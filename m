@@ -1,10 +1,11 @@
 From: shuahkh at osg.samsung.com (Shuah Khan)
-Date: Tue, 7 Nov 2017 10:02:55 -0700
-Subject: [Linux-kselftest-mirror] [PATCH v3 1/2] selftests: bpf:
- test_kmod.sh: check the module path before insmod
-In-Reply-To: <1510072553-7753-1-git-send-email-naresh.kamboju@linaro.org>
+Date: Tue, 7 Nov 2017 10:10:07 -0700
+Subject: [Linux-kselftest-mirror] [PATCH v3 2/2] selftests: bpf:
+ test_kmod.sh: use modprobe on target device
+In-Reply-To: <1510072553-7753-2-git-send-email-naresh.kamboju@linaro.org>
 References: <1510072553-7753-1-git-send-email-naresh.kamboju@linaro.org>
-Message-ID: <df3840b7-6ff5-37f3-2543-fc8067682562@osg.samsung.com>
+ <1510072553-7753-2-git-send-email-naresh.kamboju@linaro.org>
+Message-ID: <5a99822f-693e-6490-e320-187996e0cc74@osg.samsung.com>
 
 On 11/07/2017 09:35 AM, naresh.kamboju at linaro.org wrote:
 > From: Naresh Kamboju <naresh.kamboju at linaro.org>
@@ -16,33 +17,35 @@ I have to fix this up when I apply the patch which I would like
 to avoid.
 
 > 
-> test_kmod.sh reported false failure when module not present.
-> Instead check test_bpf.ko is present in the path before loading it.
+> On ARM and ARM64 devices kernel source tree is not available so
+> insmod "$SRC_TREE/lib/test_bpf.ko" is not working.
+> 
+> On these target devices the test_bpf.ko is installed under
+> /lib/modules/`uname -r`/kernel/lib/
+> so use modprobe dry run to check for missing test_bpf.ko module and
+> insert for testing.
 > 
 > Signed-off-by: Naresh Kamboju <naresh.kamboju at linaro.org>
 > ---
->  tools/testing/selftests/bpf/test_kmod.sh | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/bpf/test_kmod.sh | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
 > diff --git a/tools/testing/selftests/bpf/test_kmod.sh b/tools/testing/selftests/bpf/test_kmod.sh
-> index 6d58cca8e235..2e5a1049e2f2 100755
+> index 2e5a1049e2f2..4757ca7d163c 100755
 > --- a/tools/testing/selftests/bpf/test_kmod.sh
 > +++ b/tools/testing/selftests/bpf/test_kmod.sh
-> @@ -9,9 +9,11 @@ test_run()
->  
->  	echo "[ JIT enabled:$1 hardened:$2 ]"
->  	dmesg -C
-> -	insmod $SRC_TREE/lib/test_bpf.ko 2> /dev/null
-> -	if [ $? -ne 0 ]; then
-> -		rc=1
-> +	if [ -f ${SRC_TREE}/lib/test_bpf.ko ]; then
-> +		insmod ${SRC_TREE}/lib/test_bpf.ko 2> /dev/null
-
-Hmm. Are you sure SRC_TREE is defined in all use-cases? What happens
-when "cd tools/testing/selftests/bpf; make run_tests" is run?
-
-
-> +		if [ $? -ne 0 ]; then
+> @@ -14,6 +14,16 @@ test_run()
+>  		if [ $? -ne 0 ]; then
+>  			rc=1
+>  		fi
+> +	else
+> +		# Use modprobe dry run to check for missing test_bpf module
+> +		if ! /sbin/modprobe -q -n test_bpf; then
+> +			echo "test_bpf: [SKIP]"
+> +		elif /sbin/modprobe -q test_bpf; then
+> +			echo "test_bpf: ok"
+> +		else
+> +			echo "test_bpf: [FAIL]"
 > +			rc=1
 > +		fi
 >  	fi
@@ -50,8 +53,19 @@ when "cd tools/testing/selftests/bpf; make run_tests" is run?
 >  	dmesg | grep FAIL
 > 
 
+Okay now I am with you on the changes you are making in Patch v3 1/2 and
+this one.
+
+Please collapse these two patches into one or fix the SRC_TREE problem first
+and then fix the missing module case.
+
+I would like to get an Ack from net-dev folks before getting these in.
+Alexei and Daniel! Please review and let me know if you good with this
+change.
+
 thanks,
 -- Shuah
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
