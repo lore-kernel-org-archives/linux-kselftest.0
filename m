@@ -1,42 +1,33 @@
 From: naresh.kamboju at linaro.org (naresh.kamboju at linaro.org)
-Date: Tue,  7 Nov 2017 22:05:53 +0530
-Subject: [Linux-kselftest-mirror] [PATCH v3 2/2] selftests: bpf:
-	test_kmod.sh: use modprobe on target device
-In-Reply-To: <1510072553-7753-1-git-send-email-naresh.kamboju@linaro.org>
-References: <1510072553-7753-1-git-send-email-naresh.kamboju@linaro.org>
-Message-ID: <1510072553-7753-2-git-send-email-naresh.kamboju@linaro.org>
+Date: Tue,  7 Nov 2017 22:05:52 +0530
+Subject: [Linux-kselftest-mirror] [PATCH v3 1/2] selftests: bpf:
+	test_kmod.sh: check the module path before insmod
+Message-ID: <1510072553-7753-1-git-send-email-naresh.kamboju@linaro.org>
 
 From: Naresh Kamboju <naresh.kamboju at linaro.org>
 
-On ARM and ARM64 devices kernel source tree is not available so
-insmod "$SRC_TREE/lib/test_bpf.ko" is not working.
-
-On these target devices the test_bpf.ko is installed under
-/lib/modules/`uname -r`/kernel/lib/
-so use modprobe dry run to check for missing test_bpf.ko module and
-insert for testing.
+test_kmod.sh reported false failure when module not present.
+Instead check test_bpf.ko is present in the path before loading it.
 
 Signed-off-by: Naresh Kamboju <naresh.kamboju at linaro.org>
 ---
- tools/testing/selftests/bpf/test_kmod.sh | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ tools/testing/selftests/bpf/test_kmod.sh | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/test_kmod.sh b/tools/testing/selftests/bpf/test_kmod.sh
-index 2e5a1049e2f2..4757ca7d163c 100755
+index 6d58cca8e235..2e5a1049e2f2 100755
 --- a/tools/testing/selftests/bpf/test_kmod.sh
 +++ b/tools/testing/selftests/bpf/test_kmod.sh
-@@ -14,6 +14,16 @@ test_run()
- 		if [ $? -ne 0 ]; then
- 			rc=1
- 		fi
-+	else
-+		# Use modprobe dry run to check for missing test_bpf module
-+		if ! /sbin/modprobe -q -n test_bpf; then
-+			echo "test_bpf: [SKIP]"
-+		elif /sbin/modprobe -q test_bpf; then
-+			echo "test_bpf: ok"
-+		else
-+			echo "test_bpf: [FAIL]"
+@@ -9,9 +9,11 @@ test_run()
+ 
+ 	echo "[ JIT enabled:$1 hardened:$2 ]"
+ 	dmesg -C
+-	insmod $SRC_TREE/lib/test_bpf.ko 2> /dev/null
+-	if [ $? -ne 0 ]; then
+-		rc=1
++	if [ -f ${SRC_TREE}/lib/test_bpf.ko ]; then
++		insmod ${SRC_TREE}/lib/test_bpf.ko 2> /dev/null
++		if [ $? -ne 0 ]; then
 +			rc=1
 +		fi
  	fi
