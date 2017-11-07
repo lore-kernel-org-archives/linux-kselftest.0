@@ -1,72 +1,117 @@
-From: shuahkh@osg.samsung.com (Shuah Khan)
-Date: Tue, 7 Nov 2017 10:10:07 -0700
-Subject: [Linux-kselftest-mirror] [PATCH v3 2/2] selftests: bpf:
- test_kmod.sh: use modprobe on target device
-In-Reply-To: <1510072553-7753-2-git-send-email-naresh.kamboju@linaro.org>
-References: <1510072553-7753-1-git-send-email-naresh.kamboju@linaro.org>
- <1510072553-7753-2-git-send-email-naresh.kamboju@linaro.org>
-Message-ID: <5a99822f-693e-6490-e320-187996e0cc74@osg.samsung.com>
+From: linuxram@us.ibm.com (Ram Pai)
+Date: Tue, 7 Nov 2017 14:39:53 -0800
+Subject: [Linux-kselftest-mirror] [PATCH v9 00/51] powerpc,
+	mm: Memory Protection Keys
+In-Reply-To: <87h8u6lf27.fsf@mid.deneb.enyo.de>
+References: <1509958663-18737-1-git-send-email-linuxram@us.ibm.com>
+ <87efpbm706.fsf@mid.deneb.enyo.de>
+ <20171107012218.GA5546@ram.oc3035372033.ibm.com>
+ <87h8u6lf27.fsf@mid.deneb.enyo.de>
+Message-ID: <20171107223953.GB5546@ram.oc3035372033.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171107171007.8ryfL3h7ijzzILUTHzLFOmhLnYWpag6djSla7i89f3E@z>
+Message-ID: <20171107223953.xqlImDRbRNBJDQyjweCXyC8PAXyIz2xm8JqOAY2Aml4@z>
 
-On 11/07/2017 09:35 AM, naresh.kamboju@linaro.org wrote:
-> From: Naresh Kamboju <naresh.kamboju at linaro.org>
+On Tue, Nov 07, 2017@08:32:16AM +0100, Florian Weimer wrote:
+> * Ram Pai:
+> 
+> > On Mon, Nov 06, 2017@10:28:41PM +0100, Florian Weimer wrote:
+> >> * Ram Pai:
+> >> 
+> >> > Testing:
+> >> > -------
+> >> > This patch series has passed all the protection key
+> >> > tests available in the selftest directory.The
+> >> > tests are updated to work on both x86 and powerpc.
+> >> > The selftests have passed on x86 and powerpc hardware.
+> >> 
+> >> How do you deal with the key reuse problem?  Is it the same as x86-64,
+> >> where it's quite easy to accidentally grant existing threads access to
+> >> a just-allocated key, either due to key reuse or a changed init_pkru
+> >> parameter?
+> >
+> > I am not sure how on x86-64, two threads get allocated the same key
+> > at the same time? the key allocation is guarded under the mmap_sem
+> > semaphore. So there cannot be a race where two threads get allocated
+> > the same key.
+> 
+> The problem is a pkey_alloc/pthread_create/pkey_free/pkey_alloc
+> sequence.  The pthread_create call makes the new thread inherit the
+> access rights of the current thread, but then the key is deallocated.
+> Reallocation of the same key will have that thread retain its access
+> rights, which is IMHO not correct.
 
-Odd to see this From: line in the patch. Could you take a look
-and see where this is coming from? Your gitconfig perhaps.
+(Dave Hansen: please correct me if I miss-speak below)
 
-I have to fix this up when I apply the patch which I would like
-to avoid.
+As per the current semantics of sys_pkey_free(); the way I understand it,
+the calling thread is saying disassociate me from this key. Other
+threads continue to be associated with the key and could continue to
+get key-faults, but this calling thread will not get key-faults on that
+key any more.
+
+Also the key should not get reallocated till all the threads in the process
+have disassocated from the key; by calling sys_pkey_free().
+
+>From that point of view, I think there is a bug in the implementation of
+pkey on x86 and now on powerpc aswell.
 
 > 
-> On ARM and ARM64 devices kernel source tree is not available so
-> insmod "$SRC_TREE/lib/test_bpf.ko" is not working.
+> > Can you point me to the issue, if it is already discussed somewhere?
 > 
-> On these target devices the test_bpf.ko is installed under
-> /lib/modules/`uname -r`/kernel/lib/
-> so use modprobe dry run to check for missing test_bpf.ko module and
-> insert for testing.
+> See ‘MPK: pkey_free and key reuse’ on various lists (including
+> linux-mm and linux-arch).
 > 
-> Signed-off-by: Naresh Kamboju <naresh.kamboju at linaro.org>
-> ---
->  tools/testing/selftests/bpf/test_kmod.sh | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> It has a test case attached which demonstrates the behavior.
 > 
-> diff --git a/tools/testing/selftests/bpf/test_kmod.sh b/tools/testing/selftests/bpf/test_kmod.sh
-> index 2e5a1049e2f2..4757ca7d163c 100755
-> --- a/tools/testing/selftests/bpf/test_kmod.sh
-> +++ b/tools/testing/selftests/bpf/test_kmod.sh
-> @@ -14,6 +14,16 @@ test_run()
->  		if [ $? -ne 0 ]; then
->  			rc=1
->  		fi
-> +	else
-> +		# Use modprobe dry run to check for missing test_bpf module
-> +		if ! /sbin/modprobe -q -n test_bpf; then
-> +			echo "test_bpf: [SKIP]"
-> +		elif /sbin/modprobe -q test_bpf; then
-> +			echo "test_bpf: ok"
-> +		else
-> +			echo "test_bpf: [FAIL]"
-> +			rc=1
-> +		fi
->  	fi
->  	rmmod  test_bpf 2> /dev/null
->  	dmesg | grep FAIL
+> > As far as the semantics is concerned, a key allocated in one thread's
+> > context has no meaning if used in some other threads context within the
+> > same process.  The app should not try to re-use a key allocated in a
+> > thread's context in some other threads's context.
 > 
+> Uh-oh, that's not how this feature works on x86-64 at all.  There, the
+> keys are a process-global resource.  Treating them per-thread
+> seriously reduces their usefulness.
 
-Okay now I am with you on the changes you are making in Patch v3 1/2 and
-this one.
+Sorry. I was not thinking right. Let me restate.
 
-Please collapse these two patches into one or fix the SRC_TREE problem first
-and then fix the missing module case.
+A key is a global resource, but the permissions on a key is
+local to a thread. For eg: the same key could disable
+access on a page for one thread, while it could disable write
+on the same page on another thread.
 
-I would like to get an Ack from net-dev folks before getting these in.
-Alexei and Daniel! Please review and let me know if you good with this
-change.
+> 
+> >> What about siglongjmp from a signal handler?
+> >
+> > On powerpc there is some relief.  the permissions on a key can be
+> > modified from anywhere, including from the signal handler, and the
+> > effect will be immediate.  You dont have to wait till the
+> > signal handler returns for the key permissions to be restore.
+> 
+> My concern is that the signal handler knows nothing about protection
+> keys, but the current x86-64 semantics will cause it to clobber the
+> access rights of the current thread.
+> 
+> > also after return from the sigsetjmp();
+> > possibly caused by siglongjmp(), the program can restore the permission
+> > on any key.
+> 
+> So that's not really an option.
+> 
+> > Atleast that is my theory. Can you give me a testcase; if you have one
+> > handy.
+> 
+> The glibc patch I posted under the ‘MPK: pkey_free and key reuse’
+> thread covers this, too.
 
-thanks,
--- Shuah
+thanks. will try the test case with my kernel patches. But, on
+powerpc one can change the permissions on the key in the signal handler
+which takes into effect immediately, there should not be a bug
+in powerpc.
+
+x86 has this requirement where it has to return from the signal handler
+back to the kernel in order to change the permission on a key,
+it can cause issues with longjump.
+
+RP
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
