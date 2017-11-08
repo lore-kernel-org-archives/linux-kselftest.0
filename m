@@ -1,50 +1,51 @@
-From: sumit.semwal@linaro.org (Sumit Semwal)
-Date: Wed, 8 Nov 2017 18:16:12 +0530
-Subject: [Linux-kselftest-mirror] [PATCH 0/2] selftests: firmware: skip
-	testing unsupported features
-In-Reply-To: <1510141660-31612-1-git-send-email-amit.pundir@linaro.org>
-References: <1510141660-31612-1-git-send-email-amit.pundir@linaro.org>
-Message-ID:
- <CAO_48GGVjmwvWu4L1UMhbPc=3MqVX7mqArHbVZH69J=E5SwZsQ@mail.gmail.com>
+From: shuahkh@osg.samsung.com (Shuah Khan)
+Date: Wed, 8 Nov 2017 08:26:16 -0700
+Subject: [Linux-kselftest-mirror] [PATCH] selftests: kselftest.h: fix
+	compilation errors
+In-Reply-To: <20171108052410.14616-1-Lei.Yang@windriver.com>
+References: <20171108052410.14616-1-Lei.Yang@windriver.com>
+Message-ID: <0ac0008c-df35-6df3-03c9-5698815d18b2@osg.samsung.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171108124612.gb9LUeHP6y8MMftjhk3VfxEPkPPmWRPMu2L3VwjR2sY@z>
+Message-ID: <20171108152616.kpsbL3eQG9XhrESkfjDmtuDeWANq56g4-Co8BAvEDNU@z>
 
-Hi Amit,
+On 11/07/2017 10:24 PM, Lei Yang wrote:
+> In next branch, Various build failed with:
+> 
+> In file included from membarrier_test.c:8:0:
+> ../kselftest.h: In function ‘ksft_print_header’:
+> ../kselftest.h:61:3: error: expected ‘)’ before ‘printf’
+>    printf("TAP version 13\n");
+>    ^
+> ../kselftest.h:62:1: error: expected expression before ‘}’ token
+>  }
+>  ^
+> 
+> Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
+> ---
+>  tools/testing/selftests/kselftest.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+> index d6732ba312ef..acc98a5c3d73 100644
+> --- a/tools/testing/selftests/kselftest.h
+> +++ b/tools/testing/selftests/kselftest.h
+> @@ -57,7 +57,7 @@ static inline int ksft_get_error_cnt(void) { return ksft_cnt.ksft_error; }
+>  
+>  static inline void ksft_print_header(void)
+>  {
+> -	if (!(getenv("KSFT_TAP_LEVEL"))
+> +	if (!(getenv("KSFT_TAP_LEVEL")))
+>  		printf("TAP version 13\n");
+>  }
+>  
+> 
 
-Thanks for your patches.
+Thanks for the patch. It was a mistake that the original patch
+ended up in the linux-kselftest next branch. My bad. I ended up
+committing the patch my mistake. It is now removed.
 
-On 8 November 2017@17:17, Amit Pundir <amit.pundir@linaro.org> wrote:
-> Hi,
->
-> At Linaro we run mainline/linux-next selftests on LTS releases and
-> run into few test failures due to kernel mismatch or missing upstream
-> functionality in older kernels. Discussed at length here:
-> https://lkml.org/lkml/2017/6/15/652
->
-> This patch series is an attempt to modify selftest firmware test scripts.
-> The proposed changes skip/ignore testing the upstream functionality
-> missing in the older kernel releases.
->
-> Regards,
-> Amit Pundir
->
->
-> Amit Pundir (2):
->   selftests: firmware: skip unsupported async loading tests
->   selftests: firmware: skip unsupported custom firmware fallback tests
-Please feel free to add my
-Reviewed-by: Sumit Semwal <sumit.semwal at linaro.org>
-to both these patches.
->
->  tools/testing/selftests/firmware/fw_fallback.sh   | 38 ++++++++++++++++-------
->  tools/testing/selftests/firmware/fw_filesystem.sh | 34 ++++++++++++--------
->  2 files changed, 47 insertions(+), 25 deletions(-)
->
-> --
-> 2.7.4
->
-Best,
-Sumit.
+thanks,
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
