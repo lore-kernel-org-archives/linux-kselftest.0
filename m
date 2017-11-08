@@ -1,21 +1,50 @@
-From: gregkh@linuxfoundation.org (Greg Kroah-Hartman)
-Date: Wed, 8 Nov 2017 13:41:33 +0100
-Subject: [Linux-kselftest-mirror] [PATCH 2/2] selftests: firmware: skip
- unsupported custom firmware fallback tests
-In-Reply-To: <1510141660-31612-3-git-send-email-amit.pundir@linaro.org>
+From: sumit.semwal@linaro.org (Sumit Semwal)
+Date: Wed, 8 Nov 2017 18:16:12 +0530
+Subject: [Linux-kselftest-mirror] [PATCH 0/2] selftests: firmware: skip
+	testing unsupported features
+In-Reply-To: <1510141660-31612-1-git-send-email-amit.pundir@linaro.org>
 References: <1510141660-31612-1-git-send-email-amit.pundir@linaro.org>
- <1510141660-31612-3-git-send-email-amit.pundir@linaro.org>
-Message-ID: <20171108124133.GB23612@kroah.com>
+Message-ID:
+ <CAO_48GGVjmwvWu4L1UMhbPc=3MqVX7mqArHbVZH69J=E5SwZsQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171108124133.JzeGyxtsETHs5DJfLrKCrj7z20eqC7KvghGYakN-rE4@z>
+Message-ID: <20171108124612.gb9LUeHP6y8MMftjhk3VfxEPkPPmWRPMu2L3VwjR2sY@z>
 
-On Wed, Nov 08, 2017@05:17:40PM +0530, Amit Pundir wrote:
-> Ignore custom firmware loading and cancellation tests on older
-> kernel releases, which do not support this feature.
-> 
-> Signed-off-by: Amit Pundir <amit.pundir at linaro.org>
+Hi Amit,
 
-Acked-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+Thanks for your patches.
+
+On 8 November 2017@17:17, Amit Pundir <amit.pundir@linaro.org> wrote:
+> Hi,
+>
+> At Linaro we run mainline/linux-next selftests on LTS releases and
+> run into few test failures due to kernel mismatch or missing upstream
+> functionality in older kernels. Discussed at length here:
+> https://lkml.org/lkml/2017/6/15/652
+>
+> This patch series is an attempt to modify selftest firmware test scripts.
+> The proposed changes skip/ignore testing the upstream functionality
+> missing in the older kernel releases.
+>
+> Regards,
+> Amit Pundir
+>
+>
+> Amit Pundir (2):
+>   selftests: firmware: skip unsupported async loading tests
+>   selftests: firmware: skip unsupported custom firmware fallback tests
+Please feel free to add my
+Reviewed-by: Sumit Semwal <sumit.semwal at linaro.org>
+to both these patches.
+>
+>  tools/testing/selftests/firmware/fw_fallback.sh   | 38 ++++++++++++++++-------
+>  tools/testing/selftests/firmware/fw_filesystem.sh | 34 ++++++++++++--------
+>  2 files changed, 47 insertions(+), 25 deletions(-)
+>
+> --
+> 2.7.4
+>
+Best,
+Sumit.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
