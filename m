@@ -1,17 +1,17 @@
 From: gregkh@linuxfoundation.org (Greg Kroah-Hartman)
-Date: Wed, 8 Nov 2017 13:41:23 +0100
-Subject: [Linux-kselftest-mirror] [PATCH 1/2] selftests: firmware: skip
- unsupported async loading tests
-In-Reply-To: <1510141660-31612-2-git-send-email-amit.pundir@linaro.org>
+Date: Wed, 8 Nov 2017 13:41:33 +0100
+Subject: [Linux-kselftest-mirror] [PATCH 2/2] selftests: firmware: skip
+ unsupported custom firmware fallback tests
+In-Reply-To: <1510141660-31612-3-git-send-email-amit.pundir@linaro.org>
 References: <1510141660-31612-1-git-send-email-amit.pundir@linaro.org>
- <1510141660-31612-2-git-send-email-amit.pundir@linaro.org>
-Message-ID: <20171108124123.GA23612@kroah.com>
+ <1510141660-31612-3-git-send-email-amit.pundir@linaro.org>
+Message-ID: <20171108124133.GB23612@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171108124123.2Y-Ny-ZHhFBOQGVShiyp8jAgQIeWK-qAZ9sRQc0xzek@z>
+Message-ID: <20171108124133.JzeGyxtsETHs5DJfLrKCrj7z20eqC7KvghGYakN-rE4@z>
 
-On Wed, Nov 08, 2017@05:17:39PM +0530, Amit Pundir wrote:
-> Ignore async firmware loading tests on older kernel releases,
-> which do not support this feature.
+On Wed, Nov 08, 2017@05:17:40PM +0530, Amit Pundir wrote:
+> Ignore custom firmware loading and cancellation tests on older
+> kernel releases, which do not support this feature.
 > 
 > Signed-off-by: Amit Pundir <amit.pundir at linaro.org>
 
