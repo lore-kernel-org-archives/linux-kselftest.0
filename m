@@ -1,78 +1,96 @@
-From: shuahkh at osg.samsung.com (Shuah Khan)
-Date: Tue, 7 Nov 2017 15:57:54 -0700
-Subject: [Linux-kselftest-mirror] [PATCH] selftests: futex: fix
-	compilation error
-In-Reply-To: <af4b1c56-4056-96dd-a4ef-825157c56361@windriver.com>
-References: <1509941009-11521-1-git-send-email-Lei.Yang@windriver.com>
- <6b0b866a-b142-8c07-41e3-d561d4b91fb3@osg.samsung.com>
- <d83134db-ad68-cfa0-42ef-1db070b2c931@osg.samsung.com>
- <af4b1c56-4056-96dd-a4ef-825157c56361@windriver.com>
-Message-ID: <3605f466-52f7-fdac-0d08-01361648b801@osg.samsung.com>
+From: lei.yang at windriver.com (lei yang)
+Date: Wed, 8 Nov 2017 11:22:05 +0800
+Subject: [Linux-kselftest-mirror] [PATCH] selftests: memfd_test.c: fix
+	compilation warning.
+In-Reply-To: <6a76f65a-a484-ba72-6cc5-85010666359c@osg.samsung.com>
+References: <1509879400-26061-1-git-send-email-Lei.Yang@windriver.com>
+ <6a76f65a-a484-ba72-6cc5-85010666359c@osg.samsung.com>
+Message-ID: <1591d8a2-fcc4-9560-0be5-b4ddcf7825ec@windriver.com>
 
-On 11/06/2017 06:18 PM, lei yang wrote:
-> 
-> 
-> On 2017年11月07日 07:48, Shuah Khan wrote:
->> On 11/06/2017 04:45 PM, Shuah Khan wrote:
->>> On 11/05/2017 09:03 PM, Lei Yang wrote:
->>>> I run into below error when building futext
->>>> /bin/sh: -c: line 5: syntax error: unexpected end of file
->>>>
->>>> the closing ";" and "\" are necessary.
->>>> My OS is "Ubuntu 14.04.5 LTS"
->>>>
->>>> Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
->>>> ---
->>>>   tools/testing/selftests/futex/Makefile | 6 +++---
->>>>   1 file changed, 3 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
->>>> index f0c0369..943f3a2 100644
->>>> --- a/tools/testing/selftests/futex/Makefile
->>>> +++ b/tools/testing/selftests/futex/Makefile
->>>> @@ -11,9 +11,9 @@ all:
->>>>           BUILD_TARGET=$(OUTPUT)/$$DIR;    \
->>>>           mkdir $$BUILD_TARGET  -p;    \
->>>>           make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
->>>> -        if [ -e $$DIR/$(TEST_PROGS) ]; then
->>>> -            rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/;
->>>> -        fi
->>>> +        if [ -e $$DIR/$(TEST_PROGS) ]; then \
->>>> +            rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/; \
->>>> +        fi \
->>>>       done
->>>>     override define RUN_TESTS
->>>>
->>> Hmm. I don't see this error on linux_4.14-rc8?
->>>
->>> Can you give more details on the gcc version you are using?
+I got the same warning even with ubuntu new distro, this patch fixed 
+this issue.
+
+$ gcc --version
+gcc (Ubuntu 6.3.0-12ubuntu2) 6.3.0 20170406
+Copyright (C) 2016 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions. There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+$ make -v
+GNU Make 4.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2014 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later 
+<http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+$ uname -a
+Linux pek-lyang0-u17 4.10.0-38-generic #42-Ubuntu SMP Tue Oct 10 
+13:24:27 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
+
+
+---------------------
+
+memfd_test.c: In function mfd_assert_grow_write:
+memfd_test.c:517:19: warning: format %d expects argument of type int, 
+but argument 2 has type size_t {aka long unsigned int} [-Wformat=]
+    printf("malloc(%d) failed: %m\n", mfd_def_size * 8);
+                    ^
+memfd_test.c: In function mfd_fail_grow_write:
+memfd_test.c:537:19: warning: format %d expects argument of type int, 
+but argument 2 has type size_t {aka long unsigned int} [-Wformat=]
+    printf("malloc(%d) failed: %m\n", mfd_def_size * 8);
+
+
+
+Lei
+
+
+On 2017年11月07日 07:46, Shuah Khan wrote:
+> On 11/05/2017 03:56 AM, Lei Yang wrote:
+>> Replace '%d' by '%zu' to fix the following compilation warning.
 >>
->> I meant gnumake version? I am not seeing the failure with what I am
->> using
-> 
-> $ make -v
-> GNU Make 3.81
-> Copyright (C) 2006  Free Software Foundation, Inc.
-> This is free software; see the source for copying conditions.
-> There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
-> PARTICULAR PURPOSE.
-> 
-> This program built for x86_64-pc-linux-gnu
-> 
-> 
-> Lei
-> 
-
-I can't take patches that aren't tested on the latest kernel release.
-3.16 is very old. I am not going reply to other patches you sent.
-
-Please make sure the patches are based on the latest release and tested
-on it as well.
-
-thanks,
--- Shuah
-
-
+>> memfd_test.c:517:3: warning: format ‘%d’ expects argument of
+>> type ‘int’,but argument 2 has type ‘size_t’ [-Wformat=]
+>>     printf("malloc(%d) failed: %m\n", mfd_def_size * 8);
+>>     ^
+>> memfd_test.c: In function ‘mfd_fail_grow_write’:
+>> memfd_test.c:537:3: warning: format ‘%d’ expects argument
+>> of type ‘int’,but argument 2 has type ‘size_t’ [-Wformat=]
+>>     printf("malloc(%d) failed: %m\n", mfd_def_size * 8);
+>>
+>> Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
+>> ---
+>>   tools/testing/selftests/memfd/memfd_test.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+>> index f94c6d1..95df9e6 100644
+>> --- a/tools/testing/selftests/memfd/memfd_test.c
+>> +++ b/tools/testing/selftests/memfd/memfd_test.c
+>> @@ -514,7 +514,7 @@ static void mfd_assert_grow_write(int fd)
+>>   
+>>   	buf = malloc(mfd_def_size * 8);
+>>   	if (!buf) {
+>> -		printf("malloc(%d) failed: %m\n", mfd_def_size * 8);
+>> +		printf("malloc(%zu) failed: %m\n", mfd_def_size * 8);
+>>   		abort();
+>>   	}
+>>   
+>> @@ -534,7 +534,7 @@ static void mfd_fail_grow_write(int fd)
+>>   
+>>   	buf = malloc(mfd_def_size * 8);
+>>   	if (!buf) {
+>> -		printf("malloc(%d) failed: %m\n", mfd_def_size * 8);
+>> +		printf("malloc(%zu) failed: %m\n", mfd_def_size * 8);
+>>   		abort();
+>>   	}
+>>   
+>>
+> Relates to gcc version perhaps. What's your gcc version?
+>
+> thanks,
+> -- Shuah
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
