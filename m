@@ -1,98 +1,74 @@
 From: amit.pundir@linaro.org (Amit Pundir)
-Date: Wed,  8 Nov 2017 17:17:40 +0530
-Subject: [Linux-kselftest-mirror] [PATCH 2/2] selftests: firmware: skip
-	unsupported custom firmware fallback tests
+Date: Wed,  8 Nov 2017 17:17:39 +0530
+Subject: [Linux-kselftest-mirror] [PATCH 1/2] selftests: firmware: skip
+	unsupported async loading tests
 In-Reply-To: <1510141660-31612-1-git-send-email-amit.pundir@linaro.org>
 References: <1510141660-31612-1-git-send-email-amit.pundir@linaro.org>
-Message-ID: <1510141660-31612-3-git-send-email-amit.pundir@linaro.org>
+Message-ID: <1510141660-31612-2-git-send-email-amit.pundir@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171108114740.BUe1_3Xh9kguZDGXCCUDeLvOPdHjSufBUYBIOAo7g7M@z>
+Message-ID: <20171108114739.T_E86tQrBoblErYGFzjYtQ40TDS2qZ56BDlXcYf77Bc@z>
 
-Ignore custom firmware loading and cancellation tests on older
-kernel releases, which do not support this feature.
+Ignore async firmware loading tests on older kernel releases,
+which do not support this feature.
 
 Signed-off-by: Amit Pundir <amit.pundir at linaro.org>
 ---
- tools/testing/selftests/firmware/fw_fallback.sh | 38 +++++++++++++++++--------
- 1 file changed, 26 insertions(+), 12 deletions(-)
+ tools/testing/selftests/firmware/fw_filesystem.sh | 34 ++++++++++++++---------
+ 1 file changed, 21 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/firmware/fw_fallback.sh b/tools/testing/selftests/firmware/fw_fallback.sh
-index a52a3bab532b..72858c921eed 100755
---- a/tools/testing/selftests/firmware/fw_fallback.sh
-+++ b/tools/testing/selftests/firmware/fw_fallback.sh
-@@ -86,6 +86,11 @@ load_fw_cancel()
- 
- load_fw_custom()
- {
-+	if [ ! -e "$DIR"/trigger_custom_fallback ]; then
-+		echo "$0: custom fallback loading trigger not supported" >&2
-+		return 1
-+	fi
-+
- 	local name="$1"
- 	local file="$2"
- 
-@@ -108,11 +113,17 @@ load_fw_custom()
- 
- 	# Wait for request to finish.
- 	wait
-+	return 0
- }
- 
- 
- load_fw_custom_cancel()
- {
-+	if [ ! -e "$DIR"/trigger_custom_fallback ]; then
-+		echo "$0: cancelling custom fallback trigger not supported" >&2
-+		return 1
-+	fi
-+
- 	local name="$1"
- 	local file="$2"
- 
-@@ -133,6 +144,7 @@ load_fw_custom_cancel()
- 
- 	# Wait for request to finish.
- 	wait
-+	return 0
- }
- 
- load_fw_fallback_with_child()
-@@ -227,20 +239,22 @@ else
- 	echo "$0: cancelling fallback mechanism works"
+diff --git a/tools/testing/selftests/firmware/fw_filesystem.sh b/tools/testing/selftests/firmware/fw_filesystem.sh
+index 62f2d6f54929..b1f20fef36c7 100755
+--- a/tools/testing/selftests/firmware/fw_filesystem.sh
++++ b/tools/testing/selftests/firmware/fw_filesystem.sh
+@@ -70,9 +70,13 @@ if printf '\000' >"$DIR"/trigger_request 2> /dev/null; then
+ 	exit 1
  fi
  
--load_fw_custom "$NAME" "$FW"
+-if printf '\000' >"$DIR"/trigger_async_request 2> /dev/null; then
+-	echo "$0: empty filename should not succeed (async)" >&2
+-	exit 1
++if [ ! -e "$DIR"/trigger_async_request ]; then
++	echo "$0: empty filename: async trigger not supported" >&2
++else
++	if printf '\000' >"$DIR"/trigger_async_request 2> /dev/null; then
++		echo "$0: empty filename should not succeed (async)" >&2
++		exit 1
++	fi
+ fi
+ 
+ # Request a firmware that doesn't exist, it should fail.
+@@ -105,17 +109,21 @@ else
+ fi
+ 
+ # Try the asynchronous version too
+-if ! echo -n "$NAME" >"$DIR"/trigger_async_request ; then
+-	echo "$0: could not trigger async request" >&2
+-	exit 1
+-fi
+-
+-# Verify the contents are what we expect.
 -if ! diff -q "$FW" /dev/test_firmware >/dev/null ; then
--	echo "$0: firmware was not loaded" >&2
+-	echo "$0: firmware was not loaded (async)" >&2
 -	exit 1
--else
--	echo "$0: custom fallback loading mechanism works"
-+if load_fw_custom "$NAME" "$FW" ; then
++if [ ! -e "$DIR"/trigger_async_request ]; then
++	echo "$0: firmware loading: async trigger not supported" >&2
+ else
+-	echo "$0: async filesystem loading works"
++	if ! echo -n "$NAME" >"$DIR"/trigger_async_request ; then
++		echo "$0: could not trigger async request" >&2
++		exit 1
++	fi
++
++	# Verify the contents are what we expect.
 +	if ! diff -q "$FW" /dev/test_firmware >/dev/null ; then
-+		echo "$0: firmware was not loaded" >&2
++		echo "$0: firmware was not loaded (async)" >&2
 +		exit 1
 +	else
-+		echo "$0: custom fallback loading mechanism works"
++		echo "$0: async filesystem loading works"
 +	fi
  fi
  
--load_fw_custom_cancel "nope-$NAME" "$FW"
--if diff -q "$FW" /dev/test_firmware >/dev/null ; then
--	echo "$0: firmware was expected to be cancelled" >&2
--	exit 1
--else
--	echo "$0: cancelling custom fallback mechanism works"
-+if load_fw_custom_cancel "nope-$NAME" "$FW" ; then
-+	if diff -q "$FW" /dev/test_firmware >/dev/null ; then
-+		echo "$0: firmware was expected to be cancelled" >&2
-+		exit 1
-+	else
-+		echo "$0: cancelling custom fallback mechanism works"
-+	fi
- fi
- 
- set +e
+ ### Batched requests tests
 -- 
 2.7.4
 
