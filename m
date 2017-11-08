@@ -1,36 +1,104 @@
 From: amit.pundir at linaro.org (Amit Pundir)
-Date: Thu,  9 Nov 2017 01:10:33 +0530
-Subject: [Linux-kselftest-mirror] [PATCH v2 0/2] selftests: firmware: skip
-	testing unsupported features
-Message-ID: <1510170035-31384-1-git-send-email-amit.pundir@linaro.org>
+Date: Thu,  9 Nov 2017 01:10:35 +0530
+Subject: [Linux-kselftest-mirror] [PATCH v2 2/2] selftests: firmware: skip
+	unsupported custom firmware fallback tests
+In-Reply-To: <1510170035-31384-1-git-send-email-amit.pundir@linaro.org>
+References: <1510170035-31384-1-git-send-email-amit.pundir@linaro.org>
+Message-ID: <1510170035-31384-3-git-send-email-amit.pundir@linaro.org>
 
-Hi,
+Ignore custom firmware loading and cancellation tests on older
+kernel releases, which do not support this feature.
 
-At Linaro we run mainline/linux-next selftests on LTS releases and
-run into few test failures due to kernel mismatch or missing upstream
-functionality in older kernels. Discussed at length here:
-https://lkml.org/lkml/2017/6/15/652
-
-This patch series is an attempt to modify selftest firmware test scripts.
-The proposed changes skip/ignore testing the upstream functionality
-missing in the older kernel releases.
-
+Fixes: 061132d2b9c9 ("test_firmware: add test custom fallback trigger")
+Reviewed-by: Sumit Semwal <sumit.semwal at linaro.org>
+Acked-by: Luis R. Rodriguez <mcgrof at kernel.org>
+Acked-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+Signed-off-by: Amit Pundir <amit.pundir at linaro.org>
+---
 v2:
  Changed the display message to make it consistent across all
  the firmware test scripts. Added Fixes tag.
 
-Regards,
-Amit Pundir
+ tools/testing/selftests/firmware/fw_fallback.sh | 38 +++++++++++++++++--------
+ 1 file changed, 26 insertions(+), 12 deletions(-)
 
-
-Amit Pundir (2):
-  selftests: firmware: skip unsupported async loading tests
-  selftests: firmware: skip unsupported custom firmware fallback tests
-
- tools/testing/selftests/firmware/fw_fallback.sh   | 38 ++++++++++++++++-------
- tools/testing/selftests/firmware/fw_filesystem.sh | 34 ++++++++++++--------
- 2 files changed, 47 insertions(+), 25 deletions(-)
-
+diff --git a/tools/testing/selftests/firmware/fw_fallback.sh b/tools/testing/selftests/firmware/fw_fallback.sh
+index a52a3bab532b..72858c921eed 100755
+--- a/tools/testing/selftests/firmware/fw_fallback.sh
++++ b/tools/testing/selftests/firmware/fw_fallback.sh
+@@ -86,6 +86,11 @@ load_fw_cancel()
+ 
+ load_fw_custom()
+ {
++	if [ ! -e "$DIR"/trigger_custom_fallback ]; then
++		echo "$0: custom fallback trigger not present, ignoring test" >&2
++		return 1
++	fi
++
+ 	local name="$1"
+ 	local file="$2"
+ 
+@@ -108,11 +113,17 @@ load_fw_custom()
+ 
+ 	# Wait for request to finish.
+ 	wait
++	return 0
+ }
+ 
+ 
+ load_fw_custom_cancel()
+ {
++	if [ ! -e "$DIR"/trigger_custom_fallback ]; then
++		echo "$0: canceling custom fallback trigger not present, ignoring test" >&2
++		return 1
++	fi
++
+ 	local name="$1"
+ 	local file="$2"
+ 
+@@ -133,6 +144,7 @@ load_fw_custom_cancel()
+ 
+ 	# Wait for request to finish.
+ 	wait
++	return 0
+ }
+ 
+ load_fw_fallback_with_child()
+@@ -227,20 +239,22 @@ else
+ 	echo "$0: cancelling fallback mechanism works"
+ fi
+ 
+-load_fw_custom "$NAME" "$FW"
+-if ! diff -q "$FW" /dev/test_firmware >/dev/null ; then
+-	echo "$0: firmware was not loaded" >&2
+-	exit 1
+-else
+-	echo "$0: custom fallback loading mechanism works"
++if load_fw_custom "$NAME" "$FW" ; then
++	if ! diff -q "$FW" /dev/test_firmware >/dev/null ; then
++		echo "$0: firmware was not loaded" >&2
++		exit 1
++	else
++		echo "$0: custom fallback loading mechanism works"
++	fi
+ fi
+ 
+-load_fw_custom_cancel "nope-$NAME" "$FW"
+-if diff -q "$FW" /dev/test_firmware >/dev/null ; then
+-	echo "$0: firmware was expected to be cancelled" >&2
+-	exit 1
+-else
+-	echo "$0: cancelling custom fallback mechanism works"
++if load_fw_custom_cancel "nope-$NAME" "$FW" ; then
++	if diff -q "$FW" /dev/test_firmware >/dev/null ; then
++		echo "$0: firmware was expected to be cancelled" >&2
++		exit 1
++	else
++		echo "$0: cancelling custom fallback mechanism works"
++	fi
+ fi
+ 
+ set +e
 -- 
 2.7.4
 
