@@ -1,40 +1,45 @@
-From: linux at roeck-us.net (Guenter Roeck)
-Date: Sun, 19 Nov 2017 08:09:46 -0800
-Subject: [Linux-kselftest-mirror] Towards 4.14 LTS
-In-Reply-To: <20171119112051.GA10015@kroah.com>
-References: <5E1947BC-9D22-42EB-BA29-96EA15A9C817@linaro.org>
- <20171119112051.GA10015@kroah.com>
-Message-ID: <7a73bb41-8372-57d3-2aca-6840ca231167@roeck-us.net>
+From: leitao at debian.org (Breno Leitao)
+Date: Thu, 9 Nov 2017 16:47:15 -0200
+Subject: [Linux-kselftest-mirror] [PATCH v9 44/51] selftest/vm: powerpc
+ implementation for generic abstraction
+In-Reply-To: <1509958663-18737-45-git-send-email-linuxram@us.ibm.com>
+References: <1509958663-18737-1-git-send-email-linuxram@us.ibm.com>
+ <1509958663-18737-45-git-send-email-linuxram@us.ibm.com>
+Message-ID: <20171109184714.xs523k4cvmqghew3@gmail.com>
 
-On 11/19/2017 03:20 AM, Greg Kroah-Hartman wrote:
-> On Thu, Nov 16, 2017 at 10:50:23PM -0600, Tom Gall wrote:
->> At Linaro we’ve been putting effort into regularly running kernel tests over
->> arm, arm64 and x86_64 targets. On those targets we’re running mainline, -next,
->> 4.4, and 4.9 kernels and yes we are adding to this list as the hardware
->> capacity grows.
->>
->> For test buckets we’re using just LTP, kselftest and libhugetlbfs and
->> like kernels we will add to this list.
-> 
-> I'm sorry, I don't understand this sentance.
-> 
-My parsing of it is that they will add to the list of tests as well as
-to the list of supported kernel versions (and/or maybe architectures ?).
+Hi Ram,
 
-Guenter
+On Mon, Nov 06, 2017 at 12:57:36AM -0800, Ram Pai wrote:
+> @@ -206,12 +209,14 @@ void signal_handler(int signum, siginfo_t *si, void *vucontext)
+>  
+>  	trapno = uctxt->uc_mcontext.gregs[REG_TRAPNO];
+>  	ip = uctxt->uc_mcontext.gregs[REG_IP_IDX];
+> -	fpregset = uctxt->uc_mcontext.fpregs;
+> -	fpregs = (void *)fpregset;
 
->> With the 4.14 cycle being a little ‘different’ in so much as the goal to
->> have it be an LTS kernel I think it’s important to take a look at some
->> 4.14 test results.
->>
->> Grab a beverage, this is a bit of a long post. But quick summery 4.14 as
->> released looks just as good as 4.13, for the test buckets I named above.
-> 
-> Thanks for doing this testing and letting us know.
-> 
-> greg k-h
-> 
+Since you removed all references for fpregset now, you probably want to
+remove the declaration of the variable above.
 
+> @@ -219,20 +224,21 @@ void signal_handler(int signum, siginfo_t *si, void *vucontext)
+>  	 * state.  We just assume that it is here.
+>  	 */
+>  	fpregs += 0x70;
+> -#endif
+> -	pkey_reg_offset = pkey_reg_xstate_offset();
+
+With this code, you removed all the reference for variable
+pkey_reg_offset, thus, its declaration could be removed also.
+
+> -	*(u64 *)pkey_reg_ptr = 0x00000000;
+> +	dprintf1("si_pkey from siginfo: %lx\n", si_pkey);
+> +#if defined(__i386__) || defined(__x86_64__) /* arch */
+> +	dprintf1("signal pkey_reg from xsave: %016lx\n", *pkey_reg_ptr);
+> +	*(u64 *)pkey_reg_ptr &= reset_bits(si_pkey, PKEY_DISABLE_ACCESS);
+> +#elif __powerpc64__
+
+Since the variable pkey_reg_ptr is only used for Intel code (inside
+#ifdefs), you probably want to #ifdef the variable declaration also,
+avoid triggering "unused variable" warning on non-Intel machines.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
