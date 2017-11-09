@@ -1,47 +1,59 @@
-From: leitao@debian.org (Breno Leitao)
-Date: Thu, 9 Nov 2017 16:47:15 -0200
-Subject: [Linux-kselftest-mirror] [PATCH v9 44/51] selftest/vm: powerpc
- implementation for generic abstraction
-In-Reply-To: <1509958663-18737-45-git-send-email-linuxram@us.ibm.com>
+From: linuxram@us.ibm.com (Ram Pai)
+Date: Thu, 9 Nov 2017 14:23:29 -0800
+Subject: [Linux-kselftest-mirror] [PATCH v9 00/51] powerpc,
+	mm: Memory Protection Keys
+In-Reply-To: <20171107012218.GA5546@ram.oc3035372033.ibm.com>
 References: <1509958663-18737-1-git-send-email-linuxram@us.ibm.com>
- <1509958663-18737-45-git-send-email-linuxram@us.ibm.com>
-Message-ID: <20171109184714.xs523k4cvmqghew3@gmail.com>
+ <87efpbm706.fsf@mid.deneb.enyo.de>
+ <20171107012218.GA5546@ram.oc3035372033.ibm.com>
+Message-ID: <20171109222329.GB5656@ram.oc3035372033.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171109184715.vdU50ZwjSKfBBOhxlWHW7hCObksTeI55k_SRBy7IPRE@z>
+Message-ID: <20171109222329.d7vSDRY8wE9YaFK3i4NqoInDG7Br09NbpljpZxZogl0@z>
 
-Hi Ram,
+On Mon, Nov 06, 2017@05:22:18PM -0800, Ram Pai wrote:
+> On Mon, Nov 06, 2017@10:28:41PM +0100, Florian Weimer wrote:
+> > * Ram Pai:
+> > 
+> > > Testing:
+> > > -------
+> > > This patch series has passed all the protection key
+> > > tests available in the selftest directory.The
+> > > tests are updated to work on both x86 and powerpc.
+> > > The selftests have passed on x86 and powerpc hardware.
+> > 
+....snip....
 
-On Mon, Nov 06, 2017@12:57:36AM -0800, Ram Pai wrote:
-> @@ -206,12 +209,14 @@ void signal_handler(int signum, siginfo_t *si, void *vucontext)
->  
->  	trapno = uctxt->uc_mcontext.gregs[REG_TRAPNO];
->  	ip = uctxt->uc_mcontext.gregs[REG_IP_IDX];
-> -	fpregset = uctxt->uc_mcontext.fpregs;
-> -	fpregs = (void *)fpregset;
+> > What about siglongjmp from a signal handler?
+> 
+> On powerpc there is some relief.  the permissions on a key can be
+> modified from anywhere, including from the signal handler, and the
+> effect will be immediate.  You dont have to wait till the
+> signal handler returns for the key permissions to be restore.
+> 
+> also after return from the sigsetjmp();
+> possibly caused by siglongjmp(), the program can restore the permission
+> on any key.
+> 
+> Atleast that is my theory. Can you give me a testcase; if you have one
+> handy.
+> 
+> > 
+> >   <https://sourceware.org/bugzilla/show_bug.cgi?id=22396>
+> > 
 
-Since you removed all references for fpregset now, you probably want to
-remove the declaration of the variable above.
+reading through the bug report, you mention that the following
+"The application may not be able to save and restore the protection bits
+for all keys because the kernel API does not actually specify that the
+set of keys is a small, fixed set."
 
-> @@ -219,20 +224,21 @@ void signal_handler(int signum, siginfo_t *si, void *vucontext)
->  	 * state.  We just assume that it is here.
->  	 */
->  	fpregs += 0x70;
-> -#endif
-> -	pkey_reg_offset = pkey_reg_xstate_offset();
+What exact kernel API do you need? This patch set exposes the total
+number of keys and  max keys,  through sysfs.
+https://marc.info/?l=linux-kernel&m=150995950219669&w=2
 
-With this code, you removed all the reference for variable
-pkey_reg_offset, thus, its declaration could be removed also.
+Is this sufficient? or do you need something else?
 
-> -	*(u64 *)pkey_reg_ptr = 0x00000000;
-> +	dprintf1("si_pkey from siginfo: %lx\n", si_pkey);
-> +#if defined(__i386__) || defined(__x86_64__) /* arch */
-> +	dprintf1("signal pkey_reg from xsave: %016lx\n", *pkey_reg_ptr);
-> +	*(u64 *)pkey_reg_ptr &= reset_bits(si_pkey, PKEY_DISABLE_ACCESS);
-> +#elif __powerpc64__
+RP
 
-Since the variable pkey_reg_ptr is only used for Intel code (inside
-#ifdefs), you probably want to #ifdef the variable declaration also,
-avoid triggering "unused variable" warning on non-Intel machines.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
