@@ -1,61 +1,40 @@
-From: linuxram@us.ibm.com (Ram Pai)
-Date: Thu, 9 Nov 2017 15:37:46 -0800
+From: leitao@debian.org (Breno Leitao)
+Date: Fri, 10 Nov 2017 09:36:56 -0200
 Subject: [Linux-kselftest-mirror] [PATCH v9 44/51] selftest/vm: powerpc
  implementation for generic abstraction
-In-Reply-To: <20171109184714.xs523k4cvmqghew3@gmail.com>
+In-Reply-To: <20171109233745.GD5546@ram.oc3035372033.ibm.com>
 References: <1509958663-18737-1-git-send-email-linuxram@us.ibm.com>
  <1509958663-18737-45-git-send-email-linuxram@us.ibm.com>
  <20171109184714.xs523k4cvmqghew3@gmail.com>
-Message-ID: <20171109233745.GD5546@ram.oc3035372033.ibm.com>
+ <20171109233745.GD5546@ram.oc3035372033.ibm.com>
+Message-ID: <20171110113655.hizq4xes5oy2fzim@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171109233746.iZvFBQXkf-kx6YUWL4nIjp_0qqB1mt7I0Z-4bJJPrA0@z>
+Message-ID: <20171110113656.RinF4K-rvvQ_MJgeSDrXEczy6ZLgMHHSxL3wPbZX76U@z>
 
-On Thu, Nov 09, 2017@04:47:15PM -0200, Breno Leitao wrote:
-> Hi Ram,
+Hi Ram,
+
+On Thu, Nov 09, 2017@03:37:46PM -0800, Ram Pai wrote:
+> On Thu, Nov 09, 2017@04:47:15PM -0200, Breno Leitao wrote:
+> > On Mon, Nov 06, 2017@12:57:36AM -0800, Ram Pai wrote:
+> > > @@ -206,12 +209,14 @@ void signal_handler(int signum, siginfo_t *si, void *vucontext)
+> > >  
+> > >  	trapno = uctxt->uc_mcontext.gregs[REG_TRAPNO];
+> > >  	ip = uctxt->uc_mcontext.gregs[REG_IP_IDX];
+> > > -	fpregset = uctxt->uc_mcontext.fpregs;
+> > > -	fpregs = (void *)fpregset;
+> > 
+> > Since you removed all references for fpregset now, you probably want to
+> > remove the declaration of the variable above.
 > 
-> On Mon, Nov 06, 2017@12:57:36AM -0800, Ram Pai wrote:
-> > @@ -206,12 +209,14 @@ void signal_handler(int signum, siginfo_t *si, void *vucontext)
-> >  
-> >  	trapno = uctxt->uc_mcontext.gregs[REG_TRAPNO];
-> >  	ip = uctxt->uc_mcontext.gregs[REG_IP_IDX];
-> > -	fpregset = uctxt->uc_mcontext.fpregs;
-> > -	fpregs = (void *)fpregset;
-> 
-> Since you removed all references for fpregset now, you probably want to
-> remove the declaration of the variable above.
+> fpregs is still needed.
 
-fpregs is still needed.
+Right, fpregs is still needed, but not fpregset. Every reference for this
+variable was removed with your patch.
 
-> 
-> > @@ -219,20 +224,21 @@ void signal_handler(int signum, siginfo_t *si, void *vucontext)
-> >  	 * state.  We just assume that it is here.
-> >  	 */
-> >  	fpregs += 0x70;
-> > -#endif
-> > -	pkey_reg_offset = pkey_reg_xstate_offset();
-> 
-> With this code, you removed all the reference for variable
-> pkey_reg_offset, thus, its declaration could be removed also.
+Grepping this variable identifier on a tree with your patches, I see:
 
-yes. will fix it.
-
-> 
-> > -	*(u64 *)pkey_reg_ptr = 0x00000000;
-> > +	dprintf1("si_pkey from siginfo: %lx\n", si_pkey);
-> > +#if defined(__i386__) || defined(__x86_64__) /* arch */
-> > +	dprintf1("signal pkey_reg from xsave: %016lx\n", *pkey_reg_ptr);
-> > +	*(u64 *)pkey_reg_ptr &= reset_bits(si_pkey, PKEY_DISABLE_ACCESS);
-> > +#elif __powerpc64__
-> 
-> Since the variable pkey_reg_ptr is only used for Intel code (inside
-> #ifdefs), you probably want to #ifdef the variable declaration also,
-> avoid triggering "unused variable" warning on non-Intel machines.
-
-yes. Actually it will trigger the warning on intel machines. Fixed it.
-
-Thanks Breno!
-RP
-
+ $ grep fpregset protection_keys.c 
+ fpregset_t fpregset;
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
