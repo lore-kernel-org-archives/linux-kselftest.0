@@ -1,199 +1,60 @@
-From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
-Date: Fri, 10 Nov 2017 16:37:08 -0500
-Subject: [Linux-kselftest-mirror] [RFC PATCH for 4.15 01/10] membarrier:
-	selftest: Test private expedited cmd
-In-Reply-To: <20171110213717.12457-1-mathieu.desnoyers@efficios.com>
-References: <20171110213717.12457-1-mathieu.desnoyers@efficios.com>
-Message-ID: <20171110213717.12457-2-mathieu.desnoyers@efficios.com>
+From: linuxram at us.ibm.com (Ram Pai)
+Date: Sun, 12 Nov 2017 12:45:10 -0800
+Subject: [Linux-kselftest-mirror] [PATCH v9 00/51] powerpc,
+	mm: Memory Protection Keys
+In-Reply-To: <45ca9196-1d7d-d530-45df-4ee41773cace@c-s.fr>
+References: <1509958663-18737-1-git-send-email-linuxram@us.ibm.com>
+ <45ca9196-1d7d-d530-45df-4ee41773cace@c-s.fr>
+Message-ID: <20171112204510.GE5546@ram.oc3035372033.ibm.com>
 
-Test the new MEMBARRIER_CMD_PRIVATE_EXPEDITED and
-MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED commands.
+On Fri, Nov 10, 2017 at 07:10:31PM +0100, Christophe LEROY wrote:
+> Hi
+> 
+> Le 06/11/2017 à 09:56, Ram Pai a écrit :
+> >Memory protection keys enable applications to protect its
+> >address space from inadvertent access from or corruption
+> >by itself.
+> >
+> >These patches along with the pte-bit freeing patch series
+> >enables the protection key feature on powerpc; 4k and 64k
+> >hashpage kernels. It also changes the generic and x86
+> >code to expose memkey features through sysfs. Finally
+> >testcases and Documentation is updated.
+> >
+> >All patches can be found at --
+> >https://github.com/rampai/memorykeys.git memkey.v9
+> 
+> As far as I can see you are focussing the implementation on 64 bits
+> powerpc. This could also be implemented on 32 bits powerpc, for
+> instance the 8xx has MMU Access Protection Registers which can be
+> used to define 16 domains and could I think be used for implementing
+> protection keys.
 
-Add checks expecting specific error values on system calls expected to
-fail.
+I was assuming non-existence of any 32bit powerpc
+systems supporting memory keys. Sounds like it was a wrong assumption.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
-Acked-by: Shuah Khan <shuahkh at osg.samsung.com>
-Acked-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
-CC: Peter Zijlstra <peterz at infradead.org>
-CC: Paul E. McKenney <paulmck at linux.vnet.ibm.com>
-CC: Boqun Feng <boqun.feng at gmail.com>
-CC: Andrew Hunter <ahh at google.com>
-CC: Maged Michael <maged.michael at gmail.com>
-CC: Avi Kivity <avi at scylladb.com>
-CC: Benjamin Herrenschmidt <benh at kernel.crashing.org>
-CC: Paul Mackerras <paulus at samba.org>
-CC: Michael Ellerman <mpe at ellerman.id.au>
-CC: Dave Watson <davejwatson at fb.com>
-CC: Alan Stern <stern at rowland.harvard.edu>
-CC: Will Deacon <will.deacon at arm.com>
-CC: Andy Lutomirski <luto at kernel.org>
-CC: Alice Ferrazzi <alice.ferrazzi at gmail.com>
-CC: Paul Elder <paul.elder at pitt.edu>
-CC: linux-kselftest at vger.kernel.org
-CC: linux-arch at vger.kernel.org
----
- .../testing/selftests/membarrier/membarrier_test.c | 109 ++++++++++++++++++---
- 1 file changed, 94 insertions(+), 15 deletions(-)
+However, I think, the framework as it stands today should work. All
+the functionality is captured in pkeys.c and pkeys.h which are generic
+ppc files.  Its just a matter of providing the 32-bit implementation
+for whichever sub-arch that support it.  Can you point me to problem
+areas? I will fix them.
 
-diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
-index 9e674d9514d1..d7543a6d9030 100644
---- a/tools/testing/selftests/membarrier/membarrier_test.c
-+++ b/tools/testing/selftests/membarrier/membarrier_test.c
-@@ -16,49 +16,119 @@ static int sys_membarrier(int cmd, int flags)
- static int test_membarrier_cmd_fail(void)
- {
- 	int cmd = -1, flags = 0;
-+	const char *test_name = "sys membarrier invalid command";
- 
- 	if (sys_membarrier(cmd, flags) != -1) {
- 		ksft_exit_fail_msg(
--			"sys membarrier invalid command test: command = %d, flags = %d. Should fail, but passed\n",
--			cmd, flags);
-+			"%s test: command = %d, flags = %d. Should fail, but passed\n",
-+			test_name, cmd, flags);
-+	}
-+	if (errno != EINVAL) {
-+		ksft_exit_fail_msg(
-+			"%s test: flags = %d. Should return (%d: \"%s\"), but returned (%d: \"%s\").\n",
-+			test_name, flags, EINVAL, strerror(EINVAL),
-+			errno, strerror(errno));
- 	}
- 
- 	ksft_test_result_pass(
--		"sys membarrier invalid command test: command = %d, flags = %d. Failed as expected\n",
--		cmd, flags);
-+		"%s test: command = %d, flags = %d, errno = %d. Failed as expected\n",
-+		test_name, cmd, flags, errno);
- 	return 0;
- }
- 
- static int test_membarrier_flags_fail(void)
- {
- 	int cmd = MEMBARRIER_CMD_QUERY, flags = 1;
-+	const char *test_name = "sys membarrier MEMBARRIER_CMD_QUERY invalid flags";
- 
- 	if (sys_membarrier(cmd, flags) != -1) {
- 		ksft_exit_fail_msg(
--			"sys membarrier MEMBARRIER_CMD_QUERY invalid flags test: flags = %d. Should fail, but passed\n",
--			flags);
-+			"%s test: flags = %d. Should fail, but passed\n",
-+			test_name, flags);
-+	}
-+	if (errno != EINVAL) {
-+		ksft_exit_fail_msg(
-+			"%s test: flags = %d. Should return (%d: \"%s\"), but returned (%d: \"%s\").\n",
-+			test_name, flags, EINVAL, strerror(EINVAL),
-+			errno, strerror(errno));
- 	}
- 
- 	ksft_test_result_pass(
--		"sys membarrier MEMBARRIER_CMD_QUERY invalid flags test: flags = %d. Failed as expected\n",
--		flags);
-+		"%s test: flags = %d, errno = %d. Failed as expected\n",
-+		test_name, flags, errno);
- 	return 0;
- }
- 
--static int test_membarrier_success(void)
-+static int test_membarrier_shared_success(void)
- {
- 	int cmd = MEMBARRIER_CMD_SHARED, flags = 0;
--	const char *test_name = "sys membarrier MEMBARRIER_CMD_SHARED\n";
-+	const char *test_name = "sys membarrier MEMBARRIER_CMD_SHARED";
-+
-+	if (sys_membarrier(cmd, flags) != 0) {
-+		ksft_exit_fail_msg(
-+			"%s test: flags = %d, errno = %d\n",
-+			test_name, flags, errno);
-+	}
-+
-+	ksft_test_result_pass(
-+		"%s test: flags = %d\n", test_name, flags);
-+	return 0;
-+}
-+
-+static int test_membarrier_private_expedited_fail(void)
-+{
-+	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
-+	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED not registered failure";
-+
-+	if (sys_membarrier(cmd, flags) != -1) {
-+		ksft_exit_fail_msg(
-+			"%s test: flags = %d. Should fail, but passed\n",
-+			test_name, flags);
-+	}
-+	if (errno != EPERM) {
-+		ksft_exit_fail_msg(
-+			"%s test: flags = %d. Should return (%d: \"%s\"), but returned (%d: \"%s\").\n",
-+			test_name, flags, EPERM, strerror(EPERM),
-+			errno, strerror(errno));
-+	}
-+
-+	ksft_test_result_pass(
-+		"%s test: flags = %d, errno = %d\n",
-+		test_name, flags, errno);
-+	return 0;
-+}
-+
-+static int test_membarrier_register_private_expedited_success(void)
-+{
-+	int cmd = MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED, flags = 0;
-+	const char *test_name = "sys membarrier MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED";
- 
- 	if (sys_membarrier(cmd, flags) != 0) {
- 		ksft_exit_fail_msg(
--			"sys membarrier MEMBARRIER_CMD_SHARED test: flags = %d\n",
--			flags);
-+			"%s test: flags = %d, errno = %d\n",
-+			test_name, flags, errno);
- 	}
- 
- 	ksft_test_result_pass(
--		"sys membarrier MEMBARRIER_CMD_SHARED test: flags = %d\n",
--		flags);
-+		"%s test: flags = %d\n",
-+		test_name, flags);
-+	return 0;
-+}
-+
-+static int test_membarrier_private_expedited_success(void)
-+{
-+	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
-+	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED";
-+
-+	if (sys_membarrier(cmd, flags) != 0) {
-+		ksft_exit_fail_msg(
-+			"%s test: flags = %d, errno = %d\n",
-+			test_name, flags, errno);
-+	}
-+
-+	ksft_test_result_pass(
-+		"%s test: flags = %d\n",
-+		test_name, flags);
- 	return 0;
- }
- 
-@@ -72,7 +142,16 @@ static int test_membarrier(void)
- 	status = test_membarrier_flags_fail();
- 	if (status)
- 		return status;
--	status = test_membarrier_success();
-+	status = test_membarrier_shared_success();
-+	if (status)
-+		return status;
-+	status = test_membarrier_private_expedited_fail();
-+	if (status)
-+		return status;
-+	status = test_membarrier_register_private_expedited_success();
-+	if (status)
-+		return status;
-+	status = test_membarrier_private_expedited_success();
- 	if (status)
- 		return status;
- 	return 0;
--- 
-2.11.0
+Thanks for you interest. Togather we should be able to make it
+happen.
+
+
+> Of course the challenge after that would be to find 4 spare PTE
+> bits, I'm sure we can find them on the 8xx, at least when using 16k
+> pages we have 2 bits already available, then by merging PAGE_SHARED
+> and PAGE_USER and by reducing PAGE_RO to only one bit we can get the
+> 4 spare bits.
+
+yes. This needs to happen parallely.
+RP
+
+> 
+> Therefore I think it would be great if you could implement a
+> framework common to both PPC32 and PPC64.
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
