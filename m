@@ -1,93 +1,133 @@
-From: linuxram@us.ibm.com (Ram Pai)
-Date: Sun, 12 Nov 2017 16:54:51 -0800
-Subject: [Linux-kselftest-mirror] [PATCH v9 23/51] powerpc: Enable pkey
-	subsystem
-In-Reply-To: <1509958663-18737-24-git-send-email-linuxram@us.ibm.com>
-References: <1509958663-18737-1-git-send-email-linuxram@us.ibm.com>
- <1509958663-18737-24-git-send-email-linuxram@us.ibm.com>
-Message-ID: <20171113005451.GF5546@ram.oc3035372033.ibm.com>
+From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
+Date: Tue, 14 Nov 2017 15:04:13 -0500
+Subject: [Linux-kselftest-mirror] [RFC PATCH for 4.15 23/24] membarrier:
+	selftest: Test private expedited sync core cmd
+In-Reply-To: <20171114200414.2188-1-mathieu.desnoyers@efficios.com>
+References: <20171114200414.2188-1-mathieu.desnoyers@efficios.com>
+Message-ID: <20171114200414.2188-24-mathieu.desnoyers@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171113005451.If8Po9gqO1vEuMbQp3Hh_XlI9z1tBWGDO4vgeX3Aixo@z>
+Message-ID: <20171114200413.zj9TD-AM4IvICZ6HkUsGRvTfGxhyOVtwG91bJ3_h46s@z>
 
-On Mon, Nov 06, 2017@12:57:15AM -0800, Ram Pai wrote:
-> PAPR defines 'ibm,processor-storage-keys' property. It exports two
-> values. The first value holds the number of data-access keys and the
-> second holds the number of instruction-access keys.  Due to a bug in
-> the  firmware, instruction-access  keys is  always  reported  as zero.
-> However any key can be configured to disable data-access and/or disable
-> execution-access. The inavailablity of the second value is not a
-> big handicap, though it could have been used to determine if the
-> platform supported disable-execution-access.
-> 
-> Non PAPR platforms do not define this property   in the device tree yet.
-> Here, we   hardcode   CPUs   that   support  pkey by consulting
-> PowerISA3.0
-> 
-> This patch calculates the number of keys supported by the platform.
-> Alsi it determines the platform support for read/write/execution access
-> support for pkeys.
+Test the new MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE and
+MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE commands.
 
-> 
-> Signed-off-by: Ram Pai <linuxram at us.ibm.com>
-> ---
-> 
-....snip...
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+CC: Shuah Khan <shuahkh at osg.samsung.com>
+CC: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+CC: Peter Zijlstra <peterz at infradead.org>
+CC: Paul E. McKenney <paulmck at linux.vnet.ibm.com>
+CC: Boqun Feng <boqun.feng at gmail.com>
+CC: Andrew Hunter <ahh at google.com>
+CC: Maged Michael <maged.michael at gmail.com>
+CC: Avi Kivity <avi at scylladb.com>
+CC: Benjamin Herrenschmidt <benh at kernel.crashing.org>
+CC: Paul Mackerras <paulus at samba.org>
+CC: Michael Ellerman <mpe at ellerman.id.au>
+CC: Dave Watson <davejwatson at fb.com>
+CC: Alan Stern <stern at rowland.harvard.edu>
+CC: Will Deacon <will.deacon at arm.com>
+CC: Andy Lutomirski <luto at kernel.org>
+CC: Alice Ferrazzi <alice.ferrazzi at gmail.com>
+CC: Paul Elder <paul.elder at pitt.edu>
+CC: linux-kselftest at vger.kernel.org
+CC: linux-arch at vger.kernel.org
+---
+ .../testing/selftests/membarrier/membarrier_test.c | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
-> +static inline bool pkey_mmu_enabled(void)
-> +{
-> +	if (firmware_has_feature(FW_FEATURE_LPAR))
-> +		return pkeys_total;
-> +	else
-> +		return cpu_has_feature(CPU_FTR_PKEY);
-> +}
-> +
->  void __init pkey_initialize(void)
->  {
->  	int os_reserved, i;
-> @@ -46,14 +54,9 @@ void __init pkey_initialize(void)
->  		     __builtin_popcountl(ARCH_VM_PKEY_FLAGS >> VM_PKEY_SHIFT)
->  				!= (sizeof(u64) * BITS_PER_BYTE));
-> 
-> -	/*
-> -	 * Disable the pkey system till everything is in place. A subsequent
-> -	 * patch will enable it.
-> -	 */
-> -	static_branch_enable(&pkey_disabled);
-> -
-> -	/* Lets assume 32 keys */
-> -	pkeys_total = 32;
-
-vvvvvvvvvvvvvvvvvvvv
-> +	/* Let's assume 32 keys if we are not told the number of pkeys. */
-> +	if (!pkeys_total)
-> +		pkeys_total = 32;
-^^^^^^^^^^^^^^^^^^^^
-
-There is a small bug here. 
-
-On a KVM guest or a LPAR, if the device tree
-does not expose pkeys, the pkey-subsystem must be disabled.
-
-Unfortunately, the code above blindly sets the pkeys_total to 32.
-This confuses pkey_mmu_enabled() into returning true. Because of this
-bug the guest errorneously enables pkey-subsystem. 
-
-The fix is to delete the code marked above.
-
-> 
->  	/*
->  	 * Adjust the upper limit, based on the number of bits supported by
-> @@ -62,11 +65,19 @@ void __init pkey_initialize(void)
->  	pkeys_total = min_t(int, pkeys_total,
->  			(ARCH_VM_PKEY_FLAGS >> VM_PKEY_SHIFT));
-> 
-> +	if (!pkey_mmu_enabled() || radix_enabled() || !pkeys_total)
-> +		static_branch_enable(&pkey_disabled);
-> +	else
-> +		static_branch_disable(&pkey_disabled);
-> +
-
-RP
+diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
+index bb9c58072c5c..d9ab8b6ee52e 100644
+--- a/tools/testing/selftests/membarrier/membarrier_test.c
++++ b/tools/testing/selftests/membarrier/membarrier_test.c
+@@ -132,6 +132,63 @@ static int test_membarrier_private_expedited_success(void)
+ 	return 0;
+ }
+ 
++static int test_membarrier_private_expedited_sync_core_fail(void)
++{
++	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE not registered failure";
++
++	if (sys_membarrier(cmd, flags) != -1) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d. Should fail, but passed\n",
++			test_name, flags);
++	}
++	if (errno != EPERM) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d. Should return (%d: \"%s\"), but returned (%d: \"%s\").\n",
++			test_name, flags, EPERM, strerror(EPERM),
++			errno, strerror(errno));
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d, errno = %d\n",
++		test_name, flags, errno);
++	return 0;
++}
++
++static int test_membarrier_register_private_expedited_sync_core_success(void)
++{
++	int cmd = MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE";
++
++	if (sys_membarrier(cmd, flags) != 0) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d, errno = %d\n",
++			test_name, flags, errno);
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d\n",
++		test_name, flags);
++	return 0;
++}
++
++static int test_membarrier_private_expedited_sync_core_success(void)
++{
++	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE";
++
++	if (sys_membarrier(cmd, flags) != 0) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d, errno = %d\n",
++			test_name, flags, errno);
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d\n",
++		test_name, flags);
++	return 0;
++}
++
+ static int test_membarrier_register_shared_expedited_success(void)
+ {
+ 	int cmd = MEMBARRIER_CMD_REGISTER_SHARED_EXPEDITED, flags = 0;
+@@ -188,6 +245,22 @@ static int test_membarrier(void)
+ 	status = test_membarrier_private_expedited_success();
+ 	if (status)
+ 		return status;
++	status = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
++	if (status < 0) {
++		ksft_test_result_fail("sys_membarrier() failed\n");
++		return status;
++	}
++	if (status & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
++		status = test_membarrier_private_expedited_sync_core_fail();
++		if (status)
++			return status;
++		status = test_membarrier_register_private_expedited_sync_core_success();
++		if (status)
++			return status;
++		status = test_membarrier_private_expedited_sync_core_success();
++		if (status)
++			return status;
++	}
+ 	/*
+ 	 * It is valid to send a shared membarrier from a non-registered
+ 	 * process.
+-- 
+2.11.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
