@@ -1,43 +1,45 @@
 From: tom.gall at linaro.org (Tom Gall)
-Date: Mon, 20 Nov 2017 10:23:33 -0600
-Subject: [Linux-kselftest-mirror] Towards 4.14 LTS
-In-Reply-To: <20171119112051.GA10015@kroah.com>
+Date: Mon, 20 Nov 2017 10:48:58 -0600
+Subject: [Linux-kselftest-mirror] [LTP] Towards 4.14 LTS
+In-Reply-To: <20171120161029.GA2188@rei>
 References: <5E1947BC-9D22-42EB-BA29-96EA15A9C817@linaro.org>
- <20171119112051.GA10015@kroah.com>
-Message-ID: <EF258C71-3F2A-449C-8283-EA4F715C81C0@linaro.org>
+ <20171120161029.GA2188@rei>
+Message-ID: <AD4F87EA-602A-402D-8E72-4DFB52585A5D@linaro.org>
 
 
-> On Nov 19, 2017, at 5:20 AM, Greg Kroah-Hartman <gregkh at linuxfoundation.org> wrote:
+
+> On Nov 20, 2017, at 10:10 AM, Cyril Hrubis <chrubis at suse.cz> wrote:
 > 
-> On Thu, Nov 16, 2017 at 10:50:23PM -0600, Tom Gall wrote:
->> At Linaro we’ve been putting effort into regularly running kernel tests over 
->> arm, arm64 and x86_64 targets. On those targets we’re running mainline, -next, 
->> 4.4, and 4.9 kernels and yes we are adding to this list as the hardware 
->> capacity grows.
+> Hi!
+>> So why didn???t we report these? As mentioned we???ve been tossing out dodgy
+>> test cases to get to a clean baseline. We don???t need or want noise. 
 >> 
->> For test buckets we’re using just LTP, kselftest and libhugetlbfs and
->> like kernels we will add to this list. 
+>> For LTS, I want the system when it detects a failure to enable a quick 
+>> bisect involving the affected test bucket. Given the nature of kernel 
+>> bugs tho, there is that class of bug which only happens occasionally.
 > 
-> I'm sorry, I don't understand this sentance.
+> From my experience debugging kernel bugs requires an actuall human
+> interaction and there is only certain level of automation that can be
+> achieved. Don't take me wrong, automatic bisection and other bells and
+> whistles are a nice to have, but at the end of the day you usually need
+> someone to reproduce/look at the problem, possibly check the source
+> code, report a bug, etc. Hence it does not make much sense to have an
+> automated system without dedicated engineers assigned to review the test
+> results.
 
-I was just saying that we intend to add more test buckets and more kernels.
+You are entirely right automation only gets so far. We have a few lines
+of defense that probably are worth a mention.
 
-For instance 4.13-rc just was added to the mix.
+1) infra - sometimes results/runs need to be re-run for whatever reason.
+2) triage - Crappy test case or something that is real?
+3) kernel - bisecting etc
 
-For test buckets, I’m currently dorking around with some make check targets
-for a few interesting packages. 
+We don’t have huge dedicated teams for each category but likewise each 
+has a team.
 
-> 
->> With the 4.14 cycle being a little ‘different’ in so much as the goal to 
->> have it be an LTS kernel I think it’s important to take a look at some 
->> 4.14 test results. 
->> 
->> Grab a beverage, this is a bit of a long post. But quick summery 4.14 as 
->> released looks just as good as 4.13, for the test buckets I named above.
-> 
-> Thanks for doing this testing and letting us know.
-> 
-> greg k-h
+> -- 
+> Cyril Hrubis
+> chrubis at suse.cz
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
