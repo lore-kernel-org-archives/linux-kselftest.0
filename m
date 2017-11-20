@@ -1,47 +1,73 @@
-From: tom.gall@linaro.org (Tom Gall)
-Date: Mon, 20 Nov 2017 10:48:58 -0600
-Subject: [Linux-kselftest-mirror] [LTP] Towards 4.14 LTS
-In-Reply-To: <20171120161029.GA2188@rei>
-References: <5E1947BC-9D22-42EB-BA29-96EA15A9C817@linaro.org>
- <20171120161029.GA2188@rei>
-Message-ID: <AD4F87EA-602A-402D-8E72-4DFB52585A5D@linaro.org>
+From: elfring@users.sourceforge.net (SF Markus Elfring)
+Date: Mon, 20 Nov 2017 22:25:44 +0100
+Subject: [Linux-kselftest-mirror] [PATCH] selftest: sync: Use common error
+ handling code in sync_file_info()
+Message-ID: <219c366b-d753-e65b-b021-6d4a584588d0@users.sourceforge.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171120164858.-fqccawrMa2CcqCp9e7Aycjsvi80e_PrVA4WwXfNoQw@z>
+Message-ID: <20171120212544.7MiauwlbYMYsKJGwIsYU4eOTVsHrycNTgi1TLQuMsak@z>
 
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Mon, 20 Nov 2017 22:20:37 +0100
 
+Add a jump target so that a bit of exception handling can be better reused
+at the end of this function.
 
-> On Nov 20, 2017,@10:10 AM, Cyril Hrubis <chrubis@suse.cz> wrote:
-> 
-> Hi!
->> So why didn???t we report these? As mentioned we???ve been tossing out dodgy
->> test cases to get to a clean baseline. We don???t need or want noise. 
->> 
->> For LTS, I want the system when it detects a failure to enable a quick 
->> bisect involving the affected test bucket. Given the nature of kernel 
->> bugs tho, there is that class of bug which only happens occasionally.
-> 
-> From my experience debugging kernel bugs requires an actuall human
-> interaction and there is only certain level of automation that can be
-> achieved. Don't take me wrong, automatic bisection and other bells and
-> whistles are a nice to have, but at the end of the day you usually need
-> someone to reproduce/look at the problem, possibly check the source
-> code, report a bug, etc. Hence it does not make much sense to have an
-> automated system without dedicated engineers assigned to review the test
-> results.
+This issue was detected by using the Coccinelle software.
 
-You are entirely right automation only gets so far. We have a few lines
-of defense that probably are worth a mention.
+Signed-off-by: Markus Elfring <elfring at users.sourceforge.net>
+---
+ tools/testing/selftests/sync/sync.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-1) infra - sometimes results/runs need to be re-run for whatever reason.
-2) triage - Crappy test case or something that is real?
-3) kernel - bisecting etc
-
-We don’t have huge dedicated teams for each category but likewise each 
-has a team.
-
-> -- 
-> Cyril Hrubis
-> chrubis at suse.cz
+diff --git a/tools/testing/selftests/sync/sync.c b/tools/testing/selftests/sync/sync.c
+index f3d599f249b9..d0d55377f6f8 100644
+--- a/tools/testing/selftests/sync/sync.c
++++ b/tools/testing/selftests/sync/sync.c
+@@ -92,10 +92,8 @@ static struct sync_file_info *sync_file_info(int fd)
+ 		return NULL;
+ 
+ 	err = ioctl(fd, SYNC_IOC_FILE_INFO, info);
+-	if (err < 0) {
+-		free(info);
+-		return NULL;
+-	}
++	if (err < 0)
++		goto free_info;
+ 
+ 	num_fences = info->num_fences;
+ 
+@@ -104,22 +102,23 @@ static struct sync_file_info *sync_file_info(int fd)
+ 		info->num_fences = num_fences;
+ 
+ 		fence_info = calloc(num_fences, sizeof(*fence_info));
+-		if (!fence_info) {
+-			free(info);
+-			return NULL;
+-		}
++		if (!fence_info)
++			goto free_info;
+ 
+ 		info->sync_fence_info = (uint64_t)fence_info;
+ 
+ 		err = ioctl(fd, SYNC_IOC_FILE_INFO, info);
+ 		if (err < 0) {
+ 			free(fence_info);
+-			free(info);
+-			return NULL;
++			goto free_info;
+ 		}
+ 	}
+ 
+ 	return info;
++
++free_info:
++	free(info);
++	return NULL;
+ }
+ 
+ static void sync_file_info_free(struct sync_file_info *info)
+-- 
+2.15.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
