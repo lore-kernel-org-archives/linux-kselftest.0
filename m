@@ -1,71 +1,102 @@
 From: elfring@users.sourceforge.net (SF Markus Elfring)
-Date: Mon, 20 Nov 2017 22:25:44 +0100
-Subject: [Linux-kselftest-mirror] [PATCH] selftest: sync: Use common error
- handling code in sync_file_info()
-Message-ID: <219c366b-d753-e65b-b021-6d4a584588d0@users.sourceforge.net>
+Date: Tue, 21 Nov 2017 11:00:52 +0100
+Subject: [Linux-kselftest-mirror] [PATCH] selftests: posix_timers: Use
+ common error handling code in two functions
+Message-ID: <3ce187fa-a6df-a419-6924-ea12bf837972@users.sourceforge.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171120212544.7MiauwlbYMYsKJGwIsYU4eOTVsHrycNTgi1TLQuMsak@z>
+Message-ID: <20171121100052.6Gs1dyDSj1jS7yYCNBqXzyL2YAzlo0dUsl9_zSRUHAY@z>
 
 From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Mon, 20 Nov 2017 22:20:37 +0100
+Date: Tue, 21 Nov 2017 10:50:32 +0100
 
-Add a jump target so that a bit of exception handling can be better reused
-at the end of this function.
+Add jump targets so that a bit of exception handling can be better reused
+at the end of these functions.
 
 This issue was detected by using the Coccinelle software.
 
 Signed-off-by: Markus Elfring <elfring at users.sourceforge.net>
 ---
- tools/testing/selftests/sync/sync.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ tools/testing/selftests/timers/posix_timers.c | 32 +++++++++++++--------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/tools/testing/selftests/sync/sync.c b/tools/testing/selftests/sync/sync.c
-index f3d599f249b9..d0d55377f6f8 100644
---- a/tools/testing/selftests/sync/sync.c
-+++ b/tools/testing/selftests/sync/sync.c
-@@ -92,10 +92,8 @@ static struct sync_file_info *sync_file_info(int fd)
- 		return NULL;
+diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
+index 15cf56d32155..5c9fbb06194f 100644
+--- a/tools/testing/selftests/timers/posix_timers.c
++++ b/tools/testing/selftests/timers/posix_timers.c
+@@ -104,10 +104,8 @@ static int check_itimer(int which)
+ 		signal(SIGALRM, sig_handler);
  
- 	err = ioctl(fd, SYNC_IOC_FILE_INFO, info);
+ 	err = gettimeofday(&start, NULL);
 -	if (err < 0) {
--		free(info);
--		return NULL;
+-		perror("Can't call gettimeofday()\n");
+-		return -1;
 -	}
 +	if (err < 0)
-+		goto free_info;
++		goto report_failure;
  
- 	num_fences = info->num_fences;
+ 	err = setitimer(which, &val, NULL);
+ 	if (err < 0) {
+@@ -123,10 +121,8 @@ static int check_itimer(int which)
+ 		idle_loop();
  
-@@ -104,22 +102,23 @@ static struct sync_file_info *sync_file_info(int fd)
- 		info->num_fences = num_fences;
+ 	err = gettimeofday(&end, NULL);
+-	if (err < 0) {
+-		perror("Can't call gettimeofday()\n");
+-		return -1;
+-	}
++	if (err < 0)
++		goto report_failure;
  
- 		fence_info = calloc(num_fences, sizeof(*fence_info));
--		if (!fence_info) {
--			free(info);
--			return NULL;
--		}
-+		if (!fence_info)
-+			goto free_info;
+ 	if (!check_diff(start, end))
+ 		printf("[OK]\n");
+@@ -134,6 +130,10 @@ static int check_itimer(int which)
+ 		printf("[FAIL]\n");
  
- 		info->sync_fence_info = (uint64_t)fence_info;
- 
- 		err = ioctl(fd, SYNC_IOC_FILE_INFO, info);
- 		if (err < 0) {
- 			free(fence_info);
--			free(info);
--			return NULL;
-+			goto free_info;
- 		}
- 	}
- 
- 	return info;
+ 	return 0;
 +
-+free_info:
-+	free(info);
-+	return NULL;
++report_failure:
++	perror("Can't call gettimeofday()\n");
++	return -1;
  }
  
- static void sync_file_info_free(struct sync_file_info *info)
+ static int check_timer_create(int which)
+@@ -162,10 +162,8 @@ static int check_timer_create(int which)
+ 	signal(SIGALRM, sig_handler);
+ 
+ 	err = gettimeofday(&start, NULL);
+-	if (err < 0) {
+-		perror("Can't call gettimeofday()\n");
+-		return -1;
+-	}
++	if (err < 0)
++		goto report_failure;
+ 
+ 	err = timer_settime(id, 0, &val, NULL);
+ 	if (err < 0) {
+@@ -176,10 +174,8 @@ static int check_timer_create(int which)
+ 	user_loop();
+ 
+ 	err = gettimeofday(&end, NULL);
+-	if (err < 0) {
+-		perror("Can't call gettimeofday()\n");
+-		return -1;
+-	}
++	if (err < 0)
++		goto report_failure;
+ 
+ 	if (!check_diff(start, end))
+ 		printf("[OK]\n");
+@@ -187,6 +183,10 @@ static int check_timer_create(int which)
+ 		printf("[FAIL]\n");
+ 
+ 	return 0;
++
++report_failure:
++	perror("Can't call gettimeofday()\n");
++	return -1;
+ }
+ 
+ int main(int argc, char **argv)
 -- 
 2.15.0
 
