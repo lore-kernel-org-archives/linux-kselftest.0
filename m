@@ -1,18 +1,120 @@
-From: elfring@users.sourceforge.net (SF Markus Elfring)
-Date: Tue, 21 Nov 2017 15:04:15 +0100
-Subject: [Linux-kselftest-mirror] selftests: Completion of error handling
-Message-ID: <988e4be0-4784-d9b7-879b-06ed405ae293@users.sourceforge.net>
+From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
+Date: Tue, 21 Nov 2017 09:19:00 -0500
+Subject: [Linux-kselftest-mirror] [RFC PATCH for 4.15 22/22] membarrier:
+	selftest: Test shared expedited cmd
+In-Reply-To: <20171121141900.18471-1-mathieu.desnoyers@efficios.com>
+References: <20171121141900.18471-1-mathieu.desnoyers@efficios.com>
+Message-ID: <20171121141900.18471-23-mathieu.desnoyers@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171121140415.4p22kGaFKPZtO7sJbD7KJ4kripTfRCz0D1j5Awzd3AI@z>
+Message-ID: <20171121141900.QneUU0HMuKnkX2ALSbQNxC_TehyZqUfR3MRAcFh6I3I@z>
 
-Hello,
+Test the new MEMBARRIER_CMD_SHARED_EXPEDITED and
+MEMBARRIER_CMD_REGISTER_SHARED_EXPEDITED commands.
 
-Static source code analysis points out that the checking of return values from
-some function calls is incomplete also in this software area.
-How would you like to fix remaining open issues there?
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+Acked-by: Shuah Khan <shuahkh at osg.samsung.com>
+CC: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+CC: Peter Zijlstra <peterz at infradead.org>
+CC: Paul E. McKenney <paulmck at linux.vnet.ibm.com>
+CC: Boqun Feng <boqun.feng at gmail.com>
+CC: Andrew Hunter <ahh at google.com>
+CC: Maged Michael <maged.michael at gmail.com>
+CC: Avi Kivity <avi at scylladb.com>
+CC: Benjamin Herrenschmidt <benh at kernel.crashing.org>
+CC: Paul Mackerras <paulus at samba.org>
+CC: Michael Ellerman <mpe at ellerman.id.au>
+CC: Dave Watson <davejwatson at fb.com>
+CC: Alan Stern <stern at rowland.harvard.edu>
+CC: Will Deacon <will.deacon at arm.com>
+CC: Andy Lutomirski <luto at kernel.org>
+CC: Alice Ferrazzi <alice.ferrazzi at gmail.com>
+CC: Paul Elder <paul.elder at pitt.edu>
+CC: linux-kselftest at vger.kernel.org
+CC: linux-arch at vger.kernel.org
+---
+ .../testing/selftests/membarrier/membarrier_test.c | 51 +++++++++++++++++++++-
+ 1 file changed, 50 insertions(+), 1 deletion(-)
 
-Regards,
-Markus
+diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
+index e6ee73d01fa1..bb9c58072c5c 100644
+--- a/tools/testing/selftests/membarrier/membarrier_test.c
++++ b/tools/testing/selftests/membarrier/membarrier_test.c
+@@ -132,6 +132,40 @@ static int test_membarrier_private_expedited_success(void)
+ 	return 0;
+ }
+ 
++static int test_membarrier_register_shared_expedited_success(void)
++{
++	int cmd = MEMBARRIER_CMD_REGISTER_SHARED_EXPEDITED, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_REGISTER_SHARED_EXPEDITED";
++
++	if (sys_membarrier(cmd, flags) != 0) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d, errno = %d\n",
++			test_name, flags, errno);
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d\n",
++		test_name, flags);
++	return 0;
++}
++
++static int test_membarrier_shared_expedited_success(void)
++{
++	int cmd = MEMBARRIER_CMD_SHARED_EXPEDITED, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_SHARED_EXPEDITED";
++
++	if (sys_membarrier(cmd, flags) != 0) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d, errno = %d\n",
++			test_name, flags, errno);
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d\n",
++		test_name, flags);
++	return 0;
++}
++
+ static int test_membarrier(void)
+ {
+ 	int status;
+@@ -154,6 +188,19 @@ static int test_membarrier(void)
+ 	status = test_membarrier_private_expedited_success();
+ 	if (status)
+ 		return status;
++	/*
++	 * It is valid to send a shared membarrier from a non-registered
++	 * process.
++	 */
++	status = test_membarrier_shared_expedited_success();
++	if (status)
++		return status;
++	status = test_membarrier_register_shared_expedited_success();
++	if (status)
++		return status;
++	status = test_membarrier_shared_expedited_success();
++	if (status)
++		return status;
+ 	return 0;
+ }
+ 
+@@ -173,8 +220,10 @@ static int test_membarrier_query(void)
+ 		}
+ 		ksft_exit_fail_msg("sys_membarrier() failed\n");
+ 	}
+-	if (!(ret & MEMBARRIER_CMD_SHARED))
++	if (!(ret & MEMBARRIER_CMD_SHARED)) {
++		ksft_test_result_fail("sys_membarrier() CMD_SHARED query failed\n");
+ 		ksft_exit_fail_msg("sys_membarrier is not supported.\n");
++	}
+ 
+ 	ksft_test_result_pass("sys_membarrier available\n");
+ 	return 0;
+-- 
+2.11.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
