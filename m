@@ -1,84 +1,132 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Tue, 21 Nov 2017 08:46:52 -0700
-Subject: [Linux-kselftest-mirror] [PATCH] selftest: sync: Use common
- error handling code in sync_file_info()
-In-Reply-To: <219c366b-d753-e65b-b021-6d4a584588d0@users.sourceforge.net>
-References: <219c366b-d753-e65b-b021-6d4a584588d0@users.sourceforge.net>
-Message-ID: <3a27095e-84ad-6e93-bae5-3b242a042238@kernel.org>
+From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
+Date: Tue, 21 Nov 2017 16:46:11 +0000 (UTC)
+Subject: [Linux-kselftest-mirror] [RFC PATCH for 4.15 v3 14/22] cpu_opv:
+ selftests: Implement selftests
+In-Reply-To: <c311cd4b-4d8f-bfb5-3731-2cb2eefa4865@kernel.org>
+References: <20171121141900.18471-1-mathieu.desnoyers@efficios.com>
+ <20171121141900.18471-15-mathieu.desnoyers@efficios.com>
+ <c311cd4b-4d8f-bfb5-3731-2cb2eefa4865@kernel.org>
+Message-ID: <78388403.19365.1511282771630.JavaMail.zimbra@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171121154652.AMP5ckA89pbWJSZUa-UnI-Twg4NAitShVyw6wgHpptQ@z>
+Message-ID: <20171121164611.dCjzRRUef-FlS1MgrwCllOAYgG16-4VmOqD_s6_XSFE@z>
 
-On 11/20/2017 02:25 PM, SF Markus Elfring wrote:
-> From: Markus Elfring <elfring at users.sourceforge.net>
-> Date: Mon, 20 Nov 2017 22:20:37 +0100
+----- On Nov 21, 2017,@10:17 AM, shuah shuah@kernel.org wrote:
+
+[...]
+
+>> +int main(int argc, char **argv)
+>> +{
+>> +	int ret = 0;
+>> +
+>> +	ret |= test_compare_eq_same();
+>> +	ret |= test_compare_eq_diff();
+>> +	ret |= test_compare_ne_same();
+>> +	ret |= test_compare_ne_diff();
+>> +	ret |= test_2compare_eq_index();
+>> +	ret |= test_2compare_ne_index();
+>> +	ret |= test_memcpy();
+>> +	ret |= test_memcpy_u32();
+>> +	ret |= test_memcpy_mb_memcpy();
+>> +	ret |= test_add();
+>> +	ret |= test_two_add();
+>> +	ret |= test_or();
+>> +	ret |= test_and();
+>> +	ret |= test_xor();
+>> +	ret |= test_lshift();
+>> +	ret |= test_rshift();
+>> +	ret |= test_cmpxchg_success();
+>> +	ret |= test_cmpxchg_fail();
+>> +	ret |= test_memcpy_fault();
+>> +	ret |= test_unknown_op();
+>> +	ret |= test_max_ops();
+>> +	ret |= test_too_many_ops();
+>> +	ret |= test_memcpy_single_too_large();
+>> +	ret |= test_memcpy_single_ok_sum_too_large();
+>> +	ret |= test_page_fault();
+>> +
 > 
-> Add a jump target so that a bit of exception handling can be better reused
-> at the end of this function.
+> Where do pass counts get printed. I am seeing error messages when tests fail,
+> not seeing any pass messages. It would be nice to use ksft framework for
+> counting pass/fail for these series of tests that get run.
+
+done. New output:
+
+TAP version 13
+(standard_in) 1: syntax error
+selftests: basic_cpu_opv_test
+========================================
+TAP version 13
+ok 1 test_compare_eq same test
+ok 2 test_compare_eq different test
+ok 3 test_compare_ne same test
+ok 4 test_compare_ne different test
+ok 5 test_2compare_eq index test
+ok 6 test_2compare_ne index test
+ok 7 test_memcpy test
+ok 8 test_memcpy_u32 test
+ok 9 test_memcpy_mb_memcpy test
+ok 10 test_add test
+ok 11 test_two_add test
+ok 12 test_or test
+ok 13 test_and test
+ok 14 test_xor test
+ok 15 test_lshift test
+ok 16 test_rshift test
+ok 17 test_cmpxchg success test
+ok 18 test_cmpxchg fail test
+ok 19 test_memcpy_fault test
+ok 20 test_unknown_op test
+ok 21 test_max_ops test
+ok 22 test_too_many_ops test
+ok 23 test_memcpy_single_too_large test
+ok 24 test_memcpy_single_ok_sum_too_large test
+ok 25 test_page_fault test
+Pass 25 Fail 0 Xfail 0 Xpass 0 Skip 0 Error 0
+1..25
+ok 1.. selftests: basic_cpu_opv_test [PASS]
+
+(note the "(standard_in) 1: syntax error" for which I provided a fix
+in a separate thread still appears with my make version)
+
+[...]
+
+>> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+>> index 5bef05d6ba39..441d7bc63bb7 100644
+>> --- a/tools/testing/selftests/lib.mk
+>> +++ b/tools/testing/selftests/lib.mk
+>> @@ -105,6 +105,9 @@ COMPILE.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+>>  LINK.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
+>>  endif
+>>  
+>> +# Selftest makefiles can override those targets by setting
+>> +# OVERRIDE_TARGETS = 1.
+>> +ifeq ($(OVERRIDE_TARGETS),)
+>>  $(OUTPUT)/%:%.c
+>>  	$(LINK.c) $^ $(LDLIBS) -o $@
+>>  
+>> @@ -113,5 +116,6 @@ $(OUTPUT)/%.o:%.S
+>>  
+>>  $(OUTPUT)/%:%.S
+>>  	$(LINK.S) $^ $(LDLIBS) -o $@
+>> +endif
+>>  
+>>  .PHONY: run_tests all clean install emit_tests
+>> 
 > 
-> This issue was detected by using the Coccinelle software.
+> As I said before, please do this change in a separate patch.
 
-I would like to see the Coccinelle log included in the commit log
+Sorry, it appears that I missed this comment last time. Will move
+this change to a separate patch.
 
-> 
-> Signed-off-by: Markus Elfring <elfring at users.sourceforge.net>
-> ---
->  tools/testing/selftests/sync/sync.c | 19 +++++++++----------
->  1 file changed, 9 insertions(+), 10 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/sync/sync.c b/tools/testing/selftests/sync/sync.c
-> index f3d599f249b9..d0d55377f6f8 100644
-> --- a/tools/testing/selftests/sync/sync.c
-> +++ b/tools/testing/selftests/sync/sync.c
-> @@ -92,10 +92,8 @@ static struct sync_file_info *sync_file_info(int fd)
->  		return NULL;
->  
->  	err = ioctl(fd, SYNC_IOC_FILE_INFO, info);
-> -	if (err < 0) {
-> -		free(info);
-> -		return NULL;
-> -	}
-> +	if (err < 0)
-> +		goto free_info;
->  
->  	num_fences = info->num_fences;
->  
-> @@ -104,22 +102,23 @@ static struct sync_file_info *sync_file_info(int fd)
->  		info->num_fences = num_fences;
->  
->  		fence_info = calloc(num_fences, sizeof(*fence_info));
-> -		if (!fence_info) {
-> -			free(info);
-> -			return NULL;
-> -		}
-> +		if (!fence_info)
-> +			goto free_info;
->  
->  		info->sync_fence_info = (uint64_t)fence_info;
->  
->  		err = ioctl(fd, SYNC_IOC_FILE_INFO, info);
->  		if (err < 0) {
->  			free(fence_info);
+Thanks,
 
-Why not add a free_fence_info to make it consistent?
+Mathieu
 
-> -			free(info);
-> -			return NULL;
-> +			goto free_info;
->  		}
->  	}
->  
->  	return info;
-> +
-> +free_info:
-> +	free(info);
-> +	return NULL;
->  }
->  
->  static void sync_file_info_free(struct sync_file_info *info)
-> 
 
-thanks,
--- Shuah
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
