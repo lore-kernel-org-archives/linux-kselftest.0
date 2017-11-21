@@ -1,58 +1,37 @@
 From: elfring@users.sourceforge.net (SF Markus Elfring)
-Date: Tue, 21 Nov 2017 19:55:25 +0100
-Subject: [Linux-kselftest-mirror] [PATCH] selftest: sync: Use common
- error handling code in sync_file_info()
-In-Reply-To: <3a27095e-84ad-6e93-bae5-3b242a042238@kernel.org>
-References: <219c366b-d753-e65b-b021-6d4a584588d0@users.sourceforge.net>
- <3a27095e-84ad-6e93-bae5-3b242a042238@kernel.org>
-Message-ID: <29abb1d8-95dd-fdf3-cecb-40d6c035508c@users.sourceforge.net>
+Date: Tue, 21 Nov 2017 20:30:14 +0100
+Subject: [Linux-kselftest-mirror] selftests: Completion of error handling
+In-Reply-To: <26965dfd-74e8-cf6f-7f55-56310834189d@kernel.org>
+References: <988e4be0-4784-d9b7-879b-06ed405ae293@users.sourceforge.net>
+ <26965dfd-74e8-cf6f-7f55-56310834189d@kernel.org>
+Message-ID: <dc266850-52d0-8380-7ab1-087c07a709fb@users.sourceforge.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171121185525.-SvxOKUHEUq3szEFOxPEFlnj4vuE2ph6Vr__LgxRH08@z>
+Message-ID: <20171121193014.3Ds8Cr32O8ou1tVQjaYwGs0Pc-ziRdo9XpPQ2KLcrfs@z>
 
->> Add a jump target so that a bit of exception handling can be better reused
->> at the end of this function.
+>> Static source code analysis points out that the checking of return values from
+>> some function calls is incomplete also in this software area.
+>> How would you like to fix remaining open issues there?
 >>
->> This issue was detected by using the Coccinelle software.
 > 
-> I would like to see the Coccinelle log included in the commit log
+> Without understanding the details on which failures,
 
-I guess that I can not append the kind of report you might be looking for
-so far. This small update suggestion is just another result from one
-of my evolving scripts for the semantic patch language.
-
-It was discussed under the topic “Comparing statement lists with SmPL”
-to some degree.
-https://systeme.lip6.fr/pipermail/cocci/2017-August/004388.html
+Are you using any dedicated tools for this purpose already?
 
 
->> @@ -104,22 +102,23 @@ static struct sync_file_info *sync_file_info(int fd)
->>  		info->num_fences = num_fences;
->>  
->>  		fence_info = calloc(num_fences, sizeof(*fence_info));
->> -		if (!fence_info) {
->> -			free(info);
->> -			return NULL;
->> -		}
->> +		if (!fence_info)
->> +			goto free_info;
->>  
->>  		info->sync_fence_info = (uint64_t)fence_info;
->>  
->>  		err = ioctl(fd, SYNC_IOC_FILE_INFO, info);
->>  		if (err < 0) {
->>  			free(fence_info);
-> 
-> Why not add a free_fence_info to make it consistent?
+> it would be hard for me comment on how to handle them.
 
-It did not add another jump label because it would be used only once
-for this if branch (according to your enquiry).
+I inspected also another specific source file for example.
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/tools/testing/selftests/timers/posix_timers.c?id=aa1fbe633d3034f9f838ff13387af04771e68e31#n81
+https://elixir.free-electrons.com/linux/v4.14-rc8/source/tools/testing/selftests/timers/posix_timers.c#L78
 
+This one contains some places (like in the function “check_itimer”)
+where the error detection and corresponding exception handling is incomplete
+so far.
+Other source files can contain similar update candidates.
 
->> -			free(info);
->> -			return NULL;
->> +			goto free_info;
-
-Do you expect a second update approach for this source code place?
+There are different design options available to improve the software
+situation here.
+Which development directions do you prefer?
 
 Regards,
 Markus
