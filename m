@@ -1,26 +1,18 @@
-From: chrubis@suse.cz (Cyril Hrubis)
-Date: Tue, 21 Nov 2017 13:41:47 +0100
-Subject: [Linux-kselftest-mirror] [LTP] Towards 4.14 LTS
-In-Reply-To: <EF258C71-3F2A-449C-8283-EA4F715C81C0@linaro.org>
-References: <5E1947BC-9D22-42EB-BA29-96EA15A9C817@linaro.org>
- <20171119112051.GA10015@kroah.com>
- <EF258C71-3F2A-449C-8283-EA4F715C81C0@linaro.org>
-Message-ID: <20171121124147.GA10420@rei.lan>
+From: elfring@users.sourceforge.net (SF Markus Elfring)
+Date: Tue, 21 Nov 2017 15:04:15 +0100
+Subject: [Linux-kselftest-mirror] selftests: Completion of error handling
+Message-ID: <988e4be0-4784-d9b7-879b-06ed405ae293@users.sourceforge.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171121124147.SpPFGUqlLIA0T_Tb1YyZ9LTSWzFfM1g1MObVfLPWo1A@z>
+Message-ID: <20171121140415.4p22kGaFKPZtO7sJbD7KJ4kripTfRCz0D1j5Awzd3AI@z>
 
-Hi!
-> For instance 4.13-rc just was added to the mix.
-> 
-> For test buckets, I???m currently dorking around with some make check targets
-> for a few interesting packages. 
+Hello,
 
-You may want to look into xfstests as well, we found a few kernel oopses
-recently related to backported FS patches for SLES kernels.
+Static source code analysis points out that the checking of return values from
+some function calls is incomplete also in this software area.
+How would you like to fix remaining open issues there?
 
--- 
-Cyril Hrubis
-chrubis at suse.cz
+Regards,
+Markus
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
