@@ -1,112 +1,80 @@
 From: shuah@kernel.org (Shuah Khan)
-Date: Tue, 21 Nov 2017 08:43:37 -0700
-Subject: [Linux-kselftest-mirror] [PATCH] selftests: posix_timers: Use
- common error handling code in two functions
-In-Reply-To: <3ce187fa-a6df-a419-6924-ea12bf837972@users.sourceforge.net>
-References: <3ce187fa-a6df-a419-6924-ea12bf837972@users.sourceforge.net>
-Message-ID: <abce4f4e-a904-9bfe-7021-3cfd230d52ea@kernel.org>
+Date: Tue, 21 Nov 2017 08:46:52 -0700
+Subject: [Linux-kselftest-mirror] [PATCH] selftest: sync: Use common
+ error handling code in sync_file_info()
+In-Reply-To: <219c366b-d753-e65b-b021-6d4a584588d0@users.sourceforge.net>
+References: <219c366b-d753-e65b-b021-6d4a584588d0@users.sourceforge.net>
+Message-ID: <3a27095e-84ad-6e93-bae5-3b242a042238@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171121154337.o-4F-FbHnBmpkOsUf4PaX1YqgHc8oq0QTB7zUisIrho@z>
+Message-ID: <20171121154652.AMP5ckA89pbWJSZUa-UnI-Twg4NAitShVyw6wgHpptQ@z>
 
-On 11/21/2017 03:00 AM, SF Markus Elfring wrote:
+On 11/20/2017 02:25 PM, SF Markus Elfring wrote:
 > From: Markus Elfring <elfring at users.sourceforge.net>
-> Date: Tue, 21 Nov 2017 10:50:32 +0100
+> Date: Mon, 20 Nov 2017 22:20:37 +0100
 > 
-> Add jump targets so that a bit of exception handling can be better reused
-> at the end of these functions.
+> Add a jump target so that a bit of exception handling can be better reused
+> at the end of this function.
 > 
 > This issue was detected by using the Coccinelle software.
 
-Please include Coccinelle report in the change log.
+I would like to see the Coccinelle log included in the commit log
 
 > 
 > Signed-off-by: Markus Elfring <elfring at users.sourceforge.net>
 > ---
->  tools/testing/selftests/timers/posix_timers.c | 32 +++++++++++++--------------
->  1 file changed, 16 insertions(+), 16 deletions(-)
+>  tools/testing/selftests/sync/sync.c | 19 +++++++++----------
+>  1 file changed, 9 insertions(+), 10 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
-> index 15cf56d32155..5c9fbb06194f 100644
-> --- a/tools/testing/selftests/timers/posix_timers.c
-> +++ b/tools/testing/selftests/timers/posix_timers.c
-> @@ -104,10 +104,8 @@ static int check_itimer(int which)
->  		signal(SIGALRM, sig_handler);
+> diff --git a/tools/testing/selftests/sync/sync.c b/tools/testing/selftests/sync/sync.c
+> index f3d599f249b9..d0d55377f6f8 100644
+> --- a/tools/testing/selftests/sync/sync.c
+> +++ b/tools/testing/selftests/sync/sync.c
+> @@ -92,10 +92,8 @@ static struct sync_file_info *sync_file_info(int fd)
+>  		return NULL;
 >  
->  	err = gettimeofday(&start, NULL);
+>  	err = ioctl(fd, SYNC_IOC_FILE_INFO, info);
 > -	if (err < 0) {
-> -		perror("Can't call gettimeofday()\n");
-> -		return -1;
+> -		free(info);
+> -		return NULL;
 > -	}
 > +	if (err < 0)
-> +		goto report_failure;
+> +		goto free_info;
+>  
+>  	num_fences = info->num_fences;
+>  
+> @@ -104,22 +102,23 @@ static struct sync_file_info *sync_file_info(int fd)
+>  		info->num_fences = num_fences;
+>  
+>  		fence_info = calloc(num_fences, sizeof(*fence_info));
+> -		if (!fence_info) {
+> -			free(info);
+> -			return NULL;
+> -		}
+> +		if (!fence_info)
+> +			goto free_info;
+>  
+>  		info->sync_fence_info = (uint64_t)fence_info;
+>  
+>  		err = ioctl(fd, SYNC_IOC_FILE_INFO, info);
+>  		if (err < 0) {
+>  			free(fence_info);
 
-Instead of report_failure, makes this specific to the failure.
-Something like, gettimeofday_error
+Why not add a free_fence_info to make it consistent?
 
-> 
->  	err = setitimer(which, &val, NULL);
->  	if (err < 0) {
-> @@ -123,10 +121,8 @@ static int check_itimer(int which)
->  		idle_loop();
+> -			free(info);
+> -			return NULL;
+> +			goto free_info;
+>  		}
+>  	}
 >  
->  	err = gettimeofday(&end, NULL);
-> -	if (err < 0) {
-> -		perror("Can't call gettimeofday()\n");
-> -		return -1;
-> -	}
-> +	if (err < 0)
-> +		goto report_failure;
->  
->  	if (!check_diff(start, end))
->  		printf("[OK]\n");
-> @@ -134,6 +130,10 @@ static int check_itimer(int which)
->  		printf("[FAIL]\n");
->  
->  	return 0;
+>  	return info;
 > +
-> +report_failure:
-> +	perror("Can't call gettimeofday()\n");
-> +	return -1;
+> +free_info:
+> +	free(info);
+> +	return NULL;
 >  }
 >  
->  static int check_timer_create(int which)
-> @@ -162,10 +162,8 @@ static int check_timer_create(int which)
->  	signal(SIGALRM, sig_handler);
->  
->  	err = gettimeofday(&start, NULL);
-> -	if (err < 0) {
-> -		perror("Can't call gettimeofday()\n");
-> -		return -1;
-> -	}
-> +	if (err < 0)
-> +		goto report_failure;
->  
->  	err = timer_settime(id, 0, &val, NULL);
->  	if (err < 0) {
-> @@ -176,10 +174,8 @@ static int check_timer_create(int which)
->  	user_loop();
->  
->  	err = gettimeofday(&end, NULL);
-> -	if (err < 0) {
-> -		perror("Can't call gettimeofday()\n");
-> -		return -1;
-> -	}
-> +	if (err < 0)
-> +		goto report_failure;
->  
->  	if (!check_diff(start, end))
->  		printf("[OK]\n");
-> @@ -187,6 +183,10 @@ static int check_timer_create(int which)
->  		printf("[FAIL]\n");
->  
->  	return 0;
-> +
-> +report_failure:
-> +	perror("Can't call gettimeofday()\n");
-> +	return -1;
->  }
->  
->  int main(int argc, char **argv)
+>  static void sync_file_info_free(struct sync_file_info *info)
 > 
 
 thanks,
