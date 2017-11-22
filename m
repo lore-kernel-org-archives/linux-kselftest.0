@@ -1,16 +1,16 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Wed, 22 Nov 2017 08:16:06 -0700
-Subject: [Linux-kselftest-mirror] [PATCH update for 4.15 1/3] selftests:
- lib.mk: Introduce OVERRIDE_TARGETS
-In-Reply-To: <20171121221933.25959-1-mathieu.desnoyers@efficios.com>
-References: <20171121141900.18471-1-mathieu.desnoyers@efficios.com>
- <20171121221933.25959-1-mathieu.desnoyers@efficios.com>
-Message-ID: <48e64ffd-4936-74cf-aaee-c383fc75a97f@kernel.org>
+Date: Wed, 22 Nov 2017 08:20:52 -0700
+Subject: [Linux-kselftest-mirror] [PATCH update for 4.15 2/3] cpu_opv:
+ selftests: Implement selftests (v4)
+In-Reply-To: <20171121221933.25959-2-mathieu.desnoyers@efficios.com>
+References: <20171121221933.25959-1-mathieu.desnoyers@efficios.com>
+ <20171121221933.25959-2-mathieu.desnoyers@efficios.com>
+Message-ID: <00142e09-bcb9-a145-cbe3-27b61213f361@kernel.org>
 
 On 11/21/2017 03:19 PM, Mathieu Desnoyers wrote:
-> Introduce OVERRIDE_TARGETS to allow tests to express dependencies on
-> header files and .so, which require to override the selftests lib.mk
-> targets.
+> Implement cpu_opv selftests. It needs to express dependencies on
+> header files and .so, which require to override the selftests
+> lib.mk targets. Use OVERRIDE_TARGETS define for this.
 > 
 > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
 > CC: Russell King <linux at arm.linux.org.uk>
@@ -37,34 +37,39 @@ On 11/21/2017 03:19 PM, Mathieu Desnoyers wrote:
 > CC: linux-kselftest at vger.kernel.org
 > CC: linux-api at vger.kernel.org
 > ---
->  tools/testing/selftests/lib.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+> Changes since v1:
 > 
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index 5bef05d6ba39..441d7bc63bb7 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -105,6 +105,9 @@ COMPILE.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
->  LINK.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
->  endif
->  
-> +# Selftest makefiles can override those targets by setting
-> +# OVERRIDE_TARGETS = 1.
-> +ifeq ($(OVERRIDE_TARGETS),)
->  $(OUTPUT)/%:%.c
->  	$(LINK.c) $^ $(LDLIBS) -o $@
->  
-> @@ -113,5 +116,6 @@ $(OUTPUT)/%.o:%.S
->  
->  $(OUTPUT)/%:%.S
->  	$(LINK.S) $^ $(LDLIBS) -o $@
-> +endif
->  
->  .PHONY: run_tests all clean install emit_tests
+> - Expose similar library API as rseq:  Expose library API closely
+>   matching the rseq APIs, following removal of the event counter from
+>   the rseq kernel API.
+> - Update makefile to fix make run_tests dependency on "all".
+> - Introduce a OVERRIDE_TARGETS.
+> 
+> Changes since v2:
+> 
+> - Test page faults.
+> 
+> Changes since v3:
+> 
+> - Move lib.mk OVERRIDE_TARGETS change to its own patch.
+> - Printout TAP output.
+> ---
+>  MAINTAINERS                                        |    1 +
+>  tools/testing/selftests/Makefile                   |    1 +
+>  tools/testing/selftests/cpu-opv/.gitignore         |    1 +
+>  tools/testing/selftests/cpu-opv/Makefile           |   17 +
+>  .../testing/selftests/cpu-opv/basic_cpu_opv_test.c | 1167 ++++++++++++++++++++
+>  tools/testing/selftests/cpu-opv/cpu-op.c           |  348 ++++++
+>  tools/testing/selftests/cpu-opv/cpu-op.h           |   68 ++
+>  7 files changed, 1603 insertions(+)
+>  create mode 100644 tools/testing/selftests/cpu-opv/.gitignore
+>  create mode 100644 tools/testing/selftests/cpu-opv/Makefile
+>  create mode 100644 tools/testing/selftests/cpu-opv/basic_cpu_opv_test.c
+>  create mode 100644 tools/testing/selftests/cpu-opv/cpu-op.c
+>  create mode 100644 tools/testing/selftests/cpu-opv/cpu-op.h
 > 
 
-Thanks for splitting this patch. It will make it easier since it
-is kselftest framework change.
+Looks good.
 
 Acked-by: Shuah Khan <shuahkh at osg.samsung.com>
 
