@@ -1,27 +1,18 @@
-From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
-Date: Tue, 21 Nov 2017 22:22:43 +0000 (UTC)
+From: shuah@kernel.org (Shuah Khan)
+Date: Wed, 22 Nov 2017 08:16:06 -0700
 Subject: [Linux-kselftest-mirror] [PATCH update for 4.15 1/3] selftests:
  lib.mk: Introduce OVERRIDE_TARGETS
 In-Reply-To: <20171121221933.25959-1-mathieu.desnoyers@efficios.com>
 References: <20171121141900.18471-1-mathieu.desnoyers@efficios.com>
  <20171121221933.25959-1-mathieu.desnoyers@efficios.com>
-Message-ID: <645378149.19703.1511302963855.JavaMail.zimbra@efficios.com>
+Message-ID: <48e64ffd-4936-74cf-aaee-c383fc75a97f@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171121222243.ebb9JrPVEUjPKvNk0D-9zaghzYqACsTYuiLPVlEsdUE@z>
+Message-ID: <20171122151606.1RSLpYgbiit91jw4K6vzqa8K1mw4U1AUPGQmZkv966A@z>
 
------ On Nov 21, 2017,@5:19 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
-
+On 11/21/2017 03:19 PM, Mathieu Desnoyers wrote:
 > Introduce OVERRIDE_TARGETS to allow tests to express dependencies on
 > header files and .so, which require to override the selftests lib.mk
 > targets.
-
-Those 3 seftests update patches are still RFC (even though the subject tag
-is missing).
-
-Thanks,
-
-Mathieu
-
 > 
 > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
 > CC: Russell King <linux at arm.linux.org.uk>
@@ -48,37 +39,39 @@ Mathieu
 > CC: linux-kselftest at vger.kernel.org
 > CC: linux-api at vger.kernel.org
 > ---
-> tools/testing/selftests/lib.mk | 4 ++++
-> 1 file changed, 4 insertions(+)
+>  tools/testing/selftests/lib.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
 > diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
 > index 5bef05d6ba39..441d7bc63bb7 100644
 > --- a/tools/testing/selftests/lib.mk
 > +++ b/tools/testing/selftests/lib.mk
 > @@ -105,6 +105,9 @@ COMPILE.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
-> LINK.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
-> endif
-> 
+>  LINK.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
+>  endif
+>  
 > +# Selftest makefiles can override those targets by setting
 > +# OVERRIDE_TARGETS = 1.
 > +ifeq ($(OVERRIDE_TARGETS),)
-> $(OUTPUT)/%:%.c
-> 	$(LINK.c) $^ $(LDLIBS) -o $@
-> 
+>  $(OUTPUT)/%:%.c
+>  	$(LINK.c) $^ $(LDLIBS) -o $@
+>  
 > @@ -113,5 +116,6 @@ $(OUTPUT)/%.o:%.S
-> 
-> $(OUTPUT)/%:%.S
-> 	$(LINK.S) $^ $(LDLIBS) -o $@
+>  
+>  $(OUTPUT)/%:%.S
+>  	$(LINK.S) $^ $(LDLIBS) -o $@
 > +endif
+>  
+>  .PHONY: run_tests all clean install emit_tests
 > 
-> .PHONY: run_tests all clean install emit_tests
-> --
-> 2.11.0
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Thanks for splitting this patch. It will make it easier since it
+is kselftest framework change.
+
+Acked-by: Shuah Khan <shuahkh at osg.samsung.com>
+
+thanks,
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
