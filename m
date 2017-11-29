@@ -1,172 +1,189 @@
-From: alexander.levin at verizon.com (alexander.levin at verizon.com)
-Date: Wed, 29 Nov 2017 17:21:13 +0000
+From: 0x7f454c46 at gmail.com (Dmitry Safonov)
+Date: Wed, 29 Nov 2017 17:42:25 +0000
 Subject: [Linux-kselftest-mirror] [PATCH AUTOSEL for 4.9 04/52]
  x86/selftests: Add clobbers for int80 on x86_64
-In-Reply-To: <20171129172100.28819-1-alexander.levin@verizon.com>
+In-Reply-To: <20171129172100.28819-4-alexander.levin@verizon.com>
 References: <20171129172100.28819-1-alexander.levin@verizon.com>
-Message-ID: <20171129172100.28819-4-alexander.levin@verizon.com>
+ <20171129172100.28819-4-alexander.levin@verizon.com>
+Message-ID: <CAJwJo6ZCnqTmzxO0xTxMEEy3t+0Z2-1dvwtn_THCO_OP2_MLcQ@mail.gmail.com>
 
-From: Dmitry Safonov <dsafonov at virtuozzo.com>
+Hi Sasha,
 
-[ Upstream commit 2a4d0c627f5374f365a873dea4e10ae0bb437680 ]
+I would object including this to stable tree:
+1. It's selftest fixup
+2. I have never saw selftests failing because of it (but it's possible)
+    I saw this in CRIU (Checkpoint Restore In Userspace) project
+    triggering, so I've fixed the selftests, mostly for documentation
+    reasons - as people in userspace can reuse this code and think
+    it's good and will just work after copy-paste (which is not the case).
 
-Kernel erases R8..R11 registers prior returning to userspace
-from int80:
+So, this patch doesn't look urgent to include it in -stable kernel.
 
-  https://lkml.org/lkml/2009/10/1/164
+Thanks,
+Dmitry
 
-GCC can reuse these registers and doesn't expect them to change
-during syscall invocation. I met this kind of bug in CRIU once
-GCC 6.1 and CLANG stored local variables in those registers
-and the kernel zerofied them during syscall:
-
-  https://github.com/xemul/criu/commit/990d33f1a1cdd17bca6c2eb059ab3be2564f7fa2
-
-By that reason I suggest to add those registers to clobbers
-in selftests.  Also, as noted by Andy - removed unneeded clobber
-for flags in INT $0x80 inline asm.
-
-Signed-off-by: Dmitry Safonov <dsafonov at virtuozzo.com>
-Acked-by: Andy Lutomirski <luto at kernel.org>
-Cc: 0x7f454c46 at gmail.com
-Cc: Borislav Petkov <bp at alien8.de>
-Cc: Borislav Petkov <bp at suse.de>
-Cc: Brian Gerst <brgerst at gmail.com>
-Cc: Denys Vlasenko <dvlasenk at redhat.com>
-Cc: H. Peter Anvin <hpa at zytor.com>
-Cc: Josh Poimboeuf <jpoimboe at redhat.com>
-Cc: Linus Torvalds <torvalds at linux-foundation.org>
-Cc: Peter Zijlstra <peterz at infradead.org>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: linux-kselftest at vger.kernel.org
-Link: http://lkml.kernel.org/r/20170213101336.20486-1-dsafonov at virtuozzo.com
-Signed-off-by: Ingo Molnar <mingo at kernel.org>
-Signed-off-by: Sasha Levin <alexander.levin at verizon.com>
----
- tools/testing/selftests/x86/fsgsbase.c            |  2 +-
- tools/testing/selftests/x86/ldt_gdt.c             | 16 +++++++++++-----
- tools/testing/selftests/x86/ptrace_syscall.c      |  3 ++-
- tools/testing/selftests/x86/single_step_syscall.c |  5 ++++-
- 4 files changed, 18 insertions(+), 8 deletions(-)
-
-diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
-index 9b4610c6d3fb..f249e042b3b5 100644
---- a/tools/testing/selftests/x86/fsgsbase.c
-+++ b/tools/testing/selftests/x86/fsgsbase.c
-@@ -245,7 +245,7 @@ void do_unexpected_base(void)
- 		long ret;
- 		asm volatile ("int $0x80"
- 			      : "=a" (ret) : "a" (243), "b" (low_desc)
--			      : "flags");
-+			      : "r8", "r9", "r10", "r11");
- 		memcpy(&desc, low_desc, sizeof(desc));
- 		munmap(low_desc, sizeof(desc));
- 
-diff --git a/tools/testing/selftests/x86/ldt_gdt.c b/tools/testing/selftests/x86/ldt_gdt.c
-index e717fed80219..b9a22f18566a 100644
---- a/tools/testing/selftests/x86/ldt_gdt.c
-+++ b/tools/testing/selftests/x86/ldt_gdt.c
-@@ -45,6 +45,12 @@
- #define AR_DB			(1 << 22)
- #define AR_G			(1 << 23)
- 
-+#ifdef __x86_64__
-+# define INT80_CLOBBERS "r8", "r9", "r10", "r11"
-+#else
-+# define INT80_CLOBBERS
-+#endif
-+
- static int nerrs;
- 
- /* Points to an array of 1024 ints, each holding its own index. */
-@@ -634,7 +640,7 @@ static int invoke_set_thread_area(void)
- 	asm volatile ("int $0x80"
- 		      : "=a" (ret), "+m" (low_user_desc) :
- 			"a" (243), "b" (low_user_desc)
--		      : "flags");
-+		      : INT80_CLOBBERS);
- 	return ret;
- }
- 
-@@ -703,7 +709,7 @@ static void test_gdt_invalidation(void)
- 			"+a" (eax)
- 		      : "m" (low_user_desc_clear),
- 			[arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
--		      : "flags");
-+		      : INT80_CLOBBERS);
- 
- 	if (sel != 0) {
- 		result = "FAIL";
-@@ -734,7 +740,7 @@ static void test_gdt_invalidation(void)
- 			"+a" (eax)
- 		      : "m" (low_user_desc_clear),
- 			[arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
--		      : "flags");
-+		      : INT80_CLOBBERS);
- 
- 	if (sel != 0) {
- 		result = "FAIL";
-@@ -767,7 +773,7 @@ static void test_gdt_invalidation(void)
- 			"+a" (eax)
- 		      : "m" (low_user_desc_clear),
- 			[arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
--		      : "flags");
-+		      : INT80_CLOBBERS);
- 
- #ifdef __x86_64__
- 	syscall(SYS_arch_prctl, ARCH_GET_FS, &new_base);
-@@ -820,7 +826,7 @@ static void test_gdt_invalidation(void)
- 			"+a" (eax)
- 		      : "m" (low_user_desc_clear),
- 			[arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
--		      : "flags");
-+		      : INT80_CLOBBERS);
- 
- #ifdef __x86_64__
- 	syscall(SYS_arch_prctl, ARCH_GET_GS, &new_base);
-diff --git a/tools/testing/selftests/x86/ptrace_syscall.c b/tools/testing/selftests/x86/ptrace_syscall.c
-index b037ce9cf116..eaea92439708 100644
---- a/tools/testing/selftests/x86/ptrace_syscall.c
-+++ b/tools/testing/selftests/x86/ptrace_syscall.c
-@@ -58,7 +58,8 @@ static void do_full_int80(struct syscall_args32 *args)
- 	asm volatile ("int $0x80"
- 		      : "+a" (args->nr),
- 			"+b" (args->arg0), "+c" (args->arg1), "+d" (args->arg2),
--			"+S" (args->arg3), "+D" (args->arg4), "+r" (bp));
-+			"+S" (args->arg3), "+D" (args->arg4), "+r" (bp)
-+			: : "r8", "r9", "r10", "r11");
- 	args->arg5 = bp;
- #else
- 	sys32_helper(args, int80_and_ret);
-diff --git a/tools/testing/selftests/x86/single_step_syscall.c b/tools/testing/selftests/x86/single_step_syscall.c
-index 50c26358e8b7..a48da95c18fd 100644
---- a/tools/testing/selftests/x86/single_step_syscall.c
-+++ b/tools/testing/selftests/x86/single_step_syscall.c
-@@ -56,9 +56,11 @@ static volatile sig_atomic_t sig_traps;
- #ifdef __x86_64__
- # define REG_IP REG_RIP
- # define WIDTH "q"
-+# define INT80_CLOBBERS "r8", "r9", "r10", "r11"
- #else
- # define REG_IP REG_EIP
- # define WIDTH "l"
-+# define INT80_CLOBBERS
- #endif
- 
- static unsigned long get_eflags(void)
-@@ -140,7 +142,8 @@ int main()
- 
- 	printf("[RUN]\tSet TF and check int80\n");
- 	set_eflags(get_eflags() | X86_EFLAGS_TF);
--	asm volatile ("int $0x80" : "=a" (tmp) : "a" (SYS_getpid));
-+	asm volatile ("int $0x80" : "=a" (tmp) : "a" (SYS_getpid)
-+			: INT80_CLOBBERS);
- 	check_result();
- 
- 	/*
--- 
-2.11.0
+2017-11-29 17:21 GMT+00:00  <alexander.levin at verizon.com>:
+> From: Dmitry Safonov <dsafonov at virtuozzo.com>
+>
+> [ Upstream commit 2a4d0c627f5374f365a873dea4e10ae0bb437680 ]
+>
+> Kernel erases R8..R11 registers prior returning to userspace
+> from int80:
+>
+>   https://lkml.org/lkml/2009/10/1/164
+>
+> GCC can reuse these registers and doesn't expect them to change
+> during syscall invocation. I met this kind of bug in CRIU once
+> GCC 6.1 and CLANG stored local variables in those registers
+> and the kernel zerofied them during syscall:
+>
+>   https://github.com/xemul/criu/commit/990d33f1a1cdd17bca6c2eb059ab3be2564f7fa2
+>
+> By that reason I suggest to add those registers to clobbers
+> in selftests.  Also, as noted by Andy - removed unneeded clobber
+> for flags in INT $0x80 inline asm.
+>
+> Signed-off-by: Dmitry Safonov <dsafonov at virtuozzo.com>
+> Acked-by: Andy Lutomirski <luto at kernel.org>
+> Cc: 0x7f454c46 at gmail.com
+> Cc: Borislav Petkov <bp at alien8.de>
+> Cc: Borislav Petkov <bp at suse.de>
+> Cc: Brian Gerst <brgerst at gmail.com>
+> Cc: Denys Vlasenko <dvlasenk at redhat.com>
+> Cc: H. Peter Anvin <hpa at zytor.com>
+> Cc: Josh Poimboeuf <jpoimboe at redhat.com>
+> Cc: Linus Torvalds <torvalds at linux-foundation.org>
+> Cc: Peter Zijlstra <peterz at infradead.org>
+> Cc: Shuah Khan <shuah at kernel.org>
+> Cc: Thomas Gleixner <tglx at linutronix.de>
+> Cc: linux-kselftest at vger.kernel.org
+> Link: http://lkml.kernel.org/r/20170213101336.20486-1-dsafonov at virtuozzo.com
+> Signed-off-by: Ingo Molnar <mingo at kernel.org>
+> Signed-off-by: Sasha Levin <alexander.levin at verizon.com>
+> ---
+>  tools/testing/selftests/x86/fsgsbase.c            |  2 +-
+>  tools/testing/selftests/x86/ldt_gdt.c             | 16 +++++++++++-----
+>  tools/testing/selftests/x86/ptrace_syscall.c      |  3 ++-
+>  tools/testing/selftests/x86/single_step_syscall.c |  5 ++++-
+>  4 files changed, 18 insertions(+), 8 deletions(-)
+>
+> diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
+> index 9b4610c6d3fb..f249e042b3b5 100644
+> --- a/tools/testing/selftests/x86/fsgsbase.c
+> +++ b/tools/testing/selftests/x86/fsgsbase.c
+> @@ -245,7 +245,7 @@ void do_unexpected_base(void)
+>                 long ret;
+>                 asm volatile ("int $0x80"
+>                               : "=a" (ret) : "a" (243), "b" (low_desc)
+> -                             : "flags");
+> +                             : "r8", "r9", "r10", "r11");
+>                 memcpy(&desc, low_desc, sizeof(desc));
+>                 munmap(low_desc, sizeof(desc));
+>
+> diff --git a/tools/testing/selftests/x86/ldt_gdt.c b/tools/testing/selftests/x86/ldt_gdt.c
+> index e717fed80219..b9a22f18566a 100644
+> --- a/tools/testing/selftests/x86/ldt_gdt.c
+> +++ b/tools/testing/selftests/x86/ldt_gdt.c
+> @@ -45,6 +45,12 @@
+>  #define AR_DB                  (1 << 22)
+>  #define AR_G                   (1 << 23)
+>
+> +#ifdef __x86_64__
+> +# define INT80_CLOBBERS "r8", "r9", "r10", "r11"
+> +#else
+> +# define INT80_CLOBBERS
+> +#endif
+> +
+>  static int nerrs;
+>
+>  /* Points to an array of 1024 ints, each holding its own index. */
+> @@ -634,7 +640,7 @@ static int invoke_set_thread_area(void)
+>         asm volatile ("int $0x80"
+>                       : "=a" (ret), "+m" (low_user_desc) :
+>                         "a" (243), "b" (low_user_desc)
+> -                     : "flags");
+> +                     : INT80_CLOBBERS);
+>         return ret;
+>  }
+>
+> @@ -703,7 +709,7 @@ static void test_gdt_invalidation(void)
+>                         "+a" (eax)
+>                       : "m" (low_user_desc_clear),
+>                         [arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
+> -                     : "flags");
+> +                     : INT80_CLOBBERS);
+>
+>         if (sel != 0) {
+>                 result = "FAIL";
+> @@ -734,7 +740,7 @@ static void test_gdt_invalidation(void)
+>                         "+a" (eax)
+>                       : "m" (low_user_desc_clear),
+>                         [arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
+> -                     : "flags");
+> +                     : INT80_CLOBBERS);
+>
+>         if (sel != 0) {
+>                 result = "FAIL";
+> @@ -767,7 +773,7 @@ static void test_gdt_invalidation(void)
+>                         "+a" (eax)
+>                       : "m" (low_user_desc_clear),
+>                         [arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
+> -                     : "flags");
+> +                     : INT80_CLOBBERS);
+>
+>  #ifdef __x86_64__
+>         syscall(SYS_arch_prctl, ARCH_GET_FS, &new_base);
+> @@ -820,7 +826,7 @@ static void test_gdt_invalidation(void)
+>                         "+a" (eax)
+>                       : "m" (low_user_desc_clear),
+>                         [arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
+> -                     : "flags");
+> +                     : INT80_CLOBBERS);
+>
+>  #ifdef __x86_64__
+>         syscall(SYS_arch_prctl, ARCH_GET_GS, &new_base);
+> diff --git a/tools/testing/selftests/x86/ptrace_syscall.c b/tools/testing/selftests/x86/ptrace_syscall.c
+> index b037ce9cf116..eaea92439708 100644
+> --- a/tools/testing/selftests/x86/ptrace_syscall.c
+> +++ b/tools/testing/selftests/x86/ptrace_syscall.c
+> @@ -58,7 +58,8 @@ static void do_full_int80(struct syscall_args32 *args)
+>         asm volatile ("int $0x80"
+>                       : "+a" (args->nr),
+>                         "+b" (args->arg0), "+c" (args->arg1), "+d" (args->arg2),
+> -                       "+S" (args->arg3), "+D" (args->arg4), "+r" (bp));
+> +                       "+S" (args->arg3), "+D" (args->arg4), "+r" (bp)
+> +                       : : "r8", "r9", "r10", "r11");
+>         args->arg5 = bp;
+>  #else
+>         sys32_helper(args, int80_and_ret);
+> diff --git a/tools/testing/selftests/x86/single_step_syscall.c b/tools/testing/selftests/x86/single_step_syscall.c
+> index 50c26358e8b7..a48da95c18fd 100644
+> --- a/tools/testing/selftests/x86/single_step_syscall.c
+> +++ b/tools/testing/selftests/x86/single_step_syscall.c
+> @@ -56,9 +56,11 @@ static volatile sig_atomic_t sig_traps;
+>  #ifdef __x86_64__
+>  # define REG_IP REG_RIP
+>  # define WIDTH "q"
+> +# define INT80_CLOBBERS "r8", "r9", "r10", "r11"
+>  #else
+>  # define REG_IP REG_EIP
+>  # define WIDTH "l"
+> +# define INT80_CLOBBERS
+>  #endif
+>
+>  static unsigned long get_eflags(void)
+> @@ -140,7 +142,8 @@ int main()
+>
+>         printf("[RUN]\tSet TF and check int80\n");
+>         set_eflags(get_eflags() | X86_EFLAGS_TF);
+> -       asm volatile ("int $0x80" : "=a" (tmp) : "a" (SYS_getpid));
+> +       asm volatile ("int $0x80" : "=a" (tmp) : "a" (SYS_getpid)
+> +                       : INT80_CLOBBERS);
+>         check_result();
+>
+>         /*
+> --
+> 2.11.0
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
