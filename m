@@ -1,85 +1,172 @@
-From: arnd at arndb.de (Arnd Bergmann)
-Date: Tue, 28 Nov 2017 15:22:16 +0100
-Subject: [Linux-kselftest-mirror] [PATCH 2/2] [RFC] packet: experimental
-	support for 64-bit timestamps
-In-Reply-To: <CAF=yD-+UZuM5uVzb2LAAfEtZ5Nn1zqpzXxRJNEL+vXAv1U4Whg@mail.gmail.com>
-References: <20171127162001.4055813-1-arnd@arndb.de>
- <20171127162001.4055813-2-arnd@arndb.de>
- <20171127165945.GC1971@nanopsycho.orion>
- <CAF=yD-LOfbHOhcOaKO8Ek1Ec+7+eKz12y9e98zLXx-xOD7_VVA@mail.gmail.com>
- <CAK8P3a0xjDiA346keUEdsXQ4m2U+cpzzjUjoGyf+2W+mPqEwsA@mail.gmail.com>
- <CAJ+HfNj-2HDuW53sUjgfV4iPnVnMKquV7pgu_zggbRuWf6R3=w@mail.gmail.com>
- <CAK8P3a3y0RkKgvpP4VMgewyLfSw03493L7x75MBwSR9yctvebg@mail.gmail.com>
- <CAF=yD-+UZuM5uVzb2LAAfEtZ5Nn1zqpzXxRJNEL+vXAv1U4Whg@mail.gmail.com>
-Message-ID: <CAK8P3a0GLC7gatA5RgWomwq5i2dqd_bcVJqWaYUNZz=mgWWbbQ@mail.gmail.com>
+From: alexander.levin at verizon.com (alexander.levin at verizon.com)
+Date: Wed, 29 Nov 2017 17:21:13 +0000
+Subject: [Linux-kselftest-mirror] [PATCH AUTOSEL for 4.9 04/52]
+ x86/selftests: Add clobbers for int80 on x86_64
+In-Reply-To: <20171129172100.28819-1-alexander.levin@verizon.com>
+References: <20171129172100.28819-1-alexander.levin@verizon.com>
+Message-ID: <20171129172100.28819-4-alexander.levin@verizon.com>
 
-On Tue, Nov 28, 2017 at 3:08 PM, Willem de Bruijn
-<willemdebruijn.kernel at gmail.com> wrote:
-> On Tue, Nov 28, 2017 at 3:46 AM, Arnd Bergmann <arnd at arndb.de> wrote:
->> On Tue, Nov 28, 2017 at 8:04 AM, Björn Töpel <bjorn.topel at gmail.com> wrote:
->>> 2017-11-27 21:51 GMT+01:00 Arnd Bergmann <arnd at arndb.de>:
->>> [...]
->>>>> There already is an effort to come up with a new AF_PACKET V4 [1].
->>>>> We should make sure that any new interface does not have the
->>>>> Y2038/Y2106 issue. But, if a new version is being developed and
->>>>> that subsumes all existing use cases, then there probably is no need
->>>>> for another version that is a very small diff to V3.
->>>>
->>>> Ah, perfect, that's good timing. Adding Björn to Cc here.
->>>>
->>>
->>> Unfortunately, for the Y2038/Y2106 cases, we'll be (as a result of
->>> netdevconf discussions) moving the AF_PACKET V4 implementation to a
->>> separate, new, address/packet family.
->>
->> Ok, I see.
->
-> Does it matter whether the replacement is a new version or a
-> new packet family?
+From: Dmitry Safonov <dsafonov at virtuozzo.com>
 
-It depends on whether the new packet family provides a superset of
-the AF_PACKET features or not. If we can expect that all users of
-AF_PACKET can migrate to the replacement over time, then doing
-it there is sufficient, otherwise adding 64-bit timestamps into AF_PACKET
-may be a better way to upgrade existing users.
+[ Upstream commit 2a4d0c627f5374f365a873dea4e10ae0bb437680 ]
 
->>>>> If adding support for existing applications is useful, another approach
->>>>> would be to add a new socket option that changes the semantics for
->>>>> the two u32 fields in each of V1, V2 and V3 to hold nsec. Add a single
->>>>> check after filling in those structs whether the option is set and, if so,
->>>>> overwrite the two fields.
->>>>>
->>>>> [1] https://lwn.net/Articles/737947/
->>>>
->>>> I don't think that's necessary. As long as the V4 capabilities are a
->>>> superset of V1-V3, we should be able to just require all users to
->>>> move to V4 (or later) in the next 89 years, and make sure that they
->>>> use unsigned seconds if they care about 2038.
->>>>
->>>
->>> Given that V4 wont be around for AF_PACKET -- at least not in the
->>> shape of our patches -- Willem's suggestion is probably a good way
->>> forward.
->>
->> That leaves one question: should we do that now, or wait until some
->> other reason for a V4 comes up? I don't mind creating another
->> patch for this, just want to get a feeling of whether the API clutter
->> is worth it when we have a way out that works until y2106 (at
->> which point we run into other problems as well).
->
-> I don't expect that we'll have another packet version independent
-> from the work that Björn is doing. The choice to implement using
-> a new packet family is given by the complexity of the existing code,
-> especially the various locking mechanisms.
+Kernel erases R8..R11 registers prior returning to userspace
+from int80:
 
-Ok.
+  https://lkml.org/lkml/2009/10/1/164
 
-> From that point of view, and if we want to offer a Y2106 proof
-> AF_PACKET independent from the above, no reason to wait.
+GCC can reuse these registers and doesn't expect them to change
+during syscall invocation. I met this kind of bug in CRIU once
+GCC 6.1 and CLANG stored local variables in those registers
+and the kernel zerofied them during syscall:
 
-Agreed.
+  https://github.com/xemul/criu/commit/990d33f1a1cdd17bca6c2eb059ab3be2564f7fa2
 
-       Arnd
+By that reason I suggest to add those registers to clobbers
+in selftests.  Also, as noted by Andy - removed unneeded clobber
+for flags in INT $0x80 inline asm.
+
+Signed-off-by: Dmitry Safonov <dsafonov at virtuozzo.com>
+Acked-by: Andy Lutomirski <luto at kernel.org>
+Cc: 0x7f454c46 at gmail.com
+Cc: Borislav Petkov <bp at alien8.de>
+Cc: Borislav Petkov <bp at suse.de>
+Cc: Brian Gerst <brgerst at gmail.com>
+Cc: Denys Vlasenko <dvlasenk at redhat.com>
+Cc: H. Peter Anvin <hpa at zytor.com>
+Cc: Josh Poimboeuf <jpoimboe at redhat.com>
+Cc: Linus Torvalds <torvalds at linux-foundation.org>
+Cc: Peter Zijlstra <peterz at infradead.org>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: linux-kselftest at vger.kernel.org
+Link: http://lkml.kernel.org/r/20170213101336.20486-1-dsafonov at virtuozzo.com
+Signed-off-by: Ingo Molnar <mingo at kernel.org>
+Signed-off-by: Sasha Levin <alexander.levin at verizon.com>
+---
+ tools/testing/selftests/x86/fsgsbase.c            |  2 +-
+ tools/testing/selftests/x86/ldt_gdt.c             | 16 +++++++++++-----
+ tools/testing/selftests/x86/ptrace_syscall.c      |  3 ++-
+ tools/testing/selftests/x86/single_step_syscall.c |  5 ++++-
+ 4 files changed, 18 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
+index 9b4610c6d3fb..f249e042b3b5 100644
+--- a/tools/testing/selftests/x86/fsgsbase.c
++++ b/tools/testing/selftests/x86/fsgsbase.c
+@@ -245,7 +245,7 @@ void do_unexpected_base(void)
+ 		long ret;
+ 		asm volatile ("int $0x80"
+ 			      : "=a" (ret) : "a" (243), "b" (low_desc)
+-			      : "flags");
++			      : "r8", "r9", "r10", "r11");
+ 		memcpy(&desc, low_desc, sizeof(desc));
+ 		munmap(low_desc, sizeof(desc));
+ 
+diff --git a/tools/testing/selftests/x86/ldt_gdt.c b/tools/testing/selftests/x86/ldt_gdt.c
+index e717fed80219..b9a22f18566a 100644
+--- a/tools/testing/selftests/x86/ldt_gdt.c
++++ b/tools/testing/selftests/x86/ldt_gdt.c
+@@ -45,6 +45,12 @@
+ #define AR_DB			(1 << 22)
+ #define AR_G			(1 << 23)
+ 
++#ifdef __x86_64__
++# define INT80_CLOBBERS "r8", "r9", "r10", "r11"
++#else
++# define INT80_CLOBBERS
++#endif
++
+ static int nerrs;
+ 
+ /* Points to an array of 1024 ints, each holding its own index. */
+@@ -634,7 +640,7 @@ static int invoke_set_thread_area(void)
+ 	asm volatile ("int $0x80"
+ 		      : "=a" (ret), "+m" (low_user_desc) :
+ 			"a" (243), "b" (low_user_desc)
+-		      : "flags");
++		      : INT80_CLOBBERS);
+ 	return ret;
+ }
+ 
+@@ -703,7 +709,7 @@ static void test_gdt_invalidation(void)
+ 			"+a" (eax)
+ 		      : "m" (low_user_desc_clear),
+ 			[arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
+-		      : "flags");
++		      : INT80_CLOBBERS);
+ 
+ 	if (sel != 0) {
+ 		result = "FAIL";
+@@ -734,7 +740,7 @@ static void test_gdt_invalidation(void)
+ 			"+a" (eax)
+ 		      : "m" (low_user_desc_clear),
+ 			[arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
+-		      : "flags");
++		      : INT80_CLOBBERS);
+ 
+ 	if (sel != 0) {
+ 		result = "FAIL";
+@@ -767,7 +773,7 @@ static void test_gdt_invalidation(void)
+ 			"+a" (eax)
+ 		      : "m" (low_user_desc_clear),
+ 			[arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
+-		      : "flags");
++		      : INT80_CLOBBERS);
+ 
+ #ifdef __x86_64__
+ 	syscall(SYS_arch_prctl, ARCH_GET_FS, &new_base);
+@@ -820,7 +826,7 @@ static void test_gdt_invalidation(void)
+ 			"+a" (eax)
+ 		      : "m" (low_user_desc_clear),
+ 			[arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
+-		      : "flags");
++		      : INT80_CLOBBERS);
+ 
+ #ifdef __x86_64__
+ 	syscall(SYS_arch_prctl, ARCH_GET_GS, &new_base);
+diff --git a/tools/testing/selftests/x86/ptrace_syscall.c b/tools/testing/selftests/x86/ptrace_syscall.c
+index b037ce9cf116..eaea92439708 100644
+--- a/tools/testing/selftests/x86/ptrace_syscall.c
++++ b/tools/testing/selftests/x86/ptrace_syscall.c
+@@ -58,7 +58,8 @@ static void do_full_int80(struct syscall_args32 *args)
+ 	asm volatile ("int $0x80"
+ 		      : "+a" (args->nr),
+ 			"+b" (args->arg0), "+c" (args->arg1), "+d" (args->arg2),
+-			"+S" (args->arg3), "+D" (args->arg4), "+r" (bp));
++			"+S" (args->arg3), "+D" (args->arg4), "+r" (bp)
++			: : "r8", "r9", "r10", "r11");
+ 	args->arg5 = bp;
+ #else
+ 	sys32_helper(args, int80_and_ret);
+diff --git a/tools/testing/selftests/x86/single_step_syscall.c b/tools/testing/selftests/x86/single_step_syscall.c
+index 50c26358e8b7..a48da95c18fd 100644
+--- a/tools/testing/selftests/x86/single_step_syscall.c
++++ b/tools/testing/selftests/x86/single_step_syscall.c
+@@ -56,9 +56,11 @@ static volatile sig_atomic_t sig_traps;
+ #ifdef __x86_64__
+ # define REG_IP REG_RIP
+ # define WIDTH "q"
++# define INT80_CLOBBERS "r8", "r9", "r10", "r11"
+ #else
+ # define REG_IP REG_EIP
+ # define WIDTH "l"
++# define INT80_CLOBBERS
+ #endif
+ 
+ static unsigned long get_eflags(void)
+@@ -140,7 +142,8 @@ int main()
+ 
+ 	printf("[RUN]\tSet TF and check int80\n");
+ 	set_eflags(get_eflags() | X86_EFLAGS_TF);
+-	asm volatile ("int $0x80" : "=a" (tmp) : "a" (SYS_getpid));
++	asm volatile ("int $0x80" : "=a" (tmp) : "a" (SYS_getpid)
++			: INT80_CLOBBERS);
+ 	check_result();
+ 
+ 	/*
+-- 
+2.11.0
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
