@@ -1,24 +1,35 @@
-From: dave.hansen at intel.com (Dave Hansen)
-Date: Thu, 30 Nov 2017 07:15:23 -0800
-Subject: [Linux-kselftest-mirror] selftests: x86_64: kselftest
- mpx-mini-test_64 - no MPX support - failed - 3869 Aborted (core dumped)
-In-Reply-To: <CA+G9fYsc5PPgduSJKQy7HkJUVHqXMUHW10K=BrU8UUe5970p+Q@mail.gmail.com>
-References: <CA+G9fYvishojFT=nAJ-ejrOo9KfsDKFOa=3Nzjep0H4E88fPJg@mail.gmail.com>
- <20171124111141.GA14922@kroah.com> <20171124111242.GA25106@kroah.com>
- <CA+G9fYuco-vArAVrNhzPZiOza7LNboM7c6qrZJ_q=_fMsGHidQ@mail.gmail.com>
- <20171124114635.GB1916@kroah.com>
- <CA+G9fYsc5PPgduSJKQy7HkJUVHqXMUHW10K=BrU8UUe5970p+Q@mail.gmail.com>
-Message-ID: <5e1acb60-3143-1d05-49e1-1c80ba978987@intel.com>
+From: alexander.levin at verizon.com (alexander.levin at verizon.com)
+Date: Thu, 30 Nov 2017 21:34:37 +0000
+Subject: [Linux-kselftest-mirror] [PATCH AUTOSEL for 4.9 04/52]
+ x86/selftests: Add clobbers for int80 on x86_64
+In-Reply-To: <CAJwJo6ZCnqTmzxO0xTxMEEy3t+0Z2-1dvwtn_THCO_OP2_MLcQ@mail.gmail.com>
+References: <20171129172100.28819-1-alexander.levin@verizon.com>
+ <20171129172100.28819-4-alexander.levin@verizon.com>
+ <CAJwJo6ZCnqTmzxO0xTxMEEy3t+0Z2-1dvwtn_THCO_OP2_MLcQ@mail.gmail.com>
+Message-ID: <20171130213436.usa4ikw6in42vf6h@sasha-lappy>
 
-On 11/29/2017 09:18 PM, Naresh Kamboju wrote:
-> (For MPX to work, changes are required in the kernel, binutils and compiler.)
-> (GCC with -fmpx:  * enables annotation of code with MPX instructions
-> and prefixes)
-> Do the kernel to be re-compiled with -fmpx ?
+On Wed, Nov 29, 2017 at 05:42:25PM +0000, Dmitry Safonov wrote:
+>Hi Sasha,
+>
+>I would object including this to stable tree:
+>1. It's selftest fixup
+>2. I have never saw selftests failing because of it (but it's possible)
+>    I saw this in CRIU (Checkpoint Restore In Userspace) project
+>    triggering, so I've fixed the selftests, mostly for documentation
+>    reasons - as people in userspace can reuse this code and think
+>    it's good and will just work after copy-paste (which is not the case).
+>
+>So, this patch doesn't look urgent to include it in -stable kernel.
 
-No, that test was specifically written not to require support in the
-compiler or binutils.
---
+Hey Dmitry,
+
+We try to backport selftest patches as stable material to allow a
+"complete" selftest to run on stable kernels.
+
+-- 
+
+Thanks,
+Sasha--
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
 More majordomo info at  http://vger.kernel.org/majordomo-info.html
