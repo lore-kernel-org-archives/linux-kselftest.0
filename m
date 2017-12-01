@@ -1,83 +1,111 @@
 From: brueckner at linux.vnet.ibm.com (Hendrik Brueckner)
-Date: Fri,  1 Dec 2017 15:19:03 +0100
-Subject: [Linux-kselftest-mirror] [PATCH 0/5] bpf: correct broken uapi for
-	BPF_PROG_TYPE_PERF_EVENT program type
-Message-ID: <1512137948-31729-1-git-send-email-brueckner@linux.vnet.ibm.com>
+Date: Fri,  1 Dec 2017 15:19:05 +0100
+Subject: [Linux-kselftest-mirror] [PATCH 2/5] s390/bpf: correct broken uapi
+	for BPF_PROG_TYPE_PERF_EVENT program type
+In-Reply-To: <1512137948-31729-1-git-send-email-brueckner@linux.vnet.ibm.com>
+References: <1512137948-31729-1-git-send-email-brueckner@linux.vnet.ibm.com>
+Message-ID: <1512137948-31729-3-git-send-email-brueckner@linux.vnet.ibm.com>
 
-Perf tool bpf selftests revealed a broken uapi for s390 and arm64.
-With the BPF_PROG_TYPE_PERF_EVENT program type the bpf_perf_event
-structure exports the pt_regs structure for all architectures.
+To mitigate and correct the broken uapi for the BPF_PROG_TYPE_PERF_EVENT
+program type, introduce a user_pt_regs structure (similar to arm64) that
+exports parts from the beginnig of the pt_regs structure.
 
-This fails for s390 and arm64 because pt_regs are not part of the
-user api and kept in-kernel only.  To mitigate the broken uapi,
-introduce a wrapper that exports pt_regs in an asm-generic way.
-For arm64, export the exising user_pt_regs structure.  For s390,
-introduce a user_pt_regs structure that exports the beginning of
-pt_regs.
+The export must start with the beginning of the pt_regs structure because
+to correctly calculate BPF prologues for perf (regs_query_register_offset()).
 
-Note that user_pt_regs must export from the beginning of pt_regs
-as BPF_PROG_TYPE_PERF_EVENT program type is not the only type for
-running BPF programs.
+For BPF_PROG_TYPE_PERF_EVENT program types, the BPF program is then passed
+a user_pt_regs structure.
 
-Some more background:
-	For the bpf_perf_event, there is a uapi definition that is
-	passed to the BPF program.  For other "probe" points like
-	trace points, kprobes, and uprobes, there is no uapi and the
-	BPF program is always passed pt_regs (which is OK as the BPF
-	program runs in the kernel context).  The perf tool can attach
-	BPF programs to all of these "probe" points and, optionally,
-	can create a BPF prologue to access particular arguments
-	(passed as registers).  For this, it uses DWARF/CFI
-	information to obtain the register and calls a perf-arch
-	backend function, regs_query_register_offset().  This function
-	returns the index into (user_)pt_regs for a particular
-	register.  Then, perf creates a BPF prologue that accesses
-	this register based on the passed stucture from the "probe"
-	point.
+Note: Depending on future changes to the s390 pt_regs structure, consider
+the user_pt_regs structure to be stable for a particular kernel version
+only. (Of course, s390 tries to ensure keep it stable as much as possible.)
 
-Part of this series, are also updates to the testing and bpf selftest
-to deal with asm-specifics.  To complete the bpf support in perf, the
-the regs_query_register_offset function is added for s390 to support
-BPF prologue creation.
-
-Hendrik Brueckner (5):
-  bpf: correct broken uapi for BPF_PROG_TYPE_PERF_EVENT program type
-  s390/bpf: correct broken uapi for BPF_PROG_TYPE_PERF_EVENT program
-    type
-  arm64/bpf: correct broken uapi for BPF_PROG_TYPE_PERF_EVENT program
-    type
-  selftests/bpf: sync kernel headers and introduce arch support in
-    Makefile
-  perf s390: add regs_query_register_offset()
-
- arch/arm64/include/asm/perf_event.h                |   2 +
- arch/arm64/include/uapi/asm/bpf_perf_event.h       |   9 +
- arch/s390/include/asm/perf_event.h                 |   1 +
- arch/s390/include/asm/ptrace.h                     |  11 +-
- arch/s390/include/uapi/asm/bpf_perf_event.h        |   9 +
- arch/s390/include/uapi/asm/ptrace.h                |  11 +
- include/linux/perf_event.h                         |   6 +-
- include/uapi/asm-generic/bpf_perf_event.h          |   9 +
- include/uapi/linux/bpf_perf_event.h                |   5 +-
- kernel/events/core.c                               |   2 +-
- tools/arch/arm64/include/uapi/asm/bpf_perf_event.h |   9 +
- tools/arch/s390/include/uapi/asm/bpf_perf_event.h  |   9 +
- tools/arch/s390/include/uapi/asm/ptrace.h          | 471 +++++++++++++++++++++
- tools/include/uapi/asm-generic/bpf_perf_event.h    |   9 +
- tools/include/uapi/linux/bpf_perf_event.h          |   6 +-
- tools/perf/arch/s390/Makefile                      |   1 +
- tools/perf/arch/s390/util/dwarf-regs.c             |  32 +-
- tools/perf/check-headers.sh                        |   1 +
- tools/testing/selftests/bpf/Makefile               |  14 +-
- 19 files changed, 602 insertions(+), 15 deletions(-)
- create mode 100644 arch/arm64/include/uapi/asm/bpf_perf_event.h
+Signed-off-by: Hendrik Brueckner <brueckner at linux.vnet.ibm.com>
+Reviewed-and-tested-by: Thomas Richter <tmricht at linux.vnet.ibm.com>
+Cc: Martin Schwidefsky <schwidefsky at de.ibm.com>
+Cc: Heiko Carstens <heiko.carstens at de.ibm.com>
+Cc: Arnaldo Carvalho de Melo <acme at kernel.org>
+Cc: Alexei Starovoitov <ast at kernel.org>
+Cc: Daniel Borkmann <daniel at iogearbox.net>
+---
+ arch/s390/include/asm/perf_event.h          |  1 +
+ arch/s390/include/asm/ptrace.h              | 11 ++++++++---
+ arch/s390/include/uapi/asm/bpf_perf_event.h |  9 +++++++++
+ arch/s390/include/uapi/asm/ptrace.h         | 11 +++++++++++
+ 4 files changed, 29 insertions(+), 3 deletions(-)
  create mode 100644 arch/s390/include/uapi/asm/bpf_perf_event.h
- create mode 100644 include/uapi/asm-generic/bpf_perf_event.h
- create mode 100644 tools/arch/arm64/include/uapi/asm/bpf_perf_event.h
- create mode 100644 tools/arch/s390/include/uapi/asm/bpf_perf_event.h
- create mode 100644 tools/arch/s390/include/uapi/asm/ptrace.h
- create mode 100644 tools/include/uapi/asm-generic/bpf_perf_event.h
 
+diff --git a/arch/s390/include/asm/perf_event.h b/arch/s390/include/asm/perf_event.h
+index d6c9d1e..b9c0e36 100644
+--- a/arch/s390/include/asm/perf_event.h
++++ b/arch/s390/include/asm/perf_event.h
+@@ -40,6 +40,7 @@ extern ssize_t cpumf_events_sysfs_show(struct device *dev,
+ extern unsigned long perf_instruction_pointer(struct pt_regs *regs);
+ extern unsigned long perf_misc_flags(struct pt_regs *regs);
+ #define perf_misc_flags(regs) perf_misc_flags(regs)
++#define perf_arch_bpf_user_pt_regs(regs) &regs->user_regs
+ 
+ /* Perf pt_regs extension for sample-data-entry indicators */
+ struct perf_sf_sde_regs {
+diff --git a/arch/s390/include/asm/ptrace.h b/arch/s390/include/asm/ptrace.h
+index a3788da..6f70d81 100644
+--- a/arch/s390/include/asm/ptrace.h
++++ b/arch/s390/include/asm/ptrace.h
+@@ -74,9 +74,14 @@ enum {
+  */
+ struct pt_regs 
+ {
+-	unsigned long args[1];
+-	psw_t psw;
+-	unsigned long gprs[NUM_GPRS];
++	union {
++		user_pt_regs user_regs;
++		struct {
++			unsigned long args[1];
++			psw_t psw;
++			unsigned long gprs[NUM_GPRS];
++		};
++	};
+ 	unsigned long orig_gpr2;
+ 	unsigned int int_code;
+ 	unsigned int int_parm;
+diff --git a/arch/s390/include/uapi/asm/bpf_perf_event.h b/arch/s390/include/uapi/asm/bpf_perf_event.h
+new file mode 100644
+index 0000000..cefe7c7
+--- /dev/null
++++ b/arch/s390/include/uapi/asm/bpf_perf_event.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _UAPI__ASM_BPF_PERF_EVENT_H__
++#define _UAPI__ASM_BPF_PERF_EVENT_H__
++
++#include <asm/ptrace.h>
++
++typedef user_pt_regs bpf_user_pt_regs_t;
++
++#endif /* _UAPI__ASM_BPF_PERF_EVENT_H__ */
+diff --git a/arch/s390/include/uapi/asm/ptrace.h b/arch/s390/include/uapi/asm/ptrace.h
+index 0d23c8f..70f7cb2 100644
+--- a/arch/s390/include/uapi/asm/ptrace.h
++++ b/arch/s390/include/uapi/asm/ptrace.h
+@@ -291,6 +291,17 @@
+ } s390_regs;
+ 
+ /*
++ * The user_pt_regs structure exports the beginning of
++ * the in-kernel pt_regs structure to user space.
++ */
++typedef struct
++{
++	unsigned long args[1];
++	psw_t psw;
++	unsigned long gprs[NUM_GPRS];
++} user_pt_regs;
++
++/*
+  * Now for the user space program event recording (trace) definitions.
+  * The following structures are used only for the ptrace interface, don't
+  * touch or even look at it if you don't want to modify the user-space
 -- 
 1.8.3.1
 
