@@ -1,38 +1,74 @@
-From: elfring at users.sourceforge.net (SF Markus Elfring)
-Date: Sun, 3 Dec 2017 22:56:51 +0100
-Subject: [Linux-kselftest-mirror] Difficulties for compilation without
-	extra optimisation
-In-Reply-To: <20171203162256.4ea0750d@vmware.local.home>
-References: <7f072f78-eef4-6d87-d233-cee71dac5a32@users.sourceforge.net>
- <a2ac6d05-fdd6-82bb-075e-b7eb81b516fe@users.sourceforge.net>
- <1512314250.3673.6.camel@primarydata.com>
- <20171203162256.4ea0750d@vmware.local.home>
-Message-ID: <bd57d7d5-c8f5-0bc9-c96f-37550557dca3@users.sourceforge.net>
-
-> Why would you compile the kernel without optimization?
-
-I would like to see how big an effect finally is in such a build configuration
-after specific source code adjustments.
+From: wharms at bfs.de (walter harms)
+Date: Sun, 03 Dec 2017 22:59:01 +0100
+Subject: [Linux-kselftest-mirror] selftests: Testing a write attempt
+	into a full file?
+In-Reply-To: <428c83c2-4752-0fe4-b135-fa23b69dca78@users.sourceforge.net>
+References: <428c83c2-4752-0fe4-b135-fa23b69dca78@users.sourceforge.net>
+Message-ID: <5A2473A5.2070601@bfs.de>
 
 
-> There's many places in the kernel that WILL NOT BUILD without optimization.
 
-I did not really know this detail so far.
+Am 03.12.2017 21:46, schrieb SF Markus Elfring:
+> Hello,
+> 
+> I have constructed another demonstration program.
+> 
+> 
+> #include <errno.h>
+> #include <stdio.h>
+> #include <stdlib.h>
+> 
+> int main(void)
+> {
+> 	FILE *f = fopen("/dev/full", "a");
+> 
+> 	if (!f)
+> 		goto report_failure;
+> 
+> 	{
+> 	int const c = 'X';
+> 
+> 	if (fputc(c, f) != c)
+> 		goto report_failure;
+> 	}
+> 
+Your test is broken, you are writing actualy into a buffer.
+Adding setbuf(f,NULL) to disable buffering will return
+main: No space left on device
 
-I noticed that the optimised build variants worked during my test comparisons.
+Otherwise force the buffer to be fflush()ed and i it will also
+report an error.
 
+> 	return EXIT_SUCCESS;
+> 
+> report_failure:
+> 	perror(__func__);
+from perror(3):
+ errno is undefined after a successful library call
 
-> In fact, we do a lot of tricks to make sure that things work the way
-> we expect it to, because we add broken code that only gets compiled out
-> when gcc optimizes the code the way we expect it to be,
-> and the kernel build will break otherwise.
+so this may or may not return what you expect.
 
-Thanks for your information.
-
-Can the software areas distinguished where such special handling matters?
-
-Regards,
-Markus
+re,
+ wh
+> 	return errno;
+> }
+> 
+> 
+> I got the following result.
+> 
+> elfring at Sonne:~/Projekte/selftests> gcc-7 putc_into_full_file1.c && ./a.out; echo $?
+> 0
+> 
+> 
+> Does such a simple test example need further software development considerations?
+> 
+> Regards,
+> Markus
+> --
+> To unsubscribe from this list: send the line "unsubscribe kernel-janitors" in
+> the body of a message to majordomo at vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
