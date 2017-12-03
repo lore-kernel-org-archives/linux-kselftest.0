@@ -1,114 +1,45 @@
-From: brueckner at linux.vnet.ibm.com (Hendrik Brueckner)
-Date: Fri,  1 Dec 2017 15:19:05 +0100
-Subject: [Linux-kselftest-mirror] [PATCH 2/5] s390/bpf: correct broken uapi
-	for BPF_PROG_TYPE_PERF_EVENT program type
-In-Reply-To: <1512137948-31729-1-git-send-email-brueckner@linux.vnet.ibm.com>
-References: <1512137948-31729-1-git-send-email-brueckner@linux.vnet.ibm.com>
-Message-ID: <1512137948-31729-3-git-send-email-brueckner@linux.vnet.ibm.com>
+From: elfring at users.sourceforge.net (SF Markus Elfring)
+Date: Sun, 3 Dec 2017 15:15:37 +0100
+Subject: [Linux-kselftest-mirror] Difficulties for compilation without extra
+	optimisation
+In-Reply-To: <7f072f78-eef4-6d87-d233-cee71dac5a32@users.sourceforge.net>
+References: <7f072f78-eef4-6d87-d233-cee71dac5a32@users.sourceforge.net>
+Message-ID: <a2ac6d05-fdd6-82bb-075e-b7eb81b516fe@users.sourceforge.net>
 
-To mitigate and correct the broken uapi for the BPF_PROG_TYPE_PERF_EVENT
-program type, introduce a user_pt_regs structure (similar to arm64) that
-exports parts from the beginnig of the pt_regs structure.
+Hello,
 
-The export must start with the beginning of the pt_regs structure because
-to correctly calculate BPF prologues for perf (regs_query_register_offset()).
+I came along some software modules where I suggested source code adjustments.
 
-For BPF_PROG_TYPE_PERF_EVENT program types, the BPF program is then passed
-a user_pt_regs structure.
+Example:
+nfs/write: Use common error handling code in nfs_lock_and_join_requests()
 
-Note: Depending on future changes to the s390 pt_regs structure, consider
-the user_pt_regs structure to be stable for a particular kernel version
-only. (Of course, s390 tries to ensure keep it stable as much as possible.)
+https://lkml.org/lkml/2017/11/7/599
+https://patchwork.kernel.org/patch/10047013/
+https://lkml.kernel.org/r/<7f072f78-eef4-6d87-d233-cee71dac5a32 at users.sourceforge.net>
 
-Signed-off-by: Hendrik Brueckner <brueckner at linux.vnet.ibm.com>
-Reviewed-and-tested-by: Thomas Richter <tmricht at linux.vnet.ibm.com>
-Cc: Martin Schwidefsky <schwidefsky at de.ibm.com>
-Cc: Heiko Carstens <heiko.carstens at de.ibm.com>
-Cc: Arnaldo Carvalho de Melo <acme at kernel.org>
-Cc: Alexei Starovoitov <ast at kernel.org>
-Cc: Daniel Borkmann <daniel at iogearbox.net>
----
- arch/s390/include/asm/perf_event.h          |  1 +
- arch/s390/include/asm/ptrace.h              | 11 ++++++++---
- arch/s390/include/uapi/asm/bpf_perf_event.h |  9 +++++++++
- arch/s390/include/uapi/asm/ptrace.h         | 11 +++++++++++
- 4 files changed, 29 insertions(+), 3 deletions(-)
- create mode 100644 arch/s390/include/uapi/asm/bpf_perf_event.h
+I would like to check corresponding build results then without extra
+optimisation applied by the compiler.
+But I got surprised by error messages for a command like the following.
 
-diff --git a/arch/s390/include/asm/perf_event.h b/arch/s390/include/asm/perf_event.h
-index d6c9d1e..b9c0e36 100644
---- a/arch/s390/include/asm/perf_event.h
-+++ b/arch/s390/include/asm/perf_event.h
-@@ -40,6 +40,7 @@ extern ssize_t cpumf_events_sysfs_show(struct device *dev,
- extern unsigned long perf_instruction_pointer(struct pt_regs *regs);
- extern unsigned long perf_misc_flags(struct pt_regs *regs);
- #define perf_misc_flags(regs) perf_misc_flags(regs)
-+#define perf_arch_bpf_user_pt_regs(regs) &regs->user_regs
- 
- /* Perf pt_regs extension for sample-data-entry indicators */
- struct perf_sf_sde_regs {
-diff --git a/arch/s390/include/asm/ptrace.h b/arch/s390/include/asm/ptrace.h
-index a3788da..6f70d81 100644
---- a/arch/s390/include/asm/ptrace.h
-+++ b/arch/s390/include/asm/ptrace.h
-@@ -74,9 +74,14 @@ enum {
-  */
- struct pt_regs 
- {
--	unsigned long args[1];
--	psw_t psw;
--	unsigned long gprs[NUM_GPRS];
-+	union {
-+		user_pt_regs user_regs;
-+		struct {
-+			unsigned long args[1];
-+			psw_t psw;
-+			unsigned long gprs[NUM_GPRS];
-+		};
-+	};
- 	unsigned long orig_gpr2;
- 	unsigned int int_code;
- 	unsigned int int_parm;
-diff --git a/arch/s390/include/uapi/asm/bpf_perf_event.h b/arch/s390/include/uapi/asm/bpf_perf_event.h
-new file mode 100644
-index 0000000..cefe7c7
---- /dev/null
-+++ b/arch/s390/include/uapi/asm/bpf_perf_event.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _UAPI__ASM_BPF_PERF_EVENT_H__
-+#define _UAPI__ASM_BPF_PERF_EVENT_H__
-+
-+#include <asm/ptrace.h>
-+
-+typedef user_pt_regs bpf_user_pt_regs_t;
-+
-+#endif /* _UAPI__ASM_BPF_PERF_EVENT_H__ */
-diff --git a/arch/s390/include/uapi/asm/ptrace.h b/arch/s390/include/uapi/asm/ptrace.h
-index 0d23c8f..70f7cb2 100644
---- a/arch/s390/include/uapi/asm/ptrace.h
-+++ b/arch/s390/include/uapi/asm/ptrace.h
-@@ -291,6 +291,17 @@
- } s390_regs;
- 
- /*
-+ * The user_pt_regs structure exports the beginning of
-+ * the in-kernel pt_regs structure to user space.
-+ */
-+typedef struct
-+{
-+	unsigned long args[1];
-+	psw_t psw;
-+	unsigned long gprs[NUM_GPRS];
-+} user_pt_regs;
-+
-+/*
-  * Now for the user space program event recording (trace) definitions.
-  * The following structures are used only for the ptrace interface, don't
-  * touch or even look at it if you don't want to modify the user-space
--- 
-1.8.3.1
+elfring at Sonne:~/Projekte/Linux/next-patched> my_cc=/usr/bin/gcc-7 && LANG=C make -j4 CC="${my_cc}" HOSTCC="${my_cc}" EXTRA_CFLAGS='-O0' allmodconfig fs/nfs/write.o
+…
+In file included from ./include/linux/compiler.h:58:0,
+                 from ./include/uapi/linux/stddef.h:1,
+                 from ./include/linux/stddef.h:4,
+                 from ./include/uapi/linux/posix_types.h:4,
+                 from ./include/uapi/linux/types.h:13,
+                 from ./include/linux/types.h:5,
+                 from fs/nfs/write.c:9:
+./arch/x86/include/asm/jump_label.h: In function ‘trace_nfs_writeback_page_enter’:
+./include/linux/compiler-gcc.h:275:38: warning: asm operand 0 probably doesn’t match constraints
+ #define asm_volatile_goto(x...) do { asm goto(x); asm (""); } while (0)
+…
 
+
+How do you think about to improve this software situation anyhow?
+
+Regards,
+Markus
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
