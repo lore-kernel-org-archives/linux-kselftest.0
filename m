@@ -1,45 +1,30 @@
-From: lkp at intel.com (kbuild test robot)
-Date: Mon, 4 Dec 2017 12:00:40 +0800
-Subject: [Linux-kselftest-mirror] [PATCH 1/5] bpf: correct broken uapi
- for BPF_PROG_TYPE_PERF_EVENT program type
-In-Reply-To: <1512137948-31729-2-git-send-email-brueckner@linux.vnet.ibm.com>
-References: <1512137948-31729-2-git-send-email-brueckner@linux.vnet.ibm.com>
-Message-ID: <201712041117.BmtvHi0J%fengguang.wu@intel.com>
+From: gregkh at linuxfoundation.org (Greg KH)
+Date: Mon, 4 Dec 2017 08:38:02 +0100
+Subject: [Linux-kselftest-mirror] [PATCH] treewide: remove duplicate
+	includes
+In-Reply-To: <1512337779-16842-1-git-send-email-pravin.shedge4linux@gmail.com>
+References: <1512337779-16842-1-git-send-email-pravin.shedge4linux@gmail.com>
+Message-ID: <20171204073802.GD19596@kroah.com>
 
-Hi Hendrik,
+On Mon, Dec 04, 2017 at 03:19:39AM +0530, Pravin Shedge wrote:
+> These duplicate includes have been found with scripts/checkincludes.pl but
+> they have been removed manually to avoid removing false positives.
+> 
+> Unit Testing:
+> 
+> - build successful
+> - LTP testsuite passes.
+> - checkpatch.pl passes
+> 
+> Signed-off-by: Pravin Shedge <pravin.shedge4linux at gmail.com>
 
-Thank you for the patch! Yet something to improve:
+Please break this up per-subsystem, like any other cleanup patch, and
+send it out that way.  As it is, no one can take such a patch.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v4.15-rc2]
-[cannot apply to tip/perf/core]
-[if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
+thanks,
 
-url:    https://github.com/0day-ci/linux/commits/Hendrik-Brueckner/bpf-correct-broken-uapi-for-BPF_PROG_TYPE_PERF_EVENT-program-type/20171204-092027
-config: x86_64-randconfig-g0-12040613 (attached as .config)
-compiler: gcc-4.9 (Debian 4.9.4-2) 4.9.4
-reproduce:
-        # save the attached .config to linux build tree
-        make ARCH=x86_64 
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/perf_event.h:18:0,
-                    from include/linux/trace_events.h:10,
-                    from include/trace/syscall.h:7,
-                    from include/linux/syscalls.h:82,
-                    from net/socket.c:83:
->> include/uapi/linux/bpf_perf_event.h:11:32: fatal error: asm/bpf_perf_event.h: No such file or directory
-    #include <asm/bpf_perf_event.h>
-                                   ^
-   compilation terminated.
-
-vim +11 include/uapi/linux/bpf_perf_event.h
-
-    10	
-  > 11	#include <asm/bpf_perf_event.h>
-    12	
-
----
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+greg k-h
+--
+To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
+the body of a message to majordomo at vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
