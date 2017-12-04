@@ -1,36 +1,38 @@
-From: darrick.wong at oracle.com (Darrick J. Wong)
-Date: Mon, 4 Dec 2017 10:27:31 -0800
+From: eduval at amazon.com (Eduardo Valentin)
+Date: Mon, 4 Dec 2017 11:21:23 -0800
 Subject: [Linux-kselftest-mirror] [PATCH] treewide: remove duplicate
 	includes
 In-Reply-To: <1512337779-16842-1-git-send-email-pravin.shedge4linux@gmail.com>
 References: <1512337779-16842-1-git-send-email-pravin.shedge4linux@gmail.com>
-Message-ID: <20171204182731.GA4903@magnolia>
+Message-ID: <20171204192123.GA1463@u40b0340c692b58f6553c.ant.amazon.com>
+
+Hello,
 
 On Mon, Dec 04, 2017 at 03:19:39AM +0530, Pravin Shedge wrote:
-> These duplicate includes have been found with scripts/checkincludes.pl but
-> they have been removed manually to avoid removing false positives.
-> 
-> Unit Testing:
-> 
-> - build successful
-> - LTP testsuite passes.
-> - checkpatch.pl passes
-> 
-> Signed-off-by: Pravin Shedge <pravin.shedge4linux at gmail.com>
+<cut>
 
-<supersnip>
+> diff --git a/drivers/thermal/of-thermal.c b/drivers/thermal/of-thermal.c
+> index d04ec3b..e09f035 100644
+> --- a/drivers/thermal/of-thermal.c
+> +++ b/drivers/thermal/of-thermal.c
+> @@ -30,7 +30,6 @@
+>  #include <linux/err.h>
+>  #include <linux/export.h>
+>  #include <linux/string.h>
+> -#include <linux/thermal.h>
+>  
+>  #include "thermal_core.h"
+>  
 
-> diff --git a/fs/xfs/scrub/scrub.c b/fs/xfs/scrub/scrub.c
-> index 9c42c4e..ab3aef2 100644
-> --- a/fs/xfs/scrub/scrub.c
-> +++ b/fs/xfs/scrub/scrub.c
+No issues with this but,
 
-These look reasonable, but please send me (and linux-xfs) the three
-xfs changes separately so that I can add them to the xfs tree.
+Please send a separate patch to linux-pm at vger.kernel.org and copy edubezva at gmail.com
 
-(Also, thank you for cc'ing the xfs list for this treewide change...)
+thanks,
 
---D
+-- 
+All the best,
+Eduardo Valentin
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
