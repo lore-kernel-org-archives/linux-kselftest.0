@@ -1,29 +1,38 @@
-From: gregkh at linuxfoundation.org (Greg KH)
-Date: Mon, 4 Dec 2017 08:38:02 +0100
-Subject: [Linux-kselftest-mirror] [PATCH] treewide: remove duplicate
-	includes
-In-Reply-To: <1512337779-16842-1-git-send-email-pravin.shedge4linux@gmail.com>
-References: <1512337779-16842-1-git-send-email-pravin.shedge4linux@gmail.com>
-Message-ID: <20171204073802.GD19596@kroah.com>
+From: elfring at users.sourceforge.net (SF Markus Elfring)
+Date: Mon, 4 Dec 2017 10:00:54 +0100
+Subject: [Linux-kselftest-mirror] Difficulties for compilation without
+	extra optimisation
+In-Reply-To: <20171203162256.4ea0750d@vmware.local.home>
+References: <7f072f78-eef4-6d87-d233-cee71dac5a32@users.sourceforge.net>
+ <a2ac6d05-fdd6-82bb-075e-b7eb81b516fe@users.sourceforge.net>
+ <1512314250.3673.6.camel@primarydata.com>
+ <20171203162256.4ea0750d@vmware.local.home>
+Message-ID: <c834d3ed-3da3-e2b5-7f4b-9e36bfcb388b@users.sourceforge.net>
 
-On Mon, Dec 04, 2017 at 03:19:39AM +0530, Pravin Shedge wrote:
-> These duplicate includes have been found with scripts/checkincludes.pl but
-> they have been removed manually to avoid removing false positives.
-> 
-> Unit Testing:
-> 
-> - build successful
-> - LTP testsuite passes.
-> - checkpatch.pl passes
-> 
-> Signed-off-by: Pravin Shedge <pravin.shedge4linux at gmail.com>
+> Why would you compile the kernel without optimization?
 
-Please break this up per-subsystem, like any other cleanup patch, and
-send it out that way.  As it is, no one can take such a patch.
+Can another reason be occasionally still relevant?
 
-thanks,
+Will the compilation be a bit quicker when extra data processing
+could be omitted?
 
-greg k-h
+
+> There's many places in the kernel that WILL NOT BUILD without optimization.
+
+Would you like to keep the software situation in this way?
+
+
+> In fact, we do a lot of tricks to make sure that things work the way
+> we expect it to, because we add broken code that only gets compiled out
+> when gcc optimizes the code the way we expect it to be,
+> and the kernel build will break otherwise.
+
+* Can this goal be also achieved without the addition of “broken code”?
+
+* How do you think about to improve the error handling there?
+
+Regards,
+Markus
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
