@@ -1,19 +1,26 @@
-From: joe@perches.com (Joe Perches)
-Date: Sun, 03 Dec 2017 15:20:10 -0800
-Subject: [Linux-kselftest-mirror] [PATCH] treewide: remove duplicate
-	includes
-In-Reply-To: <1512337779-16842-1-git-send-email-pravin.shedge4linux@gmail.com>
-References: <1512337779-16842-1-git-send-email-pravin.shedge4linux@gmail.com>
-Message-ID: <1512343210.6321.39.camel@perches.com>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Sun, 3 Dec 2017 21:40:46 -0500
+Subject: [Linux-kselftest-mirror] Difficulties for compilation without
+	extra optimisation
+In-Reply-To: <bd57d7d5-c8f5-0bc9-c96f-37550557dca3@users.sourceforge.net>
+References: <7f072f78-eef4-6d87-d233-cee71dac5a32@users.sourceforge.net>
+ <a2ac6d05-fdd6-82bb-075e-b7eb81b516fe@users.sourceforge.net>
+ <1512314250.3673.6.camel@primarydata.com>
+ <20171203162256.4ea0750d@vmware.local.home>
+ <bd57d7d5-c8f5-0bc9-c96f-37550557dca3@users.sourceforge.net>
+Message-ID: <20171203214046.23b1937e@vmware.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171203232010.y1LcOd-tBWaqpeOHmAqshgiNLR0FgOk79Yis2zO1avs@z>
+Message-ID: <20171204024046.7HCAdzI5GS3ycWSr5vc7C04tRPtutnnQCvQeQxaP-O0@z>
 
-On Mon, 2017-12-04@03:19 +0530, Pravin Shedge wrote:
-> These duplicate includes have been found with scripts/checkincludes.pl but
-> they have been removed manually to avoid removing false positives.
+On Sun, 3 Dec 2017 22:56:51 +0100
+SF Markus Elfring <elfring@users.sourceforge.net> wrote:
 
-Can you list the duplicates that were not removed as well please?
+> Can the software areas distinguished where such special handling matters?
 
+No idea. That's something you are going to have to figure out on your
+own.
+
+-- Steve
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
