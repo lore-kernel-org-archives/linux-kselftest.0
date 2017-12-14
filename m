@@ -1,169 +1,269 @@
-From: gregkh at linuxfoundation.org (Greg Kroah-Hartman)
-Date: Tue, 12 Dec 2017 13:44:37 +0100
-Subject: [Linux-kselftest-mirror] [PATCH 4.9 067/148] x86/selftests: Add
-	clobbers for int80 on x86_64
-In-Reply-To: <20171212124431.207182779@linuxfoundation.org>
-References: <20171212124431.207182779@linuxfoundation.org>
-Message-ID: <20171212124434.971928220@linuxfoundation.org>
+From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
+Date: Thu, 14 Dec 2017 11:14:03 -0500
+Subject: [Linux-kselftest-mirror] [RFC PATCH for 4.16 21/21] rseq:
+	selftests: Provide Makefile, scripts, gitignore
+In-Reply-To: <20171214161403.30643-1-mathieu.desnoyers@efficios.com>
+References: <20171214161403.30643-1-mathieu.desnoyers@efficios.com>
+Message-ID: <20171214161403.30643-22-mathieu.desnoyers@efficios.com>
 
-4.9-stable review patch.  If anyone has any objections, please let me know.
+A run_param_test.sh script runs many variants of the parametrizable
+tests.
 
-------------------
+Wire up the rseq Makefile, add directory entry into MAINTAINERS file.
 
-From: Dmitry Safonov <dsafonov at virtuozzo.com>
-
-
-[ Upstream commit 2a4d0c627f5374f365a873dea4e10ae0bb437680 ]
-
-Kernel erases R8..R11 registers prior returning to userspace
-from int80:
-
-  https://lkml.org/lkml/2009/10/1/164
-
-GCC can reuse these registers and doesn't expect them to change
-during syscall invocation. I met this kind of bug in CRIU once
-GCC 6.1 and CLANG stored local variables in those registers
-and the kernel zerofied them during syscall:
-
-  https://github.com/xemul/criu/commit/990d33f1a1cdd17bca6c2eb059ab3be2564f7fa2
-
-By that reason I suggest to add those registers to clobbers
-in selftests.  Also, as noted by Andy - removed unneeded clobber
-for flags in INT $0x80 inline asm.
-
-Signed-off-by: Dmitry Safonov <dsafonov at virtuozzo.com>
-Acked-by: Andy Lutomirski <luto at kernel.org>
-Cc: 0x7f454c46 at gmail.com
-Cc: Borislav Petkov <bp at alien8.de>
-Cc: Borislav Petkov <bp at suse.de>
-Cc: Brian Gerst <brgerst at gmail.com>
-Cc: Denys Vlasenko <dvlasenk at redhat.com>
-Cc: H. Peter Anvin <hpa at zytor.com>
-Cc: Josh Poimboeuf <jpoimboe at redhat.com>
-Cc: Linus Torvalds <torvalds at linux-foundation.org>
-Cc: Peter Zijlstra <peterz at infradead.org>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: linux-kselftest at vger.kernel.org
-Link: http://lkml.kernel.org/r/20170213101336.20486-1-dsafonov at virtuozzo.com
-Signed-off-by: Ingo Molnar <mingo at kernel.org>
-Signed-off-by: Sasha Levin <alexander.levin at verizon.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+CC: Shuah Khan <shuahkh at osg.samsung.com>
+CC: Russell King <linux at arm.linux.org.uk>
+CC: Catalin Marinas <catalin.marinas at arm.com>
+CC: Will Deacon <will.deacon at arm.com>
+CC: Thomas Gleixner <tglx at linutronix.de>
+CC: Paul Turner <pjt at google.com>
+CC: Andrew Hunter <ahh at google.com>
+CC: Peter Zijlstra <peterz at infradead.org>
+CC: Andy Lutomirski <luto at amacapital.net>
+CC: Andi Kleen <andi at firstfloor.org>
+CC: Dave Watson <davejwatson at fb.com>
+CC: Chris Lameter <cl at linux.com>
+CC: Ingo Molnar <mingo at redhat.com>
+CC: "H. Peter Anvin" <hpa at zytor.com>
+CC: Ben Maurer <bmaurer at fb.com>
+CC: Steven Rostedt <rostedt at goodmis.org>
+CC: "Paul E. McKenney" <paulmck at linux.vnet.ibm.com>
+CC: Josh Triplett <josh at joshtriplett.org>
+CC: Linus Torvalds <torvalds at linux-foundation.org>
+CC: Andrew Morton <akpm at linux-foundation.org>
+CC: Boqun Feng <boqun.feng at gmail.com>
+CC: linux-kselftest at vger.kernel.org
+CC: linux-api at vger.kernel.org
 ---
- tools/testing/selftests/x86/fsgsbase.c            |    2 +-
- tools/testing/selftests/x86/ldt_gdt.c             |   16 +++++++++++-----
- tools/testing/selftests/x86/ptrace_syscall.c      |    3 ++-
- tools/testing/selftests/x86/single_step_syscall.c |    5 ++++-
- 4 files changed, 18 insertions(+), 8 deletions(-)
+ MAINTAINERS                                    |   1 +
+ tools/testing/selftests/Makefile               |   1 +
+ tools/testing/selftests/rseq/.gitignore        |   7 ++
+ tools/testing/selftests/rseq/Makefile          |  37 +++++++
+ tools/testing/selftests/rseq/run_param_test.sh | 130 +++++++++++++++++++++++++
+ 5 files changed, 176 insertions(+)
+ create mode 100644 tools/testing/selftests/rseq/.gitignore
+ create mode 100644 tools/testing/selftests/rseq/Makefile
+ create mode 100755 tools/testing/selftests/rseq/run_param_test.sh
 
---- a/tools/testing/selftests/x86/fsgsbase.c
-+++ b/tools/testing/selftests/x86/fsgsbase.c
-@@ -245,7 +245,7 @@ void do_unexpected_base(void)
- 		long ret;
- 		asm volatile ("int $0x80"
- 			      : "=a" (ret) : "a" (243), "b" (low_desc)
--			      : "flags");
-+			      : "r8", "r9", "r10", "r11");
- 		memcpy(&desc, low_desc, sizeof(desc));
- 		munmap(low_desc, sizeof(desc));
+diff --git a/MAINTAINERS b/MAINTAINERS
+index dce21dea5a63..64422f253aa9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11638,6 +11638,7 @@ S:	Supported
+ F:	kernel/rseq.c
+ F:	include/uapi/linux/rseq.h
+ F:	include/trace/events/rseq.h
++F:	tools/testing/selftests/rseq/
  
---- a/tools/testing/selftests/x86/ldt_gdt.c
-+++ b/tools/testing/selftests/x86/ldt_gdt.c
-@@ -45,6 +45,12 @@
- #define AR_DB			(1 << 22)
- #define AR_G			(1 << 23)
- 
-+#ifdef __x86_64__
-+# define INT80_CLOBBERS "r8", "r9", "r10", "r11"
-+#else
-+# define INT80_CLOBBERS
-+#endif
+ RFKILL
+ M:	Johannes Berg <johannes at sipsolutions.net>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index fc1eba0e0130..fc314334628a 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -26,6 +26,7 @@ TARGETS += nsfs
+ TARGETS += powerpc
+ TARGETS += pstore
+ TARGETS += ptrace
++TARGETS += rseq
+ TARGETS += seccomp
+ TARGETS += sigaltstack
+ TARGETS += size
+diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
+new file mode 100644
+index 000000000000..73dcf05b69fd
+--- /dev/null
++++ b/tools/testing/selftests/rseq/.gitignore
+@@ -0,0 +1,7 @@
++basic_percpu_ops_test
++basic_test
++basic_rseq_op_test
++param_test
++param_test_benchmark
++param_test_compare_twice
++param_test_skip_fastpath
+diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+new file mode 100644
+index 000000000000..69f90d718774
+--- /dev/null
++++ b/tools/testing/selftests/rseq/Makefile
+@@ -0,0 +1,37 @@
++CFLAGS += -O2 -Wall -g -I./ -I../cpu-opv/ -I../../../../usr/include/ -L./ -Wl,-rpath=./
++LDLIBS += -lpthread
 +
- static int nerrs;
- 
- /* Points to an array of 1024 ints, each holding its own index. */
-@@ -649,7 +655,7 @@ static int invoke_set_thread_area(void)
- 	asm volatile ("int $0x80"
- 		      : "=a" (ret), "+m" (low_user_desc) :
- 			"a" (243), "b" (low_user_desc)
--		      : "flags");
-+		      : INT80_CLOBBERS);
- 	return ret;
- }
- 
-@@ -718,7 +724,7 @@ static void test_gdt_invalidation(void)
- 			"+a" (eax)
- 		      : "m" (low_user_desc_clear),
- 			[arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
--		      : "flags");
-+		      : INT80_CLOBBERS);
- 
- 	if (sel != 0) {
- 		result = "FAIL";
-@@ -749,7 +755,7 @@ static void test_gdt_invalidation(void)
- 			"+a" (eax)
- 		      : "m" (low_user_desc_clear),
- 			[arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
--		      : "flags");
-+		      : INT80_CLOBBERS);
- 
- 	if (sel != 0) {
- 		result = "FAIL";
-@@ -782,7 +788,7 @@ static void test_gdt_invalidation(void)
- 			"+a" (eax)
- 		      : "m" (low_user_desc_clear),
- 			[arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
--		      : "flags");
-+		      : INT80_CLOBBERS);
- 
- #ifdef __x86_64__
- 	syscall(SYS_arch_prctl, ARCH_GET_FS, &new_base);
-@@ -835,7 +841,7 @@ static void test_gdt_invalidation(void)
- 			"+a" (eax)
- 		      : "m" (low_user_desc_clear),
- 			[arg1] "r" ((unsigned int)(unsigned long)low_user_desc_clear)
--		      : "flags");
-+		      : INT80_CLOBBERS);
- 
- #ifdef __x86_64__
- 	syscall(SYS_arch_prctl, ARCH_GET_GS, &new_base);
---- a/tools/testing/selftests/x86/ptrace_syscall.c
-+++ b/tools/testing/selftests/x86/ptrace_syscall.c
-@@ -58,7 +58,8 @@ static void do_full_int80(struct syscall
- 	asm volatile ("int $0x80"
- 		      : "+a" (args->nr),
- 			"+b" (args->arg0), "+c" (args->arg1), "+d" (args->arg2),
--			"+S" (args->arg3), "+D" (args->arg4), "+r" (bp));
-+			"+S" (args->arg3), "+D" (args->arg4), "+r" (bp)
-+			: : "r8", "r9", "r10", "r11");
- 	args->arg5 = bp;
- #else
- 	sys32_helper(args, int80_and_ret);
---- a/tools/testing/selftests/x86/single_step_syscall.c
-+++ b/tools/testing/selftests/x86/single_step_syscall.c
-@@ -56,9 +56,11 @@ static volatile sig_atomic_t sig_traps;
- #ifdef __x86_64__
- # define REG_IP REG_RIP
- # define WIDTH "q"
-+# define INT80_CLOBBERS "r8", "r9", "r10", "r11"
- #else
- # define REG_IP REG_EIP
- # define WIDTH "l"
-+# define INT80_CLOBBERS
- #endif
- 
- static unsigned long get_eflags(void)
-@@ -140,7 +142,8 @@ int main()
- 
- 	printf("[RUN]\tSet TF and check int80\n");
- 	set_eflags(get_eflags() | X86_EFLAGS_TF);
--	asm volatile ("int $0x80" : "=a" (tmp) : "a" (SYS_getpid));
-+	asm volatile ("int $0x80" : "=a" (tmp) : "a" (SYS_getpid)
-+			: INT80_CLOBBERS);
- 	check_result();
- 
- 	/*
-
++# Own dependencies because we only want to build against 1st prerequisite, but
++# still track changes to header files and depend on shared object.
++OVERRIDE_TARGETS = 1
++
++TEST_GEN_PROGS = basic_test basic_percpu_ops_test \
++		param_test param_test_skip_fastpath \
++		param_test_benchmark param_test_compare_twice
++
++TEST_GEN_PROGS_EXTENDED = librseq.so libcpu-op.so
++
++TEST_PROGS = run_param_test.sh
++
++include ../lib.mk
++
++$(OUTPUT)/librseq.so: rseq.c rseq.h rseq-*.h
++	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
++
++$(OUTPUT)/libcpu-op.so: ../cpu-opv/cpu-op.c ../cpu-opv/cpu-op.h
++	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
++
++$(OUTPUT)/%: %.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h ../cpu-opv/cpu-op.h percpu-op.h
++	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -lcpu-op -o $@
++
++$(OUTPUT)/param_test_skip_fastpath: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
++					rseq.h rseq-*.h ../cpu-opv/cpu-op.h percpu-op.h
++	$(CC) $(CFLAGS) -DRSEQ_SKIP_FASTPATH $< $(LDLIBS) -lrseq -lcpu-op -o $@
++
++$(OUTPUT)/param_test_benchmark: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
++					rseq.h rseq-*.h ../cpu-opv/cpu-op.h percpu-op.h
++	$(CC) $(CFLAGS) -DBENCHMARK $< $(LDLIBS) -lrseq -lcpu-op -o $@
++
++$(OUTPUT)/param_test_compare_twice: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
++					rseq.h rseq-*.h ../cpu-opv/cpu-op.h percpu-op.h
++	$(CC) $(CFLAGS) -DRSEQ_COMPARE_TWICE $< $(LDLIBS) -lrseq -lcpu-op -o $@
+diff --git a/tools/testing/selftests/rseq/run_param_test.sh b/tools/testing/selftests/rseq/run_param_test.sh
+new file mode 100755
+index 000000000000..64d4c7d722c9
+--- /dev/null
++++ b/tools/testing/selftests/rseq/run_param_test.sh
+@@ -0,0 +1,130 @@
++#!/bin/bash
++
++EXTRA_ARGS=${@}
++
++OLDIFS="$IFS"
++IFS=$'\n'
++TEST_LIST=(
++	"-T s"
++	"-T l"
++	"-T b"
++	"-T b -M"
++	"-T m"
++	"-T m -M"
++	"-T i"
++)
++
++TEST_NAME=(
++	"spinlock"
++	"list"
++	"buffer"
++	"buffer with barrier"
++	"memcpy"
++	"memcpy with barrier"
++	"increment"
++)
++IFS="$OLDIFS"
++
++REPS=1000
++
++function do_tests()
++{
++	local i=0
++	while [ "$i" -lt "${#TEST_LIST[@]}" ]; do
++		echo "Running test ${TEST_NAME[$i]}"
++		./param_test ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
++		echo "Running skip fast-path test ${TEST_NAME[$i]}"
++		./param_test_skip_fastpath ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
++		echo "Running compare-twice test ${TEST_NAME[$i]}"
++		./param_test_compare_twice ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
++		let "i++"
++	done
++}
++
++echo "Default parameters"
++do_tests
++
++echo "Loop injection: 10000 loops"
++
++OLDIFS="$IFS"
++IFS=$'\n'
++INJECT_LIST=(
++	"1"
++	"2"
++	"3"
++	"4"
++	"5"
++	"6"
++	"7"
++	"8"
++	"9"
++)
++IFS="$OLDIFS"
++
++NR_LOOPS=10000
++
++i=0
++while [ "$i" -lt "${#INJECT_LIST[@]}" ]; do
++	echo "Injecting at <${INJECT_LIST[$i]}>"
++	do_tests -${INJECT_LIST[i]} ${NR_LOOPS}
++	let "i++"
++done
++NR_LOOPS=
++
++function inject_blocking()
++{
++	OLDIFS="$IFS"
++	IFS=$'\n'
++	INJECT_LIST=(
++		"7"
++		"8"
++		"9"
++	)
++	IFS="$OLDIFS"
++
++	NR_LOOPS=-1
++
++	i=0
++	while [ "$i" -lt "${#INJECT_LIST[@]}" ]; do
++		echo "Injecting at <${INJECT_LIST[$i]}>"
++		do_tests -${INJECT_LIST[i]} -1 ${@}
++		let "i++"
++	done
++	NR_LOOPS=
++}
++
++echo "Yield injection (25%)"
++inject_blocking -m 4 -y
++
++echo "Yield injection (50%)"
++inject_blocking -m 2 -y
++
++echo "Yield injection (100%)"
++inject_blocking -m 1 -y
++
++echo "Kill injection (25%)"
++inject_blocking -m 4 -k
++
++echo "Kill injection (50%)"
++inject_blocking -m 2 -k
++
++echo "Kill injection (100%)"
++inject_blocking -m 1 -k
++
++echo "Sleep injection (1ms, 25%)"
++inject_blocking -m 4 -s 1
++
++echo "Sleep injection (1ms, 50%)"
++inject_blocking -m 2 -s 1
++
++echo "Sleep injection (1ms, 100%)"
++inject_blocking -m 1 -s 1
++
++echo "Disable rseq for 25% threads"
++do_tests -D 4
++
++echo "Disable rseq for 50% threads"
++do_tests -D 2
++
++echo "Disable rseq"
++do_tests -d
+-- 
+2.11.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
