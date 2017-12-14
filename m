@@ -1,17 +1,22 @@
 From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
-Date: Thu, 14 Dec 2017 11:13:57 -0500
-Subject: [Linux-kselftest-mirror] [RFC PATCH for 4.16 15/21] cpu_opv:
-	selftests: Implement selftests (v6)
+Date: Thu, 14 Dec 2017 11:13:58 -0500
+Subject: [Linux-kselftest-mirror] [RFC PATCH for 4.16 16/21] rseq:
+	selftests: Provide rseq library (v5)
 In-Reply-To: <20171214161403.30643-1-mathieu.desnoyers@efficios.com>
 References: <20171214161403.30643-1-mathieu.desnoyers@efficios.com>
-Message-ID: <20171214161403.30643-16-mathieu.desnoyers@efficios.com>
+Message-ID: <20171214161403.30643-17-mathieu.desnoyers@efficios.com>
 
-Implement cpu_opv selftests. It needs to express dependencies on
-header files and .so, which require to override the selftests
-lib.mk targets. Use OVERRIDE_TARGETS define for this.
+This rseq helper library provides a user-space API to the rseq()
+system call.
+
+The rseq fast-path exposes the instruction pointer addresses where the
+rseq assembly blocks begin and end, as well as the associated abort
+instruction pointer, in the __rseq_table section. This section allows
+debuggers may know where to place breakpoints when single-stepping
+through assembly blocks which may be aborted at any point by the kernel.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
-Acked-by: Shuah Khan <shuahkh at osg.samsung.com>
+CC: Shuah Khan <shuahkh at osg.samsung.com>
 CC: Russell King <linux at arm.linux.org.uk>
 CC: Catalin Marinas <catalin.marinas at arm.com>
 CC: Will Deacon <will.deacon at arm.com>
@@ -36,1372 +41,2749 @@ CC: linux-kselftest at vger.kernel.org
 CC: linux-api at vger.kernel.org
 ---
 Changes since v1:
-
-- Expose similar library API as rseq:  Expose library API closely
-  matching the rseq APIs, following removal of the event counter from
-  the rseq kernel API.
-- Update makefile to fix make run_tests dependency on "all".
-- Introduce a OVERRIDE_TARGETS.
+- Provide abort-ip signature: The abort-ip signature is located just
+  before the abort-ip target. It is currently hardcoded, but a
+  user-space application could use the __rseq_table to iterate on all
+  abort-ip targets and use a random value as signature if needed in the
+  future.
+- Add rseq_prepare_unload(): Libraries and JIT code using rseq critical
+  sections need to issue rseq_prepare_unload() on each thread at least
+  once before reclaim of struct rseq_cs.
+- Use initial-exec TLS model, non-weak symbol: The initial-exec model is
+  signal-safe, whereas the global-dynamic model is not.  Remove the
+  "weak" symbol attribute from the __rseq_abi in rseq.c. The rseq.so
+  library will have ownership of that symbol, and there is not reason for
+  an application or user library to try to define that symbol.
+  The expected use is to link against libreq.so, which owns and provide
+  that symbol.
+- Set cpu_id to -2 on register error
+- Add rseq_len syscall parameter, rseq_cs version
+- Ensure disassember-friendly signature: x86 32/64 disassembler have a
+  hard time decoding the instruction stream after a bad instruction. Use
+  a nopl instruction to encode the signature. Suggested by Andy Lutomirski.
+- Exercise parametrized tests variants in a shell scripts.
+- Restartable sequences selftests: Remove use of event counter.
+- Use cpu_id_start field:  With the cpu_id_start field, the C
+  preparation phase of the fast-path does not need to compare cpu_id < 0
+  anymore.
+- Signal-safe registration and refcounting: Allow libraries using
+  librseq.so to register it from signal handlers.
+- Use OVERRIDE_TARGETS in makefile.
+- Use "m" constraints for rseq_cs field.
 
 Changes since v2:
-
-- Test page faults.
+- Update based on Thomas Gleixner's comments.
 
 Changes since v3:
-
-- Move lib.mk OVERRIDE_TARGETS change to its own patch.
-- Printout TAP output.
+- Generate param_test_skip_fastpath and param_test_benchmark with
+  -DSKIP_FASTPATH and -DBENCHMARK (respectively). Add param_test_fastpath
+  to run_param_test.sh.
 
 Changes since v4:
-
-- Retry internally within cpu_op_cmpnev_storeoffp_load().
-
-Changes since v5:
-
-- Test huge pages.
+- Fold arm: workaround gcc asm size guess,
+- Namespace barrier() -> rseq_barrier() in library header,
+- Take into account coding style feedback from Peter Zijlstra,
+- Split rseq selftests into logical commits.
 ---
- MAINTAINERS                                        |    1 +
- tools/testing/selftests/Makefile                   |    1 +
- tools/testing/selftests/cpu-opv/.gitignore         |    1 +
- tools/testing/selftests/cpu-opv/Makefile           |   17 +
- .../testing/selftests/cpu-opv/basic_cpu_opv_test.c | 1258 ++++++++++++++++++++
- tools/testing/selftests/cpu-opv/cpu-op.c           |  352 ++++++
- tools/testing/selftests/cpu-opv/cpu-op.h           |   59 +
- 7 files changed, 1689 insertions(+)
- create mode 100644 tools/testing/selftests/cpu-opv/.gitignore
- create mode 100644 tools/testing/selftests/cpu-opv/Makefile
- create mode 100644 tools/testing/selftests/cpu-opv/basic_cpu_opv_test.c
- create mode 100644 tools/testing/selftests/cpu-opv/cpu-op.c
- create mode 100644 tools/testing/selftests/cpu-opv/cpu-op.h
+ tools/testing/selftests/rseq/rseq-arm.h  |  732 +++++++++++++++++++
+ tools/testing/selftests/rseq/rseq-ppc.h  |  688 ++++++++++++++++++
+ tools/testing/selftests/rseq/rseq-skip.h |   82 +++
+ tools/testing/selftests/rseq/rseq-x86.h  | 1149 ++++++++++++++++++++++++++++++
+ tools/testing/selftests/rseq/rseq.c      |  116 +++
+ tools/testing/selftests/rseq/rseq.h      |  164 +++++
+ 6 files changed, 2931 insertions(+)
+ create mode 100644 tools/testing/selftests/rseq/rseq-arm.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-ppc.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-skip.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-x86.h
+ create mode 100644 tools/testing/selftests/rseq/rseq.c
+ create mode 100644 tools/testing/selftests/rseq/rseq.h
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 36c5246b385b..dce21dea5a63 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3738,6 +3738,7 @@ L:	linux-kernel at vger.kernel.org
- S:	Supported
- F:	kernel/cpu_opv.c
- F:	include/uapi/linux/cpu_opv.h
-+F:	tools/testing/selftests/cpu-opv/
- 
- CRAMFS FILESYSTEM
- M:	Nicolas Pitre <nico at linaro.org>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index eaf599dc2137..fc1eba0e0130 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -5,6 +5,7 @@ TARGETS += breakpoints
- TARGETS += capabilities
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
-+TARGETS += cpu-opv
- TARGETS += efivarfs
- TARGETS += exec
- TARGETS += firmware
-diff --git a/tools/testing/selftests/cpu-opv/.gitignore b/tools/testing/selftests/cpu-opv/.gitignore
+diff --git a/tools/testing/selftests/rseq/rseq-arm.h b/tools/testing/selftests/rseq/rseq-arm.h
 new file mode 100644
-index 000000000000..c7186eb95cf5
+index 000000000000..adcaa6cbbd01
 --- /dev/null
-+++ b/tools/testing/selftests/cpu-opv/.gitignore
-@@ -0,0 +1 @@
-+basic_cpu_opv_test
-diff --git a/tools/testing/selftests/cpu-opv/Makefile b/tools/testing/selftests/cpu-opv/Makefile
-new file mode 100644
-index 000000000000..21e63545d521
---- /dev/null
-+++ b/tools/testing/selftests/cpu-opv/Makefile
-@@ -0,0 +1,17 @@
-+CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./
-+
-+# Own dependencies because we only want to build against 1st prerequisite, but
-+# still track changes to header files and depend on shared object.
-+OVERRIDE_TARGETS = 1
-+
-+TEST_GEN_PROGS = basic_cpu_opv_test
-+
-+TEST_GEN_PROGS_EXTENDED = libcpu-op.so
-+
-+include ../lib.mk
-+
-+$(OUTPUT)/libcpu-op.so: cpu-op.c cpu-op.h
-+	$(CC) $(CFLAGS) -shared -fPIC $< -o $@
-+
-+$(OUTPUT)/%: %.c $(TEST_GEN_PROGS_EXTENDED) cpu-op.h
-+	$(CC) $(CFLAGS) $< -lcpu-op -o $@
-diff --git a/tools/testing/selftests/cpu-opv/basic_cpu_opv_test.c b/tools/testing/selftests/cpu-opv/basic_cpu_opv_test.c
-new file mode 100644
-index 000000000000..e33daa0b683d
---- /dev/null
-+++ b/tools/testing/selftests/cpu-opv/basic_cpu_opv_test.c
-@@ -0,0 +1,1258 @@
++++ b/tools/testing/selftests/rseq/rseq-arm.h
+@@ -0,0 +1,732 @@
 +/*
-+ * Basic test coverage for cpu_opv system call.
-+ */
-+
-+#define _GNU_SOURCE
-+#include <assert.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <errno.h>
-+#include <stdlib.h>
-+#include <sys/time.h>
-+#include <sys/mman.h>
-+
-+#include "../kselftest.h"
-+
-+#include "cpu-op.h"
-+
-+#define ARRAY_SIZE(arr)	(sizeof(arr) / sizeof((arr)[0]))
-+
-+#define TESTBUFLEN	4096
-+#define TESTBUFLEN_CMP	16
-+
-+#define TESTBUFLEN_PAGE_MAX	65536
-+
-+#define NR_PF_ARRAY	16384
-+#define PF_ARRAY_LEN	4096
-+
-+#define NR_HUGE_ARRAY	512
-+#define HUGEMAPLEN	(NR_HUGE_ARRAY * PF_ARRAY_LEN)
-+
-+/* 64 MB arrays for page fault testing. */
-+char pf_array_dst[NR_PF_ARRAY][PF_ARRAY_LEN];
-+char pf_array_src[NR_PF_ARRAY][PF_ARRAY_LEN];
-+
-+static int test_compare_eq_op(char *a, char *b, size_t len)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_COMPARE_EQ_OP,
-+			.len = len,
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.compare_op.a, a),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.compare_op.b, b),
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+	};
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_compare_eq_same(void)
-+{
-+	int i, ret;
-+	char buf1[TESTBUFLEN];
-+	char buf2[TESTBUFLEN];
-+	const char *test_name = "test_compare_eq same";
-+
-+	/* Test compare_eq */
-+	for (i = 0; i < TESTBUFLEN; i++)
-+		buf1[i] = (char)i;
-+	for (i = 0; i < TESTBUFLEN; i++)
-+		buf2[i] = (char)i;
-+	ret = test_compare_eq_op(buf2, buf1, TESTBUFLEN);
-+	if (ret < 0) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (ret > 0) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, ret, 0);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_compare_eq_diff(void)
-+{
-+	int i, ret;
-+	char buf1[TESTBUFLEN];
-+	char buf2[TESTBUFLEN];
-+	const char *test_name = "test_compare_eq different";
-+
-+	for (i = 0; i < TESTBUFLEN; i++)
-+		buf1[i] = (char)i;
-+	memset(buf2, 0, TESTBUFLEN);
-+	ret = test_compare_eq_op(buf2, buf1, TESTBUFLEN);
-+	if (ret < 0) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (ret == 0) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, ret, 1);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_compare_ne_op(char *a, char *b, size_t len)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_COMPARE_NE_OP,
-+			.len = len,
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.compare_op.a, a),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.compare_op.b, b),
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+	};
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_compare_ne_same(void)
-+{
-+	int i, ret;
-+	char buf1[TESTBUFLEN];
-+	char buf2[TESTBUFLEN];
-+	const char *test_name = "test_compare_ne same";
-+
-+	/* Test compare_ne */
-+	for (i = 0; i < TESTBUFLEN; i++)
-+		buf1[i] = (char)i;
-+	for (i = 0; i < TESTBUFLEN; i++)
-+		buf2[i] = (char)i;
-+	ret = test_compare_ne_op(buf2, buf1, TESTBUFLEN);
-+	if (ret < 0) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (ret == 0) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, ret, 1);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_compare_ne_diff(void)
-+{
-+	int i, ret;
-+	char buf1[TESTBUFLEN];
-+	char buf2[TESTBUFLEN];
-+	const char *test_name = "test_compare_ne different";
-+
-+	for (i = 0; i < TESTBUFLEN; i++)
-+		buf1[i] = (char)i;
-+	memset(buf2, 0, TESTBUFLEN);
-+	ret = test_compare_ne_op(buf2, buf1, TESTBUFLEN);
-+	if (ret < 0) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (ret != 0) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, ret, 0);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_2compare_eq_op(char *a, char *b, char *c, char *d,
-+		size_t len)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_COMPARE_EQ_OP,
-+			.len = len,
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.compare_op.a, a),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.compare_op.b, b),
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+		[1] = {
-+			.op = CPU_COMPARE_EQ_OP,
-+			.len = len,
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.compare_op.a, c),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.compare_op.b, d),
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+	};
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_2compare_eq_index(void)
-+{
-+	int i, ret;
-+	char buf1[TESTBUFLEN_CMP];
-+	char buf2[TESTBUFLEN_CMP];
-+	char buf3[TESTBUFLEN_CMP];
-+	char buf4[TESTBUFLEN_CMP];
-+	const char *test_name = "test_2compare_eq index";
-+
-+	for (i = 0; i < TESTBUFLEN_CMP; i++)
-+		buf1[i] = (char)i;
-+	memset(buf2, 0, TESTBUFLEN_CMP);
-+	memset(buf3, 0, TESTBUFLEN_CMP);
-+	memset(buf4, 0, TESTBUFLEN_CMP);
-+
-+	/* First compare failure is op[0], expect 1. */
-+	ret = test_2compare_eq_op(buf2, buf1, buf4, buf3, TESTBUFLEN_CMP);
-+	if (ret < 0) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (ret != 1) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, ret, 1);
-+		return -1;
-+	}
-+
-+	/* All compares succeed. */
-+	for (i = 0; i < TESTBUFLEN_CMP; i++)
-+		buf2[i] = (char)i;
-+	ret = test_2compare_eq_op(buf2, buf1, buf4, buf3, TESTBUFLEN_CMP);
-+	if (ret < 0) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (ret != 0) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, ret, 0);
-+		return -1;
-+	}
-+
-+	/* First compare failure is op[1], expect 2. */
-+	for (i = 0; i < TESTBUFLEN_CMP; i++)
-+		buf3[i] = (char)i;
-+	ret = test_2compare_eq_op(buf2, buf1, buf4, buf3, TESTBUFLEN_CMP);
-+	if (ret < 0) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (ret != 2) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, ret, 2);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_2compare_ne_op(char *a, char *b, char *c, char *d,
-+		size_t len)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_COMPARE_NE_OP,
-+			.len = len,
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.compare_op.a, a),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.compare_op.b, b),
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+		[1] = {
-+			.op = CPU_COMPARE_NE_OP,
-+			.len = len,
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.compare_op.a, c),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.compare_op.b, d),
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+	};
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_2compare_ne_index(void)
-+{
-+	int i, ret;
-+	char buf1[TESTBUFLEN_CMP];
-+	char buf2[TESTBUFLEN_CMP];
-+	char buf3[TESTBUFLEN_CMP];
-+	char buf4[TESTBUFLEN_CMP];
-+	const char *test_name = "test_2compare_ne index";
-+
-+	memset(buf1, 0, TESTBUFLEN_CMP);
-+	memset(buf2, 0, TESTBUFLEN_CMP);
-+	memset(buf3, 0, TESTBUFLEN_CMP);
-+	memset(buf4, 0, TESTBUFLEN_CMP);
-+
-+	/* First compare ne failure is op[0], expect 1. */
-+	ret = test_2compare_ne_op(buf2, buf1, buf4, buf3, TESTBUFLEN_CMP);
-+	if (ret < 0) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (ret != 1) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, ret, 1);
-+		return -1;
-+	}
-+
-+	/* All compare ne succeed. */
-+	for (i = 0; i < TESTBUFLEN_CMP; i++)
-+		buf1[i] = (char)i;
-+	for (i = 0; i < TESTBUFLEN_CMP; i++)
-+		buf3[i] = (char)i;
-+	ret = test_2compare_ne_op(buf2, buf1, buf4, buf3, TESTBUFLEN_CMP);
-+	if (ret < 0) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (ret != 0) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, ret, 0);
-+		return -1;
-+	}
-+
-+	/* First compare failure is op[1], expect 2. */
-+	for (i = 0; i < TESTBUFLEN_CMP; i++)
-+		buf4[i] = (char)i;
-+	ret = test_2compare_ne_op(buf2, buf1, buf4, buf3, TESTBUFLEN_CMP);
-+	if (ret < 0) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (ret != 2) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, ret, 2);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_memcpy_op(void *dst, void *src, size_t len)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = len,
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.memcpy_op.dst, dst),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.memcpy_op.src, src),
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+	};
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_memcpy(void)
-+{
-+	int i, ret;
-+	char buf1[TESTBUFLEN];
-+	char buf2[TESTBUFLEN];
-+	const char *test_name = "test_memcpy";
-+
-+	/* Test memcpy */
-+	for (i = 0; i < TESTBUFLEN; i++)
-+		buf1[i] = (char)i;
-+	memset(buf2, 0, TESTBUFLEN);
-+	ret = test_memcpy_op(buf2, buf1, TESTBUFLEN);
-+	if (ret) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	for (i = 0; i < TESTBUFLEN; i++) {
-+		if (buf2[i] != (char)i) {
-+			ksft_exit_fail_msg("%s test: unexpected value at offset %d. Found %d. Should be %d.\n",
-+				   test_name, i, buf2[i], (char)i);
-+			return -1;
-+		}
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_memcpy_u32(void)
-+{
-+	int ret;
-+	uint32_t v1, v2;
-+	const char *test_name = "test_memcpy_u32";
-+
-+	/* Test memcpy_u32 */
-+	v1 = 42;
-+	v2 = 0;
-+	ret = test_memcpy_op(&v2, &v1, sizeof(v1));
-+	if (ret) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (v1 != v2) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, v2, v1);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_memcpy_mb_memcpy_op(void *dst1, void *src1,
-+		void *dst2, void *src2, size_t len)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = len,
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.memcpy_op.dst, dst1),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.memcpy_op.src, src1),
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+		[1] = {
-+			.op = CPU_MB_OP,
-+		},
-+		[2] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = len,
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.memcpy_op.dst, dst2),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.memcpy_op.src, src2),
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+	};
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_memcpy_mb_memcpy(void)
-+{
-+	int ret;
-+	int v1, v2, v3;
-+	const char *test_name = "test_memcpy_mb_memcpy";
-+
-+	/* Test memcpy */
-+	v1 = 42;
-+	v2 = v3 = 0;
-+	ret = test_memcpy_mb_memcpy_op(&v2, &v1, &v3, &v2, sizeof(int));
-+	if (ret) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (v3 != v1) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, v3, v1);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_add_op(int *v, int64_t increment)
-+{
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_op_add(v, increment, sizeof(*v), cpu);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_add(void)
-+{
-+	int orig_v = 42, v, ret;
-+	int increment = 1;
-+	const char *test_name = "test_add";
-+
-+	v = orig_v;
-+	ret = test_add_op(&v, increment);
-+	if (ret) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (v != orig_v + increment) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, v,
-+				   orig_v + increment);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_two_add_op(int *v, int64_t *increments)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_ADD_OP,
-+			.len = sizeof(*v),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(
-+				.u.arithmetic_op.p, v),
-+			.u.arithmetic_op.count = increments[0],
-+			.u.arithmetic_op.expect_fault_p = 0,
-+		},
-+		[1] = {
-+			.op = CPU_ADD_OP,
-+			.len = sizeof(*v),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(
-+				.u.arithmetic_op.p, v),
-+			.u.arithmetic_op.count = increments[1],
-+			.u.arithmetic_op.expect_fault_p = 0,
-+		},
-+	};
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_two_add(void)
-+{
-+	int orig_v = 42, v, ret;
-+	int64_t increments[2] = { 99, 123 };
-+	const char *test_name = "test_two_add";
-+
-+	v = orig_v;
-+	ret = test_two_add_op(&v, increments);
-+	if (ret) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (v != orig_v + increments[0] + increments[1]) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, v,
-+				   orig_v + increments[0] + increments[1]);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_or_op(int *v, uint64_t mask)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_OR_OP,
-+			.len = sizeof(*v),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(
-+				.u.bitwise_op.p, v),
-+			.u.bitwise_op.mask = mask,
-+			.u.bitwise_op.expect_fault_p = 0,
-+		},
-+	};
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_or(void)
-+{
-+	int orig_v = 0xFF00000, v, ret;
-+	uint32_t mask = 0xFFF;
-+	const char *test_name = "test_or";
-+
-+	v = orig_v;
-+	ret = test_or_op(&v, mask);
-+	if (ret) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (v != (orig_v | mask)) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, v, orig_v | mask);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_and_op(int *v, uint64_t mask)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_AND_OP,
-+			.len = sizeof(*v),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(
-+				.u.bitwise_op.p, v),
-+			.u.bitwise_op.mask = mask,
-+			.u.bitwise_op.expect_fault_p = 0,
-+		},
-+	};
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_and(void)
-+{
-+	int orig_v = 0xF00, v, ret;
-+	uint32_t mask = 0xFFF;
-+	const char *test_name = "test_and";
-+
-+	v = orig_v;
-+	ret = test_and_op(&v, mask);
-+	if (ret) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (v != (orig_v & mask)) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, v, orig_v & mask);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_xor_op(int *v, uint64_t mask)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_XOR_OP,
-+			.len = sizeof(*v),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(
-+				.u.bitwise_op.p, v),
-+			.u.bitwise_op.mask = mask,
-+			.u.bitwise_op.expect_fault_p = 0,
-+		},
-+	};
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_xor(void)
-+{
-+	int orig_v = 0xF00, v, ret;
-+	uint32_t mask = 0xFFF;
-+	const char *test_name = "test_xor";
-+
-+	v = orig_v;
-+	ret = test_xor_op(&v, mask);
-+	if (ret) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (v != (orig_v ^ mask)) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, v, orig_v ^ mask);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_lshift_op(int *v, uint32_t bits)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_LSHIFT_OP,
-+			.len = sizeof(*v),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(
-+				.u.shift_op.p, v),
-+			.u.shift_op.bits = bits,
-+			.u.shift_op.expect_fault_p = 0,
-+		},
-+	};
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_lshift(void)
-+{
-+	int orig_v = 0xF00, v, ret;
-+	uint32_t bits = 5;
-+	const char *test_name = "test_lshift";
-+
-+	v = orig_v;
-+	ret = test_lshift_op(&v, bits);
-+	if (ret) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (v != (orig_v << bits)) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, v, orig_v << bits);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_rshift_op(int *v, uint32_t bits)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_RSHIFT_OP,
-+			.len = sizeof(*v),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(
-+				.u.shift_op.p, v),
-+			.u.shift_op.bits = bits,
-+			.u.shift_op.expect_fault_p = 0,
-+		},
-+	};
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_rshift(void)
-+{
-+	int orig_v = 0xF00, v, ret;
-+	uint32_t bits = 5;
-+	const char *test_name = "test_rshift";
-+
-+	v = orig_v;
-+	ret = test_rshift_op(&v, bits);
-+	if (ret) {
-+		ksft_exit_fail_msg("%s test: returned with %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (v != (orig_v >> bits)) {
-+		ksft_exit_fail_msg("%s test: unexpected value %d. Should be %d.\n",
-+				   test_name, v, orig_v >> bits);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_cmpxchg_op(void *v, void *expect, void *old, void *n,
-+		size_t len)
-+{
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_op_cmpxchg(v, expect, old, n, len, cpu);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_cmpxchg_success(void)
-+{
-+	int ret;
-+	uint64_t orig_v = 1, v, expect = 1, old = 0, n = 3;
-+	const char *test_name = "test_cmpxchg success";
-+
-+	v = orig_v;
-+	ret = test_cmpxchg_op(&v, &expect, &old, &n, sizeof(uint64_t));
-+	if (ret < 0) {
-+		ksft_exit_fail_msg("%s test: ret = %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (ret) {
-+		ksft_exit_fail_msg("%s returned %d, expecting %d\n",
-+				   test_name, ret, 0);
-+		return -1;
-+	}
-+	if (v != n) {
-+		ksft_exit_fail_msg("%s v is %lld, expecting %lld\n",
-+				   test_name, (long long)v, (long long)n);
-+		return -1;
-+	}
-+	if (old != orig_v) {
-+		ksft_exit_fail_msg("%s old is %lld, expecting %lld\n",
-+				   test_name, (long long)old,
-+				   (long long)orig_v);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_cmpxchg_fail(void)
-+{
-+	int ret;
-+	uint64_t orig_v = 1, v, expect = 123, old = 0, n = 3;
-+	const char *test_name = "test_cmpxchg fail";
-+
-+	v = orig_v;
-+	ret = test_cmpxchg_op(&v, &expect, &old, &n, sizeof(uint64_t));
-+	if (ret < 0) {
-+		ksft_exit_fail_msg("%s test: ret = %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	if (ret == 0) {
-+		ksft_exit_fail_msg("%s returned %d, expecting %d\n",
-+				   test_name, ret, 1);
-+		return -1;
-+	}
-+	if (v == n) {
-+		ksft_exit_fail_msg("%s returned %lld, expecting %lld\n",
-+				   test_name, (long long)v, (long long)orig_v);
-+		return -1;
-+	}
-+	if (old != orig_v) {
-+		ksft_exit_fail_msg("%s old is %lld, expecting %lld\n",
-+				   test_name, (long long)old,
-+				   (long long)orig_v);
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_memcpy_expect_fault_op(void *dst, void *src, size_t len)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = len,
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.memcpy_op.dst, dst),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.memcpy_op.src, src),
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			/* Return EAGAIN on fault. */
-+			.u.memcpy_op.expect_fault_src = 1,
-+		},
-+	};
-+	int cpu;
-+
-+	cpu = cpu_op_get_current_cpu();
-+	return cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+}
-+
-+static int test_memcpy_fault(void)
-+{
-+	int ret;
-+	char buf1[TESTBUFLEN];
-+	const char *test_name = "test_memcpy_fault";
-+
-+	/* Test memcpy */
-+	ret = test_memcpy_op(buf1, NULL, TESTBUFLEN);
-+	if (!ret || (ret < 0 && errno != EFAULT)) {
-+		ksft_exit_fail_msg("%s test: ret = %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	/* Test memcpy expect fault */
-+	ret = test_memcpy_expect_fault_op(buf1, NULL, TESTBUFLEN);
-+	if (!ret || (ret < 0 && errno != EAGAIN)) {
-+		ksft_exit_fail_msg("%s test: ret = %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int do_test_unknown_op(void)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = -1,	/* Unknown */
-+			.len = 0,
-+		},
-+	};
-+	int cpu;
-+
-+	cpu = cpu_op_get_current_cpu();
-+	return cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+}
-+
-+static int test_unknown_op(void)
-+{
-+	int ret;
-+	const char *test_name = "test_unknown_op";
-+
-+	ret = do_test_unknown_op();
-+	if (!ret || (ret < 0 && errno != EINVAL)) {
-+		ksft_exit_fail_msg("%s test: ret = %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int do_test_max_ops(void)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = { .op = CPU_MB_OP, },
-+		[1] = { .op = CPU_MB_OP, },
-+		[2] = { .op = CPU_MB_OP, },
-+		[3] = { .op = CPU_MB_OP, },
-+		[4] = { .op = CPU_MB_OP, },
-+		[5] = { .op = CPU_MB_OP, },
-+		[6] = { .op = CPU_MB_OP, },
-+		[7] = { .op = CPU_MB_OP, },
-+		[8] = { .op = CPU_MB_OP, },
-+		[9] = { .op = CPU_MB_OP, },
-+		[10] = { .op = CPU_MB_OP, },
-+		[11] = { .op = CPU_MB_OP, },
-+		[12] = { .op = CPU_MB_OP, },
-+		[13] = { .op = CPU_MB_OP, },
-+		[14] = { .op = CPU_MB_OP, },
-+		[15] = { .op = CPU_MB_OP, },
-+	};
-+	int cpu;
-+
-+	cpu = cpu_op_get_current_cpu();
-+	return cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+}
-+
-+static int test_max_ops(void)
-+{
-+	int ret;
-+	const char *test_name = "test_max_ops";
-+
-+	ret = do_test_max_ops();
-+	if (ret < 0) {
-+		ksft_exit_fail_msg("%s test: ret = %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int do_test_too_many_ops(void)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = { .op = CPU_MB_OP, },
-+		[1] = { .op = CPU_MB_OP, },
-+		[2] = { .op = CPU_MB_OP, },
-+		[3] = { .op = CPU_MB_OP, },
-+		[4] = { .op = CPU_MB_OP, },
-+		[5] = { .op = CPU_MB_OP, },
-+		[6] = { .op = CPU_MB_OP, },
-+		[7] = { .op = CPU_MB_OP, },
-+		[8] = { .op = CPU_MB_OP, },
-+		[9] = { .op = CPU_MB_OP, },
-+		[10] = { .op = CPU_MB_OP, },
-+		[11] = { .op = CPU_MB_OP, },
-+		[12] = { .op = CPU_MB_OP, },
-+		[13] = { .op = CPU_MB_OP, },
-+		[14] = { .op = CPU_MB_OP, },
-+		[15] = { .op = CPU_MB_OP, },
-+		[16] = { .op = CPU_MB_OP, },
-+	};
-+	int cpu;
-+
-+	cpu = cpu_op_get_current_cpu();
-+	return cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+}
-+
-+static int test_too_many_ops(void)
-+{
-+	int ret;
-+	const char *test_name = "test_too_many_ops";
-+
-+	ret = do_test_too_many_ops();
-+	if (!ret || (ret < 0 && errno != EINVAL)) {
-+		ksft_exit_fail_msg("%s test: ret = %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+/* Use 64kB len, largest page size known on Linux. */
-+static int test_memcpy_single_too_large(void)
-+{
-+	int i, ret;
-+	char buf1[TESTBUFLEN_PAGE_MAX + 1];
-+	char buf2[TESTBUFLEN_PAGE_MAX + 1];
-+	const char *test_name = "test_memcpy_single_too_large";
-+
-+	/* Test memcpy */
-+	for (i = 0; i < TESTBUFLEN_PAGE_MAX + 1; i++)
-+		buf1[i] = (char)i;
-+	memset(buf2, 0, TESTBUFLEN_PAGE_MAX + 1);
-+	ret = test_memcpy_op(buf2, buf1, TESTBUFLEN_PAGE_MAX + 1);
-+	if (!ret || (ret < 0 && errno != EINVAL)) {
-+		ksft_exit_fail_msg("%s test: ret = %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+static int test_memcpy_single_ok_sum_too_large_op(void *dst, void *src,
-+						  size_t len)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = len,
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.memcpy_op.dst, dst),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.memcpy_op.src, src),
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+		[1] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = len,
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.memcpy_op.dst, dst),
-+			LINUX_FIELD_u32_u64_INIT_ONSTACK(.u.memcpy_op.src, src),
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+	};
-+	int ret, cpu;
-+
-+	do {
-+		cpu = cpu_op_get_current_cpu();
-+		ret = cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+	} while (ret == -1 && errno == EAGAIN);
-+
-+	return ret;
-+}
-+
-+static int test_memcpy_single_ok_sum_too_large(void)
-+{
-+	int i, ret;
-+	char buf1[TESTBUFLEN];
-+	char buf2[TESTBUFLEN];
-+	const char *test_name = "test_memcpy_single_ok_sum_too_large";
-+
-+	/* Test memcpy */
-+	for (i = 0; i < TESTBUFLEN; i++)
-+		buf1[i] = (char)i;
-+	memset(buf2, 0, TESTBUFLEN);
-+	ret = test_memcpy_single_ok_sum_too_large_op(buf2, buf1, TESTBUFLEN);
-+	if (!ret || (ret < 0 && errno != EINVAL)) {
-+		ksft_exit_fail_msg("%s test: ret = %d, errno = %s\n",
-+				   test_name, ret, strerror(errno));
-+		return -1;
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+/*
-+ * Iterate over large uninitialized arrays to trigger page faults.
-+ * This includes reading from zero pages.
-+ */
-+int test_page_fault(void)
-+{
-+	int ret = 0;
-+	uint64_t i;
-+	const char *test_name = "test_page_fault";
-+
-+	for (i = 0; i < NR_PF_ARRAY; i++) {
-+		ret = test_memcpy_op(pf_array_dst[i],
-+				     pf_array_src[i],
-+				     PF_ARRAY_LEN);
-+		if (ret) {
-+			ksft_exit_fail_msg("%s test: ret = %d, errno = %s\n",
-+					   test_name, ret, strerror(errno));
-+			return ret;
-+		}
-+	}
-+	ksft_test_result_pass("%s test\n", test_name);
-+	return 0;
-+}
-+
-+/*
-+ * Try to use 2MB huge pages.
-+ */
-+int test_hugetlb(void)
-+{
-+	int ret = 0;
-+	uint64_t i;
-+	const char *test_name = "test_hugetlb";
-+	int *dst, *src;
-+
-+	dst = mmap(NULL, HUGEMAPLEN, PROT_READ | PROT_WRITE,
-+		   MAP_HUGETLB | MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	if (dst == MAP_FAILED) {
-+		switch (errno) {
-+		case ENOMEM:
-+		case ENOENT:
-+		case EINVAL:
-+			ksft_test_result_skip("%s test.\n", test_name);
-+			goto end;
-+		default:
-+			break;
-+		}
-+		perror("mmap");
-+		abort();
-+	}
-+	src = mmap(NULL, HUGEMAPLEN, PROT_READ | PROT_WRITE,
-+		   MAP_HUGETLB | MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	if (src == MAP_FAILED) {
-+		if (errno == ENOMEM) {
-+			ksft_test_result_skip("%s test.\n", test_name);
-+			goto unmap_dst;
-+		}
-+		perror("mmap");
-+		abort();
-+	}
-+
-+	/* Read/write from/to huge zero pages. */
-+	for (i = 0; i < NR_HUGE_ARRAY; i++) {
-+		ret = test_memcpy_op(dst + (i * PF_ARRAY_LEN / sizeof(int)),
-+				     src + (i * PF_ARRAY_LEN / sizeof(int)),
-+				     PF_ARRAY_LEN);
-+		if (ret) {
-+			ksft_exit_fail_msg("%s test: ret = %d, errno = %s\n",
-+					   test_name, ret, strerror(errno));
-+			return ret;
-+		}
-+	}
-+	for (i = 0; i < NR_HUGE_ARRAY * (PF_ARRAY_LEN / sizeof(int)); i++)
-+		src[i] = i;
-+
-+	for (i = 0; i < NR_HUGE_ARRAY; i++) {
-+		ret = test_memcpy_op(dst + (i * PF_ARRAY_LEN / sizeof(int)),
-+				     src + (i * PF_ARRAY_LEN / sizeof(int)),
-+				     PF_ARRAY_LEN);
-+		if (ret) {
-+			ksft_exit_fail_msg("%s test: ret = %d, errno = %s\n",
-+					   test_name, ret, strerror(errno));
-+			return ret;
-+		}
-+	}
-+
-+	for (i = 0; i < NR_HUGE_ARRAY * (PF_ARRAY_LEN / sizeof(int)); i++) {
-+		if (dst[i] != i) {
-+			ksft_exit_fail_msg("%s mismatch, expect %d, got %d\n",
-+					   test_name, i, dst[i]);
-+			return ret;
-+		}
-+	}
-+
-+	ksft_test_result_pass("%s test\n", test_name);
-+
-+	if (munmap(src, HUGEMAPLEN)) {
-+		perror("munmap");
-+		abort();
-+	}
-+unmap_dst:
-+	if (munmap(dst, HUGEMAPLEN)) {
-+		perror("munmap");
-+		abort();
-+	}
-+end:
-+	return 0;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	ksft_print_header();
-+
-+	test_compare_eq_same();
-+	test_compare_eq_diff();
-+	test_compare_ne_same();
-+	test_compare_ne_diff();
-+	test_2compare_eq_index();
-+	test_2compare_ne_index();
-+	test_memcpy();
-+	test_memcpy_u32();
-+	test_memcpy_mb_memcpy();
-+	test_add();
-+	test_two_add();
-+	test_or();
-+	test_and();
-+	test_xor();
-+	test_lshift();
-+	test_rshift();
-+	test_cmpxchg_success();
-+	test_cmpxchg_fail();
-+	test_memcpy_fault();
-+	test_unknown_op();
-+	test_max_ops();
-+	test_too_many_ops();
-+	test_memcpy_single_too_large();
-+	test_memcpy_single_ok_sum_too_large();
-+	test_page_fault();
-+	test_hugetlb();
-+
-+	return ksft_exit_pass();
-+}
-diff --git a/tools/testing/selftests/cpu-opv/cpu-op.c b/tools/testing/selftests/cpu-opv/cpu-op.c
-new file mode 100644
-index 000000000000..5981895df25a
---- /dev/null
-+++ b/tools/testing/selftests/cpu-opv/cpu-op.c
-@@ -0,0 +1,352 @@
-+/*
-+ * cpu-op.c
++ * rseq-arm.h
 + *
-+ * Copyright (C) 2017 Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
++ * (C) Copyright 2016 - Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a copy
++ * of this software and associated documentation files (the "Software"), to deal
++ * in the Software without restriction, including without limitation the rights
++ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++ * copies of the Software, and to permit persons to whom the Software is
++ * furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be included in
++ * all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++#define RSEQ_SIG	0x53053053
++
++#define rseq_smp_mb()	__asm__ __volatile__ ("dmb" ::: "memory", "cc")
++#define rseq_smp_rmb()	__asm__ __volatile__ ("dmb" ::: "memory", "cc")
++#define rseq_smp_wmb()	__asm__ __volatile__ ("dmb" ::: "memory", "cc")
++
++#define rseq_smp_load_acquire(p)					\
++__extension__ ({							\
++	__typeof(*p) ____p1 = RSEQ_READ_ONCE(*p);			\
++	rseq_smp_mb();							\
++	____p1;								\
++})
++
++#define rseq_smp_acquire__after_ctrl_dep()	rseq_smp_rmb()
++
++#define rseq_smp_store_release(p, v)					\
++do {									\
++	rseq_smp_mb();							\
++	RSEQ_WRITE_ONCE(*p, v);						\
++} while (0)
++
++#ifdef RSEQ_SKIP_FASTPATH
++#include "rseq-skip.h"
++#else /* !RSEQ_SKIP_FASTPATH */
++
++#define __RSEQ_ASM_DEFINE_TABLE(version, flags,	start_ip,		\
++				post_commit_offset, abort_ip)		\
++		".pushsection __rseq_table, \"aw\"\n\t"			\
++		".balign 32\n\t"					\
++		".word " __rseq_str(version) ", " __rseq_str(flags) "\n\t" \
++		".word " __rseq_str(start_ip) ", 0x0, " __rseq_str(post_commit_offset) ", 0x0, " __rseq_str(abort_ip) ", 0x0\n\t" \
++		".popsection\n\t"
++
++#define RSEQ_ASM_DEFINE_TABLE(start_ip, post_commit_ip, abort_ip)	\
++	__RSEQ_ASM_DEFINE_TABLE(0x0, 0x0, start_ip,			\
++				(post_commit_ip - start_ip), abort_ip)
++
++#define RSEQ_ASM_STORE_RSEQ_CS(label, cs_label, rseq_cs)		\
++		RSEQ_INJECT_ASM(1)					\
++		"adr r0, " __rseq_str(cs_label) "\n\t"			\
++		"str r0, %[" __rseq_str(rseq_cs) "]\n\t"		\
++		__rseq_str(label) ":\n\t"
++
++#define RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, label)		\
++		RSEQ_INJECT_ASM(2)					\
++		"ldr r0, %[" __rseq_str(current_cpu_id) "]\n\t"	\
++		"cmp %[" __rseq_str(cpu_id) "], r0\n\t"		\
++		"bne " __rseq_str(label) "\n\t"
++
++#define __RSEQ_ASM_DEFINE_ABORT(table_label, label, teardown,		\
++				abort_label, version, flags,		\
++				start_ip, post_commit_offset, abort_ip)	\
++		__rseq_str(table_label) ":\n\t"				\
++		".word " __rseq_str(version) ", " __rseq_str(flags) "\n\t" \
++		".word " __rseq_str(start_ip) ", 0x0, " __rseq_str(post_commit_offset) ", 0x0, " __rseq_str(abort_ip) ", 0x0\n\t" \
++		".word " __rseq_str(RSEQ_SIG) "\n\t"			\
++		__rseq_str(label) ":\n\t"				\
++		teardown						\
++		"b %l[" __rseq_str(abort_label) "]\n\t"
++
++#define RSEQ_ASM_DEFINE_ABORT(table_label, label, teardown, abort_label, \
++			      start_ip, post_commit_ip, abort_ip)	\
++	__RSEQ_ASM_DEFINE_ABORT(table_label, label, teardown,		\
++				abort_label, 0x0, 0x0, start_ip,	\
++				(post_commit_ip - start_ip), abort_ip)
++
++#define RSEQ_ASM_DEFINE_CMPFAIL(label, teardown, cmpfail_label)		\
++		__rseq_str(label) ":\n\t"				\
++		teardown						\
++		"b %l[" __rseq_str(cmpfail_label) "]\n\t"
++
++#define rseq_workaround_gcc_asm_size_guess()	__asm__ __volatile__("")
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	rseq_workaround_gcc_asm_size_guess();
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"ldr r0, %[v]\n\t"
++		"cmp %[expect], r0\n\t"
++		"bne %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"ldr r0, %[v]\n\t"
++		"cmp %[expect], r0\n\t"
++		"bne %l[error2]\n\t"
++#endif
++		/* final store */
++		"str %[newv], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(5)
++		"b 5f\n\t"
++		RSEQ_ASM_DEFINE_ABORT(3, 4, "", abort, 1b, 2b, 4f)
++		"5:\n\t"
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv)
++		  RSEQ_INJECT_INPUT
++		: "r0", "memory", "cc"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	rseq_workaround_gcc_asm_size_guess();
++	return 0;
++abort:
++	rseq_workaround_gcc_asm_size_guess();
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	rseq_workaround_gcc_asm_size_guess();
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
++			       off_t voffp, intptr_t *load, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	rseq_workaround_gcc_asm_size_guess();
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"ldr r0, %[v]\n\t"
++		"cmp %[expectnot], r0\n\t"
++		"beq %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"ldr r0, %[v]\n\t"
++		"cmp %[expectnot], r0\n\t"
++		"beq %l[error2]\n\t"
++#endif
++		"str r0, %[load]\n\t"
++		"add r0, %[voffp]\n\t"
++		"ldr r0, [r0]\n\t"
++		/* final store */
++		"str r0, %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(5)
++		"b 5f\n\t"
++		RSEQ_ASM_DEFINE_ABORT(3, 4, "", abort, 1b, 2b, 4f)
++		"5:\n\t"
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expectnot]		"r" (expectnot),
++		  [voffp]		"Ir" (voffp),
++		  [load]		"m" (*load)
++		  RSEQ_INJECT_INPUT
++		: "r0", "memory", "cc"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	rseq_workaround_gcc_asm_size_guess();
++	return 0;
++abort:
++	rseq_workaround_gcc_asm_size_guess();
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	rseq_workaround_gcc_asm_size_guess();
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_addv(intptr_t *v, intptr_t count, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	rseq_workaround_gcc_asm_size_guess();
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++#endif
++		"ldr r0, %[v]\n\t"
++		"add r0, %[count]\n\t"
++		/* final store */
++		"str r0, %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(4)
++		"b 5f\n\t"
++		RSEQ_ASM_DEFINE_ABORT(3, 4, "", abort, 1b, 2b, 4f)
++		"5:\n\t"
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  [v]			"m" (*v),
++		  [count]		"Ir" (count)
++		  RSEQ_INJECT_INPUT
++		: "r0", "memory", "cc"
++		  RSEQ_INJECT_CLOBBER
++		: abort
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1
++#endif
++	);
++	rseq_workaround_gcc_asm_size_guess();
++	return 0;
++abort:
++	rseq_workaround_gcc_asm_size_guess();
++	RSEQ_INJECT_FAILED
++	return -1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
++				 intptr_t *v2, intptr_t newv2,
++				 intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	rseq_workaround_gcc_asm_size_guess();
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"ldr r0, %[v]\n\t"
++		"cmp %[expect], r0\n\t"
++		"bne %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"ldr r0, %[v]\n\t"
++		"cmp %[expect], r0\n\t"
++		"bne %l[error2]\n\t"
++#endif
++		/* try store */
++		"str %[newv2], %[v2]\n\t"
++		RSEQ_INJECT_ASM(5)
++		/* final store */
++		"str %[newv], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(6)
++		"b 5f\n\t"
++		RSEQ_ASM_DEFINE_ABORT(3, 4, "", abort, 1b, 2b, 4f)
++		"5:\n\t"
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* try store input */
++		  [v2]			"m" (*v2),
++		  [newv2]		"r" (newv2),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv)
++		  RSEQ_INJECT_INPUT
++		: "r0", "memory", "cc"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	rseq_workaround_gcc_asm_size_guess();
++	return 0;
++abort:
++	rseq_workaround_gcc_asm_size_guess();
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	rseq_workaround_gcc_asm_size_guess();
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
++					 intptr_t *v2, intptr_t newv2,
++					 intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	rseq_workaround_gcc_asm_size_guess();
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"ldr r0, %[v]\n\t"
++		"cmp %[expect], r0\n\t"
++		"bne %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"ldr r0, %[v]\n\t"
++		"cmp %[expect], r0\n\t"
++		"bne %l[error2]\n\t"
++#endif
++		/* try store */
++		"str %[newv2], %[v2]\n\t"
++		RSEQ_INJECT_ASM(5)
++		"dmb\n\t"	/* full mb provides store-release */
++		/* final store */
++		"str %[newv], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(6)
++		"b 5f\n\t"
++		RSEQ_ASM_DEFINE_ABORT(3, 4, "", abort, 1b, 2b, 4f)
++		"5:\n\t"
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* try store input */
++		  [v2]			"m" (*v2),
++		  [newv2]		"r" (newv2),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv)
++		  RSEQ_INJECT_INPUT
++		: "r0", "memory", "cc"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	rseq_workaround_gcc_asm_size_guess();
++	return 0;
++abort:
++	rseq_workaround_gcc_asm_size_guess();
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	rseq_workaround_gcc_asm_size_guess();
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
++			      intptr_t *v2, intptr_t expect2,
++			      intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	rseq_workaround_gcc_asm_size_guess();
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"ldr r0, %[v]\n\t"
++		"cmp %[expect], r0\n\t"
++		"bne %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++		"ldr r0, %[v2]\n\t"
++		"cmp %[expect2], r0\n\t"
++		"bne %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(5)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"ldr r0, %[v]\n\t"
++		"cmp %[expect], r0\n\t"
++		"bne %l[error2]\n\t"
++		"ldr r0, %[v2]\n\t"
++		"cmp %[expect2], r0\n\t"
++		"bne %l[error3]\n\t"
++#endif
++		/* final store */
++		"str %[newv], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(6)
++		"b 5f\n\t"
++		RSEQ_ASM_DEFINE_ABORT(3, 4, "", abort, 1b, 2b, 4f)
++		"5:\n\t"
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* cmp2 input */
++		  [v2]			"m" (*v2),
++		  [expect2]		"r" (expect2),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv)
++		  RSEQ_INJECT_INPUT
++		: "r0", "memory", "cc"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2, error3
++#endif
++	);
++	rseq_workaround_gcc_asm_size_guess();
++	return 0;
++abort:
++	rseq_workaround_gcc_asm_size_guess();
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	rseq_workaround_gcc_asm_size_guess();
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("1st expected value comparison failed");
++error3:
++	rseq_bug("2nd expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
++				 void *dst, void *src, size_t len,
++				 intptr_t newv, int cpu)
++{
++	uint32_t rseq_scratch[3];
++
++	RSEQ_INJECT_C(9)
++
++	rseq_workaround_gcc_asm_size_guess();
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		"str %[src], %[rseq_scratch0]\n\t"
++		"str %[dst], %[rseq_scratch1]\n\t"
++		"str %[len], %[rseq_scratch2]\n\t"
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"ldr r0, %[v]\n\t"
++		"cmp %[expect], r0\n\t"
++		"bne 5f\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 6f)
++		"ldr r0, %[v]\n\t"
++		"cmp %[expect], r0\n\t"
++		"bne 7f\n\t"
++#endif
++		/* try memcpy */
++		"cmp %[len], #0\n\t" \
++		"beq 333f\n\t" \
++		"222:\n\t" \
++		"ldrb %%r0, [%[src]]\n\t" \
++		"strb %%r0, [%[dst]]\n\t" \
++		"adds %[src], #1\n\t" \
++		"adds %[dst], #1\n\t" \
++		"subs %[len], #1\n\t" \
++		"bne 222b\n\t" \
++		"333:\n\t" \
++		RSEQ_INJECT_ASM(5)
++		/* final store */
++		"str %[newv], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(6)
++		/* teardown */
++		"ldr %[len], %[rseq_scratch2]\n\t"
++		"ldr %[dst], %[rseq_scratch1]\n\t"
++		"ldr %[src], %[rseq_scratch0]\n\t"
++		"b 8f\n\t"
++		RSEQ_ASM_DEFINE_ABORT(3, 4,
++				      /* teardown */
++				      "ldr %[len], %[rseq_scratch2]\n\t"
++				      "ldr %[dst], %[rseq_scratch1]\n\t"
++				      "ldr %[src], %[rseq_scratch0]\n\t",
++				      abort, 1b, 2b, 4f)
++		RSEQ_ASM_DEFINE_CMPFAIL(5,
++					/* teardown */
++					"ldr %[len], %[rseq_scratch2]\n\t"
++					"ldr %[dst], %[rseq_scratch1]\n\t"
++					"ldr %[src], %[rseq_scratch0]\n\t",
++					cmpfail)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_CMPFAIL(6,
++					/* teardown */
++					"ldr %[len], %[rseq_scratch2]\n\t"
++					"ldr %[dst], %[rseq_scratch1]\n\t"
++					"ldr %[src], %[rseq_scratch0]\n\t",
++					error1)
++		RSEQ_ASM_DEFINE_CMPFAIL(7,
++					/* teardown */
++					"ldr %[len], %[rseq_scratch2]\n\t"
++					"ldr %[dst], %[rseq_scratch1]\n\t"
++					"ldr %[src], %[rseq_scratch0]\n\t",
++					error2)
++#endif
++		"8:\n\t"
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv),
++		  /* try memcpy input */
++		  [dst]			"r" (dst),
++		  [src]			"r" (src),
++		  [len]			"r" (len),
++		  [rseq_scratch0]	"m" (rseq_scratch[0]),
++		  [rseq_scratch1]	"m" (rseq_scratch[1]),
++		  [rseq_scratch2]	"m" (rseq_scratch[2])
++		  RSEQ_INJECT_INPUT
++		: "r0", "memory", "cc"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	rseq_workaround_gcc_asm_size_guess();
++	return 0;
++abort:
++	rseq_workaround_gcc_asm_size_guess();
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	rseq_workaround_gcc_asm_size_guess();
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_workaround_gcc_asm_size_guess();
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_workaround_gcc_asm_size_guess();
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
++					 void *dst, void *src, size_t len,
++					 intptr_t newv, int cpu)
++{
++	uint32_t rseq_scratch[3];
++
++	RSEQ_INJECT_C(9)
++
++	rseq_workaround_gcc_asm_size_guess();
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		"str %[src], %[rseq_scratch0]\n\t"
++		"str %[dst], %[rseq_scratch1]\n\t"
++		"str %[len], %[rseq_scratch2]\n\t"
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"ldr r0, %[v]\n\t"
++		"cmp %[expect], r0\n\t"
++		"bne 5f\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 6f)
++		"ldr r0, %[v]\n\t"
++		"cmp %[expect], r0\n\t"
++		"bne 7f\n\t"
++#endif
++		/* try memcpy */
++		"cmp %[len], #0\n\t" \
++		"beq 333f\n\t" \
++		"222:\n\t" \
++		"ldrb %%r0, [%[src]]\n\t" \
++		"strb %%r0, [%[dst]]\n\t" \
++		"adds %[src], #1\n\t" \
++		"adds %[dst], #1\n\t" \
++		"subs %[len], #1\n\t" \
++		"bne 222b\n\t" \
++		"333:\n\t" \
++		RSEQ_INJECT_ASM(5)
++		"dmb\n\t"	/* full mb provides store-release */
++		/* final store */
++		"str %[newv], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(6)
++		/* teardown */
++		"ldr %[len], %[rseq_scratch2]\n\t"
++		"ldr %[dst], %[rseq_scratch1]\n\t"
++		"ldr %[src], %[rseq_scratch0]\n\t"
++		"b 8f\n\t"
++		RSEQ_ASM_DEFINE_ABORT(3, 4,
++				      /* teardown */
++				      "ldr %[len], %[rseq_scratch2]\n\t"
++				      "ldr %[dst], %[rseq_scratch1]\n\t"
++				      "ldr %[src], %[rseq_scratch0]\n\t",
++				      abort, 1b, 2b, 4f)
++		RSEQ_ASM_DEFINE_CMPFAIL(5,
++					/* teardown */
++					"ldr %[len], %[rseq_scratch2]\n\t"
++					"ldr %[dst], %[rseq_scratch1]\n\t"
++					"ldr %[src], %[rseq_scratch0]\n\t",
++					cmpfail)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_CMPFAIL(6,
++					/* teardown */
++					"ldr %[len], %[rseq_scratch2]\n\t"
++					"ldr %[dst], %[rseq_scratch1]\n\t"
++					"ldr %[src], %[rseq_scratch0]\n\t",
++					error1)
++		RSEQ_ASM_DEFINE_CMPFAIL(7,
++					/* teardown */
++					"ldr %[len], %[rseq_scratch2]\n\t"
++					"ldr %[dst], %[rseq_scratch1]\n\t"
++					"ldr %[src], %[rseq_scratch0]\n\t",
++					error2)
++#endif
++		"8:\n\t"
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv),
++		  /* try memcpy input */
++		  [dst]			"r" (dst),
++		  [src]			"r" (src),
++		  [len]			"r" (len),
++		  [rseq_scratch0]	"m" (rseq_scratch[0]),
++		  [rseq_scratch1]	"m" (rseq_scratch[1]),
++		  [rseq_scratch2]	"m" (rseq_scratch[2])
++		  RSEQ_INJECT_INPUT
++		: "r0", "memory", "cc"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	rseq_workaround_gcc_asm_size_guess();
++	return 0;
++abort:
++	rseq_workaround_gcc_asm_size_guess();
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	rseq_workaround_gcc_asm_size_guess();
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_workaround_gcc_asm_size_guess();
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_workaround_gcc_asm_size_guess();
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++#endif /* !RSEQ_SKIP_FASTPATH */
+diff --git a/tools/testing/selftests/rseq/rseq-ppc.h b/tools/testing/selftests/rseq/rseq-ppc.h
+new file mode 100644
+index 000000000000..2d6d2dfa1235
+--- /dev/null
++++ b/tools/testing/selftests/rseq/rseq-ppc.h
+@@ -0,0 +1,688 @@
++/*
++ * rseq-ppc.h
++ *
++ * (C) Copyright 2016 - Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
++ * (C) Copyright 2016 - Boqun Feng <boqun.feng at gmail.com>
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a copy
++ * of this software and associated documentation files (the "Software"), to deal
++ * in the Software without restriction, including without limitation the rights
++ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++ * copies of the Software, and to permit persons to whom the Software is
++ * furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be included in
++ * all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++#define RSEQ_SIG	0x53053053
++
++#define rseq_smp_mb()		__asm__ __volatile__ ("sync"	::: "memory", "cc")
++#define rseq_smp_lwsync()	__asm__ __volatile__ ("lwsync"	::: "memory", "cc")
++#define rseq_smp_rmb()		rseq_smp_lwsync()
++#define rseq_smp_wmb()		rseq_smp_lwsync()
++
++#define rseq_smp_load_acquire(p)					\
++__extension__ ({							\
++	__typeof(*p) ____p1 = RSEQ_READ_ONCE(*p);			\
++	rseq_smp_lwsync();						\
++	____p1;								\
++})
++
++#define rseq_smp_acquire__after_ctrl_dep()	rseq_smp_lwsync()
++
++#define rseq_smp_store_release(p, v)					\
++do {									\
++	rseq_smp_lwsync();						\
++	RSEQ_WRITE_ONCE(*p, v);						\
++} while (0)
++
++#ifdef RSEQ_SKIP_FASTPATH
++#include "rseq-skip.h"
++#else /* !RSEQ_SKIP_FASTPATH */
++
++/*
++ * The __rseq_table section can be used by debuggers to better handle
++ * single-stepping through the restartable critical sections.
++ */
++
++#ifdef __PPC64__
++
++#define STORE_WORD	"std "
++#define LOAD_WORD	"ld "
++#define LOADX_WORD	"ldx "
++#define CMP_WORD	"cmpd "
++
++#define __RSEQ_ASM_DEFINE_TABLE(label, version, flags,				\
++			start_ip, post_commit_offset, abort_ip)			\
++		".pushsection __rseq_table, \"aw\"\n\t"				\
++		".balign 32\n\t"						\
++		__rseq_str(label) ":\n\t"					\
++		".long " __rseq_str(version) ", " __rseq_str(flags) "\n\t"	\
++		".quad " __rseq_str(start_ip) ", " __rseq_str(post_commit_offset) ", " __rseq_str(abort_ip) "\n\t" \
++		".popsection\n\t"
++
++#define RSEQ_ASM_STORE_RSEQ_CS(label, cs_label, rseq_cs)			\
++		RSEQ_INJECT_ASM(1)						\
++		"lis %%r17, (" __rseq_str(cs_label) ")@highest\n\t"		\
++		"ori %%r17, %%r17, (" __rseq_str(cs_label) ")@higher\n\t"	\
++		"rldicr %%r17, %%r17, 32, 31\n\t"				\
++		"oris %%r17, %%r17, (" __rseq_str(cs_label) ")@high\n\t"	\
++		"ori %%r17, %%r17, (" __rseq_str(cs_label) ")@l\n\t"		\
++		"std %%r17, %[" __rseq_str(rseq_cs) "]\n\t"			\
++		__rseq_str(label) ":\n\t"
++
++#else /* #ifdef __PPC64__ */
++
++#define STORE_WORD	"stw "
++#define LOAD_WORD	"lwz "
++#define LOADX_WORD	"lwzx "
++#define CMP_WORD	"cmpw "
++
++#define __RSEQ_ASM_DEFINE_TABLE(label, version, flags,				\
++			start_ip, post_commit_offset, abort_ip)			\
++		".pushsection __rseq_table, \"aw\"\n\t"				\
++		".balign 32\n\t"						\
++		__rseq_str(label) ":\n\t"					\
++		".long " __rseq_str(version) ", " __rseq_str(flags) "\n\t"	\
++		/* 32-bit only supported on BE */				\
++		".long 0x0, " __rseq_str(start_ip) ", 0x0, " __rseq_str(post_commit_offset) ", 0x0, " __rseq_str(abort_ip) "\n\t" \
++		".popsection\n\t"
++
++#define RSEQ_ASM_STORE_RSEQ_CS(label, cs_label, rseq_cs)			\
++		RSEQ_INJECT_ASM(1)						\
++		"lis %%r17, (" __rseq_str(cs_label) ")@ha\n\t"			\
++		"addi %%r17, %%r17, (" __rseq_str(cs_label) ")@l\n\t"		\
++		"stw %%r17, %[" __rseq_str(rseq_cs) "]\n\t"			\
++		__rseq_str(label) ":\n\t"
++
++#endif /* #ifdef __PPC64__ */
++
++#define RSEQ_ASM_DEFINE_TABLE(label, start_ip, post_commit_ip, abort_ip)	\
++		__RSEQ_ASM_DEFINE_TABLE(label, 0x0, 0x0, start_ip,		\
++					(post_commit_ip - start_ip), abort_ip)
++
++#define RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, label)			\
++		RSEQ_INJECT_ASM(2)						\
++		"lwz %%r17, %[" __rseq_str(current_cpu_id) "]\n\t"		\
++		"cmpw cr7, %[" __rseq_str(cpu_id) "], %%r17\n\t"		\
++		"bne- cr7, " __rseq_str(label) "\n\t"
++
++#define RSEQ_ASM_DEFINE_ABORT(label, abort_label)				\
++		".pushsection __rseq_failure, \"ax\"\n\t"			\
++		".long " __rseq_str(RSEQ_SIG) "\n\t"				\
++		__rseq_str(label) ":\n\t"					\
++		"b %l[" __rseq_str(abort_label) "]\n\t"				\
++		".popsection\n\t"
++
++/*
++ * RSEQ_ASM_OPs: asm operations for rseq
++ * 	RSEQ_ASM_OP_R_*: has hard-code registers in it
++ * 	RSEQ_ASM_OP_* (else): doesn't have hard-code registers(unless cr7)
++ */
++#define RSEQ_ASM_OP_CMPEQ(var, expect, label)					\
++		LOAD_WORD "%%r17, %[" __rseq_str(var) "]\n\t"			\
++		CMP_WORD "cr7, %%r17, %[" __rseq_str(expect) "]\n\t"		\
++		"bne- cr7, " __rseq_str(label) "\n\t"
++
++#define RSEQ_ASM_OP_CMPNE(var, expectnot, label)				\
++		LOAD_WORD "%%r17, %[" __rseq_str(var) "]\n\t"			\
++		CMP_WORD "cr7, %%r17, %[" __rseq_str(expectnot) "]\n\t"		\
++		"beq- cr7, " __rseq_str(label) "\n\t"
++
++#define RSEQ_ASM_OP_STORE(value, var)						\
++		STORE_WORD "%[" __rseq_str(value) "], %[" __rseq_str(var) "]\n\t"
++
++/* Load @var to r17 */
++#define RSEQ_ASM_OP_R_LOAD(var)							\
++		LOAD_WORD "%%r17, %[" __rseq_str(var) "]\n\t"
++
++/* Store r17 to @var */
++#define RSEQ_ASM_OP_R_STORE(var)						\
++		STORE_WORD "%%r17, %[" __rseq_str(var) "]\n\t"
++
++/* Add @count to r17 */
++#define RSEQ_ASM_OP_R_ADD(count)						\
++		"add %%r17, %[" __rseq_str(count) "], %%r17\n\t"
++
++/* Load (r17 + voffp) to r17 */
++#define RSEQ_ASM_OP_R_LOADX(voffp)						\
++		LOADX_WORD "%%r17, %[" __rseq_str(voffp) "], %%r17\n\t"
++
++/* TODO: implement a faster memcpy. */
++#define RSEQ_ASM_OP_R_MEMCPY() \
++		"cmpdi %%r19, 0\n\t" \
++		"beq 333f\n\t" \
++		"addi %%r20, %%r20, -1\n\t" \
++		"addi %%r21, %%r21, -1\n\t" \
++		"222:\n\t" \
++		"lbzu %%r18, 1(%%r20)\n\t" \
++		"stbu %%r18, 1(%%r21)\n\t" \
++		"addi %%r19, %%r19, -1\n\t" \
++		"cmpdi %%r19, 0\n\t" \
++		"bne 222b\n\t" \
++		"333:\n\t" \
++
++#define RSEQ_ASM_OP_R_FINAL_STORE(var, post_commit_label)			\
++		STORE_WORD "%%r17, %[" __rseq_str(var) "]\n\t"			\
++		__rseq_str(post_commit_label) ":\n\t"
++
++#define RSEQ_ASM_OP_FINAL_STORE(value, var, post_commit_label)			\
++		STORE_WORD "%[" __rseq_str(value) "], %[" __rseq_str(var) "]\n\t" \
++		__rseq_str(post_commit_label) ":\n\t"
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		/* cmp @v equal to @expect */
++		RSEQ_ASM_OP_CMPEQ(v, expect, %l[cmpfail])
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		/* cmp @v equal to @expect */
++		RSEQ_ASM_OP_CMPEQ(v, expect, %l[error2])
++#endif
++		/* final store */
++		RSEQ_ASM_OP_FINAL_STORE(newv, v, 2)
++		RSEQ_INJECT_ASM(5)
++		RSEQ_ASM_DEFINE_ABORT(4, abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv)
++		  RSEQ_INJECT_INPUT
++		: "memory", "cc", "r17"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
++			       off_t voffp, intptr_t *load, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		/* cmp @v not equal to @expectnot */
++		RSEQ_ASM_OP_CMPNE(v, expectnot, %l[cmpfail])
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		/* cmp @v not equal to @expectnot */
++		RSEQ_ASM_OP_CMPNE(v, expectnot, %l[error2])
++#endif
++		/* load the value of @v */
++		RSEQ_ASM_OP_R_LOAD(v)
++		/* store it in @load */
++		RSEQ_ASM_OP_R_STORE(load)
++		/* dereference voffp(v) */
++		RSEQ_ASM_OP_R_LOADX(voffp)
++		/* final store the value at voffp(v) */
++		RSEQ_ASM_OP_R_FINAL_STORE(v, 2)
++		RSEQ_INJECT_ASM(5)
++		RSEQ_ASM_DEFINE_ABORT(4, abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expectnot]		"r" (expectnot),
++		  [voffp]		"b" (voffp),
++		  [load]		"m" (*load)
++		  RSEQ_INJECT_INPUT
++		: "memory", "cc", "r17"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_addv(intptr_t *v, intptr_t count, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++#ifdef RSEQ_COMPARE_TWICE
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++#endif
++		/* load the value of @v */
++		RSEQ_ASM_OP_R_LOAD(v)
++		/* add @count to it */
++		RSEQ_ASM_OP_R_ADD(count)
++		/* final store */
++		RSEQ_ASM_OP_R_FINAL_STORE(v, 2)
++		RSEQ_INJECT_ASM(4)
++		RSEQ_ASM_DEFINE_ABORT(4, abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [count]		"r" (count)
++		  RSEQ_INJECT_INPUT
++		: "memory", "cc", "r17"
++		  RSEQ_INJECT_CLOBBER
++		: abort
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
++				 intptr_t *v2, intptr_t newv2,
++				 intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		/* cmp @v equal to @expect */
++		RSEQ_ASM_OP_CMPEQ(v, expect, %l[cmpfail])
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		/* cmp @v equal to @expect */
++		RSEQ_ASM_OP_CMPEQ(v, expect, %l[error2])
++#endif
++		/* try store */
++		RSEQ_ASM_OP_STORE(newv2, v2)
++		RSEQ_INJECT_ASM(5)
++		/* final store */
++		RSEQ_ASM_OP_FINAL_STORE(newv, v, 2)
++		RSEQ_INJECT_ASM(6)
++		RSEQ_ASM_DEFINE_ABORT(4, abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* try store input */
++		  [v2]			"m" (*v2),
++		  [newv2]		"r" (newv2),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv)
++		  RSEQ_INJECT_INPUT
++		: "memory", "cc", "r17"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
++					 intptr_t *v2, intptr_t newv2,
++					 intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		/* cmp @v equal to @expect */
++		RSEQ_ASM_OP_CMPEQ(v, expect, %l[cmpfail])
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		/* cmp @v equal to @expect */
++		RSEQ_ASM_OP_CMPEQ(v, expect, %l[error2])
++#endif
++		/* try store */
++		RSEQ_ASM_OP_STORE(newv2, v2)
++		RSEQ_INJECT_ASM(5)
++		/* for 'release' */
++		"lwsync\n\t"
++		/* final store */
++		RSEQ_ASM_OP_FINAL_STORE(newv, v, 2)
++		RSEQ_INJECT_ASM(6)
++		RSEQ_ASM_DEFINE_ABORT(4, abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* try store input */
++		  [v2]			"m" (*v2),
++		  [newv2]		"r" (newv2),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv)
++		  RSEQ_INJECT_INPUT
++		: "memory", "cc", "r17"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
++			      intptr_t *v2, intptr_t expect2,
++			      intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		/* cmp @v equal to @expect */
++		RSEQ_ASM_OP_CMPEQ(v, expect, %l[cmpfail])
++		RSEQ_INJECT_ASM(4)
++		/* cmp @v2 equal to @expct2 */
++		RSEQ_ASM_OP_CMPEQ(v2, expect2, %l[cmpfail])
++		RSEQ_INJECT_ASM(5)
++#ifdef RSEQ_COMPARE_TWICE
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		/* cmp @v equal to @expect */
++		RSEQ_ASM_OP_CMPEQ(v, expect, %l[error2])
++		/* cmp @v2 equal to @expct2 */
++		RSEQ_ASM_OP_CMPEQ(v2, expect2, %l[error3])
++#endif
++		/* final store */
++		RSEQ_ASM_OP_FINAL_STORE(newv, v, 2)
++		RSEQ_INJECT_ASM(6)
++		RSEQ_ASM_DEFINE_ABORT(4, abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* cmp2 input */
++		  [v2]			"m" (*v2),
++		  [expect2]		"r" (expect2),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv)
++		  RSEQ_INJECT_INPUT
++		: "memory", "cc", "r17"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2, error3
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("1st expected value comparison failed");
++error3:
++	rseq_bug("2nd expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
++				 void *dst, void *src, size_t len,
++				 intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* setup for mempcy */
++		"mr %%r19, %[len]\n\t"
++		"mr %%r20, %[src]\n\t"
++		"mr %%r21, %[dst]\n\t"
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		/* cmp @v equal to @expect */
++		RSEQ_ASM_OP_CMPEQ(v, expect, %l[cmpfail])
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		/* cmp @v equal to @expect */
++		RSEQ_ASM_OP_CMPEQ(v, expect, %l[error2])
++#endif
++		/* try memcpy */
++		RSEQ_ASM_OP_R_MEMCPY()
++		RSEQ_INJECT_ASM(5)
++		/* final store */
++		RSEQ_ASM_OP_FINAL_STORE(newv, v, 2)
++		RSEQ_INJECT_ASM(6)
++		/* teardown */
++		RSEQ_ASM_DEFINE_ABORT(4, abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv),
++		  /* try memcpy input */
++		  [dst]			"r" (dst),
++		  [src]			"r" (src),
++		  [len]			"r" (len)
++		  RSEQ_INJECT_INPUT
++		: "memory", "cc", "r17", "r18", "r19", "r20", "r21"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
++					 void *dst, void *src, size_t len,
++					 intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* setup for mempcy */
++		"mr %%r19, %[len]\n\t"
++		"mr %%r20, %[src]\n\t"
++		"mr %%r21, %[dst]\n\t"
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		/* cmp @v equal to @expect */
++		RSEQ_ASM_OP_CMPEQ(v, expect, %l[cmpfail])
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		/* cmp cpuid */
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		/* cmp @v equal to @expect */
++		RSEQ_ASM_OP_CMPEQ(v, expect, %l[error2])
++#endif
++		/* try memcpy */
++		RSEQ_ASM_OP_R_MEMCPY()
++		RSEQ_INJECT_ASM(5)
++		/* for 'release' */
++		"lwsync\n\t"
++		/* final store */
++		RSEQ_ASM_OP_FINAL_STORE(newv, v, 2)
++		RSEQ_INJECT_ASM(6)
++		/* teardown */
++		RSEQ_ASM_DEFINE_ABORT(4, abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv),
++		  /* try memcpy input */
++		  [dst]			"r" (dst),
++		  [src]			"r" (src),
++		  [len]			"r" (len)
++		  RSEQ_INJECT_INPUT
++		: "memory", "cc", "r17", "r18", "r19", "r20", "r21"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++#undef STORE_WORD
++#undef LOAD_WORD
++#undef LOADX_WORD
++#undef CMP_WORD
++
++#endif /* !RSEQ_SKIP_FASTPATH */
+diff --git a/tools/testing/selftests/rseq/rseq-skip.h b/tools/testing/selftests/rseq/rseq-skip.h
+new file mode 100644
+index 000000000000..dc8f8e74b737
+--- /dev/null
++++ b/tools/testing/selftests/rseq/rseq-skip.h
+@@ -0,0 +1,82 @@
++/*
++ * rseq-skip.h
++ *
++ * (C) Copyright 2017 - Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a copy
++ * of this software and associated documentation files (the "Software"), to deal
++ * in the Software without restriction, including without limitation the rights
++ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++ * copies of the Software, and to permit persons to whom the Software is
++ * furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be included in
++ * all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
++{
++	return -1;
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
++			       off_t voffp, intptr_t *load, int cpu)
++{
++	return -1;
++}
++
++static inline __attribute__((always_inline))
++int rseq_addv(intptr_t *v, intptr_t count, int cpu)
++{
++	return -1;
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
++				 intptr_t *v2, intptr_t newv2,
++				 intptr_t newv, int cpu)
++{
++	return -1;
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
++					 intptr_t *v2, intptr_t newv2,
++					 intptr_t newv, int cpu)
++{
++	return -1;
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
++			      intptr_t *v2, intptr_t expect2,
++			      intptr_t newv, int cpu)
++{
++	return -1;
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
++				 void *dst, void *src, size_t len,
++				 intptr_t newv, int cpu)
++{
++	return -1;
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
++					 void *dst, void *src, size_t len,
++					 intptr_t newv, int cpu)
++{
++	return -1;
++}
+diff --git a/tools/testing/selftests/rseq/rseq-x86.h b/tools/testing/selftests/rseq/rseq-x86.h
+new file mode 100644
+index 000000000000..02d853ae2ce1
+--- /dev/null
++++ b/tools/testing/selftests/rseq/rseq-x86.h
+@@ -0,0 +1,1149 @@
++/*
++ * rseq-x86.h
++ *
++ * (C) Copyright 2016 - Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a copy
++ * of this software and associated documentation files (the "Software"), to deal
++ * in the Software without restriction, including without limitation the rights
++ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++ * copies of the Software, and to permit persons to whom the Software is
++ * furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be included in
++ * all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++#include <stdint.h>
++
++#define RSEQ_SIG	0x53053053
++
++#ifdef __x86_64__
++
++#define rseq_smp_mb()	\
++	__asm__ __volatile__ ("lock; addl $0,-128(%%rsp)" ::: "memory", "cc")
++#define rseq_smp_rmb()	rseq_barrier()
++#define rseq_smp_wmb()	rseq_barrier()
++
++#define rseq_smp_load_acquire(p)					\
++__extension__ ({							\
++	__typeof(*p) ____p1 = RSEQ_READ_ONCE(*p);			\
++	rseq_barrier();							\
++	____p1;								\
++})
++
++#define rseq_smp_acquire__after_ctrl_dep()	rseq_smp_rmb()
++
++#define rseq_smp_store_release(p, v)					\
++do {									\
++	rseq_barrier();							\
++	RSEQ_WRITE_ONCE(*p, v);						\
++} while (0)
++
++#ifdef RSEQ_SKIP_FASTPATH
++#include "rseq-skip.h"
++#else /* !RSEQ_SKIP_FASTPATH */
++
++#define __RSEQ_ASM_DEFINE_TABLE(label, version, flags,			\
++				start_ip, post_commit_offset, abort_ip)	\
++		".pushsection __rseq_table, \"aw\"\n\t"			\
++		".balign 32\n\t"					\
++		__rseq_str(label) ":\n\t"				\
++		".long " __rseq_str(version) ", " __rseq_str(flags) "\n\t" \
++		".quad " __rseq_str(start_ip) ", " __rseq_str(post_commit_offset) ", " __rseq_str(abort_ip) "\n\t" \
++		".popsection\n\t"
++
++#define RSEQ_ASM_DEFINE_TABLE(label, start_ip, post_commit_ip, abort_ip) \
++	__RSEQ_ASM_DEFINE_TABLE(label, 0x0, 0x0, start_ip,		\
++				(post_commit_ip - start_ip), abort_ip)
++
++#define RSEQ_ASM_STORE_RSEQ_CS(label, cs_label, rseq_cs)		\
++		RSEQ_INJECT_ASM(1)					\
++		"leaq " __rseq_str(cs_label) "(%%rip), %%rax\n\t"	\
++		"movq %%rax, %[" __rseq_str(rseq_cs) "]\n\t"		\
++		__rseq_str(label) ":\n\t"
++
++#define RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, label)		\
++		RSEQ_INJECT_ASM(2)					\
++		"cmpl %[" __rseq_str(cpu_id) "], %[" __rseq_str(current_cpu_id) "]\n\t" \
++		"jnz " __rseq_str(label) "\n\t"
++
++#define RSEQ_ASM_DEFINE_ABORT(label, teardown, abort_label)		\
++		".pushsection __rseq_failure, \"ax\"\n\t"		\
++		/* Disassembler-friendly signature: nopl <sig>(%rip). */\
++		".byte 0x0f, 0x1f, 0x05\n\t"				\
++		".long " __rseq_str(RSEQ_SIG) "\n\t"			\
++		__rseq_str(label) ":\n\t"				\
++		teardown						\
++		"jmp %l[" __rseq_str(abort_label) "]\n\t"		\
++		".popsection\n\t"
++
++#define RSEQ_ASM_DEFINE_CMPFAIL(label, teardown, cmpfail_label)		\
++		".pushsection __rseq_failure, \"ax\"\n\t"		\
++		__rseq_str(label) ":\n\t"				\
++		teardown						\
++		"jmp %l[" __rseq_str(cmpfail_label) "]\n\t"		\
++		".popsection\n\t"
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"cmpq %[v], %[expect]\n\t"
++		"jnz %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"cmpq %[v], %[expect]\n\t"
++		"jnz %l[error2]\n\t"
++#endif
++		/* final store */
++		"movq %[newv], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(5)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv)
++		: "memory", "cc", "rax"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++/*
++ * Compare @v against @expectnot. When it does _not_ match, load @v
++ * into @load, and store the content of *@v + voffp into @v.
++ */
++static inline __attribute__((always_inline))
++int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
++			       off_t voffp, intptr_t *load, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"movq %[v], %%rbx\n\t"
++		"cmpq %%rbx, %[expectnot]\n\t"
++		"je %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"movq %[v], %%rbx\n\t"
++		"cmpq %%rbx, %[expectnot]\n\t"
++		"je %l[error2]\n\t"
++#endif
++		"movq %%rbx, %[load]\n\t"
++		"addq %[voffp], %%rbx\n\t"
++		"movq (%%rbx), %%rbx\n\t"
++		/* final store */
++		"movq %%rbx, %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(5)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expectnot]		"r" (expectnot),
++		  [voffp]		"er" (voffp),
++		  [load]		"m" (*load)
++		: "memory", "cc", "rax", "rbx"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_addv(intptr_t *v, intptr_t count, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++#endif
++		/* final store */
++		"addq %[count], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(4)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [count]		"er" (count)
++		: "memory", "cc", "rax"
++		  RSEQ_INJECT_CLOBBER
++		: abort
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
++				 intptr_t *v2, intptr_t newv2,
++				 intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"cmpq %[v], %[expect]\n\t"
++		"jnz %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"cmpq %[v], %[expect]\n\t"
++		"jnz %l[error2]\n\t"
++#endif
++		/* try store */
++		"movq %[newv2], %[v2]\n\t"
++		RSEQ_INJECT_ASM(5)
++		/* final store */
++		"movq %[newv], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(6)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* try store input */
++		  [v2]			"m" (*v2),
++		  [newv2]		"r" (newv2),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv)
++		: "memory", "cc", "rax"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++/* x86-64 is TSO. */
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
++					 intptr_t *v2, intptr_t newv2,
++					 intptr_t newv, int cpu)
++{
++	return rseq_cmpeqv_trystorev_storev(v, expect, v2, newv2, newv, cpu);
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
++			      intptr_t *v2, intptr_t expect2,
++			      intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"cmpq %[v], %[expect]\n\t"
++		"jnz %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++		"cmpq %[v2], %[expect2]\n\t"
++		"jnz %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(5)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"cmpq %[v], %[expect]\n\t"
++		"jnz %l[error2]\n\t"
++		"cmpq %[v2], %[expect2]\n\t"
++		"jnz %l[error3]\n\t"
++#endif
++		/* final store */
++		"movq %[newv], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(6)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* cmp2 input */
++		  [v2]			"m" (*v2),
++		  [expect2]		"r" (expect2),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv)
++		: "memory", "cc", "rax"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2, error3
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("1st expected value comparison failed");
++error3:
++	rseq_bug("2nd expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
++				 void *dst, void *src, size_t len,
++				 intptr_t newv, int cpu)
++{
++	uint64_t rseq_scratch[3];
++
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		"movq %[src], %[rseq_scratch0]\n\t"
++		"movq %[dst], %[rseq_scratch1]\n\t"
++		"movq %[len], %[rseq_scratch2]\n\t"
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"cmpq %[v], %[expect]\n\t"
++		"jnz 5f\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 6f)
++		"cmpq %[v], %[expect]\n\t"
++		"jnz 7f\n\t"
++#endif
++		/* try memcpy */
++		"test %[len], %[len]\n\t" \
++		"jz 333f\n\t" \
++		"222:\n\t" \
++		"movb (%[src]), %%al\n\t" \
++		"movb %%al, (%[dst])\n\t" \
++		"inc %[src]\n\t" \
++		"inc %[dst]\n\t" \
++		"dec %[len]\n\t" \
++		"jnz 222b\n\t" \
++		"333:\n\t" \
++		RSEQ_INJECT_ASM(5)
++		/* final store */
++		"movq %[newv], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(6)
++		/* teardown */
++		"movq %[rseq_scratch2], %[len]\n\t"
++		"movq %[rseq_scratch1], %[dst]\n\t"
++		"movq %[rseq_scratch0], %[src]\n\t"
++		RSEQ_ASM_DEFINE_ABORT(4,
++			"movq %[rseq_scratch2], %[len]\n\t"
++			"movq %[rseq_scratch1], %[dst]\n\t"
++			"movq %[rseq_scratch0], %[src]\n\t",
++			abort)
++		RSEQ_ASM_DEFINE_CMPFAIL(5,
++			"movq %[rseq_scratch2], %[len]\n\t"
++			"movq %[rseq_scratch1], %[dst]\n\t"
++			"movq %[rseq_scratch0], %[src]\n\t",
++			cmpfail)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_CMPFAIL(6,
++			"movq %[rseq_scratch2], %[len]\n\t"
++			"movq %[rseq_scratch1], %[dst]\n\t"
++			"movq %[rseq_scratch0], %[src]\n\t",
++			error1)
++		RSEQ_ASM_DEFINE_CMPFAIL(7,
++			"movq %[rseq_scratch2], %[len]\n\t"
++			"movq %[rseq_scratch1], %[dst]\n\t"
++			"movq %[rseq_scratch0], %[src]\n\t",
++			error2)
++#endif
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv),
++		  /* try memcpy input */
++		  [dst]			"r" (dst),
++		  [src]			"r" (src),
++		  [len]			"r" (len),
++		  [rseq_scratch0]	"m" (rseq_scratch[0]),
++		  [rseq_scratch1]	"m" (rseq_scratch[1]),
++		  [rseq_scratch2]	"m" (rseq_scratch[2])
++		: "memory", "cc", "rax"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++/* x86-64 is TSO. */
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
++					 void *dst, void *src, size_t len,
++					 intptr_t newv, int cpu)
++{
++	return rseq_cmpeqv_trymemcpy_storev(v, expect, dst, src, len,
++					    newv, cpu);
++}
++
++#endif /* !RSEQ_SKIP_FASTPATH */
++
++#elif __i386__
++
++#define rseq_smp_mb()	\
++	__asm__ __volatile__ ("lock; addl $0,-128(%%esp)" ::: "memory", "cc")
++#define rseq_smp_rmb()	\
++	__asm__ __volatile__ ("lock; addl $0,-128(%%esp)" ::: "memory", "cc")
++#define rseq_smp_wmb()	\
++	__asm__ __volatile__ ("lock; addl $0,-128(%%esp)" ::: "memory", "cc")
++
++#define rseq_smp_load_acquire(p)					\
++__extension__ ({							\
++	__typeof(*p) ____p1 = RSEQ_READ_ONCE(*p);			\
++	rseq_smp_mb();							\
++	____p1;								\
++})
++
++#define rseq_smp_acquire__after_ctrl_dep()	rseq_smp_rmb()
++
++#define rseq_smp_store_release(p, v)					\
++do {									\
++	rseq_smp_mb();							\
++	RSEQ_WRITE_ONCE(*p, v);						\
++} while (0)
++
++#ifdef RSEQ_SKIP_FASTPATH
++#include "rseq-skip.h"
++#else /* !RSEQ_SKIP_FASTPATH */
++
++/*
++ * Use eax as scratch register and take memory operands as input to
++ * lessen register pressure. Especially needed when compiling in O0.
++ */
++#define __RSEQ_ASM_DEFINE_TABLE(label, version, flags,			\
++				start_ip, post_commit_offset, abort_ip)	\
++		".pushsection __rseq_table, \"aw\"\n\t"			\
++		".balign 32\n\t"					\
++		__rseq_str(label) ":\n\t"				\
++		".long " __rseq_str(version) ", " __rseq_str(flags) "\n\t" \
++		".long " __rseq_str(start_ip) ", 0x0, " __rseq_str(post_commit_offset) ", 0x0, " __rseq_str(abort_ip) ", 0x0\n\t" \
++		".popsection\n\t"
++
++#define RSEQ_ASM_DEFINE_TABLE(label, start_ip, post_commit_ip, abort_ip) \
++	__RSEQ_ASM_DEFINE_TABLE(label, 0x0, 0x0, start_ip,		\
++				(post_commit_ip - start_ip), abort_ip)
++
++#define RSEQ_ASM_STORE_RSEQ_CS(label, cs_label, rseq_cs)		\
++		RSEQ_INJECT_ASM(1)					\
++		"movl $" __rseq_str(cs_label) ", %[rseq_cs]\n\t"	\
++		__rseq_str(label) ":\n\t"
++
++#define RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, label)		\
++		RSEQ_INJECT_ASM(2)					\
++		"cmpl %[" __rseq_str(cpu_id) "], %[" __rseq_str(current_cpu_id) "]\n\t" \
++		"jnz " __rseq_str(label) "\n\t"
++
++#define RSEQ_ASM_DEFINE_ABORT(label, teardown, abort_label)		\
++		".pushsection __rseq_failure, \"ax\"\n\t"		\
++		/* Disassembler-friendly signature: nopl <sig>. */	\
++		".byte 0x0f, 0x1f, 0x05\n\t"				\
++		".long " __rseq_str(RSEQ_SIG) "\n\t"			\
++		__rseq_str(label) ":\n\t"				\
++		teardown						\
++		"jmp %l[" __rseq_str(abort_label) "]\n\t"		\
++		".popsection\n\t"
++
++#define RSEQ_ASM_DEFINE_CMPFAIL(label, teardown, cmpfail_label)		\
++		".pushsection __rseq_failure, \"ax\"\n\t"		\
++		__rseq_str(label) ":\n\t"				\
++		teardown						\
++		"jmp %l[" __rseq_str(cmpfail_label) "]\n\t"		\
++		".popsection\n\t"
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"cmpl %[v], %[expect]\n\t"
++		"jnz %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"cmpl %[v], %[expect]\n\t"
++		"jnz %l[error2]\n\t"
++#endif
++		/* final store */
++		"movl %[newv], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(5)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv)
++		: "memory", "cc", "eax"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++/*
++ * Compare @v against @expectnot. When it does _not_ match, load @v
++ * into @load, and store the content of *@v + voffp into @v.
++ */
++static inline __attribute__((always_inline))
++int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
++			       off_t voffp, intptr_t *load, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"movl %[v], %%ebx\n\t"
++		"cmpl %%ebx, %[expectnot]\n\t"
++		"je %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"movl %[v], %%ebx\n\t"
++		"cmpl %%ebx, %[expectnot]\n\t"
++		"je %l[error2]\n\t"
++#endif
++		"movl %%ebx, %[load]\n\t"
++		"addl %[voffp], %%ebx\n\t"
++		"movl (%%ebx), %%ebx\n\t"
++		/* final store */
++		"movl %%ebx, %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(5)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expectnot]		"r" (expectnot),
++		  [voffp]		"ir" (voffp),
++		  [load]		"m" (*load)
++		: "memory", "cc", "eax", "ebx"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_addv(intptr_t *v, intptr_t count, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++#endif
++		/* final store */
++		"addl %[count], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(4)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [count]		"ir" (count)
++		: "memory", "cc", "eax"
++		  RSEQ_INJECT_CLOBBER
++		: abort
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
++				 intptr_t *v2, intptr_t newv2,
++				 intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"cmpl %[v], %[expect]\n\t"
++		"jnz %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"cmpl %[v], %[expect]\n\t"
++		"jnz %l[error2]\n\t"
++#endif
++		/* try store */
++		"movl %[newv2], %%eax\n\t"
++		"movl %%eax, %[v2]\n\t"
++		RSEQ_INJECT_ASM(5)
++		/* final store */
++		"movl %[newv], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(6)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* try store input */
++		  [v2]			"m" (*v2),
++		  [newv2]		"m" (newv2),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"r" (newv)
++		: "memory", "cc", "eax"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
++					 intptr_t *v2, intptr_t newv2,
++					 intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"movl %[expect], %%eax\n\t"
++		"cmpl %[v], %%eax\n\t"
++		"jnz %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"movl %[expect], %%eax\n\t"
++		"cmpl %[v], %%eax\n\t"
++		"jnz %l[error2]\n\t"
++#endif
++		/* try store */
++		"movl %[newv2], %[v2]\n\t"
++		RSEQ_INJECT_ASM(5)
++		"lock; addl $0,-128(%%esp)\n\t"
++		/* final store */
++		"movl %[newv], %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(6)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* try store input */
++		  [v2]			"m" (*v2),
++		  [newv2]		"r" (newv2),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"m" (expect),
++		  [newv]		"r" (newv)
++		: "memory", "cc", "eax"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++
++}
++
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
++			      intptr_t *v2, intptr_t expect2,
++			      intptr_t newv, int cpu)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"cmpl %[v], %[expect]\n\t"
++		"jnz %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(4)
++		"cmpl %[expect2], %[v2]\n\t"
++		"jnz %l[cmpfail]\n\t"
++		RSEQ_INJECT_ASM(5)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
++		"cmpl %[v], %[expect]\n\t"
++		"jnz %l[error2]\n\t"
++		"cmpl %[expect2], %[v2]\n\t"
++		"jnz %l[error3]\n\t"
++#endif
++		"movl %[newv], %%eax\n\t"
++		/* final store */
++		"movl %%eax, %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(6)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* cmp2 input */
++		  [v2]			"m" (*v2),
++		  [expect2]		"r" (expect2),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"r" (expect),
++		  [newv]		"m" (newv)
++		: "memory", "cc", "eax"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2, error3
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("1st expected value comparison failed");
++error3:
++	rseq_bug("2nd expected value comparison failed");
++#endif
++}
++
++/* TODO: implement a faster memcpy. */
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
++				 void *dst, void *src, size_t len,
++				 intptr_t newv, int cpu)
++{
++	uint32_t rseq_scratch[3];
++
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		"movl %[src], %[rseq_scratch0]\n\t"
++		"movl %[dst], %[rseq_scratch1]\n\t"
++		"movl %[len], %[rseq_scratch2]\n\t"
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"movl %[expect], %%eax\n\t"
++		"cmpl %%eax, %[v]\n\t"
++		"jnz 5f\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 6f)
++		"movl %[expect], %%eax\n\t"
++		"cmpl %%eax, %[v]\n\t"
++		"jnz 7f\n\t"
++#endif
++		/* try memcpy */
++		"test %[len], %[len]\n\t" \
++		"jz 333f\n\t" \
++		"222:\n\t" \
++		"movb (%[src]), %%al\n\t" \
++		"movb %%al, (%[dst])\n\t" \
++		"inc %[src]\n\t" \
++		"inc %[dst]\n\t" \
++		"dec %[len]\n\t" \
++		"jnz 222b\n\t" \
++		"333:\n\t" \
++		RSEQ_INJECT_ASM(5)
++		"movl %[newv], %%eax\n\t"
++		/* final store */
++		"movl %%eax, %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(6)
++		/* teardown */
++		"movl %[rseq_scratch2], %[len]\n\t"
++		"movl %[rseq_scratch1], %[dst]\n\t"
++		"movl %[rseq_scratch0], %[src]\n\t"
++		RSEQ_ASM_DEFINE_ABORT(4,
++			"movl %[rseq_scratch2], %[len]\n\t"
++			"movl %[rseq_scratch1], %[dst]\n\t"
++			"movl %[rseq_scratch0], %[src]\n\t",
++			abort)
++		RSEQ_ASM_DEFINE_CMPFAIL(5,
++			"movl %[rseq_scratch2], %[len]\n\t"
++			"movl %[rseq_scratch1], %[dst]\n\t"
++			"movl %[rseq_scratch0], %[src]\n\t",
++			cmpfail)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_CMPFAIL(6,
++			"movl %[rseq_scratch2], %[len]\n\t"
++			"movl %[rseq_scratch1], %[dst]\n\t"
++			"movl %[rseq_scratch0], %[src]\n\t",
++			error1)
++		RSEQ_ASM_DEFINE_CMPFAIL(7,
++			"movl %[rseq_scratch2], %[len]\n\t"
++			"movl %[rseq_scratch1], %[dst]\n\t"
++			"movl %[rseq_scratch0], %[src]\n\t",
++			error2)
++#endif
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"m" (expect),
++		  [newv]		"m" (newv),
++		  /* try memcpy input */
++		  [dst]			"r" (dst),
++		  [src]			"r" (src),
++		  [len]			"r" (len),
++		  [rseq_scratch0]	"m" (rseq_scratch[0]),
++		  [rseq_scratch1]	"m" (rseq_scratch[1]),
++		  [rseq_scratch2]	"m" (rseq_scratch[2])
++		: "memory", "cc", "eax"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++/* TODO: implement a faster memcpy. */
++static inline __attribute__((always_inline))
++int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
++					 void *dst, void *src, size_t len,
++					 intptr_t newv, int cpu)
++{
++	uint32_t rseq_scratch[3];
++
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		"movl %[src], %[rseq_scratch0]\n\t"
++		"movl %[dst], %[rseq_scratch1]\n\t"
++		"movl %[len], %[rseq_scratch2]\n\t"
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
++		RSEQ_INJECT_ASM(3)
++		"movl %[expect], %%eax\n\t"
++		"cmpl %%eax, %[v]\n\t"
++		"jnz 5f\n\t"
++		RSEQ_INJECT_ASM(4)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 6f)
++		"movl %[expect], %%eax\n\t"
++		"cmpl %%eax, %[v]\n\t"
++		"jnz 7f\n\t"
++#endif
++		/* try memcpy */
++		"test %[len], %[len]\n\t" \
++		"jz 333f\n\t" \
++		"222:\n\t" \
++		"movb (%[src]), %%al\n\t" \
++		"movb %%al, (%[dst])\n\t" \
++		"inc %[src]\n\t" \
++		"inc %[dst]\n\t" \
++		"dec %[len]\n\t" \
++		"jnz 222b\n\t" \
++		"333:\n\t" \
++		RSEQ_INJECT_ASM(5)
++		"lock; addl $0,-128(%%esp)\n\t"
++		"movl %[newv], %%eax\n\t"
++		/* final store */
++		"movl %%eax, %[v]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(6)
++		/* teardown */
++		"movl %[rseq_scratch2], %[len]\n\t"
++		"movl %[rseq_scratch1], %[dst]\n\t"
++		"movl %[rseq_scratch0], %[src]\n\t"
++		RSEQ_ASM_DEFINE_ABORT(4,
++			"movl %[rseq_scratch2], %[len]\n\t"
++			"movl %[rseq_scratch1], %[dst]\n\t"
++			"movl %[rseq_scratch0], %[src]\n\t",
++			abort)
++		RSEQ_ASM_DEFINE_CMPFAIL(5,
++			"movl %[rseq_scratch2], %[len]\n\t"
++			"movl %[rseq_scratch1], %[dst]\n\t"
++			"movl %[rseq_scratch0], %[src]\n\t",
++			cmpfail)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_CMPFAIL(6,
++			"movl %[rseq_scratch2], %[len]\n\t"
++			"movl %[rseq_scratch1], %[dst]\n\t"
++			"movl %[rseq_scratch0], %[src]\n\t",
++			error1)
++		RSEQ_ASM_DEFINE_CMPFAIL(7,
++			"movl %[rseq_scratch2], %[len]\n\t"
++			"movl %[rseq_scratch1], %[dst]\n\t"
++			"movl %[rseq_scratch0], %[src]\n\t",
++			error2)
++#endif
++		: /* gcc asm goto does not allow outputs */
++		: [cpu_id]		"r" (cpu),
++		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
++		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++		  /* final store input */
++		  [v]			"m" (*v),
++		  [expect]		"m" (expect),
++		  [newv]		"m" (newv),
++		  /* try memcpy input */
++		  [dst]			"r" (dst),
++		  [src]			"r" (src),
++		  [len]			"r" (len),
++		  [rseq_scratch0]	"m" (rseq_scratch[0]),
++		  [rseq_scratch1]	"m" (rseq_scratch[1]),
++		  [rseq_scratch2]	"m" (rseq_scratch[2])
++		: "memory", "cc", "eax"
++		  RSEQ_INJECT_CLOBBER
++		: abort, cmpfail
++#ifdef RSEQ_COMPARE_TWICE
++		  , error1, error2
++#endif
++	);
++	return 0;
++abort:
++	RSEQ_INJECT_FAILED
++	return -1;
++cmpfail:
++	return 1;
++#ifdef RSEQ_COMPARE_TWICE
++error1:
++	rseq_bug("cpu_id comparison failed");
++error2:
++	rseq_bug("expected value comparison failed");
++#endif
++}
++
++#endif /* !RSEQ_SKIP_FASTPATH */
++
++#endif
+diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
+new file mode 100644
+index 000000000000..ba65c14ef3ae
+--- /dev/null
++++ b/tools/testing/selftests/rseq/rseq.c
+@@ -0,0 +1,116 @@
++/*
++ * rseq.c
++ *
++ * Copyright (C) 2016 Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
 + *
 + * This library is free software; you can redistribute it and/or
 + * modify it under the terms of the GNU Lesser General Public
@@ -1425,22 +2807,87 @@ index 000000000000..5981895df25a
 +#include <assert.h>
 +#include <signal.h>
 +
-+#include "cpu-op.h"
++#include "rseq.h"
 +
 +#define ARRAY_SIZE(arr)	(sizeof(arr) / sizeof((arr)[0]))
 +
-+#define ACCESS_ONCE(x)		(*(__volatile__  __typeof__(x) *)&(x))
-+#define WRITE_ONCE(x, v)	__extension__ ({ ACCESS_ONCE(x) = (v); })
-+#define READ_ONCE(x)		ACCESS_ONCE(x)
++__attribute__((tls_model("initial-exec"))) __thread
++volatile struct rseq __rseq_abi = {
++	.cpu_id = RSEQ_CPU_ID_UNINITIALIZED,
++};
 +
-+int cpu_opv(struct cpu_op *cpu_opv, int cpuopcnt, int cpu, int flags)
++static __attribute__((tls_model("initial-exec"))) __thread
++volatile int refcount;
++
++static void signal_off_save(sigset_t *oldset)
 +{
-+	return syscall(__NR_cpu_opv, cpu_opv, cpuopcnt, cpu, flags);
++	sigset_t set;
++	int ret;
++
++	sigfillset(&set);
++	ret = pthread_sigmask(SIG_BLOCK, &set, oldset);
++	if (ret)
++		abort();
 +}
 +
-+int cpu_op_get_current_cpu(void)
++static void signal_restore(sigset_t oldset)
 +{
-+	int cpu;
++	int ret;
++
++	ret = pthread_sigmask(SIG_SETMASK, &oldset, NULL);
++	if (ret)
++		abort();
++}
++
++static int sys_rseq(volatile struct rseq *rseq_abi, uint32_t rseq_len,
++		    int flags, uint32_t sig)
++{
++	return syscall(__NR_rseq, rseq_abi, rseq_len, flags, sig);
++}
++
++int rseq_register_current_thread(void)
++{
++	int rc, ret = 0;
++	sigset_t oldset;
++
++	signal_off_save(&oldset);
++	if (refcount++)
++		goto end;
++	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq), 0, RSEQ_SIG);
++	if (!rc) {
++		assert(rseq_current_cpu_raw() >= 0);
++		goto end;
++	}
++	if (errno != EBUSY)
++		__rseq_abi.cpu_id = -2;
++	ret = -1;
++	refcount--;
++end:
++	signal_restore(oldset);
++	return ret;
++}
++
++int rseq_unregister_current_thread(void)
++{
++	int rc, ret = 0;
++	sigset_t oldset;
++
++	signal_off_save(&oldset);
++	if (--refcount)
++		goto end;
++	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq),
++		      RSEQ_FLAG_UNREGISTER, RSEQ_SIG);
++	if (!rc)
++		goto end;
++	ret = -1;
++end:
++	signal_restore(oldset);
++	return ret;
++}
++
++int32_t rseq_fallback_current_cpu(void)
++{
++	int32_t cpu;
 +
 +	cpu = sched_getcpu();
 +	if (cpu < 0) {
@@ -1449,317 +2896,16 @@ index 000000000000..5981895df25a
 +	}
 +	return cpu;
 +}
-+
-+int cpu_op_cmpxchg(void *v, void *expect, void *old, void *n, size_t len,
-+		   int cpu)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = len,
-+			.u.memcpy_op.dst = (unsigned long)old,
-+			.u.memcpy_op.src = (unsigned long)v,
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+		[1] = {
-+			.op = CPU_COMPARE_EQ_OP,
-+			.len = len,
-+			.u.compare_op.a = (unsigned long)v,
-+			.u.compare_op.b = (unsigned long)expect,
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+		[2] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = len,
-+			.u.memcpy_op.dst = (unsigned long)v,
-+			.u.memcpy_op.src = (unsigned long)n,
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+	};
-+
-+	return cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+}
-+
-+int cpu_op_add(void *v, int64_t count, size_t len, int cpu)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_ADD_OP,
-+			.len = len,
-+			.u.arithmetic_op.p = (unsigned long)v,
-+			.u.arithmetic_op.count = count,
-+			.u.arithmetic_op.expect_fault_p = 0,
-+		},
-+	};
-+
-+	return cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+}
-+
-+int cpu_op_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv,
-+			 int cpu)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_COMPARE_EQ_OP,
-+			.len = sizeof(intptr_t),
-+			.u.compare_op.a = (unsigned long)v,
-+			.u.compare_op.b = (unsigned long)&expect,
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+		[1] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = sizeof(intptr_t),
-+			.u.memcpy_op.dst = (unsigned long)v,
-+			.u.memcpy_op.src = (unsigned long)&newv,
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+	};
-+
-+	return cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+}
-+
-+static int cpu_op_cmpeqv_storep_expect_fault(intptr_t *v, intptr_t expect,
-+					     intptr_t *newp, int cpu)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_COMPARE_EQ_OP,
-+			.len = sizeof(intptr_t),
-+			.u.compare_op.a = (unsigned long)v,
-+			.u.compare_op.b = (unsigned long)&expect,
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+		[1] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = sizeof(intptr_t),
-+			.u.memcpy_op.dst = (unsigned long)v,
-+			.u.memcpy_op.src = (unsigned long)newp,
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			/* Return EAGAIN on src fault. */
-+			.u.memcpy_op.expect_fault_src = 1,
-+		},
-+	};
-+
-+	return cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+}
-+
-+int cpu_op_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
-+				 off_t voffp, intptr_t *load, int cpu)
-+{
-+	int ret;
-+
-+	do {
-+		intptr_t oldv = READ_ONCE(*v);
-+		intptr_t *newp = (intptr_t *)(oldv + voffp);
-+
-+		if (oldv == expectnot)
-+			return 1;
-+		ret = cpu_op_cmpeqv_storep_expect_fault(v, oldv, newp, cpu);
-+		if (!ret) {
-+			*load = oldv;
-+			return 0;
-+		}
-+	} while (ret > 0);
-+
-+	return -1;
-+}
-+
-+int cpu_op_cmpeqv_storev_storev(intptr_t *v, intptr_t expect,
-+				intptr_t *v2, intptr_t newv2,
-+				intptr_t newv, int cpu)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_COMPARE_EQ_OP,
-+			.len = sizeof(intptr_t),
-+			.u.compare_op.a = (unsigned long)v,
-+			.u.compare_op.b = (unsigned long)&expect,
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+		[1] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = sizeof(intptr_t),
-+			.u.memcpy_op.dst = (unsigned long)v2,
-+			.u.memcpy_op.src = (unsigned long)&newv2,
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+		[2] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = sizeof(intptr_t),
-+			.u.memcpy_op.dst = (unsigned long)v,
-+			.u.memcpy_op.src = (unsigned long)&newv,
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+	};
-+
-+	return cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+}
-+
-+int cpu_op_cmpeqv_storev_mb_storev(intptr_t *v, intptr_t expect,
-+				   intptr_t *v2, intptr_t newv2,
-+				   intptr_t newv, int cpu)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_COMPARE_EQ_OP,
-+			.len = sizeof(intptr_t),
-+			.u.compare_op.a = (unsigned long)v,
-+			.u.compare_op.b = (unsigned long)&expect,
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+		[1] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = sizeof(intptr_t),
-+			.u.memcpy_op.dst = (unsigned long)v2,
-+			.u.memcpy_op.src = (unsigned long)&newv2,
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+		[2] = {
-+			.op = CPU_MB_OP,
-+		},
-+		[3] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = sizeof(intptr_t),
-+			.u.memcpy_op.dst = (unsigned long)v,
-+			.u.memcpy_op.src = (unsigned long)&newv,
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+	};
-+
-+	return cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+}
-+
-+int cpu_op_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
-+				intptr_t *v2, intptr_t expect2,
-+				intptr_t newv, int cpu)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_COMPARE_EQ_OP,
-+			.len = sizeof(intptr_t),
-+			.u.compare_op.a = (unsigned long)v,
-+			.u.compare_op.b = (unsigned long)&expect,
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+		[1] = {
-+			.op = CPU_COMPARE_EQ_OP,
-+			.len = sizeof(intptr_t),
-+			.u.compare_op.a = (unsigned long)v2,
-+			.u.compare_op.b = (unsigned long)&expect2,
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+		[2] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = sizeof(intptr_t),
-+			.u.memcpy_op.dst = (unsigned long)v,
-+			.u.memcpy_op.src = (unsigned long)&newv,
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+	};
-+
-+	return cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+}
-+
-+int cpu_op_cmpeqv_memcpy_storev(intptr_t *v, intptr_t expect,
-+				void *dst, void *src, size_t len,
-+				intptr_t newv, int cpu)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_COMPARE_EQ_OP,
-+			.len = sizeof(intptr_t),
-+			.u.compare_op.a = (unsigned long)v,
-+			.u.compare_op.b = (unsigned long)&expect,
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+		[1] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = len,
-+			.u.memcpy_op.dst = (unsigned long)dst,
-+			.u.memcpy_op.src = (unsigned long)src,
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+		[2] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = sizeof(intptr_t),
-+			.u.memcpy_op.dst = (unsigned long)v,
-+			.u.memcpy_op.src = (unsigned long)&newv,
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+	};
-+
-+	return cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+}
-+
-+int cpu_op_cmpeqv_memcpy_mb_storev(intptr_t *v, intptr_t expect,
-+				   void *dst, void *src, size_t len,
-+				   intptr_t newv, int cpu)
-+{
-+	struct cpu_op opvec[] = {
-+		[0] = {
-+			.op = CPU_COMPARE_EQ_OP,
-+			.len = sizeof(intptr_t),
-+			.u.compare_op.a = (unsigned long)v,
-+			.u.compare_op.b = (unsigned long)&expect,
-+			.u.compare_op.expect_fault_a = 0,
-+			.u.compare_op.expect_fault_b = 0,
-+		},
-+		[1] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = len,
-+			.u.memcpy_op.dst = (unsigned long)dst,
-+			.u.memcpy_op.src = (unsigned long)src,
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+		[2] = {
-+			.op = CPU_MB_OP,
-+		},
-+		[3] = {
-+			.op = CPU_MEMCPY_OP,
-+			.len = sizeof(intptr_t),
-+			.u.memcpy_op.dst = (unsigned long)v,
-+			.u.memcpy_op.src = (unsigned long)&newv,
-+			.u.memcpy_op.expect_fault_dst = 0,
-+			.u.memcpy_op.expect_fault_src = 0,
-+		},
-+	};
-+
-+	return cpu_opv(opvec, ARRAY_SIZE(opvec), cpu, 0);
-+}
-+
-+int cpu_op_addv(intptr_t *v, int64_t count, int cpu)
-+{
-+	return cpu_op_add(v, count, sizeof(intptr_t), cpu);
-+}
-diff --git a/tools/testing/selftests/cpu-opv/cpu-op.h b/tools/testing/selftests/cpu-opv/cpu-op.h
+diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
 new file mode 100644
-index 000000000000..762a38d6e0d0
+index 000000000000..d199f0beee1b
 --- /dev/null
-+++ b/tools/testing/selftests/cpu-opv/cpu-op.h
-@@ -0,0 +1,59 @@
++++ b/tools/testing/selftests/rseq/rseq.h
+@@ -0,0 +1,164 @@
 +/*
-+ * cpu-op.h
++ * rseq.h
 + *
-+ * (C) Copyright 2017 - Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
++ * (C) Copyright 2016 - Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
 + *
 + * Permission is hereby granted, free of charge, to any person obtaining a copy
 + * of this software and associated documentation files (the "Software"), to deal
@@ -1780,41 +2926,146 @@ index 000000000000..762a38d6e0d0
 + * SOFTWARE.
 + */
 +
-+#ifndef CPU_OPV_H
-+#define CPU_OPV_H
++#ifndef RSEQ_H
++#define RSEQ_H
 +
-+#include <stdlib.h>
 +#include <stdint.h>
-+#include <linux/cpu_opv.h>
++#include <stdbool.h>
++#include <pthread.h>
++#include <signal.h>
++#include <sched.h>
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sched.h>
++#include <linux/rseq.h>
 +
-+int cpu_opv(struct cpu_op *cpuopv, int cpuopcnt, int cpu, int flags);
-+int cpu_op_get_current_cpu(void);
++/*
++ * Empty code injection macros, override when testing.
++ * It is important to consider that the ASM injection macros need to be
++ * fully reentrant (e.g. do not modify the stack).
++ */
++#ifndef RSEQ_INJECT_ASM
++#define RSEQ_INJECT_ASM(n)
++#endif
 +
-+int cpu_op_cmpxchg(void *v, void *expect, void *old, void *_new, size_t len,
-+		   int cpu);
-+int cpu_op_add(void *v, int64_t count, size_t len, int cpu);
++#ifndef RSEQ_INJECT_C
++#define RSEQ_INJECT_C(n)
++#endif
 +
-+int cpu_op_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu);
-+int cpu_op_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
-+				 off_t voffp, intptr_t *load, int cpu);
-+int cpu_op_cmpeqv_storev_storev(intptr_t *v, intptr_t expect,
-+				intptr_t *v2, intptr_t newv2,
-+				intptr_t newv, int cpu);
-+int cpu_op_cmpeqv_storev_mb_storev(intptr_t *v, intptr_t expect,
-+				   intptr_t *v2, intptr_t newv2,
-+				   intptr_t newv, int cpu);
-+int cpu_op_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
-+				intptr_t *v2, intptr_t expect2,
-+				intptr_t newv, int cpu);
-+int cpu_op_cmpeqv_memcpy_storev(intptr_t *v, intptr_t expect,
-+				void *dst, void *src, size_t len,
-+				intptr_t newv, int cpu);
-+int cpu_op_cmpeqv_memcpy_mb_storev(intptr_t *v, intptr_t expect,
-+				   void *dst, void *src, size_t len,
-+				   intptr_t newv, int cpu);
-+int cpu_op_addv(intptr_t *v, int64_t count, int cpu);
++#ifndef RSEQ_INJECT_INPUT
++#define RSEQ_INJECT_INPUT
++#endif
 +
-+#endif  /* CPU_OPV_H_ */
++#ifndef RSEQ_INJECT_CLOBBER
++#define RSEQ_INJECT_CLOBBER
++#endif
++
++#ifndef RSEQ_INJECT_FAILED
++#define RSEQ_INJECT_FAILED
++#endif
++
++extern __thread volatile struct rseq __rseq_abi;
++
++#define rseq_likely(x)		__builtin_expect(!!(x), 1)
++#define rseq_unlikely(x)	__builtin_expect(!!(x), 0)
++#define rseq_barrier()		__asm__ __volatile__("" : : : "memory")
++
++#define RSEQ_ACCESS_ONCE(x)	(*(__volatile__  __typeof__(x) *)&(x))
++#define RSEQ_WRITE_ONCE(x, v)	__extension__ ({ RSEQ_ACCESS_ONCE(x) = (v); })
++#define RSEQ_READ_ONCE(x)	RSEQ_ACCESS_ONCE(x)
++
++#define __rseq_str_1(x)	#x
++#define __rseq_str(x)		__rseq_str_1(x)
++
++#define rseq_log(fmt, args...)						       \
++	fprintf(stderr, fmt "(in %s() at " __FILE__ ":" __rseq_str(__LINE__)"\n", \
++		## args, __func__)
++
++#define rseq_bug(fmt, args...)		\
++	do {				\
++		rseq_log(fmt, ##args);	\
++		abort();		\
++	} while (0)
++
++#if defined(__x86_64__) || defined(__i386__)
++#include <rseq-x86.h>
++#elif defined(__ARMEL__)
++#include <rseq-arm.h>
++#elif defined(__PPC__)
++#include <rseq-ppc.h>
++#else
++#error unsupported target
++#endif
++
++/*
++ * Register rseq for the current thread. This needs to be called once
++ * by any thread which uses restartable sequences, before they start
++ * using restartable sequences, to ensure restartable sequences
++ * succeed. A restartable sequence executed from a non-registered
++ * thread will always fail.
++ */
++int rseq_register_current_thread(void);
++
++/*
++ * Unregister rseq for current thread.
++ */
++int rseq_unregister_current_thread(void);
++
++/*
++ * Restartable sequence fallback for reading the current CPU number.
++ */
++int32_t rseq_fallback_current_cpu(void);
++
++/*
++ * Values returned can be either the current CPU number, -1 (rseq is
++ * uninitialized), or -2 (rseq initialization has failed).
++ */
++static inline int32_t rseq_current_cpu_raw(void)
++{
++	return RSEQ_ACCESS_ONCE(__rseq_abi.cpu_id);
++}
++
++/*
++ * Returns a possible CPU number, which is typically the current CPU.
++ * The returned CPU number can be used to prepare for an rseq critical
++ * section, which will confirm whether the cpu number is indeed the
++ * current one, and whether rseq is initialized.
++ *
++ * The CPU number returned by rseq_cpu_start should always be validated
++ * by passing it to a rseq asm sequence, or by comparing it to the
++ * return value of rseq_current_cpu_raw() if the rseq asm sequence
++ * does not need to be invoked.
++ */
++static inline uint32_t rseq_cpu_start(void)
++{
++	return RSEQ_ACCESS_ONCE(__rseq_abi.cpu_id_start);
++}
++
++static inline uint32_t rseq_current_cpu(void)
++{
++	int32_t cpu;
++
++	cpu = rseq_current_cpu_raw();
++	if (rseq_unlikely(cpu < 0))
++		cpu = rseq_fallback_current_cpu();
++	return cpu;
++}
++
++/*
++ * rseq_prepare_unload() should be invoked by each thread using rseq_finish*()
++ * at least once between their last rseq_finish*() and library unload of the
++ * library defining the rseq critical section (struct rseq_cs). This also
++ * applies to use of rseq in code generated by JIT: rseq_prepare_unload()
++ * should be invoked at least once by each thread using rseq_finish*() before
++ * reclaim of the memory holding the struct rseq_cs.
++ */
++static inline void rseq_prepare_unload(void)
++{
++	__rseq_abi.rseq_cs = 0;
++}
++
++#endif  /* RSEQ_H_ */
 -- 
 2.11.0
 
