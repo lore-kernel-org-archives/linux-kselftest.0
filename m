@@ -1,21 +1,21 @@
-From: kaushalkernelmailinglist@gmail.com (Kaushal Butala)
-Date: Wed, 20 Dec 2017 13:26:17 +0530
+From: gregkh@linuxfoundation.org (Greg KH)
+Date: Wed, 20 Dec 2017 09:56:22 +0100
 Subject: [Linux-kselftest-mirror] Linux kernel build bots GCC version
-Message-ID:
- <CANePREMYCdjhUjaNLuj1pxdTGyBRkuwsChm9Ed5K6Wyz4r4Jug@mail.gmail.com>
+In-Reply-To: <CANePREMYCdjhUjaNLuj1pxdTGyBRkuwsChm9Ed5K6Wyz4r4Jug@mail.gmail.com>
+References: <CANePREMYCdjhUjaNLuj1pxdTGyBRkuwsChm9Ed5K6Wyz4r4Jug@mail.gmail.com>
+Message-ID: <20171220085622.GB25945@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171220075617.IPkCrhYbV8Vg3RTqGeW2hZitAa-cHHoPW3dATL5W2Y0@z>
+Message-ID: <20171220085622.07aU1z8m8YPI8ROZnf0gkluUqMPPVfw1_-h6rEqotyU@z>
 
-Hi,
+On Wed, Dec 20, 2017@01:26:17PM +0530, Kaushal Butala wrote:
+> Hi,
+> 
+> I am trying to find out which GCC version is used for building the
+> daily kernel code base by the build bots specifically for amd64 and
+> x86 architecture so that I can use the same GCC version myself.
 
-I am trying to find out which GCC version is used for building the
-daily kernel code base by the build bots specifically for amd64 and
-x86 architecture so that I can use the same GCC version myself.
+Why not just ask on the 0-day mailing list?
 
-Can someone please point me as to where can I find this information?
-
-Best Regards,
-Kaushal
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
