@@ -1,28 +1,18 @@
-From: naresh.kamboju at linaro.org (Naresh Kamboju)
-Date: Wed, 20 Dec 2017 13:05:22 +0530
-Subject: [Linux-kselftest-mirror] [PATCH] selftests: pstore: Adding config
-	fragment CONFIG_PSTORE_RAM=m
-Message-ID: <1513755322-11791-1-git-send-email-naresh.kamboju@linaro.org>
+From: kaushalkernelmailinglist at gmail.com (Kaushal Butala)
+Date: Wed, 20 Dec 2017 13:26:17 +0530
+Subject: [Linux-kselftest-mirror] Linux kernel build bots GCC version
+Message-ID: <CANePREMYCdjhUjaNLuj1pxdTGyBRkuwsChm9Ed5K6Wyz4r4Jug@mail.gmail.com>
 
-pstore_tests and pstore_post_reboot_tests need CONFIG_PSTORE_RAM=m
+Hi,
 
-Signed-off-by: Naresh Kamboju <naresh.kamboju at linaro.org>
----
- tools/testing/selftests/pstore/config | 1 +
- 1 file changed, 1 insertion(+)
+I am trying to find out which GCC version is used for building the
+daily kernel code base by the build bots specifically for amd64 and
+x86 architecture so that I can use the same GCC version myself.
 
-diff --git a/tools/testing/selftests/pstore/config b/tools/testing/selftests/pstore/config
-index 6a8e5a9..d148f9f 100644
---- a/tools/testing/selftests/pstore/config
-+++ b/tools/testing/selftests/pstore/config
-@@ -2,3 +2,4 @@ CONFIG_MISC_FILESYSTEMS=y
- CONFIG_PSTORE=y
- CONFIG_PSTORE_PMSG=y
- CONFIG_PSTORE_CONSOLE=y
-+CONFIG_PSTORE_RAM=m
--- 
-2.7.4
+Can someone please point me as to where can I find this information?
 
+Best Regards,
+Kaushal
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
