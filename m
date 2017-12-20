@@ -1,31 +1,48 @@
-From: benh at kernel.crashing.org (Benjamin Herrenschmidt)
-Date: Wed, 20 Dec 2017 08:34:56 +1100
-Subject: [Linux-kselftest-mirror] [PATCH v9 29/51] mm/mprotect,
- powerpc/mm/pkeys, x86/mm/pkeys: Add sysfs interface
-In-Reply-To: <e7971d03-6ad1-40d5-9b79-f01242db5293@intel.com>
-References: <1509958663-18737-1-git-send-email-linuxram@us.ibm.com>
- <1509958663-18737-30-git-send-email-linuxram@us.ibm.com>
- <bbc5593e-31ec-183a-01a5-1a253dc0c275@intel.com>
- <20171218221850.GD5461@ram.oc3035372033.ibm.com>
- <e7971d03-6ad1-40d5-9b79-f01242db5293@intel.com>
-Message-ID: <1513719296.2743.12.camel@kernel.crashing.org>
+From: chenr.fnst at cn.fujitsu.com (Chen Rong)
+Date: Wed, 20 Dec 2017 11:15:44 +0800
+Subject: [Linux-kselftest-mirror] [PATCH] selftests/bpf: remove the DEBUG
+	macro for test_dev_cgroup
+Message-ID: <20171220031544.13350-1-chenr.fnst@cn.fujitsu.com>
 
-On Mon, 2017-12-18 at 14:28 -0800, Dave Hansen wrote:
-> > We do not have generic support for something like that on ppc.
-> > The kernel looks at the device tree to determine what hardware features
-> > are available. But does not have mechanism to tell the hardware to track
-> > which of its features are currently enabled/used by the kernel; atleast
-> > not for the memory-key feature.
-> 
-> Bummer.  You're missing out.
-> 
-> But, you could still do this with a syscall.  "Hey, kernel, do you
-> support this feature?"
+The test may fail if not enable DEBUG macro in dev_cgroup.c
+  # ./test_dev_cgroup
+  libbpf: load bpf program failed: Operation not permitted
+  libbpf: failed to load program 'cgroup/dev'
+  libbpf: failed to load object './dev_cgroup.o'
+  Failed to load DEV_CGROUP program
 
-I'm not sure I understand Ram's original (quoted) point, but informing
-userspace of CPU features is what AT_HWCAP's are about.
+Removing the DEBUG macro makes the test always pass.
 
-Ben.
+Signed-off-by: Chen Rong <chenr.fnst at cn.fujitsu.com>
+---
+ tools/testing/selftests/bpf/dev_cgroup.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/dev_cgroup.c b/tools/testing/selftests/bpf/dev_cgroup.c
+index ce41a34..a167c6d 100644
+--- a/tools/testing/selftests/bpf/dev_cgroup.c
++++ b/tools/testing/selftests/bpf/dev_cgroup.c
+@@ -13,7 +13,6 @@ SEC("cgroup/dev")
+ int bpf_prog1(struct bpf_cgroup_dev_ctx *ctx)
+ {
+ 	short type = ctx->access_type & 0xFFFF;
+-#ifdef DEBUG
+ 	short access = ctx->access_type >> 16;
+ 	char fmt[] = "  %d:%d    \n";
+ 
+@@ -39,7 +38,6 @@ int bpf_prog1(struct bpf_cgroup_dev_ctx *ctx)
+ 		fmt[10] = 'm';
+ 
+ 	bpf_trace_printk(fmt, sizeof(fmt), ctx->major, ctx->minor);
+-#endif
+ 
+ 	/* Allow access to /dev/zero and /dev/random.
+ 	 * Forbid everything else.
+-- 
+2.5.0
+
+
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
