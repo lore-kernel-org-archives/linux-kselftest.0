@@ -1,38 +1,133 @@
-From: benh@kernel.crashing.org (Benjamin Herrenschmidt)
-Date: Thu, 21 Dec 2017 09:49:13 +1100
-Subject: [Linux-kselftest-mirror] [PATCH v9 29/51] mm/mprotect,
- powerpc/mm/pkeys, x86/mm/pkeys: Add sysfs interface
-In-Reply-To: <20171220175022.GB5619@ram.oc3035372033.ibm.com>
-References: <1509958663-18737-1-git-send-email-linuxram@us.ibm.com>
- <1509958663-18737-30-git-send-email-linuxram@us.ibm.com>
- <bbc5593e-31ec-183a-01a5-1a253dc0c275@intel.com>
- <20171218221850.GD5461@ram.oc3035372033.ibm.com>
- <e7971d03-6ad1-40d5-9b79-f01242db5293@intel.com>
- <1513719296.2743.12.camel@kernel.crashing.org>
- <20171220175022.GB5619@ram.oc3035372033.ibm.com>
-Message-ID: <1513810153.2743.25.camel@kernel.crashing.org>
+From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
+Date: Fri, 22 Dec 2017 15:15:36 -0500
+Subject: [Linux-kselftest-mirror] [RFC PATCH for 4.16 11/11] membarrier:
+	selftest: Test private expedited sync core cmd
+In-Reply-To: <20171222201536.29809-1-mathieu.desnoyers@efficios.com>
+References: <20171222201536.29809-1-mathieu.desnoyers@efficios.com>
+Message-ID: <20171222201536.29809-12-mathieu.desnoyers@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171220224913.to5mCU1RJ0IC3mhUZG2bUVDXU4x4mEdSpZjBImZbJwI@z>
+Message-ID: <20171222201536.3ZChRZ2PHGm7IkIPBu7LHnpbtd-Lr6NtPzbIvFT8v3I@z>
 
-On Wed, 2017-12-20@09:50 -0800, Ram Pai wrote:
-> The argument against this patch is --  it should not be baked into
-> the ABI as yet, since we do not have clarity on what applications need.
-> 
-> As it stands today the only way to figure out the information from
-> userspace is by probing the kernel through calls to sys_pkey_alloc().
-> 
-> AT_HWCAP can be used, but that will certainly not be capable of
-> providing all the information that userspace might expect.
-> 
-> Your thoughts?
+Test the new MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE and
+MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE commands.
 
-Well, there's one well known application wanting that whole keys
-business, so why not ask them what works for them ?
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+Acked-by: Shuah Khan <shuahkh at osg.samsung.com>
+CC: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+CC: Peter Zijlstra <peterz at infradead.org>
+CC: Paul E. McKenney <paulmck at linux.vnet.ibm.com>
+CC: Boqun Feng <boqun.feng at gmail.com>
+CC: Andrew Hunter <ahh at google.com>
+CC: Maged Michael <maged.michael at gmail.com>
+CC: Avi Kivity <avi at scylladb.com>
+CC: Benjamin Herrenschmidt <benh at kernel.crashing.org>
+CC: Paul Mackerras <paulus at samba.org>
+CC: Michael Ellerman <mpe at ellerman.id.au>
+CC: Dave Watson <davejwatson at fb.com>
+CC: Alan Stern <stern at rowland.harvard.edu>
+CC: Will Deacon <will.deacon at arm.com>
+CC: Andy Lutomirski <luto at kernel.org>
+CC: Alice Ferrazzi <alice.ferrazzi at gmail.com>
+CC: Paul Elder <paul.elder at pitt.edu>
+CC: linux-kselftest at vger.kernel.org
+CC: linux-arch at vger.kernel.org
+---
+ .../testing/selftests/membarrier/membarrier_test.c | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
-In the meantime, that shouldn't block the rest of the patches.
-
-Cheers,
-Ben.
+diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
+index bb9c58072c5c..d9ab8b6ee52e 100644
+--- a/tools/testing/selftests/membarrier/membarrier_test.c
++++ b/tools/testing/selftests/membarrier/membarrier_test.c
+@@ -132,6 +132,63 @@ static int test_membarrier_private_expedited_success(void)
+ 	return 0;
+ }
+ 
++static int test_membarrier_private_expedited_sync_core_fail(void)
++{
++	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE not registered failure";
++
++	if (sys_membarrier(cmd, flags) != -1) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d. Should fail, but passed\n",
++			test_name, flags);
++	}
++	if (errno != EPERM) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d. Should return (%d: \"%s\"), but returned (%d: \"%s\").\n",
++			test_name, flags, EPERM, strerror(EPERM),
++			errno, strerror(errno));
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d, errno = %d\n",
++		test_name, flags, errno);
++	return 0;
++}
++
++static int test_membarrier_register_private_expedited_sync_core_success(void)
++{
++	int cmd = MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE";
++
++	if (sys_membarrier(cmd, flags) != 0) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d, errno = %d\n",
++			test_name, flags, errno);
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d\n",
++		test_name, flags);
++	return 0;
++}
++
++static int test_membarrier_private_expedited_sync_core_success(void)
++{
++	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE";
++
++	if (sys_membarrier(cmd, flags) != 0) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d, errno = %d\n",
++			test_name, flags, errno);
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d\n",
++		test_name, flags);
++	return 0;
++}
++
+ static int test_membarrier_register_shared_expedited_success(void)
+ {
+ 	int cmd = MEMBARRIER_CMD_REGISTER_SHARED_EXPEDITED, flags = 0;
+@@ -188,6 +245,22 @@ static int test_membarrier(void)
+ 	status = test_membarrier_private_expedited_success();
+ 	if (status)
+ 		return status;
++	status = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
++	if (status < 0) {
++		ksft_test_result_fail("sys_membarrier() failed\n");
++		return status;
++	}
++	if (status & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
++		status = test_membarrier_private_expedited_sync_core_fail();
++		if (status)
++			return status;
++		status = test_membarrier_register_private_expedited_sync_core_success();
++		if (status)
++			return status;
++		status = test_membarrier_private_expedited_sync_core_success();
++		if (status)
++			return status;
++	}
+ 	/*
+ 	 * It is valid to send a shared membarrier from a non-registered
+ 	 * process.
+-- 
+2.11.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
