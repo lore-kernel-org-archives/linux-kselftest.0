@@ -1,45 +1,58 @@
-From: daniel at iogearbox.net (Daniel Borkmann)
-Date: Wed, 28 Feb 2018 22:31:17 +0100
-Subject: [PATCH] selftests/bpf: Add bpf_probe_read_str to bpf_helpers.h
-In-Reply-To: <f7ff30a7-888f-bb3c-b6b5-48c82d5b0c08@oracle.com>
-References: <1519778024-3113-1-git-send-email-tushar.n.dave@oracle.com>
- <1d72361e-e8a7-38e0-16db-ade3f658ce92@iogearbox.net>
- <f7ff30a7-888f-bb3c-b6b5-48c82d5b0c08@oracle.com>
-Message-ID: <916737aa-6b2b-b207-a1ed-4751c8deca3b@iogearbox.net>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Fri,  5 Jan 2018 17:31:18 +0100
+Subject: [Linux-kselftest-mirror] [PATCH] selftests: seccomp: fix compile
+	error seccomp_bpf
+Message-ID: <20180105163118.22598-1-anders.roxell@linaro.org>
 
-On 02/28/2018 10:28 PM, Tushar Dave wrote:
-> On 02/28/2018 08:57 AM, Daniel Borkmann wrote:
->> Hi Tushar,
->>
->> On 02/28/2018 01:33 AM, Tushar Dave wrote:
->>> Using bpf_probe_read_str() from samples/bpf causes compiler warning.
->>> e.g.
->>> warning: implicit declaration of function 'bpf_probe_read_str' is invalid in C99
->>>        [-Wimplicit-function-declaration]
->>>          num = bpf_probe_read_str(buf, sizeof(buf), ctx->di);
->>>                ^
->>> 1 warning generated.
->>>
->>> Add bpf_probe_read_str() to bpf_helpers.h so it can be used by
->>> samples/bpf programs.
->>>
->>> Signed-off-by: Tushar Dave <tushar.n.dave at oracle.com>
->>
->> In general no objections to it, but it would need an in-tree
->> user first:
->>
->> $ git grep -n bpf_probe_read_str tools/
->> tools/include/uapi/linux/bpf.h:596: * int bpf_probe_read_str(void *dst, int size, const void *unsafe_ptr)
->> $
->>
->> Why not adding this along with a sample?
-> Okay, I will send new patch along with new sample or add usage of
-> bpf_probe_read_str() in one of our exiting sample :)
+aarch64-linux-gnu-gcc -Wl,-no-as-needed -Wall
+    -lpthread seccomp_bpf.c -o seccomp_bpf
+seccomp_bpf.c: In function 'tracer_ptrace':
+seccomp_bpf.c:1720:12: error: '__NR_open' undeclared
+    (first use in this function)
+  if (nr == __NR_open)
+            ^~~~~~~~~
+seccomp_bpf.c:1720:12: note: each undeclared identifier is reported
+    only once for each function it appears in
+In file included from seccomp_bpf.c:48:0:
+seccomp_bpf.c: In function 'TRACE_syscall_ptrace_syscall_dropped':
+seccomp_bpf.c:1795:39: error: '__NR_open' undeclared
+    (first use in this function)
+  EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_open));
+                                       ^
+open(2) is a legacy syscall, replaced with openat(2) since 2.6.16.
+Thus new architectures in the kernel, such as arm64, don't implement
+these legacy syscalls.
 
-Sounds great, the latter is totally fine as well. :-)
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-Daniel
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 24dbf634e2dd..0b457e8e0f0c 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -1717,7 +1717,7 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
+ 
+ 	if (nr == __NR_getpid)
+ 		change_syscall(_metadata, tracee, __NR_getppid);
+-	if (nr == __NR_open)
++	if (nr == __NR_openat)
+ 		change_syscall(_metadata, tracee, -1);
+ }
+ 
+@@ -1792,7 +1792,7 @@ TEST_F(TRACE_syscall, ptrace_syscall_dropped)
+ 					   true);
+ 
+ 	/* Tracer should skip the open syscall, resulting in EPERM. */
+-	EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_open));
++	EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_openat));
+ }
+ 
+ TEST_F(TRACE_syscall, syscall_allowed)
+-- 
+2.11.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
