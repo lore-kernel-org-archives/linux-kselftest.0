@@ -1,55 +1,43 @@
 From: anders.roxell at linaro.org (Anders Roxell)
-Date: Fri,  5 Jan 2018 17:31:18 +0100
-Subject: [Linux-kselftest-mirror] [PATCH] selftests: seccomp: fix compile
-	error seccomp_bpf
-Message-ID: <20180105163118.22598-1-anders.roxell@linaro.org>
+Date: Fri,  5 Jan 2018 17:33:23 +0100
+Subject: [Linux-kselftest-mirror] [PATCH] selftests: sync: missing CFLAGS
+	while compiling
+Message-ID: <20180105163323.22920-1-anders.roxell@linaro.org>
 
-aarch64-linux-gnu-gcc -Wl,-no-as-needed -Wall
-    -lpthread seccomp_bpf.c -o seccomp_bpf
-seccomp_bpf.c: In function 'tracer_ptrace':
-seccomp_bpf.c:1720:12: error: '__NR_open' undeclared
-    (first use in this function)
-  if (nr == __NR_open)
-            ^~~~~~~~~
-seccomp_bpf.c:1720:12: note: each undeclared identifier is reported
-    only once for each function it appears in
-In file included from seccomp_bpf.c:48:0:
-seccomp_bpf.c: In function 'TRACE_syscall_ptrace_syscall_dropped':
-seccomp_bpf.c:1795:39: error: '__NR_open' undeclared
-    (first use in this function)
-  EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_open));
-                                       ^
-open(2) is a legacy syscall, replaced with openat(2) since 2.6.16.
-Thus new architectures in the kernel, such as arm64, don't implement
-these legacy syscalls.
+Based on patch: https://patchwork.kernel.org/patch/10042045/
 
+arch64-linux-gnu-gcc -c sync.c -o sync/sync.o
+sync.c:42:29: fatal error: linux/sync_file.h: No such file or directory
+ #include <linux/sync_file.h>
+                             ^
+CFLAGS is not used during the compile step, so the system instead of
+kernel headers are used.  Fix this by using lib.mk's compile rules and
+remove CFLAGS from the linking step.
+
+Reported-by: Lei Yang <Lei.Yang at windriver.com>
 Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/sync/Makefile | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 24dbf634e2dd..0b457e8e0f0c 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -1717,7 +1717,7 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
+diff --git a/tools/testing/selftests/sync/Makefile b/tools/testing/selftests/sync/Makefile
+index b3c8ba3cb668..58b9336d6c84 100644
+--- a/tools/testing/selftests/sync/Makefile
++++ b/tools/testing/selftests/sync/Makefile
+@@ -27,12 +27,6 @@ OBJS := $(patsubst %,$(OUTPUT)/%,$(OBJS))
+ TESTS := $(patsubst %,$(OUTPUT)/%,$(TESTS))
  
- 	if (nr == __NR_getpid)
- 		change_syscall(_metadata, tracee, __NR_getppid);
--	if (nr == __NR_open)
-+	if (nr == __NR_openat)
- 		change_syscall(_metadata, tracee, -1);
- }
+ $(TEST_CUSTOM_PROGS): $(TESTS) $(OBJS)
+-	$(CC) -o $(TEST_CUSTOM_PROGS) $(OBJS) $(TESTS) $(CFLAGS) $(LDFLAGS)
+-
+-$(OBJS): $(OUTPUT)/%.o: %.c
+-	$(CC) -c $^ -o $@
+-
+-$(TESTS): $(OUTPUT)/%.o: %.c
+-	$(CC) -c $^ -o $@
++	$(CC) -o $(TEST_CUSTOM_PROGS) $(OBJS) $(TESTS) $(LDFLAGS)
  
-@@ -1792,7 +1792,7 @@ TEST_F(TRACE_syscall, ptrace_syscall_dropped)
- 					   true);
- 
- 	/* Tracer should skip the open syscall, resulting in EPERM. */
--	EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_open));
-+	EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_openat));
- }
- 
- TEST_F(TRACE_syscall, syscall_allowed)
+ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(OBJS) $(TESTS)
 -- 
 2.11.0
 
