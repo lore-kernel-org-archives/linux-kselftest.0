@@ -1,48 +1,81 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Tue, 9 Jan 2018 09:47:24 -0700
-Subject: [Linux-kselftest-mirror] [PATCH] kselftest: fix OOM in memory
-	compaction test
-In-Reply-To: <20180109162648.3987382-1-arnd@arndb.de>
-References: <20180109162648.3987382-1-arnd@arndb.de>
-Message-ID: <7f319aac-ef79-a7b0-372c-b52062063f97@kernel.org>
+From: keescook at chromium.org (Kees Cook)
+Date: Tue, 9 Jan 2018 15:07:04 -0800
+Subject: [Linux-kselftest-mirror] [PATCH] selftests: seccomp: fix
+	compile error seccomp_bpf
+In-Reply-To: <CA+G9fYsXCkk2uSO5fuLwUMqALitDzgzskBu3Pj5qCfdcRv3rMg@mail.gmail.com>
+References: <20180105163118.22598-1-anders.roxell@linaro.org>
+ <CA+G9fYsXCkk2uSO5fuLwUMqALitDzgzskBu3Pj5qCfdcRv3rMg@mail.gmail.com>
+Message-ID: <CAGXu5jK0X4uJxbj19ei-4bv3e7imsVqroJtP-E03bYd-9fxS4w@mail.gmail.com>
 
-On 01/09/2018 09:26 AM, Arnd Bergmann wrote:
-> Running the compaction_test sometimes results in out-of-memory
-> failures. When I debugged this, it turned out that the code to
-> reset the number of hugepages to the initial value is simply
-> broken since we write into an open sysctl file descriptor
-> multiple times without seeking back to the start.
-> 
-> Adding the lseek here fixes the problem.
-> 
-> Cc: stable at vger.kernel.org
-> Reported-by: Naresh Kamboju <naresh.kamboju at linaro.org>
-> Link: https://bugs.linaro.org/show_bug.cgi?id=3145
-> Signed-off-by: Arnd Bergmann <arnd at arndb.de>
-> ---
->  tools/testing/selftests/vm/compaction_test.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/vm/compaction_test.c b/tools/testing/selftests/vm/compaction_test.c
-> index a65b016d4c13..1097f04e4d80 100644
-> --- a/tools/testing/selftests/vm/compaction_test.c
-> +++ b/tools/testing/selftests/vm/compaction_test.c
-> @@ -137,6 +137,8 @@ int check_compaction(unsigned long mem_free, unsigned int hugepage_size)
->  	printf("No of huge pages allocated = %d\n",
->  	       (atoi(nr_hugepages)));
->  
-> +	lseek(fd, 0, SEEK_SET);
-> +
->  	if (write(fd, initial_nr_hugepages, strlen(initial_nr_hugepages))
->  	    != strlen(initial_nr_hugepages)) {
->  		perror("Failed to write value to /proc/sys/vm/nr_hugepages\n");
-> 
+On Fri, Jan 5, 2018 at 6:29 PM, Naresh Kamboju
+<naresh.kamboju at linaro.org> wrote:
+> On 5 January 2018 at 22:01, Anders Roxell <anders.roxell at linaro.org> wrote:
+>> aarch64-linux-gnu-gcc -Wl,-no-as-needed -Wall
+>>     -lpthread seccomp_bpf.c -o seccomp_bpf
+>> seccomp_bpf.c: In function 'tracer_ptrace':
+>> seccomp_bpf.c:1720:12: error: '__NR_open' undeclared
+>>     (first use in this function)
+>>   if (nr == __NR_open)
+>>             ^~~~~~~~~
+>> seccomp_bpf.c:1720:12: note: each undeclared identifier is reported
+>>     only once for each function it appears in
+>> In file included from seccomp_bpf.c:48:0:
+>> seccomp_bpf.c: In function 'TRACE_syscall_ptrace_syscall_dropped':
+>> seccomp_bpf.c:1795:39: error: '__NR_open' undeclared
+>>     (first use in this function)
+>>   EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_open));
+>>                                        ^
+>> open(2) is a legacy syscall, replaced with openat(2) since 2.6.16.
+>> Thus new architectures in the kernel, such as arm64, don't implement
+>> these legacy syscalls.
+>>
+>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+>
+> Thanks for the patch Anders.
+> Tested-by: Naresh Kamboju <naresh.kamboju at linaro.org>
+
+Did something change recently? This has built fine on arm64 for a
+while -- at least since commit 256d0afb11d6 ("selftests/seccomp: build
+and pass on arm64").
+
+-Kees
+
+>
+>> ---
+>>  tools/testing/selftests/seccomp/seccomp_bpf.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> index 24dbf634e2dd..0b457e8e0f0c 100644
+>> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> @@ -1717,7 +1717,7 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
+>>
+>>         if (nr == __NR_getpid)
+>>                 change_syscall(_metadata, tracee, __NR_getppid);
+>> -       if (nr == __NR_open)
+>> +       if (nr == __NR_openat)
+>>                 change_syscall(_metadata, tracee, -1);
+>>  }
+>>
+>> @@ -1792,7 +1792,7 @@ TEST_F(TRACE_syscall, ptrace_syscall_dropped)
+>>                                            true);
+>>
+>>         /* Tracer should skip the open syscall, resulting in EPERM. */
+>> -       EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_open));
+>> +       EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_openat));
+>>  }
+>>
+>>  TEST_F(TRACE_syscall, syscall_allowed)
+>> --
+>> 2.11.0
+>>
 
 
-Thanks for the patch. I will get this into 4.16-rc1
 
-thanks,
--- Shuah
+-- 
+Kees Cook
+Pixel Security
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
