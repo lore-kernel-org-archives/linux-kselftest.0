@@ -1,65 +1,41 @@
-From: naresh.kamboju at linaro.org (Naresh Kamboju)
-Date: Sat, 6 Jan 2018 07:59:34 +0530
-Subject: [Linux-kselftest-mirror] [PATCH] selftests: seccomp: fix
-	compile error seccomp_bpf
-In-Reply-To: <20180105163118.22598-1-anders.roxell@linaro.org>
-References: <20180105163118.22598-1-anders.roxell@linaro.org>
-Message-ID: <CA+G9fYsXCkk2uSO5fuLwUMqALitDzgzskBu3Pj5qCfdcRv3rMg@mail.gmail.com>
+From: arnd at arndb.de (Arnd Bergmann)
+Date: Tue,  9 Jan 2018 17:26:24 +0100
+Subject: [Linux-kselftest-mirror] [PATCH] kselftest: fix OOM in memory
+	compaction test
+Message-ID: <20180109162648.3987382-1-arnd@arndb.de>
 
-On 5 January 2018 at 22:01, Anders Roxell <anders.roxell at linaro.org> wrote:
-> aarch64-linux-gnu-gcc -Wl,-no-as-needed -Wall
->     -lpthread seccomp_bpf.c -o seccomp_bpf
-> seccomp_bpf.c: In function 'tracer_ptrace':
-> seccomp_bpf.c:1720:12: error: '__NR_open' undeclared
->     (first use in this function)
->   if (nr == __NR_open)
->             ^~~~~~~~~
-> seccomp_bpf.c:1720:12: note: each undeclared identifier is reported
->     only once for each function it appears in
-> In file included from seccomp_bpf.c:48:0:
-> seccomp_bpf.c: In function 'TRACE_syscall_ptrace_syscall_dropped':
-> seccomp_bpf.c:1795:39: error: '__NR_open' undeclared
->     (first use in this function)
->   EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_open));
->                                        ^
-> open(2) is a legacy syscall, replaced with openat(2) since 2.6.16.
-> Thus new architectures in the kernel, such as arm64, don't implement
-> these legacy syscalls.
->
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+Running the compaction_test sometimes results in out-of-memory
+failures. When I debugged this, it turned out that the code to
+reset the number of hugepages to the initial value is simply
+broken since we write into an open sysctl file descriptor
+multiple times without seeking back to the start.
 
-Thanks for the patch Anders.
-Tested-by: Naresh Kamboju <naresh.kamboju at linaro.org>
+Adding the lseek here fixes the problem.
 
-> ---
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index 24dbf634e2dd..0b457e8e0f0c 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -1717,7 +1717,7 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
->
->         if (nr == __NR_getpid)
->                 change_syscall(_metadata, tracee, __NR_getppid);
-> -       if (nr == __NR_open)
-> +       if (nr == __NR_openat)
->                 change_syscall(_metadata, tracee, -1);
->  }
->
-> @@ -1792,7 +1792,7 @@ TEST_F(TRACE_syscall, ptrace_syscall_dropped)
->                                            true);
->
->         /* Tracer should skip the open syscall, resulting in EPERM. */
-> -       EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_open));
-> +       EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_openat));
->  }
->
->  TEST_F(TRACE_syscall, syscall_allowed)
-> --
-> 2.11.0
->
+Cc: stable at vger.kernel.org
+Reported-by: Naresh Kamboju <naresh.kamboju at linaro.org>
+Link: https://bugs.linaro.org/show_bug.cgi?id=3145
+Signed-off-by: Arnd Bergmann <arnd at arndb.de>
+---
+ tools/testing/selftests/vm/compaction_test.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/testing/selftests/vm/compaction_test.c b/tools/testing/selftests/vm/compaction_test.c
+index a65b016d4c13..1097f04e4d80 100644
+--- a/tools/testing/selftests/vm/compaction_test.c
++++ b/tools/testing/selftests/vm/compaction_test.c
+@@ -137,6 +137,8 @@ int check_compaction(unsigned long mem_free, unsigned int hugepage_size)
+ 	printf("No of huge pages allocated = %d\n",
+ 	       (atoi(nr_hugepages)));
+ 
++	lseek(fd, 0, SEEK_SET);
++
+ 	if (write(fd, initial_nr_hugepages, strlen(initial_nr_hugepages))
+ 	    != strlen(initial_nr_hugepages)) {
+ 		perror("Failed to write value to /proc/sys/vm/nr_hugepages\n");
+-- 
+2.9.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
