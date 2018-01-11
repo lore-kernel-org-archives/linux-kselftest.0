@@ -1,38 +1,60 @@
-From: shuahkh@osg.samsung.com (Shuah Khan)
-Date: Thu, 11 Jan 2018 10:39:42 -0700
-Subject: [Linux-kselftest-mirror] [PATCH] selftests: media_tests: Fix
-	Makefile 'clean' target warning
-Message-ID: <20180111173942.20658-1-shuahkh@osg.samsung.com>
+From: luisbg@kernel.org (Luis de Bethencourt)
+Date: Thu, 11 Jan 2018 18:03:49 +0000
+Subject: [Linux-kselftest-mirror] [PATCH] tools/testing: Fix trailing
+	semicolon
+In-Reply-To: <c65087f8-d447-d603-be0a-a0577081570b@kernel.org>
+References: <20180111134607.12821-1-luisbg@kernel.org>
+ <c65087f8-d447-d603-be0a-a0577081570b@kernel.org>
+Message-ID: <97f5465b-1c18-5e1d-d84c-ce542d420540@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180111173942.nyEZp7p0D9sstZXSq19HmmT-VJj2FP_1SYjk1o_I08I@z>
+Message-ID: <20180111180349.Ii1DSnBrU86NTzdIk5xQH2ynq2T9NpHl3gfRtV18RMo@z>
 
-Remove 'clean' target and change TEST_PROGS to TEST_GEN_PROGS so the
-common lib.mk 'clean' target clean these generated files. TEST_PROGS
-is for shell scripts and not for generated test executables.
+On 01/11/2018 05:21 PM, Shuah Khan wrote:
+> On 01/11/2018 06:46 AM, Luis de Bethencourt wrote:
+>> The trailing semicolon is an empty statement that does no operation.
+>> Removing it since it doesn't do anything.
+>>
+>> Signed-off-by: Luis de Bethencourt <luisbg at kernel.org>
+>> ---
+>>
+>> Hi Shuah,
+>>
+>> After fixing the same thing in drivers/staging/rtl8723bs/, Joe Perches
+>> suggested I fix it treewide [0].
+>>
+>> Best regards :)
+>> Luis
+>>
+>>
+>> [0] http://driverdev.linuxdriverproject.org/pipermail/driverdev-devel/2018-January/115410.html
+>> [1] http://driverdev.linuxdriverproject.org/pipermail/driverdev-devel/2018-January/115390.html
+>>
+>>  tools/testing/selftests/nsfs/pidns.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/nsfs/pidns.c b/tools/testing/selftests/nsfs/pidns.c
+>> index 1182d4e437a2..e0d86e1668c0 100644
+>> --- a/tools/testing/selftests/nsfs/pidns.c
+>> +++ b/tools/testing/selftests/nsfs/pidns.c
+>> @@ -70,7 +70,7 @@ int main(int argc, char *argv[])
+>>  			return pr_err("NS_GET_PARENT returned a wrong namespace");
+>>  
+>>  		if (ioctl(pns, NS_GET_PARENT) >= 0 || errno != EPERM)
+>> -			return pr_err("Don't get EPERM");;
+>> +			return pr_err("Don't get EPERM");
+>>  	}
+>>  
+>>  	kill(pid, SIGKILL);
+>>
+> 
+> Thanks for the patch. I will take this in for 4.16-rc1.
+> 
+> thanks,
+> -- Shuah
+> 
 
-Signed-off-by: Shuah Khan <shuahkh at osg.samsung.com>
----
- tools/testing/selftests/media_tests/Makefile | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/media_tests/Makefile b/tools/testing/selftests/media_tests/Makefile
-index be5bd4ffb895..c82cec2497de 100644
---- a/tools/testing/selftests/media_tests/Makefile
-+++ b/tools/testing/selftests/media_tests/Makefile
-@@ -1,8 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--TEST_PROGS := media_device_test media_device_open video_device_test
--all: $(TEST_PROGS)
-+TEST_GEN_PROGS := media_device_test media_device_open video_device_test
-+all: $(TEST_GEN_PROGS)
- 
- include ../lib.mk
--
--clean:
--	rm -fr media_device_test media_device_open video_device_test
--- 
-2.14.1
-
+Awesome. Thanks Shuah!
+Luis
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
