@@ -1,47 +1,76 @@
-From: luisbg@kernel.org (Luis de Bethencourt)
-Date: Thu, 11 Jan 2018 13:46:07 +0000
-Subject: [Linux-kselftest-mirror] [PATCH] tools/testing: Fix trailing
-	semicolon
-Message-ID: <20180111134607.12821-1-luisbg@kernel.org>
+From: shuahkh@osg.samsung.com (Shuah Khan)
+Date: Thu, 11 Jan 2018 10:17:21 -0700
+Subject: [Linux-kselftest-mirror] [PATCH v2] selftests: media_tests: Add
+	SPDX license identifier
+Message-ID: <20180111171721.19672-1-shuahkh@osg.samsung.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180111134607.8v6apuqa-kyajJdfvDi_64DkKiKG3xXY9U71puBdCrI@z>
+Message-ID: <20180111171721.tyd08lT3GCzXwcSGMyGFqrU0a8skbBm-ki9wmSkPRos@z>
 
-The trailing semicolon is an empty statement that does no operation.
-Removing it since it doesn't do anything.
+Replace GPL license statement with SPDX GPL-2.0 license identifier.
 
-Signed-off-by: Luis de Bethencourt <luisbg at kernel.org>
+Signed-off-by: Shuah Khan <shuahkh at osg.samsung.com>
 ---
+Changes since v1:
+- Use corect comment format for SPDX license
 
-Hi Shuah,
+ tools/testing/selftests/media_tests/media_device_open.c | 3 ++-
+ tools/testing/selftests/media_tests/media_device_test.c | 3 ++-
+ tools/testing/selftests/media_tests/video_device_test.c | 3 ++-
+ 3 files changed, 6 insertions(+), 3 deletions(-)
 
-After fixing the same thing in drivers/staging/rtl8723bs/, Joe Perches
-suggested I fix it treewide [0].
-
-Best regards :)
-Luis
-
-
-[0] http://driverdev.linuxdriverproject.org/pipermail/driverdev-devel/2018-January/115410.html
-[1] http://driverdev.linuxdriverproject.org/pipermail/driverdev-devel/2018-January/115390.html
-
- tools/testing/selftests/nsfs/pidns.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/nsfs/pidns.c b/tools/testing/selftests/nsfs/pidns.c
-index 1182d4e437a2..e0d86e1668c0 100644
---- a/tools/testing/selftests/nsfs/pidns.c
-+++ b/tools/testing/selftests/nsfs/pidns.c
-@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
- 			return pr_err("NS_GET_PARENT returned a wrong namespace");
+diff --git a/tools/testing/selftests/media_tests/media_device_open.c b/tools/testing/selftests/media_tests/media_device_open.c
+index 44343c091a20..a5ce5434bafd 100644
+--- a/tools/testing/selftests/media_tests/media_device_open.c
++++ b/tools/testing/selftests/media_tests/media_device_open.c
+@@ -1,10 +1,11 @@
++// SPDX-License-Identifier: GPL-2.0
++
+ /*
+  * media_device_open.c - Media Controller Device Open Test
+  *
+  * Copyright (c) 2016 Shuah Khan <shuahkh at osg.samsung.com>
+  * Copyright (c) 2016 Samsung Electronics Co., Ltd.
+  *
+- * This file is released under the GPLv2.
+  */
  
- 		if (ioctl(pns, NS_GET_PARENT) >= 0 || errno != EPERM)
--			return pr_err("Don't get EPERM");;
-+			return pr_err("Don't get EPERM");
- 	}
+ /*
+diff --git a/tools/testing/selftests/media_tests/media_device_test.c b/tools/testing/selftests/media_tests/media_device_test.c
+index 5d49943e77d0..421a367e4bb3 100644
+--- a/tools/testing/selftests/media_tests/media_device_test.c
++++ b/tools/testing/selftests/media_tests/media_device_test.c
+@@ -1,10 +1,11 @@
++// SPDX-License-Identifier: GPL-2.0
++
+ /*
+  * media_device_test.c - Media Controller Device ioctl loop Test
+  *
+  * Copyright (c) 2016 Shuah Khan <shuahkh at osg.samsung.com>
+  * Copyright (c) 2016 Samsung Electronics Co., Ltd.
+  *
+- * This file is released under the GPLv2.
+  */
  
- 	kill(pid, SIGKILL);
+ /*
+diff --git a/tools/testing/selftests/media_tests/video_device_test.c b/tools/testing/selftests/media_tests/video_device_test.c
+index 66d419c28653..0f6aef2e2593 100644
+--- a/tools/testing/selftests/media_tests/video_device_test.c
++++ b/tools/testing/selftests/media_tests/video_device_test.c
+@@ -1,10 +1,11 @@
++// SPDX-License-Identifier: GPL-2.0
++
+ /*
+  * video_device_test - Video Device Test
+  *
+  * Copyright (c) 2016 Shuah Khan <shuahkh at osg.samsung.com>
+  * Copyright (c) 2016 Samsung Electronics Co., Ltd.
+  *
+- * This file is released under the GPLv2.
+  */
+ 
+ /*
 -- 
-2.15.1
+2.14.1
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
