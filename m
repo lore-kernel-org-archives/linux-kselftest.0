@@ -1,58 +1,35 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Sun, 14 Jan 2018 22:50:36 +0900
-Subject: [Linux-kselftest-mirror] [RESEND PATCH 2/2] selftest: ftrace: Fix
-	to add 256 kprobe events correctly
-In-Reply-To: <151593777761.23875.10360397710751679883.stgit@devbox>
-References: <151593777761.23875.10360397710751679883.stgit@devbox>
-Message-ID: <151593783656.23875.14563972262086825681.stgit@devbox>
+From: bp at alien8.de (Borislav Petkov)
+Date: Mon, 15 Jan 2018 15:59:42 +0100
+Subject: [Linux-kselftest-mirror] selftests: run all tests
+Message-ID: <20180115145942.s3dgy457xwhn6lwv@pd.tnic>
 
-Current multiple-kprobe testcase only tries to add
-kprobe events on first 256 text symbols. However
-kprobes fails to probe on some text symbols (like
-blacklisted symbols). Thus in the worst case,
-the test can not add any kprobe events.
+Hi,
 
-To avoid that, continue to try adding kprobe events
-until 256 events. Also it confirms the number of
-registered kprobe events.
+do we want something like that with which one can run all selftests
+quickly?
 
-Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+Or is there a way already which I couldn't find?
+
 ---
- .../ftrace/test.d/kprobe/multiple_kprobes.tc       |   19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc b/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
-index e297bd7a2e79..ce361b9d62cf 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
-@@ -12,9 +12,24 @@ case `uname -m` in
-   *) OFFS=0;;
- esac
- 
--echo "Setup up kprobes on first 256 text symbols"
-+if [ -d events/kprobes ]; then
-+  echo 0 > events/kprobes/enable
-+  echo > kprobe_events
-+fi
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 5d4f10ac2af2..3ed42fa50acc 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -77,3 +77,8 @@ $(OUTPUT)/test_syscall_vdso_32: thunks_32.S
+ # state.
+ $(OUTPUT)/check_initial_reg_state_32: CFLAGS += -Wl,-ereal_start -static
+ $(OUTPUT)/check_initial_reg_state_64: CFLAGS += -Wl,-ereal_start -static
 +
-+N=0
-+echo "Setup up kprobes on first available 256 text symbols"
- grep -i " t " /proc/kallsyms | cut -f3 -d" " | grep -v .*\\..* | \
--head -n 256 | while read i; do echo p ${i}+${OFFS} ; done > kprobe_events ||:
-+while read i; do
-+  echo p ${i}+${OFFS} >> kprobe_events && N=$((N+1)) ||:
-+  test $N -eq 256 && break
-+done
-+
-+L=`wc -l kprobe_events`
-+if [ $L -ne $N ]; then
-+  echo "The number of kprobes events ($L) is not $N"
-+  exit_fail
-+fi
- 
- echo 1 > events/kprobes/enable
- echo 0 > events/kprobes/enable
++run_all:
++	for f in $(TEST_PROGS); do \
++		$$f; \
++	done
 
+-- 
+Regards/Gruss,
+    Boris.
+
+Good mailing practices for 400: avoid top-posting and trim the reply.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
