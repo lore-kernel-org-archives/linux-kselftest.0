@@ -1,94 +1,132 @@
 From: idosch at mellanox.com (Ido Schimmel)
-Date: Mon, 15 Jan 2018 21:18:41 +0200
-Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 00/12] selftests:
-	forwarding: Add VRF-based tests
-Message-ID: <20180115191853.26129-1-idosch@mellanox.com>
+Date: Mon, 15 Jan 2018 21:18:44 +0200
+Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 03/12] selftests:
+	forwarding: Add a test for flooded traffic
+In-Reply-To: <20180115191853.26129-1-idosch@mellanox.com>
+References: <20180115191853.26129-1-idosch@mellanox.com>
+Message-ID: <20180115191853.26129-4-idosch@mellanox.com>
 
-One of the nice things about network namespaces is that they allow one
-to easily create and test complex environments.
+Add test cases for unknown unicast and unregistered multicast flooding.
 
-Unfortunately, these namespaces can not be used with actual switching
-ASICs, as their ports can not be migrated to other network namespaces
-(NETIF_F_NETNS_LOCAL) and most of them probably do not support the
-L1-separation provided by namespaces.
+For each traffic type, turn off flooding on one bridged port and inject
+a packet of the specified type through the second bridged port. Make
+sure the packet was not received by the listening tcpdump session on the
+other end. Later, turn on flooding and make sure the packet was
+received.
 
-However, a similar kind of flexibility can be achieved by using VRFs and
-by looping the switch ports together. For example:
+Signed-off-by: Ido Schimmel <idosch at mellanox.com>
+---
+ tools/testing/selftests/forwarding/bridge.sh |  2 +
+ tools/testing/selftests/forwarding/lib.sh    | 88 ++++++++++++++++++++++++++++
+ 2 files changed, 90 insertions(+)
 
-                             br0
-                              +
-               vrf-h1         |           vrf-h2
-                 +        +---+----+        +
-                 |        |        |        |
-    192.0.2.1/24 +        +        +        + 192.0.2.2/24
-               swp1     swp2     swp3     swp4
-                 +        +        +        +
-                 |        |        |        |
-                 +--------+        +--------+
-
-The VRFs act as lightweight namespaces representing hosts connected to
-the switch.
-
-This approach for testing switch ASICs has several advantages over the
-traditional method that requires multiple physical machines, to name a
-few:
-
-1. Only the device under test (DUT) is being tested without noise from
-other system.
-
-2. Ability to easily provision complex topologies. Testing bridging
-between 4-ports LAGs or 8-way ECMP requires many physical links that are
-not always available. With the VRF-based approach one merely needs to
-loopback more ports.
-
-These tests are written with switch ASICs in mind, but they can be run
-on any Linux box using veth pairs to emulate physical loopbacks.
-
-Feedback is is welcome. Particularly regarding the best location for
-these tests (e.g., current location, tools/testing/selftests/net).
-
-Thanks.
-
-Ido Schimmel (7):
-  selftests: forwarding: Add initial testing framework
-  selftests: forwarding: Add a test for FDB learning
-  selftests: forwarding: Add a test for flooded traffic
-  selftests: forwarding: Add a test for basic IPv4 and IPv6 routing
-  selftests: forwarding: Create test topology for multipath routing
-  selftests: forwarding: Test IPv4 weighted nexthops
-  selftests: forwarding: Test IPv6 weighted nexthops
-
-Jiri Pirko (5):
-  selftests: forwarding: Add tc offload check helper
-  selftests: forwarding: Add MAC get helper
-  selftests: forwarding: Allow to get netdev interfaces names from
-    commandline
-  selftests: forwarding: Allow to pass commandline options
-  selftests: forwarding: Introduce tc flower matching tests
-
- tools/testing/selftests/Makefile                   |   1 +
- tools/testing/selftests/forwarding/.gitignore      |   1 +
- tools/testing/selftests/forwarding/Makefile        |   6 +
- tools/testing/selftests/forwarding/README          |  56 +++
- tools/testing/selftests/forwarding/bridge.sh       | 117 +++++++
- tools/testing/selftests/forwarding/config          |  12 +
- .../selftests/forwarding/forwarding.config.sample  |  19 +
- tools/testing/selftests/forwarding/lib.sh          | 383 +++++++++++++++++++++
- tools/testing/selftests/forwarding/router.sh       | 131 +++++++
- .../selftests/forwarding/router_multipath.sh       | 321 +++++++++++++++++
- tools/testing/selftests/forwarding/tc_flower.sh    | 261 ++++++++++++++
- 11 files changed, 1308 insertions(+)
- create mode 100644 tools/testing/selftests/forwarding/.gitignore
- create mode 100644 tools/testing/selftests/forwarding/Makefile
- create mode 100644 tools/testing/selftests/forwarding/README
- create mode 100755 tools/testing/selftests/forwarding/bridge.sh
- create mode 100644 tools/testing/selftests/forwarding/config
- create mode 100644 tools/testing/selftests/forwarding/forwarding.config.sample
- create mode 100644 tools/testing/selftests/forwarding/lib.sh
- create mode 100755 tools/testing/selftests/forwarding/router.sh
- create mode 100755 tools/testing/selftests/forwarding/router_multipath.sh
- create mode 100755 tools/testing/selftests/forwarding/tc_flower.sh
-
+diff --git a/tools/testing/selftests/forwarding/bridge.sh b/tools/testing/selftests/forwarding/bridge.sh
+index 0bdcee478211..7ae4f1639c45 100755
+--- a/tools/testing/selftests/forwarding/bridge.sh
++++ b/tools/testing/selftests/forwarding/bridge.sh
+@@ -112,4 +112,6 @@ mtu_change $old_mtu "${netifs_arr[@]}"
+ 
+ learning_test "br0" $swp1 1 $h1
+ 
++flood_test $swp2 $h1 $h2
++
+ exit $EXIT_STATUS
+diff --git a/tools/testing/selftests/forwarding/lib.sh b/tools/testing/selftests/forwarding/lib.sh
+index 264bf0af4c4d..03e5253b30d8 100644
+--- a/tools/testing/selftests/forwarding/lib.sh
++++ b/tools/testing/selftests/forwarding/lib.sh
+@@ -231,3 +231,91 @@ learning_test()
+ 
+ 	print_result "learning"
+ }
++
++flood_test_do()
++{
++	local should_flood=$1
++	local host1_if=$4
++	local host2_if=$5
++	local mac=$2
++	local ip=$3
++	local err=0
++
++	# Add an ACL on `host2_if` which will tell us whether the packet
++	# was flooded to it or not.
++	tc qdisc add dev $host2_if ingress
++	tc filter add dev $host2_if ingress protocol ip pref 1 handle 101 \
++		flower dst_mac $mac action drop
++
++	mausezahn $host1_if -c 1 -p 64 -b $mac -B $ip -t ip -q
++
++	tc -j -s filter show dev $host2_if ingress \
++		| jq -e ".[] | select(.options.keys.dst_mac == \"$mac\") \
++		| select(.options.actions[0].stats.packets == 1)" &> /dev/null
++	if [[ $? -ne 0 && $should_flood == "true" || \
++	      $? -eq 0 && $should_flood == "false" ]]; then
++		err=1
++	fi
++
++	tc filter del dev $host2_if ingress protocol ip pref 1 handle 101 flower
++	tc qdisc del dev $host2_if ingress
++
++	return $err
++}
++
++flood_unicast_test()
++{
++	local mac=de:ad:be:ef:13:37
++	local ip=192.0.2.100
++	local host1_if=$2
++	local host2_if=$3
++	local br_port=$1
++
++	RET=0
++
++	bridge link set dev $br_port flood off
++
++	flood_test_do false $mac $ip $host1_if $host2_if
++	check_err $? "packet flooded when should not"
++
++	bridge link set dev $br_port flood on
++
++	flood_test_do true $mac $ip $host1_if $host2_if
++	check_err $? "packet was not flooded when should"
++
++	print_result "unknown unicast flood"
++}
++
++flood_multicast_test()
++{
++	local mac=01:00:5e:00:00:01
++	local ip=239.0.0.1
++	local host1_if=$2
++	local host2_if=$3
++	local br_port=$1
++
++	RET=0
++
++	bridge link set dev $br_port mcast_flood off
++
++	flood_test_do false $mac $ip $host1_if $host2_if
++	check_err $? "packet flooded when should not"
++
++	bridge link set dev $br_port mcast_flood on
++
++	flood_test_do true $mac $ip $host1_if $host2_if
++	check_err $? "packet was not flooded when should"
++
++	print_result "unregistered multicast flood"
++}
++
++flood_test()
++{
++	# `br_port` is connected to `host2_if`
++	local host1_if=$2
++	local host2_if=$3
++	local br_port=$1
++
++	flood_unicast_test $br_port $host1_if $host2_if
++	flood_multicast_test $br_port $host1_if $host2_if
++}
 -- 
 2.14.3
 
