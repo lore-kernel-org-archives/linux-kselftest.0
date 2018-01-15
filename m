@@ -1,46 +1,45 @@
 From: idosch@mellanox.com (Ido Schimmel)
-Date: Mon, 15 Jan 2018 21:18:51 +0200
-Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 10/12] selftests:
-	forwarding: Allow to get netdev interfaces names from commandline
+Date: Mon, 15 Jan 2018 21:18:49 +0200
+Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 08/12] selftests:
+	forwarding: Add tc offload check helper
 In-Reply-To: <20180115191853.26129-1-idosch@mellanox.com>
 References: <20180115191853.26129-1-idosch@mellanox.com>
-Message-ID: <20180115191853.26129-11-idosch@mellanox.com>
+Message-ID: <20180115191853.26129-9-idosch@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180115191851.oCRmseoAiA7CQgJCXLvXCRJOTqR93TC-ajpX5mMmTWs@z>
+Message-ID: <20180115191849.dxmpp2GESeLAfiSmTSggXcc5jO_TNmjgIluXR5l0m3U@z>
 
 From: Jiri Pirko <jiri@mellanox.com>
 
 Signed-off-by: Jiri Pirko <jiri at mellanox.com>
 Signed-off-by: Ido Schimmel <idosch at mellanox.com>
 ---
- tools/testing/selftests/forwarding/lib.sh | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ tools/testing/selftests/forwarding/lib.sh | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/tools/testing/selftests/forwarding/lib.sh b/tools/testing/selftests/forwarding/lib.sh
-index ddc3ef77f21d..85dbbe83a243 100644
+index b814b5350378..346ec4283953 100644
 --- a/tools/testing/selftests/forwarding/lib.sh
 +++ b/tools/testing/selftests/forwarding/lib.sh
-@@ -34,6 +34,20 @@ fi
+@@ -198,6 +198,19 @@ forwarding_restore()
+        sysctl -q -w net.ipv4.conf.all.forwarding=$ipv4_fwd
+ }
  
- source forwarding.config
++tc_offload_check()
++{
++	for i in $(eval echo {1..$NUM_NETIFS}); do
++		ethtool -k ${NETIFS[p$i]} \
++			| grep "hw-tc-offload: on" &> /dev/null
++		if [[ $? -ne 0 ]]; then
++			return 1
++		fi
++	done
++
++	return 0
++}
++
+ ### Tests ###
  
-+# Load netdev names from command line
-+
-+count=0
-+
-+while [[ $# -gt 0 ]]; do
-+	if [[ "$count" -eq "0" ]]; then
-+		unset NETIFS
-+		declare -A NETIFS
-+	fi
-+	count=$((count + 1))
-+	NETIFS[p$count]="$1"
-+	shift
-+done
-+
- for i in $(eval echo {1..$NUM_NETIFS}); do
- 	ip link show dev ${NETIFS[p$i]} &> /dev/null
- 	if [[ $? -ne 0 ]]; then
+ ping_test()
 -- 
 2.14.3
 
