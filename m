@@ -1,119 +1,98 @@
-From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
-Date: Mon, 15 Jan 2018 14:10:59 -0500
-Subject: [Linux-kselftest-mirror] [PATCH for 4.16 05/10] membarrier:
-	selftest: Test shared expedited cmd
-In-Reply-To: <20180115191104.12437-1-mathieu.desnoyers@efficios.com>
-References: <20180115191104.12437-1-mathieu.desnoyers@efficios.com>
-Message-ID: <20180115191104.12437-6-mathieu.desnoyers@efficios.com>
+From: idosch@mellanox.com (Ido Schimmel)
+Date: Mon, 15 Jan 2018 21:18:41 +0200
+Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 00/12] selftests:
+	forwarding: Add VRF-based tests
+Message-ID: <20180115191853.26129-1-idosch@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180115191059.OelYQYe24-ephWx7GMXhrWYXPlWcZIdVutc_C-t5_1Q@z>
+Message-ID: <20180115191841.wMEUxsMpT8-FCtSM5-MkRbBFiuo5Ez-jcQlCqa18yg4@z>
 
-Test the new MEMBARRIER_CMD_SHARED_EXPEDITED and
-MEMBARRIER_CMD_REGISTER_SHARED_EXPEDITED commands.
+One of the nice things about network namespaces is that they allow one
+to easily create and test complex environments.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
-Acked-by: Shuah Khan <shuahkh at osg.samsung.com>
-CC: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
-CC: Peter Zijlstra <peterz at infradead.org>
-CC: Paul E. McKenney <paulmck at linux.vnet.ibm.com>
-CC: Boqun Feng <boqun.feng at gmail.com>
-CC: Andrew Hunter <ahh at google.com>
-CC: Maged Michael <maged.michael at gmail.com>
-CC: Avi Kivity <avi at scylladb.com>
-CC: Benjamin Herrenschmidt <benh at kernel.crashing.org>
-CC: Paul Mackerras <paulus at samba.org>
-CC: Michael Ellerman <mpe at ellerman.id.au>
-CC: Dave Watson <davejwatson at fb.com>
-CC: Alan Stern <stern at rowland.harvard.edu>
-CC: Will Deacon <will.deacon at arm.com>
-CC: Andy Lutomirski <luto at kernel.org>
-CC: Alice Ferrazzi <alice.ferrazzi at gmail.com>
-CC: Paul Elder <paul.elder at pitt.edu>
-CC: linux-kselftest at vger.kernel.org
-CC: linux-arch at vger.kernel.org
----
- .../testing/selftests/membarrier/membarrier_test.c | 51 +++++++++++++++++++++-
- 1 file changed, 50 insertions(+), 1 deletion(-)
+Unfortunately, these namespaces can not be used with actual switching
+ASICs, as their ports can not be migrated to other network namespaces
+(NETIF_F_NETNS_LOCAL) and most of them probably do not support the
+L1-separation provided by namespaces.
 
-diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
-index e6ee73d01fa1..bb9c58072c5c 100644
---- a/tools/testing/selftests/membarrier/membarrier_test.c
-+++ b/tools/testing/selftests/membarrier/membarrier_test.c
-@@ -132,6 +132,40 @@ static int test_membarrier_private_expedited_success(void)
- 	return 0;
- }
- 
-+static int test_membarrier_register_shared_expedited_success(void)
-+{
-+	int cmd = MEMBARRIER_CMD_REGISTER_SHARED_EXPEDITED, flags = 0;
-+	const char *test_name = "sys membarrier MEMBARRIER_CMD_REGISTER_SHARED_EXPEDITED";
-+
-+	if (sys_membarrier(cmd, flags) != 0) {
-+		ksft_exit_fail_msg(
-+			"%s test: flags = %d, errno = %d\n",
-+			test_name, flags, errno);
-+	}
-+
-+	ksft_test_result_pass(
-+		"%s test: flags = %d\n",
-+		test_name, flags);
-+	return 0;
-+}
-+
-+static int test_membarrier_shared_expedited_success(void)
-+{
-+	int cmd = MEMBARRIER_CMD_SHARED_EXPEDITED, flags = 0;
-+	const char *test_name = "sys membarrier MEMBARRIER_CMD_SHARED_EXPEDITED";
-+
-+	if (sys_membarrier(cmd, flags) != 0) {
-+		ksft_exit_fail_msg(
-+			"%s test: flags = %d, errno = %d\n",
-+			test_name, flags, errno);
-+	}
-+
-+	ksft_test_result_pass(
-+		"%s test: flags = %d\n",
-+		test_name, flags);
-+	return 0;
-+}
-+
- static int test_membarrier(void)
- {
- 	int status;
-@@ -154,6 +188,19 @@ static int test_membarrier(void)
- 	status = test_membarrier_private_expedited_success();
- 	if (status)
- 		return status;
-+	/*
-+	 * It is valid to send a shared membarrier from a non-registered
-+	 * process.
-+	 */
-+	status = test_membarrier_shared_expedited_success();
-+	if (status)
-+		return status;
-+	status = test_membarrier_register_shared_expedited_success();
-+	if (status)
-+		return status;
-+	status = test_membarrier_shared_expedited_success();
-+	if (status)
-+		return status;
- 	return 0;
- }
- 
-@@ -173,8 +220,10 @@ static int test_membarrier_query(void)
- 		}
- 		ksft_exit_fail_msg("sys_membarrier() failed\n");
- 	}
--	if (!(ret & MEMBARRIER_CMD_SHARED))
-+	if (!(ret & MEMBARRIER_CMD_SHARED)) {
-+		ksft_test_result_fail("sys_membarrier() CMD_SHARED query failed\n");
- 		ksft_exit_fail_msg("sys_membarrier is not supported.\n");
-+	}
- 
- 	ksft_test_result_pass("sys_membarrier available\n");
- 	return 0;
+However, a similar kind of flexibility can be achieved by using VRFs and
+by looping the switch ports together. For example:
+
+                             br0
+                              +
+               vrf-h1         |           vrf-h2
+                 +        +---+----+        +
+                 |        |        |        |
+    192.0.2.1/24 +        +        +        + 192.0.2.2/24
+               swp1     swp2     swp3     swp4
+                 +        +        +        +
+                 |        |        |        |
+                 +--------+        +--------+
+
+The VRFs act as lightweight namespaces representing hosts connected to
+the switch.
+
+This approach for testing switch ASICs has several advantages over the
+traditional method that requires multiple physical machines, to name a
+few:
+
+1. Only the device under test (DUT) is being tested without noise from
+other system.
+
+2. Ability to easily provision complex topologies. Testing bridging
+between 4-ports LAGs or 8-way ECMP requires many physical links that are
+not always available. With the VRF-based approach one merely needs to
+loopback more ports.
+
+These tests are written with switch ASICs in mind, but they can be run
+on any Linux box using veth pairs to emulate physical loopbacks.
+
+Feedback is is welcome. Particularly regarding the best location for
+these tests (e.g., current location, tools/testing/selftests/net).
+
+Thanks.
+
+Ido Schimmel (7):
+  selftests: forwarding: Add initial testing framework
+  selftests: forwarding: Add a test for FDB learning
+  selftests: forwarding: Add a test for flooded traffic
+  selftests: forwarding: Add a test for basic IPv4 and IPv6 routing
+  selftests: forwarding: Create test topology for multipath routing
+  selftests: forwarding: Test IPv4 weighted nexthops
+  selftests: forwarding: Test IPv6 weighted nexthops
+
+Jiri Pirko (5):
+  selftests: forwarding: Add tc offload check helper
+  selftests: forwarding: Add MAC get helper
+  selftests: forwarding: Allow to get netdev interfaces names from
+    commandline
+  selftests: forwarding: Allow to pass commandline options
+  selftests: forwarding: Introduce tc flower matching tests
+
+ tools/testing/selftests/Makefile                   |   1 +
+ tools/testing/selftests/forwarding/.gitignore      |   1 +
+ tools/testing/selftests/forwarding/Makefile        |   6 +
+ tools/testing/selftests/forwarding/README          |  56 +++
+ tools/testing/selftests/forwarding/bridge.sh       | 117 +++++++
+ tools/testing/selftests/forwarding/config          |  12 +
+ .../selftests/forwarding/forwarding.config.sample  |  19 +
+ tools/testing/selftests/forwarding/lib.sh          | 383 +++++++++++++++++++++
+ tools/testing/selftests/forwarding/router.sh       | 131 +++++++
+ .../selftests/forwarding/router_multipath.sh       | 321 +++++++++++++++++
+ tools/testing/selftests/forwarding/tc_flower.sh    | 261 ++++++++++++++
+ 11 files changed, 1308 insertions(+)
+ create mode 100644 tools/testing/selftests/forwarding/.gitignore
+ create mode 100644 tools/testing/selftests/forwarding/Makefile
+ create mode 100644 tools/testing/selftests/forwarding/README
+ create mode 100755 tools/testing/selftests/forwarding/bridge.sh
+ create mode 100644 tools/testing/selftests/forwarding/config
+ create mode 100644 tools/testing/selftests/forwarding/forwarding.config.sample
+ create mode 100644 tools/testing/selftests/forwarding/lib.sh
+ create mode 100755 tools/testing/selftests/forwarding/router.sh
+ create mode 100755 tools/testing/selftests/forwarding/router_multipath.sh
+ create mode 100755 tools/testing/selftests/forwarding/tc_flower.sh
+
 -- 
-2.11.0
+2.14.3
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
