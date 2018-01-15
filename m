@@ -1,73 +1,48 @@
 From: idosch@mellanox.com (Ido Schimmel)
-Date: Mon, 15 Jan 2018 21:18:45 +0200
-Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 04/12] selftests:
-	forwarding: Add a test for basic IPv4 and IPv6 routing
+Date: Mon, 15 Jan 2018 21:18:46 +0200
+Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 05/12] selftests:
+	forwarding: Create test topology for multipath routing
 In-Reply-To: <20180115191853.26129-1-idosch@mellanox.com>
 References: <20180115191853.26129-1-idosch@mellanox.com>
-Message-ID: <20180115191853.26129-5-idosch@mellanox.com>
+Message-ID: <20180115191853.26129-6-idosch@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180115191845.t6vvFWWFxHGmRK37IL_xDJMUIv0_zAxqWgZyW4YRVfQ@z>
+Message-ID: <20180115191846.0x3IivVgs4-8lsmVyDfQLyO_OUT_4Xj8flPPsqLwfac@z>
 
-Configure two hosts which are directly connected to the same router and
-test IPv4 and IPv6 ping. Use a large MTU and check that ping is
-unaffected.
+Create a topology with two hosts, each directly connected to a different
+router. Both routers are connected using two links, enabling multipath
+routing.
+
+Test IPv4 and IPv6 ping using default MTU and large MTU.
 
 Signed-off-by: Ido Schimmel <idosch at mellanox.com>
 ---
- tools/testing/selftests/forwarding/Makefile  |   2 +-
- tools/testing/selftests/forwarding/lib.sh    |  15 +++
- tools/testing/selftests/forwarding/router.sh | 131 +++++++++++++++++++++++++++
- 3 files changed, 147 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/forwarding/router.sh
+ tools/testing/selftests/forwarding/Makefile        |   2 +-
+ .../selftests/forwarding/router_multipath.sh       | 215 +++++++++++++++++++++
+ 2 files changed, 216 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/forwarding/router_multipath.sh
 
 diff --git a/tools/testing/selftests/forwarding/Makefile b/tools/testing/selftests/forwarding/Makefile
-index ef9380c49123..4efb0c96af94 100644
+index 4efb0c96af94..48e5de22db05 100644
 --- a/tools/testing/selftests/forwarding/Makefile
 +++ b/tools/testing/selftests/forwarding/Makefile
 @@ -1,6 +1,6 @@
  # SPDX-License-Identifier: GPL-2.0
  # Makefile for forwarding selftests
  
--TEST_PROGS := bridge.sh
-+TEST_PROGS := bridge.sh router.sh
+-TEST_PROGS := bridge.sh router.sh
++TEST_PROGS := bridge.sh router.sh router_multipath.sh
  
  include ../lib.mk
-diff --git a/tools/testing/selftests/forwarding/lib.sh b/tools/testing/selftests/forwarding/lib.sh
-index 03e5253b30d8..11b6f6101d10 100644
---- a/tools/testing/selftests/forwarding/lib.sh
-+++ b/tools/testing/selftests/forwarding/lib.sh
-@@ -176,6 +176,21 @@ bridge_ageing_time_get()
- 	echo $((ageing_time / 100))
- }
- 
-+forwarding_enable()
-+{
-+       ipv4_fwd=$(sysctl -n net.ipv4.conf.all.forwarding)
-+       ipv6_fwd=$(sysctl -n net.ipv6.conf.all.forwarding)
-+
-+       sysctl -q -w net.ipv4.conf.all.forwarding=1
-+       sysctl -q -w net.ipv6.conf.all.forwarding=1
-+}
-+
-+forwarding_restore()
-+{
-+       sysctl -q -w net.ipv6.conf.all.forwarding=$ipv6_fwd
-+       sysctl -q -w net.ipv4.conf.all.forwarding=$ipv4_fwd
-+}
-+
- ### Tests ###
- 
- ping_test()
-diff --git a/tools/testing/selftests/forwarding/router.sh b/tools/testing/selftests/forwarding/router.sh
+diff --git a/tools/testing/selftests/forwarding/router_multipath.sh b/tools/testing/selftests/forwarding/router_multipath.sh
 new file mode 100755
-index 000000000000..79ad6cba9118
+index 000000000000..70f9f2c3794e
 --- /dev/null
-+++ b/tools/testing/selftests/forwarding/router.sh
-@@ -0,0 +1,131 @@
++++ b/tools/testing/selftests/forwarding/router_multipath.sh
+@@ -0,0 +1,215 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +
-+NUM_NETIFS=4
++NUM_NETIFS=8
 +source lib.sh
 +
 +h1_create()
@@ -124,46 +99,129 @@ index 000000000000..79ad6cba9118
 +	vrf_destroy "vrf-h2" 2
 +}
 +
-+router_create()
++router1_create()
 +{
-+	ip link set dev $rp1 up
-+	ip link set dev $rp2 up
++	vrf_create "vrf-r1" 3
++	ip link set dev $rp11 master vrf-r1
++	ip link set dev $rp12 master vrf-r1
++	ip link set dev $rp13 master vrf-r1
 +
-+	ip address add 192.0.2.1/24 dev $rp1
-+	ip address add 2001:db8:1::1/64 dev $rp1
++	ip link set dev vrf-r1 up
++	ip link set dev $rp11 up
++	ip link set dev $rp12 up
++	ip link set dev $rp13 up
 +
-+	ip address add 198.51.100.1/24 dev $rp2
-+	ip address add 2001:db8:2::1/64 dev $rp2
++	ip address add 192.0.2.1/24 dev $rp11
++	ip address add 2001:db8:1::1/64 dev $rp11
++
++	ip address add 169.254.2.12/24 dev $rp12
++	ip address add fe80:2::12/64 dev $rp12
++
++	ip address add 169.254.3.13/24 dev $rp13
++	ip address add fe80:3::13/64 dev $rp13
++
++	ip route add 198.51.100.0/24 vrf vrf-r1 \
++		nexthop via 169.254.2.22 dev $rp12 \
++		nexthop via 169.254.3.23 dev $rp13
++	ip route add 2001:db8:2::/64 vrf vrf-r1 \
++		nexthop via fe80:2::22 dev $rp12 \
++		nexthop via fe80:3::23 dev $rp13
 +}
 +
-+router_destroy()
++router1_destroy()
 +{
-+	ip address del 2001:db8:2::1/64 dev $rp2
-+	ip address del 198.51.100.1/24 dev $rp2
++	ip route del 2001:db8:2::/64 vrf vrf-r1
++	ip route del 198.51.100.0/24 vrf vrf-r1
 +
-+	ip address del 2001:db8:1::1/64 dev $rp1
-+	ip address del 192.0.2.1/24 dev $rp1
++	ip address del fe80:3::13/64 dev $rp13
++	ip address del 169.254.3.13/24 dev $rp13
 +
-+	ip link set dev $rp2 down
-+	ip link set dev $rp1 down
++	ip address del fe80:2::12/64 dev $rp12
++	ip address del 169.254.2.12/24 dev $rp12
++
++	ip address del 2001:db8:1::1/64 dev $rp11
++	ip address del 192.0.2.1/24 dev $rp11
++
++	ip link set dev $rp13 down
++	ip link set dev $rp12 down
++	ip link set dev $rp11 down
++
++	vrf_destroy "vrf-r1" 3
++}
++
++router2_create()
++{
++	vrf_create "vrf-r2" 4
++	ip link set dev $rp21 master vrf-r2
++	ip link set dev $rp22 master vrf-r2
++	ip link set dev $rp23 master vrf-r2
++
++	ip link set dev vrf-r2 up
++	ip link set dev $rp21 up
++	ip link set dev $rp22 up
++	ip link set dev $rp23 up
++
++	ip address add 198.51.100.1/24 dev $rp21
++	ip address add 2001:db8:2::1/64 dev $rp21
++
++	ip address add 169.254.2.22/24 dev $rp22
++	ip address add fe80:2::22/64 dev $rp22
++
++	ip address add 169.254.3.23/24 dev $rp23
++	ip address add fe80:3::23/64 dev $rp23
++
++	ip route add 192.0.2.0/24 vrf vrf-r2 \
++		nexthop via 169.254.2.12 dev $rp22 \
++		nexthop via 169.254.3.13 dev $rp23
++	ip route add 2001:db8:1::/64 vrf vrf-r2 \
++		nexthop via fe80:2::12 dev $rp22 \
++		nexthop via fe80:3::13 dev $rp23
++}
++
++router2_destroy()
++{
++	ip route del 2001:db8:1::/64 vrf vrf-r2
++	ip route del 192.0.2.0/24 vrf vrf-r2
++
++	ip address del fe80:3::23/64 dev $rp23
++	ip address del 169.254.3.23/24 dev $rp23
++
++	ip address del fe80:2::22/64 dev $rp22
++	ip address del 169.254.2.22/24 dev $rp22
++
++	ip address del 2001:db8:2::1/64 dev $rp21
++	ip address del 198.51.100.1/24 dev $rp21
++
++	ip link set dev $rp23 down
++	ip link set dev $rp22 down
++	ip link set dev $rp21 down
++
++	vrf_destroy "vrf-r2" 4
 +}
 +
 +setup_prepare()
 +{
 +	h1=${NETIFS[p1]}
-+	rp1=${NETIFS[p2]}
++	rp11=${NETIFS[p2]}
 +
-+	rp2=${NETIFS[p3]}
-+	h2=${NETIFS[p4]}
++	rp12=${NETIFS[p3]}
++	rp22=${NETIFS[p4]}
 +
-+	netifs_arr=($h1 $rp1 $rp2 $h2)
++	rp13=${NETIFS[p5]}
++	rp23=${NETIFS[p6]}
++
++	rp21=${NETIFS[p7]}
++	h2=${NETIFS[p8]}
++
++	netifs_arr=($h1 $rp11 $rp12 $rp22 $rp13 $rp23 $rp21 $h2)
 +
 +	vrf_prepare
 +
 +	h1_create
 +	h2_create
 +
-+	router_create
++	router1_create
++	router2_create
 +
 +	forwarding_enable
 +}
@@ -172,7 +230,8 @@ index 000000000000..79ad6cba9118
 +{
 +	forwarding_restore
 +
-+	router_destroy
++	router2_destroy
++	router1_destroy
 +
 +	h2_destroy
 +	h1_destroy
