@@ -1,37 +1,53 @@
 From: idosch at mellanox.com (Ido Schimmel)
-Date: Mon, 15 Jan 2018 21:18:50 +0200
-Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 09/12] selftests:
-	forwarding: Add MAC get helper
+Date: Mon, 15 Jan 2018 21:18:52 +0200
+Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 11/12] selftests:
+	forwarding: Allow to pass commandline options
 In-Reply-To: <20180115191853.26129-1-idosch@mellanox.com>
 References: <20180115191853.26129-1-idosch@mellanox.com>
-Message-ID: <20180115191853.26129-10-idosch@mellanox.com>
+Message-ID: <20180115191853.26129-12-idosch@mellanox.com>
 
 From: Jiri Pirko <jiri at mellanox.com>
 
 Signed-off-by: Jiri Pirko <jiri at mellanox.com>
 Signed-off-by: Ido Schimmel <idosch at mellanox.com>
 ---
- tools/testing/selftests/forwarding/lib.sh | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/testing/selftests/forwarding/lib.sh | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/forwarding/lib.sh b/tools/testing/selftests/forwarding/lib.sh
-index 346ec4283953..ddc3ef77f21d 100644
+index 85dbbe83a243..b9b049af93cb 100644
 --- a/tools/testing/selftests/forwarding/lib.sh
 +++ b/tools/testing/selftests/forwarding/lib.sh
-@@ -172,6 +172,13 @@ link_stats_tx_packets_get()
-        ip -j -s link show dev $if_name | jq '.[]["stats644"]["tx"]["packets"]'
- }
+@@ -34,17 +34,23 @@ fi
  
-+mac_get()
-+{
-+	local if_name=$1
-+
-+	ip -j link show dev $if_name | jq -r '.[]["address"]'
-+}
-+
- bridge_ageing_time_get()
- {
- 	local ageing_time
+ source forwarding.config
+ 
+-# Load netdev names from command line
++# Load options and netdev names from command line
+ 
+ count=0
+ 
+ while [[ $# -gt 0 ]]; do
+-	if [[ "$count" -eq "0" ]]; then
+-		unset NETIFS
+-		declare -A NETIFS
++	echo $1 | grep "=" &> /dev/null
++	if [[ $? -eq 0 ]]; then
++		splitarr=(${1//=/ })
++		OPTIONS[${splitarr[0]}]=${splitarr[1]}
++	else
++		if [[ "$count" -eq "0" ]]; then
++			unset NETIFS
++			declare -A NETIFS
++		fi
++		count=$((count + 1))
++		NETIFS[p$count]="$1"
+ 	fi
+-	count=$((count + 1))
+-	NETIFS[p$count]="$1"
+ 	shift
+ done
+ 
 -- 
 2.14.3
 
