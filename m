@@ -1,37 +1,48 @@
-From: bp@alien8.de (Borislav Petkov)
-Date: Mon, 15 Jan 2018 15:59:42 +0100
-Subject: [Linux-kselftest-mirror] selftests: run all tests
-Message-ID: <20180115145942.s3dgy457xwhn6lwv@pd.tnic>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Mon, 15 Jan 2018 13:05:57 -0500
+Subject: [Linux-kselftest-mirror] [RESEND PATCH 0/2] selftests: ftrace:
+ Fix multiple-kprobe testcase
+In-Reply-To: <151593777761.23875.10360397710751679883.stgit@devbox>
+References: <151593777761.23875.10360397710751679883.stgit@devbox>
+Message-ID: <20180115130557.34aaac4f@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180115145942.WZyK9InHff9JmeCSSxz-1ocdDEuOifOvNo71WuKKvpc@z>
+Message-ID: <20180115180557.UOkEd-VoV3cXFvbmfQESt8_elR-twNR-k5OZlKt9Pdc@z>
 
-Hi,
 
-do we want something like that with which one can run all selftests
-quickly?
+Shuah,
 
-Or is there a way already which I couldn't find?
+Want to take these in your tree? You can add:
 
----
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 5d4f10ac2af2..3ed42fa50acc 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -77,3 +77,8 @@ $(OUTPUT)/test_syscall_vdso_32: thunks_32.S
- # state.
- $(OUTPUT)/check_initial_reg_state_32: CFLAGS += -Wl,-ereal_start -static
- $(OUTPUT)/check_initial_reg_state_64: CFLAGS += -Wl,-ereal_start -static
-+
-+run_all:
-+	for f in $(TEST_PROGS); do \
-+		$$f; \
-+	done
+Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
 
--- 
-Regards/Gruss,
-    Boris.
+-- Steve
 
-Good mailing practices for 400: avoid top-posting and trim the reply.
+
+On Sun, 14 Jan 2018 22:49:37 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
+
+> Hi,
+> 
+> These patches are fixing a bug and improve testcase to
+> ensure adding 256 kprobe events for test.
+> 
+> I've just updated to the latest kselftest/master branch.
+> 
+> Thank you,
+> 
+> ---
+> 
+> Masami Hiramatsu (2):
+>       [BUGFIX] selftest: ftrace: Fix to pick text symbols for kprobes
+>       selftest: ftrace: Fix to add 256 kprobe events correctly
+> 
+> 
+>  .../ftrace/test.d/kprobe/multiple_kprobes.tc       |   21 +++++++++++++++++---
+>  1 file changed, 18 insertions(+), 3 deletions(-)
+> 
+> --
+> Masami Hiramatsu (Linaro) <mhiramat at kernel.org>
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
