@@ -1,35 +1,77 @@
-From: andrew at lunn.ch (Andrew Lunn)
-Date: Mon, 15 Jan 2018 22:01:40 +0100
-Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 02/12] selftests:
- forwarding: Add a test for FDB learning
-In-Reply-To: <20180115200520.GA27952@splinter>
+From: jiri at resnulli.us (Jiri Pirko)
+Date: Tue, 16 Jan 2018 00:17:35 +0100
+Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 00/12] selftests:
+ forwarding: Add VRF-based tests
+In-Reply-To: <df929bcd-f15e-1897-fc54-c9aba9b65667@gmail.com>
 References: <20180115191853.26129-1-idosch@mellanox.com>
- <20180115191853.26129-3-idosch@mellanox.com>
- <20180115194146.GA31030@lunn.ch> <20180115200520.GA27952@splinter>
-Message-ID: <20180115210140.GB31030@lunn.ch>
+ <df929bcd-f15e-1897-fc54-c9aba9b65667@gmail.com>
+Message-ID: <20180115231735.GI2103@nanopsycho>
 
-> Good idea. We can actually do that with only two ports. Disable flooding
-> on port A, check packets with DMAC A don't egress the port. Inject a
-> packet with SMAC A through port A, check packets with DMAC A egress the
-> port.
+Mon, Jan 15, 2018 at 09:14:56PM CET, dsahern at gmail.com wrote:
+>On 1/15/18 12:18 PM, Ido Schimmel wrote:
+>> One of the nice things about network namespaces is that they allow one
+>> to easily create and test complex environments.
+>> 
+>> Unfortunately, these namespaces can not be used with actual switching
+>> ASICs, as their ports can not be migrated to other network namespaces
+>> (NETIF_F_NETNS_LOCAL) and most of them probably do not support the
+>> L1-separation provided by namespaces.
+>> 
+>> However, a similar kind of flexibility can be achieved by using VRFs and
+>> by looping the switch ports together. For example:
+>> 
+>>                              br0
+>>                               +
+>>                vrf-h1         |           vrf-h2
+>>                  +        +---+----+        +
+>>                  |        |        |        |
+>>     192.0.2.1/24 +        +        +        + 192.0.2.2/24
+>>                swp1     swp2     swp3     swp4
+>>                  +        +        +        +
+>>                  |        |        |        |
+>>                  +--------+        +--------+
+>> 
+>> The VRFs act as lightweight namespaces representing hosts connected to
+>> the switch.
+>> 
+>> This approach for testing switch ASICs has several advantages over the
+>> traditional method that requires multiple physical machines, to name a
+>> few:
+>> 
+>> 1. Only the device under test (DUT) is being tested without noise from
+>> other system.
+>> 
+>> 2. Ability to easily provision complex topologies. Testing bridging
+>> between 4-ports LAGs or 8-way ECMP requires many physical links that are
+>> not always available. With the VRF-based approach one merely needs to
+>> loopback more ports.
+>> 
+>> These tests are written with switch ASICs in mind, but they can be run
+>> on any Linux box using veth pairs to emulate physical loopbacks.
+>> 
+>> Feedback is is welcome. Particularly regarding the best location for
+>> these tests (e.g., current location, tools/testing/selftests/net).
+>> 
+>
+>Awesome. Thanks for working on this.
+>
+>A couple of feature requests:
+>1. an option to pause on any error to allow inspection of the setup
 
-Hi Ido
+Good idea. Should be easy to add.
 
-You could do it like that. But that is more testing that you can
-disable flooding. And how often do users do that?
 
-What does your marketing department tell you about typical users of
-your switches? For DSA, we typically have 4 or 5 ports. 4 of those
-ports are typically in one bridge, and the remaining port is used
-alone. That is the sort of setup i test in DSA. Your switches
-typically have 40 ports? Do your users setup 20 bridges each with two
-ports?
+>
+>2. an option to configure the system and leave it in that state (ie,
+>don't trap exit and run cleanup). By extension, an option is needed to
+>do cleanup only.
 
-I would test the use cases which people actually use. I expect people
-setup a bridge with multiple ports, and they send traffic without
-changing any defaults. So that setup is what i would test.
+Checkout the last patch. It has "noprepare" and "nocleanup" options.
+So I guess you imagine something like that, but generic?
 
-	Andrew
+
+>
+>This framework will be very useful.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
