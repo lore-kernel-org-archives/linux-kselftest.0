@@ -1,73 +1,106 @@
-From: idosch at idosch.org (Ido Schimmel)
-Date: Tue, 16 Jan 2018 09:59:18 +0200
-Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 00/12] selftests:
- forwarding: Add VRF-based tests
-In-Reply-To: <bc5439a0-5761-47c8-7d3a-d05bb83b4e87@gmail.com>
-References: <20180115191853.26129-1-idosch@mellanox.com>
- <df929bcd-f15e-1897-fc54-c9aba9b65667@gmail.com>
- <20180115231735.GI2103@nanopsycho>
- <bc5439a0-5761-47c8-7d3a-d05bb83b4e87@gmail.com>
-Message-ID: <20180116075917.GA770@splinter>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Tue, 16 Jan 2018 12:00:45 +0100
+Subject: [Linux-kselftest-mirror] [PATCH] selftests: sync: missing
+	CFLAGS while compiling
+In-Reply-To: <7273d0ce-3548-60f7-c331-bdf9bd9a3ec2@kernel.org>
+References: <20180105163323.22920-1-anders.roxell@linaro.org>
+ <7273d0ce-3548-60f7-c331-bdf9bd9a3ec2@kernel.org>
+Message-ID: <CADYN=9LkAQnwHbADrt0qCsrXgREzTkFGUppfKrvNiwgDcamYbw@mail.gmail.com>
 
-On Mon, Jan 15, 2018 at 04:48:25PM -0700, David Ahern wrote:
-> On 1/15/18 4:17 PM, Jiri Pirko wrote:
-> >> A couple of feature requests:
-> >> 1. an option to pause on any error to allow inspection of the setup
-> > 
-> > Good idea. Should be easy to add.
-> 
-> Here is a snippet from my vrf test script:
-> 
-> PAUSE_ON_FAIL=no
-> -p option sets PAUSE_ON_FAIL=yes
-> 
-> log_test()
-> {
->         local rc=$1
->         local expected=$2
->         local msg="$3"
-> 
->         if [ ${rc} -eq ${expected} ]; then
->                 nsuccess=$((nsuccess+1))
->                 printf "\n    TEST: %-80s  [ OK ]\n" "${msg}"
->         else
->                 nfail=$((nfail+1))
->                 printf "\n    TEST: %-80s  [FAIL]\n" "${msg}"
->                 if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
->                         echo
->                         echo "hit enter to continue, 'q' to quit"
->                         read a
->                         [ "$a" = "q" ] && exit 1
->                 fi
->         fi
-> }
+On 10 January 2018 at 01:05, Shuah Khan <shuah at kernel.org> wrote:
+> On 01/05/2018 09:33 AM, Anders Roxell wrote:
+>> Based on patch: https://patchwork.kernel.org/patch/10042045/
+>>
+>> arch64-linux-gnu-gcc -c sync.c -o sync/sync.o
+>> sync.c:42:29: fatal error: linux/sync_file.h: No such file or directory
+>>  #include <linux/sync_file.h>
+>>                              ^
+>> CFLAGS is not used during the compile step, so the system instead of
+>> kernel headers are used.  Fix this by using lib.mk's compile rules and
+>> remove CFLAGS from the linking step.
+>
+> Hmm. The changes don't match the change log. It odes more than just
+> removing LDFLAGS from compile step,
 
-Nice. Will add.
+oh, you are correct. I'm sorry.
+I will re-spin the patch and make the changelog reflect the actual change
+next time.
 
-[...]
+>
+>>
+>> Reported-by: Lei Yang <Lei.Yang at windriver.com>
+>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+>> ---
+>>  tools/testing/selftests/sync/Makefile | 8 +-------
+>>  1 file changed, 1 insertion(+), 7 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/sync/Makefile b/tools/testing/selftests/sync/Makefile
+>> index b3c8ba3cb668..58b9336d6c84 100644
+>> --- a/tools/testing/selftests/sync/Makefile
+>> +++ b/tools/testing/selftests/sync/Makefile
+>> @@ -27,12 +27,6 @@ OBJS := $(patsubst %,$(OUTPUT)/%,$(OBJS))
+>>  TESTS := $(patsubst %,$(OUTPUT)/%,$(TESTS))
+>>
+>>  $(TEST_CUSTOM_PROGS): $(TESTS) $(OBJS)
+>> -     $(CC) -o $(TEST_CUSTOM_PROGS) $(OBJS) $(TESTS) $(CFLAGS) $(LDFLAGS)
+>
+> So why not just delete $(LDFLAGS)??
+> $(CC) -o $(TEST_CUSTOM_PROGS) $(OBJS) $(TESTS) $(CFLAGS)
+>
+>> -
+>> -$(OBJS): $(OUTPUT)/%.o: %.c
+>> -     $(CC) -c $^ -o $@
+>> -
+>> -$(TESTS): $(OUTPUT)/%.o: %.c
+>> -     $(CC) -c $^ -o $@
+>> +     $(CC) -o $(TEST_CUSTOM_PROGS) $(OBJS) $(TESTS) $(LDFLAGS)
+>>
+>>  EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(OBJS) $(TESTS)
+>>
+>
+> I can't take this patch the way it is. It breaks the following
+> use-case:
+>
+> make O=/tmp/kselftest TARGETS=sync kselftest
 
-> >> 2. an option to configure the system and leave it in that state (ie,
-> >> don't trap exit and run cleanup). By extension, an option is needed to
-> >> do cleanup only.
-> > 
-> > Checkout the last patch. It has "noprepare" and "nocleanup" options.
-> > So I guess you imagine something like that, but generic?
-> > 
-> 
-> Sure that is one way.
+Oh, I've missed that use-case. Will fix that in the re-spin of the patch.
 
-I think we can do something similar to your 'PAUSE_ON_FAIL' option. At
-the end of the run the system is supposed to be configured as it was in
-the beginning of the test, so we can have the trap wait for user to hit
-'c' for cleanup if the option is set. By default it will run cleanup.
+To fix this build issue when cross compiling
 
-> Something else I have found useful is to not redirect stdout/stderr from
-> the commands and to have tags that can be grep'ed to provide a summary.
-> I run my VRF test script as:
-> 
-> $ run-test.sh 2>&1 | tee vrf-results.txt | grep TEST
+--- a/tools/testing/selftests/sync/Makefile
++++ b/tools/testing/selftests/sync/Makefile
+@@ -30,7 +30,7 @@ $(TEST_CUSTOM_PROGS): $(TESTS) $(OBJS)
+        $(CC) -o $(TEST_CUSTOM_PROGS) $(OBJS) $(TESTS) $(CFLAGS) $(LDFLAGS)
 
-Good idea. Will change.
+ $(OBJS): $(OUTPUT)/%.o: %.c
+-       $(CC) -c $^ -o $@
++       $(CC) -c $^ -o $@ $(CFLAGS)
+
+ $(TESTS): $(OUTPUT)/%.o: %.c
+        $(CC) -c $^ -o $@
+
+
+The other issue that needs to be addressed somehow would be make the
+build system do
+headers_install or if that should be a prerequisite.
+I've seen ways to install the headers: "make -C ../../../..
+headers_install" if the headers
+aren't there, in
+tools/testing/selftests/gpio/Makefile
+tools/testing/selftests/vm/Makefile
+
+Is that the preferred way or should an update in
+Documentation/dev-tools/kselftest.rst be done to say do "make
+headers_install" before
+building kselftests?
+
+
+Cheers,
+Anders
+
+>
+> thanks,
+> -- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
