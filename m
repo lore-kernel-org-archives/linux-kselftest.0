@@ -1,78 +1,73 @@
-From: mpe at ellerman.id.au (Michael Ellerman)
-Date: Tue, 16 Jan 2018 17:10:39 +1100
-Subject: [Linux-kselftest-mirror] [PATCH] selftests: Fix loss of test output
-	in run_kselftests.sh
-Message-ID: <20180116061039.16713-1-mpe@ellerman.id.au>
+From: idosch at idosch.org (Ido Schimmel)
+Date: Tue, 16 Jan 2018 09:59:18 +0200
+Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 00/12] selftests:
+ forwarding: Add VRF-based tests
+In-Reply-To: <bc5439a0-5761-47c8-7d3a-d05bb83b4e87@gmail.com>
+References: <20180115191853.26129-1-idosch@mellanox.com>
+ <df929bcd-f15e-1897-fc54-c9aba9b65667@gmail.com>
+ <20180115231735.GI2103@nanopsycho>
+ <bc5439a0-5761-47c8-7d3a-d05bb83b4e87@gmail.com>
+Message-ID: <20180116075917.GA770@splinter>
 
-Commit fbcab13d2e25 ("selftests: silence test output by default")
-changed the run_tests logic as well as the logic to generate
-run_kselftests.sh to redirect test output away from the console.
+On Mon, Jan 15, 2018 at 04:48:25PM -0700, David Ahern wrote:
+> On 1/15/18 4:17 PM, Jiri Pirko wrote:
+> >> A couple of feature requests:
+> >> 1. an option to pause on any error to allow inspection of the setup
+> > 
+> > Good idea. Should be easy to add.
+> 
+> Here is a snippet from my vrf test script:
+> 
+> PAUSE_ON_FAIL=no
+> -p option sets PAUSE_ON_FAIL=yes
+> 
+> log_test()
+> {
+>         local rc=$1
+>         local expected=$2
+>         local msg="$3"
+> 
+>         if [ ${rc} -eq ${expected} ]; then
+>                 nsuccess=$((nsuccess+1))
+>                 printf "\n    TEST: %-80s  [ OK ]\n" "${msg}"
+>         else
+>                 nfail=$((nfail+1))
+>                 printf "\n    TEST: %-80s  [FAIL]\n" "${msg}"
+>                 if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
+>                         echo
+>                         echo "hit enter to continue, 'q' to quit"
+>                         read a
+>                         [ "$a" = "q" ] && exit 1
+>                 fi
+>         fi
+> }
 
-As discussed on the list and at kernel summit, this is not a desirable
-default as it means in order to debug a failure the console output is
-not sufficient, you also need access to the test machine to get the
-full test logs. Additionally it's impolite to write directly to
-/tmp/$TEST_NAME on shared systems.
+Nice. Will add.
 
-The change to the run_tests logic was reverted in commit
-a323335e62cc ("selftests: lib.mk: print individual test results to
-console by default"), and instead a summary option was added so that
-quiet output could be requested.
+[...]
 
-However the change to run_kselftests.sh was left as-is.
+> >> 2. an option to configure the system and leave it in that state (ie,
+> >> don't trap exit and run cleanup). By extension, an option is needed to
+> >> do cleanup only.
+> > 
+> > Checkout the last patch. It has "noprepare" and "nocleanup" options.
+> > So I guess you imagine something like that, but generic?
+> > 
+> 
+> Sure that is one way.
 
-This commit applies the same logic to the run_kselftests.sh code, ie.
-the script now takes a "--summary" option which suppresses the output,
-but shows all output by default.
+I think we can do something similar to your 'PAUSE_ON_FAIL' option. At
+the end of the run the system is supposed to be configured as it was in
+the beginning of the test, so we can have the trap wait for user to hit
+'c' for cleanup if the option is set. By default it will run cleanup.
 
-Additionally instead of writing to /tmp/$TEST_NAME the output is
-redirected to the directory where the generated test script is
-located.
+> Something else I have found useful is to not redirect stdout/stderr from
+> the commands and to have tags that can be grep'ed to provide a summary.
+> I run my VRF test script as:
+> 
+> $ run-test.sh 2>&1 | tee vrf-results.txt | grep TEST
 
-Fixes: fbcab13d2e25 ("selftests: silence test output by default")
-Signed-off-by: Michael Ellerman <mpe at ellerman.id.au>
----
- tools/testing/selftests/Makefile | 9 ++++++++-
- tools/testing/selftests/lib.mk   | 2 +-
- 2 files changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index eaf599dc2137..7442dfb73b7f 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -116,8 +116,15 @@ ifdef INSTALL_PATH
- 
- 	@# Ask all targets to emit their test scripts
- 	echo "#!/bin/sh" > $(ALL_SCRIPT)
--	echo "cd \$$(dirname \$$0)" >> $(ALL_SCRIPT)
-+	echo "BASE_DIR=\$$(realpath \$$(dirname \$$0))" >> $(ALL_SCRIPT)
-+	echo "cd \$$BASE_DIR" >> $(ALL_SCRIPT)
- 	echo "ROOT=\$$PWD" >> $(ALL_SCRIPT)
-+	echo "if [ \"\$$1\" = \"--summary\" ]; then" >> $(ALL_SCRIPT)
-+	echo "  OUTPUT=\$$BASE_DIR/output.log" >> $(ALL_SCRIPT)
-+	echo "  cat /dev/null > \$$OUTPUT" >> $(ALL_SCRIPT)
-+	echo "else" >> $(ALL_SCRIPT)
-+	echo "  OUTPUT=/dev/stdout" >> $(ALL_SCRIPT)
-+	echo "fi" >> $(ALL_SCRIPT)
- 
- 	for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 5bef05d6ba39..7de482a0519d 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -77,7 +77,7 @@ endif
- define EMIT_TESTS
- 	@for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
- 		BASENAME_TEST=`basename $$TEST`;	\
--		echo "(./$$BASENAME_TEST > /tmp/$$BASENAME_TEST 2>&1 && echo \"selftests: $$BASENAME_TEST [PASS]\") || echo \"selftests: $$BASENAME_TEST [FAIL]\""; \
-+		echo "(./$$BASENAME_TEST >> \$$OUTPUT 2>&1 && echo \"selftests: $$BASENAME_TEST [PASS]\") || echo \"selftests: $$BASENAME_TEST [FAIL]\""; \
- 	done;
- endef
- 
--- 
-2.14.3
-
+Good idea. Will change.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
