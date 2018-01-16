@@ -1,28 +1,28 @@
-From: bp at alien8.de (Borislav Petkov)
-Date: Tue, 16 Jan 2018 12:54:07 +0100
-Subject: [Linux-kselftest-mirror] selftests: run all tests
-In-Reply-To: <20180116114411.u4cqtvzw6evwnehu@pd.tnic>
-References: <20180115145942.s3dgy457xwhn6lwv@pd.tnic>
- <87tvvmcp0u.fsf@concordia.ellerman.id.au>
- <20180116114411.u4cqtvzw6evwnehu@pd.tnic>
-Message-ID: <20180116115407.xqlu6bfvqcwoxszg@pd.tnic>
+From: shuah at kernel.org (Shuah Khan)
+Date: Tue, 16 Jan 2018 09:33:51 -0700
+Subject: [Linux-kselftest-mirror] [RESEND PATCH 0/2] selftests: ftrace:
+ Fix multiple-kprobe testcase
+In-Reply-To: <20180115130557.34aaac4f@gandalf.local.home>
+References: <151593777761.23875.10360397710751679883.stgit@devbox>
+ <20180115130557.34aaac4f@gandalf.local.home>
+Message-ID: <fd8a6383-da88-e055-a9f9-cce7337c0fca@kernel.org>
 
-On Tue, Jan 16, 2018 at 12:44:28PM +0100, Borislav Petkov wrote:
-> Ah, that was hidden in the included lib.mk, thanks.
+On 01/15/2018 11:05 AM, Steven Rostedt wrote:
 > 
-> I wonder if we should make it more user-friendly by adding a help target
-> like for the main Makefile...
+> Shuah,
+> 
+> Want to take these in your tree? You can add:
+> 
+> Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+> 
+> -- Steve
 
-One more point:
+Thanks. 2 patches in the series are now in linux-kselftest next
+with Steve's Acked-by
 
-What I do is copy the x86/ folder to a test box and run all tests there.
-If the lib.mk is not copied, run_tests is missing....
+thanks,
+-- Shuah
 
--- 
-Regards/Gruss,
-    Boris.
-
-Good mailing practices for 400: avoid top-posting and trim the reply.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
