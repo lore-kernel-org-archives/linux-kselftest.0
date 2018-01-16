@@ -1,25 +1,24 @@
 From: bp@alien8.de (Borislav Petkov)
-Date: Tue, 16 Jan 2018 12:44:28 +0100
+Date: Tue, 16 Jan 2018 12:54:07 +0100
 Subject: [Linux-kselftest-mirror] selftests: run all tests
-In-Reply-To: <87tvvmcp0u.fsf@concordia.ellerman.id.au>
+In-Reply-To: <20180116114411.u4cqtvzw6evwnehu@pd.tnic>
 References: <20180115145942.s3dgy457xwhn6lwv@pd.tnic>
  <87tvvmcp0u.fsf@concordia.ellerman.id.au>
-Message-ID: <20180116114411.u4cqtvzw6evwnehu@pd.tnic>
+ <20180116114411.u4cqtvzw6evwnehu@pd.tnic>
+Message-ID: <20180116115407.xqlu6bfvqcwoxszg@pd.tnic>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180116114428.Bn6BEAB848ZeH7k2KaC3ODom-oeiXGM1zbNf6SwORfI@z>
+Message-ID: <20180116115407.UZBDC8H7j7sRkAoAu-Ra9BmaMrpQgUTmrLN2eYVe2dM@z>
 
-On Tue, Jan 16, 2018@05:10:25PM +1100, Michael Ellerman wrote:
-> $ cd tools/testing/selftests/x86
-> $ make run_tests
+On Tue, Jan 16, 2018@12:44:28PM +0100, Borislav Petkov wrote:
+> Ah, that was hidden in the included lib.mk, thanks.
 > 
-> Should work?
+> I wonder if we should make it more user-friendly by adding a help target
+> like for the main Makefile...
 
-Ah, that was hidden in the included lib.mk, thanks.
+One more point:
 
-I wonder if we should make it more user-friendly by adding a help target
-like for the main Makefile...
-
-Thx.
+What I do is copy the x86/ folder to a test box and run all tests there.
+If the lib.mk is not copied, run_tests is missing....
 
 -- 
 Regards/Gruss,
