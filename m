@@ -1,50 +1,133 @@
-From: shuahkh@osg.samsung.com (Shuah Khan)
-Date: Tue, 16 Jan 2018 09:34:54 -0700
-Subject: [Linux-kselftest-mirror] [PATCH] selftests: Fix loss of test
-	output in run_kselftests.sh
-In-Reply-To: <20180116061039.16713-1-mpe@ellerman.id.au>
-References: <20180116061039.16713-1-mpe@ellerman.id.au>
-Message-ID: <628da78f-243a-0fec-5a2c-e2be3691ba80@osg.samsung.com>
+From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
+Date: Wed, 17 Jan 2018 11:54:58 -0500
+Subject: [Linux-kselftest-mirror] [PATCH for 4.16 11/11] membarrier:
+	selftest: Test private expedited sync core cmd
+In-Reply-To: <20180117165458.13330-1-mathieu.desnoyers@efficios.com>
+References: <20180117165458.13330-1-mathieu.desnoyers@efficios.com>
+Message-ID: <20180117165458.13330-12-mathieu.desnoyers@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180116163454.5t5j1figdLJZdHd3ULVY7yMUmphPf0WEhdX5kAcXG7A@z>
+Message-ID: <20180117165458.P24qeGIiMc_amHDZTUs3MIpu_wZQ_WlzuGTKbMg-mpM@z>
 
-On 01/15/2018 11:10 PM, Michael Ellerman wrote:
-> Commit fbcab13d2e25 ("selftests: silence test output by default")
-> changed the run_tests logic as well as the logic to generate
-> run_kselftests.sh to redirect test output away from the console.
-> 
-> As discussed on the list and at kernel summit, this is not a desirable
-> default as it means in order to debug a failure the console output is
-> not sufficient, you also need access to the test machine to get the
-> full test logs. Additionally it's impolite to write directly to
-> /tmp/$TEST_NAME on shared systems.
-> 
-> The change to the run_tests logic was reverted in commit
-> a323335e62cc ("selftests: lib.mk: print individual test results to
-> console by default"), and instead a summary option was added so that
-> quiet output could be requested.
-> 
-> However the change to run_kselftests.sh was left as-is.
-> 
-> This commit applies the same logic to the run_kselftests.sh code, ie.
-> the script now takes a "--summary" option which suppresses the output,
-> but shows all output by default.
-> 
-> Additionally instead of writing to /tmp/$TEST_NAME the output is
-> redirected to the directory where the generated test script is
-> located.
-> 
-> Fixes: fbcab13d2e25 ("selftests: silence test output by default")
-> Signed-off-by: Michael Ellerman <mpe at ellerman.id.au>
-> ---
->  tools/testing/selftests/Makefile | 9 ++++++++-
->  tools/testing/selftests/lib.mk   | 2 +-
->  2 files changed, 9 insertions(+), 2 deletions(-)
+Test the new MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE and
+MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE commands.
 
-Thanks for catching this. Applied to linux-kselftest next
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+Acked-by: Shuah Khan <shuahkh at osg.samsung.com>
+CC: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+CC: Peter Zijlstra <peterz at infradead.org>
+CC: Paul E. McKenney <paulmck at linux.vnet.ibm.com>
+CC: Boqun Feng <boqun.feng at gmail.com>
+CC: Andrew Hunter <ahh at google.com>
+CC: Maged Michael <maged.michael at gmail.com>
+CC: Avi Kivity <avi at scylladb.com>
+CC: Benjamin Herrenschmidt <benh at kernel.crashing.org>
+CC: Paul Mackerras <paulus at samba.org>
+CC: Michael Ellerman <mpe at ellerman.id.au>
+CC: Dave Watson <davejwatson at fb.com>
+CC: Alan Stern <stern at rowland.harvard.edu>
+CC: Will Deacon <will.deacon at arm.com>
+CC: Andy Lutomirski <luto at kernel.org>
+CC: Alice Ferrazzi <alice.ferrazzi at gmail.com>
+CC: Paul Elder <paul.elder at pitt.edu>
+CC: linux-kselftest at vger.kernel.org
+CC: linux-arch at vger.kernel.org
+---
+ .../testing/selftests/membarrier/membarrier_test.c | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
+index eec39a0e1f77..22bffd55a523 100644
+--- a/tools/testing/selftests/membarrier/membarrier_test.c
++++ b/tools/testing/selftests/membarrier/membarrier_test.c
+@@ -132,6 +132,63 @@ static int test_membarrier_private_expedited_success(void)
+ 	return 0;
+ }
+ 
++static int test_membarrier_private_expedited_sync_core_fail(void)
++{
++	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE not registered failure";
++
++	if (sys_membarrier(cmd, flags) != -1) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d. Should fail, but passed\n",
++			test_name, flags);
++	}
++	if (errno != EPERM) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d. Should return (%d: \"%s\"), but returned (%d: \"%s\").\n",
++			test_name, flags, EPERM, strerror(EPERM),
++			errno, strerror(errno));
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d, errno = %d\n",
++		test_name, flags, errno);
++	return 0;
++}
++
++static int test_membarrier_register_private_expedited_sync_core_success(void)
++{
++	int cmd = MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE";
++
++	if (sys_membarrier(cmd, flags) != 0) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d, errno = %d\n",
++			test_name, flags, errno);
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d\n",
++		test_name, flags);
++	return 0;
++}
++
++static int test_membarrier_private_expedited_sync_core_success(void)
++{
++	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE";
++
++	if (sys_membarrier(cmd, flags) != 0) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d, errno = %d\n",
++			test_name, flags, errno);
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d\n",
++		test_name, flags);
++	return 0;
++}
++
+ static int test_membarrier_register_global_expedited_success(void)
+ {
+ 	int cmd = MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED, flags = 0;
+@@ -188,6 +245,22 @@ static int test_membarrier(void)
+ 	status = test_membarrier_private_expedited_success();
+ 	if (status)
+ 		return status;
++	status = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
++	if (status < 0) {
++		ksft_test_result_fail("sys_membarrier() failed\n");
++		return status;
++	}
++	if (status & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
++		status = test_membarrier_private_expedited_sync_core_fail();
++		if (status)
++			return status;
++		status = test_membarrier_register_private_expedited_sync_core_success();
++		if (status)
++			return status;
++		status = test_membarrier_private_expedited_sync_core_success();
++		if (status)
++			return status;
++	}
+ 	/*
+ 	 * It is valid to send a global membarrier from a non-registered
+ 	 * process.
+-- 
+2.11.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
