@@ -1,47 +1,66 @@
-From: roopa at cumulusnetworks.com (Roopa Prabhu)
-Date: Wed, 17 Jan 2018 14:46:36 -0800
-Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 02/12] selftests:
- forwarding: Add a test for FDB learning
-In-Reply-To: <20180117210137.GJ2114@nanopsycho>
+From: f.fainelli at gmail.com (Florian Fainelli)
+Date: Wed, 17 Jan 2018 14:51:04 -0800
+Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 00/12] selftests:
+ forwarding: Add VRF-based tests
+In-Reply-To: <df929bcd-f15e-1897-fc54-c9aba9b65667@gmail.com>
 References: <20180115191853.26129-1-idosch@mellanox.com>
- <20180115191853.26129-3-idosch@mellanox.com>
- <33d3f4a4-8b92-60da-3e1f-327effb7eda0@gmail.com>
- <20180117210137.GJ2114@nanopsycho>
-Message-ID: <CAJieiUh_jgxof2J3vqeyXUbQpNtha+1qtfo2Y9JTq3rz0+XXuw@mail.gmail.com>
+ <df929bcd-f15e-1897-fc54-c9aba9b65667@gmail.com>
+Message-ID: <c8c4a3ef-f21d-0e13-5d35-dfa212c439ab@gmail.com>
 
-On Wed, Jan 17, 2018 at 1:01 PM, Jiri Pirko <jiri at resnulli.us> wrote:
-> Wed, Jan 17, 2018 at 09:48:54PM CET, dsahern at gmail.com wrote:
->>On 1/15/18 11:18 AM, Ido Schimmel wrote:
->>> diff --git a/tools/testing/selftests/forwarding/lib.sh b/tools/testing/selftests/forwarding/lib.sh
->>> index bb423371f4de..264bf0af4c4d 100644
->>> --- a/tools/testing/selftests/forwarding/lib.sh
->>> +++ b/tools/testing/selftests/forwarding/lib.sh
->>> @@ -22,6 +22,11 @@ if [[ ! -x "$(command -v jq)" ]]; then
->>>      exit 0
->>>  fi
->>>
->>> +if [[ ! -x "$(command -v mausezahn)" ]]; then
->>> +    echo "SKIP: mausezahn not installed"
->>> +    exit 0
->>> +fi
->>> +
+On 01/15/2018 12:14 PM, David Ahern wrote:
+> On 1/15/18 12:18 PM, Ido Schimmel wrote:
+>> One of the nice things about network namespaces is that they allow one
+>> to easily create and test complex environments.
 >>
->>The checks are good, but hitting a collision with this one:
->>$   ./router.sh
->>SKIP: mausezahn not installed
+>> Unfortunately, these namespaces can not be used with actual switching
+>> ASICs, as their ports can not be migrated to other network namespaces
+>> (NETIF_F_NETNS_LOCAL) and most of them probably do not support the
+>> L1-separation provided by namespaces.
 >>
->>For debian, it is mz not mausezahn.
->
-> That is weird. If you look at the sources, the binary name is
-> "mausezahn". Looks like debian is doing some renaming :/
->
+>> However, a similar kind of flexibility can be achieved by using VRFs and
+>> by looping the switch ports together. For example:
+>>
+>>                              br0
+>>                               +
+>>                vrf-h1         |           vrf-h2
+>>                  +        +---+----+        +
+>>                  |        |        |        |
+>>     192.0.2.1/24 +        +        +        + 192.0.2.2/24
+>>                swp1     swp2     swp3     swp4
+>>                  +        +        +        +
+>>                  |        |        |        |
+>>                  +--------+        +--------+
+>>
+>> The VRFs act as lightweight namespaces representing hosts connected to
+>> the switch.
+>>
+>> This approach for testing switch ASICs has several advantages over the
+>> traditional method that requires multiple physical machines, to name a
+>> few:
+>>
+>> 1. Only the device under test (DUT) is being tested without noise from
+>> other system.
+>>
+>> 2. Ability to easily provision complex topologies. Testing bridging
+>> between 4-ports LAGs or 8-way ECMP requires many physical links that are
+>> not always available. With the VRF-based approach one merely needs to
+>> loopback more ports.
+>>
+>> These tests are written with switch ASICs in mind, but they can be run
+>> on any Linux box using veth pairs to emulate physical loopbacks.
+>>
+>> Feedback is is welcome. Particularly regarding the best location for
+>> these tests (e.g., current location, tools/testing/selftests/net).
+>>
+> 
+> Awesome. Thanks for working on this.
 
-I have seen/used both versions. Debian packages from some old upstream
-source which calls it mz.
-https://packages.debian.org/sid/main/mz
-
-I have used latest mz (with ipv6 support etc) from netsniff-ng which
-builds it as mausezahn.
+Agreed this is really cool! For DSA enabled switches, we usually have a
+host that does the test sequencing and then execute commands remotely on
+the DUT, but we might be able to get such a similar framework up and
+running on the DUT itself without too much hassle.
+-- 
+Florian
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
