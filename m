@@ -1,45 +1,47 @@
-From: dsahern at gmail.com (David Ahern)
-Date: Wed, 17 Jan 2018 13:26:57 -0800
-Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 01/12] selftests:
- forwarding: Add initial testing framework
-In-Reply-To: <20180117211818.GF5894@lunn.ch>
+From: roopa at cumulusnetworks.com (Roopa Prabhu)
+Date: Wed, 17 Jan 2018 14:46:36 -0800
+Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 02/12] selftests:
+ forwarding: Add a test for FDB learning
+In-Reply-To: <20180117210137.GJ2114@nanopsycho>
 References: <20180115191853.26129-1-idosch@mellanox.com>
- <20180115191853.26129-2-idosch@mellanox.com>
- <3f22af29-6bf9-58fc-9b4c-cc8696c3b163@gmail.com>
- <20180117211818.GF5894@lunn.ch>
-Message-ID: <b21b4bbc-a6e7-0db2-fd79-b821f7286da2@gmail.com>
+ <20180115191853.26129-3-idosch@mellanox.com>
+ <33d3f4a4-8b92-60da-3e1f-327effb7eda0@gmail.com>
+ <20180117210137.GJ2114@nanopsycho>
+Message-ID: <CAJieiUh_jgxof2J3vqeyXUbQpNtha+1qtfo2Y9JTq3rz0+XXuw@mail.gmail.com>
 
-On 1/17/18 1:18 PM, Andrew Lunn wrote:
->> IPv6 addresses on debian need ping6:
+On Wed, Jan 17, 2018 at 1:01 PM, Jiri Pirko <jiri at resnulli.us> wrote:
+> Wed, Jan 17, 2018 at 09:48:54PM CET, dsahern at gmail.com wrote:
+>>On 1/15/18 11:18 AM, Ido Schimmel wrote:
+>>> diff --git a/tools/testing/selftests/forwarding/lib.sh b/tools/testing/selftests/forwarding/lib.sh
+>>> index bb423371f4de..264bf0af4c4d 100644
+>>> --- a/tools/testing/selftests/forwarding/lib.sh
+>>> +++ b/tools/testing/selftests/forwarding/lib.sh
+>>> @@ -22,6 +22,11 @@ if [[ ! -x "$(command -v jq)" ]]; then
+>>>      exit 0
+>>>  fi
+>>>
+>>> +if [[ ! -x "$(command -v mausezahn)" ]]; then
+>>> +    echo "SKIP: mausezahn not installed"
+>>> +    exit 0
+>>> +fi
+>>> +
 >>
->> root at mlx-2700-05:~/selftests# ip vrf exec vrf-h1 ping 2001:db8:2::2 -c
->> 10 -i 0.1 -w 2
->> ping: unknown host 2001:db8:2::2
-> 
-> Hi David
-> 
-> Depends on you vintage of Debian:
+>>The checks are good, but hitting a collision with this one:
+>>$   ./router.sh
+>>SKIP: mausezahn not installed
+>>
+>>For debian, it is mz not mausezahn.
+>
+> That is weird. If you look at the sources, the binary name is
+> "mausezahn". Looks like debian is doing some renaming :/
+>
 
-Yes, ping from iputils-ping in stretch (20161105) supports ipv6; the
-jessie version (20121221) does not.
+I have seen/used both versions. Debian packages from some old upstream
+source which calls it mz.
+https://packages.debian.org/sid/main/mz
 
-
-> 
-> $ ping 2607:f8b0:4009:813::2004
-> PING 2607:f8b0:4009:813::2004(2607:f8b0:4009:813::2004) 56 data bytes
-> 64 bytes from 2607:f8b0:4009:813::2004: icmp_seq=1 ttl=54 time=22.1 ms
-> 64 bytes from 2607:f8b0:4009:813::2004: icmp_seq=2 ttl=54 time=20.7 ms
-> ^C
-> --- 2607:f8b0:4009:813::2004 ping statistics ---
-> 2 packets transmitted, 2 received, 0% packet loss, time 1001ms
-> rtt min/avg/max/mdev = 20.714/21.426/22.139/0.727 ms
-> 
-> I however don't know when this generally because available, but
-> stretch, buster and sid appear to have it.
-> 
->   Andrew
-> 
-
+I have used latest mz (with ipv6 support etc) from netsniff-ng which
+builds it as mausezahn.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
