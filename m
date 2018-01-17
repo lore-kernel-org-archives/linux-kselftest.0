@@ -1,58 +1,45 @@
-From: roopa@cumulusnetworks.com (Roopa Prabhu)
-Date: Wed, 17 Jan 2018 14:59:10 -0800
-Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 02/12] selftests:
- forwarding: Add a test for FDB learning
-In-Reply-To: <CAJieiUh_jgxof2J3vqeyXUbQpNtha+1qtfo2Y9JTq3rz0+XXuw@mail.gmail.com>
+From: andrew@lunn.ch (Andrew Lunn)
+Date: Thu, 18 Jan 2018 00:11:11 +0100
+Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 00/12] selftests:
+ forwarding: Add VRF-based tests
+In-Reply-To: <c8c4a3ef-f21d-0e13-5d35-dfa212c439ab@gmail.com>
 References: <20180115191853.26129-1-idosch@mellanox.com>
- <20180115191853.26129-3-idosch@mellanox.com>
- <33d3f4a4-8b92-60da-3e1f-327effb7eda0@gmail.com>
- <20180117210137.GJ2114@nanopsycho>
- <CAJieiUh_jgxof2J3vqeyXUbQpNtha+1qtfo2Y9JTq3rz0+XXuw@mail.gmail.com>
-Message-ID:
- <CAJieiUiB14Js0hTk7E_4+AmyAZbjHTCE_MWpU-=7FbMsjvHB2w@mail.gmail.com>
+ <df929bcd-f15e-1897-fc54-c9aba9b65667@gmail.com>
+ <c8c4a3ef-f21d-0e13-5d35-dfa212c439ab@gmail.com>
+Message-ID: <20180117231111.GG5894@lunn.ch>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180117225910.O_MLOMwD3bfphDS67ueLYQYH8IynwZe34y1rsFKbe_0@z>
+Message-ID: <20180117231111.0bxewW38FKvBKS_X_3YiMrPyMIZNm7Hswohp_WXVNXU@z>
 
-On Wed, Jan 17, 2018@2:46 PM, Roopa Prabhu <roopa@cumulusnetworks.com> wrote:
-> On Wed, Jan 17, 2018@1:01 PM, Jiri Pirko <jiri@resnulli.us> wrote:
->> Wed, Jan 17, 2018@09:48:54PM CET, dsahern@gmail.com wrote:
->>>On 1/15/18 11:18 AM, Ido Schimmel wrote:
->>>> diff --git a/tools/testing/selftests/forwarding/lib.sh b/tools/testing/selftests/forwarding/lib.sh
->>>> index bb423371f4de..264bf0af4c4d 100644
->>>> --- a/tools/testing/selftests/forwarding/lib.sh
->>>> +++ b/tools/testing/selftests/forwarding/lib.sh
->>>> @@ -22,6 +22,11 @@ if [[ ! -x "$(command -v jq)" ]]; then
->>>>      exit 0
->>>>  fi
->>>>
->>>> +if [[ ! -x "$(command -v mausezahn)" ]]; then
->>>> +    echo "SKIP: mausezahn not installed"
->>>> +    exit 0
->>>> +fi
->>>> +
->>>
->>>The checks are good, but hitting a collision with this one:
->>>$   ./router.sh
->>>SKIP: mausezahn not installed
->>>
->>>For debian, it is mz not mausezahn.
->>
->> That is weird. If you look at the sources, the binary name is
->> "mausezahn". Looks like debian is doing some renaming :/
->>
->
-> I have seen/used both versions. Debian packages from some old upstream
-> source which calls it mz.
-> https://packages.debian.org/sid/main/mz
->
-> I have used latest mz (with ipv6 support etc) from netsniff-ng which
-> builds it as mausezahn.
+> >> However, a similar kind of flexibility can be achieved by using VRFs and
+> >> by looping the switch ports together. For example:
+> >>
+> >>                              br0
+> >>                               +
+> >>                vrf-h1         |           vrf-h2
+> >>                  +        +---+----+        +
+> >>                  |        |        |        |
+> >>     192.0.2.1/24 +        +        +        + 192.0.2.2/24
+> >>                swp1     swp2     swp3     swp4
+> >>                  +        +        +        +
+> >>                  |        |        |        |
+> >>                  +--------+        +--------+
+> >>
 
+> Agreed this is really cool! For DSA enabled switches, we usually have a
+> host that does the test sequencing and then execute commands remotely on
+> the DUT, but we might be able to get such a similar framework up and
+> running on the DUT itself without too much hassle.
 
-actually Debian also builds
-https://packages.debian.org/sid/netsniff-ng and installs 'mausezahn'
+I think the problem we will have is a lack of ports. Most DSA switches
+have 4 or 5 ports. Given the need for two ports per bridge port, we
+will be limited to bridges with just two members. That really limits
+what sort of tests you can do.
 
-so you might have to check and use which exists... (mausezahn overriding mz).
+But for top or rack switches, 16 ports, 8 loopback cables, that does
+give interesting setups. If i were writing tests for that class of
+routers, that would be the hardware setup i would define.
+
+	 Andrew
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
