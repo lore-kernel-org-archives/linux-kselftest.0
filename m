@@ -1,10 +1,10 @@
 From: dima@arista.com (Dmitry Safonov)
-Date: Thu, 18 Jan 2018 22:19:43 +0000
-Subject: [Linux-kselftest-mirror] [PATCH] selftests/x86: Add <test_name>{,
+Date: Thu, 18 Jan 2018 22:26:25 +0000
+Subject: [Linux-kselftest-mirror] [PATCHv2] selftests/x86: Add <test_name>{,
 	_32, _64} targets
-Message-ID: <20180118221943.23558-1-dima@arista.com>
+Message-ID: <20180118222625.24408-1-dima@arista.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180118221943.lLZ4FU8TyiKBmdFj0cGFUV1GPH76lTZUFOCwGSbeGus@z>
+Message-ID: <20180118222625.poR1qousLawmcBYYCqZoGF4LxWmzrc4FgSWTPPwRILA@z>
 
 One can only use `make all` or `make <test_name>_<bitness>`
 as make targets.
@@ -35,26 +35,26 @@ Cc: x86 at kernel.org
 Reported-by: Ingo Molnar <mingo at kernel.org>
 Signed-off-by: Dmitry Safonov <dima at arista.com>
 ---
- tools/testing/selftests/x86/Makefile | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+v2: collide two target lines $(1) and $(1)_{64,32}
+
+ tools/testing/selftests/x86/Makefile | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 5d4f10ac2af2..5958654e00c6 100644
+index 5d4f10ac2af2..10ca46df1449 100644
 --- a/tools/testing/selftests/x86/Makefile
 +++ b/tools/testing/selftests/x86/Makefile
-@@ -27,14 +27,28 @@ UNAME_M := $(shell uname -m)
+@@ -27,14 +27,26 @@ UNAME_M := $(shell uname -m)
  CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
  CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
  
 +define gen-target-rule-32
-+$(1): $(OUTPUT)/$(1)_32
-+$(1)_32: $(OUTPUT)/$(1)_32
++$(1) $(1)_32: $(OUTPUT)/$(1)_32
 +.PHONY: $(1) $(1)_32
 +endef
 +
 +define gen-target-rule-64
-+$(1): $(OUTPUT)/$(1)_64
-+$(1)_64: $(OUTPUT)/$(1)_64
++$(1) $(1)_64: $(OUTPUT)/$(1)_64
 +.PHONY: $(1) $(1)_64
 +endef
 +
