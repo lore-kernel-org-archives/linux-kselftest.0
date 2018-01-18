@@ -1,26 +1,52 @@
 From: idosch at idosch.org (Ido Schimmel)
-Date: Thu, 18 Jan 2018 09:16:54 +0200
-Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 02/12] selftests:
- forwarding: Add a test for FDB learning
-In-Reply-To: <9e1bfed9-34a3-5810-230e-0bef75a43fb9@gmail.com>
+Date: Thu, 18 Jan 2018 09:41:25 +0200
+Subject: [Linux-kselftest-mirror] [RFC PATCH net-next 00/12] selftests:
+ forwarding: Add VRF-based tests
+In-Reply-To: <20180117231111.GG5894@lunn.ch>
 References: <20180115191853.26129-1-idosch@mellanox.com>
- <20180115191853.26129-3-idosch@mellanox.com>
- <33d3f4a4-8b92-60da-3e1f-327effb7eda0@gmail.com>
- <20180117210137.GJ2114@nanopsycho>
- <CAJieiUh_jgxof2J3vqeyXUbQpNtha+1qtfo2Y9JTq3rz0+XXuw@mail.gmail.com>
- <CAJieiUiB14Js0hTk7E_4+AmyAZbjHTCE_MWpU-=7FbMsjvHB2w@mail.gmail.com>
- <20180117233124.GA26967@nanopsycho>
- <9e1bfed9-34a3-5810-230e-0bef75a43fb9@gmail.com>
-Message-ID: <20180118071654.GA5379@splinter>
+ <df929bcd-f15e-1897-fc54-c9aba9b65667@gmail.com>
+ <c8c4a3ef-f21d-0e13-5d35-dfa212c439ab@gmail.com>
+ <20180117231111.GG5894@lunn.ch>
+Message-ID: <20180118074125.GB5379@splinter>
 
-On Wed, Jan 17, 2018 at 04:15:04PM -0800, David Ahern wrote:
-> How about the attached - make ping, ping6 and mz variables? Default to
-> ping and mausezahn but let users update that name if necessary. Comments
-> in the sample config to the effect need to be added to help users.
+Hi Andrew, Florian
 
-Yes, looks good to me. Will include the change in the next version.
+On Thu, Jan 18, 2018 at 12:11:11AM +0100, Andrew Lunn wrote:
+> > >> However, a similar kind of flexibility can be achieved by using VRFs and
+> > >> by looping the switch ports together. For example:
+> > >>
+> > >>                              br0
+> > >>                               +
+> > >>                vrf-h1         |           vrf-h2
+> > >>                  +        +---+----+        +
+> > >>                  |        |        |        |
+> > >>     192.0.2.1/24 +        +        +        + 192.0.2.2/24
+> > >>                swp1     swp2     swp3     swp4
+> > >>                  +        +        +        +
+> > >>                  |        |        |        |
+> > >>                  +--------+        +--------+
+> > >>
+> 
+> > Agreed this is really cool! For DSA enabled switches, we usually have a
+> > host that does the test sequencing and then execute commands remotely on
+> > the DUT, but we might be able to get such a similar framework up and
+> > running on the DUT itself without too much hassle.
+> 
+> I think the problem we will have is a lack of ports. Most DSA switches
+> have 4 or 5 ports. Given the need for two ports per bridge port, we
+> will be limited to bridges with just two members. That really limits
+> what sort of tests you can do.
 
-Thanks!
+I was actually interested in feedback from you guys. Looking at
+dsa_slave_changeupper() I see you don't forbid the enslavement to a VRF
+and that you set STP state to forwarding when a port leaves a bridge
+(good). Does that mean you're able to use some of these tests on your
+switches?
+
+The reason we can use these tests for mlxsw is that we support VRF and
+ACL offload. At least in the above example, swp4 is able to receive
+packets directed at 192.0.2.2 because we program the device with the
+host route 192.0.2.2/32.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
