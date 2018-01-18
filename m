@@ -1,14 +1,15 @@
 From: zongbox@gmail.com (Zong Li)
-Date: Thu, 18 Jan 2018 11:17:03 +0800
-Subject: [Linux-kselftest-mirror] [PATCH] selftest: support run subset of
+Date: Thu, 18 Jan 2018 13:31:05 +0800
+Subject: [Linux-kselftest-mirror] [PATCH v2] selftest: support run subset of
 	selftests when running installed selftests
-Message-ID: <1516245423-29392-1-git-send-email-zongbox@gmail.com>
+Message-ID: <1516253465-30367-1-git-send-email-zongbox@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180118031703.cA4GuZxDJq5WmuhN2I8SDjuW5DuwWAaUV_-S_PqgG2Q@z>
+Message-ID: <20180118053105.dA1RJARsbBPcvz-DcdOX82oiX-aF7vsf451N0IRjLBQ@z>
 
 Simply use the first argument to specify the subset of selftests.
 Use comma notation to separate multiple tests.
 (e.g. ./run_kselftest.sh size,timers,...)
+Default behaviour is running all selftests installed.
 
 Each selftest be defined as function that we can run one of selftests.
 The function name has underline as prefix to avoid confilct with
@@ -36,7 +37,7 @@ Signed-off-by: Zong Li <zong at andestech.com>
  rename tools/testing/selftests/{memory-hotplug => memory_hotplug}/mem-on-off-test.sh (100%)
 
 diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index eaf599d..ffe6797 100644
+index eaf599d..dc9bb6c 100644
 --- a/tools/testing/selftests/Makefile
 +++ b/tools/testing/selftests/Makefile
 @@ -4,7 +4,7 @@ TARGETS += bpf
@@ -83,9 +84,9 @@ index eaf599d..ffe6797 100644
 +		echo "" >> $(ALL_SCRIPT); \
  	done;
  
-+	echo "TARGETS=\$$1" >> $(ALL_SCRIPT); \
++	echo "TARGETS=\$${1:-\`ls -d */\`}" >> $(ALL_SCRIPT); \
 +	echo "for TARGET in \$${TARGETS//,/ }; do" >> $(ALL_SCRIPT); \
-+	echo "    _\$$TARGET" >> $(ALL_SCRIPT); \
++	echo "    _\$${TARGET%/}" >> $(ALL_SCRIPT); \
 +	echo "done" >> $(ALL_SCRIPT); \
 +
  	chmod u+x $(ALL_SCRIPT)
