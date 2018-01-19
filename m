@@ -1,96 +1,89 @@
 From: linuxram@us.ibm.com (Ram Pai)
-Date: Thu, 18 Jan 2018 17:50:40 -0800
-Subject: [Linux-kselftest-mirror] [PATCH v10 19/27] powerpc: Handle
-	exceptions caused by pkey violation
+Date: Thu, 18 Jan 2018 17:50:39 -0800
+Subject: [Linux-kselftest-mirror] [PATCH v10 18/27] powerpc: implementation
+	for arch_vma_access_permitted()
 In-Reply-To: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
 References: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1516326648-22775-20-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1516326648-22775-19-git-send-email-linuxram@us.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180119015040.EStHXKvlmg9JCeohXl0KYf-7otljqHaOnbIT8BaZAuw@z>
+Message-ID: <20180119015039.m9l-Iyk7_45CvdRpv8FlnyhWTeyG8OYc-3jq6wn3r18@z>
 
-Handle Data and  Instruction exceptions caused by memory
-protection-key.
-
-The CPU will detect the key fault if the HPTE is already
-programmed with the key.
-
-However if the HPTE is not  hashed, a key fault will not
-be detected by the hardware. The software will detect
-pkey violation in such a case.
+This patch provides the implementation for
+arch_vma_access_permitted(). Returns true if the
+requested access is allowed by pkey associated with the
+vma.
 
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
-Signed-off-by: Thiago Jung Bauermann <bauerman at linux.vnet.ibm.com>
 ---
- arch/powerpc/include/asm/reg.h       |    1 -
- arch/powerpc/kernel/exceptions-64s.S |    2 +-
- arch/powerpc/mm/fault.c              |   22 ++++++++++++++++++++++
- 3 files changed, 23 insertions(+), 2 deletions(-)
+ arch/powerpc/include/asm/mmu_context.h |    5 +++-
+ arch/powerpc/mm/pkeys.c                |   34 ++++++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+), 1 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/reg.h b/arch/powerpc/include/asm/reg.h
-index b779f3c..ffc9990 100644
---- a/arch/powerpc/include/asm/reg.h
-+++ b/arch/powerpc/include/asm/reg.h
-@@ -312,7 +312,6 @@
- 				 DSISR_BAD_EXT_CTRL)
- #define	  DSISR_BAD_FAULT_64S	(DSISR_BAD_FAULT_32S	| \
- 				 DSISR_ATTR_CONFLICT	| \
--				 DSISR_KEYFAULT		| \
- 				 DSISR_UNSUPP_MMU	| \
- 				 DSISR_PRTABLE_FAULT	| \
- 				 DSISR_ICSWX_NO_CT	| \
-diff --git a/arch/powerpc/kernel/exceptions-64s.S b/arch/powerpc/kernel/exceptions-64s.S
-index e441b46..804e804 100644
---- a/arch/powerpc/kernel/exceptions-64s.S
-+++ b/arch/powerpc/kernel/exceptions-64s.S
-@@ -1521,7 +1521,7 @@ USE_TEXT_SECTION()
- 	.balign	IFETCH_ALIGN_BYTES
- do_hash_page:
- #ifdef CONFIG_PPC_BOOK3S_64
--	lis	r0,(DSISR_BAD_FAULT_64S|DSISR_DABRMATCH)@h
-+	lis	r0,(DSISR_BAD_FAULT_64S | DSISR_DABRMATCH | DSISR_KEYFAULT)@h
- 	ori	r0,r0,DSISR_BAD_FAULT_64S at l
- 	and.	r0,r4,r0		/* weird error? */
- 	bne-	handle_page_fault	/* if not, try to insert a HPTE */
-diff --git a/arch/powerpc/mm/fault.c b/arch/powerpc/mm/fault.c
-index 4797d08..943a91e 100644
---- a/arch/powerpc/mm/fault.c
-+++ b/arch/powerpc/mm/fault.c
-@@ -427,6 +427,11 @@ static int __do_page_fault(struct pt_regs *regs, unsigned long address,
+diff --git a/arch/powerpc/include/asm/mmu_context.h b/arch/powerpc/include/asm/mmu_context.h
+index 209f127..cd2bd73 100644
+--- a/arch/powerpc/include/asm/mmu_context.h
++++ b/arch/powerpc/include/asm/mmu_context.h
+@@ -186,6 +186,10 @@ static inline void arch_bprm_mm_init(struct mm_struct *mm,
+ {
+ }
  
- 	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
- 
-+	if (error_code & DSISR_KEYFAULT) {
-+		_exception(SIGSEGV, regs, SEGV_PKUERR, address);
-+		return 0;
-+	}
-+
- 	/*
- 	 * We want to do this outside mmap_sem, because reading code around nip
- 	 * can result in fault, which will cause a deadlock when called with
-@@ -498,6 +503,23 @@ static int __do_page_fault(struct pt_regs *regs, unsigned long address,
- 	 * the fault.
- 	 */
- 	fault = handle_mm_fault(vma, address, flags);
-+
 +#ifdef CONFIG_PPC_MEM_KEYS
-+	/*
-+	 * if the HPTE is not hashed, hardware will not detect
-+	 * a key fault. Lets check if we failed because of a
-+	 * software detected key fault.
-+	 */
-+	if (unlikely(fault & VM_FAULT_SIGSEGV) &&
-+		!arch_vma_access_permitted(vma, flags & FAULT_FLAG_WRITE,
-+			is_exec, 0)) {
-+		int pkey = vma_pkey(vma);
-+
-+		if (likely(pkey))
-+			return __bad_area(regs, address, SEGV_PKUERR);
-+	}
-+#endif /* CONFIG_PPC_MEM_KEYS */
-+
- 	major |= fault & VM_FAULT_MAJOR;
++bool arch_vma_access_permitted(struct vm_area_struct *vma, bool write,
++			       bool execute, bool foreign);
++#else /* CONFIG_PPC_MEM_KEYS */
+ static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
+ 		bool write, bool execute, bool foreign)
+ {
+@@ -193,7 +197,6 @@ static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
+ 	return true;
+ }
  
- 	/*
+-#ifndef CONFIG_PPC_MEM_KEYS
+ #define pkey_mm_init(mm)
+ #define thread_pkey_regs_save(thread)
+ #define thread_pkey_regs_restore(new_thread, old_thread)
+diff --git a/arch/powerpc/mm/pkeys.c b/arch/powerpc/mm/pkeys.c
+index 0e044ea..0701aa3 100644
+--- a/arch/powerpc/mm/pkeys.c
++++ b/arch/powerpc/mm/pkeys.c
+@@ -390,3 +390,37 @@ bool arch_pte_access_permitted(u64 pte, bool write, bool execute)
+ 
+ 	return pkey_access_permitted(pte_to_pkey_bits(pte), write, execute);
+ }
++
++/*
++ * We only want to enforce protection keys on the current thread because we
++ * effectively have no access to AMR/IAMR for other threads or any way to tell
++ * which AMR/IAMR in a threaded process we could use.
++ *
++ * So do not enforce things if the VMA is not from the current mm, or if we are
++ * in a kernel thread.
++ */
++static inline bool vma_is_foreign(struct vm_area_struct *vma)
++{
++	if (!current->mm)
++		return true;
++
++	/* if it is not our ->mm, it has to be foreign */
++	if (current->mm != vma->vm_mm)
++		return true;
++
++	return false;
++}
++
++bool arch_vma_access_permitted(struct vm_area_struct *vma, bool write,
++			       bool execute, bool foreign)
++{
++	if (static_branch_likely(&pkey_disabled))
++		return true;
++	/*
++	 * Do not enforce our key-permissions on a foreign vma.
++	 */
++	if (foreign || vma_is_foreign(vma))
++		return true;
++
++	return pkey_access_permitted(vma_pkey(vma), write, execute);
++}
 -- 
 1.7.1
 
