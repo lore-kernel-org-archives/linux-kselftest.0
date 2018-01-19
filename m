@@ -1,131 +1,93 @@
-From: linuxram at us.ibm.com (Ram Pai)
-Date: Thu, 18 Jan 2018 17:50:32 -0800
-Subject: [Linux-kselftest-mirror] [PATCH v10 11/27] powerpc: introduce
-	execute-only pkey
-In-Reply-To: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
+From: ebiederm at xmission.com (Eric W. Biederman)
+Date: Fri, 19 Jan 2018 10:09:41 -0600
+Subject: [Linux-kselftest-mirror] [PATCH v10 27/27] mm: display pkey in
+	smaps if arch_pkeys_enabled() is true
+In-Reply-To: <1516326648-22775-28-git-send-email-linuxram@us.ibm.com> (Ram
+ Pai's message of "Thu, 18 Jan 2018 17:50:48 -0800")
 References: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1516326648-22775-12-git-send-email-linuxram@us.ibm.com>
+ <1516326648-22775-28-git-send-email-linuxram@us.ibm.com>
+Message-ID: <87shb1de4a.fsf@xmission.com>
 
-This patch provides the implementation of execute-only pkey.
-The architecture-independent layer expects the arch-dependent
-layer, to support the ability to create and enable a special
-key which has execute-only permission.
+Ram Pai <linuxram at us.ibm.com> writes:
 
-Acked-by: Balbir Singh <bsingharora at gmail.com>
-Signed-off-by: Ram Pai <linuxram at us.ibm.com>
----
- arch/powerpc/include/asm/book3s/64/mmu.h |    1 +
- arch/powerpc/include/asm/pkeys.h         |    6 +++-
- arch/powerpc/mm/pkeys.c                  |   58 ++++++++++++++++++++++++++++++
- 3 files changed, 64 insertions(+), 1 deletions(-)
+> Currently the  architecture  specific code is expected to
+> display  the  protection  keys  in  smap  for a given vma.
+> This can lead to redundant code and possibly to divergent
+> formats in which the key gets displayed.
+>
+> This  patch  changes  the implementation. It displays the
+> pkey only if the architecture support pkeys.
+>
+> x86 arch_show_smap() function is not needed anymore.
+> Delete it.
+>
+> Signed-off-by: Ram Pai <linuxram at us.ibm.com>
+> ---
+>  arch/x86/kernel/setup.c |    8 --------
+>  fs/proc/task_mmu.c      |   11 ++++++-----
+>  2 files changed, 6 insertions(+), 13 deletions(-)
+>
+> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+> index 8af2e8d..ddf945a 100644
+> --- a/arch/x86/kernel/setup.c
+> +++ b/arch/x86/kernel/setup.c
+> @@ -1326,11 +1326,3 @@ static int __init register_kernel_offset_dumper(void)
+>  	return 0;
+>  }
+>  __initcall(register_kernel_offset_dumper);
+> -
+> -void arch_show_smap(struct seq_file *m, struct vm_area_struct *vma)
+> -{
+> -	if (!boot_cpu_has(X86_FEATURE_OSPKE))
+> -		return;
+> -
+> -	seq_printf(m, "ProtectionKey:  %8u\n", vma_pkey(vma));
+> -}
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 0edd4da..4b39a94 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/page_idle.h>
+>  #include <linux/shmem_fs.h>
+>  #include <linux/uaccess.h>
+> +#include <linux/pkeys.h>
+>  
+>  #include <asm/elf.h>
+>  #include <asm/tlb.h>
+> @@ -728,10 +729,6 @@ static int smaps_hugetlb_range(pte_t *pte, unsigned long hmask,
+>  }
+>  #endif /* HUGETLB_PAGE */
+>  
+> -void __weak arch_show_smap(struct seq_file *m, struct vm_area_struct *vma)
+> -{
+> -}
+> -
+>  static int show_smap(struct seq_file *m, void *v, int is_pid)
+>  {
+>  	struct proc_maps_private *priv = m->private;
+> @@ -851,9 +848,13 @@ static int show_smap(struct seq_file *m, void *v, int is_pid)
+>  			   (unsigned long)(mss->pss >> (10 + PSS_SHIFT)));
+>  
+>  	if (!rollup_mode) {
+> -		arch_show_smap(m, vma);
+> +#ifdef CONFIG_ARCH_HAS_PKEYS
+> +		if (arch_pkeys_enabled())
+> +			seq_printf(m, "ProtectionKey:  %8u\n", vma_pkey(vma));
+> +#endif
 
-diff --git a/arch/powerpc/include/asm/book3s/64/mmu.h b/arch/powerpc/include/asm/book3s/64/mmu.h
-index 37ef23c..0abeb0e 100644
---- a/arch/powerpc/include/asm/book3s/64/mmu.h
-+++ b/arch/powerpc/include/asm/book3s/64/mmu.h
-@@ -116,6 +116,7 @@ struct patb_entry {
- 	 * bit unset -> key available for allocation
- 	 */
- 	u32 pkey_allocation_map;
-+	s16 execute_only_pkey; /* key holding execute-only protection */
- #endif
- } mm_context_t;
- 
-diff --git a/arch/powerpc/include/asm/pkeys.h b/arch/powerpc/include/asm/pkeys.h
-index 3def5af..2b5bb35 100644
---- a/arch/powerpc/include/asm/pkeys.h
-+++ b/arch/powerpc/include/asm/pkeys.h
-@@ -128,9 +128,13 @@ static inline int mm_pkey_free(struct mm_struct *mm, int pkey)
-  * Try to dedicate one of the protection keys to be used as an
-  * execute-only protection key.
-  */
-+extern int __execute_only_pkey(struct mm_struct *mm);
- static inline int execute_only_pkey(struct mm_struct *mm)
- {
--	return 0;
-+	if (static_branch_likely(&pkey_disabled))
-+		return -1;
-+
-+	return __execute_only_pkey(mm);
- }
- 
- static inline int arch_override_mprotect_pkey(struct vm_area_struct *vma,
-diff --git a/arch/powerpc/mm/pkeys.c b/arch/powerpc/mm/pkeys.c
-index 7dfcf2d..b466a2c 100644
---- a/arch/powerpc/mm/pkeys.c
-+++ b/arch/powerpc/mm/pkeys.c
-@@ -96,6 +96,8 @@ void pkey_mm_init(struct mm_struct *mm)
- 	if (static_branch_likely(&pkey_disabled))
- 		return;
- 	mm_pkey_allocation_map(mm) = initial_allocation_mask;
-+	/* -1 means unallocated or invalid */
-+	mm->context.execute_only_pkey = -1;
- }
- 
- static inline u64 read_amr(void)
-@@ -260,3 +262,59 @@ void thread_pkey_regs_init(struct thread_struct *thread)
- 	write_iamr(read_iamr() & pkey_iamr_mask);
- 	write_uamor(read_uamor() & pkey_amr_uamor_mask);
- }
-+
-+static inline bool pkey_allows_readwrite(int pkey)
-+{
-+	int pkey_shift = pkeyshift(pkey);
-+
-+	if (!is_pkey_enabled(pkey))
-+		return true;
-+
-+	return !(read_amr() & ((AMR_RD_BIT|AMR_WR_BIT) << pkey_shift));
-+}
-+
-+int __execute_only_pkey(struct mm_struct *mm)
-+{
-+	bool need_to_set_mm_pkey = false;
-+	int execute_only_pkey = mm->context.execute_only_pkey;
-+	int ret;
-+
-+	/* Do we need to assign a pkey for mm's execute-only maps? */
-+	if (execute_only_pkey == -1) {
-+		/* Go allocate one to use, which might fail */
-+		execute_only_pkey = mm_pkey_alloc(mm);
-+		if (execute_only_pkey < 0)
-+			return -1;
-+		need_to_set_mm_pkey = true;
-+	}
-+
-+	/*
-+	 * We do not want to go through the relatively costly dance to set AMR
-+	 * if we do not need to. Check it first and assume that if the
-+	 * execute-only pkey is readwrite-disabled than we do not have to set it
-+	 * ourselves.
-+	 */
-+	if (!need_to_set_mm_pkey && !pkey_allows_readwrite(execute_only_pkey))
-+		return execute_only_pkey;
-+
-+	/*
-+	 * Set up AMR so that it denies access for everything other than
-+	 * execution.
-+	 */
-+	ret = __arch_set_user_pkey_access(current, execute_only_pkey,
-+					  PKEY_DISABLE_ACCESS |
-+					  PKEY_DISABLE_WRITE);
-+	/*
-+	 * If the AMR-set operation failed somehow, just return 0 and
-+	 * effectively disable execute-only support.
-+	 */
-+	if (ret) {
-+		mm_pkey_free(mm, execute_only_pkey);
-+		return -1;
-+	}
-+
-+	/* We got one, store it and use it from here on out */
-+	if (need_to_set_mm_pkey)
-+		mm->context.execute_only_pkey = execute_only_pkey;
-+	return execute_only_pkey;
-+}
--- 
-1.7.1
+Would it be worth it making vma_pkey a noop on architectures that don't
+support protection keys so that we don't need the #ifdef here?
 
+Eric
+
+
+>  		show_smap_vma_flags(m, vma);
+>  	}
+> +
+>  	m_cache_vma(m, vma);
+>  	return ret;
+>  }
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
