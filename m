@@ -1,87 +1,82 @@
 From: linuxram at us.ibm.com (Ram Pai)
-Date: Thu, 18 Jan 2018 17:50:39 -0800
-Subject: [Linux-kselftest-mirror] [PATCH v10 18/27] powerpc: implementation
-	for arch_vma_access_permitted()
+Date: Thu, 18 Jan 2018 17:50:48 -0800
+Subject: [Linux-kselftest-mirror] [PATCH v10 27/27] mm: display pkey in
+	smaps if arch_pkeys_enabled() is true
 In-Reply-To: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
 References: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1516326648-22775-19-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1516326648-22775-28-git-send-email-linuxram@us.ibm.com>
 
-This patch provides the implementation for
-arch_vma_access_permitted(). Returns true if the
-requested access is allowed by pkey associated with the
-vma.
+Currently the  architecture  specific code is expected to
+display  the  protection  keys  in  smap  for a given vma.
+This can lead to redundant code and possibly to divergent
+formats in which the key gets displayed.
+
+This  patch  changes  the implementation. It displays the
+pkey only if the architecture support pkeys.
+
+x86 arch_show_smap() function is not needed anymore.
+Delete it.
 
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
 ---
- arch/powerpc/include/asm/mmu_context.h |    5 +++-
- arch/powerpc/mm/pkeys.c                |   34 ++++++++++++++++++++++++++++++++
- 2 files changed, 38 insertions(+), 1 deletions(-)
+ arch/x86/kernel/setup.c |    8 --------
+ fs/proc/task_mmu.c      |   11 ++++++-----
+ 2 files changed, 6 insertions(+), 13 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/mmu_context.h b/arch/powerpc/include/asm/mmu_context.h
-index 209f127..cd2bd73 100644
---- a/arch/powerpc/include/asm/mmu_context.h
-+++ b/arch/powerpc/include/asm/mmu_context.h
-@@ -186,6 +186,10 @@ static inline void arch_bprm_mm_init(struct mm_struct *mm,
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index 8af2e8d..ddf945a 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -1326,11 +1326,3 @@ static int __init register_kernel_offset_dumper(void)
+ 	return 0;
+ }
+ __initcall(register_kernel_offset_dumper);
+-
+-void arch_show_smap(struct seq_file *m, struct vm_area_struct *vma)
+-{
+-	if (!boot_cpu_has(X86_FEATURE_OSPKE))
+-		return;
+-
+-	seq_printf(m, "ProtectionKey:  %8u\n", vma_pkey(vma));
+-}
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 0edd4da..4b39a94 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -18,6 +18,7 @@
+ #include <linux/page_idle.h>
+ #include <linux/shmem_fs.h>
+ #include <linux/uaccess.h>
++#include <linux/pkeys.h>
+ 
+ #include <asm/elf.h>
+ #include <asm/tlb.h>
+@@ -728,10 +729,6 @@ static int smaps_hugetlb_range(pte_t *pte, unsigned long hmask,
+ }
+ #endif /* HUGETLB_PAGE */
+ 
+-void __weak arch_show_smap(struct seq_file *m, struct vm_area_struct *vma)
+-{
+-}
+-
+ static int show_smap(struct seq_file *m, void *v, int is_pid)
  {
- }
+ 	struct proc_maps_private *priv = m->private;
+@@ -851,9 +848,13 @@ static int show_smap(struct seq_file *m, void *v, int is_pid)
+ 			   (unsigned long)(mss->pss >> (10 + PSS_SHIFT)));
  
-+#ifdef CONFIG_PPC_MEM_KEYS
-+bool arch_vma_access_permitted(struct vm_area_struct *vma, bool write,
-+			       bool execute, bool foreign);
-+#else /* CONFIG_PPC_MEM_KEYS */
- static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
- 		bool write, bool execute, bool foreign)
- {
-@@ -193,7 +197,6 @@ static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
- 	return true;
+ 	if (!rollup_mode) {
+-		arch_show_smap(m, vma);
++#ifdef CONFIG_ARCH_HAS_PKEYS
++		if (arch_pkeys_enabled())
++			seq_printf(m, "ProtectionKey:  %8u\n", vma_pkey(vma));
++#endif
+ 		show_smap_vma_flags(m, vma);
+ 	}
++
+ 	m_cache_vma(m, vma);
+ 	return ret;
  }
- 
--#ifndef CONFIG_PPC_MEM_KEYS
- #define pkey_mm_init(mm)
- #define thread_pkey_regs_save(thread)
- #define thread_pkey_regs_restore(new_thread, old_thread)
-diff --git a/arch/powerpc/mm/pkeys.c b/arch/powerpc/mm/pkeys.c
-index 0e044ea..0701aa3 100644
---- a/arch/powerpc/mm/pkeys.c
-+++ b/arch/powerpc/mm/pkeys.c
-@@ -390,3 +390,37 @@ bool arch_pte_access_permitted(u64 pte, bool write, bool execute)
- 
- 	return pkey_access_permitted(pte_to_pkey_bits(pte), write, execute);
- }
-+
-+/*
-+ * We only want to enforce protection keys on the current thread because we
-+ * effectively have no access to AMR/IAMR for other threads or any way to tell
-+ * which AMR/IAMR in a threaded process we could use.
-+ *
-+ * So do not enforce things if the VMA is not from the current mm, or if we are
-+ * in a kernel thread.
-+ */
-+static inline bool vma_is_foreign(struct vm_area_struct *vma)
-+{
-+	if (!current->mm)
-+		return true;
-+
-+	/* if it is not our ->mm, it has to be foreign */
-+	if (current->mm != vma->vm_mm)
-+		return true;
-+
-+	return false;
-+}
-+
-+bool arch_vma_access_permitted(struct vm_area_struct *vma, bool write,
-+			       bool execute, bool foreign)
-+{
-+	if (static_branch_likely(&pkey_disabled))
-+		return true;
-+	/*
-+	 * Do not enforce our key-permissions on a foreign vma.
-+	 */
-+	if (foreign || vma_is_foreign(vma))
-+		return true;
-+
-+	return pkey_access_permitted(vma_pkey(vma), write, execute);
-+}
 -- 
 1.7.1
 
