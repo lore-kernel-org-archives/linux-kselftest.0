@@ -1,59 +1,69 @@
 From: linuxram at us.ibm.com (Ram Pai)
-Date: Thu, 18 Jan 2018 17:50:28 -0800
-Subject: [Linux-kselftest-mirror] [PATCH v10 07/27] powerpc: cleanup AMR,
-	IAMR when a key is allocated or freed
+Date: Thu, 18 Jan 2018 17:50:26 -0800
+Subject: [Linux-kselftest-mirror] [PATCH v10 05/27] powerpc: helper function
+	to read, write AMR, IAMR, UAMOR registers
 In-Reply-To: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
 References: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1516326648-22775-8-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1516326648-22775-6-git-send-email-linuxram@us.ibm.com>
 
-Cleanup the bits corresponding to a key in the AMR, and IAMR
-register, when the key is newly allocated/activated or is freed.
-We dont want some residual bits cause the hardware enforce
-unintended behavior when the key is activated or freed.
+Implements helper functions to read and write the key related
+registers; AMR, IAMR, UAMOR.
 
+AMR register tracks the read,write permission of a key
+IAMR register tracks the execute permission of a key
+UAMOR register enables and disables a key
+
+Acked-by: Balbir Singh <bsingharora at gmail.com>
 Reviewed-by: Thiago Jung Bauermann <bauerman at linux.vnet.ibm.com>
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
 ---
- arch/powerpc/include/asm/pkeys.h |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+ arch/powerpc/mm/pkeys.c |   36 ++++++++++++++++++++++++++++++++++++
+ 1 files changed, 36 insertions(+), 0 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/pkeys.h b/arch/powerpc/include/asm/pkeys.h
-index 1e8cef2..9964b46 100644
---- a/arch/powerpc/include/asm/pkeys.h
-+++ b/arch/powerpc/include/asm/pkeys.h
-@@ -69,6 +69,8 @@ static inline bool mm_pkey_is_allocated(struct mm_struct *mm, int pkey)
- 		__mm_pkey_is_allocated(mm, pkey));
+diff --git a/arch/powerpc/mm/pkeys.c b/arch/powerpc/mm/pkeys.c
+index e2f3992..6e8df6e 100644
+--- a/arch/powerpc/mm/pkeys.c
++++ b/arch/powerpc/mm/pkeys.c
+@@ -71,3 +71,39 @@ void pkey_mm_init(struct mm_struct *mm)
+ 		return;
+ 	mm_pkey_allocation_map(mm) = initial_allocation_mask;
  }
- 
-+extern void __arch_activate_pkey(int pkey);
-+extern void __arch_deactivate_pkey(int pkey);
- /*
-  * Returns a positive, 5-bit key on success, or -1 on failure.
-  * Relies on the mmap_sem to protect against concurrency in mm_pkey_alloc() and
-@@ -96,6 +98,12 @@ static inline int mm_pkey_alloc(struct mm_struct *mm)
- 
- 	ret = ffz((u32)mm_pkey_allocation_map(mm));
- 	__mm_pkey_allocated(mm, ret);
 +
-+	/*
-+	 * Enable the key in the hardware
-+	 */
-+	if (ret > 0)
-+		__arch_activate_pkey(ret);
- 	return ret;
- }
- 
-@@ -107,6 +115,10 @@ static inline int mm_pkey_free(struct mm_struct *mm, int pkey)
- 	if (!mm_pkey_is_allocated(mm, pkey))
- 		return -EINVAL;
- 
-+	/*
-+	 * Disable the key in the hardware
-+	 */
-+	__arch_deactivate_pkey(pkey);
- 	__mm_pkey_free(mm, pkey);
- 
- 	return 0;
++static inline u64 read_amr(void)
++{
++	return mfspr(SPRN_AMR);
++}
++
++static inline void write_amr(u64 value)
++{
++	mtspr(SPRN_AMR, value);
++}
++
++static inline u64 read_iamr(void)
++{
++	if (!likely(pkey_execute_disable_supported))
++		return 0x0UL;
++
++	return mfspr(SPRN_IAMR);
++}
++
++static inline void write_iamr(u64 value)
++{
++	if (!likely(pkey_execute_disable_supported))
++		return;
++
++	mtspr(SPRN_IAMR, value);
++}
++
++static inline u64 read_uamor(void)
++{
++	return mfspr(SPRN_UAMOR);
++}
++
++static inline void write_uamor(u64 value)
++{
++	mtspr(SPRN_UAMOR, value);
++}
 -- 
 1.7.1
 
