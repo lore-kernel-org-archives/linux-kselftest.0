@@ -1,77 +1,96 @@
 From: linuxram@us.ibm.com (Ram Pai)
-Date: Thu, 18 Jan 2018 17:50:41 -0800
-Subject: [Linux-kselftest-mirror] [PATCH v10 20/27] powerpc: introduce
-	get_mm_addr_key() helper
+Date: Thu, 18 Jan 2018 17:50:40 -0800
+Subject: [Linux-kselftest-mirror] [PATCH v10 19/27] powerpc: Handle
+	exceptions caused by pkey violation
 In-Reply-To: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
 References: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1516326648-22775-21-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1516326648-22775-20-git-send-email-linuxram@us.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180119015041.u3tU9aX1Yyrwp8-6En0vHfdwJxCbibg6-NJhf3Wi69Y@z>
+Message-ID: <20180119015040.EStHXKvlmg9JCeohXl0KYf-7otljqHaOnbIT8BaZAuw@z>
 
-get_mm_addr_key() helper returns the pkey associated with
-an address corresponding to a given mm_struct.
+Handle Data and  Instruction exceptions caused by memory
+protection-key.
+
+The CPU will detect the key fault if the HPTE is already
+programmed with the key.
+
+However if the HPTE is not  hashed, a key fault will not
+be detected by the hardware. The software will detect
+pkey violation in such a case.
 
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
+Signed-off-by: Thiago Jung Bauermann <bauerman at linux.vnet.ibm.com>
 ---
- arch/powerpc/include/asm/mmu.h  |    9 +++++++++
- arch/powerpc/mm/hash_utils_64.c |   24 ++++++++++++++++++++++++
- 2 files changed, 33 insertions(+), 0 deletions(-)
+ arch/powerpc/include/asm/reg.h       |    1 -
+ arch/powerpc/kernel/exceptions-64s.S |    2 +-
+ arch/powerpc/mm/fault.c              |   22 ++++++++++++++++++++++
+ 3 files changed, 23 insertions(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/mmu.h b/arch/powerpc/include/asm/mmu.h
-index 6364f5c..bb38312 100644
---- a/arch/powerpc/include/asm/mmu.h
-+++ b/arch/powerpc/include/asm/mmu.h
-@@ -260,6 +260,15 @@ static inline bool early_radix_enabled(void)
- }
- #endif
+diff --git a/arch/powerpc/include/asm/reg.h b/arch/powerpc/include/asm/reg.h
+index b779f3c..ffc9990 100644
+--- a/arch/powerpc/include/asm/reg.h
++++ b/arch/powerpc/include/asm/reg.h
+@@ -312,7 +312,6 @@
+ 				 DSISR_BAD_EXT_CTRL)
+ #define	  DSISR_BAD_FAULT_64S	(DSISR_BAD_FAULT_32S	| \
+ 				 DSISR_ATTR_CONFLICT	| \
+-				 DSISR_KEYFAULT		| \
+ 				 DSISR_UNSUPP_MMU	| \
+ 				 DSISR_PRTABLE_FAULT	| \
+ 				 DSISR_ICSWX_NO_CT	| \
+diff --git a/arch/powerpc/kernel/exceptions-64s.S b/arch/powerpc/kernel/exceptions-64s.S
+index e441b46..804e804 100644
+--- a/arch/powerpc/kernel/exceptions-64s.S
++++ b/arch/powerpc/kernel/exceptions-64s.S
+@@ -1521,7 +1521,7 @@ USE_TEXT_SECTION()
+ 	.balign	IFETCH_ALIGN_BYTES
+ do_hash_page:
+ #ifdef CONFIG_PPC_BOOK3S_64
+-	lis	r0,(DSISR_BAD_FAULT_64S|DSISR_DABRMATCH)@h
++	lis	r0,(DSISR_BAD_FAULT_64S | DSISR_DABRMATCH | DSISR_KEYFAULT)@h
+ 	ori	r0,r0,DSISR_BAD_FAULT_64S at l
+ 	and.	r0,r4,r0		/* weird error? */
+ 	bne-	handle_page_fault	/* if not, try to insert a HPTE */
+diff --git a/arch/powerpc/mm/fault.c b/arch/powerpc/mm/fault.c
+index 4797d08..943a91e 100644
+--- a/arch/powerpc/mm/fault.c
++++ b/arch/powerpc/mm/fault.c
+@@ -427,6 +427,11 @@ static int __do_page_fault(struct pt_regs *regs, unsigned long address,
  
-+#ifdef CONFIG_PPC_MEM_KEYS
-+extern u16 get_mm_addr_key(struct mm_struct *mm, unsigned long address);
-+#else
-+static inline u16 get_mm_addr_key(struct mm_struct *mm, unsigned long address)
-+{
-+	return 0;
-+}
-+#endif /* CONFIG_PPC_MEM_KEYS */
-+
- #endif /* !__ASSEMBLY__ */
+ 	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
  
- /* The kernel use the constants below to index in the page sizes array.
-diff --git a/arch/powerpc/mm/hash_utils_64.c b/arch/powerpc/mm/hash_utils_64.c
-index dc0f76e..1e1c03b 100644
---- a/arch/powerpc/mm/hash_utils_64.c
-+++ b/arch/powerpc/mm/hash_utils_64.c
-@@ -1573,6 +1573,30 @@ void hash_preload(struct mm_struct *mm, unsigned long ea,
- 	local_irq_restore(flags);
- }
- 
-+#ifdef CONFIG_PPC_MEM_KEYS
-+/*
-+ * Return the protection key associated with the given address and the
-+ * mm_struct.
-+ */
-+u16 get_mm_addr_key(struct mm_struct *mm, unsigned long address)
-+{
-+	pte_t *ptep;
-+	u16 pkey = 0;
-+	unsigned long flags;
-+
-+	if (!mm || !mm->pgd)
++	if (error_code & DSISR_KEYFAULT) {
++		_exception(SIGSEGV, regs, SEGV_PKUERR, address);
 +		return 0;
++	}
 +
-+	local_irq_save(flags);
-+	ptep = find_linux_pte(mm->pgd, address, NULL, NULL);
-+	if (ptep)
-+		pkey = pte_to_pkey_bits(pte_val(READ_ONCE(*ptep)));
-+	local_irq_restore(flags);
+ 	/*
+ 	 * We want to do this outside mmap_sem, because reading code around nip
+ 	 * can result in fault, which will cause a deadlock when called with
+@@ -498,6 +503,23 @@ static int __do_page_fault(struct pt_regs *regs, unsigned long address,
+ 	 * the fault.
+ 	 */
+ 	fault = handle_mm_fault(vma, address, flags);
 +
-+	return pkey;
-+}
++#ifdef CONFIG_PPC_MEM_KEYS
++	/*
++	 * if the HPTE is not hashed, hardware will not detect
++	 * a key fault. Lets check if we failed because of a
++	 * software detected key fault.
++	 */
++	if (unlikely(fault & VM_FAULT_SIGSEGV) &&
++		!arch_vma_access_permitted(vma, flags & FAULT_FLAG_WRITE,
++			is_exec, 0)) {
++		int pkey = vma_pkey(vma);
++
++		if (likely(pkey))
++			return __bad_area(regs, address, SEGV_PKUERR);
++	}
 +#endif /* CONFIG_PPC_MEM_KEYS */
 +
- #ifdef CONFIG_PPC_TRANSACTIONAL_MEM
- static inline void tm_flush_hash_page(int local)
- {
+ 	major |= fault & VM_FAULT_MAJOR;
+ 
+ 	/*
 -- 
 1.7.1
 
