@@ -1,83 +1,70 @@
 From: linuxram@us.ibm.com (Ram Pai)
-Date: Thu, 18 Jan 2018 17:50:48 -0800
-Subject: [Linux-kselftest-mirror] [PATCH v10 27/27] mm: display pkey in
-	smaps if arch_pkeys_enabled() is true
+Date: Thu, 18 Jan 2018 17:50:47 -0800
+Subject: [Linux-kselftest-mirror] [PATCH v10 26/27] mm,
+	x86 : introduce arch_pkeys_enabled()
 In-Reply-To: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
 References: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1516326648-22775-28-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1516326648-22775-27-git-send-email-linuxram@us.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180119015048.01vzXcUVsThfD_kWwHpSdg5pOUHwIaztZElvbANvQEI@z>
+Message-ID: <20180119015047.kr759Oko6LO2tTYk6zEMQ-5lOgxpUNCEkRYWDN0q7k8@z>
 
-Currently the  architecture  specific code is expected to
-display  the  protection  keys  in  smap  for a given vma.
-This can lead to redundant code and possibly to divergent
-formats in which the key gets displayed.
+Arch neutral code needs to know if the architecture supports
+protection  keys  to  display protection key in smaps. Hence
+introducing arch_pkeys_enabled().
 
-This  patch  changes  the implementation. It displays the
-pkey only if the architecture support pkeys.
-
-x86 arch_show_smap() function is not needed anymore.
-Delete it.
+This patch also provides x86 implementation for
+arch_pkeys_enabled().
 
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
 ---
- arch/x86/kernel/setup.c |    8 --------
- fs/proc/task_mmu.c      |   11 ++++++-----
- 2 files changed, 6 insertions(+), 13 deletions(-)
+ arch/x86/include/asm/pkeys.h |    1 +
+ arch/x86/kernel/fpu/xstate.c |    5 +++++
+ include/linux/pkeys.h        |    5 +++++
+ 3 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 8af2e8d..ddf945a 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -1326,11 +1326,3 @@ static int __init register_kernel_offset_dumper(void)
+diff --git a/arch/x86/include/asm/pkeys.h b/arch/x86/include/asm/pkeys.h
+index a0ba1ff..f6c287b 100644
+--- a/arch/x86/include/asm/pkeys.h
++++ b/arch/x86/include/asm/pkeys.h
+@@ -6,6 +6,7 @@
+ 
+ extern int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+ 		unsigned long init_val);
++extern bool arch_pkeys_enabled(void);
+ 
+ /*
+  * Try to dedicate one of the protection keys to be used as an
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index 87a57b7..4f566e9 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -945,6 +945,11 @@ int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+ 
  	return 0;
  }
- __initcall(register_kernel_offset_dumper);
--
--void arch_show_smap(struct seq_file *m, struct vm_area_struct *vma)
--{
--	if (!boot_cpu_has(X86_FEATURE_OSPKE))
--		return;
--
--	seq_printf(m, "ProtectionKey:  %8u\n", vma_pkey(vma));
--}
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 0edd4da..4b39a94 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -18,6 +18,7 @@
- #include <linux/page_idle.h>
- #include <linux/shmem_fs.h>
- #include <linux/uaccess.h>
-+#include <linux/pkeys.h>
- 
- #include <asm/elf.h>
- #include <asm/tlb.h>
-@@ -728,10 +729,6 @@ static int smaps_hugetlb_range(pte_t *pte, unsigned long hmask,
- }
- #endif /* HUGETLB_PAGE */
- 
--void __weak arch_show_smap(struct seq_file *m, struct vm_area_struct *vma)
--{
--}
--
- static int show_smap(struct seq_file *m, void *v, int is_pid)
- {
- 	struct proc_maps_private *priv = m->private;
-@@ -851,9 +848,13 @@ static int show_smap(struct seq_file *m, void *v, int is_pid)
- 			   (unsigned long)(mss->pss >> (10 + PSS_SHIFT)));
- 
- 	if (!rollup_mode) {
--		arch_show_smap(m, vma);
-+#ifdef CONFIG_ARCH_HAS_PKEYS
-+		if (arch_pkeys_enabled())
-+			seq_printf(m, "ProtectionKey:  %8u\n", vma_pkey(vma));
-+#endif
- 		show_smap_vma_flags(m, vma);
- 	}
 +
- 	m_cache_vma(m, vma);
- 	return ret;
++bool arch_pkeys_enabled(void)
++{
++	return boot_cpu_has(X86_FEATURE_OSPKE);
++}
+ #endif /* ! CONFIG_ARCH_HAS_PKEYS */
+ 
+ /*
+diff --git a/include/linux/pkeys.h b/include/linux/pkeys.h
+index 0794ca7..3ca2e44 100644
+--- a/include/linux/pkeys.h
++++ b/include/linux/pkeys.h
+@@ -35,6 +35,11 @@ static inline int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+ 	return 0;
+ }
+ 
++static inline bool arch_pkeys_enabled(void)
++{
++	return false;
++}
++
+ static inline void copy_init_pkru_to_fpregs(void)
+ {
  }
 -- 
 1.7.1
