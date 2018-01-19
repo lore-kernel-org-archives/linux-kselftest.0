@@ -1,74 +1,75 @@
 From: linuxram at us.ibm.com (Ram Pai)
-Date: Thu, 18 Jan 2018 17:50:30 -0800
-Subject: [Linux-kselftest-mirror] [PATCH v10 09/27] powerpc: ability to
-	create execute-disabled pkeys
+Date: Thu, 18 Jan 2018 17:50:41 -0800
+Subject: [Linux-kselftest-mirror] [PATCH v10 20/27] powerpc: introduce
+	get_mm_addr_key() helper
 In-Reply-To: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
 References: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1516326648-22775-10-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1516326648-22775-21-git-send-email-linuxram@us.ibm.com>
 
-powerpc has hardware support to disable execute on a pkey.
-This patch enables the ability to create execute-disabled
-keys.
+get_mm_addr_key() helper returns the pkey associated with
+an address corresponding to a given mm_struct.
 
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
 ---
- arch/powerpc/include/uapi/asm/mman.h |    6 ++++++
- arch/powerpc/mm/pkeys.c              |   16 ++++++++++++++++
- 2 files changed, 22 insertions(+), 0 deletions(-)
+ arch/powerpc/include/asm/mmu.h  |    9 +++++++++
+ arch/powerpc/mm/hash_utils_64.c |   24 ++++++++++++++++++++++++
+ 2 files changed, 33 insertions(+), 0 deletions(-)
 
-diff --git a/arch/powerpc/include/uapi/asm/mman.h b/arch/powerpc/include/uapi/asm/mman.h
-index e63bc37..65065ce 100644
---- a/arch/powerpc/include/uapi/asm/mman.h
-+++ b/arch/powerpc/include/uapi/asm/mman.h
-@@ -30,4 +30,10 @@
- #define MAP_STACK	0x20000		/* give out an address that is best suited for process/thread stacks */
- #define MAP_HUGETLB	0x40000		/* create a huge page mapping */
+diff --git a/arch/powerpc/include/asm/mmu.h b/arch/powerpc/include/asm/mmu.h
+index 6364f5c..bb38312 100644
+--- a/arch/powerpc/include/asm/mmu.h
++++ b/arch/powerpc/include/asm/mmu.h
+@@ -260,6 +260,15 @@ static inline bool early_radix_enabled(void)
+ }
+ #endif
  
-+/* Override any generic PKEY permission defines */
-+#define PKEY_DISABLE_EXECUTE   0x4
-+#undef PKEY_ACCESS_MASK
-+#define PKEY_ACCESS_MASK       (PKEY_DISABLE_ACCESS |\
-+				PKEY_DISABLE_WRITE  |\
-+				PKEY_DISABLE_EXECUTE)
- #endif /* _UAPI_ASM_POWERPC_MMAN_H */
-diff --git a/arch/powerpc/mm/pkeys.c b/arch/powerpc/mm/pkeys.c
-index eca04cd..39e9814 100644
---- a/arch/powerpc/mm/pkeys.c
-+++ b/arch/powerpc/mm/pkeys.c
-@@ -29,6 +29,14 @@ int pkey_initialize(void)
- 	int os_reserved, i;
- 
- 	/*
-+	 * We define PKEY_DISABLE_EXECUTE in addition to the arch-neutral
-+	 * generic defines for PKEY_DISABLE_ACCESS and PKEY_DISABLE_WRITE.
-+	 * Ensure that the bits a distinct.
-+	 */
-+	BUILD_BUG_ON(PKEY_DISABLE_EXECUTE &
-+		     (PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE));
++#ifdef CONFIG_PPC_MEM_KEYS
++extern u16 get_mm_addr_key(struct mm_struct *mm, unsigned long address);
++#else
++static inline u16 get_mm_addr_key(struct mm_struct *mm, unsigned long address)
++{
++	return 0;
++}
++#endif /* CONFIG_PPC_MEM_KEYS */
 +
-+	/*
- 	 * Disable the pkey system till everything is in place. A subsequent
- 	 * patch will enable it.
- 	 */
-@@ -181,10 +189,18 @@ int __arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
- 				unsigned long init_val)
+ #endif /* !__ASSEMBLY__ */
+ 
+ /* The kernel use the constants below to index in the page sizes array.
+diff --git a/arch/powerpc/mm/hash_utils_64.c b/arch/powerpc/mm/hash_utils_64.c
+index dc0f76e..1e1c03b 100644
+--- a/arch/powerpc/mm/hash_utils_64.c
++++ b/arch/powerpc/mm/hash_utils_64.c
+@@ -1573,6 +1573,30 @@ void hash_preload(struct mm_struct *mm, unsigned long ea,
+ 	local_irq_restore(flags);
+ }
+ 
++#ifdef CONFIG_PPC_MEM_KEYS
++/*
++ * Return the protection key associated with the given address and the
++ * mm_struct.
++ */
++u16 get_mm_addr_key(struct mm_struct *mm, unsigned long address)
++{
++	pte_t *ptep;
++	u16 pkey = 0;
++	unsigned long flags;
++
++	if (!mm || !mm->pgd)
++		return 0;
++
++	local_irq_save(flags);
++	ptep = find_linux_pte(mm->pgd, address, NULL, NULL);
++	if (ptep)
++		pkey = pte_to_pkey_bits(pte_val(READ_ONCE(*ptep)));
++	local_irq_restore(flags);
++
++	return pkey;
++}
++#endif /* CONFIG_PPC_MEM_KEYS */
++
+ #ifdef CONFIG_PPC_TRANSACTIONAL_MEM
+ static inline void tm_flush_hash_page(int local)
  {
- 	u64 new_amr_bits = 0x0ul;
-+	u64 new_iamr_bits = 0x0ul;
- 
- 	if (!is_pkey_enabled(pkey))
- 		return -EINVAL;
- 
-+	if (init_val & PKEY_DISABLE_EXECUTE) {
-+		if (!pkey_execute_disable_supported)
-+			return -EINVAL;
-+		new_iamr_bits |= IAMR_EX_BIT;
-+	}
-+	init_iamr(pkey, new_iamr_bits);
-+
- 	/* Set the bits we need in AMR: */
- 	if (init_val & PKEY_DISABLE_ACCESS)
- 		new_amr_bits |= AMR_RD_BIT | AMR_WR_BIT;
 -- 
 1.7.1
 
