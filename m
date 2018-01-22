@@ -1,70 +1,37 @@
 From: linuxram@us.ibm.com (Ram Pai)
-Date: Mon, 22 Jan 2018 10:52:09 -0800
-Subject: [Linux-kselftest-mirror] [PATCH v10 16/24] selftests/vm: fix an
-	assertion in test_pkey_alloc_exhaust()
+Date: Mon, 22 Jan 2018 10:52:07 -0800
+Subject: [Linux-kselftest-mirror] [PATCH v10 14/24] selftests/vm: clear the
+	bits in shadow reg when a pkey is freed.
 In-Reply-To: <1516647137-11174-1-git-send-email-linuxram@us.ibm.com>
 References: <1516647137-11174-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1516647137-11174-17-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1516647137-11174-15-git-send-email-linuxram@us.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180122185209.YXS3iBb-Yq4EaLYYPnbSQJL__sCq9JLIixnj1cbYFOQ@z>
+Message-ID: <20180122185207.bYJFua99TEEOurTcZQWEMmY9FndIwzJYkM2WNXUgurw@z>
 
-The maximum number of keys that can be allocated has to
-take into consideration, that some keys are reserved by
-the architecture for   specific   purpose. Hence cannot
-be allocated.
-
-Fix the assertion in test_pkey_alloc_exhaust()
+When a key is freed, the  key  is  no  more  effective.
+Clear the bits corresponding to the pkey in the shadow
+register. Otherwise  it  will carry some spurious bits
+which can trigger false-positive asserts.
 
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
 ---
- tools/testing/selftests/vm/pkey-helpers.h    |   14 ++++++++++++++
- tools/testing/selftests/vm/protection_keys.c |    9 ++++-----
- 2 files changed, 18 insertions(+), 5 deletions(-)
+ tools/testing/selftests/vm/protection_keys.c |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/pkey-helpers.h b/tools/testing/selftests/vm/pkey-helpers.h
-index 3559527..9d06b4a 100644
---- a/tools/testing/selftests/vm/pkey-helpers.h
-+++ b/tools/testing/selftests/vm/pkey-helpers.h
-@@ -401,4 +401,18 @@ static inline int get_start_key(void)
- #endif /* arch */
- }
- 
-+static inline int arch_reserved_keys(void)
-+{
-+#if defined(__i386__) || defined(__x86_64__) /* arch */
-+	return NR_RESERVED_PKEYS;
-+#elif __powerpc64__ /* arch */
-+	if (sysconf(_SC_PAGESIZE) == 4096)
-+		return NR_RESERVED_PKEYS_4K;
-+	else
-+		return NR_RESERVED_PKEYS_64K;
-+#else /* arch */
-+	NOT SUPPORTED
-+#endif /* arch */
-+}
-+
- #endif /* _PKEYS_HELPER_H */
 diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index 65e6dd6..33d5839 100644
+index 55a25e1..d1cbdfe 100644
 --- a/tools/testing/selftests/vm/protection_keys.c
 +++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -1167,12 +1167,11 @@ void test_pkey_alloc_exhaust(int *ptr, u16 pkey)
- 	pkey_assert(i < NR_PKEYS*2);
+@@ -586,7 +586,8 @@ int sys_pkey_free(unsigned long pkey)
+ 	int ret = syscall(SYS_pkey_free, pkey);
  
- 	/*
--	 * There are 16 pkeys supported in hardware.  One is taken
--	 * up for the default (0) and another can be taken up by
--	 * an execute-only mapping.  Ensure that we can allocate
--	 * at least 14 (16-2).
-+	 * There are NR_PKEYS pkeys supported in hardware. arch_reserved_keys()
-+	 * are reserved. One   can   be   taken   up by an execute-only mapping.
-+	 * Ensure that we can allocate at least the remaining.
- 	 */
--	pkey_assert(i >= NR_PKEYS-2);
-+	pkey_assert(i >= (NR_PKEYS-arch_reserved_keys()-1));
- 
- 	for (i = 0; i < nr_allocated_pkeys; i++) {
- 		err = sys_pkey_free(allocated_pkeys[i]);
+ 	if (!ret)
+-		shadow_pkey_reg &= reset_bits(pkey, PKEY_DISABLE_ACCESS);
++		shadow_pkey_reg &= reset_bits(pkey,
++				PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE);
+ 	dprintf1("%s(pkey=%ld) syscall ret: %d\n", __func__, pkey, ret);
+ 	return ret;
+ }
 -- 
 1.7.1
 
