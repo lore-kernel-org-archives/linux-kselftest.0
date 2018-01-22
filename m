@@ -1,69 +1,105 @@
 From: linuxram@us.ibm.com (Ram Pai)
-Date: Mon, 22 Jan 2018 10:52:15 -0800
-Subject: [Linux-kselftest-mirror] [PATCH v10 22/24] selftests/vm: Fix
-	deadlock in protection_keys.c
+Date: Mon, 22 Jan 2018 10:52:08 -0800
+Subject: [Linux-kselftest-mirror] [PATCH v10 15/24] selftests/vm: powerpc
+	implementation to check support for pkey
 In-Reply-To: <1516647137-11174-1-git-send-email-linuxram@us.ibm.com>
 References: <1516647137-11174-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1516647137-11174-23-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1516647137-11174-16-git-send-email-linuxram@us.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180122185215.0Abq-dI0s2q0wIBM8vGvwvKs6iFhiya_dMwLQH4sg8s@z>
+Message-ID: <20180122185208.CobzfeXL3bBZ6oHRm3cf6l5_tdm_oae4TQ6Kdpda1bc@z>
 
-From: Thiago Jung Bauermann <bauerman@linux.vnet.ibm.com>
-
-The sig_chld() handler calls dprintf2() taking care of setting
-dprint_in_signal so that sigsafe_printf() won't call printf().
-Unfortunately, this precaution is is negated by dprintf_level(), which
-has a call to fflush().
-
-This function acquires a lock, which means that if the signal interrupts an
-ongoing fflush() the process will deadlock. At least on powerpc this is
-easy to trigger, resulting in the following backtrace when attaching to the
-frozen process:
-
-  (gdb) bt
-  #0  0x00007fff9f96c7d8 in __lll_lock_wait_private () from /lib64/power8/libc.so.6
-  #1  0x00007fff9f8cba4c in _IO_flush_all_lockp () from /lib64/power8/libc.so.6
-  #2  0x00007fff9f8cbd1c in __GI__IO_flush_all () from /lib64/power8/libc.so.6
-  #3  0x00007fff9f8b7424 in fflush () from /lib64/power8/libc.so.6
-  #4  0x00000000100504f8 in sig_chld (x=17) at protection_keys.c:283
-  #5  <signal handler called>
-  #6  0x00007fff9f8cb8ac in _IO_flush_all_lockp () from /lib64/power8/libc.so.6
-  #7  0x00007fff9f8cbd1c in __GI__IO_flush_all () from /lib64/power8/libc.so.6
-  #8  0x00007fff9f8b7424 in fflush () from /lib64/power8/libc.so.6
-  #9  0x0000000010050b50 in pkey_get (pkey=7, flags=0) at protection_keys.c:379
-  #10 0x0000000010050dc0 in pkey_disable_set (pkey=7, flags=2) at protection_keys.c:423
-  #11 0x0000000010051414 in pkey_write_deny (pkey=7) at protection_keys.c:486
-  #12 0x00000000100556bc in test_ptrace_of_child (ptr=0x7fff9f7f0000, pkey=7) at protection_keys.c:1288
-  #13 0x0000000010055f60 in run_tests_once () at protection_keys.c:1414
-  #14 0x00000000100561a4 in main () at protection_keys.c:1459
-
-The fix is to refrain from calling fflush() when inside a signal handler.
-The output may not be as pretty but at least the testcase will be able to
-move on.
+pkey subsystem is supported if the hardware and kernel has support.
+We determine that by checking if allocation of a key succeeds or not.
 
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
-Signed-off-by: Thiago Jung Bauermann <bauerman at linux.vnet.ibm.com>
-
- tools/testing/selftests/vm/pkey-helpers.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 ---
- tools/testing/selftests/vm/pkey-helpers.h |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ tools/testing/selftests/vm/pkey-helpers.h    |   22 ++++++++++++++++------
+ tools/testing/selftests/vm/protection_keys.c |    9 +++++----
+ 2 files changed, 21 insertions(+), 10 deletions(-)
 
 diff --git a/tools/testing/selftests/vm/pkey-helpers.h b/tools/testing/selftests/vm/pkey-helpers.h
-index 9d06b4a..965cfcd 100644
+index cfc1a18..3559527 100644
 --- a/tools/testing/selftests/vm/pkey-helpers.h
 +++ b/tools/testing/selftests/vm/pkey-helpers.h
-@@ -131,7 +131,8 @@ static inline void sigsafe_printf(const char *format, ...)
- #define dprintf_level(level, args...) do {	\
- 	if (level <= DEBUG_LEVEL)		\
- 		sigsafe_printf(args);		\
--	fflush(NULL);				\
-+	if (!dprint_in_signal)			\
-+		fflush(NULL);			\
- } while (0)
- #define dprintf0(args...) dprintf_level(0, args)
- #define dprintf1(args...) dprintf_level(1, args)
+@@ -261,7 +261,7 @@ static inline void __cpuid(unsigned int *eax, unsigned int *ebx,
+ #define X86_FEATURE_PKU        (1<<3) /* Protection Keys for Userspace */
+ #define X86_FEATURE_OSPKE      (1<<4) /* OS Protection Keys Enable */
+ 
+-static inline int cpu_has_pku(void)
++static inline bool is_pkey_supported(void)
+ {
+ 	unsigned int eax;
+ 	unsigned int ebx;
+@@ -274,13 +274,13 @@ static inline int cpu_has_pku(void)
+ 
+ 	if (!(ecx & X86_FEATURE_PKU)) {
+ 		dprintf2("cpu does not have PKU\n");
+-		return 0;
++		return false;
+ 	}
+ 	if (!(ecx & X86_FEATURE_OSPKE)) {
+ 		dprintf2("cpu does not have OSPKE\n");
+-		return 0;
++		return false;
+ 	}
+-	return 1;
++	return true;
+ }
+ 
+ #define XSTATE_PKEY_BIT	(9)
+@@ -326,9 +326,19 @@ static inline void __page_o_noops(void)
+ #elif __powerpc64__ /* arch */
+ 
+ #define PAGE_SIZE (0x1UL << 16)
+-static inline int cpu_has_pku(void)
++static inline bool is_pkey_supported(void)
+ {
+-	return 1;
++	/*
++	 * No simple way to determine this.
++	 * lets try allocating a key and see if it succeeds.
++	 */
++	int ret = sys_pkey_alloc(0, 0);
++
++	if (ret > 0) {
++		sys_pkey_free(ret);
++		return true;
++	}
++	return false;
+ }
+ 
+ /* 8-bytes of instruction * 16384bytes = 1 page */
+diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
+index d1cbdfe..65e6dd6 100644
+--- a/tools/testing/selftests/vm/protection_keys.c
++++ b/tools/testing/selftests/vm/protection_keys.c
+@@ -1299,8 +1299,8 @@ void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
+ 	int size = PAGE_SIZE;
+ 	int sret;
+ 
+-	if (cpu_has_pku()) {
+-		dprintf1("SKIP: %s: no CPU support\n", __func__);
++	if (is_pkey_supported()) {
++		dprintf1("SKIP: %s: no CPU/kernel support\n", __func__);
+ 		return;
+ 	}
+ 
+@@ -1362,12 +1362,13 @@ void run_tests_once(void)
+ int main(void)
+ {
+ 	int nr_iterations = 22;
++	int pkey_supported = is_pkey_supported();
+ 
+ 	setup_handlers();
+ 
+-	printf("has pkey: %d\n", cpu_has_pku());
++	printf("has pkey: %s\n", pkey_supported ? "Yes" : "No");
+ 
+-	if (!cpu_has_pku()) {
++	if (!pkey_supported) {
+ 		int size = PAGE_SIZE;
+ 		int *ptr;
+ 
 -- 
 1.7.1
 
