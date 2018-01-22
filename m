@@ -1,50 +1,67 @@
 From: linuxram at us.ibm.com (Ram Pai)
-Date: Mon, 22 Jan 2018 10:52:12 -0800
-Subject: [Linux-kselftest-mirror] [PATCH v10 19/24] selftests/vm: detect
-	write violation on a mapped access-denied-key page
+Date: Mon, 22 Jan 2018 10:52:14 -0800
+Subject: [Linux-kselftest-mirror] [PATCH v10 21/24] selftests/vm: sub-page
+	allocator
 In-Reply-To: <1516647137-11174-1-git-send-email-linuxram@us.ibm.com>
 References: <1516647137-11174-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1516647137-11174-20-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1516647137-11174-22-git-send-email-linuxram@us.ibm.com>
 
-detect write-violation on a page to which access-disabled
-key is associated much after the page is mapped.
+introduce a new allocator that allocates 4k hardware-pages to back
+64k linux-page. This allocator is only applicable on powerpc.
 
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
 ---
- tools/testing/selftests/vm/protection_keys.c |   13 +++++++++++++
- 1 files changed, 13 insertions(+), 0 deletions(-)
+ tools/testing/selftests/vm/protection_keys.c |   30 ++++++++++++++++++++++++++
+ 1 files changed, 30 insertions(+), 0 deletions(-)
 
 diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index f90a8b6..3e9e36d 100644
+index 5783587..ae71dad 100644
 --- a/tools/testing/selftests/vm/protection_keys.c
 +++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -1059,6 +1059,18 @@ void test_write_of_access_disabled_region(int *ptr, u16 pkey)
- 	*ptr = __LINE__;
- 	expected_pkey_fault(pkey);
+@@ -766,6 +766,35 @@ void free_pkey_malloc(void *ptr)
+ 	return ptr;
  }
-+
-+void test_write_of_access_disabled_region_with_page_already_mapped(int *ptr,
-+			u16 pkey)
+ 
++void *malloc_pkey_with_mprotect_subpage(long size, int prot, u16 pkey)
 +{
-+	*ptr = __LINE__;
-+	dprintf1("disabling access; after accessing the page, "
-+		" to PKEY[%02d], doing write\n", pkey);
-+	pkey_access_deny(pkey);
-+	*ptr = __LINE__;
-+	expected_pkey_fault(pkey);
++#ifdef __powerpc64__
++	void *ptr;
++	int ret;
++
++	dprintf1("doing %s(size=%ld, prot=0x%x, pkey=%d)\n", __func__,
++			size, prot, pkey);
++	pkey_assert(pkey < NR_PKEYS);
++	ptr = mmap(NULL, size, prot, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
++	pkey_assert(ptr != (void *)-1);
++
++	ret = syscall(__NR_subpage_prot, ptr, size, NULL);
++	if (ret) {
++		perror("subpage_perm");
++		return PTR_ERR_ENOTSUP;
++	}
++
++	ret = mprotect_pkey((void *)ptr, PAGE_SIZE, prot, pkey);
++	pkey_assert(!ret);
++	record_pkey_malloc(ptr, size);
++
++	dprintf1("%s() for pkey %d @ %p\n", __func__, pkey, ptr);
++	return ptr;
++#else /*  __powerpc64__ */
++	return PTR_ERR_ENOTSUP;
++#endif /*  __powerpc64__ */
 +}
 +
- void test_kernel_write_of_access_disabled_region(int *ptr, u16 pkey)
+ void *malloc_pkey_anon_huge(long size, int prot, u16 pkey)
  {
  	int ret;
-@@ -1343,6 +1355,7 @@ void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
- 	test_write_of_write_disabled_region,
- 	test_write_of_write_disabled_region_with_page_already_mapped,
- 	test_write_of_access_disabled_region,
-+	test_write_of_access_disabled_region_with_page_already_mapped,
- 	test_kernel_write_of_access_disabled_region,
- 	test_kernel_write_of_write_disabled_region,
- 	test_kernel_gup_of_access_disabled_region,
+@@ -888,6 +917,7 @@ void setup_hugetlbfs(void)
+ void *(*pkey_malloc[])(long size, int prot, u16 pkey) = {
+ 
+ 	malloc_pkey_with_mprotect,
++	malloc_pkey_with_mprotect_subpage,
+ 	malloc_pkey_anon_huge,
+ 	malloc_pkey_hugetlb
+ /* can not do direct with the pkey_mprotect() API:
 -- 
 1.7.1
 
