@@ -1,51 +1,70 @@
 From: linuxram@us.ibm.com (Ram Pai)
-Date: Mon, 22 Jan 2018 10:52:11 -0800
-Subject: [Linux-kselftest-mirror] [PATCH v10 18/24] selftests/vm: associate
-	key on a mapped page and detect write violation
+Date: Mon, 22 Jan 2018 10:52:09 -0800
+Subject: [Linux-kselftest-mirror] [PATCH v10 16/24] selftests/vm: fix an
+	assertion in test_pkey_alloc_exhaust()
 In-Reply-To: <1516647137-11174-1-git-send-email-linuxram@us.ibm.com>
 References: <1516647137-11174-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1516647137-11174-19-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1516647137-11174-17-git-send-email-linuxram@us.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180122185211.2pMl0BgrYa1eo1l7dsswoUTwhWZ7XGFNKf0m94Wffis@z>
+Message-ID: <20180122185209.YXS3iBb-Yq4EaLYYPnbSQJL__sCq9JLIixnj1cbYFOQ@z>
 
-detect write-violation on a page to which write-disabled
-key is associated much after the page is mapped.
+The maximum number of keys that can be allocated has to
+take into consideration, that some keys are reserved by
+the architecture for   specific   purpose. Hence cannot
+be allocated.
+
+Fix the assertion in test_pkey_alloc_exhaust()
 
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
 ---
- tools/testing/selftests/vm/protection_keys.c |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+ tools/testing/selftests/vm/pkey-helpers.h    |   14 ++++++++++++++
+ tools/testing/selftests/vm/protection_keys.c |    9 ++++-----
+ 2 files changed, 18 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index 1d3f596..f90a8b6 100644
---- a/tools/testing/selftests/vm/protection_keys.c
-+++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -1034,6 +1034,17 @@ void test_read_of_access_disabled_region_with_page_already_mapped(int *ptr,
- 	expected_pkey_fault(pkey);
+diff --git a/tools/testing/selftests/vm/pkey-helpers.h b/tools/testing/selftests/vm/pkey-helpers.h
+index 3559527..9d06b4a 100644
+--- a/tools/testing/selftests/vm/pkey-helpers.h
++++ b/tools/testing/selftests/vm/pkey-helpers.h
+@@ -401,4 +401,18 @@ static inline int get_start_key(void)
+ #endif /* arch */
  }
  
-+void test_write_of_write_disabled_region_with_page_already_mapped(int *ptr,
-+		u16 pkey)
++static inline int arch_reserved_keys(void)
 +{
-+	*ptr = __LINE__;
-+	dprintf1("disabling write access; after accessing the page, "
-+		"to PKEY[%02d], doing write\n", pkey);
-+	pkey_write_deny(pkey);
-+	*ptr = __LINE__;
-+	expected_pkey_fault(pkey);
++#if defined(__i386__) || defined(__x86_64__) /* arch */
++	return NR_RESERVED_PKEYS;
++#elif __powerpc64__ /* arch */
++	if (sysconf(_SC_PAGESIZE) == 4096)
++		return NR_RESERVED_PKEYS_4K;
++	else
++		return NR_RESERVED_PKEYS_64K;
++#else /* arch */
++	NOT SUPPORTED
++#endif /* arch */
 +}
 +
- void test_write_of_write_disabled_region(int *ptr, u16 pkey)
- {
- 	dprintf1("disabling write access to PKEY[%02d], doing write\n", pkey);
-@@ -1330,6 +1341,7 @@ void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
- 	test_read_of_access_disabled_region,
- 	test_read_of_access_disabled_region_with_page_already_mapped,
- 	test_write_of_write_disabled_region,
-+	test_write_of_write_disabled_region_with_page_already_mapped,
- 	test_write_of_access_disabled_region,
- 	test_kernel_write_of_access_disabled_region,
- 	test_kernel_write_of_write_disabled_region,
+ #endif /* _PKEYS_HELPER_H */
+diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
+index 65e6dd6..33d5839 100644
+--- a/tools/testing/selftests/vm/protection_keys.c
++++ b/tools/testing/selftests/vm/protection_keys.c
+@@ -1167,12 +1167,11 @@ void test_pkey_alloc_exhaust(int *ptr, u16 pkey)
+ 	pkey_assert(i < NR_PKEYS*2);
+ 
+ 	/*
+-	 * There are 16 pkeys supported in hardware.  One is taken
+-	 * up for the default (0) and another can be taken up by
+-	 * an execute-only mapping.  Ensure that we can allocate
+-	 * at least 14 (16-2).
++	 * There are NR_PKEYS pkeys supported in hardware. arch_reserved_keys()
++	 * are reserved. One   can   be   taken   up by an execute-only mapping.
++	 * Ensure that we can allocate at least the remaining.
+ 	 */
+-	pkey_assert(i >= NR_PKEYS-2);
++	pkey_assert(i >= (NR_PKEYS-arch_reserved_keys()-1));
+ 
+ 	for (i = 0; i < nr_allocated_pkeys; i++) {
+ 		err = sys_pkey_free(allocated_pkeys[i]);
 -- 
 1.7.1
 
