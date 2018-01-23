@@ -1,22 +1,19 @@
 From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
-Date: Tue, 23 Jan 2018 10:57:23 -0500
-Subject: [Linux-kselftest-mirror] [PATCH 01/11] membarrier: selftest: Test
-	private expedited cmd (v2)
+Date: Tue, 23 Jan 2018 10:57:33 -0500
+Subject: [Linux-kselftest-mirror] [PATCH 11/11] membarrier: selftest: Test
+	private expedited sync core cmd
 In-Reply-To: <20180123155733.3404-1-mathieu.desnoyers@efficios.com>
 References: <20180123155733.3404-1-mathieu.desnoyers@efficios.com>
-Message-ID: <20180123155733.3404-2-mathieu.desnoyers@efficios.com>
+Message-ID: <20180123155733.3404-12-mathieu.desnoyers@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180123155723.jeB-7bikpV_ZFdERS1GdqSxcCmlujoDLdXQWUZPk43E@z>
+Message-ID: <20180123155733.UhMzF3DLmzSq0wT1kRCxT_2EBb_UmTjYCiLYqSZY-yc@z>
 
-Test the new MEMBARRIER_CMD_PRIVATE_EXPEDITED and
-MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED commands.
-
-Add checks expecting specific error values on system calls expected to
-fail.
+Test the new MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE and
+MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE commands.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
 Acked-by: Shuah Khan <shuahkh at osg.samsung.com>
-Acked-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+CC: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
 CC: Peter Zijlstra <peterz at infradead.org>
 CC: Paul E. McKenney <paulmck at linux.vnet.ibm.com>
 CC: Boqun Feng <boqun.feng at gmail.com>
@@ -35,94 +32,21 @@ CC: Paul Elder <paul.elder at pitt.edu>
 CC: linux-kselftest at vger.kernel.org
 CC: linux-arch at vger.kernel.org
 ---
-Changes since v1:
-- return result of ksft_exit_pass from main(), silencing compiler
-  warning about missing return value.
----
- .../testing/selftests/membarrier/membarrier_test.c | 111 ++++++++++++++++++---
- 1 file changed, 95 insertions(+), 16 deletions(-)
+ .../testing/selftests/membarrier/membarrier_test.c | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
 diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
-index 9e674d9514d1..e6ee73d01fa1 100644
+index eec39a0e1f77..22bffd55a523 100644
 --- a/tools/testing/selftests/membarrier/membarrier_test.c
 +++ b/tools/testing/selftests/membarrier/membarrier_test.c
-@@ -16,49 +16,119 @@ static int sys_membarrier(int cmd, int flags)
- static int test_membarrier_cmd_fail(void)
- {
- 	int cmd = -1, flags = 0;
-+	const char *test_name = "sys membarrier invalid command";
- 
- 	if (sys_membarrier(cmd, flags) != -1) {
- 		ksft_exit_fail_msg(
--			"sys membarrier invalid command test: command = %d, flags = %d. Should fail, but passed\n",
--			cmd, flags);
-+			"%s test: command = %d, flags = %d. Should fail, but passed\n",
-+			test_name, cmd, flags);
-+	}
-+	if (errno != EINVAL) {
-+		ksft_exit_fail_msg(
-+			"%s test: flags = %d. Should return (%d: \"%s\"), but returned (%d: \"%s\").\n",
-+			test_name, flags, EINVAL, strerror(EINVAL),
-+			errno, strerror(errno));
- 	}
- 
- 	ksft_test_result_pass(
--		"sys membarrier invalid command test: command = %d, flags = %d. Failed as expected\n",
--		cmd, flags);
-+		"%s test: command = %d, flags = %d, errno = %d. Failed as expected\n",
-+		test_name, cmd, flags, errno);
+@@ -132,6 +132,63 @@ static int test_membarrier_private_expedited_success(void)
  	return 0;
  }
  
- static int test_membarrier_flags_fail(void)
- {
- 	int cmd = MEMBARRIER_CMD_QUERY, flags = 1;
-+	const char *test_name = "sys membarrier MEMBARRIER_CMD_QUERY invalid flags";
- 
- 	if (sys_membarrier(cmd, flags) != -1) {
- 		ksft_exit_fail_msg(
--			"sys membarrier MEMBARRIER_CMD_QUERY invalid flags test: flags = %d. Should fail, but passed\n",
--			flags);
-+			"%s test: flags = %d. Should fail, but passed\n",
-+			test_name, flags);
-+	}
-+	if (errno != EINVAL) {
-+		ksft_exit_fail_msg(
-+			"%s test: flags = %d. Should return (%d: \"%s\"), but returned (%d: \"%s\").\n",
-+			test_name, flags, EINVAL, strerror(EINVAL),
-+			errno, strerror(errno));
- 	}
- 
- 	ksft_test_result_pass(
--		"sys membarrier MEMBARRIER_CMD_QUERY invalid flags test: flags = %d. Failed as expected\n",
--		flags);
-+		"%s test: flags = %d, errno = %d. Failed as expected\n",
-+		test_name, flags, errno);
- 	return 0;
- }
- 
--static int test_membarrier_success(void)
-+static int test_membarrier_shared_success(void)
- {
- 	int cmd = MEMBARRIER_CMD_SHARED, flags = 0;
--	const char *test_name = "sys membarrier MEMBARRIER_CMD_SHARED\n";
-+	const char *test_name = "sys membarrier MEMBARRIER_CMD_SHARED";
-+
-+	if (sys_membarrier(cmd, flags) != 0) {
-+		ksft_exit_fail_msg(
-+			"%s test: flags = %d, errno = %d\n",
-+			test_name, flags, errno);
-+	}
-+
-+	ksft_test_result_pass(
-+		"%s test: flags = %d\n", test_name, flags);
-+	return 0;
-+}
-+
-+static int test_membarrier_private_expedited_fail(void)
++static int test_membarrier_private_expedited_sync_core_fail(void)
 +{
-+	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
-+	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED not registered failure";
++	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE not registered failure";
 +
 +	if (sys_membarrier(cmd, flags) != -1) {
 +		ksft_exit_fail_msg(
@@ -142,31 +66,10 @@ index 9e674d9514d1..e6ee73d01fa1 100644
 +	return 0;
 +}
 +
-+static int test_membarrier_register_private_expedited_success(void)
++static int test_membarrier_register_private_expedited_sync_core_success(void)
 +{
-+	int cmd = MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED, flags = 0;
-+	const char *test_name = "sys membarrier MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED";
- 
- 	if (sys_membarrier(cmd, flags) != 0) {
- 		ksft_exit_fail_msg(
--			"sys membarrier MEMBARRIER_CMD_SHARED test: flags = %d\n",
--			flags);
-+			"%s test: flags = %d, errno = %d\n",
-+			test_name, flags, errno);
- 	}
- 
- 	ksft_test_result_pass(
--		"sys membarrier MEMBARRIER_CMD_SHARED test: flags = %d\n",
--		flags);
-+		"%s test: flags = %d\n",
-+		test_name, flags);
-+	return 0;
-+}
-+
-+static int test_membarrier_private_expedited_success(void)
-+{
-+	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
-+	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED";
++	int cmd = MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE";
 +
 +	if (sys_membarrier(cmd, flags) != 0) {
 +		ksft_exit_fail_msg(
@@ -177,34 +80,52 @@ index 9e674d9514d1..e6ee73d01fa1 100644
 +	ksft_test_result_pass(
 +		"%s test: flags = %d\n",
 +		test_name, flags);
- 	return 0;
- }
- 
-@@ -72,7 +142,16 @@ static int test_membarrier(void)
- 	status = test_membarrier_flags_fail();
++	return 0;
++}
++
++static int test_membarrier_private_expedited_sync_core_success(void)
++{
++	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE";
++
++	if (sys_membarrier(cmd, flags) != 0) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d, errno = %d\n",
++			test_name, flags, errno);
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d\n",
++		test_name, flags);
++	return 0;
++}
++
+ static int test_membarrier_register_global_expedited_success(void)
+ {
+ 	int cmd = MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED, flags = 0;
+@@ -188,6 +245,22 @@ static int test_membarrier(void)
+ 	status = test_membarrier_private_expedited_success();
  	if (status)
  		return status;
--	status = test_membarrier_success();
-+	status = test_membarrier_shared_success();
-+	if (status)
++	status = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
++	if (status < 0) {
++		ksft_test_result_fail("sys_membarrier() failed\n");
 +		return status;
-+	status = test_membarrier_private_expedited_fail();
-+	if (status)
-+		return status;
-+	status = test_membarrier_register_private_expedited_success();
-+	if (status)
-+		return status;
-+	status = test_membarrier_private_expedited_success();
- 	if (status)
- 		return status;
- 	return 0;
-@@ -108,5 +187,5 @@ int main(int argc, char **argv)
- 	test_membarrier_query();
- 	test_membarrier();
- 
--	ksft_exit_pass();
-+	return ksft_exit_pass();
- }
++	}
++	if (status & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
++		status = test_membarrier_private_expedited_sync_core_fail();
++		if (status)
++			return status;
++		status = test_membarrier_register_private_expedited_sync_core_success();
++		if (status)
++			return status;
++		status = test_membarrier_private_expedited_sync_core_success();
++		if (status)
++			return status;
++	}
+ 	/*
+ 	 * It is valid to send a global membarrier from a non-registered
+ 	 * process.
 -- 
 2.11.0
 
