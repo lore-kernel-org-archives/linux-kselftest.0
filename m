@@ -1,101 +1,61 @@
-From: linuxram@us.ibm.com (Ram Pai)
-Date: Mon, 22 Jan 2018 22:37:03 -0800
-Subject: [Linux-kselftest-mirror] [PATCH v10 01/27] mm, powerpc,
- x86: define VM_PKEY_BITx bits if CONFIG_ARCH_HAS_PKEYS is enabled
-In-Reply-To: <1516326648-22775-2-git-send-email-linuxram@us.ibm.com>
-References: <1516326648-22775-1-git-send-email-linuxram@us.ibm.com>
- <1516326648-22775-2-git-send-email-linuxram@us.ibm.com>
-Message-ID: <20180123063703.GA5661@ram.oc3035372033.ibm.com>
+From: mpe@ellerman.id.au (Michael Ellerman)
+Date: Tue, 23 Jan 2018 18:11:31 +1100
+Subject: [Linux-kselftest-mirror] selftests: run all tests
+In-Reply-To: <20180116115407.xqlu6bfvqcwoxszg@pd.tnic>
+References: <20180115145942.s3dgy457xwhn6lwv@pd.tnic>
+ <87tvvmcp0u.fsf@concordia.ellerman.id.au>
+ <20180116114411.u4cqtvzw6evwnehu@pd.tnic>
+ <20180116115407.xqlu6bfvqcwoxszg@pd.tnic>
+Message-ID: <87372xoxr0.fsf@concordia.ellerman.id.au>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180123063703.zm58-CkZ58t6fuQRAkbTcXnd5Joa66y35cqnaKENzJw@z>
+Message-ID: <20180123071131.i2maBMCPOUvnkXdHJ2i5xpHdpDEwh9cs1mOUm2rp8hY@z>
 
-Andrew,
+Borislav Petkov <bp at alien8.de> writes:
 
-	Please apply the following two patches to your tree.
+> On Tue, Jan 16, 2018@12:44:28PM +0100, Borislav Petkov wrote:
+>> Ah, that was hidden in the included lib.mk, thanks.
+>> 
+>> I wonder if we should make it more user-friendly by adding a help target
+>> like for the main Makefile...
+>
+> One more point:
+>
+> What I do is copy the x86/ folder to a test box and run all tests there.
+> If the lib.mk is not copied, run_tests is missing....
 
-[PATCH v10 01/27] mm, powerpc, x86: define VM_PKEY_BITx bits if CONFIG_ARCH_HAS_PKEYS is enabled
-[PATCH v10 02/27] mm, powerpc, x86: introduce an additional vma bit for powerpc pkey
+OK, that's not really supported I guess.
 
-	I have not heard any complaints on these changes. 
-	Dave Hansen had comments/suggestions in the initial revisions, which have been incorporated.
+If you're happy building on your host system, you can do:
 
-	Michael Ellermen has accepted the rest of the powerpc related patches in this series.
+$ make -C tools/testing/selftests/ TARGETS=x86 install
 
-Thanks,
-RP
+And then you'll have:
 
+$ find tools/testing/selftests/install/
+tools/testing/selftests/install/
+tools/testing/selftests/install/x86
+tools/testing/selftests/install/x86/mpx-mini-test_64
+tools/testing/selftests/install/x86/iopl_64
+tools/testing/selftests/install/x86/sysret_rip_64
+tools/testing/selftests/install/x86/protection_keys_64
+tools/testing/selftests/install/x86/sysret_ss_attrs_64
+tools/testing/selftests/install/x86/syscall_nt_64
+tools/testing/selftests/install/x86/test_mremap_vdso_64
+tools/testing/selftests/install/x86/ioperm_64
+tools/testing/selftests/install/x86/ptrace_syscall_64
+tools/testing/selftests/install/x86/sigreturn_64
+tools/testing/selftests/install/x86/fsgsbase_64
+tools/testing/selftests/install/x86/5lvl_64
+tools/testing/selftests/install/x86/check_initial_reg_state_64
+tools/testing/selftests/install/x86/ldt_gdt_64
+tools/testing/selftests/install/x86/single_step_syscall_64
+tools/testing/selftests/install/x86/test_vdso_64
+tools/testing/selftests/install/run_kselftest.sh
 
+You can rsync that wherever, and run it manually or with the
+run_kselftest.sh script.
 
-
-On Thu, Jan 18, 2018@05:50:22PM -0800, Ram Pai wrote:
-> VM_PKEY_BITx are defined only if CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
-> is enabled. Powerpc also needs these bits. Hence lets define the
-> VM_PKEY_BITx bits for any architecture that enables
-> CONFIG_ARCH_HAS_PKEYS.
-> 
-> Signed-off-by: Ram Pai <linuxram at us.ibm.com>
-> ---
->  fs/proc/task_mmu.c |    4 ++--
->  include/linux/mm.h |    9 +++++----
->  2 files changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> index 339e4c1..b139617 100644
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -674,13 +674,13 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
->  		[ilog2(VM_MERGEABLE)]	= "mg",
->  		[ilog2(VM_UFFD_MISSING)]= "um",
->  		[ilog2(VM_UFFD_WP)]	= "uw",
-> -#ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
-> +#ifdef CONFIG_ARCH_HAS_PKEYS
->  		/* These come out via ProtectionKey: */
->  		[ilog2(VM_PKEY_BIT0)]	= "",
->  		[ilog2(VM_PKEY_BIT1)]	= "",
->  		[ilog2(VM_PKEY_BIT2)]	= "",
->  		[ilog2(VM_PKEY_BIT3)]	= "",
-> -#endif
-> +#endif /* CONFIG_ARCH_HAS_PKEYS */
->  	};
->  	size_t i;
->  
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index ea818ff..01381d3 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -228,15 +228,16 @@ extern int overcommit_kbytes_handler(struct ctl_table *, int, void __user *,
->  #define VM_HIGH_ARCH_4	BIT(VM_HIGH_ARCH_BIT_4)
->  #endif /* CONFIG_ARCH_USES_HIGH_VMA_FLAGS */
->  
-> -#if defined(CONFIG_X86)
-> -# define VM_PAT		VM_ARCH_1	/* PAT reserves whole VMA at once (x86) */
-> -#if defined (CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS)
-> +#ifdef CONFIG_ARCH_HAS_PKEYS
->  # define VM_PKEY_SHIFT	VM_HIGH_ARCH_BIT_0
->  # define VM_PKEY_BIT0	VM_HIGH_ARCH_0	/* A protection key is a 4-bit value */
->  # define VM_PKEY_BIT1	VM_HIGH_ARCH_1
->  # define VM_PKEY_BIT2	VM_HIGH_ARCH_2
->  # define VM_PKEY_BIT3	VM_HIGH_ARCH_3
-> -#endif
-> +#endif /* CONFIG_ARCH_HAS_PKEYS */
-> +
-> +#if defined(CONFIG_X86)
-> +# define VM_PAT		VM_ARCH_1	/* PAT reserves whole VMA at once (x86) */
->  #elif defined(CONFIG_PPC)
->  # define VM_SAO		VM_ARCH_1	/* Strong Access Ordering (powerpc) */
->  #elif defined(CONFIG_PARISC)
-> -- 
-> 1.7.1
-> 
-> --
-> To unsubscribe, send a message with 'unsubscribe linux-mm' in
-> the body to majordomo at kvack.org.  For more info on Linux MM,
-> see: https://urldefense.proofpoint.com/v2/url?u=http-3A__www.linux-2Dmm.org_&d=DwIBAg&c=jf_iaSHvJObTbx-siA1ZOg&r=m-UrKChQVkZtnPpjbF6YY99NbT8FBByQ-E-ygV8luxw&m=PsCrC-HVeq8M98fNireZs4GUBJvMwNZme7wZ1YdjMqs&s=V90akzFmL1g-sNEcgmcUn_XJgJ8EaYmmsAS3AcVYScw&e= .
-> Don't email: <a href=mailto:"dont at kvack.org"> email at kvack.org </a>
-
--- 
-Ram Pai
-
+cheers
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
