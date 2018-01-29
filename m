@@ -1,44 +1,133 @@
-From: hpa@zytor.com (H. Peter Anvin)
-Date: Mon, 29 Jan 2018 10:30:05 -0800
-Subject: [Linux-kselftest-mirror] selftests/x86/fsgsbase_64 test problem
-In-Reply-To: <F6FCC323-841E-4337-B1E7-8F2E502552D6@amacapital.net>
-References: <20180126153631.ha7yc33fj5uhitjo@xps>
- <CALCETrXVFC=6wPNpL0Dc7pkSv4JSaoEZZcu3Rtw0sg7KJsE5Pg@mail.gmail.com>
- <CALCETrUi7Ub2TbFy3Cvj+j4VXZeYULPY+mgL7OX7bz9L8GO9ew@mail.gmail.com>
- <CALCETrWvkd68wPCxGwmzqgsLTr_59+=L9u8obwt+f+oUQwDY=w@mail.gmail.com>
- <CALCETrW5=K5wJqLRZACmJJ+LF8Nb+Yf3OJ1tTNwqiOCxHu3w1Q@mail.gmail.com>
- <CALCETrWq04AngUHkSv-bqDYXDSVH8N0bhXS_Nh63SpMmndexSA@mail.gmail.com>
- <CALCETrUcJ2dVkSXGhtRvQeYQZZhPca95VhjQB8j6dFN6hzceSQ@mail.gmail.com>
- <46328204-e363-e517-f30c-c8c94ac1442c@zytor.com>
- <CALCETrW6SY8ktqSA-r108WkNf15js4eu0grDds=JVbNtBdSGqA@mail.gmail.com>
- <624b9e67-14ee-6882-e55e-f337ec2471d3@zytor.com>
- <F6FCC323-841E-4337-B1E7-8F2E502552D6@amacapital.net>
-Message-ID: <0b0a3cea-d951-d3be-16de-a0e9d50cb2ba@zytor.com>
+From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
+Date: Mon, 29 Jan 2018 15:20:20 -0500
+Subject: [Linux-kselftest-mirror] [PATCH for 4.16 11/11] membarrier:
+	selftest: Test private expedited sync core cmd
+In-Reply-To: <20180129202020.8515-1-mathieu.desnoyers@efficios.com>
+References: <20180129202020.8515-1-mathieu.desnoyers@efficios.com>
+Message-ID: <20180129202020.8515-12-mathieu.desnoyers@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180129183005.8ifXUF6MbmnZvTGHmD4LPLvt2c9iJhoftvIQzRCw8xU@z>
+Message-ID: <20180129202020.q3Ku0yQHc05xGiulPHZQSnNm9xmVfif-ztcx3k9k7MA@z>
 
-On 01/29/18 10:26, Andy Lutomirski wrote:
->>>
->>> That will utterly suck on non-UMIP machines that have
->>> hypervisor-provided UMIP emulation.
->>
->> Is that a valid thing to optimize for, especially given that paranoid
->> entries aren't the most common anyway?
-> 
-> A bunch of people seem to care about NMI performance for perf.
->
+Test the new MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE and
+MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE commands.
 
-That wasn't really the question...
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+Acked-by: Shuah Khan <shuahkh at osg.samsung.com>
+Acked-by: Peter Zijlstra (Intel) <peterz at infradead.org>
+CC: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+CC: Paul E. McKenney <paulmck at linux.vnet.ibm.com>
+CC: Boqun Feng <boqun.feng at gmail.com>
+CC: Andrew Hunter <ahh at google.com>
+CC: Maged Michael <maged.michael at gmail.com>
+CC: Avi Kivity <avi at scylladb.com>
+CC: Benjamin Herrenschmidt <benh at kernel.crashing.org>
+CC: Paul Mackerras <paulus at samba.org>
+CC: Michael Ellerman <mpe at ellerman.id.au>
+CC: Dave Watson <davejwatson at fb.com>
+CC: Alan Stern <stern at rowland.harvard.edu>
+CC: Will Deacon <will.deacon at arm.com>
+CC: Andy Lutomirski <luto at kernel.org>
+CC: Alice Ferrazzi <alice.ferrazzi at gmail.com>
+CC: Paul Elder <paul.elder at pitt.edu>
+CC: linux-kselftest at vger.kernel.org
+CC: linux-arch at vger.kernel.org
+---
+ .../testing/selftests/membarrier/membarrier_test.c | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
-> And the current patch set works without this trick.
-
-But I believe the tricks it uses are fragile.
-
-> FWIW, if we switch all entries to the entry text trampoline, we get direct percpu access for free.
-
-That might be a better option.
-
-	-hpa
+diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
+index eec39a0e1f77..22bffd55a523 100644
+--- a/tools/testing/selftests/membarrier/membarrier_test.c
++++ b/tools/testing/selftests/membarrier/membarrier_test.c
+@@ -132,6 +132,63 @@ static int test_membarrier_private_expedited_success(void)
+ 	return 0;
+ }
+ 
++static int test_membarrier_private_expedited_sync_core_fail(void)
++{
++	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE not registered failure";
++
++	if (sys_membarrier(cmd, flags) != -1) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d. Should fail, but passed\n",
++			test_name, flags);
++	}
++	if (errno != EPERM) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d. Should return (%d: \"%s\"), but returned (%d: \"%s\").\n",
++			test_name, flags, EPERM, strerror(EPERM),
++			errno, strerror(errno));
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d, errno = %d\n",
++		test_name, flags, errno);
++	return 0;
++}
++
++static int test_membarrier_register_private_expedited_sync_core_success(void)
++{
++	int cmd = MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE";
++
++	if (sys_membarrier(cmd, flags) != 0) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d, errno = %d\n",
++			test_name, flags, errno);
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d\n",
++		test_name, flags);
++	return 0;
++}
++
++static int test_membarrier_private_expedited_sync_core_success(void)
++{
++	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
++	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE";
++
++	if (sys_membarrier(cmd, flags) != 0) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d, errno = %d\n",
++			test_name, flags, errno);
++	}
++
++	ksft_test_result_pass(
++		"%s test: flags = %d\n",
++		test_name, flags);
++	return 0;
++}
++
+ static int test_membarrier_register_global_expedited_success(void)
+ {
+ 	int cmd = MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED, flags = 0;
+@@ -188,6 +245,22 @@ static int test_membarrier(void)
+ 	status = test_membarrier_private_expedited_success();
+ 	if (status)
+ 		return status;
++	status = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
++	if (status < 0) {
++		ksft_test_result_fail("sys_membarrier() failed\n");
++		return status;
++	}
++	if (status & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
++		status = test_membarrier_private_expedited_sync_core_fail();
++		if (status)
++			return status;
++		status = test_membarrier_register_private_expedited_sync_core_success();
++		if (status)
++			return status;
++		status = test_membarrier_private_expedited_sync_core_success();
++		if (status)
++			return status;
++	}
+ 	/*
+ 	 * It is valid to send a global membarrier from a non-registered
+ 	 * process.
+-- 
+2.11.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
