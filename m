@@ -1,84 +1,55 @@
-From: shuahkh@osg.samsung.com (Shuah Khan)
-Date: Fri, 2 Feb 2018 10:19:12 -0700
-Subject: [Linux-kselftest-mirror] [GIT PULL] kselftest update for 4.16-rc1
-Message-ID: <1702f942-5edc-89b4-0ff7-16483236c674@osg.samsung.com>
+From: naresh.kamboju@linaro.org (Naresh Kamboju)
+Date: Wed,  7 Feb 2018 02:37:23 +0530
+Subject: [Linux-kselftest-mirror] [PATCH] selftests: bpf: test_kmod.sh:
+	check the module path before insmod
+Message-ID: <1517951243-10003-1-git-send-email-naresh.kamboju@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180202171912.tlQUjqJhVGZxyq6gKsUka4DpU0A081aZxi0UVknV1jQ@z>
+Message-ID: <20180206210723.pSk2PfccrJMBUdAI7NnEzc_S2PtP6LCfP_6I4MVLSyo@z>
 
-Hi Linus,
+test_kmod.sh reported false failure when module not present.
+Check test_bpf.ko is present in the path before loading it.
 
-Please pull the following Kselftest update for 4.16-rc1
+Stop using "insmod $SRC_TREE/lib/test_bpf.ko" instead use
+"modprobe test_bpf"
 
-This update to Kselftest consists of fixes, cleanups, and SPDX license
-additions.
+Signed-off-by: Naresh Kamboju <naresh.kamboju at linaro.org>
+---
+ tools/testing/selftests/bpf/test_kmod.sh | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-Diff for the update is attached.
+diff --git a/tools/testing/selftests/bpf/test_kmod.sh b/tools/testing/selftests/bpf/test_kmod.sh
+index ed4774d..54177b1 100755
+--- a/tools/testing/selftests/bpf/test_kmod.sh
++++ b/tools/testing/selftests/bpf/test_kmod.sh
+@@ -1,8 +1,6 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-SRC_TREE=../../../../
+-
+ test_run()
+ {
+ 	sysctl -w net.core.bpf_jit_enable=$1 2>&1 > /dev/null
+@@ -10,8 +8,13 @@ test_run()
+ 
+ 	echo "[ JIT enabled:$1 hardened:$2 ]"
+ 	dmesg -C
+-	insmod $SRC_TREE/lib/test_bpf.ko 2> /dev/null
+-	if [ $? -ne 0 ]; then
++	# Use modprobe dry run to check for missing test_bpf module
++	if ! /sbin/modprobe -q -n test_bpf; then
++		echo "test_bpf: [SKIP]"
++	elif /sbin/modprobe -q test_bpf; then
++		echo "test_bpf: ok"
++	else
++		echo "test_bpf: [FAIL]"
+ 		rc=1
+ 	fi
+ 	rmmod  test_bpf 2> /dev/null
+-- 
+2.7.4
 
-thanks,
--- Shuah
-
------------------------------------------------------------------------------------
-
-The following changes since commit ae64f9bd1d3621b5e60d7363bc20afb46aede215:
-
-  Linux 4.15-rc2 (2017-12-03 11:01:47 -0500)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-4.16-rc1
-
-for you to fetch changes up to 0e9e327d1622c332e5b1db272d5c97af82164f68:
-
-  selftests: vm: update .gitignore with missing generated file (2018-01-23 07:47:06 -0700)
-
-----------------------------------------------------------------
-linux-kselftest-4.16-rc1
-
-This update to Kselftest consists of fixes, cleanups, and SPDX license
-additions.
-
-----------------------------------------------------------------
-Anders Roxell (1):
-      selftests: seccomp: fix compile error seccomp_bpf
-
-Arnd Bergmann (1):
-      kselftest: fix OOM in memory compaction test
-
-Dmitry Safonov (1):
-      selftests/x86: Add <test_name>{,_32,_64} targets
-
-Luis de Bethencourt (1):
-      tools/testing: Fix trailing semicolon
-
-Masami Hiramatsu (2):
-      selftest: ftrace: Fix to pick text symbols for kprobes
-      selftest: ftrace: Fix to add 256 kprobe events correctly
-
-Michael Ellerman (1):
-      selftests: Fix loss of test output in run_kselftests.sh
-
-Shuah Khan (6):
-      selftests: media_tests: Fix Makefile 'clean' target warning
-      selftests: gen_kselftest_tar.h: Add SPDX license identifier
-      selftests: kselftest_install.sh: Add SPDX license identifier
-      selftests: kselftest.h: Add SPDX license identifier
-      selftests: media_tests: Add SPDX license identifier
-      selftests: vm: update .gitignore with missing generated file
-
- tools/testing/selftests/Makefile                    |  9 ++++++++-
- .../ftrace/test.d/kprobe/multiple_kprobes.tc        | 21 ++++++++++++++++++---
- tools/testing/selftests/gen_kselftest_tar.sh        |  4 +---
- tools/testing/selftests/kselftest.h                 |  2 +-
- tools/testing/selftests/kselftest_install.sh        |  4 +---
- tools/testing/selftests/lib.mk                      |  2 +-
-tools/testing/selftests/media_tests/Makefile        |  7 ++-----
- .../selftests/media_tests/media_device_open.c       |  3 ++-
- .../selftests/media_tests/media_device_test.c       |  3 ++-
- .../selftests/media_tests/video_device_test.c       |  3 ++-
- tools/testing/selftests/nsfs/pidns.c                |  2 +-
- tools/testing/selftests/seccomp/seccomp_bpf.c       |  4 ++--
- tools/testing/selftests/vm/.gitignore               |  1 +
- tools/testing/selftests/vm/compaction_test.c        |  2 ++
- tools/testing/selftests/x86/Makefile                | 12 ++++++++++++
- 15 files changed, 56 insertions(+), 23 deletions(-)
------------------------------------------------------------------------------------
+--
+To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
+the body of a message to majordomo at vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
