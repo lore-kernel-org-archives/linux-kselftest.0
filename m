@@ -1,41 +1,53 @@
-From: daniel.diaz at linaro.org (=?UTF-8?q?Daniel=20D=C3=ADaz?=)
-Date: Wed,  7 Feb 2018 11:24:31 -0600
-Subject: [Linux-kselftest-mirror] [PATCH] selftests/futex: Fix line
-	continuation in Makefile
-Message-ID: <1518024271-12467-1-git-send-email-daniel.diaz@linaro.org>
+From: naresh.kamboju at linaro.org (Naresh Kamboju)
+Date: Wed,  7 Feb 2018 23:45:34 +0530
+Subject: [Linux-kselftest-mirror] [PATCH v2] selftests: bpf: test_kmod.sh:
+	check the module path before insmod
+Message-ID: <1518027334-9814-1-git-send-email-naresh.kamboju@linaro.org>
 
-The Makefile lacks a couple of line continuation backslashes
-in an `if' clause, which produces an error while make'ing:
+test_kmod.sh reported false failure when module not present.
+Check test_bpf.ko is present in the path before loading it.
 
-  $ make
-  make[1]: Entering directory `/[...]/linux/tools/testing/selftests/futex'
-  /bin/sh: -c: line 5: syntax error: unexpected end of file
-  make[1]: *** [all] Error 1
-  make[1]: Leaving directory `/[...]/linux/tools/testing/selftests/futex'
-  make: *** [all] Error 2
+Two cases to be addressed here,
+In the development process of test_bpf.c unit testing will be done by
+developers by using "insmod $SRC_TREE/lib/test_bpf.ko"
 
-Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
+On the other hand testers run full tests by installing modules on device
+under test (DUT) and followed by modprobe to insert the modules accordingly.
+
+Signed-off-by: Naresh Kamboju <naresh.kamboju at linaro.org>
 ---
- tools/testing/selftests/futex/Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/test_kmod.sh | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
-index cea4adc..a63e845 100644
---- a/tools/testing/selftests/futex/Makefile
-+++ b/tools/testing/selftests/futex/Makefile
-@@ -12,9 +12,9 @@ all:
- 		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
- 		mkdir $$BUILD_TARGET  -p;	\
- 		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
--		if [ -e $$DIR/$(TEST_PROGS) ]; then
--			rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/;
--		fi
-+		if [ -e $$DIR/$(TEST_PROGS) ]; then \
-+			rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/; \
-+		fi \
- 	done
+diff --git a/tools/testing/selftests/bpf/test_kmod.sh b/tools/testing/selftests/bpf/test_kmod.sh
+index ed4774d..35669cc 100755
+--- a/tools/testing/selftests/bpf/test_kmod.sh
++++ b/tools/testing/selftests/bpf/test_kmod.sh
+@@ -10,9 +10,21 @@ test_run()
  
- override define RUN_TESTS
+ 	echo "[ JIT enabled:$1 hardened:$2 ]"
+ 	dmesg -C
+-	insmod $SRC_TREE/lib/test_bpf.ko 2> /dev/null
+-	if [ $? -ne 0 ]; then
+-		rc=1
++	if [ -f ${SRC_TREE}/lib/test_bpf.ko ]; then
++		insmod ${SRC_TREE}/lib/test_bpf.ko 2> /dev/null
++		if [ $? -ne 0 ]; then
++			rc=1
++		fi
++	else
++		# Use modprobe dry run to check for missing test_bpf module
++		if ! /sbin/modprobe -q -n test_bpf; then
++			echo "test_bpf: [SKIP]"
++		elif /sbin/modprobe -q test_bpf; then
++			echo "test_bpf: ok"
++		else
++			echo "test_bpf: [FAIL]"
++			rc=1
++		fi
+ 	fi
+ 	rmmod  test_bpf 2> /dev/null
+ 	dmesg | grep FAIL
 -- 
 2.7.4
 
