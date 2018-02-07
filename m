@@ -1,68 +1,39 @@
-From: daniel@iogearbox.net (Daniel Borkmann)
-Date: Wed, 7 Feb 2018 14:32:44 +0100
-Subject: [Linux-kselftest-mirror] [PATCH] selftests: bpf: test_kmod.sh:
- check the module path before insmod
-In-Reply-To: <1517951243-10003-1-git-send-email-naresh.kamboju@linaro.org>
-References: <1517951243-10003-1-git-send-email-naresh.kamboju@linaro.org>
-Message-ID: <429eeaf2-06ba-3f50-1e3e-b0e32c60817b@iogearbox.net>
+From: daniel.diaz@linaro.org (=?UTF-8?Q?Daniel_D=C3=ADaz_Rodr=C3=ADguez?=)
+Date: Wed, 7 Feb 2018 11:16:07 -0600
+Subject: [Linux-kselftest-mirror] [PATCH] selftests/android: Fix line
+	continuation in Makefile
+In-Reply-To: <CAOuPNLh17DH2nZL86WSWKUKQJr-Z1EY+ZqRFsXRTqK-XMtyx2g@mail.gmail.com>
+References: <1517961219-17700-1-git-send-email-daniel.diaz@linaro.org>
+ <CAOuPNLh17DH2nZL86WSWKUKQJr-Z1EY+ZqRFsXRTqK-XMtyx2g@mail.gmail.com>
+Message-ID:
+ <CAEUSe79T9Miw==D6u3Wx-EMymzP8aABWf_Lfqb9KP57WZgU0ZQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180207133244.49usSXHHnBFySnP8bNAsWuzHH2IK-qv6khkX-t-_aUY@z>
+Message-ID: <20180207171607.yCeTww9Oji5ddI_gd3NpkgpljsLIHnZ3HO8ExatRW1k@z>
 
-Hi Naresh,
+Hello!
 
-On 02/06/2018 10:07 PM, Naresh Kamboju wrote:
-> test_kmod.sh reported false failure when module not present.
-> Check test_bpf.ko is present in the path before loading it.
-> 
-> Stop using "insmod $SRC_TREE/lib/test_bpf.ko" instead use
-> "modprobe test_bpf"
-> 
-> Signed-off-by: Naresh Kamboju <naresh.kamboju at linaro.org>
 
-Thanks for looking into this! Could we have a way to be able to
-support both? Say, when test_bpf.ko from SRC_TREE is not present,
-we try with modprobe -q fallback? I would still like to support
-the case where you can make local changes and add new tests to
-test_bpf.c, recompile and then just rerun the test_kmod.sh w/o
-having to install it first.
+On 7 February 2018@00:01, Pintu Kumar <pintu.ping@gmail.com> wrote:
+[...]
+> Thanks for your patch.
+> However, I have copied this Makefile from
+> tools/testing/selftests/futex/Makefile before modifying it.
+> If there is a problem with backslash then the same problem must be
+> there in futex Makefile as well.
 
-Thanks,
-Daniel
+There is. Patch coming.
 
->  tools/testing/selftests/bpf/test_kmod.sh | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/test_kmod.sh b/tools/testing/selftests/bpf/test_kmod.sh
-> index ed4774d..54177b1 100755
-> --- a/tools/testing/selftests/bpf/test_kmod.sh
-> +++ b/tools/testing/selftests/bpf/test_kmod.sh
-> @@ -1,8 +1,6 @@
->  #!/bin/sh
->  # SPDX-License-Identifier: GPL-2.0
->  
-> -SRC_TREE=../../../../
-> -
->  test_run()
->  {
->  	sysctl -w net.core.bpf_jit_enable=$1 2>&1 > /dev/null
-> @@ -10,8 +8,13 @@ test_run()
->  
->  	echo "[ JIT enabled:$1 hardened:$2 ]"
->  	dmesg -C
-> -	insmod $SRC_TREE/lib/test_bpf.ko 2> /dev/null
-> -	if [ $? -ne 0 ]; then
-> +	# Use modprobe dry run to check for missing test_bpf module
-> +	if ! /sbin/modprobe -q -n test_bpf; then
-> +		echo "test_bpf: [SKIP]"
-> +	elif /sbin/modprobe -q test_bpf; then
-> +		echo "test_bpf: ok"
-> +	else
-> +		echo "test_bpf: [FAIL]"
->  		rc=1
->  	fi
->  	rmmod  test_bpf 2> /dev/null
-> 
 
+[...]
+> Also is it because of make version ?
+> Can you check your make version ?
+
+It's make 3.81.
+
+Thanks and greetings!
+
+Daniel Díaz
+daniel.diaz at linaro.org
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
