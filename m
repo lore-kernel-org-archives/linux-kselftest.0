@@ -1,50 +1,68 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Wed, 7 Feb 2018 20:20:41 +1100
-Subject: [Linux-kselftest-mirror] [PATCH] selftests: pstore: Adding
-	config fragment CONFIG_PSTORE_RAM=m
-In-Reply-To: <1517995040-22929-1-git-send-email-naresh.kamboju@linaro.org>
-References: <1517995040-22929-1-git-send-email-naresh.kamboju@linaro.org>
-Message-ID:
- <CAGXu5jJO9Cm37U=GwHPVpfh4yumszN3LuZweZuC5hqb-d0s3zw@mail.gmail.com>
+From: daniel@iogearbox.net (Daniel Borkmann)
+Date: Wed, 7 Feb 2018 14:32:44 +0100
+Subject: [Linux-kselftest-mirror] [PATCH] selftests: bpf: test_kmod.sh:
+ check the module path before insmod
+In-Reply-To: <1517951243-10003-1-git-send-email-naresh.kamboju@linaro.org>
+References: <1517951243-10003-1-git-send-email-naresh.kamboju@linaro.org>
+Message-ID: <429eeaf2-06ba-3f50-1e3e-b0e32c60817b@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180207092041.TGlShDxbx4MuprBzU6yezS2d-LH7j_gKD7AQDQobYFQ@z>
+Message-ID: <20180207133244.49usSXHHnBFySnP8bNAsWuzHH2IK-qv6khkX-t-_aUY@z>
 
-On Wed, Feb 7, 2018 at 8:17 PM, Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
-> pstore_tests and pstore_post_reboot_tests need CONFIG_PSTORE_RAM=m
+Hi Naresh,
 
-Does it need to be =m, or is =y okay too?
-
+On 02/06/2018 10:07 PM, Naresh Kamboju wrote:
+> test_kmod.sh reported false failure when module not present.
+> Check test_bpf.ko is present in the path before loading it.
+> 
+> Stop using "insmod $SRC_TREE/lib/test_bpf.ko" instead use
+> "modprobe test_bpf"
+> 
 > Signed-off-by: Naresh Kamboju <naresh.kamboju at linaro.org>
 
-Either way:
+Thanks for looking into this! Could we have a way to be able to
+support both? Say, when test_bpf.ko from SRC_TREE is not present,
+we try with modprobe -q fallback? I would still like to support
+the case where you can make local changes and add new tests to
+test_bpf.c, recompile and then just rerun the test_kmod.sh w/o
+having to install it first.
 
-Acked-by: Kees Cook <keescook at chromium.org>
+Thanks,
+Daniel
 
--Kees
+>  tools/testing/selftests/bpf/test_kmod.sh | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/test_kmod.sh b/tools/testing/selftests/bpf/test_kmod.sh
+> index ed4774d..54177b1 100755
+> --- a/tools/testing/selftests/bpf/test_kmod.sh
+> +++ b/tools/testing/selftests/bpf/test_kmod.sh
+> @@ -1,8 +1,6 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -SRC_TREE=../../../../
+> -
+>  test_run()
+>  {
+>  	sysctl -w net.core.bpf_jit_enable=$1 2>&1 > /dev/null
+> @@ -10,8 +8,13 @@ test_run()
+>  
+>  	echo "[ JIT enabled:$1 hardened:$2 ]"
+>  	dmesg -C
+> -	insmod $SRC_TREE/lib/test_bpf.ko 2> /dev/null
+> -	if [ $? -ne 0 ]; then
+> +	# Use modprobe dry run to check for missing test_bpf module
+> +	if ! /sbin/modprobe -q -n test_bpf; then
+> +		echo "test_bpf: [SKIP]"
+> +	elif /sbin/modprobe -q test_bpf; then
+> +		echo "test_bpf: ok"
+> +	else
+> +		echo "test_bpf: [FAIL]"
+>  		rc=1
+>  	fi
+>  	rmmod  test_bpf 2> /dev/null
+> 
 
-> ---
->  tools/testing/selftests/pstore/config | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/tools/testing/selftests/pstore/config b/tools/testing/selftests/pstore/config
-> index 6a8e5a9..d148f9f 100644
-> --- a/tools/testing/selftests/pstore/config
-> +++ b/tools/testing/selftests/pstore/config
-> @@ -2,3 +2,4 @@ CONFIG_MISC_FILESYSTEMS=y
->  CONFIG_PSTORE=y
->  CONFIG_PSTORE_PMSG=y
->  CONFIG_PSTORE_CONSOLE=y
-> +CONFIG_PSTORE_RAM=m
-> --
-> 2.7.4
->
-
-
-
--- 
-Kees Cook
-Pixel Security
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
