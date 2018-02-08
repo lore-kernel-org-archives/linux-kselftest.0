@@ -1,66 +1,33 @@
-From: pintu.ping at gmail.com (Pintu Kumar)
-Date: Thu, 8 Feb 2018 10:47:07 +0530
-Subject: [Linux-kselftest-mirror] [PATCH] selftests/android: Fix line
-	continuation in Makefile
-In-Reply-To: <1517961219-17700-1-git-send-email-daniel.diaz@linaro.org>
-References: <1517961219-17700-1-git-send-email-daniel.diaz@linaro.org>
-Message-ID: <CAOuPNLgJx9voztUYGoUmgPR6B7qKfDXx8TUx5utpSi0gxMOFcQ@mail.gmail.com>
+From: daniel.diaz at linaro.org (=?UTF-8?q?Daniel=20D=C3=ADaz?=)
+Date: Wed,  7 Feb 2018 23:50:28 -0600
+Subject: [Linux-kselftest-mirror] [PATCH] selftests/x86: Remove 5lvl test
+	from Makefile
+Message-ID: <1518069029-22457-1-git-send-email-daniel.diaz@linaro.org>
 
-On Wed, Feb 7, 2018 at 5:22 AM, Daniel Díaz <daniel.diaz at linaro.org> wrote:
-> The Makefile lacks a couple of line continuation backslashes
-> in an `if' clause, which can make the subsequent rsync
-> command go awry over the whole filesystem (`rsync -a / /`).
->
->   /bin/sh: -c: line 5: syntax error: unexpected end of file
->   make[1]: [all] Error 1 (ignored)
->   TEST=$DIR"_test.sh"; \
->                   if [ -e $DIR/$TEST ]; then
->   /bin/sh: -c: line 2: syntax error: unexpected end of file
->   make[1]: [all] Error 1 (ignored)
->   rsync -a $DIR/$TEST $BUILD_TARGET/;
->   [...a myriad of:]
->   [  rsync: readlink_stat("...") failed: Permission denied (13)]
->   [  skipping non-regular file "..."]
->   [  rsync: opendir "..." failed: Permission denied (13)]
->   [and many other errors...]
->   fi
->   make[1]: fi: Command not found
->   make[1]: [all] Error 127 (ignored)
->   done
->   make[1]: done: Command not found
->   make[1]: [all] Error 127 (ignored)
->
-> Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
-> ---
->  tools/testing/selftests/android/Makefile | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/android/Makefile b/tools/testing/selftests/android/Makefile
-> index 1a74922..f6304d2 100644
-> --- a/tools/testing/selftests/android/Makefile
-> +++ b/tools/testing/selftests/android/Makefile
-> @@ -11,11 +11,11 @@ all:
->                 BUILD_TARGET=$(OUTPUT)/$$DIR;   \
->                 mkdir $$BUILD_TARGET  -p;       \
->                 make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
-> -               #SUBDIR test prog name should be in the form: SUBDIR_test.sh
-> +               #SUBDIR test prog name should be in the form: SUBDIR_test.sh \
->                 TEST=$$DIR"_test.sh"; \
-> -               if [ -e $$DIR/$$TEST ]; then
-> -                       rsync -a $$DIR/$$TEST $$BUILD_TARGET/;
-> -               fi
-> +               if [ -e $$DIR/$$TEST ]; then \
-> +                       rsync -a $$DIR/$$TEST $$BUILD_TARGET/; \
-> +               fi \
->         done
->
->  override define RUN_TESTS
+The 5lvl.c test file was incorporated into another one in
+selftests/vm (va_128TBswitch.c) in commit 235266b8.
 
-Acked-by: Pintu Agarwal <pintu.ping at gmail.com>
+Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
+---
+ tools/testing/selftests/x86/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> --
-> 2.7.4
->
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 10ca46d..ce2615a 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -11,7 +11,7 @@ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt ptrace_sysc
+ TARGETS_C_32BIT_ONLY := entry_from_vm86 syscall_arg_fault test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+-TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip 5lvl
++TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip
+ 
+ TARGETS_C_32BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_32BIT_ONLY)
+ TARGETS_C_64BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_64BIT_ONLY)
+-- 
+2.7.4
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
