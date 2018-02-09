@@ -1,21 +1,69 @@
-From: kirill at shutemov.name (Kirill A. Shutemov)
-Date: Thu, 8 Feb 2018 10:51:48 +0300
-Subject: [Linux-kselftest-mirror] [PATCH] selftests/x86: Remove 5lvl
-	test from Makefile
-In-Reply-To: <1518069029-22457-1-git-send-email-daniel.diaz@linaro.org>
-References: <1518069029-22457-1-git-send-email-daniel.diaz@linaro.org>
-Message-ID: <20180208075148.gpxuve4cwwcp2etb@node.shutemov.name>
+From: lizhijian at cn.fujitsu.com (Li Zhijian)
+Date: Fri, 9 Feb 2018 15:53:59 +0800
+Subject: [Linux-kselftest-mirror] [kselftests] compaction_test is blocked
+Message-ID: <700acd92-2b0b-d2da-615e-1f228708d216@cn.fujitsu.com>
 
-On Wed, Feb 07, 2018 at 11:50:28PM -0600, Daniel Díaz wrote:
-> The 5lvl.c test file was incorporated into another one in
-> selftests/vm (va_128TBswitch.c) in commit 235266b8.
-> 
-> Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
+Hi
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov at linux.intel.com>
+kselftests is integrated Intel 0Day project.
+Sometimes we found compaction_test is blocked for more than 1 hours until i kill it.
 
--- 
- Kirill A. Shutemov
+Try to figure out where it is running, i added some log to this case.
+
+the test log is like:
+-------------------
+  [  111.750543] main: 248
+  [  111.750544]-
+  [ 111.750821] check_compaction: 98
+  [  111.750822]-
+  [  111.751102] check_compaction: 105
+  [  111.751103]-
+  [  111.751362] check_compaction: 111
+  [  111.751363]-
+  [  111.751621] check_compaction: 118
+  [  111.751622]-
+  [  111.751879] check_compaction: 123
+  [  111.751880]-
+-------------------
+118         fprintf(stderr, "%s: %d\n", __func__, __LINE__);
+119         lseek(fd, 0, SEEK_SET);
+120
+121         /* Request a large number of huge pages. The Kernel will allocate
+122            as much as it can */
+123         fprintf(stderr, "%s: %d\n", __func__, __LINE__);         <<<======== the last line we can catch.
+124         if (write(fd, "100000", (6*sizeof(char))) != (6*sizeof(char))) {        <<<<============ blocking position
+125                 perror("Failed to write 100000 to /proc/sys/vm/nr_hugepages\n");
+126                 goto close_fd;
+127         }
+128
+129         lseek(fd, 0, SEEK_SET);
+130
+131         fprintf(stderr, "%s: %d\n", __func__, __LINE__);
+132         if (read(fd, nr_hugepages, sizeof(nr_hugepages)) <= 0) {
+133                 perror("Failed to re-read from /proc/sys/vm/nr_hugepages\n");
+134                 goto close_fd;
+135         }
+-------------------
+
+According to above log and code, it most likely it is blocking at the writing operation.
+
+my environment is like:
+OS: debian
+kernel: v4.15
+model: Ivytown Ivy Bridge-EP
+nr_cpu: 48
+memory: 64G
+
+
+NOTE: 0Day can reproduce this issue in 20% on 0Day.
+
+Anybody can help have a look?
+
+Thanks
+Zhjian
+
+
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
