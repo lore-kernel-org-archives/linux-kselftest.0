@@ -1,75 +1,97 @@
 From: linux@dominikbrodowski.net (Dominik Brodowski)
-Date: Sun, 11 Feb 2018 12:10:12 +0100
-Subject: [Linux-kselftest-mirror] [PATCH 4/5] selftests/x86: do not rely on
-	int $0x80 in single_step_syscall.c
+Date: Sun, 11 Feb 2018 12:10:10 +0100
+Subject: [Linux-kselftest-mirror] [PATCH 2/5] selftests/x86: fix vDSO
+	selftest segfault for vsyscall=none
 In-Reply-To: <20180211111013.16888-1-linux@dominikbrodowski.net>
 References: <20180211111013.16888-1-linux@dominikbrodowski.net>
-Message-ID: <20180211111013.16888-5-linux@dominikbrodowski.net>
+Message-ID: <20180211111013.16888-3-linux@dominikbrodowski.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180211111012.3-dbuY5bMC7SV3JzQa59T9GIpZ-ih3Kx_wIyCW8rQXY@z>
+Message-ID: <20180211111010.MjMhAZRYQgevNbQv-6W35zbhOETXojmBvLbWlzZt7Lk@z>
 
-On 64bit builds, we should not rely on int $0x80 working (it only does if
-CONFIG_IA32_EMULATION is enabled). To keep the "Set TF and check int80"
-test running on 64bit installs with CONFIG_IA32_EMULATION enabled, build
-this test only if we can also build 32bit binaries (which should be a
-good approximation for that).
+The vDSO selftest tries to execute a vsyscall unconditionally, even if it
+is not present on the test system (e.g. if booted with vsyscall=none or
+with CONFIG_LEGACY_VSYSCALL_NONE=y set. Fix this by copying (and tweaking)
+the vsyscall check from test_vsyscall.c
 
-CC: Dmitry Safonov <dsafonov at virtuozzo.com>
-CC: Andy Lutomirski <luto at kernel.org>
+CC: Andrew Lutomirski <luto at kernel.org>
 Signed-off-by: Dominik Brodowski <linux at dominikbrodowski.net>
 ---
- tools/testing/selftests/x86/Makefile              | 2 ++
- tools/testing/selftests/x86/single_step_syscall.c | 5 ++++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ tools/testing/selftests/x86/test_vdso.c | 50 ++++++++++++++++++++++++++++-----
+ 1 file changed, 43 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index ce2615a2d105..371ae715c506 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -40,12 +40,14 @@ endef
- ifeq ($(CAN_BUILD_I386),1)
- all: all_32
- TEST_PROGS += $(BINARIES_32)
-+EXTRA_CFLAGS += -DCAN_BUILD_32
- $(foreach t,$(TARGETS_C_32BIT_ALL),$(eval $(call gen-target-rule-32,$(t))))
- endif
+diff --git a/tools/testing/selftests/x86/test_vdso.c b/tools/testing/selftests/x86/test_vdso.c
+index 29973cde06d3..558c8207e7b9 100644
+--- a/tools/testing/selftests/x86/test_vdso.c
++++ b/tools/testing/selftests/x86/test_vdso.c
+@@ -28,18 +28,52 @@
  
- ifeq ($(CAN_BUILD_X86_64),1)
- all: all_64
- TEST_PROGS += $(BINARIES_64)
-+EXTRA_CFLAGS += -DCAN_BUILD_64
- $(foreach t,$(TARGETS_C_64BIT_ALL),$(eval $(call gen-target-rule-64,$(t))))
- endif
+ int nerrs = 0;
  
-diff --git a/tools/testing/selftests/x86/single_step_syscall.c b/tools/testing/selftests/x86/single_step_syscall.c
-index a48da95c18fd..ddfdd635de16 100644
---- a/tools/testing/selftests/x86/single_step_syscall.c
-+++ b/tools/testing/selftests/x86/single_step_syscall.c
-@@ -119,7 +119,9 @@ static void check_result(void)
- 
- int main()
- {
-+#ifdef CAN_BUILD_32
- 	int tmp;
-+#endif
- 
- 	sethandler(SIGTRAP, sigtrap, 0);
- 
-@@ -139,12 +141,13 @@ int main()
- 		      : : "c" (post_nop) : "r11");
- 	check_result();
++typedef long (*getcpu_t)(unsigned *, unsigned *, void *);
++
++getcpu_t vgetcpu;
++getcpu_t vdso_getcpu;
++
++static void *vsyscall_getcpu(void)
++{
+ #ifdef __x86_64__
+-# define VSYS(x) (x)
++	FILE *maps;
++	char line[128];
++	bool found = false;
++
++	maps = fopen("/proc/self/maps", "r");
++	if (!maps) /* might still be present, but ignore it here, as we test vDSO not vsyscall */
++		return NULL;
++
++	while (fgets(line, sizeof(line), maps)) {
++		char r, x;
++		void *start, *end;
++		char name[128];
++		if (sscanf(line, "%p-%p %c-%cp %*x %*x:%*x %*u %s",
++			   &start, &end, &r, &x, name) != 5)
++			continue;
++
++		if (strcmp(name, "[vsyscall]"))
++			continue;
++
++		/* assume entries are OK, as we test vDSO here not vsyscall */
++		found = true;
++		break;
++	}
++
++	fclose(maps);
++
++	if (!found) {
++		printf("Warning: failed to find vsyscall getcpu\n");
++		return NULL;
++	}
++	return (void *) (0xffffffffff600800);
+ #else
+-# define VSYS(x) 0
++	return NULL;
  #endif
--
-+#ifdef CAN_BUILD_32
- 	printf("[RUN]\tSet TF and check int80\n");
- 	set_eflags(get_eflags() | X86_EFLAGS_TF);
- 	asm volatile ("int $0x80" : "=a" (tmp) : "a" (SYS_getpid)
- 			: INT80_CLOBBERS);
- 	check_result();
-+#endif
++}
  
- 	/*
- 	 * This test is particularly interesting if fast syscalls use
+-typedef long (*getcpu_t)(unsigned *, unsigned *, void *);
+-
+-const getcpu_t vgetcpu = (getcpu_t)VSYS(0xffffffffff600800);
+-getcpu_t vdso_getcpu;
+ 
+-void fill_function_pointers()
++static void fill_function_pointers()
+ {
+ 	void *vdso = dlopen("linux-vdso.so.1",
+ 			    RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
+@@ -54,6 +88,8 @@ void fill_function_pointers()
+ 	vdso_getcpu = (getcpu_t)dlsym(vdso, "__vdso_getcpu");
+ 	if (!vdso_getcpu)
+ 		printf("Warning: failed to find getcpu in vDSO\n");
++
++	vgetcpu = (getcpu_t) vsyscall_getcpu();
+ }
+ 
+ static long sys_getcpu(unsigned * cpu, unsigned * node,
 -- 
 2.16.1
 
