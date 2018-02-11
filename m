@@ -1,32 +1,31 @@
 From: linux@dominikbrodowski.net (Dominik Brodowski)
-Date: Sun, 11 Feb 2018 12:10:09 +0100
-Subject: [Linux-kselftest-mirror] [PATCH 1/5] selftests/x86: 5lvl test has
-	been moved
-In-Reply-To: <20180211111013.16888-1-linux@dominikbrodowski.net>
-References: <20180211111013.16888-1-linux@dominikbrodowski.net>
-Message-ID: <20180211111013.16888-2-linux@dominikbrodowski.net>
+Date: Sun, 11 Feb 2018 12:10:08 +0100
+Subject: [Linux-kselftest-mirror] [PATCH 0/5] selftests/x86: fixes for
+	!CONFIG_IA32_EMULATION and vsyscall=none
+Message-ID: <20180211111013.16888-1-linux@dominikbrodowski.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180211111009.o_8qBrQSxdEPOqbL3sGJHI4DiAt2Wyv3l-P0DI5CMKw@z>
+Message-ID: <20180211111008.yNvN73hItJzZ62Dy8wMiajEoNUBDMzM1owzEJd31bWg@z>
 
-Fixes: 235266b8e11c "selftests/vm: move 128TB mmap boundary test to generic directory"
-Signed-off-by: Dominik Brodowski <linux at dominikbrodowski.net>
----
- tools/testing/selftests/x86/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On systems with CONFIG_IA32_EMULATION disabled and vsyscall disabled, a
+couple of selftests fail spectacularly.
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 10ca46df1449..ce2615a2d105 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -11,7 +11,7 @@ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt ptrace_sysc
- TARGETS_C_32BIT_ONLY := entry_from_vm86 syscall_arg_fault test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
--TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip 5lvl
-+TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip
- 
- TARGETS_C_32BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_32BIT_ONLY)
- TARGETS_C_64BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_64BIT_ONLY)
+Also throw in a fix for the Makefile, which still wants to build the moved
+5lvl test.
+
+Dominik Brodowski (5):
+  selftests/x86: 5lvl test has been moved
+  selftests/x86: fix vDSO selftest segfault for vsyscall=none
+  selftests/x86: do not rely on int $0x80 in test_mremap_vdso.c
+  selftests/x86: do not rely on int $0x80 in single_step_syscall.c
+  selftests/x86: disable tests requiring 32bit support on pure 64bit
+    systems
+
+ tools/testing/selftests/x86/Makefile              | 24 +++++++----
+ tools/testing/selftests/x86/single_step_syscall.c |  5 ++-
+ tools/testing/selftests/x86/test_mremap_vdso.c    |  4 ++
+ tools/testing/selftests/x86/test_vdso.c           | 50 +++++++++++++++++++----
+ 4 files changed, 67 insertions(+), 16 deletions(-)
+
 -- 
 2.16.1
 
