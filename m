@@ -1,42 +1,50 @@
 From: linux@dominikbrodowski.net (Dominik Brodowski)
-Date: Sun, 11 Feb 2018 12:10:11 +0100
-Subject: [Linux-kselftest-mirror] [PATCH 3/5] selftests/x86: do not rely on
-	int $0x80 in test_mremap_vdso.c
-In-Reply-To: <20180211111013.16888-1-linux@dominikbrodowski.net>
-References: <20180211111013.16888-1-linux@dominikbrodowski.net>
-Message-ID: <20180211111013.16888-4-linux@dominikbrodowski.net>
+Date: Sun, 11 Feb 2018 11:59:50 +0100
+Subject: [Linux-kselftest-mirror] [PATCH] selftest/vDSO: fix O=
+Message-ID: <20180211105950.14720-1-linux@dominikbrodowski.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180211111011.zzmYRvdhAXgYdonyHp1zX2WpX99osxUMIoSdjasg5iE@z>
+Message-ID: <20180211105950.ERgmphdnY9Xsf_x7h3jzMWhrRJJqMhovRzls7QNhNxM@z>
 
-On 64bit builds, we should not rely on int $0x80 working (it only does if
-CONFIG_IA32_EMULATION is enabled). Without this patch, the move test may
-succeed, but the int $0x80 cause a segfault, resulting in a false negative
-output of this selftest.
+The vDSO selftests ignored the O= or KBUILD_OUTPUT= parameters. Fix it.
 
-CC: Dmitry Safonov <dsafonov at virtuozzo.com>
-CC: Andy Lutomirski <luto at kernel.org>
 Signed-off-by: Dominik Brodowski <linux at dominikbrodowski.net>
 ---
- tools/testing/selftests/x86/test_mremap_vdso.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/vDSO/Makefile | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/test_mremap_vdso.c b/tools/testing/selftests/x86/test_mremap_vdso.c
-index bf0d687c7db7..64f11c8d9b76 100644
---- a/tools/testing/selftests/x86/test_mremap_vdso.c
-+++ b/tools/testing/selftests/x86/test_mremap_vdso.c
-@@ -90,8 +90,12 @@ int main(int argc, char **argv, char **envp)
- 			vdso_size += PAGE_SIZE;
- 		}
+diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+index 3d5a62ff7d31..f5d7a7851e21 100644
+--- a/tools/testing/selftests/vDSO/Makefile
++++ b/tools/testing/selftests/vDSO/Makefile
+@@ -1,4 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
++include ../lib.mk
++
+ ifndef CROSS_COMPILE
+ CFLAGS := -std=gnu99
+ CFLAGS_vdso_standalone_test_x86 := -nostdlib -fno-asynchronous-unwind-tables -fno-stack-protector
+@@ -6,16 +8,14 @@ ifeq ($(CONFIG_X86_32),y)
+ LDLIBS += -lgcc_s
+ endif
  
-+#ifdef __i386__
- 		/* Glibc is likely to explode now - exit with raw syscall */
- 		asm volatile ("int $0x80" : : "a" (__NR_exit), "b" (!!ret));
-+#else /* __x86_64__ */
-+		syscall(SYS_exit, ret);
-+#endif
- 	} else {
- 		int status;
+-TEST_PROGS := vdso_test vdso_standalone_test_x86
++TEST_PROGS := $(OUTPUT)/vdso_test $(OUTPUT)/vdso_standalone_test_x86
  
+ all: $(TEST_PROGS)
+-vdso_test: parse_vdso.c vdso_test.c
+-vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
++$(OUTPUT)/vdso_test: parse_vdso.c vdso_test.c
++$(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
+ 	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
+ 		vdso_standalone_test_x86.c parse_vdso.c \
+-		-o vdso_standalone_test_x86
++		-o $@
+ 
+-include ../lib.mk
+-clean:
+-	rm -fr $(TEST_PROGS)
++EXTRA_CLEAN := $(TEST_PROGS)
+ endif
 -- 
 2.16.1
 
