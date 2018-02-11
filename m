@@ -1,97 +1,71 @@
 From: linux@dominikbrodowski.net (Dominik Brodowski)
-Date: Sun, 11 Feb 2018 12:10:10 +0100
-Subject: [Linux-kselftest-mirror] [PATCH 2/5] selftests/x86: fix vDSO
-	selftest segfault for vsyscall=none
+Date: Sun, 11 Feb 2018 12:10:13 +0100
+Subject: [Linux-kselftest-mirror] [PATCH 5/5] selftests/x86: disable tests
+	requiring 32bit support on pure 64bit systems
 In-Reply-To: <20180211111013.16888-1-linux@dominikbrodowski.net>
 References: <20180211111013.16888-1-linux@dominikbrodowski.net>
-Message-ID: <20180211111013.16888-3-linux@dominikbrodowski.net>
+Message-ID: <20180211111013.16888-6-linux@dominikbrodowski.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180211111010.MjMhAZRYQgevNbQv-6W35zbhOETXojmBvLbWlzZt7Lk@z>
+Message-ID: <20180211111013.ndPrpnS4Vo51y0SjUbPazYnStewjAcJkcbr_oBuRAes@z>
 
-The vDSO selftest tries to execute a vsyscall unconditionally, even if it
-is not present on the test system (e.g. if booted with vsyscall=none or
-with CONFIG_LEGACY_VSYSCALL_NONE=y set. Fix this by copying (and tweaking)
-the vsyscall check from test_vsyscall.c
+The ldt_gdt and ptrace_syscall selftests, even in their 64bit variant, use
+hard-coded 32bit syscall numbers and call int $0x80. This will fail on
+64bit systems with CONFIG_IA32_EMULATION disabled. Therefore, do not build
+these tests if we cannot build 32bit binaries (which should be a good
+approximation for CONFIG_IA32_EMULATION being enabled).
 
-CC: Andrew Lutomirski <luto at kernel.org>
+CC: Dmitry Safonov <dsafonov at virtuozzo.com>
+CC: Andy Lutomirski <luto at kernel.org>
 Signed-off-by: Dominik Brodowski <linux at dominikbrodowski.net>
 ---
- tools/testing/selftests/x86/test_vdso.c | 50 ++++++++++++++++++++++++++++-----
- 1 file changed, 43 insertions(+), 7 deletions(-)
+ tools/testing/selftests/x86/Makefile | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/test_vdso.c b/tools/testing/selftests/x86/test_vdso.c
-index 29973cde06d3..558c8207e7b9 100644
---- a/tools/testing/selftests/x86/test_vdso.c
-+++ b/tools/testing/selftests/x86/test_vdso.c
-@@ -28,18 +28,52 @@
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 371ae715c506..d744991c0f4f 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -5,16 +5,26 @@ include ../lib.mk
  
- int nerrs = 0;
+ .PHONY: all all_32 all_64 warn_32bit_failure clean
  
-+typedef long (*getcpu_t)(unsigned *, unsigned *, void *);
+-TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt ptrace_syscall test_mremap_vdso \
+-			check_initial_reg_state sigreturn ldt_gdt iopl mpx-mini-test ioperm \
++UNAME_M := $(shell uname -m)
++CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
++CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
 +
-+getcpu_t vgetcpu;
-+getcpu_t vdso_getcpu;
-+
-+static void *vsyscall_getcpu(void)
-+{
- #ifdef __x86_64__
--# define VSYS(x) (x)
-+	FILE *maps;
-+	char line[128];
-+	bool found = false;
-+
-+	maps = fopen("/proc/self/maps", "r");
-+	if (!maps) /* might still be present, but ignore it here, as we test vDSO not vsyscall */
-+		return NULL;
-+
-+	while (fgets(line, sizeof(line), maps)) {
-+		char r, x;
-+		void *start, *end;
-+		char name[128];
-+		if (sscanf(line, "%p-%p %c-%cp %*x %*x:%*x %*u %s",
-+			   &start, &end, &r, &x, name) != 5)
-+			continue;
-+
-+		if (strcmp(name, "[vsyscall]"))
-+			continue;
-+
-+		/* assume entries are OK, as we test vDSO here not vsyscall */
-+		found = true;
-+		break;
-+	}
-+
-+	fclose(maps);
-+
-+	if (!found) {
-+		printf("Warning: failed to find vsyscall getcpu\n");
-+		return NULL;
-+	}
-+	return (void *) (0xffffffffff600800);
- #else
--# define VSYS(x) 0
-+	return NULL;
- #endif
-+}
++TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
++			check_initial_reg_state sigreturn iopl mpx-mini-test ioperm \
+ 			protection_keys test_vdso test_vsyscall
+ TARGETS_C_32BIT_ONLY := entry_from_vm86 syscall_arg_fault test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+ TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip
++# Some selftests require 32bit support enabled also on 64bit systems
++TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
  
--typedef long (*getcpu_t)(unsigned *, unsigned *, void *);
+-TARGETS_C_32BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_32BIT_ONLY)
++TARGETS_C_32BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_32BIT_ONLY) $(TARGETS_C_32BIT_NEEDED)
+ TARGETS_C_64BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_64BIT_ONLY)
++ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),11)
++TARGETS_C_64BIT_ALL += $(TARGETS_C_32BIT_NEEDED)
++endif
++
+ BINARIES_32 := $(TARGETS_C_32BIT_ALL:%=%_32)
+ BINARIES_64 := $(TARGETS_C_64BIT_ALL:%=%_64)
+ 
+@@ -23,10 +33,6 @@ BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
+ 
+ CFLAGS := -O2 -g -std=gnu99 -pthread -Wall -no-pie
+ 
+-UNAME_M := $(shell uname -m)
+-CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
+-CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
 -
--const getcpu_t vgetcpu = (getcpu_t)VSYS(0xffffffffff600800);
--getcpu_t vdso_getcpu;
- 
--void fill_function_pointers()
-+static void fill_function_pointers()
- {
- 	void *vdso = dlopen("linux-vdso.so.1",
- 			    RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
-@@ -54,6 +88,8 @@ void fill_function_pointers()
- 	vdso_getcpu = (getcpu_t)dlsym(vdso, "__vdso_getcpu");
- 	if (!vdso_getcpu)
- 		printf("Warning: failed to find getcpu in vDSO\n");
-+
-+	vgetcpu = (getcpu_t) vsyscall_getcpu();
- }
- 
- static long sys_getcpu(unsigned * cpu, unsigned * node,
+ define gen-target-rule-32
+ $(1) $(1)_32: $(OUTPUT)/$(1)_32
+ .PHONY: $(1) $(1)_32
 -- 
 2.16.1
 
