@@ -1,108 +1,34 @@
-From: lizhijian@cn.fujitsu.com (Li Zhijian)
-Date: Sun, 11 Feb 2018 13:44:41 +0800
-Subject: [Linux-kselftest-mirror] [kselftests] compaction_test is blocked
-In-Reply-To: <20180209211119.xbch2eok6holyvel@xps>
-References: <700acd92-2b0b-d2da-615e-1f228708d216@cn.fujitsu.com>
- <20180209211119.xbch2eok6holyvel@xps>
-Message-ID: <7c95e7cc-1955-ba99-9aa5-4bf5d994bd58@cn.fujitsu.com>
+From: linux@dominikbrodowski.net (Dominik Brodowski)
+Date: Sun, 11 Feb 2018 12:10:09 +0100
+Subject: [Linux-kselftest-mirror] [PATCH 1/5] selftests/x86: 5lvl test has
+	been moved
+In-Reply-To: <20180211111013.16888-1-linux@dominikbrodowski.net>
+References: <20180211111013.16888-1-linux@dominikbrodowski.net>
+Message-ID: <20180211111013.16888-2-linux@dominikbrodowski.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180211054441.3Hl-IoB5vwpDaQFISu3g8RVYJyVYE0OUJ3KDy53nxV4@z>
+Message-ID: <20180211111009.o_8qBrQSxdEPOqbL3sGJHI4DiAt2Wyv3l-P0DI5CMKw@z>
 
+Fixes: 235266b8e11c "selftests/vm: move 128TB mmap boundary test to generic directory"
+Signed-off-by: Dominik Brodowski <linux at dominikbrodowski.net>
+---
+ tools/testing/selftests/x86/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-On 02/10/2018 05:11 AM, Dan Rue wrote:
-> On Fri, Feb 09, 2018@03:53:59PM +0800, Li Zhijian wrote:
->> Hi
->>
->> kselftests is integrated Intel 0Day project.
->> Sometimes we found compaction_test is blocked for more than 1 hours until i kill it.
->>
->> Try to figure out where it is running, i added some log to this case.
->>
->> the test log is like:
->> -------------------
->>   [  111.750543] main: 248
->>   [  111.750544]-
->>   [ 111.750821] check_compaction: 98
->>   [  111.750822]-
->>   [  111.751102] check_compaction: 105
->>   [  111.751103]-
->>   [  111.751362] check_compaction: 111
->>   [  111.751363]-
->>   [  111.751621] check_compaction: 118
->>   [  111.751622]-
->>   [  111.751879] check_compaction: 123
->>   [  111.751880]-
->> -------------------
->> 118         fprintf(stderr, "%s: %d\n", __func__, __LINE__);
->> 119         lseek(fd, 0, SEEK_SET);
->> 120
->> 121         /* Request a large number of huge pages. The Kernel will allocate
->> 122            as much as it can */
->> 123         fprintf(stderr, "%s: %d\n", __func__, __LINE__);         <<<======== the last line we can catch.
->> 124         if (write(fd, "100000", (6*sizeof(char))) != (6*sizeof(char))) {        <<<<============ blocking position
->> 125                 perror("Failed to write 100000 to /proc/sys/vm/nr_hugepages\n");
->> 126                 goto close_fd;
->> 127         }
->> 128
->> 129         lseek(fd, 0, SEEK_SET);
->> 130
->> 131         fprintf(stderr, "%s: %d\n", __func__, __LINE__);
->> 132         if (read(fd, nr_hugepages, sizeof(nr_hugepages)) <= 0) {
->> 133                 perror("Failed to re-read from /proc/sys/vm/nr_hugepages\n");
->> 134                 goto close_fd;
->> 135         }
->> -------------------
->>
->> According to above log and code, it most likely it is blocking at the writing operation.
->>
->> my environment is like:
->> OS: debian
->> kernel: v4.15
->> model: Ivytown Ivy Bridge-EP
->> nr_cpu: 48
->> memory: 64G
-> Hi Zhijian,
->
-> Please try this patch in mainline:
->
->      4c1baad22390 kselftest: fix OOM in memory compaction test
-
-Hi Dan
-
-Thanks for your replies.
-
-I run this case on v4.15, looks this patch is already merged to v4.15.
-lizhijian at inn:~/linux$ git describe 4c1baad
-v4.15-rc2-2-g4c1baad223906
-
-Thanks
-
-> Dan
->
->>
->> NOTE: 0Day can reproduce this issue in 20% on 0Day.
->>
->> Anybody can help have a look?
->>
->> Thanks
->> Zhjian
->>
->>
->>
->> --
->> To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
->> the body of a message to majordomo at vger.kernel.org
->> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
-> .
->
-
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 10ca46df1449..ce2615a2d105 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -11,7 +11,7 @@ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt ptrace_sysc
+ TARGETS_C_32BIT_ONLY := entry_from_vm86 syscall_arg_fault test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+-TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip 5lvl
++TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip
+ 
+ TARGETS_C_32BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_32BIT_ONLY)
+ TARGETS_C_64BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_64BIT_ONLY)
 -- 
-Best regards.
-Li Zhijian (8528)
-
-
+2.16.1
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
