@@ -1,49 +1,121 @@
-From: lizhijian@cn.fujitsu.com (Li Zhijian)
-Date: Mon, 12 Feb 2018 21:52:04 +0800
-Subject: [Linux-kselftest-mirror] [PATCH] selftests/bpf/test_maps: exit
-	child process without error in ENOMEM case
-Message-ID: <1518443524-18373-1-git-send-email-lizhijian@cn.fujitsu.com>
+From: shuah@kernel.org (Shuah Khan)
+Date: Mon, 12 Feb 2018 10:58:17 -0700
+Subject: [Linux-kselftest-mirror] [PATCH] selftests/x86: clarify that
+ there is no buffer overflow on sscanf usage
+In-Reply-To: <20180211205924.GA23210@light.dominikbrodowski.net>
+References: <20180211111013.16888-1-linux@dominikbrodowski.net>
+ <20180211111013.16888-3-linux@dominikbrodowski.net>
+ <20180211112153.f2ni5mcuut6f6zvq@gmail.com>
+ <20180211121714.GA11096@isilmar-4.linta.de>
+ <20180211130029.GA23754@light.dominikbrodowski.net>
+ <20180211182428.e7isprkt6hbuq3dk@gmail.com>
+ <20180211205924.GA23210@light.dominikbrodowski.net>
+Message-ID: <14b56564-cfa0-e6aa-7f5d-57431be7eb03@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180212135204.TlayojdQKurgo4PuNHliK_219ILrr2LFe81ACOvpt3Y@z>
+Message-ID: <20180212175817.7-l69E9zmSmo0xORZfM8alwVJduh5lC9Co8RxNXVgH4@z>
 
-From: Li Zhijian <zhijianx.li@intel.com>
+On 02/11/2018 01:59 PM, Dominik Brodowski wrote:
+> 
+> Suggested-by: Ingo Molnar <mingo at kernel.org>
+> CC: Andy Lutomirski <luto at kernel.org>
+> Signed-off-by: Dominik Brodowski <linux at dominikbrodowski.net>
+> 
 
-test_maps contains a series of stress tests, and previously it will break the
-reset tests when it failed to alloc memory.
------------------------
-Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
-Failed to create hashmap key=16 value=262144 'Cannot allocate memory'
-Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
-Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
-test_maps: test_maps.c:955: run_parallel: Assertion `status == 0' failed.
-Aborted
-not ok 1..3 selftests:  test_maps [FAIL]
------------------------
-after this patch, the rest tests will be continue when it occurs a ENOMEM failure
+Missing commit log. Please add one.
 
-CC: Alexei Starovoitov <alexei.starovoitov at gmail.com>
-CC: Philip Li <philip.li at intel.com>
-Suggest-by: Daniel Borkmann <daniel at iogearbox.net>
-Signed-off-by: Li Zhijian <zhijianx.li at intel.com>
----
- tools/testing/selftests/bpf/test_maps.c | 2 ++
- 1 file changed, 2 insertions(+)
+thanks,
+-- Shuah
 
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index 436c4c7..9e03a4c 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -126,6 +126,8 @@ static void test_hashmap_sizes(int task, void *data)
- 			fd = bpf_create_map(BPF_MAP_TYPE_HASH, i, j,
- 					    2, map_flags);
- 			if (fd < 0) {
-+				if (errno == ENOMEM)
-+					return;
- 				printf("Failed to create hashmap key=%d value=%d '%s'\n",
- 				       i, j, strerror(errno));
- 				exit(1);
--- 
-2.7.4
+> ---
+> 
+>> Yeah, probably - but still, this connection and the sscanf() guarantee is not 
+>> obvious at first sight, so please improve this to derive from the same value 
+>> (define a LINE_MAX size or such), plus maybe add a comment to the sscanf() line 
+>> that this is safe because strlen(name) >= strlen(line).
+> 
+> Sounds reasonable. Patch (which applies on top of the five patches for
+> selftests/x86 I sent out earlier today) is attached.
+> 
+> Thanks,
+> 	Dominik
+> 
+> diff --git a/tools/testing/selftests/x86/test_vdso.c b/tools/testing/selftests/x86/test_vdso.c
+> index 558c8207e7b9..7ade625f10ed 100644
+> --- a/tools/testing/selftests/x86/test_vdso.c
+> +++ b/tools/testing/selftests/x86/test_vdso.c
+> @@ -26,6 +26,9 @@
+>  # endif
+>  #endif
+>  
+> +/* max length of lines in /proc/self/maps - anything longer is skipped here */
+> +#define MAPS_LINE_LEN 128
+> +
+>  int nerrs = 0;
+>  
+>  typedef long (*getcpu_t)(unsigned *, unsigned *, void *);
+> @@ -37,17 +40,19 @@ static void *vsyscall_getcpu(void)
+>  {
+>  #ifdef __x86_64__
+>  	FILE *maps;
+> -	char line[128];
+> +	char line[MAPS_LINE_LEN];
+>  	bool found = false;
+>  
+>  	maps = fopen("/proc/self/maps", "r");
+>  	if (!maps) /* might still be present, but ignore it here, as we test vDSO not vsyscall */
+>  		return NULL;
+>  
+> -	while (fgets(line, sizeof(line), maps)) {
+> +	while (fgets(line, MAPS_LINE_LEN, maps)) {
+>  		char r, x;
+>  		void *start, *end;
+> -		char name[128];
+> +		char name[MAPS_LINE_LEN];
+> +
+> +		/* sscanf is safe here as strlen(name) >= strlen(line) */
+>  		if (sscanf(line, "%p-%p %c-%cp %*x %*x:%*x %*u %s",
+>  			   &start, &end, &r, &x, name) != 5)
+>  			continue;
+> diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/selftests/x86/test_vsyscall.c
+> index 7a744fa7b786..ee92e4727f18 100644
+> --- a/tools/testing/selftests/x86/test_vsyscall.c
+> +++ b/tools/testing/selftests/x86/test_vsyscall.c
+> @@ -33,6 +33,9 @@
+>  # endif
+>  #endif
+>  
+> +/* max length of lines in /proc/self/maps - anything longer is skipped here */
+> +#define MAPS_LINE_LEN 128
+> +
+>  static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
+>  		       int flags)
+>  {
+> @@ -98,7 +101,7 @@ static int init_vsys(void)
+>  #ifdef __x86_64__
+>  	int nerrs = 0;
+>  	FILE *maps;
+> -	char line[128];
+> +	char line[MAPS_LINE_LEN];
+>  	bool found = false;
+>  
+>  	maps = fopen("/proc/self/maps", "r");
+> @@ -108,10 +111,12 @@ static int init_vsys(void)
+>  		return 0;
+>  	}
+>  
+> -	while (fgets(line, sizeof(line), maps)) {
+> +	while (fgets(line, MAPS_LINE_LEN, maps)) {
+>  		char r, x;
+>  		void *start, *end;
+> -		char name[128];
+> +		char name[MAPS_LINE_LEN];
+> +
+> +		/* sscanf is safe here as strlen(name) >= strlen(line) */
+>  		if (sscanf(line, "%p-%p %c-%cp %*x %*x:%*x %*u %s",
+>  			   &start, &end, &r, &x, name) != 5)
+>  			continue;
+> 
+> 
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
