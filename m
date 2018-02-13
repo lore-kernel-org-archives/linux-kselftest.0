@@ -1,45 +1,61 @@
 From: shuahkh@osg.samsung.com (Shuah Khan)
-Date: Tue, 13 Feb 2018 14:25:10 -0700
-Subject: [PATCH v2] selftests: sync: missing CFLAGS while compiling
-In-Reply-To: <1517955821-11511-1-git-send-email-daniel.diaz@linaro.org>
-References: <1517955821-11511-1-git-send-email-daniel.diaz@linaro.org>
-Message-ID: <24ab9c58-2f4c-b433-7b36-421e51a2e79b@osg.samsung.com>
+Date: Tue, 13 Feb 2018 14:25:55 -0700
+Subject: [PATCH] selftests/android: Fix line continuation in Makefile
+In-Reply-To: <1517961219-17700-1-git-send-email-daniel.diaz@linaro.org>
+References: <1517961219-17700-1-git-send-email-daniel.diaz@linaro.org>
+Message-ID: <b343b99b-0c55-1032-cc6e-dacd367f7e8f@osg.samsung.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180213212510.1WIMb35R1DR1pt3NDpf_V4rqYVNESR6ph0RvxTp18ZM@z>
+Message-ID: <20180213212555.f9EQD6_802XzrY9wPYHub1QlX3N7rbUiZiW8z1WLBH4@z>
 
-On 02/06/2018 03:23 PM, Daniel Díaz wrote:
-> From: Anders Roxell <anders.roxell at linaro.org>
+On 02/06/2018 04:52 PM, Daniel Díaz wrote:
+> The Makefile lacks a couple of line continuation backslashes
+> in an `if' clause, which can make the subsequent rsync
+> command go awry over the whole filesystem (`rsync -a / /`).
 > 
-> Based on patch: https://patchwork.kernel.org/patch/10042045/
+>   /bin/sh: -c: line 5: syntax error: unexpected end of file
+>   make[1]: [all] Error 1 (ignored)
+>   TEST=$DIR"_test.sh"; \
+>                   if [ -e $DIR/$TEST ]; then
+>   /bin/sh: -c: line 2: syntax error: unexpected end of file
+>   make[1]: [all] Error 1 (ignored)
+>   rsync -a $DIR/$TEST $BUILD_TARGET/;
+>   [...a myriad of:]
+>   [  rsync: readlink_stat("...") failed: Permission denied (13)]
+>   [  skipping non-regular file "..."]
+>   [  rsync: opendir "..." failed: Permission denied (13)]
+>   [and many other errors...]
+>   fi
+>   make[1]: fi: Command not found
+>   make[1]: [all] Error 127 (ignored)
+>   done
+>   make[1]: done: Command not found
+>   make[1]: [all] Error 127 (ignored)
 > 
-> arch64-linux-gnu-gcc -c sync.c -o sync/sync.o
-> sync.c:42:29: fatal error: linux/sync_file.h: No such file or directory
->  #include <linux/sync_file.h>
->                              ^
-> CFLAGS is not used during the compile step, so the system instead of
-> kernel headers are used.  Fix this by adding CFLAGS to the OBJS compile
-> rule.
-> 
-> Reported-by: Lei Yang <Lei.Yang at windriver.com>
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 > Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
 > ---
->  tools/testing/selftests/sync/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/testing/selftests/android/Makefile | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/sync/Makefile b/tools/testing/selftests/sync/Makefile
-> index b3c8ba3..d0121a8 100644
-> --- a/tools/testing/selftests/sync/Makefile
-> +++ b/tools/testing/selftests/sync/Makefile
-> @@ -30,7 +30,7 @@ $(TEST_CUSTOM_PROGS): $(TESTS) $(OBJS)
->  	$(CC) -o $(TEST_CUSTOM_PROGS) $(OBJS) $(TESTS) $(CFLAGS) $(LDFLAGS)
+> diff --git a/tools/testing/selftests/android/Makefile b/tools/testing/selftests/android/Makefile
+> index 1a74922..f6304d2 100644
+> --- a/tools/testing/selftests/android/Makefile
+> +++ b/tools/testing/selftests/android/Makefile
+> @@ -11,11 +11,11 @@ all:
+>  		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
+>  		mkdir $$BUILD_TARGET  -p;	\
+>  		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
+> -		#SUBDIR test prog name should be in the form: SUBDIR_test.sh
+> +		#SUBDIR test prog name should be in the form: SUBDIR_test.sh \
+>  		TEST=$$DIR"_test.sh"; \
+> -		if [ -e $$DIR/$$TEST ]; then
+> -			rsync -a $$DIR/$$TEST $$BUILD_TARGET/;
+> -		fi
+> +		if [ -e $$DIR/$$TEST ]; then \
+> +			rsync -a $$DIR/$$TEST $$BUILD_TARGET/; \
+> +		fi \
+>  	done
 >  
->  $(OBJS): $(OUTPUT)/%.o: %.c
-> -	$(CC) -c $^ -o $@
-> +	$(CC) -c $^ -o $@ $(CFLAGS)
->  
->  $(TESTS): $(OUTPUT)/%.o: %.c
->  	$(CC) -c $^ -o $@
+>  override define RUN_TESTS
 > 
 
 Thanks for the patch. Applied to linux-kselftest fixes for 4.16-rc3
