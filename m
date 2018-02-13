@@ -1,120 +1,36 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Mon, 12 Feb 2018 10:58:17 -0700
-Subject: [Linux-kselftest-mirror] [PATCH] selftests/x86: clarify that
- there is no buffer overflow on sscanf usage
-In-Reply-To: <20180211205924.GA23210@light.dominikbrodowski.net>
-References: <20180211111013.16888-1-linux@dominikbrodowski.net>
- <20180211111013.16888-3-linux@dominikbrodowski.net>
- <20180211112153.f2ni5mcuut6f6zvq@gmail.com>
- <20180211121714.GA11096@isilmar-4.linta.de>
- <20180211130029.GA23754@light.dominikbrodowski.net>
- <20180211182428.e7isprkt6hbuq3dk@gmail.com>
- <20180211205924.GA23210@light.dominikbrodowski.net>
-Message-ID: <14b56564-cfa0-e6aa-7f5d-57431be7eb03@kernel.org>
+From: shuahkh at osg.samsung.com (Shuah Khan)
+Date: Tue, 13 Feb 2018 14:23:36 -0700
+Subject: [PATCH] selftests: memfd: add config fragment for fuse
+In-Reply-To: <1517955648-11186-1-git-send-email-daniel.diaz@linaro.org>
+References: <1517955648-11186-1-git-send-email-daniel.diaz@linaro.org>
+Message-ID: <14ff3440-ebaf-5d1d-66a3-d6213ca4cb95@osg.samsung.com>
 
-On 02/11/2018 01:59 PM, Dominik Brodowski wrote:
+On 02/06/2018 03:20 PM, Daniel Díaz wrote:
+> From: Anders Roxell <anders.roxell at linaro.org>
 > 
-> Suggested-by: Ingo Molnar <mingo at kernel.org>
-> CC: Andy Lutomirski <luto at kernel.org>
-> Signed-off-by: Dominik Brodowski <linux at dominikbrodowski.net>
+> The memfd test requires to insert the fuse module (CONFIG_FUSE_FS).
+> 
+> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+> Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
+> ---
+>  tools/testing/selftests/memfd/config | 1 +
+>  1 file changed, 1 insertion(+)
+>  create mode 100644 tools/testing/selftests/memfd/config
+> 
+> diff --git a/tools/testing/selftests/memfd/config b/tools/testing/selftests/memfd/config
+> new file mode 100644
+> index 0000000..835c7f4
+> --- /dev/null
+> +++ b/tools/testing/selftests/memfd/config
+> @@ -0,0 +1 @@
+> +CONFIG_FUSE_FS=m
 > 
 
-Missing commit log. Please add one.
+
+Thanks for the patch. Applied to linux-kselftest fixes for 4.16-rc3
 
 thanks,
 -- Shuah
-
-> ---
-> 
->> Yeah, probably - but still, this connection and the sscanf() guarantee is not 
->> obvious at first sight, so please improve this to derive from the same value 
->> (define a LINE_MAX size or such), plus maybe add a comment to the sscanf() line 
->> that this is safe because strlen(name) >= strlen(line).
-> 
-> Sounds reasonable. Patch (which applies on top of the five patches for
-> selftests/x86 I sent out earlier today) is attached.
-> 
-> Thanks,
-> 	Dominik
-> 
-> diff --git a/tools/testing/selftests/x86/test_vdso.c b/tools/testing/selftests/x86/test_vdso.c
-> index 558c8207e7b9..7ade625f10ed 100644
-> --- a/tools/testing/selftests/x86/test_vdso.c
-> +++ b/tools/testing/selftests/x86/test_vdso.c
-> @@ -26,6 +26,9 @@
->  # endif
->  #endif
->  
-> +/* max length of lines in /proc/self/maps - anything longer is skipped here */
-> +#define MAPS_LINE_LEN 128
-> +
->  int nerrs = 0;
->  
->  typedef long (*getcpu_t)(unsigned *, unsigned *, void *);
-> @@ -37,17 +40,19 @@ static void *vsyscall_getcpu(void)
->  {
->  #ifdef __x86_64__
->  	FILE *maps;
-> -	char line[128];
-> +	char line[MAPS_LINE_LEN];
->  	bool found = false;
->  
->  	maps = fopen("/proc/self/maps", "r");
->  	if (!maps) /* might still be present, but ignore it here, as we test vDSO not vsyscall */
->  		return NULL;
->  
-> -	while (fgets(line, sizeof(line), maps)) {
-> +	while (fgets(line, MAPS_LINE_LEN, maps)) {
->  		char r, x;
->  		void *start, *end;
-> -		char name[128];
-> +		char name[MAPS_LINE_LEN];
-> +
-> +		/* sscanf is safe here as strlen(name) >= strlen(line) */
->  		if (sscanf(line, "%p-%p %c-%cp %*x %*x:%*x %*u %s",
->  			   &start, &end, &r, &x, name) != 5)
->  			continue;
-> diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/selftests/x86/test_vsyscall.c
-> index 7a744fa7b786..ee92e4727f18 100644
-> --- a/tools/testing/selftests/x86/test_vsyscall.c
-> +++ b/tools/testing/selftests/x86/test_vsyscall.c
-> @@ -33,6 +33,9 @@
->  # endif
->  #endif
->  
-> +/* max length of lines in /proc/self/maps - anything longer is skipped here */
-> +#define MAPS_LINE_LEN 128
-> +
->  static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
->  		       int flags)
->  {
-> @@ -98,7 +101,7 @@ static int init_vsys(void)
->  #ifdef __x86_64__
->  	int nerrs = 0;
->  	FILE *maps;
-> -	char line[128];
-> +	char line[MAPS_LINE_LEN];
->  	bool found = false;
->  
->  	maps = fopen("/proc/self/maps", "r");
-> @@ -108,10 +111,12 @@ static int init_vsys(void)
->  		return 0;
->  	}
->  
-> -	while (fgets(line, sizeof(line), maps)) {
-> +	while (fgets(line, MAPS_LINE_LEN, maps)) {
->  		char r, x;
->  		void *start, *end;
-> -		char name[128];
-> +		char name[MAPS_LINE_LEN];
-> +
-> +		/* sscanf is safe here as strlen(name) >= strlen(line) */
->  		if (sscanf(line, "%p-%p %c-%cp %*x %*x:%*x %*u %s",
->  			   &start, &end, &r, &x, name) != 5)
->  			continue;
-> 
-> 
-
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
