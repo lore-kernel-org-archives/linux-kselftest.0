@@ -1,62 +1,38 @@
-From: dvhart@infradead.org (Darren Hart)
-Date: Tue, 13 Feb 2018 17:33:47 -0800
+From: shuahkh@osg.samsung.com (Shuah Khan)
+Date: Tue, 13 Feb 2018 18:45:54 -0700
 Subject: [PATCH] selftests/futex: Fix line continuation in Makefile
-In-Reply-To: <dbf5a78f-4178-2210-9a6c-bf71de7b939d@osg.samsung.com>
+In-Reply-To: <20180214013347.GA5786@fury>
 References: <1518024271-12467-1-git-send-email-daniel.diaz@linaro.org>
  <dbf5a78f-4178-2210-9a6c-bf71de7b939d@osg.samsung.com>
-Message-ID: <20180214013347.GA5786@fury>
+ <20180214013347.GA5786@fury>
+Message-ID: <6d498007-de71-2071-646c-05eeb81b2b08@osg.samsung.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180214013347.7YYOY6rAO-7p2JN52dRFpwHhSshdzz3DFfEu80NJouM@z>
+Message-ID: <20180214014554.EGfytL2N6-dLAATr-Z0btD04aCSpu3NNq8j0BOtkiMg@z>
 
-On Tue, Feb 13, 2018@02:26:46PM -0700, Shuah Khan wrote:
-> On 02/07/2018 10:24 AM, Daniel Díaz wrote:
-> > The Makefile lacks a couple of line continuation backslashes
-> > in an `if' clause, which produces an error while make'ing:
-> > 
-> >   $ make
-> >   make[1]: Entering directory `/[...]/linux/tools/testing/selftests/futex'
-> >   /bin/sh: -c: line 5: syntax error: unexpected end of file
-> >   make[1]: *** [all] Error 1
-> >   make[1]: Leaving directory `/[...]/linux/tools/testing/selftests/futex'
-> >   make: *** [all] Error 2
-> > 
-
-What is the failure scenario here? Is this shell specific? What does /bin/sh
-point to for you?
-
-> > Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
-> > ---
-> >  tools/testing/selftests/futex/Makefile | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
-> > index cea4adc..a63e845 100644
-> > --- a/tools/testing/selftests/futex/Makefile
-> > +++ b/tools/testing/selftests/futex/Makefile
-> > @@ -12,9 +12,9 @@ all:
-> >  		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
-> >  		mkdir $$BUILD_TARGET  -p;	\
-> >  		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
-> > -		if [ -e $$DIR/$(TEST_PROGS) ]; then
-> > -			rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/;
-> > -		fi
-> > +		if [ -e $$DIR/$(TEST_PROGS) ]; then \
-> > +			rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/; \
-> > +		fi \
-> >  	done
-> >  
-> >  override define RUN_TESTS
-> > 
+On 02/13/2018 06:33 PM, Darren Hart wrote:
+> On Tue, Feb 13, 2018@02:26:46PM -0700, Shuah Khan wrote:
+>> On 02/07/2018 10:24 AM, Daniel Díaz wrote:
+>>> The Makefile lacks a couple of line continuation backslashes
+>>> in an `if' clause, which produces an error while make'ing:
+>>>
+>>>   $ make
+>>>   make[1]: Entering directory `/[...]/linux/tools/testing/selftests/futex'
+>>>   /bin/sh: -c: line 5: syntax error: unexpected end of file
+>>>   make[1]: *** [all] Error 1
+>>>   make[1]: Leaving directory `/[...]/linux/tools/testing/selftests/futex'
+>>>   make: *** [all] Error 2
+>>>
 > 
-> Thanks for the patch. Applied to linux-kselftest fixes for 4.16-rc3
-> 
-> thanks,
-> -- Shuah
-> 
+> What is the failure scenario here? Is this shell specific? What does /bin/sh
+> point to for you?
 
--- 
-Darren Hart
-VMware Open Source Technology Center
+My understanding is that this problem is seen with make versions prior to 4.x.
+This specific problem is seen with make version 3.81
+
+I will let Daniel Díaz share details on his environment.
+
+thanks,
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
