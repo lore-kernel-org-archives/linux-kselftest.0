@@ -1,36 +1,35 @@
-From: alexei.starovoitov at gmail.com (Alexei Starovoitov)
-Date: Tue, 13 Feb 2018 19:28:22 -0800
-Subject: [PATCH] selftests/bpf/test_maps: exit child process without
- error in ENOMEM case
-In-Reply-To: <1518443524-18373-1-git-send-email-lizhijian@cn.fujitsu.com>
-References: <1518443524-18373-1-git-send-email-lizhijian@cn.fujitsu.com>
-Message-ID: <20180214032820.jjedkz2z4bii4asz@ast-mbp.dhcp.thefacebook.com>
+From: daniel.diaz at linaro.org (=?UTF-8?Q?Daniel_D=C3=ADaz_Rodr=C3=ADguez?=)
+Date: Wed, 14 Feb 2018 08:49:18 -0600
+Subject: [PATCH] selftests/futex: Fix line continuation in Makefile
+In-Reply-To: <20180214020352.GB5786@fury>
+References: <1518024271-12467-1-git-send-email-daniel.diaz@linaro.org>
+ <dbf5a78f-4178-2210-9a6c-bf71de7b939d@osg.samsung.com>
+ <20180214013347.GA5786@fury>
+ <6d498007-de71-2071-646c-05eeb81b2b08@osg.samsung.com>
+ <20180214020352.GB5786@fury>
+Message-ID: <CAEUSe781sJsz=4rMBa+np7x=snO7r-ByV_AiaTtmcfUZk06j=g@mail.gmail.com>
 
-On Mon, Feb 12, 2018 at 09:52:04PM +0800, Li Zhijian wrote:
-> From: Li Zhijian <zhijianx.li at intel.com>
-> 
-> test_maps contains a series of stress tests, and previously it will break the
-> reset tests when it failed to alloc memory.
-> -----------------------
-> Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
-> Failed to create hashmap key=16 value=262144 'Cannot allocate memory'
-> Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
-> Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
-> test_maps: test_maps.c:955: run_parallel: Assertion `status == 0' failed.
-> Aborted
-> not ok 1..3 selftests:  test_maps [FAIL]
-> -----------------------
-> after this patch, the rest tests will be continue when it occurs a ENOMEM failure
-> 
-> CC: Alexei Starovoitov <alexei.starovoitov at gmail.com>
-> CC: Philip Li <philip.li at intel.com>
-> Suggest-by: Daniel Borkmann <daniel at iogearbox.net>
-> Signed-off-by: Li Zhijian <zhijianx.li at intel.com>
+Hello!
 
-could you please resend it and cc netdev so it appears in patchworks properly.
 
-Thanks!
+On 13 February 2018 at 20:03, Darren Hart <dvhart at infradead.org> wrote:
+> On Tue, Feb 13, 2018 at 06:45:54PM -0700, Shuah Khan wrote:
+[...]
+>> My understanding is that this problem is seen with make versions prior to 4.x.
+>> This specific problem is seen with make version 3.81
+>> I will let Daniel Díaz share details on his environment.
+>
+> OK, thanks Shuah. I think this would be important to capture in the commit
+> message.
 
+That's correct -- fails with GNU Make 3.80, 3.81; works with GNU Make
+3.82 and the 4.x series. Shuah, if you'd like me to resubmit let me
+know.
+
+Thanks and greetings!
+
+Daniel Díaz
+daniel.diaz at linaro.org
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
