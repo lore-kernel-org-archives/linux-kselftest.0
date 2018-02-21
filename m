@@ -1,40 +1,27 @@
-From: daniel.diaz at linaro.org (=?UTF-8?q?Daniel=20D=C3=ADaz?=)
-Date: Wed, 21 Feb 2018 12:07:57 -0600
-Subject: [PATCH] selftests/intel_pstate: Fix build rule for x86
-Message-ID: <1519236493-13851-1-git-send-email-daniel.diaz@linaro.org>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Wed, 21 Feb 2018 22:30:01 +0100
+Subject: [PATCH] selftests/bpf: update gitignore with test_libbpf_open
+Message-ID: <20180221213001.18682-1-anders.roxell@linaro.org>
 
-Ensure that ARCH is defined and that this only builds for
-x86 architectures.
+bpf builds a test program for loading BPF ELF files. Add the executable
+to the .gitignore list.
 
-It is possible to build from the root of the Linux tree, which
-will define ARCH, or to run make from the selftests/ directory
-itself, which has no provision for defining ARCH, so this
-change is to use the current definition (if any), or to check
-uname -m if undefined.
-
-Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 ---
- tools/testing/selftests/intel_pstate/Makefile | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/.gitignore | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/intel_pstate/Makefile b/tools/testing/selftests/intel_pstate/Makefile
-index 5a3f7d37..7340fd6 100644
---- a/tools/testing/selftests/intel_pstate/Makefile
-+++ b/tools/testing/selftests/intel_pstate/Makefile
-@@ -2,7 +2,10 @@
- CFLAGS := $(CFLAGS) -Wall -D_GNU_SOURCE
- LDLIBS := $(LDLIBS) -lm
- 
--ifeq (,$(filter $(ARCH),x86))
-+uname_M := $(shell uname -m 2>/dev/null || echo not)
-+ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
-+
-+ifeq (x86,$(ARCH))
- TEST_GEN_FILES := msr aperf
- endif
- 
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index cc15af2e54fe..9cf83f895d98 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -11,3 +11,4 @@ test_progs
+ test_tcpbpf_user
+ test_verifier_log
+ feature
++test_libbpf_open
 -- 
-2.7.4
+2.11.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
