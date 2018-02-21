@@ -1,94 +1,85 @@
-From: shuahkh at osg.samsung.com (Shuah Khan)
-Date: Wed, 21 Feb 2018 16:11:16 -0700
-Subject: [PATCH 2/2] selftests/gpio: Fix OUTPUT directory in Makefile
-In-Reply-To: <8e7b8d40-99ac-3f4f-a25d-e0df0dd104d5@linaro.org>
+From: daniel.diaz at linaro.org (=?UTF-8?q?Daniel=20D=C3=ADaz?=)
+Date: Wed, 21 Feb 2018 17:22:52 -0600
+Subject: [PATCH v2] selftests: gpio: restructure Makefile
+In-Reply-To: <1519249964-1630-1-git-send-email-daniel.diaz@linaro.org>
 References: <1519249964-1630-1-git-send-email-daniel.diaz@linaro.org>
- <1519249964-1630-2-git-send-email-daniel.diaz@linaro.org>
- <CAHp75VdMCaKnqbUPzU2QTxOk6gjyor69w+sVVoaKyjnO+zU=+A@mail.gmail.com>
- <8e7b8d40-99ac-3f4f-a25d-e0df0dd104d5@linaro.org>
-Message-ID: <634e5fb7-4f2b-7313-e8f3-17a2eec112ef@osg.samsung.com>
+Message-ID: <1519255373-10071-1-git-send-email-daniel.diaz@linaro.org>
 
-On 02/21/2018 04:04 PM, Daniel Díaz wrote:
-> Hello!
-> 
-> 
-> On 02/21/2018 04:09 PM, Andy Shevchenko wrote:
->> On Wed, Feb 21, 2018 at 11:52 PM, Daniel Díaz <daniel.diaz at linaro.org> wrote:
->>> When simply running `make' from the selftests top dir, this
->>> error shows up:
->>>
->>>   cc -O2 -g -std=gnu99 -Wall -I../../../../usr/include/ -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/uuid    gpio-mockup-chardev.c ../../../gpio/gpio-utils.o  -lmount -o gpio-mockup-chardev
->>>   cc: error: ../../../gpio/gpio-utils.o: No such file or directory
->>>   <builtin>: recipe for target 'gpio-mockup-chardev' failed
->>>   make[1]: *** [gpio-mockup-chardev] Error 1
->>>
->>> because the output directory is set to "selftests/gpio" and
->>> all binaries built from ../../../gpio/ end up there. In fact,
->>> they appear as, exempli gratia:
->>> * gpiogpio-event-mon
->>> * gpiogpio-hammer
->>> * gpioinclude/
->>> * gpiolsgpio
->>> which is wrong, as it's missing directory separator somewhere.
->>>
->>> This patch sets straight the output directory when building
->>> ../../../gpio/ so that binaries don't cross paths.
->>
->> This patch doesn't sound right like previous one.
->> Does selftest infrastructure have it's own build system like tools?
-> 
-> Yes. See linux/Documentation/dev-tools/kselftest.rst § "Contributing new
-> tests (details)" or linux/tools/testing/selftests/lib.mk itself, which
-> starts saying:
-> # This mimics the top-level Makefile. We do it explicitly here so that this
-> # Makefile can operate with or without the kbuild infrastructure.
-> 
-> 
->> Does it use tools' one?
-> 
-> No, as far as I can tell. If anything, it uses it only to build inside
-> tools/gpio/ whatever is needed.
-> 
-> 
->> What's wrong with the current approach?
-> 
-> When building from the tools/testing/selftests/ directory, binaries end
-> up in the current directory (and with an improper name), which is
-> undesirable. The gpio/ selftest fails to build when make'ing from there.
-> 
-> This is with current master:
->   /linux/tools/testing/selftests$ make
->   make[1]: Entering directory '/linux/tools/testing/selftests/gpio'
->   [...]
->   gcc -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
-> gpio-mockup-chardev.c ../../../gpio/gpio-utils.o
-> ../../../../usr/include/linux/gpio.h  -lmount -I/usr/include/libmount -o
-> gpio-mockup-chardev
->   gcc: error: ../../../gpio/gpio-utils.o: No such file or directory
->   <builtin>: recipe for target 'gpio-mockup-chardev' failed
->   make[1]: *** [gpio-mockup-chardev] Error 1
->   make[1]: Leaving directory '/linux/tools/testing/selftests/gpio'
->   Makefile:32: recipe for target 'all' failed
->   make: *** [all] Error 2
-> 
-> 
->> Why do you need tools in selftests?
-> 
-> I'll leave that to the test author to answer, as this is only a fix in
-> the Makefile, but the only part of tools needed here is tools/gpio/*,
-> for make'ing the object files this test will be built against.
-> 
+From: Fathi Boudra <fathi.boudra at linaro.org>
 
-This test depends on tools/libs built in tools/gpio. The original
-commit has details on the benefits of adding this test. Adding author
-to the thread for further comments.
+This patch cleans up the Makefile by restructuring a couple of
+things, namely:
+1) change explicit paths in targets for variables
+2) substitute a variable (BINARIES) for another, part of the
+   selftests build system (TEST_PROGS_EXTENDED)
+3) proper cleaning up of the EXTRA objects
 
-22f6592b23ef8a0c09283bcb13087340721e1154
-commit 22f6592b23ef8a0c09283bcb13087340721e1154
-Author: Bamvor Jian Zhang <bamvor.zhangjian at linaro.org>
+The resulting Makefile is much more readable and manageable.
 
-thanks,
--- Shuah
+Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
+Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
+---
+v2: Add commit description
+
+ tools/testing/selftests/gpio/Makefile | 36 +++++++++++++++++------------------
+ 1 file changed, 17 insertions(+), 19 deletions(-)
+
+diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
+index 1bbb475..6890f61 100644
+--- a/tools/testing/selftests/gpio/Makefile
++++ b/tools/testing/selftests/gpio/Makefile
+@@ -1,31 +1,29 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
++CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
++LDLIBS += -lmount -I/usr/include/libmount
++
+ TEST_PROGS := gpio-mockup.sh
+-TEST_FILES := gpio-mockup-sysfs.sh $(BINARIES)
+-BINARIES := gpio-mockup-chardev
+-EXTRA_PROGS := ../gpiogpio-event-mon ../gpiogpio-hammer ../gpiolsgpio
+-EXTRA_DIRS := ../gpioinclude/
+-EXTRA_OBJS := ../gpiogpio-event-mon-in.o ../gpiogpio-event-mon.o
+-EXTRA_OBJS += ../gpiogpio-hammer-in.o ../gpiogpio-utils.o ../gpiolsgpio-in.o
+-EXTRA_OBJS += ../gpiolsgpio.o
++TEST_FILES := gpio-mockup-sysfs.sh
++TEST_PROGS_EXTENDED := gpio-mockup-chardev
+ 
+-include ../lib.mk
++GPIODIR := ../../../gpio
++GPIOOBJ := gpio-utils.o
++GPIOINC := gpio.h
+ 
+-all: $(BINARIES)
++all: $(GPIOINC) $(TEST_PROGS_EXTENDED)
+ 
+ override define CLEAN
+-	$(RM) $(BINARIES) $(EXTRA_PROGS) $(EXTRA_OBJS)
+-	$(RM) -r $(EXTRA_DIRS)
++	$(RM) $(TEST_PROGS_EXTENDED)
++	$(MAKE) -C $(GPIODIR) clean
+ endef
+ 
+-CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
+-LDLIBS += -lmount -I/usr/include/libmount
+-
+-$(BINARIES): ../../../gpio/gpio-utils.o ../../../../usr/include/linux/gpio.h
++include ../lib.mk
+ 
+-../../../gpio/gpio-utils.o:
+-	make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
++$(TEST_PROGS_EXTENDED): $(GPIODIR)/$(GPIOOBJ)
+ 
+-../../../../usr/include/linux/gpio.h:
+-	make -C ../../../.. headers_install INSTALL_HDR_PATH=$(shell pwd)/../../../../usr/
++$(GPIODIR)/$(GPIOOBJ):
++	$(MAKE) -C $(GPIODIR)
+ 
++$(GPIOINC):
++	$(MAKE) -C ../../../.. headers_install
+-- 
+2.7.4
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
