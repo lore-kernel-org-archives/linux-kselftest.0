@@ -1,39 +1,47 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Tue, 20 Feb 2018 08:43:48 -0700
-Subject: [PATCH] selftests: pstore: Adding config fragment
- CONFIG_PSTORE_RAM=m
-In-Reply-To: <CA+G9fYtoRby8WJMOwviC8X4SvXrLEurFvD8pKX=9KLnRccm3Uw@mail.gmail.com>
-References: <1517995040-22929-1-git-send-email-naresh.kamboju@linaro.org>
- <CAGXu5jJO9Cm37U=GwHPVpfh4yumszN3LuZweZuC5hqb-d0s3zw@mail.gmail.com>
- <CA+G9fYtoRby8WJMOwviC8X4SvXrLEurFvD8pKX=9KLnRccm3Uw@mail.gmail.com>
-Message-ID: <c109f735-d26f-4325-152d-d23adbb0695c@kernel.org>
+From: tmricht at linux.vnet.ibm.com (Thomas Richter)
+Date: Wed, 21 Feb 2018 12:21:53 +0100
+Subject: [PATCH] selftests/gpio: Makefile deletes unnecessary files
+Message-ID: <20180221112153.15011-1-tmricht@linux.vnet.ibm.com>
 
-On 02/16/2018 12:06 AM, Naresh Kamboju wrote:
-> On 7 February 2018 at 14:50, Kees Cook <keescook at chromium.org> wrote:
->> On Wed, Feb 7, 2018 at 8:17 PM, Naresh Kamboju
->> <naresh.kamboju at linaro.org> wrote:
->>> pstore_tests and pstore_post_reboot_tests need CONFIG_PSTORE_RAM=m
->>
->> Does it need to be =m, or is =y okay too?
->>
->>> Signed-off-by: Naresh Kamboju <naresh.kamboju at linaro.org>
->>
->> Either way:
->>
->> Acked-by: Kees Cook <keescook at chromium.org>
-> 
-> Thanks for the ACK.
-> 
-> Shuah,
-> Please help in applying this patch to selftests.
-> 
+The Makefile in selftests/gpio deletes several files
+(../gpio*) which do not exist at all in directory selftests.
+Instead they are located in directory
+linux/tools/gpio/ and are built when the gpio test case is
+built (in case they do not already exist).
+Since they are located outside the selftests tree, do not
+delete them.
 
-Hi Naresh,
+Signed-off-by: Thomas Richter <tmricht at linux.vnet.ibm.com>
+---
+ tools/testing/selftests/gpio/Makefile | 6 ------
+ 1 file changed, 6 deletions(-)
 
-I applied it to linux-kselftest fixes for 4.16-rc3.
-
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
+index 1bbb47565c55..91a834f6af7b 100644
+--- a/tools/testing/selftests/gpio/Makefile
++++ b/tools/testing/selftests/gpio/Makefile
+@@ -3,11 +3,6 @@
+ TEST_PROGS := gpio-mockup.sh
+ TEST_FILES := gpio-mockup-sysfs.sh $(BINARIES)
+ BINARIES := gpio-mockup-chardev
+-EXTRA_PROGS := ../gpiogpio-event-mon ../gpiogpio-hammer ../gpiolsgpio
+-EXTRA_DIRS := ../gpioinclude/
+-EXTRA_OBJS := ../gpiogpio-event-mon-in.o ../gpiogpio-event-mon.o
+-EXTRA_OBJS += ../gpiogpio-hammer-in.o ../gpiogpio-utils.o ../gpiolsgpio-in.o
+-EXTRA_OBJS += ../gpiolsgpio.o
+ 
+ include ../lib.mk
+ 
+@@ -15,7 +10,6 @@ all: $(BINARIES)
+ 
+ override define CLEAN
+ 	$(RM) $(BINARIES) $(EXTRA_PROGS) $(EXTRA_OBJS)
+-	$(RM) -r $(EXTRA_DIRS)
+ endef
+ 
+ CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
+-- 
+2.14.3
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
