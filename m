@@ -1,12 +1,12 @@
 From: gregkh@linuxfoundation.org (Greg Kroah-Hartman)
-Date: Wed, 21 Feb 2018 13:47:59 +0100
-Subject: [PATCH 4.14 068/167] selftests/x86: Clean up and document sscanf()
- usage
+Date: Wed, 21 Feb 2018 13:48:03 +0100
+Subject: [PATCH 4.14 072/167] selftests/x86: Disable tests requiring 32-bit
+ support on pure 64-bit systems
 In-Reply-To: <20180221124524.639039577@linuxfoundation.org>
 References: <20180221124524.639039577@linuxfoundation.org>
-Message-ID: <20180221124528.233369851@linuxfoundation.org>
+Message-ID: <20180221124528.441870850@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180221124759.dL0IcBlgCwE_mcu6EbNqEnDNcaTuA9qjVe2FGqRfPfc@z>
+Message-ID: <20180221124803.-zEaSgX3ZL3EbrQo2WUaeTuXQjJpK_vcXuDuzNbQ6ig@z>
 
 4.14-stable review patch.  If anyone has any objections, please let me know.
 
@@ -14,103 +14,75 @@ Message-ID: <20180221124759.dL0IcBlgCwE_mcu6EbNqEnDNcaTuA9qjVe2FGqRfPfc@z>
 
 From: Dominik Brodowski <linux@dominikbrodowski.net>
 
-commit d8e92de8ef952bed88c56c7a44c02d8dcae0984e upstream.
+commit 9279ddf23ce78ff2676e8e8e19fec0f022c26d04 upstream.
 
-Replace a couple of magically connected buffer length literal constants with
-a common definition that makes their relationship obvious. Also document
-why our sscanf() usage is safe.
+The ldt_gdt and ptrace_syscall selftests, even in their 64-bit variant, use
+hard-coded 32-bit syscall numbers and call "int $0x80".
 
-No intended functional changes.
+This will fail on 64-bit systems with CONFIG_IA32_EMULATION=y disabled.
 
-Suggested-by: Ingo Molnar <mingo at kernel.org>
+Therefore, do not build these tests if we cannot build 32-bit binaries
+(which should be a good approximation for CONFIG_IA32_EMULATION=y being enabled).
+
 Signed-off-by: Dominik Brodowski <linux at dominikbrodowski.net>
-Cc: Andrew Lutomirski <luto at kernel.org>
 Cc: Andy Lutomirski <luto at kernel.org>
+Cc: Dmitry Safonov <dsafonov at virtuozzo.com>
 Cc: Linus Torvalds <torvalds at linux-foundation.org>
 Cc: Peter Zijlstra <peterz at infradead.org>
 Cc: Thomas Gleixner <tglx at linutronix.de>
 Cc: linux-kselftest at vger.kernel.org
 Cc: shuah at kernel.org
-Link: http://lkml.kernel.org/r/20180211205924.GA23210 at light.dominikbrodowski.net
+Link: http://lkml.kernel.org/r/20180211111013.16888-6-linux at dominikbrodowski.net
 Signed-off-by: Ingo Molnar <mingo at kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
 
 ---
- tools/testing/selftests/x86/test_vdso.c     |   11 ++++++++---
- tools/testing/selftests/x86/test_vsyscall.c |   11 ++++++++---
- 2 files changed, 16 insertions(+), 6 deletions(-)
+ tools/testing/selftests/x86/Makefile |   20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
---- a/tools/testing/selftests/x86/test_vdso.c
-+++ b/tools/testing/selftests/x86/test_vdso.c
-@@ -26,6 +26,9 @@
- # endif
- #endif
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -5,16 +5,26 @@ include ../lib.mk
  
-+/* max length of lines in /proc/self/maps - anything longer is skipped here */
-+#define MAPS_LINE_LEN 128
+ .PHONY: all all_32 all_64 warn_32bit_failure clean
+ 
+-TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt ptrace_syscall test_mremap_vdso \
+-			check_initial_reg_state sigreturn ldt_gdt iopl mpx-mini-test ioperm \
++UNAME_M := $(shell uname -m)
++CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
++CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
 +
- int nerrs = 0;
++TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
++			check_initial_reg_state sigreturn iopl mpx-mini-test ioperm \
+ 			protection_keys test_vdso test_vsyscall
+ TARGETS_C_32BIT_ONLY := entry_from_vm86 syscall_arg_fault test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+ TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip
++# Some selftests require 32bit support enabled also on 64bit systems
++TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
  
- typedef long (*getcpu_t)(unsigned *, unsigned *, void *);
-@@ -37,17 +40,19 @@ static void *vsyscall_getcpu(void)
- {
- #ifdef __x86_64__
- 	FILE *maps;
--	char line[128];
-+	char line[MAPS_LINE_LEN];
- 	bool found = false;
- 
- 	maps = fopen("/proc/self/maps", "r");
- 	if (!maps) /* might still be present, but ignore it here, as we test vDSO not vsyscall */
- 		return NULL;
- 
--	while (fgets(line, sizeof(line), maps)) {
-+	while (fgets(line, MAPS_LINE_LEN, maps)) {
- 		char r, x;
- 		void *start, *end;
--		char name[128];
-+		char name[MAPS_LINE_LEN];
+-TARGETS_C_32BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_32BIT_ONLY)
++TARGETS_C_32BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_32BIT_ONLY) $(TARGETS_C_32BIT_NEEDED)
+ TARGETS_C_64BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_64BIT_ONLY)
++ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),11)
++TARGETS_C_64BIT_ALL += $(TARGETS_C_32BIT_NEEDED)
++endif
 +
-+		/* sscanf() is safe here as strlen(name) >= strlen(line) */
- 		if (sscanf(line, "%p-%p %c-%cp %*x %*x:%*x %*u %s",
- 			   &start, &end, &r, &x, name) != 5)
- 			continue;
---- a/tools/testing/selftests/x86/test_vsyscall.c
-+++ b/tools/testing/selftests/x86/test_vsyscall.c
-@@ -33,6 +33,9 @@
- # endif
- #endif
+ BINARIES_32 := $(TARGETS_C_32BIT_ALL:%=%_32)
+ BINARIES_64 := $(TARGETS_C_64BIT_ALL:%=%_64)
  
-+/* max length of lines in /proc/self/maps - anything longer is skipped here */
-+#define MAPS_LINE_LEN 128
-+
- static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
- 		       int flags)
- {
-@@ -98,7 +101,7 @@ static int init_vsys(void)
- #ifdef __x86_64__
- 	int nerrs = 0;
- 	FILE *maps;
--	char line[128];
-+	char line[MAPS_LINE_LEN];
- 	bool found = false;
+@@ -23,10 +33,6 @@ BINARIES_64 := $(patsubst %,$(OUTPUT)/%,
  
- 	maps = fopen("/proc/self/maps", "r");
-@@ -108,10 +111,12 @@ static int init_vsys(void)
- 		return 0;
- 	}
+ CFLAGS := -O2 -g -std=gnu99 -pthread -Wall -no-pie
  
--	while (fgets(line, sizeof(line), maps)) {
-+	while (fgets(line, MAPS_LINE_LEN, maps)) {
- 		char r, x;
- 		void *start, *end;
--		char name[128];
-+		char name[MAPS_LINE_LEN];
-+
-+		/* sscanf() is safe here as strlen(name) >= strlen(line) */
- 		if (sscanf(line, "%p-%p %c-%cp %*x %*x:%*x %*u %s",
- 			   &start, &end, &r, &x, name) != 5)
- 			continue;
+-UNAME_M := $(shell uname -m)
+-CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
+-CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
+-
+ ifeq ($(CAN_BUILD_I386),1)
+ all: all_32
+ TEST_PROGS += $(BINARIES_32)
 
 
 --
