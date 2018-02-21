@@ -1,66 +1,73 @@
-From: daniel.diaz@linaro.org (=?UTF-8?Q?Daniel_D=c3=adaz?=)
-Date: Wed, 21 Feb 2018 15:38:45 -0600
-Subject: [PATCH] selftests/bpf: tcpbpf_kern: use in6_* macros from glibc
-In-Reply-To: <20180221165116.9754-1-anders.roxell@linaro.org>
-References: <20180221165116.9754-1-anders.roxell@linaro.org>
-Message-ID: <02cb5e7d-5119-8501-01b7-9ea0f4b95450@linaro.org>
+From: daniel.diaz@linaro.org (=?UTF-8?q?Daniel=20D=C3=ADaz?=)
+Date: Wed, 21 Feb 2018 15:52:43 -0600
+Subject: [PATCH 1/2] selftests: gpio: restructure Makefile
+Message-ID: <1519249964-1630-1-git-send-email-daniel.diaz@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180221213845.pnuLq_4lX-xIJtWzbQk9CrpOBdrhAanW0dokP74i3Fo@z>
+Message-ID: <20180221215243.dMGddwyyT90FxLep-T2_CplFfUx8ukYWw8gwaDTYaqA@z>
 
-On 02/21/2018 10:51 AM, Anders Roxell wrote:
-> Both glibc and the kernel have in6_* macros definitions. Build fails
-> because it picks up wrong in6_* macro from the kernel header and not the
-> header from glibc.
-> 
-> Fixes build error below:
-> clang -I. -I./include/uapi -I../../../include/uapi
->      -Wno-compare-distinct-pointer-types \
->          -O2 -target bpf -emit-llvm -c test_tcpbpf_kern.c -o - |      \
-> llc -march=bpf -mcpu=generic -filetype=obj
->      -o .../tools/testing/selftests/bpf/test_tcpbpf_kern.o
-> In file included from test_tcpbpf_kern.c:12:
-> .../netinet/in.h:101:5: error: expected identifier
->     IPPROTO_HOPOPTS = 0,   /* IPv6 Hop-by-Hop options.  */
->     ^
-> .../linux/in6.h:131:26: note: expanded from macro 'IPPROTO_HOPOPTS'
->                                 ^
-> In file included from test_tcpbpf_kern.c:12:
-> /usr/include/netinet/in.h:103:5: error: expected identifier
->     IPPROTO_ROUTING = 43,  /* IPv6 routing header.  */
->     ^
-> .../linux/in6.h:132:26: note: expanded from macro 'IPPROTO_ROUTING'
->                                 ^
-> In file included from test_tcpbpf_kern.c:12:
-> .../netinet/in.h:105:5: error: expected identifier
->     IPPROTO_FRAGMENT = 44, /* IPv6 fragmentation header.  */
->     ^
-> 
-> Since both glibc and the kernel have in6_* macros definitions, use the
-> one from glibc.  Kernel headers will check for previous libc definitions
-> by including include/linux/libc-compat.h.
-> 
-> Reported-by: Daniel Díaz <daniel.diaz at linaro.org>
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+From: Fathi Boudra <fathi.boudra@linaro.org>
 
-FWIW, this was
-Tested-by: Daniel Díaz <daniel.diaz at linaro.org>
+Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
+---
+ tools/testing/selftests/gpio/Makefile | 36 +++++++++++++++++------------------
+ 1 file changed, 17 insertions(+), 19 deletions(-)
 
-> ---
->  tools/testing/selftests/bpf/test_tcpbpf_kern.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/test_tcpbpf_kern.c b/tools/testing/selftests/bpf/test_tcpbpf_kern.c
-> index 57119ad57a3f..3e645ee41ed5 100644
-> --- a/tools/testing/selftests/bpf/test_tcpbpf_kern.c
-> +++ b/tools/testing/selftests/bpf/test_tcpbpf_kern.c
-> @@ -5,7 +5,6 @@
->  #include <linux/if_ether.h>
->  #include <linux/if_packet.h>
->  #include <linux/ip.h>
-> -#include <linux/in6.h>
->  #include <linux/types.h>
->  #include <linux/socket.h>
->  #include <linux/tcp.h>
+diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
+index 1bbb475..6890f61 100644
+--- a/tools/testing/selftests/gpio/Makefile
++++ b/tools/testing/selftests/gpio/Makefile
+@@ -1,31 +1,29 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
++CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
++LDLIBS += -lmount -I/usr/include/libmount
++
+ TEST_PROGS := gpio-mockup.sh
+-TEST_FILES := gpio-mockup-sysfs.sh $(BINARIES)
+-BINARIES := gpio-mockup-chardev
+-EXTRA_PROGS := ../gpiogpio-event-mon ../gpiogpio-hammer ../gpiolsgpio
+-EXTRA_DIRS := ../gpioinclude/
+-EXTRA_OBJS := ../gpiogpio-event-mon-in.o ../gpiogpio-event-mon.o
+-EXTRA_OBJS += ../gpiogpio-hammer-in.o ../gpiogpio-utils.o ../gpiolsgpio-in.o
+-EXTRA_OBJS += ../gpiolsgpio.o
++TEST_FILES := gpio-mockup-sysfs.sh
++TEST_PROGS_EXTENDED := gpio-mockup-chardev
+ 
+-include ../lib.mk
++GPIODIR := ../../../gpio
++GPIOOBJ := gpio-utils.o
++GPIOINC := gpio.h
+ 
+-all: $(BINARIES)
++all: $(GPIOINC) $(TEST_PROGS_EXTENDED)
+ 
+ override define CLEAN
+-	$(RM) $(BINARIES) $(EXTRA_PROGS) $(EXTRA_OBJS)
+-	$(RM) -r $(EXTRA_DIRS)
++	$(RM) $(TEST_PROGS_EXTENDED)
++	$(MAKE) -C $(GPIODIR) clean
+ endef
+ 
+-CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
+-LDLIBS += -lmount -I/usr/include/libmount
+-
+-$(BINARIES): ../../../gpio/gpio-utils.o ../../../../usr/include/linux/gpio.h
++include ../lib.mk
+ 
+-../../../gpio/gpio-utils.o:
+-	make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
++$(TEST_PROGS_EXTENDED): $(GPIODIR)/$(GPIOOBJ)
+ 
+-../../../../usr/include/linux/gpio.h:
+-	make -C ../../../.. headers_install INSTALL_HDR_PATH=$(shell pwd)/../../../../usr/
++$(GPIODIR)/$(GPIOOBJ):
++	$(MAKE) -C $(GPIODIR)
+ 
++$(GPIOINC):
++	$(MAKE) -C ../../../.. headers_install
+-- 
+2.7.4
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
