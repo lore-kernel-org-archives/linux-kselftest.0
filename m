@@ -1,85 +1,97 @@
-From: daniel.diaz at linaro.org (=?UTF-8?q?Daniel=20D=C3=ADaz?=)
-Date: Wed, 21 Feb 2018 17:22:52 -0600
-Subject: [PATCH v2] selftests: gpio: restructure Makefile
-In-Reply-To: <1519249964-1630-1-git-send-email-daniel.diaz@linaro.org>
-References: <1519249964-1630-1-git-send-email-daniel.diaz@linaro.org>
-Message-ID: <1519255373-10071-1-git-send-email-daniel.diaz@linaro.org>
+From: mhiramat at kernel.org (Masami Hiramatsu)
+Date: Thu, 22 Feb 2018 08:41:53 +0900
+Subject: [PATCH v2 01/17] tracing: probeevent: Fix to support minus
+ offset from symbol
+In-Reply-To: <151922487738.6217.16114601174401123273.stgit@devbox>
+References: <151922484560.6217.1143686155616343906.stgit@devbox>
+ <151922487738.6217.16114601174401123273.stgit@devbox>
+Message-ID: <20180222084153.e057d86729063fe39b8232f0@kernel.org>
 
-From: Fathi Boudra <fathi.boudra at linaro.org>
+Hi Steve,
 
-This patch cleans up the Makefile by restructuring a couple of
-things, namely:
-1) change explicit paths in targets for variables
-2) substitute a variable (BINARIES) for another, part of the
-   selftests build system (TEST_PROGS_EXTENDED)
-3) proper cleaning up of the EXTRA objects
+Could you pick this separately since this is a bugfix?
 
-The resulting Makefile is much more readable and manageable.
+Thank you,
 
-Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
-Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
----
-v2: Add commit description
+On Wed, 21 Feb 2018 23:54:37 +0900
+Masami Hiramatsu <mhiramat at kernel.org> wrote:
 
- tools/testing/selftests/gpio/Makefile | 36 +++++++++++++++++------------------
- 1 file changed, 17 insertions(+), 19 deletions(-)
+> In Documentation/trace/kprobetrace.txt, it says
+> 
+>  @SYM[+|-offs] : Fetch memory at SYM +|- offs (SYM should be a data symbol)
+> 
+> However, the parser doesn't parse minus offset correctly.
+> This fixes the parser to get minus offset correctly.
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+> ---
+>  kernel/trace/trace_kprobe.c |    2 +-
+>  kernel/trace/trace_probe.c  |   10 +++++-----
+>  kernel/trace/trace_probe.h  |    2 +-
+>  3 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index 5ce9b8cf7be3..dab4a5b54269 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -754,7 +754,7 @@ static int create_trace_kprobe(int argc, char **argv)
+>  		/* a symbol specified */
+>  		symbol = argv[1];
+>  		/* TODO: support .init module functions */
+> -		ret = traceprobe_split_symbol_offset(symbol, &offset);
+> +		ret = traceprobe_split_symbol_offset(symbol, (long *)&offset);
+>  		if (ret) {
+>  			pr_info("Failed to parse either an address or a symbol.\n");
+>  			return ret;
+> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> index d59357308677..3e291a754862 100644
+> --- a/kernel/trace/trace_probe.c
+> +++ b/kernel/trace/trace_probe.c
+> @@ -320,7 +320,7 @@ static fetch_func_t get_fetch_size_function(const struct fetch_type *type,
+>  }
+>  
+>  /* Split symbol and offset. */
+> -int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset)
+> +int traceprobe_split_symbol_offset(char *symbol, long *offset)
+>  {
+>  	char *tmp;
+>  	int ret;
+> @@ -328,13 +328,13 @@ int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset)
+>  	if (!offset)
+>  		return -EINVAL;
+>  
+> -	tmp = strchr(symbol, '+');
+> +	tmp = strpbrk(symbol, "+-");
+>  	if (tmp) {
+> -		/* skip sign because kstrtoul doesn't accept '+' */
+> -		ret = kstrtoul(tmp + 1, 0, offset);
+> +		ret = kstrtoul(tmp + 1, 0, (unsigned long *)offset);
+>  		if (ret)
+>  			return ret;
+> -
+> +		if (*tmp == '-')
+> +			*offset = -(*offset);
+>  		*tmp = '\0';
+>  	} else
+>  		*offset = 0;
+> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> index 0745f895f780..75daff22ccea 100644
+> --- a/kernel/trace/trace_probe.h
+> +++ b/kernel/trace/trace_probe.h
+> @@ -365,7 +365,7 @@ extern int traceprobe_conflict_field_name(const char *name,
+>  extern void traceprobe_update_arg(struct probe_arg *arg);
+>  extern void traceprobe_free_probe_arg(struct probe_arg *arg);
+>  
+> -extern int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset);
+> +extern int traceprobe_split_symbol_offset(char *symbol, long *offset);
+>  
+>  /* Sum up total data length for dynamic arraies (strings) */
+>  static nokprobe_inline int
+> 
 
-diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index 1bbb475..6890f61 100644
---- a/tools/testing/selftests/gpio/Makefile
-+++ b/tools/testing/selftests/gpio/Makefile
-@@ -1,31 +1,29 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
-+LDLIBS += -lmount -I/usr/include/libmount
-+
- TEST_PROGS := gpio-mockup.sh
--TEST_FILES := gpio-mockup-sysfs.sh $(BINARIES)
--BINARIES := gpio-mockup-chardev
--EXTRA_PROGS := ../gpiogpio-event-mon ../gpiogpio-hammer ../gpiolsgpio
--EXTRA_DIRS := ../gpioinclude/
--EXTRA_OBJS := ../gpiogpio-event-mon-in.o ../gpiogpio-event-mon.o
--EXTRA_OBJS += ../gpiogpio-hammer-in.o ../gpiogpio-utils.o ../gpiolsgpio-in.o
--EXTRA_OBJS += ../gpiolsgpio.o
-+TEST_FILES := gpio-mockup-sysfs.sh
-+TEST_PROGS_EXTENDED := gpio-mockup-chardev
- 
--include ../lib.mk
-+GPIODIR := ../../../gpio
-+GPIOOBJ := gpio-utils.o
-+GPIOINC := gpio.h
- 
--all: $(BINARIES)
-+all: $(GPIOINC) $(TEST_PROGS_EXTENDED)
- 
- override define CLEAN
--	$(RM) $(BINARIES) $(EXTRA_PROGS) $(EXTRA_OBJS)
--	$(RM) -r $(EXTRA_DIRS)
-+	$(RM) $(TEST_PROGS_EXTENDED)
-+	$(MAKE) -C $(GPIODIR) clean
- endef
- 
--CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
--LDLIBS += -lmount -I/usr/include/libmount
--
--$(BINARIES): ../../../gpio/gpio-utils.o ../../../../usr/include/linux/gpio.h
-+include ../lib.mk
- 
--../../../gpio/gpio-utils.o:
--	make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
-+$(TEST_PROGS_EXTENDED): $(GPIODIR)/$(GPIOOBJ)
- 
--../../../../usr/include/linux/gpio.h:
--	make -C ../../../.. headers_install INSTALL_HDR_PATH=$(shell pwd)/../../../../usr/
-+$(GPIODIR)/$(GPIOOBJ):
-+	$(MAKE) -C $(GPIODIR)
- 
-+$(GPIOINC):
-+	$(MAKE) -C ../../../.. headers_install
+
 -- 
-2.7.4
-
+Masami Hiramatsu <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
