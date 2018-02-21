@@ -1,72 +1,123 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Wed, 21 Feb 2018 23:55:40 +0900
-Subject: [PATCH v2 03/17] selftests: ftrace: Add a testcase for string type
- with kprobe_event
+Date: Wed, 21 Feb 2018 23:55:06 +0900
+Subject: [PATCH v2 02/17] selftests: ftrace: Add probe event argument syntax
+ testcase
 In-Reply-To: <151922484560.6217.1143686155616343906.stgit@devbox>
 References: <151922484560.6217.1143686155616343906.stgit@devbox>
-Message-ID: <151922494028.6217.2260900936608276328.stgit@devbox>
+Message-ID: <151922490640.6217.5972817162012775601.stgit@devbox>
 
-Add a testcase for string type with kprobe event.
-This tests good/bad syntax combinations and also
-the traced data is correct in several way.
+Add a testcase for probe event argument syntax which
+ensures the kprobe_events interface correctly parses
+given event arguments.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- .../ftrace/test.d/kprobe/kprobe_args_string.tc     |   46 ++++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+ .../ftrace/test.d/kprobe/kprobe_args_syntax.tc     |   97 ++++++++++++++++++++
+ 1 file changed, 97 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
 new file mode 100644
-index 000000000000..5ba73035e1d9
+index 000000000000..231bcd2c4eb5
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
-@@ -0,0 +1,46 @@
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+@@ -0,0 +1,97 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Kprobe event string type argument
++# description: Kprobe event argument syntax
 +
 +[ -f kprobe_events ] || exit_unsupported # this is configurable
++
++grep "x8/16/32/64" README > /dev/null || exit_unsupported # version issue
 +
 +echo 0 > events/enable
 +echo > kprobe_events
 +
++PROBEFUNC="vfs_read"
++GOODREG=
++BADREG=
++GOODSYM="_sdata"
++if ! grep -qw ${GOODSYM} /proc/kallsyms ; then
++  GOODSYM=$PROBEFUNC
++fi
++BADSYM="deaqswdefr"
++SYMADDR=0x`grep -w ${GOODSYM} /proc/kallsyms | cut -f 1 -d " "`
++GOODTYPE="x16"
++BADTYPE="y16"
++
 +case `uname -m` in
-+x86_64)
-+  ARG2=%si
-+  OFFS=8
-+;;
-+i[3456]86)
-+  ARG2=%cx
-+  OFFS=4
++x86_64|i[3456]86)
++  GOODREG=%ax
++  BADREG=%ex
 +;;
 +aarch64)
-+  ARG2=%x1
-+  OFFS=8
++  GOODREG=%x0
++  BADREG=%ax
 +;;
 +arm*)
-+  ARG2=%r1
-+  OFFS=4
++  GOODREG=%r0
++  BADREG=%ax
 +;;
-+*)
-+  echo "Please implement other architecture here"
-+  exit_untested
 +esac
 +
-+: "Test get argument (1)"
-+echo "p:testprobe create_trace_kprobe arg1=+0(+0(${ARG2})):string" > kprobe_events
-+echo 1 > events/kprobes/testprobe/enable
-+! echo test >> kprobe_events
-+tail -n 1 trace | grep -qe "testprobe.* arg1=\"test\""
++test_goodarg() # Good-args
++{
++  while [ "$1" ]; do
++    echo "p ${PROBEFUNC} $1" > kprobe_events
++    shift 1
++  done;
++}
 +
-+echo 0 > events/kprobes/testprobe/enable
-+: "Test get argument (2)"
-+echo "p:testprobe create_trace_kprobe arg1=+0(+0(${ARG2})):string arg2=+0(+${OFFS}(${ARG2})):string" > kprobe_events
-+echo 1 > events/kprobes/testprobe/enable
-+! echo test1 test2 >> kprobe_events
-+tail -n 1 trace | grep -qe "testprobe.* arg1=\"test1\" arg2=\"test2\""
++test_badarg() # Bad-args
++{
++  while [ "$1" ]; do
++    ! echo "p ${PROBEFUNC} $1" > kprobe_events
++    shift 1
++  done;
++}
 +
-+echo 0 > events/enable
++echo > kprobe_events
++
++: "Register access"
++test_goodarg ${GOODREG}
++test_badarg ${BADREG}
++
++: "Symbol access"
++test_goodarg "@${GOODSYM}" "@${SYMADDR}" "@${GOODSYM}+10" "@${GOODSYM}-10"
++test_badarg "@" "@${BADSYM}" "@${GOODSYM}*10" "@${GOODSYM}/10" \
++	    "@${GOODSYM}%10" "@${GOODSYM}&10" "@${GOODSYM}|10"
++
++: "Stack access"
++test_goodarg "\$stack" "\$stack0" "\$stack1"
++test_badarg "\$stackp" "\$stack0+10" "\$stack1-10"
++
++: "Retval access"
++echo "r ${PROBEFUNC} \$retval" > kprobe_events
++! echo "p ${PROBEFUNC} \$retval" > kprobe_events
++
++: "Comm access"
++test_goodarg "\$comm"
++
++: "Indirect memory access"
++test_goodarg "+0(${GOODREG})" "-0(${GOODREG})" "+10(\$stack)" \
++	"+0(\$stack1)" "+10(@${GOODSYM}-10)" "+0(+10(+20(\$stack)))"
++test_badarg "+(${GOODREG})" "(${GOODREG}+10)" "-(${GOODREG})" "(${GOODREG})" \
++	"+10(\$comm)" "+0(${GOODREG})+10"
++
++: "Name assignment"
++test_goodarg "varname=${GOODREG}"
++test_badarg "varname=varname2=${GOODREG}"
++
++: "Type syntax"
++test_goodarg "${GOODREG}:${GOODTYPE}"
++test_badarg "${GOODREG}::${GOODTYPE}" "${GOODREG}:${BADTYPE}" \
++	"${GOODTYPE}:${GOODREG}"
++
++: "Combination check"
++
++test_goodarg "\$comm:string" "+0(\$stack):string"
++test_badarg "\$comm:x64" "\$stack:string" "${GOODREG}:string"
++
 +echo > kprobe_events
 
 --
