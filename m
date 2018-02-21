@@ -1,47 +1,87 @@
-From: tmricht at linux.vnet.ibm.com (Thomas Richter)
-Date: Wed, 21 Feb 2018 12:21:53 +0100
-Subject: [PATCH] selftests/gpio: Makefile deletes unnecessary files
-Message-ID: <20180221112153.15011-1-tmricht@linux.vnet.ibm.com>
+From: gregkh at linuxfoundation.org (Greg Kroah-Hartman)
+Date: Wed, 21 Feb 2018 13:48:24 +0100
+Subject: [PATCH 4.15 075/163] selftests/x86: Disable tests requiring 32-bit
+ support on pure 64-bit systems
+In-Reply-To: <20180221124529.931834518@linuxfoundation.org>
+References: <20180221124529.931834518@linuxfoundation.org>
+Message-ID: <20180221124534.621749390@linuxfoundation.org>
 
-The Makefile in selftests/gpio deletes several files
-(../gpio*) which do not exist at all in directory selftests.
-Instead they are located in directory
-linux/tools/gpio/ and are built when the gpio test case is
-built (in case they do not already exist).
-Since they are located outside the selftests tree, do not
-delete them.
+4.15-stable review patch.  If anyone has any objections, please let me know.
 
-Signed-off-by: Thomas Richter <tmricht at linux.vnet.ibm.com>
+------------------
+
+From: Dominik Brodowski <linux at dominikbrodowski.net>
+
+commit 9279ddf23ce78ff2676e8e8e19fec0f022c26d04 upstream.
+
+The ldt_gdt and ptrace_syscall selftests, even in their 64-bit variant, use
+hard-coded 32-bit syscall numbers and call "int $0x80".
+
+This will fail on 64-bit systems with CONFIG_IA32_EMULATION=y disabled.
+
+Therefore, do not build these tests if we cannot build 32-bit binaries
+(which should be a good approximation for CONFIG_IA32_EMULATION=y being enabled).
+
+Signed-off-by: Dominik Brodowski <linux at dominikbrodowski.net>
+Cc: Andy Lutomirski <luto at kernel.org>
+Cc: Dmitry Safonov <dsafonov at virtuozzo.com>
+Cc: Linus Torvalds <torvalds at linux-foundation.org>
+Cc: Peter Zijlstra <peterz at infradead.org>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: linux-kselftest at vger.kernel.org
+Cc: shuah at kernel.org
+Link: http://lkml.kernel.org/r/20180211111013.16888-6-linux at dominikbrodowski.net
+Signed-off-by: Ingo Molnar <mingo at kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+
 ---
- tools/testing/selftests/gpio/Makefile | 6 ------
- 1 file changed, 6 deletions(-)
+ tools/testing/selftests/x86/Makefile |   20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index 1bbb47565c55..91a834f6af7b 100644
---- a/tools/testing/selftests/gpio/Makefile
-+++ b/tools/testing/selftests/gpio/Makefile
-@@ -3,11 +3,6 @@
- TEST_PROGS := gpio-mockup.sh
- TEST_FILES := gpio-mockup-sysfs.sh $(BINARIES)
- BINARIES := gpio-mockup-chardev
--EXTRA_PROGS := ../gpiogpio-event-mon ../gpiogpio-hammer ../gpiolsgpio
--EXTRA_DIRS := ../gpioinclude/
--EXTRA_OBJS := ../gpiogpio-event-mon-in.o ../gpiogpio-event-mon.o
--EXTRA_OBJS += ../gpiogpio-hammer-in.o ../gpiogpio-utils.o ../gpiolsgpio-in.o
--EXTRA_OBJS += ../gpiolsgpio.o
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -5,16 +5,26 @@ include ../lib.mk
  
- include ../lib.mk
+ .PHONY: all all_32 all_64 warn_32bit_failure clean
  
-@@ -15,7 +10,6 @@ all: $(BINARIES)
+-TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt ptrace_syscall test_mremap_vdso \
+-			check_initial_reg_state sigreturn ldt_gdt iopl mpx-mini-test ioperm \
++UNAME_M := $(shell uname -m)
++CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
++CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
++
++TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
++			check_initial_reg_state sigreturn iopl mpx-mini-test ioperm \
+ 			protection_keys test_vdso test_vsyscall
+ TARGETS_C_32BIT_ONLY := entry_from_vm86 syscall_arg_fault test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+ TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip
++# Some selftests require 32bit support enabled also on 64bit systems
++TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
  
- override define CLEAN
- 	$(RM) $(BINARIES) $(EXTRA_PROGS) $(EXTRA_OBJS)
--	$(RM) -r $(EXTRA_DIRS)
- endef
+-TARGETS_C_32BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_32BIT_ONLY)
++TARGETS_C_32BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_32BIT_ONLY) $(TARGETS_C_32BIT_NEEDED)
+ TARGETS_C_64BIT_ALL := $(TARGETS_C_BOTHBITS) $(TARGETS_C_64BIT_ONLY)
++ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),11)
++TARGETS_C_64BIT_ALL += $(TARGETS_C_32BIT_NEEDED)
++endif
++
+ BINARIES_32 := $(TARGETS_C_32BIT_ALL:%=%_32)
+ BINARIES_64 := $(TARGETS_C_64BIT_ALL:%=%_64)
  
- CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
--- 
-2.14.3
+@@ -23,10 +33,6 @@ BINARIES_64 := $(patsubst %,$(OUTPUT)/%,
+ 
+ CFLAGS := -O2 -g -std=gnu99 -pthread -Wall -no-pie
+ 
+-UNAME_M := $(shell uname -m)
+-CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
+-CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
+-
+ ifeq ($(CAN_BUILD_I386),1)
+ all: all_32
+ TEST_PROGS += $(BINARIES_32)
+
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
