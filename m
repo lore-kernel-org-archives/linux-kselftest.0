@@ -1,21 +1,40 @@
 From: andy.shevchenko@gmail.com (Andy Shevchenko)
-Date: Thu, 22 Feb 2018 00:06:58 +0200
-Subject: [PATCH 1/2] selftests: gpio: restructure Makefile
-In-Reply-To: <1519249964-1630-1-git-send-email-daniel.diaz@linaro.org>
+Date: Thu, 22 Feb 2018 00:09:54 +0200
+Subject: [PATCH 2/2] selftests/gpio: Fix OUTPUT directory in Makefile
+In-Reply-To: <1519249964-1630-2-git-send-email-daniel.diaz@linaro.org>
 References: <1519249964-1630-1-git-send-email-daniel.diaz@linaro.org>
+ <1519249964-1630-2-git-send-email-daniel.diaz@linaro.org>
 Message-ID:
- <CAHp75VdceMCPw1b8NNoNLTqU-7b7gZ6b8i6eS1MF8eUTH7Lcjg@mail.gmail.com>
+ <CAHp75VdMCaKnqbUPzU2QTxOk6gjyor69w+sVVoaKyjnO+zU=+A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180221220658.fTnkWXpizK31GPT4ed8W0mmUV2OLpEQ3UuMtuqc9I4c@z>
+Message-ID: <20180221220954.kMH0ixxci9qSa1NM9pAKYsBaRCI3GlvJ7pgC3veY3Jo@z>
 
 On Wed, Feb 21, 2018@11:52 PM, Daniel Díaz <daniel.diaz@linaro.org> wrote:
-> From: Fathi Boudra <fathi.boudra at linaro.org>
+> When simply running `make' from the selftests top dir, this
+> error shows up:
+>
+>   cc -O2 -g -std=gnu99 -Wall -I../../../../usr/include/ -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/uuid    gpio-mockup-chardev.c ../../../gpio/gpio-utils.o  -lmount -o gpio-mockup-chardev
+>   cc: error: ../../../gpio/gpio-utils.o: No such file or directory
+>   <builtin>: recipe for target 'gpio-mockup-chardev' failed
+>   make[1]: *** [gpio-mockup-chardev] Error 1
+>
+> because the output directory is set to "selftests/gpio" and
+> all binaries built from ../../../gpio/ end up there. In fact,
+> they appear as, exempli gratia:
+> * gpiogpio-event-mon
+> * gpiogpio-hammer
+> * gpioinclude/
+> * gpiolsgpio
+> which is wrong, as it's missing directory separator somewhere.
+>
+> This patch sets straight the output directory when building
+> ../../../gpio/ so that binaries don't cross paths.
 
-What are you doing here?
-Why?
-What is the benefit of it?
-
-> Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
+This patch doesn't sound right like previous one.
+Does selftest infrastructure have it's own build system like tools?
+Does it use tools' one?
+What's wrong with the current approach?
+Why do you need tools in selftests?
 
 -- 
 With Best Regards,
