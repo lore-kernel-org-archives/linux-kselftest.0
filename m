@@ -1,68 +1,66 @@
 From: daniel.diaz at linaro.org (=?UTF-8?q?Daniel=20D=C3=ADaz?=)
-Date: Wed, 21 Feb 2018 15:52:43 -0600
-Subject: [PATCH 1/2] selftests: gpio: restructure Makefile
-Message-ID: <1519249964-1630-1-git-send-email-daniel.diaz@linaro.org>
+Date: Wed, 21 Feb 2018 15:52:44 -0600
+Subject: [PATCH 2/2] selftests/gpio: Fix OUTPUT directory in Makefile
+In-Reply-To: <1519249964-1630-1-git-send-email-daniel.diaz@linaro.org>
+References: <1519249964-1630-1-git-send-email-daniel.diaz@linaro.org>
+Message-ID: <1519249964-1630-2-git-send-email-daniel.diaz@linaro.org>
 
-From: Fathi Boudra <fathi.boudra at linaro.org>
+When simply running `make' from the selftests top dir, this
+error shows up:
 
-Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
+  cc -O2 -g -std=gnu99 -Wall -I../../../../usr/include/ -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/uuid    gpio-mockup-chardev.c ../../../gpio/gpio-utils.o  -lmount -o gpio-mockup-chardev
+  cc: error: ../../../gpio/gpio-utils.o: No such file or directory
+  <builtin>: recipe for target 'gpio-mockup-chardev' failed
+  make[1]: *** [gpio-mockup-chardev] Error 1
+
+because the output directory is set to "selftests/gpio" and
+all binaries built from ../../../gpio/ end up there. In fact,
+they appear as, exempli gratia:
+* gpiogpio-event-mon
+* gpiogpio-hammer
+* gpioinclude/
+* gpiolsgpio
+which is wrong, as it's missing directory separator somewhere.
+
+This patch sets straight the output directory when building
+../../../gpio/ so that binaries don't cross paths.
+
+Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
 ---
- tools/testing/selftests/gpio/Makefile | 36 +++++++++++++++++------------------
- 1 file changed, 17 insertions(+), 19 deletions(-)
+ tools/testing/selftests/gpio/Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index 1bbb475..6890f61 100644
+index 6890f61..46a131a 100644
 --- a/tools/testing/selftests/gpio/Makefile
 +++ b/tools/testing/selftests/gpio/Makefile
-@@ -1,31 +1,29 @@
- # SPDX-License-Identifier: GPL-2.0
+@@ -7,7 +7,7 @@ TEST_PROGS := gpio-mockup.sh
+ TEST_FILES := gpio-mockup-sysfs.sh
+ TEST_PROGS_EXTENDED := gpio-mockup-chardev
  
-+CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
-+LDLIBS += -lmount -I/usr/include/libmount
-+
- TEST_PROGS := gpio-mockup.sh
--TEST_FILES := gpio-mockup-sysfs.sh $(BINARIES)
--BINARIES := gpio-mockup-chardev
--EXTRA_PROGS := ../gpiogpio-event-mon ../gpiogpio-hammer ../gpiolsgpio
--EXTRA_DIRS := ../gpioinclude/
--EXTRA_OBJS := ../gpiogpio-event-mon-in.o ../gpiogpio-event-mon.o
--EXTRA_OBJS += ../gpiogpio-hammer-in.o ../gpiogpio-utils.o ../gpiolsgpio-in.o
--EXTRA_OBJS += ../gpiolsgpio.o
-+TEST_FILES := gpio-mockup-sysfs.sh
-+TEST_PROGS_EXTENDED := gpio-mockup-chardev
+-GPIODIR := ../../../gpio
++GPIODIR := $(realpath ../../../gpio)
+ GPIOOBJ := gpio-utils.o
+ GPIOINC := gpio.h
  
--include ../lib.mk
-+GPIODIR := ../../../gpio
-+GPIOOBJ := gpio-utils.o
-+GPIOINC := gpio.h
- 
--all: $(BINARIES)
-+all: $(GPIOINC) $(TEST_PROGS_EXTENDED)
+@@ -15,7 +15,7 @@ all: $(GPIOINC) $(TEST_PROGS_EXTENDED)
  
  override define CLEAN
--	$(RM) $(BINARIES) $(EXTRA_PROGS) $(EXTRA_OBJS)
--	$(RM) -r $(EXTRA_DIRS)
-+	$(RM) $(TEST_PROGS_EXTENDED)
-+	$(MAKE) -C $(GPIODIR) clean
+ 	$(RM) $(TEST_PROGS_EXTENDED)
+-	$(MAKE) -C $(GPIODIR) clean
++	$(MAKE) -C $(GPIODIR) OUTPUT=$(GPIODIR)/ clean
  endef
  
--CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
--LDLIBS += -lmount -I/usr/include/libmount
--
--$(BINARIES): ../../../gpio/gpio-utils.o ../../../../usr/include/linux/gpio.h
-+include ../lib.mk
+ include ../lib.mk
+@@ -23,7 +23,7 @@ include ../lib.mk
+ $(TEST_PROGS_EXTENDED): $(GPIODIR)/$(GPIOOBJ)
  
--../../../gpio/gpio-utils.o:
--	make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
-+$(TEST_PROGS_EXTENDED): $(GPIODIR)/$(GPIOOBJ)
+ $(GPIODIR)/$(GPIOOBJ):
+-	$(MAKE) -C $(GPIODIR)
++	$(MAKE) OUTPUT=$(GPIODIR)/ -C $(GPIODIR)
  
--../../../../usr/include/linux/gpio.h:
--	make -C ../../../.. headers_install INSTALL_HDR_PATH=$(shell pwd)/../../../../usr/
-+$(GPIODIR)/$(GPIOOBJ):
-+	$(MAKE) -C $(GPIODIR)
- 
-+$(GPIOINC):
-+	$(MAKE) -C ../../../.. headers_install
+ $(GPIOINC):
+ 	$(MAKE) -C ../../../.. headers_install
 -- 
 2.7.4
 
