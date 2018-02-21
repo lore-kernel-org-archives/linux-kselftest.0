@@ -1,44 +1,41 @@
-From: andy.shevchenko@gmail.com (Andy Shevchenko)
-Date: Thu, 22 Feb 2018 00:09:54 +0200
-Subject: [PATCH 2/2] selftests/gpio: Fix OUTPUT directory in Makefile
-In-Reply-To: <1519249964-1630-2-git-send-email-daniel.diaz@linaro.org>
-References: <1519249964-1630-1-git-send-email-daniel.diaz@linaro.org>
- <1519249964-1630-2-git-send-email-daniel.diaz@linaro.org>
-Message-ID:
- <CAHp75VdMCaKnqbUPzU2QTxOk6gjyor69w+sVVoaKyjnO+zU=+A@mail.gmail.com>
+From: labbott@redhat.com (Laura Abbott)
+Date: Wed, 21 Feb 2018 14:25:41 -0800
+Subject: [PATCHv2 0/2] Ion unit test with VGEM
+Message-ID: <20180221222543.13633-1-labbott@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180221220954.kMH0ixxci9qSa1NM9pAKYsBaRCI3GlvJ7pgC3veY3Jo@z>
+Message-ID: <20180221222541.ovbqlP5ExyvHjyimLM6GtZw2O4siIj_iKbWbCvPQu1Q@z>
 
-On Wed, Feb 21, 2018@11:52 PM, Daniel Díaz <daniel.diaz@linaro.org> wrote:
-> When simply running `make' from the selftests top dir, this
-> error shows up:
->
->   cc -O2 -g -std=gnu99 -Wall -I../../../../usr/include/ -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/uuid    gpio-mockup-chardev.c ../../../gpio/gpio-utils.o  -lmount -o gpio-mockup-chardev
->   cc: error: ../../../gpio/gpio-utils.o: No such file or directory
->   <builtin>: recipe for target 'gpio-mockup-chardev' failed
->   make[1]: *** [gpio-mockup-chardev] Error 1
->
-> because the output directory is set to "selftests/gpio" and
-> all binaries built from ../../../gpio/ end up there. In fact,
-> they appear as, exempli gratia:
-> * gpiogpio-event-mon
-> * gpiogpio-hammer
-> * gpioinclude/
-> * gpiolsgpio
-> which is wrong, as it's missing directory separator somewhere.
->
-> This patch sets straight the output directory when building
-> ../../../gpio/ so that binaries don't cross paths.
+Hi,
 
-This patch doesn't sound right like previous one.
-Does selftest infrastructure have it's own build system like tools?
-Does it use tools' one?
-What's wrong with the current approach?
-Why do you need tools in selftests?
+This is v2 of the series to add a unit test to Ion with VGEM. From v1:
+
+Ion hasn't had much in the way of unit tests and fixing that is
+something that needs to happen before it can move out of staging. The
+difficult part of testing parts of Ion is that it relies on having a
+kernel driver to actually make some of the dma_buf calls. The vgem
+DRM driver exists mostly for testing and works great for this case.
+
+Changes since v1:
+- Dropped RFC
+- Feedback/review from Daniel Vetter about DRM ioctls
+
+Thanks,
+Laura
+
+Laura Abbott (2):
+  selftests: ion: Remove some prints
+  selftests: ion: Add simple test with the vgem driver
+
+ tools/testing/selftests/android/ion/Makefile      |   3 +-
+ tools/testing/selftests/android/ion/config        |   1 +
+ tools/testing/selftests/android/ion/ionmap_test.c | 149 ++++++++++++++++++++++
+ tools/testing/selftests/android/ion/ionutils.c    |   6 -
+ 4 files changed, 152 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/android/ion/ionmap_test.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.14.3
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
