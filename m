@@ -1,54 +1,105 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Thu, 22 Feb 2018 00:01:58 +0900
-Subject: [PATCH v2 16/17] selftests: ftrace: Add a testcase for $argN with
- kprobe_event
+Date: Thu, 22 Feb 2018 00:02:27 +0900
+Subject: [PATCH v2 17/17] selftests: ftrace: Add a testcase for array type
+ with kprobe_event
 In-Reply-To: <151922484560.6217.1143686155616343906.stgit@devbox>
 References: <151922484560.6217.1143686155616343906.stgit@devbox>
-Message-ID: <151922531797.6217.2490233092090771101.stgit@devbox>
+Message-ID: <151922534694.6217.17932827779274127190.stgit@devbox>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180221150158.JRnrFagq5DL3EhbR_2JUJU1fiHwMJhvOXHWaLAb1X5I@z>
+Message-ID: <20180221150227.HBWzqis8u32S-2Ig6Gc51pt6OM_I2MKCD6kc74c4cXc@z>
 
 Add a testcase for array type with kprobe event.
-This tests whether the traced data is correct or not.
+This tests good/bad syntax combinations and also
+the traced data is correct in several way.
 If the kernel doesn't support array type, it skips
 the test as UNSUPPORTED.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- .../ftrace/test.d/kprobe/kprobe_args_argN.tc       |   25 ++++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
+ .../ftrace/test.d/kprobe/kprobe_args_array.tc      |   75 ++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
 new file mode 100644
-index 000000000000..d5c5c8c3a51e
+index 000000000000..27c9628c1fff
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
-@@ -0,0 +1,25 @@
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
+@@ -0,0 +1,75 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Kprobe event argN argument
++# description: Kprobe event array argument
 +
 +[ -f kprobe_events ] || exit_unsupported # this is configurable
 +
-+grep -q "arg<N>" README || exit_unsupported # version issue
++grep -q "<type>\[<array-size>\]" README || exit_unsupported # version issue
++
++GOODSYM="_sdata"
++if ! grep -qw ${GOODSYM} /proc/kallsyms ; then
++  GOODSYM="create_trace_kprobe"
++fi
++case `uname -m` in
++x86_64)
++  ARG2=%si
++  OFFS=8
++;;
++i[3456]86)
++  ARG2=%cx
++  OFFS=4
++;;
++aarch64)
++  ARG2=%x1
++  OFFS=8
++;;
++arm*)
++  ARG2=%r1
++  OFFS=4
++;;
++*)
++  echo "Please implement other architecture here"
++  exit_untested
++esac
++
++create_testprobe() { # args
++  echo "p:testprobe create_trace_kprobe $*" > kprobe_events
++}
 +
 +echo 0 > events/enable
 +echo > kprobe_events
 +
-+: "Test bad pattern : arg0 is not allowed"
-+! echo 'p:testprobe create_trace_kprobe $arg0' > kprobe_events
++: "Syntax test"
++create_testprobe "+0(${ARG2}):x8[1] +0(${ARG2}):s16[1] +0(${ARG2}):u32[1]"
++create_testprobe "+0(${ARG2}):x64[1] +0(${ARG2}):symbol[1]"
++create_testprobe "+0(${ARG2}):b2 at 3/8[1] +0(${ARG2}):string[1]"
++create_testprobe "+0(${ARG2}):x8[64] @${GOODSYM}:x8[4]"
 +
-+: "Test get argument"
-+echo 'p:testprobe create_trace_kprobe $arg1' > kprobe_events
++! create_testprobe "${ARG2}:x8[1]" # Can not use array type on register
++! create_testprobe "\$comm:x8[1]" # Can not use array type on \$comm
++! create_testprobe "\$comm:string[1]" # No, even if it is string array
++! create_testprobe "+0(${ARG2}):x64[0]" # array size >= 1
++! create_testprobe "+0(${ARG2}):x64[65]" # array size <= 64
++
++: "Test get argument (1)"
++create_testprobe "arg1=+0(${ARG2}):string[1]" > kprobe_events
 +echo 1 > events/kprobes/testprobe/enable
 +! echo test >> kprobe_events
-+tail -n 1 trace | grep -qe "testprobe.* arg1=0x1"
++tail -n 1 trace | grep -qe "testprobe.* arg1={\"test\"}"
++echo 0 > events/kprobes/testprobe/enable
 +
-+! echo test test test >> kprobe_events
-+tail -n 1 trace | grep -qe "testprobe.* arg1=0x3"
++: "Test get argument (2)"
++create_testprobe "arg1=+0(${ARG2}):string[3]" > kprobe_events
++echo 1 > events/kprobes/testprobe/enable
++! echo foo bar buzz >> kprobe_events
++tail -n 1 trace | grep -qe "testprobe.* arg1={\"foo\",\"bar\",\"buzz\"}"
++echo 0 > events/kprobes/testprobe/enable
 +
-+echo 0 > events/enable
++: "Test get argument (3)"
++create_testprobe "arg1=+0(+0(${ARG2})):u8[4]" > kprobe_events
++echo 1 > events/kprobes/testprobe/enable
++! echo 1234 >> kprobe_events
++tail -n 1 trace | grep -qe "testprobe.* arg1={49,50,51,52}" # ascii code
++echo 0 > events/kprobes/testprobe/enable
++
 +echo > kprobe_events
 
 --
