@@ -1,100 +1,52 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Thu, 22 Feb 2018 00:01:29 +0900
-Subject: [PATCH v2 15/17] selftests: ftrace: Add a testcase for symbol type
+Date: Thu, 22 Feb 2018 00:01:58 +0900
+Subject: [PATCH v2 16/17] selftests: ftrace: Add a testcase for $argN with
+ kprobe_event
 In-Reply-To: <151922484560.6217.1143686155616343906.stgit@devbox>
 References: <151922484560.6217.1143686155616343906.stgit@devbox>
-Message-ID: <151922528927.6217.272823645130675841.stgit@devbox>
+Message-ID: <151922531797.6217.2490233092090771101.stgit@devbox>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180221150129.hg6L3g27cPWHNJNXqnixyZyhPlDSa0Np5O1yzQsHuvU@z>
+Message-ID: <20180221150158.JRnrFagq5DL3EhbR_2JUJU1fiHwMJhvOXHWaLAb1X5I@z>
 
-Add a testcase for symbol type with kprobe event.
-This tests good/bad syntax combinations and also
-the traced data.
-If the kernel doesn't support symbol type, it skips
+Add a testcase for array type with kprobe event.
+This tests whether the traced data is correct or not.
+If the kernel doesn't support array type, it skips
 the test as UNSUPPORTED.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     |   73 ++++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
+ .../ftrace/test.d/kprobe/kprobe_args_argN.tc       |   25 ++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
 new file mode 100644
-index 000000000000..a5820b175df5
+index 000000000000..d5c5c8c3a51e
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
-@@ -0,0 +1,73 @@
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
+@@ -0,0 +1,25 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Kprobe event argument symbol type
++# description: Kprobe event argN argument
 +
 +[ -f kprobe_events ] || exit_unsupported # this is configurable
 +
-+grep -qe "type:.* symbol" README || exit_unsupported # version issue
++grep -q "arg<N>" README || exit_unsupported # version issue
 +
 +echo 0 > events/enable
 +echo > kprobe_events
 +
-+PROBEFUNC="vfs_read"
-+GOODREG=
-+BADREG=
-+GOODSYM="_sdata"
-+if ! grep -qw ${GOODSYM} /proc/kallsyms ; then
-+  GOODSYM=$PROBEFUNC
-+fi
++: "Test bad pattern : arg0 is not allowed"
++! echo 'p:testprobe create_trace_kprobe $arg0' > kprobe_events
 +
-+case `uname -m` in
-+x86_64|i[3456]86)
-+  GOODREG=%ax
-+  BADREG=%ex
-+;;
-+aarch64)
-+  GOODREG=%x0
-+  BADREG=%ax
-+;;
-+arm*)
-+  GOODREG=%r0
-+  BADREG=%ax
-+;;
-+*)
-+  echo "Please implement other architecture here"
-+  exit_untested
-+esac
-+
-+test_goodarg() # Good-args
-+{
-+  while [ "$1" ]; do
-+    echo "p ${PROBEFUNC} $1" > kprobe_events
-+    shift 1
-+  done;
-+}
-+
-+test_badarg() # Bad-args
-+{
-+  while [ "$1" ]; do
-+    ! echo "p ${PROBEFUNC} $1" > kprobe_events
-+    shift 1
-+  done;
-+}
-+
-+echo > kprobe_events
-+
-+: "Symbol type"
-+test_goodarg "${GOODREG}:symbol" "@${GOODSYM}:symbol" "@${GOODSYM}+10:symbol" \
-+	 "\$stack0:symbol" "+0(\$stack):symbol"
-+test_badarg "\$comm:symbol"
-+
-+: "Retval with symbol type"
-+echo "r ${PROBEFUNC} \$retval:symbol" > kprobe_events
-+
-+echo > kprobe_events
-+
-+: "Test get symbol"
-+echo 'p:testprobe create_trace_kprobe $stack0:symbol' > kprobe_events
++: "Test get argument"
++echo 'p:testprobe create_trace_kprobe $arg1' > kprobe_events
 +echo 1 > events/kprobes/testprobe/enable
 +! echo test >> kprobe_events
-+tail -n 1 trace | grep -q "arg1=trace_run_command"
++tail -n 1 trace | grep -qe "testprobe.* arg1=0x1"
++
++! echo test test test >> kprobe_events
++tail -n 1 trace | grep -qe "testprobe.* arg1=0x3"
 +
 +echo 0 > events/enable
 +echo > kprobe_events
