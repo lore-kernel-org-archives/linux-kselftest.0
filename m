@@ -1,38 +1,46 @@
 From: labbott@redhat.com (Laura Abbott)
-Date: Wed, 21 Feb 2018 14:25:41 -0800
-Subject: [PATCHv2 0/2] Ion unit test with VGEM
-Message-ID: <20180221222543.13633-1-labbott@redhat.com>
+Date: Wed, 21 Feb 2018 14:25:42 -0800
+Subject: [PATCHv2 1/2] selftests: ion: Remove some prints
+In-Reply-To: <20180221222543.13633-1-labbott@redhat.com>
+References: <20180221222543.13633-1-labbott@redhat.com>
+Message-ID: <20180221222543.13633-2-labbott@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180221222541.ovbqlP5ExyvHjyimLM6GtZw2O4siIj_iKbWbCvPQu1Q@z>
+Message-ID: <20180221222542.AaMWm13-cJdVF3akcKkeg5HOqaOdiDZQUiwxUloX_LY@z>
 
-Hi,
 
-This is v2 of the series to add a unit test to Ion with VGEM. From v1:
+There's no need to print messages each time we alloc and free. Remove them.
 
-Ion hasn't had much in the way of unit tests and fixing that is
-something that needs to happen before it can move out of staging. The
-difficult part of testing parts of Ion is that it relies on having a
-kernel driver to actually make some of the dma_buf calls. The vgem
-DRM driver exists mostly for testing and works great for this case.
+Signed-off-by: Laura Abbott <labbott at redhat.com>
+---
+v2: No changes
+---
+ tools/testing/selftests/android/ion/ionutils.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Changes since v1:
-- Dropped RFC
-- Feedback/review from Daniel Vetter about DRM ioctls
-
-Thanks,
-Laura
-
-Laura Abbott (2):
-  selftests: ion: Remove some prints
-  selftests: ion: Add simple test with the vgem driver
-
- tools/testing/selftests/android/ion/Makefile      |   3 +-
- tools/testing/selftests/android/ion/config        |   1 +
- tools/testing/selftests/android/ion/ionmap_test.c | 149 ++++++++++++++++++++++
- tools/testing/selftests/android/ion/ionutils.c    |   6 -
- 4 files changed, 152 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/android/ion/ionmap_test.c
-
+diff --git a/tools/testing/selftests/android/ion/ionutils.c b/tools/testing/selftests/android/ion/ionutils.c
+index ce69c14f51fa..7d1d37c4ef6a 100644
+--- a/tools/testing/selftests/android/ion/ionutils.c
++++ b/tools/testing/selftests/android/ion/ionutils.c
+@@ -80,11 +80,6 @@ int ion_export_buffer_fd(struct ion_buffer_info *ion_info)
+ 	heap_id = MAX_HEAP_COUNT + 1;
+ 	for (i = 0; i < query.cnt; i++) {
+ 		if (heap_data[i].type == ion_info->heap_type) {
+-			printf("--------------------------------------\n");
+-			printf("heap type: %d\n", heap_data[i].type);
+-			printf("  heap id: %d\n", heap_data[i].heap_id);
+-			printf("heap name: %s\n", heap_data[i].name);
+-			printf("--------------------------------------\n");
+ 			heap_id = heap_data[i].heap_id;
+ 			break;
+ 		}
+@@ -204,7 +199,6 @@ void ion_close_buffer_fd(struct ion_buffer_info *ion_info)
+ 		/* Finally, close the client fd */
+ 		if (ion_info->ionfd > 0)
+ 			close(ion_info->ionfd);
+-		printf("<%s>: buffer release successfully....\n", __func__);
+ 	}
+ }
+ 
 -- 
 2.14.3
 
