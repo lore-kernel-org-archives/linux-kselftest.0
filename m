@@ -1,106 +1,61 @@
-From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Thu, 22 Feb 2018 00:02:27 +0900
-Subject: [PATCH v2 17/17] selftests: ftrace: Add a testcase for array type
- with kprobe_event
-In-Reply-To: <151922484560.6217.1143686155616343906.stgit@devbox>
-References: <151922484560.6217.1143686155616343906.stgit@devbox>
-Message-ID: <151922534694.6217.17932827779274127190.stgit@devbox>
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Wed, 21 Feb 2018 17:51:16 +0100
+Subject: [PATCH] selftests/bpf: tcpbpf_kern: use in6_* macros from glibc
+Message-ID: <20180221165116.9754-1-anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180221150227.HBWzqis8u32S-2Ig6Gc51pt6OM_I2MKCD6kc74c4cXc@z>
+Message-ID: <20180221165116.XTkFc7WRp_8b9uNJR0Va_IT539XOOe3shL037f6bIQc@z>
 
-Add a testcase for array type with kprobe event.
-This tests good/bad syntax combinations and also
-the traced data is correct in several way.
-If the kernel doesn't support array type, it skips
-the test as UNSUPPORTED.
+Both glibc and the kernel have in6_* macros definitions. Build fails
+because it picks up wrong in6_* macro from the kernel header and not the
+header from glibc.
 
-Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+Fixes build error below:
+clang -I. -I./include/uapi -I../../../include/uapi
+     -Wno-compare-distinct-pointer-types \
+         -O2 -target bpf -emit-llvm -c test_tcpbpf_kern.c -o - |      \
+llc -march=bpf -mcpu=generic -filetype=obj
+     -o .../tools/testing/selftests/bpf/test_tcpbpf_kern.o
+In file included from test_tcpbpf_kern.c:12:
+.../netinet/in.h:101:5: error: expected identifier
+    IPPROTO_HOPOPTS = 0,   /* IPv6 Hop-by-Hop options.  */
+    ^
+.../linux/in6.h:131:26: note: expanded from macro 'IPPROTO_HOPOPTS'
+                                ^
+In file included from test_tcpbpf_kern.c:12:
+/usr/include/netinet/in.h:103:5: error: expected identifier
+    IPPROTO_ROUTING = 43,  /* IPv6 routing header.  */
+    ^
+.../linux/in6.h:132:26: note: expanded from macro 'IPPROTO_ROUTING'
+                                ^
+In file included from test_tcpbpf_kern.c:12:
+.../netinet/in.h:105:5: error: expected identifier
+    IPPROTO_FRAGMENT = 44, /* IPv6 fragmentation header.  */
+    ^
+
+Since both glibc and the kernel have in6_* macros definitions, use the
+one from glibc.  Kernel headers will check for previous libc definitions
+by including include/linux/libc-compat.h.
+
+Reported-by: Daniel Díaz <daniel.diaz at linaro.org>
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 ---
- .../ftrace/test.d/kprobe/kprobe_args_array.tc      |   75 ++++++++++++++++++++
- 1 file changed, 75 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
+ tools/testing/selftests/bpf/test_tcpbpf_kern.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
-new file mode 100644
-index 000000000000..27c9628c1fff
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
-@@ -0,0 +1,75 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Kprobe event array argument
-+
-+[ -f kprobe_events ] || exit_unsupported # this is configurable
-+
-+grep -q "<type>\[<array-size>\]" README || exit_unsupported # version issue
-+
-+GOODSYM="_sdata"
-+if ! grep -qw ${GOODSYM} /proc/kallsyms ; then
-+  GOODSYM="create_trace_kprobe"
-+fi
-+case `uname -m` in
-+x86_64)
-+  ARG2=%si
-+  OFFS=8
-+;;
-+i[3456]86)
-+  ARG2=%cx
-+  OFFS=4
-+;;
-+aarch64)
-+  ARG2=%x1
-+  OFFS=8
-+;;
-+arm*)
-+  ARG2=%r1
-+  OFFS=4
-+;;
-+*)
-+  echo "Please implement other architecture here"
-+  exit_untested
-+esac
-+
-+create_testprobe() { # args
-+  echo "p:testprobe create_trace_kprobe $*" > kprobe_events
-+}
-+
-+echo 0 > events/enable
-+echo > kprobe_events
-+
-+: "Syntax test"
-+create_testprobe "+0(${ARG2}):x8[1] +0(${ARG2}):s16[1] +0(${ARG2}):u32[1]"
-+create_testprobe "+0(${ARG2}):x64[1] +0(${ARG2}):symbol[1]"
-+create_testprobe "+0(${ARG2}):b2 at 3/8[1] +0(${ARG2}):string[1]"
-+create_testprobe "+0(${ARG2}):x8[64] @${GOODSYM}:x8[4]"
-+
-+! create_testprobe "${ARG2}:x8[1]" # Can not use array type on register
-+! create_testprobe "\$comm:x8[1]" # Can not use array type on \$comm
-+! create_testprobe "\$comm:string[1]" # No, even if it is string array
-+! create_testprobe "+0(${ARG2}):x64[0]" # array size >= 1
-+! create_testprobe "+0(${ARG2}):x64[65]" # array size <= 64
-+
-+: "Test get argument (1)"
-+create_testprobe "arg1=+0(${ARG2}):string[1]" > kprobe_events
-+echo 1 > events/kprobes/testprobe/enable
-+! echo test >> kprobe_events
-+tail -n 1 trace | grep -qe "testprobe.* arg1={\"test\"}"
-+echo 0 > events/kprobes/testprobe/enable
-+
-+: "Test get argument (2)"
-+create_testprobe "arg1=+0(${ARG2}):string[3]" > kprobe_events
-+echo 1 > events/kprobes/testprobe/enable
-+! echo foo bar buzz >> kprobe_events
-+tail -n 1 trace | grep -qe "testprobe.* arg1={\"foo\",\"bar\",\"buzz\"}"
-+echo 0 > events/kprobes/testprobe/enable
-+
-+: "Test get argument (3)"
-+create_testprobe "arg1=+0(+0(${ARG2})):u8[4]" > kprobe_events
-+echo 1 > events/kprobes/testprobe/enable
-+! echo 1234 >> kprobe_events
-+tail -n 1 trace | grep -qe "testprobe.* arg1={49,50,51,52}" # ascii code
-+echo 0 > events/kprobes/testprobe/enable
-+
-+echo > kprobe_events
+diff --git a/tools/testing/selftests/bpf/test_tcpbpf_kern.c b/tools/testing/selftests/bpf/test_tcpbpf_kern.c
+index 57119ad57a3f..3e645ee41ed5 100644
+--- a/tools/testing/selftests/bpf/test_tcpbpf_kern.c
++++ b/tools/testing/selftests/bpf/test_tcpbpf_kern.c
+@@ -5,7 +5,6 @@
+ #include <linux/if_ether.h>
+ #include <linux/if_packet.h>
+ #include <linux/ip.h>
+-#include <linux/in6.h>
+ #include <linux/types.h>
+ #include <linux/socket.h>
+ #include <linux/tcp.h>
+-- 
+2.11.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
