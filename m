@@ -1,57 +1,82 @@
-From: gregkh at linuxfoundation.org (Greg Kroah-Hartman)
-Date: Wed, 21 Feb 2018 13:49:07 +0100
-Subject: [PATCH 4.9 58/77] selftests/x86: Do not rely on "int $0x80" in
- test_mremap_vdso.c
-In-Reply-To: <20180221124432.172390020@linuxfoundation.org>
-References: <20180221124432.172390020@linuxfoundation.org>
-Message-ID: <20180221124434.659368600@linuxfoundation.org>
+From: mhiramat at kernel.org (Masami Hiramatsu)
+Date: Wed, 21 Feb 2018 23:54:37 +0900
+Subject: [PATCH v2 01/17] tracing: probeevent: Fix to support minus offset
+ from symbol
+In-Reply-To: <151922484560.6217.1143686155616343906.stgit@devbox>
+References: <151922484560.6217.1143686155616343906.stgit@devbox>
+Message-ID: <151922487738.6217.16114601174401123273.stgit@devbox>
 
-4.9-stable review patch.  If anyone has any objections, please let me know.
+In Documentation/trace/kprobetrace.txt, it says
 
-------------------
+ @SYM[+|-offs] : Fetch memory at SYM +|- offs (SYM should be a data symbol)
 
-From: Dominik Brodowski <linux at dominikbrodowski.net>
+However, the parser doesn't parse minus offset correctly.
+This fixes the parser to get minus offset correctly.
 
-commit 2cbc0d66de0480449c75636f55697c7ff3af61fc upstream.
-
-On 64-bit builds, we should not rely on "int $0x80" working (it only does if
-CONFIG_IA32_EMULATION=y is enabled).
-
-Without this patch, the move test may succeed, but the "int $0x80" causes
-a segfault, resulting in a false negative output of this self-test.
-
-Signed-off-by: Dominik Brodowski <linux at dominikbrodowski.net>
-Cc: Andy Lutomirski <luto at kernel.org>
-Cc: Dmitry Safonov <dsafonov at virtuozzo.com>
-Cc: Linus Torvalds <torvalds at linux-foundation.org>
-Cc: Peter Zijlstra <peterz at infradead.org>
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: linux-kselftest at vger.kernel.org
-Cc: shuah at kernel.org
-Link: http://lkml.kernel.org/r/20180211111013.16888-4-linux at dominikbrodowski.net
-Signed-off-by: Ingo Molnar <mingo at kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
-
+Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- tools/testing/selftests/x86/test_mremap_vdso.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ kernel/trace/trace_kprobe.c |    2 +-
+ kernel/trace/trace_probe.c  |   10 +++++-----
+ kernel/trace/trace_probe.h  |    2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
---- a/tools/testing/selftests/x86/test_mremap_vdso.c
-+++ b/tools/testing/selftests/x86/test_mremap_vdso.c
-@@ -90,8 +90,12 @@ int main(int argc, char **argv, char **e
- 			vdso_size += PAGE_SIZE;
- 		}
+diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+index 5ce9b8cf7be3..dab4a5b54269 100644
+--- a/kernel/trace/trace_kprobe.c
++++ b/kernel/trace/trace_kprobe.c
+@@ -754,7 +754,7 @@ static int create_trace_kprobe(int argc, char **argv)
+ 		/* a symbol specified */
+ 		symbol = argv[1];
+ 		/* TODO: support .init module functions */
+-		ret = traceprobe_split_symbol_offset(symbol, &offset);
++		ret = traceprobe_split_symbol_offset(symbol, (long *)&offset);
+ 		if (ret) {
+ 			pr_info("Failed to parse either an address or a symbol.\n");
+ 			return ret;
+diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+index d59357308677..3e291a754862 100644
+--- a/kernel/trace/trace_probe.c
++++ b/kernel/trace/trace_probe.c
+@@ -320,7 +320,7 @@ static fetch_func_t get_fetch_size_function(const struct fetch_type *type,
+ }
  
-+#ifdef __i386__
- 		/* Glibc is likely to explode now - exit with raw syscall */
- 		asm volatile ("int $0x80" : : "a" (__NR_exit), "b" (!!ret));
-+#else /* __x86_64__ */
-+		syscall(SYS_exit, ret);
-+#endif
- 	} else {
- 		int status;
+ /* Split symbol and offset. */
+-int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset)
++int traceprobe_split_symbol_offset(char *symbol, long *offset)
+ {
+ 	char *tmp;
+ 	int ret;
+@@ -328,13 +328,13 @@ int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset)
+ 	if (!offset)
+ 		return -EINVAL;
  
-
+-	tmp = strchr(symbol, '+');
++	tmp = strpbrk(symbol, "+-");
+ 	if (tmp) {
+-		/* skip sign because kstrtoul doesn't accept '+' */
+-		ret = kstrtoul(tmp + 1, 0, offset);
++		ret = kstrtoul(tmp + 1, 0, (unsigned long *)offset);
+ 		if (ret)
+ 			return ret;
+-
++		if (*tmp == '-')
++			*offset = -(*offset);
+ 		*tmp = '\0';
+ 	} else
+ 		*offset = 0;
+diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+index 0745f895f780..75daff22ccea 100644
+--- a/kernel/trace/trace_probe.h
++++ b/kernel/trace/trace_probe.h
+@@ -365,7 +365,7 @@ extern int traceprobe_conflict_field_name(const char *name,
+ extern void traceprobe_update_arg(struct probe_arg *arg);
+ extern void traceprobe_free_probe_arg(struct probe_arg *arg);
+ 
+-extern int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset);
++extern int traceprobe_split_symbol_offset(char *symbol, long *offset);
+ 
+ /* Sum up total data length for dynamic arraies (strings) */
+ static nokprobe_inline int
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
