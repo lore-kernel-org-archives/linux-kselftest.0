@@ -1,110 +1,114 @@
 From: gregkh at linuxfoundation.org (Greg Kroah-Hartman)
-Date: Wed, 21 Feb 2018 13:48:17 +0100
-Subject: [PATCH 4.15 068/163] selftests/x86: Fix vDSO selftest segfault for
- vsyscall=none
-In-Reply-To: <20180221124529.931834518@linuxfoundation.org>
-References: <20180221124529.931834518@linuxfoundation.org>
-Message-ID: <20180221124534.239668731@linuxfoundation.org>
+Date: Wed, 21 Feb 2018 13:47:59 +0100
+Subject: [PATCH 4.14 068/167] selftests/x86: Clean up and document sscanf()
+ usage
+In-Reply-To: <20180221124524.639039577@linuxfoundation.org>
+References: <20180221124524.639039577@linuxfoundation.org>
+Message-ID: <20180221124528.233369851@linuxfoundation.org>
 
-4.15-stable review patch.  If anyone has any objections, please let me know.
+4.14-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
 From: Dominik Brodowski <linux at dominikbrodowski.net>
 
-commit 198ee8e17502da2634f7366395db1d77630e0219 upstream.
+commit d8e92de8ef952bed88c56c7a44c02d8dcae0984e upstream.
 
-The vDSO selftest tries to execute a vsyscall unconditionally, even if it
-is not present on the test system (e.g. if booted with vsyscall=none or
-with CONFIG_LEGACY_VSYSCALL_NONE=y set. Fix this by copying (and tweaking)
-the vsyscall check from test_vsyscall.c
+Replace a couple of magically connected buffer length literal constants with
+a common definition that makes their relationship obvious. Also document
+why our sscanf() usage is safe.
 
+No intended functional changes.
+
+Suggested-by: Ingo Molnar <mingo at kernel.org>
 Signed-off-by: Dominik Brodowski <linux at dominikbrodowski.net>
 Cc: Andrew Lutomirski <luto at kernel.org>
+Cc: Andy Lutomirski <luto at kernel.org>
 Cc: Linus Torvalds <torvalds at linux-foundation.org>
 Cc: Peter Zijlstra <peterz at infradead.org>
 Cc: Thomas Gleixner <tglx at linutronix.de>
 Cc: linux-kselftest at vger.kernel.org
 Cc: shuah at kernel.org
-Link: http://lkml.kernel.org/r/20180211111013.16888-3-linux at dominikbrodowski.net
+Link: http://lkml.kernel.org/r/20180211205924.GA23210 at light.dominikbrodowski.net
 Signed-off-by: Ingo Molnar <mingo at kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
 
 ---
- tools/testing/selftests/x86/test_vdso.c |   50 +++++++++++++++++++++++++++-----
- 1 file changed, 43 insertions(+), 7 deletions(-)
+ tools/testing/selftests/x86/test_vdso.c     |   11 ++++++++---
+ tools/testing/selftests/x86/test_vsyscall.c |   11 ++++++++---
+ 2 files changed, 16 insertions(+), 6 deletions(-)
 
 --- a/tools/testing/selftests/x86/test_vdso.c
 +++ b/tools/testing/selftests/x86/test_vdso.c
-@@ -28,18 +28,52 @@
+@@ -26,6 +26,9 @@
+ # endif
+ #endif
  
++/* max length of lines in /proc/self/maps - anything longer is skipped here */
++#define MAPS_LINE_LEN 128
++
  int nerrs = 0;
  
-+typedef long (*getcpu_t)(unsigned *, unsigned *, void *);
-+
-+getcpu_t vgetcpu;
-+getcpu_t vdso_getcpu;
-+
-+static void *vsyscall_getcpu(void)
-+{
- #ifdef __x86_64__
--# define VSYS(x) (x)
-+	FILE *maps;
-+	char line[128];
-+	bool found = false;
-+
-+	maps = fopen("/proc/self/maps", "r");
-+	if (!maps) /* might still be present, but ignore it here, as we test vDSO not vsyscall */
-+		return NULL;
-+
-+	while (fgets(line, sizeof(line), maps)) {
-+		char r, x;
-+		void *start, *end;
-+		char name[128];
-+		if (sscanf(line, "%p-%p %c-%cp %*x %*x:%*x %*u %s",
-+			   &start, &end, &r, &x, name) != 5)
-+			continue;
-+
-+		if (strcmp(name, "[vsyscall]"))
-+			continue;
-+
-+		/* assume entries are OK, as we test vDSO here not vsyscall */
-+		found = true;
-+		break;
-+	}
-+
-+	fclose(maps);
-+
-+	if (!found) {
-+		printf("Warning: failed to find vsyscall getcpu\n");
-+		return NULL;
-+	}
-+	return (void *) (0xffffffffff600800);
- #else
--# define VSYS(x) 0
-+	return NULL;
- #endif
-+}
- 
--typedef long (*getcpu_t)(unsigned *, unsigned *, void *);
--
--const getcpu_t vgetcpu = (getcpu_t)VSYS(0xffffffffff600800);
--getcpu_t vdso_getcpu;
- 
--void fill_function_pointers()
-+static void fill_function_pointers()
+ typedef long (*getcpu_t)(unsigned *, unsigned *, void *);
+@@ -37,17 +40,19 @@ static void *vsyscall_getcpu(void)
  {
- 	void *vdso = dlopen("linux-vdso.so.1",
- 			    RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
-@@ -54,6 +88,8 @@ void fill_function_pointers()
- 	vdso_getcpu = (getcpu_t)dlsym(vdso, "__vdso_getcpu");
- 	if (!vdso_getcpu)
- 		printf("Warning: failed to find getcpu in vDSO\n");
-+
-+	vgetcpu = (getcpu_t) vsyscall_getcpu();
- }
+ #ifdef __x86_64__
+ 	FILE *maps;
+-	char line[128];
++	char line[MAPS_LINE_LEN];
+ 	bool found = false;
  
- static long sys_getcpu(unsigned * cpu, unsigned * node,
+ 	maps = fopen("/proc/self/maps", "r");
+ 	if (!maps) /* might still be present, but ignore it here, as we test vDSO not vsyscall */
+ 		return NULL;
+ 
+-	while (fgets(line, sizeof(line), maps)) {
++	while (fgets(line, MAPS_LINE_LEN, maps)) {
+ 		char r, x;
+ 		void *start, *end;
+-		char name[128];
++		char name[MAPS_LINE_LEN];
++
++		/* sscanf() is safe here as strlen(name) >= strlen(line) */
+ 		if (sscanf(line, "%p-%p %c-%cp %*x %*x:%*x %*u %s",
+ 			   &start, &end, &r, &x, name) != 5)
+ 			continue;
+--- a/tools/testing/selftests/x86/test_vsyscall.c
++++ b/tools/testing/selftests/x86/test_vsyscall.c
+@@ -33,6 +33,9 @@
+ # endif
+ #endif
+ 
++/* max length of lines in /proc/self/maps - anything longer is skipped here */
++#define MAPS_LINE_LEN 128
++
+ static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
+ 		       int flags)
+ {
+@@ -98,7 +101,7 @@ static int init_vsys(void)
+ #ifdef __x86_64__
+ 	int nerrs = 0;
+ 	FILE *maps;
+-	char line[128];
++	char line[MAPS_LINE_LEN];
+ 	bool found = false;
+ 
+ 	maps = fopen("/proc/self/maps", "r");
+@@ -108,10 +111,12 @@ static int init_vsys(void)
+ 		return 0;
+ 	}
+ 
+-	while (fgets(line, sizeof(line), maps)) {
++	while (fgets(line, MAPS_LINE_LEN, maps)) {
+ 		char r, x;
+ 		void *start, *end;
+-		char name[128];
++		char name[MAPS_LINE_LEN];
++
++		/* sscanf() is safe here as strlen(name) >= strlen(line) */
+ 		if (sscanf(line, "%p-%p %c-%cp %*x %*x:%*x %*u %s",
+ 			   &start, &end, &r, &x, name) != 5)
+ 			continue;
 
 
 --
