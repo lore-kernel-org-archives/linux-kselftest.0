@@ -1,33 +1,25 @@
-From: daniel at iogearbox.net (Daniel Borkmann)
-Date: Thu, 22 Feb 2018 15:25:04 +0100
-Subject: [PATCH v2] selftests/bpf/test_maps: exit child process without
- error in ENOMEM case
-In-Reply-To: <1519266842-29004-1-git-send-email-lizhijian@cn.fujitsu.com>
-References: <1519266842-29004-1-git-send-email-lizhijian@cn.fujitsu.com>
-Message-ID: <dd9b9ef2-ee8f-ad81-61dc-ce57117f803f@iogearbox.net>
+From: mcgrof at kernel.org (Luis R. Rodriguez)
+Date: Thu, 22 Feb 2018 19:50:47 +0000
+Subject: [PATCH] selftest: fix kselftest-merge depend on
+ 'RUNTIME_TESTING_MENU'
+In-Reply-To: <20180222115307.15063-1-zongbox@gmail.com>
+References: <20180222115307.15063-1-zongbox@gmail.com>
+Message-ID: <20180222195047.GC27055@wotan.suse.de>
 
-On 02/22/2018 03:34 AM, Li Zhijian wrote:
-> From: Li Zhijian <zhijianx.li at intel.com>
+On Thu, Feb 22, 2018 at 07:53:07PM +0800, Zong Li wrote:
+> Since the 'commit d3deafaa8b5c ("lib/: make RUNTIME_TESTS a menuconfig
+> to ease disabling it all")', the make kselftest-merge cannot merge the
+> config dependencies of kselftest to the existing .config file.
 > 
-> test_maps contains a series of stress tests, and previously it will break the
-> rest tests when it failed to alloc memory.
-> -----------------------
-> Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
-> Failed to create hashmap key=16 value=262144 'Cannot allocate memory'
-> Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
-> Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
-> test_maps: test_maps.c:955: run_parallel: Assertion `status == 0' failed.
-> Aborted
-> not ok 1..3 selftests:  test_maps [FAIL]
-> -----------------------
-> after this patch, the rest tests will be continue when it occurs an ENOMEM failure
+> These config dependencies of kselftest need to enable the
+> 'CONFIG_RUNTIME_TESTING_MENU=y' at the same time.
 > 
-> CC: Alexei Starovoitov <alexei.starovoitov at gmail.com>
-> CC: Philip Li <philip.li at intel.com>
-> Suggested-by: Daniel Borkmann <daniel at iogearbox.net>
-> Signed-off-by: Li Zhijian <zhijianx.li at intel.com>
+> Signed-off-by: Zong Li <zong at andestech.com>
+> Cc: Greentime Hu <greentime at andestech.com>
 
-Applied to bpf tree, thanks Li!
+Please add respective Fixes: tag with the sha1sum, and commit name.
+
+  Luis
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
