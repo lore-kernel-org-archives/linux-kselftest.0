@@ -1,50 +1,38 @@
-From: lizhijian@cn.fujitsu.com (Li Zhijian)
-Date: Thu, 22 Feb 2018 10:34:02 +0800
-Subject: [PATCH v2] selftests/bpf/test_maps: exit child process without error
- in ENOMEM case
-Message-ID: <1519266842-29004-1-git-send-email-lizhijian@cn.fujitsu.com>
+From: mingo@kernel.org (Ingo Molnar)
+Date: Thu, 22 Feb 2018 06:51:35 +0100
+Subject: [PATCH v12 01/22] selftests/x86: Move protecton key selftest to
+ arch neutral directory
+In-Reply-To: <1519264541-7621-2-git-send-email-linuxram@us.ibm.com>
+References: <1519264541-7621-1-git-send-email-linuxram@us.ibm.com>
+ <1519264541-7621-2-git-send-email-linuxram@us.ibm.com>
+Message-ID: <20180222055135.6m43xt3mt47sz37q@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180222023402.50M417QcmtsernZ8qpyRM3ju5RCmyY4n1c2HcZG6OWo@z>
+Message-ID: <20180222055135.SyYoCttYe_G2-uI40JjmyaVhCUR1TDNIsgr-1-L8Kgo@z>
 
-From: Li Zhijian <zhijianx.li@intel.com>
 
-test_maps contains a series of stress tests, and previously it will break the
-rest tests when it failed to alloc memory.
------------------------
-Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
-Failed to create hashmap key=16 value=262144 'Cannot allocate memory'
-Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
-Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
-test_maps: test_maps.c:955: run_parallel: Assertion `status == 0' failed.
-Aborted
-not ok 1..3 selftests:  test_maps [FAIL]
------------------------
-after this patch, the rest tests will be continue when it occurs an ENOMEM failure
+* Ram Pai <linuxram@us.ibm.com> wrote:
 
-CC: Alexei Starovoitov <alexei.starovoitov at gmail.com>
-CC: Philip Li <philip.li at intel.com>
-Suggested-by: Daniel Borkmann <daniel at iogearbox.net>
-Signed-off-by: Li Zhijian <zhijianx.li at intel.com>
----
- tools/testing/selftests/bpf/test_maps.c | 2 ++
- 1 file changed, 2 insertions(+)
+> cc: Dave Hansen <dave.hansen at intel.com>
+> cc: Florian Weimer <fweimer at redhat.com>
+> Signed-off-by: Ram Pai <linuxram at us.ibm.com>
+> ---
+>  tools/testing/selftests/vm/Makefile           |    1 +
+>  tools/testing/selftests/vm/pkey-helpers.h     |  223 ++++
+>  tools/testing/selftests/vm/protection_keys.c  | 1407 +++++++++++++++++++++++++
+>  tools/testing/selftests/x86/Makefile          |    2 +-
+>  tools/testing/selftests/x86/pkey-helpers.h    |  223 ----
+>  tools/testing/selftests/x86/protection_keys.c | 1407 -------------------------
+>  6 files changed, 1632 insertions(+), 1631 deletions(-)
+>  create mode 100644 tools/testing/selftests/vm/pkey-helpers.h
+>  create mode 100644 tools/testing/selftests/vm/protection_keys.c
+>  delete mode 100644 tools/testing/selftests/x86/pkey-helpers.h
+>  delete mode 100644 tools/testing/selftests/x86/protection_keys.c
 
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index 436c4c7..9e03a4c 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -126,6 +126,8 @@ static void test_hashmap_sizes(int task, void *data)
- 			fd = bpf_create_map(BPF_MAP_TYPE_HASH, i, j,
- 					    2, map_flags);
- 			if (fd < 0) {
-+				if (errno == ENOMEM)
-+					return;
- 				printf("Failed to create hashmap key=%d value=%d '%s'\n",
- 				       i, j, strerror(errno));
- 				exit(1);
--- 
-2.7.4
+Acked-by: Ingo Molnar <mingo at kernel.org>
 
+Thanks,
+
+	Ingo
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
