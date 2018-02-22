@@ -1,76 +1,49 @@
-From: linuxram@us.ibm.com (Ram Pai)
-Date: Wed, 21 Feb 2018 17:55:19 -0800
-Subject: [PATCH v12 00/22] selftests, powerpc, x86 : Memory Protection Keys
-Message-ID: <1519264541-7621-1-git-send-email-linuxram@us.ibm.com>
+From: lizhijian@cn.fujitsu.com (Li Zhijian)
+Date: Thu, 22 Feb 2018 10:34:02 +0800
+Subject: [PATCH v2] selftests/bpf/test_maps: exit child process without error
+ in ENOMEM case
+Message-ID: <1519266842-29004-1-git-send-email-lizhijian@cn.fujitsu.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180222015519.zP7VCsWUvOkyR9K0Kj0aUIKLpJlYdJxzZbR5l1J4xiw@z>
+Message-ID: <20180222023402.50M417QcmtsernZ8qpyRM3ju5RCmyY4n1c2HcZG6OWo@z>
 
-Memory protection keys enables an application to protect its address space from
-inadvertent access by its own code.
+From: Li Zhijian <zhijianx.li@intel.com>
 
-This feature is now enabled on powerpc architecture and integrated in
-4.16-rc1.  The patches move the selftests to arch neutral directory
-and enhance their test coverage. 
+test_maps contains a series of stress tests, and previously it will break the
+rest tests when it failed to alloc memory.
+-----------------------
+Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
+Failed to create hashmap key=16 value=262144 'Cannot allocate memory'
+Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
+Failed to create hashmap key=8 value=262144 'Cannot allocate memory'
+test_maps: test_maps.c:955: run_parallel: Assertion `status == 0' failed.
+Aborted
+not ok 1..3 selftests:  test_maps [FAIL]
+-----------------------
+after this patch, the rest tests will be continue when it occurs an ENOMEM failure
 
-Test
-----
-Verified for correctness on powerpc
-and on x86 architectures(using EC2 ubuntu VM instance).
+CC: Alexei Starovoitov <alexei.starovoitov at gmail.com>
+CC: Philip Li <philip.li at intel.com>
+Suggested-by: Daniel Borkmann <daniel at iogearbox.net>
+Signed-off-by: Li Zhijian <zhijianx.li at intel.com>
+---
+ tools/testing/selftests/bpf/test_maps.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-History:
--------
-
-version 12: 
-	(1) fixed the offset of pkey field in the siginfo structure for
-		x86_64 and powerpc. And tries to use the actual field
-		if the headers have it defined.
-version 11:
-	(1) fixed a deadlock in the ptrace testcase.
-
-version 10 and prior:
-	(1) moved the testcase to arch neutral directory
-	(2) split the changes into incremental patches.
-
-Ram Pai (21):
-  selftests/x86: Move protecton key selftest to arch neutral directory
-  selftests/vm: rename all references to pkru to a generic name
-  selftests/vm: move generic definitions to header file
-  selftests/vm: typecast the pkey register
-  selftests/vm: generic function to handle shadow key register
-  selftests/vm: fix the wrong assert in pkey_disable_set()
-  selftests/vm: fixed bugs in pkey_disable_clear()
-  selftests/vm: clear the bits in shadow reg when a pkey is freed.
-  selftests/vm: fix alloc_random_pkey() to make it really random
-  selftests/vm: introduce two arch independent abstraction
-  selftests/vm: pkey register should match shadow pkey
-  selftests/vm: generic cleanup
-  selftests/vm: powerpc implementation for generic abstraction
-  selftests/vm: clear the bits in shadow reg when a pkey is freed.
-  selftests/vm: powerpc implementation to check support for pkey
-  selftests/vm: fix an assertion in test_pkey_alloc_exhaust()
-  selftests/vm: associate key on a mapped page and detect access
-    violation
-  selftests/vm: associate key on a mapped page and detect write
-    violation
-  selftests/vm: detect write violation on a mapped access-denied-key
-    page
-  selftests/vm: testcases must restore pkey-permissions
-  selftests/vm: sub-page allocator
-
-Thiago Jung Bauermann (1):
-  selftests/vm: Fix deadlock in protection_keys.c
-
- tools/testing/selftests/vm/Makefile           |    1 +
- tools/testing/selftests/vm/pkey-helpers.h     |  434 ++++++++
- tools/testing/selftests/vm/protection_keys.c  | 1471 +++++++++++++++++++++++++
- tools/testing/selftests/x86/Makefile          |    2 +-
- tools/testing/selftests/x86/pkey-helpers.h    |  223 ----
- tools/testing/selftests/x86/protection_keys.c | 1407 -----------------------
- 6 files changed, 1907 insertions(+), 1631 deletions(-)
- create mode 100644 tools/testing/selftests/vm/pkey-helpers.h
- create mode 100644 tools/testing/selftests/vm/protection_keys.c
- delete mode 100644 tools/testing/selftests/x86/pkey-helpers.h
- delete mode 100644 tools/testing/selftests/x86/protection_keys.c
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index 436c4c7..9e03a4c 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -126,6 +126,8 @@ static void test_hashmap_sizes(int task, void *data)
+ 			fd = bpf_create_map(BPF_MAP_TYPE_HASH, i, j,
+ 					    2, map_flags);
+ 			if (fd < 0) {
++				if (errno == ENOMEM)
++					return;
+ 				printf("Failed to create hashmap key=%d value=%d '%s'\n",
+ 				       i, j, strerror(errno));
+ 				exit(1);
+-- 
+2.7.4
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
