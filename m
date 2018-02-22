@@ -1,116 +1,95 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Thu, 22 Feb 2018 20:43:27 +0900
-Subject: [PATCH v2 15/17] selftests: ftrace: Add a testcase for symbol type
-In-Reply-To: <151922528927.6217.272823645130675841.stgit@devbox>
-References: <151922484560.6217.1143686155616343906.stgit@devbox>
- <151922528927.6217.272823645130675841.stgit@devbox>
-Message-ID: <20180222204327.269b207ff8c3c4da377f7598@kernel.org>
+From: zongbox at gmail.com (Zong Li)
+Date: Thu, 22 Feb 2018 19:53:07 +0800
+Subject: [PATCH] selftest: fix kselftest-merge depend on 'RUNTIME_TESTING_MENU'
+Message-ID: <20180222115307.15063-1-zongbox@gmail.com>
 
-On Thu, 22 Feb 2018 00:01:29 +0900
-Masami Hiramatsu <mhiramat at kernel.org> wrote:
+Since the 'commit d3deafaa8b5c ("lib/: make RUNTIME_TESTS a menuconfig
+to ease disabling it all")', the make kselftest-merge cannot merge the
+config dependencies of kselftest to the existing .config file.
 
-> Add a testcase for symbol type with kprobe event.
-> This tests good/bad syntax combinations and also
-> the traced data.
-> If the kernel doesn't support symbol type, it skips
-> the test as UNSUPPORTED.
-> 
-> Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
-> ---
->  .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     |   73 ++++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
-> new file mode 100644
-> index 000000000000..a5820b175df5
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
-> @@ -0,0 +1,73 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: Kprobe event argument symbol type
-> +
-> +[ -f kprobe_events ] || exit_unsupported # this is configurable
-> +
-> +grep -qe "type:.* symbol" README || exit_unsupported # version issue
-> +
-> +echo 0 > events/enable
-> +echo > kprobe_events
-> +
-> +PROBEFUNC="vfs_read"
-> +GOODREG=
-> +BADREG=
-> +GOODSYM="_sdata"
-> +if ! grep -qw ${GOODSYM} /proc/kallsyms ; then
-> +  GOODSYM=$PROBEFUNC
-> +fi
-> +
-> +case `uname -m` in
-> +x86_64|i[3456]86)
-> +  GOODREG=%ax
-> +  BADREG=%ex
-> +;;
-> +aarch64)
-> +  GOODREG=%x0
-> +  BADREG=%ax
-> +;;
-> +arm*)
-> +  GOODREG=%r0
-> +  BADREG=%ax
-> +;;
-> +*)
-> +  echo "Please implement other architecture here"
-> +  exit_untested
-> +esac
-> +
-> +test_goodarg() # Good-args
-> +{
-> +  while [ "$1" ]; do
-> +    echo "p ${PROBEFUNC} $1" > kprobe_events
-> +    shift 1
-> +  done;
-> +}
-> +
-> +test_badarg() # Bad-args
-> +{
-> +  while [ "$1" ]; do
-> +    ! echo "p ${PROBEFUNC} $1" > kprobe_events
-> +    shift 1
-> +  done;
-> +}
-> +
-> +echo > kprobe_events
-> +
-> +: "Symbol type"
-> +test_goodarg "${GOODREG}:symbol" "@${GOODSYM}:symbol" "@${GOODSYM}+10:symbol" \
-> +	 "\$stack0:symbol" "+0(\$stack):symbol"
-> +test_badarg "\$comm:symbol"
-> +
-> +: "Retval with symbol type"
-> +echo "r ${PROBEFUNC} \$retval:symbol" > kprobe_events
-> +
-> +echo > kprobe_events
-> +
-> +: "Test get symbol"
-> +echo 'p:testprobe create_trace_kprobe $stack0:symbol' > kprobe_events
-> +echo 1 > events/kprobes/testprobe/enable
-> +! echo test >> kprobe_events
-> +tail -n 1 trace | grep -q "arg1=trace_run_command"
+These config dependencies of kselftest need to enable the
+'CONFIG_RUNTIME_TESTING_MENU=y' at the same time.
 
-Hmm, this works only on x86 and other arch which stores return address on
-top of stack. I'll find some other good point to test it.
+Signed-off-by: Zong Li <zong at andestech.com>
+Cc: Greentime Hu <greentime at andestech.com>
+---
+ tools/testing/selftests/bpf/config         | 1 +
+ tools/testing/selftests/firmware/config    | 1 +
+ tools/testing/selftests/kmod/config        | 1 +
+ tools/testing/selftests/lib/config         | 1 +
+ tools/testing/selftests/net/config         | 1 +
+ tools/testing/selftests/static_keys/config | 1 +
+ tools/testing/selftests/sysctl/config      | 1 +
+ tools/testing/selftests/user/config        | 1 +
+ 8 files changed, 8 insertions(+)
 
-Thanks,
-
-> +
-> +echo 0 > events/enable
-> +echo > kprobe_events
-> 
-
-
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 983dd25d49f4..d93b82144b19 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -1,3 +1,4 @@
++CONFIG_RUNTIME_TESTING_MENU=y
+ CONFIG_BPF=y
+ CONFIG_BPF_SYSCALL=y
+ CONFIG_NET_CLS_BPF=m
+diff --git a/tools/testing/selftests/firmware/config b/tools/testing/selftests/firmware/config
+index c8137f70e291..01d7445ef007 100644
+--- a/tools/testing/selftests/firmware/config
++++ b/tools/testing/selftests/firmware/config
+@@ -1 +1,2 @@
++CONFIG_RUNTIME_TESTING_MENU=y
+ CONFIG_TEST_FIRMWARE=y
+diff --git a/tools/testing/selftests/kmod/config b/tools/testing/selftests/kmod/config
+index 259f4fd6b5e2..37070985e428 100644
+--- a/tools/testing/selftests/kmod/config
++++ b/tools/testing/selftests/kmod/config
+@@ -1,3 +1,4 @@
++CONFIG_RUNTIME_TESTING_MENU=y
+ CONFIG_TEST_KMOD=m
+ CONFIG_TEST_LKM=m
+ CONFIG_XFS_FS=m
+diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
+index 126933bcc950..d1fe14c2c8cb 100644
+--- a/tools/testing/selftests/lib/config
++++ b/tools/testing/selftests/lib/config
+@@ -1,3 +1,4 @@
++CONFIG_RUNTIME_TESTING_MENU=y
+ CONFIG_TEST_PRINTF=m
+ CONFIG_TEST_BITMAP=m
+ CONFIG_PRIME_NUMBERS=m
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 7177bea1fdfa..847a99873128 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -1,3 +1,4 @@
++CONFIG_RUNTIME_TESTING_MENU=y
+ CONFIG_USER_NS=y
+ CONFIG_BPF_SYSCALL=y
+ CONFIG_TEST_BPF=m
+diff --git a/tools/testing/selftests/static_keys/config b/tools/testing/selftests/static_keys/config
+index d538fb774b96..732d17f6b9a1 100644
+--- a/tools/testing/selftests/static_keys/config
++++ b/tools/testing/selftests/static_keys/config
+@@ -1 +1,2 @@
++CONFIG_RUNTIME_TESTING_MENU=y
+ CONFIG_TEST_STATIC_KEYS=m
+diff --git a/tools/testing/selftests/sysctl/config b/tools/testing/selftests/sysctl/config
+index 6ca14800d755..772ce8c3c0d9 100644
+--- a/tools/testing/selftests/sysctl/config
++++ b/tools/testing/selftests/sysctl/config
+@@ -1 +1,2 @@
++CONFIG_RUNTIME_TESTING_MENU=y
+ CONFIG_TEST_SYSCTL=y
+diff --git a/tools/testing/selftests/user/config b/tools/testing/selftests/user/config
+index 784ed8416324..f9f491fa4ae8 100644
+--- a/tools/testing/selftests/user/config
++++ b/tools/testing/selftests/user/config
+@@ -1 +1,2 @@
++CONFIG_RUNTIME_TESTING_MENU=y
+ CONFIG_TEST_USER_COPY=m
 -- 
-Masami Hiramatsu <mhiramat at kernel.org>
+2.16.1
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
