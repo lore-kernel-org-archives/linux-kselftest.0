@@ -1,72 +1,72 @@
 From: linuxram@us.ibm.com (Ram Pai)
-Date: Wed, 21 Feb 2018 17:55:39 -0800
-Subject: [PATCH v12 20/22] selftests/vm: testcases must restore
- pkey-permissions
+Date: Wed, 21 Feb 2018 17:55:35 -0800
+Subject: [PATCH v12 16/22] selftests/vm: fix an assertion in
+ test_pkey_alloc_exhaust()
 In-Reply-To: <1519264541-7621-1-git-send-email-linuxram@us.ibm.com>
 References: <1519264541-7621-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1519264541-7621-21-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1519264541-7621-17-git-send-email-linuxram@us.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180222015539.vWPrwqvpUoBeY3SALr3XIrflBuH7wY_ftoXBktFVjjI@z>
+Message-ID: <20180222015535.Ol9_7343lXepjF56lkOZ2yaKtMmjX5OTxO82FMXYbk8@z>
 
-Generally the signal handler restores the state of the pkey register
-before returning. However there are times when the read/write operation
-can legitamely fail without invoking the signal handler.  Eg: A
-sys_read() operaton to a write-protected page should be disallowed.  In
-such a case the state of the pkey register is not restored to its
-original state.  The test case is responsible for restoring the key
-register state to its original value.
+The maximum number of keys that can be allocated has to
+take into consideration, that some keys are reserved by
+the architecture for   specific   purpose. Hence cannot
+be allocated.
+
+Fix the assertion in test_pkey_alloc_exhaust()
 
 cc: Dave Hansen <dave.hansen at intel.com>
 cc: Florian Weimer <fweimer at redhat.com>
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
 ---
- tools/testing/selftests/vm/protection_keys.c |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ tools/testing/selftests/vm/pkey-helpers.h    |   14 ++++++++++++++
+ tools/testing/selftests/vm/protection_keys.c |    9 ++++-----
+ 2 files changed, 18 insertions(+), 5 deletions(-)
 
+diff --git a/tools/testing/selftests/vm/pkey-helpers.h b/tools/testing/selftests/vm/pkey-helpers.h
+index 88ef58f..67f9b0f 100644
+--- a/tools/testing/selftests/vm/pkey-helpers.h
++++ b/tools/testing/selftests/vm/pkey-helpers.h
+@@ -416,4 +416,18 @@ static inline int get_start_key(void)
+ #endif
+ }
+ 
++static inline int arch_reserved_keys(void)
++{
++#if defined(__i386__) || defined(__x86_64__) /* arch */
++	return NR_RESERVED_PKEYS;
++#elif __powerpc64__ /* arch */
++	if (sysconf(_SC_PAGESIZE) == 4096)
++		return NR_RESERVED_PKEYS_4K;
++	else
++		return NR_RESERVED_PKEYS_64K;
++#else /* arch */
++	NOT SUPPORTED
++#endif /* arch */
++}
++
+ #endif /* _PKEYS_HELPER_H */
 diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index 437ee74..42c068a 100644
+index 58da5a0..aae6771 100644
 --- a/tools/testing/selftests/vm/protection_keys.c
 +++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -1003,6 +1003,7 @@ void test_read_of_write_disabled_region(int *ptr, u16 pkey)
- 	ptr_contents = read_ptr(ptr);
- 	dprintf1("*ptr: %d\n", ptr_contents);
- 	dprintf1("\n");
-+	pkey_write_allow(pkey);
- }
- void test_read_of_access_disabled_region(int *ptr, u16 pkey)
- {
-@@ -1082,6 +1083,7 @@ void test_kernel_write_of_access_disabled_region(int *ptr, u16 pkey)
- 	ret = read(test_fd, ptr, 1);
- 	dprintf1("read ret: %d\n", ret);
- 	pkey_assert(ret);
-+	pkey_access_allow(pkey);
- }
- void test_kernel_write_of_write_disabled_region(int *ptr, u16 pkey)
- {
-@@ -1094,6 +1096,7 @@ void test_kernel_write_of_write_disabled_region(int *ptr, u16 pkey)
- 	if (ret < 0 && (DEBUG_LEVEL > 0))
- 		perror("verbose read result (OK for this to be bad)");
- 	pkey_assert(ret);
-+	pkey_write_allow(pkey);
- }
+@@ -1167,12 +1167,11 @@ void test_pkey_alloc_exhaust(int *ptr, u16 pkey)
+ 	pkey_assert(i < NR_PKEYS*2);
  
- void test_kernel_gup_of_access_disabled_region(int *ptr, u16 pkey)
-@@ -1113,6 +1116,7 @@ void test_kernel_gup_of_access_disabled_region(int *ptr, u16 pkey)
- 	vmsplice_ret = vmsplice(pipe_fds[1], &iov, 1, SPLICE_F_GIFT);
- 	dprintf1("vmsplice() ret: %d\n", vmsplice_ret);
- 	pkey_assert(vmsplice_ret == -1);
-+	pkey_access_allow(pkey);
+ 	/*
+-	 * There are 16 pkeys supported in hardware.  One is taken
+-	 * up for the default (0) and another can be taken up by
+-	 * an execute-only mapping.  Ensure that we can allocate
+-	 * at least 14 (16-2).
++	 * There are NR_PKEYS pkeys supported in hardware. arch_reserved_keys()
++	 * are reserved. One   can   be   taken   up by an execute-only mapping.
++	 * Ensure that we can allocate at least the remaining.
+ 	 */
+-	pkey_assert(i >= NR_PKEYS-2);
++	pkey_assert(i >= (NR_PKEYS-arch_reserved_keys()-1));
  
- 	close(pipe_fds[0]);
- 	close(pipe_fds[1]);
-@@ -1133,6 +1137,7 @@ void test_kernel_gup_write_to_write_disabled_region(int *ptr, u16 pkey)
- 	if (DEBUG_LEVEL > 0)
- 		perror("futex");
- 	dprintf1("futex() ret: %d\n", futex_ret);
-+	pkey_write_allow(pkey);
- }
- 
- /* Assumes that all pkeys other than 'pkey' are unallocated */
+ 	for (i = 0; i < nr_allocated_pkeys; i++) {
+ 		err = sys_pkey_free(allocated_pkeys[i]);
 -- 
 1.7.1
 
