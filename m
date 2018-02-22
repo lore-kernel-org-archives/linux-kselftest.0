@@ -1,94 +1,57 @@
 From: zongbox@gmail.com (Zong Li)
-Date: Thu, 22 Feb 2018 19:53:07 +0800
-Subject: [PATCH] selftest: fix kselftest-merge depend on 'RUNTIME_TESTING_MENU'
-Message-ID: <20180222115307.15063-1-zongbox@gmail.com>
+Date: Thu, 22 Feb 2018 20:53:00 +0800
+Subject: [PATCH] selftest: support running subset of selftests for
+ run_kselftest.sh
+Message-ID: <20180222125300.15681-1-zongbox@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180222115307.2Qqdaumd7KbWyQ8aL0dzJMdb1Ap5R7Nh4coRZusq82A@z>
+Message-ID: <20180222125300.9_BYzI8RzvN19byP7DY-1wFGx3viUx-B5CPF4alH6E4@z>
 
-Since the 'commit d3deafaa8b5c ("lib/: make RUNTIME_TESTS a menuconfig
-to ease disabling it all")', the make kselftest-merge cannot merge the
-config dependencies of kselftest to the existing .config file.
+Simply use the first argument to specify the subset of selftests.
+Use comma notation to separate multiple tests.
+(e.g. ./run_kselftest.sh size,timers,...)
+Default behaviour is running all selftests.
 
-These config dependencies of kselftest need to enable the
-'CONFIG_RUNTIME_TESTING_MENU=y' at the same time.
+Each selftest be defined as function that we can run one of selftests.
+The function name has underline as prefix to avoid confilct with
+built-in command of shell.
+(e.g. The exec is built-in command of shell)
+The hyhpen of function name be replace to the underline because
+not all shells can use hyphen in function name, like sh, ash and so on.
 
 Signed-off-by: Zong Li <zong at andestech.com>
 Cc: Greentime Hu <greentime at andestech.com>
+Cc: Shuah Khan <shuah at kernel.org>
 ---
- tools/testing/selftests/bpf/config         | 1 +
- tools/testing/selftests/firmware/config    | 1 +
- tools/testing/selftests/kmod/config        | 1 +
- tools/testing/selftests/lib/config         | 1 +
- tools/testing/selftests/net/config         | 1 +
- tools/testing/selftests/static_keys/config | 1 +
- tools/testing/selftests/sysctl/config      | 1 +
- tools/testing/selftests/user/config        | 1 +
- 8 files changed, 8 insertions(+)
+ tools/testing/selftests/Makefile | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 983dd25d49f4..d93b82144b19 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -1,3 +1,4 @@
-+CONFIG_RUNTIME_TESTING_MENU=y
- CONFIG_BPF=y
- CONFIG_BPF_SYSCALL=y
- CONFIG_NET_CLS_BPF=m
-diff --git a/tools/testing/selftests/firmware/config b/tools/testing/selftests/firmware/config
-index c8137f70e291..01d7445ef007 100644
---- a/tools/testing/selftests/firmware/config
-+++ b/tools/testing/selftests/firmware/config
-@@ -1 +1,2 @@
-+CONFIG_RUNTIME_TESTING_MENU=y
- CONFIG_TEST_FIRMWARE=y
-diff --git a/tools/testing/selftests/kmod/config b/tools/testing/selftests/kmod/config
-index 259f4fd6b5e2..37070985e428 100644
---- a/tools/testing/selftests/kmod/config
-+++ b/tools/testing/selftests/kmod/config
-@@ -1,3 +1,4 @@
-+CONFIG_RUNTIME_TESTING_MENU=y
- CONFIG_TEST_KMOD=m
- CONFIG_TEST_LKM=m
- CONFIG_XFS_FS=m
-diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
-index 126933bcc950..d1fe14c2c8cb 100644
---- a/tools/testing/selftests/lib/config
-+++ b/tools/testing/selftests/lib/config
-@@ -1,3 +1,4 @@
-+CONFIG_RUNTIME_TESTING_MENU=y
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_BITMAP=m
- CONFIG_PRIME_NUMBERS=m
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 7177bea1fdfa..847a99873128 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -1,3 +1,4 @@
-+CONFIG_RUNTIME_TESTING_MENU=y
- CONFIG_USER_NS=y
- CONFIG_BPF_SYSCALL=y
- CONFIG_TEST_BPF=m
-diff --git a/tools/testing/selftests/static_keys/config b/tools/testing/selftests/static_keys/config
-index d538fb774b96..732d17f6b9a1 100644
---- a/tools/testing/selftests/static_keys/config
-+++ b/tools/testing/selftests/static_keys/config
-@@ -1 +1,2 @@
-+CONFIG_RUNTIME_TESTING_MENU=y
- CONFIG_TEST_STATIC_KEYS=m
-diff --git a/tools/testing/selftests/sysctl/config b/tools/testing/selftests/sysctl/config
-index 6ca14800d755..772ce8c3c0d9 100644
---- a/tools/testing/selftests/sysctl/config
-+++ b/tools/testing/selftests/sysctl/config
-@@ -1 +1,2 @@
-+CONFIG_RUNTIME_TESTING_MENU=y
- CONFIG_TEST_SYSCTL=y
-diff --git a/tools/testing/selftests/user/config b/tools/testing/selftests/user/config
-index 784ed8416324..f9f491fa4ae8 100644
---- a/tools/testing/selftests/user/config
-+++ b/tools/testing/selftests/user/config
-@@ -1 +1,2 @@
-+CONFIG_RUNTIME_TESTING_MENU=y
- CONFIG_TEST_USER_COPY=m
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 7442dfb73b7f..08e2a855f187 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -128,13 +128,22 @@ ifdef INSTALL_PATH
+ 
+ 	for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
++		echo "_$${TARGET//-/_}()" >> $(ALL_SCRIPT); \
++		echo "{" >> $(ALL_SCRIPT); \
+ 		echo "echo ; echo Running tests in $$TARGET" >> $(ALL_SCRIPT); \
+ 		echo "echo ========================================" >> $(ALL_SCRIPT); \
+ 		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
+ 		make -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
+ 		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
++		echo "}" >> $(ALL_SCRIPT); \
++		echo "" >> $(ALL_SCRIPT); \
+ 	done;
+ 
++	echo "TARGETS=\$${1:-\`ls -d */ | sed 's#/##' \`}" >> $(ALL_SCRIPT);
++	echo "for TARGET in \$${TARGETS//,/ }; do" >> $(ALL_SCRIPT);
++	echo "    _\$${TARGET//-/_}" >> $(ALL_SCRIPT);
++	echo "done" >> $(ALL_SCRIPT);
++
+ 	chmod u+x $(ALL_SCRIPT)
+ else
+ 	$(error Error: set INSTALL_PATH to use install)
 -- 
 2.16.1
 
