@@ -1,105 +1,37 @@
 From: linuxram at us.ibm.com (Ram Pai)
-Date: Wed, 21 Feb 2018 17:55:34 -0800
-Subject: [PATCH v12 15/22] selftests/vm: powerpc implementation to check
- support for pkey
+Date: Wed, 21 Feb 2018 17:55:33 -0800
+Subject: [PATCH v12 14/22] selftests/vm: clear the bits in shadow reg when a
+ pkey is freed.
 In-Reply-To: <1519264541-7621-1-git-send-email-linuxram@us.ibm.com>
 References: <1519264541-7621-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1519264541-7621-16-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1519264541-7621-15-git-send-email-linuxram@us.ibm.com>
 
-pkey subsystem is supported if the hardware and kernel has support.
-We determine that by checking if allocation of a key succeeds or not.
+When a key is freed, the  key  is  no  more  effective.
+Clear the bits corresponding to the pkey in the shadow
+register. Otherwise  it  will carry some spurious bits
+which can trigger false-positive asserts.
 
 cc: Dave Hansen <dave.hansen at intel.com>
 cc: Florian Weimer <fweimer at redhat.com>
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
 ---
- tools/testing/selftests/vm/pkey-helpers.h    |   22 ++++++++++++++++------
- tools/testing/selftests/vm/protection_keys.c |    9 +++++----
- 2 files changed, 21 insertions(+), 10 deletions(-)
+ tools/testing/selftests/vm/protection_keys.c |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/pkey-helpers.h b/tools/testing/selftests/vm/pkey-helpers.h
-index c47aead..88ef58f 100644
---- a/tools/testing/selftests/vm/pkey-helpers.h
-+++ b/tools/testing/selftests/vm/pkey-helpers.h
-@@ -258,7 +258,7 @@ static inline void __cpuid(unsigned int *eax, unsigned int *ebx,
- #define X86_FEATURE_PKU        (1<<3) /* Protection Keys for Userspace */
- #define X86_FEATURE_OSPKE      (1<<4) /* OS Protection Keys Enable */
- 
--static inline int cpu_has_pku(void)
-+static inline bool is_pkey_supported(void)
- {
- 	unsigned int eax;
- 	unsigned int ebx;
-@@ -271,13 +271,13 @@ static inline int cpu_has_pku(void)
- 
- 	if (!(ecx & X86_FEATURE_PKU)) {
- 		dprintf2("cpu does not have PKU\n");
--		return 0;
-+		return false;
- 	}
- 	if (!(ecx & X86_FEATURE_OSPKE)) {
- 		dprintf2("cpu does not have OSPKE\n");
--		return 0;
-+		return false;
- 	}
--	return 1;
-+	return true;
- }
- 
- #define XSTATE_PKEY_BIT	(9)
-@@ -323,9 +323,19 @@ static inline void __page_o_noops(void)
- #elif __powerpc64__ /* arch */
- 
- #define PAGE_SIZE (0x1UL << 16)
--static inline int cpu_has_pku(void)
-+static inline bool is_pkey_supported(void)
- {
--	return 1;
-+	/*
-+	 * No simple way to determine this.
-+	 * lets try allocating a key and see if it succeeds.
-+	 */
-+	int ret = sys_pkey_alloc(0, 0);
-+
-+	if (ret > 0) {
-+		sys_pkey_free(ret);
-+		return true;
-+	}
-+	return false;
- }
- 
- /* 8-bytes of instruction * 16384bytes = 1 page */
 diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index e82bd88..58da5a0 100644
+index c4c73e6..e82bd88 100644
 --- a/tools/testing/selftests/vm/protection_keys.c
 +++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -1299,8 +1299,8 @@ void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
- 	int size = PAGE_SIZE;
- 	int sret;
+@@ -586,7 +586,8 @@ int sys_pkey_free(unsigned long pkey)
+ 	int ret = syscall(SYS_pkey_free, pkey);
  
--	if (cpu_has_pku()) {
--		dprintf1("SKIP: %s: no CPU support\n", __func__);
-+	if (is_pkey_supported()) {
-+		dprintf1("SKIP: %s: no CPU/kernel support\n", __func__);
- 		return;
- 	}
- 
-@@ -1362,12 +1362,13 @@ void run_tests_once(void)
- int main(void)
- {
- 	int nr_iterations = 22;
-+	int pkey_supported = is_pkey_supported();
- 
- 	setup_handlers();
- 
--	printf("has pkey: %d\n", cpu_has_pku());
-+	printf("has pkey: %s\n", pkey_supported ? "Yes" : "No");
- 
--	if (!cpu_has_pku()) {
-+	if (!pkey_supported) {
- 		int size = PAGE_SIZE;
- 		int *ptr;
- 
+ 	if (!ret)
+-		shadow_pkey_reg &= reset_bits(pkey, PKEY_DISABLE_ACCESS);
++		shadow_pkey_reg &= reset_bits(pkey,
++				PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE);
+ 	dprintf1("%s(pkey=%ld) syscall ret: %d\n", __func__, pkey, ret);
+ 	return ret;
+ }
 -- 
 1.7.1
 
