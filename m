@@ -1,47 +1,36 @@
 From: shuahkh@osg.samsung.com (Shuah Khan)
-Date: Fri, 23 Feb 2018 15:11:36 -0700
-Subject: [PATCH 1/5] selftests: kselftest framework: add handling for TAP
- header level
+Date: Fri, 23 Feb 2018 15:11:40 -0700
+Subject: [PATCH 5/5] selftests: futex Makefile add top level TAP header echo
+ to RUN_TESTS
 In-Reply-To: <cover.1519423340.git.shuahkh@osg.samsung.com>
 References: <cover.1519423340.git.shuahkh@osg.samsung.com>
 Message-ID:
- <3176a8f2e1aaf19632cece19a7945a12e5ebc35f.1519423340.git.shuahkh@osg.samsung.com>
+ <bec2e6c01cbf3b2f6dc49e022a2a7543fc7f3182.1519423341.git.shuahkh@osg.samsung.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180223221136.2zJxWrkvF4-M2FhtikVKWSWb9y-IM87_e6BEvrzjY6M@z>
+Message-ID: <20180223221140.hCndkiUJUQf_pBz2sI8ws7UjlEWl9B2EbdBOnqPn7vA@z>
 
-Introduce environment variable KSFT_TAP_LEVEL to avoid printing
-nested TAP headers for each test. lib.mk run_tests target prints
-TAP header before invoking the test program or test script. Tests
-need a way to suppress TAP headers if it is already printed out.
-
-This new environment variable adds a way for ksft_print_header()
-print TAP header only when KSFT_TAP_LEVEL isn't set.
-
-lib.mk run_tests and test program should print TAP header and set
-KSFT_TAP_LEVEL to avoid a second TAP header to be printed.
-
-selftests Makefile should export KSFT_TAP_LEVEL and add TAP Header
-echo to the run_kselftest.sh script from emit_tests target handling.
+Add top level TAP header echo, testname and separator line to make
+the output consistent with the common run_tests target.
 
 Signed-off-by: Shuah Khan <shuahkh at osg.samsung.com>
 ---
- tools/testing/selftests/kselftest.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/futex/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 1a52b03962a3..1b9d8ecdebce 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -57,7 +57,8 @@ static inline int ksft_get_error_cnt(void) { return ksft_cnt.ksft_error; }
+diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
+index cea4adcd42b8..3e9a9d7b4de1 100644
+--- a/tools/testing/selftests/futex/Makefile
++++ b/tools/testing/selftests/futex/Makefile
+@@ -18,6 +18,9 @@ all:
+ 	done
  
- static inline void ksft_print_header(void)
- {
--	printf("TAP version 13\n");
-+	if (!(getenv("KSFT_TAP_LEVEL")))
-+		printf("TAP version 13\n");
- }
+ override define RUN_TESTS
++	@echo "TAP version 13";
++	@echo "selftests: futex";
++	@echo "========================================";
+ 	@cd $(OUTPUT); ./run.sh
+ endef
  
- static inline void ksft_print_cnts(void)
 -- 
 2.14.1
 
