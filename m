@@ -1,33 +1,31 @@
 From: shuahkh at osg.samsung.com (Shuah Khan)
-Date: Fri, 23 Feb 2018 15:11:40 -0700
-Subject: [PATCH 5/5] selftests: futex Makefile add top level TAP header echo
- to RUN_TESTS
+Date: Fri, 23 Feb 2018 15:11:37 -0700
+Subject: [PATCH 2/5] selftests: lib.mk set KSFT_TAP_LEVEL to prevent nested
+ TAP headers
 In-Reply-To: <cover.1519423340.git.shuahkh@osg.samsung.com>
 References: <cover.1519423340.git.shuahkh@osg.samsung.com>
-Message-ID: <bec2e6c01cbf3b2f6dc49e022a2a7543fc7f3182.1519423341.git.shuahkh@osg.samsung.com>
+Message-ID: <92e48a739971361073bcb49db549cdd5d13370fa.1519423340.git.shuahkh@osg.samsung.com>
 
-Add top level TAP header echo, testname and separator line to make
-the output consistent with the common run_tests target.
+Set KSFT_TAP_LEVEL before running tests to prevent nested TAP header
+printing from tests.
 
 Signed-off-by: Shuah Khan <shuahkh at osg.samsung.com>
 ---
- tools/testing/selftests/futex/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/lib.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
-index cea4adcd42b8..3e9a9d7b4de1 100644
---- a/tools/testing/selftests/futex/Makefile
-+++ b/tools/testing/selftests/futex/Makefile
-@@ -18,6 +18,9 @@ all:
- 	done
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 7de482a0519d..195e9d4739a9 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -20,6 +20,7 @@ all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
  
- override define RUN_TESTS
-+	@echo "TAP version 13";
-+	@echo "selftests: futex";
-+	@echo "========================================";
- 	@cd $(OUTPUT); ./run.sh
- endef
- 
+ .ONESHELL:
+ define RUN_TESTS
++	@export KSFT_TAP_LEVEL=`echo 1`;
+ 	@test_num=`echo 0`;
+ 	@echo "TAP version 13";
+ 	@for TEST in $(1); do				\
 -- 
 2.14.1
 
