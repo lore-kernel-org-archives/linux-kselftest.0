@@ -1,50 +1,51 @@
-From: dvhart at infradead.org (Darren Hart)
-Date: Sat, 24 Feb 2018 13:42:44 -0800
-Subject: [PATCH 5/5] selftests: futex Makefile add top level TAP header
- echo to RUN_TESTS
-In-Reply-To: <bec2e6c01cbf3b2f6dc49e022a2a7543fc7f3182.1519423341.git.shuahkh@osg.samsung.com>
-References: <cover.1519423340.git.shuahkh@osg.samsung.com>
- <bec2e6c01cbf3b2f6dc49e022a2a7543fc7f3182.1519423341.git.shuahkh@osg.samsung.com>
-Message-ID: <20180224214244.GA31352@fury>
+From: bsingharora at gmail.com (Balbir Singh)
+Date: Mon, 26 Feb 2018 10:19:51 +1100
+Subject: [PATCH v12 22/22] selftests/vm: Fix deadlock in protection_keys.c
+In-Reply-To: <1519264541-7621-23-git-send-email-linuxram@us.ibm.com>
+References: <1519264541-7621-1-git-send-email-linuxram@us.ibm.com>
+ <1519264541-7621-23-git-send-email-linuxram@us.ibm.com>
+Message-ID: <20180226101951.0136f963@balbir.ozlabs.ibm.com>
 
-On Fri, Feb 23, 2018 at 03:11:40PM -0700, Shuah Khan wrote:
-> Add top level TAP header echo, testname and separator line to make
-> the output consistent with the common run_tests target.
+On Wed, 21 Feb 2018 17:55:41 -0800
+Ram Pai <linuxram at us.ibm.com> wrote:
 
-No objection to the changes, but I'll echo Ingo's request for a more
-detailed justification for why these changes are warranted. We've seen
-this a few times with recent changes to kselftests, I think too much
-might be being assumed regarding the individual test author's tracking
-of the core of the kselftests ongoing work.
+> From: Thiago Jung Bauermann <bauerman at linux.vnet.ibm.com>
+> 
+> The sig_chld() handler calls dprintf2() taking care of setting
+> dprint_in_signal so that sigsafe_printf() won't call printf().
+> Unfortunately, this precaution is is negated by dprintf_level(), which
+> has a call to fflush().
+>
 
-> 
-> Signed-off-by: Shuah Khan <shuahkh at osg.samsung.com>
-> ---
->  tools/testing/selftests/futex/Makefile | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
-> index cea4adcd42b8..3e9a9d7b4de1 100644
-> --- a/tools/testing/selftests/futex/Makefile
-> +++ b/tools/testing/selftests/futex/Makefile
-> @@ -18,6 +18,9 @@ all:
->  	done
->  
->  override define RUN_TESTS
-> +	@echo "TAP version 13";
-> +	@echo "selftests: futex";
-> +	@echo "========================================";
->  	@cd $(OUTPUT); ./run.sh
->  endef
->  
-> -- 
-> 2.14.1
-> 
-> 
+fflush() is not the signal-safe function list, so this makes sense.
+I wonder if fflush() is needed in sigsafe_printf()?
 
--- 
-Darren Hart
-VMware Open Source Technology Center
+How about?
+
+diff --git a/tools/testing/selftests/x86/pkey-helpers.h b/tools/testing/selftests/x86/pkey-helpers.h
+index b3cb7670e026..2c3b39851f10 100644
+--- a/tools/testing/selftests/x86/pkey-helpers.h
++++ b/tools/testing/selftests/x86/pkey-helpers.h
+@@ -29,6 +29,7 @@ static inline void sigsafe_printf(const char *format, ...)
+ 	va_start(ap, format);
+ 	if (!dprint_in_signal) {
+ 		vprintf(format, ap);
++		fflush(NULL);				\
+ 	} else {
+ 		int ret;
+ 		int len = vsnprintf(dprint_in_signal_buffer,
+@@ -49,7 +50,6 @@ static inline void sigsafe_printf(const char *format, ...)
+ #define dprintf_level(level, args...) do {	\
+ 	if (level <= DEBUG_LEVEL)		\
+ 		sigsafe_printf(args);		\
+-	fflush(NULL);				\
+ } while (0)
+ #define dprintf0(args...) dprintf_level(0, args)
+ #define dprintf1(args...) dprintf_level(1, args)
+
+
+But both are equivalent I guess, so
+Acked-by: Balbir Singh <bsingharora at gmail.com>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
