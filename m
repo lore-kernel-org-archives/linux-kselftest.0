@@ -1,66 +1,106 @@
-From: namhyung at kernel.org (Namhyung Kim)
-Date: Mon, 26 Feb 2018 10:45:32 +0900
-Subject: [PATCH v3 15/18] tracing: probeevent: Add array type support
-In-Reply-To: <151945054003.27508.54078842635361756.stgit@devbox>
-References: <151945010287.27508.6226184958678620828.stgit@devbox>
- <151945054003.27508.54078842635361756.stgit@devbox>
-Message-ID: <20180226014532.GB1972@sejong>
+From: idosch at mellanox.com (Ido Schimmel)
+Date: Mon, 26 Feb 2018 10:59:34 +0200
+Subject: [PATCH net-next 00/14] selftests: forwarding: Add VRF-based tests
+Message-ID: <20180226085948.19368-1-idosch@mellanox.com>
 
-On Sat, Feb 24, 2018 at 02:35:40PM +0900, Masami Hiramatsu wrote:
-> Add array type support for probe events.
-> This allows user to get arraied types from memory address.
-> The array type syntax is
-> 
-> 	TYPE[N]
-> 
-> Where TYPE is one of types (u8/16/32/64,s8/16/32/64,
-> x8/16/32/64, symbol, string) and N is a fixed value less
-> than 64.
-> 
-> The string array type is a bit different from other types. For
-> other base types, <base-type>[1] is equal to <base-type>
-> (e.g. +0(%di):x32[1] is same as +0(%di):x32.) But string[1] is not
-> equal to string. The string type itself represents "char array",
-> but string array type represents "char * array". So, for example,
-> +0(%di):string[1] is equal to +0(+0(%di)):string.
-> 
-> Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
-> ---
->  Changes in v2:
->   - Add array description in README file
->   - Fix to init s3 code out of loop.
->   - Fix to proceed code when the last code is OP_ARRAY.
->   - Add string array type and bitfield array type.
-> ---
+One of the nice things about network namespaces is that they allow one
+to easily create and test complex environments.
 
-[SNIP]
-> @@ -546,11 +610,16 @@ int traceprobe_define_arg_fields(struct trace_event_call *event_call,
->  	/* Set argument names as fields */
->  	for (i = 0; i < tp->nr_args; i++) {
->  		struct probe_arg *parg = &tp->args[i];
-> -
-> -		ret = trace_define_field(event_call, parg->type->fmttype,
-> -					 parg->name,
-> +		const char *fmt = parg->type->fmttype;
-> +		int size = parg->type->size;
-> +
-> +		if (parg->fmt)
-> +			fmt = parg->fmt;
-> +		if (parg->count)
-> +			size *= parg->count;
-> +		ret = trace_define_field(event_call, fmt, parg->name,
->  					 offset + parg->offset,
-> -					 parg->type->size,
-> +					 parg->type->size * parg->count,
+Unfortunately, these namespaces can not be used with actual switching
+ASICs, as their ports can not be migrated to other network namespaces
+(NETIF_F_NETNS_LOCAL) and most of them probably do not support the
+L1-separation provided by namespaces.
 
-It should use the 'size' variable, otherwise scalar types will have 0 size.
+However, a similar kind of flexibility can be achieved by using VRFs and
+by looping the switch ports together. For example:
 
-Thanks,
-Namhyung
+                             br0
+                              +
+               vrf-h1         |           vrf-h2
+                 +        +---+----+        +
+                 |        |        |        |
+    192.0.2.1/24 +        +        +        + 192.0.2.2/24
+               swp1     swp2     swp3     swp4
+                 +        +        +        +
+                 |        |        |        |
+                 +--------+        +--------+
 
+The VRFs act as lightweight namespaces representing hosts connected to
+the switch.
 
->  					 parg->type->is_signed,
->  					 FILTER_OTHER);
+This approach for testing switch ASICs has several advantages over the
+traditional method that requires multiple physical machines, to name a
+few:
+
+1. Only the device under test (DUT) is being tested without noise from
+other system.
+
+2. Ability to easily provision complex topologies. Testing bridging
+between 4-ports LAGs or 8-way ECMP requires many physical links that are
+not always available. With the VRF-based approach one merely needs to
+loopback more ports.
+
+These tests are written with switch ASICs in mind, but they can be run
+on any Linux box using veth pairs to emulate physical loopbacks.
+
+Changes since RFC:
+* Change location to net/forwarding instead of forwarding/
+* Add ability to pause on failure
+* Add ability to pause on cleanup
+* Make configuration file optional
+* Make ping/ping6/mz configurable
+* Add more tc tests
+
+Ido Schimmel (7):
+  selftests: forwarding: Add initial testing framework
+  selftests: forwarding: Add a test for FDB learning
+  selftests: forwarding: Add a test for flooded traffic
+  selftests: forwarding: Add a test for basic IPv4 and IPv6 routing
+  selftests: forwarding: Create test topology for multipath routing
+  selftests: forwarding: Test IPv4 weighted nexthops
+  selftests: forwarding: Test IPv6 weighted nexthops
+
+Jiri Pirko (7):
+  selftests: forwarding: Add tc offload check helper
+  selftests: forwarding: Add MAC get helper
+  selftests: forwarding: Allow to get netdev interfaces names from
+    commandline
+  selftests: forwarding: Introduce tc flower matching tests
+  selftests: forwarding: Introduce tc actions tests
+  selftests: forwarding: Introduce basic tc chains tests
+  selftests: forwarding: Introduce basic shared blocks tests
+
+ tools/testing/selftests/net/forwarding/.gitignore  |   1 +
+ tools/testing/selftests/net/forwarding/README      |  56 +++
+ .../selftests/net/forwarding/bridge_vlan_aware.sh  |  87 ++++
+ tools/testing/selftests/net/forwarding/config      |  12 +
+ .../net/forwarding/forwarding.config.sample        |  31 ++
+ tools/testing/selftests/net/forwarding/lib.sh      | 533 +++++++++++++++++++++
+ tools/testing/selftests/net/forwarding/router.sh   | 125 +++++
+ .../selftests/net/forwarding/router_multipath.sh   | 317 ++++++++++++
+ .../testing/selftests/net/forwarding/tc_actions.sh | 195 ++++++++
+ .../testing/selftests/net/forwarding/tc_chains.sh  | 122 +++++
+ .../testing/selftests/net/forwarding/tc_common.sh  |  23 +
+ .../testing/selftests/net/forwarding/tc_flower.sh  | 196 ++++++++
+ .../selftests/net/forwarding/tc_shblocks.sh        | 122 +++++
+ 13 files changed, 1820 insertions(+)
+ create mode 100644 tools/testing/selftests/net/forwarding/.gitignore
+ create mode 100644 tools/testing/selftests/net/forwarding/README
+ create mode 100755 tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
+ create mode 100644 tools/testing/selftests/net/forwarding/config
+ create mode 100644 tools/testing/selftests/net/forwarding/forwarding.config.sample
+ create mode 100644 tools/testing/selftests/net/forwarding/lib.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/router.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/router_multipath.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/tc_actions.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/tc_chains.sh
+ create mode 100644 tools/testing/selftests/net/forwarding/tc_common.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/tc_flower.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/tc_shblocks.sh
+
+-- 
+2.14.3
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
