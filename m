@@ -1,41 +1,81 @@
-From: idosch@mellanox.com (Ido Schimmel)
-Date: Mon, 26 Feb 2018 10:59:43 +0200
-Subject: [PATCH net-next 09/14] selftests: forwarding: Add MAC get helper
-In-Reply-To: <20180226085948.19368-1-idosch@mellanox.com>
-References: <20180226085948.19368-1-idosch@mellanox.com>
-Message-ID: <20180226085948.19368-10-idosch@mellanox.com>
+From: mhiramat@kernel.org (Masami Hiramatsu)
+Date: Mon, 26 Feb 2018 19:16:45 +0900
+Subject: [PATCH v3 15/18] tracing: probeevent: Add array type support
+In-Reply-To: <20180226014532.GB1972@sejong>
+References: <151945010287.27508.6226184958678620828.stgit@devbox>
+ <151945054003.27508.54078842635361756.stgit@devbox>
+ <20180226014532.GB1972@sejong>
+Message-ID: <20180226191645.3b1f5b529b6c876dd279cb37@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180226085943.fP4Yg-U53wIDoHwHO7nnGMsWhLqIkTH87IhRHoDjt8Y@z>
+Message-ID: <20180226101645.-eiJaYAqEwT8enHaoJCv-3uxAE9RANt9nZprZ1sRAcg@z>
 
-From: Jiri Pirko <jiri@mellanox.com>
+On Mon, 26 Feb 2018 10:45:32 +0900
+Namhyung Kim <namhyung@kernel.org> wrote:
 
-Signed-off-by: Jiri Pirko <jiri at mellanox.com>
-Signed-off-by: Ido Schimmel <idosch at mellanox.com>
----
- tools/testing/selftests/net/forwarding/lib.sh | 7 +++++++
- 1 file changed, 7 insertions(+)
+> On Sat, Feb 24, 2018@02:35:40PM +0900, Masami Hiramatsu wrote:
+> > Add array type support for probe events.
+> > This allows user to get arraied types from memory address.
+> > The array type syntax is
+> > 
+> > 	TYPE[N]
+> > 
+> > Where TYPE is one of types (u8/16/32/64,s8/16/32/64,
+> > x8/16/32/64, symbol, string) and N is a fixed value less
+> > than 64.
+> > 
+> > The string array type is a bit different from other types. For
+> > other base types, <base-type>[1] is equal to <base-type>
+> > (e.g. +0(%di):x32[1] is same as +0(%di):x32.) But string[1] is not
+> > equal to string. The string type itself represents "char array",
+> > but string array type represents "char * array". So, for example,
+> > +0(%di):string[1] is equal to +0(+0(%di)):string.
+> > 
+> > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+> > ---
+> >  Changes in v2:
+> >   - Add array description in README file
+> >   - Fix to init s3 code out of loop.
+> >   - Fix to proceed code when the last code is OP_ARRAY.
+> >   - Add string array type and bitfield array type.
+> > ---
+> 
+> [SNIP]
+> > @@ -546,11 +610,16 @@ int traceprobe_define_arg_fields(struct trace_event_call *event_call,
+> >  	/* Set argument names as fields */
+> >  	for (i = 0; i < tp->nr_args; i++) {
+> >  		struct probe_arg *parg = &tp->args[i];
+> > -
+> > -		ret = trace_define_field(event_call, parg->type->fmttype,
+> > -					 parg->name,
+> > +		const char *fmt = parg->type->fmttype;
+> > +		int size = parg->type->size;
+> > +
+> > +		if (parg->fmt)
+> > +			fmt = parg->fmt;
+> > +		if (parg->count)
+> > +			size *= parg->count;
+> > +		ret = trace_define_field(event_call, fmt, parg->name,
+> >  					 offset + parg->offset,
+> > -					 parg->type->size,
+> > +					 parg->type->size * parg->count,
+> 
+> It should use the 'size' variable, otherwise scalar types will have 0 size.
 
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 141dd33bf6c4..9129a30df3b9 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -270,6 +270,13 @@ link_stats_tx_packets_get()
-        ip -j -s link show dev $if_name | jq '.[]["stats64"]["tx"]["packets"]'
- }
+Oops, good catch! I forgot to use it at the main point...
  
-+mac_get()
-+{
-+	local if_name=$1
-+
-+	ip -j link show dev $if_name | jq -r '.[]["address"]'
-+}
-+
- bridge_ageing_time_get()
- {
- 	local ageing_time
--- 
-2.14.3
+Thank you so much!
 
+> 
+> Thanks,
+> Namhyung
+> 
+> 
+> >  					 parg->type->is_signed,
+> >  					 FILTER_OTHER);
+
+
+-- 
+Masami Hiramatsu <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
