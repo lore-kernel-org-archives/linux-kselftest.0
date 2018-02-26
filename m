@@ -1,53 +1,69 @@
-From: andrew@lunn.ch (Andrew Lunn)
-Date: Mon, 26 Feb 2018 14:48:02 +0100
-Subject: [PATCH net-next 01/14] selftests: forwarding: Add initial
- testing framework
-In-Reply-To: <20180226085948.19368-2-idosch@mellanox.com>
-References: <20180226085948.19368-1-idosch@mellanox.com>
- <20180226085948.19368-2-idosch@mellanox.com>
-Message-ID: <20180226134802.GC1195@lunn.ch>
+From: fweimer@redhat.com (Florian Weimer)
+Date: Mon, 26 Feb 2018 15:31:55 +0100
+Subject: [PATCH] selftests/x86: Detect -no-pie availability
+Message-ID: <20180226143548.A45C843994575@oldenburg.str.redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180226134802.PHhna5iRYl8TfQIx6Z0u2mUDQfh1bYQHx6527EwOeWU@z>
+Message-ID: <20180226143155.KBRShU4-uZl0HOHM-nuDTG_w6dQfwITeG-ju8DfHTrk@z>
 
-> +                             br0
-> +                              +
-> +               vrf-h1         |           vrf-h2
-> +                 +        +---+----+        +
-> +                 |        |        |        |
-> +    192.0.2.1/24 +        +        +        + 192.0.2.2/24
-> +               swp1     swp2     swp3     swp4
-> +                 +        +        +        +
-> +                 |        |        |        |
-> +                 +--------+        +--------+
-> +
+Some toolchains need -no-pie to build all tets, others do not support
+the -no-pie flag at all.  Therefore, add another test for the
+availability of the flag.
 
-> +setup_prepare
-> +setup_wait
-> +
-> +ping_test $h1 192.0.2.2
-> +ping6_test $h1 2001:db8:1::2
+This amends commit 3346a6a4e5ba8c040360f753b26938cec31a4bdc
+("selftests: x86: sysret_ss_attrs doesn't build on a PIE build").
 
-How about putting 192.0.2.3/24 on br0, and pinging to/from
-it. Otherwise you don't test the slow path. 
+Signed-off-by: Florian Weimer <fweimer at redhat.com>
+---
+ tools/testing/selftests/x86/Makefile          |  8 +++++++-
+ tools/testing/selftests/x86/trivial_program.c | 10 ++++++++++
+ 2 files changed, 17 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/x86/trivial_program.c
 
-I would also suggest a much simpler first test.
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index d744991c0f4f..94c89261a236 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -8,6 +8,7 @@ include ../lib.mk
+ UNAME_M := $(shell uname -m)
+ CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
+ CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
++CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
+ 
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl mpx-mini-test ioperm \
+@@ -31,7 +32,12 @@ BINARIES_64 := $(TARGETS_C_64BIT_ALL:%=%_64)
+ BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+ BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
+ 
+-CFLAGS := -O2 -g -std=gnu99 -pthread -Wall -no-pie
++CFLAGS := -O2 -g -std=gnu99 -pthread -Wall
++
++# call32_from_64 in thunks.S uses absolute addresses.
++ifeq ($(CAN_BUILD_WITH_NOPIE),1)
++CFLAGS += -no-pie
++endif
+ 
+ define gen-target-rule-32
+ $(1) $(1)_32: $(OUTPUT)/$(1)_32
+diff --git a/tools/testing/selftests/x86/trivial_program.c b/tools/testing/selftests/x86/trivial_program.c
+new file mode 100644
+index 000000000000..46a447163b93
+--- /dev/null
++++ b/tools/testing/selftests/x86/trivial_program.c
+@@ -0,0 +1,10 @@
++/* Trivial program to check that compilation with certain flags is working. */
++
++#include <stdio.h>
++
++int
++main(void)
++{
++	puts("");
++	return 0;
++}
+-- 
+2.14.3
 
-> +                             
-> +                              
-> +               vrf-h1                                         vrf-h2
-> +                 +                                              +
-> +                 |                                              |
-> +    192.0.2.1/24 +        + 192.0.2.2/24  192.0.3.1/24 +        + 192.0.3.2/24
-> +               swp1     swp2                          swp3     swp4
-> +                 +        +                            +        +
-> +                 |        |                            |        |
-> +                 +--------+                            +--------+
-
-Ping from 192.0.2.1 to 192.0.2.2 and test there are 0 packets seen on
-swp3 and swp4. I've seen DSA drivers get this wrong before, forgetting
-to ensure ports are properly separated by default.
-
-   Andrew
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
