@@ -1,151 +1,168 @@
 From: idosch at mellanox.com (Ido Schimmel)
-Date: Mon, 26 Feb 2018 10:59:48 +0200
-Subject: [PATCH net-next 14/14] selftests: forwarding: Introduce basic shared
- blocks tests
+Date: Mon, 26 Feb 2018 10:59:38 +0200
+Subject: [PATCH net-next 04/14] selftests: forwarding: Add a test for basic
+ IPv4 and IPv6 routing
 In-Reply-To: <20180226085948.19368-1-idosch@mellanox.com>
 References: <20180226085948.19368-1-idosch@mellanox.com>
-Message-ID: <20180226085948.19368-15-idosch@mellanox.com>
+Message-ID: <20180226085948.19368-5-idosch@mellanox.com>
 
-From: Jiri Pirko <jiri at mellanox.com>
+Configure two hosts which are directly connected to the same router and
+test IPv4 and IPv6 ping. Use a large MTU and check that ping is
+unaffected.
 
-Test shared block infrastructure. This is a basic test that shares TC
-block in between 2 clsact qdiscs.
-
-Signed-off-by: Jiri Pirko <jiri at mellanox.com>
 Signed-off-by: Ido Schimmel <idosch at mellanox.com>
 ---
- tools/testing/selftests/net/forwarding/lib.sh      |   6 +
- .../selftests/net/forwarding/tc_shblocks.sh        | 122 +++++++++++++++++++++
- 2 files changed, 128 insertions(+)
- create mode 100755 tools/testing/selftests/net/forwarding/tc_shblocks.sh
+ tools/testing/selftests/net/forwarding/lib.sh    |  15 +++
+ tools/testing/selftests/net/forwarding/router.sh | 125 +++++++++++++++++++++++
+ 2 files changed, 140 insertions(+)
+ create mode 100755 tools/testing/selftests/net/forwarding/router.sh
 
 diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index d666b743047d..2448d2fa7c2f 100644
+index 44c9650ceb2a..85611868a80a 100644
 --- a/tools/testing/selftests/net/forwarding/lib.sh
 +++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -30,6 +30,12 @@ if [[ $? -ne 0 ]]; then
- 	exit 0
- fi
+@@ -267,6 +267,21 @@ bridge_ageing_time_get()
+ 	echo $((ageing_time / 100))
+ }
  
-+tc filter help 2>&1 | grep block &> /dev/null
-+if [[ $? -ne 0 ]]; then
-+	echo "SKIP: iproute2 too old, missing shared block support"
-+	exit 0
-+fi
++forwarding_enable()
++{
++       ipv4_fwd=$(sysctl -n net.ipv4.conf.all.forwarding)
++       ipv6_fwd=$(sysctl -n net.ipv6.conf.all.forwarding)
 +
- if [[ ! -x "$(command -v jq)" ]]; then
- 	echo "SKIP: jq not installed"
- 	exit 0
-diff --git a/tools/testing/selftests/net/forwarding/tc_shblocks.sh b/tools/testing/selftests/net/forwarding/tc_shblocks.sh
++       sysctl -q -w net.ipv4.conf.all.forwarding=1
++       sysctl -q -w net.ipv6.conf.all.forwarding=1
++}
++
++forwarding_restore()
++{
++       sysctl -q -w net.ipv6.conf.all.forwarding=$ipv6_fwd
++       sysctl -q -w net.ipv4.conf.all.forwarding=$ipv4_fwd
++}
++
+ ##############################################################################
+ # Tests
+ 
+diff --git a/tools/testing/selftests/net/forwarding/router.sh b/tools/testing/selftests/net/forwarding/router.sh
 new file mode 100755
-index 000000000000..cfc8a2ace388
+index 000000000000..cc6a14abfa87
 --- /dev/null
-+++ b/tools/testing/selftests/net/forwarding/tc_shblocks.sh
-@@ -0,0 +1,122 @@
++++ b/tools/testing/selftests/net/forwarding/router.sh
+@@ -0,0 +1,125 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +
 +NUM_NETIFS=4
 +source lib.sh
-+source tc_common.sh
-+
-+tcflags="skip_hw"
 +
 +h1_create()
 +{
-+	simple_if_init $h1 192.0.2.1/24
++	vrf_create "vrf-h1"
++	ip link set dev $h1 master vrf-h1
++
++	ip link set dev vrf-h1 up
++	ip link set dev $h1 up
++
++	ip address add 192.0.2.2/24 dev $h1
++	ip address add 2001:db8:1::2/64 dev $h1
++
++	ip route add 198.51.100.0/24 vrf vrf-h1 nexthop via 192.0.2.1
++	ip route add 2001:db8:2::/64 vrf vrf-h1 nexthop via 2001:db8:1::1
 +}
 +
 +h1_destroy()
 +{
-+	simple_if_fini $h1 192.0.2.1/24
++	ip route del 2001:db8:2::/64 vrf vrf-h1
++	ip route del 198.51.100.0/24 vrf vrf-h1
++
++	ip address del 2001:db8:1::2/64 dev $h1
++	ip address del 192.0.2.2/24 dev $h1
++
++	ip link set dev $h1 down
++	vrf_destroy "vrf-h1"
 +}
 +
 +h2_create()
 +{
-+	simple_if_init $h2 192.0.2.1/24
++	vrf_create "vrf-h2"
++	ip link set dev $h2 master vrf-h2
++
++	ip link set dev vrf-h2 up
++	ip link set dev $h2 up
++
++	ip address add 198.51.100.2/24 dev $h2
++	ip address add 2001:db8:2::2/64 dev $h2
++
++	ip route add 192.0.2.0/24 vrf vrf-h2 nexthop via 198.51.100.1
++	ip route add 2001:db8:1::/64 vrf vrf-h2 nexthop via 2001:db8:2::1
 +}
 +
 +h2_destroy()
 +{
-+	simple_if_fini $h2 192.0.2.1/24
++	ip route del 2001:db8:1::/64 vrf vrf-h2
++	ip route del 192.0.2.0/24 vrf vrf-h2
++
++	ip address del 2001:db8:2::2/64 dev $h2
++	ip address del 198.51.100.2/24 dev $h2
++
++	ip link set dev $h2 down
++	vrf_destroy "vrf-h2"
 +}
 +
-+switch_create()
++router_create()
 +{
-+	simple_if_init $swp1 192.0.2.2/24
-+	tc qdisc add dev $swp1 ingress_block 22 egress_block 23 clsact
++	ip link set dev $rp1 up
++	ip link set dev $rp2 up
 +
-+	simple_if_init $swp2 192.0.2.2/24
-+	tc qdisc add dev $swp2 ingress_block 22 egress_block 23 clsact
++	ip address add 192.0.2.1/24 dev $rp1
++	ip address add 2001:db8:1::1/64 dev $rp1
++
++	ip address add 198.51.100.1/24 dev $rp2
++	ip address add 2001:db8:2::1/64 dev $rp2
 +}
 +
-+switch_destroy()
++router_destroy()
 +{
-+	tc qdisc del dev $swp2 clsact
-+	simple_if_fini $swp2 192.0.2.2/24
++	ip address del 2001:db8:2::1/64 dev $rp2
++	ip address del 198.51.100.1/24 dev $rp2
 +
-+	tc qdisc del dev $swp1 clsact
-+	simple_if_fini $swp1 192.0.2.2/24
-+}
++	ip address del 2001:db8:1::1/64 dev $rp1
++	ip address del 192.0.2.1/24 dev $rp1
 +
-+shared_block_test()
-+{
-+	RET=0
-+
-+	tc filter add block 22 protocol ip pref 1 handle 101 flower \
-+		$tcflags dst_ip 192.0.2.2 action drop
-+
-+	$MZ $h1 -c 1 -p 64 -a $h1mac -b $swmac -A 192.0.2.1 -B 192.0.2.2 \
-+		-t ip -q
-+
-+	tc_check_packets "block 22" 101 1
-+	check_err $? "Did not match first incoming packet on a block"
-+
-+	$MZ $h2 -c 1 -p 64 -a $h2mac -b $swmac -A 192.0.2.1 -B 192.0.2.2 \
-+		-t ip -q
-+
-+	tc_check_packets "block 22" 101 2
-+	check_err $? "Did not match second incoming packet on a block"
-+
-+	tc filter del block 22 protocol ip pref 1 handle 101 flower
-+
-+	log_test "shared block ($tcflags)"
++	ip link set dev $rp2 down
++	ip link set dev $rp1 down
 +}
 +
 +setup_prepare()
 +{
 +	h1=${NETIFS[p1]}
-+	swp1=${NETIFS[p2]}
++	rp1=${NETIFS[p2]}
 +
-+	swp2=${NETIFS[p3]}
++	rp2=${NETIFS[p3]}
 +	h2=${NETIFS[p4]}
-+
-+	h1mac=$(mac_get $h1)
-+	h2mac=$(mac_get $h2)
-+
-+	swmac=$(mac_get $swp1)
-+	swp2origmac=$(mac_get $swp2)
-+	ip link set $swp2 address $swmac
 +
 +	vrf_prepare
 +
 +	h1_create
 +	h2_create
-+	switch_create
++
++	router_create
++
++	forwarding_enable
 +}
 +
 +cleanup()
 +{
 +	pre_cleanup
 +
-+	switch_destroy
++	forwarding_restore
++
++	router_destroy
++
 +	h2_destroy
 +	h1_destroy
 +
 +	vrf_cleanup
-+
-+	ip link set $swp2 address $swp2origmac
 +}
 +
 +trap cleanup EXIT
@@ -153,15 +170,8 @@ index 000000000000..cfc8a2ace388
 +setup_prepare
 +setup_wait
 +
-+shared_block_test
-+
-+tc_offload_check
-+if [[ $? -ne 0 ]]; then
-+	log_info "Could not test offloaded functionality"
-+else
-+	tcflags="skip_sw"
-+	shared_block_test
-+fi
++ping_test $h1 198.51.100.2
++ping6_test $h1 2001:db8:2::2
 +
 +exit $EXIT_STATUS
 -- 
