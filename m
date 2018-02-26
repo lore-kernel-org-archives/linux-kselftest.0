@@ -1,69 +1,33 @@
-From: fweimer@redhat.com (Florian Weimer)
-Date: Mon, 26 Feb 2018 15:31:55 +0100
-Subject: [PATCH] selftests/x86: Detect -no-pie availability
-Message-ID: <20180226143548.A45C843994575@oldenburg.str.redhat.com>
+From: petrm@mellanox.com (Petr Machata)
+Date: Mon, 26 Feb 2018 18:31:49 +0200
+Subject: [PATCH net-next 02/14] selftests: forwarding: Add a test for FDB
+ learning
+In-Reply-To: <20180226085948.19368-3-idosch@mellanox.com> (Ido Schimmel's
+ message of "Mon, 26 Feb 2018 10:59:36 +0200")
+References: <20180226085948.19368-1-idosch@mellanox.com>
+ <20180226085948.19368-3-idosch@mellanox.com>
+Message-ID: <wih4lm3pv9m.fsf@dev-r-vrt-156.mtr.labs.mlnx>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180226143155.KBRShU4-uZl0HOHM-nuDTG_w6dQfwITeG-ju8DfHTrk@z>
+Message-ID: <20180226163149.BgFDiS4XfElOcgBbUAqNuYJsxFAOm7L9cKGGALA6Paw@z>
 
-Some toolchains need -no-pie to build all tets, others do not support
-the -no-pie flag at all.  Therefore, add another test for the
-availability of the flag.
+Ido Schimmel <idosch at mellanox.com> writes:
 
-This amends commit 3346a6a4e5ba8c040360f753b26938cec31a4bdc
-("selftests: x86: sysret_ss_attrs doesn't build on a PIE build").
+> +learning_test()
+> +{
+> +	local mac=de:ad:be:ef:13:37
+> +	local ageing_time
+> +	local br_port1=$2	# Connected to `host1_if`.
+> +	local host1_if=$3
+> +	local host2_if=$4
+> +	local bridge=$1
 
-Signed-off-by: Florian Weimer <fweimer at redhat.com>
----
- tools/testing/selftests/x86/Makefile          |  8 +++++++-
- tools/testing/selftests/x86/trivial_program.c | 10 ++++++++++
- 2 files changed, 17 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/trivial_program.c
+I don't think applying RXT in Bash is appropriate. The ordering of the
+local variables should instead follow the order of function arguments,
+because that information isn't communicated by the function prototype
+itself, unlike C.
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index d744991c0f4f..94c89261a236 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -8,6 +8,7 @@ include ../lib.mk
- UNAME_M := $(shell uname -m)
- CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
- CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
-+CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
- 
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl mpx-mini-test ioperm \
-@@ -31,7 +32,12 @@ BINARIES_64 := $(TARGETS_C_64BIT_ALL:%=%_64)
- BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
- BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
- 
--CFLAGS := -O2 -g -std=gnu99 -pthread -Wall -no-pie
-+CFLAGS := -O2 -g -std=gnu99 -pthread -Wall
-+
-+# call32_from_64 in thunks.S uses absolute addresses.
-+ifeq ($(CAN_BUILD_WITH_NOPIE),1)
-+CFLAGS += -no-pie
-+endif
- 
- define gen-target-rule-32
- $(1) $(1)_32: $(OUTPUT)/$(1)_32
-diff --git a/tools/testing/selftests/x86/trivial_program.c b/tools/testing/selftests/x86/trivial_program.c
-new file mode 100644
-index 000000000000..46a447163b93
---- /dev/null
-+++ b/tools/testing/selftests/x86/trivial_program.c
-@@ -0,0 +1,10 @@
-+/* Trivial program to check that compilation with certain flags is working. */
-+
-+#include <stdio.h>
-+
-+int
-+main(void)
-+{
-+	puts("");
-+	return 0;
-+}
--- 
-2.14.3
-
+Thanks,
+Petr
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
