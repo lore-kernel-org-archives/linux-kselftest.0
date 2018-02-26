@@ -1,33 +1,51 @@
-From: petrm@mellanox.com (Petr Machata)
-Date: Mon, 26 Feb 2018 18:31:49 +0200
-Subject: [PATCH net-next 02/14] selftests: forwarding: Add a test for FDB
- learning
-In-Reply-To: <20180226085948.19368-3-idosch@mellanox.com> (Ido Schimmel's
- message of "Mon, 26 Feb 2018 10:59:36 +0200")
-References: <20180226085948.19368-1-idosch@mellanox.com>
- <20180226085948.19368-3-idosch@mellanox.com>
-Message-ID: <wih4lm3pv9m.fsf@dev-r-vrt-156.mtr.labs.mlnx>
+From: shuah@kernel.org (Shuah Khan)
+Date: Mon, 26 Feb 2018 09:54:37 -0700
+Subject: [PATCH 1/2] selftests: ion: Remove some prints
+In-Reply-To: <20180216012445.17264-2-labbott@redhat.com>
+References: <20180216012445.17264-1-labbott@redhat.com>
+ <20180216012445.17264-2-labbott@redhat.com>
+Message-ID: <f5324fa1-64fe-4b22-944b-c646c662a48f@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180226163149.BgFDiS4XfElOcgBbUAqNuYJsxFAOm7L9cKGGALA6Paw@z>
+Message-ID: <20180226165437.heq3Ifbgxl2WqA0p5Xuvdvykk6dcqdJVsxhPXcMn3As@z>
 
-Ido Schimmel <idosch at mellanox.com> writes:
+On 02/15/2018 06:24 PM, Laura Abbott wrote:
+> There's no need to print messages each time we alloc and free. Remove them.
+> 
+> Signed-off-by: Laura Abbott <labbott at redhat.com>
+> ---
+>  tools/testing/selftests/android/ion/ionutils.c | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/android/ion/ionutils.c b/tools/testing/selftests/android/ion/ionutils.c
+> index ce69c14f51fa..7d1d37c4ef6a 100644
+> --- a/tools/testing/selftests/android/ion/ionutils.c
+> +++ b/tools/testing/selftests/android/ion/ionutils.c
+> @@ -80,11 +80,6 @@ int ion_export_buffer_fd(struct ion_buffer_info *ion_info)
+>  	heap_id = MAX_HEAP_COUNT + 1;
+>  	for (i = 0; i < query.cnt; i++) {
+>  		if (heap_data[i].type == ion_info->heap_type) {
+> -			printf("--------------------------------------\n");
+> -			printf("heap type: %d\n", heap_data[i].type);
+> -			printf("  heap id: %d\n", heap_data[i].heap_id);
+> -			printf("heap name: %s\n", heap_data[i].name);
+> -			printf("--------------------------------------\n");
+>  			heap_id = heap_data[i].heap_id;
+>  			break;
+>  		}
+> @@ -204,7 +199,6 @@ void ion_close_buffer_fd(struct ion_buffer_info *ion_info)
+>  		/* Finally, close the client fd */
+>  		if (ion_info->ionfd > 0)
+>  			close(ion_info->ionfd);
+> -		printf("<%s>: buffer release successfully....\n", __func__);
+>  	}
+>  }
+>  
+> 
+Thanks Laura. I will queue this up for 4.17-rc1.
 
-> +learning_test()
-> +{
-> +	local mac=de:ad:be:ef:13:37
-> +	local ageing_time
-> +	local br_port1=$2	# Connected to `host1_if`.
-> +	local host1_if=$3
-> +	local host2_if=$4
-> +	local bridge=$1
+thanks,
+-- Shuah
 
-I don't think applying RXT in Bash is appropriate. The ordering of the
-local variables should instead follow the order of function arguments,
-because that information isn't communicated by the function prototype
-itself, unlike C.
-
-Thanks,
-Petr
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
