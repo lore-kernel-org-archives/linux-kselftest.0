@@ -1,72 +1,150 @@
 From: idosch at mellanox.com (Ido Schimmel)
-Date: Mon, 26 Feb 2018 10:59:41 +0200
-Subject: [PATCH net-next 07/14] selftests: forwarding: Test IPv6 weighted
- nexthops
+Date: Mon, 26 Feb 2018 10:59:47 +0200
+Subject: [PATCH net-next 13/14] selftests: forwarding: Introduce basic tc
+ chains tests
 In-Reply-To: <20180226085948.19368-1-idosch@mellanox.com>
 References: <20180226085948.19368-1-idosch@mellanox.com>
-Message-ID: <20180226085948.19368-8-idosch@mellanox.com>
+Message-ID: <20180226085948.19368-14-idosch@mellanox.com>
 
-Have one host generate 16K IPv6 echo requests with a random flow label
-and check that they are distributed between both multipath links
-according to the provided weights.
+From: Jiri Pirko <jiri at mellanox.com>
 
+Tests chains matching and goto chain action.
+
+Signed-off-by: Jiri Pirko <jiri at mellanox.com>
 Signed-off-by: Ido Schimmel <idosch at mellanox.com>
 ---
- .../selftests/net/forwarding/router_multipath.sh   | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ .../testing/selftests/net/forwarding/tc_chains.sh  | 122 +++++++++++++++++++++
+ 1 file changed, 122 insertions(+)
+ create mode 100755 tools/testing/selftests/net/forwarding/tc_chains.sh
 
-diff --git a/tools/testing/selftests/net/forwarding/router_multipath.sh b/tools/testing/selftests/net/forwarding/router_multipath.sh
-index bdd1245533eb..0be24b6768ce 100755
---- a/tools/testing/selftests/net/forwarding/router_multipath.sh
-+++ b/tools/testing/selftests/net/forwarding/router_multipath.sh
-@@ -222,12 +222,47 @@ multipath4_test()
-        sysctl -q -w net.ipv4.fib_multipath_hash_policy=$hash_policy
- }
- 
-+multipath6_test()
+diff --git a/tools/testing/selftests/net/forwarding/tc_chains.sh b/tools/testing/selftests/net/forwarding/tc_chains.sh
+new file mode 100755
+index 000000000000..94c114ad8b44
+--- /dev/null
++++ b/tools/testing/selftests/net/forwarding/tc_chains.sh
+@@ -0,0 +1,122 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++NUM_NETIFS=2
++source lib.sh
++source tc_common.sh
++
++tcflags="skip_hw"
++
++h1_create()
 +{
-+       local t0_rp12 t0_rp13 t1_rp12 t1_rp13
-+       local weight_rp12=$1 weight_rp13=$2
-+       local packets_rp12 packets_rp13
-+
-+       ip route replace 2001:db8:2::/64 vrf vrf-r1 \
-+	       nexthop via fe80:2::22 dev $rp12 weight $weight_rp12 \
-+	       nexthop via fe80:3::23 dev $rp13 weight $weight_rp13
-+
-+       t0_rp12=$(link_stats_tx_packets_get $rp12)
-+       t0_rp13=$(link_stats_tx_packets_get $rp13)
-+
-+       # Generate 16384 echo requests, each with a random flow label.
-+       for _ in $(seq 1 16384); do
-+	       ip vrf exec vrf-h1 ping 2001:db8:2::2 -F 0 -c 1 -q &> /dev/null
-+       done
-+
-+       t1_rp12=$(link_stats_tx_packets_get $rp12)
-+       t1_rp13=$(link_stats_tx_packets_get $rp13)
-+
-+       let "packets_rp12 = $t1_rp12 - $t0_rp12"
-+       let "packets_rp13 = $t1_rp13 - $t0_rp13"
-+       multipath_eval $weight_rp12 $weight_rp13 $packets_rp12 $packets_rp13
-+
-+       ip route replace 2001:db8:2::/64 vrf vrf-r1 \
-+	       nexthop via fe80:2::22 dev $rp12 \
-+	       nexthop via fe80:3::23 dev $rp13
++	simple_if_init $h1 192.0.2.1/24
 +}
 +
- multipath_test()
- {
- 	log_info "Running IPv4 multipath tests"
- 	multipath4_test 1 1
- 	multipath4_test 2 1
- 	multipath4_test 11 45
++h1_destroy()
++{
++	simple_if_fini $h1 192.0.2.1/24
++}
 +
-+	log_info "Running IPv6 multipath tests"
-+	multipath6_test 1 1
-+	multipath6_test 2 1
-+	multipath6_test 11 45
- }
- 
- setup_prepare()
++h2_create()
++{
++	simple_if_init $h2 192.0.2.2/24
++	tc qdisc add dev $h2 clsact
++}
++
++h2_destroy()
++{
++	tc qdisc del dev $h2 clsact
++	simple_if_fini $h2 192.0.2.2/24
++}
++
++unreachable_chain_test()
++{
++	RET=0
++
++	tc filter add dev $h2 ingress chain 1 protocol ip pref 1 handle 1101 \
++		flower $tcflags dst_mac $h2mac action drop
++
++	$MZ $h1 -c 1 -p 64 -a $h1mac -b $h2mac -A 192.0.2.1 -B 192.0.2.2 \
++		-t ip -q
++
++	tc_check_packets "dev $h2 ingress" 1101 1
++	check_fail $? "matched on filter in unreachable chain"
++
++	tc filter del dev $h2 ingress chain 1 protocol ip pref 1 handle 1101 \
++		flower
++
++	log_test "unreachable chain ($tcflags)"
++}
++
++gact_goto_chain_test()
++{
++	RET=0
++
++	tc filter add dev $h2 ingress chain 1 protocol ip pref 1 handle 1101 \
++		flower $tcflags dst_mac $h2mac action drop
++	tc filter add dev $h2 ingress protocol ip pref 2 handle 102 flower \
++		$tcflags dst_mac $h2mac action drop
++	tc filter add dev $h2 ingress protocol ip pref 1 handle 101 flower \
++		$tcflags dst_mac $h2mac action goto chain 1
++
++	$MZ $h1 -c 1 -p 64 -a $h1mac -b $h2mac -A 192.0.2.1 -B 192.0.2.2 \
++		-t ip -q
++
++	tc_check_packets "dev $h2 ingress" 102 1
++	check_fail $? "Matched on a wrong filter"
++
++	tc_check_packets "dev $h2 ingress" 101 1
++	check_err $? "Did not match on correct filter with goto chain action"
++
++	tc_check_packets "dev $h2 ingress" 1101 1
++	check_err $? "Did not match on correct filter in chain 1"
++
++	tc filter del dev $h2 ingress protocol ip pref 1 handle 101 flower
++	tc filter del dev $h2 ingress protocol ip pref 2 handle 102 flower
++	tc filter del dev $h2 ingress chain 1 protocol ip pref 1 handle 1101 \
++		flower
++
++	log_test "gact goto chain ($tcflags)"
++}
++
++setup_prepare()
++{
++	h1=${NETIFS[p1]}
++	h2=${NETIFS[p2]}
++	h1mac=$(mac_get $h1)
++	h2mac=$(mac_get $h2)
++
++	vrf_prepare
++
++	h1_create
++	h2_create
++}
++
++cleanup()
++{
++	pre_cleanup
++
++	h2_destroy
++	h1_destroy
++
++	vrf_cleanup
++}
++
++trap cleanup EXIT
++
++setup_prepare
++setup_wait
++
++unreachable_chain_test
++gact_goto_chain_test
++
++tc_offload_check
++if [[ $? -ne 0 ]]; then
++	log_info "Could not test offloaded functionality"
++else
++	tcflags="skip_sw"
++	unreachable_chain_test
++	gact_goto_chain_test
++fi
++
++exit $EXIT_STATUS
 -- 
 2.14.3
 
