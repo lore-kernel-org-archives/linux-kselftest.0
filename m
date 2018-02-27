@@ -1,44 +1,48 @@
-From: anders.roxell@linaro.org (Anders Roxell)
-Date: Tue, 27 Feb 2018 23:32:45 +0100
-Subject: [PATCH] selftest: fix kselftest-merge depend on
- 'RUNTIME_TESTING_MENU'
-In-Reply-To: <CA+ZOyajDWFr9dG70uOMoreA=FALoKJCYsFRiUAkZC-a3BuojZg@mail.gmail.com>
-References: <20180222115307.15063-1-zongbox@gmail.com>
- <CADYN=9KgBp0+iGDL8x774UUadyo54Za4ESLPk2GUfqFz+7W02Q@mail.gmail.com>
- <CA+ZOyajDWFr9dG70uOMoreA=FALoKJCYsFRiUAkZC-a3BuojZg@mail.gmail.com>
-Message-ID:
- <CADYN=9JgNRqs5ghv9_UU0MEEKX_kg+L2KXs3c-tXpw1m0dnxDw@mail.gmail.com>
+From: dan.rue@linaro.org (Dan Rue)
+Date: Tue, 27 Feb 2018 16:59:55 -0600
+Subject: selftests/x86/fsgsbase_64 test problem
+In-Reply-To: <0b0a3cea-d951-d3be-16de-a0e9d50cb2ba@zytor.com>
+References: <CALCETrUi7Ub2TbFy3Cvj+j4VXZeYULPY+mgL7OX7bz9L8GO9ew@mail.gmail.com>
+ <CALCETrWvkd68wPCxGwmzqgsLTr_59+=L9u8obwt+f+oUQwDY=w@mail.gmail.com>
+ <CALCETrW5=K5wJqLRZACmJJ+LF8Nb+Yf3OJ1tTNwqiOCxHu3w1Q@mail.gmail.com>
+ <CALCETrWq04AngUHkSv-bqDYXDSVH8N0bhXS_Nh63SpMmndexSA@mail.gmail.com>
+ <CALCETrUcJ2dVkSXGhtRvQeYQZZhPca95VhjQB8j6dFN6hzceSQ@mail.gmail.com>
+ <46328204-e363-e517-f30c-c8c94ac1442c@zytor.com>
+ <CALCETrW6SY8ktqSA-r108WkNf15js4eu0grDds=JVbNtBdSGqA@mail.gmail.com>
+ <624b9e67-14ee-6882-e55e-f337ec2471d3@zytor.com>
+ <F6FCC323-841E-4337-B1E7-8F2E502552D6@amacapital.net>
+ <0b0a3cea-d951-d3be-16de-a0e9d50cb2ba@zytor.com>
+Message-ID: <20180227225955.s2vs4g7oc7tdi72i@xps>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180227223245.JJcOLDSNanPyhlQyfS0tWPxdsYfTTCE3ybd4tKhzpNU@z>
+Message-ID: <20180227225955.pB2K0hYwFGTzv6Qe7f7BPkx8XTMFmfMimAXGUMkPU-o@z>
 
-On 23 February 2018@08:05, Zong Li <zongbox@gmail.com> wrote:
-> 2018-02-23 3:57 GMT+08:00 Anders Roxell <anders.roxell at linaro.org>:
->> On 22 February 2018@12:53, Zong Li <zongbox@gmail.com> wrote:
->>> Since the 'commit d3deafaa8b5c ("lib/: make RUNTIME_TESTS a menuconfig
->>> to ease disabling it all")', the make kselftest-merge cannot merge the
->>> config dependencies of kselftest to the existing .config file.
->>>
->>> These config dependencies of kselftest need to enable the
->>> 'CONFIG_RUNTIME_TESTING_MENU=y' at the same time.
->>
->> Is this patch needed when patch sha 'f29c79906064 ("lib/Kconfig.debug: enable
->> RUNTIME_TESTING_MENU")' find its way into the kernel ?
->> I think it's in linux-next now.
->
-> Thanks. The patch sha 'f29c79906064 ("lib/Kconfig.debug: enable
-> RUNTIME_TESTING_MENU")' can resolve the make kselftest-merge
-> on default situation, but I think the kselftest-merge should resolve
-> the dependencies
-> without the prerequisite, it should enable the 'RUNTIME_TESTING_MENU'
-> when merging
-> the config of some selftests if RUNTIME_TESTING_MENU is not set.
+On Mon, Jan 29, 2018@10:30:05AM -0800, H. Peter Anvin wrote:
+> On 01/29/18 10:26, Andy Lutomirski wrote:
+> >>>
+> >>> That will utterly suck on non-UMIP machines that have
+> >>> hypervisor-provided UMIP emulation.
+> >>
+> >> Is that a valid thing to optimize for, especially given that paranoid
+> >> entries aren't the most common anyway?
+> > 
+> > A bunch of people seem to care about NMI performance for perf.
+> >
+> 
+> That wasn't really the question...
+> 
+> > And the current patch set works without this trick.
+> 
+> But I believe the tricks it uses are fragile.
+> 
+> > FWIW, if we switch all entries to the entry text trampoline, we get direct percpu access for free.
+> 
+> That might be a better option.
 
-I see your point, but should the be enabled in a common place that
-gets included per
-default if running kselftest-merge and not in all config fragments?
+Has there been any conclusion to this thread? I can still reproduce the
+issue on mainline and next.
 
-Cheers,
-Anders
+Thanks,
+Dan
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
