@@ -1,226 +1,45 @@
 From: idosch@mellanox.com (Ido Schimmel)
-Date: Wed, 28 Feb 2018 12:25:17 +0200
-Subject: [PATCH net-next v2 12/14] selftests: forwarding: Introduce tc actions
- tests
+Date: Wed, 28 Feb 2018 12:25:13 +0200
+Subject: [PATCH net-next v2 08/14] selftests: forwarding: Add tc offload check
+ helper
 In-Reply-To: <20180228102519.4156-1-idosch@mellanox.com>
 References: <20180228102519.4156-1-idosch@mellanox.com>
-Message-ID: <20180228102519.4156-13-idosch@mellanox.com>
+Message-ID: <20180228102519.4156-9-idosch@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180228102517.1Uh0uEOmjHXNAqQc2O9MDUMX6K0MeVwcDtqInllNDLE@z>
+Message-ID: <20180228102513.yztErfyZk1pZpxoFBwpFe1M-QVRxXLcDEwJqO85Rxxk@z>
 
 From: Jiri Pirko <jiri@mellanox.com>
-
-Add first part of actions tests. This patch only contains tests of gact
-ok/drop/trap and mirred redirect egress.
 
 Signed-off-by: Jiri Pirko <jiri at mellanox.com>
 Signed-off-by: Ido Schimmel <idosch at mellanox.com>
 ---
- .../testing/selftests/net/forwarding/tc_actions.sh | 195 +++++++++++++++++++++
- 1 file changed, 195 insertions(+)
- create mode 100755 tools/testing/selftests/net/forwarding/tc_actions.sh
+ tools/testing/selftests/net/forwarding/lib.sh | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/tools/testing/selftests/net/forwarding/tc_actions.sh b/tools/testing/selftests/net/forwarding/tc_actions.sh
-new file mode 100755
-index 000000000000..84234317a25d
---- /dev/null
-+++ b/tools/testing/selftests/net/forwarding/tc_actions.sh
-@@ -0,0 +1,195 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+NUM_NETIFS=4
-+source lib.sh
-+source tc_common.sh
-+
-+tcflags="skip_hw"
-+
-+h1_create()
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 6866f4a4bc4e..92e46426bd1d 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -296,6 +296,19 @@ forwarding_restore()
+        sysctl -q -w net.ipv4.conf.all.forwarding=$ipv4_fwd
+ }
+ 
++tc_offload_check()
 +{
-+	simple_if_init $h1 192.0.2.1/24
++	for i in $(eval echo {1..$NUM_NETIFS}); do
++		ethtool -k ${NETIFS[p$i]} \
++			| grep "hw-tc-offload: on" &> /dev/null
++		if [[ $? -ne 0 ]]; then
++			return 1
++		fi
++	done
++
++	return 0
 +}
 +
-+h1_destroy()
-+{
-+	simple_if_fini $h1 192.0.2.1/24
-+}
-+
-+h2_create()
-+{
-+	simple_if_init $h2 192.0.2.2/24
-+	tc qdisc add dev $h2 clsact
-+}
-+
-+h2_destroy()
-+{
-+	tc qdisc del dev $h2 clsact
-+	simple_if_fini $h2 192.0.2.2/24
-+}
-+
-+switch_create()
-+{
-+	simple_if_init $swp1 192.0.2.2/24
-+	tc qdisc add dev $swp1 clsact
-+
-+	simple_if_init $swp2 192.0.2.1/24
-+}
-+
-+switch_destroy()
-+{
-+	simple_if_fini $swp2 192.0.2.1/24
-+
-+	tc qdisc del dev $swp1 clsact
-+	simple_if_fini $swp1 192.0.2.2/24
-+}
-+
-+mirred_egress_redirect_test()
-+{
-+	RET=0
-+
-+	tc filter add dev $h2 ingress protocol ip pref 1 handle 101 flower \
-+		$tcflags dst_ip 192.0.2.2 action drop
-+
-+	$MZ $h1 -c 1 -p 64 -a $h1mac -b $h2mac -A 192.0.2.1 -B 192.0.2.2 \
-+		-t ip -q
-+
-+	tc_check_packets "dev $h2 ingress" 101 1
-+	check_fail $? "Matched without redirect rule inserted"
-+
-+	tc filter add dev $swp1 ingress protocol ip pref 1 handle 101 flower \
-+		$tcflags dst_ip 192.0.2.2 action mirred egress redirect \
-+		dev $swp2
-+
-+	$MZ $h1 -c 1 -p 64 -a $h1mac -b $h2mac -A 192.0.2.1 -B 192.0.2.2 \
-+		-t ip -q
-+
-+	tc_check_packets "dev $h2 ingress" 101 1
-+	check_err $? "Did not match incoming redirected packet"
-+
-+	tc filter del dev $swp1 ingress protocol ip pref 1 handle 101 flower
-+	tc filter del dev $h2 ingress protocol ip pref 1 handle 101 flower
-+
-+	log_test "mirred egress redirect ($tcflags)"
-+}
-+
-+gact_drop_and_ok_test()
-+{
-+	RET=0
-+
-+	tc filter add dev $swp1 ingress protocol ip pref 2 handle 102 flower \
-+		skip_hw dst_ip 192.0.2.2 action drop
-+
-+	$MZ $h1 -c 1 -p 64 -a $h1mac -b $h2mac -A 192.0.2.1 -B 192.0.2.2 \
-+		-t ip -q
-+
-+	tc_check_packets "dev $swp1 ingress" 102 1
-+	check_err $? "Packet was not dropped"
-+
-+	tc filter add dev $swp1 ingress protocol ip pref 1 handle 101 flower \
-+		$tcflags dst_ip 192.0.2.2 action ok
-+
-+	$MZ $h1 -c 1 -p 64 -a $h1mac -b $h2mac -A 192.0.2.1 -B 192.0.2.2 \
-+		-t ip -q
-+
-+	tc_check_packets "dev $swp1 ingress" 101 1
-+	check_err $? "Did not see trapped packet"
-+
-+	tc filter del dev $swp1 ingress protocol ip pref 2 handle 102 flower
-+	tc filter del dev $swp1 ingress protocol ip pref 1 handle 101 flower
-+
-+	log_test "gact drop and ok ($tcflags)"
-+}
-+
-+gact_trap_test()
-+{
-+	RET=0
-+
-+	tc filter add dev $swp1 ingress protocol ip pref 1 handle 101 flower \
-+		skip_hw dst_ip 192.0.2.2 action drop
-+	tc filter add dev $swp1 ingress protocol ip pref 3 handle 103 flower \
-+		$tcflags dst_ip 192.0.2.2 action mirred egress redirect \
-+		dev $swp2
-+
-+	$MZ $h1 -c 1 -p 64 -a $h1mac -b $h2mac -A 192.0.2.1 -B 192.0.2.2 \
-+		-t ip -q
-+
-+	tc_check_packets "dev $swp1 ingress" 101 1
-+	check_fail $? "Saw packet without trap rule inserted"
-+
-+	tc filter add dev $swp1 ingress protocol ip pref 2 handle 102 flower \
-+		$tcflags dst_ip 192.0.2.2 action trap
-+
-+	$MZ $h1 -c 1 -p 64 -a $h1mac -b $h2mac -A 192.0.2.1 -B 192.0.2.2 \
-+		-t ip -q
-+
-+	tc_check_packets "dev $swp1 ingress" 102 1
-+	check_err $? "Packet was not trapped"
-+
-+	tc_check_packets "dev $swp1 ingress" 101 1
-+	check_err $? "Did not see trapped packet"
-+
-+	tc filter del dev $swp1 ingress protocol ip pref 3 handle 103 flower
-+	tc filter del dev $swp1 ingress protocol ip pref 2 handle 102 flower
-+	tc filter del dev $swp1 ingress protocol ip pref 1 handle 101 flower
-+
-+	log_test "trap ($tcflags)"
-+}
-+
-+setup_prepare()
-+{
-+	h1=${NETIFS[p1]}
-+	swp1=${NETIFS[p2]}
-+
-+	swp2=${NETIFS[p3]}
-+	h2=${NETIFS[p4]}
-+
-+	h1mac=$(mac_get $h1)
-+	h2mac=$(mac_get $h2)
-+
-+	swp1origmac=$(mac_get $swp1)
-+	swp2origmac=$(mac_get $swp2)
-+	ip link set $swp1 address $h2mac
-+	ip link set $swp2 address $h1mac
-+
-+	vrf_prepare
-+
-+	h1_create
-+	h2_create
-+	switch_create
-+}
-+
-+cleanup()
-+{
-+	pre_cleanup
-+
-+	switch_destroy
-+	h2_destroy
-+	h1_destroy
-+
-+	vrf_cleanup
-+
-+	ip link set $swp2 address $swp2origmac
-+	ip link set $swp1 address $swp1origmac
-+}
-+
-+trap cleanup EXIT
-+
-+setup_prepare
-+setup_wait
-+
-+gact_drop_and_ok_test
-+mirred_egress_redirect_test
-+
-+tc_offload_check
-+if [[ $? -ne 0 ]]; then
-+	log_info "Could not test offloaded functionality"
-+else
-+	tcflags="skip_sw"
-+	gact_drop_and_ok_test
-+	mirred_egress_redirect_test
-+	gact_trap_test
-+fi
-+
-+exit $EXIT_STATUS
+ ##############################################################################
+ # Tests
+ 
 -- 
 2.14.3
 
