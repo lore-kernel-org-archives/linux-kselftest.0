@@ -1,73 +1,179 @@
 From: idosch at mellanox.com (Ido Schimmel)
-Date: Wed, 28 Feb 2018 12:25:12 +0200
-Subject: [PATCH net-next v2 07/14] selftests: forwarding: Test IPv6 weighted
- nexthops
+Date: Wed, 28 Feb 2018 12:25:09 +0200
+Subject: [PATCH net-next v2 04/14] selftests: forwarding: Add a test for basic
+ IPv4 and IPv6 routing
 In-Reply-To: <20180228102519.4156-1-idosch@mellanox.com>
 References: <20180228102519.4156-1-idosch@mellanox.com>
-Message-ID: <20180228102519.4156-8-idosch@mellanox.com>
+Message-ID: <20180228102519.4156-5-idosch@mellanox.com>
 
-Have one host generate 16K IPv6 echo requests with a random flow label
-and check that they are distributed between both multipath links
-according to the provided weights.
+Configure two hosts which are directly connected to the same router and
+test IPv4 and IPv6 ping. Use a large MTU and check that ping is
+unaffected.
 
 Signed-off-by: Ido Schimmel <idosch at mellanox.com>
 ---
- .../selftests/net/forwarding/router_multipath.sh   | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ tools/testing/selftests/net/forwarding/lib.sh    |  15 +++
+ tools/testing/selftests/net/forwarding/router.sh | 125 +++++++++++++++++++++++
+ 2 files changed, 140 insertions(+)
+ create mode 100755 tools/testing/selftests/net/forwarding/router.sh
 
-diff --git a/tools/testing/selftests/net/forwarding/router_multipath.sh b/tools/testing/selftests/net/forwarding/router_multipath.sh
-index 5b425dffb5d0..d31888e3133e 100755
---- a/tools/testing/selftests/net/forwarding/router_multipath.sh
-+++ b/tools/testing/selftests/net/forwarding/router_multipath.sh
-@@ -226,12 +226,48 @@ multipath4_test()
-        sysctl -q -w net.ipv4.fib_multipath_hash_policy=$hash_policy
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index e2a4ee8946ef..962153b7181b 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -267,6 +267,21 @@ bridge_ageing_time_get()
+ 	echo $((ageing_time / 100))
  }
  
-+multipath6_test()
++forwarding_enable()
 +{
-+       local weight_rp12=$1
-+       local weight_rp13=$2
-+       local t0_rp12 t0_rp13 t1_rp12 t1_rp13
-+       local packets_rp12 packets_rp13
++       ipv4_fwd=$(sysctl -n net.ipv4.conf.all.forwarding)
++       ipv6_fwd=$(sysctl -n net.ipv6.conf.all.forwarding)
 +
-+       ip route replace 2001:db8:2::/64 vrf vrf-r1 \
-+	       nexthop via fe80:2::22 dev $rp12 weight $weight_rp12 \
-+	       nexthop via fe80:3::23 dev $rp13 weight $weight_rp13
-+
-+       t0_rp12=$(link_stats_tx_packets_get $rp12)
-+       t0_rp13=$(link_stats_tx_packets_get $rp13)
-+
-+       # Generate 16384 echo requests, each with a random flow label.
-+       for _ in $(seq 1 16384); do
-+	       ip vrf exec vrf-h1 ping 2001:db8:2::2 -F 0 -c 1 -q &> /dev/null
-+       done
-+
-+       t1_rp12=$(link_stats_tx_packets_get $rp12)
-+       t1_rp13=$(link_stats_tx_packets_get $rp13)
-+
-+       let "packets_rp12 = $t1_rp12 - $t0_rp12"
-+       let "packets_rp13 = $t1_rp13 - $t0_rp13"
-+       multipath_eval $weight_rp12 $weight_rp13 $packets_rp12 $packets_rp13
-+
-+       ip route replace 2001:db8:2::/64 vrf vrf-r1 \
-+	       nexthop via fe80:2::22 dev $rp12 \
-+	       nexthop via fe80:3::23 dev $rp13
++       sysctl -q -w net.ipv4.conf.all.forwarding=1
++       sysctl -q -w net.ipv6.conf.all.forwarding=1
 +}
 +
- multipath_test()
- {
- 	log_info "Running IPv4 multipath tests"
- 	multipath4_test 1 1
- 	multipath4_test 2 1
- 	multipath4_test 11 45
++forwarding_restore()
++{
++       sysctl -q -w net.ipv6.conf.all.forwarding=$ipv6_fwd
++       sysctl -q -w net.ipv4.conf.all.forwarding=$ipv4_fwd
++}
 +
-+	log_info "Running IPv6 multipath tests"
-+	multipath6_test 1 1
-+	multipath6_test 2 1
-+	multipath6_test 11 45
- }
+ ##############################################################################
+ # Tests
  
- setup_prepare()
+diff --git a/tools/testing/selftests/net/forwarding/router.sh b/tools/testing/selftests/net/forwarding/router.sh
+new file mode 100755
+index 000000000000..cc6a14abfa87
+--- /dev/null
++++ b/tools/testing/selftests/net/forwarding/router.sh
+@@ -0,0 +1,125 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++NUM_NETIFS=4
++source lib.sh
++
++h1_create()
++{
++	vrf_create "vrf-h1"
++	ip link set dev $h1 master vrf-h1
++
++	ip link set dev vrf-h1 up
++	ip link set dev $h1 up
++
++	ip address add 192.0.2.2/24 dev $h1
++	ip address add 2001:db8:1::2/64 dev $h1
++
++	ip route add 198.51.100.0/24 vrf vrf-h1 nexthop via 192.0.2.1
++	ip route add 2001:db8:2::/64 vrf vrf-h1 nexthop via 2001:db8:1::1
++}
++
++h1_destroy()
++{
++	ip route del 2001:db8:2::/64 vrf vrf-h1
++	ip route del 198.51.100.0/24 vrf vrf-h1
++
++	ip address del 2001:db8:1::2/64 dev $h1
++	ip address del 192.0.2.2/24 dev $h1
++
++	ip link set dev $h1 down
++	vrf_destroy "vrf-h1"
++}
++
++h2_create()
++{
++	vrf_create "vrf-h2"
++	ip link set dev $h2 master vrf-h2
++
++	ip link set dev vrf-h2 up
++	ip link set dev $h2 up
++
++	ip address add 198.51.100.2/24 dev $h2
++	ip address add 2001:db8:2::2/64 dev $h2
++
++	ip route add 192.0.2.0/24 vrf vrf-h2 nexthop via 198.51.100.1
++	ip route add 2001:db8:1::/64 vrf vrf-h2 nexthop via 2001:db8:2::1
++}
++
++h2_destroy()
++{
++	ip route del 2001:db8:1::/64 vrf vrf-h2
++	ip route del 192.0.2.0/24 vrf vrf-h2
++
++	ip address del 2001:db8:2::2/64 dev $h2
++	ip address del 198.51.100.2/24 dev $h2
++
++	ip link set dev $h2 down
++	vrf_destroy "vrf-h2"
++}
++
++router_create()
++{
++	ip link set dev $rp1 up
++	ip link set dev $rp2 up
++
++	ip address add 192.0.2.1/24 dev $rp1
++	ip address add 2001:db8:1::1/64 dev $rp1
++
++	ip address add 198.51.100.1/24 dev $rp2
++	ip address add 2001:db8:2::1/64 dev $rp2
++}
++
++router_destroy()
++{
++	ip address del 2001:db8:2::1/64 dev $rp2
++	ip address del 198.51.100.1/24 dev $rp2
++
++	ip address del 2001:db8:1::1/64 dev $rp1
++	ip address del 192.0.2.1/24 dev $rp1
++
++	ip link set dev $rp2 down
++	ip link set dev $rp1 down
++}
++
++setup_prepare()
++{
++	h1=${NETIFS[p1]}
++	rp1=${NETIFS[p2]}
++
++	rp2=${NETIFS[p3]}
++	h2=${NETIFS[p4]}
++
++	vrf_prepare
++
++	h1_create
++	h2_create
++
++	router_create
++
++	forwarding_enable
++}
++
++cleanup()
++{
++	pre_cleanup
++
++	forwarding_restore
++
++	router_destroy
++
++	h2_destroy
++	h1_destroy
++
++	vrf_cleanup
++}
++
++trap cleanup EXIT
++
++setup_prepare
++setup_wait
++
++ping_test $h1 198.51.100.2
++ping6_test $h1 2001:db8:2::2
++
++exit $EXIT_STATUS
 -- 
 2.14.3
 
