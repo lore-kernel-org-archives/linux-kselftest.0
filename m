@@ -1,133 +1,73 @@
 From: idosch at mellanox.com (Ido Schimmel)
-Date: Wed, 28 Feb 2018 12:25:08 +0200
-Subject: [PATCH net-next v2 03/14] selftests: forwarding: Add a test for
- flooded traffic
+Date: Wed, 28 Feb 2018 12:25:12 +0200
+Subject: [PATCH net-next v2 07/14] selftests: forwarding: Test IPv6 weighted
+ nexthops
 In-Reply-To: <20180228102519.4156-1-idosch@mellanox.com>
 References: <20180228102519.4156-1-idosch@mellanox.com>
-Message-ID: <20180228102519.4156-4-idosch@mellanox.com>
+Message-ID: <20180228102519.4156-8-idosch@mellanox.com>
 
-Add test cases for unknown unicast and unregistered multicast flooding.
-
-For each traffic type, turn off flooding on one bridged port and inject
-a packet of the specified type through the second bridged port. Make
-sure the packet was not received by checking the ACL counters on the
-other end. Later, turn on flooding and make sure the packet was
-received.
+Have one host generate 16K IPv6 echo requests with a random flow label
+and check that they are distributed between both multipath links
+according to the provided weights.
 
 Signed-off-by: Ido Schimmel <idosch at mellanox.com>
 ---
- .../selftests/net/forwarding/bridge_vlan_aware.sh  |  1 +
- tools/testing/selftests/net/forwarding/lib.sh      | 89 ++++++++++++++++++++++
- 2 files changed, 90 insertions(+)
+ .../selftests/net/forwarding/router_multipath.sh   | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
-index 1ba119f28963..651998e70557 100755
---- a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
-@@ -82,5 +82,6 @@ setup_wait
- ping_test $h1 192.0.2.2
- ping6_test $h1 2001:db8:1::2
- learning_test "br0" $swp1 $h1 $h2
-+flood_test $swp2 $h1 $h2
- 
- exit $EXIT_STATUS
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 21af63e860dc..e2a4ee8946ef 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -372,3 +372,92 @@ learning_test()
- 
- 	log_test "FDB learning"
+diff --git a/tools/testing/selftests/net/forwarding/router_multipath.sh b/tools/testing/selftests/net/forwarding/router_multipath.sh
+index 5b425dffb5d0..d31888e3133e 100755
+--- a/tools/testing/selftests/net/forwarding/router_multipath.sh
++++ b/tools/testing/selftests/net/forwarding/router_multipath.sh
+@@ -226,12 +226,48 @@ multipath4_test()
+        sysctl -q -w net.ipv4.fib_multipath_hash_policy=$hash_policy
  }
-+
-+flood_test_do()
+ 
++multipath6_test()
 +{
-+	local should_flood=$1
-+	local mac=$2
-+	local ip=$3
-+	local host1_if=$4
-+	local host2_if=$5
-+	local err=0
++       local weight_rp12=$1
++       local weight_rp13=$2
++       local t0_rp12 t0_rp13 t1_rp12 t1_rp13
++       local packets_rp12 packets_rp13
 +
-+	# Add an ACL on `host2_if` which will tell us whether the packet
-+	# was flooded to it or not.
-+	tc qdisc add dev $host2_if ingress
-+	tc filter add dev $host2_if ingress protocol ip pref 1 handle 101 \
-+		flower dst_mac $mac action drop
++       ip route replace 2001:db8:2::/64 vrf vrf-r1 \
++	       nexthop via fe80:2::22 dev $rp12 weight $weight_rp12 \
++	       nexthop via fe80:3::23 dev $rp13 weight $weight_rp13
 +
-+	$MZ $host1_if -c 1 -p 64 -b $mac -B $ip -t ip -q
-+	sleep 1
++       t0_rp12=$(link_stats_tx_packets_get $rp12)
++       t0_rp13=$(link_stats_tx_packets_get $rp13)
 +
-+	tc -j -s filter show dev $host2_if ingress \
-+		| jq -e ".[] | select(.options.handle == 101) \
-+		| select(.options.actions[0].stats.packets == 1)" &> /dev/null
-+	if [[ $? -ne 0 && $should_flood == "true" || \
-+	      $? -eq 0 && $should_flood == "false" ]]; then
-+		err=1
-+	fi
++       # Generate 16384 echo requests, each with a random flow label.
++       for _ in $(seq 1 16384); do
++	       ip vrf exec vrf-h1 ping 2001:db8:2::2 -F 0 -c 1 -q &> /dev/null
++       done
 +
-+	tc filter del dev $host2_if ingress protocol ip pref 1 handle 101 flower
-+	tc qdisc del dev $host2_if ingress
++       t1_rp12=$(link_stats_tx_packets_get $rp12)
++       t1_rp13=$(link_stats_tx_packets_get $rp13)
 +
-+	return $err
++       let "packets_rp12 = $t1_rp12 - $t0_rp12"
++       let "packets_rp13 = $t1_rp13 - $t0_rp13"
++       multipath_eval $weight_rp12 $weight_rp13 $packets_rp12 $packets_rp13
++
++       ip route replace 2001:db8:2::/64 vrf vrf-r1 \
++	       nexthop via fe80:2::22 dev $rp12 \
++	       nexthop via fe80:3::23 dev $rp13
 +}
 +
-+flood_unicast_test()
-+{
-+	local br_port=$1
-+	local host1_if=$2
-+	local host2_if=$3
-+	local mac=de:ad:be:ef:13:37
-+	local ip=192.0.2.100
+ multipath_test()
+ {
+ 	log_info "Running IPv4 multipath tests"
+ 	multipath4_test 1 1
+ 	multipath4_test 2 1
+ 	multipath4_test 11 45
 +
-+	RET=0
-+
-+	bridge link set dev $br_port flood off
-+
-+	flood_test_do false $mac $ip $host1_if $host2_if
-+	check_err $? "Packet flooded when should not"
-+
-+	bridge link set dev $br_port flood on
-+
-+	flood_test_do true $mac $ip $host1_if $host2_if
-+	check_err $? "Packet was not flooded when should"
-+
-+	log_test "Unknown unicast flood"
-+}
-+
-+flood_multicast_test()
-+{
-+	local br_port=$1
-+	local host1_if=$2
-+	local host2_if=$3
-+	local mac=01:00:5e:00:00:01
-+	local ip=239.0.0.1
-+
-+	RET=0
-+
-+	bridge link set dev $br_port mcast_flood off
-+
-+	flood_test_do false $mac $ip $host1_if $host2_if
-+	check_err $? "Packet flooded when should not"
-+
-+	bridge link set dev $br_port mcast_flood on
-+
-+	flood_test_do true $mac $ip $host1_if $host2_if
-+	check_err $? "Packet was not flooded when should"
-+
-+	log_test "Unregistered multicast flood"
-+}
-+
-+flood_test()
-+{
-+	# `br_port` is connected to `host2_if`
-+	local br_port=$1
-+	local host1_if=$2
-+	local host2_if=$3
-+
-+	flood_unicast_test $br_port $host1_if $host2_if
-+	flood_multicast_test $br_port $host1_if $host2_if
-+}
++	log_info "Running IPv6 multipath tests"
++	multipath6_test 1 1
++	multipath6_test 2 1
++	multipath6_test 11 45
+ }
+ 
+ setup_prepare()
 -- 
 2.14.3
 
