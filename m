@@ -1,48 +1,148 @@
-From: dan.rue@linaro.org (Dan Rue)
-Date: Tue, 27 Feb 2018 16:59:55 -0600
-Subject: selftests/x86/fsgsbase_64 test problem
-In-Reply-To: <0b0a3cea-d951-d3be-16de-a0e9d50cb2ba@zytor.com>
-References: <CALCETrUi7Ub2TbFy3Cvj+j4VXZeYULPY+mgL7OX7bz9L8GO9ew@mail.gmail.com>
- <CALCETrWvkd68wPCxGwmzqgsLTr_59+=L9u8obwt+f+oUQwDY=w@mail.gmail.com>
- <CALCETrW5=K5wJqLRZACmJJ+LF8Nb+Yf3OJ1tTNwqiOCxHu3w1Q@mail.gmail.com>
- <CALCETrWq04AngUHkSv-bqDYXDSVH8N0bhXS_Nh63SpMmndexSA@mail.gmail.com>
- <CALCETrUcJ2dVkSXGhtRvQeYQZZhPca95VhjQB8j6dFN6hzceSQ@mail.gmail.com>
- <46328204-e363-e517-f30c-c8c94ac1442c@zytor.com>
- <CALCETrW6SY8ktqSA-r108WkNf15js4eu0grDds=JVbNtBdSGqA@mail.gmail.com>
- <624b9e67-14ee-6882-e55e-f337ec2471d3@zytor.com>
- <F6FCC323-841E-4337-B1E7-8F2E502552D6@amacapital.net>
- <0b0a3cea-d951-d3be-16de-a0e9d50cb2ba@zytor.com>
-Message-ID: <20180227225955.s2vs4g7oc7tdi72i@xps>
+From: mhiramat@kernel.org (Masami Hiramatsu)
+Date: Wed, 28 Feb 2018 12:19:23 +0900
+Subject: [PATCH v4 00/19] tracing: probeevent: Improve fetcharg features
+Message-ID: <151978796240.2577.6531711990653677529.stgit@devbox>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180227225955.pB2K0hYwFGTzv6Qe7f7BPkx8XTMFmfMimAXGUMkPU-o@z>
+Message-ID: <20180228031923.jksEylOGzeWpjLrv2A9nf0DMu_dARmISb-vMzBI7gJU@z>
 
-On Mon, Jan 29, 2018@10:30:05AM -0800, H. Peter Anvin wrote:
-> On 01/29/18 10:26, Andy Lutomirski wrote:
-> >>>
-> >>> That will utterly suck on non-UMIP machines that have
-> >>> hypervisor-provided UMIP emulation.
-> >>
-> >> Is that a valid thing to optimize for, especially given that paranoid
-> >> entries aren't the most common anyway?
-> > 
-> > A bunch of people seem to care about NMI performance for perf.
-> >
-> 
-> That wasn't really the question...
-> 
-> > And the current patch set works without this trick.
-> 
-> But I believe the tricks it uses are fragile.
-> 
-> > FWIW, if we switch all entries to the entry text trampoline, we get direct percpu access for free.
-> 
-> That might be a better option.
+Hi,
 
-Has there been any conclusion to this thread? I can still reproduce the
-issue on mainline and next.
+This is the 4th version of the fetch-arg improvement series.
+This includes variable changes on fetcharg framework like,
 
-Thanks,
-Dan
+- Add fetcharg testcases (syntax, argN, symbol, string and array)
+  and probepoint testcase.
+- Rewrite fetcharg framework with fetch_insn, switch-case based
+  instead of function pointer.
+- Add "symbol" type support, which shows symbol+offset instead of
+  address value.
+- Add "$argN" fetcharg, which fetches function parameters.
+  (currently only for x86-64)
+- Add array type support (including string arrary :) ) ,
+  which enables to get fixed length array from probe-events.
+
+V3 is here:
+ https://lkml.org/lkml/2018/2/24/3 
+
+Changes from the v3 are here:
+
+ - [1/19] Fix to pass a sign to kstrtol (Thanks Namhyung!)
+          and check UINT_MAX for kprobe's offset.
+ - [4/19] Add new testcase for checking probepoint syntax.
+ - [16/19] Fix to use calculated size correctly for field definition.
+        (Thank you Namhyung!).
+ - [19/19] Add format field tests.
+
+Here are examples:
+
+o 'symbol' type
+
+ # echo 'p vfs_read $stack0:symbol' > kprobe_events 
+ # echo 1 > events/kprobes/p_vfs_read_0/enable 
+ # tail -n 3 trace
+              sh-729   [007] ...2   105.753637: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=SyS_read+0x42/0x90
+            tail-736   [000] ...2   105.754904: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=kernel_read+0x2c/0x40
+            tail-736   [000] ...2   105.754929: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=kernel_read+0x2c/0x40
+
+
+o $argN 
+
+ # echo 'p vfs_read $arg0 $arg1 $arg2' > kprobe_events
+ # echo 1 > events/kprobes/p_vfs_read_0/enable 
+ # tail -n 3 trace
+              sh-726   [007] ...2   134.288973: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffff88001d98ec00 arg2=0x7ffeb4330f79 arg3=0x1
+            tail-731   [000] ...2   134.289987: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffff88001d9dd200 arg2=0xffff88001d8a0a00 arg3=0x80
+            tail-731   [000] ...2   134.290016: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffff88001d9dd200 arg2=0xffff88001faf4a00 arg3=0x150
+
+
+o Array type
+
+ # echo 'p vfs_read +0($stack):x64 +0($stack):x8[8]' > kprobe_events 
+ # echo 1 > events/kprobes/p_vfs_read_0/enable 
+ # tail -n 3 trace
+              sh-729   [007] ...2    91.701664: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffffffff811b1252 arg2={0x52,0x12,0x1b,0x81,0xff,0xff,0xff,0xff}
+            tail-734   [000] ...2    91.702366: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffffffff811b0dec arg2={0xec,0xd,0x1b,0x81,0xff,0xff,0xff,0xff}
+            tail-734   [000] ...2    91.702386: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffffffff811b0dec arg2={0xec,0xd,0x1b,0x81,0xff,0xff,0xff,0xff}
+ #
+ # cat events/kprobes/p_vfs_read_0/format 
+name: p_vfs_read_0
+ID: 1069
+format:
+	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
+	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
+	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
+	field:int common_pid;	offset:4;	size:4;	signed:1;
+
+	field:unsigned long __probe_ip;	offset:8;	size:8;	signed:0;
+	field:u64 arg1;	offset:16;	size:0;	signed:0;
+	field:u8 arg2[8];	offset:24;	size:8;	signed:0;
+
+print fmt: "(%lx) arg1=0x%Lx arg2={0x%x,0x%x,0x%x,0x%x,0x%x,0x%x,0x%x,0x%x}", REC->__probe_ip, REC->arg1, REC->arg2[0], REC->arg2[1], REC->arg2[2], REC->arg2[3], REC->arg2[4], REC->arg2[5], REC->arg2[6], REC->arg2[7]
+
+o String Array type
+
+ # echo "p create_trace_kprobe arg1=+0(%si):string[3]" > kprobe_events 
+ # echo test1 test2 test3 >> kprobe_events 
+sh: write error: Invalid argument
+ # echo 'p vfs_read $stack' >> kprobe_events 
+ # tail -n 2 trace 
+              sh-744   [007] ...1   183.382407: p_create_trace_kprobe_0: (create_trace_kprobe+0x0/0x890) arg1={"test1","test2","test3"}
+              sh-744   [007] ...1   230.487809: p_create_trace_kprobe_0: (create_trace_kprobe+0x0/0x890) arg1={"p","vfs_read","$stack"}
+
+
+Thank you,
+
+---
+
+Masami Hiramatsu (19):
+      [BUGFIX] tracing: probeevent: Fix to support minus offset from symbol
+      selftests: ftrace: Add probe event argument syntax testcase
+      selftests: ftrace: Add a testcase for string type with kprobe_event
+      selftests: ftrace: Add a testcase for probepoint
+      tracing: probeevent: Cleanup print argument functions
+      tracing: probeevent: Cleanup argument field definition
+      tracing: probeevent: Remove NOKPROBE_SYMBOL from print functions
+      tracing: probeevent: Introduce new argument fetching code
+      tracing: probeevent: Unify fetch type tables
+      tracing: probeevent: Return consumed bytes of dynamic area
+      tracing: probeevent: Append traceprobe_ for exported function
+      tracing: probeevent: Unify fetch_insn processing common part
+      tracing: probeevent: Add symbol type
+      x86: ptrace: Add function argument access API
+      tracing: probeevent: Add $argN for accessing function args
+      tracing: probeevent: Add array type support
+      selftests: ftrace: Add a testcase for symbol type
+      selftests: ftrace: Add a testcase for $argN with kprobe_event
+      selftests: ftrace: Add a testcase for array type with kprobe_event
+
+
+ Documentation/trace/kprobetrace.txt                |   26 +
+ arch/Kconfig                                       |    7 
+ arch/x86/Kconfig                                   |    1 
+ arch/x86/include/asm/ptrace.h                      |   38 +
+ kernel/trace/trace.c                               |    9 
+ kernel/trace/trace_kprobe.c                        |  366 ++++--------
+ kernel/trace/trace_probe.c                         |  628 +++++++++-----------
+ kernel/trace/trace_probe.h                         |  284 +++------
+ kernel/trace/trace_probe_tmpl.h                    |  214 +++++++
+ kernel/trace/trace_uprobe.c                        |  168 ++---
+ .../ftrace/test.d/kprobe/kprobe_args_argN.tc       |   25 +
+ .../ftrace/test.d/kprobe/kprobe_args_array.tc      |   92 +++
+ .../ftrace/test.d/kprobe/kprobe_args_string.tc     |   46 +
+ .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     |   77 ++
+ .../ftrace/test.d/kprobe/kprobe_args_syntax.tc     |   97 +++
+ .../selftests/ftrace/test.d/kprobe/probepoint.tc   |   43 +
+ 16 files changed, 1230 insertions(+), 891 deletions(-)
+ create mode 100644 kernel/trace/trace_probe_tmpl.h
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc
+
+--
+Masami Hiramatsu (Linaro) <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
