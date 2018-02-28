@@ -1,152 +1,165 @@
 From: idosch@mellanox.com (Ido Schimmel)
-Date: Wed, 28 Feb 2018 12:25:18 +0200
-Subject: [PATCH net-next v2 13/14] selftests: forwarding: Introduce basic tc
- chains tests
+Date: Wed, 28 Feb 2018 12:25:07 +0200
+Subject: [PATCH net-next v2 02/14] selftests: forwarding: Add a test for FDB
+ learning
 In-Reply-To: <20180228102519.4156-1-idosch@mellanox.com>
 References: <20180228102519.4156-1-idosch@mellanox.com>
-Message-ID: <20180228102519.4156-14-idosch@mellanox.com>
+Message-ID: <20180228102519.4156-3-idosch@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180228102518.SCJgM3YrvkfJ92YdudJUcligh-4M91NNmTUyAroqwRE@z>
+Message-ID: <20180228102507.QtUcS6UqshgRBEDGv8pElX8OA3a2rd4FQ6-B2GoT0XI@z>
 
-From: Jiri Pirko <jiri@mellanox.com>
+Send a packet with a specific destination MAC, make sure it was learned
+on the ingress port and then aged-out.
 
-Tests chains matching and goto chain action.
-
-Signed-off-by: Jiri Pirko <jiri at mellanox.com>
 Signed-off-by: Ido Schimmel <idosch at mellanox.com>
 ---
- .../testing/selftests/net/forwarding/tc_chains.sh  | 122 +++++++++++++++++++++
- 1 file changed, 122 insertions(+)
- create mode 100755 tools/testing/selftests/net/forwarding/tc_chains.sh
+ .../selftests/net/forwarding/bridge_vlan_aware.sh  |  5 +-
+ tools/testing/selftests/net/forwarding/lib.sh      | 92 ++++++++++++++++++++++
+ 2 files changed, 96 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/tc_chains.sh b/tools/testing/selftests/net/forwarding/tc_chains.sh
-new file mode 100755
-index 000000000000..94c114ad8b44
---- /dev/null
-+++ b/tools/testing/selftests/net/forwarding/tc_chains.sh
-@@ -0,0 +1,122 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+NUM_NETIFS=2
-+source lib.sh
-+source tc_common.sh
-+
-+tcflags="skip_hw"
-+
-+h1_create()
-+{
-+	simple_if_init $h1 192.0.2.1/24
-+}
-+
-+h1_destroy()
-+{
-+	simple_if_fini $h1 192.0.2.1/24
-+}
-+
-+h2_create()
-+{
-+	simple_if_init $h2 192.0.2.2/24
-+	tc qdisc add dev $h2 clsact
-+}
-+
-+h2_destroy()
-+{
-+	tc qdisc del dev $h2 clsact
-+	simple_if_fini $h2 192.0.2.2/24
-+}
-+
-+unreachable_chain_test()
-+{
-+	RET=0
-+
-+	tc filter add dev $h2 ingress chain 1 protocol ip pref 1 handle 1101 \
-+		flower $tcflags dst_mac $h2mac action drop
-+
-+	$MZ $h1 -c 1 -p 64 -a $h1mac -b $h2mac -A 192.0.2.1 -B 192.0.2.2 \
-+		-t ip -q
-+
-+	tc_check_packets "dev $h2 ingress" 1101 1
-+	check_fail $? "matched on filter in unreachable chain"
-+
-+	tc filter del dev $h2 ingress chain 1 protocol ip pref 1 handle 1101 \
-+		flower
-+
-+	log_test "unreachable chain ($tcflags)"
-+}
-+
-+gact_goto_chain_test()
-+{
-+	RET=0
-+
-+	tc filter add dev $h2 ingress chain 1 protocol ip pref 1 handle 1101 \
-+		flower $tcflags dst_mac $h2mac action drop
-+	tc filter add dev $h2 ingress protocol ip pref 2 handle 102 flower \
-+		$tcflags dst_mac $h2mac action drop
-+	tc filter add dev $h2 ingress protocol ip pref 1 handle 101 flower \
-+		$tcflags dst_mac $h2mac action goto chain 1
-+
-+	$MZ $h1 -c 1 -p 64 -a $h1mac -b $h2mac -A 192.0.2.1 -B 192.0.2.2 \
-+		-t ip -q
-+
-+	tc_check_packets "dev $h2 ingress" 102 1
-+	check_fail $? "Matched on a wrong filter"
-+
-+	tc_check_packets "dev $h2 ingress" 101 1
-+	check_err $? "Did not match on correct filter with goto chain action"
-+
-+	tc_check_packets "dev $h2 ingress" 1101 1
-+	check_err $? "Did not match on correct filter in chain 1"
-+
-+	tc filter del dev $h2 ingress protocol ip pref 1 handle 101 flower
-+	tc filter del dev $h2 ingress protocol ip pref 2 handle 102 flower
-+	tc filter del dev $h2 ingress chain 1 protocol ip pref 1 handle 1101 \
-+		flower
-+
-+	log_test "gact goto chain ($tcflags)"
-+}
-+
-+setup_prepare()
-+{
-+	h1=${NETIFS[p1]}
-+	h2=${NETIFS[p2]}
-+	h1mac=$(mac_get $h1)
-+	h2mac=$(mac_get $h2)
-+
-+	vrf_prepare
-+
-+	h1_create
-+	h2_create
-+}
-+
-+cleanup()
-+{
-+	pre_cleanup
-+
-+	h2_destroy
-+	h1_destroy
-+
-+	vrf_cleanup
-+}
-+
-+trap cleanup EXIT
-+
-+setup_prepare
-+setup_wait
-+
-+unreachable_chain_test
-+gact_goto_chain_test
-+
-+tc_offload_check
-+if [[ $? -ne 0 ]]; then
-+	log_info "Could not test offloaded functionality"
-+else
-+	tcflags="skip_sw"
-+	unreachable_chain_test
-+	gact_goto_chain_test
+diff --git a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
+index e6faa9548460..1ba119f28963 100755
+--- a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
++++ b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
+@@ -26,7 +26,9 @@ h2_destroy()
+ 
+ switch_create()
+ {
+-	ip link add dev br0 type bridge vlan_filtering 1 mcast_snooping 0
++	# 10 Seconds ageing time.
++	ip link add dev br0 type bridge vlan_filtering 1 ageing_time 1000 \
++		mcast_snooping 0
+ 
+ 	ip link set dev $swp1 master br0
+ 	ip link set dev $swp2 master br0
+@@ -79,5 +81,6 @@ setup_wait
+ 
+ ping_test $h1 192.0.2.2
+ ping6_test $h1 2001:db8:1::2
++learning_test "br0" $swp1 $h1 $h2
+ 
+ exit $EXIT_STATUS
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index ff6550e9ddaf..21af63e860dc 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -7,6 +7,7 @@
+ # Can be overridden by the configuration file.
+ PING=${PING:=ping}
+ PING6=${PING6:=ping6}
++MZ=${MZ:=mausezahn}
+ WAIT_TIME=${WAIT_TIME:=5}
+ PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
+ PAUSE_ON_CLEANUP=${PAUSE_ON_CLEANUP:=no}
+@@ -34,6 +35,11 @@ if [[ ! -x "$(command -v jq)" ]]; then
+ 	exit 0
+ fi
+ 
++if [[ ! -x "$(command -v $MZ)" ]]; then
++	echo "SKIP: $MZ not installed"
++	exit 0
 +fi
 +
-+exit $EXIT_STATUS
+ if [[ ! -v NUM_NETIFS ]]; then
+ 	echo "SKIP: importer does not define \"NUM_NETIFS\""
+ 	exit 0
+@@ -250,6 +256,17 @@ master_name_get()
+ 	ip -j link show dev $if_name | jq -r '.[]["master"]'
+ }
+ 
++bridge_ageing_time_get()
++{
++	local bridge=$1
++	local ageing_time
++
++	# Need to divide by 100 to convert to seconds.
++	ageing_time=$(ip -j -d link show dev $bridge \
++		      | jq '.[]["linkinfo"]["info_data"]["ageing_time"]')
++	echo $((ageing_time / 100))
++}
++
+ ##############################################################################
+ # Tests
+ 
+@@ -280,3 +297,78 @@ ping6_test()
+ 	check_err $?
+ 	log_test "ping6"
+ }
++
++learning_test()
++{
++	local bridge=$1
++	local br_port1=$2	# Connected to `host1_if`.
++	local host1_if=$3
++	local host2_if=$4
++	local mac=de:ad:be:ef:13:37
++	local ageing_time
++
++	RET=0
++
++	bridge -j fdb show br $bridge brport $br_port1 \
++		| jq -e ".[] | select(.mac == \"$mac\")" &> /dev/null
++	check_fail $? "Found FDB record when should not"
++
++	# Disable unknown unicast flooding on `br_port1` to make sure
++	# packets are only forwarded through the port after a matching
++	# FDB entry was installed.
++	bridge link set dev $br_port1 flood off
++
++	tc qdisc add dev $host1_if ingress
++	tc filter add dev $host1_if ingress protocol ip pref 1 handle 101 \
++		flower dst_mac $mac action drop
++
++	$MZ $host2_if -c 1 -p 64 -b $mac -t ip -q
++	sleep 1
++
++	tc -j -s filter show dev $host1_if ingress \
++		| jq -e ".[] | select(.options.handle == 101) \
++		| select(.options.actions[0].stats.packets == 1)" &> /dev/null
++	check_fail $? "Packet reached second host when should not"
++
++	$MZ $host1_if -c 1 -p 64 -a $mac -t ip -q
++	sleep 1
++
++	bridge -j fdb show br $bridge brport $br_port1 \
++		| jq -e ".[] | select(.mac == \"$mac\")" &> /dev/null
++	check_err $? "Did not find FDB record when should"
++
++	$MZ $host2_if -c 1 -p 64 -b $mac -t ip -q
++	sleep 1
++
++	tc -j -s filter show dev $host1_if ingress \
++		| jq -e ".[] | select(.options.handle == 101) \
++		| select(.options.actions[0].stats.packets == 1)" &> /dev/null
++	check_err $? "Packet did not reach second host when should"
++
++	# Wait for 10 seconds after the ageing time to make sure FDB
++	# record was aged-out.
++	ageing_time=$(bridge_ageing_time_get $bridge)
++	sleep $((ageing_time + 10))
++
++	bridge -j fdb show br $bridge brport $br_port1 \
++		| jq -e ".[] | select(.mac == \"$mac\")" &> /dev/null
++	check_fail $? "Found FDB record when should not"
++
++	bridge link set dev $br_port1 learning off
++
++	$MZ $host1_if -c 1 -p 64 -a $mac -t ip -q
++	sleep 1
++
++	bridge -j fdb show br $bridge brport $br_port1 \
++		| jq -e ".[] | select(.mac == \"$mac\")" &> /dev/null
++	check_fail $? "Found FDB record when should not"
++
++	bridge link set dev $br_port1 learning on
++
++	tc filter del dev $host1_if ingress protocol ip pref 1 handle 101 flower
++	tc qdisc del dev $host1_if ingress
++
++	bridge link set dev $br_port1 flood on
++
++	log_test "FDB learning"
++}
 -- 
 2.14.3
 
