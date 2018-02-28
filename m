@@ -1,68 +1,51 @@
-From: shuahkh@osg.samsung.com (Shuah Khan)
-Date: Wed, 28 Feb 2018 14:10:23 -0700
-Subject: [GIT PULL] kselftest fixes update for 4.16-rc4
-Message-ID: <9f1d717e-f968-feb6-5fe7-9bfb7c304743@osg.samsung.com>
+From: tushar.n.dave@oracle.com (Tushar Dave)
+Date: Wed, 28 Feb 2018 13:28:16 -0800
+Subject: [PATCH] selftests/bpf: Add bpf_probe_read_str to bpf_helpers.h
+In-Reply-To: <1d72361e-e8a7-38e0-16db-ade3f658ce92@iogearbox.net>
+References: <1519778024-3113-1-git-send-email-tushar.n.dave@oracle.com>
+ <1d72361e-e8a7-38e0-16db-ade3f658ce92@iogearbox.net>
+Message-ID: <f7ff30a7-888f-bb3c-b6b5-48c82d5b0c08@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180228211023.LdtDsvl_ix6CVEVpxzKXwYUwzgyggXBkCD3Moimgh3A@z>
+Message-ID: <20180228212816.I_a-M6k_XFKdpkMDeicQ_EQZSKOczi831PPJzJWPqTk@z>
 
-Hi Linus,
 
-Please pull the following Kselftest update for 4.16-rc4.
 
-This kselftest fixes update for 4.16-rc4 consists of of fixes for
-various problems in test output, compile errors, and missing configs.
+On 02/28/2018 08:57 AM, Daniel Borkmann wrote:
+> Hi Tushar,
+> 
+> On 02/28/2018 01:33 AM, Tushar Dave wrote:
+>> Using bpf_probe_read_str() from samples/bpf causes compiler warning.
+>> e.g.
+>> warning: implicit declaration of function 'bpf_probe_read_str' is invalid in C99
+>>        [-Wimplicit-function-declaration]
+>>          num = bpf_probe_read_str(buf, sizeof(buf), ctx->di);
+>>                ^
+>> 1 warning generated.
+>>
+>> Add bpf_probe_read_str() to bpf_helpers.h so it can be used by
+>> samples/bpf programs.
+>>
+>> Signed-off-by: Tushar Dave <tushar.n.dave at oracle.com>
+> 
+> In general no objections to it, but it would need an in-tree
+> user first:
+> 
+> $ git grep -n bpf_probe_read_str tools/
+> tools/include/uapi/linux/bpf.h:596: * int bpf_probe_read_str(void *dst, int size, const void *unsafe_ptr)
+> $
+> 
+> Why not adding this along with a sample?
+Okay, I will send new patch along with new sample or add usage of
+bpf_probe_read_str() in one of our exiting sample :)
 
-Diff for the update is attached.
-
-thanks,
--- Shuah
-
------------------------------------------------------------------------------------
-The following changes since commit 7928b2cbe55b2a410a0f5c1f154610059c57b1b2:
-
-  Linux 4.16-rc1 (2018-02-11 15:04:29 -0800)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-4.16-rc4
-
-for you to fetch changes up to f6869826de700bce59e2cef14974f99836e34e4f:
-
-  selftests: vm: update .gitignore with new test (2018-02-26 16:09:50 -0700)
-
-----------------------------------------------------------------
-linux-kselftest-4.16-rc4
-
-This kselftest fixes update for 4.16-rc4 consists of of fixes for
-various problems in test output, compile errors, and missing configs.
-
-----------------------------------------------------------------
-Anders Roxell (2):
-      selftests: sync: missing CFLAGS while compiling
-      selftests: memfd: add config fragment for fuse
-
-Daniel Díaz (2):
-      selftests/android: Fix line continuation in Makefile
-      selftests/futex: Fix line continuation in Makefile
-
-Dominik Brodowski (1):
-      selftest/vDSO: fix O=
-
-Naresh Kamboju (1):
-      selftests: pstore: Adding config fragment CONFIG_PSTORE_RAM=m
-
-Shuah Khan (2):
-      selftests: memory-hotplug: silence test command echo
-      selftests: vm: update .gitignore with new test
-
- tools/testing/selftests/android/Makefile        |  8 ++++----
- tools/testing/selftests/futex/Makefile          |  6 +++---
- tools/testing/selftests/memfd/config            |  1 +
- tools/testing/selftests/memory-hotplug/Makefile |  2 +-
- tools/testing/selftests/pstore/config           |  1 +
- tools/testing/selftests/sync/Makefile           |  2 +-
- tools/testing/selftests/vDSO/Makefile           | 14 +++++++-------
- tools/testing/selftests/vm/.gitignore           |  1 +
- 8 files changed, 19 insertions(+), 16 deletions(-)
- create mode 100644 tools/testing/selftests/memfd/config
------------------------------------------------------------------------------------
+Thanks.
+-Tushar
+PS: adding correct mail-list this time linux-kselftest at vger.kernel.org
+> 
+> Thanks,
+> Daniel
+> 
+--
+To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
+the body of a message to majordomo at vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
