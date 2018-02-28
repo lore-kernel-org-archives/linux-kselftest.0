@@ -1,52 +1,110 @@
-From: zongbox at gmail.com (Zong Li)
-Date: Wed, 28 Feb 2018 17:13:01 +0800
-Subject: [PATCH] selftest: fix kselftest-merge depend on
- 'RUNTIME_TESTING_MENU'
-In-Reply-To: <CADYN=9JgNRqs5ghv9_UU0MEEKX_kg+L2KXs3c-tXpw1m0dnxDw@mail.gmail.com>
-References: <20180222115307.15063-1-zongbox@gmail.com>
- <CADYN=9KgBp0+iGDL8x774UUadyo54Za4ESLPk2GUfqFz+7W02Q@mail.gmail.com>
- <CA+ZOyajDWFr9dG70uOMoreA=FALoKJCYsFRiUAkZC-a3BuojZg@mail.gmail.com>
- <CADYN=9JgNRqs5ghv9_UU0MEEKX_kg+L2KXs3c-tXpw1m0dnxDw@mail.gmail.com>
-Message-ID: <CA+ZOyagCaxyrgTJ4uTqKC3zQgCG97qX+XmfQaXLUhk=MFOJyDA@mail.gmail.com>
+From: idosch at mellanox.com (Ido Schimmel)
+Date: Wed, 28 Feb 2018 12:25:05 +0200
+Subject: [PATCH net-next v2 00/14] selftests: forwarding: Add VRF-based tests
+Message-ID: <20180228102519.4156-1-idosch@mellanox.com>
 
-2018-02-28 6:32 GMT+08:00 Anders Roxell <anders.roxell at linaro.org>:
->
-> On 23 February 2018 at 08:05, Zong Li <zongbox at gmail.com> wrote:
-> > 2018-02-23 3:57 GMT+08:00 Anders Roxell <anders.roxell at linaro.org>:
-> >> On 22 February 2018 at 12:53, Zong Li <zongbox at gmail.com> wrote:
-> >>> Since the 'commit d3deafaa8b5c ("lib/: make RUNTIME_TESTS a menuconfig
-> >>> to ease disabling it all")', the make kselftest-merge cannot merge the
-> >>> config dependencies of kselftest to the existing .config file.
-> >>>
-> >>> These config dependencies of kselftest need to enable the
-> >>> 'CONFIG_RUNTIME_TESTING_MENU=y' at the same time.
-> >>
-> >> Is this patch needed when patch sha 'f29c79906064 ("lib/Kconfig.debug: enable
-> >> RUNTIME_TESTING_MENU")' find its way into the kernel ?
-> >> I think it's in linux-next now.
-> >
-> > Thanks. The patch sha 'f29c79906064 ("lib/Kconfig.debug: enable
-> > RUNTIME_TESTING_MENU")' can resolve the make kselftest-merge
-> > on default situation, but I think the kselftest-merge should resolve
-> > the dependencies
-> > without the prerequisite, it should enable the 'RUNTIME_TESTING_MENU'
-> > when merging
-> > the config of some selftests if RUNTIME_TESTING_MENU is not set.
->
-> I see your point, but should the be enabled in a common place that
-> gets included per
-> default if running kselftest-merge and not in all config fragments?
->
-> Cheers,
-> Anders
+One of the nice things about network namespaces is that they allow one
+to easily create and test complex environments.
 
-I agree with you. It is better that the config fragments of each
-selftests is responsible for
-enabling the specific configs they needed only.
-Thanks for your reply.
+Unfortunately, these namespaces can not be used with actual switching
+ASICs, as their ports can not be migrated to other network namespaces
+(NETIF_F_NETNS_LOCAL) and most of them probably do not support the
+L1-separation provided by namespaces.
 
-Best Regard,
-Zong Li
+However, a similar kind of flexibility can be achieved by using VRFs and
+by looping the switch ports together. For example:
+
+                             br0
+                              +
+               vrf-h1         |           vrf-h2
+                 +        +---+----+        +
+                 |        |        |        |
+    192.0.2.1/24 +        +        +        + 192.0.2.2/24
+               swp1     swp2     swp3     swp4
+                 +        +        +        +
+                 |        |        |        |
+                 +--------+        +--------+
+
+The VRFs act as lightweight namespaces representing hosts connected to
+the switch.
+
+This approach for testing switch ASICs has several advantages over the
+traditional method that requires multiple physical machines, to name a
+few:
+
+1. Only the device under test (DUT) is being tested without noise from
+other system.
+
+2. Ability to easily provision complex topologies. Testing bridging
+between 4-ports LAGs or 8-way ECMP requires many physical links that are
+not always available. With the VRF-based approach one merely needs to
+loopback more ports.
+
+These tests are written with switch ASICs in mind, but they can be run
+on any Linux box using veth pairs to emulate physical loopbacks.
+
+v2:
+* Order local variables declaration according to function arguments
+  order (Petr)
+
+v1:
+* Change location to net/forwarding instead of forwarding/
+* Add ability to pause on failure
+* Add ability to pause on cleanup
+* Make configuration file optional
+* Make ping/ping6/mz configurable
+* Add more tc tests
+
+Ido Schimmel (7):
+  selftests: forwarding: Add initial testing framework
+  selftests: forwarding: Add a test for FDB learning
+  selftests: forwarding: Add a test for flooded traffic
+  selftests: forwarding: Add a test for basic IPv4 and IPv6 routing
+  selftests: forwarding: Create test topology for multipath routing
+  selftests: forwarding: Test IPv4 weighted nexthops
+  selftests: forwarding: Test IPv6 weighted nexthops
+
+Jiri Pirko (7):
+  selftests: forwarding: Add tc offload check helper
+  selftests: forwarding: Add MAC get helper
+  selftests: forwarding: Allow to get netdev interfaces names from
+    commandline
+  selftests: forwarding: Introduce tc flower matching tests
+  selftests: forwarding: Introduce tc actions tests
+  selftests: forwarding: Introduce basic tc chains tests
+  selftests: forwarding: Introduce basic shared blocks tests
+
+ tools/testing/selftests/net/forwarding/.gitignore  |   1 +
+ tools/testing/selftests/net/forwarding/README      |  56 +++
+ .../selftests/net/forwarding/bridge_vlan_aware.sh  |  87 ++++
+ tools/testing/selftests/net/forwarding/config      |  12 +
+ .../net/forwarding/forwarding.config.sample        |  31 ++
+ tools/testing/selftests/net/forwarding/lib.sh      | 533 +++++++++++++++++++++
+ tools/testing/selftests/net/forwarding/router.sh   | 125 +++++
+ .../selftests/net/forwarding/router_multipath.sh   | 322 +++++++++++++
+ .../testing/selftests/net/forwarding/tc_actions.sh | 195 ++++++++
+ .../testing/selftests/net/forwarding/tc_chains.sh  | 122 +++++
+ .../testing/selftests/net/forwarding/tc_common.sh  |  23 +
+ .../testing/selftests/net/forwarding/tc_flower.sh  | 196 ++++++++
+ .../selftests/net/forwarding/tc_shblocks.sh        | 122 +++++
+ 13 files changed, 1825 insertions(+)
+ create mode 100644 tools/testing/selftests/net/forwarding/.gitignore
+ create mode 100644 tools/testing/selftests/net/forwarding/README
+ create mode 100755 tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
+ create mode 100644 tools/testing/selftests/net/forwarding/config
+ create mode 100644 tools/testing/selftests/net/forwarding/forwarding.config.sample
+ create mode 100644 tools/testing/selftests/net/forwarding/lib.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/router.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/router_multipath.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/tc_actions.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/tc_chains.sh
+ create mode 100644 tools/testing/selftests/net/forwarding/tc_common.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/tc_flower.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/tc_shblocks.sh
+
+-- 
+2.14.3
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
