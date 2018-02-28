@@ -1,146 +1,103 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Wed, 28 Feb 2018 12:19:23 +0900
-Subject: [PATCH v4 00/19] tracing: probeevent: Improve fetcharg features
-Message-ID: <151978796240.2577.6531711990653677529.stgit@devbox>
+Date: Wed, 28 Feb 2018 12:19:53 +0900
+Subject: [PATCH v4 01/19] [BUGFIX] tracing: probeevent: Fix to support minus
+ offset from symbol
+In-Reply-To: <151978796240.2577.6531711990653677529.stgit@devbox>
+References: <151978796240.2577.6531711990653677529.stgit@devbox>
+Message-ID: <151978799370.2577.9456049827647614166.stgit@devbox>
 
-Hi,
+In Documentation/trace/kprobetrace.txt, it says
 
-This is the 4th version of the fetch-arg improvement series.
-This includes variable changes on fetcharg framework like,
+ @SYM[+|-offs] : Fetch memory at SYM +|- offs (SYM should be a data symbol)
 
-- Add fetcharg testcases (syntax, argN, symbol, string and array)
-  and probepoint testcase.
-- Rewrite fetcharg framework with fetch_insn, switch-case based
-  instead of function pointer.
-- Add "symbol" type support, which shows symbol+offset instead of
-  address value.
-- Add "$argN" fetcharg, which fetches function parameters.
-  (currently only for x86-64)
-- Add array type support (including string arrary :) ) ,
-  which enables to get fixed length array from probe-events.
+However, the parser doesn't parse minus offset correctly, since
+commit 2fba0c8867af ("tracing/kprobes: Fix probe offset to be
+unsigned") drops minus ("-") offset support for kprobe probe
+address usage.
 
-V3 is here:
- https://lkml.org/lkml/2018/2/24/3 
+This fixes the traceprobe_split_symbol_offset() to parse minus
+offset again with checking the offset range, and add a minus
+offset check in kprobe probe address usage.
 
-Changes from the v3 are here:
-
- - [1/19] Fix to pass a sign to kstrtol (Thanks Namhyung!)
-          and check UINT_MAX for kprobe's offset.
- - [4/19] Add new testcase for checking probepoint syntax.
- - [16/19] Fix to use calculated size correctly for field definition.
-        (Thank you Namhyung!).
- - [19/19] Add format field tests.
-
-Here are examples:
-
-o 'symbol' type
-
- # echo 'p vfs_read $stack0:symbol' > kprobe_events 
- # echo 1 > events/kprobes/p_vfs_read_0/enable 
- # tail -n 3 trace
-              sh-729   [007] ...2   105.753637: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=SyS_read+0x42/0x90
-            tail-736   [000] ...2   105.754904: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=kernel_read+0x2c/0x40
-            tail-736   [000] ...2   105.754929: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=kernel_read+0x2c/0x40
-
-
-o $argN 
-
- # echo 'p vfs_read $arg0 $arg1 $arg2' > kprobe_events
- # echo 1 > events/kprobes/p_vfs_read_0/enable 
- # tail -n 3 trace
-              sh-726   [007] ...2   134.288973: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffff88001d98ec00 arg2=0x7ffeb4330f79 arg3=0x1
-            tail-731   [000] ...2   134.289987: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffff88001d9dd200 arg2=0xffff88001d8a0a00 arg3=0x80
-            tail-731   [000] ...2   134.290016: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffff88001d9dd200 arg2=0xffff88001faf4a00 arg3=0x150
-
-
-o Array type
-
- # echo 'p vfs_read +0($stack):x64 +0($stack):x8[8]' > kprobe_events 
- # echo 1 > events/kprobes/p_vfs_read_0/enable 
- # tail -n 3 trace
-              sh-729   [007] ...2    91.701664: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffffffff811b1252 arg2={0x52,0x12,0x1b,0x81,0xff,0xff,0xff,0xff}
-            tail-734   [000] ...2    91.702366: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffffffff811b0dec arg2={0xec,0xd,0x1b,0x81,0xff,0xff,0xff,0xff}
-            tail-734   [000] ...2    91.702386: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffffffff811b0dec arg2={0xec,0xd,0x1b,0x81,0xff,0xff,0xff,0xff}
- #
- # cat events/kprobes/p_vfs_read_0/format 
-name: p_vfs_read_0
-ID: 1069
-format:
-	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
-	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
-	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
-	field:int common_pid;	offset:4;	size:4;	signed:1;
-
-	field:unsigned long __probe_ip;	offset:8;	size:8;	signed:0;
-	field:u64 arg1;	offset:16;	size:0;	signed:0;
-	field:u8 arg2[8];	offset:24;	size:8;	signed:0;
-
-print fmt: "(%lx) arg1=0x%Lx arg2={0x%x,0x%x,0x%x,0x%x,0x%x,0x%x,0x%x,0x%x}", REC->__probe_ip, REC->arg1, REC->arg2[0], REC->arg2[1], REC->arg2[2], REC->arg2[3], REC->arg2[4], REC->arg2[5], REC->arg2[6], REC->arg2[7]
-
-o String Array type
-
- # echo "p create_trace_kprobe arg1=+0(%si):string[3]" > kprobe_events 
- # echo test1 test2 test3 >> kprobe_events 
-sh: write error: Invalid argument
- # echo 'p vfs_read $stack' >> kprobe_events 
- # tail -n 2 trace 
-              sh-744   [007] ...1   183.382407: p_create_trace_kprobe_0: (create_trace_kprobe+0x0/0x890) arg1={"test1","test2","test3"}
-              sh-744   [007] ...1   230.487809: p_create_trace_kprobe_0: (create_trace_kprobe+0x0/0x890) arg1={"p","vfs_read","$stack"}
-
-
-Thank you,
-
+Fixes: 2fba0c8867af ("tracing/kprobes: Fix probe offset to be unsigned")
+Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
+ Changes in v3:
+  - Use kstrtol instead of kstrtoul. (Thanks Namhyung!)
+ Changes in v4:
+  - Fix to decode sign. (Thanks Namhyung!)
+  - Fix to check UINT_MAX for kprobe offset.
+---
+ kernel/trace/trace_kprobe.c |    4 ++--
+ kernel/trace/trace_probe.c  |    8 +++-----
+ kernel/trace/trace_probe.h  |    2 +-
+ 3 files changed, 6 insertions(+), 8 deletions(-)
 
-Masami Hiramatsu (19):
-      [BUGFIX] tracing: probeevent: Fix to support minus offset from symbol
-      selftests: ftrace: Add probe event argument syntax testcase
-      selftests: ftrace: Add a testcase for string type with kprobe_event
-      selftests: ftrace: Add a testcase for probepoint
-      tracing: probeevent: Cleanup print argument functions
-      tracing: probeevent: Cleanup argument field definition
-      tracing: probeevent: Remove NOKPROBE_SYMBOL from print functions
-      tracing: probeevent: Introduce new argument fetching code
-      tracing: probeevent: Unify fetch type tables
-      tracing: probeevent: Return consumed bytes of dynamic area
-      tracing: probeevent: Append traceprobe_ for exported function
-      tracing: probeevent: Unify fetch_insn processing common part
-      tracing: probeevent: Add symbol type
-      x86: ptrace: Add function argument access API
-      tracing: probeevent: Add $argN for accessing function args
-      tracing: probeevent: Add array type support
-      selftests: ftrace: Add a testcase for symbol type
-      selftests: ftrace: Add a testcase for $argN with kprobe_event
-      selftests: ftrace: Add a testcase for array type with kprobe_event
+diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+index 5ce9b8cf7be3..1cd3fb4d70f8 100644
+--- a/kernel/trace/trace_kprobe.c
++++ b/kernel/trace/trace_kprobe.c
+@@ -667,7 +667,7 @@ static int create_trace_kprobe(int argc, char **argv)
+ 	char *symbol = NULL, *event = NULL, *group = NULL;
+ 	int maxactive = 0;
+ 	char *arg;
+-	unsigned long offset = 0;
++	long offset = 0;
+ 	void *addr = NULL;
+ 	char buf[MAX_EVENT_NAME_LEN];
+ 
+@@ -755,7 +755,7 @@ static int create_trace_kprobe(int argc, char **argv)
+ 		symbol = argv[1];
+ 		/* TODO: support .init module functions */
+ 		ret = traceprobe_split_symbol_offset(symbol, &offset);
+-		if (ret) {
++		if (ret || offset < 0 || offset > UINT_MAX) {
+ 			pr_info("Failed to parse either an address or a symbol.\n");
+ 			return ret;
+ 		}
+diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+index d59357308677..daf54bda4dc8 100644
+--- a/kernel/trace/trace_probe.c
++++ b/kernel/trace/trace_probe.c
+@@ -320,7 +320,7 @@ static fetch_func_t get_fetch_size_function(const struct fetch_type *type,
+ }
+ 
+ /* Split symbol and offset. */
+-int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset)
++int traceprobe_split_symbol_offset(char *symbol, long *offset)
+ {
+ 	char *tmp;
+ 	int ret;
+@@ -328,13 +328,11 @@ int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset)
+ 	if (!offset)
+ 		return -EINVAL;
+ 
+-	tmp = strchr(symbol, '+');
++	tmp = strpbrk(symbol, "+-");
+ 	if (tmp) {
+-		/* skip sign because kstrtoul doesn't accept '+' */
+-		ret = kstrtoul(tmp + 1, 0, offset);
++		ret = kstrtol(tmp, 0, offset);
+ 		if (ret)
+ 			return ret;
+-
+ 		*tmp = '\0';
+ 	} else
+ 		*offset = 0;
+diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+index 0745f895f780..75daff22ccea 100644
+--- a/kernel/trace/trace_probe.h
++++ b/kernel/trace/trace_probe.h
+@@ -365,7 +365,7 @@ extern int traceprobe_conflict_field_name(const char *name,
+ extern void traceprobe_update_arg(struct probe_arg *arg);
+ extern void traceprobe_free_probe_arg(struct probe_arg *arg);
+ 
+-extern int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset);
++extern int traceprobe_split_symbol_offset(char *symbol, long *offset);
+ 
+ /* Sum up total data length for dynamic arraies (strings) */
+ static nokprobe_inline int
 
-
- Documentation/trace/kprobetrace.txt                |   26 +
- arch/Kconfig                                       |    7 
- arch/x86/Kconfig                                   |    1 
- arch/x86/include/asm/ptrace.h                      |   38 +
- kernel/trace/trace.c                               |    9 
- kernel/trace/trace_kprobe.c                        |  366 ++++--------
- kernel/trace/trace_probe.c                         |  628 +++++++++-----------
- kernel/trace/trace_probe.h                         |  284 +++------
- kernel/trace/trace_probe_tmpl.h                    |  214 +++++++
- kernel/trace/trace_uprobe.c                        |  168 ++---
- .../ftrace/test.d/kprobe/kprobe_args_argN.tc       |   25 +
- .../ftrace/test.d/kprobe/kprobe_args_array.tc      |   92 +++
- .../ftrace/test.d/kprobe/kprobe_args_string.tc     |   46 +
- .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     |   77 ++
- .../ftrace/test.d/kprobe/kprobe_args_syntax.tc     |   97 +++
- .../selftests/ftrace/test.d/kprobe/probepoint.tc   |   43 +
- 16 files changed, 1230 insertions(+), 891 deletions(-)
- create mode 100644 kernel/trace/trace_probe_tmpl.h
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc
-
---
-Masami Hiramatsu (Linaro) <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
