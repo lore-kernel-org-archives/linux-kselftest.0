@@ -1,126 +1,299 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Wed, 28 Feb 2018 12:28:40 +0900
-Subject: [PATCH v4 19/19] selftests: ftrace: Add a testcase for array type
- with kprobe_event
+Date: Wed, 28 Feb 2018 12:26:44 +0900
+Subject: [PATCH v4 15/19] tracing: probeevent: Add $argN for accessing
+ function args
 In-Reply-To: <151978796240.2577.6531711990653677529.stgit@devbox>
 References: <151978796240.2577.6531711990653677529.stgit@devbox>
-Message-ID: <151978851997.2577.2012127759002018319.stgit@devbox>
+Message-ID: <151978840439.2577.602491083929841343.stgit@devbox>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180228032840.RTaFYoqiI6vhlYxHpHANJ92P2rDFaX9oAbTRIZj5EmU@z>
+Message-ID: <20180228032644.3mOXoofUizk3l3Znzfus1thFPKZFjL-nh0oRQFngwos@z>
 
-Add a testcase for array type with kprobe event.
-This tests good/bad syntax combinations and also
-the traced data is correct in several way.
-If the kernel doesn't support array type, it skips
-the test as UNSUPPORTED.
+Add $argN special fetch variable for accessing function
+arguments. This allows user to trace the Nth argument easily
+at the function entry.
+
+Note that this returns most probably assignment of registers
+and stacks. In some case, it may not work well. If you need
+to access correct registers or stacks you should use perf-probe.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- Changes in v4:
-  - Add format field tests.
+ Changes in v2:
+  - Add $argN in README file
+  - Make N start from 1 as same as auto-generate event argument
+    names.
+ Changes in v3:
+  - Show $arg<N> in README only when this feature is supported.
 ---
- .../ftrace/test.d/kprobe/kprobe_args_array.tc      |   92 ++++++++++++++++++++
- 1 file changed, 92 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
+ Documentation/trace/kprobetrace.txt |   10 ++++++----
+ kernel/trace/trace.c                |    4 ++++
+ kernel/trace/trace_kprobe.c         |   18 +++++++++++++-----
+ kernel/trace/trace_probe.c          |   36 ++++++++++++++++++++++-------------
+ kernel/trace/trace_probe.h          |    9 ++++++++-
+ kernel/trace/trace_uprobe.c         |    2 +-
+ 6 files changed, 55 insertions(+), 24 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
-new file mode 100644
-index 000000000000..0d0450b858fc
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
-@@ -0,0 +1,92 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Kprobe event array argument
+diff --git a/Documentation/trace/kprobetrace.txt b/Documentation/trace/kprobetrace.txt
+index d49381f2e411..1d082f8ffeee 100644
+--- a/Documentation/trace/kprobetrace.txt
++++ b/Documentation/trace/kprobetrace.txt
+@@ -43,16 +43,18 @@ Synopsis of kprobe_events
+   @SYM[+|-offs]	: Fetch memory at SYM +|- offs (SYM should be a data symbol)
+   $stackN	: Fetch Nth entry of stack (N >= 0)
+   $stack	: Fetch stack address.
+-  $retval	: Fetch return value.(*)
++  $argN		: Fetch the Nth function argument. (N >= 1) (*1)
++  $retval	: Fetch return value.(*2)
+   $comm		: Fetch current task comm.
+-  +|-offs(FETCHARG) : Fetch memory at FETCHARG +|- offs address.(**)
++  +|-offs(FETCHARG) : Fetch memory at FETCHARG +|- offs address.(*3)
+   NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
+   FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
+ 		  (u8/u16/u32/u64/s8/s16/s32/s64), hexadecimal types
+ 		  (x8/x16/x32/x64), "string" and bitfield are supported.
+ 
+-  (*) only for return probe.
+-  (**) this is useful for fetching a field of data structures.
++  (*1) only for the probe on function entry (offs == 0).
++  (*2) only for return probe.
++  (*3) this is useful for fetching a field of data structures.
+ 
+ Types
+ -----
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 8f08811d15b8..bcd1fd87082d 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -4608,7 +4608,11 @@ static const char readme_msg[] =
+ #endif
+ 	"\t     args: <name>=fetcharg[:type]\n"
+ 	"\t fetcharg: %<register>, @<address>, @<symbol>[+|-<offset>],\n"
++#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
++	"\t           $stack<index>, $stack, $retval, $comm, $arg<N>\n"
++#else
+ 	"\t           $stack<index>, $stack, $retval, $comm\n"
++#endif
+ 	"\t     type: s8/16/32/64, u8/16/32/64, x8/16/32/64, string, symbol,\n"
+ 	"\t           b<bit-width>@<bit-offset>/<container-size>\n"
+ #endif
+diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+index b564d38810b7..384ed4abae18 100644
+--- a/kernel/trace/trace_kprobe.c
++++ b/kernel/trace/trace_kprobe.c
+@@ -490,13 +490,15 @@ static int create_trace_kprobe(int argc, char **argv)
+ 	long offset = 0;
+ 	void *addr = NULL;
+ 	char buf[MAX_EVENT_NAME_LEN];
++	unsigned int flags = TPARG_FL_KERNEL;
+ 
+ 	/* argc must be >= 1 */
+ 	if (argv[0][0] == 'p')
+ 		is_return = false;
+-	else if (argv[0][0] == 'r')
++	else if (argv[0][0] == 'r') {
+ 		is_return = true;
+-	else if (argv[0][0] == '-')
++		flags |= TPARG_FL_RETURN;
++	} else if (argv[0][0] == '-')
+ 		is_delete = true;
+ 	else {
+ 		pr_info("Probe definition must be started with 'p', 'r' or"
+@@ -579,8 +581,9 @@ static int create_trace_kprobe(int argc, char **argv)
+ 			pr_info("Failed to parse either an address or a symbol.\n");
+ 			return ret;
+ 		}
+-		if (offset && is_return &&
+-		    !kprobe_on_func_entry(NULL, symbol, offset)) {
++		if (kprobe_on_func_entry(NULL, symbol, offset))
++			flags |= TPARG_FL_FENTRY;
++		if (offset && is_return && !(flags & TPARG_FL_FENTRY)) {
+ 			pr_info("Given offset is not valid for return probe.\n");
+ 			return -EINVAL;
+ 		}
+@@ -650,7 +653,7 @@ static int create_trace_kprobe(int argc, char **argv)
+ 
+ 		/* Parse fetch argument */
+ 		ret = traceprobe_parse_probe_arg(arg, &tk->tp.size, parg,
+-						 is_return, true);
++						 flags);
+ 		if (ret) {
+ 			pr_info("Parse error at argument[%d]. (%d)\n", i, ret);
+ 			goto error;
+@@ -890,6 +893,11 @@ process_fetch_insn(struct fetch_insn *code, struct pt_regs *regs, void *dest,
+ 	case FETCH_OP_COMM:
+ 		val = (unsigned long)current->comm;
+ 		break;
++#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
++	case FETCH_OP_ARG:
++		val = regs_get_kernel_argument(regs, code->param);
++		break;
++#endif
+ 	default:
+ 		return -EILSEQ;
+ 	}
+diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+index e2a31087f1f8..9458800f394a 100644
+--- a/kernel/trace/trace_probe.c
++++ b/kernel/trace/trace_probe.c
+@@ -169,14 +169,13 @@ int traceprobe_split_symbol_offset(char *symbol, long *offset)
+ #define PARAM_MAX_STACK (THREAD_SIZE / sizeof(unsigned long))
+ 
+ static int parse_probe_vars(char *arg, const struct fetch_type *t,
+-			    struct fetch_insn *code, bool is_return,
+-			    bool is_kprobe)
++			    struct fetch_insn *code, unsigned int flags)
+ {
+ 	int ret = 0;
+ 	unsigned long param;
+ 
+ 	if (strcmp(arg, "retval") == 0) {
+-		if (is_return)
++		if (flags & TPARG_FL_RETURN)
+ 			code->op = FETCH_OP_RETVAL;
+ 		else
+ 			ret = -EINVAL;
+@@ -185,7 +184,8 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
+ 			code->op = FETCH_OP_STACKP;
+ 		} else if (isdigit(arg[5])) {
+ 			ret = kstrtoul(arg + 5, 10, &param);
+-			if (ret || (is_kprobe && param > PARAM_MAX_STACK))
++			if (ret || ((flags & TPARG_FL_KERNEL) &&
++				    param > PARAM_MAX_STACK))
+ 				ret = -EINVAL;
+ 			else {
+ 				code->op = FETCH_OP_STACK;
+@@ -195,6 +195,18 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
+ 			ret = -EINVAL;
+ 	} else if (strcmp(arg, "comm") == 0) {
+ 		code->op = FETCH_OP_COMM;
++#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
++	} else if (((flags & TPARG_FL_MASK) ==
++		    (TPARG_FL_KERNEL | TPARG_FL_FENTRY)) &&
++		   strncmp(arg, "arg", 3) == 0) {
++		if (!isdigit(arg[3]))
++			return -EINVAL;
++		ret = kstrtoul(arg + 3, 10, &param);
++		if (ret || !param || param > PARAM_MAX_STACK)
++			return -EINVAL;
++		code->op = FETCH_OP_ARG;
++		code->param = (unsigned int)param - 1;
++#endif
+ 	} else
+ 		ret = -EINVAL;
+ 
+@@ -205,7 +217,7 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
+ static int
+ parse_probe_arg(char *arg, const struct fetch_type *type,
+ 		struct fetch_insn **pcode, struct fetch_insn *end,
+-		bool is_return, bool is_kprobe)
++		unsigned int flags)
+ {
+ 	struct fetch_insn *code = *pcode;
+ 	unsigned long param;
+@@ -215,8 +227,7 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
+ 
+ 	switch (arg[0]) {
+ 	case '$':
+-		ret = parse_probe_vars(arg + 1, type, code,
+-					is_return, is_kprobe);
++		ret = parse_probe_vars(arg + 1, type, code, flags);
+ 		break;
+ 
+ 	case '%':	/* named register */
+@@ -238,7 +249,7 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
+ 			code->immediate = param;
+ 		} else if (arg[1] == '+') {
+ 			/* kprobes don't support file offsets */
+-			if (is_kprobe)
++			if (flags & TPARG_FL_KERNEL)
+ 				return -EINVAL;
+ 
+ 			ret = kstrtol(arg + 2, 0, &offset);
+@@ -249,7 +260,7 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
+ 			code->immediate = (unsigned long)offset;  // imm64?
+ 		} else {
+ 			/* uprobes don't support symbols */
+-			if (!is_kprobe)
++			if (!(flags & TPARG_FL_KERNEL))
+ 				return -EINVAL;
+ 
+ 			ret = traceprobe_split_symbol_offset(arg + 1, &offset);
+@@ -290,8 +301,7 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
+ 			const struct fetch_type *t2 = find_fetch_type(NULL);
+ 
+ 			*tmp = '\0';
+-			ret = parse_probe_arg(arg, t2, &code, end, is_return,
+-					      is_kprobe);
++			ret = parse_probe_arg(arg, t2, &code, end, flags);
+ 			if (ret)
+ 				break;
+ 			if (code->op == FETCH_OP_COMM)
+@@ -351,7 +361,7 @@ static int __parse_bitfield_probe_arg(const char *bf,
+ 
+ /* String length checking wrapper */
+ int traceprobe_parse_probe_arg(char *arg, ssize_t *size,
+-		struct probe_arg *parg, bool is_return, bool is_kprobe)
++		struct probe_arg *parg, unsigned int flags)
+ {
+ 	struct fetch_insn *code, *tmp = NULL;
+ 	const char *t;
+@@ -391,7 +401,7 @@ int traceprobe_parse_probe_arg(char *arg, ssize_t *size,
+ 	code[FETCH_INSN_MAX - 1].op = FETCH_OP_END;
+ 
+ 	ret = parse_probe_arg(arg, parg->type, &code, &code[FETCH_INSN_MAX - 1],
+-			      is_return, is_kprobe);
++			      flags);
+ 	if (ret)
+ 		goto fail;
+ 
+diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+index ef477bd8468a..ff91faf70887 100644
+--- a/kernel/trace/trace_probe.h
++++ b/kernel/trace/trace_probe.h
+@@ -35,6 +35,7 @@
+ #include <linux/stringify.h>
+ #include <linux/limits.h>
+ #include <linux/uaccess.h>
++#include <linux/bitops.h>
+ #include <asm/bitsperlong.h>
+ 
+ #include "trace.h"
+@@ -89,6 +90,7 @@ enum fetch_op {
+ 	FETCH_OP_RETVAL,	/* Return value */
+ 	FETCH_OP_IMM,		/* Immediate : .immediate */
+ 	FETCH_OP_COMM,		/* Current comm */
++	FETCH_OP_ARG,		/* Function argument : .param */
+ 	FETCH_OP_FOFFS,		/* File offset: .immediate */
+ 	// Stage 2 (dereference) op
+ 	FETCH_OP_DEREF,		/* Dereference: .offset */
+@@ -261,8 +263,13 @@ find_event_file_link(struct trace_probe *tp, struct trace_event_file *file)
+ 	return NULL;
+ }
+ 
++#define TPARG_FL_RETURN BIT(0)
++#define TPARG_FL_KERNEL BIT(1)
++#define TPARG_FL_FENTRY BIT(2)
++#define TPARG_FL_MASK	GENMASK(2, 0)
 +
-+[ -f kprobe_events ] || exit_unsupported # this is configurable
-+
-+grep -q "<type>\[<array-size>\]" README || exit_unsupported # version issue
-+
-+GOODSYM="_sdata"
-+if ! grep -qw ${GOODSYM} /proc/kallsyms ; then
-+  GOODSYM="create_trace_kprobe"
-+fi
-+case `uname -m` in
-+x86_64)
-+  ARG2=%si
-+  OFFS=8
-+  BITS=64
-+;;
-+i[3456]86)
-+  ARG2=%cx
-+  OFFS=4
-+  BITS=32
-+;;
-+aarch64)
-+  ARG2=%x1
-+  OFFS=8
-+  BITS=64
-+;;
-+arm*)
-+  ARG2=%r1
-+  OFFS=4
-+  BITS=32
-+;;
-+*)
-+  echo "Please implement other architecture here"
-+  exit_untested
-+esac
-+
-+create_testprobe() { # args
-+  echo "p:testprobe create_trace_kprobe $*" > kprobe_events
-+}
-+
-+check_field() { # grep-pattern
-+  grep -e "$*" events/kprobes/testprobe/format
-+}
-+
-+echo 0 > events/enable
-+echo > kprobe_events
-+
-+: "Syntax test"
-+create_testprobe "+0(${ARG2}):x8[1] +0(${ARG2}):s16[1] +0(${ARG2}):u32[1]"
-+check_field "field:u8 arg1\[1\];.*size:1;"
-+check_field "field:s16 arg2\[1\];.*size:2;"
-+check_field "field:u32 arg3\[1\];.*size:4;"
-+create_testprobe "+0(${ARG2}):x64[1] +0(${ARG2}):symbol[1]"
-+check_field "field:u64 arg1\[1\];.*size:8;"
-+check_field "field:u${BITS} arg2\[1\];.*size:${OFFS};"
-+create_testprobe "+0(${ARG2}):b2 at 3/8[1] +0(${ARG2}):string[1]"
-+check_field "field:u8 arg1\[1\];.*size:1;"
-+check_field "field:__data_loc char\[\]\[1\] arg2;.*size:4;"
-+create_testprobe "+0(${ARG2}):x8[64] @${GOODSYM}:x8[4]"
-+check_field "field:u8 arg1\[64\];.*size:64;"
-+check_field "field:u8 arg2\[4\];.*size:4;"
-+
-+! create_testprobe "${ARG2}:x8[1]" # Can not use array type on register
-+! create_testprobe "\$comm:x8[1]" # Can not use array type on \$comm
-+! create_testprobe "\$comm:string[1]" # No, even if it is string array
-+! create_testprobe "+0(${ARG2}):x64[0]" # array size >= 1
-+! create_testprobe "+0(${ARG2}):x64[65]" # array size <= 64
-+
-+: "Test get argument (1)"
-+create_testprobe "arg1=+0(${ARG2}):string[1]" > kprobe_events
-+echo 1 > events/kprobes/testprobe/enable
-+! echo test >> kprobe_events
-+tail -n 1 trace | grep -qe "testprobe.* arg1={\"test\"}"
-+echo 0 > events/kprobes/testprobe/enable
-+
-+: "Test get argument (2)"
-+create_testprobe "arg1=+0(${ARG2}):string[3]" > kprobe_events
-+echo 1 > events/kprobes/testprobe/enable
-+! echo foo bar buzz >> kprobe_events
-+tail -n 1 trace | grep -qe "testprobe.* arg1={\"foo\",\"bar\",\"buzz\"}"
-+echo 0 > events/kprobes/testprobe/enable
-+
-+: "Test get argument (3)"
-+create_testprobe "arg1=+0(+0(${ARG2})):u8[4]" > kprobe_events
-+echo 1 > events/kprobes/testprobe/enable
-+! echo 1234 >> kprobe_events
-+tail -n 1 trace | grep -qe "testprobe.* arg1={49,50,51,52}" # ascii code
-+echo 0 > events/kprobes/testprobe/enable
-+
-+echo > kprobe_events
+ extern int traceprobe_parse_probe_arg(char *arg, ssize_t *size,
+-		   struct probe_arg *parg, bool is_return, bool is_kprobe);
++		   struct probe_arg *parg, unsigned int flags);
+ 
+ extern int traceprobe_conflict_field_name(const char *name,
+ 			       struct probe_arg *args, int narg);
+diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
+index 64c1fbe087a1..e15da2281855 100644
+--- a/kernel/trace/trace_uprobe.c
++++ b/kernel/trace/trace_uprobe.c
+@@ -519,7 +519,7 @@ static int create_trace_uprobe(int argc, char **argv)
+ 
+ 		/* Parse fetch argument */
+ 		ret = traceprobe_parse_probe_arg(arg, &tu->tp.size, parg,
+-						 is_return, false);
++					is_return ? TPARG_FL_RETURN : 0);
+ 		if (ret) {
+ 			pr_info("Parse error at argument[%d]. (%d)\n", i, ret);
+ 			goto error;
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
