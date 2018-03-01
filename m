@@ -1,30 +1,50 @@
-From: davem at davemloft.net (David Miller)
-Date: Sat, 30 Jun 2018 22:06:54 +0900 (KST)
-Subject: [PATCH net-next 00/13] mlxsw: Add resource scale tests
-In-Reply-To: <cover.1530319109.git.petrm@mellanox.com>
-References: <cover.1530319109.git.petrm@mellanox.com>
-Message-ID: <20180630.220654.479410647137748499.davem@davemloft.net>
+From: naresh.kamboju at linaro.org (Naresh Kamboju)
+Date: Thu, 1 Mar 2018 14:41:06 +0530
+Subject: [PATCH] selftests: memory-hotplug: silence test command echo
+In-Reply-To: <20180213214407.21717-1-shuahkh@osg.samsung.com>
+References: <20180213214407.21717-1-shuahkh@osg.samsung.com>
+Message-ID: <CA+G9fYsE0w00aeE3jxJU3Q01Yz_C95zn+kguMHqg6M9PRmhemg@mail.gmail.com>
 
-From: Petr Machata <petrm at mellanox.com>
-Date: Sat, 30 Jun 2018 02:44:23 +0200
+On 14 February 2018 at 03:14, Shuah Khan <shuahkh at osg.samsung.com> wrote:
+> Silence the following command being printed while running test.
+>
+> ./mem-on-off-test.sh -r 2 && echo "selftests: memory-hotplug [PASS]" ||
+> echo "selftests: memory-hotplug [FAIL]"
+>
+> Signed-off-by: Shuah Khan <shuahkh at osg.samsung.com>
+> ---
+>  tools/testing/selftests/memory-hotplug/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/memory-hotplug/Makefile b/tools/testing/selftests/memory-hotplug/Makefile
+> index 86636d207adf..183b46883875 100644
+> --- a/tools/testing/selftests/memory-hotplug/Makefile
+> +++ b/tools/testing/selftests/memory-hotplug/Makefile
+> @@ -4,7 +4,7 @@ all:
+>  include ../lib.mk
+>
+>  TEST_PROGS := mem-on-off-test.sh
+> -override RUN_TESTS := ./mem-on-off-test.sh -r 2 && echo "selftests: memory-hotplug [PASS]" || echo "selftests: memory-hotplug [FAIL]"
+> +override RUN_TESTS := @./mem-on-off-test.sh -r 2 && echo "selftests: memory-hotplug [PASS]" || echo "selftests: memory-hotplug [FAIL]"
+>  override EMIT_TESTS := echo "$(RUN_TESTS)"
+>
+>  run_full_test:
 
-> There are a number of tests that check features of the Linux networking
-> stack. By running them on suitable interfaces, one can exercise the
-> mlxsw offloading code. However none of these tests attempts to push
-> mlxsw to the limits supported by the ASIC.
-> 
-> As an additional wrinkle, the "limits supported by the ASIC" themselves
-> may not be a set of fixed numbers, but rather depend on a profile that
-> determines how the ASIC resources are allocated for different purposes.
-> 
-> This patchset introduces several tests that verify capability of mlxsw
-> to offload amounts of routes, flower rules, and mirroring sessions that
-> match predicted ASIC capacity, at different configuration profiles.
-> Additionally they verify that amounts exceeding the predicted capacity
-> can *not* be offloaded.
- ...
+The test execution broken due to this patch ?
 
-Good stuff, series applied, thanks!
+Running tests in memory-hotplug
+========================================
+./run_kselftest.sh: line 121: @./mem-on-off-test.sh: No such file or directory
+selftests: memory-hotplug [FAIL]
+
+LAVA job id:
+https://lkft.validation.linaro.org/scheduler/job/132699#L2526
+
+- Naresh
+
+> --
+> 2.14.1
+>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
