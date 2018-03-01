@@ -1,27 +1,43 @@
 From: dsahern@gmail.com (David Ahern)
-Date: Thu, 1 Mar 2018 14:44:11 -0700
-Subject: [PATCH net-next 2/5] selftests: forwarding: Only check for mz
- when it is needed
-In-Reply-To: <20180301193618.GB4839@splinter>
-References: <20180301190947.7299-1-dsahern@gmail.com>
- <20180301190947.7299-3-dsahern@gmail.com> <20180301193618.GB4839@splinter>
-Message-ID: <5f0c7d0e-b7a7-ee38-3965-8754f17d9505@gmail.com>
+Date: Thu,  1 Mar 2018 13:49:29 -0800
+Subject: [PATCH v2 net-next 0/4] selftests: forwarding: misc bug fixes and
+ enhancements
+Message-ID: <20180301214933.20199-1-dsahern@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180301214411.nywZQWYdPmPVXIOVPe9f0ezJagTEPQYfIHlNP-8REhw@z>
+Message-ID: <20180301214929.1fDxL6sRVHdCGUONrbMLwzJbmVAOf8_CvOUX-dgB-Pw@z>
 
-On 3/1/18 12:36 PM, Ido Schimmel wrote:
-> On Thu, Mar 01, 2018@11:09:44AM -0800, David Ahern wrote:
->> Add a CHECK_MZ flag and only check if mz exists when flag is set.
->> If it does not exist, exit non-0.
->>
->> Signed-off-by: David Ahern <dsahern at gmail.com>
-> 
-> The only test that doesn't require it is router.sh so I'm not sure it's
-> worth the effort. If you still want to keep the patch then
-> bridge_vlan_aware.sh needs to be patched as well.
-> 
+Bug fixes and an enhancement for the recent forwarding tests:
+- only check tc version on tc tests
+- handle multipath tests failing with 0 packet count
+- fix ping command for IPv6 on Debian jessie
+- improve summary of multipath tests
 
-ok, I'll drop this one
+v2
+- add CHECK_TC to bridge_vlan_aware.sh (Ido)
+- dropped patch 2; always check for mz given its use
+- fixed commit message for the last patch (Multipath: was dropped)
+
+David Ahern (4):
+  selftests: forwarding: Only check tc version for tc tests
+  selftests: forwarding: Handle 0 for packet difference in multipath
+    tests
+  selftests: forwarding: Use PING6 instead of ping for ipv6 multipath
+    test
+  selftests: forwarding: Add description to the multipath tests
+
+ .../selftests/net/forwarding/bridge_vlan_aware.sh  |  1 +
+ tools/testing/selftests/net/forwarding/lib.sh      | 29 ++++++++------
+ .../selftests/net/forwarding/router_multipath.sh   | 46 +++++++++++++---------
+ .../testing/selftests/net/forwarding/tc_actions.sh |  2 +-
+ .../testing/selftests/net/forwarding/tc_chains.sh  |  2 +-
+ .../testing/selftests/net/forwarding/tc_common.sh  |  2 +
+ .../testing/selftests/net/forwarding/tc_flower.sh  |  2 +-
+ .../selftests/net/forwarding/tc_shblocks.sh        |  2 +-
+ 8 files changed, 53 insertions(+), 33 deletions(-)
+
+-- 
+2.11.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
