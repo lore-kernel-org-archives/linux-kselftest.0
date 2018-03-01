@@ -1,32 +1,64 @@
 From: dsahern at gmail.com (David Ahern)
-Date: Thu,  1 Mar 2018 11:09:46 -0800
-Subject: [PATCH net-next 4/5] selftests: forwarding: Use PING6 instead of ping
- for ipv6 multipath test
+Date: Thu,  1 Mar 2018 11:09:44 -0800
+Subject: [PATCH net-next 2/5] selftests: forwarding: Only check for mz when it
+ is needed
 In-Reply-To: <20180301190947.7299-1-dsahern@gmail.com>
 References: <20180301190947.7299-1-dsahern@gmail.com>
-Message-ID: <20180301190947.7299-5-dsahern@gmail.com>
+Message-ID: <20180301190947.7299-3-dsahern@gmail.com>
 
-On Debian jessie ping can not handle IPv6 addresses so the command
-fails. Use PING6 which is set to ping6.
+Add a CHECK_MZ flag and only check if mz exists when flag is set.
+If it does not exist, exit non-0.
 
 Signed-off-by: David Ahern <dsahern at gmail.com>
 ---
- tools/testing/selftests/net/forwarding/router_multipath.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/forwarding/lib.sh              | 8 +++++---
+ tools/testing/selftests/net/forwarding/router_multipath.sh | 1 +
+ tools/testing/selftests/net/forwarding/tc_common.sh        | 1 +
+ 3 files changed, 7 insertions(+), 3 deletions(-)
 
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index d0af52109360..f21b3ac11d27 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -48,9 +48,11 @@ if [[ ! -x "$(command -v jq)" ]]; then
+ 	exit 1
+ fi
+ 
+-if [[ ! -x "$(command -v $MZ)" ]]; then
+-	echo "SKIP: $MZ not installed"
+-	exit 0
++if [[ "$CHECK_MZ" = "yes" ]]; then
++	if [[ ! -x "$(command -v $MZ)" ]]; then
++		echo "SKIP: $MZ not installed"
++		exit 1
++	fi
+ fi
+ 
+ if [[ ! -v NUM_NETIFS ]]; then
 diff --git a/tools/testing/selftests/net/forwarding/router_multipath.sh b/tools/testing/selftests/net/forwarding/router_multipath.sh
-index 9c66b3fbf994..e227ec052804 100755
+index d31888e3133e..d40016443272 100755
 --- a/tools/testing/selftests/net/forwarding/router_multipath.sh
 +++ b/tools/testing/selftests/net/forwarding/router_multipath.sh
-@@ -250,7 +250,7 @@ multipath6_test()
+@@ -2,6 +2,7 @@
+ # SPDX-License-Identifier: GPL-2.0
  
-        # Generate 16384 echo requests, each with a random flow label.
-        for _ in $(seq 1 16384); do
--	       ip vrf exec vrf-h1 ping 2001:db8:2::2 -F 0 -c 1 -q &> /dev/null
-+	       ip vrf exec vrf-h1 $PING6 2001:db8:2::2 -F 0 -c 1 -q &> /dev/null
-        done
+ NUM_NETIFS=8
++CHECK_MZ="yes"
+ source lib.sh
  
-        t1_rp12=$(link_stats_tx_packets_get $rp12)
+ h1_create()
+diff --git a/tools/testing/selftests/net/forwarding/tc_common.sh b/tools/testing/selftests/net/forwarding/tc_common.sh
+index 9d3b64a2a264..d93cd7599bc1 100644
+--- a/tools/testing/selftests/net/forwarding/tc_common.sh
++++ b/tools/testing/selftests/net/forwarding/tc_common.sh
+@@ -2,6 +2,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ CHECK_TC="yes"
++CHECK_MZ="yes"
+ 
+ tc_check_packets()
+ {
 -- 
 2.11.0
 
