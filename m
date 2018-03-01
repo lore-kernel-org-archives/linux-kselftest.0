@@ -1,26 +1,31 @@
 From: idosch@idosch.org (Ido Schimmel)
-Date: Thu, 1 Mar 2018 21:39:38 +0200
-Subject: [PATCH net-next 4/5] selftests: forwarding: Use PING6 instead of
- ping for ipv6 multipath test
-In-Reply-To: <20180301190947.7299-5-dsahern@gmail.com>
+Date: Thu, 1 Mar 2018 21:43:22 +0200
+Subject: [PATCH net-next 5/5] selftests: forwarding: Add description to
+ the multipath tests
+In-Reply-To: <20180301190947.7299-6-dsahern@gmail.com>
 References: <20180301190947.7299-1-dsahern@gmail.com>
- <20180301190947.7299-5-dsahern@gmail.com>
-Message-ID: <20180301193938.GD4839@splinter>
+ <20180301190947.7299-6-dsahern@gmail.com>
+Message-ID: <20180301194322.GE4839@splinter>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180301193938.tSuG76aLXmnqzrrjvaezwxiLKJTgsL-tzDVNoXt4J6w@z>
+Message-ID: <20180301194322.C0bhSZt7Mpd_SHTstq6AkWAuN6HQt3C0QfKSZtrlZUY@z>
 
-On Thu, Mar 01, 2018@11:09:46AM -0800, David Ahern wrote:
-> On Debian jessie ping can not handle IPv6 addresses so the command
-> fails. Use PING6 which is set to ping6.
+On Thu, Mar 01, 2018@11:09:47AM -0800, David Ahern wrote:
+> Add a better description to the summary for multipath tests. e.g.,
+> 
+> INFO: Running IPv6 multipath tests
+> TEST: Multipath: ECMP                                               [PASS]
+> INFO: Expected ratio 1.00 Measured ratio 1.02
+> TEST: Multipath: Weighted MP 2:1                                    [PASS]
+> INFO: Expected ratio 2.00 Measured ratio 2.02
+> TEST: Multipath: Weighted MP 11:45                                  [PASS]
+> INFO: Expected ratio 4.09 Measured ratio 4.03
 > 
 > Signed-off-by: David Ahern <dsahern at gmail.com>
 
-Yep, I forgot to replace that one.
+I tried to make the output as nice as the tests you sent me, but I
+failed. Happy you pitched in :)
 
 Reviewed-by: Ido Schimmel <idosch at mellanox.com>
-
-BTW, I have a patch to convert the IPv6 multipath test to use mz. I'm
-waiting for your L4 hash patches to be accepted :)
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
