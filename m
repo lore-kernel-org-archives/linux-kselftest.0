@@ -1,36 +1,48 @@
 From: dsahern at gmail.com (David Ahern)
-Date: Thu,  1 Mar 2018 11:09:42 -0800
-Subject: [PATCH net-next 0/5] selftests: forwarding: misc bug fixes and
- enhancements
-Message-ID: <20180301190947.7299-1-dsahern@gmail.com>
+Date: Thu,  1 Mar 2018 11:09:45 -0800
+Subject: [PATCH net-next 3/5] selftests: forwarding: Handle 0 for packet
+ difference in multipath tests
+In-Reply-To: <20180301190947.7299-1-dsahern@gmail.com>
+References: <20180301190947.7299-1-dsahern@gmail.com>
+Message-ID: <20180301190947.7299-4-dsahern@gmail.com>
 
-Bug fixes and an enhancement for the recent forwarding tests:
-- only check tc version on tc tests
-- only check for mz for tests that will use it
-- handle multipath tests failing with 0 packet count
-- fix ping command for IPv6 on Debian jessie
-- improve summary of multipath tests
+If the packet stats have a difference of 0, the test output shows:
+INFO: Expected ratio 2.00 Measured ratio
+Runtime error (func=(main), adr=9): Divide by zero
+(standard_in) 2: syntax error
+(standard_in) 1: syntax error
+./router_multipath.sh: line 187: test: : integer expression expected
+TEST: Multipath                                                     [FAIL]
+	Too large discrepancy between expected and measured ratios
 
-BTW: who is the cruel person that made whitespace 7 spaces in these files?
+Handle the 0 and display a cleaner message:
+INFO: Running IPv6 multipath tests
+TEST: Multipath                                                     [FAIL]
+	Packet difference is 0
 
-David Ahern (5):
-  selftests: forwarding: Only check tc version for tc tests
-  selftests: forwarding: Only check for mz when it is needed
-  selftests: forwarding: Handle 0 for packet difference in multipath
-    tests
-  selftests: forwarding: Use PING6 instead of ping for ipv6 multipath
-    test
-  selftests: forwarding: Add description to the multipath tests
+Signed-off-by: David Ahern <dsahern at gmail.com>
+---
+ tools/testing/selftests/net/forwarding/router_multipath.sh | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- tools/testing/selftests/net/forwarding/lib.sh      | 37 ++++++++++-------
- .../selftests/net/forwarding/router_multipath.sh   | 47 +++++++++++++---------
- .../testing/selftests/net/forwarding/tc_actions.sh |  2 +-
- .../testing/selftests/net/forwarding/tc_chains.sh  |  2 +-
- .../testing/selftests/net/forwarding/tc_common.sh  |  3 ++
- .../testing/selftests/net/forwarding/tc_flower.sh  |  2 +-
- .../selftests/net/forwarding/tc_shblocks.sh        |  2 +-
- 7 files changed, 59 insertions(+), 36 deletions(-)
-
+diff --git a/tools/testing/selftests/net/forwarding/router_multipath.sh b/tools/testing/selftests/net/forwarding/router_multipath.sh
+index d40016443272..9c66b3fbf994 100755
+--- a/tools/testing/selftests/net/forwarding/router_multipath.sh
++++ b/tools/testing/selftests/net/forwarding/router_multipath.sh
+@@ -169,6 +169,13 @@ multipath_eval()
+ 
+        RET=0
+ 
++       if [[ "$packets_rp12" -eq "0" || "$packets_rp13" -eq "0" ]]; then
++              check_err 1 "Packet difference is 0"
++              log_test "Multipath"
++              log_info "Expected ratio $weights_ratio"
++              return
++       fi
++
+        if [[ "$weight_rp12" -gt "$weight_rp13" ]]; then
+                weights_ratio=$(echo "scale=2; $weight_rp12 / $weight_rp13" \
+ 		       | bc -l)
 -- 
 2.11.0
 
