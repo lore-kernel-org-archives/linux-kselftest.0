@@ -1,43 +1,25 @@
-From: shuahkh at osg.samsung.com (Shuah Khan)
-Date: Thu,  1 Mar 2018 13:19:07 -0700
-Subject: [PATCH v2] selftests: futex Makefile add top level TAP header echo to
- RUN_TESTS
-Message-ID: <20180301201907.17573-1-shuahkh@osg.samsung.com>
+From: dsahern at gmail.com (David Ahern)
+Date: Thu, 1 Mar 2018 14:44:11 -0700
+Subject: [PATCH net-next 2/5] selftests: forwarding: Only check for mz
+ when it is needed
+In-Reply-To: <20180301193618.GB4839@splinter>
+References: <20180301190947.7299-1-dsahern@gmail.com>
+ <20180301190947.7299-3-dsahern@gmail.com> <20180301193618.GB4839@splinter>
+Message-ID: <5f0c7d0e-b7a7-ee38-3965-8754f17d9505@gmail.com>
 
-Add top level TAP header echo, testname and separator line to make
-the output consistent with the common run_tests target.
+On 3/1/18 12:36 PM, Ido Schimmel wrote:
+> On Thu, Mar 01, 2018 at 11:09:44AM -0800, David Ahern wrote:
+>> Add a CHECK_MZ flag and only check if mz exists when flag is set.
+>> If it does not exist, exit non-0.
+>>
+>> Signed-off-by: David Ahern <dsahern at gmail.com>
+> 
+> The only test that doesn't require it is router.sh so I'm not sure it's
+> worth the effort. If you still want to keep the patch then
+> bridge_vlan_aware.sh needs to be patched as well.
+> 
 
-This change prevents nested TAP13 headers output from individual tests.
-Nested TAP13 headers could cause problems for some parsers.
-
-Signed-off-by: Shuah Khan <shuahkh at osg.samsung.com>
----
-Changes since v1:
-- Add export KSFT_TAP_LEVEL to fix nested TAP header problem
-  for "make -C" usecase
-- Update commit log with details on nested TAP headers.
-
- tools/testing/selftests/futex/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
-index cea4adcd42b8..3006febb59fe 100644
---- a/tools/testing/selftests/futex/Makefile
-+++ b/tools/testing/selftests/futex/Makefile
-@@ -18,6 +18,10 @@ all:
- 	done
- 
- override define RUN_TESTS
-+	@export KSFT_TAP_LEVEL=`echo 1`;
-+	@echo "TAP version 13";
-+	@echo "selftests: futex";
-+	@echo "========================================";
- 	@cd $(OUTPUT); ./run.sh
- endef
- 
--- 
-2.14.1
-
+ok, I'll drop this one
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
