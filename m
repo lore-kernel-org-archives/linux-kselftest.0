@@ -1,37 +1,44 @@
-From: idosch at idosch.org (Ido Schimmel)
-Date: Thu, 1 Mar 2018 22:12:09 +0200
-Subject: [PATCH net-next 1/5] selftests: forwarding: Only check tc
- version for tc tests
-In-Reply-To: <20180301190947.7299-2-dsahern@gmail.com>
-References: <20180301190947.7299-1-dsahern@gmail.com>
- <20180301190947.7299-2-dsahern@gmail.com>
-Message-ID: <20180301201209.GA8190@splinter>
+From: shuahkh at osg.samsung.com (Shuah Khan)
+Date: Thu,  1 Mar 2018 13:16:26 -0700
+Subject: [PATCH] selftests: memory-hotplug: fix emit_tests regression
+Message-ID: <20180301201626.17347-1-shuahkh@osg.samsung.com>
 
-On Thu, Mar 01, 2018 at 11:09:43AM -0800, David Ahern wrote:
-> Capabilities of tc command are irrelevant for router tests:
->     $ ./router.sh
->     SKIP: iproute2 too old, missing shared block support
-> 
-> Add a CHECK_TC flag and only check tc capabilities if set. Add flag to
-> tc_common.sh and have it sourced before lib.sh
-> 
-> Also, if the command lacks some feature the test should exit non-0.
-> 
-> Signed-off-by: David Ahern <dsahern at gmail.com>
-> ---
->  tools/testing/selftests/net/forwarding/lib.sh      | 29 ++++++++++++++--------
->  .../testing/selftests/net/forwarding/tc_actions.sh |  2 +-
->  .../testing/selftests/net/forwarding/tc_chains.sh  |  2 +-
->  .../testing/selftests/net/forwarding/tc_common.sh  |  2 ++
->  .../testing/selftests/net/forwarding/tc_flower.sh  |  2 +-
->  .../selftests/net/forwarding/tc_shblocks.sh        |  2 +-
+Commit 16c513b13477
+("selftests: memory-hotplug: silence test command echo")
 
-bridge_vlan_aware.sh also uses tc to check flooding and learning. Looks
-good otherwise.
+introduced regression in emit_tests and results in the following
+failure when selftests are installed and run. Fix it.
 
-Reviewed-by: Ido Schimmel <idosch at mellanox.com>
+Running tests in memory-hotplug
+========================================
+./run_kselftest.sh: line 121: @./mem-on-off-test.sh: No such file or
+directory
+selftests: memory-hotplug [FAIL]
 
-Thanks, David!
+Fixes: 16c513b13477 (selftests: memory-hotplug: silence test command echo")
+Reported-by: Naresh Kamboju <naresh.kamboju at linaro.org>
+Signed-off-by: Shuah Khan <shuahkh at osg.samsung.com>
+---
+ tools/testing/selftests/memory-hotplug/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/memory-hotplug/Makefile b/tools/testing/selftests/memory-hotplug/Makefile
+index 183b46883875..686da510f989 100644
+--- a/tools/testing/selftests/memory-hotplug/Makefile
++++ b/tools/testing/selftests/memory-hotplug/Makefile
+@@ -5,7 +5,8 @@ include ../lib.mk
+ 
+ TEST_PROGS := mem-on-off-test.sh
+ override RUN_TESTS := @./mem-on-off-test.sh -r 2 && echo "selftests: memory-hotplug [PASS]" || echo "selftests: memory-hotplug [FAIL]"
+-override EMIT_TESTS := echo "$(RUN_TESTS)"
++
++override EMIT_TESTS := echo "$(subst @,,$(RUN_TESTS))"
+ 
+ run_full_test:
+ 	@/bin/bash ./mem-on-off-test.sh && echo "memory-hotplug selftests: [PASS]" || echo "memory-hotplug selftests: [FAIL]"
+-- 
+2.14.1
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
