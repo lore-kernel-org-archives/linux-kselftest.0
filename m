@@ -1,64 +1,148 @@
 From: dsahern at gmail.com (David Ahern)
-Date: Thu,  1 Mar 2018 11:09:44 -0800
-Subject: [PATCH net-next 2/5] selftests: forwarding: Only check for mz when it
- is needed
+Date: Thu,  1 Mar 2018 11:09:43 -0800
+Subject: [PATCH net-next 1/5] selftests: forwarding: Only check tc version for
+ tc tests
 In-Reply-To: <20180301190947.7299-1-dsahern@gmail.com>
 References: <20180301190947.7299-1-dsahern@gmail.com>
-Message-ID: <20180301190947.7299-3-dsahern@gmail.com>
+Message-ID: <20180301190947.7299-2-dsahern@gmail.com>
 
-Add a CHECK_MZ flag and only check if mz exists when flag is set.
-If it does not exist, exit non-0.
+Capabilities of tc command are irrelevant for router tests:
+    $ ./router.sh
+    SKIP: iproute2 too old, missing shared block support
+
+Add a CHECK_TC flag and only check tc capabilities if set. Add flag to
+tc_common.sh and have it sourced before lib.sh
+
+Also, if the command lacks some feature the test should exit non-0.
 
 Signed-off-by: David Ahern <dsahern at gmail.com>
 ---
- tools/testing/selftests/net/forwarding/lib.sh              | 8 +++++---
- tools/testing/selftests/net/forwarding/router_multipath.sh | 1 +
- tools/testing/selftests/net/forwarding/tc_common.sh        | 1 +
- 3 files changed, 7 insertions(+), 3 deletions(-)
+ tools/testing/selftests/net/forwarding/lib.sh      | 29 ++++++++++++++--------
+ .../testing/selftests/net/forwarding/tc_actions.sh |  2 +-
+ .../testing/selftests/net/forwarding/tc_chains.sh  |  2 +-
+ .../testing/selftests/net/forwarding/tc_common.sh  |  2 ++
+ .../testing/selftests/net/forwarding/tc_flower.sh  |  2 +-
+ .../selftests/net/forwarding/tc_shblocks.sh        |  2 +-
+ 6 files changed, 24 insertions(+), 15 deletions(-)
 
 diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index d0af52109360..f21b3ac11d27 100644
+index 23866a685f77..d0af52109360 100644
 --- a/tools/testing/selftests/net/forwarding/lib.sh
 +++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -48,9 +48,11 @@ if [[ ! -x "$(command -v jq)" ]]; then
- 	exit 1
- fi
+@@ -19,26 +19,33 @@ fi
+ ##############################################################################
+ # Sanity checks
  
--if [[ ! -x "$(command -v $MZ)" ]]; then
--	echo "SKIP: $MZ not installed"
--	exit 0
-+if [[ "$CHECK_MZ" = "yes" ]]; then
-+	if [[ ! -x "$(command -v $MZ)" ]]; then
-+		echo "SKIP: $MZ not installed"
++check_tc_version()
++{
++	tc -j &> /dev/null
++	if [[ $? -ne 0 ]]; then
++		echo "SKIP: iproute2 too old; tc is missing JSON support"
 +		exit 1
 +	fi
++
++	tc filter help 2>&1 | grep block &> /dev/null
++	if [[ $? -ne 0 ]]; then
++		echo "SKIP: iproute2 too old; tc is missing shared block support"
++		exit 1
++	fi
++}
++
+ if [[ "$(id -u)" -ne 0 ]]; then
+ 	echo "SKIP: need root privileges"
+ 	exit 0
  fi
  
- if [[ ! -v NUM_NETIFS ]]; then
-diff --git a/tools/testing/selftests/net/forwarding/router_multipath.sh b/tools/testing/selftests/net/forwarding/router_multipath.sh
-index d31888e3133e..d40016443272 100755
---- a/tools/testing/selftests/net/forwarding/router_multipath.sh
-+++ b/tools/testing/selftests/net/forwarding/router_multipath.sh
-@@ -2,6 +2,7 @@
+-tc -j &> /dev/null
+-if [[ $? -ne 0 ]]; then
+-	echo "SKIP: iproute2 too old, missing JSON support"
+-	exit 0
+-fi
+-
+-tc filter help 2>&1 | grep block &> /dev/null
+-if [[ $? -ne 0 ]]; then
+-	echo "SKIP: iproute2 too old, missing shared block support"
+-	exit 0
++if [[ "$CHECK_TC" = "yes" ]]; then
++	check_tc_version
+ fi
+ 
+ if [[ ! -x "$(command -v jq)" ]]; then
+ 	echo "SKIP: jq not installed"
+-	exit 0
++	exit 1
+ fi
+ 
+ if [[ ! -x "$(command -v $MZ)" ]]; then
+diff --git a/tools/testing/selftests/net/forwarding/tc_actions.sh b/tools/testing/selftests/net/forwarding/tc_actions.sh
+index 84234317a25d..8ab5cf0a960b 100755
+--- a/tools/testing/selftests/net/forwarding/tc_actions.sh
++++ b/tools/testing/selftests/net/forwarding/tc_actions.sh
+@@ -2,8 +2,8 @@
  # SPDX-License-Identifier: GPL-2.0
  
- NUM_NETIFS=8
-+CHECK_MZ="yes"
- source lib.sh
+ NUM_NETIFS=4
+-source lib.sh
+ source tc_common.sh
++source lib.sh
  
- h1_create()
+ tcflags="skip_hw"
+ 
+diff --git a/tools/testing/selftests/net/forwarding/tc_chains.sh b/tools/testing/selftests/net/forwarding/tc_chains.sh
+index 94c114ad8b44..2fd15226974b 100755
+--- a/tools/testing/selftests/net/forwarding/tc_chains.sh
++++ b/tools/testing/selftests/net/forwarding/tc_chains.sh
+@@ -2,8 +2,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ NUM_NETIFS=2
+-source lib.sh
+ source tc_common.sh
++source lib.sh
+ 
+ tcflags="skip_hw"
+ 
 diff --git a/tools/testing/selftests/net/forwarding/tc_common.sh b/tools/testing/selftests/net/forwarding/tc_common.sh
-index 9d3b64a2a264..d93cd7599bc1 100644
+index acd0b520241c..9d3b64a2a264 100644
 --- a/tools/testing/selftests/net/forwarding/tc_common.sh
 +++ b/tools/testing/selftests/net/forwarding/tc_common.sh
-@@ -2,6 +2,7 @@
+@@ -1,6 +1,8 @@
+ #!/bin/bash
  # SPDX-License-Identifier: GPL-2.0
  
- CHECK_TC="yes"
-+CHECK_MZ="yes"
- 
++CHECK_TC="yes"
++
  tc_check_packets()
  {
+ 	local id=$1
+diff --git a/tools/testing/selftests/net/forwarding/tc_flower.sh b/tools/testing/selftests/net/forwarding/tc_flower.sh
+index 026a4ea4b2fb..032b882adfc0 100755
+--- a/tools/testing/selftests/net/forwarding/tc_flower.sh
++++ b/tools/testing/selftests/net/forwarding/tc_flower.sh
+@@ -2,8 +2,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ NUM_NETIFS=2
+-source lib.sh
+ source tc_common.sh
++source lib.sh
+ 
+ tcflags="skip_hw"
+ 
+diff --git a/tools/testing/selftests/net/forwarding/tc_shblocks.sh b/tools/testing/selftests/net/forwarding/tc_shblocks.sh
+index cfc8a2ace388..077b98048ef4 100755
+--- a/tools/testing/selftests/net/forwarding/tc_shblocks.sh
++++ b/tools/testing/selftests/net/forwarding/tc_shblocks.sh
+@@ -2,8 +2,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ NUM_NETIFS=4
+-source lib.sh
+ source tc_common.sh
++source lib.sh
+ 
+ tcflags="skip_hw"
+ 
 -- 
 2.11.0
 
