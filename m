@@ -1,51 +1,35 @@
 From: dsahern@gmail.com (David Ahern)
-Date: Thu,  1 Mar 2018 13:49:31 -0800
-Subject: [PATCH v2 net-next 2/4] selftests: forwarding: Handle 0 for packet
- difference in multipath tests
+Date: Thu,  1 Mar 2018 13:49:32 -0800
+Subject: [PATCH v2 net-next 3/4] selftests: forwarding: Use PING6 instead of
+ ping for ipv6 multipath test
 In-Reply-To: <20180301214933.20199-1-dsahern@gmail.com>
 References: <20180301214933.20199-1-dsahern@gmail.com>
-Message-ID: <20180301214933.20199-3-dsahern@gmail.com>
+Message-ID: <20180301214933.20199-4-dsahern@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180301214931.uJ5Ph2tSWzpqrmjKXf-VWv9_ZjulPT7iUSw3vfdh_Fo@z>
+Message-ID: <20180301214932.Sjk6wjarz84lcslVMhbfMGgJWDGGRi7B6hVHIWi4mMc@z>
 
-If the packet stats have a difference of 0, the test output shows:
-INFO: Expected ratio 2.00 Measured ratio
-Runtime error (func=(main), adr=9): Divide by zero
-(standard_in) 2: syntax error
-(standard_in) 1: syntax error
-./router_multipath.sh: line 187: test: : integer expression expected
-TEST: Multipath                                                     [FAIL]
-	Too large discrepancy between expected and measured ratios
-
-Handle the 0 and display a cleaner message:
-INFO: Running IPv6 multipath tests
-TEST: Multipath                                                     [FAIL]
-	Packet difference is 0
+On Debian jessie ping can not handle IPv6 addresses so the command
+fails. Use PING6 which is set to ping6.
 
 Signed-off-by: David Ahern <dsahern at gmail.com>
 Reviewed-by: Ido Schimmel <idosch at mellanox.com>
 ---
- tools/testing/selftests/net/forwarding/router_multipath.sh | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/testing/selftests/net/forwarding/router_multipath.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/net/forwarding/router_multipath.sh b/tools/testing/selftests/net/forwarding/router_multipath.sh
-index d31888e3133e..c1a437c5b15f 100755
+index c1a437c5b15f..745fb40bfa44 100755
 --- a/tools/testing/selftests/net/forwarding/router_multipath.sh
 +++ b/tools/testing/selftests/net/forwarding/router_multipath.sh
-@@ -168,6 +168,13 @@ multipath_eval()
+@@ -249,7 +249,7 @@ multipath6_test()
  
-        RET=0
+        # Generate 16384 echo requests, each with a random flow label.
+        for _ in $(seq 1 16384); do
+-	       ip vrf exec vrf-h1 ping 2001:db8:2::2 -F 0 -c 1 -q &> /dev/null
++	       ip vrf exec vrf-h1 $PING6 2001:db8:2::2 -F 0 -c 1 -q &> /dev/null
+        done
  
-+       if [[ "$packets_rp12" -eq "0" || "$packets_rp13" -eq "0" ]]; then
-+              check_err 1 "Packet difference is 0"
-+              log_test "Multipath"
-+              log_info "Expected ratio $weights_ratio"
-+              return
-+       fi
-+
-        if [[ "$weight_rp12" -gt "$weight_rp13" ]]; then
-                weights_ratio=$(echo "scale=2; $weight_rp12 / $weight_rp13" \
- 		       | bc -l)
+        t1_rp12=$(link_stats_tx_packets_get $rp12)
 -- 
 2.11.0
 
