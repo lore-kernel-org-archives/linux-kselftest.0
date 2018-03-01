@@ -1,44 +1,39 @@
-From: shuahkh at osg.samsung.com (Shuah Khan)
-Date: Thu, 1 Mar 2018 07:41:21 -0700
-Subject: [PATCH] selftests: memory-hotplug: silence test command echo
-In-Reply-To: <CA+G9fYsE0w00aeE3jxJU3Q01Yz_C95zn+kguMHqg6M9PRmhemg@mail.gmail.com>
-References: <20180213214407.21717-1-shuahkh@osg.samsung.com>
- <CA+G9fYsE0w00aeE3jxJU3Q01Yz_C95zn+kguMHqg6M9PRmhemg@mail.gmail.com>
-Message-ID: <7475d5ca-3fc6-260b-a1d3-60a3e1263769@osg.samsung.com>
+From: dsahern at gmail.com (David Ahern)
+Date: Thu,  1 Mar 2018 11:09:42 -0800
+Subject: [PATCH net-next 0/5] selftests: forwarding: misc bug fixes and
+ enhancements
+Message-ID: <20180301190947.7299-1-dsahern@gmail.com>
 
-On 03/01/2018 02:11 AM, Naresh Kamboju wrote:
-> On 14 February 2018 at 03:14, Shuah Khan <shuahkh at osg.samsung.com> wrote:
->> Silence the following command being printed while running test.
->>
->> ./mem-on-off-test.sh -r 2 && echo "selftests: memory-hotplug [PASS]" ||
->> echo "selftests: memory-hotplug [FAIL]"
->>
->> Signed-off-by: Shuah Khan <shuahkh at osg.samsung.com>
->> ---
->>  tools/testing/selftests/memory-hotplug/Makefile | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/memory-hotplug/Makefile b/tools/testing/selftests/memory-hotplug/Makefile
->> index 86636d207adf..183b46883875 100644
->> --- a/tools/testing/selftests/memory-hotplug/Makefile
->> +++ b/tools/testing/selftests/memory-hotplug/Makefile
->> @@ -4,7 +4,7 @@ all:
->>  include ../lib.mk
->>
->>  TEST_PROGS := mem-on-off-test.sh
->> -override RUN_TESTS := ./mem-on-off-test.sh -r 2 && echo "selftests: memory-hotplug [PASS]" || echo "selftests: memory-hotplug [FAIL]"
->> +override RUN_TESTS := @./mem-on-off-test.sh -r 2 && echo "selftests: memory-hotplug [PASS]" || echo "selftests: memory-hotplug [FAIL]"
->>  override EMIT_TESTS := echo "$(RUN_TESTS)"
->>
->>  run_full_test:
-> 
-> The test execution broken due to this patch ?
+Bug fixes and an enhancement for the recent forwarding tests:
+- only check tc version on tc tests
+- only check for mz for tests that will use it
+- handle multipath tests failing with 0 packet count
+- fix ping command for IPv6 on Debian jessie
+- improve summary of multipath tests
 
-Thanks for reporting this. I will look at this. The change probably
-broke the EMIT_TESTS case.
+BTW: who is the cruel person that made whitespace 7 spaces in these files?
 
-thanks,
--- Shuah
+David Ahern (5):
+  selftests: forwarding: Only check tc version for tc tests
+  selftests: forwarding: Only check for mz when it is needed
+  selftests: forwarding: Handle 0 for packet difference in multipath
+    tests
+  selftests: forwarding: Use PING6 instead of ping for ipv6 multipath
+    test
+  selftests: forwarding: Add description to the multipath tests
+
+ tools/testing/selftests/net/forwarding/lib.sh      | 37 ++++++++++-------
+ .../selftests/net/forwarding/router_multipath.sh   | 47 +++++++++++++---------
+ .../testing/selftests/net/forwarding/tc_actions.sh |  2 +-
+ .../testing/selftests/net/forwarding/tc_chains.sh  |  2 +-
+ .../testing/selftests/net/forwarding/tc_common.sh  |  3 ++
+ .../testing/selftests/net/forwarding/tc_flower.sh  |  2 +-
+ .../selftests/net/forwarding/tc_shblocks.sh        |  2 +-
+ 7 files changed, 59 insertions(+), 36 deletions(-)
+
+-- 
+2.11.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
