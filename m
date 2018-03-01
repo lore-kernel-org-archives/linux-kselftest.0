@@ -1,23 +1,21 @@
 From: idosch at idosch.org (Ido Schimmel)
-Date: Thu, 1 Mar 2018 21:27:27 +0200
-Subject: [PATCH net-next 0/5] selftests: forwarding: misc bug fixes and
- enhancements
-In-Reply-To: <20180301190947.7299-1-dsahern@gmail.com>
+Date: Thu, 1 Mar 2018 21:36:18 +0200
+Subject: [PATCH net-next 2/5] selftests: forwarding: Only check for mz
+ when it is needed
+In-Reply-To: <20180301190947.7299-3-dsahern@gmail.com>
 References: <20180301190947.7299-1-dsahern@gmail.com>
-Message-ID: <20180301192727.GA4839@splinter>
+ <20180301190947.7299-3-dsahern@gmail.com>
+Message-ID: <20180301193618.GB4839@splinter>
 
-On Thu, Mar 01, 2018 at 11:09:42AM -0800, David Ahern wrote:
-> Bug fixes and an enhancement for the recent forwarding tests:
-> - only check tc version on tc tests
-> - only check for mz for tests that will use it
-> - handle multipath tests failing with 0 packet count
-> - fix ping command for IPv6 on Debian jessie
-> - improve summary of multipath tests
+On Thu, Mar 01, 2018 at 11:09:44AM -0800, David Ahern wrote:
+> Add a CHECK_MZ flag and only check if mz exists when flag is set.
+> If it does not exist, exit non-0.
 > 
-> BTW: who is the cruel person that made whitespace 7 spaces in these files?
+> Signed-off-by: David Ahern <dsahern at gmail.com>
 
-I see this in some functions in router_multipath.sh . Not sure how that
-happened... Will be more careful in the future.
+The only test that doesn't require it is router.sh so I'm not sure it's
+worth the effort. If you still want to keep the patch then
+bridge_vlan_aware.sh needs to be patched as well.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
