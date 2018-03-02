@@ -1,78 +1,133 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Fri, 2 Mar 2018 15:20:06 +0900
-Subject: [PATCH v4 18/19] selftests: ftrace: Add a testcase for $argN
- with kprobe_event
-In-Reply-To: <20180302053117.GB31540@sejong>
+Date: Fri, 2 Mar 2018 15:32:29 +0900
+Subject: [PATCH v4 01/19] [BUGFIX] tracing: probeevent: Fix to support
+ minus offset from symbol
+In-Reply-To: <20180302044951.GA31540@sejong>
 References: <151978796240.2577.6531711990653677529.stgit@devbox>
- <151978849122.2577.13948527724464684401.stgit@devbox>
- <20180302053117.GB31540@sejong>
-Message-ID: <20180302152006.22a9644429ffaa09ee02c088@kernel.org>
+ <151978799370.2577.9456049827647614166.stgit@devbox>
+ <20180302044951.GA31540@sejong>
+Message-ID: <20180302153229.dbc4dc9be90a0132b7010010@kernel.org>
 
-On Fri, 2 Mar 2018 14:31:17 +0900
+On Fri, 2 Mar 2018 13:49:51 +0900
 Namhyung Kim <namhyung at kernel.org> wrote:
 
-> On Wed, Feb 28, 2018 at 12:28:11PM +0900, Masami Hiramatsu wrote:
-> > Add a testcase for array type with kprobe event.
-> > This tests whether the traced data is correct or not.
-> > If the kernel doesn't support array type, it skips
-> > the test as UNSUPPORTED.
+> Hi Masami,
 > 
-> This description is wrong - it's for positional (argN) arguments.
+> On Wed, Feb 28, 2018 at 12:19:53PM +0900, Masami Hiramatsu wrote:
+> > In Documentation/trace/kprobetrace.txt, it says
+> > 
+> >  @SYM[+|-offs] : Fetch memory at SYM +|- offs (SYM should be a data symbol)
+> > 
+> > However, the parser doesn't parse minus offset correctly, since
+> > commit 2fba0c8867af ("tracing/kprobes: Fix probe offset to be
+> > unsigned") drops minus ("-") offset support for kprobe probe
+> > address usage.
+> > 
+> > This fixes the traceprobe_split_symbol_offset() to parse minus
+> > offset again with checking the offset range, and add a minus
+> > offset check in kprobe probe address usage.
+> 
+> It now parses a minus offset but doesn't allow it, right?
 
-Oops, why I missed this to update it...
+No, split_symbol_offset() is used for 2 cases
+ - kprobe-event probe point
+ - kporbe-event symbol-based argument
 
-----
-Add a testcase for $argN with kprobe event.
-This tests whether the traced data is correct or not.
-If the kernel and arch doesn't support $argN, it skips
-the test as UNSUPPORTED.
-----
+Former one doesn't accept a minus offset, but latter accepts it.
 
-Thanks Namhyung!
+(Frankly to say, I guess no one care about supporting minus offset :P)
 
+Thanks,
+
+> Then I still think it's better to fix the documentation.
+> 
+> 
+> > 
+> > Fixes: 2fba0c8867af ("tracing/kprobes: Fix probe offset to be unsigned")
+> > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+> > ---
+> >  Changes in v3:
+> >   - Use kstrtol instead of kstrtoul. (Thanks Namhyung!)
+> >  Changes in v4:
+> >   - Fix to decode sign. (Thanks Namhyung!)
+> >   - Fix to check UINT_MAX for kprobe offset.
+> > ---
+> >  kernel/trace/trace_kprobe.c |    4 ++--
+> >  kernel/trace/trace_probe.c  |    8 +++-----
+> >  kernel/trace/trace_probe.h  |    2 +-
+> >  3 files changed, 6 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> > index 5ce9b8cf7be3..1cd3fb4d70f8 100644
+> > --- a/kernel/trace/trace_kprobe.c
+> > +++ b/kernel/trace/trace_kprobe.c
+> > @@ -667,7 +667,7 @@ static int create_trace_kprobe(int argc, char **argv)
+> >  	char *symbol = NULL, *event = NULL, *group = NULL;
+> >  	int maxactive = 0;
+> >  	char *arg;
+> > -	unsigned long offset = 0;
+> > +	long offset = 0;
+> >  	void *addr = NULL;
+> >  	char buf[MAX_EVENT_NAME_LEN];
+> >  
+> > @@ -755,7 +755,7 @@ static int create_trace_kprobe(int argc, char **argv)
+> >  		symbol = argv[1];
+> >  		/* TODO: support .init module functions */
+> >  		ret = traceprobe_split_symbol_offset(symbol, &offset);
+> > -		if (ret) {
+> > +		if (ret || offset < 0 || offset > UINT_MAX) {
+> >  			pr_info("Failed to parse either an address or a symbol.\n");
+> >  			return ret;
+> 
+> Wouldn't it be confusing if it returns 0 for an invalid input?
 > 
 > Thanks,
 > Namhyung
 > 
 > 
-> > 
-> > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
-> > ---
-> >  .../ftrace/test.d/kprobe/kprobe_args_argN.tc       |   25 ++++++++++++++++++++
-> >  1 file changed, 25 insertions(+)
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
-> > 
-> > diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
-> > new file mode 100644
-> > index 000000000000..d5c5c8c3a51e
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
-> > @@ -0,0 +1,25 @@
-> > +#!/bin/sh
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +# description: Kprobe event argN argument
-> > +
-> > +[ -f kprobe_events ] || exit_unsupported # this is configurable
-> > +
-> > +grep -q "arg<N>" README || exit_unsupported # version issue
-> > +
-> > +echo 0 > events/enable
-> > +echo > kprobe_events
-> > +
-> > +: "Test bad pattern : arg0 is not allowed"
-> > +! echo 'p:testprobe create_trace_kprobe $arg0' > kprobe_events
-> > +
-> > +: "Test get argument"
-> > +echo 'p:testprobe create_trace_kprobe $arg1' > kprobe_events
-> > +echo 1 > events/kprobes/testprobe/enable
-> > +! echo test >> kprobe_events
-> > +tail -n 1 trace | grep -qe "testprobe.* arg1=0x1"
-> > +
-> > +! echo test test test >> kprobe_events
-> > +tail -n 1 trace | grep -qe "testprobe.* arg1=0x3"
-> > +
-> > +echo 0 > events/enable
-> > +echo > kprobe_events
+> >  		}
+> > diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> > index d59357308677..daf54bda4dc8 100644
+> > --- a/kernel/trace/trace_probe.c
+> > +++ b/kernel/trace/trace_probe.c
+> > @@ -320,7 +320,7 @@ static fetch_func_t get_fetch_size_function(const struct fetch_type *type,
+> >  }
+> >  
+> >  /* Split symbol and offset. */
+> > -int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset)
+> > +int traceprobe_split_symbol_offset(char *symbol, long *offset)
+> >  {
+> >  	char *tmp;
+> >  	int ret;
+> > @@ -328,13 +328,11 @@ int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset)
+> >  	if (!offset)
+> >  		return -EINVAL;
+> >  
+> > -	tmp = strchr(symbol, '+');
+> > +	tmp = strpbrk(symbol, "+-");
+> >  	if (tmp) {
+> > -		/* skip sign because kstrtoul doesn't accept '+' */
+> > -		ret = kstrtoul(tmp + 1, 0, offset);
+> > +		ret = kstrtol(tmp, 0, offset);
+> >  		if (ret)
+> >  			return ret;
+> > -
+> >  		*tmp = '\0';
+> >  	} else
+> >  		*offset = 0;
+> > diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> > index 0745f895f780..75daff22ccea 100644
+> > --- a/kernel/trace/trace_probe.h
+> > +++ b/kernel/trace/trace_probe.h
+> > @@ -365,7 +365,7 @@ extern int traceprobe_conflict_field_name(const char *name,
+> >  extern void traceprobe_update_arg(struct probe_arg *arg);
+> >  extern void traceprobe_free_probe_arg(struct probe_arg *arg);
+> >  
+> > -extern int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset);
+> > +extern int traceprobe_split_symbol_offset(char *symbol, long *offset);
+> >  
+> >  /* Sum up total data length for dynamic arraies (strings) */
+> >  static nokprobe_inline int
 > > 
 
 
