@@ -1,69 +1,121 @@
-From: zhijianx.li@intel.com (Li Zhijian)
-Date: Fri,  2 Mar 2018 10:43:56 +0800
-Subject: [PATCH] selftests/vm/run_vmtests: adjust hugetlb size accroding to
- nr_cpus
-Message-ID: <20180302024356.83359-1-zhijianx.li@intel.com>
+From: namhyung@kernel.org (Namhyung Kim)
+Date: Fri, 2 Mar 2018 13:49:51 +0900
+Subject: [PATCH v4 01/19] [BUGFIX] tracing: probeevent: Fix to support
+ minus offset from symbol
+In-Reply-To: <151978799370.2577.9456049827647614166.stgit@devbox>
+References: <151978796240.2577.6531711990653677529.stgit@devbox>
+ <151978799370.2577.9456049827647614166.stgit@devbox>
+Message-ID: <20180302044951.GA31540@sejong>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180302024356.c_st4XgUe0CcwU7crCam7rhn4RChCaM3NGTF_2S-Guk@z>
+Message-ID: <20180302044951.8tSQijwxbXj8GgJHOPgox0oj58kLdVMJNKCdcEDJKtY@z>
 
-this patch is to fix running userfaultfd_hugetlb failed on the host which has
-more than 64 cpus
----------------------------
-running userfaultfd_hugetlb
----------------------------
-invalid MiB
-Usage: <MiB> <bounces>
-[FAIL]
+Hi Masami,
 
->From userfaultfd.c we can know, hugetlb_size need to meet hugetlb_size >= nr_cpus * hugepage_size
-hugepage_size is often 2M, so when host cpus > 64, it requires more than 128M.
+On Wed, Feb 28, 2018@12:19:53PM +0900, Masami Hiramatsu wrote:
+> In Documentation/trace/kprobetrace.txt, it says
+> 
+>  @SYM[+|-offs] : Fetch memory at SYM +|- offs (SYM should be a data symbol)
+> 
+> However, the parser doesn't parse minus offset correctly, since
+> commit 2fba0c8867af ("tracing/kprobes: Fix probe offset to be
+> unsigned") drops minus ("-") offset support for kprobe probe
+> address usage.
+> 
+> This fixes the traceprobe_split_symbol_offset() to parse minus
+> offset again with checking the offset range, and add a minus
+> offset check in kprobe probe address usage.
 
-Signed-off-by: Li Zhijian <zhijianx.li at intel.com>
----
- tools/testing/selftests/vm/run_vmtests | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+It now parses a minus offset but doesn't allow it, right?
+Then I still think it's better to fix the documentation.
 
-diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
-index d2561895a021a..c440fb972afe9 100755
---- a/tools/testing/selftests/vm/run_vmtests
-+++ b/tools/testing/selftests/vm/run_vmtests
-@@ -2,8 +2,6 @@
- # SPDX-License-Identifier: GPL-2.0
- #please run as root
- 
--#we need 256M, below is the size in kB
--needmem=262144
- mnt=./huge
- exitcode=0
- 
-@@ -17,6 +15,13 @@ while read name size unit; do
- 	fi
- done < /proc/meminfo
- 
-+nr_cpus=$(nproc)
-+pgsize_MB=$((pgsize/1024))
-+# rule: nr_cpus * pgsize_MB <= hugetlb_size(round to 128M for testing)
-+hugetlb_size=$((((nr_cpus*pgsize_MB+127)/128)*128))
-+# needmem depends on the nr_cpus, below is the size in kB
-+needmem=$((hugetlb_size*2*1024))
-+
- #set proper nr_hugepages
- if [ -n "$freepgs" ] && [ -n "$pgsize" ]; then
- 	nr_hugepgs=`cat /proc/sys/vm/nr_hugepages`
-@@ -107,8 +112,8 @@ fi
- echo "---------------------------"
- echo "running userfaultfd_hugetlb"
- echo "---------------------------"
--# 256MB total huge pages == 128MB src and 128MB dst
--./userfaultfd hugetlb 128 32 $mnt/ufd_test_file
-+# 256MB total huge pages == 128MB src and 128MB dst when nr_cpus <= 64
-+./userfaultfd hugetlb $hugetlb_size 32 $mnt/ufd_test_file
- if [ $? -ne 0 ]; then
- 	echo "[FAIL]"
- 	exitcode=1
--- 
-2.11.0
 
+> 
+> Fixes: 2fba0c8867af ("tracing/kprobes: Fix probe offset to be unsigned")
+> Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+> ---
+>  Changes in v3:
+>   - Use kstrtol instead of kstrtoul. (Thanks Namhyung!)
+>  Changes in v4:
+>   - Fix to decode sign. (Thanks Namhyung!)
+>   - Fix to check UINT_MAX for kprobe offset.
+> ---
+>  kernel/trace/trace_kprobe.c |    4 ++--
+>  kernel/trace/trace_probe.c  |    8 +++-----
+>  kernel/trace/trace_probe.h  |    2 +-
+>  3 files changed, 6 insertions(+), 8 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index 5ce9b8cf7be3..1cd3fb4d70f8 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -667,7 +667,7 @@ static int create_trace_kprobe(int argc, char **argv)
+>  	char *symbol = NULL, *event = NULL, *group = NULL;
+>  	int maxactive = 0;
+>  	char *arg;
+> -	unsigned long offset = 0;
+> +	long offset = 0;
+>  	void *addr = NULL;
+>  	char buf[MAX_EVENT_NAME_LEN];
+>  
+> @@ -755,7 +755,7 @@ static int create_trace_kprobe(int argc, char **argv)
+>  		symbol = argv[1];
+>  		/* TODO: support .init module functions */
+>  		ret = traceprobe_split_symbol_offset(symbol, &offset);
+> -		if (ret) {
+> +		if (ret || offset < 0 || offset > UINT_MAX) {
+>  			pr_info("Failed to parse either an address or a symbol.\n");
+>  			return ret;
+
+Wouldn't it be confusing if it returns 0 for an invalid input?
+
+Thanks,
+Namhyung
+
+
+>  		}
+> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> index d59357308677..daf54bda4dc8 100644
+> --- a/kernel/trace/trace_probe.c
+> +++ b/kernel/trace/trace_probe.c
+> @@ -320,7 +320,7 @@ static fetch_func_t get_fetch_size_function(const struct fetch_type *type,
+>  }
+>  
+>  /* Split symbol and offset. */
+> -int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset)
+> +int traceprobe_split_symbol_offset(char *symbol, long *offset)
+>  {
+>  	char *tmp;
+>  	int ret;
+> @@ -328,13 +328,11 @@ int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset)
+>  	if (!offset)
+>  		return -EINVAL;
+>  
+> -	tmp = strchr(symbol, '+');
+> +	tmp = strpbrk(symbol, "+-");
+>  	if (tmp) {
+> -		/* skip sign because kstrtoul doesn't accept '+' */
+> -		ret = kstrtoul(tmp + 1, 0, offset);
+> +		ret = kstrtol(tmp, 0, offset);
+>  		if (ret)
+>  			return ret;
+> -
+>  		*tmp = '\0';
+>  	} else
+>  		*offset = 0;
+> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> index 0745f895f780..75daff22ccea 100644
+> --- a/kernel/trace/trace_probe.h
+> +++ b/kernel/trace/trace_probe.h
+> @@ -365,7 +365,7 @@ extern int traceprobe_conflict_field_name(const char *name,
+>  extern void traceprobe_update_arg(struct probe_arg *arg);
+>  extern void traceprobe_free_probe_arg(struct probe_arg *arg);
+>  
+> -extern int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset);
+> +extern int traceprobe_split_symbol_offset(char *symbol, long *offset);
+>  
+>  /* Sum up total data length for dynamic arraies (strings) */
+>  static nokprobe_inline int
+> 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
