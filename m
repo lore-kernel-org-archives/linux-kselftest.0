@@ -1,38 +1,28 @@
-From: dsahern@gmail.com (David Ahern)
-Date: Thu,  1 Mar 2018 13:49:32 -0800
-Subject: [PATCH v2 net-next 3/4] selftests: forwarding: Use PING6 instead of
- ping for ipv6 multipath test
+From: davem@davemloft.net (David Miller)
+Date: Thu, 01 Mar 2018 21:19:18 -0500 (EST)
+Subject: [PATCH v2 net-next 0/4] selftests: forwarding: misc bug fixes
+ and enhancements
 In-Reply-To: <20180301214933.20199-1-dsahern@gmail.com>
 References: <20180301214933.20199-1-dsahern@gmail.com>
-Message-ID: <20180301214933.20199-4-dsahern@gmail.com>
+Message-ID: <20180301.211918.989356665193400652.davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180301214932.Sjk6wjarz84lcslVMhbfMGgJWDGGRi7B6hVHIWi4mMc@z>
+Message-ID: <20180302021918.wSoLbYjnbSIhIzcUT4ZzEsLspbPq-r8-mmCZowLSGCE@z>
 
-On Debian jessie ping can not handle IPv6 addresses so the command
-fails. Use PING6 which is set to ping6.
+From: David Ahern <dsahern@gmail.com>
+Date: Thu,  1 Mar 2018 13:49:29 -0800
 
-Signed-off-by: David Ahern <dsahern at gmail.com>
-Reviewed-by: Ido Schimmel <idosch at mellanox.com>
----
- tools/testing/selftests/net/forwarding/router_multipath.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Bug fixes and an enhancement for the recent forwarding tests:
+> - only check tc version on tc tests
+> - handle multipath tests failing with 0 packet count
+> - fix ping command for IPv6 on Debian jessie
+> - improve summary of multipath tests
+> 
+> v2
+> - add CHECK_TC to bridge_vlan_aware.sh (Ido)
+> - dropped patch 2; always check for mz given its use
+> - fixed commit message for the last patch (Multipath: was dropped)
 
-diff --git a/tools/testing/selftests/net/forwarding/router_multipath.sh b/tools/testing/selftests/net/forwarding/router_multipath.sh
-index c1a437c5b15f..745fb40bfa44 100755
---- a/tools/testing/selftests/net/forwarding/router_multipath.sh
-+++ b/tools/testing/selftests/net/forwarding/router_multipath.sh
-@@ -249,7 +249,7 @@ multipath6_test()
- 
-        # Generate 16384 echo requests, each with a random flow label.
-        for _ in $(seq 1 16384); do
--	       ip vrf exec vrf-h1 ping 2001:db8:2::2 -F 0 -c 1 -q &> /dev/null
-+	       ip vrf exec vrf-h1 $PING6 2001:db8:2::2 -F 0 -c 1 -q &> /dev/null
-        done
- 
-        t1_rp12=$(link_stats_tx_packets_get $rp12)
--- 
-2.11.0
-
+Series applied, thanks David.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
