@@ -1,138 +1,54 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Fri, 2 Mar 2018 15:32:29 +0900
-Subject: [PATCH v4 01/19] [BUGFIX] tracing: probeevent: Fix to support
- minus offset from symbol
-In-Reply-To: <20180302044951.GA31540@sejong>
-References: <151978796240.2577.6531711990653677529.stgit@devbox>
- <151978799370.2577.9456049827647614166.stgit@devbox>
- <20180302044951.GA31540@sejong>
-Message-ID: <20180302153229.dbc4dc9be90a0132b7010010@kernel.org>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Fri, 2 Mar 2018 09:31:13 +0100
+Subject: [PATCH] selftests: memory-hotplug: fix emit_tests regression
+In-Reply-To: <20180301201626.17347-1-shuahkh@osg.samsung.com>
+References: <20180301201626.17347-1-shuahkh@osg.samsung.com>
+Message-ID: <CADYN=9LGPa+rfnuGJ-nrpxPvw+tuAYNjxCCqefxAuRe-B_tq4w@mail.gmail.com>
 
-On Fri, 2 Mar 2018 13:49:51 +0900
-Namhyung Kim <namhyung at kernel.org> wrote:
+On 1 March 2018 at 21:16, Shuah Khan <shuahkh at osg.samsung.com> wrote:
+> Commit 16c513b13477
+> ("selftests: memory-hotplug: silence test command echo")
+>
+> introduced regression in emit_tests and results in the following
+> failure when selftests are installed and run. Fix it.
+>
+> Running tests in memory-hotplug
+> ========================================
+> ./run_kselftest.sh: line 121: @./mem-on-off-test.sh: No such file or
+> directory
+> selftests: memory-hotplug [FAIL]
+>
+> Fixes: 16c513b13477 (selftests: memory-hotplug: silence test command echo")
+> Reported-by: Naresh Kamboju <naresh.kamboju at linaro.org>
+> Signed-off-by: Shuah Khan <shuahkh at osg.samsung.com>
 
-> Hi Masami,
-> 
-> On Wed, Feb 28, 2018 at 12:19:53PM +0900, Masami Hiramatsu wrote:
-> > In Documentation/trace/kprobetrace.txt, it says
-> > 
-> >  @SYM[+|-offs] : Fetch memory at SYM +|- offs (SYM should be a data symbol)
-> > 
-> > However, the parser doesn't parse minus offset correctly, since
-> > commit 2fba0c8867af ("tracing/kprobes: Fix probe offset to be
-> > unsigned") drops minus ("-") offset support for kprobe probe
-> > address usage.
-> > 
-> > This fixes the traceprobe_split_symbol_offset() to parse minus
-> > offset again with checking the offset range, and add a minus
-> > offset check in kprobe probe address usage.
-> 
-> It now parses a minus offset but doesn't allow it, right?
+Tested-by: Anders Roxell <anders.roxell at linaro.org>
 
-No, split_symbol_offset() is used for 2 cases
- - kprobe-event probe point
- - kporbe-event symbol-based argument
-
-Former one doesn't accept a minus offset, but latter accepts it.
-
-(Frankly to say, I guess no one care about supporting minus offset :P)
-
-Thanks,
-
-> Then I still think it's better to fix the documentation.
-> 
-> 
-> > 
-> > Fixes: 2fba0c8867af ("tracing/kprobes: Fix probe offset to be unsigned")
-> > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
-> > ---
-> >  Changes in v3:
-> >   - Use kstrtol instead of kstrtoul. (Thanks Namhyung!)
-> >  Changes in v4:
-> >   - Fix to decode sign. (Thanks Namhyung!)
-> >   - Fix to check UINT_MAX for kprobe offset.
-> > ---
-> >  kernel/trace/trace_kprobe.c |    4 ++--
-> >  kernel/trace/trace_probe.c  |    8 +++-----
-> >  kernel/trace/trace_probe.h  |    2 +-
-> >  3 files changed, 6 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> > index 5ce9b8cf7be3..1cd3fb4d70f8 100644
-> > --- a/kernel/trace/trace_kprobe.c
-> > +++ b/kernel/trace/trace_kprobe.c
-> > @@ -667,7 +667,7 @@ static int create_trace_kprobe(int argc, char **argv)
-> >  	char *symbol = NULL, *event = NULL, *group = NULL;
-> >  	int maxactive = 0;
-> >  	char *arg;
-> > -	unsigned long offset = 0;
-> > +	long offset = 0;
-> >  	void *addr = NULL;
-> >  	char buf[MAX_EVENT_NAME_LEN];
-> >  
-> > @@ -755,7 +755,7 @@ static int create_trace_kprobe(int argc, char **argv)
-> >  		symbol = argv[1];
-> >  		/* TODO: support .init module functions */
-> >  		ret = traceprobe_split_symbol_offset(symbol, &offset);
-> > -		if (ret) {
-> > +		if (ret || offset < 0 || offset > UINT_MAX) {
-> >  			pr_info("Failed to parse either an address or a symbol.\n");
-> >  			return ret;
-> 
-> Wouldn't it be confusing if it returns 0 for an invalid input?
-> 
-> Thanks,
-> Namhyung
-> 
-> 
-> >  		}
-> > diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-> > index d59357308677..daf54bda4dc8 100644
-> > --- a/kernel/trace/trace_probe.c
-> > +++ b/kernel/trace/trace_probe.c
-> > @@ -320,7 +320,7 @@ static fetch_func_t get_fetch_size_function(const struct fetch_type *type,
-> >  }
-> >  
-> >  /* Split symbol and offset. */
-> > -int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset)
-> > +int traceprobe_split_symbol_offset(char *symbol, long *offset)
-> >  {
-> >  	char *tmp;
-> >  	int ret;
-> > @@ -328,13 +328,11 @@ int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset)
-> >  	if (!offset)
-> >  		return -EINVAL;
-> >  
-> > -	tmp = strchr(symbol, '+');
-> > +	tmp = strpbrk(symbol, "+-");
-> >  	if (tmp) {
-> > -		/* skip sign because kstrtoul doesn't accept '+' */
-> > -		ret = kstrtoul(tmp + 1, 0, offset);
-> > +		ret = kstrtol(tmp, 0, offset);
-> >  		if (ret)
-> >  			return ret;
-> > -
-> >  		*tmp = '\0';
-> >  	} else
-> >  		*offset = 0;
-> > diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> > index 0745f895f780..75daff22ccea 100644
-> > --- a/kernel/trace/trace_probe.h
-> > +++ b/kernel/trace/trace_probe.h
-> > @@ -365,7 +365,7 @@ extern int traceprobe_conflict_field_name(const char *name,
-> >  extern void traceprobe_update_arg(struct probe_arg *arg);
-> >  extern void traceprobe_free_probe_arg(struct probe_arg *arg);
-> >  
-> > -extern int traceprobe_split_symbol_offset(char *symbol, unsigned long *offset);
-> > +extern int traceprobe_split_symbol_offset(char *symbol, long *offset);
-> >  
-> >  /* Sum up total data length for dynamic arraies (strings) */
-> >  static nokprobe_inline int
-> > 
-
-
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+> ---
+>  tools/testing/selftests/memory-hotplug/Makefile | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/memory-hotplug/Makefile b/tools/testing/selftests/memory-hotplug/Makefile
+> index 183b46883875..686da510f989 100644
+> --- a/tools/testing/selftests/memory-hotplug/Makefile
+> +++ b/tools/testing/selftests/memory-hotplug/Makefile
+> @@ -5,7 +5,8 @@ include ../lib.mk
+>
+>  TEST_PROGS := mem-on-off-test.sh
+>  override RUN_TESTS := @./mem-on-off-test.sh -r 2 && echo "selftests: memory-hotplug [PASS]" || echo "selftests: memory-hotplug [FAIL]"
+> -override EMIT_TESTS := echo "$(RUN_TESTS)"
+> +
+> +override EMIT_TESTS := echo "$(subst @,,$(RUN_TESTS))"
+>
+>  run_full_test:
+>         @/bin/bash ./mem-on-off-test.sh && echo "memory-hotplug selftests: [PASS]" || echo "memory-hotplug selftests: [FAIL]"
+> --
+> 2.14.1
+>
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
+> the body of a message to majordomo at vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
