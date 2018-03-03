@@ -1,84 +1,40 @@
-From: mike.kravetz at oracle.com (Mike Kravetz)
-Date: Fri, 2 Mar 2018 15:26:40 -0800
-Subject: [PATCH] selftests/vm/run_vmtests: adjust hugetlb size accroding
- to nr_cpus
-In-Reply-To: <20180302024356.83359-1-zhijianx.li@intel.com>
-References: <20180302024356.83359-1-zhijianx.li@intel.com>
-Message-ID: <27de0b4e-d75b-a71d-c45c-1d84bc7e6e9e@oracle.com>
+From: zhijianx.li at intel.com (Li Zhijian)
+Date: Sat,  3 Mar 2018 20:50:27 +0800
+Subject: [PATCH v2] selftests/vm/run_vmtests: adjust hugetlb size accroding to
+ nr_cpus
+Message-ID: <20180303125027.81638-1-zhijianx.li@intel.com>
 
-On 03/01/2018 06:43 PM, Li Zhijian wrote:
-> this patch is to fix running userfaultfd_hugetlb failed on the host which has
-> more than 64 cpus
-> ---------------------------
-> running userfaultfd_hugetlb
-> ---------------------------
-> invalid MiB
-> Usage: <MiB> <bounces>
-> [FAIL]
-> 
-> From userfaultfd.c we can know, hugetlb_size need to meet hugetlb_size >= nr_cpus * hugepage_size
-> hugepage_size is often 2M, so when host cpus > 64, it requires more than 128M.
-> 
-> Signed-off-by: Li Zhijian <zhijianx.li at intel.com>
+Fix userfaultfd_hugetlb on hosts which have more than 64 cpus.
 
-Thanks for fixing this.
+---------------------------
+running userfaultfd_hugetlb
+---------------------------
+invalid MiB
+Usage: <MiB> <bounces>
+[FAIL]
 
-> ---
->  tools/testing/selftests/vm/run_vmtests | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
-> index d2561895a021a..c440fb972afe9 100755
-> --- a/tools/testing/selftests/vm/run_vmtests
-> +++ b/tools/testing/selftests/vm/run_vmtests
-> @@ -2,8 +2,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  #please run as root
->  
-> -#we need 256M, below is the size in kB
-> -needmem=262144
->  mnt=./huge
->  exitcode=0
->  
-> @@ -17,6 +15,13 @@ while read name size unit; do
->  	fi
->  done < /proc/meminfo
->  
-> +nr_cpus=$(nproc)
-> +pgsize_MB=$((pgsize/1024))
-> +# rule: nr_cpus * pgsize_MB <= hugetlb_size(round to 128M for testing)
-> +hugetlb_size=$((((nr_cpus*pgsize_MB+127)/128)*128))
-> +# needmem depends on the nr_cpus, below is the size in kB
-> +needmem=$((hugetlb_size*2*1024))
-> +
->  #set proper nr_hugepages
->  if [ -n "$freepgs" ] && [ -n "$pgsize" ]; then
->  	nr_hugepgs=`cat /proc/sys/vm/nr_hugepages`
-> @@ -107,8 +112,8 @@ fi
->  echo "---------------------------"
->  echo "running userfaultfd_hugetlb"
->  echo "---------------------------"
-> -# 256MB total huge pages == 128MB src and 128MB dst
-> -./userfaultfd hugetlb 128 32 $mnt/ufd_test_file
-> +# 256MB total huge pages == 128MB src and 128MB dst when nr_cpus <= 64
-> +./userfaultfd hugetlb $hugetlb_size 32 $mnt/ufd_test_file
->  if [ $? -ne 0 ]; then
->  	echo "[FAIL]"
->  	exitcode=1
+Via userfaultfd.c we can know, hugetlb_size needs to meet hugetlb_size >=
+nr_cpus * hugepage_size.  hugepage_size is often 2M, so when host cpus >
+64, it requires more than 128M.
 
-The above changes are functionally OK.  But, I think something like the
-following may be easier to read/understand.  Feel free to use as much or
-little as you would like.
--- 
-Mike Kravetz
+Changes since v1:
+  - update changelog/comments and variable name to make code more easier to
+    read/understand(stolen from Mike Kravetz)
 
-Signed-off-by: Mike Kravetz <mike.kravetz at oracle.com>
+Link: http://lkml.kernel.org/r/20180302024356.83359-1-zhijianx.li at intel.com
+Signed-off-by: Li Zhijian <zhijianx.li at intel.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: SeongJae Park <sj38.park at gmail.com>
+Cc: Philippe Ombredanne <pombredanne at nexb.com>
+Cc: Aneesh Kumar K.V <aneesh.kumar at linux.vnet.ibm.com>
+Cc: Mike Kravetz <mike.kravetz at oracle.com>
+Signed-off-by: Andrew Morton <akpm at linux-foundation.org>
 ---
  tools/testing/selftests/vm/run_vmtests | 25 +++++++++++++++++--------
  1 file changed, 17 insertions(+), 8 deletions(-)
 
 diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
-index d2561895a021..40671f6739a9 100755
+index d2561895a021a..22d5646738302 100755
 --- a/tools/testing/selftests/vm/run_vmtests
 +++ b/tools/testing/selftests/vm/run_vmtests
 @@ -2,25 +2,33 @@
@@ -106,7 +62,7 @@ index d2561895a021..40671f6739a9 100755
 +# huge pages totaling 256MB (262144KB) in size.  The userfaultfd
 +# hugetlb test requires a minimum of 2 * nr_cpus huge pages.  Take
 +# both of these requirements into account and attempt to increase
-+* number of huge pages available.
++# number of huge pages available.
 +nr_cpus=$(nproc)
 +hpgsize_MB=$((hpgsize_KB / 1024))
 +half_ufd_size_MB=$((((nr_cpus * hpgsize_MB + 127) / 128) * 128))
@@ -134,7 +90,7 @@ index d2561895a021..40671f6739a9 100755
  	echo "[FAIL]"
  	exitcode=1
 -- 
-2.13.6
+2.11.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
