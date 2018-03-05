@@ -1,97 +1,56 @@
-From: zhijianx.li at intel.com (Li Zhijian)
-Date: Sat,  3 Mar 2018 20:50:27 +0800
-Subject: [PATCH v2] selftests/vm/run_vmtests: adjust hugetlb size accroding to
- nr_cpus
-Message-ID: <20180303125027.81638-1-zhijianx.li@intel.com>
+From: namhyung at kernel.org (Namhyung Kim)
+Date: Mon, 5 Mar 2018 11:28:14 +0900
+Subject: [PATCH v4 01/19] [BUGFIX] tracing: probeevent: Fix to support
+ minus offset from symbol
+In-Reply-To: <20180302153229.dbc4dc9be90a0132b7010010@kernel.org>
+References: <151978796240.2577.6531711990653677529.stgit@devbox>
+ <151978799370.2577.9456049827647614166.stgit@devbox>
+ <20180302044951.GA31540@sejong>
+ <20180302153229.dbc4dc9be90a0132b7010010@kernel.org>
+Message-ID: <20180305022814.GA8824@sejong>
 
-Fix userfaultfd_hugetlb on hosts which have more than 64 cpus.
+Hi Masami,
 
----------------------------
-running userfaultfd_hugetlb
----------------------------
-invalid MiB
-Usage: <MiB> <bounces>
-[FAIL]
+On Fri, Mar 02, 2018 at 03:32:29PM +0900, Masami Hiramatsu wrote:
+> On Fri, 2 Mar 2018 13:49:51 +0900
+> Namhyung Kim <namhyung at kernel.org> wrote:
+> 
+> > Hi Masami,
+> > 
+> > On Wed, Feb 28, 2018 at 12:19:53PM +0900, Masami Hiramatsu wrote:
+> > > In Documentation/trace/kprobetrace.txt, it says
+> > > 
+> > >  @SYM[+|-offs] : Fetch memory at SYM +|- offs (SYM should be a data symbol)
+> > > 
+> > > However, the parser doesn't parse minus offset correctly, since
+> > > commit 2fba0c8867af ("tracing/kprobes: Fix probe offset to be
+> > > unsigned") drops minus ("-") offset support for kprobe probe
+> > > address usage.
+> > > 
+> > > This fixes the traceprobe_split_symbol_offset() to parse minus
+> > > offset again with checking the offset range, and add a minus
+> > > offset check in kprobe probe address usage.
+> > 
+> > It now parses a minus offset but doesn't allow it, right?
+> 
+> No, split_symbol_offset() is used for 2 cases
+>  - kprobe-event probe point
+>  - kporbe-event symbol-based argument
+> 
+> Former one doesn't accept a minus offset, but latter accepts it.
 
-Via userfaultfd.c we can know, hugetlb_size needs to meet hugetlb_size >=
-nr_cpus * hugepage_size.  hugepage_size is often 2M, so when host cpus >
-64, it requires more than 128M.
+Ah, ok then.
 
-Changes since v1:
-  - update changelog/comments and variable name to make code more easier to
-    read/understand(stolen from Mike Kravetz)
+Acked-by: Namhyung Kim <namhyung at kernel.org>
 
-Link: http://lkml.kernel.org/r/20180302024356.83359-1-zhijianx.li at intel.com
-Signed-off-by: Li Zhijian <zhijianx.li at intel.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: SeongJae Park <sj38.park at gmail.com>
-Cc: Philippe Ombredanne <pombredanne at nexb.com>
-Cc: Aneesh Kumar K.V <aneesh.kumar at linux.vnet.ibm.com>
-Cc: Mike Kravetz <mike.kravetz at oracle.com>
-Signed-off-by: Andrew Morton <akpm at linux-foundation.org>
----
- tools/testing/selftests/vm/run_vmtests | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
-index d2561895a021a..22d5646738302 100755
---- a/tools/testing/selftests/vm/run_vmtests
-+++ b/tools/testing/selftests/vm/run_vmtests
-@@ -2,25 +2,33 @@
- # SPDX-License-Identifier: GPL-2.0
- #please run as root
- 
--#we need 256M, below is the size in kB
--needmem=262144
- mnt=./huge
- exitcode=0
- 
--#get pagesize and freepages from /proc/meminfo
-+#get huge pagesize and freepages from /proc/meminfo
- while read name size unit; do
- 	if [ "$name" = "HugePages_Free:" ]; then
- 		freepgs=$size
- 	fi
- 	if [ "$name" = "Hugepagesize:" ]; then
--		pgsize=$size
-+		hpgsize_KB=$size
- 	fi
- done < /proc/meminfo
- 
-+# Simple hugetlbfs tests have a hardcoded minimum requirement of
-+# huge pages totaling 256MB (262144KB) in size.  The userfaultfd
-+# hugetlb test requires a minimum of 2 * nr_cpus huge pages.  Take
-+# both of these requirements into account and attempt to increase
-+# number of huge pages available.
-+nr_cpus=$(nproc)
-+hpgsize_MB=$((hpgsize_KB / 1024))
-+half_ufd_size_MB=$((((nr_cpus * hpgsize_MB + 127) / 128) * 128))
-+needmem_KB=$((half_ufd_size_MB * 2 * 1024))
-+
- #set proper nr_hugepages
--if [ -n "$freepgs" ] && [ -n "$pgsize" ]; then
-+if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
- 	nr_hugepgs=`cat /proc/sys/vm/nr_hugepages`
--	needpgs=`expr $needmem / $pgsize`
-+	needpgs=$((needmem_KB / hpgsize_KB))
- 	tries=2
- 	while [ $tries -gt 0 ] && [ $freepgs -lt $needpgs ]; do
- 		lackpgs=$(( $needpgs - $freepgs ))
-@@ -107,8 +115,9 @@ fi
- echo "---------------------------"
- echo "running userfaultfd_hugetlb"
- echo "---------------------------"
--# 256MB total huge pages == 128MB src and 128MB dst
--./userfaultfd hugetlb 128 32 $mnt/ufd_test_file
-+# Test requires source and destination huge pages.  Size of source
-+# (half_ufd_size_MB) is passed as argument to test.
-+./userfaultfd hugetlb $half_ufd_size_MB 32 $mnt/ufd_test_file
- if [ $? -ne 0 ]; then
- 	echo "[FAIL]"
- 	exitcode=1
--- 
-2.11.0
+> 
+> (Frankly to say, I guess no one care about supporting minus offset :P)
 
+:)
+
+Thanks,
+Namhyung
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
