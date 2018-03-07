@@ -1,39 +1,30 @@
-From: anders.roxell at linaro.org (Anders Roxell)
-Date: Tue,  6 Mar 2018 16:10:04 +0100
-Subject: [PATCH] selftest: net: reuseport_bpf_numa: don't fail if no numa
- support
-Message-ID: <20180306151004.31336-1-anders.roxell@linaro.org>
+From: shuahkh at osg.samsung.com (Shuah Khan)
+Date: Tue, 6 Mar 2018 19:37:59 -0700
+Subject: [PATCH v2] selftests: futex Makefile add top level TAP header
+ echo to RUN_TESTS
+In-Reply-To: <20180306001820.GF25693@fury>
+References: <20180301201907.17573-1-shuahkh@osg.samsung.com>
+ <20180306001820.GF25693@fury>
+Message-ID: <dc8c5139-08fc-3a84-d4e2-627a83b41131@osg.samsung.com>
 
-The reuseport_bpf_numa test case fails there's no numa support.  The
-test shouldn't fail if there's no support it should be skipped with a
-pass.
+On 03/05/2018 05:18 PM, Darren Hart wrote:
+> On Thu, Mar 01, 2018 at 01:19:07PM -0700, Shuah Khan wrote:
+>> Add top level TAP header echo, testname and separator line to make
+>> the output consistent with the common run_tests target.
+>>
+>> This change prevents nested TAP13 headers output from individual tests.
+>> Nested TAP13 headers could cause problems for some parsers.
+>>
+>> Signed-off-by: Shuah Khan <shuahkh at osg.samsung.com>
+> 
+> 
+> Reviewed-by: Darren Hart (VMware) <dvhart at infradead.org>
+> 
+> 
 
-Fixes: 3c2c3c16aaf6 ("reuseport, bpf: add test case for bpf_get_numa_node_id")
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
----
- tools/testing/selftests/net/reuseport_bpf_numa.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Thanks. Queued this up with the rest for 4.17-rc1
 
-diff --git a/tools/testing/selftests/net/reuseport_bpf_numa.c b/tools/testing/selftests/net/reuseport_bpf_numa.c
-index 365c32e84189..9245c14165b7 100644
---- a/tools/testing/selftests/net/reuseport_bpf_numa.c
-+++ b/tools/testing/selftests/net/reuseport_bpf_numa.c
-@@ -228,8 +228,10 @@ int main(void)
- {
- 	int *rcv_fd, nodes;
- 
--	if (numa_available() < 0)
--		error(1, errno, "no numa api support");
-+	if (numa_available() < 0) {
-+		fprintf(stderr, "no numa api support");
-+		return 0;
-+	}
- 
- 	nodes = numa_max_node() + 1;
- 
--- 
-2.11.0
-
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
