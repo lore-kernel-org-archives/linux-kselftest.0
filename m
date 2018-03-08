@@ -1,75 +1,71 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Thu,  8 Mar 2018 17:45:03 +0900
-Subject: [PATCH v5 03/19] selftests: ftrace: Add a testcase for string type
- with kprobe_event
+Date: Thu,  8 Mar 2018 17:45:32 +0900
+Subject: [PATCH v5 04/19] selftests: ftrace: Add a testcase for probepoint
 In-Reply-To: <152049860385.7289.14079393589900496424.stgit@devbox>
 References: <152049860385.7289.14079393589900496424.stgit@devbox>
-Message-ID: <152049870345.7289.2673869684625643737.stgit@devbox>
+Message-ID: <152049873256.7289.3073863568299389050.stgit@devbox>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180308084503.fV1lWObYPeQMMVaG80ORO_qNFfU1L12NuJT0-fZkRmY@z>
+Message-ID: <20180308084532.aHLXx1I70HEGR0ePZ0OZ6vM87FlM6KMCM4GRD5qRe20@z>
 
-Add a testcase for string type with kprobe event.
-This tests good/bad syntax combinations and also
-the traced data is correct in several way.
+Add a testcase for probe point definition. This tests
+symbol, address and symbol+offset syntax. The offset
+must be positive and smaller than UINT_MAX.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- .../ftrace/test.d/kprobe/kprobe_args_string.tc     |   46 ++++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+ .../selftests/ftrace/test.d/kprobe/probepoint.tc   |   43 ++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc b/tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc
 new file mode 100644
-index 000000000000..5ba73035e1d9
+index 000000000000..4fda01a08da4
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
-@@ -0,0 +1,46 @@
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc
+@@ -0,0 +1,43 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Kprobe event string type argument
++# description: Kprobe events - probe points
 +
 +[ -f kprobe_events ] || exit_unsupported # this is configurable
 +
-+echo 0 > events/enable
-+echo > kprobe_events
++TARGET_FUNC=create_trace_kprobe
 +
-+case `uname -m` in
-+x86_64)
-+  ARG2=%si
-+  OFFS=8
-+;;
-+i[3456]86)
-+  ARG2=%cx
-+  OFFS=4
-+;;
-+aarch64)
-+  ARG2=%x1
-+  OFFS=8
-+;;
-+arm*)
-+  ARG2=%r1
-+  OFFS=4
-+;;
-+*)
-+  echo "Please implement other architecture here"
-+  exit_untested
-+esac
++dec_addr() { # hexaddr
++  printf "%d" "0x"`echo $1 | tail -c 8`
++}
 +
-+: "Test get argument (1)"
-+echo "p:testprobe create_trace_kprobe arg1=+0(+0(${ARG2})):string" > kprobe_events
-+echo 1 > events/kprobes/testprobe/enable
-+! echo test >> kprobe_events
-+tail -n 1 trace | grep -qe "testprobe.* arg1=\"test\""
++set_offs() { # prev target next
++  A1=`dec_addr $1`
++  A2=`dec_addr $2`
++  A3=`dec_addr $3`
++  TARGET="0x$2" # an address
++  PREV=`expr $A1 - $A2` # offset to previous symbol
++  NEXT=+`expr $A3 - $A2` # offset to next symbol
++  OVERFLOW=+`printf "0x%x" ${PREV}` # overflow offset to previous symbol
++}
 +
-+echo 0 > events/kprobes/testprobe/enable
-+: "Test get argument (2)"
-+echo "p:testprobe create_trace_kprobe arg1=+0(+0(${ARG2})):string arg2=+0(+${OFFS}(${ARG2})):string" > kprobe_events
-+echo 1 > events/kprobes/testprobe/enable
-+! echo test1 test2 >> kprobe_events
-+tail -n 1 trace | grep -qe "testprobe.* arg1=\"test1\" arg2=\"test2\""
++# We have to decode symbol addresses to get correct offsets.
++# If the offset is not an instruction boundary, it cause -EILSEQ.
++set_offs `grep -A1 -B1 ${TARGET_FUNC} /proc/kallsyms | cut -f 1 -d " " | xargs`
++
++UINT_TEST=no
++# printf "%x" -1 returns (unsigned long)-1.
++if [ `printf "%x" -1 | wc -c` != 9 ]; then
++  UINT_TEST=yes
++fi
 +
 +echo 0 > events/enable
 +echo > kprobe_events
++echo "p:testprobe ${TARGET_FUNC}" > kprobe_events
++echo "p:testprobe ${TARGET}" > kprobe_events
++echo "p:testprobe ${TARGET_FUNC}${NEXT}" > kprobe_events
++! echo "p:testprobe ${TARGET_FUNC}${PREV}" > kprobe_events
++if [ "${UINT_TEST}" = yes ]; then
++! echo "p:testprobe ${TARGET_FUNC}${OVERFLOW}" > kprobe_events
++fi
++echo > kprobe_events
++clear_trace
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
