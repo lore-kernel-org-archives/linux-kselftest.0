@@ -1,67 +1,86 @@
-From: labbott@redhat.com (Laura Abbott)
-Date: Thu, 8 Mar 2018 11:32:03 -0800
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Fri, 9 Mar 2018 00:30:02 +0100
 Subject: [PATCH] selftests/android/ion: Makefile: fix build error
-In-Reply-To: <20180308143741.4415-1-anders.roxell@linaro.org>
+In-Reply-To: <9e41eb91-8bac-0bf0-987d-8d95c0bfce94@redhat.com>
 References: <20180308143741.4415-1-anders.roxell@linaro.org>
-Message-ID: <9e41eb91-8bac-0bf0-987d-8d95c0bfce94@redhat.com>
+ <9e41eb91-8bac-0bf0-987d-8d95c0bfce94@redhat.com>
+Message-ID:
+ <CADYN=9LcM1N3xSEMq_AgF7=JmC-ZPif2=J2mY9X_yqg1gHMb7Q@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180308193203.jkMgJTvFlK3REbuJkokJBQUrHQJdpHOK5OwuMQqw4vw@z>
+Message-ID: <20180308233002.a1Msk7E9tCRxuplN4L4hCLd2j53idaMHivkdlI-QJss@z>
 
-On 03/08/2018 06:37 AM, Anders Roxell wrote:
-> Fails to build iomap_test.c due to missing include
-> 
-> gcc  -I. -I../../../../../drivers/staging/android/uapi/ -Wall -O2 -g
-> ionmap_test.c ipcsocket.c ionutils.c   -o ionmap_test
-> ionmap_test.c:12:27: fatal error: linux/dma-buf.h: No such file or
-> directory
->   #include <linux/dma-buf.h>
->                             ^
-> compilation terminated.
-> <builtin>: recipe for target 'ionmap_test' failed
-> make[2]: *** [ionmap_test] Error 1
-> 
-> In the current code, we add a new -I ../../../../../usr/include/ to the
-> INCLUDEDIR variable. Also add ionmap_test to the .gitignore file.
-> > Fixes: ac93f7046a53 ("selftests: ion: Add simple test with the vgem driver")
+On 8 March 2018@20:32, Laura Abbott <labbott@redhat.com> wrote:
+> On 03/08/2018 06:37 AM, Anders Roxell wrote:
+>>
+>> Fails to build iomap_test.c due to missing include
+>>
+>> gcc  -I. -I../../../../../drivers/staging/android/uapi/ -Wall -O2 -g
+>> ionmap_test.c ipcsocket.c ionutils.c   -o ionmap_test
+>> ionmap_test.c:12:27: fatal error: linux/dma-buf.h: No such file or
+>> directory
+>>   #include <linux/dma-buf.h>
+>>                             ^
+>> compilation terminated.
+>> <builtin>: recipe for target 'ionmap_test' failed
+>> make[2]: *** [ionmap_test] Error 1
+>>
+>> In the current code, we add a new -I ../../../../../usr/include/ to the
+>> INCLUDEDIR variable. Also add ionmap_test to the .gitignore file.
+>> > Fixes: ac93f7046a53 ("selftests: ion: Add simple test with the vgem
+>> > driver")
+>
+>
+> Where is this hash from?
 
-Where is this hash from? It's not in Linus' master branch.
-Are the /usr/include header properly sanitized, if so that's nice
-because there's been debates before about how best to pick up
-the sanitized headers. I see that used several other places
-around self-tests too. Anyway, you can add
+In linux-next.
 
-Acked-by: Laura Abbott <labbott at redhat.com>
+> It's not in Linus' master branch.
+> Are the /usr/include header properly sanitized
 
-Thanks,
-Laura
+That my understanding but please correct me if I'm wrong.
 
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
-> ---
->   tools/testing/selftests/android/ion/.gitignore | 1 +
->   tools/testing/selftests/android/ion/Makefile   | 2 +-
->   2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/android/ion/.gitignore b/tools/testing/selftests/android/ion/.gitignore
-> index 67e6f391b2a9..95e8f4561474 100644
-> --- a/tools/testing/selftests/android/ion/.gitignore
-> +++ b/tools/testing/selftests/android/ion/.gitignore
-> @@ -1,2 +1,3 @@
->   ionapp_export
->   ionapp_import
-> +ionmap_test
-> diff --git a/tools/testing/selftests/android/ion/Makefile b/tools/testing/selftests/android/ion/Makefile
-> index d23b6d537d8b..e03695287f76 100644
-> --- a/tools/testing/selftests/android/ion/Makefile
-> +++ b/tools/testing/selftests/android/ion/Makefile
-> @@ -1,5 +1,5 @@
->   
-> -INCLUDEDIR := -I. -I../../../../../drivers/staging/android/uapi/
-> +INCLUDEDIR := -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../usr/include/
->   CFLAGS := $(CFLAGS) $(INCLUDEDIR) -Wall -O2 -g
->   
->   TEST_GEN_FILES := ionapp_export ionapp_import ionmap_test
-> 
+Cheers,
+Anders
 
+>, if so that's nice
+> because there's been debates before about how best to pick up
+> the sanitized headers. I see that used several other places
+> around self-tests too. Anyway, you can add
+>
+> Acked-by: Laura Abbott <labbott at redhat.com>
+>
+> Thanks,
+> Laura
+>
+>
+>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+>> ---
+>>   tools/testing/selftests/android/ion/.gitignore | 1 +
+>>   tools/testing/selftests/android/ion/Makefile   | 2 +-
+>>   2 files changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/android/ion/.gitignore
+>> b/tools/testing/selftests/android/ion/.gitignore
+>> index 67e6f391b2a9..95e8f4561474 100644
+>> --- a/tools/testing/selftests/android/ion/.gitignore
+>> +++ b/tools/testing/selftests/android/ion/.gitignore
+>> @@ -1,2 +1,3 @@
+>>   ionapp_export
+>>   ionapp_import
+>> +ionmap_test
+>> diff --git a/tools/testing/selftests/android/ion/Makefile
+>> b/tools/testing/selftests/android/ion/Makefile
+>> index d23b6d537d8b..e03695287f76 100644
+>> --- a/tools/testing/selftests/android/ion/Makefile
+>> +++ b/tools/testing/selftests/android/ion/Makefile
+>> @@ -1,5 +1,5 @@
+>>   -INCLUDEDIR := -I. -I../../../../../drivers/staging/android/uapi/
+>> +INCLUDEDIR := -I. -I../../../../../drivers/staging/android/uapi/
+>> -I../../../../../usr/include/
+>>   CFLAGS := $(CFLAGS) $(INCLUDEDIR) -Wall -O2 -g
+>>     TEST_GEN_FILES := ionapp_export ionapp_import ionmap_test
+>>
+>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
