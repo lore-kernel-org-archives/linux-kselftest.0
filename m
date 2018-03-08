@@ -1,48 +1,67 @@
-From: dsahern@gmail.com (David Ahern)
-Date: Thu, 8 Mar 2018 10:59:21 -0700
-Subject: [PATCH] selftests/net: enable fragments for fib-onlink-tests
-In-Reply-To: <20180308101723.19721-1-anders.roxell@linaro.org>
-References: <20180308101723.19721-1-anders.roxell@linaro.org>
-Message-ID: <4ee15d22-86d6-7e9e-4820-536cb38c9027@gmail.com>
+From: labbott@redhat.com (Laura Abbott)
+Date: Thu, 8 Mar 2018 11:32:03 -0800
+Subject: [PATCH] selftests/android/ion: Makefile: fix build error
+In-Reply-To: <20180308143741.4415-1-anders.roxell@linaro.org>
+References: <20180308143741.4415-1-anders.roxell@linaro.org>
+Message-ID: <9e41eb91-8bac-0bf0-987d-8d95c0bfce94@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180308175921.d43bXb5M_YJyo9NltjOBeuCa5KMPHPUN3iMTgL87X90@z>
+Message-ID: <20180308193203.jkMgJTvFlK3REbuJkokJBQUrHQJdpHOK5OwuMQqw4vw@z>
 
-On 3/8/18 3:17 AM, Anders Roxell wrote:
-> We miss CONFIG_* fragments so test fib-onlink-tests.sh can do:
-> ip li add lisa type vrf table 1101
-> ip li add veth1 type veth peer name veth2
+On 03/08/2018 06:37 AM, Anders Roxell wrote:
+> Fails to build iomap_test.c due to missing include
 > 
-> And the follow message occurs if it isn't enabled:
-> Configuring interfaces
-> RTNETLINK answers: Operation not supported
+> gcc  -I. -I../../../../../drivers/staging/android/uapi/ -Wall -O2 -g
+> ionmap_test.c ipcsocket.c ionutils.c   -o ionmap_test
+> ionmap_test.c:12:27: fatal error: linux/dma-buf.h: No such file or
+> directory
+>   #include <linux/dma-buf.h>
+>                             ^
+> compilation terminated.
+> <builtin>: recipe for target 'ionmap_test' failed
+> make[2]: *** [ionmap_test] Error 1
 > 
-> This enables for NET_NRF (and friends) and VETH so we can create a vrf
-> table and veth.
-> 
-> Fixes: 153e1b84f477 ("selftests: Add FIB onlink tests")
+> In the current code, we add a new -I ../../../../../usr/include/ to the
+> INCLUDEDIR variable. Also add ionmap_test to the .gitignore file.
+> > Fixes: ac93f7046a53 ("selftests: ion: Add simple test with the vgem driver")
+
+Where is this hash from? It's not in Linus' master branch.
+Are the /usr/include header properly sanitized, if so that's nice
+because there's been debates before about how best to pick up
+the sanitized headers. I see that used several other places
+around self-tests too. Anyway, you can add
+
+Acked-by: Laura Abbott <labbott at redhat.com>
+
+Thanks,
+Laura
+
 > Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 > ---
->  tools/testing/selftests/net/config | 5 +++++
->  1 file changed, 5 insertions(+)
+>   tools/testing/selftests/android/ion/.gitignore | 1 +
+>   tools/testing/selftests/android/ion/Makefile   | 2 +-
+>   2 files changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-> index 7177bea1fdfa..6a75a3ea44ad 100644
-> --- a/tools/testing/selftests/net/config
-> +++ b/tools/testing/selftests/net/config
-> @@ -2,3 +2,8 @@ CONFIG_USER_NS=y
->  CONFIG_BPF_SYSCALL=y
->  CONFIG_TEST_BPF=m
->  CONFIG_NUMA=y
-> +CONFIG_NET_VRF=y
-> +CONFIG_NET_L3_MASTER_DEV=y
-> +CONFIG_IPV6=y
-> +CONFIG_IPV6_MULTIPLE_TABLES=y
-> +CONFIG_VETH=y
+> diff --git a/tools/testing/selftests/android/ion/.gitignore b/tools/testing/selftests/android/ion/.gitignore
+> index 67e6f391b2a9..95e8f4561474 100644
+> --- a/tools/testing/selftests/android/ion/.gitignore
+> +++ b/tools/testing/selftests/android/ion/.gitignore
+> @@ -1,2 +1,3 @@
+>   ionapp_export
+>   ionapp_import
+> +ionmap_test
+> diff --git a/tools/testing/selftests/android/ion/Makefile b/tools/testing/selftests/android/ion/Makefile
+> index d23b6d537d8b..e03695287f76 100644
+> --- a/tools/testing/selftests/android/ion/Makefile
+> +++ b/tools/testing/selftests/android/ion/Makefile
+> @@ -1,5 +1,5 @@
+>   
+> -INCLUDEDIR := -I. -I../../../../../drivers/staging/android/uapi/
+> +INCLUDEDIR := -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../usr/include/
+>   CFLAGS := $(CFLAGS) $(INCLUDEDIR) -Wall -O2 -g
+>   
+>   TEST_GEN_FILES := ionapp_export ionapp_import ionmap_test
 > 
 
-Thanks for updating the config.
-
-The recent pmtu test needs quite a bit of additional configs as well.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
