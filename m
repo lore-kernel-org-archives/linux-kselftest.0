@@ -1,93 +1,51 @@
 From: anders.roxell@linaro.org (Anders Roxell)
-Date: Thu,  8 Mar 2018 14:48:45 +0100
-Subject: [PATCH] selftests/android/ion: fix heap_type may be uninitialized
-Message-ID: <20180308134845.32409-1-anders.roxell@linaro.org>
+Date: Thu,  8 Mar 2018 15:37:41 +0100
+Subject: [PATCH] selftests/android/ion: Makefile: fix build error
+Message-ID: <20180308143741.4415-1-anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180308134845.vMIHwx2EScJzaBa8jVdA-G8dcnjHtPd6SnTBbC1O4wI@z>
+Message-ID: <20180308143741.biWAF9bWhLPHqyYXjDqQ7MnxH47Y0MKhMa0wWDk4lX4@z>
 
-gcc warns that 'heap_type' is not initialized if we don't come through
-any of the two 'case' statesments before:
+Fails to build iomap_test.c due to missing include
 
-ionapp_export.c:91:2: warning: ‘heap_type’ may be used uninitialized in
-this function [-Wmaybe-uninitialized]
-  printf("heap_type: %ld, heap_size: %ld\n", heap_type, heap_size);
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+gcc  -I. -I../../../../../drivers/staging/android/uapi/ -Wall -O2 -g
+ionmap_test.c ipcsocket.c ionutils.c   -o ionmap_test
+ionmap_test.c:12:27: fatal error: linux/dma-buf.h: No such file or
+directory
+ #include <linux/dma-buf.h>
+                           ^
+compilation terminated.
+<builtin>: recipe for target 'ionmap_test' failed
+make[2]: *** [ionmap_test] Error 1
 
-In the current code, we initialize the heap_type to -1 before the 'case'
-statements. We also change the print_usage function to state that
-heap_type and heap_size isn't optional, they are mandatory.
+In the current code, we add a new -I ../../../../../usr/include/ to the
+INCLUDEDIR variable. Also add ionmap_test to the .gitignore file.
 
-Fixes: 47a18c42d992 ("android/ion: userspace test utility for ion buffer sharing")
+Fixes: ac93f7046a53 ("selftests: ion: Add simple test with the vgem driver")
 Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 ---
- .../testing/selftests/android/ion/ionapp_export.c  | 23 +++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+ tools/testing/selftests/android/ion/.gitignore | 1 +
+ tools/testing/selftests/android/ion/Makefile   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/android/ion/ionapp_export.c b/tools/testing/selftests/android/ion/ionapp_export.c
-index a944e72621a9..b42f803e9d2a 100644
---- a/tools/testing/selftests/android/ion/ionapp_export.c
-+++ b/tools/testing/selftests/android/ion/ionapp_export.c
-@@ -31,16 +31,24 @@
+diff --git a/tools/testing/selftests/android/ion/.gitignore b/tools/testing/selftests/android/ion/.gitignore
+index 67e6f391b2a9..95e8f4561474 100644
+--- a/tools/testing/selftests/android/ion/.gitignore
++++ b/tools/testing/selftests/android/ion/.gitignore
+@@ -1,2 +1,3 @@
+ ionapp_export
+ ionapp_import
++ionmap_test
+diff --git a/tools/testing/selftests/android/ion/Makefile b/tools/testing/selftests/android/ion/Makefile
+index d23b6d537d8b..e03695287f76 100644
+--- a/tools/testing/selftests/android/ion/Makefile
++++ b/tools/testing/selftests/android/ion/Makefile
+@@ -1,5 +1,5 @@
  
- void print_usage(int argc, char *argv[])
- {
--	printf("Usage: %s [-h <help>] [-i <heap id>] [-s <size in bytes>]\n",
-+	printf("Usage: %s [-h <help>] -i <heap id> -s <size in bytes>\n",
- 		argv[0]);
- }
+-INCLUDEDIR := -I. -I../../../../../drivers/staging/android/uapi/
++INCLUDEDIR := -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../usr/include/
+ CFLAGS := $(CFLAGS) $(INCLUDEDIR) -Wall -O2 -g
  
-+void heap_type_error_text(void)
-+{
-+	printf("heap_type must be specified\n");
-+	printf("  need to specify -i <heap_type>\n");
-+	printf("  supported heap types 0 or 1\n");
-+}
-+
- int main(int argc, char *argv[])
- {
- 	int opt, ret, status, heapid;
- 	int sockfd, client_fd, shared_fd;
- 	unsigned char *map_buf;
--	unsigned long map_len, heap_type, heap_size, flags;
-+	unsigned long map_len, heap_size, flags;
-+	long heap_type;
- 	struct ion_buffer_info info;
- 	struct socket_info skinfo;
- 
-@@ -50,6 +58,7 @@ int main(int argc, char *argv[])
- 	}
- 
- 	heap_size = 0;
-+	heap_type = -1;
- 	flags = 0;
- 
- 	while ((opt = getopt(argc, argv, "hi:s:")) != -1) {
-@@ -68,7 +77,8 @@ int main(int argc, char *argv[])
- 				heap_type = ION_HEAP_TYPE_SYSTEM_CONTIG;
- 				break;
- 			default:
--				printf("ERROR: heap type not supported\n");
-+				heap_type_error_text();
-+				print_usage(argc, argv);
- 				exit(1);
- 			}
- 			break;
-@@ -82,8 +92,15 @@ int main(int argc, char *argv[])
- 		}
- 	}
- 
-+	if (heap_type < 0) {
-+		heap_type_error_text();
-+		print_usage(argc, argv);
-+		exit(1);
-+	}
-+
- 	if (heap_size <= 0) {
- 		printf("heap_size cannot be 0\n");
-+		printf("  need to specify -s <heap_size>\n");
- 		print_usage(argc, argv);
- 		exit(1);
- 	}
+ TEST_GEN_FILES := ionapp_export ionapp_import ionmap_test
 -- 
 2.11.0
 
