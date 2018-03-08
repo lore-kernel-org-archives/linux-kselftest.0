@@ -1,38 +1,91 @@
 From: anders.roxell at linaro.org (Anders Roxell)
-Date: Thu,  8 Mar 2018 11:17:23 +0100
-Subject: [PATCH] selftests/net: enable fragments for fib-onlink-tests
-Message-ID: <20180308101723.19721-1-anders.roxell@linaro.org>
+Date: Thu,  8 Mar 2018 14:48:45 +0100
+Subject: [PATCH] selftests/android/ion: fix heap_type may be uninitialized
+Message-ID: <20180308134845.32409-1-anders.roxell@linaro.org>
 
-We miss CONFIG_* fragments so test fib-onlink-tests.sh can do:
-ip li add lisa type vrf table 1101
-ip li add veth1 type veth peer name veth2
+gcc warns that 'heap_type' is not initialized if we don't come through
+any of the two 'case' statesments before:
 
-And the follow message occurs if it isn't enabled:
-Configuring interfaces
-RTNETLINK answers: Operation not supported
+ionapp_export.c:91:2: warning: ‘heap_type’ may be used uninitialized in
+this function [-Wmaybe-uninitialized]
+  printf("heap_type: %ld, heap_size: %ld\n", heap_type, heap_size);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This enables for NET_NRF (and friends) and VETH so we can create a vrf
-table and veth.
+In the current code, we initialize the heap_type to -1 before the 'case'
+statements. We also change the print_usage function to state that
+heap_type and heap_size isn't optional, they are mandatory.
 
-Fixes: 153e1b84f477 ("selftests: Add FIB onlink tests")
+Fixes: 47a18c42d992 ("android/ion: userspace test utility for ion buffer sharing")
 Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 ---
- tools/testing/selftests/net/config | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../testing/selftests/android/ion/ionapp_export.c  | 23 +++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 7177bea1fdfa..6a75a3ea44ad 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -2,3 +2,8 @@ CONFIG_USER_NS=y
- CONFIG_BPF_SYSCALL=y
- CONFIG_TEST_BPF=m
- CONFIG_NUMA=y
-+CONFIG_NET_VRF=y
-+CONFIG_NET_L3_MASTER_DEV=y
-+CONFIG_IPV6=y
-+CONFIG_IPV6_MULTIPLE_TABLES=y
-+CONFIG_VETH=y
+diff --git a/tools/testing/selftests/android/ion/ionapp_export.c b/tools/testing/selftests/android/ion/ionapp_export.c
+index a944e72621a9..b42f803e9d2a 100644
+--- a/tools/testing/selftests/android/ion/ionapp_export.c
++++ b/tools/testing/selftests/android/ion/ionapp_export.c
+@@ -31,16 +31,24 @@
+ 
+ void print_usage(int argc, char *argv[])
+ {
+-	printf("Usage: %s [-h <help>] [-i <heap id>] [-s <size in bytes>]\n",
++	printf("Usage: %s [-h <help>] -i <heap id> -s <size in bytes>\n",
+ 		argv[0]);
+ }
+ 
++void heap_type_error_text(void)
++{
++	printf("heap_type must be specified\n");
++	printf("  need to specify -i <heap_type>\n");
++	printf("  supported heap types 0 or 1\n");
++}
++
+ int main(int argc, char *argv[])
+ {
+ 	int opt, ret, status, heapid;
+ 	int sockfd, client_fd, shared_fd;
+ 	unsigned char *map_buf;
+-	unsigned long map_len, heap_type, heap_size, flags;
++	unsigned long map_len, heap_size, flags;
++	long heap_type;
+ 	struct ion_buffer_info info;
+ 	struct socket_info skinfo;
+ 
+@@ -50,6 +58,7 @@ int main(int argc, char *argv[])
+ 	}
+ 
+ 	heap_size = 0;
++	heap_type = -1;
+ 	flags = 0;
+ 
+ 	while ((opt = getopt(argc, argv, "hi:s:")) != -1) {
+@@ -68,7 +77,8 @@ int main(int argc, char *argv[])
+ 				heap_type = ION_HEAP_TYPE_SYSTEM_CONTIG;
+ 				break;
+ 			default:
+-				printf("ERROR: heap type not supported\n");
++				heap_type_error_text();
++				print_usage(argc, argv);
+ 				exit(1);
+ 			}
+ 			break;
+@@ -82,8 +92,15 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
++	if (heap_type < 0) {
++		heap_type_error_text();
++		print_usage(argc, argv);
++		exit(1);
++	}
++
+ 	if (heap_size <= 0) {
+ 		printf("heap_size cannot be 0\n");
++		printf("  need to specify -s <heap_size>\n");
+ 		print_usage(argc, argv);
+ 		exit(1);
+ 	}
 -- 
 2.11.0
 
