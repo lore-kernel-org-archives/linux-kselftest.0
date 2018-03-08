@@ -1,94 +1,235 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Thu,  8 Mar 2018 17:48:26 +0900
-Subject: [PATCH v5 11/19] tracing: probeevent: Append traceprobe_ for exported
- function
+Date: Thu,  8 Mar 2018 17:48:55 +0900
+Subject: [PATCH v5 12/19] tracing: probeevent: Unify fetch_insn processing
+ common part
 In-Reply-To: <152049860385.7289.14079393589900496424.stgit@devbox>
 References: <152049860385.7289.14079393589900496424.stgit@devbox>
-Message-ID: <152049890627.7289.15760855473762677096.stgit@devbox>
+Message-ID: <152049893525.7289.10159402298678810688.stgit@devbox>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180308084826.0y8uWt9i5ttM0ueTFc-tfrETrGHqh2EHm1N4SLBJx54@z>
+Message-ID: <20180308084855.FkTzFhVb3Q-SFHl4DKHYD3LIYRoJhddtsygDasWFkWM@z>
 
-Append traceprobe_ for exported function set_print_fmt() as
-same as other functions.
+Unify the fetch_insn bottom process (from stage 2: dereference
+indirect data) from kprobe and uprobe events, since those are
+mostly same.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- kernel/trace/trace_kprobe.c |    4 ++--
- kernel/trace/trace_probe.c  |    2 +-
- kernel/trace/trace_probe.h  |    2 +-
- kernel/trace/trace_uprobe.c |    4 ++--
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ kernel/trace/trace_kprobe.c     |   47 +++++----------------------------
+ kernel/trace/trace_probe_tmpl.h |   55 ++++++++++++++++++++++++++++++++++++++-
+ kernel/trace/trace_uprobe.c     |   43 +-----------------------------
+ 3 files changed, 63 insertions(+), 82 deletions(-)
 
 diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 927299ff191c..7d48ae5f0617 100644
+index 7d48ae5f0617..b564d38810b7 100644
 --- a/kernel/trace/trace_kprobe.c
 +++ b/kernel/trace/trace_kprobe.c
-@@ -1305,7 +1305,7 @@ static int register_kprobe_event(struct trace_kprobe *tk)
- 
- 	init_trace_event_call(tk, call);
- 
--	if (set_print_fmt(&tk->tp, trace_kprobe_is_return(tk)) < 0)
-+	if (traceprobe_set_print_fmt(&tk->tp, trace_kprobe_is_return(tk)) < 0)
- 		return -ENOMEM;
- 	ret = register_trace_event(&call->event);
- 	if (!ret) {
-@@ -1362,7 +1362,7 @@ create_local_trace_kprobe(char *func, void *addr, unsigned long offs,
- 
- 	init_trace_event_call(tk, &tk->tp.call);
- 
--	if (set_print_fmt(&tk->tp, trace_kprobe_is_return(tk)) < 0) {
-+	if (traceprobe_set_print_fmt(&tk->tp, trace_kprobe_is_return(tk)) < 0) {
- 		ret = -ENOMEM;
- 		goto error;
- 	}
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index ed3766fb290d..fff3ccfcdbb6 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -502,7 +502,7 @@ static int __set_print_fmt(struct trace_probe *tp, char *buf, int len,
- 	return pos;
+@@ -857,13 +857,18 @@ fetch_store_string(unsigned long addr, void *dest, void *base)
+ 	return ret;
  }
  
--int set_print_fmt(struct trace_probe *tp, bool is_return)
-+int traceprobe_set_print_fmt(struct trace_probe *tp, bool is_return)
++static nokprobe_inline int
++probe_mem_read(void *dest, void *src, size_t size)
++{
++	return probe_kernel_read(dest, src, size);
++}
++
+ /* Note that we don't verify it, since the code does not come from user space */
+ static int
+ process_fetch_insn(struct fetch_insn *code, struct pt_regs *regs, void *dest,
+ 		   void *base)
  {
- 	int len;
- 	char *print_fmt;
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index d1b8bd74bf56..3bc43c1ce628 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -266,7 +266,7 @@ extern void traceprobe_free_probe_arg(struct probe_arg *arg);
+ 	unsigned long val;
+-	int ret = 0;
  
- extern int traceprobe_split_symbol_offset(char *symbol, long *offset);
+ 	/* 1st stage: get value from context */
+ 	switch (code->op) {
+@@ -890,45 +895,7 @@ process_fetch_insn(struct fetch_insn *code, struct pt_regs *regs, void *dest,
+ 	}
+ 	code++;
  
--extern int set_print_fmt(struct trace_probe *tp, bool is_return);
-+extern int traceprobe_set_print_fmt(struct trace_probe *tp, bool is_return);
+-	/* 2nd stage: dereference memory if needed */
+-	while (code->op == FETCH_OP_DEREF) {
+-		ret = probe_kernel_read(&val, (void *)val + code->offset,
+-					sizeof(val));
+-		if (ret)
+-			return ret;
+-		code++;
+-	}
+-
+-	/* 3rd stage: store value to buffer */
+-	if (unlikely(!dest)) {
+-		if (code->op == FETCH_OP_ST_STRING)
+-			return fetch_store_strlen(val + code->offset);
+-		else
+-			return -EILSEQ;
+-	}
+-
+-	switch (code->op) {
+-	case FETCH_OP_ST_RAW:
+-		fetch_store_raw(val, code, dest);
+-		break;
+-	case FETCH_OP_ST_MEM:
+-		probe_kernel_read(dest, (void *)val + code->offset, code->size);
+-		break;
+-	case FETCH_OP_ST_STRING:
+-		ret = fetch_store_string(val + code->offset, dest, base);
+-		break;
+-	default:
+-		return -EILSEQ;
+-	}
+-	code++;
+-
+-	/* 4th stage: modify stored value if needed */
+-	if (code->op == FETCH_OP_MOD_BF) {
+-		fetch_apply_bitfield(code, dest);
+-		code++;
+-	}
+-
+-	return code->op == FETCH_OP_END ? ret : -EILSEQ;
++	return process_fetch_insn_bottom(code, val, dest, base);
+ }
+ NOKPROBE_SYMBOL(process_fetch_insn)
  
- #ifdef CONFIG_PERF_EVENTS
- extern struct trace_event_call *
+diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
+index d9aebd395a9d..32ae2fc78190 100644
+--- a/kernel/trace/trace_probe_tmpl.h
++++ b/kernel/trace/trace_probe_tmpl.h
+@@ -49,13 +49,66 @@ fetch_apply_bitfield(struct fetch_insn *code, void *buf)
+ }
+ 
+ /*
+- * This must be defined for each callsite.
++ * These functions must be defined for each callsite.
+  * Return consumed dynamic data size (>= 0), or error (< 0).
+  * If dest is NULL, don't store result and return required dynamic data size.
+  */
+ static int
+ process_fetch_insn(struct fetch_insn *code, struct pt_regs *regs,
+ 		   void *dest, void *base);
++static nokprobe_inline int fetch_store_strlen(unsigned long addr);
++static nokprobe_inline int
++fetch_store_string(unsigned long addr, void *dest, void *base);
++static nokprobe_inline int
++probe_mem_read(void *dest, void *src, size_t size);
++
++/* From the 2nd stage, routine is same */
++static nokprobe_inline int
++process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
++			   void *dest, void *base)
++{
++	int ret = 0;
++
++	/* 2nd stage: dereference memory if needed */
++	while (code->op == FETCH_OP_DEREF) {
++		ret = probe_mem_read(&val, (void *)val + code->offset,
++					sizeof(val));
++		if (ret)
++			return ret;
++		code++;
++	}
++
++	/* 3rd stage: store value to buffer */
++	if (unlikely(!dest)) {
++		if (code->op == FETCH_OP_ST_STRING)
++			return fetch_store_strlen(val + code->offset);
++		else
++			return -EILSEQ;
++	}
++
++	switch (code->op) {
++	case FETCH_OP_ST_RAW:
++		fetch_store_raw(val, code, dest);
++		break;
++	case FETCH_OP_ST_MEM:
++		probe_mem_read(dest, (void *)val + code->offset, code->size);
++		break;
++	case FETCH_OP_ST_STRING:
++		ret = fetch_store_string(val + code->offset, dest, base);
++		break;
++	default:
++		return -EILSEQ;
++	}
++	code++;
++
++	/* 4th stage: modify stored value if needed */
++	if (code->op == FETCH_OP_MOD_BF) {
++		fetch_apply_bitfield(code, dest);
++		code++;
++	}
++
++	return code->op == FETCH_OP_END ? ret : -EILSEQ;
++}
+ 
+ /* Sum up total data length for dynamic arraies (strings) */
+ static nokprobe_inline int
 diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index de4f91bb313a..fafd48310823 100644
+index fafd48310823..64c1fbe087a1 100644
 --- a/kernel/trace/trace_uprobe.c
 +++ b/kernel/trace/trace_uprobe.c
-@@ -1314,7 +1314,7 @@ static int register_uprobe_event(struct trace_uprobe *tu)
+@@ -111,7 +111,7 @@ static unsigned long get_user_stack_nth(struct pt_regs *regs, unsigned int n)
+  * Uprobes-specific fetch functions
+  */
+ static nokprobe_inline int
+-probe_user_read(void *dest, void *src, size_t size)
++probe_mem_read(void *dest, void *src, size_t size)
+ {
+ 	void __user *vaddr = (void __force __user *)src;
  
- 	init_trace_event_call(tu, call);
+@@ -172,7 +172,6 @@ process_fetch_insn(struct fetch_insn *code, struct pt_regs *regs, void *dest,
+ 		   void *base)
+ {
+ 	unsigned long val;
+-	int ret = 0;
  
--	if (set_print_fmt(&tu->tp, is_ret_probe(tu)) < 0)
-+	if (traceprobe_set_print_fmt(&tu->tp, is_ret_probe(tu)) < 0)
- 		return -ENOMEM;
- 
- 	ret = register_trace_event(&call->event);
-@@ -1388,7 +1388,7 @@ create_local_trace_uprobe(char *name, unsigned long offs, bool is_return)
- 	tu->filename = kstrdup(name, GFP_KERNEL);
- 	init_trace_event_call(tu, &tu->tp.call);
- 
--	if (set_print_fmt(&tu->tp, is_ret_probe(tu)) < 0) {
-+	if (traceprobe_set_print_fmt(&tu->tp, is_ret_probe(tu)) < 0) {
- 		ret = -ENOMEM;
- 		goto error;
+ 	/* 1st stage: get value from context */
+ 	switch (code->op) {
+@@ -199,45 +198,7 @@ process_fetch_insn(struct fetch_insn *code, struct pt_regs *regs, void *dest,
  	}
+ 	code++;
+ 
+-	/* 2nd stage: dereference memory if needed */
+-	while (code->op == FETCH_OP_DEREF) {
+-		ret = probe_user_read(&val, (void *)val + code->offset,
+-				      sizeof(val));
+-		if (ret)
+-			return ret;
+-		code++;
+-	}
+-
+-	/* 3rd stage: store value to buffer */
+-	if (unlikely(!dest)) {
+-		if (code->op == FETCH_OP_ST_STRING)
+-			return fetch_store_strlen(val + code->offset);
+-		else
+-			return -EILSEQ;
+-	}
+-
+-	switch (code->op) {
+-	case FETCH_OP_ST_RAW:
+-		fetch_store_raw(val, code, dest);
+-		break;
+-	case FETCH_OP_ST_MEM:
+-		probe_kernel_read(dest, (void *)val + code->offset, code->size);
+-		break;
+-	case FETCH_OP_ST_STRING:
+-		ret = fetch_store_string(val + code->offset, dest, base);
+-		break;
+-	default:
+-		return -EILSEQ;
+-	}
+-	code++;
+-
+-	/* 4th stage: modify stored value if needed */
+-	if (code->op == FETCH_OP_MOD_BF) {
+-		fetch_apply_bitfield(code, dest);
+-		code++;
+-	}
+-
+-	return code->op == FETCH_OP_END ? ret : -EILSEQ;
++	return process_fetch_insn_bottom(code, val, dest, base);
+ }
+ NOKPROBE_SYMBOL(process_fetch_insn)
+ 
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
