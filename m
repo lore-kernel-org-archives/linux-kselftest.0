@@ -1,28 +1,18 @@
-From: adobriyan@gmail.com (Alexey Dobriyan)
-Date: Sun, 11 Mar 2018 17:13:58 +0300
-Subject: [PATCH] selftests: prevent carpal tunnel
-Message-ID: <20180311141358.GA22705@avx2>
+From: dave.hansen@linux.intel.com (Dave Hansen)
+Date: Mon, 12 Mar 2018 10:34:28 -0700
+Subject: kernel_selftests.x86.mpx-mini-test_32.fail on skylake platform
+In-Reply-To: <d36f0567-04a3-3e7f-4332-ce7518bfff60@intel.com>
+References: <d36f0567-04a3-3e7f-4332-ce7518bfff60@intel.com>
+Message-ID: <3aa057ec-c0e7-8b18-2054-ec2a6aecaeb9@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180311141358._ZjsleQ4X-nTDFJTqGD3UXQKVHLBYYe8Ey1iSz7WvVA@z>
+Message-ID: <20180312173428.kdoSz_jwHoPnFSQF4VQJ49_1tZFMmYqBuEEyXoFGqCo@z>
 
-Shuah, please do
+On 03/08/2018 05:24 PM, Li Zhijian wrote:
+> 0Day robot tried to bisect the FBC, but it failed at last. But anyway
+> i want to let you know we had this issue.
 
-	ln -s tools/testing/selftests test
-
-It will save a lot of typing for everyone over the years.
-
-Signed-off-by: Alexey Dobriyan <adobriyan at gmail.com>
----
-
- test |    1 +
- 1 file changed, 1 insertion(+)
-
-new file mode 120000
---- /dev/null
-+++ b/test
-@@ -0,0 +1 @@
-+tools/testing/selftests
-\ No newline at end of file
+Can you please bisect this, manually if necessary?  Let me know if you
+need any help.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
