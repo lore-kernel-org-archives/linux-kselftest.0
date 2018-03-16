@@ -1,25 +1,49 @@
 From: dave.hansen at intel.com (Dave Hansen)
-Date: Fri, 16 Mar 2018 14:58:16 -0700
-Subject: [PATCH v12 04/22] selftests/vm: typecast the pkey register
-In-Reply-To: <1519264541-7621-5-git-send-email-linuxram@us.ibm.com>
+Date: Fri, 16 Mar 2018 15:05:19 -0700
+Subject: [PATCH v12 05/22] selftests/vm: generic function to handle shadow
+ key register
+In-Reply-To: <1519264541-7621-6-git-send-email-linuxram@us.ibm.com>
 References: <1519264541-7621-1-git-send-email-linuxram@us.ibm.com>
- <1519264541-7621-5-git-send-email-linuxram@us.ibm.com>
-Message-ID: <00081300-e891-3381-3acd-e3312e54fb58@intel.com>
+ <1519264541-7621-6-git-send-email-linuxram@us.ibm.com>
+Message-ID: <92951c0a-0468-6d3c-efef-2d9da53fd10f@intel.com>
 
 On 02/21/2018 05:55 PM, Ram Pai wrote:
-> -static inline unsigned int _rdpkey_reg(int line)
-> +static inline pkey_reg_t _rdpkey_reg(int line)
->  {
-> -	unsigned int pkey_reg = __rdpkey_reg();
-> +	pkey_reg_t pkey_reg = __rdpkey_reg();
->  
-> -	dprintf4("rdpkey_reg(line=%d) pkey_reg: %x shadow: %x\n",
-> +	dprintf4("rdpkey_reg(line=%d) pkey_reg: %016lx shadow: %016lx\n",
->  			line, pkey_reg, shadow_pkey_reg);
->  	assert(pkey_reg == shadow_pkey_reg);
+> +static inline u32 pkey_to_shift(int pkey)
+> +{
+> +	return pkey * PKEY_BITS_PER_PKEY;
+> +}
 
-Hmm.  So we're using %lx for an int?  Doesn't the compiler complain
-about this?
+pkey_bit_position(), perhaps?
+
+> +static inline pkey_reg_t reset_bits(int pkey, pkey_reg_t bits)
+> +{
+> +	u32 shift = pkey_to_shift(pkey);
+> +
+> +	return ~(bits << shift);
+> +}
+
+I'd prefer clear_pkey_flags() or maybe clear_pkey_bits().  "reset" can
+mean "reset to 0" or "reset to 1".
+
+Also, why the u32 here?  Isn't an int more appropriate?
+
+> +static inline pkey_reg_t left_shift_bits(int pkey, pkey_reg_t bits)
+> +{
+> +	u32 shift = pkey_to_shift(pkey);
+> +
+> +	return (bits << shift);
+> +}
+> +
+> +static inline pkey_reg_t right_shift_bits(int pkey, pkey_reg_t bits)
+> +{
+> +	u32 shift = pkey_to_shift(pkey);
+> +
+> +	return (bits >> shift);
+> +}
+
+Some comments on these would be handy.  Basically that this takes a
+per-key flags value and puts it at the right position so it can be
+shoved in the register.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
