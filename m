@@ -1,23 +1,26 @@
 From: gregkh@linuxfoundation.org (Greg KH)
-Date: Fri, 16 Mar 2018 08:55:53 +0100
+Date: Fri, 16 Mar 2018 08:56:42 +0100
 Subject: [PATCH v2] Add udmabuf misc device
 In-Reply-To: <20180316074650.5415-1-kraxel@redhat.com>
 References: <20180316074650.5415-1-kraxel@redhat.com>
-Message-ID: <20180316075553.GA11982@kroah.com>
+Message-ID: <20180316075642.GB11982@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180316075553.QQ4FlMIRRFc1Tqp_iVRD05PP0c7aji4mhx6qcaW1yo4@z>
+Message-ID: <20180316075642.b7igBSbbo7metCIHDMNHe1nTjPznxtrhcDsScLHXkPE@z>
 
 On Fri, Mar 16, 2018@08:46:49AM +0100, Gerd Hoffmann wrote:
 > --- /dev/null
-> +++ b/drivers/dma-buf/udmabuf.c
-> @@ -0,0 +1,261 @@
-> +/*
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License version 2 as
-> + * published by the Free Software Foundation.
-> + */
+> +++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+> @@ -0,0 +1,69 @@
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +#include <string.h>
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <malloc.h>
 
-No SPDX line or copyright here?  You put it in the .h file :(
+No license text at all?  Come on, I already made one commit in the tree
+that touched 11k files, I don't want to have to do it again :)
 
 thanks,
 
