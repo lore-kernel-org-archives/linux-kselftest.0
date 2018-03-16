@@ -1,19 +1,17 @@
 From: dave.hansen@intel.com (Dave Hansen)
-Date: Fri, 16 Mar 2018 15:30:50 -0700
-Subject: [PATCH v12 18/22] selftests/vm: associate key on a mapped page
- and detect write violation
-In-Reply-To: <1519264541-7621-19-git-send-email-linuxram@us.ibm.com>
+Date: Fri, 16 Mar 2018 15:31:28 -0700
+Subject: [PATCH v12 19/22] selftests/vm: detect write violation on a
+ mapped access-denied-key page
+In-Reply-To: <1519264541-7621-20-git-send-email-linuxram@us.ibm.com>
 References: <1519264541-7621-1-git-send-email-linuxram@us.ibm.com>
- <1519264541-7621-19-git-send-email-linuxram@us.ibm.com>
-Message-ID: <cf9ccf32-724c-e25c-4226-3c9c670bc4aa@intel.com>
+ <1519264541-7621-20-git-send-email-linuxram@us.ibm.com>
+Message-ID: <f0468b51-6c2a-0317-2c5e-d48d8a12c374@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180316223050.nQ5sxetSJI1ZLmzqp9_qfPFYPLG_ZpZCBbcZB1oyPlk@z>
+Message-ID: <20180316223128.8PtaTyWPL_22FB3a6MznLFdsXUPWhvjMwyOv9q8kWiQ@z>
 
 On 02/21/2018 05:55 PM, Ram Pai wrote:
-> detect write-violation on a page to which write-disabled
+> detect write-violation on a page to which access-disabled
 > key is associated much after the page is mapped.
-
-The more tests the merrier.
 
 Acked-by: Dave Hansen <dave.hansen at intel.com>
 
