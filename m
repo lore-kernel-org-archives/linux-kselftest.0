@@ -1,182 +1,153 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Sat, 17 Mar 2018 21:41:12 +0900
-Subject: [PATCH v6 05/21] tracing: probeevent: Cleanup print argument functions
+Date: Sat, 17 Mar 2018 21:41:55 +0900
+Subject: [PATCH v6 06/21] tracing: probeevent: Cleanup argument field
+ definition
 In-Reply-To: <152129024033.31874.15800253385376959274.stgit@devbox>
 References: <152129024033.31874.15800253385376959274.stgit@devbox>
-Message-ID: <152129047203.31874.3188700720826213215.stgit@devbox>
+Message-ID: <152129051562.31874.14164494878447631336.stgit@devbox>
 
-Current print argument functions prints the argument
-name too. It is not good for printing out multiple
-values for one argument. This change it to just print
-out the value.
+Cleanup event argument definition code in one place for
+maintenancability.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- kernel/trace/trace_kprobe.c |   20 ++++++--------------
- kernel/trace/trace_probe.c  |   12 +++++-------
- kernel/trace/trace_probe.h  |   19 ++++++++++++++++---
- kernel/trace/trace_uprobe.c |    9 ++-------
- 4 files changed, 29 insertions(+), 31 deletions(-)
+ kernel/trace/trace_kprobe.c |   32 ++++----------------------------
+ kernel/trace/trace_probe.c  |   21 +++++++++++++++++++++
+ kernel/trace/trace_probe.h  |    2 ++
+ kernel/trace/trace_uprobe.c |   15 ++-------------
+ 4 files changed, 29 insertions(+), 41 deletions(-)
 
 diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 1cd3fb4d70f8..81e2eb5a1566 100644
+index 81e2eb5a1566..a8f8cce066a9 100644
 --- a/kernel/trace/trace_kprobe.c
 +++ b/kernel/trace/trace_kprobe.c
-@@ -1090,8 +1090,6 @@ print_kprobe_event(struct trace_iterator *iter, int flags,
- 	struct kprobe_trace_entry_head *field;
- 	struct trace_seq *s = &iter->seq;
- 	struct trace_probe *tp;
--	u8 *data;
--	int i;
+@@ -1146,49 +1146,25 @@ print_kretprobe_event(struct trace_iterator *iter, int flags,
  
- 	field = (struct kprobe_trace_entry_head *)iter->ent;
- 	tp = container_of(event, struct trace_probe, call.event);
-@@ -1103,11 +1101,9 @@ print_kprobe_event(struct trace_iterator *iter, int flags,
+ static int kprobe_event_define_fields(struct trace_event_call *event_call)
+ {
+-	int ret, i;
++	int ret;
+ 	struct kprobe_trace_entry_head field;
+ 	struct trace_kprobe *tk = (struct trace_kprobe *)event_call->data;
  
- 	trace_seq_putc(s, ')');
+ 	DEFINE_FIELD(unsigned long, ip, FIELD_STRING_IP, 0);
+-	/* Set argument names as fields */
+-	for (i = 0; i < tk->tp.nr_args; i++) {
+-		struct probe_arg *parg = &tk->tp.args[i];
  
--	data = (u8 *)&field[1];
--	for (i = 0; i < tp->nr_args; i++)
--		if (!tp->args[i].type->print(s, tp->args[i].name,
--					     data + tp->args[i].offset, field))
--			goto out;
-+	if (print_probe_args(s, tp->args, tp->nr_args,
-+			     (u8 *)&field[1], field) < 0)
-+		goto out;
+-		ret = trace_define_field(event_call, parg->type->fmttype,
+-					 parg->name,
+-					 sizeof(field) + parg->offset,
+-					 parg->type->size,
+-					 parg->type->is_signed,
+-					 FILTER_OTHER);
+-		if (ret)
+-			return ret;
+-	}
+-	return 0;
++	return traceprobe_define_arg_fields(event_call, sizeof(field), &tk->tp);
+ }
  
- 	trace_seq_putc(s, '\n');
-  out:
-@@ -1121,8 +1117,6 @@ print_kretprobe_event(struct trace_iterator *iter, int flags,
- 	struct kretprobe_trace_entry_head *field;
- 	struct trace_seq *s = &iter->seq;
- 	struct trace_probe *tp;
--	u8 *data;
--	int i;
+ static int kretprobe_event_define_fields(struct trace_event_call *event_call)
+ {
+-	int ret, i;
++	int ret;
+ 	struct kretprobe_trace_entry_head field;
+ 	struct trace_kprobe *tk = (struct trace_kprobe *)event_call->data;
  
- 	field = (struct kretprobe_trace_entry_head *)iter->ent;
- 	tp = container_of(event, struct trace_probe, call.event);
-@@ -1139,11 +1133,9 @@ print_kretprobe_event(struct trace_iterator *iter, int flags,
+ 	DEFINE_FIELD(unsigned long, func, FIELD_STRING_FUNC, 0);
+ 	DEFINE_FIELD(unsigned long, ret_ip, FIELD_STRING_RETIP, 0);
+-	/* Set argument names as fields */
+-	for (i = 0; i < tk->tp.nr_args; i++) {
+-		struct probe_arg *parg = &tk->tp.args[i];
  
- 	trace_seq_putc(s, ')');
+-		ret = trace_define_field(event_call, parg->type->fmttype,
+-					 parg->name,
+-					 sizeof(field) + parg->offset,
+-					 parg->type->size,
+-					 parg->type->is_signed,
+-					 FILTER_OTHER);
+-		if (ret)
+-			return ret;
+-	}
+-	return 0;
++	return traceprobe_define_arg_fields(event_call, sizeof(field), &tk->tp);
+ }
  
--	data = (u8 *)&field[1];
--	for (i = 0; i < tp->nr_args; i++)
--		if (!tp->args[i].type->print(s, tp->args[i].name,
--					     data + tp->args[i].offset, field))
--			goto out;
-+	if (print_probe_args(s, tp->args, tp->nr_args,
-+			     (u8 *)&field[1], field) < 0)
-+		goto out;
- 
- 	trace_seq_putc(s, '\n');
- 
+ #ifdef CONFIG_PERF_EVENTS
 diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index daf54bda4dc8..8894b81e29b0 100644
+index 8894b81e29b0..049e8531fdf8 100644
 --- a/kernel/trace/trace_probe.c
 +++ b/kernel/trace/trace_probe.c
-@@ -38,10 +38,9 @@ const char *reserved_field_names[] = {
+@@ -680,3 +680,24 @@ int set_print_fmt(struct trace_probe *tp, bool is_return)
  
- /* Printing  in basic type function template */
- #define DEFINE_BASIC_PRINT_TYPE_FUNC(tname, type, fmt)			\
--int PRINT_TYPE_FUNC_NAME(tname)(struct trace_seq *s, const char *name,	\
--				void *data, void *ent)			\
-+int PRINT_TYPE_FUNC_NAME(tname)(struct trace_seq *s, void *data, void *ent)\
- {									\
--	trace_seq_printf(s, " %s=" fmt, name, *(type *)data);		\
-+	trace_seq_printf(s, fmt, *(type *)data);			\
- 	return !trace_seq_has_overflowed(s);				\
- }									\
- const char PRINT_TYPE_FMT_NAME(tname)[] = fmt;				\
-@@ -61,15 +60,14 @@ DEFINE_BASIC_PRINT_TYPE_FUNC(x32, u32, "0x%x")
- DEFINE_BASIC_PRINT_TYPE_FUNC(x64, u64, "0x%Lx")
- 
- /* Print type function for string type */
--int PRINT_TYPE_FUNC_NAME(string)(struct trace_seq *s, const char *name,
--				 void *data, void *ent)
-+int PRINT_TYPE_FUNC_NAME(string)(struct trace_seq *s, void *data, void *ent)
- {
- 	int len = *(u32 *)data >> 16;
- 
- 	if (!len)
--		trace_seq_printf(s, " %s=(fault)", name);
-+		trace_seq_puts(s, "(fault)");
- 	else
--		trace_seq_printf(s, " %s=\"%s\"", name,
-+		trace_seq_printf(s, "\"%s\"",
- 				 (const char *)get_loc_data(data, ent));
- 	return !trace_seq_has_overflowed(s);
+ 	return 0;
  }
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index 75daff22ccea..0c8e66f9c855 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -94,7 +94,7 @@ static nokprobe_inline void *get_loc_data(u32 *dl, void *ent)
- /* Data fetch function type */
- typedef	void (*fetch_func_t)(struct pt_regs *, void *, void *);
- /* Printing function type */
--typedef int (*print_type_func_t)(struct trace_seq *, const char *, void *, void *);
-+typedef int (*print_type_func_t)(struct trace_seq *, void *, void *);
- 
- /* Fetch types */
- enum {
-@@ -136,8 +136,7 @@ typedef u32 string_size;
- 
- /* Printing  in basic type function template */
- #define DECLARE_BASIC_PRINT_TYPE_FUNC(type)				\
--int PRINT_TYPE_FUNC_NAME(type)(struct trace_seq *s, const char *name,	\
--				void *data, void *ent);			\
-+int PRINT_TYPE_FUNC_NAME(type)(struct trace_seq *s, void *data, void *ent);\
- extern const char PRINT_TYPE_FMT_NAME(type)[]
- 
- DECLARE_BASIC_PRINT_TYPE_FUNC(u8);
-@@ -415,6 +414,20 @@ store_trace_args(int ent_size, struct trace_probe *tp, struct pt_regs *regs,
- 	}
- }
- 
-+static inline int
-+print_probe_args(struct trace_seq *s, struct probe_arg *args, int nr_args,
-+		 u8 *data, void *field)
-+{
-+	int i;
 +
-+	for (i = 0; i < nr_args; i++) {
-+		trace_seq_printf(s, " %s=", args[i].name);
-+		if (!args[i].type->print(s, data + args[i].offset, field))
-+			return -ENOMEM;
++int traceprobe_define_arg_fields(struct trace_event_call *event_call,
++				 size_t offset, struct trace_probe *tp)
++{
++	int ret, i;
++
++	/* Set argument names as fields */
++	for (i = 0; i < tp->nr_args; i++) {
++		struct probe_arg *parg = &tp->args[i];
++
++		ret = trace_define_field(event_call, parg->type->fmttype,
++					 parg->name,
++					 offset + parg->offset,
++					 parg->type->size,
++					 parg->type->is_signed,
++					 FILTER_OTHER);
++		if (ret)
++			return ret;
 +	}
 +	return 0;
 +}
-+
- extern int set_print_fmt(struct trace_probe *tp, bool is_return);
- 
- #ifdef CONFIG_PERF_EVENTS
+diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+index 0c8e66f9c855..de928052926b 100644
+--- a/kernel/trace/trace_probe.h
++++ b/kernel/trace/trace_probe.h
+@@ -440,3 +440,5 @@ extern struct trace_event_call *
+ create_local_trace_uprobe(char *name, unsigned long offs, bool is_return);
+ extern void destroy_local_trace_uprobe(struct trace_event_call *event_call);
+ #endif
++extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
++					size_t offset, struct trace_probe *tp);
 diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index 2014f4351ae0..4c006a693663 100644
+index 4c006a693663..887da2bb63aa 100644
 --- a/kernel/trace/trace_uprobe.c
 +++ b/kernel/trace/trace_uprobe.c
-@@ -864,7 +864,6 @@ print_uprobe_event(struct trace_iterator *iter, int flags, struct trace_event *e
- 	struct trace_seq *s = &iter->seq;
- 	struct trace_uprobe *tu;
- 	u8 *data;
--	int i;
+@@ -982,7 +982,7 @@ probe_event_disable(struct trace_uprobe *tu, struct trace_event_file *file)
  
- 	entry = (struct uprobe_trace_entry_head *)iter->ent;
- 	tu = container_of(event, struct trace_uprobe, tp.call.event);
-@@ -881,12 +880,8 @@ print_uprobe_event(struct trace_iterator *iter, int flags, struct trace_event *e
- 		data = DATAOF_TRACE_ENTRY(entry, false);
+ static int uprobe_event_define_fields(struct trace_event_call *event_call)
+ {
+-	int ret, i, size;
++	int ret, size;
+ 	struct uprobe_trace_entry_head field;
+ 	struct trace_uprobe *tu = event_call->data;
+ 
+@@ -994,19 +994,8 @@ static int uprobe_event_define_fields(struct trace_event_call *event_call)
+ 		DEFINE_FIELD(unsigned long, vaddr[0], FIELD_STRING_IP, 0);
+ 		size = SIZEOF_TRACE_ENTRY(false);
  	}
- 
+-	/* Set argument names as fields */
 -	for (i = 0; i < tu->tp.nr_args; i++) {
 -		struct probe_arg *parg = &tu->tp.args[i];
 -
--		if (!parg->type->print(s, parg->name, data + parg->offset, entry))
--			goto out;
+-		ret = trace_define_field(event_call, parg->type->fmttype,
+-					 parg->name, size + parg->offset,
+-					 parg->type->size, parg->type->is_signed,
+-					 FILTER_OTHER);
+ 
+-		if (ret)
+-			return ret;
 -	}
-+	if (print_probe_args(s, tu->tp.args, tu->tp.nr_args, data, entry) < 0)
-+		goto out;
+-	return 0;
++	return traceprobe_define_arg_fields(event_call, size, &tu->tp);
+ }
  
- 	trace_seq_putc(s, '\n');
- 
+ #ifdef CONFIG_PERF_EVENTS
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
