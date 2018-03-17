@@ -1,299 +1,177 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Sat, 17 Mar 2018 21:53:10 +0900
-Subject: [PATCH v6 21/21] perf-probe: Add array argument support
+Date: Sat, 17 Mar 2018 23:06:56 +0900
+Subject: [PATCH v6 00/21] tracing: probeevent: Improve fetcharg features
 In-Reply-To: <152129024033.31874.15800253385376959274.stgit@devbox>
 References: <152129024033.31874.15800253385376959274.stgit@devbox>
-Message-ID: <152129118998.31874.16273532808298489908.stgit@devbox>
+Message-ID: <20180317230656.00e6a95729ab211c8fc91f2a@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180317125310._6Ur1ll7AcskjrhuQY7fKXw11BSujX6OtwKB8RB3CGQ@z>
+Message-ID: <20180317140656.2--bIXkjMaFK2tTXxwwjp3JBj0FztLNgFdDfK2OD__0@z>
 
-Since kprobes events support an array argument, perf-probe
-can also support dumping array now.
-The syntax are
+On Sat, 17 Mar 2018 21:37:21 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
- <array-var>[<range>]
-or
- <pointer-var>[<range>]
+> Hi,
+> 
+> This is the 6th version of the fetch-arg improvement series.
+> This includes variable changes on fetcharg framework like,
+> 
+> - Add fetcharg testcases (syntax, argN, symbol, string and array)
+>   and probepoint testcase.
+> - Rewrite fetcharg framework with fetch_insn, switch-case based
+>   instead of function pointer.
+> - Add "symbol" type support, which shows symbol+offset instead of
+>   address value.
+> - Add "$argN" fetcharg, which fetches function parameters.
+>   (currently only for x86-64)
+> - Add array type support (including string arrary :) ) ,
+>   which enables to get fixed length array from probe-events.
+> - Add array type support for perf-probe, so that user can
+>   dump partial array entries.
+> 
+> V5 is here:
+>  https://lkml.org/lkml/2018/3/12/558
 
-where the <range> is <start>..<end>. e.g. array[0..5].
-This can also be available with string type. In this
-case, the string array should be "char *array[]" or
-"char **array_ptr".
+No, this is another series, v5 is here.
 
-Note that this feature is only available on the kernel which
-supports array type.
+https://lkml.org/lkml/2018/3/8/562
 
-Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
----
- tools/perf/Documentation/perf-probe.txt |    2 -
- tools/perf/util/probe-event.c           |   20 ++++++-
- tools/perf/util/probe-event.h           |    2 +
- tools/perf/util/probe-file.c            |    5 ++
- tools/perf/util/probe-file.h            |    1 
- tools/perf/util/probe-finder.c          |   95 ++++++++++++++++++-------------
- 6 files changed, 84 insertions(+), 41 deletions(-)
+Thanks,
 
-diff --git a/tools/perf/Documentation/perf-probe.txt b/tools/perf/Documentation/perf-probe.txt
-index b6866a05edd2..a68e423cac48 100644
---- a/tools/perf/Documentation/perf-probe.txt
-+++ b/tools/perf/Documentation/perf-probe.txt
-@@ -196,7 +196,7 @@ Each probe argument follows below syntax.
- 
-  [NAME=]LOCALVAR|$retval|%REG|@SYMBOL[:TYPE]
- 
--'NAME' specifies the name of this argument (optional). You can use the name of local variable, local data structure member (e.g. var->field, var.field2), local array with fixed index (e.g. array[1], var->array[0], var->pointer[2]), or kprobe-tracer argument format (e.g. $retval, %ax, etc). Note that the name of this argument will be set as the last member name if you specify a local data structure member (e.g. field2 for 'var->field1.field2'.)
-+'NAME' specifies the name of this argument (optional). You can use the name of local variable, local data structure member (e.g. var->field, var.field2), local array with fixed index (e.g. array[1], var->array[0], var->pointer[2]) or range (e.g. array[1..4], var->array[0..2]), or kprobe-tracer argument format (e.g. $retval, %ax, etc). Note that the name of this argument will be set as the last member name if you specify a local data structure member (e.g. field2 for 'var->field1.field2'.)
- '$vars' and '$params' special arguments are also available for NAME, '$vars' is expanded to the local variables (including function parameters) which can access at given probe point. '$params' is expanded to only the function parameters.
- 'TYPE' casts the type of this argument (optional). If omitted, perf probe automatically set the type based on debuginfo (*). Currently, basic types (u8/u16/u32/u64/s8/s16/s32/s64), hexadecimal integers (x/x8/x16/x32/x64), signedness casting (u/s), "string" and bitfield are supported. (see TYPES for detail)
- On x86 systems %REG is always the short form of the register: for example %AX. %RAX or %EAX is not valid.
-diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
-index e1dbc9821617..e07a1957c9cd 100644
---- a/tools/perf/util/probe-event.c
-+++ b/tools/perf/util/probe-event.c
-@@ -1570,6 +1570,7 @@ static int parse_perf_probe_arg(char *str, struct perf_probe_arg *arg)
- {
- 	char *tmp, *goodname;
- 	struct perf_probe_arg_field **fieldp;
-+	long end;
- 
- 	pr_debug("parsing arg: %s into ", str);
- 
-@@ -1617,7 +1618,18 @@ static int parse_perf_probe_arg(char *str, struct perf_probe_arg *arg)
- 			str = tmp;
- 			(*fieldp)->index = strtol(str + 1, &tmp, 0);
- 			(*fieldp)->ref = true;
--			if (*tmp != ']' || tmp == str + 1) {
-+			if (tmp[0] == '.' && tmp[1] == '.') { /* dump array */
-+				end = strtol(tmp + 2, &tmp, 0);
-+				if (end < (*fieldp)->index || *tmp != ']') {
-+					semantic_error("Invalid array range\n");
-+					return -EINVAL;
-+				}
-+				arg->length = end - (*fieldp)->index + 1;
-+				if (tmp[1] != '\0') {
-+					semantic_error("Array range must not follow anything.");
-+					return -EINVAL;
-+				}
-+			} else if (*tmp != ']' || tmp == str + 1) {
- 				semantic_error("Array index must be a"
- 						" number.\n");
- 				return -EINVAL;
-@@ -2022,6 +2034,12 @@ static int synthesize_probe_trace_arg(struct probe_trace_arg *arg,
- 	if (!err && arg->type)
- 		err = strbuf_addf(buf, ":%s", arg->type);
- 
-+	if (!err && arg->length) {
-+		if (!arg->type)
-+			return -EINVAL;
-+		err = strbuf_addf(buf, "[%d]", arg->length);
-+	}
-+
- 	return err;
- }
- 
-diff --git a/tools/perf/util/probe-event.h b/tools/perf/util/probe-event.h
-index 45b14f020558..e5ca1bf33ee7 100644
---- a/tools/perf/util/probe-event.h
-+++ b/tools/perf/util/probe-event.h
-@@ -42,6 +42,7 @@ struct probe_trace_arg {
- 	char				*name;	/* Argument name */
- 	char				*value;	/* Base value */
- 	char				*type;	/* Type name */
-+	unsigned int			length;	/* Length of array */
- 	struct probe_trace_arg_ref	*ref;	/* Referencing offset */
- };
- 
-@@ -79,6 +80,7 @@ struct perf_probe_arg {
- 	char				*name;	/* Argument name */
- 	char				*var;	/* Variable name */
- 	char				*type;	/* Type name */
-+	unsigned int			length;	/* Length of array */
- 	struct perf_probe_arg_field	*field;	/* Structure fields */
- };
- 
-diff --git a/tools/perf/util/probe-file.c b/tools/perf/util/probe-file.c
-index 4ae1123c6794..a879fe8eede3 100644
---- a/tools/perf/util/probe-file.c
-+++ b/tools/perf/util/probe-file.c
-@@ -999,6 +999,7 @@ int probe_cache__show_all_caches(struct strfilter *filter)
- enum ftrace_readme {
- 	FTRACE_README_PROBE_TYPE_X = 0,
- 	FTRACE_README_KRETPROBE_OFFSET,
-+	FTRACE_README_ARRAY_TYPE,
- 	FTRACE_README_END,
- };
- 
-@@ -1010,6 +1011,8 @@ static struct {
- 	[idx] = {.pattern = pat, .avail = false}
- 	DEFINE_TYPE(FTRACE_README_PROBE_TYPE_X, "*type: * x8/16/32/64,*"),
- 	DEFINE_TYPE(FTRACE_README_KRETPROBE_OFFSET, "*place (kretprobe): *"),
-+	DEFINE_TYPE(FTRACE_README_ARRAY_TYPE,
-+		    "*<type>\\\\\\[<array-size>\\\\\\]*"),
- };
- 
- static bool scan_ftrace_readme(enum ftrace_readme type)
-@@ -1057,6 +1060,8 @@ bool probe_type_is_available(enum probe_type type)
- 		return false;
- 	else if (type == PROBE_TYPE_X)
- 		return scan_ftrace_readme(FTRACE_README_PROBE_TYPE_X);
-+	else if (type == PROBE_TYPE_ARRAY)
-+		return scan_ftrace_readme(FTRACE_README_ARRAY_TYPE);
- 
- 	return true;
- }
-diff --git a/tools/perf/util/probe-file.h b/tools/perf/util/probe-file.h
-index 63f29b1d22c1..654290b2fd9c 100644
---- a/tools/perf/util/probe-file.h
-+++ b/tools/perf/util/probe-file.h
-@@ -27,6 +27,7 @@ enum probe_type {
- 	PROBE_TYPE_X,
- 	PROBE_TYPE_STRING,
- 	PROBE_TYPE_BITFIELD,
-+	PROBE_TYPE_ARRAY,
- 	PROBE_TYPE_END,
- };
- 
-diff --git a/tools/perf/util/probe-finder.c b/tools/perf/util/probe-finder.c
-index c37fbef1711d..a1df7926edfc 100644
---- a/tools/perf/util/probe-finder.c
-+++ b/tools/perf/util/probe-finder.c
-@@ -290,13 +290,52 @@ static int convert_variable_location(Dwarf_Die *vr_die, Dwarf_Addr addr,
- 	return ret2;
- }
- 
-+static int convert_variable_string_type(Dwarf_Die *vr_die, Dwarf_Die *type,
-+					struct probe_trace_arg *tvar)
-+{
-+	struct probe_trace_arg_ref **ref_ptr = &tvar->ref;
-+	int ret;
-+
-+	ret = dwarf_tag(type);
-+	if (ret != DW_TAG_pointer_type && ret != DW_TAG_array_type) {
-+		pr_warning("Failed to cast into string: "
-+			   "%s(%s) is not a pointer nor array.\n",
-+			   dwarf_diename(vr_die), dwarf_diename(type));
-+		return -EINVAL;
-+	}
-+	if (ret == DW_TAG_pointer_type && tvar->length == 0) {
-+		while (*ref_ptr)
-+			ref_ptr = &(*ref_ptr)->next;
-+		/* Add new reference with offset +0 */
-+		*ref_ptr = zalloc(sizeof(struct probe_trace_arg_ref));
-+		if (*ref_ptr == NULL) {
-+			pr_warning("Out of memory error\n");
-+			return -ENOMEM;
-+		}
-+	}
-+	if (die_get_real_type(type, type) == NULL) {
-+		pr_warning("Failed to get a type"
-+			   " information.\n");
-+		return -ENOENT;
-+	}
-+	if (!die_compare_name(type, "char") &&
-+	    !die_compare_name(type, "unsigned char")) {
-+		pr_warning("Failed to cast into string: "
-+			   "%s is not (unsigned) char *.\n",
-+			   dwarf_diename(vr_die));
-+		return -EINVAL;
-+	}
-+	tvar->type = strdup("string");
-+	return (tvar->type == NULL) ? -ENOMEM : 0;
-+}
-+
- #define BYTES_TO_BITS(nb)	((nb) * BITS_PER_LONG / sizeof(long))
- 
- static int convert_variable_type(Dwarf_Die *vr_die,
- 				 struct probe_trace_arg *tvar,
--				 const char *cast)
-+				 struct perf_probe_arg *pvar)
- {
--	struct probe_trace_arg_ref **ref_ptr = &tvar->ref;
-+	const char *cast = pvar->type;
- 	Dwarf_Die type;
- 	char buf[16];
- 	char sbuf[STRERR_BUFSIZE];
-@@ -304,6 +343,12 @@ static int convert_variable_type(Dwarf_Die *vr_die,
- 	int ret;
- 	char prefix;
- 
-+	tvar->length = pvar->length;
-+	if (tvar->length && !probe_type_is_available(PROBE_TYPE_ARRAY)) {
-+		pr_warning("This kerneld doesn't support array type.\n");
-+		return -ENOTSUP;
-+	}
-+
- 	/* TODO: check all types */
- 	if (cast && strcmp(cast, "string") != 0 && strcmp(cast, "x") != 0 &&
- 	    strcmp(cast, "s") != 0 && strcmp(cast, "u") != 0) {
-@@ -334,40 +379,8 @@ static int convert_variable_type(Dwarf_Die *vr_die,
- 	pr_debug("%s type is %s.\n",
- 		 dwarf_diename(vr_die), dwarf_diename(&type));
- 
--	if (cast && strcmp(cast, "string") == 0) {	/* String type */
--		ret = dwarf_tag(&type);
--		if (ret != DW_TAG_pointer_type &&
--		    ret != DW_TAG_array_type) {
--			pr_warning("Failed to cast into string: "
--				   "%s(%s) is not a pointer nor array.\n",
--				   dwarf_diename(vr_die), dwarf_diename(&type));
--			return -EINVAL;
--		}
--		if (die_get_real_type(&type, &type) == NULL) {
--			pr_warning("Failed to get a type"
--				   " information.\n");
--			return -ENOENT;
--		}
--		if (ret == DW_TAG_pointer_type) {
--			while (*ref_ptr)
--				ref_ptr = &(*ref_ptr)->next;
--			/* Add new reference with offset +0 */
--			*ref_ptr = zalloc(sizeof(struct probe_trace_arg_ref));
--			if (*ref_ptr == NULL) {
--				pr_warning("Out of memory error\n");
--				return -ENOMEM;
--			}
--		}
--		if (!die_compare_name(&type, "char") &&
--		    !die_compare_name(&type, "unsigned char")) {
--			pr_warning("Failed to cast into string: "
--				   "%s is not (unsigned) char *.\n",
--				   dwarf_diename(vr_die));
--			return -EINVAL;
--		}
--		tvar->type = strdup(cast);
--		return (tvar->type == NULL) ? -ENOMEM : 0;
--	}
-+	if (cast && strcmp(cast, "string") == 0)	/* String type */
-+		return convert_variable_string_type(vr_die, &type, tvar);
- 
- 	if (cast && (strcmp(cast, "u") == 0))
- 		prefix = 'u';
-@@ -381,9 +394,13 @@ static int convert_variable_type(Dwarf_Die *vr_die,
- 			 probe_type_is_available(PROBE_TYPE_X) ? 'x' : 'u';
- 
- 	ret = dwarf_bytesize(&type);
--	if (ret <= 0)
--		/* No size ... try to use default type */
-+	if (ret <= 0) { /* No size ... try to use default type */
-+		if (tvar->length) {	/* But array can not be dumped */
-+			pr_warning("Failed to convert array with unsupported type\n");
-+			return -EINVAL;
-+		}
- 		return 0;
-+	}
- 	ret = BYTES_TO_BITS(ret);
- 
- 	/* Check the bitwidth */
-@@ -559,7 +576,7 @@ static int convert_variable(Dwarf_Die *vr_die, struct probe_finder *pf)
- 		vr_die = &die_mem;
- 	}
- 	if (ret == 0)
--		ret = convert_variable_type(vr_die, pf->tvar, pf->pvar->type);
-+		ret = convert_variable_type(vr_die, pf->tvar, pf->pvar);
- 	/* *expr will be cached in libdw. Don't free it. */
- 	return ret;
- }
+> 
+> Changes from the v5 is here:
+> 
+>  - [16/21] Fix README to add backslash escapes to "[]"
+>  - [20/21] Add a bugfix patch for perf-probe.
+>  - [21/21] Add array type support for perf-probe.
+> 
+> Note that [20/21] is same as https://lkml.org/lkml/2018/3/16/108
+> I have to add this because the last patch depends on it.
+> Anyway, [20/21] and [21/21] is only for showing how perf-probe
+> will enhanced by this series. So those are extra work.
+> I will resend thodr again after [01/21]-[19/21] are merged.
+> 
+> Here are examples:
+> 
+> o 'symbol' type
+> 
+>  # echo 'p vfs_read $stack0:symbol' > kprobe_events 
+>  # echo 1 > events/kprobes/p_vfs_read_0/enable 
+>  # tail -n 3 trace
+>               sh-729   [007] ...2   105.753637: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=SyS_read+0x42/0x90
+>             tail-736   [000] ...2   105.754904: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=kernel_read+0x2c/0x40
+>             tail-736   [000] ...2   105.754929: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=kernel_read+0x2c/0x40
+> 
+> 
+> o $argN 
+> 
+>  # echo 'p vfs_read $arg0 $arg1 $arg2' > kprobe_events
+>  # echo 1 > events/kprobes/p_vfs_read_0/enable 
+>  # tail -n 3 trace
+>               sh-726   [007] ...2   134.288973: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffff88001d98ec00 arg2=0x7ffeb4330f79 arg3=0x1
+>             tail-731   [000] ...2   134.289987: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffff88001d9dd200 arg2=0xffff88001d8a0a00 arg3=0x80
+>             tail-731   [000] ...2   134.290016: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffff88001d9dd200 arg2=0xffff88001faf4a00 arg3=0x150
+> 
+> 
+> o Array type
+> 
+>  # echo 'p vfs_read +0($stack):x64 +0($stack):x8[8]' > kprobe_events 
+>  # echo 1 > events/kprobes/p_vfs_read_0/enable 
+>  # tail -n 3 trace
+>               sh-729   [007] ...2    91.701664: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffffffff811b1252 arg2={0x52,0x12,0x1b,0x81,0xff,0xff,0xff,0xff}
+>             tail-734   [000] ...2    91.702366: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffffffff811b0dec arg2={0xec,0xd,0x1b,0x81,0xff,0xff,0xff,0xff}
+>             tail-734   [000] ...2    91.702386: p_vfs_read_0: (vfs_read+0x0/0x130) arg1=0xffffffff811b0dec arg2={0xec,0xd,0x1b,0x81,0xff,0xff,0xff,0xff}
+>  #
+>  # cat events/kprobes/p_vfs_read_0/format 
+> name: p_vfs_read_0
+> ID: 1069
+> format:
+> 	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
+> 	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
+> 	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
+> 	field:int common_pid;	offset:4;	size:4;	signed:1;
+> 
+> 	field:unsigned long __probe_ip;	offset:8;	size:8;	signed:0;
+> 	field:u64 arg1;	offset:16;	size:0;	signed:0;
+> 	field:u8 arg2[8];	offset:24;	size:8;	signed:0;
+> 
+> print fmt: "(%lx) arg1=0x%Lx arg2={0x%x,0x%x,0x%x,0x%x,0x%x,0x%x,0x%x,0x%x}", REC->__probe_ip, REC->arg1, REC->arg2[0], REC->arg2[1], REC->arg2[2], REC->arg2[3], REC->arg2[4], REC->arg2[5], REC->arg2[6], REC->arg2[7]
+> 
+> o String Array type
+> 
+>  # echo "p create_trace_kprobe arg1=+0(%si):string[3]" > kprobe_events 
+>  # echo test1 test2 test3 >> kprobe_events 
+> sh: write error: Invalid argument
+>  # echo 'p vfs_read $stack' >> kprobe_events 
+>  # tail -n 2 trace 
+>               sh-744   [007] ...1   183.382407: p_create_trace_kprobe_0: (create_trace_kprobe+0x0/0x890) arg1={"test1","test2","test3"}
+>               sh-744   [007] ...1   230.487809: p_create_trace_kprobe_0: (create_trace_kprobe+0x0/0x890) arg1={"p","vfs_read","$stack"}
+> 
+> 
+> Thank you,
+> 
+> ---
+> 
+> Masami Hiramatsu (21):
+>       [BUGFIX] tracing: probeevent: Fix to support minus offset from symbol
+>       selftests: ftrace: Add probe event argument syntax testcase
+>       selftests: ftrace: Add a testcase for string type with kprobe_event
+>       selftests: ftrace: Add a testcase for probepoint
+>       tracing: probeevent: Cleanup print argument functions
+>       tracing: probeevent: Cleanup argument field definition
+>       tracing: probeevent: Remove NOKPROBE_SYMBOL from print functions
+>       tracing: probeevent: Introduce new argument fetching code
+>       tracing: probeevent: Unify fetch type tables
+>       tracing: probeevent: Return consumed bytes of dynamic area
+>       tracing: probeevent: Append traceprobe_ for exported function
+>       tracing: probeevent: Unify fetch_insn processing common part
+>       tracing: probeevent: Add symbol type
+>       x86: ptrace: Add function argument access API
+>       tracing: probeevent: Add $argN for accessing function args
+>       tracing: probeevent: Add array type support
+>       selftests: ftrace: Add a testcase for symbol type
+>       selftests: ftrace: Add a testcase for $argN with kprobe_event
+>       selftests: ftrace: Add a testcase for array type with kprobe_event
+>       [RESEND] perf-probe: Fix to convert array type collectly
+>       perf-probe: Add array argument support
+> 
+> 
+>  Documentation/trace/kprobetrace.txt                |   26 +
+>  arch/Kconfig                                       |    7 
+>  arch/x86/Kconfig                                   |    1 
+>  arch/x86/include/asm/ptrace.h                      |   38 +
+>  kernel/trace/trace.c                               |    9 
+>  kernel/trace/trace_kprobe.c                        |  366 ++++--------
+>  kernel/trace/trace_probe.c                         |  628 +++++++++-----------
+>  kernel/trace/trace_probe.h                         |  284 +++------
+>  kernel/trace/trace_probe_tmpl.h                    |  214 +++++++
+>  kernel/trace/trace_uprobe.c                        |  168 ++---
+>  tools/perf/Documentation/perf-probe.txt            |    2 
+>  tools/perf/util/probe-event.c                      |   20 +
+>  tools/perf/util/probe-event.h                      |    2 
+>  tools/perf/util/probe-file.c                       |    5 
+>  tools/perf/util/probe-file.h                       |    1 
+>  tools/perf/util/probe-finder.c                     |  108 ++-
+>  .../ftrace/test.d/kprobe/kprobe_args_argN.tc       |   25 +
+>  .../ftrace/test.d/kprobe/kprobe_args_array.tc      |   92 +++
+>  .../ftrace/test.d/kprobe/kprobe_args_string.tc     |   46 +
+>  .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     |   77 ++
+>  .../ftrace/test.d/kprobe/kprobe_args_syntax.tc     |   97 +++
+>  .../selftests/ftrace/test.d/kprobe/probepoint.tc   |   43 +
+>  22 files changed, 1319 insertions(+), 940 deletions(-)
+>  create mode 100644 kernel/trace/trace_probe_tmpl.h
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc
+> 
+> --
+> Masami Hiramatsu (Linaro) <mhiramat at kernel.org>
 
+
+-- 
+Masami Hiramatsu <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
