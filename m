@@ -1,51 +1,54 @@
-From: luto at kernel.org (Andy Lutomirski)
-Date: Sat, 17 Mar 2018 08:25:07 -0700
-Subject: [PATCH] selftests/x86/ptrace_syscall: Fix for yet more glibc
- interference
-Message-ID: <bc80338b453afa187bc5f895bd8e2c8d6e264da2.1521300271.git.luto@kernel.org>
+From: ravi.bangoria at linux.vnet.ibm.com (Ravi Bangoria)
+Date: Mon, 19 Mar 2018 13:29:59 +0530
+Subject: [PATCH v6 21/21] perf-probe: Add array argument support
+In-Reply-To: <152129118998.31874.16273532808298489908.stgit@devbox>
+References: <152129024033.31874.15800253385376959274.stgit@devbox>
+ <152129118998.31874.16273532808298489908.stgit@devbox>
+Message-ID: <8c02c538-4934-59c2-7795-9058ce57e625@linux.vnet.ibm.com>
 
-glibc keeps getting cleverer, and my version now turns raise() into
-more than one syscall.  Since the test relies on ptrace seeing an
-exact set of syscalls, this breaks the test.  Replace raise(SIGSTOP)
-with syscall(SYS_tgkill, ...) to force glibc to get out of our way.
+Hi Masami,
 
-Cc: stable at vger.kernel.org
-Signed-off-by: Andy Lutomirski <luto at kernel.org>
----
- tools/testing/selftests/x86/ptrace_syscall.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+On 03/17/2018 06:23 PM, Masami Hiramatsu wrote:
+> Since kprobes events support an array argument, perf-probe
+> can also support dumping array now.
+> The syntax are
+>
+>  <array-var>[<range>]
+> or
+>  <pointer-var>[<range>]
+>
+> where the <range> is <start>..<end>. e.g. array[0..5].
+> This can also be available with string type. In this
+> case, the string array should be "char *array[]" or
+> "char **array_ptr".
+>
+> Note that this feature is only available on the kernel which
+> supports array type.
 
-diff --git a/tools/testing/selftests/x86/ptrace_syscall.c b/tools/testing/selftests/x86/ptrace_syscall.c
-index 1ae1c5a7392e..6f22238f3217 100644
---- a/tools/testing/selftests/x86/ptrace_syscall.c
-+++ b/tools/testing/selftests/x86/ptrace_syscall.c
-@@ -183,8 +183,10 @@ static void test_ptrace_syscall_restart(void)
- 		if (ptrace(PTRACE_TRACEME, 0, 0, 0) != 0)
- 			err(1, "PTRACE_TRACEME");
- 
-+		pid_t pid = getpid(), tid = syscall(SYS_gettid);
-+
- 		printf("\tChild will make one syscall\n");
--		raise(SIGSTOP);
-+		syscall(SYS_tgkill, pid, tid, SIGSTOP);
- 
- 		syscall(SYS_gettid, 10, 11, 12, 13, 14, 15);
- 		_exit(0);
-@@ -301,9 +303,11 @@ static void test_restart_under_ptrace(void)
- 		if (ptrace(PTRACE_TRACEME, 0, 0, 0) != 0)
- 			err(1, "PTRACE_TRACEME");
- 
-+		pid_t pid = getpid(), tid = syscall(SYS_gettid);
-+
- 		printf("\tChild will take a nap until signaled\n");
- 		setsigign(SIGUSR1, SA_RESTART);
--		raise(SIGSTOP);
-+		syscall(SYS_tgkill, pid, tid, SIGSTOP);
- 
- 		syscall(SYS_pause, 0, 0, 0, 0, 0, 0);
- 		_exit(0);
--- 
-2.14.3
+User can still do,
+
+# perf probe -x ~/hello main:3 'a=a:x32[3]'
+
+which will successfully be installed in uprobe_events. But for a
+perf tool, x32[3] is not a valid type. And it seems perf tool don't
+validate the 'type' field:
+
+    static int parse_perf_probe_arg(char *str, struct perf_probe_arg *arg)
+    {
+        ....
+        tmp = strchr(str, ':');
+        if (tmp) {      /* Type setting */
+                *tmp = '\0';
+                arg->type = strdup(tmp + 1);
+                if (arg->type == NULL)
+                        return -ENOMEM;
+                pr_debug("type:%s ", arg->type);
+        }
+
+Is it okay to allow user to specify array size with type field?
+
+Thanks,
+Ravi
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
