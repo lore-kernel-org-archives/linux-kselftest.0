@@ -1,60 +1,67 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Wed, 21 Mar 2018 10:52:17 -0600
-Subject: [PATCH] selftests/android/ion: Makefile: fix build error
-In-Reply-To: <CADYN=9LcM1N3xSEMq_AgF7=JmC-ZPif2=J2mY9X_yqg1gHMb7Q@mail.gmail.com>
-References: <20180308143741.4415-1-anders.roxell@linaro.org>
- <9e41eb91-8bac-0bf0-987d-8d95c0bfce94@redhat.com>
- <CADYN=9LcM1N3xSEMq_AgF7=JmC-ZPif2=J2mY9X_yqg1gHMb7Q@mail.gmail.com>
-Message-ID: <2cf8f691-0951-57bb-6670-53d762946d9d@kernel.org>
+From: mhiramat@kernel.org (Masami Hiramatsu)
+Date: Thu, 22 Mar 2018 18:23:47 +0800
+Subject: [PATCH v6 21/21] perf-probe: Add array argument support
+In-Reply-To: <8c02c538-4934-59c2-7795-9058ce57e625@linux.vnet.ibm.com>
+References: <152129024033.31874.15800253385376959274.stgit@devbox>
+ <152129118998.31874.16273532808298489908.stgit@devbox>
+ <8c02c538-4934-59c2-7795-9058ce57e625@linux.vnet.ibm.com>
+Message-ID: <20180322182347.ca1aab9b77ab4c351100646b@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180321165217.Kx-yOlwXvh_1F3Mjw-f7qxnnDwasLHtuysvnalvYqCM@z>
+Message-ID: <20180322102347.Mv2GWMnoNl6VkZdzytaHtTR5cbTLYnjOKdeu3Z6JBVg@z>
 
-On 03/08/2018 04:30 PM, Anders Roxell wrote:
-> On 8 March 2018@20:32, Laura Abbott <labbott@redhat.com> wrote:
->> On 03/08/2018 06:37 AM, Anders Roxell wrote:
->>>
->>> Fails to build iomap_test.c due to missing include
->>>
->>> gcc  -I. -I../../../../../drivers/staging/android/uapi/ -Wall -O2 -g
->>> ionmap_test.c ipcsocket.c ionutils.c   -o ionmap_test
->>> ionmap_test.c:12:27: fatal error: linux/dma-buf.h: No such file or
->>> directory
->>>   #include <linux/dma-buf.h>
->>>                             ^
->>> compilation terminated.
->>> <builtin>: recipe for target 'ionmap_test' failed
->>> make[2]: *** [ionmap_test] Error 1
->>>
->>> In the current code, we add a new -I ../../../../../usr/include/ to the
->>> INCLUDEDIR variable. Also add ionmap_test to the .gitignore file.
->>>> Fixes: ac93f7046a53 ("selftests: ion: Add simple test with the vgem
->>>> driver")
->>
->>
->> Where is this hash from?
-> 
-> In linux-next.
-> 
->> It's not in Linus' master branch.
->> Are the /usr/include header properly sanitized
-> 
-> That my understanding but please correct me if I'm wrong.
-> 
-> Cheers,
-> Anders
-> 
->> , if so that's nice
->> because there's been debates before about how best to pick up
->> the sanitized headers. I see that used several other places
->> around self-tests too. Anyway, you can add
->>
->> Acked-by: Laura Abbott <labbott at redhat.com>
->>
+On Mon, 19 Mar 2018 13:29:59 +0530
+Ravi Bangoria <ravi.bangoria@linux.vnet.ibm.com> wrote:
 
-Thanks. Applied to linux-kselftest next for 4.17-rc1
+> Hi Masami,
+> 
+> On 03/17/2018 06:23 PM, Masami Hiramatsu wrote:
+> > Since kprobes events support an array argument, perf-probe
+> > can also support dumping array now.
+> > The syntax are
+> >
+> >  <array-var>[<range>]
+> > or
+> >  <pointer-var>[<range>]
+> >
+> > where the <range> is <start>..<end>. e.g. array[0..5].
+> > This can also be available with string type. In this
+> > case, the string array should be "char *array[]" or
+> > "char **array_ptr".
+> >
+> > Note that this feature is only available on the kernel which
+> > supports array type.
+> 
+> User can still do,
+> 
+> # perf probe -x ~/hello main:3 'a=a:x32[3]'
+> 
+> which will successfully be installed in uprobe_events. But for a
+> perf tool, x32[3] is not a valid type. And it seems perf tool don't
+> validate the 'type' field:
+> 
+>     static int parse_perf_probe_arg(char *str, struct perf_probe_arg *arg)
+>     {
+>         ....
+>         tmp = strchr(str, ':');
+>         if (tmp) {      /* Type setting */
+>                 *tmp = '\0';
+>                 arg->type = strdup(tmp + 1);
+>                 if (arg->type == NULL)
+>                         return -ENOMEM;
+>                 pr_debug("type:%s ", arg->type);
+>         }
+> 
+> Is it okay to allow user to specify array size with type field?
 
--- Shuah
+Fro this patch, yes. The availability of type is checked only when
+it is automatically generated.
+IMO, it should be done in another patch, something like
+"Validate user specified type casting" patch. Would you need it?
 
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
