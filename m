@@ -1,35 +1,59 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Fri, 23 Mar 2018 12:36:47 -0400
-Subject: [PATCH v6 05/21] tracing: probeevent: Cleanup print argument
- functions
-In-Reply-To: <152129047203.31874.3188700720826213215.stgit@devbox>
+From: mhiramat at kernel.org (Masami Hiramatsu)
+Date: Mon, 26 Mar 2018 12:53:38 +0900
+Subject: [PATCH v6 21/21] perf-probe: Add array argument support
+In-Reply-To: <8b3ad72c-f28c-8fc0-32b8-4401dbe16358@linux.vnet.ibm.com>
 References: <152129024033.31874.15800253385376959274.stgit@devbox>
- <152129047203.31874.3188700720826213215.stgit@devbox>
-Message-ID: <20180323123647.4398ae48@gandalf.local.home>
+ <152129118998.31874.16273532808298489908.stgit@devbox>
+ <8c02c538-4934-59c2-7795-9058ce57e625@linux.vnet.ibm.com>
+ <20180322182347.ca1aab9b77ab4c351100646b@kernel.org>
+ <8b3ad72c-f28c-8fc0-32b8-4401dbe16358@linux.vnet.ibm.com>
+Message-ID: <20180326125338.16f9eeead34feeb86114ee39@kernel.org>
 
-On Sat, 17 Mar 2018 21:41:12 +0900
-Masami Hiramatsu <mhiramat at kernel.org> wrote:
+On Thu, 22 Mar 2018 16:19:46 +0530
+Ravi Bangoria <ravi.bangoria at linux.vnet.ibm.com> wrote:
 
-> Current print argument functions prints the argument
-> name too. It is not good for printing out multiple
-> values for one argument. This change it to just print
-> out the value.
+> Hi Masami :)
+> 
+> On 03/22/2018 03:53 PM, Masami Hiramatsu wrote:
+> > On Mon, 19 Mar 2018 13:29:59 +0530
+> > Ravi Bangoria <ravi.bangoria at linux.vnet.ibm.com> wrote:
+> >
+> >>
+> >> Is it okay to allow user to specify array size with type field?
+> > Fro this patch, yes.
+> 
+> So IIUC, perf _tool_ will allow user to record array either with "name[range]"
+> or by "name:type[length]". Please correct me if that's wrong.
 
-Hi Masami,
+Yes, it is correct.
 
-This is a confusing change log, as I have no idea what this patch does.
-Can you add a "before" and "after" of what you mean. Some examples of
-what it currently does to show why it looks bad, and then an example of
-what it looks like after the patch.
+> And If perf tool will allow array length along with TYPE field, I guess we should
+> document that in man perf-probe?
+
+Ah, right. OK, I'll add it.
 
 Thanks!
 
--- Steve
+> 
+> Otherwise,
+> 
+> Acked-by: Ravi Bangoria <ravi.bangoria at linux.vnet.ibm.com>
+> 
+> Thanks,
+> Ravi
+> 
+> >  The availability of type is checked only when
+> > it is automatically generated.
+> > IMO, it should be done in another patch, something like
+> > "Validate user specified type casting" patch. Would you need it?
+> >
+> > Thank you,
+> >
+> 
 
 
-> 
-> Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
-> 
+-- 
+Masami Hiramatsu <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
