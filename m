@@ -1,58 +1,29 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Mon, 26 Mar 2018 13:17:33 +0900
-Subject: [PATCH v6 05/21] tracing: probeevent: Cleanup print argument
- functions
-In-Reply-To: <20180323123647.4398ae48@gandalf.local.home>
-References: <152129024033.31874.15800253385376959274.stgit@devbox>
- <152129047203.31874.3188700720826213215.stgit@devbox>
- <20180323123647.4398ae48@gandalf.local.home>
-Message-ID: <20180326131733.ac156981d82c4a38dae307f4@kernel.org>
+From: changbin.du at intel.com (changbin.du at intel.com)
+Date: Mon, 26 Mar 2018 17:23:24 +0800
+Subject: [PATCH 0/4] selftests: fix compiling issues
+Message-ID: <1522056208-4004-1-git-send-email-changbin.du@intel.com>
 
-On Fri, 23 Mar 2018 12:36:47 -0400
-Steven Rostedt <rostedt at goodmis.org> wrote:
+From: Changbin Du <changbin.du at intel.com>
 
-> On Sat, 17 Mar 2018 21:41:12 +0900
-> Masami Hiramatsu <mhiramat at kernel.org> wrote:
-> 
-> > Current print argument functions prints the argument
-> > name too. It is not good for printing out multiple
-> > values for one argument. This change it to just print
-> > out the value.
-> 
-> Hi Masami,
-> 
-> This is a confusing change log, as I have no idea what this patch does.
-> Can you add a "before" and "after" of what you mean. Some examples of
-> what it currently does to show why it looks bad, and then an example of
-> what it looks like after the patch.
+These 4 patches fixed all the existing compiling errors. With this serias,
+no compiling error reported after running 'make kselftest'.
 
-OK, this is actually just a cleanup patch. No functional difference between 
-"before" and "after". For more flexible argument, like array type, we need
-to decouple with argument name and its value printing. Is below more clear
-to you?
+Changbin Du (4):
+  selftests/Makefile: append a slash to env variable OUTPUT
+  selftests/gpio: fix paths in Makefile
+  kselftest: install sanitized kernel headers before compiling
+  selftests/bpf: fix compiling errors
 
-
-Cleanup argument-printing functions to decouple it into name-printing and
-value-printing, so that it can support more flexible argument expression,
-like array type.
-
-Thanks,
-
-
-
-> 
-> Thanks!
-> 
-> -- Steve
-> 
-> 
-> > 
-> > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
-> > 
-
+ tools/testing/selftests/.gitignore      |  4 ----
+ tools/testing/selftests/Makefile        | 21 ++++++++++++---------
+ tools/testing/selftests/bpf/Makefile    |  5 +++--
+ tools/testing/selftests/gpio/.gitignore |  4 ++++
+ tools/testing/selftests/gpio/Makefile   | 14 +++++++-------
+ 5 files changed, 26 insertions(+), 22 deletions(-)
 
 -- 
-Masami Hiramatsu <mhiramat at kernel.org>
+2.7.4
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
