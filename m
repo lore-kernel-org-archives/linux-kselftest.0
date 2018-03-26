@@ -1,99 +1,47 @@
-From: changbin.du at intel.com (changbin.du at intel.com)
-Date: Mon, 26 Mar 2018 17:23:27 +0800
-Subject: [PATCH 3/4] kselftest: install sanitized kernel headers before
- compiling
-In-Reply-To: <1522056208-4004-1-git-send-email-changbin.du@intel.com>
-References: <1522056208-4004-1-git-send-email-changbin.du@intel.com>
-Message-ID: <1522056208-4004-4-git-send-email-changbin.du@intel.com>
+From: shuahkh at osg.samsung.com (Shuah Khan)
+Date: Mon, 26 Mar 2018 08:44:04 -0600
+Subject: [PATCH] selftests: Print the test we're running to /dev/kmsg
+In-Reply-To: <20180323094427.21938-1-mpe@ellerman.id.au>
+References: <20180323094427.21938-1-mpe@ellerman.id.au>
+Message-ID: <5575d84d-5737-9610-5cef-bbfda909b704@osg.samsung.com>
 
-From: Changbin Du <changbin.du at intel.com>
+On 03/23/2018 03:44 AM, Michael Ellerman wrote:
+> Some tests cause the kernel to print things to the kernel log
+> buffer (ie. printk), in particular oops and warnings etc. However when
+> running all the tests in succession it's not always obvious which
+> test(s) caused the kernel to print something.
+> 
+> We can narrow it down by printing which test directory we're running
+> in to /dev/kmsg, if it's writable.
+> 
+> Example output:
+> 
+>   [  170.149149] kselftest: Running tests in powerpc
+>   [  305.300132] kworker/dying (71) used greatest stack depth: 7776 bytes left
+>   [  808.915456] kselftest: Running tests in pstore
+> 
+> Signed-off-by: Michael Ellerman <mpe at ellerman.id.au>
+> ---
+>  tools/testing/selftests/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 7442dfb73b7f..0fbe778efd5f 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -130,6 +130,7 @@ ifdef INSTALL_PATH
+>  		BUILD_TARGET=$$BUILD/$$TARGET;	\
+>  		echo "echo ; echo Running tests in $$TARGET" >> $(ALL_SCRIPT); \
+>  		echo "echo ========================================" >> $(ALL_SCRIPT); \
+> +		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
+>  		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
+>  		make -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
+>  		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
+> 
 
-There are test cases that require kernel headers. Some of this
-cases has put the dependency check into individual Makefiles,
-but some not. Let's sync the kernel headers at top level
-Makefile to avoid compiling errors like below.
+Thanks Michael. I will get this to 4.17-rc1
 
-make[1]: Entering directory '/home/changbin/work/linux/tools/testing/selftests/membarrier'
-gcc -g -I../../../../usr/include/    membarrier_test.c  -o /home/changbin/work/linux/tools/testing/selftests/membarrier//membarrier_test
-membarrier_test.c: In function ‘test_membarrier_global_success’:
-membarrier_test.c:64:12: error: ‘MEMBARRIER_CMD_GLOBAL’ undeclared (first use in this function)
-  int cmd = MEMBARRIER_CMD_GLOBAL, flags = 0;
-            ^
-membarrier_test.c:64:12: note: each undeclared identifier is reported only once for each function it appears in
-membarrier_test.c: In function ‘test_membarrier_private_expedited_fail’:
-membarrier_test.c:80:12: error: ‘MEMBARRIER_CMD_PRIVATE_EXPEDITED’ undeclared (first use in this function)
-  int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
-            ^
-membarrier_test.c: In function ‘test_membarrier_register_private_expedited_success’:
-membarrier_test.c:103:12: error: ‘MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED’ undeclared (first use in this function)
-  int cmd = MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED, flags = 0;
-            ^
-membarrier_test.c: In function ‘test_membarrier_private_expedited_success’:
-membarrier_test.c:120:12: error: ‘MEMBARRIER_CMD_PRIVATE_EXPEDITED’ undeclared (first use in this function)
-  int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
-            ^
-membarrier_test.c: In function ‘test_membarrier_private_expedited_sync_core_fail’:
-membarrier_test.c:137:12: error: ‘MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE’ undeclared (first use in this function)
-  int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE, flags = 0;
-            ^
-membarrier_test.c: In function ‘test_membarrier_register_private_expedited_sync_core_success’:
-membarrier_test.c:160:12: error: ‘MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE’ undeclared (first use in this function)
-  int cmd = MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE, flags = 0;
-            ^
-membarrier_test.c: In function ‘test_membarrier_private_expedited_sync_core_success’:
-membarrier_test.c:177:12: error: ‘MEMBARRIER_CMD_PRIVATE_EXPEDITED’ undeclared (first use in this function)
-  int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
-            ^
-membarrier_test.c: In function ‘test_membarrier_register_global_expedited_success’:
-membarrier_test.c:194:12: error: ‘MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED’ undeclared (first use in this function)
-  int cmd = MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED, flags = 0;
-            ^
-membarrier_test.c: In function ‘test_membarrier_global_expedited_success’:
-membarrier_test.c:211:12: error: ‘MEMBARRIER_CMD_GLOBAL_EXPEDITED’ undeclared (first use in this function)
-  int cmd = MEMBARRIER_CMD_GLOBAL_EXPEDITED, flags = 0;
-            ^
-membarrier_test.c: In function ‘test_membarrier’:
-membarrier_test.c:253:15: error: ‘MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE’ undeclared (first use in this function)
-  if (status & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
-               ^
-membarrier_test.c: In function ‘test_membarrier_query’:
-membarrier_test.c:296:14: error: ‘MEMBARRIER_CMD_GLOBAL’ undeclared (first use in this function)
-  if (!(ret & MEMBARRIER_CMD_GLOBAL)) {
-              ^
-../lib.mk:109: recipe for target '/home/changbin/work/linux/tools/testing/selftests/membarrier//membarrier_test' failed
-make[1]: *** [/home/changbin/work/linux/tools/testing/selftests/membarrier//membarrier_test] Error 1
-make[1]: Leaving directory '/home/changbin/work/linux/tools/testing/selftests/membarrier'
-
-Signed-off-by: Changbin Du <changbin.du at intel.com>
----
- tools/testing/selftests/Makefile | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 7916aa2..656b674 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -67,13 +67,16 @@ ifndef BUILD
- endif
- 
- export BUILD
--all:
-+all: headers_install
- 	@for TARGET in $(TARGETS); do		\
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
- 		mkdir $$BUILD_TARGET  -p;	\
- 		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET;\
- 	done;
- 
-+headers_install:
-+	make -C ../../../ headers_install
-+
- run_tests: all
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--- 
-2.7.4
-
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
