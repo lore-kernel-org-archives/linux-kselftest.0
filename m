@@ -1,37 +1,74 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Mon, 26 Mar 2018 13:28:32 -0400
-Subject: [PATCH v6 05/21] tracing: probeevent: Cleanup print argument
- functions
-In-Reply-To: <20180326131733.ac156981d82c4a38dae307f4@kernel.org>
-References: <152129024033.31874.15800253385376959274.stgit@devbox>
- <152129047203.31874.3188700720826213215.stgit@devbox>
- <20180323123647.4398ae48@gandalf.local.home>
- <20180326131733.ac156981d82c4a38dae307f4@kernel.org>
-Message-ID: <20180326132832.70e1797e@gandalf.local.home>
-
-On Mon, 26 Mar 2018 13:17:33 +0900
-Masami Hiramatsu <mhiramat at kernel.org> wrote:
-
-> > Masami Hiramatsu <mhiramat at kernel.org> wrote:
-> >   
-> > > Current print argument functions prints the argument
-> > > name too. It is not good for printing out multiple
-> > > values for one argument. This change it to just print
-> > > out the value.  
-> > 
+From: bauerman at linux.vnet.ibm.com (Thiago Jung Bauermann)
+Date: Mon, 26 Mar 2018 16:38:51 -0300
+Subject: [PATCH v12 04/22] selftests/vm: typecast the pkey register
+In-Reply-To: <00081300-e891-3381-3acd-e3312e54fb58@intel.com>
+References: <1519264541-7621-1-git-send-email-linuxram@us.ibm.com>
+ <1519264541-7621-5-git-send-email-linuxram@us.ibm.com>
+ <00081300-e891-3381-3acd-e3312e54fb58@intel.com>
+Message-ID: <87h8p239v8.fsf@morokweng.localdomain>
 
 
-> 
-> Cleanup argument-printing functions to decouple it into name-printing and
-> value-printing, so that it can support more flexible argument expression,
-> like array type.
+Dave Hansen <dave.hansen at intel.com> writes:
 
-Ah, so this is a change to make it possible in the next patches to do
-something more? I'll update the change log to your above.
+> On 02/21/2018 05:55 PM, Ram Pai wrote:
+>> -static inline unsigned int _rdpkey_reg(int line)
+>> +static inline pkey_reg_t _rdpkey_reg(int line)
+>>  {
+>> -	unsigned int pkey_reg = __rdpkey_reg();
+>> +	pkey_reg_t pkey_reg = __rdpkey_reg();
+>>
+>> -	dprintf4("rdpkey_reg(line=%d) pkey_reg: %x shadow: %x\n",
+>> +	dprintf4("rdpkey_reg(line=%d) pkey_reg: %016lx shadow: %016lx\n",
+>>  			line, pkey_reg, shadow_pkey_reg);
+>>  	assert(pkey_reg == shadow_pkey_reg);
+>
+> Hmm.  So we're using %lx for an int?  Doesn't the compiler complain
+> about this?
 
-That makes more sense. Thanks.
+It doesn't because dprintf4() doesn't have the annotation that tells the
+compiler that it takes printf-like arguments. Once I add it:
 
--- Steve
+--- a/tools/testing/selftests/vm/pkey-helpers.h
++++ b/tools/testing/selftests/vm/pkey-helpers.h
+@@ -54,6 +54,10 @@
+ #define DPRINT_IN_SIGNAL_BUF_SIZE 4096
+ extern int dprint_in_signal;
+ extern char dprint_in_signal_buffer[DPRINT_IN_SIGNAL_BUF_SIZE];
++
++#ifdef __GNUC__
++__attribute__((format(printf, 1, 2)))
++#endif
+ static inline void sigsafe_printf(const char *format, ...)
+ {
+ 	va_list ap;
+
+Then it does complain about it. I'm working on a fix where each arch
+will define a format string to use for its pkey_reg_t and use it like
+this:
+
+--- a/tools/testing/selftests/vm/pkey-helpers.h
++++ b/tools/testing/selftests/vm/pkey-helpers.h
+@@ -19,6 +19,7 @@
+ #define u32 uint32_t
+ #define u64 uint64_t
+ #define pkey_reg_t u32
++#define PKEY_REG_FMT "%016x"
+
+ #ifdef __i386__
+ #ifndef SYS_mprotect_key
+@@ -112,7 +113,8 @@ static inline pkey_reg_t _read_pkey_reg(int line)
+ {
+ 	pkey_reg_t pkey_reg = __read_pkey_reg();
+
+-	dprintf4("read_pkey_reg(line=%d) pkey_reg: %016lx shadow: %016lx\n",
++	dprintf4("read_pkey_reg(line=%d) pkey_reg: "PKEY_REG_FMT
++			" shadow: "PKEY_REG_FMT"\n",
+ 			line, pkey_reg, shadow_pkey_reg);
+ 	assert(pkey_reg == shadow_pkey_reg);
+
+--
+Thiago Jung Bauermann
+IBM Linux Technology Center
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
