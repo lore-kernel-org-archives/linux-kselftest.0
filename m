@@ -1,84 +1,100 @@
 From: changbin.du at intel.com (changbin.du at intel.com)
-Date: Tue, 27 Mar 2018 11:11:34 +0800
-Subject: [PATCH v2 4/4] selftests/bpf: fix compiling errors
+Date: Tue, 27 Mar 2018 11:11:31 +0800
+Subject: [PATCH v2 1/4] selftests/Makefile: append a slash to env variable
+ OUTPUT
 In-Reply-To: <1522120294-24926-1-git-send-email-changbin.du@intel.com>
 References: <1522120294-24926-1-git-send-email-changbin.du@intel.com>
-Message-ID: <1522120294-24926-5-git-send-email-changbin.du@intel.com>
+Message-ID: <1522120294-24926-2-git-send-email-changbin.du@intel.com>
 
 From: Changbin Du <changbin.du at intel.com>
 
-This patch fixed below errors of missing head files.
+The tools/build/Makefile.build use 'OUTPUT' variable as below example:
+objprefix    := $(subst ./,,$(OUTPUT)$(dir)/)
 
-tools/testing/selftests$ make
-...
-clang -I. -I./include/uapi -I../../../include/uapi -Wno-compare-distinct-pointer-types \
-	 -O2 -target bpf -emit-llvm -c test_pkt_access.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf//test_pkt_access.o
-In file included from test_pkt_access.c:9:
-In file included from ../../../include/uapi/linux/bpf.h:11:
-In file included from ./include/uapi/linux/types.h:5:
-/usr/include/asm-generic/int-ll64.h:11:10: fatal error: 'asm/bitsperlong.h' file not found
- #include <asm/bitsperlong.h>
-         ^
-1 error generated.
-clang -I. -I./include/uapi -I../../../include/uapi -Wno-compare-distinct-pointer-types \
-	 -O2 -target bpf -emit-llvm -c test_xdp.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf//test_xdp.o
-In file included from test_xdp.c:9:
-In file included from ../../../include/uapi/linux/bpf.h:11:
-In file included from ./include/uapi/linux/types.h:5:
-/usr/include/asm-generic/int-ll64.h:11:10: fatal error: 'asm/bitsperlong.h' file not found
- #include <asm/bitsperlong.h>
-         ^
-1 error generated.
-clang -I. -I./include/uapi -I../../../include/uapi -Wno-compare-distinct-pointer-types \
-	 -O2 -target bpf -emit-llvm -c test_l4lb.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf//test_l4lb.o
-In file included from test_l4lb.c:10:
-In file included from /usr/include/linux/pkt_cls.h:4:
-In file included from ./include/uapi/linux/types.h:5:
-/usr/include/asm-generic/int-ll64.h:11:10: fatal error: 'asm/bitsperlong.h' file not found
- #include <asm/bitsperlong.h>
-         ^
-1 error generated.
-clang -I. -I./include/uapi -I../../../include/uapi -Wno-compare-distinct-pointer-types \
-	 -O2 -target bpf -emit-llvm -c test_tcp_estats.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf//test_tcp_estats.o
-In file included from test_tcp_estats.c:35:
-In file included from ../../../include/uapi/linux/bpf.h:11:
-In file included from ./include/uapi/linux/types.h:5:
-/usr/include/asm-generic/int-ll64.h:11:10: fatal error: 'asm/bitsperlong.h' file not found
- #include <asm/bitsperlong.h>
-...
+So it requires the 'OUTPUT' already has a slash at the end.
+
+This patch can kill below odd paths:
+make[3]: Entering directory '/home/changbin/work/linux/tools/gpio'
+  CC       /home/changbin/work/linux/tools/testing/selftests/gpiolsgpio.o
+  CC       /home/changbin/work/linux/tools/testing/selftests/gpiogpio-utils.o
+  LD       /home/changbin/work/linux/tools/testing/selftests/gpiolsgpio-in.o
+
+A correct path should be:
+/home/changbin/work/linux/tools/testing/selftests/gpio/lsgpio.o
 
 Signed-off-by: Changbin Du <changbin.du at intel.com>
 ---
- tools/testing/selftests/bpf/Makefile | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/testing/selftests/Makefile | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 5c43c18..dc0fdc8 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -10,7 +10,8 @@ ifneq ($(wildcard $(GENHDR)),)
-   GENFLAGS := -DHAVE_GENHDR
- endif
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 7442dfb..7916aa2 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -71,31 +71,31 @@ all:
+ 	@for TARGET in $(TARGETS); do		\
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		mkdir $$BUILD_TARGET  -p;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET;\
++		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET;\
+ 	done;
  
--CFLAGS += -Wall -O2 -I$(APIDIR) -I$(LIBDIR) -I$(GENDIR) $(GENFLAGS) -I../../../include
-+CFLAGS += -Wall -O2 -I$(APIDIR) -I$(LIBDIR) -I$(GENDIR) $(GENFLAGS) \
-+	  -I../../../include -I../../../../usr/include
- LDLIBS += -lcap -lelf -lrt -lpthread
+ run_tests: all
+ 	@for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
++		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET run_tests;\
+ 	done;
  
- # Order correspond to 'make run_tests' order
-@@ -62,7 +63,7 @@ else
-   CPU ?= generic
- endif
+ hotplug:
+ 	@for TARGET in $(TARGETS_HOTPLUG); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET;\
++		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET;\
+ 	done;
  
--CLANG_FLAGS = -I. -I./include/uapi -I../../../include/uapi \
-+CLANG_FLAGS = -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include \
- 	      -Wno-compare-distinct-pointer-types
+ run_hotplug: hotplug
+ 	@for TARGET in $(TARGETS_HOTPLUG); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET run_full_test;\
++		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET run_full_test;\
+ 	done;
  
- $(OUTPUT)/test_l4lb_noinline.o: CLANG_FLAGS += -fno-inline
+ clean_hotplug:
+ 	@for TARGET in $(TARGETS_HOTPLUG); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
++		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET clean;\
+ 	done;
+ 
+ run_pstore_crash:
+@@ -111,7 +111,7 @@ ifdef INSTALL_PATH
+ 	mkdir -p $(INSTALL_PATH)
+ 	@for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
++		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
+ 	done;
+ 
+ 	@# Ask all targets to emit their test scripts
+@@ -131,7 +131,7 @@ ifdef INSTALL_PATH
+ 		echo "echo ; echo Running tests in $$TARGET" >> $(ALL_SCRIPT); \
+ 		echo "echo ========================================" >> $(ALL_SCRIPT); \
+ 		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
+-		make -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
++		make -s --no-print-directory OUTPUT=$$BUILD_TARGET/ -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
+ 		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
+ 	done;
+ 
+@@ -143,7 +143,7 @@ endif
+ clean:
+ 	@for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
++		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET clean;\
+ 	done;
+ 
+ .PHONY: all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean
 -- 
 2.7.4
 
