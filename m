@@ -1,12 +1,12 @@
 From: gregkh at linuxfoundation.org (Greg Kroah-Hartman)
-Date: Tue, 27 Mar 2018 18:27:51 +0200
-Subject: [PATCH 4.14 079/101] selftests/x86/ptrace_syscall: Fix for yet more
+Date: Tue, 27 Mar 2018 18:28:04 +0200
+Subject: [PATCH 4.15 084/105] selftests/x86/ptrace_syscall: Fix for yet more
  glibc interference
-In-Reply-To: <20180327162749.993880276@linuxfoundation.org>
-References: <20180327162749.993880276@linuxfoundation.org>
-Message-ID: <20180327162754.925376966@linuxfoundation.org>
+In-Reply-To: <20180327162757.813009222@linuxfoundation.org>
+References: <20180327162757.813009222@linuxfoundation.org>
+Message-ID: <20180327162803.442514243@linuxfoundation.org>
 
-4.14-stable review patch.  If anyone has any objections, please let me know.
+4.15-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
