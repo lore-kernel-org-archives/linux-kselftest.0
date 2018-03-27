@@ -1,58 +1,94 @@
-From: linuxram at us.ibm.com (Ram Pai)
-Date: Tue, 27 Mar 2018 02:09:25 -0700
-Subject: [PATCH v13 0/3] mm, x86,
- powerpc: Enhancements to Memory Protection Keys.
-Message-ID: <1522141768-25485-1-git-send-email-linuxram@us.ibm.com>
+From: daniel at iogearbox.net (Daniel Borkmann)
+Date: Tue, 27 Mar 2018 11:52:27 +0200
+Subject: [PATCH 4/4] selftests/bpf: fix compiling errors
+In-Reply-To: <20180327090000.fou6oyvr663lbyuq@intel.com>
+References: <1522056208-4004-1-git-send-email-changbin.du@intel.com>
+ <1522056208-4004-5-git-send-email-changbin.du@intel.com>
+ <20180326145511.lzoi6wja6iht5lvq@ast-mbp.dhcp.thefacebook.com>
+ <20180327022010.57u6rn73inbkrycn@intel.com>
+ <20180327030229.txifuth2qmnjo3hy@ast-mbp>
+ <20180327030613.hkp7hox3g4prnbsg@intel.com>
+ <2dd7c04a-eb10-e730-148e-3b04a18e9b44@iogearbox.net>
+ <20180327090000.fou6oyvr663lbyuq@intel.com>
+Message-ID: <90ce8146-cecd-c928-f9c6-470db97b2051@iogearbox.net>
 
-This patch series provides arch-neutral enhancements to
-enable memory-keys on new architecutes, and the corresponding
-changes in x86 and powerpc specific code to support that.
+On 03/27/2018 11:00 AM, Du, Changbin wrote:
+> On Tue, Mar 27, 2018 at 10:52:57AM +0200, Daniel Borkmann wrote:
+>> On 03/27/2018 05:06 AM, Du, Changbin wrote:
+>>> On Mon, Mar 26, 2018 at 08:02:30PM -0700, Alexei Starovoitov wrote:
+>>>> On Tue, Mar 27, 2018 at 10:20:10AM +0800, Du, Changbin wrote:
+>>>>> On Mon, Mar 26, 2018 at 07:55:13AM -0700, Alexei Starovoitov wrote:
+>>>>>> On Mon, Mar 26, 2018 at 05:23:28PM +0800, changbin.du at intel.com wrote:
+>>>>>>> Signed-off-by: Changbin Du <changbin.du at intel.com>
+>>>>>>> ---
+>>>>>>>  tools/testing/selftests/bpf/Makefile | 5 +++--
+>>>>>>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>>>>>>> index 5c43c18..dc0fdc8 100644
+>>>>>>> --- a/tools/testing/selftests/bpf/Makefile
+>>>>>>> +++ b/tools/testing/selftests/bpf/Makefile
+>>>>>>> @@ -10,7 +10,8 @@ ifneq ($(wildcard $(GENHDR)),)
+>>>>>>>    GENFLAGS := -DHAVE_GENHDR
+>>>>>>>  endif
+>>>>>>>  
+>>>>>>> -CFLAGS += -Wall -O2 -I$(APIDIR) -I$(LIBDIR) -I$(GENDIR) $(GENFLAGS) -I../../../include
+>>>>>>> +CFLAGS += -Wall -O2 -I$(APIDIR) -I$(LIBDIR) -I$(GENDIR) $(GENFLAGS) \
+>>>>>>> +	  -I../../../include -I../../../../usr/include
+>>>>>>>  LDLIBS += -lcap -lelf -lrt -lpthread
+>>>>>>>  
+>>>>>>>  # Order correspond to 'make run_tests' order
+>>>>>>> @@ -62,7 +63,7 @@ else
+>>>>>>>    CPU ?= generic
+>>>>>>>  endif
+>>>>>>>  
+>>>>>>> -CLANG_FLAGS = -I. -I./include/uapi -I../../../include/uapi \
+>>>>>>> +CLANG_FLAGS = -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include \
+>>>>>>>  	      -Wno-compare-distinct-pointer-types
+>>>>>>
+>>>>>> Nack.
+>>>>>> I suspect that will break the build for everyone else who's doing it in the directory
+>>>>>> itself instead of the outer one.
+>>>>>
+>>>>> This one? But I didn't see any problem.
+>>>>
+>>>> because the build was lucky and additional path ../../../../usr/include didn't point
+>>>> to a valid dir?
+>>
+>> Agree.
+>>
+>>> I am sorry but I don't understand why you mean *lucky*. Of cause, the path is valid.
+>>
+>> The problem is that this suddenly requires users to do a 'make headers_install' in
+>> order to populate usr/include/ directory in the first place. While it's annoying
+>> enough for BPF samples where this is needed, I absolutely don't want to introduce
+>> this for BPF kselftests. It's the wrong approach. Besides, in tools infra, there is
+>> a tools/arch/*/include/uapi/asm/bitsperlong.h header copy already, so we really need
+>> to use that instead. Please adapt your patch accordingly and respin. Please also Cc
+>> us and netdev at vger.kernel.org for BPF kselftests changes.
+>>
+> Thanks for the explanation. So we expect that tools/arch/*/include is in the searching list, right?
+> The corrent makefile seems not. How do you get this built?
 
-a) Provides ability to support upto 32 keys.  PowerPC
-	can handle 32 keys and hence needs this.
+E.g. take a look at tools/include/asm/barrier.h or tools/include/uapi/asm/bpf_perf_event.h
+just to name two examples. We'd need something similar to this which then points to the
+arch specific includes.
 
-b) Arch-neutral code; and not the arch-specific code,
-   determines the format of the string, that displays the key
-   for each vma in smaps.
+Thanks,
+Daniel
 
-History:
--------
-version v13:
-	(1) fixed a git bisect error. :(
-
-version v12:
-	(1) fixed compilation errors seen with various x86
-		configs.
-version v11:
-	(1) code that displays key in smaps is not any more
-		defined under CONFIG_ARCH_HAS_PKEYS.
-       	    - Comment by Eric W. Biederman and Michal Hocko
-	(2) merged two patches that implemented (1).
-		- comment by Michal Hocko
-
-version prior to v11:
-	(1) used one additional bit from VM_HIGH_ARCH_*
-       		to support 32 keys.
-	    - Suggestion by Dave Hansen.
-	(2) powerpc specific changes to support memory keys.
-
-
-Ram Pai (3):
-  mm, powerpc, x86: define VM_PKEY_BITx bits if CONFIG_ARCH_HAS_PKEYS
-    is enabled
-  mm, powerpc, x86: introduce an additional vma bit for powerpc pkey
-  mm, x86, powerpc: display pkey in smaps only if arch supports pkeys
-
- arch/powerpc/include/asm/mmu_context.h |    5 -----
- arch/powerpc/include/asm/pkeys.h       |    2 ++
- arch/x86/include/asm/mmu_context.h     |    5 -----
- arch/x86/include/asm/pkeys.h           |    1 +
- arch/x86/kernel/fpu/xstate.c           |    5 +++++
- arch/x86/kernel/setup.c                |    8 --------
- fs/proc/task_mmu.c                     |   15 ++++++++-------
- include/linux/mm.h                     |   12 +++++++-----
- include/linux/pkeys.h                  |    7 ++++++-
- 9 files changed, 29 insertions(+), 31 deletions(-)
+> changbin at gvt-dell-host:~/work/linux/tools/testing/selftests/bpf$ make -p
+> [...]
+> clang -I. -I./include/uapi -I../../../include/uapi -Wno-compare-distinct-pointer-types \
+>          -O2 -target bpf -emit-llvm -c test_pkt_access.c -o - |      \
+> llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_pkt_access.o
+> In file included from test_pkt_access.c:9:
+> In file included from ../../../include/uapi/linux/bpf.h:11:
+> In file included from ./include/uapi/linux/types.h:5:
+> /usr/include/asm-generic/int-ll64.h:11:10: fatal error: 'asm/bitsperlong.h' file not found
+> #include <asm/bitsperlong.h>
+> 
+> 
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
