@@ -1,31 +1,12 @@
 From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
-Date: Tue, 27 Mar 2018 12:05:38 -0400
-Subject: [RFC PATCH for 4.17 17/21] rseq: selftests: Provide percpu_op API
+Date: Tue, 27 Mar 2018 12:05:39 -0400
+Subject: [RFC PATCH for 4.17 18/21] rseq: selftests: Provide basic test
 In-Reply-To: <20180327160542.28457-1-mathieu.desnoyers@efficios.com>
 References: <20180327160542.28457-1-mathieu.desnoyers@efficios.com>
-Message-ID: <20180327160542.28457-18-mathieu.desnoyers@efficios.com>
+Message-ID: <20180327160542.28457-19-mathieu.desnoyers@efficios.com>
 
-Introduce percpu-op.h API. It uses rseq internally as fast-path if
-invoked from the right CPU, else cpu_opv as slow-path if called
-from the wrong CPU or if rseq fails.
-
-This allows acting on per-cpu data from various CPUs transparently from
-user-space: cpu_opv will take care of migrating the thread to the
-requested CPU. Use-cases such as rebalancing memory across per-cpu
-memory pools, or migrating tasks for a user-space scheduler, are thus
-facilitated. This also handles debugger single-stepping.
-
-The use from userspace is, e.g. for a counter increment:
-
-    int cpu, ret;
-
-    cpu = rseq_cpu_start();
-    ret = percpu_addv(&data->c[cpu].count, 1, cpu);
-    if (unlikely(ret)) {
-         perror("percpu_addv");
-         return -1;
-    }
-    return 0;
+"basic_test" only asserts that RSEQ works moderately correctly. E.g.
+that the CPUID pointer works.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
 CC: Shuah Khan <shuahkh at osg.samsung.com>
@@ -52,179 +33,71 @@ CC: Boqun Feng <boqun.feng at gmail.com>
 CC: linux-kselftest at vger.kernel.org
 CC: linux-api at vger.kernel.org
 ---
- tools/testing/selftests/rseq/percpu-op.h | 163 +++++++++++++++++++++++++++++++
- 1 file changed, 163 insertions(+)
- create mode 100644 tools/testing/selftests/rseq/percpu-op.h
+ tools/testing/selftests/rseq/basic_test.c | 55 +++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 tools/testing/selftests/rseq/basic_test.c
 
-diff --git a/tools/testing/selftests/rseq/percpu-op.h b/tools/testing/selftests/rseq/percpu-op.h
+diff --git a/tools/testing/selftests/rseq/basic_test.c b/tools/testing/selftests/rseq/basic_test.c
 new file mode 100644
-index 000000000000..c17d165438a6
+index 000000000000..e2086b3885d7
 --- /dev/null
-+++ b/tools/testing/selftests/rseq/percpu-op.h
-@@ -0,0 +1,163 @@
++++ b/tools/testing/selftests/rseq/basic_test.c
+@@ -0,0 +1,55 @@
 +/*
-+ * percpu-op.h
-+ *
-+ * (C) Copyright 2017 - Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
-+ *
-+ * Permission is hereby granted, free of charge, to any person obtaining a copy
-+ * of this software and associated documentation files (the "Software"), to deal
-+ * in the Software without restriction, including without limitation the rights
-+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+ * copies of the Software, and to permit persons to whom the Software is
-+ * furnished to do so, subject to the following conditions:
-+ *
-+ * The above copyright notice and this permission notice shall be included in
-+ * all copies or substantial portions of the Software.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-+ * SOFTWARE.
++ * Basic test coverage for critical regions and rseq_current_cpu().
 + */
 +
-+#ifndef PERCPU_OP_H
-+#define PERCPU_OP_H
++#define _GNU_SOURCE
++#include <assert.h>
++#include <sched.h>
++#include <signal.h>
++#include <stdio.h>
++#include <string.h>
++#include <sys/time.h>
 +
-+#include <stdint.h>
-+#include <stdbool.h>
-+#include <errno.h>
-+#include <stdlib.h>
 +#include "rseq.h"
-+#include "cpu-op.h"
 +
-+static inline __attribute__((always_inline))
-+int percpu_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv,
-+			 int cpu)
++void test_cpu_pointer(void)
 +{
-+	int ret;
++	cpu_set_t affinity, test_affinity;
++	int i;
 +
-+	ret = rseq_cmpeqv_storev(v, expect, newv, cpu);
-+	if (rseq_unlikely(ret)) {
-+		if (ret > 0)
-+			return ret;
-+		return cpu_op_cmpeqv_storev(v, expect, newv, cpu);
++	sched_getaffinity(0, sizeof(affinity), &affinity);
++	CPU_ZERO(&test_affinity);
++	for (i = 0; i < CPU_SETSIZE; i++) {
++		if (CPU_ISSET(i, &affinity)) {
++			CPU_SET(i, &test_affinity);
++			sched_setaffinity(0, sizeof(test_affinity),
++					&test_affinity);
++			assert(sched_getcpu() == i);
++			assert(rseq_current_cpu() == i);
++			assert(rseq_current_cpu_raw() == i);
++			assert(rseq_cpu_start() == i);
++			CPU_CLR(i, &test_affinity);
++		}
++	}
++	sched_setaffinity(0, sizeof(affinity), &affinity);
++}
++
++int main(int argc, char **argv)
++{
++	if (rseq_register_current_thread()) {
++		fprintf(stderr, "Error: rseq_register_current_thread(...) failed(%d): %s\n",
++			errno, strerror(errno));
++		goto init_thread_error;
++	}
++	printf("testing current cpu\n");
++	test_cpu_pointer();
++	if (rseq_unregister_current_thread()) {
++		fprintf(stderr, "Error: rseq_unregister_current_thread(...) failed(%d): %s\n",
++			errno, strerror(errno));
++		goto init_thread_error;
 +	}
 +	return 0;
++
++init_thread_error:
++	return -1;
 +}
-+
-+static inline __attribute__((always_inline))
-+int percpu_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
-+			       off_t voffp, intptr_t *load, int cpu)
-+{
-+	int ret;
-+
-+	ret = rseq_cmpnev_storeoffp_load(v, expectnot, voffp, load, cpu);
-+	if (rseq_unlikely(ret)) {
-+		if (ret > 0)
-+			return ret;
-+		return cpu_op_cmpnev_storeoffp_load(v, expectnot, voffp,
-+						    load, cpu);
-+	}
-+	return 0;
-+}
-+
-+static inline __attribute__((always_inline))
-+int percpu_addv(intptr_t *v, intptr_t count, int cpu)
-+{
-+	if (rseq_unlikely(rseq_addv(v, count, cpu)))
-+		return cpu_op_addv(v, count, cpu);
-+	return 0;
-+}
-+
-+static inline __attribute__((always_inline))
-+int percpu_cmpeqv_storev_storev(intptr_t *v, intptr_t expect,
-+				intptr_t *v2, intptr_t newv2,
-+				intptr_t newv, int cpu)
-+{
-+	int ret;
-+
-+	ret = rseq_cmpeqv_trystorev_storev(v, expect, v2, newv2,
-+					   newv, cpu);
-+	if (rseq_unlikely(ret)) {
-+		if (ret > 0)
-+			return ret;
-+		return cpu_op_cmpeqv_storev_storev(v, expect, v2, newv2,
-+						   newv, cpu);
-+	}
-+	return 0;
-+}
-+
-+static inline __attribute__((always_inline))
-+int percpu_cmpeqv_storev_storev_release(intptr_t *v, intptr_t expect,
-+					intptr_t *v2, intptr_t newv2,
-+					intptr_t newv, int cpu)
-+{
-+	int ret;
-+
-+	ret = rseq_cmpeqv_trystorev_storev_release(v, expect, v2, newv2,
-+						   newv, cpu);
-+	if (rseq_unlikely(ret)) {
-+		if (ret > 0)
-+			return ret;
-+		return cpu_op_cmpeqv_storev_mb_storev(v, expect, v2, newv2,
-+						      newv, cpu);
-+	}
-+	return 0;
-+}
-+
-+static inline __attribute__((always_inline))
-+int percpu_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
-+				intptr_t *v2, intptr_t expect2,
-+				intptr_t newv, int cpu)
-+{
-+	int ret;
-+
-+	ret = rseq_cmpeqv_cmpeqv_storev(v, expect, v2, expect2, newv, cpu);
-+	if (rseq_unlikely(ret)) {
-+		if (ret > 0)
-+			return ret;
-+		return cpu_op_cmpeqv_cmpeqv_storev(v, expect, v2, expect2,
-+						   newv, cpu);
-+	}
-+	return 0;
-+}
-+
-+static inline __attribute__((always_inline))
-+int percpu_cmpeqv_memcpy_storev(intptr_t *v, intptr_t expect,
-+				void *dst, void *src, size_t len,
-+				intptr_t newv, int cpu)
-+{
-+	int ret;
-+
-+	ret = rseq_cmpeqv_trymemcpy_storev(v, expect, dst, src, len,
-+					   newv, cpu);
-+	if (rseq_unlikely(ret)) {
-+		if (ret > 0)
-+			return ret;
-+		return cpu_op_cmpeqv_memcpy_storev(v, expect, dst, src, len,
-+						   newv, cpu);
-+	}
-+	return 0;
-+}
-+
-+static inline __attribute__((always_inline))
-+int percpu_cmpeqv_memcpy_storev_release(intptr_t *v, intptr_t expect,
-+					void *dst, void *src, size_t len,
-+					intptr_t newv, int cpu)
-+{
-+	int ret;
-+
-+	ret = rseq_cmpeqv_trymemcpy_storev_release(v, expect, dst, src, len,
-+						   newv, cpu);
-+	if (rseq_unlikely(ret)) {
-+		if (ret > 0)
-+			return ret;
-+		return cpu_op_cmpeqv_memcpy_mb_storev(v, expect, dst, src, len,
-+						      newv, cpu);
-+	}
-+	return 0;
-+}
-+
-+#endif  /* PERCPU_OP_H_ */
 -- 
 2.11.0
 
