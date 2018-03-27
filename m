@@ -1,105 +1,72 @@
-From: changbin.du@intel.com (changbin.du@intel.com)
-Date: Tue, 27 Mar 2018 11:11:31 +0800
-Subject: [PATCH v2 1/4] selftests/Makefile: append a slash to env variable
- OUTPUT
-In-Reply-To: <1522120294-24926-1-git-send-email-changbin.du@intel.com>
-References: <1522120294-24926-1-git-send-email-changbin.du@intel.com>
-Message-ID: <1522120294-24926-2-git-send-email-changbin.du@intel.com>
+From: daniel@iogearbox.net (Daniel Borkmann)
+Date: Tue, 27 Mar 2018 10:52:57 +0200
+Subject: [PATCH 4/4] selftests/bpf: fix compiling errors
+In-Reply-To: <20180327030613.hkp7hox3g4prnbsg@intel.com>
+References: <1522056208-4004-1-git-send-email-changbin.du@intel.com>
+ <1522056208-4004-5-git-send-email-changbin.du@intel.com>
+ <20180326145511.lzoi6wja6iht5lvq@ast-mbp.dhcp.thefacebook.com>
+ <20180327022010.57u6rn73inbkrycn@intel.com>
+ <20180327030229.txifuth2qmnjo3hy@ast-mbp>
+ <20180327030613.hkp7hox3g4prnbsg@intel.com>
+Message-ID: <2dd7c04a-eb10-e730-148e-3b04a18e9b44@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180327031131.5fiI97lpQi2O-yxzNCpifPmpgPiXDtIMiVhjWKM9BIA@z>
+Message-ID: <20180327085257.EStCIVfXe-x2fBQVn5TQf9CMUP3akaDuxyMX895ZQdg@z>
 
-From: Changbin Du <changbin.du@intel.com>
+On 03/27/2018 05:06 AM, Du, Changbin wrote:
+> On Mon, Mar 26, 2018@08:02:30PM -0700, Alexei Starovoitov wrote:
+>> On Tue, Mar 27, 2018@10:20:10AM +0800, Du, Changbin wrote:
+>>> On Mon, Mar 26, 2018@07:55:13AM -0700, Alexei Starovoitov wrote:
+>>>> On Mon, Mar 26, 2018@05:23:28PM +0800, changbin.du@intel.com wrote:
+>>>>> Signed-off-by: Changbin Du <changbin.du at intel.com>
+>>>>> ---
+>>>>>  tools/testing/selftests/bpf/Makefile | 5 +++--
+>>>>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>>>>> index 5c43c18..dc0fdc8 100644
+>>>>> --- a/tools/testing/selftests/bpf/Makefile
+>>>>> +++ b/tools/testing/selftests/bpf/Makefile
+>>>>> @@ -10,7 +10,8 @@ ifneq ($(wildcard $(GENHDR)),)
+>>>>>    GENFLAGS := -DHAVE_GENHDR
+>>>>>  endif
+>>>>>  
+>>>>> -CFLAGS += -Wall -O2 -I$(APIDIR) -I$(LIBDIR) -I$(GENDIR) $(GENFLAGS) -I../../../include
+>>>>> +CFLAGS += -Wall -O2 -I$(APIDIR) -I$(LIBDIR) -I$(GENDIR) $(GENFLAGS) \
+>>>>> +	  -I../../../include -I../../../../usr/include
+>>>>>  LDLIBS += -lcap -lelf -lrt -lpthread
+>>>>>  
+>>>>>  # Order correspond to 'make run_tests' order
+>>>>> @@ -62,7 +63,7 @@ else
+>>>>>    CPU ?= generic
+>>>>>  endif
+>>>>>  
+>>>>> -CLANG_FLAGS = -I. -I./include/uapi -I../../../include/uapi \
+>>>>> +CLANG_FLAGS = -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include \
+>>>>>  	      -Wno-compare-distinct-pointer-types
+>>>>
+>>>> Nack.
+>>>> I suspect that will break the build for everyone else who's doing it in the directory
+>>>> itself instead of the outer one.
+>>>
+>>> This one? But I didn't see any problem.
+>>
+>> because the build was lucky and additional path ../../../../usr/include didn't point
+>> to a valid dir?
 
-The tools/build/Makefile.build use 'OUTPUT' variable as below example:
-objprefix    := $(subst ./,,$(OUTPUT)$(dir)/)
+Agree.
 
-So it requires the 'OUTPUT' already has a slash at the end.
+> I am sorry but I don't understand why you mean *lucky*. Of cause, the path is valid.
 
-This patch can kill below odd paths:
-make[3]: Entering directory '/home/changbin/work/linux/tools/gpio'
-  CC       /home/changbin/work/linux/tools/testing/selftests/gpiolsgpio.o
-  CC       /home/changbin/work/linux/tools/testing/selftests/gpiogpio-utils.o
-  LD       /home/changbin/work/linux/tools/testing/selftests/gpiolsgpio-in.o
+The problem is that this suddenly requires users to do a 'make headers_install' in
+order to populate usr/include/ directory in the first place. While it's annoying
+enough for BPF samples where this is needed, I absolutely don't want to introduce
+this for BPF kselftests. It's the wrong approach. Besides, in tools infra, there is
+a tools/arch/*/include/uapi/asm/bitsperlong.h header copy already, so we really need
+to use that instead. Please adapt your patch accordingly and respin. Please also Cc
+us and netdev at vger.kernel.org for BPF kselftests changes.
 
-A correct path should be:
-/home/changbin/work/linux/tools/testing/selftests/gpio/lsgpio.o
-
-Signed-off-by: Changbin Du <changbin.du at intel.com>
----
- tools/testing/selftests/Makefile | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 7442dfb..7916aa2 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -71,31 +71,31 @@ all:
- 	@for TARGET in $(TARGETS); do		\
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
- 		mkdir $$BUILD_TARGET  -p;	\
--		make OUTPUT=$$BUILD_TARGET -C $$TARGET;\
-+		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET;\
- 	done;
- 
- run_tests: all
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		make OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
-+		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET run_tests;\
- 	done;
- 
- hotplug:
- 	@for TARGET in $(TARGETS_HOTPLUG); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		make OUTPUT=$$BUILD_TARGET -C $$TARGET;\
-+		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET;\
- 	done;
- 
- run_hotplug: hotplug
- 	@for TARGET in $(TARGETS_HOTPLUG); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		make OUTPUT=$$BUILD_TARGET -C $$TARGET run_full_test;\
-+		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET run_full_test;\
- 	done;
- 
- clean_hotplug:
- 	@for TARGET in $(TARGETS_HOTPLUG); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		make OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
-+		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET clean;\
- 	done;
- 
- run_pstore_crash:
-@@ -111,7 +111,7 @@ ifdef INSTALL_PATH
- 	mkdir -p $(INSTALL_PATH)
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		make OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
-+		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
- 	done;
- 
- 	@# Ask all targets to emit their test scripts
-@@ -131,7 +131,7 @@ ifdef INSTALL_PATH
- 		echo "echo ; echo Running tests in $$TARGET" >> $(ALL_SCRIPT); \
- 		echo "echo ========================================" >> $(ALL_SCRIPT); \
- 		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
--		make -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
-+		make -s --no-print-directory OUTPUT=$$BUILD_TARGET/ -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
- 		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
- 	done;
- 
-@@ -143,7 +143,7 @@ endif
- clean:
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		make OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
-+		make OUTPUT=$$BUILD_TARGET/ -C $$TARGET clean;\
- 	done;
- 
- .PHONY: all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean
--- 
-2.7.4
-
+Thanks,
+Daniel
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
