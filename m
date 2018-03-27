@@ -1,14 +1,88 @@
 From: changbin.du at intel.com (Du, Changbin)
-Date: Tue, 27 Mar 2018 10:20:10 +0800
+Date: Tue, 27 Mar 2018 10:33:16 +0800
 Subject: [PATCH 4/4] selftests/bpf: fix compiling errors
 In-Reply-To: <20180326145511.lzoi6wja6iht5lvq@ast-mbp.dhcp.thefacebook.com>
 References: <1522056208-4004-1-git-send-email-changbin.du@intel.com>
  <1522056208-4004-5-git-send-email-changbin.du@intel.com>
  <20180326145511.lzoi6wja6iht5lvq@ast-mbp.dhcp.thefacebook.com>
-Message-ID: <20180327022010.57u6rn73inbkrycn@intel.com>
+Message-ID: <20180327023315.zjxrxfmhuzfqqpos@intel.com>
+
+Hi Starovoitov,
+
+This one does have the issue you mentioned.
+[PATCH 2/4] selftests/gpio: fix paths in Makefile
+
+And can be fixed by:
+
+--- a/tools/testing/selftests/gpio/Makefile
++++ b/tools/testing/selftests/gpio/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+
++OUTPUT ?= $(shell pwd)
+ TEST_PROGS := gpio-mockup.sh
+ TEST_FILES := gpio-mockup-sysfs.sh $(BINARIES)
+ BINARIES := gpio-mockup-chardev
+@@ -24,7 +25,7 @@ LDLIBS += -lmount -I/usr/include/libmount
+ $(BINARIES): gpio-utils.o ../../../../usr/include/linux/gpio.h
+
+ gpio-utils.o:
+-       make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
++       make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) OUTPUT=$(OUTPUT)/ -C ../../../gpio
+
+ ../../../../usr/include/linux/gpio.h:
+
+
+I will update it later.
 
 On Mon, Mar 26, 2018 at 07:55:13AM -0700, Alexei Starovoitov wrote:
 > On Mon, Mar 26, 2018 at 05:23:28PM +0800, changbin.du at intel.com wrote:
+> > From: Changbin Du <changbin.du at intel.com>
+> > 
+> > This patch fixed below errors of missing head files.
+> > 
+> > tools/testing/selftests$ make
+> > ...
+> > clang -I. -I./include/uapi -I../../../include/uapi -Wno-compare-distinct-pointer-types \
+> > 	 -O2 -target bpf -emit-llvm -c test_pkt_access.c -o - |      \
+> > llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf//test_pkt_access.o
+> > In file included from test_pkt_access.c:9:
+> > In file included from ../../../include/uapi/linux/bpf.h:11:
+> > In file included from ./include/uapi/linux/types.h:5:
+> > /usr/include/asm-generic/int-ll64.h:11:10: fatal error: 'asm/bitsperlong.h' file not found
+> >  #include <asm/bitsperlong.h>
+> >          ^
+> > 1 error generated.
+> > clang -I. -I./include/uapi -I../../../include/uapi -Wno-compare-distinct-pointer-types \
+> > 	 -O2 -target bpf -emit-llvm -c test_xdp.c -o - |      \
+> > llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf//test_xdp.o
+> > In file included from test_xdp.c:9:
+> > In file included from ../../../include/uapi/linux/bpf.h:11:
+> > In file included from ./include/uapi/linux/types.h:5:
+> > /usr/include/asm-generic/int-ll64.h:11:10: fatal error: 'asm/bitsperlong.h' file not found
+> >  #include <asm/bitsperlong.h>
+> >          ^
+> > 1 error generated.
+> > clang -I. -I./include/uapi -I../../../include/uapi -Wno-compare-distinct-pointer-types \
+> > 	 -O2 -target bpf -emit-llvm -c test_l4lb.c -o - |      \
+> > llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf//test_l4lb.o
+> > In file included from test_l4lb.c:10:
+> > In file included from /usr/include/linux/pkt_cls.h:4:
+> > In file included from ./include/uapi/linux/types.h:5:
+> > /usr/include/asm-generic/int-ll64.h:11:10: fatal error: 'asm/bitsperlong.h' file not found
+> >  #include <asm/bitsperlong.h>
+> >          ^
+> > 1 error generated.
+> > clang -I. -I./include/uapi -I../../../include/uapi -Wno-compare-distinct-pointer-types \
+> > 	 -O2 -target bpf -emit-llvm -c test_tcp_estats.c -o - |      \
+> > llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf//test_tcp_estats.o
+> > In file included from test_tcp_estats.c:35:
+> > In file included from ../../../include/uapi/linux/bpf.h:11:
+> > In file included from ./include/uapi/linux/types.h:5:
+> > /usr/include/asm-generic/int-ll64.h:11:10: fatal error: 'asm/bitsperlong.h' file not found
+> >  #include <asm/bitsperlong.h>
+> > ...
+> > 
 > > Signed-off-by: Changbin Du <changbin.du at intel.com>
 > > ---
 > >  tools/testing/selftests/bpf/Makefile | 5 +++--
@@ -39,92 +113,7 @@ On Mon, Mar 26, 2018 at 07:55:13AM -0700, Alexei Starovoitov wrote:
 > Nack.
 > I suspect that will break the build for everyone else who's doing it in the directory
 > itself instead of the outer one.
->
-
-This one? But I didn't see any problem.
-
-changbin at gvt-dell-host:~/work/linux/tools/testing/selftests/bpf$ make
-make -C ../../../lib/bpf OUTPUT=/home/changbin/work/linux/tools/testing/selftests/bpf/
-make[1]: Entering directory '/home/changbin/work/linux/tools/lib/bpf'
-  HOSTCC   /home/changbin/work/linux/tools/testing/selftests/bpf/fixdep.o
-  HOSTLD   /home/changbin/work/linux/tools/testing/selftests/bpf/fixdep-in.o
-  LINK     /home/changbin/work/linux/tools/testing/selftests/bpf/fixdep
-  CC       /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.o
-  CC       /home/changbin/work/linux/tools/testing/selftests/bpf/bpf.o
-  CC       /home/changbin/work/linux/tools/testing/selftests/bpf/nlattr.o
-  LD       /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf-in.o
-  LINK     /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.a
-  LINK     /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.so
-make[1]: Leaving directory '/home/changbin/work/linux/tools/lib/bpf'
-make -C ../../../lib/bpf OUTPUT=/home/changbin/work/linux/tools/testing/selftests/bpf/
-make[1]: Entering directory '/home/changbin/work/linux/tools/lib/bpf'
-make[1]: Leaving directory '/home/changbin/work/linux/tools/lib/bpf'
-gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../../include/generated -DHAVE_GENHDR -I../../../include -I../../../../usr/include    test_verifier.c /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.a cgroup_helpers.c -lcap -lelf -lrt -lpthread -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_verifier
-gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../../include/generated -DHAVE_GENHDR -I../../../include -I../../../../usr/include    test_tag.c /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.a cgroup_helpers.c -lcap -lelf -lrt -lpthread -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_tag
-gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../../include/generated -DHAVE_GENHDR -I../../../include -I../../../../usr/include    test_maps.c /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.a cgroup_helpers.c -lcap -lelf -lrt -lpthread -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_maps
-gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../../include/generated -DHAVE_GENHDR -I../../../include -I../../../../usr/include    test_lru_map.c /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.a cgroup_helpers.c -lcap -lelf -lrt -lpthread -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_lru_map
-gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../../include/generated -DHAVE_GENHDR -I../../../include -I../../../../usr/include    test_lpm_map.c /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.a cgroup_helpers.c -lcap -lelf -lrt -lpthread -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_lpm_map
-gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../../include/generated -DHAVE_GENHDR -I../../../include -I../../../../usr/include    test_progs.c /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.a cgroup_helpers.c -lcap -lelf -lrt -lpthread -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_progs
-gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../../include/generated -DHAVE_GENHDR -I../../../include -I../../../../usr/include    test_align.c /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.a cgroup_helpers.c -lcap -lelf -lrt -lpthread -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_align
-gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../../include/generated -DHAVE_GENHDR -I../../../include -I../../../../usr/include    test_verifier_log.c /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.a cgroup_helpers.c -lcap -lelf -lrt -lpthread -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_verifier_log
-gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../../include/generated -DHAVE_GENHDR -I../../../include -I../../../../usr/include    test_dev_cgroup.c /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.a cgroup_helpers.c -lcap -lelf -lrt -lpthread -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_dev_cgroup
-gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../../include/generated -DHAVE_GENHDR -I../../../include -I../../../../usr/include    test_tcpbpf_user.c /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.a cgroup_helpers.c -lcap -lelf -lrt -lpthread -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_tcpbpf_user
-gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../../include/generated -DHAVE_GENHDR -I../../../include -I../../../../usr/include    test_libbpf_open.c /home/changbin/work/linux/tools/testing/selftests/bpf/libbpf.a -lcap -lelf -lrt -lpthread -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_libbpf_open
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c test_pkt_access.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_pkt_access.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c test_xdp.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_xdp.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c test_l4lb.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_l4lb.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c test_tcp_estats.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_tcp_estats.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c test_obj_id.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_obj_id.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c test_pkt_md_access.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_pkt_md_access.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c test_xdp_redirect.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_xdp_redirect.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c test_xdp_meta.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_xdp_meta.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c sockmap_parse_prog.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/sockmap_parse_prog.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c sockmap_verdict_prog.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/sockmap_verdict_prog.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c dev_cgroup.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/dev_cgroup.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c sample_ret0.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/sample_ret0.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c test_tracepoint.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_tracepoint.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types -fno-inline \
-         -O2 -target bpf -emit-llvm -c test_l4lb_noinline.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_l4lb_noinline.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types -fno-inline \
-         -O2 -target bpf -emit-llvm -c test_xdp_noinline.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_xdp_noinline.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c test_stacktrace_map.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_stacktrace_map.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c sample_map_ret0.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/sample_map_ret0.o
-clang -I. -I./include/uapi -I../../../include/uapi -I../../../../usr/include -Wno-compare-distinct-pointer-types \
-         -O2 -target bpf -emit-llvm -c test_tcpbpf_kern.c -o - |      \
-llc -march=bpf -mcpu=generic -filetype=obj -o /home/changbin/work/linux/tools/testing/selftests/bpf/test_tcpbpf_kern.o
-changbin at gvt-dell-host:~/work/linux/tools/testing/selftests/bpf$ 
+> 
 
 -- 
 Thanks,
