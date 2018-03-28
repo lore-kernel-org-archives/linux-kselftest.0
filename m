@@ -1,50 +1,51 @@
-From: changbin.du at intel.com (Du, Changbin)
-Date: Wed, 28 Mar 2018 09:45:25 +0800
-Subject: [PATCH v2 1/4] selftests/Makefile: append a slash to env
- variable OUTPUT
-In-Reply-To: <b473e652-0953-63ec-c4bf-5c9306dc4f67@kernel.org>
-References: <1522120294-24926-1-git-send-email-changbin.du@intel.com>
- <1522120294-24926-2-git-send-email-changbin.du@intel.com>
- <b473e652-0953-63ec-c4bf-5c9306dc4f67@kernel.org>
-Message-ID: <20180328014525.bl3iih4xvo74wedb@intel.com>
+From: mhiramat at kernel.org (Masami Hiramatsu)
+Date: Wed, 28 Mar 2018 13:21:12 +0900
+Subject: [PATCH v6 05/21] tracing: probeevent: Cleanup print argument
+ functions
+In-Reply-To: <20180326132832.70e1797e@gandalf.local.home>
+References: <152129024033.31874.15800253385376959274.stgit@devbox>
+ <152129047203.31874.3188700720826213215.stgit@devbox>
+ <20180323123647.4398ae48@gandalf.local.home>
+ <20180326131733.ac156981d82c4a38dae307f4@kernel.org>
+ <20180326132832.70e1797e@gandalf.local.home>
+Message-ID: <20180328132112.c2d6662837e0e193796e83cd@kernel.org>
 
-On Tue, Mar 27, 2018 at 03:19:26PM -0600, Shuah Khan wrote:
-> On 03/26/2018 09:11 PM, changbin.du at intel.com wrote:
-> > From: Changbin Du <changbin.du at intel.com>
-> > 
-> > The tools/build/Makefile.build use 'OUTPUT' variable as below example:
-> > objprefix    := $(subst ./,,$(OUTPUT)$(dir)/)
-> > 
-> > So it requires the 'OUTPUT' already has a slash at the end.
-> > 
-> > This patch can kill below odd paths:
-> > make[3]: Entering directory '/home/changbin/work/linux/tools/gpio'
-> >   CC       /home/changbin/work/linux/tools/testing/selftests/gpiolsgpio.o
-> >   CC       /home/changbin/work/linux/tools/testing/selftests/gpiogpio-utils.o
-> >   LD       /home/changbin/work/linux/tools/testing/selftests/gpiolsgpio-in.o
-> > 
-> > A correct path should be:
-> > /home/changbin/work/linux/tools/testing/selftests/gpio/lsgpio.o
-> > 
-> > Signed-off-by: Changbin Du <changbin.du at intel.com>
+On Mon, 26 Mar 2018 13:28:32 -0400
+Steven Rostedt <rostedt at goodmis.org> wrote:
+
+> On Mon, 26 Mar 2018 13:17:33 +0900
+> Masami Hiramatsu <mhiramat at kernel.org> wrote:
 > 
-> Are you seeing this when you run "make kselftest" - if gpio is the
-> only test compile that fails, it should be fixed in gpio/Makefile,
-> not is the common Makefile.
->
-I only saw error in gpio, but I also saw some kselftest Makefiles having string concatenation
-as '$(OUTPUT)$(dir)'. So the rule is not aligned all over. They just didn't produce any errors
-so far.
+> > > Masami Hiramatsu <mhiramat at kernel.org> wrote:
+> > >   
+> > > > Current print argument functions prints the argument
+> > > > name too. It is not good for printing out multiple
+> > > > values for one argument. This change it to just print
+> > > > out the value.  
+> > > 
+> 
+> 
+> > 
+> > Cleanup argument-printing functions to decouple it into name-printing and
+> > value-printing, so that it can support more flexible argument expression,
+> > like array type.
+> 
+> Ah, so this is a change to make it possible in the next patches to do
+> something more? I'll update the change log to your above.
 
-By the way, is there a basic test for kselftest infrastructure? It seems it was always
-reporting error when building it :(
+Yes, I'll update the patch description :)
 
-> thanks,
-> -- Shuah
+Thanks!
+
+> 
+> That makes more sense. Thanks.
+> 
+> -- Steve
+> 
+
 
 -- 
-Thanks,
-Changbin Du
+Masami Hiramatsu <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
