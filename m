@@ -1,38 +1,33 @@
-From: bauerman at linux.vnet.ibm.com (Thiago Jung Bauermann)
-Date: Wed, 28 Mar 2018 20:51:42 -0300
-Subject: [PATCH v12 07/22] selftests/vm: fixed bugs in pkey_disable_clear()
-In-Reply-To: <34fd1ae9-9697-ac6c-d6bc-7c25b4515a25@intel.com>
-References: <1519264541-7621-1-git-send-email-linuxram@us.ibm.com>
- <1519264541-7621-8-git-send-email-linuxram@us.ibm.com>
- <dc5ee0c8-afe3-78aa-001d-7b49b398337b@intel.com>
- <87muys3p2v.fsf@morokweng.localdomain>
- <34fd1ae9-9697-ac6c-d6bc-7c25b4515a25@intel.com>
-Message-ID: <878tabvjw1.fsf@morokweng.localdomain>
+From: colin.king at canonical.com (Colin King)
+Date: Thu, 29 Mar 2018 18:24:31 +0100
+Subject: [PATCH] selftests/ftrace: fix spelling mistake: "tiggers" ->
+ "triggers"
+Message-ID: <20180329172431.8171-1-colin.king@canonical.com>
 
+From: Colin Ian King <colin.king at canonical.com>
 
-Dave Hansen <dave.hansen at intel.com> writes:
+Trivial fix to spelling mistake in message text
 
-> On 03/28/2018 01:47 PM, Thiago Jung Bauermann wrote:
->>>>  	if (flags)
->>>> -		assert(rdpkey_reg() > orig_pkey_reg);
->>>> +		assert(rdpkey_reg() < orig_pkey_reg);
->>>>  }
->>>>
->>>>  void pkey_write_allow(int pkey)
->>> This seems so horribly wrong that I wonder how it worked in the first
->>> place.  Any idea?
->> The code simply wasn't used. pkey_disable_clear() is called by
->> pkey_write_allow() and pkey_access_allow(), but before this patch series
->> nothing called either of these functions.
->> 
->
-> Ahh, that explains it.  Can that get stuck in the changelog, please?
+Signed-off-by: Colin Ian King <colin.king at canonical.com>
+---
+ tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, will be in the next version.
-
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc
+index c5ef8b9d02b3..1b8faf4c318c 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc
+@@ -35,7 +35,7 @@ do_reset
+ 
+ reset_trigger
+ 
+-echo "Test histogram multiple tiggers"
++echo "Test histogram multiple triggers"
+ 
+ echo 'hist:keys=parent_pid:vals=child_pid' > events/sched/sched_process_fork/trigger
+ echo 'hist:keys=parent_comm:vals=child_pid' >> events/sched/sched_process_fork/trigger
 -- 
-Thiago Jung Bauermann
-IBM Linux Technology Center
+2.15.1
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
