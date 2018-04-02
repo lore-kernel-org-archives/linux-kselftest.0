@@ -1,48 +1,50 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Mon, 2 Apr 2018 15:58:49 +0900
-Subject: [PATCH] selftests/ftrace: fix spelling mistake: "tiggers" ->
- "triggers"
-In-Reply-To: <20180329172431.8171-1-colin.king@canonical.com>
-References: <20180329172431.8171-1-colin.king@canonical.com>
-Message-ID: <20180402155849.109fcb9c5d4653fc7adcddf1@kernel.org>
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Mon, 2 Apr 2018 16:02:07 -0400
+Subject: [PATCH v6 10/21] tracing: probeevent: Return consumed bytes of
+ dynamic area
+In-Reply-To: <152129069244.31874.7879658400858676349.stgit@devbox>
+References: <152129024033.31874.15800253385376959274.stgit@devbox>
+ <152129069244.31874.7879658400858676349.stgit@devbox>
+Message-ID: <20180402160207.23c96309@gandalf.local.home>
 
-On Thu, 29 Mar 2018 18:24:31 +0100
-Colin King <colin.king at canonical.com> wrote:
+On Sat, 17 Mar 2018 21:44:52 +0900
+Masami Hiramatsu <mhiramat at kernel.org> wrote:
 
-> From: Colin Ian King <colin.king at canonical.com>
-> 
-> Trivial fix to spelling mistake in message text
-> 
-> Signed-off-by: Colin Ian King <colin.king at canonical.com>
-
-Oops, thanks!
-
-Acked-by: Masami Hiramatsu <mhiramat at kernel.org>
-
-> ---
->  tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc
-> index c5ef8b9d02b3..1b8faf4c318c 100644
-> --- a/tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc
-> @@ -35,7 +35,7 @@ do_reset
+> -static nokprobe_inline void
+> -fetch_store_string(unsigned long addr, void *dest)
+> +static nokprobe_inline int
+> +fetch_store_string(unsigned long addr, void *dest, void *base)
+>  {
+> -	int maxlen = get_rloc_len(*(u32 *)dest);
+> -	u8 *dst = get_rloc_data(dest);
+> +	int maxlen = get_loc_len(*(u32 *)dest);
+> +	u8 *dst = get_loc_data(dest, base);
+>  	long ret;
 >  
->  reset_trigger
+>  	if (!maxlen)
+> -		return;
+> +		return -ENOMEM;
 >  
-> -echo "Test histogram multiple tiggers"
-> +echo "Test histogram multiple triggers"
+>  	/*
+>  	 * Try to get string again, since the string can be changed while
+> @@ -854,19 +851,19 @@ fetch_store_string(unsigned long addr, void *dest)
 >  
->  echo 'hist:keys=parent_pid:vals=child_pid' > events/sched/sched_process_fork/trigger
->  echo 'hist:keys=parent_comm:vals=child_pid' >> events/sched/sched_process_fork/trigger
-> -- 
-> 2.15.1
-> 
+>  	if (ret < 0) {	/* Failed to fetch string */
+>  		dst[0] = '\0';
+> -		*(u32 *)dest = make_data_rloc(0, get_rloc_offs(*(u32 *)dest));
+> -	} else {
+> -		*(u32 *)dest = make_data_rloc(ret, get_rloc_offs(*(u32 *)dest));
+> +		ret = 0;
 
+Why do you return 0 here and not the error value? You return -ENOMEM
+above if maxlen is zero.
 
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+-- Steve
+
+>  	}
+> +	*(u32 *)dest = make_data_loc(ret, (void *)dst - base);
+> +	return ret;
+>  }
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
