@@ -1,37 +1,51 @@
-From: alexander.levin@verizon.com (alexander.levin@verizon.com)
-Date: Thu, 30 Nov 2017 21:34:37 +0000
-Subject: [Linux-kselftest-mirror] [PATCH AUTOSEL for 4.9 04/52]
- x86/selftests: Add clobbers for int80 on x86_64
-In-Reply-To: <CAJwJo6ZCnqTmzxO0xTxMEEy3t+0Z2-1dvwtn_THCO_OP2_MLcQ@mail.gmail.com>
-References: <20171129172100.28819-1-alexander.levin@verizon.com>
- <20171129172100.28819-4-alexander.levin@verizon.com>
- <CAJwJo6ZCnqTmzxO0xTxMEEy3t+0Z2-1dvwtn_THCO_OP2_MLcQ@mail.gmail.com>
-Message-ID: <20171130213436.usa4ikw6in42vf6h@sasha-lappy>
+From: mhiramat@kernel.org (Masami Hiramatsu)
+Date: Mon, 2 Apr 2018 15:58:49 +0900
+Subject: [PATCH] selftests/ftrace: fix spelling mistake: "tiggers" ->
+ "triggers"
+In-Reply-To: <20180329172431.8171-1-colin.king@canonical.com>
+References: <20180329172431.8171-1-colin.king@canonical.com>
+Message-ID: <20180402155849.109fcb9c5d4653fc7adcddf1@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20171130213437.RJU4wQXG3f7m9X8RH-Rs6iHI6bgE5BAQH2xoxIF7DXc@z>
+Message-ID: <20180402065849.O5MBSMsGLk_2XeTRTyeDcw9T1pkkTUp1jtDZMwRrQuU@z>
 
-On Wed, Nov 29, 2017@05:42:25PM +0000, Dmitry Safonov wrote:
->Hi Sasha,
->
->I would object including this to stable tree:
->1. It's selftest fixup
->2. I have never saw selftests failing because of it (but it's possible)
->    I saw this in CRIU (Checkpoint Restore In Userspace) project
->    triggering, so I've fixed the selftests, mostly for documentation
->    reasons - as people in userspace can reuse this code and think
->    it's good and will just work after copy-paste (which is not the case).
->
->So, this patch doesn't look urgent to include it in -stable kernel.
+On Thu, 29 Mar 2018 18:24:31 +0100
+Colin King <colin.king@canonical.com> wrote:
 
-Hey Dmitry,
+> From: Colin Ian King <colin.king at canonical.com>
+> 
+> Trivial fix to spelling mistake in message text
+> 
+> Signed-off-by: Colin Ian King <colin.king at canonical.com>
 
-We try to backport selftest patches as stable material to allow a
-"complete" selftest to run on stable kernels.
+Oops, thanks!
+
+Acked-by: Masami Hiramatsu <mhiramat at kernel.org>
+
+> ---
+>  tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc
+> index c5ef8b9d02b3..1b8faf4c318c 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-multihist.tc
+> @@ -35,7 +35,7 @@ do_reset
+>  
+>  reset_trigger
+>  
+> -echo "Test histogram multiple tiggers"
+> +echo "Test histogram multiple triggers"
+>  
+>  echo 'hist:keys=parent_pid:vals=child_pid' > events/sched/sched_process_fork/trigger
+>  echo 'hist:keys=parent_comm:vals=child_pid' >> events/sched/sched_process_fork/trigger
+> -- 
+> 2.15.1
+> 
+
 
 -- 
-
-Thanks,
-Sasha--
+Masami Hiramatsu <mhiramat at kernel.org>
+--
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
 More majordomo info at  http://vger.kernel.org/majordomo-info.html
