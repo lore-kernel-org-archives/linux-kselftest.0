@@ -1,66 +1,46 @@
-From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Tue, 3 Apr 2018 23:41:53 +0900
-Subject: [PATCH v6 10/21] tracing: probeevent: Return consumed bytes of
- dynamic area
-In-Reply-To: <20180402160207.23c96309@gandalf.local.home>
-References: <152129024033.31874.15800253385376959274.stgit@devbox>
- <152129069244.31874.7879658400858676349.stgit@devbox>
- <20180402160207.23c96309@gandalf.local.home>
-Message-ID: <20180403234153.7bd44567305ca11cead0e35b@kernel.org>
+From: ben.hutchings@codethink.co.uk (Ben Hutchings)
+Date: Tue, 3 Apr 2018 20:48:49 +0100
+Subject: [PATCH] test_firmware: fix setting old custom fw path back on exit,
+ second try
+Message-ID: <20180403194849.csgzr3jllt4f2qb7@xylophone.i.decadent.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180403144153.ktlDm-mCDSHd33p4aEtVAd7R_hlL_QZjcftEYqZplQ8@z>
+Message-ID: <20180403194849.HrcUy8Sb1u6wSOx4TBGtwaq6Fa7Rh5hihGKne5HMPgw@z>
 
-On Mon, 2 Apr 2018 16:02:07 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Commit 65c79230576 tried to clear the custom firmware path on exit by
+writing a single space to the firmware_class.path parameter.  This
+doesn't work because nothing strips this space from the value stored
+and fw_get_filesystem_firmware() only ignores zero-length paths.
 
-> On Sat, 17 Mar 2018 21:44:52 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> 
-> > -static nokprobe_inline void
-> > -fetch_store_string(unsigned long addr, void *dest)
-> > +static nokprobe_inline int
-> > +fetch_store_string(unsigned long addr, void *dest, void *base)
-> >  {
-> > -	int maxlen = get_rloc_len(*(u32 *)dest);
-> > -	u8 *dst = get_rloc_data(dest);
-> > +	int maxlen = get_loc_len(*(u32 *)dest);
-> > +	u8 *dst = get_loc_data(dest, base);
-> >  	long ret;
-> >  
-> >  	if (!maxlen)
-> > -		return;
-> > +		return -ENOMEM;
-> >  
-> >  	/*
-> >  	 * Try to get string again, since the string can be changed while
-> > @@ -854,19 +851,19 @@ fetch_store_string(unsigned long addr, void *dest)
-> >  
-> >  	if (ret < 0) {	/* Failed to fetch string */
-> >  		dst[0] = '\0';
-> > -		*(u32 *)dest = make_data_rloc(0, get_rloc_offs(*(u32 *)dest));
-> > -	} else {
-> > -		*(u32 *)dest = make_data_rloc(ret, get_rloc_offs(*(u32 *)dest));
-> > +		ret = 0;
-> 
-> Why do you return 0 here and not the error value? You return -ENOMEM
-> above if maxlen is zero.
+Instead, write a null byte.
 
-Good catch! it should clear dst[0] and return 0 even if no buffer remains...
-OK, I'll fix it.
+Fixes: 0a8adf58475 ("test: add firmware_class loader test")
+Fixes: 65c79230576 ("test_firmware: fix setting old custom fw path back on exit")
+Signed-off-by: Ben Hutchings <ben.hutchings at codethink.co.uk>
+---
+ tools/testing/selftests/firmware/fw_filesystem.sh | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thank you!
-
-> 
-> -- Steve
-> 
-> >  	}
-> > +	*(u32 *)dest = make_data_loc(ret, (void *)dst - base);
-> > +	return ret;
-> >  }
-
-
+diff --git a/tools/testing/selftests/firmware/fw_filesystem.sh b/tools/testing/selftests/firmware/fw_filesystem.sh
+index f9508e1a4058..6b63b6bf2661 100755
+--- a/tools/testing/selftests/firmware/fw_filesystem.sh
++++ b/tools/testing/selftests/firmware/fw_filesystem.sh
+@@ -46,9 +46,11 @@ test_finish()
+ 		echo "$OLD_TIMEOUT" >/sys/class/firmware/timeout
+ 	fi
+ 	if [ "$OLD_FWPATH" = "" ]; then
+-		OLD_FWPATH=" "
++		# A zero-length write won't work; write a null byte
++		printf '\000' >/sys/module/firmware_class/parameters/path
++	else
++		echo -n "$OLD_FWPATH" >/sys/module/firmware_class/parameters/path
+ 	fi
+-	echo -n "$OLD_FWPATH" >/sys/module/firmware_class/parameters/path
+ 	rm -f "$FW"
+ 	rmdir "$FWPATH"
+ }
 -- 
-Masami Hiramatsu <mhiramat at kernel.org>
+2.16.2
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
