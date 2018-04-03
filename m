@@ -1,50 +1,36 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Mon, 2 Apr 2018 16:02:07 -0400
-Subject: [PATCH v6 10/21] tracing: probeevent: Return consumed bytes of
- dynamic area
-In-Reply-To: <152129069244.31874.7879658400858676349.stgit@devbox>
-References: <152129024033.31874.15800253385376959274.stgit@devbox>
- <152129069244.31874.7879658400858676349.stgit@devbox>
-Message-ID: <20180402160207.23c96309@gandalf.local.home>
+From: dan.carpenter at oracle.com (Dan Carpenter)
+Date: Tue, 3 Apr 2018 13:07:05 +0300
+Subject: [PATCH] selftests/ftrace: fix spelling mistake: "tiggers" ->
+ "triggers"
+In-Reply-To: <583c21dd-2ffc-4375-af8a-aa721ffb4594@kernel.org>
+References: <20180329172431.8171-1-colin.king@canonical.com>
+ <20180329133102.6061ba66@gandalf.local.home>
+ <48be730c-2a15-d3ad-d1aa-7d57fe7db6ca@canonical.com>
+ <56713d51-0954-e7a8-cf7a-7a6bfedf58f3@kernel.org>
+ <20180329140409.1311baac@gandalf.local.home>
+ <583c21dd-2ffc-4375-af8a-aa721ffb4594@kernel.org>
+Message-ID: <20180403100704.hwdugt2piatcngqw@mwanda>
 
-On Sat, 17 Mar 2018 21:44:52 +0900
-Masami Hiramatsu <mhiramat at kernel.org> wrote:
+On Fri, Mar 30, 2018 at 09:51:21AM -0600, Shuah Khan wrote:
+> On 03/29/2018 12:04 PM, Steven Rostedt wrote:
+> > On Thu, 29 Mar 2018 11:54:28 -0600
+> > Shuah Khan <shuah at kernel.org> wrote:
+> > 
+> >> I will pick this up with your Ack Steve, unless you want include
+> >> it in your pull request.
+> > 
+> > You or Janitors can take it.
+> > 
+> 
+> Okay we can leave it to the Janitors then.
+>
 
-> -static nokprobe_inline void
-> -fetch_store_string(unsigned long addr, void *dest)
-> +static nokprobe_inline int
-> +fetch_store_string(unsigned long addr, void *dest, void *base)
->  {
-> -	int maxlen = get_rloc_len(*(u32 *)dest);
-> -	u8 *dst = get_rloc_data(dest);
-> +	int maxlen = get_loc_len(*(u32 *)dest);
-> +	u8 *dst = get_loc_data(dest, base);
->  	long ret;
->  
->  	if (!maxlen)
-> -		return;
-> +		return -ENOMEM;
->  
->  	/*
->  	 * Try to get string again, since the string can be changed while
-> @@ -854,19 +851,19 @@ fetch_store_string(unsigned long addr, void *dest)
->  
->  	if (ret < 0) {	/* Failed to fetch string */
->  		dst[0] = '\0';
-> -		*(u32 *)dest = make_data_rloc(0, get_rloc_offs(*(u32 *)dest));
-> -	} else {
-> -		*(u32 *)dest = make_data_rloc(ret, get_rloc_offs(*(u32 *)dest));
-> +		ret = 0;
+There isn't a Janitor tree...
 
-Why do you return 0 here and not the error value? You return -ENOMEM
-above if maxlen is zero.
+regards,
+dan carpenter
 
--- Steve
-
->  	}
-> +	*(u32 *)dest = make_data_loc(ret, (void *)dst - base);
-> +	return ret;
->  }
+ 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
