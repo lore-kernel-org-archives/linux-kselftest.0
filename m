@@ -1,33 +1,49 @@
 From: ben.hutchings at codethink.co.uk (Ben Hutchings)
-Date: Wed, 4 Apr 2018 22:37:13 +0200
-Subject: [PATCH driver-core 1/2] test_firmware: Install all scripts
-Message-ID: <20180404203712.zecit6po44qsde4c@xylophone.i.decadent.org.uk>
+Date: Wed, 4 Apr 2018 22:38:49 +0200
+Subject: [PATCH driver-core 2/2] test_firmware: fix setting old custom fw
+ path back on exit, second try
+In-Reply-To: <20180404203712.zecit6po44qsde4c@xylophone.i.decadent.org.uk>
+References: <20180404203712.zecit6po44qsde4c@xylophone.i.decadent.org.uk>
+Message-ID: <20180404203848.3txsangsvaxtxsu4@xylophone.i.decadent.org.uk>
 
-List all the scripts invoked by fw_run_tests.sh, so that
-"make TARGETS=firmware install" keeps working.
+Commit 65c79230576 tried to clear the custom firmware path on exit by
+writing a single space to the firmware_class.path parameter.  This
+doesn't work because nothing strips this space from the value stored
+and fw_get_filesystem_firmware() only ignores zero-length paths.
 
-Fixes: 29a1c00ce1df8 ("test_firmware: add simple firmware firmware test ...")
-Fixes: b3cf21fae1fe0 ("test_firmware: test three firmware kernel configs ...")
+Instead, write a null byte.
+
+Fixes: 0a8adf58475 ("test: add firmware_class loader test")
+Fixes: 65c79230576 ("test_firmware: fix setting old custom fw path back on exit")
 Signed-off-by: Ben Hutchings <ben.hutchings at codethink.co.uk>
 ---
- tools/testing/selftests/firmware/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/firmware/fw_lib.sh | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/firmware/Makefile b/tools/testing/selftests/firmware/Makefile
-index 826f38d5dd19..261c81f08606 100644
---- a/tools/testing/selftests/firmware/Makefile
-+++ b/tools/testing/selftests/firmware/Makefile
-@@ -4,6 +4,7 @@
- all:
- 
- TEST_PROGS := fw_run_tests.sh
-+TEST_FILES := fw_fallback.sh fw_filesystem.sh fw_lib.sh
- 
- include ../lib.mk
- 
+diff --git a/tools/testing/selftests/firmware/fw_lib.sh b/tools/testing/selftests/firmware/fw_lib.sh
+index 9ea31b57d71a..962d7f4ac627 100755
+--- a/tools/testing/selftests/firmware/fw_lib.sh
++++ b/tools/testing/selftests/firmware/fw_lib.sh
+@@ -154,11 +154,13 @@ test_finish()
+ 	if [ "$HAS_FW_LOADER_USER_HELPER" = "yes" ]; then
+ 		echo "$OLD_TIMEOUT" >/sys/class/firmware/timeout
+ 	fi
+-	if [ "$OLD_FWPATH" = "" ]; then
+-		OLD_FWPATH=" "
+-	fi
+ 	if [ "$TEST_REQS_FW_SET_CUSTOM_PATH" = "yes" ]; then
+-		echo -n "$OLD_FWPATH" >/sys/module/firmware_class/parameters/path
++		if [ "$OLD_FWPATH" = "" ]; then
++			# A zero-length write won't work; write a null byte
++			printf '\000' >/sys/module/firmware_class/parameters/path
++		else
++			echo -n "$OLD_FWPATH" >/sys/module/firmware_class/parameters/path
++		fi
+ 	fi
+ 	if [ -f $FW ]; then
+ 		rm -f "$FW"
 -- 
 2.16.2
-
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
