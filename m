@@ -1,49 +1,83 @@
-From: ben.hutchings at codethink.co.uk (Ben Hutchings)
-Date: Wed, 4 Apr 2018 22:38:49 +0200
-Subject: [PATCH driver-core 2/2] test_firmware: fix setting old custom fw
- path back on exit, second try
-In-Reply-To: <20180404203712.zecit6po44qsde4c@xylophone.i.decadent.org.uk>
-References: <20180404203712.zecit6po44qsde4c@xylophone.i.decadent.org.uk>
-Message-ID: <20180404203848.3txsangsvaxtxsu4@xylophone.i.decadent.org.uk>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Thu,  5 Apr 2018 09:39:07 +0200
+Subject: [PATCH v2] selftests/android/ion: fix heap_type may be uninitialized
+In-Reply-To: <20180308134845.32409-1-anders.roxell@linaro.org>
+References: <20180308134845.32409-1-anders.roxell@linaro.org>
+Message-ID: <20180405073907.30615-1-anders.roxell@linaro.org>
 
-Commit 65c79230576 tried to clear the custom firmware path on exit by
-writing a single space to the firmware_class.path parameter.  This
-doesn't work because nothing strips this space from the value stored
-and fw_get_filesystem_firmware() only ignores zero-length paths.
+gcc warns that 'heap_type' is not initialized if we don't come through
+any of the two 'case' statesments before:
 
-Instead, write a null byte.
+ionapp_export.c:91:2: warning: ‘heap_type’ may be used uninitialized in
+this function [-Wmaybe-uninitialized]
+  printf("heap_type: %ld, heap_size: %ld\n", heap_type, heap_size);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Fixes: 0a8adf58475 ("test: add firmware_class loader test")
-Fixes: 65c79230576 ("test_firmware: fix setting old custom fw path back on exit")
-Signed-off-by: Ben Hutchings <ben.hutchings at codethink.co.uk>
+In the current code, we initialize the heap_type to -1 before the 'case'
+statements. We also change the print_usage function to state that
+heap_type and heap_size isn't optional, they are mandatory.
+
+Fixes: 47a18c42d992 ("android/ion: userspace test utility for ion buffer sharing")
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 ---
- tools/testing/selftests/firmware/fw_lib.sh | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ tools/testing/selftests/android/ion/ionapp_export.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/firmware/fw_lib.sh b/tools/testing/selftests/firmware/fw_lib.sh
-index 9ea31b57d71a..962d7f4ac627 100755
---- a/tools/testing/selftests/firmware/fw_lib.sh
-+++ b/tools/testing/selftests/firmware/fw_lib.sh
-@@ -154,11 +154,13 @@ test_finish()
- 	if [ "$HAS_FW_LOADER_USER_HELPER" = "yes" ]; then
- 		echo "$OLD_TIMEOUT" >/sys/class/firmware/timeout
- 	fi
--	if [ "$OLD_FWPATH" = "" ]; then
--		OLD_FWPATH=" "
--	fi
- 	if [ "$TEST_REQS_FW_SET_CUSTOM_PATH" = "yes" ]; then
--		echo -n "$OLD_FWPATH" >/sys/module/firmware_class/parameters/path
-+		if [ "$OLD_FWPATH" = "" ]; then
-+			# A zero-length write won't work; write a null byte
-+			printf '\000' >/sys/module/firmware_class/parameters/path
-+		else
-+			echo -n "$OLD_FWPATH" >/sys/module/firmware_class/parameters/path
-+		fi
- 	fi
- 	if [ -f $FW ]; then
- 		rm -f "$FW"
+diff --git a/tools/testing/selftests/android/ion/ionapp_export.c b/tools/testing/selftests/android/ion/ionapp_export.c
+index a944e72621a9..67a0263a7f28 100644
+--- a/tools/testing/selftests/android/ion/ionapp_export.c
++++ b/tools/testing/selftests/android/ion/ionapp_export.c
+@@ -31,8 +31,10 @@
+ 
+ void print_usage(int argc, char *argv[])
+ {
+-	printf("Usage: %s [-h <help>] [-i <heap id>] [-s <size in bytes>]\n",
++	printf("Usage: %s [-h <help>] -i <heap id> -s <size in bytes>\n",
+ 		argv[0]);
++	printf("    Supported heap id's 0 or 1\n");
++	printf("    Heap size > 0\n");
+ }
+ 
+ int main(int argc, char *argv[])
+@@ -40,7 +42,8 @@ int main(int argc, char *argv[])
+ 	int opt, ret, status, heapid;
+ 	int sockfd, client_fd, shared_fd;
+ 	unsigned char *map_buf;
+-	unsigned long map_len, heap_type, heap_size, flags;
++	unsigned long map_len, heap_size, flags;
++	long heap_type;
+ 	struct ion_buffer_info info;
+ 	struct socket_info skinfo;
+ 
+@@ -50,6 +53,7 @@ int main(int argc, char *argv[])
+ 	}
+ 
+ 	heap_size = 0;
++	heap_type = -1;
+ 	flags = 0;
+ 
+ 	while ((opt = getopt(argc, argv, "hi:s:")) != -1) {
+@@ -68,7 +72,7 @@ int main(int argc, char *argv[])
+ 				heap_type = ION_HEAP_TYPE_SYSTEM_CONTIG;
+ 				break;
+ 			default:
+-				printf("ERROR: heap type not supported\n");
++				print_usage(argc, argv);
+ 				exit(1);
+ 			}
+ 			break;
+@@ -82,8 +86,7 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
+-	if (heap_size <= 0) {
+-		printf("heap_size cannot be 0\n");
++	if (heap_size <= 0 || heap_type < 0) {
+ 		print_usage(argc, argv);
+ 		exit(1);
+ 	}
 -- 
-2.16.2
+2.11.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
