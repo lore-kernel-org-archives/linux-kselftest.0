@@ -1,52 +1,96 @@
-From: christian.koenig@amd.com (=?UTF-8?Q?Christian_K=c3=b6nig?=)
-Date: Fri, 6 Apr 2018 14:24:46 +0200
-Subject: [PATCH v2] Add udmabuf misc device
-In-Reply-To: <20180406093307.s7wkhpmddd5d4r7a@sirius.home.kraxel.org>
-References: <20180316074650.5415-1-kraxel@redhat.com>
- <7547e99b-0e3c-264e-e52b-40ad5d52b49a@gmail.com>
- <20180406093307.s7wkhpmddd5d4r7a@sirius.home.kraxel.org>
-Message-ID: <5d88baad-a956-6bd5-e0d6-aabae6647f3e@amd.com>
+From: pintu.ping@gmail.com (Pintu Kumar)
+Date: Fri, 6 Apr 2018 23:12:01 +0530
+Subject: [PATCH v2] selftests/android/ion: fix heap_type may be
+ uninitialized
+In-Reply-To: <20180405073907.30615-1-anders.roxell@linaro.org>
+References: <20180308134845.32409-1-anders.roxell@linaro.org>
+ <20180405073907.30615-1-anders.roxell@linaro.org>
+Message-ID:
+ <CAOuPNLhgAZB2w8eK4UvbtNo1mSXakpe3sKNbfSOzpoHB0iN3OA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180406122446.a17WMGH1WJXq4Zp9wc_iFSTF0BGvve-SrCyuZOHdfng@z>
+Message-ID: <20180406174201.zIqiXaLLentrObhljxk1bLqpIYtdhI5wa9g5_yo1j8w@z>
 
-Am 06.04.2018 um 11:33 schrieb Gerd Hoffmann:
->    Hi,
+On Thu, Apr 5, 2018@1:09 PM, Anders Roxell <anders.roxell@linaro.org> wrote:
+> gcc warns that 'heap_type' is not initialized if we don't come through
+> any of the two 'case' statesments before:
 >
->> The pages backing a DMA-buf are not allowed to move (at least not without a
->> patch set I'm currently working on), but for certain MM operations to work
->> correctly you must be able to modify the page tables entries and move the
->> pages backing them around.
->>
->> For example try to use fork() with some copy on write pages with this
->> approach. You will find that you have only two options to correctly handle
->> this.
-> The fork() issue should go away with shared memory pages (no cow).
-> I guess this is the reason why vgem is internally backed by shmem.
-
-Yes, exactly that is also an approach which should work fine. Just don't 
-try to get this working with get_user_pages().
-
+> ionapp_export.c:91:2: warning: ‘heap_type’ may be used uninitialized in
+> this function [-Wmaybe-uninitialized]
+>   printf("heap_type: %ld, heap_size: %ld\n", heap_type, heap_size);
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 >
-> Hmm.  So I could try to limit the udmabuf driver to shmem too (i.e.
-> have the ioctl take a shmem filehandle and offset instead of a virtual
-> address).
+> In the current code, we initialize the heap_type to -1 before the 'case'
+> statements. We also change the print_usage function to state that
+> heap_type and heap_size isn't optional, they are mandatory.
 >
-> But maybe it is better then to just extend vgem, i.e. add support to
-> create gem objects from existing shmem.
+> Fixes: 47a18c42d992 ("android/ion: userspace test utility for ion buffer sharing")
+> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+> ---
+>  tools/testing/selftests/android/ion/ionapp_export.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
 >
-> Comments?
-
-Yes, extending vgem instead of creating something new sounds like a good 
-idea to me as well.
-
-Regards,
-Christian.
-
+> diff --git a/tools/testing/selftests/android/ion/ionapp_export.c b/tools/testing/selftests/android/ion/ionapp_export.c
+> index a944e72621a9..67a0263a7f28 100644
+> --- a/tools/testing/selftests/android/ion/ionapp_export.c
+> +++ b/tools/testing/selftests/android/ion/ionapp_export.c
+> @@ -31,8 +31,10 @@
 >
-> cheers,
->    Gerd
+>  void print_usage(int argc, char *argv[])
+>  {
+> -       printf("Usage: %s [-h <help>] [-i <heap id>] [-s <size in bytes>]\n",
+> +       printf("Usage: %s [-h <help>] -i <heap id> -s <size in bytes>\n",
+>                 argv[0]);
+> +       printf("    Supported heap id's 0 or 1\n");
+> +       printf("    Heap size > 0\n");
+>  }
+>
+>  int main(int argc, char *argv[])
+> @@ -40,7 +42,8 @@ int main(int argc, char *argv[])
+>         int opt, ret, status, heapid;
+>         int sockfd, client_fd, shared_fd;
+>         unsigned char *map_buf;
+> -       unsigned long map_len, heap_type, heap_size, flags;
+> +       unsigned long map_len, heap_size, flags;
+> +       long heap_type;
+>         struct ion_buffer_info info;
+>         struct socket_info skinfo;
+>
+> @@ -50,6 +53,7 @@ int main(int argc, char *argv[])
+>         }
+>
+>         heap_size = 0;
+> +       heap_type = -1;
+>         flags = 0;
 >
 
+To make it simple, I would suggest, let the default heap_type be 0.
+Actually that was my original intention but I would have missed it
+during submission.
+In that case nothing below is required to change.
+
+>         while ((opt = getopt(argc, argv, "hi:s:")) != -1) {
+> @@ -68,7 +72,7 @@ int main(int argc, char *argv[])
+>                                 heap_type = ION_HEAP_TYPE_SYSTEM_CONTIG;
+>                                 break;
+>                         default:
+> -                               printf("ERROR: heap type not supported\n");
+> +                               print_usage(argc, argv);
+>                                 exit(1);
+>                         }
+>                         break;
+> @@ -82,8 +86,7 @@ int main(int argc, char *argv[])
+>                 }
+>         }
+>
+> -       if (heap_size <= 0) {
+> -               printf("heap_size cannot be 0\n");
+> +       if (heap_size <= 0 || heap_type < 0) {
+>                 print_usage(argc, argv);
+>                 exit(1);
+>         }
+> --
+> 2.11.0
+>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
