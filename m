@@ -1,83 +1,36 @@
-From: anders.roxell at linaro.org (Anders Roxell)
-Date: Thu,  5 Apr 2018 09:39:07 +0200
-Subject: [PATCH v2] selftests/android/ion: fix heap_type may be uninitialized
-In-Reply-To: <20180308134845.32409-1-anders.roxell@linaro.org>
-References: <20180308134845.32409-1-anders.roxell@linaro.org>
-Message-ID: <20180405073907.30615-1-anders.roxell@linaro.org>
+From: kraxel at redhat.com (Gerd Hoffmann)
+Date: Fri, 6 Apr 2018 11:33:07 +0200
+Subject: [PATCH v2] Add udmabuf misc device
+In-Reply-To: <7547e99b-0e3c-264e-e52b-40ad5d52b49a@gmail.com>
+References: <20180316074650.5415-1-kraxel@redhat.com>
+ <7547e99b-0e3c-264e-e52b-40ad5d52b49a@gmail.com>
+Message-ID: <20180406093307.s7wkhpmddd5d4r7a@sirius.home.kraxel.org>
 
-gcc warns that 'heap_type' is not initialized if we don't come through
-any of the two 'case' statesments before:
+  Hi,
 
-ionapp_export.c:91:2: warning: ‘heap_type’ may be used uninitialized in
-this function [-Wmaybe-uninitialized]
-  printf("heap_type: %ld, heap_size: %ld\n", heap_type, heap_size);
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> The pages backing a DMA-buf are not allowed to move (at least not without a
+> patch set I'm currently working on), but for certain MM operations to work
+> correctly you must be able to modify the page tables entries and move the
+> pages backing them around.
+> 
+> For example try to use fork() with some copy on write pages with this
+> approach. You will find that you have only two options to correctly handle
+> this.
 
-In the current code, we initialize the heap_type to -1 before the 'case'
-statements. We also change the print_usage function to state that
-heap_type and heap_size isn't optional, they are mandatory.
+The fork() issue should go away with shared memory pages (no cow).
+I guess this is the reason why vgem is internally backed by shmem.
 
-Fixes: 47a18c42d992 ("android/ion: userspace test utility for ion buffer sharing")
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
----
- tools/testing/selftests/android/ion/ionapp_export.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+Hmm.  So I could try to limit the udmabuf driver to shmem too (i.e.
+have the ioctl take a shmem filehandle and offset instead of a virtual
+address).
 
-diff --git a/tools/testing/selftests/android/ion/ionapp_export.c b/tools/testing/selftests/android/ion/ionapp_export.c
-index a944e72621a9..67a0263a7f28 100644
---- a/tools/testing/selftests/android/ion/ionapp_export.c
-+++ b/tools/testing/selftests/android/ion/ionapp_export.c
-@@ -31,8 +31,10 @@
- 
- void print_usage(int argc, char *argv[])
- {
--	printf("Usage: %s [-h <help>] [-i <heap id>] [-s <size in bytes>]\n",
-+	printf("Usage: %s [-h <help>] -i <heap id> -s <size in bytes>\n",
- 		argv[0]);
-+	printf("    Supported heap id's 0 or 1\n");
-+	printf("    Heap size > 0\n");
- }
- 
- int main(int argc, char *argv[])
-@@ -40,7 +42,8 @@ int main(int argc, char *argv[])
- 	int opt, ret, status, heapid;
- 	int sockfd, client_fd, shared_fd;
- 	unsigned char *map_buf;
--	unsigned long map_len, heap_type, heap_size, flags;
-+	unsigned long map_len, heap_size, flags;
-+	long heap_type;
- 	struct ion_buffer_info info;
- 	struct socket_info skinfo;
- 
-@@ -50,6 +53,7 @@ int main(int argc, char *argv[])
- 	}
- 
- 	heap_size = 0;
-+	heap_type = -1;
- 	flags = 0;
- 
- 	while ((opt = getopt(argc, argv, "hi:s:")) != -1) {
-@@ -68,7 +72,7 @@ int main(int argc, char *argv[])
- 				heap_type = ION_HEAP_TYPE_SYSTEM_CONTIG;
- 				break;
- 			default:
--				printf("ERROR: heap type not supported\n");
-+				print_usage(argc, argv);
- 				exit(1);
- 			}
- 			break;
-@@ -82,8 +86,7 @@ int main(int argc, char *argv[])
- 		}
- 	}
- 
--	if (heap_size <= 0) {
--		printf("heap_size cannot be 0\n");
-+	if (heap_size <= 0 || heap_type < 0) {
- 		print_usage(argc, argv);
- 		exit(1);
- 	}
--- 
-2.11.0
+But maybe it is better then to just extend vgem, i.e. add support to
+create gem objects from existing shmem.
+
+Comments?
+
+cheers,
+  Gerd
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
