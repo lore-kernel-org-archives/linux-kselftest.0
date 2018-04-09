@@ -1,31 +1,59 @@
-From: Alexander.Levin@microsoft.com (Sasha Levin)
-Date: Mon, 9 Apr 2018 03:36:41 +0000
-Subject: [PATCH v2] selftests/android/ion: fix heap_type may be
- uninitialized
-In-Reply-To: <20180405073907.30615-1-anders.roxell@linaro.org>
-References: <20180405073907.30615-1-anders.roxell@linaro.org>
-Message-ID:
- <DM5PR2101MB1032D911A4D219B49022C307FBBF0@DM5PR2101MB1032.namprd21.prod.outlook.com>
+From: daniel@ffwll.ch (Daniel Vetter)
+Date: Mon, 9 Apr 2018 10:21:31 +0200
+Subject: [PATCH v2] Add udmabuf misc device
+In-Reply-To: <5d88baad-a956-6bd5-e0d6-aabae6647f3e@amd.com>
+References: <20180316074650.5415-1-kraxel@redhat.com>
+ <7547e99b-0e3c-264e-e52b-40ad5d52b49a@gmail.com>
+ <20180406093307.s7wkhpmddd5d4r7a@sirius.home.kraxel.org>
+ <5d88baad-a956-6bd5-e0d6-aabae6647f3e@amd.com>
+Message-ID: <20180409082131.GF31310@phenom.ffwll.local>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180409033641.Sdbpdq7LXRHmdszR3APC8pi-CwYVDhh1tYtSKkAnU9M@z>
+Message-ID: <20180409082131.E_X4zRe7PURJgh4-yi0hoYx41O8M6tMaUYu5rGIOoYo@z>
 
-Hi,
+On Fri, Apr 06, 2018@02:24:46PM +0200, Christian König wrote:
+> Am 06.04.2018 um 11:33 schrieb Gerd Hoffmann:
+> >    Hi,
+> > 
+> > > The pages backing a DMA-buf are not allowed to move (at least not without a
+> > > patch set I'm currently working on), but for certain MM operations to work
+> > > correctly you must be able to modify the page tables entries and move the
+> > > pages backing them around.
+> > > 
+> > > For example try to use fork() with some copy on write pages with this
+> > > approach. You will find that you have only two options to correctly handle
+> > > this.
+> > The fork() issue should go away with shared memory pages (no cow).
+> > I guess this is the reason why vgem is internally backed by shmem.
+> 
+> Yes, exactly that is also an approach which should work fine. Just don't try
+> to get this working with get_user_pages().
+> 
+> > 
+> > Hmm.  So I could try to limit the udmabuf driver to shmem too (i.e.
+> > have the ioctl take a shmem filehandle and offset instead of a virtual
+> > address).
+> > 
+> > But maybe it is better then to just extend vgem, i.e. add support to
+> > create gem objects from existing shmem.
+> > 
+> > Comments?
+> 
+> Yes, extending vgem instead of creating something new sounds like a good
+> idea to me as well.
 
-[This is an automated email]
++1 on adding a vgem "import from shmem/memfd" ioctl. Sounds like a good
+idea, and generally useful.
 
-This commit has been processed because it contains a "Fixes:" tag,
-fixing commit: 47a18c42d992 android/ion: userspace test utility for ion buffer sharing.
-
-The bot has also determined it's probably a bug fixing patch. (score: 30.2608)
-
-The bot has tested the following trees: v4.16, v4.15.15.
-
-v4.16: Build OK!
-v4.15.15: Build OK!
-
+We might want to limit to memfd though for semantic reasons: dma-buf have
+invariant size, shmem not so much. memfd can be locked down to not change
+their size anymore. And iirc the core mm page invalidation protocol around
+truncate() is about as bad as get_user_pages vs cow :-)
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
 --
-Thanks,
-Sasha--
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
 More majordomo info at  http://vger.kernel.org/majordomo-info.html
