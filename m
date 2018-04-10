@@ -1,58 +1,50 @@
-From: daniel@ffwll.ch (Daniel Vetter)
-Date: Mon, 9 Apr 2018 10:21:31 +0200
-Subject: [PATCH v2] Add udmabuf misc device
-In-Reply-To: <5d88baad-a956-6bd5-e0d6-aabae6647f3e@amd.com>
-References: <20180316074650.5415-1-kraxel@redhat.com>
- <7547e99b-0e3c-264e-e52b-40ad5d52b49a@gmail.com>
- <20180406093307.s7wkhpmddd5d4r7a@sirius.home.kraxel.org>
- <5d88baad-a956-6bd5-e0d6-aabae6647f3e@amd.com>
-Message-ID: <20180409082131.GF31310@phenom.ffwll.local>
+From: mpe@ellerman.id.au (Michael Ellerman)
+Date: Tue, 10 Apr 2018 16:20:53 +1000
+Subject: [PATCH] selftests/filesystems: Don't run dnotify_test by default
+Message-ID: <20180410062053.8816-1-mpe@ellerman.id.au>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180409082131.E_X4zRe7PURJgh4-yi0hoYx41O8M6tMaUYu5rGIOoYo@z>
+Message-ID: <20180410062053.8N8ZCImiqbLRdnBrmTyMzD6sK4f6oM947x2hDpIduBs@z>
 
-On Fri, Apr 06, 2018@02:24:46PM +0200, Christian König wrote:
-> Am 06.04.2018 um 11:33 schrieb Gerd Hoffmann:
-> >    Hi,
-> > 
-> > > The pages backing a DMA-buf are not allowed to move (at least not without a
-> > > patch set I'm currently working on), but for certain MM operations to work
-> > > correctly you must be able to modify the page tables entries and move the
-> > > pages backing them around.
-> > > 
-> > > For example try to use fork() with some copy on write pages with this
-> > > approach. You will find that you have only two options to correctly handle
-> > > this.
-> > The fork() issue should go away with shared memory pages (no cow).
-> > I guess this is the reason why vgem is internally backed by shmem.
-> 
-> Yes, exactly that is also an approach which should work fine. Just don't try
-> to get this working with get_user_pages().
-> 
-> > 
-> > Hmm.  So I could try to limit the udmabuf driver to shmem too (i.e.
-> > have the ioctl take a shmem filehandle and offset instead of a virtual
-> > address).
-> > 
-> > But maybe it is better then to just extend vgem, i.e. add support to
-> > create gem objects from existing shmem.
-> > 
-> > Comments?
-> 
-> Yes, extending vgem instead of creating something new sounds like a good
-> idea to me as well.
+In commit ce290a19609d ("selftests: add devpts selftests"), the
+filesystems directory was added to the top-level selftests Makefile.
 
-+1 on adding a vgem "import from shmem/memfd" ioctl. Sounds like a good
-idea, and generally useful.
+That had the effect of causing the existing dnotify_test in the
+filesystems directory to now be run as part of the default selftests
+test-run. Unfortunately dnotify_test is actually an infinite loop.
 
-We might want to limit to memfd though for semantic reasons: dma-buf have
-invariant size, shmem not so much. memfd can be locked down to not change
-their size anymore. And iirc the core mm page invalidation protocol around
-truncate() is about as bad as get_user_pages vs cow :-)
--Daniel
+Fix it by moving dnotify_test to TEST_GEN_PROGS_EXTENDED, which says
+that it's a generated file (ie. built) but should not be run as part
+of the default test suite run (it's an "extendend" test).
+
+While we're here cleanup a few other things, devpts_pts should be in
+TEST_GEN_PROGS to indicate that it's built, and with the above two
+changes we no longer need a custom all or clean rule.
+
+Fixes: ce290a19609d ("selftests: add devpts selftests")
+Signed-off-by: Michael Ellerman <mpe at ellerman.id.au>
+---
+ tools/testing/selftests/filesystems/Makefile | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/filesystems/Makefile b/tools/testing/selftests/filesystems/Makefile
+index 4e6d09fb166f..5c7d7001ad37 100644
+--- a/tools/testing/selftests/filesystems/Makefile
++++ b/tools/testing/selftests/filesystems/Makefile
+@@ -1,8 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+-TEST_PROGS := dnotify_test devpts_pts
+-all: $(TEST_PROGS)
+ 
+-include ../lib.mk
++TEST_GEN_PROGS := devpts_pts
++TEST_GEN_PROGS_EXTENDED := dnotify_test
+ 
+-clean:
+-	rm -fr $(TEST_PROGS)
++include ../lib.mk
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.14.1
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
