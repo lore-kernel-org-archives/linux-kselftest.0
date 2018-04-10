@@ -1,58 +1,26 @@
-From: colin.king@canonical.com (Colin King)
-Date: Tue, 10 Apr 2018 13:38:56 +0100
-Subject: [PATCH][next] kvm: selftests: fix spelling mistake: "divisable" and
- "divisible"
-Message-ID: <20180410123856.24869-1-colin.king@canonical.com>
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Tue, 10 Apr 2018 15:48:22 +0200
+Subject: [PATCH] selftests: kvm: add .gitignore for generated files
+Message-ID: <20180410134822.23990-1-anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180410123856.lLFTf6SKXU6iGn7y5cKuAsVHmkEqqN-MFFyj1AauOW0@z>
+Message-ID: <20180410134822.RRbPFApg-FuFFw3nBq9Qnodxg3xw3QcVKhw30aIfpUM@z>
 
-From: Colin Ian King <colin.king@canonical.com>
-
-Trivial fix to spelling mistakes in comment and message text
-
-Signed-off-by: Colin Ian King <colin.king at canonical.com>
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c  | 2 +-
- tools/testing/selftests/kvm/lib/sparsebit.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/kvm/.gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/.gitignore
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 7ca1bb40c498..e213d513dc61 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1435,7 +1435,7 @@ vm_paddr_t vm_phy_page_alloc(struct kvm_vm *vm,
- 	sparsebit_idx_t pg;
- 
- 	TEST_ASSERT((paddr_min % vm->page_size) == 0, "Min physical address "
--		"not divisable by page size.\n"
-+		"not divisible by page size.\n"
- 		"  paddr_min: 0x%lx page_size: 0x%x",
- 		paddr_min, vm->page_size);
- 
-diff --git a/tools/testing/selftests/kvm/lib/sparsebit.c b/tools/testing/selftests/kvm/lib/sparsebit.c
-index 0c5cf3e0cb6f..b132bc95d183 100644
---- a/tools/testing/selftests/kvm/lib/sparsebit.c
-+++ b/tools/testing/selftests/kvm/lib/sparsebit.c
-@@ -121,7 +121,7 @@
-  *     avoided by moving the setting of the nodes mask bits into
-  *     the previous nodes num_after setting.
-  *
-- *   + Node starting index is evenly divisable by the number of bits
-+ *   + Node starting index is evenly divisible by the number of bits
-  *     within a nodes mask member.
-  *
-  *   + Nodes never represent a range of bits that wrap around the
-@@ -1741,7 +1741,7 @@ void sparsebit_validate_internal(struct sparsebit *s)
- 
- 		/* Validate node index is divisible by the mask size */
- 		if (nodep->idx % MASK_BITS) {
--			fprintf(stderr, "Node index not divisable by "
-+			fprintf(stderr, "Node index not divisible by "
- 				"mask size,\n"
- 				"  nodep: %p nodep->idx: 0x%lx "
- 				"MASK_BITS: %lu\n",
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+new file mode 100644
+index 000000000000..a546e052d19a
+--- /dev/null
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -0,0 +1,2 @@
++set_sregs_test
++sync_regs_test
 -- 
-2.15.1
+2.16.3
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
