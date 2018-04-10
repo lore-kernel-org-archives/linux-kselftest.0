@@ -1,47 +1,116 @@
-From: shuahkh at osg.samsung.com (Shuah Khan)
-Date: Tue, 10 Apr 2018 12:57:03 -0600
-Subject: [PATCH] selftests/filesystems: Don't run dnotify_test by default
-In-Reply-To: <20180410094553.GB3438@gmail.com>
-References: <20180410062053.8816-1-mpe@ellerman.id.au>
- <20180410094553.GB3438@gmail.com>
-Message-ID: <3fb54ca8-bd31-4937-75f9-415a72eafaf2@osg.samsung.com>
+From: jpoimboe at redhat.com (Josh Poimboeuf)
+Date: Tue, 10 Apr 2018 15:00:59 -0500
+Subject: [PATCH v2] selftests/livepatch: introduce tests
+In-Reply-To: <1523373354-10801-2-git-send-email-joe.lawrence@redhat.com>
+References: <1523373354-10801-1-git-send-email-joe.lawrence@redhat.com>
+ <1523373354-10801-2-git-send-email-joe.lawrence@redhat.com>
+Message-ID: <20180410200059.loy3hw6tcwdi4m5z@treble>
 
-On 04/10/2018 03:45 AM, Christian Brauner wrote:
-> On Tue, Apr 10, 2018 at 04:20:53PM +1000, Michael Ellerman wrote:
->> In commit ce290a19609d ("selftests: add devpts selftests"), the
->> filesystems directory was added to the top-level selftests Makefile.
->>
->> That had the effect of causing the existing dnotify_test in the
->> filesystems directory to now be run as part of the default selftests
->> test-run. Unfortunately dnotify_test is actually an infinite loop.
->>
->> Fix it by moving dnotify_test to TEST_GEN_PROGS_EXTENDED, which says
->> that it's a generated file (ie. built) but should not be run as part
->> of the default test suite run (it's an "extendend" test).
+On Tue, Apr 10, 2018 at 11:15:54AM -0400, Joe Lawrence wrote:
+> +static void test_klp_shadow_vars_exit(void)
+> +{
+> +}
+> +
+> +module_init(test_klp_shadow_vars_init);
+> +module_init(test_klp_shadow_vars_exit);
 
-Typo - I can fix it when I apply it.
+For this last line, s/module_init/module_exit/, though I think the exit
+function can just be removed altogether?
 
->>
->> While we're here cleanup a few other things, devpts_pts should be in
->> TEST_GEN_PROGS to indicate that it's built, and with the above two
->> changes we no longer need a custom all or clean rule.
->>
->> Fixes: ce290a19609d ("selftests: add devpts selftests")
->> Signed-off-by: Michael Ellerman <mpe at ellerman.id.au>
-> 
-> I'm not sure if I should've made it to be built given that it wasn't
-> before but it probably doesn't hurt. It's either that or remove it I
-> guess.
+Also I get the following bug (run on latest Linus master + Petr's two
+patch sets):
 
-This way the test gets built and gets included in the installed tests.
-This way somebody can run it by itself.
-> 
-> Acked-by: Christian brauner <christian.brauner at ubuntu.com>
+[  106.302072] % modprobe test_klp_shadow_vars
+[  106.311165] test_klp_shadow_vars: klp_shadow_get(obj=PTR5, id=0x1234) = PTR0
+[  106.313080] test_klp_shadow_vars:   got expected NULL result
+[  106.314811] BUG: sleeping function called from invalid context at mm/slab.h:421
+[  106.316518] in_atomic(): 1, irqs_disabled(): 1, pid: 2254, name: modprobe
+[  106.318107] 1 lock held by modprobe/2254:
+[  106.319332]  #0: 00000000d0851080 (klp_shadow_lock){....}, at: __klp_shadow_get_or_alloc+0x88/0x1b0
+[  106.321220] irq event stamp: 4408
+[  106.322176] hardirqs last  enabled at (4407): [<ffffffff8114c28e>] console_unlock+0x44e/0x680
+[  106.323598] hardirqs last disabled at (4408): [<ffffffff8199e6c7>] _raw_spin_lock_irqsave+0x27/0x90
+[  106.325041] softirqs last  enabled at (4404): [<ffffffff81c0039b>] __do_softirq+0x39b/0x4fc
+[  106.326469] softirqs last disabled at (4367): [<ffffffff810d8450>] irq_exit+0xe0/0xf0
+[  106.327901] Preemption disabled at:
+[  106.327905] [<ffffffff81167c28>] __klp_shadow_get_or_alloc+0x88/0x1b0
+[  106.330117] CPU: 7 PID: 2254 Comm: modprobe Tainted: G              K  4.16.0+ #60
+[  106.331565] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-2.fc27 04/01/2014
+[  106.333143] Call Trace:
+[  106.334011]  dump_stack+0x8e/0xd5
+[  106.334962]  ___might_sleep+0x185/0x260
+[  106.335997]  ? shadow_dtor+0x40/0x40 [test_klp_shadow_vars]
+[  106.337170]  __might_sleep+0x4a/0x80
+[  106.338137]  kmem_cache_alloc_trace+0x20b/0x300
+[  106.339183]  ? ptr_id+0x5c/0xd0 [test_klp_shadow_vars]
+[  106.340341]  ? shadow_dtor+0x40/0x40 [test_klp_shadow_vars]
+[  106.341506]  ptr_id+0x5c/0xd0 [test_klp_shadow_vars]
+[  106.342725]  shadow_ctor+0x20/0x40 [test_klp_shadow_vars]
+[  106.343998]  __klp_shadow_get_or_alloc+0xc4/0x1b0
+[  106.345184]  ? shadow_dtor+0x40/0x40 [test_klp_shadow_vars]
+[  106.346494]  klp_shadow_alloc+0x10/0x20
+[  106.347583]  shadow_alloc+0x28/0xa0 [test_klp_shadow_vars]
+[  106.348871]  ? shadow_free_all+0x40/0x40 [test_klp_shadow_vars]
+[  106.350200]  test_klp_shadow_vars_init+0x96/0x400 [test_klp_shadow_vars]
+[  106.351646]  ? shadow_free_all+0x40/0x40 [test_klp_shadow_vars]
+[  106.352949]  do_one_initcall+0x61/0x37f
+[  106.353963]  ? rcu_read_lock_sched_held+0x79/0x80
+[  106.355040]  ? kmem_cache_alloc_trace+0x29d/0x300
+[  106.356098]  ? do_init_module+0x27/0x213
+[  106.357090]  do_init_module+0x5f/0x213
+[  106.358047]  load_module+0x2815/0x2e70
+[  106.358992]  ? vfs_read+0x12d/0x150
+[  106.359920]  SYSC_finit_module+0xfc/0x120
+[  106.360870]  ? SYSC_finit_module+0xfc/0x120
+[  106.361839]  SyS_finit_module+0xe/0x10
+[  106.362753]  do_syscall_64+0x7e/0x240
+[  106.363645]  entry_SYSCALL_64_after_hwframe+0x42/0xb7
+[  106.364711] RIP: 0033:0x7f26d0d40b19
+[  106.365799] RSP: 002b:00007ffee1de19a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+[  106.367306] RAX: ffffffffffffffda RBX: 00005636550d54b0 RCX: 00007f26d0d40b19
+[  106.368573] RDX: 0000000000000000 RSI: 0000563654134186 RDI: 0000000000000003
+[  106.369950] RBP: 0000563654134186 R08: 0000000000000000 R09: 00005636550d4270
+[  106.371164] R10: 0000000000000003 R11: 0000000000000246 R12: 0000000000000000
+[  106.372422] R13: 00005636550d53b0 R14: 0000000000040000 R15: 00005636550d54b0
+[  106.373900] test_klp_shadow_vars: shadow_ctor: PTR6 -> PTR1
+[  106.375249] test_klp_shadow_vars: klp_shadow_alloc(obj=PTR5, id=0x1234, size=8, gfp_flags=GFP_KERNEL), ctor=PTR7, ctor_data=PTR1 = PTR6
+[  106.378893] test_klp_shadow_vars: shadow_ctor: PTR8 -> PTR2
+[  106.380305] test_klp_shadow_vars: klp_shadow_alloc(obj=PTR9, id=0x1234, size=8, gfp_flags=GFP_KERNEL), ctor=PTR7, ctor_data=PTR2 = PTR8
+[  106.382779] test_klp_shadow_vars: shadow_ctor: PTR10 -> PTR3
+[  106.384131] test_klp_shadow_vars: klp_shadow_alloc(obj=PTR5, id=0x1235, size=8, gfp_flags=GFP_KERNEL), ctor=PTR7, ctor_data=PTR3 = PTR10
+[  106.386584] test_klp_shadow_vars: klp_shadow_get(obj=PTR5, id=0x1234) = PTR6
+[  106.387929] test_klp_shadow_vars:   got expected PTR6 -> PTR1 result
+[  106.389181] test_klp_shadow_vars: klp_shadow_get(obj=PTR9, id=0x1234) = PTR8
+[  106.390488] test_klp_shadow_vars:   got expected PTR8 -> PTR2 result
+[  106.391731] test_klp_shadow_vars: klp_shadow_get(obj=PTR5, id=0x1235) = PTR10
+[  106.393066] test_klp_shadow_vars:   got expected PTR10 -> PTR3 result
+[  106.394347] test_klp_shadow_vars: shadow_ctor: PTR11 -> PTR4
+[  106.395523] test_klp_shadow_vars: klp_shadow_get_or_alloc(obj=PTR12, id=0x1234, size=8, gfp_flags=GFP_KERNEL), ctor=PTR7, ctor_data=PTR4 = PTR11
+[  106.398033] test_klp_shadow_vars: klp_shadow_get_or_alloc(obj=PTR12, id=0x1234, size=8, gfp_flags=GFP_KERNEL), ctor=PTR7, ctor_data=PTR4 = PTR11
+[  106.400554] test_klp_shadow_vars:   got expected PTR11 -> PTR4 result
+[  106.401937] test_klp_shadow_vars: shadow_dtor(obj=PTR5, shadow_data=PTR6)
+[  106.403592] test_klp_shadow_vars: klp_shadow_free(obj=PTR5, id=0x1234, dtor=PTR13)
+[  106.405083] test_klp_shadow_vars: klp_shadow_get(obj=PTR5, id=0x1234) = PTR0
+[  106.406500] test_klp_shadow_vars:   got expected NULL result
+[  106.407735] test_klp_shadow_vars: shadow_dtor(obj=PTR9, shadow_data=PTR8)
+[  106.409252] test_klp_shadow_vars: klp_shadow_free(obj=PTR9, id=0x1234, dtor=PTR13)
+[  106.410867] test_klp_shadow_vars: klp_shadow_get(obj=PTR9, id=0x1234) = PTR0
+[  106.412232] test_klp_shadow_vars:   got expected NULL result
+[  106.413461] test_klp_shadow_vars: shadow_dtor(obj=PTR12, shadow_data=PTR11)
+[  106.414888] test_klp_shadow_vars: klp_shadow_free(obj=PTR12, id=0x1234, dtor=PTR13)
+[  106.416319] test_klp_shadow_vars: klp_shadow_get(obj=PTR12, id=0x1234) = PTR0
+[  106.417681] test_klp_shadow_vars:   got expected NULL result
+[  106.418947] test_klp_shadow_vars: klp_shadow_get(obj=PTR5, id=0x1235) = PTR10
+[  106.420314] test_klp_shadow_vars:   got expected PTR10 -> PTR3 result
+[  106.421658] test_klp_shadow_vars: shadow_dtor(obj=PTR5, shadow_data=PTR10)
+[  106.423065] test_klp_shadow_vars: klp_shadow_free_all(id=0x1235, dtor=PTR13)
+[  106.424421] test_klp_shadow_vars: klp_shadow_get(obj=PTR5, id=0x1234) = PTR0
+[  106.425745] test_klp_shadow_vars:   shadow_get() got expected NULL result
+[  106.438719] % rmmod test_klp_shadow_vars
 
-Thanks Michael. I will get this into 4.17-rc2 or rc3.
 
--- Shuah
-
+-- 
+Josh
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
