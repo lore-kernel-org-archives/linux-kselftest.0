@@ -1,62 +1,46 @@
-From: pbonzini at redhat.com (Paolo Bonzini)
-Date: Tue, 10 Apr 2018 17:20:22 +0200
-Subject: [PATCH][next] kvm: selftests: fix spelling mistake: "divisable"
- and "divisible"
-In-Reply-To: <20180410123856.24869-1-colin.king@canonical.com>
-References: <20180410123856.24869-1-colin.king@canonical.com>
-Message-ID: <8a6e5200-15be-f5e6-d2a8-1ea03f653c54@redhat.com>
+From: shuahkh at osg.samsung.com (Shuah Khan)
+Date: Tue, 10 Apr 2018 12:57:03 -0600
+Subject: [PATCH] selftests/filesystems: Don't run dnotify_test by default
+In-Reply-To: <20180410094553.GB3438@gmail.com>
+References: <20180410062053.8816-1-mpe@ellerman.id.au>
+ <20180410094553.GB3438@gmail.com>
+Message-ID: <3fb54ca8-bd31-4937-75f9-415a72eafaf2@osg.samsung.com>
 
-On 10/04/2018 14:38, Colin King wrote:
-> From: Colin Ian King <colin.king at canonical.com>
-> 
-> Trivial fix to spelling mistakes in comment and message text
-> 
-> Signed-off-by: Colin Ian King <colin.king at canonical.com>
-> ---
->  tools/testing/selftests/kvm/lib/kvm_util.c  | 2 +-
->  tools/testing/selftests/kvm/lib/sparsebit.c | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 7ca1bb40c498..e213d513dc61 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -1435,7 +1435,7 @@ vm_paddr_t vm_phy_page_alloc(struct kvm_vm *vm,
->  	sparsebit_idx_t pg;
->  
->  	TEST_ASSERT((paddr_min % vm->page_size) == 0, "Min physical address "
-> -		"not divisable by page size.\n"
-> +		"not divisible by page size.\n"
->  		"  paddr_min: 0x%lx page_size: 0x%x",
->  		paddr_min, vm->page_size);
->  
-> diff --git a/tools/testing/selftests/kvm/lib/sparsebit.c b/tools/testing/selftests/kvm/lib/sparsebit.c
-> index 0c5cf3e0cb6f..b132bc95d183 100644
-> --- a/tools/testing/selftests/kvm/lib/sparsebit.c
-> +++ b/tools/testing/selftests/kvm/lib/sparsebit.c
-> @@ -121,7 +121,7 @@
->   *     avoided by moving the setting of the nodes mask bits into
->   *     the previous nodes num_after setting.
->   *
-> - *   + Node starting index is evenly divisable by the number of bits
-> + *   + Node starting index is evenly divisible by the number of bits
->   *     within a nodes mask member.
->   *
->   *   + Nodes never represent a range of bits that wrap around the
-> @@ -1741,7 +1741,7 @@ void sparsebit_validate_internal(struct sparsebit *s)
->  
->  		/* Validate node index is divisible by the mask size */
->  		if (nodep->idx % MASK_BITS) {
-> -			fprintf(stderr, "Node index not divisable by "
-> +			fprintf(stderr, "Node index not divisible by "
->  				"mask size,\n"
->  				"  nodep: %p nodep->idx: 0x%lx "
->  				"MASK_BITS: %lu\n",
-> 
+On 04/10/2018 03:45 AM, Christian Brauner wrote:
+> On Tue, Apr 10, 2018 at 04:20:53PM +1000, Michael Ellerman wrote:
+>> In commit ce290a19609d ("selftests: add devpts selftests"), the
+>> filesystems directory was added to the top-level selftests Makefile.
+>>
+>> That had the effect of causing the existing dnotify_test in the
+>> filesystems directory to now be run as part of the default selftests
+>> test-run. Unfortunately dnotify_test is actually an infinite loop.
+>>
+>> Fix it by moving dnotify_test to TEST_GEN_PROGS_EXTENDED, which says
+>> that it's a generated file (ie. built) but should not be run as part
+>> of the default test suite run (it's an "extendend" test).
 
-Queued, thanks.
+Typo - I can fix it when I apply it.
 
-Paolo
+>>
+>> While we're here cleanup a few other things, devpts_pts should be in
+>> TEST_GEN_PROGS to indicate that it's built, and with the above two
+>> changes we no longer need a custom all or clean rule.
+>>
+>> Fixes: ce290a19609d ("selftests: add devpts selftests")
+>> Signed-off-by: Michael Ellerman <mpe at ellerman.id.au>
+> 
+> I'm not sure if I should've made it to be built given that it wasn't
+> before but it probably doesn't hurt. It's either that or remove it I
+> guess.
+
+This way the test gets built and gets included in the installed tests.
+This way somebody can run it by itself.
+> 
+> Acked-by: Christian brauner <christian.brauner at ubuntu.com>
+
+Thanks Michael. I will get this into 4.17-rc2 or rc3.
+
+-- Shuah
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
