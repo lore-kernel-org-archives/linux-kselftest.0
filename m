@@ -1,37 +1,46 @@
-From: joe.lawrence@redhat.com (Joe Lawrence)
-Date: Wed, 11 Apr 2018 09:59:59 -0400
-Subject: [PATCH v2] selftests/livepatch: introduce tests
-In-Reply-To: <201804111155.d856J7oR%fengguang.wu@intel.com>
-References: <1523373354-10801-2-git-send-email-joe.lawrence@redhat.com>
- <201804111155.d856J7oR%fengguang.wu@intel.com>
-Message-ID: <b20ea6f4-5f8a-d99b-deaf-eb76297251a2@redhat.com>
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Wed, 11 Apr 2018 17:17:34 +0200
+Subject: [PATCH] selftests: net: add in_netns.sh to TEST_PROGS
+Message-ID: <20180411151734.15507-1-anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180411135959.x7bt8Txg0NzX7A2rrzByKpjMYisiThDFnPv1pOj-_9E@z>
+Message-ID: <20180411151734.efp0DW7YysoaBdnYrSSGC10b0PUQ7_7ShMKlnybnVzE@z>
 
-On 04/10/2018 11:44 PM, kbuild test robot wrote:
-> Hi Joe,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on v4.16]
-> [also build test ERROR on next-20180410]
-> [cannot apply to linus/master jikos-livepatching/for-next]
-> [if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
-                                   ^^^^^^^^^^^^^^
-Hi kbuild test robot,
+Script in_netns.sh isn't installed.
+--------------------
+running psock_fanout test
+--------------------
+./run_afpackettests: line 12: ./in_netns.sh: No such file or directory
+[FAIL]
+--------------------
+running psock_tpacket test
+--------------------
+./run_afpackettests: line 22: ./in_netns.sh: No such file or directory
+[FAIL]
 
-Thank you for testing!  Yet something to improve:
+In current code added in_netns.sh to be installed.
 
-Is there syntax one can add to a commit, or better yet, patchset cover
-letter to specify a git tree URL in which the patch(set) is based on?
+Fixes: cc30c93fa020 ("selftests/net: ignore background traffic in psock_fanout")
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+---
+ tools/testing/selftests/net/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I can't find anything at [1] that documents such feature.
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 785fc18a16b4..8f1e13d2e547 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -5,7 +5,7 @@ CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
+ CFLAGS += -I../../../../usr/include/
+ 
+ TEST_PROGS := run_netsocktests run_afpackettests test_bpf.sh netdevice.sh rtnetlink.sh
+-TEST_PROGS += fib_tests.sh fib-onlink-tests.sh pmtu.sh
++TEST_PROGS += fib_tests.sh fib-onlink-tests.sh in_netns.sh pmtu.sh
+ TEST_GEN_FILES =  socket
+ TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy
+ TEST_GEN_PROGS = reuseport_bpf reuseport_bpf_cpu reuseport_bpf_numa
+-- 
+2.16.3
 
-[1] https://01.org/lkp/documentation/0-day-test-service
-
-Thanks,
-
--- Joe
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
