@@ -1,53 +1,37 @@
-From: mpe@ellerman.id.au (Michael Ellerman)
-Date: Wed, 11 Apr 2018 13:24:12 +1000
-Subject: [PATCH] selftests/filesystems: Don't run dnotify_test by default
-In-Reply-To: <3fb54ca8-bd31-4937-75f9-415a72eafaf2@osg.samsung.com>
-References: <20180410062053.8816-1-mpe@ellerman.id.au>
- <20180410094553.GB3438@gmail.com>
- <3fb54ca8-bd31-4937-75f9-415a72eafaf2@osg.samsung.com>
-Message-ID: <87fu42l92b.fsf@concordia.ellerman.id.au>
+From: joe.lawrence@redhat.com (Joe Lawrence)
+Date: Wed, 11 Apr 2018 09:59:59 -0400
+Subject: [PATCH v2] selftests/livepatch: introduce tests
+In-Reply-To: <201804111155.d856J7oR%fengguang.wu@intel.com>
+References: <1523373354-10801-2-git-send-email-joe.lawrence@redhat.com>
+ <201804111155.d856J7oR%fengguang.wu@intel.com>
+Message-ID: <b20ea6f4-5f8a-d99b-deaf-eb76297251a2@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180411032412.uXqf9aWFcGtOkn3Re4_BuSxk2-vGdA4fYbGIK_lm-d0@z>
+Message-ID: <20180411135959.x7bt8Txg0NzX7A2rrzByKpjMYisiThDFnPv1pOj-_9E@z>
 
-Shuah Khan <shuahkh at osg.samsung.com> writes:
-> On 04/10/2018 03:45 AM, Christian Brauner wrote:
->> On Tue, Apr 10, 2018@04:20:53PM +1000, Michael Ellerman wrote:
->>> In commit ce290a19609d ("selftests: add devpts selftests"), the
->>> filesystems directory was added to the top-level selftests Makefile.
->>>
->>> That had the effect of causing the existing dnotify_test in the
->>> filesystems directory to now be run as part of the default selftests
->>> test-run. Unfortunately dnotify_test is actually an infinite loop.
->>>
->>> Fix it by moving dnotify_test to TEST_GEN_PROGS_EXTENDED, which says
->>> that it's a generated file (ie. built) but should not be run as part
->>> of the default test suite run (it's an "extendend" test).
->
-> Typo - I can fix it when I apply it.
+On 04/10/2018 11:44 PM, kbuild test robot wrote:
+> Hi Joe,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on v4.16]
+> [also build test ERROR on next-20180410]
+> [cannot apply to linus/master jikos-livepatching/for-next]
+> [if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
+                                   ^^^^^^^^^^^^^^
+Hi kbuild test robot,
 
-Oops, thanks.
+Thank you for testing!  Yet something to improve:
 
->>> While we're here cleanup a few other things, devpts_pts should be in
->>> TEST_GEN_PROGS to indicate that it's built, and with the above two
->>> changes we no longer need a custom all or clean rule.
->>>
->>> Fixes: ce290a19609d ("selftests: add devpts selftests")
->>> Signed-off-by: Michael Ellerman <mpe at ellerman.id.au>
->> 
->> I'm not sure if I should've made it to be built given that it wasn't
->> before but it probably doesn't hurt. It's either that or remove it I
->> guess.
->
-> This way the test gets built and gets included in the installed tests.
-> This way somebody can run it by itself.
->> 
->> Acked-by: Christian brauner <christian.brauner at ubuntu.com>
->
-> Thanks Michael. I will get this into 4.17-rc2 or rc3.
+Is there syntax one can add to a commit, or better yet, patchset cover
+letter to specify a git tree URL in which the patch(set) is based on?
 
-Thanks.
+I can't find anything at [1] that documents such feature.
 
-cheers
+[1] https://01.org/lkp/documentation/0-day-test-service
+
+Thanks,
+
+-- Joe
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
