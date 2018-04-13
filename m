@@ -1,45 +1,74 @@
-From: philip.li at intel.com (Philip Li)
-Date: Fri, 13 Apr 2018 23:49:01 +0800
-Subject: [kbuild-all] [PATCH v2] selftests/livepatch: introduce tests
-In-Reply-To: <b20ea6f4-5f8a-d99b-deaf-eb76297251a2@redhat.com>
-References: <1523373354-10801-2-git-send-email-joe.lawrence@redhat.com>
- <201804111155.d856J7oR%fengguang.wu@intel.com>
- <b20ea6f4-5f8a-d99b-deaf-eb76297251a2@redhat.com>
-Message-ID: <20180413154901.GD20885@intel.com>
+From: joe.lawrence at redhat.com (Joe Lawrence)
+Date: Fri, 13 Apr 2018 16:52:25 -0400
+Subject: [PATCH v3] selftests/livepatch: introduce tests
+In-Reply-To: <alpine.LSU.2.21.1804131118080.17969@pobox.suse.cz>
+References: <1523544871-29444-1-git-send-email-joe.lawrence@redhat.com>
+ <1523544871-29444-2-git-send-email-joe.lawrence@redhat.com>
+ <alpine.LSU.2.21.1804131118080.17969@pobox.suse.cz>
+Message-ID: <c9f4b440-c672-e45f-ddcc-63548b0411e2@redhat.com>
 
-On Wed, Apr 11, 2018 at 09:59:59AM -0400, Joe Lawrence wrote:
-> On 04/10/2018 11:44 PM, kbuild test robot wrote:
-> > Hi Joe,
-> > 
-> > Thank you for the patch! Yet something to improve:
-> > 
-> > [auto build test ERROR on v4.16]
-> > [also build test ERROR on next-20180410]
-> > [cannot apply to linus/master jikos-livepatching/for-next]
-> > [if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
->                                    ^^^^^^^^^^^^^^
-> Hi kbuild test robot,
+On 04/13/2018 07:20 AM, Miroslav Benes wrote:
+> Hi,
 > 
-> Thank you for testing!  Yet something to improve:
+> On Thu, 12 Apr 2018, Joe Lawrence wrote:
 > 
-> Is there syntax one can add to a commit, or better yet, patchset cover
-> letter to specify a git tree URL in which the patch(set) is based on?
-thanks Joe, currently we recommend to use --base option when using git format-patch.
-This will record the base of your series, and 0day would act accordingly to apply
-to that base.
+>> Add a few livepatch modules and simple target modules that the included
+>> regression suite can run tests against.
+> 
+> Could you include a brief description which features are tested?
 
+I can add this to the commit msg:
+
+      - basic livepatching (multiple patches, atomic replace)
+      - pre/post (un)patch callbacks
+      - shadow variable API
+
+Or do you prefer a little more detail?
+
+>  
+>> Signed-off-by: Joe Lawrence <joe.lawrence at redhat.com>
+>> ---
 > 
-> I can't find anything at [1] that documents such feature.
+>> diff --git a/lib/livepatch/test_klp_shadow_vars.c b/lib/livepatch/test_klp_shadow_vars.c
+>> new file mode 100644
+>> index 000000000000..18c75b21cb9e
+>> --- /dev/null
+>> +++ b/lib/livepatch/test_klp_shadow_vars.c
+>>
+>> +/*
+>> + * Shadow variable wrapper functions that echo the function and arguments
+>> + * to the kernel log for testing verification.  Don't display raw pointers,
+>> + * but use the ptr_id() value instead.
+>> + */
+>> +void *shadow_get(void *obj, unsigned long id)
+>> +{
+>> +	void *ret = klp_shadow_get(obj, id);
+>> +
+>> +	pr_info("klp_%s(obj=PTR%d, id=0x%lx) = PTR%d\n",
+>> +		__func__, ptr_id(obj), id, ptr_id(ret));
+>> +
+>> +	return ret;
+>> +}
 > 
-> [1] https://01.org/lkp/documentation/0-day-test-service
+>> +void shadow_free(void *obj, unsigned long id, klp_shadow_dtor_t dtor)
+>> +{
+>> +	klp_shadow_free(obj, id, dtor);
+>> +	pr_info("klp_%s(obj=PTR%d, id=0x%lx, dtor=PTR%d)\n",
+>> +		__func__, ptr_id(obj), id, ptr_id(dtor));
+>> +}
 > 
-> Thanks,
-> 
-> -- Joe
-> _______________________________________________
-> kbuild-all mailing list
-> kbuild-all at lists.01.org
-> https://lists.01.org/mailman/listinfo/kbuild-all
+> Sparse (make C=1) would be happier with those two being static.
+
+Ah right. I wonder why the kbuild test robot didn't complain about
+those, too.  Easy enough to fix up, thanks.
+
+> Otherwise it works as expected. Good job!
+
+Thanks for reviewing.  I'll hold off on posting v4 until Petr (and
+others) get a chance to comment.  Perhaps there are other tests that
+would be helpful?
+
+-- Joe
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
