@@ -1,54 +1,33 @@
-From: daniel.diaz at linaro.org (=?UTF-8?q?Daniel=20D=C3=ADaz?=)
-Date: Thu, 12 Apr 2018 10:12:28 -0500
-Subject: [PATCH] selftests/intel_pstate: Enhance table printing
-Message-ID: <1523545962-5281-1-git-send-email-daniel.diaz@linaro.org>
+From: peng.hao2 at zte.com.cn (Peng Hao)
+Date: Fri, 13 Apr 2018 08:36:30 +0800
+Subject: [PATCH] kvm: selftests: add -std=gnu99 cflags
+Message-ID: <1523579790-30773-1-git-send-email-peng.hao2@zte.com.cn>
 
-Using coreutils' pr, a nicer table is printed out with the
-results.
+lib/kvm_util.c: In function ‘kvm_memcmp_hva_gva’:
+lib/kvm_util.c:332:2: error: ‘for’ loop initial declarations are only allowed in C99 mode
 
-Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
+So add -std=gnu99 to CFLAGS
+
+Signed-off-by: Peng Hao <peng.hao2 at zte.com.cn>
 ---
- tools/testing/selftests/intel_pstate/run.sh | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ tools/testing/selftests/kvm/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
-index bde31a0..a40068b 100755
---- a/tools/testing/selftests/intel_pstate/run.sh
-+++ b/tools/testing/selftests/intel_pstate/run.sh
-@@ -92,18 +92,28 @@ done
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index dc44de9..1da541e 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -14,7 +14,7 @@ LIBKVM += $(LIBKVM_$(UNAME_M))
  
- [ $EVALUATE_ONLY -eq 0 ] && cpupower frequency-set -g powersave --max=${max_freq}MHz >& /dev/null
+ INSTALL_HDR_PATH = $(top_srcdir)/usr
+ LINUX_HDR_PATH = $(INSTALL_HDR_PATH)/include/
+-CFLAGS += -O2 -g -I$(LINUX_HDR_PATH) -Iinclude -I$(<D)
++CFLAGS += -O2 -g -std=gnu99 -I$(LINUX_HDR_PATH) -Iinclude -I$(<D)
  
--echo "=============================================================================="
-+echo "========================================================================"
- echo "The marketing frequency of the cpu is $mkt_freq MHz"
- echo "The maximum frequency of the cpu is $max_freq MHz"
- echo "The minimum frequency of the cpu is $min_freq MHz"
- 
- # make a pretty table
--echo "Target      Actual      Difference     MSR(0x199)     max_perf_pct"
-+echo "Target Actual Difference MSR(0x199) max_perf_pct" | tr " " "\n" > /tmp/result.tab
- for freq in `seq $max_freq -100 $min_freq`
- do
- 	result_freq=$(cat /tmp/result.${freq} | grep "cpu MHz" | awk ' { print $4 } ' | awk -F "." ' { print $1 } ')
- 	msr=$(cat /tmp/result.${freq} | grep "msr" | awk ' { print $3 } ')
- 	max_perf_pct=$(cat /tmp/result.${freq} | grep "max_perf_pct" | awk ' { print $2 } ' )
--	echo " $freq        $result_freq          $(($result_freq-$freq))          $msr          $(($max_perf_pct*$max_freq))"
-+	cat >> /tmp/result.tab << EOF
-+$freq
-+$result_freq
-+$((result_freq - freq))
-+$msr
-+$((max_perf_pct * max_freq))
-+EOF
- done
-+
-+# print the table
-+pr -aTt -5 < /tmp/result.tab
-+
- exit 0
+ # After inclusion, $(OUTPUT) is defined and
+ # $(TEST_GEN_PROGS) starts with $(OUTPUT)/
 -- 
-2.7.4
+1.8.3.1
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
