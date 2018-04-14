@@ -1,43 +1,34 @@
-From: joe.lawrence@redhat.com (Joe Lawrence)
-Date: Fri, 13 Apr 2018 16:55:40 -0400
-Subject: [kbuild-all] [PATCH v2] selftests/livepatch: introduce tests
-In-Reply-To: <20180413154901.GD20885@intel.com>
-References: <1523373354-10801-2-git-send-email-joe.lawrence@redhat.com>
- <201804111155.d856J7oR%fengguang.wu@intel.com>
- <b20ea6f4-5f8a-d99b-deaf-eb76297251a2@redhat.com>
- <20180413154901.GD20885@intel.com>
-Message-ID: <9423b665-e8bf-df6f-95c0-6d01d1ce0e8c@redhat.com>
+From: peng.hao2@zte.com.cn (Peng Hao)
+Date: Sun, 15 Apr 2018 03:08:56 +0800
+Subject: [PATCH] selftests:vm: add include file
+Message-ID: <1523732936-42546-1-git-send-email-peng.hao2@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180413205540.uf0VfuE6skaIM6Xjd86jwV_M8V-wwQp2MEzzxQK_hhM@z>
+Message-ID: <20180414190856.nvhHWQmB32ounaMOql1R1F6zQEAAtMKZHwNJCRL2nJg@z>
 
-On 04/13/2018 11:49 AM, Philip Li wrote:
-> On Wed, Apr 11, 2018@09:59:59AM -0400, Joe Lawrence wrote:
->> On 04/10/2018 11:44 PM, kbuild test robot wrote:
->>> Hi Joe,
->>>
->>> Thank you for the patch! Yet something to improve:
->>>
->>> [auto build test ERROR on v4.16]
->>> [also build test ERROR on next-20180410]
->>> [cannot apply to linus/master jikos-livepatching/for-next]
->>> [if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
->>                                    ^^^^^^^^^^^^^^
->> Hi kbuild test robot,
->>
->> Thank you for testing!  Yet something to improve:
->>
->> Is there syntax one can add to a commit, or better yet, patchset cover
->> letter to specify a git tree URL in which the patch(set) is based on?
-> thanks Joe, currently we recommend to use --base option when using git format-patch.
-> This will record the base of your series, and 0day would act accordingly to apply
-> to that base.
+userfaultfd.c: In function ‘hugetlb_release_pages’:
+userfaultfd.c:145:25: error: ‘FALLOC_FL_PUNCH_HOLE’ undeclared 
+(first use in this function)
 
-I didn't know about the --base option, that looks like a cool feature.
-BTW, I assume that "well-known patches" would apply to those posted to
-any upstream mailing list that the kbuild test robot is currently
-listening to?
+Signed-off-by: Peng Hao <peng.hao2 at zte.com.cn>
+---
+ tools/testing/selftests/vm/userfaultfd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
--- Joe
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index de2f9ec..d8fe447 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -68,6 +68,7 @@
+ #include <linux/userfaultfd.h>
+ #include <setjmp.h>
+ #include <stdbool.h>
++#include <linux/falloc.h>
+ 
+ #ifdef __NR_userfaultfd
+ 
+-- 
+1.8.3.1
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
