@@ -1,5 +1,5 @@
-From: torvalds@linux-foundation.org (Linus Torvalds)
-Date: Mon, 16 Apr 2018 11:34:32 -0700
+From: mingo@kernel.org (Ingo Molnar)
+Date: Mon, 16 Apr 2018 21:46:33 +0200
 Subject: Linux 4.17-rc1 - kernel paging errors running x86 selftests
 In-Reply-To: <CA+55aFwBT7xEKxoVEEgT3vjg960Tpx+CJo+4238P66Q7w-nM-Q@mail.gmail.com>
 References: <1dcd116c-9384-6885-2d9e-f620c14bd955@osg.samsung.com>
@@ -8,24 +8,25 @@ References: <1dcd116c-9384-6885-2d9e-f620c14bd955@osg.samsung.com>
  <8c0a94b7-763d-16be-6401-23a3064ee55a@linux.intel.com>
  <CA+55aFx=pwEJQHhab3gW6+qdom=ccFoWoK-aZokmqtPxNqTd8g@mail.gmail.com>
  <CA+55aFwBT7xEKxoVEEgT3vjg960Tpx+CJo+4238P66Q7w-nM-Q@mail.gmail.com>
-Message-ID:
- <CA+55aFzmcwNjgvjwyVEeTYmBmdP5Ed+FNZXKJFpWx4g_+F7G1Q@mail.gmail.com>
+Message-ID: <20180416194633.elornxpw5rioylfo@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180416183432.JnFeThFWfmGngIm9rDp2y8vQxD8FwQfCUpX6-z928Lg@z>
+Message-ID: <20180416194633.QO3mrFbRbH5LplxBfY2RexwkK6EyvJh6eZYRmEFAcRI@z>
 
-On Mon, Apr 16, 2018 at 11:15 AM, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
+
+* Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
+> On Mon, Apr 16, 2018 at 11:04 AM, Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > I was going through the bisection, with just a couple more rounds to
+> > go, but I guess I don't even need it.
+> 
 > Ingo/Thomas: I will be just taking this directly, since it's so
 > trivial and obvious and I got cc'd on the discussion.
 
-.. and I also verified that it actually fixes the problem Shuah
-reported. Not that there really was any question about it, but hey,
-after bisecting it I decided to just test the fix too.
+A belated Ack - and thanks for applying the fix!
 
-I know, I know. What are users for? I must be slipping.
-
-               Linus
+	Ingo
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
