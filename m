@@ -1,86 +1,68 @@
-From: mbenes at suse.cz (Miroslav Benes)
-Date: Mon, 16 Apr 2018 13:33:55 +0200 (CEST)
+From: pmladek at suse.com (Petr Mladek)
+Date: Mon, 16 Apr 2018 14:49:47 +0200
 Subject: [PATCH v3] selftests/livepatch: introduce tests
-In-Reply-To: <c9f4b440-c672-e45f-ddcc-63548b0411e2@redhat.com>
+In-Reply-To: <1523544871-29444-2-git-send-email-joe.lawrence@redhat.com>
 References: <1523544871-29444-1-git-send-email-joe.lawrence@redhat.com>
  <1523544871-29444-2-git-send-email-joe.lawrence@redhat.com>
- <alpine.LSU.2.21.1804131118080.17969@pobox.suse.cz>
- <c9f4b440-c672-e45f-ddcc-63548b0411e2@redhat.com>
-Message-ID: <alpine.LSU.2.21.1804161329040.23118@pobox.suse.cz>
+Message-ID: <20180416124947.4ehk7xbxoiqrklue@pathway.suse.cz>
 
-On Fri, 13 Apr 2018, Joe Lawrence wrote:
+On Thu 2018-04-12 10:54:31, Joe Lawrence wrote:
+> Add a few livepatch modules and simple target modules that the included
+> regression suite can run tests against.
+> 
+> 
+> diff --git a/Documentation/livepatch/callbacks.txt b/Documentation/livepatch/callbacks.txt
+> index c9776f48e458..6ca2801a6bb9 100644
+> --- a/Documentation/livepatch/callbacks.txt
+> +++ b/Documentation/livepatch/callbacks.txt
+> @@ -116,490 +116,3 @@ virtnet_probe() initialized its driver's net_device features.  A
 
-> On 04/13/2018 07:20 AM, Miroslav Benes wrote:
-> > Hi,
-> > 
-> > On Thu, 12 Apr 2018, Joe Lawrence wrote:
-> > 
-> >> Add a few livepatch modules and simple target modules that the included
-> >> regression suite can run tests against.
-> > 
-> > Could you include a brief description which features are tested?
-> 
-> I can add this to the commit msg:
-> 
->       - basic livepatching (multiple patches, atomic replace)
->       - pre/post (un)patch callbacks
->       - shadow variable API
-> 
-> Or do you prefer a little more detail?
+It might make sense to add a note about sample modules in
+lib/livepatch/
 
-That would suffice. Thanks.
- 
-> >  
-> >> Signed-off-by: Joe Lawrence <joe.lawrence at redhat.com>
-> >> ---
-> > 
-> >> diff --git a/lib/livepatch/test_klp_shadow_vars.c b/lib/livepatch/test_klp_shadow_vars.c
-> >> new file mode 100644
-> >> index 000000000000..18c75b21cb9e
-> >> --- /dev/null
-> >> +++ b/lib/livepatch/test_klp_shadow_vars.c
-> >>
-> >> +/*
-> >> + * Shadow variable wrapper functions that echo the function and arguments
-> >> + * to the kernel log for testing verification.  Don't display raw pointers,
-> >> + * but use the ptr_id() value instead.
-> >> + */
-> >> +void *shadow_get(void *obj, unsigned long id)
-> >> +{
-> >> +	void *ret = klp_shadow_get(obj, id);
-> >> +
-> >> +	pr_info("klp_%s(obj=PTR%d, id=0x%lx) = PTR%d\n",
-> >> +		__func__, ptr_id(obj), id, ptr_id(ret));
-> >> +
-> >> +	return ret;
-> >> +}
-> > 
-> >> +void shadow_free(void *obj, unsigned long id, klp_shadow_dtor_t dtor)
-> >> +{
-> >> +	klp_shadow_free(obj, id, dtor);
-> >> +	pr_info("klp_%s(obj=PTR%d, id=0x%lx, dtor=PTR%d)\n",
-> >> +		__func__, ptr_id(obj), id, ptr_id(dtor));
-> >> +}
-> > 
-> > Sparse (make C=1) would be happier with those two being static.
-> 
-> Ah right. I wonder why the kbuild test robot didn't complain about
-> those, too.  Easy enough to fix up, thanks.
-> 
-> > Otherwise it works as expected. Good job!
-> 
-> Thanks for reviewing.  I'll hold off on posting v4 until Petr (and
-> others) get a chance to comment.  Perhaps there are other tests that
-> would be helpful?
 
-I think it would be useful to have tests for a stack checking and a 
-consistency. Nicolai has written some lately for our internal testing, but 
-it would take some time to transform them appropriately, I think.
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 64155e310a9f..e4a0e81542ff 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1932,6 +1932,18 @@ config TEST_DEBUG_VIRTUAL
+>  
+>  	  If unsure, say N.
+>  
+> +config TEST_LIVEPATCH
+> +	tristate "Test livepatching"
+> +	default n
+> +	depends on LIVEPATCH
+> +	depends on m
+> +	help
+> +	  Test various kernel livepatching features for correctness.
+> +	  The tests will load test modules that will be livepatched
+> +	  in various scenarios.
 
-So I would start with this and we can add more later. I would also 
-establish a (soft) rule to submit selftests with new features.
+It would be great to make a clue how to run the test. Something like:
 
-Miroslav
+	  To run tests call:
+
+	  tools/testing/selftests/livepatch/test-callbacks.sh
+	  tools/testing/selftests/livepatch/test-livepatch.sh
+	  tools/selftests/livepatch/test-shadow-vars.sh
+
+This is inspired by config TEST_KMOD description.
+
+
+> +	  If unsure, say N.
+> +
+>  endif # RUNTIME_TESTING_MENU
+>  
+>  config MEMTEST
+> diff --git a/lib/Makefile b/lib/Makefile
+> index a90d4fcd748f..98a38441afb0 100644
+
+Otherwise, it looks great to me. Thanks a lot for getting this
+together.
+
+Best Regards,
+Petr
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
