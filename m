@@ -1,189 +1,52 @@
-From: anders.roxell@linaro.org (Anders Roxell)
-Date: Tue, 17 Apr 2018 10:59:36 +0200
-Subject: [PATCH] selftests/memfd: move common code into common.c
-Message-ID: <20180417085936.19512-1-anders.roxell@linaro.org>
+From: joe.lawrence@redhat.com (Joe Lawrence)
+Date: Tue, 17 Apr 2018 09:25:30 -0400
+Subject: [PATCH v3] selftests/livepatch: introduce tests
+In-Reply-To: <alpine.LSU.2.21.1804171004410.12184@pobox.suse.cz>
+References: <1523544871-29444-1-git-send-email-joe.lawrence@redhat.com>
+ <1523544871-29444-2-git-send-email-joe.lawrence@redhat.com>
+ <alpine.LSU.2.21.1804131118080.17969@pobox.suse.cz>
+ <c9f4b440-c672-e45f-ddcc-63548b0411e2@redhat.com>
+ <alpine.LSU.2.21.1804161329040.23118@pobox.suse.cz>
+ <20180416150230.6ys6ya7alpodxp3d@pathway.suse.cz>
+ <alpine.LSU.2.21.1804171004410.12184@pobox.suse.cz>
+Message-ID: <771e3d3b-214f-a49c-20f8-d0e8a4baffac@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180417085936.P78ya8_WlF8IhPcwsdWFV0CYr1wJohY0pBN61S_PPJ4@z>
+Message-ID: <20180417132530.RMI6wLTO9RUphVPSyG5IPOL2qgrzFvHoKv6Rzx2qyw8@z>
 
-Remove code duplication, in the current code, we move common code for
-memfd to common.c.
+On 04/17/2018 04:06 AM, Miroslav Benes wrote:
+> On Mon, 16 Apr 2018, Petr Mladek wrote:
+> 
+>> On Mon 2018-04-16 13:33:55, Miroslav Benes wrote:
+>>> On Fri, 13 Apr 2018, Joe Lawrence wrote:
+>>>> Thanks for reviewing.  I'll hold off on posting v4 until Petr (and
+>>>> others) get a chance to comment.  Perhaps there are other tests that
+>>>> would be helpful?
+>>
+>>> I think it would be useful to have tests for a stack checking and a 
+>>> consistency. Nicolai has written some lately for our internal testing, but 
+>>> it would take some time to transform them appropriately, I think.
+>>
+>> The future of the stack handling is not clear at the moment. We should
+>> wait how the discussion goes before spending time on test cases for
+>> the current behavior.
 
-The duplicate functions got added in commit 87b2d44026e0 ("selftests:
-add memfd/sealing page-pinning tests")
+Roger that on the patch stack discussion.  Once we figure out where that
+is heading, we can create tests to verify that we're accurately
+following the new rules.
 
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
----
- tools/testing/selftests/memfd/common.c     | 37 +++++++++++++++++++
- tools/testing/selftests/memfd/common.h     |  4 ++
- tools/testing/selftests/memfd/fuse_test.c  | 43 +---------------------
- tools/testing/selftests/memfd/memfd_test.c | 37 -------------------
- 4 files changed, 43 insertions(+), 78 deletions(-)
+> 
+> You're talking about something different. We have to check stacks of all 
+> tasks while patching in order to achieve consistency. Tests for that would 
+> be useful.
 
-diff --git a/tools/testing/selftests/memfd/common.c b/tools/testing/selftests/memfd/common.c
-index 8eb3d75f6e60..fee1f07828a3 100644
---- a/tools/testing/selftests/memfd/common.c
-+++ b/tools/testing/selftests/memfd/common.c
-@@ -44,3 +44,40 @@ int sys_memfd_create(const char *name, unsigned int flags)
- 
- 	return syscall(__NR_memfd_create, name, flags);
- }
-+
-+unsigned int mfd_assert_get_seals(int fd)
-+{
-+	int r;
-+
-+	r = fcntl(fd, F_GET_SEALS);
-+	if (r < 0) {
-+		printf("GET_SEALS(%d) failed: %m\n", fd);
-+		abort();
-+	}
-+
-+	return (unsigned int)r;
-+}
-+
-+void mfd_assert_add_seals(int fd, unsigned int seals)
-+{
-+	int r;
-+	unsigned int s;
-+
-+	s = mfd_assert_get_seals(fd);
-+	r = fcntl(fd, F_ADD_SEALS, seals);
-+	if (r < 0) {
-+		printf("ADD_SEALS(%d, %u -> %u) failed: %m\n", fd, s, seals);
-+		abort();
-+	}
-+}
-+
-+void mfd_assert_has_seals(int fd, unsigned int seals)
-+{
-+	unsigned int s;
-+
-+	s = mfd_assert_get_seals(fd);
-+	if (s != seals) {
-+		printf("%u != %u = GET_SEALS(%d)\n", seals, s, fd);
-+		abort();
-+	}
-+}
-diff --git a/tools/testing/selftests/memfd/common.h b/tools/testing/selftests/memfd/common.h
-index 522d2c630bd8..5c778d15e8c7 100644
---- a/tools/testing/selftests/memfd/common.h
-+++ b/tools/testing/selftests/memfd/common.h
-@@ -6,4 +6,8 @@ extern int hugetlbfs_test;
- unsigned long default_huge_page_size(void);
- int sys_memfd_create(const char *name, unsigned int flags);
- 
-+void mfd_assert_add_seals(int fd, unsigned int seals);
-+void mfd_assert_has_seals(int fd, unsigned int seals);
-+unsigned int mfd_assert_get_seals(int fd);
-+
- #endif
-diff --git a/tools/testing/selftests/memfd/fuse_test.c b/tools/testing/selftests/memfd/fuse_test.c
-index b018e835737d..231714615861 100644
---- a/tools/testing/selftests/memfd/fuse_test.c
-+++ b/tools/testing/selftests/memfd/fuse_test.c
-@@ -60,49 +60,10 @@ static int mfd_assert_new(const char *name, loff_t sz, unsigned int flags)
- 	return fd;
- }
- 
--static __u64 mfd_assert_get_seals(int fd)
-+static int mfd_busy_add_seals(int fd, unsigned int seals)
- {
- 	long r;
--
--	r = fcntl(fd, F_GET_SEALS);
--	if (r < 0) {
--		printf("GET_SEALS(%d) failed: %m\n", fd);
--		abort();
--	}
--
--	return r;
--}
--
--static void mfd_assert_has_seals(int fd, __u64 seals)
--{
--	__u64 s;
--
--	s = mfd_assert_get_seals(fd);
--	if (s != seals) {
--		printf("%llu != %llu = GET_SEALS(%d)\n",
--		       (unsigned long long)seals, (unsigned long long)s, fd);
--		abort();
--	}
--}
--
--static void mfd_assert_add_seals(int fd, __u64 seals)
--{
--	long r;
--	__u64 s;
--
--	s = mfd_assert_get_seals(fd);
--	r = fcntl(fd, F_ADD_SEALS, seals);
--	if (r < 0) {
--		printf("ADD_SEALS(%d, %llu -> %llu) failed: %m\n",
--		       fd, (unsigned long long)s, (unsigned long long)seals);
--		abort();
--	}
--}
--
--static int mfd_busy_add_seals(int fd, __u64 seals)
--{
--	long r;
--	__u64 s;
-+	unsigned int s;
- 
- 	r = fcntl(fd, F_GET_SEALS);
- 	if (r < 0)
-diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-index 10baa1652fc2..527789de69b5 100644
---- a/tools/testing/selftests/memfd/memfd_test.c
-+++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -67,43 +67,6 @@ static void mfd_fail_new(const char *name, unsigned int flags)
- 	}
- }
- 
--static unsigned int mfd_assert_get_seals(int fd)
--{
--	int r;
--
--	r = fcntl(fd, F_GET_SEALS);
--	if (r < 0) {
--		printf("GET_SEALS(%d) failed: %m\n", fd);
--		abort();
--	}
--
--	return (unsigned int)r;
--}
--
--static void mfd_assert_has_seals(int fd, unsigned int seals)
--{
--	unsigned int s;
--
--	s = mfd_assert_get_seals(fd);
--	if (s != seals) {
--		printf("%u != %u = GET_SEALS(%d)\n", seals, s, fd);
--		abort();
--	}
--}
--
--static void mfd_assert_add_seals(int fd, unsigned int seals)
--{
--	int r;
--	unsigned int s;
--
--	s = mfd_assert_get_seals(fd);
--	r = fcntl(fd, F_ADD_SEALS, seals);
--	if (r < 0) {
--		printf("ADD_SEALS(%d, %u -> %u) failed: %m\n", fd, s, seals);
--		abort();
--	}
--}
--
- static void mfd_fail_add_seals(int fd, unsigned int seals)
- {
- 	int r;
--- 
-2.17.0
+FWIW there is the "busy target module" test in this patch.  It's main
+purpose is to verify the behavior of the callbacks in a situation where
+one livepatch target holds up the transition (aka the "busy mod").
 
+If Nicolai has created test(s) that specifically target the stack
+safeness, even better for future inclusion.
+
+-- Joe
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
