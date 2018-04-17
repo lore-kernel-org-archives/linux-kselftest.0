@@ -1,34 +1,188 @@
 From: anders.roxell@linaro.org (Anders Roxell)
-Date: Tue, 17 Apr 2018 10:46:31 +0200
-Subject: [PATCH] doc: dev-tools: kselftest.rst: update contributing new tests
-Message-ID: <20180417084631.11242-1-anders.roxell@linaro.org>
+Date: Tue, 17 Apr 2018 10:59:36 +0200
+Subject: [PATCH] selftests/memfd: move common code into common.c
+Message-ID: <20180417085936.19512-1-anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180417084631.V9j4TqE32ReQfIoSbhfpkHFGYPup26J0-rbbQ9D6-is@z>
+Message-ID: <20180417085936.P78ya8_WlF8IhPcwsdWFV0CYr1wJohY0pBN61S_PPJ4@z>
 
-Add a description that the kernel headers should be used as far as it is
-possible and then the system headers.
+Remove code duplication, in the current code, we move common code for
+memfd to common.c.
+
+The duplicate functions got added in commit 87b2d44026e0 ("selftests:
+add memfd/sealing page-pinning tests")
 
 Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 ---
- Documentation/dev-tools/kselftest.rst | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/memfd/common.c     | 37 +++++++++++++++++++
+ tools/testing/selftests/memfd/common.h     |  4 ++
+ tools/testing/selftests/memfd/fuse_test.c  | 43 +---------------------
+ tools/testing/selftests/memfd/memfd_test.c | 37 -------------------
+ 4 files changed, 43 insertions(+), 78 deletions(-)
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index e80850eefe13..27f08d6ba91c 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -151,6 +151,9 @@ Contributing new tests (details)
-    TEST_FILES, TEST_GEN_FILES mean it is the file which is used by
-    test.
+diff --git a/tools/testing/selftests/memfd/common.c b/tools/testing/selftests/memfd/common.c
+index 8eb3d75f6e60..fee1f07828a3 100644
+--- a/tools/testing/selftests/memfd/common.c
++++ b/tools/testing/selftests/memfd/common.c
+@@ -44,3 +44,40 @@ int sys_memfd_create(const char *name, unsigned int flags)
  
-+ * First use the headers inside the kernel, and then the system headers. The
-+   internal headers should be the primary focus to be able to find regressions.
+ 	return syscall(__NR_memfd_create, name, flags);
+ }
 +
- Test Harness
- ============
++unsigned int mfd_assert_get_seals(int fd)
++{
++	int r;
++
++	r = fcntl(fd, F_GET_SEALS);
++	if (r < 0) {
++		printf("GET_SEALS(%d) failed: %m\n", fd);
++		abort();
++	}
++
++	return (unsigned int)r;
++}
++
++void mfd_assert_add_seals(int fd, unsigned int seals)
++{
++	int r;
++	unsigned int s;
++
++	s = mfd_assert_get_seals(fd);
++	r = fcntl(fd, F_ADD_SEALS, seals);
++	if (r < 0) {
++		printf("ADD_SEALS(%d, %u -> %u) failed: %m\n", fd, s, seals);
++		abort();
++	}
++}
++
++void mfd_assert_has_seals(int fd, unsigned int seals)
++{
++	unsigned int s;
++
++	s = mfd_assert_get_seals(fd);
++	if (s != seals) {
++		printf("%u != %u = GET_SEALS(%d)\n", seals, s, fd);
++		abort();
++	}
++}
+diff --git a/tools/testing/selftests/memfd/common.h b/tools/testing/selftests/memfd/common.h
+index 522d2c630bd8..5c778d15e8c7 100644
+--- a/tools/testing/selftests/memfd/common.h
++++ b/tools/testing/selftests/memfd/common.h
+@@ -6,4 +6,8 @@ extern int hugetlbfs_test;
+ unsigned long default_huge_page_size(void);
+ int sys_memfd_create(const char *name, unsigned int flags);
  
++void mfd_assert_add_seals(int fd, unsigned int seals);
++void mfd_assert_has_seals(int fd, unsigned int seals);
++unsigned int mfd_assert_get_seals(int fd);
++
+ #endif
+diff --git a/tools/testing/selftests/memfd/fuse_test.c b/tools/testing/selftests/memfd/fuse_test.c
+index b018e835737d..231714615861 100644
+--- a/tools/testing/selftests/memfd/fuse_test.c
++++ b/tools/testing/selftests/memfd/fuse_test.c
+@@ -60,49 +60,10 @@ static int mfd_assert_new(const char *name, loff_t sz, unsigned int flags)
+ 	return fd;
+ }
+ 
+-static __u64 mfd_assert_get_seals(int fd)
++static int mfd_busy_add_seals(int fd, unsigned int seals)
+ {
+ 	long r;
+-
+-	r = fcntl(fd, F_GET_SEALS);
+-	if (r < 0) {
+-		printf("GET_SEALS(%d) failed: %m\n", fd);
+-		abort();
+-	}
+-
+-	return r;
+-}
+-
+-static void mfd_assert_has_seals(int fd, __u64 seals)
+-{
+-	__u64 s;
+-
+-	s = mfd_assert_get_seals(fd);
+-	if (s != seals) {
+-		printf("%llu != %llu = GET_SEALS(%d)\n",
+-		       (unsigned long long)seals, (unsigned long long)s, fd);
+-		abort();
+-	}
+-}
+-
+-static void mfd_assert_add_seals(int fd, __u64 seals)
+-{
+-	long r;
+-	__u64 s;
+-
+-	s = mfd_assert_get_seals(fd);
+-	r = fcntl(fd, F_ADD_SEALS, seals);
+-	if (r < 0) {
+-		printf("ADD_SEALS(%d, %llu -> %llu) failed: %m\n",
+-		       fd, (unsigned long long)s, (unsigned long long)seals);
+-		abort();
+-	}
+-}
+-
+-static int mfd_busy_add_seals(int fd, __u64 seals)
+-{
+-	long r;
+-	__u64 s;
++	unsigned int s;
+ 
+ 	r = fcntl(fd, F_GET_SEALS);
+ 	if (r < 0)
+diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+index 10baa1652fc2..527789de69b5 100644
+--- a/tools/testing/selftests/memfd/memfd_test.c
++++ b/tools/testing/selftests/memfd/memfd_test.c
+@@ -67,43 +67,6 @@ static void mfd_fail_new(const char *name, unsigned int flags)
+ 	}
+ }
+ 
+-static unsigned int mfd_assert_get_seals(int fd)
+-{
+-	int r;
+-
+-	r = fcntl(fd, F_GET_SEALS);
+-	if (r < 0) {
+-		printf("GET_SEALS(%d) failed: %m\n", fd);
+-		abort();
+-	}
+-
+-	return (unsigned int)r;
+-}
+-
+-static void mfd_assert_has_seals(int fd, unsigned int seals)
+-{
+-	unsigned int s;
+-
+-	s = mfd_assert_get_seals(fd);
+-	if (s != seals) {
+-		printf("%u != %u = GET_SEALS(%d)\n", seals, s, fd);
+-		abort();
+-	}
+-}
+-
+-static void mfd_assert_add_seals(int fd, unsigned int seals)
+-{
+-	int r;
+-	unsigned int s;
+-
+-	s = mfd_assert_get_seals(fd);
+-	r = fcntl(fd, F_ADD_SEALS, seals);
+-	if (r < 0) {
+-		printf("ADD_SEALS(%d, %u -> %u) failed: %m\n", fd, s, seals);
+-		abort();
+-	}
+-}
+-
+ static void mfd_fail_add_seals(int fd, unsigned int seals)
+ {
+ 	int r;
 -- 
-2.11.0
+2.17.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
