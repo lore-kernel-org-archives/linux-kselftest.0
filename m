@@ -1,21 +1,30 @@
 From: mcgrof@kernel.org (Luis R. Rodriguez)
-Date: Wed, 18 Apr 2018 22:35:09 +0200
-Subject: [PATCH driver-core 1/2] test_firmware: Install all scripts
-In-Reply-To: <20180404203712.zecit6po44qsde4c@xylophone.i.decadent.org.uk>
+Date: Wed, 18 Apr 2018 22:38:09 +0200
+Subject: [PATCH driver-core 2/2] test_firmware: fix setting old custom fw
+ path back on exit, second try
+In-Reply-To: <20180404203848.3txsangsvaxtxsu4@xylophone.i.decadent.org.uk>
 References: <20180404203712.zecit6po44qsde4c@xylophone.i.decadent.org.uk>
-Message-ID: <20180418203509.GP30543@wotan.suse.de>
+ <20180404203848.3txsangsvaxtxsu4@xylophone.i.decadent.org.uk>
+Message-ID: <20180418203808.GQ30543@wotan.suse.de>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180418203509.vGDM-m_agVGiU1IyKMJN2E612ojN4bq18yMMx3AhfIg@z>
+Message-ID: <20180418203809.zgYv5udFomvdD5wZ_5iLFhS-fG-_MrAdEEcVYbjGTlM@z>
 
-On Wed, Apr 04, 2018@10:37:13PM +0200, Ben Hutchings wrote:
-> List all the scripts invoked by fw_run_tests.sh, so that
-> "make TARGETS=firmware install" keeps working.
+On Wed, Apr 04, 2018@10:38:49PM +0200, Ben Hutchings wrote:
+> Commit 65c79230576 tried to clear the custom firmware path on exit by
+> writing a single space to the firmware_class.path parameter.  This
+> doesn't work because nothing strips this space from the value stored
+> and fw_get_filesystem_firmware() only ignores zero-length paths.
 > 
-> Fixes: 29a1c00ce1df8 ("test_firmware: add simple firmware firmware test ...")
-> Fixes: b3cf21fae1fe0 ("test_firmware: test three firmware kernel configs ...")
+> Instead, write a null byte.
+> 
+> Fixes: 0a8adf58475 ("test: add firmware_class loader test")
+> Fixes: 65c79230576 ("test_firmware: fix setting old custom fw path back on exit")
 > Signed-off-by: Ben Hutchings <ben.hutchings at codethink.co.uk>
 
 Acked-by: Luis R. Rodriguez <mcgrof at kernel.org>
+
+Greg, let me know if you want to take these two in now, or if you want me to
+queue them up on my own and then send you what I get in the queue later.
 
   Luis
 --
