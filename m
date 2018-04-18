@@ -1,32 +1,43 @@
-From: shuahkh@osg.samsung.com (Shuah Khan)
-Date: Tue, 17 Apr 2018 09:02:36 -0600
-Subject: Linux 4.17-rc1 - kernel paging errors running x86 selftests
-In-Reply-To: <CA+55aFzmcwNjgvjwyVEeTYmBmdP5Ed+FNZXKJFpWx4g_+F7G1Q@mail.gmail.com>
-References: <1dcd116c-9384-6885-2d9e-f620c14bd955@osg.samsung.com>
- <CA+55aFwE1SR87+Xkkmfr+D0Yq3R0HRkdf1GdgScEfXXWN4ba6w@mail.gmail.com>
- <CA+55aFzotCBw7S=dNzyFjZkNqS7MMeKVgUoK6Dgb9gRPV_ywVQ@mail.gmail.com>
- <8c0a94b7-763d-16be-6401-23a3064ee55a@linux.intel.com>
- <CA+55aFx=pwEJQHhab3gW6+qdom=ccFoWoK-aZokmqtPxNqTd8g@mail.gmail.com>
- <CA+55aFwBT7xEKxoVEEgT3vjg960Tpx+CJo+4238P66Q7w-nM-Q@mail.gmail.com>
- <CA+55aFzmcwNjgvjwyVEeTYmBmdP5Ed+FNZXKJFpWx4g_+F7G1Q@mail.gmail.com>
-Message-ID: <aff48576-c8ed-ddf6-5c74-ce4b0153f419@osg.samsung.com>
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Wed, 18 Apr 2018 09:52:56 +0200
+Subject: [PATCH 2/2] selftests/filesystems: remove Makefile warning
+In-Reply-To: <20180418075256.300-1-anders.roxell@linaro.org>
+References: <20180418075256.300-1-anders.roxell@linaro.org>
+Message-ID: <20180418075256.300-2-anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180417150236.O19F98dbKQp1CI0HJJJftoLrNjSCsBe4oe3PVIw-wZM@z>
+Message-ID: <20180418075256.yU0rwgBAw_-sIlLpRnSsZ_gOUL9T6Izr-1nP7aGKhD4@z>
 
-On 04/16/2018 12:34 PM, Linus Torvalds wrote:
-> On Mon, Apr 16, 2018 at 11:15 AM, Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->>
->> Ingo/Thomas: I will be just taking this directly, since it's so
->> trivial and obvious and I got cc'd on the discussion.
-> 
-> .. and I also verified that it actually fixes the problem Shuah
-> reported. Not that there really was any question about it, but hey,
-> after bisecting it I decided to just test the fix too.
+When overriding the 'clean' target make throws up warnings:
+Makefile:9: warning: overriding recipe for target 'clean'
+../lib.mk:98: warning: ignoring old recipe for target 'clean'
 
-Awesome. Thanks.
+In current code we change from TEST_PROGS to TEST_GEN_PROGS and that
+does that we can remove the target 'clean' and 'all'.
 
--- Shuah
+Fixes: 10924bc64487 ("selftests: move dnotify_test from Documentation/filesystems")
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+---
+ tools/testing/selftests/filesystems/Makefile | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/filesystems/Makefile b/tools/testing/selftests/filesystems/Makefile
+index 427a401aae5c..a55ac3ac09ad 100644
+--- a/tools/testing/selftests/filesystems/Makefile
++++ b/tools/testing/selftests/filesystems/Makefile
+@@ -1,9 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-TEST_PROGS := dnotify_test devpts_pts
++TEST_GEN_PROGS := dnotify_test devpts_pts
+ CFLAGS += -I../../../../usr/include/
+-all: $(TEST_PROGS)
+ 
+ include ../lib.mk
+-
+-clean:
+-	rm -fr $(TEST_PROGS)
+-- 
+2.11.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
