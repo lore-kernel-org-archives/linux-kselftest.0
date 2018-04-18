@@ -1,49 +1,65 @@
-From: tom.hromatka at oracle.com (Tom Hromatka)
-Date: Wed, 18 Apr 2018 14:03:37 -0600
-Subject: [PATCH 2/2] selftests: sparc64: char: Selftest for privileged ADI
- driver
-In-Reply-To: <6ef81e28-7656-ccf5-5d4d-ef315ae250ce@kernel.org>
-References: <20180418162958.442909-1-tom.hromatka@oracle.com>
- <20180418162958.442909-3-tom.hromatka@oracle.com>
- <6ef81e28-7656-ccf5-5d4d-ef315ae250ce@kernel.org>
-Message-ID: <a44ead3d-8565-2d44-5a28-dfc51d4920d9@oracle.com>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Wed, 18 Apr 2018 22:32:10 +0200
+Subject: [PATCH 2/2] selftests/filesystems: remove Makefile warning
+In-Reply-To: <21de28f0-41c2-feac-1fec-63a2d76a2398@kernel.org>
+References: <20180418075256.300-1-anders.roxell@linaro.org>
+ <20180418075256.300-2-anders.roxell@linaro.org>
+ <21de28f0-41c2-feac-1fec-63a2d76a2398@kernel.org>
+Message-ID: <CADYN=9JPshmJA4zREWRQgNet7jLJbXuJUTyFTo0nB9i2bA1WyQ@mail.gmail.com>
 
-
-
-On 04/18/2018 01:58 PM, Shuah Khan wrote:
-> Hi Tom,
+On 18 April 2018 at 16:54, Shuah Khan <shuah at kernel.org> wrote:
+> On 04/18/2018 01:52 AM, Anders Roxell wrote:
+>> When overriding the 'clean' target make throws up warnings:
+>> Makefile:9: warning: overriding recipe for target 'clean'
+>> ../lib.mk:98: warning: ignoring old recipe for target 'clean'
+>>
+>> In current code we change from TEST_PROGS to TEST_GEN_PROGS and that
+>> does that we can remove the target 'clean' and 'all'.
+>>
+>> Fixes: 10924bc64487 ("selftests: move dnotify_test from Documentation/filesystems")
+>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+>> ---
+>>  tools/testing/selftests/filesystems/Makefile | 6 +-----
+>>  1 file changed, 1 insertion(+), 5 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/filesystems/Makefile b/tools/testing/selftests/filesystems/Makefile
+>> index 427a401aae5c..a55ac3ac09ad 100644
+>> --- a/tools/testing/selftests/filesystems/Makefile
+>> +++ b/tools/testing/selftests/filesystems/Makefile
+>> @@ -1,9 +1,5 @@
+>>  # SPDX-License-Identifier: GPL-2.0
+>> -TEST_PROGS := dnotify_test devpts_pts
+>> +TEST_GEN_PROGS := dnotify_test devpts_pts
+>>  CFLAGS += -I../../../../usr/include/
+>> -all: $(TEST_PROGS)
+>>
+>>  include ../lib.mk
+>> -
+>> -clean:
+>> -     rm -fr $(TEST_PROGS)
+>>
 >
-> On 04/18/2018 10:29 AM, Tom Hromatka wrote:
->> Add a selftest for the sparc64 privileged ADI driver.  These
->> tests verify the read(), pread(), write(), pwrite(), and seek()
->> functionality of the driver.  The tests also report simple
->> performance statistics:
->>
->>          Syscall Call    AvgTime AvgSize
->>                  Count   (ticks) (bytes)
->>          -------------------------------
->>          read          3  167134    8133
->>          pread         4  137217    6741
->>          write         3   73787    8133
->>          pwrite        4   65832    6741
->>          seek         10    2422       0
->>
->>          Ran 8 tests
->>          All tests passed
->>
->> Signed-off-by: Tom Hromatka <tom.hromatka at oracle.com>
->> Reviewed-by: Allen Pais <allen.pais at oracle.com>
-> Thanks for the patch. A few comments below:
+> Hi Anders,
+>
+> Michael sent in a patch to fix the problem already.
 
-Thanks for the quick turnaround, Shuah.  I'll work through your
-comments and get a v2 out in the next few days.
+I'm sorry I should have seen that.
 
-Regards.
+> It is in linux-kselftest fixes
+> branch for 4.17-rc2
+>
+> Classifying dnotify_test to TEST_GEN_PROGS_EXTENDED as Michael is the correct way
+> to handle this problem. It allows the test to be built and installed and it won't
+> be run in the main kselftest run.
 
-Tom
+Great, thank you for the explanation.
 
+Cheers,
+Anders
 
-
+>
+> thanks,
+> -- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
