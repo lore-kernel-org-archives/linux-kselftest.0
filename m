@@ -1,49 +1,72 @@
-From: gregkh@linuxfoundation.org (Greg KH)
-Date: Thu, 19 Apr 2018 09:45:36 +0200
-Subject: [PATCH 1/2] char: sparc64: Add privileged ADI driver
-In-Reply-To: <20180418162958.442909-2-tom.hromatka@oracle.com>
-References: <20180418162958.442909-1-tom.hromatka@oracle.com>
- <20180418162958.442909-2-tom.hromatka@oracle.com>
-Message-ID: <20180419074536.GA20145@kroah.com>
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Thu, 19 Apr 2018 10:22:01 +0200
+Subject: [PATCH 2/2] selftests/filesystems: remove Makefile warning
+In-Reply-To: <21de28f0-41c2-feac-1fec-63a2d76a2398@kernel.org>
+References: <20180418075256.300-1-anders.roxell@linaro.org>
+ <20180418075256.300-2-anders.roxell@linaro.org>
+ <21de28f0-41c2-feac-1fec-63a2d76a2398@kernel.org>
+Message-ID:
+ <CADYN=9Lw0S8yhnRn3u+0A8Cc3R91V=3PBytU1c+Ns3TNPdB1xw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180419074536.cLXKmIlTUCuwCw7ZUb1cArWY4qLanYLAg0FXCiDeTo0@z>
+Message-ID: <20180419082201.NW1GcC74YY35JfoYfBZLdYGzzi0WqsyrzdtE9a0dlro@z>
 
-On Wed, Apr 18, 2018@10:29:57AM -0600, Tom Hromatka wrote:
-> +/*
-> + * Copyright (c) 2017, 2018, Oracle and/or its affiliates. All rights reserved.
-> + * Author: Tom Hromatka <tom.hromatka at oracle.com>
-> + *
-> + * This program is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU General Public License version 2
-> + * as published by the Free Softare Foundation; or, when distributed
-> + * separately from the Linux kernel or incorporated into other
-> + * software packages, subject to the following license:
-> + *
-> + * Permission is hereby granted, free of charge, to any person obtaining a copy
-> + * of this source file (the "Software"), to deal in the Software without
-> + * restriction, including without limitation the rights to use, copy, modify,
-> + * merge, publish, distribute, sublicense, and/or sell copies of the Software,
-> + * and to permit persons to whom the Software is furnished to do so, subject to
-> + * the following conditions:
-> + *
-> + * The above copyright notice and this permission notice shall be included in
-> + * all copies or substantial portions of the Software.
-> + *
-> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> + * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-> + * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-> + * IN THE SOFTWARE.
-> + */
+On 18 April 2018@16:54, Shuah Khan <shuah@kernel.org> wrote:
+> On 04/18/2018 01:52 AM, Anders Roxell wrote:
+>> When overriding the 'clean' target make throws up warnings:
+>> Makefile:9: warning: overriding recipe for target 'clean'
+>> ../lib.mk:98: warning: ignoring old recipe for target 'clean'
+>>
+>> In current code we change from TEST_PROGS to TEST_GEN_PROGS and that
+>> does that we can remove the target 'clean' and 'all'.
+>>
+>> Fixes: 10924bc64487 ("selftests: move dnotify_test from Documentation/filesystems")
+>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+>> ---
+>>  tools/testing/selftests/filesystems/Makefile | 6 +-----
+>>  1 file changed, 1 insertion(+), 5 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/filesystems/Makefile b/tools/testing/selftests/filesystems/Makefile
+>> index 427a401aae5c..a55ac3ac09ad 100644
+>> --- a/tools/testing/selftests/filesystems/Makefile
+>> +++ b/tools/testing/selftests/filesystems/Makefile
+>> @@ -1,9 +1,5 @@
+>>  # SPDX-License-Identifier: GPL-2.0
+>> -TEST_PROGS := dnotify_test devpts_pts
+>> +TEST_GEN_PROGS := dnotify_test devpts_pts
+>>  CFLAGS += -I../../../../usr/include/
+>> -all: $(TEST_PROGS)
+>>
+>>  include ../lib.mk
+>> -
+>> -clean:
+>> -     rm -fr $(TEST_PROGS)
+>>
+>
+> Hi Anders,
+>
+> Michael sent in a patch to fix the problem already. It is in linux-kselftest fixes
+> branch for 4.17-rc2
+>
+> Classifying dnotify_test to TEST_GEN_PROGS_EXTENDED as Michael is the correct way
+> to handle this problem. It allows the test to be built and installed and it won't
+> be run in the main kselftest run.
 
-Please just use a single SPDX line at the top of the file for this huge
-license boiler-plate.
+Why don't we want to run them in the main kselftest run?
+Is the rationale documented somewhere/somehow?
+If they are long running tests or intrusive tests, can we document
+with a printout like:
+=== Test ${foo} - SKIPPED (${short_rationale}) ===
+=== Test dnotify_test - SKIPPED (long run) ===
+=== Test devpts_pts - SKIPPED (intrusive run) ===
 
-thanks,
+Should there be a variable to turn them on from the main kselftest run?
 
-greg k-h
+Cheers,
+Anders
+
+>
+> thanks,
+> -- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
