@@ -1,30 +1,47 @@
-From: mcgrof at kernel.org (Luis R. Rodriguez)
-Date: Wed, 18 Apr 2018 22:38:09 +0200
-Subject: [PATCH driver-core 2/2] test_firmware: fix setting old custom fw
- path back on exit, second try
-In-Reply-To: <20180404203848.3txsangsvaxtxsu4@xylophone.i.decadent.org.uk>
-References: <20180404203712.zecit6po44qsde4c@xylophone.i.decadent.org.uk>
- <20180404203848.3txsangsvaxtxsu4@xylophone.i.decadent.org.uk>
-Message-ID: <20180418203808.GQ30543@wotan.suse.de>
+From: gregkh at linuxfoundation.org (Greg KH)
+Date: Thu, 19 Apr 2018 09:45:36 +0200
+Subject: [PATCH 1/2] char: sparc64: Add privileged ADI driver
+In-Reply-To: <20180418162958.442909-2-tom.hromatka@oracle.com>
+References: <20180418162958.442909-1-tom.hromatka@oracle.com>
+ <20180418162958.442909-2-tom.hromatka@oracle.com>
+Message-ID: <20180419074536.GA20145@kroah.com>
 
-On Wed, Apr 04, 2018 at 10:38:49PM +0200, Ben Hutchings wrote:
-> Commit 65c79230576 tried to clear the custom firmware path on exit by
-> writing a single space to the firmware_class.path parameter.  This
-> doesn't work because nothing strips this space from the value stored
-> and fw_get_filesystem_firmware() only ignores zero-length paths.
-> 
-> Instead, write a null byte.
-> 
-> Fixes: 0a8adf58475 ("test: add firmware_class loader test")
-> Fixes: 65c79230576 ("test_firmware: fix setting old custom fw path back on exit")
-> Signed-off-by: Ben Hutchings <ben.hutchings at codethink.co.uk>
+On Wed, Apr 18, 2018 at 10:29:57AM -0600, Tom Hromatka wrote:
+> +/*
+> + * Copyright (c) 2017, 2018, Oracle and/or its affiliates. All rights reserved.
+> + * Author: Tom Hromatka <tom.hromatka at oracle.com>
+> + *
+> + * This program is free software; you can redistribute it and/or
+> + * modify it under the terms of the GNU General Public License version 2
+> + * as published by the Free Softare Foundation; or, when distributed
+> + * separately from the Linux kernel or incorporated into other
+> + * software packages, subject to the following license:
+> + *
+> + * Permission is hereby granted, free of charge, to any person obtaining a copy
+> + * of this source file (the "Software"), to deal in the Software without
+> + * restriction, including without limitation the rights to use, copy, modify,
+> + * merge, publish, distribute, sublicense, and/or sell copies of the Software,
+> + * and to permit persons to whom the Software is furnished to do so, subject to
+> + * the following conditions:
+> + *
+> + * The above copyright notice and this permission notice shall be included in
+> + * all copies or substantial portions of the Software.
+> + *
+> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> + * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+> + * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+> + * IN THE SOFTWARE.
+> + */
 
-Acked-by: Luis R. Rodriguez <mcgrof at kernel.org>
+Please just use a single SPDX line at the top of the file for this huge
+license boiler-plate.
 
-Greg, let me know if you want to take these two in now, or if you want me to
-queue them up on my own and then send you what I get in the queue later.
+thanks,
 
-  Luis
+greg k-h
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
