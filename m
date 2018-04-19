@@ -1,37 +1,60 @@
-From: anders.roxell at linaro.org (Anders Roxell)
-Date: Thu, 19 Apr 2018 12:28:25 +0200
-Subject: [PATCH v2] doc: dev-tools: kselftest.rst: update contributing new
- tests
-In-Reply-To: <20180417084631.11242-1-anders.roxell@linaro.org>
-References: <20180417084631.11242-1-anders.roxell@linaro.org>
-Message-ID: <20180419102825.2990-1-anders.roxell@linaro.org>
+From: alexandre.belloni at bootlin.com (Alexandre Belloni)
+Date: Thu, 19 Apr 2018 14:50:28 +0200
+Subject: [PATCH 2/4] selftests: timers: rtcpie: restore previous PIE rate
+In-Reply-To: <20180419125030.5076-1-alexandre.belloni@bootlin.com>
+References: <20180419125030.5076-1-alexandre.belloni@bootlin.com>
+Message-ID: <20180419125030.5076-3-alexandre.belloni@bootlin.com>
 
-Add a description that the kernel headers should be used as far as it is
-possible and then the system headers.
+After the test ends, restore the PIE rate to its previous value to be less
+disruptive.
 
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+Signed-off-by: Alexandre Belloni <alexandre.belloni at bootlin.com>
 ---
- Documentation/dev-tools/kselftest.rst | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/timers/rtcpie.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index e80850eefe13..3bf371a938d0 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -151,6 +151,11 @@ Contributing new tests (details)
-    TEST_FILES, TEST_GEN_FILES mean it is the file which is used by
-    test.
+diff --git a/tools/testing/selftests/timers/rtcpie.c b/tools/testing/selftests/timers/rtcpie.c
+index ea98b1f6ac17..47b5bad1b393 100644
+--- a/tools/testing/selftests/timers/rtcpie.c
++++ b/tools/testing/selftests/timers/rtcpie.c
+@@ -28,7 +28,7 @@ static const char default_rtc[] = "/dev/rtc0";
+ int main(int argc, char **argv)
+ {
+ 	int i, fd, retval, irqcount = 0;
+-	unsigned long tmp, data;
++	unsigned long tmp, data, old_pie_rate;
+ 	const char *rtc = default_rtc;
+ 	struct timeval start, end, diff;
  
-+ * First use the headers inside the kernel source and/or git repo, and then the
-+   system headers.  Headers for the kernel release as opposed to headers
-+   installed by the distro on the system should be the primary focus to be able
-+   to find regressions.
+@@ -51,7 +51,7 @@ int main(int argc, char **argv)
+ 	}
+ 
+ 	/* Read periodic IRQ rate */
+-	retval = ioctl(fd, RTC_IRQP_READ, &tmp);
++	retval = ioctl(fd, RTC_IRQP_READ, &old_pie_rate);
+ 	if (retval == -1) {
+ 		/* not all RTCs support periodic IRQs */
+ 		if (errno == EINVAL) {
+@@ -61,7 +61,7 @@ int main(int argc, char **argv)
+ 		perror("RTC_IRQP_READ ioctl");
+ 		exit(errno);
+ 	}
+-	fprintf(stderr, "\nPeriodic IRQ rate is %ldHz.\n", tmp);
++	fprintf(stderr, "\nPeriodic IRQ rate is %ldHz.\n", old_pie_rate);
+ 
+ 	fprintf(stderr, "Counting 20 interrupts at:");
+ 	fflush(stderr);
+@@ -124,6 +124,8 @@ int main(int argc, char **argv)
+ 	}
+ 
+ done:
++	ioctl(fd, RTC_IRQP_SET, old_pie_rate);
 +
- Test Harness
- ============
+ 	fprintf(stderr, "\n\n\t\t\t *** Test complete ***\n");
  
+ 	close(fd);
 -- 
-2.11.0
+2.17.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
