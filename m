@@ -1,1148 +1,924 @@
-From: lpechacek@suse.cz (Libor Pechacek)
-Date: Fri, 20 Apr 2018 14:56:05 +0200
-Subject: [PATCH v3] selftests/livepatch: introduce tests
-In-Reply-To: <1523544871-29444-2-git-send-email-joe.lawrence@redhat.com>
-References: <1523544871-29444-1-git-send-email-joe.lawrence@redhat.com>
- <1523544871-29444-2-git-send-email-joe.lawrence@redhat.com>
-Message-ID: <20180420125605.e4eye7ncukyivleh@fm.suse.cz>
+From: tom.hromatka@oracle.com (Tom Hromatka)
+Date: Fri, 20 Apr 2018 11:34:06 -0600
+Subject: [PATCH v2 2/2] selftests: sparc64: char: Selftest for privileged ADI
+ driver
+In-Reply-To: <20180420173406.485815-1-tom.hromatka@oracle.com>
+References: <20180420173406.485815-1-tom.hromatka@oracle.com>
+Message-ID: <20180420173406.485815-3-tom.hromatka@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180420125605.Wth_cAcb3wyreaUODRUkz38pFTdUwPi_-TV9u9v4SDw@z>
+Message-ID: <20180420173406.pcfq5ydHCq8FjSjWVNIkunrdYxlkhVP6bHVljRd8p9c@z>
 
-Hi Joe,
+Add a selftest for the sparc64 privileged ADI driver.  These
+tests verify the read(), pread(), write(), pwrite(), and seek()
+functionality of the driver.  The tests also report simple
+performance statistics:
 
-I know I am late to the party, yet have some questions about the code.
+        Syscall Call    AvgTime AvgSize
+                Count   (ticks) (bytes)
+        -------------------------------
+        read          3  119638    8133
+        pread         4  118164    6741
+        write         3  339442    8133
+        pwrite        4  280134    6741
+        seek         10    2919       0
+        Pass 8 Fail 0 Xfail 0 Xpass 0 Skip 0 Error 0
 
-On Thu 12-04-18 10:54:31, Joe Lawrence wrote:
-> Add a few livepatch modules and simple target modules that the included
-> regression suite can run tests against.
-> 
-> Signed-off-by: Joe Lawrence <joe.lawrence at redhat.com>
-> ---
-[...]
-> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-> new file mode 100644
-> index 000000000000..7aaef80e9edb
-> --- /dev/null
-> +++ b/tools/testing/selftests/livepatch/functions.sh
-> @@ -0,0 +1,196 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Copyright (C) 2018 Joe Lawrence <joe.lawrence at redhat.com>
-> +
-> +# Shell functions for the rest of the scripts.
-> +
-> +MAX_RETRIES=600
-> +RETRY_INTERVAL=".1"	# seconds
-> +
-> +# die(msg) - game over, man
-> +#	msg - dying words
-> +function die() {
-> +	echo "ERROR: $1" >&2
-> +	exit 1
-> +}
-> +
-> +# set_dynamic_debug() - setup kernel dynamic debug
-> +#	TODO - push and pop this config?
-> +function set_dynamic_debug() {
-> +	cat << EOF > /sys/kernel/debug/dynamic_debug/control
-> +file kernel/livepatch/* +p
-> +func klp_try_switch_task -p
-> +EOF
-> +}
-> +
-> +# wait_for_transition(modname)
-> +#	modname - livepatch module name
-> +wait_for_transition() {
-> +	local mod="$1"; shift
+Signed-off-by: Tom Hromatka <tom.hromatka at oracle.com>
+Reviewed-by: Allen Pais <allen.pais at oracle.com>
+---
+ tools/testing/selftests/Makefile                   |   1 +
+ tools/testing/selftests/sparc64/Makefile           |  46 ++
+ tools/testing/selftests/sparc64/drivers/.gitignore |   1 +
+ tools/testing/selftests/sparc64/drivers/Makefile   |  15 +
+ tools/testing/selftests/sparc64/drivers/adi-test.c | 732 +++++++++++++++++++++
+ .../selftests/sparc64/drivers/drivers_test.sh      |  30 +
+ tools/testing/selftests/sparc64/run.sh             |   3 +
+ 7 files changed, 828 insertions(+)
+ create mode 100644 tools/testing/selftests/sparc64/Makefile
+ create mode 100644 tools/testing/selftests/sparc64/drivers/.gitignore
+ create mode 100644 tools/testing/selftests/sparc64/drivers/Makefile
+ create mode 100644 tools/testing/selftests/sparc64/drivers/adi-test.c
+ create mode 100755 tools/testing/selftests/sparc64/drivers/drivers_test.sh
+ create mode 100755 tools/testing/selftests/sparc64/run.sh
 
-Why is the function waiting for a concrete module to finish the transition?
-Wouldn't checking all modules, and therefore watching the global transition
-state, be equally efficient without the need to provide module name?
-
-> +
-> +	# Wait for livepatch transition  ...
-> +	local i=0
-> +	while [[ $(cat /sys/kernel/livepatch/"$mod"/transition) != "0" ]]; do
-> +		i=$((i+1))
-> +		if [[ $i -eq $MAX_RETRIES ]]; then
-> +			die "failed to complete transition for module $mod"
-
-FWIW, qa_test_klp tests dump blocking processes' stacks at this place for more
-efficient information exchange between tester and developer.
-(klp_dump_blocking_processes() in https://github.com/lpechacek/qa_test_klp,
-file klp_tc_functions.sh)
-
-> +		fi
-> +		sleep $RETRY_INTERVAL
-> +	done
-> +}
-> +
-> +# load_mod(modname, params) - load a kernel module
-> +#	modname - module name to load
-> +#       params  - module parameters to pass to modprobe
-> +function load_mod() {
-> +	local mod="$1"; shift
-> +	local args="$*"
-> +
-> +	local msg="% modprobe $mod $args"
-> +	echo "${msg%% }" > /dev/kmsg
-> +	ret=$(modprobe "$mod" "$args" 2>&1)
-> +	if [[ "$ret" != "" ]]; then
-> +		echo "$ret" > /dev/kmsg
-> +		die "$ret"
-> +	fi
-> +
-> +	# Wait for module in sysfs ...
-> +	local i=0
-> +	while [ ! -e /sys/module/"$mod" ]; do
-> +		i=$((i+1))
-> +		if [[ $i -eq $MAX_RETRIES ]]; then
-> +			die "failed to load module $mod"
-> +		fi
-> +		sleep $RETRY_INTERVAL
-> +	done
-> +
-> +	# Wait for livepatch ...
-> +	if [[ $(modinfo "$mod" | awk '/^livepatch:/{print $NF}') == "Y" ]]; then
-> +
-> +		# Wait for livepatch in sysfs ...
-> +		local i=0
-> +		while [ ! -e /sys/kernel/livepatch/"$mod" ]; do
-
-Hmmm! Good test! Never came to my mind...
-
-> +			i=$((i+1))
-> +			if [[ $i -eq $MAX_RETRIES ]]; then
-> +				die "failed to load module $mod (sysfs)"
-> +			fi
-> +			sleep $RETRY_INTERVAL
-> +		done
-> +	fi
-> +}
-> +
-> +# load_failing_mod(modname, params) - load a kernel module, expect to fail
-> +#	modname - module name to load
-> +#       params  - module parameters to pass to modprobe
-> +function load_failing_mod() {
-> +	local mod="$1"; shift
-> +	local args="$*"
-> +
-> +	local msg="% modprobe $mod $args"
-> +	echo "${msg%% }" > /dev/kmsg
-> +	ret=$(modprobe "$mod" "$args" 2>&1)
-> +	if [[ "$ret" == "" ]]; then
-> +		echo "$mod unexpectedly loaded" > /dev/kmsg
-> +		die "$mod unexpectedly loaded"
-
-I'm wondering why is the same message being logged to kernel buffer and console
-when in other cases it's written to console only.
-
-> +	fi
-> +	echo "$ret" > /dev/kmsg
-> +}
-> +
-> +# unload_mod(modname) - unload a kernel module
-> +#	modname - module name to unload
-> +function unload_mod() {
-> +	local mod="$1"
-> +
-> +	# Wait for module reference count to clear ...
-> +	local i=0
-> +	while [[ $(cat /sys/module/"$mod"/refcnt) != "0" ]]; do
-> +		i=$((i+1))
-> +		if [[ $i -eq $MAX_RETRIES ]]; then
-> +			die "failed to unload module $mod (refcnt)"
-> +		fi
-> +		sleep $RETRY_INTERVAL
-> +	done
-
-The repeating pattern of "while <some test>; do <count>; if <count beyond max
-retries>; then <die>..." seems to ask for encapsulation.
-
-> +
-> +	echo "% rmmod $mod" > /dev/kmsg
-> +	ret=$(rmmod "$mod" 2>&1)
-> +	if [[ "$ret" != "" ]]; then
-> +		echo "$ret" > /dev/kmsg
-> +		die "$ret"
-
-Similarly "echo <message> > /dev/kmsg; die <message>" is a repeating pattern.
-How about introducing "klp_log_messsage()" or something like that?
-
-> +	fi
-> +
-> +	# Wait for module in sysfs ...
-> +	local i=0
-> +	while [ -e /sys/module/"$mod" ]; do
-> +		i=$((i+1))
-> +		if [[ $i -eq $MAX_RETRIES ]]; then
-> +			die "failed to unload module $mod (/sys/module)"
-> +		fi
-> +		sleep $RETRY_INTERVAL
-> +	done
-> +
-> +	# Wait for livepatch sysfs if applicable ...
-> +	if [[ $(modinfo "$mod" | awk '/^livepatch:/{print $NF}') == "Y" ]]; then
-> +
-> +		local i=0
-> +		while [ -e /sys/kernel/livepatch/"$mod" ]; do
-> +			i=$((i+1))
-> +			if [[ $i -eq $MAX_RETRIES ]]; then
-> +				die "failed to unload module $mod (/sys/livepatch)"
-> +			fi
-> +			sleep $RETRY_INTERVAL
-> +		done
-> +	fi
-> +}
-> +
-> +# display_lp(modname) - disable a livepatch
-     ^^^^^^^ typo
-
-> +#	modname - module name to unload
-> +function disable_lp() {
-> +	local mod="$1"
-
-   ^^^VVVV - mixed indentation with tabs and spaces. Intentional?
-	     (same in set_pre_patch_ret and several other places)
-
-> +
-> +        echo "% echo 0 > /sys/kernel/livepatch/$mod/enabled" > /dev/kmsg
-> +        echo 0 > /sys/kernel/livepatch/"$mod"/enabled
-
-How about folding disable_lp functionality into module unload function? That
-would save extra invocation of disable_lp in test scripts.
-
-> +
-> +	# Wait for livepatch enable to clear ...
-> +	local i=0
-> +	while [[ $(cat /sys/kernel/livepatch/"$mod"/enabled) != "0" ]]; do
-> +		i=$((i+1))
-> +		if [[ $i -eq $MAX_RETRIES ]]; then
-> +			die "failed to disable livepatch $mod"
-> +		fi
-> +		sleep $RETRY_INTERVAL
-> +	done
-> +}
-> +
-> +# set_pre_patch_ret(modname, pre_patch_ret)
-> +#	modname - module name to set
-> +#	pre_patch_ret - new pre_patch_ret value
-> +function set_pre_patch_ret {
-
-This function is used by single test in this patch set. Are there plans for
-reuse in other tests?
-
-> +	local mod="$1"; shift
-> +        local ret="$1"
-> +
-> +        echo "% echo $1 > /sys/module/$mod/parameters/pre_patch_ret" > /dev/kmsg
-> +        echo "$1" > /sys/module/"$mod"/parameters/pre_patch_ret
-> +
-> +	local i=0
-> +	while [[ $(cat /sys/module/"$mod"/parameters/pre_patch_ret) != "$1" ]]; do
-> +		i=$((i+1))
-> +		if [[ $i -eq $MAX_RETRIES ]]; then
-> +			die "failed to set pre_patch_ret parameter for $mod module"
-> +		fi
-> +		sleep $RETRY_INTERVAL
-> +	done
-> +}
-> +
-> +# filter_dmesg() - print a filtered dmesg
-> +#	TODO - better filter, out of order msgs, etc?
-
-      ^^^VVV - Mismatch between comment and function.
-
-> +function check_result {
-> +	local expect="$*"
-> +	local result=$(dmesg | grep -v 'tainting' | grep -e 'livepatch:' -e 'test_klp' | sed 's/^\[[ 0-9.]*\] //')
-> +
-> +	if [[ "$expect" == "$result" ]] ; then
-> +		echo "ok"
-> +	else
-> +		echo -e "not ok\n\n$(diff -upr --label expected --label result <(echo "$expect") <(echo "$result"))\n"
-> +		die "livepatch kselftest(s) failed"
-> +	fi
-> +}
-> diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
-> new file mode 100755
-> index 000000000000..739d09bb3cff
-> --- /dev/null
-> +++ b/tools/testing/selftests/livepatch/test-callbacks.sh
-> @@ -0,0 +1,607 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Copyright (C) 2018 Joe Lawrence <joe.lawrence at redhat.com>
-> +
-> +. functions.sh
-
-This assumes functions.sh is in $CWD.
-
-The rest looks good to me at the moment.
-
-Thanks!
-
-Libor
-
-> +
-> +MOD_LIVEPATCH=test_klp_callbacks_demo
-> +MOD_LIVEPATCH2=test_klp_callbacks_demo2
-> +MOD_TARGET=test_klp_callbacks_mod
-> +MOD_TARGET_BUSY=test_klp_callbacks_busy
-> +
-> +set_dynamic_debug
-> +
-> +
-> +# TEST: target module before livepatch
-> +#
-> +# Test a combination of loading a kernel module and a livepatch that
-> +# patches a function in the first module.  Load the target module
-> +# before the livepatch module.  Unload them in the same order.
-> +#
-> +# - On livepatch enable, before the livepatch transition starts,
-> +#   pre-patch callbacks are executed for vmlinux and $MOD_TARGET (those
-> +#   klp_objects currently loaded).  After klp_objects are patched
-> +#   according to the klp_patch, their post-patch callbacks run and the
-> +#   transition completes.
-> +#
-> +# - Similarly, on livepatch disable, pre-patch callbacks run before the
-> +#   unpatching transition starts.  klp_objects are reverted, post-patch
-> +#   callbacks execute and the transition completes.
-> +
-> +echo -n "TEST: target module before livepatch ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_TARGET
-> +load_mod $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-
-wait_for_transition is not needed here and at other few places. disable_lp
-waits for the transition to complete.
-
-> +disable_lp $MOD_LIVEPATCH
-> +unload_mod $MOD_LIVEPATCH
-> +unload_mod $MOD_TARGET
-> +
-> +check_result "% modprobe $MOD_TARGET
-> +$MOD_TARGET: ${MOD_TARGET}_init
-> +% modprobe $MOD_LIVEPATCH
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +$MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: pre_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH': completing patching transition
-> +$MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: post_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': patching complete
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-> +livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-> +$MOD_LIVEPATCH: pre_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +$MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: post_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +% rmmod $MOD_LIVEPATCH
-> +% rmmod $MOD_TARGET
-> +$MOD_TARGET: ${MOD_TARGET}_exit"
-> +
-> +
-> +# TEST: module_coming notifier
-> +#
-> +# This test is similar to the previous test, but (un)load the livepatch
-> +# module before the target kernel module.  This tests the livepatch
-> +# core's module_coming handler.
-> +#
-> +# - On livepatch enable, only pre/post-patch callbacks are executed for
-> +#   currently loaded klp_objects, in this case, vmlinux.
-> +#
-> +# - When a targeted module is subsequently loaded, only its
-> +#   pre/post-patch callbacks are executed.
-> +#
-> +# - On livepatch disable, all currently loaded klp_objects' (vmlinux and
-> +#   $MOD_TARGET) pre/post-unpatch callbacks are executed.
-> +
-> +echo -n "TEST: module_coming notifier ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +load_mod $MOD_TARGET
-> +disable_lp $MOD_LIVEPATCH
-> +unload_mod $MOD_LIVEPATCH
-> +unload_mod $MOD_TARGET
-> +
-> +check_result "% modprobe $MOD_LIVEPATCH
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +$MOD_LIVEPATCH: pre_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH': completing patching transition
-> +$MOD_LIVEPATCH: post_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': patching complete
-> +% modprobe $MOD_TARGET
-> +livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
-> +$MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
-> +$MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
-> +$MOD_TARGET: ${MOD_TARGET}_init
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-> +livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-> +$MOD_LIVEPATCH: pre_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +$MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: post_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +% rmmod $MOD_LIVEPATCH
-> +% rmmod $MOD_TARGET
-> +$MOD_TARGET: ${MOD_TARGET}_exit"
-> +
-> +
-> +# TEST: module_going notifier
-> +#
-> +# Test loading the livepatch after a targeted kernel module, then unload
-> +# the kernel module before disabling the livepatch.  This tests the
-> +# livepatch core's module_going handler.
-> +#
-> +# - First load a target module, then the livepatch.
-> +#
-> +# - When a target module is unloaded, the livepatch is only reverted
-> +#   from that klp_object ($MOD_TARGET).  As such, only its pre and
-> +#   post-unpatch callbacks are executed when this occurs.
-> +#
-> +# - When the livepatch is disabled, pre and post-unpatch callbacks are
-> +#   run for the remaining klp_object, vmlinux.
-> +
-> +echo -n "TEST: module_going notifier ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_TARGET
-> +load_mod $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +unload_mod $MOD_TARGET
-> +disable_lp $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +unload_mod $MOD_LIVEPATCH
-> +
-> +check_result "% modprobe $MOD_TARGET
-> +$MOD_TARGET: ${MOD_TARGET}_init
-> +% modprobe $MOD_LIVEPATCH
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +$MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: pre_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH': completing patching transition
-> +$MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: post_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': patching complete
-> +% rmmod $MOD_TARGET
-> +$MOD_TARGET: ${MOD_TARGET}_exit
-> +$MOD_LIVEPATCH: pre_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going away
-> +livepatch: reverting patch '$MOD_LIVEPATCH' on unloading module '$MOD_TARGET'
-> +$MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going away
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-> +livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-> +$MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +$MOD_LIVEPATCH: post_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +% rmmod $MOD_LIVEPATCH"
-> +
-> +
-> +# TEST: module_coming and module_going notifiers
-> +#
-> +# This test is similar to the previous test, however the livepatch is
-> +# loaded first.  This tests the livepatch core's module_coming and
-> +# module_going handlers.
-> +#
-> +# - First load the livepatch.
-> +#
-> +# - When a targeted kernel module is subsequently loaded, only its
-> +#   pre/post-patch callbacks are executed.
-> +#
-> +# - When the target module is unloaded, the livepatch is only reverted
-> +#   from the $MOD_TARGET klp_object.  As such, only pre and
-> +#   post-unpatch callbacks are executed when this occurs.
-> +
-> +echo -n "TEST: module_coming and module_going notifiers ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +load_mod $MOD_TARGET
-> +unload_mod $MOD_TARGET
-> +disable_lp $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +unload_mod $MOD_LIVEPATCH
-> +
-> +check_result "% modprobe $MOD_LIVEPATCH
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +$MOD_LIVEPATCH: pre_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH': completing patching transition
-> +$MOD_LIVEPATCH: post_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': patching complete
-> +% modprobe $MOD_TARGET
-> +livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
-> +$MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
-> +$MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
-> +$MOD_TARGET: ${MOD_TARGET}_init
-> +% rmmod $MOD_TARGET
-> +$MOD_TARGET: ${MOD_TARGET}_exit
-> +$MOD_LIVEPATCH: pre_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going away
-> +livepatch: reverting patch '$MOD_LIVEPATCH' on unloading module '$MOD_TARGET'
-> +$MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going away
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-> +livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-> +$MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +$MOD_LIVEPATCH: post_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +% rmmod $MOD_LIVEPATCH"
-> +
-> +
-> +# TEST: target module not present
-> +#
-> +# A simple test of loading a livepatch without one of its patch target
-> +# klp_objects ever loaded ($MOD_TARGET).
-> +#
-> +# - Load the livepatch.
-> +#
-> +# - As expected, only pre/post-(un)patch handlers are executed for
-> +#   vmlinux.
-> +
-> +echo -n "TEST: target module not present ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +disable_lp $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +unload_mod $MOD_LIVEPATCH
-> +
-> +check_result "% modprobe $MOD_LIVEPATCH
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +$MOD_LIVEPATCH: pre_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH': completing patching transition
-> +$MOD_LIVEPATCH: post_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': patching complete
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-> +livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-> +$MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +$MOD_LIVEPATCH: post_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +% rmmod $MOD_LIVEPATCH"
-> +
-> +
-> +# TEST: pre-patch callback -ENODEV
-> +#
-> +# Test a scenario where a vmlinux pre-patch callback returns a non-zero
-> +# status (ie, failure).
-> +#
-> +# - First load a target module.
-> +#
-> +# - Load the livepatch module, setting its 'pre_patch_ret' value to -19
-> +#   (-ENODEV).  When its vmlinux pre-patch callback executes, this
-> +#   status code will propagate back to the module-loading subsystem.
-> +#   The result is that the insmod command refuses to load the livepatch
-> +#   module.
-> +
-> +echo -n "TEST: pre-patch callback -ENODEV ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_TARGET
-> +load_failing_mod $MOD_LIVEPATCH pre_patch_ret=-19
-> +unload_mod $MOD_TARGET
-> +
-> +check_result "% modprobe $MOD_TARGET
-> +$MOD_TARGET: ${MOD_TARGET}_init
-> +% modprobe $MOD_LIVEPATCH pre_patch_ret=-19
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +$MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
-> +livepatch: pre-patch callback failed for object '$MOD_TARGET'
-> +livepatch: failed to enable patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +modprobe: ERROR: could not insert '$MOD_LIVEPATCH': No such device
-> +% rmmod $MOD_TARGET
-> +$MOD_TARGET: ${MOD_TARGET}_exit"
-> +
-> +
-> +# TEST: module_coming + pre-patch callback -ENODEV
-> +#
-> +# Similar to the previous test, setup a livepatch such that its vmlinux
-> +# pre-patch callback returns success.  However, when a targeted kernel
-> +# module is later loaded, have the livepatch return a failing status
-> +# code.
-> +#
-> +# - Load the livepatch, vmlinux pre-patch callback succeeds.
-> +#
-> +# - Set a trap so subsequent pre-patch callbacks to this livepatch will
-> +#   return -ENODEV.
-> +#
-> +# - The livepatch pre-patch callback for subsequently loaded target
-> +#   modules will return failure, so the module loader refuses to load
-> +#   the kernel module.  No post-patch or pre/post-unpatch callbacks are
-> +#   executed for this klp_object.
-> +#
-> +# - Pre/post-unpatch callbacks are run for the vmlinux klp_object.
-> +
-> +echo -n "TEST: module_coming + pre-patch callback -ENODEV ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +set_pre_patch_ret $MOD_LIVEPATCH -19
-> +load_failing_mod $MOD_TARGET
-> +disable_lp $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +unload_mod $MOD_LIVEPATCH
-> +
-> +check_result "% modprobe $MOD_LIVEPATCH
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +$MOD_LIVEPATCH: pre_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH': completing patching transition
-> +$MOD_LIVEPATCH: post_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': patching complete
-> +% echo -19 > /sys/module/$MOD_LIVEPATCH/parameters/pre_patch_ret
-> +% modprobe $MOD_TARGET
-> +livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
-> +$MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
-> +livepatch: pre-patch callback failed for object '$MOD_TARGET'
-> +livepatch: patch '$MOD_LIVEPATCH' failed for module '$MOD_TARGET', refusing to load module '$MOD_TARGET'
-> +modprobe: ERROR: could not insert '$MOD_TARGET': No such device
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-> +livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-> +$MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +$MOD_LIVEPATCH: post_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +% rmmod $MOD_LIVEPATCH"
-> +
-> +
-> +# TEST: multiple target modules
-> +#
-> +# Test loading multiple targeted kernel modules.  This test-case is
-> +# mainly for comparing with the next test-case.
-> +#
-> +# - Load a target "busy" kernel module which kicks off a worker function
-> +#   that immediately exits.
-> +#
-> +# - Proceed with loading the livepatch and another ordinary target
-> +#   module.  Post-patch callbacks are executed and the transition
-> +#   completes quickly.
-> +
-> +echo -n "TEST: multiple target modules ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_TARGET_BUSY sleep_secs=0
-> +# give $MOD_TARGET_BUSY::busymod_work_func() a chance to run
-> +sleep 5
-> +load_mod $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +load_mod $MOD_TARGET
-> +unload_mod $MOD_TARGET
-> +disable_lp $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +unload_mod $MOD_LIVEPATCH
-> +unload_mod $MOD_TARGET_BUSY
-> +
-> +check_result "% modprobe $MOD_TARGET_BUSY sleep_secs=0
-> +$MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_init
-> +$MOD_TARGET_BUSY: busymod_work_func, sleeping 0 seconds ...
-> +$MOD_TARGET_BUSY: busymod_work_func exit
-> +% modprobe $MOD_LIVEPATCH
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +$MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: pre_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH': completing patching transition
-> +$MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: post_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': patching complete
-> +% modprobe $MOD_TARGET
-> +livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
-> +$MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
-> +$MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
-> +$MOD_TARGET: ${MOD_TARGET}_init
-> +% rmmod $MOD_TARGET
-> +$MOD_TARGET: ${MOD_TARGET}_exit
-> +$MOD_LIVEPATCH: pre_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going away
-> +livepatch: reverting patch '$MOD_LIVEPATCH' on unloading module '$MOD_TARGET'
-> +$MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going away
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-> +livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-> +$MOD_LIVEPATCH: pre_unpatch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +$MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: post_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +% rmmod $MOD_LIVEPATCH
-> +% rmmod $MOD_TARGET_BUSY
-> +$MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
-> +
-> +
-> +
-> +# TEST: busy target module
-> +#
-> +# A similar test as the previous one, but force the "busy" kernel module
-> +# to do longer work.
-> +#
-> +# The livepatching core will refuse to patch a task that is currently
-> +# executing a to-be-patched function -- the consistency model stalls the
-> +# current patch transition until this safety-check is met.  Test a
-> +# scenario where one of a livepatch's target klp_objects sits on such a
-> +# function for a long time.  Meanwhile, load and unload other target
-> +# kernel modules while the livepatch transition is in progress.
-> +#
-> +# - Load the "busy" kernel module, this time make it do 10 seconds worth
-> +#   of work.
-> +#
-> +# - Meanwhile, the livepatch is loaded.  Notice that the patch
-> +#   transition does not complete as the targeted "busy" module is
-> +#   sitting on a to-be-patched function.
-> +#
-> +# - Load a second target module (this one is an ordinary idle kernel
-> +#   module).  Note that *no* post-patch callbacks will be executed while
-> +#   the livepatch is still in transition.
-> +#
-> +# - Request an unload of the simple kernel module.  The patch is still
-> +#   transitioning, so its pre-unpatch callbacks are skipped.
-> +#
-> +# - Finally the livepatch is disabled.  Since none of the patch's
-> +#   klp_object's post-patch callbacks executed, the remaining
-> +#   klp_object's pre-unpatch callbacks are skipped.
-> +
-> +echo -n "TEST: busy target module ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_TARGET_BUSY sleep_secs=10
-> +load_mod $MOD_LIVEPATCH
-> +# Don't wait for transition, load $MOD_TARGET while the transition
-> +# is still stalled in $MOD_TARGET_BUSY::busymod_work_func()
-> +sleep 5
-> +load_mod $MOD_TARGET
-> +unload_mod $MOD_TARGET
-> +disable_lp $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +unload_mod $MOD_LIVEPATCH
-> +unload_mod $MOD_TARGET_BUSY
-> +
-> +check_result "% modprobe $MOD_TARGET_BUSY sleep_secs=10
-> +$MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_init
-> +$MOD_TARGET_BUSY: busymod_work_func, sleeping 10 seconds ...
-> +% modprobe $MOD_LIVEPATCH
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +$MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: pre_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +% modprobe $MOD_TARGET
-> +livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
-> +$MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
-> +$MOD_TARGET: ${MOD_TARGET}_init
-> +% rmmod $MOD_TARGET
-> +$MOD_TARGET: ${MOD_TARGET}_exit
-> +livepatch: reverting patch '$MOD_LIVEPATCH' on unloading module '$MOD_TARGET'
-> +$MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going away
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-> +livepatch: '$MOD_LIVEPATCH': reversing transition from patching to unpatching
-> +livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +$MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
-> +$MOD_LIVEPATCH: post_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +% rmmod $MOD_LIVEPATCH
-> +% rmmod $MOD_TARGET_BUSY
-> +$MOD_TARGET_BUSY: busymod_work_func exit
-> +$MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
-> +
-> +
-> +# TEST: multiple livepatches
-> +#
-> +# Test loading multiple livepatches.  This test-case is mainly for comparing
-> +# with the next test-case.
-> +#
-> +# - Load and unload two livepatches, pre and post (un)patch callbacks
-> +#   execute as each patch progresses through its (un)patching
-> +#   transition.
-> +
-> +echo -n "TEST: multiple livepatches ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +load_mod $MOD_LIVEPATCH2
-> +wait_for_transition $MOD_LIVEPATCH2
-> +disable_lp $MOD_LIVEPATCH2
-> +wait_for_transition $MOD_LIVEPATCH2
-> +disable_lp $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +unload_mod $MOD_LIVEPATCH2
-> +unload_mod $MOD_LIVEPATCH
-> +
-> +check_result "% modprobe $MOD_LIVEPATCH
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +$MOD_LIVEPATCH: pre_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH': completing patching transition
-> +$MOD_LIVEPATCH: post_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': patching complete
-> +% modprobe $MOD_LIVEPATCH2
-> +livepatch: enabling patch '$MOD_LIVEPATCH2'
-> +livepatch: '$MOD_LIVEPATCH2': initializing patching transition
-> +$MOD_LIVEPATCH2: pre_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH2': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH2': completing patching transition
-> +$MOD_LIVEPATCH2: post_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH2': patching complete
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH2/enabled
-> +livepatch: '$MOD_LIVEPATCH2': initializing unpatching transition
-> +$MOD_LIVEPATCH2: pre_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH2': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH2': completing unpatching transition
-> +$MOD_LIVEPATCH2: post_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH2': unpatching complete
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-> +livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-> +$MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +$MOD_LIVEPATCH: post_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +% rmmod $MOD_LIVEPATCH2
-> +% rmmod $MOD_LIVEPATCH"
-> +
-> +
-> +# TEST: atomic replace
-> +#
-> +# Load multiple livepatches, but the second as an 'atomic-replace'
-> +# patch.  When the latter laods, the original livepatch should be
-> +# disabled and *none* of its pre/post-unpatch callbacks executed.  On
-> +# the other hand, when the atomic-replace livepatch is disabled, its
-> +# pre/post-unpatch callbacks *should* be executed.
-> +#
-> +# - Load and unload two livepatches, the second of which has its
-> +#   .replace flag set true.
-> +#
-> +# - Pre and post patch callbacks are executed for both livepatches.
-> +#
-> +# - Once the atomic replace module is loaded, only its pre and post
-> +#   unpatch callbacks are executed.
-> +
-> +echo -n "TEST: atomic replace ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +load_mod $MOD_LIVEPATCH2 replace=1
-> +wait_for_transition $MOD_LIVEPATCH2
-> +disable_lp $MOD_LIVEPATCH2
-> +wait_for_transition $MOD_LIVEPATCH2
-> +unload_mod $MOD_LIVEPATCH2
-> +unload_mod $MOD_LIVEPATCH
-> +
-> +check_result "% modprobe $MOD_LIVEPATCH
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +$MOD_LIVEPATCH: pre_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH': completing patching transition
-> +$MOD_LIVEPATCH: post_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH': patching complete
-> +% modprobe $MOD_LIVEPATCH2 replace=1
-> +livepatch: enabling patch '$MOD_LIVEPATCH2'
-> +livepatch: '$MOD_LIVEPATCH2': initializing patching transition
-> +$MOD_LIVEPATCH2: pre_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH2': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH2': completing patching transition
-> +$MOD_LIVEPATCH2: post_patch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH2': patching complete
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH2/enabled
-> +livepatch: '$MOD_LIVEPATCH2': initializing unpatching transition
-> +$MOD_LIVEPATCH2: pre_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH2': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH2': completing unpatching transition
-> +$MOD_LIVEPATCH2: post_unpatch_callback: vmlinux
-> +livepatch: '$MOD_LIVEPATCH2': unpatching complete
-> +% rmmod $MOD_LIVEPATCH2
-> +% rmmod $MOD_LIVEPATCH"
-> +
-> +
-> +exit 0
-> diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
-> new file mode 100755
-> index 000000000000..3e4b8072da84
-> --- /dev/null
-> +++ b/tools/testing/selftests/livepatch/test-livepatch.sh
-> @@ -0,0 +1,173 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Copyright (C) 2018 Joe Lawrence <joe.lawrence at redhat.com>
-> +
-> +. functions.sh
-> +
-> +MOD_LIVEPATCH=test_klp_livepatch
-> +MOD_REPLACE=test_klp_atomic_replace
-> +
-> +set_dynamic_debug
-> +
-> +
-> +# TEST: basic function patching
-> +# - load a livepatch that modifies the output from /proc/cmdline and
-> +#   verify correct behavior
-> +# - unload the livepatch and make sure the patch was removed
-> +
-> +echo -n "TEST: basic function patching ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +
-> +if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
-> +	echo -e "FAIL\n\n"
-> +	die "livepatch kselftest(s) failed"
-> +fi
-> +
-> +disable_lp $MOD_LIVEPATCH
-> +unload_mod $MOD_LIVEPATCH
-> +
-> +if [[ "$(cat /proc/cmdline)" == "$MOD_LIVEPATCH: this has been live patched" ]] ; then
-> +	echo -e "FAIL\n\n"
-> +	die "livepatch kselftest(s) failed"
-> +fi
-> +
-> +check_result "% modprobe $MOD_LIVEPATCH
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH': completing patching transition
-> +livepatch: '$MOD_LIVEPATCH': patching complete
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-> +livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +% rmmod $MOD_LIVEPATCH"
-> +
-> +
-> +# TEST: multiple livepatches
-> +# - load a livepatch that modifies the output from /proc/cmdline and
-> +#   verify correct behavior
-> +# - load another livepatch and verify that both livepatches are active
-> +# - unload the second livepatch and verify that the first is still active
-> +# - unload the first livepatch and verify none are active
-> +
-> +echo -n "TEST: multiple livepatches ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +
-> +grep 'live patched' /proc/cmdline > /dev/kmsg
-> +grep 'live patched' /proc/meminfo > /dev/kmsg
-> +
-> +load_mod $MOD_REPLACE replace=0
-> +wait_for_transition $MOD_REPLACE
-> +
-> +grep 'live patched' /proc/cmdline > /dev/kmsg
-> +grep 'live patched' /proc/meminfo > /dev/kmsg
-> +
-> +disable_lp $MOD_REPLACE
-> +unload_mod $MOD_REPLACE
-> +
-> +grep 'live patched' /proc/cmdline > /dev/kmsg
-> +grep 'live patched' /proc/meminfo > /dev/kmsg
-> +
-> +disable_lp $MOD_LIVEPATCH
-> +unload_mod $MOD_LIVEPATCH
-> +
-> +grep 'live patched' /proc/cmdline > /dev/kmsg
-> +grep 'live patched' /proc/meminfo > /dev/kmsg
-> +
-> +check_result "% modprobe $MOD_LIVEPATCH
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH': completing patching transition
-> +livepatch: '$MOD_LIVEPATCH': patching complete
-> +$MOD_LIVEPATCH: this has been live patched
-> +% modprobe $MOD_REPLACE replace=0
-> +livepatch: enabling patch '$MOD_REPLACE'
-> +livepatch: '$MOD_REPLACE': initializing patching transition
-> +livepatch: '$MOD_REPLACE': starting patching transition
-> +livepatch: '$MOD_REPLACE': completing patching transition
-> +livepatch: '$MOD_REPLACE': patching complete
-> +$MOD_LIVEPATCH: this has been live patched
-> +$MOD_REPLACE: this has been live patched
-> +% echo 0 > /sys/kernel/livepatch/$MOD_REPLACE/enabled
-> +livepatch: '$MOD_REPLACE': initializing unpatching transition
-> +livepatch: '$MOD_REPLACE': starting unpatching transition
-> +livepatch: '$MOD_REPLACE': completing unpatching transition
-> +livepatch: '$MOD_REPLACE': unpatching complete
-> +% rmmod $MOD_REPLACE
-> +$MOD_LIVEPATCH: this has been live patched
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-> +livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +% rmmod $MOD_LIVEPATCH"
-> +
-> +
-> +# TEST: atomic replace livepatch
-> +# - load a livepatch that modifies the output from /proc/cmdline and
-> +#   verify correct behavior
-> +# - load an atomic replace livepatch and verify that only the second is active
-> +# - remove the first livepatch and verify that the atomic replace livepatch
-> +#   is still active
-> +# - remove the atomic replace livepatch and verify that none are active
-> +
-> +echo -n "TEST: atomic replace livepatch ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_LIVEPATCH
-> +wait_for_transition $MOD_LIVEPATCH
-> +
-> +grep 'live patched' /proc/cmdline > /dev/kmsg
-> +grep 'live patched' /proc/meminfo > /dev/kmsg
-> +
-> +load_mod $MOD_REPLACE replace=1
-> +wait_for_transition $MOD_REPLACE
-> +
-> +grep 'live patched' /proc/cmdline > /dev/kmsg
-> +grep 'live patched' /proc/meminfo > /dev/kmsg
-> +
-> +unload_mod $MOD_LIVEPATCH
-> +
-> +grep 'live patched' /proc/cmdline > /dev/kmsg
-> +grep 'live patched' /proc/meminfo > /dev/kmsg
-> +
-> +disable_lp $MOD_REPLACE
-> +unload_mod $MOD_REPLACE
-> +
-> +grep 'live patched' /proc/cmdline > /dev/kmsg
-> +grep 'live patched' /proc/meminfo > /dev/kmsg
-> +
-> +check_result "% modprobe $MOD_LIVEPATCH
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH': completing patching transition
-> +livepatch: '$MOD_LIVEPATCH': patching complete
-> +$MOD_LIVEPATCH: this has been live patched
-> +% modprobe $MOD_REPLACE replace=1
-> +livepatch: enabling patch '$MOD_REPLACE'
-> +livepatch: '$MOD_REPLACE': initializing patching transition
-> +livepatch: '$MOD_REPLACE': starting patching transition
-> +livepatch: '$MOD_REPLACE': completing patching transition
-> +livepatch: '$MOD_REPLACE': patching complete
-> +$MOD_REPLACE: this has been live patched
-> +% rmmod $MOD_LIVEPATCH
-> +$MOD_REPLACE: this has been live patched
-> +% echo 0 > /sys/kernel/livepatch/$MOD_REPLACE/enabled
-> +livepatch: '$MOD_REPLACE': initializing unpatching transition
-> +livepatch: '$MOD_REPLACE': starting unpatching transition
-> +livepatch: '$MOD_REPLACE': completing unpatching transition
-> +livepatch: '$MOD_REPLACE': unpatching complete
-> +% rmmod $MOD_REPLACE"
-> +
-> +
-> +exit 0
-> diff --git a/tools/testing/selftests/livepatch/test-shadow-vars.sh b/tools/testing/selftests/livepatch/test-shadow-vars.sh
-> new file mode 100755
-> index 000000000000..96390a21b15d
-> --- /dev/null
-> +++ b/tools/testing/selftests/livepatch/test-shadow-vars.sh
-> @@ -0,0 +1,60 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Copyright (C) 2018 Joe Lawrence <joe.lawrence at redhat.com>
-> +
-> +. functions.sh
-> +
-> +MOD_TEST=test_klp_shadow_vars
-> +
-> +set_dynamic_debug
-> +
-> +
-> +# TEST: basic shadow variable API
-> +# - load a module that exercises the shadow variable API
-> +
-> +echo -n "TEST: basic shadow variable API ... "
-> +dmesg -C
-> +
-> +load_mod $MOD_TEST
-> +unload_mod $MOD_TEST
-> +
-> +check_result "% modprobe $MOD_TEST
-> +$MOD_TEST: klp_shadow_get(obj=PTR5, id=0x1234) = PTR0
-> +$MOD_TEST:   got expected NULL result
-> +$MOD_TEST: shadow_ctor: PTR6 -> PTR1
-> +$MOD_TEST: klp_shadow_alloc(obj=PTR5, id=0x1234, size=8, gfp_flags=GFP_KERNEL), ctor=PTR7, ctor_data=PTR1 = PTR6
-> +$MOD_TEST: shadow_ctor: PTR8 -> PTR2
-> +$MOD_TEST: klp_shadow_alloc(obj=PTR9, id=0x1234, size=8, gfp_flags=GFP_KERNEL), ctor=PTR7, ctor_data=PTR2 = PTR8
-> +$MOD_TEST: shadow_ctor: PTR10 -> PTR3
-> +$MOD_TEST: klp_shadow_alloc(obj=PTR5, id=0x1235, size=8, gfp_flags=GFP_KERNEL), ctor=PTR7, ctor_data=PTR3 = PTR10
-> +$MOD_TEST: klp_shadow_get(obj=PTR5, id=0x1234) = PTR6
-> +$MOD_TEST:   got expected PTR6 -> PTR1 result
-> +$MOD_TEST: klp_shadow_get(obj=PTR9, id=0x1234) = PTR8
-> +$MOD_TEST:   got expected PTR8 -> PTR2 result
-> +$MOD_TEST: klp_shadow_get(obj=PTR5, id=0x1235) = PTR10
-> +$MOD_TEST:   got expected PTR10 -> PTR3 result
-> +$MOD_TEST: shadow_ctor: PTR11 -> PTR4
-> +$MOD_TEST: klp_shadow_get_or_alloc(obj=PTR12, id=0x1234, size=8, gfp_flags=GFP_KERNEL), ctor=PTR7, ctor_data=PTR4 = PTR11
-> +$MOD_TEST: klp_shadow_get_or_alloc(obj=PTR12, id=0x1234, size=8, gfp_flags=GFP_KERNEL), ctor=PTR7, ctor_data=PTR4 = PTR11
-> +$MOD_TEST:   got expected PTR11 -> PTR4 result
-> +$MOD_TEST: shadow_dtor(obj=PTR5, shadow_data=PTR6)
-> +$MOD_TEST: klp_shadow_free(obj=PTR5, id=0x1234, dtor=PTR13)
-> +$MOD_TEST: klp_shadow_get(obj=PTR5, id=0x1234) = PTR0
-> +$MOD_TEST:   got expected NULL result
-> +$MOD_TEST: shadow_dtor(obj=PTR9, shadow_data=PTR8)
-> +$MOD_TEST: klp_shadow_free(obj=PTR9, id=0x1234, dtor=PTR13)
-> +$MOD_TEST: klp_shadow_get(obj=PTR9, id=0x1234) = PTR0
-> +$MOD_TEST:   got expected NULL result
-> +$MOD_TEST: shadow_dtor(obj=PTR12, shadow_data=PTR11)
-> +$MOD_TEST: klp_shadow_free(obj=PTR12, id=0x1234, dtor=PTR13)
-> +$MOD_TEST: klp_shadow_get(obj=PTR12, id=0x1234) = PTR0
-> +$MOD_TEST:   got expected NULL result
-> +$MOD_TEST: klp_shadow_get(obj=PTR5, id=0x1235) = PTR10
-> +$MOD_TEST:   got expected PTR10 -> PTR3 result
-> +$MOD_TEST: shadow_dtor(obj=PTR5, shadow_data=PTR10)
-> +$MOD_TEST: klp_shadow_free_all(id=0x1235, dtor=PTR13)
-> +$MOD_TEST: klp_shadow_get(obj=PTR5, id=0x1234) = PTR0
-> +$MOD_TEST:   shadow_get() got expected NULL result
-> +% rmmod test_klp_shadow_vars"
-> +
-> +exit 0
-> -- 
-> 1.8.3.1
-> 
-> 
-
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 7442dfb73b7f..94da632579e7 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -28,6 +28,7 @@ TARGETS += ptrace
+ TARGETS += seccomp
+ TARGETS += sigaltstack
+ TARGETS += size
++TARGETS += sparc64
+ TARGETS += splice
+ TARGETS += static_keys
+ TARGETS += sync
+diff --git a/tools/testing/selftests/sparc64/Makefile b/tools/testing/selftests/sparc64/Makefile
+new file mode 100644
+index 000000000000..2082eeffd779
+--- /dev/null
++++ b/tools/testing/selftests/sparc64/Makefile
+@@ -0,0 +1,46 @@
++SUBDIRS := drivers
++
++TEST_PROGS := run.sh
++
++.PHONY: all clean
++
++include ../lib.mk
++
++all:
++	@for DIR in $(SUBDIRS); do		\
++		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
++		mkdir $$BUILD_TARGET  -p;	\
++		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
++		#SUBDIR test prog name should be in the form: SUBDIR_test.sh \
++		TEST=$$DIR"_test.sh"; \
++		if [ -e $$DIR/$$TEST ]; then \
++			rsync -a $$DIR/$$TEST $$BUILD_TARGET/; \
++		fi \
++	done
++
++override define RUN_TESTS
++	@cd $(OUTPUT); ./run.sh
++endef
++
++override define INSTALL_RULE
++	mkdir -p $(INSTALL_PATH)
++	install -t $(INSTALL_PATH) $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES)
++
++	@for SUBDIR in $(SUBDIRS); do \
++		BUILD_TARGET=$(OUTPUT)/$$SUBDIR;	\
++		mkdir $$BUILD_TARGET  -p;	\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$SUBDIR INSTALL_PATH=$(INSTALL_PATH)/$$SUBDIR install; \
++	done;
++endef
++
++override define EMIT_TESTS
++	echo "./run.sh"
++endef
++
++override define CLEAN
++	@for DIR in $(SUBDIRS); do		\
++		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
++		mkdir $$BUILD_TARGET  -p;	\
++		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
++	done
++endef
+diff --git a/tools/testing/selftests/sparc64/drivers/.gitignore b/tools/testing/selftests/sparc64/drivers/.gitignore
+new file mode 100644
+index 000000000000..90e835ed74e6
+--- /dev/null
++++ b/tools/testing/selftests/sparc64/drivers/.gitignore
+@@ -0,0 +1 @@
++adi-test
+diff --git a/tools/testing/selftests/sparc64/drivers/Makefile b/tools/testing/selftests/sparc64/drivers/Makefile
+new file mode 100644
+index 000000000000..6264f40bbdbc
+--- /dev/null
++++ b/tools/testing/selftests/sparc64/drivers/Makefile
+@@ -0,0 +1,15 @@
++
++INCLUDEDIR := -I.
++CFLAGS := $(CFLAGS) $(INCLUDEDIR) -Wall -O2 -g
++
++TEST_GEN_FILES := adi-test
++
++all: $(TEST_GEN_FILES)
++
++$(TEST_GEN_FILES): adi-test.c
++
++TEST_PROGS := drivers_test.sh
++
++include ../../lib.mk
++
++$(OUTPUT)/adi-test: adi-test.c
+diff --git a/tools/testing/selftests/sparc64/drivers/adi-test.c b/tools/testing/selftests/sparc64/drivers/adi-test.c
+new file mode 100644
+index 000000000000..22ffd06fba24
+--- /dev/null
++++ b/tools/testing/selftests/sparc64/drivers/adi-test.c
+@@ -0,0 +1,732 @@
++/*
++ * Copyright (c) 2017, 2018, Oracle and/or its affiliates. All rights reserved.
++ * Author: Tom Hromatka <tom.hromatka at oracle.com>
++ *
++ * This program is free software: you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation, either version 3 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++#include <linux/kernel.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <stdarg.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/syscall.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <unistd.h>
++
++#include "../../kselftest.h"
++
++#define DEBUG_LEVEL_1_BIT	(0x0001)
++#define DEBUG_LEVEL_2_BIT	(0x0002)
++#define DEBUG_LEVEL_3_BIT	(0x0004)
++#define DEBUG_LEVEL_4_BIT	(0x0008)
++#define DEBUG_TIMING_BIT	(0x1000)
++
++#ifndef ARRAY_SIZE
++# define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
++#endif
++
++/* bit mask of enabled bits to print */
++#define DEBUG 0x0001
++
++#define DEBUG_PRINT_L1(...)	debug_print(DEBUG_LEVEL_1_BIT, __VA_ARGS__)
++#define DEBUG_PRINT_L2(...)	debug_print(DEBUG_LEVEL_2_BIT, __VA_ARGS__)
++#define DEBUG_PRINT_L3(...)	debug_print(DEBUG_LEVEL_3_BIT, __VA_ARGS__)
++#define DEBUG_PRINT_L4(...)	debug_print(DEBUG_LEVEL_4_BIT, __VA_ARGS__)
++#define DEBUG_PRINT_T(...)	debug_print(DEBUG_TIMING_BIT, __VA_ARGS__)
++
++static void debug_print(int level, const char *s, ...)
++{
++	va_list args;
++
++	va_start(args, s);
++
++	if (DEBUG & level)
++		vfprintf(stdout, s, args);
++	va_end(args);
++}
++
++#ifndef min
++#define min(x, y) ((x) < (y) ? x : y)
++#endif
++
++#define RETURN_FROM_TEST(_ret) \
++	do { \
++		DEBUG_PRINT_L1( \
++			"\tTest %s returned %d\n", __func__, _ret); \
++		return _ret; \
++	} while (0)
++
++#define ADI_BLKSZ	64
++#define ADI_MAX_VERSION	15
++
++#define TEST_STEP_FAILURE(_ret) \
++	do { \
++		fprintf(stderr, "\tTest step failure: %d at %s:%d\n", \
++			_ret, __func__, __LINE__); \
++		goto out; \
++	} while (0)
++
++#define RDTICK(_x) \
++	asm volatile(" rd %%tick, %0\n" : "=r" (_x))
++
++static int random_version(void)
++{
++	long tick;
++
++	RDTICK(tick);
++
++	return tick % (ADI_MAX_VERSION + 1);
++}
++
++#define MAX_RANGES_SUPPORTED	5
++static const char system_ram_str[] = "System RAM\n";
++static int range_count;
++static unsigned long long int start_addr[MAX_RANGES_SUPPORTED];
++static unsigned long long int   end_addr[MAX_RANGES_SUPPORTED];
++
++struct stats {
++	char		name[16];
++	unsigned long	total;
++	unsigned long	count;
++	unsigned long	bytes;
++};
++
++static struct stats read_stats = {
++	.name = "read", .total = 0, .count = 0, .bytes = 0};
++static struct stats pread_stats = {
++	.name = "pread", .total = 0, .count = 0, .bytes = 0};
++static struct stats write_stats = {
++	.name = "write", .total = 0, .count = 0, .bytes = 0};
++static struct stats pwrite_stats = {
++	.name = "pwrite", .total = 0, .count = 0, .bytes = 0};
++static struct stats seek_stats = {
++	.name = "seek", .total = 0, .count = 0, .bytes = 0};
++
++static void update_stats(struct stats * const ustats,
++			 unsigned long measurement, unsigned long bytes)
++{
++	ustats->total += measurement;
++	ustats->bytes += bytes;
++	ustats->count++;
++}
++
++static void print_ustats(const struct stats * const ustats)
++{
++	DEBUG_PRINT_L1("%s\t%7d\t%7.0f\t%7.0f\n",
++		       ustats->name, ustats->count,
++		       (float)ustats->total / (float)ustats->count,
++		       (float)ustats->bytes / (float)ustats->count);
++}
++
++static void print_stats(void)
++{
++	DEBUG_PRINT_L1("\nSyscall\tCall\tAvgTime\tAvgSize\n"
++		       "\tCount\t(ticks)\t(bytes)\n"
++		       "-------------------------------\n");
++
++	print_ustats(&read_stats);
++	print_ustats(&pread_stats);
++	print_ustats(&write_stats);
++	print_ustats(&pwrite_stats);
++	print_ustats(&seek_stats);
++}
++
++static int build_memory_map(void)
++{
++	char line[256];
++	FILE *fp;
++	int i;
++
++	range_count = 0;
++
++	fp = fopen("/proc/iomem", "r");
++	if (!fp) {
++		fprintf(stderr, "/proc/iomem: error %d: %s\n",
++			errno, strerror(errno));
++		return -errno;
++	}
++
++	while (fgets(line, sizeof(line), fp) != 0) {
++		if (strstr(line, system_ram_str)) {
++			char *dash, *end_ptr;
++
++			/* Given a line like this:
++			 * d0400000-10ffaffff : System RAM
++			 * replace the "-" with a space
++			 */
++			dash = strstr(line, "-");
++			dash[0] = 0x20;
++
++			start_addr[range_count] = strtoull(line, &end_ptr, 16);
++			end_addr[range_count] = strtoull(end_ptr, NULL, 16);
++			range_count++;
++		}
++	}
++
++	fclose(fp);
++
++	DEBUG_PRINT_L1("RAM Ranges\n");
++	for (i = 0; i < range_count; i++)
++		DEBUG_PRINT_L1("\trange %d: 0x%llx\t- 0x%llx\n",
++			       i, start_addr[i], end_addr[i]);
++
++	if (range_count == 0) {
++		fprintf(stderr, "No valid address ranges found.  Error.\n");
++		return -1;
++	}
++
++	return 0;
++}
++
++static int read_adi(int fd, unsigned char *buf, int buf_sz)
++{
++	int ret, bytes_read = 0;
++	long start, end, elapsed_time = 0;
++
++	do {
++		RDTICK(start);
++		ret = read(fd, buf + bytes_read, buf_sz - bytes_read);
++		RDTICK(end);
++		if (ret < 0)
++			return -errno;
++
++		elapsed_time += end - start;
++		update_stats(&read_stats, elapsed_time, buf_sz);
++		bytes_read += ret;
++
++	} while (bytes_read < buf_sz);
++
++	DEBUG_PRINT_T("\tread elapsed timed = %ld\n", elapsed_time);
++	DEBUG_PRINT_L3("\tRead  %d bytes\n", bytes_read);
++
++	return bytes_read;
++}
++
++static int pread_adi(int fd, unsigned char *buf,
++		     int buf_sz, unsigned long offset)
++{
++	int ret, i, bytes_read = 0;
++	unsigned long cur_offset;
++	long start, end, elapsed_time = 0;
++
++	cur_offset = offset;
++	do {
++		RDTICK(start);
++		ret = pread(fd, buf + bytes_read, buf_sz - bytes_read,
++			    cur_offset);
++		RDTICK(end);
++		if (ret < 0)
++			return -errno;
++
++		elapsed_time += end - start;
++		update_stats(&pread_stats, elapsed_time, buf_sz);
++		bytes_read += ret;
++		cur_offset += ret;
++
++	} while (bytes_read < buf_sz);
++
++	DEBUG_PRINT_T("\tpread elapsed timed = %ld\n", elapsed_time);
++	DEBUG_PRINT_L3("\tRead  %d bytes starting at offset 0x%lx\n",
++		       bytes_read, offset);
++	for (i = 0; i < bytes_read; i++)
++		DEBUG_PRINT_L4("\t\t0x%lx\t%d\n", offset + i, buf[i]);
++
++	return bytes_read;
++}
++
++static int write_adi(int fd, const unsigned char * const buf, int buf_sz)
++{
++	int ret, bytes_written = 0;
++	long start, end, elapsed_time = 0;
++
++	do {
++		RDTICK(start);
++		ret = write(fd, buf + bytes_written, buf_sz - bytes_written);
++		RDTICK(end);
++		if (ret < 0)
++			return -errno;
++
++		elapsed_time += (end - start);
++		update_stats(&write_stats, elapsed_time, buf_sz);
++		bytes_written += ret;
++	} while (bytes_written < buf_sz);
++
++	DEBUG_PRINT_T("\twrite elapsed timed = %ld\n", elapsed_time);
++	DEBUG_PRINT_L3("\tWrote %d of %d bytes\n", bytes_written, buf_sz);
++
++	return bytes_written;
++}
++
++static int pwrite_adi(int fd, const unsigned char * const buf,
++		      int buf_sz, unsigned long offset)
++{
++	int ret, bytes_written = 0;
++	unsigned long cur_offset;
++	long start, end, elapsed_time = 0;
++
++	cur_offset = offset;
++
++	do {
++		RDTICK(start);
++		ret = pwrite(fd, buf + bytes_written,
++			     buf_sz - bytes_written, cur_offset);
++		RDTICK(end);
++		if (ret < 0) {
++			fprintf(stderr, "pwrite(): error %d: %s\n",
++				errno, strerror(errno));
++			return -errno;
++		}
++
++		elapsed_time += (end - start);
++		update_stats(&pwrite_stats, elapsed_time, buf_sz);
++		bytes_written += ret;
++		cur_offset += ret;
++
++	} while (bytes_written < buf_sz);
++
++	DEBUG_PRINT_T("\tpwrite elapsed timed = %ld\n", elapsed_time);
++	DEBUG_PRINT_L3("\tWrote %d of %d bytes starting at address 0x%lx\n",
++		       bytes_written, buf_sz, offset);
++
++	return bytes_written;
++}
++
++static off_t seek_adi(int fd, off_t offset, int whence)
++{
++	long start, end;
++	off_t ret;
++
++	RDTICK(start);
++	ret = lseek(fd, offset, whence);
++	RDTICK(end);
++	DEBUG_PRINT_L2("\tlseek ret = 0x%llx\n", ret);
++	if (ret < 0)
++		goto out;
++
++	DEBUG_PRINT_T("\tlseek elapsed timed = %ld\n", end - start);
++	update_stats(&seek_stats, end - start, 0);
++
++out:
++	(void)lseek(fd, 0, SEEK_END);
++	return ret;
++}
++
++static int test0_prpw_aligned_1byte(int fd)
++{
++	/* somewhat arbitrarily chosen address */
++	unsigned long paddr =
++		(end_addr[range_count - 1] - 0x1000) & ~(ADI_BLKSZ - 1);
++	unsigned char version[1], expected_version;
++	loff_t offset;
++	int ret;
++
++	version[0] = random_version();
++	expected_version = version[0];
++
++	offset = paddr / ADI_BLKSZ;
++
++	ret = pwrite_adi(fd, version, sizeof(version), offset);
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	ret = pread_adi(fd, version, sizeof(version), offset);
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	if (expected_version != version[0]) {
++		DEBUG_PRINT_L2("\tExpected version %d but read version %d\n",
++			       expected_version, version[0]);
++		TEST_STEP_FAILURE(-expected_version);
++	}
++
++	ret = 0;
++out:
++	RETURN_FROM_TEST(ret);
++}
++
++#define TEST1_VERSION_SZ	4096
++static int test1_prpw_aligned_4096bytes(int fd)
++{
++	/* somewhat arbitrarily chosen address */
++	unsigned long paddr =
++		(end_addr[range_count - 1] - 0x6000) & ~(ADI_BLKSZ - 1);
++	unsigned char version[TEST1_VERSION_SZ],
++		expected_version[TEST1_VERSION_SZ];
++	loff_t offset;
++	int ret, i;
++
++	for (i = 0; i < TEST1_VERSION_SZ; i++) {
++		version[i] = random_version();
++		expected_version[i] = version[i];
++	}
++
++	offset = paddr / ADI_BLKSZ;
++
++	ret = pwrite_adi(fd, version, sizeof(version), offset);
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	ret = pread_adi(fd, version, sizeof(version), offset);
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	for (i = 0; i < TEST1_VERSION_SZ; i++) {
++		if (expected_version[i] != version[i]) {
++			DEBUG_PRINT_L2(
++				"\tExpected version %d but read version %d\n",
++				expected_version, version[0]);
++			TEST_STEP_FAILURE(-expected_version[i]);
++		}
++	}
++
++	ret = 0;
++out:
++	RETURN_FROM_TEST(ret);
++}
++
++#define TEST2_VERSION_SZ	10327
++static int test2_prpw_aligned_10327bytes(int fd)
++{
++	/* somewhat arbitrarily chosen address */
++	unsigned long paddr =
++		(start_addr[0] + 0x6000) & ~(ADI_BLKSZ - 1);
++	unsigned char version[TEST2_VERSION_SZ],
++		expected_version[TEST2_VERSION_SZ];
++	loff_t offset;
++	int ret, i;
++
++	for (i = 0; i < TEST2_VERSION_SZ; i++) {
++		version[i] = random_version();
++		expected_version[i] = version[i];
++	}
++
++	offset = paddr / ADI_BLKSZ;
++
++	ret = pwrite_adi(fd, version, sizeof(version), offset);
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	ret = pread_adi(fd, version, sizeof(version), offset);
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	for (i = 0; i < TEST2_VERSION_SZ; i++) {
++		if (expected_version[i] != version[i]) {
++			DEBUG_PRINT_L2(
++				"\tExpected version %d but read version %d\n",
++				expected_version, version[0]);
++			TEST_STEP_FAILURE(-expected_version[i]);
++		}
++	}
++
++	ret = 0;
++out:
++	RETURN_FROM_TEST(ret);
++}
++
++#define TEST3_VERSION_SZ	12541
++static int test3_prpw_unaligned_12541bytes(int fd)
++{
++	/* somewhat arbitrarily chosen address */
++	unsigned long paddr =
++		((start_addr[0] + 0xC000) & ~(ADI_BLKSZ - 1)) + 17;
++	unsigned char version[TEST3_VERSION_SZ],
++		expected_version[TEST3_VERSION_SZ];
++	loff_t offset;
++	int ret, i;
++
++	for (i = 0; i < TEST3_VERSION_SZ; i++) {
++		version[i] = random_version();
++		expected_version[i] = version[i];
++	}
++
++	offset = paddr / ADI_BLKSZ;
++
++	ret = pwrite_adi(fd, version, sizeof(version), offset);
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	ret = pread_adi(fd, version, sizeof(version), offset);
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	for (i = 0; i < TEST3_VERSION_SZ; i++) {
++		if (expected_version[i] != version[i]) {
++			DEBUG_PRINT_L2(
++				"\tExpected version %d but read version %d\n",
++				expected_version, version[0]);
++			TEST_STEP_FAILURE(-expected_version[i]);
++		}
++	}
++
++	ret = 0;
++out:
++	RETURN_FROM_TEST(ret);
++}
++
++static int test4_lseek(int fd)
++{
++#define	OFFSET_ADD	(0x100)
++#define OFFSET_SUBTRACT	(0xFFFFFFF000000000)
++
++	off_t offset_out, offset_in;
++	int ret;
++
++
++	offset_in = 0x123456789abcdef0;
++	offset_out = seek_adi(fd, offset_in, SEEK_SET);
++	if (offset_out != offset_in) {
++		ret = -1;
++		TEST_STEP_FAILURE(ret);
++	}
++
++	/* seek to the current offset.  this should return EINVAL */
++	offset_out = seek_adi(fd, offset_in, SEEK_SET);
++	if (offset_out < 0 && errno == EINVAL)
++		DEBUG_PRINT_L2(
++			"\tSEEK_SET failed as designed. Not an error\n");
++	else {
++		ret = -2;
++		TEST_STEP_FAILURE(ret);
++	}
++
++	offset_out = seek_adi(fd, 0, SEEK_CUR);
++	if (offset_out != offset_in) {
++		ret = -3;
++		TEST_STEP_FAILURE(ret);
++	}
++
++	offset_out = seek_adi(fd, OFFSET_ADD, SEEK_CUR);
++	if (offset_out != (offset_in + OFFSET_ADD)) {
++		ret = -4;
++		TEST_STEP_FAILURE(ret);
++	}
++
++	offset_out = seek_adi(fd, OFFSET_SUBTRACT, SEEK_CUR);
++	if (offset_out != (offset_in + OFFSET_ADD + OFFSET_SUBTRACT)) {
++		ret = -5;
++		TEST_STEP_FAILURE(ret);
++	}
++
++	ret = 0;
++out:
++	RETURN_FROM_TEST(ret);
++}
++
++static int test5_rw_aligned_1byte(int fd)
++{
++	/* somewhat arbitrarily chosen address */
++	unsigned long paddr =
++		(end_addr[range_count - 1] - 0xF000) & ~(ADI_BLKSZ - 1);
++	unsigned char version, expected_version;
++	loff_t offset;
++	off_t oret;
++	int ret;
++
++	offset = paddr / ADI_BLKSZ;
++	version = expected_version = random_version();
++
++	oret = seek_adi(fd, offset, SEEK_SET);
++	if (oret != offset) {
++		ret = -1;
++		TEST_STEP_FAILURE(ret);
++	}
++
++	ret = write_adi(fd, &version, sizeof(version));
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	oret = seek_adi(fd, offset, SEEK_SET);
++	if (oret != offset) {
++		ret = -1;
++		TEST_STEP_FAILURE(ret);
++	}
++
++	ret = read_adi(fd, &version, sizeof(version));
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	if (expected_version != version) {
++		DEBUG_PRINT_L2("\tExpected version %d but read version %d\n",
++			       expected_version, version);
++		TEST_STEP_FAILURE(-expected_version);
++	}
++
++	ret = 0;
++out:
++	RETURN_FROM_TEST(ret);
++}
++
++#define TEST6_VERSION_SZ        9434
++static int test6_rw_aligned_9434bytes(int fd)
++{
++	/* somewhat arbitrarily chosen address */
++	unsigned long paddr =
++		(end_addr[range_count - 1] - 0x5F000) & ~(ADI_BLKSZ - 1);
++	unsigned char version[TEST6_VERSION_SZ],
++		      expected_version[TEST6_VERSION_SZ];
++	loff_t offset;
++	off_t oret;
++	int ret, i;
++
++	offset = paddr / ADI_BLKSZ;
++	for (i = 0; i < TEST6_VERSION_SZ; i++)
++		version[i] = expected_version[i] = random_version();
++
++	oret = seek_adi(fd, offset, SEEK_SET);
++	if (oret != offset) {
++		ret = -1;
++		TEST_STEP_FAILURE(ret);
++	}
++
++	ret = write_adi(fd, version, sizeof(version));
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	memset(version, 0, TEST6_VERSION_SZ);
++
++	oret = seek_adi(fd, offset, SEEK_SET);
++	if (oret != offset) {
++		ret = -1;
++		TEST_STEP_FAILURE(ret);
++	}
++
++	ret = read_adi(fd, version, sizeof(version));
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	for (i = 0; i < TEST6_VERSION_SZ; i++) {
++		if (expected_version[i] != version[i]) {
++			DEBUG_PRINT_L2(
++				"\tExpected version %d but read version %d\n",
++				expected_version[i], version[i]);
++			TEST_STEP_FAILURE(-expected_version[i]);
++		}
++	}
++
++	ret = 0;
++out:
++	RETURN_FROM_TEST(ret);
++}
++
++#define TEST7_VERSION_SZ        14963
++static int test7_rw_aligned_14963bytes(int fd)
++{
++	/* somewhat arbitrarily chosen address */
++	unsigned long paddr =
++	  ((start_addr[range_count - 1] + 0xF000) & ~(ADI_BLKSZ - 1)) + 39;
++	unsigned char version[TEST7_VERSION_SZ],
++		      expected_version[TEST7_VERSION_SZ];
++	loff_t offset;
++	off_t oret;
++	int ret, i;
++
++	offset = paddr / ADI_BLKSZ;
++	for (i = 0; i < TEST7_VERSION_SZ; i++) {
++		version[i] = random_version();
++		expected_version[i] = version[i];
++	}
++
++	oret = seek_adi(fd, offset, SEEK_SET);
++	if (oret != offset) {
++		ret = -1;
++		TEST_STEP_FAILURE(ret);
++	}
++
++	ret = write_adi(fd, version, sizeof(version));
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	memset(version, 0, TEST7_VERSION_SZ);
++
++	oret = seek_adi(fd, offset, SEEK_SET);
++	if (oret != offset) {
++		ret = -1;
++		TEST_STEP_FAILURE(ret);
++	}
++
++	ret = read_adi(fd, version, sizeof(version));
++	if (ret != sizeof(version))
++		TEST_STEP_FAILURE(ret);
++
++	for (i = 0; i < TEST7_VERSION_SZ; i++) {
++		if (expected_version[i] != version[i]) {
++			DEBUG_PRINT_L2(
++				"\tExpected version %d but read version %d\n",
++				expected_version[i], version[i]);
++			TEST_STEP_FAILURE(-expected_version[i]);
++		}
++
++		paddr += ADI_BLKSZ;
++	}
++
++	ret = 0;
++out:
++	RETURN_FROM_TEST(ret);
++}
++
++static int (*tests[])(int fd) = {
++	test0_prpw_aligned_1byte,
++	test1_prpw_aligned_4096bytes,
++	test2_prpw_aligned_10327bytes,
++	test3_prpw_unaligned_12541bytes,
++	test4_lseek,
++	test5_rw_aligned_1byte,
++	test6_rw_aligned_9434bytes,
++	test7_rw_aligned_14963bytes,
++};
++#define TEST_COUNT	ARRAY_SIZE(tests)
++
++int main(int argc, char *argv[])
++{
++	int fd, ret, test;
++
++	ret = build_memory_map();
++	if (ret < 0)
++		return ret;
++
++	fd = open("/dev/adi", O_RDWR);
++	if (fd < 0) {
++		fprintf(stderr, "open: error %d: %s\n",
++			errno, strerror(errno));
++		return -errno;
++	}
++
++	for (test = 0; test < TEST_COUNT; test++) {
++		DEBUG_PRINT_L1("Running test #%d\n", test);
++
++		ret = (*tests[test])(fd);
++		if (ret != 0)
++			ksft_test_result_fail("Test #%d failed: error %d\n",
++					      test, ret);
++		else
++			ksft_test_result_pass("Test #%d passed\n", test);
++	}
++
++	print_stats();
++	close(fd);
++
++	if (ksft_get_fail_cnt() > 0)
++		ksft_exit_fail();
++	else
++		ksft_exit_pass();
++
++	/* it's impossible to get here, but the compiler throws a warning
++	 * about control reaching the end of non-void function.  bah.
++	 */
++	return 0;
++}
+diff --git a/tools/testing/selftests/sparc64/drivers/drivers_test.sh b/tools/testing/selftests/sparc64/drivers/drivers_test.sh
+new file mode 100755
+index 000000000000..6d08273b7532
+--- /dev/null
++++ b/tools/testing/selftests/sparc64/drivers/drivers_test.sh
+@@ -0,0 +1,30 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++SRC_TREE=../../../../
++
++test_run()
++{
++	if [ -f ${SRC_TREE}/drivers/char/adi.ko ]; then
++		insmod ${SRC_TREE}/drivers/char/adi.ko 2> /dev/null
++		if [ $? -ne 0 ]; then
++			rc=1
++		fi
++	else
++		# Use modprobe dry run to check for missing adi module
++		if ! /sbin/modprobe -q -n adi; then
++			echo "adi: [SKIP]"
++		elif /sbin/modprobe -q adi; then
++			echo "adi: ok"
++		else
++			echo "adi: [FAIL]"
++			rc=1
++		fi
++	fi
++	./adi-test
++	rmmod adi 2> /dev/null
++}
++
++rc=0
++test_run
++exit $rc
+diff --git a/tools/testing/selftests/sparc64/run.sh b/tools/testing/selftests/sparc64/run.sh
+new file mode 100755
+index 000000000000..38ad61f9328e
+--- /dev/null
++++ b/tools/testing/selftests/sparc64/run.sh
+@@ -0,0 +1,3 @@
++#!/bin/sh
++
++(cd drivers; ./drivers_test.sh)
 -- 
-Libor Pechacek
-SUSE Labs
+2.15.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
