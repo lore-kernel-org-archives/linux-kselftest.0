@@ -1,20 +1,54 @@
-From: davem@davemloft.net (David Miller)
-Date: Fri, 20 Apr 2018 16:06:53 -0400 (EDT)
-Subject: [PATCH v3 0/2] sparc64: Add privileged ADI driver
-In-Reply-To: <20180420193939.487546-1-tom.hromatka@oracle.com>
-References: <20180420193939.487546-1-tom.hromatka@oracle.com>
-Message-ID: <20180420.160653.391583024671680574.davem@davemloft.net>
+From: shuahkh@osg.samsung.com (Shuah Khan)
+Date: Fri, 20 Apr 2018 14:33:48 -0600
+Subject: [GIT PULL] kselftest update for 4.17-rc2
+Message-ID: <4c8657ee-d7e8-3e87-05fb-57de6fff13e2@osg.samsung.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180420200653.N6nq_d2E_bcTZpcBosi8k18BpP8whdMYHruh1VJcPUo@z>
+Message-ID: <20180420203348.Y7-Tp45ovpg6opSecGn2I2O91d-gzqF-Ib34F_rYBgE@z>
+
+Hi Linus,
+
+Please pull the following Kselftest update for 4.17-rc2
 
 
-Something put your commit message texts completely into the subject
-lines of the patch emails.
+This Kselftest update for 4.17-rc2 consists of a fix from Michael Ellerman
+to not run dnotify_test by default to prevent Kselftest running forever.
 
-Please fix this and resubmit as v4.
+diff is attached.
 
-Thank you.
---
-To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
-the body of a message to majordomo at vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+thanks,
+-- Shuah
+
+-----------------------------------------------------------------------------------
+The following changes since commit 60cc43fc888428bb2f18f08997432d426a243338:
+
+  Linux 4.17-rc1 (2018-04-15 18:24:20 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-4.17-rc2
+
+for you to fetch changes up to 8bf24e8319613bbe950d4188682b3a0d9441b76b:
+
+  selftests/filesystems: Don't run dnotify_test by default (2018-04-17 17:01:16 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-4.17-rc2
+
+This Kselftest update for 4.17-rc2 consists of a fix from Michael Ellerman
+to not run dnotify_test by default to prevent Kselftest running forever.
+
+----------------------------------------------------------------
+Michael Ellerman (1):
+      selftests/filesystems: Don't run dnotify_test by default
+
+ tools/testing/selftests/filesystems/Makefile | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+-----------------------------------------------------------------------------------
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux-kselftest-4.17-rc2.diff
+Type: text/x-patch
+Size: 502 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20180420/da12fd7f/attachment.bin>
