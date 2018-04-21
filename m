@@ -1,47 +1,61 @@
 From: jeffrin@rajagiritech.edu.in (Jeffrin Thalakkottoor)
-Date: Sat, 21 Apr 2018 20:17:55 +0530
-Subject: possible BUG: selftest about raw_skew failed
+Date: Sun, 22 Apr 2018 02:11:05 +0530
+Subject: possible BUG: selftests: proc-loadavg-001 failed during kernel
+ testing
 Message-ID:
- <CAG=yYwmQb-zuq3V9muu=xXsRGa3s1A=fFgz-XJchCiFd+GYUYQ@mail.gmail.com>
+ <CAG=yYwnsP5w6hKqsp0Q3_DZO3JZmtStGwnXNZN9zjPuFe8fOeA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180421144755.h8COUUOxVu009-BEpdmuepJh1OYorDGH5VAM8pZV3hg@z>
+Message-ID: <20180421204105.dobiA82OE-YjaXXD-lOU6fAgzfuwfOwVq0iXJ2Hni3U@z>
 
-hello,
+This problem is fixed now.
 
-failure of a test in selftest:timers
-
-selftests: raw_skew
+$sudo make -C tools/testing/selftests/proc run_tests
+[sudo] password for jeffrin:
+make: Entering directory
+'/home/jeffrin/upstream-kernel/linux/tools/testing/selftests/proc'
+TAP version 13
+selftests: proc-loadavg-001
 ========================================
-WARNING: ADJ_OFFSET in progress, this will cause inaccurate results
-Estimating clock drift: 17.910(est) 16.820(act) [FAILED]
-Bail out!
-Pass 0 Fail 0 Xfail 0 Xpass 0 Skip 0 Error 0
-1..0
-not ok 1..7 selftests:  raw_skew [FAIL]
+ok 1..1 selftests: proc-loadavg-001 [PASS]
 
-
-To reproduce :
-
-make -C tools/testing/selftests/timers/ run_tests
+Please add me in changelog if i was useful.
 
 
 
+On Sat, Apr 21, 2018 at 8:41 PM, Jeffrin Thalakkottoor
+<jeffrin@rajagiritech.edu.in> wrote:
+> hello,
+>
+> selftests: proc-loadavg-001
+> ========================================
+> not ok 1..1 selftests:  proc-loadavg-001 [FAIL]
+>
+> To reproduce :
+> make -C tools/testing/selftests/proc run_tests
+>
+> Linux debian 4.17.0-rc1+ #3 SMP Sat Apr 21 03:41:44 IST 2018 x86_64 GNU/Linux
+>
+> GNU Make            4.2.1
+> Binutils            2.30
+> Util-linux          2.31.1
+> Mount                2.31.1
+> Linux C Library      2.27
+> Dynamic linker (ldd) 2.27
+> readlink: missing operand
+> Try 'readlink --help' for more information.
+> Procps              3.3.14
+> Kbd                  2.0.4
+> Console-tools        2.0.4
+> Sh-utils            8.28
+> Udev                238
+>
+>
+>
+> --
+> software engineer
+> rajagiri school of engineering and technology
 
-Linux debian 4.17.0-rc1+ #3 SMP Sat Apr 21 03:41:44 IST 2018 x86_64 GNU/Linux
 
-GNU Make            4.2.1
-Binutils            2.30
-Util-linux          2.31.1
-Mount                2.31.1
-Linux C Library      2.27
-Dynamic linker (ldd) 2.27
-readlink: missing operand
-Try 'readlink --help' for more information.
-Procps              3.3.14
-Kbd                  2.0.4
-Console-tools        2.0.4
-Sh-utils            8.28
-Udev                238
 
 -- 
 software engineer
