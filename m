@@ -1,31 +1,51 @@
-From: gregkh@linuxfoundation.org (Greg KH)
-Date: Sat, 21 Apr 2018 11:04:49 +0200
-Subject: [PATCH v4 1/2] char: sparc64: Add privileged ADI driver
-In-Reply-To: <20180420205221.488589-2-tom.hromatka@oracle.com>
-References: <20180420205221.488589-1-tom.hromatka@oracle.com>
- <20180420205221.488589-2-tom.hromatka@oracle.com>
-Message-ID: <20180421090449.GA8194@kroah.com>
+From: jeffrin@rajagiritech.edu.in (Jeffrin Thalakkottoor)
+Date: Sat, 21 Apr 2018 20:17:55 +0530
+Subject: possible BUG: selftest about raw_skew failed
+Message-ID:
+ <CAG=yYwmQb-zuq3V9muu=xXsRGa3s1A=fFgz-XJchCiFd+GYUYQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180421090449.4izXeVYZglefBPnQdpFvANy6P3_F1Rd-qDTFoSxcj3I@z>
+Message-ID: <20180421144755.h8COUUOxVu009-BEpdmuepJh1OYorDGH5VAM8pZV3hg@z>
 
-On Fri, Apr 20, 2018@02:52:20PM -0600, Tom Hromatka wrote:
-> --- /dev/null
-> +++ b/drivers/char/adi.c
-> @@ -0,0 +1,240 @@
-> +// SPDX-License-Identifier: GPL-2.0
+hello,
 
-Good, but:
+failure of a test in selftest:timers
 
-> +MODULE_LICENSE("GPL");
+selftests: raw_skew
+========================================
+WARNING: ADJ_OFFSET in progress, this will cause inaccurate results
+Estimating clock drift: 17.910(est) 16.820(act) [FAILED]
+Bail out!
+Pass 0 Fail 0 Xfail 0 Xpass 0 Skip 0 Error 0
+1..0
+not ok 1..7 selftests:  raw_skew [FAIL]
 
-That's the wrong line :(
 
-Read include/linux/module.h for the correct string to put here for a
-GPL version 2 only module.
+To reproduce :
 
-thanks,
+make -C tools/testing/selftests/timers/ run_tests
 
-greg k-h
+
+
+
+Linux debian 4.17.0-rc1+ #3 SMP Sat Apr 21 03:41:44 IST 2018 x86_64 GNU/Linux
+
+GNU Make            4.2.1
+Binutils            2.30
+Util-linux          2.31.1
+Mount                2.31.1
+Linux C Library      2.27
+Dynamic linker (ldd) 2.27
+readlink: missing operand
+Try 'readlink --help' for more information.
+Procps              3.3.14
+Kbd                  2.0.4
+Console-tools        2.0.4
+Sh-utils            8.28
+Udev                238
+
+-- 
+software engineer
+rajagiri school of engineering and technology
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
