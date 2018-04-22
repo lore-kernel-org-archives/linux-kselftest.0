@@ -1,62 +1,39 @@
-From: jeffrin at rajagiritech.edu.in (Jeffrin Thalakkottoor)
-Date: Sun, 22 Apr 2018 02:11:05 +0530
-Subject: possible BUG: selftests: proc-loadavg-001 failed during kernel
- testing
-Message-ID: <CAG=yYwnsP5w6hKqsp0Q3_DZO3JZmtStGwnXNZN9zjPuFe8fOeA@mail.gmail.com>
-
-This problem is fixed now.
-
-$sudo make -C tools/testing/selftests/proc run_tests
-[sudo] password for jeffrin:
-make: Entering directory
-'/home/jeffrin/upstream-kernel/linux/tools/testing/selftests/proc'
-TAP version 13
-selftests: proc-loadavg-001
-========================================
-ok 1..1 selftests: proc-loadavg-001 [PASS]
-
-Please add me in changelog if i was useful.
+From: tom.hromatka at oracle.com (Tom Hromatka)
+Date: Sun, 22 Apr 2018 15:52:49 -0600
+Subject: [PATCH v4 1/2] char: sparc64: Add privileged ADI driver
+In-Reply-To: <20180421090449.GA8194@kroah.com>
+References: <20180420205221.488589-1-tom.hromatka@oracle.com>
+ <20180420205221.488589-2-tom.hromatka@oracle.com>
+ <20180421090449.GA8194@kroah.com>
+Message-ID: <7241fc77-c38c-abdb-d8dc-4b22dac36895@oracle.com>
 
 
 
-On Sat, Apr 21, 2018 at 8:41 PM, Jeffrin Thalakkottoor
-<jeffrin at rajagiritech.edu.in> wrote:
-> hello,
+On 04/21/2018 03:04 AM, Greg KH wrote:
+> On Fri, Apr 20, 2018 at 02:52:20PM -0600, Tom Hromatka wrote:
+>> --- /dev/null
+>> +++ b/drivers/char/adi.c
+>> @@ -0,0 +1,240 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+> Good, but:
 >
-> selftests: proc-loadavg-001
-> ========================================
-> not ok 1..1 selftests:  proc-loadavg-001 [FAIL]
+>> +MODULE_LICENSE("GPL");
+> That's the wrong line :(
 >
-> To reproduce :
-> make -C tools/testing/selftests/proc run_tests
+> Read include/linux/module.h for the correct string to put here for a
+> GPL version 2 only module.
 >
-> Linux debian 4.17.0-rc1+ #3 SMP Sat Apr 21 03:41:44 IST 2018 x86_64 GNU/Linux
->
-> GNU Make            4.2.1
-> Binutils            2.30
-> Util-linux          2.31.1
-> Mount                2.31.1
-> Linux C Library      2.27
-> Dynamic linker (ldd) 2.27
-> readlink: missing operand
-> Try 'readlink --help' for more information.
-> Procps              3.3.14
-> Kbd                  2.0.4
-> Console-tools        2.0.4
-> Sh-utils            8.28
-> Udev                238
->
->
->
-> --
-> software engineer
-> rajagiri school of engineering and technology
 
+<Tom hangs his head in shame>
 
+My sincerest apologies, Greg.  I'll follow the guidance from
+the aforementioned file and re-re-submit the patch tomorrow :(.
 
--- 
-software engineer
-rajagiri school of engineering and technology
+Thanks so much for your patience.
+
+Regards,
+
+Tom
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
