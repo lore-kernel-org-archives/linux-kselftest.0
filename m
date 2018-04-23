@@ -1,23 +1,22 @@
 From: anders.roxell at linaro.org (Anders Roxell)
-Date: Mon, 23 Apr 2018 15:50:57 +0200
-Subject: [PATCH] selftests: bpf: update .gitignore with missing file
-Message-ID: <20180423135057.951-1-anders.roxell@linaro.org>
+Date: Mon, 23 Apr 2018 15:57:25 +0200
+Subject: [PATCH] selftests: kvm: update .gitignore with missing file
+Message-ID: <20180423135725.3753-1-anders.roxell@linaro.org>
 
-Fixes: c0fa1b6c3efc ("bpf: btf: Add BTF tests")
+Fixes: d5edb7f8e7ab ("kvm: selftests: add vmx_tsc_adjust_test")
 Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 ---
- tools/testing/selftests/bpf/.gitignore | 1 +
+ tools/testing/selftests/kvm/.gitignore | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index 5e1ab2f0eb79..3e3b3ced3f7c 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -15,3 +15,4 @@ test_libbpf_open
- test_sock
- test_sock_addr
- urandom_read
-+test_btf
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index a546e052d19a..63fc1ab9248f 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -1,2 +1,3 @@
+ set_sregs_test
+ sync_regs_test
++vmx_tsc_adjust_test
 -- 
 2.17.0
 
