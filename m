@@ -1,51 +1,66 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Mon, 23 Apr 2018 09:39:02 -0700
-Subject: [PATCH] selftests:firmware: fixes a call to a wrong function name
-In-Reply-To: <20180423141022.5019-1-ahiliation@yahoo.co.in>
-References: <20180423141022.5019-1-ahiliation@yahoo.co.in>
-Message-ID:
- <CAGXu5jL0FKq=_fESYT78_LPOVYQ4MsPHQ6u_RgFBJa4fzNN3rQ@mail.gmail.com>
+From: tom.hromatka@oracle.com (Tom Hromatka)
+Date: Mon, 23 Apr 2018 11:33:30 -0600
+Subject: [PATCH v5 0/2] sparc64: Add privileged ADI driver
+Message-ID: <20180423173332.561489-1-tom.hromatka@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180423163902.zUYGWAgzWy_6dpNF5T1fc7pq0eWaG8rYoIbO2YXmZec@z>
+Message-ID: <20180423173330.cXMEVAFA63CC33AsJe8baIzu_8sV4aFkPnwX7b6VB0g@z>
 
-On Mon, Apr 23, 2018@7:10 AM, Jeffrin Jose T <ahiliation@yahoo.co.in> wrote:
->  This is a patch to the tools/testing/selftests/firmware/fw_run_tests.sh
->  file which fixes a bug which calls to a wrong function name,which in turn
->  blocks the execution of certain tests.
->
-> Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
->
-> ---
->  tools/testing/selftests/firmware/fw_run_tests.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/firmware/fw_run_tests.sh b/tools/testing/selftests/firmware/fw_run_tests.sh
-> index 06d638e9dc62..cffdd4eb0a57 100755
-> --- a/tools/testing/selftests/firmware/fw_run_tests.sh
-> +++ b/tools/testing/selftests/firmware/fw_run_tests.sh
-> @@ -66,5 +66,5 @@ if [ -f $FW_FORCE_SYSFS_FALLBACK ]; then
->         run_test_config_0003
->  else
->         echo "Running basic kernel configuration, working with your config"
-> -       run_test
-> +       run_tests
->  fi
+ADI is a feature supported on SPARC M7 and newer processors to allow
+hardware to catch rogue accesses to memory. ADI is supported for data
+fetches only and not instruction fetches. An app can enable ADI on its
+data pages, set version tags on them and use versioned addresses to
+access the data pages. Upper bits of the address contain the version
+tag. On M7 processors, upper four bits (bits 63-60) contain the version
+tag. If a rogue app attempts to access ADI enabled data pages, its
+access is blocked and processor generates an exception. Please see
+Documentation/sparc/adi.txt for further details.
 
-I find it confusing that run_tests() uses $1 and $2 but later ignores
-them unless -f $FW_FORCE_SYSFS_FALLBACK, which is checked at both the
-top level and in proc_set_*_fallback()... I'd expected the test to
-happen only in run_tests() and have it removed from from
-proc_set_*_fallback().
+This patchset implements a char driver to read/write ADI versions from
+privileged user space processes.  Intended consumers are makedumpfile
+and crash.
 
-Regardless, the above patch is correct to run the tests. :)
+v5:
+  * Fixed MODULE_LICENSE() for adi.c
+v4:
+  * Fixed messed up subject lines.
+v3:
+  * Really fixed the copyright headers to use SPDX GPL v2.  Really.
+v2:
+  * Simplified copyright headers
+  * Completely reworked sparc64 selftests Makefiles.  Used the
+    android selftests Makefiles as an example
+  * Added run.sh and drivers_test.sh to the sparc64 selftest
+    directory.  Used bpf/test_kmod.sh and the android selftests
+    as examples
+  * Minor cleanups in the selftest adi-test.c
+  * Added calls to ksft_test_*() in the adi-test.c
 
-Acked-by: Kees Cook <keescook at chromium.org>
+Tom Hromatka (2):
+  char: sparc64: Add privileged ADI driver
+  selftests: sparc64: char: Selftest for privileged ADI driver
 
--Kees
+ drivers/char/Kconfig                               |  12 +
+ drivers/char/Makefile                              |   1 +
+ drivers/char/adi.c                                 | 240 +++++++
+ tools/testing/selftests/Makefile                   |   1 +
+ tools/testing/selftests/sparc64/Makefile           |  46 ++
+ tools/testing/selftests/sparc64/drivers/.gitignore |   1 +
+ tools/testing/selftests/sparc64/drivers/Makefile   |  15 +
+ tools/testing/selftests/sparc64/drivers/adi-test.c | 721 +++++++++++++++++++++
+ .../selftests/sparc64/drivers/drivers_test.sh      |  30 +
+ tools/testing/selftests/sparc64/run.sh             |   3 +
+ 10 files changed, 1070 insertions(+)
+ create mode 100644 drivers/char/adi.c
+ create mode 100644 tools/testing/selftests/sparc64/Makefile
+ create mode 100644 tools/testing/selftests/sparc64/drivers/.gitignore
+ create mode 100644 tools/testing/selftests/sparc64/drivers/Makefile
+ create mode 100644 tools/testing/selftests/sparc64/drivers/adi-test.c
+ create mode 100755 tools/testing/selftests/sparc64/drivers/drivers_test.sh
+ create mode 100755 tools/testing/selftests/sparc64/run.sh
 
 -- 
-Kees Cook
-Pixel Security
+2.15.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
