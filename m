@@ -1,95 +1,101 @@
-From: lpechacek at suse.com (Libor Pechacek)
-Date: Tue, 24 Apr 2018 19:19:02 +0200
+From: lpechacek at suse.cz (Libor Pechacek)
+Date: Tue, 24 Apr 2018 19:35:11 +0200
 Subject: [PATCH v3] selftests/livepatch: introduce tests
-In-Reply-To: <c3f1a6b8-5eba-84e1-9d0b-8009c9087022@redhat.com>
+In-Reply-To: <20180423144317.too6ucui37m7oj7y@redhat.com>
 References: <1523544871-29444-1-git-send-email-joe.lawrence@redhat.com>
  <1523544871-29444-2-git-send-email-joe.lawrence@redhat.com>
  <20180420125605.e4eye7ncukyivleh@fm.suse.cz>
  <20180423144317.too6ucui37m7oj7y@redhat.com>
- <c3f1a6b8-5eba-84e1-9d0b-8009c9087022@redhat.com>
-Message-ID: <20180424171902.z4ymubblh2dtcp4h@fmn.suse.cz>
+Message-ID: <20180424173511.frrpg45bndwffvkh@fmn.suse.cz>
 
-On Tue 24-04-18 11:50:28, Joe Lawrence wrote:
-> On 04/23/2018 10:43 AM, Joe Lawrence wrote:
-> > On Fri, Apr 20, 2018 at 02:56:05PM +0200, Libor Pechacek wrote:
-> >> On Thu 12-04-18 10:54:31, Joe Lawrence wrote:
-> >>> +	fi
-> >>> +	echo "$ret" > /dev/kmsg
-> >>> +}
-> >>> +
-> >>> +# unload_mod(modname) - unload a kernel module
-> >>> +#	modname - module name to unload
-> >>> +function unload_mod() {
-> >>> +	local mod="$1"
-> >>> +
-> >>> +	# Wait for module reference count to clear ...
-> >>> +	local i=0
-> >>> +	while [[ $(cat /sys/module/"$mod"/refcnt) != "0" ]]; do
-> >>> +		i=$((i+1))
-> >>> +		if [[ $i -eq $MAX_RETRIES ]]; then
-> >>> +			die "failed to unload module $mod (refcnt)"
-> >>> +		fi
-> >>> +		sleep $RETRY_INTERVAL
-> >>> +	done
-> >>
-> >> The repeating pattern of "while <some test>; do <count>; if <count beyond max
-> >> retries>; then <die>..." seems to ask for encapsulation.
-> >>
+On Mon 23-04-18 10:43:17, Joe Lawrence wrote:
+> On Fri, Apr 20, 2018 at 02:56:05PM +0200, Libor Pechacek wrote:
+[...]
+> > > +
+> > > +	# Wait for livepatch transition  ...
+> > > +	local i=0
+> > > +	while [[ $(cat /sys/kernel/livepatch/"$mod"/transition) != "0" ]]; do
+> > > +		i=$((i+1))
+> > > +		if [[ $i -eq $MAX_RETRIES ]]; then
+> > > +			die "failed to complete transition for module $mod"
 > > 
-> > Yeah I definitely agree.  I think at some point I had acquired
-> > bash-fatigue;  I wasn't sure how to cleanly wrap <some test> around that
-> > extra logic.  In C, I could do something clever with macros or a
-> > callback function.  My bash scripting isn't great, so I copied and
-> > pasted my way through it.  Suggestions welcome.
+> > FWIW, qa_test_klp tests dump blocking processes' stacks at this place for more
+> > efficient information exchange between tester and developer.
+> > (klp_dump_blocking_processes() in https://github.com/lpechacek/qa_test_klp,
+> > file klp_tc_functions.sh)
 > > 
 > 
-> Okay, here's what I came up with... first off, do you prefer this kind
-> of transition check vs. looking only at a specific module?
+> ... If I read the klp_dump_blocking_processes() code correctly and
+> understand your comment, you are suggesting that reading (any)
+> /sys/kernel/livepatch/*/transition would be simpler?  No module
+> parameter needed as only one should ever be transitioning at a given
+> time?
+
+Exactly.
+
+[...]
+> > > +#	modname - module name to unload
+> > > +function disable_lp() {
+> > > +	local mod="$1"
+> > 
+> >    ^^^VVVV - mixed indentation with tabs and spaces. Intentional?
+> > 	     (same in set_pre_patch_ret and several other places)
+> > 
 > 
->   # check_transition() - verify that no livepatch transition in effect
->   function check_transition() {
->   	grep -q '^1$' /sys/kernel/livepatch/*/transition 2>/dev/null
->   }
-
-Elegant!
-
-> then wrap the retry/timeout logic like:
+> Ahh, thanks for spotting that.  checkpatch doesn't seem to complain
+> about shell script indentation.  Funny that shellcheck didn't either.
 > 
->   # retry_cmd(cmd) - loop a command until it is successful or
->   #		   $MAX_RETRIES, sleeping $RETRY_INTERVAL in
->   #		   between tries
->   # 	cmd - command and its arguments to run
->   function retry_cmd() {
->   	local cmd="$*"
->   	local i=0
->   	while eval "$cmd"; do
->   		i=$((i+1))
->   		[[ $i -eq $MAX_RETRIES ]] && return 1
->   		sleep $RETRY_INTERVAL
->   	done
->   	return 0
->   }
+> > > +
+> > > +        echo "% echo 0 > /sys/kernel/livepatch/$mod/enabled" > /dev/kmsg
+> > > +        echo 0 > /sys/kernel/livepatch/"$mod"/enabled
+> > 
+> > How about folding disable_lp functionality into module unload function? That
+> > would save extra invocation of disable_lp in test scripts.
+> > 
 > 
-> and the callers to something like:
+> Maybe this is just a stylistic thing, but I preferred the test scripts
+> to be rather explicit about what they are doing.  Instead of a do-it-all
+> test_it() call, I liked how part_a(), part_b(), part_c() spelled things
+> out.
 > 
->   # wait_for_transition() - wait until all livepatch transitions clear
->   function wait_for_transition() {
->   	retry_cmd check_transition ||
->   		die "failed to complete transition"
->   }
+> In some instances, these functions were once combined, but I ran
+> into a scenario where I needed only a part of that function because I
+> was injecting an error.  That experience lead me to keep the test "api"
+> more RISC than CISC :) 
 
-My idea was to make the die() part of the retry loop. This implementation is,
-however, more flexible.
+Understood. Thanks for explanation.
 
-> I can create similar check() functions to eval for sysfs file existence,
-> file content, reference count, etc. to remove all the other
-> retry/timeout loops.
+[...]
+> > > diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
+> > > new file mode 100755
+> > > index 000000000000..739d09bb3cff
+> > > --- /dev/null
+> > > +++ b/tools/testing/selftests/livepatch/test-callbacks.sh
+> > > @@ -0,0 +1,607 @@
+> > > +#!/bin/bash
+> > > +# SPDX-License-Identifier: GPL-2.0
+> > > +# Copyright (C) 2018 Joe Lawrence <joe.lawrence at redhat.com>
+> > > +
+> > > +. functions.sh
+> > 
+> > This assumes functions.sh is in $CWD.
+> > 
+> 
+> Good point.  In the past, I've used something like:
+> 
+>   SCRIPTDIR="$(readlink -f $(dirname $(type -p $0)))"
+> 
+> but I notice that not many selftests do anything special at all:
+> 
+>   % grep '^\. ' $(find . tools/testing/selftests/ -name '*.sh')
+>   ...
+> 
+> only the perf tests do, and they use ". $(dirname $0)/..." so I'll use
+> that convention for these tests.
 
-I think check_*() functions can be avoided for trivial tests. retry_cmd() can
-be passed a more complex command string than a single function name.
+Indeed! I'm for following the crowd.
 
-Regarding naming, I'd say wait_false() or similar would better describe what
-retry_cmd() does. 
+Thanks for putting the scripts together. Good job done!
 
 Libor
 -- 
