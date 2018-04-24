@@ -1,32 +1,19 @@
-From: anders.roxell@linaro.org (Anders Roxell)
-Date: Tue, 24 Apr 2018 00:53:05 +0200
-Subject: [PATCH v2] selftests: bpf: update .gitignore with missing file
-In-Reply-To: <065a8bc2-6065-3d43-8b03-35ed693de7ce@iogearbox.net>
-References: <065a8bc2-6065-3d43-8b03-35ed693de7ce@iogearbox.net>
-Message-ID: <20180423225305.18947-1-anders.roxell@linaro.org>
+From: davem@davemloft.net (David Miller)
+Date: Mon, 23 Apr 2018 21:07:37 -0400 (EDT)
+Subject: [PATCH] selftests: net: update .gitignore with missing test
+In-Reply-To: <20180423140050.4508-1-anders.roxell@linaro.org>
+References: <20180423140050.4508-1-anders.roxell@linaro.org>
+Message-ID: <20180423.210737.2027945447387234727.davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180423225305.kdBvgLYuqRKSUd2xsrtFJcEsEfYDXt9zX3aKHj_D8Ag@z>
+Message-ID: <20180424010737.gvSUQkMFOB4jFZPqix2axVm69W1uDXBKqiS2NEplWsg@z>
 
-Fixes: c0fa1b6c3efc ("bpf: btf: Add BTF tests")
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
----
-Rebased against bpf-next.
+From: Anders Roxell <anders.roxell@linaro.org>
+Date: Mon, 23 Apr 2018 16:00:50 +0200
 
- tools/testing/selftests/bpf/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+> Fixes: 192dc405f308 ("selftests: net: add tcp_mmap program")
+> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index 9cf83f895d98..da19f0562bf8 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -12,3 +12,4 @@ test_tcpbpf_user
- test_verifier_log
- feature
- test_libbpf_open
-+test_btf
--- 
-2.17.0
-
+Applied, thanks.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
