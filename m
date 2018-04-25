@@ -1,39 +1,90 @@
-From: anders.roxell@linaro.org (Anders Roxell)
-Date: Wed, 25 Apr 2018 00:19:52 +0200
-Subject: [PATCH] selftests: net: add in_netns.sh TEST_GEN_PROGS_EXTENDED
-Message-ID: <20180424221952.12081-1-anders.roxell@linaro.org>
+From: mhiramat@kernel.org (Masami Hiramatsu)
+Date: Wed, 25 Apr 2018 21:16:06 +0900
+Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
+Message-ID: <152465856498.26224.16969986455942749517.stgit@devbox>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180424221952.AXuSJrZ57MMH8EqAcEgXctmM7RVghM1T-uFs9jjTCs0@z>
+Message-ID: <20180425121606.7aRXmuK-J6nhxPL5PBfi8K_obNfdBdX4nmPTqY2QqMQ@z>
 
-Script in_netns.sh is a utility function and not its own test so it
-shouldn't be part of the TEST_PROGS. The in_netns.sh get used by
-run_afpackettests.
-To install in_netns.sh without being added to the main run_kselftest.sh
-script use the TEST_GEN_PROGS_EXTENDED variable.
+Hi,
 
-Fixes: 5ff9c1a3dd92 ("selftests: net: add in_netns.sh to TEST_PROGS")
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+This is the 7th version of the fetch-arg improvement series.
+This includes variable changes on fetcharg framework like,
+
+- Add fetcharg testcases (syntax, argN, symbol, string and array)
+  and probepoint testcase.
+- Rewrite fetcharg framework with fetch_insn, switch-case based
+  instead of function pointer.
+- Add "symbol" type support, which shows symbol+offset instead of
+  address value.
+- Add "$argN" fetcharg, which fetches function parameters.
+  (currently only for x86-64)
+- Add array type support (including string arrary :) ) ,
+  which enables to get fixed length array from probe-events.
+- Add array type support for perf-probe, so that user can
+  dump partial array entries.
+
+V6 is here:
+ https://lkml.org/lkml/2018/3/17/75
+
+Changes from the v6 are here:
+ [6/16]  - Fix to return an error if failed to fetch string and
+        fill zero-length data_loc in error case.
+ [11/16] - Update document for restructured text.
+ [15/16] - Fix README test.
+ [16/16] - Add type-casting description (and note) to documentation.
+
+And rebased on the latest Steve's ftrace/core branch.
+
+Thank you,
+
 ---
- tools/testing/selftests/net/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index c3761c35f542..4a8cfe8071a7 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -5,7 +5,8 @@ CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
- CFLAGS += -I../../../../usr/include/
- 
- TEST_PROGS := run_netsocktests run_afpackettests test_bpf.sh netdevice.sh rtnetlink.sh
--TEST_PROGS += fib_tests.sh fib-onlink-tests.sh in_netns.sh pmtu.sh
-+TEST_PROGS += fib_tests.sh fib-onlink-tests.sh pmtu.sh
-+TEST_GEN_PROGS_EXTENDED := in_netns.sh
- TEST_GEN_FILES =  socket
- TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy
- TEST_GEN_FILES += tcp_mmap
--- 
-2.11.0
+Masami Hiramatsu (16):
+      tracing: probeevent: Cleanup print argument functions
+      tracing: probeevent: Cleanup argument field definition
+      tracing: probeevent: Remove NOKPROBE_SYMBOL from print functions
+      tracing: probeevent: Introduce new argument fetching code
+      tracing: probeevent: Unify fetch type tables
+      tracing: probeevent: Return consumed bytes of dynamic area
+      tracing: probeevent: Append traceprobe_ for exported function
+      tracing: probeevent: Unify fetch_insn processing common part
+      tracing: probeevent: Add symbol type
+      x86: ptrace: Add function argument access API
+      tracing: probeevent: Add $argN for accessing function args
+      tracing: probeevent: Add array type support
+      selftests: ftrace: Add a testcase for symbol type
+      selftests: ftrace: Add a testcase for $argN with kprobe_event
+      selftests: ftrace: Add a testcase for array type with kprobe_event
+      perf-probe: Add array argument support
 
+
+ Documentation/trace/kprobetrace.rst                |   23 +
+ arch/Kconfig                                       |    7 
+ arch/x86/Kconfig                                   |    1 
+ arch/x86/include/asm/ptrace.h                      |   38 +
+ kernel/trace/trace.c                               |    9 
+ kernel/trace/trace_kprobe.c                        |  358 ++++--------
+ kernel/trace/trace_probe.c                         |  620 +++++++++-----------
+ kernel/trace/trace_probe.h                         |  282 +++------
+ kernel/trace/trace_probe_tmpl.h                    |  216 +++++++
+ kernel/trace/trace_uprobe.c                        |  176 ++----
+ tools/perf/Documentation/perf-probe.txt            |   12 
+ tools/perf/util/probe-event.c                      |   20 +
+ tools/perf/util/probe-event.h                      |    2 
+ tools/perf/util/probe-file.c                       |    5 
+ tools/perf/util/probe-file.h                       |    1 
+ tools/perf/util/probe-finder.c                     |   95 ++-
+ .../ftrace/test.d/kprobe/kprobe_args_argN.tc       |   25 +
+ .../ftrace/test.d/kprobe/kprobe_args_array.tc      |   92 +++
+ .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     |   77 ++
+ 19 files changed, 1127 insertions(+), 932 deletions(-)
+ create mode 100644 kernel/trace/trace_probe_tmpl.h
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
+
+--
+Masami Hiramatsu (Linaro) <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
