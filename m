@@ -1,57 +1,28 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Wed, 25 Apr 2018 09:30:51 -0600
-Subject: [PATCH] selftests:firmware: fixes a call to a wrong function name
-In-Reply-To: <20180425152657.GA5139@kroah.com>
-References: <20180423141022.5019-1-ahiliation@yahoo.co.in>
- <CAGXu5jL0FKq=_fESYT78_LPOVYQ4MsPHQ6u_RgFBJa4fzNN3rQ@mail.gmail.com>
- <20180425152657.GA5139@kroah.com>
-Message-ID: <ad2a60e7-d8a1-fe6b-e3c4-bdb71060245e@kernel.org>
+From: davem@davemloft.net (David Miller)
+Date: Wed, 25 Apr 2018 13:25:13 -0400 (EDT)
+Subject: [PATCH] selftests: net: add in_netns.sh TEST_GEN_PROGS_EXTENDED
+In-Reply-To: <20180424221952.12081-1-anders.roxell@linaro.org>
+References: <20180424221952.12081-1-anders.roxell@linaro.org>
+Message-ID: <20180425.132513.1786379382285267245.davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180425153051.XfRo3uxJBCm-KzMeS7RtPCDMKTQKzzki3lV15CaNQjQ@z>
+Message-ID: <20180425172513.SY-0SHHHvaZHhfk2Ud_I-uRV1K1I7fiGgko5RqJxBp4@z>
 
-On 04/25/2018 09:26 AM, Greg KH wrote:
-> On Mon, Apr 23, 2018@09:39:02AM -0700, Kees Cook wrote:
->> On Mon, Apr 23, 2018@7:10 AM, Jeffrin Jose T <ahiliation@yahoo.co.in> wrote:
->>>  This is a patch to the tools/testing/selftests/firmware/fw_run_tests.sh
->>>  file which fixes a bug which calls to a wrong function name,which in turn
->>>  blocks the execution of certain tests.
->>>
->>> Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
->>>
->>> ---
->>>  tools/testing/selftests/firmware/fw_run_tests.sh | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/tools/testing/selftests/firmware/fw_run_tests.sh b/tools/testing/selftests/firmware/fw_run_tests.sh
->>> index 06d638e9dc62..cffdd4eb0a57 100755
->>> --- a/tools/testing/selftests/firmware/fw_run_tests.sh
->>> +++ b/tools/testing/selftests/firmware/fw_run_tests.sh
->>> @@ -66,5 +66,5 @@ if [ -f $FW_FORCE_SYSFS_FALLBACK ]; then
->>>         run_test_config_0003
->>>  else
->>>         echo "Running basic kernel configuration, working with your config"
->>> -       run_test
->>> +       run_tests
->>>  fi
->>
->> I find it confusing that run_tests() uses $1 and $2 but later ignores
->> them unless -f $FW_FORCE_SYSFS_FALLBACK, which is checked at both the
->> top level and in proc_set_*_fallback()... I'd expected the test to
->> happen only in run_tests() and have it removed from from
->> proc_set_*_fallback().
->>
->> Regardless, the above patch is correct to run the tests. :)
+From: Anders Roxell <anders.roxell@linaro.org>
+Date: Wed, 25 Apr 2018 00:19:52 +0200
+
+> Script in_netns.sh is a utility function and not its own test so it
+> shouldn't be part of the TEST_PROGS. The in_netns.sh get used by
+> run_afpackettests.
+> To install in_netns.sh without being added to the main run_kselftest.sh
+> script use the TEST_GEN_PROGS_EXTENDED variable.
 > 
-> Thanks, I'll go queue this up.
-> 
-> greg k-h
-> 
+> Fixes: 5ff9c1a3dd92 ("selftests: net: add in_netns.sh to TEST_PROGS")
+> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 
-Thanks. This probably has dependency on firmware tree.
+Please respin this against the 'net' tree as we want this bug fixed
+there not just 'net-next'.
 
-Acked-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
-
--- Shuah
+Thanks.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
