@@ -1,121 +1,107 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Wed, 25 Apr 2018 21:20:28 +0900
-Subject: [PATCH v7 09/16] tracing: probeevent: Add symbol type
+Date: Wed, 25 Apr 2018 21:20:57 +0900
+Subject: [PATCH v7 10/16] x86: ptrace: Add function argument access API
 In-Reply-To: <152465856498.26224.16969986455942749517.stgit@devbox>
 References: <152465856498.26224.16969986455942749517.stgit@devbox>
-Message-ID: <152465882860.26224.14779072294412467338.stgit@devbox>
+Message-ID: <152465885737.26224.2822487520472783854.stgit@devbox>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180425122028.SZVUOsT758AY1qQ9UrnlxVvRTKceTfUzfASk0uS5qAo@z>
+Message-ID: <20180425122057.cLRPOffN-lsOt5XSU0nywNKFnx6gByZY-2cjdhoiSw8@z>
 
-Add "symbol" type to probeevent, which is an alias of u32 or u64
-(depends on BITS_PER_LONG). This shows the result value in
-symbol+offset style. This type is only available with kprobe
-events.
+Add regs_get_argument() which returns N th argument of the
+function call.
+Note that this chooses most probably assignment, in some case
+it can be incorrect (e.g. passing data structure or floating
+point etc.)
+
+This is expected to be called from kprobes or ftrace with regs
+where the top of stack is the return address.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- Changes in v2:
-  - Add symbol type to README file.
----
- Documentation/trace/kprobetrace.rst |    2 ++
- kernel/trace/trace.c                |    2 +-
- kernel/trace/trace_probe.c          |    8 ++++++++
- kernel/trace/trace_probe.h          |   12 +++++++++---
- 4 files changed, 20 insertions(+), 4 deletions(-)
+ arch/Kconfig                  |    7 +++++++
+ arch/x86/Kconfig              |    1 +
+ arch/x86/include/asm/ptrace.h |   38 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+)
 
-diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
-index 3e0f971b12de..c920c9be221a 100644
---- a/Documentation/trace/kprobetrace.rst
-+++ b/Documentation/trace/kprobetrace.rst
-@@ -72,6 +72,8 @@ offset, and container-size (usually 32). The syntax is::
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 8e0d665c8d53..e20c3781b3ca 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -272,6 +272,13 @@ config HAVE_REGS_AND_STACK_ACCESS_API
+ 	  declared in asm/ptrace.h
+ 	  For example the kprobes-based event tracer needs this API.
  
-  b<bit-width>@<bit-offset>/<container-size>
++config HAVE_FUNCTION_ARG_ACCESS_API
++	bool
++	help
++	  This symbol should be selected by an architecure if it supports
++	  the API needed to access function arguments from pt_regs,
++	  declared in asm/ptrace.h
++
+ config HAVE_CLK
+ 	bool
+ 	help
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 00fcf81f2c56..2d8aaee91694 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -177,6 +177,7 @@ config X86
+ 	select HAVE_PERF_USER_STACK_DUMP
+ 	select HAVE_RCU_TABLE_FREE
+ 	select HAVE_REGS_AND_STACK_ACCESS_API
++	select HAVE_FUNCTION_ARG_ACCESS_API
+ 	select HAVE_RELIABLE_STACKTRACE		if X86_64 && UNWINDER_FRAME_POINTER && STACK_VALIDATION
+ 	select HAVE_STACK_VALIDATION		if X86_64
+ 	select HAVE_SYSCALL_TRACEPOINTS
+diff --git a/arch/x86/include/asm/ptrace.h b/arch/x86/include/asm/ptrace.h
+index 6de1fd3d0097..c2304b25e2fd 100644
+--- a/arch/x86/include/asm/ptrace.h
++++ b/arch/x86/include/asm/ptrace.h
+@@ -256,6 +256,44 @@ static inline unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs,
+ 		return 0;
+ }
  
-+Symbol type('symbol') is an alias of u32 or u64 type (depends on BITS_PER_LONG)
-+which shows given pointer in "symbol+offset" style.
- For $comm, the default type is "string"; any other type is invalid.
- 
- 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index dfbcf9ee1447..4812ae046f43 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -4621,7 +4621,7 @@ static const char readme_msg[] =
- 	"\t     args: <name>=fetcharg[:type]\n"
- 	"\t fetcharg: %<register>, @<address>, @<symbol>[+|-<offset>],\n"
- 	"\t           $stack<index>, $stack, $retval, $comm\n"
--	"\t     type: s8/16/32/64, u8/16/32/64, x8/16/32/64, string,\n"
-+	"\t     type: s8/16/32/64, u8/16/32/64, x8/16/32/64, string, symbol,\n"
- 	"\t           b<bit-width>@<bit-offset>/<container-size>\n"
- #endif
- 	"  events/\t\t- Directory containing all trace event subsystems:\n"
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index fff3ccfcdbb6..e2a31087f1f8 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -58,6 +58,13 @@ DEFINE_BASIC_PRINT_TYPE_FUNC(x16, u16, "0x%x")
- DEFINE_BASIC_PRINT_TYPE_FUNC(x32, u32, "0x%x")
- DEFINE_BASIC_PRINT_TYPE_FUNC(x64, u64, "0x%Lx")
- 
-+int PRINT_TYPE_FUNC_NAME(symbol)(struct trace_seq *s, void *data, void *ent)
++/**
++ * regs_get_kernel_argument() - get Nth function argument in kernel
++ * @regs:	pt_regs of that context
++ * @n:		function argument number (start from 0)
++ *
++ * regs_get_argument() returns @n th argument of the function call.
++ * Note that this chooses most probably assignment, in some case
++ * it can be incorrect.
++ * This is expected to be called from kprobes or ftrace with regs
++ * where the top of stack is the return address.
++ */
++static inline unsigned long regs_get_kernel_argument(struct pt_regs *regs,
++						     unsigned int n)
 +{
-+	trace_seq_printf(s, "%pS", (void *)*(unsigned long *)data);
-+	return !trace_seq_has_overflowed(s);
++	static const unsigned int argument_offs[] = {
++#ifdef __i386__
++		offsetof(struct pt_regs, ax),
++		offsetof(struct pt_regs, cx),
++		offsetof(struct pt_regs, dx),
++#define NR_REG_ARGUMENTS 3
++#else
++		offsetof(struct pt_regs, di),
++		offsetof(struct pt_regs, si),
++		offsetof(struct pt_regs, dx),
++		offsetof(struct pt_regs, cx),
++		offsetof(struct pt_regs, r8),
++		offsetof(struct pt_regs, r9),
++#define NR_REG_ARGUMENTS 6
++#endif
++	};
++
++	if (n >= NR_REG_ARGUMENTS) {
++		n -= NR_REG_ARGUMENTS - 1;
++		return regs_get_kernel_stack_nth(regs, n);
++	} else
++		return regs_get_register(regs, argument_offs[n]);
 +}
-+const char PRINT_TYPE_FMT_NAME(symbol)[] = "%pS";
 +
- /* Print type function for string type */
- int PRINT_TYPE_FUNC_NAME(string)(struct trace_seq *s, void *data, void *ent)
- {
-@@ -91,6 +98,7 @@ static const struct fetch_type probe_fetch_types[] = {
- 	ASSIGN_FETCH_TYPE_ALIAS(x16, u16, u16, 0),
- 	ASSIGN_FETCH_TYPE_ALIAS(x32, u32, u32, 0),
- 	ASSIGN_FETCH_TYPE_ALIAS(x64, u64, u64, 0),
-+	ASSIGN_FETCH_TYPE_ALIAS(symbol, ADDR_FETCH_TYPE, ADDR_FETCH_TYPE, 0),
- 
- 	ASSIGN_FETCH_TYPE_END
- };
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index 3bc43c1ce628..ef477bd8468a 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -157,6 +157,7 @@ DECLARE_BASIC_PRINT_TYPE_FUNC(x32);
- DECLARE_BASIC_PRINT_TYPE_FUNC(x64);
- 
- DECLARE_BASIC_PRINT_TYPE_FUNC(string);
-+DECLARE_BASIC_PRINT_TYPE_FUNC(symbol);
- 
- /* Default (unsigned long) fetch type */
- #define __DEFAULT_FETCH_TYPE(t) x##t
-@@ -164,6 +165,10 @@ DECLARE_BASIC_PRINT_TYPE_FUNC(string);
- #define DEFAULT_FETCH_TYPE _DEFAULT_FETCH_TYPE(BITS_PER_LONG)
- #define DEFAULT_FETCH_TYPE_STR __stringify(DEFAULT_FETCH_TYPE)
- 
-+#define __ADDR_FETCH_TYPE(t) u##t
-+#define _ADDR_FETCH_TYPE(t) __ADDR_FETCH_TYPE(t)
-+#define ADDR_FETCH_TYPE _ADDR_FETCH_TYPE(BITS_PER_LONG)
-+
- #define __ASSIGN_FETCH_TYPE(_name, ptype, ftype, _size, sign, _fmttype)	\
- 	{.name = _name,				\
- 	 .size = _size,					\
-@@ -172,13 +177,14 @@ DECLARE_BASIC_PRINT_TYPE_FUNC(string);
- 	 .fmt = PRINT_TYPE_FMT_NAME(ptype),		\
- 	 .fmttype = _fmttype,				\
- 	}
--
-+#define _ASSIGN_FETCH_TYPE(_name, ptype, ftype, _size, sign, _fmttype)	\
-+	__ASSIGN_FETCH_TYPE(_name, ptype, ftype, _size, sign, #_fmttype)
- #define ASSIGN_FETCH_TYPE(ptype, ftype, sign)			\
--	__ASSIGN_FETCH_TYPE(#ptype, ptype, ftype, sizeof(ftype), sign, #ptype)
-+	_ASSIGN_FETCH_TYPE(#ptype, ptype, ftype, sizeof(ftype), sign, ptype)
- 
- /* If ptype is an alias of atype, use this macro (show atype in format) */
- #define ASSIGN_FETCH_TYPE_ALIAS(ptype, atype, ftype, sign)		\
--	__ASSIGN_FETCH_TYPE(#ptype, ptype, ftype, sizeof(ftype), sign, #atype)
-+	_ASSIGN_FETCH_TYPE(#ptype, ptype, ftype, sizeof(ftype), sign, atype)
- 
- #define ASSIGN_FETCH_TYPE_END {}
- 
+ #define arch_has_single_step()	(1)
+ #ifdef CONFIG_X86_DEBUGCTLMSR
+ #define arch_has_block_step()	(1)
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
