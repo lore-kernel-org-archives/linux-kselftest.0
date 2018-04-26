@@ -1,87 +1,45 @@
-From: joe.lawrence@redhat.com (Joe Lawrence)
-Date: Thu, 26 Apr 2018 09:45:03 -0400
-Subject: [PATCH v4 0/1] Add livepatch kselftests
-In-Reply-To: <1524680930-28168-1-git-send-email-joe.lawrence@redhat.com>
-References: <1524680930-28168-1-git-send-email-joe.lawrence@redhat.com>
-Message-ID: <148c3baf-ab6f-c1f2-2911-79e5c8b361bd@redhat.com>
+From: naresh.kamboju@linaro.org (Naresh Kamboju)
+Date: Thu, 26 Apr 2018 21:49:25 +0530
+Subject: selftests: pstore_tests failed
+Message-ID:
+ <CA+G9fYvcGL838Z1XuTM=AP4TJZyaQS5a6pZ6MBir1tsTAv+Xmg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180426134503.v6bKlKZ-VQUkfFOh8zsWut4iYQq1FW1Qq0lf9JmLHA4@z>
+Message-ID: <20180426161925.8sNUtOADH1K1VlsYmBo8fj0dXjNK5DQmD09F50pWQGQ@z>
 
->On 04/25/2018 02:28 PM, Joe Lawrence wrote:
+pstore_tests failed on x86_64 device.
+This test pass at your end ? If yes, what are pre-requirements ?
 
-> [ ... snip ... ]
-> 
-> base-commit: 0adb32858b0bddf4ada5f364a84ed60b196dbcda
-> prerequisite-patch-id: 5ed747c1a89a5dc4bba08186e21f927d7f3bf049
-> prerequisite-patch-id: e9800288b71a9f339ea066e58d9ef70dece67083
-> prerequisite-patch-id: 415f2e190b1b50142c78f2940c7b8dd39b5321a0
-> prerequisite-patch-id: d229d9cf08af087e0a758d9df1da467103c2c200
-> prerequisite-patch-id: b8c7ef99b13c6b321cba5e8919ed0b3e29f213e9
-> prerequisite-patch-id: 4e10c0d08f151b18310fe0b1e5013d62db94cfeb
-> prerequisite-patch-id: 33046b190c114d202f3a52e0e274dbb2b1907a4c
-> prerequisite-patch-id: 6978944a725756317dd4e005d479b6101784aaf0
-> prerequisite-patch-id: cce9d3c7e1ae8887f387ca9e072552dc63479749
-> prerequisite-patch-id: c44ccc5dd7b1be6fe2b1f32ca6abde1da73fae79
-> 
+Linux kernel version: 4.17.0-rc1
 
-Hi kbuild test robot folks,
++ ./pstore_tests
+=== Pstore unit tests (pstore_tests) ===
+UUID=ffa28670-e941-478a-a3c0-2fdad1df8195
+Checking pstore backend is registered ... ok
+backend=(null)
+cmdline=root=/dev/nfs rw nfsroot=10.66.16.116:
+/var/lib/lava/dispatcher/tmp/198332/extract-nfsrootfs-yqsi5ya0,tcp,hard,intr
+backend=ramoops ramoops.mem_address=0x30000000 ramoops.mem_size=0x10000 ip=dhcp
+console=ttyS0,115200n8 lava_mac={LAVA_MAC}
+Checking pstore console is registered ... FAIL
+Checking /dev/pmsg0 exists ... FAIL
+Writing unique string to /dev/pmsg0 ... FAIL
 
-I attempted to use the --base option with git format-patch as suggested
-by Philip, but the bot still sent me mail (addressed only to myself and
-cc'd kbuild-all at 01.org) about build test ERRORs against the wrong base:
+Following config enabled,
 
-> [auto build test ERROR on v4.16]
-> [also build test ERROR on next-20180424]
-> [cannot apply to linus/master jikos-livepatching/for-next]
+CONFIG_EFI_VARS_PSTORE=y
+CONFIG_PSTORE=y
+CONFIG_PSTORE_DEFLATE_COMPRESS=y
+ONFIG_PSTORE_COMPRESS=y
+CONFIG_PSTORE_DEFLATE_COMPRESS_DEFAULT=y
+CONFIG_PSTORE_COMPRESS_DEFAULT="deflate"
+CONFIG_PSTORE_CONSOLE=y
+CONFIG_PSTORE_PMSG=y
+CONFIG_PSTORE_RAM=m
 
-I'm assuming operator error :(  Here's a summary of my workflow:
+Please suggest a way to get this working.
 
-* Save an .mbox of the entire base patchset, as posted to the
-live-patching list:
-
-  https://lkml.org/lkml/2018/3/23/665
-
-* Create a "base" branch and apply the mbox:
-
-  % git checkout -b test_base v4.16
-  Switched to a new branch 'test_base'
-
-  % git am /tmp/pm.mbox
-  Applying: livepatch: Use lists to manage patches, objects and functions
-  Applying: livepatch: Free only structures with initialized kobject
-  Applying: livepatch: Add atomic replace
-  Applying: livepatch: Add an extra flag to distinguish registered   patches
-  Applying: livepatch: Remove replaced patches from the stack
-  Applying: livepatch: Remove Nop structures when unused
-  Applying: livepatch: Allow to replace even disabled patches
-  Applying: livepatch: Atomic replace and cumulative patches documentation
-
-* Create a new dev branch from the base, make a trivial change and commit:
-
-  % git checkout -b test_branch test_base
-  % sed -i 's/^EXTRAVERSION =/EXTRAVERSION = .test/' Makefile
-  % git commit Makefile -m 'test commit'
-
-* Create .patch files with --base:
-
-  % git format-patch --base=v4.16 -1 --cover-letter
-  % grep -e '^base-commit' -e 'prereq' 0000-cover-letter.patch
-  base-commit: 0adb32858b0bddf4ada5f364a84ed60b196dbcda
-  prerequisite-patch-id: 5ed747c1a89a5dc4bba08186e21f927d7f3bf049
-  prerequisite-patch-id: e9800288b71a9f339ea066e58d9ef70dece67083
-  prerequisite-patch-id: 415f2e190b1b50142c78f2940c7b8dd39b5321a0
-  prerequisite-patch-id: d229d9cf08af087e0a758d9df1da467103c2c200
-  prerequisite-patch-id: b8c7ef99b13c6b321cba5e8919ed0b3e29f213e9
-  prerequisite-patch-id: 4e10c0d08f151b18310fe0b1e5013d62db94cfeb
-  prerequisite-patch-id: 33046b190c114d202f3a52e0e274dbb2b1907a4c
-  prerequisite-patch-id: 6978944a725756317dd4e005d479b6101784aaf0
-
-I notice that these patch-ids are only added to the cover-letter... do I
-need to force them each individual patch as well?  /confused
-
-Thanks,
-
--- Joe
+Complete boot log and test details link,
+https://lkft.validation.linaro.org/scheduler/job/198332#L230
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
