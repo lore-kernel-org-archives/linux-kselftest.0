@@ -1,23 +1,51 @@
-From: corbet at lwn.net (Jonathan Corbet)
-Date: Fri, 27 Apr 2018 16:56:40 -0600
-Subject: [PATCH v2] doc: dev-tools: kselftest.rst: update contributing
- new tests
-In-Reply-To: <20180419102825.2990-1-anders.roxell@linaro.org>
-References: <20180417084631.11242-1-anders.roxell@linaro.org>
- <20180419102825.2990-1-anders.roxell@linaro.org>
-Message-ID: <20180427165640.437f3b8e@lwn.net>
+From: rdunlap at infradead.org (Randy Dunlap)
+Date: Fri, 27 Apr 2018 16:38:02 -0700
+Subject: PROBLEM: error due to conflicting types during build of kselftests
+In-Reply-To: <CAG=yYwnMXFxHxCnYNWCb-HhpAb21kc5_e_6q-N_DRGhMVurPMQ@mail.gmail.com>
+References: <CAG=yYwnMXFxHxCnYNWCb-HhpAb21kc5_e_6q-N_DRGhMVurPMQ@mail.gmail.com>
+Message-ID: <bd125268-a685-ba6e-efc4-130a0621855f@infradead.org>
 
-On Thu, 19 Apr 2018 12:28:25 +0200
-Anders Roxell <anders.roxell at linaro.org> wrote:
-
-> Add a description that the kernel headers should be used as far as it is
-> possible and then the system headers.
+On 04/20/2018 11:03 AM, Jeffrin Thalakkottoor wrote:
+> hello,
 > 
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+> the following is the error found...
+> -----------------------------------------------------------------------------------
+> protection_keys.c:421:5: error: conflicting types for ‘pkey_set’
+>  int pkey_set(int pkey, unsigned long rights, unsigned long flags)
+>      ^~~~~~~~
+> ------------------------------------------------------------------------------------
+> 
+> to reproduce this error...
+> make -C tools/testing/selftests
 
-Applied, thanks.
+Hi,
 
-jon
+I can't reproduce this problem.  What is your gcc --version?
+
+Thanks.
+
+> Details about software:
+> 
+> Linux debian 4.17.0-rc1+ #1 SMP Thu Apr 19 18:59:45 IST 2018 x86_64 GNU/Linux
+> 
+> GNU Make             4.2.1
+> Binutils             2.30
+> Util-linux           2.31.1
+> Mount                2.31.1
+> Linux C Library      2.27
+> Dynamic linker (ldd) 2.27
+> readlink: missing operand
+> Try 'readlink --help' for more information.
+> Procps               3.3.14
+> Kbd                  2.0.4
+> Console-tools        2.0.4
+> Sh-utils             8.28
+> Udev                 238
+> 
+
+
+-- 
+~Randy
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
