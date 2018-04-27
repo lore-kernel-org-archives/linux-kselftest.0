@@ -1,41 +1,31 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Thu, 26 Apr 2018 21:42:53 -0400
-Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
-In-Reply-To: <152465856498.26224.16969986455942749517.stgit@devbox>
-References: <152465856498.26224.16969986455942749517.stgit@devbox>
-Message-ID: <20180426214253.64ec8762@gandalf.local.home>
+From: mlichvar at redhat.com (Miroslav Lichvar)
+Date: Fri, 27 Apr 2018 09:41:30 +0200
+Subject: possible BUG: selftest about raw_skew failed
+In-Reply-To: <alpine.DEB.2.21.1804262327480.1596@nanos.tec.linutronix.de>
+References: <CAG=yYwmQb-zuq3V9muu=xXsRGa3s1A=fFgz-XJchCiFd+GYUYQ@mail.gmail.com>
+ <alpine.DEB.2.21.1804262327480.1596@nanos.tec.linutronix.de>
+Message-ID: <20180427074130.GN20050@localhost>
 
-On Wed, 25 Apr 2018 21:16:06 +0900
-Masami Hiramatsu <mhiramat at kernel.org> wrote:
+On Thu, Apr 26, 2018 at 11:28:29PM +0200, Thomas Gleixner wrote:
+> On Sat, 21 Apr 2018, Jeffrin Thalakkottoor wrote:
+> > selftests: raw_skew
+> > ========================================
+> > WARNING: ADJ_OFFSET in progress, this will cause inaccurate results
+> > Estimating clock drift: 17.910(est) 16.820(act) [FAILED]
 
-> Hi,
-> 
-> This is the 7th version of the fetch-arg improvement series.
-> This includes variable changes on fetcharg framework like,
-> 
-> - Add fetcharg testcases (syntax, argN, symbol, string and array)
->   and probepoint testcase.
-> - Rewrite fetcharg framework with fetch_insn, switch-case based
->   instead of function pointer.
-> - Add "symbol" type support, which shows symbol+offset instead of
->   address value.
-> - Add "$argN" fetcharg, which fetches function parameters.
->   (currently only for x86-64)
-> - Add array type support (including string arrary :) ) ,
->   which enables to get fixed length array from probe-events.
-> - Add array type support for perf-probe, so that user can
->   dump partial array entries.
-> 
+Was ntpd, systemd-timesyncd, or some other NTP/PTP daemon running
+shortly before or during the test?
 
-Masami,
+The warning indicates that the clock was slewed by adjtime() or
+adjtimex(), which makes the measurement of the frequency less accurate
+and the test may fail.
 
-Thanks for posting this! I'm currently trying to get a set of patches
-in the -rc releases, and this would be for 4.18 (or 5.0?), I'll try to
-get some time next week to look at this.
+Maybe this test and other tests that measure the frequency of the
+system clock should be modified to SKIP when adjtimex() returns a
+non-zero offset (or the frequency changes during the test)? 
 
-Thanks!
-
--- Steve
+-- 
+Miroslav Lichvar
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
