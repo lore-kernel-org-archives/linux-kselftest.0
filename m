@@ -1,29 +1,124 @@
-From: davem@davemloft.net (David Miller)
-Date: Fri, 27 Apr 2018 13:14:01 -0400 (EDT)
-Subject: [PATCH v2] selftests: net: add in_netns.sh TEST_GEN_PROGS_EXTENDED
-In-Reply-To: <20180425213206.7531-1-anders.roxell@linaro.org>
-References: <20180425.132513.1786379382285267245.davem@davemloft.net>
- <20180425213206.7531-1-anders.roxell@linaro.org>
-Message-ID: <20180427.131401.2013176564896918298.davem@davemloft.net>
+From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
+Date: Fri, 27 Apr 2018 16:17:39 -0400 (EDT)
+Subject: [PATCH 1/1] selftests: Fix lib.mk run_tests target shell script
+In-Reply-To: <c1575990-8bb7-9997-0c0a-8a5b78b347c6@osg.samsung.com>
+References: <20171028134639.16811-1-mathieu.desnoyers@efficios.com>
+ <44e3d6b0-6e0d-4482-fa7e-d8dac8619d4e@osg.samsung.com>
+ <1490563551.1701.1509574972486.JavaMail.zimbra@efficios.com>
+ <1717349402.1702.1509575073204.JavaMail.zimbra@efficios.com>
+ <c1575990-8bb7-9997-0c0a-8a5b78b347c6@osg.samsung.com>
+Message-ID: <740429490.6175.1524860259330.JavaMail.zimbra@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180427171401.ExeH8ozpNr55HFN0rk_HVXGx7HgUNJoAzD1c55xdtpM@z>
+Message-ID: <20180427201739.qRv5bfDta62ItoBxtN1_ScLtzn9hAVxCrXA-bXxpgCM@z>
 
-From: Anders Roxell <anders.roxell@linaro.org>
-Date: Wed, 25 Apr 2018 23:32:06 +0200
+----- On Nov 1, 2017,@6:28 PM, Shuah Khan shuahkh@osg.samsung.com wrote:
 
-> Script in_netns.sh is a utility function and not its own test so it
-> shouldn't be part of the TEST_PROGS. The in_netns.sh get used by
-> run_afpackettests.
-> To install in_netns.sh without being added to the main run_kselftest.sh
-> script use the TEST_GEN_PROGS_EXTENDED variable.
+> On 11/01/2017 04:24 PM, Mathieu Desnoyers wrote:
+>> ----- On Nov 1, 2017, at 6:22 PM, Mathieu Desnoyers
+>> mathieu.desnoyers@efficios.com wrote:
+>> 
+>>> ----- On Nov 1, 2017,@5:33 PM, Shuah Khan shuahkh@osg.samsung.com wrote:
+>>>
+>>>> On 10/28/2017 07:46 AM, Mathieu Desnoyers wrote:
+>>>>> Within run_tests target, the whole script needs to be executed within
+>>>>> the same shell and not as separate subshells, so the initial test_num
+>>>>> variable set to 0 is still present when executing "test_num=`echo
+>>>>> $$test_num+1 | bc`;".
+>>>>>
+>>>>> Demonstration of the issue (make run_tests):
+>>>>>
+>>>>> TAP version 13
+>>>>> (standard_in) 1: syntax error
+>>>>> selftests: basic_test
+>>>>> ========================================
+>>>>> ok 1.. selftests: basic_test [PASS]
+>>>>> (standard_in) 1: syntax error
+>>>>> selftests: basic_percpu_ops_test
+>>>>> ========================================
+>>>>> ok 1.. selftests: basic_percpu_ops_test [PASS]
+>>>>> (standard_in) 1: syntax error
+>>>>> selftests: param_test
+>>>>> ========================================
+>>>>> ok 1.. selftests: param_test [PASS]
+>>>>
+>>>> Hi Mathieu,
+>>>>
+>>>> Odd. I don't see the error. I am curious if this specific to
+>>>> env. Can you reproduce this with one of the existing tests,
+>>>> kcmp or breakpoints
+>>>
+>>> Yes, it reproduces:
+>>>
+>>> cd tools/testing/selftests/kcmp
+>>> make run_tests
+>>> gcc -I../../../../usr/include/    kcmp_test.c  -o
+>>> /home/efficios/git/linux-rseq/tools/testing/selftests/kcmp/kcmp_test
+>>> TAP version 13
+>>> (standard_in) 1: syntax error
+>>> selftests: kcmp_test
+>>> ========================================
+>>> ok 1.. selftests: kcmp_test [PASS]
+>>>
+>>> cd tools/testing/selftests/breakpoints
+>>> make run_tests
+>>> gcc     step_after_suspend_test.c  -o
+>>> /home/efficios/git/linux-rseq/tools/testing/selftests/breakpoints/step_after_suspend_test
+>>> gcc     breakpoint_test.c  -o
+>>> /home/efficios/git/linux-rseq/tools/testing/selftests/breakpoints/breakpoint_test
+>>> TAP version 13
+>>> (standard_in) 1: syntax error
+>>> selftests: step_after_suspend_test
+>>> ========================================
+>>> not ok 1.. selftests:  step_after_suspend_test [FAIL]
+>>> (standard_in) 1: syntax error
+>>> selftests: breakpoint_test
+>>> ========================================
+>>> ok 1.. selftests: breakpoint_test [PASS]
+>>>
+>> 
+>> The version of "make" on that machine is:
+>> 
+>> make --version
+>> GNU Make 3.81
+>> Copyright (C) 2006  Free Software Foundation, Inc.
+>> This is free software; see the source for copying conditions.
+>> There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+>> PARTICULAR PURPOSE.
+>> 
+>> This program built for x86_64-pc-linux-gnu
+>> 
+>> (if it helps reproducing)
+>> 
 > 
-> Fixes: 5ff9c1a3dd92 ("selftests: net: add in_netns.sh to TEST_PROGS")
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
-> ---
+> Yup that's it. I have
 > 
-> respin against the 'net' tree.
+> GNU Make 4.1
+> Built for x86_64-pc-linux-gnu
+> Copyright (C) 1988-2014 Free Software Foundation, Inc.
+> License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+> This is free software: you are free to change and redistribute it.
+> There is NO WARRANTY, to the extent permitted by law.
+> 
+> I will test with your patch and see what happens in my env.
 
-Applied, thank you.
+Hi,
+
+I still see the problem with v4.17-rc2. Did you have time to
+consider merging my fix ?
+
+Thanks,
+
+Mathieu
+
+
+> 
+> thanks,
+> -- Shuah
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
