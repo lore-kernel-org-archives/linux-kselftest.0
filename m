@@ -1,64 +1,63 @@
-From: rdunlap at infradead.org (Randy Dunlap)
-Date: Fri, 27 Apr 2018 21:38:17 -0700
-Subject: [PATCH] kselftests: fix grammar and non-ASCII space
-Message-ID: <b1c47352-9389-0117-2a6b-ef552f6b82e5@infradead.org>
+From: jeffrin at rajagiritech.edu.in (Jeffrin Thalakkottoor)
+Date: Sun, 29 Apr 2018 03:12:12 +0530
+Subject: PROBLEM: error due to conflicting types during build of kselftests
+In-Reply-To: <bd125268-a685-ba6e-efc4-130a0621855f@infradead.org>
+References: <CAG=yYwnMXFxHxCnYNWCb-HhpAb21kc5_e_6q-N_DRGhMVurPMQ@mail.gmail.com>
+ <bd125268-a685-ba6e-efc4-130a0621855f@infradead.org>
+Message-ID: <CAG=yYwnq1KwAmKL5t=KFTMcRY9rDFM_5XBDNpbvzM-8J-U7TKQ@mail.gmail.com>
 
-From: Randy Dunlap <rdunlap at infradead.org>
+anyway my current is gcc (Debian 7.3.0-16) 7.3.0
 
-This is a small cleanup to kselftest.rst:
+may be you can try ... make -C tools/testing/selftests 2> error.txt
 
-- Fix some language typos in the usage instructions.
-- Change one non-ASCII space to an ASCII space.
-
-Signed-off-by: Randy Dunlap <rdunlap at infradead.org>
----
- Documentation/dev-tools/kselftest.rst |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
---- linux-next-20180426.orig/Documentation/dev-tools/kselftest.rst
-+++ linux-next-20180426/Documentation/dev-tools/kselftest.rst
-@@ -9,7 +9,7 @@ and booting a kernel.
- 
- On some systems, hot-plug tests could hang forever waiting for cpu and
- memory to be ready to be offlined. A special hot-plug target is created
--to run full range of hot-plug tests. In default mode, hot-plug tests run
-+to run the full range of hot-plug tests. In default mode, hot-plug tests run
- in safe mode with a limited scope. In limited mode, cpu-hotplug test is
- run on a single cpu as opposed to all hotplug capable cpus, and memory
- hotplug test is run on 2% of hotplug capable memory instead of 10%.
-@@ -89,9 +89,9 @@ Note that some tests will require root p
- Install selftests
- =================
- 
--You can use kselftest_install.sh tool installs selftests in default
--location which is tools/testing/selftests/kselftest or a user specified
--location.
-+You can use the kselftest_install.sh tool to install selftests in the
-+default location, which is tools/testing/selftests/kselftest, or in a
-+user specified location.
- 
- To install selftests in default location::
- 
-@@ -109,7 +109,7 @@ Running installed selftests
- Kselftest install as well as the Kselftest tarball provide a script
- named "run_kselftest.sh" to run the tests.
- 
--You can simply do the following to run the installed Kselftests.Â Please
-+You can simply do the following to run the installed Kselftests. Please
- note some tests will require root privileges::
- 
-    $ cd kselftest
-@@ -139,7 +139,7 @@ Contributing new tests (details)
-    default.
- 
-    TEST_CUSTOM_PROGS should be used by tests that require custom build
--   rule and prevent common build rule use.
-+   rules and prevent common build rule use.
- 
-    TEST_PROGS are for test shell scripts. Please ensure shell script has
-    its exec bit set. Otherwise, lib.mk run_tests will generate a warning.
+On Sat, Apr 28, 2018 at 5:08 AM, Randy Dunlap <rdunlap at infradead.org> wrote:
+> On 04/20/2018 11:03 AM, Jeffrin Thalakkottoor wrote:
+>> hello,
+>>
+>> the following is the error found...
+>> -----------------------------------------------------------------------------------
+>> protection_keys.c:421:5: error: conflicting types for ‘pkey_set’
+>>  int pkey_set(int pkey, unsigned long rights, unsigned long flags)
+>>      ^~~~~~~~
+>> ------------------------------------------------------------------------------------
+>>
+>> to reproduce this error...
+>> make -C tools/testing/selftests
+>
+> Hi,
+>
+> I can't reproduce this problem.  What is your gcc --version?
+>
+> Thanks.
+>
+>> Details about software:
+>>
+>> Linux debian 4.17.0-rc1+ #1 SMP Thu Apr 19 18:59:45 IST 2018 x86_64 GNU/Linux
+>>
+>> GNU Make             4.2.1
+>> Binutils             2.30
+>> Util-linux           2.31.1
+>> Mount                2.31.1
+>> Linux C Library      2.27
+>> Dynamic linker (ldd) 2.27
+>> readlink: missing operand
+>> Try 'readlink --help' for more information.
+>> Procps               3.3.14
+>> Kbd                  2.0.4
+>> Console-tools        2.0.4
+>> Sh-utils             8.28
+>> Udev                 238
+>>
+>
+>
+> --
+> ~Randy
 
 
+
+-- 
+software engineer
+rajagiri school of engineering and technology
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
