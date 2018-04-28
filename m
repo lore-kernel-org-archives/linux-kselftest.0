@@ -1,40 +1,30 @@
-From: rdunlap@infradead.org (Randy Dunlap)
-Date: Fri, 27 Apr 2018 17:17:32 -0700
+From: daniel.diaz@linaro.org (=?UTF-8?Q?Daniel_D=C3=ADaz_Rodr=C3=ADguez?=)
+Date: Fri, 27 Apr 2018 22:02:49 -0500
 Subject: kselftest archives etc.
-Message-ID: <958d61ac-f70a-80b1-a657-59fe1fd1d369@infradead.org>
+In-Reply-To: <958d61ac-f70a-80b1-a657-59fe1fd1d369@infradead.org>
+References: <958d61ac-f70a-80b1-a657-59fe1fd1d369@infradead.org>
+Message-ID:
+ <CAEUSe79+t1D4XUaaVi6vfEvDA=pMkGqag+_GyC32WcEbTXamBA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180428001732.YVfdavi0aL3kTdj6w4TMnCxdBN3ctqe6epAb6xKvmEw@z>
+Message-ID: <20180428030249.Z-1pZQLbdY9I8dqpVUEhHU1Wn2AW-iwSipTM8sT7tdU@z>
 
-Hi,
-
-I was having trouble with the use of the gcc -no-pie option in
-tools/testing/selftests/x86: (option not supported)
-
-CFLAGS := -O2 -g -std=gnu99 -pthread -Wall -no-pie
-
-so I looked for an archive of linux-kselftest at vger.kernel.org.
-
-http://vger.kernel.org/vger-lists.html lists all mailing lists and
-(some of) their archives, but none for linux-kselftest.
-
-Anyway, I checked www.spinics.net for an archive and there it was.
+Hello!
 
 
-(1) Is it OK to ask DaveM to list http://www.spinics.net/lists/linux-kselftest/
-at http://vger.kernel.org/vger-lists.html#linux-kselftest ?
+On 27 April 2018@19:17, Randy Dunlap <rdunlap@infradead.org> wrote:
+[...]
+> so I looked for an archive of linux-kselftest at vger.kernel.org.
+> http://vger.kernel.org/vger-lists.html lists all mailing lists and
+> (some of) their archives, but none for linux-kselftest.
 
-(2) for this patch:  http://www.spinics.net/lists/linux-kselftest/msg03136.html
+For what it's worth, as of last November Linaro is also hosting a
+mirror of this mailing list:
+  https://lists.linaro.org/pipermail/linux-kselftest-mirror/
 
-[PATCH] selftests/x86: Detect -no-pie availability
+Greetings!
 
-Acked-by: Randy Dunlap <rdunlap at infradead.org>
-Tested-by: Randy Dunlap <rdunlap at infradead.org>
-
-What is the status of this patch?
-
-thanks,
--- 
-~Randy
+Daniel Díaz
+daniel.diaz at linaro.org
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
