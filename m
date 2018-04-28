@@ -1,49 +1,36 @@
 From: rdunlap at infradead.org (Randy Dunlap)
-Date: Fri, 27 Apr 2018 16:38:02 -0700
-Subject: PROBLEM: error due to conflicting types during build of kselftests
-In-Reply-To: <CAG=yYwnMXFxHxCnYNWCb-HhpAb21kc5_e_6q-N_DRGhMVurPMQ@mail.gmail.com>
-References: <CAG=yYwnMXFxHxCnYNWCb-HhpAb21kc5_e_6q-N_DRGhMVurPMQ@mail.gmail.com>
-Message-ID: <bd125268-a685-ba6e-efc4-130a0621855f@infradead.org>
-
-On 04/20/2018 11:03 AM, Jeffrin Thalakkottoor wrote:
-> hello,
-> 
-> the following is the error found...
-> -----------------------------------------------------------------------------------
-> protection_keys.c:421:5: error: conflicting types for ‘pkey_set’
->  int pkey_set(int pkey, unsigned long rights, unsigned long flags)
->      ^~~~~~~~
-> ------------------------------------------------------------------------------------
-> 
-> to reproduce this error...
-> make -C tools/testing/selftests
+Date: Fri, 27 Apr 2018 17:17:32 -0700
+Subject: kselftest archives etc.
+Message-ID: <958d61ac-f70a-80b1-a657-59fe1fd1d369@infradead.org>
 
 Hi,
 
-I can't reproduce this problem.  What is your gcc --version?
+I was having trouble with the use of the gcc -no-pie option in
+tools/testing/selftests/x86: (option not supported)
 
-Thanks.
+CFLAGS := -O2 -g -std=gnu99 -pthread -Wall -no-pie
 
-> Details about software:
-> 
-> Linux debian 4.17.0-rc1+ #1 SMP Thu Apr 19 18:59:45 IST 2018 x86_64 GNU/Linux
-> 
-> GNU Make             4.2.1
-> Binutils             2.30
-> Util-linux           2.31.1
-> Mount                2.31.1
-> Linux C Library      2.27
-> Dynamic linker (ldd) 2.27
-> readlink: missing operand
-> Try 'readlink --help' for more information.
-> Procps               3.3.14
-> Kbd                  2.0.4
-> Console-tools        2.0.4
-> Sh-utils             8.28
-> Udev                 238
-> 
+so I looked for an archive of linux-kselftest at vger.kernel.org.
+
+http://vger.kernel.org/vger-lists.html lists all mailing lists and
+(some of) their archives, but none for linux-kselftest.
+
+Anyway, I checked www.spinics.net for an archive and there it was.
 
 
+(1) Is it OK to ask DaveM to list http://www.spinics.net/lists/linux-kselftest/
+at http://vger.kernel.org/vger-lists.html#linux-kselftest ?
+
+(2) for this patch:  http://www.spinics.net/lists/linux-kselftest/msg03136.html
+
+[PATCH] selftests/x86: Detect -no-pie availability
+
+Acked-by: Randy Dunlap <rdunlap at infradead.org>
+Tested-by: Randy Dunlap <rdunlap at infradead.org>
+
+What is the status of this patch?
+
+thanks,
 -- 
 ~Randy
 --
