@@ -1,63 +1,35 @@
-From: rdunlap@infradead.org (Randy Dunlap)
-Date: Sat, 28 Apr 2018 14:54:19 -0700
-Subject: PROBLEM: error due to conflicting types during build of kselftests
-In-Reply-To: <CAG=yYwnq1KwAmKL5t=KFTMcRY9rDFM_5XBDNpbvzM-8J-U7TKQ@mail.gmail.com>
-References: <CAG=yYwnMXFxHxCnYNWCb-HhpAb21kc5_e_6q-N_DRGhMVurPMQ@mail.gmail.com>
- <bd125268-a685-ba6e-efc4-130a0621855f@infradead.org>
- <CAG=yYwnq1KwAmKL5t=KFTMcRY9rDFM_5XBDNpbvzM-8J-U7TKQ@mail.gmail.com>
-Message-ID: <49022295-d118-4aa7-c750-36f36b6b6821@infradead.org>
+From: colin.king@canonical.com (Colin King)
+Date: Sun, 29 Apr 2018 12:54:25 +0100
+Subject: [PATCH] selftests: fix spelling mistake: "desciptor" -> "descriptor"
+Message-ID: <20180429115425.9378-1-colin.king@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180428215419.zozyWNZ4QBDZM38hGZYPWvoRnop735ds4oFpsOlrtEc@z>
+Message-ID: <20180429115425.ep4DK1UjrlqDObYp3JRNH468nUUjrhHJBz1QDsyyOLs@z>
 
-On 04/28/2018 02:42 PM, Jeffrin Thalakkottoor wrote:
-> anyway my current is gcc (Debian 7.3.0-16) 7.3.0
-> 
-> may be you can try ... make -C tools/testing/selftests 2> error.txt
+From: Colin Ian King <colin.king@canonical.com>
 
-I have a much older gcc, so newer must be better.  :)
+Trivial fix to spelling mistake in message text
 
+Signed-off-by: Colin Ian King <colin.king at canonical.com>
+---
+ tools/testing/selftests/filesystems/devpts_pts.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> On Sat, Apr 28, 2018@5:08 AM, Randy Dunlap <rdunlap@infradead.org> wrote:
->> On 04/20/2018 11:03 AM, Jeffrin Thalakkottoor wrote:
->>> hello,
->>>
->>> the following is the error found...
->>> -----------------------------------------------------------------------------------
->>> protection_keys.c:421:5: error: conflicting types for ‘pkey_set’
->>>  int pkey_set(int pkey, unsigned long rights, unsigned long flags)
->>>      ^~~~~~~~
->>> ------------------------------------------------------------------------------------
->>>
->>> to reproduce this error...
->>> make -C tools/testing/selftests
->>
->> Hi,
->>
->> I can't reproduce this problem.  What is your gcc --version?
->>
->> Thanks.
->>
->>> Details about software:
->>>
->>> Linux debian 4.17.0-rc1+ #1 SMP Thu Apr 19 18:59:45 IST 2018 x86_64 GNU/Linux
->>>
->>> GNU Make             4.2.1
->>> Binutils             2.30
->>> Util-linux           2.31.1
->>> Mount                2.31.1
->>> Linux C Library      2.27
->>> Dynamic linker (ldd) 2.27
->>> readlink: missing operand
->>> Try 'readlink --help' for more information.
->>> Procps               3.3.14
->>> Kbd                  2.0.4
->>> Console-tools        2.0.4
->>> Sh-utils             8.28
->>> Udev                 238
-
-
+diff --git a/tools/testing/selftests/filesystems/devpts_pts.c b/tools/testing/selftests/filesystems/devpts_pts.c
+index b9055e974289..ea5de8271521 100644
+--- a/tools/testing/selftests/filesystems/devpts_pts.c
++++ b/tools/testing/selftests/filesystems/devpts_pts.c
+@@ -279,7 +279,7 @@ int main(int argc, char *argv[])
+ 	int ret;
+ 
+ 	if (!isatty(STDIN_FILENO)) {
+-		fprintf(stderr, "Standard input file desciptor is not attached "
++		fprintf(stderr, "Standard input file descriptor is not attached "
+ 				"to a terminal. Skipping test\n");
+ 		exit(EXIT_FAILURE);
+ 	}
 -- 
-~Randy
+2.17.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
