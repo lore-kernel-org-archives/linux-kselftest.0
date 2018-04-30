@@ -1,33 +1,35 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Mon, 30 Apr 2018 08:08:22 -0600
+Date: Mon, 30 Apr 2018 08:10:00 -0600
 Subject: kselftest archives etc.
-In-Reply-To: <a407c7a0-add1-f9d2-95d4-bb80ff44d90a@redhat.com>
+In-Reply-To: <CAEUSe79+t1D4XUaaVi6vfEvDA=pMkGqag+_GyC32WcEbTXamBA@mail.gmail.com>
 References: <958d61ac-f70a-80b1-a657-59fe1fd1d369@infradead.org>
- <a407c7a0-add1-f9d2-95d4-bb80ff44d90a@redhat.com>
-Message-ID: <28be9406-e1fb-7b4f-42e6-363c3267d7fb@kernel.org>
+ <CAEUSe79+t1D4XUaaVi6vfEvDA=pMkGqag+_GyC32WcEbTXamBA@mail.gmail.com>
+Message-ID: <5a8ec357-bd08-9ae0-3ed5-aefa825e79f5@kernel.org>
 
-On 04/30/2018 03:15 AM, Florian Weimer wrote:
-> On 04/28/2018 02:17 AM, Randy Dunlap wrote:
->> (2) for this patch:http://www.spinics.net/lists/linux-kselftest/msg03136.html
->>
->> [PATCH] selftests/x86: Detect -no-pie availability
->>
->> Acked-by: Randy Dunlap<rdunlap at infradead.org>
->> Tested-by: Randy Dunlap<rdunlap at infradead.org>
->>
->> What is the status of this patch?
+On 04/27/2018 09:02 PM, Daniel Díaz Rodríguez wrote:
+> Hello!
 > 
-> Yours is the first reaction to it.  Shall I resubmit it, with your ack added?
 > 
-> Thanks,
-> Florian
+> On 27 April 2018 at 19:17, Randy Dunlap <rdunlap at infradead.org> wrote:
+> [...]
+>> so I looked for an archive of linux-kselftest at vger.kernel.org.
+>> http://vger.kernel.org/vger-lists.html lists all mailing lists and
+>> (some of) their archives, but none for linux-kselftest.
+
+Yes. It have been meaning to request a archival for it. I will send email
+to Dave M.
+
+> 
+> For what it's worth, as of last November Linaro is also hosting a
+> mirror of this mailing list:
+>   https://lists.linaro.org/pipermail/linux-kselftest-mirror/
 > 
 
-Please do. For such patches, I usually wait for x86 maintainers to Ack it.
-Resend and I will take it through.
+Nice. I didn't know.
 
 thanks,
 -- Shuah
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
