@@ -1,35 +1,27 @@
-From: colin.king@canonical.com (Colin King)
-Date: Sun, 29 Apr 2018 12:54:25 +0100
-Subject: [PATCH] selftests: fix spelling mistake: "desciptor" -> "descriptor"
-Message-ID: <20180429115425.9378-1-colin.king@canonical.com>
+From: fweimer@redhat.com (Florian Weimer)
+Date: Mon, 30 Apr 2018 11:15:09 +0200
+Subject: kselftest archives etc.
+In-Reply-To: <958d61ac-f70a-80b1-a657-59fe1fd1d369@infradead.org>
+References: <958d61ac-f70a-80b1-a657-59fe1fd1d369@infradead.org>
+Message-ID: <a407c7a0-add1-f9d2-95d4-bb80ff44d90a@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180429115425.ep4DK1UjrlqDObYp3JRNH468nUUjrhHJBz1QDsyyOLs@z>
+Message-ID: <20180430091509.4ybDydwTe-DkspJv8FSZ7e-kiF6TBRxOATbHEUmqzPM@z>
 
-From: Colin Ian King <colin.king@canonical.com>
+On 04/28/2018 02:17 AM, Randy Dunlap wrote:
+> (2) for this patch:http://www.spinics.net/lists/linux-kselftest/msg03136.html
+> 
+> [PATCH] selftests/x86: Detect -no-pie availability
+> 
+> Acked-by: Randy Dunlap<rdunlap at infradead.org>
+> Tested-by: Randy Dunlap<rdunlap at infradead.org>
+> 
+> What is the status of this patch?
 
-Trivial fix to spelling mistake in message text
+Yours is the first reaction to it.  Shall I resubmit it, with your ack 
+added?
 
-Signed-off-by: Colin Ian King <colin.king at canonical.com>
----
- tools/testing/selftests/filesystems/devpts_pts.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/filesystems/devpts_pts.c b/tools/testing/selftests/filesystems/devpts_pts.c
-index b9055e974289..ea5de8271521 100644
---- a/tools/testing/selftests/filesystems/devpts_pts.c
-+++ b/tools/testing/selftests/filesystems/devpts_pts.c
-@@ -279,7 +279,7 @@ int main(int argc, char *argv[])
- 	int ret;
- 
- 	if (!isatty(STDIN_FILENO)) {
--		fprintf(stderr, "Standard input file desciptor is not attached "
-+		fprintf(stderr, "Standard input file descriptor is not attached "
- 				"to a terminal. Skipping test\n");
- 		exit(EXIT_FAILURE);
- 	}
--- 
-2.17.0
-
+Thanks,
+Florian
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
