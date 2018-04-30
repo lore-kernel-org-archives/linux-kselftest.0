@@ -1,25 +1,33 @@
-From: fweimer at redhat.com (Florian Weimer)
-Date: Mon, 30 Apr 2018 11:15:09 +0200
+From: shuah at kernel.org (Shuah Khan)
+Date: Mon, 30 Apr 2018 08:08:22 -0600
 Subject: kselftest archives etc.
-In-Reply-To: <958d61ac-f70a-80b1-a657-59fe1fd1d369@infradead.org>
+In-Reply-To: <a407c7a0-add1-f9d2-95d4-bb80ff44d90a@redhat.com>
 References: <958d61ac-f70a-80b1-a657-59fe1fd1d369@infradead.org>
-Message-ID: <a407c7a0-add1-f9d2-95d4-bb80ff44d90a@redhat.com>
+ <a407c7a0-add1-f9d2-95d4-bb80ff44d90a@redhat.com>
+Message-ID: <28be9406-e1fb-7b4f-42e6-363c3267d7fb@kernel.org>
 
-On 04/28/2018 02:17 AM, Randy Dunlap wrote:
-> (2) for this patch:http://www.spinics.net/lists/linux-kselftest/msg03136.html
+On 04/30/2018 03:15 AM, Florian Weimer wrote:
+> On 04/28/2018 02:17 AM, Randy Dunlap wrote:
+>> (2) for this patch:http://www.spinics.net/lists/linux-kselftest/msg03136.html
+>>
+>> [PATCH] selftests/x86: Detect -no-pie availability
+>>
+>> Acked-by: Randy Dunlap<rdunlap at infradead.org>
+>> Tested-by: Randy Dunlap<rdunlap at infradead.org>
+>>
+>> What is the status of this patch?
 > 
-> [PATCH] selftests/x86: Detect -no-pie availability
+> Yours is the first reaction to it.  Shall I resubmit it, with your ack added?
 > 
-> Acked-by: Randy Dunlap<rdunlap at infradead.org>
-> Tested-by: Randy Dunlap<rdunlap at infradead.org>
+> Thanks,
+> Florian
 > 
-> What is the status of this patch?
 
-Yours is the first reaction to it.  Shall I resubmit it, with your ack 
-added?
+Please do. For such patches, I usually wait for x86 maintainers to Ack it.
+Resend and I will take it through.
 
-Thanks,
-Florian
+thanks,
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
