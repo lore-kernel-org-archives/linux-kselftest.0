@@ -1,42 +1,256 @@
-From: rdunlap at infradead.org (Randy Dunlap)
-Date: Mon, 30 Apr 2018 08:46:48 -0700
-Subject: kselftest archives etc.
-In-Reply-To: <5a8ec357-bd08-9ae0-3ed5-aefa825e79f5@kernel.org>
-References: <958d61ac-f70a-80b1-a657-59fe1fd1d369@infradead.org>
- <CAEUSe79+t1D4XUaaVi6vfEvDA=pMkGqag+_GyC32WcEbTXamBA@mail.gmail.com>
- <5a8ec357-bd08-9ae0-3ed5-aefa825e79f5@kernel.org>
-Message-ID: <fc234870-ad35-61fd-0974-c04a417a76a3@infradead.org>
+From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
+Date: Mon, 30 Apr 2018 18:44:33 -0400
+Subject: [PATCH 14/14] rseq: selftests: Provide Makefile, scripts,
+ gitignore (v2)
+In-Reply-To: <20180430224433.17407-1-mathieu.desnoyers@efficios.com>
+References: <20180430224433.17407-1-mathieu.desnoyers@efficios.com>
+Message-ID: <20180430224433.17407-15-mathieu.desnoyers@efficios.com>
 
-On 04/30/2018 07:10 AM, Shuah Khan wrote:
-> On 04/27/2018 09:02 PM, Daniel Díaz Rodríguez wrote:
->> Hello!
->>
->>
->> On 27 April 2018 at 19:17, Randy Dunlap <rdunlap at infradead.org> wrote:
->> [...]
->>> so I looked for an archive of linux-kselftest at vger.kernel.org.
->>> http://vger.kernel.org/vger-lists.html lists all mailing lists and
->>> (some of) their archives, but none for linux-kselftest.
-> 
-> Yes. It have been meaning to request a archival for it. I will send email
-> to Dave M.
+A run_param_test.sh script runs many variants of the parametrizable
+tests.
 
-vger doesn't do archives, but vger.kernel.org will tell people where to find
-them if we can get Dave M. to edit that web page.
+Wire up the rseq Makefile, add directory entry into MAINTAINERS file.
 
->>
->> For what it's worth, as of last November Linaro is also hosting a
->> mirror of this mailing list:
->>   https://lists.linaro.org/pipermail/linux-kselftest-mirror/
->>
-> 
-> Nice. I didn't know.
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+CC: Shuah Khan <shuahkh at osg.samsung.com>
+CC: Russell King <linux at arm.linux.org.uk>
+CC: Catalin Marinas <catalin.marinas at arm.com>
+CC: Will Deacon <will.deacon at arm.com>
+CC: Thomas Gleixner <tglx at linutronix.de>
+CC: Paul Turner <pjt at google.com>
+CC: Andrew Hunter <ahh at google.com>
+CC: Peter Zijlstra <peterz at infradead.org>
+CC: Andy Lutomirski <luto at amacapital.net>
+CC: Andi Kleen <andi at firstfloor.org>
+CC: Dave Watson <davejwatson at fb.com>
+CC: Chris Lameter <cl at linux.com>
+CC: Ingo Molnar <mingo at redhat.com>
+CC: "H. Peter Anvin" <hpa at zytor.com>
+CC: Ben Maurer <bmaurer at fb.com>
+CC: Steven Rostedt <rostedt at goodmis.org>
+CC: "Paul E. McKenney" <paulmck at linux.vnet.ibm.com>
+CC: Josh Triplett <josh at joshtriplett.org>
+CC: Linus Torvalds <torvalds at linux-foundation.org>
+CC: Andrew Morton <akpm at linux-foundation.org>
+CC: Boqun Feng <boqun.feng at gmail.com>
+CC: linux-kselftest at vger.kernel.org
+CC: linux-api at vger.kernel.org
+---
+Changes since v1:
+- Use only rseq, remove use of cpu_opv.
+---
+ MAINTAINERS                                    |   1 +
+ tools/testing/selftests/Makefile               |   1 +
+ tools/testing/selftests/rseq/.gitignore        |   6 ++
+ tools/testing/selftests/rseq/Makefile          |  30 ++++++
+ tools/testing/selftests/rseq/run_param_test.sh | 121 +++++++++++++++++++++++++
+ 5 files changed, 159 insertions(+)
+ create mode 100644 tools/testing/selftests/rseq/.gitignore
+ create mode 100644 tools/testing/selftests/rseq/Makefile
+ create mode 100755 tools/testing/selftests/rseq/run_param_test.sh
 
-vger.kernel.org could (should) list both of these archives for kselftest.
-
-thanks,
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4d61ce154dfc..5e8968b3ccae 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11991,6 +11991,7 @@ S:	Supported
+ F:	kernel/rseq.c
+ F:	include/uapi/linux/rseq.h
+ F:	include/trace/events/rseq.h
++F:	tools/testing/selftests/rseq/
+ 
+ RFKILL
+ M:	Johannes Berg <johannes at sipsolutions.net>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 32aafa92074c..593fb44c9cd4 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -28,6 +28,7 @@ TARGETS += powerpc
+ TARGETS += proc
+ TARGETS += pstore
+ TARGETS += ptrace
++TARGETS += rseq
+ TARGETS += seccomp
+ TARGETS += sigaltstack
+ TARGETS += size
+diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
+new file mode 100644
+index 000000000000..cc610da7e369
+--- /dev/null
++++ b/tools/testing/selftests/rseq/.gitignore
+@@ -0,0 +1,6 @@
++basic_percpu_ops_test
++basic_test
++basic_rseq_op_test
++param_test
++param_test_benchmark
++param_test_compare_twice
+diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+new file mode 100644
+index 000000000000..c30c52e1d0d2
+--- /dev/null
++++ b/tools/testing/selftests/rseq/Makefile
+@@ -0,0 +1,30 @@
++# SPDX-License-Identifier: GPL-2.0+ OR MIT
++CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./
++LDLIBS += -lpthread
++
++# Own dependencies because we only want to build against 1st prerequisite, but
++# still track changes to header files and depend on shared object.
++OVERRIDE_TARGETS = 1
++
++TEST_GEN_PROGS = basic_test basic_percpu_ops_test param_test \
++		param_test_benchmark param_test_compare_twice
++
++TEST_GEN_PROGS_EXTENDED = librseq.so
++
++TEST_PROGS = run_param_test.sh
++
++include ../lib.mk
++
++$(OUTPUT)/librseq.so: rseq.c rseq.h rseq-*.h
++	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
++
++$(OUTPUT)/%: %.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
++	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
++
++$(OUTPUT)/param_test_benchmark: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
++					rseq.h rseq-*.h
++	$(CC) $(CFLAGS) -DBENCHMARK $< $(LDLIBS) -lrseq -o $@
++
++$(OUTPUT)/param_test_compare_twice: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
++					rseq.h rseq-*.h
++	$(CC) $(CFLAGS) -DRSEQ_COMPARE_TWICE $< $(LDLIBS) -lrseq -o $@
+diff --git a/tools/testing/selftests/rseq/run_param_test.sh b/tools/testing/selftests/rseq/run_param_test.sh
+new file mode 100755
+index 000000000000..3acd6d75ff9f
+--- /dev/null
++++ b/tools/testing/selftests/rseq/run_param_test.sh
+@@ -0,0 +1,121 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0+ or MIT
++
++EXTRA_ARGS=${@}
++
++OLDIFS="$IFS"
++IFS=$'\n'
++TEST_LIST=(
++	"-T s"
++	"-T l"
++	"-T b"
++	"-T b -M"
++	"-T m"
++	"-T m -M"
++	"-T i"
++)
++
++TEST_NAME=(
++	"spinlock"
++	"list"
++	"buffer"
++	"buffer with barrier"
++	"memcpy"
++	"memcpy with barrier"
++	"increment"
++)
++IFS="$OLDIFS"
++
++REPS=1000
++SLOW_REPS=100
++
++function do_tests()
++{
++	local i=0
++	while [ "$i" -lt "${#TEST_LIST[@]}" ]; do
++		echo "Running test ${TEST_NAME[$i]}"
++		./param_test ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
++		echo "Running compare-twice test ${TEST_NAME[$i]}"
++		./param_test_compare_twice ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
++		let "i++"
++	done
++}
++
++echo "Default parameters"
++do_tests
++
++echo "Loop injection: 10000 loops"
++
++OLDIFS="$IFS"
++IFS=$'\n'
++INJECT_LIST=(
++	"1"
++	"2"
++	"3"
++	"4"
++	"5"
++	"6"
++	"7"
++	"8"
++	"9"
++)
++IFS="$OLDIFS"
++
++NR_LOOPS=10000
++
++i=0
++while [ "$i" -lt "${#INJECT_LIST[@]}" ]; do
++	echo "Injecting at <${INJECT_LIST[$i]}>"
++	do_tests -${INJECT_LIST[i]} ${NR_LOOPS}
++	let "i++"
++done
++NR_LOOPS=
++
++function inject_blocking()
++{
++	OLDIFS="$IFS"
++	IFS=$'\n'
++	INJECT_LIST=(
++		"7"
++		"8"
++		"9"
++	)
++	IFS="$OLDIFS"
++
++	NR_LOOPS=-1
++
++	i=0
++	while [ "$i" -lt "${#INJECT_LIST[@]}" ]; do
++		echo "Injecting at <${INJECT_LIST[$i]}>"
++		do_tests -${INJECT_LIST[i]} -1 ${@}
++		let "i++"
++	done
++	NR_LOOPS=
++}
++
++echo "Yield injection (25%)"
++inject_blocking -m 4 -y
++
++echo "Yield injection (50%)"
++inject_blocking -m 2 -y
++
++echo "Yield injection (100%)"
++inject_blocking -m 1 -y
++
++echo "Kill injection (25%)"
++inject_blocking -m 4 -k
++
++echo "Kill injection (50%)"
++inject_blocking -m 2 -k
++
++echo "Kill injection (100%)"
++inject_blocking -m 1 -k
++
++echo "Sleep injection (1ms, 25%)"
++inject_blocking -m 4 -s 1
++
++echo "Sleep injection (1ms, 50%)"
++inject_blocking -m 2 -s 1
++
++echo "Sleep injection (1ms, 100%)"
++inject_blocking -m 1 -s 1
 -- 
-~Randy
+2.11.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
