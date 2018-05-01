@@ -1,84 +1,88 @@
 From: shuah@kernel.org (Shuah Khan (Samsung OSG))
-Date: Tue,  1 May 2018 16:54:37 -0600
-Subject: [PATCH 5/7] selftests: lib.mk: add SKIP handling and test suite name
- to EMIT_TESTS
+Date: Tue,  1 May 2018 16:54:36 -0600
+Subject: [PATCH 4/7] selftests: lib.mk: Include test suite name in the
+ RUN_TESTS output
 In-Reply-To: <cover.1525212671.git.shuah@kernel.org>
 References: <cover.1525212671.git.shuah@kernel.org>
 Message-ID:
- <eaa689c8fa2397e68bc1cf3bf4dce02feb21a62a.1525212671.git.shuah@kernel.org>
+ <87a45d125d28566835bfe836732c40805055b665.1525212671.git.shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180501225437.5LkXjOX0rdXzTVKWURgYme3ie5Tp70CdpTEoMtx5Rr4@z>
-
-EMIT_TESTS which is the common function that implements run_tests target,
-treats all non-zero return codes from tests as failures. When tests are
-skipped with non-zero return code, because of unmet dependencies and/or
-unsupported configuration, it reports them as failed. This will lead to
-too many false negatives even on the tests that couldn't be run.
-
-EMIT_TESTS is changed to test for SKIP=4 return from tests to enable
-the framework for individual tests to return special SKIP code.
-
-Tests will be changed as needed to report SKIP instead FAIL/PASS when
-they get skipped.
+Message-ID: <20180501225436.CojeaDMkk0eXhkX_3U8d9sctlxkyltzIVcj6c8H4UeU@z>
 
 Currently just the test name is printed in the RUN_TESTS output. For
 example, when raw_skew sub-test from timers tests in run, the output
 shows just raw_skew. Include main test name when printing sub-test
 results.
 
-In addition, remove duplicate strings for printing common information with
-a new for the test header information.
+In addition, remove duplicate strings for printing common information
+with a new for the test header information.
 
-With this change run_kelftest.sh output for breakpoints test will be:
+Before the change:
 
-TAP version 13
-Running tests in breakpoints
+selftests: raw_skew
 ========================================
-selftests: breakpoints: step_after_suspend_test
-not ok 1..1 selftests: breakpoints: step_after_suspend_test [SKIP]
-selftests: breakpoints: breakpoint_test
-ok 1..2 selftests: breakpoints: breakpoint_test [PASS]
+WARNING: ADJ_OFFSET in progress, this will cause inaccurate results
+Estimating clock drift: -20.616(est) -20.586(act)       [OK]
+Pass 0 Fail 0 Xfail 0 Xpass 0 Skip 0 Error 0
+1..0
+ok 1..7 selftests: raw_skew [PASS]
+
+After the change:
+
+selftests: timers: raw_skew
+========================================
+WARNING: ADJ_OFFSET in progress, this will cause inaccurate results
+Estimating clock drift: -19.794(est) -19.896(act)       [OK]
+Pass 0 Fail 0 Xfail 0 Xpass 0 Skip 0 Error 0
+1..0
+ok 1..7 selftests: timers: raw_skew [PASS]
 
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/Makefile | 3 ++-
- tools/testing/selftests/lib.mk   | 8 ++++++--
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ tools/testing/selftests/lib.mk | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 32aafa92074c..302c7ea8b820 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -134,7 +134,8 @@ ifdef INSTALL_PATH
- 	echo "else" >> $(ALL_SCRIPT)
- 	echo "  OUTPUT=/dev/stdout" >> $(ALL_SCRIPT)
- 	echo "fi" >> $(ALL_SCRIPT)
--	echo "export KSFT_TAP_LEVEL=`echo 1`" >> $(ALL_SCRIPT)
-+	echo "export KSFT_TAP_LEVEL=1" >> $(ALL_SCRIPT)
-+	echo "export skip=4" >> $(ALL_SCRIPT)
- 
- 	for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
 diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index eb2be6dabbda..0c6012500026 100644
+index dd516f92f7c2..eb2be6dabbda 100644
 --- a/tools/testing/selftests/lib.mk
 +++ b/tools/testing/selftests/lib.mk
-@@ -94,9 +94,13 @@ else
- endif
+@@ -20,26 +20,27 @@ all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
  
- define EMIT_TESTS
--	@for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
-+	@test_num=`echo 0`;				\
-+	for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
- 		BASENAME_TEST=`basename $$TEST`;	\
--		echo "(./$$BASENAME_TEST >> \$$OUTPUT 2>&1 && echo \"selftests: $$BASENAME_TEST [PASS]\") || echo \"selftests: $$BASENAME_TEST [FAIL]\""; \
-+		test_num=`echo $$test_num+1 | bc`;	\
-+		TEST_HDR_MSG="selftests: "`basename $$PWD`:" $$BASENAME_TEST";	\
-+		echo "echo $$TEST_HDR_MSG";	\
-+		echo "(./$$BASENAME_TEST >> \$$OUTPUT 2>&1 && echo \"ok 1..$$test_num $$TEST_HDR_MSG [PASS]\") || (if [ \$$? -eq \$$skip ]; then echo \"not ok 1..$$test_num $$TEST_HDR_MSG [SKIP]\"; else echo \"not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]\"; fi;)"; \
- 	done;
- endef
- 
+ .ONESHELL:
+ define RUN_TEST_PRINT_RESULT
+-	echo "selftests: $$BASENAME_TEST";	\
++	TEST_HDR_MSG="selftests: "`basename $$PWD`:" $$BASENAME_TEST";	\
++	echo $$TEST_HDR_MSG;					\
+ 	echo "========================================";	\
+ 	if [ ! -x $$TEST ]; then	\
+-		echo "selftests: Warning: file $$BASENAME_TEST is not executable, correct this.";\
+-		echo "not ok 1..$$test_num selftests: $$BASENAME_TEST [FAIL]"; \
++		echo "$$TEST_HDR_MSG: Warning: file $$BASENAME_TEST is not executable, correct this.";\
++		echo "not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]"; \
+ 	else					\
+ 		cd `dirname $$TEST` > /dev/null; \
+ 		if [ "X$(summary)" != "X" ]; then	\
+ 			(./$$BASENAME_TEST > /tmp/$$BASENAME_TEST 2>&1 && \
+-			echo "ok 1..$$test_num selftests: $$BASENAME_TEST [PASS]") || \
++			echo "ok 1..$$test_num $$TEST_HDR_MSG [PASS]") || \
+ 			(if [ $$? -eq $$skip ]; then	\
+-				echo "not ok 1..$$test_num selftests:  $$BASENAME_TEST [SKIP]";				\
+-			else echo "not ok 1..$$test_num selftests:  $$BASENAME_TEST [FAIL]";					\
++				echo "not ok 1..$$test_num $$TEST_HDR_MSG [SKIP]";				\
++			else echo "not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]";					\
+ 			fi;)			\
+ 		else				\
+ 			(./$$BASENAME_TEST &&	\
+-			echo "ok 1..$$test_num selftests: $$BASENAME_TEST [PASS]") ||						\
++			echo "ok 1..$$test_num $$TEST_HDR_MSG [PASS]") ||						\
+ 			(if [ $$? -eq $$skip ]; then \
+-				echo "not ok 1..$$test_num selftests:  $$BASENAME_TEST [SKIP]"; \
+-			else echo "not ok 1..$$test_num selftests:  $$BASENAME_TEST [FAIL]";				\
++				echo "not ok 1..$$test_num $$TEST_HDR_MSG [SKIP]"; \
++			else echo "not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]";				\
+ 			fi;)		\
+ 		fi;				\
+ 		cd - > /dev/null;		\
 -- 
 2.14.1
 
