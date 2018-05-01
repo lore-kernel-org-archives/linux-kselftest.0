@@ -1,43 +1,37 @@
 From: shuah at kernel.org (Shuah Khan (Samsung OSG))
-Date: Tue,  1 May 2018 16:54:32 -0600
-Subject: [PATCH 0/7] Kselftest framework SKIP handling
-Message-ID: <cover.1525212671.git.shuah@kernel.org>
+Date: Tue,  1 May 2018 16:54:39 -0600
+Subject: [PATCH 7/7] selftests: kselftest: change KSFT_SKIP=4 instead of
+ KSFT_PASS
+In-Reply-To: <cover.1525212671.git.shuah@kernel.org>
+References: <cover.1525212671.git.shuah@kernel.org>
+Message-ID: <16ce561ed5b34d1066d2e9de747ccdf0550078e7.1525212671.git.shuah@kernel.org>
 
-Kselftest framework currently treats all non-zero return codes from tests
-as failures. When tests are skipped with non-zero return code, because of
-unmet dependencies and/or unsupported configuration, it reports them as
-failed. This will lead to too many false negatives even on the tests that
-couldn't be run.
+KSFT_SKIP points to KSFT_PASS resulting in reporting skipped tests as
+Passed, when test programs exit with KSFT_SKIP or call ksft_exit_skip().
+If tests are skipped because of unmet dependencies and/or unsupported
+configuration, reporting them as passed leads to too many false positives.
 
-This patch series fixes the problem by adding SKIP handling:
+Fix it to return a skip code of 4 to clearly differentiate the skipped
+tests.
 
-The common RUN_TESTS and EMIT_TESTS functions are changed to test for
-SKIP=4 return from tests. This change enables the framework and tests
-that return SKIP=4 will report SKIP, other continue to report FAIL/PASS.
+Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+---
+ tools/testing/selftests/kselftest.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-KSFT_SKIP has been changed to report Skip code of 4 instead of KSFT_PASS
-to clearly differentiate the skipped tests.
-
-I am working on Test changes to report SKIP instead FAIL/PASS when they get
-skipped. I will be sending them out later this week.
-
-In addition, I made changes to improve the reporting and cleaned up both
-RUN_TESTS and EMIT_TESTS define to remove duplicate test output strings.
-
-Shuah Khan (Samsung OSG) (7):
-  selftests: lib.mk: cleanup RUN_TESTS define and make it readable
-  selftests: lib.mk: add SKIP handling to RUN_TESTS define
-  selftests: lib.mk: move running and printing result to a new function
-  selftests: lib.mk: Include test suite name in the RUN_TESTS output
-  selftests: lib.mk: add SKIP handling and test suite name to EMIT_TESTS
-  selftests: lib.mk: add test execute bit check to EMIT_TESTS
-  selftests: kselftest: change KSFT_SKIP=4 instead of KSFT_PASS
-
- tools/testing/selftests/Makefile    |  3 +-
- tools/testing/selftests/kselftest.h |  2 +-
- tools/testing/selftests/lib.mk      | 55 +++++++++++++++++++++++++++----------
- 3 files changed, 44 insertions(+), 16 deletions(-)
-
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index 1b9d8ecdebce..15e6b75fc3a5 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -20,7 +20,7 @@
+ #define KSFT_XFAIL 2
+ #define KSFT_XPASS 3
+ /* Treat skip as pass */
+-#define KSFT_SKIP  KSFT_PASS
++#define KSFT_SKIP  4
+ 
+ /* counters */
+ struct ksft_count {
 -- 
 2.14.1
 
