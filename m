@@ -1,29 +1,46 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Fri, 30 Mar 2018 09:51:21 -0600
-Subject: [PATCH] selftests/ftrace: fix spelling mistake: "tiggers" ->
- "triggers"
-In-Reply-To: <20180329140409.1311baac@gandalf.local.home>
-References: <20180329172431.8171-1-colin.king@canonical.com>
- <20180329133102.6061ba66@gandalf.local.home>
- <48be730c-2a15-d3ad-d1aa-7d57fe7db6ca@canonical.com>
- <56713d51-0954-e7a8-cf7a-7a6bfedf58f3@kernel.org>
- <20180329140409.1311baac@gandalf.local.home>
-Message-ID: <583c21dd-2ffc-4375-af8a-aa721ffb4594@kernel.org>
+From: shuah at kernel.org (Shuah Khan (Samsung OSG))
+Date: Tue,  1 May 2018 16:54:32 -0600
+Subject: [PATCH 0/7] Kselftest framework SKIP handling
+Message-ID: <cover.1525212671.git.shuah@kernel.org>
 
-On 03/29/2018 12:04 PM, Steven Rostedt wrote:
-> On Thu, 29 Mar 2018 11:54:28 -0600
-> Shuah Khan <shuah at kernel.org> wrote:
-> 
->> I will pick this up with your Ack Steve, unless you want include
->> it in your pull request.
-> 
-> You or Janitors can take it.
-> 
+Kselftest framework currently treats all non-zero return codes from tests
+as failures. When tests are skipped with non-zero return code, because of
+unmet dependencies and/or unsupported configuration, it reports them as
+failed. This will lead to too many false negatives even on the tests that
+couldn't be run.
 
-Okay we can leave it to the Janitors then.
+This patch series fixes the problem by adding SKIP handling:
 
-thanks,
--- Shuah
+The common RUN_TESTS and EMIT_TESTS functions are changed to test for
+SKIP=4 return from tests. This change enables the framework and tests
+that return SKIP=4 will report SKIP, other continue to report FAIL/PASS.
+
+KSFT_SKIP has been changed to report Skip code of 4 instead of KSFT_PASS
+to clearly differentiate the skipped tests.
+
+I am working on Test changes to report SKIP instead FAIL/PASS when they get
+skipped. I will be sending them out later this week.
+
+In addition, I made changes to improve the reporting and cleaned up both
+RUN_TESTS and EMIT_TESTS define to remove duplicate test output strings.
+
+Shuah Khan (Samsung OSG) (7):
+  selftests: lib.mk: cleanup RUN_TESTS define and make it readable
+  selftests: lib.mk: add SKIP handling to RUN_TESTS define
+  selftests: lib.mk: move running and printing result to a new function
+  selftests: lib.mk: Include test suite name in the RUN_TESTS output
+  selftests: lib.mk: add SKIP handling and test suite name to EMIT_TESTS
+  selftests: lib.mk: add test execute bit check to EMIT_TESTS
+  selftests: kselftest: change KSFT_SKIP=4 instead of KSFT_PASS
+
+ tools/testing/selftests/Makefile    |  3 +-
+ tools/testing/selftests/kselftest.h |  2 +-
+ tools/testing/selftests/lib.mk      | 55 +++++++++++++++++++++++++++----------
+ 3 files changed, 44 insertions(+), 16 deletions(-)
+
+-- 
+2.14.1
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
