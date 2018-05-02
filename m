@@ -1,35 +1,82 @@
-From: colin.king@canonical.com (Colin King)
-Date: Wed,  2 May 2018 16:00:10 +0100
-Subject: [PATCH] selftests: media_tests: fix spelling mistake: "iternations"
- -> "iterations"
-Message-ID: <20180502150010.32333-1-colin.king@canonical.com>
+From: shuah@kernel.org (Shuah Khan (Samsung OSG))
+Date: Wed,  2 May 2018 15:18:47 -0600
+Subject: [PATCH] selftests: mount: delete RUN_TESTS and EMIT_TESTS overrides
+In-Reply-To: <20180502211848.22404-1-shuah@kernel.org>
+References: <20180502211848.22404-1-shuah@kernel.org>
+Message-ID: <20180502211848.22404-4-shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180502150010.KURwUzVzKVQkFbHnzSMBKJw_VkZ9xt47bdiONypAU-I@z>
+Message-ID: <20180502211847.e0anCMbsbVm0BEEakkq_61a2QbXmDjGz6dP3eQnlbT8@z>
 
-From: Colin Ian King <colin.king@canonical.com>
+Delete RUN_TESTS and EMIT_TESTS overrides and use common defines in
+lib.mk. Add new run_tests.sh to do the dependency checks the custom
+RUN_TESTS did. Common defines work with the run_tests.sh set as the
+TEST_PROGS and defining unprivileged-remount-test in TEST_GEN_FILES.
 
-Trivial fix to spelling mistake in message text
+Kselftest framework builds and installs TEST_GEN_FILES and doesn't run
+them via RUN_TESTS and include it in EMIT_TESTS. With this change the
+new run_tests.sh runs the test after checking dependencies.
 
-Signed-off-by: Colin Ian King <colin.king at canonical.com>
+This change also adds Skip handling to return kselftest skip code when
+test is skipped to clearly identify when the test is skipped instead of
+reporting it as failed.
+
+Output with this change:
+
+TAP version 13
+selftests: mount: run_tests.sh
+========================================
+WARN: No /proc/self/uid_map exist, test skipped.
+not ok 1..1 selftests: mount: run_tests.sh [SKIP]
+
+Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/media_tests/media_device_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/mount/Makefile     | 12 ++----------
+ tools/testing/selftests/mount/run_tests.sh | 12 ++++++++++++
+ 2 files changed, 14 insertions(+), 10 deletions(-)
+ create mode 100755 tools/testing/selftests/mount/run_tests.sh
 
-diff --git a/tools/testing/selftests/media_tests/media_device_test.c b/tools/testing/selftests/media_tests/media_device_test.c
-index 421a367e4bb3..d8bb1e15d1d9 100644
---- a/tools/testing/selftests/media_tests/media_device_test.c
-+++ b/tools/testing/selftests/media_tests/media_device_test.c
-@@ -88,7 +88,7 @@ int main(int argc, char **argv)
- 	       "other Oops in the dmesg. Enable KaSan kernel\n"
- 	       "config option for use-after-free error detection.\n\n");
+diff --git a/tools/testing/selftests/mount/Makefile b/tools/testing/selftests/mount/Makefile
+index e094f71c6dbc..026890744215 100644
+--- a/tools/testing/selftests/mount/Makefile
++++ b/tools/testing/selftests/mount/Makefile
+@@ -3,15 +3,7 @@
+ CFLAGS = -Wall \
+          -O2
  
--	printf("Running test for %d iternations\n", count);
-+	printf("Running test for %d iterations\n", count);
+-TEST_GEN_PROGS := unprivileged-remount-test
++TEST_PROGS := run_tests.sh
++TEST_GEN_FILES := unprivileged-remount-test
  
- 	while (count > 0) {
- 		ret = ioctl(fd, MEDIA_IOC_DEVICE_INFO, &mdi);
+ include ../lib.mk
+-
+-override RUN_TESTS := if [ -f /proc/self/uid_map ] ; \
+-		      then	\
+-				./unprivileged-remount-test ; \
+-		      else	\
+-				echo "WARN: No /proc/self/uid_map exist, test skipped." ; \
+-		      fi
+-override EMIT_TESTS := echo "$(RUN_TESTS)"
+-
+diff --git a/tools/testing/selftests/mount/run_tests.sh b/tools/testing/selftests/mount/run_tests.sh
+new file mode 100755
+index 000000000000..4ab8f507dcba
+--- /dev/null
++++ b/tools/testing/selftests/mount/run_tests.sh
+@@ -0,0 +1,12 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++# Run mount selftests
++if [ -f /proc/self/uid_map ] ; then
++	./unprivileged-remount-test ;
++else
++	echo "WARN: No /proc/self/uid_map exist, test skipped." ;
++	exit $ksft_skip
++fi
 -- 
-2.17.0
+2.14.1
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
