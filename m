@@ -1,45 +1,36 @@
-From: shuah at kernel.org (Shuah Khan (Samsung OSG))
-Date: Wed,  2 May 2018 15:18:44 -0600
-Subject: [PATCH] selftests: android: delete RUN_TESTS and EMIT_TESTS overrides
-Message-ID: <20180502211848.22404-1-shuah@kernel.org>
+From: petrm at mellanox.com (Petr Machata)
+Date: Thu, 03 May 2018 12:36:52 +0200
+Subject: [PATCH net-next mlxsw 0/3] selftests: forwarding: Updates to sysctl
+ handling
+Message-ID: <cover.1525343276.git.petrm@mellanox.com>
 
-Delete RUN_TESTS and EMIT_TESTS overrides and use common defines in
-lib.mk. Common defines work just fine and there is no need to define
-custom overrides.
+Some selftests need to adjust sysctl settings. In order to be neutral to
+the system that the test is run on, it is a good practice to change back
+to the original setting after the test ends. That involves some
+boilerplate that can be abstracted away.
 
-Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
----
- tools/testing/selftests/android/Makefile | 8 --------
- 1 file changed, 8 deletions(-)
+In patch #1, introduce two functions, sysctl_set() and sysctl_restore().
+The former stores the current value of a given setting, and sets a new
+value. The latter restores the setting to the previously-stored value.
 
-diff --git a/tools/testing/selftests/android/Makefile b/tools/testing/selftests/android/Makefile
-index f6304d2be90c..72c25a3cb658 100644
---- a/tools/testing/selftests/android/Makefile
-+++ b/tools/testing/selftests/android/Makefile
-@@ -18,10 +18,6 @@ all:
- 		fi \
- 	done
- 
--override define RUN_TESTS
--	@cd $(OUTPUT); ./run.sh
--endef
--
- override define INSTALL_RULE
- 	mkdir -p $(INSTALL_PATH)
- 	install -t $(INSTALL_PATH) $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES)
-@@ -33,10 +29,6 @@ override define INSTALL_RULE
- 	done;
- endef
- 
--override define EMIT_TESTS
--	echo "./run.sh"
--endef
--
- override define CLEAN
- 	@for DIR in $(SUBDIRS); do		\
- 		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
+In patch #2, use these wrappers in a number of tests.
+
+Additionally in patch #3, fix a problem in mirror_gre_nh.sh, which
+neglected to set a sysctl that's crucial for the test to work.
+
+Petr Machata (3):
+  selftests: forwarding: lib: Add sysctl_set(), sysctl_restore()
+  selftests: forwarding: Use sysctl_set(), sysctl_restore()
+  selftests: forwarding: mirror_gre_nh: Unset RP filter
+
+ tools/testing/selftests/net/forwarding/lib.sh      | 28 ++++++++++++++++------
+ .../selftests/net/forwarding/mirror_gre_changes.sh |  7 ++----
+ .../selftests/net/forwarding/mirror_gre_nh.sh      |  6 +++++
+ .../selftests/net/forwarding/router_multipath.sh   | 12 ++++------
+ 4 files changed, 33 insertions(+), 20 deletions(-)
+
 -- 
-2.14.1
+2.4.11
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
