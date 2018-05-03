@@ -1,33 +1,52 @@
-From: davem at davemloft.net (David Miller)
-Date: Thu, 03 May 2018 13:37:34 -0400 (EDT)
-Subject: [PATCH net-next mlxsw 0/3] selftests: forwarding: Updates to
- sysctl handling
-In-Reply-To: <cover.1525343276.git.petrm@mellanox.com>
-References: <cover.1525343276.git.petrm@mellanox.com>
-Message-ID: <20180503.133734.1839164892433201492.davem@davemloft.net>
+From: shuah at kernel.org (Shuah Khan)
+Date: Thu, 3 May 2018 14:50:58 -0600
+Subject: [GIT PULL] kselftest update for 4.17-4
+Message-ID: <c5fc8296-5cdc-9827-e7ad-c6e7d00ba0a9@kernel.org>
 
-From: Petr Machata <petrm at mellanox.com>
-Date: Thu, 03 May 2018 12:36:52 +0200
+Hi Linus,
 
-> Some selftests need to adjust sysctl settings. In order to be neutral to
-> the system that the test is run on, it is a good practice to change back
-> to the original setting after the test ends. That involves some
-> boilerplate that can be abstracted away.
-> 
-> In patch #1, introduce two functions, sysctl_set() and sysctl_restore().
-> The former stores the current value of a given setting, and sets a new
-> value. The latter restores the setting to the previously-stored value.
-> 
-> In patch #2, use these wrappers in a number of tests.
-> 
-> Additionally in patch #3, fix a problem in mirror_gre_nh.sh, which
-> neglected to set a sysctl that's crucial for the test to work.
+Please pull the following Kselftest update for 4.17-rc4
 
-Luckily that errant 'mlxsw' hides inside of [] so git will get rid of
-it :-)
+This Kselftest update for 4.17-rc4 consists of a fix for a syntax error
+in the script that runs selftests. Mathieu Desnoyers found this bug in
+the script on systems running GNU Make 3.8 or older.
 
-Series applied, thanks.
---
-To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
-the body of a message to majordomo at vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+diff is attached.
+
+thanks,
+-- Shuah
+
+-----------------------------------------------------------------------------------
+The following changes since commit 8bf24e8319613bbe950d4188682b3a0d9441b76b:
+
+  selftests/filesystems: Don't run dnotify_test by default (2018-04-17 17:01:16 -0600)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-4.17-rc4
+
+for you to fetch changes up to a33554401e4746cc33307910a1baad63ce3fd650:
+
+  selftests: Fix lib.mk run_tests target shell script (2018-04-27 16:06:36 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-4.17-rc4
+
+This Kselftest update for 4.17-rc4 consists of a fix for a syntax error
+in the script that runs selftests. Mathieu Desnoyers found this bug in
+the script on systems running GNU Make 3.8 or older.
+
+----------------------------------------------------------------
+Mathieu Desnoyers (1):
+      selftests: Fix lib.mk run_tests target shell script
+
+ tools/testing/selftests/lib.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+-----------------------------------------------------------------------------------
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux-kselftest-4.17-rc4.diff
+Type: text/x-patch
+Size: 663 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20180503/46ca27a3/attachment.bin>
