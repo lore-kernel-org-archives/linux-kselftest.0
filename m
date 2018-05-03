@@ -1,54 +1,102 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Thu, 3 May 2018 14:50:58 -0600
-Subject: [GIT PULL] kselftest update for 4.17-4
-Message-ID: <c5fc8296-5cdc-9827-e7ad-c6e7d00ba0a9@kernel.org>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Thu, 3 May 2018 18:11:37 -0400
+Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
+In-Reply-To: <152465856498.26224.16969986455942749517.stgit@devbox>
+References: <152465856498.26224.16969986455942749517.stgit@devbox>
+Message-ID: <20180503181137.6d82d897@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180503205058.u3z1Y0Nh2v7fy_CIPaNrs1oTC5W7-BwvlUrISA4yFR4@z>
+Message-ID: <20180503221137.lMmymqjKah1PwikW6sr2RCk3vgu0fmpc4V03JGSCEf0@z>
 
-Hi Linus,
+On Wed, 25 Apr 2018 21:16:06 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-Please pull the following Kselftest update for 4.17-rc4
+> Hi,
+> 
+> This is the 7th version of the fetch-arg improvement series.
+> This includes variable changes on fetcharg framework like,
+> 
+> - Add fetcharg testcases (syntax, argN, symbol, string and array)
+>   and probepoint testcase.
+> - Rewrite fetcharg framework with fetch_insn, switch-case based
+>   instead of function pointer.
+> - Add "symbol" type support, which shows symbol+offset instead of
+>   address value.
+> - Add "$argN" fetcharg, which fetches function parameters.
+>   (currently only for x86-64)
+> - Add array type support (including string arrary :) ) ,
+>   which enables to get fixed length array from probe-events.
+> - Add array type support for perf-probe, so that user can
+>   dump partial array entries.
+> 
+> V6 is here:
+>  https://lkml.org/lkml/2018/3/17/75
+> 
+> Changes from the v6 are here:
+>  [6/16]  - Fix to return an error if failed to fetch string and
+>         fill zero-length data_loc in error case.
+>  [11/16] - Update document for restructured text.
+>  [15/16] - Fix README test.
+>  [16/16] - Add type-casting description (and note) to documentation.
+> 
+> And rebased on the latest Steve's ftrace/core branch.
+> 
 
-This Kselftest update for 4.17-rc4 consists of a fix for a syntax error
-in the script that runs selftests. Mathieu Desnoyers found this bug in
-the script on systems running GNU Make 3.8 or older.
+Hi Masami,
 
-diff is attached.
+I skimmed through the patches and it they appear fine. I've applied
+them and started playing a little.
 
-thanks,
--- Shuah
+I've been thinking my function based events, and thought instead I
+would make them part of the kprobe infrastructure. Just have a slightly
+different format, and instead of being p: or r: be f: And keep the
+format I was suggesting.
 
------------------------------------------------------------------------------------
-The following changes since commit 8bf24e8319613bbe950d4188682b3a0d9441b76b:
+What do you think?
 
-  selftests/filesystems: Don't run dnotify_test by default (2018-04-17 17:01:16 -0600)
+Also, when looking at the kprobe code, I was looking at this function:
 
-are available in the git repository at:
+> /* Ftrace callback handler for kprobes -- called under preepmt disabed */
+> void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+> 			   struct ftrace_ops *ops, struct pt_regs *regs)
+> {
+> 	struct kprobe *p;
+> 	struct kprobe_ctlblk *kcb;
+> 
+> 	/* Preempt is disabled by ftrace */
+> 	p = get_kprobe((kprobe_opcode_t *)ip);
+> 	if (unlikely(!p) || kprobe_disabled(p))
+> 		return;
+> 
+> 	kcb = get_kprobe_ctlblk();
+> 	if (kprobe_running()) {
+> 		kprobes_inc_nmissed_count(p);
+> 	} else {
+> 		unsigned long orig_ip = regs->ip;
+> 		/* Kprobe handler expects regs->ip = ip + 1 as breakpoint hit */
+> 		regs->ip = ip + sizeof(kprobe_opcode_t);
+> 
+> 		/* To emulate trap based kprobes, preempt_disable here */
+> 		preempt_disable();
+> 		__this_cpu_write(current_kprobe, p);
+> 		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+> 		if (!p->pre_handler || !p->pre_handler(p, regs)) {
+> 			__skip_singlestep(p, regs, kcb, orig_ip);
+> 			preempt_enable_no_resched();
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-4.17-rc4
+This preemption disabling and enabling looks rather strange. Looking at
+git blame, it appears this was added for jprobes. Can we remove it now
+that jprobes is going away?
 
-for you to fetch changes up to a33554401e4746cc33307910a1baad63ce3fd650:
+> 		}
+> 		/*
+> 		 * If pre_handler returns !0, it sets regs->ip and
+> 		 * resets current kprobe, and keep preempt count +1.
+> 		 */
+> 	}
+> }
 
-  selftests: Fix lib.mk run_tests target shell script (2018-04-27 16:06:36 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-4.17-rc4
-
-This Kselftest update for 4.17-rc4 consists of a fix for a syntax error
-in the script that runs selftests. Mathieu Desnoyers found this bug in
-the script on systems running GNU Make 3.8 or older.
-
-----------------------------------------------------------------
-Mathieu Desnoyers (1):
-      selftests: Fix lib.mk run_tests target shell script
-
- tools/testing/selftests/lib.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
------------------------------------------------------------------------------------
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: linux-kselftest-4.17-rc4.diff
-Type: text/x-patch
-Size: 663 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20180503/46ca27a3/attachment.bin>
+-- Steve
+--
+To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
+the body of a message to majordomo at vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
