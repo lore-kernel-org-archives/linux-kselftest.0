@@ -1,135 +1,77 @@
-From: naveen.n.rao@linux.vnet.ibm.com (Naveen N. Rao)
-Date: Fri, 04 May 2018 23:00:20 +0530
-Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
-In-Reply-To: <20180504120642.354cdd1f@gandalf.local.home>
-References: <152465856498.26224.16969986455942749517.stgit@devbox>
- <20180503181137.6d82d897@gandalf.local.home>
- <20180505004828.9b75b6802472f09b0d2de5b8@kernel.org>
- <20180504120642.354cdd1f@gandalf.local.home>
-Message-ID: <1525453638.1fh5wo34i6.naveen@linux.ibm.com>
+From: shuah@kernel.org (Shuah Khan)
+Date: Fri, 4 May 2018 13:39:33 -0600
+Subject: [PATCH] selftests/x86: Detect -no-pie availability
+In-Reply-To: <20180502121433.7F874401F1BF7@oldenburg.str.redhat.com>
+References: <20180502121433.7F874401F1BF7@oldenburg.str.redhat.com>
+Message-ID: <f55777ec-53e5-ad7a-dca9-6313dc779342@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180504173020.sGVJAmK-NFl1wStkRDNl1Cp0JrjKwzfESqM9Xu7iO0g@z>
+Message-ID: <20180504193933.Q7Z4eWQaq3YZSSEmEP08qP2Nx_6Ns0EdUQ4Tex9Hux8@z>
 
-Steven Rostedt wrote:
-> On Sat, 5 May 2018 00:48:28 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
->> > 
->> > Also, when looking at the kprobe code, I was looking at this function:
->> >   
->> > > /* Ftrace callback handler for kprobes -- called under preepmt disabed */
->> > > void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
->> > > 			   struct ftrace_ops *ops, struct pt_regs *regs)
->> > > {
->> > > 	struct kprobe *p;
->> > > 	struct kprobe_ctlblk *kcb;
->> > > 
->> > > 	/* Preempt is disabled by ftrace */
->> > > 	p = get_kprobe((kprobe_opcode_t *)ip);
->> > > 	if (unlikely(!p) || kprobe_disabled(p))
->> > > 		return;
->> > > 
->> > > 	kcb = get_kprobe_ctlblk();
->> > > 	if (kprobe_running()) {
->> > > 		kprobes_inc_nmissed_count(p);
->> > > 	} else {
->> > > 		unsigned long orig_ip = regs->ip;
->> > > 		/* Kprobe handler expects regs->ip = ip + 1 as breakpoint hit */
->> > > 		regs->ip = ip + sizeof(kprobe_opcode_t);
->> > > 
->> > > 		/* To emulate trap based kprobes, preempt_disable here */
->> > > 		preempt_disable();
->> > > 		__this_cpu_write(current_kprobe, p);
->> > > 		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
->> > > 		if (!p->pre_handler || !p->pre_handler(p, regs)) {
->> > > 			__skip_singlestep(p, regs, kcb, orig_ip);
->> > > 			preempt_enable_no_resched();  
->> > 
->> > This preemption disabling and enabling looks rather strange. Looking at
->> > git blame, it appears this was added for jprobes. Can we remove it now
->> > that jprobes is going away?  
->> 
->> No, that is not for jprobes but for compatibility with kprobe's user
->> handler. Since this transformation is done silently, user can not
->> change their handler for ftrace case. So we need to keep this condition
->> same as original kprobes.
->> 
->> And anyway, for using smp_processor_id() for accessing per-cpu,
->> we should disable preemption, correct?
+On 05/02/2018 06:10 AM, Florian Weimer wrote:
+> Some toolchains need -no-pie to build all tests, others do not support
+> the -no-pie flag at all.  Therefore, add another test for the
+> availability of the flag.
 > 
-> But as stated at the start of the function:
+> This amends commit 3346a6a4e5ba8c040360f753b26938cec31a4bdc
+> ("selftests: x86: sysret_ss_attrs doesn't build on a PIE build").
 > 
->  /* Preempt is disabled by ftrace */
+> Signed-off-by: Florian Weimer <fweimer at redhat.com>
+> Acked-by: Randy Dunlap <rdunlap at infradead.org>
+> Tested-by: Randy Dunlap <rdunlap at infradead.org>
+> ---
+>  tools/testing/selftests/x86/Makefile          |  8 +++++++-
+>  tools/testing/selftests/x86/trivial_program.c | 10 ++++++++++
+>  2 files changed, 17 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/x86/trivial_program.c
 > 
+> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+> index d744991c0f4f..94c89261a236 100644
+> --- a/tools/testing/selftests/x86/Makefile
+> +++ b/tools/testing/selftests/x86/Makefile
+> @@ -8,6 +8,7 @@ include ../lib.mk
+>  UNAME_M := $(shell uname -m)
+>  CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
+>  CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
+> +CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
+>  
+>  TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+>  			check_initial_reg_state sigreturn iopl mpx-mini-test ioperm \
+> @@ -31,7 +32,12 @@ BINARIES_64 := $(TARGETS_C_64BIT_ALL:%=%_64)
+>  BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+>  BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
+>  
+> -CFLAGS := -O2 -g -std=gnu99 -pthread -Wall -no-pie
+> +CFLAGS := -O2 -g -std=gnu99 -pthread -Wall
+> +
+> +# call32_from_64 in thunks.S uses absolute addresses.
+> +ifeq ($(CAN_BUILD_WITH_NOPIE),1)
+> +CFLAGS += -no-pie
+> +endif
+>  
+>  define gen-target-rule-32
+>  $(1) $(1)_32: $(OUTPUT)/$(1)_32
+> diff --git a/tools/testing/selftests/x86/trivial_program.c b/tools/testing/selftests/x86/trivial_program.c
+> new file mode 100644
+> index 000000000000..46a447163b93
+> --- /dev/null
+> +++ b/tools/testing/selftests/x86/trivial_program.c
+> @@ -0,0 +1,10 @@
+> +/* Trivial program to check that compilation with certain flags is working. */
+> +
+> +#include <stdio.h>
+> +
+> +int
+> +main(void)
+> +{
+> +	puts("");
+> +	return 0;
+> +}
 > 
-> The reason I ask, is that we have for this function:
-> 
-> 		/* To emulate trap based kprobes, preempt_disable here */
-> 		preempt_disable();
-> 		__this_cpu_write(current_kprobe, p);
-> 		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-> 		if (!p->pre_handler || !p->pre_handler(p, regs)) {
-> 			__skip_singlestep(p, regs, kcb, orig_ip);
-> 			preempt_enable_no_resched();
-> 		}
-> 
-> And in arch/x86/kernel/kprobes/core.c we have:
-> 
-> 	preempt_disable();
-> 
-> 	kcb = get_kprobe_ctlblk();
-> 	p = get_kprobe(addr);
-> 
-> 	if (p) {
-> 		if (kprobe_running()) {
-> 			if (reenter_kprobe(p, regs, kcb))
-> 				return 1;
-> 		} else {
-> 			set_current_kprobe(p, regs, kcb);
-> 			kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-> 
-> 			/*
-> 			 * If we have no pre-handler or it returned 0, we
-> 			 * continue with normal processing.  If we have a
-> 			 * pre-handler and it returned non-zero, it prepped
-> 			 * for calling the break_handler below on re-entry
-> 			 * for jprobe processing, so get out doing nothing
-> 			 * more here.
-> 			 */
-> 			if (!p->pre_handler || !p->pre_handler(p, regs))
-> 				setup_singlestep(p, regs, kcb, 0);
-> 			return 1;
-> 
-> 
-> Which is why I thought it was for jprobes. I'm a bit confused about
-> where preemption is enabled again.
 
-Jprobes was the in-kernel user for that. However, users can write custom 
-kprobe [pre-]handlers that return a non-zero value if they want to 
-suppress normal processing of the probe (single stepping the instruction 
-where the probe was installed). In this case, the custom handler is 
-expected to deal with re-enabling preemption before returning from the 
-pre handler. Or, there must be some other way to re-enable preemption 
-later on like with jprobes -- where the hook would cause a trap to 
-complete jprobe handling.
+Thanks. I will queue this up for 4.18-rc1
 
-For optprobes, we actually break this and do not disable preemption.  
-But, the expectation there is that the user set a post-handler to force 
-optprobes to be disabled, *if* they want to do custom handling by 
-returning a non-zero return value from the pre handler.
-
-For KPROBES_ON_FTRACE, we need to emulate the behavior of the normal, 
-trap-based kprobes. This is the reason preemption needs to be disabled 
-again, so as to balance it with the user's custom handler re-enabling 
-it.
-
-Of course, with the in-kernel user (jprobes) now gone, it is anybody's 
-guess as to who is still depending on this custom pre-handler behavior 
-;)
-
-
-- Naveen
-
-
+thahnks,
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
