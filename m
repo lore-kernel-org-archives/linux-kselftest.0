@@ -1,99 +1,37 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Thu, 3 May 2018 18:11:37 -0400
-Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
-In-Reply-To: <152465856498.26224.16969986455942749517.stgit@devbox>
-References: <152465856498.26224.16969986455942749517.stgit@devbox>
-Message-ID: <20180503181137.6d82d897@gandalf.local.home>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Fri,  4 May 2018 11:17:25 +0200
+Subject: [PATCH] selftests: net: add udpgso* to TEST_GEN_FILES
+Message-ID: <20180504091725.24977-1-anders.roxell@linaro.org>
 
-On Wed, 25 Apr 2018 21:16:06 +0900
-Masami Hiramatsu <mhiramat at kernel.org> wrote:
+The generated files udpgso* shouldn't be part of TEST_PROGS, they are
+used by udpgso.sh and udpgsp_bench.sh. They should be added to the
+TEST_GEN_FILES to get installed without being added to the main
+run_kselftest.sh script.
 
-> Hi,
-> 
-> This is the 7th version of the fetch-arg improvement series.
-> This includes variable changes on fetcharg framework like,
-> 
-> - Add fetcharg testcases (syntax, argN, symbol, string and array)
->   and probepoint testcase.
-> - Rewrite fetcharg framework with fetch_insn, switch-case based
->   instead of function pointer.
-> - Add "symbol" type support, which shows symbol+offset instead of
->   address value.
-> - Add "$argN" fetcharg, which fetches function parameters.
->   (currently only for x86-64)
-> - Add array type support (including string arrary :) ) ,
->   which enables to get fixed length array from probe-events.
-> - Add array type support for perf-probe, so that user can
->   dump partial array entries.
-> 
-> V6 is here:
->  https://lkml.org/lkml/2018/3/17/75
-> 
-> Changes from the v6 are here:
->  [6/16]  - Fix to return an error if failed to fetch string and
->         fill zero-length data_loc in error case.
->  [11/16] - Update document for restructured text.
->  [15/16] - Fix README test.
->  [16/16] - Add type-casting description (and note) to documentation.
-> 
-> And rebased on the latest Steve's ftrace/core branch.
-> 
+Fixes: 3a687bef148d ("selftests: udp gso benchmark")
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+---
+ tools/testing/selftests/net/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi Masami,
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 44895de1a0c4..f0363387ef2f 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -11,9 +11,9 @@ TEST_GEN_PROGS_EXTENDED := in_netns.sh
+ TEST_GEN_FILES =  socket
+ TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy
+ TEST_GEN_FILES += tcp_mmap tcp_inq
++TEST_GEN_FILES += udpgso udpgso_bench_tx udpgso_bench_rx
+ TEST_GEN_PROGS = reuseport_bpf reuseport_bpf_cpu reuseport_bpf_numa
+ TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict
+-TEST_GEN_PROGS += udpgso udpgso_bench_tx udpgso_bench_rx
+ 
+ include ../lib.mk
+ 
+-- 
+2.11.0
 
-I skimmed through the patches and it they appear fine. I've applied
-them and started playing a little.
-
-I've been thinking my function based events, and thought instead I
-would make them part of the kprobe infrastructure. Just have a slightly
-different format, and instead of being p: or r: be f: And keep the
-format I was suggesting.
-
-What do you think?
-
-Also, when looking at the kprobe code, I was looking at this function:
-
-> /* Ftrace callback handler for kprobes -- called under preepmt disabed */
-> void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
-> 			   struct ftrace_ops *ops, struct pt_regs *regs)
-> {
-> 	struct kprobe *p;
-> 	struct kprobe_ctlblk *kcb;
-> 
-> 	/* Preempt is disabled by ftrace */
-> 	p = get_kprobe((kprobe_opcode_t *)ip);
-> 	if (unlikely(!p) || kprobe_disabled(p))
-> 		return;
-> 
-> 	kcb = get_kprobe_ctlblk();
-> 	if (kprobe_running()) {
-> 		kprobes_inc_nmissed_count(p);
-> 	} else {
-> 		unsigned long orig_ip = regs->ip;
-> 		/* Kprobe handler expects regs->ip = ip + 1 as breakpoint hit */
-> 		regs->ip = ip + sizeof(kprobe_opcode_t);
-> 
-> 		/* To emulate trap based kprobes, preempt_disable here */
-> 		preempt_disable();
-> 		__this_cpu_write(current_kprobe, p);
-> 		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-> 		if (!p->pre_handler || !p->pre_handler(p, regs)) {
-> 			__skip_singlestep(p, regs, kcb, orig_ip);
-> 			preempt_enable_no_resched();
-
-This preemption disabling and enabling looks rather strange. Looking at
-git blame, it appears this was added for jprobes. Can we remove it now
-that jprobes is going away?
-
-> 		}
-> 		/*
-> 		 * If pre_handler returns !0, it sets regs->ip and
-> 		 * resets current kprobe, and keep preempt count +1.
-> 		 */
-> 	}
-> }
-
--- Steve
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
