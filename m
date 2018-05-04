@@ -1,149 +1,130 @@
-From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Sat, 5 May 2018 00:48:28 +0900
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Fri, 4 May 2018 12:06:42 -0400
 Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
-In-Reply-To: <20180503181137.6d82d897@gandalf.local.home>
+In-Reply-To: <20180505004828.9b75b6802472f09b0d2de5b8@kernel.org>
 References: <152465856498.26224.16969986455942749517.stgit@devbox>
  <20180503181137.6d82d897@gandalf.local.home>
-Message-ID: <20180505004828.9b75b6802472f09b0d2de5b8@kernel.org>
+ <20180505004828.9b75b6802472f09b0d2de5b8@kernel.org>
+Message-ID: <20180504120642.354cdd1f@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180504154828.0C01btWok9qU4vy7IxySPoAJK4gxhEUfU48Tfp2nld8@z>
+Message-ID: <20180504160642.lbA3-zGLm0fybD_kCslexctPXeBmJemZBx0qmFU9JOA@z>
 
-On Thu, 3 May 2018 18:11:37 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Sat, 5 May 2018 00:48:28 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-> On Wed, 25 Apr 2018 21:16:06 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> So the syntax will be
 > 
-> > Hi,
+> p[:EVENT] SYM[(CAST)|+OFFS] [FETCHARG]
+> 
+> And here is an example;
+> 
+> p:myevent vfs_read(void *file, char *buf, size_t count, void *pos) $arg1 $arg2
+
+If we do this, why bother with $arg1 $arg2?
+
+We could allow this to be an alternative format?
+
+> 
+> In this case inside '()' will be analyzed and packed as something
+> like "reference type" data and it is used when converting "$argN".
+> And maybe we can provide $args special variable to record all
+> arguments (it can be available only when the (CAST) is given).
+> 
+> This gives the user a consistent model; if you just give a symbol
+> the arguments may not be correctly translated. but if you give a
+> type-casting information, it will be much better.
+> 
 > > 
-> > This is the 7th version of the fetch-arg improvement series.
-> > This includes variable changes on fetcharg framework like,
+> > Also, when looking at the kprobe code, I was looking at this function:
+> >   
+> > > /* Ftrace callback handler for kprobes -- called under preepmt disabed */
+> > > void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+> > > 			   struct ftrace_ops *ops, struct pt_regs *regs)
+> > > {
+> > > 	struct kprobe *p;
+> > > 	struct kprobe_ctlblk *kcb;
+> > > 
+> > > 	/* Preempt is disabled by ftrace */
+> > > 	p = get_kprobe((kprobe_opcode_t *)ip);
+> > > 	if (unlikely(!p) || kprobe_disabled(p))
+> > > 		return;
+> > > 
+> > > 	kcb = get_kprobe_ctlblk();
+> > > 	if (kprobe_running()) {
+> > > 		kprobes_inc_nmissed_count(p);
+> > > 	} else {
+> > > 		unsigned long orig_ip = regs->ip;
+> > > 		/* Kprobe handler expects regs->ip = ip + 1 as breakpoint hit */
+> > > 		regs->ip = ip + sizeof(kprobe_opcode_t);
+> > > 
+> > > 		/* To emulate trap based kprobes, preempt_disable here */
+> > > 		preempt_disable();
+> > > 		__this_cpu_write(current_kprobe, p);
+> > > 		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+> > > 		if (!p->pre_handler || !p->pre_handler(p, regs)) {
+> > > 			__skip_singlestep(p, regs, kcb, orig_ip);
+> > > 			preempt_enable_no_resched();  
 > > 
-> > - Add fetcharg testcases (syntax, argN, symbol, string and array)
-> >   and probepoint testcase.
-> > - Rewrite fetcharg framework with fetch_insn, switch-case based
-> >   instead of function pointer.
-> > - Add "symbol" type support, which shows symbol+offset instead of
-> >   address value.
-> > - Add "$argN" fetcharg, which fetches function parameters.
-> >   (currently only for x86-64)
-> > - Add array type support (including string arrary :) ) ,
-> >   which enables to get fixed length array from probe-events.
-> > - Add array type support for perf-probe, so that user can
-> >   dump partial array entries.
-> > 
-> > V6 is here:
-> >  https://lkml.org/lkml/2018/3/17/75
-> > 
-> > Changes from the v6 are here:
-> >  [6/16]  - Fix to return an error if failed to fetch string and
-> >         fill zero-length data_loc in error case.
-> >  [11/16] - Update document for restructured text.
-> >  [15/16] - Fix README test.
-> >  [16/16] - Add type-casting description (and note) to documentation.
-> > 
-> > And rebased on the latest Steve's ftrace/core branch.
-> > 
+> > This preemption disabling and enabling looks rather strange. Looking at
+> > git blame, it appears this was added for jprobes. Can we remove it now
+> > that jprobes is going away?  
 > 
-> Hi Masami,
+> No, that is not for jprobes but for compatibility with kprobe's user
+> handler. Since this transformation is done silently, user can not
+> change their handler for ftrace case. So we need to keep this condition
+> same as original kprobes.
 > 
-> I skimmed through the patches and it they appear fine. I've applied
-> them and started playing a little.
-> 
+> And anyway, for using smp_processor_id() for accessing per-cpu,
+> we should disable preemption, correct?
 
-Thanks!
+But as stated at the start of the function:
 
-> I've been thinking my function based events, and thought instead I
-> would make them part of the kprobe infrastructure. Just have a slightly
-> different format, and instead of being p: or r: be f: And keep the
-> format I was suggesting.
-> 
-> What do you think?
-
-Unifying the user knob is great!
-
-But if so, the format also should not be so different, I mean user
-can use it same way. And maybe "f:" will be non-sense. "p:" with
-"function+0" allows user to use "function type casting", that is
-enough I think.
-
-So the syntax will be
-
-p[:EVENT] SYM[(CAST)|+OFFS] [FETCHARG]
-
-And here is an example;
-
-p:myevent vfs_read(void *file, char *buf, size_t count, void *pos) $arg1 $arg2
-
-In this case inside '()' will be analyzed and packed as something
-like "reference type" data and it is used when converting "$argN".
-And maybe we can provide $args special variable to record all
-arguments (it can be available only when the (CAST) is given).
-
-This gives the user a consistent model; if you just give a symbol
-the arguments may not be correctly translated. but if you give a
-type-casting information, it will be much better.
-
-> 
-> Also, when looking at the kprobe code, I was looking at this function:
-> 
-> > /* Ftrace callback handler for kprobes -- called under preepmt disabed */
-> > void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
-> > 			   struct ftrace_ops *ops, struct pt_regs *regs)
-> > {
-> > 	struct kprobe *p;
-> > 	struct kprobe_ctlblk *kcb;
-> > 
-> > 	/* Preempt is disabled by ftrace */
-> > 	p = get_kprobe((kprobe_opcode_t *)ip);
-> > 	if (unlikely(!p) || kprobe_disabled(p))
-> > 		return;
-> > 
-> > 	kcb = get_kprobe_ctlblk();
-> > 	if (kprobe_running()) {
-> > 		kprobes_inc_nmissed_count(p);
-> > 	} else {
-> > 		unsigned long orig_ip = regs->ip;
-> > 		/* Kprobe handler expects regs->ip = ip + 1 as breakpoint hit */
-> > 		regs->ip = ip + sizeof(kprobe_opcode_t);
-> > 
-> > 		/* To emulate trap based kprobes, preempt_disable here */
-> > 		preempt_disable();
-> > 		__this_cpu_write(current_kprobe, p);
-> > 		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-> > 		if (!p->pre_handler || !p->pre_handler(p, regs)) {
-> > 			__skip_singlestep(p, regs, kcb, orig_ip);
-> > 			preempt_enable_no_resched();
-> 
-> This preemption disabling and enabling looks rather strange. Looking at
-> git blame, it appears this was added for jprobes. Can we remove it now
-> that jprobes is going away?
-
-No, that is not for jprobes but for compatibility with kprobe's user
-handler. Since this transformation is done silently, user can not
-change their handler for ftrace case. So we need to keep this condition
-same as original kprobes.
-
-And anyway, for using smp_processor_id() for accessing per-cpu,
-we should disable preemption, correct?
-
-Thanks,
+ /* Preempt is disabled by ftrace */
 
 
-> 
-> > 		}
-> > 		/*
-> > 		 * If pre_handler returns !0, it sets regs->ip and
-> > 		 * resets current kprobe, and keep preempt count +1.
-> > 		 */
-> > 	}
-> > }
-> 
-> -- Steve
+The reason I ask, is that we have for this function:
+
+		/* To emulate trap based kprobes, preempt_disable here */
+		preempt_disable();
+		__this_cpu_write(current_kprobe, p);
+		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+		if (!p->pre_handler || !p->pre_handler(p, regs)) {
+			__skip_singlestep(p, regs, kcb, orig_ip);
+			preempt_enable_no_resched();
+		}
+
+And in arch/x86/kernel/kprobes/core.c we have:
+
+	preempt_disable();
+
+	kcb = get_kprobe_ctlblk();
+	p = get_kprobe(addr);
+
+	if (p) {
+		if (kprobe_running()) {
+			if (reenter_kprobe(p, regs, kcb))
+				return 1;
+		} else {
+			set_current_kprobe(p, regs, kcb);
+			kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+
+			/*
+			 * If we have no pre-handler or it returned 0, we
+			 * continue with normal processing.  If we have a
+			 * pre-handler and it returned non-zero, it prepped
+			 * for calling the break_handler below on re-entry
+			 * for jprobe processing, so get out doing nothing
+			 * more here.
+			 */
+			if (!p->pre_handler || !p->pre_handler(p, regs))
+				setup_singlestep(p, regs, kcb, 0);
+			return 1;
 
 
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+Which is why I thought it was for jprobes. I'm a bit confused about
+where preemption is enabled again.
+
+-- Steve
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
