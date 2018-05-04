@@ -1,128 +1,36 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Fri, 4 May 2018 12:06:42 -0400
-Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
-In-Reply-To: <20180505004828.9b75b6802472f09b0d2de5b8@kernel.org>
-References: <152465856498.26224.16969986455942749517.stgit@devbox>
- <20180503181137.6d82d897@gandalf.local.home>
- <20180505004828.9b75b6802472f09b0d2de5b8@kernel.org>
-Message-ID: <20180504120642.354cdd1f@gandalf.local.home>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Fri,  4 May 2018 18:47:25 +0200
+Subject: [PATCH] selftests: net: use TEST_PROGS_EXTENDED
+Message-ID: <20180504164725.13516-1-anders.roxell@linaro.org>
 
-On Sat, 5 May 2018 00:48:28 +0900
-Masami Hiramatsu <mhiramat at kernel.org> wrote:
+When a script file that isn't generated uses the variable
+TEST_GEN_PROGS_EXTENDED and a 'make -C tools/testing/selftests clean' is
+performed the script file gets removed and git shows the file as
+deleted. For script files that isn't generated TEST_PROGS_EXTENDED
+should be used.
 
-> So the syntax will be
-> 
-> p[:EVENT] SYM[(CAST)|+OFFS] [FETCHARG]
-> 
-> And here is an example;
-> 
-> p:myevent vfs_read(void *file, char *buf, size_t count, void *pos) $arg1 $arg2
+Fixes: 9faedd643fd9 ("selftests: net: add in_netns.sh TEST_GEN_PROGS_EXTENDED")
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+---
+ tools/testing/selftests/net/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If we do this, why bother with $arg1 $arg2?
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 44895de1a0c4..eee47a4bc675 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -7,7 +7,7 @@ CFLAGS += -I../../../../usr/include/
+ TEST_PROGS := run_netsocktests run_afpackettests test_bpf.sh netdevice.sh rtnetlink.sh
+ TEST_PROGS += fib_tests.sh fib-onlink-tests.sh pmtu.sh udpgso.sh
+ TEST_PROGS += udpgso_bench.sh
+-TEST_GEN_PROGS_EXTENDED := in_netns.sh
++TEST_PROGS_EXTENDED := in_netns.sh
+ TEST_GEN_FILES =  socket
+ TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy
+ TEST_GEN_FILES += tcp_mmap tcp_inq
+-- 
+2.11.0
 
-We could allow this to be an alternative format?
-
-> 
-> In this case inside '()' will be analyzed and packed as something
-> like "reference type" data and it is used when converting "$argN".
-> And maybe we can provide $args special variable to record all
-> arguments (it can be available only when the (CAST) is given).
-> 
-> This gives the user a consistent model; if you just give a symbol
-> the arguments may not be correctly translated. but if you give a
-> type-casting information, it will be much better.
-> 
-> > 
-> > Also, when looking at the kprobe code, I was looking at this function:
-> >   
-> > > /* Ftrace callback handler for kprobes -- called under preepmt disabed */
-> > > void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
-> > > 			   struct ftrace_ops *ops, struct pt_regs *regs)
-> > > {
-> > > 	struct kprobe *p;
-> > > 	struct kprobe_ctlblk *kcb;
-> > > 
-> > > 	/* Preempt is disabled by ftrace */
-> > > 	p = get_kprobe((kprobe_opcode_t *)ip);
-> > > 	if (unlikely(!p) || kprobe_disabled(p))
-> > > 		return;
-> > > 
-> > > 	kcb = get_kprobe_ctlblk();
-> > > 	if (kprobe_running()) {
-> > > 		kprobes_inc_nmissed_count(p);
-> > > 	} else {
-> > > 		unsigned long orig_ip = regs->ip;
-> > > 		/* Kprobe handler expects regs->ip = ip + 1 as breakpoint hit */
-> > > 		regs->ip = ip + sizeof(kprobe_opcode_t);
-> > > 
-> > > 		/* To emulate trap based kprobes, preempt_disable here */
-> > > 		preempt_disable();
-> > > 		__this_cpu_write(current_kprobe, p);
-> > > 		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-> > > 		if (!p->pre_handler || !p->pre_handler(p, regs)) {
-> > > 			__skip_singlestep(p, regs, kcb, orig_ip);
-> > > 			preempt_enable_no_resched();  
-> > 
-> > This preemption disabling and enabling looks rather strange. Looking at
-> > git blame, it appears this was added for jprobes. Can we remove it now
-> > that jprobes is going away?  
-> 
-> No, that is not for jprobes but for compatibility with kprobe's user
-> handler. Since this transformation is done silently, user can not
-> change their handler for ftrace case. So we need to keep this condition
-> same as original kprobes.
-> 
-> And anyway, for using smp_processor_id() for accessing per-cpu,
-> we should disable preemption, correct?
-
-But as stated at the start of the function:
-
- /* Preempt is disabled by ftrace */
-
-
-The reason I ask, is that we have for this function:
-
-		/* To emulate trap based kprobes, preempt_disable here */
-		preempt_disable();
-		__this_cpu_write(current_kprobe, p);
-		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-		if (!p->pre_handler || !p->pre_handler(p, regs)) {
-			__skip_singlestep(p, regs, kcb, orig_ip);
-			preempt_enable_no_resched();
-		}
-
-And in arch/x86/kernel/kprobes/core.c we have:
-
-	preempt_disable();
-
-	kcb = get_kprobe_ctlblk();
-	p = get_kprobe(addr);
-
-	if (p) {
-		if (kprobe_running()) {
-			if (reenter_kprobe(p, regs, kcb))
-				return 1;
-		} else {
-			set_current_kprobe(p, regs, kcb);
-			kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-
-			/*
-			 * If we have no pre-handler or it returned 0, we
-			 * continue with normal processing.  If we have a
-			 * pre-handler and it returned non-zero, it prepped
-			 * for calling the break_handler below on re-entry
-			 * for jprobe processing, so get out doing nothing
-			 * more here.
-			 */
-			if (!p->pre_handler || !p->pre_handler(p, regs))
-				setup_singlestep(p, regs, kcb, 0);
-			return 1;
-
-
-Which is why I thought it was for jprobes. I'm a bit confused about
-where preemption is enabled again.
-
--- Steve
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
