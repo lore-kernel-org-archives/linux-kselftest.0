@@ -1,15 +1,15 @@
 From: shuah at kernel.org (Shuah Khan (Samsung OSG))
-Date: Fri,  4 May 2018 19:13:20 -0600
-Subject: [PATCH 16/24] selftests: lib: return Kselftest Skip code for skipped
- tests
+Date: Fri,  4 May 2018 19:13:07 -0600
+Subject: [PATCH 03/24] selftests: cpu-hotplug: return Kselftest Skip code for
+ skipped tests
 In-Reply-To: <20180505011328.32078-1-shuah@kernel.org>
 References: <20180505011328.32078-1-shuah@kernel.org>
-Message-ID: <20180505011328.32078-16-shuah@kernel.org>
+Message-ID: <20180505011328.32078-3-shuah@kernel.org>
 
-When lib test(s) is skipped because of unmet dependencies and/or
-unsupported configuration, it returns non-zero value hich is treated
-as a fail by the Kselftest framework. This leads to false negative result
-even when the test could not be run.
+When cpu-on-off-test is skipped because of unmet dependencies and/or
+unsupported configuration, it returns 0 which is treated as a pass
+by the Kselftest framework. This leads to false positive result even
+when the test could not be run.
 
 Change it to return kselftest skip code when a test gets skipped to
 clearly report that the test could not be run.
@@ -19,70 +19,70 @@ messages to indicate that the test is skipped.
 
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/lib/bitmap.sh        | 8 ++++++--
- tools/testing/selftests/lib/prime_numbers.sh | 7 +++++--
- tools/testing/selftests/lib/printf.sh        | 8 ++++++--
- 3 files changed, 17 insertions(+), 6 deletions(-)
+ tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/lib/bitmap.sh b/tools/testing/selftests/lib/bitmap.sh
-index 4dee4d2a8bbe..5a90006d1aea 100755
---- a/tools/testing/selftests/lib/bitmap.sh
-+++ b/tools/testing/selftests/lib/bitmap.sh
-@@ -1,9 +1,13 @@
- #!/bin/sh
+diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+index f3a8933c1275..bab13dd025a6 100755
+--- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
++++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+@@ -2,6 +2,8 @@
  # SPDX-License-Identifier: GPL-2.0
-+
+ 
+ SYSFS=
 +# Kselftest framework requirement - SKIP code is 4.
 +ksft_skip=4
-+
- # Runs bitmap infrastructure tests using test_bitmap kernel module
- if ! /sbin/modprobe -q -n test_bitmap; then
--	echo "bitmap: [SKIP]"
--	exit 77
-+	echo "bitmap: module test_bitmap is not found [SKIP]"
-+	exit $ksft_skip
- fi
  
- if /sbin/modprobe -q test_bitmap; then
-diff --git a/tools/testing/selftests/lib/prime_numbers.sh b/tools/testing/selftests/lib/prime_numbers.sh
-index b363994e5e11..76602d4b050f 100755
---- a/tools/testing/selftests/lib/prime_numbers.sh
-+++ b/tools/testing/selftests/lib/prime_numbers.sh
-@@ -2,9 +2,12 @@
- # SPDX-License-Identifier: GPL-2.0
- # Checks fast/slow prime_number generation for inconsistencies
+ prerequisite()
+ {
+@@ -9,7 +11,7 @@ prerequisite()
  
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- if ! /sbin/modprobe -q -r prime_numbers; then
--	echo "prime_numbers: [SKIP]"
--	exit 77
-+	echo "prime_numbers: module prime_numbers is not found [SKIP]"
-+	exit $ksft_skip
- fi
+ 	if [ $UID != 0 ]; then
+ 		echo $msg must be run as root >&2
+-		exit 0
++		exit $ksft_skip
+ 	fi
  
- if /sbin/modprobe -q prime_numbers selftest=65536; then
-diff --git a/tools/testing/selftests/lib/printf.sh b/tools/testing/selftests/lib/printf.sh
-index 0c37377fd7d4..45a23e2d64ad 100755
---- a/tools/testing/selftests/lib/printf.sh
-+++ b/tools/testing/selftests/lib/printf.sh
-@@ -1,9 +1,13 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- # Runs printf infrastructure using test_printf kernel module
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- if ! /sbin/modprobe -q -n test_printf; then
--	echo "printf: [SKIP]"
--	exit 77
-+	echo "printf: module test_printf is not found [SKIP]"
-+	exit $ksft_skip
- fi
+ 	taskset -p 01 $$
+@@ -18,12 +20,12 @@ prerequisite()
  
- if /sbin/modprobe -q test_printf; then
+ 	if [ ! -d "$SYSFS" ]; then
+ 		echo $msg sysfs is not mounted >&2
+-		exit 0
++		exit $ksft_skip
+ 	fi
+ 
+ 	if ! ls $SYSFS/devices/system/cpu/cpu* > /dev/null 2>&1; then
+ 		echo $msg cpu hotplug is not supported >&2
+-		exit 0
++		exit $ksft_skip
+ 	fi
+ 
+ 	echo "CPU online/offline summary:"
+@@ -32,7 +34,7 @@ prerequisite()
+ 
+ 	if [[ "$online_cpus" = "$online_max" ]]; then
+ 		echo "$msg: since there is only one cpu: $online_cpus"
+-		exit 0
++		exit $ksft_skip
+ 	fi
+ 
+ 	echo -e "\t Cpus in online state: $online_cpus"
+@@ -237,12 +239,12 @@ prerequisite_extra()
+ 
+ 	if [ ! -d "$DEBUGFS" ]; then
+ 		echo $msg debugfs is not mounted >&2
+-		exit 0
++		exit $ksft_skip
+ 	fi
+ 
+ 	if [ ! -d $NOTIFIER_ERR_INJECT_DIR ]; then
+ 		echo $msg cpu-notifier-error-inject module is not available >&2
+-		exit 0
++		exit $ksft_skip
+ 	fi
+ }
+ 
 -- 
 2.14.1
 
