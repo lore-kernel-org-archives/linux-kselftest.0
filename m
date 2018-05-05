@@ -1,12 +1,12 @@
 From: shuah at kernel.org (Shuah Khan (Samsung OSG))
-Date: Fri,  4 May 2018 19:13:12 -0600
-Subject: [PATCH 08/24] selftests: firmware: return Kselftest Skip code for
+Date: Fri,  4 May 2018 19:13:13 -0600
+Subject: [PATCH 09/24] selftests: ftrace: return Kselftest Skip code for
  skipped tests
 In-Reply-To: <20180505011328.32078-1-shuah@kernel.org>
 References: <20180505011328.32078-1-shuah@kernel.org>
-Message-ID: <20180505011328.32078-8-shuah@kernel.org>
+Message-ID: <20180505011328.32078-9-shuah@kernel.org>
 
-When firmware test(s) get skipped because of unmet dependencies and/or
+When ftrace test is skipped because of unmet dependencies and/or
 unsupported configuration, it returns 0 which is treated as a pass
 by the Kselftest framework. This leads to false positive result even
 when the test could not be run.
@@ -19,91 +19,42 @@ messages to indicate that the test is skipped.
 
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/firmware/fw_fallback.sh   | 4 ++--
- tools/testing/selftests/firmware/fw_filesystem.sh | 4 +++-
- tools/testing/selftests/firmware/fw_lib.sh        | 7 +++++--
- 3 files changed, 10 insertions(+), 5 deletions(-)
+ tools/testing/selftests/ftrace/ftracetest | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/firmware/fw_fallback.sh b/tools/testing/selftests/firmware/fw_fallback.sh
-index 8e2e34a2ca69..70d18be46af5 100755
---- a/tools/testing/selftests/firmware/fw_fallback.sh
-+++ b/tools/testing/selftests/firmware/fw_fallback.sh
-@@ -74,7 +74,7 @@ load_fw_custom()
- {
- 	if [ ! -e "$DIR"/trigger_custom_fallback ]; then
- 		echo "$0: custom fallback trigger not present, ignoring test" >&2
--		return 1
-+		exit $ksft_skip
- 	fi
- 
- 	local name="$1"
-@@ -107,7 +107,7 @@ load_fw_custom_cancel()
- {
- 	if [ ! -e "$DIR"/trigger_custom_fallback ]; then
- 		echo "$0: canceling custom fallback trigger not present, ignoring test" >&2
--		return 1
-+		exit $ksft_skip
- 	fi
- 
- 	local name="$1"
-diff --git a/tools/testing/selftests/firmware/fw_filesystem.sh b/tools/testing/selftests/firmware/fw_filesystem.sh
-index 6452d2129cd9..a4320c4b44dc 100755
---- a/tools/testing/selftests/firmware/fw_filesystem.sh
-+++ b/tools/testing/selftests/firmware/fw_filesystem.sh
-@@ -30,6 +30,7 @@ fi
- 
- if [ ! -e "$DIR"/trigger_async_request ]; then
- 	echo "$0: empty filename: async trigger not present, ignoring test" >&2
-+	exit $ksft_skip
- else
- 	if printf '\000' >"$DIR"/trigger_async_request 2> /dev/null; then
- 		echo "$0: empty filename should not succeed (async)" >&2
-@@ -69,6 +70,7 @@ fi
- # Try the asynchronous version too
- if [ ! -e "$DIR"/trigger_async_request ]; then
- 	echo "$0: firmware loading: async trigger not present, ignoring test" >&2
-+	exit $ksft_skip
- else
- 	if ! echo -n "$NAME" >"$DIR"/trigger_async_request ; then
- 		echo "$0: could not trigger async request" >&2
-@@ -89,7 +91,7 @@ test_config_present()
- {
- 	if [ ! -f $DIR/reset ]; then
- 		echo "Configuration triggers not present, ignoring test"
--		exit 0
-+		exit $ksft_skip
- 	fi
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index f9a9d424c980..b731c8cdcffb 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -23,6 +23,9 @@ echo "		            If <dir> is -, all logs output in console only"
+ exit $1
  }
- 
-diff --git a/tools/testing/selftests/firmware/fw_lib.sh b/tools/testing/selftests/firmware/fw_lib.sh
-index 962d7f4ac627..6c5f1b2ffb74 100755
---- a/tools/testing/selftests/firmware/fw_lib.sh
-+++ b/tools/testing/selftests/firmware/fw_lib.sh
-@@ -9,11 +9,14 @@ DIR=/sys/devices/virtual/misc/test_firmware
- PROC_CONFIG="/proc/config.gz"
- TEST_DIR=$(dirname $0)
  
 +# Kselftest framework requirement - SKIP code is 4.
 +ksft_skip=4
 +
- print_reqs_exit()
- {
- 	echo "You must have the following enabled in your kernel:" >&2
- 	cat $TEST_DIR/config >&2
--	exit 1
-+	exit $ksft_skip
- }
+ errexit() { # message
+   echo "Error: $1" 1>&2
+   exit 1
+@@ -30,7 +33,8 @@ errexit() { # message
  
- test_modprobe()
-@@ -88,7 +91,7 @@ verify_reqs()
- 	if [ "$TEST_REQS_FW_SYSFS_FALLBACK" = "yes" ]; then
- 		if [ ! "$HAS_FW_LOADER_USER_HELPER" = "yes" ]; then
- 			echo "usermode helper disabled so ignoring test"
--			exit 0
-+			exit $ksft_skip
- 		fi
- 	fi
+ # Ensuring user privilege
+ if [ `id -u` -ne 0 ]; then
+-  errexit "this must be run by root user"
++  echo "Skipping: test must be run by root user"
++  exit $ksft_skip
+ fi
+ 
+ # Utilities
+@@ -249,7 +253,7 @@ trap 'SIG_RESULT=$UNTESTED' $SIG_UNTESTED
+ SIG_UNSUPPORTED=$((SIG_BASE + UNSUPPORTED))
+ exit_unsupported () {
+   kill -s $SIG_UNSUPPORTED $SIG_PID
+-  exit 0
++  exit $ksft_skip
  }
+ trap 'SIG_RESULT=$UNSUPPORTED' $SIG_UNSUPPORTED
+ 
 -- 
 2.14.1
 
