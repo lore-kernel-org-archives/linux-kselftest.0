@@ -1,86 +1,90 @@
 From: shuah@kernel.org (Shuah Khan (Samsung OSG))
-Date: Fri,  4 May 2018 19:13:18 -0600
-Subject: [PATCH 14/24] selftests: kvm: return Kselftest Skip code for skipped
+Date: Fri,  4 May 2018 19:13:20 -0600
+Subject: [PATCH 16/24] selftests: lib: return Kselftest Skip code for skipped
  tests
 In-Reply-To: <20180505011328.32078-1-shuah@kernel.org>
 References: <20180505011328.32078-1-shuah@kernel.org>
-Message-ID: <20180505011328.32078-14-shuah@kernel.org>
+Message-ID: <20180505011328.32078-16-shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180505011318.JvXFhjTK5YRtbVCgAW3ll7dn6FWzZzQt8K87QIEJTlU@z>
+Message-ID: <20180505011320.91VwuUCXCYyFypcLglog8JJv9-YQlfWqUZs7X35lvnU@z>
 
-When kvm test is skipped because of unmet dependencies and/or unsupported
-configuration, it exits with error which is treated as a fail by the
-Kselftest framework. This leads to false negative result even when the test
-could not be run.
+When lib test(s) is skipped because of unmet dependencies and/or
+unsupported configuration, it returns non-zero value hich is treated
+as a fail by the Kselftest framework. This leads to false negative result
+even when the test could not be run.
 
-Change it to return kselftest skip code when a test gets skipped to clearly
-report that the test could not be run.
+Change it to return kselftest skip code when a test gets skipped to
+clearly report that the test could not be run.
 
-Change it to use ksft_exit_skip() when the test is skipped. In addition,
-refine test_assert() message to include strerror() string and add explicit
-check for root user to clearly identofy non-root user skip case.
+Kselftest framework SKIP code is 4 and the framework prints appropriate
+messages to indicate that the test is skipped.
 
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/kvm/lib/assert.c          | 10 ++++++++--
- tools/testing/selftests/kvm/vmx_tsc_adjust_test.c |  4 +++-
- 2 files changed, 11 insertions(+), 3 deletions(-)
+ tools/testing/selftests/lib/bitmap.sh        | 8 ++++++--
+ tools/testing/selftests/lib/prime_numbers.sh | 7 +++++--
+ tools/testing/selftests/lib/printf.sh        | 8 ++++++--
+ 3 files changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/assert.c b/tools/testing/selftests/kvm/lib/assert.c
-index c9f5b7d4ce38..4705729d847e 100644
---- a/tools/testing/selftests/kvm/lib/assert.c
-+++ b/tools/testing/selftests/kvm/lib/assert.c
-@@ -13,6 +13,8 @@
- #include <execinfo.h>
- #include <sys/syscall.h>
- 
-+#include "../../kselftest.h"
+diff --git a/tools/testing/selftests/lib/bitmap.sh b/tools/testing/selftests/lib/bitmap.sh
+index 4dee4d2a8bbe..5a90006d1aea 100755
+--- a/tools/testing/selftests/lib/bitmap.sh
++++ b/tools/testing/selftests/lib/bitmap.sh
+@@ -1,9 +1,13 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
 +
- /* Dumps the current stack trace to stderr. */
- static void __attribute__((noinline)) test_dump_stack(void);
- static void test_dump_stack(void)
-@@ -65,13 +67,17 @@ test_assert(bool exp, const char *exp_str,
- {
- 	va_list ap;
- 
-+	if (getuid() != 0)
-+		ksft_exit_skip("Please run the test as root - Exiting.\n");
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
 +
- 	if (!(exp)) {
- 		va_start(ap, fmt);
+ # Runs bitmap infrastructure tests using test_bitmap kernel module
+ if ! /sbin/modprobe -q -n test_bitmap; then
+-	echo "bitmap: [SKIP]"
+-	exit 77
++	echo "bitmap: module test_bitmap is not found [SKIP]"
++	exit $ksft_skip
+ fi
  
- 		fprintf(stderr, "==== Test Assertion Failure ====\n"
- 			"  %s:%u: %s\n"
--			"  pid=%d tid=%d\n",
--			file, line, exp_str, getpid(), gettid());
-+			"  pid=%d tid=%d - %s\n",
-+			file, line, exp_str, getpid(), gettid(),
-+			strerror(errno));
- 		test_dump_stack();
- 		if (fmt) {
- 			fputs("  ", stderr);
-diff --git a/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c b/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
-index 8f7f62093add..62fb73699eb6 100644
---- a/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
-+++ b/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
-@@ -28,6 +28,8 @@
- #include <string.h>
- #include <sys/ioctl.h>
+ if /sbin/modprobe -q test_bitmap; then
+diff --git a/tools/testing/selftests/lib/prime_numbers.sh b/tools/testing/selftests/lib/prime_numbers.sh
+index b363994e5e11..76602d4b050f 100755
+--- a/tools/testing/selftests/lib/prime_numbers.sh
++++ b/tools/testing/selftests/lib/prime_numbers.sh
+@@ -2,9 +2,12 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Checks fast/slow prime_number generation for inconsistencies
  
-+#include "../kselftest.h"
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
 +
- #ifndef MSR_IA32_TSC_ADJUST
- #define MSR_IA32_TSC_ADJUST 0x3b
- #endif
-@@ -190,7 +192,7 @@ int main(int argc, char *argv[])
+ if ! /sbin/modprobe -q -r prime_numbers; then
+-	echo "prime_numbers: [SKIP]"
+-	exit 77
++	echo "prime_numbers: module prime_numbers is not found [SKIP]"
++	exit $ksft_skip
+ fi
  
- 	if (!(entry->ecx & CPUID_VMX)) {
- 		printf("nested VMX not enabled, skipping test");
--		return 0;
-+		return KSFT_SKIP;
- 	}
+ if /sbin/modprobe -q prime_numbers selftest=65536; then
+diff --git a/tools/testing/selftests/lib/printf.sh b/tools/testing/selftests/lib/printf.sh
+index 0c37377fd7d4..45a23e2d64ad 100755
+--- a/tools/testing/selftests/lib/printf.sh
++++ b/tools/testing/selftests/lib/printf.sh
+@@ -1,9 +1,13 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ # Runs printf infrastructure using test_printf kernel module
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
+ if ! /sbin/modprobe -q -n test_printf; then
+-	echo "printf: [SKIP]"
+-	exit 77
++	echo "printf: module test_printf is not found [SKIP]"
++	exit $ksft_skip
+ fi
  
- 	vm = vm_create_default_vmx(VCPU_ID, (void *) l1_guest_code);
+ if /sbin/modprobe -q test_printf; then
 -- 
 2.14.1
 
