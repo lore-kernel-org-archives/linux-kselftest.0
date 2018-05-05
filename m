@@ -1,17 +1,17 @@
 From: shuah@kernel.org (Shuah Khan (Samsung OSG))
-Date: Fri,  4 May 2018 19:13:13 -0600
-Subject: [PATCH 09/24] selftests: ftrace: return Kselftest Skip code for
+Date: Fri,  4 May 2018 19:13:08 -0600
+Subject: [PATCH 04/24] selftests: cpufreq: return Kselftest Skip code for
  skipped tests
 In-Reply-To: <20180505011328.32078-1-shuah@kernel.org>
 References: <20180505011328.32078-1-shuah@kernel.org>
-Message-ID: <20180505011328.32078-9-shuah@kernel.org>
+Message-ID: <20180505011328.32078-4-shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180505011313.C2y601dCwbGL_-Ft43a5EIvRCF2AhbdhSY1kOwfbGxA@z>
+Message-ID: <20180505011308.0ptRQn6UJkQn31rBW79HLELUBhEH3tjaMZCjGkwqt9o@z>
 
-When ftrace test is skipped because of unmet dependencies and/or
-unsupported configuration, it returns 0 which is treated as a pass
-by the Kselftest framework. This leads to false positive result even
-when the test could not be run.
+When cpufreq test is skipped because of unmet dependencies and/or
+unsupported configuration, it exits with error which is treated as
+a fail by the Kselftest framework. This leads to false negative
+result even when the test could not be run.
 
 Change it to return kselftest skip code when a test gets skipped to
 clearly report that the test could not be run.
@@ -21,42 +21,32 @@ messages to indicate that the test is skipped.
 
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/ftrace/ftracetest | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ tools/testing/selftests/cpufreq/main.sh | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index f9a9d424c980..b731c8cdcffb 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -23,6 +23,9 @@ echo "		            If <dir> is -, all logs output in console only"
- exit $1
- }
+diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
+index d83922de9d89..31f8c9a76c5f 100755
+--- a/tools/testing/selftests/cpufreq/main.sh
++++ b/tools/testing/selftests/cpufreq/main.sh
+@@ -13,6 +13,9 @@ SYSFS=
+ CPUROOT=
+ CPUFREQROOT=
  
 +# Kselftest framework requirement - SKIP code is 4.
 +ksft_skip=4
 +
- errexit() { # message
-   echo "Error: $1" 1>&2
-   exit 1
-@@ -30,7 +33,8 @@ errexit() { # message
+ helpme()
+ {
+ 	printf "Usage: $0 [-h] [-todg args]
+@@ -38,7 +41,7 @@ prerequisite()
  
- # Ensuring user privilege
- if [ `id -u` -ne 0 ]; then
--  errexit "this must be run by root user"
-+  echo "Skipping: test must be run by root user"
-+  exit $ksft_skip
- fi
+ 	if [ $UID != 0 ]; then
+ 		echo $msg must be run as root >&2
+-		exit 2
++		exit $ksft_skip
+ 	fi
  
- # Utilities
-@@ -249,7 +253,7 @@ trap 'SIG_RESULT=$UNTESTED' $SIG_UNTESTED
- SIG_UNSUPPORTED=$((SIG_BASE + UNSUPPORTED))
- exit_unsupported () {
-   kill -s $SIG_UNSUPPORTED $SIG_PID
--  exit 0
-+  exit $ksft_skip
- }
- trap 'SIG_RESULT=$UNSUPPORTED' $SIG_UNSUPPORTED
- 
+ 	taskset -p 01 $$
 -- 
 2.14.1
 
