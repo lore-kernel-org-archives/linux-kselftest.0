@@ -1,12 +1,12 @@
 From: shuah at kernel.org (Shuah Khan (Samsung OSG))
-Date: Fri,  4 May 2018 19:13:08 -0600
-Subject: [PATCH 04/24] selftests: cpufreq: return Kselftest Skip code for
- skipped tests
+Date: Fri,  4 May 2018 19:13:16 -0600
+Subject: [PATCH 12/24] selftests: ipc: return Kselftest Skip code for skipped
+ tests
 In-Reply-To: <20180505011328.32078-1-shuah@kernel.org>
 References: <20180505011328.32078-1-shuah@kernel.org>
-Message-ID: <20180505011328.32078-4-shuah@kernel.org>
+Message-ID: <20180505011328.32078-12-shuah@kernel.org>
 
-When cpufreq test is skipped because of unmet dependencies and/or
+When ipc test is skipped because of unmet dependencies and/or
 unsupported configuration, it exits with error which is treated as
 a fail by the Kselftest framework. This leads to false negative
 result even when the test could not be run.
@@ -14,37 +14,31 @@ result even when the test could not be run.
 Change it to return kselftest skip code when a test gets skipped to
 clearly report that the test could not be run.
 
-Kselftest framework SKIP code is 4 and the framework prints appropriate
-messages to indicate that the test is skipped.
+Change it to use ksft_exit_skip() when the test is skipped.
 
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/cpufreq/main.sh | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/testing/selftests/ipc/msgque.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
-index d83922de9d89..31f8c9a76c5f 100755
---- a/tools/testing/selftests/cpufreq/main.sh
-+++ b/tools/testing/selftests/cpufreq/main.sh
-@@ -13,6 +13,9 @@ SYSFS=
- CPUROOT=
- CPUFREQROOT=
+diff --git a/tools/testing/selftests/ipc/msgque.c b/tools/testing/selftests/ipc/msgque.c
+index ee9382bdfadc..dac927e82336 100644
+--- a/tools/testing/selftests/ipc/msgque.c
++++ b/tools/testing/selftests/ipc/msgque.c
+@@ -196,10 +196,9 @@ int main(int argc, char **argv)
+ 	int msg, pid, err;
+ 	struct msgque_data msgque;
  
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- helpme()
- {
- 	printf "Usage: $0 [-h] [-todg args]
-@@ -38,7 +41,7 @@ prerequisite()
+-	if (getuid() != 0) {
+-		printf("Please run the test as root - Exiting.\n");
+-		return ksft_exit_fail();
+-	}
++	if (getuid() != 0)
++		return ksft_exit_skip(
++				"Please run the test as root - Exiting.\n");
  
- 	if [ $UID != 0 ]; then
- 		echo $msg must be run as root >&2
--		exit 2
-+		exit $ksft_skip
- 	fi
- 
- 	taskset -p 01 $$
+ 	msgque.key = ftok(argv[0], 822155650);
+ 	if (msgque.key == -1) {
 -- 
 2.14.1
 
