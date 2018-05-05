@@ -1,59 +1,50 @@
 From: shuah@kernel.org (Shuah Khan (Samsung OSG))
-Date: Fri,  4 May 2018 19:13:05 -0600
-Subject: [PATCH 01/24] selftests: android: ion: return Kselftest Skip code for
+Date: Fri,  4 May 2018 19:13:06 -0600
+Subject: [PATCH 02/24] selftests: breakpoints: return Kselftest Skip code for
  skipped tests
-Message-ID: <20180505011328.32078-1-shuah@kernel.org>
+In-Reply-To: <20180505011328.32078-1-shuah@kernel.org>
+References: <20180505011328.32078-1-shuah@kernel.org>
+Message-ID: <20180505011328.32078-2-shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180505011305.hpeJG5BFIHh0dQE9Tlc53W2LEUs8TGaL9Q3lSeprqH8@z>
+Message-ID: <20180505011306.cnX8Uf3wLAMqCc6OveXQ3IHjAfoZ2TlEnFPCxkHODkU@z>
 
-When ion test is skipped because of unmet dependencies and/or unsupported
-configuration, it returns 0 which is treated as a pass by the Kselftest
-framework. This leads to false positive result even when the test could
-not be run.
+When step_after_suspend_test is skipped because of unmet dependencies
+and/or unsupported configuration, it exits with error which is treated
+as a fail by the Kselftest framework. This leads to false negative result
+even when the test could not be run.
 
-Change it to return kselftest skip code when a test gets skipped to
-clearly report that the test could not be run.
+Change it to return kselftest skip code when a test gets skipped to clearly
+report that the test could not be run.
 
-Kselftest framework SKIP code is 4 and the framework prints appropriate
-messages to indicate that the test is skipped.
+Change it to use ksft_exit_skip() when a non-root user runs the test and
+add an explicit check for root and a clear message, instead of failing
+the test when /sys/power/state file open fails.
 
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/android/ion/ion_test.sh | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/breakpoints/step_after_suspend_test.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/android/ion/ion_test.sh b/tools/testing/selftests/android/ion/ion_test.sh
-index a1aff506f5e6..69e676cfc94e 100755
---- a/tools/testing/selftests/android/ion/ion_test.sh
-+++ b/tools/testing/selftests/android/ion/ion_test.sh
-@@ -4,6 +4,9 @@ heapsize=4096
- TCID="ion_test.sh"
- errcode=0
+diff --git a/tools/testing/selftests/breakpoints/step_after_suspend_test.c b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
+index 3fece06e9f64..f82dcc1f8841 100644
+--- a/tools/testing/selftests/breakpoints/step_after_suspend_test.c
++++ b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
+@@ -143,10 +143,14 @@ void suspend(void)
+ 	int err;
+ 	struct itimerspec spec = {};
  
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
++	if (getuid() != 0)
++		ksft_exit_skip("Please run the test as root - Exiting.\n");
 +
- run_test()
- {
- 	heaptype=$1
-@@ -25,7 +28,7 @@ check_root()
- 	uid=$(id -u)
- 	if [ $uid -ne 0 ]; then
- 		echo $TCID: must be run as root >&2
--		exit 0
-+		exit $ksft_skip
- 	fi
- }
+ 	power_state_fd = open("/sys/power/state", O_RDWR);
+ 	if (power_state_fd < 0)
+ 		ksft_exit_fail_msg(
+-			"open(\"/sys/power/state\") failed (is this test running as root?)\n");
++			"open(\"/sys/power/state\") failed %s)\n",
++			strerror(errno));
  
-@@ -35,7 +38,7 @@ check_device()
- 	if [ ! -e $DEVICE ]; then
- 		echo $TCID: No $DEVICE device found >&2
- 		echo $TCID: May be CONFIG_ION is not set >&2
--		exit 0
-+		exit $ksft_skip
- 	fi
- }
- 
+ 	timerfd = timerfd_create(CLOCK_BOOTTIME_ALARM, 0);
+ 	if (timerfd < 0)
 -- 
 2.14.1
 
