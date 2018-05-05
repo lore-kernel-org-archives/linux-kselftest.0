@@ -1,48 +1,50 @@
 From: shuah at kernel.org (Shuah Khan (Samsung OSG))
-Date: Fri,  4 May 2018 19:13:06 -0600
-Subject: [PATCH 02/24] selftests: breakpoints: return Kselftest Skip code for
- skipped tests
+Date: Fri,  4 May 2018 19:13:10 -0600
+Subject: [PATCH 06/24] selftests: exec: return Kselftest Skip code for skipped
+ tests
 In-Reply-To: <20180505011328.32078-1-shuah@kernel.org>
 References: <20180505011328.32078-1-shuah@kernel.org>
-Message-ID: <20180505011328.32078-2-shuah@kernel.org>
+Message-ID: <20180505011328.32078-6-shuah@kernel.org>
 
-When step_after_suspend_test is skipped because of unmet dependencies
-and/or unsupported configuration, it exits with error which is treated
-as a fail by the Kselftest framework. This leads to false negative result
-even when the test could not be run.
+When execveat test is skipped because of unmet dependencies and/or
+unsupported configuration, it exits with error which is treated as
+a fail by the Kselftest framework. This leads to false negative
+result even when the test could not be run.
 
-Change it to return kselftest skip code when a test gets skipped to clearly
-report that the test could not be run.
+Change it to return kselftest skip code when a test gets skipped to
+clearly report that the test could not be run.
 
-Change it to use ksft_exit_skip() when a non-root user runs the test and
-add an explicit check for root and a clear message, instead of failing
-the test when /sys/power/state file open fails.
+Change it to use ksft_exit_skip() when kernel doesn't support execveat.
 
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/breakpoints/step_after_suspend_test.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ tools/testing/selftests/exec/execveat.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/breakpoints/step_after_suspend_test.c b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
-index 3fece06e9f64..f82dcc1f8841 100644
---- a/tools/testing/selftests/breakpoints/step_after_suspend_test.c
-+++ b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
-@@ -143,10 +143,14 @@ void suspend(void)
- 	int err;
- 	struct itimerspec spec = {};
+diff --git a/tools/testing/selftests/exec/execveat.c b/tools/testing/selftests/exec/execveat.c
+index 67cd4597db2b..47cbf54d0801 100644
+--- a/tools/testing/selftests/exec/execveat.c
++++ b/tools/testing/selftests/exec/execveat.c
+@@ -20,6 +20,8 @@
+ #include <string.h>
+ #include <unistd.h>
  
-+	if (getuid() != 0)
-+		ksft_exit_skip("Please run the test as root - Exiting.\n");
++#include "../kselftest.h"
 +
- 	power_state_fd = open("/sys/power/state", O_RDWR);
- 	if (power_state_fd < 0)
- 		ksft_exit_fail_msg(
--			"open(\"/sys/power/state\") failed (is this test running as root?)\n");
-+			"open(\"/sys/power/state\") failed %s)\n",
-+			strerror(errno));
+ static char longpath[2 * PATH_MAX] = "";
+ static char *envp[] = { "IN_TEST=yes", NULL, NULL };
+ static char *argv[] = { "execveat", "99", NULL };
+@@ -249,8 +251,8 @@ static int run_tests(void)
+ 	errno = 0;
+ 	execveat_(-1, NULL, NULL, NULL, 0);
+ 	if (errno == ENOSYS) {
+-		printf("[FAIL] ENOSYS calling execveat - no kernel support?\n");
+-		return 1;
++		ksft_exit_skip(
++			"ENOSYS calling execveat - no kernel support?\n");
+ 	}
  
- 	timerfd = timerfd_create(CLOCK_BOOTTIME_ALARM, 0);
- 	if (timerfd < 0)
+ 	/* Change file position to confirm it doesn't affect anything */
 -- 
 2.14.1
 
