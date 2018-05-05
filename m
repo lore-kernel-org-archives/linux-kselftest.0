@@ -1,52 +1,68 @@
 From: shuah@kernel.org (Shuah Khan (Samsung OSG))
-Date: Fri,  4 May 2018 19:13:10 -0600
-Subject: [PATCH 06/24] selftests: exec: return Kselftest Skip code for skipped
- tests
+Date: Fri,  4 May 2018 19:13:11 -0600
+Subject: [PATCH 07/24] selftests: filesystems: return Kselftest Skip code for
+ skipped tests
 In-Reply-To: <20180505011328.32078-1-shuah@kernel.org>
 References: <20180505011328.32078-1-shuah@kernel.org>
-Message-ID: <20180505011328.32078-6-shuah@kernel.org>
+Message-ID: <20180505011328.32078-7-shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180505011310.lHfcwRyicGWy8UumFTKGHlq6YjcvLwwQPW05LtcxNsQ@z>
+Message-ID: <20180505011311.3IHm6DUDwA-unS1q7ikrhBXEafXJDEK2EWmU3gQgRd0@z>
 
-When execveat test is skipped because of unmet dependencies and/or
+When devpts_pts test is skipped because of unmet dependencies and/or
 unsupported configuration, it exits with error which is treated as
 a fail by the Kselftest framework. This leads to false negative
 result even when the test could not be run.
 
+In another case, it returns pass for a skipped test reporting a false
+postive.
+
 Change it to return kselftest skip code when a test gets skipped to
 clearly report that the test could not be run.
 
-Change it to use ksft_exit_skip() when kernel doesn't support execveat.
+Change it to use ksft_exit_skip() when test is skipped.
 
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/exec/execveat.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ tools/testing/selftests/filesystems/devpts_pts.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/exec/execveat.c b/tools/testing/selftests/exec/execveat.c
-index 67cd4597db2b..47cbf54d0801 100644
---- a/tools/testing/selftests/exec/execveat.c
-+++ b/tools/testing/selftests/exec/execveat.c
-@@ -20,6 +20,8 @@
- #include <string.h>
- #include <unistd.h>
- 
+diff --git a/tools/testing/selftests/filesystems/devpts_pts.c b/tools/testing/selftests/filesystems/devpts_pts.c
+index b9055e974289..0f2d9f427944 100644
+--- a/tools/testing/selftests/filesystems/devpts_pts.c
++++ b/tools/testing/selftests/filesystems/devpts_pts.c
+@@ -11,6 +11,7 @@
+ #include <sys/ioctl.h>
+ #include <sys/mount.h>
+ #include <sys/wait.h>
 +#include "../kselftest.h"
-+
- static char longpath[2 * PATH_MAX] = "";
- static char *envp[] = { "IN_TEST=yes", NULL, NULL };
- static char *argv[] = { "execveat", "99", NULL };
-@@ -249,8 +251,8 @@ static int run_tests(void)
- 	errno = 0;
- 	execveat_(-1, NULL, NULL, NULL, 0);
- 	if (errno == ENOSYS) {
--		printf("[FAIL] ENOSYS calling execveat - no kernel support?\n");
--		return 1;
-+		ksft_exit_skip(
-+			"ENOSYS calling execveat - no kernel support?\n");
+ 
+ static bool terminal_dup2(int duplicate, int original)
+ {
+@@ -125,10 +126,12 @@ static int do_tiocgptpeer(char *ptmx, char *expected_procfd_contents)
+ 		if (errno == EINVAL) {
+ 			fprintf(stderr, "TIOCGPTPEER is not supported. "
+ 					"Skipping test.\n");
+-			fret = EXIT_SUCCESS;
++			fret = KSFT_SKIP;
++		} else {
++			fprintf(stderr,
++				"Failed to perform TIOCGPTPEER ioctl\n");
++			fret = EXIT_FAILURE;
+ 		}
+-
+-		fprintf(stderr, "Failed to perform TIOCGPTPEER ioctl\n");
+ 		goto do_cleanup;
  	}
  
- 	/* Change file position to confirm it doesn't affect anything */
+@@ -281,7 +284,7 @@ int main(int argc, char *argv[])
+ 	if (!isatty(STDIN_FILENO)) {
+ 		fprintf(stderr, "Standard input file desciptor is not attached "
+ 				"to a terminal. Skipping test\n");
+-		exit(EXIT_FAILURE);
++		exit(KSFT_SKIP);
+ 	}
+ 
+ 	ret = unshare(CLONE_NEWNS);
 -- 
 2.14.1
 
