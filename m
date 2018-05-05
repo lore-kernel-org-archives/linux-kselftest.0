@@ -1,44 +1,53 @@
 From: shuah at kernel.org (Shuah Khan (Samsung OSG))
-Date: Fri,  4 May 2018 19:13:24 -0600
-Subject: [PATCH 20/24] selftests: membarrier: return Kselftest Skip code for
+Date: Fri,  4 May 2018 19:13:22 -0600
+Subject: [PATCH 18/24] selftests: locking: return Kselftest Skip code for
  skipped tests
 In-Reply-To: <20180505011328.32078-1-shuah@kernel.org>
 References: <20180505011328.32078-1-shuah@kernel.org>
-Message-ID: <20180505011328.32078-20-shuah@kernel.org>
+Message-ID: <20180505011328.32078-18-shuah@kernel.org>
 
-When membarrier test is skipped because of unmet dependencies and/or
-unsupported configuration, it exits with error which is treated as a
-fail by the Kselftest framework. This leads to false negative result
-even when the test could not be run.
+When locking test is skipped because of unmet dependencies and/or
+unsupported configuration, it exits with error which is treated as
+a fail by the Kselftest framework. This leads to false negative
+result even when the test could not be run.
 
 Change it to return kselftest skip code when a test gets skipped to
 clearly report that the test could not be run.
 
-Change it to use ksft_exit_skip() when the test is skipped.
+Added an explicit search for ww_mutex module and return skip code if
+it isn't found to differentiate between the failure to load the module
+condition and module not found condition.
+
+Kselftest framework SKIP code is 4 and the framework prints appropriate
+messages to indicate that the test is skipped.
 
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/membarrier/membarrier_test.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ tools/testing/selftests/locking/ww_mutex.sh | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ mode change 100644 => 100755 tools/testing/selftests/locking/ww_mutex.sh
 
-diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
-index 22bffd55a523..6793f8ecc8e7 100644
---- a/tools/testing/selftests/membarrier/membarrier_test.c
-+++ b/tools/testing/selftests/membarrier/membarrier_test.c
-@@ -293,10 +293,9 @@ static int test_membarrier_query(void)
- 		}
- 		ksft_exit_fail_msg("sys_membarrier() failed\n");
- 	}
--	if (!(ret & MEMBARRIER_CMD_GLOBAL)) {
--		ksft_test_result_fail("sys_membarrier() CMD_GLOBAL query failed\n");
--		ksft_exit_fail_msg("sys_membarrier is not supported.\n");
--	}
-+	if (!(ret & MEMBARRIER_CMD_GLOBAL))
-+		ksft_exit_skip(
-+			"sys_membarrier unsupported: CMD_GLOBAL not found.\n");
+diff --git a/tools/testing/selftests/locking/ww_mutex.sh b/tools/testing/selftests/locking/ww_mutex.sh
+old mode 100644
+new mode 100755
+index 2c3d6b1878c2..91e4ac7566af
+--- a/tools/testing/selftests/locking/ww_mutex.sh
++++ b/tools/testing/selftests/locking/ww_mutex.sh
+@@ -1,6 +1,14 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
+ # Runs API tests for struct ww_mutex (Wait/Wound mutexes)
++if ! /sbin/modprobe -q -n test-ww_mutex; then
++	echo "ww_mutex: module test-ww_mutex is not found [SKIP]"
++	exit $ksft_skip
++fi
  
- 	ksft_test_result_pass("sys_membarrier available\n");
- 	return 0;
+ if /sbin/modprobe -q test-ww_mutex; then
+        /sbin/modprobe -q -r test-ww_mutex
 -- 
 2.14.1
 
