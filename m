@@ -1,92 +1,59 @@
-From: shuah at kernel.org (Shuah Khan (Samsung OSG))
-Date: Mon,  7 May 2018 15:08:21 -0600
-Subject: [[PATCH v2 14/24]] selftests: kvm: return Kselftest Skip code for
+From: shuah at kernel.org (Shuah Khan)
+Date: Mon, 7 May 2018 15:16:16 -0600
+Subject: [PATCH 21/24] selftests: memfd: return Kselftest Skip code for
  skipped tests
-Message-ID: <20180507210821.23910-1-shuah@kernel.org>
+In-Reply-To: <f2b3f38a-7c7a-43ec-9c2d-94bbb7d56eb7@kernel.org>
+References: <20180505011328.32078-1-shuah@kernel.org>
+ <20180505011328.32078-21-shuah@kernel.org>
+ <a5fff7b0-f308-25bc-909b-8579f6f14546@oracle.com>
+ <f2b3f38a-7c7a-43ec-9c2d-94bbb7d56eb7@kernel.org>
+Message-ID: <72a499bc-5c32-b553-88c6-a56704c398fc@kernel.org>
 
-When kvm test is skipped because of unmet dependencies and/or unsupported
-configuration, it exits with error which is treated as a fail by the
-Kselftest framework. This leads to false negative result even when the test
-could not be run.
+On 05/07/2018 12:45 PM, Shuah Khan wrote:
+> On 05/04/2018 07:52 PM, Mike Kravetz wrote:
+>> On 05/04/2018 06:13 PM, Shuah Khan (Samsung OSG) wrote:
+>>> When memfd test is skipped because of unmet dependencies and/or unsupported
+>>> configuration, it returns non-zero value which is treated as a fail by the
+>>> Kselftest framework. This leads to false negative result even when the test
+>>> could not be run.
+>>>
+>>> Change it to return kselftest skip code when a test gets skipped to
+>>> clearly report that the test could not be run.
+>>>
+>>> Added an explicit check for root user and return skip code.
+>>>
+>>> Kselftest framework SKIP code is 4 and the framework prints appropriate
+>>> messages to indicate that the test is skipped.
+>>>
+>>> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+>>> ---
+>>>  tools/testing/selftests/memfd/run_tests.sh | 10 +++++++++-
+>>>  1 file changed, 9 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/memfd/run_tests.sh b/tools/testing/selftests/memfd/run_tests.sh
+>>> index c2d41ed81b24..88dc206a69b7 100755
+>>> --- a/tools/testing/selftests/memfd/run_tests.sh
+>>> +++ b/tools/testing/selftests/memfd/run_tests.sh
+>>> @@ -1,6 +1,14 @@
+>>>  #!/bin/bash
+>>>  # please run as root
+>>>  
+>>> +# Kselftest framework requirement - SKIP code is 4.
+>>> +ksft_skip=4
+>>> +
+>>> +if [ $UID != 0 ]; then
+>>> +	echo "Please run this test as root"
+>>> +	exit $ksft_skip
+>>> +fi
+>>> +
 
-Change it to return kselftest skip code when a test gets skipped to clearly
-report that the test could not be run.
+Moving root check this far up messes the test up and requires root access for
+run_fuse_test.sh and memfd_test which is incorrect.
 
-Change it to use ksft_exit_skip() when the test is skipped. In addition,
-refine test_assert() message to include strerror() string and add explicit
-check for EACCES to cleary identify when test doesn't run when access is
-denied to resources required e.g: open /dev/kvm failed, rc: -1 errno: 13
+I will re-do the patch
 
-Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
----
-
-Changes since v1:
-- Don't do root check at the top of assert.
-- Instead do check for EACCES.
-
- tools/testing/selftests/kvm/lib/assert.c          | 9 +++++++--
- tools/testing/selftests/kvm/vmx_tsc_adjust_test.c | 4 +++-
- 2 files changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/lib/assert.c b/tools/testing/selftests/kvm/lib/assert.c
-index c9f5b7d4ce38..cd01144d27c8 100644
---- a/tools/testing/selftests/kvm/lib/assert.c
-+++ b/tools/testing/selftests/kvm/lib/assert.c
-@@ -13,6 +13,8 @@
- #include <execinfo.h>
- #include <sys/syscall.h>
- 
-+#include "../../kselftest.h"
-+
- /* Dumps the current stack trace to stderr. */
- static void __attribute__((noinline)) test_dump_stack(void);
- static void test_dump_stack(void)
-@@ -70,8 +72,9 @@ test_assert(bool exp, const char *exp_str,
- 
- 		fprintf(stderr, "==== Test Assertion Failure ====\n"
- 			"  %s:%u: %s\n"
--			"  pid=%d tid=%d\n",
--			file, line, exp_str, getpid(), gettid());
-+			"  pid=%d tid=%d - %s\n",
-+			file, line, exp_str, getpid(), gettid(),
-+			strerror(errno));
- 		test_dump_stack();
- 		if (fmt) {
- 			fputs("  ", stderr);
-@@ -80,6 +83,8 @@ test_assert(bool exp, const char *exp_str,
- 		}
- 		va_end(ap);
- 
-+		if (errno == EACCES)
-+			ksft_exit_skip("Access denied - Exiting.\n");
- 		exit(254);
- 	}
- 
-diff --git a/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c b/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
-index 8f7f62093add..62fb73699eb6 100644
---- a/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
-+++ b/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
-@@ -28,6 +28,8 @@
- #include <string.h>
- #include <sys/ioctl.h>
- 
-+#include "../kselftest.h"
-+
- #ifndef MSR_IA32_TSC_ADJUST
- #define MSR_IA32_TSC_ADJUST 0x3b
- #endif
-@@ -190,7 +192,7 @@ int main(int argc, char *argv[])
- 
- 	if (!(entry->ecx & CPUID_VMX)) {
- 		printf("nested VMX not enabled, skipping test");
--		return 0;
-+		return KSFT_SKIP;
- 	}
- 
- 	vm = vm_create_default_vmx(VCPU_ID, (void *) l1_guest_code);
--- 
-2.14.1
-
+thanks,
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
