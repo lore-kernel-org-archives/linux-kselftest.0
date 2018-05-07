@@ -1,61 +1,83 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Mon, 7 May 2018 15:16:16 -0600
-Subject: [PATCH 21/24] selftests: memfd: return Kselftest Skip code for
+From: shuah@kernel.org (Shuah Khan (Samsung OSG))
+Date: Mon,  7 May 2018 17:01:16 -0600
+Subject: [PATCH v2 21/24] selftests: memfd: return Kselftest Skip code for
  skipped tests
-In-Reply-To: <f2b3f38a-7c7a-43ec-9c2d-94bbb7d56eb7@kernel.org>
-References: <20180505011328.32078-1-shuah@kernel.org>
- <20180505011328.32078-21-shuah@kernel.org>
- <a5fff7b0-f308-25bc-909b-8579f6f14546@oracle.com>
- <f2b3f38a-7c7a-43ec-9c2d-94bbb7d56eb7@kernel.org>
-Message-ID: <72a499bc-5c32-b553-88c6-a56704c398fc@kernel.org>
+Message-ID: <20180507230116.27652-1-shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180507211616.LaeD9VdLLfvlFdnVn2s7kA6w7PxW3rlUHEf7egYpa_Y@z>
+Message-ID: <20180507230116.pXZqE4kdgEO3QPgxaBoXU9tB680lsCULgq4gPYn6XGw@z>
 
-On 05/07/2018 12:45 PM, Shuah Khan wrote:
-> On 05/04/2018 07:52 PM, Mike Kravetz wrote:
->> On 05/04/2018 06:13 PM, Shuah Khan (Samsung OSG) wrote:
->>> When memfd test is skipped because of unmet dependencies and/or unsupported
->>> configuration, it returns non-zero value which is treated as a fail by the
->>> Kselftest framework. This leads to false negative result even when the test
->>> could not be run.
->>>
->>> Change it to return kselftest skip code when a test gets skipped to
->>> clearly report that the test could not be run.
->>>
->>> Added an explicit check for root user and return skip code.
->>>
->>> Kselftest framework SKIP code is 4 and the framework prints appropriate
->>> messages to indicate that the test is skipped.
->>>
->>> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
->>> ---
->>>  tools/testing/selftests/memfd/run_tests.sh | 10 +++++++++-
->>>  1 file changed, 9 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/tools/testing/selftests/memfd/run_tests.sh b/tools/testing/selftests/memfd/run_tests.sh
->>> index c2d41ed81b24..88dc206a69b7 100755
->>> --- a/tools/testing/selftests/memfd/run_tests.sh
->>> +++ b/tools/testing/selftests/memfd/run_tests.sh
->>> @@ -1,6 +1,14 @@
->>>  #!/bin/bash
->>>  # please run as root
->>>  
->>> +# Kselftest framework requirement - SKIP code is 4.
->>> +ksft_skip=4
->>> +
->>> +if [ $UID != 0 ]; then
->>> +	echo "Please run this test as root"
->>> +	exit $ksft_skip
->>> +fi
->>> +
+When memfd test is skipped because of unmet dependencies and/or unsupported
+configuration, it returns non-zero value which is treated as a fail by the
+Kselftest framework. This leads to false negative result even when the test
+could not be run.
 
-Moving root check this far up messes the test up and requires root access for
-run_fuse_test.sh and memfd_test which is incorrect.
+Change it to return kselftest skip code when a test gets skipped to clearly
+report that the test could not be run.
 
-I will re-do the patch
+Added an explicit check for root user at the start of memfd hugetlbfs test
+and return skip code if a non-root user attempts to run it.
 
-thanks,
--- Shuah
+In addition, return skip code when not enough huge pages are available to
+run the test.
+
+Kselftest framework SKIP code is 4 and the framework prints appropriate
+messages to indicate that the test is skipped.
+
+Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+---
+
+Changes since v1:
+-- addressed review comments on v1
+-- Fixed a regression in v1 that changed the behavior to require root
+   for all tests not just the hugetlbfs test.
+
+ tools/testing/selftests/memfd/run_tests.sh | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/memfd/run_tests.sh b/tools/testing/selftests/memfd/run_tests.sh
+index c2d41ed81b24..2013f195e623 100755
+--- a/tools/testing/selftests/memfd/run_tests.sh
++++ b/tools/testing/selftests/memfd/run_tests.sh
+@@ -1,6 +1,9 @@
+ #!/bin/bash
+ # please run as root
+ 
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
+ #
+ # Normal tests requiring no special resources
+ #
+@@ -29,12 +32,13 @@ if [ -n "$freepgs" ] && [ $freepgs -lt $hpages_test ]; then
+ 	nr_hugepgs=`cat /proc/sys/vm/nr_hugepages`
+ 	hpages_needed=`expr $hpages_test - $freepgs`
+ 
++	if [ $UID != 0 ]; then
++		echo "Please run memfd with hugetlbfs test as root"
++		exit $ksft_skip
++	fi
++
+ 	echo 3 > /proc/sys/vm/drop_caches
+ 	echo $(( $hpages_needed + $nr_hugepgs )) > /proc/sys/vm/nr_hugepages
+-	if [ $? -ne 0 ]; then
+-		echo "Please run this test as root"
+-		exit 1
+-	fi
+ 	while read name size unit; do
+ 		if [ "$name" = "HugePages_Free:" ]; then
+ 			freepgs=$size
+@@ -53,7 +57,7 @@ if [ $freepgs -lt $hpages_test ]; then
+ 	fi
+ 	printf "Not enough huge pages available (%d < %d)\n" \
+ 		$freepgs $needpgs
+-	exit 1
++	exit $ksft_skip
+ fi
+ 
+ #
+-- 
+2.14.1
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
