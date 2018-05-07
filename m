@@ -1,115 +1,42 @@
 From: shuah@kernel.org (Shuah Khan)
-Date: Mon, 7 May 2018 12:45:22 -0600
-Subject: [PATCH 21/24] selftests: memfd: return Kselftest Skip code for
+Date: Mon, 7 May 2018 13:41:32 -0600
+Subject: [PATCH 14/24] selftests: kvm: return Kselftest Skip code for
  skipped tests
-In-Reply-To: <a5fff7b0-f308-25bc-909b-8579f6f14546@oracle.com>
+In-Reply-To: <08ca6038-00a0-1526-493a-36e6732b5934@redhat.com>
 References: <20180505011328.32078-1-shuah@kernel.org>
- <20180505011328.32078-21-shuah@kernel.org>
- <a5fff7b0-f308-25bc-909b-8579f6f14546@oracle.com>
-Message-ID: <f2b3f38a-7c7a-43ec-9c2d-94bbb7d56eb7@kernel.org>
+ <20180505011328.32078-14-shuah@kernel.org>
+ <08ca6038-00a0-1526-493a-36e6732b5934@redhat.com>
+Message-ID: <004c6cf7-a79d-ab00-ee68-f8c5bc7f5988@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180507184522.OCBa7WLg5HebtopykOmQ50bUYdwjukPLBqkP_VsJBrw@z>
+Message-ID: <20180507194132.g40ay_uAH7ItcqSH0py1yWzFUdcszaBR_Slbc3mQXz8@z>
 
-On 05/04/2018 07:52 PM, Mike Kravetz wrote:
-> On 05/04/2018 06:13 PM, Shuah Khan (Samsung OSG) wrote:
->> When memfd test is skipped because of unmet dependencies and/or unsupported
->> configuration, it returns non-zero value which is treated as a fail by the
+On 05/07/2018 05:46 AM, Paolo Bonzini wrote:
+> On 05/05/2018 03:13, Shuah Khan (Samsung OSG) wrote:
+>> When kvm test is skipped because of unmet dependencies and/or unsupported
+>> configuration, it exits with error which is treated as a fail by the
 >> Kselftest framework. This leads to false negative result even when the test
 >> could not be run.
 >>
->> Change it to return kselftest skip code when a test gets skipped to
->> clearly report that the test could not be run.
+>> Change it to return kselftest skip code when a test gets skipped to clearly
+>> report that the test could not be run.
 >>
->> Added an explicit check for root user and return skip code.
->>
->> Kselftest framework SKIP code is 4 and the framework prints appropriate
->> messages to indicate that the test is skipped.
->>
->> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
->> ---
->>  tools/testing/selftests/memfd/run_tests.sh | 10 +++++++++-
->>  1 file changed, 9 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/memfd/run_tests.sh b/tools/testing/selftests/memfd/run_tests.sh
->> index c2d41ed81b24..88dc206a69b7 100755
->> --- a/tools/testing/selftests/memfd/run_tests.sh
->> +++ b/tools/testing/selftests/memfd/run_tests.sh
->> @@ -1,6 +1,14 @@
->>  #!/bin/bash
->>  # please run as root
->>  
->> +# Kselftest framework requirement - SKIP code is 4.
->> +ksft_skip=4
->> +
->> +if [ $UID != 0 ]; then
->> +	echo "Please run this test as root"
->> +	exit $ksft_skip
->> +fi
->> +
->>  #
->>  # Normal tests requiring no special resources
->>  #
->> @@ -33,7 +41,7 @@ if [ -n "$freepgs" ] && [ $freepgs -lt $hpages_test ]; then
->>  	echo $(( $hpages_needed + $nr_hugepgs )) > /proc/sys/vm/nr_hugepages
->>  	if [ $? -ne 0 ]; then
->>  		echo "Please run this test as root"
->> -		exit 1
->> +		exit $ksft_skip
+>> Change it to use ksft_exit_skip() when the test is skipped. In addition,
+>> refine test_assert() message to include strerror() string and add explicit
+>> check for root user to clearly identofy non-root user skip case.
 > 
-> We now KNOW that we are running as root because of the check above.  We
-> can delete this test, and rely on the later check to determine if the
-> number of huge pages was actually increased.
+> Root should not be needed.
 
-Thanks for the review. Yesh this check can go away.
+Will remove the root check and send v2.
 
 > 
-> How about this instead (untested)?
+> Otherwise
 > 
-> Signed-off-by: Mike Kravetz <mike.kravetz at oracle.com>
-> diff --git a/tools/testing/selftests/memfd/run_tests.sh b/tools/testing/selftests/memfd/run_tests.sh
-> index c2d41ed81b24..99a265a84e1d 100755
-> --- a/tools/testing/selftests/memfd/run_tests.sh
-> +++ b/tools/testing/selftests/memfd/run_tests.sh
-> @@ -1,6 +1,14 @@
->  #!/bin/bash
->  # please run as root
->  
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
-> +if [ $UID != 0 ]; then
-> +	echo "Please run this test as root"
-> +	exit $ksft_skip
-> +fi
-> +
->  #
->  # Normal tests requiring no special resources
->  #
-> @@ -31,10 +39,6 @@ if [ -n "$freepgs" ] && [ $freepgs -lt $hpages_test ]; then
->  
->  	echo 3 > /proc/sys/vm/drop_caches
->  	echo $(( $hpages_needed + $nr_hugepgs )) > /proc/sys/vm/nr_hugepages
-> -	if [ $? -ne 0 ]; then
-> -		echo "Please run this test as root"
-> -		exit 1
-> -	fi
->  	while read name size unit; do
->  		if [ "$name" = "HugePages_Free:" ]; then
->  			freepgs=$size
-> @@ -53,7 +57,7 @@ if [ $freepgs -lt $hpages_test ]; then
->  	fi
->  	printf "Not enough huge pages available (%d < %d)\n" \
->  		$freepgs $needpgs
-> -	exit 1
-> +	exit $ksft_skip
->  fi
-
-I thought about changing this to skip and wasn't sure since the test did
-run partially. Good to know this case can be classified as skip. I will
-make the suggested changes and send v2.
+> Acked-by: Paolo Bonzini <pbonzini at redhat.com>
+> 
 
 thanks,
 -- Shuah
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
