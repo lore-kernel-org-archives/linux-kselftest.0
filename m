@@ -1,70 +1,97 @@
-From: pintu.ping at gmail.com (Pintu Kumar)
-Date: Mon, 7 May 2018 16:34:16 +0530
-Subject: [PATCH 01/24] selftests: android: ion: return Kselftest Skip code
- for skipped tests
-In-Reply-To: <20180505011328.32078-1-shuah@kernel.org>
+From: pbonzini at redhat.com (Paolo Bonzini)
+Date: Mon, 7 May 2018 13:46:17 +0200
+Subject: [PATCH 14/24] selftests: kvm: return Kselftest Skip code for
+ skipped tests
+In-Reply-To: <20180505011328.32078-14-shuah@kernel.org>
 References: <20180505011328.32078-1-shuah@kernel.org>
-Message-ID: <CAOuPNLjqAqF3Ls76ab+9QtTOmrCwYzYzXPye7i9mLp8DwqMaMQ@mail.gmail.com>
+ <20180505011328.32078-14-shuah@kernel.org>
+Message-ID: <08ca6038-00a0-1526-493a-36e6732b5934@redhat.com>
 
-On Sat, May 5, 2018 at 6:43 AM, Shuah Khan (Samsung OSG)
-<shuah at kernel.org> wrote:
-> When ion test is skipped because of unmet dependencies and/or unsupported
-> configuration, it returns 0 which is treated as a pass by the Kselftest
-> framework. This leads to false positive result even when the test could
-> not be run.
->
-> Change it to return kselftest skip code when a test gets skipped to
-> clearly report that the test could not be run.
->
-> Kselftest framework SKIP code is 4 and the framework prints appropriate
-> messages to indicate that the test is skipped.
->
+On 05/05/2018 03:13, Shuah Khan (Samsung OSG) wrote:
+> When kvm test is skipped because of unmet dependencies and/or unsupported
+> configuration, it exits with error which is treated as a fail by the
+> Kselftest framework. This leads to false negative result even when the test
+> could not be run.
+> 
+> Change it to return kselftest skip code when a test gets skipped to clearly
+> report that the test could not be run.
+> 
+> Change it to use ksft_exit_skip() when the test is skipped. In addition,
+> refine test_assert() message to include strerror() string and add explicit
+> check for root user to clearly identofy non-root user skip case.
+
+Root should not be needed.
+
+Otherwise
+
+Acked-by: Paolo Bonzini <pbonzini at redhat.com>
+
+Paolo
+
 > Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 > ---
->  tools/testing/selftests/android/ion/ion_test.sh | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/android/ion/ion_test.sh b/tools/testing/selftests/android/ion/ion_test.sh
-> index a1aff506f5e6..69e676cfc94e 100755
-> --- a/tools/testing/selftests/android/ion/ion_test.sh
-> +++ b/tools/testing/selftests/android/ion/ion_test.sh
-> @@ -4,6 +4,9 @@ heapsize=4096
->  TCID="ion_test.sh"
->  errcode=0
->
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
+>  tools/testing/selftests/kvm/lib/assert.c          | 10 ++++++++--
+>  tools/testing/selftests/kvm/vmx_tsc_adjust_test.c |  4 +++-
+>  2 files changed, 11 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/assert.c b/tools/testing/selftests/kvm/lib/assert.c
+> index c9f5b7d4ce38..4705729d847e 100644
+> --- a/tools/testing/selftests/kvm/lib/assert.c
+> +++ b/tools/testing/selftests/kvm/lib/assert.c
+> @@ -13,6 +13,8 @@
+>  #include <execinfo.h>
+>  #include <sys/syscall.h>
+>  
+> +#include "../../kselftest.h"
 > +
->  run_test()
+>  /* Dumps the current stack trace to stderr. */
+>  static void __attribute__((noinline)) test_dump_stack(void);
+>  static void test_dump_stack(void)
+> @@ -65,13 +67,17 @@ test_assert(bool exp, const char *exp_str,
 >  {
->         heaptype=$1
-> @@ -25,7 +28,7 @@ check_root()
->         uid=$(id -u)
->         if [ $uid -ne 0 ]; then
->                 echo $TCID: must be run as root >&2
-> -               exit 0
-> +               exit $ksft_skip
->         fi
->  }
->
-> @@ -35,7 +38,7 @@ check_device()
->         if [ ! -e $DEVICE ]; then
->                 echo $TCID: No $DEVICE device found >&2
->                 echo $TCID: May be CONFIG_ION is not set >&2
-> -               exit 0
-> +               exit $ksft_skip
->         fi
->  }
->
+>  	va_list ap;
+>  
+> +	if (getuid() != 0)
+> +		ksft_exit_skip("Please run the test as root - Exiting.\n");
 
-Ok changes looks good to me.
+This should not be needed.  Otherwise
+>  	if (!(exp)) {
+>  		va_start(ap, fmt);
+>  
+>  		fprintf(stderr, "==== Test Assertion Failure ====\n"
+>  			"  %s:%u: %s\n"
+> -			"  pid=%d tid=%d\n",
+> -			file, line, exp_str, getpid(), gettid());
+> +			"  pid=%d tid=%d - %s\n",
+> +			file, line, exp_str, getpid(), gettid(),
+> +			strerror(errno));
+>  		test_dump_stack();
+>  		if (fmt) {
+>  			fputs("  ", stderr);
+> diff --git a/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c b/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
+> index 8f7f62093add..62fb73699eb6 100644
+> --- a/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
+> +++ b/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
+> @@ -28,6 +28,8 @@
+>  #include <string.h>
+>  #include <sys/ioctl.h>
+>  
+> +#include "../kselftest.h"
+> +
+>  #ifndef MSR_IA32_TSC_ADJUST
+>  #define MSR_IA32_TSC_ADJUST 0x3b
+>  #endif
+> @@ -190,7 +192,7 @@ int main(int argc, char *argv[])
+>  
+>  	if (!(entry->ecx & CPUID_VMX)) {
+>  		printf("nested VMX not enabled, skipping test");
+> -		return 0;
+> +		return KSFT_SKIP;
+>  	}
+>  
+>  	vm = vm_create_default_vmx(VCPU_ID, (void *) l1_guest_code);
+> 
 
-Acked-by: Pintu Agarwal <pintu.ping at gmail.com>
-
-
-> --
-> 2.14.1
->
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
