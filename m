@@ -1,99 +1,162 @@
-From: pbonzini@redhat.com (Paolo Bonzini)
-Date: Mon, 7 May 2018 13:46:17 +0200
-Subject: [PATCH 14/24] selftests: kvm: return Kselftest Skip code for
- skipped tests
-In-Reply-To: <20180505011328.32078-14-shuah@kernel.org>
-References: <20180505011328.32078-1-shuah@kernel.org>
- <20180505011328.32078-14-shuah@kernel.org>
-Message-ID: <08ca6038-00a0-1526-493a-36e6732b5934@redhat.com>
+From: mhiramat@kernel.org (Masami Hiramatsu)
+Date: Mon, 7 May 2018 23:53:17 +0900
+Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
+In-Reply-To: <1525680222.8nou0tzkkt.naveen@linux.ibm.com>
+References: <152465856498.26224.16969986455942749517.stgit@devbox>
+ <20180503181137.6d82d897@gandalf.local.home>
+ <20180505004828.9b75b6802472f09b0d2de5b8@kernel.org>
+ <20180504120642.354cdd1f@gandalf.local.home>
+ <20180505113803.45700179a93091b114ec6984@kernel.org>
+ <1525506231.y43xvmd3yw.naveen@linux.ibm.com>
+ <20180505233211.ecad929b13461f1e5f6427d2@kernel.org>
+ <1525680222.8nou0tzkkt.naveen@linux.ibm.com>
+Message-ID: <20180507235317.fa04131c603dbe59ef78a829@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180507114617.1c9kr0615a7EvbieXTxBae8MVC5mIjywhKu3I3047lg@z>
+Message-ID: <20180507145317.p0BBos4yYjRg1t4-g3Sqs7w8w0Qtcxj4BSY9JQAAajk@z>
 
-On 05/05/2018 03:13, Shuah Khan (Samsung OSG) wrote:
-> When kvm test is skipped because of unmet dependencies and/or unsupported
-> configuration, it exits with error which is treated as a fail by the
-> Kselftest framework. This leads to false negative result even when the test
-> could not be run.
+On Mon, 07 May 2018 13:41:53 +0530
+"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+
+> Masami Hiramatsu wrote:
+> > On Sat, 05 May 2018 13:16:04 +0530
+> > "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+> > 
+> >> Masami Hiramatsu wrote:
+> >> > On Fri, 4 May 2018 12:06:42 -0400
+> >> > Steven Rostedt <rostedt@goodmis.org> wrote:
+> >> > 
+> >> >> On Sat, 5 May 2018 00:48:28 +0900
+> >> >> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >> >> 
+> >> >> > > Also, when looking at the kprobe code, I was looking at this 
+> >> >> > > function:
+> >> >> > >   
+> >> >> > > > /* Ftrace callback handler for kprobes -- called under preepmt disabed */
+> >> >> > > > void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+> >> >> > > > 			   struct ftrace_ops *ops, struct pt_regs *regs)
+> >> >> > > > {
+> >> >> > > > 	struct kprobe *p;
+> >> >> > > > 	struct kprobe_ctlblk *kcb;
+> >> >> > > > 
+> >> >> > > > 	/* Preempt is disabled by ftrace */
+> >> >> > > > 	p = get_kprobe((kprobe_opcode_t *)ip);
+> >> >> > > > 	if (unlikely(!p) || kprobe_disabled(p))
+> >> >> > > > 		return;
+> >> >> > > > 
+> >> >> > > > 	kcb = get_kprobe_ctlblk();
+> >> >> > > > 	if (kprobe_running()) {
+> >> >> > > > 		kprobes_inc_nmissed_count(p);
+> >> >> > > > 	} else {
+> >> >> > > > 		unsigned long orig_ip = regs->ip;
+> >> >> > > > 		/* Kprobe handler expects regs->ip = ip + 1 as breakpoint hit */
+> >> >> > > > 		regs->ip = ip + sizeof(kprobe_opcode_t);
+> >> >> > > > 
+> >> >> > > > 		/* To emulate trap based kprobes, preempt_disable here */
+> >> >> > > > 		preempt_disable();
+> >> >> > > > 		__this_cpu_write(current_kprobe, p);
+> >> >> > > > 		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+> >> >> > > > 		if (!p->pre_handler || !p->pre_handler(p, regs)) {
+> >> >> > > > 			__skip_singlestep(p, regs, kcb, orig_ip);
+> >> >> > > > 			preempt_enable_no_resched();  
+> >> >> > > 
+> >> >> > > This preemption disabling and enabling looks rather strange. Looking at
+> >> >> > > git blame, it appears this was added for jprobes. Can we remove it now
+> >> >> > > that jprobes is going away?  
+> >> >> > 
+> >> >> > No, that is not for jprobes but for compatibility with kprobe's user
+> >> >> > handler. Since this transformation is done silently, user can not
+> >> >> > change their handler for ftrace case. So we need to keep this condition
+> >> >> > same as original kprobes.
+> >> >> > 
+> >> >> > And anyway, for using smp_processor_id() for accessing per-cpu,
+> >> >> > we should disable preemption, correct?
+> >> >> 
+> >> >> But as stated at the start of the function:
+> >> >> 
+> >> >>  /* Preempt is disabled by ftrace */
+> >> > 
+> >> > Ah, yes. So this is only for the jprobes.
+> >> > 
+> >> >> 
+> >> >> 
+> >> >> The reason I ask, is that we have for this function:
+> >> >> 
+> >> >> 		/* To emulate trap based kprobes, preempt_disable here */
+> >> >> 		preempt_disable();
+> >> >> 		__this_cpu_write(current_kprobe, p);
+> >> >> 		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+> >> >> 		if (!p->pre_handler || !p->pre_handler(p, regs)) {
+> >> >> 			__skip_singlestep(p, regs, kcb, orig_ip);
+> >> >> 			preempt_enable_no_resched();
+> >> >> 		}
+> >> >> 
+> >> >> And in arch/x86/kernel/kprobes/core.c we have:
+> >> >> 
+> >> >> 	preempt_disable();
+> >> >> 
+> >> >> 	kcb = get_kprobe_ctlblk();
+> >> >> 	p = get_kprobe(addr);
+> >> >> 
+> >> >> 	if (p) {
+> >> >> 		if (kprobe_running()) {
+> >> >> 			if (reenter_kprobe(p, regs, kcb))
+> >> >> 				return 1;
+> >> >> 		} else {
+> >> >> 			set_current_kprobe(p, regs, kcb);
+> >> >> 			kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+> >> >> 
+> >> >> 			/*
+> >> >> 			 * If we have no pre-handler or it returned 0, we
+> >> >> 			 * continue with normal processing.  If we have a
+> >> >> 			 * pre-handler and it returned non-zero, it prepped
+> >> >> 			 * for calling the break_handler below on re-entry
+> >> >> 			 * for jprobe processing, so get out doing nothing
+> >> >> 			 * more here.
+> >> >> 			 */
+> >> >> 			if (!p->pre_handler || !p->pre_handler(p, regs))
+> >> >> 				setup_singlestep(p, regs, kcb, 0);
+> >> >> 			return 1;
+> >> >> 
+> >> >> 
+> >> >> Which is why I thought it was for jprobes. I'm a bit confused about
+> >> >> where preemption is enabled again.
+> >> > 
+> >> > You're right. So I would like to remove it with x86 jprobe support
+> >> > code to avoid inconsistency.
+> >> 
+> >> I didn't understand that. Which code are you planning to remove? Can you 
+> >> please elaborate? I thought we still need to disable preemption in the 
+> >> ftrace handler.
+> > 
+> > Yes, kprobe_ftrace_handler itself must be run under preempt disabled
+> > because it depends on a per-cpu variable. What I will remove is the
+> > redundant preempt disable/enable_noresched (unbalanced) pair in the
+> > kprobe_ftrace_handler, and jprobe x86 ports which is no more used.
 > 
-> Change it to return kselftest skip code when a test gets skipped to clearly
-> report that the test could not be run.
+> Won't that break out-of-tree users depending on returning a non-zero 
+> value to handle preemption differently? You seem to have alluded to it 
+> earlier in the mail chain above where you said that this is not just for 
+> jprobes (though it was added for jprobes as the main use case).
+
+No, all users are in tree already (function override for bpf and error-injection).
+And also, for changing execution path by using kprobes, user handler must call
+not only preempt_enable(), but also clear current_kprobe per-cpu variable which
+is not exported to kmodules.
+
+This means if there is such out-of-tree module, that must change the kernel or
+hack the kernel to identify the address of curent_kprobe. If it requires such
+a change or hack for the kernel, it is very easy to update the module too.
+
+Thank you,
+
 > 
-> Change it to use ksft_exit_skip() when the test is skipped. In addition,
-> refine test_assert() message to include strerror() string and add explicit
-> check for root user to clearly identofy non-root user skip case.
-
-Root should not be needed.
-
-Otherwise
-
-Acked-by: Paolo Bonzini <pbonzini at redhat.com>
-
-Paolo
-
-> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
-> ---
->  tools/testing/selftests/kvm/lib/assert.c          | 10 ++++++++--
->  tools/testing/selftests/kvm/vmx_tsc_adjust_test.c |  4 +++-
->  2 files changed, 11 insertions(+), 3 deletions(-)
+> - Naveen
 > 
-> diff --git a/tools/testing/selftests/kvm/lib/assert.c b/tools/testing/selftests/kvm/lib/assert.c
-> index c9f5b7d4ce38..4705729d847e 100644
-> --- a/tools/testing/selftests/kvm/lib/assert.c
-> +++ b/tools/testing/selftests/kvm/lib/assert.c
-> @@ -13,6 +13,8 @@
->  #include <execinfo.h>
->  #include <sys/syscall.h>
->  
-> +#include "../../kselftest.h"
-> +
->  /* Dumps the current stack trace to stderr. */
->  static void __attribute__((noinline)) test_dump_stack(void);
->  static void test_dump_stack(void)
-> @@ -65,13 +67,17 @@ test_assert(bool exp, const char *exp_str,
->  {
->  	va_list ap;
->  
-> +	if (getuid() != 0)
-> +		ksft_exit_skip("Please run the test as root - Exiting.\n");
-
-This should not be needed.  Otherwise
->  	if (!(exp)) {
->  		va_start(ap, fmt);
->  
->  		fprintf(stderr, "==== Test Assertion Failure ====\n"
->  			"  %s:%u: %s\n"
-> -			"  pid=%d tid=%d\n",
-> -			file, line, exp_str, getpid(), gettid());
-> +			"  pid=%d tid=%d - %s\n",
-> +			file, line, exp_str, getpid(), gettid(),
-> +			strerror(errno));
->  		test_dump_stack();
->  		if (fmt) {
->  			fputs("  ", stderr);
-> diff --git a/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c b/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
-> index 8f7f62093add..62fb73699eb6 100644
-> --- a/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
-> +++ b/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
-> @@ -28,6 +28,8 @@
->  #include <string.h>
->  #include <sys/ioctl.h>
->  
-> +#include "../kselftest.h"
-> +
->  #ifndef MSR_IA32_TSC_ADJUST
->  #define MSR_IA32_TSC_ADJUST 0x3b
->  #endif
-> @@ -190,7 +192,7 @@ int main(int argc, char *argv[])
->  
->  	if (!(entry->ecx & CPUID_VMX)) {
->  		printf("nested VMX not enabled, skipping test");
-> -		return 0;
-> +		return KSFT_SKIP;
->  	}
->  
->  	vm = vm_create_default_vmx(VCPU_ID, (void *) l1_guest_code);
 > 
 
+
+-- 
+Masami Hiramatsu <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
