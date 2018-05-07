@@ -1,78 +1,45 @@
 From: rostedt@goodmis.org (Steven Rostedt)
-Date: Mon, 7 May 2018 11:17:21 -0400
-Subject: [PATCH 09/24] selftests: ftrace: return Kselftest Skip code for
- skipped tests
-In-Reply-To: <20180505011328.32078-9-shuah@kernel.org>
-References: <20180505011328.32078-1-shuah@kernel.org>
- <20180505011328.32078-9-shuah@kernel.org>
-Message-ID: <20180507111721.7f8a6b35@gandalf.local.home>
+Date: Mon, 7 May 2018 11:21:54 -0400
+Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
+In-Reply-To: <20180505113803.45700179a93091b114ec6984@kernel.org>
+References: <152465856498.26224.16969986455942749517.stgit@devbox>
+ <20180503181137.6d82d897@gandalf.local.home>
+ <20180505004828.9b75b6802472f09b0d2de5b8@kernel.org>
+ <20180504120642.354cdd1f@gandalf.local.home>
+ <20180505113803.45700179a93091b114ec6984@kernel.org>
+Message-ID: <20180507112154.5c1ea44c@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180507151721.afxvUQNbrA4d_noDnw7k9yCI29z4U5BfaCqmxne11ks@z>
+Message-ID: <20180507152154.eRKB6UV6RrtxNgg2GXsOb6Ua2UgbcXEEV3nZZvMheb0@z>
 
-On Fri,  4 May 2018 19:13:13 -0600
-"Shuah Khan (Samsung OSG)" <shuah@kernel.org> wrote:
+On Sat, 5 May 2018 11:38:03 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-> When ftrace test is skipped because of unmet dependencies and/or
-> unsupported configuration, it returns 0 which is treated as a pass
-> by the Kselftest framework. This leads to false positive result even
-> when the test could not be run.
+> On Fri, 4 May 2018 12:06:42 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
 > 
-> Change it to return kselftest skip code when a test gets skipped to
-> clearly report that the test could not be run.
+> > On Sat, 5 May 2018 00:48:28 +0900
+> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >   
+> > > So the syntax will be
+> > > 
+> > > p[:EVENT] SYM[(CAST)|+OFFS] [FETCHARG]
+> > > 
+> > > And here is an example;
+> > > 
+> > > p:myevent vfs_read(void *file, char *buf, size_t count, void *pos) $arg1 $arg2  
+> > 
+> > If we do this, why bother with $arg1 $arg2?  
 > 
-> Kselftest framework SKIP code is 4 and the framework prints appropriate
-> messages to indicate that the test is skipped.
-> 
+> User may want to trace only some of them. :)
 
-I'm fine with this change, but I believe Masami and perhaps others
-have scripts that expect zero return.
+Yes, and this is why I like my solution of the NULL parameter, and you
+don't need to show anything after what you want.
 
-If anything, we probably need to have a way to override the ksft_skip
-via a command line argument.
+ p:myevent vfs_read(void *file, NULL, size_t count)
 
-Masami?
+would only trace file and count, and ignore buf and pos.
 
 -- Steve
-
-> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
-> ---
->  tools/testing/selftests/ftrace/ftracetest | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> index f9a9d424c980..b731c8cdcffb 100755
-> --- a/tools/testing/selftests/ftrace/ftracetest
-> +++ b/tools/testing/selftests/ftrace/ftracetest
-> @@ -23,6 +23,9 @@ echo "		            If <dir> is -, all logs output in console only"
->  exit $1
->  }
->  
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
->  errexit() { # message
->    echo "Error: $1" 1>&2
->    exit 1
-> @@ -30,7 +33,8 @@ errexit() { # message
->  
->  # Ensuring user privilege
->  if [ `id -u` -ne 0 ]; then
-> -  errexit "this must be run by root user"
-> +  echo "Skipping: test must be run by root user"
-> +  exit $ksft_skip
->  fi
->  
->  # Utilities
-> @@ -249,7 +253,7 @@ trap 'SIG_RESULT=$UNTESTED' $SIG_UNTESTED
->  SIG_UNSUPPORTED=$((SIG_BASE + UNSUPPORTED))
->  exit_unsupported () {
->    kill -s $SIG_UNSUPPORTED $SIG_PID
-> -  exit 0
-> +  exit $ksft_skip
->  }
->  trap 'SIG_RESULT=$UNSUPPORTED' $SIG_UNSUPPORTED
->  
-
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
