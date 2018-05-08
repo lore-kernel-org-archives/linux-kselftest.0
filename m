@@ -1,91 +1,24 @@
-From: mike.kravetz@oracle.com (Mike Kravetz)
-Date: Mon, 7 May 2018 17:20:51 -0700
-Subject: [PATCH v2 21/24] selftests: memfd: return Kselftest Skip code for
- skipped tests
-In-Reply-To: <20180507230116.27652-1-shuah@kernel.org>
-References: <20180507230116.27652-1-shuah@kernel.org>
-Message-ID: <c1ad2960-7294-4370-a7b6-06a709bf247d@oracle.com>
+From: davem@davemloft.net (David Miller)
+Date: Mon, 07 May 2018 23:22:24 -0400 (EDT)
+Subject: [PATCH] selftests: net: add udpgso* to TEST_GEN_FILES
+In-Reply-To: <20180504091725.24977-1-anders.roxell@linaro.org>
+References: <20180504091725.24977-1-anders.roxell@linaro.org>
+Message-ID: <20180507.232224.1710068197351359395.davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180508002051.qzy5moxa4VCyNZCeVN2Ay75ZpWxRmPOqrR1tssnQGwc@z>
+Message-ID: <20180508032224.50gVW2DWu7nzxiUTxqeEkn037DRPIf7_9jQMqUbXESk@z>
 
-On 05/07/2018 04:01 PM, Shuah Khan (Samsung OSG) wrote:
-> When memfd test is skipped because of unmet dependencies and/or unsupported
-> configuration, it returns non-zero value which is treated as a fail by the
-> Kselftest framework. This leads to false negative result even when the test
-> could not be run.
-> 
-> Change it to return kselftest skip code when a test gets skipped to clearly
-> report that the test could not be run.
-> 
-> Added an explicit check for root user at the start of memfd hugetlbfs test
-> and return skip code if a non-root user attempts to run it.
-> 
-> In addition, return skip code when not enough huge pages are available to
-> run the test.
-> 
-> Kselftest framework SKIP code is 4 and the framework prints appropriate
-> messages to indicate that the test is skipped.
-> 
-> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+From: Anders Roxell <anders.roxell@linaro.org>
+Date: Fri,  4 May 2018 11:17:25 +0200
 
-Thanks for making the changes!
+> The generated files udpgso* shouldn't be part of TEST_PROGS, they are
+> used by udpgso.sh and udpgsp_bench.sh. They should be added to the
+> TEST_GEN_FILES to get installed without being added to the main
+> run_kselftest.sh script.
+> 
+> Fixes: 3a687bef148d ("selftests: udp gso benchmark")
+> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 
-Reviewed-by: Mike Kravetz <mike.kravetz at oracle.com>
-
--- 
-Mike Kravetz
-> ---
-> 
-> Changes since v1:
-> -- addressed review comments on v1
-> -- Fixed a regression in v1 that changed the behavior to require root
->    for all tests not just the hugetlbfs test.
-> 
->  tools/testing/selftests/memfd/run_tests.sh | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/memfd/run_tests.sh b/tools/testing/selftests/memfd/run_tests.sh
-> index c2d41ed81b24..2013f195e623 100755
-> --- a/tools/testing/selftests/memfd/run_tests.sh
-> +++ b/tools/testing/selftests/memfd/run_tests.sh
-> @@ -1,6 +1,9 @@
->  #!/bin/bash
->  # please run as root
->  
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
->  #
->  # Normal tests requiring no special resources
->  #
-> @@ -29,12 +32,13 @@ if [ -n "$freepgs" ] && [ $freepgs -lt $hpages_test ]; then
->  	nr_hugepgs=`cat /proc/sys/vm/nr_hugepages`
->  	hpages_needed=`expr $hpages_test - $freepgs`
->  
-> +	if [ $UID != 0 ]; then
-> +		echo "Please run memfd with hugetlbfs test as root"
-> +		exit $ksft_skip
-> +	fi
-> +
->  	echo 3 > /proc/sys/vm/drop_caches
->  	echo $(( $hpages_needed + $nr_hugepgs )) > /proc/sys/vm/nr_hugepages
-> -	if [ $? -ne 0 ]; then
-> -		echo "Please run this test as root"
-> -		exit 1
-> -	fi
->  	while read name size unit; do
->  		if [ "$name" = "HugePages_Free:" ]; then
->  			freepgs=$size
-> @@ -53,7 +57,7 @@ if [ $freepgs -lt $hpages_test ]; then
->  	fi
->  	printf "Not enough huge pages available (%d < %d)\n" \
->  		$freepgs $needpgs
-> -	exit 1
-> +	exit $ksft_skip
->  fi
->  
->  #
-> 
+Applied, thanks.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
