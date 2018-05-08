@@ -1,67 +1,70 @@
-From: naveen.n.rao@linux.vnet.ibm.com (Naveen N. Rao)
-Date: Tue, 08 May 2018 23:31:42 +0530
-Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
-In-Reply-To: <20180509000215.b4e907b419540d8c84abcdd9@kernel.org>
-References: <152465856498.26224.16969986455942749517.stgit@devbox>
- <20180503181137.6d82d897@gandalf.local.home>
- <20180505004828.9b75b6802472f09b0d2de5b8@kernel.org>
- <20180504120642.354cdd1f@gandalf.local.home>
- <20180505113803.45700179a93091b114ec6984@kernel.org>
- <1525506231.y43xvmd3yw.naveen@linux.ibm.com>
- <20180505233211.ecad929b13461f1e5f6427d2@kernel.org>
- <1525680222.8nou0tzkkt.naveen@linux.ibm.com>
- <20180507235317.fa04131c603dbe59ef78a829@kernel.org>
- <1525772835.npvwj0nws0.naveen@linux.ibm.com>
- <20180509000215.b4e907b419540d8c84abcdd9@kernel.org>
-Message-ID: <1525802391.f0r6zmk1g8.naveen@linux.ibm.com>
+From: shuah@kernel.org (Shuah Khan)
+Date: Tue, 8 May 2018 14:21:11 -0600
+Subject: [PATCH] selftests:intel_pstate: fixes typical crash of a testing
+ script for Intel P-State driver
+In-Reply-To: <62c2484a-b8fe-513c-a9c7-dff1f3f3979a@kernel.org>
+References: <20180429191226.14242-1-ahiliation@yahoo.co.in>
+ <62c2484a-b8fe-513c-a9c7-dff1f3f3979a@kernel.org>
+Message-ID: <f19c0a3f-a881-fbb4-ed0b-bf20bda730cf@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180508180142.bFIyqaMNy6XXa_TVrScRGHpIWSyWSoJRRqC3etHJ7m4@z>
+Message-ID: <20180508202111.2aatIarNuOqRfYHA0peW2akr1_am2SbDCBpDe9N-K2w@z>
 
-Masami Hiramatsu wrote:
-> On Tue, 08 May 2018 15:41:11 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+On 05/04/2018 01:47 PM, Shuah Khan wrote:
+> On 04/29/2018 01:12 PM, Jeffrin Jose T wrote:
+>>  Testing script for Intel P-State driver crashes during
+>>  the run.  this patch fixes that crash and produce typical results.
+>>
+>> Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
+>>
+>> ---
+>>  tools/testing/selftests/intel_pstate/run.sh | 7 +++++--
+>>  1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
+>> index c670359becc6..cd32aca8806f 100755
+>> --- a/tools/testing/selftests/intel_pstate/run.sh
+>> +++ b/tools/testing/selftests/intel_pstate/run.sh
+>> @@ -27,6 +27,7 @@
+>>  # and the test will error out in those cases.  The result.X file can be checked
+>>  # for consistency and modified to remove the extra MHz values.  The result.X
+>>  # files can be re-evaluated by setting EVALUATE_ONLY to 1 below.
+>> +#set -xv
+>>  
+>>  EVALUATE_ONLY=0
+>>  
+>> @@ -101,12 +102,13 @@ cpupower frequency-set -g powersave --max=${max_freq}MHz >& /dev/null
+>>  echo "Target      Actual      Difference     MSR(0x199)     max_perf_pct"
+>>  for freq in `seq $max_freq -100 $min_freq`
+>>  do
+>> -	result_freq=$(cat /tmp/result.${freq} | grep "cpu MHz" | awk ' { print $4 } ' | awk -F "." ' { print $1 } ')
+>> +       result_freq=$(cat /tmp/result.${freq} | grep "cpu MHz" \
+>>         | awk '{print $4}' | awk -F "." '{print $1}')
+>> +	result_freq=$(echo $result_freq | head -n1 | cut -d " " -f1)
+>>  	msr=$(cat /tmp/result.${freq} | grep "msr" | awk ' { print $3 } ')
+>>  	max_perf_pct=$(cat /tmp/result.${freq} | grep "max_perf_pct" | awk ' { print $2 } ' )
+>> -	if [ $result_freq -eq $freq ]; then
+>> +	if (( "$result_freq" == "$freq" ))
+>> +	then
+>>  		echo " $freq        $result_freq             0          $msr         $(($max_perf_pct*3300))"
+>>  	else
+>>  		echo " $freq        $result_freq          $(($result_freq-$freq))          $msr          $(($max_perf_pct*$max_freq))"
+>>
 > 
->> Masami Hiramatsu wrote:
->> > On Mon, 07 May 2018 13:41:53 +0530
->> > "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->> >> >> 
->> >> >> I didn't understand that. Which code are you planning to remove? Can you 
->> >> >> please elaborate? I thought we still need to disable preemption in the 
->> >> >> ftrace handler.
->> >> > 
->> >> > Yes, kprobe_ftrace_handler itself must be run under preempt disabled
->> >> > because it depends on a per-cpu variable. What I will remove is the
->> >> > redundant preempt disable/enable_noresched (unbalanced) pair in the
->> >> > kprobe_ftrace_handler, and jprobe x86 ports which is no more used.
->> >> 
->> >> Won't that break out-of-tree users depending on returning a non-zero 
->> >> value to handle preemption differently? You seem to have alluded to it 
->> >> earlier in the mail chain above where you said that this is not just for 
->> >> jprobes (though it was added for jprobes as the main use case).
->> > 
->> > No, all users are in tree already (function override for bpf and error-injection).
->> 
->> Ok, so BPF error injection is a new user that can return a non-zero 
->> value from the pre handler. It looks like it can use KPROBES_ON_FTRACE 
->> too.
->> 
->> In that case, on function entry, we call into kprobe_ftrace_handler() 
->> which will call fei_kprobe_handler(), which can re-enable premption 
->> before returning 1. So, if you remove the additional 
->> prempt_disable()/enable_no_resched() in kprobe_ftrace_handler(), then it 
->> will become imbalanced, right?
+> Thanks. I will get this into 4.17-rc5
 > 
-> Right. So we have to fix both at once. Please check the patch below.
+> -- Shuah
 > 
-> https://patchwork.kernel.org/patch/10386171/
 
-Ah, so your intent was to change the semantics of how the pre handler 
-works! I missed that aspect. This now makes sense. Thanks for the 
-clarification.
+This patch didn't apply. In any case Daniel Diaz sent in a patch a coupld of weeks ago
+which did apply and fixes the same problem.
 
-- Naveen
+I applied Daniel's patch to linux-kselftest fixes for 4.17-rc5
 
+https://lists.linaro.org/pipermail/linux-kselftest-mirror/2018-April/000858.html
 
+thank you both.
+
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
