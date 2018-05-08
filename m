@@ -1,35 +1,67 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Tue, 8 May 2018 11:36:17 -0600
-Subject: [PATCH 2/2] tools/testing/selftests/x86: fix error: conflicting
- types for 'pkey_get|pkey_set'
-In-Reply-To: <125eb810-1d48-394d-9665-40da64326fbb@intel.com>
-References: <1525770870-19067-1-git-send-email-lizhijian@cn.fujitsu.com>
- <1525770870-19067-2-git-send-email-lizhijian@cn.fujitsu.com>
- <125eb810-1d48-394d-9665-40da64326fbb@intel.com>
-Message-ID: <e80c9430-eaed-6a46-bde2-141b2e4266d2@kernel.org>
+From: naveen.n.rao@linux.vnet.ibm.com (Naveen N. Rao)
+Date: Tue, 08 May 2018 23:31:42 +0530
+Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
+In-Reply-To: <20180509000215.b4e907b419540d8c84abcdd9@kernel.org>
+References: <152465856498.26224.16969986455942749517.stgit@devbox>
+ <20180503181137.6d82d897@gandalf.local.home>
+ <20180505004828.9b75b6802472f09b0d2de5b8@kernel.org>
+ <20180504120642.354cdd1f@gandalf.local.home>
+ <20180505113803.45700179a93091b114ec6984@kernel.org>
+ <1525506231.y43xvmd3yw.naveen@linux.ibm.com>
+ <20180505233211.ecad929b13461f1e5f6427d2@kernel.org>
+ <1525680222.8nou0tzkkt.naveen@linux.ibm.com>
+ <20180507235317.fa04131c603dbe59ef78a829@kernel.org>
+ <1525772835.npvwj0nws0.naveen@linux.ibm.com>
+ <20180509000215.b4e907b419540d8c84abcdd9@kernel.org>
+Message-ID: <1525802391.f0r6zmk1g8.naveen@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180508173617.vA9okurNDF1cRiHkndfaLhbhkCZa45py_6uFrWrqkp8@z>
+Message-ID: <20180508180142.bFIyqaMNy6XXa_TVrScRGHpIWSyWSoJRRqC3etHJ7m4@z>
 
-On 05/08/2018 10:30 AM, Dave Hansen wrote:
-> On 05/08/2018 02:14 AM, Li Zhijian wrote:
->> -u32 pkey_get(int pkey, unsigned long flags)
->> +u32 _pkey_get(int pkey, unsigned long flags)
->>  {
->>  	u32 mask = (PKEY_DISABLE_ACCESS|PKEY_DISABLE_WRITE);
->>  	u32 pkru = __rdpkru();
->> @@ -422,7 +426,7 @@ u32 pkey_get(int pkey, unsigned long flags)
->>  	return masked_pkru;
->>  }
+Masami Hiramatsu wrote:
+> On Tue, 08 May 2018 15:41:11 +0530
+> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
 > 
-> I'm not a huge fan of random underscores for undocumented reasons.  But,
-> oh well.
+>> Masami Hiramatsu wrote:
+>> > On Mon, 07 May 2018 13:41:53 +0530
+>> > "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+>> >> >> 
+>> >> >> I didn't understand that. Which code are you planning to remove? Can you 
+>> >> >> please elaborate? I thought we still need to disable preemption in the 
+>> >> >> ftrace handler.
+>> >> > 
+>> >> > Yes, kprobe_ftrace_handler itself must be run under preempt disabled
+>> >> > because it depends on a per-cpu variable. What I will remove is the
+>> >> > redundant preempt disable/enable_noresched (unbalanced) pair in the
+>> >> > kprobe_ftrace_handler, and jprobe x86 ports which is no more used.
+>> >> 
+>> >> Won't that break out-of-tree users depending on returning a non-zero 
+>> >> value to handle preemption differently? You seem to have alluded to it 
+>> >> earlier in the mail chain above where you said that this is not just for 
+>> >> jprobes (though it was added for jprobes as the main use case).
+>> > 
+>> > No, all users are in tree already (function override for bpf and error-injection).
+>> 
+>> Ok, so BPF error injection is a new user that can return a non-zero 
+>> value from the pre handler. It looks like it can use KPROBES_ON_FTRACE 
+>> too.
+>> 
+>> In that case, on function entry, we call into kprobe_ftrace_handler() 
+>> which will call fei_kprobe_handler(), which can re-enable premption 
+>> before returning 1. So, if you remove the additional 
+>> prempt_disable()/enable_no_resched() in kprobe_ftrace_handler(), then it 
+>> will become imbalanced, right?
 > 
-> Acked-by: Dave Hansen <dave.hansen at intel.com>
+> Right. So we have to fix both at once. Please check the patch below.
 > 
+> https://patchwork.kernel.org/patch/10386171/
 
-Thanks. Queuing this up for 4.17-rc5
+Ah, so your intent was to change the semantics of how the pre handler 
+works! I missed that aspect. This now makes sense. Thanks for the 
+clarification.
 
--- Shuah
+- Naveen
+
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
