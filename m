@@ -1,93 +1,76 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Tue, 8 May 2018 12:38:12 +0900
-Subject: [PATCH 09/24] selftests: ftrace: return Kselftest Skip code for
- skipped tests
-In-Reply-To: <20180505011328.32078-9-shuah@kernel.org>
-References: <20180505011328.32078-1-shuah@kernel.org>
- <20180505011328.32078-9-shuah@kernel.org>
-Message-ID: <20180508123812.874ff8d2a22abd62148b293d@kernel.org>
+Date: Tue, 8 May 2018 13:01:27 +0900
+Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
+In-Reply-To: <20180507113003.66045d18@gandalf.local.home>
+References: <152465856498.26224.16969986455942749517.stgit@devbox>
+ <20180503181137.6d82d897@gandalf.local.home>
+ <20180505004828.9b75b6802472f09b0d2de5b8@kernel.org>
+ <20180504120642.354cdd1f@gandalf.local.home>
+ <20180505113803.45700179a93091b114ec6984@kernel.org>
+ <20180506005143.7bd9030db298fcfbade73434@kernel.org>
+ <20180507113003.66045d18@gandalf.local.home>
+Message-ID: <20180508130127.c9de04e9d9c93a90e9891ae0@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180508033812.e0YZVBI7kO5zhInCkVhF6NcYB2ObJ5q9mCz3Y7xRQeM@z>
+Message-ID: <20180508040127.TFHdigcCWTYX1rbjgX09lkzAEPX4x3hBsnxzSaP8EHw@z>
 
-On Fri,  4 May 2018 19:13:13 -0600
-"Shuah Khan (Samsung OSG)" <shuah@kernel.org> wrote:
+On Mon, 7 May 2018 11:30:03 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> When ftrace test is skipped because of unmet dependencies and/or
-> unsupported configuration, it returns 0 which is treated as a pass
-> by the Kselftest framework. This leads to false positive result even
-> when the test could not be run.
+> On Sun, 6 May 2018 00:51:43 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > 
-> Change it to return kselftest skip code when a test gets skipped to
-> clearly report that the test could not be run.
+> > OK, now I think it is a time to introduce new unified interface for dynamic events,
+> > tracefs/dynamic_events and make uprobe_events and kprobe_events as symbolic-links
+> > to the new interface file.
 > 
-> Kselftest framework SKIP code is 4 and the framework prints appropriate
-> messages to indicate that the test is skipped.
+> So basically make one file that does all the work?
 > 
-> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
-> ---
->  tools/testing/selftests/ftrace/ftracetest | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+> I'm not sure we can keep the other files as symbolic links. Because we
+> don't want the kprobe_events showing up in the uprobe_events file, and
+> vice versa. We need to keep all this backward compatible.
+
+Good catch!
+Can't we check which file the user opened? If not, even though
+we can setup a filter in ops->open().
+
 > 
-> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> index f9a9d424c980..b731c8cdcffb 100755
-> --- a/tools/testing/selftests/ftrace/ftracetest
-> +++ b/tools/testing/selftests/ftrace/ftracetest
-> @@ -23,6 +23,9 @@ echo "		            If <dir> is -, all logs output in console only"
->  exit $1
->  }
->  
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
->  errexit() { # message
->    echo "Error: $1" 1>&2
->    exit 1
-> @@ -30,7 +33,8 @@ errexit() { # message
->  
->  # Ensuring user privilege
->  if [ `id -u` -ne 0 ]; then
-> -  errexit "this must be run by root user"
-> +  echo "Skipping: test must be run by root user"
-> +  exit $ksft_skip
->  fi
->  
->  # Utilities
-> @@ -249,7 +253,7 @@ trap 'SIG_RESULT=$UNTESTED' $SIG_UNTESTED
->  SIG_UNSUPPORTED=$((SIG_BASE + UNSUPPORTED))
->  exit_unsupported () {
->    kill -s $SIG_UNSUPPORTED $SIG_PID
-> -  exit 0
-> +  exit $ksft_skip
+> But I do like the idea of one file to rule them all, approach.
 
-This should return 0. If you want to change the result code,
-you have to change the last part as below.
-(Note that we need a switch option of return code, so that
- ftracetest user can continue to use same way...)
+Thanks!
 
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index f9a9d424c980..d6ce56a2a937 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -326,5 +326,15 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
- prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
- prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
- 
--# if no error, return 0
--exit $TOTAL_RESULT
-+# following kselftest result code
-+if [ $UNSUPPORTED_CASES -ne 0 -o \
-+       $UNTESTED_CASES -ne 0 -o \
-+       $UNRESOLVED_CASES -ne 0]; then # There are skipped tests
-+  exit 4
-+elif [ $XAILED_CASES -ne 0 -o ]; then # XFAILs
-+  exit 2
-+elif [ $FAILED_CASES -ne 0 -o ]; then # FAILs
-+  exit 1
-+else # PASS
-+  exit 0
-+fi
+> 
+> -- Steve
+> 
+> 
+> > 
+> > Actually, there is no reason we split those 2 interfaces, since
+> > both have similar, but very clear syntax differences.
+> > 
+> > o Uprobe event definition
+> >   p[:[GRP/]EVENT] PATH:OFFSET [FETCHARGS] : Set a uprobe
+> >   r[:[GRP/]EVENT] PATH:OFFSET [FETCHARGS] : Set a return uprobe (uretprobe)
+> >   -:[GRP/]EVENT                           : Clear uprobe or uretprobe event
+> > 
+> > o Kprobe event definition
+> >   p[:[GRP/]EVENT] [MOD:]SYM[+offs]|MEMADDR [FETCHARGS]  : Set a probe
+> >   r[MAXACTIVE][:[GRP/]EVENT] [MOD:]SYM[+0] [FETCHARGS]  : Set a return probe
+> >   -:[GRP/]EVENT                                         : Clear a probe
+> > 
+> > At first, it is clear that those can share the parser. 2nd, it is easy to
+> > distinguish those, because Uprobe event must require the PATH which starts
+> > with '/', on the other hand, Kprobe event must NOT start with '/'.
+> > (both SYM and MOD will start with alphabet or '_', of course MEMADDR
+> > will start with digits)
+> > 
+> > If we can merge those to unified dynamic_events interface, I think
+> > 'f[:[GRP/]EVENT] SYM(CAST)' is also acceptable, since it is no more
+> > only for kprobe/uprobe. We can directly add some other dynamic
+> > events via dynamic_events interface. ;)
+> > 
+> > Thank you,
+> > 
+> 
 
-Thanks,
 
 -- 
 Masami Hiramatsu <mhiramat at kernel.org>
