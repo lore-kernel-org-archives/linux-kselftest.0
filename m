@@ -1,70 +1,37 @@
 From: shuah@kernel.org (Shuah Khan)
-Date: Tue, 8 May 2018 14:21:11 -0600
-Subject: [PATCH] selftests:intel_pstate: fixes typical crash of a testing
- script for Intel P-State driver
-In-Reply-To: <62c2484a-b8fe-513c-a9c7-dff1f3f3979a@kernel.org>
-References: <20180429191226.14242-1-ahiliation@yahoo.co.in>
- <62c2484a-b8fe-513c-a9c7-dff1f3f3979a@kernel.org>
-Message-ID: <f19c0a3f-a881-fbb4-ed0b-bf20bda730cf@kernel.org>
+Date: Tue, 8 May 2018 14:27:13 -0600
+Subject: [PATCH] selftests/intel_pstate: Improve test, minor fixes
+In-Reply-To: <1523398277-2066-1-git-send-email-daniel.diaz@linaro.org>
+References: <1523398277-2066-1-git-send-email-daniel.diaz@linaro.org>
+Message-ID: <00379a47-e35b-c5a3-2f94-4fa3b90921e9@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180508202111.2aatIarNuOqRfYHA0peW2akr1_am2SbDCBpDe9N-K2w@z>
+Message-ID: <20180508202713.OXL2PUtwGFn2lmqf_MgSc7uCwGrFu3yP3CMk266IbLs@z>
 
-On 05/04/2018 01:47 PM, Shuah Khan wrote:
-> On 04/29/2018 01:12 PM, Jeffrin Jose T wrote:
->>  Testing script for Intel P-State driver crashes during
->>  the run.  this patch fixes that crash and produce typical results.
->>
->> Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
->>
->> ---
->>  tools/testing/selftests/intel_pstate/run.sh | 7 +++++--
->>  1 file changed, 5 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
->> index c670359becc6..cd32aca8806f 100755
->> --- a/tools/testing/selftests/intel_pstate/run.sh
->> +++ b/tools/testing/selftests/intel_pstate/run.sh
->> @@ -27,6 +27,7 @@
->>  # and the test will error out in those cases.  The result.X file can be checked
->>  # for consistency and modified to remove the extra MHz values.  The result.X
->>  # files can be re-evaluated by setting EVALUATE_ONLY to 1 below.
->> +#set -xv
->>  
->>  EVALUATE_ONLY=0
->>  
->> @@ -101,12 +102,13 @@ cpupower frequency-set -g powersave --max=${max_freq}MHz >& /dev/null
->>  echo "Target      Actual      Difference     MSR(0x199)     max_perf_pct"
->>  for freq in `seq $max_freq -100 $min_freq`
->>  do
->> -	result_freq=$(cat /tmp/result.${freq} | grep "cpu MHz" | awk ' { print $4 } ' | awk -F "." ' { print $1 } ')
->> +       result_freq=$(cat /tmp/result.${freq} | grep "cpu MHz" \
->>         | awk '{print $4}' | awk -F "." '{print $1}')
->> +	result_freq=$(echo $result_freq | head -n1 | cut -d " " -f1)
->>  	msr=$(cat /tmp/result.${freq} | grep "msr" | awk ' { print $3 } ')
->>  	max_perf_pct=$(cat /tmp/result.${freq} | grep "max_perf_pct" | awk ' { print $2 } ' )
->> -	if [ $result_freq -eq $freq ]; then
->> +	if (( "$result_freq" == "$freq" ))
->> +	then
->>  		echo " $freq        $result_freq             0          $msr         $(($max_perf_pct*3300))"
->>  	else
->>  		echo " $freq        $result_freq          $(($result_freq-$freq))          $msr          $(($max_perf_pct*$max_freq))"
->>
+On 04/10/2018 04:11 PM, Daniel Díaz wrote:
+> A few changes improve the overall usability of the test:
+> * fix a hard-coded maximum frequency (3300),
+> * don't adjust the CPU frequency if only evaluating results,
+> * fix a comparison for multiple frequencies.
 > 
-> Thanks. I will get this into 4.17-rc5
+> A symptom of that last issue looked like this:
+>   ./run.sh: line 107: [: too many arguments
+>   ./run.sh: line 110: 3099
+>   3099
+>   3100-3100: syntax error in expression (error token is \"3099
+>   3100-3100\")
 > 
-> -- Shuah
+> Because a check will count how many differente frequencies
+> there are among the CPUs of the system, and after they are
+> tallied another read is performed, which might produce
+> different results.
 > 
+> Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
 
-This patch didn't apply. In any case Daniel Diaz sent in a patch a coupld of weeks ago
-which did apply and fixes the same problem.
+Applied to linux-kselftest fixes for 4.17-rc5
 
-I applied Daniel's patch to linux-kselftest fixes for 4.17-rc5
-
-https://lists.linaro.org/pipermail/linux-kselftest-mirror/2018-April/000858.html
-
-thank you both.
-
+thanks,
 -- Shuah
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
