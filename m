@@ -1,40 +1,73 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Tue, 8 May 2018 09:34:22 -0600
-Subject: [PATCH] selftests: kvm: update .gitignore with missing file
-In-Reply-To: <CADYN=9KPSYmrAA_N-J-OLvn2+B1_hU5KK24-Q1V66j3cCmkNTw@mail.gmail.com>
-References: <20180423135725.3753-1-anders.roxell@linaro.org>
- <CADYN=9KPSYmrAA_N-J-OLvn2+B1_hU5KK24-Q1V66j3cCmkNTw@mail.gmail.com>
-Message-ID: <62bdea19-17e2-82e9-c2bf-214f8219f7c6@kernel.org>
+From: rdunlap@infradead.org (Randy Dunlap)
+Date: Tue, 8 May 2018 08:46:51 -0700
+Subject: PROBLEM: error due to conflicting types during build of kselftests
+In-Reply-To: <49022295-d118-4aa7-c750-36f36b6b6821@infradead.org>
+References: <CAG=yYwnMXFxHxCnYNWCb-HhpAb21kc5_e_6q-N_DRGhMVurPMQ@mail.gmail.com>
+ <bd125268-a685-ba6e-efc4-130a0621855f@infradead.org>
+ <CAG=yYwnq1KwAmKL5t=KFTMcRY9rDFM_5XBDNpbvzM-8J-U7TKQ@mail.gmail.com>
+ <49022295-d118-4aa7-c750-36f36b6b6821@infradead.org>
+Message-ID: <ccbfdf1b-ffd5-4b05-8b73-7726816da735@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180508153422.IuPbiEovXApqYtRetvRfqwU68KsccGnY4ms_dQfHUrM@z>
+Message-ID: <20180508154651.qHRYAZKBkS5PMFAJz9pdOIaJSDgUJVGPvqr8nOTn1Y4@z>
 
-On 05/08/2018 02:22 AM, Anders Roxell wrote:
-> On 23 April 2018@15:57, Anders Roxell <anders.roxell@linaro.org> wrote:
->> Fixes: d5edb7f8e7ab ("kvm: selftests: add vmx_tsc_adjust_test")
->> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
->> ---
->>  tools/testing/selftests/kvm/.gitignore | 1 +
->>  1 file changed, 1 insertion(+)
+On 04/28/2018 02:54 PM, Randy Dunlap wrote:
+> On 04/28/2018 02:42 PM, Jeffrin Thalakkottoor wrote:
+>> anyway my current is gcc (Debian 7.3.0-16) 7.3.0
 >>
->> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
->> index a546e052d19a..63fc1ab9248f 100644
->> --- a/tools/testing/selftests/kvm/.gitignore
->> +++ b/tools/testing/selftests/kvm/.gitignore
->> @@ -1,2 +1,3 @@
->>  set_sregs_test
->>  sync_regs_test
->> +vmx_tsc_adjust_test
->> --
->> 2.17.0
->>
+>> may be you can try ... make -C tools/testing/selftests 2> error.txt
 > 
-> ping.
+> I have a much older gcc, so newer must be better.  :)
 > 
 
-I plan to get this into 4.18-rc1
+This patch (just posted) should fix the error that you are seeing:
 
-thanks,
--- Shuah
+https://marc.info/?l=linux-kernel&m=152577091622065&w=2
+
+
+> 
+>> On Sat, Apr 28, 2018@5:08 AM, Randy Dunlap <rdunlap@infradead.org> wrote:
+>>> On 04/20/2018 11:03 AM, Jeffrin Thalakkottoor wrote:
+>>>> hello,
+>>>>
+>>>> the following is the error found...
+>>>> -----------------------------------------------------------------------------------
+>>>> protection_keys.c:421:5: error: conflicting types for ‘pkey_set’
+>>>>  int pkey_set(int pkey, unsigned long rights, unsigned long flags)
+>>>>      ^~~~~~~~
+>>>> ------------------------------------------------------------------------------------
+>>>>
+>>>> to reproduce this error...
+>>>> make -C tools/testing/selftests
+>>>
+>>> Hi,
+>>>
+>>> I can't reproduce this problem.  What is your gcc --version?
+>>>
+>>> Thanks.
+>>>
+>>>> Details about software:
+>>>>
+>>>> Linux debian 4.17.0-rc1+ #1 SMP Thu Apr 19 18:59:45 IST 2018 x86_64 GNU/Linux
+>>>>
+>>>> GNU Make             4.2.1
+>>>> Binutils             2.30
+>>>> Util-linux           2.31.1
+>>>> Mount                2.31.1
+>>>> Linux C Library      2.27
+>>>> Dynamic linker (ldd) 2.27
+>>>> readlink: missing operand
+>>>> Try 'readlink --help' for more information.
+>>>> Procps               3.3.14
+>>>> Kbd                  2.0.4
+>>>> Console-tools        2.0.4
+>>>> Sh-utils             8.28
+>>>> Udev                 238
+> 
+> 
+
+
+-- 
+~Randy
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
