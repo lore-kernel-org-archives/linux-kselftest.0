@@ -1,192 +1,59 @@
-From: anders.roxell at linaro.org (Anders Roxell)
-Date: Tue, 8 May 2018 11:38:39 +0200
-Subject: [PATCH] selftests/memfd: move common code into common.c
-In-Reply-To: <20180417085936.19512-1-anders.roxell@linaro.org>
-References: <20180417085936.19512-1-anders.roxell@linaro.org>
-Message-ID: <CADYN=9L47uYKQqZVz91EDHNd0aWXrTPc_tbdAZHBeWLKTHgcTA@mail.gmail.com>
+From: naveen.n.rao at linux.vnet.ibm.com (Naveen N. Rao)
+Date: Tue, 08 May 2018 15:41:11 +0530
+Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
+In-Reply-To: <20180507235317.fa04131c603dbe59ef78a829@kernel.org>
+References: <152465856498.26224.16969986455942749517.stgit@devbox>
+ <20180503181137.6d82d897@gandalf.local.home>
+ <20180505004828.9b75b6802472f09b0d2de5b8@kernel.org>
+ <20180504120642.354cdd1f@gandalf.local.home>
+ <20180505113803.45700179a93091b114ec6984@kernel.org>
+ <1525506231.y43xvmd3yw.naveen@linux.ibm.com>
+ <20180505233211.ecad929b13461f1e5f6427d2@kernel.org>
+ <1525680222.8nou0tzkkt.naveen@linux.ibm.com>
+ <20180507235317.fa04131c603dbe59ef78a829@kernel.org>
+Message-ID: <1525772835.npvwj0nws0.naveen@linux.ibm.com>
 
-On 17 April 2018 at 10:59, Anders Roxell <anders.roxell at linaro.org> wrote:
-> Remove code duplication, in the current code, we move common code for
-> memfd to common.c.
->
-> The duplicate functions got added in commit 87b2d44026e0 ("selftests:
-> add memfd/sealing page-pinning tests")
->
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
-> ---
->  tools/testing/selftests/memfd/common.c     | 37 +++++++++++++++++++
->  tools/testing/selftests/memfd/common.h     |  4 ++
->  tools/testing/selftests/memfd/fuse_test.c  | 43 +---------------------
->  tools/testing/selftests/memfd/memfd_test.c | 37 -------------------
->  4 files changed, 43 insertions(+), 78 deletions(-)
->
-> diff --git a/tools/testing/selftests/memfd/common.c b/tools/testing/selftests/memfd/common.c
-> index 8eb3d75f6e60..fee1f07828a3 100644
-> --- a/tools/testing/selftests/memfd/common.c
-> +++ b/tools/testing/selftests/memfd/common.c
-> @@ -44,3 +44,40 @@ int sys_memfd_create(const char *name, unsigned int flags)
->
->         return syscall(__NR_memfd_create, name, flags);
->  }
-> +
-> +unsigned int mfd_assert_get_seals(int fd)
-> +{
-> +       int r;
-> +
-> +       r = fcntl(fd, F_GET_SEALS);
-> +       if (r < 0) {
-> +               printf("GET_SEALS(%d) failed: %m\n", fd);
-> +               abort();
-> +       }
-> +
-> +       return (unsigned int)r;
-> +}
-> +
-> +void mfd_assert_add_seals(int fd, unsigned int seals)
-> +{
-> +       int r;
-> +       unsigned int s;
-> +
-> +       s = mfd_assert_get_seals(fd);
-> +       r = fcntl(fd, F_ADD_SEALS, seals);
-> +       if (r < 0) {
-> +               printf("ADD_SEALS(%d, %u -> %u) failed: %m\n", fd, s, seals);
-> +               abort();
-> +       }
-> +}
-> +
-> +void mfd_assert_has_seals(int fd, unsigned int seals)
-> +{
-> +       unsigned int s;
-> +
-> +       s = mfd_assert_get_seals(fd);
-> +       if (s != seals) {
-> +               printf("%u != %u = GET_SEALS(%d)\n", seals, s, fd);
-> +               abort();
-> +       }
-> +}
-> diff --git a/tools/testing/selftests/memfd/common.h b/tools/testing/selftests/memfd/common.h
-> index 522d2c630bd8..5c778d15e8c7 100644
-> --- a/tools/testing/selftests/memfd/common.h
-> +++ b/tools/testing/selftests/memfd/common.h
-> @@ -6,4 +6,8 @@ extern int hugetlbfs_test;
->  unsigned long default_huge_page_size(void);
->  int sys_memfd_create(const char *name, unsigned int flags);
->
-> +void mfd_assert_add_seals(int fd, unsigned int seals);
-> +void mfd_assert_has_seals(int fd, unsigned int seals);
-> +unsigned int mfd_assert_get_seals(int fd);
-> +
->  #endif
-> diff --git a/tools/testing/selftests/memfd/fuse_test.c b/tools/testing/selftests/memfd/fuse_test.c
-> index b018e835737d..231714615861 100644
-> --- a/tools/testing/selftests/memfd/fuse_test.c
-> +++ b/tools/testing/selftests/memfd/fuse_test.c
-> @@ -60,49 +60,10 @@ static int mfd_assert_new(const char *name, loff_t sz, unsigned int flags)
->         return fd;
->  }
->
-> -static __u64 mfd_assert_get_seals(int fd)
-> +static int mfd_busy_add_seals(int fd, unsigned int seals)
->  {
->         long r;
-> -
-> -       r = fcntl(fd, F_GET_SEALS);
-> -       if (r < 0) {
-> -               printf("GET_SEALS(%d) failed: %m\n", fd);
-> -               abort();
-> -       }
-> -
-> -       return r;
-> -}
-> -
-> -static void mfd_assert_has_seals(int fd, __u64 seals)
-> -{
-> -       __u64 s;
-> -
-> -       s = mfd_assert_get_seals(fd);
-> -       if (s != seals) {
-> -               printf("%llu != %llu = GET_SEALS(%d)\n",
-> -                      (unsigned long long)seals, (unsigned long long)s, fd);
-> -               abort();
-> -       }
-> -}
-> -
-> -static void mfd_assert_add_seals(int fd, __u64 seals)
-> -{
-> -       long r;
-> -       __u64 s;
-> -
-> -       s = mfd_assert_get_seals(fd);
-> -       r = fcntl(fd, F_ADD_SEALS, seals);
-> -       if (r < 0) {
-> -               printf("ADD_SEALS(%d, %llu -> %llu) failed: %m\n",
-> -                      fd, (unsigned long long)s, (unsigned long long)seals);
-> -               abort();
-> -       }
-> -}
-> -
-> -static int mfd_busy_add_seals(int fd, __u64 seals)
-> -{
-> -       long r;
-> -       __u64 s;
-> +       unsigned int s;
->
->         r = fcntl(fd, F_GET_SEALS);
->         if (r < 0)
-> diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-> index 10baa1652fc2..527789de69b5 100644
-> --- a/tools/testing/selftests/memfd/memfd_test.c
-> +++ b/tools/testing/selftests/memfd/memfd_test.c
-> @@ -67,43 +67,6 @@ static void mfd_fail_new(const char *name, unsigned int flags)
->         }
->  }
->
-> -static unsigned int mfd_assert_get_seals(int fd)
-> -{
-> -       int r;
-> -
-> -       r = fcntl(fd, F_GET_SEALS);
-> -       if (r < 0) {
-> -               printf("GET_SEALS(%d) failed: %m\n", fd);
-> -               abort();
-> -       }
-> -
-> -       return (unsigned int)r;
-> -}
-> -
-> -static void mfd_assert_has_seals(int fd, unsigned int seals)
-> -{
-> -       unsigned int s;
-> -
-> -       s = mfd_assert_get_seals(fd);
-> -       if (s != seals) {
-> -               printf("%u != %u = GET_SEALS(%d)\n", seals, s, fd);
-> -               abort();
-> -       }
-> -}
-> -
-> -static void mfd_assert_add_seals(int fd, unsigned int seals)
-> -{
-> -       int r;
-> -       unsigned int s;
-> -
-> -       s = mfd_assert_get_seals(fd);
-> -       r = fcntl(fd, F_ADD_SEALS, seals);
-> -       if (r < 0) {
-> -               printf("ADD_SEALS(%d, %u -> %u) failed: %m\n", fd, s, seals);
-> -               abort();
-> -       }
-> -}
-> -
->  static void mfd_fail_add_seals(int fd, unsigned int seals)
->  {
->         int r;
-> --
-> 2.17.0
->
+Masami Hiramatsu wrote:
+> On Mon, 07 May 2018 13:41:53 +0530
+> "Naveen N. Rao" <naveen.n.rao at linux.vnet.ibm.com> wrote:
+>> >> 
+>> >> I didn't understand that. Which code are you planning to remove? Can you 
+>> >> please elaborate? I thought we still need to disable preemption in the 
+>> >> ftrace handler.
+>> > 
+>> > Yes, kprobe_ftrace_handler itself must be run under preempt disabled
+>> > because it depends on a per-cpu variable. What I will remove is the
+>> > redundant preempt disable/enable_noresched (unbalanced) pair in the
+>> > kprobe_ftrace_handler, and jprobe x86 ports which is no more used.
+>> 
+>> Won't that break out-of-tree users depending on returning a non-zero 
+>> value to handle preemption differently? You seem to have alluded to it 
+>> earlier in the mail chain above where you said that this is not just for 
+>> jprobes (though it was added for jprobes as the main use case).
+> 
+> No, all users are in tree already (function override for bpf and error-injection).
 
-Ping.
+Ok, so BPF error injection is a new user that can return a non-zero 
+value from the pre handler. It looks like it can use KPROBES_ON_FTRACE 
+too.
+
+In that case, on function entry, we call into kprobe_ftrace_handler() 
+which will call fei_kprobe_handler(), which can re-enable premption 
+before returning 1. So, if you remove the additional 
+prempt_disable()/enable_no_resched() in kprobe_ftrace_handler(), then it 
+will become imbalanced, right?
+
+> And also, for changing execution path by using kprobes, user handler must call
+> not only preempt_enable(), but also clear current_kprobe per-cpu variable which
+> is not exported to kmodules.
+
+Ok, good point. And that means we don't have any external users any 
+more.
+
+Thanks,
+Naveen
+
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
