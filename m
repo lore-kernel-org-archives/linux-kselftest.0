@@ -1,139 +1,192 @@
-From: lizhijian at cn.fujitsu.com (Li Zhijian)
-Date: Tue, 8 May 2018 17:14:30 +0800
-Subject: [PATCH 2/2] tools/testing/selftests/x86: fix error: conflicting types
- for 'pkey_get|pkey_set'
-In-Reply-To: <1525770870-19067-1-git-send-email-lizhijian@cn.fujitsu.com>
-References: <1525770870-19067-1-git-send-email-lizhijian@cn.fujitsu.com>
-Message-ID: <1525770870-19067-2-git-send-email-lizhijian@cn.fujitsu.com>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Tue, 8 May 2018 11:38:39 +0200
+Subject: [PATCH] selftests/memfd: move common code into common.c
+In-Reply-To: <20180417085936.19512-1-anders.roxell@linaro.org>
+References: <20180417085936.19512-1-anders.roxell@linaro.org>
+Message-ID: <CADYN=9L47uYKQqZVz91EDHNd0aWXrTPc_tbdAZHBeWLKTHgcTA@mail.gmail.com>
 
-pkey_get() and pkey_set() are implemented since glibc-2.27, here just
-rename pkey_get|pkey_set to _pkey_get|_pkey_set simply
+On 17 April 2018 at 10:59, Anders Roxell <anders.roxell at linaro.org> wrote:
+> Remove code duplication, in the current code, we move common code for
+> memfd to common.c.
+>
+> The duplicate functions got added in commit 87b2d44026e0 ("selftests:
+> add memfd/sealing page-pinning tests")
+>
+> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+> ---
+>  tools/testing/selftests/memfd/common.c     | 37 +++++++++++++++++++
+>  tools/testing/selftests/memfd/common.h     |  4 ++
+>  tools/testing/selftests/memfd/fuse_test.c  | 43 +---------------------
+>  tools/testing/selftests/memfd/memfd_test.c | 37 -------------------
+>  4 files changed, 43 insertions(+), 78 deletions(-)
+>
+> diff --git a/tools/testing/selftests/memfd/common.c b/tools/testing/selftests/memfd/common.c
+> index 8eb3d75f6e60..fee1f07828a3 100644
+> --- a/tools/testing/selftests/memfd/common.c
+> +++ b/tools/testing/selftests/memfd/common.c
+> @@ -44,3 +44,40 @@ int sys_memfd_create(const char *name, unsigned int flags)
+>
+>         return syscall(__NR_memfd_create, name, flags);
+>  }
+> +
+> +unsigned int mfd_assert_get_seals(int fd)
+> +{
+> +       int r;
+> +
+> +       r = fcntl(fd, F_GET_SEALS);
+> +       if (r < 0) {
+> +               printf("GET_SEALS(%d) failed: %m\n", fd);
+> +               abort();
+> +       }
+> +
+> +       return (unsigned int)r;
+> +}
+> +
+> +void mfd_assert_add_seals(int fd, unsigned int seals)
+> +{
+> +       int r;
+> +       unsigned int s;
+> +
+> +       s = mfd_assert_get_seals(fd);
+> +       r = fcntl(fd, F_ADD_SEALS, seals);
+> +       if (r < 0) {
+> +               printf("ADD_SEALS(%d, %u -> %u) failed: %m\n", fd, s, seals);
+> +               abort();
+> +       }
+> +}
+> +
+> +void mfd_assert_has_seals(int fd, unsigned int seals)
+> +{
+> +       unsigned int s;
+> +
+> +       s = mfd_assert_get_seals(fd);
+> +       if (s != seals) {
+> +               printf("%u != %u = GET_SEALS(%d)\n", seals, s, fd);
+> +               abort();
+> +       }
+> +}
+> diff --git a/tools/testing/selftests/memfd/common.h b/tools/testing/selftests/memfd/common.h
+> index 522d2c630bd8..5c778d15e8c7 100644
+> --- a/tools/testing/selftests/memfd/common.h
+> +++ b/tools/testing/selftests/memfd/common.h
+> @@ -6,4 +6,8 @@ extern int hugetlbfs_test;
+>  unsigned long default_huge_page_size(void);
+>  int sys_memfd_create(const char *name, unsigned int flags);
+>
+> +void mfd_assert_add_seals(int fd, unsigned int seals);
+> +void mfd_assert_has_seals(int fd, unsigned int seals);
+> +unsigned int mfd_assert_get_seals(int fd);
+> +
+>  #endif
+> diff --git a/tools/testing/selftests/memfd/fuse_test.c b/tools/testing/selftests/memfd/fuse_test.c
+> index b018e835737d..231714615861 100644
+> --- a/tools/testing/selftests/memfd/fuse_test.c
+> +++ b/tools/testing/selftests/memfd/fuse_test.c
+> @@ -60,49 +60,10 @@ static int mfd_assert_new(const char *name, loff_t sz, unsigned int flags)
+>         return fd;
+>  }
+>
+> -static __u64 mfd_assert_get_seals(int fd)
+> +static int mfd_busy_add_seals(int fd, unsigned int seals)
+>  {
+>         long r;
+> -
+> -       r = fcntl(fd, F_GET_SEALS);
+> -       if (r < 0) {
+> -               printf("GET_SEALS(%d) failed: %m\n", fd);
+> -               abort();
+> -       }
+> -
+> -       return r;
+> -}
+> -
+> -static void mfd_assert_has_seals(int fd, __u64 seals)
+> -{
+> -       __u64 s;
+> -
+> -       s = mfd_assert_get_seals(fd);
+> -       if (s != seals) {
+> -               printf("%llu != %llu = GET_SEALS(%d)\n",
+> -                      (unsigned long long)seals, (unsigned long long)s, fd);
+> -               abort();
+> -       }
+> -}
+> -
+> -static void mfd_assert_add_seals(int fd, __u64 seals)
+> -{
+> -       long r;
+> -       __u64 s;
+> -
+> -       s = mfd_assert_get_seals(fd);
+> -       r = fcntl(fd, F_ADD_SEALS, seals);
+> -       if (r < 0) {
+> -               printf("ADD_SEALS(%d, %llu -> %llu) failed: %m\n",
+> -                      fd, (unsigned long long)s, (unsigned long long)seals);
+> -               abort();
+> -       }
+> -}
+> -
+> -static int mfd_busy_add_seals(int fd, __u64 seals)
+> -{
+> -       long r;
+> -       __u64 s;
+> +       unsigned int s;
+>
+>         r = fcntl(fd, F_GET_SEALS);
+>         if (r < 0)
+> diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+> index 10baa1652fc2..527789de69b5 100644
+> --- a/tools/testing/selftests/memfd/memfd_test.c
+> +++ b/tools/testing/selftests/memfd/memfd_test.c
+> @@ -67,43 +67,6 @@ static void mfd_fail_new(const char *name, unsigned int flags)
+>         }
+>  }
+>
+> -static unsigned int mfd_assert_get_seals(int fd)
+> -{
+> -       int r;
+> -
+> -       r = fcntl(fd, F_GET_SEALS);
+> -       if (r < 0) {
+> -               printf("GET_SEALS(%d) failed: %m\n", fd);
+> -               abort();
+> -       }
+> -
+> -       return (unsigned int)r;
+> -}
+> -
+> -static void mfd_assert_has_seals(int fd, unsigned int seals)
+> -{
+> -       unsigned int s;
+> -
+> -       s = mfd_assert_get_seals(fd);
+> -       if (s != seals) {
+> -               printf("%u != %u = GET_SEALS(%d)\n", seals, s, fd);
+> -               abort();
+> -       }
+> -}
+> -
+> -static void mfd_assert_add_seals(int fd, unsigned int seals)
+> -{
+> -       int r;
+> -       unsigned int s;
+> -
+> -       s = mfd_assert_get_seals(fd);
+> -       r = fcntl(fd, F_ADD_SEALS, seals);
+> -       if (r < 0) {
+> -               printf("ADD_SEALS(%d, %u -> %u) failed: %m\n", fd, s, seals);
+> -               abort();
+> -       }
+> -}
+> -
+>  static void mfd_fail_add_seals(int fd, unsigned int seals)
+>  {
+>         int r;
+> --
+> 2.17.0
+>
 
-the compiling errors are like:
-------------
-protection_keys.c:399:5: error: conflicting types for 'pkey_get'
- u32 pkey_get(int pkey, unsigned long flags)
-     ^
-In file included from /usr/include/bits/mman-linux.h:115:0,
-                 from /usr/include/bits/mman.h:45,
-                 from /usr/include/sys/mman.h:41,
-                 from protection_keys.c:37:
-/usr/include/bits/mman-shared.h:64:5: note: previous declaration of 'pkey_get' was here
- int pkey_get (int __key) __THROW;
-     ^
-protection_keys.c:421:5: error: conflicting types for 'pkey_set'
- int pkey_set(int pkey, unsigned long rights, unsigned long flags)
-     ^
-In file included from /usr/include/bits/mman-linux.h:115:0,
-                 from /usr/include/bits/mman.h:45,
-                 from /usr/include/sys/mman.h:41,
-                 from protection_keys.c:37:
-/usr/include/bits/mman-shared.h:60:5: note: previous declaration of 'pkey_set' was here
- int pkey_set (int __key, unsigned int __access_rights) __THROW;
-     ^
-------------
-
-Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
----
- tools/testing/selftests/x86/protection_keys.c | 32 +++++++++++++++------------
- 1 file changed, 18 insertions(+), 14 deletions(-)
-
-diff --git a/tools/testing/selftests/x86/protection_keys.c b/tools/testing/selftests/x86/protection_keys.c
-index 757bb16..ccbd81f 100644
---- a/tools/testing/selftests/x86/protection_keys.c
-+++ b/tools/testing/selftests/x86/protection_keys.c
-@@ -397,10 +397,14 @@ pid_t fork_lazy_child(void)
- 	return forkret;
- }
- 
--#define PKEY_DISABLE_ACCESS    0x1
--#define PKEY_DISABLE_WRITE     0x2
-+#ifndef PKEY_DISABLE_ACCESS
-+# define PKEY_DISABLE_ACCESS    0x1
-+#endif
-+#ifndef PKEY_DISABLE_WRITE
-+# define PKEY_DISABLE_WRITE     0x2
-+#endif
- 
--u32 pkey_get(int pkey, unsigned long flags)
-+u32 _pkey_get(int pkey, unsigned long flags)
- {
- 	u32 mask = (PKEY_DISABLE_ACCESS|PKEY_DISABLE_WRITE);
- 	u32 pkru = __rdpkru();
-@@ -422,7 +426,7 @@ u32 pkey_get(int pkey, unsigned long flags)
- 	return masked_pkru;
- }
- 
--int pkey_set(int pkey, unsigned long rights, unsigned long flags)
-+int _pkey_set(int pkey, unsigned long rights, unsigned long flags)
- {
- 	u32 mask = (PKEY_DISABLE_ACCESS|PKEY_DISABLE_WRITE);
- 	u32 old_pkru = __rdpkru();
-@@ -456,15 +460,15 @@ void pkey_disable_set(int pkey, int flags)
- 		pkey, flags);
- 	pkey_assert(flags & (PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE));
- 
--	pkey_rights = pkey_get(pkey, syscall_flags);
-+	pkey_rights = _pkey_get(pkey, syscall_flags);
- 
--	dprintf1("%s(%d) pkey_get(%d): %x\n", __func__,
-+	dprintf1("%s(%d) _pkey_get(%d): %x\n", __func__,
- 			pkey, pkey, pkey_rights);
- 	pkey_assert(pkey_rights >= 0);
- 
- 	pkey_rights |= flags;
- 
--	ret = pkey_set(pkey, pkey_rights, syscall_flags);
-+	ret = _pkey_set(pkey, pkey_rights, syscall_flags);
- 	assert(!ret);
- 	/*pkru and flags have the same format */
- 	shadow_pkru |= flags << (pkey * 2);
-@@ -472,8 +476,8 @@ void pkey_disable_set(int pkey, int flags)
- 
- 	pkey_assert(ret >= 0);
- 
--	pkey_rights = pkey_get(pkey, syscall_flags);
--	dprintf1("%s(%d) pkey_get(%d): %x\n", __func__,
-+	pkey_rights = _pkey_get(pkey, syscall_flags);
-+	dprintf1("%s(%d) _pkey_get(%d): %x\n", __func__,
- 			pkey, pkey, pkey_rights);
- 
- 	dprintf1("%s(%d) pkru: 0x%x\n", __func__, pkey, rdpkru());
-@@ -487,24 +491,24 @@ void pkey_disable_clear(int pkey, int flags)
- {
- 	unsigned long syscall_flags = 0;
- 	int ret;
--	int pkey_rights = pkey_get(pkey, syscall_flags);
-+	int pkey_rights = _pkey_get(pkey, syscall_flags);
- 	u32 orig_pkru = rdpkru();
- 
- 	pkey_assert(flags & (PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE));
- 
--	dprintf1("%s(%d) pkey_get(%d): %x\n", __func__,
-+	dprintf1("%s(%d) _pkey_get(%d): %x\n", __func__,
- 			pkey, pkey, pkey_rights);
- 	pkey_assert(pkey_rights >= 0);
- 
- 	pkey_rights |= flags;
- 
--	ret = pkey_set(pkey, pkey_rights, 0);
-+	ret = _pkey_set(pkey, pkey_rights, 0);
- 	/* pkru and flags have the same format */
- 	shadow_pkru &= ~(flags << (pkey * 2));
- 	pkey_assert(ret >= 0);
- 
--	pkey_rights = pkey_get(pkey, syscall_flags);
--	dprintf1("%s(%d) pkey_get(%d): %x\n", __func__,
-+	pkey_rights = _pkey_get(pkey, syscall_flags);
-+	dprintf1("%s(%d) _pkey_get(%d): %x\n", __func__,
- 			pkey, pkey, pkey_rights);
- 
- 	dprintf1("%s(%d) pkru: 0x%x\n", __func__, pkey, rdpkru());
--- 
-2.7.4
-
-
-
+Ping.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
