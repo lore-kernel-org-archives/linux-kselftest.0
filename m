@@ -1,37 +1,60 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Tue, 8 May 2018 14:27:13 -0600
-Subject: [PATCH] selftests/intel_pstate: Improve test, minor fixes
-In-Reply-To: <1523398277-2066-1-git-send-email-daniel.diaz@linaro.org>
-References: <1523398277-2066-1-git-send-email-daniel.diaz@linaro.org>
-Message-ID: <00379a47-e35b-c5a3-2f94-4fa3b90921e9@kernel.org>
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Wed, 9 May 2018 11:46:09 +0200
+Subject: [PATCH] selftests: futex: delete RUN_TESTS and EMIT_TESTS
+ overrides
+In-Reply-To: <20180502211848.22404-2-shuah@kernel.org>
+References: <20180502211848.22404-1-shuah@kernel.org>
+ <20180502211848.22404-2-shuah@kernel.org>
+Message-ID: <20180509094609.GA10043@localhost.localdomain>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180508202713.OXL2PUtwGFn2lmqf_MgSc7uCwGrFu3yP3CMk266IbLs@z>
+Message-ID: <20180509094609.S8V0uj3bPrzyjUcdysqFXSiYwZ3ymZix-BjDPtL0iG4@z>
 
-On 04/10/2018 04:11 PM, Daniel Díaz wrote:
-> A few changes improve the overall usability of the test:
-> * fix a hard-coded maximum frequency (3300),
-> * don't adjust the CPU frequency if only evaluating results,
-> * fix a comparison for multiple frequencies.
+On 2018-05-02 15:18, Shuah Khan (Samsung OSG) wrote:
+> Delete RUN_TESTS and EMIT_TESTS overrides and use common defines in
+> lib.mk. Common defines work just fine and there is no need to define
+> custom overrides.
 > 
-> A symptom of that last issue looked like this:
->   ./run.sh: line 107: [: too many arguments
->   ./run.sh: line 110: 3099
->   3099
->   3100-3100: syntax error in expression (error token is \"3099
->   3100-3100\")
+> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+
+Reviewed-by: Anders Roxell <anders.roxell at linaro.org>
+
+> ---
+>  tools/testing/selftests/futex/Makefile | 12 ------------
+>  1 file changed, 12 deletions(-)
 > 
-> Because a check will count how many differente frequencies
-> there are among the CPUs of the system, and after they are
-> tallied another read is performed, which might produce
-> different results.
+> diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
+> index 8497a376ef9d..12631f0076a1 100644
+> --- a/tools/testing/selftests/futex/Makefile
+> +++ b/tools/testing/selftests/futex/Makefile
+> @@ -17,14 +17,6 @@ all:
+>  		fi \
+>  	done
+>  
+> -override define RUN_TESTS
+> -	@export KSFT_TAP_LEVEL=`echo 1`;
+> -	@echo "TAP version 13";
+> -	@echo "selftests: futex";
+> -	@echo "========================================";
+> -	@cd $(OUTPUT); ./run.sh
+> -endef
+> -
+>  override define INSTALL_RULE
+>  	mkdir -p $(INSTALL_PATH)
+>  	install -t $(INSTALL_PATH) $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES)
+> @@ -36,10 +28,6 @@ override define INSTALL_RULE
+>  	done;
+>  endef
+>  
+> -override define EMIT_TESTS
+> -	echo "./run.sh"
+> -endef
+> -
+>  override define CLEAN
+>  	@for DIR in $(SUBDIRS); do		\
+>  		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
+> -- 
+> 2.14.1
 > 
-> Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
-
-Applied to linux-kselftest fixes for 4.17-rc5
-
-thanks,
--- Shuah
-
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
