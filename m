@@ -1,68 +1,88 @@
-From: lei.yang@windriver.com (lei yang)
-Date: Wed, 9 May 2018 19:39:47 +0800
-Subject: [PATCH] selftests: memory-hotplug: delete RUN_TESTS and
- EMIT_TESTS overrides
-In-Reply-To: <20180502211848.22404-3-shuah@kernel.org>
-References: <20180502211848.22404-1-shuah@kernel.org>
- <20180502211848.22404-3-shuah@kernel.org>
-Message-ID: <71d76124-fbe8-c475-3bb9-bec645db02a0@windriver.com>
+From: jeffrin@rajagiritech.edu.in (Jeffrin Thalakkottoor)
+Date: Wed, 9 May 2018 19:57:57 +0530
+Subject: [PATCH] selftests:intel_pstate: fixes typical crash of a testing
+ script for Intel P-State driver
+In-Reply-To: <f19c0a3f-a881-fbb4-ed0b-bf20bda730cf@kernel.org>
+References: <20180429191226.14242-1-ahiliation@yahoo.co.in>
+ <62c2484a-b8fe-513c-a9c7-dff1f3f3979a@kernel.org>
+ <f19c0a3f-a881-fbb4-ed0b-bf20bda730cf@kernel.org>
+Message-ID:
+ <CAG=yYw=4yKar6DocK1Ng00_KyNkC9pXjnTj67BGcD1n5107cnQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180509113947.35Pj6m5pW7ggmNs4PUL4X6FevTTHRDZLSUfHy_PZv04@z>
+Message-ID: <20180509142757.A4PknOm7sRNOChLezoooZAEKWl8SLYM7NuAdmybsOro@z>
+
+hello  Shuah,
+
+i had  later send another version of that patch.
+anyway thank you  daniel for your effort
+
+thank you both.
 
 
-On 2018年05月03日 05:18, Shuah Khan (Samsung OSG) wrote:
-> Delete RUN_TESTS and EMIT_TESTS overrides and use common defines in
-> lib.mk. Common defines work after making the change the test to run
-> with ratio=2 as the default mode to be able to invoke the test without
-> the "-r 2" argument from the common RUN_TESTS and EMIT_TESTS.
+
+On Wed, May 9, 2018@1:51 AM, Shuah Khan <shuah@kernel.org> wrote:
+> On 05/04/2018 01:47 PM, Shuah Khan wrote:
+>> On 04/29/2018 01:12 PM, Jeffrin Jose T wrote:
+>>>  Testing script for Intel P-State driver crashes during
+>>>  the run.  this patch fixes that crash and produce typical results.
+>>>
+>>> Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
+>>>
+>>> ---
+>>>  tools/testing/selftests/intel_pstate/run.sh | 7 +++++--
+>>>  1 file changed, 5 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
+>>> index c670359becc6..cd32aca8806f 100755
+>>> --- a/tools/testing/selftests/intel_pstate/run.sh
+>>> +++ b/tools/testing/selftests/intel_pstate/run.sh
+>>> @@ -27,6 +27,7 @@
+>>>  # and the test will error out in those cases.  The result.X file can be checked
+>>>  # for consistency and modified to remove the extra MHz values.  The result.X
+>>>  # files can be re-evaluated by setting EVALUATE_ONLY to 1 below.
+>>> +#set -xv
+>>>
+>>>  EVALUATE_ONLY=0
+>>>
+>>> @@ -101,12 +102,13 @@ cpupower frequency-set -g powersave --max=${max_freq}MHz >& /dev/null
+>>>  echo "Target      Actual      Difference     MSR(0x199)     max_perf_pct"
+>>>  for freq in `seq $max_freq -100 $min_freq`
+>>>  do
+>>> -    result_freq=$(cat /tmp/result.${freq} | grep "cpu MHz" | awk ' { print $4 } ' | awk -F "." ' { print $1 } ')
+>>> +       result_freq=$(cat /tmp/result.${freq} | grep "cpu MHz" \
+>>>         | awk '{print $4}' | awk -F "." '{print $1}')
+>>> +    result_freq=$(echo $result_freq | head -n1 | cut -d " " -f1)
+>>>      msr=$(cat /tmp/result.${freq} | grep "msr" | awk ' { print $3 } ')
+>>>      max_perf_pct=$(cat /tmp/result.${freq} | grep "max_perf_pct" | awk ' { print $2 } ' )
+>>> -    if [ $result_freq -eq $freq ]; then
+>>> +    if (( "$result_freq" == "$freq" ))
+>>> +    then
+>>>              echo " $freq        $result_freq             0          $msr         $(($max_perf_pct*3300))"
+>>>      else
+>>>              echo " $freq        $result_freq          $(($result_freq-$freq))          $msr          $(($max_perf_pct*$max_freq))"
+>>>
+>>
+>> Thanks. I will get this into 4.17-rc5
+>>
+>> -- Shuah
+>>
 >
-> The run_full_tests target now calls the test with "-r 10".
+> This patch didn't apply. In any case Daniel Diaz sent in a patch a coupld of weeks ago
+> which did apply and fixes the same problem.
 >
-> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
-
-Reviewed-by: Lei.Yang at windriver.com
-
-Lei
-
-
-
-> ---
->   tools/testing/selftests/memory-hotplug/Makefile           | 5 +----
->   tools/testing/selftests/memory-hotplug/mem-on-off-test.sh | 3 ++-
->   2 files changed, 3 insertions(+), 5 deletions(-)
+> I applied Daniel's patch to linux-kselftest fixes for 4.17-rc5
 >
-> diff --git a/tools/testing/selftests/memory-hotplug/Makefile b/tools/testing/selftests/memory-hotplug/Makefile
-> index 686da510f989..e0a625e34f40 100644
-> --- a/tools/testing/selftests/memory-hotplug/Makefile
-> +++ b/tools/testing/selftests/memory-hotplug/Makefile
-> @@ -4,11 +4,8 @@ all:
->   include ../lib.mk
->   
->   TEST_PROGS := mem-on-off-test.sh
-> -override RUN_TESTS := @./mem-on-off-test.sh -r 2 && echo "selftests: memory-hotplug [PASS]" || echo "selftests: memory-hotplug [FAIL]"
-> -
-> -override EMIT_TESTS := echo "$(subst @,,$(RUN_TESTS))"
->   
->   run_full_test:
-> -	@/bin/bash ./mem-on-off-test.sh && echo "memory-hotplug selftests: [PASS]" || echo "memory-hotplug selftests: [FAIL]"
-> +	@/bin/bash ./mem-on-off-test.sh -r 10 && echo "memory-hotplug selftests: [PASS]" || echo "memory-hotplug selftests: [FAIL]"
->   
->   clean:
-> diff --git a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-> index ae2c790d0880..ff4991704d07 100755
-> --- a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-> +++ b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-> @@ -133,7 +133,8 @@ offline_memory_expect_fail()
->   
->   error=-12
->   priority=0
-> -ratio=10
-> +# Run with default of ratio=2 for Kselftest run
-> +ratio=2
->   retval=0
->   
->   while getopts e:hp:r: opt; do
+> https://lists.linaro.org/pipermail/linux-kselftest-mirror/2018-April/000858.html
+>
+> thank you both.
+>
+> -- Shuah
 
+
+
+-- 
+software engineer
+rajagiri school of engineering and technology
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
