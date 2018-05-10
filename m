@@ -1,53 +1,46 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Thu, 10 May 2018 09:33:15 -0600
-Subject: [PATCH] selftests: ftrace: Fixes for the testing script ftracetest
-In-Reply-To: <20180510152108.19750-1-ahiliation@yahoo.co.in>
-References: <20180510152108.19750-1-ahiliation@yahoo.co.in>
-Message-ID: <4f351384-0308-c273-9df7-c1ad3bc500c4@kernel.org>
+Date: Thu, 10 May 2018 09:36:25 -0600
+Subject: [PATCH] selftests: intel_pstate: Fixes for the testing script
+ run.sh
+In-Reply-To: <20180509221733.15182-1-ahiliation@yahoo.co.in>
+References: <20180509221733.15182-1-ahiliation@yahoo.co.in>
+Message-ID: <3530a166-8c57-6bd4-e4e2-b6019b492598@kernel.org>
 
-On 05/10/2018 09:21 AM, Jeffrin Jose T wrote:
-> modified notification of permission requirement to run test
-> to make it unified with standards
+On 05/09/2018 04:17 PM, Jeffrin Jose T wrote:
+> fix for notification of permission requirement to run test.
+> fix for exit status value for test skipped.
 > 
 > Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
 > ---
->  tools/testing/selftests/ftrace/ftracetest | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/intel_pstate/run.sh | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> index f9a9d424c980..0cc967344c07 100755
-> --- a/tools/testing/selftests/ftrace/ftracetest
-> +++ b/tools/testing/selftests/ftrace/ftracetest
-> @@ -1,4 +1,4 @@
-> -#!/bin/sh
-> +#!/bin/bash
+> diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
+> index c670359becc6..74983f74a9a1 100755
+> --- a/tools/testing/selftests/intel_pstate/run.sh
+> +++ b/tools/testing/selftests/intel_pstate/run.sh
+> @@ -30,6 +30,13 @@
 >  
->  # ftracetest - Ftrace test shell scripts
->  #
-> @@ -29,8 +29,11 @@ errexit() { # message
->  }
+>  EVALUATE_ONLY=0
 >  
->  # Ensuring user privilege
-> -if [ `id -u` -ne 0 ]; then
-> -  errexit "this must be run by root user"
 > +msg="skip all tests:"
 > +
-> +if [ $UID != 0 ]; then
+> +if [ $UID != 0 ] && [ $EVALUATE_ONLY == 0 ]; then
 > +    echo $msg please run this as root >&2
 > +    exit $ksft_skip
->  fi
->  
->  # Utilities
+> +fi
+> +
+>  if ! uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ | grep -q x86; then
+>  	echo "$0 # Skipped: Test can only run on x86 architectures."
+>  	exit 0
 > 
 
-Hi Jeffrin,
-
-I already have a patch out for this. Please make sure you aren't doing
-duplicate work.
+I have a patch out for this and your change conflicts with it. I am in the process
+of pushing patches into linux-kselftest next. Please rebase this patch on top
+of that.
 
 thanks,
 -- Shuah
-
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
