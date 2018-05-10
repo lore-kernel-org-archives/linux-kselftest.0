@@ -1,39 +1,39 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Thu, 10 May 2018 11:27:00 -0600
-Subject: [PATCH] selftests: kvm: add .gitignore for generated files
-In-Reply-To: <4743ad90-6502-bf39-95bb-89759978784b@kernel.org>
-References: <20180410134822.23990-1-anders.roxell@linaro.org>
- <CADYN=9L-CBLjG=mtOOfzBC4EZt02idZKgnrj5bSvsfPVSFZpsg@mail.gmail.com>
- <4743ad90-6502-bf39-95bb-89759978784b@kernel.org>
-Message-ID: <eebc381b-0eb7-ff60-2860-87026702c201@kernel.org>
+Date: Thu, 10 May 2018 11:27:31 -0600
+Subject: [PATCH] selftests: kvm: update .gitignore with missing file
+In-Reply-To: <62bdea19-17e2-82e9-c2bf-214f8219f7c6@kernel.org>
+References: <20180423135725.3753-1-anders.roxell@linaro.org>
+ <CADYN=9KPSYmrAA_N-J-OLvn2+B1_hU5KK24-Q1V66j3cCmkNTw@mail.gmail.com>
+ <62bdea19-17e2-82e9-c2bf-214f8219f7c6@kernel.org>
+Message-ID: <cb55d1fa-e5b2-5e3c-a74e-d60b3f9a2088@kernel.org>
 
-On 05/08/2018 09:33 AM, Shuah Khan wrote:
-> On 05/08/2018 02:21 AM, Anders Roxell wrote:
->> On 10 April 2018 at 15:48, Anders Roxell <anders.roxell at linaro.org> wrote:
+On 05/08/2018 09:34 AM, Shuah Khan wrote:
+> On 05/08/2018 02:22 AM, Anders Roxell wrote:
+>> On 23 April 2018 at 15:57, Anders Roxell <anders.roxell at linaro.org> wrote:
+>>> Fixes: d5edb7f8e7ab ("kvm: selftests: add vmx_tsc_adjust_test")
 >>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 >>> ---
->>>  tools/testing/selftests/kvm/.gitignore | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>  create mode 100644 tools/testing/selftests/kvm/.gitignore
+>>>  tools/testing/selftests/kvm/.gitignore | 1 +
+>>>  1 file changed, 1 insertion(+)
 >>>
 >>> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
->>> new file mode 100644
->>> index 000000000000..a546e052d19a
->>> --- /dev/null
+>>> index a546e052d19a..63fc1ab9248f 100644
+>>> --- a/tools/testing/selftests/kvm/.gitignore
 >>> +++ b/tools/testing/selftests/kvm/.gitignore
->>> @@ -0,0 +1,2 @@
->>> +set_sregs_test
->>> +sync_regs_test
+>>> @@ -1,2 +1,3 @@
+>>>  set_sregs_test
+>>>  sync_regs_test
+>>> +vmx_tsc_adjust_test
 >>> --
->>> 2.16.3
+>>> 2.17.0
 >>>
 >>
 >> ping.
 >>
 > 
-> I plan to get this to inot 4.18-rc1.
+> I plan to get this into 4.18-rc1
 > 
-> thabks,
+> thanks,
 > -- Shuah
 > 
 
