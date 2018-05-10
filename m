@@ -1,60 +1,39 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Thu, 10 May 2018 11:34:43 -0600
-Subject: [PATCH 0/4] selftests: rework RTC tests
-In-Reply-To: <95d19039-69ee-cda5-3cfe-918283cf9913@kernel.org>
-References: <20180419125030.5076-1-alexandre.belloni@bootlin.com>
- <95d19039-69ee-cda5-3cfe-918283cf9913@kernel.org>
-Message-ID: <0efabd57-040b-d4d6-e9a1-21a0a8746086@kernel.org>
+From: tj at kernel.org (Tejun Heo)
+Date: Thu, 10 May 2018 11:32:24 -0700
+Subject: [PATCH v2] selftests/cgroup: memory controller self-tests
+In-Reply-To: <20180510163701.28936-1-guro@fb.com>
+References: <20180510163701.28936-1-guro@fb.com>
+Message-ID: <20180510183224.GP2368884@devbig577.frc2.facebook.com>
 
-On 04/24/2018 01:33 PM, Shuah Khan wrote:
-> On 04/19/2018 06:50 AM, Alexandre Belloni wrote:
->> Hi,
->>
->> This series separates tests using the RTC devices between the one
->> testing driver agnostic kernel facilities (timers) and the others that
->> are testing device drivers and hardware.
->>
->> Then, rtctest is reworked to use the test harness and be much more
->> robust. Skipping tests is now easier and tests will not block
->> indefinitively.
->>
->> I'm planning to send more improvements later this cycle.
->>
->> Alexandre Belloni (4):
->>   selftests: timers: move PIE tests out of rtctest
->>   selftests: timers: rtcpie: restore previous PIE rate
->>   selftests: move RTC tests to rtc subfolder
->>   selftests: rtc: rework rtctest
->>
->>  MAINTAINERS                                   |   2 +-
->>  tools/testing/selftests/Makefile              |   1 +
->>  tools/testing/selftests/rtc/.gitignore        |   2 +
->>  tools/testing/selftests/rtc/Makefile          |   9 +
->>  tools/testing/selftests/rtc/rtctest.c         | 238 +++++++++++
->>  .../rtctest_setdate.c => rtc/setdate.c}       |   0
->>  tools/testing/selftests/timers/.gitignore     |   3 +-
->>  tools/testing/selftests/timers/Makefile       |   4 +-
->>  tools/testing/selftests/timers/rtcpie.c       | 134 ++++++
->>  tools/testing/selftests/timers/rtctest.c      | 403 ------------------
->>  10 files changed, 388 insertions(+), 408 deletions(-)
->>  create mode 100644 tools/testing/selftests/rtc/.gitignore
->>  create mode 100644 tools/testing/selftests/rtc/Makefile
->>  create mode 100644 tools/testing/selftests/rtc/rtctest.c
->>  rename tools/testing/selftests/{timers/rtctest_setdate.c => rtc/setdate.c} (100%)
->>  create mode 100644 tools/testing/selftests/timers/rtcpie.c
->>  delete mode 100644 tools/testing/selftests/timers/rtctest.c
->>
+On Thu, May 10, 2018 at 05:37:01PM +0100, Roman Gushchin wrote:
+> Cgroups are used for controlling the physical resource distribution
+> (memory, CPU, io, etc) and often are used as basic building blocks
+> for large distributed computing systems. Even small differences
+> in the actual behavior may lead to significant incidents.
 > 
-> Looks good to me. Thanks for doing this. I will queue this for 4.18-rc1
+> The codebase is under the active development, which will unlikely
+> stop at any time soon. Also it's scattered over different
+> kernel subsystems, which makes regressions more probable.
 > 
-> thanks,
-> -- Shuah
+> Given that, the lack of any tests is crying.
 > 
+> This patch implements some basic tests for the memory controller,
+> as well as a minimal required framework.
+> It doesn't pretend for a very good coverage, but pretends
+> to be a starting point.
+> 
+> Hopefully, any following significant changes will
+> include corresponding tests.
+> 
+> Tests for CPU and io controllers, as well as cgroup core
+> are next in the todo list.
 
-Applied to linux-kselftest next for 4.18-rc1
+This is great.  Applying to cgroup/for-4.18.
 
-thanks,
--- Shuah
+Thanks a lot.
+
+-- 
+tejun
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
