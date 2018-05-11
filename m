@@ -1,47 +1,31 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Fri, 11 May 2018 08:55:28 -0600
-Subject: [PATCH v2] selftests/cgroup: memory controller self-tests
-In-Reply-To: <20180511143228.GU2368884@devbig577.frc2.facebook.com>
-References: <20180510163701.28936-1-guro@fb.com>
- <20180510183224.GP2368884@devbig577.frc2.facebook.com>
- <a652ce44-07f9-d229-70d4-4376bfbafa40@kernel.org>
- <20180511143228.GU2368884@devbig577.frc2.facebook.com>
-Message-ID: <ae4dc3f9-baa6-b492-7c43-0359734440b3@kernel.org>
+From: dvhart at infradead.org (Darren Hart)
+Date: Fri, 11 May 2018 08:13:20 -0700
+Subject: [PATCH] selftests: futex: delete RUN_TESTS and EMIT_TESTS
+ overrides
+In-Reply-To: <20180502211848.22404-2-shuah@kernel.org>
+References: <20180502211848.22404-1-shuah@kernel.org>
+ <20180502211848.22404-2-shuah@kernel.org>
+Message-ID: <20180511151320.GA6391@fury>
 
-On 05/11/2018 08:32 AM, Tejun Heo wrote:
-> Hello, Shuah.
+On Wed, May 02, 2018 at 03:18:45PM -0600, Shuah Khan (Samsung OSG) wrote:
+> Delete RUN_TESTS and EMIT_TESTS overrides and use common defines in
+> lib.mk. Common defines work just fine and there is no need to define
+> custom overrides.
 > 
-> On Thu, May 10, 2018 at 01:29:07PM -0600, Shuah Khan wrote:
->> Don't pull them yet. If Roman can redo the patches on linux-kselftest next,
->> he can pick up the SKIP changes.
-> 
-> So, what we can do is either fix that up during / after the merge
-> window or creating a separate branch which pulls from both cgroup and
-> kselftest.  Please let me know which way you wanna go and if the
-> latter which branch I should pull (it gotta be a stable branch).
-> 
-> Thanks.
-> 
+> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 
-I think we don't need to create a special branch and all. The following
-should work:
+I was concerned because this override was a deliberate decision made in:
 
-linux-next already has the skip work. What we can do is:
+9705315b7562 selftests/futex: Update Makefile to use lib.mk
 
-Do the cleanup and test it against linux-next. In linux-next SKIP isn't PASS. If test is
-compiled on linux-next, you will see that SKIP is SKIP. If it is compiled on the mainline,
-it will be reported PASS, which will be a temporary state.
+But reviewing lib.mk today, the RUN_TESTS and EMIT_TESTS perform the same
+function running TEST_PROGS.
 
-cgroup test will end up in linux-next anyway with crgoups tree before the merge window.
-We can verify it then and make sure it is working correctly.
+Reviewed-by: Darren Hart (VMware) <dvhart at infradead.org>
 
-So I would recommend a version 3 that includes the cleanup to get rid if the TEST_* local
-defines.
-
-thanks,
--- Shuah
-
-
+-- 
+Darren Hart
+VMware Open Source Technology Center
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
