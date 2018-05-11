@@ -1,109 +1,108 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Thu, 10 May 2018 14:18:16 -0600
-Subject: [PATCH 09/24] selftests: ftrace: return Kselftest Skip code for
- skipped tests
-In-Reply-To: <20180508123812.874ff8d2a22abd62148b293d@kernel.org>
-References: <20180505011328.32078-1-shuah@kernel.org>
- <20180505011328.32078-9-shuah@kernel.org>
- <20180508123812.874ff8d2a22abd62148b293d@kernel.org>
-Message-ID: <34a4aa44-75f0-b868-cfc8-37fc716af0a5@kernel.org>
+From: xiaolong.ye@intel.com (Ye Xiaolong)
+Date: Fri, 11 May 2018 10:53:24 +0800
+Subject: [PATCH v4 0/1] Add livepatch kselftests
+In-Reply-To: <148c3baf-ab6f-c1f2-2911-79e5c8b361bd@redhat.com>
+References: <1524680930-28168-1-git-send-email-joe.lawrence@redhat.com>
+ <148c3baf-ab6f-c1f2-2911-79e5c8b361bd@redhat.com>
+Message-ID: <20180511025324.GA17456@yexl-desktop>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180510201816.o-UB8VQfi7OGHGSKvsr7rP1iMvAzZ7VofARyhTR6lXI@z>
+Message-ID: <20180511025324.8UBtCI7raXEQp9zd3Yw1I2z6jwyUWk3DxdGJp0z2HJg@z>
 
-Hi Masami,
+Hi, Joe
 
-On 05/07/2018 09:38 PM, Masami Hiramatsu wrote:
-> On Fri,  4 May 2018 19:13:13 -0600
-> "Shuah Khan (Samsung OSG)" <shuah@kernel.org> wrote:
-> 
->> When ftrace test is skipped because of unmet dependencies and/or
->> unsupported configuration, it returns 0 which is treated as a pass
->> by the Kselftest framework. This leads to false positive result even
->> when the test could not be run.
->>
->> Change it to return kselftest skip code when a test gets skipped to
->> clearly report that the test could not be run.
->>
->> Kselftest framework SKIP code is 4 and the framework prints appropriate
->> messages to indicate that the test is skipped.
->>
->> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
->> ---
->>  tools/testing/selftests/ftrace/ftracetest | 8 ++++++--
->>  1 file changed, 6 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
->> index f9a9d424c980..b731c8cdcffb 100755
->> --- a/tools/testing/selftests/ftrace/ftracetest
->> +++ b/tools/testing/selftests/ftrace/ftracetest
->> @@ -23,6 +23,9 @@ echo "		            If <dir> is -, all logs output in console only"
->>  exit $1
->>  }
->>  
->> +# Kselftest framework requirement - SKIP code is 4.
->> +ksft_skip=4
->> +
->>  errexit() { # message
->>    echo "Error: $1" 1>&2
->>    exit 1
->> @@ -30,7 +33,8 @@ errexit() { # message
->>  
->>  # Ensuring user privilege
->>  if [ `id -u` -ne 0 ]; then
->> -  errexit "this must be run by root user"
->> +  echo "Skipping: test must be run by root user"
->> +  exit $ksft_skip
->>  fi
->>  
->>  # Utilities
->> @@ -249,7 +253,7 @@ trap 'SIG_RESULT=$UNTESTED' $SIG_UNTESTED
->>  SIG_UNSUPPORTED=$((SIG_BASE + UNSUPPORTED))
->>  exit_unsupported () {
->>    kill -s $SIG_UNSUPPORTED $SIG_PID
->> -  exit 0
->> +  exit $ksft_skip
-> 
-> This should return 0. If you want to change the result code,
-> you have to change the last part as below.
-> (Note that we need a switch option of return code, so that
->  ftracetest user can continue to use same way...)
+Sorry for the late response.
 
-Doesn't this existing option take care of this:
+On 04/26, Joe Lawrence wrote:
+>>On 04/25/2018 02:28 PM, Joe Lawrence wrote:
+>
+>> [ ... snip ... ]
+>> 
+>> base-commit: 0adb32858b0bddf4ada5f364a84ed60b196dbcda
+>> prerequisite-patch-id: 5ed747c1a89a5dc4bba08186e21f927d7f3bf049
+>> prerequisite-patch-id: e9800288b71a9f339ea066e58d9ef70dece67083
+>> prerequisite-patch-id: 415f2e190b1b50142c78f2940c7b8dd39b5321a0
+>> prerequisite-patch-id: d229d9cf08af087e0a758d9df1da467103c2c200
+>> prerequisite-patch-id: b8c7ef99b13c6b321cba5e8919ed0b3e29f213e9
+>> prerequisite-patch-id: 4e10c0d08f151b18310fe0b1e5013d62db94cfeb
+>> prerequisite-patch-id: 33046b190c114d202f3a52e0e274dbb2b1907a4c
+>> prerequisite-patch-id: 6978944a725756317dd4e005d479b6101784aaf0
+>> prerequisite-patch-id: cce9d3c7e1ae8887f387ca9e072552dc63479749
+>> prerequisite-patch-id: c44ccc5dd7b1be6fe2b1f32ca6abde1da73fae79
+>> 
+>
+>Hi kbuild test robot folks,
+>
+>I attempted to use the --base option with git format-patch as suggested
+>by Philip, but the bot still sent me mail (addressed only to myself and
+>cc'd kbuild-all at 01.org) about build test ERRORs against the wrong base:
+>
+>> [auto build test ERROR on v4.16]
+>> [also build test ERROR on next-20180424]
+>> [cannot apply to linus/master jikos-livepatching/for-next]
 
---fail-unsupported Treat UNSUPPORTED as a failure"
+I noticed this error report was for [PATCH v3] selftests/livepatch: introduce tests
+which doesn't include the base commit info.
 
-Is there a need for another. This indicates that the default
-mode is UNSUPPORTED isn't a failure.
+>
+>I'm assuming operator error :(  Here's a summary of my workflow:
+>
+>* Save an .mbox of the entire base patchset, as posted to the
+>live-patching list:
+>
+>  https://lkml.org/lkml/2018/3/23/665
+>
+>* Create a "base" branch and apply the mbox:
+>
+>  % git checkout -b test_base v4.16
+>  Switched to a new branch 'test_base'
+>
+>  % git am /tmp/pm.mbox
+>  Applying: livepatch: Use lists to manage patches, objects and functions
+>  Applying: livepatch: Free only structures with initialized kobject
+>  Applying: livepatch: Add atomic replace
+>  Applying: livepatch: Add an extra flag to distinguish registered   patches
+>  Applying: livepatch: Remove replaced patches from the stack
+>  Applying: livepatch: Remove Nop structures when unused
+>  Applying: livepatch: Allow to replace even disabled patches
+>  Applying: livepatch: Atomic replace and cumulative patches documentation
+>
+>* Create a new dev branch from the base, make a trivial change and commit:
+>
+>  % git checkout -b test_branch test_base
+>  % sed -i 's/^EXTRAVERSION =/EXTRAVERSION = .test/' Makefile
+>  % git commit Makefile -m 'test commit'
+>
+>* Create .patch files with --base:
+>
+>  % git format-patch --base=v4.16 -1 --cover-letter
+>  % grep -e '^base-commit' -e 'prereq' 0000-cover-letter.patch
+>  base-commit: 0adb32858b0bddf4ada5f364a84ed60b196dbcda
+>  prerequisite-patch-id: 5ed747c1a89a5dc4bba08186e21f927d7f3bf049
+>  prerequisite-patch-id: e9800288b71a9f339ea066e58d9ef70dece67083
+>  prerequisite-patch-id: 415f2e190b1b50142c78f2940c7b8dd39b5321a0
+>  prerequisite-patch-id: d229d9cf08af087e0a758d9df1da467103c2c200
+>  prerequisite-patch-id: b8c7ef99b13c6b321cba5e8919ed0b3e29f213e9
+>  prerequisite-patch-id: 4e10c0d08f151b18310fe0b1e5013d62db94cfeb
+>  prerequisite-patch-id: 33046b190c114d202f3a52e0e274dbb2b1907a4c
+>  prerequisite-patch-id: 6978944a725756317dd4e005d479b6101784aaf0
+>
+>I notice that these patch-ids are only added to the cover-letter... do I
+>need to force them each individual patch as well?  /confused
 
-> 
-> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> index f9a9d424c980..d6ce56a2a937 100755
-> --- a/tools/testing/selftests/ftrace/ftracetest
-> +++ b/tools/testing/selftests/ftrace/ftracetest
-> @@ -326,5 +326,15 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
->  prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
->  prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
->  
-> -# if no error, return 0
-> -exit $TOTAL_RESULT
-> +# following kselftest result code
-> +if [ $UNSUPPORTED_CASES -ne 0 -o \
-> +       $UNTESTED_CASES -ne 0 -o \
-> +       $UNRESOLVED_CASES -ne 0]; then # There are skipped tests
-> +  exit 4
-> +elif [ $XAILED_CASES -ne 0 -o ]; then # XFAILs
-> +  exit 2
-> +elif [ $FAILED_CASES -ne 0 -o ]; then # FAILs
-> +  exit 1
-> +else # PASS
-> +  exit 0
-> +fi
-> 
+I think the work flow you described above is ok, you can just send them with
+git send-email after doing that, and base commit/prerequisite patch info in
+cover-letter is fine, the question here is I can't find the patch emails of
+your patchset except the cover letter in 0day's mail archive, do you send them
+as a whole series, could you tell the subjects of them so I can take a look in
+0day's log.
 
-Thanks for pointing out the right change to make.
+Thanks,
+Xiaolong
 
--- Shuah
-
+>
+>Thanks,
+>
+>-- Joe
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
