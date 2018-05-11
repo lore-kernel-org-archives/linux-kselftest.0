@@ -1,90 +1,49 @@
 From: shuah@kernel.org (Shuah Khan)
-Date: Fri, 11 May 2018 08:43:18 -0600
-Subject: selftests: kvm tests need config file.
-In-Reply-To: <2890615a-1f55-48a6-b939-3977d0161846@redhat.com>
-References: <CA+G9fYvfp9zfWSB92ZzAk23=x28Hx_H4y8ugMsaoQ=tZJxhe9A@mail.gmail.com>
- <2890615a-1f55-48a6-b939-3977d0161846@redhat.com>
-Message-ID: <a493daa1-446a-7726-fa41-51312dd616c4@kernel.org>
+Date: Fri, 11 May 2018 08:55:28 -0600
+Subject: [PATCH v2] selftests/cgroup: memory controller self-tests
+In-Reply-To: <20180511143228.GU2368884@devbig577.frc2.facebook.com>
+References: <20180510163701.28936-1-guro@fb.com>
+ <20180510183224.GP2368884@devbig577.frc2.facebook.com>
+ <a652ce44-07f9-d229-70d4-4376bfbafa40@kernel.org>
+ <20180511143228.GU2368884@devbig577.frc2.facebook.com>
+Message-ID: <ae4dc3f9-baa6-b492-7c43-0359734440b3@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180511144318.91KDrk4yZ6hbQn4hTg88EHEgk-k6AFRRCh-NwQgPzYQ@z>
+Message-ID: <20180511145528.OkSha32TU6LcT0Zi_Tixg61WHG6QYZy-DZD-1KSiJjY@z>
 
-On 05/11/2018 05:50 AM, Paolo Bonzini wrote:
-> On 11/05/2018 12:19, Naresh Kamboju wrote:
->> I have two questions,
->>
->> 1.
->> selftests: kvm tests failed.
->> Seems like missing pre-requirement of Kconfigs.
->>
->> Please add required configs in a "config" file in the path.
->> The kernel build will merge those configs at the time of building.
->> Example: selftests/net/config
+On 05/11/2018 08:32 AM, Tejun Heo wrote:
+> Hello, Shuah.
 > 
-> Ok, I will.
-
-Thanks.
-
+> On Thu, May 10, 2018@01:29:07PM -0600, Shuah Khan wrote:
+>> Don't pull them yet. If Roman can redo the patches on linux-kselftest next,
+>> he can pick up the SKIP changes.
 > 
->> 2.
->> Do you have a plan to make it work for arm /arm64 ?
+> So, what we can do is either fix that up during / after the merge
+> window or creating a separate branch which pulls from both cgroup and
+> kselftest.  Please let me know which way you wanna go and if the
+> latter which branch I should pull (it gotta be a stable branch).
 > 
-> Not me directly, but compared to Google's original submission I have
-> already taken some steps to separate the architecture-independent parts
-> from the x86-specific ones.  So, patches are welcome! :)
-
-I second that. Patches will be great.
+> Thanks.
 > 
->> Test log,
->>
->> Running tests in kvm
->> ========================================
->> selftests: kvm: set_sregs_test
->> ==== Test Assertion Failure ====
->>   lib/kvm_util.c:95: kvm_fd >= 0
->>   pid=5611 tid=5611 - No such file or directory
->>      1 0x0000000000401e8e: ?? ??:0
->>      2 0x00000000004064b9: ?? ??:0
->>      3 0x0000000000400f51: ?? ??:0
->>      4 0x00007f74923d1290: ?? ??:0
->>      5 0x0000000000401039: ?? ??:0
->>   open /dev/kvm failed, rc: -1 errno: 2
->> not ok 1..1 selftests: kvm: set_sregs_test [FAIL]
->> se[  201.324786] kselftest: Running tests in membarrier
->> lftests: kvm: sync_regs_test
->> ==== Test Assertion Failure ====
->>   lib/kvm_util.c:54: kvm_fd >= 0
->>   pid=5617 tid=5617 - No such file or directory
->>      1 0x0000000000401deb: ?? ??:0
->>      2 0x0000000000400f52: ?? ??:0
->>      [  201.350386] kselftest: Running tests in memfd
->> 3 0x00007f9f2c5eb290: ?? ??:0
->>      4 0x00000000004014e9: ?? ??:0
->>   open /dev/kvm failed, rc: -1 errno: 2
->> not ok 1..2 selftests: kvm: sync_regs_test [FAIL]
->> selftests: kvm: vmx_tsc_adjust_test
->> ==== Test Assertion Failure ====
->>   lib/kvm_util.c:422: kvm_fd >= 0
->>   pid=5623 tid=5623 - No such file or directory
->>      1 0x00000000004018fa: ?? ??:0
->>      2 0x0000000000401d02: ?? ??:0
->>      3 0x0000000000400ef8: ?? ??:0
->>      4 0x00007f3e65a59290: ?? ??:0
->>      5 0x0000000000401119: ?? ??:0
->>   open /dev/kvm failed, rc: -1 errno: 2
->> not ok 1..3 selftests: kvm: vmx_tsc_adjust_test [FAIL]
->>
->> Ref bugs:
->> LKFT: next: arm32 and arm64: kselftest kvm test case build failed
->> https://bugs.linaro.org/show_bug.cgi?id=3826
->>
->> LKFT: linux-next: kvm vmx_tsc_adjust_test failed on all devices
->> https://bugs.linaro.org/show_bug.cgi?id=3780
 
-I see that you are testing the skip, override cleanups, and test patches
-I applied. Thanks for doing that and reporting results/problems.
+I think we don't need to create a special branch and all. The following
+should work:
+
+linux-next already has the skip work. What we can do is:
+
+Do the cleanup and test it against linux-next. In linux-next SKIP isn't PASS. If test is
+compiled on linux-next, you will see that SKIP is SKIP. If it is compiled on the mainline,
+it will be reported PASS, which will be a temporary state.
+
+cgroup test will end up in linux-next anyway with crgoups tree before the merge window.
+We can verify it then and make sure it is working correctly.
+
+So I would recommend a version 3 that includes the cleanup to get rid if the TEST_* local
+defines.
 
 thanks,
 -- Shuah
+
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
