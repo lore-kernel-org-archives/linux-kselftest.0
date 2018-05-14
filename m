@@ -1,62 +1,39 @@
-From: pintu.ping@gmail.com (Pintu Kumar)
-Date: Sat, 12 May 2018 21:42:10 +0530
-Subject: [PATCH] selftests: android: delete RUN_TESTS and EMIT_TESTS
- overrides
-In-Reply-To: <20180502211848.22404-1-shuah@kernel.org>
-References: <20180502211848.22404-1-shuah@kernel.org>
-Message-ID:
- <CAOuPNLhZyWQfm=eK440suESciE-1q0Rpwx0nKHXWD2jxMZ74xw@mail.gmail.com>
+From: mingo.kernel.org@gmail.com (Ingo Molnar)
+Date: Mon, 14 May 2018 11:30:15 +0200
+Subject: [PATCH 2/2] tools/testing/selftests/x86: fix error: conflicting
+ types for 'pkey_get|pkey_set'
+In-Reply-To: <125eb810-1d48-394d-9665-40da64326fbb@intel.com>
+References: <1525770870-19067-1-git-send-email-lizhijian@cn.fujitsu.com>
+ <1525770870-19067-2-git-send-email-lizhijian@cn.fujitsu.com>
+ <125eb810-1d48-394d-9665-40da64326fbb@intel.com>
+Message-ID: <20180514093015.GA27428@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180512161210.WWG36XmfrhQVLTuUbZyQ1YZZ4niBlVvm96htN4Rmv5o@z>
+Message-ID: <20180514093015.UmSfGQGW_vjZTeZBWeO1fVRMOhui0Q5qgZamnMy0tdI@z>
 
-On Thu, May 3, 2018 at 2:48 AM, Shuah Khan (Samsung OSG)
-<shuah@kernel.org> wrote:
-> Delete RUN_TESTS and EMIT_TESTS overrides and use common defines in
-> lib.mk. Common defines work just fine and there is no need to define
-> custom overrides.
->
-> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
-> ---
->  tools/testing/selftests/android/Makefile | 8 --------
->  1 file changed, 8 deletions(-)
->
-> diff --git a/tools/testing/selftests/android/Makefile b/tools/testing/selftests/android/Makefile
-> index f6304d2be90c..72c25a3cb658 100644
-> --- a/tools/testing/selftests/android/Makefile
-> +++ b/tools/testing/selftests/android/Makefile
-> @@ -18,10 +18,6 @@ all:
->                 fi \
->         done
->
-> -override define RUN_TESTS
-> -       @cd $(OUTPUT); ./run.sh
-> -endef
-> -
->  override define INSTALL_RULE
->         mkdir -p $(INSTALL_PATH)
->         install -t $(INSTALL_PATH) $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES)
-> @@ -33,10 +29,6 @@ override define INSTALL_RULE
->         done;
->  endef
->
-> -override define EMIT_TESTS
-> -       echo "./run.sh"
-> -endef
-> -
->  override define CLEAN
->         @for DIR in $(SUBDIRS); do              \
->                 BUILD_TARGET=$(OUTPUT)/$$DIR;   \
-> --
-> 2.14.1
->
 
-OK.
+* Dave Hansen <dave.hansen@intel.com> wrote:
 
-Acked-by: Pintu Agarwal <pintu.ping at gmail.com>
+> On 05/08/2018 02:14 AM, Li Zhijian wrote:
+> > -u32 pkey_get(int pkey, unsigned long flags)
+> > +u32 _pkey_get(int pkey, unsigned long flags)
+> >  {
+> >  	u32 mask = (PKEY_DISABLE_ACCESS|PKEY_DISABLE_WRITE);
+> >  	u32 pkru = __rdpkru();
+> > @@ -422,7 +426,7 @@ u32 pkey_get(int pkey, unsigned long flags)
+> >  	return masked_pkru;
+> >  }
+> 
+> I'm not a huge fan of random underscores for undocumented reasons.  But,
+> oh well.
+> 
+> Acked-by: Dave Hansen <dave.hansen at intel.com>
 
----
+So I saw these too late, fixed them already, and did it slightly differently:
+I used a hw_*() prefix which I think is cleaner and more obvious than underscores.
 
-Note: This mail goes into my spam email box.
+Thanks,
+
+	Ingo
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
