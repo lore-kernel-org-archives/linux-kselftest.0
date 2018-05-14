@@ -1,35 +1,30 @@
-From: mingo.kernel.org at gmail.com (Ingo Molnar)
-Date: Mon, 14 May 2018 11:30:15 +0200
-Subject: [PATCH 2/2] tools/testing/selftests/x86: fix error: conflicting
- types for 'pkey_get|pkey_set'
-In-Reply-To: <125eb810-1d48-394d-9665-40da64326fbb@intel.com>
+From: mingo at kernel.org (Ingo Molnar)
+Date: Mon, 14 May 2018 11:31:57 +0200
+Subject: [PATCH 1/2] tools/testing/selftests/x86: fix warning:
+ "SEGV_PKUERR|SEGV_BNDERR" redefined
+In-Reply-To: <486b5b09-d45f-5d79-cb8a-9ea3537ae048@kernel.org>
 References: <1525770870-19067-1-git-send-email-lizhijian@cn.fujitsu.com>
- <1525770870-19067-2-git-send-email-lizhijian@cn.fujitsu.com>
- <125eb810-1d48-394d-9665-40da64326fbb@intel.com>
-Message-ID: <20180514093015.GA27428@gmail.com>
+ <8f91739f-5d63-e6c9-7bf9-4c970237bcf8@intel.com>
+ <486b5b09-d45f-5d79-cb8a-9ea3537ae048@kernel.org>
+Message-ID: <20180514093157.GB27428@gmail.com>
 
 
-* Dave Hansen <dave.hansen at intel.com> wrote:
+* Shuah Khan <shuah at kernel.org> wrote:
 
-> On 05/08/2018 02:14 AM, Li Zhijian wrote:
-> > -u32 pkey_get(int pkey, unsigned long flags)
-> > +u32 _pkey_get(int pkey, unsigned long flags)
-> >  {
-> >  	u32 mask = (PKEY_DISABLE_ACCESS|PKEY_DISABLE_WRITE);
-> >  	u32 pkru = __rdpkru();
-> > @@ -422,7 +426,7 @@ u32 pkey_get(int pkey, unsigned long flags)
-> >  	return masked_pkru;
-> >  }
+> On 05/08/2018 10:25 AM, Dave Hansen wrote:
+> > On 05/08/2018 02:14 AM, Li Zhijian wrote:
+> >> SEGV_PKUERR and SEGV_BNDERR are defined since glibc-2.27
+> > 
+> > 
+> > Acked-by: Dave Hansen <dave.hansen at intel.com>
+> > 
 > 
-> I'm not a huge fan of random underscores for undocumented reasons.  But,
-> oh well.
-> 
-> Acked-by: Dave Hansen <dave.hansen at intel.com>
+> Thanks. Queuing this up for 4.17-rc5
 
-So I saw these too late, fixed them already, and did it slightly differently:
-I used a hw_*() prefix which I think is cleaner and more obvious than underscores.
+Please drop these patches, I have fixed them slightly differently and there are 
+dependencies with followup patches.
 
-Thanks,
+Tanks,
 
 	Ingo
 --
