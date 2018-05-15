@@ -1,25 +1,30 @@
-From: guro at fb.com (Roman Gushchin)
-Date: Tue, 15 May 2018 17:57:08 +0100
+From: shuah at kernel.org (Shuah Khan)
+Date: Tue, 15 May 2018 11:03:29 -0600
 Subject: [PATCH] selftests: cgroup/memcontrol: add basic test for swap
  controls
-In-Reply-To: <1526400353-12991-1-git-send-email-rppt@linux.vnet.ibm.com>
+In-Reply-To: <20180515164034.GF2368884@devbig577.frc2.facebook.com>
 References: <1526400353-12991-1-git-send-email-rppt@linux.vnet.ibm.com>
-Message-ID: <20180515165702.GA26711@castle.DHCP.thefacebook.com>
+ <20180515164034.GF2368884@devbig577.frc2.facebook.com>
+Message-ID: <74c0905f-efce-7409-9da3-34fac29ff3cb@kernel.org>
 
-On Tue, May 15, 2018 at 07:05:53PM +0300, Mike Rapoport wrote:
-> The new test verifies that memory.swap.max and memory.swap.current behave
-> as expected for simple allocation scenarios
+On 05/15/2018 10:40 AM, Tejun Heo wrote:
+> On Tue, May 15, 2018 at 07:05:53PM +0300, Mike Rapoport wrote:
+>> The new test verifies that memory.swap.max and memory.swap.current behave
+>> as expected for simple allocation scenarios
+>>
+>> Signed-off-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
 > 
-> Signed-off-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
-> ---
+> Looks good to me.
 > 
-> The patch is against kselftest/next branch
+> Acked-by: Tejun Heo <tj at kernel.org>
+> 
+> Thanks.
+> 
 
-Hi Mike!
+Thanks. Applied to linux-kselftest next for 4.18-rc1
 
-Looks good to me, thank you for working on it!
-
-Acked-by: Roman Gushchin <guro at fb.com>
+thanks,
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
