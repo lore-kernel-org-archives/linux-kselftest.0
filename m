@@ -1,27 +1,37 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Tue, 15 May 2018 11:03:29 -0600
-Subject: [PATCH] selftests: cgroup/memcontrol: add basic test for swap
- controls
-In-Reply-To: <20180515164034.GF2368884@devbig577.frc2.facebook.com>
-References: <1526400353-12991-1-git-send-email-rppt@linux.vnet.ibm.com>
- <20180515164034.GF2368884@devbig577.frc2.facebook.com>
-Message-ID: <74c0905f-efce-7409-9da3-34fac29ff3cb@kernel.org>
+Date: Tue, 15 May 2018 14:08:54 -0600
+Subject: [PATCH 1/2] tools/testing/selftests/x86: fix warning:
+ "SEGV_PKUERR|SEGV_BNDERR" redefined
+In-Reply-To: <20180514093157.GB27428@gmail.com>
+References: <1525770870-19067-1-git-send-email-lizhijian@cn.fujitsu.com>
+ <8f91739f-5d63-e6c9-7bf9-4c970237bcf8@intel.com>
+ <486b5b09-d45f-5d79-cb8a-9ea3537ae048@kernel.org>
+ <20180514093157.GB27428@gmail.com>
+Message-ID: <68755e04-3954-e193-8ba3-e96930075622@kernel.org>
 
-On 05/15/2018 10:40 AM, Tejun Heo wrote:
-> On Tue, May 15, 2018 at 07:05:53PM +0300, Mike Rapoport wrote:
->> The new test verifies that memory.swap.max and memory.swap.current behave
->> as expected for simple allocation scenarios
+On 05/14/2018 03:31 AM, Ingo Molnar wrote:
+> 
+> * Shuah Khan <shuah at kernel.org> wrote:
+> 
+>> On 05/08/2018 10:25 AM, Dave Hansen wrote:
+>>> On 05/08/2018 02:14 AM, Li Zhijian wrote:
+>>>> SEGV_PKUERR and SEGV_BNDERR are defined since glibc-2.27
+>>>
+>>>
+>>> Acked-by: Dave Hansen <dave.hansen at intel.com>
+>>>
 >>
->> Signed-off-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
+>> Thanks. Queuing this up for 4.17-rc5
 > 
-> Looks good to me.
+> Please drop these patches, I have fixed them slightly differently and there are 
+> dependencies with followup patches.
 > 
-> Acked-by: Tejun Heo <tj at kernel.org>
+> Tanks,
 > 
-> Thanks.
+> 	Ingo
 > 
 
-Thanks. Applied to linux-kselftest next for 4.18-rc1
+Dropped now.
 
 thanks,
 -- Shuah
