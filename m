@@ -1,37 +1,51 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Tue, 15 May 2018 14:08:54 -0600
-Subject: [PATCH 1/2] tools/testing/selftests/x86: fix warning:
- "SEGV_PKUERR|SEGV_BNDERR" redefined
-In-Reply-To: <20180514093157.GB27428@gmail.com>
-References: <1525770870-19067-1-git-send-email-lizhijian@cn.fujitsu.com>
- <8f91739f-5d63-e6c9-7bf9-4c970237bcf8@intel.com>
- <486b5b09-d45f-5d79-cb8a-9ea3537ae048@kernel.org>
- <20180514093157.GB27428@gmail.com>
-Message-ID: <68755e04-3954-e193-8ba3-e96930075622@kernel.org>
+Date: Tue, 15 May 2018 14:22:58 -0600
+Subject: [PATCH] selftest: intel_pstate: More accurate error message and
+ also a debug support message from aperf.c
+In-Reply-To: <20180514220154.9507-1-ahiliation@yahoo.co.in>
+References: <20180514220154.9507-1-ahiliation@yahoo.co.in>
+Message-ID: <f84c3812-8c4f-fa4a-962e-256dbc6d66df@kernel.org>
 
-On 05/14/2018 03:31 AM, Ingo Molnar wrote:
+On 05/14/2018 04:01 PM, Jeffrin Jose T wrote:
+> Fix for  aperf.c to produce the path of the file which is in mention
+> during error report.CONFIG_X86_MSR=m support requirement is also mentioned.
 > 
-> * Shuah Khan <shuah at kernel.org> wrote:
+> Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
+> ---
+>  tools/testing/selftests/intel_pstate/aperf.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
->> On 05/08/2018 10:25 AM, Dave Hansen wrote:
->>> On 05/08/2018 02:14 AM, Li Zhijian wrote:
->>>> SEGV_PKUERR and SEGV_BNDERR are defined since glibc-2.27
->>>
->>>
->>> Acked-by: Dave Hansen <dave.hansen at intel.com>
->>>
->>
->> Thanks. Queuing this up for 4.17-rc5
-> 
-> Please drop these patches, I have fixed them slightly differently and there are 
-> dependencies with followup patches.
-> 
-> Tanks,
-> 
-> 	Ingo
-> 
+> diff --git a/tools/testing/selftests/intel_pstate/aperf.c b/tools/testing/selftests/intel_pstate/aperf.c
+> index d21edea9c560..da98c1673f08 100644
+> --- a/tools/testing/selftests/intel_pstate/aperf.c
+> +++ b/tools/testing/selftests/intel_pstate/aperf.c
+> @@ -41,7 +41,9 @@ int main(int argc, char **argv) {
+>  	fd = open(msr_file_name, O_RDONLY);
+>  
+>  	if (fd == -1) {
+> -		perror("Failed to open")> +		printf("Failed to open /dev/cpu/%d/msr:", cpu);
 
-Dropped now.
+Why are you deleting perror() and add a printf() for the error message perror()
+printf()?
+
+Why not collapse these messages into one and use strerror() to include the
+error string? 
+> +		printf(" No such file or directory:")
+
+Not necessarily. open(0 could fail due to insufficient permissions. That is why
+using strerror() or perror() is the correct way so the real error message gets
+printed.
+
+> +		printf(" Make sure CONFIG_X86_MSR=m support is Enabled\n");
+
+Might not be the real reason why the opeN() failed.
+
+>  		return 1;
+>  	}
+
+The return should be KSFT_SKIP instead of 1
+>  
+> 
 
 thanks,
 -- Shuah
