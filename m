@@ -1,61 +1,168 @@
-From: daniel@iogearbox.net (Daniel Borkmann)
-Date: Mon, 14 May 2018 21:20:24 +0200
-Subject: [PATCH v3] selftests: add headers_install to lib.mk
-In-Reply-To: <20180514115809.9803-1-anders.roxell@linaro.org>
-References: <20180413090351.25662-1-anders.roxell@linaro.org>
- <20180514115809.9803-1-anders.roxell@linaro.org>
-Message-ID: <1a021bf3-cf93-aa12-c5a8-1ea6c7900fbb@iogearbox.net>
+From: rppt@linux.vnet.ibm.com (Mike Rapoport)
+Date: Tue, 15 May 2018 19:05:53 +0300
+Subject: [PATCH] selftests: cgroup/memcontrol: add basic test for swap controls
+Message-ID: <1526400353-12991-1-git-send-email-rppt@linux.vnet.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180514192024.Djxz8ZnIeqX7tTjroxIHjhei4fscIkyezWQjgKzonSA@z>
+Message-ID: <20180515160553.2MWUlQ6UlE5NpjPrR3r2G0-cr4StV7QFMtHQkIUjIt0@z>
 
-On 05/14/2018 01:58 PM, Anders Roxell wrote:
-> If the kernel headers aren't installed we can't build all the tests.
-> Add a new make target rule 'khdr' in the file lib.mk to generate the
-> kernel headers and that gets include for every test-dir Makefile that
-> includes lib.mk If the testdir in turn have its own sub-dirs the
-> top_srcdir needs to be set to the linux-rootdir to be able to generate
-> the kernel headers.
-> 
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
-> Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
-> ---
->  Makefile                                          | 14 +-------------
->  scripts/subarch.include                           | 13 +++++++++++++
->  tools/testing/selftests/android/Makefile          |  2 +-
->  tools/testing/selftests/android/ion/Makefile      |  1 +
->  tools/testing/selftests/bpf/Makefile              |  5 ++---
->  tools/testing/selftests/futex/functional/Makefile |  1 +
->  tools/testing/selftests/gpio/Makefile             |  7 ++-----
->  tools/testing/selftests/kvm/Makefile              |  7 ++-----
->  tools/testing/selftests/lib.mk                    | 10 ++++++++++
->  tools/testing/selftests/vm/Makefile               |  4 ----
->  10 files changed, 33 insertions(+), 31 deletions(-)
->  create mode 100644 scripts/subarch.include
-[...]
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 438d4f93875b..9741609a0eb1 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -16,9 +16,8 @@ LDLIBS += -lcap -lelf -lrt -lpthread
->  TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read
->  all: $(TEST_CUSTOM_PROGS)
->  
-> -$(TEST_CUSTOM_PROGS): urandom_read
-> -
-> -urandom_read: urandom_read.c
-> +$(TEST_CUSTOM_PROGS):| khdr
-> +$(TEST_CUSTOM_PROGS): urandom_read.c
->  	$(CC) -o $(TEST_CUSTOM_PROGS) -static $<
->  
->  # Order correspond to 'make run_tests' order
+The new test verifies that memory.swap.max and memory.swap.current behave
+as expected for simple allocation scenarios
 
-Can you elaborate on the error in BPF you're seeing that would force a
-headers_install for it? Some people are running the tools/ infrastructure
-(incl. BPF kselftests) outside of kernel tree where this dependency would
-break their setup. Why BPF bits cannot be fixed otherwise?
+Signed-off-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
+---
 
-Thanks,
-Daniel
+The patch is against kselftest/next branch
+
+ tools/testing/selftests/cgroup/cgroup_util.c     | 16 +++++
+ tools/testing/selftests/cgroup/cgroup_util.h     |  1 +
+ tools/testing/selftests/cgroup/test_memcontrol.c | 91 ++++++++++++++++++++++++
+ 3 files changed, 108 insertions(+)
+
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index a938b6c8b55a..41cc3b5e5be1 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -315,3 +315,19 @@ int alloc_anon(const char *cgroup, void *arg)
+ 	free(buf);
+ 	return 0;
+ }
++
++int is_swap_enabled(void)
++{
++	char buf[PAGE_SIZE];
++	const char delim[] = "\n";
++	int cnt = 0;
++	char *line;
++
++	if (read_text("/proc/swaps", buf, sizeof(buf)) <= 0)
++		return -1;
++
++	for (line = strtok(buf, delim); line; line = strtok(NULL, delim))
++		cnt++;
++
++	return cnt > 1;
++}
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
+index 000de075d3d8..fe82a297d4e0 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.h
++++ b/tools/testing/selftests/cgroup/cgroup_util.h
+@@ -38,3 +38,4 @@ extern int cg_run_nowait(const char *cgroup,
+ extern int get_temp_fd(void);
+ extern int alloc_pagecache(int fd, size_t size);
+ extern int alloc_anon(const char *cgroup, void *arg);
++extern int is_swap_enabled(void);
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index c92a21f3c806..beae06c9c899 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -638,6 +638,96 @@ static int test_memcg_max(const char *root)
+ 	return ret;
+ }
+ 
++static int alloc_anon_50M_check_swap(const char *cgroup, void *arg)
++{
++	long mem_max = (long)arg;
++	size_t size = MB(50);
++	char *buf, *ptr;
++	long mem_current, swap_current;
++	int ret = -1;
++
++	buf = malloc(size);
++	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
++		*ptr = 0;
++
++	mem_current = cg_read_long(cgroup, "memory.current");
++	if (!mem_current || !values_close(mem_current, mem_max, 3))
++		goto cleanup;
++
++	swap_current = cg_read_long(cgroup, "memory.swap.current");
++	if (!swap_current ||
++	    !values_close(mem_current + swap_current, size, 3))
++		goto cleanup;
++
++	ret = 0;
++cleanup:
++	free(buf);
++	return ret;
++}
++
++/*
++ * This test checks that memory.swap.max limits the amount of
++ * anonymous memory which can be swapped out.
++ */
++static int test_memcg_swap_max(const char *root)
++{
++	int ret = KSFT_FAIL;
++	char *memcg;
++	long max;
++
++	if (!is_swap_enabled())
++		return KSFT_SKIP;
++
++	memcg = cg_name(root, "memcg_test");
++	if (!memcg)
++		goto cleanup;
++
++	if (cg_create(memcg))
++		goto cleanup;
++
++	if (cg_read_long(memcg, "memory.swap.current")) {
++		ret = KSFT_SKIP;
++		goto cleanup;
++	}
++
++	if (cg_read_strcmp(memcg, "memory.max", "max\n"))
++		goto cleanup;
++
++	if (cg_read_strcmp(memcg, "memory.swap.max", "max\n"))
++		goto cleanup;
++
++	if (cg_write(memcg, "memory.swap.max", "30M"))
++		goto cleanup;
++
++	if (cg_write(memcg, "memory.max", "30M"))
++		goto cleanup;
++
++	/* Should be killed by OOM killer */
++	if (!cg_run(memcg, alloc_anon, (void *)MB(100)))
++		goto cleanup;
++
++	if (cg_read_key_long(memcg, "memory.events", "oom ") != 1)
++		goto cleanup;
++
++	if (cg_read_key_long(memcg, "memory.events", "oom_kill ") != 1)
++		goto cleanup;
++
++	if (cg_run(memcg, alloc_anon_50M_check_swap, (void *)MB(30)))
++		goto cleanup;
++
++	max = cg_read_key_long(memcg, "memory.events", "max ");
++	if (max <= 0)
++		goto cleanup;
++
++	ret = KSFT_PASS;
++
++cleanup:
++	cg_destroy(memcg);
++	free(memcg);
++
++	return ret;
++}
++
+ /*
+  * This test disables swapping and tries to allocate anonymous memory
+  * up to OOM. Then it checks for oom and oom_kill events in
+@@ -694,6 +784,7 @@ struct memcg_test {
+ 	T(test_memcg_high),
+ 	T(test_memcg_max),
+ 	T(test_memcg_oom_events),
++	T(test_memcg_swap_max),
+ };
+ #undef T
+ 
+-- 
+2.7.4
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
