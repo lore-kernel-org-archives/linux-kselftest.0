@@ -1,25 +1,33 @@
-From: tj at kernel.org (Tejun Heo)
-Date: Tue, 15 May 2018 09:40:34 -0700
-Subject: [PATCH] selftests: cgroup/memcontrol: add basic test for swap
- controls
-In-Reply-To: <1526400353-12991-1-git-send-email-rppt@linux.vnet.ibm.com>
-References: <1526400353-12991-1-git-send-email-rppt@linux.vnet.ibm.com>
-Message-ID: <20180515164034.GF2368884@devbig577.frc2.facebook.com>
+From: shuah at kernel.org (Shuah Khan (Samsung OSG))
+Date: Tue, 15 May 2018 10:44:27 -0600
+Subject: [PATCH] MAINTAINERS: Add Q: entry to kselftest for patchwork project
+Message-ID: <20180515164427.12201-1-shuah@kernel.org>
 
-On Tue, May 15, 2018 at 07:05:53PM +0300, Mike Rapoport wrote:
-> The new test verifies that memory.swap.max and memory.swap.current behave
-> as expected for simple allocation scenarios
-> 
-> Signed-off-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
+A new patchwork project is created to track kselftest patches. Update
+the kselftest entry in the MAINTAINERS file adding Q: entry:
 
-Looks good to me.
+https://patchwork.kernel.org/project/linux-kselftest/list/
 
-Acked-by: Tejun Heo <tj at kernel.org>
+Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks.
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 58b9861ccf99..ab577593d80a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7698,6 +7698,7 @@ KERNEL SELFTEST FRAMEWORK
+ M:	Shuah Khan <shuah at kernel.org>
+ L:	linux-kselftest at vger.kernel.org
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
++Q:	https://patchwork.kernel.org/project/linux-kselftest/list/
+ S:	Maintained
+ F:	tools/testing/selftests/
+ F:	Documentation/dev-tools/kselftest*
 -- 
-tejun
+2.14.1
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
