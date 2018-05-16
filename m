@@ -1,180 +1,187 @@
-From: rppt at linux.vnet.ibm.com (Mike Rapoport)
-Date: Wed, 16 May 2018 17:48:26 +0300
+From: guro at fb.com (Roman Gushchin)
+Date: Wed, 16 May 2018 17:04:19 +0100
 Subject: [PATCH] selftests: cgroup: memcontrol: add basic test for socket
  accounting
-In-Reply-To: <20180516140332.GA19754@castle.DHCP.thefacebook.com>
+In-Reply-To: <20180516144826.GB23563@rapoport-lnx>
 References: <1526470089-27010-1-git-send-email-rppt@linux.vnet.ibm.com>
  <20180516140332.GA19754@castle.DHCP.thefacebook.com>
-Message-ID: <20180516144826.GB23563@rapoport-lnx>
+ <20180516144826.GB23563@rapoport-lnx>
+Message-ID: <20180516160243.GA31445@castle.DHCP.thefacebook.com>
 
-On Wed, May 16, 2018 at 03:04:08PM +0100, Roman Gushchin wrote:
-> Hi Mike!
-> 
-> On Wed, May 16, 2018 at 02:28:09PM +0300, Mike Rapoport wrote:
-> > The test verifies that with active TCP traffic memory.current and
-> > memory.stat.sock have similar values.
+On Wed, May 16, 2018 at 05:48:26PM +0300, Mike Rapoport wrote:
+> On Wed, May 16, 2018 at 03:04:08PM +0100, Roman Gushchin wrote:
+> > Hi Mike!
 > > 
-> > Signed-off-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
-> > ---
-> >  tools/testing/selftests/cgroup/test_memcontrol.c | 184 +++++++++++++++++++++++
-> >  1 file changed, 184 insertions(+)
+> > On Wed, May 16, 2018 at 02:28:09PM +0300, Mike Rapoport wrote:
+> > > The test verifies that with active TCP traffic memory.current and
+> > > memory.stat.sock have similar values.
+> > > 
+> > > Signed-off-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
+> > > ---
+> > >  tools/testing/selftests/cgroup/test_memcontrol.c | 184 +++++++++++++++++++++++
+> > >  1 file changed, 184 insertions(+)
+> > > 
+> > > diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+> > > index beae06c9c899..0efdb1009175 100644
+> > > --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> > > +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> > > @@ -9,6 +9,12 @@
+> > >  #include <sys/stat.h>
+> > >  #include <sys/types.h>
+> > >  #include <unistd.h>
+> > > +#include <sys/socket.h>
+> > > +#include <sys/wait.h>
+> > > +#include <arpa/inet.h>
+> > > +#include <netinet/in.h>
+> > > +#include <netdb.h>
+> > > +#include <errno.h>
+> > >  
+> > >  #include "../kselftest.h"
+> > >  #include "cgroup_util.h"
+> > > @@ -772,6 +778,183 @@ static int test_memcg_oom_events(const char *root)
+> > >  	return ret;
+> > >  }
+> > >  
+> > > +struct tcp_server_args {
+> > > +	unsigned short port;
+> > > +	int ctl[2];
+> > > +};
+> > > +
+> > > +static int tcp_server(const char *cgroup, void *arg)
+> > > +{
+> > > +	struct tcp_server_args *srv_args = arg;
+> > > +	struct sockaddr_in6 saddr = { 0 };
+> > > +	socklen_t slen = sizeof(saddr);
+> > > +	int sk, client_sk, ctl_fd, yes = 1, ret = -1;
+> > > +
+> > > +	close(srv_args->ctl[0]);
+> > > +	ctl_fd = srv_args->ctl[1];
+> > > +
+> > > +	saddr.sin6_family = AF_INET6;
+> > > +	saddr.sin6_addr = in6addr_any;
+> > > +	saddr.sin6_port = htons(srv_args->port);
+> > > +
+> > > +	sk = socket(AF_INET6, SOCK_STREAM, 0);
+> > > +	if (sk < 0)
+> > > +		return ret;
+> > > +
+> > > +	if (setsockopt(sk, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) < 0)
+> > > +		goto cleanup;
+> > > +
+> > > +	if (bind(sk, (struct sockaddr *)&saddr, slen)) {
+> > > +		write(ctl_fd, &errno, sizeof(errno));
+> > > +		goto cleanup;
+> > > +	}
+> > > +
+> > > +	if (listen(sk, 1))
+> > > +		goto cleanup;
+> > > +
+> > > +	ret = 0;
+> > > +	if (write(ctl_fd, &ret, sizeof(ret)) != sizeof(ret)) {
+> > > +		ret = -1;
+> > > +		goto cleanup;
+> > > +	}
+> > > +
+> > > +	client_sk = accept(sk, NULL, NULL);
+> > > +	if (client_sk < 0)
+> > > +		goto cleanup;
+> > > +
+> > > +	ret = -1;
+> > > +	for (;;) {
+> > > +		uint8_t buf[0x100000];
+> > > +
+> > > +		if (write(client_sk, buf, sizeof(buf)) <= 0) {
+> > > +			if (errno == ECONNRESET)
+> > > +				ret = 0;
+> > > +			break;
+> > > +		}
+> > > +	}
+> > > +
+> > > +	close(client_sk);
+> > > +
+> > > +cleanup:
+> > > +	close(sk);
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +static int tcp_client(const char *cgroup, unsigned short port)
+> > > +{
+> > > +	const char server[] = "localhost";
+> > > +	struct addrinfo *ai;
+> > > +	char servport[6];
+> > > +	int retries = 0x10; /* nice round number */
+> > > +	int sk, ret;
+> > > +
+> > > +	snprintf(servport, sizeof(servport), "%hd", port);
+> > > +	ret = getaddrinfo(server, servport, NULL, &ai);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	sk = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
+> > > +	if (sk < 0)
+> > > +		goto free_ainfo;
+> > > +
+> > > +	ret = connect(sk, ai->ai_addr, ai->ai_addrlen);
+> > > +	if (ret < 0)
+> > > +		goto close_sk;
+> > > +
+> > > +	ret = KSFT_FAIL;
+> > > +	while (retries--) {
+> > > +		uint8_t buf[0x100000];
+> > > +		long current, sock;
+> > > +
+> > > +		if (read(sk, buf, sizeof(buf)) <= 0)
+> > > +			goto close_sk;
+> > > +
+> > > +		current = cg_read_long(cgroup, "memory.current");
+> > > +		if (current < 0)
+> > > +			goto close_sk;
+> > > +
+> > > +		sock = cg_read_key_long(cgroup, "memory.stat", "sock ");
+> > > +		if (sock < 0)
+> > > +			goto close_sk;
+> > > +
+> > > +		if (values_close(current, sock, 3)) {
+> > > +			ret = KSFT_PASS;
+> > > +			break;
+> > > +		}
 > > 
-> > diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-> > index beae06c9c899..0efdb1009175 100644
-> > --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> > +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> > @@ -9,6 +9,12 @@
-> >  #include <sys/stat.h>
-> >  #include <sys/types.h>
-> >  #include <unistd.h>
-> > +#include <sys/socket.h>
-> > +#include <sys/wait.h>
-> > +#include <arpa/inet.h>
-> > +#include <netinet/in.h>
-> > +#include <netdb.h>
-> > +#include <errno.h>
-> >  
-> >  #include "../kselftest.h"
-> >  #include "cgroup_util.h"
-> > @@ -772,6 +778,183 @@ static int test_memcg_oom_events(const char *root)
-> >  	return ret;
-> >  }
-> >  
-> > +struct tcp_server_args {
-> > +	unsigned short port;
-> > +	int ctl[2];
-> > +};
-> > +
-> > +static int tcp_server(const char *cgroup, void *arg)
-> > +{
-> > +	struct tcp_server_args *srv_args = arg;
-> > +	struct sockaddr_in6 saddr = { 0 };
-> > +	socklen_t slen = sizeof(saddr);
-> > +	int sk, client_sk, ctl_fd, yes = 1, ret = -1;
-> > +
-> > +	close(srv_args->ctl[0]);
-> > +	ctl_fd = srv_args->ctl[1];
-> > +
-> > +	saddr.sin6_family = AF_INET6;
-> > +	saddr.sin6_addr = in6addr_any;
-> > +	saddr.sin6_port = htons(srv_args->port);
-> > +
-> > +	sk = socket(AF_INET6, SOCK_STREAM, 0);
-> > +	if (sk < 0)
-> > +		return ret;
-> > +
-> > +	if (setsockopt(sk, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) < 0)
-> > +		goto cleanup;
-> > +
-> > +	if (bind(sk, (struct sockaddr *)&saddr, slen)) {
-> > +		write(ctl_fd, &errno, sizeof(errno));
-> > +		goto cleanup;
-> > +	}
-> > +
-> > +	if (listen(sk, 1))
-> > +		goto cleanup;
-> > +
-> > +	ret = 0;
-> > +	if (write(ctl_fd, &ret, sizeof(ret)) != sizeof(ret)) {
-> > +		ret = -1;
-> > +		goto cleanup;
-> > +	}
-> > +
-> > +	client_sk = accept(sk, NULL, NULL);
-> > +	if (client_sk < 0)
-> > +		goto cleanup;
-> > +
-> > +	ret = -1;
-> > +	for (;;) {
-> > +		uint8_t buf[0x100000];
-> > +
-> > +		if (write(client_sk, buf, sizeof(buf)) <= 0) {
-> > +			if (errno == ECONNRESET)
-> > +				ret = 0;
-> > +			break;
-> > +		}
-> > +	}
-> > +
-> > +	close(client_sk);
-> > +
-> > +cleanup:
-> > +	close(sk);
-> > +	return ret;
-> > +}
-> > +
-> > +static int tcp_client(const char *cgroup, unsigned short port)
-> > +{
-> > +	const char server[] = "localhost";
-> > +	struct addrinfo *ai;
-> > +	char servport[6];
-> > +	int retries = 0x10; /* nice round number */
-> > +	int sk, ret;
-> > +
-> > +	snprintf(servport, sizeof(servport), "%hd", port);
-> > +	ret = getaddrinfo(server, servport, NULL, &ai);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	sk = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
-> > +	if (sk < 0)
-> > +		goto free_ainfo;
-> > +
-> > +	ret = connect(sk, ai->ai_addr, ai->ai_addrlen);
-> > +	if (ret < 0)
-> > +		goto close_sk;
-> > +
-> > +	ret = KSFT_FAIL;
-> > +	while (retries--) {
-> > +		uint8_t buf[0x100000];
-> > +		long current, sock;
-> > +
-> > +		if (read(sk, buf, sizeof(buf)) <= 0)
-> > +			goto close_sk;
-> > +
-> > +		current = cg_read_long(cgroup, "memory.current");
-> > +		if (current < 0)
-> > +			goto close_sk;
-> > +
-> > +		sock = cg_read_key_long(cgroup, "memory.stat", "sock ");
-> > +		if (sock < 0)
-> > +			goto close_sk;
-> > +
-> > +		if (values_close(current, sock, 3)) {
-> > +			ret = KSFT_PASS;
-> > +			break;
-> > +		}
+> > The test is flapping (at least on my dev machine) because of this condition.
+> > 
+> > I believe it's because of the batching we're using on the page charge path.
+> > So, in theory, it should be possible to calculate the maximum difference
+> > like num_cpus * PAGE_SIZE * batch_size.
 > 
-> The test is flapping (at least on my dev machine) because of this condition.
+> I afraid it's more complex and timing sensitive
+>  
+> > Alternatively, just bump allowed error percentage :)
 > 
-> I believe it's because of the batching we're using on the page charge path.
-> So, in theory, it should be possible to calculate the maximum difference
-> like num_cpus * PAGE_SIZE * batch_size.
+> so I'll bump the error percentage :)
 
-I afraid it's more complex and timing sensitive
- 
-> Alternatively, just bump allowed error percentage :)
+Ok.
+Please, add then a check that current >= sock.
+It should be always true, right?
 
-so I'll bump the error percentage :)
- 
-> > +	}
-> > +
-> > +close_sk:
-> > +	close(sk);
-> 
-> It would be great to check that sock and current are getting 0 values
-> after we're closing the socket.
- 
-Hmm, here it's also timing sensitive. I can see that sock is reliably
-getting 0 if I check it after the server exits. But current usually remains
-small but still !0.
- 
-> Thanks!
-> 
+>  
+> > > +	}
+> > > +
+> > > +close_sk:
+> > > +	close(sk);
+> > 
+> > It would be great to check that sock and current are getting 0 values
+> > after we're closing the socket.
+>  
+> Hmm, here it's also timing sensitive. I can see that sock is reliably
+> getting 0 if I check it after the server exits. But current usually remains
+> small but still !0.
 
--- 
-Sincerely yours,
-Mike.
+Ok, then I'd check that sock == 0 and current >= 0.
+That will catch some refcounter underrun issues we had in the past.
 
+Other than that (and assuming the test isn't flapping):
+Acked-by: Roman Gushchin <guro at fb.com>
+
+Thanks!
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
