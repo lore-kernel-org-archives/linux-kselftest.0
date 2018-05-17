@@ -1,48 +1,57 @@
-From: dan.carpenter@oracle.com (Dan Carpenter)
-Date: Thu, 17 May 2018 16:22:25 +0300
-Subject: [bug report] selftests: cgroup: add memory controller self-tests
-Message-ID: <20180517132225.GA13289@mwanda>
+From: mpe@ellerman.id.au (Michael Ellerman)
+Date: Fri, 18 May 2018 00:03:01 +1000
+Subject: [PATCH 1/2] selftests/powerpc: Add ptrace tests for Protection
+ Key registers
+In-Reply-To: <20180223183344.21038-1-bauerman@linux.vnet.ibm.com>
+References: <20180223183344.21038-1-bauerman@linux.vnet.ibm.com>
+Message-ID: <87tvr6mlbe.fsf@concordia.ellerman.id.au>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180517132225.z9HwooafxKPPBR99icif1byFFEPpq4CNvJ8b5QDTAr8@z>
+Message-ID: <20180517140301.Gk6-NvPpbC1zRu2FzbElXTG6-IWfBzhx2TxYAjLR0Sg@z>
 
-Hello Roman Gushchin,
+Thiago Jung Bauermann <bauerman at linux.vnet.ibm.com> writes:
 
-The patch a62213fe9b77: "selftests: cgroup: add memory controller
-self-tests" from May 11, 2018, leads to the following static checker
-warning:
+> This test exercises read and write access to the AMR, IAMR and UAMOR.
+>
+> Signed-off-by: Thiago Jung Bauermann <bauerman at linux.vnet.ibm.com>
+> ---
+>  tools/testing/selftests/powerpc/include/reg.h      |   1 +
+>  tools/testing/selftests/powerpc/ptrace/Makefile    |   5 +-
+>  tools/testing/selftests/powerpc/ptrace/child.h     | 130 ++++++++
+>  .../testing/selftests/powerpc/ptrace/ptrace-pkey.c | 326 +++++++++++++++++++++
 
-	./tools/testing/selftests/cgroup/cgroup_util.c:62 cg_name()
-	warn: variable dereferenced before check 'name' (see line 59)
+This is failing on machines without pkeys:
 
-./tools/testing/selftests/cgroup/cgroup_util.c
-    57  char *cg_name(const char *root, const char *name)
-    58  {
-    59          size_t len = strlen(root) + strlen(name) + 2;
-                                            ^^^^^^^^^^^^
-    60          char *ret = malloc(len);
-    61  
-    62          if (name)
-                    ^^^^
-    63                  snprintf(ret, len, "%s/%s", root, name);
-    64  
-    65          return ret;
-    66  }
-    67  
-    68  char *cg_name_indexed(const char *root, const char *name, int index)
-    69  {
-    70          size_t len = strlen(root) + strlen(name) + 10;
-                                            ^^^^^^^^^^^^
-    71          char *ret = malloc(len);
-    72  
-    73          if (name)
-                    ^^^^
-    74                  snprintf(ret, len, "%s/%s_%d", root, name, index);
-    75  
-    76          return ret;
-    77  }
+  test: ptrace_pkey
+  tags: git_version:52e7d87
+  [FAIL] Test FAILED on line 117
+  [FAIL] Test FAILED on line 191
+  failure: ptrace_pkey
 
-regards,
-dan carpenter
+
+I think the first fail is in the child here:
+
+int ptrace_read_regs(pid_t child, unsigned long type, unsigned long regs[],
+		     int n)
+{
+	struct iovec iov;
+	long ret;
+
+	FAIL_IF(start_trace(child));
+
+	iov.iov_base = regs;
+	iov.iov_len = n * sizeof(unsigned long);
+
+	ret = ptrace(PTRACE_GETREGSET, child, type, &iov);
+	FAIL_IF(ret != 0);
+
+
+Which makes sense.
+
+The test needs to skip if pkeys are not available/enabled. Using the
+availability of the REGSET might actually be a nice way to detect that,
+because it's read-only.
+
+cheers
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
