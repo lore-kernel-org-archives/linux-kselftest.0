@@ -1,32 +1,76 @@
-From: mpe at ellerman.id.au (Michael Ellerman)
-Date: Fri, 18 May 2018 00:03:51 +1000
-Subject: [PATCH 2/2] selftests/powerpc: Add core file test for Protection
- Key registers
-In-Reply-To: <20180223183344.21038-2-bauerman@linux.vnet.ibm.com>
-References: <20180223183344.21038-1-bauerman@linux.vnet.ibm.com>
- <20180223183344.21038-2-bauerman@linux.vnet.ibm.com>
-Message-ID: <87r2mamla0.fsf@concordia.ellerman.id.au>
+From: guro at fb.com (Roman Gushchin)
+Date: Thu, 17 May 2018 16:56:51 +0100
+Subject: [bug report] selftests: cgroup: add memory controller self-tests
+In-Reply-To: <20180517132225.GA13289@mwanda>
+References: <20180517132225.GA13289@mwanda>
+Message-ID: <20180517155646.GA1134@castle.DHCP.thefacebook.com>
 
-Thiago Jung Bauermann <bauerman at linux.vnet.ibm.com> writes:
+On Thu, May 17, 2018 at 04:22:25PM +0300, Dan Carpenter wrote:
 
-> This test verifies that the AMR, IAMR and UAMOR are being written to a
-> process' core file.
->
-> Signed-off-by: Thiago Jung Bauermann <bauerman at linux.vnet.ibm.com>
-> ---
->  tools/testing/selftests/powerpc/ptrace/Makefile    |   5 +-
->  tools/testing/selftests/powerpc/ptrace/core-pkey.c | 460 +++++++++++++++++++++
+> Hello Roman Gushchin,
+> 
+> The patch a62213fe9b77: "selftests: cgroup: add memory controller
+> self-tests" from May 11, 2018, leads to the following static checker
+> warning:
+> 
+> 	./tools/testing/selftests/cgroup/cgroup_util.c:62 cg_name()
+> 	warn: variable dereferenced before check 'name' (see line 59)
+> 
 
-Also failing w/out pkeys:
+Hi Dan!
 
-  test: core_pkey
-  tags: git_version:52e7d87
-  [FAIL] Test FAILED on line 117
-  [FAIL] Test FAILED on line 265
-  failure: core_pkey
+Thank you for the report!
+The fix is below.
 
 
-cheers
+Roman
+
+--
+
+>From ec990dc816b0a36201bed84e5b38b928b9bb9138 Mon Sep 17 00:00:00 2001
+From: Roman Gushchin <guro at fb.com>
+Date: Thu, 17 May 2018 16:53:15 +0100
+Subject: [PATCH] kselftest/cgroup: fix variable dereferenced before check
+ warning
+
+cg_name(const char *root, const char *name) is always called with
+non-empty root and name arguments, so there is no sense in checking
+it in the function body (after using in strlen()).
+
+Signed-off-by: Roman Gushchin <guro at fb.com>
+Reported-by: Dan Carpenter <dan.carpenter at oracle.com>
+Cc: linux-kselftest at vger.kernel.org
+---
+ tools/testing/selftests/cgroup/cgroup_util.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index 41cc3b5e5be1..b69bdeb4b9fe 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -59,8 +59,7 @@ char *cg_name(const char *root, const char *name)
+ 	size_t len = strlen(root) + strlen(name) + 2;
+ 	char *ret = malloc(len);
+ 
+-	if (name)
+-		snprintf(ret, len, "%s/%s", root, name);
++	snprintf(ret, len, "%s/%s", root, name);
+ 
+ 	return ret;
+ }
+@@ -70,8 +69,7 @@ char *cg_name_indexed(const char *root, const char *name, int index)
+ 	size_t len = strlen(root) + strlen(name) + 10;
+ 	char *ret = malloc(len);
+ 
+-	if (name)
+-		snprintf(ret, len, "%s/%s_%d", root, name, index);
++	snprintf(ret, len, "%s/%s_%d", root, name, index);
+ 
+ 	return ret;
+ }
+-- 
+2.14.3
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
