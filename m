@@ -1,53 +1,30 @@
 From: mpe at ellerman.id.au (Michael Ellerman)
-Date: Fri, 18 May 2018 00:03:01 +1000
-Subject: [PATCH 1/2] selftests/powerpc: Add ptrace tests for Protection
+Date: Fri, 18 May 2018 00:03:51 +1000
+Subject: [PATCH 2/2] selftests/powerpc: Add core file test for Protection
  Key registers
-In-Reply-To: <20180223183344.21038-1-bauerman@linux.vnet.ibm.com>
+In-Reply-To: <20180223183344.21038-2-bauerman@linux.vnet.ibm.com>
 References: <20180223183344.21038-1-bauerman@linux.vnet.ibm.com>
-Message-ID: <87tvr6mlbe.fsf@concordia.ellerman.id.au>
+ <20180223183344.21038-2-bauerman@linux.vnet.ibm.com>
+Message-ID: <87r2mamla0.fsf@concordia.ellerman.id.au>
 
 Thiago Jung Bauermann <bauerman at linux.vnet.ibm.com> writes:
 
-> This test exercises read and write access to the AMR, IAMR and UAMOR.
+> This test verifies that the AMR, IAMR and UAMOR are being written to a
+> process' core file.
 >
 > Signed-off-by: Thiago Jung Bauermann <bauerman at linux.vnet.ibm.com>
 > ---
->  tools/testing/selftests/powerpc/include/reg.h      |   1 +
 >  tools/testing/selftests/powerpc/ptrace/Makefile    |   5 +-
->  tools/testing/selftests/powerpc/ptrace/child.h     | 130 ++++++++
->  .../testing/selftests/powerpc/ptrace/ptrace-pkey.c | 326 +++++++++++++++++++++
+>  tools/testing/selftests/powerpc/ptrace/core-pkey.c | 460 +++++++++++++++++++++
 
-This is failing on machines without pkeys:
+Also failing w/out pkeys:
 
-  test: ptrace_pkey
+  test: core_pkey
   tags: git_version:52e7d87
   [FAIL] Test FAILED on line 117
-  [FAIL] Test FAILED on line 191
-  failure: ptrace_pkey
+  [FAIL] Test FAILED on line 265
+  failure: core_pkey
 
-
-I think the first fail is in the child here:
-
-int ptrace_read_regs(pid_t child, unsigned long type, unsigned long regs[],
-		     int n)
-{
-	struct iovec iov;
-	long ret;
-
-	FAIL_IF(start_trace(child));
-
-	iov.iov_base = regs;
-	iov.iov_len = n * sizeof(unsigned long);
-
-	ret = ptrace(PTRACE_GETREGSET, child, type, &iov);
-	FAIL_IF(ret != 0);
-
-
-Which makes sense.
-
-The test needs to skip if pkeys are not available/enabled. Using the
-availability of the REGSET might actually be a nice way to detect that,
-because it's read-only.
 
 cheers
 --
