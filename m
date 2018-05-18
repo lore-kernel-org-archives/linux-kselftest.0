@@ -1,48 +1,60 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Fri, 18 May 2018 13:19:11 -0600
-Subject: [PATCH] selftest: intel_pstate: debug support message from
- aperf.c and return value fix.
-In-Reply-To: <20180518140550.2280-1-ahiliation@yahoo.co.in>
-References: <20180518140550.2280-1-ahiliation@yahoo.co.in>
-Message-ID: <4f51f365-705a-211f-cccb-c634ea750dc6@kernel.org>
+Date: Fri, 18 May 2018 13:24:03 -0600
+Subject: [PATCH v2] selftests/cgroup: memory controller self-tests
+In-Reply-To: <1b9740f8-953a-985d-ba21-551e6064a572@kernel.org>
+References: <20180510163701.28936-1-guro@fb.com>
+ <20180510183224.GP2368884@devbig577.frc2.facebook.com>
+ <a652ce44-07f9-d229-70d4-4376bfbafa40@kernel.org>
+ <20180511143228.GU2368884@devbig577.frc2.facebook.com>
+ <ae4dc3f9-baa6-b492-7c43-0359734440b3@kernel.org>
+ <20180511162920.GV2368884@devbig577.frc2.facebook.com>
+ <957d089f-7a88-9ff4-733a-8e082339720c@kernel.org>
+ <20180511180342.GA20683@castle>
+ <fb835740-cee8-83f8-880c-ea6eea8c7c63@kernel.org>
+ <20180511200250.GW2368884@devbig577.frc2.facebook.com>
+ <1b9740f8-953a-985d-ba21-551e6064a572@kernel.org>
+Message-ID: <77f5a3b3-4bf1-43bf-2826-e19af96dff75@kernel.org>
 
-On 05/18/2018 08:05 AM, Jeffrin Jose T wrote:
-> Additional message along with an error message which is more
-> verbose for debug support from aperf.c and updated with the
-> new return value "KSFT_SKIP".
+On 05/11/2018 02:22 PM, Shuah Khan wrote:
+> On 05/11/2018 02:02 PM, Tejun Heo wrote:
+>> On Fri, May 11, 2018 at 01:33:26PM -0600, Shuah Khan wrote:
+>>> Yeah. I see that. You have a switch for the KSFT_ values. Since there is no
+>>> dependency on the cgroup tree, I would recommend having this patch go through
+>>> kselftest tree which is the normal process for tests anyway.
+>>>
+>>> This version is good and I can apply this to linux-kselftest next. I ran a
+>>> quick test and the Skip case looks good.
+>>>
+>>> TAP version 13
+>>> selftests: cgroup: test_memcontrol
+>>> ========================================
+>>> 1..0 # Skipped: memory controller isn't available
+>>> not ok 1..1 selftests: cgroup: test_memcontrol [SKIP]
+>>>
+>>>
+>>> Tejun! Please send me your Ack.
+>>
+>> Sure, please feel free to add my ack.  I'll revert the original patch
+>> from cgroup tree.
+>>
+>> Thanks.
+>>
 > 
-> Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
-> ---
->  tools/testing/selftests/intel_pstate/aperf.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> Thanks. I will apply this to linux-kselftest next for 4.18-rc1 with
+> you Ack.
 > 
-> diff --git a/tools/testing/selftests/intel_pstate/aperf.c b/tools/testing/selftests/intel_pstate/aperf.c
-> index d21edea9c560..f6cd03a87493 100644
-> --- a/tools/testing/selftests/intel_pstate/aperf.c
-> +++ b/tools/testing/selftests/intel_pstate/aperf.c
-> @@ -9,6 +9,8 @@
->  #include <sys/timeb.h>
->  #include <sched.h>
->  #include <errno.h>
-> +#include <string.h>
-> +#include "../kselftest.h"
->  
->  void usage(char *name) {
->  	printf ("Usage: %s cpunum\n", name);
-> @@ -41,8 +43,8 @@ int main(int argc, char **argv) {
->  	fd = open(msr_file_name, O_RDONLY);
->  
->  	if (fd == -1) {
-> -		perror("Failed to open");
-> -		return 1;
-> +		printf("/dev/cpu/%d/msr: %s\n", cpu, strerror(errno));
-> +		return KSFT_SKIP;
->  	}
->  
->  	CPU_ZERO(&cpuset);
+> thanks,
+> -- Shuah
 > 
 
-Thanks. I will queue this up for 4.18-rc1
+Hi Roman,
+
+Could you please send me the fix for
+
+[bug,report] selftests: cgroup: add memory controller self-tests
+
+It is cc'ed to kselftest mailing list and not to me. Please send
+it directly for me to apply it.
 
 thanks,
 -- Shuah
