@@ -1,35 +1,51 @@
-From: anders.roxell at linaro.org (Anders Roxell)
-Date: Fri, 18 May 2018 20:23:24 +0200
-Subject: [PATCH] selftests: bpf: config: enable NET_SCH_INGRESS for xdp_meta.sh
-Message-ID: <20180518182324.23827-1-anders.roxell@linaro.org>
+From: shuah at kernel.org (Shuah Khan)
+Date: Fri, 18 May 2018 13:19:11 -0600
+Subject: [PATCH] selftest: intel_pstate: debug support message from
+ aperf.c and return value fix.
+In-Reply-To: <20180518140550.2280-1-ahiliation@yahoo.co.in>
+References: <20180518140550.2280-1-ahiliation@yahoo.co.in>
+Message-ID: <4f51f365-705a-211f-cccb-c634ea750dc6@kernel.org>
 
-When running bpf's selftest test_xdp_meta.sh it fails:
-./test_xdp_meta.sh
-Error: Specified qdisc not found.
-selftests: test_xdp_meta [FAILED]
+On 05/18/2018 08:05 AM, Jeffrin Jose T wrote:
+> Additional message along with an error message which is more
+> verbose for debug support from aperf.c and updated with the
+> new return value "KSFT_SKIP".
+> 
+> Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
+> ---
+>  tools/testing/selftests/intel_pstate/aperf.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/intel_pstate/aperf.c b/tools/testing/selftests/intel_pstate/aperf.c
+> index d21edea9c560..f6cd03a87493 100644
+> --- a/tools/testing/selftests/intel_pstate/aperf.c
+> +++ b/tools/testing/selftests/intel_pstate/aperf.c
+> @@ -9,6 +9,8 @@
+>  #include <sys/timeb.h>
+>  #include <sched.h>
+>  #include <errno.h>
+> +#include <string.h>
+> +#include "../kselftest.h"
+>  
+>  void usage(char *name) {
+>  	printf ("Usage: %s cpunum\n", name);
+> @@ -41,8 +43,8 @@ int main(int argc, char **argv) {
+>  	fd = open(msr_file_name, O_RDONLY);
+>  
+>  	if (fd == -1) {
+> -		perror("Failed to open");
+> -		return 1;
+> +		printf("/dev/cpu/%d/msr: %s\n", cpu, strerror(errno));
+> +		return KSFT_SKIP;
+>  	}
+>  
+>  	CPU_ZERO(&cpuset);
+> 
 
-Need to enable CONFIG_NET_SCH_INGRESS and CONFIG_NET_CLS_ACT to get the
-test to pass.
+Thanks. I will queue this up for 4.18-rc1
 
-Fixes: 22c8852624fc ("bpf: improve selftests and add tests for meta pointer")
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
----
- tools/testing/selftests/bpf/config | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 983dd25d49f4..1eefe211a4a8 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -5,3 +5,5 @@ CONFIG_BPF_EVENTS=y
- CONFIG_TEST_BPF=m
- CONFIG_CGROUP_BPF=y
- CONFIG_NETDEVSIM=m
-+CONFIG_NET_CLS_ACT=y
-+CONFIG_NET_SCH_INGRESS=y
--- 
-2.17.0
-
+thanks,
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
