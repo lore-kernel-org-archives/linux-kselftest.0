@@ -1,32 +1,31 @@
 From: vladbu at mellanox.com (Vlad Buslov)
-Date: Fri, 18 May 2018 19:21:22 +0300
-Subject: [PATCH] tc-testing: flush gact actions on test teardown
-Message-ID: <1526660482-10424-1-git-send-email-vladbu@mellanox.com>
+Date: Fri, 18 May 2018 19:31:06 +0300
+Subject: [PATCH] tc-testing: fix ip address in u32 test
+Message-ID: <1526661066-11138-1-git-send-email-vladbu@mellanox.com>
 
-Test 6fb4 creates one mirred and one pipe action, but only flushes mirred
-on teardown. Leaking pipe action causes failures in other tests.
-
-Add additional teardown command to also flush gact actions.
+Fix expected ip address to actually match configured ip address.
+Fix test to expect single matched filter.
 
 Signed-off-by: Vlad Buslov <vladbu at mellanox.com>
 ---
- tools/testing/selftests/tc-testing/tc-tests/actions/mirred.json | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/tc-testing/tc-tests/filters/tests.json | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/mirred.json b/tools/testing/selftests/tc-testing/tc-tests/actions/mirred.json
-index 443c9b3..acb24f7 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/actions/mirred.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/actions/mirred.json
-@@ -44,7 +44,8 @@
-         "matchPattern": "action order [0-9]*: mirred \\(Egress Redirect to device lo\\).*index 2 ref",
-         "matchCount": "1",
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
+index 5fa02d8..99a5ffc 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
+@@ -12,8 +12,8 @@
+         "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: protocol ip prio 1 u32 match ip src 127.0.0.1/32 flowid 1:1 action ok",
+         "expExitCode": "0",
+         "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
+-        "matchPattern": "match 7f000002/ffffffff at 12",
+-        "matchCount": "0",
++        "matchPattern": "match 7f000001/ffffffff at 12",
++        "matchCount": "1",
          "teardown": [
--            "$TC actions flush action mirred"
-+            "$TC actions flush action mirred",
-+            "$TC actions flush action gact"
+             "$TC qdisc del dev $DEV1 ingress"
          ]
-     },
-     {
 -- 
 2.7.5
 
