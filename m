@@ -1,34 +1,44 @@
-From: vladbu at mellanox.com (Vlad Buslov)
-Date: Fri, 18 May 2018 19:31:06 +0300
-Subject: [PATCH] tc-testing: fix ip address in u32 test
-Message-ID: <1526661066-11138-1-git-send-email-vladbu@mellanox.com>
+From: shuah at kernel.org (Shuah Khan)
+Date: Fri, 18 May 2018 10:54:07 -0600
+Subject: [PATCH bpf-next 0/5] fix test_sockmap
+In-Reply-To: <20180518071753.4768-1-bhole_prashant_q7@lab.ntt.co.jp>
+References: <20180518071753.4768-1-bhole_prashant_q7@lab.ntt.co.jp>
+Message-ID: <7ca8b025-c152-b0c9-a58b-cff722c2223e@kernel.org>
 
-Fix expected ip address to actually match configured ip address.
-Fix test to expect single matched filter.
+On 05/18/2018 01:17 AM, Prashant Bhole wrote:
+> This series fixes bugs in test_sockmap code. They weren't caught
+> previously because failure in RX/TX thread was not notified to the
+> main thread.
+> 
+> Also fixed data verification logic and slightly improved test output
+> such that parameters values (cork, apply, start, end) of failed test
+> can be easily seen.
+> 
+> Note: Even after fixing above problems there are issues with tests
+> which set cork parameter. Tests fail (RX thread timeout) when cork
+> value is non-zero and overall data sent by TX thread isn't multiples
+> of cork value.
+> 
+> Prashant Bhole (5):
+>   selftests/bpf: test_sockmap, check test failure
+>   selftests/bpf: test_sockmap, join cgroup in selftest mode
+>   selftests/bpf: test_sockmap, fix test timeout
+>   selftests/bpf: test_sockmap, fix data verification
+>   selftests/bpf: test_sockmap, print additional test options
+> 
+>  tools/testing/selftests/bpf/test_sockmap.c | 76 +++++++++++++++++++++++-------
+>  1 file changed, 58 insertions(+), 18 deletions(-)
+> 
 
-Signed-off-by: Vlad Buslov <vladbu at mellanox.com>
----
- tools/testing/selftests/tc-testing/tc-tests/filters/tests.json | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Please remember to cc linux-kselftest mailing list as well. I would like to see
+all the test patches cc'ed to it. Linaro and other test users watch the kselftest
+mailing list. I also have patchwork project now to manage the patch volume.
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-index 5fa02d8..99a5ffc 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-@@ -12,8 +12,8 @@
-         "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: protocol ip prio 1 u32 match ip src 127.0.0.1/32 flowid 1:1 action ok",
-         "expExitCode": "0",
-         "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
--        "matchPattern": "match 7f000002/ffffffff at 12",
--        "matchCount": "0",
-+        "matchPattern": "match 7f000001/ffffffff at 12",
-+        "matchCount": "1",
-         "teardown": [
-             "$TC qdisc del dev $DEV1 ingress"
-         ]
--- 
-2.7.5
+I am okay with patches going through net/bpf trees - there are always test
+dependencies on net/bpf trees.
 
+thanks,
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
