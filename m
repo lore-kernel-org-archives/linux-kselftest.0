@@ -1,54 +1,37 @@
-From: daniel@iogearbox.net (Daniel Borkmann)
-Date: Fri, 18 May 2018 19:23:21 +0200
-Subject: [PATCH bpf-next 0/5] fix test_sockmap
-In-Reply-To: <7ca8b025-c152-b0c9-a58b-cff722c2223e@kernel.org>
-References: <20180518071753.4768-1-bhole_prashant_q7@lab.ntt.co.jp>
- <7ca8b025-c152-b0c9-a58b-cff722c2223e@kernel.org>
-Message-ID: <d0e3bb4a-7491-1da5-d068-15559ebd360a@iogearbox.net>
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Fri, 18 May 2018 20:23:24 +0200
+Subject: [PATCH] selftests: bpf: config: enable NET_SCH_INGRESS for xdp_meta.sh
+Message-ID: <20180518182324.23827-1-anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180518172321.I5kyy_TTE-yOZ3T3B-lNQFhK3KGoOep8lzeN0eZ58G0@z>
+Message-ID: <20180518182324.daZSCwF_9_AJa6f4l-3bZHPK8pphFSlAeWdCAaMi-Xo@z>
 
-On 05/18/2018 06:54 PM, Shuah Khan wrote:
-> On 05/18/2018 01:17 AM, Prashant Bhole wrote:
->> This series fixes bugs in test_sockmap code. They weren't caught
->> previously because failure in RX/TX thread was not notified to the
->> main thread.
->>
->> Also fixed data verification logic and slightly improved test output
->> such that parameters values (cork, apply, start, end) of failed test
->> can be easily seen.
->>
->> Note: Even after fixing above problems there are issues with tests
->> which set cork parameter. Tests fail (RX thread timeout) when cork
->> value is non-zero and overall data sent by TX thread isn't multiples
->> of cork value.
->>
->> Prashant Bhole (5):
->>   selftests/bpf: test_sockmap, check test failure
->>   selftests/bpf: test_sockmap, join cgroup in selftest mode
->>   selftests/bpf: test_sockmap, fix test timeout
->>   selftests/bpf: test_sockmap, fix data verification
->>   selftests/bpf: test_sockmap, print additional test options
->>
->>  tools/testing/selftests/bpf/test_sockmap.c | 76 +++++++++++++++++++++++-------
->>  1 file changed, 58 insertions(+), 18 deletions(-)
-> 
-> Please remember to cc linux-kselftest mailing list as well. I would like to see
-> all the test patches cc'ed to it. Linaro and other test users watch the kselftest
-> mailing list. I also have patchwork project now to manage the patch volume.
-> 
-> I am okay with patches going through net/bpf trees - there are always test
-> dependencies on net/bpf trees.
+When running bpf's selftest test_xdp_meta.sh it fails:
+./test_xdp_meta.sh
+Error: Specified qdisc not found.
+selftests: test_xdp_meta [FAILED]
 
-Yep, routing all the BPF selftest patches via bpf/bpf-next tree is the only
-viable model that works for us in BPF case, in fact also looks like BPF
-selftests are the busiest subdir in #commits so avoiding merge conflicts is
-crucial. Whenever appropriate, most fixes or new features are very often
-accompanied in a patch set with extensive selftests for BPF, so it has a
-deep dependency on the two trees.
+Need to enable CONFIG_NET_SCH_INGRESS and CONFIG_NET_CLS_ACT to get the
+test to pass.
 
-Best,
-Daniel
+Fixes: 22c8852624fc ("bpf: improve selftests and add tests for meta pointer")
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+---
+ tools/testing/selftests/bpf/config | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 983dd25d49f4..1eefe211a4a8 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -5,3 +5,5 @@ CONFIG_BPF_EVENTS=y
+ CONFIG_TEST_BPF=m
+ CONFIG_CGROUP_BPF=y
+ CONFIG_NETDEVSIM=m
++CONFIG_NET_CLS_ACT=y
++CONFIG_NET_SCH_INGRESS=y
+-- 
+2.17.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
