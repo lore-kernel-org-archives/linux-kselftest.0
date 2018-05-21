@@ -1,46 +1,51 @@
-From: anders.roxell@linaro.org (Anders Roxell)
-Date: Sat, 19 May 2018 00:27:37 +0200
-Subject: [PATCH v2] selftests: net: reuseport_bpf_numa: don't fail if no numa
- support
-In-Reply-To: <20180306151004.31336-1-anders.roxell@linaro.org>
-References: <20180306151004.31336-1-anders.roxell@linaro.org>
-Message-ID: <20180518222737.16006-1-anders.roxell@linaro.org>
+From: bhole_prashant_q7@lab.ntt.co.jp (Prashant Bhole)
+Date: Mon, 21 May 2018 14:16:11 +0900
+Subject: [PATCH bpf-next 0/5] fix test_sockmap
+In-Reply-To: <7ca8b025-c152-b0c9-a58b-cff722c2223e@kernel.org>
+References: <20180518071753.4768-1-bhole_prashant_q7@lab.ntt.co.jp>
+ <7ca8b025-c152-b0c9-a58b-cff722c2223e@kernel.org>
+Message-ID: <1a604b94-6a84-c6ab-f166-ed3594ebcae9@lab.ntt.co.jp>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180518222737.Umhgn_HlLaG6GA-uSMFxpkzKp0z1JDTwZuU6C6_dcU8@z>
+Message-ID: <20180521051611.SqAYe4DPLdqwAq_k43H60kCw0RaoWz1TC95f7OkP_No@z>
 
-The reuseport_bpf_numa test case fails there's no numa support.  The
-test shouldn't fail if there's no support it should be skipped.
 
-Fixes: 3c2c3c16aaf6 ("reuseport, bpf: add test case for bpf_get_numa_node_id")
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
----
- tools/testing/selftests/net/reuseport_bpf_numa.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/reuseport_bpf_numa.c b/tools/testing/selftests/net/reuseport_bpf_numa.c
-index 365c32e84189..c9f478b40996 100644
---- a/tools/testing/selftests/net/reuseport_bpf_numa.c
-+++ b/tools/testing/selftests/net/reuseport_bpf_numa.c
-@@ -23,6 +23,8 @@
- #include <unistd.h>
- #include <numa.h>
- 
-+#include "../kselftest.h"
-+
- static const int PORT = 8888;
- 
- static void build_rcv_group(int *rcv_fd, size_t len, int family, int proto)
-@@ -229,7 +231,7 @@ int main(void)
- 	int *rcv_fd, nodes;
- 
- 	if (numa_available() < 0)
--		error(1, errno, "no numa api support");
-+		ksft_exit_skip("no numa api support\n");
- 
- 	nodes = numa_max_node() + 1;
- 
--- 
-2.17.0
+On 5/19/2018 1:54 AM, Shuah Khan wrote:
+> On 05/18/2018 01:17 AM, Prashant Bhole wrote:
+>> This series fixes bugs in test_sockmap code. They weren't caught
+>> previously because failure in RX/TX thread was not notified to the
+>> main thread.
+>>
+>> Also fixed data verification logic and slightly improved test output
+>> such that parameters values (cork, apply, start, end) of failed test
+>> can be easily seen.
+>>
+>> Note: Even after fixing above problems there are issues with tests
+>> which set cork parameter. Tests fail (RX thread timeout) when cork
+>> value is non-zero and overall data sent by TX thread isn't multiples
+>> of cork value.
+>>
+>> Prashant Bhole (5):
+>>    selftests/bpf: test_sockmap, check test failure
+>>    selftests/bpf: test_sockmap, join cgroup in selftest mode
+>>    selftests/bpf: test_sockmap, fix test timeout
+>>    selftests/bpf: test_sockmap, fix data verification
+>>    selftests/bpf: test_sockmap, print additional test options
+>>
+>>   tools/testing/selftests/bpf/test_sockmap.c | 76 +++++++++++++++++++++++-------
+>>   1 file changed, 58 insertions(+), 18 deletions(-)
+>>
+> 
+> Please remember to cc linux-kselftest mailing list as well. I would like to see
+> all the test patches cc'ed to it. Linaro and other test users watch the kselftest
+> mailing list. I also have patchwork project now to manage the patch volume. >
+> I am okay with patches going through net/bpf trees - there are always test
+> dependencies on net/bpf trees.
+> 
+Ok. I will remember this. Thanks.
+
+-Prashant
+
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
