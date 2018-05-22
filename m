@@ -1,19 +1,22 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Tue, 22 May 2018 09:33:22 -0600
-Subject: [PATCH v2] selftests: cgroup/memcontrol: add basic test for
- socket accounting
-In-Reply-To: <1526562346-27178-1-git-send-email-rppt@linux.vnet.ibm.com>
-References: <1526562346-27178-1-git-send-email-rppt@linux.vnet.ibm.com>
-Message-ID: <2b43cc2d-8d1b-1e20-b215-1c4d6edd20d2@kernel.org>
+Date: Tue, 22 May 2018 09:35:35 -0600
+Subject: [PATCH] kselftest/cgroup: fix variable dereferenced before check
+ warning
+In-Reply-To: <20180522101031.8451-1-guro@fb.com>
+References: <20180522101031.8451-1-guro@fb.com>
+Message-ID: <351128a3-5bba-8cd2-6d8a-fcaf9c33e2f3@kernel.org>
 
-Hi Mike,
+On 05/22/2018 04:10 AM, Roman Gushchin wrote:
+> cg_name(const char *root, const char *name) is always called with
+> non-empty root and name arguments, so there is no sense in checking
+> it in the function body (after using in strlen()).
+> 
+> Signed-off-by: Roman Gushchin <guro at fb.com>
+> Reported-by: Dan Carpenter <dan.carpenter at oracle.com>
+> Cc: linux-kselftest at vger.kernel.org
 
-On 05/17/2018 07:05 AM, Mike Rapoport wrote:
-> Signed-off-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
-> Acked-by: Roman Gushchin <guro at fb.com>
-> ---
 
-You are missing the commit log. Please add the commit log and resend.
+Thanks. I will queue this up for 4.18-rc1
 
 -- Shuah
 
