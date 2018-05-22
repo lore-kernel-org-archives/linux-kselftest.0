@@ -1,23 +1,22 @@
-From: mbenes at suse.cz (Miroslav Benes)
-Date: Tue, 22 May 2018 16:27:30 +0200 (CEST)
-Subject: [PATCH v4 0/1] Add livepatch kselftests
-In-Reply-To: <1524680930-28168-1-git-send-email-joe.lawrence@redhat.com>
-References: <1524680930-28168-1-git-send-email-joe.lawrence@redhat.com>
-Message-ID: <alpine.LSU.2.21.1805221617160.1847@pobox.suse.cz>
+From: shuah at kernel.org (Shuah Khan)
+Date: Tue, 22 May 2018 09:33:22 -0600
+Subject: [PATCH v2] selftests: cgroup/memcontrol: add basic test for
+ socket accounting
+In-Reply-To: <1526562346-27178-1-git-send-email-rppt@linux.vnet.ibm.com>
+References: <1526562346-27178-1-git-send-email-rppt@linux.vnet.ibm.com>
+Message-ID: <2b43cc2d-8d1b-1e20-b215-1c4d6edd20d2@kernel.org>
 
-On Wed, 25 Apr 2018, Joe Lawrence wrote:
+Hi Mike,
 
-> This round incorporates feedback from SUSE folks, Miroslav, Petr and
-> Libor.  Thanks for the reviews and feedback!
-> 
-> Like the previous version, this applies on top of Petr's shadow variable
-> changes and the atomic replace patchset.
+On 05/17/2018 07:05 AM, Mike Rapoport wrote:
+> Signed-off-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
+> Acked-by: Roman Gushchin <guro at fb.com>
+> ---
 
-I skimmed through it and I did not find anything suspicious. It also works 
-as advertised. It'd great if someone from kselftest ML took a look.
+You are missing the commit log. Please add the commit log and resend.
 
-Thanks,
-Miroslav
+-- Shuah
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
