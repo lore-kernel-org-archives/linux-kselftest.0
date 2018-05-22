@@ -1,559 +1,247 @@
-From: christianvanbrauner at gmail.com (Christian Brauner)
-Date: Tue, 22 May 2018 21:34:21 +0200
-Subject: [PATCH] selftests: uevent filtering
-Message-ID: <20180522193421.7017-1-christian@brauner.io>
+From: rppt at linux.vnet.ibm.com (Mike Rapoport)
+Date: Tue, 22 May 2018 23:06:05 +0300
+Subject: [PATCH v3] selftests: cgroup/memcontrol: add basic test for socket
+ accounting
+Message-ID: <1527019565-20470-1-git-send-email-rppt@linux.vnet.ibm.com>
 
-Recent discussions around uevent filtering (cf. net-next commit [1], [2],
-and [3] and discussions in [4], [5], and [6]) have shown that the semantics
-around uevent filtering where not well understood.
-Now that we have settled - at least for the moment - how uevent filtering
-should look like let's add some selftests to ensure we don't regress
-anything in the future.
-Note, the semantics of uevent filtering are described in detail in my
-commit message to [2] so I won't repeat them here.
+The test verifies that when there is active TCP connection, the
+memory.stat.sock and memory.current values are close.
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=90d52d4fd82007005125d9a8d2d560a1ca059b9d
-[2]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=a3498436b3a0f8ec289e6847e1de40b4123e1639
-[3]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=26045a7b14bc7a5455e411d820110f66557d6589
-[4]: https://lkml.org/lkml/2018/4/4/739
-[5]: https://lkml.org/lkml/2018/4/26/767
-[6]: https://lkml.org/lkml/2018/4/26/738
-
-Signed-off-by: Christian Brauner <christian at brauner.io>
+Signed-off-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
+Acked-by: Roman Gushchin <guro at fb.com>
 ---
- tools/testing/selftests/uevent/Makefile       |  17 +
- tools/testing/selftests/uevent/config         |   2 +
- .../selftests/uevent/uevent_filtering.c       | 486 ++++++++++++++++++
- 3 files changed, 505 insertions(+)
- create mode 100644 tools/testing/selftests/uevent/Makefile
- create mode 100644 tools/testing/selftests/uevent/config
- create mode 100644 tools/testing/selftests/uevent/uevent_filtering.c
+v3 changes:
+* added changelog
 
-diff --git a/tools/testing/selftests/uevent/Makefile b/tools/testing/selftests/uevent/Makefile
-new file mode 100644
-index 000000000000..f7baa9aa2932
---- /dev/null
-+++ b/tools/testing/selftests/uevent/Makefile
-@@ -0,0 +1,17 @@
-+# SPDX-License-Identifier: GPL-2.0
-+all:
-+
-+include ../lib.mk
-+
-+.PHONY: all clean
-+
-+BINARIES := uevent_filtering
-+CFLAGS += -Wl,-no-as-needed -Wall
-+
-+uevent_filtering: uevent_filtering.c ../kselftest.h ../kselftest_harness.h
-+	$(CC) $(CFLAGS) $< -o $@
-+
-+TEST_PROGS += $(BINARIES)
-+EXTRA_CLEAN := $(BINARIES)
-+
-+all: $(BINARIES)
-diff --git a/tools/testing/selftests/uevent/config b/tools/testing/selftests/uevent/config
-new file mode 100644
-index 000000000000..1038f4515be8
---- /dev/null
-+++ b/tools/testing/selftests/uevent/config
-@@ -0,0 +1,2 @@
-+CONFIG_USER_NS=y
-+CONFIG_NET=y
-diff --git a/tools/testing/selftests/uevent/uevent_filtering.c b/tools/testing/selftests/uevent/uevent_filtering.c
-new file mode 100644
-index 000000000000..f83391aa42cf
---- /dev/null
-+++ b/tools/testing/selftests/uevent/uevent_filtering.c
-@@ -0,0 +1,486 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/netlink.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/prctl.h>
+v2 changes:
+* bumped error percentage for comparing memory.current with memory.stat.sock
+* added checks that memory.stat.sock == 0 and memory.current >= 0 after TCP
+server exits
+* simplified error handling
+
+ tools/testing/selftests/cgroup/test_memcontrol.c | 193 +++++++++++++++++++++++
+ 1 file changed, 193 insertions(+)
+
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index beae06c9c899..cf0bddc9d271 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -9,6 +9,12 @@
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <unistd.h>
 +#include <sys/socket.h>
-+#include <sched.h>
-+#include <sys/eventfd.h>
-+#include <sys/stat.h>
-+#include <sys/syscall.h>
-+#include <sys/types.h>
 +#include <sys/wait.h>
-+#include <unistd.h>
++#include <arpa/inet.h>
++#include <netinet/in.h>
++#include <netdb.h>
++#include <errno.h>
+ 
+ #include "../kselftest.h"
+ #include "cgroup_util.h"
+@@ -772,6 +778,192 @@ static int test_memcg_oom_events(const char *root)
+ 	return ret;
+ }
+ 
++struct tcp_server_args {
++	unsigned short port;
++	int ctl[2];
++};
 +
-+#include "../kselftest.h"
-+#include "../kselftest_harness.h"
-+
-+#define __DEV_FULL "/sys/devices/virtual/mem/full/uevent"
-+#define __UEVENT_BUFFER_SIZE (2048 * 2)
-+#define __UEVENT_HEADER "add@/devices/virtual/mem/full"
-+#define __UEVENT_HEADER_LEN sizeof("add@/devices/virtual/mem/full")
-+#define __UEVENT_LISTEN_ALL -1
-+
-+ssize_t read_nointr(int fd, void *buf, size_t count)
++static int tcp_server(const char *cgroup, void *arg)
 +{
-+	ssize_t ret;
++	struct tcp_server_args *srv_args = arg;
++	struct sockaddr_in6 saddr = { 0 };
++	socklen_t slen = sizeof(saddr);
++	int sk, client_sk, ctl_fd, yes = 1, ret = -1;
 +
-+again:
-+	ret = read(fd, buf, count);
-+	if (ret < 0 && errno == EINTR)
-+		goto again;
++	close(srv_args->ctl[0]);
++	ctl_fd = srv_args->ctl[1];
 +
-+	return ret;
-+}
++	saddr.sin6_family = AF_INET6;
++	saddr.sin6_addr = in6addr_any;
++	saddr.sin6_port = htons(srv_args->port);
 +
-+ssize_t write_nointr(int fd, const void *buf, size_t count)
-+{
-+	ssize_t ret;
++	sk = socket(AF_INET6, SOCK_STREAM, 0);
++	if (sk < 0)
++		return ret;
 +
-+again:
-+	ret = write(fd, buf, count);
-+	if (ret < 0 && errno == EINTR)
-+		goto again;
++	if (setsockopt(sk, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) < 0)
++		goto cleanup;
 +
-+	return ret;
-+}
-+
-+int wait_for_pid(pid_t pid)
-+{
-+	int status, ret;
-+
-+again:
-+	ret = waitpid(pid, &status, 0);
-+	if (ret == -1) {
-+		if (errno == EINTR)
-+			goto again;
-+
-+		return -1;
++	if (bind(sk, (struct sockaddr *)&saddr, slen)) {
++		write(ctl_fd, &errno, sizeof(errno));
++		goto cleanup;
 +	}
 +
-+	if (ret != pid)
-+		goto again;
++	if (listen(sk, 1))
++		goto cleanup;
 +
-+	if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static int uevent_listener(unsigned long post_flags, bool expect_uevent,
-+			   int sync_fd)
-+{
-+	int sk_fd, ret;
-+	socklen_t sk_addr_len;
-+	int fret = -1, rcv_buf_sz = __UEVENT_BUFFER_SIZE;
-+	uint64_t sync_add = 1;
-+	struct sockaddr_nl sk_addr = { 0 }, rcv_addr = { 0 };
-+	char buf[__UEVENT_BUFFER_SIZE] = { 0 };
-+	struct iovec iov = { buf, __UEVENT_BUFFER_SIZE };
-+	char control[CMSG_SPACE(sizeof(struct ucred))];
-+	struct msghdr hdr = {
-+		&rcv_addr, sizeof(rcv_addr), &iov, 1,
-+		control,   sizeof(control),  0,
-+	};
-+
-+	sk_fd = socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC,
-+		       NETLINK_KOBJECT_UEVENT);
-+	if (sk_fd < 0) {
-+		fprintf(stderr, "%s - Failed to open uevent socket\n", strerror(errno));
-+		return -1;
++	ret = 0;
++	if (write(ctl_fd, &ret, sizeof(ret)) != sizeof(ret)) {
++		ret = -1;
++		goto cleanup;
 +	}
 +
-+	ret = setsockopt(sk_fd, SOL_SOCKET, SO_RCVBUF, &rcv_buf_sz,
-+			 sizeof(rcv_buf_sz));
-+	if (ret < 0) {
-+		fprintf(stderr, "%s - Failed to set socket options\n", strerror(errno));
-+		goto on_error;
-+	}
++	client_sk = accept(sk, NULL, NULL);
++	if (client_sk < 0)
++		goto cleanup;
 +
-+	sk_addr.nl_family = AF_NETLINK;
-+	sk_addr.nl_groups = __UEVENT_LISTEN_ALL;
-+
-+	sk_addr_len = sizeof(sk_addr);
-+	ret = bind(sk_fd, (struct sockaddr *)&sk_addr, sk_addr_len);
-+	if (ret < 0) {
-+		fprintf(stderr, "%s - Failed to bind socket\n", strerror(errno));
-+		goto on_error;
-+	}
-+
-+	ret = getsockname(sk_fd, (struct sockaddr *)&sk_addr, &sk_addr_len);
-+	if (ret < 0) {
-+		fprintf(stderr, "%s - Failed to retrieve socket name\n", strerror(errno));
-+		goto on_error;
-+	}
-+
-+	if ((size_t)sk_addr_len != sizeof(sk_addr)) {
-+		fprintf(stderr, "Invalid socket address size\n");
-+		goto on_error;
-+	}
-+
-+	if (post_flags & CLONE_NEWUSER) {
-+		ret = unshare(CLONE_NEWUSER);
-+		if (ret < 0) {
-+			fprintf(stderr,
-+				"%s - Failed to unshare user namespace\n",
-+				strerror(errno));
-+			goto on_error;
-+		}
-+	}
-+
-+	if (post_flags & CLONE_NEWNET) {
-+		ret = unshare(CLONE_NEWNET);
-+		if (ret < 0) {
-+			fprintf(stderr,
-+				"%s - Failed to unshare network namespace\n",
-+				strerror(errno));
-+			goto on_error;
-+		}
-+	}
-+
-+	ret = write_nointr(sync_fd, &sync_add, sizeof(sync_add));
-+	close(sync_fd);
-+	if (ret != sizeof(sync_add)) {
-+		fprintf(stderr, "Failed to synchronize with parent process\n");
-+		goto on_error;
-+	}
-+
-+	fret = 0;
++	ret = -1;
 +	for (;;) {
-+		ssize_t r;
++		uint8_t buf[0x100000];
 +
-+		r = recvmsg(sk_fd, &hdr, 0);
-+		if (r <= 0) {
-+			fprintf(stderr, "%s - Failed to receive uevent\n", strerror(errno));
-+			ret = -1;
++		if (write(client_sk, buf, sizeof(buf)) <= 0) {
++			if (errno == ECONNRESET)
++				ret = 0;
 +			break;
 +		}
-+
-+		/* ignore libudev messages */
-+		if (memcmp(buf, "libudev", 8) == 0)
-+			continue;
-+
-+		/* ignore uevents we didn't trigger */
-+		if (memcmp(buf, __UEVENT_HEADER, __UEVENT_HEADER_LEN) != 0)
-+			continue;
-+
-+		if (!expect_uevent) {
-+			fprintf(stderr, "Received unexpected uevent:\n");
-+			ret = -1;
-+		}
-+
-+		if (TH_LOG_ENABLED) {
-+			/* If logging is enabled dump the received uevent. */
-+			(void)write_nointr(STDERR_FILENO, buf, r);
-+			(void)write_nointr(STDERR_FILENO, "\n", 1);
-+		}
-+
-+		break;
 +	}
 +
-+on_error:
-+	close(sk_fd);
++	close(client_sk);
 +
-+	return fret;
++cleanup:
++	close(sk);
++	return ret;
 +}
 +
-+int trigger_uevent(unsigned int times)
++static int tcp_client(const char *cgroup, unsigned short port)
 +{
-+	int fd, ret;
-+	unsigned int i;
++	const char server[] = "localhost";
++	struct addrinfo *ai;
++	char servport[6];
++	int retries = 0x10; /* nice round number */
++	int sk, ret;
 +
-+	fd = open(__DEV_FULL, O_RDWR | O_CLOEXEC);
-+	if (fd < 0) {
-+		if (errno != ENOENT)
-+			return -EINVAL;
++	snprintf(servport, sizeof(servport), "%hd", port);
++	ret = getaddrinfo(server, servport, NULL, &ai);
++	if (ret)
++		return ret;
 +
-+		return -1;
-+	}
++	sk = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
++	if (sk < 0)
++		goto free_ainfo;
 +
-+	for (i = 0; i < times; i++) {
-+		ret = write_nointr(fd, "add\n", sizeof("add\n") - 1);
-+		if (ret < 0) {
-+			fprintf(stderr, "Failed to trigger uevent\n");
++	ret = connect(sk, ai->ai_addr, ai->ai_addrlen);
++	if (ret < 0)
++		goto close_sk;
++
++	ret = KSFT_FAIL;
++	while (retries--) {
++		uint8_t buf[0x100000];
++		long current, sock;
++
++		if (read(sk, buf, sizeof(buf)) <= 0)
++			goto close_sk;
++
++		current = cg_read_long(cgroup, "memory.current");
++		sock = cg_read_key_long(cgroup, "memory.stat", "sock ");
++
++		if (current < 0 || sock < 0)
++			goto close_sk;
++
++		if (current < sock)
++			goto close_sk;
++
++		if (values_close(current, sock, 10)) {
++			ret = KSFT_PASS;
 +			break;
 +		}
 +	}
-+	close(fd);
++
++close_sk:
++	close(sk);
++free_ainfo:
++	freeaddrinfo(ai);
++	return ret;
++}
++
++/*
++ * This test checks socket memory accounting.
++ * The test forks a TCP server listens on a random port between 1000
++ * and 61000. Once it gets a client connection, it starts writing to
++ * its socket.
++ * The TCP client interleaves reads from the socket with check whether
++ * memory.current and memory.stat.sock are similar.
++ */
++static int test_memcg_sock(const char *root)
++{
++	int bind_retries = 5, ret = KSFT_FAIL, pid, err;
++	unsigned short port;
++	char *memcg;
++
++	memcg = cg_name(root, "memcg_test");
++	if (!memcg)
++		goto cleanup;
++
++	if (cg_create(memcg))
++		goto cleanup;
++
++	while (bind_retries--) {
++		struct tcp_server_args args;
++
++		if (pipe(args.ctl))
++			goto cleanup;
++
++		port = args.port = 1000 + rand() % 60000;
++
++		pid = cg_run_nowait(memcg, tcp_server, &args);
++		if (pid < 0)
++			goto cleanup;
++
++		close(args.ctl[1]);
++		if (read(args.ctl[0], &err, sizeof(err)) != sizeof(err))
++			goto cleanup;
++		close(args.ctl[0]);
++
++		if (!err)
++			break;
++		if (err != EADDRINUSE)
++			goto cleanup;
++
++		waitpid(pid, NULL, 0);
++	}
++
++	if (err == EADDRINUSE) {
++		ret = KSFT_SKIP;
++		goto cleanup;
++	}
++
++	if (tcp_client(memcg, port) != KSFT_PASS)
++		goto cleanup;
++
++	waitpid(pid, &err, 0);
++	if (WEXITSTATUS(err))
++		goto cleanup;
++
++	if (cg_read_long(memcg, "memory.current") < 0)
++		goto cleanup;
++
++	if (cg_read_key_long(memcg, "memory.stat", "sock "))
++		goto cleanup;
++
++	ret = KSFT_PASS;
++
++cleanup:
++	cg_destroy(memcg);
++	free(memcg);
 +
 +	return ret;
 +}
 +
-+int set_death_signal(void)
-+{
-+	int ret;
-+	pid_t ppid;
-+
-+	ret = prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0);
-+
-+	/* Check whether we have been orphaned. */
-+	ppid = getppid();
-+	if (ppid == 1) {
-+		pid_t self;
-+
-+		self = getpid();
-+		ret = kill(self, SIGKILL);
-+	}
-+
-+	if (ret < 0)
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static int do_test(unsigned long pre_flags, unsigned long post_flags,
-+		   bool expect_uevent, int sync_fd)
-+{
-+	int ret;
-+	uint64_t wait_val;
-+	pid_t pid;
-+	sigset_t mask;
-+	sigset_t orig_mask;
-+	struct timespec timeout;
-+
-+	sigemptyset(&mask);
-+	sigaddset(&mask, SIGCHLD);
-+
-+	ret = sigprocmask(SIG_BLOCK, &mask, &orig_mask);
-+	if (ret < 0) {
-+		fprintf(stderr, "%s- Failed to block SIGCHLD\n", strerror(errno));
-+		return -1;
-+	}
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		fprintf(stderr, "%s - Failed to fork() new process\n", strerror(errno));
-+		return -1;
-+	}
-+
-+	if (pid == 0) {
-+		/* Make sure that we go away when our parent dies. */
-+		ret = set_death_signal();
-+		if (ret < 0) {
-+			fprintf(stderr, "Failed to set PR_SET_PDEATHSIG to SIGKILL\n");
-+			_exit(EXIT_FAILURE);
-+		}
-+
-+		if (pre_flags & CLONE_NEWUSER) {
-+			ret = unshare(CLONE_NEWUSER);
-+			if (ret < 0) {
-+				fprintf(stderr,
-+					"%s - Failed to unshare user namespace\n",
-+					strerror(errno));
-+				_exit(EXIT_FAILURE);
-+			}
-+		}
-+
-+		if (pre_flags & CLONE_NEWNET) {
-+			ret = unshare(CLONE_NEWNET);
-+			if (ret < 0) {
-+				fprintf(stderr,
-+					"%s - Failed to unshare network namespace\n",
-+					strerror(errno));
-+				_exit(EXIT_FAILURE);
-+			}
-+		}
-+
-+		if (uevent_listener(post_flags, expect_uevent, sync_fd) < 0)
-+			_exit(EXIT_FAILURE);
-+
-+		_exit(EXIT_SUCCESS);
-+	}
-+
-+	ret = read_nointr(sync_fd, &wait_val, sizeof(wait_val));
-+	if (ret != sizeof(wait_val)) {
-+		fprintf(stderr, "Failed to synchronize with child process\n");
-+		_exit(EXIT_FAILURE);
-+	}
-+
-+	/* Trigger 10 uevents to account for the case where the kernel might
-+	 * drop some.
-+	 */
-+	ret = trigger_uevent(10);
-+	if (ret < 0)
-+		fprintf(stderr, "Failed triggering uevents\n");
-+
-+	/* Wait for 2 seconds before considering this failed. This should be
-+	 * plenty of time for the kernel to deliver the uevent even under heavy
-+	 * load.
-+	 */
-+	timeout.tv_sec = 2;
-+	timeout.tv_nsec = 0;
-+
-+again:
-+	ret = sigtimedwait(&mask, NULL, &timeout);
-+	if (ret < 0) {
-+		if (errno == EINTR)
-+			goto again;
-+
-+		if (!expect_uevent)
-+			ret = kill(pid, SIGTERM); /* success */
-+		else
-+			ret = kill(pid, SIGUSR1); /* error */
-+		if (ret < 0)
-+			return -1;
-+	}
-+
-+	ret = wait_for_pid(pid);
-+	if (ret < 0)
-+		return -1;
-+
-+	return ret;
-+}
-+
-+static void signal_handler(int sig)
-+{
-+	if (sig == SIGTERM)
-+		_exit(EXIT_SUCCESS);
-+
-+	_exit(EXIT_FAILURE);
-+}
-+
-+TEST(uevent_filtering)
-+{
-+	int ret, sync_fd;
-+	struct sigaction act;
-+
-+	if (geteuid()) {
-+		TH_LOG("Uevent filtering tests require root privileges. Skipping test");
-+		_exit(KSFT_SKIP);
-+	}
-+
-+	ret = access(__DEV_FULL, F_OK);
-+	EXPECT_EQ(0, ret) {
-+		if (errno == ENOENT) {
-+			TH_LOG(__DEV_FULL " does not exist. Skipping test");
-+			_exit(KSFT_SKIP);
-+		}
-+
-+		_exit(KSFT_FAIL);
-+	}
-+
-+	act.sa_handler = signal_handler;
-+	act.sa_flags = 0;
-+	sigemptyset(&act.sa_mask);
-+
-+	ret = sigaction(SIGTERM, &act, NULL);
-+	ASSERT_EQ(0, ret);
-+
-+	sync_fd = eventfd(0, EFD_CLOEXEC);
-+	ASSERT_GE(sync_fd, 0);
-+
-+	/*
-+	 * Setup:
-+	 * - Open uevent listening socket in initial network namespace owned by
-+	 *   initial user namespace.
-+	 * - Trigger uevent in initial network namespace owned by initial user
-+	 *   namespace.
-+	 * Expected Result:
-+	 * - uevent listening socket receives uevent
-+	 */
-+	ret = do_test(0, 0, true, sync_fd);
-+	ASSERT_EQ(0, ret) {
-+		goto do_cleanup;
-+	}
-+
-+	/*
-+	 * Setup:
-+	 * - Open uevent listening socket in non-initial network namespace
-+	 *   owned by initial user namespace.
-+	 * - Trigger uevent in initial network namespace owned by initial user
-+	 *   namespace.
-+	 * Expected Result:
-+	 * - uevent listening socket receives uevent
-+	 */
-+	ret = do_test(CLONE_NEWNET, 0, true, sync_fd);
-+	ASSERT_EQ(0, ret) {
-+		goto do_cleanup;
-+	}
-+
-+	/*
-+	 * Setup:
-+	 * - unshare user namespace
-+	 * - Open uevent listening socket in initial network namespace
-+	 *   owned by initial user namespace.
-+	 * - Trigger uevent in initial network namespace owned by initial user
-+	 *   namespace.
-+	 * Expected Result:
-+	 * - uevent listening socket receives uevent
-+	 */
-+	ret = do_test(CLONE_NEWUSER, 0, true, sync_fd);
-+	ASSERT_EQ(0, ret) {
-+		goto do_cleanup;
-+	}
-+
-+	/*
-+	 * Setup:
-+	 * - Open uevent listening socket in non-initial network namespace
-+	 *   owned by non-initial user namespace.
-+	 * - Trigger uevent in initial network namespace owned by initial user
-+	 *   namespace.
-+	 * Expected Result:
-+	 * - uevent listening socket receives no uevent
-+	 */
-+	ret = do_test(CLONE_NEWUSER | CLONE_NEWNET, 0, false, sync_fd);
-+	ASSERT_EQ(0, ret) {
-+		goto do_cleanup;
-+	}
-+
-+	/*
-+	 * Setup:
-+	 * - Open uevent listening socket in initial network namespace
-+	 *   owned by initial user namespace.
-+	 * - unshare network namespace
-+	 * - Trigger uevent in initial network namespace owned by initial user
-+	 *   namespace.
-+	 * Expected Result:
-+	 * - uevent listening socket receives uevent
-+	 */
-+	ret = do_test(0, CLONE_NEWNET, true, sync_fd);
-+	ASSERT_EQ(0, ret) {
-+		goto do_cleanup;
-+	}
-+
-+	/*
-+	 * Setup:
-+	 * - Open uevent listening socket in initial network namespace
-+	 *   owned by initial user namespace.
-+	 * - unshare user namespace
-+	 * - Trigger uevent in initial network namespace owned by initial user
-+	 *   namespace.
-+	 * Expected Result:
-+	 * - uevent listening socket receives uevent
-+	 */
-+	ret = do_test(0, CLONE_NEWUSER, true, sync_fd);
-+	ASSERT_EQ(0, ret) {
-+		goto do_cleanup;
-+	}
-+
-+	/*
-+	 * Setup:
-+	 * - Open uevent listening socket in initial network namespace
-+	 *   owned by initial user namespace.
-+	 * - unshare user namespace
-+	 * - unshare network namespace
-+	 * - Trigger uevent in initial network namespace owned by initial user
-+	 *   namespace.
-+	 * Expected Result:
-+	 * - uevent listening socket receives uevent
-+	 */
-+	ret = do_test(0, CLONE_NEWUSER | CLONE_NEWNET, true, sync_fd);
-+	ASSERT_EQ(0, ret) {
-+		goto do_cleanup;
-+	}
-+
-+do_cleanup:
-+	close(sync_fd);
-+}
-+
-+TEST_HARNESS_MAIN
+ #define T(x) { x, #x }
+ struct memcg_test {
+ 	int (*fn)(const char *root);
+@@ -785,6 +977,7 @@ struct memcg_test {
+ 	T(test_memcg_max),
+ 	T(test_memcg_oom_events),
+ 	T(test_memcg_swap_max),
++	T(test_memcg_sock),
+ };
+ #undef T
+ 
 -- 
-2.17.0
+2.7.4
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
