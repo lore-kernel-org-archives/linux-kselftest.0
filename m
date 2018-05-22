@@ -1,49 +1,46 @@
-From: bhole_prashant_q7 at lab.ntt.co.jp (Prashant Bhole)
-Date: Mon, 21 May 2018 14:16:11 +0900
-Subject: [PATCH bpf-next 0/5] fix test_sockmap
-In-Reply-To: <7ca8b025-c152-b0c9-a58b-cff722c2223e@kernel.org>
-References: <20180518071753.4768-1-bhole_prashant_q7@lab.ntt.co.jp>
- <7ca8b025-c152-b0c9-a58b-cff722c2223e@kernel.org>
-Message-ID: <1a604b94-6a84-c6ab-f166-ed3594ebcae9@lab.ntt.co.jp>
+From: guro at fb.com (Roman Gushchin)
+Date: Tue, 22 May 2018 11:10:31 +0100
+Subject: [PATCH] kselftest/cgroup: fix variable dereferenced before check
+ warning
+Message-ID: <20180522101031.8451-1-guro@fb.com>
 
+cg_name(const char *root, const char *name) is always called with
+non-empty root and name arguments, so there is no sense in checking
+it in the function body (after using in strlen()).
 
+Signed-off-by: Roman Gushchin <guro at fb.com>
+Reported-by: Dan Carpenter <dan.carpenter at oracle.com>
+Cc: linux-kselftest at vger.kernel.org
+---
+ tools/testing/selftests/cgroup/cgroup_util.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-On 5/19/2018 1:54 AM, Shuah Khan wrote:
-> On 05/18/2018 01:17 AM, Prashant Bhole wrote:
->> This series fixes bugs in test_sockmap code. They weren't caught
->> previously because failure in RX/TX thread was not notified to the
->> main thread.
->>
->> Also fixed data verification logic and slightly improved test output
->> such that parameters values (cork, apply, start, end) of failed test
->> can be easily seen.
->>
->> Note: Even after fixing above problems there are issues with tests
->> which set cork parameter. Tests fail (RX thread timeout) when cork
->> value is non-zero and overall data sent by TX thread isn't multiples
->> of cork value.
->>
->> Prashant Bhole (5):
->>    selftests/bpf: test_sockmap, check test failure
->>    selftests/bpf: test_sockmap, join cgroup in selftest mode
->>    selftests/bpf: test_sockmap, fix test timeout
->>    selftests/bpf: test_sockmap, fix data verification
->>    selftests/bpf: test_sockmap, print additional test options
->>
->>   tools/testing/selftests/bpf/test_sockmap.c | 76 +++++++++++++++++++++++-------
->>   1 file changed, 58 insertions(+), 18 deletions(-)
->>
-> 
-> Please remember to cc linux-kselftest mailing list as well. I would like to see
-> all the test patches cc'ed to it. Linaro and other test users watch the kselftest
-> mailing list. I also have patchwork project now to manage the patch volume. >
-> I am okay with patches going through net/bpf trees - there are always test
-> dependencies on net/bpf trees.
-> 
-Ok. I will remember this. Thanks.
-
--Prashant
-
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index 41cc3b5e5be1..b69bdeb4b9fe 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -59,8 +59,7 @@ char *cg_name(const char *root, const char *name)
+ 	size_t len = strlen(root) + strlen(name) + 2;
+ 	char *ret = malloc(len);
+ 
+-	if (name)
+-		snprintf(ret, len, "%s/%s", root, name);
++	snprintf(ret, len, "%s/%s", root, name);
+ 
+ 	return ret;
+ }
+@@ -70,8 +69,7 @@ char *cg_name_indexed(const char *root, const char *name, int index)
+ 	size_t len = strlen(root) + strlen(name) + 10;
+ 	char *ret = malloc(len);
+ 
+-	if (name)
+-		snprintf(ret, len, "%s/%s_%d", root, name, index);
++	snprintf(ret, len, "%s/%s_%d", root, name, index);
+ 
+ 	return ret;
+ }
+-- 
+2.14.3
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
