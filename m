@@ -1,77 +1,46 @@
 From: petrm@mellanox.com (Petr Machata)
-Date: Wed, 23 May 2018 18:35:01 +0200
-Subject: [PATCH net-next 2/3] selftests: forwarding: Test removal of underlay
- route
+Date: Wed, 23 May 2018 18:35:07 +0200
+Subject: [PATCH net-next 3/3] selftests: forwarding: Test removal of mirroring
 In-Reply-To: <cover.1527093017.git.petrm@mellanox.com>
 References: <cover.1527093017.git.petrm@mellanox.com>
 Message-ID:
- <0f1c5fd8a2e601ac13f3343a8de1cdd845da559e.1527093017.git.petrm@mellanox.com>
+ <daf8235f3af7ca43d2fcb220f309522982b713a4.1527093017.git.petrm@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180523163501.I7X8jKdk_MiSpdc-Q_miIUSmZ95zIGWWVFIkO5fTPFo@z>
+Message-ID: <20180523163507.Mw9JcxrYULesS8psgN2vh-VvPuL3QejVV3KIGgwB4kA@z>
 
-When underlay route is removed, the mirrored traffic should not be
-forwarded.
+Test that when flower-based mirror action is removed, mirroring stops.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 ---
- .../selftests/net/forwarding/mirror_gre_changes.sh | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ tools/testing/selftests/net/forwarding/mirror_gre_flower.sh | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh b/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh
-index a35fd55..e22a9e4 100755
---- a/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh
-@@ -13,6 +13,7 @@ ALL_TESTS="
- 	test_egress_up
- 	test_remote_ip
- 	test_tun_del
-+	test_route_del
- "
- 
- NUM_NETIFS=6
-@@ -189,6 +190,29 @@ test_span_gre_tun_del()
- 	log_test "$what: tunnel deleted ($tcflags)"
+diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_flower.sh b/tools/testing/selftests/net/forwarding/mirror_gre_flower.sh
+index 2e54407..12914f4 100755
+--- a/tools/testing/selftests/net/forwarding/mirror_gre_flower.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_gre_flower.sh
+@@ -67,6 +67,11 @@ test_span_gre_dir_acl()
+ 	test_span_gre_dir_ips "$@" 192.0.2.3 192.0.2.4
  }
  
-+test_span_gre_route_del()
++fail_test_span_gre_dir_acl()
 +{
-+	local tundev=$1; shift
-+	local edev=$1; shift
-+	local route=$1; shift
-+	local what=$1; shift
-+
-+	RET=0
-+
-+	mirror_install $swp1 ingress $tundev "matchall $tcflags"
-+	quick_test_span_gre_dir $tundev ingress
-+
-+	ip route del $route dev $edev
-+	fail_test_span_gre_dir $tundev ingress
-+
-+	ip route add $route dev $edev
-+	quick_test_span_gre_dir $tundev ingress
-+
-+	mirror_uninstall $swp1 ingress
-+
-+	log_test "$what: underlay route removal ($tcflags)"
++	fail_test_span_gre_dir_ips "$@" 192.0.2.3 192.0.2.4
 +}
 +
- test_ttl()
+ full_test_span_gre_dir_acl()
  {
- 	test_span_gre_ttl gt4 gretap ip "mirror to gretap"
-@@ -221,6 +245,12 @@ test_tun_del()
- 			      2001:db8:2::1 2001:db8:2::2 "mirror to ip6gretap"
+ 	local tundev=$1; shift
+@@ -83,6 +88,9 @@ full_test_span_gre_dir_acl()
+ 			  "$forward_type" "$backward_type"
+ 	mirror_uninstall $swp1 $direction
+ 
++	# Test lack of mirroring after ACL mirror is uninstalled.
++	fail_test_span_gre_dir_acl "$tundev" "$direction"
++
+ 	log_test "$direction $what ($tcflags)"
  }
  
-+test_route_del()
-+{
-+	test_span_gre_route_del gt4 $swp3 192.0.2.128/28 "mirror to gretap"
-+	test_span_gre_route_del gt6 $swp3 2001:db8:2::/64 "mirror to ip6gretap"
-+}
-+
- test_all()
- {
- 	slow_path_trap_install $swp1 ingress
 -- 
 2.4.11
 
