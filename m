@@ -1,20 +1,26 @@
-From: daniel at iogearbox.net (Daniel Borkmann)
-Date: Wed, 23 May 2018 12:29:25 +0200
-Subject: [PATCH v2] selftests: net: reuseport_bpf_numa: don't fail if no
- numa support
-In-Reply-To: <20180518222737.16006-1-anders.roxell@linaro.org>
-References: <20180306151004.31336-1-anders.roxell@linaro.org>
- <20180518222737.16006-1-anders.roxell@linaro.org>
-Message-ID: <ce493dd7-5813-6676-9e6b-7a97e74e7676@iogearbox.net>
+From: petrm at mellanox.com (Petr Machata)
+Date: Wed, 23 May 2018 18:34:49 +0200
+Subject: [PATCH net-next 0/3] selftests: forwarding: Additions to
+ mirror-to-gretap tests
+Message-ID: <cover.1527093017.git.petrm@mellanox.com>
 
-On 05/19/2018 12:27 AM, Anders Roxell wrote:
-> The reuseport_bpf_numa test case fails there's no numa support.  The
-> test shouldn't fail if there's no support it should be skipped.
-> 
-> Fixes: 3c2c3c16aaf6 ("reuseport, bpf: add test case for bpf_get_numa_node_id")
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+This patchset is for a handful of edge cases in mirror-to-gretap
+scenarios: removal of mirrored-to netdevice (#1), removal of underlay
+route for tunnel remote endpoint (#2) and cessation of mirroring upon
+removal of flower mirroring rule (#3).
 
-Applied to bpf tree, thanks Anders!
+Petr Machata (3):
+  selftests: forwarding: Test mirroring to deleted device
+  selftests: forwarding: Test removal of underlay route
+  selftests: forwarding: Test removal of mirroring
+
+ .../selftests/net/forwarding/mirror_gre_changes.sh | 68 ++++++++++++++++++++++
+ .../selftests/net/forwarding/mirror_gre_flower.sh  |  8 +++
+ 2 files changed, 76 insertions(+)
+
+-- 
+2.4.11
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
