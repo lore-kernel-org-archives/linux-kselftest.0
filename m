@@ -1,77 +1,69 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Wed, 23 May 2018 18:34:56 +0200
-Subject: [PATCH net-next 1/3] selftests: forwarding: Test mirroring to deleted
- device
+Date: Wed, 23 May 2018 18:35:01 +0200
+Subject: [PATCH net-next 2/3] selftests: forwarding: Test removal of underlay
+ route
 In-Reply-To: <cover.1527093017.git.petrm@mellanox.com>
 References: <cover.1527093017.git.petrm@mellanox.com>
-Message-ID: <d483f29572ab5b8f8a87e1ebe05a2e7f315a254d.1527093017.git.petrm@mellanox.com>
+Message-ID: <0f1c5fd8a2e601ac13f3343a8de1cdd845da559e.1527093017.git.petrm@mellanox.com>
 
-Tests that the mirroring code catches up with deletion of a mirrored-to
-device.
+When underlay route is removed, the mirrored traffic should not be
+forwarded.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 ---
- .../selftests/net/forwarding/mirror_gre_changes.sh | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ .../selftests/net/forwarding/mirror_gre_changes.sh | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh b/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh
-index 50ab346..a35fd55 100755
+index a35fd55..e22a9e4 100755
 --- a/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh
 +++ b/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh
-@@ -12,6 +12,7 @@ ALL_TESTS="
- 	test_tun_up
+@@ -13,6 +13,7 @@ ALL_TESTS="
  	test_egress_up
  	test_remote_ip
-+	test_tun_del
+ 	test_tun_del
++	test_route_del
  "
  
  NUM_NETIFS=6
-@@ -159,6 +160,35 @@ test_span_gre_remote_ip()
- 	log_test "$what: remote address change ($tcflags)"
+@@ -189,6 +190,29 @@ test_span_gre_tun_del()
+ 	log_test "$what: tunnel deleted ($tcflags)"
  }
  
-+test_span_gre_tun_del()
++test_span_gre_route_del()
 +{
 +	local tundev=$1; shift
-+	local type=$1; shift
-+	local flags=$1; shift
-+	local local_ip=$1; shift
-+	local remote_ip=$1; shift
++	local edev=$1; shift
++	local route=$1; shift
 +	local what=$1; shift
 +
 +	RET=0
 +
 +	mirror_install $swp1 ingress $tundev "matchall $tcflags"
 +	quick_test_span_gre_dir $tundev ingress
-+	ip link del dev $tundev
++
++	ip route del $route dev $edev
 +	fail_test_span_gre_dir $tundev ingress
 +
-+	tunnel_create $tundev $type $local_ip $remote_ip \
-+		      ttl 100 tos inherit $flags
-+
-+	# Recreating the tunnel doesn't reestablish mirroring, so reinstall it
-+	# and verify it works for the follow-up tests.
-+	mirror_uninstall $swp1 ingress
-+	mirror_install $swp1 ingress $tundev "matchall $tcflags"
++	ip route add $route dev $edev
 +	quick_test_span_gre_dir $tundev ingress
++
 +	mirror_uninstall $swp1 ingress
 +
-+	log_test "$what: tunnel deleted ($tcflags)"
++	log_test "$what: underlay route removal ($tcflags)"
 +}
 +
  test_ttl()
  {
  	test_span_gre_ttl gt4 gretap ip "mirror to gretap"
-@@ -183,6 +213,14 @@ test_remote_ip()
- 	test_span_gre_remote_ip gt6 ip6gretap 2001:db8:2::2 2001:db8:2::4 "mirror to ip6gretap"
+@@ -221,6 +245,12 @@ test_tun_del()
+ 			      2001:db8:2::1 2001:db8:2::2 "mirror to ip6gretap"
  }
  
-+test_tun_del()
++test_route_del()
 +{
-+	test_span_gre_tun_del gt4 gretap "" \
-+			      192.0.2.129 192.0.2.130 "mirror to gretap"
-+	test_span_gre_tun_del gt6 ip6gretap allow-localremote \
-+			      2001:db8:2::1 2001:db8:2::2 "mirror to ip6gretap"
++	test_span_gre_route_del gt4 $swp3 192.0.2.128/28 "mirror to gretap"
++	test_span_gre_route_del gt6 $swp3 2001:db8:2::/64 "mirror to ip6gretap"
 +}
 +
  test_all()
