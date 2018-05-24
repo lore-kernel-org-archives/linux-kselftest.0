@@ -1,68 +1,70 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Thu, 24 May 2018 16:27:31 +0200
-Subject: [PATCH net-next 05/10] selftests: forwarding: mirror_gre_lib: Support
- VLAN
+Date: Thu, 24 May 2018 16:27:35 +0200
+Subject: [PATCH net-next 06/10] selftests: forwarding: lib: Extract
+ trap_{,un}install()
 In-Reply-To: <cover.1527171860.git.petrm@mellanox.com>
 References: <cover.1527171860.git.petrm@mellanox.com>
-Message-ID: <65a48688c3c8c87cea558830b9fd1931137c011a.1527171860.git.petrm@mellanox.com>
+Message-ID: <62e6587e5459918306bda15380ac6b5e37024b4f.1527171860.git.petrm@mellanox.com>
 
-Add full_test_span_gre_dir_vlan_ips() and full_test_span_gre_dir_vlan()
-to support mirror-to-gre tests that involve VLAN.
+A mirror-to-vlan test that's coming next needs to install the trap
+unconditionally. Therefore extract from slow_path_trap_{,un}install()
+a more generic functions trap_install() and trap_uninstall(), and covert
+the former two to conditional wrappers around these.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 ---
- .../selftests/net/forwarding/mirror_gre_lib.sh     | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ tools/testing/selftests/net/forwarding/lib.sh | 27 ++++++++++++++++++---------
+ 1 file changed, 18 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh b/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
-index c7b2cdc..92ef6dd 100644
---- a/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
-@@ -43,6 +43,35 @@ full_test_span_gre_dir_ips()
- 	log_test "$direction $what ($tcflags)"
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 11c481c..e78ee7e 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -472,26 +472,35 @@ tc_offload_check()
+ 	return 0
  }
  
-+full_test_span_gre_dir_vlan_ips()
-+{
-+	local tundev=$1; shift
-+	local direction=$1; shift
-+	local vlan_match=$1; shift
-+	local forward_type=$1; shift
-+	local backward_type=$1; shift
-+	local what=$1; shift
-+	local ip1=$1; shift
-+	local ip2=$1; shift
-+
-+	RET=0
-+
-+	mirror_install $swp1 $direction $tundev "matchall $tcflags"
-+
-+	test_span_dir_ips "h3-$tundev" "$direction" "$forward_type" \
-+			  "$backward_type" "$ip1" "$ip2"
-+
-+	tc filter add dev $h3 ingress pref 77 prot 802.1q \
-+		flower $vlan_match ip_proto 0x2f \
-+		action pass
-+	mirror_test v$h1 $ip1 $ip2 $h3 77 10
-+	tc filter del dev $h3 ingress pref 77
-+
-+	mirror_uninstall $swp1 $direction
-+
-+	log_test "$direction $what ($tcflags)"
-+}
-+
- quick_test_span_gre_dir()
+-slow_path_trap_install()
++trap_install()
  {
- 	quick_test_span_gre_dir_ips "$@" 192.0.2.1 192.0.2.2
-@@ -62,3 +91,8 @@ full_test_span_gre_dir()
- {
- 	full_test_span_gre_dir_ips "$@" 192.0.2.1 192.0.2.2
+ 	local dev=$1; shift
+ 	local direction=$1; shift
+ 
+-	if [ "${tcflags/skip_hw}" != "$tcflags" ]; then
+-		# For slow-path testing, we need to install a trap to get to
+-		# slow path the packets that would otherwise be switched in HW.
+-		tc filter add dev $dev $direction pref 1 \
+-		   flower skip_sw action trap
+-	fi
++	# For slow-path testing, we need to install a trap to get to
++	# slow path the packets that would otherwise be switched in HW.
++	tc filter add dev $dev $direction pref 1 flower skip_sw action trap
  }
-+
-+full_test_span_gre_dir_vlan()
-+{
-+	full_test_span_gre_dir_vlan_ips "$@" 192.0.2.1 192.0.2.2
+ 
+-slow_path_trap_uninstall()
++trap_uninstall()
+ {
+ 	local dev=$1; shift
+ 	local direction=$1; shift
+ 
++	tc filter del dev $dev $direction pref 1 flower skip_sw
 +}
++
++slow_path_trap_install()
++{
++	if [ "${tcflags/skip_hw}" != "$tcflags" ]; then
++		trap_install "$@"
++	fi
++}
++
++slow_path_trap_uninstall()
++{
+ 	if [ "${tcflags/skip_hw}" != "$tcflags" ]; then
+-		tc filter del dev $dev $direction pref 1 flower skip_sw
++		trap_uninstall "$@"
+ 	fi
+ }
+ 
 -- 
 2.4.11
 
