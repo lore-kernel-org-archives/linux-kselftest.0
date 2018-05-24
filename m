@@ -1,32 +1,78 @@
-From: davem at davemloft.net (David Miller)
-Date: Wed, 23 May 2018 15:24:40 -0400 (EDT)
-Subject: [PATCH] selftests: uevent filtering
-In-Reply-To: <20180522193421.7017-1-christian@brauner.io>
-References: <20180522193421.7017-1-christian@brauner.io>
-Message-ID: <20180523.152440.915264101771444714.davem@davemloft.net>
+From: joelaf at google.com (Joel Fernandes)
+Date: Wed, 23 May 2018 18:21:49 -0700
+Subject: [PATCH v7 0/8] Centralize and unify usage of preempt/irq tracepoints
+Message-ID: <20180524012157.181277-1-joel@joelfernandes.org>
 
-From: Christian Brauner <christianvanbrauner at gmail.com>
-Date: Tue, 22 May 2018 21:34:21 +0200
+From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
 
-> Recent discussions around uevent filtering (cf. net-next commit [1], [2],
-> and [3] and discussions in [4], [5], and [6]) have shown that the semantics
-> around uevent filtering where not well understood.
-> Now that we have settled - at least for the moment - how uevent filtering
-> should look like let's add some selftests to ensure we don't regress
-> anything in the future.
-> Note, the semantics of uevent filtering are described in detail in my
-> commit message to [2] so I won't repeat them here.
-> 
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=90d52d4fd82007005125d9a8d2d560a1ca059b9d
-> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=a3498436b3a0f8ec289e6847e1de40b4123e1639
-> [3]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=26045a7b14bc7a5455e411d820110f66557d6589
-> [4]: https://lkml.org/lkml/2018/4/4/739
-> [5]: https://lkml.org/lkml/2018/4/26/767
-> [6]: https://lkml.org/lkml/2018/4/26/738
-> 
-> Signed-off-by: Christian Brauner <christian at brauner.io>
+This is the next revision of preempt/irq tracepoint centralization and
+unified usage across the kernel.
+The preempt/irq tracepoints exist but not everything in the kernel is
+using it. This makes things not work simultaneously (for ex, only either
+lockdep or irqsoff events can be used at a time). This series is an attempt to
+solve that, and also results in a nice clean up of kernel in general.
+Several ifdefs are simpler, and the design is more unified and better.
+Also as a result of this, we also speeded performance all rcuidle
+tracepoints since their handling is simpler.
 
-Applied to net-next, thanks.
+Few changes since v6:
+- Added a module to simulate an atomic section, a kselftest to load and
+  and trigger it which verifies the preempt-tracer and this series.
+
+- there is a new warning after I rebased in early boot, this is because
+early_boot_irqs_disabled was set too early, I moved it after the lockdep
+initialization.
+
+- added back the softirq fix since it appears it wasn't picked up.
+
+- Ran Ingo's locking API selftest suite which are passing with this
+  series.
+
+- Mathieu suggested ifdef'ing the tracepoint_synchronize_unregister
+  function incase tracepoints aren't enabled, did that.
+
+
+Joel Fernandes (Google) (7):
+  softirq: reorder trace_softirqs_on to prevent lockdep splat
+  srcu: Add notrace variant of srcu_dereference
+  trace/irqsoff: Split reset into separate functions
+  tracepoint: Make rcuidle tracepoint callers use SRCU
+  tracing: Centralize preemptirq tracepoints and unify their usage
+  lib: Add module to simulate atomic sections for testing preemptoff
+    tracers
+  kselftests: Add tests for the preemptoff and irqsoff tracers
+
+Paul McKenney (1):
+  srcu: Add notrace variants of srcu_read_{lock,unlock}
+
+ include/linux/ftrace.h                        |  11 +-
+ include/linux/irqflags.h                      |  11 +-
+ include/linux/lockdep.h                       |   8 +-
+ include/linux/preempt.h                       |   2 +-
+ include/linux/srcu.h                          |  22 ++
+ include/linux/tracepoint.h                    |  48 +++-
+ include/trace/events/preemptirq.h             |  23 +-
+ init/main.c                                   |   5 +-
+ kernel/locking/lockdep.c                      |  35 ++-
+ kernel/sched/core.c                           |   2 +-
+ kernel/softirq.c                              |   6 +-
+ kernel/trace/Kconfig                          |  22 +-
+ kernel/trace/Makefile                         |   2 +-
+ kernel/trace/trace_irqsoff.c                  | 235 ++++++------------
+ kernel/trace/trace_preemptirq.c               |  71 ++++++
+ kernel/tracepoint.c                           |  15 +-
+ lib/Kconfig.debug                             |   8 +
+ lib/Makefile                                  |   1 +
+ lib/test_atomic_sections.c                    |  79 ++++++
+ tools/testing/selftests/ftrace/config         |   3 +
+ .../test.d/preemptirq/irqsoff_tracer.tc       |  74 ++++++
+ 21 files changed, 454 insertions(+), 229 deletions(-)
+ create mode 100644 kernel/trace/trace_preemptirq.c
+ create mode 100644 lib/test_atomic_sections.c
+ create mode 100644 tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
+
+-- 
+2.17.0.441.gb46fe60e1d-goog
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
