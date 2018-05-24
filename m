@@ -1,79 +1,54 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Thu, 24 May 2018 16:27:21 +0200
-Subject: [PATCH net-next 03/10] selftests: forwarding: Add $h3's clsact to
- mirror_topo_lib.sh
+Date: Thu, 24 May 2018 16:27:26 +0200
+Subject: [PATCH net-next 04/10] selftests: forwarding: lib: Support VLAN
+ devices
 In-Reply-To: <cover.1527171860.git.petrm@mellanox.com>
 References: <cover.1527171860.git.petrm@mellanox.com>
-Message-ID: <4119543d66caca1a06e70d55bb41c7748c36d28a.1527171860.git.petrm@mellanox.com>
+Message-ID: <8f2315290ed342c054168a424962219b151a990c.1527171860.git.petrm@mellanox.com>
 
-Having a clsact qdisc on $h3 is useful in several tests, and will be
-useful in more tests to come. Move the registration from all the tests
-that need it into the topology file itself.
+Add vlan_create() and vlan_destroy() to manage VLAN netdevices.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 ---
- tools/testing/selftests/net/forwarding/mirror_gre.sh         | 2 --
- tools/testing/selftests/net/forwarding/mirror_gre_changes.sh | 2 --
- tools/testing/selftests/net/forwarding/mirror_topo_lib.sh    | 2 ++
- 3 files changed, 2 insertions(+), 4 deletions(-)
+ tools/testing/selftests/net/forwarding/lib.sh | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/tools/testing/selftests/net/forwarding/mirror_gre.sh b/tools/testing/selftests/net/forwarding/mirror_gre.sh
-index c6786d1..e6fd7a1 100755
---- a/tools/testing/selftests/net/forwarding/mirror_gre.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre.sh
-@@ -72,7 +72,6 @@ test_span_gre_mac()
- 	RET=0
- 
- 	mirror_install $swp1 $direction $tundev "matchall $tcflags"
--	tc qdisc add dev $h3 clsact
- 	tc filter add dev $h3 ingress pref 77 prot $prot \
- 		flower ip_proto 0x2f src_mac $swp3mac dst_mac $h3mac \
- 		action pass
-@@ -80,7 +79,6 @@ test_span_gre_mac()
- 	mirror_test v$h1 192.0.2.1 192.0.2.2 $h3 77 10
- 
- 	tc filter del dev $h3 ingress pref 77
--	tc qdisc del dev $h3 clsact
- 	mirror_uninstall $swp1 $direction
- 
- 	log_test "$direction $what: envelope MAC ($tcflags)"
-diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh b/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh
-index e22a9e4..aa29d46 100755
---- a/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh
-@@ -73,7 +73,6 @@ test_span_gre_ttl()
- 	RET=0
- 
- 	mirror_install $swp1 ingress $tundev "matchall $tcflags"
--	tc qdisc add dev $h3 clsact
- 	tc filter add dev $h3 ingress pref 77 prot $prot \
- 		flower ip_ttl 50 action pass
- 
-@@ -84,7 +83,6 @@ test_span_gre_ttl()
- 
- 	ip link set dev $tundev type $type ttl 100
- 	tc filter del dev $h3 ingress pref 77
--	tc qdisc del dev $h3 clsact
- 	mirror_uninstall $swp1 ingress
- 
- 	log_test "$what: TTL change ($tcflags)"
-diff --git a/tools/testing/selftests/net/forwarding/mirror_topo_lib.sh b/tools/testing/selftests/net/forwarding/mirror_topo_lib.sh
-index 5b787972..04979e5 100644
---- a/tools/testing/selftests/net/forwarding/mirror_topo_lib.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_topo_lib.sh
-@@ -46,10 +46,12 @@ mirror_topo_h2_destroy()
- mirror_topo_h3_create()
- {
- 	simple_if_init $h3
-+	tc qdisc add dev $h3 clsact
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index d5aa864..11c481c 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -362,6 +362,31 @@ tunnel_destroy()
+ 	ip link del dev $name
  }
  
- mirror_topo_h3_destroy()
++vlan_create()
++{
++	local if_name=$1; shift
++	local vid=$1; shift
++	local vrf=$1; shift
++	local ips=("${@}")
++	local name=$if_name.$vid
++
++	ip link add name $name link $if_name type vlan id $vid
++	if [ "$vrf" != "" ]; then
++		ip link set dev $name master $vrf
++	fi
++	ip link set dev $name up
++	__addr_add_del $name add "${ips[@]}"
++}
++
++vlan_destroy()
++{
++	local if_name=$1; shift
++	local vid=$1; shift
++	local name=$if_name.$vid
++
++	ip link del dev $name
++}
++
+ master_name_get()
  {
-+	tc qdisc del dev $h3 clsact
- 	simple_if_fini $h3
- }
- 
+ 	local if_name=$1
 -- 
 2.4.11
 
