@@ -1,229 +1,163 @@
 From: petrm@mellanox.com (Petr Machata)
-Date: Thu, 24 May 2018 16:27:10 +0200
-Subject: [PATCH net-next 01/10] selftests: forwarding: Split
- mirror_gre_topo_lib.sh
+Date: Thu, 24 May 2018 16:27:16 +0200
+Subject: [PATCH net-next 02/10] selftests: forwarding: mirror_gre_lib: Extract
+ generic functions
 In-Reply-To: <cover.1527171860.git.petrm@mellanox.com>
 References: <cover.1527171860.git.petrm@mellanox.com>
 Message-ID:
- <addb3679a348a0bef04f1cabf0484892a46b0890.1527171860.git.petrm@mellanox.com>
+ <2f771a18324d9d904fc3e50600dcf8793fb6bd68.1527171860.git.petrm@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180524142710.jYmRtanQBEiKEucYRPnqObJqiIGEH0iCaT5s0mlNiJU@z>
+Message-ID: <20180524142716.Dq3SJYqEbkCnq9JYRdDIA_4KVP1mJFjeYiZAqz5ziOA@z>
 
-Move generic parts of mirror_gre_topo_lib.sh into a new file
-mirror_topo_lib.sh. Reuse the functions in GRE topo, adding the tunnel
-devices as necessary.
+For non-GRE mirroring tests, a functions along the lines of
+do_test_span_gre_dir_ips() and test_span_gre_dir_ips() are necessary,
+but such that they don't assume tunnels are involved. Extract the code
+from mirror_gre_lib.sh to mirror_lib.sh and convert to just use a given
+device without assuming it's named "h3-$tundev". Convert the two
+above-mentioned functions to wrappers that pass along the correct device
+name.
+
+Add test_span_dir() and fail_test_span_dir() to round up the API for use
+by following patches.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 ---
- .../net/forwarding/mirror_gre_topo_lib.sh          | 53 ++----------
- .../selftests/net/forwarding/mirror_topo_lib.sh    | 99 ++++++++++++++++++++++
- 2 files changed, 108 insertions(+), 44 deletions(-)
- create mode 100644 tools/testing/selftests/net/forwarding/mirror_topo_lib.sh
+ .../selftests/net/forwarding/mirror_gre_lib.sh     | 41 ++++------------
+ .../testing/selftests/net/forwarding/mirror_lib.sh | 54 ++++++++++++++++++++++
+ 2 files changed, 64 insertions(+), 31 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_topo_lib.sh b/tools/testing/selftests/net/forwarding/mirror_gre_topo_lib.sh
-index b3ceda2..2534195 100644
---- a/tools/testing/selftests/net/forwarding/mirror_gre_topo_lib.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre_topo_lib.sh
-@@ -33,29 +33,11 @@
- #   |                                                                         |
- #   +-------------------------------------------------------------------------+
+diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh b/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
+index 207ffd1..c7b2cdc 100644
+--- a/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
+@@ -1,47 +1,26 @@
+ # SPDX-License-Identifier: GPL-2.0
  
--mirror_gre_topo_h1_create()
+-do_test_span_gre_dir_ips()
 -{
--	simple_if_init $h1 192.0.2.1/28
--}
+-	local expect=$1; shift
+-	local tundev=$1; shift
+-	local direction=$1; shift
+-	local ip1=$1; shift
+-	local ip2=$1; shift
 -
--mirror_gre_topo_h1_destroy()
--{
--	simple_if_fini $h1 192.0.2.1/28
+-	icmp_capture_install h3-$tundev
+-	mirror_test v$h1 $ip1 $ip2 h3-$tundev 100 $expect
+-	mirror_test v$h2 $ip2 $ip1 h3-$tundev 100 $expect
+-	icmp_capture_uninstall h3-$tundev
 -}
--
--mirror_gre_topo_h2_create()
--{
--	simple_if_init $h2 192.0.2.2/28
--}
--
--mirror_gre_topo_h2_destroy()
--{
--	simple_if_fini $h2 192.0.2.2/28
--}
-+source mirror_topo_lib.sh
++source mirror_lib.sh
  
- mirror_gre_topo_h3_create()
+ quick_test_span_gre_dir_ips()
  {
--	simple_if_init $h3
-+	mirror_topo_h3_create
- 
- 	tunnel_create h3-gt4 gretap 192.0.2.130 192.0.2.129
- 	ip link set h3-gt4 vrf v$h3
-@@ -71,49 +53,32 @@ mirror_gre_topo_h3_destroy()
- 	tunnel_destroy h3-gt6
- 	tunnel_destroy h3-gt4
- 
--	simple_if_fini $h3
-+	mirror_topo_h3_destroy
+-	do_test_span_gre_dir_ips 10 "$@"
++	local tundev=$1; shift
++
++	do_test_span_dir_ips 10 h3-$tundev "$@"
  }
  
- mirror_gre_topo_switch_create()
+ fail_test_span_gre_dir_ips()
  {
--	ip link set dev $swp3 up
--
--	ip link add name br1 type bridge vlan_filtering 1
--	ip link set dev br1 up
--
--	ip link set dev $swp1 master br1
--	ip link set dev $swp1 up
--
--	ip link set dev $swp2 master br1
--	ip link set dev $swp2 up
-+	mirror_topo_switch_create
- 
- 	tunnel_create gt4 gretap 192.0.2.129 192.0.2.130 \
- 		      ttl 100 tos inherit
- 
- 	tunnel_create gt6 ip6gretap 2001:db8:2::1 2001:db8:2::2 \
- 		      ttl 100 tos inherit allow-localremote
--
--	tc qdisc add dev $swp1 clsact
+-	do_test_span_gre_dir_ips 0 "$@"
++	local tundev=$1; shift
++
++	do_test_span_dir_ips 0 h3-$tundev "$@"
  }
  
- mirror_gre_topo_switch_destroy()
+ test_span_gre_dir_ips()
  {
--	tc qdisc del dev $swp1 clsact
+ 	local tundev=$1; shift
+-	local direction=$1; shift
+-	local forward_type=$1; shift
+-	local backward_type=$1; shift
+-	local ip1=$1; shift
+-	local ip2=$1; shift
 -
- 	tunnel_destroy gt6
- 	tunnel_destroy gt4
+-	quick_test_span_gre_dir_ips "$tundev" "$direction" "$ip1" "$ip2"
+-
+-	icmp_capture_install h3-$tundev "type $forward_type"
+-	mirror_test v$h1 $ip1 $ip2 h3-$tundev 100 10
+-	icmp_capture_uninstall h3-$tundev
  
--	ip link set dev $swp1 down
--	ip link set dev $swp2 down
--	ip link del dev br1
--
--	ip link set dev $swp3 down
-+	mirror_topo_switch_destroy
+-	icmp_capture_install h3-$tundev "type $backward_type"
+-	mirror_test v$h2 $ip2 $ip1 h3-$tundev 100 10
+-	icmp_capture_uninstall h3-$tundev
++	test_span_dir_ips h3-$tundev "$@"
  }
  
- mirror_gre_topo_create()
- {
--	mirror_gre_topo_h1_create
--	mirror_gre_topo_h2_create
-+	mirror_topo_h1_create
-+	mirror_topo_h2_create
- 	mirror_gre_topo_h3_create
+ full_test_span_gre_dir_ips()
+@@ -57,8 +36,8 @@ full_test_span_gre_dir_ips()
+ 	RET=0
  
- 	mirror_gre_topo_switch_create
-@@ -124,6 +89,6 @@ mirror_gre_topo_destroy()
- 	mirror_gre_topo_switch_destroy
+ 	mirror_install $swp1 $direction $tundev "matchall $tcflags"
+-	test_span_gre_dir_ips "$tundev" "$direction" "$forward_type" \
+-			      "$backward_type" "$ip1" "$ip2"
++	test_span_dir_ips "h3-$tundev" "$direction" "$forward_type" \
++			  "$backward_type" "$ip1" "$ip2"
+ 	mirror_uninstall $swp1 $direction
  
- 	mirror_gre_topo_h3_destroy
--	mirror_gre_topo_h2_destroy
--	mirror_gre_topo_h1_destroy
-+	mirror_topo_h2_destroy
-+	mirror_topo_h1_destroy
+ 	log_test "$direction $what ($tcflags)"
+diff --git a/tools/testing/selftests/net/forwarding/mirror_lib.sh b/tools/testing/selftests/net/forwarding/mirror_lib.sh
+index e5028a5..04cbc38 100644
+--- a/tools/testing/selftests/net/forwarding/mirror_lib.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_lib.sh
+@@ -38,3 +38,57 @@ mirror_test()
+ 	((expect <= delta && delta <= expect + 2))
+ 	check_err $? "Expected to capture $expect packets, got $delta."
  }
-diff --git a/tools/testing/selftests/net/forwarding/mirror_topo_lib.sh b/tools/testing/selftests/net/forwarding/mirror_topo_lib.sh
-new file mode 100644
-index 0000000..5b787972
---- /dev/null
-+++ b/tools/testing/selftests/net/forwarding/mirror_topo_lib.sh
-@@ -0,0 +1,99 @@
-+# SPDX-License-Identifier: GPL-2.0
 +
-+# This is the standard topology for testing mirroring. The tests that use it
-+# tweak it in one way or another--typically add more devices to the topology.
-+#
-+#   +---------------------+                             +---------------------+
-+#   | H1                  |                             |                  H2 |
-+#   |     + $h1           |                             |           $h2 +     |
-+#   |     | 192.0.2.1/28  |                             |  192.0.2.2/28 |     |
-+#   +-----|---------------+                             +---------------|-----+
-+#         |                                                             |
-+#   +-----|-------------------------------------------------------------|-----+
-+#   | SW  o--> mirror                                                   |     |
-+#   | +---|-------------------------------------------------------------|---+ |
-+#   | |   + $swp1                    BR                           $swp2 +   | |
-+#   | +---------------------------------------------------------------------+ |
-+#   |                                                                         |
-+#   |     + $swp3                                                             |
-+#   +-----|-------------------------------------------------------------------+
-+#         |
-+#   +-----|-------------------------------------------------------------------+
-+#   | H3  + $h3                                                               |
-+#   |                                                                         |
-+#   +-------------------------------------------------------------------------+
-+
-+mirror_topo_h1_create()
++do_test_span_dir_ips()
 +{
-+	simple_if_init $h1 192.0.2.1/28
++	local expect=$1; shift
++	local dev=$1; shift
++	local direction=$1; shift
++	local ip1=$1; shift
++	local ip2=$1; shift
++
++	icmp_capture_install $dev
++	mirror_test v$h1 $ip1 $ip2 $dev 100 $expect
++	mirror_test v$h2 $ip2 $ip1 $dev 100 $expect
++	icmp_capture_uninstall $dev
 +}
 +
-+mirror_topo_h1_destroy()
++quick_test_span_dir_ips()
 +{
-+	simple_if_fini $h1 192.0.2.1/28
++	do_test_span_dir_ips 10 "$@"
 +}
 +
-+mirror_topo_h2_create()
++fail_test_span_dir_ips()
 +{
-+	simple_if_init $h2 192.0.2.2/28
++	do_test_span_dir_ips 0 "$@"
 +}
 +
-+mirror_topo_h2_destroy()
++test_span_dir_ips()
 +{
-+	simple_if_fini $h2 192.0.2.2/28
++	local dev=$1; shift
++	local direction=$1; shift
++	local forward_type=$1; shift
++	local backward_type=$1; shift
++	local ip1=$1; shift
++	local ip2=$1; shift
++
++	quick_test_span_dir_ips "$dev" "$direction" "$ip1" "$ip2"
++
++	icmp_capture_install $dev "type $forward_type"
++	mirror_test v$h1 $ip1 $ip2 $dev 100 10
++	icmp_capture_uninstall $dev
++
++	icmp_capture_install $dev "type $backward_type"
++	mirror_test v$h2 $ip2 $ip1 $dev 100 10
++	icmp_capture_uninstall $dev
 +}
 +
-+mirror_topo_h3_create()
++fail_test_span_dir()
 +{
-+	simple_if_init $h3
++	fail_test_span_dir_ips "$@" 192.0.2.1 192.0.2.2
 +}
 +
-+mirror_topo_h3_destroy()
++test_span_dir()
 +{
-+	simple_if_fini $h3
-+}
-+
-+mirror_topo_switch_create()
-+{
-+	ip link set dev $swp3 up
-+
-+	ip link add name br1 type bridge vlan_filtering 1
-+	ip link set dev br1 up
-+
-+	ip link set dev $swp1 master br1
-+	ip link set dev $swp1 up
-+
-+	ip link set dev $swp2 master br1
-+	ip link set dev $swp2 up
-+
-+	tc qdisc add dev $swp1 clsact
-+}
-+
-+mirror_topo_switch_destroy()
-+{
-+	tc qdisc del dev $swp1 clsact
-+
-+	ip link set dev $swp1 down
-+	ip link set dev $swp2 down
-+	ip link del dev br1
-+
-+	ip link set dev $swp3 down
-+}
-+
-+mirror_topo_create()
-+{
-+	mirror_topo_h1_create
-+	mirror_topo_h2_create
-+	mirror_topo_h3_create
-+
-+	mirror_topo_switch_create
-+}
-+
-+mirror_topo_destroy()
-+{
-+	mirror_topo_switch_destroy
-+
-+	mirror_topo_h3_destroy
-+	mirror_topo_h2_destroy
-+	mirror_topo_h1_destroy
++	test_span_dir_ips "$@" 192.0.2.1 192.0.2.2
 +}
 -- 
 2.4.11
