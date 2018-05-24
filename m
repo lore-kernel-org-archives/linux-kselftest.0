@@ -1,88 +1,36 @@
-From: joelaf@google.com (Joel Fernandes)
-Date: Wed, 23 May 2018 18:21:50 -0700
-Subject: [PATCH v7 1/8] softirq: reorder trace_softirqs_on to prevent lockdep
- splat
-In-Reply-To: <20180524012157.181277-1-joel@joelfernandes.org>
-References: <20180524012157.181277-1-joel@joelfernandes.org>
-Message-ID: <20180524012157.181277-2-joel@joelfernandes.org>
+From: sbrivio@redhat.com (Stefano Brivio)
+Date: Thu, 24 May 2018 16:10:12 +0200
+Subject: [PATCH net] selftests/net: Add missing config options for PMTU tests
+Message-ID:
+ <53b70df32d1d92df98a9c8deaae90e9e7ad37fbc.1527170629.git.sbrivio@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180524012150.kxXfF9t-XazJT1wbZyy_MXvqJEEIQKo7CiCdnxg3rzo@z>
+Message-ID: <20180524141012.AADHIU_SsTbyNqdznk4rd9XEh2-RiDaeK_ZZPSLvTCg@z>
 
-From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+PMTU tests in pmtu.sh need support for VTI, VTI6 and dummy
+interfaces: add them to config file.
 
-I'm able to reproduce a lockdep splat with config options:
-CONFIG_PROVE_LOCKING=y,
-CONFIG_DEBUG_LOCK_ALLOC=y and
-CONFIG_PREEMPTIRQ_EVENTS=y
-
-$ echo 1 > /d/tracing/events/preemptirq/preempt_enable/enable
-
-[   26.112609] DEBUG_LOCKS_WARN_ON(current->softirqs_enabled)
-[   26.112636] WARNING: CPU: 0 PID: 118 at kernel/locking/lockdep.c:3854
-[...]
-[   26.144229] Call Trace:
-[   26.144926]  <IRQ>
-[   26.145506]  lock_acquire+0x55/0x1b0
-[   26.146499]  ? __do_softirq+0x46f/0x4d9
-[   26.147571]  ? __do_softirq+0x46f/0x4d9
-[   26.148646]  trace_preempt_on+0x8f/0x240
-[   26.149744]  ? trace_preempt_on+0x4d/0x240
-[   26.150862]  ? __do_softirq+0x46f/0x4d9
-[   26.151930]  preempt_count_sub+0x18a/0x1a0
-[   26.152985]  __do_softirq+0x46f/0x4d9
-[   26.153937]  irq_exit+0x68/0xe0
-[   26.154755]  smp_apic_timer_interrupt+0x271/0x280
-[   26.156056]  apic_timer_interrupt+0xf/0x20
-[   26.157105]  </IRQ>
-
-The issue was this:
-
-preempt_count = 1 << SOFTIRQ_SHIFT
-
-	__local_bh_enable(cnt = 1 << SOFTIRQ_SHIFT) {
-		if (softirq_count() == (cnt && SOFTIRQ_MASK)) {
-			trace_softirqs_on() {
-				current->softirqs_enabled = 1;
-			}
-		}
-		preempt_count_sub(cnt) {
-			trace_preempt_on() {
-				tracepoint() {
-					rcu_read_lock_sched() {
-						// jumps into lockdep
-
-Where preempt_count still has softirqs disabled, but
-current->softirqs_enabled is true, and we get a splat.
-
-Cc: stable at vger.kernel.org
-Reviewed-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-Fixes: d59158162e032 ("tracing: Add support for preempt and irq enable/disable events")
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+Reported-by: Naresh Kamboju <naresh.kamboju at linaro.org>
+Fixes: d1f1b9cbf34c ("selftests: net: Introduce first PMTU test")
+Signed-off-by: Stefano Brivio <sbrivio at redhat.com>
 ---
- kernel/softirq.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/config | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index 177de3640c78..8a040bcaa033 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -139,9 +139,13 @@ static void __local_bh_enable(unsigned int cnt)
- {
- 	lockdep_assert_irqs_disabled();
- 
-+	if (preempt_count() == cnt)
-+		trace_preempt_on(CALLER_ADDR0, get_lock_parent_ip());
-+
- 	if (softirq_count() == (cnt & SOFTIRQ_MASK))
- 		trace_softirqs_on(_RET_IP_);
--	preempt_count_sub(cnt);
-+
-+	__preempt_count_sub(cnt);
- }
- 
- /*
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 6a75a3ea44ad..7ba089b33e8b 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -7,3 +7,8 @@ CONFIG_NET_L3_MASTER_DEV=y
+ CONFIG_IPV6=y
+ CONFIG_IPV6_MULTIPLE_TABLES=y
+ CONFIG_VETH=y
++CONFIG_INET_XFRM_MODE_TUNNEL=y
++CONFIG_NET_IPVTI=y
++CONFIG_INET6_XFRM_MODE_TUNNEL=y
++CONFIG_IPV6_VTI=y
++CONFIG_DUMMY=y
 -- 
-2.17.0.441.gb46fe60e1d-goog
+2.15.1
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
