@@ -1,44 +1,40 @@
 From: petrm@mellanox.com (Petr Machata)
-Date: Thu, 24 May 2018 16:27:55 +0200
-Subject: [PATCH net-next 08/10] selftests: forwarding: Test mirror-to-gre w/
- UL VLAN+802.1q
+Date: Thu, 24 May 2018 16:28:01 +0200
+Subject: [PATCH net-next 09/10] selftests: forwarding: Test mirror-to-gre w/
+ UL VLAN
 In-Reply-To: <cover.1527171860.git.petrm@mellanox.com>
 References: <cover.1527171860.git.petrm@mellanox.com>
 Message-ID:
- <0d431918534794d3ebadb15c3938808808b0bc45.1527171860.git.petrm@mellanox.com>
+ <db7d6a60183e93c098d4b68bc97344a24fc3e966.1527171860.git.petrm@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180524142755.aXG6hFDPJv-NQTmg2C0L1JUEHbpQ201_KQM3Zt28k3U@z>
+Message-ID: <20180524142801.7g8UrZPTocXNUXcAz80IGIJcPP2yLoirBf81HKsewLk@z>
 
-Test for "tc action mirred egress mirror" that mirrors to GRE when the
-underlay route points at a vlan device on top of a bridge device with
-vlan filtering (802.1q).
+Test for "tc action mirred egress mirror" that mirrors to a gretap
+netdevice whose underlay route points at a vlan device.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 ---
- .../net/forwarding/mirror_gre_vlan_bridge_1q.sh    | 140 +++++++++++++++++++++
- 1 file changed, 140 insertions(+)
- create mode 100755 tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh
+ .../selftests/net/forwarding/mirror_gre_vlan.sh    | 92 ++++++++++++++++++++++
+ 1 file changed, 92 insertions(+)
+ create mode 100755 tools/testing/selftests/net/forwarding/mirror_gre_vlan.sh
 
-diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh b/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh
+diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_vlan.sh b/tools/testing/selftests/net/forwarding/mirror_gre_vlan.sh
 new file mode 100755
-index 0000000..01ec28a
+index 0000000..88cecdb
 --- /dev/null
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh
-@@ -0,0 +1,140 @@
++++ b/tools/testing/selftests/net/forwarding/mirror_gre_vlan.sh
+@@ -0,0 +1,92 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +
 +# This test uses standard topology for testing gretap. See
 +# mirror_gre_topo_lib.sh for more details.
 +#
-+# Test for "tc action mirred egress mirror" when the underlay route points at a
-+# vlan device on top of a bridge device with vlan filtering (802.1q).
++# Test for "tc action mirred egress mirror" that mirrors to a gretap netdevice
++# whose underlay route points at a vlan device.
 +
 +ALL_TESTS="
 +	test_gretap
-+	test_ip6gretap
-+	test_gretap_forbidden
-+	test_ip6gretap_forbidden
 +"
 +
 +NUM_NETIFS=6
@@ -61,81 +57,36 @@ index 0000000..01ec28a
 +	vrf_prepare
 +	mirror_gre_topo_create
 +
-+	vlan_create br1 555 "" 192.0.2.129/32 2001:db8:2::1/128
-+	bridge vlan add dev br1 vid 555 self
-+	ip route rep 192.0.2.130/32 dev br1.555
-+	ip -6 route rep 2001:db8:2::2/128 dev br1.555
++	ip link add name $swp3.555 link $swp3 type vlan id 555
++	ip address add dev $swp3.555 192.0.2.129/32
++	ip address add dev $swp3.555 2001:db8:2::1/128
++	ip link set dev $swp3.555 up
 +
-+	vlan_create $h3 555 v$h3 192.0.2.130/28 2001:db8:2::2/64
++	ip route add 192.0.2.130/32 dev $swp3.555
++	ip -6 route add 2001:db8:2::2/128 dev $swp3.555
 +
-+	ip link set dev $swp3 master br1
-+	bridge vlan add dev $swp3 vid 555
++	ip link add name $h3.555 link $h3 type vlan id 555
++	ip link set dev $h3.555 master v$h3
++	ip address add dev $h3.555 192.0.2.130/28
++	ip address add dev $h3.555 2001:db8:2::2/64
++	ip link set dev $h3.555 up
 +}
 +
 +cleanup()
 +{
 +	pre_cleanup
 +
-+	ip link set dev $swp3 nomaster
-+	vlan_destroy $h3 555
-+	vlan_destroy br1 555
++	ip link del dev $h3.555
++	ip link del dev $swp3.555
 +
 +	mirror_gre_topo_destroy
 +	vrf_cleanup
 +}
 +
-+test_vlan_match()
-+{
-+	local tundev=$1; shift
-+	local vlan_match=$1; shift
-+	local what=$1; shift
-+
-+	full_test_span_gre_dir_vlan $tundev ingress "$vlan_match" 8 0 "$what"
-+	full_test_span_gre_dir_vlan $tundev egress "$vlan_match" 0 8 "$what"
-+}
-+
 +test_gretap()
 +{
-+	test_vlan_match gt4 'vlan_id 555 vlan_ethtype ip' "mirror to gretap"
-+}
-+
-+test_ip6gretap()
-+{
-+	test_vlan_match gt6 'vlan_id 555 vlan_ethtype ipv6' "mirror to ip6gretap"
-+}
-+
-+test_span_gre_forbidden()
-+{
-+	local tundev=$1; shift
-+	local what=$1; shift
-+
-+	RET=0
-+
-+	# Run the pass-test first, to prime neighbor table.
-+	mirror_install $swp1 ingress $tundev "matchall $tcflags"
-+	quick_test_span_gre_dir $tundev ingress
-+
-+	# Now forbid the VLAN at the bridge and see it fail.
-+	bridge vlan del dev br1 vid 555 self
-+	sleep 1
-+
-+	fail_test_span_gre_dir $tundev ingress
-+	mirror_uninstall $swp1 ingress
-+
-+	bridge vlan add dev br1 vid 555 self
-+	sleep 1
-+
-+	log_test "$what: vlan forbidden at a bridge ($tcflags)"
-+}
-+
-+test_gretap_forbidden()
-+{
-+	test_span_gre_forbidden gt4 "mirror to gretap"
-+}
-+
-+test_ip6gretap_forbidden()
-+{
-+	test_span_gre_forbidden gt4 "mirror to ip6gretap"
++	full_test_span_gre_dir gt4 ingress 8 0 "mirror to gretap"
++	full_test_span_gre_dir gt4 egress 0 8 "mirror to gretap"
 +}
 +
 +test_all()
