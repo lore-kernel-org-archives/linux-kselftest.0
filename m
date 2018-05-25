@@ -1,67 +1,223 @@
-From: mpe@ellerman.id.au (Michael Ellerman)
-Date: Fri, 25 May 2018 20:26:35 +1000
-Subject: [PATCH 1/2] selftests/powerpc: Add ptrace tests for Protection
- Key registers
-In-Reply-To: <874liwqy64.fsf@morokweng.localdomain>
-References: <20180223183344.21038-1-bauerman@linux.vnet.ibm.com>
- <87tvr6mlbe.fsf@concordia.ellerman.id.au>
- <874liwqy64.fsf@morokweng.localdomain>
-Message-ID: <87po1kqbdw.fsf@concordia.ellerman.id.au>
+From: namhyung@kernel.org (Namhyung Kim)
+Date: Fri, 25 May 2018 20:43:39 +0900
+Subject: [PATCH v7 6/8] tracing: Centralize preemptirq tracepoints and
+ unify their usage
+In-Reply-To: <20180524012157.181277-7-joel@joelfernandes.org>
+References: <20180524012157.181277-1-joel@joelfernandes.org>
+ <20180524012157.181277-7-joel@joelfernandes.org>
+Message-ID: <20180525114339.GA30990@sejong>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180525102635.t0j10IfIy9JLU2AEtblOQSNGsOH77wUJWaixkewm2iU@z>
+Message-ID: <20180525114339.IWK9zc4UEJOU42d7MnoOgIkSyipJ2lwPiuTpmzWrLUU@z>
 
-Thiago Jung Bauermann <bauerman at linux.ibm.com> writes:
-> Michael Ellerman <mpe at ellerman.id.au> writes:
->> Thiago Jung Bauermann <bauerman at linux.vnet.ibm.com> writes:
->>>  tools/testing/selftests/powerpc/include/reg.h      |   1 +
->>>  tools/testing/selftests/powerpc/ptrace/Makefile    |   5 +-
->>>  tools/testing/selftests/powerpc/ptrace/child.h     | 130 ++++++++
->>>  .../testing/selftests/powerpc/ptrace/ptrace-pkey.c | 326 +++++++++++++++++++++
->>
->> This is failing on machines without pkeys:
->>
->>   test: ptrace_pkey
->>   tags: git_version:52e7d87
->>   [FAIL] Test FAILED on line 117
->>   [FAIL] Test FAILED on line 191
->>   failure: ptrace_pkey
->>
->>
->> I think the first fail is in the child here:
->>
->> int ptrace_read_regs(pid_t child, unsigned long type, unsigned long regs[],
->> 		     int n)
->> {
->> 	struct iovec iov;
->> 	long ret;
->>
->> 	FAIL_IF(start_trace(child));
->>
->> 	iov.iov_base = regs;
->> 	iov.iov_len = n * sizeof(unsigned long);
->>
->> 	ret = ptrace(PTRACE_GETREGSET, child, type, &iov);
->> 	FAIL_IF(ret != 0);
->>
->>
->> Which makes sense.
->
-> Yes, that is indeed what is going on.
->
->> The test needs to skip if pkeys are not available/enabled. Using the
->> availability of the REGSET might actually be a nice way to detect that,
->> because it's read-only.
->
->  I forgot to consider the case of pkeys not available or not enabled,
->  sorry about that.
+Hi Joel,
 
-No worries.
+On Wed, May 23, 2018@06:21:55PM -0700, Joel Fernandes wrote:
+> From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
+> 
+> This patch detaches the preemptirq tracepoints from the tracers and
+> keeps it separate.
+> 
+> Advantages:
+> * Lockdep and irqsoff event can now run in parallel since they no longer
+> have their own calls.
+> 
+> * This unifies the usecase of adding hooks to an irqsoff and irqson
+> event, and a preemptoff and preempton event.
+>   3 users of the events exist:
+>   - Lockdep
+>   - irqsoff and preemptoff tracers
+>   - irqs and preempt trace events
+> 
+> The unification cleans up several ifdefs and makes the code in preempt
+> tracer and irqsoff tracers simpler. It gets rid of all the horrific
+> ifdeferry around PROVE_LOCKING and makes configuration of the different
+> users of the tracepoints more easy and understandable. It also gets rid
+> of the time_* function calls from the lockdep hooks used to call into
+> the preemptirq tracer which is not needed anymore. The negative delta in
+> lines of code in this patch is quite large too.
+> 
+> In the patch we introduce a new CONFIG option PREEMPTIRQ_TRACEPOINTS
+> as a single point for registering probes onto the tracepoints. With
+> this,
+> the web of config options for preempt/irq toggle tracepoints and its
+> users becomes:
+> 
+>  PREEMPT_TRACER   PREEMPTIRQ_EVENTS  IRQSOFF_TRACER PROVE_LOCKING
+>        |                 |     \         |           |
+>        \    (selects)    /      \        \ (selects) /
+>       TRACE_PREEMPT_TOGGLE       ----> TRACE_IRQFLAGS
+>                       \                  /
+>                        \ (depends on)   /
+>                      PREEMPTIRQ_TRACEPOINTS
+> 
+> One note, I have to check for lockdep recursion in the code that calls
+> the trace events API and bail out if we're in lockdep recursion
+> protection to prevent something like the following case: a spin_lock is
+> taken. Then lockdep_acquired is called.  That does a raw_local_irq_save
+> and then sets lockdep_recursion, and then calls __lockdep_acquired. In
+> this function, a call to get_lock_stats happens which calls
+> preempt_disable, which calls trace IRQS off somewhere which enters my
+> tracepoint code and sets the tracing_irq_cpu flag to prevent recursion.
+> This flag is then never cleared causing lockdep paths to never be
+> entered and thus causing splats and other bad things.
+> 
+> Other than the performance tests mentioned in the previous patch, I also
+> ran the locking API test suite. I verified that all tests cases are
+> passing.
+> 
+> I also injected issues by not registering lockdep probes onto the
+> tracepoints and I see failures to confirm that the probes are indeed
+> working.
+> 
+> Without probes:
+> 
+> [    0.000000]      hard-irqs-on + irq-safe-A/21:  ok  |  ok  |  ok  |
+> [    0.000000]      soft-irqs-on + irq-safe-A/21:  ok  |  ok  |  ok  |
+> [    0.000000]        sirq-safe-A => hirqs-on/12:  ok  |  ok  |  ok  |
+> [    0.000000]        sirq-safe-A => hirqs-on/21:  ok  |  ok  |  ok  |
+> [    0.000000]          hard-safe-A + irqs-on/12:  ok  |  ok  |  ok  |
+> [    0.000000]          soft-safe-A + irqs-on/12:  ok  |  ok  |  ok  |
+> [    0.000000]          hard-safe-A + irqs-on/21:  ok  |  ok  |  ok  |
+> [    0.000000]          soft-safe-A + irqs-on/21:  ok  |  ok  |  ok  |
+> [    0.000000]     hard-safe-A + unsafe-B #1/123:  ok  |  ok  |  ok  |
+> [    0.000000]     soft-safe-A + unsafe-B #1/123:  ok  |  ok  |  ok  |
+> 
+> With probes:
+> 
+> [    0.000000]      hard-irqs-on + irq-safe-A/21:  ok  |  ok  |  ok  |
+> [    0.000000]      soft-irqs-on + irq-safe-A/21:  ok  |  ok  |  ok  |
+> [    0.000000]        sirq-safe-A => hirqs-on/12:FAILED|FAILED|  ok  |
+> [    0.000000]        sirq-safe-A => hirqs-on/21:FAILED|FAILED|  ok  |
+> [    0.000000]          hard-safe-A + irqs-on/12:FAILED|FAILED|  ok  |
+> [    0.000000]          soft-safe-A + irqs-on/12:FAILED|FAILED|  ok  |
+> [    0.000000]          hard-safe-A + irqs-on/21:FAILED|FAILED|  ok  |
+> [    0.000000]          soft-safe-A + irqs-on/21:FAILED|FAILED|  ok  |
+> [    0.000000]     hard-safe-A + unsafe-B #1/123:  ok  |  ok  |  ok  |
+> [    0.000000]     soft-safe-A + unsafe-B #1/123:  ok  |  ok  |  ok  |
+> 
+> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> ---
 
-> I just sent a v2 which implements your suggestion above.
+[SNIP]
+>  
+>  #ifdef CONFIG_IRQSOFF_TRACER
+> +/*
+> + * We are only interested in hardirq on/off events:
+> + */
+> +static void tracer_hardirqs_on(void *none, unsigned long a0, unsigned long a1)
+> +{
+> +	if (!preempt_trace() && irq_trace())
+> +		stop_critical_timing(a0, a1);
+> +}
+> +
+> +static void tracer_hardirqs_off(void *none, unsigned long a0, unsigned long a1)
+> +{
+> +	if (!preempt_trace() && irq_trace())
+> +		start_critical_timing(a0, a1);
+> +}
+> +
+>  static int irqsoff_tracer_init(struct trace_array *tr)
+>  {
+>  	trace_type = TRACER_IRQS_OFF;
+>  
+> +	register_trace_irq_disable(tracer_hardirqs_off, NULL);
+> +	register_trace_irq_enable(tracer_hardirqs_on, NULL);
+>  	return __irqsoff_tracer_init(tr);
+>  }
+>  
+>  static void irqsoff_tracer_reset(struct trace_array *tr)
+>  {
+> +	unregister_trace_irq_disable(tracer_hardirqs_off, NULL);
+> +	unregister_trace_irq_enable(tracer_hardirqs_on, NULL);
+>  	__irqsoff_tracer_reset(tr);
+>  }
+>  
+> @@ -692,19 +650,37 @@ static struct tracer irqsoff_tracer __read_mostly =
+>  };
+>  # define register_irqsoff(trace) register_tracer(&trace)
+>  #else
+> +static inline void tracer_hardirqs_on(unsigned long a0, unsigned long a1) { }
+> +static inline void tracer_hardirqs_off(unsigned long a0, unsigned long a1) { }
 
-Thanks.
+Just a nitpick.  These lines seem unnecessary since they're used
+only when CONFIG_IRQSOFF_TRACER is enabled AFAICS.
 
-cheers
+
+>  # define register_irqsoff(trace) do { } while (0)
+> -#endif
+> +#endif /*  CONFIG_IRQSOFF_TRACER */
+>  
+>  #ifdef CONFIG_PREEMPT_TRACER
+> +static void tracer_preempt_on(void *none, unsigned long a0, unsigned long a1)
+> +{
+> +	if (preempt_trace() && !irq_trace())
+> +		stop_critical_timing(a0, a1);
+> +}
+> +
+> +static void tracer_preempt_off(void *none, unsigned long a0, unsigned long a1)
+> +{
+> +	if (preempt_trace() && !irq_trace())
+> +		start_critical_timing(a0, a1);
+> +}
+> +
+>  static int preemptoff_tracer_init(struct trace_array *tr)
+>  {
+>  	trace_type = TRACER_PREEMPT_OFF;
+>  
+> +	register_trace_preempt_disable(tracer_preempt_off, NULL);
+> +	register_trace_preempt_enable(tracer_preempt_on, NULL);
+>  	return __irqsoff_tracer_init(tr);
+>  }
+>  
+>  static void preemptoff_tracer_reset(struct trace_array *tr)
+>  {
+> +	unregister_trace_preempt_disable(tracer_preempt_off, NULL);
+> +	unregister_trace_preempt_enable(tracer_preempt_on, NULL);
+>  	__irqsoff_tracer_reset(tr);
+>  }
+>  
+> @@ -729,21 +705,32 @@ static struct tracer preemptoff_tracer __read_mostly =
+>  };
+>  # define register_preemptoff(trace) register_tracer(&trace)
+>  #else
+> +static inline void tracer_preempt_on(unsigned long a0, unsigned long a1) { }
+> +static inline void tracer_preempt_off(unsigned long a0, unsigned long a1) { }
+
+Ditto (for CONFIG_PREEMPT_TRACER).
+
+Thanks,
+Namhyung
+
+
+>  # define register_preemptoff(trace) do { } while (0)
+> -#endif
+> +#endif /* CONFIG_PREEMPT_TRACER */
+>  
+> -#if defined(CONFIG_IRQSOFF_TRACER) && \
+> -	defined(CONFIG_PREEMPT_TRACER)
+> +#if defined(CONFIG_IRQSOFF_TRACER) && defined(CONFIG_PREEMPT_TRACER)
+>  
+>  static int preemptirqsoff_tracer_init(struct trace_array *tr)
+>  {
+>  	trace_type = TRACER_IRQS_OFF | TRACER_PREEMPT_OFF;
+>  
+> +	register_trace_irq_disable(tracer_hardirqs_off, NULL);
+> +	register_trace_irq_enable(tracer_hardirqs_on, NULL);
+> +	register_trace_preempt_disable(tracer_preempt_off, NULL);
+> +	register_trace_preempt_enable(tracer_preempt_on, NULL);
+> +
+>  	return __irqsoff_tracer_init(tr);
+>  }
+>  
+>  static void preemptirqsoff_tracer_reset(struct trace_array *tr)
+>  {
+> +	unregister_trace_irq_disable(tracer_hardirqs_off, NULL);
+> +	unregister_trace_irq_enable(tracer_hardirqs_on, NULL);
+> +	unregister_trace_preempt_disable(tracer_preempt_off, NULL);
+> +	unregister_trace_preempt_enable(tracer_preempt_on, NULL);
+> +
+>  	__irqsoff_tracer_reset(tr);
+>  }
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
