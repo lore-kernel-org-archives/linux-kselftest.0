@@ -1,18 +1,24 @@
 From: davem at davemloft.net (David Miller)
-Date: Thu, 24 May 2018 22:14:49 -0400 (EDT)
-Subject: [PATCH net-next 0/3] selftests: forwarding: Additions to
- mirror-to-gretap tests
-In-Reply-To: <cover.1527093017.git.petrm@mellanox.com>
-References: <cover.1527093017.git.petrm@mellanox.com>
-Message-ID: <20180524.221449.331369875257512117.davem@davemloft.net>
+Date: Thu, 24 May 2018 22:26:42 -0400 (EDT)
+Subject: [PATCH net-next 00/10] Mirroring tests involving VLAN
+In-Reply-To: <cover.1527171860.git.petrm@mellanox.com>
+References: <cover.1527171860.git.petrm@mellanox.com>
+Message-ID: <20180524.222642.1508131441762277991.davem@davemloft.net>
 
 From: Petr Machata <petrm at mellanox.com>
-Date: Wed, 23 May 2018 18:34:49 +0200
+Date: Thu, 24 May 2018 16:27:04 +0200
 
-> This patchset is for a handful of edge cases in mirror-to-gretap
-> scenarios: removal of mirrored-to netdevice (#1), removal of underlay
-> route for tunnel remote endpoint (#2) and cessation of mirroring upon
-> removal of flower mirroring rule (#3).
+> This patchset tests mirror-to-gretap with various underlay
+> configurations involving VLAN netdevice in particular. Some of the tests
+> involve bridges as well, but tests aimed specifically at testing bridges
+> (i.e. FDB, STP) are not part of this patchset.
+> 
+> In patches #1-#6, the codebase is adapted to support the new tests.
+> 
+> In patch #7, a test for mirroring to VLAN is introduced.
+> 
+> Patches #8-#10 add three tests where VLAN is part of underlay path after
+> gretap encapsulation.
 
 Series applied, thank you.
 --
