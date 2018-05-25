@@ -1,61 +1,67 @@
-From: petrm@mellanox.com (Petr Machata)
-Date: Fri, 25 May 2018 12:05:38 +0300
-Subject: [PATCH net-next] selftests: net: Test headroom handling of
- ip6_gre devices
-In-Reply-To: <CALDO+Sbf3DEKyXnQNjyJNF-E+rroZ7XcKCYjiPOSDnzfkjwQiQ@mail.gmail.com>
- (William Tu's message of "Thu, 24 May 2018 09:19:53 -0700")
-References: <a78543459df02997bc298c09e9aa56167b22d5a4.1527093523.git.petrm@mellanox.com>
- <CALDO+Sbf3DEKyXnQNjyJNF-E+rroZ7XcKCYjiPOSDnzfkjwQiQ@mail.gmail.com>
-Message-ID: <wihfu2ggl5p.fsf@dev-r-vrt-156.mtr.labs.mlnx>
+From: mpe@ellerman.id.au (Michael Ellerman)
+Date: Fri, 25 May 2018 20:26:35 +1000
+Subject: [PATCH 1/2] selftests/powerpc: Add ptrace tests for Protection
+ Key registers
+In-Reply-To: <874liwqy64.fsf@morokweng.localdomain>
+References: <20180223183344.21038-1-bauerman@linux.vnet.ibm.com>
+ <87tvr6mlbe.fsf@concordia.ellerman.id.au>
+ <874liwqy64.fsf@morokweng.localdomain>
+Message-ID: <87po1kqbdw.fsf@concordia.ellerman.id.au>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180525090538.xEX7dH5PeMaR_3-OguYiMSQr-pRNZG5P-kknt4TPFYM@z>
+Message-ID: <20180525102635.t0j10IfIy9JLU2AEtblOQSNGsOH77wUJWaixkewm2iU@z>
 
-William Tu <u9012063 at gmail.com> writes:
-
->> +cleanup()
->> +{
->> +       ip link del dev swp1
->> +       ip link del dev swp3
->> +       ip link del dev vh3
-> I think we also need to do:
-> ip link del dev gt6
-
-gt6 is removed in test_headroom, but for early-break sort of scenarios I
-guess we do want to have it in cleanup() as well. With 2>/dev/null,
-because most of the time it will have been cleaned up already. I'll send
-a v2 like that.
-
->> +test_headroom()
->> +{
->> +       ip link add name gt6 "$@"
->> +       ip link set dev gt6 up
->> +
->> +       sleep 1
->> +
->> +       tc filter add dev swp1 ingress pref 1000 matchall skip_hw \
->> +               action mirred egress mirror dev gt6
->> +       ping -I h1 192.0.2.2 -c 1 -w 2 &> /dev/null
+Thiago Jung Bauermann <bauerman at linux.ibm.com> writes:
+> Michael Ellerman <mpe at ellerman.id.au> writes:
+>> Thiago Jung Bauermann <bauerman at linux.vnet.ibm.com> writes:
+>>>  tools/testing/selftests/powerpc/include/reg.h      |   1 +
+>>>  tools/testing/selftests/powerpc/ptrace/Makefile    |   5 +-
+>>>  tools/testing/selftests/powerpc/ptrace/child.h     | 130 ++++++++
+>>>  .../testing/selftests/powerpc/ptrace/ptrace-pkey.c | 326 +++++++++++++++++++++
+>>
+>> This is failing on machines without pkeys:
+>>
+>>   test: ptrace_pkey
+>>   tags: git_version:52e7d87
+>>   [FAIL] Test FAILED on line 117
+>>   [FAIL] Test FAILED on line 191
+>>   failure: ptrace_pkey
+>>
+>>
+>> I think the first fail is in the child here:
+>>
+>> int ptrace_read_regs(pid_t child, unsigned long type, unsigned long regs[],
+>> 		     int n)
+>> {
+>> 	struct iovec iov;
+>> 	long ret;
+>>
+>> 	FAIL_IF(start_trace(child));
+>>
+>> 	iov.iov_base = regs;
+>> 	iov.iov_len = n * sizeof(unsigned long);
+>>
+>> 	ret = ptrace(PTRACE_GETREGSET, child, type, &iov);
+>> 	FAIL_IF(ret != 0);
+>>
+>>
+>> Which makes sense.
 >
-> I increase ping count from 1 to 1000
-> and after a while the program hangs when I try to ctrl+c
-> + cleanup
-> + ip link del dev swp1
-> dmesg shows:
-> ....
-> [ 1256.002453] unregister_netdevice: waiting for swp1 to become free.
-> Usage count = 9
-> [ 1266.082571] unregister_netdevice: waiting for swp1 to become free.
-> Usage count = 9
-> [ 1276.163011] unregister_netdevice: waiting for swp1 to become free.
-> Usage count = 9
+> Yes, that is indeed what is going on.
+>
+>> The test needs to skip if pkeys are not available/enabled. Using the
+>> availability of the REGSET might actually be a nice way to detect that,
+>> because it's read-only.
+>
+>  I forgot to consider the case of pkeys not available or not enabled,
+>  sorry about that.
 
-Interesting. Looks like another bug, the headroom issue would panic
-after the first packet (and only after the first packet--increasing ping
-count doesn't make it more likely to reproduce, rerunning the whole
-script does).
+No worries.
 
-Thanks,
-Petr
+> I just sent a v2 which implements your suggestion above.
+
+Thanks.
+
+cheers
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
