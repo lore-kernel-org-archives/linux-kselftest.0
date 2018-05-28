@@ -1,87 +1,39 @@
 From: bhole_prashant_q7@lab.ntt.co.jp (Prashant Bhole)
-Date: Mon, 28 May 2018 13:37:59 +0900
-Subject: [PATCH bpf v2 1/5] selftests/bpf: test_sockmap, check test failure
+Date: Mon, 28 May 2018 13:38:01 +0900
+Subject: [PATCH bpf v2 3/5] selftests/bpf: test_sockmap, fix test timeout
 In-Reply-To: <20180528043803.4824-1-bhole_prashant_q7@lab.ntt.co.jp>
 References: <20180528043803.4824-1-bhole_prashant_q7@lab.ntt.co.jp>
-Message-ID: <20180528043803.4824-2-bhole_prashant_q7@lab.ntt.co.jp>
+Message-ID: <20180528043803.4824-4-bhole_prashant_q7@lab.ntt.co.jp>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180528043759.H41FyhzSJaDSWqwBomJsF7TVYNKh9mNoWf5zR-gGS18@z>
+Message-ID: <20180528043801.FlUWDRtJvW9VeF1vFLn2kRIq_AmF2Tbvu9SrgGOi5q8@z>
 
-Test failures are not identified because exit code of RX/TX threads
-is not checked. Also threads are not returning correct exit code.
+In order to reduce runtime of tests, recently timout for select() call
+was reduced from 1sec to 10usec. This was causing many tests failures.
+It was caught with failure handling commits in this series.
 
-- Return exit code from threads depending on test execution status
-- In main thread, check the exit code of RX/TX threads
+Restoring the timeout from 10usec to 1sec
 
-Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
+Fixes: a18fda1a62c3 ("bpf: reduce runtime of test_sockmap tests")
 Signed-off-by: Prashant Bhole <bhole_prashant_q7 at lab.ntt.co.jp>
 ---
- tools/testing/selftests/bpf/test_sockmap.c | 25 ++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/test_sockmap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index eb17fae458e6..34feb74c95c4 100644
+index 8a81ea0e9fb6..f79397513362 100644
 --- a/tools/testing/selftests/bpf/test_sockmap.c
 +++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -429,8 +429,8 @@ static int sendmsg_test(struct sockmap_options *opt)
- 	struct msg_stats s = {0};
- 	int iov_count = opt->iov_count;
- 	int iov_buf = opt->iov_length;
-+	int rx_status, tx_status;
- 	int cnt = opt->rate;
--	int status;
+@@ -345,8 +345,8 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
+ 		if (err < 0)
+ 			perror("recv start time: ");
+ 		while (s->bytes_recvd < total_bytes) {
+-			timeout.tv_sec = 0;
+-			timeout.tv_usec = 10;
++			timeout.tv_sec = 1;
++			timeout.tv_usec = 0;
  
- 	errno = 0;
- 
-@@ -442,7 +442,7 @@ static int sendmsg_test(struct sockmap_options *opt)
- 	rxpid = fork();
- 	if (rxpid == 0) {
- 		if (opt->drop_expected)
--			exit(1);
-+			exit(0);
- 
- 		if (opt->sendpage)
- 			iov_count = 1;
-@@ -463,7 +463,7 @@ static int sendmsg_test(struct sockmap_options *opt)
- 				"rx_sendmsg: TX: %zuB %fB/s %fGB/s RX: %zuB %fB/s %fGB/s\n",
- 				s.bytes_sent, sent_Bps, sent_Bps/giga,
- 				s.bytes_recvd, recvd_Bps, recvd_Bps/giga);
--		exit(1);
-+		exit(err ? 1 : 0);
- 	} else if (rxpid == -1) {
- 		perror("msg_loop_rx: ");
- 		return errno;
-@@ -491,14 +491,27 @@ static int sendmsg_test(struct sockmap_options *opt)
- 				"tx_sendmsg: TX: %zuB %fB/s %f GB/s RX: %zuB %fB/s %fGB/s\n",
- 				s.bytes_sent, sent_Bps, sent_Bps/giga,
- 				s.bytes_recvd, recvd_Bps, recvd_Bps/giga);
--		exit(1);
-+		exit(err ? 1 : 0);
- 	} else if (txpid == -1) {
- 		perror("msg_loop_tx: ");
- 		return errno;
- 	}
- 
--	assert(waitpid(rxpid, &status, 0) == rxpid);
--	assert(waitpid(txpid, &status, 0) == txpid);
-+	assert(waitpid(rxpid, &rx_status, 0) == rxpid);
-+	assert(waitpid(txpid, &tx_status, 0) == txpid);
-+	if (WIFEXITED(rx_status)) {
-+		err = WEXITSTATUS(rx_status);
-+		if (err) {
-+			fprintf(stderr, "rx thread exited with err %d. ", err);
-+			goto out;
-+		}
-+	}
-+	if (WIFEXITED(tx_status)) {
-+		err = WEXITSTATUS(tx_status);
-+		if (err)
-+			fprintf(stderr, "tx thread exited with err %d. ", err);
-+	}
-+out:
- 	return err;
- }
- 
+ 			/* FD sets */
+ 			FD_ZERO(&w);
 -- 
 2.17.0
 
