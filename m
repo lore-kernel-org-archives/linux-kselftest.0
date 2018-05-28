@@ -1,60 +1,73 @@
 From: bhole_prashant_q7 at lab.ntt.co.jp (Prashant Bhole)
-Date: Mon, 28 May 2018 13:38:02 +0900
-Subject: [PATCH bpf v2 4/5] selftests/bpf: test_sockmap, fix data verification
+Date: Mon, 28 May 2018 13:38:03 +0900
+Subject: [PATCH bpf v2 5/5] selftests/bpf: test_sockmap,
+ print additional test options
 In-Reply-To: <20180528043803.4824-1-bhole_prashant_q7@lab.ntt.co.jp>
 References: <20180528043803.4824-1-bhole_prashant_q7@lab.ntt.co.jp>
-Message-ID: <20180528043803.4824-5-bhole_prashant_q7@lab.ntt.co.jp>
+Message-ID: <20180528043803.4824-6-bhole_prashant_q7@lab.ntt.co.jp>
 
-When data verification is enabled, some tests fail because verification is done
-incorrectly. Following changes fix it.
+Print values of test options like apply, cork, start, end so that
+individual failed tests can be identified for manual run
 
-- Identify the size of data block to be verified
-- Reset verification counter when data block size is reached
-- Fixed the value printed in case of verfication failure
-
-Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
 Acked-by: John Fastabend <john.fastabend at gmail.com>
 Signed-off-by: Prashant Bhole <bhole_prashant_q7 at lab.ntt.co.jp>
 ---
- tools/testing/selftests/bpf/test_sockmap.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_sockmap.c | 28 +++++++++++++++-------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index f79397513362..e8faf4596dac 100644
+index e8faf4596dac..7970d48c4acb 100644
 --- a/tools/testing/selftests/bpf/test_sockmap.c
 +++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -337,8 +337,15 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
- 		int fd_flags = O_NONBLOCK;
- 		struct timeval timeout;
- 		float total_bytes;
-+		int bytes_cnt = 0;
-+		int chunk_sz;
- 		fd_set w;
- 
-+		if (opt->sendpage)
-+			chunk_sz = iov_length * cnt;
-+		else
-+			chunk_sz = iov_length * iov_count;
+@@ -869,6 +869,8 @@ static char *test_to_str(int test)
+ #define OPTSTRING 60
+ static void test_options(char *options)
+ {
++	char tstr[OPTSTRING];
 +
- 		fcntl(fd, fd_flags);
- 		total_bytes = (float)iov_count * (float)iov_length * (float)cnt;
- 		err = clock_gettime(CLOCK_MONOTONIC, &s->start);
-@@ -388,9 +395,14 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
- 							errno = -EIO;
- 							fprintf(stderr,
- 								"detected data corruption @iov[%i]:%i %02x != %02x, %02x ?= %02x\n",
--								i, j, d[j], k - 1, d[j+1], k + 1);
-+								i, j, d[j], k - 1, d[j+1], k);
- 							goto out_errno;
- 						}
-+						bytes_cnt++;
-+						if (bytes_cnt == chunk_sz) {
-+							k = 0;
-+							bytes_cnt = 0;
-+						}
- 						recv--;
- 					}
- 				}
+ 	memset(options, 0, OPTSTRING);
+ 
+ 	if (txmsg_pass)
+@@ -881,14 +883,22 @@ static void test_options(char *options)
+ 		strncat(options, "redir_noisy,", OPTSTRING);
+ 	if (txmsg_drop)
+ 		strncat(options, "drop,", OPTSTRING);
+-	if (txmsg_apply)
+-		strncat(options, "apply,", OPTSTRING);
+-	if (txmsg_cork)
+-		strncat(options, "cork,", OPTSTRING);
+-	if (txmsg_start)
+-		strncat(options, "start,", OPTSTRING);
+-	if (txmsg_end)
+-		strncat(options, "end,", OPTSTRING);
++	if (txmsg_apply) {
++		snprintf(tstr, OPTSTRING, "apply %d,", txmsg_apply);
++		strncat(options, tstr, OPTSTRING);
++	}
++	if (txmsg_cork) {
++		snprintf(tstr, OPTSTRING, "cork %d,", txmsg_cork);
++		strncat(options, tstr, OPTSTRING);
++	}
++	if (txmsg_start) {
++		snprintf(tstr, OPTSTRING, "start %d,", txmsg_start);
++		strncat(options, tstr, OPTSTRING);
++	}
++	if (txmsg_end) {
++		snprintf(tstr, OPTSTRING, "end %d,", txmsg_end);
++		strncat(options, tstr, OPTSTRING);
++	}
+ 	if (txmsg_ingress)
+ 		strncat(options, "ingress,", OPTSTRING);
+ 	if (txmsg_skb)
+@@ -897,7 +907,7 @@ static void test_options(char *options)
+ 
+ static int __test_exec(int cgrp, int test, struct sockmap_options *opt)
+ {
+-	char *options = calloc(60, sizeof(char));
++	char *options = calloc(OPTSTRING, sizeof(char));
+ 	int err;
+ 
+ 	if (test == SENDPAGE)
 -- 
 2.17.0
 
