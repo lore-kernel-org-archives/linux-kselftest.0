@@ -1,78 +1,261 @@
-From: bhole_prashant_q7@lab.ntt.co.jp (Prashant Bhole)
-Date: Mon, 28 May 2018 13:38:03 +0900
-Subject: [PATCH bpf v2 5/5] selftests/bpf: test_sockmap,
- print additional test options
-In-Reply-To: <20180528043803.4824-1-bhole_prashant_q7@lab.ntt.co.jp>
-References: <20180528043803.4824-1-bhole_prashant_q7@lab.ntt.co.jp>
-Message-ID: <20180528043803.4824-6-bhole_prashant_q7@lab.ntt.co.jp>
+From: rppt@linux.vnet.ibm.com (Mike Rapoport)
+Date: Mon, 28 May 2018 09:18:46 +0300
+Subject: [PATCH v3] selftests: cgroup/memcontrol: add basic test for
+ socket accounting
+In-Reply-To: <1527019565-20470-1-git-send-email-rppt@linux.vnet.ibm.com>
+References: <1527019565-20470-1-git-send-email-rppt@linux.vnet.ibm.com>
+Message-ID: <20180528061845.GA4805@rapoport-lnx>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180528043803.eJ-W-mJrbn-yaWuuWTzIRJ4mflRD7IDoLgN8dZ_AR2E@z>
+Message-ID: <20180528061846.7qp3UHNkTvGx4cDtWnsqaP_bbYRcEF_V6tzvwW3tsWQ@z>
 
-Print values of test options like apply, cork, start, end so that
-individual failed tests can be identified for manual run
+Hi,
 
-Acked-by: John Fastabend <john.fastabend at gmail.com>
-Signed-off-by: Prashant Bhole <bhole_prashant_q7 at lab.ntt.co.jp>
----
- tools/testing/selftests/bpf/test_sockmap.c | 28 +++++++++++++++-------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+Are there any updates on this?
 
-diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index e8faf4596dac..7970d48c4acb 100644
---- a/tools/testing/selftests/bpf/test_sockmap.c
-+++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -869,6 +869,8 @@ static char *test_to_str(int test)
- #define OPTSTRING 60
- static void test_options(char *options)
- {
-+	char tstr[OPTSTRING];
-+
- 	memset(options, 0, OPTSTRING);
- 
- 	if (txmsg_pass)
-@@ -881,14 +883,22 @@ static void test_options(char *options)
- 		strncat(options, "redir_noisy,", OPTSTRING);
- 	if (txmsg_drop)
- 		strncat(options, "drop,", OPTSTRING);
--	if (txmsg_apply)
--		strncat(options, "apply,", OPTSTRING);
--	if (txmsg_cork)
--		strncat(options, "cork,", OPTSTRING);
--	if (txmsg_start)
--		strncat(options, "start,", OPTSTRING);
--	if (txmsg_end)
--		strncat(options, "end,", OPTSTRING);
-+	if (txmsg_apply) {
-+		snprintf(tstr, OPTSTRING, "apply %d,", txmsg_apply);
-+		strncat(options, tstr, OPTSTRING);
-+	}
-+	if (txmsg_cork) {
-+		snprintf(tstr, OPTSTRING, "cork %d,", txmsg_cork);
-+		strncat(options, tstr, OPTSTRING);
-+	}
-+	if (txmsg_start) {
-+		snprintf(tstr, OPTSTRING, "start %d,", txmsg_start);
-+		strncat(options, tstr, OPTSTRING);
-+	}
-+	if (txmsg_end) {
-+		snprintf(tstr, OPTSTRING, "end %d,", txmsg_end);
-+		strncat(options, tstr, OPTSTRING);
-+	}
- 	if (txmsg_ingress)
- 		strncat(options, "ingress,", OPTSTRING);
- 	if (txmsg_skb)
-@@ -897,7 +907,7 @@ static void test_options(char *options)
- 
- static int __test_exec(int cgrp, int test, struct sockmap_options *opt)
- {
--	char *options = calloc(60, sizeof(char));
-+	char *options = calloc(OPTSTRING, sizeof(char));
- 	int err;
- 
- 	if (test == SENDPAGE)
+On Tue, May 22, 2018@11:06:05PM +0300, Mike Rapoport wrote:
+> The test verifies that when there is active TCP connection, the
+> memory.stat.sock and memory.current values are close.
+> 
+> Signed-off-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
+> Acked-by: Roman Gushchin <guro at fb.com>
+> ---
+> v3 changes:
+> * added changelog
+> 
+> v2 changes:
+> * bumped error percentage for comparing memory.current with memory.stat.sock
+> * added checks that memory.stat.sock == 0 and memory.current >= 0 after TCP
+> server exits
+> * simplified error handling
+> 
+>  tools/testing/selftests/cgroup/test_memcontrol.c | 193 +++++++++++++++++++++++
+>  1 file changed, 193 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+> index beae06c9c899..cf0bddc9d271 100644
+> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> @@ -9,6 +9,12 @@
+>  #include <sys/stat.h>
+>  #include <sys/types.h>
+>  #include <unistd.h>
+> +#include <sys/socket.h>
+> +#include <sys/wait.h>
+> +#include <arpa/inet.h>
+> +#include <netinet/in.h>
+> +#include <netdb.h>
+> +#include <errno.h>
+> 
+>  #include "../kselftest.h"
+>  #include "cgroup_util.h"
+> @@ -772,6 +778,192 @@ static int test_memcg_oom_events(const char *root)
+>  	return ret;
+>  }
+> 
+> +struct tcp_server_args {
+> +	unsigned short port;
+> +	int ctl[2];
+> +};
+> +
+> +static int tcp_server(const char *cgroup, void *arg)
+> +{
+> +	struct tcp_server_args *srv_args = arg;
+> +	struct sockaddr_in6 saddr = { 0 };
+> +	socklen_t slen = sizeof(saddr);
+> +	int sk, client_sk, ctl_fd, yes = 1, ret = -1;
+> +
+> +	close(srv_args->ctl[0]);
+> +	ctl_fd = srv_args->ctl[1];
+> +
+> +	saddr.sin6_family = AF_INET6;
+> +	saddr.sin6_addr = in6addr_any;
+> +	saddr.sin6_port = htons(srv_args->port);
+> +
+> +	sk = socket(AF_INET6, SOCK_STREAM, 0);
+> +	if (sk < 0)
+> +		return ret;
+> +
+> +	if (setsockopt(sk, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) < 0)
+> +		goto cleanup;
+> +
+> +	if (bind(sk, (struct sockaddr *)&saddr, slen)) {
+> +		write(ctl_fd, &errno, sizeof(errno));
+> +		goto cleanup;
+> +	}
+> +
+> +	if (listen(sk, 1))
+> +		goto cleanup;
+> +
+> +	ret = 0;
+> +	if (write(ctl_fd, &ret, sizeof(ret)) != sizeof(ret)) {
+> +		ret = -1;
+> +		goto cleanup;
+> +	}
+> +
+> +	client_sk = accept(sk, NULL, NULL);
+> +	if (client_sk < 0)
+> +		goto cleanup;
+> +
+> +	ret = -1;
+> +	for (;;) {
+> +		uint8_t buf[0x100000];
+> +
+> +		if (write(client_sk, buf, sizeof(buf)) <= 0) {
+> +			if (errno == ECONNRESET)
+> +				ret = 0;
+> +			break;
+> +		}
+> +	}
+> +
+> +	close(client_sk);
+> +
+> +cleanup:
+> +	close(sk);
+> +	return ret;
+> +}
+> +
+> +static int tcp_client(const char *cgroup, unsigned short port)
+> +{
+> +	const char server[] = "localhost";
+> +	struct addrinfo *ai;
+> +	char servport[6];
+> +	int retries = 0x10; /* nice round number */
+> +	int sk, ret;
+> +
+> +	snprintf(servport, sizeof(servport), "%hd", port);
+> +	ret = getaddrinfo(server, servport, NULL, &ai);
+> +	if (ret)
+> +		return ret;
+> +
+> +	sk = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
+> +	if (sk < 0)
+> +		goto free_ainfo;
+> +
+> +	ret = connect(sk, ai->ai_addr, ai->ai_addrlen);
+> +	if (ret < 0)
+> +		goto close_sk;
+> +
+> +	ret = KSFT_FAIL;
+> +	while (retries--) {
+> +		uint8_t buf[0x100000];
+> +		long current, sock;
+> +
+> +		if (read(sk, buf, sizeof(buf)) <= 0)
+> +			goto close_sk;
+> +
+> +		current = cg_read_long(cgroup, "memory.current");
+> +		sock = cg_read_key_long(cgroup, "memory.stat", "sock ");
+> +
+> +		if (current < 0 || sock < 0)
+> +			goto close_sk;
+> +
+> +		if (current < sock)
+> +			goto close_sk;
+> +
+> +		if (values_close(current, sock, 10)) {
+> +			ret = KSFT_PASS;
+> +			break;
+> +		}
+> +	}
+> +
+> +close_sk:
+> +	close(sk);
+> +free_ainfo:
+> +	freeaddrinfo(ai);
+> +	return ret;
+> +}
+> +
+> +/*
+> + * This test checks socket memory accounting.
+> + * The test forks a TCP server listens on a random port between 1000
+> + * and 61000. Once it gets a client connection, it starts writing to
+> + * its socket.
+> + * The TCP client interleaves reads from the socket with check whether
+> + * memory.current and memory.stat.sock are similar.
+> + */
+> +static int test_memcg_sock(const char *root)
+> +{
+> +	int bind_retries = 5, ret = KSFT_FAIL, pid, err;
+> +	unsigned short port;
+> +	char *memcg;
+> +
+> +	memcg = cg_name(root, "memcg_test");
+> +	if (!memcg)
+> +		goto cleanup;
+> +
+> +	if (cg_create(memcg))
+> +		goto cleanup;
+> +
+> +	while (bind_retries--) {
+> +		struct tcp_server_args args;
+> +
+> +		if (pipe(args.ctl))
+> +			goto cleanup;
+> +
+> +		port = args.port = 1000 + rand() % 60000;
+> +
+> +		pid = cg_run_nowait(memcg, tcp_server, &args);
+> +		if (pid < 0)
+> +			goto cleanup;
+> +
+> +		close(args.ctl[1]);
+> +		if (read(args.ctl[0], &err, sizeof(err)) != sizeof(err))
+> +			goto cleanup;
+> +		close(args.ctl[0]);
+> +
+> +		if (!err)
+> +			break;
+> +		if (err != EADDRINUSE)
+> +			goto cleanup;
+> +
+> +		waitpid(pid, NULL, 0);
+> +	}
+> +
+> +	if (err == EADDRINUSE) {
+> +		ret = KSFT_SKIP;
+> +		goto cleanup;
+> +	}
+> +
+> +	if (tcp_client(memcg, port) != KSFT_PASS)
+> +		goto cleanup;
+> +
+> +	waitpid(pid, &err, 0);
+> +	if (WEXITSTATUS(err))
+> +		goto cleanup;
+> +
+> +	if (cg_read_long(memcg, "memory.current") < 0)
+> +		goto cleanup;
+> +
+> +	if (cg_read_key_long(memcg, "memory.stat", "sock "))
+> +		goto cleanup;
+> +
+> +	ret = KSFT_PASS;
+> +
+> +cleanup:
+> +	cg_destroy(memcg);
+> +	free(memcg);
+> +
+> +	return ret;
+> +}
+> +
+>  #define T(x) { x, #x }
+>  struct memcg_test {
+>  	int (*fn)(const char *root);
+> @@ -785,6 +977,7 @@ struct memcg_test {
+>  	T(test_memcg_max),
+>  	T(test_memcg_oom_events),
+>  	T(test_memcg_swap_max),
+> +	T(test_memcg_sock),
+>  };
+>  #undef T
+> 
+> -- 
+> 2.7.4
+> 
+
 -- 
-2.17.0
-
+Sincerely yours,
+Mike.
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
