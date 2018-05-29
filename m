@@ -1,58 +1,29 @@
-From: daniel@ffwll.ch (Daniel Vetter)
-Date: Tue, 29 May 2018 14:30:55 +0200
-Subject: [PATCH v3] Add udmabuf misc device
-In-Reply-To: <20180529084845.2al2dmpvjpz6eexp@sirius.home.kraxel.org>
-References: <20180525140808.12714-1-kraxel@redhat.com>
- <20180529082327.GF3438@phenom.ffwll.local>
- <20180529084845.2al2dmpvjpz6eexp@sirius.home.kraxel.org>
-Message-ID:
- <CAKMK7uGnxNwOUoY=kqG4hW4AZd8Fouh9GRq8Na-fRQUUvF9fZw@mail.gmail.com>
+From: shuah@kernel.org (Shuah Khan)
+Date: Tue, 29 May 2018 08:19:41 -0600
+Subject: [PATCH] selftest: intel_pstate: debug support message from
+ aperf.c and return value fix.
+In-Reply-To: <4f51f365-705a-211f-cccb-c634ea750dc6@kernel.org>
+References: <20180518140550.2280-1-ahiliation@yahoo.co.in>
+ <4f51f365-705a-211f-cccb-c634ea750dc6@kernel.org>
+Message-ID: <b21341a7-1fe4-9874-d5ed-29fb60bf9285@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180529123055.4Pr2qpSgnLdqfPRuWpUUZu8kg2B05EcU-z01uqqPPjI@z>
+Message-ID: <20180529141941.JYMUWGNYjvNQVgxf37tvPVyc4ayTSYKbTBufT9AZ2Yo@z>
 
-On Tue, May 29, 2018@10:48 AM, Gerd Hoffmann <kraxel@redhat.com> wrote:
->   Hi,
->
->> > +static void *kmap_atomic_udmabuf(struct dma_buf *buf, unsigned long page_num)
->> > +{
->> > +   struct udmabuf *ubuf = buf->priv;
->> > +   struct page *page = ubuf->pages[page_num];
->> > +
->> > +   return kmap_atomic(page);
->> > +}
->> > +
->> > +static void *kmap_udmabuf(struct dma_buf *buf, unsigned long page_num)
->> > +{
->> > +   struct udmabuf *ubuf = buf->priv;
->> > +   struct page *page = ubuf->pages[page_num];
->> > +
->> > +   return kmap(page);
->> > +}
+Hi Jeffrin,
+
+On 05/18/2018 01:19 PM, Shuah Khan wrote:
+> On 05/18/2018 08:05 AM, Jeffrin Jose T wrote:
+>> Additional message along with an error message which is more
+>> verbose for debug support from aperf.c and updated with the
+>> new return value "KSFT_SKIP".
 >>
->> The above leaks like mad since no kunamp?
->
-> /me checks code.  Oops.  Yes.
->
-> The docs say map() is required and unmap() is not (for both atomic and
-> non-atomic cases), so I assumed there is a default implementation just
-> doing kunmap(page).  Which is not the case.  /me looks a bit surprised.
->
-> I'll fix it for v4.
->
->> Also I think we have 0 users of the kmap atomic interfaces ... so not sure
->> whether it's worth it to implement those.
->
-> Well, the docs are correct.  kmap_atomic() is required, dma-buf.c calls
-> the function pointer without checking it exists beforehand ...
+>> Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
 
-Frankly with the pletoria of dummy kmap functions that just return
-NULL; it might be better to move that into core dma-buf code and make
-it optional for real. Since it's indeed very surprising.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-+41 (0) 79 365 57 48 - http://blog.ffwll.ch
+Can you please resend this patch. I don't see this posted to the
+linux-kselftest mailing list. Please tag it RESEND
+
+thanks,
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
