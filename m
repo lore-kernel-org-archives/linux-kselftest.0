@@ -1,31 +1,20 @@
 From: kraxel at redhat.com (Gerd Hoffmann)
-Date: Tue, 29 May 2018 12:48:55 +0200
+Date: Tue, 29 May 2018 12:50:37 +0200
 Subject: [PATCH v3] Add udmabuf misc device
-In-Reply-To: <20180529084406.GI3438@phenom.ffwll.local>
+In-Reply-To: <0ad0606e-3201-e203-ec93-8718d7938751@gmail.com>
 References: <20180525140808.12714-1-kraxel@redhat.com>
- <20180529082327.GF3438@phenom.ffwll.local>
- <20180529084406.GI3438@phenom.ffwll.local>
-Message-ID: <20180529104855.vvrfdtbgrsqj27ga@sirius.home.kraxel.org>
+ <0ad0606e-3201-e203-ec93-8718d7938751@gmail.com>
+Message-ID: <20180529105037.uog4tvcckqp5q6fe@sirius.home.kraxel.org>
 
   Hi,
 
-> > > qemu test branch:
-> > >   https://git.kraxel.org/cgit/qemu/log/?h=sirius/udmabuf
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > +config UDMABUF
+> > +	bool "userspace dmabuf misc driver"
+> > +	default n
+> > +	depends on DMA_SHARED_BUFFER
+> Don't you want "select DMA_SHARED_BUFFER" here instead?
 
-> > > +	if (!shmem_mapping(file_inode(ubuf->filp)->i_mapping))
-> > > +		goto err_free_ubuf;
-> 
-> Can/should we test here that the memfd has a locked down size here?
-
-Makes sense.  Suggested way to check that?  unstatic memfd_get_seals()
-function (mm/shmem.c)?  Or is there some better way?
-
-Also which seals should we require?  Is F_SEAL_SHRINK enough?
-
-> On that: Link to userspace patches/git tree using this would be nice.
-
-See above.
+Why do you think so?
 
 cheers,
   Gerd
