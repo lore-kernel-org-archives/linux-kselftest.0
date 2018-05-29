@@ -1,37 +1,50 @@
-From: john.fastabend at gmail.com (John Fastabend)
-Date: Tue, 29 May 2018 08:48:47 -0700
-Subject: [PATCH bpf v2 0/5] fix test_sockmap
-In-Reply-To: <20180528043803.4824-1-bhole_prashant_q7@lab.ntt.co.jp>
-References: <20180528043803.4824-1-bhole_prashant_q7@lab.ntt.co.jp>
-Message-ID: <dd755be4-a298-a037-b32a-b506f45f4d8f@gmail.com>
+From: shuah at kernel.org (Shuah Khan)
+Date: Tue, 29 May 2018 11:05:47 -0600
+Subject: [PATCH] selftests: intel_pstate: notification about privilege
+ required to run intel_pstate testing script
+In-Reply-To: <20180526170135.3340-1-ahiliation@gmail.com>
+References: <20180526170135.3340-1-ahiliation@gmail.com>
+Message-ID: <80da5a3b-fb1b-a9e5-5c4b-38b485fde688@kernel.org>
 
-On 05/27/2018 09:37 PM, Prashant Bhole wrote:
-> This series fixes error handling, timeout and data verification in
-> test_sockmap. Previously it was not able to detect failure/timeout in
-> RX/TX thread because error was not notified to the main thread.
+On 05/26/2018 11:01 AM, Jeffrin Jose T wrote:
+> The intel_pstate related testing script need root level privileges
+> when trying to access certain file for the successful execution of
+> the script.But this is not the case always like when using evaluation
+> only mode, which only require user level privilege.
 > 
-> Also slightly improved test output by printing parameter values (cork,
-> apply, start, end) so that parameters for all tests are displayed.
+> This patch is to notify the user about the privilege the script
+> demands for the successful execution of the test.
 > 
-> Prashant Bhole (5):
->   selftests/bpf: test_sockmap, check test failure
->   selftests/bpf: test_sockmap, join cgroup in selftest mode
->   selftests/bpf: test_sockmap, fix test timeout
->   selftests/bpf: test_sockmap, fix data verification
->   selftests/bpf: test_sockmap, print additional test options
+> Signed-off-by: Jeffrin Jose T (Rajagiri SET) <ahiliation at gmail.com>
+> ---
+>  tools/testing/selftests/intel_pstate/run.sh | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
->  tools/testing/selftests/bpf/test_sockmap.c | 76 +++++++++++++++++-----
->  1 file changed, 58 insertions(+), 18 deletions(-)
+> diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
+> index 6ded61670f6d..4ddd389c2cb9 100755
+> --- a/tools/testing/selftests/intel_pstate/run.sh
+> +++ b/tools/testing/selftests/intel_pstate/run.sh
+> @@ -33,6 +33,12 @@ EVALUATE_ONLY=0
+>  # Kselftest framework requirement - SKIP code is 4.
+>  ksft_skip=4
+>  
+> +msg="skip all tests:"
+> +if [ $UID != 0 ] && [ $EVALUATE_ONLY == 0 ]; then
+> +    echo $msg please run this as root >&2
+> +    exit $ksft_skip
+> +fi
+> +
+>  if ! uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ | grep -q x86; then
+>  	echo "$0 # Skipped: Test can only run on x86 architectures."
+>  	exit $ksft_skip
 > 
 
-After first patch "check test failure" how do we handle the case
-where test is known to cause timeouts because we are specifically testing
-these cases. This is the 'cork' parameter we discussed in the last
-series. It looks like with this series the test may still throw an
-error?
+Why not do the arch check first and then do the root check? The order of
+arch followed by root on non-x86 arch definitely better than root first
+check.
 
-Thanks,
-John
+thanks,
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
