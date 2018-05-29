@@ -1,50 +1,45 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Tue, 29 May 2018 11:05:47 -0600
-Subject: [PATCH] selftests: intel_pstate: notification about privilege
- required to run intel_pstate testing script
-In-Reply-To: <20180526170135.3340-1-ahiliation@gmail.com>
-References: <20180526170135.3340-1-ahiliation@gmail.com>
-Message-ID: <80da5a3b-fb1b-a9e5-5c4b-38b485fde688@kernel.org>
+From: ahiliation at gmail.com (Jeffrin Jose T)
+Date: Tue, 29 May 2018 22:54:36 +0530
+Subject: [PATCH] [RESEND] selftest: intel_pstate: debug support message from
+ aperf.c and return value fix.
+Message-ID: <20180529172436.4432-1-ahiliation@gmail.com>
 
-On 05/26/2018 11:01 AM, Jeffrin Jose T wrote:
-> The intel_pstate related testing script need root level privileges
-> when trying to access certain file for the successful execution of
-> the script.But this is not the case always like when using evaluation
-> only mode, which only require user level privilege.
-> 
-> This patch is to notify the user about the privilege the script
-> demands for the successful execution of the test.
-> 
-> Signed-off-by: Jeffrin Jose T (Rajagiri SET) <ahiliation at gmail.com>
-> ---
->  tools/testing/selftests/intel_pstate/run.sh | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
-> index 6ded61670f6d..4ddd389c2cb9 100755
-> --- a/tools/testing/selftests/intel_pstate/run.sh
-> +++ b/tools/testing/selftests/intel_pstate/run.sh
-> @@ -33,6 +33,12 @@ EVALUATE_ONLY=0
->  # Kselftest framework requirement - SKIP code is 4.
->  ksft_skip=4
->  
-> +msg="skip all tests:"
-> +if [ $UID != 0 ] && [ $EVALUATE_ONLY == 0 ]; then
-> +    echo $msg please run this as root >&2
-> +    exit $ksft_skip
-> +fi
-> +
->  if ! uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ | grep -q x86; then
->  	echo "$0 # Skipped: Test can only run on x86 architectures."
->  	exit $ksft_skip
-> 
+Additional message along with an error message which is more
+verbose for debug support from aperf.c and updated with the
+new return value "KSFT_SKIP".
 
-Why not do the arch check first and then do the root check? The order of
-arch followed by root on non-x86 arch definitely better than root first
-check.
+Signed-off-by: Jeffrin Jose T [Rajagiri SET] <ahiliation at gmail.com>
+---
+ tools/testing/selftests/intel_pstate/aperf.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/intel_pstate/aperf.c b/tools/testing/selftests/intel_pstate/aperf.c
+index d21edea9c560..f6cd03a87493 100644
+--- a/tools/testing/selftests/intel_pstate/aperf.c
++++ b/tools/testing/selftests/intel_pstate/aperf.c
+@@ -9,6 +9,8 @@
+ #include <sys/timeb.h>
+ #include <sched.h>
+ #include <errno.h>
++#include <string.h>
++#include "../kselftest.h"
+ 
+ void usage(char *name) {
+ 	printf ("Usage: %s cpunum\n", name);
+@@ -41,8 +43,8 @@ int main(int argc, char **argv) {
+ 	fd = open(msr_file_name, O_RDONLY);
+ 
+ 	if (fd == -1) {
+-		perror("Failed to open");
+-		return 1;
++		printf("/dev/cpu/%d/msr: %s\n", cpu, strerror(errno));
++		return KSFT_SKIP;
+ 	}
+ 
+ 	CPU_ZERO(&cpuset);
+-- 
+2.17.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
