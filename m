@@ -1,88 +1,45 @@
-From: joelaf@google.com (Joel Fernandes)
-Date: Tue, 29 May 2018 17:04:53 -0700
-Subject: [PATCH v8 1/8] softirq: reorder trace_softirqs_on to prevent lockdep
- splat
-In-Reply-To: <20180530000500.257225-1-joel@joelfernandes.org>
-References: <20180530000500.257225-1-joel@joelfernandes.org>
-Message-ID: <20180530000500.257225-2-joel@joelfernandes.org>
+From: bhole_prashant_q7@lab.ntt.co.jp (Prashant Bhole)
+Date: Wed, 30 May 2018 09:44:21 +0900
+Subject: [PATCH bpf v2 0/5] fix test_sockmap
+In-Reply-To: <dd755be4-a298-a037-b32a-b506f45f4d8f@gmail.com>
+References: <20180528043803.4824-1-bhole_prashant_q7@lab.ntt.co.jp>
+ <dd755be4-a298-a037-b32a-b506f45f4d8f@gmail.com>
+Message-ID: <95bb9c9a-25ed-4b10-a181-987a61e0a24c@lab.ntt.co.jp>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180530000453.ulovWYssbeck7F3u_S93SJpe_s-ED9R-ZQdHwMwZSgM@z>
+Message-ID: <20180530004421.X3gLnK5z6gsuSNYclkL408s77d6McTWK4ZHPu1yHzHU@z>
 
-From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 
-I'm able to reproduce a lockdep splat with config options:
-CONFIG_PROVE_LOCKING=y,
-CONFIG_DEBUG_LOCK_ALLOC=y and
-CONFIG_PREEMPTIRQ_EVENTS=y
 
-$ echo 1 > /d/tracing/events/preemptirq/preempt_enable/enable
+On 5/30/2018 12:48 AM, John Fastabend wrote:
+> On 05/27/2018 09:37 PM, Prashant Bhole wrote:
+>> This series fixes error handling, timeout and data verification in
+>> test_sockmap. Previously it was not able to detect failure/timeout in
+>> RX/TX thread because error was not notified to the main thread.
+>>
+>> Also slightly improved test output by printing parameter values (cork,
+>> apply, start, end) so that parameters for all tests are displayed.
+>>
+>> Prashant Bhole (5):
+>>    selftests/bpf: test_sockmap, check test failure
+>>    selftests/bpf: test_sockmap, join cgroup in selftest mode
+>>    selftests/bpf: test_sockmap, fix test timeout
+>>    selftests/bpf: test_sockmap, fix data verification
+>>    selftests/bpf: test_sockmap, print additional test options
+>>
+>>   tools/testing/selftests/bpf/test_sockmap.c | 76 +++++++++++++++++-----
+>>   1 file changed, 58 insertions(+), 18 deletions(-)
+>>
+> 
+> After first patch "check test failure" how do we handle the case
+> where test is known to cause timeouts because we are specifically testing
+> these cases. This is the 'cork' parameter we discussed in the last
+> series. It looks like with this series the test may still throw an
+> error?
 
-[   26.112609] DEBUG_LOCKS_WARN_ON(current->softirqs_enabled)
-[   26.112636] WARNING: CPU: 0 PID: 118 at kernel/locking/lockdep.c:3854
-[...]
-[   26.144229] Call Trace:
-[   26.144926]  <IRQ>
-[   26.145506]  lock_acquire+0x55/0x1b0
-[   26.146499]  ? __do_softirq+0x46f/0x4d9
-[   26.147571]  ? __do_softirq+0x46f/0x4d9
-[   26.148646]  trace_preempt_on+0x8f/0x240
-[   26.149744]  ? trace_preempt_on+0x4d/0x240
-[   26.150862]  ? __do_softirq+0x46f/0x4d9
-[   26.151930]  preempt_count_sub+0x18a/0x1a0
-[   26.152985]  __do_softirq+0x46f/0x4d9
-[   26.153937]  irq_exit+0x68/0xe0
-[   26.154755]  smp_apic_timer_interrupt+0x271/0x280
-[   26.156056]  apic_timer_interrupt+0xf/0x20
-[   26.157105]  </IRQ>
+Sorry. In your comment in last series, did you mean to skip error 
+checking only for all cork tests (for now)?
 
-The issue was this:
-
-preempt_count = 1 << SOFTIRQ_SHIFT
-
-	__local_bh_enable(cnt = 1 << SOFTIRQ_SHIFT) {
-		if (softirq_count() == (cnt && SOFTIRQ_MASK)) {
-			trace_softirqs_on() {
-				current->softirqs_enabled = 1;
-			}
-		}
-		preempt_count_sub(cnt) {
-			trace_preempt_on() {
-				tracepoint() {
-					rcu_read_lock_sched() {
-						// jumps into lockdep
-
-Where preempt_count still has softirqs disabled, but
-current->softirqs_enabled is true, and we get a splat.
-
-Cc: stable at vger.kernel.org
-Reviewed-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-Fixes: d59158162e032 ("tracing: Add support for preempt and irq enable/disable events")
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
- kernel/softirq.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index 177de3640c78..8a040bcaa033 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -139,9 +139,13 @@ static void __local_bh_enable(unsigned int cnt)
- {
- 	lockdep_assert_irqs_disabled();
- 
-+	if (preempt_count() == cnt)
-+		trace_preempt_on(CALLER_ADDR0, get_lock_parent_ip());
-+
- 	if (softirq_count() == (cnt & SOFTIRQ_MASK))
- 		trace_softirqs_on(_RET_IP_);
--	preempt_count_sub(cnt);
-+
-+	__preempt_count_sub(cnt);
- }
- 
- /*
--- 
-2.17.0.921.gf22659ad46-goog
+-Prashant
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
