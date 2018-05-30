@@ -1,82 +1,84 @@
 From: joelaf at google.com (Joel Fernandes)
-Date: Tue, 29 May 2018 17:04:56 -0700
-Subject: [PATCH v8 4/8] trace/irqsoff: Split reset into separate functions
+Date: Tue, 29 May 2018 17:04:53 -0700
+Subject: [PATCH v8 1/8] softirq: reorder trace_softirqs_on to prevent lockdep
+ splat
 In-Reply-To: <20180530000500.257225-1-joel@joelfernandes.org>
 References: <20180530000500.257225-1-joel@joelfernandes.org>
-Message-ID: <20180530000500.257225-5-joel@joelfernandes.org>
+Message-ID: <20180530000500.257225-2-joel@joelfernandes.org>
 
 From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
 
-Split reset functions into seperate functions in preparation
-of future patches that need to do tracer specific reset.
+I'm able to reproduce a lockdep splat with config options:
+CONFIG_PROVE_LOCKING=y,
+CONFIG_DEBUG_LOCK_ALLOC=y and
+CONFIG_PREEMPTIRQ_EVENTS=y
 
+$ echo 1 > /d/tracing/events/preemptirq/preempt_enable/enable
+
+[   26.112609] DEBUG_LOCKS_WARN_ON(current->softirqs_enabled)
+[   26.112636] WARNING: CPU: 0 PID: 118 at kernel/locking/lockdep.c:3854
+[...]
+[   26.144229] Call Trace:
+[   26.144926]  <IRQ>
+[   26.145506]  lock_acquire+0x55/0x1b0
+[   26.146499]  ? __do_softirq+0x46f/0x4d9
+[   26.147571]  ? __do_softirq+0x46f/0x4d9
+[   26.148646]  trace_preempt_on+0x8f/0x240
+[   26.149744]  ? trace_preempt_on+0x4d/0x240
+[   26.150862]  ? __do_softirq+0x46f/0x4d9
+[   26.151930]  preempt_count_sub+0x18a/0x1a0
+[   26.152985]  __do_softirq+0x46f/0x4d9
+[   26.153937]  irq_exit+0x68/0xe0
+[   26.154755]  smp_apic_timer_interrupt+0x271/0x280
+[   26.156056]  apic_timer_interrupt+0xf/0x20
+[   26.157105]  </IRQ>
+
+The issue was this:
+
+preempt_count = 1 << SOFTIRQ_SHIFT
+
+	__local_bh_enable(cnt = 1 << SOFTIRQ_SHIFT) {
+		if (softirq_count() == (cnt && SOFTIRQ_MASK)) {
+			trace_softirqs_on() {
+				current->softirqs_enabled = 1;
+			}
+		}
+		preempt_count_sub(cnt) {
+			trace_preempt_on() {
+				tracepoint() {
+					rcu_read_lock_sched() {
+						// jumps into lockdep
+
+Where preempt_count still has softirqs disabled, but
+current->softirqs_enabled is true, and we get a splat.
+
+Cc: stable at vger.kernel.org
+Reviewed-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+Fixes: d59158162e032 ("tracing: Add support for preempt and irq enable/disable events")
 Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
 ---
- kernel/trace/trace_irqsoff.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ kernel/softirq.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/trace/trace_irqsoff.c b/kernel/trace/trace_irqsoff.c
-index 03ecb4465ee4..f8daa754cce2 100644
---- a/kernel/trace/trace_irqsoff.c
-+++ b/kernel/trace/trace_irqsoff.c
-@@ -634,7 +634,7 @@ static int __irqsoff_tracer_init(struct trace_array *tr)
- 	return 0;
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index 177de3640c78..8a040bcaa033 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -139,9 +139,13 @@ static void __local_bh_enable(unsigned int cnt)
+ {
+ 	lockdep_assert_irqs_disabled();
+ 
++	if (preempt_count() == cnt)
++		trace_preempt_on(CALLER_ADDR0, get_lock_parent_ip());
++
+ 	if (softirq_count() == (cnt & SOFTIRQ_MASK))
+ 		trace_softirqs_on(_RET_IP_);
+-	preempt_count_sub(cnt);
++
++	__preempt_count_sub(cnt);
  }
  
--static void irqsoff_tracer_reset(struct trace_array *tr)
-+static void __irqsoff_tracer_reset(struct trace_array *tr)
- {
- 	int lat_flag = save_flags & TRACE_ITER_LATENCY_FMT;
- 	int overwrite_flag = save_flags & TRACE_ITER_OVERWRITE;
-@@ -665,6 +665,12 @@ static int irqsoff_tracer_init(struct trace_array *tr)
- 
- 	return __irqsoff_tracer_init(tr);
- }
-+
-+static void irqsoff_tracer_reset(struct trace_array *tr)
-+{
-+	__irqsoff_tracer_reset(tr);
-+}
-+
- static struct tracer irqsoff_tracer __read_mostly =
- {
- 	.name		= "irqsoff",
-@@ -697,11 +703,16 @@ static int preemptoff_tracer_init(struct trace_array *tr)
- 	return __irqsoff_tracer_init(tr);
- }
- 
-+static void preemptoff_tracer_reset(struct trace_array *tr)
-+{
-+	__irqsoff_tracer_reset(tr);
-+}
-+
- static struct tracer preemptoff_tracer __read_mostly =
- {
- 	.name		= "preemptoff",
- 	.init		= preemptoff_tracer_init,
--	.reset		= irqsoff_tracer_reset,
-+	.reset		= preemptoff_tracer_reset,
- 	.start		= irqsoff_tracer_start,
- 	.stop		= irqsoff_tracer_stop,
- 	.print_max	= true,
-@@ -731,11 +742,16 @@ static int preemptirqsoff_tracer_init(struct trace_array *tr)
- 	return __irqsoff_tracer_init(tr);
- }
- 
-+static void preemptirqsoff_tracer_reset(struct trace_array *tr)
-+{
-+	__irqsoff_tracer_reset(tr);
-+}
-+
- static struct tracer preemptirqsoff_tracer __read_mostly =
- {
- 	.name		= "preemptirqsoff",
- 	.init		= preemptirqsoff_tracer_init,
--	.reset		= irqsoff_tracer_reset,
-+	.reset		= preemptirqsoff_tracer_reset,
- 	.start		= irqsoff_tracer_start,
- 	.stop		= irqsoff_tracer_stop,
- 	.print_max	= true,
+ /*
 -- 
 2.17.0.921.gf22659ad46-goog
 
