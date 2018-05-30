@@ -1,88 +1,40 @@
 From: bhole_prashant_q7@lab.ntt.co.jp (Prashant Bhole)
-Date: Wed, 30 May 2018 14:56:07 +0900
-Subject: [PATCH bpf v3 1/5] selftests/bpf: test_sockmap, check test failure
+Date: Wed, 30 May 2018 14:56:08 +0900
+Subject: [PATCH bpf v3 2/5] selftests/bpf: test_sockmap,
+ join cgroup in selftest mode
 In-Reply-To: <20180530055611.10216-1-bhole_prashant_q7@lab.ntt.co.jp>
 References: <20180530055611.10216-1-bhole_prashant_q7@lab.ntt.co.jp>
-Message-ID: <20180530055611.10216-2-bhole_prashant_q7@lab.ntt.co.jp>
+Message-ID: <20180530055611.10216-3-bhole_prashant_q7@lab.ntt.co.jp>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180530055607.k-EZh66QfJTgSDOpSq3yLxEKKNtjjd_LhW0v6Zra62k@z>
+Message-ID: <20180530055608.bkTbI1S80cj7rM3oibCFlXGmp7deDDXHrevocuaU8so@z>
 
-Test failures are not identified because exit code of RX/TX threads
-is not checked. Also threads are not returning correct exit code.
-
-- Return exit code from threads depending on test execution status
-- In main thread, check the exit code of RX/TX threads
-- Skip error checking for corked tests as they are expected to timeout
+In case of selftest mode, temporary cgroup environment is created but
+cgroup is not joined. It causes test failures. Fixed by joining the
+cgroup
 
 Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
+Acked-by: John Fastabend <john.fastabend at gmail.com>
 Signed-off-by: Prashant Bhole <bhole_prashant_q7 at lab.ntt.co.jp>
 ---
- tools/testing/selftests/bpf/test_sockmap.c | 25 ++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/test_sockmap.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index eb17fae458e6..01bc9c6745e8 100644
+index 01bc9c6745e8..64f9e25c451f 100644
 --- a/tools/testing/selftests/bpf/test_sockmap.c
 +++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -429,8 +429,8 @@ static int sendmsg_test(struct sockmap_options *opt)
- 	struct msg_stats s = {0};
- 	int iov_count = opt->iov_count;
- 	int iov_buf = opt->iov_length;
-+	int rx_status, tx_status;
- 	int cnt = opt->rate;
--	int status;
- 
- 	errno = 0;
- 
-@@ -442,7 +442,7 @@ static int sendmsg_test(struct sockmap_options *opt)
- 	rxpid = fork();
- 	if (rxpid == 0) {
- 		if (opt->drop_expected)
--			exit(1);
-+			exit(0);
- 
- 		if (opt->sendpage)
- 			iov_count = 1;
-@@ -463,7 +463,7 @@ static int sendmsg_test(struct sockmap_options *opt)
- 				"rx_sendmsg: TX: %zuB %fB/s %fGB/s RX: %zuB %fB/s %fGB/s\n",
- 				s.bytes_sent, sent_Bps, sent_Bps/giga,
- 				s.bytes_recvd, recvd_Bps, recvd_Bps/giga);
--		exit(1);
-+		exit(err ? 1 : 0);
- 	} else if (rxpid == -1) {
- 		perror("msg_loop_rx: ");
- 		return errno;
-@@ -491,14 +491,27 @@ static int sendmsg_test(struct sockmap_options *opt)
- 				"tx_sendmsg: TX: %zuB %fB/s %f GB/s RX: %zuB %fB/s %fGB/s\n",
- 				s.bytes_sent, sent_Bps, sent_Bps/giga,
- 				s.bytes_recvd, recvd_Bps, recvd_Bps/giga);
--		exit(1);
-+		exit(err ? 1 : 0);
- 	} else if (txpid == -1) {
- 		perror("msg_loop_tx: ");
- 		return errno;
+@@ -1342,6 +1342,11 @@ static int __test_suite(char *bpf_file)
+ 		return cg_fd;
  	}
  
--	assert(waitpid(rxpid, &status, 0) == rxpid);
--	assert(waitpid(txpid, &status, 0) == txpid);
-+	assert(waitpid(rxpid, &rx_status, 0) == rxpid);
-+	assert(waitpid(txpid, &tx_status, 0) == txpid);
-+	if (WIFEXITED(rx_status)) {
-+		err = WEXITSTATUS(rx_status);
-+		if (err && !txmsg_cork) {
-+			fprintf(stderr, "rx thread exited with err %d. ", err);
-+			goto out;
-+		}
++	if (join_cgroup(CG_PATH)) {
++		fprintf(stderr, "ERROR: failed to join cgroup\n");
++		return -EINVAL;
 +	}
-+	if (WIFEXITED(tx_status)) {
-+		err = WEXITSTATUS(tx_status);
-+		if (err)
-+			fprintf(stderr, "tx thread exited with err %d. ", err);
-+	}
-+out:
- 	return err;
- }
- 
++
+ 	/* Tests basic commands and APIs with range of iov values */
+ 	txmsg_start = txmsg_end = 0;
+ 	err = test_txmsg(cg_fd);
 -- 
 2.17.0
 
