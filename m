@@ -1,52 +1,84 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Tue, 29 May 2018 11:54:28 -0600
-Subject: [PATCH] [RESEND] selftest: intel_pstate: debug support message
- from aperf.c and return value fix.
-In-Reply-To: <20180529172436.4432-1-ahiliation@gmail.com>
-References: <20180529172436.4432-1-ahiliation@gmail.com>
-Message-ID: <e68e630d-c8fd-41cd-b579-1bfffa8a1042@kernel.org>
+From: joelaf@google.com (Joel Fernandes)
+Date: Tue, 29 May 2018 17:04:52 -0700
+Subject: [PATCH v8 0/8] Centralize and unify usage of preempt/irq tracepoints
+Message-ID: <20180530000500.257225-1-joel@joelfernandes.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180529175428.SoVMsdkA4C8hfCl7tK9rmH7IhQqz1k6aLb5VaS1a0Qk@z>
+Message-ID: <20180530000452.lSerTsaXgD8jO3tPBaw7uLKMIsFlTbmGQ6O_fgu_ewE@z>
 
-On 05/29/2018 11:24 AM, Jeffrin Jose T wrote:
-> Additional message along with an error message which is more
-> verbose for debug support from aperf.c and updated with the
-> new return value "KSFT_SKIP".
-> 
-> Signed-off-by: Jeffrin Jose T [Rajagiri SET] <ahiliation at gmail.com>
-> ---
->  tools/testing/selftests/intel_pstate/aperf.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/intel_pstate/aperf.c b/tools/testing/selftests/intel_pstate/aperf.c
-> index d21edea9c560..f6cd03a87493 100644
-> --- a/tools/testing/selftests/intel_pstate/aperf.c
-> +++ b/tools/testing/selftests/intel_pstate/aperf.c
-> @@ -9,6 +9,8 @@
->  #include <sys/timeb.h>
->  #include <sched.h>
->  #include <errno.h>
-> +#include <string.h>
-> +#include "../kselftest.h"
->  
->  void usage(char *name) {
->  	printf ("Usage: %s cpunum\n", name);
-> @@ -41,8 +43,8 @@ int main(int argc, char **argv) {
->  	fd = open(msr_file_name, O_RDONLY);
->  
->  	if (fd == -1) {
-> -		perror("Failed to open");
-> -		return 1;
-> +		printf("/dev/cpu/%d/msr: %s\n", cpu, strerror(errno));
-> +		return KSFT_SKIP;
->  	}
->  
->  	CPU_ZERO(&cpuset);
-> 
+From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 
-Thanks, Applied to linux-kselftest next for 4.18-rc1
+The preempt/irq tracepoints exist but not everything in the kernel is
+using it during preempt/irq on/off events. This makes things not work
+simultaneously (for ex, only either lockdep or irqsoff events can be
+used at a time). This series is an attempt to solve that, and also
+results in a nice clean up of the kernel in general. Several ifdefs are
+simpler, and the design is more unified and better. Also as a result of
+this, we also speeded up  performance all rcuidle tracepoints since
+their handling is simpler.
 
--- Shuah
+v7->v8:
+- Refactored irqsoff tracer probe defines based on Namhyung's
+  suggestions. No functional change.
+
+v6->v7:
+- Added a module to simulate an atomic section, a kselftest to load and
+  and trigger it which verifies the preempt-tracer and this series.
+
+- Fixed a new warning after I rebased in early boot, this is because
+early_boot_irqs_disabled was set too early, I moved it after the lockdep
+initialization.
+
+- added back the softirq fix since it appears it wasn't picked up.
+
+- Ran Ingo's locking API selftest suite which are passing with this
+  series.
+
+- Mathieu suggested ifdef'ing the tracepoint_synchronize_unregister
+  function incase tracepoints aren't enabled, did that.
+
+Joel Fernandes (Google) (7):
+  softirq: reorder trace_softirqs_on to prevent lockdep splat
+  srcu: Add notrace variant of srcu_dereference
+  trace/irqsoff: Split reset into separate functions
+  tracepoint: Make rcuidle tracepoint callers use SRCU
+  tracing: Centralize preemptirq tracepoints and unify their usage
+  lib: Add module to simulate atomic sections for testing preemptoff
+    tracers
+  kselftests: Add tests for the preemptoff and irqsoff tracers
+
+Paul McKenney (1):
+  srcu: Add notrace variants of srcu_read_{lock,unlock}
+
+ include/linux/ftrace.h                        |  11 +-
+ include/linux/irqflags.h                      |  11 +-
+ include/linux/lockdep.h                       |   8 +-
+ include/linux/preempt.h                       |   2 +-
+ include/linux/srcu.h                          |  22 ++
+ include/linux/tracepoint.h                    |  48 +++-
+ include/trace/events/preemptirq.h             |  23 +-
+ init/main.c                                   |   5 +-
+ kernel/locking/lockdep.c                      |  35 +--
+ kernel/sched/core.c                           |   2 +-
+ kernel/softirq.c                              |   6 +-
+ kernel/trace/Kconfig                          |  22 +-
+ kernel/trace/Makefile                         |   2 +-
+ kernel/trace/trace_irqsoff.c                  | 253 ++++++------------
+ kernel/trace/trace_preemptirq.c               |  71 +++++
+ kernel/tracepoint.c                           |  15 +-
+ lib/Kconfig.debug                             |   8 +
+ lib/Makefile                                  |   1 +
+ lib/test_atomic_sections.c                    |  79 ++++++
+ tools/testing/selftests/ftrace/config         |   3 +
+ .../test.d/preemptirq/irqsoff_tracer.tc       |  74 +++++
+ 21 files changed, 459 insertions(+), 242 deletions(-)
+ create mode 100644 kernel/trace/trace_preemptirq.c
+ create mode 100644 lib/test_atomic_sections.c
+ create mode 100644 tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
+
+-- 
+2.17.0.921.gf22659ad46-goog
+
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
