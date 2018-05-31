@@ -1,27 +1,46 @@
-From: ahiliation@gmail.com (Jeffrin Thalakkottoor)
-Date: Thu, 31 May 2018 18:34:36 +0530
-Subject: [RESEND PATCH] selftests: intel_pstate: notification about
- privilege required to run intel_pstate testing script
-In-Reply-To: <16b7c1d5-3fe8-2bc9-6037-1fd61624f992@kernel.org>
-References: <20180530220339.6107-1-ahiliation@gmail.com>
- <16b7c1d5-3fe8-2bc9-6037-1fd61624f992@kernel.org>
-Message-ID:
- <CAEeSCzoUSVp5eWDk1A=v2oS-469QJYcw_kQcpDMj92RJRV-1+w@mail.gmail.com>
+From: shuah@kernel.org (Shuah Khan)
+Date: Thu, 31 May 2018 08:42:33 -0600
+Subject: [PATCH] selftests: add test for USB over IP driver
+In-Reply-To: <20180531063530.GB7744@kroah.com>
+References: <20180531030057.32442-1-shuah@kernel.org>
+ <20180531063530.GB7744@kroah.com>
+Message-ID: <52c33b15-0bc3-83ab-1e9c-bef7a0cbf791@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180531130436.jD5nungU1-L3rNbLMMzUY0L0n_SHLd8RbSrhoVgLa7U@z>
+Message-ID: <20180531144233.bvn2tvb978q9x2kIEcVLDdY3UMWAcu3PZVogHChtkag@z>
 
-On Thu, May 31, 2018@5:12 AM, Shuah Khan <shuah@kernel.org> wrote:
-> I will take this patch and apply it to linux-kselftest next for 4.18-rc1.
-anyway thanks .
+On 05/31/2018 12:35 AM, Greg KH wrote:
+> On Wed, May 30, 2018@09:00:57PM -0600, Shuah Khan (Samsung OSG) wrote:
+>> Add test for USB over IP driver. This test runs several tests on a device
+>> specified in the -b <busid> argument and path to the usbip tools.
+>>
+>> usbip_test.sh -b <busid> -p <usbip tools path>
+>>
+>> e.g:
+>> cd tools/testing selftests/drivers/usb/usbip
+>> sudo ./usbip_test.sh -b 3-10.2 -p <yoursrctree>/tools/usb/usbip
+>>
+>> This test should be run as root and user should build usbip tools before
+>> running the test.
+>>
+>> The usbip test isn't included in the Kselftest run as it requires user to
+>> specify a device to run tests on.
+>>
+>> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+> 
+> If you want to take this through your tree, that's fine with me:
+> 
+> 	Acked-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+> 
+> Otherwise I will be glad to queue it up in mine, just let me know what
+> is easier for you.
+> 
+> Nice work, thanks.
 
-> For next time, this patch should have been tagged v2 not RESEND. Also please
-> include changes made since the last version in this spot after the Signed-off-by
-> line.
-thanks for correction
+Thanks. Please take this through your tree sticking to the current flow
+of patches for this driver.
 
---
-software engineer
-rajagiri school of engineering and technology
+thanks,
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
