@@ -1,45 +1,91 @@
 From: petrm@mellanox.com (Petr Machata)
-Date: Thu, 31 May 2018 19:51:56 +0200
-Subject: [PATCH net-next 0/9] Test mirror-to-gretap with bridge in UL
-Message-ID: <cover.1527788672.git.petrm@mellanox.com>
+Date: Thu, 31 May 2018 19:52:02 +0200
+Subject: [PATCH net-next 1/9] selftests: forwarding: lib: Move here
+ vlan_capture_{,un}install()
+In-Reply-To: <cover.1527788672.git.petrm@mellanox.com>
+References: <cover.1527788672.git.petrm@mellanox.com>
+Message-ID:
+ <196945ae7a8ded90e82cee21ee6e507c6a859487.1527788672.git.petrm@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180531175156.8679ZL6TEO1ikSLHrCYPh1wyb5Yq19zhcTnyiI758As@z>
+Message-ID: <20180531175202.7bsx1EnCO7hh9NweeCoWNEHdyE_YKomK8l1r3rPXTPE@z>
 
-This patchset adds more tests to the mirror-to-gretap suite where bridge
-is present in the underlay. Specifically it adds tests for bridge VLAN
-handling, FDB, and bridge port STP status.
+Move vlan_capture_install() and vlan_capture_uninstall() from
+mirror_vlan.sh test to lib.sh so that it can be reused in other tests.
 
-In patches #1-#3, the codebase is refactored to support the new tests.
+Signed-off-by: Petr Machata <petrm at mellanox.com>
+---
+ tools/testing/selftests/net/forwarding/lib.sh      | 23 ++++++++++++++++++++++
+ .../selftests/net/forwarding/mirror_vlan.sh        | 23 ----------------------
+ 2 files changed, 23 insertions(+), 23 deletions(-)
 
-In patch #4, an STP test is added to the mirroring library, that will
-later be called from bridge tests.
-
-In patches #5-#8, the test for mirror-to-gretap with an 802.1q bridge in
-underlay is adapted and more tests are added.
-
-In patch #9, an STP test is added to the test suite for mirror-to-gretap
-with an 802.1d bridge in underlay.
-
-Petr Machata (9):
-  selftests: forwarding: lib: Move here vlan_capture_{,un}install()
-  selftests: forwarding: mirror_lib: Move here
-    do_test_span_vlan_dir_ips()
-  selftests: forwarding: mirror_lib: skip_hw the VLAN capture
-  selftests: forwarding: mirror_gre_lib: Add STP test
-  selftests: forwarding: mirror_gre_vlan_bridge_1q: Fix tunnel name
-  selftests: forwarding: mirror_gre_vlan_bridge_1q: Test final config
-  selftests: forwarding: mirror_gre_vlan_bridge_1q: Rename two tests
-  selftests: forwarding: mirror_gre_vlan_bridge_1q: Add more tests
-  selftests: forwarding: mirror_gre_bridge_1d_vlan: Add STP test
-
- tools/testing/selftests/net/forwarding/lib.sh      |  23 ++++
- .../net/forwarding/mirror_gre_bridge_1d_vlan.sh    |  12 ++
- .../selftests/net/forwarding/mirror_gre_lib.sh     |  32 +++++
- .../net/forwarding/mirror_gre_vlan_bridge_1q.sh    | 148 +++++++++++++++++++--
- .../testing/selftests/net/forwarding/mirror_lib.sh |  38 ++++++
- .../selftests/net/forwarding/mirror_vlan.sh        |  38 ------
- 6 files changed, 244 insertions(+), 47 deletions(-)
-
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 89ba4cd..7b18a53 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -514,6 +514,29 @@ icmp6_capture_uninstall()
+ 	__icmp_capture_add_del del 100 v6 "$@"
+ }
+ 
++__vlan_capture_add_del()
++{
++	local add_del=$1; shift
++	local pref=$1; shift
++	local dev=$1; shift
++	local filter=$1; shift
++
++	tc filter $add_del dev "$dev" ingress \
++	   proto 802.1q pref $pref \
++	   flower $filter \
++	   action pass
++}
++
++vlan_capture_install()
++{
++	__vlan_capture_add_del add 100 "$@"
++}
++
++vlan_capture_uninstall()
++{
++	__vlan_capture_add_del del 100 "$@"
++}
++
+ matchall_sink_create()
+ {
+ 	local dev=$1; shift
+diff --git a/tools/testing/selftests/net/forwarding/mirror_vlan.sh b/tools/testing/selftests/net/forwarding/mirror_vlan.sh
+index 1e10520..758b6d0 100755
+--- a/tools/testing/selftests/net/forwarding/mirror_vlan.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_vlan.sh
+@@ -76,29 +76,6 @@ test_vlan()
+ 	test_vlan_dir egress 0 8
+ }
+ 
+-vlan_capture_add_del()
+-{
+-	local add_del=$1; shift
+-	local pref=$1; shift
+-	local dev=$1; shift
+-	local filter=$1; shift
+-
+-	tc filter $add_del dev "$dev" ingress \
+-	   proto 802.1q pref $pref \
+-	   flower $filter \
+-	   action pass
+-}
+-
+-vlan_capture_install()
+-{
+-	vlan_capture_add_del add 100 "$@"
+-}
+-
+-vlan_capture_uninstall()
+-{
+-	vlan_capture_add_del del 100 "$@"
+-}
+-
+ do_test_span_vlan_dir_ips()
+ {
+ 	local expect=$1; shift
 -- 
 2.4.11
 
