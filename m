@@ -1,71 +1,63 @@
 From: bhole_prashant_q7@lab.ntt.co.jp (Prashant Bhole)
-Date: Thu, 31 May 2018 13:42:38 +0900
-Subject: [PATCH bpf-next v4 3/5] selftests/bpf: test_sockmap,
- timing improvements
+Date: Thu, 31 May 2018 13:42:39 +0900
+Subject: [PATCH bpf-next v4 4/5] selftests/bpf: test_sockmap,
+ fix data verification
 In-Reply-To: <20180531044240.796-1-bhole_prashant_q7@lab.ntt.co.jp>
 References: <20180531044240.796-1-bhole_prashant_q7@lab.ntt.co.jp>
-Message-ID: <20180531044240.796-4-bhole_prashant_q7@lab.ntt.co.jp>
+Message-ID: <20180531044240.796-5-bhole_prashant_q7@lab.ntt.co.jp>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180531044238.f8zZcL-OGtOUtjyyFhNc8uDehumJ5jxI2isBsC35Vjw@z>
+Message-ID: <20180531044239.aBqsMfbGPOTK7xCA-oBl9g-yfFzzILquSb3mdPYN3oA@z>
 
-Currently 10us delay is too low for many tests to succeed. It needs to
-be increased. Also, many corked tests are expected to hit rx timeout
-irrespective of timeout value.
+When data verification is enabled, some tests fail because verification is done
+incorrectly. Following changes fix it.
 
-- This patch sets 1000usec timeout value for corked tests because less
-than that causes broken-pipe error in tx thread. Also sets 1 second
-timeout for all other tests because less than that results in RX
-timeout
-- tests with apply=1 and higher number of iterations were taking lot
-of time. This patch reduces test run time by reducing iterations.
+- Identify the size of data block to be verified
+- Reset verification counter when data block size is reached
+- Fixed the value printed in case of verfication failure
 
-real    0m12.968s
-user    0m0.219s
-sys     0m14.337s
-
-Fixes: a18fda1a62c3 ("bpf: reduce runtime of test_sockmap tests")
+Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
+Acked-by: John Fastabend <john.fastabend at gmail.com>
 Signed-off-by: Prashant Bhole <bhole_prashant_q7 at lab.ntt.co.jp>
 ---
- tools/testing/selftests/bpf/test_sockmap.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/test_sockmap.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index 7f9ca79aadbc..5cd0550af595 100644
+index 5cd0550af595..2bc70e1ab2eb 100644
 --- a/tools/testing/selftests/bpf/test_sockmap.c
 +++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -345,8 +345,13 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
- 		if (err < 0)
- 			perror("recv start time: ");
- 		while (s->bytes_recvd < total_bytes) {
--			timeout.tv_sec = 0;
--			timeout.tv_usec = 10;
-+			if (txmsg_cork) {
-+				timeout.tv_sec = 0;
-+				timeout.tv_usec = 1000;
-+			} else {
-+				timeout.tv_sec = 1;
-+				timeout.tv_usec = 0;
-+			}
+@@ -337,8 +337,15 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
+ 		int fd_flags = O_NONBLOCK;
+ 		struct timeval timeout;
+ 		float total_bytes;
++		int bytes_cnt = 0;
++		int chunk_sz;
+ 		fd_set w;
  
- 			/* FD sets */
- 			FD_ZERO(&w);
-@@ -1025,14 +1030,14 @@ static int test_send(struct sockmap_options *opt, int cgrp)
- 
- 	opt->iov_length = 1;
- 	opt->iov_count = 1;
--	opt->rate = 1024;
-+	opt->rate = 512;
- 	err = test_exec(cgrp, opt);
- 	if (err)
- 		goto out;
- 
- 	opt->iov_length = 256;
- 	opt->iov_count = 1024;
--	opt->rate = 10;
-+	opt->rate = 2;
- 	err = test_exec(cgrp, opt);
- 	if (err)
- 		goto out;
++		if (opt->sendpage)
++			chunk_sz = iov_length * cnt;
++		else
++			chunk_sz = iov_length * iov_count;
++
+ 		fcntl(fd, fd_flags);
+ 		total_bytes = (float)iov_count * (float)iov_length * (float)cnt;
+ 		err = clock_gettime(CLOCK_MONOTONIC, &s->start);
+@@ -393,9 +400,14 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
+ 							errno = -EIO;
+ 							fprintf(stderr,
+ 								"detected data corruption @iov[%i]:%i %02x != %02x, %02x ?= %02x\n",
+-								i, j, d[j], k - 1, d[j+1], k + 1);
++								i, j, d[j], k - 1, d[j+1], k);
+ 							goto out_errno;
+ 						}
++						bytes_cnt++;
++						if (bytes_cnt == chunk_sz) {
++							k = 0;
++							bytes_cnt = 0;
++						}
+ 						recv--;
+ 					}
+ 				}
 -- 
 2.17.0
 
