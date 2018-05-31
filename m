@@ -1,33 +1,104 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Wed, 30 May 2018 21:29:30 -0600
-Subject: [PATCH v3] selftests: cgroup/memcontrol: add basic test for
- socket accounting
-In-Reply-To: <20180528061845.GA4805@rapoport-lnx>
-References: <1527019565-20470-1-git-send-email-rppt@linux.vnet.ibm.com>
- <20180528061845.GA4805@rapoport-lnx>
-Message-ID: <46b8563c-912b-add4-8c56-625c738510fd@kernel.org>
+From: bhole_prashant_q7@lab.ntt.co.jp (Prashant Bhole)
+Date: Thu, 31 May 2018 13:13:57 +0900
+Subject: [PATCH bpf v3 3/5] selftests/bpf: test_sockmap, fix test timeout
+In-Reply-To: <df1d9ec2-783a-09f4-29d7-544d20d74465@gmail.com>
+References: <20180530055611.10216-1-bhole_prashant_q7@lab.ntt.co.jp>
+ <20180530055611.10216-4-bhole_prashant_q7@lab.ntt.co.jp>
+ <20180530192942.4ahcaxupbhfkopl4@ast-mbp.dhcp.thefacebook.com>
+ <df1d9ec2-783a-09f4-29d7-544d20d74465@gmail.com>
+Message-ID: <634dc36e-f299-631d-f501-d12453fa0b98@lab.ntt.co.jp>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180531032930.2bN1jjSj2e2SeConWbbAqUPqqGDluOaCnt_t0z0PDHI@z>
+Message-ID: <20180531041357.OdqGb5cn_y6AHJyN21wqrY294RPFgSGbKRbWWQhwByY@z>
 
-On 05/28/2018 12:18 AM, Mike Rapoport wrote:
-> Hi,
-> 
-> Are there any updates on this?
-> 
-> On Tue, May 22, 2018@11:06:05PM +0300, Mike Rapoport wrote:
->> The test verifies that when there is active TCP connection, the
->> memory.stat.sock and memory.current values are close.
+
+
+On 5/31/2018 4:59 AM, John Fastabend wrote:
+> On 05/30/2018 12:29 PM, Alexei Starovoitov wrote:
+>> On Wed, May 30, 2018@02:56:09PM +0900, Prashant Bhole wrote:
+>>> In order to reduce runtime of tests, recently timout for select() call
+>>> was reduced from 1sec to 10usec. This was causing many tests failures.
+>>> It was caught with failure handling commits in this series.
+>>>
+>>> Restoring the timeout from 10usec to 1sec
+>>>
+>>> Fixes: a18fda1a62c3 ("bpf: reduce runtime of test_sockmap tests")
+>>> Signed-off-by: Prashant Bhole <bhole_prashant_q7 at lab.ntt.co.jp>
+>>> ---
+>>>   tools/testing/selftests/bpf/test_sockmap.c | 4 ++--
+>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+>>> index 64f9e25c451f..9d01f5c2abe2 100644
+>>> --- a/tools/testing/selftests/bpf/test_sockmap.c
+>>> +++ b/tools/testing/selftests/bpf/test_sockmap.c
+>>> @@ -345,8 +345,8 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
+>>>   		if (err < 0)
+>>>   			perror("recv start time: ");
+>>>   		while (s->bytes_recvd < total_bytes) {
+>>> -			timeout.tv_sec = 0;
+>>> -			timeout.tv_usec = 10;
+>>> +			timeout.tv_sec = 1;
+>>> +			timeout.tv_usec = 0;
 >>
->> Signed-off-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
->> Acked-by: Roman Gushchin <guro at fb.com>
->> ---
->> v3 changes:
->> * added changelog
+>> I've applied the set, but had to revert it, since it takes too long.
+>>
+>> real	1m40.124s
+>> user	0m0.375s
+>> sys	0m14.521s
+>>
+> 
+> Dang, I thought it would be a bit longer but not minutes.
+> 
+>> Myself and Daniel run the test semi-manually when we apply patches.> Adding 2 extra minutes of wait time is unnecessary.
+> 
+> Yep.
+> 
+>> Especially since most of it is idle time.
+>> Please find a way to fix tests differently.
+>> btw I don't see any failures today. Not sure what is being fixed
+>> by incresing a timeout.
+>>
+> 
+> Calling these fixes is a bit much, they are primarily improvements.
+> 
+> The background is, when I originally wrote the tests my goal was to
+> exercise the kernel code paths. Because of this I didn't really care if
+> the tests actually sent/recv all bytes in the test. (I have long
+> running tests using netperf/wrk/apached/etc. for that) But, the manual
+> tests do have an option to verify the data if specified. The 'verify'
+> option is a bit fragile in that with the right tests (e.g. drop)
+> or the certain options (e.g. cork) it can fail which is expected.
+> 
+> What Prashant added was support to actually verify the data correctly.
+> And also fix a few cgroup handling and some pretty printing as well.
+> He noticed the low timeout causing issue in these cases though so
+> increased it.
+> 
+> @Prashant, how about increasing this less dramatically because now
+> all cork tests are going to stall for 1s unless perfectly aligned.
+> How about 100us? Or even better we can conditionally set it based
+> on if tx_cork is set. If tx_cork is set use 1us otherwise use 200us
+> or something. (1s is really to high in any cases for lo)
+> 
+> Also capturing some of the above in the cover letter would help
+> folks understand the context a bit better.
+> 
 
-Now in linux-kselftest next for 4.18-rc1.
+I did trial and error for timeout values. Currently 1000us for corked 
+tests and 1 sec for other tests works fine. I observed broken-pipe error 
+at tx side when timeout was < 1000us.
 
-thanks,
--- Shuah
+Also tests with apply=1 and higher number of iterations were taking 
+time, so reducing iterations reduces the test run time drastically.
+
+real    0m12.968s
+user    0m0.219s
+sys     0m14.337s
+
+Also I will try to explain background in the cover letter of next series.
+
+-Prashant
+
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
