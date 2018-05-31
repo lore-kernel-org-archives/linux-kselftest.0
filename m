@@ -1,33 +1,39 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Thu, 31 May 2018 19:52:26 +0200
-Subject: [PATCH net-next 5/9] selftests: forwarding:
- mirror_gre_vlan_bridge_1q: Fix tunnel name
+Date: Thu, 31 May 2018 19:52:32 +0200
+Subject: [PATCH net-next 6/9] selftests: forwarding:
+ mirror_gre_vlan_bridge_1q: Test final config
 In-Reply-To: <cover.1527788672.git.petrm@mellanox.com>
 References: <cover.1527788672.git.petrm@mellanox.com>
-Message-ID: <9abf361236d8ef198d390a49fde874087491231e.1527788672.git.petrm@mellanox.com>
+Message-ID: <68dcc17b4f98dfda3b9f408edee906698b1a2313.1527788672.git.petrm@mellanox.com>
 
-The "ip6gretap" in the test name refers to the tunnel device type that
-the test is supposed to be testing. However test_ip6gretap_forbidden()
-tests, due to a typo, a gretap tunnel. Fix the typo.
+After the final change reestablishes the original configuration, make
+sure the traffic flows again as it should.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 ---
- tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh b/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh
-index 01ec28a..29fde73 100755
+index 29fde73..0a3bac9 100755
 --- a/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh
 +++ b/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh
-@@ -108,7 +108,7 @@ test_gretap_forbidden()
+@@ -91,12 +91,13 @@ test_span_gre_forbidden()
+ 	# Now forbid the VLAN at the bridge and see it fail.
+ 	bridge vlan del dev br1 vid 555 self
+ 	sleep 1
+-
+ 	fail_test_span_gre_dir $tundev ingress
+-	mirror_uninstall $swp1 ingress
  
- test_ip6gretap_forbidden()
- {
--	test_span_gre_forbidden gt4 "mirror to ip6gretap"
-+	test_span_gre_forbidden gt6 "mirror to ip6gretap"
+ 	bridge vlan add dev br1 vid 555 self
+ 	sleep 1
++	quick_test_span_gre_dir $tundev ingress
++
++	mirror_uninstall $swp1 ingress
+ 
+ 	log_test "$what: vlan forbidden at a bridge ($tcflags)"
  }
- 
- test_all()
 -- 
 2.4.11
 
