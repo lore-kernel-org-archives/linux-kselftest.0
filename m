@@ -1,25 +1,34 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Fri, 01 Jun 2018 00:37:29 +0200
-Subject: [PATCH net-next 0/2] selftests: forwarding: mirror_vlan: Fixlets
-Message-ID: <cover.1527805500.git.petrm@mellanox.com>
+Date: Fri, 01 Jun 2018 00:37:47 +0200
+Subject: [PATCH net-next 2/2] selftests: forwarding: mirror_vlan: Change test
+ description
+In-Reply-To: <cover.1527805500.git.petrm@mellanox.com>
+References: <cover.1527805500.git.petrm@mellanox.com>
+Message-ID: <2771471a59b715ec664cb95b17a2fc4f33a98803.1527805500.git.petrm@mellanox.com>
 
-This patchset includes two small fixes for the tests that were
-introduced in commit 1bb58d2d3cbe ("Merge branch
-'Mirroring-tests-involving-VLAN'").
+The test description is displayed with the PASS/FAIL resolution after
+the test is ran. There however already is one other test described
+exactly like this, which makes it unclear which of the tests passed or
+failed. Make the description unique.
 
-In patch #1, a "tc action trap" is uninstalled after the suite runs,
-instead of being installed again.
+Signed-off-by: Petr Machata <petrm at mellanox.com>
+---
+ tools/testing/selftests/net/forwarding/mirror_vlan.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In patch #2, a test in suite is renamed to differentiate it from another
-test of the same name.
-
-Petr Machata (2):
-  selftests: forwarding: mirror_vlan: Uninstall trap
-  selftests: forwarding: mirror_vlan: Change test description
-
- tools/testing/selftests/net/forwarding/mirror_vlan.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
+diff --git a/tools/testing/selftests/net/forwarding/mirror_vlan.sh b/tools/testing/selftests/net/forwarding/mirror_vlan.sh
+index c22e949..efade19 100755
+--- a/tools/testing/selftests/net/forwarding/mirror_vlan.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_vlan.sh
+@@ -129,7 +129,7 @@ test_tagged_vlan_dir()
+ 				  192.0.2.17 192.0.2.18
+ 	mirror_uninstall $swp1 $direction
+ 
+-	log_test "$direction mirror to vlan ($tcflags)"
++	log_test "$direction mirror tagged to vlan ($tcflags)"
+ }
+ 
+ test_tagged_vlan()
 -- 
 2.4.11
 
