@@ -1,38 +1,32 @@
-From: gregkh at linuxfoundation.org (Greg KH)
-Date: Thu, 31 May 2018 08:35:30 +0200
-Subject: [PATCH] selftests: add test for USB over IP driver
-In-Reply-To: <20180531030057.32442-1-shuah@kernel.org>
-References: <20180531030057.32442-1-shuah@kernel.org>
-Message-ID: <20180531063530.GB7744@kroah.com>
+From: lkp at intel.com (kbuild test robot)
+Date: Thu, 31 May 2018 14:45:35 +0800
+Subject: [PATCH v8 8/8] kselftests: Add tests for the preemptoff and
+ irqsoff tracers
+In-Reply-To: <20180530000500.257225-9-joel@joelfernandes.org>
+References: <20180530000500.257225-9-joel@joelfernandes.org>
+Message-ID: <201805311418.7PnmvmRl%fengguang.wu@intel.com>
 
-On Wed, May 30, 2018 at 09:00:57PM -0600, Shuah Khan (Samsung OSG) wrote:
-> Add test for USB over IP driver. This test runs several tests on a device
-> specified in the -b <busid> argument and path to the usbip tools.
-> 
-> usbip_test.sh -b <busid> -p <usbip tools path>
-> 
-> e.g:
-> cd tools/testing selftests/drivers/usb/usbip
-> sudo ./usbip_test.sh -b 3-10.2 -p <yoursrctree>/tools/usb/usbip
-> 
-> This test should be run as root and user should build usbip tools before
-> running the test.
-> 
-> The usbip test isn't included in the Kselftest run as it requires user to
-> specify a device to run tests on.
-> 
-> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+Hi Joel,
 
-If you want to take this through your tree, that's fine with me:
+Thank you for the patch! Perhaps something to improve:
 
-	Acked-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+[auto build test WARNING on linus/master]
+[also build test WARNING on v4.17-rc7]
+[cannot apply to next-20180530]
+[if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
 
-Otherwise I will be glad to queue it up in mine, just let me know what
-is easier for you.
+url:    https://github.com/0day-ci/linux/commits/Joel-Fernandes/Centralize-and-unify-usage-of-preempt-irq-tracepoints/20180531-093357
 
-Nice work, thanks.
 
-greg k-h
+coccinelle warnings: (new ones prefixed by >>)
+
+>> lib/test_atomic_sections.c:66:1-3: WARNING: PTR_ERR_OR_ZERO can be used
+
+Please review and possibly fold the followup patch.
+
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
