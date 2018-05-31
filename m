@@ -1,60 +1,33 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Thu, 31 May 2018 19:52:20 +0200
-Subject: [PATCH net-next 4/9] selftests: forwarding: mirror_gre_lib: Add STP
- test
+Date: Thu, 31 May 2018 19:52:26 +0200
+Subject: [PATCH net-next 5/9] selftests: forwarding:
+ mirror_gre_vlan_bridge_1q: Fix tunnel name
 In-Reply-To: <cover.1527788672.git.petrm@mellanox.com>
 References: <cover.1527788672.git.petrm@mellanox.com>
-Message-ID: <0651437857445ed3bf6fc4a99faf56f02733f46b.1527788672.git.petrm@mellanox.com>
+Message-ID: <9abf361236d8ef198d390a49fde874087491231e.1527788672.git.petrm@mellanox.com>
 
-Add a reusable full test that toggles STP state of a given bridge port
-and checks that the mirroring reacts appropriately. The test will be
-used by bridge tests in follow-up patches.
+The "ip6gretap" in the test name refers to the tunnel device type that
+the test is supposed to be testing. However test_ip6gretap_forbidden()
+tests, due to a typo, a gretap tunnel. Fix the typo.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 ---
- .../selftests/net/forwarding/mirror_gre_lib.sh     | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh b/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
-index 92ef6dd..619b469 100644
---- a/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
-@@ -96,3 +96,35 @@ full_test_span_gre_dir_vlan()
+diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh b/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh
+index 01ec28a..29fde73 100755
+--- a/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh
+@@ -108,7 +108,7 @@ test_gretap_forbidden()
+ 
+ test_ip6gretap_forbidden()
  {
- 	full_test_span_gre_dir_vlan_ips "$@" 192.0.2.1 192.0.2.2
+-	test_span_gre_forbidden gt4 "mirror to ip6gretap"
++	test_span_gre_forbidden gt6 "mirror to ip6gretap"
  }
-+
-+full_test_span_gre_stp_ips()
-+{
-+	local tundev=$1; shift
-+	local nbpdev=$1; shift
-+	local what=$1; shift
-+	local ip1=$1; shift
-+	local ip2=$1; shift
-+	local h3mac=$(mac_get $h3)
-+
-+	RET=0
-+
-+	mirror_install $swp1 ingress $tundev "matchall $tcflags"
-+	quick_test_span_gre_dir_ips $tundev ingress $ip1 $ip2
-+
-+	bridge link set dev $nbpdev state disabled
-+	sleep 1
-+	fail_test_span_gre_dir_ips $tundev ingress $ip1 $ip2
-+
-+	bridge link set dev $nbpdev state forwarding
-+	sleep 1
-+	quick_test_span_gre_dir_ips $tundev ingress $ip1 $ip2
-+
-+	mirror_uninstall $swp1 ingress
-+
-+	log_test "$what: STP state ($tcflags)"
-+}
-+
-+full_test_span_gre_stp()
-+{
-+	full_test_span_gre_stp_ips "$@" 192.0.2.1 192.0.2.2
-+}
+ 
+ test_all()
 -- 
 2.4.11
 
