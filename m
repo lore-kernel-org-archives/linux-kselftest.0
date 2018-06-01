@@ -1,267 +1,115 @@
-From: petrm@mellanox.com (Petr Machata)
-Date: Wed, 01 Aug 2018 00:39:29 +0200
-Subject: [PATCH net-next v2 7/7] selftests: mlxsw: Add test for
- ip_forward_update_priority
-In-Reply-To: <cover.1533076217.git.petrm@mellanox.com>
-References: <cover.1533076217.git.petrm@mellanox.com>
-Message-ID:
- <c5637eb0b26da090c740b5adfdbf7cf5359d4a71.1533076217.git.petrm@mellanox.com>
+From: john.fastabend@gmail.com (John Fastabend)
+Date: Fri, 1 Jun 2018 07:03:07 -0700
+Subject: [PATCH bpf v3 3/5] selftests/bpf: test_sockmap, fix test timeout
+In-Reply-To: <634dc36e-f299-631d-f501-d12453fa0b98@lab.ntt.co.jp>
+References: <20180530055611.10216-1-bhole_prashant_q7@lab.ntt.co.jp>
+ <20180530055611.10216-4-bhole_prashant_q7@lab.ntt.co.jp>
+ <20180530192942.4ahcaxupbhfkopl4@ast-mbp.dhcp.thefacebook.com>
+ <df1d9ec2-783a-09f4-29d7-544d20d74465@gmail.com>
+ <634dc36e-f299-631d-f501-d12453fa0b98@lab.ntt.co.jp>
+Message-ID: <f69d6775-b56f-2b47-21ce-51f9ef30d797@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180731223929.9vKms6amySVrgCSNJcreh8-se4YFAeuvgmoYeHIHBDM@z>
+Message-ID: <20180601140307.rUqVtOtMmruS0jnT3Qhb70gNMRNP5seSENusyLfBmjk@z>
 
-Verify that with that sysctl turned off, DSCP prioritization and rewrite
-works the same way as in qos_dscp_bridge test. However when the sysctl
-is charged, there should be a reprioritization after routing stage,
-which will be observed by a different DSCP rewrite on egress.
+On 05/30/2018 09:13 PM, Prashant Bhole wrote:
+> 
+> 
+> On 5/31/2018 4:59 AM, John Fastabend wrote:
+>> On 05/30/2018 12:29 PM, Alexei Starovoitov wrote:
+>>> On Wed, May 30, 2018@02:56:09PM +0900, Prashant Bhole wrote:
+>>>> In order to reduce runtime of tests, recently timout for select() call
+>>>> was reduced from 1sec to 10usec. This was causing many tests failures.
+>>>> It was caught with failure handling commits in this series.
+>>>>
+>>>> Restoring the timeout from 10usec to 1sec
+>>>>
+>>>> Fixes: a18fda1a62c3 ("bpf: reduce runtime of test_sockmap tests")
+>>>> Signed-off-by: Prashant Bhole <bhole_prashant_q7 at lab.ntt.co.jp>
+>>>> ---
+>>>>   tools/testing/selftests/bpf/test_sockmap.c | 4 ++--
+>>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/tools/testing/selftests/bpf/test_sockmap.c
+>>>> b/tools/testing/selftests/bpf/test_sockmap.c
+>>>> index 64f9e25c451f..9d01f5c2abe2 100644
+>>>> --- a/tools/testing/selftests/bpf/test_sockmap.c
+>>>> +++ b/tools/testing/selftests/bpf/test_sockmap.c
+>>>> @@ -345,8 +345,8 @@ static int msg_loop(int fd, int iov_count, int
+>>>> iov_length, int cnt,
+>>>>           if (err < 0)
+>>>>               perror("recv start time: ");
+>>>>           while (s->bytes_recvd < total_bytes) {
+>>>> -            timeout.tv_sec = 0;
+>>>> -            timeout.tv_usec = 10;
+>>>> +            timeout.tv_sec = 1;
+>>>> +            timeout.tv_usec = 0;
+>>>
+>>> I've applied the set, but had to revert it, since it takes too long.
+>>>
+>>> real    1m40.124s
+>>> user    0m0.375s
+>>> sys    0m14.521s
+>>>
+>>
+>> Dang, I thought it would be a bit longer but not minutes.
+>>
+>>> Myself and Daniel run the test semi-manually when we apply patches.>
+>>> Adding 2 extra minutes of wait time is unnecessary.
+>>
+>> Yep.
+>>
+>>> Especially since most of it is idle time.
+>>> Please find a way to fix tests differently.
+>>> btw I don't see any failures today. Not sure what is being fixed
+>>> by incresing a timeout.
+>>>
+>>
+>> Calling these fixes is a bit much, they are primarily improvements.
+>>
+>> The background is, when I originally wrote the tests my goal was to
+>> exercise the kernel code paths. Because of this I didn't really care if
+>> the tests actually sent/recv all bytes in the test. (I have long
+>> running tests using netperf/wrk/apached/etc. for that) But, the manual
+>> tests do have an option to verify the data if specified. The 'verify'
+>> option is a bit fragile in that with the right tests (e.g. drop)
+>> or the certain options (e.g. cork) it can fail which is expected.
+>>
+>> What Prashant added was support to actually verify the data correctly.
+>> And also fix a few cgroup handling and some pretty printing as well.
+>> He noticed the low timeout causing issue in these cases though so
+>> increased it.
+>>
+>> @Prashant, how about increasing this less dramatically because now
+>> all cork tests are going to stall for 1s unless perfectly aligned.
+>> How about 100us? Or even better we can conditionally set it based
+>> on if tx_cork is set. If tx_cork is set use 1us otherwise use 200us
+>> or something. (1s is really to high in any cases for lo)
+>>
+>> Also capturing some of the above in the cover letter would help
+>> folks understand the context a bit better.
+>>
+> 
+> I did trial and error for timeout values. Currently 1000us for corked
+> tests and 1 sec for other tests works fine. I observed broken-pipe error
+> at tx side when timeout was < 1000us.
+> 
+> Also tests with apply=1 and higher number of iterations were taking
+> time, so reducing iterations reduces the test run time drastically.
+> 
 
-Signed-off-by: Petr Machata <petrm at mellanox.com>
-Reviewed-by: Ido Schimmel <idosch at mellanox.com>
----
- .../selftests/drivers/net/mlxsw/qos_dscp_router.sh | 233 +++++++++++++++++++++
- 1 file changed, 233 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/mlxsw/qos_dscp_router.sh
+Yep, sending 1B at a time is slow.
 
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_router.sh b/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_router.sh
-new file mode 100755
-index 000000000000..281d90766e12
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_router.sh
-@@ -0,0 +1,233 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Test for DSCP prioritization in the router.
-+#
-+# With ip_forward_update_priority disabled, the packets are expected to keep
-+# their DSCP (which in this test uses only values 0..7) intact as they are
-+# forwarded by the switch. That is verified at $h2. ICMP responses are formed
-+# with the same DSCP as the requests, and likewise pass through the switch
-+# intact, which is verified at $h1.
-+#
-+# With ip_forward_update_priority enabled, router reprioritizes the packets
-+# according to the table in reprioritize(). Thus, say, DSCP 7 maps to priority
-+# 4, which on egress maps back to DSCP 4. The response packet then gets
-+# reprioritized to 6, getting DSCP 6 on egress.
-+#
-+# +----------------------+                             +----------------------+
-+# | H1                   |                             |                   H2 |
-+# |    + $h1             |                             |            $h2 +     |
-+# |    | 192.0.2.1/28    |                             |  192.0.2.18/28 |     |
-+# +----|-----------------+                             +----------------|-----+
-+#      |                                                                |
-+# +----|----------------------------------------------------------------|-----+
-+# | SW |                                                                |     |
-+# |    + $swp1                                                    $swp2 +     |
-+# |      192.0.2.2/28                                     192.0.2.17/28       |
-+# |      APP=0,5,0 .. 7,5,7                          APP=0,5,0 .. 7,5,7       |
-+# +---------------------------------------------------------------------------+
-+
-+ALL_TESTS="
-+	ping_ipv4
-+	test_update
-+	test_no_update
-+"
-+
-+lib_dir=$(dirname $0)/../../../net/forwarding
-+
-+NUM_NETIFS=4
-+source $lib_dir/lib.sh
-+
-+reprioritize()
-+{
-+	local in=$1; shift
-+
-+	# This is based on rt_tos2priority in include/net/route.h. Assuming 1:1
-+	# mapping between priorities and TOS, it yields a new priority for a
-+	# packet with ingress priority of $in.
-+	local -a reprio=(0 0 2 2 6 6 4 4)
-+
-+	echo ${reprio[$in]}
-+}
-+
-+h1_create()
-+{
-+	local dscp;
-+
-+	simple_if_init $h1 192.0.2.1/28
-+	tc qdisc add dev $h1 clsact
-+	dscp_capture_install $h1 0
-+	ip route add vrf v$h1 192.0.2.16/28 via 192.0.2.2
-+}
-+
-+h1_destroy()
-+{
-+	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
-+	dscp_capture_uninstall $h1 0
-+	tc qdisc del dev $h1 clsact
-+	simple_if_fini $h1 192.0.2.1/28
-+}
-+
-+h2_create()
-+{
-+	simple_if_init $h2 192.0.2.18/28
-+	tc qdisc add dev $h2 clsact
-+	dscp_capture_install $h2 0
-+	ip route add vrf v$h2 192.0.2.0/28 via 192.0.2.17
-+}
-+
-+h2_destroy()
-+{
-+	ip route del vrf v$h2 192.0.2.0/28 via 192.0.2.17
-+	dscp_capture_uninstall $h2 0
-+	tc qdisc del dev $h2 clsact
-+	simple_if_fini $h2 192.0.2.18/28
-+}
-+
-+dscp_map()
-+{
-+	local base=$1; shift
-+
-+	for prio in {0..7}; do
-+		echo app=$prio,5,$((base + prio))
-+	done
-+}
-+
-+switch_create()
-+{
-+	simple_if_init $swp1 192.0.2.2/28
-+	__simple_if_init $swp2 v$swp1 192.0.2.17/28
-+
-+	lldptool -T -i $swp1 -V APP $(dscp_map 0) >/dev/null
-+	lldptool -T -i $swp2 -V APP $(dscp_map 0) >/dev/null
-+	lldpad_app_wait_set $swp1
-+	lldpad_app_wait_set $swp2
-+}
-+
-+switch_destroy()
-+{
-+	lldptool -T -i $swp2 -V APP -d $(dscp_map 0) >/dev/null
-+	lldptool -T -i $swp1 -V APP -d $(dscp_map 0) >/dev/null
-+	lldpad_app_wait_del
-+
-+	__simple_if_fini $swp2 192.0.2.17/28
-+	simple_if_fini $swp1 192.0.2.2/28
-+}
-+
-+setup_prepare()
-+{
-+	h1=${NETIFS[p1]}
-+	swp1=${NETIFS[p2]}
-+
-+	swp2=${NETIFS[p3]}
-+	h2=${NETIFS[p4]}
-+
-+	vrf_prepare
-+
-+	sysctl_set net.ipv4.ip_forward_update_priority 1
-+	h1_create
-+	h2_create
-+	switch_create
-+}
-+
-+cleanup()
-+{
-+	pre_cleanup
-+
-+	switch_destroy
-+	h2_destroy
-+	h1_destroy
-+	sysctl_restore net.ipv4.ip_forward_update_priority
-+
-+	vrf_cleanup
-+}
-+
-+ping_ipv4()
-+{
-+	ping_test $h1 192.0.2.18
-+}
-+
-+dscp_ping_test()
-+{
-+	local vrf_name=$1; shift
-+	local sip=$1; shift
-+	local dip=$1; shift
-+	local prio=$1; shift
-+	local reprio=$1; shift
-+	local dev1=$1; shift
-+	local dev2=$1; shift
-+
-+	local prio2=$($reprio $prio)   # ICMP Request egress prio
-+	local prio3=$($reprio $prio2)  # ICMP Response egress prio
-+
-+	local dscp=$((prio << 2))     # ICMP Request ingress DSCP
-+	local dscp2=$((prio2 << 2))   # ICMP Request egress DSCP
-+	local dscp3=$((prio3 << 2))   # ICMP Response egress DSCP
-+
-+	RET=0
-+
-+	eval "local -A dev1_t0s=($(dscp_fetch_stats $dev1 0))"
-+	eval "local -A dev2_t0s=($(dscp_fetch_stats $dev2 0))"
-+
-+	ip vrf exec $vrf_name \
-+	   ${PING} -Q $dscp ${sip:+-I $sip} $dip \
-+		   -c 10 -i 0.1 -w 2 &> /dev/null
-+
-+	eval "local -A dev1_t1s=($(dscp_fetch_stats $dev1 0))"
-+	eval "local -A dev2_t1s=($(dscp_fetch_stats $dev2 0))"
-+
-+	for i in {0..7}; do
-+		local dscpi=$((i << 2))
-+		local expect2=0
-+		local expect3=0
-+
-+		if ((i == prio2)); then
-+			expect2=10
-+		fi
-+		if ((i == prio3)); then
-+			expect3=10
-+		fi
-+
-+		local delta=$((dev2_t1s[$i] - dev2_t0s[$i]))
-+		((expect2 == delta))
-+		check_err $? "DSCP $dscpi@$dev2: Expected to capture $expect2 packets, got $delta."
-+
-+		delta=$((dev1_t1s[$i] - dev1_t0s[$i]))
-+		((expect3 == delta))
-+		check_err $? "DSCP $dscpi@$dev1: Expected to capture $expect3 packets, got $delta."
-+	done
-+
-+	log_test "DSCP rewrite: $dscp-(prio $prio2)-$dscp2-(prio $prio3)-$dscp3"
-+}
-+
-+__test_update()
-+{
-+	local update=$1; shift
-+	local reprio=$1; shift
-+
-+	sysctl_restore net.ipv4.ip_forward_update_priority
-+	sysctl_set net.ipv4.ip_forward_update_priority $update
-+
-+	for prio in {0..7}; do
-+		dscp_ping_test v$h1 192.0.2.1 192.0.2.18 $prio $reprio $h1 $h2
-+	done
-+}
-+
-+test_update()
-+{
-+	__test_update 1 reprioritize
-+}
-+
-+test_no_update()
-+{
-+	__test_update 0 echo
-+}
-+
-+trap cleanup EXIT
-+
-+setup_prepare
-+setup_wait
-+
-+tests_run
-+
-+exit $EXIT_STATUS
--- 
-2.4.11
+> real    0m12.968s
+> user    0m0.219s
+> sys     0m14.337s
+> 
+> Also I will try to explain background in the cover letter of next series.
+> 
+Seems more reasonable to me now. Thanks.
+
+> -Prashant
+> 
+> 
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
