@@ -1,39 +1,23 @@
-From: john.fastabend@gmail.com (John Fastabend)
-Date: Fri, 1 Jun 2018 07:11:56 -0700
-Subject: [PATCH bpf-next v4 3/5] selftests/bpf: test_sockmap, timing
- improvements
-In-Reply-To: <20180531044240.796-4-bhole_prashant_q7@lab.ntt.co.jp>
-References: <20180531044240.796-1-bhole_prashant_q7@lab.ntt.co.jp>
- <20180531044240.796-4-bhole_prashant_q7@lab.ntt.co.jp>
-Message-ID: <1f1895d0-0620-f6df-c3c3-033360bd310e@gmail.com>
+From: patch-notifications@ellerman.id.au (Michael Ellerman)
+Date: Sat,  2 Jun 2018 01:54:59 +1000 (AEST)
+Subject: [v2, 2/2] selftests/powerpc: Add core file test for Protection Key
+ registers
+In-Reply-To: <20180525021145.4520-2-bauerman@linux.ibm.com>
+Message-ID: <40y86W6jNmz9s3x@ozlabs.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180601141156.2Xna_XioQz6-hU4YTdXVmqq_vbWfcidvNR_ssyr8v2I@z>
+Message-ID: <20180601155459.23zc3slx3fmCYIDNad8xEGNzCePvSxG2xhgC8oJWBtU@z>
 
-On 05/30/2018 09:42 PM, Prashant Bhole wrote:
-> Currently 10us delay is too low for many tests to succeed. It needs to
-> be increased. Also, many corked tests are expected to hit rx timeout
-> irrespective of timeout value.
+On Fri, 2018-05-25@02:11:45 UTC, Thiago Jung Bauermann wrote:
+> This test verifies that the AMR, IAMR and UAMOR are being written to a
+> process' core file.
 > 
-> - This patch sets 1000usec timeout value for corked tests because less
-> than that causes broken-pipe error in tx thread. Also sets 1 second
-> timeout for all other tests because less than that results in RX
-> timeout
-> - tests with apply=1 and higher number of iterations were taking lot
-> of time. This patch reduces test run time by reducing iterations.
-> 
-> real    0m12.968s
-> user    0m0.219s
-> sys     0m14.337s
-> 
-> Fixes: a18fda1a62c3 ("bpf: reduce runtime of test_sockmap tests")
-> Signed-off-by: Prashant Bhole <bhole_prashant_q7 at lab.ntt.co.jp>
-> ---
+> Signed-off-by: Thiago Jung Bauermann <bauerman at linux.ibm.com>
 
-OK seems more reasonable to me. We could probably even go lower
-on some of the 'rate' values here if needed (512->128).
+Applied to powerpc next, thanks.
 
-Acked-by: John Fastabend <john.fastabend at gmail.com>
+https://git.kernel.org/powerpc/c/39b91dd625f15438859204a489ab62
 
+cheers
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
