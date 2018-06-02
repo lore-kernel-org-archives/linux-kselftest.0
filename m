@@ -1,29 +1,34 @@
-From: davem at davemloft.net (David Miller)
-Date: Fri, 01 Jun 2018 14:11:32 -0400 (EDT)
-Subject: [PATCH net-next 0/9] Test mirror-to-gretap with bridge in UL
-In-Reply-To: <cover.1527788672.git.petrm@mellanox.com>
-References: <cover.1527788672.git.petrm@mellanox.com>
-Message-ID: <20180601.141132.2033350757881840928.davem@davemloft.net>
+From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
+Date: Fri, 1 Jun 2018 21:17:24 -0400 (EDT)
+Subject: [PATCH v8 5/8] tracepoint: Make rcuidle tracepoint callers use
+ SRCU
+In-Reply-To: <20180531175153.GA129415@joelaf.mtv.corp.google.com>
+References: <20180530000500.257225-1-joel@joelfernandes.org>
+ <20180530000500.257225-6-joel@joelfernandes.org>
+ <214539705.3633.1527749441133.JavaMail.zimbra@efficios.com>
+ <20180531175153.GA129415@joelaf.mtv.corp.google.com>
+Message-ID: <1349580221.4426.1527902244184.JavaMail.zimbra@efficios.com>
 
-From: Petr Machata <petrm at mellanox.com>
-Date: Thu, 31 May 2018 19:51:56 +0200
+----- On May 31, 2018, at 1:51 PM, Joel Fernandes, Google joel at joelfernandes.org wrote:
 
-> This patchset adds more tests to the mirror-to-gretap suite where bridge
-> is present in the underlay. Specifically it adds tests for bridge VLAN
-> handling, FDB, and bridge port STP status.
+>> I find it odd to have a "return" in a macro that consists of a
+>> do { } while (0). I'm tempted to replace "return" by "break" here,
+>> to break the macro do/while (0) loop.
 > 
-> In patches #1-#3, the codebase is refactored to support the new tests.
-> 
-> In patch #4, an STP test is added to the mirroring library, that will
-> later be called from bridge tests.
-> 
-> In patches #5-#8, the test for mirror-to-gretap with an 802.1q bridge in
-> underlay is adapted and more tests are added.
-> 
-> In patch #9, an STP test is added to the test suite for mirror-to-gretap
-> with an 802.1d bridge in underlay.
+> "return;" is also used from "if (!(cond))" above so I prefer be consistent
+> and just use return than break as done above, but please let me know if you
+> still object.
 
-Series applied, thanks.
+It's fine by me,
+
+Thanks!
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
