@@ -1,36 +1,44 @@
-From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
-Date: Fri, 1 Jun 2018 21:17:24 -0400 (EDT)
-Subject: [PATCH v8 5/8] tracepoint: Make rcuidle tracepoint callers use
- SRCU
-In-Reply-To: <20180531175153.GA129415@joelaf.mtv.corp.google.com>
-References: <20180530000500.257225-1-joel@joelfernandes.org>
- <20180530000500.257225-6-joel@joelfernandes.org>
- <214539705.3633.1527749441133.JavaMail.zimbra@efficios.com>
- <20180531175153.GA129415@joelaf.mtv.corp.google.com>
-Message-ID: <1349580221.4426.1527902244184.JavaMail.zimbra@efficios.com>
+From: daniel@iogearbox.net (Daniel Borkmann)
+Date: Sat, 2 Jun 2018 06:16:05 +0200
+Subject: [PATCH bpf-next v4 0/5] fix test_sockmap
+In-Reply-To: <20180531044240.796-1-bhole_prashant_q7@lab.ntt.co.jp>
+References: <20180531044240.796-1-bhole_prashant_q7@lab.ntt.co.jp>
+Message-ID: <839ad376-9719-0649-e821-e05568aa1145@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180602011724.M_o-zuHwqHWfU8YBXwfGYya7W9nNw3ny2F-oJ4UIG0g@z>
+Message-ID: <20180602041605.tUHO5biCSm0YWVYzjuKE3BWqDFRQqhiJq_NR1_czr9I@z>
 
------ On May 31, 2018,@1:51 PM, Joel Fernandes, Google joel@joelfernandes.org wrote:
-
->> I find it odd to have a "return" in a macro that consists of a
->> do { } while (0). I'm tempted to replace "return" by "break" here,
->> to break the macro do/while (0) loop.
+On 05/31/2018 06:42 AM, Prashant Bhole wrote:
+> test_sockmap was originally written only to exercise kernel code
+> paths, so there was no strict checking of errors. When the code was
+> modified to run as selftests, due to lack of error handling it was not
+> able to detect test failures.
 > 
-> "return;" is also used from "if (!(cond))" above so I prefer be consistent
-> and just use return than break as done above, but please let me know if you
-> still object.
+> In order to improve, this series fixes error handling, test run time
+> and data verification.
+> 
+> Also slightly improved test output by printing parameter values (cork,
+> apply, start, end) so that parameters for all tests are displayed.
+> 
+> Changes in v4:
+>   - patch1: Ignore RX timoute error only for corked tests
+>   - patch3: Setting different timeout for corked tests and reduce
+>       run time by reducing number of iterations in some tests
+> 
+> Changes in v3:
+>   - Skipped error checking for corked tests
+> 
+> Prashant Bhole (5):
+>   selftests/bpf: test_sockmap, check test failure
+>   selftests/bpf: test_sockmap, join cgroup in selftest mode
+>   selftests/bpf: test_sockmap, timing improvements
+>   selftests/bpf: test_sockmap, fix data verification
+>   selftests/bpf: test_sockmap, print additional test options
+> 
+>  tools/testing/selftests/bpf/test_sockmap.c | 87 +++++++++++++++++-----
+>  1 file changed, 67 insertions(+), 20 deletions(-)
+> 
 
-It's fine by me,
-
-Thanks!
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Applied to bpf-next, thanks Prashant!
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
