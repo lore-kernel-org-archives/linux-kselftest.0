@@ -1,25 +1,36 @@
-From: petrm at mellanox.com (Petr Machata)
-Date: Tue, 05 Jun 2018 16:15:22 +0300
-Subject: [PATCH net-next] selftests: forwarding: Fix importing dependent
- libraries
-In-Reply-To: <1ee588d3867b411485be29e45ebbda050920544c.1528203928.git.petrm@mellanox.com>
- (Petr Machata's message of "Tue, 05 Jun 2018 15:07:12 +0200")
-References: <1ee588d3867b411485be29e45ebbda050920544c.1528203928.git.petrm@mellanox.com>
-Message-ID: <wihefhlbcid.fsf@dev-r-vrt-156.mtr.labs.mlnx>
+From: davem at davemloft.net (David Miller)
+Date: Tue, 05 Jun 2018 14:28:40 -0400 (EDT)
+Subject: [PATCH v6 0/2] sparc64: Add privileged ADI driver
+In-Reply-To: <20180426165409.716764-1-tom.hromatka@oracle.com>
+References: <20180426165409.716764-1-tom.hromatka@oracle.com>
+Message-ID: <20180605.142840.2277897500494503602.davem@davemloft.net>
 
-Petr Machata <petrm at mellanox.com> writes:
+From: Tom Hromatka <tom.hromatka at oracle.com>
+Date: Thu, 26 Apr 2018 10:54:07 -0600
 
-> When libraries are sourced from elsewhere from the tree, such as the
-> testing/selftests/drivers/net/mlxsw subdirectory, sourcing their own
+> ADI is a feature supported on SPARC M7 and newer processors to allow
+> hardware to catch rogue accesses to memory. ADI is supported for data
+> fetches only and not instruction fetches. An app can enable ADI on its
+> data pages, set version tags on them and use versioned addresses to
+> access the data pages. Upper bits of the address contain the version
+> tag. On M7 processors, upper four bits (bits 63-60) contain the version
+> tag. If a rogue app attempts to access ADI enabled data pages, its
+> access is blocked and processor generates an exception. Please see
+> Documentation/sparc/adi.txt for further details.
+> 
+> This patchset implements a char driver to read/write ADI versions from
+> privileged user space processes.  Intended consumers are makedumpfile
+> and crash.
 
-Sorry, I didn't realize the mirror_bridge.sh is not upstream yet. This
-patch is thus immaterial, it will be sent together with the test when it
-becomes relevant.
+Series applied, but there is one thing I am not happy with.
 
-Please ignore.
+The hard coded ADI block size.
 
-Thanks,
-Petr
+This value is at least theoretically dynamic, and that is why
+it is passed into userspace programs via the ELF AUX vector
+at exec() time.
+
+So they should really fetch it from there.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
