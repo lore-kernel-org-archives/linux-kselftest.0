@@ -1,47 +1,36 @@
-From: rafael.tinoco@linaro.org (Rafael David Tinoco)
-Date: Wed,  6 Jun 2018 14:44:24 -0300
-Subject: [PATCH] selftests: gpio: gpio-mockup-chardev
- GPIOHANDLE_REQUEST_OUTPUT fix
-Message-ID: <20180606174424.9630-1-rafael.tinoco@linaro.org>
+From: dan.carpenter@oracle.com (Dan Carpenter)
+Date: Thu, 7 Jun 2018 11:30:02 +0300
+Subject: [PATCH] kselftest/cgroup: fix a signedness bug
+Message-ID: <20180607083001.m4z4wjev6j3sc423@kili.mountain>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180606174424.WhoYct8Ad_MqmFSfAdXgk2POc8G8tWCDFa4uXGHWJtw@z>
+Message-ID: <20180607083002.R1sRXSWjX0Y4DfW5N9Q687U5IMJjtwvbfIwBHtSjTmg@z>
 
-Following logic from commit: 22f6592b23, GPIOHANDLE_REQUEST_OUTPUT
-should handle errors same way as GPIOHANDLE_REQUEST_INPUT does, or else
-the following error occurs:
+"len" needs to be signed for the error handling to work.
 
-gpio-mockup-chardev: gpio<gpiochip1> line<0> test flag<0x2> value<0>: No
-such file or directory
+Signed-off-by: Dan Carpenter <dan.carpenter at oracle.com>
 
-despite the real result of gpio_pin_test(), gpio_debugfs_get() and
-gpiotools_request_linehandle() functions.
-
-Signed-off-by: Rafael David Tinoco <rafael.tinoco at linaro.org>
----
- tools/testing/selftests/gpio/gpio-mockup-chardev.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/gpio/gpio-mockup-chardev.c b/tools/testing/selftests/gpio/gpio-mockup-chardev.c
-index 667e916fa7cc..f8d468f54e98 100644
---- a/tools/testing/selftests/gpio/gpio-mockup-chardev.c
-+++ b/tools/testing/selftests/gpio/gpio-mockup-chardev.c
-@@ -225,10 +225,10 @@ int gpio_pin_test(struct gpiochip_info *cinfo, int line, int flag, int value)
- 		if (flag & GPIOHANDLE_REQUEST_ACTIVE_LOW)
- 			debugfs_value = !debugfs_value;
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index b69bdeb4b9fe..1e9e3c470561 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -35,7 +35,7 @@ static ssize_t read_text(const char *path, char *buf, size_t max_len)
+ 	return len;
+ }
  
--		if (!(debugfs_dir == OUT && value == debugfs_value))
-+		if (!(debugfs_dir == OUT && value == debugfs_value)) {
- 			errno = -EINVAL;
--		ret = -errno;
--
-+			ret = -errno;
-+		}
- 	}
- 	gpiotools_release_linehandle(fd);
+-static ssize_t write_text(const char *path, char *buf, size_t len)
++static ssize_t write_text(const char *path, char *buf, ssize_t len)
+ {
+ 	int fd;
  
--- 
-2.17.1
-
+@@ -140,7 +140,7 @@ long cg_read_key_long(const char *cgroup, const char *control, const char *key)
+ int cg_write(const char *cgroup, const char *control, char *buf)
+ {
+ 	char path[PATH_MAX];
+-	size_t len = strlen(buf);
++	ssize_t len = strlen(buf);
+ 
+ 	snprintf(path, sizeof(path), "%s/%s", cgroup, control);
+ 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
