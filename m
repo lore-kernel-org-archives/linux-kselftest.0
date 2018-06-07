@@ -1,176 +1,204 @@
 From: joelaf@google.com (Joel Fernandes)
-Date: Thu,  7 Jun 2018 13:38:14 -0700
-Subject: [PATCH v9 6/7] lib: Add module to simulate atomic sections for
- testing preemptoff tracers
+Date: Thu,  7 Jun 2018 13:38:12 -0700
+Subject: [PATCH v9 4/7] tracepoint: Make rcuidle tracepoint callers use SRCU
 In-Reply-To: <20180607203815.255845-1-joel@joelfernandes.org>
 References: <20180607203815.255845-1-joel@joelfernandes.org>
-Message-ID: <20180607203815.255845-7-joel@joelfernandes.org>
+Message-ID: <20180607203815.255845-5-joel@joelfernandes.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180607203814.HaCApiX1spoPhcPajWcbcUL9QvrTVNwPi7U22UPb_PU@z>
+Message-ID: <20180607203812.vgt4gsDsHz4bs0PH5Bfasz89c_8t_jkXOeUcfOjxFCE@z>
 
 From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 
-In this patch we introduce a test module for simulating a long atomic
-section in the kernel which the preemptoff or irqsoff tracers can
-detect. This module is to be used only for test purposes and is default
-disabled.
+In recent tests with IRQ on/off tracepoints, a large performance
+overhead ~10% is noticed when running hackbench. This is root caused to
+calls to rcu_irq_enter_irqson and rcu_irq_exit_irqson from the
+tracepoint code. Following a long discussion on the list [1] about this,
+we concluded that srcu is a better alternative for use during rcu idle.
+Although it does involve extra barriers, its lighter than the sched-rcu
+version which has to do additional RCU calls to notify RCU idle about
+entry into RCU sections.
 
-Following is the expected output (only briefly shown) that can be parsed
-to verify that the tracers are working correctly. We will use this from
-the kselftests in future patches.
+In this patch, we change the underlying implementation of the
+trace_*_rcuidle API to use SRCU. This has shown to improve performance
+alot for the high frequency irq enable/disable tracepoints.
 
-For the preemptoff tracer:
+Test: Tested idle and preempt/irq tracepoints.
 
-echo preemptoff > /d/tracing/current_tracer
-sleep 1
-insmod ./test_atomic_sections.ko atomic_mode=preempt atomic_time=500000
-sleep 1
-bash-4.3# cat /d/tracing/trace
-preempt -1066    2...2    0us@: atomic_sect_run <-atomic_sect_run
-preempt -1066    2...2 500002us : atomic_sect_run <-atomic_sect_run
-preempt -1066    2...2 500004us : tracer_preempt_on <-atomic_sect_run
-preempt -1066    2...2 500012us : <stack trace>
- => kthread
- => ret_from_fork
+Here are some performance numbers:
 
-For the irqsoff tracer:
+With a run of the following 30 times on a single core x86 Qemu instance
+with 1GB memory:
+hackbench -g 4 -f 2 -l 3000
 
-echo irqsoff > /d/tracing/current_tracer
-sleep 1
-insmod ./test_atomic_sections.ko atomic_mode=irq atomic_time=500000
-sleep 1
-bash-4.3# cat /d/tracing/trace
-irq dis -1069    1d..1    0us@: atomic_sect_run
-irq dis -1069    1d..1 500001us : atomic_sect_run
-irq dis -1069    1d..1 500002us : tracer_hardirqs_on <-atomic_sect_run
-irq dis -1069    1d..1 500005us : <stack trace>
- => ret_from_fork
+Completion times in seconds. CONFIG_PROVE_LOCKING=y.
 
-Co-developed-by: Erick Reyes <erickreyes at google.com>
-Cc: Andy Shevchenko <andriy.shevchenko at linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko at linux.intel.com>
+No patches (without this series)
+Mean: 3.048
+Median: 3.025
+Std Dev: 0.064
+
+With Lockdep using irq tracepoints with RCU implementation:
+Mean: 3.451   (-11.66 %)
+Median: 3.447 (-12.22%)
+Std Dev: 0.049
+
+With Lockdep using irq tracepoints with SRCU implementation (this series):
+Mean: 3.020   (I would consider the improvement against the "without
+	       this series" case as just noise).
+Median: 3.013
+Std Dev: 0.033
+
+[1] https://patchwork.kernel.org/patch/10344297/
+
+Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
 Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
 ---
- lib/Kconfig.debug          |  8 ++++
- lib/Makefile               |  1 +
- lib/test_atomic_sections.c | 77 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 86 insertions(+)
- create mode 100644 lib/test_atomic_sections.c
+ include/linux/tracepoint.h | 49 +++++++++++++++++++++++++++++++-------
+ kernel/tracepoint.c        | 16 ++++++++++++-
+ 2 files changed, 56 insertions(+), 9 deletions(-)
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index c40c7b734cd1..faebf0fe3bcf 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1933,6 +1933,14 @@ config TEST_KMOD
+diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+index c94f466d57ef..9cf2882d2ef4 100644
+--- a/include/linux/tracepoint.h
++++ b/include/linux/tracepoint.h
+@@ -15,6 +15,7 @@
+  */
  
- 	  If unsure, say N.
+ #include <linux/smp.h>
++#include <linux/srcu.h>
+ #include <linux/errno.h>
+ #include <linux/types.h>
+ #include <linux/cpumask.h>
+@@ -33,6 +34,8 @@ struct trace_eval_map {
  
-+config TEST_ATOMIC_SECTIONS
-+	tristate "Simulate atomic sections for tracers to detect"
-+	depends on m
-+	help
-+	  Select this option to build a test module that can help test atomic
-+	  sections by simulating them with a duration supplied as a module
-+	  parameter. Preempt disable and irq disable modes can be requested.
+ #define TRACEPOINT_DEFAULT_PRIO	10
+ 
++extern struct srcu_struct tracepoint_srcu;
 +
- config TEST_DEBUG_VIRTUAL
- 	tristate "Test CONFIG_DEBUG_VIRTUAL feature"
- 	depends on DEBUG_VIRTUAL
-diff --git a/lib/Makefile b/lib/Makefile
-index ce20696d5a92..e82cf5445b7b 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -46,6 +46,7 @@ obj-y += string_helpers.o
- obj-$(CONFIG_TEST_STRING_HELPERS) += test-string_helpers.o
- obj-y += hexdump.o
- obj-$(CONFIG_TEST_HEXDUMP) += test_hexdump.o
-+obj-$(CONFIG_TEST_ATOMIC_SECTIONS) += test_atomic_sections.o
- obj-y += kstrtox.o
- obj-$(CONFIG_FIND_BIT_BENCHMARK) += find_bit_benchmark.o
- obj-$(CONFIG_TEST_BPF) += test_bpf.o
-diff --git a/lib/test_atomic_sections.c b/lib/test_atomic_sections.c
-new file mode 100644
-index 000000000000..1eef518f0974
---- /dev/null
-+++ b/lib/test_atomic_sections.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Atomic section emulation test module
-+ *
-+ * Emulates atomic sections by disabling IRQs or preemption
-+ * and doing a busy wait for a specified amount of time.
-+ * This can be used for testing of different atomic section
-+ * tracers such as irqsoff tracers.
-+ *
-+ * (c) 2018. Google LLC
-+ */
+ extern int
+ tracepoint_probe_register(struct tracepoint *tp, void *probe, void *data);
+ extern int
+@@ -75,10 +78,16 @@ int unregister_tracepoint_module_notifier(struct notifier_block *nb)
+  * probe unregistration and the end of module exit to make sure there is no
+  * caller executing a probe when it is freed.
+  */
++#ifdef CONFIG_TRACEPOINTS
+ static inline void tracepoint_synchronize_unregister(void)
+ {
++	synchronize_srcu(&tracepoint_srcu);
+ 	synchronize_sched();
+ }
++#else
++static inline void tracepoint_synchronize_unregister(void)
++{ }
++#endif
+ 
+ #ifdef CONFIG_HAVE_SYSCALL_TRACEPOINTS
+ extern int syscall_regfunc(void);
+@@ -129,18 +138,38 @@ extern void syscall_unregfunc(void);
+  * as "(void *, void)". The DECLARE_TRACE_NOARGS() will pass in just
+  * "void *data", where as the DECLARE_TRACE() will pass in "void *data, proto".
+  */
+-#define __DO_TRACE(tp, proto, args, cond, rcucheck)			\
++#define __DO_TRACE(tp, proto, args, cond, rcuidle)			\
+ 	do {								\
+ 		struct tracepoint_func *it_func_ptr;			\
+ 		void *it_func;						\
+ 		void *__data;						\
++		int __maybe_unused idx = 0;				\
+ 									\
+ 		if (!(cond))						\
+ 			return;						\
+-		if (rcucheck)						\
+-			rcu_irq_enter_irqson();				\
+-		rcu_read_lock_sched_notrace();				\
+-		it_func_ptr = rcu_dereference_sched((tp)->funcs);	\
++									\
++		/*							\
++		 * For rcuidle callers, use srcu since sched-rcu	\
++		 * doesn't work from the idle path.			\
++		 */							\
++		if (rcuidle) {						\
++			if (in_nmi()) {					\
++				WARN_ON_ONCE(1);			\
++				return; /* no srcu from nmi */		\
++			}						\
++									\
++			idx = srcu_read_lock_notrace(&tracepoint_srcu);	\
++			it_func_ptr =					\
++				srcu_dereference_notrace((tp)->funcs,	\
++						&tracepoint_srcu);	\
++			/* To keep it consistent with !rcuidle path */	\
++			preempt_disable_notrace();			\
++		} else {						\
++			rcu_read_lock_sched_notrace();			\
++			it_func_ptr =					\
++				rcu_dereference_sched((tp)->funcs);	\
++		}							\
++									\
+ 		if (it_func_ptr) {					\
+ 			do {						\
+ 				it_func = (it_func_ptr)->func;		\
+@@ -148,9 +177,13 @@ extern void syscall_unregfunc(void);
+ 				((void(*)(proto))(it_func))(args);	\
+ 			} while ((++it_func_ptr)->func);		\
+ 		}							\
+-		rcu_read_unlock_sched_notrace();			\
+-		if (rcucheck)						\
+-			rcu_irq_exit_irqson();				\
++									\
++		if (rcuidle) {						\
++			preempt_enable_notrace();			\
++			srcu_read_unlock_notrace(&tracepoint_srcu, idx);\
++		} else {						\
++			rcu_read_unlock_sched_notrace();		\
++		}							\
+ 	} while (0)
+ 
+ #ifndef MODULE
+diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
+index 1e37da2e0c25..b2e3be589aff 100644
+--- a/kernel/tracepoint.c
++++ b/kernel/tracepoint.c
+@@ -31,6 +31,9 @@
+ extern struct tracepoint * const __start___tracepoints_ptrs[];
+ extern struct tracepoint * const __stop___tracepoints_ptrs[];
+ 
++DEFINE_SRCU(tracepoint_srcu);
++EXPORT_SYMBOL_GPL(tracepoint_srcu);
 +
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/kernel.h>
-+#include <linux/kthread.h>
-+#include <linux/ktime.h>
-+#include <linux/module.h>
-+#include <linux/printk.h>
-+#include <linux/string.h>
-+
-+static ulong atomic_time = 100;
-+static char atomic_mode[10] = "irq";
-+
-+module_param_named(atomic_time, atomic_time, ulong, S_IRUGO);
-+module_param_string(atomic_mode, atomic_mode, 10, S_IRUGO);
-+MODULE_PARM_DESC(atomic_time, "Period in microseconds (100 uS default)");
-+MODULE_PARM_DESC(atomic_mode, "Mode of the test such as preempt or irq (default irq)");
-+
-+static void busy_wait(ulong time)
+ /* Set to 1 to enable tracepoint debug output */
+ static const int tracepoint_debug;
+ 
+@@ -67,16 +70,27 @@ static inline void *allocate_probes(int count)
+ 	return p == NULL ? NULL : p->probes;
+ }
+ 
+-static void rcu_free_old_probes(struct rcu_head *head)
++static void srcu_free_old_probes(struct rcu_head *head)
+ {
+ 	kfree(container_of(head, struct tp_probes, rcu));
+ }
+ 
++static void rcu_free_old_probes(struct rcu_head *head)
 +{
-+	ktime_t start, end;
-+	start = ktime_get();
-+	do {
-+		end = ktime_get();
-+		if (kthread_should_stop())
-+			break;
-+	} while (ktime_to_ns(ktime_sub(end, start)) < (time * 1000));
++	call_srcu(&tracepoint_srcu, head, srcu_free_old_probes);
 +}
 +
-+int atomic_sect_run(void *data)
-+{
-+	unsigned long flags;
-+
-+	if (!strcmp(atomic_mode, "irq")) {
-+		local_irq_save(flags);
-+		busy_wait(atomic_time);
-+		local_irq_restore(flags);
-+	} else if (!strcmp(atomic_mode, "preempt")) {
-+		preempt_disable();
-+		busy_wait(atomic_time);
-+		preempt_enable();
-+	}
-+
-+	return 0;
-+}
-+
-+static int __init atomic_sect_init(void)
-+{
-+	char task_name[50];
-+	struct task_struct *test_task;
-+
-+	snprintf(task_name, sizeof(task_name), "%s_test", atomic_mode);
-+
-+	test_task = kthread_run(atomic_sect_run, NULL, task_name);
-+	return PTR_ERR_OR_ZERO(test_task);
-+}
-+
-+static void __exit atomic_sect_exit(void)
-+{
-+	return;
-+}
-+
-+module_init(atomic_sect_init)
-+module_exit(atomic_sect_exit)
-+MODULE_LICENSE("GPL v2");
+ static inline void release_probes(struct tracepoint_func *old)
+ {
+ 	if (old) {
+ 		struct tp_probes *tp_probes = container_of(old,
+ 			struct tp_probes, probes[0]);
++		/*
++		 * Tracepoint probes are protected by both sched RCU and SRCU,
++		 * by calling the SRCU callback in the sched RCU callback we
++		 * cover both cases. So let us chain the SRCU and sched RCU
++		 * callbacks to wait for both grace periods.
++		 */
+ 		call_rcu_sched(&tp_probes->rcu, rcu_free_old_probes);
+ 	}
+ }
 -- 
 2.17.1.1185.g55be947832-goog
 
