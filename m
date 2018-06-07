@@ -1,65 +1,82 @@
-From: joelaf at google.com (Joel Fernandes)
-Date: Thu,  7 Jun 2018 13:38:09 -0700
-Subject: [PATCH v9 1/7] srcu: Add notrace variants of srcu_read_{lock,unlock}
-In-Reply-To: <20180607203815.255845-1-joel@joelfernandes.org>
-References: <20180607203815.255845-1-joel@joelfernandes.org>
-Message-ID: <20180607203815.255845-2-joel@joelfernandes.org>
+From: ys114321 at gmail.com (Y Song)
+Date: Thu, 7 Jun 2018 14:17:16 -0700
+Subject: [PATCH] selftests: bpf: fix urandom_read build issue
+In-Reply-To: <CADYN=9J3wY1f6q4NvH1mHJXnu6GnErOqz75CfzfG1q5-WzcyCg@mail.gmail.com>
+References: <20180607105712.553-1-anders.roxell@linaro.org>
+ <CAH3MdRWo0kUYngyAwXP1sOT_XqbxyfTvDd6sNz+qd7LL1T8LUA@mail.gmail.com>
+ <CADYN=9J3wY1f6q4NvH1mHJXnu6GnErOqz75CfzfG1q5-WzcyCg@mail.gmail.com>
+Message-ID: <CAH3MdRXMHRtK9FJ4UP8Gy-bahCS2oipOY7yLTEqu-x6uOMKLvw@mail.gmail.com>
 
-From: Paul McKenney <paulmck at linux.vnet.ibm.com>
+On Thu, Jun 7, 2018 at 12:07 PM, Anders Roxell <anders.roxell at linaro.org> wrote:
+> On 7 June 2018 at 19:52, Y Song <ys114321 at gmail.com> wrote:
+>> On Thu, Jun 7, 2018 at 3:57 AM, Anders Roxell <anders.roxell at linaro.org> wrote:
+>>> gcc complains that urandom_read gets built twice.
+>>>
+>>> gcc -o tools/testing/selftests/bpf/urandom_read
+>>> -static urandom_read.c -Wl,--build-id
+>>> gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../lib/bpf
+>>> -I../../../../include/generated  -I../../../include    urandom_read.c
+>>> urandom_read -lcap -lelf -lrt -lpthread -o
+>>> tools/testing/selftests/bpf/urandom_read
+>>> gcc: fatal error: input file
+>>> ‘tools/testing/selftests/bpf/urandom_read’ is the
+>>> same as output file
+>>> compilation terminated.
+>>> ../lib.mk:110: recipe for target
+>>> 'tools/testing/selftests/bpf/urandom_read' failed
+>>
+>> What is the build/make command to reproduce the above failure?
+>
+> make -C tools/testing/selftests
 
-This is needed for a future tracepoint patch that uses srcu, and to make
-sure it doesn't call into lockdep.
+Thanks. The patch will break
+   make -C tools/testing/selftests/bpf
 
-tracepoint code already calls notrace variants for rcu_read_lock_sched
-so this patch does the same for srcu which will be used in a later
-patch. Keeps it consistent with rcu-sched.
+[yhs at localhost bpf-next]$ make -C tools/testing/selftests/bpf
+make: Entering directory '/home/yhs/work/bpf-next/tools/testing/selftests/bpf'
+gcc -o /urandom_read -static urandom_read.c -Wl,--build-id
+/usr/bin/ld: cannot open output file /urandom_read: Permission denied
+collect2: error: ld returned 1 exit status
+make: *** [Makefile:20: /urandom_read] Error 1
+make: Leaving directory '/home/yhs/work/bpf-next/tools/testing/selftests/bpf'
+[yhs at localhost bpf-next]$
 
-[Joel: Added commit message]
-Reviewed-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-Signed-off-by: Paul McKenney <paulmck at linux.vnet.ibm.com>
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
- include/linux/srcu.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Could you still make the above command work?
 
-diff --git a/include/linux/srcu.h b/include/linux/srcu.h
-index 33c1c698df09..2ec618979b20 100644
---- a/include/linux/srcu.h
-+++ b/include/linux/srcu.h
-@@ -161,6 +161,16 @@ static inline int srcu_read_lock(struct srcu_struct *sp) __acquires(sp)
- 	return retval;
- }
- 
-+/* Used by tracing, cannot be traced and cannot invoke lockdep. */
-+static inline notrace int
-+srcu_read_lock_notrace(struct srcu_struct *sp) __acquires(sp)
-+{
-+	int retval;
-+
-+	retval = __srcu_read_lock(sp);
-+	return retval;
-+}
-+
- /**
-  * srcu_read_unlock - unregister a old reader from an SRCU-protected structure.
-  * @sp: srcu_struct in which to unregister the old reader.
-@@ -175,6 +185,13 @@ static inline void srcu_read_unlock(struct srcu_struct *sp, int idx)
- 	__srcu_read_unlock(sp, idx);
- }
- 
-+/* Used by tracing, cannot be traced and cannot call lockdep. */
-+static inline notrace void
-+srcu_read_unlock_notrace(struct srcu_struct *sp, int idx) __releases(sp)
-+{
-+	__srcu_read_unlock(sp, idx);
-+}
-+
- /**
-  * smp_mb__after_srcu_read_unlock - ensure full ordering after srcu_read_unlock
-  *
--- 
-2.17.1.1185.g55be947832-goog
-
+>
+> Cheers,
+> Anders
+>
+>>
+>>> To fix this issue remove the urandom_read target and so target
+>>> TEST_CUSTOM_PROGS gets used.
+>>>
+>>> Fixes: 81f77fd0deeb ("bpf: add selftest for stackmap with BPF_F_STACK_BUILD_ID")
+>>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+>>> ---
+>>>  tools/testing/selftests/bpf/Makefile | 6 ++----
+>>>  1 file changed, 2 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>>> index 607ed8729c06..67285591ffd7 100644
+>>> --- a/tools/testing/selftests/bpf/Makefile
+>>> +++ b/tools/testing/selftests/bpf/Makefile
+>>> @@ -16,10 +16,8 @@ LDLIBS += -lcap -lelf -lrt -lpthread
+>>>  TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read
+>>>  all: $(TEST_CUSTOM_PROGS)
+>>>
+>>> -$(TEST_CUSTOM_PROGS): urandom_read
+>>> -
+>>> -urandom_read: urandom_read.c
+>>> -       $(CC) -o $(TEST_CUSTOM_PROGS) -static $< -Wl,--build-id
+>>> +$(TEST_CUSTOM_PROGS): $(OUTPUT)/%: %.c
+>>> +       $(CC) -o $@ -static $< -Wl,--build-id
+>>>
+>>>  # Order correspond to 'make run_tests' order
+>>>  TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test_progs \
+>>> --
+>>> 2.17.1
+>>>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
