@@ -1,34 +1,51 @@
-From: dan.carpenter at oracle.com (Dan Carpenter)
-Date: Thu, 7 Jun 2018 11:30:02 +0300
-Subject: [PATCH] kselftest/cgroup: fix a signedness bug
-Message-ID: <20180607083001.m4z4wjev6j3sc423@kili.mountain>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Thu,  7 Jun 2018 12:57:12 +0200
+Subject: [PATCH] selftests: bpf: fix urandom_read build issue
+Message-ID: <20180607105712.553-1-anders.roxell@linaro.org>
 
-"len" needs to be signed for the error handling to work.
+gcc complains that urandom_read gets built twice.
 
-Signed-off-by: Dan Carpenter <dan.carpenter at oracle.com>
+gcc -o tools/testing/selftests/bpf/urandom_read
+-static urandom_read.c -Wl,--build-id
+gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../lib/bpf
+-I../../../../include/generated  -I../../../include    urandom_read.c
+urandom_read -lcap -lelf -lrt -lpthread -o
+tools/testing/selftests/bpf/urandom_read
+gcc: fatal error: input file
+‘tools/testing/selftests/bpf/urandom_read’ is the
+same as output file
+compilation terminated.
+../lib.mk:110: recipe for target
+'tools/testing/selftests/bpf/urandom_read' failed
+To fix this issue remove the urandom_read target and so target
+TEST_CUSTOM_PROGS gets used.
 
-diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-index b69bdeb4b9fe..1e9e3c470561 100644
---- a/tools/testing/selftests/cgroup/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/cgroup_util.c
-@@ -35,7 +35,7 @@ static ssize_t read_text(const char *path, char *buf, size_t max_len)
- 	return len;
- }
+Fixes: 81f77fd0deeb ("bpf: add selftest for stackmap with BPF_F_STACK_BUILD_ID")
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+---
+ tools/testing/selftests/bpf/Makefile | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 607ed8729c06..67285591ffd7 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -16,10 +16,8 @@ LDLIBS += -lcap -lelf -lrt -lpthread
+ TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read
+ all: $(TEST_CUSTOM_PROGS)
  
--static ssize_t write_text(const char *path, char *buf, size_t len)
-+static ssize_t write_text(const char *path, char *buf, ssize_t len)
- {
- 	int fd;
+-$(TEST_CUSTOM_PROGS): urandom_read
+-
+-urandom_read: urandom_read.c
+-	$(CC) -o $(TEST_CUSTOM_PROGS) -static $< -Wl,--build-id
++$(TEST_CUSTOM_PROGS): $(OUTPUT)/%: %.c
++	$(CC) -o $@ -static $< -Wl,--build-id
  
-@@ -140,7 +140,7 @@ long cg_read_key_long(const char *cgroup, const char *control, const char *key)
- int cg_write(const char *cgroup, const char *control, char *buf)
- {
- 	char path[PATH_MAX];
--	size_t len = strlen(buf);
-+	ssize_t len = strlen(buf);
- 
- 	snprintf(path, sizeof(path), "%s/%s", cgroup, control);
- 
+ # Order correspond to 'make run_tests' order
+ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test_progs \
+-- 
+2.17.1
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
