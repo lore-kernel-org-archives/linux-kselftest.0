@@ -1,43 +1,60 @@
-From: guro@fb.com (Roman Gushchin)
-Date: Thu, 7 Jun 2018 13:52:27 +0100
-Subject: [PATCH] kselftest/cgroup: fix a signedness bug
-In-Reply-To: <20180607083001.m4z4wjev6j3sc423@kili.mountain>
-References: <20180607083001.m4z4wjev6j3sc423@kili.mountain>
-Message-ID: <20180607125224.GA4302@castle>
+From: ys114321@gmail.com (Y Song)
+Date: Thu, 7 Jun 2018 10:52:02 -0700
+Subject: [PATCH] selftests: bpf: fix urandom_read build issue
+In-Reply-To: <20180607105712.553-1-anders.roxell@linaro.org>
+References: <20180607105712.553-1-anders.roxell@linaro.org>
+Message-ID:
+ <CAH3MdRWo0kUYngyAwXP1sOT_XqbxyfTvDd6sNz+qd7LL1T8LUA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180607125227.St2nVTQMHPYVDP-a-mtf9QYKbeJd0wQjocHqtW1X1IA@z>
+Message-ID: <20180607175202.2iIApar9urvD7ppqr7yHx6q_hSX_xxHUg_v57UT_29M@z>
 
-On Thu, Jun 07, 2018@11:30:02AM +0300, Dan Carpenter wrote:
-> "len" needs to be signed for the error handling to work.
-> 
-> Signed-off-by: Dan Carpenter <dan.carpenter at oracle.com>
-> 
-> diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-> index b69bdeb4b9fe..1e9e3c470561 100644
-> --- a/tools/testing/selftests/cgroup/cgroup_util.c
-> +++ b/tools/testing/selftests/cgroup/cgroup_util.c
-> @@ -35,7 +35,7 @@ static ssize_t read_text(const char *path, char *buf, size_t max_len)
->  	return len;
->  }
->  
-> -static ssize_t write_text(const char *path, char *buf, size_t len)
-> +static ssize_t write_text(const char *path, char *buf, ssize_t len)
->  {
->  	int fd;
->  
-> @@ -140,7 +140,7 @@ long cg_read_key_long(const char *cgroup, const char *control, const char *key)
->  int cg_write(const char *cgroup, const char *control, char *buf)
->  {
->  	char path[PATH_MAX];
-> -	size_t len = strlen(buf);
-> +	ssize_t len = strlen(buf);
->  
->  	snprintf(path, sizeof(path), "%s/%s", cgroup, control);
->  
+On Thu, Jun 7, 2018@3:57 AM, Anders Roxell <anders.roxell@linaro.org> wrote:
+> gcc complains that urandom_read gets built twice.
+>
+> gcc -o tools/testing/selftests/bpf/urandom_read
+> -static urandom_read.c -Wl,--build-id
+> gcc -Wall -O2 -I../../../include/uapi -I../../../lib -I../../../lib/bpf
+> -I../../../../include/generated  -I../../../include    urandom_read.c
+> urandom_read -lcap -lelf -lrt -lpthread -o
+> tools/testing/selftests/bpf/urandom_read
+> gcc: fatal error: input file
+> ‘tools/testing/selftests/bpf/urandom_read’ is the
+> same as output file
+> compilation terminated.
+> ../lib.mk:110: recipe for target
+> 'tools/testing/selftests/bpf/urandom_read' failed
 
-Looks good to me!
+What is the build/make command to reproduce the above failure?
 
-Thanks!
+> To fix this issue remove the urandom_read target and so target
+> TEST_CUSTOM_PROGS gets used.
+>
+> Fixes: 81f77fd0deeb ("bpf: add selftest for stackmap with BPF_F_STACK_BUILD_ID")
+> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+> ---
+>  tools/testing/selftests/bpf/Makefile | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 607ed8729c06..67285591ffd7 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -16,10 +16,8 @@ LDLIBS += -lcap -lelf -lrt -lpthread
+>  TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read
+>  all: $(TEST_CUSTOM_PROGS)
+>
+> -$(TEST_CUSTOM_PROGS): urandom_read
+> -
+> -urandom_read: urandom_read.c
+> -       $(CC) -o $(TEST_CUSTOM_PROGS) -static $< -Wl,--build-id
+> +$(TEST_CUSTOM_PROGS): $(OUTPUT)/%: %.c
+> +       $(CC) -o $@ -static $< -Wl,--build-id
+>
+>  # Order correspond to 'make run_tests' order
+>  TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test_progs \
+> --
+> 2.17.1
+>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
