@@ -1,47 +1,69 @@
 From: shuah at kernel.org (Shuah Khan (Samsung OSG))
-Date: Tue, 12 Jun 2018 17:22:30 -0600
-Subject: [PATCH] selftests: pstore: return Kselftest Skip code for skipped
- tests
-Message-ID: <20180612232230.27864-1-shuah@kernel.org>
+Date: Tue, 12 Jun 2018 17:23:48 -0600
+Subject: [PATCH] selftests: sparc64: Fix to do nothing on non-sparc64
+Message-ID: <20180612232348.27979-1-shuah@kernel.org>
 
-When pstore_post_reboot test gets skipped because of unmet dependencies
-and/or unsupported configuration, it returns 0 which is treated as a pass
-by the Kselftest framework. This leads to false positive result even when
-the test could not be run.
+sparc64 test fails with the following errors on non-sparc64 systems. Fix
+the Makefile to do nothing on non-sparc64 systems to suppress the errors:
 
-Change it to return kselftest skip code when a test gets skipped to clearly
-report that the test could not be run.
-
-Kselftest framework SKIP code is 4 and the framework prints appropriate
-messages to indicate that the test is skipped.
+make run_tests
+adi-test.c: Assembler messages:
+adi-test.c:302: Error: no such instruction: `rd %tick,%r13'
+adi-test.c:304: Error: no such instruction: `rd %tick,%rbp'
+adi-test.c:190: Error: no such instruction: `rd %tick,%rbp'
+adi-test.c:192: Error: no such instruction: `rd %tick,%rdx'
+adi-test.c:273: Error: no such instruction: `rd %tick,%rbx'
+adi-test.c:276: Error: no such instruction: `rd %tick,%rdx'
+adi-test.c:217: Error: no such instruction: `rd %tick,%rbp'
+adi-test.c:220: Error: no such instruction: `rd %tick,%rdx'
+adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
+adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
+adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
+adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
+adi-test.c:246: Error: no such instruction: `rd %tick,%rbp'
+adi-test.c:248: Error: no such instruction: `rd %tick,%rdx'
+adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
+adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
+adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
+<builtin>: recipe for target 'adi-test' failed
+make[1]: *** [adi-test] Error 1
+adi: [FAIL]
+./drivers_test.sh: 24: ./drivers_test.sh: ./adi-test: not found
+../lib.mk:73: recipe for target 'run_tests' failed
+make: *** [run_tests] Error 1
 
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/pstore/pstore_post_reboot_tests | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/testing/selftests/sparc64/Makefile | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/tools/testing/selftests/pstore/pstore_post_reboot_tests b/tools/testing/selftests/pstore/pstore_post_reboot_tests
-index 6ccb154cb4aa..22f8df1ad7d4 100755
---- a/tools/testing/selftests/pstore/pstore_post_reboot_tests
-+++ b/tools/testing/selftests/pstore/pstore_post_reboot_tests
-@@ -7,13 +7,16 @@
- #
- # Released under the terms of the GPL v2.
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
+diff --git a/tools/testing/selftests/sparc64/Makefile b/tools/testing/selftests/sparc64/Makefile
+index 2082eeffd779..442f0ca45441 100644
+--- a/tools/testing/selftests/sparc64/Makefile
++++ b/tools/testing/selftests/sparc64/Makefile
+@@ -1,7 +1,17 @@
++uname_M := $(shell uname -m 2>/dev/null || echo not)
++ARCH ?= $(shell echo $(uname_M) | sed -e s/x86_64/x86/)
 +
- . ./common_tests
++ifneq ($(ARCH),sparc64)
++nothing:
++.PHONY: all clean run_tests install
++.SILENT:
++else
++
+ SUBDIRS := drivers
  
- if [ -e $REBOOT_FLAG  ]; then
-     rm $REBOOT_FLAG
- else
-     prlog "pstore_crash_test has not been executed yet. we skip further tests."
--    exit 0
-+    exit $ksft_skip
- fi
+ TEST_PROGS := run.sh
  
- prlog -n "Mounting pstore filesystem ... "
++
+ .PHONY: all clean
+ 
+ include ../lib.mk
+@@ -44,3 +54,4 @@ override define CLEAN
+ 		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
+ 	done
+ endef
++endif
 -- 
 2.17.0
 
