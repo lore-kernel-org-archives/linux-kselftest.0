@@ -1,45 +1,55 @@
 From: shuah@kernel.org (Shuah Khan (Samsung OSG))
-Date: Tue, 12 Jun 2018 17:24:03 -0600
-Subject: [PATCH] selftests: sparc64: delete RUN_TESTS and EMIT_TESTS overrides
-Message-ID: <20180612232403.28031-1-shuah@kernel.org>
+Date: Tue, 12 Jun 2018 17:48:07 -0600
+Subject: [PATCH] selftests: static_keys: return Kselftest Skip code for
+ skipped tests
+Message-ID: <20180612234807.28967-1-shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180612232403.8_YuT2oQQtAJQNoTVuOi7eCfuUxi3RUwyoEjaZpk7fk@z>
+Message-ID: <20180612234807.wqwz8AzmS2fAHhWrxFfiLDtqM8q32jKftl5N3jNr0Kc@z>
 
-Delete RUN_TESTS and EMIT_TESTS overrides and use common defines in
-lib.mk. Common defines work just fine and there is no need to define
-custom overrides.
+When static_keys test is skipped because of unmet dependencies and/or
+unsupported configuration, it exits with error which is treated as a fail
+by the Kselftest framework. This leads to false negative result even when
+the test could not be run.
+
+Change it to return kselftest skip code when a test gets skipped to clearly
+report that the test could not be run.
+
+Added an explicit searches for test_static_key_base and test_static_keys
+modules and return skip code if they aren't found to differentiate between
+the failure to load the module condition and module not found condition.
+
+Kselftest framework SKIP code is 4 and the framework prints appropriate
+messages to indicate that the test is skipped.
 
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/sparc64/Makefile | 8 --------
- 1 file changed, 8 deletions(-)
+ .../selftests/static_keys/test_static_keys.sh       | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/tools/testing/selftests/sparc64/Makefile b/tools/testing/selftests/sparc64/Makefile
-index 442f0ca45441..76b2206932c3 100644
---- a/tools/testing/selftests/sparc64/Makefile
-+++ b/tools/testing/selftests/sparc64/Makefile
-@@ -28,10 +28,6 @@ all:
- 		fi \
- 	done
+diff --git a/tools/testing/selftests/static_keys/test_static_keys.sh b/tools/testing/selftests/static_keys/test_static_keys.sh
+index 24cff498b31a..fc9f8cde7d42 100755
+--- a/tools/testing/selftests/static_keys/test_static_keys.sh
++++ b/tools/testing/selftests/static_keys/test_static_keys.sh
+@@ -2,6 +2,19 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Runs static keys kernel module tests
  
--override define RUN_TESTS
--	@cd $(OUTPUT); ./run.sh
--endef
--
- override define INSTALL_RULE
- 	mkdir -p $(INSTALL_PATH)
- 	install -t $(INSTALL_PATH) $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES)
-@@ -43,10 +39,6 @@ override define INSTALL_RULE
- 	done;
- endef
- 
--override define EMIT_TESTS
--	echo "./run.sh"
--endef
--
- override define CLEAN
- 	@for DIR in $(SUBDIRS); do		\
- 		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++if ! /sbin/modprobe -q -n test_static_key_base; then
++	echo "static_key: module test_static_key_base is not found [SKIP]"
++	exit $ksft_skip
++fi
++
++if ! /sbin/modprobe -q -n test_static_keys; then
++	echo "static_key: module test_static_keys is not found [SKIP]"
++	exit $ksft_skip
++fi
++
+ if /sbin/modprobe -q test_static_key_base; then
+ 	if /sbin/modprobe -q test_static_keys; then
+ 		echo "static_key: ok"
 -- 
 2.17.0
 
