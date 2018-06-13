@@ -1,51 +1,100 @@
-From: daniel@iogearbox.net (Daniel Borkmann)
-Date: Wed, 13 Jun 2018 02:08:49 +0200
-Subject: [PATCH] selftests: bpf: config: add config fragments
-In-Reply-To: <20180612110510.11731-1-anders.roxell@linaro.org>
-References: <20180612110510.11731-1-anders.roxell@linaro.org>
-Message-ID: <d6851756-ae3b-09ec-f487-1eeece6bd4c6@iogearbox.net>
+From: shuah@kernel.org (Shuah Khan (Samsung OSG))
+Date: Tue, 12 Jun 2018 18:19:24 -0600
+Subject: [PATCH] selftests: sysctl: return Kselftest Skip code for skipped
+ tests
+Message-ID: <20180613001924.30082-1-shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180613000849.dS3ECoI9NEaDrrswX4Drn98IGJZPcZfgSY4A6aBw3h0@z>
+Message-ID: <20180613001924.RWNpY-h2zxPo556hHy3DrkZHbnCFlQq5uyngl0qUBaE@z>
 
-On 06/12/2018 01:05 PM, Anders Roxell wrote:
-> Tests test_tunnel.sh fails due to config fragments ins't enabled.
-> 
-> Fixes: 933a741e3b82 ("selftests/bpf: bpf tunnel test.")
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
-> ---
-> 
-> All tests passes except ip6gretap that still fails. I'm unsure why.
-> Ideas?
+When sysctl test is skipped because of unmet dependencies and/or
+unsupported configuration, it exits with error which is treated as
+a fail by the Kselftest framework. This leads to false negative result
+even when the test could not be run.
 
-William (Cc) might be able to help you out.
+Change it to return kselftest skip code when a test gets skipped to
+clearly report that the test could not be run.
 
-Applied the one below in the mean-time to bpf, thanks!
+Changed return code to kselftest skip code in skip error legs that check
+requirements and module probe test error leg.
 
-> Cheers,
-> Anders
-> 
->  tools/testing/selftests/bpf/config | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-> index 1eefe211a4a8..7eb613ffef55 100644
-> --- a/tools/testing/selftests/bpf/config
-> +++ b/tools/testing/selftests/bpf/config
-> @@ -7,3 +7,13 @@ CONFIG_CGROUP_BPF=y
->  CONFIG_NETDEVSIM=m
->  CONFIG_NET_CLS_ACT=y
->  CONFIG_NET_SCH_INGRESS=y
-> +CONFIG_NET_IPIP=y
-> +CONFIG_IPV6=y
-> +CONFIG_NET_IPGRE_DEMUX=y
-> +CONFIG_NET_IPGRE=y
-> +CONFIG_IPV6_GRE=y
-> +CONFIG_CRYPTO_USER_API_HASH=m
-> +CONFIG_CRYPTO_HMAC=m
-> +CONFIG_CRYPTO_SHA256=m
-> +CONFIG_VXLAN=y
-> +CONFIG_GENEVE=y
-> 
+Kselftest framework SKIP code is 4 and the framework prints appropriate
+messages to indicate that the test is skipped.
+
+Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+---
+ tools/testing/selftests/sysctl/sysctl.sh | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
+index ec232c3cfcaa..584eb8ea780a 100755
+--- a/tools/testing/selftests/sysctl/sysctl.sh
++++ b/tools/testing/selftests/sysctl/sysctl.sh
+@@ -14,6 +14,9 @@
+ 
+ # This performs a series tests against the proc sysctl interface.
+ 
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
+ TEST_NAME="sysctl"
+ TEST_DRIVER="test_${TEST_NAME}"
+ TEST_DIR=$(dirname $0)
+@@ -41,7 +44,7 @@ test_modprobe()
+                echo "$0: $DIR not present" >&2
+                echo "You must have the following enabled in your kernel:" >&2
+                cat $TEST_DIR/config >&2
+-               exit 1
++               exit $ksft_skip
+        fi
+ }
+ 
+@@ -98,28 +101,30 @@ test_reqs()
+ 	uid=$(id -u)
+ 	if [ $uid -ne 0 ]; then
+ 		echo $msg must be run as root >&2
+-		exit 0
++		exit $ksft_skip
+ 	fi
+ 
+ 	if ! which perl 2> /dev/null > /dev/null; then
+ 		echo "$0: You need perl installed"
+-		exit 1
++		exit $ksft_skip
+ 	fi
+ 	if ! which getconf 2> /dev/null > /dev/null; then
+ 		echo "$0: You need getconf installed"
+-		exit 1
++		exit $ksft_skip
+ 	fi
+ 	if ! which diff 2> /dev/null > /dev/null; then
+ 		echo "$0: You need diff installed"
+-		exit 1
++		exit $ksft_skip
+ 	fi
+ }
+ 
+ function load_req_mod()
+ {
+-	trap "test_modprobe" EXIT
+-
+ 	if [ ! -d $DIR ]; then
++		if ! modprobe -q -n $TEST_DRIVER; then
++			echo "$0: module $TEST_DRIVER not found [SKIP]"
++			exit $ksft_skip
++		fi
+ 		modprobe $TEST_DRIVER
+ 		if [ $? -ne 0 ]; then
+ 			exit
+@@ -765,6 +770,7 @@ function parse_args()
+ test_reqs
+ allow_user_defaults
+ check_production_sysctl_writes_strict
++test_modprobe
+ load_req_mod
+ 
+ trap "test_finish" EXIT
+-- 
+2.17.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
