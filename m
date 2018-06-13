@@ -1,113 +1,60 @@
-From: keescook at chromium.org (Kees Cook)
-Date: Tue, 12 Jun 2018 17:23:01 -0700
-Subject: [PATCH] selftests: sysctl: return Kselftest Skip code for skipped
- tests
-In-Reply-To: <20180613001924.30082-1-shuah@kernel.org>
-References: <20180613001924.30082-1-shuah@kernel.org>
-Message-ID: <CAGXu5jJXR+BfKri71yjJWdPw-yf9+Cf_i-N0FPvbqidtdLz7-Q@mail.gmail.com>
+From: shuah at kernel.org (Shuah Khan)
+Date: Wed, 13 Jun 2018 11:17:27 -0600
+Subject: [GIT PULL] kselftest update 2 for Linux 4.18-rc1
+Message-ID: <71fff95c-e017-da84-59ea-c4b8612d380a@kernel.org>
 
-On Tue, Jun 12, 2018 at 5:19 PM, Shuah Khan (Samsung OSG)
-<shuah at kernel.org> wrote:
-> When sysctl test is skipped because of unmet dependencies and/or
-> unsupported configuration, it exits with error which is treated as
-> a fail by the Kselftest framework. This leads to false negative result
-> even when the test could not be run.
->
-> Change it to return kselftest skip code when a test gets skipped to
-> clearly report that the test could not be run.
->
-> Changed return code to kselftest skip code in skip error legs that check
-> requirements and module probe test error leg.
->
-> Kselftest framework SKIP code is 4 and the framework prints appropriate
-> messages to indicate that the test is skipped.
->
-> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+Hi Linus,
 
-Reviewed-by: Kees Cook <keescook at chromium.org>
+Please pull the following Kselftest update 2 for 4.18-rc1
 
-> ---
->  tools/testing/selftests/sysctl/sysctl.sh | 20 +++++++++++++-------
->  1 file changed, 13 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-> index ec232c3cfcaa..584eb8ea780a 100755
-> --- a/tools/testing/selftests/sysctl/sysctl.sh
-> +++ b/tools/testing/selftests/sysctl/sysctl.sh
-> @@ -14,6 +14,9 @@
->
->  # This performs a series tests against the proc sysctl interface.
->
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
->  TEST_NAME="sysctl"
->  TEST_DRIVER="test_${TEST_NAME}"
->  TEST_DIR=$(dirname $0)
-> @@ -41,7 +44,7 @@ test_modprobe()
->                 echo "$0: $DIR not present" >&2
->                 echo "You must have the following enabled in your kernel:" >&2
->                 cat $TEST_DIR/config >&2
-> -               exit 1
-> +               exit $ksft_skip
->         fi
->  }
->
-> @@ -98,28 +101,30 @@ test_reqs()
->         uid=$(id -u)
->         if [ $uid -ne 0 ]; then
->                 echo $msg must be run as root >&2
-> -               exit 0
-> +               exit $ksft_skip
->         fi
->
->         if ! which perl 2> /dev/null > /dev/null; then
->                 echo "$0: You need perl installed"
-> -               exit 1
-> +               exit $ksft_skip
->         fi
->         if ! which getconf 2> /dev/null > /dev/null; then
->                 echo "$0: You need getconf installed"
-> -               exit 1
-> +               exit $ksft_skip
->         fi
->         if ! which diff 2> /dev/null > /dev/null; then
->                 echo "$0: You need diff installed"
-> -               exit 1
-> +               exit $ksft_skip
->         fi
->  }
->
->  function load_req_mod()
->  {
-> -       trap "test_modprobe" EXIT
-> -
->         if [ ! -d $DIR ]; then
-> +               if ! modprobe -q -n $TEST_DRIVER; then
-> +                       echo "$0: module $TEST_DRIVER not found [SKIP]"
-> +                       exit $ksft_skip
-> +               fi
->                 modprobe $TEST_DRIVER
->                 if [ $? -ne 0 ]; then
->                         exit
-> @@ -765,6 +770,7 @@ function parse_args()
->  test_reqs
->  allow_user_defaults
->  check_production_sysctl_writes_strict
-> +test_modprobe
->  load_req_mod
->
->  trap "test_finish" EXIT
-> --
-> 2.17.0
->
+This second Kselftest update for Linux 4.18-rc1:
 
+- fixes a signedness bug in cgroups test
+- adds ppc support for kprobe args tests
 
+diff is attached.
 
--- 
-Kees Cook
-Pixel Security
---
-To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
-the body of a message to majordomo at vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+thanks,
+-- Shuah
+
+-----------------------------------------------------------------------------------
+The following changes since commit fa32156921daa5c175228e2cac7679d50efd6c52:
+
+  selftests: lib: fix prime_numbers module search and skip logic (2018-05-30 21:32:55 -0600)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-4.18-rc1-2
+
+for you to fetch changes up to 53c3daf8cfeae4b1289723c7abeb9540c1630cf8:
+
+  kselftest/cgroup: fix a signedness bug (2018-06-07 13:44:30 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-4.18-rc1-2
+
+This second Kselftest update for Linux 4.18-rc1:
+
+- fixes a signedness bug in cgroups test
+- adds ppc support for kprobe args tests
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      kselftest/cgroup: fix a signedness bug
+
+Naveen N. Rao (1):
+      selftests/ftrace: Add ppc support for kprobe args tests
+
+ tools/testing/selftests/cgroup/cgroup_util.c                      | 4 ++--
+ .../testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc  | 8 ++++++++
+ .../testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc  | 7 +++++++
+ 3 files changed, 17 insertions(+), 2 deletions(-)
+
+-----------------------------------------------------------------------------------
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux-kselftest-4.18-rc1-2.diff
+Type: text/x-patch
+Size: 1885 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20180613/3a4f6126/attachment.bin>
