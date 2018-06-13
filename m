@@ -1,62 +1,29 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Wed, 13 Jun 2018 11:17:27 -0600
-Subject: [GIT PULL] kselftest update 2 for Linux 4.18-rc1
-Message-ID: <71fff95c-e017-da84-59ea-c4b8612d380a@kernel.org>
+From: tom.hromatka@oracle.com (Tom Hromatka)
+Date: Wed, 13 Jun 2018 11:18:11 -0600
+Subject: [PATCH] selftests: sparc64: delete RUN_TESTS and EMIT_TESTS
+ overrides
+In-Reply-To: <20180612232403.28031-1-shuah@kernel.org>
+References: <20180612232403.28031-1-shuah@kernel.org>
+Message-ID: <8eb11b0a-3284-c580-6ae5-f0204ce5c5bf@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180613171727.RmefrbdK7EJeGyPXN9fn417EeF2omSTMyEcxH7_sOl0@z>
+Message-ID: <20180613171811.Umjlxodzt-N1I_mfJnJy2GXJBqeKNKUuhwQ1XlENlhk@z>
 
-Hi Linus,
+Thanks for the clean up, Shuah.  Looks good to me.
 
-Please pull the following Kselftest update 2 for 4.18-rc1
+Tom
 
-This second Kselftest update for Linux 4.18-rc1:
 
-- fixes a signedness bug in cgroups test
-- adds ppc support for kprobe args tests
 
-diff is attached.
+On 06/12/2018 05:24 PM, Shuah Khan (Samsung OSG) wrote:
+> Delete RUN_TESTS and EMIT_TESTS overrides and use common defines in
+> lib.mk. Common defines work just fine and there is no need to define
+> custom overrides.
+>
+> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 
-thanks,
--- Shuah
+Reviewed-by: Tom Hromatka <tom.hromatka at oracle.com>
 
------------------------------------------------------------------------------------
-The following changes since commit fa32156921daa5c175228e2cac7679d50efd6c52:
-
-  selftests: lib: fix prime_numbers module search and skip logic (2018-05-30 21:32:55 -0600)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-4.18-rc1-2
-
-for you to fetch changes up to 53c3daf8cfeae4b1289723c7abeb9540c1630cf8:
-
-  kselftest/cgroup: fix a signedness bug (2018-06-07 13:44:30 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-4.18-rc1-2
-
-This second Kselftest update for Linux 4.18-rc1:
-
-- fixes a signedness bug in cgroups test
-- adds ppc support for kprobe args tests
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      kselftest/cgroup: fix a signedness bug
-
-Naveen N. Rao (1):
-      selftests/ftrace: Add ppc support for kprobe args tests
-
- tools/testing/selftests/cgroup/cgroup_util.c                      | 4 ++--
- .../testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc  | 8 ++++++++
- .../testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc  | 7 +++++++
- 3 files changed, 17 insertions(+), 2 deletions(-)
-
------------------------------------------------------------------------------------
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: linux-kselftest-4.18-rc1-2.diff
-Type: text/x-patch
-Size: 1885 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20180613/3a4f6126/attachment.bin>
+--
+To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
+the body of a message to majordomo at vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
