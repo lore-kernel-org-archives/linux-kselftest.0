@@ -1,60 +1,43 @@
 From: linuxram@us.ibm.com (Ram Pai)
-Date: Wed, 13 Jun 2018 17:45:02 -0700
-Subject: [PATCH v13 11/24] selftests/vm: fix alloc_random_pkey() to make it
- really random
+Date: Wed, 13 Jun 2018 17:45:04 -0700
+Subject: [PATCH v13 13/24] selftests/vm: pkey register should match shadow pkey
 In-Reply-To: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
 References: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1528937115-10132-12-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1528937115-10132-14-git-send-email-linuxram@us.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180614004502.KMS2PjXpvk6UWcKos8jNTVBdOHxQOOXxUXe1AXpx0UU@z>
+Message-ID: <20180614004504.5ydJj1hyWzRWLNlUlqxcrkYnivhnmS9omO1Msa_yWPY@z>
 
-alloc_random_pkey() was allocating the same pkey every time.
-Not all pkeys were geting tested. fixed it.
+expected_pkey_fault() is comparing the contents of pkey
+register with 0. This may not be true all the time. There
+could be bits set by default by the architecture
+which can never be changed. Hence compare the value against
+shadow pkey register, which is supposed to track the bits
+accurately all throughout
 
 cc: Dave Hansen <dave.hansen at intel.com>
 cc: Florian Weimer <fweimer at redhat.com>
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
 ---
- tools/testing/selftests/vm/protection_keys.c |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ tools/testing/selftests/vm/protection_keys.c |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index 42a91c7..c5f9776 100644
+index 9afe894..adcae4a 100644
 --- a/tools/testing/selftests/vm/protection_keys.c
 +++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -24,6 +24,7 @@
- #define _GNU_SOURCE
- #include <errno.h>
- #include <linux/futex.h>
-+#include <time.h>
- #include <sys/time.h>
- #include <sys/syscall.h>
- #include <string.h>
-@@ -576,13 +577,15 @@ int alloc_random_pkey(void)
- 	int alloced_pkeys[NR_PKEYS];
- 	int nr_alloced = 0;
- 	int random_index;
-+
- 	memset(alloced_pkeys, 0, sizeof(alloced_pkeys));
-+	srand((unsigned int)time(NULL));
+@@ -916,10 +916,10 @@ void expected_pkey_fault(int pkey)
+ 		pkey_assert(last_si_pkey == pkey);
  
- 	/* allocate every possible key and make a note of which ones we got */
- 	max_nr_pkey_allocs = NR_PKEYS;
--	max_nr_pkey_allocs = 1;
- 	for (i = 0; i < max_nr_pkey_allocs; i++) {
- 		int new_pkey = alloc_pkey();
-+
- 		if (new_pkey < 0)
- 			break;
- 		alloced_pkeys[nr_alloced++] = new_pkey;
-@@ -598,6 +601,7 @@ int alloc_random_pkey(void)
- 	/* go through the allocated ones that we did not want and free them */
- 	for (i = 0; i < nr_alloced; i++) {
- 		int free_ret;
-+
- 		if (!alloced_pkeys[i])
- 			continue;
- 		free_ret = sys_pkey_free(alloced_pkeys[i]);
+ 	/*
+-	 * The signal handler shold have cleared out PKEY register to let the
++	 * The signal handler should have cleared out pkey-register to let the
+ 	 * test program continue.  We now have to restore it.
+ 	 */
+-	if (__read_pkey_reg() != 0)
++	if (__read_pkey_reg() != shadow_pkey_reg)
+ 		pkey_assert(0);
+ 
+ 	__write_pkey_reg(shadow_pkey_reg);
 -- 
 1.7.1
 
