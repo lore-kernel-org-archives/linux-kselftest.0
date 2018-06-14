@@ -1,72 +1,114 @@
 From: linuxram@us.ibm.com (Ram Pai)
-Date: Wed, 13 Jun 2018 17:45:13 -0700
-Subject: [PATCH v13 22/24] selftests/vm: testcases must restore
- pkey-permissions
+Date: Wed, 13 Jun 2018 17:45:15 -0700
+Subject: [PATCH v13 24/24] selftests/vm: test correct behavior of pkey-0
 In-Reply-To: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
 References: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1528937115-10132-23-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1528937115-10132-25-git-send-email-linuxram@us.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180614004513.42cyzNna9DLPOSWIVNGj0qUFHgMYlxU2I6HD4PVdoCg@z>
+Message-ID: <20180614004515.MadYBLmhzVDr_gbC-8lh_3iNHPmoT4fJUaf80jlrGV0@z>
 
-Generally the signal handler restores the state of the pkey register
-before returning. However there are times when the read/write operation
-can legitamely fail without invoking the signal handler.  Eg: A
-sys_read() operaton to a write-protected page should be disallowed.  In
-such a case the state of the pkey register is not restored to its
-original state.  The test case is responsible for restoring the key
-register state to its original value.
+Ensure pkey-0 is allocated on start.  Ensure pkey-0 can be attached
+dynamically in various modes, without failures.  Ensure pkey-0 can be
+freed and allocated.
 
-cc: Dave Hansen <dave.hansen at intel.com>
-cc: Florian Weimer <fweimer at redhat.com>
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
 ---
- tools/testing/selftests/vm/protection_keys.c |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ tools/testing/selftests/vm/protection_keys.c |   66 +++++++++++++++++++++++++-
+ 1 files changed, 64 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index caf634e..b5a9e6c 100644
+index cbd87f8..f37b031 100644
 --- a/tools/testing/selftests/vm/protection_keys.c
 +++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -1011,6 +1011,7 @@ void test_read_of_write_disabled_region(int *ptr, u16 pkey)
- 	ptr_contents = read_ptr(ptr);
- 	dprintf1("*ptr: %d\n", ptr_contents);
- 	dprintf1("\n");
-+	pkey_write_allow(pkey);
+@@ -1003,6 +1003,67 @@ void close_test_fds(void)
+ 	return *ptr;
  }
- void test_read_of_access_disabled_region(int *ptr, u16 pkey)
+ 
++void test_pkey_alloc_free_attach_pkey0(int *ptr, u16 pkey)
++{
++	int i, err;
++	int max_nr_pkey_allocs;
++	int alloced_pkeys[NR_PKEYS];
++	int nr_alloced = 0;
++	int newpkey;
++	long size;
++
++	assert(pkey_last_malloc_record);
++	size = pkey_last_malloc_record->size;
++	/*
++	 * This is a bit of a hack.  But mprotect() requires
++	 * huge-page-aligned sizes when operating on hugetlbfs.
++	 * So, make sure that we use something that's a multiple
++	 * of a huge page when we can.
++	 */
++	if (size >= HPAGE_SIZE)
++		size = HPAGE_SIZE;
++
++
++	/* allocate every possible key and make sure key-0 never got allocated */
++	max_nr_pkey_allocs = NR_PKEYS;
++	for (i = 0; i < max_nr_pkey_allocs; i++) {
++		int new_pkey = alloc_pkey();
++		assert(new_pkey != 0);
++
++		if (new_pkey < 0)
++			break;
++		alloced_pkeys[nr_alloced++] = new_pkey;
++	}
++	/* free all the allocated keys */
++	for (i = 0; i < nr_alloced; i++) {
++		int free_ret;
++
++		if (!alloced_pkeys[i])
++			continue;
++		free_ret = sys_pkey_free(alloced_pkeys[i]);
++		pkey_assert(!free_ret);
++	}
++
++	/* attach key-0 in various modes */
++	err = sys_mprotect_pkey(ptr, size, PROT_READ, 0);
++	pkey_assert(!err);
++	err = sys_mprotect_pkey(ptr, size, PROT_WRITE, 0);
++	pkey_assert(!err);
++	err = sys_mprotect_pkey(ptr, size, PROT_EXEC, 0);
++	pkey_assert(!err);
++	err = sys_mprotect_pkey(ptr, size, PROT_READ|PROT_WRITE, 0);
++	pkey_assert(!err);
++	err = sys_mprotect_pkey(ptr, size, PROT_READ|PROT_WRITE|PROT_EXEC, 0);
++	pkey_assert(!err);
++
++	/* free key-0 */
++	err = sys_pkey_free(0);
++	pkey_assert(!err);
++
++	newpkey = sys_pkey_alloc(0, 0x0);
++	assert(newpkey == 0);
++}
++
+ void test_read_of_write_disabled_region(int *ptr, u16 pkey)
  {
-@@ -1090,6 +1091,7 @@ void test_kernel_write_of_access_disabled_region(int *ptr, u16 pkey)
- 	ret = read(test_fd, ptr, 1);
- 	dprintf1("read ret: %d\n", ret);
- 	pkey_assert(ret);
-+	pkey_access_allow(pkey);
- }
- void test_kernel_write_of_write_disabled_region(int *ptr, u16 pkey)
+ 	int ptr_contents;
+@@ -1153,10 +1214,10 @@ void test_kernel_gup_write_to_write_disabled_region(int *ptr, u16 pkey)
+ void test_pkey_syscalls_on_non_allocated_pkey(int *ptr, u16 pkey)
  {
-@@ -1102,6 +1104,7 @@ void test_kernel_write_of_write_disabled_region(int *ptr, u16 pkey)
- 	if (ret < 0 && (DEBUG_LEVEL > 0))
- 		perror("verbose read result (OK for this to be bad)");
- 	pkey_assert(ret);
-+	pkey_write_allow(pkey);
- }
+ 	int err;
+-	int i = get_start_key();
++	int i;
  
- void test_kernel_gup_of_access_disabled_region(int *ptr, u16 pkey)
-@@ -1121,6 +1124,7 @@ void test_kernel_gup_of_access_disabled_region(int *ptr, u16 pkey)
- 	vmsplice_ret = vmsplice(pipe_fds[1], &iov, 1, SPLICE_F_GIFT);
- 	dprintf1("vmsplice() ret: %d\n", vmsplice_ret);
- 	pkey_assert(vmsplice_ret == -1);
-+	pkey_access_allow(pkey);
+ 	/* Note: 0 is the default pkey, so don't mess with it */
+-	for (; i < NR_PKEYS; i++) {
++	for (i=1; i < NR_PKEYS; i++) {
+ 		if (pkey == i)
+ 			continue;
  
- 	close(pipe_fds[0]);
- 	close(pipe_fds[1]);
-@@ -1141,6 +1145,7 @@ void test_kernel_gup_write_to_write_disabled_region(int *ptr, u16 pkey)
- 	if (DEBUG_LEVEL > 0)
- 		perror("futex");
- 	dprintf1("futex() ret: %d\n", futex_ret);
-+	pkey_write_allow(pkey);
- }
+@@ -1465,6 +1526,7 @@ void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
+ 	test_pkey_syscalls_on_non_allocated_pkey,
+ 	test_pkey_syscalls_bad_args,
+ 	test_pkey_alloc_exhaust,
++	test_pkey_alloc_free_attach_pkey0,
+ };
  
- /* Assumes that all pkeys other than 'pkey' are unallocated */
+ void run_tests_once(void)
 -- 
 1.7.1
 
