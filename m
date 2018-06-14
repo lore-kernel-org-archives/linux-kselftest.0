@@ -1,43 +1,31 @@
-From: anders.roxell@linaro.org (Anders Roxell)
-Date: Thu, 14 Jun 2018 11:57:08 +0200
-Subject: [PATCH v2] selftests: sync: add config fragment for testing sync
- framework
-Message-ID: <20180614095708.27645-1-anders.roxell@linaro.org>
+From: u9012063@gmail.com (William Tu)
+Date: Thu, 14 Jun 2018 04:06:21 -0700
+Subject: [PATCH] selftests: bpf: config: add config fragments
+In-Reply-To: <d6851756-ae3b-09ec-f487-1eeece6bd4c6@iogearbox.net>
+References: <20180612110510.11731-1-anders.roxell@linaro.org>
+ <d6851756-ae3b-09ec-f487-1eeece6bd4c6@iogearbox.net>
+Message-ID:
+ <CALDO+SY3qNYAOSiYC3645C7YY9LSx7ggg0GjY76m4TbBfF_t3A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180614095708.2mvgghPk2f4Nz0175_4gWBnR3TgA5YxCC3OF-b1x0DY@z>
+Message-ID: <20180614110621.1qaG5flSPbJfxG5eKFQuN9rawzibkdBuKGkZSHQ_69c@z>
 
-From: Fathi Boudra <fathi.boudra@linaro.org>
+On Tue, Jun 12, 2018@5:08 PM, Daniel Borkmann <daniel@iogearbox.net> wrote:
+> On 06/12/2018 01:05 PM, Anders Roxell wrote:
+>> Tests test_tunnel.sh fails due to config fragments ins't enabled.
+>>
+>> Fixes: 933a741e3b82 ("selftests/bpf: bpf tunnel test.")
+>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+>> ---
+>>
+>> All tests passes except ip6gretap that still fails. I'm unsure why.
+>> Ideas?
 
-Unless the software synchronization objects (CONFIG_SW_SYNC) is enabled,
-the sync test will be skipped:
+Hi Anders,
 
-TAP version 13
-1..0 # Skipped: Sync framework not supported by kernel
+ip6erspan is based on ip6gretap, does ip6erspan pass?
 
-Add a config fragment file to be able to run "make kselftest-merge" to
-enable relevant configuration required in order to run the sync test.
-
-Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
-Link: https://lkml.org/lkml/2017/5/5/14
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
----
- tools/testing/selftests/sync/config | 4 ++++
- 1 file changed, 4 insertions(+)
- create mode 100644 tools/testing/selftests/sync/config
-
-diff --git a/tools/testing/selftests/sync/config b/tools/testing/selftests/sync/config
-new file mode 100644
-index 000000000000..1ab7e8130db2
---- /dev/null
-+++ b/tools/testing/selftests/sync/config
-@@ -0,0 +1,4 @@
-+CONFIG_STAGING=y
-+CONFIG_ANDROID=y
-+CONFIG_SYNC=y
-+CONFIG_SW_SYNC=y
--- 
-2.11.0
-
+Regards,
+William
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
