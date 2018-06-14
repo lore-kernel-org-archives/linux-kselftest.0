@@ -1,176 +1,60 @@
 From: linuxram@us.ibm.com (Ram Pai)
-Date: Wed, 13 Jun 2018 17:44:58 -0700
-Subject: [PATCH v13 07/24] selftests/vm: generic function to handle shadow key
- register
+Date: Wed, 13 Jun 2018 17:45:02 -0700
+Subject: [PATCH v13 11/24] selftests/vm: fix alloc_random_pkey() to make it
+ really random
 In-Reply-To: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
 References: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1528937115-10132-8-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1528937115-10132-12-git-send-email-linuxram@us.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180614004458.qMV51shcM7Ikku3BT_F2aGISyWn0s7Rh_uKFZnCbvQ4@z>
+Message-ID: <20180614004502.KMS2PjXpvk6UWcKos8jNTVBdOHxQOOXxUXe1AXpx0UU@z>
 
-helper functions to handler shadow pkey register
+alloc_random_pkey() was allocating the same pkey every time.
+Not all pkeys were geting tested. fixed it.
 
 cc: Dave Hansen <dave.hansen at intel.com>
 cc: Florian Weimer <fweimer at redhat.com>
 Signed-off-by: Ram Pai <linuxram at us.ibm.com>
-Signed-off-by: Thiago Jung Bauermann <bauerman at linux.ibm.com>
 ---
- tools/testing/selftests/vm/pkey-helpers.h    |   29 ++++++++++++++++++++++
- tools/testing/selftests/vm/pkey-x86.h        |    5 ++++
- tools/testing/selftests/vm/protection_keys.c |   34 ++++++++++++++++---------
- 3 files changed, 56 insertions(+), 12 deletions(-)
+ tools/testing/selftests/vm/protection_keys.c |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/pkey-helpers.h b/tools/testing/selftests/vm/pkey-helpers.h
-index 2a1a024..ada0146 100644
---- a/tools/testing/selftests/vm/pkey-helpers.h
-+++ b/tools/testing/selftests/vm/pkey-helpers.h
-@@ -80,6 +80,35 @@ static inline void sigsafe_printf(const char *format, ...)
- #error Architecture not supported
- #endif /* arch */
- 
-+static inline pkey_reg_t clear_pkey_flags(int pkey, pkey_reg_t flags)
-+{
-+	u32 shift = pkey_bit_position(pkey);
-+
-+	return ~(flags << shift);
-+}
-+
-+/*
-+ * Takes pkey flags and puts them at the right bit position for the given key so
-+ * that the result can be ORed into the register.
-+ */
-+static inline pkey_reg_t left_shift_bits(int pkey, pkey_reg_t bits)
-+{
-+	u32 shift = pkey_bit_position(pkey);
-+
-+	return (bits << shift);
-+}
-+
-+/*
-+ * Takes pkey register values and puts the flags for the given pkey at the least
-+ * significant bits of the returned value.
-+ */
-+static inline pkey_reg_t right_shift_bits(int pkey, pkey_reg_t bits)
-+{
-+	u32 shift = pkey_bit_position(pkey);
-+
-+	return (bits >> shift);
-+}
-+
- extern pkey_reg_t shadow_pkey_reg;
- 
- static inline pkey_reg_t _read_pkey_reg(int line)
-diff --git a/tools/testing/selftests/vm/pkey-x86.h b/tools/testing/selftests/vm/pkey-x86.h
-index 5f40901..2b3780d 100644
---- a/tools/testing/selftests/vm/pkey-x86.h
-+++ b/tools/testing/selftests/vm/pkey-x86.h
-@@ -49,6 +49,11 @@
- #define pkey_reg_t		u32
- #define PKEY_REG_FMT		"%016x"
- 
-+static inline u32 pkey_bit_position(int pkey)
-+{
-+	return pkey * PKEY_BITS_PER_PKEY;
-+}
-+
- static inline void __page_o_noops(void)
- {
- 	/* 8-bytes of instruction * 512 bytes = 1 page */
 diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index 90b3a41..57340b3 100644
+index 42a91c7..c5f9776 100644
 --- a/tools/testing/selftests/vm/protection_keys.c
 +++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -342,7 +342,7 @@ static u32 hw_pkey_get(int pkey, unsigned long flags)
- 			__func__, pkey, flags, 0, 0);
- 	dprintf2("%s() raw pkey_reg: "PKEY_REG_FMT"\n", __func__, pkey_reg);
- 
--	shifted_pkey_reg = (pkey_reg >> (pkey * PKEY_BITS_PER_PKEY));
-+	shifted_pkey_reg = right_shift_bits(pkey, pkey_reg);
- 	dprintf2("%s() shifted_pkey_reg: "PKEY_REG_FMT"\n", __func__,
- 			shifted_pkey_reg);
- 	masked_pkey_reg = shifted_pkey_reg & mask;
-@@ -366,9 +366,9 @@ static int hw_pkey_set(int pkey, unsigned long rights, unsigned long flags)
- 	/* copy old pkey_reg */
- 	new_pkey_reg = old_pkey_reg;
- 	/* mask out bits from pkey in old value: */
--	new_pkey_reg &= ~(mask << (pkey * PKEY_BITS_PER_PKEY));
-+	new_pkey_reg &= clear_pkey_flags(pkey, mask);
- 	/* OR in new bits for pkey: */
--	new_pkey_reg |= (rights << (pkey * PKEY_BITS_PER_PKEY));
-+	new_pkey_reg |= left_shift_bits(pkey, rights);
- 
- 	__write_pkey_reg(new_pkey_reg);
- 
-@@ -402,7 +402,7 @@ void pkey_disable_set(int pkey, int flags)
- 	ret = hw_pkey_set(pkey, pkey_rights, syscall_flags);
- 	assert(!ret);
- 	/*pkey_reg and flags have the same format */
--	shadow_pkey_reg |= flags << (pkey * 2);
-+	shadow_pkey_reg |= left_shift_bits(pkey, flags);
- 	dprintf1("%s(%d) shadow: 0x"PKEY_REG_FMT"\n",
- 		__func__, pkey, shadow_pkey_reg);
- 
-@@ -436,7 +436,7 @@ void pkey_disable_clear(int pkey, int flags)
- 	pkey_rights |= flags;
- 
- 	ret = hw_pkey_set(pkey, pkey_rights, 0);
--	shadow_pkey_reg &= ~(flags << (pkey * 2));
-+	shadow_pkey_reg &= clear_pkey_flags(pkey, flags);
- 	pkey_assert(ret >= 0);
- 
- 	pkey_rights = hw_pkey_get(pkey, syscall_flags);
-@@ -494,6 +494,21 @@ int sys_pkey_alloc(unsigned long flags, unsigned long init_val)
- 	return ret;
- }
- 
-+void pkey_setup_shadow(void)
-+{
-+	shadow_pkey_reg = __read_pkey_reg();
-+}
+@@ -24,6 +24,7 @@
+ #define _GNU_SOURCE
+ #include <errno.h>
+ #include <linux/futex.h>
++#include <time.h>
+ #include <sys/time.h>
+ #include <sys/syscall.h>
+ #include <string.h>
+@@ -576,13 +577,15 @@ int alloc_random_pkey(void)
+ 	int alloced_pkeys[NR_PKEYS];
+ 	int nr_alloced = 0;
+ 	int random_index;
 +
-+void pkey_reset_shadow(u32 key)
-+{
-+	shadow_pkey_reg &= clear_pkey_flags(key, 0x3);
-+}
-+
-+void pkey_set_shadow(u32 key, u64 init_val)
-+{
-+	shadow_pkey_reg |=  left_shift_bits(key, init_val);
-+}
-+
- int alloc_pkey(void)
- {
- 	int ret;
-@@ -512,7 +527,7 @@ int alloc_pkey(void)
- 			shadow_pkey_reg);
- 	if (ret) {
- 		/* clear both the bits: */
--		shadow_pkey_reg &= ~(0x3      << (ret * 2));
-+		pkey_reset_shadow(ret);
- 		dprintf4("%s()::%d, ret: %d pkey_reg: 0x"PKEY_REG_FMT
- 				" shadow: 0x"PKEY_REG_FMT"\n",
- 				__func__,
-@@ -522,7 +537,7 @@ int alloc_pkey(void)
- 		 * move the new state in from init_val
- 		 * (remember, we cheated and init_val == pkey_reg format)
- 		 */
--		shadow_pkey_reg |=  (init_val << (ret * 2));
-+		pkey_set_shadow(ret, init_val);
- 	}
- 	dprintf4("%s()::%d, ret: %d pkey_reg: 0x"PKEY_REG_FMT
- 			" shadow: 0x"PKEY_REG_FMT"\n",
-@@ -1403,11 +1418,6 @@ void run_tests_once(void)
- 	iteration_nr++;
- }
+ 	memset(alloced_pkeys, 0, sizeof(alloced_pkeys));
++	srand((unsigned int)time(NULL));
  
--void pkey_setup_shadow(void)
--{
--	shadow_pkey_reg = __read_pkey_reg();
--}
--
- int main(void)
- {
- 	int nr_iterations = 22;
+ 	/* allocate every possible key and make a note of which ones we got */
+ 	max_nr_pkey_allocs = NR_PKEYS;
+-	max_nr_pkey_allocs = 1;
+ 	for (i = 0; i < max_nr_pkey_allocs; i++) {
+ 		int new_pkey = alloc_pkey();
++
+ 		if (new_pkey < 0)
+ 			break;
+ 		alloced_pkeys[nr_alloced++] = new_pkey;
+@@ -598,6 +601,7 @@ int alloc_random_pkey(void)
+ 	/* go through the allocated ones that we did not want and free them */
+ 	for (i = 0; i < nr_alloced; i++) {
+ 		int free_ret;
++
+ 		if (!alloced_pkeys[i])
+ 			continue;
+ 		free_ret = sys_pkey_free(alloced_pkeys[i]);
 -- 
 1.7.1
 
