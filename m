@@ -1,85 +1,71 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Thu, 14 Jun 2018 14:42:44 -0600
-Subject: Improving kselfests cross compilation
-In-Reply-To: <19ec8c01-15a0-eca2-cf6c-08c71b670dab@gmail.com>
-References: <19ec8c01-15a0-eca2-cf6c-08c71b670dab@gmail.com>
-Message-ID: <4dd5e859-4d76-0c44-3ca1-1629de9cdc81@kernel.org>
+From: shuah at kernel.org (Shuah Khan (Samsung OSG))
+Date: Thu, 14 Jun 2018 17:29:35 -0600
+Subject: [PATCH] selftests: zram: return Kselftest Skip code for skipped tests
+Message-ID: <20180614232935.24702-1-shuah@kernel.org>
 
-Hi Florian,
+When zram test is skipped because of unmet dependencies and/or
+unsupported configuration, it exits with error which is treated as
+a fail by the Kselftest framework. This leads to false negative result
+even when the test could not be run.
 
-On 06/13/2018 09:39 PM, Florian Fainelli wrote:
-> Hi Shuah,
-> 
-> I was giving a shot at building the kselftests from within buildroot [1]
-> as of Linux be779f03d563981c65cc7417cc5e0dbbc5b89d30 and there are a
-> number of things that make it still reasonably hard even today:
-> 
-> - 3c545084130c1fd5cf873a5fec3ee29070128e06 ("selftests: sparc64: char:
-> Selftest for privileged ADI driver") this contains inline assembly that
-> can only work when building for sparc64, yet this is still being built
-> irrespective of what ARCH is set to
+Change it to return kselftest skip code when a test gets skipped to
+clearly report that the test could not be run.
 
-I fixed this problem and sent in a patch couple of days ago.
+Kselftest framework SKIP code is 4 and the framework prints appropriate
+messages to indicate that the test is skipped.
 
-> 
-> - each Makefile that requires knowledge of the architecture seems to
-> duplicate what ARCH should be, this cannot be moved to lib.mk since
-> Makefiles do expect lib.mk to be included last and/or after they have
-> done their own overrides, but something like common.mk which contains
-> CC, ARCH etc. could be useful to avoid the repetition of looking at
-> uname -m etc. etc.
-> 
+Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+---
+ tools/testing/selftests/zram/zram.sh     | 5 ++++-
+ tools/testing/selftests/zram/zram_lib.sh | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-I think this is a good idea. Is this something you would like to work
-on?
-
-> - some tests' Makefile do seem to hardcode paths to the system's include
-> instead of accepting a configurable path:
-> 
-> gpio/Makefile:
-> 
-> LDLIBS += -lmount -I/usr/include/libmount
-
-gpio test has been a problem from the beginning. It has dependency
-on objects that get built in tools/gpio
-
-I think it is mistake on my part to accept this test in the first
-place. It is on my todo list to address the problem (not sure how),
-but I don't like the dependency. If you want to take a look at the
-best way to address, please do.
-
-> 
-> I will try to submit patches in the next days that address the most
-> obvious issues I listed here
-
-Thanks. I did lot of cleanup on the sparc64 test, you can find them all
-at https://patchwork.kernel.org/project/linux-kselftest/list/
-
-but in order for this effort not to be a
-> constant whack-a-mole game, there really needs to be at least one or two
-> architectures that must attempt to cross-compile (and run) those tests
-> and use that as an acceptance criteria.
-> 
-
-These problem usually surface in linux-next and get fixed. However since
-selftest patches go through other trees (x86, mm, net, bpf) in addition
-to kselftest tree, it would be difficult to unless all the maintainers
-agree to the acceptance criteria. I try to review the tests from selftest
-framework compatibility, however in some cases, patches get pulled in even
-before I get a chance to review and I miss things like sparc64 arch handling
-So there are some pain points, however, I don't think we can avoid problems all
-together with the number of tests that are getting added on a regular basis.
-
-I do think soaking in linux-next is the best way to go.
-
-The example of sparc64 test you mentioned is a new test. I am surprised that
-we didn't find this problem in linux-next early on. I found it in my routine
-testing I do during the merge window.
-
-David! Did this patch end up in linux-next? I am not sure how net patch flow?
-
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/zram/zram.sh b/tools/testing/selftests/zram/zram.sh
+index 754de7da426a..232e958ec454 100755
+--- a/tools/testing/selftests/zram/zram.sh
++++ b/tools/testing/selftests/zram/zram.sh
+@@ -2,6 +2,9 @@
+ # SPDX-License-Identifier: GPL-2.0
+ TCID="zram.sh"
+ 
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
+ . ./zram_lib.sh
+ 
+ run_zram () {
+@@ -24,5 +27,5 @@ elif [ -b /dev/zram0 ]; then
+ else
+ 	echo "$TCID : No zram.ko module or /dev/zram0 device file not found"
+ 	echo "$TCID : CONFIG_ZRAM is not set"
+-	exit 1
++	exit $ksft_skip
+ fi
+diff --git a/tools/testing/selftests/zram/zram_lib.sh b/tools/testing/selftests/zram/zram_lib.sh
+index f6a9c73e7a44..9e73a4fb9b0a 100755
+--- a/tools/testing/selftests/zram/zram_lib.sh
++++ b/tools/testing/selftests/zram/zram_lib.sh
+@@ -18,6 +18,9 @@ MODULE=0
+ dev_makeswap=-1
+ dev_mounted=-1
+ 
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
+ trap INT
+ 
+ check_prereqs()
+@@ -27,7 +30,7 @@ check_prereqs()
+ 
+ 	if [ $uid -ne 0 ]; then
+ 		echo $msg must be run as root >&2
+-		exit 0
++		exit $ksft_skip
+ 	fi
+ }
+ 
+-- 
+2.17.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
