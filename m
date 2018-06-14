@@ -1,151 +1,171 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Wed, 13 Jun 2018 21:06:41 -0700
-Subject: [PATCH] selftests: kselftest_harness: return Kselftest Skip code
- for skipped tests
-In-Reply-To: <20180614013445.6120-1-shuah@kernel.org>
-References: <20180614013445.6120-1-shuah@kernel.org>
-Message-ID:
- <CAGXu5jLXAQxo7mUJThXCOMPEC3yvGU5_wLqjU_YKGtd6sFfuUw@mail.gmail.com>
+From: rppt@linux.vnet.ibm.com (Mike Rapoport)
+Date: Thu, 14 Jun 2018 08:39:05 +0300
+Subject: [PATCH] selftests: vm: return Kselftest Skip code for skipped
+ tests
+In-Reply-To: <20180614033557.10191-1-shuah@kernel.org>
+References: <20180614033557.10191-1-shuah@kernel.org>
+Message-ID: <20180614053905.GA31020@rapoport-lnx>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180614040641.IYpvhkxF4LXICkBwx9QxDRzU2Ma_BK4Qcw7yB9hImFA@z>
+Message-ID: <20180614053905.zK5msKV5wQJHhDSdTx_r0A23r2MNh4oln58Zu4MbmWI@z>
 
-On Wed, Jun 13, 2018 at 6:34 PM, Shuah Khan (Samsung OSG)
-<shuah@kernel.org> wrote:
-> When a test is skipped because of unmet dependencies and/or unsupported
-> configuration, kselftest_harness exits with error which is treated as a
-> fail by the Kselftest framework. This leads to false negative result even
-> when the test could not be run.
->
+On Wed, Jun 13, 2018@09:35:57PM -0600, Shuah Khan (Samsung OSG) wrote:
+> When vm test is skipped because of unmet dependencies and/or unsupported
+> configuration, it exits with error which is treated as a fail by the
+> Kselftest framework. This leads to false negative result even when the
+> test could not be run.
+> 
 > Change it to return kselftest skip code when a test gets skipped to
-> clearly report that the test could not be run. This change add skip
-> handling to kselftest_harness with minimal changes adding a new skipped
-> field to struct __test_metadata and using it to recognize KSFT_SKIP exit
-> from the test function (t->fn) to __run_test() to the test_harness_run()
-> to return the right skip code to Kselftest framework.
->
+> clearly report that the test could not be run.
+> 
 > Kselftest framework SKIP code is 4 and the framework prints appropriate
 > messages to indicate that the test is skipped.
-
-Unfortunately this will not work: test step # is used as the failure
-code to let test runners know where a child failed. KSFT_SKIP is 4, so
-every test failing in step 4 would be seen as a skip instead of a
-fail.
-
-Tests must not exit on their own with this harness: only the existing
-ASSERT/EXPECT macros can be used. uevent test should never be doing
-this:
-
-        if (geteuid()) {
-                TH_LOG("Uevent filtering tests require root
-privileges. Skipping test");
-                _exit(KSFT_SKIP);
-        }
-
-Nor the _exit(EXIT_FAILURE) calls. Those must all be ASSERT() instead.
-
-Perhaps a new signal could be used, but the return codes are already being used.
-
--Kees
-
->
-> This change is tested on uevent test and the results are as follows:
->
-> Before:
->
-> TAP version 13
-> selftests: uevent: uevent_filtering
-> ========================================
-> [==========] Running 1 tests from 1 test cases.
-> [ RUN      ] global.uevent_filtering
-> uevent_filtering.c:355:global.uevent_filtering:Uevent filtering tests require root privileges. Skipping test
-> global.uevent_filtering: Test skipped at step #4
-> [     FAIL ] global.uevent_filtering
-> [==========] 0 / 1 tests passed.
-> [  FAILED  ]
-> not ok 1..1 selftests: uevent: uevent_filtering [FAIL]
->
-> After:
->
-> TAP version 13
-> selftests: uevent: uevent_filtering
-> ========================================
-> [==========] Running 1 tests from 1 test cases.
-> [ RUN      ] global.uevent_filtering
-> uevent_filtering.c:355:global.uevent_filtering:Uevent filtering tests require root privileges. Skipping test
-> global.uevent_filtering: Test skipped at step #4
-> [     SKIP ] global.uevent_filtering
-> not ok 1..1 selftests: uevent: uevent_filtering [SKIP]
->
+> 
 > Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+
+For the userfaultfd test
+ 
+Acked-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
+
 > ---
->  tools/testing/selftests/kselftest_harness.h | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> index 6ae3730c4ee3..7af9ab97b367 100644
-> --- a/tools/testing/selftests/kselftest_harness.h
-> +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -631,6 +631,7 @@ struct __test_metadata {
->         void (*fn)(struct __test_metadata *);
->         int termsig;
->         int passed;
-> +       int skipped;
->         int trigger; /* extra handler after the evaluation */
->         __u8 step;
->         bool no_print; /* manual trigger when TH_LOG_STREAM is not available */
-> @@ -694,6 +695,7 @@ void __run_test(struct __test_metadata *t)
->         int status;
->
->         t->passed = 1;
-> +       t->skipped = 0;
->         t->trigger = 0;
->         printf("[ RUN      ] %s\n", t->name);
->         child_pid = fork();
-> @@ -716,9 +718,12 @@ void __run_test(struct __test_metadata *t)
->                                         t->name,
->                                         WEXITSTATUS(status));
->                         } else if (!t->passed) {
-> +                               if (WEXITSTATUS(status) == KSFT_SKIP)
-> +                                       t->skipped = 1;
->                                 fprintf(TH_LOG_STREAM,
-> -                                       "%s: Test failed at step #%d\n",
-> +                                       "%s: Test %s at step #%d\n",
->                                         t->name,
-> +                                       (t->skipped ? "skipped" : "failed"),
->                                         WEXITSTATUS(status));
->                         }
->                 } else if (WIFSIGNALED(status)) {
-> @@ -743,7 +748,11 @@ void __run_test(struct __test_metadata *t)
->                                 status);
->                 }
->         }
-> -       printf("[     %4s ] %s\n", (t->passed ? "OK" : "FAIL"), t->name);
-> +       if (t->skipped)
-> +               printf("[     %4s ] %s\n", "SKIP", t->name);
-> +       else
-> +               printf("[     %4s ] %s\n", (t->passed ? "OK" : "FAIL"),
-> +                       t->name);
+>  tools/testing/selftests/vm/compaction_test.c |  4 +++-
+>  tools/testing/selftests/vm/mlock2-tests.c    | 12 +++++++-----
+>  tools/testing/selftests/vm/run_vmtests       |  5 ++++-
+>  tools/testing/selftests/vm/userfaultfd.c     |  4 +++-
+>  4 files changed, 17 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vm/compaction_test.c b/tools/testing/selftests/vm/compaction_test.c
+> index 1097f04e4d80..bcec71250873 100644
+> --- a/tools/testing/selftests/vm/compaction_test.c
+> +++ b/tools/testing/selftests/vm/compaction_test.c
+> @@ -16,6 +16,8 @@
+>  #include <unistd.h>
+>  #include <string.h>
+> 
+> +#include "../kselftest.h"
+> +
+>  #define MAP_SIZE 1048576
+> 
+>  struct map_list {
+> @@ -169,7 +171,7 @@ int main(int argc, char **argv)
+>  		printf("Either the sysctl compact_unevictable_allowed is not\n"
+>  		       "set to 1 or couldn't read the proc file.\n"
+>  		       "Skipping the test\n");
+> -		return 0;
+> +		return KSFT_SKIP;
+>  	}
+> 
+>  	lim.rlim_cur = RLIM_INFINITY;
+> diff --git a/tools/testing/selftests/vm/mlock2-tests.c b/tools/testing/selftests/vm/mlock2-tests.c
+> index 4997b9222cfa..637b6d0ac0d0 100644
+> --- a/tools/testing/selftests/vm/mlock2-tests.c
+> +++ b/tools/testing/selftests/vm/mlock2-tests.c
+> @@ -9,6 +9,8 @@
+>  #include <stdbool.h>
+>  #include "mlock2.h"
+> 
+> +#include "../kselftest.h"
+> +
+>  struct vm_boundaries {
+>  	unsigned long start;
+>  	unsigned long end;
+> @@ -303,7 +305,7 @@ static int test_mlock_lock()
+>  	if (mlock2_(map, 2 * page_size, 0)) {
+>  		if (errno == ENOSYS) {
+>  			printf("Cannot call new mlock family, skipping test\n");
+> -			_exit(0);
+> +			_exit(KSFT_SKIP);
+>  		}
+>  		perror("mlock2(0)");
+>  		goto unmap;
+> @@ -412,7 +414,7 @@ static int test_mlock_onfault()
+>  	if (mlock2_(map, 2 * page_size, MLOCK_ONFAULT)) {
+>  		if (errno == ENOSYS) {
+>  			printf("Cannot call new mlock family, skipping test\n");
+> -			_exit(0);
+> +			_exit(KSFT_SKIP);
+>  		}
+>  		perror("mlock2(MLOCK_ONFAULT)");
+>  		goto unmap;
+> @@ -425,7 +427,7 @@ static int test_mlock_onfault()
+>  	if (munlock(map, 2 * page_size)) {
+>  		if (errno == ENOSYS) {
+>  			printf("Cannot call new mlock family, skipping test\n");
+> -			_exit(0);
+> +			_exit(KSFT_SKIP);
+>  		}
+>  		perror("munlock()");
+>  		goto unmap;
+> @@ -457,7 +459,7 @@ static int test_lock_onfault_of_present()
+>  	if (mlock2_(map, 2 * page_size, MLOCK_ONFAULT)) {
+>  		if (errno == ENOSYS) {
+>  			printf("Cannot call new mlock family, skipping test\n");
+> -			_exit(0);
+> +			_exit(KSFT_SKIP);
+>  		}
+>  		perror("mlock2(MLOCK_ONFAULT)");
+>  		goto unmap;
+> @@ -583,7 +585,7 @@ static int test_vma_management(bool call_mlock)
+>  	if (call_mlock && mlock2_(map, 3 * page_size, MLOCK_ONFAULT)) {
+>  		if (errno == ENOSYS) {
+>  			printf("Cannot call new mlock family, skipping test\n");
+> -			_exit(0);
+> +			_exit(KSFT_SKIP);
+>  		}
+>  		perror("mlock(ONFAULT)\n");
+>  		goto out;
+> diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
+> index 22d564673830..88cbe5575f0c 100755
+> --- a/tools/testing/selftests/vm/run_vmtests
+> +++ b/tools/testing/selftests/vm/run_vmtests
+> @@ -2,6 +2,9 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  #please run as root
+> 
+> +# Kselftest framework requirement - SKIP code is 4.
+> +ksft_skip=4
+> +
+>  mnt=./huge
+>  exitcode=0
+> 
+> @@ -36,7 +39,7 @@ if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
+>  		echo $(( $lackpgs + $nr_hugepgs )) > /proc/sys/vm/nr_hugepages
+>  		if [ $? -ne 0 ]; then
+>  			echo "Please run this test as root"
+> -			exit 1
+> +			exit $ksft_skip
+>  		fi
+>  		while read name size unit; do
+>  			if [ "$name" = "HugePages_Free:" ]; then
+> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> index de2f9ec8a87f..7b8171e3128a 100644
+> --- a/tools/testing/selftests/vm/userfaultfd.c
+> +++ b/tools/testing/selftests/vm/userfaultfd.c
+> @@ -69,6 +69,8 @@
+>  #include <setjmp.h>
+>  #include <stdbool.h>
+> 
+> +#include "../kselftest.h"
+> +
+>  #ifdef __NR_userfaultfd
+> 
+>  static unsigned long nr_cpus, nr_pages, nr_pages_per_cpu, page_size;
+> @@ -1322,7 +1324,7 @@ int main(int argc, char **argv)
+>  int main(void)
+>  {
+>  	printf("skip: Skipping userfaultfd test (missing __NR_userfaultfd)\n");
+> -	return 0;
+> +	return KSFT_SKIP;
 >  }
->
->  static int test_harness_run(int __attribute__((unused)) argc,
-> @@ -762,6 +771,8 @@ static int test_harness_run(int __attribute__((unused)) argc,
->                 __run_test(t);
->                 if (t->passed)
->                         pass_count++;
-> +               else if (t->skipped)
-> +                       return KSFT_SKIP;
->                 else
->                         ret = 1;
->         }
-> --
+> 
+>  #endif /* __NR_userfaultfd */
+> -- 
 > 2.17.0
->
-
-
+> 
 
 -- 
-Kees Cook
-Pixel Security
+Sincerely yours,
+Mike.
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
