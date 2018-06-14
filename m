@@ -1,71 +1,43 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Thu, 14 Jun 2018 10:02:15 -0600
-Subject: [PATCH] selftests: kselftest_harness: return Kselftest Skip code
- for skipped tests
-In-Reply-To: <CAGXu5jLXAQxo7mUJThXCOMPEC3yvGU5_wLqjU_YKGtd6sFfuUw@mail.gmail.com>
-References: <20180614013445.6120-1-shuah@kernel.org>
- <CAGXu5jLXAQxo7mUJThXCOMPEC3yvGU5_wLqjU_YKGtd6sFfuUw@mail.gmail.com>
-Message-ID: <dd086a7d-36fe-b6f5-3257-c30898cc8a34@kernel.org>
-
-On 06/13/2018 10:06 PM, Kees Cook wrote:
-> On Wed, Jun 13, 2018 at 6:34 PM, Shuah Khan (Samsung OSG)
-> <shuah at kernel.org> wrote:
->> When a test is skipped because of unmet dependencies and/or unsupported
->> configuration, kselftest_harness exits with error which is treated as a
->> fail by the Kselftest framework. This leads to false negative result even
->> when the test could not be run.
->>
->> Change it to return kselftest skip code when a test gets skipped to
->> clearly report that the test could not be run. This change add skip
->> handling to kselftest_harness with minimal changes adding a new skipped
->> field to struct __test_metadata and using it to recognize KSFT_SKIP exit
->> from the test function (t->fn) to __run_test() to the test_harness_run()
->> to return the right skip code to Kselftest framework.
->>
->> Kselftest framework SKIP code is 4 and the framework prints appropriate
->> messages to indicate that the test is skipped.
-> 
-> Unfortunately this will not work: test step # is used as the failure
-> code to let test runners know where a child failed. KSFT_SKIP is 4, so
-> every test failing in step 4 would be seen as a skip instead of a
-> fail.
-> 
-
-Yeah. That is correct. __bail() does exit with step which could be step #4
-
-> Tests must not exit on their own with this harness: only the existing
-> ASSERT/EXPECT macros can be used. uevent test should never be doing
-> this:
-> 
->         if (geteuid()) {
->                 TH_LOG("Uevent filtering tests require root
-> privileges. Skipping test");
->                 _exit(KSFT_SKIP);
->         }
-> 
-> Nor the _exit(EXIT_FAILURE) calls. Those must all be ASSERT() instead.
-
-It did look like an improper use of the harness by this test. Okay that
-makes sense.
-
-> 
-> Perhaps a new signal could be used, but the return codes are already being used.
-> 
-
-A a new harness hook for KSFT_SKIP case so tests can call that explicitly would
-solve the problem once the problem of conflict with step #4.
-
-Since he harness step metadata doesn't have special meaning than keeping track of
-how far test ran, harness could be changed to treat step #4 as a special value and
-not use it for step to solve the conflict between ksft and kselftest_harness.
-
-thanks,
--- Shuah
+From: tom.hromatka at oracle.com (Tom Hromatka)
+Date: Thu, 14 Jun 2018 12:49:08 -0600
+Subject: [PATCH] selftests: sparc64: Add missing SPDX License Identifiers
+In-Reply-To: <20180614010559.5144-1-shuah@kernel.org>
+References: <20180614010559.5144-1-shuah@kernel.org>
+Message-ID: <2f9d0d78-067f-7a25-dc10-f4476a7ae54c@oracle.com>
 
 
 
+On 06/13/2018 07:05 PM, Shuah Khan (Samsung OSG) wrote:
+> Add missing SPDX License Identifiers to Makefile(s).
+>
+> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 
+Reviewed-by: Tom Hromatka <tom.hromatka at oracle.com>
 
+> ---
+>   tools/testing/selftests/sparc64/Makefile         | 1 +
+>   tools/testing/selftests/sparc64/drivers/Makefile | 2 +-
+>   2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/sparc64/Makefile b/tools/testing/selftests/sparc64/Makefile
+> index 76b2206932c3..a19531dba4dc 100644
+> --- a/tools/testing/selftests/sparc64/Makefile
+> +++ b/tools/testing/selftests/sparc64/Makefile
+> @@ -1,3 +1,4 @@
+> +# SPDX-License-Identifier: GPL-2.0
+>   uname_M := $(shell uname -m 2>/dev/null || echo not)
+>   ARCH ?= $(shell echo $(uname_M) | sed -e s/x86_64/x86/)
+>   
+> diff --git a/tools/testing/selftests/sparc64/drivers/Makefile b/tools/testing/selftests/sparc64/drivers/Makefile
+> index 6264f40bbdbc..deb0df415565 100644
+> --- a/tools/testing/selftests/sparc64/drivers/Makefile
+> +++ b/tools/testing/selftests/sparc64/drivers/Makefile
+> @@ -1,4 +1,4 @@
+> -
+> +# SPDX-License-Identifier: GPL-2.0
+>   INCLUDEDIR := -I.
+>   CFLAGS := $(CFLAGS) $(INCLUDEDIR) -Wall -O2 -g
+>   
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
