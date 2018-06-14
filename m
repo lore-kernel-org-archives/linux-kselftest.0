@@ -1,36 +1,35 @@
 From: linuxram at us.ibm.com (Ram Pai)
-Date: Wed, 13 Jun 2018 17:44:56 -0700
-Subject: [PATCH v13 05/24] selftests/vm: Make gcc check arguments of
- sigsafe_printf()
+Date: Wed, 13 Jun 2018 17:44:59 -0700
+Subject: [PATCH v13 08/24] selftests/vm: fix the wrong assert in
+ pkey_disable_set()
 In-Reply-To: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
 References: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
-Message-ID: <1528937115-10132-6-git-send-email-linuxram@us.ibm.com>
+Message-ID: <1528937115-10132-9-git-send-email-linuxram@us.ibm.com>
 
-From: Thiago Jung Bauermann <bauerman at linux.ibm.com>
+If the flag is 0, no bits will be set. Hence we cant expect
+the resulting bitmap to have a higher value than what it
+was earlier.
 
-This will help us ensure we print pkey_reg_t values correctly in different
-architectures.
-
-Signed-off-by: Thiago Jung Bauermann <bauerman at linux.ibm.com>
+cc: Dave Hansen <dave.hansen at intel.com>
+cc: Florian Weimer <fweimer at redhat.com>
+Signed-off-by: Ram Pai <linuxram at us.ibm.com>
 ---
- tools/testing/selftests/vm/pkey-helpers.h |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ tools/testing/selftests/vm/protection_keys.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/pkey-helpers.h b/tools/testing/selftests/vm/pkey-helpers.h
-index 3ed2f02..7f18a82 100644
---- a/tools/testing/selftests/vm/pkey-helpers.h
-+++ b/tools/testing/selftests/vm/pkey-helpers.h
-@@ -27,6 +27,10 @@
- #define DPRINT_IN_SIGNAL_BUF_SIZE 4096
- extern int dprint_in_signal;
- extern char dprint_in_signal_buffer[DPRINT_IN_SIGNAL_BUF_SIZE];
-+
-+#ifdef __GNUC__
-+__attribute__((format(printf, 1, 2)))
-+#endif
- static inline void sigsafe_printf(const char *format, ...)
- {
- 	va_list ap;
+diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
+index 57340b3..5fcccdb 100644
+--- a/tools/testing/selftests/vm/protection_keys.c
++++ b/tools/testing/selftests/vm/protection_keys.c
+@@ -415,7 +415,7 @@ void pkey_disable_set(int pkey, int flags)
+ 	dprintf1("%s(%d) pkey_reg: 0x"PKEY_REG_FMT"\n",
+ 		__func__, pkey, read_pkey_reg());
+ 	if (flags)
+-		pkey_assert(read_pkey_reg() > orig_pkey_reg);
++		pkey_assert(read_pkey_reg() >= orig_pkey_reg);
+ 	dprintf1("END<---%s(%d, 0x%x)\n", __func__,
+ 		pkey, flags);
+ }
 -- 
 1.7.1
 
