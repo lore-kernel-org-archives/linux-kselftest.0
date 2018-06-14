@@ -1,50 +1,90 @@
-From: tom.hromatka@oracle.com (Tom Hromatka)
-Date: Wed, 13 Jun 2018 11:20:57 -0600
-Subject: [PATCH] selftests: sparc64: Fix to do nothing on non-sparc64
-In-Reply-To: <20180612232348.27979-1-shuah@kernel.org>
-References: <20180612232348.27979-1-shuah@kernel.org>
-Message-ID: <d6a1ce6d-4903-ec7a-10aa-d40118fce45c@oracle.com>
+From: linuxram@us.ibm.com (Ram Pai)
+Date: Wed, 13 Jun 2018 17:44:51 -0700
+Subject: [PATCH v13 00/24] selftests, powerpc, x86 : Memory Protection Keys
+Message-ID: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180613172057.UbXvt89_FFvtQ2VkDdMBTHSuv2qMRcX-vghiPE0U2Mo@z>
+Message-ID: <20180614004451.2TrjIYv3RbPXYOSwX-gYgfeZK_ct4NRSm3n62sxIrcw@z>
 
-Thanks, Shuah!
+Memory protection keys enables an application to protect its address space from
+inadvertent access by its own code.
 
-Tom
+This feature is now enabled on powerpc architecture and integrated in
+4.16-rc1.  The patches move the selftests to arch neutral directory
+and enhance their test coverage.
+
+Test
+----
+Verified for correctness on powerpc. Need help verifying on x86.
+Compiles on x86.
+
+History:
+-------
+
+version 13:
+	(1) Incorporated comments for Dave Hansen.
+	(2)   Added one more test for correct pkey-0 behavior.
+
+version 12:
+        (1) fixed the offset of pkey field in the siginfo structure for
+	    x86_64 and powerpc. And tries to use the actual field
+	    if the headers have it defined.
+
+version 11:
+	(1) fixed a deadlock in the ptrace testcase.
+
+version 10 and prior:
+	(1) moved the testcase to arch neutral directory
+	(2) split the changes into incremental patches.
 
 
-On 06/12/2018 05:23 PM, Shuah Khan (Samsung OSG) wrote:
-> sparc64 test fails with the following errors on non-sparc64 systems. Fix
-> the Makefile to do nothing on non-sparc64 systems to suppress the errors:
->
-> make run_tests
-> adi-test.c: Assembler messages:
-> adi-test.c:302: Error: no such instruction: `rd %tick,%r13'
-> adi-test.c:304: Error: no such instruction: `rd %tick,%rbp'
-> adi-test.c:190: Error: no such instruction: `rd %tick,%rbp'
-> adi-test.c:192: Error: no such instruction: `rd %tick,%rdx'
-> adi-test.c:273: Error: no such instruction: `rd %tick,%rbx'
-> adi-test.c:276: Error: no such instruction: `rd %tick,%rdx'
-> adi-test.c:217: Error: no such instruction: `rd %tick,%rbp'
-> adi-test.c:220: Error: no such instruction: `rd %tick,%rdx'
-> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
-> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
-> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
-> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
-> adi-test.c:246: Error: no such instruction: `rd %tick,%rbp'
-> adi-test.c:248: Error: no such instruction: `rd %tick,%rdx'
-> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
-> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
-> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
-> <builtin>: recipe for target 'adi-test' failed
-> make[1]: *** [adi-test] Error 1
-> adi: [FAIL]
-> ./drivers_test.sh: 24: ./drivers_test.sh: ./adi-test: not found
-> ../lib.mk:73: recipe for target 'run_tests' failed
-> make: *** [run_tests] Error 1
->
-> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+Ram Pai (22):
+  selftests/x86: Move protecton key selftest to arch neutral directory
+  selftests/vm: rename all references to pkru to a generic name
+  selftests/vm: move generic definitions to header file
+  selftests/vm: typecast the pkey register
+  selftests/vm: generic function to handle shadow key register
+  selftests/vm: fix the wrong assert in pkey_disable_set()
+  selftests/vm: fixed bugs in pkey_disable_clear()
+  selftests/vm: clear the bits in shadow reg when a pkey is freed.
+  selftests/vm: fix alloc_random_pkey() to make it really random
+  selftests/vm: introduce two arch independent abstraction
+  selftests/vm: pkey register should match shadow pkey
+  selftests/vm: generic cleanup
+  selftests/vm: powerpc implementation for generic abstraction
+  selftests/vm: clear the bits in shadow reg when a pkey is freed.
+  selftests/vm: powerpc implementation to check support for pkey
+  selftests/vm: fix an assertion in test_pkey_alloc_exhaust()
+  selftests/vm: associate key on a mapped page and detect access
+    violation
+  selftests/vm: associate key on a mapped page and detect write
+    violation
+  selftests/vm: detect write violation on a mapped access-denied-key
+    page
+  selftests/vm: testcases must restore pkey-permissions
+  selftests/vm: sub-page allocator
+  selftests/vm: test correct behavior of pkey-0
 
-Reviewed-by: Tom Hromatka <tom.hromatka at oracle.com>
+Thiago Jung Bauermann (2):
+  selftests/vm: move arch-specific definitions to arch-specific header
+  selftests/vm: Make gcc check arguments of sigsafe_printf()
+
+ tools/testing/selftests/vm/.gitignore         |    1 +
+ tools/testing/selftests/vm/Makefile           |    1 +
+ tools/testing/selftests/vm/pkey-helpers.h     |  214 ++++
+ tools/testing/selftests/vm/pkey-powerpc.h     |  126 ++
+ tools/testing/selftests/vm/pkey-x86.h         |  184 +++
+ tools/testing/selftests/vm/protection_keys.c  | 1598 +++++++++++++++++++++++++
+ tools/testing/selftests/x86/.gitignore        |    1 -
+ tools/testing/selftests/x86/pkey-helpers.h    |  219 ----
+ tools/testing/selftests/x86/protection_keys.c | 1485 -----------------------
+ 9 files changed, 2124 insertions(+), 1705 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/pkey-helpers.h
+ create mode 100644 tools/testing/selftests/vm/pkey-powerpc.h
+ create mode 100644 tools/testing/selftests/vm/pkey-x86.h
+ create mode 100644 tools/testing/selftests/vm/protection_keys.c
+ delete mode 100644 tools/testing/selftests/x86/pkey-helpers.h
+ delete mode 100644 tools/testing/selftests/x86/protection_keys.c
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
