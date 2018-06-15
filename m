@@ -1,73 +1,77 @@
-From: shuah@kernel.org (Shuah Khan (Samsung OSG))
-Date: Thu, 14 Jun 2018 17:29:35 -0600
-Subject: [PATCH] selftests: zram: return Kselftest Skip code for skipped tests
-Message-ID: <20180614232935.24702-1-shuah@kernel.org>
+From: linuxram@us.ibm.com (Ram Pai)
+Date: Thu, 14 Jun 2018 17:58:54 -0700
+Subject: [PATCH v13 00/24] selftests, powerpc, x86 : Memory Protection Keys
+In-Reply-To: <c5c119b0-f5ca-4ddc-43c0-a6b597173973@redhat.com>
+References: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
+ <c5c119b0-f5ca-4ddc-43c0-a6b597173973@redhat.com>
+Message-ID: <20180615005854.GA5294@ram.oc3035372033.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180614232935.fbiIuALrNCQwsOM-FRca7tBRl3giMCkTb4L-5keFoDw@z>
+Message-ID: <20180615005854.0NwutMCivVBa_eaZz-NeAqBRhvs1Goz06MgdEAkvcFU@z>
 
-When zram test is skipped because of unmet dependencies and/or
-unsupported configuration, it exits with error which is treated as
-a fail by the Kselftest framework. This leads to false negative result
-even when the test could not be run.
+On Thu, Jun 14, 2018@10:19:11PM +0200, Florian Weimer wrote:
+> On 06/14/2018 02:44 AM, Ram Pai wrote:
+> >Test
+> >----
+> >Verified for correctness on powerpc. Need help verifying on x86.
+> >Compiles on x86.
+> 
+> It breaks make in tools/testing/selftests/x86:
+> 
+> make: *** No rule to make target `protection_keys.c', needed by
+> `/home/linux/tools/testing/selftests/x86/protection_keys_64'.  Stop.
 
-Change it to return kselftest skip code when a test gets skipped to
-clearly report that the test could not be run.
+Ah.. it has to be taken out from the Makefile of
+/home/linux/tools/testing/selftests/x86/
 
-Kselftest framework SKIP code is 4 and the framework prints appropriate
-messages to indicate that the test is skipped.
+The sources have been moved to /home/linux/tools/testing/selftests/mm/
 
-Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
----
- tools/testing/selftests/zram/zram.sh     | 5 ++++-
- tools/testing/selftests/zram/zram_lib.sh | 5 ++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> The generic implementation no longer builds 32-bit binaries.  Is
+> this the intent?
 
-diff --git a/tools/testing/selftests/zram/zram.sh b/tools/testing/selftests/zram/zram.sh
-index 754de7da426a..232e958ec454 100755
---- a/tools/testing/selftests/zram/zram.sh
-+++ b/tools/testing/selftests/zram/zram.sh
-@@ -2,6 +2,9 @@
- # SPDX-License-Identifier: GPL-2.0
- TCID="zram.sh"
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- . ./zram_lib.sh
- 
- run_zram () {
-@@ -24,5 +27,5 @@ elif [ -b /dev/zram0 ]; then
- else
- 	echo "$TCID : No zram.ko module or /dev/zram0 device file not found"
- 	echo "$TCID : CONFIG_ZRAM is not set"
--	exit 1
-+	exit $ksft_skip
- fi
-diff --git a/tools/testing/selftests/zram/zram_lib.sh b/tools/testing/selftests/zram/zram_lib.sh
-index f6a9c73e7a44..9e73a4fb9b0a 100755
---- a/tools/testing/selftests/zram/zram_lib.sh
-+++ b/tools/testing/selftests/zram/zram_lib.sh
-@@ -18,6 +18,9 @@ MODULE=0
- dev_makeswap=-1
- dev_mounted=-1
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- trap INT
- 
- check_prereqs()
-@@ -27,7 +30,7 @@ check_prereqs()
- 
- 	if [ $uid -ne 0 ]; then
- 		echo $msg must be run as root >&2
--		exit 0
-+		exit $ksft_skip
- 	fi
- }
- 
--- 
-2.17.0
+No. But building it 32-bit after moving it to a the new directory 
+needs some special code in the Makefile. 
+
+> 
+> It's possible to build 32-bit binaries with “make CC='gcc -m32'”, so
+> perhaps this is good enough?
+
+Dave Hansen did mention it, but he did not complain too much. So I kept
+quite.
+
+> 
+> But with that, I get a warning:
+> 
+> protection_keys.c: In function ‘dump_mem’:
+> protection_keys.c:172:3: warning: format ‘%lx’ expects argument of
+> type ‘long unsigned int’, but argument 4 has type ‘uint64_t’
+> [-Wformat=]
+>    dprintf1("dump[%03d][@%p]: %016lx\n", i, ptr, *ptr);
+>    ^
+> 
+> I suppose you could use %016llx and add a cast to unsigned long long
+> to fix this.
+
+yes.
+
+> 
+> Anyway, both the 32-bit and 64-bit tests fail here:
+> 
+> assert() at protection_keys.c::943 test_nr: 12 iteration: 1
+> running abort_hooks()...
+> 
+> I've yet checked what causes this.  It's with the kernel headers
+> from 4.17, but with other userspace headers based on glibc 2.17.  I
+> hope to look into this some more before the weekend, but I
+> eventually have to return the test machine to the pool.
+
+I wish I could get a x86 machine which could do memory keys. Had a AWS
+instance, but struggled to boot my kernel. Can't get to the console...
+gave up.  If someone can give me a ready-made machine with support for
+memkeys, I can quickly fix all the outstanding x86 issues.  But if
+someone can just fix it for me, ....  ;)
+
+RP
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
