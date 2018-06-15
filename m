@@ -1,78 +1,180 @@
-From: linuxram@us.ibm.com (Ram Pai)
-Date: Thu, 14 Jun 2018 17:58:54 -0700
-Subject: [PATCH v13 00/24] selftests, powerpc, x86 : Memory Protection Keys
-In-Reply-To: <c5c119b0-f5ca-4ddc-43c0-a6b597173973@redhat.com>
-References: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
- <c5c119b0-f5ca-4ddc-43c0-a6b597173973@redhat.com>
-Message-ID: <20180615005854.GA5294@ram.oc3035372033.ibm.com>
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Fri, 15 Jun 2018 08:41:22 +0200
+Subject: [PATCH] selftests: bpf: config: add config fragments
+In-Reply-To: <CALDO+SZXvnUU7VKd_UwnBCU0NiTHjqei4xEUCdcktkKCD3MnEg@mail.gmail.com>
+References: <20180612110510.11731-1-anders.roxell@linaro.org>
+ <d6851756-ae3b-09ec-f487-1eeece6bd4c6@iogearbox.net>
+ <CALDO+SY3qNYAOSiYC3645C7YY9LSx7ggg0GjY76m4TbBfF_t3A@mail.gmail.com>
+ <CADYN=9+3V4fpqbjh-X4VUVWd_X38XSYhEbZoRBffcx=-nMtF8g@mail.gmail.com>
+ <CALDO+SZXvnUU7VKd_UwnBCU0NiTHjqei4xEUCdcktkKCD3MnEg@mail.gmail.com>
+Message-ID:
+ <CADYN=9KegM2wNCX7=BDct16bzzmr-02aG1c3MLDEEon1yGXnzQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180615005854.0NwutMCivVBa_eaZz-NeAqBRhvs1Goz06MgdEAkvcFU@z>
+Message-ID: <20180615064122.nftHes_qXuR-xwFrwlNoALnCp_2e_JhPnIEKtKzO7JU@z>
 
-On Thu, Jun 14, 2018@10:19:11PM +0200, Florian Weimer wrote:
-> On 06/14/2018 02:44 AM, Ram Pai wrote:
-> >Test
-> >----
-> >Verified for correctness on powerpc. Need help verifying on x86.
-> >Compiles on x86.
-> 
-> It breaks make in tools/testing/selftests/x86:
-> 
-> make: *** No rule to make target `protection_keys.c', needed by
-> `/home/linux/tools/testing/selftests/x86/protection_keys_64'.  Stop.
+On Thu, 14 Jun 2018@14:09, William Tu <u9012063@gmail.com> wrote:
+>
+> On Thu, Jun 14, 2018@4:42 AM, Anders Roxell <anders.roxell@linaro.org> wrote:
+> > On 14 June 2018@13:06, William Tu <u9012063@gmail.com> wrote:
+> >> On Tue, Jun 12, 2018@5:08 PM, Daniel Borkmann <daniel@iogearbox.net> wrote:
+> >>> On 06/12/2018 01:05 PM, Anders Roxell wrote:
+> >>>> Tests test_tunnel.sh fails due to config fragments ins't enabled.
+> >>>>
+> >>>> Fixes: 933a741e3b82 ("selftests/bpf: bpf tunnel test.")
+> >>>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+> >>>> ---
+> >>>>
+> >>>> All tests passes except ip6gretap that still fails. I'm unsure why.
+> >>>> Ideas?
+> >>
+> >> Hi Anders,
+> >>
+> >> ip6erspan is based on ip6gretap, does ip6erspan pass?
+> >
+> > it did pass  when I was sending the email.
+> > However, I retested this on next-20180613 and now it fails.
+> >
+> Does 'ip -s link show' show any errors/dropped on ip6gretap device?
 
-Ah.. it has to be taken out from the Makefile of
-/home/linux/tools/testing/selftests/x86/
+I rerun the test_ip6gretap test only and added "set -x" to
+test_tunnel.sh here's the output.
+I added "ip -s link show ip6gretap11" before the cleanup function in the script.
 
-The sources have been moved to /home/linux/tools/testing/selftests/mm/
+# ./test_tunnel.sh
++ PING_ARG='-c 3 -w 10 -q'
++ ret=0
++ GREEN='\033[0;92m'
++ RED='\033[0;31m'
++ NC='\033[0m'
++ trap cleanup 0 3 6
++ trap cleanup_exit 2 9
++ cleanup
++ ip netns delete at_ns0
++ ip link del veth1
++ ip link del ipip11
++ ip link del ipip6tnl11
++ ip link del gretap11
++ ip link del ip6gre11
++ ip link del ip6gretap11
++ ip link del vxlan11
++ ip link del ip6vxlan11
++ ip link del geneve11
++ ip link del ip6geneve11
++ ip link del erspan11
++ ip link del ip6erspan11
++ bpf_tunnel_test
++ echo 'Testing IP6GRETAP tunnel...'
+Testing IP6GRETAP tunnel...
++ test_ip6gretap
++ TYPE=ip6gretap
++ DEV_NS=ip6gretap00
++ DEV=ip6gretap11
++ ret=0
++ check ip6gretap
++ ip link help ip6gretap
++ grep -q '^Usage:'
++ '[' 0 -ne 0 ']'
++ config_device
++ ip netns add at_ns0
++ ip link add veth0 type veth peer name veth1
++ ip link set veth0 netns at_ns0
++ ip netns exec at_ns0 ip addr add 172.16.1.100/24 dev veth0
++ ip netns exec at_ns0 ip link set dev veth0 up
++ ip link set dev veth1 up mtu 1500
++ ip addr add dev veth1 172.16.1.200/24
++ add_ip6gretap_tunnel
++ ip netns exec at_ns0 ip addr add ::11/96 dev veth0
++ ip netns exec at_ns0 ip link set dev veth0 up
++ ip addr add dev veth1 ::22/96
++ ip link set dev veth1 up
++ ip netns exec at_ns0 ip link add dev ip6gretap00 type ip6gretap seq
+flowlabel 0xbcdef key 2 local ::11 remote ::22
++ ip netns exec at_ns0 ip addr add dev ip6gretap00 10.1.1.100/24
++ ip netns exec at_ns0 ip addr add dev ip6gretap00 fc80::100/96
++ ip netns exec at_ns0 ip link set dev ip6gretap00 up
++ ip link add dev ip6gretap11 type ip6gretap external
++ ip addr add dev ip6gretap11 10.1.1.200/24
++ ip addr add dev ip6gretap11 fc80::200/24
++ ip link set dev ip6gretap11 up
++ attach_bpf ip6gretap11 ip6gretap_set_tunnel ip6gretap_get_tunnel
++ DEV=ip6gretap11
++ SET=ip6gretap_set_tunnel
++ GET=ip6gretap_get_tunnel
++ tc qdisc add dev ip6gretap11 clsact
++ tc filter add dev ip6gretap11 egress bpf da obj test_tunnel_kern.o
+sec ip6gretap_set_tunnel
++ tc filter add dev ip6gretap11 ingress bpf da obj test_tunnel_kern.o
+sec ip6gretap_get_tunnel
++ ping6 -c 3 -w 10 -q ::11
+PING ::11 (::11): 56 data bytes
 
-> 
-> The generic implementation no longer builds 32-bit binaries.  Is
-> this the intent?
+--- ::11 ping statistics ---
+5 packets transmitted, 3 packets received, 40% packet loss
+round-trip min/avg/max = 0.139/1.857/5.293 ms
++ ip netns exec at_ns0 ping -c 3 -w 10 -q 10.1.1.200
+PING 10.1.1.200 (10.1.1.200): 56 data bytes
 
-No. But building it 32-bit after moving it to a the new directory 
-needs some special code in the Makefile. 
+--- 10.1.1.200 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.214/0.256/0.305 ms
++ ping -c 3 -w 10 -q 10.1.1.100
+PING 10.1.1.100 (10.1.1.100): 56 data bytes
 
-> 
-> It's possible to build 32-bit binaries with “make CC='gcc -m32'”, so
-> perhaps this is good enough?
+--- 10.1.1.100 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.210/0.211/0.213 ms
++ check_err 0
++ '[' 0 -eq 0 ']'
++ ret=0
++ ip netns exec at_ns0 ping6 -c 3 -w 10 -q fc80::200
+PING fc80::200 (fc80::200): 56 data bytes
 
-Dave Hansen did mention it, but he did not complain too much. So I kept
-quite.
-
-> 
-> But with that, I get a warning:
-> 
-> protection_keys.c: In function ‘dump_mem’:
-> protection_keys.c:172:3: warning: format ‘%lx’ expects argument of
-> type ‘long unsigned int’, but argument 4 has type ‘uint64_t’
-> [-Wformat=]
->    dprintf1("dump[%03d][@%p]: %016lx\n", i, ptr, *ptr);
->    ^
-> 
-> I suppose you could use %016llx and add a cast to unsigned long long
-> to fix this.
-
-yes.
-
-> 
-> Anyway, both the 32-bit and 64-bit tests fail here:
-> 
-> assert() at protection_keys.c::943 test_nr: 12 iteration: 1
-> running abort_hooks()...
-> 
-> I've yet checked what causes this.  It's with the kernel headers
-> from 4.17, but with other userspace headers based on glibc 2.17.  I
-> hope to look into this some more before the weekend, but I
-> eventually have to return the test machine to the pool.
-
-I wish I could get a x86 machine which could do memory keys. Had a AWS
-instance, but struggled to boot my kernel. Can't get to the console...
-gave up.  If someone can give me a ready-made machine with support for
-memkeys, I can quickly fix all the outstanding x86 issues.  But if
-someone can just fix it for me, ....  ;)
-
-RP
-
+--- fc80::200 ping statistics ---
+10 packets transmitted, 0 packets received, 100% packet loss
++ check_err 1
++ '[' 0 -eq 0 ']'
++ ret=1
++ ip -s link show ip6gretap11
+19: ip6gretap11 at NONE: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1434 qdisc
+pfifo_fast state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether de:d2:0c:53:80:8c brd ff:ff:ff:ff:ff:ff
+    RX: bytes  packets  errors  dropped overrun mcast
+    2096       25       0       0       0       0
+    TX: bytes  packets  errors  dropped carrier collsns
+    5324       36       5       5       0       0
++ cleanup
++ ip netns delete at_ns0
++ ip link del veth1
++ ip link del ipip11
++ ip link del ipip6tnl11
++ ip link del gretap11
++ ip link del ip6gre11
++ ip link del ip6gretap11
++ ip link del vxlan11
++ ip link del ip6vxlan11
++ ip link del geneve11
++ ip link del ip6geneve11
++ ip link del erspan11
++ ip link del ip6erspan11
++ '[' 1 -ne 0 ']'
++ echo -e '\033[0;31mFAIL: ip6gretap\033[0m'
+FAIL: ip6gretap
++ return 1
++ exit 0
++ cleanup
++ ip netns delete at_ns0
++ ip link del veth1
++ ip link del ipip11
++ ip link del ipip6tnl11
++ ip link del gretap11
++ ip link del ip6gre11
++ ip link del ip6gretap11
++ ip link del vxlan11
++ ip link del ip6vxlan11
++ ip link del geneve11
++ ip link del ip6geneve11
++ ip link del erspan11
++ ip link del ip6erspan11
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
