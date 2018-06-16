@@ -1,13 +1,14 @@
 From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
-Date: Sat, 16 Jun 2018 15:44:55 -0400
-Subject: [RFC PATCH for 4.18 1/2] rseq/selftests: run_param_test.sh should be
- executable
+Date: Sat, 16 Jun 2018 15:44:56 -0400
+Subject: [RFC PATCH for 4.18 2/2] rseq/selftests: arm: align struct rseq_cs on
+ 32 bytes
 In-Reply-To: <20180616194456.26159-1-mathieu.desnoyers@efficios.com>
 References: <20180616194456.26159-1-mathieu.desnoyers@efficios.com>
-Message-ID: <20180616194456.26159-2-mathieu.desnoyers@efficios.com>
+Message-ID: <20180616194456.26159-3-mathieu.desnoyers@efficios.com>
 
-The executable bit of the run_param_test.sh script got lost in
-the merge.
+uapi/linux/rseq.h aligns struct rseq_cs on 32 bytes. Satisfy this
+alignment requirement in its definition within the rseq-arm.h
+inline assembly.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
 Cc: Thomas Gleixner <tglx at linutronix.de>
@@ -35,13 +36,21 @@ Cc: Andy Lutomirski <luto at amacapital.net>
 Cc: Andrew Morton <akpm at linux-foundation.org>
 Cc: Linus Torvalds <torvalds at linux-foundation.org>
 ---
- tools/testing/selftests/rseq/run_param_test.sh | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- mode change 100644 => 100755 tools/testing/selftests/rseq/run_param_test.sh
+ tools/testing/selftests/rseq/rseq-arm.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/rseq/run_param_test.sh b/tools/testing/selftests/rseq/run_param_test.sh
-old mode 100644
-new mode 100755
+diff --git a/tools/testing/selftests/rseq/rseq-arm.h b/tools/testing/selftests/rseq/rseq-arm.h
+index 3b055f9aeaab..3cea19877227 100644
+--- a/tools/testing/selftests/rseq/rseq-arm.h
++++ b/tools/testing/selftests/rseq/rseq-arm.h
+@@ -57,6 +57,7 @@ do {									\
+ #define __RSEQ_ASM_DEFINE_ABORT(table_label, label, teardown,		\
+ 				abort_label, version, flags,		\
+ 				start_ip, post_commit_offset, abort_ip)	\
++		".balign 32\n\t"					\
+ 		__rseq_str(table_label) ":\n\t"				\
+ 		".word " __rseq_str(version) ", " __rseq_str(flags) "\n\t" \
+ 		".word " __rseq_str(start_ip) ", 0x0, " __rseq_str(post_commit_offset) ", 0x0, " __rseq_str(abort_ip) ", 0x0\n\t" \
 -- 
 2.11.0
 
