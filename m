@@ -1,74 +1,50 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Fri, 15 Jun 2018 10:51:58 -0600
-Subject: [PATCH] selftests: sparc64: Fix to do nothing on non-sparc64
-In-Reply-To: <20180615.094145.334438195653112696.davem@redhat.com>
-References: <20180612232348.27979-1-shuah@kernel.org>
- <d6a1ce6d-4903-ec7a-10aa-d40118fce45c@oracle.com>
- <d8ec82b2-a27a-7a7a-9d8a-b3b937e8e959@kernel.org>
- <20180615.094145.334438195653112696.davem@redhat.com>
-Message-ID: <fa06cf9a-e38b-df0d-3e15-a8ecff1e923f@kernel.org>
+From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
+Date: Sat, 16 Jun 2018 15:44:55 -0400
+Subject: [RFC PATCH for 4.18 1/2] rseq/selftests: run_param_test.sh should be
+ executable
+In-Reply-To: <20180616194456.26159-1-mathieu.desnoyers@efficios.com>
+References: <20180616194456.26159-1-mathieu.desnoyers@efficios.com>
+Message-ID: <20180616194456.26159-2-mathieu.desnoyers@efficios.com>
 
-On 06/15/2018 10:41 AM, David Miller wrote:
-> From: Shuah Khan <shuah at kernel.org>
-> Date: Fri, 15 Jun 2018 10:33:21 -0600
-> 
->> On 06/13/2018 11:20 AM, Tom Hromatka wrote:
->>> Thanks, Shuah!
->>>
->>> Tom
->>>
->>>
->>> On 06/12/2018 05:23 PM, Shuah Khan (Samsung OSG) wrote:
->>>> sparc64 test fails with the following errors on non-sparc64 systems. Fix
->>>> the Makefile to do nothing on non-sparc64 systems to suppress the errors:
->>>>
->>>> make run_tests
->>>> adi-test.c: Assembler messages:
->>>> adi-test.c:302: Error: no such instruction: `rd %tick,%r13'
->>>> adi-test.c:304: Error: no such instruction: `rd %tick,%rbp'
->>>> adi-test.c:190: Error: no such instruction: `rd %tick,%rbp'
->>>> adi-test.c:192: Error: no such instruction: `rd %tick,%rdx'
->>>> adi-test.c:273: Error: no such instruction: `rd %tick,%rbx'
->>>> adi-test.c:276: Error: no such instruction: `rd %tick,%rdx'
->>>> adi-test.c:217: Error: no such instruction: `rd %tick,%rbp'
->>>> adi-test.c:220: Error: no such instruction: `rd %tick,%rdx'
->>>> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
->>>> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
->>>> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
->>>> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
->>>> adi-test.c:246: Error: no such instruction: `rd %tick,%rbp'
->>>> adi-test.c:248: Error: no such instruction: `rd %tick,%rdx'
->>>> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
->>>> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
->>>> adi-test.c:79: Error: no such instruction: `rd %tick,%rax'
->>>> <builtin>: recipe for target 'adi-test' failed
->>>> make[1]: *** [adi-test] Error 1
->>>> adi: [FAIL]
->>>> ./drivers_test.sh: 24: ./drivers_test.sh: ./adi-test: not found
->>>> ../lib.mk:73: recipe for target 'run_tests' failed
->>>> make: *** [run_tests] Error 1
->>>>
->>>> Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
->>>
->>> Reviewed-by: Tom Hromatka <tom.hromatka at oracle.com>
->>>
->>
->> get_maintainers didn't include your name for this patch. Would you like to
->> take this fix through sparc tree? It would be good to get this in for
->> 4.18-rc2
->>
->> If so, please let me know if you would like me to resend the patch
->> with Tom's Reviewed-by tag.
-> 
-> I'm very busy, so this time could you merge this for me?  Thanks!
-> 
-> Acked-by: David S. Miller <davem at davemloft.net>
-> 
+The executable bit of the run_param_test.sh script got lost in
+the merge.
 
-Okay. I will take care of this.
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Joel Fernandes <joelaf at google.com>
+Cc: Peter Zijlstra <peterz at infradead.org>
+Cc: Catalin Marinas <catalin.marinas at arm.com>
+Cc: Dave Watson <davejwatson at fb.com>
+Cc: Will Deacon <will.deacon at arm.com>
+Cc: Shuah Khan <shuahkh at osg.samsung.com>
+Cc: Andi Kleen <andi at firstfloor.org>
+Cc: linux-kselftest at vger.kernel.org
+Cc: "H . Peter Anvin" <hpa at zytor.com>
+Cc: Chris Lameter <cl at linux.com>
+Cc: Russell King <linux at arm.linux.org.uk>
+Cc: Andrew Hunter <ahh at google.com>
+Cc: Michael Kerrisk <mtk.manpages at gmail.com>
+Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
+Cc: Paul Turner <pjt at google.com>
+Cc: Boqun Feng <boqun.feng at gmail.com>
+Cc: Josh Triplett <josh at joshtriplett.org>
+Cc: Steven Rostedt <rostedt at goodmis.org>
+Cc: Ben Maurer <bmaurer at fb.com>
+Cc: linux-api at vger.kernel.org
+Cc: Andy Lutomirski <luto at amacapital.net>
+Cc: Andrew Morton <akpm at linux-foundation.org>
+Cc: Linus Torvalds <torvalds at linux-foundation.org>
+---
+ tools/testing/selftests/rseq/run_param_test.sh | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ mode change 100644 => 100755 tools/testing/selftests/rseq/run_param_test.sh
 
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/rseq/run_param_test.sh b/tools/testing/selftests/rseq/run_param_test.sh
+old mode 100644
+new mode 100755
+-- 
+2.11.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
