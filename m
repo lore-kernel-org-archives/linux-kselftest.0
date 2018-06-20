@@ -1,27 +1,25 @@
 From: anders.roxell@linaro.org (Anders Roxell)
-Date: Thu, 21 Jun 2018 00:43:44 +0200
-Subject: [PATCH] selftests: net: add tcp_inq to gitignore
-Message-ID: <20180620224344.6425-1-anders.roxell@linaro.org>
+Date: Thu, 21 Jun 2018 00:54:12 +0200
+Subject: [PATCH] selftests: cgroup: add gitignore file
+Message-ID: <20180620225412.7894-1-anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180620224344.Bh4omBIydtRVe8XLdp9eX5ZVnwF5lOx7z5b3g4hExb0@z>
+Message-ID: <20180620225412.-AyaBbXF38W_Q09HysG5DqGxfcZ862CVlIDvqFEaPIk@z>
 
-sha: 702353b538f5 ("selftest: add test for TCP_INQ") forgot to add
-tcp_inq to .gitignore.
+Add the executable 'test_memcontrol' to a .gitignore file.
 
 Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 ---
- tools/testing/selftests/net/.gitignore | 1 +
+ tools/testing/selftests/cgroup/.gitignore | 1 +
  1 file changed, 1 insertion(+)
+ create mode 100644 tools/testing/selftests/cgroup/.gitignore
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 128e548aa377..1a0ac3a29ec5 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -12,3 +12,4 @@ tcp_mmap
- udpgso
- udpgso_bench_rx
- udpgso_bench_tx
-+tcp_inq
+diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
+new file mode 100644
+index 000000000000..95eb3a53c381
+--- /dev/null
++++ b/tools/testing/selftests/cgroup/.gitignore
+@@ -0,0 +1 @@
++test_memcontrol
 -- 
 2.17.1
 
