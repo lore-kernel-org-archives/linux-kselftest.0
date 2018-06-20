@@ -1,47 +1,21 @@
 From: dave.hansen@intel.com (Dave Hansen)
-Date: Wed, 20 Jun 2018 07:53:57 -0700
-Subject: [PATCH v13 13/24] selftests/vm: pkey register should match shadow
- pkey
-In-Reply-To: <1528937115-10132-14-git-send-email-linuxram@us.ibm.com>
+Date: Wed, 20 Jun 2018 07:57:11 -0700
+Subject: [PATCH v13 14/24] selftests/vm: generic cleanup
+In-Reply-To: <1528937115-10132-15-git-send-email-linuxram@us.ibm.com>
 References: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
- <1528937115-10132-14-git-send-email-linuxram@us.ibm.com>
-Message-ID: <6246f823-77d9-6727-097e-73f103078a44@intel.com>
+ <1528937115-10132-15-git-send-email-linuxram@us.ibm.com>
+Message-ID: <e50fa00b-724e-ebcb-38b4-22cad9bee1c5@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180620145357.JcIPRE7H-yqgH1wk_6FM1-Fr3cGWXFvkhPrl5tVc4sc@z>
+Message-ID: <20180620145711.rVP6Oaz6XdtwyqophwjpYAP7E6tBojBP1wNxOT3lPZ0@z>
 
 On 06/13/2018 05:45 PM, Ram Pai wrote:
-> +++ b/tools/testing/selftests/vm/protection_keys.c
-> @@ -916,10 +916,10 @@ void expected_pkey_fault(int pkey)
->  		pkey_assert(last_si_pkey == pkey);
->  
->  	/*
-> -	 * The signal handler shold have cleared out PKEY register to let the
-> +	 * The signal handler should have cleared out pkey-register to let the
->  	 * test program continue.  We now have to restore it.
->  	 */
-> -	if (__read_pkey_reg() != 0)
-> +	if (__read_pkey_reg() != shadow_pkey_reg)
->  		pkey_assert(0);
->  
->  	__write_pkey_reg(shadow_pkey_reg);
+> cleanup the code to satisfy coding styles.
 
-I think this is wrong on x86.
+A lot of this makes the code look worse and more unreadable than before.
+ I think someone just ran it through lindent or something.
 
-When we leave the signal handler, we zero out PKRU so that the faulting
-instruction can continue, that's why we have the check against zero.
-I'm actually kinda surprised this works.
-
-Logically, this patch does:
-
-	if (hardware != shadow)
-		error();
-	hardware = shadow;
-
-That does not look right to me.  What we want is:
-
-	if (hardware != signal_return_pkey_reg)
-		error();
-	hardware = shadow;
+I also took a few CodingStyle liberties in here because it's _not_ main
+kernel code.  I think the occasional 85-column line is probably OK in here.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
