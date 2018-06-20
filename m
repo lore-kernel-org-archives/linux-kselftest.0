@@ -1,77 +1,29 @@
-From: andreyknvl@google.com (Andrey Konovalov)
-Date: Wed, 20 Jun 2018 17:24:19 +0200
-Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
-Message-ID: <cover.1529507994.git.andreyknvl@google.com>
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Thu, 21 Jun 2018 00:43:44 +0200
+Subject: [PATCH] selftests: net: add tcp_inq to gitignore
+Message-ID: <20180620224344.6425-1-anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180620152419.WqV92UrNQLd8LjmPe98Xkv_U5uB0bmLiKJmcmbvxoBU@z>
+Message-ID: <20180620224344.Bh4omBIydtRVe8XLdp9eX5ZVnwF5lOx7z5b3g4hExb0@z>
 
-arm64 has a feature called Top Byte Ignore, which allows to embed pointer
-tags into the top byte of each pointer. Userspace programs (such as
-HWASan, a memory debugging tool [1]) might use this feature and pass
-tagged user pointers to the kernel through syscalls or other interfaces.
+sha: 702353b538f5 ("selftest: add test for TCP_INQ") forgot to add
+tcp_inq to .gitignore.
 
-This patch makes a few of the kernel interfaces accept tagged user
-pointers. The kernel is already able to handle user faults with tagged
-pointers and has the untagged_addr macro, which this patchset reuses.
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+---
+ tools/testing/selftests/net/.gitignore | 1 +
+ 1 file changed, 1 insertion(+)
 
-We're not trying to cover all possible ways the kernel accepts user
-pointers in one patchset, so this one should be considered as a start.
-
-Thanks!
-
-[1] http://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html
-
-Changes in v4:
-- Added a selftest for checking that passing tagged pointers to the 
-  kernel succeeds.
-- Rebased onto 81e97f013 (4.18-rc1+).
-
-Changes in v3:
-- Rebased onto e5c51f30 (4.17-rc6+).
-- Added linux-arch@ to the list of recipients.
-
-Changes in v2:
-- Rebased onto 2d618bdf (4.17-rc3+).
-- Removed excessive untagging in gup.c.
-- Removed untagging pointers returned from __uaccess_mask_ptr.
-
-Changes in v1:
-- Rebased onto 4.17-rc1.
-
-Changes in RFC v2:
-- Added "#ifndef untagged_addr..." fallback in linux/uaccess.h instead of
-  defining it for each arch individually.
-- Updated Documentation/arm64/tagged-pointers.txt.
-- Dropped “mm, arm64: untag user addresses in memory syscalls”.
-- Rebased onto 3eb2ce82 (4.16-rc7).
-
-Andrey Konovalov (7):
-  arm64: add type casts to untagged_addr macro
-  uaccess: add untagged_addr definition for other arches
-  arm64: untag user addresses in access_ok and __uaccess_mask_ptr
-  mm, arm64: untag user addresses in mm/gup.c
-  lib, arm64: untag addrs passed to strncpy_from_user and strnlen_user
-  arm64: update Documentation/arm64/tagged-pointers.txt
-  selftests, arm64: add a selftest for passing tagged pointers to kernel
-
- Documentation/arm64/tagged-pointers.txt       |  5 +++--
- arch/arm64/include/asm/uaccess.h              | 14 +++++++++-----
- include/linux/uaccess.h                       |  4 ++++
- lib/strncpy_from_user.c                       |  2 ++
- lib/strnlen_user.c                            |  2 ++
- mm/gup.c                                      |  4 ++++
- tools/testing/selftests/arm64/.gitignore      |  1 +
- tools/testing/selftests/arm64/Makefile        | 11 +++++++++++
- .../testing/selftests/arm64/run_tags_test.sh  | 12 ++++++++++++
- tools/testing/selftests/arm64/tags_test.c     | 19 +++++++++++++++++++
- 10 files changed, 67 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/arm64/.gitignore
- create mode 100644 tools/testing/selftests/arm64/Makefile
- create mode 100755 tools/testing/selftests/arm64/run_tags_test.sh
- create mode 100644 tools/testing/selftests/arm64/tags_test.c
-
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index 128e548aa377..1a0ac3a29ec5 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -12,3 +12,4 @@ tcp_mmap
+ udpgso
+ udpgso_bench_rx
+ udpgso_bench_tx
++tcp_inq
 -- 
-2.18.0.rc1.244.gcf134e6275-goog
+2.17.1
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
