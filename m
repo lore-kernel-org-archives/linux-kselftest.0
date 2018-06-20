@@ -1,19 +1,40 @@
-From: dave.hansen at intel.com (Dave Hansen)
-Date: Wed, 20 Jun 2018 08:22:05 -0700
-Subject: [PATCH v13 24/24] selftests/vm: test correct behavior of pkey-0
-In-Reply-To: <1528937115-10132-25-git-send-email-linuxram@us.ibm.com>
-References: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
- <1528937115-10132-25-git-send-email-linuxram@us.ibm.com>
-Message-ID: <0a7c79a9-8d2d-09cb-30c6-f0f7bca526db@intel.com>
+From: andreyknvl at google.com (Andrey Konovalov)
+Date: Wed, 20 Jun 2018 17:24:21 +0200
+Subject: [PATCH v4 2/7] uaccess: add untagged_addr definition for other arches
+In-Reply-To: <cover.1529507994.git.andreyknvl@google.com>
+References: <cover.1529507994.git.andreyknvl@google.com>
+Message-ID: <a937551f03c4617aa400fb75130627df7ed09506.1529507994.git.andreyknvl@google.com>
 
-On 06/13/2018 05:45 PM, Ram Pai wrote:
-> Ensure pkey-0 is allocated on start.  Ensure pkey-0 can be attached
-> dynamically in various modes, without failures.  Ensure pkey-0 can be
-> freed and allocated.
+To allow arm64 syscalls accept tagged pointers from userspace, we must
+untag them when they are passed to the kernel. Since untagging is done in
+generic parts of the kernel (like the mm subsystem), the untagged_addr
+macro should be defined for all architectures.
 
-I like this.  Looks very useful.
+Define it as a noop for other architectures besides arm64.
 
-Acked-by: Dave Hansen <dave.hansen at intel.com>
+Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+---
+ include/linux/uaccess.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+index efe79c1cdd47..c045b4eff95e 100644
+--- a/include/linux/uaccess.h
++++ b/include/linux/uaccess.h
+@@ -13,6 +13,10 @@
+ 
+ #include <asm/uaccess.h>
+ 
++#ifndef untagged_addr
++#define untagged_addr(addr) addr
++#endif
++
+ /*
+  * Architectures should provide two primitives (raw_copy_{to,from}_user())
+  * and get rid of their private instances of copy_{to,from}_user() and
+-- 
+2.18.0.rc1.244.gcf134e6275-goog
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
