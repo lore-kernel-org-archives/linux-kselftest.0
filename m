@@ -1,49 +1,33 @@
 From: andreyknvl at google.com (Andrey Konovalov)
-Date: Wed, 20 Jun 2018 17:24:24 +0200
-Subject: [PATCH v4 5/7] lib,
- arm64: untag addrs passed to strncpy_from_user and strnlen_user
+Date: Wed, 20 Jun 2018 17:24:20 +0200
+Subject: [PATCH v4 1/7] arm64: add type casts to untagged_addr macro
 In-Reply-To: <cover.1529507994.git.andreyknvl@google.com>
 References: <cover.1529507994.git.andreyknvl@google.com>
-Message-ID: <8ccd13e2d13dea7143bd8b5be44b733c03aa3c02.1529507994.git.andreyknvl@google.com>
+Message-ID: <6d0ef0da936f76a215a5bae7784eba67ce1967e5.1529507994.git.andreyknvl@google.com>
 
-strncpy_from_user and strnlen_user accept user addresses as arguments, and
-do not go through the same path as copy_from_user and others, so here we
-need to handle the case of tagged user addresses separately.
-
-Untag user pointers passed to these functions.
+This patch makes the untagged_addr macro accept all kinds of address types
+(void *, unsigned long, etc.) and allows not to specify type casts in each
+place where it is used. This is done by using __typeof__.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- lib/strncpy_from_user.c | 2 ++
- lib/strnlen_user.c      | 2 ++
- 2 files changed, 4 insertions(+)
+ arch/arm64/include/asm/uaccess.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/lib/strncpy_from_user.c b/lib/strncpy_from_user.c
-index b53e1b5d80f4..97467cd2bc59 100644
---- a/lib/strncpy_from_user.c
-+++ b/lib/strncpy_from_user.c
-@@ -106,6 +106,8 @@ long strncpy_from_user(char *dst, const char __user *src, long count)
- 	if (unlikely(count <= 0))
- 		return 0;
+diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+index e66b0fca99c2..2d6451cbaa86 100644
+--- a/arch/arm64/include/asm/uaccess.h
++++ b/arch/arm64/include/asm/uaccess.h
+@@ -102,7 +102,8 @@ static inline unsigned long __range_ok(const void __user *addr, unsigned long si
+  * up with a tagged userland pointer. Clear the tag to get a sane pointer to
+  * pass on to access_ok(), for instance.
+  */
+-#define untagged_addr(addr)		sign_extend64(addr, 55)
++#define untagged_addr(addr)		\
++	((__typeof__(addr))sign_extend64((__u64)(addr), 55))
  
-+	src = untagged_addr(src);
-+
- 	max_addr = user_addr_max();
- 	src_addr = (unsigned long)src;
- 	if (likely(src_addr < max_addr)) {
-diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
-index 60d0bbda8f5e..8b5f56466e00 100644
---- a/lib/strnlen_user.c
-+++ b/lib/strnlen_user.c
-@@ -108,6 +108,8 @@ long strnlen_user(const char __user *str, long count)
- 	if (unlikely(count <= 0))
- 		return 0;
- 
-+	str = untagged_addr(str);
-+
- 	max_addr = user_addr_max();
- 	src_addr = (unsigned long)str;
- 	if (likely(src_addr < max_addr)) {
+ #define access_ok(type, addr, size)	__range_ok(addr, size)
+ #define user_addr_max			get_fs
 -- 
 2.18.0.rc1.244.gcf134e6275-goog
 
