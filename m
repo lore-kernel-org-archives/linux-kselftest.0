@@ -1,44 +1,102 @@
-From: ahiliation@gmail.com (Jeffrin Jose T)
-Date: Thu, 21 Jun 2018 22:30:20 +0530
-Subject: [PATCH] selftests: bpf: notification about privilege required to run
- test_kmod.sh testing script
-Message-ID: <20180621170020.9073-1-ahiliation@gmail.com>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Thu, 21 Jun 2018 16:16:48 -0400
+Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
+In-Reply-To: <152465856498.26224.16969986455942749517.stgit@devbox>
+References: <152465856498.26224.16969986455942749517.stgit@devbox>
+Message-ID: <20180621161648.29e7a4cc@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180621170020.97i8qoW32VvdszGqrDVO_975u_RC3oRDF7X67ap-3uo@z>
+Message-ID: <20180621201648.9hdOZYcLJS8HQ37OD9roiJRrEn7a5Ss_qEyuyKB7XxY@z>
 
-The test_kmod.sh script require root privilege for the successful
-execution of the test.
+Hi Masami,
 
-This patch is to notify the user about the privilege the script
-demands for the successful execution of the test.
+Are you going to post another version of this patch set?
 
-Signed-off-by: Jeffrin Jose T (Rajagiri SET) <ahiliation at gmail.com>
----
- tools/testing/selftests/bpf/test_kmod.sh | 9 +++++++++
- 1 file changed, 9 insertions(+)
+-- Steve
 
-diff --git a/tools/testing/selftests/bpf/test_kmod.sh b/tools/testing/selftests/bpf/test_kmod.sh
-index 35669ccd4d23..378ccc512ad3 100755
---- a/tools/testing/selftests/bpf/test_kmod.sh
-+++ b/tools/testing/selftests/bpf/test_kmod.sh
-@@ -1,6 +1,15 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+msg="skip all tests:"
-+if [ "$(id -u)" != "0" ]; then
-+    echo $msg please run this as root >&2
-+    exit $ksft_skip
-+fi
-+
- SRC_TREE=../../../../
- 
- test_run()
--- 
-2.17.0
+
+On Wed, 25 Apr 2018 21:16:06 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
+
+> Hi,
+> 
+> This is the 7th version of the fetch-arg improvement series.
+> This includes variable changes on fetcharg framework like,
+> 
+> - Add fetcharg testcases (syntax, argN, symbol, string and array)
+>   and probepoint testcase.
+> - Rewrite fetcharg framework with fetch_insn, switch-case based
+>   instead of function pointer.
+> - Add "symbol" type support, which shows symbol+offset instead of
+>   address value.
+> - Add "$argN" fetcharg, which fetches function parameters.
+>   (currently only for x86-64)
+> - Add array type support (including string arrary :) ) ,
+>   which enables to get fixed length array from probe-events.
+> - Add array type support for perf-probe, so that user can
+>   dump partial array entries.
+> 
+> V6 is here:
+>  https://lkml.org/lkml/2018/3/17/75
+> 
+> Changes from the v6 are here:
+>  [6/16]  - Fix to return an error if failed to fetch string and
+>         fill zero-length data_loc in error case.
+>  [11/16] - Update document for restructured text.
+>  [15/16] - Fix README test.
+>  [16/16] - Add type-casting description (and note) to documentation.
+> 
+> And rebased on the latest Steve's ftrace/core branch.
+> 
+> Thank you,
+> 
+> ---
+> 
+> Masami Hiramatsu (16):
+>       tracing: probeevent: Cleanup print argument functions
+>       tracing: probeevent: Cleanup argument field definition
+>       tracing: probeevent: Remove NOKPROBE_SYMBOL from print functions
+>       tracing: probeevent: Introduce new argument fetching code
+>       tracing: probeevent: Unify fetch type tables
+>       tracing: probeevent: Return consumed bytes of dynamic area
+>       tracing: probeevent: Append traceprobe_ for exported function
+>       tracing: probeevent: Unify fetch_insn processing common part
+>       tracing: probeevent: Add symbol type
+>       x86: ptrace: Add function argument access API
+>       tracing: probeevent: Add $argN for accessing function args
+>       tracing: probeevent: Add array type support
+>       selftests: ftrace: Add a testcase for symbol type
+>       selftests: ftrace: Add a testcase for $argN with kprobe_event
+>       selftests: ftrace: Add a testcase for array type with kprobe_event
+>       perf-probe: Add array argument support
+> 
+> 
+>  Documentation/trace/kprobetrace.rst                |   23 +
+>  arch/Kconfig                                       |    7 
+>  arch/x86/Kconfig                                   |    1 
+>  arch/x86/include/asm/ptrace.h                      |   38 +
+>  kernel/trace/trace.c                               |    9 
+>  kernel/trace/trace_kprobe.c                        |  358 ++++--------
+>  kernel/trace/trace_probe.c                         |  620 +++++++++-----------
+>  kernel/trace/trace_probe.h                         |  282 +++------
+>  kernel/trace/trace_probe_tmpl.h                    |  216 +++++++
+>  kernel/trace/trace_uprobe.c                        |  176 ++----
+>  tools/perf/Documentation/perf-probe.txt            |   12 
+>  tools/perf/util/probe-event.c                      |   20 +
+>  tools/perf/util/probe-event.h                      |    2 
+>  tools/perf/util/probe-file.c                       |    5 
+>  tools/perf/util/probe-file.h                       |    1 
+>  tools/perf/util/probe-finder.c                     |   95 ++-
+>  .../ftrace/test.d/kprobe/kprobe_args_argN.tc       |   25 +
+>  .../ftrace/test.d/kprobe/kprobe_args_array.tc      |   92 +++
+>  .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     |   77 ++
+>  19 files changed, 1127 insertions(+), 932 deletions(-)
+>  create mode 100644 kernel/trace/trace_probe_tmpl.h
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
+> 
+> --
+> Masami Hiramatsu (Linaro) <mhiramat at kernel.org>
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
