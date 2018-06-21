@@ -1,49 +1,85 @@
 From: joel@joelfernandes.org (Joel Fernandes)
-Date: Thu, 21 Jun 2018 15:32:31 -0700
-Subject: [PATCH v9 2/7] srcu: Add notrace variant of srcu_dereference
+Date: Thu, 21 Jun 2018 15:32:32 -0700
+Subject: [PATCH v9 3/7] trace/irqsoff: Split reset into separate functions
 In-Reply-To: <20180621223236.211495-1-joel@joelfernandes.org>
 References: <20180621223236.211495-1-joel@joelfernandes.org>
-Message-ID: <20180621223236.211495-3-joel@joelfernandes.org>
+Message-ID: <20180621223236.211495-4-joel@joelfernandes.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180621223231.aiu2dxQA2OfkPiKJiIWkQ56crqwLROopN6CdziXPTro@z>
+Message-ID: <20180621223232.T1w9JdT8mWEZ_U5IUHZw7-9p26grRsvbEp7PdnFHbmM@z>
 
 From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 
-In the last patch in this series, we are making lockdep register hooks
-onto the irq_{disable,enable} tracepoints. These tracepoints use the
-_rcuidle tracepoint variant. In this series we switch the _rcuidle
-tracepoint callers to use SRCU instead of sched-RCU. Inorder to
-dereference the pointer to the probe functions, we could call
-srcu_dereference, however this API will call back into lockdep to check
-if the lock is held *before* the lockdep probe hooks have a chance to
-run and annotate the IRQ enabled/disabled state.
+Split reset functions into seperate functions in preparation
+of future patches that need to do tracer specific reset.
 
-For this reason we need a notrace variant of srcu_dereference since
-otherwise we get lockdep splats. This patch adds the needed
-srcu_dereference_notrace variant.
-
-Reviewed-by: Paul E. McKenney <paulmck at linux.vnet.ibm.com>
+Reviewed-by: Namhyung Kim <namhyung at kernel.org>
 Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
 ---
- include/linux/srcu.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ kernel/trace/trace_irqsoff.c | 22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/srcu.h b/include/linux/srcu.h
-index 3e72a291c401..67135d4a8a30 100644
---- a/include/linux/srcu.h
-+++ b/include/linux/srcu.h
-@@ -169,6 +169,11 @@ static inline int srcu_read_lock_held(const struct srcu_struct *sp)
-  */
- #define srcu_dereference(p, sp) srcu_dereference_check((p), (sp), 0)
+diff --git a/kernel/trace/trace_irqsoff.c b/kernel/trace/trace_irqsoff.c
+index 03ecb4465ee4..f8daa754cce2 100644
+--- a/kernel/trace/trace_irqsoff.c
++++ b/kernel/trace/trace_irqsoff.c
+@@ -634,7 +634,7 @@ static int __irqsoff_tracer_init(struct trace_array *tr)
+ 	return 0;
+ }
  
-+/**
-+ * srcu_dereference_notrace - no tracing and no lockdep calls from here
-+ */
-+#define srcu_dereference_notrace(p, sp) srcu_dereference_check((p), (sp), 1)
+-static void irqsoff_tracer_reset(struct trace_array *tr)
++static void __irqsoff_tracer_reset(struct trace_array *tr)
+ {
+ 	int lat_flag = save_flags & TRACE_ITER_LATENCY_FMT;
+ 	int overwrite_flag = save_flags & TRACE_ITER_OVERWRITE;
+@@ -665,6 +665,12 @@ static int irqsoff_tracer_init(struct trace_array *tr)
+ 
+ 	return __irqsoff_tracer_init(tr);
+ }
 +
- /**
-  * srcu_read_lock - register a new reader for an SRCU-protected structure.
-  * @sp: srcu_struct in which to register the new reader.
++static void irqsoff_tracer_reset(struct trace_array *tr)
++{
++	__irqsoff_tracer_reset(tr);
++}
++
+ static struct tracer irqsoff_tracer __read_mostly =
+ {
+ 	.name		= "irqsoff",
+@@ -697,11 +703,16 @@ static int preemptoff_tracer_init(struct trace_array *tr)
+ 	return __irqsoff_tracer_init(tr);
+ }
+ 
++static void preemptoff_tracer_reset(struct trace_array *tr)
++{
++	__irqsoff_tracer_reset(tr);
++}
++
+ static struct tracer preemptoff_tracer __read_mostly =
+ {
+ 	.name		= "preemptoff",
+ 	.init		= preemptoff_tracer_init,
+-	.reset		= irqsoff_tracer_reset,
++	.reset		= preemptoff_tracer_reset,
+ 	.start		= irqsoff_tracer_start,
+ 	.stop		= irqsoff_tracer_stop,
+ 	.print_max	= true,
+@@ -731,11 +742,16 @@ static int preemptirqsoff_tracer_init(struct trace_array *tr)
+ 	return __irqsoff_tracer_init(tr);
+ }
+ 
++static void preemptirqsoff_tracer_reset(struct trace_array *tr)
++{
++	__irqsoff_tracer_reset(tr);
++}
++
+ static struct tracer preemptirqsoff_tracer __read_mostly =
+ {
+ 	.name		= "preemptirqsoff",
+ 	.init		= preemptirqsoff_tracer_init,
+-	.reset		= irqsoff_tracer_reset,
++	.reset		= preemptirqsoff_tracer_reset,
+ 	.start		= irqsoff_tracer_start,
+ 	.stop		= irqsoff_tracer_stop,
+ 	.print_max	= true,
 -- 
 2.18.0.rc2.346.g013aa6912e-goog
 
