@@ -1,85 +1,64 @@
 From: joel@joelfernandes.org (Joel Fernandes)
-Date: Thu, 21 Jun 2018 15:32:32 -0700
-Subject: [PATCH v9 3/7] trace/irqsoff: Split reset into separate functions
+Date: Thu, 21 Jun 2018 15:32:30 -0700
+Subject: [PATCH v9 1/7] srcu: Add notrace variants of srcu_read_{lock,unlock}
 In-Reply-To: <20180621223236.211495-1-joel@joelfernandes.org>
 References: <20180621223236.211495-1-joel@joelfernandes.org>
-Message-ID: <20180621223236.211495-4-joel@joelfernandes.org>
+Message-ID: <20180621223236.211495-2-joel@joelfernandes.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180621223232.T1w9JdT8mWEZ_U5IUHZw7-9p26grRsvbEp7PdnFHbmM@z>
+Message-ID: <20180621223230.rJZq2blsVXsBG3ssqddh6K92NpLKzgWPW8_DilU4lfw@z>
 
-From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+From: Paul McKenney <paulmck@linux.vnet.ibm.com>
 
-Split reset functions into seperate functions in preparation
-of future patches that need to do tracer specific reset.
+This is needed for a future tracepoint patch that uses srcu, and to make
+sure it doesn't call into lockdep.
 
-Reviewed-by: Namhyung Kim <namhyung at kernel.org>
+tracepoint code already calls notrace variants for rcu_read_lock_sched
+so this patch does the same for srcu which will be used in a later
+patch. Keeps it consistent with rcu-sched.
+
+[Joel: Added commit message]
+Reviewed-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+Signed-off-by: Paul McKenney <paulmck at linux.vnet.ibm.com>
 Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
 ---
- kernel/trace/trace_irqsoff.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ include/linux/srcu.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/kernel/trace/trace_irqsoff.c b/kernel/trace/trace_irqsoff.c
-index 03ecb4465ee4..f8daa754cce2 100644
---- a/kernel/trace/trace_irqsoff.c
-+++ b/kernel/trace/trace_irqsoff.c
-@@ -634,7 +634,7 @@ static int __irqsoff_tracer_init(struct trace_array *tr)
- 	return 0;
+diff --git a/include/linux/srcu.h b/include/linux/srcu.h
+index 91494d7e8e41..3e72a291c401 100644
+--- a/include/linux/srcu.h
++++ b/include/linux/srcu.h
+@@ -195,6 +195,16 @@ static inline int srcu_read_lock(struct srcu_struct *sp) __acquires(sp)
+ 	return retval;
  }
  
--static void irqsoff_tracer_reset(struct trace_array *tr)
-+static void __irqsoff_tracer_reset(struct trace_array *tr)
- {
- 	int lat_flag = save_flags & TRACE_ITER_LATENCY_FMT;
- 	int overwrite_flag = save_flags & TRACE_ITER_OVERWRITE;
-@@ -665,6 +665,12 @@ static int irqsoff_tracer_init(struct trace_array *tr)
- 
- 	return __irqsoff_tracer_init(tr);
- }
-+
-+static void irqsoff_tracer_reset(struct trace_array *tr)
++/* Used by tracing, cannot be traced and cannot invoke lockdep. */
++static inline notrace int
++srcu_read_lock_notrace(struct srcu_struct *sp) __acquires(sp)
 +{
-+	__irqsoff_tracer_reset(tr);
++	int retval;
++
++	retval = __srcu_read_lock(sp);
++	return retval;
 +}
 +
- static struct tracer irqsoff_tracer __read_mostly =
- {
- 	.name		= "irqsoff",
-@@ -697,11 +703,16 @@ static int preemptoff_tracer_init(struct trace_array *tr)
- 	return __irqsoff_tracer_init(tr);
+ /**
+  * srcu_read_unlock - unregister a old reader from an SRCU-protected structure.
+  * @sp: srcu_struct in which to unregister the old reader.
+@@ -209,6 +219,13 @@ static inline void srcu_read_unlock(struct srcu_struct *sp, int idx)
+ 	__srcu_read_unlock(sp, idx);
  }
  
-+static void preemptoff_tracer_reset(struct trace_array *tr)
++/* Used by tracing, cannot be traced and cannot call lockdep. */
++static inline notrace void
++srcu_read_unlock_notrace(struct srcu_struct *sp, int idx) __releases(sp)
 +{
-+	__irqsoff_tracer_reset(tr);
++	__srcu_read_unlock(sp, idx);
 +}
 +
- static struct tracer preemptoff_tracer __read_mostly =
- {
- 	.name		= "preemptoff",
- 	.init		= preemptoff_tracer_init,
--	.reset		= irqsoff_tracer_reset,
-+	.reset		= preemptoff_tracer_reset,
- 	.start		= irqsoff_tracer_start,
- 	.stop		= irqsoff_tracer_stop,
- 	.print_max	= true,
-@@ -731,11 +742,16 @@ static int preemptirqsoff_tracer_init(struct trace_array *tr)
- 	return __irqsoff_tracer_init(tr);
- }
- 
-+static void preemptirqsoff_tracer_reset(struct trace_array *tr)
-+{
-+	__irqsoff_tracer_reset(tr);
-+}
-+
- static struct tracer preemptirqsoff_tracer __read_mostly =
- {
- 	.name		= "preemptirqsoff",
- 	.init		= preemptirqsoff_tracer_init,
--	.reset		= irqsoff_tracer_reset,
-+	.reset		= preemptirqsoff_tracer_reset,
- 	.start		= irqsoff_tracer_start,
- 	.stop		= irqsoff_tracer_stop,
- 	.print_max	= true,
+ /**
+  * smp_mb__after_srcu_read_unlock - ensure full ordering after srcu_read_unlock
+  *
 -- 
 2.18.0.rc2.346.g013aa6912e-goog
 
