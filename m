@@ -1,13 +1,13 @@
 From: ahiliation at gmail.com (Jeffrin Jose T)
-Date: Sat, 23 Jun 2018 01:30:53 +0530
-Subject: [PATCH] selftests: bpf: notification about privilege required to run
- test_lwt_seg6local.sh testing script
-Message-ID: <20180622200053.4957-1-ahiliation@gmail.com>
+Date: Sat, 23 Jun 2018 03:10:32 +0530
+Subject: [PATCH v2] selftests: bpf: notification about privilege required to
+ run test_lwt_seg6local.sh testing script
+Message-ID: <20180622214032.6527-1-ahiliation@gmail.com>
 
-This test_lwt_seg6local.sh will execute with root privilege.
+This test needs root privilege for it's successful execution.
 
 This patch is atleast used to notify the user about the privilege
-required related to smooth execution of the script.
+the script demands for the  smooth execution of the test.
 
 Signed-off-by: Jeffrin Jose T (Rajagiri SET) <ahiliation at gmail.com>
 ---
