@@ -1,118 +1,84 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Fri, 22 Jun 2018 15:04:12 +0900
-Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
-In-Reply-To: <20180621161648.29e7a4cc@gandalf.local.home>
-References: <152465856498.26224.16969986455942749517.stgit@devbox>
- <20180621161648.29e7a4cc@gandalf.local.home>
-Message-ID: <20180622150412.ef26a31acb46c5baebd97ddb@kernel.org>
+From: shuah at kernel.org (Shuah Khan)
+Date: Fri, 22 Jun 2018 08:54:54 -0600
+Subject: [GIT PULL] kselftest fixes update for Linux 4.18-rc2
+Message-ID: <c25e444d-734b-34be-2221-783d2dd78fa6@kernel.org>
 
-Hi Steve,
+Hi Linus,
 
-On Thu, 21 Jun 2018 16:16:48 -0400
-Steven Rostedt <rostedt at goodmis.org> wrote:
+Please pull the following kselftest fixes update for Linux 4.18-rc2
 
-> Hi Masami,
-> 
-> Are you going to post another version of this patch set?
+This Kselftest fixes update for Linux 4.18-rc2:
 
-No, this is the latest one which I sent to LKML.
-Oops, it was 2 month ago now...
+- Fixes new sparc64 adi driver test compile errors on non-sparc systems.
+- Fixes config fragment for sync framework for improved test coverage.
+- Fixes several tests to return correct Kselftest skip code.
 
-Thank you,
+I included a patch that adds missing SPDX license text in the Makefile for
+the new Sparc64 test that went into 4.18-rc1. It should have been added in
+the final version of the patches that went into 4.18-rc1.
 
-> 
-> -- Steve
-> 
-> 
-> On Wed, 25 Apr 2018 21:16:06 +0900
-> Masami Hiramatsu <mhiramat at kernel.org> wrote:
-> 
-> > Hi,
-> > 
-> > This is the 7th version of the fetch-arg improvement series.
-> > This includes variable changes on fetcharg framework like,
-> > 
-> > - Add fetcharg testcases (syntax, argN, symbol, string and array)
-> >   and probepoint testcase.
-> > - Rewrite fetcharg framework with fetch_insn, switch-case based
-> >   instead of function pointer.
-> > - Add "symbol" type support, which shows symbol+offset instead of
-> >   address value.
-> > - Add "$argN" fetcharg, which fetches function parameters.
-> >   (currently only for x86-64)
-> > - Add array type support (including string arrary :) ) ,
-> >   which enables to get fixed length array from probe-events.
-> > - Add array type support for perf-probe, so that user can
-> >   dump partial array entries.
-> > 
-> > V6 is here:
-> >  https://lkml.org/lkml/2018/3/17/75
-> > 
-> > Changes from the v6 are here:
-> >  [6/16]  - Fix to return an error if failed to fetch string and
-> >         fill zero-length data_loc in error case.
-> >  [11/16] - Update document for restructured text.
-> >  [15/16] - Fix README test.
-> >  [16/16] - Add type-casting description (and note) to documentation.
-> > 
-> > And rebased on the latest Steve's ftrace/core branch.
-> > 
-> > Thank you,
-> > 
-> > ---
-> > 
-> > Masami Hiramatsu (16):
-> >       tracing: probeevent: Cleanup print argument functions
-> >       tracing: probeevent: Cleanup argument field definition
-> >       tracing: probeevent: Remove NOKPROBE_SYMBOL from print functions
-> >       tracing: probeevent: Introduce new argument fetching code
-> >       tracing: probeevent: Unify fetch type tables
-> >       tracing: probeevent: Return consumed bytes of dynamic area
-> >       tracing: probeevent: Append traceprobe_ for exported function
-> >       tracing: probeevent: Unify fetch_insn processing common part
-> >       tracing: probeevent: Add symbol type
-> >       x86: ptrace: Add function argument access API
-> >       tracing: probeevent: Add $argN for accessing function args
-> >       tracing: probeevent: Add array type support
-> >       selftests: ftrace: Add a testcase for symbol type
-> >       selftests: ftrace: Add a testcase for $argN with kprobe_event
-> >       selftests: ftrace: Add a testcase for array type with kprobe_event
-> >       perf-probe: Add array argument support
-> > 
-> > 
-> >  Documentation/trace/kprobetrace.rst                |   23 +
-> >  arch/Kconfig                                       |    7 
-> >  arch/x86/Kconfig                                   |    1 
-> >  arch/x86/include/asm/ptrace.h                      |   38 +
-> >  kernel/trace/trace.c                               |    9 
-> >  kernel/trace/trace_kprobe.c                        |  358 ++++--------
-> >  kernel/trace/trace_probe.c                         |  620 +++++++++-----------
-> >  kernel/trace/trace_probe.h                         |  282 +++------
-> >  kernel/trace/trace_probe_tmpl.h                    |  216 +++++++
-> >  kernel/trace/trace_uprobe.c                        |  176 ++----
-> >  tools/perf/Documentation/perf-probe.txt            |   12 
-> >  tools/perf/util/probe-event.c                      |   20 +
-> >  tools/perf/util/probe-event.h                      |    2 
-> >  tools/perf/util/probe-file.c                       |    5 
-> >  tools/perf/util/probe-file.h                       |    1 
-> >  tools/perf/util/probe-finder.c                     |   95 ++-
-> >  .../ftrace/test.d/kprobe/kprobe_args_argN.tc       |   25 +
-> >  .../ftrace/test.d/kprobe/kprobe_args_array.tc      |   92 +++
-> >  .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     |   77 ++
-> >  19 files changed, 1127 insertions(+), 932 deletions(-)
-> >  create mode 100644 kernel/trace/trace_probe_tmpl.h
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
-> > 
-> > --
-> > Masami Hiramatsu (Linaro) <mhiramat at kernel.org>
-> 
+diff is attached.
 
+thanks,
+-- Shuah
 
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
---
-To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
-the body of a message to majordomo at vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+-----------------------------------------------------------------------------
+The following changes since commit ce397d215ccd07b8ae3f71db689aedb85d56ab40:
+
+  Linux 4.18-rc1 (2018-06-17 08:04:49 +0900)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-4.18-rc2
+
+for you to fetch changes up to eb83d5f7d07ed913d62ca4ad1e14fb6ca4937bab:
+
+  selftests: sparc64: Add missing SPDX License Identifiers (2018-06-18 09:29:20 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-4.18-rc2
+
+This Kselftest fixes update for Linux 4.18-rc2:
+
+- Fixes new sparc64 adi driver test compile errors on non-sparc systems.
+- Fixes config fragment for sync framework for improved test coverage.
+- Fixes several tests to return correct Kselftest skip code.
+
+----------------------------------------------------------------
+Fathi Boudra (1):
+      selftests: sync: add config fragment for testing sync framework
+
+Shuah Khan (Samsung OSG) (9):
+      selftests: pstore: return Kselftest Skip code for skipped tests
+      selftests: static_keys: return Kselftest Skip code for skipped tests
+      selftests: sysctl: return Kselftest Skip code for skipped tests
+      selftests: user: return Kselftest Skip code for skipped tests
+      selftests: zram: return Kselftest Skip code for skipped tests
+      selftests: vm: return Kselftest Skip code for skipped tests
+      selftests: sparc64: Fix to do nothing on non-sparc64
+      selftests: sparc64: delete RUN_TESTS and EMIT_TESTS overrides
+      selftests: sparc64: Add missing SPDX License Identifiers
+
+ .../selftests/pstore/pstore_post_reboot_tests        |  5 ++++-
+ tools/testing/selftests/sparc64/Makefile             | 20 ++++++++++++--------
+ tools/testing/selftests/sparc64/drivers/Makefile     |  2 +-
+ .../selftests/static_keys/test_static_keys.sh        | 13 +++++++++++++
+ tools/testing/selftests/sync/config                  |  4 ++++
+ tools/testing/selftests/sysctl/sysctl.sh             | 20 +++++++++++++-------
+tools/testing/selftests/user/test_user_copy.sh       |  7 +++++++
+ tools/testing/selftests/vm/compaction_test.c         |  4 +++-
+ tools/testing/selftests/vm/mlock2-tests.c            | 12 +++++++-----
+ tools/testing/selftests/vm/run_vmtests               |  5 ++++-
+ tools/testing/selftests/vm/userfaultfd.c             |  4 +++-
+ tools/testing/selftests/zram/zram.sh                 |  5 ++++-
+ tools/testing/selftests/zram/zram_lib.sh             |  5 ++++-
+ 13 files changed, 79 insertions(+), 27 deletions(-)
+ create mode 100644 tools/testing/selftests/sync/config
+-----------------------------------------------------------------------------
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux-kselftest-4.18-rc2.diff
+Type: text/x-patch
+Size: 10604 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20180622/0926152f/attachment.bin>
