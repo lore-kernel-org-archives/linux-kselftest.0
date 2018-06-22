@@ -1,60 +1,44 @@
-From: shuah@kernel.org (Shuah Khan (Samsung OSG))
-Date: Fri, 22 Jun 2018 11:51:08 -0600
-Subject: [PATCH] selftests: vDSO - fix to return KSFT_SKIP when test couldn't
- be run
-Message-ID: <20180622175108.24292-1-shuah@kernel.org>
+From: ahiliation@gmail.com (Jeffrin Jose T)
+Date: Sat, 23 Jun 2018 00:24:17 +0530
+Subject: [PATCH] selftests: bpf: notification about privilege required to run
+ test_lirc_mode2.sh testing script
+Message-ID: <20180622185417.3452-1-ahiliation@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180622175108.NOL6jP6qwxsqe_WSE8yVlDe5neQCpPRIrIbUfw0VfxI@z>
+Message-ID: <20180622185417.foBTOw9jOWoBw14Yk-i4jnok2jG2RHjtHyCwi0heJOg@z>
 
-Fix to return KSFT_SKIP when test couldn't be run because AT_SYSINFO_EHDR
-isn't found and gettimeofday isn't defined.
+The test_lirc_mode2.sh script require root privilege for the successful
+execution of the test.
 
-Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+This patch is to notify the user about the privilege the script
+demands for the successful execution of the test.
+
+Signed-off-by: Jeffrin Jose T (Rajagiri SET) <ahiliation at gmail.com>
 ---
- tools/testing/selftests/vDSO/vdso_test.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/test_lirc_mode2.sh | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test.c b/tools/testing/selftests/vDSO/vdso_test.c
-index 2df26bd0099c..eda53f833d8e 100644
---- a/tools/testing/selftests/vDSO/vdso_test.c
-+++ b/tools/testing/selftests/vDSO/vdso_test.c
-@@ -15,6 +15,8 @@
- #include <sys/auxv.h>
- #include <sys/time.h>
+diff --git a/tools/testing/selftests/bpf/test_lirc_mode2.sh b/tools/testing/selftests/bpf/test_lirc_mode2.sh
+index ce2e15e4f976..51184f8f9e64 100755
+--- a/tools/testing/selftests/bpf/test_lirc_mode2.sh
++++ b/tools/testing/selftests/bpf/test_lirc_mode2.sh
+@@ -1,6 +1,15 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
  
-+#include "../kselftest.h"
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
 +
- extern void *vdso_sym(const char *version, const char *name);
- extern void vdso_init_from_sysinfo_ehdr(uintptr_t base);
- extern void vdso_init_from_auxv(void *auxv);
-@@ -37,7 +39,7 @@ int main(int argc, char **argv)
- 	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
- 	if (!sysinfo_ehdr) {
- 		printf("AT_SYSINFO_EHDR is not present!\n");
--		return 0;
-+		return KSFT_SKIP;
- 	}
- 
- 	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
-@@ -48,7 +50,7 @@ int main(int argc, char **argv)
- 
- 	if (!gtod) {
- 		printf("Could not find %s\n", name);
--		return 1;
-+		return KSFT_SKIP;
- 	}
- 
- 	struct timeval tv;
-@@ -59,6 +61,7 @@ int main(int argc, char **argv)
- 		       (long long)tv.tv_sec, (long long)tv.tv_usec);
- 	} else {
- 		printf("%s failed\n", name);
-+		return KSFT_FAIL;
- 	}
- 
- 	return 0;
++msg="skip all tests:"
++if [ $UID != 0 ]; then
++    echo $msg please run this as root >&2
++    exit $ksft_skip
++fi
++
+ GREEN='\033[0;92m'
+ RED='\033[0;31m'
+ NC='\033[0m' # No Color
 -- 
-2.17.1
+2.17.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
