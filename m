@@ -1,29 +1,28 @@
 From: ahiliation@gmail.com (Jeffrin Jose T)
-Date: Sat, 23 Jun 2018 00:24:17 +0530
+Date: Sat, 23 Jun 2018 01:30:53 +0530
 Subject: [PATCH] selftests: bpf: notification about privilege required to run
- test_lirc_mode2.sh testing script
-Message-ID: <20180622185417.3452-1-ahiliation@gmail.com>
+ test_lwt_seg6local.sh testing script
+Message-ID: <20180622200053.4957-1-ahiliation@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180622185417.foBTOw9jOWoBw14Yk-i4jnok2jG2RHjtHyCwi0heJOg@z>
+Message-ID: <20180622200053.pW8490hruy9fBcK43HNp5ypTkew1OIUpo3ZA76Hlaos@z>
 
-The test_lirc_mode2.sh script require root privilege for the successful
-execution of the test.
+This test_lwt_seg6local.sh will execute with root privilege.
 
-This patch is to notify the user about the privilege the script
-demands for the successful execution of the test.
+This patch is atleast used to notify the user about the privilege
+required related to smooth execution of the script.
 
 Signed-off-by: Jeffrin Jose T (Rajagiri SET) <ahiliation at gmail.com>
 ---
- tools/testing/selftests/bpf/test_lirc_mode2.sh | 9 +++++++++
+ tools/testing/selftests/bpf/test_lwt_seg6local.sh | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_lirc_mode2.sh b/tools/testing/selftests/bpf/test_lirc_mode2.sh
-index ce2e15e4f976..51184f8f9e64 100755
---- a/tools/testing/selftests/bpf/test_lirc_mode2.sh
-+++ b/tools/testing/selftests/bpf/test_lirc_mode2.sh
-@@ -1,6 +1,15 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/bpf/test_lwt_seg6local.sh b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+index 1c77994b5e71..30575577a8b2 100755
+--- a/tools/testing/selftests/bpf/test_lwt_seg6local.sh
++++ b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+@@ -21,6 +21,15 @@
+ # An UDP datagram is sent from fb00::1 to fb00::6. The test succeeds if this
+ # datagram can be read on NS6 when binding to fb00::6.
  
 +# Kselftest framework requirement - SKIP code is 4.
 +ksft_skip=4
@@ -34,9 +33,9 @@ index ce2e15e4f976..51184f8f9e64 100755
 +    exit $ksft_skip
 +fi
 +
- GREEN='\033[0;92m'
- RED='\033[0;31m'
- NC='\033[0m' # No Color
+ TMP_FILE="/tmp/selftest_lwt_seg6local.txt"
+ 
+ cleanup()
 -- 
 2.17.0
 
