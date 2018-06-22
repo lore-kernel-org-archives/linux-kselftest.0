@@ -1,54 +1,58 @@
 From: shuah@kernel.org (Shuah Khan (Samsung OSG))
-Date: Fri, 22 Jun 2018 11:50:48 -0600
-Subject: [PATCH] selftests: vDSO - fix to exclude x86 test on non-x86 platforms
-Message-ID: <20180622175048.24237-1-shuah@kernel.org>
+Date: Fri, 22 Jun 2018 11:51:08 -0600
+Subject: [PATCH] selftests: vDSO - fix to return KSFT_SKIP when test couldn't
+ be run
+Message-ID: <20180622175108.24292-1-shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180622175048.bgqySMfYmqO1CmzbY2WMXTPO0mQziT2w0-B1tzZgy1c@z>
+Message-ID: <20180622175108.NOL6jP6qwxsqe_WSE8yVlDe5neQCpPRIrIbUfw0VfxI@z>
 
-Fix to exclude vdso_standalone_test_x86 test from building on non-x86
-platforms. In addition, fix it to use TEST_GEN_PROGS which is the right
-variable to use for generated programs. TEST_PROGS is for shell scripts.
+Fix to return KSFT_SKIP when test couldn't be run because AT_SYSINFO_EHDR
+isn't found and gettimeofday isn't defined.
 
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 ---
- tools/testing/selftests/vDSO/Makefile | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ tools/testing/selftests/vDSO/vdso_test.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index f5d7a7851e21..9e03d61f52fd 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -1,6 +1,14 @@
- # SPDX-License-Identifier: GPL-2.0
- include ../lib.mk
+diff --git a/tools/testing/selftests/vDSO/vdso_test.c b/tools/testing/selftests/vDSO/vdso_test.c
+index 2df26bd0099c..eda53f833d8e 100644
+--- a/tools/testing/selftests/vDSO/vdso_test.c
++++ b/tools/testing/selftests/vDSO/vdso_test.c
+@@ -15,6 +15,8 @@
+ #include <sys/auxv.h>
+ #include <sys/time.h>
  
-+uname_M := $(shell uname -m 2>/dev/null || echo not)
-+ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
++#include "../kselftest.h"
 +
-+TEST_GEN_PROGS := $(OUTPUT)/vdso_test
-+ifeq ($(ARCH),x86)
-+TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
-+endif
-+
- ifndef CROSS_COMPILE
- CFLAGS := -std=gnu99
- CFLAGS_vdso_standalone_test_x86 := -nostdlib -fno-asynchronous-unwind-tables -fno-stack-protector
-@@ -8,14 +16,11 @@ ifeq ($(CONFIG_X86_32),y)
- LDLIBS += -lgcc_s
- endif
+ extern void *vdso_sym(const char *version, const char *name);
+ extern void vdso_init_from_sysinfo_ehdr(uintptr_t base);
+ extern void vdso_init_from_auxv(void *auxv);
+@@ -37,7 +39,7 @@ int main(int argc, char **argv)
+ 	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
+ 	if (!sysinfo_ehdr) {
+ 		printf("AT_SYSINFO_EHDR is not present!\n");
+-		return 0;
++		return KSFT_SKIP;
+ 	}
  
--TEST_PROGS := $(OUTPUT)/vdso_test $(OUTPUT)/vdso_standalone_test_x86
--
--all: $(TEST_PROGS)
-+all: $(TEST_GEN_PROGS)
- $(OUTPUT)/vdso_test: parse_vdso.c vdso_test.c
- $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
- 	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
- 		vdso_standalone_test_x86.c parse_vdso.c \
- 		-o $@
+ 	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
+@@ -48,7 +50,7 @@ int main(int argc, char **argv)
  
--EXTRA_CLEAN := $(TEST_PROGS)
- endif
+ 	if (!gtod) {
+ 		printf("Could not find %s\n", name);
+-		return 1;
++		return KSFT_SKIP;
+ 	}
+ 
+ 	struct timeval tv;
+@@ -59,6 +61,7 @@ int main(int argc, char **argv)
+ 		       (long long)tv.tv_sec, (long long)tv.tv_usec);
+ 	} else {
+ 		printf("%s failed\n", name);
++		return KSFT_FAIL;
+ 	}
+ 
+ 	return 0;
 -- 
 2.17.1
 
