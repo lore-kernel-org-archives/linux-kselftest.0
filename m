@@ -1,177 +1,117 @@
-From: joelaf at google.com (Joel Fernandes)
-Date: Thu, 21 Jun 2018 15:36:47 -0700
-Subject: [PATCH v9 6/7] lib: Add module to simulate atomic sections for
- testing preemptoff tracers
-In-Reply-To: <20180621223236.211495-1-joel@joelfernandes.org>
-References: <20180621223236.211495-1-joel@joelfernandes.org>
-Message-ID: <20180621223647.GA212425@joelaf.mtv.corp.google.com>
+From: mhiramat at kernel.org (Masami Hiramatsu)
+Date: Fri, 22 Jun 2018 15:04:12 +0900
+Subject: [PATCH v7 00/16] tracing: probeevent: Improve fetcharg features
+In-Reply-To: <20180621161648.29e7a4cc@gandalf.local.home>
+References: <152465856498.26224.16969986455942749517.stgit@devbox>
+ <20180621161648.29e7a4cc@gandalf.local.home>
+Message-ID: <20180622150412.ef26a31acb46c5baebd97ddb@kernel.org>
 
-From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
+Hi Steve,
 
-In this patch we introduce a test module for simulating a long atomic
-section in the kernel which the preemptoff or irqsoff tracers can
-detect. This module is to be used only for test purposes and is default
-disabled.
+On Thu, 21 Jun 2018 16:16:48 -0400
+Steven Rostedt <rostedt at goodmis.org> wrote:
 
-Following is the expected output (only briefly shown) that can be parsed
-to verify that the tracers are working correctly. We will use this from
-the kselftests in future patches.
+> Hi Masami,
+> 
+> Are you going to post another version of this patch set?
 
-For the preemptoff tracer:
+No, this is the latest one which I sent to LKML.
+Oops, it was 2 month ago now...
 
-echo preemptoff > /d/tracing/current_tracer
-sleep 1
-insmod ./test_atomic_sections.ko atomic_mode=preempt atomic_time=500000
-sleep 1
-bash-4.3# cat /d/tracing/trace
-preempt -1066    2...2    0us@: atomic_sect_run <-atomic_sect_run
-preempt -1066    2...2 500002us : atomic_sect_run <-atomic_sect_run
-preempt -1066    2...2 500004us : tracer_preempt_on <-atomic_sect_run
-preempt -1066    2...2 500012us : <stack trace>
- => kthread
- => ret_from_fork
+Thank you,
 
-For the irqsoff tracer:
+> 
+> -- Steve
+> 
+> 
+> On Wed, 25 Apr 2018 21:16:06 +0900
+> Masami Hiramatsu <mhiramat at kernel.org> wrote:
+> 
+> > Hi,
+> > 
+> > This is the 7th version of the fetch-arg improvement series.
+> > This includes variable changes on fetcharg framework like,
+> > 
+> > - Add fetcharg testcases (syntax, argN, symbol, string and array)
+> >   and probepoint testcase.
+> > - Rewrite fetcharg framework with fetch_insn, switch-case based
+> >   instead of function pointer.
+> > - Add "symbol" type support, which shows symbol+offset instead of
+> >   address value.
+> > - Add "$argN" fetcharg, which fetches function parameters.
+> >   (currently only for x86-64)
+> > - Add array type support (including string arrary :) ) ,
+> >   which enables to get fixed length array from probe-events.
+> > - Add array type support for perf-probe, so that user can
+> >   dump partial array entries.
+> > 
+> > V6 is here:
+> >  https://lkml.org/lkml/2018/3/17/75
+> > 
+> > Changes from the v6 are here:
+> >  [6/16]  - Fix to return an error if failed to fetch string and
+> >         fill zero-length data_loc in error case.
+> >  [11/16] - Update document for restructured text.
+> >  [15/16] - Fix README test.
+> >  [16/16] - Add type-casting description (and note) to documentation.
+> > 
+> > And rebased on the latest Steve's ftrace/core branch.
+> > 
+> > Thank you,
+> > 
+> > ---
+> > 
+> > Masami Hiramatsu (16):
+> >       tracing: probeevent: Cleanup print argument functions
+> >       tracing: probeevent: Cleanup argument field definition
+> >       tracing: probeevent: Remove NOKPROBE_SYMBOL from print functions
+> >       tracing: probeevent: Introduce new argument fetching code
+> >       tracing: probeevent: Unify fetch type tables
+> >       tracing: probeevent: Return consumed bytes of dynamic area
+> >       tracing: probeevent: Append traceprobe_ for exported function
+> >       tracing: probeevent: Unify fetch_insn processing common part
+> >       tracing: probeevent: Add symbol type
+> >       x86: ptrace: Add function argument access API
+> >       tracing: probeevent: Add $argN for accessing function args
+> >       tracing: probeevent: Add array type support
+> >       selftests: ftrace: Add a testcase for symbol type
+> >       selftests: ftrace: Add a testcase for $argN with kprobe_event
+> >       selftests: ftrace: Add a testcase for array type with kprobe_event
+> >       perf-probe: Add array argument support
+> > 
+> > 
+> >  Documentation/trace/kprobetrace.rst                |   23 +
+> >  arch/Kconfig                                       |    7 
+> >  arch/x86/Kconfig                                   |    1 
+> >  arch/x86/include/asm/ptrace.h                      |   38 +
+> >  kernel/trace/trace.c                               |    9 
+> >  kernel/trace/trace_kprobe.c                        |  358 ++++--------
+> >  kernel/trace/trace_probe.c                         |  620 +++++++++-----------
+> >  kernel/trace/trace_probe.h                         |  282 +++------
+> >  kernel/trace/trace_probe_tmpl.h                    |  216 +++++++
+> >  kernel/trace/trace_uprobe.c                        |  176 ++----
+> >  tools/perf/Documentation/perf-probe.txt            |   12 
+> >  tools/perf/util/probe-event.c                      |   20 +
+> >  tools/perf/util/probe-event.h                      |    2 
+> >  tools/perf/util/probe-file.c                       |    5 
+> >  tools/perf/util/probe-file.h                       |    1 
+> >  tools/perf/util/probe-finder.c                     |   95 ++-
+> >  .../ftrace/test.d/kprobe/kprobe_args_argN.tc       |   25 +
+> >  .../ftrace/test.d/kprobe/kprobe_args_array.tc      |   92 +++
+> >  .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     |   77 ++
+> >  19 files changed, 1127 insertions(+), 932 deletions(-)
+> >  create mode 100644 kernel/trace/trace_probe_tmpl.h
+> >  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_argN.tc
+> >  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_array.tc
+> >  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
+> > 
+> > --
+> > Masami Hiramatsu (Linaro) <mhiramat at kernel.org>
+> 
 
-echo irqsoff > /d/tracing/current_tracer
-sleep 1
-insmod ./test_atomic_sections.ko atomic_mode=irq atomic_time=500000
-sleep 1
-bash-4.3# cat /d/tracing/trace
-irq dis -1069    1d..1    0us@: atomic_sect_run
-irq dis -1069    1d..1 500001us : atomic_sect_run
-irq dis -1069    1d..1 500002us : tracer_hardirqs_on <-atomic_sect_run
-irq dis -1069    1d..1 500005us : <stack trace>
- => ret_from_fork
 
-Co-developed-by: Erick Reyes <erickreyes at google.com>
-Cc: Andy Shevchenko <andriy.shevchenko at linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko at linux.intel.com>
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
- lib/Kconfig.debug          |  8 ++++
- lib/Makefile               |  1 +
- lib/test_atomic_sections.c | 77 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 86 insertions(+)
- create mode 100644 lib/test_atomic_sections.c
-
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 8838d1158d19..622c90e1e066 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1956,6 +1956,14 @@ config TEST_KMOD
- 
- 	  If unsure, say N.
- 
-+config TEST_ATOMIC_SECTIONS
-+	tristate "Simulate atomic sections for tracers to detect"
-+	depends on m
-+	help
-+	  Select this option to build a test module that can help test atomic
-+	  sections by simulating them with a duration supplied as a module
-+	  parameter. Preempt disable and irq disable modes can be requested.
-+
- config TEST_DEBUG_VIRTUAL
- 	tristate "Test CONFIG_DEBUG_VIRTUAL feature"
- 	depends on DEBUG_VIRTUAL
-diff --git a/lib/Makefile b/lib/Makefile
-index 8153fdab287f..0c155c2d5db9 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -44,6 +44,7 @@ obj-y += string_helpers.o
- obj-$(CONFIG_TEST_STRING_HELPERS) += test-string_helpers.o
- obj-y += hexdump.o
- obj-$(CONFIG_TEST_HEXDUMP) += test_hexdump.o
-+obj-$(CONFIG_TEST_ATOMIC_SECTIONS) += test_atomic_sections.o
- obj-y += kstrtox.o
- obj-$(CONFIG_FIND_BIT_BENCHMARK) += find_bit_benchmark.o
- obj-$(CONFIG_TEST_BPF) += test_bpf.o
-diff --git a/lib/test_atomic_sections.c b/lib/test_atomic_sections.c
-new file mode 100644
-index 000000000000..1eef518f0974
---- /dev/null
-+++ b/lib/test_atomic_sections.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Atomic section emulation test module
-+ *
-+ * Emulates atomic sections by disabling IRQs or preemption
-+ * and doing a busy wait for a specified amount of time.
-+ * This can be used for testing of different atomic section
-+ * tracers such as irqsoff tracers.
-+ *
-+ * (c) 2018. Google LLC
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/kernel.h>
-+#include <linux/kthread.h>
-+#include <linux/ktime.h>
-+#include <linux/module.h>
-+#include <linux/printk.h>
-+#include <linux/string.h>
-+
-+static ulong atomic_time = 100;
-+static char atomic_mode[10] = "irq";
-+
-+module_param_named(atomic_time, atomic_time, ulong, S_IRUGO);
-+module_param_string(atomic_mode, atomic_mode, 10, S_IRUGO);
-+MODULE_PARM_DESC(atomic_time, "Period in microseconds (100 uS default)");
-+MODULE_PARM_DESC(atomic_mode, "Mode of the test such as preempt or irq (default irq)");
-+
-+static void busy_wait(ulong time)
-+{
-+	ktime_t start, end;
-+	start = ktime_get();
-+	do {
-+		end = ktime_get();
-+		if (kthread_should_stop())
-+			break;
-+	} while (ktime_to_ns(ktime_sub(end, start)) < (time * 1000));
-+}
-+
-+int atomic_sect_run(void *data)
-+{
-+	unsigned long flags;
-+
-+	if (!strcmp(atomic_mode, "irq")) {
-+		local_irq_save(flags);
-+		busy_wait(atomic_time);
-+		local_irq_restore(flags);
-+	} else if (!strcmp(atomic_mode, "preempt")) {
-+		preempt_disable();
-+		busy_wait(atomic_time);
-+		preempt_enable();
-+	}
-+
-+	return 0;
-+}
-+
-+static int __init atomic_sect_init(void)
-+{
-+	char task_name[50];
-+	struct task_struct *test_task;
-+
-+	snprintf(task_name, sizeof(task_name), "%s_test", atomic_mode);
-+
-+	test_task = kthread_run(atomic_sect_run, NULL, task_name);
-+	return PTR_ERR_OR_ZERO(test_task);
-+}
-+
-+static void __exit atomic_sect_exit(void)
-+{
-+	return;
-+}
-+
-+module_init(atomic_sect_init)
-+module_exit(atomic_sect_exit)
-+MODULE_LICENSE("GPL v2");
 -- 
-2.18.0.rc2.346.g013aa6912e-goog
-
+Masami Hiramatsu <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
