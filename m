@@ -1,43 +1,64 @@
-From: ahiliation@gmail.com (Jeffrin Jose T)
-Date: Sat, 23 Jun 2018 03:10:32 +0530
-Subject: [PATCH v2] selftests: bpf: notification about privilege required to
- run test_lwt_seg6local.sh testing script
-Message-ID: <20180622214032.6527-1-ahiliation@gmail.com>
+From: shannon.nelson@oracle.com (Shannon Nelson)
+Date: Fri, 22 Jun 2018 17:31:36 -0700
+Subject: [PATCH net-next 2/4] selftests: rtnetlink: use dummydev as a test
+ device
+In-Reply-To: <1529713898-9200-1-git-send-email-shannon.nelson@oracle.com>
+References: <1529713898-9200-1-git-send-email-shannon.nelson@oracle.com>
+Message-ID: <1529713898-9200-3-git-send-email-shannon.nelson@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180622214032.NwU5r2ShJuYuC89WFQ7jJTDVi6QfqIkTiOvzhSteEAA@z>
+Message-ID: <20180623003136.ZzfsHVf9Ku62CSx_q7AhhrtomT0UVNjH_abNZicbGGA@z>
 
-This test needs root privilege for it's successful execution.
+We really shouldn't mess with local system settings, so let's
+use the already created dummy device instead for ipsec testing.
+Oh, and let's put the temp file into a proper directory.
 
-This patch is atleast used to notify the user about the privilege
-the script demands for the  smooth execution of the test.
-
-Signed-off-by: Jeffrin Jose T (Rajagiri SET) <ahiliation at gmail.com>
+Signed-off-by: Shannon Nelson <shannon.nelson at oracle.com>
 ---
- tools/testing/selftests/bpf/test_lwt_seg6local.sh | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ tools/testing/selftests/net/rtnetlink.sh | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_lwt_seg6local.sh b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
-index 1c77994b5e71..30575577a8b2 100755
---- a/tools/testing/selftests/bpf/test_lwt_seg6local.sh
-+++ b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
-@@ -21,6 +21,15 @@
- # An UDP datagram is sent from fb00::1 to fb00::6. The test succeeds if this
- # datagram can be read on NS6 when binding to fb00::6.
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
+diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+index 261a981..15948cf 100755
+--- a/tools/testing/selftests/net/rtnetlink.sh
++++ b/tools/testing/selftests/net/rtnetlink.sh
+@@ -523,21 +523,19 @@ kci_test_macsec()
+ kci_test_ipsec()
+ {
+ 	ret=0
+-
+-	# find an ip address on this machine and make up a destination
+-	srcip=`ip -o addr | awk '/inet / { print $4; }' | grep -v "^127" | head -1 | cut -f1 -d/`
+-	net=`echo $srcip | cut -f1-3 -d.`
+-	base=`echo $srcip | cut -f4 -d.`
+-	dstip="$net."`expr $base + 1`
+-
+ 	algo="aead rfc4106(gcm(aes)) 0x3132333435363738393031323334353664636261 128"
++	srcip=192.168.123.1
++	dstip=192.168.123.2
++	spi=7
 +
-+msg="skip all tests:"
-+if [ $UID != 0 ]; then
-+    echo $msg please run this as root >&2
-+    exit $ksft_skip
-+fi
-+
- TMP_FILE="/tmp/selftest_lwt_seg6local.txt"
++	ip addr add $srcip dev $devdummy
  
- cleanup()
+ 	# flush to be sure there's nothing configured
+ 	ip x s flush ; ip x p flush
+ 	check_err $?
+ 
+ 	# start the monitor in the background
+-	tmpfile=`mktemp ipsectestXXX`
++	tmpfile=`mktemp /var/run/ipsectestXXX`
+ 	mpid=`(ip x m > $tmpfile & echo $!) 2>/dev/null`
+ 	sleep 0.2
+ 
+@@ -601,6 +599,7 @@ kci_test_ipsec()
+ 	check_err $?
+ 	ip x p flush
+ 	check_err $?
++	ip addr del $srcip/32 dev $devdummy
+ 
+ 	if [ $ret -ne 0 ]; then
+ 		echo "FAIL: ipsec"
 -- 
-2.17.0
+2.7.4
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
