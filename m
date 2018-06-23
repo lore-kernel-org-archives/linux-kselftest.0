@@ -1,60 +1,25 @@
 From: shannon.nelson at oracle.com (Shannon Nelson)
-Date: Fri, 22 Jun 2018 17:31:36 -0700
-Subject: [PATCH net-next 2/4] selftests: rtnetlink: use dummydev as a test
- device
-In-Reply-To: <1529713898-9200-1-git-send-email-shannon.nelson@oracle.com>
-References: <1529713898-9200-1-git-send-email-shannon.nelson@oracle.com>
-Message-ID: <1529713898-9200-3-git-send-email-shannon.nelson@oracle.com>
+Date: Fri, 22 Jun 2018 17:31:34 -0700
+Subject: [PATCH net-next 0/4] Updates for ipsec selftests
+Message-ID: <1529713898-9200-1-git-send-email-shannon.nelson@oracle.com>
 
-We really shouldn't mess with local system settings, so let's
-use the already created dummy device instead for ipsec testing.
-Oh, and let's put the temp file into a proper directory.
+Fix up the existing ipsec selftest and add tests for
+the ipsec offload driver API.
 
-Signed-off-by: Shannon Nelson <shannon.nelson at oracle.com>
----
- tools/testing/selftests/net/rtnetlink.sh | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+Shannon Nelson (4):
+  selftests: rtnetlink: clear the return code at start of ipsec test
+  selftests: rtnetlink: use dummydev as a test device
+  netdevsim: add ipsec offload testing
+  selftests: rtnetlink: add ipsec offload API test
 
-diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-index 261a981..15948cf 100755
---- a/tools/testing/selftests/net/rtnetlink.sh
-+++ b/tools/testing/selftests/net/rtnetlink.sh
-@@ -523,21 +523,19 @@ kci_test_macsec()
- kci_test_ipsec()
- {
- 	ret=0
--
--	# find an ip address on this machine and make up a destination
--	srcip=`ip -o addr | awk '/inet / { print $4; }' | grep -v "^127" | head -1 | cut -f1 -d/`
--	net=`echo $srcip | cut -f1-3 -d.`
--	base=`echo $srcip | cut -f4 -d.`
--	dstip="$net."`expr $base + 1`
--
- 	algo="aead rfc4106(gcm(aes)) 0x3132333435363738393031323334353664636261 128"
-+	srcip=192.168.123.1
-+	dstip=192.168.123.2
-+	spi=7
-+
-+	ip addr add $srcip dev $devdummy
- 
- 	# flush to be sure there's nothing configured
- 	ip x s flush ; ip x p flush
- 	check_err $?
- 
- 	# start the monitor in the background
--	tmpfile=`mktemp ipsectestXXX`
-+	tmpfile=`mktemp /var/run/ipsectestXXX`
- 	mpid=`(ip x m > $tmpfile & echo $!) 2>/dev/null`
- 	sleep 0.2
- 
-@@ -601,6 +599,7 @@ kci_test_ipsec()
- 	check_err $?
- 	ip x p flush
- 	check_err $?
-+	ip addr del $srcip/32 dev $devdummy
- 
- 	if [ $ret -ne 0 ]; then
- 		echo "FAIL: ipsec"
+ drivers/net/netdevsim/Makefile           |   4 +
+ drivers/net/netdevsim/ipsec.c            | 345 +++++++++++++++++++++++++++++++
+ drivers/net/netdevsim/netdev.c           |   7 +
+ drivers/net/netdevsim/netdevsim.h        |  37 ++++
+ tools/testing/selftests/net/rtnetlink.sh | 132 +++++++++++-
+ 5 files changed, 518 insertions(+), 7 deletions(-)
+ create mode 100644 drivers/net/netdevsim/ipsec.c
+
 -- 
 2.7.4
 
