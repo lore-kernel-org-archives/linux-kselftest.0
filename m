@@ -1,55 +1,64 @@
-From: petrm@mellanox.com (Petr Machata)
-Date: Tue, 26 Jun 2018 01:20:32 +0200
-Subject: [PATCH net-next] selftests: forwarding: mirror_gre_vlan_bridge_1q:
- Unset rp_filter
-Message-ID:
- <66d218fb95026460e240752eec3af58920a14d86.1529968802.git.petrm@mellanox.com>
+From: shannon.nelson@oracle.com (Shannon Nelson)
+Date: Mon, 25 Jun 2018 16:41:34 -0700
+Subject: [PATCH v2 net-next 2/4] selftests: rtnetlink: use dummydev as a test
+ device
+In-Reply-To: <1529970096-23199-1-git-send-email-shannon.nelson@oracle.com>
+References: <1529970096-23199-1-git-send-email-shannon.nelson@oracle.com>
+Message-ID: <1529970096-23199-3-git-send-email-shannon.nelson@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180625232032.DxIpTLiUip5oSdeHZ3YM3rW1-Oqh6Hxjz57tVKOc978@z>
+Message-ID: <20180625234134.Tp8LHIO0v8RShsO5cPk2C0kbDH6ZnUAUUw1Qnnc9rMQ@z>
 
-The IP addresses of tunnel endpoint at H3 are set at the VLAN device
-$h3.555. Therefore when test_gretap_untagged_egress() sets vlan 555 to
-egress untagged at $swp3, $h3's rp_filter rejects these packets. The
-test then spuriously fails.
+We really shouldn't mess with local system settings, so let's
+use the already created dummy device instead for ipsec testing.
+Oh, and let's put the temp file into a proper directory.
 
-Therefore turn off net.ipv4.conf.{all, $h3}.rp_filter.
-
-Fixes: 9c7c8a82442c ("selftests: forwarding: mirror_gre_vlan_bridge_1q: Add more tests")
-Signed-off-by: Petr Machata <petrm at mellanox.com>
-Reviewed-by: Ido Schimmel <idosch at mellanox.com>
+Signed-off-by: Shannon Nelson <shannon.nelson at oracle.com>
 ---
- .../selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh        | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ tools/testing/selftests/net/rtnetlink.sh | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh b/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh
-index 5dbc7a08f4bd..1ac5038ae256 100755
---- a/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre_vlan_bridge_1q.sh
-@@ -39,6 +39,12 @@ setup_prepare()
- 	swp3=${NETIFS[p5]}
- 	h3=${NETIFS[p6]}
- 
-+	# gt4's remote address is at $h3.555, not $h3. Thus the packets arriving
-+	# directly to $h3 for test_gretap_untagged_egress() are rejected by
-+	# rp_filter and the test spuriously fails.
-+	sysctl_set net.ipv4.conf.all.rp_filter 0
-+	sysctl_set net.ipv4.conf.$h3.rp_filter 0
+diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+index 261a981..15948cf 100755
+--- a/tools/testing/selftests/net/rtnetlink.sh
++++ b/tools/testing/selftests/net/rtnetlink.sh
+@@ -523,21 +523,19 @@ kci_test_macsec()
+ kci_test_ipsec()
+ {
+ 	ret=0
+-
+-	# find an ip address on this machine and make up a destination
+-	srcip=`ip -o addr | awk '/inet / { print $4; }' | grep -v "^127" | head -1 | cut -f1 -d/`
+-	net=`echo $srcip | cut -f1-3 -d.`
+-	base=`echo $srcip | cut -f4 -d.`
+-	dstip="$net."`expr $base + 1`
+-
+ 	algo="aead rfc4106(gcm(aes)) 0x3132333435363738393031323334353664636261 128"
++	srcip=192.168.123.1
++	dstip=192.168.123.2
++	spi=7
 +
- 	vrf_prepare
- 	mirror_gre_topo_create
++	ip addr add $srcip dev $devdummy
  
-@@ -65,6 +71,9 @@ cleanup()
+ 	# flush to be sure there's nothing configured
+ 	ip x s flush ; ip x p flush
+ 	check_err $?
  
- 	mirror_gre_topo_destroy
- 	vrf_cleanup
-+
-+	sysctl_restore net.ipv4.conf.$h3.rp_filter
-+	sysctl_restore net.ipv4.conf.all.rp_filter
- }
+ 	# start the monitor in the background
+-	tmpfile=`mktemp ipsectestXXX`
++	tmpfile=`mktemp /var/run/ipsectestXXX`
+ 	mpid=`(ip x m > $tmpfile & echo $!) 2>/dev/null`
+ 	sleep 0.2
  
- test_vlan_match()
+@@ -601,6 +599,7 @@ kci_test_ipsec()
+ 	check_err $?
+ 	ip x p flush
+ 	check_err $?
++	ip addr del $srcip/32 dev $devdummy
+ 
+ 	if [ $ret -ne 0 ]; then
+ 		echo "FAIL: ipsec"
 -- 
-2.4.11
+2.7.4
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
