@@ -1,36 +1,35 @@
 From: liu.song.a23@gmail.com (Song Liu)
-Date: Sun, 24 Jun 2018 22:08:52 -0700
+Date: Sun, 24 Jun 2018 22:09:28 -0700
 Subject: [PATCH] selftests: bpf: notification about privilege required to
- run test_lirc_mode2.sh testing script
-In-Reply-To: <20180622185417.3452-1-ahiliation@gmail.com>
-References: <20180622185417.3452-1-ahiliation@gmail.com>
+ run test_lwt_seg6local.sh testing script
+In-Reply-To: <20180622200053.4957-1-ahiliation@gmail.com>
+References: <20180622200053.4957-1-ahiliation@gmail.com>
 Message-ID:
- <CAPhsuW6MUKiKdstH=H8nrPA5kRQUQus-UVSxYgCM+KwWQ3VXJA@mail.gmail.com>
+ <CAPhsuW66EoOKmgbVHa8Hrs=RVjwBxa-Mcb2+=gLpYFPUPg6C6A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180625050852.xl1v5g5ImPS9CMCYl12aGVTsjj1omNvHOyc4bigjHgA@z>
+Message-ID: <20180625050928.Lo0vy3saLEJ8P9CwByxjdfS58AwsQALGkAkeLiCQOIg@z>
 
-On Fri, Jun 22, 2018@11:54 AM, Jeffrin Jose T <ahiliation@gmail.com> wrote:
-> The test_lirc_mode2.sh script require root privilege for the successful
-> execution of the test.
+On Fri, Jun 22, 2018@1:00 PM, Jeffrin Jose T <ahiliation@gmail.com> wrote:
+> This test_lwt_seg6local.sh will execute with root privilege.
 >
-> This patch is to notify the user about the privilege the script
-> demands for the successful execution of the test.
+> This patch is atleast used to notify the user about the privilege
+> required related to smooth execution of the script.
 >
 > Signed-off-by: Jeffrin Jose T (Rajagiri SET) <ahiliation at gmail.com>
 
 Acked-by: Song Liu <songliubraving at fb.com>
 
 > ---
->  tools/testing/selftests/bpf/test_lirc_mode2.sh | 9 +++++++++
+>  tools/testing/selftests/bpf/test_lwt_seg6local.sh | 9 +++++++++
 >  1 file changed, 9 insertions(+)
 >
-> diff --git a/tools/testing/selftests/bpf/test_lirc_mode2.sh b/tools/testing/selftests/bpf/test_lirc_mode2.sh
-> index ce2e15e4f976..51184f8f9e64 100755
-> --- a/tools/testing/selftests/bpf/test_lirc_mode2.sh
-> +++ b/tools/testing/selftests/bpf/test_lirc_mode2.sh
-> @@ -1,6 +1,15 @@
->  #!/bin/bash
->  # SPDX-License-Identifier: GPL-2.0
+> diff --git a/tools/testing/selftests/bpf/test_lwt_seg6local.sh b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+> index 1c77994b5e71..30575577a8b2 100755
+> --- a/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+> +++ b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+> @@ -21,6 +21,15 @@
+>  # An UDP datagram is sent from fb00::1 to fb00::6. The test succeeds if this
+>  # datagram can be read on NS6 when binding to fb00::6.
 >
 > +# Kselftest framework requirement - SKIP code is 4.
 > +ksft_skip=4
@@ -41,9 +40,9 @@ Acked-by: Song Liu <songliubraving at fb.com>
 > +    exit $ksft_skip
 > +fi
 > +
->  GREEN='\033[0;92m'
->  RED='\033[0;31m'
->  NC='\033[0m' # No Color
+>  TMP_FILE="/tmp/selftest_lwt_seg6local.txt"
+>
+>  cleanup()
 > --
 > 2.17.0
 >
