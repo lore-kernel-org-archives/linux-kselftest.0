@@ -1,103 +1,35 @@
-From: petrm at mellanox.com (Petr Machata)
-Date: Mon, 25 Jun 2018 16:43:55 +0200
-Subject: [PATCH net-next v2] selftests: net: Test headroom handling of ip6_gre
- devices
-Message-ID: <2071eab42614e7019ece0e2d6f89fdde55815347.1529937619.git.petrm@mellanox.com>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Mon, 25 Jun 2018 16:56:05 +0200
+Subject: [PATCH] selftests: bpf: enable NET_SCHED
+Message-ID: <20180625145605.13726-1-anders.roxell@linaro.org>
 
-Commit 5691484df961 ("net: ip6_gre: Fix headroom request in
-ip6erspan_tunnel_xmit()") and commit 01b8d064d58b ("net: ip6_gre:
-Request headroom in __gre6_xmit()") fix problems in reserving headroom
-in the packets tunneled through ip6gre/tap and ip6erspan netdevices.
+CONFIG_NET_SCHED wasn't enabled in arm64's defconfig only for x86.
+So bpf/test_tunnel.sh tests fails with:
+RTNETLINK answers: Operation not supported
+RTNETLINK answers: Operation not supported
+We have an error talking to the kernel, -1
+Enable NET_SCHED and more tests passes.
 
-These two patches included snippets that reproduced the issues. This
-patch elevates the snippets to a full-fledged test case.
-
-Suggested-by: David Miller <davem at davemloft.net>
-Signed-off-by: Petr Machata <petrm at mellanox.com>
+Fixes: 3bce593ac06b ("selftests: bpf: config: add config fragments")
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 ---
+ tools/testing/selftests/bpf/config | 1 +
+ 1 file changed, 1 insertion(+)
 
-Notes:
-    Changes between v1 and v2:
-    
-    - Move tunnel construction to setup() and destruction to cleanup().
-
- tools/testing/selftests/net/ip6_gre_headroom.sh | 65 +++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100755 tools/testing/selftests/net/ip6_gre_headroom.sh
-
-diff --git a/tools/testing/selftests/net/ip6_gre_headroom.sh b/tools/testing/selftests/net/ip6_gre_headroom.sh
-new file mode 100755
-index 000000000000..5b41e8bb6e2d
---- /dev/null
-+++ b/tools/testing/selftests/net/ip6_gre_headroom.sh
-@@ -0,0 +1,65 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test that enough headroom is reserved for the first packet passing through an
-+# IPv6 GRE-like netdevice.
-+
-+setup_prepare()
-+{
-+	ip link add h1 type veth peer name swp1
-+	ip link add h3 type veth peer name swp3
-+
-+	ip link set dev h1 up
-+	ip address add 192.0.2.1/28 dev h1
-+
-+	ip link add dev vh3 type vrf table 20
-+	ip link set dev h3 master vh3
-+	ip link set dev vh3 up
-+	ip link set dev h3 up
-+
-+	ip link set dev swp3 up
-+	ip address add dev swp3 2001:db8:2::1/64
-+	ip address add dev swp3 2001:db8:2::3/64
-+
-+	ip link set dev swp1 up
-+	tc qdisc add dev swp1 clsact
-+
-+	ip link add name er6 type ip6erspan \
-+	   local 2001:db8:2::1 remote 2001:db8:2::2 oseq okey 123
-+	ip link set dev er6 up
-+
-+	ip link add name gt6 type ip6gretap \
-+	   local 2001:db8:2::3 remote 2001:db8:2::4
-+	ip link set dev gt6 up
-+
-+	sleep 1
-+}
-+
-+cleanup()
-+{
-+	ip link del dev gt6
-+	ip link del dev er6
-+	ip link del dev swp1
-+	ip link del dev swp3
-+	ip link del dev vh3
-+}
-+
-+test_headroom()
-+{
-+	local type=$1; shift
-+	local tundev=$1; shift
-+
-+	tc filter add dev swp1 ingress pref 1000 matchall skip_hw \
-+		action mirred egress mirror dev $tundev
-+	ping -I h1 192.0.2.2 -c 1 -w 2 &> /dev/null
-+	tc filter del dev swp1 ingress pref 1000
-+
-+	# If it doesn't panic, it passes.
-+	printf "TEST: %-60s  [PASS]\n" "$type headroom"
-+}
-+
-+trap cleanup EXIT
-+
-+setup_prepare
-+test_headroom ip6gretap gt6
-+test_headroom ip6erspan er6
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 1e0c547caf3c..7a6d92562dc6 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -6,6 +6,7 @@ CONFIG_TEST_BPF=m
+ CONFIG_CGROUP_BPF=y
+ CONFIG_NETDEVSIM=m
+ CONFIG_NET_CLS_ACT=y
++CONFIG_NET_SCHED=y
+ CONFIG_NET_SCH_INGRESS=y
+ CONFIG_NET_IPIP=y
+ CONFIG_IPV6=y
 -- 
-2.4.11
+2.18.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
