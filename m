@@ -1,110 +1,104 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Mon, 25 Jun 2018 22:13:02 +0900
-Subject: [PATCH v9 7/7] kselftests: Add tests for the preemptoff and
- irqsoff tracers
-In-Reply-To: <20180621223236.211495-8-joel@joelfernandes.org>
-References: <20180621223236.211495-1-joel@joelfernandes.org>
- <20180621223236.211495-8-joel@joelfernandes.org>
-Message-ID: <20180625221302.8507c98e500d8efc70c19d88@kernel.org>
+From: petrm at mellanox.com (Petr Machata)
+Date: Mon, 25 Jun 2018 16:43:55 +0200
+Subject: [PATCH net-next v2] selftests: net: Test headroom handling of ip6_gre
+ devices
+Message-ID: <2071eab42614e7019ece0e2d6f89fdde55815347.1529937619.git.petrm@mellanox.com>
 
-Hi Joel,
+Commit 5691484df961 ("net: ip6_gre: Fix headroom request in
+ip6erspan_tunnel_xmit()") and commit 01b8d064d58b ("net: ip6_gre:
+Request headroom in __gre6_xmit()") fix problems in reserving headroom
+in the packets tunneled through ip6gre/tap and ip6erspan netdevices.
 
-On Thu, 21 Jun 2018 15:32:36 -0700
-Joel Fernandes <joel at joelfernandes.org> wrote:
-[...]
-> +++ b/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
-> @@ -0,0 +1,74 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: test for the preemptirqsoff tracer
-> +
-> +MOD=test_atomic_sections
-> +
-> +fail() {
-> +    reset_tracer
-> +    rmmod $MOD || true
-> +    exit_fail
-> +}
-> +
-> +unsup() { #msg
-> +    reset_tracer
-> +    rmmod $MOD || true
-> +    echo $1
-> +    exit_unsupported
-> +}
-> +
-> +modprobe $MOD || unsup "$MOD module not available"
-> +rmmod $MOD
-> +
-> +grep -q "preemptoff" available_tracers || unsup "preemptoff tracer not enabled"
-> +grep -q "irqsoff" available_tracers || unsup "irqsoff tracer not enabled"
-> +
-> +reset_tracer
-> +
-> +# Simulate preemptoff section for half a second couple of times
-> +echo preemptoff > current_tracer
-> +sleep 1
-> +modprobe test_atomic_sections atomic_mode=preempt atomic_time=500000 || fail
-> +rmmod test_atomic_sections || fail
-> +modprobe test_atomic_sections atomic_mode=preempt atomic_time=500000 || fail
-> +rmmod test_atomic_sections || fail
-> +modprobe test_atomic_sections atomic_mode=preempt atomic_time=500000 || fail
-> +rmmod test_atomic_sections || fail
+These two patches included snippets that reproduced the issues. This
+patch elevates the snippets to a full-fledged test case.
 
-Why don't you use $MOD for these operations?
+Suggested-by: David Miller <davem at davemloft.net>
+Signed-off-by: Petr Machata <petrm at mellanox.com>
+---
 
-> +
-> +cat trace
-> +
-> +# Confirm which tracer
-> +grep -q "tracer: preemptoff" trace || fail
-> +
-> +# Check the end of the section
-> +egrep -q "5.....us : <stack trace>" trace || fail
-> +
-> +# Check for 500ms of latency
-> +egrep -q "latency: 5..... us" trace || fail
-> +
-> +reset_tracer
-> +
-> +# Simulate irqsoff section for half a second couple of times
-> +echo irqsoff > current_tracer
-> +sleep 1
-> +modprobe test_atomic_sections atomic_mode=irq atomic_time=500000 || fail
-> +rmmod test_atomic_sections || fail
-> +modprobe test_atomic_sections atomic_mode=irq atomic_time=500000 || fail
-> +rmmod test_atomic_sections || fail
-> +modprobe test_atomic_sections atomic_mode=irq atomic_time=500000 || fail
-> +rmmod test_atomic_sections || fail
+Notes:
+    Changes between v1 and v2:
+    
+    - Move tunnel construction to setup() and destruction to cleanup().
 
-Ditto.
+ tools/testing/selftests/net/ip6_gre_headroom.sh | 65 +++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100755 tools/testing/selftests/net/ip6_gre_headroom.sh
 
-Other parts looks good to me.
-
-Thanks,
-
-> +
-> +cat trace
-> +
-> +# Confirm which tracer
-> +grep -q "tracer: irqsoff" trace || fail
-> +
-> +# Check the end of the section
-> +egrep -q "5.....us : <stack trace>" trace || fail
-> +
-> +# Check for 500ms of latency
-> +egrep -q "latency: 5..... us" trace || fail
-> +
-> +reset_tracer
-> +exit 0
-> +
-> -- 
-> 2.18.0.rc2.346.g013aa6912e-goog
-> 
-
-
+diff --git a/tools/testing/selftests/net/ip6_gre_headroom.sh b/tools/testing/selftests/net/ip6_gre_headroom.sh
+new file mode 100755
+index 000000000000..5b41e8bb6e2d
+--- /dev/null
++++ b/tools/testing/selftests/net/ip6_gre_headroom.sh
+@@ -0,0 +1,65 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Test that enough headroom is reserved for the first packet passing through an
++# IPv6 GRE-like netdevice.
++
++setup_prepare()
++{
++	ip link add h1 type veth peer name swp1
++	ip link add h3 type veth peer name swp3
++
++	ip link set dev h1 up
++	ip address add 192.0.2.1/28 dev h1
++
++	ip link add dev vh3 type vrf table 20
++	ip link set dev h3 master vh3
++	ip link set dev vh3 up
++	ip link set dev h3 up
++
++	ip link set dev swp3 up
++	ip address add dev swp3 2001:db8:2::1/64
++	ip address add dev swp3 2001:db8:2::3/64
++
++	ip link set dev swp1 up
++	tc qdisc add dev swp1 clsact
++
++	ip link add name er6 type ip6erspan \
++	   local 2001:db8:2::1 remote 2001:db8:2::2 oseq okey 123
++	ip link set dev er6 up
++
++	ip link add name gt6 type ip6gretap \
++	   local 2001:db8:2::3 remote 2001:db8:2::4
++	ip link set dev gt6 up
++
++	sleep 1
++}
++
++cleanup()
++{
++	ip link del dev gt6
++	ip link del dev er6
++	ip link del dev swp1
++	ip link del dev swp3
++	ip link del dev vh3
++}
++
++test_headroom()
++{
++	local type=$1; shift
++	local tundev=$1; shift
++
++	tc filter add dev swp1 ingress pref 1000 matchall skip_hw \
++		action mirred egress mirror dev $tundev
++	ping -I h1 192.0.2.2 -c 1 -w 2 &> /dev/null
++	tc filter del dev swp1 ingress pref 1000
++
++	# If it doesn't panic, it passes.
++	printf "TEST: %-60s  [PASS]\n" "$type headroom"
++}
++
++trap cleanup EXIT
++
++setup_prepare
++test_headroom ip6gretap gt6
++test_headroom ip6erspan er6
 -- 
-Masami Hiramatsu <mhiramat at kernel.org>
+2.4.11
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
