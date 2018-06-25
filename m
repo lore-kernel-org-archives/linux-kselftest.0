@@ -1,62 +1,36 @@
 From: shannon.nelson@oracle.com (Shannon Nelson)
-Date: Mon, 25 Jun 2018 16:41:34 -0700
-Subject: [PATCH v2 net-next 2/4] selftests: rtnetlink: use dummydev as a test
- device
+Date: Mon, 25 Jun 2018 16:41:33 -0700
+Subject: [PATCH v2 net-next 1/4] selftests: rtnetlink: clear the return code
+ at start of ipsec test
 In-Reply-To: <1529970096-23199-1-git-send-email-shannon.nelson@oracle.com>
 References: <1529970096-23199-1-git-send-email-shannon.nelson@oracle.com>
-Message-ID: <1529970096-23199-3-git-send-email-shannon.nelson@oracle.com>
+Message-ID: <1529970096-23199-2-git-send-email-shannon.nelson@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180625234134.Tp8LHIO0v8RShsO5cPk2C0kbDH6ZnUAUUw1Qnnc9rMQ@z>
+Message-ID: <20180625234133.dMr8qzqNGwEodbtYofd1IEZ2BpyYSopNn1KrZwcdfIg@z>
 
-We really shouldn't mess with local system settings, so let's
-use the already created dummy device instead for ipsec testing.
-Oh, and let's put the temp file into a proper directory.
+Following the custom from the other functions, clear the global
+ret code before starting the test so as to not have previously
+failed tests cause us to thing this test has failed.
 
+Reported-by: Anders Roxell <anders.roxell at linaro.org>
 Signed-off-by: Shannon Nelson <shannon.nelson at oracle.com>
 ---
- tools/testing/selftests/net/rtnetlink.sh | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ tools/testing/selftests/net/rtnetlink.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-index 261a981..15948cf 100755
+index b33a371..261a981 100755
 --- a/tools/testing/selftests/net/rtnetlink.sh
 +++ b/tools/testing/selftests/net/rtnetlink.sh
-@@ -523,21 +523,19 @@ kci_test_macsec()
+@@ -522,6 +522,8 @@ kci_test_macsec()
+ #-------------------------------------------------------------------
  kci_test_ipsec()
  {
- 	ret=0
--
--	# find an ip address on this machine and make up a destination
--	srcip=`ip -o addr | awk '/inet / { print $4; }' | grep -v "^127" | head -1 | cut -f1 -d/`
--	net=`echo $srcip | cut -f1-3 -d.`
--	base=`echo $srcip | cut -f4 -d.`
--	dstip="$net."`expr $base + 1`
--
- 	algo="aead rfc4106(gcm(aes)) 0x3132333435363738393031323334353664636261 128"
-+	srcip=192.168.123.1
-+	dstip=192.168.123.2
-+	spi=7
++	ret=0
 +
-+	ip addr add $srcip dev $devdummy
- 
- 	# flush to be sure there's nothing configured
- 	ip x s flush ; ip x p flush
- 	check_err $?
- 
- 	# start the monitor in the background
--	tmpfile=`mktemp ipsectestXXX`
-+	tmpfile=`mktemp /var/run/ipsectestXXX`
- 	mpid=`(ip x m > $tmpfile & echo $!) 2>/dev/null`
- 	sleep 0.2
- 
-@@ -601,6 +599,7 @@ kci_test_ipsec()
- 	check_err $?
- 	ip x p flush
- 	check_err $?
-+	ip addr del $srcip/32 dev $devdummy
- 
- 	if [ $ret -ne 0 ]; then
- 		echo "FAIL: ipsec"
+ 	# find an ip address on this machine and make up a destination
+ 	srcip=`ip -o addr | awk '/inet / { print $4; }' | grep -v "^127" | head -1 | cut -f1 -d/`
+ 	net=`echo $srcip | cut -f1-3 -d.`
 -- 
 2.7.4
 
