@@ -1,58 +1,112 @@
-From: zhijianx.li@intel.com (Li Zhijian)
-Date: Mon, 25 Jun 2018 16:41:24 +0800
-Subject: test_syscall_vdso_32 [FAIL]
-Message-ID: <0d78b5b4-710e-1b41-46e1-74003ca1381e@intel.com>
+From: mhiramat@kernel.org (Masami Hiramatsu)
+Date: Mon, 25 Jun 2018 22:13:02 +0900
+Subject: [PATCH v9 7/7] kselftests: Add tests for the preemptoff and
+ irqsoff tracers
+In-Reply-To: <20180621223236.211495-8-joel@joelfernandes.org>
+References: <20180621223236.211495-1-joel@joelfernandes.org>
+ <20180621223236.211495-8-joel@joelfernandes.org>
+Message-ID: <20180625221302.8507c98e500d8efc70c19d88@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180625084124.hoQlYekhJZYHt-znL5fj1Sqx31JQYFcCcLcb0AT4LiI@z>
+Message-ID: <20180625131302.jUrLv4CswakDmUiufMkxFJPpqX8sB-joblhV6K-T2xs@z>
 
-Hi
+Hi Joel,
 
-Intel 0Day noticed that test_syscall_vdso_32 failed since 8bb2610bc4967f19672444a7b0407367f1540028(x86/entry/64/compat: Preserve r8-r11 in int $0x80)
+On Thu, 21 Jun 2018 15:32:36 -0700
+Joel Fernandes <joel@joelfernandes.org> wrote:
+[...]
+> +++ b/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
+> @@ -0,0 +1,74 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +# description: test for the preemptirqsoff tracer
+> +
+> +MOD=test_atomic_sections
+> +
+> +fail() {
+> +    reset_tracer
+> +    rmmod $MOD || true
+> +    exit_fail
+> +}
+> +
+> +unsup() { #msg
+> +    reset_tracer
+> +    rmmod $MOD || true
+> +    echo $1
+> +    exit_unsupported
+> +}
+> +
+> +modprobe $MOD || unsup "$MOD module not available"
+> +rmmod $MOD
+> +
+> +grep -q "preemptoff" available_tracers || unsup "preemptoff tracer not enabled"
+> +grep -q "irqsoff" available_tracers || unsup "irqsoff tracer not enabled"
+> +
+> +reset_tracer
+> +
+> +# Simulate preemptoff section for half a second couple of times
+> +echo preemptoff > current_tracer
+> +sleep 1
+> +modprobe test_atomic_sections atomic_mode=preempt atomic_time=500000 || fail
+> +rmmod test_atomic_sections || fail
+> +modprobe test_atomic_sections atomic_mode=preempt atomic_time=500000 || fail
+> +rmmod test_atomic_sections || fail
+> +modprobe test_atomic_sections atomic_mode=preempt atomic_time=500000 || fail
+> +rmmod test_atomic_sections || fail
 
-2018-06-25 14:23:00 make run_tests -C x86
-make: Entering directory '/usr/src/linux-selftests-x86_64-rhel-7.2-8bb2610bc4967f19672444a7b0407367f1540028/tools/testing/selftests/x86'
-gcc -m32 -o /usr/src/linux-selftests-x86_64-rhel-7.2-8bb2610bc4967f19672444a7b0407367f1540028/tools/testing/selftests/x86/test_syscall_vdso_32 -O2 -g -std=gnu99 -pthread -Wall -no-pie -DCAN_BUILD_32 -DCAN_BUILD_64 test_syscall_vdso.c thunks_32.S -lrt -ldl -lm
-TAP version 13
-selftests: test_syscall_vdso_32
-========================================
-[RUN]	Executing 6-argument 32-bit syscall via VDSO
-[WARN]	Flags before=0000000000200ed7 id 0 00 o d i s z 0 a 0 p 1 c
-[WARN]	Flags  after=0000000000200606 id 0 00 d i 0 0 p 1
-[WARN]	Flags change=00000000000008d1 0 00 o s z 0 a 0 0 c
-[OK]	Arguments are preserved across syscall
-[NOTE]	R11 has changed:0000000000200606 - assuming clobbered by SYSRET insn
-[OK]	R8..R15 did not leak kernel data
-[RUN]	Executing 6-argument 32-bit syscall via INT 80
-[OK]	Arguments are preserved across syscall
-[FAIL]	R8 has changed:0000000000000000
-[FAIL]	R9 has changed:0000000000000000
-[FAIL]	R10 has changed:0000000000000000
-[FAIL]	R11 has changed:0000000000000000
-[RUN]	Executing 6-argument 32-bit syscall via VDSO
-[WARN]	Flags before=0000000000200ed7 id 0 00 o d i s z 0 a 0 p 1 c
-[WARN]	Flags  after=0000000000200606 id 0 00 d i 0 0 p 1
-[WARN]	Flags change=00000000000008d1 0 00 o s z 0 a 0 0 c
-[OK]	Arguments are preserved across syscall
-[NOTE]	R11 has changed:0000000000200606 - assuming clobbered by SYSRET insn
-[OK]	R8..R15 did not leak kernel data
-[RUN]	Executing 6-argument 32-bit syscall via INT 80
-[OK]	Arguments are preserved across syscall
-[FAIL]	R8 has changed:0000000000000000
-[FAIL]	R9 has changed:0000000000000000
-[FAIL]	R10 has changed:0000000000000000
-[FAIL]	R11 has changed:0000000000000000
-[RUN]	Running tests under ptrace
-not ok 1..1 selftests:  test_syscall_vdso_32 [FAIL]
-make: Leaving directory '/usr/src/linux-selftests-x86_64-rhel-7.2-8bb2610bc4967f19672444a7b0407367f1540028/tools/testing/selftests/x86'
+Why don't you use $MOD for these operations?
 
-This commit changed the testcase expected behavior, but looks it doesn't work as expected.
-so want to consult whether 0Day missed something(special configurations) to this case ?
+> +
+> +cat trace
+> +
+> +# Confirm which tracer
+> +grep -q "tracer: preemptoff" trace || fail
+> +
+> +# Check the end of the section
+> +egrep -q "5.....us : <stack trace>" trace || fail
+> +
+> +# Check for 500ms of latency
+> +egrep -q "latency: 5..... us" trace || fail
+> +
+> +reset_tracer
+> +
+> +# Simulate irqsoff section for half a second couple of times
+> +echo irqsoff > current_tracer
+> +sleep 1
+> +modprobe test_atomic_sections atomic_mode=irq atomic_time=500000 || fail
+> +rmmod test_atomic_sections || fail
+> +modprobe test_atomic_sections atomic_mode=irq atomic_time=500000 || fail
+> +rmmod test_atomic_sections || fail
+> +modprobe test_atomic_sections atomic_mode=irq atomic_time=500000 || fail
+> +rmmod test_atomic_sections || fail
 
-if more details are needed, please let me know.
+Ditto.
+
+Other parts looks good to me.
+
+Thanks,
+
+> +
+> +cat trace
+> +
+> +# Confirm which tracer
+> +grep -q "tracer: irqsoff" trace || fail
+> +
+> +# Check the end of the section
+> +egrep -q "5.....us : <stack trace>" trace || fail
+> +
+> +# Check for 500ms of latency
+> +egrep -q "latency: 5..... us" trace || fail
+> +
+> +reset_tracer
+> +exit 0
+> +
+> -- 
+> 2.18.0.rc2.346.g013aa6912e-goog
+> 
 
 
-Thanks
-
+-- 
+Masami Hiramatsu <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
