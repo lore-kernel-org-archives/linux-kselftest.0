@@ -1,34 +1,26 @@
-From: andreyknvl at google.com (Andrey Konovalov)
-Date: Tue, 26 Jun 2018 14:47:50 +0200
-Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
-In-Reply-To: <cover.1529507994.git.andreyknvl@google.com>
-References: <cover.1529507994.git.andreyknvl@google.com>
-Message-ID: <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
+From: davem at davemloft.net (David Miller)
+Date: Tue, 26 Jun 2018 23:03:19 +0900 (KST)
+Subject: [PATCH net-next v2] selftests: net: Test headroom handling of
+ ip6_gre devices
+In-Reply-To: <2071eab42614e7019ece0e2d6f89fdde55815347.1529937619.git.petrm@mellanox.com>
+References: <2071eab42614e7019ece0e2d6f89fdde55815347.1529937619.git.petrm@mellanox.com>
+Message-ID: <20180626.230319.2202227950116916295.davem@davemloft.net>
 
-On Wed, Jun 20, 2018 at 5:24 PM, Andrey Konovalov <andreyknvl at google.com> wrote:
-> arm64 has a feature called Top Byte Ignore, which allows to embed pointer
-> tags into the top byte of each pointer. Userspace programs (such as
-> HWASan, a memory debugging tool [1]) might use this feature and pass
-> tagged user pointers to the kernel through syscalls or other interfaces.
->
-> This patch makes a few of the kernel interfaces accept tagged user
-> pointers. The kernel is already able to handle user faults with tagged
-> pointers and has the untagged_addr macro, which this patchset reuses.
->
-> We're not trying to cover all possible ways the kernel accepts user
-> pointers in one patchset, so this one should be considered as a start.
->
-> Thanks!
->
-> [1] http://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html
+From: Petr Machata <petrm at mellanox.com>
+Date: Mon, 25 Jun 2018 16:43:55 +0200
 
-Hi!
+> Commit 5691484df961 ("net: ip6_gre: Fix headroom request in
+> ip6erspan_tunnel_xmit()") and commit 01b8d064d58b ("net: ip6_gre:
+> Request headroom in __gre6_xmit()") fix problems in reserving headroom
+> in the packets tunneled through ip6gre/tap and ip6erspan netdevices.
+> 
+> These two patches included snippets that reproduced the issues. This
+> patch elevates the snippets to a full-fledged test case.
+> 
+> Suggested-by: David Miller <davem at davemloft.net>
+> Signed-off-by: Petr Machata <petrm at mellanox.com>
 
-Is there anything I should do to move forward with this?
-
-I've received zero replies to this patch set (v3 and v4) over the last month.
-
-Thanks!
+Applied, thanks.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
