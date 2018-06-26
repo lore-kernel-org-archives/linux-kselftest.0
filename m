@@ -1,39 +1,22 @@
-From: dan.carpenter at oracle.com (Dan Carpenter)
-Date: Tue, 26 Jun 2018 12:03:48 +0300
-Subject: [bug report] selftests: cgroup: add memory controller self-tests
-Message-ID: <20180626090347.cuwod4fv5koqbu63@kili.mountain>
+From: daniel at iogearbox.net (Daniel Borkmann)
+Date: Tue, 26 Jun 2018 12:07:41 +0200
+Subject: [PATCH] selftests: bpf: enable NET_SCHED
+In-Reply-To: <20180625145605.13726-1-anders.roxell@linaro.org>
+References: <20180625145605.13726-1-anders.roxell@linaro.org>
+Message-ID: <76182da2-d261-8747-610f-8506e3d96daf@iogearbox.net>
 
-Hello Roman Gushchin,
+On 06/25/2018 04:56 PM, Anders Roxell wrote:
+> CONFIG_NET_SCHED wasn't enabled in arm64's defconfig only for x86.
+> So bpf/test_tunnel.sh tests fails with:
+> RTNETLINK answers: Operation not supported
+> RTNETLINK answers: Operation not supported
+> We have an error talking to the kernel, -1
+> Enable NET_SCHED and more tests passes.
+> 
+> Fixes: 3bce593ac06b ("selftests: bpf: config: add config fragments")
+> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 
-The patch 84092dbcf901: "selftests: cgroup: add memory controller
-self-tests" from May 11, 2018, leads to the following static checker
-warning:
-
-	./tools/testing/selftests/cgroup/test_memcontrol.c:76 test_memcg_subtree_control()
-	error: uninitialized symbol 'child2'.
-
-./tools/testing/selftests/cgroup/test_memcontrol.c
-    69  
-    70  cleanup:
-    71          cg_destroy(child);
-    72          cg_destroy(parent);
-    73          free(parent);
-    74          free(child);
-    75  
-    76          cg_destroy(child2);
-
-The problem with using one error label to handle all possible returns
-is that some stuff hasn't been initialized yet.
-
-    77          cg_destroy(parent2);
-    78          free(parent2);
-    79          free(child2);
-    80  
-    81          return ret;
-    82  }
-
-regards,
-dan carpenter
+Applied to bpf, thanks Anders!
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
