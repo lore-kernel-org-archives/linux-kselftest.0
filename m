@@ -1,117 +1,53 @@
-From: guro at fb.com (Roman Gushchin)
-Date: Tue, 26 Jun 2018 10:22:28 -0700
-Subject: [PATCH v2] selftests: cgroup: fix cleanup path in
- test_memcg_subtree_control()
-In-Reply-To: <20180626090347.cuwod4fv5koqbu63@kili.mountain>
-References: <20180626090347.cuwod4fv5koqbu63@kili.mountain>
-Message-ID: <20180626172228.12590-1-guro@fb.com>
+From: catalin.marinas at arm.com (Catalin Marinas)
+Date: Tue, 26 Jun 2018 18:29:01 +0100
+Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
+In-Reply-To: <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
+References: <cover.1529507994.git.andreyknvl@google.com>
+ <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
+Message-ID: <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
 
-Dan reported, that cleanup path in test_memcg_subtree_control()
-triggers a static checker warning:
-  ./tools/testing/selftests/cgroup/test_memcontrol.c:76 \
-  test_memcg_subtree_control()
-  error: uninitialized symbol 'child2'.
+Hi Andrey,
 
-Fix this by initializing child2 and parent2 variables and
-split the cleanup path into few stages.
+On Tue, Jun 26, 2018 at 02:47:50PM +0200, Andrey Konovalov wrote:
+> On Wed, Jun 20, 2018 at 5:24 PM, Andrey Konovalov <andreyknvl at google.com> wrote:
+> > arm64 has a feature called Top Byte Ignore, which allows to embed pointer
+> > tags into the top byte of each pointer. Userspace programs (such as
+> > HWASan, a memory debugging tool [1]) might use this feature and pass
+> > tagged user pointers to the kernel through syscalls or other interfaces.
+> >
+> > This patch makes a few of the kernel interfaces accept tagged user
+> > pointers. The kernel is already able to handle user faults with tagged
+> > pointers and has the untagged_addr macro, which this patchset reuses.
+> >
+> > We're not trying to cover all possible ways the kernel accepts user
+> > pointers in one patchset, so this one should be considered as a start.
+> >
+> > Thanks!
+> >
+> > [1] http://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html
+> 
+> Is there anything I should do to move forward with this?
+> 
+> I've received zero replies to this patch set (v3 and v4) over the last
+> month.
 
-Signed-off-by: Roman Gushchin <guro at fb.com>
-Fixes: 84092dbcf901 ("selftests: cgroup: add memory controller self-tests")
-Reported-by: Dan Carpenter <dan.carpenter at oracle.com>
-Cc: Dan Carpenter <dan.carpenter at oracle.com>
-Cc: Shuah Khan (Samsung OSG) <shuah at kernel.org>
-Cc: Mike Rapoport <rppt at linux.vnet.ibm.com>
----
- tools/testing/selftests/cgroup/test_memcontrol.c | 38 +++++++++++++-----------
- 1 file changed, 21 insertions(+), 17 deletions(-)
+The patches in this series look fine but my concern is that they are not
+sufficient and we don't have (yet?) a way to identify where such
+annotations are required. You even say in patch 6 that this is "some
+initial work for supporting non-zero address tags passed to the kernel".
+Unfortunately, merging (or relaxing) an ABI without a clear picture is
+not really feasible.
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index cf0bddc9d271..ae8f04f84b03 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -25,7 +25,7 @@
-  */
- static int test_memcg_subtree_control(const char *root)
- {
--	char *parent, *child, *parent2, *child2;
-+	char *parent, *child, *parent2 = NULL, *child2 = NULL;
- 	int ret = KSFT_FAIL;
- 	char buf[PAGE_SIZE];
- 
-@@ -33,50 +33,54 @@ static int test_memcg_subtree_control(const char *root)
- 	parent = cg_name(root, "memcg_test_0");
- 	child = cg_name(root, "memcg_test_0/memcg_test_1");
- 	if (!parent || !child)
--		goto cleanup;
-+		goto cleanup_free;
- 
- 	if (cg_create(parent))
--		goto cleanup;
-+		goto cleanup_free;
- 
- 	if (cg_write(parent, "cgroup.subtree_control", "+memory"))
--		goto cleanup;
-+		goto cleanup_parent;
- 
- 	if (cg_create(child))
--		goto cleanup;
-+		goto cleanup_parent;
- 
- 	if (cg_read_strstr(child, "cgroup.controllers", "memory"))
--		goto cleanup;
-+		goto cleanup_child;
- 
- 	/* Create two nested cgroups without enabling memory controller */
- 	parent2 = cg_name(root, "memcg_test_1");
- 	child2 = cg_name(root, "memcg_test_1/memcg_test_1");
- 	if (!parent2 || !child2)
--		goto cleanup;
-+		goto cleanup_free2;
- 
- 	if (cg_create(parent2))
--		goto cleanup;
-+		goto cleanup_free2;
- 
- 	if (cg_create(child2))
--		goto cleanup;
-+		goto cleanup_parent2;
- 
- 	if (cg_read(child2, "cgroup.controllers", buf, sizeof(buf)))
--		goto cleanup;
-+		goto cleanup_all;
- 
- 	if (!cg_read_strstr(child2, "cgroup.controllers", "memory"))
--		goto cleanup;
-+		goto cleanup_all;
- 
- 	ret = KSFT_PASS;
- 
--cleanup:
--	cg_destroy(child);
--	cg_destroy(parent);
--	free(parent);
--	free(child);
--
-+cleanup_all:
- 	cg_destroy(child2);
-+cleanup_parent2:
- 	cg_destroy(parent2);
-+cleanup_free2:
- 	free(parent2);
- 	free(child2);
-+cleanup_child:
-+	cg_destroy(child);
-+cleanup_parent:
-+	cg_destroy(parent);
-+cleanup_free:
-+	free(parent);
-+	free(child);
- 
- 	return ret;
- }
+While I support this work, as a maintainer I'd like to understand
+whether we'd be in a continuous chase of ABI breaks with every kernel
+release or we have a better way to identify potential issues. Is there
+any way to statically analyse conversions from __user ptr to long for
+example? Or, could we get the compiler to do this for us?
+
+Thanks.
+
 -- 
-2.14.4
-
+Catalin
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
