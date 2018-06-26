@@ -1,87 +1,385 @@
 From: petrm@mellanox.com (Petr Machata)
-Date: Tue, 26 Jun 2018 02:08:00 +0200
-Subject: [PATCH net-next 4/6] selftests: forwarding: lib: Extract
- interface-init functions
+Date: Tue, 26 Jun 2018 02:08:05 +0200
+Subject: [PATCH net-next 5/6] selftests: forwarding: Test multipath tunneling
 In-Reply-To: <cover.1529971148.git.petrm@mellanox.com>
 References: <cover.1529971148.git.petrm@mellanox.com>
 Message-ID:
- <5c9a2c980ce03e57d6fc81e819fe2816a45f73fc.1529971148.git.petrm@mellanox.com>
+ <12d9b506ca912d654d38a005ac5259a6eef2f073.1529971148.git.petrm@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180626000800.p2hUfXTejCjfJ2NJeLoJ1r9gXhCXdjjlMiDlbpPfRnY@z>
+Message-ID: <20180626000805.5eava303K10TnHc0syO7BV31uuE1u8vQFSk11qpHOOk@z>
 
-The function simple_if_init() does two things: it creates a VRF, then
-moves an interface into this VRF and configures addresses. The latter
-comes in handy when adding more interfaces into a VRF later on. The
-situation is similar for simple_if_fini().
-
-Therefore split the interface remastering and address de/initialization
-logic to a new pair of helpers __simple_if_init() / __simple_if_fini(),
-and defer to these helpers from simple_if_init() and simple_if_fini().
+Add a GRE-tunneling test such that there are two tunnels involved, with
+a multipath route listing both as next hops. Similarly to
+router_multipath.sh, test that the distribution of traffic to the
+tunnels honors the configured weights.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 Reviewed-by: Ido Schimmel <idosch at mellanox.com>
 ---
- tools/testing/selftests/net/forwarding/lib.sh | 32 +++++++++++++++++++++------
- 1 file changed, 25 insertions(+), 7 deletions(-)
+ .../selftests/net/forwarding/gre_multipath.sh      | 354 +++++++++++++++++++++
+ 1 file changed, 354 insertions(+)
+ create mode 100755 tools/testing/selftests/net/forwarding/gre_multipath.sh
 
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index f94ea4bafa13..1dfdf14894e2 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -287,6 +287,29 @@ __addr_add_del()
- 	done
- }
- 
-+__simple_if_init()
+diff --git a/tools/testing/selftests/net/forwarding/gre_multipath.sh b/tools/testing/selftests/net/forwarding/gre_multipath.sh
+new file mode 100755
+index 000000000000..982cc8c23200
+--- /dev/null
++++ b/tools/testing/selftests/net/forwarding/gre_multipath.sh
+@@ -0,0 +1,354 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++# Test traffic distribution when a wECMP route forwards traffic to two GRE
++# tunnels.
++#
++# +-------------------------+
++# | H1                      |
++# |               $h1 +     |
++# |      192.0.2.1/28 |     |
++# |  2001:db8:1::1/64 |     |
++# +-------------------|-----+
++#                     |
++# +-------------------|------------------------+
++# | SW1               |                        |
++# |              $ol1 +                        |
++# |      192.0.2.2/28                          |
++# |  2001:db8:1::2/64                          |
++# |                                            |
++# |  + g1a (gre)          + g1b (gre)          |
++# |    loc=192.0.2.65       loc=192.0.2.81     |
++# |    rem=192.0.2.66 --.   rem=192.0.2.82 --. |
++# |    tos=inherit      |   tos=inherit      | |
++# |  .------------------'                    | |
++# |  |                    .------------------' |
++# |  v                    v                    |
++# |  + $ul1.111 (vlan)    + $ul1.222 (vlan)    |
++# |  | 192.0.2.129/28     | 192.0.2.145/28     |
++# |   \                  /                     |
++# |    \________________/                      |
++# |            |                               |
++# |            + $ul1                          |
++# +------------|-------------------------------+
++#              |
++# +------------|-------------------------------+
++# | SW2        + $ul2                          |
++# |     _______|________                       |
++# |    /                \                      |
++# |   /                  \                     |
++# |  + $ul2.111 (vlan)    + $ul2.222 (vlan)    |
++# |  ^ 192.0.2.130/28     ^ 192.0.2.146/28     |
++# |  |                    |                    |
++# |  |                    '------------------. |
++# |  '------------------.                    | |
++# |  + g2a (gre)        | + g2b (gre)        | |
++# |    loc=192.0.2.66   |   loc=192.0.2.82   | |
++# |    rem=192.0.2.65 --'   rem=192.0.2.81 --' |
++# |    tos=inherit          tos=inherit        |
++# |                                            |
++# |              $ol2 +                        |
++# |     192.0.2.17/28 |                        |
++# |  2001:db8:2::1/64 |                        |
++# +-------------------|------------------------+
++#                     |
++# +-------------------|-----+
++# | H2                |     |
++# |               $h2 +     |
++# |     192.0.2.18/28       |
++# |  2001:db8:2::2/64       |
++# +-------------------------+
++
++ALL_TESTS="
++	ping_ipv4
++	ping_ipv6
++	multipath_ipv4
++	multipath_ipv6
++	multipath_ipv6_l4
++"
++
++NUM_NETIFS=6
++source lib.sh
++
++h1_create()
 +{
-+	local if_name=$1; shift
-+	local vrf_name=$1; shift
-+	local addrs=("${@}")
-+
-+	ip link set dev $if_name master $vrf_name
-+	ip link set dev $if_name up
-+
-+	__addr_add_del $if_name add "${addrs[@]}"
++	simple_if_init $h1 192.0.2.1/28 2001:db8:1::1/64
++	ip route add vrf v$h1 192.0.2.16/28 via 192.0.2.2
++	ip route add vrf v$h1 2001:db8:2::/64 via 2001:db8:1::2
 +}
 +
-+__simple_if_fini()
++h1_destroy()
 +{
-+	local if_name=$1; shift
-+	local addrs=("${@}")
-+
-+	__addr_add_del $if_name del "${addrs[@]}"
-+
-+	ip link set dev $if_name down
-+	ip link set dev $if_name nomaster
++	ip route del vrf v$h1 2001:db8:2::/64 via 2001:db8:1::2
++	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
++	simple_if_fini $h1 192.0.2.1/28
 +}
 +
- simple_if_init()
- {
- 	local if_name=$1
-@@ -298,11 +321,8 @@ simple_if_init()
- 	array=("${@}")
- 
- 	vrf_create $vrf_name
--	ip link set dev $if_name master $vrf_name
- 	ip link set dev $vrf_name up
--	ip link set dev $if_name up
--
--	__addr_add_del $if_name add "${array[@]}"
-+	__simple_if_init $if_name $vrf_name "${array[@]}"
- }
- 
- simple_if_fini()
-@@ -315,9 +335,7 @@ simple_if_fini()
- 	vrf_name=v$if_name
- 	array=("${@}")
- 
--	__addr_add_del $if_name del "${array[@]}"
--
--	ip link set dev $if_name down
-+	__simple_if_fini $if_name "${array[@]}"
- 	vrf_destroy $vrf_name
- }
- 
++sw1_create()
++{
++	simple_if_init $ol1 192.0.2.2/28 2001:db8:1::2/64
++	__simple_if_init $ul1 v$ol1
++	vlan_create $ul1 111 v$ol1 192.0.2.129/28
++	vlan_create $ul1 222 v$ol1 192.0.2.145/28
++
++	tunnel_create g1a gre 192.0.2.65 192.0.2.66 tos inherit dev v$ol1
++	__simple_if_init g1a v$ol1 192.0.2.65/32
++	ip route add vrf v$ol1 192.0.2.66/32 via 192.0.2.130
++
++	tunnel_create g1b gre 192.0.2.81 192.0.2.82 tos inherit dev v$ol1
++	__simple_if_init g1b v$ol1 192.0.2.81/32
++	ip route add vrf v$ol1 192.0.2.82/32 via 192.0.2.146
++
++	ip route add vrf v$ol1 192.0.2.16/28 \
++	   nexthop dev g1a \
++	   nexthop dev g1b
++	ip route add vrf v$ol1 2001:db8:2::/64 \
++	   nexthop dev g1a \
++	   nexthop dev g1b
++
++	tc qdisc add dev $ul1 clsact
++	tc filter add dev $ul1 egress pref 111 prot 802.1q \
++	   flower vlan_id 111 action pass
++	tc filter add dev $ul1 egress pref 222 prot 802.1q \
++	   flower vlan_id 222 action pass
++}
++
++sw1_destroy()
++{
++	tc qdisc del dev $ul1 clsact
++
++	ip route del vrf v$ol1 2001:db8:2::/64
++	ip route del vrf v$ol1 192.0.2.16/28
++
++	ip route del vrf v$ol1 192.0.2.82/32 via 192.0.2.146
++	__simple_if_fini g1b 192.0.2.81/32
++	tunnel_destroy g1b
++
++	ip route del vrf v$ol1 192.0.2.66/32 via 192.0.2.130
++	__simple_if_fini g1a 192.0.2.65/32
++	tunnel_destroy g1a
++
++	vlan_destroy $ul1 222
++	vlan_destroy $ul1 111
++	__simple_if_fini $ul1
++	simple_if_fini $ol1 192.0.2.2/28 2001:db8:1::2/64
++}
++
++sw2_create()
++{
++	simple_if_init $ol2 192.0.2.17/28 2001:db8:2::1/64
++	__simple_if_init $ul2 v$ol2
++	vlan_create $ul2 111 v$ol2 192.0.2.130/28
++	vlan_create $ul2 222 v$ol2 192.0.2.146/28
++
++	tunnel_create g2a gre 192.0.2.66 192.0.2.65 tos inherit dev v$ol2
++	__simple_if_init g2a v$ol2 192.0.2.66/32
++	ip route add vrf v$ol2 192.0.2.65/32 via 192.0.2.129
++
++	tunnel_create g2b gre 192.0.2.82 192.0.2.81 tos inherit dev v$ol2
++	__simple_if_init g2b v$ol2 192.0.2.82/32
++	ip route add vrf v$ol2 192.0.2.81/32 via 192.0.2.145
++
++	ip route add vrf v$ol2 192.0.2.0/28 \
++	   nexthop dev g2a \
++	   nexthop dev g2b
++	ip route add vrf v$ol2 2001:db8:1::/64 \
++	   nexthop dev g2a \
++	   nexthop dev g2b
++}
++
++sw2_destroy()
++{
++	ip route del vrf v$ol2 2001:db8:1::/64
++	ip route del vrf v$ol2 192.0.2.0/28
++
++	ip route del vrf v$ol2 192.0.2.81/32 via 192.0.2.145
++	__simple_if_fini g2b 192.0.2.82/32
++	tunnel_destroy g2b
++
++	ip route del vrf v$ol2 192.0.2.65/32 via 192.0.2.129
++	__simple_if_fini g2a 192.0.2.66/32
++	tunnel_destroy g2a
++
++	vlan_destroy $ul2 222
++	vlan_destroy $ul2 111
++	__simple_if_fini $ul2
++	simple_if_fini $ol2 192.0.2.17/28 2001:db8:2::1/64
++}
++
++h2_create()
++{
++	simple_if_init $h2 192.0.2.18/28 2001:db8:2::2/64
++	ip route add vrf v$h2 192.0.2.0/28 via 192.0.2.17
++	ip route add vrf v$h2 2001:db8:1::/64 via 2001:db8:2::1
++}
++
++h2_destroy()
++{
++	ip route del vrf v$h2 2001:db8:1::/64 via 2001:db8:2::1
++	ip route del vrf v$h2 192.0.2.0/28 via 192.0.2.17
++	simple_if_fini $h2 192.0.2.18/28 2001:db8:2::2/64
++}
++
++setup_prepare()
++{
++	h1=${NETIFS[p1]}
++	ol1=${NETIFS[p2]}
++
++	ul1=${NETIFS[p3]}
++	ul2=${NETIFS[p4]}
++
++	ol2=${NETIFS[p5]}
++	h2=${NETIFS[p6]}
++
++	vrf_prepare
++	h1_create
++	sw1_create
++	sw2_create
++	h2_create
++}
++
++cleanup()
++{
++	pre_cleanup
++
++	h2_destroy
++	sw2_destroy
++	sw1_destroy
++	h1_destroy
++	vrf_cleanup
++}
++
++multipath4_test()
++{
++	local what=$1; shift
++	local weight1=$1; shift
++	local weight2=$1; shift
++
++	sysctl_set net.ipv4.fib_multipath_hash_policy 1
++	ip route replace vrf v$ol1 192.0.2.16/28 \
++	   nexthop dev g1a weight $weight1 \
++	   nexthop dev g1b weight $weight2
++
++	local t0_111=$(tc_rule_stats_get $ul1 111 egress)
++	local t0_222=$(tc_rule_stats_get $ul1 222 egress)
++
++	ip vrf exec v$h1 \
++	   $MZ $h1 -q -p 64 -A 192.0.2.1 -B 192.0.2.18 \
++	       -d 1msec -t udp "sp=1024,dp=0-32768"
++
++	local t1_111=$(tc_rule_stats_get $ul1 111 egress)
++	local t1_222=$(tc_rule_stats_get $ul1 222 egress)
++
++	local d111=$((t1_111 - t0_111))
++	local d222=$((t1_222 - t0_222))
++	multipath_eval "$what" $weight1 $weight2 $d111 $d222
++
++	ip route replace vrf v$ol1 192.0.2.16/28 \
++	   nexthop dev g1a \
++	   nexthop dev g1b
++	sysctl_restore net.ipv4.fib_multipath_hash_policy
++}
++
++multipath6_l4_test()
++{
++	local what=$1; shift
++	local weight1=$1; shift
++	local weight2=$1; shift
++
++	sysctl_set net.ipv6.fib_multipath_hash_policy 1
++	ip route replace vrf v$ol1 2001:db8:2::/64 \
++	   nexthop dev g1a weight $weight1 \
++	   nexthop dev g1b weight $weight2
++
++	local t0_111=$(tc_rule_stats_get $ul1 111 egress)
++	local t0_222=$(tc_rule_stats_get $ul1 222 egress)
++
++	ip vrf exec v$h1 \
++	   $MZ $h1 -6 -q -p 64 -A 2001:db8:1::1 -B 2001:db8:2::2 \
++	       -d 1msec -t udp "sp=1024,dp=0-32768"
++
++	local t1_111=$(tc_rule_stats_get $ul1 111 egress)
++	local t1_222=$(tc_rule_stats_get $ul1 222 egress)
++
++	local d111=$((t1_111 - t0_111))
++	local d222=$((t1_222 - t0_222))
++	multipath_eval "$what" $weight1 $weight2 $d111 $d222
++
++	ip route replace vrf v$ol1 2001:db8:2::/64 \
++	   nexthop dev g1a \
++	   nexthop dev g1b
++	sysctl_restore net.ipv6.fib_multipath_hash_policy
++}
++
++multipath6_test()
++{
++	local what=$1; shift
++	local weight1=$1; shift
++	local weight2=$1; shift
++
++	ip route replace vrf v$ol1 2001:db8:2::/64 \
++	   nexthop dev g1a weight $weight1 \
++	   nexthop dev g1b weight $weight2
++
++	local t0_111=$(tc_rule_stats_get $ul1 111 egress)
++	local t0_222=$(tc_rule_stats_get $ul1 222 egress)
++
++        # Generate 16384 echo requests, each with a random flow label.
++	for ((i=0; i < 16384; ++i)); do
++		ip vrf exec v$h1 $PING6 2001:db8:2::2 -F 0 -c 1 -q &> /dev/null
++	done
++
++	local t1_111=$(tc_rule_stats_get $ul1 111 egress)
++	local t1_222=$(tc_rule_stats_get $ul1 222 egress)
++
++	local d111=$((t1_111 - t0_111))
++	local d222=$((t1_222 - t0_222))
++	multipath_eval "$what" $weight1 $weight2 $d111 $d222
++
++	ip route replace vrf v$ol1 2001:db8:2::/64 \
++	   nexthop dev g1a \
++	   nexthop dev g1b
++}
++
++ping_ipv4()
++{
++	ping_test $h1 192.0.2.18
++}
++
++ping_ipv6()
++{
++	ping6_test $h1 2001:db8:2::2
++}
++
++multipath_ipv4()
++{
++	log_info "Running IPv4 multipath tests"
++	multipath4_test "ECMP" 1 1
++	multipath4_test "Weighted MP 2:1" 2 1
++	multipath4_test "Weighted MP 11:45" 11 45
++}
++
++multipath_ipv6()
++{
++	log_info "Running IPv6 multipath tests"
++	multipath6_test "ECMP" 1 1
++	multipath6_test "Weighted MP 2:1" 2 1
++	multipath6_test "Weighted MP 11:45" 11 45
++}
++
++multipath_ipv6_l4()
++{
++	log_info "Running IPv6 L4 hash multipath tests"
++	multipath6_l4_test "ECMP" 1 1
++	multipath6_l4_test "Weighted MP 2:1" 2 1
++	multipath6_l4_test "Weighted MP 11:45" 11 45
++}
++
++trap cleanup EXIT
++
++setup_prepare
++setup_wait
++tests_run
++
++exit $EXIT_STATUS
 -- 
 2.4.11
 
