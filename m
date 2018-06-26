@@ -1,442 +1,151 @@
 From: shannon.nelson at oracle.com (Shannon Nelson)
-Date: Tue, 26 Jun 2018 10:07:54 -0700
-Subject: [PATCH v3 net-next 3/4] netdevsim: add ipsec offload testing
+Date: Tue, 26 Jun 2018 10:07:55 -0700
+Subject: [PATCH v3 net-next 4/4] selftests: rtnetlink: add ipsec offload API
+ test
 In-Reply-To: <1530032875-30482-1-git-send-email-shannon.nelson@oracle.com>
 References: <1530032875-30482-1-git-send-email-shannon.nelson@oracle.com>
-Message-ID: <1530032875-30482-4-git-send-email-shannon.nelson@oracle.com>
+Message-ID: <1530032875-30482-5-git-send-email-shannon.nelson@oracle.com>
 
-Implement the IPsec/XFRM offload API for testing.
+Using the netdevsim as a device for testing, try out the XFRM commands
+for setting up IPsec hardware offloads.
 
 Signed-off-by: Shannon Nelson <shannon.nelson at oracle.com>
 ---
-V2 - addressed formatting comments from Jakub Kicinski
-V3 - a couple more little xmas tree nits
+ tools/testing/selftests/net/rtnetlink.sh | 114 +++++++++++++++++++++++++++++++
+ 1 file changed, 114 insertions(+)
 
- drivers/net/netdevsim/Makefile    |   4 +
- drivers/net/netdevsim/ipsec.c     | 297 ++++++++++++++++++++++++++++++++++++++
- drivers/net/netdevsim/netdev.c    |   7 +
- drivers/net/netdevsim/netdevsim.h |  41 ++++++
- 4 files changed, 349 insertions(+)
- create mode 100644 drivers/net/netdevsim/ipsec.c
-
-diff --git a/drivers/net/netdevsim/Makefile b/drivers/net/netdevsim/Makefile
-index 449b2a1..0fee1d0 100644
---- a/drivers/net/netdevsim/Makefile
-+++ b/drivers/net/netdevsim/Makefile
-@@ -13,3 +13,7 @@ endif
- ifneq ($(CONFIG_NET_DEVLINK),)
- netdevsim-objs += devlink.o fib.o
- endif
-+
-+ifneq ($(CONFIG_XFRM_OFFLOAD),)
-+netdevsim-objs += ipsec.o
-+endif
-diff --git a/drivers/net/netdevsim/ipsec.c b/drivers/net/netdevsim/ipsec.c
-new file mode 100644
-index 0000000..ceff544
---- /dev/null
-+++ b/drivers/net/netdevsim/ipsec.c
-@@ -0,0 +1,297 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright(c) 2018 Oracle and/or its affiliates. All rights reserved. */
-+
-+#include <crypto/aead.h>
-+#include <linux/debugfs.h>
-+#include <net/xfrm.h>
-+
-+#include "netdevsim.h"
-+
-+#define NSIM_IPSEC_AUTH_BITS	128
-+
-+static ssize_t nsim_dbg_netdev_ops_read(struct file *filp,
-+					char __user *buffer,
-+					size_t count, loff_t *ppos)
-+{
-+	struct netdevsim *ns = filp->private_data;
-+	struct nsim_ipsec *ipsec = &ns->ipsec;
-+	size_t bufsize;
-+	char *buf, *p;
-+	int len;
-+	int i;
-+
-+	/* the buffer needed is
-+	 * (num SAs * 3 lines each * ~60 bytes per line) + one more line
-+	 */
-+	bufsize = (ipsec->count * 4 * 60) + 60;
-+	buf = kzalloc(bufsize, GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	p = buf;
-+	p += snprintf(p, bufsize - (p - buf),
-+		      "SA count=%u tx=%u\n",
-+		      ipsec->count, ipsec->tx);
-+
-+	for (i = 0; i < NSIM_IPSEC_MAX_SA_COUNT; i++) {
-+		struct nsim_sa *sap = &ipsec->sa[i];
-+
-+		if (!sap->used)
-+			continue;
-+
-+		p += snprintf(p, bufsize - (p - buf),
-+			      "sa[%i] %cx ipaddr=0x%08x %08x %08x %08x\n",
-+			      i, (sap->rx ? 'r' : 't'), sap->ipaddr[0],
-+			      sap->ipaddr[1], sap->ipaddr[2], sap->ipaddr[3]);
-+		p += snprintf(p, bufsize - (p - buf),
-+			      "sa[%i]    spi=0x%08x proto=0x%x salt=0x%08x crypt=%d\n",
-+			      i, be32_to_cpu(sap->xs->id.spi),
-+			      sap->xs->id.proto, sap->salt, sap->crypt);
-+		p += snprintf(p, bufsize - (p - buf),
-+			      "sa[%i]    key=0x%08x %08x %08x %08x\n",
-+			      i, sap->key[0], sap->key[1],
-+			      sap->key[2], sap->key[3]);
-+	}
-+
-+	len = simple_read_from_buffer(buffer, count, ppos, buf, p - buf);
-+
-+	kfree(buf);
-+	return len;
-+}
-+
-+static const struct file_operations ipsec_dbg_fops = {
-+	.owner = THIS_MODULE,
-+	.open = simple_open,
-+	.read = nsim_dbg_netdev_ops_read,
-+};
-+
-+static int nsim_ipsec_find_empty_idx(struct nsim_ipsec *ipsec)
-+{
-+	u32 i;
-+
-+	if (ipsec->count == NSIM_IPSEC_MAX_SA_COUNT)
-+		return -ENOSPC;
-+
-+	/* search sa table */
-+	for (i = 0; i < NSIM_IPSEC_MAX_SA_COUNT; i++) {
-+		if (!ipsec->sa[i].used)
-+			return i;
-+	}
-+
-+	return -ENOSPC;
-+}
-+
-+static int nsim_ipsec_parse_proto_keys(struct xfrm_state *xs,
-+				       u32 *mykey, u32 *mysalt)
-+{
-+	const char aes_gcm_name[] = "rfc4106(gcm(aes))";
-+	struct net_device *dev = xs->xso.dev;
-+	unsigned char *key_data;
-+	char *alg_name = NULL;
-+	int key_len;
-+
-+	if (!xs->aead) {
-+		netdev_err(dev, "Unsupported IPsec algorithm\n");
-+		return -EINVAL;
-+	}
-+
-+	if (xs->aead->alg_icv_len != NSIM_IPSEC_AUTH_BITS) {
-+		netdev_err(dev, "IPsec offload requires %d bit authentication\n",
-+			   NSIM_IPSEC_AUTH_BITS);
-+		return -EINVAL;
-+	}
-+
-+	key_data = &xs->aead->alg_key[0];
-+	key_len = xs->aead->alg_key_len;
-+	alg_name = xs->aead->alg_name;
-+
-+	if (strcmp(alg_name, aes_gcm_name)) {
-+		netdev_err(dev, "Unsupported IPsec algorithm - please use %s\n",
-+			   aes_gcm_name);
-+		return -EINVAL;
-+	}
-+
-+	/* 160 accounts for 16 byte key and 4 byte salt */
-+	if (key_len > NSIM_IPSEC_AUTH_BITS) {
-+		*mysalt = ((u32 *)key_data)[4];
-+	} else if (key_len == NSIM_IPSEC_AUTH_BITS) {
-+		*mysalt = 0;
-+	} else {
-+		netdev_err(dev, "IPsec hw offload only supports 128 bit keys with optional 32 bit salt\n");
-+		return -EINVAL;
-+	}
-+	memcpy(mykey, key_data, 16);
-+
-+	return 0;
-+}
-+
-+static int nsim_ipsec_add_sa(struct xfrm_state *xs)
-+{
-+	struct nsim_ipsec *ipsec;
-+	struct net_device *dev;
-+	struct netdevsim *ns;
-+	struct nsim_sa sa;
-+	u16 sa_idx;
-+	int ret;
-+
-+	dev = xs->xso.dev;
-+	ns = netdev_priv(dev);
-+	ipsec = &ns->ipsec;
-+
-+	if (xs->id.proto != IPPROTO_ESP && xs->id.proto != IPPROTO_AH) {
-+		netdev_err(dev, "Unsupported protocol 0x%04x for ipsec offload\n",
-+			   xs->id.proto);
-+		return -EINVAL;
-+	}
-+
-+	if (xs->calg) {
-+		netdev_err(dev, "Compression offload not supported\n");
-+		return -EINVAL;
-+	}
-+
-+	/* find the first unused index */
-+	ret = nsim_ipsec_find_empty_idx(ipsec);
-+	if (ret < 0) {
-+		netdev_err(dev, "No space for SA in Rx table!\n");
-+		return ret;
-+	}
-+	sa_idx = (u16)ret;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.used = true;
-+	sa.xs = xs;
-+
-+	if (sa.xs->id.proto & IPPROTO_ESP)
-+		sa.crypt = xs->ealg || xs->aead;
-+
-+	/* get the key and salt */
-+	ret = nsim_ipsec_parse_proto_keys(xs, sa.key, &sa.salt);
-+	if (ret) {
-+		netdev_err(dev, "Failed to get key data for SA table\n");
-+		return ret;
-+	}
-+
-+	if (xs->xso.flags & XFRM_OFFLOAD_INBOUND) {
-+		sa.rx = true;
-+
-+		if (xs->props.family == AF_INET6)
-+			memcpy(sa.ipaddr, &xs->id.daddr.a6, 16);
-+		else
-+			memcpy(&sa.ipaddr[3], &xs->id.daddr.a4, 4);
-+	}
-+
-+	/* the preparations worked, so save the info */
-+	memcpy(&ipsec->sa[sa_idx], &sa, sizeof(sa));
-+
-+	/* the XFRM stack doesn't like offload_handle == 0,
-+	 * so add a bitflag in case our array index is 0
-+	 */
-+	xs->xso.offload_handle = sa_idx | NSIM_IPSEC_VALID;
-+	ipsec->count++;
-+
-+	return 0;
-+}
-+
-+static void nsim_ipsec_del_sa(struct xfrm_state *xs)
-+{
-+	struct netdevsim *ns = netdev_priv(xs->xso.dev);
-+	struct nsim_ipsec *ipsec = &ns->ipsec;
-+	u16 sa_idx;
-+
-+	sa_idx = xs->xso.offload_handle & ~NSIM_IPSEC_VALID;
-+	if (!ipsec->sa[sa_idx].used) {
-+		netdev_err(ns->netdev, "Invalid SA for delete sa_idx=%d\n",
-+			   sa_idx);
-+		return;
-+	}
-+
-+	memset(&ipsec->sa[sa_idx], 0, sizeof(struct nsim_sa));
-+	ipsec->count--;
-+}
-+
-+static bool nsim_ipsec_offload_ok(struct sk_buff *skb, struct xfrm_state *xs)
-+{
-+	struct netdevsim *ns = netdev_priv(xs->xso.dev);
-+	struct nsim_ipsec *ipsec = &ns->ipsec;
-+
-+	ipsec->ok++;
-+
-+	return true;
-+}
-+
-+static const struct xfrmdev_ops nsim_xfrmdev_ops = {
-+	.xdo_dev_state_add	= nsim_ipsec_add_sa,
-+	.xdo_dev_state_delete	= nsim_ipsec_del_sa,
-+	.xdo_dev_offload_ok	= nsim_ipsec_offload_ok,
-+};
-+
-+bool nsim_ipsec_tx(struct netdevsim *ns, struct sk_buff *skb)
-+{
-+	struct nsim_ipsec *ipsec = &ns->ipsec;
-+	struct xfrm_state *xs;
-+	struct nsim_sa *tsa;
-+	u32 sa_idx;
-+
-+	/* do we even need to check this packet? */
-+	if (!skb->sp)
-+		return true;
-+
-+	if (unlikely(!skb->sp->len)) {
-+		netdev_err(ns->netdev, "no xfrm state len = %d\n",
-+			   skb->sp->len);
-+		return false;
-+	}
-+
-+	xs = xfrm_input_state(skb);
-+	if (unlikely(!xs)) {
-+		netdev_err(ns->netdev, "no xfrm_input_state() xs = %p\n", xs);
-+		return false;
-+	}
-+
-+	sa_idx = xs->xso.offload_handle & ~NSIM_IPSEC_VALID;
-+	if (unlikely(sa_idx > NSIM_IPSEC_MAX_SA_COUNT)) {
-+		netdev_err(ns->netdev, "bad sa_idx=%d max=%d\n",
-+			   sa_idx, NSIM_IPSEC_MAX_SA_COUNT);
-+		return false;
-+	}
-+
-+	tsa = &ipsec->sa[sa_idx];
-+	if (unlikely(!tsa->used)) {
-+		netdev_err(ns->netdev, "unused sa_idx=%d\n", sa_idx);
-+		return false;
-+	}
-+
-+	if (xs->id.proto != IPPROTO_ESP && xs->id.proto != IPPROTO_AH) {
-+		netdev_err(ns->netdev, "unexpected proto=%d\n", xs->id.proto);
-+		return false;
-+	}
-+
-+	ipsec->tx++;
-+
-+	return true;
-+}
-+
-+void nsim_ipsec_init(struct netdevsim *ns)
-+{
-+	ns->netdev->xfrmdev_ops = &nsim_xfrmdev_ops;
-+
-+#define NSIM_ESP_FEATURES	(NETIF_F_HW_ESP | \
-+				 NETIF_F_HW_ESP_TX_CSUM | \
-+				 NETIF_F_GSO_ESP)
-+
-+	ns->netdev->features |= NSIM_ESP_FEATURES;
-+	ns->netdev->hw_enc_features |= NSIM_ESP_FEATURES;
-+
-+	ns->ipsec.pfile = debugfs_create_file("ipsec", 0400, ns->ddir, ns,
-+					      &ipsec_dbg_fops);
-+}
-+
-+void nsim_ipsec_teardown(struct netdevsim *ns)
-+{
-+	struct nsim_ipsec *ipsec = &ns->ipsec;
-+
-+	if (ipsec->count)
-+		netdev_err(ns->netdev, "tearing down IPsec offload with %d SAs left\n",
-+			   ipsec->count);
-+	debugfs_remove_recursive(ipsec->pfile);
-+}
-diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-index ec68f38..6ce8604d 100644
---- a/drivers/net/netdevsim/netdev.c
-+++ b/drivers/net/netdevsim/netdev.c
-@@ -171,6 +171,8 @@ static int nsim_init(struct net_device *dev)
- 	if (err)
- 		goto err_unreg_dev;
- 
-+	nsim_ipsec_init(ns);
-+
- 	return 0;
- 
- err_unreg_dev:
-@@ -186,6 +188,7 @@ static void nsim_uninit(struct net_device *dev)
- {
- 	struct netdevsim *ns = netdev_priv(dev);
- 
-+	nsim_ipsec_teardown(ns);
- 	nsim_devlink_teardown(ns);
- 	debugfs_remove_recursive(ns->ddir);
- 	nsim_bpf_uninit(ns);
-@@ -203,11 +206,15 @@ static netdev_tx_t nsim_start_xmit(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct netdevsim *ns = netdev_priv(dev);
- 
-+	if (!nsim_ipsec_tx(ns, skb))
-+		goto out;
-+
- 	u64_stats_update_begin(&ns->syncp);
- 	ns->tx_packets++;
- 	ns->tx_bytes += skb->len;
- 	u64_stats_update_end(&ns->syncp);
- 
-+out:
- 	dev_kfree_skb(skb);
- 
- 	return NETDEV_TX_OK;
-diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
-index 3a8581a..29448e8 100644
---- a/drivers/net/netdevsim/netdevsim.h
-+++ b/drivers/net/netdevsim/netdevsim.h
-@@ -29,6 +29,27 @@ struct bpf_prog;
- struct dentry;
- struct nsim_vf_config;
- 
-+#define NSIM_IPSEC_MAX_SA_COUNT		33
-+#define NSIM_IPSEC_VALID		BIT(31)
-+
-+struct nsim_sa {
-+	struct xfrm_state *xs;
-+	__be32 ipaddr[4];
-+	u32 key[4];
-+	u32 salt;
-+	bool used;
-+	bool crypt;
-+	bool rx;
-+};
-+
-+struct nsim_ipsec {
-+	struct nsim_sa sa[NSIM_IPSEC_MAX_SA_COUNT];
-+	struct dentry *pfile;
-+	u32 count;
-+	u32 tx;
-+	u32 ok;
-+};
-+
- struct netdevsim {
- 	struct net_device *netdev;
- 
-@@ -67,6 +88,7 @@ struct netdevsim {
- #if IS_ENABLED(CONFIG_NET_DEVLINK)
- 	struct devlink *devlink;
- #endif
-+	struct nsim_ipsec ipsec;
- };
- 
- extern struct dentry *nsim_ddir;
-@@ -147,6 +169,25 @@ static inline void nsim_devlink_exit(void)
+diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+index 15948cf..9e1a82e 100755
+--- a/tools/testing/selftests/net/rtnetlink.sh
++++ b/tools/testing/selftests/net/rtnetlink.sh
+@@ -608,6 +608,119 @@ kci_test_ipsec()
+ 	echo "PASS: ipsec"
  }
- #endif
  
-+#if IS_ENABLED(CONFIG_XFRM_OFFLOAD)
-+void nsim_ipsec_init(struct netdevsim *ns);
-+void nsim_ipsec_teardown(struct netdevsim *ns);
-+bool nsim_ipsec_tx(struct netdevsim *ns, struct sk_buff *skb);
-+#else
-+static inline void nsim_ipsec_init(struct netdevsim *ns)
++#-------------------------------------------------------------------
++# Example commands
++#   ip x s add proto esp src 14.0.0.52 dst 14.0.0.70 \
++#            spi 0x07 mode transport reqid 0x07 replay-window 32 \
++#            aead 'rfc4106(gcm(aes))' 1234567890123456dcba 128 \
++#            sel src 14.0.0.52/24 dst 14.0.0.70/24
++#            offload dev sim1 dir out
++#   ip x p add dir out src 14.0.0.52/24 dst 14.0.0.70/24 \
++#            tmpl proto esp src 14.0.0.52 dst 14.0.0.70 \
++#            spi 0x07 mode transport reqid 0x07
++#
++#-------------------------------------------------------------------
++kci_test_ipsec_offload()
 +{
++	ret=0
++	algo="aead rfc4106(gcm(aes)) 0x3132333435363738393031323334353664636261 128"
++	srcip=192.168.123.3
++	dstip=192.168.123.4
++	dev=simx1
++	sysfsd=/sys/kernel/debug/netdevsim/$dev
++	sysfsf=$sysfsd/ipsec
++
++	# setup netdevsim since dummydev doesn't have offload support
++	modprobe netdevsim
++	check_err $?
++	if [ $ret -ne 0 ]; then
++		echo "FAIL: ipsec_offload can't load netdevsim"
++		return 1
++	fi
++
++	ip link add $dev type netdevsim
++	ip addr add $srcip dev $dev
++	ip link set $dev up
++	if [ ! -d $sysfsd ] ; then
++		echo "FAIL: ipsec_offload can't create device $dev"
++		return 1
++	fi
++	if [ ! -f $sysfsf ] ; then
++		echo "FAIL: ipsec_offload netdevsim doesn't support IPsec offload"
++		return 1
++	fi
++
++	# flush to be sure there's nothing configured
++	ip x s flush ; ip x p flush
++
++	# create offloaded SAs, both in and out
++	ip x p add dir out src $srcip/24 dst $dstip/24 \
++	    tmpl proto esp src $srcip dst $dstip spi 9 \
++	    mode transport reqid 42
++	check_err $?
++	ip x p add dir out src $dstip/24 dst $srcip/24 \
++	    tmpl proto esp src $dstip dst $srcip spi 9 \
++	    mode transport reqid 42
++	check_err $?
++
++	ip x s add proto esp src $srcip dst $dstip spi 9 \
++	    mode transport reqid 42 $algo sel src $srcip/24 dst $dstip/24 \
++	    offload dev $dev dir out
++	check_err $?
++	ip x s add proto esp src $dstip dst $srcip spi 9 \
++	    mode transport reqid 42 $algo sel src $dstip/24 dst $srcip/24 \
++	    offload dev $dev dir in
++	check_err $?
++	if [ $ret -ne 0 ]; then
++		echo "FAIL: ipsec_offload can't create SA"
++		return 1
++	fi
++
++	# does offload show up in ip output
++	lines=`ip x s list | grep -c "crypto offload parameters: dev $dev dir"`
++	if [ $lines -ne 2 ] ; then
++		echo "FAIL: ipsec_offload SA offload missing from list output"
++		check_err 1
++	fi
++
++	# use ping to exercise the Tx path
++	ping -I $dev -c 3 -W 1 -i 0 $dstip >/dev/null
++
++	# does driver have correct offload info
++	diff $sysfsf - << EOF
++SA count=2 tx=3
++sa[0] tx ipaddr=0x00000000 00000000 00000000 00000000
++sa[0]    spi=0x00000009 proto=0x32 salt=0x61626364 crypt=1
++sa[0]    key=0x34333231 38373635 32313039 36353433
++sa[1] rx ipaddr=0x00000000 00000000 00000000 037ba8c0
++sa[1]    spi=0x00000009 proto=0x32 salt=0x61626364 crypt=1
++sa[1]    key=0x34333231 38373635 32313039 36353433
++EOF
++	if [ $? -ne 0 ] ; then
++		echo "FAIL: ipsec_offload incorrect driver data"
++		check_err 1
++	fi
++
++	# does offload get removed from driver
++	ip x s flush
++	ip x p flush
++	lines=`grep -c "SA count=0" $sysfsf`
++	if [ $lines -ne 1 ] ; then
++		echo "FAIL: ipsec_offload SA not removed from driver"
++		check_err 1
++	fi
++
++	# clean up any leftovers
++	ip link del $dev
++	rmmod netdevsim
++
++	if [ $ret -ne 0 ]; then
++		echo "FAIL: ipsec_offload"
++		return 1
++	fi
++	echo "PASS: ipsec_offload"
 +}
 +
-+static inline void nsim_ipsec_teardown(struct netdevsim *ns)
-+{
-+}
-+
-+static inline bool nsim_ipsec_tx(struct netdevsim *ns, struct sk_buff *skb)
-+{
-+	return true;
-+}
-+#endif
-+
- static inline struct netdevsim *to_nsim(struct device *ptr)
+ kci_test_gretap()
  {
- 	return container_of(ptr, struct netdevsim, dev);
+ 	testns="testns"
+@@ -862,6 +975,7 @@ kci_test_rtnl()
+ 	kci_test_encap
+ 	kci_test_macsec
+ 	kci_test_ipsec
++	kci_test_ipsec_offload
+ 
+ 	kci_del_dummy
+ }
 -- 
 2.7.4
 
