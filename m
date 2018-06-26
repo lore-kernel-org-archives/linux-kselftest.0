@@ -1,16 +1,17 @@
 From: daniel at iogearbox.net (Daniel Borkmann)
-Date: Tue, 26 Jun 2018 12:22:23 +0200
-Subject: [PATCH v2] selftests: bpf: notification about privilege required
- to run test_lwt_seg6local.sh testing script
-In-Reply-To: <20180622214032.6527-1-ahiliation@gmail.com>
-References: <20180622214032.6527-1-ahiliation@gmail.com>
-Message-ID: <b10965e2-1187-2cc1-f51f-20a489a77d2d@iogearbox.net>
+Date: Tue, 26 Jun 2018 12:22:45 +0200
+Subject: [PATCH] selftests: bpf: notification about privilege required to
+ run test_lirc_mode2.sh testing script
+In-Reply-To: <20180622185417.3452-1-ahiliation@gmail.com>
+References: <20180622185417.3452-1-ahiliation@gmail.com>
+Message-ID: <382273ea-c7c7-fc48-0ca5-0b7d35f7803d@iogearbox.net>
 
-On 06/22/2018 11:40 PM, Jeffrin Jose T wrote:
-> This test needs root privilege for it's successful execution.
+On 06/22/2018 08:54 PM, Jeffrin Jose T wrote:
+> The test_lirc_mode2.sh script require root privilege for the successful
+> execution of the test.
 > 
-> This patch is atleast used to notify the user about the privilege
-> the script demands for the  smooth execution of the test.
+> This patch is to notify the user about the privilege the script
+> demands for the successful execution of the test.
 > 
 > Signed-off-by: Jeffrin Jose T (Rajagiri SET) <ahiliation at gmail.com>
 
