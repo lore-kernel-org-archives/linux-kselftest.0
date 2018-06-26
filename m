@@ -1,28 +1,29 @@
-From: davem@davemloft.net (David Miller)
-Date: Tue, 26 Jun 2018 23:25:46 +0900 (KST)
-Subject: [PATCH net-next] selftests: forwarding:
- mirror_gre_vlan_bridge_1q: Unset rp_filter
-In-Reply-To: <66d218fb95026460e240752eec3af58920a14d86.1529968802.git.petrm@mellanox.com>
-References: <66d218fb95026460e240752eec3af58920a14d86.1529968802.git.petrm@mellanox.com>
-Message-ID: <20180626.232546.1490966337335126755.davem@davemloft.net>
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Tue, 26 Jun 2018 17:32:13 +0200
+Subject: [PATCH] selftests: mount: remove no longer needed config option
+Message-ID: <20180626153213.676-1-anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180626142546.t7tbeDgFKAMb2GeAV4wT2QCUXTLwYU34Az5iyVxJHpU@z>
+Message-ID: <20180626153213.qV0a1SiN6_vA8PhvPJkBimHadumjrxLn8ylO1Zxg_8o@z>
 
-From: Petr Machata <petrm@mellanox.com>
-Date: Tue, 26 Jun 2018 01:20:32 +0200
+Since commit eedf265aa003 ("devpts: Make each mount of devpts an
+independent filesystem.") CONFIG_DEVPTS_MULTIPLE_INSTANCES isn't needed
+in the defconfig anymore.
 
-> The IP addresses of tunnel endpoint at H3 are set at the VLAN device
-> $h3.555. Therefore when test_gretap_untagged_egress() sets vlan 555 to
-> egress untagged at $swp3, $h3's rp_filter rejects these packets. The
-> test then spuriously fails.
-> 
-> Therefore turn off net.ipv4.conf.{all, $h3}.rp_filter.
-> 
-> Fixes: 9c7c8a82442c ("selftests: forwarding: mirror_gre_vlan_bridge_1q: Add more tests")
-> Signed-off-by: Petr Machata <petrm at mellanox.com>
-> Reviewed-by: Ido Schimmel <idosch at mellanox.com>
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+---
+ tools/testing/selftests/mount/config | 1 -
+ 1 file changed, 1 deletion(-)
 
-Applied.
+diff --git a/tools/testing/selftests/mount/config b/tools/testing/selftests/mount/config
+index b5d881e48548..416bd53ce982 100644
+--- a/tools/testing/selftests/mount/config
++++ b/tools/testing/selftests/mount/config
+@@ -1,2 +1 @@
+ CONFIG_USER_NS=y
+-CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
+-- 
+2.18.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
