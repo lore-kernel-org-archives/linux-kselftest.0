@@ -1,116 +1,47 @@
 From: guro at fb.com (Roman Gushchin)
-Date: Tue, 26 Jun 2018 10:14:10 -0700
-Subject: [PATCH] selftests: cgroup: fix cleanup path in
- test_memcg_subtree_control()
+Date: Tue, 26 Jun 2018 10:15:22 -0700
+Subject: [bug report] selftests: cgroup: add memory controller self-tests
 In-Reply-To: <20180626090347.cuwod4fv5koqbu63@kili.mountain>
 References: <20180626090347.cuwod4fv5koqbu63@kili.mountain>
-Message-ID: <20180626171410.10303-1-guro@fb.com>
+Message-ID: <20180626171520.GA10359@castle.DHCP.thefacebook.com>
 
-Dan reported, that clenaup path in test_memcg_subtree_control()
-triggers a static checker warning:
-  ./tools/testing/selftests/cgroup/test_memcontrol.c:76 \
-  test_memcg_subtree_control()
-  error: uninitialized symbol 'child2'.
+On Tue, Jun 26, 2018 at 12:03:48PM +0300, Dan Carpenter wrote:
+> Hello Roman Gushchin,
+> 
+> The patch 84092dbcf901: "selftests: cgroup: add memory controller
+> self-tests" from May 11, 2018, leads to the following static checker
+> warning:
+> 
+> 	./tools/testing/selftests/cgroup/test_memcontrol.c:76 test_memcg_subtree_control()
+> 	error: uninitialized symbol 'child2'.
+> 
+> ./tools/testing/selftests/cgroup/test_memcontrol.c
+>     69  
+>     70  cleanup:
+>     71          cg_destroy(child);
+>     72          cg_destroy(parent);
+>     73          free(parent);
+>     74          free(child);
+>     75  
+>     76          cg_destroy(child2);
+> 
+> The problem with using one error label to handle all possible returns
+> is that some stuff hasn't been initialized yet.
+> 
+>     77          cg_destroy(parent2);
+>     78          free(parent2);
+>     79          free(child2);
+>     80  
+>     81          return ret;
+>     82  }
 
-Fix this by initializing child2 and parent2 variables and
-split the cleanup path into few stages.
+Hello, Dan!
 
-Signed-off-by: Roman Gushchin <guro at fb.com>
-Fixes: 84092dbcf901 ("selftests: cgroup: add memory controller self-tests")
-Reported-by: Dan Carpenter <dan.carpenter at oracle.com>
-Cc: Shuah Khan (Samsung OSG) <shuah at kernel.org>
-Cc: Mike Rapoport <rppt at linux.vnet.ibm.com>
----
- tools/testing/selftests/cgroup/test_memcontrol.c | 38 +++++++++++++-----------
- 1 file changed, 21 insertions(+), 17 deletions(-)
+Thanks for the report!
+Just sent the fix.
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index cf0bddc9d271..ae8f04f84b03 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -25,7 +25,7 @@
-  */
- static int test_memcg_subtree_control(const char *root)
- {
--	char *parent, *child, *parent2, *child2;
-+	char *parent, *child, *parent2 = NULL, *child2 = NULL;
- 	int ret = KSFT_FAIL;
- 	char buf[PAGE_SIZE];
- 
-@@ -33,50 +33,54 @@ static int test_memcg_subtree_control(const char *root)
- 	parent = cg_name(root, "memcg_test_0");
- 	child = cg_name(root, "memcg_test_0/memcg_test_1");
- 	if (!parent || !child)
--		goto cleanup;
-+		goto cleanup_free;
- 
- 	if (cg_create(parent))
--		goto cleanup;
-+		goto cleanup_free;
- 
- 	if (cg_write(parent, "cgroup.subtree_control", "+memory"))
--		goto cleanup;
-+		goto cleanup_parent;
- 
- 	if (cg_create(child))
--		goto cleanup;
-+		goto cleanup_parent;
- 
- 	if (cg_read_strstr(child, "cgroup.controllers", "memory"))
--		goto cleanup;
-+		goto cleanup_child;
- 
- 	/* Create two nested cgroups without enabling memory controller */
- 	parent2 = cg_name(root, "memcg_test_1");
- 	child2 = cg_name(root, "memcg_test_1/memcg_test_1");
- 	if (!parent2 || !child2)
--		goto cleanup;
-+		goto cleanup_free2;
- 
- 	if (cg_create(parent2))
--		goto cleanup;
-+		goto cleanup_free2;
- 
- 	if (cg_create(child2))
--		goto cleanup;
-+		goto cleanup_parent2;
- 
- 	if (cg_read(child2, "cgroup.controllers", buf, sizeof(buf)))
--		goto cleanup;
-+		goto cleanup_all;
- 
- 	if (!cg_read_strstr(child2, "cgroup.controllers", "memory"))
--		goto cleanup;
-+		goto cleanup_all;
- 
- 	ret = KSFT_PASS;
- 
--cleanup:
--	cg_destroy(child);
--	cg_destroy(parent);
--	free(parent);
--	free(child);
--
-+cleanup_all:
- 	cg_destroy(child2);
-+cleanup_parent2:
- 	cg_destroy(parent2);
-+cleanup_free2:
- 	free(parent2);
- 	free(child2);
-+cleanup_child:
-+	cg_destroy(child);
-+cleanup_parent:
-+	cg_destroy(parent);
-+cleanup_free:
-+	free(parent);
-+	free(child);
- 
- 	return ret;
- }
--- 
-2.14.4
-
+Thanks,
+Roman
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
