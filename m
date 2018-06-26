@@ -1,40 +1,24 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Tue, 26 Jun 2018 12:22:28 -0600
-Subject: [PATCH] selftests/net: Fix permissions for fib_tests.sh
-In-Reply-To: <1529425232-25242-1-git-send-email-daniel.diaz@linaro.org>
-References: <1529425232-25242-1-git-send-email-daniel.diaz@linaro.org>
-Message-ID: <8f5b0575-2213-5f7a-5b08-7502f65a1d16@kernel.org>
+From: jakub.kicinski@netronome.com (Jakub Kicinski)
+Date: Tue, 26 Jun 2018 14:23:35 -0700
+Subject: [PATCH v3 net-next 3/4] netdevsim: add ipsec offload testing
+In-Reply-To: <1530032875-30482-4-git-send-email-shannon.nelson@oracle.com>
+References: <1530032875-30482-1-git-send-email-shannon.nelson@oracle.com>
+ <1530032875-30482-4-git-send-email-shannon.nelson@oracle.com>
+Message-ID: <20180626142335.1b53b484@cakuba.netronome.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180626182228.-pqVk-UAIAm6aOd_VjHkPeXPbxxDjYChjsdNG7LsA6c@z>
+Message-ID: <20180626212335.WeotVk_b8AlPgiPpU3XQ6_BtlvMq7udz5IgYFAURLmw@z>
 
-On 06/19/2018 10:20 AM, Daniel Díaz wrote:
-> fib_tests.sh became non-executable at some point. This is
-> what happens:
->   selftests: net: fib_tests.sh: Warning: file fib_tests.sh is
->   not executable, correct this.
->   not ok 1..11 selftests: net: fib_tests.sh [FAIL]
+On Tue, 26 Jun 2018 10:07:54 -0700, Shannon Nelson wrote:
+> Implement the IPsec/XFRM offload API for testing.
 > 
-> Fixes: d69faad76584 ("selftests: fib_tests: Add prefix route tests with metric")
-> 
-> Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
+> Signed-off-by: Shannon Nelson <shannon.nelson at oracle.com>
 > ---
->  tools/testing/selftests/net/fib_tests.sh | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  mode change 100644 => 100755 tools/testing/selftests/net/fib_tests.sh
-> 
-> diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-> old mode 100644
-> new mode 100755
-> 
+> V2 - addressed formatting comments from Jakub Kicinski
+> V3 - a couple more little xmas tree nits
 
-Hi David,
+Thank you! :)
 
-Are you planning to pick this up for 4.18-rc3 or later?
-
-Acked-by: Shuah Khan <shuah at kernel.org>
-
-thanks,
--- Shuah
+Reviewed-by: Jakub Kicinski <jakub.kicinski at netronome.com>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
