@@ -1,47 +1,39 @@
-From: dan.rue@linaro.org (Dan Rue)
-Date: Tue, 26 Jun 2018 11:06:43 -0600
-Subject: qemu-system-x86_64: mov_ss_trap_64 PANIC: double fault,
- error_code: 0x0
-In-Reply-To: <CALCETrWZ=sipwoVic16LM08+-FKV5knO7Cv3pSM_5w=KLCqTKw@mail.gmail.com>
-References: <CA+G9fYu0E0fM+WaFim1WKup5BZvjtGZ_4ii5FhTUjNZEqaAuwA@mail.gmail.com>
- <CALCETrWZ=sipwoVic16LM08+-FKV5knO7Cv3pSM_5w=KLCqTKw@mail.gmail.com>
-Message-ID: <20180626170643.r2znwqmc57gxep7p@xps>
+From: shannon.nelson@oracle.com (Shannon Nelson)
+Date: Tue, 26 Jun 2018 10:07:52 -0700
+Subject: [PATCH v3 net-next 1/4] selftests: rtnetlink: clear the return code
+ at start of ipsec test
+In-Reply-To: <1530032875-30482-1-git-send-email-shannon.nelson@oracle.com>
+References: <1530032875-30482-1-git-send-email-shannon.nelson@oracle.com>
+Message-ID: <1530032875-30482-2-git-send-email-shannon.nelson@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180626170643.lzQ8Pa9qRywlIy3Kkpgs8hWVTlfIdfhsf1xTG-Afxlo@z>
+Message-ID: <20180626170752.7rhGW1Pm4sFXoTiMqfne2nyTgNqiw493KAPwTXYuU9s@z>
 
-On Mon, Jun 25, 2018@08:47:40AM -0700, Andy Lutomirski wrote:
-> On Sun, Jun 24, 2018 at 10:41 PM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
-> >
-> > Kselftest test case mov_ss_trap_64 is causing kernel panic on
-> > qemu-system-x86_64 and PASS on real x86_64 hardware.
-> >
-> > Test code snippet,
-> > main() {
-> > <>
-> >       printf("[RUN]\tMOV SS; CS CS INT3\n");
-> >       asm volatile ("mov %[ss], %%ss; .byte 0x2e, 0x2e; int3" :: [ss] "m" (ss));
-> > <>
-> > }
-> >
-> 
-> This smells like CVE-2018-1087.  Can you confirm that your *host*
-> kernel is patched?
-> 
-> CVE-2018-1087 is extremely severe, and if your host kernel is not
-> patched, I think you need to apply some serious pressure on your
-> vendor to get with the program.
+Following the custom from the other functions, clear the global
+ret code before starting the test so as to not have previously
+failed tests cause us to thing this test has failed.
 
-Thanks Andy - that was exactly it. We updated our host running debian
-stretch to the latest kernel (per
-https://security-tracker.debian.org/tracker/CVE-2018-1087), and the
-symptom was no longer seen. Thanks for the pointer.
+Reported-by: Anders Roxell <anders.roxell at linaro.org>
+Signed-off-by: Shannon Nelson <shannon.nelson at oracle.com>
+---
+ tools/testing/selftests/net/rtnetlink.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Dan
-
+diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+index b33a371..261a981 100755
+--- a/tools/testing/selftests/net/rtnetlink.sh
++++ b/tools/testing/selftests/net/rtnetlink.sh
+@@ -522,6 +522,8 @@ kci_test_macsec()
+ #-------------------------------------------------------------------
+ kci_test_ipsec()
+ {
++	ret=0
++
+ 	# find an ip address on this machine and make up a destination
+ 	srcip=`ip -o addr | awk '/inet / { print $4; }' | grep -v "^127" | head -1 | cut -f1 -d/`
+ 	net=`echo $srcip | cut -f1-3 -d.`
 -- 
-Linux Kernel Functional Testing (LKFT)
-https://lkft.linaro.org/
+2.7.4
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
