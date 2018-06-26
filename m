@@ -1,22 +1,20 @@
 From: daniel at iogearbox.net (Daniel Borkmann)
-Date: Tue, 26 Jun 2018 12:07:41 +0200
-Subject: [PATCH] selftests: bpf: enable NET_SCHED
-In-Reply-To: <20180625145605.13726-1-anders.roxell@linaro.org>
-References: <20180625145605.13726-1-anders.roxell@linaro.org>
-Message-ID: <76182da2-d261-8747-610f-8506e3d96daf@iogearbox.net>
+Date: Tue, 26 Jun 2018 12:22:23 +0200
+Subject: [PATCH v2] selftests: bpf: notification about privilege required
+ to run test_lwt_seg6local.sh testing script
+In-Reply-To: <20180622214032.6527-1-ahiliation@gmail.com>
+References: <20180622214032.6527-1-ahiliation@gmail.com>
+Message-ID: <b10965e2-1187-2cc1-f51f-20a489a77d2d@iogearbox.net>
 
-On 06/25/2018 04:56 PM, Anders Roxell wrote:
-> CONFIG_NET_SCHED wasn't enabled in arm64's defconfig only for x86.
-> So bpf/test_tunnel.sh tests fails with:
-> RTNETLINK answers: Operation not supported
-> RTNETLINK answers: Operation not supported
-> We have an error talking to the kernel, -1
-> Enable NET_SCHED and more tests passes.
+On 06/22/2018 11:40 PM, Jeffrin Jose T wrote:
+> This test needs root privilege for it's successful execution.
 > 
-> Fixes: 3bce593ac06b ("selftests: bpf: config: add config fragments")
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+> This patch is atleast used to notify the user about the privilege
+> the script demands for the  smooth execution of the test.
+> 
+> Signed-off-by: Jeffrin Jose T (Rajagiri SET) <ahiliation at gmail.com>
 
-Applied to bpf, thanks Anders!
+Applied to bpf, thanks Jeffrin!
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
