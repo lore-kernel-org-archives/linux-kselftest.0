@@ -1,64 +1,117 @@
-From: shannon.nelson@oracle.com (Shannon Nelson)
-Date: Tue, 26 Jun 2018 10:07:53 -0700
-Subject: [PATCH v3 net-next 2/4] selftests: rtnetlink: use dummydev as a test
- device
-In-Reply-To: <1530032875-30482-1-git-send-email-shannon.nelson@oracle.com>
-References: <1530032875-30482-1-git-send-email-shannon.nelson@oracle.com>
-Message-ID: <1530032875-30482-3-git-send-email-shannon.nelson@oracle.com>
+From: guro@fb.com (Roman Gushchin)
+Date: Tue, 26 Jun 2018 10:14:10 -0700
+Subject: [PATCH] selftests: cgroup: fix cleanup path in
+ test_memcg_subtree_control()
+In-Reply-To: <20180626090347.cuwod4fv5koqbu63@kili.mountain>
+References: <20180626090347.cuwod4fv5koqbu63@kili.mountain>
+Message-ID: <20180626171410.10303-1-guro@fb.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180626170753.37l6ZCu2nmxXdpMz_gsocS3fd9_VpuxW4qwkBgtv4dQ@z>
+Message-ID: <20180626171410.AOPhkT_DWTdMCmCKumTwknXX8StjkLHYvztB9T508IA@z>
 
-We really shouldn't mess with local system settings, so let's
-use the already created dummy device instead for ipsec testing.
-Oh, and let's put the temp file into a proper directory.
+Dan reported, that clenaup path in test_memcg_subtree_control()
+triggers a static checker warning:
+  ./tools/testing/selftests/cgroup/test_memcontrol.c:76 \
+  test_memcg_subtree_control()
+  error: uninitialized symbol 'child2'.
 
-Signed-off-by: Shannon Nelson <shannon.nelson at oracle.com>
+Fix this by initializing child2 and parent2 variables and
+split the cleanup path into few stages.
+
+Signed-off-by: Roman Gushchin <guro at fb.com>
+Fixes: 84092dbcf901 ("selftests: cgroup: add memory controller self-tests")
+Reported-by: Dan Carpenter <dan.carpenter at oracle.com>
+Cc: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+Cc: Mike Rapoport <rppt at linux.vnet.ibm.com>
 ---
- tools/testing/selftests/net/rtnetlink.sh | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ tools/testing/selftests/cgroup/test_memcontrol.c | 38 +++++++++++++-----------
+ 1 file changed, 21 insertions(+), 17 deletions(-)
 
-diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-index 261a981..15948cf 100755
---- a/tools/testing/selftests/net/rtnetlink.sh
-+++ b/tools/testing/selftests/net/rtnetlink.sh
-@@ -523,21 +523,19 @@ kci_test_macsec()
- kci_test_ipsec()
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index cf0bddc9d271..ae8f04f84b03 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -25,7 +25,7 @@
+  */
+ static int test_memcg_subtree_control(const char *root)
  {
- 	ret=0
+-	char *parent, *child, *parent2, *child2;
++	char *parent, *child, *parent2 = NULL, *child2 = NULL;
+ 	int ret = KSFT_FAIL;
+ 	char buf[PAGE_SIZE];
+ 
+@@ -33,50 +33,54 @@ static int test_memcg_subtree_control(const char *root)
+ 	parent = cg_name(root, "memcg_test_0");
+ 	child = cg_name(root, "memcg_test_0/memcg_test_1");
+ 	if (!parent || !child)
+-		goto cleanup;
++		goto cleanup_free;
+ 
+ 	if (cg_create(parent))
+-		goto cleanup;
++		goto cleanup_free;
+ 
+ 	if (cg_write(parent, "cgroup.subtree_control", "+memory"))
+-		goto cleanup;
++		goto cleanup_parent;
+ 
+ 	if (cg_create(child))
+-		goto cleanup;
++		goto cleanup_parent;
+ 
+ 	if (cg_read_strstr(child, "cgroup.controllers", "memory"))
+-		goto cleanup;
++		goto cleanup_child;
+ 
+ 	/* Create two nested cgroups without enabling memory controller */
+ 	parent2 = cg_name(root, "memcg_test_1");
+ 	child2 = cg_name(root, "memcg_test_1/memcg_test_1");
+ 	if (!parent2 || !child2)
+-		goto cleanup;
++		goto cleanup_free2;
+ 
+ 	if (cg_create(parent2))
+-		goto cleanup;
++		goto cleanup_free2;
+ 
+ 	if (cg_create(child2))
+-		goto cleanup;
++		goto cleanup_parent2;
+ 
+ 	if (cg_read(child2, "cgroup.controllers", buf, sizeof(buf)))
+-		goto cleanup;
++		goto cleanup_all;
+ 
+ 	if (!cg_read_strstr(child2, "cgroup.controllers", "memory"))
+-		goto cleanup;
++		goto cleanup_all;
+ 
+ 	ret = KSFT_PASS;
+ 
+-cleanup:
+-	cg_destroy(child);
+-	cg_destroy(parent);
+-	free(parent);
+-	free(child);
 -
--	# find an ip address on this machine and make up a destination
--	srcip=`ip -o addr | awk '/inet / { print $4; }' | grep -v "^127" | head -1 | cut -f1 -d/`
--	net=`echo $srcip | cut -f1-3 -d.`
--	base=`echo $srcip | cut -f4 -d.`
--	dstip="$net."`expr $base + 1`
--
- 	algo="aead rfc4106(gcm(aes)) 0x3132333435363738393031323334353664636261 128"
-+	srcip=192.168.123.1
-+	dstip=192.168.123.2
-+	spi=7
-+
-+	ip addr add $srcip dev $devdummy
++cleanup_all:
+ 	cg_destroy(child2);
++cleanup_parent2:
+ 	cg_destroy(parent2);
++cleanup_free2:
+ 	free(parent2);
+ 	free(child2);
++cleanup_child:
++	cg_destroy(child);
++cleanup_parent:
++	cg_destroy(parent);
++cleanup_free:
++	free(parent);
++	free(child);
  
- 	# flush to be sure there's nothing configured
- 	ip x s flush ; ip x p flush
- 	check_err $?
- 
- 	# start the monitor in the background
--	tmpfile=`mktemp ipsectestXXX`
-+	tmpfile=`mktemp /var/run/ipsectestXXX`
- 	mpid=`(ip x m > $tmpfile & echo $!) 2>/dev/null`
- 	sleep 0.2
- 
-@@ -601,6 +599,7 @@ kci_test_ipsec()
- 	check_err $?
- 	ip x p flush
- 	check_err $?
-+	ip addr del $srcip/32 dev $devdummy
- 
- 	if [ $ret -ne 0 ]; then
- 		echo "FAIL: ipsec"
+ 	return ret;
+ }
 -- 
-2.7.4
+2.14.4
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
