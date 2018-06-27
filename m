@@ -1,44 +1,141 @@
-From: luto@kernel.org (Andy Lutomirski)
-Date: Tue, 26 Jun 2018 22:13:26 -0700
-Subject: test_syscall_vdso_32 [FAIL]
-In-Reply-To: <45ea6606-e782-fd07-fffa-cc133b33f9f7@intel.com>
-References: <0d78b5b4-710e-1b41-46e1-74003ca1381e@intel.com>
- <CALCETrVLRmySnqpG+o-S9VGkx7uKFfLGeawyM7UDCRj_g7vs1g@mail.gmail.com>
- <45ea6606-e782-fd07-fffa-cc133b33f9f7@intel.com>
-Message-ID:
- <CALCETrVc5f9VMQtZ-_GeGzhmttXnFMjipK6ER59Q0LbY076N+w@mail.gmail.com>
+From: mhiramat@kernel.org (Masami Hiramatsu)
+Date: Wed, 27 Jun 2018 21:21:27 +0900
+Subject: [PATCH v9 7/7] kselftests: Add tests for the preemptoff and
+ irqsoff tracers
+In-Reply-To: <20180625162102.GA49367@joelaf.mtv.corp.google.com>
+References: <20180621223236.211495-1-joel@joelfernandes.org>
+ <20180621223236.211495-8-joel@joelfernandes.org>
+ <20180625221302.8507c98e500d8efc70c19d88@kernel.org>
+ <20180625162102.GA49367@joelaf.mtv.corp.google.com>
+Message-ID: <20180627212127.e05d66b4f5d11b20d0364375@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180627051326.3xKP7Tw0ipb0Z2PVWptSpyUkwHVIwmurAxdWegsfK0E@z>
+Message-ID: <20180627122127.wVJtLttv2OCVryJWqABkwXXYZZHrLxbUAbLLBkB5ah8@z>
 
-On Mon, Jun 25, 2018@6:23 PM Li Zhijian <zhijianx.li@intel.com> wrote:
->
-> On 6/25/2018 11:40 PM, Andy Lutomirski wrote:
-> > On Mon, Jun 25, 2018@1:41 AM Li Zhijian <zhijianx.li@intel.com> wrote:
-> >> Hi
-> >>
-> >> Intel 0Day noticed that test_syscall_vdso_32 failed since 8bb2610bc4967f19672444a7b0407367f1540028(x86/entry/64/compat: Preserve r8-r11 in int $0x80)
-> >>
+On Mon, 25 Jun 2018 09:21:02 -0700
+Joel Fernandes <joel@joelfernandes.org> wrote:
 
-[snipped]
 
-Indeed.
+> 
+> From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
+> Subject: [PATCH v9.1 7/7] kselftests: Add tests for the preemptoff and irqsoff
+>  tracers
+> 
+> Here we add unit tests for the preemptoff and irqsoff tracer by using a
+> kernel module introduced previously to trigger atomic sections in the
+> kernel.
+> 
 
-Hi Thomas-
+Looks good to me.
 
-Something went wrong when you applied the patch mentioned above.  The
-original patch is here:
+Acked-by: Masami Hiramatsu <mhiramat at kernel.org>
 
-https://lore.kernel.org/lkml/d4c4d9985fbe64f8c9e19291886453914b48caee.1523975710.git.luto at kernel.org/
+Thanks!
 
-but somehow it got applied with huge offset -- the same exact change
-was made, but it was made to the entirely wrong function!  I'm a
-little nervous about sending a fixup patch because there are three
-copies of that code in the file, and I don't want to just move the
-problem around.  What's the right thing to do here?
+> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> ---
+>  tools/testing/selftests/ftrace/config         |  3 +
+>  .../test.d/preemptirq/irqsoff_tracer.tc       | 74 +++++++++++++++++++
+>  2 files changed, 77 insertions(+)
+>  create mode 100755 tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
+> 
+> diff --git a/tools/testing/selftests/ftrace/config b/tools/testing/selftests/ftrace/config
+> index b01924c71c09..29588b328345 100644
+> --- a/tools/testing/selftests/ftrace/config
+> +++ b/tools/testing/selftests/ftrace/config
+> @@ -4,3 +4,6 @@ CONFIG_FUNCTION_PROFILER=y
+>  CONFIG_TRACER_SNAPSHOT=y
+>  CONFIG_STACK_TRACER=y
+>  CONFIG_HIST_TRIGGERS=y
+> +CONFIG_PREEMPT_TRACER=y
+> +CONFIG_IRQSOFF_TRACER=y
+> +CONFIG_TEST_ATOMIC_SECTIONS=m
+> diff --git a/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc b/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
+> new file mode 100755
+> index 000000000000..2dcd5e4cafb4
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
+> @@ -0,0 +1,74 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +# description: test for the preemptirqsoff tracer
+> +
+> +MOD=test_atomic_sections
+> +
+> +fail() {
+> +    reset_tracer
+> +    rmmod $MOD || true
+> +    exit_fail
+> +}
+> +
+> +unsup() { #msg
+> +    reset_tracer
+> +    rmmod $MOD || true
+> +    echo $1
+> +    exit_unsupported
+> +}
+> +
+> +modprobe $MOD || unsup "$MOD module not available"
+> +rmmod $MOD
+> +
+> +grep -q "preemptoff" available_tracers || unsup "preemptoff tracer not enabled"
+> +grep -q "irqsoff" available_tracers || unsup "irqsoff tracer not enabled"
+> +
+> +reset_tracer
+> +
+> +# Simulate preemptoff section for half a second couple of times
+> +echo preemptoff > current_tracer
+> +sleep 1
+> +modprobe $MOD atomic_mode=preempt atomic_time=500000 || fail
+> +rmmod $MOD || fail
+> +modprobe $MOD atomic_mode=preempt atomic_time=500000 || fail
+> +rmmod $MOD || fail
+> +modprobe $MOD atomic_mode=preempt atomic_time=500000 || fail
+> +rmmod $MOD || fail
+> +
+> +cat trace
+> +
+> +# Confirm which tracer
+> +grep -q "tracer: preemptoff" trace || fail
+> +
+> +# Check the end of the section
+> +egrep -q "5.....us : <stack trace>" trace || fail
+> +
+> +# Check for 500ms of latency
+> +egrep -q "latency: 5..... us" trace || fail
+> +
+> +reset_tracer
+> +
+> +# Simulate irqsoff section for half a second couple of times
+> +echo irqsoff > current_tracer
+> +sleep 1
+> +modprobe $MOD atomic_mode=irq atomic_time=500000 || fail
+> +rmmod $MOD || fail
+> +modprobe $MOD atomic_mode=irq atomic_time=500000 || fail
+> +rmmod $MOD || fail
+> +modprobe $MOD atomic_mode=irq atomic_time=500000 || fail
+> +rmmod $MOD || fail
+> +
+> +cat trace
+> +
+> +# Confirm which tracer
+> +grep -q "tracer: irqsoff" trace || fail
+> +
+> +# Check the end of the section
+> +egrep -q "5.....us : <stack trace>" trace || fail
+> +
+> +# Check for 500ms of latency
+> +egrep -q "latency: 5..... us" trace || fail
+> +
+> +reset_tracer
+> +exit 0
+> +
+> -- 
+> 2.18.0.rc2.346.g013aa6912e-goog
+> 
 
-Clearly this needs to get fixed somehow, and the fix should go to -stable.
 
---Andy
+-- 
+Masami Hiramatsu <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
