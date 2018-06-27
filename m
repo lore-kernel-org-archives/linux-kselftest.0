@@ -1,34 +1,44 @@
-From: davem@davemloft.net (David Miller)
-Date: Wed, 27 Jun 2018 10:42:32 +0900 (KST)
-Subject: [PATCH net-next 0/6] Multipath tests for tunnel devices
-In-Reply-To: <cover.1529971148.git.petrm@mellanox.com>
-References: <cover.1529971148.git.petrm@mellanox.com>
-Message-ID: <20180627.104232.104524931315029852.davem@davemloft.net>
+From: luto@kernel.org (Andy Lutomirski)
+Date: Tue, 26 Jun 2018 22:13:26 -0700
+Subject: test_syscall_vdso_32 [FAIL]
+In-Reply-To: <45ea6606-e782-fd07-fffa-cc133b33f9f7@intel.com>
+References: <0d78b5b4-710e-1b41-46e1-74003ca1381e@intel.com>
+ <CALCETrVLRmySnqpG+o-S9VGkx7uKFfLGeawyM7UDCRj_g7vs1g@mail.gmail.com>
+ <45ea6606-e782-fd07-fffa-cc133b33f9f7@intel.com>
+Message-ID:
+ <CALCETrVc5f9VMQtZ-_GeGzhmttXnFMjipK6ER59Q0LbY076N+w@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180627014232.paay5IW1QRGyIDoX_s31OM5EW2hgN904_z66Rgi5OXY@z>
+Message-ID: <20180627051326.3xKP7Tw0ipb0Z2PVWptSpyUkwHVIwmurAxdWegsfK0E@z>
 
-From: Petr Machata <petrm@mellanox.com>
-Date: Tue, 26 Jun 2018 02:05:51 +0200
+On Mon, Jun 25, 2018@6:23 PM Li Zhijian <zhijianx.li@intel.com> wrote:
+>
+> On 6/25/2018 11:40 PM, Andy Lutomirski wrote:
+> > On Mon, Jun 25, 2018@1:41 AM Li Zhijian <zhijianx.li@intel.com> wrote:
+> >> Hi
+> >>
+> >> Intel 0Day noticed that test_syscall_vdso_32 failed since 8bb2610bc4967f19672444a7b0407367f1540028(x86/entry/64/compat: Preserve r8-r11 in int $0x80)
+> >>
 
-> This patchset adds a test for ECMP and weighted ECMP between two GRE
-> tunnels.
-> 
-> In patches #1 and #2, the function multipath_eval() is first moved from
-> router_multipath.sh to lib.sh for ease of reuse, and then fixed up.
-> 
-> In patch #3, the function tc_rule_stats_get() is parameterized to be
-> useful for egress rules as well.
-> 
-> In patch #4, a new function __simple_if_init() is extracted from
-> simple_if_init(). This covers the logic that needs to be done for the
-> usual interface: VRF migration, upping and installation of IP addresses.
-> 
-> Patch #5 then adds the test itself.
-> 
-> Additionally in patch #6, a requirement to add diagrams to selftests is
-> documented.
+[snipped]
 
-Looks good, series applied.
+Indeed.
+
+Hi Thomas-
+
+Something went wrong when you applied the patch mentioned above.  The
+original patch is here:
+
+https://lore.kernel.org/lkml/d4c4d9985fbe64f8c9e19291886453914b48caee.1523975710.git.luto at kernel.org/
+
+but somehow it got applied with huge offset -- the same exact change
+was made, but it was made to the entirely wrong function!  I'm a
+little nervous about sending a fixup patch because there are three
+copies of that code in the file, and I don't want to just move the
+problem around.  What's the right thing to do here?
+
+Clearly this needs to get fixed somehow, and the fix should go to -stable.
+
+--Andy
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
