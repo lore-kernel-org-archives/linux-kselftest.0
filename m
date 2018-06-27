@@ -1,139 +1,56 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Wed, 27 Jun 2018 21:21:27 +0900
-Subject: [PATCH v9 7/7] kselftests: Add tests for the preemptoff and
- irqsoff tracers
-In-Reply-To: <20180625162102.GA49367@joelaf.mtv.corp.google.com>
-References: <20180621223236.211495-1-joel@joelfernandes.org>
- <20180621223236.211495-8-joel@joelfernandes.org>
- <20180625221302.8507c98e500d8efc70c19d88@kernel.org>
- <20180625162102.GA49367@joelaf.mtv.corp.google.com>
-Message-ID: <20180627212127.e05d66b4f5d11b20d0364375@kernel.org>
+From: andreyknvl at google.com (Andrey Konovalov)
+Date: Wed, 27 Jun 2018 17:05:57 +0200
+Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
+In-Reply-To: <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
+References: <cover.1529507994.git.andreyknvl@google.com>
+ <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
+ <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
+Message-ID: <CAAeHK+yqWKTdTG+ymZ2-5XKiDANV+fmUjnQkRy-5tpgphuLJRA@mail.gmail.com>
 
-On Mon, 25 Jun 2018 09:21:02 -0700
-Joel Fernandes <joel at joelfernandes.org> wrote:
+On Tue, Jun 26, 2018 at 7:29 PM, Catalin Marinas
+<catalin.marinas at arm.com> wrote:
+> Hi Andrey,
+>
+> On Tue, Jun 26, 2018 at 02:47:50PM +0200, Andrey Konovalov wrote:
+>> On Wed, Jun 20, 2018 at 5:24 PM, Andrey Konovalov <andreyknvl at google.com> wrote:
+>> > arm64 has a feature called Top Byte Ignore, which allows to embed pointer
+>> > tags into the top byte of each pointer. Userspace programs (such as
+>> > HWASan, a memory debugging tool [1]) might use this feature and pass
+>> > tagged user pointers to the kernel through syscalls or other interfaces.
+>> >
+>> > This patch makes a few of the kernel interfaces accept tagged user
+>> > pointers. The kernel is already able to handle user faults with tagged
+>> > pointers and has the untagged_addr macro, which this patchset reuses.
+>> >
+>> > We're not trying to cover all possible ways the kernel accepts user
+>> > pointers in one patchset, so this one should be considered as a start.
+>> >
+>> > Thanks!
+>> >
+>> > [1] http://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html
+>>
+>> Is there anything I should do to move forward with this?
+>>
+>> I've received zero replies to this patch set (v3 and v4) over the last
+>> month.
+>
+> The patches in this series look fine but my concern is that they are not
+> sufficient and we don't have (yet?) a way to identify where such
+> annotations are required. You even say in patch 6 that this is "some
+> initial work for supporting non-zero address tags passed to the kernel".
+> Unfortunately, merging (or relaxing) an ABI without a clear picture is
+> not really feasible.
+>
+> While I support this work, as a maintainer I'd like to understand
+> whether we'd be in a continuous chase of ABI breaks with every kernel
+> release or we have a better way to identify potential issues. Is there
+> any way to statically analyse conversions from __user ptr to long for
+> example? Or, could we get the compiler to do this for us?
 
 
-> 
-> From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
-> Subject: [PATCH v9.1 7/7] kselftests: Add tests for the preemptoff and irqsoff
->  tracers
-> 
-> Here we add unit tests for the preemptoff and irqsoff tracer by using a
-> kernel module introduced previously to trigger atomic sections in the
-> kernel.
-> 
-
-Looks good to me.
-
-Acked-by: Masami Hiramatsu <mhiramat at kernel.org>
+OK, got it, I'll try to figure out a way to find these conversions.
 
 Thanks!
-
-> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> ---
->  tools/testing/selftests/ftrace/config         |  3 +
->  .../test.d/preemptirq/irqsoff_tracer.tc       | 74 +++++++++++++++++++
->  2 files changed, 77 insertions(+)
->  create mode 100755 tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
-> 
-> diff --git a/tools/testing/selftests/ftrace/config b/tools/testing/selftests/ftrace/config
-> index b01924c71c09..29588b328345 100644
-> --- a/tools/testing/selftests/ftrace/config
-> +++ b/tools/testing/selftests/ftrace/config
-> @@ -4,3 +4,6 @@ CONFIG_FUNCTION_PROFILER=y
->  CONFIG_TRACER_SNAPSHOT=y
->  CONFIG_STACK_TRACER=y
->  CONFIG_HIST_TRIGGERS=y
-> +CONFIG_PREEMPT_TRACER=y
-> +CONFIG_IRQSOFF_TRACER=y
-> +CONFIG_TEST_ATOMIC_SECTIONS=m
-> diff --git a/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc b/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
-> new file mode 100755
-> index 000000000000..2dcd5e4cafb4
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
-> @@ -0,0 +1,74 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: test for the preemptirqsoff tracer
-> +
-> +MOD=test_atomic_sections
-> +
-> +fail() {
-> +    reset_tracer
-> +    rmmod $MOD || true
-> +    exit_fail
-> +}
-> +
-> +unsup() { #msg
-> +    reset_tracer
-> +    rmmod $MOD || true
-> +    echo $1
-> +    exit_unsupported
-> +}
-> +
-> +modprobe $MOD || unsup "$MOD module not available"
-> +rmmod $MOD
-> +
-> +grep -q "preemptoff" available_tracers || unsup "preemptoff tracer not enabled"
-> +grep -q "irqsoff" available_tracers || unsup "irqsoff tracer not enabled"
-> +
-> +reset_tracer
-> +
-> +# Simulate preemptoff section for half a second couple of times
-> +echo preemptoff > current_tracer
-> +sleep 1
-> +modprobe $MOD atomic_mode=preempt atomic_time=500000 || fail
-> +rmmod $MOD || fail
-> +modprobe $MOD atomic_mode=preempt atomic_time=500000 || fail
-> +rmmod $MOD || fail
-> +modprobe $MOD atomic_mode=preempt atomic_time=500000 || fail
-> +rmmod $MOD || fail
-> +
-> +cat trace
-> +
-> +# Confirm which tracer
-> +grep -q "tracer: preemptoff" trace || fail
-> +
-> +# Check the end of the section
-> +egrep -q "5.....us : <stack trace>" trace || fail
-> +
-> +# Check for 500ms of latency
-> +egrep -q "latency: 5..... us" trace || fail
-> +
-> +reset_tracer
-> +
-> +# Simulate irqsoff section for half a second couple of times
-> +echo irqsoff > current_tracer
-> +sleep 1
-> +modprobe $MOD atomic_mode=irq atomic_time=500000 || fail
-> +rmmod $MOD || fail
-> +modprobe $MOD atomic_mode=irq atomic_time=500000 || fail
-> +rmmod $MOD || fail
-> +modprobe $MOD atomic_mode=irq atomic_time=500000 || fail
-> +rmmod $MOD || fail
-> +
-> +cat trace
-> +
-> +# Confirm which tracer
-> +grep -q "tracer: irqsoff" trace || fail
-> +
-> +# Check the end of the section
-> +egrep -q "5.....us : <stack trace>" trace || fail
-> +
-> +# Check for 500ms of latency
-> +egrep -q "latency: 5..... us" trace || fail
-> +
-> +reset_tracer
-> +exit 0
-> +
-> -- 
-> 2.18.0.rc2.346.g013aa6912e-goog
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
