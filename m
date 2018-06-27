@@ -1,108 +1,32 @@
-From: u9012063 at gmail.com (William Tu)
-Date: Tue, 26 Jun 2018 14:27:10 -0700
-Subject: [PATCH] selftests: bpf: config: add config fragments
-In-Reply-To: <CADYN=9JAOim7CvoZzWnbHNEF+4yG3Lzvry1rZLqGp+7hQxPdkw@mail.gmail.com>
-References: <20180612110510.11731-1-anders.roxell@linaro.org>
- <d6851756-ae3b-09ec-f487-1eeece6bd4c6@iogearbox.net>
- <CALDO+SY3qNYAOSiYC3645C7YY9LSx7ggg0GjY76m4TbBfF_t3A@mail.gmail.com>
- <CADYN=9+3V4fpqbjh-X4VUVWd_X38XSYhEbZoRBffcx=-nMtF8g@mail.gmail.com>
- <CALDO+SZXvnUU7VKd_UwnBCU0NiTHjqei4xEUCdcktkKCD3MnEg@mail.gmail.com>
- <CADYN=9KegM2wNCX7=BDct16bzzmr-02aG1c3MLDEEon1yGXnzQ@mail.gmail.com>
- <CALDO+SY2eE6DHtVmfnUpMjTjHe3shfzae48nk_OehfUyuKNYsg@mail.gmail.com>
- <CADYN=9JAOim7CvoZzWnbHNEF+4yG3Lzvry1rZLqGp+7hQxPdkw@mail.gmail.com>
-Message-ID: <CALDO+Sap3GTW3Ud4u-950ZicXpqfCh3kV5x8FVFpPmH+snOsGg@mail.gmail.com>
+From: davem at davemloft.net (David Miller)
+Date: Wed, 27 Jun 2018 10:42:32 +0900 (KST)
+Subject: [PATCH net-next 0/6] Multipath tests for tunnel devices
+In-Reply-To: <cover.1529971148.git.petrm@mellanox.com>
+References: <cover.1529971148.git.petrm@mellanox.com>
+Message-ID: <20180627.104232.104524931315029852.davem@davemloft.net>
 
->> >
->> > --- ::11 ping statistics ---
->> > 5 packets transmitted, 3 packets received, 40% packet loss
->> > round-trip min/avg/max = 0.139/1.857/5.293 ms
->> > + ip netns exec at_ns0 ping -c 3 -w 10 -q 10.1.1.200
->> > PING 10.1.1.200 (10.1.1.200): 56 data bytes
->> >
->> > --- 10.1.1.200 ping statistics ---
->> > 3 packets transmitted, 3 packets received, 0% packet loss
->> > round-trip min/avg/max = 0.214/0.256/0.305 ms
->> > + ping -c 3 -w 10 -q 10.1.1.100
->> > PING 10.1.1.100 (10.1.1.100): 56 data bytes
->> >
->> > --- 10.1.1.100 ping statistics ---
->> > 3 packets transmitted, 3 packets received, 0% packet loss
->> > round-trip min/avg/max = 0.210/0.211/0.213 ms
->> > + check_err 0
->> > + '[' 0 -eq 0 ']'
->> > + ret=0
+From: Petr Machata <petrm at mellanox.com>
+Date: Tue, 26 Jun 2018 02:05:51 +0200
 
-So looks like the ipv4 over ipv6 gre passes.
+> This patchset adds a test for ECMP and weighted ECMP between two GRE
+> tunnels.
+> 
+> In patches #1 and #2, the function multipath_eval() is first moved from
+> router_multipath.sh to lib.sh for ease of reuse, and then fixed up.
+> 
+> In patch #3, the function tc_rule_stats_get() is parameterized to be
+> useful for egress rules as well.
+> 
+> In patch #4, a new function __simple_if_init() is extracted from
+> simple_if_init(). This covers the logic that needs to be done for the
+> usual interface: VRF migration, upping and installation of IP addresses.
+> 
+> Patch #5 then adds the test itself.
+> 
+> Additionally in patch #6, a requirement to add diagrams to selftests is
+> documented.
 
->> > + ip netns exec at_ns0 ping6 -c 3 -w 10 -q fc80::200
->> > PING fc80::200 (fc80::200): 56 data bytes
->> >
->> > --- fc80::200 ping statistics ---
->> > 10 packets transmitted, 0 packets received, 100% packet loss
-`
-but the ipv6 over ipv6 gre fails.
-Do you have any firewall rules that block this traffic?
-or if possible, the packet might get dropped at function ip6gre_xmit_ipv6
-can you print the return value of this function?
-
-
->> > + check_err 1
->> > + '[' 0 -eq 0 ']'
->> > + ret=1
->> > + ip -s link show ip6gretap11
->> > 19: ip6gretap11 at NONE: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1434 qdisc
->> > pfifo_fast state UNKNOWN mode DEFAULT group default qlen 1000
->> >     link/ether de:d2:0c:53:80:8c brd ff:ff:ff:ff:ff:ff
->> >     RX: bytes  packets  errors  dropped overrun mcast
->> >     2096       25       0       0       0       0
->> >     TX: bytes  packets  errors  dropped carrier collsns
->> >     5324       36       5       5       0       0
->>
->> So there are 5 errors at TX.
->
-> and today when I tried it on next-20180620 I saw 8 errors at TX.
->
->> I couldn't reproduce in my local machine using 4.17-rc6.
->> How do I checkin the "next-20180613" source code?
->
-> You can find the source code here [1], and I would look in the latest tag that I
-> said that I was able to reproduce it on above.
->
-> Cheers,
-> Anders
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
-
-Hi Anders,
-
-I'm still not able to reproduce the issue on next-20180620.
-Below is my test.
-
-Testing IP6GRETAP tunnel...
-PING ::11(::11) 56 data bytes
-
---- ::11 ping statistics ---
-5 packets transmitted, 3 received, 40% packet loss, time 4048ms
-rtt min/avg/max/mdev = 0.040/32.118/96.235/45.337 ms
-PING 10.1.1.200 (10.1.1.200) 56(84) bytes of data.
-
---- 10.1.1.200 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2026ms
-rtt min/avg/max/mdev = 0.074/0.099/0.117/0.018 ms
-PING 10.1.1.100 (10.1.1.100) 56(84) bytes of data.
-
---- 10.1.1.100 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2054ms
-rtt min/avg/max/mdev = 0.069/0.113/0.187/0.052 ms
-PING fc80::200(fc80::200) 56 data bytes
-
---- fc80::200 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2054ms
-rtt min/avg/max/mdev = 0.069/0.104/0.142/0.031 ms
-PASS: ip6gretap
-root at osboxes:~/linux-next/tools/testing/selftests/bpf#
-root at osboxes:~/linux-next/tools/testing/selftests/bpf# uname -a
-Linux osboxes 4.18.0-rc1-next-20180620 #1 SMP Tue Jun 26 12:26:00 PDT
-2018 x86_64 x86_64 x86_64 GNU/Linux
+Looks good, series applied.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
