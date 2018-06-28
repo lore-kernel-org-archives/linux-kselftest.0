@@ -1,7 +1,7 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Thu, 28 Jun 2018 11:27:42 +0100
+From: luc.vanoostenryck@gmail.com (Luc Van Oostenryck)
+Date: Thu, 28 Jun 2018 12:46:11 +0200
 Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
-In-Reply-To: <20180628061758.j6bytsaj5jk4aocg@ltop.local>
+In-Reply-To: <20180628102741.vk6vphfinlj3lvhv@armageddon.cambridge.arm.com>
 References: <cover.1529507994.git.andreyknvl@google.com>
  <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
  <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
@@ -9,34 +9,45 @@ References: <cover.1529507994.git.andreyknvl@google.com>
  <0cef1643-a523-98e7-95e2-9ec595137642@arm.com>
  <20180627171757.amucnh5znld45cpc@armageddon.cambridge.arm.com>
  <20180628061758.j6bytsaj5jk4aocg@ltop.local>
-Message-ID: <20180628102741.vk6vphfinlj3lvhv@armageddon.cambridge.arm.com>
+ <20180628102741.vk6vphfinlj3lvhv@armageddon.cambridge.arm.com>
+Message-ID: <20180628104610.czsnq4w3lfhxrn53@ltop.local>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180628102742.2j1EdMuWJ1HTgR4x07zVk20wWRiFZv3g6b0k5Jwvlsc@z>
+Message-ID: <20180628104611.6DzZHVDVsn0aB9rV8AzI4n0vmv8KDgmW4Li55GX5CLk@z>
 
-On Thu, Jun 28, 2018@08:17:59AM +0200, Luc Van Oostenryck wrote:
-> On Wed, Jun 27, 2018@06:17:58PM +0100, Catalin Marinas wrote:
-> > sparse is indeed an option. The current implementation doesn't warn on
-> > an explicit cast from (void __user *) to (unsigned long) since that's a
-> > valid thing in the kernel. I couldn't figure out if there's any other
-> > __attribute__ that could be used to warn of such conversion.
+On Thu, Jun 28, 2018@11:27:42AM +0100, Catalin Marinas wrote:
+> On Thu, Jun 28, 2018@08:17:59AM +0200, Luc Van Oostenryck wrote:
+> > On Wed, Jun 27, 2018@06:17:58PM +0100, Catalin Marinas wrote:
+> > > sparse is indeed an option. The current implementation doesn't warn on
+> > > an explicit cast from (void __user *) to (unsigned long) since that's a
+> > > valid thing in the kernel. I couldn't figure out if there's any other
+> > > __attribute__ that could be used to warn of such conversion.
+> > 
+> > sparse doesn't have such attribute but would an new option that would warn
+> > on such cast be a solution for your case?
 > 
-> sparse doesn't have such attribute but would an new option that would warn
-> on such cast be a solution for your case?
+> I can't tell for sure whether such sparse option would be the full
+> solution but detecting explicit __user pointer casts to long is a good
+> starting point. So far this patchset pretty much relies on detecting
+> a syscall failure and trying to figure out why, patching the kernel. It
+> doesn't really scale.
 
-I can't tell for sure whether such sparse option would be the full
-solution but detecting explicit __user pointer casts to long is a good
-starting point. So far this patchset pretty much relies on detecting
-a syscall failure and trying to figure out why, patching the kernel. It
-doesn't really scale.
+OK, I'll add such an option this evening.
+ 
+> As a side note, we have cases in the user-kernel ABI where the user
+> address type is "unsigned long": mmap() and friends. My feedback on an
+> early version of this patchset was to always require untagged pointers
+> coming from user space on such syscalls, so no need for explicit
+> untagging.
 
-As a side note, we have cases in the user-kernel ABI where the user
-address type is "unsigned long": mmap() and friends. My feedback on an
-early version of this patchset was to always require untagged pointers
-coming from user space on such syscalls, so no need for explicit
-untagging.
+Mmmm yes.
+I tend to favor a sort of opposite approach. When we have an address
+that must not be dereferenced as-such (and sometimes when the address
+can be from both __user & __kernel space) I prefer to use a ulong
+which will force the use of the required operation before being
+able to do any sort of dereferencing and this won't need horrible
+casts with __force (it, of course, all depends on the full context).
 
--- 
-Catalin
+-- Luc
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
