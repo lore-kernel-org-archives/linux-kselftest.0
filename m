@@ -1,67 +1,35 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Thu, 28 Jun 2018 11:21:13 -0700
-Subject: [PATCH v9 1/7] srcu: Add notrace variants of srcu_read_{lock,unlock}
-In-Reply-To: <20180628182119.226030-1-joel@joelfernandes.org>
-References: <20180628182119.226030-1-joel@joelfernandes.org>
-Message-ID: <20180628182119.226030-2-joel@joelfernandes.org>
+From: andreyknvl@google.com (Andrey Konovalov)
+Date: Thu, 28 Jun 2018 21:30:16 +0200
+Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
+In-Reply-To: <CAAeHK+yqWKTdTG+ymZ2-5XKiDANV+fmUjnQkRy-5tpgphuLJRA@mail.gmail.com>
+References: <cover.1529507994.git.andreyknvl@google.com>
+ <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
+ <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
+ <CAAeHK+yqWKTdTG+ymZ2-5XKiDANV+fmUjnQkRy-5tpgphuLJRA@mail.gmail.com>
+Message-ID:
+ <CAAeHK+wJbbCZd+-X=9oeJgsqQJiq8h+Aagz3SQMPaAzCD+pvFw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180628182113.6ZvRv5-OEr3yDzIAIbk2Vngogr2Hv-wf4eN8eQV1Ylg@z>
+Message-ID: <20180628193016.2YKwNsdixl9aXfKtwFrjdv_AkTlF8DEGlIPWzIVa7PE@z>
 
-From: Paul McKenney <paulmck@linux.vnet.ibm.com>
+On Wed, Jun 27, 2018@5:05 PM, Andrey Konovalov <andreyknvl@google.com> wrote:
+> On Tue, Jun 26, 2018 at 7:29 PM, Catalin Marinas
+> <catalin.marinas@arm.com> wrote:
+>> While I support this work, as a maintainer I'd like to understand
+>> whether we'd be in a continuous chase of ABI breaks with every kernel
+>> release or we have a better way to identify potential issues. Is there
+>> any way to statically analyse conversions from __user ptr to long for
+>> example? Or, could we get the compiler to do this for us?
+>
+>
+> OK, got it, I'll try to figure out a way to find these conversions.
 
-This is needed for a future tracepoint patch that uses srcu, and to make
-sure it doesn't call into lockdep.
+I've prototyped a checker on top of clang static analyzer (initially
+looked at sparse, but couldn't find any documentation or examples).
+The results are here [1], search for "warning: user pointer cast".
+Sharing in case anybody wants to take a look, will look at them myself
+tomorrow.
 
-tracepoint code already calls notrace variants for rcu_read_lock_sched
-so this patch does the same for srcu which will be used in a later
-patch. Keeps it consistent with rcu-sched.
-
-[Joel: Added commit message]
-Reviewed-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-Signed-off-by: Paul McKenney <paulmck at linux.vnet.ibm.com>
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
- include/linux/srcu.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/include/linux/srcu.h b/include/linux/srcu.h
-index 91494d7e8e41..3e72a291c401 100644
---- a/include/linux/srcu.h
-+++ b/include/linux/srcu.h
-@@ -195,6 +195,16 @@ static inline int srcu_read_lock(struct srcu_struct *sp) __acquires(sp)
- 	return retval;
- }
- 
-+/* Used by tracing, cannot be traced and cannot invoke lockdep. */
-+static inline notrace int
-+srcu_read_lock_notrace(struct srcu_struct *sp) __acquires(sp)
-+{
-+	int retval;
-+
-+	retval = __srcu_read_lock(sp);
-+	return retval;
-+}
-+
- /**
-  * srcu_read_unlock - unregister a old reader from an SRCU-protected structure.
-  * @sp: srcu_struct in which to unregister the old reader.
-@@ -209,6 +219,13 @@ static inline void srcu_read_unlock(struct srcu_struct *sp, int idx)
- 	__srcu_read_unlock(sp, idx);
- }
- 
-+/* Used by tracing, cannot be traced and cannot call lockdep. */
-+static inline notrace void
-+srcu_read_unlock_notrace(struct srcu_struct *sp, int idx) __releases(sp)
-+{
-+	__srcu_read_unlock(sp, idx);
-+}
-+
- /**
-  * smp_mb__after_srcu_read_unlock - ensure full ordering after srcu_read_unlock
-  *
--- 
-2.18.0.rc2.346.g013aa6912e-goog
-
+[1] https://gist.github.com/xairy/433edd5c86456a64026247cb2fef2115
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
