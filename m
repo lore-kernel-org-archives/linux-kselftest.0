@@ -1,41 +1,42 @@
-From: davem@davemloft.net (David Miller)
-Date: Thu, 28 Jun 2018 16:15:42 +0900 (KST)
-Subject: [PATCH] selftests/net: Fix permissions for fib_tests.sh
-In-Reply-To: <8f5b0575-2213-5f7a-5b08-7502f65a1d16@kernel.org>
-References: <1529425232-25242-1-git-send-email-daniel.diaz@linaro.org>
- <8f5b0575-2213-5f7a-5b08-7502f65a1d16@kernel.org>
-Message-ID: <20180628.161542.1549781477221134232.davem@davemloft.net>
+From: catalin.marinas@arm.com (Catalin Marinas)
+Date: Thu, 28 Jun 2018 11:27:42 +0100
+Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
+In-Reply-To: <20180628061758.j6bytsaj5jk4aocg@ltop.local>
+References: <cover.1529507994.git.andreyknvl@google.com>
+ <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
+ <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
+ <CAAeHK+yqWKTdTG+ymZ2-5XKiDANV+fmUjnQkRy-5tpgphuLJRA@mail.gmail.com>
+ <0cef1643-a523-98e7-95e2-9ec595137642@arm.com>
+ <20180627171757.amucnh5znld45cpc@armageddon.cambridge.arm.com>
+ <20180628061758.j6bytsaj5jk4aocg@ltop.local>
+Message-ID: <20180628102741.vk6vphfinlj3lvhv@armageddon.cambridge.arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180628071542.KEFuz8CiHiQludmm1GdTlF80JUufDUDJHIVRDR-hTXs@z>
+Message-ID: <20180628102742.2j1EdMuWJ1HTgR4x07zVk20wWRiFZv3g6b0k5Jwvlsc@z>
 
-From: Shuah Khan <shuah@kernel.org>
-Date: Tue, 26 Jun 2018 12:22:28 -0600
-
-> On 06/19/2018 10:20 AM, Daniel Díaz wrote:
->> fib_tests.sh became non-executable at some point. This is
->> what happens:
->>   selftests: net: fib_tests.sh: Warning: file fib_tests.sh is
->>   not executable, correct this.
->>   not ok 1..11 selftests: net: fib_tests.sh [FAIL]
->> 
->> Fixes: d69faad76584 ("selftests: fib_tests: Add prefix route tests with metric")
->> 
->> Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
->> ---
->>  tools/testing/selftests/net/fib_tests.sh | 0
->>  1 file changed, 0 insertions(+), 0 deletions(-)
->>  mode change 100644 => 100755 tools/testing/selftests/net/fib_tests.sh
->> 
->> diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
->> old mode 100644
->> new mode 100755
->> 
+On Thu, Jun 28, 2018@08:17:59AM +0200, Luc Van Oostenryck wrote:
+> On Wed, Jun 27, 2018@06:17:58PM +0100, Catalin Marinas wrote:
+> > sparse is indeed an option. The current implementation doesn't warn on
+> > an explicit cast from (void __user *) to (unsigned long) since that's a
+> > valid thing in the kernel. I couldn't figure out if there's any other
+> > __attribute__ that could be used to warn of such conversion.
 > 
-> Hi David,
-> 
-> Are you planning to pick this up for 4.18-rc3 or later?
+> sparse doesn't have such attribute but would an new option that would warn
+> on such cast be a solution for your case?
 
-Applied, thanks.
+I can't tell for sure whether such sparse option would be the full
+solution but detecting explicit __user pointer casts to long is a good
+starting point. So far this patchset pretty much relies on detecting
+a syscall failure and trying to figure out why, patching the kernel. It
+doesn't really scale.
+
+As a side note, we have cases in the user-kernel ABI where the user
+address type is "unsigned long": mmap() and friends. My feedback on an
+early version of this patchset was to always require untagged pointers
+coming from user space on such syscalls, so no need for explicit
+untagging.
+
+-- 
+Catalin
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
