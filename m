@@ -1,37 +1,59 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Thu, 28 Jun 2018 18:56:15 +0200
-Subject: [PATCH net-next 0/4] Fixes for running mirror-to-gretap tests on veth
-Message-ID: <cover.1530204784.git.petrm@mellanox.com>
+Date: Thu, 28 Jun 2018 18:56:20 +0200
+Subject: [PATCH net-next 1/4] selftests: forwarding: lib: Split out
+ setup_wait_dev()
+In-Reply-To: <cover.1530204784.git.petrm@mellanox.com>
+References: <cover.1530204784.git.petrm@mellanox.com>
+Message-ID: <141750f970e14c36b70c86bc67cf2ed952eb61ab.1530204784.git.petrm@mellanox.com>
 
-The forwarding selftests infrastructure makes it possible to run the
-individual tests on a purely software netdevices. Names of interfaces to
-run the test with can be passed as command line arguments to a test.
-lib.sh then creates veth pairs backing the interfaces if none exist in
-the system.
+Split out of setup_wait() a function setup_wait_dev() that waits for a
+single device. This gives tests the opportunity to wait for a selected
+device after they tinkered with its upness.
 
-However, the tests need to recognize that they might be run on a soft
-device. Many mirror-to-gretap tests are buggy in this regard. This patch
-set aims to fix the problems in running mirror-to-gretap tests on veth
-devices.
+Signed-off-by: Petr Machata <petrm at mellanox.com>
+---
+ tools/testing/selftests/net/forwarding/lib.sh | 25 ++++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
 
-In patch #1, a service function is split out of setup_wait().
-In patch #2, installing a trap is made optional.
-In patch #3, tc filters in several tests are tweaked to work with veth.
-In patch #4, the logic for waiting for neighbor is fixed for veth.
-
-Petr Machata (4):
-  selftests: forwarding: lib: Split out setup_wait_dev()
-  selftests: forwarding: lib: Avoid trapping soft devices
-  selftests: forwarding: Tweak tc filters for mirror-to-gretap tests
-  selftests: forwarding: mirror_gre_changes: Fix waiting for neighbor
-
- tools/testing/selftests/net/forwarding/lib.sh      | 41 +++++++++++++++-------
- .../net/forwarding/mirror_gre_bridge_1d_vlan.sh    |  6 ++--
- .../selftests/net/forwarding/mirror_gre_changes.sh | 11 ++----
- .../selftests/net/forwarding/mirror_gre_lib.sh     |  2 +-
- .../net/forwarding/mirror_gre_vlan_bridge_1q.sh    |  6 ++--
- 5 files changed, 39 insertions(+), 27 deletions(-)
-
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 1dfdf14894e2..ac1df4860fbe 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -185,18 +185,25 @@ log_info()
+ 	echo "INFO: $msg"
+ }
+ 
++setup_wait_dev()
++{
++	local dev=$1; shift
++
++	while true; do
++		ip link show dev $dev up \
++			| grep 'state UP' &> /dev/null
++		if [[ $? -ne 0 ]]; then
++			sleep 1
++		else
++			break
++		fi
++	done
++}
++
+ setup_wait()
+ {
+ 	for i in $(eval echo {1..$NUM_NETIFS}); do
+-		while true; do
+-			ip link show dev ${NETIFS[p$i]} up \
+-				| grep 'state UP' &> /dev/null
+-			if [[ $? -ne 0 ]]; then
+-				sleep 1
+-			else
+-				break
+-			fi
+-		done
++		setup_wait_dev ${NETIFS[p$i]}
+ 	done
+ 
+ 	# Make sure links are ready.
 -- 
 2.4.11
 
