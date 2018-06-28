@@ -1,116 +1,47 @@
 From: joel at joelfernandes.org (Joel Fernandes)
-Date: Thu, 28 Jun 2018 11:21:49 -0700
-Subject: [PATCH v9 7/7] kselftests: Add tests for the preemptoff and irqsoff
- tracers
+Date: Thu, 28 Jun 2018 11:21:44 -0700
+Subject: [PATCH v9 2/7] srcu: Add notrace variant of srcu_dereference
 In-Reply-To: <20180628182149.226164-1-joel@joelfernandes.org>
 References: <20180628182149.226164-1-joel@joelfernandes.org>
-Message-ID: <20180628182149.226164-8-joel@joelfernandes.org>
+Message-ID: <20180628182149.226164-3-joel@joelfernandes.org>
 
 From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
 
-Here we add unit tests for the preemptoff and irqsoff tracer by using a
-kernel module introduced previously to trigger atomic sections in the
-kernel.
+In the last patch in this series, we are making lockdep register hooks
+onto the irq_{disable,enable} tracepoints. These tracepoints use the
+_rcuidle tracepoint variant. In this series we switch the _rcuidle
+tracepoint callers to use SRCU instead of sched-RCU. Inorder to
+dereference the pointer to the probe functions, we could call
+srcu_dereference, however this API will call back into lockdep to check
+if the lock is held *before* the lockdep probe hooks have a chance to
+run and annotate the IRQ enabled/disabled state.
 
-Reviewed-by: Masami Hiramatsu <mhiramat at kernel.org>
-Acked-by: Masami Hiramatsu <mhiramat at kernel.org>
+For this reason we need a notrace variant of srcu_dereference since
+otherwise we get lockdep splats. This patch adds the needed
+srcu_dereference_notrace variant.
+
+Reviewed-by: Paul E. McKenney <paulmck at linux.vnet.ibm.com>
 Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
 ---
- tools/testing/selftests/ftrace/config         |  3 +
- .../test.d/preemptirq/irqsoff_tracer.tc       | 73 +++++++++++++++++++
- 2 files changed, 76 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
+ include/linux/srcu.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/testing/selftests/ftrace/config b/tools/testing/selftests/ftrace/config
-index b01924c71c09..29588b328345 100644
---- a/tools/testing/selftests/ftrace/config
-+++ b/tools/testing/selftests/ftrace/config
-@@ -4,3 +4,6 @@ CONFIG_FUNCTION_PROFILER=y
- CONFIG_TRACER_SNAPSHOT=y
- CONFIG_STACK_TRACER=y
- CONFIG_HIST_TRIGGERS=y
-+CONFIG_PREEMPT_TRACER=y
-+CONFIG_IRQSOFF_TRACER=y
-+CONFIG_TEST_ATOMIC_SECTIONS=m
-diff --git a/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc b/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
-new file mode 100644
-index 000000000000..1806d340035d
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
-@@ -0,0 +1,73 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: test for the preemptirqsoff tracer
+diff --git a/include/linux/srcu.h b/include/linux/srcu.h
+index 3e72a291c401..67135d4a8a30 100644
+--- a/include/linux/srcu.h
++++ b/include/linux/srcu.h
+@@ -169,6 +169,11 @@ static inline int srcu_read_lock_held(const struct srcu_struct *sp)
+  */
+ #define srcu_dereference(p, sp) srcu_dereference_check((p), (sp), 0)
+ 
++/**
++ * srcu_dereference_notrace - no tracing and no lockdep calls from here
++ */
++#define srcu_dereference_notrace(p, sp) srcu_dereference_check((p), (sp), 1)
 +
-+MOD=test_atomic_sections
-+
-+fail() {
-+    reset_tracer
-+    rmmod $MOD || true
-+    exit_fail
-+}
-+
-+unsup() { #msg
-+    reset_tracer
-+    rmmod $MOD || true
-+    echo $1
-+    exit_unsupported
-+}
-+
-+modprobe $MOD || unsup "$MOD module not available"
-+rmmod $MOD
-+
-+grep -q "preemptoff" available_tracers || unsup "preemptoff tracer not enabled"
-+grep -q "irqsoff" available_tracers || unsup "irqsoff tracer not enabled"
-+
-+reset_tracer
-+
-+# Simulate preemptoff section for half a second couple of times
-+echo preemptoff > current_tracer
-+sleep 1
-+modprobe $MOD atomic_mode=preempt atomic_time=500000 || fail
-+rmmod $MOD || fail
-+modprobe $MOD atomic_mode=preempt atomic_time=500000 || fail
-+rmmod $MOD || fail
-+modprobe $MOD atomic_mode=preempt atomic_time=500000 || fail
-+rmmod $MOD || fail
-+
-+cat trace
-+
-+# Confirm which tracer
-+grep -q "tracer: preemptoff" trace || fail
-+
-+# Check the end of the section
-+egrep -q "5.....us : <stack trace>" trace || fail
-+
-+# Check for 500ms of latency
-+egrep -q "latency: 5..... us" trace || fail
-+
-+reset_tracer
-+
-+# Simulate irqsoff section for half a second couple of times
-+echo irqsoff > current_tracer
-+sleep 1
-+modprobe $MOD atomic_mode=irq atomic_time=500000 || fail
-+rmmod $MOD || fail
-+modprobe $MOD atomic_mode=irq atomic_time=500000 || fail
-+rmmod $MOD || fail
-+modprobe $MOD atomic_mode=irq atomic_time=500000 || fail
-+rmmod $MOD || fail
-+
-+cat trace
-+
-+# Confirm which tracer
-+grep -q "tracer: irqsoff" trace || fail
-+
-+# Check the end of the section
-+egrep -q "5.....us : <stack trace>" trace || fail
-+
-+# Check for 500ms of latency
-+egrep -q "latency: 5..... us" trace || fail
-+
-+reset_tracer
-+exit 0
+ /**
+  * srcu_read_lock - register a new reader for an SRCU-protected structure.
+  * @sp: srcu_struct in which to register the new reader.
 -- 
 2.18.0.rc2.346.g013aa6912e-goog
 
