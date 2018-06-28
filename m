@@ -1,56 +1,30 @@
-From: rafael.tinoco@linaro.org (Rafael Tinoco)
-Date: Wed, 27 Jun 2018 22:15:37 -0300
-Subject: [PATCH] selftests: gpio: gpio-mockup-chardev
- GPIOHANDLE_REQUEST_OUTPUT fix
-In-Reply-To: <CACRpkdZ82RNta7LGp4OB=6TY_q3mdqGGDedayz-C4hB9m7WG9Q@mail.gmail.com>
-References: <20180606174424.9630-1-rafael.tinoco@linaro.org>
- <CACRpkdZ82RNta7LGp4OB=6TY_q3mdqGGDedayz-C4hB9m7WG9Q@mail.gmail.com>
-Message-ID:
- <CADtBP2CzQ7_ad53ZnC_5w5gmaQdSeB8VxDEtW13fZye_OGWzug@mail.gmail.com>
+From: luc.vanoostenryck@gmail.com (Luc Van Oostenryck)
+Date: Thu, 28 Jun 2018 08:17:59 +0200
+Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
+In-Reply-To: <20180627171757.amucnh5znld45cpc@armageddon.cambridge.arm.com>
+References: <cover.1529507994.git.andreyknvl@google.com>
+ <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
+ <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
+ <CAAeHK+yqWKTdTG+ymZ2-5XKiDANV+fmUjnQkRy-5tpgphuLJRA@mail.gmail.com>
+ <0cef1643-a523-98e7-95e2-9ec595137642@arm.com>
+ <20180627171757.amucnh5znld45cpc@armageddon.cambridge.arm.com>
+Message-ID: <20180628061758.j6bytsaj5jk4aocg@ltop.local>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180628011537.hWCR_IDhhKrtmKntXuTzIg1cVcBtqhVf64gjp6_JBB8@z>
+Message-ID: <20180628061759.gxo2in-DKrdbwxoMTePYrF4ImCsQpzlDgpt-xxO3fp8@z>
 
-Linus, Bartosz,
+On Wed, Jun 27, 2018@06:17:58PM +0100, Catalin Marinas wrote:
+> 
+> sparse is indeed an option. The current implementation doesn't warn on
+> an explicit cast from (void __user *) to (unsigned long) since that's a
+> valid thing in the kernel. I couldn't figure out if there's any other
+> __attribute__ that could be used to warn of such conversion.
 
-This was discovered during our investigations of a functional tests
-regression/error:
+Hi,
 
-https://bugs.linaro.org/show_bug.cgi?id=3769
+sparse doesn't have such attribute but would an new option that would warn
+on such cast be a solution for your case?
 
-Which turned out to be related to missing CONFIG_ARM{64}_MODULE_PLTS
-config in our builds.
-
-However, during investigations, we realized the functional test had
-the issues best described in comment:
-
-https://bugs.linaro.org/show_bug.cgi?id=3769#c3
-
-Related to errno variable being considered outside the error scope.
-
-Thank you
-Rafael
-
-On Thu, 14 Jun 2018@11:42, Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Wed, Jun 6, 2018 at 7:44 PM, Rafael David Tinoco
-> <rafael.tinoco@linaro.org> wrote:
->
-> > Following logic from commit: 22f6592b23, GPIOHANDLE_REQUEST_OUTPUT
-> > should handle errors same way as GPIOHANDLE_REQUEST_INPUT does, or else
-> > the following error occurs:
-> >
-> > gpio-mockup-chardev: gpio<gpiochip1> line<0> test flag<0x2> value<0>: No
-> > such file or directory
-> >
-> > despite the real result of gpio_pin_test(), gpio_debugfs_get() and
-> > gpiotools_request_linehandle() functions.
-> >
-> > Signed-off-by: Rafael David Tinoco <rafael.tinoco at linaro.org>
->
-> Bartosz, does this look OK to you?
->
-> Yours,
-> Linus Walleij
+-- Luc
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
