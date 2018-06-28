@@ -1,30 +1,22 @@
-From: luc.vanoostenryck@gmail.com (Luc Van Oostenryck)
-Date: Thu, 28 Jun 2018 08:17:59 +0200
-Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
-In-Reply-To: <20180627171757.amucnh5znld45cpc@armageddon.cambridge.arm.com>
-References: <cover.1529507994.git.andreyknvl@google.com>
- <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
- <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
- <CAAeHK+yqWKTdTG+ymZ2-5XKiDANV+fmUjnQkRy-5tpgphuLJRA@mail.gmail.com>
- <0cef1643-a523-98e7-95e2-9ec595137642@arm.com>
- <20180627171757.amucnh5znld45cpc@armageddon.cambridge.arm.com>
-Message-ID: <20180628061758.j6bytsaj5jk4aocg@ltop.local>
+From: davem@davemloft.net (David Miller)
+Date: Thu, 28 Jun 2018 16:10:23 +0900 (KST)
+Subject: [PATCH v3 net-next 0/4] Updates for ipsec selftests
+In-Reply-To: <1530032875-30482-1-git-send-email-shannon.nelson@oracle.com>
+References: <1530032875-30482-1-git-send-email-shannon.nelson@oracle.com>
+Message-ID: <20180628.161023.224659291643516280.davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180628061759.gxo2in-DKrdbwxoMTePYrF4ImCsQpzlDgpt-xxO3fp8@z>
+Message-ID: <20180628071023.eLjb2ivLPWWqAC-DDmhAio2Q1-Alo_pZJq69tax-PGw@z>
 
-On Wed, Jun 27, 2018@06:17:58PM +0100, Catalin Marinas wrote:
+From: Shannon Nelson <shannon.nelson@oracle.com>
+Date: Tue, 26 Jun 2018 10:07:51 -0700
+
+> Fix up the existing ipsec selftest and add tests for
+> the ipsec offload driver API.
 > 
-> sparse is indeed an option. The current implementation doesn't warn on
-> an explicit cast from (void __user *) to (unsigned long) since that's a
-> valid thing in the kernel. I couldn't figure out if there's any other
-> __attribute__ that could be used to warn of such conversion.
+> v2: addressed formatting nits in netdevsim from Jakub Kicinski
+> v3: a couple more nits from Jakub
 
-Hi,
-
-sparse doesn't have such attribute but would an new option that would warn
-on such cast be a solution for your case?
-
--- Luc
+Looks good, series applied.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
