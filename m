@@ -1,48 +1,90 @@
-From: David.Laight@ACULAB.COM (David Laight)
-Date: Fri, 29 Jun 2018 15:27:30 +0000
-Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
-In-Reply-To: <20180628144858.2fu7kq56cxhp2kpg@armageddon.cambridge.arm.com>
-References: <cover.1529507994.git.andreyknvl@google.com>
- <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
- <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
- <CAAeHK+yqWKTdTG+ymZ2-5XKiDANV+fmUjnQkRy-5tpgphuLJRA@mail.gmail.com>
- <0cef1643-a523-98e7-95e2-9ec595137642@arm.com>
- <20180627171757.amucnh5znld45cpc@armageddon.cambridge.arm.com>
- <20180628061758.j6bytsaj5jk4aocg@ltop.local>
- <20180628102741.vk6vphfinlj3lvhv@armageddon.cambridge.arm.com>
- <20180628104610.czsnq4w3lfhxrn53@ltop.local>
- <20180628144858.2fu7kq56cxhp2kpg@armageddon.cambridge.arm.com>
-Message-ID: <a53c13e0cff941aa85f023b0f29346af@AcuMS.aculab.com>
+From: petrm@mellanox.com (Petr Machata)
+Date: Sat, 30 Jun 2018 02:44:23 +0200
+Subject: [PATCH net-next 00/13] mlxsw: Add resource scale tests
+Message-ID: <cover.1530319109.git.petrm@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180629152730.n7DLipuKdW7Rn5eLnJqRihla-V-H_dTjTciJQHAM9_o@z>
+Message-ID: <20180630004423.oIf-zuP3XgOpRr8BYitdNr0QPkJbrG5WPY4BPf5h7Kc@z>
 
-From: Catalin Marinas
-> Sent: 28 June 2018 15:49
-...
-> >
-> > Mmmm yes.
-> > I tend to favor a sort of opposite approach. When we have an address
-> > that must not be dereferenced as-such (and sometimes when the address
-> > can be from both __user & __kernel space) I prefer to use a ulong
-> > which will force the use of the required operation before being
-> > able to do any sort of dereferencing and this won't need horrible
-> > casts with __force (it, of course, all depends on the full context).
-> 
-> I agree. That's what the kernel uses in functions like get_user_pages()
-> which take ulong as an argument. Similarly mmap() and friends don't
-> expect the pointer to be dereferenced, hence the ulong argument. The
-> interesting part that the man page (and the C library header
-> declaration) shows such address argument as void *. We could add a
-> syscall wrapper in the arch code, only that it doesn't feel consistent
-> with the "rule" that ulong addresses are not actually tagged pointers.
+There are a number of tests that check features of the Linux networking
+stack. By running them on suitable interfaces, one can exercise the
+mlxsw offloading code. However none of these tests attempts to push
+mlxsw to the limits supported by the ASIC.
 
-For most modern calling conventions it would make sense to put 'user'
-addresses (and physical ones from that matter) into a structure.
-That way you get much stronger typing from C itself.
+As an additional wrinkle, the "limits supported by the ASIC" themselves
+may not be a set of fixed numbers, but rather depend on a profile that
+determines how the ASIC resources are allocated for different purposes.
 
-The patch would, of course, be huge!
+This patchset introduces several tests that verify capability of mlxsw
+to offload amounts of routes, flower rules, and mirroring sessions that
+match predicted ASIC capacity, at different configuration profiles.
+Additionally they verify that amounts exceeding the predicted capacity
+can *not* be offloaded.
 
-	David
+These are not generic tests, but ones that are tailored for mlxsw
+specifically. For that reason they are not added to net/forwarding
+selftests subdirectory, but rather to a newly-added drivers/net/mlxsw.
+
+Patches #1, #2 and #3 tweak the generic forwarding/lib.sh to support the
+new additions.
+
+In patches #4 and #5, new libraries for interfacing with devlink are
+introduced, first a generic one, then a Spectrum-specific one.
+
+In patch #6, a devlink resource test is introduced.
+
+Patches #7 and #8, #9 and #10, and #11 and #12 introduce three scale
+tests: router, flower and mirror-to-gretap. The first of each pair of
+patches introduces a generic portion of the test (mlxsw-specific), the
+second introduces a Spectrum-specific wrapper.
+
+Patch #13 then introduces a scale test driver that runs (possibly a
+subset of) the tests introduced by patches from previous paragraph.
+
+Arkadi Sharshevsky (1):
+  selftests: mlxsw: Add router test
+
+Petr Machata (8):
+  selftests: forwarding: lib: Add check_err_fail()
+  selftests: forwarding: lib: Parameterize NUM_NETIFS in two functions
+  selftests: forwarding: Add devlink_lib.sh
+  selftests: mlxsw: Add devlink_lib_spectrum.sh
+  selftests: mlxsw: Add tc flower scale test
+  selftests: mlxsw: Add target for tc flower test on spectrum
+  selftests: mlxsw: Add scale test for mirror-to-gretap
+  selftests: mlxsw: Add target for mirror-to-gretap test on spectrum
+
+Yuval Mintz (4):
+  selftests: forwarding: Allow lib.sh sourcing from other directories
+  selftests: mlxsw: Add devlink KVD resource test
+  selftests: mlxsw: Add target for router test on spectrum
+  selftests: mlxsw: Add scale test for resources
+
+ MAINTAINERS                                        |   1 +
+ .../drivers/net/mlxsw/mirror_gre_scale.sh          | 197 +++++++++++++++++++++
+ .../selftests/drivers/net/mlxsw/router_scale.sh    | 167 +++++++++++++++++
+ .../net/mlxsw/spectrum/devlink_lib_spectrum.sh     | 119 +++++++++++++
+ .../net/mlxsw/spectrum/devlink_resources.sh        | 117 ++++++++++++
+ .../drivers/net/mlxsw/spectrum/mirror_gre_scale.sh |  13 ++
+ .../drivers/net/mlxsw/spectrum/resource_scale.sh   |  55 ++++++
+ .../drivers/net/mlxsw/spectrum/router_scale.sh     |  18 ++
+ .../drivers/net/mlxsw/spectrum/tc_flower_scale.sh  |  19 ++
+ .../selftests/drivers/net/mlxsw/tc_flower_scale.sh | 134 ++++++++++++++
+ .../selftests/net/forwarding/devlink_lib.sh        | 108 +++++++++++
+ tools/testing/selftests/net/forwarding/lib.sh      |  30 +++-
+ 12 files changed, 974 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/mlxsw/mirror_gre_scale.sh
+ create mode 100644 tools/testing/selftests/drivers/net/mlxsw/router_scale.sh
+ create mode 100644 tools/testing/selftests/drivers/net/mlxsw/spectrum/devlink_lib_spectrum.sh
+ create mode 100755 tools/testing/selftests/drivers/net/mlxsw/spectrum/devlink_resources.sh
+ create mode 100644 tools/testing/selftests/drivers/net/mlxsw/spectrum/mirror_gre_scale.sh
+ create mode 100755 tools/testing/selftests/drivers/net/mlxsw/spectrum/resource_scale.sh
+ create mode 100644 tools/testing/selftests/drivers/net/mlxsw/spectrum/router_scale.sh
+ create mode 100644 tools/testing/selftests/drivers/net/mlxsw/spectrum/tc_flower_scale.sh
+ create mode 100644 tools/testing/selftests/drivers/net/mlxsw/tc_flower_scale.sh
+ create mode 100644 tools/testing/selftests/net/forwarding/devlink_lib.sh
+
+-- 
+2.4.11
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
