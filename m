@@ -1,161 +1,152 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Sat, 30 Jun 2018 02:48:12 +0200
-Subject: [PATCH net-next 05/13] selftests: mlxsw: Add devlink_lib_spectrum.sh
+Date: Sat, 30 Jun 2018 02:48:27 +0200
+Subject: [PATCH net-next 06/13] selftests: mlxsw: Add devlink KVD resource test
 In-Reply-To: <cover.1530319109.git.petrm@mellanox.com>
 References: <cover.1530319109.git.petrm@mellanox.com>
-Message-ID: <ee04f82f335af582d55b06dc706a5aadd9e3c50a.1530319109.git.petrm@mellanox.com>
+Message-ID: <812360f52f4f3a670c7432784f775f36749b9b0e.1530319109.git.petrm@mellanox.com>
 
-This library builds on top of devlink_lib.sh and contains functionality
-specific to Spectrum ASICs, e.g., re-partitioning the various KVD
-sub-parts.
+From: Yuval Mintz <yuvalm at mellanox.com>
+
+Add a selftest that can be used to perform basic sanity of the devlink
+resource API as well as test the behavior of KVD manipulation in the
+driver.
+
+This is the first case of a HW-only test - in order to test the devlink
+resource a driver capable of exposing resources has to be provided
+first.
 
 Signed-off-by: Yuval Mintz <yuvalm at mellanox.com>
-[petrm at mellanox.com: Split this out from another patch. Fix line length
-in devlink_sp_read_kvd_defaults().]
+[petrm at mellanox.com: Extracted two patches out of this patch. Tweaked
+commit message.]
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 ---
- MAINTAINERS                                        |   1 +
- .../net/mlxsw/spectrum/devlink_lib_spectrum.sh     | 119 +++++++++++++++++++++
- 2 files changed, 120 insertions(+)
- create mode 100644 tools/testing/selftests/drivers/net/mlxsw/spectrum/devlink_lib_spectrum.sh
+ .../net/mlxsw/spectrum/devlink_resources.sh        | 117 +++++++++++++++++++++
+ 1 file changed, 117 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/mlxsw/spectrum/devlink_resources.sh
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f3e766e504d8..f3dd6c4f61e1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9154,6 +9154,7 @@ S:	Supported
- W:	http://www.mellanox.com
- Q:	http://patchwork.ozlabs.org/project/netdev/list/
- F:	drivers/net/ethernet/mellanox/mlxsw/
-+F:	tools/testing/selftests/drivers/net/mlxsw/
- 
- MELLANOX FIRMWARE FLASH LIBRARY (mlxfw)
- M:	mlxsw at mellanox.com
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/spectrum/devlink_lib_spectrum.sh b/tools/testing/selftests/drivers/net/mlxsw/spectrum/devlink_lib_spectrum.sh
-new file mode 100644
-index 000000000000..73035e25085d
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/spectrum/devlink_resources.sh b/tools/testing/selftests/drivers/net/mlxsw/spectrum/devlink_resources.sh
+new file mode 100755
+index 000000000000..b1fe960e398a
 --- /dev/null
-+++ b/tools/testing/selftests/drivers/net/mlxsw/spectrum/devlink_lib_spectrum.sh
-@@ -0,0 +1,119 @@
++++ b/tools/testing/selftests/drivers/net/mlxsw/spectrum/devlink_resources.sh
+@@ -0,0 +1,117 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +
-+source "../../../../net/forwarding/devlink_lib.sh"
++NUM_NETIFS=1
++source devlink_lib_spectrum.sh
 +
-+if [ "$DEVLINK_VIDDID" != "15b3:cb84" ]; then
-+	echo "SKIP: test is tailored for Mellanox Spectrum"
-+	exit 1
-+fi
++setup_prepare()
++{
++	devlink_sp_read_kvd_defaults
++}
 +
-+# Needed for returning to default
-+declare -A KVD_DEFAULTS
++cleanup()
++{
++	pre_cleanup
++	devlink_sp_size_kvd_to_default
++}
 +
-+KVD_CHILDREN="linear hash_single hash_double"
-+KVDL_CHILDREN="singles chunks large_chunks"
++trap cleanup EXIT
 +
-+devlink_sp_resource_minimize()
++setup_prepare
++
++profiles_test()
++{
++	local i
++
++	log_info "Running profile tests"
++
++	for i in $KVD_PROFILES; do
++		RET=0
++		devlink_sp_resource_kvd_profile_set $i
++		log_test "'$i' profile"
++	done
++
++	# Default is explicitly tested at end to ensure it's actually applied
++	RET=0
++	devlink_sp_resource_kvd_profile_set "default"
++	log_test "'default' profile"
++}
++
++resources_min_test()
 +{
 +	local size
 +	local i
++	local j
++
++	log_info "Running KVD-minimum tests"
 +
 +	for i in $KVD_CHILDREN; do
++		RET=0
 +		size=$(devlink_resource_get kvd "$i" | jq '.["size_min"]')
 +		devlink_resource_size_set "$size" kvd "$i"
-+	done
 +
-+	for i in $KVDL_CHILDREN; do
-+		size=$(devlink_resource_get kvd linear "$i" | \
-+		       jq '.["size_min"]')
-+		devlink_resource_size_set "$size" kvd linear "$i"
-+	done
-+}
-+
-+devlink_sp_size_kvd_to_default()
-+{
-+	local need_reload=0
-+	local i
-+
-+	for i in $KVD_CHILDREN; do
-+		local size=$(echo "${KVD_DEFAULTS[kvd_$i]}" | jq '.["size"]')
-+		current_size=$(devlink_resource_size_get kvd "$i")
-+
-+		if [ "$size" -ne "$current_size" ]; then
-+			devlink_resource_size_set "$size" kvd "$i"
-+			need_reload=1
++		# In case of linear, need to minimize sub-resources as well
++		if [[ "$i" == "linear" ]]; then
++			for j in $KVDL_CHILDREN; do
++				devlink_resource_size_set 0 kvd linear "$j"
++			done
 +		fi
-+	done
 +
-+	for i in $KVDL_CHILDREN; do
-+		local size=$(echo "${KVD_DEFAULTS[kvd_linear_$i]}" | \
-+			     jq '.["size"]')
-+		current_size=$(devlink_resource_size_get kvd linear "$i")
-+
-+		if [ "$size" -ne "$current_size" ]; then
-+			devlink_resource_size_set "$size" kvd linear "$i"
-+			need_reload=1
-+		fi
-+	done
-+
-+	if [ "$need_reload" -ne "0" ]; then
 +		devlink_reload
-+	fi
++		devlink_sp_size_kvd_to_default
++		log_test "'$i' minimize [$size]"
++	done
 +}
 +
-+devlink_sp_read_kvd_defaults()
++resources_max_test()
 +{
-+	local key
++	local min_size
++	local size
 +	local i
++	local j
 +
-+	KVD_DEFAULTS[kvd]=$(devlink_resource_get "kvd")
++	log_info "Running KVD-maximum tests"
 +	for i in $KVD_CHILDREN; do
-+		key=kvd_$i
-+		KVD_DEFAULTS[$key]=$(devlink_resource_get kvd "$i")
-+	done
++		RET=0
++		devlink_sp_resource_minimize
 +
-+	for i in $KVDL_CHILDREN; do
-+		key=kvd_linear_$i
-+		KVD_DEFAULTS[$key]=$(devlink_resource_get kvd linear "$i")
++		# Calculate the maximum possible size for the given partition
++		size=$(devlink_resource_size_get kvd)
++		for j in $KVD_CHILDREN; do
++			if [ "$i" != "$j" ]; then
++				min_size=$(devlink_resource_get kvd "$j" | \
++					   jq '.["size_min"]')
++				size=$((size - min_size))
++			fi
++		done
++
++		# Test almost maximum size
++		devlink_resource_size_set "$((size - 128))" kvd "$i"
++		devlink_reload
++		log_test "'$i' almost maximize [$((size - 128))]"
++
++		# Test above maximum size
++		devlink resource set "$DEVLINK_DEV" \
++			path "kvd/$i" size $((size + 128)) &> /dev/null
++		check_fail $? "Set kvd/$i to size $((size + 128)) should fail"
++		log_test "'$i' Overflow rejection [$((size + 128))]"
++
++		# Test maximum size
++		if [ "$i" == "hash_single" ] || [ "$i" == "hash_double" ]; then
++			echo "SKIP: Observed problem with exact max $i"
++			continue
++		fi
++
++		devlink_resource_size_set "$size" kvd "$i"
++		devlink_reload
++		log_test "'$i' maximize [$size]"
++
++		devlink_sp_size_kvd_to_default
 +	done
 +}
 +
-+KVD_PROFILES="default scale ipv4_max"
++profiles_test
++resources_min_test
++resources_max_test
 +
-+devlink_sp_resource_kvd_profile_set()
-+{
-+	local profile=$1
-+
-+	case "$profile" in
-+	scale)
-+		devlink_resource_size_set 64000 kvd linear
-+		devlink_resource_size_set 15616 kvd linear singles
-+		devlink_resource_size_set 32000 kvd linear chunks
-+		devlink_resource_size_set 16384 kvd linear large_chunks
-+		devlink_resource_size_set 128000 kvd hash_single
-+		devlink_resource_size_set 48000 kvd hash_double
-+		devlink_reload
-+		;;
-+	ipv4_max)
-+		devlink_resource_size_set 64000 kvd linear
-+		devlink_resource_size_set 15616 kvd linear singles
-+		devlink_resource_size_set 32000 kvd linear chunks
-+		devlink_resource_size_set 16384 kvd linear large_chunks
-+		devlink_resource_size_set 144000 kvd hash_single
-+		devlink_resource_size_set 32768 kvd hash_double
-+		devlink_reload
-+		;;
-+	default)
-+		devlink_resource_size_set 98304 kvd linear
-+		devlink_resource_size_set 16384 kvd linear singles
-+		devlink_resource_size_set 49152 kvd linear chunks
-+		devlink_resource_size_set 32768 kvd linear large_chunks
-+		devlink_resource_size_set 87040 kvd hash_single
-+		devlink_resource_size_set 60416 kvd hash_double
-+		devlink_reload
-+		;;
-+	*)
-+		check_err 1 "Unknown profile $profile"
-+	esac
-+}
++exit "$RET"
 -- 
 2.4.11
 
