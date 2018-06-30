@@ -1,33 +1,32 @@
 From: davem@davemloft.net (David Miller)
-Date: Sat, 30 Jun 2018 20:35:53 +0900 (KST)
-Subject: [PATCH net-next 0/4] Fixes for running mirror-to-gretap tests
- on veth
-In-Reply-To: <cover.1530204784.git.petrm@mellanox.com>
-References: <cover.1530204784.git.petrm@mellanox.com>
-Message-ID: <20180630.203553.1800987077648681363.davem@davemloft.net>
+Date: Sat, 30 Jun 2018 22:06:54 +0900 (KST)
+Subject: [PATCH net-next 00/13] mlxsw: Add resource scale tests
+In-Reply-To: <cover.1530319109.git.petrm@mellanox.com>
+References: <cover.1530319109.git.petrm@mellanox.com>
+Message-ID: <20180630.220654.479410647137748499.davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180630113553.z9jF925Q1oqq_PQV4G2ke736EYA70a2clYOvoc6mKpU@z>
+Message-ID: <20180630130654.8g5ObOgrfHCRbSNQcvJQT8-9giduKZ5IEjIXzTdgFag@z>
 
 From: Petr Machata <petrm@mellanox.com>
-Date: Thu, 28 Jun 2018 18:56:15 +0200
+Date: Sat, 30 Jun 2018 02:44:23 +0200
 
-> The forwarding selftests infrastructure makes it possible to run the
-> individual tests on a purely software netdevices. Names of interfaces to
-> run the test with can be passed as command line arguments to a test.
-> lib.sh then creates veth pairs backing the interfaces if none exist in
-> the system.
+> There are a number of tests that check features of the Linux networking
+> stack. By running them on suitable interfaces, one can exercise the
+> mlxsw offloading code. However none of these tests attempts to push
+> mlxsw to the limits supported by the ASIC.
 > 
-> However, the tests need to recognize that they might be run on a soft
-> device. Many mirror-to-gretap tests are buggy in this regard. This patch
-> set aims to fix the problems in running mirror-to-gretap tests on veth
-> devices.
+> As an additional wrinkle, the "limits supported by the ASIC" themselves
+> may not be a set of fixed numbers, but rather depend on a profile that
+> determines how the ASIC resources are allocated for different purposes.
 > 
-> In patch #1, a service function is split out of setup_wait().
-> In patch #2, installing a trap is made optional.
-> In patch #3, tc filters in several tests are tweaked to work with veth.
-> In patch #4, the logic for waiting for neighbor is fixed for veth.
+> This patchset introduces several tests that verify capability of mlxsw
+> to offload amounts of routes, flower rules, and mirroring sessions that
+> match predicted ASIC capacity, at different configuration profiles.
+> Additionally they verify that amounts exceeding the predicted capacity
+> can *not* be offloaded.
+ ...
 
-Series applied, thanks.
+Good stuff, series applied, thanks!
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
