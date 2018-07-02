@@ -1,21 +1,56 @@
 From: lizhijian@cn.fujitsu.com (Li Zhijian)
-Date: Mon,  2 Jul 2018 11:53:51 +0800
-Subject: [PATCH 0/3] fix selftests compiling errors and warnings
-Message-ID: <1530503634-32241-1-git-send-email-lizhijian@cn.fujitsu.com>
+Date: Mon,  2 Jul 2018 11:53:53 +0800
+Subject: [PATCH 2/3] selftests/android: initialize heap_type to avoid
+ compiling warning
+In-Reply-To: <1530503634-32241-2-git-send-email-lizhijian@cn.fujitsu.com>
+References: <1530503634-32241-1-git-send-email-lizhijian@cn.fujitsu.com>
+ <1530503634-32241-2-git-send-email-lizhijian@cn.fujitsu.com>
+Message-ID: <1530503634-32241-3-git-send-email-lizhijian@cn.fujitsu.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180702035351.Lgwt0WDJfU6PzUJqEl4QjgiOmKtrRjXnTRR2TI_w8lc@z>
+Message-ID: <20180702035353.mn9mjWZ2PALflceM3uElnVGfnRUjKl-uHqWafglPRJw@z>
 
+root at vm-lkp-nex04-8G-7 ~/linux-v4.18-rc2/tools/testing/selftests/android# make
+make[1]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+make[1]: Entering directory '/root/linux-v4.18-rc2/tools/testing/selftests/android/ion'
+gcc  -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../usr/include/ -Wall -O2 -g    ionapp_export.c ipcsocket.c ionutils.c   -o ionapp_export
+ionapp_export.c: In function 'main':
+ionapp_export.c:91:2: warning: 'heap_type' may be used uninitialized in
+this function [-Wmaybe-uninitialized]
+  printf("heap_type: %ld, heap_size: %ld\n", heap_type, heap_size);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Li Zhijian (3):
-  selftests/android: fix compiling error
-  selftests/android: initialize heap_type to avoid compiling warning
-  selftests/gpio: unset OUTPUT for build tools/gpio
-
- tools/testing/selftests/android/ion/Makefile        | 5 ++++-
+CC: Shuah Khan <shuah at kernel.org>
+CC: Pintu Agarwal <pintu.ping at gmail.com>
+Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
+---
  tools/testing/selftests/android/ion/ionapp_export.c | 7 +++++++
- tools/testing/selftests/gpio/Makefile               | 2 +-
- 3 files changed, 12 insertions(+), 2 deletions(-)
+ 1 file changed, 7 insertions(+)
 
+diff --git a/tools/testing/selftests/android/ion/ionapp_export.c b/tools/testing/selftests/android/ion/ionapp_export.c
+index a944e72..e3435c2 100644
+--- a/tools/testing/selftests/android/ion/ionapp_export.c
++++ b/tools/testing/selftests/android/ion/ionapp_export.c
+@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
+ 		return -1;
+ 	}
+ 
++	heap_type = -1UL;
+ 	heap_size = 0;
+ 	flags = 0;
+ 
+@@ -82,6 +83,12 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
++	if (heap_type == -1UL) {
++		printf("heap_type is invalid\n");
++		print_usage(argc, argv);
++		exit(1);
++	}
++
+ 	if (heap_size <= 0) {
+ 		printf("heap_size cannot be 0\n");
+ 		print_usage(argc, argv);
 -- 
 2.7.4
 
