@@ -1,49 +1,46 @@
 From: lizhijian@cn.fujitsu.com (Li Zhijian)
-Date: Mon,  2 Jul 2018 11:53:54 +0800
-Subject: [PATCH 3/3] selftests/gpio: unset OUTPUT for build tools/gpio
-In-Reply-To: <1530503634-32241-3-git-send-email-lizhijian@cn.fujitsu.com>
+Date: Mon,  2 Jul 2018 11:53:52 +0800
+Subject: [PATCH 1/3] selftests/android: fix compiling error
+In-Reply-To: <1530503634-32241-1-git-send-email-lizhijian@cn.fujitsu.com>
 References: <1530503634-32241-1-git-send-email-lizhijian@cn.fujitsu.com>
- <1530503634-32241-2-git-send-email-lizhijian@cn.fujitsu.com>
- <1530503634-32241-3-git-send-email-lizhijian@cn.fujitsu.com>
-Message-ID: <1530503634-32241-4-git-send-email-lizhijian@cn.fujitsu.com>
+Message-ID: <1530503634-32241-2-git-send-email-lizhijian@cn.fujitsu.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180702035354.9jrUZjkHUti7oz0ohsUMwXtxod9PEobEwzEpeNHecTk@z>
+Message-ID: <20180702035352.gdx39ZS4RdLf7MxLatWctP4bwqv549SteEDJW7QVZmc@z>
 
-when we execute 'make' to build selftests, the TOP Makefile build gpio like:
-selftests$ make ARCH= CROSS_COMPILE= OUTPUT=/home/lizj/linux/tools/testing/selftests/gpio -C gpio
-...
-make[2]: Leaving directory '/home/lizj/linux/tools/gpio'
-gcc -O2 -g -std=gnu99 -Wall -I../../../../usr/include/gpio-mockup-chardev.c ../../../gpio/gpio-utils.o ../../../../usr/include/linux/gpio.h  -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/uuid -lmount -o gpio-mockup-chardev
-gcc: error: ../../../gpio/gpio-utils.o: No such file or directory
-<builtin>: recipe for target 'gpio-mockup-chardev' failed
-make[1]: *** [gpio-mockup-chardev] Error 1
-make[1]: Leaving directory
-'/home/lizj/linux/tools/testing/selftests/gpio'
-Makefile:84: recipe for target 'all' failed
-make: *** [all] Error 2
+lizhijian at haswell-OptiPlex-9020:/home/lizj/linux/tools/testing/selftests/android/ion$ make
+gcc  -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../usr/include/ -Wall -O2 -g    ionapp_export.c ipcsocket.c ionutils.c   -o ionapp_export
+gcc  -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../usr/include/ -Wall -O2 -g    ionapp_import.c ipcsocket.c ionutils.c   -o ionapp_import
+gcc  -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../usr/include/ -Wall -O2 -g    ionmap_test.c ipcsocket.c ionutils.c   -o ionmap_test
+ionmap_test.c:12:27: fatal error: linux/dma-buf.h: No such file or directory
+compilation terminated.
+<builtin>: recipe for target 'ionmap_test' failed
+make: *** [ionmap_test] Error 1
 
-CC: Bamvor Jian Zhang <bamv2005 at gmail.com>
-CC: Bartosz Golaszewski <brgl at bgdev.pl>
+It requires headers_install to $TOP/usr
+
 CC: Shuah Khan <shuah at kernel.org>
-CC: linux-gpio at vger.kernel.org
+CC: Pintu Agarwal <pintu.ping at gmail.com>
 Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
 ---
- tools/testing/selftests/gpio/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/android/ion/Makefile | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index 1bbb475..e64a11c 100644
---- a/tools/testing/selftests/gpio/Makefile
-+++ b/tools/testing/selftests/gpio/Makefile
-@@ -24,7 +24,7 @@ LDLIBS += -lmount -I/usr/include/libmount
- $(BINARIES): ../../../gpio/gpio-utils.o ../../../../usr/include/linux/gpio.h
+diff --git a/tools/testing/selftests/android/ion/Makefile b/tools/testing/selftests/android/ion/Makefile
+index e036952..9f83299 100644
+--- a/tools/testing/selftests/android/ion/Makefile
++++ b/tools/testing/selftests/android/ion/Makefile
+@@ -4,7 +4,10 @@ CFLAGS := $(CFLAGS) $(INCLUDEDIR) -Wall -O2 -g
  
- ../../../gpio/gpio-utils.o:
--	make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
-+	make OUTPUT= ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
+ TEST_GEN_FILES := ionapp_export ionapp_import ionmap_test
  
- ../../../../usr/include/linux/gpio.h:
- 	make -C ../../../.. headers_install INSTALL_HDR_PATH=$(shell pwd)/../../../../usr/
+-all: $(TEST_GEN_FILES)
++all: ../../../../../usr/include/linux/dma-buf.h $(TEST_GEN_FILES)
++
++../../../../../usr/include/linux/dma-buf.h:
++	make -C ../../../../../ headers_install INSTALL_HDR_PATH=$(shell pwd)/../../../../../usr
+ 
+ $(TEST_GEN_FILES): ipcsocket.c ionutils.c
+ 
 -- 
 2.7.4
 
