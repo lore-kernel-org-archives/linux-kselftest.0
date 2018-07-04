@@ -1,71 +1,48 @@
-From: tomeu.vizoso@collabora.com (Tomeu Vizoso)
-Date: Wed, 4 Jul 2018 09:26:39 +0200
-Subject: [PATCH v6] Add udmabuf misc device
-In-Reply-To: <20180704055338.n3b7oexltaejqmcd@sirius.home.kraxel.org>
-References: <20180703075359.30349-1-kraxel@redhat.com>
- <20180703083757.GG7880@phenom.ffwll.local>
- <20180704055338.n3b7oexltaejqmcd@sirius.home.kraxel.org>
-Message-ID: <9818b301-9c9d-c703-d4fe-7c2d4d43ed66@collabora.com>
+From: mlichvar@redhat.com (Miroslav Lichvar)
+Date: Wed, 4 Jul 2018 09:49:18 +0200
+Subject: [RFC][PATCH] selftest: timers: Tweak raw_skew to SKIP when
+ ADJ_OFFSET is in progress
+In-Reply-To: <1530646587-12101-1-git-send-email-john.stultz@linaro.org>
+References: <1530646587-12101-1-git-send-email-john.stultz@linaro.org>
+Message-ID: <20180704074918.GE22600@localhost>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180704072639.yarZDd4bH_TioXh9tI0LKR1PG0btsSF3GcQ4BtH9Mpw@z>
+Message-ID: <20180704074918.3JsmgJ28tOU_kppYX2oc2HZ5mdbNRarAL8WDhgdTBOQ@z>
 
-On 07/04/2018 07:53 AM, Gerd Hoffmann wrote:
-> On Tue, Jul 03, 2018@10:37:57AM +0200, Daniel Vetter wrote:
->> On Tue, Jul 03, 2018@09:53:58AM +0200, Gerd Hoffmann wrote:
->>> A driver to let userspace turn memfd regions into dma-bufs.
->>>
->>> Use case:  Allows qemu create dmabufs for the vga framebuffer or
->>> virtio-gpu ressources.  Then they can be passed around to display
->>> those guest things on the host.  To spice client for classic full
->>> framebuffer display, and hopefully some day to wayland server for
->>> seamless guest window display.
->>>
->>> qemu test branch:
->>>    https://git.kraxel.org/cgit/qemu/log/?h=sirius/udmabuf
->>>
->>> Cc: David Airlie <airlied at linux.ie>
->>> Cc: Tomeu Vizoso <tomeu.vizoso at collabora.com>
->>> Cc: Laurent Pinchart <laurent.pinchart at ideasonboard.com>
->>> Cc: Daniel Vetter <daniel at ffwll.ch>
->>> Signed-off-by: Gerd Hoffmann <kraxel at redhat.com>
->>
->> I think some ack for a 2nd use-case, like virtio-wl or whatever would be
->> really cool. To give us some assurance that this is generically useful.
-> 
-> Tomeu?  Laurent?
+On Tue, Jul 03, 2018@12:36:27PM -0700, John Stultz wrote:
+> In the past we've warned when ADJ_OFFSET was in progress, usually
+> caused by ntpd or some other time adjusting daemon running in non
+> steady sate, which can cause the skew calculations to be incorrect
 
-Sorry, but I think I will need some help to understand how this could 
-help in the virtio-wl case [adding Zach Reizner to CC].
+Good idea.
 
-Any graphics buffers that are allocated with memfd will be shared with 
-the compositor via wl_shm, without need for dmabufs.
+> Thus, this patch sets a flag which we check when we fail so that
+> we don't cause false negatives.
 
-Daniel Stone [added to CC] commented though that this could be useful for 
-browsers that composite pages with a nested Wayland compositor, to avoid 
-having to blit each layer so that the EGL platform notifies the 
-compositor of new contents.
+I'd suggest to check few more things to better detect when something
+is adjusting the clock. The offset should be zero also at the end of
+the test and the frequency and tick should be the same as at the
+beginning of the test. This will detect daemons that set the frequency
+of the clock directly, not using adjtime() or the PLL.
 
-Cheers,
+Something like this:
 
-Tomeu
+@@ -137,9 +135,10 @@ int main(int argv, char **argc)
+        printf(" %lld.%i(act)", ppm/1000, abs((int)(ppm%1000)));
+ 
+        if (llabs(eppm - ppm) > 1000) {
+-               if (adj_offset_bad) {
++               if (tx1.offset || tx2.offset ||
++                   tx1.freq != tx2.freq || tx1.tick != tx2.tick) {
+                        printf("        [SKIP]\n");
+-                       return ksft_exit_skip("ADJ_OFFSET in progress. Shutdown NTPd or other time steering daemons\n");
++                       return ksft_exit_skip("The clock was adjusted. Shutdown ntpd or other time steering daemons\n");
+                }
+                printf("        [FAILED]\n");
+                return ksft_exit_fail();
 
->> Plus an ack from dma-buf folks (nag them on irc, you don't have them on Cc
->> here).
-> 
-> Hmm, does MAINTAINERS need an update then?  Maintainer and mailing lists
-> listed in the "DMA BUFFER SHARING FRAMEWORK" entry are on Cc.
-> 
-> Who should be Cc'ed?
-> 
->> Then this is imo good to go.
->>
->> I assume you'll push it to drm-misc, like all the other dma-buf stuff?
-> 
-> Can do that, sure, after collecting the acks ...
-> 
-> thanks,
->    Gerd
-> 
+
+-- 
+Miroslav Lichvar
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
