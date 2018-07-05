@@ -1,52 +1,54 @@
-From: daniel@ffwll.ch (Daniel Vetter)
-Date: Wed, 4 Jul 2018 11:19:54 +0200
-Subject: [PATCH v6] Add udmabuf misc device
-In-Reply-To: <20180704085825.nfkv5i7ultaavjve@sirius.home.kraxel.org>
-References: <20180703075359.30349-1-kraxel@redhat.com>
- <20180703083757.GG7880@phenom.ffwll.local>
- <20180704055338.n3b7oexltaejqmcd@sirius.home.kraxel.org>
- <20180704080807.GH3891@phenom.ffwll.local>
- <20180704085825.nfkv5i7ultaavjve@sirius.home.kraxel.org>
-Message-ID: <20180704091954.GQ3891@phenom.ffwll.local>
+From: john.stultz@linaro.org (John Stultz)
+Date: Thu,  5 Jul 2018 10:50:31 -0700
+Subject: [RFC][PATCH v2] selftest: timers: Tweak raw_skew to SKIP when
+ ADJ_OFFSET/other clock adjustments are in progress
+Message-ID: <1530813031-19243-1-git-send-email-john.stultz@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180704091954.Qxn8otukugrXCFfnUupyiZj6RZeQvtpkBhLUwQwRWk8@z>
+Message-ID: <20180705175031.OfwTCc3mj0puP3-I294g8CF8cWAiLIIhSRb239iLpNc@z>
 
-On Wed, Jul 04, 2018@10:58:25AM +0200, Gerd Hoffmann wrote:
->   Hi,
-> 
-> > > Hmm, does MAINTAINERS need an update then?  Maintainer and mailing lists
-> > > listed in the "DMA BUFFER SHARING FRAMEWORK" entry are on Cc.
-> > 
-> > Yeah, maintainers entry with you as maintainer plus dri-devel as mailing
-> > list plus drm-misc as repo would be good. Just grep for drm-misc.git for
-> > tons of examples.
-> 
-> There is an *existing* entry covering drivers/dma-buf/, and I've dropped
-> udmabuf.c into that directory, so I've assumed get_maintainers.pl picks
-> up all relevant dma-buf folks ...
-> 
-> Covering udmabuf.c maintainance is a different issue.  I could just add
-> myself to the existing entry, or create a new one specifically for
-> udmabuf.
+In the past we've warned when ADJ_OFFSET was in progress, usually
+caused by ntpd or some other time adjusting daemon running in non
+steady sate, which can cause the skew calculations to be incorrect
 
-That's what I meant, do a more specific entry to add yourself just for
-udmabuf.
+Thus, this patch sets a flag which we check if the clock was being
+adjusted when we fail so that we don't cause false negatives.
 
-> > > Who should be Cc'ed?
-> > 
-> > dim add-missing-cc ftw :-)
-> 
-> That just uses get_maintainer.pl according to the docs, so that wouldn't
-> change things as that is wired up as sendemail.cccmd already.  Except
-> that dim would probably add the list of people to the commit message.
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Ingo Molnar <mingo at kernel.org>
+Cc: Miroslav Lichvar <mlichvar at redhat.com>
+Cc: Richard Cochran <richardcochran at gmail.com>
+Cc: Prarit Bhargava <prarit at redhat.com>
+Cc: Stephen Boyd <sboyd at kernel.org>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: linux-kselftest at vger.kernel.org
+Suggested-by: Miroslav Lichvar <mlichvar at redhat.com>
+Signed-off-by: John Stultz <john.stultz at linaro.org>
+---
+v2: Widened the checks to look for other clock adjustments that
+    could happen, as suggested by Miroslav
+---
+ tools/testing/selftests/timers/raw_skew.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Ah right, I totally missed that you have more on the mail's Cc: than on
-the patch. I never do that, so always miss them :-)
--Daniel
+diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/selftests/timers/raw_skew.c
+index ca6cd14..dcf73c5 100644
+--- a/tools/testing/selftests/timers/raw_skew.c
++++ b/tools/testing/selftests/timers/raw_skew.c
+@@ -134,6 +134,11 @@ int main(int argv, char **argc)
+ 	printf(" %lld.%i(act)", ppm/1000, abs((int)(ppm%1000)));
+ 
+ 	if (llabs(eppm - ppm) > 1000) {
++		if (tx1.offset || tx2.offset ||
++		    tx1.freq != tx2.freq || tx1.tick != tx2.tick) {
++			printf("	[SKIP]\n");
++			return ksft_exit_skip("The clock was adjusted externally. Shutdown NTPd or other time sync daemons\n");
++		}
+ 		printf("	[FAILED]\n");
+ 		return ksft_exit_fail();
+ 	}
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.7.4
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
