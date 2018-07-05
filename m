@@ -1,30 +1,56 @@
 From: petrm@mellanox.com (Petr Machata)
-Date: Thu, 05 Jul 2018 21:10:53 +0200
-Subject: [PATCH net-next 0/2] Add a mlxsw-specific test for mirror-to-gretap
-Message-ID: <cover.1530816800.git.petrm@mellanox.com>
+Date: Thu, 05 Jul 2018 21:10:59 +0200
+Subject: [PATCH net-next 1/2] selftests: forwarding: Allow importing dependent
+ libraries
+In-Reply-To: <cover.1530816800.git.petrm@mellanox.com>
+References: <cover.1530816800.git.petrm@mellanox.com>
+Message-ID:
+ <f4ab79eb87bd1267887289623eba593e0ec52ca0.1530816800.git.petrm@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180705191053.DSL_KkNcG8lNi2waq_TzsdA5XnTIR5UtAPUPe6I9eZw@z>
+Message-ID: <20180705191059.g9kbmzO2qiRXhB1jOeIiqV5__HifSC4Cphs3hnTJFt4@z>
 
-Some configurations of mirror-to-gretap are impossible for mlxsw to
-offload. Add a test that checks that these out-of-domain conditions are
-handled properly by mlxsw.
+The next patch introduces a new mlxsw-specific test that uses
+mirror_gre_lib.sh and mirror_gre_topo_lib.sh.
 
-In patch #1, fix mirror_gre_lib.sh and mirror_gre_topo_lib.sh so that
-they can be imported from directories other than forwarding/.
+However when sourcing their own deps, these libraries assume that the
+test that's running is in the same directory. That's not the case for
+driver-specific tests.
 
-In patch #2, add a test to check handling of several scenarios that
-mlxsw is expected to fail to offload.
+So change the libraries to source their deps through $relative_path.
+That variable is set up by lib.sh, which should be imported by the test
+in question in any case.
 
-Petr Machata (2):
-  selftests: forwarding: Allow importing dependent libraries
-  selftests: mlxsw: Add mlxsw-specific test for mirror to gretap
+Signed-off-by: Petr Machata <petrm at mellanox.com>
+---
+ tools/testing/selftests/net/forwarding/mirror_gre_lib.sh      | 2 +-
+ tools/testing/selftests/net/forwarding/mirror_gre_topo_lib.sh | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- .../selftests/drivers/net/mlxsw/mirror_gre.sh      | 217 +++++++++++++++++++++
- .../selftests/net/forwarding/mirror_gre_lib.sh     |   2 +-
- .../net/forwarding/mirror_gre_topo_lib.sh          |   2 +-
- 3 files changed, 219 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/drivers/net/mlxsw/mirror_gre.sh
-
+diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh b/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
+index 1c18e332cd4f..fac486178ef7 100644
+--- a/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-source mirror_lib.sh
++source "$relative_path/mirror_lib.sh"
+ 
+ quick_test_span_gre_dir_ips()
+ {
+diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_topo_lib.sh b/tools/testing/selftests/net/forwarding/mirror_gre_topo_lib.sh
+index 253419564708..39c03e2867f4 100644
+--- a/tools/testing/selftests/net/forwarding/mirror_gre_topo_lib.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_gre_topo_lib.sh
+@@ -33,7 +33,7 @@
+ #   |                                                                         |
+ #   +-------------------------------------------------------------------------+
+ 
+-source mirror_topo_lib.sh
++source "$relative_path/mirror_topo_lib.sh"
+ 
+ mirror_gre_topo_h3_create()
+ {
 -- 
 2.4.11
 
