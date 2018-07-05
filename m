@@ -1,53 +1,32 @@
-From: john.stultz@linaro.org (John Stultz)
-Date: Thu,  5 Jul 2018 10:50:31 -0700
-Subject: [RFC][PATCH v2] selftest: timers: Tweak raw_skew to SKIP when
- ADJ_OFFSET/other clock adjustments are in progress
-Message-ID: <1530813031-19243-1-git-send-email-john.stultz@linaro.org>
+From: petrm@mellanox.com (Petr Machata)
+Date: Thu, 05 Jul 2018 21:10:53 +0200
+Subject: [PATCH net-next 0/2] Add a mlxsw-specific test for mirror-to-gretap
+Message-ID: <cover.1530816800.git.petrm@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180705175031.OfwTCc3mj0puP3-I294g8CF8cWAiLIIhSRb239iLpNc@z>
+Message-ID: <20180705191053.DSL_KkNcG8lNi2waq_TzsdA5XnTIR5UtAPUPe6I9eZw@z>
 
-In the past we've warned when ADJ_OFFSET was in progress, usually
-caused by ntpd or some other time adjusting daemon running in non
-steady sate, which can cause the skew calculations to be incorrect
+Some configurations of mirror-to-gretap are impossible for mlxsw to
+offload. Add a test that checks that these out-of-domain conditions are
+handled properly by mlxsw.
 
-Thus, this patch sets a flag which we check if the clock was being
-adjusted when we fail so that we don't cause false negatives.
+In patch #1, fix mirror_gre_lib.sh and mirror_gre_topo_lib.sh so that
+they can be imported from directories other than forwarding/.
 
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: Ingo Molnar <mingo at kernel.org>
-Cc: Miroslav Lichvar <mlichvar at redhat.com>
-Cc: Richard Cochran <richardcochran at gmail.com>
-Cc: Prarit Bhargava <prarit at redhat.com>
-Cc: Stephen Boyd <sboyd at kernel.org>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: linux-kselftest at vger.kernel.org
-Suggested-by: Miroslav Lichvar <mlichvar at redhat.com>
-Signed-off-by: John Stultz <john.stultz at linaro.org>
----
-v2: Widened the checks to look for other clock adjustments that
-    could happen, as suggested by Miroslav
----
- tools/testing/selftests/timers/raw_skew.c | 5 +++++
- 1 file changed, 5 insertions(+)
+In patch #2, add a test to check handling of several scenarios that
+mlxsw is expected to fail to offload.
 
-diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/selftests/timers/raw_skew.c
-index ca6cd14..dcf73c5 100644
---- a/tools/testing/selftests/timers/raw_skew.c
-+++ b/tools/testing/selftests/timers/raw_skew.c
-@@ -134,6 +134,11 @@ int main(int argv, char **argc)
- 	printf(" %lld.%i(act)", ppm/1000, abs((int)(ppm%1000)));
- 
- 	if (llabs(eppm - ppm) > 1000) {
-+		if (tx1.offset || tx2.offset ||
-+		    tx1.freq != tx2.freq || tx1.tick != tx2.tick) {
-+			printf("	[SKIP]\n");
-+			return ksft_exit_skip("The clock was adjusted externally. Shutdown NTPd or other time sync daemons\n");
-+		}
- 		printf("	[FAILED]\n");
- 		return ksft_exit_fail();
- 	}
+Petr Machata (2):
+  selftests: forwarding: Allow importing dependent libraries
+  selftests: mlxsw: Add mlxsw-specific test for mirror to gretap
+
+ .../selftests/drivers/net/mlxsw/mirror_gre.sh      | 217 +++++++++++++++++++++
+ .../selftests/net/forwarding/mirror_gre_lib.sh     |   2 +-
+ .../net/forwarding/mirror_gre_topo_lib.sh          |   2 +-
+ 3 files changed, 219 insertions(+), 2 deletions(-)
+ create mode 100755 tools/testing/selftests/drivers/net/mlxsw/mirror_gre.sh
+
 -- 
-2.7.4
+2.4.11
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
