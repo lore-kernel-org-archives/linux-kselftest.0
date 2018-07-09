@@ -1,18 +1,20 @@
 From: jhs@mojatatu.com (Jamal Hadi Salim)
-Date: Mon, 9 Jul 2018 14:33:41 -0400
-Subject: [PATCH net-next repost] tc-testing: fix ip address in u32 test
-In-Reply-To: <1531160746-17991-1-git-send-email-vladbu@mellanox.com>
-References: <1531160746-17991-1-git-send-email-vladbu@mellanox.com>
-Message-ID: <8f4af1de-3f65-e820-8b54-4bf94c071075@mojatatu.com>
+Date: Mon, 9 Jul 2018 14:33:13 -0400
+Subject: [PATCH net-next repost] tc-testing: flush gact actions on test
+ teardown
+In-Reply-To: <1531160689-17914-1-git-send-email-vladbu@mellanox.com>
+References: <1531160689-17914-1-git-send-email-vladbu@mellanox.com>
+Message-ID: <e7be829c-35d0-24ba-ed09-70f93952b382@mojatatu.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180709183341.OAcEY15AvYP5hoHP46PNMHCiUiGuJqr-U83iHMQ-cmw@z>
+Message-ID: <20180709183313.580aS-AoIt26c6_FEh0-TFVKzIoIxdVt0zSKACI46KU@z>
 
-On 09/07/18 02:25 PM, Vlad Buslov wrote:
-> Fix expected ip address to actually match configured ip address.
-> Fix test to expect single matched filter.
+On 09/07/18 02:24 PM, Vlad Buslov wrote:
+> Test 6fb4 creates one mirred and one pipe action, but only flushes mirred
+> on teardown. Leaking pipe action causes failures in other tests.
+> 
+> Add additional teardown command to also flush gact actions.
 > 
 > Signed-off-by: Vlad Buslov <vladbu at mellanox.com>
-
 
 Acked-by: Jamal Hadi Salim <jhs at mojatatu.com>
 
