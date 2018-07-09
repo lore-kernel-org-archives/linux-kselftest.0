@@ -1,36 +1,25 @@
-From: vladbu@mellanox.com (Vlad Buslov)
-Date: Mon,  9 Jul 2018 21:25:46 +0300
-Subject: [PATCH net-next repost] tc-testing: fix ip address in u32 test
-Message-ID: <1531160746-17991-1-git-send-email-vladbu@mellanox.com>
+From: jhs@mojatatu.com (Jamal Hadi Salim)
+Date: Mon, 9 Jul 2018 14:31:55 -0400
+Subject: [PATCH net-next] tc-testing: remove duplicate spaces in connmark
+ match patterns
+In-Reply-To: <1531160535-17742-1-git-send-email-vladbu@mellanox.com>
+References: <1531160535-17742-1-git-send-email-vladbu@mellanox.com>
+Message-ID: <c5a89c01-d43f-cdd6-f70c-eb5d6535ba86@mojatatu.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180709182546.WqKiw2ccyjPhae1qulT4PHMCI9dOG5GuTpL_dhGVq7c@z>
+Message-ID: <20180709183155.NLTOZIzbvoKWpyszhhb8A18XgSX4DNubYGIIcHhShu8@z>
 
-Fix expected ip address to actually match configured ip address.
-Fix test to expect single matched filter.
+On 09/07/18 02:22 PM, Vlad Buslov wrote:
+> Match patterns for some connmark tests contain duplicate whitespace that is
+> not present in actual tc output. This causes tests to fail because they
+> can't match required action, even when it was successfully created.
+> 
+> Fixes: 1dad0f9ffff7 ("tc-testing: add connmark action tests")
+> Signed-off-by: Vlad Buslov <vladbu at mellanox.com>
 
-Signed-off-by: Vlad Buslov <vladbu at mellanox.com>
----
- tools/testing/selftests/tc-testing/tc-tests/filters/tests.json | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Acked-by: Jamal Hadi Salim <jhs at mojatatu.com>
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-index 5fa02d86b35f..99a5ffca1088 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-@@ -12,8 +12,8 @@
-         "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: protocol ip prio 1 u32 match ip src 127.0.0.1/32 flowid 1:1 action ok",
-         "expExitCode": "0",
-         "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
--        "matchPattern": "match 7f000002/ffffffff at 12",
--        "matchCount": "0",
-+        "matchPattern": "match 7f000001/ffffffff at 12",
-+        "matchCount": "1",
-         "teardown": [
-             "$TC qdisc del dev $DEV1 ingress"
-         ]
--- 
-2.7.5
-
+cheers,
+jamal
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
