@@ -1,44 +1,30 @@
-From: mlichvar at redhat.com (Miroslav Lichvar)
-Date: Mon, 9 Jul 2018 11:26:21 +0200
-Subject: [RFC][PATCH v2] selftest: timers: Tweak raw_skew to SKIP when
- ADJ_OFFSET/other clock adjustments are in progress
-In-Reply-To: <1530813031-19243-1-git-send-email-john.stultz@linaro.org>
-References: <1530813031-19243-1-git-send-email-john.stultz@linaro.org>
-Message-ID: <20180709092621.GC1285@localhost>
+From: linus.walleij at linaro.org (Linus Walleij)
+Date: Mon, 9 Jul 2018 16:08:57 +0200
+Subject: [PATCH] selftests: gpio: gpio-mockup-chardev
+ GPIOHANDLE_REQUEST_OUTPUT fix
+In-Reply-To: <20180606174424.9630-1-rafael.tinoco@linaro.org>
+References: <20180606174424.9630-1-rafael.tinoco@linaro.org>
+Message-ID: <CACRpkdZny9ixvz8=dVXfLG04_5pSoHYJa01qeB+gXqpkPCoGpA@mail.gmail.com>
 
-On Thu, Jul 05, 2018 at 10:50:31AM -0700, John Stultz wrote:
-> In the past we've warned when ADJ_OFFSET was in progress, usually
-> caused by ntpd or some other time adjusting daemon running in non
-> steady sate, which can cause the skew calculations to be incorrect
-> 
-> Thus, this patch sets a flag which we check if the clock was being
-> adjusted when we fail so that we don't cause false negatives.
+On Wed, Jun 6, 2018 at 7:44 PM Rafael David Tinoco
+<rafael.tinoco at linaro.org> wrote:
 
-The commit message might need an update as the code no longer sets a
-flag. Other than that, it looks good to me.
+> Following logic from commit: 22f6592b23, GPIOHANDLE_REQUEST_OUTPUT
+> should handle errors same way as GPIOHANDLE_REQUEST_INPUT does, or else
+> the following error occurs:
+>
+> gpio-mockup-chardev: gpio<gpiochip1> line<0> test flag<0x2> value<0>: No
+> such file or directory
+>
+> despite the real result of gpio_pin_test(), gpio_debugfs_get() and
+> gpiotools_request_linehandle() functions.
+>
+> Signed-off-by: Rafael David Tinoco <rafael.tinoco at linaro.org>
 
-Thanks,
+Patch applied. Sorry for forgetting about it.
 
-> --- a/tools/testing/selftests/timers/raw_skew.c
-> +++ b/tools/testing/selftests/timers/raw_skew.c
-> @@ -134,6 +134,11 @@ int main(int argv, char **argc)
->  	printf(" %lld.%i(act)", ppm/1000, abs((int)(ppm%1000)));
->  
->  	if (llabs(eppm - ppm) > 1000) {
-> +		if (tx1.offset || tx2.offset ||
-> +		    tx1.freq != tx2.freq || tx1.tick != tx2.tick) {
-> +			printf("	[SKIP]\n");
-> +			return ksft_exit_skip("The clock was adjusted externally. Shutdown NTPd or other time sync daemons\n");
-> +		}
->  		printf("	[FAILED]\n");
->  		return ksft_exit_fail();
->  	}
-> -- 
-> 2.7.4
-> 
-
--- 
-Miroslav Lichvar
+Yours,
+Linus Walleij
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
