@@ -1,133 +1,141 @@
 From: vladbu@mellanox.com (Vlad Buslov)
-Date: Mon,  9 Jul 2018 21:22:15 +0300
-Subject: [PATCH net-next] tc-testing: remove duplicate spaces in connmark
- match patterns
-Message-ID: <1531160535-17742-1-git-send-email-vladbu@mellanox.com>
+Date: Mon,  9 Jul 2018 21:23:45 +0300
+Subject: [PATCH net-next] tc-testing: remove duplicate spaces in skbedit match
+ patterns
+Message-ID: <1531160625-17839-1-git-send-email-vladbu@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180709182215.7r1uClo8mI4qnIX9jlxU7uZ_k_Fg2dpsJqTIjBbWN_E@z>
+Message-ID: <20180709182345._NO0b1g-jJVp5il1iCUV2LFJvPMzIE7gv8NWSKWInWw@z>
 
-Match patterns for some connmark tests contain duplicate whitespace that is
+Match patterns for some skbedit tests contain duplicate whitespace that is
 not present in actual tc output. This causes tests to fail because they
 can't match required action, even when it was successfully created.
 
-Fixes: 1dad0f9ffff7 ("tc-testing: add connmark action tests")
 Signed-off-by: Vlad Buslov <vladbu at mellanox.com>
 ---
- .../tc-testing/tc-tests/actions/connmark.json      | 24 +++++++++++-----------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ .../tc-testing/tc-tests/actions/skbedit.json       | 26 +++++++++++-----------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/connmark.json b/tools/testing/selftests/tc-testing/tc-tests/actions/connmark.json
-index 70952bd98ff9..13147a1f5731 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/actions/connmark.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/actions/connmark.json
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/skbedit.json b/tools/testing/selftests/tc-testing/tc-tests/actions/skbedit.json
+index 37ecc2716fee..5aaf593b914a 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/actions/skbedit.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/actions/skbedit.json
 @@ -17,7 +17,7 @@
-         "cmdUnderTest": "$TC actions add action connmark",
+         "cmdUnderTest": "$TC actions add action skbedit mark 1",
          "expExitCode": "0",
-         "verifyCmd": "$TC actions list action connmark",
--        "matchPattern": "action order [0-9]+:  connmark zone 0 pipe",
-+        "matchPattern": "action order [0-9]+: connmark zone 0 pipe",
+         "verifyCmd": "$TC actions list action skbedit",
+-        "matchPattern": "action order [0-9]*:  skbedit mark 1",
++        "matchPattern": "action order [0-9]*: skbedit  mark 1",
          "matchCount": "1",
          "teardown": [
-             "$TC actions flush action connmark"
-@@ -41,7 +41,7 @@
-         "cmdUnderTest": "$TC actions add action connmark pass index 1",
-         "expExitCode": "0",
-         "verifyCmd": "$TC actions get action connmark index 1",
--        "matchPattern": "action order [0-9]+:  connmark zone 0 pass.*index 1 ref",
-+        "matchPattern": "action order [0-9]+: connmark zone 0 pass.*index 1 ref",
-         "matchCount": "1",
-         "teardown": [
-             "$TC actions flush action connmark"
+             "$TC actions flush action skbedit"
 @@ -65,7 +65,7 @@
-         "cmdUnderTest": "$TC actions add action connmark drop index 100",
+         "cmdUnderTest": "$TC actions add action skbedit prio 99",
          "expExitCode": "0",
-         "verifyCmd": "$TC actions get action connmark index 100",
--        "matchPattern": "action order [0-9]+:  connmark zone 0 drop.*index 100 ref",
-+        "matchPattern": "action order [0-9]+: connmark zone 0 drop.*index 100 ref",
+         "verifyCmd": "$TC actions list action skbedit",
+-        "matchPattern": "action order [0-9]*:  skbedit priority :99",
++        "matchPattern": "action order [0-9]*: skbedit  priority :99",
          "matchCount": "1",
          "teardown": [
-             "$TC actions flush action connmark"
-@@ -89,7 +89,7 @@
-         "cmdUnderTest": "$TC actions add action connmark pipe index 455",
-         "expExitCode": "0",
-         "verifyCmd": "$TC actions get action connmark index 455",
--        "matchPattern": "action order [0-9]+:  connmark zone 0 pipe.*index 455 ref",
-+        "matchPattern": "action order [0-9]+: connmark zone 0 pipe.*index 455 ref",
-         "matchCount": "1",
-         "teardown": [
-             "$TC actions flush action connmark"
+             "$TC actions flush action skbedit"
 @@ -113,7 +113,7 @@
-         "cmdUnderTest": "$TC actions add action connmark reclassify index 7",
+         "cmdUnderTest": "$TC actions add action skbedit queue_mapping 909",
          "expExitCode": "0",
-         "verifyCmd": "$TC actions list action connmark",
--        "matchPattern": "action order [0-9]+:  connmark zone 0 reclassify.*index 7 ref",
-+        "matchPattern": "action order [0-9]+: connmark zone 0 reclassify.*index 7 ref",
+         "verifyCmd": "$TC actions list action skbedit",
+-        "matchPattern": "action order [0-9]*:  skbedit queue_mapping 909",
++        "matchPattern": "action order [0-9]*: skbedit queue_mapping 909",
          "matchCount": "1",
          "teardown": [
-             "$TC actions flush action connmark"
-@@ -137,7 +137,7 @@
-         "cmdUnderTest": "$TC actions add action connmark continue index 17",
-         "expExitCode": "0",
-         "verifyCmd": "$TC actions list action connmark",
--        "matchPattern": "action order [0-9]+:  connmark zone 0 continue.*index 17 ref",
-+        "matchPattern": "action order [0-9]+: connmark zone 0 continue.*index 17 ref",
-         "matchCount": "1",
-         "teardown": [
-             "$TC actions flush action connmark"
+             "$TC actions flush action skbedit"
 @@ -161,7 +161,7 @@
-         "cmdUnderTest": "$TC actions add action connmark jump 10 index 17",
+         "cmdUnderTest": "$TC actions add action skbedit ptype host",
          "expExitCode": "0",
-         "verifyCmd": "$TC actions list action connmark",
--        "matchPattern": "action order [0-9]+:  connmark zone 0 jump 10.*index 17 ref",
-+        "matchPattern": "action order [0-9]+: connmark zone 0 jump 10.*index 17 ref",
+         "verifyCmd": "$TC actions list action skbedit",
+-        "matchPattern": "action order [0-9]*:  skbedit ptype host",
++        "matchPattern": "action order [0-9]*: skbedit  ptype host",
          "matchCount": "1",
          "teardown": [
-             "$TC actions flush action connmark"
+             "$TC actions flush action skbedit"
 @@ -185,7 +185,7 @@
-         "cmdUnderTest": "$TC actions add action connmark zone 100 pipe index 1",
+         "cmdUnderTest": "$TC actions add action skbedit ptype otherhost",
          "expExitCode": "0",
-         "verifyCmd": "$TC actions get action connmark index 1",
--        "matchPattern": "action order [0-9]+:  connmark zone 100 pipe.*index 1 ref",
-+        "matchPattern": "action order [0-9]+: connmark zone 100 pipe.*index 1 ref",
+         "verifyCmd": "$TC actions list action skbedit",
+-        "matchPattern": "action order [0-9]*:  skbedit ptype otherhost",
++        "matchPattern": "action order [0-9]*: skbedit  ptype otherhost",
          "matchCount": "1",
          "teardown": [
-             "$TC actions flush action connmark"
-@@ -209,7 +209,7 @@
-         "cmdUnderTest": "$TC actions add action connmark zone 65536 reclassify index 21",
-         "expExitCode": "255",
-         "verifyCmd": "$TC actions get action connmark index 1",
--        "matchPattern": "action order [0-9]+:  connmark zone 65536 reclassify.*index 21 ref",
-+        "matchPattern": "action order [0-9]+: connmark zone 65536 reclassify.*index 21 ref",
-         "matchCount": "0",
-         "teardown": [
-             "$TC actions flush action connmark"
+             "$TC actions flush action skbedit"
 @@ -233,7 +233,7 @@
-         "cmdUnderTest": "$TC actions add action connmark zone 655 unsupp_arg pass index 2",
-         "expExitCode": "255",
-         "verifyCmd": "$TC actions get action connmark index 2",
--        "matchPattern": "action order [0-9]+:  connmark zone 655 unsupp_arg pass.*index 2 ref",
-+        "matchPattern": "action order [0-9]+: connmark zone 655 unsupp_arg pass.*index 2 ref",
-         "matchCount": "0",
-         "teardown": [
-             "$TC actions flush action connmark"
-@@ -258,7 +258,7 @@
-         "cmdUnderTest": "$TC actions replace action connmark zone 555 reclassify index 555",
+         "cmdUnderTest": "$TC actions add action skbedit ptype host pipe index 11",
          "expExitCode": "0",
-         "verifyCmd": "$TC actions get action connmark index 555",
--        "matchPattern": "action order [0-9]+:  connmark zone 555 reclassify.*index 555 ref",
-+        "matchPattern": "action order [0-9]+: connmark zone 555 reclassify.*index 555 ref",
+         "verifyCmd": "$TC actions get action skbedit index 11",
+-        "matchPattern": "action order [0-9]*:  skbedit ptype host pipe.*index 11 ref",
++        "matchPattern": "action order [0-9]*: skbedit  ptype host pipe.*index 11 ref",
          "matchCount": "1",
          "teardown": [
-             "$TC actions flush action connmark"
-@@ -282,7 +282,7 @@
-         "cmdUnderTest": "$TC actions add action connmark zone 555 pipe index 5 cookie aabbccddeeff112233445566778800a1",
+             "$TC actions flush action skbedit"
+@@ -257,7 +257,7 @@
+         "cmdUnderTest": "$TC actions add action skbedit mark 56789 reclassify index 90",
          "expExitCode": "0",
-         "verifyCmd": "$TC actions get action connmark index 5",
--        "matchPattern": "action order [0-9]+:  connmark zone 555 pipe.*index 5 ref.*cookie aabbccddeeff112233445566778800a1",
-+        "matchPattern": "action order [0-9]+: connmark zone 555 pipe.*index 5 ref.*cookie aabbccddeeff112233445566778800a1",
+         "verifyCmd": "$TC actions get action skbedit index 90",
+-        "matchPattern": "action order [0-9]*:  skbedit mark 56789 reclassify.*index 90 ref",
++        "matchPattern": "action order [0-9]*: skbedit  mark 56789 reclassify.*index 90 ref",
          "matchCount": "1",
          "teardown": [
-             "$TC actions flush action connmark"
+             "$TC actions flush action skbedit"
+@@ -281,7 +281,7 @@
+         "cmdUnderTest": "$TC actions add action skbedit queue_mapping 3 pass index 271",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions get action skbedit index 271",
+-        "matchPattern": "action order [0-9]*:  skbedit queue_mapping 3 pass.*index 271 ref",
++        "matchPattern": "action order [0-9]*: skbedit queue_mapping 3 pass.*index 271 ref",
+         "matchCount": "1",
+         "teardown": [
+             "$TC actions flush action skbedit"
+@@ -305,7 +305,7 @@
+         "cmdUnderTest": "$TC actions add action skbedit queue_mapping 3 drop index 271",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions get action skbedit index 271",
+-        "matchPattern": "action order [0-9]*:  skbedit queue_mapping 3 drop.*index 271 ref",
++        "matchPattern": "action order [0-9]*: skbedit queue_mapping 3 drop.*index 271 ref",
+         "matchCount": "1",
+         "teardown": [
+             "$TC actions flush action skbedit"
+@@ -329,7 +329,7 @@
+         "cmdUnderTest": "$TC actions add action skbedit priority 8 jump 9 index 2",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions get action skbedit index 2",
+-        "matchPattern": "action order [0-9]*:  skbedit priority :8 jump 9.*index 2 ref",
++        "matchPattern": "action order [0-9]*: skbedit  priority :8 jump 9.*index 2 ref",
+         "matchCount": "1",
+         "teardown": [
+             "$TC actions flush action skbedit"
+@@ -353,7 +353,7 @@
+         "cmdUnderTest": "$TC actions add action skbedit priority 16 continue index 32",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions get action skbedit index 32",
+-        "matchPattern": "action order [0-9]*:  skbedit priority :16 continue.*index 32 ref",
++        "matchPattern": "action order [0-9]*: skbedit  priority :16 continue.*index 32 ref",
+         "matchCount": "1",
+         "teardown": [
+             "$TC actions flush action skbedit"
+@@ -377,7 +377,7 @@
+         "cmdUnderTest": "$TC actions add action skbedit priority 16 continue index 32 cookie deadbeef",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions get action skbedit index 32",
+-        "matchPattern": "action order [0-9]*:  skbedit priority :16 continue.*index 32 ref.*cookie deadbeef",
++        "matchPattern": "action order [0-9]*: skbedit  priority :16 continue.*index 32 ref.*cookie deadbeef",
+         "matchCount": "1",
+         "teardown": [
+             "$TC actions flush action skbedit"
+@@ -405,7 +405,7 @@
+         "cmdUnderTest": "$TC actions list action skbedit",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions list action skbedit",
+-        "matchPattern": "action order [0-9]*:  skbedit",
++        "matchPattern": "action order [0-9]*: skbedit",
+         "matchCount": "4",
+         "teardown": [
+             "$TC actions flush action skbedit"
 -- 
 2.7.5
 
