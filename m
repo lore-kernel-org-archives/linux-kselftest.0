@@ -1,35 +1,33 @@
 From: vladbu@mellanox.com (Vlad Buslov)
-Date: Mon,  9 Jul 2018 21:24:49 +0300
-Subject: [PATCH net-next repost] tc-testing: flush gact actions on test
- teardown
-Message-ID: <1531160689-17914-1-git-send-email-vladbu@mellanox.com>
+Date: Mon,  9 Jul 2018 21:25:46 +0300
+Subject: [PATCH net-next repost] tc-testing: fix ip address in u32 test
+Message-ID: <1531160746-17991-1-git-send-email-vladbu@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180709182449.QwLMIufmrOTlEiMSHYoO_4RReCGVTQeMHPOsCpFu7jo@z>
+Message-ID: <20180709182546.WqKiw2ccyjPhae1qulT4PHMCI9dOG5GuTpL_dhGVq7c@z>
 
-Test 6fb4 creates one mirred and one pipe action, but only flushes mirred
-on teardown. Leaking pipe action causes failures in other tests.
-
-Add additional teardown command to also flush gact actions.
+Fix expected ip address to actually match configured ip address.
+Fix test to expect single matched filter.
 
 Signed-off-by: Vlad Buslov <vladbu at mellanox.com>
 ---
- tools/testing/selftests/tc-testing/tc-tests/actions/mirred.json | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/tc-testing/tc-tests/filters/tests.json | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/mirred.json b/tools/testing/selftests/tc-testing/tc-tests/actions/mirred.json
-index 6e4edfae1799..db49fd0f8445 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/actions/mirred.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/actions/mirred.json
-@@ -44,7 +44,8 @@
-         "matchPattern": "action order [0-9]*: mirred \\(Egress Redirect to device lo\\).*index 2 ref",
-         "matchCount": "1",
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
+index 5fa02d86b35f..99a5ffca1088 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
+@@ -12,8 +12,8 @@
+         "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: protocol ip prio 1 u32 match ip src 127.0.0.1/32 flowid 1:1 action ok",
+         "expExitCode": "0",
+         "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
+-        "matchPattern": "match 7f000002/ffffffff at 12",
+-        "matchCount": "0",
++        "matchPattern": "match 7f000001/ffffffff at 12",
++        "matchCount": "1",
          "teardown": [
--            "$TC actions flush action mirred"
-+            "$TC actions flush action mirred",
-+            "$TC actions flush action gact"
+             "$TC qdisc del dev $DEV1 ingress"
          ]
-     },
-     {
 -- 
 2.7.5
 
