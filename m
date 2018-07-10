@@ -1,39 +1,25 @@
-From: shuah at kernel.org (Shuah Khan (Samsung OSG))
-Date: Mon,  9 Jul 2018 13:07:04 -0600
-Subject: [PATCH] selftests: usbip: remove test_bitmap noise
-Message-ID: <20180709190704.20333-1-shuah@kernel.org>
+From: lizhijian at cn.fujitsu.com (Li Zhijian)
+Date: Tue, 10 Jul 2018 16:38:50 +0800
+Subject: [PATCH 0/3] fix selftests compiling errors and warnings
+In-Reply-To: <1530503634-32241-1-git-send-email-lizhijian@cn.fujitsu.com>
+References: <1530503634-32241-1-git-send-email-lizhijian@cn.fujitsu.com>
+Message-ID: <e8ac4e1d-e923-6f78-005c-e8267463a9c9@cn.fujitsu.com>
 
-Remove test_bitmap noise which is a result of cut and paste error.
-There is no need for this modprobe -q -r test_bitmap noise in this
-test.
+ping
 
-Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
----
- tools/testing/selftests/drivers/usb/usbip/usbip_test.sh | 2 --
- 1 file changed, 2 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
-index 1893d0f59ad7..a72df93cf1f8 100755
---- a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
-+++ b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
-@@ -46,7 +46,6 @@ if ! /sbin/modprobe -q -n usbip_host; then
- fi
- 
- if /sbin/modprobe -q usbip_host; then
--	/sbin/modprobe -q -r test_bitmap
- 	echo "usbip_test: module usbip_host is loaded [OK]"
- else
- 	echo "usbip_test: module usbip_host failed to load [FAIL]"
-@@ -56,7 +55,6 @@ fi
- 
- echo "Load vhci_hcd module"
- if /sbin/modprobe -q vhci_hcd; then
--	/sbin/modprobe -q -r test_bitmap
- 	echo "usbip_test: module vhci_hcd is loaded [OK]"
- else
- 	echo "usbip_test: module vhci_hcd failed to load [FAIL]"
--- 
-2.17.0
+On 07/02/2018 11:53 AM, Li Zhijian wrote:
+> Li Zhijian (3):
+>    selftests/android: fix compiling error
+>    selftests/android: initialize heap_type to avoid compiling warning
+>    selftests/gpio: unset OUTPUT for build tools/gpio
+>
+>   tools/testing/selftests/android/ion/Makefile        | 5 ++++-
+>   tools/testing/selftests/android/ion/ionapp_export.c | 7 +++++++
+>   tools/testing/selftests/gpio/Makefile               | 2 +-
+>   3 files changed, 12 insertions(+), 2 deletions(-)
+>
+
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
