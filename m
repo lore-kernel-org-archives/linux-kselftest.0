@@ -1,39 +1,33 @@
 From: joel@joelfernandes.org (Joel Fernandes)
-Date: Tue, 10 Jul 2018 10:33:45 -0700
-Subject: [PATCH v9 5/7] tracing: Centralize preemptirq tracepoints and
- unify their usage
-In-Reply-To: <20180710102050.78ae0ea8@gandalf.local.home>
-References: <20180628182149.226164-1-joel@joelfernandes.org>
- <20180628182149.226164-6-joel@joelfernandes.org>
- <20180710102050.78ae0ea8@gandalf.local.home>
-Message-ID: <20180710173345.GB103636@joelaf.mtv.corp.google.com>
+Date: Tue, 10 Jul 2018 10:44:49 -0700
+Subject: [PATCH] trace: Add SPDX-License-Identifier to trace_preemptirq.c
+Message-ID: <20180710174449.110865-1-joel@joelfernandes.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180710173345.fHz3ERdEgPwUBvNDNURUuykjKcr5jboLbL0RHw9gmRc@z>
+Message-ID: <20180710174449.7oe4aUkPcHivfKQUZm4J5Zw4L2mXWPTKmcb6gW5X_Ws@z>
 
-On Tue, Jul 10, 2018@10:20:50AM -0400, Steven Rostedt wrote:
-> On Thu, 28 Jun 2018 11:21:47 -0700
-> Joel Fernandes <joel@joelfernandes.org> wrote:
-> 
-> > diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
-> > new file mode 100644
-> > index 000000000000..dc01c7f4d326
-> > --- /dev/null
-> > +++ b/kernel/trace/trace_preemptirq.c
-> > @@ -0,0 +1,71 @@
-> 
-> Can you send a patch on top of this, that adds a SPDX header here. Just
-> add another patch, no need to resend this one.
-> 
-> I need to go through all the files in kernel/trace/* and add SPDX
-> headers. I don't want to add more files that don't have them.
+From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 
-Sure, I'll send a patch ontop of this.
+This patch adds a SPDX-License-Identifier to trace_preemptirq.c.
 
-> I'm still playing around with this patch, and testing it.
+Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+---
+This patch is based on top of the v9 posting of "Centralize and unify
+usage of preempt/irq tracepoints": https://lkml.org/lkml/2018/6/28/643
 
-Ok, thanks.
+ kernel/trace/trace_preemptirq.c | 1 +
+ 1 file changed, 1 insertion(+)
 
--Joel
+diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
+index dc01c7f4d326..13e2c6e99465 100644
+--- a/kernel/trace/trace_preemptirq.c
++++ b/kernel/trace/trace_preemptirq.c
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0
+ /*
+  * preemptoff and irqoff tracepoints
+  *
+-- 
+2.18.0.203.gfac676dfb9-goog
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
