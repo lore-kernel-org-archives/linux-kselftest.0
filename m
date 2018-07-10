@@ -1,44 +1,106 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Tue, 10 Jul 2018 08:08:27 -0600
-Subject: [PATCH 0/3] fix selftests compiling errors and warnings
-In-Reply-To: <e8ac4e1d-e923-6f78-005c-e8267463a9c9@cn.fujitsu.com>
-References: <1530503634-32241-1-git-send-email-lizhijian@cn.fujitsu.com>
- <e8ac4e1d-e923-6f78-005c-e8267463a9c9@cn.fujitsu.com>
-Message-ID: <f3800c8a-0a7a-02ce-a285-5b65c20f626c@kernel.org>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Tue, 10 Jul 2018 10:20:50 -0400
+Subject: [PATCH v9 5/7] tracing: Centralize preemptirq tracepoints and
+ unify their usage
+In-Reply-To: <20180628182149.226164-6-joel@joelfernandes.org>
+References: <20180628182149.226164-1-joel@joelfernandes.org>
+ <20180628182149.226164-6-joel@joelfernandes.org>
+Message-ID: <20180710102050.78ae0ea8@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180710140827.plSTIhTGbkWUc8NnVuqFiz6N0Fji2YV9_sE_4pAwjRg@z>
+Message-ID: <20180710142050.Jn5iDgx3PxISR-SFPiMlMKdVLeGp--kzFXYNMY713rA@z>
 
-On 07/10/2018 02:38 AM, Li Zhijian wrote:
-> ping
-> 
-> 
-> On 07/02/2018 11:53 AM, Li Zhijian wrote:
->> Li Zhijian (3):
->>    selftests/android: fix compiling error
->>    selftests/android: initialize heap_type to avoid compiling warning
->>    selftests/gpio: unset OUTPUT for build tools/gpio
->>
->>   tools/testing/selftests/android/ion/Makefile        | 5 ++++-
->>   tools/testing/selftests/android/ion/ionapp_export.c | 7 +++++++
->>   tools/testing/selftests/gpio/Makefile               | 2 +-
->>   3 files changed, 12 insertions(+), 2 deletions(-)
->>
-> 
-> 
-> 
+On Thu, 28 Jun 2018 11:21:47 -0700
+Joel Fernandes <joel@joelfernandes.org> wrote:
 
-I was away on vacation all of last week. I will review the series.
-Anders Roxell is working on making the change at the main Makefile
-level to handle the headers dependency. I have been waiting to hear
-from Maintainers to Ack it.
+> diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
+> new file mode 100644
+> index 000000000000..dc01c7f4d326
+> --- /dev/null
+> +++ b/kernel/trace/trace_preemptirq.c
+> @@ -0,0 +1,71 @@
 
-Once Anders patch goes in, is the first and third patches in this series
-needed?
+Can you send a patch on top of this, that adds a SPDX header here. Just
+add another patch, no need to resend this one.
 
-No problems with the second one. I can get that in soon.
+I need to go through all the files in kernel/trace/* and add SPDX
+headers. I don't want to add more files that don't have them.
 
-thanks,
--- Shuah
+I'm still playing around with this patch, and testing it.
+
+-- Steve
+
+> +/*
+> + * preemptoff and irqoff tracepoints
+> + *
+> + * Copyright (C) Joel Fernandes (Google) <joel at joelfernandes.org>
+> + */
+> +
+> +#include <linux/kallsyms.h>
+> +#include <linux/uaccess.h>
+> +#include <linux/module.h>
+> +#include <linux/ftrace.h>
+> +
+> +#define CREATE_TRACE_POINTS
+> +#include <trace/events/preemptirq.h>
+> +
+> +#ifdef CONFIG_TRACE_IRQFLAGS
+> +/* Per-cpu variable to prevent redundant calls when IRQs already off */
+> +static DEFINE_PER_CPU(int, tracing_irq_cpu);
+> +
+> +void trace_hardirqs_on(void)
+> +{
+> +	if (lockdep_recursing(current) || !this_cpu_read(tracing_irq_cpu))
+> +		return;
+> +
+> +	trace_irq_enable_rcuidle(CALLER_ADDR0, CALLER_ADDR1);
+> +	this_cpu_write(tracing_irq_cpu, 0);
+> +}
+> +EXPORT_SYMBOL(trace_hardirqs_on);
+> +
+> +void trace_hardirqs_off(void)
+> +{
+> +	if (lockdep_recursing(current) || this_cpu_read(tracing_irq_cpu))
+> +		return;
+> +
+> +	this_cpu_write(tracing_irq_cpu, 1);
+> +	trace_irq_disable_rcuidle(CALLER_ADDR0, CALLER_ADDR1);
+> +}
+> +EXPORT_SYMBOL(trace_hardirqs_off);
+> +
+> +__visible void trace_hardirqs_on_caller(unsigned long caller_addr)
+> +{
+> +	if (lockdep_recursing(current) || !this_cpu_read(tracing_irq_cpu))
+> +		return;
+> +
+> +	trace_irq_enable_rcuidle(CALLER_ADDR0, caller_addr);
+> +	this_cpu_write(tracing_irq_cpu, 0);
+> +}
+> +EXPORT_SYMBOL(trace_hardirqs_on_caller);
+> +
+> +__visible void trace_hardirqs_off_caller(unsigned long caller_addr)
+> +{
+> +	if (lockdep_recursing(current) || this_cpu_read(tracing_irq_cpu))
+> +		return;
+> +
+> +	this_cpu_write(tracing_irq_cpu, 1);
+> +	trace_irq_disable_rcuidle(CALLER_ADDR0, caller_addr);
+> +}
+> +EXPORT_SYMBOL(trace_hardirqs_off_caller);
+> +#endif /* CONFIG_TRACE_IRQFLAGS */
+> +
+> +#ifdef CONFIG_TRACE_PREEMPT_TOGGLE
+> +
+> +void trace_preempt_on(unsigned long a0, unsigned long a1)
+> +{
+> +	trace_preempt_enable_rcuidle(a0, a1);
+> +}
+> +
+> +void trace_preempt_off(unsigned long a0, unsigned long a1)
+> +{
+> +	trace_preempt_disable_rcuidle(a0, a1);
+> +}
+> +#endif
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
