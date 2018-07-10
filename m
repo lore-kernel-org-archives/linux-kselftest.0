@@ -1,106 +1,71 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Tue, 10 Jul 2018 10:20:50 -0400
-Subject: [PATCH v9 5/7] tracing: Centralize preemptirq tracepoints and
- unify their usage
-In-Reply-To: <20180628182149.226164-6-joel@joelfernandes.org>
-References: <20180628182149.226164-1-joel@joelfernandes.org>
- <20180628182149.226164-6-joel@joelfernandes.org>
-Message-ID: <20180710102050.78ae0ea8@gandalf.local.home>
+From: shuah@kernel.org (Shuah Khan)
+Date: Tue, 10 Jul 2018 08:50:36 -0600
+Subject: [PATCH 2/3] selftests/android: initialize heap_type to avoid
+ compiling warning
+In-Reply-To: <1530503634-32241-3-git-send-email-lizhijian@cn.fujitsu.com>
+References: <1530503634-32241-1-git-send-email-lizhijian@cn.fujitsu.com>
+ <1530503634-32241-2-git-send-email-lizhijian@cn.fujitsu.com>
+ <1530503634-32241-3-git-send-email-lizhijian@cn.fujitsu.com>
+Message-ID: <1f24bf06-88cb-8d09-febf-02ff55ec263a@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180710142050.Jn5iDgx3PxISR-SFPiMlMKdVLeGp--kzFXYNMY713rA@z>
+Message-ID: <20180710145036.e1Dy6nSTfjJoRUbSvhvTMeFSRmyqSigNtqXksnXQauA@z>
 
-On Thu, 28 Jun 2018 11:21:47 -0700
-Joel Fernandes <joel@joelfernandes.org> wrote:
+Hi Li Zhijian,
 
-> diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
-> new file mode 100644
-> index 000000000000..dc01c7f4d326
-> --- /dev/null
-> +++ b/kernel/trace/trace_preemptirq.c
-> @@ -0,0 +1,71 @@
+On 07/01/2018 09:53 PM, Li Zhijian wrote:
+> root at vm-lkp-nex04-8G-7 ~/linux-v4.18-rc2/tools/testing/selftests/android# make
+> make[1]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+> make[1]: Entering directory '/root/linux-v4.18-rc2/tools/testing/selftests/android/ion'
+> gcc  -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../usr/include/ -Wall -O2 -g    ionapp_export.c ipcsocket.c ionutils.c   -o ionapp_export
+> ionapp_export.c: In function 'main':
+> ionapp_export.c:91:2: warning: 'heap_type' may be used uninitialized in
+> this function [-Wmaybe-uninitialized]
+>   printf("heap_type: %ld, heap_size: %ld\n", heap_type, heap_size);
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> CC: Shuah Khan <shuah at kernel.org>
+> CC: Pintu Agarwal <pintu.ping at gmail.com>
+> Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
+> ---
+>  tools/testing/selftests/android/ion/ionapp_export.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/android/ion/ionapp_export.c b/tools/testing/selftests/android/ion/ionapp_export.c
+> index a944e72..e3435c2 100644
+> --- a/tools/testing/selftests/android/ion/ionapp_export.c
+> +++ b/tools/testing/selftests/android/ion/ionapp_export.c
+> @@ -49,6 +49,7 @@ int main(int argc, char *argv[])
+>  		return -1;
+>  	}
+>  
+> +	heap_type = -1UL;
 
-Can you send a patch on top of this, that adds a SPDX header here. Just
-add another patch, no need to resend this one.
+Initialize it to one of the valid types. ION_HEAP_TYPE_SYSTEM
+is one choice.
 
-I need to go through all the files in kernel/trace/* and add SPDX
-headers. I don't want to add more files that don't have them.
 
-I'm still playing around with this patch, and testing it.
+>  	heap_size = 0;
+>  	flags = 0;
+>  
+> @@ -82,6 +83,12 @@ int main(int argc, char *argv[])
+>  		}
+>  	}
+>  
+> +	if (heap_type == -1UL) {
+> +		printf("heap_type is invalid\n");
+> +		print_usage(argc, argv);
+> +		exit(1);
+> +	}
 
--- Steve
+This check isn't necessary. The test requires two arguments,
+-i <heap id> and -s <size in bytes> and won't run without either
+one of them. heap_type is going to be ION_HEAP_TYPE_SYSTEM or
+ION_HEAP_TYPE_SYSTEM_CONTIG at this point.
 
-> +/*
-> + * preemptoff and irqoff tracepoints
-> + *
-> + * Copyright (C) Joel Fernandes (Google) <joel at joelfernandes.org>
-> + */
-> +
-> +#include <linux/kallsyms.h>
-> +#include <linux/uaccess.h>
-> +#include <linux/module.h>
-> +#include <linux/ftrace.h>
-> +
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/preemptirq.h>
-> +
-> +#ifdef CONFIG_TRACE_IRQFLAGS
-> +/* Per-cpu variable to prevent redundant calls when IRQs already off */
-> +static DEFINE_PER_CPU(int, tracing_irq_cpu);
-> +
-> +void trace_hardirqs_on(void)
-> +{
-> +	if (lockdep_recursing(current) || !this_cpu_read(tracing_irq_cpu))
-> +		return;
-> +
-> +	trace_irq_enable_rcuidle(CALLER_ADDR0, CALLER_ADDR1);
-> +	this_cpu_write(tracing_irq_cpu, 0);
-> +}
-> +EXPORT_SYMBOL(trace_hardirqs_on);
-> +
-> +void trace_hardirqs_off(void)
-> +{
-> +	if (lockdep_recursing(current) || this_cpu_read(tracing_irq_cpu))
-> +		return;
-> +
-> +	this_cpu_write(tracing_irq_cpu, 1);
-> +	trace_irq_disable_rcuidle(CALLER_ADDR0, CALLER_ADDR1);
-> +}
-> +EXPORT_SYMBOL(trace_hardirqs_off);
-> +
-> +__visible void trace_hardirqs_on_caller(unsigned long caller_addr)
-> +{
-> +	if (lockdep_recursing(current) || !this_cpu_read(tracing_irq_cpu))
-> +		return;
-> +
-> +	trace_irq_enable_rcuidle(CALLER_ADDR0, caller_addr);
-> +	this_cpu_write(tracing_irq_cpu, 0);
-> +}
-> +EXPORT_SYMBOL(trace_hardirqs_on_caller);
-> +
-> +__visible void trace_hardirqs_off_caller(unsigned long caller_addr)
-> +{
-> +	if (lockdep_recursing(current) || this_cpu_read(tracing_irq_cpu))
-> +		return;
-> +
-> +	this_cpu_write(tracing_irq_cpu, 1);
-> +	trace_irq_disable_rcuidle(CALLER_ADDR0, caller_addr);
-> +}
-> +EXPORT_SYMBOL(trace_hardirqs_off_caller);
-> +#endif /* CONFIG_TRACE_IRQFLAGS */
-> +
-> +#ifdef CONFIG_TRACE_PREEMPT_TOGGLE
-> +
-> +void trace_preempt_on(unsigned long a0, unsigned long a1)
-> +{
-> +	trace_preempt_enable_rcuidle(a0, a1);
-> +}
-> +
-> +void trace_preempt_off(unsigned long a0, unsigned long a1)
-> +{
-> +	trace_preempt_disable_rcuidle(a0, a1);
-> +}
-> +#endif
+Interesting. Looks like this test doesn't cover all ion_heap_types.
 
+thanks,
+-- Shuah
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
