@@ -1,25 +1,46 @@
-From: lizhijian at cn.fujitsu.com (Li Zhijian)
-Date: Tue, 10 Jul 2018 16:38:50 +0800
-Subject: [PATCH 0/3] fix selftests compiling errors and warnings
-In-Reply-To: <1530503634-32241-1-git-send-email-lizhijian@cn.fujitsu.com>
-References: <1530503634-32241-1-git-send-email-lizhijian@cn.fujitsu.com>
-Message-ID: <e8ac4e1d-e923-6f78-005c-e8267463a9c9@cn.fujitsu.com>
+From: petrm at mellanox.com (Petr Machata)
+Date: Tue, 10 Jul 2018 14:44:26 +0200
+Subject: [PATCH net-next] selftests: forwarding: mirror_gre_nh: Unset
+ rp_filter on host VRF
+Message-ID: <a1d9001969381681ce4c3891ef8404b74aef177f.1531226547.git.petrm@mellanox.com>
 
-ping
+The mirrored packets arrive at $h3 encapsulated in GRE/IPv4, with IP
+address from 192.0.2.128/28 network. However the interface is configured
+as a member of 192.0.2.160/28 and there's no route directing traffic
+from the former network through that interface. Correspondingly, the RP
+filter on the VRF rejects it.
 
+Therefore turn off the VRF's RP filter.
 
-On 07/02/2018 11:53 AM, Li Zhijian wrote:
-> Li Zhijian (3):
->    selftests/android: fix compiling error
->    selftests/android: initialize heap_type to avoid compiling warning
->    selftests/gpio: unset OUTPUT for build tools/gpio
->
->   tools/testing/selftests/android/ion/Makefile        | 5 ++++-
->   tools/testing/selftests/android/ion/ionapp_export.c | 7 +++++++
->   tools/testing/selftests/gpio/Makefile               | 2 +-
->   3 files changed, 12 insertions(+), 2 deletions(-)
->
+Signed-off-by: Petr Machata <petrm at mellanox.com>
+---
+ tools/testing/selftests/net/forwarding/mirror_gre_nh.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_nh.sh b/tools/testing/selftests/net/forwarding/mirror_gre_nh.sh
+index 8fa681eb90e7..6f9ef1820e93 100755
+--- a/tools/testing/selftests/net/forwarding/mirror_gre_nh.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_gre_nh.sh
+@@ -35,6 +35,8 @@ setup_prepare()
+ 	vrf_prepare
+ 	mirror_gre_topo_create
+ 
++	sysctl_set net.ipv4.conf.v$h3.rp_filter 0
++
+ 	ip address add dev $swp3 192.0.2.161/28
+ 	ip address add dev $h3 192.0.2.162/28
+ 	ip address add dev gt4 192.0.2.129/32
+@@ -61,6 +63,8 @@ cleanup()
+ 	ip address del dev $h3 192.0.2.162/28
+ 	ip address del dev $swp3 192.0.2.161/28
+ 
++	sysctl_restore net.ipv4.conf.v$h3.rp_filter 0
++
+ 	mirror_gre_topo_destroy
+ 	vrf_cleanup
+ 
+-- 
+2.4.11
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
