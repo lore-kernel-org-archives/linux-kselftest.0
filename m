@@ -1,79 +1,76 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Wed, 11 Jul 2018 09:06:49 -0400
-Subject: [PATCH v9 4/7] tracepoint: Make rcuidle tracepoint callers use
- SRCU
-In-Reply-To: <20180711125647.GG2476@hirez.programming.kicks-ass.net>
+From: peterz@infradead.org (Peter Zijlstra)
+Date: Wed, 11 Jul 2018 15:12:56 +0200
+Subject: [PATCH v9 5/7] tracing: Centralize preemptirq tracepoints and
+ unify their usage
+In-Reply-To: <20180628182149.226164-6-joel@joelfernandes.org>
 References: <20180628182149.226164-1-joel@joelfernandes.org>
- <20180628182149.226164-5-joel@joelfernandes.org>
- <20180711125647.GG2476@hirez.programming.kicks-ass.net>
-Message-ID: <20180711090649.68af40f9@gandalf.local.home>
+ <20180628182149.226164-6-joel@joelfernandes.org>
+Message-ID: <20180711131256.GH2476@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180711130649.zX6sIBwwAA-0Tt_cLpKppbpmeVIuzRZMq7pOQfXLJ_I@z>
+Message-ID: <20180711131256.Uqe-1QP5r1iux6Cb3tB-WgiehTTfG0NstGx5CdqV5iQ@z>
 
-On Wed, 11 Jul 2018 14:56:47 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+On Thu, Jun 28, 2018@11:21:47AM -0700, Joel Fernandes wrote:
+> One note, I have to check for lockdep recursion in the code that calls
+> the trace events API and bail out if we're in lockdep recursion
 
-> On Thu, Jun 28, 2018@11:21:46AM -0700, Joel Fernandes wrote:
-> >  static inline void tracepoint_synchronize_unregister(void)
-> >  {
-> > +	synchronize_srcu(&tracepoint_srcu);
-> >  	synchronize_sched();
-> >  }  
-> 
-> Given you below do call_rcu_sched() and then call_srcu(), isn't the
-> above the wrong way around?
+I'm not seeing any new lockdep_recursion checks...
 
-Good catch!
+> protection to prevent something like the following case: a spin_lock is
+> taken. Then lockdep_acquired is called.  That does a raw_local_irq_save
+> and then sets lockdep_recursion, and then calls __lockdep_acquired. In
+> this function, a call to get_lock_stats happens which calls
+> preempt_disable, which calls trace IRQS off somewhere which enters my
+> tracepoint code and sets the tracing_irq_cpu flag to prevent recursion.
+> This flag is then never cleared causing lockdep paths to never be
+> entered and thus causing splats and other bad things.
 
-	release_probes()
-		call_rcu_sched()
-			---> rcu_free_old_probes() queued
+Would it not be much easier to avoid that entirely, afaict all
+get/put_lock_stats() callers already have IRQs disabled, so that
+(traced) preempt fiddling is entirely superfluous.
 
-	tracepoint_synchronize_unregister()
-		synchronize_srcu(&tracepoint_srcu);
-			< finishes right away >
-		synchronize_sched()
-			--> rcu_free_old_probes()
-				--> srcu_free_old_probes() queued
-	
-Here tracepoint_synchronize_unregister() returned before the srcu
-portion ran.
-
-
-> 
-> Also, does the above want to be barrier instead of synchronize, so as to
-> guarantee completion of the callbacks.
-
-Not sure what you mean here.
-
--- Steve
-
-> 
-> > +static void srcu_free_old_probes(struct rcu_head *head)
-> >  {
-> >  	kfree(container_of(head, struct tp_probes, rcu));
-> >  }
-> >  
-> > +static void rcu_free_old_probes(struct rcu_head *head)
-> > +{
-> > +	call_srcu(&tracepoint_srcu, head, srcu_free_old_probes);
-> > +}
-> > +
-> >  static inline void release_probes(struct tracepoint_func *old)
-> >  {
-> >  	if (old) {
-> >  		struct tp_probes *tp_probes = container_of(old,
-> >  			struct tp_probes, probes[0]);
-> > +		/*
-> > +		 * Tracepoint probes are protected by both sched RCU and SRCU,
-> > +		 * by calling the SRCU callback in the sched RCU callback we
-> > +		 * cover both cases. So let us chain the SRCU and sched RCU
-> > +		 * callbacks to wait for both grace periods.
-> > +		 */
-> >  		call_rcu_sched(&tp_probes->rcu, rcu_free_old_probes);
-> >  	}
-> >  }  
-
+---
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index 5fa4d3138bf1..8f5ce0048d15 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -248,12 +248,7 @@ void clear_lock_stats(struct lock_class *class)
+ 
+ static struct lock_class_stats *get_lock_stats(struct lock_class *class)
+ {
+-	return &get_cpu_var(cpu_lock_stats)[class - lock_classes];
+-}
+-
+-static void put_lock_stats(struct lock_class_stats *stats)
+-{
+-	put_cpu_var(cpu_lock_stats);
++	return &this_cpu_ptr(&cpu_lock_stats)[class - lock_classes];
+ }
+ 
+ static void lock_release_holdtime(struct held_lock *hlock)
+@@ -271,7 +266,6 @@ static void lock_release_holdtime(struct held_lock *hlock)
+ 		lock_time_inc(&stats->read_holdtime, holdtime);
+ 	else
+ 		lock_time_inc(&stats->write_holdtime, holdtime);
+-	put_lock_stats(stats);
+ }
+ #else
+ static inline void lock_release_holdtime(struct held_lock *hlock)
+@@ -4090,7 +4084,6 @@ __lock_contended(struct lockdep_map *lock, unsigned long ip)
+ 		stats->contending_point[contending_point]++;
+ 	if (lock->cpu != smp_processor_id())
+ 		stats->bounces[bounce_contended + !!hlock->read]++;
+-	put_lock_stats(stats);
+ }
+ 
+ static void
+@@ -4138,7 +4131,6 @@ __lock_acquired(struct lockdep_map *lock, unsigned long ip)
+ 	}
+ 	if (lock->cpu != cpu)
+ 		stats->bounces[bounce_acquired + !!hlock->read]++;
+-	put_lock_stats(stats);
+ 
+ 	lock->cpu = cpu;
+ 	lock->ip = ip;
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
