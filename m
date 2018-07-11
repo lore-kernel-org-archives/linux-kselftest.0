@@ -1,54 +1,64 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Wed, 11 Jul 2018 10:17:37 -0600
-Subject: [PATCH v2] selftests/android: initialize heap_type to avoid
- compiling warning
-In-Reply-To: <1531274880-9375-1-git-send-email-lizhijian@cn.fujitsu.com>
-References: <1531274880-9375-1-git-send-email-lizhijian@cn.fujitsu.com>
-Message-ID: <53f02d65-9a91-2661-3052-d46032389e3a@kernel.org>
+From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
+Date: Wed, 11 Jul 2018 12:40:19 -0400 (EDT)
+Subject: [PATCH v9 4/7] tracepoint: Make rcuidle tracepoint callers use
+ SRCU
+In-Reply-To: <20180711151751.GI2476@hirez.programming.kicks-ass.net>
+References: <20180628182149.226164-1-joel@joelfernandes.org>
+ <20180628182149.226164-5-joel@joelfernandes.org>
+ <20180711125647.GG2476@hirez.programming.kicks-ass.net>
+ <20180711090649.68af40f9@gandalf.local.home>
+ <20180711151751.GI2476@hirez.programming.kicks-ass.net>
+Message-ID: <1447856878.4127.1531327219355.JavaMail.zimbra@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180711161737.f7QdNZ_W35XoNndYYUfpXbC1PVXWgxuAr4pKsY6lf7M@z>
+Message-ID: <20180711164019.r_-qThmsHIUzeEEtMa5ieM1Yh9ZGSnQkidqXHeoUlC0@z>
 
-On 07/10/2018 08:08 PM, Li Zhijian wrote:
-> root at vm-lkp-nex04-8G-7 ~/linux-v4.18-rc2/tools/testing/selftests/android# make
-> make[1]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
-> make[1]: Entering directory '/root/linux-v4.18-rc2/tools/testing/selftests/android/ion'
-> gcc  -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../usr/include/ -Wall -O2 -g    ionapp_export.c ipcsocket.c ionutils.c   -o ionapp_export
-> ionapp_export.c: In function 'main':
-> ionapp_export.c:91:2: warning: 'heap_type' may be used uninitialized in
-> this function [-Wmaybe-uninitialized]
->   printf("heap_type: %ld, heap_size: %ld\n", heap_type, heap_size);
->   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----- On Jul 11, 2018,@11:17 AM, Peter Zijlstra peterz@infradead.org wrote:
+
+> On Wed, Jul 11, 2018@09:06:49AM -0400, Steven Rostedt wrote:
+>> On Wed, 11 Jul 2018 14:56:47 +0200
+>> Peter Zijlstra <peterz@infradead.org> wrote:
+>> 
+>> > On Thu, Jun 28, 2018@11:21:46AM -0700, Joel Fernandes wrote:
+>> > >  static inline void tracepoint_synchronize_unregister(void)
+>> > >  {
+>> > > +	synchronize_srcu(&tracepoint_srcu);
+>> > >  	synchronize_sched();
+>> > >  }
+>> > 
+>> > Given you below do call_rcu_sched() and then call_srcu(), isn't the
+>> > above the wrong way around?
+>> 
+>> Good catch!
+>> 
+>> 	release_probes()
+>> 		call_rcu_sched()
+>> 			---> rcu_free_old_probes() queued
+>> 
+>> 	tracepoint_synchronize_unregister()
+>> 		synchronize_srcu(&tracepoint_srcu);
+>> 			< finishes right away >
+>> 		synchronize_sched()
+>> 			--> rcu_free_old_probes()
+>> 				--> srcu_free_old_probes() queued
+>> 	
+>> Here tracepoint_synchronize_unregister() returned before the srcu
+>> portion ran.
 > 
-> CC: Shuah Khan <shuah at kernel.org>
-> CC: Pintu Agarwal <pintu.ping at gmail.com>
-> Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
-> ---
->  tools/testing/selftests/android/ion/ionapp_export.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/android/ion/ionapp_export.c b/tools/testing/selftests/android/ion/ionapp_export.c
-> index a944e72..b5fa0a2 100644
-> --- a/tools/testing/selftests/android/ion/ionapp_export.c
-> +++ b/tools/testing/selftests/android/ion/ionapp_export.c
-> @@ -51,6 +51,7 @@ int main(int argc, char *argv[])
->  
->  	heap_size = 0;
->  	flags = 0;
-> +	heap_type = ION_HEAP_TYPE_SYSTEM;
->  
->  	while ((opt = getopt(argc, argv, "hi:s:")) != -1) {
->  		switch (opt) {
-> 
+> I just read the comment that goes with that function; the order doesn't
+> matter. All we want to ensure is that the unregistration is visible to
+> either sched or srcu tracepoint users.
 
-Thanks. Applied to linux-kselftest next after updating the commit message
+Exactly, the order does not matter here.
 
-"Initialize heap_type to ION_HEAP_TYPE_SYSTEM to avoid "used uninitialized"
-compiler warning. heap_type gets used after initialization, this change is
-to just keep the compiler happy."
+Thanks,
 
-thanks,
--- Shuah
+Mathieu
 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
