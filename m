@@ -1,62 +1,42 @@
 From: lizhijian@cn.fujitsu.com (Li Zhijian)
-Date: Wed, 11 Jul 2018 09:37:06 +0800
-Subject: [PATCH 0/3] fix selftests compiling errors and warnings
-In-Reply-To: <f3800c8a-0a7a-02ce-a285-5b65c20f626c@kernel.org>
-References: <1530503634-32241-1-git-send-email-lizhijian@cn.fujitsu.com>
- <e8ac4e1d-e923-6f78-005c-e8267463a9c9@cn.fujitsu.com>
- <f3800c8a-0a7a-02ce-a285-5b65c20f626c@kernel.org>
-Message-ID: <e32d3755-8a27-75f8-da65-c863eb31a756@cn.fujitsu.com>
+Date: Wed, 11 Jul 2018 10:08:00 +0800
+Subject: [PATCH v2] selftests/android: initialize heap_type to avoid compiling
+ warning
+Message-ID: <1531274880-9375-1-git-send-email-lizhijian@cn.fujitsu.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180711013706.pix-jGzQ2s-4fSPSBeGtYCQQHaehwWdZ6ZaJGJom02E@z>
+Message-ID: <20180711020800.RFXFhysHqa1pToKSq2k2plA-7_PoOvWH5b_h2rWGfPY@z>
 
+root at vm-lkp-nex04-8G-7 ~/linux-v4.18-rc2/tools/testing/selftests/android# make
+make[1]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+make[1]: Entering directory '/root/linux-v4.18-rc2/tools/testing/selftests/android/ion'
+gcc  -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../usr/include/ -Wall -O2 -g    ionapp_export.c ipcsocket.c ionutils.c   -o ionapp_export
+ionapp_export.c: In function 'main':
+ionapp_export.c:91:2: warning: 'heap_type' may be used uninitialized in
+this function [-Wmaybe-uninitialized]
+  printf("heap_type: %ld, heap_size: %ld\n", heap_type, heap_size);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+CC: Shuah Khan <shuah at kernel.org>
+CC: Pintu Agarwal <pintu.ping at gmail.com>
+Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
+---
+ tools/testing/selftests/android/ion/ionapp_export.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 07/10/2018 10:08 PM, Shuah Khan wrote:
-> On 07/10/2018 02:38 AM, Li Zhijian wrote:
->> ping
->>
->>
->> On 07/02/2018 11:53 AM, Li Zhijian wrote:
->>> Li Zhijian (3):
->>>     selftests/android: fix compiling error
->>>     selftests/android: initialize heap_type to avoid compiling warning
->>>     selftests/gpio: unset OUTPUT for build tools/gpio
->>>
->>>    tools/testing/selftests/android/ion/Makefile        | 5 ++++-
->>>    tools/testing/selftests/android/ion/ionapp_export.c | 7 +++++++
->>>    tools/testing/selftests/gpio/Makefile               | 2 +-
->>>    3 files changed, 12 insertions(+), 2 deletions(-)
->>>
->>
->>
-> I was away on vacation all of last week. I will review the series.
-> Anders Roxell is working on making the change at the main Makefile
-> level to handle the headers dependency.
-
-Good to know this, looking forward it
-
-
->   I have been waiting to hear
-> from Maintainers to Ack it.
->
-> Once Anders patch goes in, is the first and third patches in this series
-> needed?
-
-I will have a check once his patch is merged
-
-
-Thanks
-
->
-> No problems with the second one. I can get that in soon.
->
-> thanks,
-> -- Shuah
->
->
-> .
->
-
+diff --git a/tools/testing/selftests/android/ion/ionapp_export.c b/tools/testing/selftests/android/ion/ionapp_export.c
+index a944e72..b5fa0a2 100644
+--- a/tools/testing/selftests/android/ion/ionapp_export.c
++++ b/tools/testing/selftests/android/ion/ionapp_export.c
+@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
+ 
+ 	heap_size = 0;
+ 	flags = 0;
++	heap_type = ION_HEAP_TYPE_SYSTEM;
+ 
+ 	while ((opt = getopt(argc, argv, "hi:s:")) != -1) {
+ 		switch (opt) {
+-- 
+2.7.4
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
