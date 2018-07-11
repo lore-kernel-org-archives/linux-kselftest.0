@@ -1,132 +1,60 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Tue, 10 Jul 2018 20:49:58 -0400
-Subject: [PATCH v9 7/7] kselftests: Add tests for the preemptoff and
- irqsoff tracers
-In-Reply-To: <20180628182149.226164-8-joel@joelfernandes.org>
-References: <20180628182149.226164-1-joel@joelfernandes.org>
- <20180628182149.226164-8-joel@joelfernandes.org>
-Message-ID: <20180710204958.22910589@gandalf.local.home>
-
-On Thu, 28 Jun 2018 11:21:49 -0700
-Joel Fernandes <joel at joelfernandes.org> wrote:
-
-> From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
-> 
-> Here we add unit tests for the preemptoff and irqsoff tracer by using a
-> kernel module introduced previously to trigger atomic sections in the
-> kernel.
-> 
-> Reviewed-by: Masami Hiramatsu <mhiramat at kernel.org>
-> Acked-by: Masami Hiramatsu <mhiramat at kernel.org>
-> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-
-This looks fine. The only patch that needs to be changed and resent is
-patch 6 and 7. Just send 6, and this one again because it depends on
-patch 6.
-
-I'll go ahead and apply 1-5 and kick off my other tests.
-
-Thanks!
-
--- Steve
+From: lizhijian at cn.fujitsu.com (Li Zhijian)
+Date: Wed, 11 Jul 2018 09:37:06 +0800
+Subject: [PATCH 0/3] fix selftests compiling errors and warnings
+In-Reply-To: <f3800c8a-0a7a-02ce-a285-5b65c20f626c@kernel.org>
+References: <1530503634-32241-1-git-send-email-lizhijian@cn.fujitsu.com>
+ <e8ac4e1d-e923-6f78-005c-e8267463a9c9@cn.fujitsu.com>
+ <f3800c8a-0a7a-02ce-a285-5b65c20f626c@kernel.org>
+Message-ID: <e32d3755-8a27-75f8-da65-c863eb31a756@cn.fujitsu.com>
 
 
-> ---
->  tools/testing/selftests/ftrace/config         |  3 +
->  .../test.d/preemptirq/irqsoff_tracer.tc       | 73 +++++++++++++++++++
->  2 files changed, 76 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
-> 
-> diff --git a/tools/testing/selftests/ftrace/config b/tools/testing/selftests/ftrace/config
-> index b01924c71c09..29588b328345 100644
-> --- a/tools/testing/selftests/ftrace/config
-> +++ b/tools/testing/selftests/ftrace/config
-> @@ -4,3 +4,6 @@ CONFIG_FUNCTION_PROFILER=y
->  CONFIG_TRACER_SNAPSHOT=y
->  CONFIG_STACK_TRACER=y
->  CONFIG_HIST_TRIGGERS=y
-> +CONFIG_PREEMPT_TRACER=y
-> +CONFIG_IRQSOFF_TRACER=y
-> +CONFIG_TEST_ATOMIC_SECTIONS=m
-> diff --git a/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc b/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
-> new file mode 100644
-> index 000000000000..1806d340035d
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
-> @@ -0,0 +1,73 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: test for the preemptirqsoff tracer
-> +
-> +MOD=test_atomic_sections
-> +
-> +fail() {
-> +    reset_tracer
-> +    rmmod $MOD || true
-> +    exit_fail
-> +}
-> +
-> +unsup() { #msg
-> +    reset_tracer
-> +    rmmod $MOD || true
-> +    echo $1
-> +    exit_unsupported
-> +}
-> +
-> +modprobe $MOD || unsup "$MOD module not available"
-> +rmmod $MOD
-> +
-> +grep -q "preemptoff" available_tracers || unsup "preemptoff tracer not enabled"
-> +grep -q "irqsoff" available_tracers || unsup "irqsoff tracer not enabled"
-> +
-> +reset_tracer
-> +
-> +# Simulate preemptoff section for half a second couple of times
-> +echo preemptoff > current_tracer
-> +sleep 1
-> +modprobe $MOD atomic_mode=preempt atomic_time=500000 || fail
-> +rmmod $MOD || fail
-> +modprobe $MOD atomic_mode=preempt atomic_time=500000 || fail
-> +rmmod $MOD || fail
-> +modprobe $MOD atomic_mode=preempt atomic_time=500000 || fail
-> +rmmod $MOD || fail
-> +
-> +cat trace
-> +
-> +# Confirm which tracer
-> +grep -q "tracer: preemptoff" trace || fail
-> +
-> +# Check the end of the section
-> +egrep -q "5.....us : <stack trace>" trace || fail
-> +
-> +# Check for 500ms of latency
-> +egrep -q "latency: 5..... us" trace || fail
-> +
-> +reset_tracer
-> +
-> +# Simulate irqsoff section for half a second couple of times
-> +echo irqsoff > current_tracer
-> +sleep 1
-> +modprobe $MOD atomic_mode=irq atomic_time=500000 || fail
-> +rmmod $MOD || fail
-> +modprobe $MOD atomic_mode=irq atomic_time=500000 || fail
-> +rmmod $MOD || fail
-> +modprobe $MOD atomic_mode=irq atomic_time=500000 || fail
-> +rmmod $MOD || fail
-> +
-> +cat trace
-> +
-> +# Confirm which tracer
-> +grep -q "tracer: irqsoff" trace || fail
-> +
-> +# Check the end of the section
-> +egrep -q "5.....us : <stack trace>" trace || fail
-> +
-> +# Check for 500ms of latency
-> +egrep -q "latency: 5..... us" trace || fail
-> +
-> +reset_tracer
-> +exit 0
+
+On 07/10/2018 10:08 PM, Shuah Khan wrote:
+> On 07/10/2018 02:38 AM, Li Zhijian wrote:
+>> ping
+>>
+>>
+>> On 07/02/2018 11:53 AM, Li Zhijian wrote:
+>>> Li Zhijian (3):
+>>>     selftests/android: fix compiling error
+>>>     selftests/android: initialize heap_type to avoid compiling warning
+>>>     selftests/gpio: unset OUTPUT for build tools/gpio
+>>>
+>>>    tools/testing/selftests/android/ion/Makefile        | 5 ++++-
+>>>    tools/testing/selftests/android/ion/ionapp_export.c | 7 +++++++
+>>>    tools/testing/selftests/gpio/Makefile               | 2 +-
+>>>    3 files changed, 12 insertions(+), 2 deletions(-)
+>>>
+>>
+>>
+> I was away on vacation all of last week. I will review the series.
+> Anders Roxell is working on making the change at the main Makefile
+> level to handle the headers dependency.
+
+Good to know this, looking forward it
+
+
+>   I have been waiting to hear
+> from Maintainers to Ack it.
+>
+> Once Anders patch goes in, is the first and third patches in this series
+> needed?
+
+I will have a check once his patch is merged
+
+
+Thanks
+
+>
+> No problems with the second one. I can get that in soon.
+>
+> thanks,
+> -- Shuah
+>
+>
+> .
+>
+
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
