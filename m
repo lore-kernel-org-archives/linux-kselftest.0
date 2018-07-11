@@ -1,40 +1,29 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Tue, 10 Jul 2018 22:27:30 -0700
-Subject: [PATCH v9 7/7] kselftests: Add tests for the preemptoff and
- irqsoff tracers
-In-Reply-To: <20180710204958.22910589@gandalf.local.home>
-References: <20180628182149.226164-1-joel@joelfernandes.org>
- <20180628182149.226164-8-joel@joelfernandes.org>
- <20180710204958.22910589@gandalf.local.home>
-Message-ID: <20180711052730.GB11372@joelaf.mtv.corp.google.com>
+From: davem@davemloft.net (David Miller)
+Date: Tue, 10 Jul 2018 22:58:29 -0700 (PDT)
+Subject: [PATCH net-next] selftests: forwarding: mirror_lib: Tighten up
+ VLAN capture
+In-Reply-To: <0fecbe018ff9a06a5f3686e3c4801b5005925019.1531072211.git.petrm@mellanox.com>
+References: <0fecbe018ff9a06a5f3686e3c4801b5005925019.1531072211.git.petrm@mellanox.com>
+Message-ID: <20180710.225829.143333520309033405.davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180711052730.8Hwk0lO117qk-vG0KXtTqtpXSg0rBAL0f-kfq2DCObc@z>
+Message-ID: <20180711055829.tvAbAXSKOZW9f0gEjv74wq3TzUV8IRnWitVPkPITsTU@z>
 
-On Tue, Jul 10, 2018@08:49:58PM -0400, Steven Rostedt wrote:
-> On Thu, 28 Jun 2018 11:21:49 -0700
-> Joel Fernandes <joel@joelfernandes.org> wrote:
+From: Petr Machata <petrm@mellanox.com>
+Date: Sun, 08 Jul 2018 19:58:55 +0200
+
+> The function do_test_span_vlan_dir_ips() is used for testing whether
+> mirrored packets are VLAN-encapsulated. But since it only considers
+> VLAN encapsulation, it may end up matching unmirrored ARP traffic as
+> well. One consequence is a rare failure of mirror_gre_vlan_bridge_1q's
+> test_gretap_untagged_egress. Decreasing ping cadence in mirror_test()
+> makes the problem easily reproducible.
 > 
-> > From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
-> > 
-> > Here we add unit tests for the preemptoff and irqsoff tracer by using a
-> > kernel module introduced previously to trigger atomic sections in the
-> > kernel.
-> > 
-> > Reviewed-by: Masami Hiramatsu <mhiramat at kernel.org>
-> > Acked-by: Masami Hiramatsu <mhiramat at kernel.org>
-> > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> Therefore tighten up the match criterion to only count those 802.1q
+> packets where the next header is IP.
 > 
-> This looks fine. The only patch that needs to be changed and resent is
-> patch 6 and 7. Just send 6, and this one again because it depends on
-> patch 6.
-> 
-> I'll go ahead and apply 1-5 and kick off my other tests.
+> Signed-off-by: Petr Machata <petrm at mellanox.com>
 
-Sounds good, I'll resend those shortly with the changes you suggested.
-
-Thanks!
-
-- Joel
+Applied.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
