@@ -1,73 +1,49 @@
-From: paulmck@linux.vnet.ibm.com (Paul E. McKenney)
-Date: Wed, 11 Jul 2018 08:15:59 -0700
+From: peterz@infradead.org (Peter Zijlstra)
+Date: Wed, 11 Jul 2018 17:17:51 +0200
 Subject: [PATCH v9 4/7] tracepoint: Make rcuidle tracepoint callers use
  SRCU
-In-Reply-To: <20180711104618.05dc4b46@gandalf.local.home>
+In-Reply-To: <20180711090649.68af40f9@gandalf.local.home>
 References: <20180628182149.226164-1-joel@joelfernandes.org>
  <20180628182149.226164-5-joel@joelfernandes.org>
- <20180711124954.GE2476@hirez.programming.kicks-ass.net>
- <20180711090003.42596c2b@gandalf.local.home>
- <20180711142744.GN3593@linux.vnet.ibm.com>
- <20180711104618.05dc4b46@gandalf.local.home>
-Message-ID: <20180711151559.GR3593@linux.vnet.ibm.com>
+ <20180711125647.GG2476@hirez.programming.kicks-ass.net>
+ <20180711090649.68af40f9@gandalf.local.home>
+Message-ID: <20180711151751.GI2476@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180711151559.BXRqt2xd1c1Clbxou4pk24L9oulFirgCdnVqIqPxRIk@z>
+Message-ID: <20180711151751.8BAgUqYL7K1Bgs-KGXhinNuQhB5VD4ivjpsYnkGndDo@z>
 
-On Wed, Jul 11, 2018@10:46:18AM -0400, Steven Rostedt wrote:
-> On Wed, 11 Jul 2018 07:27:44 -0700
-> "Paul E. McKenney" <paulmck@linux.vnet.ibm.com> wrote:
+On Wed, Jul 11, 2018@09:06:49AM -0400, Steven Rostedt wrote:
+> On Wed, 11 Jul 2018 14:56:47 +0200
+> Peter Zijlstra <peterz@infradead.org> wrote:
 > 
-> > On Wed, Jul 11, 2018@09:00:03AM -0400, Steven Rostedt wrote:
-> > > On Wed, 11 Jul 2018 14:49:54 +0200
-> > > Peter Zijlstra <peterz@infradead.org> wrote:
-> > >   
-> > > > On Thu, Jun 28, 2018 at 11:21:46AM -0700, Joel Fernandes wrote:  
-> > > > > -		it_func_ptr = rcu_dereference_sched((tp)->funcs);	\    
-> > > > 
-> > > > I would convert to rcu_dereference_raw() to appease sparse. The fancy
-> > > > stuff below is pointless if you then turn off all checking.  
-> > > 
-> > > The problem with doing this is if we use a trace event without the
-> > > proper _idle() or whatever, we wont get a warning that it is used
-> > > incorrectly with lockdep. Or does lockdep still check if "rcu is
-> > > watching" with rcu_dereference_raw()?  
+> > On Thu, Jun 28, 2018@11:21:46AM -0700, Joel Fernandes wrote:
+> > >  static inline void tracepoint_synchronize_unregister(void)
+> > >  {
+> > > +	synchronize_srcu(&tracepoint_srcu);
+> > >  	synchronize_sched();
+> > >  }  
 > > 
-> > No lockdep checking is done by rcu_dereference_raw().
+> > Given you below do call_rcu_sched() and then call_srcu(), isn't the
+> > above the wrong way around?
 > 
-> Correct, but I think we can do this regardless. So Joel please resend
-> with Peter's suggestion.
+> Good catch!
 > 
-> The reason being is because of this:
+> 	release_probes()
+> 		call_rcu_sched()
+> 			---> rcu_free_old_probes() queued
 > 
-> 
-> #define __DECLARE_TRACE(name, proto, args, cond, data_proto, data_args) \
-> 	extern struct tracepoint __tracepoint_##name;			\
-> 	static inline void trace_##name(proto)				\
-> 	{								\
-> 		if (static_key_false(&__tracepoint_##name.key))		\
-> 			__DO_TRACE(&__tracepoint_##name,		\
-> 				TP_PROTO(data_proto),			\
-> 				TP_ARGS(data_args),			\
-> 				TP_CONDITION(cond), 0);			\
-> 		if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {		\
-> 			rcu_read_lock_sched_notrace();			\
-> 			rcu_dereference_sched(__tracepoint_##name.funcs);\
-> 			rcu_read_unlock_sched_notrace();		\
-> 		}							\
-> 	}
-> 
-> Because lockdep would only trigger warnings when the tracepoint was
-> enabled and used in a place it shouldn't be, we added the above
-> IS_ENABLED(CONFIG_LOCKDEP) part to test regardless if the the
-> tracepoint was enabled or not. Because we do this, we don't need to
-> have the test in the __DO_TRACE() code itself. That means we can clean
-> up the code as per Peter's suggestion.
+> 	tracepoint_synchronize_unregister()
+> 		synchronize_srcu(&tracepoint_srcu);
+> 			< finishes right away >
+> 		synchronize_sched()
+> 			--> rcu_free_old_probes()
+> 				--> srcu_free_old_probes() queued
+> 	
+> Here tracepoint_synchronize_unregister() returned before the srcu
+> portion ran.
 
-Indeed, the rcu_dereference_sched() would catch it in that case, so
-agreed, Peter's suggestion isn't losing any debuggability.
-
-						Thanx, Paul
-
+I just read the comment that goes with that function; the order doesn't
+matter. All we want to ensure is that the unregistration is visible to
+either sched or srcu tracepoint users.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
