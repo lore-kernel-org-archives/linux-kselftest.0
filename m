@@ -1,74 +1,51 @@
 From: peterz@infradead.org (Peter Zijlstra)
-Date: Wed, 11 Jul 2018 14:53:22 +0200
+Date: Wed, 11 Jul 2018 14:56:47 +0200
 Subject: [PATCH v9 4/7] tracepoint: Make rcuidle tracepoint callers use
  SRCU
 In-Reply-To: <20180628182149.226164-5-joel@joelfernandes.org>
 References: <20180628182149.226164-1-joel@joelfernandes.org>
  <20180628182149.226164-5-joel@joelfernandes.org>
-Message-ID: <20180711125322.GF2476@hirez.programming.kicks-ass.net>
+Message-ID: <20180711125647.GG2476@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180711125322.U4zicd0SOHYeqcuj0L9NLNzdUFG0o3kyrzj2dGbcOeE@z>
+Message-ID: <20180711125647._ADobPGDwayzreDme2rK54Zye99kb-j_8S_OuFlnJdo@z>
 
 On Thu, Jun 28, 2018@11:21:46AM -0700, Joel Fernandes wrote:
-> -		rcu_read_lock_sched_notrace();				\
-> -		it_func_ptr = rcu_dereference_sched((tp)->funcs);	\
-> +									\
-> +		/*							\
-> +		 * For rcuidle callers, use srcu since sched-rcu	\
-> +		 * doesn't work from the idle path.			\
-> +		 */							\
-> +		if (rcuidle) {						\
-> +			if (in_nmi()) {					\
-> +				WARN_ON_ONCE(1);			\
-> +				return; /* no srcu from nmi */		\
-> +			}						\
-> +									\
-> +			idx = srcu_read_lock_notrace(&tracepoint_srcu);	\
-> +			it_func_ptr =					\
-> +				srcu_dereference_notrace((tp)->funcs,	\
-> +						&tracepoint_srcu);	\
-> +			/* To keep it consistent with !rcuidle path */	\
-> +			preempt_disable_notrace();			\
-> +		} else {						\
-> +			rcu_read_lock_sched_notrace();			\
-> +			it_func_ptr =					\
-> +				rcu_dereference_sched((tp)->funcs);	\
-> +		}							\
-> +									\
->  		if (it_func_ptr) {					\
->  			do {						\
->  				it_func = (it_func_ptr)->func;		\
-> @@ -148,9 +177,13 @@ extern void syscall_unregfunc(void);
->  				((void(*)(proto))(it_func))(args);	\
->  			} while ((++it_func_ptr)->func);		\
->  		}							\
-> -		rcu_read_unlock_sched_notrace();			\
-> -		if (rcucheck)						\
-> -			rcu_irq_exit_irqson();				\
-> +									\
-> +		if (rcuidle) {						\
-> +			preempt_enable_notrace();			\
-> +			srcu_read_unlock_notrace(&tracepoint_srcu, idx);\
-> +		} else {						\
-> +			rcu_read_unlock_sched_notrace();		\
-> +		}							\
->  	} while (0)
+>  static inline void tracepoint_synchronize_unregister(void)
+>  {
+> +	synchronize_srcu(&tracepoint_srcu);
+>  	synchronize_sched();
+>  }
 
-In fact, I would write the thing like:
+Given you below do call_rcu_sched() and then call_srcu(), isn't the
+above the wrong way around?
 
-		preempt_disable_notrace();
-		if (rcuidle)
-			idx = srcu_read_lock_notrace(&tracepoint_srcu);
+Also, does the above want to be barrier instead of synchronize, so as to
+guarantee completion of the callbacks.
 
-		it_func_ptr = rcu_dereference_raw((tp)->funcs);
-
-		/* ... */
-
-		if (rcu_idle)
-			srcu_read_unlock_notrace(&tracepoint_srcu, idx);
-		preempt_enable_notrace();
-
-Much simpler and very much the same.
+> +static void srcu_free_old_probes(struct rcu_head *head)
+>  {
+>  	kfree(container_of(head, struct tp_probes, rcu));
+>  }
+>  
+> +static void rcu_free_old_probes(struct rcu_head *head)
+> +{
+> +	call_srcu(&tracepoint_srcu, head, srcu_free_old_probes);
+> +}
+> +
+>  static inline void release_probes(struct tracepoint_func *old)
+>  {
+>  	if (old) {
+>  		struct tp_probes *tp_probes = container_of(old,
+>  			struct tp_probes, probes[0]);
+> +		/*
+> +		 * Tracepoint probes are protected by both sched RCU and SRCU,
+> +		 * by calling the SRCU callback in the sched RCU callback we
+> +		 * cover both cases. So let us chain the SRCU and sched RCU
+> +		 * callbacks to wait for both grace periods.
+> +		 */
+>  		call_rcu_sched(&tp_probes->rcu, rcu_free_old_probes);
+>  	}
+>  }
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
