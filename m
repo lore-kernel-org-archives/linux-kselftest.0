@@ -1,50 +1,52 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Thu, 12 Jul 2018 16:15:38 -0400
-Subject: [PATCH v9 4/7] tracepoint: Make rcuidle tracepoint callers use
- SRCU
-In-Reply-To: <20180712191701.GA107829@joelaf.mtv.corp.google.com>
-References: <20180628182149.226164-1-joel@joelfernandes.org>
- <20180628182149.226164-5-joel@joelfernandes.org>
- <20180711124954.GE2476@hirez.programming.kicks-ass.net>
- <20180711090003.42596c2b@gandalf.local.home>
- <20180711142744.GN3593@linux.vnet.ibm.com>
- <20180711104618.05dc4b46@gandalf.local.home>
- <20180711205249.GA32091@joelaf.mtv.corp.google.com>
- <20180711232120.5dbfa1c7@vmware.local.home>
- <20180712042825.GA154647@joelaf.mtv.corp.google.com>
- <20180712093512.1f612a24@gandalf.local.home>
- <20180712191701.GA107829@joelaf.mtv.corp.google.com>
-Message-ID: <20180712161538.0737ba7f@gandalf.local.home>
+From: john.stultz at linaro.org (John Stultz)
+Date: Thu, 12 Jul 2018 13:17:19 -0700
+Subject: [GIT PULL][PATCH 0/2] Few timekeeping items for 4.19
+Message-ID: <1531426641-20076-1-git-send-email-john.stultz@linaro.org>
 
-On Thu, 12 Jul 2018 12:17:01 -0700
-Joel Fernandes <joel at joelfernandes.org> wrote:
+Hey Thomas,
+  I had a few other items in my stack here, but you've already
+queued them in -tip, so here's what I have left.
 
-> AFAICT, _notrace doesn't call into lockdep or tracing (there's also a comment
-> that says so):
-> 
-> /**
->  * srcu_dereference_notrace - no tracing and no lockdep calls from here
->  */
+Let me know if you have any objections or feedback for change.
 
-Note, I had a different tree checked out, so I didn't have the source
-available without digging through my email.
+thanks
+-john
 
-> 
-> So then, we should use the regular variant for this additional check you're
-> suggesting.
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Ingo Molnar <mingo at kernel.org>
+Cc: Miroslav Lichvar <mlichvar at redhat.com>
+Cc: Richard Cochran <richardcochran at gmail.com>
+Cc: Prarit Bhargava <prarit at redhat.com>
+Cc: Stephen Boyd <sboyd at kernel.org>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: linux-kselftest at vger.kernel.org
 
-OK, I thought we had a rcu_dereference_notrace() that did checks and
-thought that this followed suit, but it appears there is no such call.
-That's where my confusion was.
+The following changes since commit 021c91791a5e7e85c567452f1be3e4c2c6cb6063:
 
-Sure, I'll nuke the notrace() portion, thanks.
+  Linux 4.18-rc3 (2018-07-01 16:04:53 -0700)
 
-Also, I've applied 1-3, since 4 and 5 looks to be getting a remake, I'm
-going to remove them from my queue. Please fold the SPDX patch into 5.
+are available in the git repository at:
 
-Thanks!
+  https://git.linaro.org/people/john.stultz/linux.git fortglx/4.19/time
 
--- Steve
+for you to fetch changes up to b061c7a513afe14a68af41cec7c3476befc40e95:
+
+  timekeeping: Update multiplier when NTP frequency is set directly (2018-07-10 12:44:25 -0700)
+
+----------------------------------------------------------------
+John Stultz (1):
+      selftest: timers: Tweak raw_skew to SKIP when ADJ_OFFSET/other clock adjustments are in progress
+
+Miroslav Lichvar (1):
+      timekeeping: Update multiplier when NTP frequency is set directly
+
+ kernel/time/timekeeping.c                 | 36 ++++++++++++++++++++++++++++++------
+ tools/testing/selftests/timers/raw_skew.c |  5 +++++
+ 2 files changed, 35 insertions(+), 6 deletions(-)
+
+-- 
+2.7.4
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
