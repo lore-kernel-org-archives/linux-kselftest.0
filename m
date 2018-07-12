@@ -1,38 +1,39 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Thu, 12 Jul 2018 16:31:35 -0400
-Subject: [PATCH v9 4/7] tracepoint: Make rcuidle tracepoint callers use
- SRCU
-In-Reply-To: <CAEXW_YSxxEXF5knSDXsq=dTkZjtw_Qr1voo0A3qqW+KN8LKcMQ@mail.gmail.com>
-References: <20180628182149.226164-1-joel@joelfernandes.org>
- <20180628182149.226164-5-joel@joelfernandes.org>
- <20180711124954.GE2476@hirez.programming.kicks-ass.net>
- <20180711090003.42596c2b@gandalf.local.home>
- <20180711142744.GN3593@linux.vnet.ibm.com>
- <20180711104618.05dc4b46@gandalf.local.home>
- <20180711205249.GA32091@joelaf.mtv.corp.google.com>
- <20180711232120.5dbfa1c7@vmware.local.home>
- <20180712042825.GA154647@joelaf.mtv.corp.google.com>
- <20180712093512.1f612a24@gandalf.local.home>
- <20180712191701.GA107829@joelaf.mtv.corp.google.com>
- <20180712161538.0737ba7f@gandalf.local.home>
- <CAEXW_YSxxEXF5knSDXsq=dTkZjtw_Qr1voo0A3qqW+KN8LKcMQ@mail.gmail.com>
-Message-ID: <20180712163135.22075cd4@gandalf.local.home>
+From: john.stultz@linaro.org (John Stultz)
+Date: Thu, 12 Jul 2018 13:34:15 -0700
+Subject: [GIT PULL][PATCH 0/2] Few timekeeping items for 4.19
+In-Reply-To: <alpine.DEB.2.21.1807122222360.1597@nanos.tec.linutronix.de>
+References: <1531426641-20076-1-git-send-email-john.stultz@linaro.org>
+ <alpine.DEB.2.21.1807122222360.1597@nanos.tec.linutronix.de>
+Message-ID:
+ <CALAqxLUxihWMj0xR=qg=A2eycYYHCXbr3y2JxLUJyBznrso5bw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180712203135.gBBPTj6xniXFpqX8IOyV5OVt8gjh1MRKYnSjOKHvSVM@z>
+Message-ID: <20180712203415.vD0sZ5NC54DKe8APLn9C5U3TmYJeICElIoCdtAblUyg@z>
 
-On Thu, 12 Jul 2018 13:29:32 -0700
-Joel Fernandes <joel@joelfernandes.org> wrote:
-
-> Also the kselftest patches were acked and can be taken independently,
-> I had reposted them as a separate 2 patch series with some minor
-> changes based on your suggestions. Could you check them?
+On Thu, Jul 12, 2018@1:26 PM, Thomas Gleixner <tglx@linutronix.de> wrote:
+> On Thu, 12 Jul 2018, John Stultz wrote:
 >
+>>   I had a few other items in my stack here, but you've already
+>> queued them in -tip, so here's what I have left.
+>
+> Did I miss you replying on them that you picked them up? Normally when I
+> see that you or Daniel picked something up I happily move the mails to the
+> done folder unless I see something horrible.
 
-Yep, I saw them. I was going to wait till these patches were sent, but
-since they are agnostic, I'll look at them now. Thanks for letting me
-know.
+No, that's my fault. I'll try to be better about making that clear so
+you don't duplicate work. You're just much faster then I am :)
 
--- Steve
+>> Let me know if you have any objections or feedback for change.
+>
+> One small request for the next pull request. Please write a short summary,
+> optionally in a tag, then pulling the tag adds it to the merge commit message.
+> But plain in the pull request mail is fine as well.
+
+Sure, I'll try to take a swing at this next time, I've not done much
+with git tags (other then trying to do a signature tag long ago when I
+still had a valid gpg key :)
+
+thanks
+-john
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
