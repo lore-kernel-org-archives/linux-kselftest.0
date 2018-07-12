@@ -1,56 +1,30 @@
-From: john.stultz at linaro.org (John Stultz)
-Date: Thu, 12 Jul 2018 13:17:20 -0700
-Subject: [PATCH 1/2] selftest: timers: Tweak raw_skew to SKIP when
- ADJ_OFFSET/other clock adjustments are in progress
+From: tglx at linutronix.de (Thomas Gleixner)
+Date: Thu, 12 Jul 2018 22:26:26 +0200 (CEST)
+Subject: [GIT PULL][PATCH 0/2] Few timekeeping items for 4.19
 In-Reply-To: <1531426641-20076-1-git-send-email-john.stultz@linaro.org>
 References: <1531426641-20076-1-git-send-email-john.stultz@linaro.org>
-Message-ID: <1531426641-20076-2-git-send-email-john.stultz@linaro.org>
+Message-ID: <alpine.DEB.2.21.1807122222360.1597@nanos.tec.linutronix.de>
 
-In the past we've warned when ADJ_OFFSET was in progress, usually
-caused by ntpd or some other time adjusting daemon running in non
-steady sate, which can cause the skew calculations to be
-incorrect.
+John,
 
-Thus, this patch checks to see if the clock was being adjusted
-when we fail so that we don't cause false negatives.
+On Thu, 12 Jul 2018, John Stultz wrote:
 
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: Ingo Molnar <mingo at kernel.org>
-Cc: Miroslav Lichvar <mlichvar at redhat.com>
-Cc: Richard Cochran <richardcochran at gmail.com>
-Cc: Prarit Bhargava <prarit at redhat.com>
-Cc: Stephen Boyd <sboyd at kernel.org>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: linux-kselftest at vger.kernel.org
-Suggested-by: Miroslav Lichvar <mlichvar at redhat.com>
-Signed-off-by: John Stultz <john.stultz at linaro.org>
----
-v2: Widened the checks to look for other clock adjustments that
-    could happen, as suggested by Miroslav
-v3: Fixed up commit message
----
- tools/testing/selftests/timers/raw_skew.c | 5 +++++
- 1 file changed, 5 insertions(+)
+>   I had a few other items in my stack here, but you've already
+> queued them in -tip, so here's what I have left.
 
-diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/selftests/timers/raw_skew.c
-index ca6cd14..dcf73c5 100644
---- a/tools/testing/selftests/timers/raw_skew.c
-+++ b/tools/testing/selftests/timers/raw_skew.c
-@@ -134,6 +134,11 @@ int main(int argv, char **argc)
- 	printf(" %lld.%i(act)", ppm/1000, abs((int)(ppm%1000)));
- 
- 	if (llabs(eppm - ppm) > 1000) {
-+		if (tx1.offset || tx2.offset ||
-+		    tx1.freq != tx2.freq || tx1.tick != tx2.tick) {
-+			printf("	[SKIP]\n");
-+			return ksft_exit_skip("The clock was adjusted externally. Shutdown NTPd or other time sync daemons\n");
-+		}
- 		printf("	[FAILED]\n");
- 		return ksft_exit_fail();
- 	}
--- 
-2.7.4
+Did I miss you replying on them that you picked them up? Normally when I
+see that you or Daniel picked something up I happily move the mails to the
+done folder unless I see something horrible.
 
+> Let me know if you have any objections or feedback for change.
+
+One small request for the next pull request. Please write a short summary,
+optionally in a tag, then pulling the tag adds it to the merge commit message.
+But plain in the pull request mail is fine as well.
+
+Thanks,
+
+	tglx
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
