@@ -1,25 +1,43 @@
-From: davem at davemloft.net (David Miller)
-Date: Wed, 11 Jul 2018 23:59:39 -0700 (PDT)
-Subject: [PATCH net-next] selftests: forwarding: mirror_gre_nh: Unset
- rp_filter on host VRF
-In-Reply-To: <a1d9001969381681ce4c3891ef8404b74aef177f.1531226547.git.petrm@mellanox.com>
-References: <a1d9001969381681ce4c3891ef8404b74aef177f.1531226547.git.petrm@mellanox.com>
-Message-ID: <20180711.235939.1607210055217095532.davem@davemloft.net>
+From: joel at joelfernandes.org (Joel Fernandes)
+Date: Thu, 12 Jul 2018 01:38:05 -0700
+Subject: [PATCH v9 5/7] tracing: Centralize preemptirq tracepoints and
+ unify their usage
+In-Reply-To: <20180711091944.4d8e78ef@gandalf.local.home>
+References: <20180628182149.226164-1-joel@joelfernandes.org>
+ <20180628182149.226164-6-joel@joelfernandes.org>
+ <20180711131256.GH2476@hirez.programming.kicks-ass.net>
+ <20180711091944.4d8e78ef@gandalf.local.home>
+Message-ID: <20180712083805.GA67912@joelaf.mtv.corp.google.com>
 
-From: Petr Machata <petrm at mellanox.com>
-Date: Tue, 10 Jul 2018 14:44:26 +0200
-
-> The mirrored packets arrive at $h3 encapsulated in GRE/IPv4, with IP
-> address from 192.0.2.128/28 network. However the interface is configured
-> as a member of 192.0.2.160/28 and there's no route directing traffic
-> from the former network through that interface. Correspondingly, the RP
-> filter on the VRF rejects it.
+On Wed, Jul 11, 2018 at 09:19:44AM -0400, Steven Rostedt wrote:
+> > > protection to prevent something like the following case: a spin_lock is
+> > > taken. Then lockdep_acquired is called.  That does a raw_local_irq_save
+> > > and then sets lockdep_recursion, and then calls __lockdep_acquired. In
+> > > this function, a call to get_lock_stats happens which calls
+> > > preempt_disable, which calls trace IRQS off somewhere which enters my
+> > > tracepoint code and sets the tracing_irq_cpu flag to prevent recursion.
+> > > This flag is then never cleared causing lockdep paths to never be
+> > > entered and thus causing splats and other bad things.  
+> > 
+> > Would it not be much easier to avoid that entirely, afaict all
+> > get/put_lock_stats() callers already have IRQs disabled, so that
+> > (traced) preempt fiddling is entirely superfluous.
 > 
-> Therefore turn off the VRF's RP filter.
-> 
-> Signed-off-by: Petr Machata <petrm at mellanox.com>
+> Agreed. Looks like a good clean up.
 
-Applied.
+So actually with or without the clean up, I don't see any issues with
+dropping lockdep_recursing in my tests at the moment. I'm not sure something
+else changed between then and now causing the issue to go away. I can include
+Peter's clean up in my series though if he's Ok with it since you guys agree
+its a good clean up anyway. Would you prefer I did that, and then also
+dropped the lockdep_recursing checks? Or should I keep the
+lockdep_recursing() checks just to be safe? Do you see cases where you want
+irqsoff tracing while lockdep_recursing() is true?
+
+thanks,
+
+- Joel
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
