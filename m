@@ -1,95 +1,71 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Wed, 11 Jul 2018 17:44:11 -0700
-Subject: [PATCH v9 5/7] tracing: Centralize preemptirq tracepoints and
- unify their usage
-In-Reply-To: <20180711131256.GH2476@hirez.programming.kicks-ass.net>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Wed, 11 Jul 2018 21:22:37 -0400
+Subject: [PATCH v9 4/7] tracepoint: Make rcuidle tracepoint callers use
+ SRCU
+In-Reply-To: <20180711205639.GB32091@joelaf.mtv.corp.google.com>
 References: <20180628182149.226164-1-joel@joelfernandes.org>
- <20180628182149.226164-6-joel@joelfernandes.org>
- <20180711131256.GH2476@hirez.programming.kicks-ass.net>
-Message-ID: <20180712004411.GD32091@joelaf.mtv.corp.google.com>
+ <20180628182149.226164-5-joel@joelfernandes.org>
+ <20180711124954.GE2476@hirez.programming.kicks-ass.net>
+ <20180711090003.42596c2b@gandalf.local.home>
+ <20180711142744.GN3593@linux.vnet.ibm.com>
+ <20180711104618.05dc4b46@gandalf.local.home>
+ <20180711151559.GR3593@linux.vnet.ibm.com>
+ <20180711205639.GB32091@joelaf.mtv.corp.google.com>
+Message-ID: <20180711212237.3eff418f@vmware.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180712004411.2pd75UcMPRZg1vXfS5qP75n3DSL77J_xMH_iMBsvG2Y@z>
+Message-ID: <20180712012237.j7Op1vVLl0o88uT_5OR14hho_wd3cLWRG1Dek69iDvs@z>
 
-On Wed, Jul 11, 2018@03:12:56PM +0200, Peter Zijlstra wrote:
-> On Thu, Jun 28, 2018@11:21:47AM -0700, Joel Fernandes wrote:
-> > One note, I have to check for lockdep recursion in the code that calls
-> > the trace events API and bail out if we're in lockdep recursion
+On Wed, 11 Jul 2018 13:56:39 -0700
+Joel Fernandes <joel@joelfernandes.org> wrote:
+
+> > > #define __DECLARE_TRACE(name, proto, args, cond, data_proto, data_args) \
+> > > 	extern struct tracepoint __tracepoint_##name;			\
+> > > 	static inline void trace_##name(proto)				\
+> > > 	{								\
+> > > 		if (static_key_false(&__tracepoint_##name.key))		\
+> > > 			__DO_TRACE(&__tracepoint_##name,		\
+> > > 				TP_PROTO(data_proto),			\
+> > > 				TP_ARGS(data_args),			\
+> > > 				TP_CONDITION(cond), 0);			\
+> > > 		if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {		\
+> > > 			rcu_read_lock_sched_notrace();			\
+> > > 			rcu_dereference_sched(__tracepoint_##name.funcs);\
+> > > 			rcu_read_unlock_sched_notrace();		\
+> > > 		}							\
+> > > 	}
+> > > 
+> > > Because lockdep would only trigger warnings when the tracepoint was
+> > > enabled and used in a place it shouldn't be, we added the above
+> > > IS_ENABLED(CONFIG_LOCKDEP) part to test regardless if the the
+> > > tracepoint was enabled or not. Because we do this, we don't need to
+> > > have the test in the __DO_TRACE() code itself. That means we can clean
+> > > up the code as per Peter's suggestion.  
+> > 
+> > Indeed, the rcu_dereference_sched() would catch it in that case, so
+> > agreed, Peter's suggestion isn't losing any debuggability.  
 > 
-> I'm not seeing any new lockdep_recursion checks...
+> Hmm, but if we are doing the check later anyway, then why not do it in
+> __DO_TRACE itself?
 
-I meant its this part:
+Because __DO_TRACE is only called if the trace event is enabled. If we
+never enable a trace event, we never know if it has a potential of
+doing it wrong. The second part is to trigger the warning immediately
+regardless if the trace event is enabled or not.
 
-void trace_hardirqs_on(void)
-{
-	if (lockdep_recursing(current) || !this_cpu_read(tracing_irq_cpu))
-		return;
-
-> > protection to prevent something like the following case: a spin_lock is
-> > taken. Then lockdep_acquired is called.  That does a raw_local_irq_save
-> > and then sets lockdep_recursion, and then calls __lockdep_acquired. In
-> > this function, a call to get_lock_stats happens which calls
-> > preempt_disable, which calls trace IRQS off somewhere which enters my
-> > tracepoint code and sets the tracing_irq_cpu flag to prevent recursion.
-> > This flag is then never cleared causing lockdep paths to never be
-> > entered and thus causing splats and other bad things.
 > 
-> Would it not be much easier to avoid that entirely, afaict all
-> get/put_lock_stats() callers already have IRQs disabled, so that
-> (traced) preempt fiddling is entirely superfluous.
+> Also I guess we are discussing about changing the rcu_dereference_sched which
+> I think should go into a separate patch since my patch isn't touching how the
+> rcuidle==0 paths use the RCU API. So I think this is an existing issue
+> independent of this series.
 
-Let me try to apply Peter's diff and see if I still don't need lockdep
-recursion checking. I believe it is still harmless to still check for lockdep
-recursion just to be safe. But I'll give it a try and let you know how it
-goes.
+But the code you added made it much more complex to keep the checks as
+is. If we remove the checks then this patch doesn't need to have all
+the if statements, and we can do it the way Peter suggested.
 
-thanks!
+But sure, go ahead and make a separate patch first that removes the
+checks from __DO_TRACE() first if you want to.
 
-- Joel
-
-
-> ---
-> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-> index 5fa4d3138bf1..8f5ce0048d15 100644
-> --- a/kernel/locking/lockdep.c
-> +++ b/kernel/locking/lockdep.c
-> @@ -248,12 +248,7 @@ void clear_lock_stats(struct lock_class *class)
->  
->  static struct lock_class_stats *get_lock_stats(struct lock_class *class)
->  {
-> -	return &get_cpu_var(cpu_lock_stats)[class - lock_classes];
-> -}
-> -
-> -static void put_lock_stats(struct lock_class_stats *stats)
-> -{
-> -	put_cpu_var(cpu_lock_stats);
-> +	return &this_cpu_ptr(&cpu_lock_stats)[class - lock_classes];
->  }
->  
->  static void lock_release_holdtime(struct held_lock *hlock)
-> @@ -271,7 +266,6 @@ static void lock_release_holdtime(struct held_lock *hlock)
->  		lock_time_inc(&stats->read_holdtime, holdtime);
->  	else
->  		lock_time_inc(&stats->write_holdtime, holdtime);
-> -	put_lock_stats(stats);
->  }
->  #else
->  static inline void lock_release_holdtime(struct held_lock *hlock)
-> @@ -4090,7 +4084,6 @@ __lock_contended(struct lockdep_map *lock, unsigned long ip)
->  		stats->contending_point[contending_point]++;
->  	if (lock->cpu != smp_processor_id())
->  		stats->bounces[bounce_contended + !!hlock->read]++;
-> -	put_lock_stats(stats);
->  }
->  
->  static void
-> @@ -4138,7 +4131,6 @@ __lock_acquired(struct lockdep_map *lock, unsigned long ip)
->  	}
->  	if (lock->cpu != cpu)
->  		stats->bounces[bounce_acquired + !!hlock->read]++;
-> -	put_lock_stats(stats);
->  
->  	lock->cpu = cpu;
->
+-- Steve
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
