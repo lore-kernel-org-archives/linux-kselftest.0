@@ -1,23 +1,39 @@
 From: rostedt@goodmis.org (Steven Rostedt)
-Date: Thu, 12 Jul 2018 19:02:22 -0400
-Subject: [PATCH 1/2] lib: Add module for testing preemptoff/irqsoff
- latency tracers
-In-Reply-To: <20180712213611.GA8743@joelaf.mtv.corp.google.com>
+Date: Thu, 12 Jul 2018 19:04:13 -0400
+Subject: [PATCH 2/2] kselftests: Add tests for the preemptoff and
+ irqsoff tracers
+In-Reply-To: <20180711063540.91101-3-joel@joelfernandes.org>
 References: <20180711063540.91101-1-joel@joelfernandes.org>
- <20180711063540.91101-2-joel@joelfernandes.org>
- <20180712172232.00e4c01e@gandalf.local.home>
- <20180712213611.GA8743@joelaf.mtv.corp.google.com>
-Message-ID: <20180712190222.56750eda@gandalf.local.home>
+ <20180711063540.91101-3-joel@joelfernandes.org>
+Message-ID: <20180712190413.317bd017@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180712230222.pE86C_5k1tOl_12j6rZqsxCeOTNRNxVQFPmwL_yyjXA@z>
+Message-ID: <20180712230413.8o3AlCTq_Mbn_mGmJm_QTWe4yY4Fm-2Tqk3CmCcKxfc@z>
 
-On Thu, 12 Jul 2018 14:36:11 -0700
+On Tue, 10 Jul 2018 23:35:40 -0700
 Joel Fernandes <joel@joelfernandes.org> wrote:
 
-> Sure, I added this below. Hope its easy for you to apply, if not let me know
-> and I can send it again separately. thanks.
+> From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
+> 
+> Here we add unit tests for the preemptoff and irqsoff tracer by using a
+> kernel module introduced previously to trigger long preempt or irq
+> disabled sections in the kernel.
+> 
+> Reviewed-by: Masami Hiramatsu <mhiramat at kernel.org>
+> Acked-by: Masami Hiramatsu <mhiramat at kernel.org>
+> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> ---
+>
 
-Thanks, I added this in my queue.
+I added this to my queue too.
+
+If you are curious to see what's currently in my queue, I just pushed
+my queue to my tree:
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+
+  ftrace/core
+
+Beware, that branch can and will rebase often.
 
 -- Steve
 --
