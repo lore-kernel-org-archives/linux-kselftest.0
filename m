@@ -1,18 +1,20 @@
 From: john.stultz@linaro.org (John Stultz)
-Date: Thu, 12 Jul 2018 13:17:19 -0700
-Subject: [GIT PULL][PATCH 0/2] Few timekeeping items for 4.19
-Message-ID: <1531426641-20076-1-git-send-email-john.stultz@linaro.org>
+Date: Thu, 12 Jul 2018 13:17:20 -0700
+Subject: [PATCH 1/2] selftest: timers: Tweak raw_skew to SKIP when
+ ADJ_OFFSET/other clock adjustments are in progress
+In-Reply-To: <1531426641-20076-1-git-send-email-john.stultz@linaro.org>
+References: <1531426641-20076-1-git-send-email-john.stultz@linaro.org>
+Message-ID: <1531426641-20076-2-git-send-email-john.stultz@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180712201719.XD34FjLvODnjvah3OzVAdlvIwMKZhtBavrRfG881H38@z>
+Message-ID: <20180712201720.kMsje6zLy10TR63OTVFmS0sBGGENx0Dg68v78aAEhAs@z>
 
-Hey Thomas,
-  I had a few other items in my stack here, but you've already
-queued them in -tip, so here's what I have left.
+In the past we've warned when ADJ_OFFSET was in progress, usually
+caused by ntpd or some other time adjusting daemon running in non
+steady sate, which can cause the skew calculations to be
+incorrect.
 
-Let me know if you have any objections or feedback for change.
-
-thanks
--john
+Thus, this patch checks to see if the clock was being adjusted
+when we fail so that we don't cause false negatives.
 
 Cc: Thomas Gleixner <tglx at linutronix.de>
 Cc: Ingo Molnar <mingo at kernel.org>
@@ -22,30 +24,32 @@ Cc: Prarit Bhargava <prarit at redhat.com>
 Cc: Stephen Boyd <sboyd at kernel.org>
 Cc: Shuah Khan <shuah at kernel.org>
 Cc: linux-kselftest at vger.kernel.org
+Suggested-by: Miroslav Lichvar <mlichvar at redhat.com>
+Signed-off-by: John Stultz <john.stultz at linaro.org>
+---
+v2: Widened the checks to look for other clock adjustments that
+    could happen, as suggested by Miroslav
+v3: Fixed up commit message
+---
+ tools/testing/selftests/timers/raw_skew.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-The following changes since commit 021c91791a5e7e85c567452f1be3e4c2c6cb6063:
-
-  Linux 4.18-rc3 (2018-07-01 16:04:53 -0700)
-
-are available in the git repository at:
-
-  https://git.linaro.org/people/john.stultz/linux.git fortglx/4.19/time
-
-for you to fetch changes up to b061c7a513afe14a68af41cec7c3476befc40e95:
-
-  timekeeping: Update multiplier when NTP frequency is set directly (2018-07-10 12:44:25 -0700)
-
-----------------------------------------------------------------
-John Stultz (1):
-      selftest: timers: Tweak raw_skew to SKIP when ADJ_OFFSET/other clock adjustments are in progress
-
-Miroslav Lichvar (1):
-      timekeeping: Update multiplier when NTP frequency is set directly
-
- kernel/time/timekeeping.c                 | 36 ++++++++++++++++++++++++++++++------
- tools/testing/selftests/timers/raw_skew.c |  5 +++++
- 2 files changed, 35 insertions(+), 6 deletions(-)
-
+diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/selftests/timers/raw_skew.c
+index ca6cd14..dcf73c5 100644
+--- a/tools/testing/selftests/timers/raw_skew.c
++++ b/tools/testing/selftests/timers/raw_skew.c
+@@ -134,6 +134,11 @@ int main(int argv, char **argc)
+ 	printf(" %lld.%i(act)", ppm/1000, abs((int)(ppm%1000)));
+ 
+ 	if (llabs(eppm - ppm) > 1000) {
++		if (tx1.offset || tx2.offset ||
++		    tx1.freq != tx2.freq || tx1.tick != tx2.tick) {
++			printf("	[SKIP]\n");
++			return ksft_exit_skip("The clock was adjusted externally. Shutdown NTPd or other time sync daemons\n");
++		}
+ 		printf("	[FAILED]\n");
+ 		return ksft_exit_fail();
+ 	}
 -- 
 2.7.4
 
