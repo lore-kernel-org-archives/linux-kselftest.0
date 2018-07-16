@@ -1,61 +1,94 @@
-From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Sat, 14 Jul 2018 01:28:44 +0900
-Subject: [PATCH 3/3] selftests/ftrace: Add snapshot and tracing_on test case
-In-Reply-To: <153149923649.11274.14970833360963898112.stgit@devbox>
-References: <153149923649.11274.14970833360963898112.stgit@devbox>
-Message-ID: <153149932412.11274.15289227592627901488.stgit@devbox>
+From: andreyknvl@google.com (Andrey Konovalov)
+Date: Mon, 16 Jul 2018 13:25:59 +0200
+Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
+In-Reply-To: <CAAeHK+wJbbCZd+-X=9oeJgsqQJiq8h+Aagz3SQMPaAzCD+pvFw@mail.gmail.com>
+References: <cover.1529507994.git.andreyknvl@google.com>
+ <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
+ <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
+ <CAAeHK+yqWKTdTG+ymZ2-5XKiDANV+fmUjnQkRy-5tpgphuLJRA@mail.gmail.com>
+ <CAAeHK+wJbbCZd+-X=9oeJgsqQJiq8h+Aagz3SQMPaAzCD+pvFw@mail.gmail.com>
+Message-ID:
+ <CAAeHK+yWF05XoU+0iuJoXAL3cWgdtxbeLoBz169yP12W4LkcQw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180713162844.T9yAKJsPOhEWHGFvd0Xs3nd_9FsNFsdvy1uVCt0ZTQ8@z>
+Message-ID: <20180716112559.zNhDhkd-HSrDEFqHkVwQ_pPdEBBom3STAgaSmP8G49M@z>
 
-Add a testcase for checking snapshot and tracing_on
-relationship. This ensures that the snapshotting doesn't
-affect current tracing on/off settings.
+On Thu, Jun 28, 2018@9:30 PM, Andrey Konovalov <andreyknvl@google.com> wrote:
+> On Wed, Jun 27, 2018@5:05 PM, Andrey Konovalov <andreyknvl@google.com> wrote:
+>> On Tue, Jun 26, 2018 at 7:29 PM, Catalin Marinas
+>> <catalin.marinas@arm.com> wrote:
+>>> While I support this work, as a maintainer I'd like to understand
+>>> whether we'd be in a continuous chase of ABI breaks with every kernel
+>>> release or we have a better way to identify potential issues. Is there
+>>> any way to statically analyse conversions from __user ptr to long for
+>>> example? Or, could we get the compiler to do this for us?
+>>
+>>
+>> OK, got it, I'll try to figure out a way to find these conversions.
+>
+> I've prototyped a checker on top of clang static analyzer (initially
+> looked at sparse, but couldn't find any documentation or examples).
+> The results are here [1], search for "warning: user pointer cast".
+> Sharing in case anybody wants to take a look, will look at them myself
+> tomorrow.
+>
+> [1] https://gist.github.com/xairy/433edd5c86456a64026247cb2fef2115
 
-Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
-Cc: Steven Rostedt <rostedt at goodmis.org>
-Cc: Ingo Molnar <mingo at redhat.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: linux-kselftest at vger.kernel.org
----
- .../selftests/ftrace/test.d/00basic/snapshot.tc    |   28 ++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/snapshot.tc
+So the checker reports ~100 different places where a __user pointer
+being casted. I've looked through them and found 3 places where we
+need to add untagging. Source code lines below come from 4.18-rc2+
+(6f0d349d).
 
-diff --git a/tools/testing/selftests/ftrace/test.d/00basic/snapshot.tc b/tools/testing/selftests/ftrace/test.d/00basic/snapshot.tc
-new file mode 100644
-index 000000000000..3b1f45e13a2e
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/00basic/snapshot.tc
-@@ -0,0 +1,28 @@
-+#!/bin/sh
-+# description: Snapshot and tracing setting
-+# flags: instance
-+
-+[ ! -f snapshot ] && exit_unsupported
-+
-+echo "Set tracing off"
-+echo 0 > tracing_on
-+
-+echo "Allocate and take a snapshot"
-+echo 1 > snapshot
-+
-+# Since trace buffer is empty, snapshot is also empty, but allocated
-+grep -q "Snapshot is allocated" snapshot
-+
-+echo "Ensure keep tracing off"
-+test `cat tracing_on` -eq 0
-+
-+echo "Set tracing on"
-+echo 1 > tracing_on
-+
-+echo "Take a snapshot again"
-+echo 1 > snapshot
-+
-+echo "Ensure keep tracing on"
-+test `cat tracing_on` -eq 1
-+
-+exit 0
+Place 1:
 
+arch/arm64/mm/fault.c:302:34: warning: user pointer cast
+current->thread.fault_address = (unsigned long)info->si_addr;
+
+Compare a pointer with TASK_SIZE (1 << 48) to check whether it lies in
+the kernel or in user space. Need to untag the address before
+performing a comparison.
+
+Place 2:
+
+fs/namespace.c:2736:21: warning: user pointer cast
+size = TASK_SIZE - (unsigned long)data;
+
+A similar check performed by subtracting a pointer from TASK_SIZE.
+Need to untag before subtracting.
+
+Place 3:
+
+drivers/usb/core/devio.c:1407:29: warning: user pointer cast
+unsigned long uurb_start = (unsigned long)uurb->buffer;
+drivers/usb/core/devio.c:1636:31: warning: user pointer cast
+unsigned long uurb_start = (unsigned long)uurb->buffer;
+drivers/usb/core/devio.c:1715:30: warning: user pointer cast
+unsigned long uurb_start = (unsigned long)uurb->buffer;
+
+The device keeps list of mmapped areas and searches them for provided
+__user pointer. Need to untag before searching.
+
+There are also a few cases of memory syscalls operating on __user
+pointers instead of unsigned longs like mmap:
+
+ipc/shm.c:1355:23: warning: user pointer cast
+unsigned long addr = (unsigned long)shmaddr;
+ipc/shm.c:1566:23: warning: user pointer cast
+unsigned long addr = (unsigned long)shmaddr;
+mm/migrate.c:1586:10: warning: user pointer cast
+addr = (unsigned long)p;
+mm/migrate.c:1660:24: warning: user pointer cast
+unsigned long addr = (unsigned long)(*pages);
+
+If we don't add untagging to mmap, we probably don't need it here.
+
+The rest of reported places look fine as is. Full annotated results of
+running the checker are here [2].
+
+I'll add the 3 patches with fixes to v5 of this patchset.
+
+Catalin, WDYT?
+
+[2] https://gist.github.com/xairy/aabda57741919df67d79895356ba9b58
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
