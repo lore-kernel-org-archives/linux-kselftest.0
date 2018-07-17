@@ -1,26 +1,43 @@
-From: dave.hansen@intel.com (Dave Hansen)
-Date: Tue, 17 Jul 2018 10:56:08 -0700
+From: linuxram@us.ibm.com (Ram Pai)
+Date: Tue, 17 Jul 2018 12:10:36 -0700
 Subject: [PATCH v13 19/24] selftests/vm: associate key on a mapped page
  and detect access violation
-In-Reply-To: <20180717161332.GH5790@ram.oc3035372033.ibm.com>
+In-Reply-To: <febe6668-c66a-4601-63da-44501faf12ee@intel.com>
 References: <1528937115-10132-1-git-send-email-linuxram@us.ibm.com>
  <1528937115-10132-20-git-send-email-linuxram@us.ibm.com>
  <048b1de9-85f8-22ff-a31a-b06a382769bb@intel.com>
  <20180717161332.GH5790@ram.oc3035372033.ibm.com>
-Message-ID: <febe6668-c66a-4601-63da-44501faf12ee@intel.com>
+ <febe6668-c66a-4601-63da-44501faf12ee@intel.com>
+Message-ID: <20180717191036.GI5790@ram.oc3035372033.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180717175608.rBOqetNJIAvOwLWdDk_7iNMP55_h8TGU2VLl_qzR5qc@z>
+Message-ID: <20180717191036.dYXTkCc0Upo5mWXDbQvj-NwatBBcel1rUtEWSSiG3Fs@z>
 
-On 07/17/2018 09:13 AM, Ram Pai wrote:
-> I have incorporated almost all of your comments. But there are some
-> comments that take some effort to implement. Shall we get the patches
-> merged in the current form?  This code has been sitting out for a while.
+On Tue, Jul 17, 2018@10:56:08AM -0700, Dave Hansen wrote:
+> On 07/17/2018 09:13 AM, Ram Pai wrote:
+> > I have incorporated almost all of your comments. But there are some
+> > comments that take some effort to implement. Shall we get the patches
+> > merged in the current form?  This code has been sitting out for a while.
+> > 
+> > In the current form its tested and works on powerpc and on x86, and
+> > incorporates about 95% of your suggestions. The rest I will take care
+> > as we go.
 > 
-> In the current form its tested and works on powerpc and on x86, and
-> incorporates about 95% of your suggestions. The rest I will take care
-> as we go.
+> What constitutes the remaining 5%?
 
-What constitutes the remaining 5%?
+Mostly your comments on code-organization in the signal handler. There
+are still some #if defined(__i386__)  ..... Can be cleaned up and
+abstracted further.
+
+Also your questions on some of the code changes, the rationale for which
+is not obvious. Will help to spinkle in some descriptive comments there.
+
+Have fixed up a lot of codying style issues. But there could till be a
+few that may spew warning by checkpatch.pl.
+
+There are no functional issues AFAICT.
+
+RP
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
