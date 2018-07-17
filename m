@@ -1,94 +1,88 @@
-From: andreyknvl@google.com (Andrey Konovalov)
-Date: Mon, 16 Jul 2018 13:25:59 +0200
-Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
-In-Reply-To: <CAAeHK+wJbbCZd+-X=9oeJgsqQJiq8h+Aagz3SQMPaAzCD+pvFw@mail.gmail.com>
-References: <cover.1529507994.git.andreyknvl@google.com>
- <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
- <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
- <CAAeHK+yqWKTdTG+ymZ2-5XKiDANV+fmUjnQkRy-5tpgphuLJRA@mail.gmail.com>
- <CAAeHK+wJbbCZd+-X=9oeJgsqQJiq8h+Aagz3SQMPaAzCD+pvFw@mail.gmail.com>
-Message-ID:
- <CAAeHK+yWF05XoU+0iuJoXAL3cWgdtxbeLoBz169yP12W4LkcQw@mail.gmail.com>
+From: linuxram@us.ibm.com (Ram Pai)
+Date: Tue, 17 Jul 2018 06:49:03 -0700
+Subject: [PATCH v14 00/22] selftests, powerpc, x86 : Memory Protection Keys
+Message-ID: <1531835365-32387-1-git-send-email-linuxram@us.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180716112559.zNhDhkd-HSrDEFqHkVwQ_pPdEBBom3STAgaSmP8G49M@z>
+Message-ID: <20180717134903.bosqebCISnRT8udOpWJqCQgPNKbW-XddJBvczieyNf0@z>
 
-On Thu, Jun 28, 2018@9:30 PM, Andrey Konovalov <andreyknvl@google.com> wrote:
-> On Wed, Jun 27, 2018@5:05 PM, Andrey Konovalov <andreyknvl@google.com> wrote:
->> On Tue, Jun 26, 2018 at 7:29 PM, Catalin Marinas
->> <catalin.marinas@arm.com> wrote:
->>> While I support this work, as a maintainer I'd like to understand
->>> whether we'd be in a continuous chase of ABI breaks with every kernel
->>> release or we have a better way to identify potential issues. Is there
->>> any way to statically analyse conversions from __user ptr to long for
->>> example? Or, could we get the compiler to do this for us?
->>
->>
->> OK, got it, I'll try to figure out a way to find these conversions.
->
-> I've prototyped a checker on top of clang static analyzer (initially
-> looked at sparse, but couldn't find any documentation or examples).
-> The results are here [1], search for "warning: user pointer cast".
-> Sharing in case anybody wants to take a look, will look at them myself
-> tomorrow.
->
-> [1] https://gist.github.com/xairy/433edd5c86456a64026247cb2fef2115
+Memory protection keys enables an application to protect its address space from
+inadvertent access by its own code.
 
-So the checker reports ~100 different places where a __user pointer
-being casted. I've looked through them and found 3 places where we
-need to add untagging. Source code lines below come from 4.18-rc2+
-(6f0d349d).
+This feature is now enabled on powerpc architecture and integrated in
+4.16-rc1.  The patches move the selftests to arch neutral directory
+and enhance their test coverage.
 
-Place 1:
+Test
+----
+Verified for correctness on powerpc and on x86.
 
-arch/arm64/mm/fault.c:302:34: warning: user pointer cast
-current->thread.fault_address = (unsigned long)info->si_addr;
+History:
+-------
+version 14:
+	(1) incorporated another round of comments from Dave Hansen.
 
-Compare a pointer with TASK_SIZE (1 << 48) to check whether it lies in
-the kernel or in user space. Need to untag the address before
-performing a comparison.
+version 13:
+        (1) Incorporated comments for Dave Hansen.
+	(2)   Added one more test for correct pkey-0 behavior.
 
-Place 2:
+version 12:
+	(1) fixed the offset of pkey field in the siginfo structure for
+		x86_64 and powerpc. And tries to use the actual field
+		if the headers have it defined.
 
-fs/namespace.c:2736:21: warning: user pointer cast
-size = TASK_SIZE - (unsigned long)data;
+version 11:
+	(1) fixed a deadlock in the ptrace testcase.
 
-A similar check performed by subtracting a pointer from TASK_SIZE.
-Need to untag before subtracting.
+version 10 and prior:
+	(1) moved the testcase to arch neutral directory
+	(2) split the changes into incremental patches.
 
-Place 3:
+Ram Pai (20):
+  selftests/x86: Move protecton key selftest to arch neutral directory
+  selftests/vm: rename all references to pkru to a generic name
+  selftests/vm: move generic definitions to header file
+  selftests/vm: typecast the pkey register
+  selftests/vm: generic function to handle shadow key register
+  selftests/vm: fix the wrong assert in pkey_disable_set()
+  selftests/vm: fixed bugs in pkey_disable_clear()
+  selftests/vm: fix alloc_random_pkey() to make it really random
+  selftests/vm: introduce two arch independent abstraction
+  selftests/vm: pkey register should match shadow pkey
+  selftests/vm: generic cleanup
+  selftests/vm: Introduce generic abstractions
+  selftests/vm: powerpc implementation to check support for pkey
+  selftests/vm: fix an assertion in test_pkey_alloc_exhaust()
+  selftests/vm: associate key on a mapped page and detect access
+    violation
+  selftests/vm: associate key on a mapped page and detect write
+    violation
+  selftests/vm: detect write violation on a mapped access-denied-key
+    page
+  selftests/vm: testcases must restore pkey-permissions
+  selftests/vm: sub-page allocator
+  selftests/vm: test correct behavior of pkey-0
 
-drivers/usb/core/devio.c:1407:29: warning: user pointer cast
-unsigned long uurb_start = (unsigned long)uurb->buffer;
-drivers/usb/core/devio.c:1636:31: warning: user pointer cast
-unsigned long uurb_start = (unsigned long)uurb->buffer;
-drivers/usb/core/devio.c:1715:30: warning: user pointer cast
-unsigned long uurb_start = (unsigned long)uurb->buffer;
+Thiago Jung Bauermann (2):
+  selftests/vm: move arch-specific definitions to arch-specific header
+  selftests/vm: Make gcc check arguments of sigsafe_printf()
 
-The device keeps list of mmapped areas and searches them for provided
-__user pointer. Need to untag before searching.
+ tools/testing/selftests/vm/.gitignore         |    1 +
+ tools/testing/selftests/vm/Makefile           |    1 +
+ tools/testing/selftests/vm/pkey-helpers.h     |  214 ++++
+ tools/testing/selftests/vm/pkey-powerpc.h     |  128 ++
+ tools/testing/selftests/vm/pkey-x86.h         |  184 +++
+ tools/testing/selftests/vm/protection_keys.c  | 1593 +++++++++++++++++++++++++
+ tools/testing/selftests/x86/.gitignore        |    1 -
+ tools/testing/selftests/x86/pkey-helpers.h    |  219 ----
+ tools/testing/selftests/x86/protection_keys.c | 1485 -----------------------
+ 9 files changed, 2121 insertions(+), 1705 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/pkey-helpers.h
+ create mode 100644 tools/testing/selftests/vm/pkey-powerpc.h
+ create mode 100644 tools/testing/selftests/vm/pkey-x86.h
+ create mode 100644 tools/testing/selftests/vm/protection_keys.c
+ delete mode 100644 tools/testing/selftests/x86/pkey-helpers.h
+ delete mode 100644 tools/testing/selftests/x86/protection_keys.c
 
-There are also a few cases of memory syscalls operating on __user
-pointers instead of unsigned longs like mmap:
-
-ipc/shm.c:1355:23: warning: user pointer cast
-unsigned long addr = (unsigned long)shmaddr;
-ipc/shm.c:1566:23: warning: user pointer cast
-unsigned long addr = (unsigned long)shmaddr;
-mm/migrate.c:1586:10: warning: user pointer cast
-addr = (unsigned long)p;
-mm/migrate.c:1660:24: warning: user pointer cast
-unsigned long addr = (unsigned long)(*pages);
-
-If we don't add untagging to mmap, we probably don't need it here.
-
-The rest of reported places look fine as is. Full annotated results of
-running the checker are here [2].
-
-I'll add the 3 patches with fixes to v5 of this patchset.
-
-Catalin, WDYT?
-
-[2] https://gist.github.com/xairy/aabda57741919df67d79895356ba9b58
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
