@@ -1,11 +1,15 @@
 From: dave.hansen at intel.com (Dave Hansen)
-Date: Wed, 18 Jul 2018 08:26:16 -0700
-Subject: [PATCH v14 03/22] selftests/vm: move generic definitions to
- header file
-In-Reply-To: <1531835365-32387-4-git-send-email-linuxram@us.ibm.com>
+Date: Wed, 18 Jul 2018 08:27:08 -0700
+Subject: [PATCH v14 04/22] selftests/vm: move arch-specific definitions to
+ arch-specific header
+In-Reply-To: <1531835365-32387-5-git-send-email-linuxram@us.ibm.com>
 References: <1531835365-32387-1-git-send-email-linuxram@us.ibm.com>
- <1531835365-32387-4-git-send-email-linuxram@us.ibm.com>
-Message-ID: <7b7e20f1-a145-949a-1cbc-cca3e36631a6@intel.com>
+ <1531835365-32387-5-git-send-email-linuxram@us.ibm.com>
+Message-ID: <cbe905d6-bff5-cbe0-831b-13c76334ff1a@intel.com>
+
+On 07/17/2018 06:49 AM, Ram Pai wrote:
+> In preparation for multi-arch support, move definitions which have
+> arch-specific values to x86-specific header.
 
 Acked-by: Dave Hansen <dave.hansen at intel.com>
 --
