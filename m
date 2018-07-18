@@ -1,521 +1,133 @@
-From: claudiozumbo at gmail.com (Claudio)
-Date: Wed, 18 Jul 2018 19:33:58 +0200
-Subject: [PATCH kselftest-next] Add cgroup core selftests
-Message-ID: <20180718173358.14007-1-claudiozumbo@gmail.com>
+From: jcline at redhat.com (Jeremy Cline)
+Date: Wed, 18 Jul 2018 17:36:10 -0400
+Subject: [PATCH] bpf: Add Python 3 support to selftests scripts for bpf
+Message-ID: <20180718213610.19618-1-jcline@redhat.com>
 
-This commit adds tests for some of the core functionalities
-of cgroups v2.
+Adjust tcp_client.py and tcp_server.py to work with Python 3 by using
+the print function, marking string literals as bytes, and using the
+newer exception syntax. This should be functionally equivalent and
+support Python 2.6 through Python 3.7.
 
-The commit adds tests for some core principles of croup V2 API:
-
-- test_cgcore_internal_process_constraint
-
-  Tests internal process constraint.
-  You can't add a pid to a domain parent if a controller is enabled.
-
-- test_cgcore_top_down_constraint_enable
-
-   Tests that you can't enable a controller on a child if it's not enabled
-   on the parent.
-
-- test_cgcore_top_down_constraint_disable
-
-  Tests that you can't disable a controller on a parent if it's
-  enabled in a child.
-
-- test_cgcore_no_internal_process_constraint_on_threads
-
-  Tests that there's no internal process constrain on threaded cgroups.
-  You can add threads/processes on a parent with a controller enabled.
-
-- test_cgcore_parent_becomes_threaded
-
-  Tests that when a child becomes threaded the parent type becomes
-  domain threaded.
-
-- test_cgcore_invalid_domain
-
-  In a situation like:
-
-  A (domain threaded) - B (threaded) - C (domain)
-
-  it tests that C can't be used until it is turned into a threaded cgroup.
-  The "cgroup.type" file will report "domain (invalid)" in these cases.
-  Operations which fail due to invalid topology use EOPNOTSUPP as the errno.
-
-- test_cgcore_populated
-
-  In a situation like:
-
-  A(0) - B(0) - C(1)
-         \ D(0)
-
-  It tests that A, B and C's "populated" fields would be 1 while D's 0.
-  It tests that after the one process in C is moved to root, A,B and C's
-  "populated" fields would flip to "0" and file modified events will
-  be generated on the "cgroup.events" files of both cgroups.
-
-Signed-off-by: Claudio Zumbo <claudioz at fb.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Roman Gushchin <guro at fb.com>
-Cc: Tejun Heo <tj at kernel.org>
-Cc: kernel-team at fb.com
+Signed-off-by: Jeremy Cline <jcline at redhat.com>
 ---
- tools/testing/selftests/cgroup/Makefile      |   2 +
- tools/testing/selftests/cgroup/cgroup_util.c |   8 +
- tools/testing/selftests/cgroup/cgroup_util.h |   1 +
- tools/testing/selftests/cgroup/test_core.c   | 395 +++++++++++++++++++++++++++
- 4 files changed, 406 insertions(+)
- create mode 100644 tools/testing/selftests/cgroup/test_core.c
+ tools/testing/selftests/bpf/tcp_client.py | 12 ++++++------
+ tools/testing/selftests/bpf/tcp_server.py | 17 +++++++++--------
+ 2 files changed, 15 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-index f7a31392eb2f..23fbaa4a9630 100644
---- a/tools/testing/selftests/cgroup/Makefile
-+++ b/tools/testing/selftests/cgroup/Makefile
-@@ -4,7 +4,9 @@ CFLAGS += -Wall
- all:
+diff --git a/tools/testing/selftests/bpf/tcp_client.py b/tools/testing/selftests/bpf/tcp_client.py
+index 481dccdf140c..9fe5f1b5c020 100755
+--- a/tools/testing/selftests/bpf/tcp_client.py
++++ b/tools/testing/selftests/bpf/tcp_client.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/env python
+ #
+ # SPDX-License-Identifier: GPL-2.0
+ #
+@@ -9,11 +9,11 @@ import subprocess
+ import select
  
- TEST_GEN_PROGS = test_memcontrol
-+TEST_GEN_PROGS += test_core
+ def read(sock, n):
+-    buf = ''
++    buf = b''
+     while len(buf) < n:
+         rem = n - len(buf)
+         try: s = sock.recv(rem)
+-        except (socket.error), e: return ''
++        except (socket.error) as e: return b''
+         buf += s
+     return buf
  
- include ../lib.mk
+@@ -22,7 +22,7 @@ def send(sock, s):
+     count = 0
+     while count < total:
+         try: n = sock.send(s)
+-        except (socket.error), e: n = 0
++        except (socket.error) as e: n = 0
+         if n == 0:
+             return count;
+         count += n
+@@ -39,10 +39,10 @@ try:
+ except socket.error as e:
+     sys.exit(1)
  
- $(OUTPUT)/test_memcontrol: cgroup_util.c
-+$(OUTPUT)/test_core: cgroup_util.c
-diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-index 1e9e3c470561..1c5d2b2a583b 100644
---- a/tools/testing/selftests/cgroup/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/cgroup_util.c
-@@ -229,6 +229,14 @@ int cg_destroy(const char *cgroup)
- 	return ret;
- }
+-buf = ''
++buf = b''
+ n = 0
+ while n < 1000:
+-    buf += '+'
++    buf += b'+'
+     n += 1
  
-+int cg_enter_current(const char *cgroup)
-+{
-+	char pidbuf[64];
-+
-+	snprintf(pidbuf, sizeof(pidbuf), "%d", getpid());
-+	return cg_write(cgroup, "cgroup.procs", pidbuf);
-+}
-+
- int cg_run(const char *cgroup,
- 	   int (*fn)(const char *cgroup, void *arg),
- 	   void *arg)
-diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
-index fe82a297d4e0..1ff6f9f1abdc 100644
---- a/tools/testing/selftests/cgroup/cgroup_util.h
-+++ b/tools/testing/selftests/cgroup/cgroup_util.h
-@@ -32,6 +32,7 @@ extern int cg_write(const char *cgroup, const char *control, char *buf);
- extern int cg_run(const char *cgroup,
- 		  int (*fn)(const char *cgroup, void *arg),
- 		  void *arg);
-+extern int cg_enter_current(const char *cgroup);
- extern int cg_run_nowait(const char *cgroup,
- 			 int (*fn)(const char *cgroup, void *arg),
- 			 void *arg);
-diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-new file mode 100644
-index 000000000000..be59f9c34ea2
---- /dev/null
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -0,0 +1,395 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include <linux/limits.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+#include <stdio.h>
-+#include <errno.h>
-+
-+#include "../kselftest.h"
-+#include "cgroup_util.h"
-+
-+/*
-+ * A(0) - B(0) - C(1)
-+ *        \ D(0)
-+ *
-+ * A, B and C's "populated" fields would be 1 while D's 0.
-+ * test that after the one process in C is moved to root,
-+ * A,B and C's "populated" fields would flip to "0" and file
-+ * modified events will be generated on the
-+ * "cgroup.events" files of both cgroups.
-+ */
-+static int test_cgcore_populated(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *cg_test_a = NULL, *cg_test_b = NULL;
-+	char *cg_test_c = NULL, *cg_test_d = NULL;
-+
-+	cg_test_a = cg_name(root, "cg_test_a");
-+	cg_test_b = cg_name(root, "cg_test_a/cg_test_b");
-+	cg_test_c = cg_name(root, "cg_test_a/cg_test_b/cg_test_c");
-+	cg_test_d = cg_name(root, "cg_test_a/cg_test_b/cg_test_d");
-+
-+	if (!cg_test_a || !cg_test_b || !cg_test_c || !cg_test_d)
-+		goto cleanup;
-+
-+	if (cg_create(cg_test_a))
-+		goto cleanup;
-+
-+	if (cg_create(cg_test_b))
-+		goto cleanup;
-+
-+	if (cg_create(cg_test_c))
-+		goto cleanup;
-+
-+	if (cg_create(cg_test_d))
-+		goto cleanup;
-+
-+	if (cg_enter_current(cg_test_c))
-+		goto cleanup;
-+
-+	if (cg_read_strcmp(cg_test_a, "cgroup.events", "populated 1\n"))
-+		goto cleanup;
-+
-+	if (cg_read_strcmp(cg_test_b, "cgroup.events", "populated 1\n"))
-+		goto cleanup;
-+
-+	if (cg_read_strcmp(cg_test_c, "cgroup.events", "populated 1\n"))
-+		goto cleanup;
-+
-+	if (cg_read_strcmp(cg_test_d, "cgroup.events", "populated 0\n"))
-+		goto cleanup;
-+
-+	if (cg_enter_current(root))
-+		goto cleanup;
-+
-+	if (cg_read_strcmp(cg_test_a, "cgroup.events", "populated 0\n"))
-+		goto cleanup;
-+
-+	if (cg_read_strcmp(cg_test_b, "cgroup.events", "populated 0\n"))
-+		goto cleanup;
-+
-+	if (cg_read_strcmp(cg_test_c, "cgroup.events", "populated 0\n"))
-+		goto cleanup;
-+
-+	if (cg_read_strcmp(cg_test_d, "cgroup.events", "populated 0\n"))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (cg_test_d)
-+		cg_destroy(cg_test_d);
-+	if (cg_test_c)
-+		cg_destroy(cg_test_c);
-+	if (cg_test_b)
-+		cg_destroy(cg_test_b);
-+	if (cg_test_a)
-+		cg_destroy(cg_test_a);
-+	free(cg_test_d);
-+	free(cg_test_c);
-+	free(cg_test_b);
-+	free(cg_test_a);
-+	return ret;
-+}
-+
-+/*
-+ * A (domain threaded) - B (threaded) - C (domain)
-+ *
-+ * test that C can't be used until it is turned into a
-+ * threaded cgroup.  "cgroup.type" file will report "domain (invalid)" in
-+ * these cases. Operations which fail due to invalid topology use
-+ * EOPNOTSUPP as the errno.
-+ */
-+static int test_cgcore_invalid_domain(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *grandparent = NULL, *parent = NULL, *child = NULL;
-+
-+	grandparent = cg_name(root, "cg_test_grandparent");
-+	parent = cg_name(root, "cg_test_grandparent/cg_test_parent");
-+	child = cg_name(root, "cg_test_grandparent/cg_test_parent/cg_test_child");
-+	if (!parent || !child || !grandparent)
-+		goto cleanup;
-+
-+	if (cg_create(grandparent))
-+		goto cleanup;
-+
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	if (cg_create(child))
-+		goto cleanup;
-+
-+	if (cg_write(parent, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	if (cg_read_strcmp(child, "cgroup.type", "domain invalid\n"))
-+		goto cleanup;
-+
-+	if (!cg_enter_current(child))
-+		goto cleanup;
-+
-+	if (errno != EOPNOTSUPP)
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	cg_enter_current(root);
-+	if (child)
-+		cg_destroy(child);
-+	if (parent)
-+		cg_destroy(parent);
-+	if (grandparent)
-+		cg_destroy(grandparent);
-+	free(child);
-+	free(parent);
-+	free(grandparent);
-+	return ret;
-+}
-+
-+/*
-+ * Test that when a child becomes threaded
-+ * the parent type becomes domain threaded.
-+ */
-+static int test_cgcore_parent_becomes_threaded(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *parent = NULL, *child = NULL;
-+
-+	parent = cg_name(root, "cg_test_parent");
-+	child = cg_name(root, "cg_test_parent/cg_test_child");
-+	if (!parent || !child)
-+		goto cleanup;
-+
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	if (cg_create(child))
-+		goto cleanup;
-+
-+	if (cg_write(child, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	if (cg_read_strcmp(parent, "cgroup.type", "domain threaded\n"))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (child)
-+		cg_destroy(child);
-+	if (parent)
-+		cg_destroy(parent);
-+	free(child);
-+	free(parent);
-+	return ret;
-+
-+}
-+
-+/*
-+ * Test that there's no internal process constrain on threaded cgroups.
-+ * You can add threads/processes on a parent with a controller enabled.
-+ */
-+static int test_cgcore_no_internal_process_constraint_on_threads(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *parent = NULL, *child = NULL;
-+
-+	if (cg_read_strstr(root, "cgroup.controllers", "cpu") ||
-+	    cg_read_strstr(root, "cgroup.subtree_control", "cpu")) {
-+		ret = KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	parent = cg_name(root, "cg_test_parent");
-+	child = cg_name(root, "cg_test_parent/cg_test_child");
-+	if (!parent || !child)
-+		goto cleanup;
-+
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	if (cg_create(child))
-+		goto cleanup;
-+
-+	if (cg_write(parent, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	if (cg_write(child, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	if (cg_write(parent, "cgroup.subtree_control", "+cpu"))
-+		goto cleanup;
-+
-+	if (cg_enter_current(parent))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	cg_enter_current(root);
-+	cg_enter_current(root);
-+	if (child)
-+		cg_destroy(child);
-+	if (parent)
-+		cg_destroy(parent);
-+	free(child);
-+	free(parent);
-+	return ret;
-+}
-+
-+/*
-+ * Test that you can't enable a controller on a child if it's not enabled
-+ * on the parent.
-+ */
-+static int test_cgcore_top_down_constraint_enable(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *parent = NULL, *child = NULL;
-+
-+	parent = cg_name(root, "cg_test_parent");
-+	child = cg_name(root, "cg_test_parent/cg_test_child");
-+	if (!parent || !child)
-+		goto cleanup;
-+
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	if (cg_create(child))
-+		goto cleanup;
-+
-+	if (!cg_write(child, "cgroup.subtree_control", "+memory"))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (child)
-+		cg_destroy(child);
-+	if (parent)
-+		cg_destroy(parent);
-+	free(child);
-+	free(parent);
-+	return ret;
-+}
-+
-+/*
-+ * Test that you can't disable a controller on a parent
-+ * if it's enabled in a child.
-+ */
-+static int test_cgcore_top_down_constraint_disable(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *parent = NULL, *child = NULL;
-+
-+	parent = cg_name(root, "cg_test_parent");
-+	child = cg_name(root, "cg_test_parent/cg_test_child");
-+	if (!parent || !child)
-+		goto cleanup;
-+
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	if (cg_create(child))
-+		goto cleanup;
-+
-+	if (cg_write(parent, "cgroup.subtree_control", "+memory"))
-+		goto cleanup;
-+
-+	if (cg_write(child, "cgroup.subtree_control", "+memory"))
-+		goto cleanup;
-+
-+	if (!cg_write(parent, "cgroup.subtree_control", "-memory"))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (child)
-+		cg_destroy(child);
-+	if (parent)
-+		cg_destroy(parent);
-+	free(child);
-+	free(parent);
-+	return ret;
-+}
-+
-+/*
-+ * Test internal process constraint.
-+ * You can't add a pid to a domain parent if a controller is enabled.
-+ */
-+static int test_cgcore_internal_process_constraint(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *parent = NULL, *child = NULL;
-+
-+	parent = cg_name(root, "cg_test_parent");
-+	child = cg_name(root, "cg_test_parent/cg_test_child");
-+	if (!parent || !child)
-+		goto cleanup;
-+
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	if (cg_create(child))
-+		goto cleanup;
-+
-+	if (cg_write(parent, "cgroup.subtree_control", "+memory"))
-+		goto cleanup;
-+
-+	if (!cg_enter_current(parent))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (child)
-+		cg_destroy(child);
-+	if (parent)
-+		cg_destroy(parent);
-+	free(child);
-+	free(parent);
-+	return ret;
-+}
-+
-+#define T(x) { x, #x }
-+struct corecg_test {
-+	int (*fn)(const char *root);
-+	const char *name;
-+} tests[] = {
-+	T(test_cgcore_internal_process_constraint),
-+	T(test_cgcore_top_down_constraint_enable),
-+	T(test_cgcore_top_down_constraint_disable),
-+	T(test_cgcore_no_internal_process_constraint_on_threads),
-+	T(test_cgcore_parent_becomes_threaded),
-+	T(test_cgcore_invalid_domain),
-+	T(test_cgcore_populated),
-+};
-+#undef T
-+
-+int main(int argc, char *argv[])
-+{
-+	char root[PATH_MAX];
-+	int i, ret = EXIT_SUCCESS;
-+
-+	if (cg_find_unified_root(root, sizeof(root)))
-+		ksft_exit_skip("cgroup v2 isn't mounted\n");
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		switch (tests[i].fn(root)) {
-+		case KSFT_PASS:
-+			ksft_test_result_pass("%s\n", tests[i].name);
-+			break;
-+		case KSFT_SKIP:
-+			ksft_test_result_skip("%s\n", tests[i].name);
-+			break;
-+		default:
-+			ret = EXIT_FAILURE;
-+			ksft_test_result_fail("%s\n", tests[i].name);
-+			break;
-+		}
-+	}
-+
-+	return ret;
-+}
+ sock.settimeout(1);
+diff --git a/tools/testing/selftests/bpf/tcp_server.py b/tools/testing/selftests/bpf/tcp_server.py
+index bc454d7d0be2..1d4a40a6584b 100755
+--- a/tools/testing/selftests/bpf/tcp_server.py
++++ b/tools/testing/selftests/bpf/tcp_server.py
+@@ -1,7 +1,8 @@
+-#!/usr/bin/env python2
++#!/usr/bin/env python
+ #
+ # SPDX-License-Identifier: GPL-2.0
+ #
++from __future__ import print_function
+ 
+ import sys, os, os.path, getopt
+ import socket, time
+@@ -9,11 +10,11 @@ import subprocess
+ import select
+ 
+ def read(sock, n):
+-    buf = ''
++    buf = b''
+     while len(buf) < n:
+         rem = n - len(buf)
+         try: s = sock.recv(rem)
+-        except (socket.error), e: return ''
++        except (socket.error) as e: return b''
+         buf += s
+     return buf
+ 
+@@ -22,7 +23,7 @@ def send(sock, s):
+     count = 0
+     while count < total:
+         try: n = sock.send(s)
+-        except (socket.error), e: n = 0
++        except (socket.error) as e: n = 0
+         if n == 0:
+             return count;
+         count += n
+@@ -43,7 +44,7 @@ host = socket.gethostname()
+ 
+ try: serverSocket.bind((host, 0))
+ except socket.error as msg:
+-    print 'bind fails: ', msg
++    print('bind fails: ' + str(msg))
+ 
+ sn = serverSocket.getsockname()
+ serverPort = sn[1]
+@@ -51,10 +52,10 @@ serverPort = sn[1]
+ cmdStr = ("./tcp_client.py %d &") % (serverPort)
+ os.system(cmdStr)
+ 
+-buf = ''
++buf = b''
+ n = 0
+ while n < 500:
+-    buf += '.'
++    buf += b'.'
+     n += 1
+ 
+ serverSocket.listen(MAX_PORTS)
+@@ -79,5 +80,5 @@ while True:
+                 serverSocket.close()
+                 sys.exit(0)
+     else:
+-        print 'Select timeout!'
++        print('Select timeout!')
+         sys.exit(1)
 -- 
-2.11.0
+2.17.1
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
