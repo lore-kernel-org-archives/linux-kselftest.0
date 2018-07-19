@@ -1,22 +1,74 @@
-From: tj at kernel.org (Tejun Heo)
-Date: Thu, 19 Jul 2018 09:57:16 -0700
+From: guro at fb.com (Roman Gushchin)
+Date: Thu, 19 Jul 2018 10:08:30 -0700
 Subject: [PATCH kselftest-next] Add cgroup core selftests
 In-Reply-To: <20180718173358.14007-1-claudiozumbo@gmail.com>
 References: <20180718173358.14007-1-claudiozumbo@gmail.com>
-Message-ID: <20180719165716.GV72677@devbig577.frc2.facebook.com>
+Message-ID: <20180719170829.GB21770@castle.DHCP.thefacebook.com>
 
 On Wed, Jul 18, 2018 at 07:33:58PM +0200, Claudio wrote:
 > This commit adds tests for some of the core functionalities
 > of cgroups v2.
 > 
 > The commit adds tests for some core principles of croup V2 API:
+> 
+> - test_cgcore_internal_process_constraint
+> 
+>   Tests internal process constraint.
+>   You can't add a pid to a domain parent if a controller is enabled.
+> 
+> - test_cgcore_top_down_constraint_enable
+> 
+>    Tests that you can't enable a controller on a child if it's not enabled
+>    on the parent.
+> 
+> - test_cgcore_top_down_constraint_disable
+> 
+>   Tests that you can't disable a controller on a parent if it's
+>   enabled in a child.
+> 
+> - test_cgcore_no_internal_process_constraint_on_threads
+> 
+>   Tests that there's no internal process constrain on threaded cgroups.
+>   You can add threads/processes on a parent with a controller enabled.
+> 
+> - test_cgcore_parent_becomes_threaded
+> 
+>   Tests that when a child becomes threaded the parent type becomes
+>   domain threaded.
+> 
+> - test_cgcore_invalid_domain
+> 
+>   In a situation like:
+> 
+>   A (domain threaded) - B (threaded) - C (domain)
+> 
+>   it tests that C can't be used until it is turned into a threaded cgroup.
+>   The "cgroup.type" file will report "domain (invalid)" in these cases.
+>   Operations which fail due to invalid topology use EOPNOTSUPP as the errno.
+> 
+> - test_cgcore_populated
+> 
+>   In a situation like:
+> 
+>   A(0) - B(0) - C(1)
+>          \ D(0)
+> 
+>   It tests that A, B and C's "populated" fields would be 1 while D's 0.
+>   It tests that after the one process in C is moved to root, A,B and C's
+>   "populated" fields would flip to "0" and file modified events will
+>   be generated on the "cgroup.events" files of both cgroups.
+> 
+> Signed-off-by: Claudio Zumbo <claudioz at fb.com>
+> Cc: Shuah Khan <shuah at kernel.org>
+> Cc: Roman Gushchin <guro at fb.com>
+> Cc: Tejun Heo <tj at kernel.org>
+> Cc: kernel-team at fb.com
 
-Acked-by: Tejun Heo <tj at kernel.org>
+Looks good to me!
 
-Thanks, Claudio.
+Reviewed-by: Roman Gushchin <guro at fb.com>
 
--- 
-tejun
+Thank you!
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
