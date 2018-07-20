@@ -1,76 +1,144 @@
-From: guro@fb.com (Roman Gushchin)
-Date: Thu, 19 Jul 2018 10:08:30 -0700
-Subject: [PATCH kselftest-next] Add cgroup core selftests
-In-Reply-To: <20180718173358.14007-1-claudiozumbo@gmail.com>
-References: <20180718173358.14007-1-claudiozumbo@gmail.com>
-Message-ID: <20180719170829.GB21770@castle.DHCP.thefacebook.com>
+From: daniel@iogearbox.net (Daniel Borkmann)
+Date: Fri, 20 Jul 2018 22:45:34 +0200
+Subject: [PATCH] bpf: Add Python 3 support to selftests scripts for bpf
+In-Reply-To: <20180718213610.19618-1-jcline@redhat.com>
+References: <20180718213610.19618-1-jcline@redhat.com>
+Message-ID: <1aa3dc98-2ab1-7386-d5d9-afd3dbb3fde9@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180719170830.1nri-AVEBz3IdNO6gcqRkSUCUT66njZdIXIhDSvG5ZQ@z>
+Message-ID: <20180720204534.m5u-2644wkwnRgfWEo4ij9teUe_-d1rHTm18BpH-TJI@z>
 
-On Wed, Jul 18, 2018@07:33:58PM +0200, Claudio wrote:
-> This commit adds tests for some of the core functionalities
-> of cgroups v2.
+On 07/18/2018 11:36 PM, Jeremy Cline wrote:
+> Adjust tcp_client.py and tcp_server.py to work with Python 3 by using
+> the print function, marking string literals as bytes, and using the
+> newer exception syntax. This should be functionally equivalent and
+> support Python 2.6 through Python 3.7.
 > 
-> The commit adds tests for some core principles of croup V2 API:
-> 
-> - test_cgcore_internal_process_constraint
-> 
->   Tests internal process constraint.
->   You can't add a pid to a domain parent if a controller is enabled.
-> 
-> - test_cgcore_top_down_constraint_enable
-> 
->    Tests that you can't enable a controller on a child if it's not enabled
->    on the parent.
-> 
-> - test_cgcore_top_down_constraint_disable
-> 
->   Tests that you can't disable a controller on a parent if it's
->   enabled in a child.
-> 
-> - test_cgcore_no_internal_process_constraint_on_threads
-> 
->   Tests that there's no internal process constrain on threaded cgroups.
->   You can add threads/processes on a parent with a controller enabled.
-> 
-> - test_cgcore_parent_becomes_threaded
-> 
->   Tests that when a child becomes threaded the parent type becomes
->   domain threaded.
-> 
-> - test_cgcore_invalid_domain
-> 
->   In a situation like:
-> 
->   A (domain threaded) - B (threaded) - C (domain)
-> 
->   it tests that C can't be used until it is turned into a threaded cgroup.
->   The "cgroup.type" file will report "domain (invalid)" in these cases.
->   Operations which fail due to invalid topology use EOPNOTSUPP as the errno.
-> 
-> - test_cgcore_populated
-> 
->   In a situation like:
-> 
->   A(0) - B(0) - C(1)
->          \ D(0)
-> 
->   It tests that A, B and C's "populated" fields would be 1 while D's 0.
->   It tests that after the one process in C is moved to root, A,B and C's
->   "populated" fields would flip to "0" and file modified events will
->   be generated on the "cgroup.events" files of both cgroups.
-> 
-> Signed-off-by: Claudio Zumbo <claudioz at fb.com>
-> Cc: Shuah Khan <shuah at kernel.org>
-> Cc: Roman Gushchin <guro at fb.com>
-> Cc: Tejun Heo <tj at kernel.org>
-> Cc: kernel-team at fb.com
+> Signed-off-by: Jeremy Cline <jcline at redhat.com>
 
-Looks good to me!
+Thanks for the patch, Jeremy! Given we also have test_offload.py in BPF
+kselftests and it is written for python 3 only, it would probably make
+sense to adapt the tcp_{client,server}.py towards python 3 as well, so
+we wouldn't need to keep extra compat for 2 and have a consistent version
+dependency. Lawrence / Jeremy, any objections?
 
-Reviewed-by: Roman Gushchin <guro at fb.com>
+>  tools/testing/selftests/bpf/tcp_client.py | 12 ++++++------
+>  tools/testing/selftests/bpf/tcp_server.py | 17 +++++++++--------
+>  2 files changed, 15 insertions(+), 14 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/tcp_client.py b/tools/testing/selftests/bpf/tcp_client.py
+> index 481dccdf140c..9fe5f1b5c020 100755
+> --- a/tools/testing/selftests/bpf/tcp_client.py
+> +++ b/tools/testing/selftests/bpf/tcp_client.py
+> @@ -1,4 +1,4 @@
+> -#!/usr/bin/env python2
+> +#!/usr/bin/env python
+>  #
+>  # SPDX-License-Identifier: GPL-2.0
+>  #
+> @@ -9,11 +9,11 @@ import subprocess
+>  import select
+>  
+>  def read(sock, n):
+> -    buf = ''
+> +    buf = b''
+>      while len(buf) < n:
+>          rem = n - len(buf)
+>          try: s = sock.recv(rem)
+> -        except (socket.error), e: return ''
+> +        except (socket.error) as e: return b''
+>          buf += s
+>      return buf
+>  
+> @@ -22,7 +22,7 @@ def send(sock, s):
+>      count = 0
+>      while count < total:
+>          try: n = sock.send(s)
+> -        except (socket.error), e: n = 0
+> +        except (socket.error) as e: n = 0
+>          if n == 0:
+>              return count;
+>          count += n
+> @@ -39,10 +39,10 @@ try:
+>  except socket.error as e:
+>      sys.exit(1)
+>  
+> -buf = ''
+> +buf = b''
+>  n = 0
+>  while n < 1000:
+> -    buf += '+'
+> +    buf += b'+'
+>      n += 1
+>  
+>  sock.settimeout(1);
+> diff --git a/tools/testing/selftests/bpf/tcp_server.py b/tools/testing/selftests/bpf/tcp_server.py
+> index bc454d7d0be2..1d4a40a6584b 100755
+> --- a/tools/testing/selftests/bpf/tcp_server.py
+> +++ b/tools/testing/selftests/bpf/tcp_server.py
+> @@ -1,7 +1,8 @@
+> -#!/usr/bin/env python2
+> +#!/usr/bin/env python
+>  #
+>  # SPDX-License-Identifier: GPL-2.0
+>  #
+> +from __future__ import print_function
+>  
+>  import sys, os, os.path, getopt
+>  import socket, time
+> @@ -9,11 +10,11 @@ import subprocess
+>  import select
+>  
+>  def read(sock, n):
+> -    buf = ''
+> +    buf = b''
+>      while len(buf) < n:
+>          rem = n - len(buf)
+>          try: s = sock.recv(rem)
+> -        except (socket.error), e: return ''
+> +        except (socket.error) as e: return b''
+>          buf += s
+>      return buf
+>  
+> @@ -22,7 +23,7 @@ def send(sock, s):
+>      count = 0
+>      while count < total:
+>          try: n = sock.send(s)
+> -        except (socket.error), e: n = 0
+> +        except (socket.error) as e: n = 0
+>          if n == 0:
+>              return count;
+>          count += n
+> @@ -43,7 +44,7 @@ host = socket.gethostname()
+>  
+>  try: serverSocket.bind((host, 0))
+>  except socket.error as msg:
+> -    print 'bind fails: ', msg
+> +    print('bind fails: ' + str(msg))
+>  
+>  sn = serverSocket.getsockname()
+>  serverPort = sn[1]
+> @@ -51,10 +52,10 @@ serverPort = sn[1]
+>  cmdStr = ("./tcp_client.py %d &") % (serverPort)
+>  os.system(cmdStr)
+>  
+> -buf = ''
+> +buf = b''
+>  n = 0
+>  while n < 500:
+> -    buf += '.'
+> +    buf += b'.'
+>      n += 1
+>  
+>  serverSocket.listen(MAX_PORTS)
+> @@ -79,5 +80,5 @@ while True:
+>                  serverSocket.close()
+>                  sys.exit(0)
+>      else:
+> -        print 'Select timeout!'
+> +        print('Select timeout!')
+>          sys.exit(1)
+> 
 
-Thank you!
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
