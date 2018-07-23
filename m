@@ -1,175 +1,225 @@
-From: dan.rue@linaro.org (Dan Rue)
-Date: Mon, 23 Jul 2018 17:33:13 +0000
-Subject: [PATCH] bpf: Add Python 3 support to selftests scripts for bpf
-In-Reply-To: <dd971e43-3148-5a54-788e-d89835d3638a@redhat.com>
-References: <20180718213610.19618-1-jcline@redhat.com>
- <1aa3dc98-2ab1-7386-d5d9-afd3dbb3fde9@iogearbox.net>
- <dd971e43-3148-5a54-788e-d89835d3638a@redhat.com>
-Message-ID: <20180723173313.ri2uz7srtdtno2hl@linode.therub.org>
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Mon, 23 Jul 2018 22:49:12 +0200
+Subject: [PATCH v4] selftests: add headers_install to lib.mk
+In-Reply-To: <20180607110911.12252-1-anders.roxell@linaro.org>
+References: <20180413090351.25662-1-anders.roxell@linaro.org>
+ <20180607110911.12252-1-anders.roxell@linaro.org>
+Message-ID:
+ <CADYN=9J=hSFb2wCZ1+dXL=023p9y05MEGUPvH48WfPX7XDZvwQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180723173313.nKk2JiJ80ZdXnq0qJaBXj-0F4aZ9A50VYjzp7u6vFtc@z>
+Message-ID: <20180723204912.UN8MSAz3AMhpdRVO2VdqG7T6IY_S_tw0Dd1jD2tTnhg@z>
 
-On Mon, Jul 23, 2018@10:08:57AM -0400, Jeremy Cline wrote:
-> Hi Daniel,
-> 
-> On 07/20/2018 04:45 PM, Daniel Borkmann wrote:
-> > On 07/18/2018 11:36 PM, Jeremy Cline wrote:
-> >> Adjust tcp_client.py and tcp_server.py to work with Python 3 by using
-> >> the print function, marking string literals as bytes, and using the
-> >> newer exception syntax. This should be functionally equivalent and
-> >> support Python 2.6 through Python 3.7.
-> >>
-> >> Signed-off-by: Jeremy Cline <jcline at redhat.com>
-> > 
-> > Thanks for the patch, Jeremy! Given we also have test_offload.py in BPF
-> > kselftests and it is written for python 3 only, it would probably make
-> > sense to adapt the tcp_{client,server}.py towards python 3 as well, so
-> > we wouldn't need to keep extra compat for 2 and have a consistent version
-> > dependency. Lawrence / Jeremy, any objections?
-> 
-> I certainly don't object to Python 3 only and I'm happy to drop the
-> Python 2 compatibility from this patch if that's okay.
-
-This (well, along with introducing python in the first place, which took
-me by surprise), sounds like a policy decision that should be made clear
-in the kselftest documentation (Documentation/dev-tools/kselftest.rst).
-Currently, that file does not mention any python requirement.
-
-That said, I agree that python2 support is no longer necessary.
-
-My use-case (which may be unusual?): We try to run all of kselftest
-against a variety of kernels and architectures for every push to next,
-mainline, and stable/lts branches. It seems that this is not a common
-usecase, but shouldn't it be?
-
-Dan
-
-> 
-> > 
-> >>  tools/testing/selftests/bpf/tcp_client.py | 12 ++++++------
-> >>  tools/testing/selftests/bpf/tcp_server.py | 17 +++++++++--------
-> >>  2 files changed, 15 insertions(+), 14 deletions(-)
-> >>
-> >> diff --git a/tools/testing/selftests/bpf/tcp_client.py b/tools/testing/selftests/bpf/tcp_client.py
-> >> index 481dccdf140c..9fe5f1b5c020 100755
-> >> --- a/tools/testing/selftests/bpf/tcp_client.py
-> >> +++ b/tools/testing/selftests/bpf/tcp_client.py
-> >> @@ -1,4 +1,4 @@
-> >> -#!/usr/bin/env python2
-> >> +#!/usr/bin/env python
-> >>  #
-> >>  # SPDX-License-Identifier: GPL-2.0
-> >>  #
-> >> @@ -9,11 +9,11 @@ import subprocess
-> >>  import select
-> >>  
-> >>  def read(sock, n):
-> >> -    buf = ''
-> >> +    buf = b''
-> >>      while len(buf) < n:
-> >>          rem = n - len(buf)
-> >>          try: s = sock.recv(rem)
-> >> -        except (socket.error), e: return ''
-> >> +        except (socket.error) as e: return b''
-> >>          buf += s
-> >>      return buf
-> >>  
-> >> @@ -22,7 +22,7 @@ def send(sock, s):
-> >>      count = 0
-> >>      while count < total:
-> >>          try: n = sock.send(s)
-> >> -        except (socket.error), e: n = 0
-> >> +        except (socket.error) as e: n = 0
-> >>          if n == 0:
-> >>              return count;
-> >>          count += n
-> >> @@ -39,10 +39,10 @@ try:
-> >>  except socket.error as e:
-> >>      sys.exit(1)
-> >>  
-> >> -buf = ''
-> >> +buf = b''
-> >>  n = 0
-> >>  while n < 1000:
-> >> -    buf += '+'
-> >> +    buf += b'+'
-> >>      n += 1
-> >>  
-> >>  sock.settimeout(1);
-> >> diff --git a/tools/testing/selftests/bpf/tcp_server.py b/tools/testing/selftests/bpf/tcp_server.py
-> >> index bc454d7d0be2..1d4a40a6584b 100755
-> >> --- a/tools/testing/selftests/bpf/tcp_server.py
-> >> +++ b/tools/testing/selftests/bpf/tcp_server.py
-> >> @@ -1,7 +1,8 @@
-> >> -#!/usr/bin/env python2
-> >> +#!/usr/bin/env python
-> >>  #
-> >>  # SPDX-License-Identifier: GPL-2.0
-> >>  #
-> >> +from __future__ import print_function
-> >>  
-> >>  import sys, os, os.path, getopt
-> >>  import socket, time
-> >> @@ -9,11 +10,11 @@ import subprocess
-> >>  import select
-> >>  
-> >>  def read(sock, n):
-> >> -    buf = ''
-> >> +    buf = b''
-> >>      while len(buf) < n:
-> >>          rem = n - len(buf)
-> >>          try: s = sock.recv(rem)
-> >> -        except (socket.error), e: return ''
-> >> +        except (socket.error) as e: return b''
-> >>          buf += s
-> >>      return buf
-> >>  
-> >> @@ -22,7 +23,7 @@ def send(sock, s):
-> >>      count = 0
-> >>      while count < total:
-> >>          try: n = sock.send(s)
-> >> -        except (socket.error), e: n = 0
-> >> +        except (socket.error) as e: n = 0
-> >>          if n == 0:
-> >>              return count;
-> >>          count += n
-> >> @@ -43,7 +44,7 @@ host = socket.gethostname()
-> >>  
-> >>  try: serverSocket.bind((host, 0))
-> >>  except socket.error as msg:
-> >> -    print 'bind fails: ', msg
-> >> +    print('bind fails: ' + str(msg))
-> >>  
-> >>  sn = serverSocket.getsockname()
-> >>  serverPort = sn[1]
-> >> @@ -51,10 +52,10 @@ serverPort = sn[1]
-> >>  cmdStr = ("./tcp_client.py %d &") % (serverPort)
-> >>  os.system(cmdStr)
-> >>  
-> >> -buf = ''
-> >> +buf = b''
-> >>  n = 0
-> >>  while n < 500:
-> >> -    buf += '.'
-> >> +    buf += b'.'
-> >>      n += 1
-> >>  
-> >>  serverSocket.listen(MAX_PORTS)
-> >> @@ -79,5 +80,5 @@ while True:
-> >>                  serverSocket.close()
-> >>                  sys.exit(0)
-> >>      else:
-> >> -        print 'Select timeout!'
-> >> +        print('Select timeout!')
-> >>          sys.exit(1)
-> >>
-> > 
-> 
-> 
+On Thu, 7 Jun 2018@13:09, Anders Roxell <anders.roxell@linaro.org> wrote:
+>
+> If the kernel headers aren't installed we can't build all the tests.
+> Add a new make target rule 'khdr' in the file lib.mk to generate the
+> kernel headers and that gets include for every test-dir Makefile that
+> includes lib.mk If the testdir in turn have its own sub-dirs the
+> top_srcdir needs to be set to the linux-rootdir to be able to generate
+> the kernel headers.
+>
+> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+> Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
+> ---
+>  Makefile                                           | 14 +-------------
+>  scripts/subarch.include                            | 13 +++++++++++++
+>  tools/testing/selftests/android/Makefile           |  2 +-
+>  tools/testing/selftests/android/ion/Makefile       |  2 ++
+>  tools/testing/selftests/futex/functional/Makefile  |  1 +
+>  tools/testing/selftests/gpio/Makefile              |  7 ++-----
+>  tools/testing/selftests/kvm/Makefile               |  7 ++-----
+>  tools/testing/selftests/lib.mk                     | 12 ++++++++++++
+>  tools/testing/selftests/net/Makefile               |  1 +
+>  .../selftests/networking/timestamping/Makefile     |  1 +
+>  tools/testing/selftests/vm/Makefile                |  4 ----
+>  11 files changed, 36 insertions(+), 28 deletions(-)
+>  create mode 100644 scripts/subarch.include
+>
+> diff --git a/Makefile b/Makefile
+> index 6b9aea95ae3a..8050072300fa 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -286,19 +286,7 @@ KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
+>  KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
+>  export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
+>
+> -# SUBARCH tells the usermode build what the underlying arch is.  That is set
+> -# first, and if a usermode build is happening, the "ARCH=um" on the command
+> -# line overrides the setting of ARCH below.  If a native build is happening,
+> -# then ARCH is assigned, getting whatever value it gets normally, and
+> -# SUBARCH is subsequently ignored.
+> -
+> -SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
+> -                                 -e s/sun4u/sparc64/ \
+> -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
+> -                                 -e s/s390x/s390/ -e s/parisc64/parisc/ \
+> -                                 -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+> -                                 -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
+> -                                 -e s/riscv.*/riscv/)
+> +include scripts/subarch.include
+>
+>  # Cross compiling and selecting different set of gcc/bin-utils
+>  # ---------------------------------------------------------------------------
+> diff --git a/scripts/subarch.include b/scripts/subarch.include
+> new file mode 100644
+> index 000000000000..650682821126
+> --- /dev/null
+> +++ b/scripts/subarch.include
+> @@ -0,0 +1,13 @@
+> +# SUBARCH tells the usermode build what the underlying arch is.  That is set
+> +# first, and if a usermode build is happening, the "ARCH=um" on the command
+> +# line overrides the setting of ARCH below.  If a native build is happening,
+> +# then ARCH is assigned, getting whatever value it gets normally, and
+> +# SUBARCH is subsequently ignored.
+> +
+> +SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
+> +                                 -e s/sun4u/sparc64/ \
+> +                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
+> +                                 -e s/s390x/s390/ -e s/parisc64/parisc/ \
+> +                                 -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+> +                                 -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
+> +                                 -e s/riscv.*/riscv/)
+> diff --git a/tools/testing/selftests/android/Makefile b/tools/testing/selftests/android/Makefile
+> index 72c25a3cb658..d9a725478375 100644
+> --- a/tools/testing/selftests/android/Makefile
+> +++ b/tools/testing/selftests/android/Makefile
+> @@ -6,7 +6,7 @@ TEST_PROGS := run.sh
+>
+>  include ../lib.mk
+>
+> -all:
+> +all: khdr
+>         @for DIR in $(SUBDIRS); do              \
+>                 BUILD_TARGET=$(OUTPUT)/$$DIR;   \
+>                 mkdir $$BUILD_TARGET  -p;       \
+> diff --git a/tools/testing/selftests/android/ion/Makefile b/tools/testing/selftests/android/ion/Makefile
+> index e03695287f76..88cfe88e466f 100644
+> --- a/tools/testing/selftests/android/ion/Makefile
+> +++ b/tools/testing/selftests/android/ion/Makefile
+> @@ -10,6 +10,8 @@ $(TEST_GEN_FILES): ipcsocket.c ionutils.c
+>
+>  TEST_PROGS := ion_test.sh
+>
+> +KSFT_KHDR_INSTALL := 1
+> +top_srcdir = ../../../../..
+>  include ../../lib.mk
+>
+>  $(OUTPUT)/ionapp_export: ionapp_export.c ipcsocket.c ionutils.c
+> diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+> index ff8feca49746..ad1eeb14fda7 100644
+> --- a/tools/testing/selftests/futex/functional/Makefile
+> +++ b/tools/testing/selftests/futex/functional/Makefile
+> @@ -18,6 +18,7 @@ TEST_GEN_FILES := \
+>
+>  TEST_PROGS := run.sh
+>
+> +top_srcdir = ../../../../..
+>  include ../../lib.mk
+>
+>  $(TEST_GEN_FILES): $(HEADERS)
+> diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
+> index 1bbb47565c55..4665cdbf1a8d 100644
+> --- a/tools/testing/selftests/gpio/Makefile
+> +++ b/tools/testing/selftests/gpio/Makefile
+> @@ -21,11 +21,8 @@ endef
+>  CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
+>  LDLIBS += -lmount -I/usr/include/libmount
+>
+> -$(BINARIES): ../../../gpio/gpio-utils.o ../../../../usr/include/linux/gpio.h
+> +$(BINARIES):| khdr
+> +$(BINARIES): ../../../gpio/gpio-utils.o
+>
+>  ../../../gpio/gpio-utils.o:
+>         make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
+> -
+> -../../../../usr/include/linux/gpio.h:
+> -       make -C ../../../.. headers_install INSTALL_HDR_PATH=$(shell pwd)/../../../../usr/
+> -
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index d9d00319b07c..bcb69380bbab 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -32,9 +32,6 @@ $(LIBKVM_OBJ): $(OUTPUT)/%.o: %.c
+>  $(OUTPUT)/libkvm.a: $(LIBKVM_OBJ)
+>         $(AR) crs $@ $^
+>
+> -$(LINUX_HDR_PATH):
+> -       make -C $(top_srcdir) headers_install
+> -
+> -all: $(STATIC_LIBS) $(LINUX_HDR_PATH)
+> +all: $(STATIC_LIBS)
+>  $(TEST_GEN_PROGS): $(STATIC_LIBS)
+> -$(TEST_GEN_PROGS) $(LIBKVM_OBJ): | $(LINUX_HDR_PATH)
+> +$(STATIC_LIBS):| khdr
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 17ab36605a8e..0a8e75886224 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -16,8 +16,20 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
+>  TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
+>  TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
+>
+> +top_srcdir ?= ../../../..
+> +include $(top_srcdir)/scripts/subarch.include
+> +ARCH           ?= $(SUBARCH)
+> +
+>  all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
+>
+> +.PHONY: khdr
+> +khdr:
+> +       make ARCH=$(ARCH) -C $(top_srcdir) headers_install
+> +
+> +ifdef KSFT_KHDR_INSTALL
+> +$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES):| khdr
+> +endif
+> +
+>  .ONESHELL:
+>  define RUN_TEST_PRINT_RESULT
+>         TEST_HDR_MSG="selftests: "`basename $$PWD`:" $$BASENAME_TEST";  \
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+> index 663e11e85727..d515dabc6b0d 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -15,6 +15,7 @@ TEST_GEN_FILES += udpgso udpgso_bench_tx udpgso_bench_rx
+>  TEST_GEN_PROGS = reuseport_bpf reuseport_bpf_cpu reuseport_bpf_numa
+>  TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict
+>
+> +KSFT_KHDR_INSTALL := 1
+>  include ../lib.mk
+>
+>  $(OUTPUT)/reuseport_bpf_numa: LDFLAGS += -lnuma
+> diff --git a/tools/testing/selftests/networking/timestamping/Makefile b/tools/testing/selftests/networking/timestamping/Makefile
+> index a728040edbe1..14cfcf006936 100644
+> --- a/tools/testing/selftests/networking/timestamping/Makefile
+> +++ b/tools/testing/selftests/networking/timestamping/Makefile
+> @@ -5,6 +5,7 @@ TEST_PROGS := hwtstamp_config rxtimestamp timestamping txtimestamp
+>
+>  all: $(TEST_PROGS)
+>
+> +top_srcdir = ../../../../..
+>  include ../../lib.mk
+>
+>  clean:
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index fdefa2295ddc..58759454b1d0 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -25,10 +25,6 @@ TEST_PROGS := run_vmtests
+>
+>  include ../lib.mk
+>
+> -$(OUTPUT)/userfaultfd: ../../../../usr/include/linux/kernel.h
+>  $(OUTPUT)/userfaultfd: LDLIBS += -lpthread
+>
+>  $(OUTPUT)/mlock-random-test: LDLIBS += -lcap
+> -
+> -../../../../usr/include/linux/kernel.h:
+> -       make -C ../../../.. headers_install
 > --
-> To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
-> the body of a message to majordomo at vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 2.17.1
+>
+
+Ping.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
