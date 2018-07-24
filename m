@@ -1,91 +1,133 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Tue, 24 Jul 2018 11:10:42 -0600
-Subject: [PATCH v4] selftests: add headers_install to lib.mk
-In-Reply-To: <CADYN=9J=hSFb2wCZ1+dXL=023p9y05MEGUPvH48WfPX7XDZvwQ@mail.gmail.com>
-References: <20180413090351.25662-1-anders.roxell@linaro.org>
- <20180607110911.12252-1-anders.roxell@linaro.org>
- <CADYN=9J=hSFb2wCZ1+dXL=023p9y05MEGUPvH48WfPX7XDZvwQ@mail.gmail.com>
-Message-ID: <f222aa8d-88b8-140c-30ed-83fd908bfd09@kernel.org>
+From: jcline at redhat.com (Jeremy Cline)
+Date: Tue, 24 Jul 2018 15:53:34 -0400
+Subject: [PATCH v2] bpf: Add Python 3 support to selftests scripts for bpf
+Message-ID: <20180724195334.13965-1-jcline@redhat.com>
 
-On 07/23/2018 02:49 PM, Anders Roxell wrote:
-> On Thu, 7 Jun 2018 at 13:09, Anders Roxell <anders.roxell at linaro.org> wrote:
->>
->> If the kernel headers aren't installed we can't build all the tests.
->> Add a new make target rule 'khdr' in the file lib.mk to generate the
->> kernel headers and that gets include for every test-dir Makefile that
->> includes lib.mk If the testdir in turn have its own sub-dirs the
->> top_srcdir needs to be set to the linux-rootdir to be able to generate
->> the kernel headers.
->>
->> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
->> Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
->> ---
->>  Makefile                                           | 14 +-------------
->>  scripts/subarch.include                            | 13 +++++++++++++
->>  tools/testing/selftests/android/Makefile           |  2 +-
->>  tools/testing/selftests/android/ion/Makefile       |  2 ++
->>  tools/testing/selftests/futex/functional/Makefile  |  1 +
->>  tools/testing/selftests/gpio/Makefile              |  7 ++-----
->>  tools/testing/selftests/kvm/Makefile               |  7 ++-----
->>  tools/testing/selftests/lib.mk                     | 12 ++++++++++++
->>  tools/testing/selftests/net/Makefile               |  1 +
->>  .../selftests/networking/timestamping/Makefile     |  1 +
->>  tools/testing/selftests/vm/Makefile                |  4 ----
->>  11 files changed, 36 insertions(+), 28 deletions(-)
->>  create mode 100644 scripts/subarch.include
->>
->> diff --git a/Makefile b/Makefile
->> index 6b9aea95ae3a..8050072300fa 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -286,19 +286,7 @@ KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
->>  KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
->>  export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
->>
->> -# SUBARCH tells the usermode build what the underlying arch is.  That is set
->> -# first, and if a usermode build is happening, the "ARCH=um" on the command
->> -# line overrides the setting of ARCH below.  If a native build is happening,
->> -# then ARCH is assigned, getting whatever value it gets normally, and
->> -# SUBARCH is subsequently ignored.
->> -
->> -SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
->> -                                 -e s/sun4u/sparc64/ \
->> -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
->> -                                 -e s/s390x/s390/ -e s/parisc64/parisc/ \
->> -                                 -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
->> -                                 -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
->> -                                 -e s/riscv.*/riscv/)
->> +include scripts/subarch.include
+Adjust tcp_client.py and tcp_server.py to work with Python 3 by using
+the print function, marking string literals as bytes, and using the
+newer exception syntax. This should be functionally equivalent and
+supports Python 3+.
 
-What is the reason for this SUBARCH block move to to scripts/subarch.include?
-Is this necessary for adding headers install dependency to lib.mk?
+Signed-off-by: Jeremy Cline <jcline at redhat.com>
+---
 
+Changes since v1:
+  - Drop Python 2 support
 
->>
->>  # Cross compiling and selecting different set of gcc/bin-utils
->>  # ---------------------------------------------------------------------------
->> diff --git a/scripts/subarch.include b/scripts/subarch.include
->> new file mode 100644
->> index 000000000000..650682821126
->> --- /dev/null
->> +++ b/scripts/subarch.include
->> @@ -0,0 +1,13 @@
->> +# SUBARCH tells the usermode build what the underlying arch is.  That is set
->> +# first, and if a usermode build is happening, the "ARCH=um" on the command
->> +# line overrides the setting of ARCH below.  If a native build is happening,
->> +# then ARCH is assigned, getting whatever value it gets normally, and
->> +# SUBARCH is subsequently ignored.
->> +
->> +SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
->> +                                 -e s/sun4u/sparc64/ \
->> +                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
->> +                                 -e s/s390x/s390/ -e s/parisc64/parisc/ \
->> +                                 -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
->> +                                 -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
->> +                                 -e s/riscv.*/riscv/)
+ tools/testing/selftests/bpf/tcp_client.py | 12 ++++++------
+ tools/testing/selftests/bpf/tcp_server.py | 16 ++++++++--------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
 
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/bpf/tcp_client.py b/tools/testing/selftests/bpf/tcp_client.py
+index 481dccdf140c..7f8200a8702b 100755
+--- a/tools/testing/selftests/bpf/tcp_client.py
++++ b/tools/testing/selftests/bpf/tcp_client.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/env python3
+ #
+ # SPDX-License-Identifier: GPL-2.0
+ #
+@@ -9,11 +9,11 @@ import subprocess
+ import select
+ 
+ def read(sock, n):
+-    buf = ''
++    buf = b''
+     while len(buf) < n:
+         rem = n - len(buf)
+         try: s = sock.recv(rem)
+-        except (socket.error), e: return ''
++        except (socket.error) as e: return b''
+         buf += s
+     return buf
+ 
+@@ -22,7 +22,7 @@ def send(sock, s):
+     count = 0
+     while count < total:
+         try: n = sock.send(s)
+-        except (socket.error), e: n = 0
++        except (socket.error) as e: n = 0
+         if n == 0:
+             return count;
+         count += n
+@@ -39,10 +39,10 @@ try:
+ except socket.error as e:
+     sys.exit(1)
+ 
+-buf = ''
++buf = b''
+ n = 0
+ while n < 1000:
+-    buf += '+'
++    buf += b'+'
+     n += 1
+ 
+ sock.settimeout(1);
+diff --git a/tools/testing/selftests/bpf/tcp_server.py b/tools/testing/selftests/bpf/tcp_server.py
+index bc454d7d0be2..b39903fca4c8 100755
+--- a/tools/testing/selftests/bpf/tcp_server.py
++++ b/tools/testing/selftests/bpf/tcp_server.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/env python3
+ #
+ # SPDX-License-Identifier: GPL-2.0
+ #
+@@ -9,11 +9,11 @@ import subprocess
+ import select
+ 
+ def read(sock, n):
+-    buf = ''
++    buf = b''
+     while len(buf) < n:
+         rem = n - len(buf)
+         try: s = sock.recv(rem)
+-        except (socket.error), e: return ''
++        except (socket.error) as e: return b''
+         buf += s
+     return buf
+ 
+@@ -22,7 +22,7 @@ def send(sock, s):
+     count = 0
+     while count < total:
+         try: n = sock.send(s)
+-        except (socket.error), e: n = 0
++        except (socket.error) as e: n = 0
+         if n == 0:
+             return count;
+         count += n
+@@ -43,7 +43,7 @@ host = socket.gethostname()
+ 
+ try: serverSocket.bind((host, 0))
+ except socket.error as msg:
+-    print 'bind fails: ', msg
++    print('bind fails: ' + str(msg))
+ 
+ sn = serverSocket.getsockname()
+ serverPort = sn[1]
+@@ -51,10 +51,10 @@ serverPort = sn[1]
+ cmdStr = ("./tcp_client.py %d &") % (serverPort)
+ os.system(cmdStr)
+ 
+-buf = ''
++buf = b''
+ n = 0
+ while n < 500:
+-    buf += '.'
++    buf += b'.'
+     n += 1
+ 
+ serverSocket.listen(MAX_PORTS)
+@@ -79,5 +79,5 @@ while True:
+                 serverSocket.close()
+                 sys.exit(0)
+     else:
+-        print 'Select timeout!'
++        print('Select timeout!')
+         sys.exit(1)
+-- 
+2.17.1
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
