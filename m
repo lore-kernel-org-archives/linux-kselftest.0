@@ -1,81 +1,92 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Tue, 24 Jul 2018 10:47:53 -0600
-Subject: [PATCH kselftest-next] Add cgroup core selftests
-In-Reply-To: <20180719170829.GB21770@castle.DHCP.thefacebook.com>
-References: <20180718173358.14007-1-claudiozumbo@gmail.com>
- <20180719170829.GB21770@castle.DHCP.thefacebook.com>
-Message-ID: <5fa20088-3797-7252-43b1-c7ede9e142f8@kernel.org>
+Date: Tue, 24 Jul 2018 11:10:42 -0600
+Subject: [PATCH v4] selftests: add headers_install to lib.mk
+In-Reply-To: <CADYN=9J=hSFb2wCZ1+dXL=023p9y05MEGUPvH48WfPX7XDZvwQ@mail.gmail.com>
+References: <20180413090351.25662-1-anders.roxell@linaro.org>
+ <20180607110911.12252-1-anders.roxell@linaro.org>
+ <CADYN=9J=hSFb2wCZ1+dXL=023p9y05MEGUPvH48WfPX7XDZvwQ@mail.gmail.com>
+Message-ID: <f222aa8d-88b8-140c-30ed-83fd908bfd09@kernel.org>
 
-On 07/19/2018 11:08 AM, Roman Gushchin wrote:
-> On Wed, Jul 18, 2018 at 07:33:58PM +0200, Claudio wrote:
->> This commit adds tests for some of the core functionalities
->> of cgroups v2.
+On 07/23/2018 02:49 PM, Anders Roxell wrote:
+> On Thu, 7 Jun 2018 at 13:09, Anders Roxell <anders.roxell at linaro.org> wrote:
 >>
->> The commit adds tests for some core principles of croup V2 API:
+>> If the kernel headers aren't installed we can't build all the tests.
+>> Add a new make target rule 'khdr' in the file lib.mk to generate the
+>> kernel headers and that gets include for every test-dir Makefile that
+>> includes lib.mk If the testdir in turn have its own sub-dirs the
+>> top_srcdir needs to be set to the linux-rootdir to be able to generate
+>> the kernel headers.
 >>
->> - test_cgcore_internal_process_constraint
+>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+>> Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
+>> ---
+>>  Makefile                                           | 14 +-------------
+>>  scripts/subarch.include                            | 13 +++++++++++++
+>>  tools/testing/selftests/android/Makefile           |  2 +-
+>>  tools/testing/selftests/android/ion/Makefile       |  2 ++
+>>  tools/testing/selftests/futex/functional/Makefile  |  1 +
+>>  tools/testing/selftests/gpio/Makefile              |  7 ++-----
+>>  tools/testing/selftests/kvm/Makefile               |  7 ++-----
+>>  tools/testing/selftests/lib.mk                     | 12 ++++++++++++
+>>  tools/testing/selftests/net/Makefile               |  1 +
+>>  .../selftests/networking/timestamping/Makefile     |  1 +
+>>  tools/testing/selftests/vm/Makefile                |  4 ----
+>>  11 files changed, 36 insertions(+), 28 deletions(-)
+>>  create mode 100644 scripts/subarch.include
 >>
->>   Tests internal process constraint.
->>   You can't add a pid to a domain parent if a controller is enabled.
+>> diff --git a/Makefile b/Makefile
+>> index 6b9aea95ae3a..8050072300fa 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -286,19 +286,7 @@ KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
+>>  KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
+>>  export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
 >>
->> - test_cgcore_top_down_constraint_enable
->>
->>    Tests that you can't enable a controller on a child if it's not enabled
->>    on the parent.
->>
->> - test_cgcore_top_down_constraint_disable
->>
->>   Tests that you can't disable a controller on a parent if it's
->>   enabled in a child.
->>
->> - test_cgcore_no_internal_process_constraint_on_threads
->>
->>   Tests that there's no internal process constrain on threaded cgroups.
->>   You can add threads/processes on a parent with a controller enabled.
->>
->> - test_cgcore_parent_becomes_threaded
->>
->>   Tests that when a child becomes threaded the parent type becomes
->>   domain threaded.
->>
->> - test_cgcore_invalid_domain
->>
->>   In a situation like:
->>
->>   A (domain threaded) - B (threaded) - C (domain)
->>
->>   it tests that C can't be used until it is turned into a threaded cgroup.
->>   The "cgroup.type" file will report "domain (invalid)" in these cases.
->>   Operations which fail due to invalid topology use EOPNOTSUPP as the errno.
->>
->> - test_cgcore_populated
->>
->>   In a situation like:
->>
->>   A(0) - B(0) - C(1)
->>          \ D(0)
->>
->>   It tests that A, B and C's "populated" fields would be 1 while D's 0.
->>   It tests that after the one process in C is moved to root, A,B and C's
->>   "populated" fields would flip to "0" and file modified events will
->>   be generated on the "cgroup.events" files of both cgroups.
->>
->> Signed-off-by: Claudio Zumbo <claudioz at fb.com>
->> Cc: Shuah Khan <shuah at kernel.org>
->> Cc: Roman Gushchin <guro at fb.com>
->> Cc: Tejun Heo <tj at kernel.org>
->> Cc: kernel-team at fb.com
-> 
-> Looks good to me!
-> 
-> Reviewed-by: Roman Gushchin <guro at fb.com>
-> 
-> Thank you!
-> 
+>> -# SUBARCH tells the usermode build what the underlying arch is.  That is set
+>> -# first, and if a usermode build is happening, the "ARCH=um" on the command
+>> -# line overrides the setting of ARCH below.  If a native build is happening,
+>> -# then ARCH is assigned, getting whatever value it gets normally, and
+>> -# SUBARCH is subsequently ignored.
+>> -
+>> -SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
+>> -                                 -e s/sun4u/sparc64/ \
+>> -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
+>> -                                 -e s/s390x/s390/ -e s/parisc64/parisc/ \
+>> -                                 -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+>> -                                 -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
+>> -                                 -e s/riscv.*/riscv/)
+>> +include scripts/subarch.include
 
-Thanks for the new test. I will queue this up for 4.19-rc1
+What is the reason for this SUBARCH block move to to scripts/subarch.include?
+Is this necessary for adding headers install dependency to lib.mk?
 
+
+>>
+>>  # Cross compiling and selecting different set of gcc/bin-utils
+>>  # ---------------------------------------------------------------------------
+>> diff --git a/scripts/subarch.include b/scripts/subarch.include
+>> new file mode 100644
+>> index 000000000000..650682821126
+>> --- /dev/null
+>> +++ b/scripts/subarch.include
+>> @@ -0,0 +1,13 @@
+>> +# SUBARCH tells the usermode build what the underlying arch is.  That is set
+>> +# first, and if a usermode build is happening, the "ARCH=um" on the command
+>> +# line overrides the setting of ARCH below.  If a native build is happening,
+>> +# then ARCH is assigned, getting whatever value it gets normally, and
+>> +# SUBARCH is subsequently ignored.
+>> +
+>> +SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
+>> +                                 -e s/sun4u/sparc64/ \
+>> +                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
+>> +                                 -e s/s390x/s390/ -e s/parisc64/parisc/ \
+>> +                                 -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+>> +                                 -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
+>> +                                 -e s/riscv.*/riscv/)
+
+thanks,
 -- Shuah
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
