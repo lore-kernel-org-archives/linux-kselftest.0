@@ -1,31 +1,19 @@
-From: bauerman at linux.ibm.com (Thiago Jung Bauermann)
-Date: Tue, 24 Jul 2018 23:57:25 -0300
-Subject: [PATCH] selftests: kselftest: Remove outdated comment
-Message-ID: <20180725025725.4214-1-bauerman@linux.ibm.com>
+From: daniel at iogearbox.net (Daniel Borkmann)
+Date: Wed, 25 Jul 2018 07:53:34 +0200
+Subject: [PATCH v2] bpf: Add Python 3 support to selftests scripts for bpf
+In-Reply-To: <20180724195334.13965-1-jcline@redhat.com>
+References: <20180724195334.13965-1-jcline@redhat.com>
+Message-ID: <9f26bdd3-080f-2bd2-78cb-cd9c66d390c4@iogearbox.net>
 
-Commit 3c07aaef6598 ("selftests: kselftest: change KSFT_SKIP=4 instead of
-KSFT_PASS") reverted commit 11867a77eb85 ("selftests: kselftest framework:
-change skip exit code to 0") but missed removing the comment which that
-commit added, so do that now.
+On 07/24/2018 09:53 PM, Jeremy Cline wrote:
+> Adjust tcp_client.py and tcp_server.py to work with Python 3 by using
+> the print function, marking string literals as bytes, and using the
+> newer exception syntax. This should be functionally equivalent and
+> supports Python 3+.
+> 
+> Signed-off-by: Jeremy Cline <jcline at redhat.com>
 
-Signed-off-by: Thiago Jung Bauermann <bauerman at linux.ibm.com>
----
- tools/testing/selftests/kselftest.h | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 15e6b75fc3a5..a3edb2c8e43d 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -19,7 +19,6 @@
- #define KSFT_FAIL  1
- #define KSFT_XFAIL 2
- #define KSFT_XPASS 3
--/* Treat skip as pass */
- #define KSFT_SKIP  4
- 
- /* counters */
-
+Applied to bpf-next, thanks Jeremy!
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
