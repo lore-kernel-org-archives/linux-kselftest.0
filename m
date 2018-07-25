@@ -1,72 +1,60 @@
-From: anders.roxell at linaro.org (Anders Roxell)
-Date: Wed, 25 Jul 2018 18:08:17 +0200
-Subject: [PATCH v4] selftests: add headers_install to lib.mk
-In-Reply-To: <f222aa8d-88b8-140c-30ed-83fd908bfd09@kernel.org>
-References: <20180413090351.25662-1-anders.roxell@linaro.org>
- <20180607110911.12252-1-anders.roxell@linaro.org>
- <CADYN=9J=hSFb2wCZ1+dXL=023p9y05MEGUPvH48WfPX7XDZvwQ@mail.gmail.com>
- <f222aa8d-88b8-140c-30ed-83fd908bfd09@kernel.org>
-Message-ID: <CADYN=9LSA60E4mFwrbeY-RGi4kZV6hO0ygz0-C6QB3+KKaoxQg@mail.gmail.com>
+From: ezequiel at collabora.com (Ezequiel Garcia)
+Date: Wed, 25 Jul 2018 14:15:11 -0300
+Subject: [PATCH v2 0/5] Make sure .device_run is always called in non-atomic
+ context
+Message-ID: <20180725171516.11210-1-ezequiel@collabora.com>
 
-On Tue, 24 Jul 2018 at 19:11, Shuah Khan <shuah at kernel.org> wrote:
->
-> On 07/23/2018 02:49 PM, Anders Roxell wrote:
-> > On Thu, 7 Jun 2018 at 13:09, Anders Roxell <anders.roxell at linaro.org> wrote:
-> >>
-> >> If the kernel headers aren't installed we can't build all the tests.
-> >> Add a new make target rule 'khdr' in the file lib.mk to generate the
-> >> kernel headers and that gets include for every test-dir Makefile that
-> >> includes lib.mk If the testdir in turn have its own sub-dirs the
-> >> top_srcdir needs to be set to the linux-rootdir to be able to generate
-> >> the kernel headers.
-> >>
-> >> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
-> >> Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
-> >> ---
-> >>  Makefile                                           | 14 +-------------
-> >>  scripts/subarch.include                            | 13 +++++++++++++
-> >>  tools/testing/selftests/android/Makefile           |  2 +-
-> >>  tools/testing/selftests/android/ion/Makefile       |  2 ++
-> >>  tools/testing/selftests/futex/functional/Makefile  |  1 +
-> >>  tools/testing/selftests/gpio/Makefile              |  7 ++-----
-> >>  tools/testing/selftests/kvm/Makefile               |  7 ++-----
-> >>  tools/testing/selftests/lib.mk                     | 12 ++++++++++++
-> >>  tools/testing/selftests/net/Makefile               |  1 +
-> >>  .../selftests/networking/timestamping/Makefile     |  1 +
-> >>  tools/testing/selftests/vm/Makefile                |  4 ----
-> >>  11 files changed, 36 insertions(+), 28 deletions(-)
-> >>  create mode 100644 scripts/subarch.include
-> >>
-> >> diff --git a/Makefile b/Makefile
-> >> index 6b9aea95ae3a..8050072300fa 100644
-> >> --- a/Makefile
-> >> +++ b/Makefile
-> >> @@ -286,19 +286,7 @@ KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
-> >>  KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
-> >>  export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
-> >>
-> >> -# SUBARCH tells the usermode build what the underlying arch is.  That is set
-> >> -# first, and if a usermode build is happening, the "ARCH=um" on the command
-> >> -# line overrides the setting of ARCH below.  If a native build is happening,
-> >> -# then ARCH is assigned, getting whatever value it gets normally, and
-> >> -# SUBARCH is subsequently ignored.
-> >> -
-> >> -SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
-> >> -                                 -e s/sun4u/sparc64/ \
-> >> -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
-> >> -                                 -e s/s390x/s390/ -e s/parisc64/parisc/ \
-> >> -                                 -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
-> >> -                                 -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
-> >> -                                 -e s/riscv.*/riscv/)
-> >> +include scripts/subarch.include
->
-> What is the reason for this SUBARCH block move to to scripts/subarch.include?
-> Is this necessary for adding headers install dependency to lib.mk?
+This series goal is to avoid drivers from having ad-hoc code
+to call .device_run in non-atomic context. Currently, .device_run
+can be called via v4l2_m2m_job_finish(), potentially running
+in interrupt context.
 
-This is needed to create headers for cross build.
+This series will be useful for the upcoming Request API, where drivers
+typically require .device_run to be called in non-atomic context for
+v4l2_ctrl_request_setup() calls.
 
-Cheers,
-Anders
+The solution is to add a per-device worker that is scheduled
+by v4l2_m2m_job_finish, which replaces drivers having a threaded interrupt
+or similar.
+
+This change allows v4l2_m2m_job_finish() to be called in interrupt
+context, separating .device_run and v4l2_m2m_job_finish() contexts.
+
+It's worth mentioning that v4l2_m2m_cancel_job() doesn't need
+to flush or cancel the new worker, because the job_spinlock
+synchronizes both and also because the core prevents simultaneous
+jobs. Either v4l2_m2m_cancel_job() will wait for the worker, or the
+worker will be unable to run a new job.
+
+While working on this series, I found a bug recently introduced on
+commit "media: mem2mem: Remove excessive try_run call". The first patch
+fixes the bug.
+
+In order to test the change, and make sure no regressions are
+introduced, a kselftest test is added to stress the mem2mem framework.
+
+Patches are based on v4.18-rc4 plus:
+
+34dbb848d5e47 "media: mem2mem: Remove excessive try_run call"
+
+Ezequiel Garcia (4):
+  v4l2-mem2mem: Fix missing v4l2_m2m_try_run call
+  v4l2-mem2mem: Avoid v4l2_m2m_prepare_buf from scheduling a job
+  v4l2-mem2mem: Avoid calling .device_run in v4l2_m2m_job_finish
+  selftests: media_tests: Add a memory-to-memory concurrent stress test
+
+Sakari Ailus (1):
+  v4l2-mem2mem: Simplify exiting the function in __v4l2_m2m_try_schedule
+
+ drivers/media/v4l2-core/v4l2-mem2mem.c        | 104 +++++--
+ tools/testing/selftests/media_tests/Makefile  |   4 +-
+ .../selftests/media_tests/m2m_job_test.c      | 283 ++++++++++++++++++
+ 3 files changed, 362 insertions(+), 29 deletions(-)
+ create mode 100644 tools/testing/selftests/media_tests/m2m_job_test.c
+
+-- 
+2.18.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
