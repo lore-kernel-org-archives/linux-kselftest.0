@@ -1,32 +1,33 @@
 From: anders.roxell@linaro.org (Anders Roxell)
-Date: Thu, 26 Jul 2018 09:07:52 +0200
-Subject: [PATCH] selftests: cgroup: add gitignore file
-In-Reply-To: <20180620225412.7894-1-anders.roxell@linaro.org>
-References: <20180620225412.7894-1-anders.roxell@linaro.org>
+Date: Thu, 26 Jul 2018 09:10:23 +0200
+Subject: [PATCH] selftests: mount: remove no longer needed config option
+In-Reply-To: <20180626153213.676-1-anders.roxell@linaro.org>
+References: <20180626153213.676-1-anders.roxell@linaro.org>
 Message-ID:
- <CADYN=9L9VutVezvXdXs_6htMvBJtdj2KxaGDc8XN7jV3hdAskg@mail.gmail.com>
+ <CADYN=9Lu8uCLGaFXTRah2g13Tk2Zs+O8UDRSek0n=0fer4yDxA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180726070752.v0XsNe0nzspe3g6vr9siRy4nRICBNp8idlDqjSr5pMU@z>
+Message-ID: <20180726071023.brAhJu0YMenJZyq9Dwr1mkoBInXgcDSZ9x4IlI7tqj0@z>
 
-On Thu, 21 Jun 2018@00:54, Anders Roxell <anders.roxell@linaro.org> wrote:
+On Tue, 26 Jun 2018@17:32, Anders Roxell <anders.roxell@linaro.org> wrote:
 >
-> Add the executable 'test_memcontrol' to a .gitignore file.
+> Since commit eedf265aa003 ("devpts: Make each mount of devpts an
+> independent filesystem.") CONFIG_DEVPTS_MULTIPLE_INSTANCES isn't needed
+> in the defconfig anymore.
 >
 > Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 > ---
->  tools/testing/selftests/cgroup/.gitignore | 1 +
->  1 file changed, 1 insertion(+)
->  create mode 100644 tools/testing/selftests/cgroup/.gitignore
+>  tools/testing/selftests/mount/config | 1 -
+>  1 file changed, 1 deletion(-)
 >
-> diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
-> new file mode 100644
-> index 000000000000..95eb3a53c381
-> --- /dev/null
-> +++ b/tools/testing/selftests/cgroup/.gitignore
-> @@ -0,0 +1 @@
-> +test_memcontrol
+> diff --git a/tools/testing/selftests/mount/config b/tools/testing/selftests/mount/config
+> index b5d881e48548..416bd53ce982 100644
+> --- a/tools/testing/selftests/mount/config
+> +++ b/tools/testing/selftests/mount/config
+> @@ -1,2 +1 @@
+>  CONFIG_USER_NS=y
+> -CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
 > --
-> 2.17.1
+> 2.18.0
 >
 
 Ping.
