@@ -1,267 +1,115 @@
-From: kafai at fb.com (Martin KaFai Lau)
-Date: Wed, 25 Jul 2018 12:18:47 -0700
-Subject: selftests: bpf: test_progs: deadlock at trace_call_bpf
-In-Reply-To: <CA+G9fYs-AzZ4x2x8m5kOYaEg_vagaorjQAkWs9C5ghOnCLYZvA@mail.gmail.com>
-References: <CA+G9fYs-AzZ4x2x8m5kOYaEg_vagaorjQAkWs9C5ghOnCLYZvA@mail.gmail.com>
-Message-ID: <20180725191847.z2plxuggbptf7mgb@kafai-mbp.dhcp.thefacebook.com>
+From: dima at arista.com (Dmitry Safonov)
+Date: Thu, 26 Jul 2018 03:31:26 +0100
+Subject: [PATCH 00/18] xfrm: Add compat layer
+Message-ID: <20180726023144.31066-1-dima@arista.com>
 
-On Tue, Jul 24, 2018 at 02:51:42PM +0530, Naresh Kamboju wrote:
-> Deadlock warning on x86 machine while testing selftests: bpf:
-> test_progs and running linux next 4.18.0-rc3-next-20180705 and still
-> happening on 4.18.0-rc5-next-20180720.
-> 
-> Any one noticed this kernel warning about deadlock ?
-It should be a false positive.  The head->lock is a percpu
-lock and is acquired by the bpf prog running on that cpu when
-updating a bpf htab.  Hence, CPU0 and CPU1 are acquiring
-a different head->lock.
+Due to some historical mistake, xfrm User ABI differ between native and
+compatible applications. The difference is in structures paddings and in
+the result in the size of netlink messages.
+As it's already visible ABI, it cannot be adjusted by packing structures.
 
-When looking at a CPU alone, another bpf prog cannot start
-running on the same CPU before the currently running bpf prog
-has finished.  e.g. There is a percpu "bpf_prog_active" counter
-to ensure that in the tracing side.
+Possibility for compatible application to manage xfrm tunnels was
+disabled by: the commmit 19d7df69fdb2 ("xfrm: Refuse to insert 32 bit
+userspace socket policies on 64 bit systems") and the commit 74005991b78a
+("xfrm: Do not parse 32bits compiled xfrm netlink msg on 64bits host").
 
-The head->lock is primary used in bpf htab update which
-is used very heavily in most of the bpf progs.  Hence,
-replacing the lock with the irqsave version is unnecessary
-while having performance impact.
+By some wonderful reasons and brilliant architecture decisions for
+creating userspace, on Arista switches we still use 32-bit userspace
+with 64-bit kernel. There is slow movement to full 64-bit build, but
+it's not yet here. As the switches need support for ipsec tunnels, the
+local kernel has reverted mentioned patches that disable xfrm for
+compat apps. On the top of that there is a bunch of disgraceful hacks
+in userspace to work around the size check for netlink messages
+and all that jazz.
 
-Thanks,
-Martin
+It looks like, we're not the only desirable users of compatible xfrm,
+there were a couple of attempts to make it work:
+https://lkml.org/lkml/2017/1/20/733
+https://patchwork.ozlabs.org/patch/44600/
+http://netdev.vger.kernel.narkive.com/2Gesykj6/patch-net-next-xfrm-correctly-parse-netlink-msg-from-32bits-ip-command-on-64bits-host
 
-> 
-> selftests: bpf: test_progs
-> libbpf: incorrect bpf_call opcode
-> libbpf: incorrect bpf_call opcode
-> test_pkt_access:FAIL:ipv4 err 0 errno 2 retval 0 duration 126
-> test_pkt_access:FAIL:ipv6 err 0 errno 2 retval 0 duration 115
-> test_xdp:FAIL:ipv4 err 0 errno 2 retval 3 size 74
-> test_xdp:FAIL:ipv6 err 0 errno 2 retval 3 size 114
-> test_xdp_adjust_tail:FAIL:ipv4 err 0 errno 2 retval 1 size 54
-> test_xdp_adjust_tail:FAIL:ipv6 err 0 errno 2 retval 3 siz[   69.901655]
-> [   69.903862] ========================================================
-> [   69.910213] WARNING: possible irq lock inversion dependency detected
-> [   69.916559] 4.18.0-rc3-next-20180705 #1 Not tainted
-> [   69.921428] --------------------------------------------------------
-> [   69.927774] dd/2928 just changed the state of lock:
-> [   69.932643] 0000000022eeb38d (&head->lock){+...}, at:
-> pcpu_freelist_push+0x28/0x50
-> [   69.940208] but this lock was taken by another, HARDIRQ-safe lock
-> in the past:
-> [   69.947420]  (&rq->lock){-.-.}
-> [   69.947421]
-> [   69.947421]
-> [   69.947421] and interrupts could create inverse lock ordering between them.
-> [   69.947421]
-> [   69.961842]
-> [   69.961842] other info that might help us debug this:
-> [   69.968357]  Possible interrupt unsafe locking scenario:
-> [   69.968357]
-> [   69.975136]        CPU0                    CPU1
-> [   69.979659]        ----                    ----
-> [   69.984184]   lock(&head->lock);
-> [   69.987406]                                local_irq_disable();
-> [   69.993319]                                lock(&rq->lock);
-> [   69.998882]                                lock(&head->lock);
-> [   70.004618]   <Interrupt>
-> [   70.007235]     lock(&rq->lock);
-> [   70.010461]
-> [   70.010461]  *** DEADLOCK ***
-> [   70.010461]
-> [   70.016372] 1 lock held by dd/2928:
-> [   70.019856]  #0: 00000000ab9293c8 (rcu_read_lock){....}, at:
-> trace_call_bpf+0x37/0x1d0
-> [   70.027768]
-> [   70.027768] the shortest dependencies between 2nd lock and 1st lock:
-> [   70.035586]  -> (&rq->lock){-.-.} ops: 1401365 {
-> [   70.040204]     IN-HARDIRQ-W at:
-> [   70.043428]                       lock_acquire+0xd5/0x1c0
-> [   70.048820]                       _raw_spin_lock+0x2f/0x40
-> [   70.054299]                       scheduler_tick+0x51/0xf0
-> [   70.059781]                       update_process_times+0x47/0x60
-> [   70.065779]                       tick_periodic+0x2b/0xc0
-> [   70.071171]                       tick_handle_periodic+0x25/0x70
-> [   70.077168]                       timer_interrupt+0x15/0x20
-> [   70.082731]                       __handle_irq_event_percpu+0x48/0x320
-> [   70.089250]                       handle_irq_event_percpu+0x32/0x80
-> [   70.095505]                       handle_irq_event+0x39/0x60
-> [   70.101157]                       handle_level_irq+0x7f/0x100
-> [   70.106893]                       handle_irq+0x6f/0x110
-> [   70.112112]                       do_IRQ+0x5c/0x110
-> [   70.116982]                       ret_from_intr+0x0/0x1d
-> [   70.122286]                       _raw_spin_unlock_irqrestore+0x38/0x50
-> [   70.128891]                       __setup_irq+0x45d/0x700
-> [   70.134281]                       setup_irq+0x4c/0x90
-> [   70.139324]                       hpet_time_init+0x25/0x37
-> [   70.144803]                       x86_late_time_init+0xf/0x1c
-> [   70.150538]                       start_kernel+0x40c/0x4ca
-> [   70.156017]                       x86_64_start_reservations+0x24/0x26
-> [   70.162445]                       x86_64_start_kernel+0x6f/0x72
-> [   70.168357]                       secondary_startup_64+0xa4/0xb0
-> [   70.174356]     IN-SOFTIRQ-W at:
-> [   70.177578]                       lock_acquire+0xd5/0x1c0
-> [   70.182970]                       _raw_spin_lock+0x2f/0x40
-> [   70.188448]                       try_to_wake_up+0x31b/0x540
-> [   70.194097]                       wake_up_process+0x15/0x20
-> [   70.199661]                       swake_up_locked+0x24/0x40
-> [   70.205226]                       swake_up_one+0x1f/0x30
-> [   70.210530]                       rcu_gp_kthread_wake+0x3b/0x40
-> [   70.216441]                       rcu_accelerate_cbs_unlocked+0x9c/0xe0
-> [   70.223048]                       rcu_process_callbacks+0x111/0x10c0
-> [   70.229396]                       __do_softirq+0xbf/0x493
-> [   70.234788]                       irq_exit+0xc3/0xd0
-> [   70.239743]                       smp_apic_timer_interrupt+0x93/0x2a0
-> [   70.246176]                       apic_timer_interrupt+0xf/0x20
-> [   70.252084]                       console_unlock+0x4e8/0x620
-> [   70.257737]                       vprintk_emit+0x254/0x430
-> [   70.263214]                       vprintk_default+0x1f/0x30
-> [   70.268776]                       vprintk_func+0x27/0x60
-> [   70.274082]                       printk+0x52/0x6e
-> [   70.278864]                       native_cpu_up+0x71b/0x7a0
-> [   70.284431]                       bringup_cpu+0x2a/0xb0
-> [   70.289648]                       cpuhp_invoke_callback+0xb2/0xb20
-> [   70.295818]                       _cpu_up+0xae/0x160
-> [   70.300776]                       do_cpu_up+0x8d/0xb0
-> [   70.305818]                       cpu_up+0x13/0x20
-> [   70.310602]                       smp_init+0x67/0xc4
-> [   70.315559]                       kernel_init_freeable+0x134/0x259
-> [   70.321731]                       kernel_init+0xe/0x110
-> [   70.326947]                       ret_from_fork+0x3a/0x50
-> [   70.332339]     INITIAL USE at:
-> [   70.335477]                      lock_acquire+0xd5/0x1c0
-> [   70.340780]                      _raw_spin_lock_irqsave+0x3a/0x50
-> [   70.346864]                      rq_attach_root+0x1b/0xc0
-> [   70.352255]                      sched_init+0x310/0x432
-> [   70.357472]                      start_kernel+0x26e/0x4ca
-> [   70.362861]                      x86_64_start_reservations+0x24/0x26
-> [   70.369207]                      x86_64_start_kernel+0x6f/0x72
-> [   70.375048]                      secondary_startup_64+0xa4/0xb0
-> [   70.380958]   }
-> [   70.382710]   ... key      at: [<ffffffff8716faf8>] __key.69482+0x0/0x8
-> [   70.389310]   ... acquired at:
-> [   70.392364]    _raw_spin_lock+0x2f/0x40
-> [   70.396192]    pcpu_freelist_pop+0x7a/0xd0
-> [   70.400286]    bpf_get_stackid+0x1ca/0x470
-> [   70.404383]    bpf_get_stackid_tp+0x11/0x20
-> [   70.408559]    ___bpf_prog_run+0x7f2/0x1090
-> [   70.412739]    __bpf_prog_run32+0x39/0x50
-> [   70.416742]    trace_call_bpf+0xc8/0x1d0
-> [   70.420659]    perf_trace_run_bpf_submit+0x42/0xb0
-> [   70.425444]    perf_trace_sched_switch+0x116/0x190
-> [   70.430227]    __schedule+0x6d8/0xa20
-> [   70.433883]    schedule+0x3d/0x90
-> [   70.437194]    worker_thread+0xd0/0x410
-> [   70.441025]    kthread+0x10d/0x140
-> [   70.444424]    ret_from_fork+0x3a/0x50
-> [   70.448165]
-> [   70.449658] -> (&head->lock){+...} ops: 61660 {
-> [   70.454181]    HARDIRQ-ON-W at:
-> [   70.457319]                     lock_acquire+0xd5/0x1c0
-> [   70.462536]                     _raw_spin_lock+0x2f/0x40
-> [   70.467841]                     pcpu_freelist_push+0x28/0x50
-> [   70.473492]                     bpf_get_stackid+0x43a/0x470
-> [   70.479054]                     bpf_get_stackid_tp+0x11/0x20
-> [   70.484724]                     ___bpf_prog_run+0x7f2/0x1090
-> [   70.490372]                     __bpf_prog_run32+0x39/0x50
-> [   70.495852]                     trace_call_bpf+0xc8/0x1d0
-> [   70.501243]                     perf_trace_run_bpf_submit+0x42/0xb0
-> [   70.507500]                     perf_trace_urandom_read+0xbf/0x100
-> [   70.513670]                     urandom_read+0x1ce/0x340
-> [   70.518975]                     __vfs_read+0x37/0x160
-> [   70.524027]                     vfs_read+0xa8/0x150
-> [   70.528898]                     ksys_read+0x58/0xc0
-> [   70.533766]                     __x64_sys_read+0x1a/0x20
-> [   70.539092]                     do_syscall_64+0x4f/0x190
-> [   70.544401]                     entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> [   70.551092]    INITIAL USE at:
-> [   70.554143]                    lock_acquire+0xd5/0x1c0
-> [   70.559272]                    _raw_spin_lock+0x2f/0x40
-> [   70.564491]                    pcpu_freelist_populate+0xb6/0x110
-> [   70.570489]                    htab_map_alloc+0x3b6/0x4c0
-> [   70.575878]                    map_create+0xf0/0x370
-> [   70.580836]                    __x64_sys_bpf+0x10b/0x260
-> [   70.586138]                    do_syscall_64+0x4f/0x190
-> [   70.591356]                    entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> [   70.597960]  }
-> [   70.599624]  ... key      at: [<ffffffff87d4c5a0>] __key.11024+0x0/0x8
-> [   70.606142]  ... acquired at:
-> [   70.609104]    mark_lock+0x392/0x570
-> [   70.612676]    __lock_acquire+0x5cd/0x13c0
-> [   70.616767]    lock_acquire+0xd5/0x1c0
-> [   70.620511]    _raw_spin_lock+0x2f/0x40
-> [   70.624342]    pcpu_freelist_push+0x28/0x50
-> [   70.628519]    bpf_get_stackid+0x43a/0x470
-> [   70.632610]    bpf_get_stackid_tp+0x11/0x20
-> [   70.636785]    ___bpf_prog_run+0x7f2/0x1090
-> [   70.640965]    __bpf_prog_run32+0x39/0x50
-> [   70.644969]    trace_call_bpf+0xc8/0x1d0
-> [   70.648886]    perf_trace_run_bpf_submit+0x42/0xb0
-> [   70.653668]    perf_trace_urandom_read+0xbf/0x100
-> [   70.658366]    urandom_read+0x1ce/0x340
-> [   70.662199]    __vfs_read+0x37/0x160
-> [   70.665768]    vfs_read+0xa8/0x150
-> [   70.669166]    ksys_read+0x58/0xc0
-> [   70.672562]    __x64_sys_read+0x1a/0x20
-> [   70.676393]    do_syscall_64+0x4f/0x190
-> [   70.680223]    entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> [   70.685440]
-> [   70.686933]
-> [   70.686933] stack backtrace:
-> [   70.691283] CPU: 3 PID: 2928 Comm: dd Not tainted 4.18.0-rc3-next-20180705 #1
-> [   70.698405] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-> 2.0b 07/27/2017
-> [   70.705875] Call Trace:
-> [   70.708321]  dump_stack+0x68/0x95
-> [   70.711631]  print_irq_inversion_bug.part.41+0x1a5/0x1b1
-> [   70.716935]  check_usage_backwards+0x14b/0x160
-> [   70.721374]  mark_lock+0x392/0x570
-> [   70.724771]  ? mark_lock+0x392/0x570
-> [   70.728340]  ? print_shortest_lock_dependencies+0x1a0/0x1a0
-> [   70.733904]  __lock_acquire+0x5cd/0x13c0
-> [   70.737823]  ? find_get_entry+0x1a2/0x2f0
-> [   70.741825]  lock_acquire+0xd5/0x1c0
-> [   70.745397]  ? lock_acquire+0xd5/0x1c0
-> [   70.749141]  ? pcpu_freelist_push+0x28/0x50
-> [   70.753317]  _raw_spin_lock+0x2f/0x40
-> [   70.756974]  ? pcpu_freelist_push+0x28/0x50
-> [   70.761153]  pcpu_freelist_push+0x28/0x50
-> [   70.765156]  bpf_get_stackid+0x43a/0x470
-> [   70.769073]  bpf_get_stackid_tp+0x11/0x20
-> [   70.773077]  ___bpf_prog_run+0x7f2/0x1090
-> [   70.777083]  __bpf_prog_run32+0x39/0x50
-> [   70.780912]  ? lock_acquire+0xd5/0x1c0
-> [   70.784656]  trace_call_bpf+0xc8/0x1d0
-> [   70.788399]  perf_trace_run_bpf_submit+0x42/0xb0
-> [   70.793013]  perf_trace_urandom_read+0xbf/0x100
-> [   70.797544]  urandom_read+0x1ce/0x340
-> [   70.801202]  __vfs_read+0x37/0x160
-> [   70.804598]  ? security_file_permission+0x8d/0xb0
-> [   70.809297]  ? security_file_permission+0x8d/0xb0
-> [   70.813993]  vfs_read+0xa8/0x150
-> [   70.817218]  ksys_read+0x58/0xc0
-> [   70.820442]  __x64_sys_read+0x1a/0x20
-> [   70.824106]  do_syscall_64+0x4f/0x190
-> [   70.827764]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> [   70.832807] RIP: 0033:0x7f302526f160
-> [   70.836378] Code: b6 fe ff ff 48 8d 3d 97 b1 08 00 48 83 ec 08 e8
-> 66 d3 01 00 66 0f 1f 44 00 00 83 3d e9 15 2c 00 00 75 10 b8 00 00 00
-> 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 7e 94 01 00 48 89
-> 04 24
-> [   70.855253] RSP: 002b:00007fff096fd4e8 EFLAGS: 00000246 ORIG_RAX:
-> 0000000000000000
-> [   70.862812] RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007f302526f160
-> [   70.869935] RDX: 0000000000000200 RSI: 000000000070f000 RDI: 0000000000000000
-> [   70.877060] RBP: 0000000000000200 R08: 000000000070f000 R09: 0000000000711060
-> [   70.884183] R10: 0000000000000871 R11: 0000000000000246 R12: 000000000070f000
-> [   70.891306] R13: 0000000000000000 R14: 0000000000000200 R15: 0000000000000000
-> e 54
-> test_l4lb:FAIL:ipv4 err 0 errno 2 retval 7 size 54 magic 1234
-> 
-> Full kernel selftest test log,
-> https://urldefense.proofpoint.com/v2/url?u=https-3A__lkft.validation.linaro.org_scheduler_job_314724-23L2142&d=DwIBaQ&c=5VD0RTtNlTh3ycd41b3MUw&r=VQnoQ7LvghIj0gVEaiQSUw&m=jZ-W3Sa5-4fLxWPWxGZCwCp8KROtodYFS8Hz01vayqc&s=N9XPdzKisD7r4k5e94WLyeOinbQRUkmhBtNx6Fj4jhQ&e=
-> 
-> Best regards
-> Naresh Kamboju
+All the discussions end in the conclusion that xfrm should have a full
+compatible layer to correctly work with 32-bit applications on 64-bit
+kernels:
+https://lkml.org/lkml/2017/1/23/413
+https://patchwork.ozlabs.org/patch/433279/
+
+In some recent lkml discussion, Linus said that it's worth to fix this
+problem and not giving people an excuse to stay on 32-bit kernel:
+https://lkml.org/lkml/2018/2/13/752
+
+So, here I add a compatible layer to xfrm.
+As xfrm uses netlink notifications, kernel should send them in ABI
+format that an application will parse. The proposed solution is
+to save the ABI of bind() syscall. The realization detail is
+to create kernel-hidden, non visible to userspace netlink groups
+for compat applications.
+
+The first two patches simplify ifdeffery, and while I've already submitted
+them a while ago, I'm resending them for completeness:
+https://lore.kernel.org/lkml/20180717005004.25984-1-dima at arista.com/T/#u
+
+There is also an exhaustive selftest for ipsec tunnels and to check
+that kernel parses correctly the structures those differ in size.
+It doesn't depend on any library and compat version can be easy
+build with: make CFLAGS=-m32 net/ipsec
+
+Cc: "David S. Miller" <davem at davemloft.net>
+Cc: Herbert Xu <herbert at gondor.apana.org.au>
+Cc: Steffen Klassert <steffen.klassert at secunet.com>
+Cc: Dmitry Safonov <0x7f454c46 at gmail.com>
+Cc: netdev at vger.kernel.org
+
+Dmitry Safonov (18):
+  x86/compat: Adjust in_compat_syscall() to generic code under !COMPAT
+  compat: Cleanup in_compat_syscall() callers
+  selftest/net/xfrm: Add test for ipsec tunnel
+  net/xfrm: Add _packed types for compat users
+  net/xfrm: Parse userspi_info{,_packed} depending on syscall
+  netlink: Do not subscribe to non-existent groups
+  netlink: Pass groups pointer to .bind()
+  xfrm: Add in-kernel groups for compat notifications
+  xfrm: Dump usersa_info in compat/native formats
+  xfrm: Send state notifications in compat format too
+  xfrm: Add compat support for xfrm_user_expire messages
+  xfrm: Add compat support for xfrm_userpolicy_info messages
+  xfrm: Add compat support for xfrm_user_acquire messages
+  xfrm: Add compat support for xfrm_user_polexpire messages
+  xfrm: Check compat acquire listeners in xfrm_is_alive()
+  xfrm: Notify compat listeners about policy flush
+  xfrm: Notify compat listeners about state flush
+  xfrm: Enable compat syscalls
+
+ MAINTAINERS                            |    1 +
+ arch/x86/include/asm/compat.h          |    9 +-
+ arch/x86/include/asm/ftrace.h          |    4 +-
+ arch/x86/kernel/process_64.c           |    4 +-
+ arch/x86/kernel/sys_x86_64.c           |   11 +-
+ arch/x86/mm/hugetlbpage.c              |    4 +-
+ arch/x86/mm/mmap.c                     |    2 +-
+ drivers/firmware/efi/efivars.c         |   16 +-
+ include/linux/compat.h                 |    4 +-
+ include/linux/netlink.h                |    2 +-
+ include/net/xfrm.h                     |   14 -
+ kernel/audit.c                         |    2 +-
+ kernel/time/time.c                     |    2 +-
+ net/core/rtnetlink.c                   |   14 +-
+ net/core/sock_diag.c                   |   25 +-
+ net/netfilter/nfnetlink.c              |   24 +-
+ net/netlink/af_netlink.c               |   28 +-
+ net/netlink/af_netlink.h               |    4 +-
+ net/netlink/genetlink.c                |   26 +-
+ net/xfrm/xfrm_state.c                  |    5 -
+ net/xfrm/xfrm_user.c                   |  690 ++++++++---
+ tools/testing/selftests/net/.gitignore |    1 +
+ tools/testing/selftests/net/Makefile   |    1 +
+ tools/testing/selftests/net/ipsec.c    | 1987 ++++++++++++++++++++++++++++++++
+ 24 files changed, 2612 insertions(+), 268 deletions(-)
+ create mode 100644 tools/testing/selftests/net/ipsec.c
+
+-- 
+2.13.6
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
