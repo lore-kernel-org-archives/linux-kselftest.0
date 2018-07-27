@@ -1,41 +1,107 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Fri, 27 Jul 2018 21:21:54 +0900
-Subject: [PATCH 25/25] selftests/ftrace: Add trace_pipe testcase
-In-Reply-To: <153269339575.3084.16279591141931053689.stgit@devbox>
-References: <153269339575.3084.16279591141931053689.stgit@devbox>
-Message-ID: <153269411396.3084.11842883301653040754.stgit@devbox>
+From: hverkuil at xs4all.nl (Hans Verkuil)
+Date: Fri, 27 Jul 2018 15:35:45 +0200
+Subject: [PATCH v2 1/5] v4l2-mem2mem: Fix missing v4l2_m2m_try_run call
+In-Reply-To: <20180725171516.11210-2-ezequiel@collabora.com>
+References: <20180725171516.11210-1-ezequiel@collabora.com>
+ <20180725171516.11210-2-ezequiel@collabora.com>
+Message-ID: <c0cf528b-103a-9a92-527d-e80508734c72@xs4all.nl>
 
-Add a simple testcase for trace_pipe which can consume
-ringbuffer.
+On 25/07/18 19:15, Ezequiel Garcia wrote:
+> Commit 34dbb848d5e4 ("media: mem2mem: Remove excessive try_run call")
+> removed a redundant call to v4l2_m2m_try_run but instead introduced
+> a bug. Consider the following case:
+> 
+>  1) Context A schedules, queues and runs job A.
+>  2) While the m2m device is running, context B schedules
+>     and queues job B. Job B cannot run, because it has to
+>     wait for job A.
+>  3) Job A completes, calls v4l2_m2m_job_finish, and tries
+>     to queue a job for context A, but since the context is
+>     empty it won't do anything.
+> 
+> In this scenario, queued job B will never run. Fix this by calling
+> v4l2_m2m_try_run from v4l2_m2m_try_schedule.
+> 
+> While here, add more documentation to these functions.
+> 
+> Fixes: 34dbb848d5e4 ("media: mem2mem: Remove excessive try_run call")
+> Signed-off-by: Ezequiel Garcia <ezequiel at collabora.com>
 
-Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
----
- .../selftests/ftrace/test.d/00basic/trace_pipe.tc  |   15 +++++++++++++++
- 1 file changed, 15 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
+So just to be clear: this first patch fixes a regression and can be applied
+separately from the other patches?
 
-diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
-new file mode 100644
-index 000000000000..a7dd6fda487a
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
-@@ -0,0 +1,15 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: trace_pipe and trace_marker
-+
-+[ ! -f trace_marker ] && exit_unsupported
-+
-+echo "test input 1" > trace_marker
-+
-+: "trace interface never consume the ring buffer"
-+grep -q "test input 1" trace
-+grep -q "test input 1" trace
-+
-+: "trace interface never consume the ring buffer"
-+head -n 1 trace_pipe | grep -q "test input 1"
-+! grep -q "test input 1" trace
+> ---
+>  drivers/media/v4l2-core/v4l2-mem2mem.c | 32 +++++++++++++++++++++++---
+>  1 file changed, 29 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> index 5f9cd5b74cda..dfd796621b06 100644
+> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
+> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> @@ -209,15 +209,23 @@ static void v4l2_m2m_try_run(struct v4l2_m2m_dev *m2m_dev)
+>  	m2m_dev->curr_ctx->job_flags |= TRANS_RUNNING;
+>  	spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags);
+>  
+> +	dprintk("Running job on m2m_ctx: %p\n", m2m_dev->curr_ctx);
 
+Is this intended? It feels out of place in this patch.
+
+>  	m2m_dev->m2m_ops->device_run(m2m_dev->curr_ctx->priv);
+>  }
+>  
+> -void v4l2_m2m_try_schedule(struct v4l2_m2m_ctx *m2m_ctx)
+> +/*
+> + * __v4l2_m2m_try_queue() - queue a job
+> + * @m2m_dev: m2m device
+> + * @m2m_ctx: m2m context
+> + *
+> + * Check if this context is ready to queue a job.
+> + *
+> + * This function can run in interrupt context.
+> + */
+> +static void __v4l2_m2m_try_queue(struct v4l2_m2m_dev *m2m_dev, struct v4l2_m2m_ctx *m2m_ctx)
+>  {
+> -	struct v4l2_m2m_dev *m2m_dev;
+>  	unsigned long flags_job, flags_out, flags_cap;
+>  
+> -	m2m_dev = m2m_ctx->m2m_dev;
+>  	dprintk("Trying to schedule a job for m2m_ctx: %p\n", m2m_ctx);
+>  
+>  	if (!m2m_ctx->out_q_ctx.q.streaming
+> @@ -275,7 +283,25 @@ void v4l2_m2m_try_schedule(struct v4l2_m2m_ctx *m2m_ctx)
+>  	m2m_ctx->job_flags |= TRANS_QUEUED;
+>  
+>  	spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags_job);
+> +}
+> +
+> +/**
+> + * v4l2_m2m_try_schedule() - schedule and possibly run a job for any context
+> + * @m2m_ctx: m2m context
+> + *
+> + * Check if this context is ready to queue a job. If suitable,
+> + * run the next queued job on the mem2mem device.
+> + *
+> + * This function shouldn't run in interrupt context.
+> + *
+> + * Note that v4l2_m2m_try_schedule() can schedule one job for this context,
+> + * and then run another job for another context.
+> + */
+> +void v4l2_m2m_try_schedule(struct v4l2_m2m_ctx *m2m_ctx)
+> +{
+> +	struct v4l2_m2m_dev *m2m_dev = m2m_ctx->m2m_dev;
+>  
+> +	__v4l2_m2m_try_queue(m2m_dev, m2m_ctx);
+
+Why introduce __v4l2_m2m_try_queue? Why not keep it in here?
+
+>  	v4l2_m2m_try_run(m2m_dev);
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_m2m_try_schedule);
+> 
+
+Regards,
+
+	Hans
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
