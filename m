@@ -1,49 +1,78 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Fri, 27 Jul 2018 21:18:26 +0900
-Subject: [PATCH 18/25] selftests/ftrace: Add a testcase for nop tracer
+Date: Fri, 27 Jul 2018 21:18:54 +0900
+Subject: [PATCH 19/25] selftests/ftrace: Add kprobe-event with symbol argument
+ test
 In-Reply-To: <153269339575.3084.16279591141931053689.stgit@devbox>
 References: <153269339575.3084.16279591141931053689.stgit@devbox>
-Message-ID: <153269390651.3084.11003353154583064083.stgit@devbox>
+Message-ID: <153269393477.3084.13242296184705905821.stgit@devbox>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180727121826.2GCi9tEqLk2B1XBCK_D5aaAiT-juBFMuZRgnsCJ5FlY@z>
+Message-ID: <20180727121854.-H-7wanS85fjEiUH5VMDH2PKS9ZEaFz0zPds05eBQEo@z>
 
-Add a testcase for nop tracer. This tracer has 2 test
-options, so check it too.
+Add a testcase for kprobe-event with @symbol argument.
+Since @symbol needs to refer the kernel data symbol
+(linux_proc_banner), it requires CONFIG_KALLSYMS_ALL.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- .../testing/selftests/ftrace/test.d/tracer/nop.tc  |   22 ++++++++++++++++++++
- 1 file changed, 22 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/tracer/nop.tc
+ tools/testing/selftests/ftrace/config              |    1 +
+ .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     |   39 ++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
 
-diff --git a/tools/testing/selftests/ftrace/test.d/tracer/nop.tc b/tools/testing/selftests/ftrace/test.d/tracer/nop.tc
+diff --git a/tools/testing/selftests/ftrace/config b/tools/testing/selftests/ftrace/config
+index 766669592173..4c7d90aa97b2 100644
+--- a/tools/testing/selftests/ftrace/config
++++ b/tools/testing/selftests/ftrace/config
+@@ -8,3 +8,4 @@ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
+ CONFIG_SAMPLES=y
+ CONFIG_SAMPLE_TRACE_PRINTK=m
++CONFIG_KALLSYMS_ALL=y
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
 new file mode 100644
-index 000000000000..ca63e316e0f5
+index 000000000000..2b6dd33f9076
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/tracer/nop.tc
-@@ -0,0 +1,22 @@
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
+@@ -0,0 +1,39 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Test nop tracer
++# description: Kprobe event symbol argument
 +
-+# nop must be supported always
-+grep -q "nop" available_tracers
++[ -f kprobe_events ] || exit_unsupported # this is configurable
 +
-+echo "nop" > current_tracer
++SYMBOL="linux_proc_banner"
 +
-+# nop provides 2 test options
-+grep -q "test_nop_accept" trace_options
-+grep -q "test_nop_refuse" trace_options
++if [ ! -f /proc/kallsyms ]; then
++  echo "Can not check the target symbol - please enable CONFIG_KALLSYMS"
++  exit_unresolved
++elif ! grep "$SYMBOL\$" /proc/kallsyms; then
++  echo "Linux banner is not exported - please enable CONFIG_KALLSYMS_ALL"
++  exit_unresolved
++fi
 +
-+# nop_accept always success
-+echo "test_nop_accept" > trace_options
-+echo "notest_nop_accept" > trace_options
++: "Test get basic types symbol argument"
++echo "p:testprobe_u _do_fork arg1=@linux_proc_banner:u64 arg2=@linux_proc_banner:u32 arg3=@linux_proc_banner:u16 arg4=@linux_proc_banner:u8" > kprobe_events
++echo "p:testprobe_s _do_fork arg1=@linux_proc_banner:s64 arg2=@linux_proc_banner:s32 arg3=@linux_proc_banner:s16 arg4=@linux_proc_banner:s8" >> kprobe_events
++if grep -q "x8/16/32/64" README; then
++  echo "p:testprobe_x _do_fork arg1=@linux_proc_banner:x64 arg2=@linux_proc_banner:x32 arg3=@linux_proc_banner:x16 arg4=@linux_proc_banner:x8" >> kprobe_events
++fi
++echo "p:testprobe_bf _do_fork arg1=@linux_proc_banner:b8 at 4/32" >> kprobe_events
++echo 1 > events/kprobes/enable
++(echo "forked")
++echo 0 > events/kprobes/enable
++grep "testprobe_[usx]:.* arg1=.* arg2=.* arg3=.* arg4=.*" trace
++grep "testprobe_bf:.* arg1=.*" trace
 +
-+# nop_refuse always failed
-+! echo "test_nop_refuse" > trace_options
-+! echo "notest_nop_refuse" > trace_options
++: "Test get string symbol argument"
++echo "p:testprobe_str _do_fork arg1=@linux_proc_banner:string" > kprobe_events
++echo 1 > events/kprobes/enable
++(echo "forked")
++echo 0 > events/kprobes/enable
++RESULT=`grep "testprobe_str" trace | sed -e 's/.* arg1=\(.*\)/\1/'`
 +
-+exit 0
++RESULT=`echo $RESULT | sed -e 's/.* \((.*)\) \((.*)\) .*/\1 \2/'`
++ORIG=`cat /proc/version | sed -e 's/.* \((.*)\) \((.*)\) .*/\1 \2/'`
++test "$RESULT" = "$ORIG"
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
