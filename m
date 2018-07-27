@@ -1,56 +1,49 @@
-From: luto@amacapital.net (Andy Lutomirski)
-Date: Fri, 27 Jul 2018 10:09:50 -0700
-Subject: [PATCH 00/18] xfrm: Add compat layer
-In-Reply-To: <CADhJOfam+cY8uD4XTGvZSEFQdAgTu49G6cg6c64NJoP3bNuBmw@mail.gmail.com>
-References: <20180726023144.31066-1-dima@arista.com>
- <20180726084959.pzjvflfjq6a76du6@breakpoint.cc>
- <20180727073747.h27dtojlnmc3k25v@gauss3.secunet.de>
- <1532700173.2679.18.camel@arista.com>
- <20180727141936.uze6ohordx7ue3no@breakpoint.cc>
- <1532703111.2679.20.camel@arista.com>
- <CADhJOfam+cY8uD4XTGvZSEFQdAgTu49G6cg6c64NJoP3bNuBmw@mail.gmail.com>
-Message-ID: <9907339A-4CBE-4F5C-88CB-A1C6DBCB4CED@amacapital.net>
+From: jmattson@google.com (Jim Mattson)
+Date: Fri, 27 Jul 2018 10:15:32 -0700
+Subject: [PATCH v14 8/9] KVM: x86: virtualize cpuid faulting
+In-Reply-To: <20170208080917.24320-9-khuey@kylehuey.com>
+References: <20170208080917.24320-1-khuey@kylehuey.com>
+ <20170208080917.24320-9-khuey@kylehuey.com>
+Message-ID:
+ <CALMp9eQfrbhZ-K8H3RTa75+OJggMyD+Ly_Ch0bTpazQQ7XbPEw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180727170950.DIA_JSL8TyQPyO0hBRhmd4jFP-19hryv2MHVOxz1Tco@z>
+Message-ID: <20180727171532.AoHsrPHdwV9YzfoHP79NnU5af35-JjG1IRxaimbPpOI@z>
 
+On Wed, Feb 8, 2017@12:09 AM, Kyle Huey <me@kylehuey.com> wrote:
+> Hardware support for faulting on the cpuid instruction is not required to
+> emulate it, because cpuid triggers a VM exit anyways. KVM handles the relevant
+> MSRs (MSR_PLATFORM_INFO and MSR_MISC_FEATURES_ENABLE) and upon a
+> cpuid-induced VM exit checks the cpuid faulting state and the CPL.
+> kvm_require_cpl is even kind enough to inject the GP fault for us.
+>
+> Signed-off-by: Kyle Huey <khuey at kylehuey.com>
+> Reviewed-by: David Matlack <dmatlack at google.com>
 
+I have a couple of concerns about portions of this patch:
 
-> On Jul 27, 2018,@9:48 AM, Nathan Harold <nharold@google.com> wrote:
-> 
-> We (Android) are very interested in removing the restriction for 32-bit userspace processes accessing xfrm netlink on 64-bit kernels. IPsec support is required to pass Android conformance tests, and any manufacturer wishing to ship 32-bit userspace with a recent kernel needs out-of-tree changes (removing the compat_task check) to do so.
-> 
-> That said, it’s not difficult to work around alignment issues directly in userspace, so maybe we could just remove the check and make this the caller's responsibility? Here’s an example of the workaround currently in the Android tree:
-> https://android.googlesource.com/platform/system/netd/+/refs/heads/master/server/XfrmController.h#257
-> 
-> We could also employ a (relatively simple) solution such as the one above in the uapi XFRM header itself, though it would require a caller to declare the target kernel ABI at compile time. Maybe that’s not unthinkable for an uncommon case?
-> 
+1) There are some backward compatibility issues:
+  A) Suppose we have an old userspace that doesn't know it needs to
+zero MSR_PLATFORM_INFO to preserve existing behavior (to the extent
+possible). If a VM starts on a new kernel it could set the bit in
+MSR_MISC_FEATURES_ENABLES that enables CPUID faulting. On
+live-migration to an old kernel, that bit would be lost.
+  B) With either an old userspace or a new userspace, as a VM migrates
+between old and new kernels, the behavior of RDMSR with ECX set to
+either MSR_PLATFORM_INFO or MSR_MISC_FEATURES_ENABLES will vary
+depending on which kernel the VM is currently running on.
+  Ideally, I think this new functionality should be guarded by a KVM
+capability that has to be enabled from userspace.
 
-Could there just be an XFRM2 that is entirely identical to XFRM for 64-bit userspace but makes the 32-bit structures match?  If there are a grand total of two or so userspace implementations, that should cover most use cases. L
-
-> -Nathan
-> 
-> 
->> On Fri, Jul 27, 2018@7:51 AM, Dmitry Safonov <dima@arista.com> wrote:
->> On Fri, 2018-07-27@16:19 +0200, Florian Westphal wrote:
->> > Dmitry Safonov <dima@arista.com> wrote:
->> > > 1. It will double copy netlink messages, making it O(n) instead of
->> > > O(1), where n - is number of bind()s.. Probably we don't care much.
->> > 
->> > About those bind() patches, I don't understand why they are needed.
->> > 
->> > Why can't you just add the compat skb to the native skb when doing
->> > the multicast call?
->> > 
->> > skb_shinfo(skb)->frag_list = compat_skb;
->> > xfrm_nlmsg_multicast(net, skb, 0, ...
->> 
->> Oh yeah, sorry, I think I misread the patch - will try to add compat
->> skb in the multicast call.
->> 
->> -- 
->> Thanks,
->>              Dmitry
-> 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20180727/62f1409d/attachment-0001.html>
+2) This doesn't really play well with volume 3 of the SDM, section
+18.7.3, where Intel instructs developers to use
+MSR_PLATFORM_INFO[15:8] to determine the TSC frequency for a variety
+of microarchitectures. When reads of this MSR raised #GP, it was
+pretty clear that one couldn't get the TSC frequency that way, but I
+don't think many consumers would specifically check for a 0 in that
+field when the RDMSR succeeds. If a guest hypervisor used that value
+in the computation of the TSC scaling factor for a VMCS12, for
+example, it might be surprised to get a #DE.
+--
+To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
+the body of a message to majordomo at vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
