@@ -1,39 +1,32 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Fri, 27 Jul 2018 21:12:19 +0900
-Subject: [PATCH 05/25] selftests/ftrace: More initialize features in
- initialize_ftrace
+Date: Fri, 27 Jul 2018 21:12:47 +0900
+Subject: [PATCH 06/25] selftests/ftrace: Cleanup ftrace after running test
 In-Reply-To: <153269339575.3084.16279591141931053689.stgit@devbox>
 References: <153269339575.3084.16279591141931053689.stgit@devbox>
-Message-ID: <153269353884.3084.8412677007260573415.stgit@devbox>
+Message-ID: <153269356720.3084.3464379546646600817.stgit@devbox>
 
-Clear pid filter, synthetic_events, snapshots,
-and trace log in initialize_ftrace(), since
-those are used in test cases.
+Cleanup ftrace by initialize_ftrace() after running
+all test cases. This means we also don't need cleanup
+ftrace on each test case, except for some special
+options.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- tools/testing/selftests/ftrace/test.d/functions |    4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/ftrace/ftracetest |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
-index e4645d5e3126..f17eaf3582b2 100644
---- a/tools/testing/selftests/ftrace/test.d/functions
-+++ b/tools/testing/selftests/ftrace/test.d/functions
-@@ -91,10 +91,14 @@ initialize_ftrace() { # Reset ftrace to initial-state
-     reset_events_filter
-     disable_events
-     echo > set_event_pid	# event tracer is always on
-+    echo > set_ftrace_pid
-     [ -f set_ftrace_filter ] && echo | tee set_ftrace_*
-     [ -f set_graph_function ] && echo | tee set_graph_*
-     [ -f stack_trace_filter ] && echo > stack_trace_filter
-     [ -f kprobe_events ] && echo > kprobe_events
-     [ -f uprobe_events ] && echo > uprobe_events
-+    [ -f synthetic_events ] && echo > synthetic_events
-+    [ -f snapshot ] && echo 0 > snapshot
-+    clear_trace
-     enable_tracing
- }
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index 3ca596255eff..5c71d58febb2 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -341,6 +341,7 @@ for t in $TEST_CASES; do
+     exit 1
+   fi
+ done
++(cd $TRACING_DIR; initialize_ftrace) # for cleanup
+ 
+ prlog ""
+ prlog "# of passed: " `echo $PASSED_CASES | wc -w`
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
