@@ -1,47 +1,51 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Fri, 27 Jul 2018 21:19:51 +0900
-Subject: [PATCH 21/25] selftests/ftrace: Add ringbuffer size changing testcase
+Date: Fri, 27 Jul 2018 21:20:19 +0900
+Subject: [PATCH 22/25] selftests/ftrace: Add function profiling stat testcase
 In-Reply-To: <153269339575.3084.16279591141931053689.stgit@devbox>
 References: <153269339575.3084.16279591141931053689.stgit@devbox>
-Message-ID: <153269399108.3084.13255857156285716199.stgit@devbox>
+Message-ID: <153269401935.3084.14477880989343988808.stgit@devbox>
 
-Add a testcase for changing ringbuffer size. This tests
-not only ringbuffer size but also tests the imbalance
-per-cpu buffer size change too.
+Add a testcase for function profiling per-cpu statistics
+interface. There is already func_profile.tc, but that is
+mainly focusing on the combination of function-profiler
+and function tracer. This testcase ensures trace_stat
+per-cpu function statistics is correctly updated.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- .../ftrace/test.d/00basic/ringbuffer_size.tc       |   21 ++++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/ringbuffer_size.tc
+ .../ftrace/test.d/ftrace/func_profile_stat.tc      |   23 ++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
 
-diff --git a/tools/testing/selftests/ftrace/test.d/00basic/ringbuffer_size.tc b/tools/testing/selftests/ftrace/test.d/00basic/ringbuffer_size.tc
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
 new file mode 100644
-index 000000000000..9224f33b3194
+index 000000000000..1d2440d80ec3
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/00basic/ringbuffer_size.tc
-@@ -0,0 +1,21 @@
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
+@@ -0,0 +1,23 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Change the ringbuffer size
++# description: ftrace - function profiling
 +
-+rb_size_test() {
-+ORIG=`cat buffer_size_kb`
++[ ! -f function_profile_enabled ] && exit_unsupported
 +
-+expr $ORIG / 2 > buffer_size_kb
++: "Enable function profile"
++echo 1 > function_profile_enabled
 +
-+expr $ORIG \* 2 > buffer_size_kb
++: "Profile must be updated"
++cp trace_stat/function0 $TMPDIR/
++( echo "forked"; sleep 1 )
++: "diff returns 0 if there is no difference"
++! diff trace_stat/function0 $TMPDIR/function0
 +
-+echo $ORIG > buffer_size_kb
-+}
++echo 0 > function_profile_enabled
 +
-+rb_size_test
++: "Profile must NOT be updated"
++cp trace_stat/function0 $TMPDIR/
++( echo "forked"; sleep 1 )
++: "diff returns 0 if there is no difference"
++diff trace_stat/function0 $TMPDIR/function0
 +
-+: "If per-cpu buffer is supported, imbalance it"
-+if [ -d per_cpu/cpu0 ]; then
-+  cd per_cpu/cpu0
-+  rb_size_test
-+fi
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
