@@ -1,60 +1,40 @@
-From: luto@amacapital.net (Andy Lutomirski)
-Date: Fri, 27 Jul 2018 13:46:06 -0700
+From: jmattson@google.com (Jim Mattson)
+Date: Fri, 27 Jul 2018 14:03:52 -0700
 Subject: [PATCH v14 8/9] KVM: x86: virtualize cpuid faulting
-In-Reply-To: <CALMp9eSyJep6UPxeiZRWPrdzwvvcqJEbPPZ6C61EeHsvdyhMLg@mail.gmail.com>
+In-Reply-To: <6F48D384-B29C-41B4-83F1-B02FC2480205@amacapital.net>
 References: <20170208080917.24320-1-khuey@kylehuey.com>
  <20170208080917.24320-9-khuey@kylehuey.com>
  <CALCETrVS8ch-1harGv2NUy83ZLna8Vde1zNLxPTPaxuMexQMjw@mail.gmail.com>
  <CALMp9eSyJep6UPxeiZRWPrdzwvvcqJEbPPZ6C61EeHsvdyhMLg@mail.gmail.com>
-Message-ID: <6F48D384-B29C-41B4-83F1-B02FC2480205@amacapital.net>
+ <6F48D384-B29C-41B4-83F1-B02FC2480205@amacapital.net>
+Message-ID:
+ <CALMp9eQDWWAgmwnzZ0iTa2w+7-d_MjyOByOdfN0MjiHzaQWyEw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180727204606._PiInCFGOpBxOjwHrD7RvJeUfonsWwVClyG9yAqMu_g@z>
+Message-ID: <20180727210352.tvRxsBSyc_ZTvH6cV-5OSGfuJmEatuSQtY_2_ZI61_4@z>
 
+On Fri, Jul 27, 2018@1:46 PM, Andy Lutomirski <luto@amacapital.net> wrote:
+>> On Jul 27, 2018,@1:28 PM, Jim Mattson <jmattson@google.com> wrote:
+>> Initializing this bit to zero helps with migration, but then if the
+>> CPUID faulting bits in both MSRs are set, userspace has to take pains
+>> to ensure that MSR_PLATFORM_INFO is restored first, or the
+>> MSR_MISC_FEATURES_ENABLES value will be rejected.
+>
+> The code could drop the constraint and just let the entry possibly fail if the MSRs are set wrong
 
+That would be an improvement, I think.
 
-> On Jul 27, 2018,@1:28 PM, Jim Mattson <jmattson@google.com> wrote:
-> 
->> On Fri, Jul 27, 2018@12:41 PM, Andy Lutomirski <luto@kernel.org> wrote:
->>> On Wed, Feb 8, 2017@12:09 AM, Kyle Huey <me@kylehuey.com> wrote:
->>> Hardware support for faulting on the cpuid instruction is not required to
->>> emulate it, because cpuid triggers a VM exit anyways. KVM handles the relevant
->>> MSRs (MSR_PLATFORM_INFO and MSR_MISC_FEATURES_ENABLE) and upon a
->>> cpuid-induced VM exit checks the cpuid faulting state and the CPL.
->>> kvm_require_cpl is even kind enough to inject the GP fault for us.
->>> 
->>> Signed-off-by: Kyle Huey <khuey at kylehuey.com>
->>> Reviewed-by: David Matlack <dmatlack at google.com>
->>> ---
->>> ...
->>> @@ -7613,16 +7636,19 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->>> 
->>>        kvm_clear_async_pf_completion_queue(vcpu);
->>>        kvm_async_pf_hash_reset(vcpu);
->>>        vcpu->arch.apf.halted = false;
->>> 
->>>        if (!init_event) {
->>>                kvm_pmu_reset(vcpu);
->>>                vcpu->arch.smbase = 0x30000;
->>> +
->>> +               vcpu->arch.msr_platform_info = MSR_PLATFORM_INFO_CPUID_FAULT;
->>> +               vcpu->arch.msr_misc_features_enables = 0;
->> 
->> Jim, I assume you're worried about this bit?  It seems like
->> msr_platform_info should maybe be initialized to zero to avoid causing
->> an unintended migration issue.
-> 
-> Initializing this bit to zero helps with migration, but then if the
-> CPUID faulting bits in both MSRs are set, userspace has to take pains
-> to ensure that MSR_PLATFORM_INFO is restored first, or the
-> MSR_MISC_FEATURES_ENABLES value will be rejected.
+>> I'm also concerned about the 0 in the "Maximum Non-Turbo Ratio" field
+>> feeding into someone's calculated TSC frequency.
+>
+> Hmm. I don’t have a good answer to that. Are there any real CPUs that have this MSR but don’t have that field?
 
-The code could drop the constraint and just let the entry possibly fail if the MSRs are set wrong
-
-> 
-> I'm also concerned about the 0 in the "Maximum Non-Turbo Ratio" field
-> feeding into someone's calculated TSC frequency.
-
-Hmm. I don’t have a good answer to that. Are there any real CPUs that have this MSR but don’t have that field?--
+No. The reason I bring this up is that a customer has code that
+expects to be able to derive the TSC frequency from this MSR (per
+Intel's instructions in SDM volume 3, section 18.7.3), and they were
+surprised to find that the MSR raises #GP on our platform. We're
+looking into cherry-picking this support from upstream as a start, but
+I know the customer would be unhappy to read zero from bits 15:8.
+--
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
 More majordomo info at  http://vger.kernel.org/majordomo-info.html
