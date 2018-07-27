@@ -1,53 +1,66 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Fri, 27 Jul 2018 21:20:19 +0900
-Subject: [PATCH 22/25] selftests/ftrace: Add function profiling stat testcase
+Date: Fri, 27 Jul 2018 21:20:47 +0900
+Subject: [PATCH 23/25] selftests/ftrace: Add max stack tracer testcase
 In-Reply-To: <153269339575.3084.16279591141931053689.stgit@devbox>
 References: <153269339575.3084.16279591141931053689.stgit@devbox>
-Message-ID: <153269401935.3084.14477880989343988808.stgit@devbox>
+Message-ID: <153269404756.3084.16183774834747280299.stgit@devbox>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180727122019.btEI1stfSmlx8LNjniOYZRyCT2tv-a9mbEWI8igshzI@z>
+Message-ID: <20180727122047.BdgIcSa6hi0I0vdhXSdWgDLYqiZb2t9_i2EllYOifIs@z>
 
-Add a testcase for function profiling per-cpu statistics
-interface. There is already func_profile.tc, but that is
-mainly focusing on the combination of function-profiler
-and function tracer. This testcase ensures trace_stat
-per-cpu function statistics is correctly updated.
+Add a testcase for max stack tracer, which checks basic
+max stack usage tracing and its filter feature.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- .../ftrace/test.d/ftrace/func_profile_stat.tc      |   23 ++++++++++++++++++++
- 1 file changed, 23 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
+ .../ftrace/test.d/ftrace/func_stack_tracer.tc      |   39 ++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
 
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
 new file mode 100644
-index 000000000000..1d2440d80ec3
+index 000000000000..b414f0e3c646
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
-@@ -0,0 +1,23 @@
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
+@@ -0,0 +1,39 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: ftrace - function profiling
++# description: ftrace - Max stack tracer
++# Test the basic function of max-stack usage tracing
 +
-+[ ! -f function_profile_enabled ] && exit_unsupported
++if [ ! -f stack_trace ]; then
++  echo "Max stack tracer is not supported - please make CONFIG_STACK_TRACER=y"
++  exit_unsupported
++fi
 +
-+: "Enable function profile"
-+echo 1 > function_profile_enabled
++echo > stack_trace_filter
++echo 0 > stack_max_size
++echo 1 > /proc/sys/kernel/stack_tracer_enabled
 +
-+: "Profile must be updated"
-+cp trace_stat/function0 $TMPDIR/
-+( echo "forked"; sleep 1 )
-+: "diff returns 0 if there is no difference"
-+! diff trace_stat/function0 $TMPDIR/function0
++: "Fork and wait for the first entry become !lock"
++timeout=10
++while [ $timeout -ne 0 ]; do
++  ( echo "forked" )
++  FL=`grep " 0)" stack_trace`
++  echo $FL | grep -q "lock" || break;
++  timeout=$((timeout - 1))
++done
++echo 0 > /proc/sys/kernel/stack_tracer_enabled
 +
-+echo 0 > function_profile_enabled
++echo '*lock*' > stack_trace_filter
++test `cat stack_trace_filter | wc -l` -eq `grep lock stack_trace_filter | wc -l`
 +
-+: "Profile must NOT be updated"
-+cp trace_stat/function0 $TMPDIR/
-+( echo "forked"; sleep 1 )
-+: "diff returns 0 if there is no difference"
-+diff trace_stat/function0 $TMPDIR/function0
++echo 0 > stack_max_size
++echo 1 > /proc/sys/kernel/stack_tracer_enabled
 +
++: "Fork and always the first entry including lock"
++timeout=10
++while [ $timeout -ne 0 ]; do
++  ( echo "forked" )
++  FL=`grep " 0)" stack_trace`
++  echo $FL | grep -q "lock"
++  timeout=$((timeout - 1))
++done
++echo 0 > /proc/sys/kernel/stack_tracer_enabled
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
