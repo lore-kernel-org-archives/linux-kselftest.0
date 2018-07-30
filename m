@@ -1,127 +1,54 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Mon, 30 Jul 2018 17:32:30 -0600
-Subject: [PATCH] selftests: membarrier: fix test by checking supported
- commands
-In-Reply-To: <20180730160543.19056-1-rafael.tinoco@linaro.org>
-References: <20180730160543.19056-1-rafael.tinoco@linaro.org>
-Message-ID: <9edf8459-aea1-c59e-5d73-112e986777e1@kernel.org>
+From: bauerman at linux.ibm.com (Thiago Jung Bauermann)
+Date: Mon, 30 Jul 2018 20:53:30 -0300
+Subject: [PATCH 1/3] userfaultfd: selftest: Fix checking of
+ userfaultfd_open() result
+In-Reply-To: <20180725135942.GC25188@rapoport-lnx>
+References: <20180725024209.32586-1-bauerman@linux.ibm.com>
+ <20180725024209.32586-2-bauerman@linux.ibm.com>
+ <20180725135942.GC25188@rapoport-lnx>
+Message-ID: <8736w0b7r9.fsf@morokweng.localdomain>
 
-Hi Rafael,
 
-On 07/30/2018 10:05 AM, Rafael David Tinoco wrote:
-> Makes membarrier_test compatible with older kernels (LTS) by checking if
-> the membarrier features exist before running the tests.
-> 
-> Link: https://bugs.linaro.org/show_bug.cgi?id=3771
-> Signed-off-by: Rafael David Tinoco <rafael.tinoco at linaro.org>
-> Cc: <stable at vger.kernel.org> #v4.17
-> ---
->  .../selftests/membarrier/membarrier_test.c    | 69 +++++++++++--------
->  1 file changed, 41 insertions(+), 28 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
-> index 6793f8ecc8e7..b96caa096e2f 100644
-> --- a/tools/testing/selftests/membarrier/membarrier_test.c
-> +++ b/tools/testing/selftests/membarrier/membarrier_test.c
-> @@ -225,7 +225,14 @@ static int test_membarrier_global_expedited_success(void)
->  
->  static int test_membarrier(void)
->  {
-> -	int status;
-> +	int supported, status;
-> +
-> +	supported = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
-> +	if (supported < 0) {
-> +		ksft_test_result_fail(
-> +			"sys_membarrier() failed to query supported cmds\n");
-> +		return supported;
-> +	}
->  
+Hello Mike,
 
-ksft_exit_skip() is the right interface to use here. If feature isn't supported,
-it should exit skip as opposed fail.
+Thanks for promptly reviewing the patches.
 
->  	status = test_membarrier_cmd_fail();
->  	if (status)
-> @@ -236,21 +243,22 @@ static int test_membarrier(void)
->  	status = test_membarrier_global_success();
->  	if (status)
->  		return status;
-> -	status = test_membarrier_private_expedited_fail();
-> -	if (status)
-> -		return status;
-> -	status = test_membarrier_register_private_expedited_success();
-> -	if (status)
-> -		return status;
-> -	status = test_membarrier_private_expedited_success();
-> -	if (status)
-> -		return status;
-> -	status = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
-> -	if (status < 0) {
-> -		ksft_test_result_fail("sys_membarrier() failed\n");
-> -		return status;
-> +
-> +	/* commit 22e4ebb975822833b083533035233d128b30e98f added this feature */
-> +	if (supported & MEMBARRIER_CMD_PRIVATE_EXPEDITED) {
-> +		status = test_membarrier_private_expedited_fail();
-> +		if (status)
-> +			return status;
-> +		status = test_membarrier_register_private_expedited_success();
-> +		if (status)
-> +			return status;
-> +		status = test_membarrier_private_expedited_success();
-> +		if (status)
-> +			return status;
->  	}
-> -	if (status & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
-> +
-> +	/* commit 70216e18e519a54a2f13569e8caff99a092a92d6 added this feature */
-> +	if (supported & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
->  		status = test_membarrier_private_expedited_sync_core_fail();
->  		if (status)
->  			return status;
-> @@ -261,19 +269,24 @@ static int test_membarrier(void)
->  		if (status)
->  			return status;
->  	}
-> -	/*
-> -	 * It is valid to send a global membarrier from a non-registered
-> -	 * process.
-> -	 */
-> -	status = test_membarrier_global_expedited_success();
-> -	if (status)
-> -		return status;
-> -	status = test_membarrier_register_global_expedited_success();
-> -	if (status)
-> -		return status;
-> -	status = test_membarrier_global_expedited_success();
-> -	if (status)
-> -		return status;
-> +
-> +	/* commit c5f58bd58f432be5d92df33c5458e0bcbee3aadf added this feature */
-> +	if (supported & MEMBARRIER_CMD_GLOBAL_EXPEDITED) {
-> +		/*
-> +		 * It is valid to send a global membarrier from a non-registered
-> +		 * process.
-> +		 */
-> +		status = test_membarrier_global_expedited_success();
-> +		if (status)
-> +			return status;
-> +		status = test_membarrier_register_global_expedited_success();
-> +		if (status)
-> +			return status;
-> +		status = test_membarrier_global_expedited_success();
-> +		if (status)
-> +			return status;
-> +	}
-> +
->  	return 0;
->  }
->  
-> 
+Mike Rapoport <rppt at linux.vnet.ibm.com> writes:
 
-thanks,
--- Shuah
+> Hi,
+>
+> On Tue, Jul 24, 2018 at 11:42:07PM -0300, Thiago Jung Bauermann wrote:
+>> If the userfaultfd test is run on a kernel with CONFIG_USERFAULTFD=n, it
+>> will report that the system call is not available yet go ahead and continue
+>> anyway:
+>>
+>>   # ./userfaultfd anon 30 1
+>>   nr_pages: 480, nr_pages_per_cpu: 120
+>>   userfaultfd syscall not available in this kernel
+>>   bounces: 0, mode:, register failure
+>>
+>> This is because userfaultfd_open() returns 0 on success and 1 on error but
+>> all callers assume that it returns < 0 on error.
+>>
+>> Since the convention of the test as a whole is the one used by
+>> userfault_open(), fix its callers instead. Now the test behaves correctly:
+>>
+>>   # ./userfaultfd anon 30 1
+>>   nr_pages: 480, nr_pages_per_cpu: 120
+>>   userfaultfd syscall not available in this kernel
+>>
+>> Signed-off-by: Thiago Jung Bauermann <bauerman at linux.ibm.com>
+>
+> It seems that this patch is superseded by the second patch in this series.
+
+Yes, but since this is a simple bugfix while the other patch is a
+proposed improvement which can be debated, I think it's worthwhile to
+keep them separate.
+
+--
+Thiago Jung Bauermann
+IBM Linux Technology Center
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
