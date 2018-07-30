@@ -1,57 +1,61 @@
 From: petrm@mellanox.com (Petr Machata)
-Date: Mon, 30 Jul 2018 16:39:46 +0200
-Subject: [PATCH net-next 1/5] selftests: forwarding: lib: Add require_command()
+Date: Mon, 30 Jul 2018 16:39:52 +0200
+Subject: [PATCH net-next 2/5] selftests: forwarding: lib: Support team devices
 In-Reply-To: <cover.1532961216.git.petrm@mellanox.com>
 References: <cover.1532961216.git.petrm@mellanox.com>
 Message-ID:
- <1e938f8458821359f085a0815df487581b0da159.1532961216.git.petrm@mellanox.com>
+ <f1578e8fee0a3e2afd436c0ff0d49ba04e7c3bbf.1532961216.git.petrm@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180730143946.7gq1UDLk1NiZpz7RKbzlhW43oQq6rtX3Q9ub03i1W1Q@z>
+Message-ID: <20180730143952.WTA7CDbVxS0HdT50M_LoQ8X3yDZxerBM_tEBC8QgEdw@z>
 
-The logic for testing whether a certain command is available is used
-several times in the current code base. The tests in follow-up patches
-add more requirements like that.
-
-Therefore extract the logic into a named function, require_command(),
-that can be used directly from lib.sh as well as from any test that
-wishes to declare dependence on some command.
+Add team_create() and team_destroy() to manage team netdevices.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 ---
- tools/testing/selftests/net/forwarding/lib.sh | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ tools/testing/selftests/net/forwarding/lib.sh | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
 diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 158d59ffee40..81e36157bf16 100644
+index 81e36157bf16..3a4eba4f0d08 100644
 --- a/tools/testing/selftests/net/forwarding/lib.sh
 +++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -62,15 +62,18 @@ if [[ "$CHECK_TC" = "yes" ]]; then
- 	check_tc_version
- fi
+@@ -8,6 +8,7 @@
+ PING=${PING:=ping}
+ PING6=${PING6:=ping6}
+ MZ=${MZ:=mausezahn}
++TEAMD=${TEAMD:=teamd}
+ WAIT_TIME=${WAIT_TIME:=5}
+ PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
+ PAUSE_ON_CLEANUP=${PAUSE_ON_CLEANUP:=no}
+@@ -425,6 +426,28 @@ vlan_destroy()
+ 	ip link del dev $name
+ }
  
--if [[ ! -x "$(command -v jq)" ]]; then
--	echo "SKIP: jq not installed"
--	exit 1
--fi
-+require_command()
++team_create()
 +{
-+	local cmd=$1; shift
- 
--if [[ ! -x "$(command -v $MZ)" ]]; then
--	echo "SKIP: $MZ not installed"
--	exit 1
--fi
-+	if [[ ! -x "$(command -v "$cmd")" ]]; then
-+		echo "SKIP: $cmd not installed"
-+		exit 1
-+	fi
++	local if_name=$1; shift
++	local mode=$1; shift
++
++	require_command $TEAMD
++	$TEAMD -t $if_name -d -c '{"runner": {"name": "'$mode'"}}'
++	for slave in "$@"; do
++		ip link set dev $slave down
++		ip link set dev $slave master $if_name
++		ip link set dev $slave up
++	done
++	ip link set dev $if_name up
 +}
 +
-+require_command jq
-+require_command $MZ
- 
- if [[ ! -v NUM_NETIFS ]]; then
- 	echo "SKIP: importer does not define \"NUM_NETIFS\""
++team_destroy()
++{
++	local if_name=$1; shift
++
++	$TEAMD -t $if_name -k
++}
++
+ master_name_get()
+ {
+ 	local if_name=$1
 -- 
 2.4.11
 
