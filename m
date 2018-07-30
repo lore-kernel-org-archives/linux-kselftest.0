@@ -1,316 +1,115 @@
-From: petrm at mellanox.com (Petr Machata)
-Date: Mon, 30 Jul 2018 16:40:07 +0200
-Subject: [PATCH net-next 5/5] selftests: forwarding: Test mirror-to-gretap w/
- UL team LACP
-In-Reply-To: <cover.1532961216.git.petrm@mellanox.com>
-References: <cover.1532961216.git.petrm@mellanox.com>
-Message-ID: <118764ddd590dde7801d99ee235079e8781aecf6.1532961216.git.petrm@mellanox.com>
+From: rafael.tinoco at linaro.org (Rafael David Tinoco)
+Date: Mon, 30 Jul 2018 13:05:43 -0300
+Subject: [PATCH] selftests: membarrier: fix test by checking supported commands
+Message-ID: <20180730160543.19056-1-rafael.tinoco@linaro.org>
 
-This tests mirror-to-gretap when an underlay packet path includes a team
-device which is not in loadbalance mode, but in LACP mode. The test
-manipulates LAG membership to achieve changes in txability, thus making
-sure that a driver that offloads mirror-to-gretap doesn't just consider
-upness of a device.
+Makes membarrier_test compatible with older kernels (LTS) by checking if
+the membarrier features exist before running the tests.
 
-Signed-off-by: Petr Machata <petrm at mellanox.com>
+Link: https://bugs.linaro.org/show_bug.cgi?id=3771
+Signed-off-by: Rafael David Tinoco <rafael.tinoco at linaro.org>
+Cc: <stable at vger.kernel.org> #v4.17
 ---
- .../net/forwarding/mirror_gre_lag_lacp.sh          | 285 +++++++++++++++++++++
- 1 file changed, 285 insertions(+)
- create mode 100755 tools/testing/selftests/net/forwarding/mirror_gre_lag_lacp.sh
+ .../selftests/membarrier/membarrier_test.c    | 69 +++++++++++--------
+ 1 file changed, 41 insertions(+), 28 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_lag_lacp.sh b/tools/testing/selftests/net/forwarding/mirror_gre_lag_lacp.sh
-new file mode 100755
-index 000000000000..9edf4cb104a8
---- /dev/null
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre_lag_lacp.sh
-@@ -0,0 +1,285 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
+index 6793f8ecc8e7..b96caa096e2f 100644
+--- a/tools/testing/selftests/membarrier/membarrier_test.c
++++ b/tools/testing/selftests/membarrier/membarrier_test.c
+@@ -225,7 +225,14 @@ static int test_membarrier_global_expedited_success(void)
+ 
+ static int test_membarrier(void)
+ {
+-	int status;
++	int supported, status;
 +
-+# Test for "tc action mirred egress mirror" when the underlay route points at a
-+# team device.
-+#
-+# +----------------------+                             +----------------------+
-+# | H1                   |                             |                   H2 |
-+# |    + $h1.333         |                             |        $h1.555 +     |
-+# |    | 192.0.2.1/28    |                             |  192.0.2.18/28 |     |
-+# +----|-----------------+                             +----------------|-----+
-+#      |                                $h1                             |
-+#      +---------------------------------+------------------------------+
-+#                                        |
-+# +--------------------------------------|------------------------------------+
-+# | SW                                   o---> mirror                         |
-+# |                                      |                                    |
-+# |   +----------------------------------+------------------------------+     |
-+# |   |                                $swp1                            |     |
-+# |   + $swp1.333                                             $swp1.555 +     |
-+# |     192.0.2.2/28                                      192.0.2.17/28       |
-+# |                                                                           |
-+# |                                                                           |
-+# |   + gt4 (gretap)      ,-> + lag1 (team)                                   |
-+# |     loc=192.0.2.129   |   | 192.0.2.129/28                                |
-+# |     rem=192.0.2.130 --'   |                                               |
-+# |     ttl=100               |                                               |
-+# |     tos=inherit           |                                               |
-+# |      _____________________|______________________                         |
-+# |     /                                            \                        |
-+# |    /                                              \                       |
-+# |   + $swp3                                          + $swp4                |
-+# +---|------------------------------------------------|----------------------+
-+#     |                                                |
-+# +---|------------------------------------------------|----------------------+
-+# |   + $h3                                            + $h4               H3 |
-+# |    \                                              /                       |
-+# |     \____________________________________________/                        |
-+# |                           |                                               |
-+# |                           + lag2 (team)                                   |
-+# |                             192.0.2.130/28                                |
-+# |                                                                           |
-+# +---------------------------------------------------------------------------+
++	supported = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
++	if (supported < 0) {
++		ksft_test_result_fail(
++			"sys_membarrier() failed to query supported cmds\n");
++		return supported;
++	}
+ 
+ 	status = test_membarrier_cmd_fail();
+ 	if (status)
+@@ -236,21 +243,22 @@ static int test_membarrier(void)
+ 	status = test_membarrier_global_success();
+ 	if (status)
+ 		return status;
+-	status = test_membarrier_private_expedited_fail();
+-	if (status)
+-		return status;
+-	status = test_membarrier_register_private_expedited_success();
+-	if (status)
+-		return status;
+-	status = test_membarrier_private_expedited_success();
+-	if (status)
+-		return status;
+-	status = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
+-	if (status < 0) {
+-		ksft_test_result_fail("sys_membarrier() failed\n");
+-		return status;
 +
-+ALL_TESTS="
-+	test_mirror_gretap_first
-+	test_mirror_gretap_second
-+"
++	/* commit 22e4ebb975822833b083533035233d128b30e98f added this feature */
++	if (supported & MEMBARRIER_CMD_PRIVATE_EXPEDITED) {
++		status = test_membarrier_private_expedited_fail();
++		if (status)
++			return status;
++		status = test_membarrier_register_private_expedited_success();
++		if (status)
++			return status;
++		status = test_membarrier_private_expedited_success();
++		if (status)
++			return status;
+ 	}
+-	if (status & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
 +
-+NUM_NETIFS=6
-+source lib.sh
-+source mirror_lib.sh
-+source mirror_gre_lib.sh
++	/* commit 70216e18e519a54a2f13569e8caff99a092a92d6 added this feature */
++	if (supported & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
+ 		status = test_membarrier_private_expedited_sync_core_fail();
+ 		if (status)
+ 			return status;
+@@ -261,19 +269,24 @@ static int test_membarrier(void)
+ 		if (status)
+ 			return status;
+ 	}
+-	/*
+-	 * It is valid to send a global membarrier from a non-registered
+-	 * process.
+-	 */
+-	status = test_membarrier_global_expedited_success();
+-	if (status)
+-		return status;
+-	status = test_membarrier_register_global_expedited_success();
+-	if (status)
+-		return status;
+-	status = test_membarrier_global_expedited_success();
+-	if (status)
+-		return status;
 +
-+require_command $ARPING
++	/* commit c5f58bd58f432be5d92df33c5458e0bcbee3aadf added this feature */
++	if (supported & MEMBARRIER_CMD_GLOBAL_EXPEDITED) {
++		/*
++		 * It is valid to send a global membarrier from a non-registered
++		 * process.
++		 */
++		status = test_membarrier_global_expedited_success();
++		if (status)
++			return status;
++		status = test_membarrier_register_global_expedited_success();
++		if (status)
++			return status;
++		status = test_membarrier_global_expedited_success();
++		if (status)
++			return status;
++	}
 +
-+vlan_host_create()
-+{
-+	local if_name=$1; shift
-+	local vid=$1; shift
-+	local vrf_name=$1; shift
-+	local ips=("${@}")
-+
-+	vrf_create $vrf_name
-+	ip link set dev $vrf_name up
-+	vlan_create $if_name $vid $vrf_name "${ips[@]}"
-+}
-+
-+vlan_host_destroy()
-+{
-+	local if_name=$1; shift
-+	local vid=$1; shift
-+	local vrf_name=$1; shift
-+
-+	vlan_destroy $if_name $vid
-+	ip link set dev $vrf_name down
-+	vrf_destroy $vrf_name
-+}
-+
-+h1_create()
-+{
-+	vlan_host_create $h1 333 vrf-h1 192.0.2.1/28
-+	ip -4 route add 192.0.2.16/28 vrf vrf-h1 nexthop via 192.0.2.2
-+}
-+
-+h1_destroy()
-+{
-+	ip -4 route del 192.0.2.16/28 vrf vrf-h1
-+	vlan_host_destroy $h1 333 vrf-h1
-+}
-+
-+h2_create()
-+{
-+	vlan_host_create $h1 555 vrf-h2 192.0.2.18/28
-+	ip -4 route add 192.0.2.0/28 vrf vrf-h2 nexthop via 192.0.2.17
-+}
-+
-+h2_destroy()
-+{
-+	ip -4 route del 192.0.2.0/28 vrf vrf-h2
-+	vlan_host_destroy $h1 555 vrf-h2
-+}
-+
-+h3_create_team()
-+{
-+	team_create lag2 lacp $h3 $h4
-+	__simple_if_init lag2 vrf-h3 192.0.2.130/32
-+	ip -4 route add vrf vrf-h3 192.0.2.129/32 dev lag2
-+}
-+
-+h3_destroy_team()
-+{
-+	ip -4 route del vrf vrf-h3 192.0.2.129/32 dev lag2
-+	__simple_if_fini lag2 192.0.2.130/32
-+	team_destroy lag2
-+
-+	ip link set dev $h3 down
-+	ip link set dev $h4 down
-+}
-+
-+h3_create()
-+{
-+	vrf_create vrf-h3
-+	ip link set dev vrf-h3 up
-+	tc qdisc add dev $h3 clsact
-+	tc qdisc add dev $h4 clsact
-+	h3_create_team
-+}
-+
-+h3_destroy()
-+{
-+	h3_destroy_team
-+	tc qdisc del dev $h4 clsact
-+	tc qdisc del dev $h3 clsact
-+	ip link set dev vrf-h3 down
-+	vrf_destroy vrf-h3
-+}
-+
-+switch_create()
-+{
-+	ip link set dev $swp1 up
-+	tc qdisc add dev $swp1 clsact
-+	vlan_create $swp1 333 "" 192.0.2.2/28
-+	vlan_create $swp1 555 "" 192.0.2.17/28
-+
-+	tunnel_create gt4 gretap 192.0.2.129 192.0.2.130 \
-+		      ttl 100 tos inherit
-+
-+	ip link set dev $swp3 up
-+	ip link set dev $swp4 up
-+	team_create lag1 lacp $swp3 $swp4
-+	__addr_add_del lag1 add 192.0.2.129/32
-+	ip -4 route add 192.0.2.130/32 dev lag1
-+}
-+
-+switch_destroy()
-+{
-+	ip -4 route del 192.0.2.130/32 dev lag1
-+	__addr_add_del lag1 del 192.0.2.129/32
-+	team_destroy lag1
-+
-+	ip link set dev $swp4 down
-+	ip link set dev $swp3 down
-+
-+	tunnel_destroy gt4
-+
-+	vlan_destroy $swp1 555
-+	vlan_destroy $swp1 333
-+	tc qdisc del dev $swp1 clsact
-+	ip link set dev $swp1 down
-+}
-+
-+setup_prepare()
-+{
-+	h1=${NETIFS[p1]}
-+	swp1=${NETIFS[p2]}
-+
-+	swp3=${NETIFS[p3]}
-+	h3=${NETIFS[p4]}
-+
-+	swp4=${NETIFS[p5]}
-+	h4=${NETIFS[p6]}
-+
-+	vrf_prepare
-+
-+	ip link set dev $h1 up
-+	h1_create
-+	h2_create
-+	h3_create
-+	switch_create
-+
-+	trap_install $h3 ingress
-+	trap_install $h4 ingress
-+}
-+
-+cleanup()
-+{
-+	pre_cleanup
-+
-+	trap_uninstall $h4 ingress
-+	trap_uninstall $h3 ingress
-+
-+	switch_destroy
-+	h3_destroy
-+	h2_destroy
-+	h1_destroy
-+	ip link set dev $h1 down
-+
-+	vrf_cleanup
-+}
-+
-+test_lag_slave()
-+{
-+	local up_dev=$1; shift
-+	local down_dev=$1; shift
-+	local what=$1; shift
-+
-+	RET=0
-+
-+	mirror_install $swp1 ingress gt4 \
-+		       "proto 802.1q flower vlan_id 333 $tcflags"
-+
-+	# Move $down_dev away from the team. That will prompt change in
-+	# txability of the connected device, without changing its upness. The
-+	# driver should notice the txability change and move the traffic to the
-+	# other slave.
-+	ip link set dev $down_dev nomaster
-+	sleep 2
-+	mirror_test vrf-h1 192.0.2.1 192.0.2.18 $up_dev 1 10
-+
-+	# Test lack of connectivity when neither slave is txable.
-+	ip link set dev $up_dev nomaster
-+	sleep 2
-+	mirror_test vrf-h1 192.0.2.1 192.0.2.18 $h3 1 0
-+	mirror_test vrf-h1 192.0.2.1 192.0.2.18 $h4 1 0
-+	mirror_uninstall $swp1 ingress
-+
-+	# Recreate H3's team device, because mlxsw, which this test is
-+	# predominantly mean to test, requires a bottom-up construction and
-+	# doesn't allow enslavement to a device that already has an upper.
-+	h3_destroy_team
-+	h3_create_team
-+	# Wait for ${h,swp}{3,4}.
-+	setup_wait
-+
-+	log_test "$what ($tcflags)"
-+}
-+
-+test_mirror_gretap_first()
-+{
-+	test_lag_slave $h3 $h4 "mirror to gretap: LAG first slave"
-+}
-+
-+test_mirror_gretap_second()
-+{
-+	test_lag_slave $h4 $h3 "mirror to gretap: LAG second slave"
-+}
-+
-+test_all()
-+{
-+	slow_path_trap_install $swp1 ingress
-+	slow_path_trap_install $swp1 egress
-+
-+	tests_run
-+
-+	slow_path_trap_uninstall $swp1 egress
-+	slow_path_trap_uninstall $swp1 ingress
-+}
-+
-+trap cleanup EXIT
-+
-+setup_prepare
-+setup_wait
-+
-+tcflags="skip_hw"
-+test_all
-+
-+if ! tc_offload_check; then
-+	echo "WARN: Could not test offloaded functionality"
-+else
-+	tcflags="skip_sw"
-+	test_all
-+fi
-+
-+exit $EXIT_STATUS
+ 	return 0;
+ }
+ 
 -- 
-2.4.11
+2.18.0
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
