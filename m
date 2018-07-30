@@ -1,40 +1,38 @@
-From: davem@davemloft.net (David Miller)
-Date: Mon, 30 Jul 2018 09:48:25 -0700 (PDT)
-Subject: [PATCH net-next 0/5] A test for mirror-to-gretap with team in
- UL packet path
-In-Reply-To: <cover.1532961216.git.petrm@mellanox.com>
-References: <cover.1532961216.git.petrm@mellanox.com>
-Message-ID: <20180730.094825.1936294046318747308.davem@davemloft.net>
+From: dima@arista.com (Dmitry Safonov)
+Date: Mon, 30 Jul 2018 18:39:20 +0100
+Subject: [PATCH 00/18] xfrm: Add compat layer
+In-Reply-To: <20180728.141812.1026007723536955024.davem@davemloft.net>
+References: <1532703111.2679.20.camel@arista.com>
+ <CADhJOfam+cY8uD4XTGvZSEFQdAgTu49G6cg6c64NJoP3bNuBmw@mail.gmail.com>
+ <1532795215.2679.27.camel@arista.com>
+ <20180728.141812.1026007723536955024.davem@davemloft.net>
+Message-ID: <1532972360.2679.32.camel@arista.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180730164825.XBcvMdyAt7G9b7z9p_w17Xm5pZFdKo7f3BHMSK0L0fE@z>
+Message-ID: <20180730173920.kCawoKhvyodlC3mGEk5x5iRfvWOq4Q8JD4CAqtJ3SV8@z>
 
-From: Petr Machata <petrm@mellanox.com>
-Date: Mon, 30 Jul 2018 16:37:17 +0200
+On Sat, 2018-07-28@14:18 -0700, David Miller wrote:
+> From: Dmitry Safonov <dima at arista.com>
+> Date: Sat, 28 Jul 2018 17:26:55 +0100
+> 
+> > Well, I think, I'll rework my patches set according to critics and
+> > separate compat xfrm layer. I've already a selftest to check that
+> 32/64
+> > bit xfrm works - so the most time-taking part is done.
+> 
+> The way you've done the compat structures using __packed is only
+> going
+> to work on x86, just FYI.
 
-> This patchset adds a test for "tc action mirred mirror" where the
-> mirrored-to device is a gretap, and underlay path contains a team
-> device.
-> 
-> In patch #1 require_command() is added, which should henceforth be used
-> to declare dependence on a certain tool.
-> 
-> In patch #2, two new functions, team_create() and team_destroy(), are
-> added to lib.sh.
-> 
-> The newly-added test uses arping, which isn't necessarily available.
-> Therefore patch #3 introduces $ARPING, and a preexisting test is fixed
-> to require_command $ARPING.
-> 
-> In patches #4 and #5, two new tests are added. In both cases, a team
-> device is on egress path of a mirrored packet in a mirror-to-gretap
-> scenario. In the first one, the team device is in loadbalance mode, in
-> the second one it's in lacp mode. (The difference in modes necessitates
-> a different testing strategy, hence two test cases instead of just
-> parameterizing one.)
+Thanks for pointing, so I'll probably cover it under something like
+HAS_COMPAT_XFRM.
+(if there isn't any better idea).
 
-I always like seeing new test cases. :)
+> The "32-bit alignment for 64-bit objects" thing x86 has is very much
+> not universal amongst ABIs having 32-bit and 64-bit variants.
 
-Series applied, thanks.
+-- 
+Thanks,
+             Dmitry
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
