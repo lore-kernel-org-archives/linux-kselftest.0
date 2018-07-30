@@ -1,135 +1,40 @@
-From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
-Date: Mon, 30 Jul 2018 12:13:55 -0400 (EDT)
-Subject: [PATCH] selftests: membarrier: fix test by checking supported
- commands
-In-Reply-To: <20180730160543.19056-1-rafael.tinoco@linaro.org>
-References: <20180730160543.19056-1-rafael.tinoco@linaro.org>
-Message-ID: <1707195302.6878.1532967235729.JavaMail.zimbra@efficios.com>
+From: davem@davemloft.net (David Miller)
+Date: Mon, 30 Jul 2018 09:48:25 -0700 (PDT)
+Subject: [PATCH net-next 0/5] A test for mirror-to-gretap with team in
+ UL packet path
+In-Reply-To: <cover.1532961216.git.petrm@mellanox.com>
+References: <cover.1532961216.git.petrm@mellanox.com>
+Message-ID: <20180730.094825.1936294046318747308.davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180730161355.9NIXEsTPBnWUnaSBX9A52X_9ggr4GveLKeiooSxyQI4@z>
+Message-ID: <20180730164825.XBcvMdyAt7G9b7z9p_w17Xm5pZFdKo7f3BHMSK0L0fE@z>
 
------ On Jul 30, 2018,@12:05 PM, Rafael David Tinoco rafael.tinoco@linaro.org wrote:
+From: Petr Machata <petrm@mellanox.com>
+Date: Mon, 30 Jul 2018 16:37:17 +0200
 
-> Makes membarrier_test compatible with older kernels (LTS) by checking if
-> the membarrier features exist before running the tests.
+> This patchset adds a test for "tc action mirred mirror" where the
+> mirrored-to device is a gretap, and underlay path contains a team
+> device.
 > 
-> Link: https://bugs.linaro.org/show_bug.cgi?id=3771
-> Signed-off-by: Rafael David Tinoco <rafael.tinoco at linaro.org>
-> Cc: <stable at vger.kernel.org> #v4.17
-
-Acked-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
-
-Thanks!
-
-Mathieu
-
-> ---
-> .../selftests/membarrier/membarrier_test.c    | 69 +++++++++++--------
-> 1 file changed, 41 insertions(+), 28 deletions(-)
+> In patch #1 require_command() is added, which should henceforth be used
+> to declare dependence on a certain tool.
 > 
-> diff --git a/tools/testing/selftests/membarrier/membarrier_test.c
-> b/tools/testing/selftests/membarrier/membarrier_test.c
-> index 6793f8ecc8e7..b96caa096e2f 100644
-> --- a/tools/testing/selftests/membarrier/membarrier_test.c
-> +++ b/tools/testing/selftests/membarrier/membarrier_test.c
-> @@ -225,7 +225,14 @@ static int test_membarrier_global_expedited_success(void)
+> In patch #2, two new functions, team_create() and team_destroy(), are
+> added to lib.sh.
 > 
-> static int test_membarrier(void)
-> {
-> -	int status;
-> +	int supported, status;
-> +
-> +	supported = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
-> +	if (supported < 0) {
-> +		ksft_test_result_fail(
-> +			"sys_membarrier() failed to query supported cmds\n");
-> +		return supported;
-> +	}
+> The newly-added test uses arping, which isn't necessarily available.
+> Therefore patch #3 introduces $ARPING, and a preexisting test is fixed
+> to require_command $ARPING.
 > 
-> 	status = test_membarrier_cmd_fail();
-> 	if (status)
-> @@ -236,21 +243,22 @@ static int test_membarrier(void)
-> 	status = test_membarrier_global_success();
-> 	if (status)
-> 		return status;
-> -	status = test_membarrier_private_expedited_fail();
-> -	if (status)
-> -		return status;
-> -	status = test_membarrier_register_private_expedited_success();
-> -	if (status)
-> -		return status;
-> -	status = test_membarrier_private_expedited_success();
-> -	if (status)
-> -		return status;
-> -	status = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
-> -	if (status < 0) {
-> -		ksft_test_result_fail("sys_membarrier() failed\n");
-> -		return status;
-> +
-> +	/* commit 22e4ebb975822833b083533035233d128b30e98f added this feature */
-> +	if (supported & MEMBARRIER_CMD_PRIVATE_EXPEDITED) {
-> +		status = test_membarrier_private_expedited_fail();
-> +		if (status)
-> +			return status;
-> +		status = test_membarrier_register_private_expedited_success();
-> +		if (status)
-> +			return status;
-> +		status = test_membarrier_private_expedited_success();
-> +		if (status)
-> +			return status;
-> 	}
-> -	if (status & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
-> +
-> +	/* commit 70216e18e519a54a2f13569e8caff99a092a92d6 added this feature */
-> +	if (supported & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
-> 		status = test_membarrier_private_expedited_sync_core_fail();
-> 		if (status)
-> 			return status;
-> @@ -261,19 +269,24 @@ static int test_membarrier(void)
-> 		if (status)
-> 			return status;
-> 	}
-> -	/*
-> -	 * It is valid to send a global membarrier from a non-registered
-> -	 * process.
-> -	 */
-> -	status = test_membarrier_global_expedited_success();
-> -	if (status)
-> -		return status;
-> -	status = test_membarrier_register_global_expedited_success();
-> -	if (status)
-> -		return status;
-> -	status = test_membarrier_global_expedited_success();
-> -	if (status)
-> -		return status;
-> +
-> +	/* commit c5f58bd58f432be5d92df33c5458e0bcbee3aadf added this feature */
-> +	if (supported & MEMBARRIER_CMD_GLOBAL_EXPEDITED) {
-> +		/*
-> +		 * It is valid to send a global membarrier from a non-registered
-> +		 * process.
-> +		 */
-> +		status = test_membarrier_global_expedited_success();
-> +		if (status)
-> +			return status;
-> +		status = test_membarrier_register_global_expedited_success();
-> +		if (status)
-> +			return status;
-> +		status = test_membarrier_global_expedited_success();
-> +		if (status)
-> +			return status;
-> +	}
-> +
-> 	return 0;
-> }
-> 
-> --
-> 2.18.0
+> In patches #4 and #5, two new tests are added. In both cases, a team
+> device is on egress path of a mirrored packet in a mirror-to-gretap
+> scenario. In the first one, the team device is in loadbalance mode, in
+> the second one it's in lacp mode. (The difference in modes necessitates
+> a different testing strategy, hence two test cases instead of just
+> parameterizing one.)
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+I always like seeing new test cases. :)
+
+Series applied, thanks.
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
