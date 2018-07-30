@@ -1,45 +1,54 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Mon, 30 Jul 2018 16:37:17 +0200
-Subject: [PATCH net-next 0/5] A test for mirror-to-gretap with team in UL
- packet path
-Message-ID: <cover.1532961216.git.petrm@mellanox.com>
+Date: Mon, 30 Jul 2018 16:39:46 +0200
+Subject: [PATCH net-next 1/5] selftests: forwarding: lib: Add require_command()
+In-Reply-To: <cover.1532961216.git.petrm@mellanox.com>
+References: <cover.1532961216.git.petrm@mellanox.com>
+Message-ID: <1e938f8458821359f085a0815df487581b0da159.1532961216.git.petrm@mellanox.com>
 
-This patchset adds a test for "tc action mirred mirror" where the
-mirrored-to device is a gretap, and underlay path contains a team
-device.
+The logic for testing whether a certain command is available is used
+several times in the current code base. The tests in follow-up patches
+add more requirements like that.
 
-In patch #1 require_command() is added, which should henceforth be used
-to declare dependence on a certain tool.
+Therefore extract the logic into a named function, require_command(),
+that can be used directly from lib.sh as well as from any test that
+wishes to declare dependence on some command.
 
-In patch #2, two new functions, team_create() and team_destroy(), are
-added to lib.sh.
+Signed-off-by: Petr Machata <petrm at mellanox.com>
+---
+ tools/testing/selftests/net/forwarding/lib.sh | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-The newly-added test uses arping, which isn't necessarily available.
-Therefore patch #3 introduces $ARPING, and a preexisting test is fixed
-to require_command $ARPING.
-
-In patches #4 and #5, two new tests are added. In both cases, a team
-device is on egress path of a mirrored packet in a mirror-to-gretap
-scenario. In the first one, the team device is in loadbalance mode, in
-the second one it's in lacp mode. (The difference in modes necessitates
-a different testing strategy, hence two test cases instead of just
-parameterizing one.)
-
-Petr Machata (5):
-  selftests: forwarding: lib: Add require_command()
-  selftests: forwarding: lib: Support team devices
-  selftests: forwarding: Introduce $ARPING
-  selftests: forwarding: Test mirror-to-gretap w/ UL team
-  selftests: forwarding: Test mirror-to-gretap w/ UL team LACP
-
- tools/testing/selftests/net/forwarding/lib.sh      |  43 +++-
- .../net/forwarding/mirror_gre_bridge_1q_lag.sh     | 283 ++++++++++++++++++++
- .../net/forwarding/mirror_gre_lag_lacp.sh          | 285 +++++++++++++++++++++
- .../net/forwarding/mirror_gre_vlan_bridge_1q.sh    |   6 +-
- 4 files changed, 607 insertions(+), 10 deletions(-)
- create mode 100755 tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q_lag.sh
- create mode 100755 tools/testing/selftests/net/forwarding/mirror_gre_lag_lacp.sh
-
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 158d59ffee40..81e36157bf16 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -62,15 +62,18 @@ if [[ "$CHECK_TC" = "yes" ]]; then
+ 	check_tc_version
+ fi
+ 
+-if [[ ! -x "$(command -v jq)" ]]; then
+-	echo "SKIP: jq not installed"
+-	exit 1
+-fi
++require_command()
++{
++	local cmd=$1; shift
+ 
+-if [[ ! -x "$(command -v $MZ)" ]]; then
+-	echo "SKIP: $MZ not installed"
+-	exit 1
+-fi
++	if [[ ! -x "$(command -v "$cmd")" ]]; then
++		echo "SKIP: $cmd not installed"
++		exit 1
++	fi
++}
++
++require_command jq
++require_command $MZ
+ 
+ if [[ ! -v NUM_NETIFS ]]; then
+ 	echo "SKIP: importer does not define \"NUM_NETIFS\""
 -- 
 2.4.11
 
