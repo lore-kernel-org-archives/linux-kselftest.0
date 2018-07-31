@@ -1,70 +1,89 @@
 From: bauerman@linux.ibm.com (Thiago Jung Bauermann)
-Date: Mon, 30 Jul 2018 20:54:53 -0300
-Subject: [PATCH 2/3] userfaultfd: selftest: Skip test if a feature isn't
- supported
-In-Reply-To: <20180725141148.GD25188@rapoport-lnx>
+Date: Mon, 30 Jul 2018 21:01:56 -0300
+Subject: [PATCH 3/3] userfaultfd: selftest: Report XFAIL if shmem doesn't
+ support zeropage
+In-Reply-To: <20180725141849.GE25188@rapoport-lnx>
 References: <20180725024209.32586-1-bauerman@linux.ibm.com>
- <20180725024209.32586-3-bauerman@linux.ibm.com>
- <20180725141148.GD25188@rapoport-lnx>
-Message-ID: <871sbkb7oy.fsf@morokweng.localdomain>
+ <20180725024209.32586-4-bauerman@linux.ibm.com>
+ <20180725141849.GE25188@rapoport-lnx>
+Message-ID: <87zhy89ssr.fsf@morokweng.localdomain>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180730235453.3BHmwp8HvJF2lO7DRS-S6_kknem1oXM6CYd52kE0zXQ@z>
+Message-ID: <20180731000156.qdQkKsx20lpaU_etkoj028d5fTX6_GVdfs-FjxFeDww@z>
 
 
 Mike Rapoport <rppt at linux.vnet.ibm.com> writes:
 
 > Hi,
 >
-> On Tue, Jul 24, 2018@11:42:08PM -0300, Thiago Jung Bauermann wrote:
->> If userfaultfd runs on a system that doesn't support some feature it is
->> trying to test, it currently ends with error code 1 which indicates
->> test failure:
->> 
->>   # ./userfaultfd anon 10 10
+> On Tue, Jul 24, 2018@11:42:09PM -0300, Thiago Jung Bauermann wrote:
+>> If userfaultfd runs on a system that doesn't support UFFDIO_ZEROPAGE for
+>> shared memory, it currently ends with error code 1 which indicates test
+>> failure:
+>>
+>>   # ./userfaultfd shmem 10 10
 >>   nr_pages: 160, nr_pages_per_cpu: 80
->>   bounces: 9, mode: rnd poll, userfaults: 7 59
->>   bounces: 8, mode: poll, userfaults: 0 0
->>   bounces: 7, mode: rnd racing ver, userfaults: 45 2
->>   bounces: 6, mode: racing ver, userfaults: 3 1
->>   bounces: 5, mode: rnd ver, userfaults: 55 32
->>   bounces: 4, mode: ver, userfaults: 69 0
->>   bounces: 3, mode: rnd racing, userfaults: 1 1
->>   bounces: 2, mode: racing, userfaults: 65 0
->>   bounces: 1, mode: rnd, userfaults: 44 1
->>   bounces: 0, mode:, userfaults: 3 2
->>   testing UFFDIO_ZEROPAGE: done.
->>   testing signal delivery: UFFDIO_API
+>>   bounces: 9, mode: rnd poll, unexpected missing ioctl for anon memory
 >>   # echo $?
 >>   1
->> 
->> Make the testcase return KSFT_SKIP instead, which is more accurate since it
->> is not a real test failure:
->> 
->>   # ./userfaultfd anon 10 10
->>   nr_pages: 160, nr_pages_per_cpu: 80
->>   bounces: 9, mode: rnd poll, userfaults: 3 0
->>   bounces: 8, mode: poll, userfaults: 6 1
->>   bounces: 7, mode: rnd racing ver, userfaults: 3 1
->>   bounces: 6, mode: racing ver, userfaults: 2 1
->>   bounces: 5, mode: rnd ver, userfaults: 2 1
->>   bounces: 4, mode: ver, userfaults: 3 47
->>   bounces: 3, mode: rnd racing, userfaults: 38 0
->>   bounces: 2, mode: racing, userfaults: 4 61
->>   bounces: 1, mode: rnd, userfaults: 16 6
->>   bounces: 0, mode:, userfaults: 55 25
->>   testing UFFDIO_ZEROPAGE: done.
->>   testing signal delivery: UFFDIO_API: Invalid argument
->>   # echo $?
->>   4
->> 
->> While at it, also improve the error message of the ioctl(UFFDIO_API) call.
+>>
+>> This is a real failure, but expected so signal that to the test harness:
 >
-> Can you please also make the test return KSFT_SKIP if userfaultfd(2) fails
-> with ENOSYS?
+> I don't think its a real failure. If the kernel does not support
+> UFFDIO_ZEROPAGE for shared memory the userfaultfd_zeropage_test can be
+> simply skipped.
 
-Sure. v2 will have a separate patch implementing your suggestion.
+Ok, good point. I'll make that change in v2.
 
--- 
+>>   # ./userfaultfd shmem 10 10
+>>   nr_pages: 160, nr_pages_per_cpu: 80
+>>   bounces: 9, mode: rnd poll, UFFDIO_ZEROPAGE unsupported in shmem VMAs
+>>   # echo $?
+>>   2
+>>
+>> Signed-off-by: Thiago Jung Bauermann <bauerman at linux.ibm.com>
+>> ---
+>>  tools/testing/selftests/vm/userfaultfd.c | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+>> index bc9ec38fbc34..686fe96f617f 100644
+>> --- a/tools/testing/selftests/vm/userfaultfd.c
+>> +++ b/tools/testing/selftests/vm/userfaultfd.c
+>> @@ -1115,6 +1115,14 @@ static int userfaultfd_stress(void)
+>>  		expected_ioctls = uffd_test_ops->expected_ioctls;
+>>  		if ((uffdio_register.ioctls & expected_ioctls) !=
+>>  		    expected_ioctls) {
+>> +			if (test_type == TEST_SHMEM &&
+>> +			    (uffdio_register.ioctls & expected_ioctls) ==
+>> +			    UFFD_API_RANGE_IOCTLS_BASIC) {
+>> +				fprintf(stderr,
+>> +					"UFFDIO_ZEROPAGE unsupported in shmem VMAs\n");
+>> +				return KSFT_XFAIL;
+>> +			}
+>> +
+>
+> By all means, this check should be moved to userfaultfd_zeropage_test().
+
+I made that change in v2.
+
+> Ideally, we should call here ksft_test_result_skip() and simply return from
+> the function.
+
+In my understanding, calling ksft_test_result_skip() would require
+converting the testcase to use the functions that generate TAP output.
+
+Also, returning here isn't actually necessary: from my testing
+userfaultfd_stress() doesn't require zeropage support in shmem so if the
+only bit missing from uffdio_register.ioctls is the one for
+UFFDIO_ZEROPAGE then this error can simply be ignored and the test can
+continue. Do you agree?
+
+>>  			fprintf(stderr,
+>>  				"unexpected missing ioctl for anon memory\n");
+>>  			return 1;
+
+
+--
 Thiago Jung Bauermann
 IBM Linux Technology Center
 
