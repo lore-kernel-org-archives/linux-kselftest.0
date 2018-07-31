@@ -1,115 +1,74 @@
 From: petrm@mellanox.com (Petr Machata)
-Date: Tue, 31 Jul 2018 11:56:03 +0200
-Subject: [PATCH net-next 1/7] net: ipv4: Control SKB reprioritization after
- forwarding
+Date: Tue, 31 Jul 2018 11:56:08 +0200
+Subject: [PATCH net-next 2/7] net: ipv4: Notify about changes to
+ ip_forward_update_priority
 In-Reply-To: <cover.1533030830.git.petrm@mellanox.com>
 References: <cover.1533030830.git.petrm@mellanox.com>
 Message-ID:
- <56e17ee7750b89ff350735ff7cbaf14c63864586.1533030830.git.petrm@mellanox.com>
+ <849e91253d822f6f37aee1688167de08418ce1b6.1533030830.git.petrm@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180731095603.4YWOhS8-NVibPO3CRU0_Sp4LQRiP8m3APUK2jXQvMRo@z>
+Message-ID: <20180731095608.PFazl7cklMZ_LzBpdyp9i-dovK_cQVe3shB9p79Hy64@z>
 
-After IPv4 packets are forwarded, the priority of the corresponding SKB
-is updated according to the TOS field of IPv4 header. This overrides any
-prioritization done earlier by e.g. an skbedit action or ingress-qos-map
-defined at a vlan device.
-
-Such overriding may not always be desirable. Even if the packet ends up
-being routed, which implies this is an L3 network node, an administrator
-may wish to preserve whatever prioritization was done earlier on in the
-pipeline.
-
-Therefore introduce a sysctl that controls this behavior. Keep the
-default value at 1 to maintain backward-compatible behavior.
+Drivers may make offloading decision based on whether
+ip_forward_update_priority is enabled or not. Therefore distribute
+netevent notifications to give them a chance to react to a change.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 Reviewed-by: Ido Schimmel <idosch at mellanox.com>
 ---
- Documentation/networking/ip-sysctl.txt | 9 +++++++++
- include/net/netns/ipv4.h               | 1 +
- net/ipv4/af_inet.c                     | 1 +
- net/ipv4/ip_forward.c                  | 3 ++-
- net/ipv4/sysctl_net_ipv4.c             | 9 +++++++++
- 5 files changed, 22 insertions(+), 1 deletion(-)
+ include/net/netevent.h     |  1 +
+ net/ipv4/sysctl_net_ipv4.c | 19 ++++++++++++++++++-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/networking/ip-sysctl.txt b/Documentation/networking/ip-sysctl.txt
-index 77c37fb0b6a6..e74515ecaa9c 100644
---- a/Documentation/networking/ip-sysctl.txt
-+++ b/Documentation/networking/ip-sysctl.txt
-@@ -81,6 +81,15 @@ fib_multipath_hash_policy - INTEGER
- 	0 - Layer 3
- 	1 - Layer 4
+diff --git a/include/net/netevent.h b/include/net/netevent.h
+index d9918261701c..4107016c3bb4 100644
+--- a/include/net/netevent.h
++++ b/include/net/netevent.h
+@@ -28,6 +28,7 @@ enum netevent_notif_type {
+ 	NETEVENT_DELAY_PROBE_TIME_UPDATE, /* arg is struct neigh_parms ptr */
+ 	NETEVENT_IPV4_MPATH_HASH_UPDATE, /* arg is struct net ptr */
+ 	NETEVENT_IPV6_MPATH_HASH_UPDATE, /* arg is struct net ptr */
++	NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE, /* arg is struct net ptr */
+ };
  
-+ip_forward_update_priority - INTEGER
-+	Whether to update SKB priority from "TOS" field in IPv4 header after it
-+	is forwarded. The new SKB priority is mapped from TOS field value
-+	according to an rt_tos2priority table (see e.g. man tc-prio).
-+	Default: 1 (Update priority.)
-+	Possible values:
-+	0 - Do not update priority.
-+	1 - Update priority.
-+
- route/max_size - INTEGER
- 	Maximum number of routes allowed in the kernel.  Increase
- 	this when using large numbers of interfaces and/or routes.
-diff --git a/include/net/netns/ipv4.h b/include/net/netns/ipv4.h
-index 661348f23ea5..e47503b4e4d1 100644
---- a/include/net/netns/ipv4.h
-+++ b/include/net/netns/ipv4.h
-@@ -98,6 +98,7 @@ struct netns_ipv4 {
- 	int sysctl_ip_default_ttl;
- 	int sysctl_ip_no_pmtu_disc;
- 	int sysctl_ip_fwd_use_pmtu;
-+	int sysctl_ip_fwd_update_priority;
- 	int sysctl_ip_nonlocal_bind;
- 	/* Shall we try to damage output packets if routing dev changes? */
- 	int sysctl_ip_dynaddr;
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index f2a0a3bab6b5..d3cfbd89ca3a 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -1802,6 +1802,7 @@ static __net_init int inet_init_net(struct net *net)
- 	 * We set them here, in case sysctl is not compiled.
- 	 */
- 	net->ipv4.sysctl_ip_default_ttl = IPDEFTTL;
-+	net->ipv4.sysctl_ip_fwd_update_priority = true;
- 	net->ipv4.sysctl_ip_dynaddr = 0;
- 	net->ipv4.sysctl_ip_early_demux = 1;
- 	net->ipv4.sysctl_udp_early_demux = 1;
-diff --git a/net/ipv4/ip_forward.c b/net/ipv4/ip_forward.c
-index b54b948b0596..32662e9e5d21 100644
---- a/net/ipv4/ip_forward.c
-+++ b/net/ipv4/ip_forward.c
-@@ -143,7 +143,8 @@ int ip_forward(struct sk_buff *skb)
- 	    !skb_sec_path(skb))
- 		ip_rt_send_redirect(skb);
- 
--	skb->priority = rt_tos2priority(iph->tos);
-+	if (net->ipv4.sysctl_ip_fwd_update_priority)
-+		skb->priority = rt_tos2priority(iph->tos);
- 
- 	return NF_HOOK(NFPROTO_IPV4, NF_INET_FORWARD,
- 		       net, NULL, skb, skb->dev, rt->dst.dev,
+ int register_netevent_notifier(struct notifier_block *nb);
 diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index 5fa335fd3852..e21dda015513 100644
+index e21dda015513..b92f422f2fa8 100644
 --- a/net/ipv4/sysctl_net_ipv4.c
 +++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -664,6 +664,15 @@ static struct ctl_table ipv4_net_table[] = {
- 		.proc_handler	= proc_dointvec,
- 	},
- 	{
-+		.procname	= "ip_forward_update_priority",
-+		.data		= &init_net.ipv4.sysctl_ip_fwd_update_priority,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler   = proc_dointvec_minmax,
-+		.extra1		= &zero,
-+		.extra2		= &one,
-+	},
-+	{
- 		.procname	= "ip_nonlocal_bind",
- 		.data		= &init_net.ipv4.sysctl_ip_nonlocal_bind,
+@@ -201,6 +201,23 @@ static int ipv4_ping_group_range(struct ctl_table *table, int write,
+ 	return ret;
+ }
+ 
++static int ipv4_fwd_update_priority(struct ctl_table *table, int write,
++				    void __user *buffer,
++				    size_t *lenp, loff_t *ppos)
++{
++	struct net *net;
++	int ret;
++
++	net = container_of(table->data, struct net,
++			   ipv4.sysctl_ip_fwd_update_priority);
++	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
++	if (write && ret == 0)
++		call_netevent_notifiers(NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE,
++					net);
++
++	return ret;
++}
++
+ static int proc_tcp_congestion_control(struct ctl_table *ctl, int write,
+ 				       void __user *buffer, size_t *lenp, loff_t *ppos)
+ {
+@@ -668,7 +685,7 @@ static struct ctl_table ipv4_net_table[] = {
+ 		.data		= &init_net.ipv4.sysctl_ip_fwd_update_priority,
  		.maxlen		= sizeof(int),
+ 		.mode		= 0644,
+-		.proc_handler   = proc_dointvec_minmax,
++		.proc_handler   = ipv4_fwd_update_priority,
+ 		.extra1		= &zero,
+ 		.extra2		= &one,
+ 	},
 -- 
 2.4.11
 
