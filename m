@@ -1,90 +1,74 @@
-From: bauerman at linux.ibm.com (Thiago Jung Bauermann)
-Date: Mon, 30 Jul 2018 21:01:56 -0300
-Subject: [PATCH 3/3] userfaultfd: selftest: Report XFAIL if shmem doesn't
- support zeropage
-In-Reply-To: <20180725141849.GE25188@rapoport-lnx>
-References: <20180725024209.32586-1-bauerman@linux.ibm.com>
- <20180725024209.32586-4-bauerman@linux.ibm.com>
- <20180725141849.GE25188@rapoport-lnx>
-Message-ID: <87zhy89ssr.fsf@morokweng.localdomain>
+From: rafael.tinoco at linaro.org (Rafael David Tinoco)
+Date: Tue, 31 Jul 2018 00:15:37 -0300
+Subject: [PATCH] selftests: membarrier: fix test by checking supported
+ commands
+In-Reply-To: <9edf8459-aea1-c59e-5d73-112e986777e1@kernel.org>
+References: <20180730160543.19056-1-rafael.tinoco@linaro.org>
+ <9edf8459-aea1-c59e-5d73-112e986777e1@kernel.org>
+Message-ID: <20180731031537.bs64cdcxfqgmjwp4@mobile.celeiro.br>
 
+Hello Shuah,
 
-Mike Rapoport <rppt at linux.vnet.ibm.com> writes:
-
-> Hi,
+On Mon, Jul 30, 2018 at 05:32:30PM -0600, Shuah Khan wrote:
+> Hi Rafael,
 >
-> On Tue, Jul 24, 2018 at 11:42:09PM -0300, Thiago Jung Bauermann wrote:
->> If userfaultfd runs on a system that doesn't support UFFDIO_ZEROPAGE for
->> shared memory, it currently ends with error code 1 which indicates test
->> failure:
->>
->>   # ./userfaultfd shmem 10 10
->>   nr_pages: 160, nr_pages_per_cpu: 80
->>   bounces: 9, mode: rnd poll, unexpected missing ioctl for anon memory
->>   # echo $?
->>   1
->>
->> This is a real failure, but expected so signal that to the test harness:
+> On 07/30/2018 10:05 AM, Rafael David Tinoco wrote:
+> > Makes membarrier_test compatible with older kernels (LTS) by checking if
+> > the membarrier features exist before running the tests.
+> >
+> > Link: https://bugs.linaro.org/show_bug.cgi?id=3771
+> > Signed-off-by: Rafael David Tinoco <rafael.tinoco at linaro.org>
+> > Cc: <stable at vger.kernel.org> #v4.17
+> > ---
+> >  .../selftests/membarrier/membarrier_test.c    | 69 +++++++++++--------
+> >  1 file changed, 41 insertions(+), 28 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
+> > index 6793f8ecc8e7..b96caa096e2f 100644
+> > --- a/tools/testing/selftests/membarrier/membarrier_test.c
+> > +++ b/tools/testing/selftests/membarrier/membarrier_test.c
+> > @@ -225,7 +225,14 @@ static int test_membarrier_global_expedited_success(void)
+> >
+> >  static int test_membarrier(void)
+> >  {
+> > -	int status;
+> > +	int supported, status;
+> > +
+> > +	supported = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
+> > +	if (supported < 0) {
+> > +		ksft_test_result_fail(
+> > +			"sys_membarrier() failed to query supported cmds\n");
+> > +		return supported;
+> > +	}
+> >
 >
-> I don't think its a real failure. If the kernel does not support
-> UFFDIO_ZEROPAGE for shared memory the userfaultfd_zeropage_test can be
-> simply skipped.
-
-Ok, good point. I'll make that change in v2.
-
->>   # ./userfaultfd shmem 10 10
->>   nr_pages: 160, nr_pages_per_cpu: 80
->>   bounces: 9, mode: rnd poll, UFFDIO_ZEROPAGE unsupported in shmem VMAs
->>   # echo $?
->>   2
->>
->> Signed-off-by: Thiago Jung Bauermann <bauerman at linux.ibm.com>
->> ---
->>  tools/testing/selftests/vm/userfaultfd.c | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
->> index bc9ec38fbc34..686fe96f617f 100644
->> --- a/tools/testing/selftests/vm/userfaultfd.c
->> +++ b/tools/testing/selftests/vm/userfaultfd.c
->> @@ -1115,6 +1115,14 @@ static int userfaultfd_stress(void)
->>  		expected_ioctls = uffd_test_ops->expected_ioctls;
->>  		if ((uffdio_register.ioctls & expected_ioctls) !=
->>  		    expected_ioctls) {
->> +			if (test_type == TEST_SHMEM &&
->> +			    (uffdio_register.ioctls & expected_ioctls) ==
->> +			    UFFD_API_RANGE_IOCTLS_BASIC) {
->> +				fprintf(stderr,
->> +					"UFFDIO_ZEROPAGE unsupported in shmem VMAs\n");
->> +				return KSFT_XFAIL;
->> +			}
->> +
+> ksft_exit_skip() is the right interface to use here. If feature isn't supported,
+> it should exit skip as opposed fail.
 >
-> By all means, this check should be moved to userfaultfd_zeropage_test().
 
-I made that change in v2.
+Not sure this is the case here. This part was just a positional change.
 
-> Ideally, we should call here ksft_test_result_skip() and simply return from
-> the function.
+This check is extending an existing logic (for MEMBARRIER_CMD_PRIVATE_
+EXPEDITED_SYNC_CORE tests). Calling membarrier with MEMBARRIER_CMD_QUERY
+will return us MEMBARRIER_CMD_BITMASK, telling us which features are
+enabled for the running kernel (thus which tests can be executed).
 
-In my understanding, calling ksft_test_result_skip() would require
-converting the testcase to use the functions that generate TAP output.
+The query command was added in v4.3 and should (could ?) be considered a
+fundament for a working test by now, I suppose, no ?
 
-Also, returning here isn't actually necessary: from my testing
-userfaultfd_stress() doesn't require zeropage support in shmem so if the
-only bit missing from uffdio_register.ioctls is the one for
-UFFDIO_ZEROPAGE then this error can simply be ignored and the test can
-continue. Do you agree?
+It is used to decide which further tests to run. Not receiving anything
+back from this call would mean something is broken (since at least
+MEMBARRIER_CMD_GLOBAL should have always existed as a membarrier
+feature/command).
 
->>  			fprintf(stderr,
->>  				"unexpected missing ioctl for anon memory\n");
->>  			return 1;
+I think your concern is addressed in the beginning of the test.
+test_membarrier_query() tests for ENOSYS and calls ksft_exit_skip() if
+CONFIG_MEMBARRIER is disabled.
 
+This part is not about checking if the test can run, but which one can.
+What do you think ? Tks for reviewing!
 
---
-Thiago Jung Bauermann
-IBM Linux Technology Center
-
+-- Rafael D. Tinoco
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
