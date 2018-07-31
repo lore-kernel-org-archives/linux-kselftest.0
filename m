@@ -1,71 +1,77 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Tue, 31 Jul 2018 11:56:08 +0200
-Subject: [PATCH net-next 2/7] net: ipv4: Notify about changes to
- ip_forward_update_priority
+Date: Tue, 31 Jul 2018 11:56:22 +0200
+Subject: [PATCH net-next 4/7] mlxsw: spectrum_router: Handle
+ sysctl_ip_fwd_update_priority
 In-Reply-To: <cover.1533030830.git.petrm@mellanox.com>
 References: <cover.1533030830.git.petrm@mellanox.com>
-Message-ID: <849e91253d822f6f37aee1688167de08418ce1b6.1533030830.git.petrm@mellanox.com>
+Message-ID: <90eee3afe1efd213f07acd8461d981fd0b7bd343.1533030830.git.petrm@mellanox.com>
 
-Drivers may make offloading decision based on whether
-ip_forward_update_priority is enabled or not. Therefore distribute
-netevent notifications to give them a chance to react to a change.
+This sysctl setting controls whether packet priority should be updated
+after forwarding. Configure RGCR.usp accordingly so that the device is
+in sync with the kernel handling.
+
+Note that RGCR doesn't allow changing arbitrary parameters
+mid-operation, however "usp" is exempt and can be reconfigured.
+
+Also react to NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE notifications
+that signify change in this configuration.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 Reviewed-by: Ido Schimmel <idosch at mellanox.com>
 ---
- include/net/netevent.h     |  1 +
- net/ipv4/sysctl_net_ipv4.c | 19 ++++++++++++++++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/include/net/netevent.h b/include/net/netevent.h
-index d9918261701c..4107016c3bb4 100644
---- a/include/net/netevent.h
-+++ b/include/net/netevent.h
-@@ -28,6 +28,7 @@ enum netevent_notif_type {
- 	NETEVENT_DELAY_PROBE_TIME_UPDATE, /* arg is struct neigh_parms ptr */
- 	NETEVENT_IPV4_MPATH_HASH_UPDATE, /* arg is struct net ptr */
- 	NETEVENT_IPV6_MPATH_HASH_UPDATE, /* arg is struct net ptr */
-+	NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE, /* arg is struct net ptr */
- };
- 
- int register_netevent_notifier(struct notifier_block *nb);
-diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index e21dda015513..b92f422f2fa8 100644
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -201,6 +201,23 @@ static int ipv4_ping_group_range(struct ctl_table *table, int write,
- 	return ret;
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+index 5ee927626567..eec7166fad62 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+@@ -2436,6 +2436,18 @@ static void mlxsw_sp_router_mp_hash_event_work(struct work_struct *work)
+ 	kfree(net_work);
  }
  
-+static int ipv4_fwd_update_priority(struct ctl_table *table, int write,
-+				    void __user *buffer,
-+				    size_t *lenp, loff_t *ppos)
++static int __mlxsw_sp_router_init(struct mlxsw_sp *mlxsw_sp);
++
++static void mlxsw_sp_router_update_priority_work(struct work_struct *work)
 +{
-+	struct net *net;
-+	int ret;
++	struct mlxsw_sp_netevent_work *net_work =
++		container_of(work, struct mlxsw_sp_netevent_work, work);
++	struct mlxsw_sp *mlxsw_sp = net_work->mlxsw_sp;
 +
-+	net = container_of(table->data, struct net,
-+			   ipv4.sysctl_ip_fwd_update_priority);
-+	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
-+	if (write && ret == 0)
-+		call_netevent_notifiers(NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE,
-+					net);
-+
-+	return ret;
++	__mlxsw_sp_router_init(mlxsw_sp);
++	kfree(net_work);
 +}
 +
- static int proc_tcp_congestion_control(struct ctl_table *ctl, int write,
- 				       void __user *buffer, size_t *lenp, loff_t *ppos)
+ static int mlxsw_sp_router_schedule_work(struct net *net,
+ 					 struct notifier_block *nb,
+ 					 void (*cb)(struct work_struct *))
+@@ -2522,6 +2534,9 @@ static int mlxsw_sp_router_netevent_event(struct notifier_block *nb,
+ 		return mlxsw_sp_router_schedule_work(ptr, nb,
+ 				mlxsw_sp_router_mp_hash_event_work);
+ 
++	case NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE:
++		return mlxsw_sp_router_schedule_work(ptr, nb,
++				mlxsw_sp_router_update_priority_work);
+ 	}
+ 
+ 	return NOTIFY_DONE;
+@@ -7390,6 +7405,7 @@ static int mlxsw_sp_dscp_init(struct mlxsw_sp *mlxsw_sp)
+ 
+ static int __mlxsw_sp_router_init(struct mlxsw_sp *mlxsw_sp)
  {
-@@ -668,7 +685,7 @@ static struct ctl_table ipv4_net_table[] = {
- 		.data		= &init_net.ipv4.sysctl_ip_fwd_update_priority,
- 		.maxlen		= sizeof(int),
- 		.mode		= 0644,
--		.proc_handler   = proc_dointvec_minmax,
-+		.proc_handler   = ipv4_fwd_update_priority,
- 		.extra1		= &zero,
- 		.extra2		= &one,
- 	},
++	bool usp = init_net.ipv4.sysctl_ip_fwd_update_priority;
+ 	char rgcr_pl[MLXSW_REG_RGCR_LEN];
+ 	u64 max_rifs;
+ 	int err;
+@@ -7400,7 +7416,7 @@ static int __mlxsw_sp_router_init(struct mlxsw_sp *mlxsw_sp)
+ 
+ 	mlxsw_reg_rgcr_pack(rgcr_pl, true, true);
+ 	mlxsw_reg_rgcr_max_router_interfaces_set(rgcr_pl, max_rifs);
+-	mlxsw_reg_rgcr_usp_set(rgcr_pl, true);
++	mlxsw_reg_rgcr_usp_set(rgcr_pl, usp);
+ 	err = mlxsw_reg_write(mlxsw_sp->core, MLXSW_REG(rgcr), rgcr_pl);
+ 	if (err)
+ 		return err;
 -- 
 2.4.11
 
