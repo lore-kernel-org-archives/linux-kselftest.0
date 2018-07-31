@@ -1,74 +1,93 @@
 From: petrm@mellanox.com (Petr Machata)
-Date: Wed, 01 Aug 2018 00:36:42 +0200
-Subject: [PATCH net-next v2 2/7] net: ipv4: Notify about changes to
- ip_forward_update_priority
+Date: Wed, 01 Aug 2018 00:37:36 +0200
+Subject: [PATCH net-next v2 3/7] mlxsw: spectrum: Extract work-scheduling into
+ a new function
 In-Reply-To: <cover.1533076217.git.petrm@mellanox.com>
 References: <cover.1533076217.git.petrm@mellanox.com>
 Message-ID:
- <55313c0467f038b52be81b48c270747848c0ad21.1533076217.git.petrm@mellanox.com>
+ <81de49a9f677be1d741076e7f4aabb90bbc441cf.1533076217.git.petrm@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180731223642.EbyirhW5iXqFODY1cdd67EVPNVpUKWuRfJer0EZpIEo@z>
+Message-ID: <20180731223736.XbyAIsvQ35ZQ0cZS2yvbK1zPkKPD0Lh2UQ84VuCoGzc@z>
 
-Drivers may make offloading decision based on whether
-ip_forward_update_priority is enabled or not. Therefore distribute
-netevent notifications to give them a chance to react to a change.
+The boilerplate to schedule NETEVENT_IPV4_MPATH_HASH_UPDATE and
+NETEVENT_IPV6_MPATH_HASH_UPDATE handling is almost equivalent to that of
+NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE that's coming in the next
+patch. The only difference is which actual worker function should be
+called. Extract this boilerplate into a named function in order to allow
+reuse.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 Reviewed-by: Ido Schimmel <idosch at mellanox.com>
 ---
- include/net/netevent.h     |  1 +
- net/ipv4/sysctl_net_ipv4.c | 19 ++++++++++++++++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
+ .../net/ethernet/mellanox/mlxsw/spectrum_router.c  | 38 +++++++++++++---------
+ 1 file changed, 23 insertions(+), 15 deletions(-)
 
-diff --git a/include/net/netevent.h b/include/net/netevent.h
-index d9918261701c..4107016c3bb4 100644
---- a/include/net/netevent.h
-+++ b/include/net/netevent.h
-@@ -28,6 +28,7 @@ enum netevent_notif_type {
- 	NETEVENT_DELAY_PROBE_TIME_UPDATE, /* arg is struct neigh_parms ptr */
- 	NETEVENT_IPV4_MPATH_HASH_UPDATE, /* arg is struct net ptr */
- 	NETEVENT_IPV6_MPATH_HASH_UPDATE, /* arg is struct net ptr */
-+	NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE, /* arg is struct net ptr */
- };
- 
- int register_netevent_notifier(struct notifier_block *nb);
-diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index e21dda015513..b92f422f2fa8 100644
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -201,6 +201,23 @@ static int ipv4_ping_group_range(struct ctl_table *table, int write,
- 	return ret;
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+index 8d67f0123699..5ee927626567 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+@@ -2436,17 +2436,36 @@ static void mlxsw_sp_router_mp_hash_event_work(struct work_struct *work)
+ 	kfree(net_work);
  }
  
-+static int ipv4_fwd_update_priority(struct ctl_table *table, int write,
-+				    void __user *buffer,
-+				    size_t *lenp, loff_t *ppos)
++static int mlxsw_sp_router_schedule_work(struct net *net,
++					 struct notifier_block *nb,
++					 void (*cb)(struct work_struct *))
 +{
-+	struct net *net;
-+	int ret;
++	struct mlxsw_sp_netevent_work *net_work;
++	struct mlxsw_sp_router *router;
 +
-+	net = container_of(table->data, struct net,
-+			   ipv4.sysctl_ip_fwd_update_priority);
-+	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
-+	if (write && ret == 0)
-+		call_netevent_notifiers(NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE,
-+					net);
++	if (!net_eq(net, &init_net))
++		return NOTIFY_DONE;
 +
-+	return ret;
++	net_work = kzalloc(sizeof(*net_work), GFP_ATOMIC);
++	if (!net_work)
++		return NOTIFY_BAD;
++
++	router = container_of(nb, struct mlxsw_sp_router, netevent_nb);
++	INIT_WORK(&net_work->work, cb);
++	net_work->mlxsw_sp = router->mlxsw_sp;
++	mlxsw_core_schedule_work(&net_work->work);
++	return NOTIFY_DONE;
 +}
 +
- static int proc_tcp_congestion_control(struct ctl_table *ctl, int write,
- 				       void __user *buffer, size_t *lenp, loff_t *ppos)
+ static int mlxsw_sp_router_netevent_event(struct notifier_block *nb,
+ 					  unsigned long event, void *ptr)
  {
-@@ -668,7 +685,7 @@ static struct ctl_table ipv4_net_table[] = {
- 		.data		= &init_net.ipv4.sysctl_ip_fwd_update_priority,
- 		.maxlen		= sizeof(int),
- 		.mode		= 0644,
--		.proc_handler   = proc_dointvec_minmax,
-+		.proc_handler   = ipv4_fwd_update_priority,
- 		.extra1		= &zero,
- 		.extra2		= &one,
- 	},
+ 	struct mlxsw_sp_netevent_work *net_work;
+ 	struct mlxsw_sp_port *mlxsw_sp_port;
+-	struct mlxsw_sp_router *router;
+ 	struct mlxsw_sp *mlxsw_sp;
+ 	unsigned long interval;
+ 	struct neigh_parms *p;
+ 	struct neighbour *n;
+-	struct net *net;
+ 
+ 	switch (event) {
+ 	case NETEVENT_DELAY_PROBE_TIME_UPDATE:
+@@ -2500,20 +2519,9 @@ static int mlxsw_sp_router_netevent_event(struct notifier_block *nb,
+ 		break;
+ 	case NETEVENT_IPV4_MPATH_HASH_UPDATE:
+ 	case NETEVENT_IPV6_MPATH_HASH_UPDATE:
+-		net = ptr;
++		return mlxsw_sp_router_schedule_work(ptr, nb,
++				mlxsw_sp_router_mp_hash_event_work);
+ 
+-		if (!net_eq(net, &init_net))
+-			return NOTIFY_DONE;
+-
+-		net_work = kzalloc(sizeof(*net_work), GFP_ATOMIC);
+-		if (!net_work)
+-			return NOTIFY_BAD;
+-
+-		router = container_of(nb, struct mlxsw_sp_router, netevent_nb);
+-		INIT_WORK(&net_work->work, mlxsw_sp_router_mp_hash_event_work);
+-		net_work->mlxsw_sp = router->mlxsw_sp;
+-		mlxsw_core_schedule_work(&net_work->work);
+-		break;
+ 	}
+ 
+ 	return NOTIFY_DONE;
 -- 
 2.4.11
 
