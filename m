@@ -1,141 +1,265 @@
 From: petrm@mellanox.com (Petr Machata)
-Date: Wed, 01 Aug 2018 00:39:25 +0200
-Subject: [PATCH net-next v2 6/7] selftests: forwarding: Move DSCP capture to
- lib.sh
+Date: Wed, 01 Aug 2018 00:39:29 +0200
+Subject: [PATCH net-next v2 7/7] selftests: mlxsw: Add test for
+ ip_forward_update_priority
 In-Reply-To: <cover.1533076217.git.petrm@mellanox.com>
 References: <cover.1533076217.git.petrm@mellanox.com>
 Message-ID:
- <e260842f25a7a082315dd42a0531718f306c8a6a.1533076217.git.petrm@mellanox.com>
+ <c5637eb0b26da090c740b5adfdbf7cf5359d4a71.1533076217.git.petrm@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180731223925.doMngRNy37RQ_AG0OXLTb3JjC-V8CG0Yj6rypI8fnsA@z>
+Message-ID: <20180731223929.9vKms6amySVrgCSNJcreh8-se4YFAeuvgmoYeHIHBDM@z>
 
-dscp_capture_install() and dscp_capture_uninstall() are going to be
-useful for a test added by a following patch, move them therefore to
-lib.sh together with related helpers.
-
-While doing so, change the rule preference from mere DSCP value to
-DSCP+100 in order to support adding captures of packets with DSCP of 0.
+Verify that with that sysctl turned off, DSCP prioritization and rewrite
+works the same way as in qos_dscp_bridge test. However when the sysctl
+is charged, there should be a reprioritization after routing stage,
+which will be observed by a different DSCP rewrite on egress.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 Reviewed-by: Ido Schimmel <idosch at mellanox.com>
 ---
- .../selftests/drivers/net/mlxsw/qos_dscp_bridge.sh | 42 ----------------------
- tools/testing/selftests/net/forwarding/lib.sh      | 42 ++++++++++++++++++++++
- 2 files changed, 42 insertions(+), 42 deletions(-)
+ .../selftests/drivers/net/mlxsw/qos_dscp_router.sh | 233 +++++++++++++++++++++
+ 1 file changed, 233 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/mlxsw/qos_dscp_router.sh
 
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_bridge.sh b/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_bridge.sh
-index 9e875ee8dc1c..1ca631d5aaba 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_bridge.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_bridge.sh
-@@ -34,36 +34,6 @@ lib_dir=$(dirname $0)/../../../net/forwarding
- NUM_NETIFS=4
- source $lib_dir/lib.sh
- 
--__dscp_capture_add_del()
--{
--	local add_del=$1; shift
--	local dev=$1; shift
--	local base=$1; shift
--	local dscp;
--
--	for prio in {0..7}; do
--		dscp=$((base + prio))
--		__icmp_capture_add_del $add_del $dscp "" $dev \
--				       "ip_tos $((dscp << 2))"
--	done
--}
--
--dscp_capture_install()
--{
--	local dev=$1; shift
--	local base=$1; shift
--
--	__dscp_capture_add_del add $dev $base
--}
--
--dscp_capture_uninstall()
--{
--	local dev=$1; shift
--	local base=$1; shift
--
--	__dscp_capture_add_del del $dev $base
--}
--
- h1_create()
- {
- 	local dscp;
-@@ -155,18 +125,6 @@ cleanup()
- 	vrf_cleanup
- }
- 
--dscp_fetch_stats()
--{
--	local dev=$1; shift
--	local base=$1; shift
--
--	for prio in {0..7}; do
--		local dscp=$((base + prio))
--		local t=$(tc_rule_stats_get $dev $dscp)
--		echo "[$dscp]=$t "
--	done
--}
--
- ping_ipv4()
- {
- 	ping_test $h1 192.0.2.2
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 90af5cd23417..ca53b539aa2d 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -653,6 +653,48 @@ vlan_capture_uninstall()
- 	__vlan_capture_add_del del 100 "$@"
- }
- 
-+__dscp_capture_add_del()
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_router.sh b/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_router.sh
+new file mode 100755
+index 000000000000..281d90766e12
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_router.sh
+@@ -0,0 +1,233 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++# Test for DSCP prioritization in the router.
++#
++# With ip_forward_update_priority disabled, the packets are expected to keep
++# their DSCP (which in this test uses only values 0..7) intact as they are
++# forwarded by the switch. That is verified at $h2. ICMP responses are formed
++# with the same DSCP as the requests, and likewise pass through the switch
++# intact, which is verified at $h1.
++#
++# With ip_forward_update_priority enabled, router reprioritizes the packets
++# according to the table in reprioritize(). Thus, say, DSCP 7 maps to priority
++# 4, which on egress maps back to DSCP 4. The response packet then gets
++# reprioritized to 6, getting DSCP 6 on egress.
++#
++# +----------------------+                             +----------------------+
++# | H1                   |                             |                   H2 |
++# |    + $h1             |                             |            $h2 +     |
++# |    | 192.0.2.1/28    |                             |  192.0.2.18/28 |     |
++# +----|-----------------+                             +----------------|-----+
++#      |                                                                |
++# +----|----------------------------------------------------------------|-----+
++# | SW |                                                                |     |
++# |    + $swp1                                                    $swp2 +     |
++# |      192.0.2.2/28                                     192.0.2.17/28       |
++# |      APP=0,5,0 .. 7,5,7                          APP=0,5,0 .. 7,5,7       |
++# +---------------------------------------------------------------------------+
++
++ALL_TESTS="
++	ping_ipv4
++	test_update
++	test_no_update
++"
++
++lib_dir=$(dirname $0)/../../../net/forwarding
++
++NUM_NETIFS=4
++source $lib_dir/lib.sh
++
++reprioritize()
 +{
-+	local add_del=$1; shift
-+	local dev=$1; shift
-+	local base=$1; shift
++	local in=$1; shift
++
++	# This is based on rt_tos2priority in include/net/route.h. Assuming 1:1
++	# mapping between priorities and TOS, it yields a new priority for a
++	# packet with ingress priority of $in.
++	local -a reprio=(0 0 2 2 6 6 4 4)
++
++	echo ${reprio[$in]}
++}
++
++h1_create()
++{
 +	local dscp;
 +
++	simple_if_init $h1 192.0.2.1/28
++	tc qdisc add dev $h1 clsact
++	dscp_capture_install $h1 0
++	ip route add vrf v$h1 192.0.2.16/28 via 192.0.2.2
++}
++
++h1_destroy()
++{
++	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
++	dscp_capture_uninstall $h1 0
++	tc qdisc del dev $h1 clsact
++	simple_if_fini $h1 192.0.2.1/28
++}
++
++h2_create()
++{
++	simple_if_init $h2 192.0.2.18/28
++	tc qdisc add dev $h2 clsact
++	dscp_capture_install $h2 0
++	ip route add vrf v$h2 192.0.2.0/28 via 192.0.2.17
++}
++
++h2_destroy()
++{
++	ip route del vrf v$h2 192.0.2.0/28 via 192.0.2.17
++	dscp_capture_uninstall $h2 0
++	tc qdisc del dev $h2 clsact
++	simple_if_fini $h2 192.0.2.18/28
++}
++
++dscp_map()
++{
++	local base=$1; shift
++
 +	for prio in {0..7}; do
-+		dscp=$((base + prio))
-+		__icmp_capture_add_del $add_del $((dscp + 100)) "" $dev \
-+				       "skip_hw ip_tos $((dscp << 2))"
++		echo app=$prio,5,$((base + prio))
 +	done
 +}
 +
-+dscp_capture_install()
++switch_create()
 +{
-+	local dev=$1; shift
-+	local base=$1; shift
++	simple_if_init $swp1 192.0.2.2/28
++	__simple_if_init $swp2 v$swp1 192.0.2.17/28
 +
-+	__dscp_capture_add_del add $dev $base
++	lldptool -T -i $swp1 -V APP $(dscp_map 0) >/dev/null
++	lldptool -T -i $swp2 -V APP $(dscp_map 0) >/dev/null
++	lldpad_app_wait_set $swp1
++	lldpad_app_wait_set $swp2
 +}
 +
-+dscp_capture_uninstall()
++switch_destroy()
 +{
-+	local dev=$1; shift
-+	local base=$1; shift
++	lldptool -T -i $swp2 -V APP -d $(dscp_map 0) >/dev/null
++	lldptool -T -i $swp1 -V APP -d $(dscp_map 0) >/dev/null
++	lldpad_app_wait_del
 +
-+	__dscp_capture_add_del del $dev $base
++	__simple_if_fini $swp2 192.0.2.17/28
++	simple_if_fini $swp1 192.0.2.2/28
 +}
 +
-+dscp_fetch_stats()
++setup_prepare()
 +{
-+	local dev=$1; shift
-+	local base=$1; shift
++	h1=${NETIFS[p1]}
++	swp1=${NETIFS[p2]}
++
++	swp2=${NETIFS[p3]}
++	h2=${NETIFS[p4]}
++
++	vrf_prepare
++
++	sysctl_set net.ipv4.ip_forward_update_priority 1
++	h1_create
++	h2_create
++	switch_create
++}
++
++cleanup()
++{
++	pre_cleanup
++
++	switch_destroy
++	h2_destroy
++	h1_destroy
++	sysctl_restore net.ipv4.ip_forward_update_priority
++
++	vrf_cleanup
++}
++
++ping_ipv4()
++{
++	ping_test $h1 192.0.2.18
++}
++
++dscp_ping_test()
++{
++	local vrf_name=$1; shift
++	local sip=$1; shift
++	local dip=$1; shift
++	local prio=$1; shift
++	local reprio=$1; shift
++	local dev1=$1; shift
++	local dev2=$1; shift
++
++	local prio2=$($reprio $prio)   # ICMP Request egress prio
++	local prio3=$($reprio $prio2)  # ICMP Response egress prio
++
++	local dscp=$((prio << 2))     # ICMP Request ingress DSCP
++	local dscp2=$((prio2 << 2))   # ICMP Request egress DSCP
++	local dscp3=$((prio3 << 2))   # ICMP Response egress DSCP
++
++	RET=0
++
++	eval "local -A dev1_t0s=($(dscp_fetch_stats $dev1 0))"
++	eval "local -A dev2_t0s=($(dscp_fetch_stats $dev2 0))"
++
++	ip vrf exec $vrf_name \
++	   ${PING} -Q $dscp ${sip:+-I $sip} $dip \
++		   -c 10 -i 0.1 -w 2 &> /dev/null
++
++	eval "local -A dev1_t1s=($(dscp_fetch_stats $dev1 0))"
++	eval "local -A dev2_t1s=($(dscp_fetch_stats $dev2 0))"
++
++	for i in {0..7}; do
++		local dscpi=$((i << 2))
++		local expect2=0
++		local expect3=0
++
++		if ((i == prio2)); then
++			expect2=10
++		fi
++		if ((i == prio3)); then
++			expect3=10
++		fi
++
++		local delta=$((dev2_t1s[$i] - dev2_t0s[$i]))
++		((expect2 == delta))
++		check_err $? "DSCP $dscpi@$dev2: Expected to capture $expect2 packets, got $delta."
++
++		delta=$((dev1_t1s[$i] - dev1_t0s[$i]))
++		((expect3 == delta))
++		check_err $? "DSCP $dscpi@$dev1: Expected to capture $expect3 packets, got $delta."
++	done
++
++	log_test "DSCP rewrite: $dscp-(prio $prio2)-$dscp2-(prio $prio3)-$dscp3"
++}
++
++__test_update()
++{
++	local update=$1; shift
++	local reprio=$1; shift
++
++	sysctl_restore net.ipv4.ip_forward_update_priority
++	sysctl_set net.ipv4.ip_forward_update_priority $update
 +
 +	for prio in {0..7}; do
-+		local dscp=$((base + prio))
-+		local t=$(tc_rule_stats_get $dev $((dscp + 100)))
-+		echo "[$dscp]=$t "
++		dscp_ping_test v$h1 192.0.2.1 192.0.2.18 $prio $reprio $h1 $h2
 +	done
 +}
 +
- matchall_sink_create()
- {
- 	local dev=$1; shift
++test_update()
++{
++	__test_update 1 reprioritize
++}
++
++test_no_update()
++{
++	__test_update 0 echo
++}
++
++trap cleanup EXIT
++
++setup_prepare
++setup_wait
++
++tests_run
++
++exit $EXIT_STATUS
 -- 
 2.4.11
 
