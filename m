@@ -1,90 +1,77 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Wed, 01 Aug 2018 00:37:36 +0200
-Subject: [PATCH net-next v2 3/7] mlxsw: spectrum: Extract work-scheduling into
- a new function
+Date: Wed, 01 Aug 2018 00:38:03 +0200
+Subject: [PATCH net-next v2 4/7] mlxsw: spectrum_router: Handle
+ sysctl_ip_fwd_update_priority
 In-Reply-To: <cover.1533076217.git.petrm@mellanox.com>
 References: <cover.1533076217.git.petrm@mellanox.com>
-Message-ID: <81de49a9f677be1d741076e7f4aabb90bbc441cf.1533076217.git.petrm@mellanox.com>
+Message-ID: <612b9ef595e1cec62711aade431dfbf721499147.1533076217.git.petrm@mellanox.com>
 
-The boilerplate to schedule NETEVENT_IPV4_MPATH_HASH_UPDATE and
-NETEVENT_IPV6_MPATH_HASH_UPDATE handling is almost equivalent to that of
-NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE that's coming in the next
-patch. The only difference is which actual worker function should be
-called. Extract this boilerplate into a named function in order to allow
-reuse.
+This sysctl setting controls whether packet priority should be updated
+after forwarding. Configure RGCR.usp accordingly so that the device is
+in sync with the kernel handling.
+
+Note that RGCR doesn't allow changing arbitrary parameters
+mid-operation, however "usp" is exempt and can be reconfigured.
+
+Also react to NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE notifications
+that signify change in this configuration.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 Reviewed-by: Ido Schimmel <idosch at mellanox.com>
 ---
- .../net/ethernet/mellanox/mlxsw/spectrum_router.c  | 38 +++++++++++++---------
- 1 file changed, 23 insertions(+), 15 deletions(-)
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-index 8d67f0123699..5ee927626567 100644
+index 5ee927626567..eec7166fad62 100644
 --- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
 +++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-@@ -2436,17 +2436,36 @@ static void mlxsw_sp_router_mp_hash_event_work(struct work_struct *work)
+@@ -2436,6 +2436,18 @@ static void mlxsw_sp_router_mp_hash_event_work(struct work_struct *work)
  	kfree(net_work);
  }
  
-+static int mlxsw_sp_router_schedule_work(struct net *net,
-+					 struct notifier_block *nb,
-+					 void (*cb)(struct work_struct *))
++static int __mlxsw_sp_router_init(struct mlxsw_sp *mlxsw_sp);
++
++static void mlxsw_sp_router_update_priority_work(struct work_struct *work)
 +{
-+	struct mlxsw_sp_netevent_work *net_work;
-+	struct mlxsw_sp_router *router;
++	struct mlxsw_sp_netevent_work *net_work =
++		container_of(work, struct mlxsw_sp_netevent_work, work);
++	struct mlxsw_sp *mlxsw_sp = net_work->mlxsw_sp;
 +
-+	if (!net_eq(net, &init_net))
-+		return NOTIFY_DONE;
-+
-+	net_work = kzalloc(sizeof(*net_work), GFP_ATOMIC);
-+	if (!net_work)
-+		return NOTIFY_BAD;
-+
-+	router = container_of(nb, struct mlxsw_sp_router, netevent_nb);
-+	INIT_WORK(&net_work->work, cb);
-+	net_work->mlxsw_sp = router->mlxsw_sp;
-+	mlxsw_core_schedule_work(&net_work->work);
-+	return NOTIFY_DONE;
++	__mlxsw_sp_router_init(mlxsw_sp);
++	kfree(net_work);
 +}
 +
- static int mlxsw_sp_router_netevent_event(struct notifier_block *nb,
- 					  unsigned long event, void *ptr)
- {
- 	struct mlxsw_sp_netevent_work *net_work;
- 	struct mlxsw_sp_port *mlxsw_sp_port;
--	struct mlxsw_sp_router *router;
- 	struct mlxsw_sp *mlxsw_sp;
- 	unsigned long interval;
- 	struct neigh_parms *p;
- 	struct neighbour *n;
--	struct net *net;
+ static int mlxsw_sp_router_schedule_work(struct net *net,
+ 					 struct notifier_block *nb,
+ 					 void (*cb)(struct work_struct *))
+@@ -2522,6 +2534,9 @@ static int mlxsw_sp_router_netevent_event(struct notifier_block *nb,
+ 		return mlxsw_sp_router_schedule_work(ptr, nb,
+ 				mlxsw_sp_router_mp_hash_event_work);
  
- 	switch (event) {
- 	case NETEVENT_DELAY_PROBE_TIME_UPDATE:
-@@ -2500,20 +2519,9 @@ static int mlxsw_sp_router_netevent_event(struct notifier_block *nb,
- 		break;
- 	case NETEVENT_IPV4_MPATH_HASH_UPDATE:
- 	case NETEVENT_IPV6_MPATH_HASH_UPDATE:
--		net = ptr;
++	case NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE:
 +		return mlxsw_sp_router_schedule_work(ptr, nb,
-+				mlxsw_sp_router_mp_hash_event_work);
- 
--		if (!net_eq(net, &init_net))
--			return NOTIFY_DONE;
--
--		net_work = kzalloc(sizeof(*net_work), GFP_ATOMIC);
--		if (!net_work)
--			return NOTIFY_BAD;
--
--		router = container_of(nb, struct mlxsw_sp_router, netevent_nb);
--		INIT_WORK(&net_work->work, mlxsw_sp_router_mp_hash_event_work);
--		net_work->mlxsw_sp = router->mlxsw_sp;
--		mlxsw_core_schedule_work(&net_work->work);
--		break;
++				mlxsw_sp_router_update_priority_work);
  	}
  
  	return NOTIFY_DONE;
+@@ -7390,6 +7405,7 @@ static int mlxsw_sp_dscp_init(struct mlxsw_sp *mlxsw_sp)
+ 
+ static int __mlxsw_sp_router_init(struct mlxsw_sp *mlxsw_sp)
+ {
++	bool usp = init_net.ipv4.sysctl_ip_fwd_update_priority;
+ 	char rgcr_pl[MLXSW_REG_RGCR_LEN];
+ 	u64 max_rifs;
+ 	int err;
+@@ -7400,7 +7416,7 @@ static int __mlxsw_sp_router_init(struct mlxsw_sp *mlxsw_sp)
+ 
+ 	mlxsw_reg_rgcr_pack(rgcr_pl, true, true);
+ 	mlxsw_reg_rgcr_max_router_interfaces_set(rgcr_pl, max_rifs);
+-	mlxsw_reg_rgcr_usp_set(rgcr_pl, true);
++	mlxsw_reg_rgcr_usp_set(rgcr_pl, usp);
+ 	err = mlxsw_reg_write(mlxsw_sp->core, MLXSW_REG(rgcr), rgcr_pl);
+ 	if (err)
+ 		return err;
 -- 
 2.4.11
 
