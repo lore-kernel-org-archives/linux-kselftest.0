@@ -1,8 +1,10 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Tue, 31 Jul 2018 11:55:57 +0200
-Subject: [PATCH net-next 0/7] ipv4: Control SKB reprioritization after
+Date: Tue, 31 Jul 2018 11:56:03 +0200
+Subject: [PATCH net-next 1/7] net: ipv4: Control SKB reprioritization after
  forwarding
-Message-ID: <cover.1533030830.git.petrm@mellanox.com>
+In-Reply-To: <cover.1533030830.git.petrm@mellanox.com>
+References: <cover.1533030830.git.petrm@mellanox.com>
+Message-ID: <56e17ee7750b89ff350735ff7cbaf14c63864586.1533030830.git.petrm@mellanox.com>
 
 After IPv4 packets are forwarded, the priority of the corresponding SKB
 is updated according to the TOS field of IPv4 header. This overrides any
@@ -14,58 +16,97 @@ being routed, which implies this is an L3 network node, an administrator
 may wish to preserve whatever prioritization was done earlier on in the
 pipeline.
 
-Therefore this patch set introduces a sysctl that controls this
-behavior, net.ipv4.ip_forward_update_priority. It's value is 1 by
-default to preserve the current behavior.
+Therefore introduce a sysctl that controls this behavior. Keep the
+default value at 1 to maintain backward-compatible behavior.
 
-All of the above is implemented in patch #1.
+Signed-off-by: Petr Machata <petrm at mellanox.com>
+Reviewed-by: Ido Schimmel <idosch at mellanox.com>
+---
+ Documentation/networking/ip-sysctl.txt | 9 +++++++++
+ include/net/netns/ipv4.h               | 1 +
+ net/ipv4/af_inet.c                     | 1 +
+ net/ipv4/ip_forward.c                  | 3 ++-
+ net/ipv4/sysctl_net_ipv4.c             | 9 +++++++++
+ 5 files changed, 22 insertions(+), 1 deletion(-)
 
-Value changes prompt a new NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE
-notification, so that the drivers can hook up whatever logic may depend
-on this value. That is implemented in patch #2.
-
-In patches #3 and #4, mlxsw is adapted to recognize the sysctl. On
-initialization, the RGCR register that handles router configuration is
-set in accordance with the sysctl. The new notification is listened to
-and RGCR is reconfigured as necessary.
-
-In patches #5 to #7, a selftest is added to verify that mlxsw reflects
-the sysctl value as necessary. The test is expressed in terms of the
-recently-introduced ieee_setapp support, and works by observing how DSCP
-value gets rewritten depending on packet priority. For this reason, the
-test is added to the subdirectory drivers/net/mlxsw. Even though it's
-not particularly specific to mlxsw, it's not suitable for running on
-soft devices (which don't support the ieee_setapp et.al.).
-
-Changes from RFC to v1:
-
-- Fix wrong sysctl name in ip-sysctl.txt
-- Add notifications
-- Add mlxsw support
-- Add self test
-
-Petr Machata (7):
-  net: ipv4: Control SKB reprioritization after forwarding
-  net: ipv4: Notify about changes to ip_forward_update_priority
-  mlxsw: spectrum: Extract work-scheduling into a new function
-  mlxsw: spectrum_router: Handle sysctl_ip_fwd_update_priority
-  selftests: forwarding: Move lldpad waiting to lib.sh
-  selftests: forwarding: Move DSCP capture to lib.sh
-  selftests: mlxsw: Add test for ip_forward_update_priority
-
- Documentation/networking/ip-sysctl.txt             |   9 +
- .../net/ethernet/mellanox/mlxsw/spectrum_router.c  |  56 +++--
- include/net/netevent.h                             |   1 +
- include/net/netns/ipv4.h                           |   1 +
- net/ipv4/af_inet.c                                 |   1 +
- net/ipv4/ip_forward.c                              |   3 +-
- net/ipv4/sysctl_net_ipv4.c                         |  26 +++
- .../selftests/drivers/net/mlxsw/qos_dscp_bridge.sh |  65 +-----
- .../selftests/drivers/net/mlxsw/qos_dscp_router.sh | 233 +++++++++++++++++++++
- tools/testing/selftests/net/forwarding/lib.sh      |  63 ++++++
- 10 files changed, 379 insertions(+), 79 deletions(-)
- create mode 100755 tools/testing/selftests/drivers/net/mlxsw/qos_dscp_router.sh
-
+diff --git a/Documentation/networking/ip-sysctl.txt b/Documentation/networking/ip-sysctl.txt
+index 77c37fb0b6a6..e74515ecaa9c 100644
+--- a/Documentation/networking/ip-sysctl.txt
++++ b/Documentation/networking/ip-sysctl.txt
+@@ -81,6 +81,15 @@ fib_multipath_hash_policy - INTEGER
+ 	0 - Layer 3
+ 	1 - Layer 4
+ 
++ip_forward_update_priority - INTEGER
++	Whether to update SKB priority from "TOS" field in IPv4 header after it
++	is forwarded. The new SKB priority is mapped from TOS field value
++	according to an rt_tos2priority table (see e.g. man tc-prio).
++	Default: 1 (Update priority.)
++	Possible values:
++	0 - Do not update priority.
++	1 - Update priority.
++
+ route/max_size - INTEGER
+ 	Maximum number of routes allowed in the kernel.  Increase
+ 	this when using large numbers of interfaces and/or routes.
+diff --git a/include/net/netns/ipv4.h b/include/net/netns/ipv4.h
+index 661348f23ea5..e47503b4e4d1 100644
+--- a/include/net/netns/ipv4.h
++++ b/include/net/netns/ipv4.h
+@@ -98,6 +98,7 @@ struct netns_ipv4 {
+ 	int sysctl_ip_default_ttl;
+ 	int sysctl_ip_no_pmtu_disc;
+ 	int sysctl_ip_fwd_use_pmtu;
++	int sysctl_ip_fwd_update_priority;
+ 	int sysctl_ip_nonlocal_bind;
+ 	/* Shall we try to damage output packets if routing dev changes? */
+ 	int sysctl_ip_dynaddr;
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index f2a0a3bab6b5..d3cfbd89ca3a 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -1802,6 +1802,7 @@ static __net_init int inet_init_net(struct net *net)
+ 	 * We set them here, in case sysctl is not compiled.
+ 	 */
+ 	net->ipv4.sysctl_ip_default_ttl = IPDEFTTL;
++	net->ipv4.sysctl_ip_fwd_update_priority = true;
+ 	net->ipv4.sysctl_ip_dynaddr = 0;
+ 	net->ipv4.sysctl_ip_early_demux = 1;
+ 	net->ipv4.sysctl_udp_early_demux = 1;
+diff --git a/net/ipv4/ip_forward.c b/net/ipv4/ip_forward.c
+index b54b948b0596..32662e9e5d21 100644
+--- a/net/ipv4/ip_forward.c
++++ b/net/ipv4/ip_forward.c
+@@ -143,7 +143,8 @@ int ip_forward(struct sk_buff *skb)
+ 	    !skb_sec_path(skb))
+ 		ip_rt_send_redirect(skb);
+ 
+-	skb->priority = rt_tos2priority(iph->tos);
++	if (net->ipv4.sysctl_ip_fwd_update_priority)
++		skb->priority = rt_tos2priority(iph->tos);
+ 
+ 	return NF_HOOK(NFPROTO_IPV4, NF_INET_FORWARD,
+ 		       net, NULL, skb, skb->dev, rt->dst.dev,
+diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+index 5fa335fd3852..e21dda015513 100644
+--- a/net/ipv4/sysctl_net_ipv4.c
++++ b/net/ipv4/sysctl_net_ipv4.c
+@@ -664,6 +664,15 @@ static struct ctl_table ipv4_net_table[] = {
+ 		.proc_handler	= proc_dointvec,
+ 	},
+ 	{
++		.procname	= "ip_forward_update_priority",
++		.data		= &init_net.ipv4.sysctl_ip_fwd_update_priority,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler   = proc_dointvec_minmax,
++		.extra1		= &zero,
++		.extra2		= &one,
++	},
++	{
+ 		.procname	= "ip_nonlocal_bind",
+ 		.data		= &init_net.ipv4.sysctl_ip_nonlocal_bind,
+ 		.maxlen		= sizeof(int),
 -- 
 2.4.11
 
