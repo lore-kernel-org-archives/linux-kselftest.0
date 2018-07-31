@@ -1,77 +1,111 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Wed, 01 Aug 2018 00:38:03 +0200
-Subject: [PATCH net-next v2 4/7] mlxsw: spectrum_router: Handle
- sysctl_ip_fwd_update_priority
+Date: Wed, 01 Aug 2018 00:38:59 +0200
+Subject: [PATCH net-next v2 5/7] selftests: forwarding: Move lldpad waiting to
+ lib.sh
 In-Reply-To: <cover.1533076217.git.petrm@mellanox.com>
 References: <cover.1533076217.git.petrm@mellanox.com>
-Message-ID: <612b9ef595e1cec62711aade431dfbf721499147.1533076217.git.petrm@mellanox.com>
+Message-ID: <94801d18bfb830355aa1b3c8be46492b5711fdc0.1533076217.git.petrm@mellanox.com>
 
-This sysctl setting controls whether packet priority should be updated
-after forwarding. Configure RGCR.usp accordingly so that the device is
-in sync with the kernel handling.
+The function lldpad_wait() will be useful for a test added by a
+following patch. Likewise would the "sleep 5" with its extensive
+comment.
 
-Note that RGCR doesn't allow changing arbitrary parameters
-mid-operation, however "usp" is exempt and can be reconfigured.
+Therefore move lldpad_wait() to lib.sh in order to allow reuse. Rename
+it to lldpad_app_wait_set() to recognize that what this is intended to
+wait on are the pending APP sets.
 
-Also react to NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE notifications
-that signify change in this configuration.
+For the sleeping, add a function lldpad_app_wait_del(). That will serve
+to hold the related explanatory comment (which edit for clarity), and as
+a token in the caller to identify the sites where this sort of waiting
+takes place. That will serve when/if a better way to handle this
+business is found.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 Reviewed-by: Ido Schimmel <idosch at mellanox.com>
 ---
- drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ .../selftests/drivers/net/mlxsw/qos_dscp_bridge.sh | 23 +++-------------------
+ tools/testing/selftests/net/forwarding/lib.sh      | 21 ++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-index 5ee927626567..eec7166fad62 100644
---- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-+++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-@@ -2436,6 +2436,18 @@ static void mlxsw_sp_router_mp_hash_event_work(struct work_struct *work)
- 	kfree(net_work);
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_bridge.sh b/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_bridge.sh
+index cc527660a022..9e875ee8dc1c 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_bridge.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/qos_dscp_bridge.sh
+@@ -103,16 +103,6 @@ dscp_map()
+ 	done
  }
  
-+static int __mlxsw_sp_router_init(struct mlxsw_sp *mlxsw_sp);
-+
-+static void mlxsw_sp_router_update_priority_work(struct work_struct *work)
+-lldpad_wait()
+-{
+-	local dev=$1; shift
+-
+-	while lldptool -t -i $dev -V APP -c app | grep -q pending; do
+-	    echo "$dev: waiting for lldpad to push pending APP updates"
+-	    sleep 5
+-	done
+-}
+-
+ switch_create()
+ {
+ 	ip link add name br1 type bridge vlan_filtering 1
+@@ -124,22 +114,15 @@ switch_create()
+ 
+ 	lldptool -T -i $swp1 -V APP $(dscp_map 10) >/dev/null
+ 	lldptool -T -i $swp2 -V APP $(dscp_map 20) >/dev/null
+-	lldpad_wait $swp1
+-	lldpad_wait $swp2
++	lldpad_app_wait_set $swp1
++	lldpad_app_wait_set $swp2
+ }
+ 
+ switch_destroy()
+ {
+ 	lldptool -T -i $swp2 -V APP -d $(dscp_map 20) >/dev/null
+ 	lldptool -T -i $swp1 -V APP -d $(dscp_map 10) >/dev/null
+-
+-	# Give lldpad a chance to push down the changes. If the device is downed
+-	# too soon, the updates will be left pending, but will have been struck
+-	# off the lldpad's DB already, and we won't be able to tell. Then on
+-	# next test iteration this would cause weirdness as newly-added APP
+-	# rules conflict with the old ones, sometimes getting stuck in an
+-	# "unknown" state.
+-	sleep 5
++	lldpad_app_wait_del
+ 
+ 	ip link set dev $swp2 nomaster
+ 	ip link set dev $swp1 nomaster
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 843a6715924f..90af5cd23417 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -247,6 +247,27 @@ setup_wait()
+ 	sleep $WAIT_TIME
+ }
+ 
++lldpad_app_wait_set()
 +{
-+	struct mlxsw_sp_netevent_work *net_work =
-+		container_of(work, struct mlxsw_sp_netevent_work, work);
-+	struct mlxsw_sp *mlxsw_sp = net_work->mlxsw_sp;
++	local dev=$1; shift
 +
-+	__mlxsw_sp_router_init(mlxsw_sp);
-+	kfree(net_work);
++	while lldptool -t -i $dev -V APP -c app | grep -q pending; do
++		echo "$dev: waiting for lldpad to push pending APP updates"
++		sleep 5
++	done
 +}
 +
- static int mlxsw_sp_router_schedule_work(struct net *net,
- 					 struct notifier_block *nb,
- 					 void (*cb)(struct work_struct *))
-@@ -2522,6 +2534,9 @@ static int mlxsw_sp_router_netevent_event(struct notifier_block *nb,
- 		return mlxsw_sp_router_schedule_work(ptr, nb,
- 				mlxsw_sp_router_mp_hash_event_work);
- 
-+	case NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE:
-+		return mlxsw_sp_router_schedule_work(ptr, nb,
-+				mlxsw_sp_router_update_priority_work);
- 	}
- 
- 	return NOTIFY_DONE;
-@@ -7390,6 +7405,7 @@ static int mlxsw_sp_dscp_init(struct mlxsw_sp *mlxsw_sp)
- 
- static int __mlxsw_sp_router_init(struct mlxsw_sp *mlxsw_sp)
++lldpad_app_wait_del()
++{
++	# Give lldpad a chance to push down the changes. If the device is downed
++	# too soon, the updates will be left pending. However, they will have
++	# been struck off the lldpad's DB already, so we won't be able to tell
++	# they are pending. Then on next test iteration this would cause
++	# weirdness as newly-added APP rules conflict with the old ones,
++	# sometimes getting stuck in an "unknown" state.
++	sleep 5
++}
++
+ pre_cleanup()
  {
-+	bool usp = init_net.ipv4.sysctl_ip_fwd_update_priority;
- 	char rgcr_pl[MLXSW_REG_RGCR_LEN];
- 	u64 max_rifs;
- 	int err;
-@@ -7400,7 +7416,7 @@ static int __mlxsw_sp_router_init(struct mlxsw_sp *mlxsw_sp)
- 
- 	mlxsw_reg_rgcr_pack(rgcr_pl, true, true);
- 	mlxsw_reg_rgcr_max_router_interfaces_set(rgcr_pl, max_rifs);
--	mlxsw_reg_rgcr_usp_set(rgcr_pl, true);
-+	mlxsw_reg_rgcr_usp_set(rgcr_pl, usp);
- 	err = mlxsw_reg_write(mlxsw_sp->core, MLXSW_REG(rgcr), rgcr_pl);
- 	if (err)
- 		return err;
+ 	if [ "${PAUSE_ON_CLEANUP}" = "yes" ]; then
 -- 
 2.4.11
 
