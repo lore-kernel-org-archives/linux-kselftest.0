@@ -1,49 +1,57 @@
-From: davem at davemloft.net (David Miller)
-Date: Wed, 01 Aug 2018 09:52:54 -0700 (PDT)
-Subject: [PATCH net-next v2 0/7] ipv4: Control SKB reprioritization
- after forwarding
-In-Reply-To: <cover.1533076217.git.petrm@mellanox.com>
-References: <cover.1533076217.git.petrm@mellanox.com>
-Message-ID: <20180801.095254.162481197087516714.davem@davemloft.net>
+From: catalin.marinas at arm.com (Catalin Marinas)
+Date: Wed, 1 Aug 2018 18:42:56 +0100
+Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
+In-Reply-To: <CAAeHK+yWF05XoU+0iuJoXAL3cWgdtxbeLoBz169yP12W4LkcQw@mail.gmail.com>
+References: <cover.1529507994.git.andreyknvl@google.com>
+ <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
+ <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
+ <CAAeHK+yqWKTdTG+ymZ2-5XKiDANV+fmUjnQkRy-5tpgphuLJRA@mail.gmail.com>
+ <CAAeHK+wJbbCZd+-X=9oeJgsqQJiq8h+Aagz3SQMPaAzCD+pvFw@mail.gmail.com>
+ <CAAeHK+yWF05XoU+0iuJoXAL3cWgdtxbeLoBz169yP12W4LkcQw@mail.gmail.com>
+Message-ID: <20180801174256.5mbyf33eszml4nmu@armageddon.cambridge.arm.com>
 
-From: Petr Machata <petrm at mellanox.com>
-Date: Wed, 01 Aug 2018 00:35:53 +0200
+On Mon, Jul 16, 2018 at 01:25:59PM +0200, Andrey Konovalov wrote:
+> On Thu, Jun 28, 2018 at 9:30 PM, Andrey Konovalov <andreyknvl at google.com> wrote:
+> > On Wed, Jun 27, 2018 at 5:05 PM, Andrey Konovalov <andreyknvl at google.com> wrote:
+> >> On Tue, Jun 26, 2018 at 7:29 PM, Catalin Marinas
+> >> <catalin.marinas at arm.com> wrote:
+> >>> While I support this work, as a maintainer I'd like to understand
+> >>> whether we'd be in a continuous chase of ABI breaks with every kernel
+> >>> release or we have a better way to identify potential issues. Is there
+> >>> any way to statically analyse conversions from __user ptr to long for
+> >>> example? Or, could we get the compiler to do this for us?
+> >>
+> >> OK, got it, I'll try to figure out a way to find these conversions.
+> >
+> > I've prototyped a checker on top of clang static analyzer (initially
+> > looked at sparse, but couldn't find any documentation or examples).
+> > The results are here [1], search for "warning: user pointer cast".
+> > Sharing in case anybody wants to take a look, will look at them myself
+> > tomorrow.
+> >
+> > [1] https://gist.github.com/xairy/433edd5c86456a64026247cb2fef2115
+> 
+> So the checker reports ~100 different places where a __user pointer
+> being casted. I've looked through them and found 3 places where we
+> need to add untagging. Source code lines below come from 4.18-rc2+
+> (6f0d349d).
+[...]
+> I'll add the 3 patches with fixes to v5 of this patchset.
 
-> After IPv4 packets are forwarded, the priority of the corresponding SKB
-> is updated according to the TOS field of IPv4 header. This overrides any
-> prioritization done earlier by e.g. an skbedit action or ingress-qos-map
-> defined at a vlan device.
-> 
-> Such overriding may not always be desirable. Even if the packet ends up
-> being routed, which implies this is an L3 network node, an administrator
-> may wish to preserve whatever prioritization was done earlier on in the
-> pipeline.
-> 
-> Therefore this patch set introduces a sysctl that controls this
-> behavior, net.ipv4.ip_forward_update_priority. It's value is 1 by
-> default to preserve the current behavior.
-> 
-> All of the above is implemented in patch #1.
-> 
-> Value changes prompt a new NETEVENT_IPV4_FWD_UPDATE_PRIORITY_UPDATE
-> notification, so that the drivers can hook up whatever logic may depend
-> on this value. That is implemented in patch #2.
-> 
-> In patches #3 and #4, mlxsw is adapted to recognize the sysctl. On
-> initialization, the RGCR register that handles router configuration is
-> set in accordance with the sysctl. The new notification is listened to
-> and RGCR is reconfigured as necessary.
-> 
-> In patches #5 to #7, a selftest is added to verify that mlxsw reflects
-> the sysctl value as necessary. The test is expressed in terms of the
-> recently-introduced ieee_setapp support, and works by observing how DSCP
-> value gets rewritten depending on packet priority. For this reason, the
-> test is added to the subdirectory drivers/net/mlxsw. Even though it's
-> not particularly specific to mlxsw, it's not suitable for running on
-> soft devices (which don't support the ieee_setapp et.al.).
- ...
+Thanks for investigating. You can fix those three places in your code
+but I was rather looking for a way to check such casting in the future
+for newly added code. While for the khwasan we can assume it's a debug
+option, the tagged user pointers are ABI and we need to keep it stable.
 
-Series applied, thank you.
+We could we actually add some macros for explicit conversion between
+__user ptr and long and silence the warning there (I guess this would
+work better for sparse). We can then detect new ptr to long casts as
+they appear. I just hope that's not too intrusive.
+
+(I haven't tried the sparse patch yet, hopefully sometime this week)
+
+-- 
+Catalin
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
