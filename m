@@ -1,59 +1,85 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Wed, 1 Aug 2018 18:42:56 +0100
-Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
-In-Reply-To: <CAAeHK+yWF05XoU+0iuJoXAL3cWgdtxbeLoBz169yP12W4LkcQw@mail.gmail.com>
-References: <cover.1529507994.git.andreyknvl@google.com>
- <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
- <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
- <CAAeHK+yqWKTdTG+ymZ2-5XKiDANV+fmUjnQkRy-5tpgphuLJRA@mail.gmail.com>
- <CAAeHK+wJbbCZd+-X=9oeJgsqQJiq8h+Aagz3SQMPaAzCD+pvFw@mail.gmail.com>
- <CAAeHK+yWF05XoU+0iuJoXAL3cWgdtxbeLoBz169yP12W4LkcQw@mail.gmail.com>
-Message-ID: <20180801174256.5mbyf33eszml4nmu@armageddon.cambridge.arm.com>
+From: ezequiel@collabora.com (Ezequiel Garcia)
+Date: Wed,  1 Aug 2018 18:50:22 -0300
+Subject: [PATCH v3 0/4] Make sure .device_run is always called in non-atomic
+ context
+Message-ID: <20180801215026.27809-1-ezequiel@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180801174256.H4UgDddVaKLSGEffGRDsWW13MczPJFX7weSNobR3dkw@z>
+Message-ID: <20180801215022._NxmT-EjztetKTgRUd4ywxNv1NZsh_bBr7IyjdtdPiM@z>
 
-On Mon, Jul 16, 2018@01:25:59PM +0200, Andrey Konovalov wrote:
-> On Thu, Jun 28, 2018@9:30 PM, Andrey Konovalov <andreyknvl@google.com> wrote:
-> > On Wed, Jun 27, 2018@5:05 PM, Andrey Konovalov <andreyknvl@google.com> wrote:
-> >> On Tue, Jun 26, 2018 at 7:29 PM, Catalin Marinas
-> >> <catalin.marinas@arm.com> wrote:
-> >>> While I support this work, as a maintainer I'd like to understand
-> >>> whether we'd be in a continuous chase of ABI breaks with every kernel
-> >>> release or we have a better way to identify potential issues. Is there
-> >>> any way to statically analyse conversions from __user ptr to long for
-> >>> example? Or, could we get the compiler to do this for us?
-> >>
-> >> OK, got it, I'll try to figure out a way to find these conversions.
-> >
-> > I've prototyped a checker on top of clang static analyzer (initially
-> > looked at sparse, but couldn't find any documentation or examples).
-> > The results are here [1], search for "warning: user pointer cast".
-> > Sharing in case anybody wants to take a look, will look at them myself
-> > tomorrow.
-> >
-> > [1] https://gist.github.com/xairy/433edd5c86456a64026247cb2fef2115
-> 
-> So the checker reports ~100 different places where a __user pointer
-> being casted. I've looked through them and found 3 places where we
-> need to add untagging. Source code lines below come from 4.18-rc2+
-> (6f0d349d).
-[...]
-> I'll add the 3 patches with fixes to v5 of this patchset.
+This series goal is to avoid drivers from having ad-hoc code
+to call .device_run in non-atomic context. Currently, .device_run
+can be called via v4l2_m2m_job_finish(), potentially running
+in interrupt context.
 
-Thanks for investigating. You can fix those three places in your code
-but I was rather looking for a way to check such casting in the future
-for newly added code. While for the khwasan we can assume it's a debug
-option, the tagged user pointers are ABI and we need to keep it stable.
+This series will be useful for the upcoming Request API, where drivers
+typically require .device_run to be called in non-atomic context for
+v4l2_ctrl_request_setup() calls.
 
-We could we actually add some macros for explicit conversion between
-__user ptr and long and silence the warning there (I guess this would
-work better for sparse). We can then detect new ptr to long casts as
-they appear. I just hope that's not too intrusive.
+The solution is to add a per-device worker that is scheduled
+by v4l2_m2m_job_finish, which replaces drivers having a threaded interrupt
+or similar.
 
-(I haven't tried the sparse patch yet, hopefully sometime this week)
+This change allows v4l2_m2m_job_finish() to be called in interrupt
+context, separating .device_run and v4l2_m2m_job_finish() contexts.
+
+It's worth mentioning that v4l2_m2m_cancel_job() doesn't need
+to flush or cancel the new worker, because the job_spinlock
+synchronizes both and also because the core prevents simultaneous
+jobs. Either v4l2_m2m_cancel_job() will wait for the worker, or the
+worker will be unable to run a new job.
+
+Testing
+-------
+
+In order to test the change, and make sure no regressions are
+introduced, a kselftest test is added to stress the mem2mem framework.
+
+Note that this series rework the kselftest media_tests target.
+Those tests that need hardware and human intervention are now
+marked as _EXTENDED, and a frontend script is added to run those
+tests that can run without hardware or human intervention.
+
+This will allow the media_tests target to be included in
+automatic regression testing setups.
+
+Hopefully, we will be able to introduce more and more automatic
+regression tests. Currently, our self-test run looks like:
+
+    $ make TARGETS=media_tests kselftest 
+    make[1]: Entering directory '/home/zeta/repos/builds/virtme-x86_64'
+    make[3]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+    make[3]: Nothing to be done for 'all'.
+    make[3]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+    TAP version 13
+    selftests: media_tests: m2m_job_test.sh
+    ========================================
+    -------------------
+    running media tests
+    -------------------
+    media_device : no video4linux drivers loaded, vim2m is needed
+    not ok 1..1 selftests: media_tests: m2m_job_test.sh [SKIP]
+    make[1]: Leaving directory '/home/zeta/repos/builds/virtme-x86_64'
+
+Ezequiel Garcia (3):
+  v4l2-mem2mem: Avoid v4l2_m2m_prepare_buf from scheduling a job
+  v4l2-mem2mem: Avoid calling .device_run in v4l2_m2m_job_finish
+  selftests: media_tests: Add a memory-to-memory concurrent stress test
+
+Sakari Ailus (1):
+  v4l2-mem2mem: Simplify exiting the function in __v4l2_m2m_try_schedule
+
+ drivers/media/v4l2-core/v4l2-mem2mem.c        |  72 +++--
+ .../testing/selftests/media_tests/.gitignore  |   1 +
+ tools/testing/selftests/media_tests/Makefile  |   5 +-
+ .../selftests/media_tests/m2m_job_test.c      | 287 ++++++++++++++++++
+ .../selftests/media_tests/m2m_job_test.sh     |  32 ++
+ 5 files changed, 371 insertions(+), 26 deletions(-)
+ create mode 100644 tools/testing/selftests/media_tests/m2m_job_test.c
+ create mode 100755 tools/testing/selftests/media_tests/m2m_job_test.sh
 
 -- 
-Catalin
+2.18.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
