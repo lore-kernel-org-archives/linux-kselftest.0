@@ -1,44 +1,94 @@
 From: ezequiel@collabora.com (Ezequiel Garcia)
-Date: Wed,  1 Aug 2018 18:50:23 -0300
-Subject: [PATCH v3 1/4] v4l2-mem2mem: Avoid v4l2_m2m_prepare_buf from
- scheduling a job
+Date: Wed,  1 Aug 2018 18:50:24 -0300
+Subject: [PATCH v3 2/4] v4l2-mem2mem: Simplify exiting the function in
+ __v4l2_m2m_try_schedule
 In-Reply-To: <20180801215026.27809-1-ezequiel@collabora.com>
 References: <20180801215026.27809-1-ezequiel@collabora.com>
-Message-ID: <20180801215026.27809-2-ezequiel@collabora.com>
+Message-ID: <20180801215026.27809-3-ezequiel@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180801215023.HOf2xo8yC_am0sRgN1JzvIXr6fje0rHxTBQXVmUMEdI@z>
+Message-ID: <20180801215024.QASAjqib0OHbWUxd5HnS3wH97pkZzFd6pqmmsofe3yw@z>
 
-There is no need for v4l2_m2m_prepare_buf to try to schedule a job,
-as it only prepares a buffer, but does not queue or changes the
-state of the queue.
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Remove the call to v4l2_m2m_try_schedule from v4l2_m2m_prepare_buf.
+The __v4l2_m2m_try_schedule function acquires and releases multiple
+spinlocks. Simplify unlocking the job lock by adding labels to unlock
+the lock and exit the function.
 
+Signed-off-by: Sakari Ailus <sakari.ailus at linux.intel.com>
 Signed-off-by: Ezequiel Garcia <ezequiel at collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-mem2mem.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 29 ++++++++++++--------------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-index 0a93c5b173c2..efae845435c9 100644
+index efae845435c9..da82d151dd20 100644
 --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
 +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-@@ -481,14 +481,9 @@ int v4l2_m2m_prepare_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- 			 struct v4l2_buffer *buf)
- {
- 	struct vb2_queue *vq;
--	int ret;
+@@ -279,51 +279,48 @@ static void __v4l2_m2m_try_queue(struct v4l2_m2m_dev *m2m_dev,
  
- 	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
--	ret = vb2_prepare_buf(vq, buf);
--	if (!ret)
--		v4l2_m2m_try_schedule(m2m_ctx);
--
--	return ret;
-+	return vb2_prepare_buf(vq, buf);
+ 	/* If the context is aborted then don't schedule it */
+ 	if (m2m_ctx->job_flags & TRANS_ABORT) {
+-		spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags_job);
+ 		dprintk("Aborted context\n");
+-		return;
++		goto job_unlock;
+ 	}
+ 
+ 	if (m2m_ctx->job_flags & TRANS_QUEUED) {
+-		spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags_job);
+ 		dprintk("On job queue already\n");
+-		return;
++		goto job_unlock;
+ 	}
+ 
+ 	spin_lock_irqsave(&m2m_ctx->out_q_ctx.rdy_spinlock, flags_out);
+ 	if (list_empty(&m2m_ctx->out_q_ctx.rdy_queue)
+ 	    && !m2m_ctx->out_q_ctx.buffered) {
+-		spin_unlock_irqrestore(&m2m_ctx->out_q_ctx.rdy_spinlock,
+-					flags_out);
+-		spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags_job);
+ 		dprintk("No input buffers available\n");
+-		return;
++		goto out_unlock;
+ 	}
+ 	spin_lock_irqsave(&m2m_ctx->cap_q_ctx.rdy_spinlock, flags_cap);
+ 	if (list_empty(&m2m_ctx->cap_q_ctx.rdy_queue)
+ 	    && !m2m_ctx->cap_q_ctx.buffered) {
+-		spin_unlock_irqrestore(&m2m_ctx->cap_q_ctx.rdy_spinlock,
+-					flags_cap);
+-		spin_unlock_irqrestore(&m2m_ctx->out_q_ctx.rdy_spinlock,
+-					flags_out);
+-		spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags_job);
+ 		dprintk("No output buffers available\n");
+-		return;
++		goto cap_unlock;
+ 	}
+ 	spin_unlock_irqrestore(&m2m_ctx->cap_q_ctx.rdy_spinlock, flags_cap);
+ 	spin_unlock_irqrestore(&m2m_ctx->out_q_ctx.rdy_spinlock, flags_out);
+ 
+ 	if (m2m_dev->m2m_ops->job_ready
+ 		&& (!m2m_dev->m2m_ops->job_ready(m2m_ctx->priv))) {
+-		spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags_job);
+ 		dprintk("Driver not ready\n");
+-		return;
++		goto job_unlock;
+ 	}
+ 
+ 	list_add_tail(&m2m_ctx->queue, &m2m_dev->job_queue);
+ 	m2m_ctx->job_flags |= TRANS_QUEUED;
+ 
+ 	spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags_job);
++	return;
++
++cap_unlock:
++	spin_unlock_irqrestore(&m2m_ctx->cap_q_ctx.rdy_spinlock, flags_cap);
++out_unlock:
++	spin_unlock_irqrestore(&m2m_ctx->out_q_ctx.rdy_spinlock, flags_out);
++job_unlock:
++	spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags_job);
  }
- EXPORT_SYMBOL_GPL(v4l2_m2m_prepare_buf);
  
+ /**
 -- 
 2.18.0
 
