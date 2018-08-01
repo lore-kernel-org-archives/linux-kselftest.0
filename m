@@ -1,391 +1,197 @@
-From: ezequiel@collabora.com (Ezequiel Garcia)
-Date: Wed,  1 Aug 2018 18:50:26 -0300
-Subject: [PATCH v3 4/4] selftests: media_tests: Add a memory-to-memory
- concurrent stress test
-In-Reply-To: <20180801215026.27809-1-ezequiel@collabora.com>
-References: <20180801215026.27809-1-ezequiel@collabora.com>
-Message-ID: <20180801215026.27809-5-ezequiel@collabora.com>
+From: dima@arista.com (Dmitry Safonov)
+Date: Thu,  2 Aug 2018 00:36:36 +0100
+Subject: [PATCH] mm/selftest: Add MAP_POPULATE test
+Message-ID: <20180801233636.29354-1-dima@arista.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180801215026.S2QaAZ2AhbAdU6ooqyRnNrfLHXt8lhNcwh3eF1wB2Jw@z>
+Message-ID: <20180801233636.hfsZentz6CiVWt6lGVqdg-cybbgL_vxI72E2b1VZhFw@z>
 
-Add a test for the memory-to-memory framework, to exercise the
-scheduling of concurrent jobs, using multiple contexts.
+As many other projects, we use some shmalloc allocator.
+At some point we need to make a part of allocated pages back private to
+process. And it should be populated straight away.
+Check that (MAP_PRIVATE | MAP_POPULATE) actually copies the private page.
 
-This test needs to be run using the vim2m virtual driver,
-and so needs no hardware.
-
-While here, rework the media_tests suite in order to make it
-useful for automatic tools. Those tests that need human intervention
-are now separated from those that can run automatically, needing
-only virtual drivers to work.
-
-Signed-off-by: Ezequiel Garcia <ezequiel at collabora.com>
+Cc: Andrew Morton <akpm at linux-foundation.org>
+Cc: Dmitry Safonov <0x7f454c46 at gmail.com>
+Cc: Hua Zhong <hzhong at arista.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Stuart Ritchie <sritchie at arista.com>
+Cc: linux-kselftest at vger.kernel.org
+Signed-off-by: Dmitry Safonov <dima at arista.com>
 ---
- .../testing/selftests/media_tests/.gitignore  |   1 +
- tools/testing/selftests/media_tests/Makefile  |   5 +-
- .../selftests/media_tests/m2m_job_test.c      | 287 ++++++++++++++++++
- .../selftests/media_tests/m2m_job_test.sh     |  32 ++
- 4 files changed, 324 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/media_tests/m2m_job_test.c
- create mode 100755 tools/testing/selftests/media_tests/m2m_job_test.sh
+ tools/testing/selftests/vm/.gitignore     |   1 +
+ tools/testing/selftests/vm/Makefile       |   1 +
+ tools/testing/selftests/vm/map_populate.c | 113 ++++++++++++++++++++++++++++++
+ tools/testing/selftests/vm/run_vmtests    |  11 +++
+ 4 files changed, 126 insertions(+)
+ create mode 100644 tools/testing/selftests/vm/map_populate.c
 
-diff --git a/tools/testing/selftests/media_tests/.gitignore b/tools/testing/selftests/media_tests/.gitignore
-index 8745eba39012..71c6508348ce 100644
---- a/tools/testing/selftests/media_tests/.gitignore
-+++ b/tools/testing/selftests/media_tests/.gitignore
-@@ -1,3 +1,4 @@
- media_device_test
- media_device_open
- video_device_test
-+m2m_job_test
-diff --git a/tools/testing/selftests/media_tests/Makefile b/tools/testing/selftests/media_tests/Makefile
-index 60826d7d37d4..d25d4c3eb7d2 100644
---- a/tools/testing/selftests/media_tests/Makefile
-+++ b/tools/testing/selftests/media_tests/Makefile
-@@ -1,6 +1,9 @@
- # SPDX-License-Identifier: GPL-2.0
- #
- CFLAGS += -I../ -I../../../../usr/include/
--TEST_GEN_PROGS := media_device_test media_device_open video_device_test
-+TEST_GEN_PROGS_EXTENDED := media_device_test media_device_open video_device_test m2m_job_test
-+TEST_PROGS := m2m_job_test.sh
- 
- include ../lib.mk
-+
-+LDLIBS += -lpthread
-diff --git a/tools/testing/selftests/media_tests/m2m_job_test.c b/tools/testing/selftests/media_tests/m2m_job_test.c
+diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
+index 342c7bc9dc8c..af5ff83f6d7f 100644
+--- a/tools/testing/selftests/vm/.gitignore
++++ b/tools/testing/selftests/vm/.gitignore
+@@ -1,6 +1,7 @@
+ hugepage-mmap
+ hugepage-shm
+ map_hugetlb
++map_populate
+ thuge-gen
+ compaction_test
+ mlock2-tests
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index fdefa2295ddc..9881876d2aa0 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -12,6 +12,7 @@ TEST_GEN_FILES += gup_benchmark
+ TEST_GEN_FILES += hugepage-mmap
+ TEST_GEN_FILES += hugepage-shm
+ TEST_GEN_FILES += map_hugetlb
++TEST_GEN_FILES += map_populate
+ TEST_GEN_FILES += mlock-random-test
+ TEST_GEN_FILES += mlock2-tests
+ TEST_GEN_FILES += on-fault-limit
+diff --git a/tools/testing/selftests/vm/map_populate.c b/tools/testing/selftests/vm/map_populate.c
 new file mode 100644
-index 000000000000..5800269567e6
+index 000000000000..df3eacc8eecb
 --- /dev/null
-+++ b/tools/testing/selftests/media_tests/m2m_job_test.c
-@@ -0,0 +1,287 @@
++++ b/tools/testing/selftests/vm/map_populate.c
+@@ -0,0 +1,113 @@
 +// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright (c) Collabora, Ltd.
-+
 +/*
-+ * This file adds a test for the memory-to-memory
-+ * framework.
++ * Copyright (c) 2018 Dmitry Safonov, Arista Networks
 + *
-+ * This test opens a user specified video device and then
-+ * queues concurrent jobs. The jobs are totally dummy,
-+ * its purpose is only to verify that each of the queued
-+ * jobs is run, and is run only once.
-+ *
-+ * The vim2m driver is needed in order to run the test.
-+ *
-+ * Usage:
-+ *      ./m2m-job-test -d /dev/videoX
++ * MAP_POPULATE | MAP_PRIVATE should COW VMA pages.
 + */
 +
-+#include <assert.h>
++#define _GNU_SOURCE
 +#include <errno.h>
 +#include <fcntl.h>
-+#include <unistd.h>
++#include <sys/mman.h>
++#include <sys/socket.h>
++#include <sys/types.h>
++#include <sys/wait.h>
 +#include <stdio.h>
 +#include <stdlib.h>
 +#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/stat.h>
-+#include <time.h>
-+#include <pthread.h>
-+#include <poll.h>
++#include <unistd.h>
 +
-+#include <linux/videodev2.h>
-+
-+#include "../kselftest.h"
-+
-+#define V4L2_CID_TRANS_TIME_MSEC        (V4L2_CID_USER_BASE + 0x1000)
-+#define V4L2_CID_TRANS_NUM_BUFS         (V4L2_CID_USER_BASE + 0x1001)
-+
-+#define MAX_TRANS_TIME_MSEC 500
-+#define MAX_COUNT 50
-+#define MAX_BUFFERS 5
-+#define W 10
-+#define H 10
-+
-+#ifndef DEBUG
-+#define dprintf(fmt, arg...)			\
-+	do {					\
-+	} while (0)
-+#else
-+#define dprintf(fmt, arg...) printf(fmt, ## arg)
++#ifndef MMAP_SZ
++#define MMAP_SZ		4096
 +#endif
 +
-+static char video_device[256];
-+static int thread_count;
++#define BUG_ON(condition, description)					\
++	do {								\
++		if (condition) {					\
++			fprintf(stderr, "[FAIL]\t%s:%d\t%s:%s\n", __func__, \
++				__LINE__, (description), strerror(errno)); \
++			exit(1);					\
++		}							\
++	} while (0)
 +
-+struct context {
-+	int vfd;
-+	unsigned int width;
-+	unsigned int height;
-+	int buffers;
-+};
-+
-+static int req_src_buf(struct context *ctx, int buffers)
++static int parent_f(int sock, unsigned long *smap, int child)
 +{
-+	struct v4l2_requestbuffers reqbuf;
-+	struct v4l2_buffer buf;
-+	int i, ret;
++	int status, ret;
 +
-+	memset(&reqbuf, 0, sizeof(reqbuf));
-+	memset(&buf, 0, sizeof(buf));
++	ret = read(sock, &status, sizeof(int));
++	BUG_ON(ret <= 0, "read(sock)");
 +
-+	reqbuf.count	= buffers;
-+	reqbuf.type	= V4L2_BUF_TYPE_VIDEO_OUTPUT;
-+	reqbuf.memory	= V4L2_MEMORY_MMAP;
-+	ret = ioctl(ctx->vfd, VIDIOC_REQBUFS, &reqbuf);
-+	if (ret)
-+		return ret;
++	*smap = 0x22222BAD;
++	ret = msync(smap, MMAP_SZ, MS_SYNC);
++	BUG_ON(ret, "msync()");
 +
-+	for (i = 0; i < buffers; i++) {
-+		buf.type	= V4L2_BUF_TYPE_VIDEO_OUTPUT;
-+		buf.memory	= V4L2_MEMORY_MMAP;
-+		buf.index	= i;
-+		ret = ioctl(ctx->vfd, VIDIOC_QUERYBUF, &buf);
-+		if (ret)
-+			return ret;
-+		buf.bytesused = W*H*2;
-+		ret = ioctl(ctx->vfd, VIDIOC_QBUF, &buf);
-+		if (ret)
-+			return ret;
-+	}
++	ret = write(sock, &status, sizeof(int));
++	BUG_ON(ret <= 0, "write(sock)");
++
++	waitpid(child, &status, 0);
++	BUG_ON(!WIFEXITED(status), "child hasn't suicide by own will");
++
++	return WEXITSTATUS(status);
++}
++
++static int child_f(int sock, unsigned long *smap, int fd)
++{
++	int ret, buf = 0;
++
++	smap = mmap(0, MMAP_SZ, PROT_READ | PROT_WRITE,
++			MAP_PRIVATE | MAP_POPULATE, fd, 0);
++	BUG_ON(smap == MAP_FAILED, "mmap()");
++
++	BUG_ON(*smap != 0xdeadbabe, "MAP_PRIVATE | MAP_POPULATE changed file");
++
++	ret = write(sock, &buf, sizeof(int));
++	BUG_ON(ret <= 0, "write(sock)");
++
++	ret = read(sock, &buf, sizeof(int));
++	BUG_ON(ret <= 0, "read(sock)");
++
++	BUG_ON(*smap == 0x22222BAD, "MAP_POPULATE didn't COW private page");
++	BUG_ON(*smap != 0xdeadbabe, "mapping was corrupted");
 +
 +	return 0;
 +}
 +
-+static int req_dst_buf(struct context *ctx, int buffers)
++int main(int argc, char **argv)
 +{
-+	struct v4l2_requestbuffers reqbuf;
-+	struct v4l2_buffer buf;
-+	int i, ret;
++	int sock[2], child, ret;
++	FILE *ftmp;
++	unsigned long *smap;
 +
-+	memset(&reqbuf, 0, sizeof(reqbuf));
-+	memset(&buf, 0, sizeof(buf));
++	ftmp = tmpfile();
++	BUG_ON(ftmp == 0, "tmpfile()");
 +
-+	reqbuf.count	= buffers;
-+	reqbuf.type	= V4L2_BUF_TYPE_VIDEO_CAPTURE;
-+	reqbuf.memory	= V4L2_MEMORY_MMAP;
++	ret = ftruncate(fileno(ftmp), MMAP_SZ);
++	BUG_ON(ret, "ftruncate()");
 +
-+	ret = ioctl(ctx->vfd, VIDIOC_REQBUFS, &reqbuf);
-+	if (ret)
-+		return ret;
++	smap = mmap(0, MMAP_SZ, PROT_READ | PROT_WRITE,
++			MAP_SHARED, fileno(ftmp), 0);
++	BUG_ON(smap == MAP_FAILED, "mmap()");
 +
-+	for (i = 0; i < buffers; i++) {
-+		buf.type	= V4L2_BUF_TYPE_VIDEO_CAPTURE;
-+		buf.memory	= V4L2_MEMORY_MMAP;
-+		buf.index	= i;
-+		ret = ioctl(ctx->vfd, VIDIOC_QUERYBUF, &buf);
-+		if (ret)
-+			return ret;
-+		ret = ioctl(ctx->vfd, VIDIOC_QBUF, &buf);
-+		if (ret)
-+			return ret;
-+	}
-+	return 0;
-+}
++	*smap = 0xdeadbabe;
++	/* Probably unnecessary, but let it be. */
++	ret = msync(smap, MMAP_SZ, MS_SYNC);
++	BUG_ON(ret, "msync()");
 +
-+static int streamon(struct context *ctx)
-+{
-+	enum v4l2_buf_type type;
-+	int ret;
++	ret = socketpair(PF_LOCAL, SOCK_SEQPACKET, 0, sock);
++	BUG_ON(ret, "socketpair()");
 +
-+	type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
-+	ret = ioctl(ctx->vfd, VIDIOC_STREAMON, &type);
-+	if (ret)
-+		return ret;
++	child = fork();
++	BUG_ON(child == -1, "fork()");
 +
-+	type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-+	ret = ioctl(ctx->vfd, VIDIOC_STREAMON, &type);
-+	if (ret)
-+		return ret;
++	if (child) {
++		ret = close(sock[0]);
++		BUG_ON(ret, "close()");
 +
-+	return ret;
-+}
-+
-+static int dqbuf(struct context *ctx)
-+{
-+	struct v4l2_buffer buf;
-+	int i, ret, timeout;
-+
-+	struct pollfd fds[] = {
-+		{ .fd = ctx->vfd, .events = POLLIN },
-+	};
-+
-+	for (i = 0; i < ctx->buffers; i++) {
-+		timeout = (MAX_TRANS_TIME_MSEC + 10) * thread_count * 2;
-+		ret = poll(fds, 1, timeout);
-+		if (-1 == ret) {
-+			if (errno == EINTR)
-+				continue;
-+			return -1;
-+		}
-+
-+		if (ret == 0) {
-+			dprintf("%s: timeout on %p\n", __func__, ctx);
-+			return -1;
-+		}
-+
-+		dprintf("%s: event on %p\n", __func__, ctx);
-+
-+		memset(&buf, 0, sizeof(buf));
-+		buf.type	= V4L2_BUF_TYPE_VIDEO_OUTPUT;
-+		buf.memory	= V4L2_MEMORY_MMAP;
-+		buf.index	= i;
-+		ret = ioctl(ctx->vfd, VIDIOC_DQBUF, &buf);
-+		if (ret) {
-+			dprintf("%s: VIDIOC_DQBUF failed %p\n", __func__, ctx);
-+			return ret;
-+		}
-+
-+		memset(&buf, 0, sizeof(buf));
-+		buf.type	= V4L2_BUF_TYPE_VIDEO_CAPTURE;
-+		buf.memory	= V4L2_MEMORY_MMAP;
-+		buf.index	= i;
-+		ret = ioctl(ctx->vfd, VIDIOC_DQBUF, &buf);
-+		if (ret) {
-+			dprintf("%s: VIDIOC_DQBUF failed %p\n", __func__, ctx);
-+			return ret;
-+		}
++		return parent_f(sock[1], smap, child);
 +	}
 +
-+	return 0;
++	ret = close(sock[1]);
++	BUG_ON(ret, "close()");
++
++	return child_f(sock[0], smap, fileno(ftmp));
 +}
-+
-+static void *job(void *arg)
-+{
-+	struct context *ctx = (struct context *)arg;
-+
-+	dprintf("%s: %p running\n", __func__, ctx);
-+
-+	assert(streamon(ctx) == 0);
-+	assert(dqbuf(ctx) == 0);
-+	assert(dqbuf(ctx) != 0);
-+	close(ctx->vfd);
-+
-+	dprintf("%s: %p done\n", __func__, ctx);
-+	return NULL;
-+}
-+
-+static void init(struct context *ctx)
-+{
-+	struct v4l2_ext_controls ext_ctrls;
-+	struct v4l2_ext_control ctrls[2];
-+	struct v4l2_capability cap;
-+	int ret, buffers;
-+
-+	memset(ctx, 0, sizeof(*ctx));
-+
-+	ctx->vfd = open(video_device, O_RDWR | O_NONBLOCK, 0);
-+	ctx->width = W;
-+	ctx->height = H;
-+	assert(ctx->vfd >= 0);
-+
-+	ret = ioctl(ctx->vfd, VIDIOC_QUERYCAP, &cap);
-+	assert(ret == 0);
-+	assert(cap.device_caps & V4L2_CAP_VIDEO_M2M);
-+	if (strcmp((const char *)cap.driver, "vim2m") != 0)
-+		ksft_exit_skip("Please run the test as root - Exiting.\n");
-+
-+	ctrls[0].id = V4L2_CID_TRANS_TIME_MSEC;
-+	ctrls[0].value = rand() % MAX_TRANS_TIME_MSEC + 10;
-+	ctrls[1].id =  V4L2_CID_TRANS_NUM_BUFS;
-+	ctrls[1].value = 1;
-+
-+	memset(&ext_ctrls, 0, sizeof(ext_ctrls));
-+	ext_ctrls.count = 2;
-+	ext_ctrls.controls = ctrls;
-+	ret = ioctl(ctx->vfd, VIDIOC_S_EXT_CTRLS, &ext_ctrls);
-+	assert(ret == 0);
-+
-+	buffers = rand() % MAX_BUFFERS + 1;
-+	assert(req_src_buf(ctx, buffers) == 0);
-+	assert(req_dst_buf(ctx, buffers) == 0);
-+	ctx->buffers = buffers;
-+}
-+
-+int main(int argc, char * const argv[])
-+{
-+	int i, opt;
-+
-+	if (argc < 2) {
-+		printf("Usage: %s [-d </dev/videoX>]\n", argv[0]);
-+		exit(-1);
-+	}
-+
-+	/* Process arguments */
-+	while ((opt = getopt(argc, argv, "d:")) != -1) {
-+		switch (opt) {
-+		case 'd':
-+			strncpy(video_device, optarg, sizeof(video_device) - 1);
-+			video_device[sizeof(video_device)-1] = '\0';
-+			break;
-+		default:
-+			printf("Usage: %s [-d </dev/videoX>]\n", argv[0]);
-+			exit(-1);
-+		}
-+	}
-+
-+	/* Generate random number of interations */
-+	srand((unsigned int) time(NULL));
-+	thread_count = rand() % MAX_COUNT + 1;
-+
-+	pthread_t in_thread[thread_count];
-+	struct context ctx[thread_count];
-+
-+	printf("Running %d threads\n", thread_count);
-+
-+	for (i = 0; i < thread_count; i++)
-+		init(&ctx[i]);
-+
-+	for (i = 0; i < thread_count; i++)
-+		pthread_create(&in_thread[i], NULL, job, &ctx[i]);
-+
-+	for (i = 0; i < thread_count; i++)
-+		pthread_join(in_thread[i], NULL);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/media_tests/m2m_job_test.sh b/tools/testing/selftests/media_tests/m2m_job_test.sh
-new file mode 100755
-index 000000000000..59777a7ac7d8
---- /dev/null
-+++ b/tools/testing/selftests/media_tests/m2m_job_test.sh
-@@ -0,0 +1,32 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+TCID="media_device"
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+echo "-------------------"
-+echo "running media tests"
-+echo "-------------------"
-+
-+# Not needed, but does not hurt to have it
-+shopt -s nullglob
-+
-+v4l=/sys/class/video4linux
-+
-+if [ ! -d $v4l ]; then
-+        echo "$TCID : video4linux support not present"
-+        exit $ksft_skip
+diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
+index 88cbe5575f0c..584a91ae4a8f 100755
+--- a/tools/testing/selftests/vm/run_vmtests
++++ b/tools/testing/selftests/vm/run_vmtests
+@@ -168,6 +168,17 @@ else
+ fi
+ 
+ echo "--------------------"
++echo "running map_populate"
++echo "--------------------"
++./map_populate
++if [ $? -ne 0 ]; then
++	echo "[FAIL]"
++	exitcode=1
++else
++	echo "[PASS]"
 +fi
 +
-+if [ -z `ls $v4l` ]; then
-+	echo "$TCID : no video4linux drivers loaded, vim2m is needed"
-+	exit $ksft_skip
-+fi
-+
-+for f in $v4l/*; do
-+	dev_node=/dev/`basename $f`
-+	if [ -c $dev_node ]; then
-+		./m2m_job_test -d $dev_node
-+	fi
-+done
++echo "--------------------"
+ echo "running mlock2-tests"
+ echo "--------------------"
+ ./mlock2-tests
 -- 
-2.18.0
+2.13.6
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
