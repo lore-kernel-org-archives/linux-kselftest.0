@@ -1,181 +1,95 @@
 From: ezequiel@collabora.com (Ezequiel Garcia)
-Date: Thu, 02 Aug 2018 12:06:48 -0300
-Subject: [PATCH v3 3/4] v4l2-mem2mem: Avoid calling .device_run in
- v4l2_m2m_job_finish
-In-Reply-To: <4dd7aafd-67cb-8f74-9b9f-9b880ca9888e@xs4all.nl>
-References: <20180801215026.27809-1-ezequiel@collabora.com>
- <20180801215026.27809-4-ezequiel@collabora.com>
- <4dd7aafd-67cb-8f74-9b9f-9b880ca9888e@xs4all.nl>
-Message-ID: <192ee183b9410faf9116ad243634bb16e968f66b.camel@collabora.com>
+Date: Thu,  2 Aug 2018 17:48:44 -0300
+Subject: [PATCH v4 0/6] Make sure .device_run is always called in non-atomic
+ context
+Message-ID: <20180802204850.31633-1-ezequiel@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180802150648.UQfg-l5AzACf_itbmE1rJ413vwy_BoZ0XvJiDvEvOZA@z>
+Message-ID: <20180802204844.DP2AwXKhdt_a3KwhOTWFcEPrJ91ftsgtC8gNrnKZmU8@z>
 
-On Thu, 2018-08-02@10:02 +0200, Hans Verkuil wrote:
-> On 08/01/2018 11:50 PM, Ezequiel Garcia wrote:
-> > v4l2_m2m_job_finish() is typically called in interrupt context.
-> > 
-> > Some implementation of .device_run might sleep, and so it's
-> > desirable to avoid calling it directly from
-> > v4l2_m2m_job_finish(), thus avoiding .device_run from running
-> > in interrupt context.
-> > 
-> > Implement a deferred context that calls v4l2_m2m_try_run,
-> > and gets scheduled by v4l2_m2m_job_finish().
-> > 
-> > Signed-off-by: Ezequiel Garcia <ezequiel at collabora.com>
-> > ---
-> >  drivers/media/v4l2-core/v4l2-mem2mem.c | 36 +++++++++++++++++++++++---
-> >  1 file changed, 33 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> > index da82d151dd20..0bf4deefa899 100644
-> > --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-> > +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> > @@ -69,6 +69,7 @@ static const char * const m2m_entity_name[] = {
-> >   * @curr_ctx:		currently running instance
-> >   * @job_queue:		instances queued to run
-> >   * @job_spinlock:	protects job_queue
-> > + * @job_work:		worker to run queued jobs.
-> >   * @m2m_ops:		driver callbacks
-> >   */
-> >  struct v4l2_m2m_dev {
-> > @@ -85,6 +86,7 @@ struct v4l2_m2m_dev {
-> >  
-> >  	struct list_head	job_queue;
-> >  	spinlock_t		job_spinlock;
-> > +	struct work_struct	job_work;
-> >  
-> >  	const struct v4l2_m2m_ops *m2m_ops;
-> >  };
-> > @@ -224,10 +226,11 @@ EXPORT_SYMBOL(v4l2_m2m_get_curr_priv);
-> >  /**
-> >   * v4l2_m2m_try_run() - select next job to perform and run it if possible
-> >   * @m2m_dev: per-device context
-> > + * @try_lock: indicates if the queue lock should be taken
-> 
-> I don't like this bool. See more below.
-> 
+v4:
+  * Add patches and 1 and 2, to make q_lock mandatory,
+    in other words, require output and capture locks to match.
+  * Add WARN_ON if the lock is not held in v4l2_m2m_try_schedule,
+    and also document the requirement.
+  * Add a comment explaining why the job is scheduled.
 
-Me neither. In fact, I've spent a lot of time trying to avoid it!
-However...
+This series goal is to avoid drivers from having ad-hoc code
+to call .device_run in non-atomic context. Currently, .device_run
+can be called via v4l2_m2m_job_finish(), potentially running
+in interrupt context.
 
-> >   *
-> >   * Get next transaction (if present) from the waiting jobs list and run it.
-> >   */
-> > -static void v4l2_m2m_try_run(struct v4l2_m2m_dev *m2m_dev)
-> > +static void v4l2_m2m_try_run(struct v4l2_m2m_dev *m2m_dev, bool try_lock)
-> >  {
-> >  	unsigned long flags;
-> >  
-> > @@ -250,7 +253,20 @@ static void v4l2_m2m_try_run(struct v4l2_m2m_dev *m2m_dev)
-> >  	spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags);
-> >  
-> >  	dprintk("Running job on m2m_ctx: %p\n", m2m_dev->curr_ctx);
-> > +
-> > +	/*
-> > +	 * A m2m context lock is taken only after a m2m context
-> > +	 * is picked from the queue and marked as running.
-> > +	 * The lock is only needed if v4l2_m2m_try_run is called
-> > +	 * from the async worker.
-> > +	 */
-> > +	if (try_lock && m2m_dev->curr_ctx->q_lock)
-> > +		mutex_lock(m2m_dev->curr_ctx->q_lock);
-> > +
+This series will be useful for the upcoming Request API, where drivers
+typically require .device_run to be called in non-atomic context for
+v4l2_ctrl_request_setup() calls.
 
-Note that only after a context has been chosen, and curr_ctx is assigned,
-it's possible to take the mutex.
+The solution is to add a per-device worker that is scheduled
+by v4l2_m2m_job_finish, which replaces drivers having a threaded interrupt
+or similar.
 
-> >  	m2m_dev->m2m_ops->device_run(m2m_dev->curr_ctx->priv);
-> > +
-> > +	if (try_lock && m2m_dev->curr_ctx->q_lock)
-> > +		mutex_unlock(m2m_dev->curr_ctx->q_lock);
-> >  }
-> >  
-> >  /*
-> > @@ -340,10 +356,22 @@ void v4l2_m2m_try_schedule(struct v4l2_m2m_ctx *m2m_ctx)
-> >  	struct v4l2_m2m_dev *m2m_dev = m2m_ctx->m2m_dev;
-> >  
-> >  	__v4l2_m2m_try_queue(m2m_dev, m2m_ctx);
-> > -	v4l2_m2m_try_run(m2m_dev);
-> > +	v4l2_m2m_try_run(m2m_dev, false);
-> 
-> I would like to see a WARN_ON where you verify that q_lock is actually locked
-> (and this needs to be documented as well).
-> 
+This change allows v4l2_m2m_job_finish() to be called in interrupt
+context, separating .device_run and v4l2_m2m_job_finish() contexts.
 
-OK.
+It's worth mentioning that v4l2_m2m_cancel_job() doesn't need
+to flush or cancel the new worker, because the job_spinlock
+synchronizes both and also because the core prevents simultaneous
+jobs. Either v4l2_m2m_cancel_job() will wait for the worker, or the
+worker will be unable to run a new job.
 
-> >  }
-> >  EXPORT_SYMBOL_GPL(v4l2_m2m_try_schedule);
-> >  
-> > +/**
-> > + * v4l2_m2m_device_run_work() - run pending jobs for the context
-> > + * @work: Work structure used for scheduling the execution of this function.
-> > + */
-> > +static void v4l2_m2m_device_run_work(struct work_struct *work)
-> > +{
-> > +	struct v4l2_m2m_dev *m2m_dev =
-> > +		container_of(work, struct v4l2_m2m_dev, job_work);
-> > +
-> > +	v4l2_m2m_try_run(m2m_dev, true);
-> 
-> Just lock q_lock here around the try_run call. That's consistent with how
-> try_schedule works. No need to add an extra argument to try_run.
-> 
+Testing
+-------
 
-As I mentioned above, we might not have any lock to take at this point.
+In order to test the change, and make sure no regressions are
+introduced, a kselftest test is added to stress the mem2mem framework.
 
-> > +}
-> > +
-> >  /**
-> >   * v4l2_m2m_cancel_job() - cancel pending jobs for the context
-> >   * @m2m_ctx: m2m context with jobs to be canceled
-> > @@ -403,7 +431,8 @@ void v4l2_m2m_job_finish(struct v4l2_m2m_dev *m2m_dev,
-> >  	/* This instance might have more buffers ready, but since we do not
-> >  	 * allow more than one job on the job_queue per instance, each has
-> >  	 * to be scheduled separately after the previous one finishes. */
-> > -	v4l2_m2m_try_schedule(m2m_ctx);
-> > +	__v4l2_m2m_try_queue(m2m_dev, m2m_ctx);
-> > +	schedule_work(&m2m_dev->job_work);
-> 
-> You might want to add a comment here explaining why you need 'work' here.
-> 
+Note that this series rework the kselftest media_tests target.
+Those tests that need hardware and human intervention are now
+marked as _EXTENDED, and a frontend script is added to run those
+tests that can run without hardware or human intervention.
 
-OK.
+This will allow the media_tests target to be included in
+automatic regression testing setups.
 
-> >  }
-> >  EXPORT_SYMBOL(v4l2_m2m_job_finish);
-> >  
-> > @@ -837,6 +866,7 @@ struct v4l2_m2m_dev *v4l2_m2m_init(const struct v4l2_m2m_ops *m2m_ops)
-> >  	m2m_dev->m2m_ops = m2m_ops;
-> >  	INIT_LIST_HEAD(&m2m_dev->job_queue);
-> >  	spin_lock_init(&m2m_dev->job_spinlock);
-> > +	INIT_WORK(&m2m_dev->job_work, v4l2_m2m_device_run_work);
-> >  
-> >  	return m2m_dev;
-> >  }
-> > 
-> 
-> Regarding q_lock: I would like to see that made compulsory. So v4l2_mem2mem should check
-> that both queue lock pointers point to the same mutex and return an error if that's not
-> the case (I believe all m2m drivers use the same mutex already).
-> 
-> Also make sure that there are no drivers that set q_lock explicitly (mtk-vcodec does).
-> 
-> That way q_lock can be safely used here.
-> 
+Hopefully, we will be able to introduce more and more automatic
+regression tests. Currently, our self-test run looks like:
 
-Yes, I have that patch ready since a few days.
+    $ make TARGETS=media_tests kselftest 
+    make[1]: Entering directory '/home/zeta/repos/builds/virtme-x86_64'
+    make[3]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+    make[3]: Nothing to be done for 'all'.
+    make[3]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+    TAP version 13
+    selftests: media_tests: m2m_job_test.sh
+    ========================================
+    -------------------
+    running media tests
+    -------------------
+    media_device : no video4linux drivers loaded, vim2m is needed
+    not ok 1..1 selftests: media_tests: m2m_job_test.sh [SKIP]
+    make[1]: Leaving directory '/home/zeta/repos/builds/virtme-x86_64'
 
-> This will also allow us to simplify v4l2_ioctl_get_lock() in v4l2-ioctl.c:
-> v4l2_ioctl_m2m_queue_is_output() can be dropped since the lock for capture
-> and output is now the same.
-> 
+Ezequiel Garcia (5):
+  mem2mem: Require capture and output mutexes to match
+  v4l2-ioctl.c: simplify locking for m2m devices
+  v4l2-mem2mem: Avoid v4l2_m2m_prepare_buf from scheduling a job
+  v4l2-mem2mem: Avoid calling .device_run in v4l2_m2m_job_finish
+  selftests: media_tests: Add a memory-to-memory concurrent stress test
 
-Right.
+Sakari Ailus (1):
+  v4l2-mem2mem: Simplify exiting the function in __v4l2_m2m_try_schedule
 
-Regards,
-Eze
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  47 +--
+ drivers/media/v4l2-core/v4l2-mem2mem.c        |  94 ++++--
+ .../testing/selftests/media_tests/.gitignore  |   1 +
+ tools/testing/selftests/media_tests/Makefile  |   5 +-
+ .../selftests/media_tests/m2m_job_test.c      | 287 ++++++++++++++++++
+ .../selftests/media_tests/m2m_job_test.sh     |  32 ++
+ 6 files changed, 389 insertions(+), 77 deletions(-)
+ create mode 100644 tools/testing/selftests/media_tests/m2m_job_test.c
+ create mode 100755 tools/testing/selftests/media_tests/m2m_job_test.sh
+
+-- 
+2.18.0
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
