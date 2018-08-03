@@ -1,158 +1,104 @@
 From: bauerman@linux.ibm.com (Thiago Jung Bauermann)
-Date: Fri,  3 Aug 2018 19:00:45 -0300
-Subject: [PATCH v2 3/4] userfaultfd: selftest: Skip test if a feature isn't
- supported
+Date: Fri,  3 Aug 2018 19:00:46 -0300
+Subject: [PATCH v2 4/4] userfaultfd: selftest: Cope if shmem doesn't support
+ zeropage
 In-Reply-To: <20180803220046.4019-1-bauerman@linux.ibm.com>
 References: <20180803220046.4019-1-bauerman@linux.ibm.com>
-Message-ID: <20180803220046.4019-4-bauerman@linux.ibm.com>
+Message-ID: <20180803220046.4019-5-bauerman@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180803220045.BBVWpHOqlyfMkeVviHA9FwnNP6ILa0NT6q9Ak0mtQpw@z>
+Message-ID: <20180803220046.uADM2r0u-I-gPwAysGMg91244yIvv4g9BmmbpANenJw@z>
 
-If userfaultfd runs on a system that doesn't support some feature it is
-trying to test, it currently ends with error code 1 which indicates
-test failure:
+If userfaultfd runs on a system that doesn't support UFFDIO_ZEROPAGE for
+shared memory, it currently ends with error code 1 which indicates test
+failure:
 
-  # ./userfaultfd anon 10 10
+  # ./userfaultfd shmem 10 10
   nr_pages: 160, nr_pages_per_cpu: 80
-  bounces: 9, mode: rnd poll, userfaults: 7 59
-  bounces: 8, mode: poll, userfaults: 0 0
-  bounces: 7, mode: rnd racing ver, userfaults: 45 2
-  bounces: 6, mode: racing ver, userfaults: 3 1
-  bounces: 5, mode: rnd ver, userfaults: 55 32
-  bounces: 4, mode: ver, userfaults: 69 0
-  bounces: 3, mode: rnd racing, userfaults: 1 1
-  bounces: 2, mode: racing, userfaults: 65 0
-  bounces: 1, mode: rnd, userfaults: 44 1
-  bounces: 0, mode:, userfaults: 3 2
-  testing UFFDIO_ZEROPAGE: done.
-  testing signal delivery: UFFDIO_API
+  bounces: 9, mode: rnd poll, unexpected missing ioctl for anon memory
   # echo $?
   1
 
-Make each test return KSFT_SKIP instead, which is more accurate since it is
-not a real test failure and try to run the other tests which may still
-work:
+Change userfaultfd_zeropage_test() to return KSFT_SKIP to indicate that
+the test is being skipped.
 
-  # ./userfaultfd anon 10 10
-  nr_pages: 160, nr_pages_per_cpu: 80
-  bounces: 9, mode: rnd poll, userfaults: 65 27
-  bounces: 8, mode: poll, userfaults: 0 0
-  bounces: 7, mode: rnd racing ver, userfaults: 60 29
-  bounces: 6, mode: racing ver, userfaults: 58 1
-  bounces: 5, mode: rnd ver, userfaults: 69 3
-  bounces: 4, mode: ver, userfaults: 35 27
-  bounces: 3, mode: rnd racing, userfaults: 44 0
-  bounces: 2, mode: racing, userfaults: 40 25
-  bounces: 1, mode: rnd, userfaults: 2 1
-  bounces: 0, mode:, userfaults: 0 1
-  testing UFFDIO_ZEROPAGE: done.
-  testing signal delivery: UFFDIO_API: Invalid argument
-  testing events (fork, remap, remove): userfaults: 160
-  # echo $?
-  0
-
-While at it, also improve the error message of the ioctl(UFFDIO_API) call.
+Also change userfaultfd_events_test() and userfaultfd_stress() to ignore
+the missing UFFDIO_ZEROPAGE bit from the list of supported ioctls since
+these tests don't require that feature.
 
 Signed-off-by: Thiago Jung Bauermann <bauerman at linux.ibm.com>
 ---
- tools/testing/selftests/vm/userfaultfd.c | 42 +++++++++++++++++++++++---------
- 1 file changed, 30 insertions(+), 12 deletions(-)
+ tools/testing/selftests/vm/userfaultfd.c | 36 +++++++++++++++++++++++++++-----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
 
 diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index d728bd1cb33c..c84e44ddf314 100644
+index c84e44ddf314..00f1ca663d67 100644
 --- a/tools/testing/selftests/vm/userfaultfd.c
 +++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -647,8 +647,11 @@ static int userfaultfd_open(int features)
- 	uffdio_api.api = UFFD_API;
- 	uffdio_api.features = features;
- 	if (ioctl(uffd, UFFDIO_API, &uffdio_api)) {
--		fprintf(stderr, "UFFDIO_API\n");
--		return 1;
-+		int errnum = errno;
-+
-+		perror("UFFDIO_API");
-+
-+		return errnum == EINVAL ? KSFT_SKIP : 1;
- 	}
- 	if (uffdio_api.api != UFFD_API) {
- 		fprintf(stderr, "UFFDIO_API error %Lu\n", uffdio_api.api);
-@@ -854,6 +857,7 @@ static int userfaultfd_zeropage_test(void)
- {
- 	struct uffdio_register uffdio_register;
- 	unsigned long expected_ioctls;
-+	int err;
- 
- 	printf("testing UFFDIO_ZEROPAGE: ");
- 	fflush(stdout);
-@@ -861,8 +865,10 @@ static int userfaultfd_zeropage_test(void)
- 	if (uffd_test_ops->release_pages(area_dst))
- 		return 1;
- 
--	if (userfaultfd_open(0))
--		return 1;
-+	err = userfaultfd_open(0);
-+	if (err)
-+		return err;
-+
- 	uffdio_register.range.start = (unsigned long) area_dst;
- 	uffdio_register.range.len = nr_pages * page_size;
- 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
-@@ -904,8 +910,10 @@ static int userfaultfd_events_test(void)
- 
- 	features = UFFD_FEATURE_EVENT_FORK | UFFD_FEATURE_EVENT_REMAP |
- 		UFFD_FEATURE_EVENT_REMOVE;
--	if (userfaultfd_open(features))
--		return 1;
-+	err = userfaultfd_open(features);
-+	if (err)
-+		return err;
-+
- 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
- 
- 	uffdio_register.range.start = (unsigned long) area_dst;
-@@ -963,8 +971,9 @@ static int userfaultfd_sig_test(void)
- 		return 1;
- 
- 	features = UFFD_FEATURE_EVENT_FORK|UFFD_FEATURE_SIGBUS;
--	if (userfaultfd_open(features))
--		return 1;
-+	err = userfaultfd_open(features);
-+	if (err)
-+		return err;
- 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
- 
- 	uffdio_register.range.start = (unsigned long) area_dst;
-@@ -1029,8 +1038,9 @@ static int userfaultfd_stress(void)
- 	if (!area_dst)
- 		return 1;
- 
--	if (userfaultfd_open(0))
--		return 1;
-+	err = userfaultfd_open(0);
-+	if (err)
-+		return err;
- 
- 	count_verify = malloc(nr_pages * sizeof(unsigned long long));
- 	if (!count_verify) {
-@@ -1201,8 +1211,16 @@ static int userfaultfd_stress(void)
- 		return err;
- 
- 	close(uffd);
--	return userfaultfd_zeropage_test() || userfaultfd_sig_test()
--		|| userfaultfd_events_test();
-+
-+	err = userfaultfd_zeropage_test();
-+	if (err && err != KSFT_SKIP)
-+		return err;
-+
-+	err = userfaultfd_sig_test();
-+	if (err && err != KSFT_SKIP)
-+		return err;
-+
-+	return userfaultfd_events_test();
+@@ -852,6 +852,16 @@ static int uffdio_zeropage(int ufd, unsigned long offset)
+ 	return __uffdio_zeropage(ufd, offset, false);
  }
  
- /*
++/* Tells whether the kernel doesn't support ZEROPAGE on shared memory VMAs. */
++static bool shmem_without_zeropage_support(unsigned long expected_ioctls,
++					   unsigned long supported_ioctls)
++{
++	/* Turn off ZEROPAGE bit from expected_ioctls. */
++	expected_ioctls &= ~(1 << _UFFDIO_ZEROPAGE);
++
++	return test_type == TEST_SHMEM && supported_ioctls == expected_ioctls;
++}
++
+ /* exercise UFFDIO_ZEROPAGE */
+ static int userfaultfd_zeropage_test(void)
+ {
+@@ -877,10 +887,20 @@ static int userfaultfd_zeropage_test(void)
+ 
+ 	expected_ioctls = uffd_test_ops->expected_ioctls;
+ 	if ((uffdio_register.ioctls & expected_ioctls) !=
+-	    expected_ioctls)
++	    expected_ioctls) {
++		close(uffd);
++
++		if (shmem_without_zeropage_support(expected_ioctls,
++						   uffdio_register.ioctls)) {
++			fprintf(stderr,
++				"UFFDIO_ZEROPAGE unsupported in shmem VMAs\n");
++			return KSFT_SKIP;
++		}
++
+ 		fprintf(stderr,
+-			"unexpected missing ioctl for anon memory\n"),
+-			exit(1);
++			"unexpected missing ioctl for anon memory\n");
++		return 1;
++	}
+ 
+ 	if (uffdio_zeropage(uffd, 0)) {
+ 		if (my_bcmp(area_dst, zeropage, page_size))
+@@ -924,7 +944,10 @@ static int userfaultfd_events_test(void)
+ 
+ 	expected_ioctls = uffd_test_ops->expected_ioctls;
+ 	if ((uffdio_register.ioctls & expected_ioctls) !=
+-	    expected_ioctls)
++	    expected_ioctls &&
++	    /* No need for zeropage support in this test, so ignore it. */
++	    !shmem_without_zeropage_support(expected_ioctls,
++					    uffdio_register.ioctls))
+ 		fprintf(stderr,
+ 			"unexpected missing ioctl for anon memory\n"),
+ 			exit(1);
+@@ -1117,7 +1140,10 @@ static int userfaultfd_stress(void)
+ 		}
+ 		expected_ioctls = uffd_test_ops->expected_ioctls;
+ 		if ((uffdio_register.ioctls & expected_ioctls) !=
+-		    expected_ioctls) {
++		    expected_ioctls &&
++		    /* No need for zeropage support in this test, so ignore it. */
++		    !shmem_without_zeropage_support(expected_ioctls,
++						    uffdio_register.ioctls)) {
+ 			fprintf(stderr,
+ 				"unexpected missing ioctl for anon memory\n");
+ 			return 1;
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
