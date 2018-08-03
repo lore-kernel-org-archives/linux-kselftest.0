@@ -1,42 +1,43 @@
-From: andreyknvl@google.com (Andrey Konovalov)
-Date: Fri, 3 Aug 2018 18:54:57 +0200
-Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
-In-Reply-To: <20180803164337.GB4718@bombadil.infradead.org>
-References: <cover.1529507994.git.andreyknvl@google.com>
- <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
- <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
- <CAAeHK+yqWKTdTG+ymZ2-5XKiDANV+fmUjnQkRy-5tpgphuLJRA@mail.gmail.com>
- <CAAeHK+wJbbCZd+-X=9oeJgsqQJiq8h+Aagz3SQMPaAzCD+pvFw@mail.gmail.com>
- <CAAeHK+yWF05XoU+0iuJoXAL3cWgdtxbeLoBz169yP12W4LkcQw@mail.gmail.com>
- <20180801174256.5mbyf33eszml4nmu@armageddon.cambridge.arm.com>
- <CAAeHK+zb7vcehuX9=oxLUJVJr1ZcgmRTODQz7wsPy+rJb=3kbQ@mail.gmail.com>
- <CAAeHK+xTxPhfbVTNxcbsx7VdwQ21Bt-vo2ZU1tEM1_JX7uKnng@mail.gmail.com>
- <20180803150945.GC9297@kroah.com>
- <20180803164337.GB4718@bombadil.infradead.org>
-Message-ID:
- <CAAeHK+zqVTOSFD5yZ0E5Z3HZPVn8KYQJMGjBvin8rEfugBdfag@mail.gmail.com>
+From: bauerman@linux.ibm.com (Thiago Jung Bauermann)
+Date: Fri,  3 Aug 2018 19:00:42 -0300
+Subject: [PATCH v2 0/4] userfaultfd: selftest: Improve behavior with older
+ kernels
+Message-ID: <20180803220046.4019-1-bauerman@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180803165457.J-22bPDd0QkuTBvBHENvm3gaN4H786bBm1LGragh9g0@z>
+Message-ID: <20180803220042.kgysuWI2ToXRCOAKeNREyEVWoLiXnvt3k0INmc6pHlM@z>
 
-On Fri, Aug 3, 2018@6:43 PM, Matthew Wilcox <willy@infradead.org> wrote:
-> On Fri, Aug 03, 2018@05:09:45PM +0200, Greg Kroah-Hartman wrote:
->> On Fri, Aug 03, 2018@04:59:18PM +0200, Andrey Konovalov wrote:
->> > Started looking at this. When I run sparse with default checks enabled
->> > (make C=1) I get countless warnings. Does anybody actually use it?
->>
->> Try using a more up-to-date version of sparse.  Odds are you are using
->> an old one, there is a newer version in a different branch on kernel.org
->> somewhere...
->
-> That's not true.  Building the current version of sparse from
-> git://git.kernel.org/pub/scm/devel/sparse/sparse.git leaves me with a
-> thousand errors just building the mm/ directory.  A sample:
+Hello,
 
-I'm running the one from https://github.com/lucvoo/sparse-dev which
-seems to be even more up to date. Defconfig on x86 gives me ~3000
-warnings:
+A tester ran the upstream selftest on a distro kernel and sounded the alarm when
+it reported failures for features which aren't included in that kernel.
 
-https://gist.github.com/xairy/8adace989f64462e18ffb5cb7d096b73
+This patch set improves the test behavior in that scenario.
+
+Changes since v1:
+
+- Patch "userfaultfd: selftest: Skip test if userfaultfd() syscall
+  not supported"
+  - New patch, suggested by Mke Rapoport.
+
+- Patch "userfaultfd: selftest: Skip test if a feature isn't supported"
+  - Try running other tests even if one (or more) of them returns KSFT_SKIP.
+
+- Patch "userfaultfd: selftest: Cope if shmem doesn't support zeropage"
+  - Ignore lack of UFFDIO_ZEROPAGE in userfaultfd_events_test() and
+    userfaultfd_stress().
+  - Make userfaultfd_zeropage_test() return KSFT_SKIP if UFFDIO_ZEROPAGE
+    isn't supported.
+
+Thiago Jung Bauermann (4):
+  userfaultfd: selftest: Fix checking of userfaultfd_open() result
+  userfaultfd: selftest: Skip test if userfaultfd() syscall not
+    supported
+  userfaultfd: selftest: Skip test if a feature isn't supported
+  userfaultfd: selftest: Cope if shmem doesn't support zeropage
+
+ tools/testing/selftests/vm/userfaultfd.c | 86 ++++++++++++++++++++++++--------
+ 1 file changed, 66 insertions(+), 20 deletions(-)
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
