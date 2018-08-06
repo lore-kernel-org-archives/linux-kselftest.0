@@ -1,37 +1,47 @@
 From: andreyknvl@google.com (Andrey Konovalov)
-Date: Mon,  6 Aug 2018 18:40:41 +0200
-Subject: [PATCH v5 06/10] arm64: untag user address in __do_user_fault
+Date: Mon,  6 Aug 2018 18:40:39 +0200
+Subject: [PATCH v5 04/10] mm, arm64: untag user addresses in mm/gup.c
 In-Reply-To: <cover.1533573460.git.andreyknvl@google.com>
 References: <cover.1533573460.git.andreyknvl@google.com>
 Message-ID:
- <d22f893405349d7d26d67161f9577eabfee27214.1533573460.git.andreyknvl@google.com>
+ <64762ca688f8611c38cf6a8c8bf50a75d9f2fa3a.1533573460.git.andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180806164041.kbd34EkY-KcbeP8PjXM0Ysmpyn5ffRIuTgApBQpC5As@z>
+Message-ID: <20180806164039.a5AVxWXcmpSp3Xdhn7dwitN_odk2cvcWR0UcpI9VwSQ@z>
 
-In __do_user_fault the fault address is being compared to TASK_SIZE to
-find out whether the address lies in the kernel or in user space. Since
-the fault address is coming from a user it can be tagged.
+mm/gup.c provides a kernel interface that accepts user addresses and
+manipulates user pages directly (for example get_user_pages, that is used
+by the futex syscall). Since a user can provided tagged addresses, we need
+to handle such case.
 
-Untag the pointer before comparing.
+Add untagging to gup.c functions that use user addresses for vma lookup.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- arch/arm64/mm/fault.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/gup.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index b8eecc7b9531..89033d992d28 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -313,7 +313,7 @@ static void __do_user_fault(struct siginfo *info, unsigned int esr)
- 	 * type", so we ignore this wrinkle and just return the translation
- 	 * fault.)
- 	 */
--	if (current->thread.fault_address >= TASK_SIZE) {
-+	if (untagged_addr(current->thread.fault_address) >= TASK_SIZE) {
- 		switch (ESR_ELx_EC(esr)) {
- 		case ESR_ELx_EC_DABT_LOW:
- 			/*
+diff --git a/mm/gup.c b/mm/gup.c
+index fc5f98069f4e..ebb87fb56709 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -666,6 +666,8 @@ static long __get_user_pages(struct task_struct *tsk, struct mm_struct *mm,
+ 	if (!nr_pages)
+ 		return 0;
+ 
++	start = untagged_addr(start);
++
+ 	VM_BUG_ON(!!pages != !!(gup_flags & FOLL_GET));
+ 
+ 	/*
+@@ -820,6 +822,8 @@ int fixup_user_fault(struct task_struct *tsk, struct mm_struct *mm,
+ 	struct vm_area_struct *vma;
+ 	int ret, major = 0;
+ 
++	address = untagged_addr(address);
++
+ 	if (unlocked)
+ 		fault_flags |= FAULT_FLAG_ALLOW_RETRY;
+ 
 -- 
 2.18.0.597.ga71716f1ad-goog
 
