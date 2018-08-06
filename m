@@ -1,60 +1,39 @@
 From: andreyknvl@google.com (Andrey Konovalov)
-Date: Mon,  6 Aug 2018 18:40:43 +0200
-Subject: [PATCH v5 08/10] usb, arm64: untag user addresses in devio
+Date: Mon,  6 Aug 2018 18:40:42 +0200
+Subject: [PATCH v5 07/10] fs, arm64: untag user address in copy_mount_options
 In-Reply-To: <cover.1533573460.git.andreyknvl@google.com>
 References: <cover.1533573460.git.andreyknvl@google.com>
 Message-ID:
- <39bbae2c9d880bd3c27ac3ee03d4be72e161491c.1533573460.git.andreyknvl@google.com>
+ <dbacdbf3f3d66c853fafcbfdbf5c1f0afb464981.1533573460.git.andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180806164043.4_P56YT1pFuc407kHDuIp9kdfvm20313Op0L9MolUjY@z>
+Message-ID: <20180806164042.HMOl7vdCeE3-5TDhfENjnhswnN0iTXha7Kbm8mlyUhc@z>
 
-devio allows to mmap memory regions and keeps them in a list. It also
-accepts a user address through an ioctl call and searches the memory
-region list for the region that contains this address. Since the addresses
-provided to mmap must not be tagged, and the addresses provided to ioctl
-might be tagged, we might compare tagged and untagged addresses during the
-search.
+In copy_mount_options a user address is being subtracted from TASK_SIZE.
+If the address is lower than TASK_SIZE, the size is calculated to not
+allow the exact_copy_from_user() call to cross TASK_SIZE boundary.
+However if the address is tagged, then the size will be calculated
+incorrectly.
 
-Untag the provided addresses before searching.
+Untag the address before subtracting.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- drivers/usb/core/devio.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ fs/namespace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index 476dcc5f2da3..357c2e7b87b8 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -1404,7 +1404,7 @@ find_memory_area(struct usb_dev_state *ps, const struct usbdevfs_urb *uurb)
- {
- 	struct usb_memory *usbm = NULL, *iter;
- 	unsigned long flags;
--	unsigned long uurb_start = (unsigned long)uurb->buffer;
-+	unsigned long uurb_start = (unsigned long)untagged_addr(uurb->buffer);
+diff --git a/fs/namespace.c b/fs/namespace.c
+index 8ddd14806799..fd070e65e529 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -2733,7 +2733,7 @@ void *copy_mount_options(const void __user * data)
+ 	 * the remainder of the page.
+ 	 */
+ 	/* copy_from_user cannot cross TASK_SIZE ! */
+-	size = TASK_SIZE - (unsigned long)data;
++	size = TASK_SIZE - (unsigned long)untagged_addr(data);
+ 	if (size > PAGE_SIZE)
+ 		size = PAGE_SIZE;
  
- 	spin_lock_irqsave(&ps->lock, flags);
- 	list_for_each_entry(iter, &ps->memory_list, memlist) {
-@@ -1633,7 +1633,8 @@ static int proc_do_submiturb(struct usb_dev_state *ps, struct usbdevfs_urb *uurb
- 		}
- 	} else if (uurb->buffer_length > 0) {
- 		if (as->usbm) {
--			unsigned long uurb_start = (unsigned long)uurb->buffer;
-+			unsigned long uurb_start =
-+				(unsigned long)untagged_addr(uurb->buffer);
- 
- 			as->urb->transfer_buffer = as->usbm->mem +
- 					(uurb_start - as->usbm->vm_start);
-@@ -1712,7 +1713,8 @@ static int proc_do_submiturb(struct usb_dev_state *ps, struct usbdevfs_urb *uurb
- 	as->ps = ps;
- 	as->userurb = arg;
- 	if (as->usbm) {
--		unsigned long uurb_start = (unsigned long)uurb->buffer;
-+		unsigned long uurb_start =
-+			(unsigned long)untagged_addr(uurb->buffer);
- 
- 		as->urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
- 		as->urb->transfer_dma = as->usbm->dma_handle +
 -- 
 2.18.0.597.ga71716f1ad-goog
 
