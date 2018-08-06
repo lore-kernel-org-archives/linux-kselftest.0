@@ -1,83 +1,83 @@
-From: andreyknvl at google.com (Andrey Konovalov)
-Date: Mon,  6 Aug 2018 18:40:35 +0200
-Subject: [PATCH v5 00/10] arm64: untag user pointers passed to the kernel
-Message-ID: <cover.1533573460.git.andreyknvl@google.com>
+From: shuah at kernel.org (Shuah Khan)
+Date: Mon, 6 Aug 2018 11:03:54 -0600
+Subject: [PATCH v4] selftests: add headers_install to lib.mk
+In-Reply-To: <CADYN=9LSA60E4mFwrbeY-RGi4kZV6hO0ygz0-C6QB3+KKaoxQg@mail.gmail.com>
+References: <20180413090351.25662-1-anders.roxell@linaro.org>
+ <20180607110911.12252-1-anders.roxell@linaro.org>
+ <CADYN=9J=hSFb2wCZ1+dXL=023p9y05MEGUPvH48WfPX7XDZvwQ@mail.gmail.com>
+ <f222aa8d-88b8-140c-30ed-83fd908bfd09@kernel.org>
+ <CADYN=9LSA60E4mFwrbeY-RGi4kZV6hO0ygz0-C6QB3+KKaoxQg@mail.gmail.com>
+Message-ID: <3f332e65-0b33-9952-6aba-f9c8953a1f26@kernel.org>
 
-arm64 has a feature called Top Byte Ignore, which allows to embed pointer
-tags into the top byte of each pointer. Userspace programs (such as
-HWASan, a memory debugging tool [1]) might use this feature and pass
-tagged user pointers to the kernel through syscalls or other interfaces.
+Hi Anders,
 
-This patch makes a few of the kernel interfaces accept tagged user
-pointers. The kernel is already able to handle user faults with tagged
-pointers and has the untagged_addr macro, which this patchset reuses.
+On 07/25/2018 10:08 AM, Anders Roxell wrote:
+> On Tue, 24 Jul 2018 at 19:11, Shuah Khan <shuah at kernel.org> wrote:
+>>
+>> On 07/23/2018 02:49 PM, Anders Roxell wrote:
+>>> On Thu, 7 Jun 2018 at 13:09, Anders Roxell <anders.roxell at linaro.org> wrote:
+>>>>
+>>>> If the kernel headers aren't installed we can't build all the tests.
+>>>> Add a new make target rule 'khdr' in the file lib.mk to generate the
+>>>> kernel headers and that gets include for every test-dir Makefile that
+>>>> includes lib.mk If the testdir in turn have its own sub-dirs the
+>>>> top_srcdir needs to be set to the linux-rootdir to be able to generate
+>>>> the kernel headers.
+>>>>
+>>>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+>>>> Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
+>>>> ---
+>>>>  Makefile                                           | 14 +-------------
+>>>>  scripts/subarch.include                            | 13 +++++++++++++
+>>>>  tools/testing/selftests/android/Makefile           |  2 +-
+>>>>  tools/testing/selftests/android/ion/Makefile       |  2 ++
+>>>>  tools/testing/selftests/futex/functional/Makefile  |  1 +
+>>>>  tools/testing/selftests/gpio/Makefile              |  7 ++-----
+>>>>  tools/testing/selftests/kvm/Makefile               |  7 ++-----
+>>>>  tools/testing/selftests/lib.mk                     | 12 ++++++++++++
+>>>>  tools/testing/selftests/net/Makefile               |  1 +
+>>>>  .../selftests/networking/timestamping/Makefile     |  1 +
+>>>>  tools/testing/selftests/vm/Makefile                |  4 ----
+>>>>  11 files changed, 36 insertions(+), 28 deletions(-)
+>>>>  create mode 100644 scripts/subarch.include
+>>>>
+>>>> diff --git a/Makefile b/Makefile
+>>>> index 6b9aea95ae3a..8050072300fa 100644
+>>>> --- a/Makefile
+>>>> +++ b/Makefile
+>>>> @@ -286,19 +286,7 @@ KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
+>>>>  KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
+>>>>  export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
+>>>>
+>>>> -# SUBARCH tells the usermode build what the underlying arch is.  That is set
+>>>> -# first, and if a usermode build is happening, the "ARCH=um" on the command
+>>>> -# line overrides the setting of ARCH below.  If a native build is happening,
+>>>> -# then ARCH is assigned, getting whatever value it gets normally, and
+>>>> -# SUBARCH is subsequently ignored.
+>>>> -
+>>>> -SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
+>>>> -                                 -e s/sun4u/sparc64/ \
+>>>> -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
+>>>> -                                 -e s/s390x/s390/ -e s/parisc64/parisc/ \
+>>>> -                                 -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+>>>> -                                 -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
+>>>> -                                 -e s/riscv.*/riscv/)
+>>>> +include scripts/subarch.include
+>>
+>> What is the reason for this SUBARCH block move to to scripts/subarch.include?
+>> Is this necessary for adding headers install dependency to lib.mk?
+> 
+> This is needed to create headers for cross build.
+> 
 
-Thanks!
+I am sorry for the delay on this patch. I am going to get this into 4.19.
+If anybody has objections, please let me.
 
-[1] http://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html
+Anders! Will be able to rebase the patch and send me the latest. I think
+I have Acks from kvm, android, and vm so far.
 
-Changes in v5:
-- Added 3 new patches that add untagging to places found with static
-  analysis.
-- Rebased onto 44c929e1 (4.18-rc8).
-
-Changes in v4:
-- Added a selftest for checking that passing tagged pointers to the
-  kernel succeeds.
-- Rebased onto 81e97f013 (4.18-rc1+).
-
-Changes in v3:
-- Rebased onto e5c51f30 (4.17-rc6+).
-- Added linux-arch@ to the list of recipients.
-
-Changes in v2:
-- Rebased onto 2d618bdf (4.17-rc3+).
-- Removed excessive untagging in gup.c.
-- Removed untagging pointers returned from __uaccess_mask_ptr.
-
-Changes in v1:
-- Rebased onto 4.17-rc1.
-
-Changes in RFC v2:
-- Added "#ifndef untagged_addr..." fallback in linux/uaccess.h instead of
-  defining it for each arch individually.
-- Updated Documentation/arm64/tagged-pointers.txt.
-- Dropped "mm, arm64: untag user addresses in memory syscalls".
-- Rebased onto 3eb2ce82 (4.16-rc7).
-
-Andrey Konovalov (10):
-  arm64: add type casts to untagged_addr macro
-  uaccess: add untagged_addr definition for other arches
-  arm64: untag user addresses in access_ok and __uaccess_mask_ptr
-  mm, arm64: untag user addresses in mm/gup.c
-  lib, arm64: untag addrs passed to strncpy_from_user and strnlen_user
-  arm64: untag user address in __do_user_fault
-  fs, arm64: untag user address in copy_mount_options
-  usb, arm64: untag user addresses in devio
-  arm64: update Documentation/arm64/tagged-pointers.txt
-  selftests, arm64: add a selftest for passing tagged pointers to kernel
-
- Documentation/arm64/tagged-pointers.txt       |  5 +++--
- arch/arm64/include/asm/uaccess.h              | 14 +++++++++-----
- arch/arm64/mm/fault.c                         |  2 +-
- drivers/usb/core/devio.c                      |  8 +++++---
- fs/namespace.c                                |  2 +-
- include/linux/uaccess.h                       |  4 ++++
- lib/strncpy_from_user.c                       |  2 ++
- lib/strnlen_user.c                            |  2 ++
- mm/gup.c                                      |  4 ++++
- tools/testing/selftests/arm64/.gitignore      |  1 +
- tools/testing/selftests/arm64/Makefile        | 11 +++++++++++
- .../testing/selftests/arm64/run_tags_test.sh  | 12 ++++++++++++
- tools/testing/selftests/arm64/tags_test.c     | 19 +++++++++++++++++++
- 13 files changed, 74 insertions(+), 12 deletions(-)
- create mode 100644 tools/testing/selftests/arm64/.gitignore
- create mode 100644 tools/testing/selftests/arm64/Makefile
- create mode 100755 tools/testing/selftests/arm64/run_tags_test.sh
- create mode 100644 tools/testing/selftests/arm64/tags_test.c
-
--- 
-2.18.0.597.ga71716f1ad-goog
+thanks,
+-- Shuah
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
