@@ -1,36 +1,34 @@
 From: andreyknvl at google.com (Andrey Konovalov)
-Date: Mon,  6 Aug 2018 18:40:42 +0200
-Subject: [PATCH v5 07/10] fs, arm64: untag user address in copy_mount_options
+Date: Mon,  6 Aug 2018 18:40:41 +0200
+Subject: [PATCH v5 06/10] arm64: untag user address in __do_user_fault
 In-Reply-To: <cover.1533573460.git.andreyknvl@google.com>
 References: <cover.1533573460.git.andreyknvl@google.com>
-Message-ID: <dbacdbf3f3d66c853fafcbfdbf5c1f0afb464981.1533573460.git.andreyknvl@google.com>
+Message-ID: <d22f893405349d7d26d67161f9577eabfee27214.1533573460.git.andreyknvl@google.com>
 
-In copy_mount_options a user address is being subtracted from TASK_SIZE.
-If the address is lower than TASK_SIZE, the size is calculated to not
-allow the exact_copy_from_user() call to cross TASK_SIZE boundary.
-However if the address is tagged, then the size will be calculated
-incorrectly.
+In __do_user_fault the fault address is being compared to TASK_SIZE to
+find out whether the address lies in the kernel or in user space. Since
+the fault address is coming from a user it can be tagged.
 
-Untag the address before subtracting.
+Untag the pointer before comparing.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- fs/namespace.c | 2 +-
+ arch/arm64/mm/fault.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index 8ddd14806799..fd070e65e529 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -2733,7 +2733,7 @@ void *copy_mount_options(const void __user * data)
- 	 * the remainder of the page.
+diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+index b8eecc7b9531..89033d992d28 100644
+--- a/arch/arm64/mm/fault.c
++++ b/arch/arm64/mm/fault.c
+@@ -313,7 +313,7 @@ static void __do_user_fault(struct siginfo *info, unsigned int esr)
+ 	 * type", so we ignore this wrinkle and just return the translation
+ 	 * fault.)
  	 */
- 	/* copy_from_user cannot cross TASK_SIZE ! */
--	size = TASK_SIZE - (unsigned long)data;
-+	size = TASK_SIZE - (unsigned long)untagged_addr(data);
- 	if (size > PAGE_SIZE)
- 		size = PAGE_SIZE;
- 
+-	if (current->thread.fault_address >= TASK_SIZE) {
++	if (untagged_addr(current->thread.fault_address) >= TASK_SIZE) {
+ 		switch (ESR_ELx_EC(esr)) {
+ 		case ESR_ELx_EC_DABT_LOW:
+ 			/*
 -- 
 2.18.0.597.ga71716f1ad-goog
 
