@@ -1,102 +1,29 @@
-From: bauerman at linux.ibm.com (Thiago Jung Bauermann)
-Date: Fri,  3 Aug 2018 19:00:46 -0300
-Subject: [PATCH v2 4/4] userfaultfd: selftest: Cope if shmem doesn't support
- zeropage
-In-Reply-To: <20180803220046.4019-1-bauerman@linux.ibm.com>
-References: <20180803220046.4019-1-bauerman@linux.ibm.com>
-Message-ID: <20180803220046.4019-5-bauerman@linux.ibm.com>
+From: gor at linux.ibm.com (Vasily Gorbik)
+Date: Mon, 6 Aug 2018 13:47:00 +0200
+Subject: [PATCH 0/1] rseq/selftests: add __rseq_abi misalignment check
+Message-ID: <cover.thread-5c3a1c.your-ad-here.call-01533555685-ext-8699@work.hours>
 
-If userfaultfd runs on a system that doesn't support UFFDIO_ZEROPAGE for
-shared memory, it currently ends with error code 1 which indicates test
-failure:
+While implementing rseq selftest for s390 a glibc problem with tls
+variables alignment has been discovered. It turned out to be a general
+problem affecting several architectures. The bug opened for this problem:
 
-  # ./userfaultfd shmem 10 10
-  nr_pages: 160, nr_pages_per_cpu: 80
-  bounces: 9, mode: rnd poll, unexpected missing ioctl for anon memory
-  # echo $?
-  1
+https://sourceware.org/bugzilla/show_bug.cgi?id=23403
 
-Change userfaultfd_zeropage_test() to return KSFT_SKIP to indicate that
-the test is being skipped.
+There is no fix yet. On s390 __rseq_abi ends up aligned to 0x10 instead
+of 0x20 which makes rseq selftest fail every time.
 
-Also change userfaultfd_events_test() and userfaultfd_stress() to ignore
-the missing UFFDIO_ZEROPAGE bit from the list of supported ioctls since
-these tests don't require that feature.
+The change proposed adds __rseq_abi misalignment check, produces user
+friendly message and skips the test.
 
-Signed-off-by: Thiago Jung Bauermann <bauerman at linux.ibm.com>
----
- tools/testing/selftests/vm/userfaultfd.c | 36 +++++++++++++++++++++++++++-----
- 1 file changed, 31 insertions(+), 5 deletions(-)
+Vasily Gorbik (1):
+  rseq/selftests: add __rseq_abi misalignment check
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index c84e44ddf314..00f1ca663d67 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -852,6 +852,16 @@ static int uffdio_zeropage(int ufd, unsigned long offset)
- 	return __uffdio_zeropage(ufd, offset, false);
- }
- 
-+/* Tells whether the kernel doesn't support ZEROPAGE on shared memory VMAs. */
-+static bool shmem_without_zeropage_support(unsigned long expected_ioctls,
-+					   unsigned long supported_ioctls)
-+{
-+	/* Turn off ZEROPAGE bit from expected_ioctls. */
-+	expected_ioctls &= ~(1 << _UFFDIO_ZEROPAGE);
-+
-+	return test_type == TEST_SHMEM && supported_ioctls == expected_ioctls;
-+}
-+
- /* exercise UFFDIO_ZEROPAGE */
- static int userfaultfd_zeropage_test(void)
- {
-@@ -877,10 +887,20 @@ static int userfaultfd_zeropage_test(void)
- 
- 	expected_ioctls = uffd_test_ops->expected_ioctls;
- 	if ((uffdio_register.ioctls & expected_ioctls) !=
--	    expected_ioctls)
-+	    expected_ioctls) {
-+		close(uffd);
-+
-+		if (shmem_without_zeropage_support(expected_ioctls,
-+						   uffdio_register.ioctls)) {
-+			fprintf(stderr,
-+				"UFFDIO_ZEROPAGE unsupported in shmem VMAs\n");
-+			return KSFT_SKIP;
-+		}
-+
- 		fprintf(stderr,
--			"unexpected missing ioctl for anon memory\n"),
--			exit(1);
-+			"unexpected missing ioctl for anon memory\n");
-+		return 1;
-+	}
- 
- 	if (uffdio_zeropage(uffd, 0)) {
- 		if (my_bcmp(area_dst, zeropage, page_size))
-@@ -924,7 +944,10 @@ static int userfaultfd_events_test(void)
- 
- 	expected_ioctls = uffd_test_ops->expected_ioctls;
- 	if ((uffdio_register.ioctls & expected_ioctls) !=
--	    expected_ioctls)
-+	    expected_ioctls &&
-+	    /* No need for zeropage support in this test, so ignore it. */
-+	    !shmem_without_zeropage_support(expected_ioctls,
-+					    uffdio_register.ioctls))
- 		fprintf(stderr,
- 			"unexpected missing ioctl for anon memory\n"),
- 			exit(1);
-@@ -1117,7 +1140,10 @@ static int userfaultfd_stress(void)
- 		}
- 		expected_ioctls = uffd_test_ops->expected_ioctls;
- 		if ((uffdio_register.ioctls & expected_ioctls) !=
--		    expected_ioctls) {
-+		    expected_ioctls &&
-+		    /* No need for zeropage support in this test, so ignore it. */
-+		    !shmem_without_zeropage_support(expected_ioctls,
-+						    uffdio_register.ioctls)) {
- 			fprintf(stderr,
- 				"unexpected missing ioctl for anon memory\n");
- 			return 1;
+ tools/testing/selftests/rseq/rseq.c           | 19 +++++++++++++++++++
+ .../testing/selftests/rseq/run_param_test.sh  |  4 ++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
+
+-- 
+2.18.0.13.gd42ae10
 
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
