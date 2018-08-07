@@ -1,80 +1,104 @@
-From: luc.vanoostenryck@gmail.com (Luc Van Oostenryck)
-Date: Mon, 6 Aug 2018 21:12:53 +0200
-Subject: [PATCH v4 0/7] arm64: untag user pointers passed to the kernel
-In-Reply-To: <20180803150945.GC9297@kroah.com>
-References: <cover.1529507994.git.andreyknvl@google.com>
- <CAAeHK+zqtyGzd_CZ7qKZKU-uZjZ1Pkmod5h8zzbN0xCV26nSfg@mail.gmail.com>
- <20180626172900.ufclp2pfrhwkxjco@armageddon.cambridge.arm.com>
- <CAAeHK+yqWKTdTG+ymZ2-5XKiDANV+fmUjnQkRy-5tpgphuLJRA@mail.gmail.com>
- <CAAeHK+wJbbCZd+-X=9oeJgsqQJiq8h+Aagz3SQMPaAzCD+pvFw@mail.gmail.com>
- <CAAeHK+yWF05XoU+0iuJoXAL3cWgdtxbeLoBz169yP12W4LkcQw@mail.gmail.com>
- <20180801174256.5mbyf33eszml4nmu@armageddon.cambridge.arm.com>
- <CAAeHK+zb7vcehuX9=oxLUJVJr1ZcgmRTODQz7wsPy+rJb=3kbQ@mail.gmail.com>
- <CAAeHK+xTxPhfbVTNxcbsx7VdwQ21Bt-vo2ZU1tEM1_JX7uKnng@mail.gmail.com>
- <20180803150945.GC9297@kroah.com>
+From: yamada.masahiro@socionext.com (Masahiro Yamada)
+Date: Tue, 7 Aug 2018 11:32:26 +0900
+Subject: [PATCH v4] selftests: add headers_install to lib.mk
+In-Reply-To: <3f332e65-0b33-9952-6aba-f9c8953a1f26@kernel.org>
+References: <20180413090351.25662-1-anders.roxell@linaro.org>
+ <20180607110911.12252-1-anders.roxell@linaro.org>
+ <CADYN=9J=hSFb2wCZ1+dXL=023p9y05MEGUPvH48WfPX7XDZvwQ@mail.gmail.com>
+ <f222aa8d-88b8-140c-30ed-83fd908bfd09@kernel.org>
+ <CADYN=9LSA60E4mFwrbeY-RGi4kZV6hO0ygz0-C6QB3+KKaoxQg@mail.gmail.com>
+ <3f332e65-0b33-9952-6aba-f9c8953a1f26@kernel.org>
 Message-ID:
- <CAExDi1T=s1ASPz6wMbV-G+Wiq8u9zu9cFztaCQ1kDy_TDQkXvg@mail.gmail.com>
+ <CAK7LNAQ6hNmjmZc8J54KWCtR6x4Megn3mbdzprGgSZL5Zk9GCg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180806191253.gdSB_5BPWLmWqgArKlxE3ViftUWH5AAza9D6MLLJuVs@z>
+Message-ID: <20180807023226.mp30mXDH_wRTtR9acnM3iFYbjZnqVryEMLWUO44qNks@z>
 
-On Fri, Aug 3, 2018 at 5:09 PM, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> On Fri, Aug 03, 2018@04:59:18PM +0200, Andrey Konovalov wrote:
->> On Thu, Aug 2, 2018@5:00 PM, Andrey Konovalov <andreyknvl@google.com> wrote:
->> > On Wed, Aug 1, 2018@7:42 PM, Catalin Marinas <catalin.marinas@arm.com> wrote:
->> >> On Mon, Jul 16, 2018@01:25:59PM +0200, Andrey Konovalov wrote:
->> >>> On Thu, Jun 28, 2018@9:30 PM, Andrey Konovalov <andreyknvl@google.com> wrote:
->> >>> So the checker reports ~100 different places where a __user pointer
->> >>> being casted. I've looked through them and found 3 places where we
->> >>> need to add untagging. Source code lines below come from 4.18-rc2+
->> >>> (6f0d349d).
->> >> [...]
->> >>> I'll add the 3 patches with fixes to v5 of this patchset.
->> >>
->> >> Thanks for investigating. You can fix those three places in your code
->> >
->> > OK, will do.
->> >
->> >> but I was rather looking for a way to check such casting in the future
->> >> for newly added code. While for the khwasan we can assume it's a debug
->> >> option, the tagged user pointers are ABI and we need to keep it stable.
->> >>
->> >> We could we actually add some macros for explicit conversion between
->> >> __user ptr and long and silence the warning there (I guess this would
->> >> work better for sparse). We can then detect new ptr to long casts as
->> >> they appear. I just hope that's not too intrusive.
->> >>
->> >> (I haven't tried the sparse patch yet, hopefully sometime this week)
->> >
->> > Haven't look at that sparse patch yet myself, but sounds doable.
->> > Should these macros go into this patchset or should they go
->> > separately?
+2018-08-07 2:03 GMT+09:00 Shuah Khan <shuah at kernel.org>:
+> Hi Anders,
+>
+> On 07/25/2018 10:08 AM, Anders Roxell wrote:
+>> On Tue, 24 Jul 2018@19:11, Shuah Khan <shuah@kernel.org> wrote:
+>>>
+>>> On 07/23/2018 02:49 PM, Anders Roxell wrote:
+>>>> On Thu, 7 Jun 2018@13:09, Anders Roxell <anders.roxell@linaro.org> wrote:
+>>>>>
+>>>>> If the kernel headers aren't installed we can't build all the tests.
+>>>>> Add a new make target rule 'khdr' in the file lib.mk to generate the
+>>>>> kernel headers and that gets include for every test-dir Makefile that
+>>>>> includes lib.mk If the testdir in turn have its own sub-dirs the
+>>>>> top_srcdir needs to be set to the linux-rootdir to be able to generate
+>>>>> the kernel headers.
+>>>>>
+>>>>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+>>>>> Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
+>>>>> ---
+>>>>>  Makefile                                           | 14 +-------------
+>>>>>  scripts/subarch.include                            | 13 +++++++++++++
+>>>>>  tools/testing/selftests/android/Makefile           |  2 +-
+>>>>>  tools/testing/selftests/android/ion/Makefile       |  2 ++
+>>>>>  tools/testing/selftests/futex/functional/Makefile  |  1 +
+>>>>>  tools/testing/selftests/gpio/Makefile              |  7 ++-----
+>>>>>  tools/testing/selftests/kvm/Makefile               |  7 ++-----
+>>>>>  tools/testing/selftests/lib.mk                     | 12 ++++++++++++
+>>>>>  tools/testing/selftests/net/Makefile               |  1 +
+>>>>>  .../selftests/networking/timestamping/Makefile     |  1 +
+>>>>>  tools/testing/selftests/vm/Makefile                |  4 ----
+>>>>>  11 files changed, 36 insertions(+), 28 deletions(-)
+>>>>>  create mode 100644 scripts/subarch.include
+>>>>>
+>>>>> diff --git a/Makefile b/Makefile
+>>>>> index 6b9aea95ae3a..8050072300fa 100644
+>>>>> --- a/Makefile
+>>>>> +++ b/Makefile
+>>>>> @@ -286,19 +286,7 @@ KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
+>>>>>  KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
+>>>>>  export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
+>>>>>
+>>>>> -# SUBARCH tells the usermode build what the underlying arch is.  That is set
+>>>>> -# first, and if a usermode build is happening, the "ARCH=um" on the command
+>>>>> -# line overrides the setting of ARCH below.  If a native build is happening,
+>>>>> -# then ARCH is assigned, getting whatever value it gets normally, and
+>>>>> -# SUBARCH is subsequently ignored.
+>>>>> -
+>>>>> -SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
+>>>>> -                                 -e s/sun4u/sparc64/ \
+>>>>> -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
+>>>>> -                                 -e s/s390x/s390/ -e s/parisc64/parisc/ \
+>>>>> -                                 -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+>>>>> -                                 -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
+>>>>> -                                 -e s/riscv.*/riscv/)
+>>>>> +include scripts/subarch.include
+>>>
+>>> What is the reason for this SUBARCH block move to to scripts/subarch.include?
+>>> Is this necessary for adding headers install dependency to lib.mk?
 >>
->> Started looking at this. When I run sparse with default checks enabled
->> (make C=1) I get countless warnings. Does anybody actually use it?
+>> This is needed to create headers for cross build.
+>>
 >
-> Try using a more up-to-date version of sparse.  Odds are you are using
-> an old one, there is a newer version in a different branch on kernel.org
-> somewhere...
+> I am sorry for the delay on this patch. I am going to get this into 4.19.
+> If anybody has objections, please let me.
 >
-> greg k-h
+> Anders! Will be able to rebase the patch and send me the latest. I think
+> I have Acks from kvm, android, and vm so far.
 >
 
-Quoting Linus in [1]:
 
-Honestly, I'd like to just encourage people to get the sparse update
-from Luc Van Oostenryck instead.
+I may be missing something about the tools/ directory,
+but why isn't it like this?
 
-For a while there it looked like Chris Li would just pull from Luc,
-and we'd have timely releases, but that really doesn't seem to have
-ended up happening after all. So right now it's probably just best to
-get Luc's tree instead from
 
-    https://github.com/lucvoo/sparse-dev
+kselftest: headers_install
+        $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
 
-which also ends up fixing a lot of other issues.
 
-[1] https://lore.kernel.org/lkml/CA+55aFzYEnZR2GZLR-DwpONjMNYGYoDy+6AWLCVNayWiaZuqoA at mail.gmail.com/T/#u
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
