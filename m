@@ -1,101 +1,85 @@
-From: yamada.masahiro at socionext.com (Masahiro Yamada)
-Date: Tue, 7 Aug 2018 11:32:26 +0900
-Subject: [PATCH v4] selftests: add headers_install to lib.mk
-In-Reply-To: <3f332e65-0b33-9952-6aba-f9c8953a1f26@kernel.org>
-References: <20180413090351.25662-1-anders.roxell@linaro.org>
- <20180607110911.12252-1-anders.roxell@linaro.org>
- <CADYN=9J=hSFb2wCZ1+dXL=023p9y05MEGUPvH48WfPX7XDZvwQ@mail.gmail.com>
- <f222aa8d-88b8-140c-30ed-83fd908bfd09@kernel.org>
- <CADYN=9LSA60E4mFwrbeY-RGi4kZV6hO0ygz0-C6QB3+KKaoxQg@mail.gmail.com>
- <3f332e65-0b33-9952-6aba-f9c8953a1f26@kernel.org>
-Message-ID: <CAK7LNAQ6hNmjmZc8J54KWCtR6x4Megn3mbdzprGgSZL5Zk9GCg@mail.gmail.com>
+From: rppt at linux.vnet.ibm.com (Mike Rapoport)
+Date: Tue, 7 Aug 2018 09:50:25 +0300
+Subject: [PATCH v2 1/4] userfaultfd: selftest: Fix checking of
+ userfaultfd_open() result
+In-Reply-To: <20180803220046.4019-2-bauerman@linux.ibm.com>
+References: <20180803220046.4019-1-bauerman@linux.ibm.com>
+ <20180803220046.4019-2-bauerman@linux.ibm.com>
+Message-ID: <20180807065023.GA20140@rapoport-lnx>
 
-2018-08-07 2:03 GMT+09:00 Shuah Khan <shuah at kernel.org>:
-> Hi Anders,
->
-> On 07/25/2018 10:08 AM, Anders Roxell wrote:
->> On Tue, 24 Jul 2018 at 19:11, Shuah Khan <shuah at kernel.org> wrote:
->>>
->>> On 07/23/2018 02:49 PM, Anders Roxell wrote:
->>>> On Thu, 7 Jun 2018 at 13:09, Anders Roxell <anders.roxell at linaro.org> wrote:
->>>>>
->>>>> If the kernel headers aren't installed we can't build all the tests.
->>>>> Add a new make target rule 'khdr' in the file lib.mk to generate the
->>>>> kernel headers and that gets include for every test-dir Makefile that
->>>>> includes lib.mk If the testdir in turn have its own sub-dirs the
->>>>> top_srcdir needs to be set to the linux-rootdir to be able to generate
->>>>> the kernel headers.
->>>>>
->>>>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
->>>>> Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
->>>>> ---
->>>>>  Makefile                                           | 14 +-------------
->>>>>  scripts/subarch.include                            | 13 +++++++++++++
->>>>>  tools/testing/selftests/android/Makefile           |  2 +-
->>>>>  tools/testing/selftests/android/ion/Makefile       |  2 ++
->>>>>  tools/testing/selftests/futex/functional/Makefile  |  1 +
->>>>>  tools/testing/selftests/gpio/Makefile              |  7 ++-----
->>>>>  tools/testing/selftests/kvm/Makefile               |  7 ++-----
->>>>>  tools/testing/selftests/lib.mk                     | 12 ++++++++++++
->>>>>  tools/testing/selftests/net/Makefile               |  1 +
->>>>>  .../selftests/networking/timestamping/Makefile     |  1 +
->>>>>  tools/testing/selftests/vm/Makefile                |  4 ----
->>>>>  11 files changed, 36 insertions(+), 28 deletions(-)
->>>>>  create mode 100644 scripts/subarch.include
->>>>>
->>>>> diff --git a/Makefile b/Makefile
->>>>> index 6b9aea95ae3a..8050072300fa 100644
->>>>> --- a/Makefile
->>>>> +++ b/Makefile
->>>>> @@ -286,19 +286,7 @@ KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
->>>>>  KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
->>>>>  export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
->>>>>
->>>>> -# SUBARCH tells the usermode build what the underlying arch is.  That is set
->>>>> -# first, and if a usermode build is happening, the "ARCH=um" on the command
->>>>> -# line overrides the setting of ARCH below.  If a native build is happening,
->>>>> -# then ARCH is assigned, getting whatever value it gets normally, and
->>>>> -# SUBARCH is subsequently ignored.
->>>>> -
->>>>> -SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
->>>>> -                                 -e s/sun4u/sparc64/ \
->>>>> -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
->>>>> -                                 -e s/s390x/s390/ -e s/parisc64/parisc/ \
->>>>> -                                 -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
->>>>> -                                 -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
->>>>> -                                 -e s/riscv.*/riscv/)
->>>>> +include scripts/subarch.include
->>>
->>> What is the reason for this SUBARCH block move to to scripts/subarch.include?
->>> Is this necessary for adding headers install dependency to lib.mk?
->>
->> This is needed to create headers for cross build.
->>
->
-> I am sorry for the delay on this patch. I am going to get this into 4.19.
-> If anybody has objections, please let me.
->
-> Anders! Will be able to rebase the patch and send me the latest. I think
-> I have Acks from kvm, android, and vm so far.
->
+On Fri, Aug 03, 2018 at 07:00:43PM -0300, Thiago Jung Bauermann wrote:
+> If the userfaultfd test is run on a kernel with CONFIG_USERFAULTFD=n, it
+> will report that the system call is not available yet go ahead and continue
+> anyway:
+> 
+>   # ./userfaultfd anon 30 1
+>   nr_pages: 480, nr_pages_per_cpu: 120
+>   userfaultfd syscall not available in this kernel
+>   bounces: 0, mode:, register failure
+> 
+> This is because userfaultfd_open() returns 0 on success and 1 on error but
+> all callers assume that it returns < 0 on error.
+> 
+> Since the convention of the test as a whole is the one used by
+> userfault_open(), fix its callers instead. Now the test behaves correctly:
+> 
+>   # ./userfaultfd anon 30 1
+>   nr_pages: 480, nr_pages_per_cpu: 120
+>   userfaultfd syscall not available in this kernel
+> 
+> Signed-off-by: Thiago Jung Bauermann <bauerman at linux.ibm.com>
 
+Reviewed-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
 
-I may be missing something about the tools/ directory,
-but why isn't it like this?
-
-
-kselftest: headers_install
-        $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
-
-
-
-
-
-
+> ---
+>  tools/testing/selftests/vm/userfaultfd.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> index 7b8171e3128a..e4099afe7557 100644
+> --- a/tools/testing/selftests/vm/userfaultfd.c
+> +++ b/tools/testing/selftests/vm/userfaultfd.c
+> @@ -859,7 +859,7 @@ static int userfaultfd_zeropage_test(void)
+>  	if (uffd_test_ops->release_pages(area_dst))
+>  		return 1;
+> 
+> -	if (userfaultfd_open(0) < 0)
+> +	if (userfaultfd_open(0))
+>  		return 1;
+>  	uffdio_register.range.start = (unsigned long) area_dst;
+>  	uffdio_register.range.len = nr_pages * page_size;
+> @@ -902,7 +902,7 @@ static int userfaultfd_events_test(void)
+> 
+>  	features = UFFD_FEATURE_EVENT_FORK | UFFD_FEATURE_EVENT_REMAP |
+>  		UFFD_FEATURE_EVENT_REMOVE;
+> -	if (userfaultfd_open(features) < 0)
+> +	if (userfaultfd_open(features))
+>  		return 1;
+>  	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
+> 
+> @@ -961,7 +961,7 @@ static int userfaultfd_sig_test(void)
+>  		return 1;
+> 
+>  	features = UFFD_FEATURE_EVENT_FORK|UFFD_FEATURE_SIGBUS;
+> -	if (userfaultfd_open(features) < 0)
+> +	if (userfaultfd_open(features))
+>  		return 1;
+>  	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
+> 
+> @@ -1027,7 +1027,7 @@ static int userfaultfd_stress(void)
+>  	if (!area_dst)
+>  		return 1;
+> 
+> -	if (userfaultfd_open(0) < 0)
+> +	if (userfaultfd_open(0))
+>  		return 1;
+> 
+>  	count_verify = malloc(nr_pages * sizeof(unsigned long long));
 
 -- 
-Best Regards
-Masahiro Yamada
+Sincerely yours,
+Mike.
+
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
