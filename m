@@ -1,108 +1,89 @@
-From: anders.roxell@linaro.org (Anders Roxell)
-Date: Wed, 8 Aug 2018 12:44:31 +0200
-Subject: [PATCH v4] selftests: add headers_install to lib.mk
-In-Reply-To: <CAK7LNAQ6hNmjmZc8J54KWCtR6x4Megn3mbdzprGgSZL5Zk9GCg@mail.gmail.com>
-References: <20180413090351.25662-1-anders.roxell@linaro.org>
- <20180607110911.12252-1-anders.roxell@linaro.org>
- <CADYN=9J=hSFb2wCZ1+dXL=023p9y05MEGUPvH48WfPX7XDZvwQ@mail.gmail.com>
- <f222aa8d-88b8-140c-30ed-83fd908bfd09@kernel.org>
- <CADYN=9LSA60E4mFwrbeY-RGi4kZV6hO0ygz0-C6QB3+KKaoxQg@mail.gmail.com>
- <3f332e65-0b33-9952-6aba-f9c8953a1f26@kernel.org>
- <CAK7LNAQ6hNmjmZc8J54KWCtR6x4Megn3mbdzprGgSZL5Zk9GCg@mail.gmail.com>
-Message-ID:
- <CADYN=9+mrrNN3m5FNCfiNC1ENe-aViYuGvmKsFOYdqMC2hMfAg@mail.gmail.com>
+From: rafael.tinoco@linaro.org (Rafael David Tinoco)
+Date: Wed, 8 Aug 2018 11:09:00 -0300
+Subject: [PATCH] selftests: membarrier: fix test by checking supported
+ commands
+In-Reply-To: <20180731031537.bs64cdcxfqgmjwp4@mobile.celeiro.br>
+References: <20180730160543.19056-1-rafael.tinoco@linaro.org>
+ <9edf8459-aea1-c59e-5d73-112e986777e1@kernel.org>
+ <20180731031537.bs64cdcxfqgmjwp4@mobile.celeiro.br>
+Message-ID: <20180808140900.mureac7fptuoaba6@mobile.celeiro.br>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180808104431.fwxkbz9FWru5UPnhX7PkzjUxyyqd65LNH1Uz7YLoL_w@z>
+Message-ID: <20180808140900.3x_99e_JfBSVeoxRfH5BGZ_N-Bv0NIhU3fO6VsC3caI@z>
 
-On Tue, 7 Aug 2018 at 04:33, Masahiro Yamada
-<yamada.masahiro@socionext.com> wrote:
->
-> 2018-08-07 2:03 GMT+09:00 Shuah Khan <shuah at kernel.org>:
-> > Hi Anders,
+On Tue, Jul 31, 2018@12:15:37AM -0300, Rafael David Tinoco wrote:
+> Hello Shuah,
+> 
+> On Mon, Jul 30, 2018@05:32:30PM -0600, Shuah Khan wrote:
+> > Hi Rafael,
 > >
-> > On 07/25/2018 10:08 AM, Anders Roxell wrote:
-> >> On Tue, 24 Jul 2018@19:11, Shuah Khan <shuah@kernel.org> wrote:
-> >>>
-> >>> On 07/23/2018 02:49 PM, Anders Roxell wrote:
-> >>>> On Thu, 7 Jun 2018@13:09, Anders Roxell <anders.roxell@linaro.org> wrote:
-> >>>>>
-> >>>>> If the kernel headers aren't installed we can't build all the tests.
-> >>>>> Add a new make target rule 'khdr' in the file lib.mk to generate the
-> >>>>> kernel headers and that gets include for every test-dir Makefile that
-> >>>>> includes lib.mk If the testdir in turn have its own sub-dirs the
-> >>>>> top_srcdir needs to be set to the linux-rootdir to be able to generate
-> >>>>> the kernel headers.
-> >>>>>
-> >>>>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
-> >>>>> Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
-> >>>>> ---
-> >>>>>  Makefile                                           | 14 +-------------
-> >>>>>  scripts/subarch.include                            | 13 +++++++++++++
-> >>>>>  tools/testing/selftests/android/Makefile           |  2 +-
-> >>>>>  tools/testing/selftests/android/ion/Makefile       |  2 ++
-> >>>>>  tools/testing/selftests/futex/functional/Makefile  |  1 +
-> >>>>>  tools/testing/selftests/gpio/Makefile              |  7 ++-----
-> >>>>>  tools/testing/selftests/kvm/Makefile               |  7 ++-----
-> >>>>>  tools/testing/selftests/lib.mk                     | 12 ++++++++++++
-> >>>>>  tools/testing/selftests/net/Makefile               |  1 +
-> >>>>>  .../selftests/networking/timestamping/Makefile     |  1 +
-> >>>>>  tools/testing/selftests/vm/Makefile                |  4 ----
-> >>>>>  11 files changed, 36 insertions(+), 28 deletions(-)
-> >>>>>  create mode 100644 scripts/subarch.include
-> >>>>>
-> >>>>> diff --git a/Makefile b/Makefile
-> >>>>> index 6b9aea95ae3a..8050072300fa 100644
-> >>>>> --- a/Makefile
-> >>>>> +++ b/Makefile
-> >>>>> @@ -286,19 +286,7 @@ KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
-> >>>>>  KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
-> >>>>>  export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
-> >>>>>
-> >>>>> -# SUBARCH tells the usermode build what the underlying arch is.  That is set
-> >>>>> -# first, and if a usermode build is happening, the "ARCH=um" on the command
-> >>>>> -# line overrides the setting of ARCH below.  If a native build is happening,
-> >>>>> -# then ARCH is assigned, getting whatever value it gets normally, and
-> >>>>> -# SUBARCH is subsequently ignored.
-> >>>>> -
-> >>>>> -SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
-> >>>>> -                                 -e s/sun4u/sparc64/ \
-> >>>>> -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
-> >>>>> -                                 -e s/s390x/s390/ -e s/parisc64/parisc/ \
-> >>>>> -                                 -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
-> >>>>> -                                 -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
-> >>>>> -                                 -e s/riscv.*/riscv/)
-> >>>>> +include scripts/subarch.include
-> >>>
-> >>> What is the reason for this SUBARCH block move to to scripts/subarch.include?
-> >>> Is this necessary for adding headers install dependency to lib.mk?
-> >>
-> >> This is needed to create headers for cross build.
-> >>
+> > On 07/30/2018 10:05 AM, Rafael David Tinoco wrote:
+> > > Makes membarrier_test compatible with older kernels (LTS) by checking if
+> > > the membarrier features exist before running the tests.
+> > >
+> > > Link: https://bugs.linaro.org/show_bug.cgi?id=3771
+> > > Signed-off-by: Rafael David Tinoco <rafael.tinoco at linaro.org>
+> > > Cc: <stable at vger.kernel.org> #v4.17
+> > > ---
+> > >  .../selftests/membarrier/membarrier_test.c    | 69 +++++++++++--------
+> > >  1 file changed, 41 insertions(+), 28 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
+> > > index 6793f8ecc8e7..b96caa096e2f 100644
+> > > --- a/tools/testing/selftests/membarrier/membarrier_test.c
+> > > +++ b/tools/testing/selftests/membarrier/membarrier_test.c
+> > > @@ -225,7 +225,14 @@ static int test_membarrier_global_expedited_success(void)
+> > >
+> > >  static int test_membarrier(void)
+> > >  {
+> > > -	int status;
+> > > +	int supported, status;
+> > > +
+> > > +	supported = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
+> > > +	if (supported < 0) {
+> > > +		ksft_test_result_fail(
+> > > +			"sys_membarrier() failed to query supported cmds\n");
+> > > +		return supported;
+> > > +	}
+> > >
 > >
-> > I am sorry for the delay on this patch. I am going to get this into 4.19.
-> > If anybody has objections, please let me.
+> > ksft_exit_skip() is the right interface to use here. If feature isn't supported,
+> > it should exit skip as opposed fail.
 > >
-> > Anders! Will be able to rebase the patch and send me the latest. I think
-> > I have Acks from kvm, android, and vm so far.
-> >
->
->
-> I may be missing something about the tools/ directory,
-> but why isn't it like this?
->
->
-> kselftest: headers_install
->         $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+> 
+> Not sure this is the case here. This part was just a positional change.
+> 
+> This check is extending an existing logic (for MEMBARRIER_CMD_PRIVATE_
+> EXPEDITED_SYNC_CORE tests). Calling membarrier with MEMBARRIER_CMD_QUERY
+> will return us MEMBARRIER_CMD_BITMASK, telling us which features are
+> enabled for the running kernel (thus which tests can be executed).
+> 
+> The query command was added in v4.3 and should (could ?) be considered a
+> fundament for a working test by now, I suppose, no ?
+> 
+> It is used to decide which further tests to run. Not receiving anything
+> back from this call would mean something is broken (since at least
+> MEMBARRIER_CMD_GLOBAL should have always existed as a membarrier
+> feature/command).
+> 
+> I think your concern is addressed in the beginning of the test.
+> test_membarrier_query() tests for ENOSYS and calls ksft_exit_skip() if
+> CONFIG_MEMBARRIER is disabled.
+> 
+> This part is not about checking if the test can run, but which one can.
+> What do you think ? Tks for reviewing!
 
-That wont work if you cross compile, since you wont run the tests
-where you build them.
-Then you can argue that we should break it up in a build and run rule.
-However, my understanding how people just build and run the the tests
-for that particular subsystem that they develop for, like:
-make -C tools/testing/selftests/<subsystem>/
+Shuah,
 
-Cheers,
-Anders
+Never mind, I'll remove the 2nd MEMBARRIER_CMD_QUERY call, and cache the
+first call results into a global status. This way, the function
+test_membarrier_query() will test for availability, and initial issues
+(like not having MEMBARRIER_CMD_GLOBAL), and skip or return error
+approprietly like you said. No need to call it twice, just use cached
+status. Tks for the review.
+
+I'll send a v2.
+
+Thank you
 --
 To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
 the body of a message to majordomo at vger.kernel.org
