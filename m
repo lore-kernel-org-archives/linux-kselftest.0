@@ -1,220 +1,136 @@
-From: anders.roxell at linaro.org (Anders Roxell)
-Date: Thu,  9 Aug 2018 10:04:02 +0200
-Subject: [PATCH v5] selftests: add headers_install to lib.mk
-In-Reply-To: <3f332e65-0b33-9952-6aba-f9c8953a1f26@kernel.org>
-References: <3f332e65-0b33-9952-6aba-f9c8953a1f26@kernel.org>
-Message-ID: <20180809080402.24469-1-anders.roxell@linaro.org>
+From: rafael.tinoco at linaro.org (Rafael David Tinoco)
+Date: Thu,  9 Aug 2018 17:21:57 -0300
+Subject: [PATCH v2] selftests: membarrier: fix test by checking supported
+ commands
+In-Reply-To: <9edf8459-aea1-c59e-5d73-112e986777e1@kernel.org>
+References: <9edf8459-aea1-c59e-5d73-112e986777e1@kernel.org>
+Message-ID: <20180809202157.21148-1-rafael.tinoco@linaro.org>
 
-If the kernel headers aren't installed we can't build all the tests.
-Add a new make target rule 'khdr' in the file lib.mk to generate the
-kernel headers and that gets include for every test-dir Makefile that
-includes lib.mk If the testdir in turn have its own sub-dirs the
-top_srcdir needs to be set to the linux-rootdir to be able to generate
-the kernel headers.
+Makes membarrier_test compatible with older kernels (LTS) by checking if
+the membarrier features exist before running the tests.
 
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
-Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
+Link: https://bugs.linaro.org/show_bug.cgi?id=3771
+Signed-off-by: Rafael David Tinoco <rafael.tinoco at linaro.org>
+Cc: <stable at vger.kernel.org> #v4.17
 ---
+ .../selftests/membarrier/membarrier_test.c    | 71 +++++++++++--------
+ 1 file changed, 40 insertions(+), 31 deletions(-)
 
-Rebased onto next-20180808
-
-Cheers,
-Anders
-
- Makefile                                           | 14 +-------------
- scripts/subarch.include                            | 13 +++++++++++++
- tools/testing/selftests/android/Makefile           |  2 +-
- tools/testing/selftests/android/ion/Makefile       |  2 ++
- tools/testing/selftests/futex/functional/Makefile  |  1 +
- tools/testing/selftests/gpio/Makefile              |  7 ++-----
- tools/testing/selftests/kvm/Makefile               |  7 ++-----
- tools/testing/selftests/lib.mk                     | 12 ++++++++++++
- tools/testing/selftests/net/Makefile               |  1 +
- .../selftests/networking/timestamping/Makefile     |  1 +
- tools/testing/selftests/vm/Makefile                |  4 ----
- 11 files changed, 36 insertions(+), 28 deletions(-)
- create mode 100644 scripts/subarch.include
-
-diff --git a/Makefile b/Makefile
-index c88d56de7fda..49dc0c6e1f23 100644
---- a/Makefile
-+++ b/Makefile
-@@ -299,19 +299,7 @@ KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
- KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
- export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
+diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
+index 6793f8ecc8e7..4dc263824bda 100644
+--- a/tools/testing/selftests/membarrier/membarrier_test.c
++++ b/tools/testing/selftests/membarrier/membarrier_test.c
+@@ -223,7 +223,7 @@ static int test_membarrier_global_expedited_success(void)
+ 	return 0;
+ }
  
--# SUBARCH tells the usermode build what the underlying arch is.  That is set
--# first, and if a usermode build is happening, the "ARCH=um" on the command
--# line overrides the setting of ARCH below.  If a native build is happening,
--# then ARCH is assigned, getting whatever value it gets normally, and
--# SUBARCH is subsequently ignored.
--
--SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
--				  -e s/sun4u/sparc64/ \
--				  -e s/arm.*/arm/ -e s/sa110/arm/ \
--				  -e s/s390x/s390/ -e s/parisc64/parisc/ \
--				  -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
--				  -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
--				  -e s/riscv.*/riscv/)
-+include scripts/subarch.include
+-static int test_membarrier(void)
++static int test_membarrier(int supported)
+ {
+ 	int status;
  
- # Cross compiling and selecting different set of gcc/bin-utils
- # ---------------------------------------------------------------------------
-diff --git a/scripts/subarch.include b/scripts/subarch.include
-new file mode 100644
-index 000000000000..650682821126
---- /dev/null
-+++ b/scripts/subarch.include
-@@ -0,0 +1,13 @@
-+# SUBARCH tells the usermode build what the underlying arch is.  That is set
-+# first, and if a usermode build is happening, the "ARCH=um" on the command
-+# line overrides the setting of ARCH below.  If a native build is happening,
-+# then ARCH is assigned, getting whatever value it gets normally, and
-+# SUBARCH is subsequently ignored.
+@@ -236,21 +236,22 @@ static int test_membarrier(void)
+ 	status = test_membarrier_global_success();
+ 	if (status)
+ 		return status;
+-	status = test_membarrier_private_expedited_fail();
+-	if (status)
+-		return status;
+-	status = test_membarrier_register_private_expedited_success();
+-	if (status)
+-		return status;
+-	status = test_membarrier_private_expedited_success();
+-	if (status)
+-		return status;
+-	status = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
+-	if (status < 0) {
+-		ksft_test_result_fail("sys_membarrier() failed\n");
+-		return status;
 +
-+SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
-+				  -e s/sun4u/sparc64/ \
-+				  -e s/arm.*/arm/ -e s/sa110/arm/ \
-+				  -e s/s390x/s390/ -e s/parisc64/parisc/ \
-+				  -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
-+				  -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
-+				  -e s/riscv.*/riscv/)
-diff --git a/tools/testing/selftests/android/Makefile b/tools/testing/selftests/android/Makefile
-index 72c25a3cb658..d9a725478375 100644
---- a/tools/testing/selftests/android/Makefile
-+++ b/tools/testing/selftests/android/Makefile
-@@ -6,7 +6,7 @@ TEST_PROGS := run.sh
- 
- include ../lib.mk
- 
--all:
-+all: khdr
- 	@for DIR in $(SUBDIRS); do		\
- 		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
- 		mkdir $$BUILD_TARGET  -p;	\
-diff --git a/tools/testing/selftests/android/ion/Makefile b/tools/testing/selftests/android/ion/Makefile
-index e03695287f76..88cfe88e466f 100644
---- a/tools/testing/selftests/android/ion/Makefile
-+++ b/tools/testing/selftests/android/ion/Makefile
-@@ -10,6 +10,8 @@ $(TEST_GEN_FILES): ipcsocket.c ionutils.c
- 
- TEST_PROGS := ion_test.sh
- 
-+KSFT_KHDR_INSTALL := 1
-+top_srcdir = ../../../../..
- include ../../lib.mk
- 
- $(OUTPUT)/ionapp_export: ionapp_export.c ipcsocket.c ionutils.c
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index ff8feca49746..ad1eeb14fda7 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -18,6 +18,7 @@ TEST_GEN_FILES := \
- 
- TEST_PROGS := run.sh
- 
-+top_srcdir = ../../../../..
- include ../../lib.mk
- 
- $(TEST_GEN_FILES): $(HEADERS)
-diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index 1bbb47565c55..4665cdbf1a8d 100644
---- a/tools/testing/selftests/gpio/Makefile
-+++ b/tools/testing/selftests/gpio/Makefile
-@@ -21,11 +21,8 @@ endef
- CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
- LDLIBS += -lmount -I/usr/include/libmount
- 
--$(BINARIES): ../../../gpio/gpio-utils.o ../../../../usr/include/linux/gpio.h
-+$(BINARIES):| khdr
-+$(BINARIES): ../../../gpio/gpio-utils.o
- 
- ../../../gpio/gpio-utils.o:
- 	make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
--
--../../../../usr/include/linux/gpio.h:
--	make -C ../../../.. headers_install INSTALL_HDR_PATH=$(shell pwd)/../../../../usr/
--
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index dd0e5163f01f..34d492b77a7c 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -34,9 +34,6 @@ $(LIBKVM_OBJ): $(OUTPUT)/%.o: %.c
- $(OUTPUT)/libkvm.a: $(LIBKVM_OBJ)
- 	$(AR) crs $@ $^
- 
--$(LINUX_HDR_PATH):
--	make -C $(top_srcdir) headers_install
--
--all: $(STATIC_LIBS) $(LINUX_HDR_PATH)
-+all: $(STATIC_LIBS)
- $(TEST_GEN_PROGS): $(STATIC_LIBS)
--$(TEST_GEN_PROGS) $(LIBKVM_OBJ): | $(LINUX_HDR_PATH)
-+$(STATIC_LIBS):| khdr
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 17ab36605a8e..0a8e75886224 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -16,8 +16,20 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
- TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
- TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
- 
-+top_srcdir ?= ../../../..
-+include $(top_srcdir)/scripts/subarch.include
-+ARCH		?= $(SUBARCH)
++	/* commit 22e4ebb975822833b083533035233d128b30e98f added this feature */
++	if (supported & MEMBARRIER_CMD_PRIVATE_EXPEDITED) {
++		status = test_membarrier_private_expedited_fail();
++		if (status)
++			return status;
++		status = test_membarrier_register_private_expedited_success();
++		if (status)
++			return status;
++		status = test_membarrier_private_expedited_success();
++		if (status)
++			return status;
+ 	}
+-	if (status & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
 +
- all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
- 
-+.PHONY: khdr
-+khdr:
-+	make ARCH=$(ARCH) -C $(top_srcdir) headers_install
++	/* commit 70216e18e519a54a2f13569e8caff99a092a92d6 added this feature */
++	if (supported & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
+ 		status = test_membarrier_private_expedited_sync_core_fail();
+ 		if (status)
+ 			return status;
+@@ -261,23 +262,28 @@ static int test_membarrier(void)
+ 		if (status)
+ 			return status;
+ 	}
+-	/*
+-	 * It is valid to send a global membarrier from a non-registered
+-	 * process.
+-	 */
+-	status = test_membarrier_global_expedited_success();
+-	if (status)
+-		return status;
+-	status = test_membarrier_register_global_expedited_success();
+-	if (status)
+-		return status;
+-	status = test_membarrier_global_expedited_success();
+-	if (status)
+-		return status;
 +
-+ifdef KSFT_KHDR_INSTALL
-+$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES):| khdr
-+endif
++	/* commit c5f58bd58f432be5d92df33c5458e0bcbee3aadf added this feature */
++	if (supported & MEMBARRIER_CMD_GLOBAL_EXPEDITED) {
++		/*
++		 * It is valid to send a global membarrier from a non-registered
++		 * process.
++		 */
++		status = test_membarrier_global_expedited_success();
++		if (status)
++			return status;
++		status = test_membarrier_register_global_expedited_success();
++		if (status)
++			return status;
++		status = test_membarrier_global_expedited_success();
++		if (status)
++			return status;
++	}
 +
- .ONESHELL:
- define RUN_TEST_PRINT_RESULT
- 	TEST_HDR_MSG="selftests: "`basename $$PWD`:" $$BASENAME_TEST";	\
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 9cca68e440a0..919aa2ac00af 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -15,6 +15,7 @@ TEST_GEN_FILES += udpgso udpgso_bench_tx udpgso_bench_rx
- TEST_GEN_PROGS = reuseport_bpf reuseport_bpf_cpu reuseport_bpf_numa
- TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls
+ 	return 0;
+ }
  
-+KSFT_KHDR_INSTALL := 1
- include ../lib.mk
+-static int test_membarrier_query(void)
++static int test_membarrier_query(int *supported)
+ {
+ 	int flags = 0, ret;
  
- $(OUTPUT)/reuseport_bpf_numa: LDFLAGS += -lnuma
-diff --git a/tools/testing/selftests/networking/timestamping/Makefile b/tools/testing/selftests/networking/timestamping/Makefile
-index a728040edbe1..14cfcf006936 100644
---- a/tools/testing/selftests/networking/timestamping/Makefile
-+++ b/tools/testing/selftests/networking/timestamping/Makefile
-@@ -5,6 +5,7 @@ TEST_PROGS := hwtstamp_config rxtimestamp timestamping txtimestamp
+@@ -297,16 +303,19 @@ static int test_membarrier_query(void)
+ 		ksft_exit_skip(
+ 			"sys_membarrier unsupported: CMD_GLOBAL not found.\n");
  
- all: $(TEST_PROGS)
++	*supported = ret;
+ 	ksft_test_result_pass("sys_membarrier available\n");
+ 	return 0;
+ }
  
-+top_srcdir = ../../../../..
- include ../../lib.mk
+ int main(int argc, char **argv)
+ {
++	int supported;
++
+ 	ksft_print_header();
  
- clean:
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 9881876d2aa0..e94b7b14bcb2 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -26,10 +26,6 @@ TEST_PROGS := run_vmtests
+-	test_membarrier_query();
+-	test_membarrier();
++	test_membarrier_query(&supported);
++	test_membarrier(supported);
  
- include ../lib.mk
- 
--$(OUTPUT)/userfaultfd: ../../../../usr/include/linux/kernel.h
- $(OUTPUT)/userfaultfd: LDLIBS += -lpthread
- 
- $(OUTPUT)/mlock-random-test: LDLIBS += -lcap
--
--../../../../usr/include/linux/kernel.h:
--	make -C ../../../.. headers_install
+ 	return ksft_exit_pass();
+ }
 -- 
 2.18.0
 
