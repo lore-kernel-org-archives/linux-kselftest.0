@@ -1,140 +1,41 @@
-From: rafael.tinoco at linaro.org (Rafael David Tinoco)
-Date: Thu,  9 Aug 2018 17:21:57 -0300
-Subject: [PATCH v2] selftests: membarrier: fix test by checking supported
- commands
-In-Reply-To: <9edf8459-aea1-c59e-5d73-112e986777e1@kernel.org>
-References: <9edf8459-aea1-c59e-5d73-112e986777e1@kernel.org>
-Message-ID: <20180809202157.21148-1-rafael.tinoco@linaro.org>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Fri, 10 Aug 2018 10:50:26 +0200
+Subject: kselftest-merge misses config's to merge
+Message-ID: <CADYN=9KTA0LeczLnY8kxyrCtm2umPX0ODsmVEhBbBTY4MfUP0A@mail.gmail.com>
 
-Makes membarrier_test compatible with older kernels (LTS) by checking if
-the membarrier features exist before running the tests.
+Hi,
 
-Link: https://bugs.linaro.org/show_bug.cgi?id=3771
-Signed-off-by: Rafael David Tinoco <rafael.tinoco at linaro.org>
-Cc: <stable at vger.kernel.org> #v4.17
----
- .../selftests/membarrier/membarrier_test.c    | 71 +++++++++++--------
- 1 file changed, 40 insertions(+), 31 deletions(-)
+I have a question about the config files in tools/testing/selftests/ .
+The kselftest-merge target in the root Makefile assumes that the
+config files are placed in
+tools/testing/selftests/*/config and selftests/android/ion/config and
+selftests/net/forwarding/config doesn't follow that. So either we move
+those files up a level or do something like below in the top Makefile.
 
-diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
-index 6793f8ecc8e7..4dc263824bda 100644
---- a/tools/testing/selftests/membarrier/membarrier_test.c
-+++ b/tools/testing/selftests/membarrier/membarrier_test.c
-@@ -223,7 +223,7 @@ static int test_membarrier_global_expedited_success(void)
- 	return 0;
- }
- 
--static int test_membarrier(void)
-+static int test_membarrier(int supported)
- {
- 	int status;
- 
-@@ -236,21 +236,22 @@ static int test_membarrier(void)
- 	status = test_membarrier_global_success();
- 	if (status)
- 		return status;
--	status = test_membarrier_private_expedited_fail();
--	if (status)
--		return status;
--	status = test_membarrier_register_private_expedited_success();
--	if (status)
--		return status;
--	status = test_membarrier_private_expedited_success();
--	if (status)
--		return status;
--	status = sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
--	if (status < 0) {
--		ksft_test_result_fail("sys_membarrier() failed\n");
--		return status;
-+
-+	/* commit 22e4ebb975822833b083533035233d128b30e98f added this feature */
-+	if (supported & MEMBARRIER_CMD_PRIVATE_EXPEDITED) {
-+		status = test_membarrier_private_expedited_fail();
-+		if (status)
-+			return status;
-+		status = test_membarrier_register_private_expedited_success();
-+		if (status)
-+			return status;
-+		status = test_membarrier_private_expedited_success();
-+		if (status)
-+			return status;
- 	}
--	if (status & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
-+
-+	/* commit 70216e18e519a54a2f13569e8caff99a092a92d6 added this feature */
-+	if (supported & MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE) {
- 		status = test_membarrier_private_expedited_sync_core_fail();
- 		if (status)
- 			return status;
-@@ -261,23 +262,28 @@ static int test_membarrier(void)
- 		if (status)
- 			return status;
- 	}
--	/*
--	 * It is valid to send a global membarrier from a non-registered
--	 * process.
--	 */
--	status = test_membarrier_global_expedited_success();
--	if (status)
--		return status;
--	status = test_membarrier_register_global_expedited_success();
--	if (status)
--		return status;
--	status = test_membarrier_global_expedited_success();
--	if (status)
--		return status;
-+
-+	/* commit c5f58bd58f432be5d92df33c5458e0bcbee3aadf added this feature */
-+	if (supported & MEMBARRIER_CMD_GLOBAL_EXPEDITED) {
-+		/*
-+		 * It is valid to send a global membarrier from a non-registered
-+		 * process.
-+		 */
-+		status = test_membarrier_global_expedited_success();
-+		if (status)
-+			return status;
-+		status = test_membarrier_register_global_expedited_success();
-+		if (status)
-+			return status;
-+		status = test_membarrier_global_expedited_success();
-+		if (status)
-+			return status;
-+	}
-+
- 	return 0;
- }
- 
--static int test_membarrier_query(void)
-+static int test_membarrier_query(int *supported)
- {
- 	int flags = 0, ret;
- 
-@@ -297,16 +303,19 @@ static int test_membarrier_query(void)
- 		ksft_exit_skip(
- 			"sys_membarrier unsupported: CMD_GLOBAL not found.\n");
- 
-+	*supported = ret;
- 	ksft_test_result_pass("sys_membarrier available\n");
- 	return 0;
- }
- 
- int main(int argc, char **argv)
- {
-+	int supported;
-+
- 	ksft_print_header();
- 
--	test_membarrier_query();
--	test_membarrier();
-+	test_membarrier_query(&supported);
-+	test_membarrier(supported);
- 
- 	return ksft_exit_pass();
- }
--- 
-2.18.0
+diff --git a/Makefile b/Makefile
+index c88d56de7fda..06aeeca16917 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1188,12 +1188,13 @@ PHONY += kselftest-clean
+ kselftest-clean:
+  $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests clean
 
---
-To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
-the body of a message to majordomo at vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
++KSFT_CONFIGS=$(shell find $(srctree)/tools/testing/selftests/ -type f
+-name config)
+ PHONY += kselftest-merge
+ kselftest-merge:
+  $(if $(wildcard $(objtree)/.config),, $(error No .config exists,
+config your kernel first!))
+  $(Q)$(CONFIG_SHELL) $(srctree)/scripts/kconfig/merge_config.sh \
+  -m $(objtree)/.config \
+- $(srctree)/tools/testing/selftests/*/config
++ $(KSFT_CONFIGS)
+  +$(Q)$(MAKE) -f $(srctree)/Makefile olddefconfig
+
+ # ---------------------------------------------------------------------------
+
+
+or do you have another way to solve this?
+
+Cheers,
+Anders
