@@ -1,44 +1,32 @@
-From: anders.roxell@linaro.org (Anders Roxell)
-Date: Fri, 10 Aug 2018 10:50:26 +0200
-Subject: kselftest-merge misses config's to merge
-Message-ID:
- <CADYN=9KTA0LeczLnY8kxyrCtm2umPX0ODsmVEhBbBTY4MfUP0A@mail.gmail.com>
+From: colin.king@canonical.com (Colin King)
+Date: Mon, 13 Aug 2018 15:00:32 +0100
+Subject: [PATCH][bpf-next] bpf: test: fix spelling mistake "REUSEEPORT" ->
+ "REUSEPORT"
+Message-ID: <20180813140032.2208-1-colin.king@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180810085026.srzLk2aX5uhGsxImYK_cwgXmv4QQYjT3l0P53qBxG4c@z>
+Message-ID: <20180813140032.s1pXRYrN97Yj6UZ_PjPCdouQcLPBElrd547GYRnpvEM@z>
 
-Hi,
+From: Colin Ian King <colin.king@canonical.com>
 
-I have a question about the config files in tools/testing/selftests/ .
-The kselftest-merge target in the root Makefile assumes that the
-config files are placed in
-tools/testing/selftests/*/config and selftests/android/ion/config and
-selftests/net/forwarding/config doesn't follow that. So either we move
-those files up a level or do something like below in the top Makefile.
+Trivial fix to spelling mistake in error message
 
-diff --git a/Makefile b/Makefile
-index c88d56de7fda..06aeeca16917 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1188,12 +1188,13 @@ PHONY += kselftest-clean
- kselftest-clean:
-  $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests clean
+Signed-off-by: Colin Ian King <colin.king at canonical.com>
+---
+ tools/testing/selftests/bpf/test_maps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-+KSFT_CONFIGS=$(shell find $(srctree)/tools/testing/selftests/ -type f
--name config)
- PHONY += kselftest-merge
- kselftest-merge:
-  $(if $(wildcard $(objtree)/.config),, $(error No .config exists,
-config your kernel first!))
-  $(Q)$(CONFIG_SHELL) $(srctree)/scripts/kconfig/merge_config.sh \
-  -m $(objtree)/.config \
-- $(srctree)/tools/testing/selftests/*/config
-+ $(KSFT_CONFIGS)
-  +$(Q)$(MAKE) -f $(srctree)/Makefile olddefconfig
-
- # ---------------------------------------------------------------------------
-
-
-or do you have another way to solve this?
-
-Cheers,
-Anders
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index 4b7c74f5faa7..6f54f84144a0 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -1191,7 +1191,7 @@ static void prepare_reuseport_grp(int type, int map_fd,
+ 
+ 		err = setsockopt(fd64, SOL_SOCKET, SO_REUSEPORT,
+ 				 &optval, sizeof(optval));
+-		CHECK(err == -1, "setsockopt(SO_REUSEEPORT)",
++		CHECK(err == -1, "setsockopt(SO_REUSEPORT)",
+ 		      "err:%d errno:%d\n", err, errno);
+ 
+ 		/* reuseport_array does not allow unbound sk */
+-- 
+2.17.1
