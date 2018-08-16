@@ -1,59 +1,60 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Fri, 17 Aug 2018 01:29:39 +0900
-Subject: [PATCH v2 01/32] tracing: Allow gcov profiling on only ftrace
- subsystem
+Date: Fri, 17 Aug 2018 01:30:08 +0900
+Subject: [PATCH v2 02/32] selftests/ftrace: Add --stop-fail hidden option for
+ debug
 In-Reply-To: <153443695002.23257.13628220023468200991.stgit@devbox>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
-Message-ID: <153443697980.23257.9233992547183322108.stgit@devbox>
+Message-ID: <153443700818.23257.8232348122806172328.stgit@devbox>
 
-Add GCOV_PROFILE_FTRACE to allow gcov profiling
-on only files in ftrace subsystem. This kconfig
-flag will be used for checking kselftest/ftrace
-coverage.
+Add --stop-fail option for debugging the ftracetest.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- kernel/trace/Kconfig  |   13 +++++++++++++
- kernel/trace/Makefile |    5 +++++
- 2 files changed, 18 insertions(+)
+ tools/testing/selftests/ftrace/ftracetest |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index fd6754b88f87..8decf6d8553a 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -774,6 +774,19 @@ config TRACING_EVENTS_GPIO
- 	help
- 	  Enable tracing events for gpio subsystem
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index f9a9d424c980..c9c7fa8dc440 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -69,6 +69,10 @@ parse_opts() { # opts
+       DEBUG=1
+       shift 1
+     ;;
++    --stop-fail)
++      STOP_FAILURE=1
++      shift 1
++    ;;
+     --fail-unsupported)
+       UNSUPPORTED_RESULT=1
+       shift 1
+@@ -117,6 +121,7 @@ KEEP_LOG=0
+ DEBUG=0
+ VERBOSE=0
+ UNSUPPORTED_RESULT=0
++STOP_FAILURE=0
+ # Parse command-line options
+ parse_opts $*
  
-+config GCOV_PROFILE_FTRACE
-+	bool "Enable GCOV profiling on ftrace subsystem"
-+	depends on GCOV_KERNEL
-+	help
-+	  Enable GCOV profiling on ftrace subsystem for checking
-+	  which functions/lines are tested.
-+
-+	  If unsure, say N.
-+
-+	  Note that on a kernel compiled with this flags, ftrace will be
-+	  significantly run slower. So do not enable it for production
-+	  kernel.
-+
- endif # FTRACE
+@@ -304,6 +309,10 @@ run_test() { # testfile
+ # Main loop
+ for t in $TEST_CASES; do
+   run_test $t
++  if [ $STOP_FAILURE -ne 0 -a $TOTAL_RESULT -ne 0 ]; then
++    echo "A failure detected. Stop test."
++    exit 1
++  fi
+ done
  
- endif # TRACING_SUPPORT
-diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
-index 98d53b39a8ee..f81dadbc7c4a 100644
---- a/kernel/trace/Makefile
-+++ b/kernel/trace/Makefile
-@@ -23,6 +23,11 @@ ifdef CONFIG_TRACING_BRANCHES
- KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
- endif
+ # Test on instance loop
+@@ -315,6 +324,10 @@ for t in $TEST_CASES; do
+   run_test $t
+   rmdir $TRACING_DIR
+   TRACING_DIR=$SAVED_TRACING_DIR
++  if [ $STOP_FAILURE -ne 0 -a $TOTAL_RESULT -ne 0 ]; then
++    echo "A failure detected. Stop test."
++    exit 1
++  fi
+ done
  
-+# for GCOV coverage profiling
-+ifdef CONFIG_GCOV_PROFILE_FTRACE
-+GCOV_PROFILE := y
-+endif
-+
- CFLAGS_trace_benchmark.o := -I$(src)
- CFLAGS_trace_events_filter.o := -I$(src)
- 
+ prlog ""
