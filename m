@@ -1,26 +1,41 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Fri, 17 Aug 2018 01:36:44 +0900
-Subject: [PATCH v2 16/32] selftests/ftrace: Check set_event_pid result
+Date: Fri, 17 Aug 2018 01:37:13 +0900
+Subject: [PATCH v2 17/32] selftests/ftrace: Add kprobe event with $comm
+ argument testcase
 In-Reply-To: <153443695002.23257.13628220023468200991.stgit@devbox>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
-Message-ID: <153443740447.23257.15132897095208881026.stgit@devbox>
+Message-ID: <153443743305.23257.15090529854978913091.stgit@devbox>
 
-Ensure the set_event_pid shows set pid list.
+Add kprobe-event with $comm argument testcase to
+ftracetest. This not only checks syntax but
+also checks log file.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- .../selftests/ftrace/test.d/event/event-pid.tc     |    1 +
- 1 file changed, 1 insertion(+)
+ .../ftrace/test.d/kprobe/kprobe_args_comm.tc       |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc
 
-diff --git a/tools/testing/selftests/ftrace/test.d/event/event-pid.tc b/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
-index 6d2897f6a106..4ecbd9b69ec6 100644
---- a/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
-+++ b/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
-@@ -46,6 +46,7 @@ do_reset
- read mypid rest < /proc/self/stat
- 
- echo $mypid > set_event_pid
-+grep -q $mypid set_event_pid
- echo 'sched:sched_switch' > set_event
- 
- yield
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc
+new file mode 100644
+index 000000000000..15c1f70fcaf9
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc
+@@ -0,0 +1,17 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: Kprobe event with comm arguments
++
++[ -f kprobe_events ] || exit_unsupported # this is configurable
++
++grep -A1 "fetcharg:" README | grep -q "\$comm" || exit_unsupported # this is too old
++
++echo 'p:testprobe _do_fork comm=$comm ' > kprobe_events
++grep testprobe kprobe_events | grep -q 'comm=$comm'
++test -d events/kprobes/testprobe
++
++echo 1 > events/kprobes/testprobe/enable
++( echo "forked")
++grep testprobe trace | grep -q 'comm=".*"'
++
++exit 0
