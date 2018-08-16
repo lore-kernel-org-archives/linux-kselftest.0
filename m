@@ -1,34 +1,31 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Fri, 17 Aug 2018 01:33:26 +0900
-Subject: [PATCH v2 09/32] selftests/ftrace: Fix to test kprobe $comm arg only
- if available
+Date: Fri, 17 Aug 2018 01:33:55 +0900
+Subject: [PATCH v2 10/32] selftests/ftrace: Fix checkbashisms errors
 In-Reply-To: <153443695002.23257.13628220023468200991.stgit@devbox>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
-Message-ID: <153443720677.23257.11748611005672444564.stgit@devbox>
+Message-ID: <153443723502.23257.14228272091408974348.stgit@devbox>
 
-Test $comm in kprobe-event argument syntax testcase
-only if it is supported on the kernel because
-$comm has been introduced 4.8 kernel.
-So on older stable kernel, it should be skipped.
+Fix a test case to make checkbashisms clean.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- .../ftrace/test.d/kprobe/kprobe_args_syntax.tc     |    3 +++
- 1 file changed, 3 insertions(+)
+ .../trigger/trigger-trace-marker-snapshot.tc       |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
-index d783a8ce0692..6f0f19953193 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
-@@ -75,8 +75,11 @@ test_badarg "\$stackp" "\$stack0+10" "\$stack1-10"
- echo "r ${PROBEFUNC} \$retval" > kprobe_events
- ! echo "p ${PROBEFUNC} \$retval" > kprobe_events
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-snapshot.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-snapshot.tc
+index 79ce7d51350b..df246e505af7 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-snapshot.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-snapshot.tc
+@@ -39,10 +39,10 @@ test_trace() {
+ 	fi
+ 	echo "testing $line for >$x<"
+ 	match=`echo $line | sed -e "s/>$x<//"`
+-	if [ "$line" == "$match" ]; then
++	if [ "$line" = "$match" ]; then
+ 	    fail "$line does not have >$x< in it"
+ 	fi
+-	let x=$x+2
++	x=$((x+2))
+     done
+ }
  
-+# $comm was introduced in 4.8, older kernels reject it.
-+if grep -A1 "fetcharg:" README | grep -q '\$comm' ; then
- : "Comm access"
- test_goodarg "\$comm"
-+fi
- 
- : "Indirect memory access"
- test_goodarg "+0(${GOODREG})" "-0(${GOODREG})" "+10(\$stack)" \
