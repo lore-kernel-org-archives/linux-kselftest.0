@@ -1,128 +1,52 @@
-From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Fri, 17 Aug 2018 01:44:18 +0900
-Subject: [PATCH v2 32/32] selftests/ftrace: Add blktrace testcase
-In-Reply-To: <153443695002.23257.13628220023468200991.stgit@devbox>
-References: <153443695002.23257.13628220023468200991.stgit@devbox>
-Message-ID: <153443785794.23257.1676529524763163046.stgit@devbox>
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Fri, 17 Aug 2018 19:15:08 +0200
+Subject: kselftest-merge misses config's to merge
+In-Reply-To: <CADYN=9KTA0LeczLnY8kxyrCtm2umPX0ODsmVEhBbBTY4MfUP0A@mail.gmail.com>
+References: <CADYN=9KTA0LeczLnY8kxyrCtm2umPX0ODsmVEhBbBTY4MfUP0A@mail.gmail.com>
+Message-ID:
+ <CADYN=9JsYs+ADo61D7Jpc-8kOebaN=9Cbxc_cVPBYhHLb4Veyw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180816164418.YXSoywTWE-xA9Cy9EF8Q4lWiYVwKJCauQthOi7wjoz8@z>
+Message-ID: <20180817171508.aWlbRaiAHypPz9WDvb0bRpAVjMMv5KlhyCgOPKWUY_E@z>
 
-Add a basic testcase for blktrace. For making it portable,
-this test uses a loop device.
+On Fri, 10 Aug 2018@10:50, Anders Roxell <anders.roxell@linaro.org> wrote:
+>
+> Hi,
+>
+> I have a question about the config files in tools/testing/selftests/ .
+> The kselftest-merge target in the root Makefile assumes that the
+> config files are placed in
+> tools/testing/selftests/*/config and selftests/android/ion/config and
+> selftests/net/forwarding/config doesn't follow that. So either we move
+> those files up a level or do something like below in the top Makefile.
+>
+> diff --git a/Makefile b/Makefile
+> index c88d56de7fda..06aeeca16917 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1188,12 +1188,13 @@ PHONY += kselftest-clean
+>  kselftest-clean:
+>   $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests clean
+>
+> +KSFT_CONFIGS=$(shell find $(srctree)/tools/testing/selftests/ -type f
+> -name config)
+>  PHONY += kselftest-merge
+>  kselftest-merge:
+>   $(if $(wildcard $(objtree)/.config),, $(error No .config exists,
+> config your kernel first!))
+>   $(Q)$(CONFIG_SHELL) $(srctree)/scripts/kconfig/merge_config.sh \
+>   -m $(objtree)/.config \
+> - $(srctree)/tools/testing/selftests/*/config
+> + $(KSFT_CONFIGS)
+>   +$(Q)$(MAKE) -f $(srctree)/Makefile olddefconfig
+>
+>  # ---------------------------------------------------------------------------
+>
+>
+> or do you have another way to solve this?
 
-Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
----
- tools/testing/selftests/ftrace/config              |    1 
- .../testing/selftests/ftrace/test.d/tracer/blk.tc  |   91 ++++++++++++++++++++
- 2 files changed, 92 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/tracer/blk.tc
+I will be happy to add it to the documentation in
+Documentation/dev-tools/kselftest.rst with what we say if it
+is needed.
 
-diff --git a/tools/testing/selftests/ftrace/config b/tools/testing/selftests/ftrace/config
-index c2c8de4fafff..d999032442e1 100644
---- a/tools/testing/selftests/ftrace/config
-+++ b/tools/testing/selftests/ftrace/config
-@@ -5,6 +5,7 @@ CONFIG_TRACER_SNAPSHOT=y
- CONFIG_STACK_TRACER=y
- CONFIG_HIST_TRIGGERS=y
- CONFIG_SCHED_TRACER=y
-+CONFIG_BLK_DEV_IO_TRACE=y
- CONFIG_PREEMPT_TRACER=y
- CONFIG_IRQSOFF_TRACER=y
- CONFIG_PREEMPTIRQ_DELAY_TEST=m
-diff --git a/tools/testing/selftests/ftrace/test.d/tracer/blk.tc b/tools/testing/selftests/ftrace/test.d/tracer/blk.tc
-new file mode 100644
-index 000000000000..9d6e72810c8a
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/tracer/blk.tc
-@@ -0,0 +1,91 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL2.0
-+# description: Test blktrace
-+
-+IMG=$TMPDIR/fs.img
-+MNTDIR=$TMPDIR/mnt
-+
-+if ! grep -wq "blk" available_tracers ; then
-+  echo "blktrace is not supported"
-+  exit_unsupported
-+fi
-+
-+available_fs() { #fstype
-+  grep -q $1 /proc/filesystems && which mkfs.$1
-+}
-+
-+if available_fs ext3; then
-+  FSTYPE=ext3
-+elif available_fs ext4; then
-+  FSTYPE=ext4
-+elif available_fs ext2; then
-+  FSTYPE=ext2
-+elif available_fs xfs; then
-+  FSTYPE=xfs
-+elif available_fs btrfs; then
-+  FSTYPE=btrfs
-+else
-+  echo "No available block-based filesystems"
-+  exit_unresolved
-+fi
-+
-+if ! which losetup; then
-+  echo "No losetup found"
-+  exit_unresolved
-+fi
-+LODEV=`losetup -f`
-+LODEVTRACE=/sys/block/`basename $LODEV`/trace
-+
-+do_cleanup() {
-+  if [ -d $MNTDIR ]; then
-+   umount $MNTDIR ||:
-+  fi
-+  losetup -d $LODEV ||:
-+  rm -f $IMG
-+}
-+
-+# workload failure is not a tracer's failure
-+workload_fail() {
-+  do_cleanup
-+  echo "Failed to run workload"
-+  exit_unresolved
-+}
-+
-+do_fail() {
-+  do_cleanup
-+  echo "Test failed"
-+  exit 1
-+}
-+
-+enable_lodevtrace() {
-+  if [ `cat $LODEVTRACE/enable` -ne 1 ]; then
-+    echo 1 > $LODEVTRACE/enable
-+  fi
-+}
-+
-+echo blk > current_tracer
-+
-+dd if=/dev/zero of=$IMG bs=1M count=10 &&\
-+losetup $LODEV $IMG &&\
-+mkfs.$FSTYPE $LODEV &&\
-+mkdir -p $MNTDIR &&\
-+mount -t $FSTYPE $LODEV $MNTDIR &&\
-+enable_lodevtrace &&\
-+dd if=/dev/urandom of=$MNTDIR/testfile bs=1M count=1 &&\
-+sync &&\
-+umount $MNTDIR || workload_fail
-+
-+grep -q "[dd]" trace || do_fail
-+grep -q "[umount]" trace || do_fail
-+echo > trace
-+
-+losetup $LODEV $IMG &&\
-+mount -t $FSTYPE $LODEV $MNTDIR &&\
-+cat $MNTDIR/testfile > /dev/null &&\
-+echo 0 > $LODEVTRACE/enable &&\
-+umount $MNTDIR || workload_fail
-+
-+grep -q "[cat]" trace || do_fail
-+grep -q "[mount]" trace || do_fail
-+
-+do_cleanup
+Cheers,
+Anders
