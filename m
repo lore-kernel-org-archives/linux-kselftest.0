@@ -1,30 +1,83 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Mon, 20 Aug 2018 09:01:36 -0600
-Subject: kselftest-merge misses config's to merge
-In-Reply-To: <CADYN=9JsYs+ADo61D7Jpc-8kOebaN=9Cbxc_cVPBYhHLb4Veyw@mail.gmail.com>
-References: <CADYN=9KTA0LeczLnY8kxyrCtm2umPX0ODsmVEhBbBTY4MfUP0A@mail.gmail.com>
- <CADYN=9JsYs+ADo61D7Jpc-8kOebaN=9Cbxc_cVPBYhHLb4Veyw@mail.gmail.com>
-Message-ID: <f795f5c2-1fc2-b828-45c1-72340144a84c@kernel.org>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Mon, 20 Aug 2018 11:32:13 -0400
+Subject: [PATCH v2 01/32] tracing: Allow gcov profiling on only ftrace
+ subsystem
+In-Reply-To: <153443697980.23257.9233992547183322108.stgit@devbox>
+References: <153443695002.23257.13628220023468200991.stgit@devbox>
+ <153443697980.23257.9233992547183322108.stgit@devbox>
+Message-ID: <20180820113213.09497e0a@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180820150136.gBTvByxUUXj78o9C4IwBvFGDMsOh1Zv7LbJmxaTvOII@z>
+Message-ID: <20180820153213.S5p-veC2lSbTrYt_oUOJHX0mCl9F_RbVOGMTnCFyeuY@z>
 
-Hi Anders,
+On Fri, 17 Aug 2018 01:29:39 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-On 08/17/2018 11:15 AM, Anders Roxell wrote:
-> On Fri, 10 Aug 2018@10:50, Anders Roxell <anders.roxell@linaro.org> wrote:
->>
->> Hi,
->>
->> I have a question about the config files in tools/testing/selftests/ .
->> The kselftest-merge target in the root Makefile assumes that the
->> config files are placed in
->> tools/testing/selftests/*/config and selftests/android/ion/config and
->> selftests/net/forwarding/config doesn't follow that. So either we move
->> those files up a level or do something like below in the top Makefile.
+> Add GCOV_PROFILE_FTRACE to allow gcov profiling
+> on only files in ftrace subsystem. This kconfig
+> flag will be used for checking kselftest/ftrace
 
-Let's move them up to where they need to be and document it as well.
+Note, I haven't heard of "kconfig flag" as the terminology. Usually, we
+just say "config" or "config option".
 
-Sorry for the late reply. I was out on vacation all of last week.
+> coverage.
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+> ---
+>  kernel/trace/Kconfig  |   13 +++++++++++++
+>  kernel/trace/Makefile |    5 +++++
+>  2 files changed, 18 insertions(+)
+> 
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index fd6754b88f87..8decf6d8553a 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -774,6 +774,19 @@ config TRACING_EVENTS_GPIO
+>  	help
+>  	  Enable tracing events for gpio subsystem
+>  
+> +config GCOV_PROFILE_FTRACE
+> +	bool "Enable GCOV profiling on ftrace subsystem"
+> +	depends on GCOV_KERNEL
+> +	help
+> +	  Enable GCOV profiling on ftrace subsystem for checking
+> +	  which functions/lines are tested.
+> +
+> +	  If unsure, say N.
+> +
+> +	  Note that on a kernel compiled with this flags, ftrace will be
+> +	  significantly run slower. So do not enable it for production
+> +	  kernel.
 
-thanks,
--- Shuah
+
+I would rewrite the above as:
+
+	Note that on a kernel compiled with this config, ftrace will
+	run significantly slower.
+
+I think we can leave out the production sentence. It should be obvious
+from the "significantly slower" part.
+
+Other than that, it looks fine to me.
+
+-- Steve
+
+> +
+>  endif # FTRACE
+>  
+>  endif # TRACING_SUPPORT
+> diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
+> index 98d53b39a8ee..f81dadbc7c4a 100644
+> --- a/kernel/trace/Makefile
+> +++ b/kernel/trace/Makefile
+> @@ -23,6 +23,11 @@ ifdef CONFIG_TRACING_BRANCHES
+>  KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
+>  endif
+>  
+> +# for GCOV coverage profiling
+> +ifdef CONFIG_GCOV_PROFILE_FTRACE
+> +GCOV_PROFILE := y
+> +endif
+> +
+>  CFLAGS_trace_benchmark.o := -I$(src)
+>  CFLAGS_trace_events_filter.o := -I$(src)
+>  
