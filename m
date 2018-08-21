@@ -1,34 +1,35 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Tue, 21 Aug 2018 15:53:24 +0900
-Subject: [PATCH v2 01/32] tracing: Allow gcov profiling on only ftrace
- subsystem
-In-Reply-To: <20180820113349.4fefbe0e@gandalf.local.home>
-References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443697980.23257.9233992547183322108.stgit@devbox>
- <20180820113213.09497e0a@gandalf.local.home>
- <20180820113349.4fefbe0e@gandalf.local.home>
-Message-ID: <20180821155324.1c99360e7edf1023b1659fa1@kernel.org>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Tue, 21 Aug 2018 18:10:03 +0200
+Subject: [PATCH] selftests: android: move config up a level
+Message-ID: <20180821161003.16737-1-anders.roxell@linaro.org>
 
-Hi Steve,
+'make kselftest-merge' assumes that the config files for the tests are
+located under the 'main' test dir, like tools/testing/selftests/android/
+and not in a subdir to android.
 
-On Mon, 20 Aug 2018 11:33:49 -0400
-Steven Rostedt <rostedt at goodmis.org> wrote:
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+---
+ Documentation/dev-tools/kselftest.rst            | 2 +-
+ tools/testing/selftests/android/{ion => }/config | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename tools/testing/selftests/android/{ion => }/config (100%)
 
-> On Mon, 20 Aug 2018 11:32:13 -0400
-> Steven Rostedt <rostedt at goodmis.org> wrote:
-> 
-> > Other than that, it looks fine to me.
-> 
-> This patch also seems out of place for the series.
-
-Yes, this one is the patch for ftrace, not ftracetest.
-
-> Want to resend it
-> separately, and I'll apply it?
-
-OK, I'll fix "config" and resend it :)
-
-Thank you,
-
+diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+index 6f653acea248..dad1bb8711e2 100644
+--- a/Documentation/dev-tools/kselftest.rst
++++ b/Documentation/dev-tools/kselftest.rst
+@@ -159,7 +159,7 @@ Contributing new tests (details)
+  * If a test needs specific kernel config options enabled, add a config file in
+    the test directory to enable them.
+ 
+-   e.g: tools/testing/selftests/android/ion/config
++   e.g: tools/testing/selftests/android/config
+ 
+ Test Harness
+ ============
+diff --git a/tools/testing/selftests/android/ion/config b/tools/testing/selftests/android/config
+similarity index 100%
+rename from tools/testing/selftests/android/ion/config
+rename to tools/testing/selftests/android/config
 -- 
-Masami Hiramatsu <mhiramat at kernel.org>
+2.18.0
