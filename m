@@ -1,31 +1,46 @@
-From: idosch at idosch.org (Ido Schimmel)
-Date: Wed, 22 Aug 2018 09:45:46 +0300
-Subject: [PATCH] selftests: net: move fragment forwarding/config up a level
-In-Reply-To: <fa188bdd-2f4c-66fc-a803-5d53425c3daf@kernel.org>
-References: <20180821161212.5750-1-anders.roxell@linaro.org>
- <20180821185625.GB27078@splinter>
- <fa188bdd-2f4c-66fc-a803-5d53425c3daf@kernel.org>
-Message-ID: <20180822064546.GA32527@splinter.mtl.com>
+From: shuah at kernel.org (Shuah Khan)
+Date: Thu, 23 Aug 2018 11:05:05 -0600
+Subject: [PATCH] selftests: android: move config up a level
+In-Reply-To: <20180821161003.16737-1-anders.roxell@linaro.org>
+References: <20180821161003.16737-1-anders.roxell@linaro.org>
+Message-ID: <11b89e1a-1543-5774-13f8-e004c8fc46ef@kernel.org>
 
-On Tue, Aug 21, 2018 at 01:41:54PM -0600, Shuah Khan wrote:
-> On 08/21/2018 12:56 PM, Ido Schimmel wrote:
-> > On Tue, Aug 21, 2018 at 06:12:12PM +0200, Anders Roxell wrote:
-> >> 'make kselftest-merge' assumes that the config files for the tests are
-> >> located under the 'main' tet dir, like tools/testing/selftests/net/ and
-> >> not in a subdir to net.
-> > 
-> > The tests under tools/testing/selftests/net/forwarding/ aren't executed
-> > as part of the Makefile. The config file is there mainly so that people
-> > will know which config options they need in order to run the tests.
-> > 
-> > The tests can be added to the Makefile, but some of them take a few
-> > minutes to complete which is probably against "Don't take too long;"
-> > mentioned in Documentation/dev-tools/kselftest.rst.
-> > 
+Hi Anders,
+
+On 08/21/2018 10:10 AM, Anders Roxell wrote:
+> 'make kselftest-merge' assumes that the config files for the tests are
+> located under the 'main' test dir, like tools/testing/selftests/android/
+> and not in a subdir to android.
 > 
-> I don't see any reason why these shouldn't be added. With the number of
-> tests that get run by default, time has gone up. The goal is to run more
-> tests not less. There are some stress/destructive tests that continue to
-> be left out of the Makefile.
+> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+> ---
+>  Documentation/dev-tools/kselftest.rst            | 2 +-
+>  tools/testing/selftests/android/{ion => }/config | 0
+>  2 files changed, 1 insertion(+), 1 deletion(-)
+>  rename tools/testing/selftests/android/{ion => }/config (100%)
 
-Thanks for clarifying. I'll add the tests.
+Please split this patch into two with the Doc change into as a separate
+patch.
+
+> 
+> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+> index 6f653acea248..dad1bb8711e2 100644
+> --- a/Documentation/dev-tools/kselftest.rst
+> +++ b/Documentation/dev-tools/kselftest.rst
+> @@ -159,7 +159,7 @@ Contributing new tests (details)
+>   * If a test needs specific kernel config options enabled, add a config file in
+>     the test directory to enable them.
+>  
+> -   e.g: tools/testing/selftests/android/ion/config
+> +   e.g: tools/testing/selftests/android/config
+>  
+>  Test Harness
+>  ============
+> diff --git a/tools/testing/selftests/android/ion/config b/tools/testing/selftests/android/config
+> similarity index 100%
+> rename from tools/testing/selftests/android/ion/config
+> rename to tools/testing/selftests/android/config
+> 
+
+thanks,
+-- Shuah
