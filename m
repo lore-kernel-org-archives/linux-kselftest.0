@@ -1,21 +1,18 @@
-From: anders.roxell at linaro.org (Anders Roxell)
-Date: Fri, 24 Aug 2018 14:49:41 +0200
-Subject: [PATCH v2] selftests: android: move config up a level
-Message-ID: <20180824124941.10146-1-anders.roxell@linaro.org>
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Fri, 24 Aug 2018 16:37:37 -0400
+Subject: [PATCH v2 03/32] selftests/ftrace: Add --console hidden option
+In-Reply-To: <153443703653.23257.12015337438174061938.stgit@devbox>
+References: <153443695002.23257.13628220023468200991.stgit@devbox>
+ <153443703653.23257.12015337438174061938.stgit@devbox>
+Message-ID: <20180824163737.0f47535a@gandalf.local.home>
 
-'make kselftest-merge' assumes that the config files for the tests are
-located under the 'main' test dir, like tools/testing/selftests/android/
-and not in a subdir to android.
+On Fri, 17 Aug 2018 01:30:36 +0900
+Masami Hiramatsu <mhiramat at kernel.org> wrote:
 
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
----
- tools/testing/selftests/android/{ion => }/config | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename tools/testing/selftests/android/{ion => }/config (100%)
+> Add --console hidden option for debug test cases.
+> This option allows to put "sh" or something else
+> when the test case hits a bug.
 
-diff --git a/tools/testing/selftests/android/ion/config b/tools/testing/selftests/android/config
-similarity index 100%
-rename from tools/testing/selftests/android/ion/config
-rename to tools/testing/selftests/android/config
--- 
-2.11.0
+Can you add more information to why and how this would be used.
+
+-- Steve
