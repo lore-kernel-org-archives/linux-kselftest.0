@@ -1,31 +1,49 @@
 From: rostedt@goodmis.org (Steven Rostedt)
-Date: Fri, 24 Aug 2018 17:46:54 -0400
-Subject: [PATCH v2 05/32] selftests/ftrace: More initialize features in
- initialize_ftrace
-In-Reply-To: <20180824174601.581f499d@gandalf.local.home>
+Date: Fri, 24 Aug 2018 17:47:10 -0400
+Subject: [PATCH v2 04/32] selftests/ftrace: Add case number prefix to
+ logfile
+In-Reply-To: <153443706488.23257.9219288456614329354.stgit@devbox>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443709338.23257.2179609309041817332.stgit@devbox>
- <20180824174601.581f499d@gandalf.local.home>
-Message-ID: <20180824174654.07b68472@gandalf.local.home>
+ <153443706488.23257.9219288456614329354.stgit@devbox>
+Message-ID: <20180824174710.3a5050ca@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180824214654.yDg604eNP5m8iOUzN1YaJ0nuOhs5i8ig_iNl4mL0ZLk@z>
+Message-ID: <20180824214710.HsEszsNrNo2coz0UqV3vnX1EhXNVERBRtTq6Rc-5_og@z>
 
-On Fri, 24 Aug 2018 17:46:01 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, 17 Aug 2018 01:31:05 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-> On Fri, 17 Aug 2018 01:31:33 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> Add a case number prefix to each logfile. This makes
+> it easier to find which logfile is corresponding
+> to which failure.
 > 
-> > Clear pid filter, synthetic_events, snapshots,
-> > ftrace filter, and trace log in initialize_ftrace(),
-> > since those are used in test cases.
-> > 
-> > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>  
-> 
-> Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-> 
+> Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 
-Bah, this was suppose to be for the previous patch (which I just got
-done testing). I'll send out a separate ack for that.
+Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+
 
 -- Steve
+
+> ---
+>  tools/testing/selftests/ftrace/ftracetest |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+> index 8debd37038e4..3ca596255eff 100755
+> --- a/tools/testing/selftests/ftrace/ftracetest
+> +++ b/tools/testing/selftests/ftrace/ftracetest
+> @@ -284,13 +284,13 @@ __run_test() { # testfile
+>  # Run one test case
+>  run_test() { # testfile
+>    local testname=`basename $1`
+> +  testcase $1
+>    if [ ! -z "$LOG_FILE" ] ; then
+> -    local testlog=`mktemp $LOG_DIR/${testname}-log.XXXXXX`
+> +    local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
+>    else
+>      local testlog=/proc/self/fd/1
+>    fi
+>    export TMPDIR=`mktemp -d /tmp/ftracetest-dir.XXXXXX`
+> -  testcase $1
+>    echo "execute$INSTANCE: "$1 > $testlog
+>    SIG_RESULT=0
+>    if [ $VERBOSE -eq -1 ]; then
