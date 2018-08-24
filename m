@@ -1,13 +1,13 @@
 From: rostedt@goodmis.org (Steven Rostedt)
-Date: Fri, 24 Aug 2018 17:24:43 -0400
+Date: Fri, 24 Aug 2018 17:46:01 -0400
 Subject: [PATCH v2 05/32] selftests/ftrace: More initialize features in
  initialize_ftrace
 In-Reply-To: <153443709338.23257.2179609309041817332.stgit@devbox>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
  <153443709338.23257.2179609309041817332.stgit@devbox>
-Message-ID: <20180824172443.4900cda2@gandalf.local.home>
+Message-ID: <20180824174601.581f499d@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180824212443.3Ikbk0KeQKBwi0BA1iWWHVXXWaJlZ3zTpz7Nnx85bug@z>
+Message-ID: <20180824214601.Q2TshttTW1INbFOQYZXXTZ22MRfxGWPmLBhs36_PSBE@z>
 
 On Fri, 17 Aug 2018 01:31:33 +0900
 Masami Hiramatsu <mhiramat@kernel.org> wrote:
