@@ -1,73 +1,57 @@
 From: rostedt@goodmis.org (Steven Rostedt)
-Date: Fri, 24 Aug 2018 19:23:52 -0400
-Subject: [PATCH v2 24/32] selftests/ftrace: Add max stack tracer testcase
-In-Reply-To: <153443763074.23257.4052504725796725062.stgit@devbox>
+Date: Fri, 24 Aug 2018 19:25:07 -0400
+Subject: [PATCH v2 25/32] selftests/ftrace: Add function filter on
+ module testcase
+In-Reply-To: <153443765894.23257.13622063956539869338.stgit@devbox>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443763074.23257.4052504725796725062.stgit@devbox>
-Message-ID: <20180824192352.262144f5@gandalf.local.home>
+ <153443765894.23257.13622063956539869338.stgit@devbox>
+Message-ID: <20180824192507.3066a18a@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180824232352.wJLpfiWT9Q6PwTsAFfUcfG9rs9fDO4X4tJ-YBObf90Q@z>
+Message-ID: <20180824232507.EOXoG0QAnFEdoBZgGMvX4eansq-WMeVzuVv_0lRm9-M@z>
 
-On Fri, 17 Aug 2018 01:40:30 +0900
+On Fri, 17 Aug 2018 01:40:59 +0900
 Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-> Add a testcase for max stack tracer, which checks basic
-> max stack usage tracing and its filter feature.
+> Add a testcase for function filter on module.
 > 
 > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 > ---
->  .../ftrace/test.d/ftrace/func_stack_tracer.tc      |   39 ++++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
+>  .../ftrace/test.d/ftrace/func_mod_trace.tc         |   24 ++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
 > 
-> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
+> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
 > new file mode 100644
-> index 000000000000..b414f0e3c646
+> index 000000000000..359380c3834f
 > --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
-> @@ -0,0 +1,39 @@
+> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
+> @@ -0,0 +1,24 @@
 > +#!/bin/sh
 > +# SPDX-License-Identifier: GPL-2.0
-> +# description: ftrace - Max stack tracer
-> +# Test the basic function of max-stack usage tracing
+> +# description: ftrace - function trace on module
 > +
-> +if [ ! -f stack_trace ]; then
-> +  echo "Max stack tracer is not supported - please make CONFIG_STACK_TRACER=y"
-> +  exit_unsupported
-> +fi
+> +[ ! -f set_ftrace_filter ] && exit_unsupported
 > +
-> +echo > stack_trace_filter
-> +echo 0 > stack_max_size
-> +echo 1 > /proc/sys/kernel/stack_tracer_enabled
+> +: "mod: allows to filter a non exist function"
+> +echo 'non_exist_func:mod:non_exist_module' > set_ftrace_filter
+> +grep -q "non_exist_func" set_ftrace_filter
 > +
-> +: "Fork and wait for the first entry become !lock"
-> +timeout=10
-> +while [ $timeout -ne 0 ]; do
-> +  ( echo "forked" )
-> +  FL=`grep " 0)" stack_trace`
-> +  echo $FL | grep -q "lock" || break;
-> +  timeout=$((timeout - 1))
-> +done
-> +echo 0 > /proc/sys/kernel/stack_tracer_enabled
-> +
-> +echo '*lock*' > stack_trace_filter
-> +test `cat stack_trace_filter | wc -l` -eq `grep lock stack_trace_filter | wc -l`
-> +
-> +echo 0 > stack_max_size
-> +echo 1 > /proc/sys/kernel/stack_tracer_enabled
+> +: "mod: on exist module"
+> +echo '*:mod:trace_printk' > set_ftrace_filter
+> +if ! modprobe trace-printk.ko ; then
 
-This test fails quite a bit because it doesn't guarantee that another
-stack trace gets in that is bigger, and we don't find the "lock".
+Need to remove the '.ko'
 
 -- Steve
 
+> +  echo "No trace-printk sample module - please make CONFIG_SAMPLE_TRACE_PRINTK=
+> +m"
+> +  exit_unresolved;
+> +fi
 > +
-> +: "Fork and always the first entry including lock"
-> +timeout=10
-> +while [ $timeout -ne 0 ]; do
-> +  ( echo "forked" )
-> +  FL=`grep " 0)" stack_trace`
-> +  echo $FL | grep -q "lock"
-> +  timeout=$((timeout - 1))
-> +done
-> +echo 0 > /proc/sys/kernel/stack_tracer_enabled
+> +: "Wildcard should be resolved after loading module"
+> +grep -q "trace_printk_irq_work" set_ftrace_filter
+> +
+> +: "After removing the filter becomes empty"
+> +rmmod trace_printk
+> +test `cat set_ftrace_filter | wc -l` -eq 0
