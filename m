@@ -1,55 +1,48 @@
 From: rostedt at goodmis.org (Steven Rostedt)
-Date: Fri, 24 Aug 2018 19:25:07 -0400
-Subject: [PATCH v2 25/32] selftests/ftrace: Add function filter on
- module testcase
-In-Reply-To: <153443765894.23257.13622063956539869338.stgit@devbox>
+Date: Fri, 24 Aug 2018 19:26:29 -0400
+Subject: [PATCH v2 26/32] selftests/ftrace: Add trace_pipe testcase
+In-Reply-To: <153443768729.23257.2645114356784631107.stgit@devbox>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443765894.23257.13622063956539869338.stgit@devbox>
-Message-ID: <20180824192507.3066a18a@gandalf.local.home>
+ <153443768729.23257.2645114356784631107.stgit@devbox>
+Message-ID: <20180824192629.42c8e906@gandalf.local.home>
 
-On Fri, 17 Aug 2018 01:40:59 +0900
+On Fri, 17 Aug 2018 01:41:27 +0900
 Masami Hiramatsu <mhiramat at kernel.org> wrote:
 
-> Add a testcase for function filter on module.
+> Add a simple testcase for trace_pipe which can consume
+> ringbuffer.
 > 
 > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 > ---
->  .../ftrace/test.d/ftrace/func_mod_trace.tc         |   24 ++++++++++++++++++++
->  1 file changed, 24 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
+>  .../selftests/ftrace/test.d/00basic/trace_pipe.tc  |   15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
 > 
-> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
+> diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
 > new file mode 100644
-> index 000000000000..359380c3834f
+> index 000000000000..a7dd6fda487a
 > --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
-> @@ -0,0 +1,24 @@
+> +++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
+> @@ -0,0 +1,15 @@
 > +#!/bin/sh
 > +# SPDX-License-Identifier: GPL-2.0
-> +# description: ftrace - function trace on module
-> +
-> +[ ! -f set_ftrace_filter ] && exit_unsupported
-> +
-> +: "mod: allows to filter a non exist function"
-> +echo 'non_exist_func:mod:non_exist_module' > set_ftrace_filter
-> +grep -q "non_exist_func" set_ftrace_filter
-> +
-> +: "mod: on exist module"
-> +echo '*:mod:trace_printk' > set_ftrace_filter
-> +if ! modprobe trace-printk.ko ; then
+> +# description: trace_pipe and trace_marker
 
-Need to remove the '.ko'
+Should add:
+
+ # flags: instance
 
 -- Steve
 
-> +  echo "No trace-printk sample module - please make CONFIG_SAMPLE_TRACE_PRINTK=
-> +m"
-> +  exit_unresolved;
-> +fi
 > +
-> +: "Wildcard should be resolved after loading module"
-> +grep -q "trace_printk_irq_work" set_ftrace_filter
+> +[ ! -f trace_marker ] && exit_unsupported
 > +
-> +: "After removing the filter becomes empty"
-> +rmmod trace_printk
-> +test `cat set_ftrace_filter | wc -l` -eq 0
+> +echo "test input 1" > trace_marker
+> +
+> +: "trace interface never consume the ring buffer"
+> +grep -q "test input 1" trace
+> +grep -q "test input 1" trace
+> +
+> +: "trace interface never consume the ring buffer"
+> +head -n 1 trace_pipe | grep -q "test input 1"
+> +! grep -q "test input 1" trace
