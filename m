@@ -1,86 +1,185 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Sat, 25 Aug 2018 10:45:09 +0900
-Subject: [PATCH v2 24/32] selftests/ftrace: Add max stack tracer testcase
-In-Reply-To: <20180824192352.262144f5@gandalf.local.home>
+Date: Sat, 25 Aug 2018 10:47:09 +0900
+Subject: [PATCH v2 11/32] selftests/ftrace: Use loopback address instead
+ of localhost
+In-Reply-To: <20180824175211.60bbebe1@gandalf.local.home>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443763074.23257.4052504725796725062.stgit@devbox>
- <20180824192352.262144f5@gandalf.local.home>
-Message-ID: <20180825104509.1b739d5d17d860e453daa0ca@kernel.org>
+ <153443726327.23257.3638322755203446041.stgit@devbox>
+ <20180824175211.60bbebe1@gandalf.local.home>
+Message-ID: <20180825104709.42bc08748ab7a276af8a78f7@kernel.org>
 
-On Fri, 24 Aug 2018 19:23:52 -0400
+On Fri, 24 Aug 2018 17:52:11 -0400
 Steven Rostedt <rostedt at goodmis.org> wrote:
 
-> On Fri, 17 Aug 2018 01:40:30 +0900
+> On Fri, 17 Aug 2018 01:34:23 +0900
 > Masami Hiramatsu <mhiramat at kernel.org> wrote:
 > 
-> > Add a testcase for max stack tracer, which checks basic
-> > max stack usage tracing and its filter feature.
+> > Use raw loopback address instead of localhost, because
+> > "localhost" can depend on nsswitch and in some case
+> > we can not resolve the localhost.
 > > 
 > > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 > > ---
-> >  .../ftrace/test.d/ftrace/func_stack_tracer.tc      |   39 ++++++++++++++++++++
-> >  1 file changed, 39 insertions(+)
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
+> >  .../selftests/ftrace/test.d/event/event-enable.tc  |    2 +-
+> >  .../selftests/ftrace/test.d/event/event-pid.tc     |    2 +-
+> >  .../ftrace/test.d/event/subsystem-enable.tc        |    2 +-
+> >  .../ftrace/test.d/event/toplevel-enable.tc         |    2 +-
+> >  .../ftrace/test.d/ftrace/func-filter-pid.tc        |    2 +-
+> >  .../inter-event/trigger-field-variable-support.tc  |    2 +-
+> >  .../trigger-inter-event-combined-hist.tc           |    2 +-
+> >  .../inter-event/trigger-onmatch-action-hist.tc     |    2 +-
+> >  .../trigger-onmatch-onmax-action-hist.tc           |    2 +-
+> >  .../inter-event/trigger-onmax-action-hist.tc       |    2 +-
+> >  10 files changed, 10 insertions(+), 10 deletions(-)
 > > 
-> > diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
-> > new file mode 100644
-> > index 000000000000..b414f0e3c646
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
-> > @@ -0,0 +1,39 @@
-> > +#!/bin/sh
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +# description: ftrace - Max stack tracer
-> > +# Test the basic function of max-stack usage tracing
-> > +
-> > +if [ ! -f stack_trace ]; then
-> > +  echo "Max stack tracer is not supported - please make CONFIG_STACK_TRACER=y"
-> > +  exit_unsupported
-> > +fi
-> > +
-> > +echo > stack_trace_filter
-> > +echo 0 > stack_max_size
-> > +echo 1 > /proc/sys/kernel/stack_tracer_enabled
-> > +
-> > +: "Fork and wait for the first entry become !lock"
-> > +timeout=10
-> > +while [ $timeout -ne 0 ]; do
-> > +  ( echo "forked" )
-> > +  FL=`grep " 0)" stack_trace`
-> > +  echo $FL | grep -q "lock" || break;
-> > +  timeout=$((timeout - 1))
-> > +done
-> > +echo 0 > /proc/sys/kernel/stack_tracer_enabled
-> > +
-> > +echo '*lock*' > stack_trace_filter
-> > +test `cat stack_trace_filter | wc -l` -eq `grep lock stack_trace_filter | wc -l`
-> > +
-> > +echo 0 > stack_max_size
-> > +echo 1 > /proc/sys/kernel/stack_tracer_enabled
+> > diff --git a/tools/testing/selftests/ftrace/test.d/event/event-enable.tc b/tools/testing/selftests/ftrace/test.d/event/event-enable.tc
+> > index 386dbddbdc11..a028628cdd0e 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/event/event-enable.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/event/event-enable.tc
+> > @@ -14,7 +14,7 @@ fail() { #msg
+> >  }
+> >  
+> >  yield() {
+> > -    ping localhost -c 1 || sleep .001 || usleep 1 || sleep 1
+> > +    ping 127.0.0.1 -c 1 || sleep .001 || usleep 1 || sleep 1
+> >  }
+> >  
+> >  if [ ! -f set_event -o ! -d events/sched ]; then
+> > diff --git a/tools/testing/selftests/ftrace/test.d/event/event-pid.tc b/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
+> > index 6dbf67544fde..6d2897f6a106 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
+> > @@ -17,7 +17,7 @@ fail() { #msg
+> >  }
+> >  
+> >  yield() {
+> > -    ping localhost -c 1 || sleep .001 || usleep 1 || sleep 1
+> > +    ping 127.0.0.1 -c 1 || sleep .001 || usleep 1 || sleep 1
+> >  }
+> >  
+> >  if [ ! -f set_event -o ! -d events/sched ]; then
+> > diff --git a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+> > index 10eb17f161b7..9f0221b39d4d 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+> > @@ -14,7 +14,7 @@ fail() { #msg
+> >  }
+> >  
+> >  yield() {
+> > -    ping localhost -c 1 || sleep .001 || usleep 1 || sleep 1
+> > +    ping 127.0.0.1 -c 1 || sleep .001 || usleep 1 || sleep 1
+> >  }
+> >  
+> >  if [ ! -f set_event -o ! -d events/sched ]; then
+> > diff --git a/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc b/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
+> > index 8d55a233c1a4..5f3611047d3a 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
+> > @@ -13,7 +13,7 @@ fail() { #msg
+> >  }
+> >  
+> >  yield() {
+> > -    ping localhost -c 1 || sleep .001 || usleep 1 || sleep 1
+> > +    ping 127.0.0.1 -c 1 || sleep .001 || usleep 1 || sleep 1
+> >  }
+> >  
+> >  if [ ! -f available_events -o ! -f set_event -o ! -d events ]; then
+> > diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
+> > index 970903cb7834..cd52cf6a1fc4 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
+> > @@ -49,7 +49,7 @@ fail() { # msg
+> >  }
+> >  
+> >  yield() {
+> > -    ping localhost -c 1 || sleep .001 || usleep 1 || sleep 1
+> > +    ping 127.0.0.1 -c 1 || sleep .001 || usleep 1 || sleep 1
+> >  }
 > 
-> This test fails quite a bit because it doesn't guarantee that another
-> stack trace gets in that is bigger, and we don't find the "lock".
+> Perhaps we should make this a helper function since it's used so much.
 
-Hmm, maybe I misunderstand what is the stack_trace_filter.
-I thought it filtered the function that triggered stack trace,
-so the top of stack trace was always filtered function.
-If not, what does this filter?
+Yeah, agree. OK, I'll add a patch to move it in common place.
+
+> 
+> >  
+> >  do_test() {
+> > diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
+> > index 575af23df04e..59b58c77e9ce 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
+> > @@ -23,7 +23,7 @@ echo 'hist:keys=comm:ts0=common_timestamp.usecs if comm=="ping"' > events/sched/
+> >  echo 'hist:keys=next_comm:wakeup_lat=common_timestamp.usecs-$ts0:onmatch(sched.sched_waking).wakeup_latency($wakeup_lat,next_pid,sched.sched_waking.prio,next_comm) if next_comm=="ping"' > events/sched/sched_switch/trigger
+> >  echo 'hist:keys=pid,prio,comm:vals=lat:sort=pid,prio' > events/synthetic/wakeup_latency/trigger
+> >  
+> > -ping localhost -c 3
+> > +ping 127.0.0.1 -c 3
+> >  if ! grep -q "ping" events/synthetic/wakeup_latency/hist; then
+> >      fail "Failed to create inter-event histogram"
+> >  fi
+> > diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
+> > index 92aef26e2631..0a7709fdfd8e 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
+> > @@ -37,7 +37,7 @@ echo 'waking+wakeup_latency u64 lat; pid_t pid' >> synthetic_events
+> >  echo 'hist:keys=pid,lat:sort=pid,lat:ww_lat=$waking_lat+$wakeup_lat:onmatch(synthetic.wakeup_latency).waking+wakeup_latency($ww_lat,pid)' >> events/synthetic/wakeup_latency/trigger
+> >  echo 'hist:keys=pid,lat:sort=pid,lat' >> events/synthetic/waking+wakeup_latency/trigger
+> >  
+> > -ping localhost -c 3
+> > +ping 127.0.0.1 -c 3
+> >  if ! grep -q "pid:" events/synthetic/waking+wakeup_latency/hist; then
+> >      fail "Failed to create combined histogram"
+> >  fi
+> > diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc
+> > index 1ef5dd4521f0..c5bdf8338aeb 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc
+> > @@ -29,7 +29,7 @@ echo "Test histogram variables,simple expression support and onmatch action"
+> >  echo 'hist:keys=pid:ts0=common_timestamp.usecs if comm=="ping"' > events/sched/sched_wakeup/trigger
+> >  echo 'hist:keys=next_pid:wakeup_lat=common_timestamp.usecs-$ts0:onmatch(sched.sched_wakeup).wakeup_latency($wakeup_lat,next_pid,next_comm) if next_comm=="ping"' > events/sched/sched_switch/trigger
+> >  echo 'hist:keys=comm,pid,lat:wakeup_lat=lat:sort=lat' > events/synthetic/wakeup_latency/trigger
+> > -ping localhost -c 5
+> > +ping 127.0.0.1 -c 5
+> >  if ! grep -q "ping" events/synthetic/wakeup_latency/hist; then
+> >      fail "Failed to create onmatch action inter-event histogram"
+> >  fi
+> > diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc
+> > index 7234683ee5e5..47cb76bfd9c0 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc
+> > @@ -29,7 +29,7 @@ echo "Test histogram variables,simple expression support and onmatch-onmax actio
+> >  echo 'hist:keys=pid:ts0=common_timestamp.usecs if comm=="ping"' > events/sched/sched_wakeup/trigger
+> >  echo 'hist:keys=next_pid:wakeup_lat=common_timestamp.usecs-$ts0:onmatch(sched.sched_wakeup).wakeup_latency($wakeup_lat,next_pid,next_comm):onmax($wakeup_lat).save(next_comm,prev_pid,prev_prio,prev_comm) if next_comm=="ping"' >> events/sched/sched_switch/trigger
+> >  echo 'hist:keys=comm,pid,lat:wakeup_lat=lat:sort=lat' > events/synthetic/wakeup_latency/trigger
+> > -ping localhost -c 5
+> > +ping 127.0.0.1 -c 5
+> >  if [ ! grep -q "ping" events/synthetic/wakeup_latency/hist -o ! grep -q "max:" events/sched/sched_switch/hist]; then
+> >      fail "Failed to create onmatch-onmax action inter-event histogram"
+> >  fi
+> > diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc
+> > index 55b9630a1d70..6fa0c449035c 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc
+> > @@ -27,7 +27,7 @@ echo "Test onmax action"
+> >  
+> >  echo 'hist:keys=pid:ts0=common_timestamp.usecs if comm=="ping"' >> events/sched/sched_waking/trigger
+> >  echo 'hist:keys=next_pid:wakeup_lat=common_timestamp.usecs-$ts0:onmax($wakeup_lat).save(next_comm,prev_pid,prev_prio,prev_comm) if next_comm=="ping"' >> events/sched/sched_switch/trigger
+> > -ping localhost -c 3
+> > +ping 127.0.0.1 -c 3
+> 
+> Perhaps we should also add a variable LOCALHOST="127.0.0.1" and use
+> that. I rather not have the raw address all over the place, in case we
+> want to change its meaning, it's best to do it in one place.
+
+Agreed. That should be moved in the common place too.
 
 Thank you,
 
 > 
 > -- Steve
 > 
-> > +
-> > +: "Fork and always the first entry including lock"
-> > +timeout=10
-> > +while [ $timeout -ne 0 ]; do
-> > +  ( echo "forked" )
-> > +  FL=`grep " 0)" stack_trace`
-> > +  echo $FL | grep -q "lock"
-> > +  timeout=$((timeout - 1))
-> > +done
-> > +echo 0 > /proc/sys/kernel/stack_tracer_enabled
+> >  if ! grep -q "max:" events/sched/sched_switch/hist; then
+> >      fail "Failed to create onmax action inter-event histogram"
+> >  fi
 > 
 
 
