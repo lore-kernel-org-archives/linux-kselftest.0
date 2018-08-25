@@ -1,50 +1,38 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Fri, 24 Aug 2018 19:28:00 -0400
-Subject: [PATCH v2 27/32] selftests/ftrace: Add stacktrace ftrace filter
- command testcase
-In-Reply-To: <153443771560.23257.1531051659949223265.stgit@devbox>
+From: mhiramat@kernel.org (Masami Hiramatsu)
+Date: Sat, 25 Aug 2018 10:35:13 +0900
+Subject: [PATCH v2 03/32] selftests/ftrace: Add --console hidden option
+In-Reply-To: <20180824163737.0f47535a@gandalf.local.home>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443771560.23257.1531051659949223265.stgit@devbox>
-Message-ID: <20180824192800.04290c1e@gandalf.local.home>
+ <153443703653.23257.12015337438174061938.stgit@devbox>
+ <20180824163737.0f47535a@gandalf.local.home>
+Message-ID: <20180825103513.5b86d42a7ee2d20435522fbb@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180824232800.seQYCJYmPQHIJgzL5lt3yG9PFs2GckS_DXs_GR1XLnE@z>
+Message-ID: <20180825013513.Zm8KJ8opGtA60Ll4uBj-tLtF2phXnSVh4BtGvfP7EoY@z>
 
-On Fri, 17 Aug 2018 01:41:55 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+On Fri, 24 Aug 2018 16:37:37 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> Add a test case for stacktrace filter command for ftrace.
+> On Fri, 17 Aug 2018 01:30:36 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > 
-> Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
-> ---
->  .../ftrace/test.d/ftrace/func-filter-stacktrace.tc |   12 ++++++++++++
->  1 file changed, 12 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
+> > Add --console hidden option for debug test cases.
+> > This option allows to put "sh" or something else
+> > when the test case hits a bug.
 > 
-> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
-> new file mode 100644
-> index 000000000000..ec0d8216d509
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
-> @@ -0,0 +1,12 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL2.0
-> +# description: ftrace - stacktrace filter command
+> Can you add more information to why and how this would be used.
 
-Add:
+For example, if you find a testcase which doesn't
+pass, you can insert sh for interactive debug as below
 
- # flags: instance
+  #!/bin/sh
+  # description: sample test case
 
-> +
-> +echo _do_fork:stacktrace >> set_ftrace_filter
-> +
-> +grep -q "_do_fork:stacktrace:unlimited" set_ftrace_filter
-> +
-> +(echo "forked"; sleep 1)
-> +
-> +grep -q "<stack trace>" trace
+  good-command
+  suspicious-wrong-command
+  sh # <- add this for interactive debug
 
-> +
 
-Can remove the extra line.
+Thank you,
 
--- Steve
+-- 
+Masami Hiramatsu <mhiramat at kernel.org>
