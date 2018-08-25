@@ -1,141 +1,106 @@
 From: rostedt at goodmis.org (Steven Rostedt)
-Date: Fri, 24 Aug 2018 22:22:19 -0400
-Subject: [PATCH v2 32/32] selftests/ftrace: Add blktrace testcase
-In-Reply-To: <153443785794.23257.1676529524763163046.stgit@devbox>
+Date: Fri, 24 Aug 2018 22:41:22 -0400
+Subject: [PATCH v2 24/32] selftests/ftrace: Add max stack tracer testcase
+In-Reply-To: <20180825104509.1b739d5d17d860e453daa0ca@kernel.org>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443785794.23257.1676529524763163046.stgit@devbox>
-Message-ID: <20180824222219.1d8aae6f@vmware.local.home>
+ <153443763074.23257.4052504725796725062.stgit@devbox>
+ <20180824192352.262144f5@gandalf.local.home>
+ <20180825104509.1b739d5d17d860e453daa0ca@kernel.org>
+Message-ID: <20180824224122.2e10e7f9@vmware.local.home>
 
-On Fri, 17 Aug 2018 01:44:18 +0900
+On Sat, 25 Aug 2018 10:45:09 +0900
 Masami Hiramatsu <mhiramat at kernel.org> wrote:
 
-> Add a basic testcase for blktrace. For making it portable,
-> this test uses a loop device.
+> On Fri, 24 Aug 2018 19:23:52 -0400
+> Steven Rostedt <rostedt at goodmis.org> wrote:
+> 
+> > On Fri, 17 Aug 2018 01:40:30 +0900
+> > Masami Hiramatsu <mhiramat at kernel.org> wrote:
+> >   
+> > > Add a testcase for max stack tracer, which checks basic
+> > > max stack usage tracing and its filter feature.
+> > > 
+> > > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+> > > ---
+> > >  .../ftrace/test.d/ftrace/func_stack_tracer.tc      |   39 ++++++++++++++++++++
+> > >  1 file changed, 39 insertions(+)
+> > >  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
+> > > 
+> > > diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
+> > > new file mode 100644
+> > > index 000000000000..b414f0e3c646
+> > > --- /dev/null
+> > > +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
+> > > @@ -0,0 +1,39 @@
+> > > +#!/bin/sh
+> > > +# SPDX-License-Identifier: GPL-2.0
+> > > +# description: ftrace - Max stack tracer
+> > > +# Test the basic function of max-stack usage tracing
+> > > +
+> > > +if [ ! -f stack_trace ]; then
+> > > +  echo "Max stack tracer is not supported - please make CONFIG_STACK_TRACER=y"
+> > > +  exit_unsupported
+> > > +fi
+> > > +
+> > > +echo > stack_trace_filter
+> > > +echo 0 > stack_max_size
+> > > +echo 1 > /proc/sys/kernel/stack_tracer_enabled
+> > > +
+> > > +: "Fork and wait for the first entry become !lock"
+> > > +timeout=10
+> > > +while [ $timeout -ne 0 ]; do
+> > > +  ( echo "forked" )
+> > > +  FL=`grep " 0)" stack_trace`
+> > > +  echo $FL | grep -q "lock" || break;
+> > > +  timeout=$((timeout - 1))
+> > > +done
+> > > +echo 0 > /proc/sys/kernel/stack_tracer_enabled
+> > > +
+> > > +echo '*lock*' > stack_trace_filter
+> > > +test `cat stack_trace_filter | wc -l` -eq `grep lock stack_trace_filter | wc -l`
+> > > +
+> > > +echo 0 > stack_max_size
+> > > +echo 1 > /proc/sys/kernel/stack_tracer_enabled  
+> > 
+> > This test fails quite a bit because it doesn't guarantee that another
+> > stack trace gets in that is bigger, and we don't find the "lock".  
+> 
+> Hmm, maybe I misunderstand what is the stack_trace_filter.
+> I thought it filtered the function that triggered stack trace,
+> so the top of stack trace was always filtered function.
+> If not, what does this filter?
 
-blktrace is a bit special, as it's maintained by the block subsystem
-and not really truly part of ftrace. It lives in the tracing directory,
-but the changes go through Jens's tree. I'm guessing that Jens already
-has tests for this. Not sure we should add a test to the ftrace
-selftests for this tracer.
+Ah, I missed the filter part, no its correct, and actually found a
+bug ;-) By adding this patch, it works again:
 
-Jens, you have thoughts on this?
+diff --git a/kernel/trace/trace_stack.c b/kernel/trace/trace_stack.c
+index 4237eba4ef20..2b0d1ee3241c 100644
+--- a/kernel/trace/trace_stack.c
++++ b/kernel/trace/trace_stack.c
+@@ -111,7 +111,7 @@ check_stack(unsigned long ip, unsigned long *stack)
+ 	stack_trace_max_size = this_size;
+ 
+ 	stack_trace_max.nr_entries = 0;
+-	stack_trace_max.skip = 3;
++	stack_trace_max.skip = 0;
+ 
+ 	save_stack_trace(&stack_trace_max);
+ 
+
 
 -- Steve
 
+> >   
+> > > +
+> > > +: "Fork and always the first entry including lock"
+> > > +timeout=10
+> > > +while [ $timeout -ne 0 ]; do
+> > > +  ( echo "forked" )
+> > > +  FL=`grep " 0)" stack_trace`
+> > > +  echo $FL | grep -q "lock"
+> > > +  timeout=$((timeout - 1))
+> > > +done
+> > > +echo 0 > /proc/sys/kernel/stack_tracer_enabled  
+> >   
 > 
-> Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
-> ---
->  tools/testing/selftests/ftrace/config              |    1 
->  .../testing/selftests/ftrace/test.d/tracer/blk.tc  |   91 ++++++++++++++++++++
->  2 files changed, 92 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/tracer/blk.tc
 > 
-> diff --git a/tools/testing/selftests/ftrace/config b/tools/testing/selftests/ftrace/config
-> index c2c8de4fafff..d999032442e1 100644
-> --- a/tools/testing/selftests/ftrace/config
-> +++ b/tools/testing/selftests/ftrace/config
-> @@ -5,6 +5,7 @@ CONFIG_TRACER_SNAPSHOT=y
->  CONFIG_STACK_TRACER=y
->  CONFIG_HIST_TRIGGERS=y
->  CONFIG_SCHED_TRACER=y
-> +CONFIG_BLK_DEV_IO_TRACE=y
->  CONFIG_PREEMPT_TRACER=y
->  CONFIG_IRQSOFF_TRACER=y
->  CONFIG_PREEMPTIRQ_DELAY_TEST=m
-> diff --git a/tools/testing/selftests/ftrace/test.d/tracer/blk.tc b/tools/testing/selftests/ftrace/test.d/tracer/blk.tc
-> new file mode 100644
-> index 000000000000..9d6e72810c8a
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/tracer/blk.tc
-> @@ -0,0 +1,91 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL2.0
-> +# description: Test blktrace
-> +
-> +IMG=$TMPDIR/fs.img
-> +MNTDIR=$TMPDIR/mnt
-> +
-> +if ! grep -wq "blk" available_tracers ; then
-> +  echo "blktrace is not supported"
-> +  exit_unsupported
-> +fi
-> +
-> +available_fs() { #fstype
-> +  grep -q $1 /proc/filesystems && which mkfs.$1
-> +}
-> +
-> +if available_fs ext3; then
-> +  FSTYPE=ext3
-> +elif available_fs ext4; then
-> +  FSTYPE=ext4
-> +elif available_fs ext2; then
-> +  FSTYPE=ext2
-> +elif available_fs xfs; then
-> +  FSTYPE=xfs
-> +elif available_fs btrfs; then
-> +  FSTYPE=btrfs
-> +else
-> +  echo "No available block-based filesystems"
-> +  exit_unresolved
-> +fi
-> +
-> +if ! which losetup; then
-> +  echo "No losetup found"
-> +  exit_unresolved
-> +fi
-> +LODEV=`losetup -f`
-> +LODEVTRACE=/sys/block/`basename $LODEV`/trace
-> +
-> +do_cleanup() {
-> +  if [ -d $MNTDIR ]; then
-> +   umount $MNTDIR ||:
-> +  fi
-> +  losetup -d $LODEV ||:
-> +  rm -f $IMG
-> +}
-> +
-> +# workload failure is not a tracer's failure
-> +workload_fail() {
-> +  do_cleanup
-> +  echo "Failed to run workload"
-> +  exit_unresolved
-> +}
-> +
-> +do_fail() {
-> +  do_cleanup
-> +  echo "Test failed"
-> +  exit 1
-> +}
-> +
-> +enable_lodevtrace() {
-> +  if [ `cat $LODEVTRACE/enable` -ne 1 ]; then
-> +    echo 1 > $LODEVTRACE/enable
-> +  fi
-> +}
-> +
-> +echo blk > current_tracer
-> +
-> +dd if=/dev/zero of=$IMG bs=1M count=10 &&\
-> +losetup $LODEV $IMG &&\
-> +mkfs.$FSTYPE $LODEV &&\
-> +mkdir -p $MNTDIR &&\
-> +mount -t $FSTYPE $LODEV $MNTDIR &&\
-> +enable_lodevtrace &&\
-> +dd if=/dev/urandom of=$MNTDIR/testfile bs=1M count=1 &&\
-> +sync &&\
-> +umount $MNTDIR || workload_fail
-> +
-> +grep -q "[dd]" trace || do_fail
-> +grep -q "[umount]" trace || do_fail
-> +echo > trace
-> +
-> +losetup $LODEV $IMG &&\
-> +mount -t $FSTYPE $LODEV $MNTDIR &&\
-> +cat $MNTDIR/testfile > /dev/null &&\
-> +echo 0 > $LODEVTRACE/enable &&\
-> +umount $MNTDIR || workload_fail
-> +
-> +grep -q "[cat]" trace || do_fail
-> +grep -q "[mount]" trace || do_fail
-> +
-> +do_cleanup
