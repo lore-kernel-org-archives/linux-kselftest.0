@@ -1,78 +1,89 @@
 From: rostedt@goodmis.org (Steven Rostedt)
-Date: Fri, 24 Aug 2018 22:18:22 -0400
-Subject: [PATCH v2 30/32] selftests/ftrace: Add ftrace cpumask testcase
-In-Reply-To: <153443780039.23257.5243924038958174104.stgit@devbox>
+Date: Fri, 24 Aug 2018 22:19:26 -0400
+Subject: [PATCH v2 31/32] selftests/ftrace: Add output format testcase
+In-Reply-To: <153443782973.23257.16320326555688796000.stgit@devbox>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443780039.23257.5243924038958174104.stgit@devbox>
-Message-ID: <20180824221822.3e0092c9@vmware.local.home>
+ <153443782973.23257.16320326555688796000.stgit@devbox>
+Message-ID: <20180824221926.40cae9f9@vmware.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180825021822.uX_ruY-5DMRSQZ8EbWQ8knPLjiRoG0cOqQhIpGIamOA@z>
+Message-ID: <20180825021926.AoEY3FPWe5dMUMxIbebVSte_xu2qONmS7CRoPfKn9rE@z>
 
-On Fri, 17 Aug 2018 01:43:20 +0900
+On Fri, 17 Aug 2018 01:43:49 +0900
 Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-> Add a testcase for tracing_cpumask with function tracer.
-> 
-> Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
-> ---
->  .../selftests/ftrace/test.d/ftrace/func_cpumask.tc |   34 ++++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
-> new file mode 100644
-> index 000000000000..37420e355445
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
-> @@ -0,0 +1,34 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL2.0
-> +# description: ftrace - function trace with cpumask
-> +
-> +NP=`grep "^processor" /proc/cpuinfo | wc -l`
+> Add a testcase for tracing output format using trace_marker.
+> This tests raw, hex and bin format output.
 
-A better way to find the number of CPUs is to either use "nproc" or
-just look at /sys/devices/system/cpu/cpu[0-9]*. Because what I learned
-from experience is that searching for strings in /proc/cpuinfo is not
-cross arch compatible. For example, other archs don't use "processor"
-in the stings and would come up with a box with 0 CPUs. Something we've
-been working on for some time ;-)
+I'd like to deprecate these formats. They are useless ever since we
+implemented trace_pipe_raw.
+
+Let's not add this test.
+
+Thanks,
 
 -- Steve
 
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+> ---
+>  .../ftrace/test.d/00basic/print_format.tc          |   51 ++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/print_format.tc
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/00basic/print_format.tc b/tools/testing/selftests/ftrace/test.d/00basic/print_format.tc
+> new file mode 100644
+> index 000000000000..55feb542e83e
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/test.d/00basic/print_format.tc
+> @@ -0,0 +1,51 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL2.0
+> +# description: Change print trace format
 > +
-> +if [ $NP -eq 1 ] ;then
-> +  echo "We can not test cpumask on UP environment"
+> +if [ ! -f trace_marker ]; then
+> +  echo "trace_marker is not supported, can not continue testing"
 > +  exit_unresolved
 > +fi
 > +
 > +do_reset() {
-> +  echo ffff > tracing_cpumask
-
-Why ffff? Should we save what was in tracing_cpumask first and just
-reuse it?
-
--- Steve
-
-
+> +  if [ `cat options/bin` -eq 1 ]; then
+> +    grep -v "^#" trace | od -h | cut -f 2- -d " " | xargs echo
+> +  fi
+> +  echo 0 > options/hex
+> +  echo 0 > options/raw
+> +  echo 0 > options/bin
+> +  cat trace
+> +  exit 1
 > +}
 > +
-> +echo 0 > tracing_on
 > +echo > trace
-> +: "Bitmask only record on CPU1"
-> +echo 2 > tracing_cpumask
-> +MASK=0x`cat tracing_cpumask`
-> +test `printf "%d" $MASK` -eq 2 || do_reset
-> +
-> +echo function > current_tracer
-> +echo 1 > tracing_on
-> +(echo "forked")
+> +echo "abcdefgh" > trace_marker
 > +echo 0 > tracing_on
 > +
-> +: "Check CPU1 events are recorded"
-> +grep -q -e "\[001\]" trace || do_reset
+> +: "Get the pid and cpu#"
+> +IDS=`grep -v "^#" trace | sed -e 's/[[:space:]]*.*-\([[:digit:]]*\)[[:space:]]*\[\([[:digit:]]*\)\].*/\1 \2/'`
 > +
-> +: "There should be No other cpu events"
-> +! grep -qv -e "\[001\]" -e "^#" trace || do_reset
+> +read_pid_cpu() {
+> +  _PID=$1
+> +  _CPU=`printf "%d" $2`
+> +}
 > +
-> +do_reset
+> +read_pid_cpu $IDS
+> +
+> +: "Test raw output format"
+> +echo 1 > options/raw
+> +grep -v "^#" trace | grep "^$_PID $_CPU" || do_reset
+> +echo 0 > options/raw
+> +
+> +: "Test hex output format"
+> +echo 1 > options/hex
+> +PAT=`printf "%08x %08x" $_PID $_CPU`
+> +grep -v "^#" trace | grep "^$PAT" || do_reset
+> +echo 0 > options/hex
+> +
+> +: "Test bin output format"
+> +echo 1 > options/bin
+> +PAT=`printf "%04x [[:xdigit:]]* [[:xdigit:]]*%02x" $_PID $_CPU`
+> +# Make a stream of hexdump
+> +grep -v "^#" trace | od -h | cut -f 2- -d " " | xargs echo | grep "$PAT" || do_reset
+> +echo 0 > options/bin
