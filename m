@@ -1,74 +1,119 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Sun, 26 Aug 2018 16:30:20 +0900
-Subject: [PATCH v2 19/32] selftests/ftrace: Add a testcase for nop tracer
-In-Reply-To: <20180824185342.542d8a6a@gandalf.local.home>
+Date: Sun, 26 Aug 2018 17:42:40 +0900
+Subject: [PATCH v2 24/32] selftests/ftrace: Add max stack tracer testcase
+In-Reply-To: <20180824224122.2e10e7f9@vmware.local.home>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443748943.23257.13855745627496095446.stgit@devbox>
- <20180824185342.542d8a6a@gandalf.local.home>
-Message-ID: <20180826163020.acae9d2772fa6d7de005b83d@kernel.org>
+ <153443763074.23257.4052504725796725062.stgit@devbox>
+ <20180824192352.262144f5@gandalf.local.home>
+ <20180825104509.1b739d5d17d860e453daa0ca@kernel.org>
+ <20180824224122.2e10e7f9@vmware.local.home>
+Message-ID: <20180826174240.22bc6c2c79da25f1ef261bf6@kernel.org>
 
-On Fri, 24 Aug 2018 18:53:42 -0400
+On Fri, 24 Aug 2018 22:41:22 -0400
 Steven Rostedt <rostedt at goodmis.org> wrote:
 
-> On Fri, 17 Aug 2018 01:38:09 +0900
+> On Sat, 25 Aug 2018 10:45:09 +0900
 > Masami Hiramatsu <mhiramat at kernel.org> wrote:
 > 
-> > Add a testcase for nop tracer. This tracer has 2 test
-> > options, so check it too.
+> > On Fri, 24 Aug 2018 19:23:52 -0400
+> > Steven Rostedt <rostedt at goodmis.org> wrote:
 > > 
+> > > On Fri, 17 Aug 2018 01:40:30 +0900
+> > > Masami Hiramatsu <mhiramat at kernel.org> wrote:
+> > >   
+> > > > Add a testcase for max stack tracer, which checks basic
+> > > > max stack usage tracing and its filter feature.
+> > > > 
+> > > > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+> > > > ---
+> > > >  .../ftrace/test.d/ftrace/func_stack_tracer.tc      |   39 ++++++++++++++++++++
+> > > >  1 file changed, 39 insertions(+)
+> > > >  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
+> > > > 
+> > > > diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
+> > > > new file mode 100644
+> > > > index 000000000000..b414f0e3c646
+> > > > --- /dev/null
+> > > > +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
+> > > > @@ -0,0 +1,39 @@
+> > > > +#!/bin/sh
+> > > > +# SPDX-License-Identifier: GPL-2.0
+> > > > +# description: ftrace - Max stack tracer
+> > > > +# Test the basic function of max-stack usage tracing
+> > > > +
+> > > > +if [ ! -f stack_trace ]; then
+> > > > +  echo "Max stack tracer is not supported - please make CONFIG_STACK_TRACER=y"
+> > > > +  exit_unsupported
+> > > > +fi
+> > > > +
+> > > > +echo > stack_trace_filter
+> > > > +echo 0 > stack_max_size
+> > > > +echo 1 > /proc/sys/kernel/stack_tracer_enabled
+> > > > +
+> > > > +: "Fork and wait for the first entry become !lock"
+> > > > +timeout=10
+> > > > +while [ $timeout -ne 0 ]; do
+> > > > +  ( echo "forked" )
+> > > > +  FL=`grep " 0)" stack_trace`
+> > > > +  echo $FL | grep -q "lock" || break;
+> > > > +  timeout=$((timeout - 1))
+> > > > +done
+> > > > +echo 0 > /proc/sys/kernel/stack_tracer_enabled
+> > > > +
+> > > > +echo '*lock*' > stack_trace_filter
+> > > > +test `cat stack_trace_filter | wc -l` -eq `grep lock stack_trace_filter | wc -l`
+> > > > +
+> > > > +echo 0 > stack_max_size
+> > > > +echo 1 > /proc/sys/kernel/stack_tracer_enabled  
+> > > 
+> > > This test fails quite a bit because it doesn't guarantee that another
+> > > stack trace gets in that is bigger, and we don't find the "lock".  
+> > 
+> > Hmm, maybe I misunderstand what is the stack_trace_filter.
+> > I thought it filtered the function that triggered stack trace,
+> > so the top of stack trace was always filtered function.
+> > If not, what does this filter?
 > 
-> I'd rather not include this. In fact, I'd love to get rid of the nop
-> options. They were added to make sure options worked when we first
-> added them. They are actually pointless.
+> Ah, I missed the filter part, no its correct, and actually found a
+> bug ;-) By adding this patch, it works again:
 
-Got it. I was thinking it was an odd option when I was writing a test. :)
+Great! this shows ftracetest really works :)
+Anyway, with this fix, we don't need the timeout things anymore.
 
-> The only point of this test is to know if options work or not. Hmm, I
-> guess that is something that could possibly be valuable :-/
+Thanks!
 
-Actually setting "nop" is already done in basic testcase. So I think
-we can just drop this test.
-
-
-Thank you,
- 
+> 
+> diff --git a/kernel/trace/trace_stack.c b/kernel/trace/trace_stack.c
+> index 4237eba4ef20..2b0d1ee3241c 100644
+> --- a/kernel/trace/trace_stack.c
+> +++ b/kernel/trace/trace_stack.c
+> @@ -111,7 +111,7 @@ check_stack(unsigned long ip, unsigned long *stack)
+>  	stack_trace_max_size = this_size;
+>  
+>  	stack_trace_max.nr_entries = 0;
+> -	stack_trace_max.skip = 3;
+> +	stack_trace_max.skip = 0;
+>  
+>  	save_stack_trace(&stack_trace_max);
+>  
+> 
+> 
 > -- Steve
 > 
-> 
-> > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
-> > ---
-> >  .../testing/selftests/ftrace/test.d/tracer/nop.tc  |   22 ++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/tracer/nop.tc
+> > >   
+> > > > +
+> > > > +: "Fork and always the first entry including lock"
+> > > > +timeout=10
+> > > > +while [ $timeout -ne 0 ]; do
+> > > > +  ( echo "forked" )
+> > > > +  FL=`grep " 0)" stack_trace`
+> > > > +  echo $FL | grep -q "lock"
+> > > > +  timeout=$((timeout - 1))
+> > > > +done
+> > > > +echo 0 > /proc/sys/kernel/stack_tracer_enabled  
+> > >   
 > > 
-> > diff --git a/tools/testing/selftests/ftrace/test.d/tracer/nop.tc b/tools/testing/selftests/ftrace/test.d/tracer/nop.tc
-> > new file mode 100644
-> > index 000000000000..ca63e316e0f5
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/ftrace/test.d/tracer/nop.tc
-> > @@ -0,0 +1,22 @@
-> > +#!/bin/sh
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +# description: Test nop tracer
-> > +
-> > +# nop must be supported always
-> > +grep -q "nop" available_tracers
-> > +
-> > +echo "nop" > current_tracer
-> > +
-> > +# nop provides 2 test options
-> > +grep -q "test_nop_accept" trace_options
-> > +grep -q "test_nop_refuse" trace_options
-> > +
-> > +# nop_accept always success
-> > +echo "test_nop_accept" > trace_options
-> > +echo "notest_nop_accept" > trace_options
-> > +
-> > +# nop_refuse always failed
-> > +! echo "test_nop_refuse" > trace_options
-> > +! echo "notest_nop_refuse" > trace_options
-> > +
-> > +exit 0
+> > 
 > 
 
 
