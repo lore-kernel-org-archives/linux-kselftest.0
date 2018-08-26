@@ -1,62 +1,70 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Sun, 26 Aug 2018 20:20:54 +0900
-Subject: [PATCH v2 26/32] selftests/ftrace: Add trace_pipe testcase
-In-Reply-To: <20180824192629.42c8e906@gandalf.local.home>
+Date: Sun, 26 Aug 2018 20:22:00 +0900
+Subject: [PATCH v2 29/32] selftests/ftrace: Add wakeup_rt tracer testcase
+In-Reply-To: <20180824220949.2c8ee9a6@vmware.local.home>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443768729.23257.2645114356784631107.stgit@devbox>
- <20180824192629.42c8e906@gandalf.local.home>
-Message-ID: <20180826202054.897d7ae94b0a024e2b326c47@kernel.org>
+ <153443777214.23257.14428652484801816908.stgit@devbox>
+ <20180824220949.2c8ee9a6@vmware.local.home>
+Message-ID: <20180826202200.c261c79f6667b267fd80fca5@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180826112054.poQoPAsPaulf7nQ6A8alu6c46pPGXjKX6Saf7h2dIDc@z>
+Message-ID: <20180826112200.gxsTFxMeoRHUBYZAiGBfltQRucnJOYrgQ5Ob3F_cfZM@z>
 
-On Fri, 24 Aug 2018 19:26:29 -0400
+On Fri, 24 Aug 2018 22:09:49 -0400
 Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> On Fri, 17 Aug 2018 01:41:27 +0900
+> On Fri, 17 Aug 2018 01:42:52 +0900
 > Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > 
-> > Add a simple testcase for trace_pipe which can consume
-> > ringbuffer.
+> > Add a testcase for wakeup_rt tracer. This requires chrt
+> > command to test.
 > > 
 > > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 > > ---
-> >  .../selftests/ftrace/test.d/00basic/trace_pipe.tc  |   15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
+> >  .../selftests/ftrace/test.d/tracer/wakeup_rt.tc    |   25 ++++++++++++++++++++
+> >  1 file changed, 25 insertions(+)
+> >  create mode 100644 tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc
 > > 
-> > diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
+> > diff --git a/tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc b/tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc
 > > new file mode 100644
-> > index 000000000000..a7dd6fda487a
+> > index 000000000000..3f279072ec2d
 > > --- /dev/null
-> > +++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
-> > @@ -0,0 +1,15 @@
+> > +++ b/tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc
+> > @@ -0,0 +1,25 @@
 > > +#!/bin/sh
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +# description: trace_pipe and trace_marker
+> > +# SPDX-License-Identifier: GPL2.0
+> > +# description: Test wakeup RT tracer
+> > +
+> > +if ! which nice ; then
+> > +  echo "chrt is not found. This test requires chrt command."
+> > +  exit_unresolved
+> > +fi
+> > +
+> > +if ! grep -wq "wakeup_rt" available_tracers ; then
+> > +  echo "wakeup_rt tracer is not supported"
+> > +  exit_unsupported
+> > +fi
+> > +
+> > +echo wakeup > current_tracer
 > 
-> Should add:
-> 
->  # flags: instance
+> I think you meant "echo wakeup_rt" ;-)
 
-Ah, right!
+Oops, that's my fault....
 
 Thanks!
 
 > 
 > -- Steve
 > 
+> > +echo 1 > tracing_on
+> > +echo 0 > tracing_max_latency
 > > +
-> > +[ ! -f trace_marker ] && exit_unsupported
+> > +: "Wakeup a realtime task"
+> > +chrt -f 5 sleep 1
 > > +
-> > +echo "test input 1" > trace_marker
+> > +echo 0 > tracing_on
+> > +grep "+ \[[[:digit:]]*\]" trace
+> > +grep "==> \[[[:digit:]]*\]" trace
 > > +
-> > +: "trace interface never consume the ring buffer"
-> > +grep -q "test input 1" trace
-> > +grep -q "test input 1" trace
-> > +
-> > +: "trace interface never consume the ring buffer"
-> > +head -n 1 trace_pipe | grep -q "test input 1"
-> > +! grep -q "test input 1" trace
 > 
 
 
