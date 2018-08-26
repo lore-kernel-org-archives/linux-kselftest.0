@@ -1,76 +1,79 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Sun, 26 Aug 2018 17:43:31 +0900
-Subject: [PATCH v2 21/32] selftests/ftrace: Add trace_printk sample
- module test
-In-Reply-To: <20180824190621.1683e34c@gandalf.local.home>
+Date: Sun, 26 Aug 2018 20:20:04 +0900
+Subject: [PATCH v2 23/32] selftests/ftrace: Add function profiling stat
+ testcase
+In-Reply-To: <20180824192018.40b9b015@gandalf.local.home>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443754593.23257.6968622935654299173.stgit@devbox>
- <20180824190621.1683e34c@gandalf.local.home>
-Message-ID: <20180826174331.58be4a6211236e81c9099821@kernel.org>
+ <153443760252.23257.5752638886588410084.stgit@devbox>
+ <20180824192018.40b9b015@gandalf.local.home>
+Message-ID: <20180826202004.dffa0d77a634feafc772854a@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180826084331.9wxejN95bVLYYY_QTYXDvHgRsJAMeXktiG8OP35Sm7w@z>
+Message-ID: <20180826112004.wsn-tsRZfacRGWzQi_gL4c7RNCs2CnT7qiBibeqjfdQ@z>
 
-On Fri, 24 Aug 2018 19:06:21 -0400
+On Fri, 24 Aug 2018 19:20:18 -0400
 Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> On Fri, 17 Aug 2018 01:39:06 +0900
+> On Fri, 17 Aug 2018 01:40:02 +0900
 > Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > 
-> > Add trace_printk sample module test. This requires to
-> > enable trace_printk.ko module for test.
+> > Add a testcase for function profiling per-cpu statistics
+> > interface. There is already func_profile.tc, but that is
+> > mainly focusing on the combination of function-profiler
+> > and function tracer. This testcase ensures trace_stat
+> > per-cpu function statistics is correctly updated.
 > > 
 > > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 > > ---
-> >  .../selftests/ftrace/test.d/event/trace_printk.tc  |   27 ++++++++++++++++++++
-> >  1 file changed, 27 insertions(+)
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
+> >  .../ftrace/test.d/ftrace/func_profile_stat.tc      |   23 ++++++++++++++++++++
+> >  1 file changed, 23 insertions(+)
+> >  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
 > > 
-> > diff --git a/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc b/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
+> > diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
 > > new file mode 100644
-> > index 000000000000..4da4d739f03d
+> > index 000000000000..1d2440d80ec3
 > > --- /dev/null
-> > +++ b/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
-> > @@ -0,0 +1,27 @@
+> > +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
+> > @@ -0,0 +1,23 @@
 > > +#!/bin/sh
 > > +# SPDX-License-Identifier: GPL-2.0
-> > +# description: Test trace_printk from module
+> > +# description: ftrace - function profiling
 > > +
-> > +rmmod trace-printk ||:
-> > +if ! modprobe trace-printk.ko ; then
+> > +[ ! -f function_profile_enabled ] && exit_unsupported
+> > +
+> > +: "Enable function profile"
+> > +echo 1 > function_profile_enabled
+> > +
+> > +: "Profile must be updated"
+> > +cp trace_stat/function0 $TMPDIR/
+> > +( echo "forked"; sleep 1 )
+> > +: "diff returns 0 if there is no difference"
+> > +! diff trace_stat/function0 $TMPDIR/function0
+> > +
+> > +echo 0 > function_profile_enabled
+> > +
+> > +: "Profile must NOT be updated"
+> > +cp trace_stat/function0 $TMPDIR/
+> > +( echo "forked"; sleep 1 )
+> > +: "diff returns 0 if there is no difference"
+> > +diff trace_stat/function0 $TMPDIR/function0
 > 
-> "modprobe trace-printk.ko" doesn't work. You need to drop the ".ko"
+> > +
+> 
+> Can remove the last empty line from the file.
 
-Ah, I'm using busybox's modprobe, which acccepts .ko :(
+Yes, thank you for pointing it out.
 
-I'll fix that.
+> 
+> Other than that...
+> 
+> Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
 
 Thanks!
 
 > 
 > -- Steve
 > 
-> > +  echo "No trace-printk sample module - please make CONFIG_SAMPLE_TRACE_PRINTK=m"
-> > +  exit_unresolved;
-> > +fi
-> > +
-> > +echo "Waiting for irq work"
-> > +sleep 1
-> > +
-> > +grep -q ": This .* trace_bputs" trace
-> > +grep -q ": This .* trace_puts" trace
-> > +grep -q ": This .* trace_bprintk" trace
-> > +grep -q ": This .* trace_printk" trace
-> > +
-> > +grep -q ": (irq) .* trace_bputs" trace
-> > +grep -q ": (irq) .* trace_puts" trace
-> > +grep -q ": (irq) .* trace_bprintk" trace
-> > +grep -q ": (irq) .* trace_printk" trace
-> > +
-> > +grep -q "This is a %s that will use trace_bprintk" printk_formats
-> > +grep -q "(irq) This is a static string that will use trace_bputs" printk_formats
-> > +
-> > +rmmod trace-printk ||:
-> 
+> -- Steve
 
 
 -- 
