@@ -1,77 +1,61 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Sun, 26 Aug 2018 20:20:04 +0900
-Subject: [PATCH v2 23/32] selftests/ftrace: Add function profiling stat
- testcase
-In-Reply-To: <20180824192018.40b9b015@gandalf.local.home>
+Date: Sun, 26 Aug 2018 20:20:54 +0900
+Subject: [PATCH v2 26/32] selftests/ftrace: Add trace_pipe testcase
+In-Reply-To: <20180824192629.42c8e906@gandalf.local.home>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443760252.23257.5752638886588410084.stgit@devbox>
- <20180824192018.40b9b015@gandalf.local.home>
-Message-ID: <20180826202004.dffa0d77a634feafc772854a@kernel.org>
+ <153443768729.23257.2645114356784631107.stgit@devbox>
+ <20180824192629.42c8e906@gandalf.local.home>
+Message-ID: <20180826202054.897d7ae94b0a024e2b326c47@kernel.org>
 
-On Fri, 24 Aug 2018 19:20:18 -0400
+On Fri, 24 Aug 2018 19:26:29 -0400
 Steven Rostedt <rostedt at goodmis.org> wrote:
 
-> On Fri, 17 Aug 2018 01:40:02 +0900
+> On Fri, 17 Aug 2018 01:41:27 +0900
 > Masami Hiramatsu <mhiramat at kernel.org> wrote:
 > 
-> > Add a testcase for function profiling per-cpu statistics
-> > interface. There is already func_profile.tc, but that is
-> > mainly focusing on the combination of function-profiler
-> > and function tracer. This testcase ensures trace_stat
-> > per-cpu function statistics is correctly updated.
+> > Add a simple testcase for trace_pipe which can consume
+> > ringbuffer.
 > > 
 > > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 > > ---
-> >  .../ftrace/test.d/ftrace/func_profile_stat.tc      |   23 ++++++++++++++++++++
-> >  1 file changed, 23 insertions(+)
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
+> >  .../selftests/ftrace/test.d/00basic/trace_pipe.tc  |   15 +++++++++++++++
+> >  1 file changed, 15 insertions(+)
+> >  create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
 > > 
-> > diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
+> > diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
 > > new file mode 100644
-> > index 000000000000..1d2440d80ec3
+> > index 000000000000..a7dd6fda487a
 > > --- /dev/null
-> > +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
-> > @@ -0,0 +1,23 @@
+> > +++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
+> > @@ -0,0 +1,15 @@
 > > +#!/bin/sh
 > > +# SPDX-License-Identifier: GPL-2.0
-> > +# description: ftrace - function profiling
-> > +
-> > +[ ! -f function_profile_enabled ] && exit_unsupported
-> > +
-> > +: "Enable function profile"
-> > +echo 1 > function_profile_enabled
-> > +
-> > +: "Profile must be updated"
-> > +cp trace_stat/function0 $TMPDIR/
-> > +( echo "forked"; sleep 1 )
-> > +: "diff returns 0 if there is no difference"
-> > +! diff trace_stat/function0 $TMPDIR/function0
-> > +
-> > +echo 0 > function_profile_enabled
-> > +
-> > +: "Profile must NOT be updated"
-> > +cp trace_stat/function0 $TMPDIR/
-> > +( echo "forked"; sleep 1 )
-> > +: "diff returns 0 if there is no difference"
-> > +diff trace_stat/function0 $TMPDIR/function0
+> > +# description: trace_pipe and trace_marker
 > 
-> > +
+> Should add:
 > 
-> Can remove the last empty line from the file.
+>  # flags: instance
 
-Yes, thank you for pointing it out.
-
-> 
-> Other than that...
-> 
-> Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+Ah, right!
 
 Thanks!
 
 > 
 > -- Steve
 > 
-> -- Steve
+> > +
+> > +[ ! -f trace_marker ] && exit_unsupported
+> > +
+> > +echo "test input 1" > trace_marker
+> > +
+> > +: "trace interface never consume the ring buffer"
+> > +grep -q "test input 1" trace
+> > +grep -q "test input 1" trace
+> > +
+> > +: "trace interface never consume the ring buffer"
+> > +head -n 1 trace_pipe | grep -q "test input 1"
+> > +! grep -q "test input 1" trace
+> 
 
 
 -- 
