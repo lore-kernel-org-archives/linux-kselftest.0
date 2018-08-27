@@ -1,41 +1,31 @@
 From: shuah@kernel.org (Shuah Khan)
-Date: Mon, 27 Aug 2018 11:57:58 -0600
-Subject: [PATCH] doc: dev-tools: kselftest.rst: update config file location
-In-Reply-To: <20180824124744.9842-1-anders.roxell@linaro.org>
-References: <20180824124744.9842-1-anders.roxell@linaro.org>
-Message-ID: <55c84596-0e12-0211-dbee-9eddb9a0ab28@kernel.org>
+Date: Mon, 27 Aug 2018 13:37:18 -0600
+Subject: [PATCH v2] selftests: android: move config up a level
+In-Reply-To: <20180824124941.10146-1-anders.roxell@linaro.org>
+References: <20180824124941.10146-1-anders.roxell@linaro.org>
+Message-ID: <4479e4c6-18a5-a60a-62d5-29a1c13d4650@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180827175758.Jh6A899KLzyttZcXZRsPwi_mqkRrWpe2mYJgXyXdAyU@z>
+Message-ID: <20180827193718.wzSnl-89F3XyF38Oxaa5-_VKe80M86ZgFAqRGq-gLE4@z>
 
-On 08/24/2018 06:47 AM, Anders Roxell wrote:
-> Config fragment files should be placed in
-> tools/testing/selftests/<testdir>/config
+On 08/24/2018 06:49 AM, Anders Roxell wrote:
+> 'make kselftest-merge' assumes that the config files for the tests are
+> located under the 'main' test dir, like tools/testing/selftests/android/
+> and not in a subdir to android.
 > 
 > Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 > ---
->  Documentation/dev-tools/kselftest.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/testing/selftests/android/{ion => }/config | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename tools/testing/selftests/android/{ion => }/config (100%)
 > 
-> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-> index 6f653acea248..dad1bb8711e2 100644
-> --- a/Documentation/dev-tools/kselftest.rst
-> +++ b/Documentation/dev-tools/kselftest.rst
-> @@ -159,7 +159,7 @@ Contributing new tests (details)
->   * If a test needs specific kernel config options enabled, add a config file in
->     the test directory to enable them.
->  
-> -   e.g: tools/testing/selftests/android/ion/config
-> +   e.g: tools/testing/selftests/android/config
->  
->  Test Harness
->  ============
+> diff --git a/tools/testing/selftests/android/ion/config b/tools/testing/selftests/android/config
+> similarity index 100%
+> rename from tools/testing/selftests/android/ion/config
+> rename to tools/testing/selftests/android/config
 > 
 
-Jo Jon,
 
-This patch looks good. Here is my Ack for it go through doc tree.
-
-Acked-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+Applied to linux-kselftest next for next 4.19-rc2
 
 thanks,
 -- Shuah
