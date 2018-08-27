@@ -1,31 +1,40 @@
 From: shuah@kernel.org (Shuah Khan)
-Date: Mon, 27 Aug 2018 13:37:18 -0600
-Subject: [PATCH v2] selftests: android: move config up a level
-In-Reply-To: <20180824124941.10146-1-anders.roxell@linaro.org>
-References: <20180824124941.10146-1-anders.roxell@linaro.org>
-Message-ID: <4479e4c6-18a5-a60a-62d5-29a1c13d4650@kernel.org>
+Date: Mon, 27 Aug 2018 14:14:06 -0600
+Subject: [PATCH] selftests: kselftest: Remove outdated comment
+In-Reply-To: <20180725025725.4214-1-bauerman@linux.ibm.com>
+References: <20180725025725.4214-1-bauerman@linux.ibm.com>
+Message-ID: <99fd20f8-b3fd-c5b7-ccb2-092888c8545f@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180827193718.wzSnl-89F3XyF38Oxaa5-_VKe80M86ZgFAqRGq-gLE4@z>
+Message-ID: <20180827201406.axDa_jYWrrjeRCGsbjvPTGgFAbO6OwLL_Vp-SnwO3Yw@z>
 
-On 08/24/2018 06:49 AM, Anders Roxell wrote:
-> 'make kselftest-merge' assumes that the config files for the tests are
-> located under the 'main' test dir, like tools/testing/selftests/android/
-> and not in a subdir to android.
+On 07/24/2018 08:57 PM, Thiago Jung Bauermann wrote:
+> Commit 3c07aaef6598 ("selftests: kselftest: change KSFT_SKIP=4 instead of
+> KSFT_PASS") reverted commit 11867a77eb85 ("selftests: kselftest framework:
+> change skip exit code to 0") but missed removing the comment which that
+> commit added, so do that now.
 > 
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+> Signed-off-by: Thiago Jung Bauermann <bauerman at linux.ibm.com>
 > ---
->  tools/testing/selftests/android/{ion => }/config | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename tools/testing/selftests/android/{ion => }/config (100%)
+>  tools/testing/selftests/kselftest.h | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/android/ion/config b/tools/testing/selftests/android/config
-> similarity index 100%
-> rename from tools/testing/selftests/android/ion/config
-> rename to tools/testing/selftests/android/config
+> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+> index 15e6b75fc3a5..a3edb2c8e43d 100644
+> --- a/tools/testing/selftests/kselftest.h
+> +++ b/tools/testing/selftests/kselftest.h
+> @@ -19,7 +19,6 @@
+>  #define KSFT_FAIL  1
+>  #define KSFT_XFAIL 2
+>  #define KSFT_XPASS 3
+> -/* Treat skip as pass */
+>  #define KSFT_SKIP  4
+>  
+>  /* counters */
+> 
 > 
 
-
-Applied to linux-kselftest next for next 4.19-rc2
+Thanks for the patch. Sorry for the delay. It is now in linux-kselfttest
+next for the next 4.19-rc
 
 thanks,
 -- Shuah
