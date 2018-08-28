@@ -1,154 +1,55 @@
 From: bauerman at linux.ibm.com (Thiago Jung Bauermann)
-Date: Tue, 28 Aug 2018 14:26:08 -0300
-Subject: [PATCH v3 4/4] userfaultfd: selftest: make supported range ioctl
- verification more robust
+Date: Tue, 28 Aug 2018 14:26:06 -0300
+Subject: [PATCH v3 2/4] userfaultfd: selftest: Skip test if userfaultfd()
+ syscall not supported
 In-Reply-To: <20180828172608.30075-1-bauerman@linux.ibm.com>
 References: <20180828172608.30075-1-bauerman@linux.ibm.com>
-Message-ID: <20180828172608.30075-5-bauerman@linux.ibm.com>
+Message-ID: <20180828172608.30075-3-bauerman@linux.ibm.com>
 
-From: Mike Rapoport <rppt at linux.vnet.ibm.com>
+Since there's no point in doing anything in this case, immediately exit the
+process.
 
-When userfaultfd tests runs on older kernel that does not support
-UFFDIO_ZEROPAGE for shared memory it fails at the ioctl verification.
+And take the opportunity to improve the error message.
 
-Split out the verification that supported ioctls are superset of the
-expected ioctls and relax the checks for UFFDIO_ZEROPAGE for shared memory
-areas.
+Before:
 
-Signed-off-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
+  # ./userfaultfd shmem 10 10
+  nr_pages: 160, nr_pages_per_cpu: 40
+  userfaultfd syscall not available in this kernel
+  # echo $?
+  1
+
+After:
+
+  # ./userfaultfd shmem 10 10
+  nr_pages: 160, nr_pages_per_cpu: 40
+  userfaultfd syscall not available in this kernel: Function not implemented
+  # echo $?
+  4
+
+Suggested-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
 Signed-off-by: Thiago Jung Bauermann <bauerman at linux.ibm.com>
+Acked-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
 ---
- tools/testing/selftests/vm/userfaultfd.c | 63 +++++++++++++++++---------------
- 1 file changed, 34 insertions(+), 29 deletions(-)
+ tools/testing/selftests/vm/userfaultfd.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index c84e44ddf314..676cbedff3db 100644
+index e4099afe7557..d728bd1cb33c 100644
 --- a/tools/testing/selftests/vm/userfaultfd.c
 +++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -271,6 +271,32 @@ static int my_bcmp(char *str1, char *str2, size_t n)
- 	return 0;
- }
+@@ -636,9 +636,11 @@ static int userfaultfd_open(int features)
  
-+static int verify_ioctls(unsigned long supported_ioctls)
-+{
-+	unsigned long expected_ioctls = uffd_test_ops->expected_ioctls;
-+
-+	if ((supported_ioctls & expected_ioctls) == expected_ioctls)
-+		return 0;
-+
-+	/*
-+	 * For older kernels shared memory may not have UFFDIO_ZEROPAGE.
-+	 * In this case we just mask it out from the
-+	 * expected_ioctls. The userfaultfd_zeropage_test will then
-+	 * verify that an attempt to use UFFDIO_ZEROPAGE returns
-+	 * EINVAL
-+	 */
-+	if (test_type == TEST_SHMEM) {
-+		expected_ioctls &= ~(1 << _UFFDIO_ZEROPAGE);
-+		if ((supported_ioctls & expected_ioctls) == expected_ioctls) {
-+			uffd_test_ops->expected_ioctls = expected_ioctls;
-+			return 0;
-+		}
-+	}
-+
-+	fprintf(stderr, "unexpected missing ioctl\n");
-+	return 1;
-+}
-+
- static void *locking_thread(void *arg)
- {
- 	unsigned long cpu = (unsigned long) arg;
-@@ -856,7 +882,6 @@ static int uffdio_zeropage(int ufd, unsigned long offset)
- static int userfaultfd_zeropage_test(void)
- {
- 	struct uffdio_register uffdio_register;
--	unsigned long expected_ioctls;
- 	int err;
- 
- 	printf("testing UFFDIO_ZEROPAGE: ");
-@@ -875,12 +900,8 @@ static int userfaultfd_zeropage_test(void)
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		fprintf(stderr, "register failure\n"), exit(1);
- 
--	expected_ioctls = uffd_test_ops->expected_ioctls;
--	if ((uffdio_register.ioctls & expected_ioctls) !=
--	    expected_ioctls)
+ 	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
+ 	if (uffd < 0) {
 -		fprintf(stderr,
--			"unexpected missing ioctl for anon memory\n"),
--			exit(1);
-+	if (verify_ioctls(uffdio_register.ioctls))
-+		return 1;
- 
- 	if (uffdio_zeropage(uffd, 0)) {
- 		if (my_bcmp(area_dst, zeropage, page_size))
-@@ -895,7 +916,6 @@ static int userfaultfd_zeropage_test(void)
- static int userfaultfd_events_test(void)
- {
- 	struct uffdio_register uffdio_register;
--	unsigned long expected_ioctls;
- 	unsigned long userfaults;
- 	pthread_t uffd_mon;
- 	int err, features;
-@@ -922,12 +942,8 @@ static int userfaultfd_events_test(void)
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		fprintf(stderr, "register failure\n"), exit(1);
- 
--	expected_ioctls = uffd_test_ops->expected_ioctls;
--	if ((uffdio_register.ioctls & expected_ioctls) !=
--	    expected_ioctls)
--		fprintf(stderr,
--			"unexpected missing ioctl for anon memory\n"),
--			exit(1);
-+	if (verify_ioctls(uffdio_register.ioctls))
-+		return 1;
- 
- 	if (pthread_create(&uffd_mon, &attr, uffd_poll_thread, NULL))
- 		perror("uffd_poll_thread create"), exit(1);
-@@ -957,7 +973,6 @@ static int userfaultfd_events_test(void)
- static int userfaultfd_sig_test(void)
- {
- 	struct uffdio_register uffdio_register;
--	unsigned long expected_ioctls;
- 	unsigned long userfaults;
- 	pthread_t uffd_mon;
- 	int err, features;
-@@ -982,12 +997,8 @@ static int userfaultfd_sig_test(void)
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		fprintf(stderr, "register failure\n"), exit(1);
- 
--	expected_ioctls = uffd_test_ops->expected_ioctls;
--	if ((uffdio_register.ioctls & expected_ioctls) !=
--	    expected_ioctls)
--		fprintf(stderr,
--			"unexpected missing ioctl for anon memory\n"),
--			exit(1);
-+	if (verify_ioctls(uffdio_register.ioctls))
-+		return 1;
- 
- 	if (faulting_process(1))
- 		fprintf(stderr, "faulting process failed\n"), exit(1);
-@@ -1088,8 +1099,6 @@ static int userfaultfd_stress(void)
- 
- 	err = 0;
- 	while (bounces--) {
--		unsigned long expected_ioctls;
--
- 		printf("bounces: %d, mode:", bounces);
- 		if (bounces & BOUNCE_RANDOM)
- 			printf(" rnd");
-@@ -1115,13 +1124,9 @@ static int userfaultfd_stress(void)
- 			fprintf(stderr, "register failure\n");
- 			return 1;
- 		}
--		expected_ioctls = uffd_test_ops->expected_ioctls;
--		if ((uffdio_register.ioctls & expected_ioctls) !=
--		    expected_ioctls) {
--			fprintf(stderr,
--				"unexpected missing ioctl for anon memory\n");
+-			"userfaultfd syscall not available in this kernel\n");
+-		return 1;
++		int errnum = errno;
 +
-+		if (verify_ioctls(uffdio_register.ioctls))
- 			return 1;
--		}
++		perror("userfaultfd syscall not available in this kernel");
++
++		exit(errnum == ENOSYS ? KSFT_SKIP : 1);
+ 	}
+ 	uffd_flags = fcntl(uffd, F_GETFD, NULL);
  
- 		if (area_dst_alias) {
- 			uffdio_register.range.start = (unsigned long)
