@@ -1,55 +1,34 @@
-From: bauerman at linux.ibm.com (Thiago Jung Bauermann)
-Date: Tue, 28 Aug 2018 14:26:06 -0300
-Subject: [PATCH v3 2/4] userfaultfd: selftest: Skip test if userfaultfd()
- syscall not supported
-In-Reply-To: <20180828172608.30075-1-bauerman@linux.ibm.com>
-References: <20180828172608.30075-1-bauerman@linux.ibm.com>
-Message-ID: <20180828172608.30075-3-bauerman@linux.ibm.com>
+From: Lei.Yang at windriver.com (Lei Yang)
+Date: Wed, 29 Aug 2018 15:04:08 +0800
+Subject: [PATCH]] kvm: selftests: use -pthread instead of -lpthread
+Message-ID: <1535526248-3759-1-git-send-email-Lei.Yang@windriver.com>
 
-Since there's no point in doing anything in this case, immediately exit the
-process.
+I run into the following error
 
-And take the opportunity to improve the error message.
+testing/selftests/kvm/dirty_log_test.c:285: undefined reference to `pthread_create'
+testing/selftests/kvm/dirty_log_test.c:297: undefined reference to `pthread_join'
+collect2: error: ld returned 1 exit status
 
-Before:
+my gcc version is gcc version 4.8.4
+"-pthread" would work everywhere
 
-  # ./userfaultfd shmem 10 10
-  nr_pages: 160, nr_pages_per_cpu: 40
-  userfaultfd syscall not available in this kernel
-  # echo $?
-  1
-
-After:
-
-  # ./userfaultfd shmem 10 10
-  nr_pages: 160, nr_pages_per_cpu: 40
-  userfaultfd syscall not available in this kernel: Function not implemented
-  # echo $?
-  4
-
-Suggested-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
-Signed-off-by: Thiago Jung Bauermann <bauerman at linux.ibm.com>
-Acked-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
+Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
 ---
- tools/testing/selftests/vm/userfaultfd.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ tools/testing/selftests/kvm/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index e4099afe7557..d728bd1cb33c 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -636,9 +636,11 @@ static int userfaultfd_open(int features)
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 03b0f55..48c970c 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -20,7 +20,7 @@ INSTALL_HDR_PATH = $(top_srcdir)/usr
+ LINUX_HDR_PATH = $(INSTALL_HDR_PATH)/include/
+ LINUX_TOOL_INCLUDE = $(top_srcdir)tools/include
+ CFLAGS += -O2 -g -std=gnu99 -I$(LINUX_TOOL_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude -I$(<D) -I..
+-LDFLAGS += -lpthread
++LDFLAGS += -pthread
  
- 	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
- 	if (uffd < 0) {
--		fprintf(stderr,
--			"userfaultfd syscall not available in this kernel\n");
--		return 1;
-+		int errnum = errno;
-+
-+		perror("userfaultfd syscall not available in this kernel");
-+
-+		exit(errnum == ENOSYS ? KSFT_SKIP : 1);
- 	}
- 	uffd_flags = fcntl(uffd, F_GETFD, NULL);
- 
+ # After inclusion, $(OUTPUT) is defined and
+ # $(TEST_GEN_PROGS) starts with $(OUTPUT)/
+-- 
+1.9.1
