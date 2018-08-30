@@ -1,41 +1,37 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Thu, 30 Aug 2018 23:19:59 +0900
-Subject: [PATCH v3 16/28] selftests/ftrace: Add kprobe event with $comm
- argument testcase
+Date: Thu, 30 Aug 2018 23:20:28 +0900
+Subject: [PATCH v3 17/28] selftests/ftrace: Add kprobe profile testcase
 In-Reply-To: <153563834333.29700.11242968505215651399.stgit@devbox>
 References: <153563834333.29700.11242968505215651399.stgit@devbox>
-Message-ID: <153563879958.29700.4453164394141470380.stgit@devbox>
+Message-ID: <153563882827.29700.10174083050862372644.stgit@devbox>
 
-Add kprobe-event with $comm argument testcase to
-ftracetest. This not only checks syntax but
-also checks log file.
+Add a testcase for testing kprobe_profile interface
+which provides per-kprobe event hit/misshit counts.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
- .../ftrace/test.d/kprobe/kprobe_args_comm.tc       |   17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc
+ .../selftests/ftrace/test.d/kprobe/profile.tc      |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc b/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
 new file mode 100644
-index 000000000000..15c1f70fcaf9
+index 000000000000..0384b525cdee
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc
-@@ -0,0 +1,17 @@
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
+@@ -0,0 +1,15 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Kprobe event with comm arguments
++# description: Kprobe dynamic event - adding and removing
 +
 +[ -f kprobe_events ] || exit_unsupported # this is configurable
 +
-+grep -A1 "fetcharg:" README | grep -q "\$comm" || exit_unsupported # this is too old
-+
-+echo 'p:testprobe _do_fork comm=$comm ' > kprobe_events
-+grep testprobe kprobe_events | grep -q 'comm=$comm'
-+test -d events/kprobes/testprobe
-+
-+echo 1 > events/kprobes/testprobe/enable
-+( echo "forked")
-+grep testprobe trace | grep -q 'comm=".*"'
-+
-+exit 0
++! grep -q 'myevent' kprobe_profile
++echo p:myevent _do_fork > kprobe_events
++grep -q 'myevent[[:space:]]*0[[:space:]]*0$' kprobe_profile
++echo 1 > events/kprobes/myevent/enable
++( echo "forked" )
++grep -q 'myevent[[:space:]]*[[:digit:]]*[[:space:]]*0$' kprobe_profile
++echo 0 > events/kprobes/myevent/enable
++echo > kprobe_events
++! grep -q 'myevent' kprobe_profile
