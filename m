@@ -1,51 +1,68 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Thu, 30 Aug 2018 23:25:11 +0900
-Subject: [PATCH v3 27/28] selftests/ftrace: Add wakeup_rt tracer testcase
+Date: Thu, 30 Aug 2018 23:25:39 +0900
+Subject: [PATCH v3 28/28] selftests/ftrace: Add ftrace cpumask testcase
 In-Reply-To: <153563834333.29700.11242968505215651399.stgit@devbox>
 References: <153563834333.29700.11242968505215651399.stgit@devbox>
-Message-ID: <153563911084.29700.11577853607938050611.stgit@devbox>
+Message-ID: <153563913896.29700.6147067496062109284.stgit@devbox>
 
-Add a testcase for wakeup_rt tracer. This requires chrt
-command to test.
+Add a testcase for tracing_cpumask with function tracer.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
  Changes in v3:
- - Check "chrt" command exist correctly.
- - Use "wakeup_rt" tracer correctly.
+ - Use nproc instead of /proc/cpuinfo
+ - If nproc doesn't exist, use /sys/devices/cpu/cpu*.
+ - Save and restore the original cpumask
 ---
- .../selftests/ftrace/test.d/tracer/wakeup_rt.tc    |   25 ++++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc
+ .../selftests/ftrace/test.d/ftrace/func_cpumask.tc |   42 ++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
 
-diff --git a/tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc b/tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
 new file mode 100644
-index 000000000000..f99b5178e00a
+index 000000000000..0e6810743576
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc
-@@ -0,0 +1,25 @@
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
+@@ -0,0 +1,42 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL2.0
-+# description: Test wakeup RT tracer
++# description: ftrace - function trace with cpumask
 +
-+if ! which chrt ; then
-+  echo "chrt is not found. This test requires chrt command."
++if ! which nproc ; then
++  nproc() {
++    ls -d /sys/devices/system/cpu/cpu[0-9]* | wc -l
++  }
++fi
++
++NP=`nproc`
++
++if [ $NP -eq 1 ] ;then
++  echo "We can not test cpumask on UP environment"
 +  exit_unresolved
 +fi
 +
-+if ! grep -wq "wakeup_rt" available_tracers ; then
-+  echo "wakeup_rt tracer is not supported"
-+  exit_unsupported
-+fi
++ORIG_CPUMASK=`cat tracing_cpumask`
 +
-+echo wakeup_rt > current_tracer
-+echo 1 > tracing_on
-+echo 0 > tracing_max_latency
-+
-+: "Wakeup a realtime task"
-+chrt -f 5 sleep 1
++do_reset() {
++  echo $ORIG_CPUMASK > tracing_cpumask
++}
 +
 +echo 0 > tracing_on
-+grep "+ \[[[:digit:]]*\]" trace
-+grep "==> \[[[:digit:]]*\]" trace
++echo > trace
++: "Bitmask only record on CPU1"
++echo 2 > tracing_cpumask
++MASK=0x`cat tracing_cpumask`
++test `printf "%d" $MASK` -eq 2 || do_reset
 +
++echo function > current_tracer
++echo 1 > tracing_on
++(echo "forked")
++echo 0 > tracing_on
++
++: "Check CPU1 events are recorded"
++grep -q -e "\[001\]" trace || do_reset
++
++: "There should be No other cpu events"
++! grep -qv -e "\[001\]" -e "^#" trace || do_reset
++
++do_reset
