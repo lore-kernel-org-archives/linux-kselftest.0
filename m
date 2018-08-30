@@ -1,37 +1,32 @@
 From: andreyknvl at google.com (Andrey Konovalov)
-Date: Thu, 30 Aug 2018 13:41:07 +0200
-Subject: [PATCH v6 02/11] uaccess: add untagged_addr definition for other
- arches
+Date: Thu, 30 Aug 2018 13:41:06 +0200
+Subject: [PATCH v6 01/11] arm64: add type casts to untagged_addr macro
 In-Reply-To: <cover.1535629099.git.andreyknvl@google.com>
 References: <cover.1535629099.git.andreyknvl@google.com>
-Message-ID: <bf96f9150ad04fc8db64ddc02fd81ec7568f5c39.1535629099.git.andreyknvl@google.com>
+Message-ID: <fb5fa982f99419a3099031cf20ddb9957e627886.1535629099.git.andreyknvl@google.com>
 
-To allow arm64 syscalls accept tagged pointers from userspace, we must
-untag them when they are passed to the kernel. Since untagging is done in
-generic parts of the kernel, the untagged_addr macro needs to be defined
-for all architectures.
-
-Define it as a noop for other architectures besides arm64.
+This patch makes the untagged_addr macro accept all kinds of address types
+(void *, unsigned long, etc.) and allows not to specify type casts in each
+place where it is used. This is done by using __typeof__.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- include/linux/uaccess.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/include/asm/uaccess.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index efe79c1cdd47..c045b4eff95e 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -13,6 +13,10 @@
+diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+index e66b0fca99c2..2d6451cbaa86 100644
+--- a/arch/arm64/include/asm/uaccess.h
++++ b/arch/arm64/include/asm/uaccess.h
+@@ -102,7 +102,8 @@ static inline unsigned long __range_ok(const void __user *addr, unsigned long si
+  * up with a tagged userland pointer. Clear the tag to get a sane pointer to
+  * pass on to access_ok(), for instance.
+  */
+-#define untagged_addr(addr)		sign_extend64(addr, 55)
++#define untagged_addr(addr)		\
++	((__typeof__(addr))sign_extend64((__u64)(addr), 55))
  
- #include <asm/uaccess.h>
- 
-+#ifndef untagged_addr
-+#define untagged_addr(addr) addr
-+#endif
-+
- /*
-  * Architectures should provide two primitives (raw_copy_{to,from}_user())
-  * and get rid of their private instances of copy_{to,from}_user() and
+ #define access_ok(type, addr, size)	__range_ok(addr, size)
+ #define user_addr_max			get_fs
 -- 
 2.19.0.rc0.228.g281dcd1b4d0-goog
