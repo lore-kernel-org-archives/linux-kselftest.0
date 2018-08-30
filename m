@@ -1,96 +1,59 @@
 From: andreyknvl@google.com (Andrey Konovalov)
-Date: Thu, 30 Aug 2018 13:41:15 +0200
-Subject: [PATCH v6 10/11] selftests,
- arm64: add a selftest for passing tagged pointers to kernel
+Date: Thu, 30 Aug 2018 13:41:13 +0200
+Subject: [PATCH v6 08/11] usb, arm64: untag user addresses in devio
 In-Reply-To: <cover.1535629099.git.andreyknvl@google.com>
 References: <cover.1535629099.git.andreyknvl@google.com>
 Message-ID:
- <087a7b141ae275a2ea2b53c9df96a1fbce9dc79a.1535629099.git.andreyknvl@google.com>
+ <c0396442f9143244bdfdf0ea3bfab55b583a328f.1535629099.git.andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180830114115.b28RYGML8tRM8oUqJCMDwGBCjtQJ8VvbXt5uMoctAKQ@z>
+Message-ID: <20180830114113.ws2k93cCHS7Y-0tZkcUkmYvUdRfT4AQEeFUwq9ph2As@z>
 
-This patch adds a simple test, that calls the uname syscall with a
-tagged user pointer as an argument. Without the kernel accepting tagged
-user pointers the test fails with EFAULT.
+devio allows to mmap memory regions and keeps them in a list. It also
+accepts a user address through an ioctl call and searches the memory
+region list for the region that contains this address. Since the addresses
+provided to mmap must not be tagged, and the addresses provided to ioctl
+might be tagged, we might compare tagged and untagged addresses during the
+search.
+
+Untag the provided addresses before searching.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- tools/testing/selftests/arm64/.gitignore      |  1 +
- tools/testing/selftests/arm64/Makefile        | 11 +++++++++++
- .../testing/selftests/arm64/run_tags_test.sh  | 12 ++++++++++++
- tools/testing/selftests/arm64/tags_test.c     | 19 +++++++++++++++++++
- 4 files changed, 43 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/.gitignore
- create mode 100644 tools/testing/selftests/arm64/Makefile
- create mode 100755 tools/testing/selftests/arm64/run_tags_test.sh
- create mode 100644 tools/testing/selftests/arm64/tags_test.c
+ drivers/usb/core/devio.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/.gitignore b/tools/testing/selftests/arm64/.gitignore
-new file mode 100644
-index 000000000000..e8fae8d61ed6
---- /dev/null
-+++ b/tools/testing/selftests/arm64/.gitignore
-@@ -0,0 +1 @@
-+tags_test
-diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
-new file mode 100644
-index 000000000000..a61b2e743e99
---- /dev/null
-+++ b/tools/testing/selftests/arm64/Makefile
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# ARCH can be overridden by the user for cross compiling
-+ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-+
-+ifneq (,$(filter $(ARCH),aarch64 arm64))
-+TEST_GEN_PROGS := tags_test
-+TEST_PROGS := run_tags_test.sh
-+endif
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/arm64/run_tags_test.sh b/tools/testing/selftests/arm64/run_tags_test.sh
-new file mode 100755
-index 000000000000..745f11379930
---- /dev/null
-+++ b/tools/testing/selftests/arm64/run_tags_test.sh
-@@ -0,0 +1,12 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+echo "--------------------"
-+echo "running tags test"
-+echo "--------------------"
-+./tags_test
-+if [ $? -ne 0 ]; then
-+	echo "[FAIL]"
-+else
-+	echo "[PASS]"
-+fi
-diff --git a/tools/testing/selftests/arm64/tags_test.c b/tools/testing/selftests/arm64/tags_test.c
-new file mode 100644
-index 000000000000..1452ed7d33f9
---- /dev/null
-+++ b/tools/testing/selftests/arm64/tags_test.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <stdint.h>
-+#include <sys/utsname.h>
-+
-+#define SHIFT_TAG(tag)		((uint64_t)(tag) << 56)
-+#define SET_TAG(ptr, tag)	(((uint64_t)(ptr) & ~SHIFT_TAG(0xff)) | \
-+					SHIFT_TAG(tag))
-+
-+int main(void)
-+{
-+	struct utsname utsname;
-+	void *ptr = &utsname;
-+	void *tagged_ptr = (void *)SET_TAG(ptr, 0x42);
-+	int err = uname(tagged_ptr);
-+	return err;
-+}
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index 6ce77b33da61..ed5ab7c8100b 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -1405,7 +1405,7 @@ find_memory_area(struct usb_dev_state *ps, const struct usbdevfs_urb *uurb)
+ {
+ 	struct usb_memory *usbm = NULL, *iter;
+ 	unsigned long flags;
+-	unsigned long uurb_start = (unsigned long)uurb->buffer;
++	unsigned long uurb_start = (unsigned long)untagged_addr(uurb->buffer);
+ 
+ 	spin_lock_irqsave(&ps->lock, flags);
+ 	list_for_each_entry(iter, &ps->memory_list, memlist) {
+@@ -1634,7 +1634,8 @@ static int proc_do_submiturb(struct usb_dev_state *ps, struct usbdevfs_urb *uurb
+ 		}
+ 	} else if (uurb->buffer_length > 0) {
+ 		if (as->usbm) {
+-			unsigned long uurb_start = (unsigned long)uurb->buffer;
++			unsigned long uurb_start =
++				(unsigned long)untagged_addr(uurb->buffer);
+ 
+ 			as->urb->transfer_buffer = as->usbm->mem +
+ 					(uurb_start - as->usbm->vm_start);
+@@ -1713,7 +1714,8 @@ static int proc_do_submiturb(struct usb_dev_state *ps, struct usbdevfs_urb *uurb
+ 	as->ps = ps;
+ 	as->userurb = arg;
+ 	if (as->usbm) {
+-		unsigned long uurb_start = (unsigned long)uurb->buffer;
++		unsigned long uurb_start =
++			(unsigned long)untagged_addr(uurb->buffer);
+ 
+ 		as->urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+ 		as->urb->transfer_dma = as->usbm->dma_handle +
 -- 
 2.19.0.rc0.228.g281dcd1b4d0-goog
