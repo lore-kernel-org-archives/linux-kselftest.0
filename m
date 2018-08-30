@@ -1,33 +1,61 @@
 From: andreyknvl at google.com (Andrey Konovalov)
-Date: Thu, 30 Aug 2018 13:41:11 +0200
-Subject: [PATCH v6 06/11] arm64: untag user address in __do_user_fault
+Date: Thu, 30 Aug 2018 13:41:08 +0200
+Subject: [PATCH v6 03/11] arm64: untag user addresses in access_ok and
+ __uaccess_mask_ptr
 In-Reply-To: <cover.1535629099.git.andreyknvl@google.com>
 References: <cover.1535629099.git.andreyknvl@google.com>
-Message-ID: <b0f447bbf035a5b0a6cffa9035f1f922266a9f35.1535629099.git.andreyknvl@google.com>
+Message-ID: <7a37e7363328f4aa10706c0294242eaa5e4e9e89.1535629099.git.andreyknvl@google.com>
 
-In __do_user_fault the fault address is being compared to TASK_SIZE to
-find out whether the address lies in the kernel or in user space. Since
-the fault address is coming from a user it can be tagged.
+copy_from_user (and a few other similar functions) are used to copy data
+from user memory into the kernel memory or vice versa. Since a user can
+provided a tagged pointer to one of the syscalls that use copy_from_user,
+we need to correctly handle such pointers.
 
-Untag the pointer before comparing.
+Do this by untagging user pointers in access_ok and in __uaccess_mask_ptr,
+before performing access validity checks.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- arch/arm64/mm/fault.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/include/asm/uaccess.h | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index 50b30ff30de4..871fb3c38b23 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -313,7 +313,7 @@ static void __do_user_fault(struct siginfo *info, unsigned int esr)
- 	 * type", so we ignore this wrinkle and just return the translation
- 	 * fault.)
- 	 */
--	if (current->thread.fault_address >= TASK_SIZE) {
-+	if (untagged_addr(current->thread.fault_address) >= TASK_SIZE) {
- 		switch (ESR_ELx_EC(esr)) {
- 		case ESR_ELx_EC_DABT_LOW:
- 			/*
+diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+index 2d6451cbaa86..fa7318d3d7d5 100644
+--- a/arch/arm64/include/asm/uaccess.h
++++ b/arch/arm64/include/asm/uaccess.h
+@@ -105,7 +105,8 @@ static inline unsigned long __range_ok(const void __user *addr, unsigned long si
+ #define untagged_addr(addr)		\
+ 	((__typeof__(addr))sign_extend64((__u64)(addr), 55))
+ 
+-#define access_ok(type, addr, size)	__range_ok(addr, size)
++#define access_ok(type, addr, size)	\
++	__range_ok(untagged_addr(addr), size)
+ #define user_addr_max			get_fs
+ 
+ #define _ASM_EXTABLE(from, to)						\
+@@ -237,7 +238,8 @@ static inline void uaccess_enable_not_uao(void)
+ 
+ /*
+  * Sanitise a uaccess pointer such that it becomes NULL if above the
+- * current addr_limit.
++ * current addr_limit. In case the pointer is tagged (has the top byte set),
++ * untag the pointer before checking.
+  */
+ #define uaccess_mask_ptr(ptr) (__typeof__(ptr))__uaccess_mask_ptr(ptr)
+ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
+@@ -245,10 +247,11 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
+ 	void __user *safe_ptr;
+ 
+ 	asm volatile(
+-	"	bics	xzr, %1, %2\n"
++	"	bics	xzr, %3, %2\n"
+ 	"	csel	%0, %1, xzr, eq\n"
+ 	: "=&r" (safe_ptr)
+-	: "r" (ptr), "r" (current_thread_info()->addr_limit)
++	: "r" (ptr), "r" (current_thread_info()->addr_limit),
++	  "r" (untagged_addr(ptr))
+ 	: "cc");
+ 
+ 	csdb();
 -- 
 2.19.0.rc0.228.g281dcd1b4d0-goog
