@@ -1,190 +1,88 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Thu, 30 Aug 2018 23:17:10 +0900
-Subject: [PATCH v3 10/28] selftests/ftrace: Use loopback address instead of
- localhost
+Date: Thu, 30 Aug 2018 23:17:38 +0900
+Subject: [PATCH v3 11/28] selftests/ftrace: Improve kprobe on module testcase
+ to load/unload module
 In-Reply-To: <153563834333.29700.11242968505215651399.stgit@devbox>
 References: <153563834333.29700.11242968505215651399.stgit@devbox>
-Message-ID: <153563862993.29700.6436770573173736555.stgit@devbox>
+Message-ID: <153563865827.29700.17322388816487128350.stgit@devbox>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180830141710.wNTWt9PSnkQFZrtySnCpgKC6FlujU1MlYXbLuDouHmI@z>
+Message-ID: <20180830141738.kyPZnVQoO6_5lD3-UZUHSPaygDvzFkxOp-Lsy4AdG4Y@z>
 
-Use raw loopback address instead of localhost, because
-"localhost" can depend on nsswitch and in some case
-we can not resolve the localhost.
+Improve kprobe events on module testcase to check module
+load/unload with disabled/enabled events. This also change
+the target module to trace_printk.ko, so it depends on
+CONFIG_SAMPLE_TRACE_PRINTK=m.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
  Changes in v3:
- - Use $LOCALHOST variable instead of raw loopback address
- - Move yield common function into test.d/functions.
+ - Fix to remove ".ko" extention from modprobe argument.
 ---
- .../selftests/ftrace/test.d/event/event-enable.tc  |    4 ----
- .../selftests/ftrace/test.d/event/event-pid.tc     |    4 ----
- .../ftrace/test.d/event/subsystem-enable.tc        |    4 ----
- .../ftrace/test.d/event/toplevel-enable.tc         |    4 ----
- .../ftrace/test.d/ftrace/func-filter-pid.tc        |    4 ----
- tools/testing/selftests/ftrace/test.d/functions    |    6 ++++++
- .../inter-event/trigger-field-variable-support.tc  |    2 +-
- .../trigger-inter-event-combined-hist.tc           |    2 +-
- .../inter-event/trigger-onmatch-action-hist.tc     |    3 ++-
- .../trigger-onmatch-onmax-action-hist.tc           |    3 ++-
- .../inter-event/trigger-onmax-action-hist.tc       |    3 ++-
- 11 files changed, 14 insertions(+), 25 deletions(-)
+ tools/testing/selftests/ftrace/config              |    4 ++
+ .../ftrace/test.d/kprobe/kprobe_module.tc          |   35 ++++++++++++++++++--
+ 2 files changed, 36 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/event/event-enable.tc b/tools/testing/selftests/ftrace/test.d/event/event-enable.tc
-index 386dbddbdc11..dfb0d5122f7b 100644
---- a/tools/testing/selftests/ftrace/test.d/event/event-enable.tc
-+++ b/tools/testing/selftests/ftrace/test.d/event/event-enable.tc
-@@ -13,10 +13,6 @@ fail() { #msg
-     exit_fail
- }
+diff --git a/tools/testing/selftests/ftrace/config b/tools/testing/selftests/ftrace/config
+index 07db5ab09cc7..32cf61b6bb54 100644
+--- a/tools/testing/selftests/ftrace/config
++++ b/tools/testing/selftests/ftrace/config
+@@ -7,3 +7,7 @@ CONFIG_HIST_TRIGGERS=y
+ CONFIG_PREEMPT_TRACER=y
+ CONFIG_IRQSOFF_TRACER=y
+ CONFIG_PREEMPTIRQ_DELAY_TEST=m
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_SAMPLES=y
++CONFIG_SAMPLE_TRACE_PRINTK=m
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
+index ec6c5fffef1e..d861bd776c5e 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
+@@ -4,11 +4,18 @@
  
--yield() {
--    ping localhost -c 1 || sleep .001 || usleep 1 || sleep 1
--}
--
- if [ ! -f set_event -o ! -d events/sched ]; then
-     echo "event tracing is not supported"
-     exit_unsupported
-diff --git a/tools/testing/selftests/ftrace/test.d/event/event-pid.tc b/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
-index 6dbf67544fde..e28897738500 100644
---- a/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
-+++ b/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
-@@ -16,10 +16,6 @@ fail() { #msg
-     exit_fail
- }
+ [ -f kprobe_events ] || exit_unsupported # this is configurable
  
--yield() {
--    ping localhost -c 1 || sleep .001 || usleep 1 || sleep 1
--}
--
- if [ ! -f set_event -o ! -d events/sched ]; then
-     echo "event tracing is not supported"
-     exit_unsupported
-diff --git a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
-index 10eb17f161b7..83a8c571e93a 100644
---- a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
-+++ b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
-@@ -13,10 +13,6 @@ fail() { #msg
-     exit_fail
- }
- 
--yield() {
--    ping localhost -c 1 || sleep .001 || usleep 1 || sleep 1
--}
--
- if [ ! -f set_event -o ! -d events/sched ]; then
-     echo "event tracing is not supported"
-     exit_unsupported
-diff --git a/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc b/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
-index 8d55a233c1a4..84d7bda08d2a 100644
---- a/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
-+++ b/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
-@@ -12,10 +12,6 @@ fail() { #msg
-     exit_fail
- }
- 
--yield() {
--    ping localhost -c 1 || sleep .001 || usleep 1 || sleep 1
--}
--
- if [ ! -f available_events -o ! -f set_event -o ! -d events ]; then
-     echo "event tracing is not supported"
-     exit_unsupported
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
-index 970903cb7834..64cfcc75e3c1 100644
---- a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
-@@ -48,10 +48,6 @@ fail() { # msg
-     exit_fail
- }
- 
--yield() {
--    ping localhost -c 1 || sleep .001 || usleep 1 || sleep 1
--}
--
- do_test() {
-     disable_tracing
- 
-diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
-index b2bfa4dd43f7..7b96e80e6b8a 100644
---- a/tools/testing/selftests/ftrace/test.d/functions
-+++ b/tools/testing/selftests/ftrace/test.d/functions
-@@ -103,3 +103,9 @@ initialize_ftrace() { # Reset ftrace to initial-state
-     clear_trace
-     enable_tracing
- }
++rmmod trace-printk ||:
++if ! modprobe trace-printk ; then
++  echo "No trace-printk sample module - please make CONFIG_SAMPLE_TRACE_PRINTK=
++m"
++  exit_unresolved;
++fi
 +
-+LOCALHOST=127.0.0.1
++MOD=trace_printk
++FUNC=trace_printk_irq_work
 +
-+yield() {
-+    ping $LOCALHOST -c 1 || sleep .001 || usleep 1 || sleep 1
-+}
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
-index 575af23df04e..f59b2a9a1f22 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
-@@ -23,7 +23,7 @@ echo 'hist:keys=comm:ts0=common_timestamp.usecs if comm=="ping"' > events/sched/
- echo 'hist:keys=next_comm:wakeup_lat=common_timestamp.usecs-$ts0:onmatch(sched.sched_waking).wakeup_latency($wakeup_lat,next_pid,sched.sched_waking.prio,next_comm) if next_comm=="ping"' > events/sched/sched_switch/trigger
- echo 'hist:keys=pid,prio,comm:vals=lat:sort=pid,prio' > events/synthetic/wakeup_latency/trigger
+ :;: "Add an event on a module function without specifying event name" ;:
  
--ping localhost -c 3
-+ping $LOCALHOST -c 3
- if ! grep -q "ping" events/synthetic/wakeup_latency/hist; then
-     fail "Failed to create inter-event histogram"
- fi
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
-index 92aef26e2631..524d9ce361e2 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
-@@ -37,7 +37,7 @@ echo 'waking+wakeup_latency u64 lat; pid_t pid' >> synthetic_events
- echo 'hist:keys=pid,lat:sort=pid,lat:ww_lat=$waking_lat+$wakeup_lat:onmatch(synthetic.wakeup_latency).waking+wakeup_latency($ww_lat,pid)' >> events/synthetic/wakeup_latency/trigger
- echo 'hist:keys=pid,lat:sort=pid,lat' >> events/synthetic/waking+wakeup_latency/trigger
+-MOD=`lsmod | head -n 2 | tail -n 1 | cut -f1 -d" "`
+-FUNC=`grep -m 1 ".* t .*\\[$MOD\\]" /proc/kallsyms | xargs | cut -f3 -d" "`
+-[ "x" != "x$MOD" -a "y" != "y$FUNC" ] || exit_unresolved
+ echo "p $MOD:$FUNC" > kprobe_events
+ PROBE_NAME=`echo $MOD:$FUNC | tr ".:" "_"`
+ test -d events/kprobes/p_${PROBE_NAME}_0 || exit_failure
+@@ -22,3 +29,25 @@ test -d events/kprobes/event1 || exit_failure
  
--ping localhost -c 3
-+ping $LOCALHOST -c 3
- if ! grep -q "pid:" events/synthetic/waking+wakeup_latency/hist; then
-     fail "Failed to create combined histogram"
- fi
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc
-index 1ef5dd4521f0..39fb65b0cd9f 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc
-@@ -29,7 +29,8 @@ echo "Test histogram variables,simple expression support and onmatch action"
- echo 'hist:keys=pid:ts0=common_timestamp.usecs if comm=="ping"' > events/sched/sched_wakeup/trigger
- echo 'hist:keys=next_pid:wakeup_lat=common_timestamp.usecs-$ts0:onmatch(sched.sched_wakeup).wakeup_latency($wakeup_lat,next_pid,next_comm) if next_comm=="ping"' > events/sched/sched_switch/trigger
- echo 'hist:keys=comm,pid,lat:wakeup_lat=lat:sort=lat' > events/synthetic/wakeup_latency/trigger
--ping localhost -c 5
+ echo "p:kprobes1/event1 $MOD:$FUNC" > kprobe_events
+ test -d events/kprobes1/event1 || exit_failure
 +
-+ping $LOCALHOST -c 5
- if ! grep -q "ping" events/synthetic/wakeup_latency/hist; then
-     fail "Failed to create onmatch action inter-event histogram"
- fi
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc
-index 7234683ee5e5..81ab3939c96a 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc
-@@ -29,7 +29,8 @@ echo "Test histogram variables,simple expression support and onmatch-onmax actio
- echo 'hist:keys=pid:ts0=common_timestamp.usecs if comm=="ping"' > events/sched/sched_wakeup/trigger
- echo 'hist:keys=next_pid:wakeup_lat=common_timestamp.usecs-$ts0:onmatch(sched.sched_wakeup).wakeup_latency($wakeup_lat,next_pid,next_comm):onmax($wakeup_lat).save(next_comm,prev_pid,prev_prio,prev_comm) if next_comm=="ping"' >> events/sched/sched_switch/trigger
- echo 'hist:keys=comm,pid,lat:wakeup_lat=lat:sort=lat' > events/synthetic/wakeup_latency/trigger
--ping localhost -c 5
++:;: "Remove target module, but event still be there" ;:
++if ! rmmod trace-printk ; then
++  echo "Failed to unload module - please enable CONFIG_MODULE_UNLOAD"
++  exit_unresolved;
++fi
++test -d events/kprobes1/event1
 +
-+ping $LOCALHOST -c 5
- if [ ! grep -q "ping" events/synthetic/wakeup_latency/hist -o ! grep -q "max:" events/sched/sched_switch/hist]; then
-     fail "Failed to create onmatch-onmax action inter-event histogram"
- fi
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc
-index 55b9630a1d70..1180ab5f0845 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc
-@@ -27,7 +27,8 @@ echo "Test onmax action"
- 
- echo 'hist:keys=pid:ts0=common_timestamp.usecs if comm=="ping"' >> events/sched/sched_waking/trigger
- echo 'hist:keys=next_pid:wakeup_lat=common_timestamp.usecs-$ts0:onmax($wakeup_lat).save(next_comm,prev_pid,prev_prio,prev_comm) if next_comm=="ping"' >> events/sched/sched_switch/trigger
--ping localhost -c 3
++:;: "Check posibility to defining events on unloaded module";:
++echo "p:event2 $MOD:$FUNC" >> kprobe_events
 +
-+ping $LOCALHOST -c 3
- if ! grep -q "max:" events/sched/sched_switch/hist; then
-     fail "Failed to create onmax action inter-event histogram"
- fi
++:;: "Target is gone, but we can prepare for next time";:
++echo 1 > events/kprobes1/event1/enable
++
++:;: "Load module again, which means the event1 should be recorded";:
++modprobe trace-printk
++grep "event1:" trace
++
++:;: "Remove the module again and check the event is not locked"
++rmmod trace-printk
++echo 0 > events/kprobes1/event1/enable
++echo "-:kprobes1/event1" >> kprobe_events
