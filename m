@@ -1,81 +1,37 @@
-From: tomeu.vizoso@collabora.com (Tomeu Vizoso)
-Date: Thu, 30 Aug 2018 17:17:31 +0200
-Subject: [PATCH v6] Add udmabuf misc device
-In-Reply-To: <20180704080005.juutrwri4kxm7yim@sirius.home.kraxel.org>
-References: <20180703075359.30349-1-kraxel@redhat.com>
- <20180703083757.GG7880@phenom.ffwll.local>
- <20180704055338.n3b7oexltaejqmcd@sirius.home.kraxel.org>
- <9818b301-9c9d-c703-d4fe-7c2d4d43ed66@collabora.com>
- <20180704080005.juutrwri4kxm7yim@sirius.home.kraxel.org>
-Message-ID: <06d8aa8d-5eac-64e2-f21e-43fe7ca96cc2@collabora.com>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Thu, 30 Aug 2018 11:50:55 -0400
+Subject: [PATCH v2 22/32] selftests/ftrace: Add ringbuffer size changing
+ testcase
+In-Reply-To: <20180830161218.e46affa5a84abd47c9cf2a39@kernel.org>
+References: <153443695002.23257.13628220023468200991.stgit@devbox>
+ <153443757416.23257.9284862385646039929.stgit@devbox>
+ <20180824191836.305ad740@gandalf.local.home>
+ <20180830161218.e46affa5a84abd47c9cf2a39@kernel.org>
+Message-ID: <20180830115055.6a28054c@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180830151731.aDj_ERlFyyn-9pe7UzRezKixlZV4o1KU0l-wXa4fhPc@z>
+Message-ID: <20180830155055.VN_gBICcn8x8frUh9gEwU6b1rWK6os8WCFA65ZnsxvY@z>
 
-On 07/04/2018 10:00 AM, Gerd Hoffmann wrote:
-> On Wed, Jul 04, 2018@09:26:39AM +0200, Tomeu Vizoso wrote:
->> On 07/04/2018 07:53 AM, Gerd Hoffmann wrote:
->>> On Tue, Jul 03, 2018@10:37:57AM +0200, Daniel Vetter wrote:
->>>> On Tue, Jul 03, 2018@09:53:58AM +0200, Gerd Hoffmann wrote:
->>>>> A driver to let userspace turn memfd regions into dma-bufs.
->>>>>
->>>>> Use case:  Allows qemu create dmabufs for the vga framebuffer or
->>>>> virtio-gpu ressources.  Then they can be passed around to display
->>>>> those guest things on the host.  To spice client for classic full
->>>>> framebuffer display, and hopefully some day to wayland server for
->>>>> seamless guest window display.
->>>>>
->>>>> qemu test branch:
->>>>>     https://git.kraxel.org/cgit/qemu/log/?h=sirius/udmabuf
->>>>>
->>>>> Cc: David Airlie <airlied at linux.ie>
->>>>> Cc: Tomeu Vizoso <tomeu.vizoso at collabora.com>
->>>>> Cc: Laurent Pinchart <laurent.pinchart at ideasonboard.com>
->>>>> Cc: Daniel Vetter <daniel at ffwll.ch>
->>>>> Signed-off-by: Gerd Hoffmann <kraxel at redhat.com>
->>>>
->>>> I think some ack for a 2nd use-case, like virtio-wl or whatever would be
->>>> really cool. To give us some assurance that this is generically useful.
->>>
->>> Tomeu?  Laurent?
->>
->> Sorry, but I think I will need some help to understand how this could help
->> in the virtio-wl case [adding Zach Reizner to CC].
->>
->> Any graphics buffers that are allocated with memfd will be shared with the
->> compositor via wl_shm, without need for dmabufs.
+On Thu, 30 Aug 2018 16:12:18 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
+
+> > I'm fine with this, but one day I need to port over some of my other
+> > tests. I have a test that stresses the ring buffer size (basically
+> > checks to see if it can cause an oom). I need to port that to
+> > selftests. But for now...  
 > 
-> Within one machine, yes.  Once virtualization is added to the mix things
-> become more complicated ...
-> 
-> When using virtio-gpu the guest will allocate graphics buffers from
-> normal (guest) ram, then register these buffers (which are allowed to be
-> scattered) with the host as resource.
-> 
-> qemu can use memfd to allocate guest ram.  Now, with the help of
-> udmabuf, qemu can create a *host* dma-buf for the *guest* graphics
-> buffer.
+> Hmm, such stress test is not good for kselftest, since it can cause
+> oom and kill some test process. Maybe we should have such stresstest
+> framework (which allows test to crash kernel)
 
-Guess each physical address in the iovec in 
-VIRTIO_GPU_CMD_RESOURCE_ATTACH_BACKING can be passed as the offset in the 
-udmabuf_create_item struct?
+The point of the test is to make sure that it doesn't kill
+everything :-)  The ring buffer code is suppose to detect that it will
+cause an OOM, and if it does that's considered a failure.
 
-> That dma-buf can be used by qemu internally (mmap it to get a linear
-> mapping of the resource, to avoid copying).  It can be passed on to
-> spice-client, to display the guest framebuffer.
-> 
-> And I think it could also be quite useful to pass guest wayland windows
-> to the host compositor, without mapping host-allocated buffers into the
-> guest, so we don't have do deal with the "find some address space for
-> the mapping" issue in the first place.
+Just like any other test, if it fails, it can crash the kernel. But the
+ring buffer code is suppose to be able to keep the kernel from crashing
+(including triggering OOM) if the buffer size is stressed.
 
-Sounds good to me if the answer to the above is "yes".
+Maybe I'll port that over today :-/
 
-> There are more things needed to
-> complete this of course, but it's a building block ...
 
-Are you thinking of anything else besides passing the winsrv protocol 
-across the guest/host boundary? Just wondering if I'm missing something.
-
-Thanks,
-
-Tomeu
+-- Steve
