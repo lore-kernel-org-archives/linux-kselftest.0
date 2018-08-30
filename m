@@ -1,36 +1,34 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Thu, 30 Aug 2018 23:16:13 +0900
-Subject: [PATCH v3 08/28] selftests/ftrace: Fix to test kprobe $comm arg only
- if available
+Date: Thu, 30 Aug 2018 23:16:41 +0900
+Subject: [PATCH v3 09/28] selftests/ftrace: Fix checkbashisms errors
 In-Reply-To: <153563834333.29700.11242968505215651399.stgit@devbox>
 References: <153563834333.29700.11242968505215651399.stgit@devbox>
-Message-ID: <153563857337.29700.5631759295666790709.stgit@devbox>
+Message-ID: <153563860167.29700.13365388020478810834.stgit@devbox>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180830141613.XXzcmp2O79CPYsETU8d7yFyk73DKVzwvFqSlsJj-Z0o@z>
+Message-ID: <20180830141641.siakUK6Kuhx2zsJcRQicfMmVgq4_Qp4jFzRBwCmNYRE@z>
 
-Test $comm in kprobe-event argument syntax testcase
-only if it is supported on the kernel because
-$comm has been introduced 4.8 kernel.
-So on older stable kernel, it should be skipped.
+Fix a test case to make checkbashisms clean.
 
 Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
 ---
- .../ftrace/test.d/kprobe/kprobe_args_syntax.tc     |    3 +++
- 1 file changed, 3 insertions(+)
+ .../trigger/trigger-trace-marker-snapshot.tc       |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
-index d783a8ce0692..6f0f19953193 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
-@@ -75,8 +75,11 @@ test_badarg "\$stackp" "\$stack0+10" "\$stack1-10"
- echo "r ${PROBEFUNC} \$retval" > kprobe_events
- ! echo "p ${PROBEFUNC} \$retval" > kprobe_events
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-snapshot.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-snapshot.tc
+index 79ce7d51350b..df246e505af7 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-snapshot.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-snapshot.tc
+@@ -39,10 +39,10 @@ test_trace() {
+ 	fi
+ 	echo "testing $line for >$x<"
+ 	match=`echo $line | sed -e "s/>$x<//"`
+-	if [ "$line" == "$match" ]; then
++	if [ "$line" = "$match" ]; then
+ 	    fail "$line does not have >$x< in it"
+ 	fi
+-	let x=$x+2
++	x=$((x+2))
+     done
+ }
  
-+# $comm was introduced in 4.8, older kernels reject it.
-+if grep -A1 "fetcharg:" README | grep -q '\$comm' ; then
- : "Comm access"
- test_goodarg "\$comm"
-+fi
- 
- : "Indirect memory access"
- test_goodarg "+0(${GOODREG})" "-0(${GOODREG})" "+10(\$stack)" \
