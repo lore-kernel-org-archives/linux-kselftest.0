@@ -1,85 +1,101 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Thu, 30 Aug 2018 16:12:18 +0900
-Subject: [PATCH v2 22/32] selftests/ftrace: Add ringbuffer size changing
- testcase
-In-Reply-To: <20180824191836.305ad740@gandalf.local.home>
+Date: Thu, 30 Aug 2018 16:48:40 +0900
+Subject: [PATCH v2 31/32] selftests/ftrace: Add output format testcase
+In-Reply-To: <20180824221926.40cae9f9@vmware.local.home>
 References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443757416.23257.9284862385646039929.stgit@devbox>
- <20180824191836.305ad740@gandalf.local.home>
-Message-ID: <20180830161218.e46affa5a84abd47c9cf2a39@kernel.org>
+ <153443782973.23257.16320326555688796000.stgit@devbox>
+ <20180824221926.40cae9f9@vmware.local.home>
+Message-ID: <20180830164840.35171b39d82d1893cb2a1405@kernel.org>
 
-On Fri, 24 Aug 2018 19:18:36 -0400
+On Fri, 24 Aug 2018 22:19:26 -0400
 Steven Rostedt <rostedt at goodmis.org> wrote:
 
-> On Fri, 17 Aug 2018 01:39:34 +0900
+> On Fri, 17 Aug 2018 01:43:49 +0900
 > Masami Hiramatsu <mhiramat at kernel.org> wrote:
 > 
-> > Add a testcase for changing ringbuffer size. This tests
-> > not only ringbuffer size but also tests the imbalance
-> > per-cpu buffer size change too.
-> > 
-> > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+> > Add a testcase for tracing output format using trace_marker.
+> > This tests raw, hex and bin format output.
 > 
-> I'm fine with this, but one day I need to port over some of my other
-> tests. I have a test that stresses the ring buffer size (basically
-> checks to see if it can cause an oom). I need to port that to
-> selftests. But for now...
+> I'd like to deprecate these formats. They are useless ever since we
+> implemented trace_pipe_raw.
+> 
+> Let's not add this test.
 
-Hmm, such stress test is not good for kselftest, since it can cause
-oom and kill some test process. Maybe we should have such stresstest
-framework (which allows test to crash kernel)
+OK, I'll drop it.
+I think this test code itself can reuse for testing trace_pipe_raw too.
+(for next time?)
 
-> 
-> Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-> 
-> But, one more thing..
-> 
-> > ---
-> >  .../ftrace/test.d/00basic/ringbuffer_size.tc       |   21 ++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/ringbuffer_size.tc
-> > 
-> > diff --git a/tools/testing/selftests/ftrace/test.d/00basic/ringbuffer_size.tc b/tools/testing/selftests/ftrace/test.d/00basic/ringbuffer_size.tc
-> > new file mode 100644
-> > index 000000000000..9224f33b3194
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/ftrace/test.d/00basic/ringbuffer_size.tc
-> > @@ -0,0 +1,21 @@
-> > +#!/bin/sh
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +# description: Change the ringbuffer size
-> 
-> Should add:
-> 
->  # flags: instance
-
-OK, I'll add it.
-
-Thank you!
+Thank you,
 
 > 
-> As this works for instances as well.
+> Thanks,
 > 
 > -- Steve
 > 
+> > 
+> > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+> > ---
+> >  .../ftrace/test.d/00basic/print_format.tc          |   51 ++++++++++++++++++++
+> >  1 file changed, 51 insertions(+)
+> >  create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/print_format.tc
+> > 
+> > diff --git a/tools/testing/selftests/ftrace/test.d/00basic/print_format.tc b/tools/testing/selftests/ftrace/test.d/00basic/print_format.tc
+> > new file mode 100644
+> > index 000000000000..55feb542e83e
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/ftrace/test.d/00basic/print_format.tc
+> > @@ -0,0 +1,51 @@
+> > +#!/bin/sh
+> > +# SPDX-License-Identifier: GPL2.0
+> > +# description: Change print trace format
 > > +
-> > +rb_size_test() {
-> > +ORIG=`cat buffer_size_kb`
+> > +if [ ! -f trace_marker ]; then
+> > +  echo "trace_marker is not supported, can not continue testing"
+> > +  exit_unresolved
+> > +fi
 > > +
-> > +expr $ORIG / 2 > buffer_size_kb
-> > +
-> > +expr $ORIG \* 2 > buffer_size_kb
-> > +
-> > +echo $ORIG > buffer_size_kb
+> > +do_reset() {
+> > +  if [ `cat options/bin` -eq 1 ]; then
+> > +    grep -v "^#" trace | od -h | cut -f 2- -d " " | xargs echo
+> > +  fi
+> > +  echo 0 > options/hex
+> > +  echo 0 > options/raw
+> > +  echo 0 > options/bin
+> > +  cat trace
+> > +  exit 1
 > > +}
 > > +
-> > +rb_size_test
+> > +echo > trace
+> > +echo "abcdefgh" > trace_marker
+> > +echo 0 > tracing_on
 > > +
-> > +: "If per-cpu buffer is supported, imbalance it"
-> > +if [ -d per_cpu/cpu0 ]; then
-> > +  cd per_cpu/cpu0
-> > +  rb_size_test
-> > +fi
+> > +: "Get the pid and cpu#"
+> > +IDS=`grep -v "^#" trace | sed -e 's/[[:space:]]*.*-\([[:digit:]]*\)[[:space:]]*\[\([[:digit:]]*\)\].*/\1 \2/'`
+> > +
+> > +read_pid_cpu() {
+> > +  _PID=$1
+> > +  _CPU=`printf "%d" $2`
+> > +}
+> > +
+> > +read_pid_cpu $IDS
+> > +
+> > +: "Test raw output format"
+> > +echo 1 > options/raw
+> > +grep -v "^#" trace | grep "^$_PID $_CPU" || do_reset
+> > +echo 0 > options/raw
+> > +
+> > +: "Test hex output format"
+> > +echo 1 > options/hex
+> > +PAT=`printf "%08x %08x" $_PID $_CPU`
+> > +grep -v "^#" trace | grep "^$PAT" || do_reset
+> > +echo 0 > options/hex
+> > +
+> > +: "Test bin output format"
+> > +echo 1 > options/bin
+> > +PAT=`printf "%04x [[:xdigit:]]* [[:xdigit:]]*%02x" $_PID $_CPU`
+> > +# Make a stream of hexdump
+> > +grep -v "^#" trace | od -h | cut -f 2- -d " " | xargs echo | grep "$PAT" || do_reset
+> > +echo 0 > options/bin
 > 
 
 
