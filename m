@@ -1,39 +1,20 @@
-From: igor.stoppa at gmail.com (Igor Stoppa)
-Date: Sat,  1 Sep 2018 00:24:08 +0300
-Subject: [PATCH] selftest: vm: add unlikely() to BUG_ON()
-Message-ID: <20180831212408.20071-1-igor.stoppa@huawei.com>
+From: corbet at lwn.net (Jonathan Corbet)
+Date: Fri, 31 Aug 2018 16:26:36 -0600
+Subject: [PATCH] doc: dev-tools: kselftest.rst: update config file location
+In-Reply-To: <55c84596-0e12-0211-dbee-9eddb9a0ab28@kernel.org>
+References: <20180824124744.9842-1-anders.roxell@linaro.org>
+ <55c84596-0e12-0211-dbee-9eddb9a0ab28@kernel.org>
+Message-ID: <20180831162636.791d4146@lwn.net>
 
-BUG_ON() is unlikely() to BUG()
+On Mon, 27 Aug 2018 11:57:58 -0600
+Shuah Khan <shuah at kernel.org> wrote:
 
-For unlikely(), borrow the definition from tools/include/linux/compiler.h
+> Jo Jon,
+> 
+> This patch looks good. Here is my Ack for it go through doc tree.
+> 
+> Acked-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
 
-Signed-off-by: Igor Stoppa <igor.stoppa at huawei.com>
-Cc: Dmitry Safonov <dima at arista.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: linux-kselftest at vger.kernel.org
-Cc: linux-kernel at vger.kernel.org
----
- tools/testing/selftests/vm/map_populate.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Applied, thanks.
 
-diff --git a/tools/testing/selftests/vm/map_populate.c b/tools/testing/selftests/vm/map_populate.c
-index 6b8aeaa0bf7a..1bf8ff068dcd 100644
---- a/tools/testing/selftests/vm/map_populate.c
-+++ b/tools/testing/selftests/vm/map_populate.c
-@@ -21,9 +21,13 @@
- #define MMAP_SZ		4096
- #endif
- 
-+#ifndef unlikely
-+# define unlikely(x)		__builtin_expect(!!(x), 0)
-+#endif
-+
- #define BUG_ON(condition, description)					\
- 	do {								\
--		if (condition) {					\
-+		if (unlikely(condition)) {				\
- 			fprintf(stderr, "[FAIL]\t%s:%d\t%s:%s\n", __func__, \
- 				__LINE__, (description), strerror(errno)); \
- 			exit(1);					\
--- 
-2.17.1
+jon
