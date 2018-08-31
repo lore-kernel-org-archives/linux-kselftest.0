@@ -1,37 +1,39 @@
-From: viro at ZenIV.linux.org.uk (Al Viro)
-Date: Fri, 31 Aug 2018 14:42:44 +0100
-Subject: [PATCH v6 11/11] arm64: annotate user pointers casts detected by
- sparse
-In-Reply-To: <20180831081123.6mo62xnk54pvlxmc@ltop.local>
-References: <cover.1535629099.git.andreyknvl@google.com>
- <5d54526e5ff2e5ad63d0dfdd9ab17cf359afa4f2.1535629099.git.andreyknvl@google.com>
- <20180831081123.6mo62xnk54pvlxmc@ltop.local>
-Message-ID: <20180831134244.GB19965@ZenIV.linux.org.uk>
+From: igor.stoppa at gmail.com (Igor Stoppa)
+Date: Sat,  1 Sep 2018 00:24:08 +0300
+Subject: [PATCH] selftest: vm: add unlikely() to BUG_ON()
+Message-ID: <20180831212408.20071-1-igor.stoppa@huawei.com>
 
-On Fri, Aug 31, 2018 at 10:11:24AM +0200, Luc Van Oostenryck wrote:
-> On Thu, Aug 30, 2018 at 01:41:16PM +0200, Andrey Konovalov wrote:
-> > This patch adds __force annotations for __user pointers casts detected by
-> > sparse with the -Wcast-from-as flag enabled (added in [1]).
-> > 
-> > [1] https://github.com/lucvoo/sparse-dev/commit/5f960cb10f56ec2017c128ef9d16060e0145f292
-> 
-> Hi,
-> 
-> It would be nice to have some explanation for why these added __force
-> are useful.
+BUG_ON() is unlikely() to BUG()
 
-	It would be even more useful if that series would either deal with
-the noise for real ("that's what we intend here, that's what we intend there,
-here's a primitive for such-and-such kind of cases, here we actually
-ought to pass __user pointer instead of unsigned long", etc.) or left it
-unmasked.
+For unlikely(), borrow the definition from tools/include/linux/compiler.h
 
-	As it is, __force says only one thing: "I know the code is doing
-the right thing here".  That belongs in primitives, and I do *not* mean the
-#define cast_to_ulong(x) ((__force unsigned long)(x))
-kind.
+Signed-off-by: Igor Stoppa <igor.stoppa at huawei.com>
+Cc: Dmitry Safonov <dima at arista.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: linux-kselftest at vger.kernel.org
+Cc: linux-kernel at vger.kernel.org
+---
+ tools/testing/selftests/vm/map_populate.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-	Folks, if you don't want to deal with that - leave the warnings be.
-They do carry more information than "someone has slapped __force in that place".
-
-Al, very annoyed by that kind of information-hiding crap...
+diff --git a/tools/testing/selftests/vm/map_populate.c b/tools/testing/selftests/vm/map_populate.c
+index 6b8aeaa0bf7a..1bf8ff068dcd 100644
+--- a/tools/testing/selftests/vm/map_populate.c
++++ b/tools/testing/selftests/vm/map_populate.c
+@@ -21,9 +21,13 @@
+ #define MMAP_SZ		4096
+ #endif
+ 
++#ifndef unlikely
++# define unlikely(x)		__builtin_expect(!!(x), 0)
++#endif
++
+ #define BUG_ON(condition, description)					\
+ 	do {								\
+-		if (condition) {					\
++		if (unlikely(condition)) {				\
+ 			fprintf(stderr, "[FAIL]\t%s:%d\t%s:%s\n", __func__, \
+ 				__LINE__, (description), strerror(errno)); \
+ 			exit(1);					\
+-- 
+2.17.1
