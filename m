@@ -1,51 +1,40 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Thu, 30 Aug 2018 19:40:53 -0400
-Subject: [PATCH v2 22/32] selftests/ftrace: Add ringbuffer size changing
- testcase
-In-Reply-To: <20180831083528.ae339a660d28a71e02f03ed4@kernel.org>
-References: <153443695002.23257.13628220023468200991.stgit@devbox>
- <153443757416.23257.9284862385646039929.stgit@devbox>
- <20180824191836.305ad740@gandalf.local.home>
- <20180830161218.e46affa5a84abd47c9cf2a39@kernel.org>
- <20180830115055.6a28054c@gandalf.local.home>
- <20180831083528.ae339a660d28a71e02f03ed4@kernel.org>
-Message-ID: <20180830194053.4f1351b1@gandalf.local.home>
+From: kraxel at redhat.com (Gerd Hoffmann)
+Date: Fri, 31 Aug 2018 09:04:24 +0200
+Subject: [PATCH v6] Add udmabuf misc device
+In-Reply-To: <06d8aa8d-5eac-64e2-f21e-43fe7ca96cc2@collabora.com>
+References: <20180703075359.30349-1-kraxel@redhat.com>
+ <20180703083757.GG7880@phenom.ffwll.local>
+ <20180704055338.n3b7oexltaejqmcd@sirius.home.kraxel.org>
+ <9818b301-9c9d-c703-d4fe-7c2d4d43ed66@collabora.com>
+ <20180704080005.juutrwri4kxm7yim@sirius.home.kraxel.org>
+ <06d8aa8d-5eac-64e2-f21e-43fe7ca96cc2@collabora.com>
+Message-ID: <20180831070424.3xoxfy54vyxbdfzd@sirius.home.kraxel.org>
 
-On Fri, 31 Aug 2018 08:35:28 +0900
-Masami Hiramatsu <mhiramat at kernel.org> wrote:
+  Hi,
 
-> On Thu, 30 Aug 2018 11:50:55 -0400
-> Steven Rostedt <rostedt at goodmis.org> wrote:
+> > qemu can use memfd to allocate guest ram.  Now, with the help of
+> > udmabuf, qemu can create a *host* dma-buf for the *guest* graphics
+> > buffer.
 > 
-> > On Thu, 30 Aug 2018 16:12:18 +0900
-> > Masami Hiramatsu <mhiramat at kernel.org> wrote:
-> >   
-> > > > I'm fine with this, but one day I need to port over some of my other
-> > > > tests. I have a test that stresses the ring buffer size (basically
-> > > > checks to see if it can cause an oom). I need to port that to
-> > > > selftests. But for now...    
-> > > 
-> > > Hmm, such stress test is not good for kselftest, since it can cause
-> > > oom and kill some test process. Maybe we should have such stresstest
-> > > framework (which allows test to crash kernel)  
-> > 
-> > The point of the test is to make sure that it doesn't kill
-> > everything :-)  The ring buffer code is suppose to detect that it will
-> > cause an OOM, and if it does that's considered a failure.  
-> 
-> Ah, OK, so the test itself must not cause OOM. That's reasonable. :)
-> 
-> > 
-> > Just like any other test, if it fails, it can crash the kernel. But the
-> > ring buffer code is suppose to be able to keep the kernel from crashing
-> > (including triggering OOM) if the buffer size is stressed.
-> > 
-> > Maybe I'll port that over today :-/  
-> 
-> Looking forward it!
-> 
+> Guess each physical address in the iovec in
+> VIRTIO_GPU_CMD_RESOURCE_ATTACH_BACKING can be passed as the offset in the
+> udmabuf_create_item struct?
 
-Unfortunately, I didn't get to it, and will be on PTO for the next 4
-days. Perhaps next week.
+Exactly.
 
--- Steve
+https://git.kraxel.org/cgit/qemu/commit/?h=sirius/udmabuf&id=515a5b9f1215ea668a992e39d66993a17a940801
+
+> Are you thinking of anything else besides passing the winsrv protocol across
+> the guest/host boundary? Just wondering if I'm missing something.
+
+The patch above uses the dmabuf internally in qemu.  It simply mmaps it,
+so qemu has a linear representation of the resource and can use it as
+pixman image backing storage without copying the pixel data.
+
+So it is useful even without actually exporting the dmabuf to other
+processes.
+
+cheers,
+  Gerd
+
+PS: Any chance you can review the v7 patch?
