@@ -1,42 +1,23 @@
-From: kraxel@redhat.com (Gerd Hoffmann)
-Date: Fri, 31 Aug 2018 09:04:24 +0200
-Subject: [PATCH v6] Add udmabuf misc device
-In-Reply-To: <06d8aa8d-5eac-64e2-f21e-43fe7ca96cc2@collabora.com>
-References: <20180703075359.30349-1-kraxel@redhat.com>
- <20180703083757.GG7880@phenom.ffwll.local>
- <20180704055338.n3b7oexltaejqmcd@sirius.home.kraxel.org>
- <9818b301-9c9d-c703-d4fe-7c2d4d43ed66@collabora.com>
- <20180704080005.juutrwri4kxm7yim@sirius.home.kraxel.org>
- <06d8aa8d-5eac-64e2-f21e-43fe7ca96cc2@collabora.com>
-Message-ID: <20180831070424.3xoxfy54vyxbdfzd@sirius.home.kraxel.org>
+From: luc.vanoostenryck@gmail.com (Luc Van Oostenryck)
+Date: Fri, 31 Aug 2018 10:11:24 +0200
+Subject: [PATCH v6 11/11] arm64: annotate user pointers casts detected by
+ sparse
+In-Reply-To: <5d54526e5ff2e5ad63d0dfdd9ab17cf359afa4f2.1535629099.git.andreyknvl@google.com>
+References: <cover.1535629099.git.andreyknvl@google.com>
+ <5d54526e5ff2e5ad63d0dfdd9ab17cf359afa4f2.1535629099.git.andreyknvl@google.com>
+Message-ID: <20180831081123.6mo62xnk54pvlxmc@ltop.local>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180831070424.6zaMDnaqmbWWu66pxlfexh7GZC9fNGJqt2lnQx79e1I@z>
+Message-ID: <20180831081124.OggKvENHPpdwCY1EBv_NF6t9R0HJzjGlSJ7yBO8CxxY@z>
 
-  Hi,
-
-> > qemu can use memfd to allocate guest ram.  Now, with the help of
-> > udmabuf, qemu can create a *host* dma-buf for the *guest* graphics
-> > buffer.
+On Thu, Aug 30, 2018@01:41:16PM +0200, Andrey Konovalov wrote:
+> This patch adds __force annotations for __user pointers casts detected by
+> sparse with the -Wcast-from-as flag enabled (added in [1]).
 > 
-> Guess each physical address in the iovec in
-> VIRTIO_GPU_CMD_RESOURCE_ATTACH_BACKING can be passed as the offset in the
-> udmabuf_create_item struct?
+> [1] https://github.com/lucvoo/sparse-dev/commit/5f960cb10f56ec2017c128ef9d16060e0145f292
 
-Exactly.
+Hi,
 
-https://git.kraxel.org/cgit/qemu/commit/?h=sirius/udmabuf&id=515a5b9f1215ea668a992e39d66993a17a940801
+It would be nice to have some explanation for why these added __force
+are useful.
 
-> Are you thinking of anything else besides passing the winsrv protocol across
-> the guest/host boundary? Just wondering if I'm missing something.
-
-The patch above uses the dmabuf internally in qemu.  It simply mmaps it,
-so qemu has a linear representation of the resource and can use it as
-pixman image backing storage without copying the pixel data.
-
-So it is useful even without actually exporting the dmabuf to other
-processes.
-
-cheers,
-  Gerd
-
-PS: Any chance you can review the v7 patch?
+-- Luc Van Oostenryck
