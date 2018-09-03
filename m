@@ -1,108 +1,69 @@
-From: mauricio.vasquez@polito.it (Mauricio Vasquez B)
-Date: Mon,  3 Sep 2018 19:01:59 +0200
-Subject: [PATCH bpf] selftests/bpf/test_progs: do not check errno == 0
-Message-ID: <1535994119-4853-1-git-send-email-mauricio.vasquez@polito.it>
+From: gregkh@linuxfoundation.org (Greg Kroah-Hartman)
+Date: Mon,  3 Sep 2018 18:55:40 +0200
+Subject: [PATCH 4.14 054/165] selftests/ftrace: Add snapshot and tracing_on
+ test case
+In-Reply-To: <20180903165655.003605184@linuxfoundation.org>
+References: <20180903165655.003605184@linuxfoundation.org>
+Message-ID: <20180903165657.845228106@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180903170159.VVwQqQPaPF9yN6-3_pdAiwyOk6O8QKmgpUltkhUp87o@z>
+Message-ID: <20180903165540.FNx-3DVnec47aAR1nrP5NdLhiPR02QO_eb66aXG60LA@z>
 
-The errno man page states: "The value in errno is significant only when
-the return value of the call indicated an error..." then it is not correct
-to check it, it could be different than zero even if the function
-succeeded.
+4.14-stable review patch.  If anyone has any objections, please let me know.
 
-It causes some false positives if errno is set by a previous function.
+------------------
 
-Signed-off-by: Mauricio Vasquez B <mauricio.vasquez at polito.it>
+From: Masami Hiramatsu <mhiramat@kernel.org>
+
+[ Upstream commit 82f4f3e69c5c29bce940dd87a2c0f16c51d48d17 ]
+
+Add a testcase for checking snapshot and tracing_on
+relationship. This ensures that the snapshotting doesn't
+affect current tracing on/off settings.
+
+Link: http://lkml.kernel.org/r/153149932412.11274.15289227592627901488.stgit at devbox
+
+Cc: Tom Zanussi <tom.zanussi at linux.intel.com>
+Cc: Hiraku Toyooka <hiraku.toyooka at cybertrust.co.jp>
+Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+Cc: Ingo Molnar <mingo at redhat.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: linux-kselftest at vger.kernel.org
+Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+Signed-off-by: Sasha Levin <alexander.levin at microsoft.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
 ---
- tools/testing/selftests/bpf/test_progs.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ tools/testing/selftests/ftrace/test.d/00basic/snapshot.tc |   28 ++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/snapshot.tc
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 0ef68204c84b..63a671803ed6 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -112,13 +112,13 @@ static void test_pkt_access(void)
- 
- 	err = bpf_prog_test_run(prog_fd, 100000, &pkt_v4, sizeof(pkt_v4),
- 				NULL, NULL, &retval, &duration);
--	CHECK(err || errno || retval, "ipv4",
-+	CHECK(err || retval, "ipv4",
- 	      "err %d errno %d retval %d duration %d\n",
- 	      err, errno, retval, duration);
- 
- 	err = bpf_prog_test_run(prog_fd, 100000, &pkt_v6, sizeof(pkt_v6),
- 				NULL, NULL, &retval, &duration);
--	CHECK(err || errno || retval, "ipv6",
-+	CHECK(err || retval, "ipv6",
- 	      "err %d errno %d retval %d duration %d\n",
- 	      err, errno, retval, duration);
- 	bpf_object__close(obj);
-@@ -153,14 +153,14 @@ static void test_xdp(void)
- 	err = bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4),
- 				buf, &size, &retval, &duration);
- 
--	CHECK(err || errno || retval != XDP_TX || size != 74 ||
-+	CHECK(err || retval != XDP_TX || size != 74 ||
- 	      iph->protocol != IPPROTO_IPIP, "ipv4",
- 	      "err %d errno %d retval %d size %d\n",
- 	      err, errno, retval, size);
- 
- 	err = bpf_prog_test_run(prog_fd, 1, &pkt_v6, sizeof(pkt_v6),
- 				buf, &size, &retval, &duration);
--	CHECK(err || errno || retval != XDP_TX || size != 114 ||
-+	CHECK(err || retval != XDP_TX || size != 114 ||
- 	      iph6->nexthdr != IPPROTO_IPV6, "ipv6",
- 	      "err %d errno %d retval %d size %d\n",
- 	      err, errno, retval, size);
-@@ -185,13 +185,13 @@ static void test_xdp_adjust_tail(void)
- 	err = bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4),
- 				buf, &size, &retval, &duration);
- 
--	CHECK(err || errno || retval != XDP_DROP,
-+	CHECK(err || retval != XDP_DROP,
- 	      "ipv4", "err %d errno %d retval %d size %d\n",
- 	      err, errno, retval, size);
- 
- 	err = bpf_prog_test_run(prog_fd, 1, &pkt_v6, sizeof(pkt_v6),
- 				buf, &size, &retval, &duration);
--	CHECK(err || errno || retval != XDP_TX || size != 54,
-+	CHECK(err || retval != XDP_TX || size != 54,
- 	      "ipv6", "err %d errno %d retval %d size %d\n",
- 	      err, errno, retval, size);
- 	bpf_object__close(obj);
-@@ -254,14 +254,14 @@ static void test_l4lb(const char *file)
- 
- 	err = bpf_prog_test_run(prog_fd, NUM_ITER, &pkt_v4, sizeof(pkt_v4),
- 				buf, &size, &retval, &duration);
--	CHECK(err || errno || retval != 7/*TC_ACT_REDIRECT*/ || size != 54 ||
-+	CHECK(err || retval != 7/*TC_ACT_REDIRECT*/ || size != 54 ||
- 	      *magic != MAGIC_VAL, "ipv4",
- 	      "err %d errno %d retval %d size %d magic %x\n",
- 	      err, errno, retval, size, *magic);
- 
- 	err = bpf_prog_test_run(prog_fd, NUM_ITER, &pkt_v6, sizeof(pkt_v6),
- 				buf, &size, &retval, &duration);
--	CHECK(err || errno || retval != 7/*TC_ACT_REDIRECT*/ || size != 74 ||
-+	CHECK(err || retval != 7/*TC_ACT_REDIRECT*/ || size != 74 ||
- 	      *magic != MAGIC_VAL, "ipv6",
- 	      "err %d errno %d retval %d size %d magic %x\n",
- 	      err, errno, retval, size, *magic);
-@@ -343,14 +343,14 @@ static void test_xdp_noinline(void)
- 
- 	err = bpf_prog_test_run(prog_fd, NUM_ITER, &pkt_v4, sizeof(pkt_v4),
- 				buf, &size, &retval, &duration);
--	CHECK(err || errno || retval != 1 || size != 54 ||
-+	CHECK(err || retval != 1 || size != 54 ||
- 	      *magic != MAGIC_VAL, "ipv4",
- 	      "err %d errno %d retval %d size %d magic %x\n",
- 	      err, errno, retval, size, *magic);
- 
- 	err = bpf_prog_test_run(prog_fd, NUM_ITER, &pkt_v6, sizeof(pkt_v6),
- 				buf, &size, &retval, &duration);
--	CHECK(err || errno || retval != 1 || size != 74 ||
-+	CHECK(err || retval != 1 || size != 74 ||
- 	      *magic != MAGIC_VAL, "ipv6",
- 	      "err %d errno %d retval %d size %d magic %x\n",
- 	      err, errno, retval, size, *magic);
--- 
-2.7.4
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/00basic/snapshot.tc
+@@ -0,0 +1,28 @@
++#!/bin/sh
++# description: Snapshot and tracing setting
++# flags: instance
++
++[ ! -f snapshot ] && exit_unsupported
++
++echo "Set tracing off"
++echo 0 > tracing_on
++
++echo "Allocate and take a snapshot"
++echo 1 > snapshot
++
++# Since trace buffer is empty, snapshot is also empty, but allocated
++grep -q "Snapshot is allocated" snapshot
++
++echo "Ensure keep tracing off"
++test `cat tracing_on` -eq 0
++
++echo "Set tracing on"
++echo 1 > tracing_on
++
++echo "Take a snapshot again"
++echo 1 > snapshot
++
++echo "Ensure keep tracing on"
++test `cat tracing_on` -eq 1
++
++exit 0
