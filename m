@@ -1,25 +1,49 @@
-From: daniel@iogearbox.net (Daniel Borkmann)
-Date: Wed, 31 Oct 2018 23:11:23 +0100
-Subject: [PATCH v2] kselftests/bpf: use ping6 as the default ipv6 ping
- binary if it exists
-In-Reply-To: <CAPhsuW4Bm2H7sV8xgzcD9s=9d_z1bpeEYbo2OMTTh9mcgmrC0w@mail.gmail.com>
-References: <1540869355-13324-1-git-send-email-lizhijian@cn.fujitsu.com>
- <CAPhsuW4Bm2H7sV8xgzcD9s=9d_z1bpeEYbo2OMTTh9mcgmrC0w@mail.gmail.com>
-Message-ID: <9244917c-05d7-113d-fef8-ff5251c8e0fe@iogearbox.net>
+From: andreyknvl@google.com (Andrey Konovalov)
+Date: Mon, 3 Sep 2018 14:34:27 +0200
+Subject: [PATCH v6 11/11] arm64: annotate user pointers casts detected by
+ sparse
+In-Reply-To: <20180831134244.GB19965@ZenIV.linux.org.uk>
+References: <cover.1535629099.git.andreyknvl@google.com>
+ <5d54526e5ff2e5ad63d0dfdd9ab17cf359afa4f2.1535629099.git.andreyknvl@google.com>
+ <20180831081123.6mo62xnk54pvlxmc@ltop.local>
+ <20180831134244.GB19965@ZenIV.linux.org.uk>
+Message-ID:
+ <CAAeHK+w86m6YztnTGhuZPKRczb-+znZ1hiJskPXeQok4SgcaOw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181031221123.Ei7KaH2Kgw8ixYgr4hg2iW2NK9nic0X411M1LAopBO4@z>
+Message-ID: <20180903123427.wEdpqv5xmkItTcLJsf3ytByqCwbOlcPuYVpei6XXzBA@z>
 
-On 10/30/2018 07:35 PM, Song Liu wrote:
-> On Mon, Oct 29, 2018@7:35 PM Li Zhijian <lizhijian@cn.fujitsu.com> wrote:
+On Fri, Aug 31, 2018@3:42 PM, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> On Fri, Aug 31, 2018@10:11:24AM +0200, Luc Van Oostenryck wrote:
+>> On Thu, Aug 30, 2018@01:41:16PM +0200, Andrey Konovalov wrote:
+>> > This patch adds __force annotations for __user pointers casts detected by
+>> > sparse with the -Wcast-from-as flag enabled (added in [1]).
+>> >
+>> > [1] https://github.com/lucvoo/sparse-dev/commit/5f960cb10f56ec2017c128ef9d16060e0145f292
 >>
->> ping binary on some distros doesn't support "ping -6" anymore.
+>> Hi,
 >>
->> Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
-> 
-> I think this should go bpf-next. Please resubmit when the bpf-next tree is open
-> (after the merge window). Other than this:
-> 
-> Acked-by: Song Liu <songliubraving at fb.com>
+>> It would be nice to have some explanation for why these added __force
+>> are useful.
 
-Ok, applied to bpf tree, thanks. Given the fix, though not too urgent perhaps,
-is small and isolated enough, I've applied it there.
+I'll add this in the next version, thanks!
+
+>         It would be even more useful if that series would either deal with
+> the noise for real ("that's what we intend here, that's what we intend there,
+> here's a primitive for such-and-such kind of cases, here we actually
+> ought to pass __user pointer instead of unsigned long", etc.) or left it
+> unmasked.
+>
+>         As it is, __force says only one thing: "I know the code is doing
+> the right thing here".  That belongs in primitives, and I do *not* mean the
+> #define cast_to_ulong(x) ((__force unsigned long)(x))
+> kind.
+>
+>         Folks, if you don't want to deal with that - leave the warnings be.
+> They do carry more information than "someone has slapped __force in that place".
+>
+> Al, very annoyed by that kind of information-hiding crap...
+
+This patch only adds __force to hide the reports I've looked at and
+decided that the code does the right thing. The cases where this is
+not the case are handled by the previous patches in the patchset. I'll
+this to the patch description as well. Is that OK?
