@@ -1,24 +1,67 @@
-From: mauricio.vasquez at polito.it (Mauricio Vasquez B)
-Date: Mon,  3 Sep 2018 18:05:27 +0200
-Subject: [PATCH bpf] selftests/bpf: add missing executables to .gitignore
-Message-ID: <1535990727-2778-1-git-send-email-mauricio.vasquez@polito.it>
+From: gregkh at linuxfoundation.org (Greg Kroah-Hartman)
+Date: Mon,  3 Sep 2018 18:49:15 +0200
+Subject: [PATCH 3.18 25/56] selftests/ftrace: Add snapshot and tracing_on test
+ case
+In-Reply-To: <20180903164924.078355019@linuxfoundation.org>
+References: <20180903164924.078355019@linuxfoundation.org>
+Message-ID: <20180903164925.346533975@linuxfoundation.org>
 
-Signed-off-by: Mauricio Vasquez B <mauricio.vasquez at polito.it>
+3.18-stable review patch.  If anyone has any objections, please let me know.
+
+------------------
+
+From: Masami Hiramatsu <mhiramat at kernel.org>
+
+[ Upstream commit 82f4f3e69c5c29bce940dd87a2c0f16c51d48d17 ]
+
+Add a testcase for checking snapshot and tracing_on
+relationship. This ensures that the snapshotting doesn't
+affect current tracing on/off settings.
+
+Link: http://lkml.kernel.org/r/153149932412.11274.15289227592627901488.stgit at devbox
+
+Cc: Tom Zanussi <tom.zanussi at linux.intel.com>
+Cc: Hiraku Toyooka <hiraku.toyooka at cybertrust.co.jp>
+Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+Cc: Ingo Molnar <mingo at redhat.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: linux-kselftest at vger.kernel.org
+Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+Signed-off-by: Sasha Levin <alexander.levin at microsoft.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
 ---
- tools/testing/selftests/bpf/.gitignore | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/ftrace/test.d/00basic/snapshot.tc |   28 ++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/snapshot.tc
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index 49938d72cf63..4d789c1e5167 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -19,3 +19,7 @@ test_btf
- test_sockmap
- test_lirc_mode2_user
- get_cgroup_id_user
-+test_skb_cgroup_id_user
-+test_socket_cookie
-+test_cgroup_storage
-+test_select_reuseport
--- 
-2.7.4
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/00basic/snapshot.tc
+@@ -0,0 +1,28 @@
++#!/bin/sh
++# description: Snapshot and tracing setting
++# flags: instance
++
++[ ! -f snapshot ] && exit_unsupported
++
++echo "Set tracing off"
++echo 0 > tracing_on
++
++echo "Allocate and take a snapshot"
++echo 1 > snapshot
++
++# Since trace buffer is empty, snapshot is also empty, but allocated
++grep -q "Snapshot is allocated" snapshot
++
++echo "Ensure keep tracing off"
++test `cat tracing_on` -eq 0
++
++echo "Set tracing on"
++echo 1 > tracing_on
++
++echo "Take a snapshot again"
++echo 1 > snapshot
++
++echo "Ensure keep tracing on"
++test `cat tracing_on` -eq 1
++
++exit 0
