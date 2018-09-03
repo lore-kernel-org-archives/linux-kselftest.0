@@ -1,14 +1,14 @@
 From: gregkh@linuxfoundation.org (Greg Kroah-Hartman)
-Date: Mon,  3 Sep 2018 18:49:15 +0200
-Subject: [PATCH 3.18 25/56] selftests/ftrace: Add snapshot and tracing_on test
+Date: Mon,  3 Sep 2018 18:49:08 +0200
+Subject: [PATCH 4.4 30/80] selftests/ftrace: Add snapshot and tracing_on test
  case
-In-Reply-To: <20180903164924.078355019@linuxfoundation.org>
-References: <20180903164924.078355019@linuxfoundation.org>
-Message-ID: <20180903164925.346533975@linuxfoundation.org>
+In-Reply-To: <20180903164934.171677301@linuxfoundation.org>
+References: <20180903164934.171677301@linuxfoundation.org>
+Message-ID: <20180903164935.354711574@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180903164915.2PqrDwK-ttkY_TGwTOHAW9KuLnfG8M8QEHNcbLzLvzc@z>
+Message-ID: <20180903164908.1WSWqcpq8wIXPNZoWP29DbxfLZ6G2Yqk4VWjCNwmNJM@z>
 
-3.18-stable review patch.  If anyone has any objections, please let me know.
+4.4-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
