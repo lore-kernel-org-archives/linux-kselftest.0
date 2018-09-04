@@ -1,222 +1,250 @@
-From: anders.roxell@linaro.org (Anders Roxell)
-Date: Tue,  4 Sep 2018 12:47:21 +0200
-Subject: [PATCH v6] selftests: add headers_install to lib.mk
-In-Reply-To: <20180809080402.24469-1-anders.roxell@linaro.org>
-References: <20180809080402.24469-1-anders.roxell@linaro.org>
-Message-ID: <20180904104721.27535-1-anders.roxell@linaro.org>
+From: vincenzo.frascino@arm.com (Vincenzo Frascino)
+Date: Tue, 4 Sep 2018 12:27:23 +0100
+Subject: [PATCH v6 11/11] arm64: annotate user pointers casts detected by
+ sparse
+In-Reply-To: <20180903151026.n2jak3e4yqusnogt@ltop.local>
+References: <cover.1535629099.git.andreyknvl@google.com>
+ <5d54526e5ff2e5ad63d0dfdd9ab17cf359afa4f2.1535629099.git.andreyknvl@google.com>
+ <20180831081123.6mo62xnk54pvlxmc@ltop.local>
+ <20180831134244.GB19965@ZenIV.linux.org.uk>
+ <CAAeHK+w86m6YztnTGhuZPKRczb-+znZ1hiJskPXeQok4SgcaOw@mail.gmail.com>
+ <01cadefd-c929-cb45-500d-7043cf3943f6@arm.com>
+ <20180903151026.n2jak3e4yqusnogt@ltop.local>
+Message-ID: <a31d3400-4523-2bda-a429-f2a221e69ee8@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180904104721.LA8StDP82DAF1G58whg20Qd_e_2XTtoxHUTbGdJ2kjk@z>
+Message-ID: <20180904112723.Cu-BFxLAVi0M4l1shNmTqWRv3sQNfGvvRBnzkkqPbMs@z>
 
-If the kernel headers aren't installed we can't build all the tests.
-Add a new make target rule 'khdr' in the file lib.mk to generate the
-kernel headers and that gets include for every test-dir Makefile that
-includes lib.mk If the testdir in turn have its own sub-dirs the
-top_srcdir needs to be set to the linux-rootdir to be able to generate
-the kernel headers.
+On 03/09/18 16:10, Luc Van Oostenryck wrote:
+> On Mon, Sep 03, 2018@02:49:38PM +0100, Vincenzo Frascino wrote:
+>> On 03/09/18 13:34, Andrey Konovalov wrote:
+>>> On Fri, Aug 31, 2018@3:42 PM, Al Viro <viro@zeniv.linux.org.uk> wrote:
+>>>> On Fri, Aug 31, 2018@10:11:24AM +0200, Luc Van Oostenryck wrote:
+>>>>> On Thu, Aug 30, 2018@01:41:16PM +0200, Andrey Konovalov wrote:
+>>>>>> This patch adds __force annotations for __user pointers casts detected by
+>>>>>> sparse with the -Wcast-from-as flag enabled (added in [1]).
+>>>>>>
+>>>>>> [1] https://github.com/lucvoo/sparse-dev/commit/5f960cb10f56ec2017c128ef9d16060e0145f292
+>>>>>
+>>>>> Hi,
+>>>>>
+>>>>> It would be nice to have some explanation for why these added __force
+>>>>> are useful.
+>>>
+>>> I'll add this in the next version, thanks!
+>>>
+>>>>         It would be even more useful if that series would either deal with
+>>>> the noise for real ("that's what we intend here, that's what we intend there,
+>>>> here's a primitive for such-and-such kind of cases, here we actually
+>>>> ought to pass __user pointer instead of unsigned long", etc.) or left it
+>>>> unmasked.
+>>>>
+>>>>         As it is, __force says only one thing: "I know the code is doing
+>>>> the right thing here".  That belongs in primitives, and I do *not* mean the
+>>>> #define cast_to_ulong(x) ((__force unsigned long)(x))
+>>>> kind.
+>>>>
+>>>>         Folks, if you don't want to deal with that - leave the warnings be.
+>>>> They do carry more information than "someone has slapped __force in that place".
+>>>>
+>>>> Al, very annoyed by that kind of information-hiding crap...
+>>>
+>>> This patch only adds __force to hide the reports I've looked at and
+>>> decided that the code does the right thing. The cases where this is
+>>> not the case are handled by the previous patches in the patchset. I'll
+>>> this to the patch description as well. Is that OK?
+>>>
+>> I think as well that we should make explicit the information that
+>> __force is hiding.
+>> A possible solution could be defining some new address spaces and use
+>> them where it is relevant in the kernel. Something like:
+>>
+>> # define __compat_ptr __attribute__((noderef, address_space(5)))
+>> # define __tagged_ptr __attribute__((noderef, address_space(6)))
+>>
+>> In this way sparse can still identify the casting and trigger a warning.
+>>
+>> We could at that point modify sparse to ignore these conversions when a
+>> specific flag is passed (i.e. -Wignore-compat-ptr, -Wignore-tagged-ptr)
+>> to exclude from the generated warnings the ones we have already dealt
+>> with.
+>>
+>> What do you think about this approach?
+> 
+> I'll be happy to add such warnings to sparse if it is useful to detect
+> (and correct!) problems. I'm also thinking to other possiblities, like
+> having some weaker form of __force (maybe simply __force_as (which will
+> 'only' force the address space) or even __force_as(TO, FROM) (with TO
+> and FROM being a mask of the address space allowed).I believe we need something here to address this type of problems and I like
+your proposal of adding a weaker force in the form of __force_as(TO, FROM)
+because I think it provides the right level information. 
 
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
-Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
+> However, for the specific situation here, I'm not sure that using
+> address spaces is the right choice because I suspect that the concept
+> of tagged pointer is orthogonal to the one of (the usual) address space
+> (it won't be possible for a pointer to be __tagged_ptr *and* __user).
+I was thinking to address spaces because the information seems easily accessible
+in sparse [1], but I am certainly open to any solution that can be semantically
+more correct.
+
+> 
+> OTOH, when I see already the tons of warnings for concepts established
+> since many years (I'm thinking especially at __bitwise, see [1]) I'm a
+> bit affraid of adding new, more specialized ones that people will
+> understand even less how/when they need to use them.
+Thanks for providing this statistic, it is very interesting. I understand your
+concern, but I think that in this case we need a more specialized option not only
+to find potential problems but even to provide the right amount of information
+to who reads the code. 
+
+A solution could be to let __force_as(TO, FROM) behave like __force and silence
+the warning by default, but have an option in sparse to re-enable it 
+(i.e. -Wshow-force-as). 
+
+[1]
 ---
+commit ee7985f0c2b29c96aefe78df4139209eb4e719d8
+Author: Vincenzo Frascino <vincenzo.frascino at arm.com>
+Date:   Wed Aug 15 10:55:44 2018 +0100
 
-I sent this (v5) a month ago and wondered if it got lost. Resending
-unchanged.
+    print address space number for explicit cast to ulong
+    
+    This patch build on top of commit b34880d ("stricter warning
+    for explicit cast to ulong") and prints the address space
+    number when a "warning: cast removes address space of expression"
+    is triggered.
+    
+    This makes easier to discriminate in between different address
+    spaces.
+    
+    A validation example is provided as well as part of this patch.
+    
+    Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
 
-Cheers,
-Anders
-
- Makefile                                           | 14 +-------------
- scripts/subarch.include                            | 13 +++++++++++++
- tools/testing/selftests/android/Makefile           |  2 +-
- tools/testing/selftests/android/ion/Makefile       |  2 ++
- tools/testing/selftests/futex/functional/Makefile  |  1 +
- tools/testing/selftests/gpio/Makefile              |  7 ++-----
- tools/testing/selftests/kvm/Makefile               |  7 ++-----
- tools/testing/selftests/lib.mk                     | 12 ++++++++++++
- tools/testing/selftests/net/Makefile               |  1 +
- .../selftests/networking/timestamping/Makefile     |  1 +
- tools/testing/selftests/vm/Makefile                |  4 ----
- 11 files changed, 36 insertions(+), 28 deletions(-)
- create mode 100644 scripts/subarch.include
-
-diff --git a/Makefile b/Makefile
-index 19948e556941..9c781e77fa24 100644
---- a/Makefile
-+++ b/Makefile
-@@ -299,19 +299,7 @@ KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
- KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
- export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
+diff --git a/evaluate.c b/evaluate.c
+index 6d5d479..2fc0ebc 100644
+--- a/evaluate.c
++++ b/evaluate.c
+@@ -3017,8 +3017,12 @@ static struct symbol *evaluate_cast(struct expression *expr)
+ 		sas = stype->ctype.as;
+ 	}
  
--# SUBARCH tells the usermode build what the underlying arch is.  That is set
--# first, and if a usermode build is happening, the "ARCH=um" on the command
--# line overrides the setting of ARCH below.  If a native build is happening,
--# then ARCH is assigned, getting whatever value it gets normally, and
--# SUBARCH is subsequently ignored.
--
--SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
--				  -e s/sun4u/sparc64/ \
--				  -e s/arm.*/arm/ -e s/sa110/arm/ \
--				  -e s/s390x/s390/ -e s/parisc64/parisc/ \
--				  -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
--				  -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
--				  -e s/riscv.*/riscv/)
-+include scripts/subarch.include
+-	if (!tas && sas > 0)
+-		warning(expr->pos, "cast removes address space of expression");
++	if (!tas && sas > 0) {
++		if (Wcast_from_as)
++			warning(expr->pos, "cast removes address space of expression (<asn:%d>)", sas);
++		else
++			warning(expr->pos, "cast removes address space of expression");
++	}
+ 	if (tas > 0 && sas > 0 && tas != sas)
+ 		warning(expr->pos, "cast between address spaces (<asn:%d>-><asn:%d>)", sas, tas);
+ 	if (tas > 0 && !sas &&
+diff --git a/sparse.1 b/sparse.1
+index 3e13523..699d09f 100644
+--- a/sparse.1
++++ b/sparse.1
+@@ -84,6 +84,9 @@ This is similar to \fB\-Waddress\-space\fR but will also warn
+ on casts to \fBunsigned long\fR.
  
- # Cross compiling and selecting different set of gcc/bin-utils
- # ---------------------------------------------------------------------------
-diff --git a/scripts/subarch.include b/scripts/subarch.include
+ Sparse does not issues these warnings by default.
++
++When the option is activated the address space number is printed
++as part of the warning message.
+ .
+ .TP
+ .B \-Wcast\-to\-as
+diff --git a/validation/Waddress-space-all-attr.c b/validation/Waddress-space-all-attr.c
 new file mode 100644
-index 000000000000..650682821126
+index 0000000..455ba68
 --- /dev/null
-+++ b/scripts/subarch.include
-@@ -0,0 +1,13 @@
-+# SUBARCH tells the usermode build what the underlying arch is.  That is set
-+# first, and if a usermode build is happening, the "ARCH=um" on the command
-+# line overrides the setting of ARCH below.  If a native build is happening,
-+# then ARCH is assigned, getting whatever value it gets normally, and
-+# SUBARCH is subsequently ignored.
++++ b/validation/Waddress-space-all-attr.c
+@@ -0,0 +1,84 @@
++/* Resembles include/linux/compiler_types.h */
++#define __kernel __attribute__((address_space(0)))
++#define __user __attribute__((address_space(1)))
++#define __iomem __attribute__((address_space(2)))
++#define __percpu __attribute__((address_space(3)))
++#define __rcu __attribute__((address_space(4)))
 +
-+SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
-+				  -e s/sun4u/sparc64/ \
-+				  -e s/arm.*/arm/ -e s/sa110/arm/ \
-+				  -e s/s390x/s390/ -e s/parisc64/parisc/ \
-+				  -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
-+				  -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
-+				  -e s/riscv.*/riscv/)
-diff --git a/tools/testing/selftests/android/Makefile b/tools/testing/selftests/android/Makefile
-index 72c25a3cb658..d9a725478375 100644
---- a/tools/testing/selftests/android/Makefile
-+++ b/tools/testing/selftests/android/Makefile
-@@ -6,7 +6,7 @@ TEST_PROGS := run.sh
- 
- include ../lib.mk
- 
--all:
-+all: khdr
- 	@for DIR in $(SUBDIRS); do		\
- 		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
- 		mkdir $$BUILD_TARGET  -p;	\
-diff --git a/tools/testing/selftests/android/ion/Makefile b/tools/testing/selftests/android/ion/Makefile
-index e03695287f76..88cfe88e466f 100644
---- a/tools/testing/selftests/android/ion/Makefile
-+++ b/tools/testing/selftests/android/ion/Makefile
-@@ -10,6 +10,8 @@ $(TEST_GEN_FILES): ipcsocket.c ionutils.c
- 
- TEST_PROGS := ion_test.sh
- 
-+KSFT_KHDR_INSTALL := 1
-+top_srcdir = ../../../../..
- include ../../lib.mk
- 
- $(OUTPUT)/ionapp_export: ionapp_export.c ipcsocket.c ionutils.c
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index ff8feca49746..ad1eeb14fda7 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -18,6 +18,7 @@ TEST_GEN_FILES := \
- 
- TEST_PROGS := run.sh
- 
-+top_srcdir = ../../../../..
- include ../../lib.mk
- 
- $(TEST_GEN_FILES): $(HEADERS)
-diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index 1bbb47565c55..4665cdbf1a8d 100644
---- a/tools/testing/selftests/gpio/Makefile
-+++ b/tools/testing/selftests/gpio/Makefile
-@@ -21,11 +21,8 @@ endef
- CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
- LDLIBS += -lmount -I/usr/include/libmount
- 
--$(BINARIES): ../../../gpio/gpio-utils.o ../../../../usr/include/linux/gpio.h
-+$(BINARIES):| khdr
-+$(BINARIES): ../../../gpio/gpio-utils.o
- 
- ../../../gpio/gpio-utils.o:
- 	make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
--
--../../../../usr/include/linux/gpio.h:
--	make -C ../../../.. headers_install INSTALL_HDR_PATH=$(shell pwd)/../../../../usr/
--
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 03b0f551bedf..87d1a8488af8 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -37,9 +37,6 @@ $(LIBKVM_OBJ): $(OUTPUT)/%.o: %.c
- $(OUTPUT)/libkvm.a: $(LIBKVM_OBJ)
- 	$(AR) crs $@ $^
- 
--$(LINUX_HDR_PATH):
--	make -C $(top_srcdir) headers_install
--
--all: $(STATIC_LIBS) $(LINUX_HDR_PATH)
-+all: $(STATIC_LIBS)
- $(TEST_GEN_PROGS): $(STATIC_LIBS)
--$(TEST_GEN_PROGS) $(LIBKVM_OBJ): | $(LINUX_HDR_PATH)
-+$(STATIC_LIBS):| khdr
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 17ab36605a8e..0a8e75886224 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -16,8 +16,20 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
- TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
- TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
- 
-+top_srcdir ?= ../../../..
-+include $(top_srcdir)/scripts/subarch.include
-+ARCH		?= $(SUBARCH)
 +
- all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
- 
-+.PHONY: khdr
-+khdr:
-+	make ARCH=$(ARCH) -C $(top_srcdir) headers_install
++typedef unsigned long ulong;
++typedef long long llong;
++typedef struct s obj_t;
 +
-+ifdef KSFT_KHDR_INSTALL
-+$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES):| khdr
-+endif
++static void expl(obj_t __kernel *k, obj_t __iomem *o,
++		 obj_t __user *p, obj_t __percpu *pc,
++		 obj_t __rcu *r)
++{
++	(int)(k);
++	(ulong)(k);
++	(llong)(k);
++	(void *)(k);
++	(obj_t*)(k);
++	(obj_t __kernel*)(k);
 +
- .ONESHELL:
- define RUN_TEST_PRINT_RESULT
- 	TEST_HDR_MSG="selftests: "`basename $$PWD`:" $$BASENAME_TEST";	\
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index cccdb2295567..256d82d5fa87 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -15,6 +15,7 @@ TEST_GEN_FILES += udpgso udpgso_bench_tx udpgso_bench_rx ip_defrag
- TEST_GEN_PROGS = reuseport_bpf reuseport_bpf_cpu reuseport_bpf_numa
- TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls
- 
-+KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
- $(OUTPUT)/reuseport_bpf_numa: LDFLAGS += -lnuma
-diff --git a/tools/testing/selftests/networking/timestamping/Makefile b/tools/testing/selftests/networking/timestamping/Makefile
-index a728040edbe1..14cfcf006936 100644
---- a/tools/testing/selftests/networking/timestamping/Makefile
-+++ b/tools/testing/selftests/networking/timestamping/Makefile
-@@ -5,6 +5,7 @@ TEST_PROGS := hwtstamp_config rxtimestamp timestamping txtimestamp
- 
- all: $(TEST_PROGS)
- 
-+top_srcdir = ../../../../..
- include ../../lib.mk
- 
- clean:
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 9881876d2aa0..e94b7b14bcb2 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -26,10 +26,6 @@ TEST_PROGS := run_vmtests
- 
- include ../lib.mk
- 
--$(OUTPUT)/userfaultfd: ../../../../usr/include/linux/kernel.h
- $(OUTPUT)/userfaultfd: LDLIBS += -lpthread
- 
- $(OUTPUT)/mlock-random-test: LDLIBS += -lcap
--
--../../../../usr/include/linux/kernel.h:
--	make -C ../../../.. headers_install
++	(int)(o);
++	(ulong)(o);
++	(llong)(o);
++	(void *)(o);
++	(obj_t*)(o);
++	(obj_t __iomem*)(o);
++
++	(int)(p);
++	(ulong)(p);
++	(llong)(p);
++	(void *)(p);
++	(obj_t*)(p);
++	(obj_t __user*)(p);
++
++	(int)(pc);
++	(ulong)(pc);
++	(llong)(pc);
++	(void *)(pc);
++	(obj_t*)(pc);
++	(obj_t __percpu*)(pc);
++
++	(int)(r);
++	(ulong)(r);
++	(llong)(r);
++	(void *)(r);
++	(obj_t*)(r);
++	(obj_t __rcu*)(r);
++}
++
++/*
++ * check-name: Waddress-space-all-attr
++ * check-command: sparse -Wcast-from-as -Wcast-to-as $file
++ *
++ * check-error-start
++Waddress-space-all-attr.c:24:10: warning: cast removes address space of expression (<asn:2>)
++Waddress-space-all-attr.c:25:10: warning: cast removes address space of expression (<asn:2>)
++Waddress-space-all-attr.c:26:10: warning: cast removes address space of expression (<asn:2>)
++Waddress-space-all-attr.c:27:10: warning: cast removes address space of expression (<asn:2>)
++Waddress-space-all-attr.c:28:10: warning: cast removes address space of expression (<asn:2>)
++Waddress-space-all-attr.c:31:10: warning: cast removes address space of expression (<asn:1>)
++Waddress-space-all-attr.c:32:10: warning: cast removes address space of expression (<asn:1>)
++Waddress-space-all-attr.c:33:10: warning: cast removes address space of expression (<asn:1>)
++Waddress-space-all-attr.c:34:10: warning: cast removes address space of expression (<asn:1>)
++Waddress-space-all-attr.c:35:10: warning: cast removes address space of expression (<asn:1>)
++Waddress-space-all-attr.c:38:10: warning: cast removes address space of expression (<asn:3>)
++Waddress-space-all-attr.c:39:10: warning: cast removes address space of expression (<asn:3>)
++Waddress-space-all-attr.c:40:10: warning: cast removes address space of expression (<asn:3>)
++Waddress-space-all-attr.c:41:10: warning: cast removes address space of expression (<asn:3>)
++Waddress-space-all-attr.c:42:10: warning: cast removes address space of expression (<asn:3>)
++Waddress-space-all-attr.c:45:10: warning: cast removes address space of expression (<asn:4>)
++Waddress-space-all-attr.c:46:10: warning: cast removes address space of expression (<asn:4>)
++Waddress-space-all-attr.c:47:10: warning: cast removes address space of expression (<asn:4>)
++Waddress-space-all-attr.c:48:10: warning: cast removes address space of expression (<asn:4>)
++Waddress-space-all-attr.c:49:10: warning: cast removes address space of expression (<asn:4>)
++Waddress-space-all-attr.c:17:10: warning: non size-preserving pointer to integer cast
++Waddress-space-all-attr.c:24:10: warning: non size-preserving pointer to integer cast
++Waddress-space-all-attr.c:31:10: warning: non size-preserving pointer to integer cast
++Waddress-space-all-attr.c:38:10: warning: non size-preserving pointer to integer cast
++Waddress-space-all-attr.c:45:10: warning: non size-preserving pointer to integer cast
++ * check-error-end
++ */
+
+
 -- 
-2.18.0
+Regards,
+Vincenzo
