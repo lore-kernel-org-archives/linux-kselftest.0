@@ -1,24 +1,27 @@
 From: Lei.Yang@windriver.com (Lei Yang)
-Date: Wed, 5 Sep 2018 11:14:49 +0800
-Subject: [PATCH] selftests/efivarfs: add required kernel configs
-Message-ID: <1536117289-15240-1-git-send-email-Lei.Yang@windriver.com>
+Date: Wed, 5 Sep 2018 17:57:15 +0800
+Subject: [PATCH] selftests: memory-hotplug: add required configs
+Message-ID: <1536141435-10097-1-git-send-email-Lei.Yang@windriver.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180905031449._vPipc-Z3do1xUMaYMCMmg-R5P8ps2YmAtGJ7iahEis@z>
+Message-ID: <20180905095715.ycIt0PS1_V7ABZp6mksxcX3Y0JH-l3Okfr8IOmtxXrc@z>
 
-add config file
+add CONFIG_MEMORY_HOTREMOVE=y in config
+without this config, /sys/devices/system/memory/memory*/removable
+always return 0, I endup getting an early skip during test
 
 Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
 ---
- tools/testing/selftests/efivarfs/config | 1 +
+ tools/testing/selftests/memory-hotplug/config | 1 +
  1 file changed, 1 insertion(+)
- create mode 100644 tools/testing/selftests/efivarfs/config
 
-diff --git a/tools/testing/selftests/efivarfs/config b/tools/testing/selftests/efivarfs/config
-new file mode 100644
-index 0000000..4e151f1
---- /dev/null
-+++ b/tools/testing/selftests/efivarfs/config
-@@ -0,0 +1 @@
-+CONFIG_EFIVAR_FS=y
+diff --git a/tools/testing/selftests/memory-hotplug/config b/tools/testing/selftests/memory-hotplug/config
+index 2fde301..a7e8cd5 100644
+--- a/tools/testing/selftests/memory-hotplug/config
++++ b/tools/testing/selftests/memory-hotplug/config
+@@ -2,3 +2,4 @@ CONFIG_MEMORY_HOTPLUG=y
+ CONFIG_MEMORY_HOTPLUG_SPARSE=y
+ CONFIG_NOTIFIER_ERROR_INJECTION=y
+ CONFIG_MEMORY_NOTIFIER_ERROR_INJECT=m
++CONFIG_MEMORY_HOTREMOVE=y
 -- 
 1.9.1
