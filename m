@@ -1,19 +1,56 @@
 From: jgkamat@fb.com (jgkamat@fb.com)
-Date: Tue, 4 Sep 2018 18:08:25 -0700
-Subject: kselftests for memory.oom.group
-Message-ID: <20180905010827.27743-1-jgkamat@fb.com>
+Date: Tue, 4 Sep 2018 18:08:26 -0700
+Subject: [PATCH 1/2] Fix cg_read_strcmp()
+In-Reply-To: <20180905010827.27743-1-jgkamat@fb.com>
+References: <20180905010827.27743-1-jgkamat@fb.com>
+Message-ID: <20180905010827.27743-2-jgkamat@fb.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180905010825.-r50LzGbLRTt8Xgh3jBgmkFsmrd9OPdaqRQBG7-5Wco@z>
+Message-ID: <20180905010826.xkjChznBBEgAdZVonVnIP2p25NL32yTXKU4ejg-xLtg@z>
 
-Hi Shuah,
+From: Jay Kamat <jgkamat@fb.com>
 
-I wrote some tests for the new memory.oom.group feature in cgroups 2.
+Fix a couple issues with cg_read_strcmp(), to improve correctness of
+cgroup tests
+- Fix cg_read_strcmp() always returning 0 for empty "needle" strings
+- Fix a memory leak in cg_read_strcmp()
 
-In the process, I discovered a few small bugs in the cgroups tests, which
-I have fixed as well in a separate commit.
+Fixes: 84092dbcf901 ("selftests: cgroup: add memory controller self-tests")
 
-This is my first ever patch to Linux, so let me know if you see any issues or
-improvements that can be made.
+Signed-off-by: Jay Kamat <jgkamat at fb.com>
+---
+ tools/testing/selftests/cgroup/cgroup_util.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-Thanks for all your amazing work on Linux!
--Jay
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index 1e9e3c470561..4aadf38bcd5d 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -91,15 +91,24 @@ int cg_read_strcmp(const char *cgroup, const char *control,
+ {
+ 	size_t size = strlen(expected) + 1;
+ 	char *buf;
++	int ret;
++
++	/* Handle the case of comparing against empty string */
++	if (size == 1)
++		size = 32;
+ 
+ 	buf = malloc(size);
+ 	if (!buf)
+ 		return -1;
+ 
+-	if (cg_read(cgroup, control, buf, size))
++	if (cg_read(cgroup, control, buf, size)) {
++		free(buf);
+ 		return -1;
++	}
+ 
+-	return strcmp(expected, buf);
++	ret = strcmp(expected, buf);
++	free(buf);
++	return ret;
+ }
+ 
+ int cg_read_strstr(const char *cgroup, const char *control, const char *needle)
+-- 
+2.17.1
