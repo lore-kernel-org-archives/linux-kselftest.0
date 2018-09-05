@@ -1,37 +1,29 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Wed, 5 Sep 2018 10:49:05 -0600
-Subject: [PATCH] sysctl: kselftests: add test_core to .gitignore
-In-Reply-To: <78c85cee-7af9-75fc-14c7-6565a7080008@windriver.com>
-References: <1536115175-10864-1-git-send-email-Lei.Yang@windriver.com>
- <78c85cee-7af9-75fc-14c7-6565a7080008@windriver.com>
-Message-ID: <2adb1f15-24dd-5744-a091-343d4617801e@kernel.org>
+Date: Wed, 5 Sep 2018 10:56:36 -0600
+Subject: [PATCH] selftests/efivarfs: add required kernel configs
+In-Reply-To: <1536117289-15240-1-git-send-email-Lei.Yang@windriver.com>
+References: <1536117289-15240-1-git-send-email-Lei.Yang@windriver.com>
+Message-ID: <af970d74-8e88-341b-b703-bed94f0746bc@kernel.org>
 
-On 09/04/2018 09:08 PM, lei yang wrote:
-> sorry, the title should be :"cgroup: kselftests: add test_core to .gitignore"
+On 09/04/2018 09:14 PM, Lei Yang wrote:
+> add config file
 > 
-> Lei
+> Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
+> ---
+>  tools/testing/selftests/efivarfs/config | 1 +
+>  1 file changed, 1 insertion(+)
+>  create mode 100644 tools/testing/selftests/efivarfs/config
 > 
-> 
-> 
-> On 2018年09月05日 10:39, Lei Yang wrote:
->> Update .gitignore files.
->>
->> Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
->> ---
->>   tools/testing/selftests/cgroup/.gitignore | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
->> index 95eb3a5..adacda5 100644
->> --- a/tools/testing/selftests/cgroup/.gitignore
->> +++ b/tools/testing/selftests/cgroup/.gitignore
->> @@ -1 +1,2 @@
->>   test_memcontrol
->> +test_core
-> 
+> diff --git a/tools/testing/selftests/efivarfs/config b/tools/testing/selftests/efivarfs/config
+> new file mode 100644
+> index 0000000..4e151f1
+> --- /dev/null
+> +++ b/tools/testing/selftests/efivarfs/config
+> @@ -0,0 +1 @@
+> +CONFIG_EFIVAR_FS=y
 > 
 
-Please resend with the correct summary.
 
-thanks,
+Thanks. Applied to linux-kselftest next,
+
 -- Shuah
