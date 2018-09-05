@@ -1,21 +1,29 @@
-From: Lei.Yang at windriver.com (Lei Yang)
-Date: Wed, 5 Sep 2018 10:39:35 +0800
+From: lei.yang at windriver.com (lei yang)
+Date: Wed, 5 Sep 2018 11:08:15 +0800
 Subject: [PATCH] sysctl: kselftests: add test_core to .gitignore
-Message-ID: <1536115175-10864-1-git-send-email-Lei.Yang@windriver.com>
+In-Reply-To: <1536115175-10864-1-git-send-email-Lei.Yang@windriver.com>
+References: <1536115175-10864-1-git-send-email-Lei.Yang@windriver.com>
+Message-ID: <78c85cee-7af9-75fc-14c7-6565a7080008@windriver.com>
 
-Update .gitignore files.
+sorry, the title should be :"cgroup: kselftests: add test_core to 
+.gitignore"
 
-Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
----
- tools/testing/selftests/cgroup/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+Lei
 
-diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
-index 95eb3a5..adacda5 100644
---- a/tools/testing/selftests/cgroup/.gitignore
-+++ b/tools/testing/selftests/cgroup/.gitignore
-@@ -1 +1,2 @@
- test_memcontrol
-+test_core
--- 
-1.9.1
+
+
+On 2018年09月05日 10:39, Lei Yang wrote:
+> Update .gitignore files.
+>
+> Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
+> ---
+>   tools/testing/selftests/cgroup/.gitignore | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
+> index 95eb3a5..adacda5 100644
+> --- a/tools/testing/selftests/cgroup/.gitignore
+> +++ b/tools/testing/selftests/cgroup/.gitignore
+> @@ -1 +1,2 @@
+>   test_memcontrol
+> +test_core
