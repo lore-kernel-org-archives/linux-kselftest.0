@@ -1,73 +1,49 @@
-From: lei.yang@windriver.com (lei yang)
-Date: Thu, 6 Sep 2018 13:48:02 +0800
-Subject: [PATCH] sysctl: kselftests: use kernel module instead of built-in
-In-Reply-To: <8aeffc5f-ed8c-b418-5db3-ef0299456002@kernel.org>
-References: <1536114044-31236-1-git-send-email-Lei.Yang@windriver.com>
- <8aeffc5f-ed8c-b418-5db3-ef0299456002@kernel.org>
-Message-ID: <9bbc49fe-5043-d03e-a359-215e71ed3a42@windriver.com>
+From: Lei.Yang@windriver.com (Lei Yang)
+Date: Thu, 6 Sep 2018 18:22:54 +0800
+Subject: [PATCH v2] sysctl: kselftests: fix test_modprobe issue
+Message-ID: <1536229374-25699-1-git-send-email-Lei.Yang@windriver.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180906054802.H1wzTCDElYIEQk8djkpve8HaDeXjG7UV4XRULZiuJVk@z>
+Message-ID: <20180906102254.p4em1g_lcV8ctm4r7Pp4H4V_7v4R3WbDhsU2dTLyc9E@z>
 
+when CONFIG_TEST_SYSCTL=y, there is no "/sys/module/test_sysctl/"
+when CONFIG_TEST_SYSCTL=m, checking /sys/module/test_sysctl/ is
+before kernel module loading
 
-
-On 2018年09月06日 00:47, Shuah Khan wrote:
-> On 09/04/2018 08:20 PM, Lei Yang wrote:
->> It uses modprobe $TEST_DRIVER in sysctl.sh, so update
->> config to use "m" instead
->>
->> Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
->> ---
->>   tools/testing/selftests/sysctl/config | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/sysctl/config b/tools/testing/selftests/sysctl/config
->> index 6ca1480..fc263ef 100644
->> --- a/tools/testing/selftests/sysctl/config
->> +++ b/tools/testing/selftests/sysctl/config
->> @@ -1 +1 @@
->> -CONFIG_TEST_SYSCTL=y
->> +CONFIG_TEST_SYSCTL=m
->>
-> What happens if it is a built-in? Can you elaborate in the changelog
->
-> On that note we might have other cases that do modprobe in scripts and
-> run into the same issue you are trying to solve. :)
-
-I double-checked again, found that it doesn't work on either with 
-built-in or kernel module
-if it's built-in, modprobe test_sysctl still return 0, so it doesn't 
-matter it's a built-in or module.
-
-but the problem is that test_modprobe check module load before modprobe 
-execute , I'll sent a V2 patch to fix this and keep its build-in config 
-untouched
-
-
-if changes nothing
-
-1) when  CONFIG_TEST_SYSCTL=y
+you'll get below error message
 root at intel-x86-64:/tmp/sysctl# ./sysctl.sh
 Checking production write strict setting ... ok
 ./sysctl.sh: /sys/module/test_sysctl/ not present
 You must have the following enabled in your kernel:
-CONFIG_TEST_SYSCTL=y
-root at intel-x86-64:/tmp/sysctl# zcat /proc/config.gz |grep TEST_SYS
-CONFIG_TEST_SYSCTL=y
 
+This patch will fix this issue.
+when CONFIG_TEST_SYSCTL=y, it has no chance to check "/sys/module/test_sysctl/"
+when CONFIG_TEST_SYSCTL=m, it will load kernel module first before checking sys
+interface.
 
+Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
+---
+ tools/testing/selftests/sysctl/sysctl.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-2) when CONFIG_TEST_SYSCTL=m
-root at intel-x86-64:/tmp/sysctl# ./sysctl.sh
-Checking production write strict setting ... ok
-./sysctl.sh: /sys/module/test_sysctl/ not present
-You must have the following enabled in your kernel:
-CONFIG_TEST_SYSCTL=y
-root at intel-x86-64:/tmp/sysctl# zcat /proc/config.gz |grep TEST_SYS
-CONFIG_TEST_SYSCTL=m
-
-
-Lei
-
-> thanks,
-
-> -- Shuah
+diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
+index 584eb8e..08dc995 100755
+--- a/tools/testing/selftests/sysctl/sysctl.sh
++++ b/tools/testing/selftests/sysctl/sysctl.sh
+@@ -120,6 +120,7 @@ test_reqs()
+ 
+ function load_req_mod()
+ {
++        trap "test_modprobe" EXIT
+ 	if [ ! -d $DIR ]; then
+ 		if ! modprobe -q -n $TEST_DRIVER; then
+ 			echo "$0: module $TEST_DRIVER not found [SKIP]"
+@@ -770,7 +771,6 @@ function parse_args()
+ test_reqs
+ allow_user_defaults
+ check_production_sysctl_writes_strict
+-test_modprobe
+ load_req_mod
+ 
+ trap "test_finish" EXIT
+-- 
+1.9.1
