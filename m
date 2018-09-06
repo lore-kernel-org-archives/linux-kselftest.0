@@ -1,20 +1,30 @@
-From: alexei.starovoitov@gmail.com (Alexei Starovoitov)
-Date: Thu, 6 Sep 2018 11:00:20 -0700
-Subject: [PATCH bpf] selftests/bpf/test_progs: do not check errno == 0
-In-Reply-To: <1535994119-4853-1-git-send-email-mauricio.vasquez@polito.it>
-References: <1535994119-4853-1-git-send-email-mauricio.vasquez@polito.it>
-Message-ID: <20180906180019.a3u4tw322qhfkj3v@ast-mbp.dhcp.thefacebook.com>
+From: shuah@kernel.org (Shuah Khan)
+Date: Thu, 6 Sep 2018 12:35:42 -0600
+Subject: [PATCH v2] cgroup: kselftests: add test_core to .gitignore
+In-Reply-To: <1536212843-3774-1-git-send-email-Lei.Yang@windriver.com>
+References: <1536212843-3774-1-git-send-email-Lei.Yang@windriver.com>
+Message-ID: <ae04ec24-5e2c-3f6d-42b3-453fcb508a01@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180906180020.iMrvHO4g4pmBGt_uLbk9Rl__Dwbku4QAn4TAgu0n5IE@z>
+Message-ID: <20180906183542.Aqk-eXfqa1QpPlBL0TAhjfvxKB-Yl5Tb25BTIlX7o-U@z>
 
-On Mon, Sep 03, 2018@07:01:59PM +0200, Mauricio Vasquez B wrote:
-> The errno man page states: "The value in errno is significant only when
-> the return value of the call indicated an error..." then it is not correct
-> to check it, it could be different than zero even if the function
-> succeeded.
+On 09/05/2018 11:47 PM, Lei Yang wrote:
+> Update .gitignore file.
 > 
-> It causes some false positives if errno is set by a previous function.
+> Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
+> ---
+>  tools/testing/selftests/cgroup/.gitignore | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Signed-off-by: Mauricio Vasquez B <mauricio.vasquez at polito.it>
+> diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
+> index 95eb3a5..adacda5 100644
+> --- a/tools/testing/selftests/cgroup/.gitignore
+> +++ b/tools/testing/selftests/cgroup/.gitignore
+> @@ -1 +1,2 @@
+>  test_memcontrol
+> +test_core
+> 
 
-Applied, Thanks
+
+Thanks. Applied to linux-kselftest next
+
+-- Shuah
