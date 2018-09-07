@@ -1,82 +1,65 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Fri, 7 Sep 2018 16:26:00 +0100
+From: torvalds@linux-foundation.org (Linus Torvalds)
+Date: Fri, 7 Sep 2018 09:30:35 -0700
 Subject: [PATCH v6 11/11] arm64: annotate user pointers casts detected by
  sparse
-In-Reply-To: <CA+55aFy2t_MHgr_CgwbhtFkL+djaCq2qMM1G+f2DwJ0qEr1URQ@mail.gmail.com>
+In-Reply-To: <20180907152600.myidisza5o4kdmvf@armageddon.cambridge.arm.com>
 References: <cover.1535629099.git.andreyknvl@google.com>
  <5d54526e5ff2e5ad63d0dfdd9ab17cf359afa4f2.1535629099.git.andreyknvl@google.com>
  <CA+55aFyW9N2tSb2bQvkthbVVyY6nt5yFeWQRLHp1zruBmb5ocw@mail.gmail.com>
  <CA+55aFy2t_MHgr_CgwbhtFkL+djaCq2qMM1G+f2DwJ0qEr1URQ@mail.gmail.com>
-Message-ID: <20180907152600.myidisza5o4kdmvf@armageddon.cambridge.arm.com>
+ <20180907152600.myidisza5o4kdmvf@armageddon.cambridge.arm.com>
+Message-ID:
+ <CA+55aFzQ+ykLu10q3AdyaaKJx8SDWWL9Qiu6WH2jbN_ugRUTOg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180907152600.al-yihCgTT1PhT5p7puyTqhQeAprJqQVw_QJldw04PY@z>
+Message-ID: <20180907163035.ec8zdjs7ylYLPibPIaepCMh0e1uFJn-xvQj2RprbRk0@z>
 
-On Thu, Sep 06, 2018@02:16:19PM -0700, Linus Torvalds wrote:
-> On Thu, Sep 6, 2018 at 2:13 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > So for example:
-> >
-> > >  static inline compat_uptr_t ptr_to_compat(void __user *uptr)
-> > >  {
-> > > -       return (u32)(unsigned long)uptr;
-> > > +       return (u32)(__force unsigned long)uptr;
-> > >  }
-> >
-> > this actually looks correct.
-> 
-> Side note: I do think that while the above is correct, the rest of the
-> patch shows that we might be better off simply not havign the warning
-> for address space changes at all for the "cast a pointer to an integer
-> type" case.
-> 
-> When you cast to a non-pointer type, the address space issue simply
-> doesn't exist at all, so the warning makes less sense.
+On Fri, Sep 7, 2018@8:26 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> So it's not about casting to another pointer; it's rather about no
+> longer using the value as a user pointer but as an actual (untyped,
+> untagged) virtual address.
+>
+> There may be better options to address this but I haven't seen any
+> concrete proposal so far. Or we could simply consider that we've found
+> all places where it matters and not bother with any static analysis
+> tools (but for the time being it's still worth investigating whether we
+> can do better than this).
 
-That's actually a new (potential) issue introduced by these patches. The
-arm64 architecture has a feature called Top Byte Ignore (TBI, a.k.a.
-tagged pointers) where the top 8-bit of a 64-bit pointer can be set to
-anything and the hardware automatically ignores it when dereferencing.
-The arm64 user/kernel ABI currently mandates that any pointer passed
-from user space to the kernel must have the top byte 0.
+I actually originally wanted to have sparse not just check types, but
+actually do transformations too, in order to check more.
 
-This patchset is proposing to relax the ABI so that user pointers with a
-non-zero top byte can be actually passed via kernel syscalls. It
-basically moves the responsibility to remove the pointer tag (where
-needed) from user to the kernel (and for some good reasons, user space
-can't always do it given the way hwasan is implemented in LLVM).
+For example, for just the user pointer case, we actually have two
+wildy different kinds of user pointers: "checked" user pointers and
+"wild" user pointers.
 
-The downside is that now a tagged user pointer may not represent just a
-virtual address but address|tag, so things like access_ok() or
-find_extended_vma() need to untag (clear the top byte of) the pointer
-before use. Note that copy_from_user() etc. can safely dereference a
-tagged user pointer as the tag is automatically ignored by the hardware.
+Most of the time it doesn't matter, but it does for the unsafe ones:
+"__get_user()" and friends.
 
-The arm64 maintainers asked for a more reliable approach to identifying
-existing and new cases where such explicit untagging is required and one
-of the proposals was a sparse option. Based on some observations, it
-seems that untagging is needed when a pointer is cast to a long and the
-pointer tag information can be dropped. With the sparse patch, there are
-lots of warnings where we actually can preserve the tag (e.g. compat
-user pointers should be ignored since the top 32-bit are always 0), so
-Andrey is trying to mask such warnings out so that we can detect new
-potential issues as the kernel evolves.
+So long long ago I wanted sparse to not just do the completely static
+type analysis, but also do actual "data flow" analysis where doing an
+"access_on()" on a pointer would turn it from "wild" to "checked", and
+then I could have warned about "hey, this function does __get_user(),
+but the flow analysis shows that you passed it a pointer that had
+never been checked".
 
-So it's not about casting to another pointer; it's rather about no
-longer using the value as a user pointer but as an actual (untyped,
-untagged) virtual address.
+But sparse never ended up doing that kind of much smarter things. Some
+of the lock context stuff does it on a very small local level, and not
+very well there either.
 
-There may be better options to address this but I haven't seen any
-concrete proposal so far. Or we could simply consider that we've found
-all places where it matters and not bother with any static analysis
-tools (but for the time being it's still worth investigating whether we
-can do better than this).
+But it sounds like this is exactly what you guys would want for the
+tagged pointers. Some functions can take a "wild" pointer, because
+they deal with the tag part natively. And others need to be "checked"
+and have gone through the cleaning and verification.
 
-> It's really just he "pointer to one address space" being cast to
-> "pointer to another address space" that should really warn, and that
-> might need that "__force" thing.
+But sparse is sadly not the right tool for this, and having a single
+"__user" address space is not sufficient. I guess for the arm64 case,
+you really could make up a *new* address space: "__user_untagged", and
+then have functions that convert from "void __user *" to "void
+__user_untagged *", and then mark the functions that need the tag
+removed as taking that new kind of user pointer.
 
-I think sparse already warns if changing the address space of a pointer.
+And if you never mix types, that would actually work. But I'm guessing
+you can also pass "__user_untagged" pointers to the regular user
+access functions, and you do?
 
--- 
-Catalin
+                  Linus
