@@ -1,121 +1,63 @@
-From: daniel at ffwll.ch (Daniel Vetter)
-Date: Tue, 11 Sep 2018 12:05:55 +0200
+From: kraxel at redhat.com (Gerd Hoffmann)
+Date: Tue, 11 Sep 2018 14:03:50 +0200
 Subject: [PATCH v7] Add udmabuf misc device
 In-Reply-To: <18750721.r4B5nx0M26@avalon>
 References: <20180827093444.23623-1-kraxel@redhat.com>
  <21053714.0Xa7F2u2PE@avalon>
  <20180911065014.vo6qp6hkb7cjftdc@sirius.home.kraxel.org>
  <18750721.r4B5nx0M26@avalon>
-Message-ID: <CAKMK7uFviQPhsehfps0=gyA=bT72uQn1avzN7RXWE-OyRdb9aQ@mail.gmail.com>
+Message-ID: <20180911120350.qtacdf2otwzuywv2@sirius.home.kraxel.org>
 
-On Tue, Sep 11, 2018 at 11:50 AM, Laurent Pinchart
-<laurent.pinchart at ideasonboard.com> wrote:
-> Hi Gerd,
->
-> On Tuesday, 11 September 2018 09:50:14 EEST Gerd Hoffmann wrote:
->>   Hi,
->>
->> >> +#define UDMABUF_CREATE       _IOW('u', 0x42, struct udmabuf_create)
->> >
->> > Why do you start at 0x42 if you reserve the 0x40-0x4f range ?
->>
->> No particular strong reason, just that using 42 was less boring than
->> starting with 0x40.
->>
->> >> +#define UDMABUF_CREATE_LIST  _IOW('u', 0x43, struct
->> >> udmabuf_create_list)
->> >
->> > Where's the documentation ? :-)
->>
->> Isn't it simple enough?
->
-> No kernel UAPI is simple enough to get away without documenting it.
+> > >> +	if (WARN_ON(vmf->pgoff >= ubuf->pagecount))
+> > >> +		return VM_FAULT_SIGBUS;
+> > > 
+> > > Just curious, when do you expect this to happen ?
+> > 
+> > It should not.  If it actually happens it would be a bug somewhere,
+> > thats why the WARN_ON.
+> 
+> But you seem to consider that this condition that should never happen still 
+> has a high enough chance of happening that it's worth a WARN_ON(). I was 
+> wondering why this one in particular, and not other conditions that also can't 
+> happen and are not checked through the code. 
 
-Simplest option would be to throw a bit of kerneldoc into the uapi
-header, add Documentation/driver-api/dma-buf.rst.
--Daniel
+Added it while writing the code, to get any coding mistake I make
+flagged right away instead of things exploding later on.
 
->
->> But, well, yes, I guess I can add some kerneldoc comments.
->>
->> >> +static int udmabuf_vm_fault(struct vm_fault *vmf)
->> >> +{
->> >> +  struct vm_area_struct *vma = vmf->vma;
->> >> +  struct udmabuf *ubuf = vma->vm_private_data;
->> >> +
->> >> +  if (WARN_ON(vmf->pgoff >= ubuf->pagecount))
->> >> +          return VM_FAULT_SIGBUS;
->> >
->> > Just curious, when do you expect this to happen ?
->>
->> It should not.  If it actually happens it would be a bug somewhere,
->> thats why the WARN_ON.
->
-> But you seem to consider that this condition that should never happen still
-> has a high enough chance of happening that it's worth a WARN_ON(). I was
-> wondering why this one in particular, and not other conditions that also can't
-> happen and are not checked through the code.
->
->> >> +  struct udmabuf *ubuf;
->> >>
->> >> +  ubuf = kzalloc(sizeof(struct udmabuf), GFP_KERNEL);
->> >
->> > sizeof(*ubuf)
->>
->> Why?  Should not make a difference ...
->
+I can drop it.
+
+> > >> +	ubuf = kzalloc(sizeof(struct udmabuf), GFP_KERNEL);
+> > > 
+> > > sizeof(*ubuf)
+> > 
+> > Why?  Should not make a difference ...
+> 
 > Because the day we replace
->
->         struct udmabuf *ubuf;
->
+> 
+> 	struct udmabuf *ubuf;
+> 
 > with
->
->         struct udmabuf_ext *ubuf;
->
-> and forget to change the next line, we'll introduce a bug. That's why
-> sizeof(variable) is preferred over sizeof(type). Another reason is that I can
+> 
+> 	struct udmabuf_ext *ubuf;
+> 
+> and forget to change the next line, we'll introduce a bug. That's why 
+> sizeof(variable) is preferred over sizeof(type). Another reason is that I can 
 > easily see that
->
->         ubuf = kzalloc(sizeof(*ubuf), GFP_KERNEL);
->
-> is correct, while using sizeof(type) requires me to go and look up the
+> 
+> 	ubuf = kzalloc(sizeof(*ubuf), GFP_KERNEL);
+> 
+> is correct, while using sizeof(type) requires me to go and look up the 
 > declaration of the variable.
->
->> >> +          memfd = fget(list[i].memfd);
->> >> +          if (!memfd)
->> >> +                  goto err_put_pages;
->> >> +          if (!shmem_mapping(file_inode(memfd)->i_mapping))
->> >> +                  goto err_put_pages;
->> >> +          seals = memfd_fcntl(memfd, F_GET_SEALS, 0);
->> >> +          if (seals == -EINVAL ||
->> >> +              (seals & SEALS_WANTED) != SEALS_WANTED ||
->> >> +              (seals & SEALS_DENIED) != 0)
->> >> +                  goto err_put_pages;
->> >
->> > All these conditions will return -EINVAL. I'm not familiar with the memfd
->> > API, should some error conditions return a different error code to make
->> > them distinguishable by userspace ?
->>
->> Hmm, I guess EBADFD would be reasonable in case the file handle isn't a
->> memfd.  Other suggestions?
->
-> I'll let others comment on this as I don't feel qualified to pick proper error
-> codes, not being familiar with the memfd API.
->
->> I'll prepare a fixup patch series addressing most of the other
->> review comments.
->
-> --
-> Regards,
->
-> Laurent Pinchart
->
->
->
 
+So it simplifies review, ok, will change it.
 
+BTW: Maybe the kernel should pick up a neat trick from glib:
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-+41 (0) 79 365 57 48 - http://blog.ffwll.ch
+g_new0() is a macro which takes the type instead of the size as first
+argument, and it casts the return value to that type.  So the compiler
+will throw warnings in case of a mismatch.  That'll work better than
+depending purely on the coder being careful and review catching the
+remaining issues.
+
+cheers,
+  Gerd
