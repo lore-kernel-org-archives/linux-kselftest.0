@@ -1,195 +1,201 @@
-From: ydroneaud at opteya.com (Yann Droneaud)
-Date: Tue, 11 Sep 2018 22:47:17 +0200
-Subject: [v7] Add udmabuf misc device
-In-Reply-To: <20180827093444.23623-1-kraxel@redhat.com>
-References: <20180827093444.23623-1-kraxel@redhat.com>
-Message-ID: <e739a3e6de0e9d9c86ae98c6b5cc3710a1fcb40d.camel@opteya.com>
+From: mhiramat at kernel.org (Masami Hiramatsu)
+Date: Wed, 12 Sep 2018 18:57:43 +0900
+Subject: [PATCH v3 00/28] selftests/ftrace: Improve ftracetest with
+ coverage check
+In-Reply-To: <153563834333.29700.11242968505215651399.stgit@devbox>
+References: <153563834333.29700.11242968505215651399.stgit@devbox>
+Message-ID: <20180912185743.b00b0b152abd632e10f04608@kernel.org>
 
-Hi,
+Hi Shuah,
 
-Le lundi 27 août 2018 à 11:34 +0200, Gerd Hoffmann a écrit :
-> A driver to let userspace turn memfd regions into dma-bufs.
+Would you have any comment?
+
+Thank you,
+
+On Thu, 30 Aug 2018 23:12:24 +0900
+Masami Hiramatsu <mhiramat at kernel.org> wrote:
+
+> Hi,
 > 
-> Use case:  Allows qemu create dmabufs for the vga framebuffer or
-> virtio-gpu ressources.  Then they can be passed around to display
-> those guest things on the host.  To spice client for classic full
-> framebuffer display, and hopefully some day to wayland server for
-> seamless guest window display.
+> Here is the 3rd version of the series for improving ftracetest
+> testcase using gcov/lcov. In this version I just fixed some
+> reported issues and dropped some tests which is not needed.
+> I also dropped a testcase for blktrace from this version.
+> It will be discussed separated thread.
 > 
-> qemu test branch:
->   https://git.kraxel.org/cgit/qemu/log/?h=sirius/udmabuf
+> Previous version is here;
 > 
-> Cc: David Airlie <airlied at linux.ie>
-> Cc: Tomeu Vizoso <tomeu.vizoso at collabora.com>
-> Cc: Laurent Pinchart <laurent.pinchart at ideasonboard.com>
-> Cc: Daniel Vetter <daniel at ffwll.ch>
-> Signed-off-by: Gerd Hoffmann <kraxel at redhat.com>
-> Acked-by: Daniel Vetter <daniel.vetter at ffwll.ch>
+> https://lkml.org/lkml/2018/8/16/393
+> 
+> GCOV_PROFILE_FTRACE has already been merged through tracing
+> tree.
+> 
+> Ftracetest framework improvements:
+>  - Add --stop-fail for detecting failure soon.
+>  - Add --console for interactively debugging a testcase by shell.
+>  - Add testcase-number prefix to logfile for finding log easier.
+>  - Improve general init function
+>  - Add SPDX license identifiers
+>  - Call general init function after all testcases.
+>  - Remove init/cleanup code from all testcase (since general init
+>    function will fixed it up)
+> 
+> Testcase fixes:
+>  - Fix to check $comm availability.
+>  - Make checkbashisms clean
+> 
+> Testcase improvements:
+>  - Use loopback address instead of localhost
+>  - Improve kprobe on module testcase to load/unload module
+>  - Improve kprobe testcase to check log data
+>  - Improve kretprobe testcase to check log data
+>  - Test kprobe-event argument with various bitsize
+>  - Check set_event_pid result
+> 
+> Adding testcases:
+>  - Add kprobe event with $comm argument testcase
+>  - Add kprobe profile testcase
+>  - Add kprobe-event with symbol argument testcase
+>  - Add trace_printk sample module testcase
+>  - Add ringbuffer size changing testcase
+>  - Add function profiling statistics testcase
+>  - Add max stack tracer testcase
+>  - Add function filter on module testcase
+>  - Add trace_pipe testcase
+>  - Add stacktrace ftrace filter command testcase
+>  - Add wakeup tracer testcase
+>  - Add wakeup_rt tracer testcase
+>  - Add ftrace cpumask testcase
+> 
+> TBD:
+> Following testcase improvements are remaining.
+>  - Checking of various supported types (like u8, u64 etc.)
+>    testcases
+> 
+> Tested on x86-64 qemu.
+> 
+> # of passed:  84
+> # of failed:  0
+> # of unresolved:  0
+> # of untested:  0
+> # of unsupported:  0
+> # of xfailed:  0
+> # of undefined(test bug):  0
+> 
+> Thank you,
+> 
 > ---
->  Documentation/ioctl/ioctl-number.txt              |   1 +
->  include/uapi/linux/udmabuf.h                      |  33 +++
->  drivers/dma-buf/udmabuf.c                         | 287
-> ++++++++++++++++++++++
->  tools/testing/selftests/drivers/dma-buf/udmabuf.c |  96 ++++++++
->  MAINTAINERS                                       |  16 ++
->  drivers/dma-buf/Kconfig                           |   8 +
->  drivers/dma-buf/Makefile                          |   1 +
->  tools/testing/selftests/drivers/dma-buf/Makefile  |   5 +
->  8 files changed, 447 insertions(+)
->  create mode 100644 include/uapi/linux/udmabuf.h
->  create mode 100644 drivers/dma-buf/udmabuf.c
->  create mode 100644 tools/testing/selftests/drivers/dma-buf/udmabuf.c
->  create mode 100644 tools/testing/selftests/drivers/dma-buf/Makefile
 > 
-> diff --git a/include/uapi/linux/udmabuf.h
-> b/include/uapi/linux/udmabuf.h
-> new file mode 100644
-> index 0000000000..46b6532ed8
-> --- /dev/null
-> +++ b/include/uapi/linux/udmabuf.h
-> @@ -0,0 +1,33 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#ifndef _UAPI_LINUX_UDMABUF_H
-> +#define _UAPI_LINUX_UDMABUF_H
-> +
-> +#include <linux/types.h>
-> +#include <linux/ioctl.h>
-> +
-> +#define UDMABUF_FLAGS_CLOEXEC	0x01
-> +
-> +struct udmabuf_create {
-> +	__u32 memfd;
-> +	__u32 flags;
-> +	__u64 offset;
-> +	__u64 size;
-> +};
-> +
-> +struct udmabuf_create_item {
-> +	__u32 memfd;
-> +	__u32 __pad;
-> +	__u64 offset;
-> +	__u64 size;
-> +};
-> +
-> +struct udmabuf_create_list {
-> +	__u32 flags;
-> +	__u32 count;
-> +	struct udmabuf_create_item list[];
-> +};
-> +
-> +#define UDMABUF_CREATE       _IOW('u', 0x42, struct udmabuf_create)
-> +#define UDMABUF_CREATE_LIST  _IOW('u', 0x43, struct
-> udmabuf_create_list)
-> +
-> +#endif /* _UAPI_LINUX_UDMABUF_H */
-> diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-> new file mode 100644
-> index 0000000000..8e24204526
-> --- /dev/null
-> +++ b/drivers/dma-buf/udmabuf.c
-> +static long udmabuf_create(struct udmabuf_create_list *head,
-> +			   struct udmabuf_create_item *list)
-> +{
-> +	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
-> +	struct file *memfd = NULL;
-> +	struct udmabuf *ubuf;
-> +	struct dma_buf *buf;
-> +	pgoff_t pgoff, pgcnt, pgidx, pgbuf;
-> +	struct page *page;
-> +	int seals, ret = -EINVAL;
-> +	u32 i, flags;
-> +
-> +	ubuf = kzalloc(sizeof(struct udmabuf), GFP_KERNEL);
-> +	if (!ubuf)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < head->count; i++) {
+> Masami Hiramatsu (28):
+>       selftests/ftrace: Add --stop-fail hidden option for debug
+>       selftests/ftrace: Add --console hidden option
+>       selftests/ftrace: Add case number prefix to logfile
+>       selftests/ftrace: More initialize features in initialize_ftrace
+>       selftests/ftrace: Add SPDX License Identifier to template
+>       selftests/ftrace: Cleanup ftrace after running test
+>       selftests/ftrace: Remove unneeded per-test init/cleanup ftrace
+>       selftests/ftrace: Fix to test kprobe $comm arg only if available
+>       selftests/ftrace: Fix checkbashisms errors
+>       selftests/ftrace: Use loopback address instead of localhost
+>       selftests/ftrace: Improve kprobe on module testcase to load/unload module
+>       selftests/ftrace: Improve kprobe testcase to check log data
+>       selftests/ftrace: Improve kretprobe testcase to check log data
+>       selftests/ftrace: Test kprobe-event argument with various bitsize
+>       selftests/ftrace: Check set_event_pid result
+>       selftests/ftrace: Add kprobe event with $comm argument testcase
+>       selftests/ftrace: Add kprobe profile testcase
+>       selftests/ftrace: Add kprobe-event with symbol argument test
+>       selftests/ftrace: Add trace_printk sample module test
+>       selftests/ftrace: Add ringbuffer size changing testcase
+>       selftests/ftrace: Add function profiling stat testcase
+>       selftests/ftrace: Add max stack tracer testcase
+>       selftests/ftrace: Add function filter on module testcase
+>       selftests/ftrace: Add trace_pipe testcase
+>       selftests/ftrace: Add stacktrace ftrace filter command testcase
+>       selftests/ftrace: Add wakeup tracer testcase
+>       selftests/ftrace: Add wakeup_rt tracer testcase
+>       selftests/ftrace: Add ftrace cpumask testcase
+> 
+> 
+>  tools/testing/selftests/ftrace/config              |    6 ++
+>  tools/testing/selftests/ftrace/ftracetest          |   32 +++++++++++-
+>  .../ftrace/test.d/00basic/ringbuffer_size.tc       |   22 ++++++++
+>  .../selftests/ftrace/test.d/00basic/trace_pipe.tc  |   16 ++++++
+>  .../selftests/ftrace/test.d/event/event-enable.tc  |   10 ----
+>  .../selftests/ftrace/test.d/event/event-pid.tc     |    8 +--
+>  .../ftrace/test.d/event/subsystem-enable.tc        |   10 ----
+>  .../ftrace/test.d/event/toplevel-enable.tc         |   10 ----
+>  .../selftests/ftrace/test.d/event/trace_printk.tc  |   27 ++++++++++
+>  .../ftrace/test.d/ftrace/fgraph-filter-stack.tc    |    4 --
+>  .../ftrace/test.d/ftrace/fgraph-filter.tc          |    9 ---
+>  .../ftrace/test.d/ftrace/func-filter-pid.tc        |   10 ----
+>  .../ftrace/test.d/ftrace/func-filter-stacktrace.tc |   12 +++++
+>  .../selftests/ftrace/test.d/ftrace/func_cpumask.tc |   42 ++++++++++++++++
+>  .../ftrace/test.d/ftrace/func_event_triggers.tc    |    3 -
+>  .../ftrace/test.d/ftrace/func_mod_trace.tc         |   24 +++++++++
+>  .../ftrace/test.d/ftrace/func_profile_stat.tc      |   22 ++++++++
+>  .../ftrace/test.d/ftrace/func_profiler.tc          |    4 --
+>  .../ftrace/test.d/ftrace/func_set_ftrace_file.tc   |   13 -----
+>  .../ftrace/test.d/ftrace/func_stack_tracer.tc      |   39 +++++++++++++++
+>  .../test.d/ftrace/func_traceonoff_triggers.tc      |   11 ----
+>  tools/testing/selftests/ftrace/test.d/functions    |   11 ++++
+>  .../ftrace/test.d/kprobe/add_and_remove.tc         |    3 -
+>  .../selftests/ftrace/test.d/kprobe/busy_check.tc   |    3 -
+>  .../selftests/ftrace/test.d/kprobe/kprobe_args.tc  |    8 ++-
+>  .../ftrace/test.d/kprobe/kprobe_args_comm.tc       |   17 +++++++
+>  .../ftrace/test.d/kprobe/kprobe_args_string.tc     |    5 --
+>  .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     |   39 +++++++++++++++
+>  .../ftrace/test.d/kprobe/kprobe_args_syntax.tc     |    8 +--
+>  .../ftrace/test.d/kprobe/kprobe_args_type.tc       |   52 ++++++++++++--------
+>  .../ftrace/test.d/kprobe/kprobe_eventname.tc       |    5 --
+>  .../ftrace/test.d/kprobe/kprobe_ftrace.tc          |    9 ---
+>  .../ftrace/test.d/kprobe/kprobe_module.tc          |   36 ++++++++++++--
+>  .../ftrace/test.d/kprobe/kretprobe_args.tc         |    9 ++-
+>  .../ftrace/test.d/kprobe/kretprobe_maxactive.tc    |    4 --
+>  .../ftrace/test.d/kprobe/multiple_kprobes.tc       |    5 --
+>  .../selftests/ftrace/test.d/kprobe/probepoint.tc   |    4 --
+>  .../selftests/ftrace/test.d/kprobe/profile.tc      |   15 ++++++
+>  tools/testing/selftests/ftrace/test.d/template     |    1 
+>  .../selftests/ftrace/test.d/tracer/wakeup.tc       |   25 ++++++++++
+>  .../selftests/ftrace/test.d/tracer/wakeup_rt.tc    |   25 ++++++++++
+>  .../inter-event/trigger-extended-error-support.tc  |   12 -----
+>  .../inter-event/trigger-field-variable-support.tc  |   15 ------
+>  .../trigger-inter-event-combined-hist.tc           |   15 ------
+>  .../inter-event/trigger-multi-actions-accept.tc    |   14 -----
+>  .../inter-event/trigger-onmatch-action-hist.tc     |   16 +-----
+>  .../trigger-onmatch-onmax-action-hist.tc           |   16 +-----
+>  .../inter-event/trigger-onmax-action-hist.tc       |   16 +-----
+>  .../trigger-synthetic-event-createremove.tc        |   12 -----
+>  .../ftrace/test.d/trigger/trigger-eventonoff.tc    |   12 -----
+>  .../ftrace/test.d/trigger/trigger-filter.tc        |   14 -----
+>  .../ftrace/test.d/trigger/trigger-hist-mod.tc      |   12 -----
+>  .../ftrace/test.d/trigger/trigger-hist.tc          |   12 -----
+>  .../ftrace/test.d/trigger/trigger-multihist.tc     |   16 ------
+>  .../ftrace/test.d/trigger/trigger-snapshot.tc      |   12 -----
+>  .../ftrace/test.d/trigger/trigger-stacktrace.tc    |   12 -----
+>  .../test.d/trigger/trigger-trace-marker-hist.tc    |   11 ----
+>  .../trigger/trigger-trace-marker-snapshot.tc       |   16 +-----
+>  .../trigger-trace-marker-synthetic-kernel.tc       |   12 -----
+>  .../trigger/trigger-trace-marker-synthetic.tc      |   12 -----
+>  .../ftrace/test.d/trigger/trigger-traceonoff.tc    |   12 -----
+>  61 files changed, 460 insertions(+), 427 deletions(-)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/ringbuffer_size.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/tracer/wakeup.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc
+> 
+> --
+> Masami Hiramatsu (Linaro)
 
-You need to check .__pad for unsupported value:
-
-                if (list[i].__pad) {
-                        ret = -EINVAL;
-                        goto err_free_ubuf;
-                }
-
-> +		if (!IS_ALIGNED(list[i].offset, PAGE_SIZE))
-> +			goto err_free_ubuf;
-> +		if (!IS_ALIGNED(list[i].size, PAGE_SIZE))
-> +			goto err_free_ubuf;
-> +		ubuf->pagecount += list[i].size >> PAGE_SHIFT;
-> +	}
-> +	ubuf->pages = kmalloc_array(ubuf->pagecount, sizeof(struct page
-> *),
-> +				    GFP_KERNEL);
-> +	if (!ubuf->pages) {
-> +		ret = -ENOMEM;
-> +		goto err_free_ubuf;
-> +	}
-> +
-> +	pgbuf = 0;
-> +	for (i = 0; i < head->count; i++) {
-> +		memfd = fget(list[i].memfd);
-> +		if (!memfd)
-> +			goto err_put_pages;
-> +		if (!shmem_mapping(file_inode(memfd)->i_mapping))
-> +			goto err_put_pages;
-> +		seals = memfd_fcntl(memfd, F_GET_SEALS, 0);
-> +		if (seals == -EINVAL ||
-> +		    (seals & SEALS_WANTED) != SEALS_WANTED ||
-> +		    (seals & SEALS_DENIED) != 0)
-> +			goto err_put_pages;
-> +		pgoff = list[i].offset >> PAGE_SHIFT;
-> +		pgcnt = list[i].size   >> PAGE_SHIFT;
-> +		for (pgidx = 0; pgidx < pgcnt; pgidx++) {
-> +			page = shmem_read_mapping_page(
-> +				file_inode(memfd)->i_mapping, pgoff +
-> pgidx);
-> +			if (IS_ERR(page)) {
-> +				ret = PTR_ERR(page);
-> +				goto err_put_pages;
-> +			}
-> +			ubuf->pages[pgbuf++] = page;
-> +		}
-> +		fput(memfd);
-> +	}
-> +	memfd = NULL;
-> +
-> +	exp_info.ops  = &udmabuf_ops;
-> +	exp_info.size = ubuf->pagecount << PAGE_SHIFT;
-> +	exp_info.priv = ubuf;
-> +
-> +	buf = dma_buf_export(&exp_info);
-> +	if (IS_ERR(buf)) {
-> +		ret = PTR_ERR(buf);
-> +		goto err_put_pages;
-> +	}
-> +
-> +	flags = 0;
-
-You need to check .flags for unsupported value:
-
-        if (head->flags & ~UDMABUF_FLAGS_CLOEXEC)
-                 return -EINVAL;
-
-(at the beginning of the function, of course).
-
-> +	if (head->flags & UDMABUF_FLAGS_CLOEXEC)
-> +		flags |= O_CLOEXEC;
-> +	return dma_buf_fd(buf, flags);
-> +
-> +err_put_pages:
-> +	while (pgbuf > 0)
-> +		put_page(ubuf->pages[--pgbuf]);
-> +err_free_ubuf:
-> +	fput(memfd);
-> +	kfree(ubuf->pages);
-> +	kfree(ubuf);
-> +	return ret;
-> +}
-> +
-
-Regards
 
 -- 
-Yann Droneaud
-OPTEYA
+Masami Hiramatsu <mhiramat at kernel.org>
