@@ -1,42 +1,42 @@
-From: alexey.skidanov@intel.com (Alexey Skidanov)
-Date: Fri, 14 Sep 2018 12:46:58 +0300
-Subject: [PATCH] Fix compilation error
-Message-ID: <1536918418-5016-1-git-send-email-alexey.skidanov@intel.com>
+From: pbonzini@redhat.com (Paolo Bonzini)
+Date: Fri, 14 Sep 2018 19:38:04 +0200
+Subject: [PATCH]] kvm: selftests: use -pthread instead of -lpthread
+In-Reply-To: <1535526248-3759-1-git-send-email-Lei.Yang@windriver.com>
+References: <1535526248-3759-1-git-send-email-Lei.Yang@windriver.com>
+Message-ID: <6955862a-e192-fbfd-3ff3-cac7d70f02d0@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180914094658.p59r9iZK1JbgQgCuzrkqJWtD7m6vNaKR735YmV5nsdo@z>
+Message-ID: <20180914173804.Gav7ypraDRWyRSBjoZqWm5mnu2W-If2twBFqP1OB1aQ@z>
 
-ionmap_test compilation failed because there is no dma_buf.h on any of
-include paths. Moreover, it's better to use the dma_buf.h file of
-kernel under test and not the currently running one.
+On 29/08/2018 09:04, Lei Yang wrote:
+> I run into the following error
+> 
+> testing/selftests/kvm/dirty_log_test.c:285: undefined reference to `pthread_create'
+> testing/selftests/kvm/dirty_log_test.c:297: undefined reference to `pthread_join'
+> collect2: error: ld returned 1 exit status
+> 
+> my gcc version is gcc version 4.8.4
+> "-pthread" would work everywhere
+> 
+> Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 03b0f55..48c970c 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -20,7 +20,7 @@ INSTALL_HDR_PATH = $(top_srcdir)/usr
+>  LINUX_HDR_PATH = $(INSTALL_HDR_PATH)/include/
+>  LINUX_TOOL_INCLUDE = $(top_srcdir)tools/include
+>  CFLAGS += -O2 -g -std=gnu99 -I$(LINUX_TOOL_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude -I$(<D) -I..
+> -LDFLAGS += -lpthread
+> +LDFLAGS += -pthread
+>  
+>  # After inclusion, $(OUTPUT) is defined and
+>  # $(TEST_GEN_PROGS) starts with $(OUTPUT)/
+> 
 
-To fix this, add new target to the Makefile, installing Kernel headers
-for user space and direct compiler to look for dma_buf.h file there.
+Queued, thanks.
 
-Signed-off-by: Alexey Skidanov <alexey.skidanov at intel.com>
----
- tools/testing/selftests/android/ion/Makefile | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/android/ion/Makefile b/tools/testing/selftests/android/ion/Makefile
-index e036952..a4aac0e 100644
---- a/tools/testing/selftests/android/ion/Makefile
-+++ b/tools/testing/selftests/android/ion/Makefile
-@@ -1,10 +1,14 @@
- 
--INCLUDEDIR := -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../usr/include/
-+INCLUDEDIR := -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../uapi/include
- CFLAGS := $(CFLAGS) $(INCLUDEDIR) -Wall -O2 -g
- 
- TEST_GEN_FILES := ionapp_export ionapp_import ionmap_test
- 
--all: $(TEST_GEN_FILES)
-+all: usr_headers $(TEST_GEN_FILES)
-+
-+usr_headers:
-+	cd ../../../../../
-+	make headers_install INSTALL_HDR_PATH=./uapi
- 
- $(TEST_GEN_FILES): ipcsocket.c ionutils.c
- 
--- 
-2.7.4
+Paolo
