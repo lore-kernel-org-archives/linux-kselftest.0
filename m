@@ -1,77 +1,59 @@
-From: alexey.skidanov@intel.com (Alexey Skidanov)
-Date: Fri, 14 Sep 2018 22:53:08 +0300
-Subject: [PATCH] Fix compilation error
-In-Reply-To: <CAEUSe796puVCHcxNO35Wb1jD6YutXyzU35ofP1Tp-XTLu-TBLQ@mail.gmail.com>
-References: <1536918418-5016-1-git-send-email-alexey.skidanov@intel.com>
- <2108af5b-7877-5675-50d9-cbda82eed48d@redhat.com>
- <CAEUSe796puVCHcxNO35Wb1jD6YutXyzU35ofP1Tp-XTLu-TBLQ@mail.gmail.com>
-Message-ID: <c0963b7b-9a70-2c03-c8f3-0aa34fec62f6@intel.com>
+From: Alexander.Levin@microsoft.com (Sasha Levin)
+Date: Sat, 15 Sep 2018 01:32:58 +0000
+Subject: [PATCH AUTOSEL 4.14 47/57] selftest: timers: Tweak raw_skew to SKIP
+ when ADJ_OFFSET/other clock adjustments are in progress
+In-Reply-To: <20180915013223.179909-1-alexander.levin@microsoft.com>
+References: <20180915013223.179909-1-alexander.levin@microsoft.com>
+Message-ID: <20180915013223.179909-47-alexander.levin@microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180914195308.9_7XwW7Dfm9SRX0L0lOX62roCNnsmBAeb-qRQrdGO60@z>
+Message-ID: <20180915013258.vJGjYwoEer3NkN4WPD_D8U467CTy67rCTDRB8Y-MFCA@z>
 
+From: John Stultz <john.stultz@linaro.org>
 
+[ Upstream commit 1416270f4a1ae83ea84156ceba19a66a8f88be1f ]
 
-On 09/14/2018 10:02 PM, Daniel Díaz wrote:
-> Hello!
-> 
-> On Fri, 14 Sep 2018@13:30, Laura Abbott <labbott@redhat.com> wrote:
->>
->> On 09/14/2018 02:46 AM, Alexey Skidanov wrote:
->>> ionmap_test compilation failed because there is no dma_buf.h on any of
->>> include paths. Moreover, it's better to use the dma_buf.h file of
->>> kernel under test and not the currently running one.
->>>
->>> To fix this, add new target to the Makefile, installing Kernel headers
->>> for user space and direct compiler to look for dma_buf.h file there.
->>>
->>
->> This is what gpio has:
->>
->> ../../../../usr/include/linux/gpio.h:
->>          make -C ../../../.. headers_install INSTALL_HDR_PATH=$(shell pwd)/../../../../usr/
->>
->> I'd like to be consistent with other selftests. Shuah, what's
->> your opinion on the best way to get the headers?
-> 
-> Please consider Anders' patch, which is already in Shuah's next branch:
->   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=next&id=b2d35fa5fc80c27e868e393dcab4c94a0d71737f
-> 
-> Greetings!
-> 
-> Daniel Díaz
-> daniel.diaz at linaro.org
-> 
-> 
+In the past we've warned when ADJ_OFFSET was in progress, usually
+caused by ntpd or some other time adjusting daemon running in non
+steady sate, which can cause the skew calculations to be
+incorrect.
 
-Looks like the issue is already resolved :)
->> Thanks,
->> Laura
->>
->>> Signed-off-by: Alexey Skidanov <alexey.skidanov at intel.com>
->>> ---
->>>   tools/testing/selftests/android/ion/Makefile | 8 ++++++--
->>>   1 file changed, 6 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/android/ion/Makefile b/tools/testing/selftests/android/ion/Makefile
->>> index e036952..a4aac0e 100644
->>> --- a/tools/testing/selftests/android/ion/Makefile
->>> +++ b/tools/testing/selftests/android/ion/Makefile
->>> @@ -1,10 +1,14 @@
->>>
->>> -INCLUDEDIR := -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../usr/include/
->>> +INCLUDEDIR := -I. -I../../../../../drivers/staging/android/uapi/ -I../../../../../uapi/include
->>>   CFLAGS := $(CFLAGS) $(INCLUDEDIR) -Wall -O2 -g
->>>
->>>   TEST_GEN_FILES := ionapp_export ionapp_import ionmap_test
->>>
->>> -all: $(TEST_GEN_FILES)
->>> +all: usr_headers $(TEST_GEN_FILES)
->>> +
->>> +usr_headers:
->>> +     cd ../../../../../
->>> +     make headers_install INSTALL_HDR_PATH=./uapi
->>>
->>>   $(TEST_GEN_FILES): ipcsocket.c ionutils.c
->>>
->>>
->>
+Thus, this patch checks to see if the clock was being adjusted
+when we fail so that we don't cause false negatives.
+
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Ingo Molnar <mingo at kernel.org>
+Cc: Miroslav Lichvar <mlichvar at redhat.com>
+Cc: Richard Cochran <richardcochran at gmail.com>
+Cc: Prarit Bhargava <prarit at redhat.com>
+Cc: Stephen Boyd <sboyd at kernel.org>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: linux-kselftest at vger.kernel.org
+Suggested-by: Miroslav Lichvar <mlichvar at redhat.com>
+Signed-off-by: John Stultz <john.stultz at linaro.org>
+---
+v2: Widened the checks to look for other clock adjustments that
+    could happen, as suggested by Miroslav
+v3: Fixed up commit message
+Signed-off-by: Sasha Levin <alexander.levin at microsoft.com>
+---
+ tools/testing/selftests/timers/raw_skew.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/selftests/timers/raw_skew.c
+index ca6cd146aafe..dcf73c5dab6e 100644
+--- a/tools/testing/selftests/timers/raw_skew.c
++++ b/tools/testing/selftests/timers/raw_skew.c
+@@ -134,6 +134,11 @@ int main(int argv, char **argc)
+ 	printf(" %lld.%i(act)", ppm/1000, abs((int)(ppm%1000)));
+ 
+ 	if (llabs(eppm - ppm) > 1000) {
++		if (tx1.offset || tx2.offset ||
++		    tx1.freq != tx2.freq || tx1.tick != tx2.tick) {
++			printf("	[SKIP]\n");
++			return ksft_exit_skip("The clock was adjusted externally. Shutdown NTPd or other time sync daemons\n");
++		}
+ 		printf("	[FAILED]\n");
+ 		return ksft_exit_fail();
+ 	}
+-- 
+2.17.1
