@@ -1,10 +1,10 @@
 From: Alexander.Levin at microsoft.com (Sasha Levin)
-Date: Sat, 15 Sep 2018 01:34:43 +0000
-Subject: [PATCH AUTOSEL 4.9 28/34] selftest: timers: Tweak raw_skew to SKIP
+Date: Sat, 15 Sep 2018 01:35:15 +0000
+Subject: [PATCH AUTOSEL 4.4 17/20] selftest: timers: Tweak raw_skew to SKIP
  when ADJ_OFFSET/other clock adjustments are in progress
-In-Reply-To: <20180915013422.180023-1-alexander.levin@microsoft.com>
-References: <20180915013422.180023-1-alexander.levin@microsoft.com>
-Message-ID: <20180915013422.180023-28-alexander.levin@microsoft.com>
+In-Reply-To: <20180915013502.180110-1-alexander.levin@microsoft.com>
+References: <20180915013502.180110-1-alexander.levin@microsoft.com>
+Message-ID: <20180915013502.180110-17-alexander.levin@microsoft.com>
 
 From: John Stultz <john.stultz at linaro.org>
 
