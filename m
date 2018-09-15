@@ -1,12 +1,12 @@
 From: Alexander.Levin@microsoft.com (Sasha Levin)
-Date: Sat, 15 Sep 2018 01:32:58 +0000
-Subject: [PATCH AUTOSEL 4.14 47/57] selftest: timers: Tweak raw_skew to SKIP
+Date: Sat, 15 Sep 2018 01:34:43 +0000
+Subject: [PATCH AUTOSEL 4.9 28/34] selftest: timers: Tweak raw_skew to SKIP
  when ADJ_OFFSET/other clock adjustments are in progress
-In-Reply-To: <20180915013223.179909-1-alexander.levin@microsoft.com>
-References: <20180915013223.179909-1-alexander.levin@microsoft.com>
-Message-ID: <20180915013223.179909-47-alexander.levin@microsoft.com>
+In-Reply-To: <20180915013422.180023-1-alexander.levin@microsoft.com>
+References: <20180915013422.180023-1-alexander.levin@microsoft.com>
+Message-ID: <20180915013422.180023-28-alexander.levin@microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180915013258.vJGjYwoEer3NkN4WPD_D8U467CTy67rCTDRB8Y-MFCA@z>
+Message-ID: <20180915013443.YgCksuACOkG3nXPIF1VGNfMwHO91NvC8mo1fWikHRUw@z>
 
 From: John Stultz <john.stultz@linaro.org>
 
@@ -40,10 +40,10 @@ Signed-off-by: Sasha Levin <alexander.levin at microsoft.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/selftests/timers/raw_skew.c
-index ca6cd146aafe..dcf73c5dab6e 100644
+index 30906bfd9c1b..0ab937a17ebb 100644
 --- a/tools/testing/selftests/timers/raw_skew.c
 +++ b/tools/testing/selftests/timers/raw_skew.c
-@@ -134,6 +134,11 @@ int main(int argv, char **argc)
+@@ -146,6 +146,11 @@ int main(int argv, char **argc)
  	printf(" %lld.%i(act)", ppm/1000, abs((int)(ppm%1000)));
  
  	if (llabs(eppm - ppm) > 1000) {
