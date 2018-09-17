@@ -1,29 +1,21 @@
-From: gregkh@linuxfoundation.org (Greg KH)
-Date: Mon, 17 Sep 2018 09:12:59 +0200
-Subject: [GIT PULL] kselftest fixes update for Linux 4.19-rc5
-In-Reply-To: <ce9af2b4-86e1-6603-cd36-b900fb583e6f@kernel.org>
-References: <ce9af2b4-86e1-6603-cd36-b900fb583e6f@kernel.org>
-Message-ID: <20180917071259.GA27405@kroah.com>
+From: davem@davemloft.net (David Miller)
+Date: Mon, 17 Sep 2018 08:15:31 -0700 (PDT)
+Subject: [PATCH net-next] selftests/tls: Add MSG_WAITALL in recv() syscall
+In-Reply-To: <20180916043428.24329-1-vakul.garg@nxp.com>
+References: <20180916043428.24329-1-vakul.garg@nxp.com>
+Message-ID: <20180917.081531.1710106422276499589.davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180917071259.AnSy2-fpMaj6FUUyR4oq_kOg1axm2retfm4EuafL6Qk@z>
+Message-ID: <20180917151531.cXUP8DWtCjtTpi8gaB873VsInmylu1wMQyP8ASiJlvY@z>
 
-On Sun, Sep 16, 2018@02:22:21PM -0600, Shuah Khan wrote:
-> Hi Linus,
-> 
-> Please pull the following Kselftest update for Linux 4.19-rc5
-> 
-> linux-kselftest-4.19-rc5
-> 
-> This Kselftest fixes update for 4.19-rc5 consists of:
-> 
-> -- fixes to build failures
-> -- fixes to add missing config files to increase test coverage
-> -- fixes to cgroup test and a new cgroup test for memory.oom.group
-> 
-> Please note that the selftests: add headers_install to lib.mk patch changes
-> the main Makefile. Some tests can't build without headers installed. This 
-> fixes such test build failures.
+From: Vakul Garg <vakul.garg@nxp.com>
+Date: Sun, 16 Sep 2018 10:04:28 +0530
 
-I've merged these now, thanks.
+> A number of tls selftests rely upon recv() to return an exact number of
+> data bytes. When tls record crypto is done using an async accelerator,
+> it is possible that recv() returns lesser than expected number bytes.
+> This leads to failure of many test cases. To fix it, MSG_WAITALL has
+> been used in flags passed to recv() syscall.
+> 
+> Signed-off-by: Vakul Garg <vakul.garg at nxp.com>
 
-greg k-h
+Applied.
