@@ -1,84 +1,96 @@
-From: andreyknvl at google.com (Andrey Konovalov)
-Date: Mon, 17 Sep 2018 19:01:00 +0200
-Subject: [PATCH v6 11/11] arm64: annotate user pointers casts detected by
- sparse
-In-Reply-To: <20180911164152.GA29166@arrakis.emea.arm.com>
-References: <cover.1535629099.git.andreyknvl@google.com>
- <5d54526e5ff2e5ad63d0dfdd9ab17cf359afa4f2.1535629099.git.andreyknvl@google.com>
- <CA+55aFyW9N2tSb2bQvkthbVVyY6nt5yFeWQRLHp1zruBmb5ocw@mail.gmail.com>
- <CA+55aFy2t_MHgr_CgwbhtFkL+djaCq2qMM1G+f2DwJ0qEr1URQ@mail.gmail.com>
- <20180907152600.myidisza5o4kdmvf@armageddon.cambridge.arm.com>
- <CA+55aFzQ+ykLu10q3AdyaaKJx8SDWWL9Qiu6WH2jbN_ugRUTOg@mail.gmail.com>
- <20180911164152.GA29166@arrakis.emea.arm.com>
-Message-ID: <CAAeHK+z4HOF_PobxSys8svftWt8dhbuUXEpq2sdXBTCXwTEH2g@mail.gmail.com>
+From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
+Date: Tue, 18 Sep 2018 09:53:28 -0400
+Subject: [PATCH] rseq/selftests: fix parametrized test with -fpie
+Message-ID: <20180918135328.32034-1-mathieu.desnoyers@efficios.com>
 
-I took another look at the changes this patchset does to the kernel
-and here are my thoughts:
+On x86-64, the parametrized selftest code for rseq crashes with a
+segmentation fault when compiled with -fpie. This happens when the
+param_test binary is loaded at an address beyond 32-bit on x86-64.
 
-I see two ways how a (potentially tagged) user pointer gets into the kernel:
+The issue is caused by use of a 32-bit register to hold the address
+of the loop counter variable.
 
-1. A pointer is passed to a syscall (directly as an argument or
-indirectly as a struct field).
-2. A pointer is extracted from user context (registers, etc.) by some
-kind of a trap/fault handler.
-(Is there something else?)
+Fix this by using a 64-bit register to calculate the address of the
+loop counter variables as an offset from rip.
 
-In case 1 we also have a special case of a pointer passed to one of
-the memory syscalls (mmap, mprotect, etc.). These syscalls "are not
-doing memory accesses but rather dealing with the memory range, hence
-an untagged pointer is better suited" as pointed out by Catalin (these
-syscalls do not always use "unsigned long" instead of "void __user *"
-though, for example shmat uses "void __user *").
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+Cc: <stable at vger.kernel.org> # v4.18
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Joel Fernandes <joelaf at google.com>
+Cc: Peter Zijlstra <peterz at infradead.org>
+Cc: Catalin Marinas <catalin.marinas at arm.com>
+Cc: Dave Watson <davejwatson at fb.com>
+Cc: Will Deacon <will.deacon at arm.com>
+Cc: Shuah Khan <shuahkh at osg.samsung.com>
+Cc: Andi Kleen <andi at firstfloor.org>
+Cc: linux-kselftest at vger.kernel.org
+Cc: "H . Peter Anvin" <hpa at zytor.com>
+Cc: Chris Lameter <cl at linux.com>
+Cc: Russell King <linux at arm.linux.org.uk>
+Cc: Michael Kerrisk <mtk.manpages at gmail.com>
+Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
+Cc: Paul Turner <pjt at google.com>
+Cc: Boqun Feng <boqun.feng at gmail.com>
+Cc: Josh Triplett <josh at joshtriplett.org>
+Cc: Steven Rostedt <rostedt at goodmis.org>
+Cc: Ben Maurer <bmaurer at fb.com>
+Cc: Andy Lutomirski <luto at amacapital.net>
+Cc: Andrew Morton <akpm at linux-foundation.org>
+Cc: Linus Torvalds <torvalds at linux-foundation.org>
+---
+ tools/testing/selftests/rseq/param_test.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-Looking at patch #8 ("usb, arm64: untag user addresses in devio") in
-this series, it seems that that devio ioctl actually accepts a pointer
-into a vma, so we shouldn't actually be untagging its argument and the
-patch needs to be dropped. Otherwise there's quite a few more cases
-that needs to be changed (like tcp_zerocopy_receive() for example,
-more can be found by grepping find_vma() in generic code).
-
-Regarding case 2, it seems that analyzing casts of __user pointers
-won't really help, since the code (arch/arm64/mm/fault.c) doesn't
-really use them. However all of this code is arch specific, so it
-shouldn't really change over time (right?). It looks like dealing with
-tags passed to the kernel through these fault handlers is already
-resolved with these patches (and therefore patch #6 ("arm64: untag
-user address in __do_user_fault") in this series is not actually
-needed and can be dropped (need to test that)):
-
-276e9327 ("arm64: entry: improve data abort handling of tagged pointers"),
-81cddd65 ("arm64: traps: fix userspace cache maintenance emulation on
-a tagged pointer")
-7dcd9dd8 ("arm64: hw_breakpoint: fix watchpoint matching for tagged pointers")
-
-Now, I also see two cases when kernel behavior changes depending on
-whether a pointer is tagged:
-
-1. Kernel code checks that a pointer belongs to userspace by comparing
-it with TASK_SIZE/addr_limit/user_addr_max()/USER_DS/... .
-2. A pointer gets passed to find_vma() or similar functions.
-(Is there something else?)
-
-The initial thought that I had here is that the pointers that reach
-find_vma() must be passed through memory syscalls and therefore
-shouldn't be untagged and don't require any fixes. There are at least
-two exceptions to this: 1. get_user_pages() (see patch #4 ("mm, arm64:
-untag user addresses in mm/gup.c") in this patch series) and 2.
-__do_page_fault() in arch/arm64/mm/fault.c. Are there any other
-obvious exceptions? I've tried adding BUG_ON(has_tag(addr)) to
-find_vma() and running a modified syzkaller version that passes tagged
-pointers to the kernel and failed to find anything else.
-
-As for case 1, the places where pointers are compared with TASK_SIZE
-and others can be found with grep. Maybe it makes sense to introduce
-some kind of routine like is_user_pointer() that handles tagged
-pointers and refactor the existing code to use it? And maybe add a
-rule to checkpatch.pl that forbids the direct usage of TASK_SIZE and
-others.
-
-So I think detecting direct comparisons with TASK_SIZE and others
-would more useful than finding __user pointer casts (it seems that the
-latter requires a lot of annotations to be fixed/added), and I should
-just drop this patch with annotations.
-
-WDYT?
+diff --git a/tools/testing/selftests/rseq/param_test.c b/tools/testing/selftests/rseq/param_test.c
+index 615252331813..4bc071525bf7 100644
+--- a/tools/testing/selftests/rseq/param_test.c
++++ b/tools/testing/selftests/rseq/param_test.c
+@@ -56,15 +56,13 @@ unsigned int yield_mod_cnt, nr_abort;
+ 			printf(fmt, ## __VA_ARGS__);	\
+ 	} while (0)
+ 
+-#if defined(__x86_64__) || defined(__i386__)
++#ifdef __i386__
+ 
+ #define INJECT_ASM_REG	"eax"
+ 
+ #define RSEQ_INJECT_CLOBBER \
+ 	, INJECT_ASM_REG
+ 
+-#ifdef __i386__
+-
+ #define RSEQ_INJECT_ASM(n) \
+ 	"mov asm_loop_cnt_" #n ", %%" INJECT_ASM_REG "\n\t" \
+ 	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
+@@ -76,9 +74,16 @@ unsigned int yield_mod_cnt, nr_abort;
+ 
+ #elif defined(__x86_64__)
+ 
++#define INJECT_ASM_REG_P	"rax"
++#define INJECT_ASM_REG		"eax"
++
++#define RSEQ_INJECT_CLOBBER \
++	, INJECT_ASM_REG_P \
++	, INJECT_ASM_REG
++
+ #define RSEQ_INJECT_ASM(n) \
+-	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG "\n\t" \
+-	"mov (%%" INJECT_ASM_REG "), %%" INJECT_ASM_REG "\n\t" \
++	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG_P "\n\t" \
++	"mov (%%" INJECT_ASM_REG_P "), %%" INJECT_ASM_REG "\n\t" \
+ 	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
+ 	"jz 333f\n\t" \
+ 	"222:\n\t" \
+@@ -86,10 +91,6 @@ unsigned int yield_mod_cnt, nr_abort;
+ 	"jnz 222b\n\t" \
+ 	"333:\n\t"
+ 
+-#else
+-#error "Unsupported architecture"
+-#endif
+-
+ #elif defined(__ARMEL__)
+ 
+ #define RSEQ_INJECT_INPUT \
+-- 
+2.11.0
