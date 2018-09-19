@@ -1,96 +1,283 @@
-From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
-Date: Tue, 18 Sep 2018 09:53:28 -0400
-Subject: [PATCH] rseq/selftests: fix parametrized test with -fpie
-Message-ID: <20180918135328.32034-1-mathieu.desnoyers@efficios.com>
+From: dima at arista.com (Dmitry Safonov)
+Date: Wed, 19 Sep 2018 21:50:33 +0100
+Subject: [RFC 16/20] selftest: Add Time Namespace test for supported clocks
+In-Reply-To: <20180919205037.9574-1-dima@arista.com>
+References: <20180919205037.9574-1-dima@arista.com>
+Message-ID: <20180919205037.9574-17-dima@arista.com>
 
-On x86-64, the parametrized selftest code for rseq crashes with a
-segmentation fault when compiled with -fpie. This happens when the
-param_test binary is loaded at an address beyond 32-bit on x86-64.
+This test checks that all supported clocks can be changed by
+clock_settime.
 
-The issue is caused by use of a 32-bit register to hold the address
-of the loop counter variable.
-
-Fix this by using a 64-bit register to calculate the address of the
-loop counter variables as an offset from rip.
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
-Cc: <stable at vger.kernel.org> # v4.18
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: Joel Fernandes <joelaf at google.com>
-Cc: Peter Zijlstra <peterz at infradead.org>
-Cc: Catalin Marinas <catalin.marinas at arm.com>
-Cc: Dave Watson <davejwatson at fb.com>
-Cc: Will Deacon <will.deacon at arm.com>
-Cc: Shuah Khan <shuahkh at osg.samsung.com>
-Cc: Andi Kleen <andi at firstfloor.org>
 Cc: linux-kselftest at vger.kernel.org
-Cc: "H . Peter Anvin" <hpa at zytor.com>
-Cc: Chris Lameter <cl at linux.com>
-Cc: Russell King <linux at arm.linux.org.uk>
-Cc: Michael Kerrisk <mtk.manpages at gmail.com>
-Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
-Cc: Paul Turner <pjt at google.com>
-Cc: Boqun Feng <boqun.feng at gmail.com>
-Cc: Josh Triplett <josh at joshtriplett.org>
-Cc: Steven Rostedt <rostedt at goodmis.org>
-Cc: Ben Maurer <bmaurer at fb.com>
-Cc: Andy Lutomirski <luto at amacapital.net>
-Cc: Andrew Morton <akpm at linux-foundation.org>
-Cc: Linus Torvalds <torvalds at linux-foundation.org>
+Signed-off-by: Andrei Vagin <avagin at openvz.org>
+Co-developed-by: Andrei Vagin <avagin at openvz.org>
+Signed-off-by: Dmitry Safonov <dima at arista.com>
 ---
- tools/testing/selftests/rseq/param_test.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ tools/testing/selftests/timens/.gitignore |   1 +
+ tools/testing/selftests/timens/Makefile   |   5 +
+ tools/testing/selftests/timens/config     |   1 +
+ tools/testing/selftests/timens/log.h      |  21 ++++
+ tools/testing/selftests/timens/timens.c   | 196 ++++++++++++++++++++++++++++++
+ 5 files changed, 224 insertions(+)
+ create mode 100644 tools/testing/selftests/timens/.gitignore
+ create mode 100644 tools/testing/selftests/timens/Makefile
+ create mode 100644 tools/testing/selftests/timens/config
+ create mode 100644 tools/testing/selftests/timens/log.h
+ create mode 100644 tools/testing/selftests/timens/timens.c
 
-diff --git a/tools/testing/selftests/rseq/param_test.c b/tools/testing/selftests/rseq/param_test.c
-index 615252331813..4bc071525bf7 100644
---- a/tools/testing/selftests/rseq/param_test.c
-+++ b/tools/testing/selftests/rseq/param_test.c
-@@ -56,15 +56,13 @@ unsigned int yield_mod_cnt, nr_abort;
- 			printf(fmt, ## __VA_ARGS__);	\
- 	} while (0)
- 
--#if defined(__x86_64__) || defined(__i386__)
-+#ifdef __i386__
- 
- #define INJECT_ASM_REG	"eax"
- 
- #define RSEQ_INJECT_CLOBBER \
- 	, INJECT_ASM_REG
- 
--#ifdef __i386__
--
- #define RSEQ_INJECT_ASM(n) \
- 	"mov asm_loop_cnt_" #n ", %%" INJECT_ASM_REG "\n\t" \
- 	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
-@@ -76,9 +74,16 @@ unsigned int yield_mod_cnt, nr_abort;
- 
- #elif defined(__x86_64__)
- 
-+#define INJECT_ASM_REG_P	"rax"
-+#define INJECT_ASM_REG		"eax"
+diff --git a/tools/testing/selftests/timens/.gitignore b/tools/testing/selftests/timens/.gitignore
+new file mode 100644
+index 000000000000..27a693229ce1
+--- /dev/null
++++ b/tools/testing/selftests/timens/.gitignore
+@@ -0,0 +1 @@
++timens
+diff --git a/tools/testing/selftests/timens/Makefile b/tools/testing/selftests/timens/Makefile
+new file mode 100644
+index 000000000000..b877efb78974
+--- /dev/null
++++ b/tools/testing/selftests/timens/Makefile
+@@ -0,0 +1,5 @@
++TEST_GEN_PROGS := timens
 +
-+#define RSEQ_INJECT_CLOBBER \
-+	, INJECT_ASM_REG_P \
-+	, INJECT_ASM_REG
++CFLAGS := -Wall -Werror
 +
- #define RSEQ_INJECT_ASM(n) \
--	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG "\n\t" \
--	"mov (%%" INJECT_ASM_REG "), %%" INJECT_ASM_REG "\n\t" \
-+	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG_P "\n\t" \
-+	"mov (%%" INJECT_ASM_REG_P "), %%" INJECT_ASM_REG "\n\t" \
- 	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
- 	"jz 333f\n\t" \
- 	"222:\n\t" \
-@@ -86,10 +91,6 @@ unsigned int yield_mod_cnt, nr_abort;
- 	"jnz 222b\n\t" \
- 	"333:\n\t"
- 
--#else
--#error "Unsupported architecture"
--#endif
--
- #elif defined(__ARMEL__)
- 
- #define RSEQ_INJECT_INPUT \
++include ../lib.mk
+diff --git a/tools/testing/selftests/timens/config b/tools/testing/selftests/timens/config
+new file mode 100644
+index 000000000000..4480620f6f49
+--- /dev/null
++++ b/tools/testing/selftests/timens/config
+@@ -0,0 +1 @@
++CONFIG_TIME_NS=y
+diff --git a/tools/testing/selftests/timens/log.h b/tools/testing/selftests/timens/log.h
+new file mode 100644
+index 000000000000..05fec7f97870
+--- /dev/null
++++ b/tools/testing/selftests/timens/log.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __SELFTEST_TIMENS_LOG_H__
++#define __SELFTEST_TIMENS_LOG_H__
++
++#define pr_msg(fmt, lvl, ...)						\
++	fprintf(stderr, "[%s] (%s:%d)\t" fmt "\n",			\
++			lvl, __FILE__, __LINE__, ##__VA_ARGS__)
++
++#define pr_p(func, fmt, ...)	func(fmt ": %m", ##__VA_ARGS__)
++
++#define pr_err(fmt, ...)						\
++	({								\
++		pr_msg(fmt, "ERR", ##__VA_ARGS__)			\
++		-1;							\
++	})
++#define pr_fail(fmt, ...)	pr_msg(fmt, "FAIL", ##__VA_ARGS__)
++
++#define pr_perror(fmt, ...)	pr_p(pr_err, fmt, ##__VA_ARGS__)
++
++#endif
+diff --git a/tools/testing/selftests/timens/timens.c b/tools/testing/selftests/timens/timens.c
+new file mode 100644
+index 000000000000..dfa6701214b1
+--- /dev/null
++++ b/tools/testing/selftests/timens/timens.c
+@@ -0,0 +1,196 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <sched.h>
++#include <stdio.h>
++#include <stdbool.h>
++#include <sys/stat.h>
++#include <sys/syscall.h>
++#include <sys/types.h>
++#include <time.h>
++#include <unistd.h>
++#include <time.h>
++
++#include "log.h"
++
++#ifndef CLONE_NEWTIME
++# define CLONE_NEWTIME	0x00001000
++#endif
++
++/*
++ * Test shouldn't be run for a day, so add 10 days to child
++ * time and check parent's time to be in the same day.
++ */
++#define DAY_IN_SEC			(60*60*24)
++#define TEN_DAYS_IN_SEC			(10*DAY_IN_SEC)
++
++#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
++
++#define CLOCK_TYPES							\
++	ct(CLOCK_BOOTTIME),						\
++	ct(CLOCK_MONOTONIC),						\
++	ct(CLOCK_MONOTONIC_COARSE),					\
++	ct(CLOCK_MONOTONIC_RAW),					\
++
++
++#define ct(clock)	clock
++static clockid_t clocks[] = {
++	CLOCK_TYPES
++};
++#undef ct
++#define ct(clock)	#clock
++static char *clock_names[] = {
++	CLOCK_TYPES
++};
++
++static int child_ns, parent_ns;
++
++static int switch_ns(int fd)
++{
++	if (setns(fd, CLONE_NEWTIME)) {
++		pr_perror("setns()");
++		return -1;
++	}
++
++	return 0;
++}
++
++static int init_namespaces(void)
++{
++	char path[] = "/proc/self/ns/time";
++	struct stat st1, st2;
++
++	parent_ns = open(path, O_RDONLY);
++	if (parent_ns <= 0)
++		return pr_perror("Unable to open %s", path);
++
++	if (fstat(parent_ns, &st1))
++		return pr_perror("Unable to stat the parent timens");
++
++	if (unshare(CLONE_NEWTIME))
++		return pr_perror("Can't unshare() timens");
++
++	child_ns = open(path, O_RDONLY);
++	if (child_ns <= 0)
++		return pr_perror("Unable to open %s", path);
++
++	if (fstat(child_ns, &st2))
++		return pr_perror("Unable to stat the timens");
++
++	if (st1.st_ino == st2.st_ino)
++		return pr_perror("The same child_ns after CLONE_NEWTIME");
++
++	return 0;
++}
++
++static int _gettime(clockid_t clk_id, struct timespec *res, bool raw_syscall)
++{
++	int err;
++
++	if (!raw_syscall) {
++		if (clock_gettime(clk_id, res)) {
++			pr_perror("clock_gettime(%d)", (int)clk_id);
++			return -1;
++		}
++		return 0;
++	}
++
++	err = syscall(SYS_clock_gettime, clk_id, res);
++	if (err)
++		pr_perror("syscall(SYS_clock_gettime(%d))", (int)clk_id);
++
++	return err;
++}
++
++static int _settime(clockid_t clk_id, struct timespec *res, bool raw_syscall)
++{
++	int err;
++
++	if (!raw_syscall) {
++		if (clock_settime(clk_id, res))
++			return pr_perror("clock_settime(%d)", (int)clk_id);
++		return 0;
++	}
++
++	err = syscall(SYS_clock_settime, clk_id, res);
++	if (err)
++		pr_perror("syscall(SYS_clock_settime(%d))", (int)clk_id);
++
++	return err;
++}
++
++static int test_gettime(clockid_t clock_index, bool raw_syscall, time_t offset)
++{
++	struct timespec child_ts_new, parent_ts_old, cur_ts;
++	char *entry = raw_syscall ? "syscall" : "vdso";
++	double precision = 0.0;
++
++	switch (clocks[clock_index]) {
++	case CLOCK_MONOTONIC_COARSE:
++	case CLOCK_MONOTONIC_RAW:
++		precision = -2.0;
++		break;
++	}
++
++	if (switch_ns(parent_ns))
++		return pr_err("switch_ns(%d)", child_ns);
++
++	if (_gettime(clocks[clock_index], &parent_ts_old, raw_syscall))
++		return -1;
++
++	if (switch_ns(child_ns))
++		return pr_err("switch_ns(%d)", child_ns);
++
++	child_ts_new.tv_nsec = parent_ts_old.tv_nsec;
++	child_ts_new.tv_sec = parent_ts_old.tv_sec + offset;
++
++	if (_settime(clocks[clock_index], &child_ts_new, raw_syscall))
++		return -1;
++
++	if (_gettime(clocks[clock_index], &cur_ts, raw_syscall))
++		return -1;
++
++	if (difftime(cur_ts.tv_sec, child_ts_new.tv_sec) < precision) {
++		pr_fail("Child's %s (%s) time has not changed: %lu -> %lu [%lu]",
++			clock_names[clock_index], entry, parent_ts_old.tv_sec,
++			child_ts_new.tv_sec, cur_ts.tv_sec);
++		return -1;
++	}
++
++	if (switch_ns(parent_ns))
++		return pr_err("switch_ns(%d)", parent_ns);
++
++	if (_gettime(clocks[clock_index], &cur_ts, raw_syscall))
++		return -1;
++
++	if (difftime(cur_ts.tv_sec, parent_ts_old.tv_sec) > DAY_IN_SEC) {
++		pr_fail("Parent's %s (%s) time has changed: %lu -> %lu [%lu]",
++			clock_names[clock_index], entry, parent_ts_old.tv_sec,
++			child_ts_new.tv_sec, cur_ts.tv_sec);
++		/* Let's play nice and put it closer to original */
++		clock_settime(clocks[clock_index], &cur_ts);
++		return -1;
++	}
++
++	pr_msg("Passed for %s (%s)", "OK", clock_names[clock_index], entry);
++	return 0;
++}
++
++int main(int argc, char *argv[])
++{
++	unsigned int i;
++	int ret = 0;
++
++	if (init_namespaces())
++		return 1;
++
++	for (i = 0; i < ARRAY_SIZE(clocks); i++) {
++		ret |= test_gettime(i, true, TEN_DAYS_IN_SEC);
++		ret |= test_gettime(i, true, -TEN_DAYS_IN_SEC);
++		ret |= test_gettime(i, false, TEN_DAYS_IN_SEC);
++		ret |= test_gettime(i, false, -TEN_DAYS_IN_SEC);
++	}
++
++	return !!ret;
++}
 -- 
-2.11.0
+2.13.6
