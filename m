@@ -1,145 +1,141 @@
 From: dima at arista.com (Dmitry Safonov)
-Date: Wed, 19 Sep 2018 21:50:35 +0100
-Subject: [RFC 18/20] selftest/timens: Add test for clock_nanosleep
-In-Reply-To: <20180919205037.9574-1-dima@arista.com>
-References: <20180919205037.9574-1-dima@arista.com>
-Message-ID: <20180919205037.9574-19-dima@arista.com>
+Date: Wed, 19 Sep 2018 21:50:17 +0100
+Subject: [RFC 00/20] ns: Introduce Time Namespace
+Message-ID: <20180919205037.9574-1-dima@arista.com>
 
-From: Andrei Vagin <avagin at gmail.com>
+Discussions around time virtualization are there for a long time.
+The first attempt to implement time namespace was in 2006 by Jeff Dike.
+>From that time, the topic appears on and off in various discussions.
 
-Check that clock_nanosleep() takes into account clock offsets.
+There are two main use cases for time namespaces:
+1. change date and time inside a container;
+2. adjust clocks for a container restored from a checkpoint.
 
-Cc: linux-kselftest at vger.kernel.org
-Signed-off-by: Andrei Vagin <avagin at openvz.org>
-Signed-off-by: Dmitry Safonov <dima at arista.com>
----
- tools/testing/selftests/timens/.gitignore        |  1 +
- tools/testing/selftests/timens/Makefile          |  2 +-
- tools/testing/selftests/timens/clock_nanosleep.c | 98 ++++++++++++++++++++++++
- 3 files changed, 100 insertions(+), 1 deletion(-)
+“It seems like this might be one of the last major obstacles keeping
+migration from being used in production systems, given that not all
+containers and connections can be migrated as long as a time dependency
+is capable of messing it up.” (by github.com/dav-ell)
+
+The kernel provides access to several clocks: CLOCK_REALTIME,
+CLOCK_MONOTONIC, CLOCK_BOOTTIME. Last two clocks are monotonous, but the
+start points for them are not defined and are different for each running
+system. When a container is migrated from one node to another, all
+clocks have to be restored into consistent states; in other words, they
+have to continue running from the same points where they have been
+dumped.
+
+The main idea behind this patch set is adding per-namespace offsets for
+system clocks. When a process in a non-root time namespace requests
+time of a clock, a namespace offset is added to the current value of
+this clock on a host and the sum is returned.
+
+All offsets are placed on a separate page, this allows up to map it as 
+part of vvar into user processes and use offsets from vdso calls.
+
+Now offsets are implemented for CLOCK_MONOTONIC and CLOCK_BOOTTIME
+clocks.
+
+Questions to discuss:
+
+* Clone flags exhaustion. Currently there is only one unused clone flag
+bit left, and it may be worth to use it to extend arguments of the clone
+system call.
+
+* Realtime clock implementation details:
+  Is having a simple offset enough?
+  What to do when date and time is changed on the host?
+  Is there a need to adjust vfs modification and creation times? 
+  Implementation for adjtime() syscall.
+
+Cc: Dmitry Safonov <0x7f454c46 at gmail.com>
+Cc: Adrian Reber <adrian at lisas.de>
+Cc: Andrei Vagin <avagin at openvz.org>
+Cc: Andy Lutomirski <luto at kernel.org>
+Cc: Christian Brauner <christian.brauner at ubuntu.com>
+Cc: Cyrill Gorcunov <gorcunov at openvz.org>
+Cc: "Eric W. Biederman" <ebiederm at xmission.com>
+Cc: "H. Peter Anvin" <hpa at zytor.com> 
+Cc: Ingo Molnar <mingo at redhat.com>
+Cc: Jeff Dike <jdike at addtoit.com>
+Cc: Oleg Nesterov <oleg at redhat.com>
+Cc: Pavel Emelyanov <xemul at virtuozzo.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: containers at lists.linux-foundation.org
+Cc: criu at openvz.org
+Cc: linux-api at vger.kernel.org
+Cc: x86 at kernel.org
+
+Andrei Vagin (12):
+  ns: Introduce Time Namespace
+  timens: Add timens_offsets
+  timens: Introduce CLOCK_MONOTONIC offsets
+  timens: Introduce CLOCK_BOOTTIME offset
+  timerfd/timens: Take into account ns clock offsets
+  kernel: Take into account timens clock offsets in clock_nanosleep
+  x86/vdso/timens: Add offsets page in vvar
+  x86/vdso: Use set_normalized_timespec() to avoid 32 bit overflow
+  posix-timers/timens: Take into account clock offsets
+  selftest/timens: Add test for timerfd
+  selftest/timens: Add test for clock_nanosleep
+  timens/selftest: Add timer offsets test
+
+Dmitry Safonov (8):
+  timens: Shift /proc/uptime
+  x86/vdso: Restrict splitting vvar vma
+  x86/vdso: Purge timens page on setns()/unshare()/clone()
+  x86/vdso: Look for vvar vma to purge timens page
+  timens: Add align for timens_offsets
+  timens: Optimize zero-offsets
+  selftest: Add Time Namespace test for supported clocks
+  timens/selftest: Add procfs selftest
+
+ arch/Kconfig                                     |   5 +
+ arch/x86/Kconfig                                 |   1 +
+ arch/x86/entry/vdso/vclock_gettime.c             |  52 +++++
+ arch/x86/entry/vdso/vdso-layout.lds.S            |   9 +-
+ arch/x86/entry/vdso/vdso2c.c                     |   3 +
+ arch/x86/entry/vdso/vma.c                        |  67 +++++++
+ arch/x86/include/asm/vdso.h                      |   2 +
+ fs/proc/namespaces.c                             |   3 +
+ fs/proc/uptime.c                                 |   3 +
+ fs/timerfd.c                                     |  16 +-
+ include/linux/nsproxy.h                          |   1 +
+ include/linux/proc_ns.h                          |   1 +
+ include/linux/time_namespace.h                   |  72 +++++++
+ include/linux/timens_offsets.h                   |  25 +++
+ include/linux/user_namespace.h                   |   1 +
+ include/uapi/linux/sched.h                       |   1 +
+ init/Kconfig                                     |   8 +
+ kernel/Makefile                                  |   1 +
+ kernel/fork.c                                    |   3 +-
+ kernel/nsproxy.c                                 |  19 +-
+ kernel/time/hrtimer.c                            |   8 +
+ kernel/time/posix-timers.c                       |  89 ++++++++-
+ kernel/time/posix-timers.h                       |   2 +
+ kernel/time_namespace.c                          | 230 +++++++++++++++++++++++
+ tools/testing/selftests/timens/.gitignore        |   5 +
+ tools/testing/selftests/timens/Makefile          |   6 +
+ tools/testing/selftests/timens/clock_nanosleep.c |  98 ++++++++++
+ tools/testing/selftests/timens/config            |   1 +
+ tools/testing/selftests/timens/log.h             |  21 +++
+ tools/testing/selftests/timens/procfs.c          | 145 ++++++++++++++
+ tools/testing/selftests/timens/timens.c          | 196 +++++++++++++++++++
+ tools/testing/selftests/timens/timer.c           |  95 ++++++++++
+ tools/testing/selftests/timens/timerfd.c         |  96 ++++++++++
+ 33 files changed, 1272 insertions(+), 13 deletions(-)
+ create mode 100644 include/linux/time_namespace.h
+ create mode 100644 include/linux/timens_offsets.h
+ create mode 100644 kernel/time_namespace.c
+ create mode 100644 tools/testing/selftests/timens/.gitignore
+ create mode 100644 tools/testing/selftests/timens/Makefile
  create mode 100644 tools/testing/selftests/timens/clock_nanosleep.c
+ create mode 100644 tools/testing/selftests/timens/config
+ create mode 100644 tools/testing/selftests/timens/log.h
+ create mode 100644 tools/testing/selftests/timens/procfs.c
+ create mode 100644 tools/testing/selftests/timens/timens.c
+ create mode 100644 tools/testing/selftests/timens/timer.c
+ create mode 100644 tools/testing/selftests/timens/timerfd.c
 
-diff --git a/tools/testing/selftests/timens/.gitignore b/tools/testing/selftests/timens/.gitignore
-index b609f6ee9fb9..9b6c8ddac2c8 100644
---- a/tools/testing/selftests/timens/.gitignore
-+++ b/tools/testing/selftests/timens/.gitignore
-@@ -1,2 +1,3 @@
-+clock_nanosleep
- timens
- timerfd
-diff --git a/tools/testing/selftests/timens/Makefile b/tools/testing/selftests/timens/Makefile
-index 66b90cd28e5c..76a1dc891184 100644
---- a/tools/testing/selftests/timens/Makefile
-+++ b/tools/testing/selftests/timens/Makefile
-@@ -1,4 +1,4 @@
--TEST_GEN_PROGS := timens timerfd
-+TEST_GEN_PROGS := timens timerfd clock_nanosleep
- 
- CFLAGS := -Wall -Werror
- 
-diff --git a/tools/testing/selftests/timens/clock_nanosleep.c b/tools/testing/selftests/timens/clock_nanosleep.c
-new file mode 100644
-index 000000000000..5af780b4cfe0
---- /dev/null
-+++ b/tools/testing/selftests/timens/clock_nanosleep.c
-@@ -0,0 +1,98 @@
-+#define _GNU_SOURCE
-+#include <sched.h>
-+
-+#include <sys/timerfd.h>
-+#include <sys/syscall.h>
-+#include <time.h>
-+#include <unistd.h>
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <stdint.h>
-+
-+#include "log.h"
-+
-+#ifndef CLONE_NEWTIME
-+#define CLONE_NEWTIME   0x00001000
-+#endif
-+
-+static long long get_elapsed_time(int clockid, struct timespec *start)
-+{
-+	struct timespec curr;
-+	long long secs, nsecs;
-+
-+	if (clock_gettime(clockid, &curr) == -1)
-+		return pr_perror("clock_gettime");
-+
-+	secs = curr.tv_sec - start->tv_sec;
-+	nsecs = curr.tv_nsec - start->tv_nsec;
-+	if (nsecs < 0) {
-+		secs--;
-+		nsecs += 1000000000;
-+	}
-+	if (nsecs > 1000000000) {
-+		secs++;
-+		nsecs -= 1000000000;
-+	}
-+	return secs * 1000 + nsecs / 1000000;
-+}
-+
-+int run_test(int clockid)
-+{
-+	long long elapsed;
-+	int i;
-+
-+	for (i = 0; i < 2; i++) {
-+		struct timespec now = {};
-+		struct timespec start;
-+
-+		if (clock_gettime(clockid, &start) == -1)
-+			return pr_perror("clock_gettime");
-+
-+
-+		if (i == 1) {
-+			now.tv_sec = start.tv_sec;
-+			now.tv_nsec = start.tv_nsec;
-+		}
-+
-+		printf("clock_nanosleep: %d\n", clockid);
-+		now.tv_sec += 2;
-+		clock_nanosleep(clockid, i ? TIMER_ABSTIME : 0, &now, NULL);
-+
-+		elapsed = get_elapsed_time(clockid, &start);
-+		if (elapsed < 1900 || elapsed > 2100) {
-+			pr_fail("elapsed %lld\n", elapsed);
-+			return 1;
-+		}
-+	}
-+
-+	printf("PASS\n");
-+
-+	return 0;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct timespec tp;
-+	int ret;
-+
-+	if (unshare(CLONE_NEWTIME))
-+		return pr_perror("unshare");;
-+
-+	if (clock_gettime(CLOCK_MONOTONIC, &tp))
-+		return pr_perror("clock_gettime");
-+	tp.tv_sec += 7 * 24 * 3600;
-+	if (clock_settime(CLOCK_MONOTONIC, &tp))
-+		return pr_perror("clock_settime");
-+
-+	if (clock_gettime(CLOCK_BOOTTIME, &tp))
-+		return pr_perror("clock_gettime");
-+	tp.tv_sec += 9 * 24 * 3600;
-+	tp.tv_nsec = 0;
-+	if (clock_settime(CLOCK_BOOTTIME, &tp))
-+		return pr_perror("clock_settime");
-+
-+	ret = 0;
-+	ret |= run_test(CLOCK_MONOTONIC);
-+	return ret;
-+}
-+
 -- 
 2.13.6
