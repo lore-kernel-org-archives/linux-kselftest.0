@@ -1,65 +1,71 @@
 From: dima@arista.com (Dmitry Safonov)
-Date: Wed, 19 Sep 2018 21:50:34 +0100
-Subject: [RFC 17/20] selftest/timens: Add test for timerfd
+Date: Wed, 19 Sep 2018 21:50:37 +0100
+Subject: [RFC 20/20] timens/selftest: Add timer offsets test
 In-Reply-To: <20180919205037.9574-1-dima@arista.com>
 References: <20180919205037.9574-1-dima@arista.com>
-Message-ID: <20180919205037.9574-18-dima@arista.com>
+Message-ID: <20180919205037.9574-21-dima@arista.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180919205034.mugc9CrNsCiEZxA8IhloXcJPtFvXZLmbgv6LYLjdVTQ@z>
+Message-ID: <20180919205037.6AQqpglBGrnwCxwv8I46Yxx3xMvSq2UTrzgn1pUUClE@z>
 
-From: Andrei Vagin <avagin@gmail.com>
+From: Andrei Vagin <avagin@openvz.org>
 
-Check that timerfd_create takes into account clock offsets.
+Check that timer_create takes into account clock offsets.
 
 Cc: linux-kselftest at vger.kernel.org
 Signed-off-by: Andrei Vagin <avagin at openvz.org>
 Signed-off-by: Dmitry Safonov <dima at arista.com>
 ---
  tools/testing/selftests/timens/.gitignore |  1 +
- tools/testing/selftests/timens/Makefile   |  2 +-
- tools/testing/selftests/timens/timerfd.c  | 96 +++++++++++++++++++++++++++++++
+ tools/testing/selftests/timens/Makefile   |  3 +-
+ tools/testing/selftests/timens/timer.c    | 95 +++++++++++++++++++++++++++++++
  3 files changed, 98 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/timens/timerfd.c
+ create mode 100644 tools/testing/selftests/timens/timer.c
 
 diff --git a/tools/testing/selftests/timens/.gitignore b/tools/testing/selftests/timens/.gitignore
-index 27a693229ce1..b609f6ee9fb9 100644
+index 94ffdd9cead7..3b7eda8f35ce 100644
 --- a/tools/testing/selftests/timens/.gitignore
 +++ b/tools/testing/selftests/timens/.gitignore
-@@ -1 +1,2 @@
+@@ -1,4 +1,5 @@
+ clock_nanosleep
+ procfs
  timens
-+timerfd
++timer
+ timerfd
 diff --git a/tools/testing/selftests/timens/Makefile b/tools/testing/selftests/timens/Makefile
-index b877efb78974..66b90cd28e5c 100644
+index f96f50d1fef8..ae1ffd24cc43 100644
 --- a/tools/testing/selftests/timens/Makefile
 +++ b/tools/testing/selftests/timens/Makefile
-@@ -1,4 +1,4 @@
--TEST_GEN_PROGS := timens
-+TEST_GEN_PROGS := timens timerfd
+@@ -1,5 +1,6 @@
+-TEST_GEN_PROGS := timens timerfd clock_nanosleep procfs
++TEST_GEN_PROGS := timens timerfd timer clock_nanosleep procfs
  
  CFLAGS := -Wall -Werror
++LDFLAGS := -lrt
  
-diff --git a/tools/testing/selftests/timens/timerfd.c b/tools/testing/selftests/timens/timerfd.c
+ include ../lib.mk
+diff --git a/tools/testing/selftests/timens/timer.c b/tools/testing/selftests/timens/timer.c
 new file mode 100644
-index 000000000000..914a4cd9a0df
+index 000000000000..e3a0951aadc8
 --- /dev/null
-+++ b/tools/testing/selftests/timens/timerfd.c
-@@ -0,0 +1,96 @@
++++ b/tools/testing/selftests/timens/timer.c
+@@ -0,0 +1,95 @@
 +// SPDX-License-Identifier: GPL-2.0
 +#define _GNU_SOURCE
 +#include <sched.h>
 +
-+#include <sys/timerfd.h>
 +#include <sys/syscall.h>
 +#include <time.h>
 +#include <unistd.h>
 +#include <stdlib.h>
 +#include <stdio.h>
 +#include <stdint.h>
++#include <signal.h>
++#include <time.h>
 +
 +#include "log.h"
 +
 +#ifndef CLONE_NEWTIME
-+# define CLONE_NEWTIME	0x00001000
++#define CLONE_NEWTIME   0x00001000	  /* New time namespace */
 +#endif
 +
 +int run_test(int clockid)
@@ -67,12 +73,14 @@ index 000000000000..914a4cd9a0df
 +	struct itimerspec new_value;
 +	struct timespec now;
 +	long long elapsed;
-+	int fd, i;
++	timer_t fd;
++	int i;
 +
-+	if (clock_gettime(clockid, &now))
++	if (clock_gettime(clockid, &now) == -1)
 +		return pr_perror("clock_gettime");
 +
 +	for (i = 0; i < 2; i++) {
++		struct sigevent sevp = {.sigev_notify = SIGEV_NONE};
 +		int flags = 0;
 +
 +		pr_msg("timerfd_settime: %d", "INFO", clockid);
@@ -86,26 +94,22 @@ index 000000000000..914a4cd9a0df
 +			new_value.it_value.tv_nsec += now.tv_nsec;
 +		}
 +
-+		fd = timerfd_create(clockid, 0);
-+		if (fd == -1)
++		if (timer_create(clockid, &sevp, &fd) == -1)
 +			return pr_perror("timerfd_create");
 +
 +		if (i == 1)
-+			flags |= TFD_TIMER_ABSTIME;
-+
-+		if (timerfd_settime(fd, flags, &new_value, NULL))
++			flags |= TIMER_ABSTIME;
++		if (timer_settime(fd, flags, &new_value, NULL) == -1)
 +			return pr_perror("timerfd_settime");
 +
-+		if (timerfd_gettime(fd, &new_value))
++		if (timer_gettime(fd, &new_value) == -1)
 +			return pr_perror("timerfd_gettime");
 +
 +		elapsed = new_value.it_value.tv_sec;
 +		if (abs(elapsed - 3600) > 60) {
-+			printf("FAIL\n");
++			pr_fail("elapsed: %lld\n", elapsed);
 +			return 1;
 +		}
-+
-+		close(fd);
 +	}
 +
 +	printf("PASS\n");
@@ -123,13 +127,13 @@ index 000000000000..914a4cd9a0df
 +
 +	if (clock_gettime(CLOCK_MONOTONIC, &tp))
 +		return pr_perror("clock_gettime");
-+	tp.tv_sec = 7 * 24 * 3600;
++	tp.tv_sec -= 70 * 24 * 3600;
 +	if (clock_settime(CLOCK_MONOTONIC, &tp))
 +		return pr_perror("clock_settime");
 +
 +	if (clock_gettime(CLOCK_BOOTTIME, &tp))
 +		return pr_perror("clock_gettime");
-+	tp.tv_sec += 9 * 24 * 3600;
++	tp.tv_sec -= 9 * 24 * 3600;
 +	tp.tv_nsec = 0;
 +	if (clock_settime(CLOCK_BOOTTIME, &tp))
 +		return pr_perror("clock_settime");
