@@ -1,186 +1,77 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Fri, 21 Sep 2018 16:53:44 -0600
-Subject: [PATCH v4] selftests: membarrier: reorganized test for LTS
- supportability
-In-Reply-To: <20180903190457.27088-1-rafael.tinoco@linaro.org>
-References: <1a86c3c5-66f5-24d8-4fcc-367302ecec35@kernel.org>
- <20180903190457.27088-1-rafael.tinoco@linaro.org>
-Message-ID: <dcc20b51-3069-6854-3190-b8958e2f9b96@kernel.org>
+From: jerry.hoemann at hpe.com (Jerry Hoemann)
+Date: Fri, 21 Sep 2018 16:55:26 -0600
+Subject: [PATCH] selftests: watchdog: Add gettimeout and get|set pretimeout
+Message-ID: <1537570526-65241-1-git-send-email-jerry.hoemann@hpe.com>
 
-On 09/03/2018 01:04 PM, Rafael David Tinoco wrote:
-> This commit re-organizes membarrier test, solving issues when testing
-> LTS kernels. Now, the code:
-> 
->  - always run the same amount of tests (even on older kernels).
->  - allows each test to succeed, fail or be skipped independently.
->  - allows testing features even when explicitly unsupported (force=1).
->  - able to consider different return codes for diff kernel versions.
->  - checks false positive/negative by checking ret code and errno.
->  - can be extended easily: to expand an array with commands.
-> 
-> Link: https://bugs.linaro.org/show_bug.cgi?id=3771
-> Signed-off-by: Rafael David Tinoco <rafael.tinoco at linaro.org>
-> ---
->  .../selftests/membarrier/membarrier_test.c    | 482 +++++++++---------
->  1 file changed, 241 insertions(+), 241 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/membarrier/membarrier_test.c b/tools/testing/selftests/membarrier/membarrier_test.c
-> index 6793f8ecc8e7..151bc8a944a3 100644
-> --- a/tools/testing/selftests/membarrier/membarrier_test.c
-> +++ b/tools/testing/selftests/membarrier/membarrier_test.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #define _GNU_SOURCE
->  #include <linux/membarrier.h>
-> +#include <sys/utsname.h>
->  #include <syscall.h>
->  #include <stdio.h>
->  #include <errno.h>
-> @@ -8,305 +9,304 @@
->  
->  #include "../kselftest.h"
->  
-> -static int sys_membarrier(int cmd, int flags)
-> +#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-> +#define KERNEL_VERSION(a, b, c) (((a) << 16) + ((b) << 8) + (c))
-> +
-> +struct memb_tests {
-> +	char testname[80];
-> +	int command;
-> +	int flags;
-> +	int exp_ret;
-> +	int exp_errno;
-> +	int enabled;
-> +	int force;
-> +	int force_exp_errno;
-> +	int above;
-> +	int bellow;
-> +};
-> +
-> +struct memb_tests mbt[] = {
-> +	{
-> +	 .testname = "cmd_fail\0",
-> +	 .command = -1,
-> +	 .exp_ret = -1,
-> +	 .exp_errno = EINVAL,
-> +	 .enabled = 1,
-> +	 },
-> +	{
-> +	 .testname = "cmd_flags_fail\0",
-> +	 .command = MEMBARRIER_CMD_QUERY,
-> +	 .flags = 1,
-> +	 .exp_ret = -1,
-> +	 .exp_errno = EINVAL,
-> +	 .enabled = 1,
-> +	 },
-> +	{
-> +	 .testname = "cmd_global_success\0",
-> +	 .command = MEMBARRIER_CMD_GLOBAL,
-> +	 .flags = 0,
-> +	 .exp_ret = 0,
-> +	 },
-> +	/*
-> +	 * PRIVATE EXPEDITED (forced)
-> +	 */
-> +	{
-> +	 .testname = "cmd_private_expedited_fail\0",
-> +	 .command = MEMBARRIER_CMD_PRIVATE_EXPEDITED,
-> +	 .flags = 0,
-> +	 .exp_ret = -1,
-> +	 .exp_errno = EPERM,
-> +	 .force = 1,
-> +	 .force_exp_errno = EINVAL,
-> +	 .bellow = KERNEL_VERSION(4, 10, 0),
-> +	 },
-> +	{
-> +	 .testname = "cmd_private_expedited_fail\0",
-> +	 .command = MEMBARRIER_CMD_PRIVATE_EXPEDITED,
-> +	 .flags = 0,
-> +	 .exp_ret = -1,
-> +	 .exp_errno = EPERM,
-> +	 .force = 1,
-> +	 .force_exp_errno = EPERM,
-> +	 .above = KERNEL_VERSION(4, 10, 0),
-> +	 },
-> +	{
-> +	 .testname = "cmd_register_private_expedited_success\0",
-> +	 .command = MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED,
-> +	 .flags = 0,
-> +	 .exp_ret = 0,
-> +	 .force = 1,
-> +	 .force_exp_errno = EINVAL,
-> +	 },
-> +	{
-> +	 .testname = "cmd_private_expedited_success\0",
-> +	 .command = MEMBARRIER_CMD_PRIVATE_EXPEDITED,
-> +	 .flags = 0,
-> +	 .exp_ret = 0,
-> +	 .force = 1,
-> +	 .force_exp_errno = EINVAL,
-> +	 },
-> +	 /*
-> +	  * PRIVATE EXPEDITED SYNC CORE
-> +	  */
-> +	{
-> +	 .testname = "cmd_private_expedited_sync_core_fail\0",
-> +	 .command = MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE,
-> +	 .flags = 0,
-> +	 .exp_ret = -1,
-> +	 .exp_errno = EPERM,
-> +	 },
-> +	{
-> +	 .testname = "cmd_register_private_expedited_sync_core_success\0",
-> +	 .command = MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE,
-> +	 .flags = 0,
-> +	 .exp_ret = 0,
-> +	 },
-> +	{
-> +	 .testname = "cmd_private_expedited_sync_core_success\0",
-> +	 .command = MEMBARRIER_CMD_PRIVATE_EXPEDITED,
-> +	 .flags = 0,
-> +	 .exp_ret = 0,
-> +	 },
-> +	/*
-> +	 * GLOBAL EXPEDITED
-> +	 * global membarrier from a non-registered process is valid
-> +	 */
-> +	{
-> +	 .testname = "cmd_global_expedited_success\0",
-> +	 .command = MEMBARRIER_CMD_GLOBAL_EXPEDITED,
-> +	 .flags = 0,
-> +	 .exp_ret = 0,
-> +	 },
-> +	{
-> +	 .testname = "cmd_register_global_expedited_success\0",
-> +	 .command = MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED,
-> +	 .flags = 0,
-> +	 .exp_ret = 0,
-> +	 },
-> +	{
-> +	 .testname = "cmd_global_expedited_success\0",
-> +	 .command = MEMBARRIER_CMD_GLOBAL_EXPEDITED,
-> +	 .flags = 0,
-> +	 .exp_ret = 0,
-> +	 },
-> +};
-> +
-> +static void
-> +info_passed_ok(struct memb_tests test)
->  {
-> -	return syscall(__NR_membarrier, cmd, flags);
-> +	ksft_test_result_pass("sys_membarrier(): %s succeeded.\n",
-> +			test.testname);
->  }
->  
+Add command line arguments to call ioctl WDIOC_GETTIMEOUT,
+WDIOC_GETPRETIMEOUT and WDIOC_SETPRETIMEOUT.
 
-Why do we need to add new routines for these conditions. Why can't handle
-these strings in array. For example you can define an array of strings for
+Signed-off-by: Jerry Hoemann <jerry.hoemann at hpe.com>
+---
+ tools/testing/selftests/watchdog/watchdog-test.c | 30 +++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
 
-passed unexpectedly etc. and the pass the string to appropriate ksft_* interface
-instead of adding of these routines. Also it is hard to review the code this way.
-
-I do like the direction though. Also please run get_maintainer.pl and cc everybody
-it suggests.
-
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
+index 6e29087..4861e2c 100644
+--- a/tools/testing/selftests/watchdog/watchdog-test.c
++++ b/tools/testing/selftests/watchdog/watchdog-test.c
+@@ -19,7 +19,7 @@
+ 
+ int fd;
+ const char v = 'V';
+-static const char sopts[] = "bdehp:t:";
++static const char sopts[] = "bdehp:t:Tn:N";
+ static const struct option lopts[] = {
+ 	{"bootstatus",          no_argument, NULL, 'b'},
+ 	{"disable",             no_argument, NULL, 'd'},
+@@ -27,6 +27,9 @@
+ 	{"help",                no_argument, NULL, 'h'},
+ 	{"pingrate",      required_argument, NULL, 'p'},
+ 	{"timeout",       required_argument, NULL, 't'},
++	{"gettimeout",          no_argument, NULL, 'T'},
++	{"pretimeout",    required_argument, NULL, 'n'},
++	{"getpretimeout",       no_argument, NULL, 'N'},
+ 	{NULL,                  no_argument, NULL, 0x0}
+ };
+ 
+@@ -71,6 +74,9 @@ static void usage(char *progname)
+ 	printf(" -h, --help          Print the help message\n");
+ 	printf(" -p, --pingrate=P    Set ping rate to P seconds (default %d)\n", DEFAULT_PING_RATE);
+ 	printf(" -t, --timeout=T     Set timeout to T seconds\n");
++	printf(" -T, --gettimeout    Get the timeout\n");
++	printf(" -n, --pretimeout    Set the pretimeout to T seconds\n");
++	printf(" -N, --getpretimeout Get the pretimeout\n");
+ 	printf("\n");
+ 	printf("Parameters are parsed left-to-right in real-time.\n");
+ 	printf("Example: %s -d -t 10 -p 5 -e\n", progname);
+@@ -135,6 +141,28 @@ int main(int argc, char *argv[])
+ 			else
+ 				printf("WDIOC_SETTIMEOUT errno '%s'\n", strerror(errno));
+ 			break;
++		case 'T':
++			ret = ioctl(fd, WDIOC_GETTIMEOUT, &flags);
++			if (!ret)
++				printf("Watchdog timeout set to %u seconds.\n", flags);
++			else
++				printf("WDIOC_GETTIMEOUT errno '%s'\n", strerror(errno));
++			break;
++		case 'n':
++			flags = strtoul(optarg, NULL, 0);
++			ret = ioctl(fd, WDIOC_SETPRETIMEOUT, &flags);
++			if (!ret)
++				printf("Watchdog pretimeout set to %u seconds.\n", flags);
++			else
++				printf("WDIOC_SETPRETIMEOUT errno '%s'\n", strerror(errno));
++			break;
++		case 'N':
++			ret = ioctl(fd, WDIOC_GETPRETIMEOUT, &flags);
++			if (!ret)
++				printf("Watchdog pretimeout set to %u seconds.\n", flags);
++			else
++				printf("WDIOC_GETPRETIMEOUT errno '%s'\n", strerror(errno));
++			break;
+ 		default:
+ 			usage(argv[0]);
+ 			goto end;
+-- 
+1.8.3.1
