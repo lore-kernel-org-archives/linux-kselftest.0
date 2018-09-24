@@ -1,212 +1,32 @@
-From: avagin@virtuozzo.com (Andrey Vagin)
-Date: Mon, 24 Sep 2018 20:51:33 +0000
-Subject: [RFC 00/20] ns: Introduce Time Namespace
-In-Reply-To: <874lej6nny.fsf@xmission.com>
+From: shuah@kernel.org (Shuah Khan)
+Date: Mon, 24 Sep 2018 15:36:56 -0600
+Subject: [RFC 16/20] selftest: Add Time Namespace test for supported clocks
+In-Reply-To: <20180919205037.9574-17-dima@arista.com>
 References: <20180919205037.9574-1-dima@arista.com>
- <874lej6nny.fsf@xmission.com>
-Message-ID: <20180924205119.GA14833@outlook.office365.com>
+ <20180919205037.9574-17-dima@arista.com>
+Message-ID: <741594c9-2247-3cde-5da9-ae8cc41854b6@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180924205133.sUrlMddAq7veaIrF2WV_uhhR_UGltWfsmYTzso7KMr4@z>
+Message-ID: <20180924213656.umLFWi9W9dmfwqGbY1CInullmkXlgvnobGJUf0zLhyg@z>
 
-On Fri, Sep 21, 2018@02:27:29PM +0200, Eric W. Biederman wrote:
-> Dmitry Safonov <dima at arista.com> writes:
-> 
-> > Discussions around time virtualization are there for a long time.
-> > The first attempt to implement time namespace was in 2006 by Jeff Dike.
-> > From that time, the topic appears on and off in various discussions.
-> >
-> > There are two main use cases for time namespaces:
-> > 1. change date and time inside a container;
-> > 2. adjust clocks for a container restored from a checkpoint.
-> >
-> > “It seems like this might be one of the last major obstacles keeping
-> > migration from being used in production systems, given that not all
-> > containers and connections can be migrated as long as a time dependency
-> > is capable of messing it up.” (by github.com/dav-ell)
-> >
-> > The kernel provides access to several clocks: CLOCK_REALTIME,
-> > CLOCK_MONOTONIC, CLOCK_BOOTTIME. Last two clocks are monotonous, but the
-> > start points for them are not defined and are different for each running
-> > system. When a container is migrated from one node to another, all
-> > clocks have to be restored into consistent states; in other words, they
-> > have to continue running from the same points where they have been
-> > dumped.
-> >
-> > The main idea behind this patch set is adding per-namespace offsets for
-> > system clocks. When a process in a non-root time namespace requests
-> > time of a clock, a namespace offset is added to the current value of
-> > this clock on a host and the sum is returned.
-> >
-> > All offsets are placed on a separate page, this allows up to map it as 
-> > part of vvar into user processes and use offsets from vdso calls.
-> >
-> > Now offsets are implemented for CLOCK_MONOTONIC and CLOCK_BOOTTIME
-> > clocks.
-> >
-> > Questions to discuss:
-> >
-> > * Clone flags exhaustion. Currently there is only one unused clone flag
-> > bit left, and it may be worth to use it to extend arguments of the clone
-> > system call.
-> >
-> > * Realtime clock implementation details:
-> >   Is having a simple offset enough?
-> >   What to do when date and time is changed on the host?
-> >   Is there a need to adjust vfs modification and creation times? 
-> >   Implementation for adjtime() syscall.
-> 
-> Overall I support this effort.  In my quick skim this code looked good.
+Hi Dmitry,
 
-Hi Eric,
+Thanks for adding tests with the kernel changes.
 
-Thank you for the feedback.
+On 09/19/2018 02:50 PM, Dmitry Safonov wrote:
+> This test checks that all supported clocks can be changed by
+> clock_settime.
 
-> 
-> My feeling is that we need to be able to support running ntpd and
-> support one namespace doing googles smoothing of leap seconds while
-> another namespace takes the leap second.
-> 
-> What I was imagining when I was last thinking about this was one
-> instance of struct timekeeper aka tk_core per time namespace.  That
-> structure already keeps offsets for all of the various clocks from
-> the kerne internal time sources.  What would be needed would be to
-> pass in an appropriate time namespace pointer.
-> 
-> I could be completely wrong as I have not take the time to completely
-> trace through the code.  Have you looked at pushing the time namespace
-> down as far as tk_core?
-> 
-> What I think would be the big advantage (besides ntp working) is that
-> the bulk of the code could be reused.  Allowing testing of the kernel's
-> time code by setting up a new time namespace.  So a person in production
-> could setup a time namespace with the time set ahead a little  bit and
-> be able to verify that the kernel handles the upcoming leap second
-> properly.
->
+It would good to elaborate a bit more on the nature of the tests in the
+here. Also a few things to consider.
 
-It is an interesting idea, but I have a few questions:
+I noticed that this test isn't added to selftests/Makefile as TARGET. If it is
+an oversight, please make that change as well. If not, it is fine.
 
-1. Does it mean that timekeeping_update() will be called for each
-namespace? This functions is called periodically, it updates times on the
-timekeeper structure, updates vsyscall_gtod_data, etc. What will be an
-overhead of this?
+Please make sure if the test can't be run because of unmet dependencies, the test
+will exit with KSFT_SKIP as opposed to an error. Dependencies include configuration,
+privilege, any other unsupported conditions.
 
-2. What will we do with vdso? It looks like we will have to have a
-separate vsyscall_gtod_data for each ns and update each of them
-separately.
+This is a comment applies to all the test patches in this series.
 
-> 
-> 
-> I don't know about the vfs.  I think the danger is being able to write
-> dates in the future or in the past.  It appears that utimes(2) and
-> utimesnat(2) already allow this except for status change.  So it is
-> possible we simply don't care.  I seem to remember that what nfs does
-> is take the time stamp from the host writing to the file.
-> 
-> I think the guide for filesystem timestamps should be to first ensure
-> we don't introduce security issues, and then do what distributed
-> filesystems do when dealing with hosts with different clocks.
-> 
-> Given those those two guidlines above I don't think there is a need to
-> change timestamsp the way the user namespace changes uid when displayed.
-> 
-> 
-> 
-> As for the hardware like the real time clock we definitely should not
-> let a root in a time namespace change it.  We might even be able to get
-> away with leaving the real time clock out of the time namespace.  If not
-> we need to be very careful how the real time clock is abstracted.  I
-> would start by leaving the real time clock hardware out of the time
-> namespace and see if there is any part of userspace that cares.
-> 
-> Eric
-> 
-> > Cc: Dmitry Safonov <0x7f454c46 at gmail.com>
-> > Cc: Adrian Reber <adrian at lisas.de>
-> > Cc: Andrei Vagin <avagin at openvz.org>
-> > Cc: Andy Lutomirski <luto at kernel.org>
-> > Cc: Christian Brauner <christian.brauner at ubuntu.com>
-> > Cc: Cyrill Gorcunov <gorcunov at openvz.org>
-> > Cc: "Eric W. Biederman" <ebiederm at xmission.com>
-> > Cc: "H. Peter Anvin" <hpa at zytor.com> 
-> > Cc: Ingo Molnar <mingo at redhat.com>
-> > Cc: Jeff Dike <jdike at addtoit.com>
-> > Cc: Oleg Nesterov <oleg at redhat.com>
-> > Cc: Pavel Emelyanov <xemul at virtuozzo.com>
-> > Cc: Shuah Khan <shuah at kernel.org>
-> > Cc: Thomas Gleixner <tglx at linutronix.de>
-> > Cc: containers at lists.linux-foundation.org
-> > Cc: criu at openvz.org
-> > Cc: linux-api at vger.kernel.org
-> > Cc: x86 at kernel.org
-> >
-> > Andrei Vagin (12):
-> >   ns: Introduce Time Namespace
-> >   timens: Add timens_offsets
-> >   timens: Introduce CLOCK_MONOTONIC offsets
-> >   timens: Introduce CLOCK_BOOTTIME offset
-> >   timerfd/timens: Take into account ns clock offsets
-> >   kernel: Take into account timens clock offsets in clock_nanosleep
-> >   x86/vdso/timens: Add offsets page in vvar
-> >   x86/vdso: Use set_normalized_timespec() to avoid 32 bit overflow
-> >   posix-timers/timens: Take into account clock offsets
-> >   selftest/timens: Add test for timerfd
-> >   selftest/timens: Add test for clock_nanosleep
-> >   timens/selftest: Add timer offsets test
-> >
-> > Dmitry Safonov (8):
-> >   timens: Shift /proc/uptime
-> >   x86/vdso: Restrict splitting vvar vma
-> >   x86/vdso: Purge timens page on setns()/unshare()/clone()
-> >   x86/vdso: Look for vvar vma to purge timens page
-> >   timens: Add align for timens_offsets
-> >   timens: Optimize zero-offsets
-> >   selftest: Add Time Namespace test for supported clocks
-> >   timens/selftest: Add procfs selftest
-> >
-> >  arch/Kconfig                                     |   5 +
-> >  arch/x86/Kconfig                                 |   1 +
-> >  arch/x86/entry/vdso/vclock_gettime.c             |  52 +++++
-> >  arch/x86/entry/vdso/vdso-layout.lds.S            |   9 +-
-> >  arch/x86/entry/vdso/vdso2c.c                     |   3 +
-> >  arch/x86/entry/vdso/vma.c                        |  67 +++++++
-> >  arch/x86/include/asm/vdso.h                      |   2 +
-> >  fs/proc/namespaces.c                             |   3 +
-> >  fs/proc/uptime.c                                 |   3 +
-> >  fs/timerfd.c                                     |  16 +-
-> >  include/linux/nsproxy.h                          |   1 +
-> >  include/linux/proc_ns.h                          |   1 +
-> >  include/linux/time_namespace.h                   |  72 +++++++
-> >  include/linux/timens_offsets.h                   |  25 +++
-> >  include/linux/user_namespace.h                   |   1 +
-> >  include/uapi/linux/sched.h                       |   1 +
-> >  init/Kconfig                                     |   8 +
-> >  kernel/Makefile                                  |   1 +
-> >  kernel/fork.c                                    |   3 +-
-> >  kernel/nsproxy.c                                 |  19 +-
-> >  kernel/time/hrtimer.c                            |   8 +
-> >  kernel/time/posix-timers.c                       |  89 ++++++++-
-> >  kernel/time/posix-timers.h                       |   2 +
-> >  kernel/time_namespace.c                          | 230 +++++++++++++++++++++++
-> >  tools/testing/selftests/timens/.gitignore        |   5 +
-> >  tools/testing/selftests/timens/Makefile          |   6 +
-> >  tools/testing/selftests/timens/clock_nanosleep.c |  98 ++++++++++
-> >  tools/testing/selftests/timens/config            |   1 +
-> >  tools/testing/selftests/timens/log.h             |  21 +++
-> >  tools/testing/selftests/timens/procfs.c          | 145 ++++++++++++++
-> >  tools/testing/selftests/timens/timens.c          | 196 +++++++++++++++++++
-> >  tools/testing/selftests/timens/timer.c           |  95 ++++++++++
-> >  tools/testing/selftests/timens/timerfd.c         |  96 ++++++++++
-> >  33 files changed, 1272 insertions(+), 13 deletions(-)
-> >  create mode 100644 include/linux/time_namespace.h
-> >  create mode 100644 include/linux/timens_offsets.h
-> >  create mode 100644 kernel/time_namespace.c
-> >  create mode 100644 tools/testing/selftests/timens/.gitignore
-> >  create mode 100644 tools/testing/selftests/timens/Makefile
-> >  create mode 100644 tools/testing/selftests/timens/clock_nanosleep.c
-> >  create mode 100644 tools/testing/selftests/timens/config
-> >  create mode 100644 tools/testing/selftests/timens/log.h
-> >  create mode 100644 tools/testing/selftests/timens/procfs.c
-> >  create mode 100644 tools/testing/selftests/timens/timens.c
-> >  create mode 100644 tools/testing/selftests/timens/timer.c
-> >  create mode 100644 tools/testing/selftests/timens/timerfd.c
+thanks,
+-- Shuah
