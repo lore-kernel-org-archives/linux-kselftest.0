@@ -1,59 +1,88 @@
-From: gregkh at linuxfoundation.org (Greg Kroah-Hartman)
-Date: Mon, 24 Sep 2018 13:53:05 +0200
-Subject: [PATCH 4.14 151/173] selftest: timers: Tweak raw_skew to SKIP when
- ADJ_OFFSET/other clock adjustments are in progress
-In-Reply-To: <20180924113114.334025954@linuxfoundation.org>
-References: <20180924113114.334025954@linuxfoundation.org>
-Message-ID: <20180924113126.466853612@linuxfoundation.org>
+From: andreyknvl at google.com (Andrey Konovalov)
+Date: Mon, 24 Sep 2018 17:04:31 +0200
+Subject: [PATCH v6 11/11] arm64: annotate user pointers casts detected by
+ sparse
+In-Reply-To: <CAAeHK+z4HOF_PobxSys8svftWt8dhbuUXEpq2sdXBTCXwTEH2g@mail.gmail.com>
+References: <cover.1535629099.git.andreyknvl@google.com>
+ <5d54526e5ff2e5ad63d0dfdd9ab17cf359afa4f2.1535629099.git.andreyknvl@google.com>
+ <CA+55aFyW9N2tSb2bQvkthbVVyY6nt5yFeWQRLHp1zruBmb5ocw@mail.gmail.com>
+ <CA+55aFy2t_MHgr_CgwbhtFkL+djaCq2qMM1G+f2DwJ0qEr1URQ@mail.gmail.com>
+ <20180907152600.myidisza5o4kdmvf@armageddon.cambridge.arm.com>
+ <CA+55aFzQ+ykLu10q3AdyaaKJx8SDWWL9Qiu6WH2jbN_ugRUTOg@mail.gmail.com>
+ <20180911164152.GA29166@arrakis.emea.arm.com>
+ <CAAeHK+z4HOF_PobxSys8svftWt8dhbuUXEpq2sdXBTCXwTEH2g@mail.gmail.com>
+Message-ID: <CAAeHK+z0C+GKK3dEVmtaAiS2koAZ5NDug7-nahUT79y3MX3MLQ@mail.gmail.com>
 
-4.14-stable review patch.  If anyone has any objections, please let me know.
+On Mon, Sep 17, 2018 at 7:01 PM, Andrey Konovalov <andreyknvl at google.com> wrote:
+> I took another look at the changes this patchset does to the kernel
+> and here are my thoughts:
+>
+> I see two ways how a (potentially tagged) user pointer gets into the kernel:
+>
+> 1. A pointer is passed to a syscall (directly as an argument or
+> indirectly as a struct field).
+> 2. A pointer is extracted from user context (registers, etc.) by some
+> kind of a trap/fault handler.
+> (Is there something else?)
+>
+> In case 1 we also have a special case of a pointer passed to one of
+> the memory syscalls (mmap, mprotect, etc.). These syscalls "are not
+> doing memory accesses but rather dealing with the memory range, hence
+> an untagged pointer is better suited" as pointed out by Catalin (these
+> syscalls do not always use "unsigned long" instead of "void __user *"
+> though, for example shmat uses "void __user *").
+>
+> Looking at patch #8 ("usb, arm64: untag user addresses in devio") in
+> this series, it seems that that devio ioctl actually accepts a pointer
+> into a vma, so we shouldn't actually be untagging its argument and the
+> patch needs to be dropped. Otherwise there's quite a few more cases
+> that needs to be changed (like tcp_zerocopy_receive() for example,
+> more can be found by grepping find_vma() in generic code).
+>
+> Regarding case 2, it seems that analyzing casts of __user pointers
+> won't really help, since the code (arch/arm64/mm/fault.c) doesn't
+> really use them. However all of this code is arch specific, so it
+> shouldn't really change over time (right?). It looks like dealing with
+> tags passed to the kernel through these fault handlers is already
+> resolved with these patches (and therefore patch #6 ("arm64: untag
+> user address in __do_user_fault") in this series is not actually
+> needed and can be dropped (need to test that)):
+>
+> 276e9327 ("arm64: entry: improve data abort handling of tagged pointers"),
+> 81cddd65 ("arm64: traps: fix userspace cache maintenance emulation on
+> a tagged pointer")
+> 7dcd9dd8 ("arm64: hw_breakpoint: fix watchpoint matching for tagged pointers")
+>
+> Now, I also see two cases when kernel behavior changes depending on
+> whether a pointer is tagged:
+>
+> 1. Kernel code checks that a pointer belongs to userspace by comparing
+> it with TASK_SIZE/addr_limit/user_addr_max()/USER_DS/... .
+> 2. A pointer gets passed to find_vma() or similar functions.
+> (Is there something else?)
+>
+> The initial thought that I had here is that the pointers that reach
+> find_vma() must be passed through memory syscalls and therefore
+> shouldn't be untagged and don't require any fixes. There are at least
+> two exceptions to this: 1. get_user_pages() (see patch #4 ("mm, arm64:
+> untag user addresses in mm/gup.c") in this patch series) and 2.
+> __do_page_fault() in arch/arm64/mm/fault.c. Are there any other
+> obvious exceptions? I've tried adding BUG_ON(has_tag(addr)) to
+> find_vma() and running a modified syzkaller version that passes tagged
+> pointers to the kernel and failed to find anything else.
+>
+> As for case 1, the places where pointers are compared with TASK_SIZE
+> and others can be found with grep. Maybe it makes sense to introduce
+> some kind of routine like is_user_pointer() that handles tagged
+> pointers and refactor the existing code to use it? And maybe add a
+> rule to checkpatch.pl that forbids the direct usage of TASK_SIZE and
+> others.
+>
+> So I think detecting direct comparisons with TASK_SIZE and others
+> would more useful than finding __user pointer casts (it seems that the
+> latter requires a lot of annotations to be fixed/added), and I should
+> just drop this patch with annotations.
+>
+> WDYT?
 
-------------------
-
-From: John Stultz <john.stultz at linaro.org>
-
-[ Upstream commit 1416270f4a1ae83ea84156ceba19a66a8f88be1f ]
-
-In the past we've warned when ADJ_OFFSET was in progress, usually
-caused by ntpd or some other time adjusting daemon running in non
-steady sate, which can cause the skew calculations to be
-incorrect.
-
-Thus, this patch checks to see if the clock was being adjusted
-when we fail so that we don't cause false negatives.
-
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: Ingo Molnar <mingo at kernel.org>
-Cc: Miroslav Lichvar <mlichvar at redhat.com>
-Cc: Richard Cochran <richardcochran at gmail.com>
-Cc: Prarit Bhargava <prarit at redhat.com>
-Cc: Stephen Boyd <sboyd at kernel.org>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: linux-kselftest at vger.kernel.org
-Suggested-by: Miroslav Lichvar <mlichvar at redhat.com>
-Signed-off-by: John Stultz <john.stultz at linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
----
-v2: Widened the checks to look for other clock adjustments that
-    could happen, as suggested by Miroslav
-v3: Fixed up commit message
-Signed-off-by: Sasha Levin <alexander.levin at microsoft.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
----
- tools/testing/selftests/timers/raw_skew.c |    5 +++++
- 1 file changed, 5 insertions(+)
-
---- a/tools/testing/selftests/timers/raw_skew.c
-+++ b/tools/testing/selftests/timers/raw_skew.c
-@@ -134,6 +134,11 @@ int main(int argv, char **argc)
- 	printf(" %lld.%i(act)", ppm/1000, abs((int)(ppm%1000)));
- 
- 	if (llabs(eppm - ppm) > 1000) {
-+		if (tx1.offset || tx2.offset ||
-+		    tx1.freq != tx2.freq || tx1.tick != tx2.tick) {
-+			printf("	[SKIP]\n");
-+			return ksft_exit_skip("The clock was adjusted externally. Shutdown NTPd or other time sync daemons\n");
-+		}
- 		printf("	[FAILED]\n");
- 		return ksft_exit_fail();
- 	}
+ping
