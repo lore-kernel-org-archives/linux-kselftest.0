@@ -1,12 +1,12 @@
 From: gregkh at linuxfoundation.org (Greg Kroah-Hartman)
-Date: Mon, 24 Sep 2018 13:53:01 +0200
-Subject: [PATCH 4.4 62/70] selftest: timers: Tweak raw_skew to SKIP when
+Date: Mon, 24 Sep 2018 13:53:24 +0200
+Subject: [PATCH 4.18 218/235] selftest: timers: Tweak raw_skew to SKIP when
  ADJ_OFFSET/other clock adjustments are in progress
-In-Reply-To: <20180924113058.420454070@linuxfoundation.org>
-References: <20180924113058.420454070@linuxfoundation.org>
-Message-ID: <20180924113107.101779218@linuxfoundation.org>
+In-Reply-To: <20180924113103.999624566@linuxfoundation.org>
+References: <20180924113103.999624566@linuxfoundation.org>
+Message-ID: <20180924113125.269769392@linuxfoundation.org>
 
-4.4-stable review patch.  If anyone has any objections, please let me know.
+4.18-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -45,7 +45,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
 
 --- a/tools/testing/selftests/timers/raw_skew.c
 +++ b/tools/testing/selftests/timers/raw_skew.c
-@@ -146,6 +146,11 @@ int main(int argv, char **argc)
+@@ -134,6 +134,11 @@ int main(int argv, char **argc)
  	printf(" %lld.%i(act)", ppm/1000, abs((int)(ppm%1000)));
  
  	if (llabs(eppm - ppm) > 1000) {
