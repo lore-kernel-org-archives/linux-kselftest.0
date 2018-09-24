@@ -1,14 +1,14 @@
 From: gregkh@linuxfoundation.org (Greg Kroah-Hartman)
-Date: Mon, 24 Sep 2018 13:53:05 +0200
-Subject: [PATCH 4.9 098/111] selftest: timers: Tweak raw_skew to SKIP when
+Date: Mon, 24 Sep 2018 13:53:01 +0200
+Subject: [PATCH 4.4 62/70] selftest: timers: Tweak raw_skew to SKIP when
  ADJ_OFFSET/other clock adjustments are in progress
-In-Reply-To: <20180924113103.337261320@linuxfoundation.org>
-References: <20180924113103.337261320@linuxfoundation.org>
-Message-ID: <20180924113114.738389747@linuxfoundation.org>
+In-Reply-To: <20180924113058.420454070@linuxfoundation.org>
+References: <20180924113058.420454070@linuxfoundation.org>
+Message-ID: <20180924113107.101779218@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180924115305._VFnfhJ2OewMBXV8RXmGzYD4-bCx24hA8RJGZLGkc9I@z>
+Message-ID: <20180924115301.J5T4sPo42O1U_jRlP0Q_yMmkQHar5F89KrkpbuK0bgU@z>
 
-4.9-stable review patch.  If anyone has any objections, please let me know.
+4.4-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
