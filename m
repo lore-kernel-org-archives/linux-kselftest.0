@@ -1,260 +1,212 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Mon, 24 Sep 2018 14:42:33 -0600
-Subject: [PATCH] selftests: watchdog: Add gettimeout and get|set pretimeout
-In-Reply-To: <20180924014750.GA22296@anatevka.americas.hpqcorp.net>
-References: <1537570526-65241-1-git-send-email-jerry.hoemann@hpe.com>
- <0c6376ec-a3f4-7798-8f30-829480c41f79@kernel.org>
- <20180924014750.GA22296@anatevka.americas.hpqcorp.net>
-Message-ID: <1c4e6b40-dc4e-5706-0a31-1741ba19ca09@kernel.org>
+From: avagin@virtuozzo.com (Andrey Vagin)
+Date: Mon, 24 Sep 2018 20:51:33 +0000
+Subject: [RFC 00/20] ns: Introduce Time Namespace
+In-Reply-To: <874lej6nny.fsf@xmission.com>
+References: <20180919205037.9574-1-dima@arista.com>
+ <874lej6nny.fsf@xmission.com>
+Message-ID: <20180924205119.GA14833@outlook.office365.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180924204233.sRfadCILokg9YRx5SpvbMrAbCjsf2ZoC6HuikRh4KRs@z>
+Message-ID: <20180924205133.sUrlMddAq7veaIrF2WV_uhhR_UGltWfsmYTzso7KMr4@z>
 
-On 09/23/2018 07:47 PM, Jerry Hoemann wrote:
-> On Fri, Sep 21, 2018@05:42:00PM -0600, Shuah Khan wrote:
->> Hi Jerry,
->>
->> Thanks for the patch. A few comments below:
+On Fri, Sep 21, 2018@02:27:29PM +0200, Eric W. Biederman wrote:
+> Dmitry Safonov <dima at arista.com> writes:
 > 
->   Replies inline.
+> > Discussions around time virtualization are there for a long time.
+> > The first attempt to implement time namespace was in 2006 by Jeff Dike.
+> > From that time, the topic appears on and off in various discussions.
+> >
+> > There are two main use cases for time namespaces:
+> > 1. change date and time inside a container;
+> > 2. adjust clocks for a container restored from a checkpoint.
+> >
+> > “It seems like this might be one of the last major obstacles keeping
+> > migration from being used in production systems, given that not all
+> > containers and connections can be migrated as long as a time dependency
+> > is capable of messing it up.” (by github.com/dav-ell)
+> >
+> > The kernel provides access to several clocks: CLOCK_REALTIME,
+> > CLOCK_MONOTONIC, CLOCK_BOOTTIME. Last two clocks are monotonous, but the
+> > start points for them are not defined and are different for each running
+> > system. When a container is migrated from one node to another, all
+> > clocks have to be restored into consistent states; in other words, they
+> > have to continue running from the same points where they have been
+> > dumped.
+> >
+> > The main idea behind this patch set is adding per-namespace offsets for
+> > system clocks. When a process in a non-root time namespace requests
+> > time of a clock, a namespace offset is added to the current value of
+> > this clock on a host and the sum is returned.
+> >
+> > All offsets are placed on a separate page, this allows up to map it as 
+> > part of vvar into user processes and use offsets from vdso calls.
+> >
+> > Now offsets are implemented for CLOCK_MONOTONIC and CLOCK_BOOTTIME
+> > clocks.
+> >
+> > Questions to discuss:
+> >
+> > * Clone flags exhaustion. Currently there is only one unused clone flag
+> > bit left, and it may be worth to use it to extend arguments of the clone
+> > system call.
+> >
+> > * Realtime clock implementation details:
+> >   Is having a simple offset enough?
+> >   What to do when date and time is changed on the host?
+> >   Is there a need to adjust vfs modification and creation times? 
+> >   Implementation for adjtime() syscall.
 > 
->>
->> On 09/21/2018 04:55 PM, Jerry Hoemann wrote:
->>> Add command line arguments to call ioctl WDIOC_GETTIMEOUT,
->>> WDIOC_GETPRETIMEOUT and WDIOC_SETPRETIMEOUT.
->>>
->>> Signed-off-by: Jerry Hoemann <jerry.hoemann at hpe.com>
->>> ---
->>>  tools/testing/selftests/watchdog/watchdog-test.c | 30 +++++++++++++++++++++++-
->>>  1 file changed, 29 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
->>> index 6e29087..4861e2c 100644
->>> --- a/tools/testing/selftests/watchdog/watchdog-test.c
->>> +++ b/tools/testing/selftests/watchdog/watchdog-test.c
->>> @@ -19,7 +19,7 @@
->>>  
->>>  int fd;
->>>  const char v = 'V';
->>> -static const char sopts[] = "bdehp:t:";
->>> +static const char sopts[] = "bdehp:t:Tn:N";
->>>  static const struct option lopts[] = {
->>>  	{"bootstatus",          no_argument, NULL, 'b'},
->>>  	{"disable",             no_argument, NULL, 'd'},
->>> @@ -27,6 +27,9 @@
->>>  	{"help",                no_argument, NULL, 'h'},
->>>  	{"pingrate",      required_argument, NULL, 'p'},
->>>  	{"timeout",       required_argument, NULL, 't'},
->>> +	{"gettimeout",          no_argument, NULL, 'T'},
->>> +	{"pretimeout",    required_argument, NULL, 'n'},
->>> +	{"getpretimeout",       no_argument, NULL, 'N'},
->>>  	{NULL,                  no_argument, NULL, 0x0}
->>>  };
->>>  
->>> @@ -71,6 +74,9 @@ static void usage(char *progname)
->>>  	printf(" -h, --help          Print the help message\n");
->>>  	printf(" -p, --pingrate=P    Set ping rate to P seconds (default %d)\n", DEFAULT_PING_RATE);
->>>  	printf(" -t, --timeout=T     Set timeout to T seconds\n");
->>> +	printf(" -T, --gettimeout    Get the timeout\n");
->>> +	printf(" -n, --pretimeout    Set the pretimeout to T seconds\n");
->>> +	printf(" -N, --getpretimeout Get the pretimeout\n");
->>
->> How are the new arguments used?
-> 
-> I forgot the param.  Should be:
-> 
->     +	printf(" -n, --pretimeout=T  Set the pretimeout to T seconds\n");
-> 
-> 
-> I'll update in v2.
+> Overall I support this effort.  In my quick skim this code looked good.
 
-Okay.
+Hi Eric,
+
+Thank you for the feedback.
 
 > 
-> Is this what you mean?  Or did I misunderstand?
-> > 
->>
->>>  	printf("\n");
->>>  	printf("Parameters are parsed left-to-right in real-time.\n");
->>>  	printf("Example: %s -d -t 10 -p 5 -e\n", progname);
->>
->> Please add an example usage for each of these new arguments.
+> My feeling is that we need to be able to support running ntpd and
+> support one namespace doing googles smoothing of leap seconds while
+> another namespace takes the leap second.
 > 
-> Will do.
+> What I was imagining when I was last thinking about this was one
+> instance of struct timekeeper aka tk_core per time namespace.  That
+> structure already keeps offsets for all of the various clocks from
+> the kerne internal time sources.  What would be needed would be to
+> pass in an appropriate time namespace pointer.
+> 
+> I could be completely wrong as I have not take the time to completely
+> trace through the code.  Have you looked at pushing the time namespace
+> down as far as tk_core?
+> 
+> What I think would be the big advantage (besides ntp working) is that
+> the bulk of the code could be reused.  Allowing testing of the kernel's
+> time code by setting up a new time namespace.  So a person in production
+> could setup a time namespace with the time set ahead a little  bit and
+> be able to verify that the kernel handles the upcoming leap second
+> properly.
+>
 
-okay.
+It is an interesting idea, but I have a few questions:
 
-> 
->>
->>> @@ -135,6 +141,28 @@ int main(int argc, char *argv[])
->>>  			else
->>>  				printf("WDIOC_SETTIMEOUT errno '%s'\n", strerror(errno));
->>>  			break;
->>> +		case 'T':
->>> +			ret = ioctl(fd, WDIOC_GETTIMEOUT, &flags);
->>> +			if (!ret)
->>> +				printf("Watchdog timeout set to %u seconds.\n", flags);
->>
->> It would good to make this message different from the WDIOC_SETTIMEOUT message.
->> Please update it to reflect that this is the result of a WDIOC_GETTIMEOUT.
-> 
-> Will update message to make distinct.
-> 
->>
->> What would user intend to do with this GETTIMEOUT? Shouldn't this be the case that it
->> prints the current value and exits instead of the same logic as SETTIMEOUT option?
-> 
-> Are you suggesting setting the "oneshot" flag so the test app doesn't actually
-> go into the while(1) keep_alive loop?
-> 
-> Watchdog drivers may adjust the requested value to match hardware constraints.
-> Callers of set timeout (and set pretimeout) should call get timeout to see what
-> value was actually set.
-> 
-> B/c of above, I just got into the habit of specifying both flags: first set,
-> then get to make sure value set was what I intended.
-> 
-> But I can make the "Get" a one shot.  Just let me know if this is your preference.
+1. Does it mean that timekeeping_update() will be called for each
+namespace? This functions is called periodically, it updates times on the
+timekeeper structure, updates vsyscall_gtod_data, etc. What will be an
+overhead of this?
 
-I prefer that both GETs be oneshot. GETs should just print the current value and go
-follow oneshot path. It doesn't make sense for them to do more.
-> 
-> 
->>
->>> +			else
->>> +				printf("WDIOC_GETTIMEOUT errno '%s'\n", strerror(errno))
->>
->> Shouldn't this error be an exit condition?
-> 
-> Hmmm, I don't see this error path much different than the error path for the
-> other failing ioctl.  Am I missing something?
-
-Yeah that is what I don't understand with the new code as well as the existing.
-Shouldn't error path be handled differently. What is the point in doing more
-other than gracefully exit closing the file? I don't think existing error paths
-are doing this, probably they should.
-> 
-> 
-> But, If we make the "GET" a one shot, then we wouldn't really need to
-> special case the failure case as we wouldn't go into the keep_alive
-> loop in either case.
-> 
-> 
-
-Right.
+2. What will we do with vdso? It looks like we will have to have a
+separate vsyscall_gtod_data for each ns and update each of them
+separately.
 
 > 
->>
->>> +			break;
->>> +		case 'n':
->>> +			flags = strtoul(optarg, NULL, 0);
->>> +			ret = ioctl(fd, WDIOC_SETPRETIMEOUT, &flags);
->>> +			if (!ret)
->>> +				printf("Watchdog pretimeout set to %u seconds.\n", flags);
->>> +			else
->>> +				printf("WDIOC_SETPRETIMEOUT errno '%s'\n", strerror(errno));
->>> +			break;
->>> +		case 'N':
->>> +			ret = ioctl(fd, WDIOC_GETPRETIMEOUT, &flags);
->>> +			if (!ret)
->>> +				printf("Watchdog pretimeout set to %u seconds.\n", flags);
->>
->> It would good to make this message different from the WDIOC_GETPRETIMEOUT message.
->> Please update it to reflect that this is the result of a WDIOC_GETPRETIMEOUT
 > 
-> will do.
+> I don't know about the vfs.  I think the danger is being able to write
+> dates in the future or in the past.  It appears that utimes(2) and
+> utimesnat(2) already allow this except for status change.  So it is
+> possible we simply don't care.  I seem to remember that what nfs does
+> is take the time stamp from the host writing to the file.
 > 
-
-Okay.
-
->>
->> What would user intend to do with this GETTIMEOUT? Shouldn't this be the case that it
->> prints the current value and exits instead of the same logic as WDIOC_SETPRETIMEOUT?
+> I think the guide for filesystem timestamps should be to first ensure
+> we don't introduce security issues, and then do what distributed
+> filesystems do when dealing with hosts with different clocks.
 > 
-> I think you're just asking me to set the "oneshot" flag on this,
-> which I can certainly do.
-
-Correct. For couple of reasons. GET/SET_PRETIMEOUG might not be supported on all
-platforms/drivers. It would make sense to handle error paths correctly.
-
+> Given those those two guidlines above I don't think there is a need to
+> change timestamsp the way the user namespace changes uid when displayed.
 > 
-> But, some background on pretimeout that (I think) is interesting:
 > 
-> The underling HW for the watchdog on proliants allows for the pre-timeout to
-> be enabled or disabled.  But if the pretimeout is enabled, the value of
-> the pretimeout is hard coded by HW (9 seconds.)
 > 
-> The hpwdt driver allows for setting pretimeout by passing in a value
-> 	0 < pretimeout < timeout
-> to enable a pretimeout.  The user then needs to call get pretimeout to
-> determine the actual value.
+> As for the hardware like the real time clock we definitely should not
+> let a root in a time namespace change it.  We might even be able to get
+> away with leaving the real time clock out of the time namespace.  If not
+> we need to be very careful how the real time clock is abstracted.  I
+> would start by leaving the real time clock hardware out of the time
+> namespace and see if there is any part of userspace that cares.
 > 
-> Failure to take into account the pretimeout when pinging the WD can lead to
-> unexpected system crashes.
+> Eric
 > 
-> I've handled the following issue multiple times:
-> 
-> A user wants to set the timeout to value T and ping the WD every T/2 seconds.
-> He fails to take into account the pretimeout value of P.  The system crashes
-> with the pretimeout NMI when (T/2) < P.
-> 
-> The basic misunderstanding is that to prevent the WD from acting, the WD
-> only needs to be pinged at least once every T seconds, when in actuality the
-> WD needs to be pinged at least once every (T-P) seconds.
-> 
-> Specifically for Proliants, I've seen people set the timeout to 10 seconds
-> thinking they had plenty of time to ping the WD only to be surprised when
-> the pretimeout NMI takes the system down 1 second later.
-
-In this case, this patch really doesn't solve the problem. You will still run
-into this problem if user does a set. You are providing a way to check pretimeout,
-however that is a separate operation. So I am not clear on how this patch solves
-the issue of pretimeout NMI takes the system down.
-
-> 
-> Note: a WD doesn't need to support the pretimeout feature.
-
-It isn't clear what this means?
-
-> 
->>
->>> +			else
->>> +				printf("WDIOC_GETPRETIMEOUT errno '%s'\n", strerror(errno));
->>
->> Shouldn't this error be an exit condition?
-> 
-> Similar to above.  I can make GETPRETIMEOUT a "oneshot" to handle both the
-> success/failing case of the ioctl call.
-> 
->>
->>> +			break;
->>>  		default:
->>>  			usage(argv[0]);
->>>  			goto end;
->>>
->>
->> Also can you run this test as normal user?
-> 
-> No.  Must be run as root to open /dev/watchdog.  When /dev/watchdog is opened, the
-> WD is started and if not updated properly, the system will crash.
-
-Hmm. I don't understand why the system would panic if non-root user can't open the
-device, at least in the context of this test. 
-
-        fd = open("/dev/watchdog", O_WRONLY);
-
-        if (fd == -1) {
-                printf("Watchdog device not enabled.\n");
-                exit(-1);
-        }
-
-
-Shouldn't it just exit based on the code above?
-
-> 
-
-> "cat /dev/watchdog" is one of my favorite ways to crash a system.  :)  :)
-
-That doesn't sound great, if a non-root user can bring the system down!!
- 
-thanks,
--- Shuah
+> > Cc: Dmitry Safonov <0x7f454c46 at gmail.com>
+> > Cc: Adrian Reber <adrian at lisas.de>
+> > Cc: Andrei Vagin <avagin at openvz.org>
+> > Cc: Andy Lutomirski <luto at kernel.org>
+> > Cc: Christian Brauner <christian.brauner at ubuntu.com>
+> > Cc: Cyrill Gorcunov <gorcunov at openvz.org>
+> > Cc: "Eric W. Biederman" <ebiederm at xmission.com>
+> > Cc: "H. Peter Anvin" <hpa at zytor.com> 
+> > Cc: Ingo Molnar <mingo at redhat.com>
+> > Cc: Jeff Dike <jdike at addtoit.com>
+> > Cc: Oleg Nesterov <oleg at redhat.com>
+> > Cc: Pavel Emelyanov <xemul at virtuozzo.com>
+> > Cc: Shuah Khan <shuah at kernel.org>
+> > Cc: Thomas Gleixner <tglx at linutronix.de>
+> > Cc: containers at lists.linux-foundation.org
+> > Cc: criu at openvz.org
+> > Cc: linux-api at vger.kernel.org
+> > Cc: x86 at kernel.org
+> >
+> > Andrei Vagin (12):
+> >   ns: Introduce Time Namespace
+> >   timens: Add timens_offsets
+> >   timens: Introduce CLOCK_MONOTONIC offsets
+> >   timens: Introduce CLOCK_BOOTTIME offset
+> >   timerfd/timens: Take into account ns clock offsets
+> >   kernel: Take into account timens clock offsets in clock_nanosleep
+> >   x86/vdso/timens: Add offsets page in vvar
+> >   x86/vdso: Use set_normalized_timespec() to avoid 32 bit overflow
+> >   posix-timers/timens: Take into account clock offsets
+> >   selftest/timens: Add test for timerfd
+> >   selftest/timens: Add test for clock_nanosleep
+> >   timens/selftest: Add timer offsets test
+> >
+> > Dmitry Safonov (8):
+> >   timens: Shift /proc/uptime
+> >   x86/vdso: Restrict splitting vvar vma
+> >   x86/vdso: Purge timens page on setns()/unshare()/clone()
+> >   x86/vdso: Look for vvar vma to purge timens page
+> >   timens: Add align for timens_offsets
+> >   timens: Optimize zero-offsets
+> >   selftest: Add Time Namespace test for supported clocks
+> >   timens/selftest: Add procfs selftest
+> >
+> >  arch/Kconfig                                     |   5 +
+> >  arch/x86/Kconfig                                 |   1 +
+> >  arch/x86/entry/vdso/vclock_gettime.c             |  52 +++++
+> >  arch/x86/entry/vdso/vdso-layout.lds.S            |   9 +-
+> >  arch/x86/entry/vdso/vdso2c.c                     |   3 +
+> >  arch/x86/entry/vdso/vma.c                        |  67 +++++++
+> >  arch/x86/include/asm/vdso.h                      |   2 +
+> >  fs/proc/namespaces.c                             |   3 +
+> >  fs/proc/uptime.c                                 |   3 +
+> >  fs/timerfd.c                                     |  16 +-
+> >  include/linux/nsproxy.h                          |   1 +
+> >  include/linux/proc_ns.h                          |   1 +
+> >  include/linux/time_namespace.h                   |  72 +++++++
+> >  include/linux/timens_offsets.h                   |  25 +++
+> >  include/linux/user_namespace.h                   |   1 +
+> >  include/uapi/linux/sched.h                       |   1 +
+> >  init/Kconfig                                     |   8 +
+> >  kernel/Makefile                                  |   1 +
+> >  kernel/fork.c                                    |   3 +-
+> >  kernel/nsproxy.c                                 |  19 +-
+> >  kernel/time/hrtimer.c                            |   8 +
+> >  kernel/time/posix-timers.c                       |  89 ++++++++-
+> >  kernel/time/posix-timers.h                       |   2 +
+> >  kernel/time_namespace.c                          | 230 +++++++++++++++++++++++
+> >  tools/testing/selftests/timens/.gitignore        |   5 +
+> >  tools/testing/selftests/timens/Makefile          |   6 +
+> >  tools/testing/selftests/timens/clock_nanosleep.c |  98 ++++++++++
+> >  tools/testing/selftests/timens/config            |   1 +
+> >  tools/testing/selftests/timens/log.h             |  21 +++
+> >  tools/testing/selftests/timens/procfs.c          | 145 ++++++++++++++
+> >  tools/testing/selftests/timens/timens.c          | 196 +++++++++++++++++++
+> >  tools/testing/selftests/timens/timer.c           |  95 ++++++++++
+> >  tools/testing/selftests/timens/timerfd.c         |  96 ++++++++++
+> >  33 files changed, 1272 insertions(+), 13 deletions(-)
+> >  create mode 100644 include/linux/time_namespace.h
+> >  create mode 100644 include/linux/timens_offsets.h
+> >  create mode 100644 kernel/time_namespace.c
+> >  create mode 100644 tools/testing/selftests/timens/.gitignore
+> >  create mode 100644 tools/testing/selftests/timens/Makefile
+> >  create mode 100644 tools/testing/selftests/timens/clock_nanosleep.c
+> >  create mode 100644 tools/testing/selftests/timens/config
+> >  create mode 100644 tools/testing/selftests/timens/log.h
+> >  create mode 100644 tools/testing/selftests/timens/procfs.c
+> >  create mode 100644 tools/testing/selftests/timens/timens.c
+> >  create mode 100644 tools/testing/selftests/timens/timer.c
+> >  create mode 100644 tools/testing/selftests/timens/timerfd.c
