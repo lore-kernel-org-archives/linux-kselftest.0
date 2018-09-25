@@ -1,266 +1,115 @@
-From: jerry.hoemann@hpe.com (Jerry Hoemann)
-Date: Tue, 25 Sep 2018 11:06:07 -0600
-Subject: [PATCH] selftests: watchdog: Add gettimeout and get|set pretimeout
-In-Reply-To: <1c4e6b40-dc4e-5706-0a31-1741ba19ca09@kernel.org>
-References: <1537570526-65241-1-git-send-email-jerry.hoemann@hpe.com>
- <0c6376ec-a3f4-7798-8f30-829480c41f79@kernel.org>
- <20180924014750.GA22296@anatevka.americas.hpqcorp.net>
- <1c4e6b40-dc4e-5706-0a31-1741ba19ca09@kernel.org>
-Message-ID: <20180925170607.GB25620@anatevka.americas.hpqcorp.net>
+From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
+Date: Tue, 25 Sep 2018 13:39:36 -0400 (EDT)
+Subject: [PATCH] rseq/selftests: fix parametrized test with -fpie
+In-Reply-To: <20180918135328.32034-1-mathieu.desnoyers@efficios.com>
+References: <20180918135328.32034-1-mathieu.desnoyers@efficios.com>
+Message-ID: <1367962117.10271.1537897176578.JavaMail.zimbra@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180925170607.sbB-6WJlQ5H9-2v-TFqQkSxHiQ8MYxA2qlfLRHR_B6M@z>
+Message-ID: <20180925173936.Ks571PU56OWAmF7ej9NY9wOl9-kfhktiIRlL3NmCHpA@z>
 
+----- On Sep 18, 2018,@9:53 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
 
-Shuah,
-
-Wrote this yesterday, and wanted to proof it before sending.  I got
-your other email earlier and replied to specific point on permission
-of /dev/watchdog, so some of this is now redundant.
--------------------------
-
-With the potential exception of error path, I think my v2 of the patch
-addresses the issues you raised below.  Additional comments inline.
-
-
-On Mon, Sep 24, 2018@02:42:33PM -0600, Shuah Khan wrote:
-> On 09/23/2018 07:47 PM, Jerry Hoemann wrote:
-> > On Fri, Sep 21, 2018@05:42:00PM -0600, Shuah Khan wrote:
-> >>>  
-> >>> @@ -135,6 +141,28 @@ int main(int argc, char *argv[])
-> >>>  			else
-> >>>  				printf("WDIOC_SETTIMEOUT errno '%s'\n", strerror(errno));
-> >>>  			break;
-> >>> +		case 'T':
-> >>> +			ret = ioctl(fd, WDIOC_GETTIMEOUT, &flags);
-> >>> +			if (!ret)
-> >>> +				printf("Watchdog timeout set to %u seconds.\n", flags);
-> >>
-> >> It would good to make this message different from the WDIOC_SETTIMEOUT message.
-> >> Please update it to reflect that this is the result of a WDIOC_GETTIMEOUT.
-> > 
-> > Will update message to make distinct.
-> > 
-> >>
-> >> What would user intend to do with this GETTIMEOUT? Shouldn't this be the case that it
-> >> prints the current value and exits instead of the same logic as SETTIMEOUT option?
-> > 
-> > Are you suggesting setting the "oneshot" flag so the test app doesn't actually
-> > go into the while(1) keep_alive loop?
-> > 
-> > Watchdog drivers may adjust the requested value to match hardware constraints.
-> > Callers of set timeout (and set pretimeout) should call get timeout to see what
-> > value was actually set.
-> > 
-> > B/c of above, I just got into the habit of specifying both flags: first set,
-> > then get to make sure value set was what I intended.
-> > 
-> > But I can make the "Get" a one shot.  Just let me know if this is your preference.
+> On x86-64, the parametrized selftest code for rseq crashes with a
+> segmentation fault when compiled with -fpie. This happens when the
+> param_test binary is loaded at an address beyond 32-bit on x86-64.
 > 
-> I prefer that both GETs be oneshot. GETs should just print the current value and go
-> follow oneshot path. It doesn't make sense for them to do more.
-> > 
-> > 
-> >>
-> >>> +			else
-> >>> +				printf("WDIOC_GETTIMEOUT errno '%s'\n", strerror(errno))
-> >>
-> >> Shouldn't this error be an exit condition?
-> > 
-> > Hmmm, I don't see this error path much different than the error path for the
-> > other failing ioctl.  Am I missing something?
+> The issue is caused by use of a 32-bit register to hold the address
+> of the loop counter variable.
 > 
-> Yeah that is what I don't understand with the new code as well as the existing.
-> Shouldn't error path be handled differently. What is the point in doing more
-> other than gracefully exit closing the file? I don't think existing error paths
-> are doing this, probably they should.
+> Fix this by using a 64-bit register to calculate the address of the
+> loop counter variables as an offset from rip.
 
+Should this fix go through tip or the selftests tree ?
 
-Watchdog timers have a long and varied history in Linux.  Traditionally, not all
-watchdog have implemented all the ioctl interfaces.  So, an ioctl returning error
-doesn't necessarily mean that an error has occurred, it might just mean 
-that the particular watchdog didn't implement that particular feature.
+Thanks,
 
-E.g., yes, we could error out if user tries to set a PRETIMEOUT on a system
-that doesn't support that feature, or we could just continue.
-
-
-
-> > 
-> > 
-> > But, If we make the "GET" a one shot, then we wouldn't really need to
-> > special case the failure case as we wouldn't go into the keep_alive
-> > loop in either case.
-> > 
-> > 
-> 
-> Right.
-> 
-> > 
-> >>
-> >>> +			break;
-> >>> +		case 'n':
-> >>> +			flags = strtoul(optarg, NULL, 0);
-> >>> +			ret = ioctl(fd, WDIOC_SETPRETIMEOUT, &flags);
-> >>> +			if (!ret)
-> >>> +				printf("Watchdog pretimeout set to %u seconds.\n", flags);
-> >>> +			else
-> >>> +				printf("WDIOC_SETPRETIMEOUT errno '%s'\n", strerror(errno));
-> >>> +			break;
-> >>> +		case 'N':
-> >>> +			ret = ioctl(fd, WDIOC_GETPRETIMEOUT, &flags);
-> >>> +			if (!ret)
-> >>> +				printf("Watchdog pretimeout set to %u seconds.\n", flags);
-> >>
-> >> It would good to make this message different from the WDIOC_GETPRETIMEOUT message.
-> >> Please update it to reflect that this is the result of a WDIOC_GETPRETIMEOUT
-> > 
-> > will do.
-> > 
-> 
-> Okay.
-> 
-> >>
-> >> What would user intend to do with this GETTIMEOUT? Shouldn't this be the case that it
-> >> prints the current value and exits instead of the same logic as WDIOC_SETPRETIMEOUT?
-> > 
-> > I think you're just asking me to set the "oneshot" flag on this,
-> > which I can certainly do.
-> 
-> Correct. For couple of reasons. GET/SET_PRETIMEOUG might not be supported on all
-> platforms/drivers. It would make sense to handle error paths correctly.
-
-
-The proper handling of a production quality watchdog client on a system without the
-pretimeout feature would be to use the value 0 for pretimeout in calculations of
-ping rate.  The client shouldn't exit in these cases as the clients would then
-fail to run on systems that don't support pretimeout.
-
+Mathieu
 
 > 
-> > 
-> > But, some background on pretimeout that (I think) is interesting:
-> > 
-> > The underling HW for the watchdog on proliants allows for the pre-timeout to
-> > be enabled or disabled.  But if the pretimeout is enabled, the value of
-> > the pretimeout is hard coded by HW (9 seconds.)
-> > 
-> > The hpwdt driver allows for setting pretimeout by passing in a value
-> > 	0 < pretimeout < timeout
-> > to enable a pretimeout.  The user then needs to call get pretimeout to
-> > determine the actual value.
-> > 
-> > Failure to take into account the pretimeout when pinging the WD can lead to
-> > unexpected system crashes.
-> > 
-> > I've handled the following issue multiple times:
-> > 
-> > A user wants to set the timeout to value T and ping the WD every T/2 seconds.
-> > He fails to take into account the pretimeout value of P.  The system crashes
-> > with the pretimeout NMI when (T/2) < P.
-> > 
-> > The basic misunderstanding is that to prevent the WD from acting, the WD
-> > only needs to be pinged at least once every T seconds, when in actuality the
-> > WD needs to be pinged at least once every (T-P) seconds.
-> > 
-> > Specifically for Proliants, I've seen people set the timeout to 10 seconds
-> > thinking they had plenty of time to ping the WD only to be surprised when
-> > the pretimeout NMI takes the system down 1 second later.
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+> Cc: <stable at vger.kernel.org> # v4.18
+> Cc: Thomas Gleixner <tglx at linutronix.de>
+> Cc: Joel Fernandes <joelaf at google.com>
+> Cc: Peter Zijlstra <peterz at infradead.org>
+> Cc: Catalin Marinas <catalin.marinas at arm.com>
+> Cc: Dave Watson <davejwatson at fb.com>
+> Cc: Will Deacon <will.deacon at arm.com>
+> Cc: Shuah Khan <shuahkh at osg.samsung.com>
+> Cc: Andi Kleen <andi at firstfloor.org>
+> Cc: linux-kselftest at vger.kernel.org
+> Cc: "H . Peter Anvin" <hpa at zytor.com>
+> Cc: Chris Lameter <cl at linux.com>
+> Cc: Russell King <linux at arm.linux.org.uk>
+> Cc: Michael Kerrisk <mtk.manpages at gmail.com>
+> Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
+> Cc: Paul Turner <pjt at google.com>
+> Cc: Boqun Feng <boqun.feng at gmail.com>
+> Cc: Josh Triplett <josh at joshtriplett.org>
+> Cc: Steven Rostedt <rostedt at goodmis.org>
+> Cc: Ben Maurer <bmaurer at fb.com>
+> Cc: Andy Lutomirski <luto at amacapital.net>
+> Cc: Andrew Morton <akpm at linux-foundation.org>
+> Cc: Linus Torvalds <torvalds at linux-foundation.org>
+> ---
+> tools/testing/selftests/rseq/param_test.c | 19 ++++++++++---------
+> 1 file changed, 10 insertions(+), 9 deletions(-)
 > 
-> In this case, this patch really doesn't solve the problem. You will still run
-> into this problem if user does a set. You are providing a way to check pretimeout,
-> however that is a separate operation. So I am not clear on how this patch solves
-> the issue of pretimeout NMI takes the system down.
-
-You are correct, this patch doesn't solve that problem, and wasn't intended to.
-It does provide the knowledgeable user the information s/he needs to properly
-program the watchdog.
-
-I guess the question is what is the vision of watchdog-test?  If it is to
-be a full featured watchdog client, there are several things that would
-be needed to be done.  Automatic sanity checking actual values of timeout
-and pretimeout relative to ping rate would be one.  Running the test as
-an actual daemon would be another.  Configuration files would be needed
-as well.
-
-I view it as a nice, small exemplar of a watchdog client to
-which I wanted to add three small additional ioctls to.  :)
-
-Now, if you want me to add some of these additional features, we
-can discuss that.
-
-
+> diff --git a/tools/testing/selftests/rseq/param_test.c
+> b/tools/testing/selftests/rseq/param_test.c
+> index 615252331813..4bc071525bf7 100644
+> --- a/tools/testing/selftests/rseq/param_test.c
+> +++ b/tools/testing/selftests/rseq/param_test.c
+> @@ -56,15 +56,13 @@ unsigned int yield_mod_cnt, nr_abort;
+> 			printf(fmt, ## __VA_ARGS__);	\
+> 	} while (0)
 > 
-> > 
-> > Note: a WD doesn't need to support the pretimeout feature.
+> -#if defined(__x86_64__) || defined(__i386__)
+> +#ifdef __i386__
 > 
-> It isn't clear what this means?
+> #define INJECT_ASM_REG	"eax"
 > 
-
-Let me rephrase:  A watchdog driver doesn't need to support the pretimeout feature.
-Many/(Most?) do not.  So, on those systems, the get/set pretimeout ioctl should
-return error.  But that doesn't IMHO mean the client should exit.
-
-
-> > 
-> >>
-> >>> +			else
-> >>> +				printf("WDIOC_GETPRETIMEOUT errno '%s'\n", strerror(errno));
-> >>
-> >> Shouldn't this error be an exit condition?
-> > 
-> > Similar to above.  I can make GETPRETIMEOUT a "oneshot" to handle both the
-> > success/failing case of the ioctl call.
-> > 
-> >>
-> >>> +			break;
-> >>>  		default:
-> >>>  			usage(argv[0]);
-> >>>  			goto end;
-> >>>
-> >>
-> >> Also can you run this test as normal user?
-> > 
-> > No.  Must be run as root to open /dev/watchdog.  When /dev/watchdog is opened, the
-> > WD is started and if not updated properly, the system will crash.
+> #define RSEQ_INJECT_CLOBBER \
+> 	, INJECT_ASM_REG
 > 
-> Hmm. I don't understand why the system would panic if non-root user can't open the
-> device, at least in the context of this test. 
+> -#ifdef __i386__
+> -
+> #define RSEQ_INJECT_ASM(n) \
+> 	"mov asm_loop_cnt_" #n ", %%" INJECT_ASM_REG "\n\t" \
+> 	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
+> @@ -76,9 +74,16 @@ unsigned int yield_mod_cnt, nr_abort;
 > 
-
-Sorry, Let me rephrase.
-
-You asked if the test can be run as a normal user.
-The answer to that question is no.  The permission on /dev/watchdog only
-allow root to open it.  Hence to run the test as a normal user, the
-open fails and the test exits.
-
-The reason for only allowing root to open /dev/watchdog is that it
-is trivial to crash the system.  One simply opens /dev/watchdog and
-doesn't update it.  I routinely test the watchdog (and crash dump)
-by "cat /dev/watchdog" as root.
-
-
->         fd = open("/dev/watchdog", O_WRONLY);
+> #elif defined(__x86_64__)
 > 
->         if (fd == -1) {
->                 printf("Watchdog device not enabled.\n");
->                 exit(-1);
->         }
+> +#define INJECT_ASM_REG_P	"rax"
+> +#define INJECT_ASM_REG		"eax"
+> +
+> +#define RSEQ_INJECT_CLOBBER \
+> +	, INJECT_ASM_REG_P \
+> +	, INJECT_ASM_REG
+> +
+> #define RSEQ_INJECT_ASM(n) \
+> -	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG "\n\t" \
+> -	"mov (%%" INJECT_ASM_REG "), %%" INJECT_ASM_REG "\n\t" \
+> +	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG_P "\n\t" \
+> +	"mov (%%" INJECT_ASM_REG_P "), %%" INJECT_ASM_REG "\n\t" \
+> 	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
+> 	"jz 333f\n\t" \
+> 	"222:\n\t" \
+> @@ -86,10 +91,6 @@ unsigned int yield_mod_cnt, nr_abort;
+> 	"jnz 222b\n\t" \
+> 	"333:\n\t"
 > 
+> -#else
+> -#error "Unsupported architecture"
+> -#endif
+> -
+> #elif defined(__ARMEL__)
 > 
-> Shouldn't it just exit based on the code above?
-> 
-> > 
-> 
-> > "cat /dev/watchdog" is one of my favorite ways to crash a system.  :)  :)
-> 
-> That doesn't sound great, if a non-root user can bring the system down!!
->  
-> thanks,
-> -- Shuah
+> #define RSEQ_INJECT_INPUT \
+> --
+> 2.11.0
 
 -- 
-
------------------------------------------------------------------------------
-Jerry Hoemann                  Software Engineer   Hewlett Packard Enterprise
------------------------------------------------------------------------------
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
