@@ -1,113 +1,98 @@
-From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
-Date: Tue, 25 Sep 2018 13:39:36 -0400 (EDT)
-Subject: [PATCH] rseq/selftests: fix parametrized test with -fpie
-In-Reply-To: <20180918135328.32034-1-mathieu.desnoyers@efficios.com>
-References: <20180918135328.32034-1-mathieu.desnoyers@efficios.com>
-Message-ID: <1367962117.10271.1537897176578.JavaMail.zimbra@efficios.com>
+From: shuah at kernel.org (Shuah Khan)
+Date: Tue, 25 Sep 2018 14:51:15 -0600
+Subject: [V2 PATCH] selftests: watchdog: Add gettimeout and get|set
+ pretimeout
+In-Reply-To: <1537817767-78918-2-git-send-email-jerry.hoemann@hpe.com>
+References: <1537817767-78918-1-git-send-email-jerry.hoemann@hpe.com>
+ <1537817767-78918-2-git-send-email-jerry.hoemann@hpe.com>
+Message-ID: <16941ebb-85ca-ad4c-de7b-c26f193ca611@kernel.org>
 
------ On Sep 18, 2018, at 9:53 AM, Mathieu Desnoyers mathieu.desnoyers at efficios.com wrote:
+Hi Jerry,
 
-> On x86-64, the parametrized selftest code for rseq crashes with a
-> segmentation fault when compiled with -fpie. This happens when the
-> param_test binary is loaded at an address beyond 32-bit on x86-64.
+On 09/24/2018 01:36 PM, Jerry Hoemann wrote:
+> Add command line arguments to call ioctl WDIOC_GETTIMEOUT,
+> WDIOC_GETPRETIMEOUT and WDIOC_SETPRETIMEOUT.
 > 
-> The issue is caused by use of a 32-bit register to hold the address
-> of the loop counter variable.
-> 
-> Fix this by using a 64-bit register to calculate the address of the
-> loop counter variables as an offset from rip.
-
-Should this fix go through tip or the selftests tree ?
-
-Thanks,
-
-Mathieu
-
-> 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
-> Cc: <stable at vger.kernel.org> # v4.18
-> Cc: Thomas Gleixner <tglx at linutronix.de>
-> Cc: Joel Fernandes <joelaf at google.com>
-> Cc: Peter Zijlstra <peterz at infradead.org>
-> Cc: Catalin Marinas <catalin.marinas at arm.com>
-> Cc: Dave Watson <davejwatson at fb.com>
-> Cc: Will Deacon <will.deacon at arm.com>
-> Cc: Shuah Khan <shuahkh at osg.samsung.com>
-> Cc: Andi Kleen <andi at firstfloor.org>
-> Cc: linux-kselftest at vger.kernel.org
-> Cc: "H . Peter Anvin" <hpa at zytor.com>
-> Cc: Chris Lameter <cl at linux.com>
-> Cc: Russell King <linux at arm.linux.org.uk>
-> Cc: Michael Kerrisk <mtk.manpages at gmail.com>
-> Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
-> Cc: Paul Turner <pjt at google.com>
-> Cc: Boqun Feng <boqun.feng at gmail.com>
-> Cc: Josh Triplett <josh at joshtriplett.org>
-> Cc: Steven Rostedt <rostedt at goodmis.org>
-> Cc: Ben Maurer <bmaurer at fb.com>
-> Cc: Andy Lutomirski <luto at amacapital.net>
-> Cc: Andrew Morton <akpm at linux-foundation.org>
-> Cc: Linus Torvalds <torvalds at linux-foundation.org>
+> Signed-off-by: Jerry Hoemann <jerry.hoemann at hpe.com>
 > ---
-> tools/testing/selftests/rseq/param_test.c | 19 ++++++++++---------
-> 1 file changed, 10 insertions(+), 9 deletions(-)
+>  tools/testing/selftests/watchdog/watchdog-test.c | 33 +++++++++++++++++++++++-
+>  1 file changed, 32 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/rseq/param_test.c
-> b/tools/testing/selftests/rseq/param_test.c
-> index 615252331813..4bc071525bf7 100644
-> --- a/tools/testing/selftests/rseq/param_test.c
-> +++ b/tools/testing/selftests/rseq/param_test.c
-> @@ -56,15 +56,13 @@ unsigned int yield_mod_cnt, nr_abort;
-> 			printf(fmt, ## __VA_ARGS__);	\
-> 	} while (0)
-> 
-> -#if defined(__x86_64__) || defined(__i386__)
-> +#ifdef __i386__
-> 
-> #define INJECT_ASM_REG	"eax"
-> 
-> #define RSEQ_INJECT_CLOBBER \
-> 	, INJECT_ASM_REG
-> 
-> -#ifdef __i386__
-> -
-> #define RSEQ_INJECT_ASM(n) \
-> 	"mov asm_loop_cnt_" #n ", %%" INJECT_ASM_REG "\n\t" \
-> 	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
-> @@ -76,9 +74,16 @@ unsigned int yield_mod_cnt, nr_abort;
-> 
-> #elif defined(__x86_64__)
-> 
-> +#define INJECT_ASM_REG_P	"rax"
-> +#define INJECT_ASM_REG		"eax"
-> +
-> +#define RSEQ_INJECT_CLOBBER \
-> +	, INJECT_ASM_REG_P \
-> +	, INJECT_ASM_REG
-> +
-> #define RSEQ_INJECT_ASM(n) \
-> -	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG "\n\t" \
-> -	"mov (%%" INJECT_ASM_REG "), %%" INJECT_ASM_REG "\n\t" \
-> +	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG_P "\n\t" \
-> +	"mov (%%" INJECT_ASM_REG_P "), %%" INJECT_ASM_REG "\n\t" \
-> 	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
-> 	"jz 333f\n\t" \
-> 	"222:\n\t" \
-> @@ -86,10 +91,6 @@ unsigned int yield_mod_cnt, nr_abort;
-> 	"jnz 222b\n\t" \
-> 	"333:\n\t"
-> 
-> -#else
-> -#error "Unsupported architecture"
-> -#endif
-> -
-> #elif defined(__ARMEL__)
-> 
-> #define RSEQ_INJECT_INPUT \
-> --
-> 2.11.0
+> diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
+> index 6e29087..3e8e393 100644
+> --- a/tools/testing/selftests/watchdog/watchdog-test.c
+> +++ b/tools/testing/selftests/watchdog/watchdog-test.c
+> @@ -19,7 +19,7 @@
+>  
+>  int fd;
+>  const char v = 'V';
+> -static const char sopts[] = "bdehp:t:";
+> +static const char sopts[] = "bdehp:t:Tn:N";
+>  static const struct option lopts[] = {
+>  	{"bootstatus",          no_argument, NULL, 'b'},
+>  	{"disable",             no_argument, NULL, 'd'},
+> @@ -27,6 +27,9 @@
+>  	{"help",                no_argument, NULL, 'h'},
+>  	{"pingrate",      required_argument, NULL, 'p'},
+>  	{"timeout",       required_argument, NULL, 't'},
+> +	{"gettimeout",          no_argument, NULL, 'T'},
+> +	{"pretimeout",    required_argument, NULL, 'n'},
+> +	{"getpretimeout",       no_argument, NULL, 'N'},
+>  	{NULL,                  no_argument, NULL, 0x0}
+>  };
+>  
+> @@ -71,9 +74,13 @@ static void usage(char *progname)
+>  	printf(" -h, --help          Print the help message\n");
+>  	printf(" -p, --pingrate=P    Set ping rate to P seconds (default %d)\n", DEFAULT_PING_RATE);
+>  	printf(" -t, --timeout=T     Set timeout to T seconds\n");
+> +	printf(" -T, --gettimeout    Get the timeout\n");
+> +	printf(" -n, --pretimeout=T  Set the pretimeout to T seconds\n");
+> +	printf(" -N, --getpretimeout Get the pretimeout\n");
+>  	printf("\n");
+>  	printf("Parameters are parsed left-to-right in real-time.\n");
+>  	printf("Example: %s -d -t 10 -p 5 -e\n", progname);
+> +	printf("Example: %s -t 12 -T -n 7 -N\n", progname);
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Would this work the way you want it though, since -N now is oneshot?
+Should this be just "printf("Example: %s -t 12 -T -n 7\n", progname); ??
+
+The rest looks good to me.
+
+>  }
+>  
+>  int main(int argc, char *argv[])
+> @@ -135,6 +142,30 @@ int main(int argc, char *argv[])
+>  			else
+>  				printf("WDIOC_SETTIMEOUT errno '%s'\n", strerror(errno));
+>  			break;
+> +		case 'T':
+> +			oneshot = 1;
+> +			ret = ioctl(fd, WDIOC_GETTIMEOUT, &flags);
+> +			if (!ret)
+> +				printf("WDIOC_GETTIMEOUT returns %u seconds.\n", flags);
+> +			else
+> +				printf("WDIOC_GETTIMEOUT errno '%s'\n", strerror(errno));
+> +			break;
+> +		case 'n':
+> +			flags = strtoul(optarg, NULL, 0);
+> +			ret = ioctl(fd, WDIOC_SETPRETIMEOUT, &flags);
+> +			if (!ret)
+> +				printf("Watchdog pretimeout set to %u seconds.\n", flags);
+> +			else
+> +				printf("WDIOC_SETPRETIMEOUT errno '%s'\n", strerror(errno));
+> +			break;
+> +		case 'N':
+> +			oneshot = 1;
+> +			ret = ioctl(fd, WDIOC_GETPRETIMEOUT, &flags);
+> +			if (!ret)
+> +				printf("WDIOC_GETPRETIMEOUT returns %u seconds.\n", flags);
+> +			else
+> +				printf("WDIOC_GETPRETIMEOUT errno '%s'\n", strerror(errno));
+> +			break;
+>  		default:
+>  			usage(argv[0]);
+>  			goto end;
+> 
+
+thanks,
+-- Shuah
