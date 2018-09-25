@@ -1,76 +1,261 @@
 From: jerry.hoemann at hpe.com (Jerry Hoemann)
-Date: Tue, 25 Sep 2018 10:09:42 -0600
+Date: Tue, 25 Sep 2018 11:06:07 -0600
 Subject: [PATCH] selftests: watchdog: Add gettimeout and get|set pretimeout
-In-Reply-To: <f8616e56-004a-e296-0f84-8ebd019ad027@kernel.org>
+In-Reply-To: <1c4e6b40-dc4e-5706-0a31-1741ba19ca09@kernel.org>
 References: <1537570526-65241-1-git-send-email-jerry.hoemann@hpe.com>
  <0c6376ec-a3f4-7798-8f30-829480c41f79@kernel.org>
  <20180924014750.GA22296@anatevka.americas.hpqcorp.net>
  <1c4e6b40-dc4e-5706-0a31-1741ba19ca09@kernel.org>
- <f8616e56-004a-e296-0f84-8ebd019ad027@kernel.org>
-Message-ID: <20180925160942.GA25620@anatevka.americas.hpqcorp.net>
+Message-ID: <20180925170607.GB25620@anatevka.americas.hpqcorp.net>
 
-On Tue, Sep 25, 2018 at 09:50:18AM -0600, Shuah Khan wrote:
-> >>> Also can you run this test as normal user?
+
+Shuah,
+
+Wrote this yesterday, and wanted to proof it before sending.  I got
+your other email earlier and replied to specific point on permission
+of /dev/watchdog, so some of this is now redundant.
+-------------------------
+
+With the potential exception of error path, I think my v2 of the patch
+addresses the issues you raised below.  Additional comments inline.
+
+
+On Mon, Sep 24, 2018 at 02:42:33PM -0600, Shuah Khan wrote:
+> On 09/23/2018 07:47 PM, Jerry Hoemann wrote:
+> > On Fri, Sep 21, 2018 at 05:42:00PM -0600, Shuah Khan wrote:
+> >>>  
+> >>> @@ -135,6 +141,28 @@ int main(int argc, char *argv[])
+> >>>  			else
+> >>>  				printf("WDIOC_SETTIMEOUT errno '%s'\n", strerror(errno));
+> >>>  			break;
+> >>> +		case 'T':
+> >>> +			ret = ioctl(fd, WDIOC_GETTIMEOUT, &flags);
+> >>> +			if (!ret)
+> >>> +				printf("Watchdog timeout set to %u seconds.\n", flags);
 > >>
-> >> No.  Must be run as root to open /dev/watchdog.  When /dev/watchdog is opened, the
-> >> WD is started and if not updated properly, the system will crash.
+> >> It would good to make this message different from the WDIOC_SETTIMEOUT message.
+> >> Please update it to reflect that this is the result of a WDIOC_GETTIMEOUT.
 > > 
-> > Hmm. I don't understand why the system would panic if non-root user can't open the
-> > device, at least in the context of this test. 
-> > 
-> >         fd = open("/dev/watchdog", O_WRONLY);
-> > 
-> >         if (fd == -1) {
-> >                 printf("Watchdog device not enabled.\n");
-> >                 exit(-1);
-> >         }
-> > 
-> > 
-> > Shouldn't it just exit based on the code above?
+> > Will update message to make distinct.
 > > 
 > >>
+> >> What would user intend to do with this GETTIMEOUT? Shouldn't this be the case that it
+> >> prints the current value and exits instead of the same logic as SETTIMEOUT option?
 > > 
-> >> "cat /dev/watchdog" is one of my favorite ways to crash a system.  :)  :)
+> > Are you suggesting setting the "oneshot" flag so the test app doesn't actually
+> > go into the while(1) keep_alive loop?
 > > 
-> > That doesn't sound great, if a non-root user can bring the system down!!
-> >  
+> > Watchdog drivers may adjust the requested value to match hardware constraints.
+> > Callers of set timeout (and set pretimeout) should call get timeout to see what
+> > value was actually set.
+> > 
+> > B/c of above, I just got into the habit of specifying both flags: first set,
+> > then get to make sure value set was what I intended.
+> > 
+> > But I can make the "Get" a one shot.  Just let me know if this is your preference.
 > 
-> This got me concerned enough that I tried this with softdog. It behaved just
-> the way I expected it.
+> I prefer that both GETs be oneshot. GETs should just print the current value and go
+> follow oneshot path. It doesn't make sense for them to do more.
+> > 
+> > 
+> >>
+> >>> +			else
+> >>> +				printf("WDIOC_GETTIMEOUT errno '%s'\n", strerror(errno))
+> >>
+> >> Shouldn't this error be an exit condition?
+> > 
+> > Hmmm, I don't see this error path much different than the error path for the
+> > other failing ioctl.  Am I missing something?
 > 
-> cat /dev/watchdog
-> cat: /dev/watchdog: Permission denied
+> Yeah that is what I don't understand with the new code as well as the existing.
+> Shouldn't error path be handled differently. What is the point in doing more
+> other than gracefully exit closing the file? I don't think existing error paths
+> are doing this, probably they should.
+
+
+Watchdog timers have a long and varied history in Linux.  Traditionally, not all
+watchdog have implemented all the ioctl interfaces.  So, an ioctl returning error
+doesn't necessarily mean that an error has occurred, it might just mean 
+that the particular watchdog didn't implement that particular feature.
+
+E.g., yes, we could error out if user tries to set a PRETIMEOUT on a system
+that doesn't support that feature, or we could just continue.
+
+
+
+> > 
+> > 
+> > But, If we make the "GET" a one shot, then we wouldn't really need to
+> > special case the failure case as we wouldn't go into the keep_alive
+> > loop in either case.
+> > 
+> > 
 > 
-> Running the test as non-root does the following as per the current logic.
+> Right.
 > 
-> watchdog-test -b
-> Watchdog device not enabled.
+> > 
+> >>
+> >>> +			break;
+> >>> +		case 'n':
+> >>> +			flags = strtoul(optarg, NULL, 0);
+> >>> +			ret = ioctl(fd, WDIOC_SETPRETIMEOUT, &flags);
+> >>> +			if (!ret)
+> >>> +				printf("Watchdog pretimeout set to %u seconds.\n", flags);
+> >>> +			else
+> >>> +				printf("WDIOC_SETPRETIMEOUT errno '%s'\n", strerror(errno));
+> >>> +			break;
+> >>> +		case 'N':
+> >>> +			ret = ioctl(fd, WDIOC_GETPRETIMEOUT, &flags);
+> >>> +			if (!ret)
+> >>> +				printf("Watchdog pretimeout set to %u seconds.\n", flags);
+> >>
+> >> It would good to make this message different from the WDIOC_GETPRETIMEOUT message.
+> >> Please update it to reflect that this is the result of a WDIOC_GETPRETIMEOUT
+> > 
+> > will do.
+> > 
 > 
-> I think this logic could be improved to detect that a non-root user is running
-> the test and print appropriate message.
+> Okay.
 > 
-> However, I am not seeing the behavior you are describing that "cat /dev/watchdog"
-> panics the syste. Did you mean running a root which is expected unless you terminate
-> before the timeout? If you are seeing this as non-root user on you system, the
-> watchdog driver could be suspect.
+> >>
+> >> What would user intend to do with this GETTIMEOUT? Shouldn't this be the case that it
+> >> prints the current value and exits instead of the same logic as WDIOC_SETPRETIMEOUT?
+> > 
+> > I think you're just asking me to set the "oneshot" flag on this,
+> > which I can certainly do.
 > 
+> Correct. For couple of reasons. GET/SET_PRETIMEOUG might not be supported on all
+> platforms/drivers. It would make sense to handle error paths correctly.
+
+
+The proper handling of a production quality watchdog client on a system without the
+pretimeout feature would be to use the value 0 for pretimeout in calculations of
+ping rate.  The client shouldn't exit in these cases as the clients would then
+fail to run on systems that don't support pretimeout.
+
+
+> 
+> > 
+> > But, some background on pretimeout that (I think) is interesting:
+> > 
+> > The underling HW for the watchdog on proliants allows for the pre-timeout to
+> > be enabled or disabled.  But if the pretimeout is enabled, the value of
+> > the pretimeout is hard coded by HW (9 seconds.)
+> > 
+> > The hpwdt driver allows for setting pretimeout by passing in a value
+> > 	0 < pretimeout < timeout
+> > to enable a pretimeout.  The user then needs to call get pretimeout to
+> > determine the actual value.
+> > 
+> > Failure to take into account the pretimeout when pinging the WD can lead to
+> > unexpected system crashes.
+> > 
+> > I've handled the following issue multiple times:
+> > 
+> > A user wants to set the timeout to value T and ping the WD every T/2 seconds.
+> > He fails to take into account the pretimeout value of P.  The system crashes
+> > with the pretimeout NMI when (T/2) < P.
+> > 
+> > The basic misunderstanding is that to prevent the WD from acting, the WD
+> > only needs to be pinged at least once every T seconds, when in actuality the
+> > WD needs to be pinged at least once every (T-P) seconds.
+> > 
+> > Specifically for Proliants, I've seen people set the timeout to 10 seconds
+> > thinking they had plenty of time to ping the WD only to be surprised when
+> > the pretimeout NMI takes the system down 1 second later.
+> 
+> In this case, this patch really doesn't solve the problem. You will still run
+> into this problem if user does a set. You are providing a way to check pretimeout,
+> however that is a separate operation. So I am not clear on how this patch solves
+> the issue of pretimeout NMI takes the system down.
+
+You are correct, this patch doesn't solve that problem, and wasn't intended to.
+It does provide the knowledgeable user the information s/he needs to properly
+program the watchdog.
+
+I guess the question is what is the vision of watchdog-test?  If it is to
+be a full featured watchdog client, there are several things that would
+be needed to be done.  Automatic sanity checking actual values of timeout
+and pretimeout relative to ping rate would be one.  Running the test as
+an actual daemon would be another.  Configuration files would be needed
+as well.
+
+I view it as a nice, small exemplar of a watchdog client to
+which I wanted to add three small additional ioctls to.  :)
+
+Now, if you want me to add some of these additional features, we
+can discuss that.
+
+
+> 
+> > 
+> > Note: a WD doesn't need to support the pretimeout feature.
+> 
+> It isn't clear what this means?
+> 
+
+Let me rephrase:  A watchdog driver doesn't need to support the pretimeout feature.
+Many/(Most?) do not.  So, on those systems, the get/set pretimeout ioctl should
+return error.  But that doesn't IMHO mean the client should exit.
+
+
+> > 
+> >>
+> >>> +			else
+> >>> +				printf("WDIOC_GETPRETIMEOUT errno '%s'\n", strerror(errno));
+> >>
+> >> Shouldn't this error be an exit condition?
+> > 
+> > Similar to above.  I can make GETPRETIMEOUT a "oneshot" to handle both the
+> > success/failing case of the ioctl call.
+> > 
+> >>
+> >>> +			break;
+> >>>  		default:
+> >>>  			usage(argv[0]);
+> >>>  			goto end;
+> >>>
+> >>
+> >> Also can you run this test as normal user?
+> > 
+> > No.  Must be run as root to open /dev/watchdog.  When /dev/watchdog is opened, the
+> > WD is started and if not updated properly, the system will crash.
+> 
+> Hmm. I don't understand why the system would panic if non-root user can't open the
+> device, at least in the context of this test. 
+> 
+
+Sorry, Let me rephrase.
+
+You asked if the test can be run as a normal user.
+The answer to that question is no.  The permission on /dev/watchdog only
+allow root to open it.  Hence to run the test as a normal user, the
+open fails and the test exits.
+
+The reason for only allowing root to open /dev/watchdog is that it
+is trivial to crash the system.  One simply opens /dev/watchdog and
+doesn't update it.  I routinely test the watchdog (and crash dump)
+by "cat /dev/watchdog" as root.
+
+
+>         fd = open("/dev/watchdog", O_WRONLY);
+> 
+>         if (fd == -1) {
+>                 printf("Watchdog device not enabled.\n");
+>                 exit(-1);
+>         }
+> 
+> 
+> Shouldn't it just exit based on the code above?
+> 
+> > 
+> 
+> > "cat /dev/watchdog" is one of my favorite ways to crash a system.  :)  :)
+> 
+> That doesn't sound great, if a non-root user can bring the system down!!
+>  
 > thanks,
 > -- Shuah
-
-Sorry, for misunderstanding.  Let me rephrase:
-
-When you asked if the test can be run as a normal user::
-
-No.  The test must be run as root to open /dev/watchdog as the permission
-on /dev/watchdog allow only root to open it.  The reason that we only
-allow root to open /dev/watchdog is that it is trivial to crash
-the system.  Just open /dev/watchdog and don't update the watchdog.
-
-One of my favorite ways to crash the system is to
-as root "cat /dev/watchdog."
-
-
-
 
 -- 
 
