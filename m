@@ -1,56 +1,34 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Wed, 26 Sep 2018 15:04:03 -0600
-Subject: [V2 PATCH] selftests: watchdog: Add gettimeout and get|set
- pretimeout
-In-Reply-To: <20180926200320.GB14558@anatevka.americas.hpqcorp.net>
-References: <1537817767-78918-1-git-send-email-jerry.hoemann@hpe.com>
- <1537817767-78918-2-git-send-email-jerry.hoemann@hpe.com>
- <16941ebb-85ca-ad4c-de7b-c26f193ca611@kernel.org>
- <20180926162920.GB3948@anatevka.americas.hpqcorp.net>
- <ce60e815-10f1-08fd-d853-2629992a4a98@kernel.org>
- <20180926200320.GB14558@anatevka.americas.hpqcorp.net>
-Message-ID: <07a8e98e-1e25-d87d-51e5-66ff9dd65245@kernel.org>
+From: jerry.hoemann@hpe.com (Jerry Hoemann)
+Date: Wed, 26 Sep 2018 15:23:07 -0600
+Subject: [V3 PATCH 0/2] selftests: watchdog: Add get/set/pre timeout
+Message-ID: <1537996989-13092-1-git-send-email-jerry.hoemann@hpe.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180926210403.78fkU6J0y141SnnYFqzjEjv8ZOIQJ07OkKWsVbflrUk@z>
+Message-ID: <20180926212307.cd-Kp7G85xbDWP44qREa82C9d3yxfzB0daiyFbUroz8@z>
 
-On 09/26/2018 02:03 PM, Jerry Hoemann wrote:
-> On Wed, Sep 26, 2018@01:47:25PM -0600, Shuah Khan wrote:
->> On 09/26/2018 10:29 AM, Jerry Hoemann wrote:
->>> On Tue, Sep 25, 2018@02:51:15PM -0600, Shuah Khan wrote:
->>>> Hi Jerry,
->>>>
->>>>
->>>> The rest looks good to me.
->>
->> I spoke too soon. I ran your patch on softdog and error messages in unsupported
->> cases could you refinement. Please see below:
->>
->> Sorry for not catching this earlier.
->>
->>>>
->>>>>  }
->>>>>  
->>>>>  int main(int argc, char *argv[])
->>>>> @@ -135,6 +142,30 @@ int main(int argc, char *argv[])
->>>>>  			else
->>>>>  				printf("WDIOC_SETTIMEOUT errno '%s'\n", strerror(errno));
->>>>>  			break;
->>>>> +		case 'T':
->>>>> +			oneshot = 1;
->>>>> +			ret = ioctl(fd, WDIOC_GETTIMEOUT, &flags);
->>>>> +			if (!ret)
->>>>> +				printf("WDIOC_GETTIMEOUT returns %u seconds.\n", flags);
->>>>> +			else
->>>>> +				printf("WDIOC_GETTIMEOUT errno '%s'\n", strerror(errno));
->>
->> Either remove "errno" or change it to "error '%s'"
-> 
-> Oh, I see. I did a cut/paste from prior printf in file which have same issue.
-> I'll fix those while I'm at it.
-> 
-> 
-> 
 
-Thanks. That will be awesome.
+Add command line arguments to call ioctl WDIOC_GETTIMEOUT,
+WDIOC_GETPRETIMEOUT and WDIOC_SETPRETIMEOUT.
 
--- Shuah
+Changes  v2
+1) Update usage to include argument
+2) Update usage to give example.
+3) Made printf of WDIOC_GETTIMEOUT distinct from WDIOC_SETTIMEOUT
+4) Made WDIOC_GETTIMEOUT a "one shot"
+5) Made printf of WDIOC_GETPRETIMEOUT disnct from WDIOC_SETPRETIMEOUT
+6) Made WDIOC_GETPRETIMEOUT a "one shot"
+
+Change v3
+1) Printf says errno, but prints the string version of the error.
+   Make the printf consistent.
+2) As above error was cut/paste from prior printf in application
+   add new patch 1 to fix the existing printf first.
+
+Jerry Hoemann (2):
+  selftests: watchdog: Fix error message.
+  selftests: watchdog: Add gettimeout and get|set pretimeout
+
+ tools/testing/selftests/watchdog/watchdog-test.c | 41 +++++++++++++++++++++---
+ 1 file changed, 36 insertions(+), 5 deletions(-)
+
+-- 
+1.8.3.1
