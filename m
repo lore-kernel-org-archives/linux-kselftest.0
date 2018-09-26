@@ -1,88 +1,41 @@
-From: jerry.hoemann@hpe.com (Jerry Hoemann)
-Date: Wed, 26 Sep 2018 15:23:09 -0600
-Subject: [V3 PATCH 2/2] selftests: watchdog: Add gettimeout and get|set
- pretimeout
+From: shuah@kernel.org (Shuah Khan)
+Date: Wed, 26 Sep 2018 15:37:34 -0600
+Subject: [V3 PATCH 0/2] selftests: watchdog: Add get/set/pre timeout
 In-Reply-To: <1537996989-13092-1-git-send-email-jerry.hoemann@hpe.com>
 References: <1537996989-13092-1-git-send-email-jerry.hoemann@hpe.com>
-Message-ID: <1537996989-13092-3-git-send-email-jerry.hoemann@hpe.com>
+Message-ID: <6f3a8fe3-1ec4-ed8b-99a2-1dba7553c1fc@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180926212309.nYO3mVw3ZzuuX2u_TxtLzbuJH-fjRhrElkWy8Sz6wU0@z>
+Message-ID: <20180926213734._d3gwL6up3UX87kiaW_RbcufCgzjUMzLN6ndn4a5n04@z>
 
-Add command line arguments to call ioctl WDIOC_GETTIMEOUT,
-WDIOC_GETPRETIMEOUT and WDIOC_SETPRETIMEOUT.
+On 09/26/2018 03:23 PM, Jerry Hoemann wrote:
+> Add command line arguments to call ioctl WDIOC_GETTIMEOUT,
+> WDIOC_GETPRETIMEOUT and WDIOC_SETPRETIMEOUT.
+> 
+> Changes  v2
+> 1) Update usage to include argument
+> 2) Update usage to give example.
+> 3) Made printf of WDIOC_GETTIMEOUT distinct from WDIOC_SETTIMEOUT
+> 4) Made WDIOC_GETTIMEOUT a "one shot"
+> 5) Made printf of WDIOC_GETPRETIMEOUT disnct from WDIOC_SETPRETIMEOUT
+> 6) Made WDIOC_GETPRETIMEOUT a "one shot"
+> 
+> Change v3
+> 1) Printf says errno, but prints the string version of the error.
+>    Make the printf consistent.
+> 2) As above error was cut/paste from prior printf in application
+>    add new patch 1 to fix the existing printf first.
+> 
+> Jerry Hoemann (2):
+>   selftests: watchdog: Fix error message.
+>   selftests: watchdog: Add gettimeout and get|set pretimeout
+> 
+>  tools/testing/selftests/watchdog/watchdog-test.c | 41 +++++++++++++++++++++---
+>  1 file changed, 36 insertions(+), 5 deletions(-)
+> 
 
-Signed-off-by: Jerry Hoemann <jerry.hoemann at hpe.com>
----
- tools/testing/selftests/watchdog/watchdog-test.c | 33 +++++++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
+Thanks for the patches. Applied to linux-kselftest next for 4.20-rc1
 
-diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-index 8429186..e29bc71 100644
---- a/tools/testing/selftests/watchdog/watchdog-test.c
-+++ b/tools/testing/selftests/watchdog/watchdog-test.c
-@@ -19,7 +19,7 @@
- 
- int fd;
- const char v = 'V';
--static const char sopts[] = "bdehp:t:";
-+static const char sopts[] = "bdehp:t:Tn:N";
- static const struct option lopts[] = {
- 	{"bootstatus",          no_argument, NULL, 'b'},
- 	{"disable",             no_argument, NULL, 'd'},
-@@ -27,6 +27,9 @@
- 	{"help",                no_argument, NULL, 'h'},
- 	{"pingrate",      required_argument, NULL, 'p'},
- 	{"timeout",       required_argument, NULL, 't'},
-+	{"gettimeout",          no_argument, NULL, 'T'},
-+	{"pretimeout",    required_argument, NULL, 'n'},
-+	{"getpretimeout",       no_argument, NULL, 'N'},
- 	{NULL,                  no_argument, NULL, 0x0}
- };
- 
-@@ -71,9 +74,13 @@ static void usage(char *progname)
- 	printf(" -h, --help          Print the help message\n");
- 	printf(" -p, --pingrate=P    Set ping rate to P seconds (default %d)\n", DEFAULT_PING_RATE);
- 	printf(" -t, --timeout=T     Set timeout to T seconds\n");
-+	printf(" -T, --gettimeout    Get the timeout\n");
-+	printf(" -n, --pretimeout=T  Set the pretimeout to T seconds\n");
-+	printf(" -N, --getpretimeout Get the pretimeout\n");
- 	printf("\n");
- 	printf("Parameters are parsed left-to-right in real-time.\n");
- 	printf("Example: %s -d -t 10 -p 5 -e\n", progname);
-+	printf("Example: %s -t 12 -T -n 7 -N\n", progname);
- }
- 
- int main(int argc, char *argv[])
-@@ -135,6 +142,30 @@ int main(int argc, char *argv[])
- 			else
- 				printf("WDIOC_SETTIMEOUT error '%s'\n", strerror(errno));
- 			break;
-+		case 'T':
-+			oneshot = 1;
-+			ret = ioctl(fd, WDIOC_GETTIMEOUT, &flags);
-+			if (!ret)
-+				printf("WDIOC_GETTIMEOUT returns %u seconds.\n", flags);
-+			else
-+				printf("WDIOC_GETTIMEOUT error '%s'\n", strerror(errno));
-+			break;
-+		case 'n':
-+			flags = strtoul(optarg, NULL, 0);
-+			ret = ioctl(fd, WDIOC_SETPRETIMEOUT, &flags);
-+			if (!ret)
-+				printf("Watchdog pretimeout set to %u seconds.\n", flags);
-+			else
-+				printf("WDIOC_SETPRETIMEOUT error '%s'\n", strerror(errno));
-+			break;
-+		case 'N':
-+			oneshot = 1;
-+			ret = ioctl(fd, WDIOC_GETPRETIMEOUT, &flags);
-+			if (!ret)
-+				printf("WDIOC_GETPRETIMEOUT returns %u seconds.\n", flags);
-+			else
-+				printf("WDIOC_GETPRETIMEOUT error '%s'\n", strerror(errno));
-+			break;
- 		default:
- 			usage(argv[0]);
- 			goto end;
--- 
-1.8.3.1
+btw -for future reference, the convention is [PATCH v3] not [V3 PATCH]
+
+thanks,
+-- Shuah
