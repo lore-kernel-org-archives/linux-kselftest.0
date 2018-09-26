@@ -1,26 +1,37 @@
-From: 0x7f454c46 at gmail.com (Dmitry Safonov)
-Date: Wed, 26 Sep 2018 18:59:49 +0100
-Subject: [RFC 00/20] ns: Introduce Time Namespace
-In-Reply-To: <87zhw4rwiq.fsf@xmission.com>
-References: <20180919205037.9574-1-dima@arista.com>
- <874lej6nny.fsf@xmission.com>
- <20180924205119.GA14833@outlook.office365.com> <874leezh8n.fsf@xmission.com>
- <20180925014150.GA6302@outlook.office365.com> <87zhw4rwiq.fsf@xmission.com>
-Message-ID: <CAJwJo6bseG42YNqA0cxWpB0C252_CWER0gDrF0OUOm+=DJ7XdQ@mail.gmail.com>
+From: shuah at kernel.org (Shuah Khan (Samsung OSG))
+Date: Wed, 26 Sep 2018 13:18:46 -0600
+Subject: [PATCH] selftests: watchdog: fix message when /dev/watchdog open fails
+Message-ID: <20180926191846.23984-1-shuah@kernel.org>
 
-2018-09-26 18:36 GMT+01:00 Eric W. Biederman <ebiederm at xmission.com>:
-> The advantage of timekeeping_update per time namespace is that it allows
-> different lengths of seconds per time namespace.  Which allows testing
-> ntp and the kernel in interesting ways while still having a working
-> production configuration on the same system.
+When /dev/watchdog open fails, watchdog exits with "watchdog not enabled"
+message. This is incorrect when open fails due to insufficient privilege.
 
-Just a quick note: the different length of second per namespace sounds
-very interesting in my POV, I remember I've seen this article:
-http://publish.illinois.edu/science-of-security-lablet/files/2014/05/DSSnet-A-Smart-Grid-Modeling-Platform-Combining-Electrical-Power-Distributtion-System-Simulation-and-Software-Defined-Networking-Emulation.pdf
+Fix message to clearly state the reason when open fails with EACCESS when
+a non-root user runs it.
 
-And their realisation with a simulation of time going with different speed
-per-pid  (with vdso disabled):
-https://github.com/littlepretty/VirtualTimeKernel
+Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+---
+ tools/testing/selftests/watchdog/watchdog-test.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Thanks,
-             Dmitry
+diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
+index 6e290874b70e..e029e2017280 100644
+--- a/tools/testing/selftests/watchdog/watchdog-test.c
++++ b/tools/testing/selftests/watchdog/watchdog-test.c
+@@ -89,7 +89,13 @@ int main(int argc, char *argv[])
+ 	fd = open("/dev/watchdog", O_WRONLY);
+ 
+ 	if (fd == -1) {
+-		printf("Watchdog device not enabled.\n");
++		if (errno == ENOENT)
++			printf("Watchdog device not enabled.\n");
++		else if (errno == EACCES)
++			printf("Run watchdog as root.\n");
++		else
++			printf("Watchdog device open failed %s\n",
++				strerror(errno));
+ 		exit(-1);
+ 	}
+ 
+-- 
+2.17.0
