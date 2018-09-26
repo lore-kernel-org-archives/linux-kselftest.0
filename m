@@ -1,32 +1,57 @@
 From: jerry.hoemann at hpe.com (Jerry Hoemann)
-Date: Wed, 26 Sep 2018 15:23:07 -0600
-Subject: [V3 PATCH 0/2] selftests: watchdog: Add get/set/pre timeout
-Message-ID: <1537996989-13092-1-git-send-email-jerry.hoemann@hpe.com>
+Date: Wed, 26 Sep 2018 15:23:08 -0600
+Subject: [V3 PATCH 1/2] selftests: watchdog: Fix error message.
+In-Reply-To: <1537996989-13092-1-git-send-email-jerry.hoemann@hpe.com>
+References: <1537996989-13092-1-git-send-email-jerry.hoemann@hpe.com>
+Message-ID: <1537996989-13092-2-git-send-email-jerry.hoemann@hpe.com>
 
+Printf's say errno but print the string version of error.
+Make consistent.
 
-Add command line arguments to call ioctl WDIOC_GETTIMEOUT,
-WDIOC_GETPRETIMEOUT and WDIOC_SETPRETIMEOUT.
+Signed-off-by: Jerry Hoemann <jerry.hoemann at hpe.com>
+---
+ tools/testing/selftests/watchdog/watchdog-test.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Changes  v2
-1) Update usage to include argument
-2) Update usage to give example.
-3) Made printf of WDIOC_GETTIMEOUT distinct from WDIOC_SETTIMEOUT
-4) Made WDIOC_GETTIMEOUT a "one shot"
-5) Made printf of WDIOC_GETPRETIMEOUT disnct from WDIOC_SETPRETIMEOUT
-6) Made WDIOC_GETPRETIMEOUT a "one shot"
-
-Change v3
-1) Printf says errno, but prints the string version of the error.
-   Make the printf consistent.
-2) As above error was cut/paste from prior printf in application
-   add new patch 1 to fix the existing printf first.
-
-Jerry Hoemann (2):
-  selftests: watchdog: Fix error message.
-  selftests: watchdog: Add gettimeout and get|set pretimeout
-
- tools/testing/selftests/watchdog/watchdog-test.c | 41 +++++++++++++++++++++---
- 1 file changed, 36 insertions(+), 5 deletions(-)
-
+diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
+index 6e29087..8429186 100644
+--- a/tools/testing/selftests/watchdog/watchdog-test.c
++++ b/tools/testing/selftests/watchdog/watchdog-test.c
+@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
+ 				printf("Last boot is caused by: %s.\n", (flags != 0) ?
+ 					"Watchdog" : "Power-On-Reset");
+ 			else
+-				printf("WDIOC_GETBOOTSTATUS errno '%s'\n", strerror(errno));
++				printf("WDIOC_GETBOOTSTATUS error '%s'\n", strerror(errno));
+ 			break;
+ 		case 'd':
+ 			flags = WDIOS_DISABLECARD;
+@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
+ 			if (!ret)
+ 				printf("Watchdog card disabled.\n");
+ 			else
+-				printf("WDIOS_DISABLECARD errno '%s'\n", strerror(errno));
++				printf("WDIOS_DISABLECARD error '%s'\n", strerror(errno));
+ 			break;
+ 		case 'e':
+ 			flags = WDIOS_ENABLECARD;
+@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
+ 			if (!ret)
+ 				printf("Watchdog card enabled.\n");
+ 			else
+-				printf("WDIOS_ENABLECARD errno '%s'\n", strerror(errno));
++				printf("WDIOS_ENABLECARD error '%s'\n", strerror(errno));
+ 			break;
+ 		case 'p':
+ 			ping_rate = strtoul(optarg, NULL, 0);
+@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
+ 			if (!ret)
+ 				printf("Watchdog timeout set to %u seconds.\n", flags);
+ 			else
+-				printf("WDIOC_SETTIMEOUT errno '%s'\n", strerror(errno));
++				printf("WDIOC_SETTIMEOUT error '%s'\n", strerror(errno));
+ 			break;
+ 		default:
+ 			usage(argv[0]);
 -- 
 1.8.3.1
