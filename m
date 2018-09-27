@@ -1,111 +1,68 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Thu, 27 Sep 2018 13:12:11 -0600
-Subject: [PATCH v2] rseq/selftests: fix parametrized test with -fpie
-In-Reply-To: <20180927183919.7461-1-mathieu.desnoyers@efficios.com>
-References: <20180927183919.7461-1-mathieu.desnoyers@efficios.com>
-Message-ID: <34c0750c-bf39-267c-e1e4-38bbbf77305c@kernel.org>
+From: tglx@linutronix.de (Thomas Gleixner)
+Date: Thu, 27 Sep 2018 23:30:09 +0200 (CEST)
+Subject: [RFC 00/20] ns: Introduce Time Namespace
+In-Reply-To: <87zhw4rwiq.fsf@xmission.com>
+References: <20180919205037.9574-1-dima@arista.com>
+ <874lej6nny.fsf@xmission.com> <20180924205119.GA14833@outlook.office365.com>
+ <874leezh8n.fsf@xmission.com> <20180925014150.GA6302@outlook.office365.com>
+ <87zhw4rwiq.fsf@xmission.com>
+Message-ID: <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180927191211.64mxpbrdIswPPQE7EsVwjKRUo_3Dz4wsbFf24hZKh5I@z>
+Message-ID: <20180927213009.AbrvKX3VTHSF66Roqq9N64QIbj6UsmtuBa0W9900gH0@z>
 
-On 09/27/2018 12:39 PM, Mathieu Desnoyers wrote:
-> On x86-64, the parametrized selftest code for rseq crashes with a
-> segmentation fault when compiled with -fpie. This happens when the
-> param_test binary is loaded at an address beyond 32-bit on x86-64.
+On Wed, 26 Sep 2018, Eric W. Biederman wrote:
+> Reading the code the calling sequence there is:
+> tick_sched_do_timer
+>    tick_do_update_jiffies64
+>       update_wall_time
+>           timekeeping_advance
+>              timekeepging_update
 > 
-> The issue is caused by use of a 32-bit register to hold the address
-> of the loop counter variable.
+> If I read that properly under the right nohz circumstances that update
+> can be delayed indefinitely.
 > 
-> Fix this by using a 64-bit register to calculate the address of the
-> loop counter variables as an offset from rip.
-> 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
-> Acked-by: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
-> Cc: <stable at vger.kernel.org> # v4.18
-> Cc: Shuah Khan <shuah at kernel.org>
-> Cc: Thomas Gleixner <tglx at linutronix.de>
-> Cc: Joel Fernandes <joelaf at google.com>
-> Cc: Peter Zijlstra <peterz at infradead.org>
-> Cc: Catalin Marinas <catalin.marinas at arm.com>
-> Cc: Dave Watson <davejwatson at fb.com>
-> Cc: Will Deacon <will.deacon at arm.com>
-> Cc: Andi Kleen <andi at firstfloor.org>
-> Cc: linux-kselftest at vger.kernel.org
-> Cc: "H . Peter Anvin" <hpa at zytor.com>
-> Cc: Chris Lameter <cl at linux.com>
-> Cc: Russell King <linux at arm.linux.org.uk>
-> Cc: Michael Kerrisk <mtk.manpages at gmail.com>
-> Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
-> Cc: Paul Turner <pjt at google.com>
-> Cc: Boqun Feng <boqun.feng at gmail.com>
-> Cc: Josh Triplett <josh at joshtriplett.org>
-> Cc: Steven Rostedt <rostedt at goodmis.org>
-> Cc: Ben Maurer <bmaurer at fb.com>
-> Cc: Andy Lutomirski <luto at amacapital.net>
-> Cc: Andrew Morton <akpm at linux-foundation.org>
-> Cc: Linus Torvalds <torvalds at linux-foundation.org>
-> ---
-> Changes since v1:
-> - Update email address for Shuah Khan based on updated MAINTAINERS
->   email address,
-> - Rebase on v4.19-rc5.
-> ---
->  tools/testing/selftests/rseq/param_test.c | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/rseq/param_test.c b/tools/testing/selftests/rseq/param_test.c
-> index 642d4e12abea..eec2663261f2 100644
-> --- a/tools/testing/selftests/rseq/param_test.c
-> +++ b/tools/testing/selftests/rseq/param_test.c
-> @@ -56,15 +56,13 @@ unsigned int yield_mod_cnt, nr_abort;
->  			printf(fmt, ## __VA_ARGS__);	\
->  	} while (0)
->  
-> -#if defined(__x86_64__) || defined(__i386__)
-> +#ifdef __i386__
->  
->  #define INJECT_ASM_REG	"eax"
->  
->  #define RSEQ_INJECT_CLOBBER \
->  	, INJECT_ASM_REG
->  
-> -#ifdef __i386__
-> -
->  #define RSEQ_INJECT_ASM(n) \
->  	"mov asm_loop_cnt_" #n ", %%" INJECT_ASM_REG "\n\t" \
->  	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
-> @@ -76,9 +74,16 @@ unsigned int yield_mod_cnt, nr_abort;
->  
->  #elif defined(__x86_64__)
->  
-> +#define INJECT_ASM_REG_P	"rax"
-> +#define INJECT_ASM_REG		"eax"
-> +
-> +#define RSEQ_INJECT_CLOBBER \
-> +	, INJECT_ASM_REG_P \
-> +	, INJECT_ASM_REG
-> +
->  #define RSEQ_INJECT_ASM(n) \
-> -	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG "\n\t" \
-> -	"mov (%%" INJECT_ASM_REG "), %%" INJECT_ASM_REG "\n\t" \
-> +	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG_P "\n\t" \
-> +	"mov (%%" INJECT_ASM_REG_P "), %%" INJECT_ASM_REG "\n\t" \
->  	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
->  	"jz 333f\n\t" \
->  	"222:\n\t" \
-> @@ -86,10 +91,6 @@ unsigned int yield_mod_cnt, nr_abort;
->  	"jnz 222b\n\t" \
->  	"333:\n\t"
->  
-> -#else
-> -#error "Unsupported architecture"
-> -#endif
-> -
->  #elif defined(__s390__)
->  
->  #define RSEQ_INJECT_INPUT \
-> 
+> So I think we could prototype a time namespace that was per
+> timekeeping_update and just had update_wall_time iterate through
+> all of the time namespaces.
 
-Applied now to linux-kselftest fixes. I will get this into the next rc
+Please don't go there. timekeeping_update() is already heavy and walking
+through a gazillion of namespaces will just make it horrible,
 
-thanks,
--- Shuah
+> I don't think the naive version would scale to very many time
+> namespaces.
+
+:)
+
+> At the same time using the techniques from the nohz work and a little
+> smarts I expect we could get the code to scale.
+
+You'd need to invoke the update when the namespace is switched in and
+hasn't been updated since the last tick happened. That might be doable, but
+you also need to take the wraparound constraints of the underlying
+clocksources into account, which again can cause walking all name spaces
+when they are all idle long enough.
+
+>From there it becomes hairy, because it's not only timekeeping,
+i.e. reading time, this is also affecting all timers which are armed from a
+namespace.
+
+That gets really ugly because when you do settimeofday() or adjtimex() for
+a particular namespace, then you have to search for all armed timers of
+that namespace and adjust them.
+
+The original posix timer code had the same issue because it mapped the
+clock realtime timers to the timer wheel so any setting of the clock caused
+a full walk of all armed timers, disarming, adjusting and requeing
+them. That's horrible not only performance wise, it's also a locking
+nightmare of all sorts.
+
+Add time skew via NTP/PTP into the picture and you might have to adjust
+timers as well, because you need to guarantee that they are not expiring
+early.
+
+I haven't looked through Dimitry's patches yet, but I don't see how this
+can work at all without introducing subtle issues all over the place.
+
+Thanks,
+
+	tglx
