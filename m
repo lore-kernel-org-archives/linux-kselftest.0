@@ -1,26 +1,93 @@
-From: tglx at linutronix.de (Thomas Gleixner)
-Date: Thu, 27 Sep 2018 23:41:49 +0200 (CEST)
-Subject: [RFC 00/20] ns: Introduce Time Namespace
-In-Reply-To: <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
-References: <20180919205037.9574-1-dima@arista.com>
- <874lej6nny.fsf@xmission.com> <20180924205119.GA14833@outlook.office365.com>
- <874leezh8n.fsf@xmission.com> <20180925014150.GA6302@outlook.office365.com>
- <87zhw4rwiq.fsf@xmission.com>
- <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
-Message-ID: <alpine.DEB.2.21.1809272335430.8118@nanos.tec.linutronix.de>
+From: mhiramat at kernel.org (Masami Hiramatsu)
+Date: Fri, 28 Sep 2018 07:49:38 +0900
+Subject: [PATCH v3 00/28] selftests/ftrace: Improve ftracetest with
+ coverage check
+In-Reply-To: <9cf69344-5dfc-4961-163e-1e14bbe80647@kernel.org>
+References: <153563834333.29700.11242968505215651399.stgit@devbox>
+ <9cf69344-5dfc-4961-163e-1e14bbe80647@kernel.org>
+Message-ID: <20180928074938.bb89440c8e2b91fcb918d93a@kernel.org>
 
-On Thu, 27 Sep 2018, Thomas Gleixner wrote:
-> Add time skew via NTP/PTP into the picture and you might have to adjust
-> timers as well, because you need to guarantee that they are not expiring
-> early.
+On Fri, 21 Sep 2018 15:24:25 -0600
+Shuah Khan <shuah at kernel.org> wrote:
+
+> Hi Masami,
 > 
-> I haven't looked through Dimitry's patches yet, but I don't see how this
-> can work at all without introducing subtle issues all over the place.
+> On 08/30/2018 08:12 AM, Masami Hiramatsu wrote:
+> > Hi,
+> > 
+> > Here is the 3rd version of the series for improving ftracetest
+> > testcase using gcov/lcov. In this version I just fixed some
+> > reported issues and dropped some tests which is not needed.
+> > I also dropped a testcase for blktrace from this version.
+> > It will be discussed separated thread.
+> > 
+> > Previous version is here;
+> > 
+> > https://lkml.org/lkml/2018/8/16/393
+> > 
+> > GCOV_PROFILE_FTRACE has already been merged through tracing
+> > tree.
+> > 
+> > Ftracetest framework improvements:
+> >  - Add --stop-fail for detecting failure soon.
+> >  - Add --console for interactively debugging a testcase by shell.
+> >  - Add testcase-number prefix to logfile for finding log easier.
+> >  - Improve general init function
+> >  - Add SPDX license identifiers
+> >  - Call general init function after all testcases.
+> >  - Remove init/cleanup code from all testcase (since general init
+> >    function will fixed it up)
+> > 
+> > Testcase fixes:
+> >  - Fix to check $comm availability.
+> >  - Make checkbashisms clean
+> > 
+> > Testcase improvements:
+> >  - Use loopback address instead of localhost
+> >  - Improve kprobe on module testcase to load/unload module
+> >  - Improve kprobe testcase to check log data
+> >  - Improve kretprobe testcase to check log data
+> >  - Test kprobe-event argument with various bitsize
+> >  - Check set_event_pid result
+> > 
+> > Adding testcases:
+> >  - Add kprobe event with $comm argument testcase
+> >  - Add kprobe profile testcase
+> >  - Add kprobe-event with symbol argument testcase
+> >  - Add trace_printk sample module testcase
+> >  - Add ringbuffer size changing testcase
+> >  - Add function profiling statistics testcase
+> >  - Add max stack tracer testcase
+> >  - Add function filter on module testcase
+> >  - Add trace_pipe testcase
+> >  - Add stacktrace ftrace filter command testcase
+> >  - Add wakeup tracer testcase
+> >  - Add wakeup_rt tracer testcase
+> >  - Add ftrace cpumask testcase
+> > 
+> > TBD:
+> > Following testcase improvements are remaining.
+> >  - Checking of various supported types (like u8, u64 etc.)
+> >    testcases
+> > 
+> > Tested on x86-64 qemu.
+> > 
+> > # of passed:  84
+> > # of failed:  0
+> > # of unresolved:  0
+> > # of untested:  0
+> > # of unsupported:  0
+> > # of xfailed:  0
+> > # of undefined(test bug):  0
+> > 
+> > Thank you,
+> > 
+> 
+> Thanks for the patches. Sorry for the delay. I am applying the series to linux-kselftest
+> next for 4.20 release
 
-And just a quick scan tells me that this is broken. Timers will expire
-early or late. The latter is acceptible to some extent, but larger delays
-might come with surprise. Expiring early is an absolute nono.
+Thank you Shuah, I found it in your next branch :)
 
-Thanks,
 
-	tglx
+-- 
+Masami Hiramatsu <mhiramat at kernel.org>
