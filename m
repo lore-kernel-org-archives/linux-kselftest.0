@@ -1,73 +1,65 @@
-From: shuah at kernel.org (Shuah Khan (Samsung OSG))
-Date: Thu, 27 Sep 2018 09:54:12 -0600
-Subject: [PATCH linux-kselftest-next] selftests: watchdog: Fix ioctl SET*
- error paths to take oneshot exit path
-Message-ID: <20180927155412.11433-1-shuah@kernel.org>
+From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
+Date: Thu, 27 Sep 2018 14:02:08 -0400 (EDT)
+Subject: [PATCH] rseq/selftests: fix parametrized test with -fpie
+In-Reply-To: <a7bae2ff-1f4d-dbfc-43f8-e7a89f319abb@samsung.com>
+References: <20180918135328.32034-1-mathieu.desnoyers@efficios.com>
+ <1367962117.10271.1537897176578.JavaMail.zimbra@efficios.com>
+ <CGME20180927132250epcas4p3d0775cc258f6112d27bdad359fc6e416@epcas4p3.samsung.com>
+ <20180927092235.77282e35@vmware.local.home>
+ <a7bae2ff-1f4d-dbfc-43f8-e7a89f319abb@samsung.com>
+Message-ID: <44897232.11546.1538071328396.JavaMail.zimbra@efficios.com>
 
-When ioctls for WDIOC_SETOPTIONS (WDIOS_DISABLECARD or WDIOS_ENABLECARD),
-WDIOC_SETTIMEOUT, and WDIOC_SETPRETIMEOUT fail, the error path continues
-to handler watchdog timer until user terminates it. When ioctl returns
-error, it might not be safe to let the watchdog tick. The error could be
-due an unsupported ioctl command or some other error.
+----- On Sep 27, 2018, at 9:58 AM, Shuah Khan shuah.kh at samsung.com wrote:
 
-Fix it to handle error paths as oneshot to stop the watchdog ticks and
-exit right away.
+> On 09/27/2018 07:22 AM, Steven Rostedt wrote:
+>> On Tue, 25 Sep 2018 13:39:36 -0400 (EDT)
+>> Mathieu Desnoyers <mathieu.desnoyers at efficios.com> wrote:
+>> 
+>>> ----- On Sep 18, 2018, at 9:53 AM, Mathieu Desnoyers
+>>> mathieu.desnoyers at efficios.com wrote:
+>>>
+>>>> On x86-64, the parametrized selftest code for rseq crashes with a
+>>>> segmentation fault when compiled with -fpie. This happens when the
+>>>> param_test binary is loaded at an address beyond 32-bit on x86-64.
+>>>>
+>>>> The issue is caused by use of a 32-bit register to hold the address
+>>>> of the loop counter variable.
+>>>>
+>>>> Fix this by using a 64-bit register to calculate the address of the
+>>>> loop counter variables as an offset from rip.
+>>>
+>>> Should this fix go through tip or the selftests tree ?
+>>>
+>> 
+>> I usually have changes like this pulled through Shuah's tree with an
+>> ack from the maintainer of the code that it tests.
+>> 
+>> -- Steve
+>> 
+> 
+> Right that is what I prefer. I usually wait for an Ack. I can pull this
+> in.
 
-Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
----
- tools/testing/selftests/watchdog/watchdog-test.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+I am maintainer of the code that it tests as well, so being both author
+of the selftest patch and giving an ack to it seems a bit silly. :) Other
+rseq co-maintainers could weight in though: Peter, Paul, and Boqun.
 
-diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-index e0f1600dc1b3..c6bd9a68306b 100644
---- a/tools/testing/selftests/watchdog/watchdog-test.c
-+++ b/tools/testing/selftests/watchdog/watchdog-test.c
-@@ -123,16 +123,20 @@ int main(int argc, char *argv[])
- 			ret = ioctl(fd, WDIOC_SETOPTIONS, &flags);
- 			if (!ret)
- 				printf("Watchdog card disabled.\n");
--			else
-+			else {
- 				printf("WDIOS_DISABLECARD error '%s'\n", strerror(errno));
-+				oneshot = 1;
-+			}
- 			break;
- 		case 'e':
- 			flags = WDIOS_ENABLECARD;
- 			ret = ioctl(fd, WDIOC_SETOPTIONS, &flags);
- 			if (!ret)
- 				printf("Watchdog card enabled.\n");
--			else
-+			else {
- 				printf("WDIOS_ENABLECARD error '%s'\n", strerror(errno));
-+				oneshot = 1;
-+			}
- 			break;
- 		case 'p':
- 			ping_rate = strtoul(optarg, NULL, 0);
-@@ -145,8 +149,10 @@ int main(int argc, char *argv[])
- 			ret = ioctl(fd, WDIOC_SETTIMEOUT, &flags);
- 			if (!ret)
- 				printf("Watchdog timeout set to %u seconds.\n", flags);
--			else
-+			else {
- 				printf("WDIOC_SETTIMEOUT error '%s'\n", strerror(errno));
-+				oneshot = 1;
-+			}
- 			break;
- 		case 'T':
- 			oneshot = 1;
-@@ -161,8 +167,10 @@ int main(int argc, char *argv[])
- 			ret = ioctl(fd, WDIOC_SETPRETIMEOUT, &flags);
- 			if (!ret)
- 				printf("Watchdog pretimeout set to %u seconds.\n", flags);
--			else
-+			else {
- 				printf("WDIOC_SETPRETIMEOUT error '%s'\n", strerror(errno));
-+				oneshot = 1;
-+			}
- 			break;
- 		case 'N':
- 			oneshot = 1;
+Thanks,
+
+Mathieu
+
+> 
+> thanks,
+> -- Shuah
+> 
+> --
+> Shuah Khan
+> Sr. Linux Kernel Developer
+> Open Source Innovation Group
+> Samsung Research America(Silicon Valley)
+> shuah.kh at samsung.com
+
 -- 
-2.17.0
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
