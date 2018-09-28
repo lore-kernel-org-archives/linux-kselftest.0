@@ -1,61 +1,86 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Fri, 28 Sep 2018 07:52:26 -0600
-Subject: [PATCH v6] selftests: add headers_install to lib.mk
-In-Reply-To: <87y3bmte9l.fsf@concordia.ellerman.id.au>
-References: <20180809080402.24469-1-anders.roxell@linaro.org>
- <20180904104721.27535-1-anders.roxell@linaro.org>
- <87y3bmte9l.fsf@concordia.ellerman.id.au>
-Message-ID: <4473d2b6-a760-1a48-68e7-9f90023b57b5@kernel.org>
+From: vakul.garg at nxp.com (Vakul Garg)
+Date: Fri, 28 Sep 2018 21:48:08 +0530
+Subject: [PATCH net-next] selftests/tls: Fix recv(MSG_PEEK) & splice() test
+ cases
+Message-ID: <20180928161808.10363-1-vakul.garg@nxp.com>
 
-On 09/27/2018 10:52 PM, Michael Ellerman wrote:
-> [ + linuxppc-dev ]
-> 
-> Anders Roxell <anders.roxell at linaro.org> writes:
->> If the kernel headers aren't installed we can't build all the tests.
->> Add a new make target rule 'khdr' in the file lib.mk to generate the
->> kernel headers and that gets include for every test-dir Makefile that
->> includes lib.mk If the testdir in turn have its own sub-dirs the
->> top_srcdir needs to be set to the linux-rootdir to be able to generate
->> the kernel headers.
->>
->> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
->> Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
->> ---
->>
->> I sent this (v5) a month ago and wondered if it got lost. Resending
->> unchanged.
->>
->> Cheers,
->> Anders
->>
->>  Makefile                                           | 14 +-------------
->>  scripts/subarch.include                            | 13 +++++++++++++
->>  tools/testing/selftests/android/Makefile           |  2 +-
->>  tools/testing/selftests/android/ion/Makefile       |  2 ++
->>  tools/testing/selftests/futex/functional/Makefile  |  1 +
->>  tools/testing/selftests/gpio/Makefile              |  7 ++-----
->>  tools/testing/selftests/kvm/Makefile               |  7 ++-----
->>  tools/testing/selftests/lib.mk                     | 12 ++++++++++++
->>  tools/testing/selftests/net/Makefile               |  1 +
->>  .../selftests/networking/timestamping/Makefile     |  1 +
->>  tools/testing/selftests/vm/Makefile                |  4 ----
->>  11 files changed, 36 insertions(+), 28 deletions(-)
->>  create mode 100644 scripts/subarch.include
-> 
-> This broke all the powerpc selftests :(
+TLS test cases splice_from_pipe, send_and_splice &
+recv_peek_multiple_records expect to receive a given nummber of bytes
+and then compare them against the number of bytes which were sent.
+Therefore, system call recv() must not return before receiving the
+requested number of bytes, otherwise the subsequent memcmp() fails.
+This patch passes MSG_WAITALL flag to recv() so that it does not return
+prematurely before requested number of bytes are copied to receive
+buffer.
 
-Sorry for thr breakage.
+Signed-off-by: Vakul Garg <vakul.garg at nxp.com>
+---
+ tools/testing/selftests/net/tls.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-> 
-> Why did it go in at rc5?
-> 
-
-This patch has been in linux-next for a sometime before I decided to send this.
-My original intent was to send this for rc2, and my schedule was messed up with
-traveling. Since I didn't hear any issues from linux-next soaking, I made a call
-on sending this in for rc5.
-
-On second thought I should have waited until 4.20. Sorry about that.
-
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
+index 11d54c36ae49..fac68d710f35 100644
+--- a/tools/testing/selftests/net/tls.c
++++ b/tools/testing/selftests/net/tls.c
+@@ -288,7 +288,7 @@ TEST_F(tls, splice_from_pipe)
+ 	ASSERT_GE(pipe(p), 0);
+ 	EXPECT_GE(write(p[1], mem_send, send_len), 0);
+ 	EXPECT_GE(splice(p[0], NULL, self->fd, NULL, send_len, 0), 0);
+-	EXPECT_GE(recv(self->cfd, mem_recv, send_len, 0), 0);
++	EXPECT_EQ(recv(self->cfd, mem_recv, send_len, MSG_WAITALL), send_len);
+ 	EXPECT_EQ(memcmp(mem_send, mem_recv, send_len), 0);
+ }
+ 
+@@ -322,13 +322,13 @@ TEST_F(tls, send_and_splice)
+ 
+ 	ASSERT_GE(pipe(p), 0);
+ 	EXPECT_EQ(send(self->fd, test_str, send_len2, 0), send_len2);
+-	EXPECT_NE(recv(self->cfd, buf, send_len2, 0), -1);
++	EXPECT_EQ(recv(self->cfd, buf, send_len2, MSG_WAITALL), send_len2);
+ 	EXPECT_EQ(memcmp(test_str, buf, send_len2), 0);
+ 
+ 	EXPECT_GE(write(p[1], mem_send, send_len), send_len);
+ 	EXPECT_GE(splice(p[0], NULL, self->fd, NULL, send_len, 0), send_len);
+ 
+-	EXPECT_GE(recv(self->cfd, mem_recv, send_len, 0), 0);
++	EXPECT_EQ(recv(self->cfd, mem_recv, send_len, MSG_WAITALL), send_len);
+ 	EXPECT_EQ(memcmp(mem_send, mem_recv, send_len), 0);
+ }
+ 
+@@ -516,17 +516,17 @@ TEST_F(tls, recv_peek_multiple_records)
+ 	len = strlen(test_str_second) + 1;
+ 	EXPECT_EQ(send(self->fd, test_str_second, len, 0), len);
+ 
+-	len = sizeof(buf);
++	len = strlen(test_str_first);
+ 	memset(buf, 0, len);
+-	EXPECT_NE(recv(self->cfd, buf, len, MSG_PEEK), -1);
++	EXPECT_EQ(recv(self->cfd, buf, len, MSG_PEEK | MSG_WAITALL), len);
+ 
+ 	/* MSG_PEEK can only peek into the current record. */
+-	len = strlen(test_str_first) + 1;
++	len = strlen(test_str_first);
+ 	EXPECT_EQ(memcmp(test_str_first, buf, len), 0);
+ 
+-	len = sizeof(buf);
++	len = strlen(test_str) + 1;
+ 	memset(buf, 0, len);
+-	EXPECT_NE(recv(self->cfd, buf, len, 0), -1);
++	EXPECT_EQ(recv(self->cfd, buf, len, MSG_WAITALL), len);
+ 
+ 	/* Non-MSG_PEEK will advance strparser (and therefore record)
+ 	 * however.
+@@ -543,9 +543,9 @@ TEST_F(tls, recv_peek_multiple_records)
+ 	len = strlen(test_str_second) + 1;
+ 	EXPECT_EQ(send(self->fd, test_str_second, len, 0), len);
+ 
+-	len = sizeof(buf);
++	len = strlen(test_str) + 1;
+ 	memset(buf, 0, len);
+-	EXPECT_NE(recv(self->cfd, buf, len, MSG_PEEK), -1);
++	EXPECT_EQ(recv(self->cfd, buf, len, MSG_PEEK | MSG_WAITALL), len);
+ 
+ 	len = strlen(test_str) + 1;
+ 	EXPECT_EQ(memcmp(test_str, buf, len), 0);
+-- 
+2.13.6
