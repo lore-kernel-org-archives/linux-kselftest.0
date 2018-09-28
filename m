@@ -1,95 +1,49 @@
-From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Fri, 28 Sep 2018 07:49:38 +0900
-Subject: [PATCH v3 00/28] selftests/ftrace: Improve ftracetest with
- coverage check
-In-Reply-To: <9cf69344-5dfc-4961-163e-1e14bbe80647@kernel.org>
-References: <153563834333.29700.11242968505215651399.stgit@devbox>
- <9cf69344-5dfc-4961-163e-1e14bbe80647@kernel.org>
-Message-ID: <20180928074938.bb89440c8e2b91fcb918d93a@kernel.org>
+From: mpe@ellerman.id.au (Michael Ellerman)
+Date: Fri, 28 Sep 2018 14:52:22 +1000
+Subject: [PATCH v6] selftests: add headers_install to lib.mk
+In-Reply-To: <20180904104721.27535-1-anders.roxell@linaro.org>
+References: <20180809080402.24469-1-anders.roxell@linaro.org>
+ <20180904104721.27535-1-anders.roxell@linaro.org>
+Message-ID: <87y3bmte9l.fsf@concordia.ellerman.id.au>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180927224938.MYv6DPg1K8H-R_V3rAo4yW1ZdsRZ0jeGUDjrMkAzqRs@z>
+Message-ID: <20180928045222.8j_VRvF0e7zMzwB3RW82yRlw6RBrQduek3DP6HNldY4@z>
 
-On Fri, 21 Sep 2018 15:24:25 -0600
-Shuah Khan <shuah@kernel.org> wrote:
+[ + linuxppc-dev ]
 
-> Hi Masami,
-> 
-> On 08/30/2018 08:12 AM, Masami Hiramatsu wrote:
-> > Hi,
-> > 
-> > Here is the 3rd version of the series for improving ftracetest
-> > testcase using gcov/lcov. In this version I just fixed some
-> > reported issues and dropped some tests which is not needed.
-> > I also dropped a testcase for blktrace from this version.
-> > It will be discussed separated thread.
-> > 
-> > Previous version is here;
-> > 
-> > https://lkml.org/lkml/2018/8/16/393
-> > 
-> > GCOV_PROFILE_FTRACE has already been merged through tracing
-> > tree.
-> > 
-> > Ftracetest framework improvements:
-> >  - Add --stop-fail for detecting failure soon.
-> >  - Add --console for interactively debugging a testcase by shell.
-> >  - Add testcase-number prefix to logfile for finding log easier.
-> >  - Improve general init function
-> >  - Add SPDX license identifiers
-> >  - Call general init function after all testcases.
-> >  - Remove init/cleanup code from all testcase (since general init
-> >    function will fixed it up)
-> > 
-> > Testcase fixes:
-> >  - Fix to check $comm availability.
-> >  - Make checkbashisms clean
-> > 
-> > Testcase improvements:
-> >  - Use loopback address instead of localhost
-> >  - Improve kprobe on module testcase to load/unload module
-> >  - Improve kprobe testcase to check log data
-> >  - Improve kretprobe testcase to check log data
-> >  - Test kprobe-event argument with various bitsize
-> >  - Check set_event_pid result
-> > 
-> > Adding testcases:
-> >  - Add kprobe event with $comm argument testcase
-> >  - Add kprobe profile testcase
-> >  - Add kprobe-event with symbol argument testcase
-> >  - Add trace_printk sample module testcase
-> >  - Add ringbuffer size changing testcase
-> >  - Add function profiling statistics testcase
-> >  - Add max stack tracer testcase
-> >  - Add function filter on module testcase
-> >  - Add trace_pipe testcase
-> >  - Add stacktrace ftrace filter command testcase
-> >  - Add wakeup tracer testcase
-> >  - Add wakeup_rt tracer testcase
-> >  - Add ftrace cpumask testcase
-> > 
-> > TBD:
-> > Following testcase improvements are remaining.
-> >  - Checking of various supported types (like u8, u64 etc.)
-> >    testcases
-> > 
-> > Tested on x86-64 qemu.
-> > 
-> > # of passed:  84
-> > # of failed:  0
-> > # of unresolved:  0
-> > # of untested:  0
-> > # of unsupported:  0
-> > # of xfailed:  0
-> > # of undefined(test bug):  0
-> > 
-> > Thank you,
-> > 
-> 
-> Thanks for the patches. Sorry for the delay. I am applying the series to linux-kselftest
-> next for 4.20 release
+Anders Roxell <anders.roxell at linaro.org> writes:
+> If the kernel headers aren't installed we can't build all the tests.
+> Add a new make target rule 'khdr' in the file lib.mk to generate the
+> kernel headers and that gets include for every test-dir Makefile that
+> includes lib.mk If the testdir in turn have its own sub-dirs the
+> top_srcdir needs to be set to the linux-rootdir to be able to generate
+> the kernel headers.
+>
+> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+> Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
+> ---
+>
+> I sent this (v5) a month ago and wondered if it got lost. Resending
+> unchanged.
+>
+> Cheers,
+> Anders
+>
+>  Makefile                                           | 14 +-------------
+>  scripts/subarch.include                            | 13 +++++++++++++
+>  tools/testing/selftests/android/Makefile           |  2 +-
+>  tools/testing/selftests/android/ion/Makefile       |  2 ++
+>  tools/testing/selftests/futex/functional/Makefile  |  1 +
+>  tools/testing/selftests/gpio/Makefile              |  7 ++-----
+>  tools/testing/selftests/kvm/Makefile               |  7 ++-----
+>  tools/testing/selftests/lib.mk                     | 12 ++++++++++++
+>  tools/testing/selftests/net/Makefile               |  1 +
+>  .../selftests/networking/timestamping/Makefile     |  1 +
+>  tools/testing/selftests/vm/Makefile                |  4 ----
+>  11 files changed, 36 insertions(+), 28 deletions(-)
+>  create mode 100644 scripts/subarch.include
 
-Thank you Shuah, I found it in your next branch :)
+This broke all the powerpc selftests :(
 
+Why did it go in at rc5?
 
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+cheers
