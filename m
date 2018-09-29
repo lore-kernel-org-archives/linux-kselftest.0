@@ -1,56 +1,125 @@
-From: peterx@redhat.com (Peter Xu)
-Date: Sat, 29 Sep 2018 16:43:11 +0800
-Subject: [PATCH 3/3] userfaultfd: selftest: recycle lock threads first
-In-Reply-To: <20180929084311.15600-1-peterx@redhat.com>
+From: rppt@linux.vnet.ibm.com (Mike Rapoport)
+Date: Sat, 29 Sep 2018 13:28:12 +0300
+Subject: [PATCH 1/3] userfaultfd: selftest: cleanup help messages
+In-Reply-To: <20180929084311.15600-2-peterx@redhat.com>
 References: <20180929084311.15600-1-peterx@redhat.com>
-Message-ID: <20180929084311.15600-4-peterx@redhat.com>
+ <20180929084311.15600-2-peterx@redhat.com>
+Message-ID: <20180929102811.GA6429@rapoport-lnx>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180929084311.9fCZSgDDOcitxED73-HNMVw_cNaaMYgKwjDGfJD_oBU@z>
+Message-ID: <20180929102812.97EpdXuWbk_SidzezhC-BP5OsJXwEoliukQBlIH4a4Y@z>
 
-Now we recycle the uffd servicing threads earlier than the lock
-threads.  It might happen that when the lock thread is still blocked at
-a pthread mutex lock while the servicing thread has already quitted for
-the cpu so the lock thread will be blocked forever and hang the test
-program.  To fix the possible race, recycle the lock threads first.
+On Sat, Sep 29, 2018@04:43:09PM +0800, Peter Xu wrote:
+> Firstly, the help in the comment region is obsolete, now we support
+> three parameters.  Since at it, change it and move it into the help
+> message of the program.
+> 
+> Also, the help messages dumped here and there is obsolete too.  Use a
+> single usage() helper.
+> 
+> Signed-off-by: Peter Xu <peterx at redhat.com>
 
-This never happens with current missing-only tests, but when I start to
-run the write-protection tests (the feature is not yet posted upstream)
-it happens every time of the run possibly because in that new test we'll
-need to service two page faults for each lock operation.
+Small comment below, otherwise
 
-Signed-off-by: Peter Xu <peterx at redhat.com>
----
- tools/testing/selftests/vm/userfaultfd.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Acked-by: Mike Rapoport <rppt at linux.vnet.ibm.com>
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index f79706f13ce7..a388675b15af 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -623,6 +623,12 @@ static int stress(unsigned long *userfaults)
- 	if (uffd_test_ops->release_pages(area_src))
- 		return 1;
- 
-+
-+	finished = 1;
-+	for (cpu = 0; cpu < nr_cpus; cpu++)
-+		if (pthread_join(locking_threads[cpu], NULL))
-+			return 1;
-+
- 	for (cpu = 0; cpu < nr_cpus; cpu++) {
- 		char c;
- 		if (bounces & BOUNCE_POLL) {
-@@ -640,11 +646,6 @@ static int stress(unsigned long *userfaults)
- 		}
- 	}
- 
--	finished = 1;
--	for (cpu = 0; cpu < nr_cpus; cpu++)
--		if (pthread_join(locking_threads[cpu], NULL))
--			return 1;
--
- 	return 0;
- }
- 
+> ---
+>  tools/testing/selftests/vm/userfaultfd.c | 44 ++++++++++++++----------
+>  1 file changed, 26 insertions(+), 18 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> index 7b8171e3128a..2a84adaf8cf8 100644
+> --- a/tools/testing/selftests/vm/userfaultfd.c
+> +++ b/tools/testing/selftests/vm/userfaultfd.c
+> @@ -34,18 +34,6 @@
+>   * per-CPU threads 1 by triggering userfaults inside
+>   * pthread_mutex_lock will also verify the atomicity of the memory
+>   * transfer (UFFDIO_COPY).
+> - *
+> - * The program takes two parameters: the amounts of physical memory in
+> - * megabytes (MiB) of the area and the number of bounces to execute.
+> - *
+> - * # 100MiB 99999 bounces
+> - * ./userfaultfd 100 99999
+> - *
+> - * # 1GiB 99 bounces
+> - * ./userfaultfd 1000 99
+> - *
+> - * # 10MiB-~6GiB 999 bounces, continue forever unless an error triggers
+> - * while ./userfaultfd $[RANDOM % 6000 + 10] 999; do true; done
+>   */
+> 
+>  #define _GNU_SOURCE
+> @@ -115,6 +103,28 @@ pthread_attr_t attr;
+>  				 ~(unsigned long)(sizeof(unsigned long long) \
+>  						  -  1)))
+> 
+> +const char *examples =
+> +    "# 100MiB 99999 bounces\n"
+> +    "./userfaultfd anon 100 99999\n"
+> +    "\n"
+> +    "# 1GiB 99 bounces\n"
+> +    "./userfaultfd anon 1000 99\n"
+> +    "\n"
+> +    "# 10MiB-~6GiB 999 bounces, continue forever unless an error triggers\n"
+> +    "while ./userfaultfd anon $[RANDOM % 6000 + 10] 999; do true; done\n"
+> +    "\n";
+
+While at it, can you please update the examples to include other test
+types?
+
+> +
+> +static void usage(void)
+> +{
+> +	fprintf(stderr, "\nUsage: ./userfaultfd <test type> <MiB> <bounces> "
+> +		"[hugetlbfs_file]\n\n");
+> +	fprintf(stderr, "Supported <test type>: anon, hugetlb, "
+> +		"hugetlb_shared, shmem\n\n");
+> +	fprintf(stderr, "Examples:\n\n");
+> +	fprintf(stderr, examples);
+> +	exit(1);
+> +}
+> +
+>  static int anon_release_pages(char *rel_area)
+>  {
+>  	int ret = 0;
+> @@ -1272,8 +1282,7 @@ static void sigalrm(int sig)
+>  int main(int argc, char **argv)
+>  {
+>  	if (argc < 4)
+> -		fprintf(stderr, "Usage: <test type> <MiB> <bounces> [hugetlbfs_file]\n"),
+> -				exit(1);
+> +		usage();
+> 
+>  	if (signal(SIGALRM, sigalrm) == SIG_ERR)
+>  		fprintf(stderr, "failed to arm SIGALRM"), exit(1);
+> @@ -1286,20 +1295,19 @@ int main(int argc, char **argv)
+>  		nr_cpus;
+>  	if (!nr_pages_per_cpu) {
+>  		fprintf(stderr, "invalid MiB\n");
+> -		fprintf(stderr, "Usage: <MiB> <bounces>\n"), exit(1);
+> +		usage();
+>  	}
+> 
+>  	bounces = atoi(argv[3]);
+>  	if (bounces <= 0) {
+>  		fprintf(stderr, "invalid bounces\n");
+> -		fprintf(stderr, "Usage: <MiB> <bounces>\n"), exit(1);
+> +		usage();
+>  	}
+>  	nr_pages = nr_pages_per_cpu * nr_cpus;
+> 
+>  	if (test_type == TEST_HUGETLB) {
+>  		if (argc < 5)
+> -			fprintf(stderr, "Usage: hugetlb <MiB> <bounces> <hugetlbfs_file>\n"),
+> -				exit(1);
+> +			usage();
+>  		huge_fd = open(argv[4], O_CREAT | O_RDWR, 0755);
+>  		if (huge_fd < 0) {
+>  			fprintf(stderr, "Open of %s failed", argv[3]);
+> -- 
+> 2.17.1
+> 
+
 -- 
-2.17.1
+Sincerely yours,
+Mike.
