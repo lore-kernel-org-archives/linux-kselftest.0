@@ -1,36 +1,21 @@
-From: luto at amacapital.net (Andy Lutomirski)
-Date: Sat, 29 Sep 2018 10:25:17 -0700
-Subject: [PATCH 2/3] namei: implement AT_THIS_ROOT chroot-like path
- resolution
-In-Reply-To: <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
+From: willy at infradead.org (Matthew Wilcox)
+Date: Sat, 29 Sep 2018 12:44:29 -0700
+Subject: [PATCH 0/3] namei: implement various scoping AT_* flags
+In-Reply-To: <9D01A225-05BE-4B4A-873A-94168D17F687@amacapital.net>
 References: <20180929103453.12025-1-cyphar@cyphar.com>
- <20180929131534.24472-1-cyphar@cyphar.com>
- <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
-Message-ID: <F0E08B90-F10B-4897-913D-CA18E99A987D@amacapital.net>
+ <1EE20CA2-4C8B-4A80-B613-0277D92B376D@amacapital.net>
+ <20180929154551.jsi6dt3xjxdxoqeh@ryuk>
+ <9D01A225-05BE-4B4A-873A-94168D17F687@amacapital.net>
+Message-ID: <20180929194429.GA1702@bombadil.infradead.org>
 
+On Sat, Sep 29, 2018 at 09:34:24AM -0700, Andy Lutomirski wrote:
+> Also, as a perhaps-silly suggestion: if you end up adding a new
+> syscall, I can see a use for a mode that does the path walk but, rather
+> than failing on a disallowed link, stops early and indicates where it
+> stopped. Then web servers, samba, etc can more efficiently implement
+> custom behavior when links are encountered.  And it may also be useful
+> to have a variant of AT_THIS_ROOT where trying to escape is an error
+> instead of having it just get stuck at the root.
 
-
-> On Sep 29, 2018, at 9:35 AM, Jann Horn <jannh at google.com> wrote:
-> 
-> +cc linux-api; please keep them in CC for future versions of the patch
-> 
->> On Sat, Sep 29, 2018 at 4:29 PM Aleksa Sarai <cyphar at cyphar.com> wrote:
->> The primary motivation for the need for this flag is container runtimes
->> which have to interact with malicious root filesystems in the host
->> namespaces. One of the first requirements for a container runtime to be
->> secure against a malicious rootfs is that they correctly scope symlinks
->> (that is, they should be scoped as though they are chroot(2)ed into the
->> container's rootfs) and ".."-style paths. The already-existing AT_XDEV
->> and AT_NO_PROCLINKS help defend against other potential attacks in a
->> malicious rootfs scenario.
-> 
-> So, I really like the concept for patch 1 of this series (but haven't
-> read the code yet); but I dislike this patch because of its footgun
-> potential.
-> 
-
-The code could do it differently: do the path walk and then, before accepting the result, walk back up and make sure the result is under the starting point.
-
-This is *not* a full solution, though, since a walk above the root gas side effects on timing, various caches, and possibly network traffic, so it’s open to Spectre-like attacks in which a malicious container could use a runtime-initiated AT_THIS_ROOT to infer the existence of directories outside the container.
-
-But what’s the container usecase?  Any sane container is based on pivot_root or similar, so the runtime can just do the walk in the container context. IOW I’m a bit confused as to the exact intended use of the whole series. Can you elaborate?
+AT_USER_LINKS indicating that userspace wants to resolve symlinks
+themselves?
