@@ -1,155 +1,62 @@
 From: rppt@linux.vnet.ibm.com (Mike Rapoport)
-Date: Sat, 29 Sep 2018 13:31:39 +0300
-Subject: [PATCH 2/3] userfaultfd: selftest: generalize read and poll
-In-Reply-To: <20180929084311.15600-3-peterx@redhat.com>
+Date: Sat, 29 Sep 2018 13:32:52 +0300
+Subject: [PATCH 3/3] userfaultfd: selftest: recycle lock threads first
+In-Reply-To: <20180929084311.15600-4-peterx@redhat.com>
 References: <20180929084311.15600-1-peterx@redhat.com>
- <20180929084311.15600-3-peterx@redhat.com>
-Message-ID: <20180929103138.GB6429@rapoport-lnx>
+ <20180929084311.15600-4-peterx@redhat.com>
+Message-ID: <20180929103252.GC6429@rapoport-lnx>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180929103139.n1UBOxyDNhHy9ytRCnh81AZDNow6ET8bWHLI-ZG9sVM@z>
+Message-ID: <20180929103252.Y3culv9mLSb5-ZU4j5AwCMlxvyLl0w5amlH4JzC8HDo@z>
 
-On Sat, Sep 29, 2018@04:43:10PM +0800, Peter Xu wrote:
-> We do very similar things in read and poll modes, but we're copying the
-> codes around.  Share the codes properly on reading the message and
-> handling the page fault to make the code cleaner.  Meanwhile this solves
-> previous mismatch of behaviors between the two modes on that the old
-> code:
+On Sat, Sep 29, 2018@04:43:11PM +0800, Peter Xu wrote:
+> Now we recycle the uffd servicing threads earlier than the lock
+> threads.  It might happen that when the lock thread is still blocked at
+> a pthread mutex lock while the servicing thread has already quitted for
+> the cpu so the lock thread will be blocked forever and hang the test
+> program.  To fix the possible race, recycle the lock threads first.
 > 
-> - did not check EAGAIN case in read() mode
-> - ignored BOUNCE_VERIFY check in read() mode
+> This never happens with current missing-only tests, but when I start to
+> run the write-protection tests (the feature is not yet posted upstream)
+> it happens every time of the run possibly because in that new test we'll
+> need to service two page faults for each lock operation.
 > 
 > Signed-off-by: Peter Xu <peterx at redhat.com>
+
+Acked-by: Mike Rapoport <rppt at linux.vnt.ibm.com>
+
 > ---
->  tools/testing/selftests/vm/userfaultfd.c | 76 +++++++++++++-----------
->  1 file changed, 42 insertions(+), 34 deletions(-)
+>  tools/testing/selftests/vm/userfaultfd.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
 > 
 > diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-> index 2a84adaf8cf8..f79706f13ce7 100644
+> index f79706f13ce7..a388675b15af 100644
 > --- a/tools/testing/selftests/vm/userfaultfd.c
 > +++ b/tools/testing/selftests/vm/userfaultfd.c
-> @@ -449,6 +449,42 @@ static int copy_page(int ufd, unsigned long offset)
->  	return __copy_page(ufd, offset, false);
->  }
+> @@ -623,6 +623,12 @@ static int stress(unsigned long *userfaults)
+>  	if (uffd_test_ops->release_pages(area_src))
+>  		return 1;
 > 
-> +static int uffd_read_msg(int ufd, struct uffd_msg *msg)
-> +{
-> +	int ret = read(uffd, msg, sizeof(*msg));
 > +
-> +	if (ret != sizeof(*msg)) {
-> +		if (ret < 0)
-
-I'd appreciate curly brace here
-
-> +			if (errno == EAGAIN)
-> +				return 1;
-> +			else
-> +				perror("blocking read error"), exit(1);
-> +		else
-
-and here
-
-> +				fprintf(stderr, "short read\n"), exit(1);
-> +	}
+> +	finished = 1;
+> +	for (cpu = 0; cpu < nr_cpus; cpu++)
+> +		if (pthread_join(locking_threads[cpu], NULL))
+> +			return 1;
 > +
-> +	return 0;
-> +}
-> +
-> +/* Return 1 if page fault handled by us; otherwise 0 */
-> +static int uffd_handle_page_fault(struct uffd_msg *msg)
-> +{
-> +	unsigned long offset;
-> +
-> +	if (msg->event != UFFD_EVENT_PAGEFAULT)
-> +		fprintf(stderr, "unexpected msg event %u\n",
-> +			msg->event), exit(1);
-> +
-> +	if (bounces & BOUNCE_VERIFY &&
-> +	    msg->arg.pagefault.flags & UFFD_PAGEFAULT_FLAG_WRITE)
-> +		fprintf(stderr, "unexpected write fault\n"), exit(1);
-> +
-> +	offset = (char *)(unsigned long)msg->arg.pagefault.address - area_dst;
-> +	offset &= ~(page_size-1);
-> +
-> +	return copy_page(uffd, offset);
-> +}
-> +
->  static void *uffd_poll_thread(void *arg)
->  {
->  	unsigned long cpu = (unsigned long) arg;
-> @@ -456,7 +492,6 @@ static void *uffd_poll_thread(void *arg)
->  	struct uffd_msg msg;
->  	struct uffdio_register uffd_reg;
->  	int ret;
-> -	unsigned long offset;
->  	char tmp_chr;
->  	unsigned long userfaults = 0;
-> 
-> @@ -480,25 +515,15 @@ static void *uffd_poll_thread(void *arg)
->  		if (!(pollfd[0].revents & POLLIN))
->  			fprintf(stderr, "pollfd[0].revents %d\n",
->  				pollfd[0].revents), exit(1);
-> -		ret = read(uffd, &msg, sizeof(msg));
-> -		if (ret < 0) {
-> -			if (errno == EAGAIN)
-> -				continue;
-> -			perror("nonblocking read error"), exit(1);
-> -		}
-> +		if (uffd_read_msg(uffd, &msg))
-> +			continue;
->  		switch (msg.event) {
->  		default:
->  			fprintf(stderr, "unexpected msg event %u\n",
->  				msg.event), exit(1);
->  			break;
->  		case UFFD_EVENT_PAGEFAULT:
-> -			if (msg.arg.pagefault.flags & UFFD_PAGEFAULT_FLAG_WRITE)
-> -				fprintf(stderr, "unexpected write fault\n"), exit(1);
-> -			offset = (char *)(unsigned long)msg.arg.pagefault.address -
-> -				area_dst;
-> -			offset &= ~(page_size-1);
-> -			if (copy_page(uffd, offset))
-> -				userfaults++;
-> +			userfaults += uffd_handle_page_fault(&msg);
->  			break;
->  		case UFFD_EVENT_FORK:
->  			close(uffd);
-> @@ -526,8 +551,6 @@ static void *uffd_read_thread(void *arg)
->  {
->  	unsigned long *this_cpu_userfaults;
->  	struct uffd_msg msg;
-> -	unsigned long offset;
-> -	int ret;
-> 
->  	this_cpu_userfaults = (unsigned long *) arg;
->  	*this_cpu_userfaults = 0;
-> @@ -536,24 +559,9 @@ static void *uffd_read_thread(void *arg)
->  	/* from here cancellation is ok */
-> 
->  	for (;;) {
-> -		ret = read(uffd, &msg, sizeof(msg));
-> -		if (ret != sizeof(msg)) {
-> -			if (ret < 0)
-> -				perror("blocking read error"), exit(1);
-> -			else
-> -				fprintf(stderr, "short read\n"), exit(1);
-> -		}
-> -		if (msg.event != UFFD_EVENT_PAGEFAULT)
-> -			fprintf(stderr, "unexpected msg event %u\n",
-> -				msg.event), exit(1);
-> -		if (bounces & BOUNCE_VERIFY &&
-> -		    msg.arg.pagefault.flags & UFFD_PAGEFAULT_FLAG_WRITE)
-> -			fprintf(stderr, "unexpected write fault\n"), exit(1);
-> -		offset = (char *)(unsigned long)msg.arg.pagefault.address -
-> -			 area_dst;
-> -		offset &= ~(page_size-1);
-> -		if (copy_page(uffd, offset))
-> -			(*this_cpu_userfaults)++;
-> +		if (uffd_read_msg(uffd, &msg))
-> +			continue;
-> +		(*this_cpu_userfaults) += uffd_handle_page_fault(&msg);
+>  	for (cpu = 0; cpu < nr_cpus; cpu++) {
+>  		char c;
+>  		if (bounces & BOUNCE_POLL) {
+> @@ -640,11 +646,6 @@ static int stress(unsigned long *userfaults)
+>  		}
 >  	}
->  	return (void *)NULL;
+> 
+> -	finished = 1;
+> -	for (cpu = 0; cpu < nr_cpus; cpu++)
+> -		if (pthread_join(locking_threads[cpu], NULL))
+> -			return 1;
+> -
+>  	return 0;
 >  }
+> 
 > -- 
 > 2.17.1
 > 
