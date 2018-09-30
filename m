@@ -1,21 +1,39 @@
-From: willy at infradead.org (Matthew Wilcox)
-Date: Sat, 29 Sep 2018 12:44:29 -0700
-Subject: [PATCH 0/3] namei: implement various scoping AT_* flags
-In-Reply-To: <9D01A225-05BE-4B4A-873A-94168D17F687@amacapital.net>
+From: cyphar at cyphar.com (Aleksa Sarai)
+Date: Sun, 30 Sep 2018 14:38:23 +1000
+Subject: [PATCH 1/3] namei: implement O_BENEATH-style AT_* flags
+In-Reply-To: <20180929103453.12025-2-cyphar@cyphar.com>
 References: <20180929103453.12025-1-cyphar@cyphar.com>
- <1EE20CA2-4C8B-4A80-B613-0277D92B376D@amacapital.net>
- <20180929154551.jsi6dt3xjxdxoqeh@ryuk>
- <9D01A225-05BE-4B4A-873A-94168D17F687@amacapital.net>
-Message-ID: <20180929194429.GA1702@bombadil.infradead.org>
+ <20180929103453.12025-2-cyphar@cyphar.com>
+Message-ID: <20180930043823.2pgzrtgcziaou7ov@ryuk>
 
-On Sat, Sep 29, 2018 at 09:34:24AM -0700, Andy Lutomirski wrote:
-> Also, as a perhaps-silly suggestion: if you end up adding a new
-> syscall, I can see a use for a mode that does the path walk but, rather
-> than failing on a disallowed link, stops early and indicates where it
-> stopped. Then web servers, samba, etc can more efficiently implement
-> custom behavior when links are encountered.  And it may also be useful
-> to have a variant of AT_THIS_ROOT where trying to escape is an error
-> instead of having it just get stuck at the root.
+On 2018-09-29, Aleksa Sarai <cyphar at cyphar.com> wrote:
+> * AT_XDEV: Disallow mount-point crossing (both *down* into one, or *up*
+>   from one). The primary "scoping" use is to blocking resolution that
+>   crosses a bind-mount, which has a similar property to a symlink (in
+>   the way that it allows for escape from the starting-point). Since it
+>   is not possible to differentiate bind-mounts However since
+>   bind-mounting requires privileges (in ways symlinks don't) this has
+>   been split from LOOKUP_BENEATH. The naming is based on "find -xdev"
+>   (though find(1) doesn't walk upwards, the semantics seem obvious).
 
-AT_USER_LINKS indicating that userspace wants to resolve symlinks
-themselves?
+I've just noticed that the mountpoint-crossing code for AT_XDEV doesn't
+detect things like:
+
+   % ln -s / /tmp/jumpup
+   % vfs_helper -o open -F xdev -d /tmp jumpup
+   /
+
+I will fix that in v2.
+
+-- 
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20180930/71e10012/attachment.sig>
