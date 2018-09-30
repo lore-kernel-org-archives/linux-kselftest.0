@@ -1,31 +1,30 @@
 From: cyphar@cyphar.com (Aleksa Sarai)
-Date: Sun, 30 Sep 2018 14:38:23 +1000
-Subject: [PATCH 1/3] namei: implement O_BENEATH-style AT_* flags
-In-Reply-To: <20180929103453.12025-2-cyphar@cyphar.com>
+Date: Sun, 30 Sep 2018 14:44:11 +1000
+Subject: [PATCH 0/3] namei: implement various scoping AT_* flags
+In-Reply-To: <20180929143814.yfo6rud7dkyb5ip4@brauner.io>
 References: <20180929103453.12025-1-cyphar@cyphar.com>
- <20180929103453.12025-2-cyphar@cyphar.com>
-Message-ID: <20180930043823.2pgzrtgcziaou7ov@ryuk>
+ <20180929143814.yfo6rud7dkyb5ip4@brauner.io>
+Message-ID: <20180930044411.orcuw7xok4szqzzo@ryuk>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20180930043823.H-Ila5Tst9-2Tw_tz5QLvLl47Ub33FW0ykUhSLtQ32I@z>
+Message-ID: <20180930044411.RmHeNj9ykFZ33B2t5zVy5sQVvUmkxgPdbxiEIgMWhrc@z>
 
-On 2018-09-29, Aleksa Sarai <cyphar@cyphar.com> wrote:
-> * AT_XDEV: Disallow mount-point crossing (both *down* into one, or *up*
->   from one). The primary "scoping" use is to blocking resolution that
->   crosses a bind-mount, which has a similar property to a symlink (in
->   the way that it allows for escape from the starting-point). Since it
->   is not possible to differentiate bind-mounts However since
->   bind-mounting requires privileges (in ways symlinks don't) this has
->   been split from LOOKUP_BENEATH. The naming is based on "find -xdev"
->   (though find(1) doesn't walk upwards, the semantics seem obvious).
+On 2018-09-29, Christian Brauner <christian@brauner.io> wrote:
+> > Currently I've only enabled these for openat(2) and the stat(2) family.
+> > I would hope we could enable it for basically every *at(2) syscall --
+> > but many of them appear to not have a @flags argument and thus we'll
+> > need to add several new syscalls to do this. I'm more than happy to send
+> > those patches, but I'd prefer to know that this preliminary work is
+> > acceptable before doing a bunch of copy-paste to add new sets of *at(2)
+> > syscalls.
+> 
+> We should really make sure that we can't make due with openat() alone
+> before adding a bunch of new syscalls. So there's no need to rush into
+> this. :)
 
-I've just noticed that the mountpoint-crossing code for AT_XDEV doesn't
-detect things like:
-
-   % ln -s / /tmp/jumpup
-   % vfs_helper -o open -F xdev -d /tmp jumpup
-   /
-
-I will fix that in v2.
+Yeah, I think that we could (mostly) make do with openat(2). We might
+need to have renameat(2) and a few others, but if we had more support
+for AT_EMPTY_PATH you should be able to just O_PATH|O_{BENEATH,XDEV,...}
+and then operate on the O_PATH fd.
 
 -- 
 Aleksa Sarai
@@ -38,4 +37,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 833 bytes
 Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20180930/71e10012/attachment.sig>
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20180930/c9919dd2/attachment.sig>
