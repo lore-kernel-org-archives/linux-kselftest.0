@@ -1,39 +1,64 @@
-From: luto@amacapital.net (Andy Lutomirski)
-Date: Mon, 1 Oct 2018 07:28:34 -0700
-Subject: [PATCH 2/3] namei: implement AT_THIS_ROOT chroot-like path
- resolution
-In-Reply-To: <20181001054246.gfinmx3api7kjhmc@ryuk>
+From: cyphar@cyphar.com (Aleksa Sarai)
+Date: Tue, 2 Oct 2018 02:04:31 +1000
+Subject: [PATCH 1/3] namei: implement O_BENEATH-style AT_* flags
+In-Reply-To: <20181001130038.s5ztphs3pl2zt3ut@brauner.io>
 References: <20180929103453.12025-1-cyphar@cyphar.com>
- <20180929131534.24472-1-cyphar@cyphar.com>
- <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
- <20181001054246.gfinmx3api7kjhmc@ryuk>
-Message-ID: <C89D720F-3CC4-4FA9-9CBB-E41A67360A6B@amacapital.net>
+ <20180929103453.12025-2-cyphar@cyphar.com>
+ <CAG48ez17EQuJQAZUg5hDFXhkjnnVFh39=aD+j0FBdsoTONSGEA@mail.gmail.com>
+ <20181001130038.s5ztphs3pl2zt3ut@brauner.io>
+Message-ID: <20181001160431.emb6b2hf32b754cl@ryuk>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181001142834.PbDwHI_CTRLS3XBISgSH7cyuIpq-IUjXC21bAOwLQ2Q@z>
+Message-ID: <20181001160431.oPuQ-pOdIHuyWiQRf9HhZtccYmxK7iR_4LFdkDfALvc@z>
 
-
->>> Currently most container runtimes try to do this resolution in
->>> userspace[1], causing many potential race conditions. In addition, the
->>> "obvious" alternative (actually performing a {ch,pivot_}root(2))
->>> requires a fork+exec which is *very* costly if necessary for every
->>> filesystem operation involving a container.
->> 
->> Wait. fork() I understand, but why exec? And actually, you don't need
->> a full fork() either, clone() lets you do this with some process parts
->> shared. And then you also shouldn't need to use SCM_RIGHTS, just keep
->> the file descriptor table shared. And why chroot()/pivot_root(),
->> wouldn't you want to use setns()?
+On 2018-10-01, Christian Brauner <christian@brauner.io> wrote:
+> On Mon, Oct 01, 2018@02:28:03PM +0200, Jann Horn wrote:
+> > On Sat, Sep 29, 2018@4:28 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
+> > > * AT_BENEATH: Disallow ".." or absolute paths (either in the path or
+> > >   found during symlink resolution) to escape the starting point of name
+> > >   resolution, though ".." is permitted in cases like "foo/../bar".
+> > >   Relative symlinks are still allowed (as long as they don't escape the
+> > >   starting point).
+> > 
+> > As I said on the other thread, I would strongly prefer an API that
+> > behaves along the lines of David Drysdale's old patch
+> > https://lore.kernel.org/lkml/1439458366-8223-2-git-send-email-drysdale at google.com/
+> > : Forbid any use of "..". This would also be more straightforward to
+> > implement safely. If that doesn't work for you, I would like it if you
+> > could at least make that an option. I would like it if this API could
+> > mitigate straightforward directory traversal bugs such as
+> > https://bugs.chromium.org/p/project-zero/issues/detail?id=1583, where
+> > a confused deputy attempts to access a path like
+> > "/mnt/media_rw/../../data" while intending to access a directory under
+> > "/mnt/media_rw".
 > 
-> You're right about this -- for C runtimes. In Go we cannot do a raw
-> clone() or fork() (if you do it manually with RawSyscall you'll end with
-> broken runtime state). So you're forced to do fork+exec (which then
-> means that you can't use CLONE_FILES and must use SCM_RIGHTS). Same goes
-> for CLONE_VFORK.
+> Oh, the semantics for this changed in this patchset, hah. I was still on
+> vacation so didn't get to look at it before it was sent out. From prior
+> discussion I remember that the original intention actual was what you
+> argue for. And the patchset should be as tight as possible. Having
+> special cases where ".." is allowed just sounds like an invitation for
+> userspace to get it wrong.
+> Aleksa, did you have a specific use-case in mind that made you change
+> this or was it already present in an earlier iteration of the patchset
+> by someone else?
 
-I must admit that I’m not very sympathetic to the argument that “Go’s runtime model is incompatible with the simpler solution.”
+Al's original patchset allowed "..". A quick survey of my machine shows
+that there are 100k symlinks that contain ".." (~37% of all symlinks on
+my machine). This indicates to me that you would be restricting a large
+amount of reasonable resolutions because of this restriction.
 
-Anyway, it occurs to me that the real problem is that setns() and chroot() are both overkill for this use case. What’s needed is to start your walk from /proc/pid-in-container/root, with two twists:
+I posted a proposed way to protect against ".." shenanigans. If it's
+turns out this is not possible, I'm okay with disallowing ".." (assuming
+Al is also okay with that).
 
-1. Do the walk as though rooted at a directory. This is basically just your AT_THIS_ROOT, but the footgun is avoided because the dirfd you use is from a foreign namespace, and, except for symlinks to absolute paths, no amount of .. racing is going to escape the *namespace*.
-
-2. Avoid /proc. It’s not just the *links* — you really don’t want to walk into /proc/self. *Maybe* procfs is already careful enough when mounted in a namespace?
+-- 
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181002/3234394a/attachment.sig>
