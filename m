@@ -1,54 +1,42 @@
 From: avagin@virtuozzo.com (Andrey Vagin)
-Date: Mon, 1 Oct 2018 20:51:36 +0000
-Subject: Setting monotonic time?
-In-Reply-To: <877ej2xc23.fsf_-_@xmission.com>
+Date: Mon, 1 Oct 2018 23:20:47 +0000
+Subject: [RFC 00/20] ns: Introduce Time Namespace
+In-Reply-To: <alpine.DEB.2.21.1809272335430.8118@nanos.tec.linutronix.de>
 References: <20180919205037.9574-1-dima@arista.com>
  <874lej6nny.fsf@xmission.com> <20180924205119.GA14833@outlook.office365.com>
  <874leezh8n.fsf@xmission.com> <20180925014150.GA6302@outlook.office365.com>
  <87zhw4rwiq.fsf@xmission.com>
  <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
- <87mus1ftb9.fsf@xmission.com>
- <alpine.DEB.2.21.1809282023350.1432@nanos.tec.linutronix.de>
- <877ej2xc23.fsf_-_@xmission.com>
-Message-ID: <20181001205124.GA23620@outlook.office365.com>
+ <alpine.DEB.2.21.1809272335430.8118@nanos.tec.linutronix.de>
+Message-ID: <20181001232033.GA31324@outlook.office365.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181001205136.FWRgq3JPX1kPgInmkA0i_ev7HUfrTk0nd522MBFSeCY@z>
+Message-ID: <20181001232047.z9SZ22Ybrn0uP3c2W8ToF-xSpVP_SN2g1InJ5nn48MY@z>
 
-On Mon, Oct 01, 2018@11:15:32AM +0200, Eric W. Biederman wrote:
+On Thu, Sep 27, 2018@11:41:49PM +0200, Thomas Gleixner wrote:
+> On Thu, 27 Sep 2018, Thomas Gleixner wrote:
+> > Add time skew via NTP/PTP into the picture and you might have to adjust
+> > timers as well, because you need to guarantee that they are not expiring
+> > early.
+> > 
+> > I haven't looked through Dimitry's patches yet, but I don't see how this
+> > can work at all without introducing subtle issues all over the place.
 > 
-> In the context of process migration there is a simpler subproblem that I
-> think it is worth exploring if we can do something about.
-> 
-> For a cluster of machines all running with synchronized
-> clocks. CLOCK_REALTIME matches. CLOCK_MONOTNIC does not match between
-> machines.   Not having a matching CLOCK_MONOTONIC prevents successful
-> process migration between nodes in that cluster.
-> 
-> Would it be possible to allow setting CLOCK_MONOTONIC at the very
-> beginning of time?  So that all of the nodes in a cluster can be in
-> sync?
+> And just a quick scan tells me that this is broken. Timers will expire
+> early or late. The latter is acceptible to some extent, but larger delays
+> might come with surprise. Expiring early is an absolute nono.
 
-Here is a question about how to synchronize clocks between nodes. It
-looks like we will need to have a working network for this, but a
-network configuration may be non-trivial and it can require to run a few
-processes which can use CLOCK_MONOTNIC...
+Do you mean that we have to adjust all timers after changing offset for
+CLOCK_MONOTONIC or CLOCK_BOOTTIME? Our idea is that offsets for
+monotonic and boot times will be set immediately after creating a time
+namespace before using any timers.
 
-> 
-> No change in skew just in offset for CLOCK_MONOTONIC.
-> 
-> There are also dragons involved in coordinating things so that
-> CLOCK_MONOTONIC gets set before CLOCK_MONOTONIC gets used.  So I don't
-> know if allowing CLOCK_MONOTONIC to be set would be practical but it
-> seems work exploring all on it's own.
-> 
-> Dmitry would setting CLOCK_MONOTONIC exactly once at boot time solve
-> your problem that is you are looking at a time namespace to solve?
-
-Process migration is only one of use-cases. Another use-case is
-restoring from snapshots. It may be even more popular than process
-migration. We can't guarantee that all snapshots will be done in one
-cluster. For example, a user meets a bug, does a container snapshot and
-attaches it to a bug report.
+It is interesting to think what a use-case for changing these offsets
+after creating timers. It may be useful for testing needs. A user sets a
+timer in an hour and then change a clock offset forward and check that a
+test application handles the timer properly.
 
 > 
-> Eric
+> Thanks,
+> 
+> 	tglx
+> 
