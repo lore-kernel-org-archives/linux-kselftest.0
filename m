@@ -1,41 +1,26 @@
-From: guroan@gmail.com (Roman Gushchin)
-Date: Fri, 30 Nov 2018 15:47:43 -0800
-Subject: [PATCH v4 5/7] kselftests: cgroup: don't fail on cg_kill_all() error
- in cg_destroy()
-In-Reply-To: <20181130234745.6756-1-guro@fb.com>
-References: <20181130234745.6756-1-guro@fb.com>
-Message-ID: <20181130234745.6756-6-guro@fb.com>
+From: david@fromorbit.com (Dave Chinner)
+Date: Mon, 1 Oct 2018 14:08:21 +1000
+Subject: [PATCH 0/3] namei: implement various scoping AT_* flags
+In-Reply-To: <20180929103453.12025-1-cyphar@cyphar.com>
+References: <20180929103453.12025-1-cyphar@cyphar.com>
+Message-ID: <20181001040821.GP31060@dastard>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181130234743.cmFtG6dlVTUBVXUtWhN4d5fbttNLJ09ad0NVmfdNl8g@z>
+Message-ID: <20181001040821.X8XYdnJX5NdkQDnsS1yQDtiEZkUvFDTfQgxlHpR9_2Y@z>
 
-If the cgroup destruction races with an exit() of a belonging
-process(es), cg_kill_all() may fail. It's not a good reason to make
-cg_destroy() fail and leave the cgroup in place, potentially causing
-next test runs to fail.
+On Sat, Sep 29, 2018@08:34:50PM +1000, Aleksa Sarai wrote:
+> I've added some selftests for this, but it's not clear to me whether
+> they should live here or in xfstests (as far as I can tell there are no
+> other VFS tests in selftests, while there are some tests that look like
+> generic VFS tests in xfstests). If you'd prefer them to be included in
+> xfstests, let me know.
 
-Signed-off-by: Roman Gushchin <guro at fb.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Tejun Heo <tj at kernel.org>
-Cc: kernel-team at fb.com
-Cc: linux-kselftest at vger.kernel.org
----
- tools/testing/selftests/cgroup/cgroup_util.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+xfstests, please. That way the new functionality will get immediate
+coverage by all the main filesystem development and distro QA
+teams....
 
-diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-index 14c9fe284806..eba06f94433b 100644
---- a/tools/testing/selftests/cgroup/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/cgroup_util.c
-@@ -227,9 +227,7 @@ int cg_destroy(const char *cgroup)
- retry:
- 	ret = rmdir(cgroup);
- 	if (ret && errno == EBUSY) {
--		ret = cg_killall(cgroup);
--		if (ret)
--			return ret;
-+		cg_killall(cgroup);
- 		usleep(100);
- 		goto retry;
- 	}
+Cheers,
+
+Dave.
 -- 
-2.17.2
+Dave Chinner
+david at fromorbit.com
