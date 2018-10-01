@@ -1,95 +1,50 @@
-From: cyphar@cyphar.com (Aleksa Sarai)
-Date: Tue, 2 Oct 2018 02:18:33 +1000
-Subject: [PATCH 2/3] namei: implement AT_THIS_ROOT chroot-like path
- resolution
-In-Reply-To: <CAG48ez3ApZC5cGzTxyt1ej0CyhYPD4PUEf5nbkqPmNbO+daOXQ@mail.gmail.com>
-References: <20180929103453.12025-1-cyphar@cyphar.com>
- <20180929131534.24472-1-cyphar@cyphar.com>
- <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
- <20181001054246.gfinmx3api7kjhmc@ryuk>
- <CAG48ez3ApZC5cGzTxyt1ej0CyhYPD4PUEf5nbkqPmNbO+daOXQ@mail.gmail.com>
-Message-ID: <20181001161833.sg5iy6gk7n7crcvy@ryuk>
+From: tglx@linutronix.de (Thomas Gleixner)
+Date: Mon, 1 Oct 2018 20:52:41 +0200 (CEST)
+Subject: Setting monotonic time?
+In-Reply-To: <877ej2xc23.fsf_-_@xmission.com>
+References: <20180919205037.9574-1-dima@arista.com>
+ <874lej6nny.fsf@xmission.com> <20180924205119.GA14833@outlook.office365.com>
+ <874leezh8n.fsf@xmission.com> <20180925014150.GA6302@outlook.office365.com>
+ <87zhw4rwiq.fsf@xmission.com>
+ <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
+ <87mus1ftb9.fsf@xmission.com>
+ <alpine.DEB.2.21.1809282023350.1432@nanos.tec.linutronix.de>
+ <877ej2xc23.fsf_-_@xmission.com>
+Message-ID: <alpine.DEB.2.21.1810012047520.32062@nanos.tec.linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181001161833.MfkJzX8gJXdzbOcD-Uxjfa8_wYdARsWlUH6PF5yZ6FI@z>
+Message-ID: <20181001185241.HzUon3y670Fkmd2t6d6E2ZscbzyYPDasgL_BRjEQkyY@z>
 
-On 2018-10-01, Jann Horn <jannh@google.com> wrote:
-> > If this is an issue for AT_THIS_ROOT, I believe this might also be an
-> > issue for AT_BENEATH since they are effectively both using the same
-> > nd->root trick (so you could similarly trick AT_BENEATH to not error
-> > out). So we'd need to figure out how to solve this problem in order for
-> > AT_BENEATH to be safe.
+On Mon, 1 Oct 2018, Eric W. Biederman wrote:
+> In the context of process migration there is a simpler subproblem that I
+> think it is worth exploring if we can do something about.
 > 
-> Oh, wait, what? I think I didn't notice that the semantics of
-> AT_BENEATH changed like that since the original posting of David
-> Drysdale's O_BENEATH_ONLY patch
-> (https://lore.kernel.org/lkml/1439458366-8223-2-git-send-email-drysdale at google.com/).
-> David's patch had nice, straightforward semantics, blocking any form
-> of upwards traversal. Why was that changed? Does anyone actually want
-> to use paths that contain ".." with AT_BENEATH? I would strongly
-> prefer something that blocks any use of "..".
+> For a cluster of machines all running with synchronized
+> clocks. CLOCK_REALTIME matches. CLOCK_MONOTNIC does not match between
+> machines.   Not having a matching CLOCK_MONOTONIC prevents successful
+> process migration between nodes in that cluster.
 > 
-> @Al: It looks like this already changed back when you posted
-> https://lore.kernel.org/lkml/20170429220414.GT29622 at ZenIV.linux.org.uk/
-> ?
-
-Yes, I copied the semantics from Al's patchset. I don't know why he felt
-strongly that this was the best idea, but in my opinion allowing paths
-like "a/../b/../c" seems like it's quite useful because otherwise you
-wouldn't be able to operate on most distribution root filesystems (many
-have symlinks that have ".." components). Looking at my own (openSUSE)
-machine there are something like 100k such symlinks (~37% of symlinks on
-my machine).
-
-While I do understand that the easiest way of solving this problem is to
-disallow ".." entirely with AT_BENEATH, given that support ".." has
-utility, I would like to know whether it's actually not possible to have
-this work safely.
-
-> > Speaking naively, doesn't it make sense to invalidate the walk if a path
-> > component was modified? Or is this something that would be far too
-> > costly with little benefit? What if we do more aggressive nd->root
-> > checks when resolving with AT_BENEATH or AT_THIS_ROOT (or if nd->root !=
-> > current->mnt_ns->root)?
+> Would it be possible to allow setting CLOCK_MONOTONIC at the very
+> beginning of time?  So that all of the nodes in a cluster can be in
+> sync?
 > 
-> It seems to me like doing that would basically require looking at each
-> node in the path walk twice? And it'd be difficult to guarantee
-> forward progress unless you're willing to do some fairly heavy
-> locking.
-
-I had another idea since I wrote my previous mail -- since the issue (at
-least the way I understand it) is that ".." can "skip" over nd->root
-because of the rename, what if we had some sort of is_descendant() check
-within follow_dotdot()? (FWIW, ".." already has some pretty interesting
-"hand-over-hand" locking semantics.) This should be effectively similar
-to how prepend_path() deals with a path that is not reachable from @root
-(I'm not sure if the locking is acceptable for the namei path though).
-
-Since ".." with AT_THIS_ROOT (or AT_BENEATH) is not going to be the most
-common component type (and we only need to do these checks for those
-flags), I would think that the extra cost would not be _that_ awful.
-
-Would this work?
-
-> > You're right about this -- for C runtimes. In Go we cannot do a raw
-> > clone() or fork() (if you do it manually with RawSyscall you'll end with
-> > broken runtime state). So you're forced to do fork+exec (which then
-> > means that you can't use CLONE_FILES and must use SCM_RIGHTS). Same goes
-> > for CLONE_VFORK.
+> No change in skew just in offset for CLOCK_MONOTONIC.
 > 
-> If you insist on implementing every last bit of your code in Go, I guess.
+> There are also dragons involved in coordinating things so that
+> CLOCK_MONOTONIC gets set before CLOCK_MONOTONIC gets used.  So I don't
+> know if allowing CLOCK_MONOTONIC to be set would be practical but it
+> seems work exploring all on it's own.
 
-Fair enough, though I believe this would affect most multi-threaded
-programs as well (regardless of the language they're written in).
+It's used very early on in the kernel, so that would be a major surprise
+for many things including user space which has expectations on clock
+monotonic.
 
--- 
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181002/ccba6799/attachment.sig>
+It would be reasonably easy to add CLOCK_MONONOTIC_SYNC which can be set in
+the way you described and then in name spaces make it possible to magically
+map CLOCK_MONOTONIC to CLOCK_MONOTONIC_SYNC.
+
+It still wouldn't allow to have different NTP/PTP time domains, but might
+be a good start to address the main migration headaches.
+
+Thanks,
+
+	tglx
