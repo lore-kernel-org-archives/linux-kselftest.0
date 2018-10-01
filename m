@@ -1,52 +1,91 @@
 From: cyphar at cyphar.com (Aleksa Sarai)
-Date: Tue, 2 Oct 2018 02:04:31 +1000
-Subject: [PATCH 1/3] namei: implement O_BENEATH-style AT_* flags
-In-Reply-To: <20181001130038.s5ztphs3pl2zt3ut@brauner.io>
+Date: Tue, 2 Oct 2018 02:15:35 +1000
+Subject: [PATCH 0/3] namei: implement various scoping AT_* flags
+In-Reply-To: <1f1d699b1c8d472495a5b07199c31a6e@AcuMS.aculab.com>
 References: <20180929103453.12025-1-cyphar@cyphar.com>
- <20180929103453.12025-2-cyphar@cyphar.com>
- <CAG48ez17EQuJQAZUg5hDFXhkjnnVFh39=aD+j0FBdsoTONSGEA@mail.gmail.com>
- <20181001130038.s5ztphs3pl2zt3ut@brauner.io>
-Message-ID: <20181001160431.emb6b2hf32b754cl@ryuk>
+ <1f1d699b1c8d472495a5b07199c31a6e@AcuMS.aculab.com>
+Message-ID: <20181001161535.3zslyuk6vmnpioy6@ryuk>
 
-On 2018-10-01, Christian Brauner <christian at brauner.io> wrote:
-> On Mon, Oct 01, 2018 at 02:28:03PM +0200, Jann Horn wrote:
-> > On Sat, Sep 29, 2018 at 4:28 PM Aleksa Sarai <cyphar at cyphar.com> wrote:
-> > > * AT_BENEATH: Disallow ".." or absolute paths (either in the path or
-> > >   found during symlink resolution) to escape the starting point of name
-> > >   resolution, though ".." is permitted in cases like "foo/../bar".
-> > >   Relative symlinks are still allowed (as long as they don't escape the
-> > >   starting point).
+On 2018-10-01, David Laight <David.Laight at ACULAB.COM> wrote:
+> > The need for some sort of control over VFS's path resolution (to avoid
+> > malicious paths resulting in inadvertent breakouts) has been a very
+> > long-standing desire of many userspace applications. This patchset is a
+> > revival of Al Viro's old AT_NO_JUMPS[1] patchset with a few additions.
 > > 
-> > As I said on the other thread, I would strongly prefer an API that
-> > behaves along the lines of David Drysdale's old patch
-> > https://lore.kernel.org/lkml/1439458366-8223-2-git-send-email-drysdale at google.com/
-> > : Forbid any use of "..". This would also be more straightforward to
-> > implement safely. If that doesn't work for you, I would like it if you
-> > could at least make that an option. I would like it if this API could
-> > mitigate straightforward directory traversal bugs such as
-> > https://bugs.chromium.org/p/project-zero/issues/detail?id=1583, where
-> > a confused deputy attempts to access a path like
-> > "/mnt/media_rw/../../data" while intending to access a directory under
-> > "/mnt/media_rw".
+> > The most obvious change is that AT_NO_JUMPS has been split as dicussed
+> > in the original thread, along with a further split of AT_NO_PROCLINKS
+> > which means that each individual property of AT_NO_JUMPS is now a
+> > separate flag:
+> > 
+> >   * Path-based escapes from the starting-point using "/" or ".." are
+> >     blocked by AT_BENEATH.
 > 
-> Oh, the semantics for this changed in this patchset, hah. I was still on
-> vacation so didn't get to look at it before it was sent out. From prior
-> discussion I remember that the original intention actual was what you
-> argue for. And the patchset should be as tight as possible. Having
-> special cases where ".." is allowed just sounds like an invitation for
-> userspace to get it wrong.
-> Aleksa, did you have a specific use-case in mind that made you change
-> this or was it already present in an earlier iteration of the patchset
-> by someone else?
+> You may need to allow absolute paths that refer to items inside
+> the controlled area.
+> (Even if done by a textual replacement based on the expected name
+> of the base directory.)
 
-Al's original patchset allowed "..". A quick survey of my machine shows
-that there are 100k symlinks that contain ".." (~37% of all symlinks on
-my machine). This indicates to me that you would be restricting a large
-amount of reasonable resolutions because of this restriction.
+This is sort of what AT_THIS_ROOT does. I didn't want to include it for
+AT_BENEATH because it would be just as contentious as AT_THIS_ROOT
+currently is. :P
 
-I posted a proposed way to protect against ".." shenanigans. If it's
-turns out this is not possible, I'm okay with disallowing ".." (assuming
-Al is also okay with that).
+> >   * Mountpoint crossings are blocked by AT_XDEV.
+> 
+> You might want a mountpoint flag that allows crossing into the mounted
+> filesystem (you may need to get out in order to do pwd()).
+
+Like a mount flag? I'm not sure how I feel about that. The intention is
+to allow for a process to have control over how path lookups are
+handled, and tying it to a mount flag means that it's no longer entirely
+up to the process.
+
+> >   * /proc/$pid/fd/$fd resolution is blocked by AT_NO_PROCLINKS (more
+> > 	correctly it actually blocks any user of nd_jump_link() because it
+> > 	allows out-of-VFS path resolution manipulation).
+> 
+> Or 'fix' the /proc/$pid/fd/$fd code to open the actual vnode rather than
+> being a symlink (although this might still let you get a directory vnode).
+> FWIW this is what NetBSD does - you can link the open file back into
+> the filesystem!
+
+Isn't this how it works currently? The /proc/$pid/fd/$fd "symlinks" are
+actually references to the underlying file (they can even escape a
+pivot_root()) -- you can re-open them or do any number of other dodgy
+things through /proc with them (we definitely abuse this in container
+runtimes -- and I'm sure plenty of other people do as well).
+
+> > AT_NO_JUMPS is now effectively (AT_BENEATH|AT_XDEV|AT_NO_PROCLINKS). At
+> > Linus' suggestion in the original thread, I've also implemented
+> > AT_NO_SYMLINKS which just denies _all_ symlink resolution (including
+> > "proclink" resolution).
+> 
+> What about allowing 'trivial' symlinks?
+
+The use-case of AT_NO_SYMLINKS that Linus pitched[1] is that git wants
+to have a unique name for every object and so allowing trivial symlinks
+is a no-go. I assume "trivial" here means "no-'..' components"?
+
+> > Currently I've only enabled these for openat(2) and the stat(2) family.
+> > I would hope we could enable it for basically every *at(2) syscall --
+> > but many of them appear to not have a @flags argument and thus we'll
+> > need to add several new syscalls to do this. I'm more than happy to send
+> > those patches, but I'd prefer to know that this preliminary work is
+> > acceptable before doing a bunch of copy-paste to add new sets of *at(2)
+> > syscalls.
+> 
+> If you make the flags a property of the directory vnode (perhaps as
+> well as any syscall flags), and make it inherited by vnode lookup then
+> it can be used to stop library functions (or entire binaries) using
+> blocked paths.
+> You'd then only need to add an fcntl() call to set the flags (but never
+> clear them) to get the restriction applied to every lookup.
+
+This seems like it might be useful, but it could always be done as a
+follow-up patch by just setting LOOKUP_BLAH if the dirfd has the flag
+set. I'm also a little bit concerned that (because fd flags are set on
+the 'struct file') if you start sharing fds then you can no longer use
+the lookup scoping for security (a racing process could remove the
+flags while the management process resolves through it).
 
 -- 
 Aleksa Sarai
@@ -59,4 +98,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 833 bytes
 Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181002/3234394a/attachment.sig>
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181002/6cd9c4e0/attachment.sig>
