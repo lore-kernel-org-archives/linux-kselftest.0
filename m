@@ -1,67 +1,68 @@
-From: mpe@ellerman.id.au (Michael Ellerman)
-Date: Wed, 03 Oct 2018 00:12:51 +1000
-Subject: [PATCH v6] selftests: add headers_install to lib.mk
-In-Reply-To: <4473d2b6-a760-1a48-68e7-9f90023b57b5@kernel.org>
-References: <20180809080402.24469-1-anders.roxell@linaro.org>
- <20180904104721.27535-1-anders.roxell@linaro.org>
- <87y3bmte9l.fsf@concordia.ellerman.id.au>
- <4473d2b6-a760-1a48-68e7-9f90023b57b5@kernel.org>
-Message-ID: <8736tol9ng.fsf@concordia.ellerman.id.au>
+From: arnd@arndb.de (Arnd Bergmann)
+Date: Tue, 2 Oct 2018 22:00:57 +0200
+Subject: Setting monotonic time?
+In-Reply-To: <alpine.DEB.2.21.1810012047520.32062@nanos.tec.linutronix.de>
+References: <20180919205037.9574-1-dima@arista.com>
+ <874lej6nny.fsf@xmission.com>
+ <20180924205119.GA14833@outlook.office365.com> <874leezh8n.fsf@xmission.com>
+ <20180925014150.GA6302@outlook.office365.com> <87zhw4rwiq.fsf@xmission.com>
+ <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
+ <87mus1ftb9.fsf@xmission.com>
+ <alpine.DEB.2.21.1809282023350.1432@nanos.tec.linutronix.de>
+ <877ej2xc23.fsf_-_@xmission.com>
+ <alpine.DEB.2.21.1810012047520.32062@nanos.tec.linutronix.de>
+Message-ID:
+ <CAK8P3a2zTqrCGURE3XVpn3_w6C4R5O+cq8TdtbyKCMGyRk9_jw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181002141251.Ex4ceelPfIvXKh27zJhzIPV-lYgBX8-Kk30vFHCXXpM@z>
+Message-ID: <20181002200057._kU20m9dNRlcLm_Us6qP4IFEJ7PzpAwdqNaTLIu26Qc@z>
 
-Shuah Khan <shuah at kernel.org> writes:
-> On 09/27/2018 10:52 PM, Michael Ellerman wrote:
->> [ + linuxppc-dev ]
->> 
->> Anders Roxell <anders.roxell at linaro.org> writes:
->>> If the kernel headers aren't installed we can't build all the tests.
->>> Add a new make target rule 'khdr' in the file lib.mk to generate the
->>> kernel headers and that gets include for every test-dir Makefile that
->>> includes lib.mk If the testdir in turn have its own sub-dirs the
->>> top_srcdir needs to be set to the linux-rootdir to be able to generate
->>> the kernel headers.
->>>
->>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
->>> Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
->>> ---
->>>
->>> I sent this (v5) a month ago and wondered if it got lost. Resending
->>> unchanged.
->>>
->>> Cheers,
->>> Anders
->>>
->>>  Makefile                                           | 14 +-------------
->>>  scripts/subarch.include                            | 13 +++++++++++++
->>>  tools/testing/selftests/android/Makefile           |  2 +-
->>>  tools/testing/selftests/android/ion/Makefile       |  2 ++
->>>  tools/testing/selftests/futex/functional/Makefile  |  1 +
->>>  tools/testing/selftests/gpio/Makefile              |  7 ++-----
->>>  tools/testing/selftests/kvm/Makefile               |  7 ++-----
->>>  tools/testing/selftests/lib.mk                     | 12 ++++++++++++
->>>  tools/testing/selftests/net/Makefile               |  1 +
->>>  .../selftests/networking/timestamping/Makefile     |  1 +
->>>  tools/testing/selftests/vm/Makefile                |  4 ----
->>>  11 files changed, 36 insertions(+), 28 deletions(-)
->>>  create mode 100644 scripts/subarch.include
->> 
->> This broke all the powerpc selftests :(
+On Mon, Oct 1, 2018@8:53 PM Thomas Gleixner <tglx@linutronix.de> wrote:
 >
-> Sorry for thr breakage.
+> On Mon, 1 Oct 2018, Eric W. Biederman wrote:
+> > In the context of process migration there is a simpler subproblem that I
+> > think it is worth exploring if we can do something about.
+> >
+> > For a cluster of machines all running with synchronized
+> > clocks. CLOCK_REALTIME matches. CLOCK_MONOTNIC does not match between
+> > machines.   Not having a matching CLOCK_MONOTONIC prevents successful
+> > process migration between nodes in that cluster.
+> >
+> > Would it be possible to allow setting CLOCK_MONOTONIC at the very
+> > beginning of time?  So that all of the nodes in a cluster can be in
+> > sync?
+> >
+> > No change in skew just in offset for CLOCK_MONOTONIC.
+> >
+> > There are also dragons involved in coordinating things so that
+> > CLOCK_MONOTONIC gets set before CLOCK_MONOTONIC gets used.  So I don't
+> > know if allowing CLOCK_MONOTONIC to be set would be practical but it
+> > seems work exploring all on it's own.
 >
->> Why did it go in at rc5?
+> It's used very early on in the kernel, so that would be a major surprise
+> for many things including user space which has expectations on clock
+> monotonic.
 >
-> This patch has been in linux-next for a sometime before I decided to send this.
-> My original intent was to send this for rc2, and my schedule was messed up with
-> traveling. Since I didn't hear any issues from linux-next soaking, I made a call
-> on sending this in for rc5.
+> It would be reasonably easy to add CLOCK_MONONOTIC_SYNC which can be set in
+> the way you described and then in name spaces make it possible to magically
+> map CLOCK_MONOTONIC to CLOCK_MONOTONIC_SYNC.
+>
+> It still wouldn't allow to have different NTP/PTP time domains, but might
+> be a good start to address the main migration headaches.
 
-OK. And I didn't notice the breakage in linux-next because _I_ was
-travelling :)
+If we make CLOCK_MONOTONIC settable this way in a namespace,
+do you think that should include device drivers that report timestamps
+in CLOCK_MONOTONIC base, or only the timekeeping clock and timer
+interfaces?
 
-> On second thought I should have waited until 4.20. Sorry about that.
+Examples for drivers that can report timestamps are input, sound, v4l,
+and drm. I think most of these can report stamps in either monotonic
+or realtime base, while socket timestamps notably are always in
+realtime.
 
-Yeah that would have been better, no worries.
+We can probably get away with not setting the timebase for those
+device drivers as long as the checkpoint/restart and migration features
+are not expected to restore the state of an open character device
+in that way. I don't know if that is a reasonable assumption to make
+for the examples I listed.
 
-cheers
+      Arnd
