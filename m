@@ -1,96 +1,63 @@
 From: andreyknvl@google.com (Andrey Konovalov)
-Date: Tue,  2 Oct 2018 15:12:43 +0200
-Subject: [PATCH v7 8/8] selftests,
- arm64: add a selftest for passing tagged pointers to kernel
+Date: Tue,  2 Oct 2018 15:12:42 +0200
+Subject: [PATCH v7 7/8] arm64: update Documentation/arm64/tagged-pointers.txt
 In-Reply-To: <cover.1538485901.git.andreyknvl@google.com>
 References: <cover.1538485901.git.andreyknvl@google.com>
 Message-ID:
- <3a2c0a6b2499a328cc9471d4095ae36f0f05252d.1538485901.git.andreyknvl@google.com>
+ <47a464307d4df3c0cb65f88d1fe83f9a741dd74b.1538485901.git.andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181002131243.cw5BhP0uh5YmyvKCveuleHzCaLn2Zu031i1ySOQhh84@z>
+Message-ID: <20181002131242.WH8a7waW5BaTsFdMYPceJiOZuto87MYnvBX17i0UOJQ@z>
 
-This patch adds a simple test, that calls the uname syscall with a
-tagged user pointer as an argument. Without the kernel accepting tagged
-user pointers the test fails with EFAULT.
+Document the changes in Documentation/arm64/tagged-pointers.txt.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- tools/testing/selftests/arm64/.gitignore      |  1 +
- tools/testing/selftests/arm64/Makefile        | 11 +++++++++++
- .../testing/selftests/arm64/run_tags_test.sh  | 12 ++++++++++++
- tools/testing/selftests/arm64/tags_test.c     | 19 +++++++++++++++++++
- 4 files changed, 43 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/.gitignore
- create mode 100644 tools/testing/selftests/arm64/Makefile
- create mode 100755 tools/testing/selftests/arm64/run_tags_test.sh
- create mode 100644 tools/testing/selftests/arm64/tags_test.c
+ Documentation/arm64/tagged-pointers.txt | 24 ++++++++++++++----------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/.gitignore b/tools/testing/selftests/arm64/.gitignore
-new file mode 100644
-index 000000000000..e8fae8d61ed6
---- /dev/null
-+++ b/tools/testing/selftests/arm64/.gitignore
-@@ -0,0 +1 @@
-+tags_test
-diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
-new file mode 100644
-index 000000000000..a61b2e743e99
---- /dev/null
-+++ b/tools/testing/selftests/arm64/Makefile
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0
+diff --git a/Documentation/arm64/tagged-pointers.txt b/Documentation/arm64/tagged-pointers.txt
+index a25a99e82bb1..ae877d185fdb 100644
+--- a/Documentation/arm64/tagged-pointers.txt
++++ b/Documentation/arm64/tagged-pointers.txt
+@@ -17,13 +17,21 @@ this byte for application use.
+ Passing tagged addresses to the kernel
+ --------------------------------------
+ 
+-All interpretation of userspace memory addresses by the kernel assumes
+-an address tag of 0x00.
++Some initial work for supporting non-zero address tags passed to the
++kernel has been done. As of now, the kernel supports tags in:
+ 
+-This includes, but is not limited to, addresses found in:
++  - user fault addresses
+ 
+- - pointer arguments to system calls, including pointers in structures
+-   passed to system calls,
++  - pointer arguments (including pointers in structures), which don't
++    describe virtual memory ranges, passed to system calls
 +
-+# ARCH can be overridden by the user for cross compiling
-+ARCH ?= $(shell uname -m 2>/dev/null || echo not)
++All other interpretations of userspace memory addresses by the kernel
++assume an address tag of 0x00. This includes, but is not limited to,
++addresses found in:
 +
-+ifneq (,$(filter $(ARCH),aarch64 arm64))
-+TEST_GEN_PROGS := tags_test
-+TEST_PROGS := run_tags_test.sh
-+endif
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/arm64/run_tags_test.sh b/tools/testing/selftests/arm64/run_tags_test.sh
-new file mode 100755
-index 000000000000..745f11379930
---- /dev/null
-+++ b/tools/testing/selftests/arm64/run_tags_test.sh
-@@ -0,0 +1,12 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+echo "--------------------"
-+echo "running tags test"
-+echo "--------------------"
-+./tags_test
-+if [ $? -ne 0 ]; then
-+	echo "[FAIL]"
-+else
-+	echo "[PASS]"
-+fi
-diff --git a/tools/testing/selftests/arm64/tags_test.c b/tools/testing/selftests/arm64/tags_test.c
-new file mode 100644
-index 000000000000..1452ed7d33f9
---- /dev/null
-+++ b/tools/testing/selftests/arm64/tags_test.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <stdint.h>
-+#include <sys/utsname.h>
-+
-+#define SHIFT_TAG(tag)		((uint64_t)(tag) << 56)
-+#define SET_TAG(ptr, tag)	(((uint64_t)(ptr) & ~SHIFT_TAG(0xff)) | \
-+					SHIFT_TAG(tag))
-+
-+int main(void)
-+{
-+	struct utsname utsname;
-+	void *ptr = &utsname;
-+	void *tagged_ptr = (void *)SET_TAG(ptr, 0x42);
-+	int err = uname(tagged_ptr);
-+	return err;
-+}
++ - pointer arguments (including pointers in structures), which describe
++   virtual memory ranges, passed to memory system calls (mmap, mprotect,
++   etc.)
+ 
+  - the stack pointer (sp), e.g. when interpreting it to deliver a
+    signal,
+@@ -33,11 +41,7 @@ This includes, but is not limited to, addresses found in:
+ 
+ Using non-zero address tags in any of these locations may result in an
+ error code being returned, a (fatal) signal being raised, or other modes
+-of failure.
+-
+-For these reasons, passing non-zero address tags to the kernel via
+-system calls is forbidden, and using a non-zero address tag for sp is
+-strongly discouraged.
++of failure. Using a non-zero address tag for sp is strongly discouraged.
+ 
+ Programs maintaining a frame pointer and frame records that use non-zero
+ address tags may suffer impaired or inaccurate debug and profiling
 -- 
 2.19.0.605.g01d371f741-goog
