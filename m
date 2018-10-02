@@ -1,84 +1,127 @@
-From: cyphar at cyphar.com (Aleksa Sarai)
-Date: Tue, 2 Oct 2018 17:32:20 +1000
-Subject: [PATCH 2/3] namei: implement AT_THIS_ROOT chroot-like path
- resolution
-In-Reply-To: <C89D720F-3CC4-4FA9-9CBB-E41A67360A6B@amacapital.net>
-References: <20180929103453.12025-1-cyphar@cyphar.com>
- <20180929131534.24472-1-cyphar@cyphar.com>
- <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
- <20181001054246.gfinmx3api7kjhmc@ryuk>
- <C89D720F-3CC4-4FA9-9CBB-E41A67360A6B@amacapital.net>
-Message-ID: <20181002073220.7mzndna4tdnxdvdt@ryuk>
+From: andreyknvl at google.com (Andrey Konovalov)
+Date: Tue,  2 Oct 2018 15:12:35 +0200
+Subject: [PATCH v7 0/8] arm64: untag user pointers passed to the kernel
+Message-ID: <cover.1538485901.git.andreyknvl@google.com>
 
-On 2018-10-01, Andy Lutomirski <luto at amacapital.net> wrote:
-> >>> Currently most container runtimes try to do this resolution in
-> >>> userspace[1], causing many potential race conditions. In addition, the
-> >>> "obvious" alternative (actually performing a {ch,pivot_}root(2))
-> >>> requires a fork+exec which is *very* costly if necessary for every
-> >>> filesystem operation involving a container.
-> >> 
-> >> Wait. fork() I understand, but why exec? And actually, you don't need
-> >> a full fork() either, clone() lets you do this with some process parts
-> >> shared. And then you also shouldn't need to use SCM_RIGHTS, just keep
-> >> the file descriptor table shared. And why chroot()/pivot_root(),
-> >> wouldn't you want to use setns()?
-> > 
-> > You're right about this -- for C runtimes. In Go we cannot do a raw
-> > clone() or fork() (if you do it manually with RawSyscall you'll end with
-> > broken runtime state). So you're forced to do fork+exec (which then
-> > means that you can't use CLONE_FILES and must use SCM_RIGHTS). Same goes
-> > for CLONE_VFORK.
-> 
-> I must admit that I’m not very sympathetic to the argument that “Go’s
-> runtime model is incompatible with the simpler solution.”
+arm64 has a feature called Top Byte Ignore, which allows to embed pointer
+tags into the top byte of each pointer. Userspace programs (such as
+HWASan, a memory debugging tool [1]) might use this feature and pass
+tagged user pointers to the kernel through syscalls or other interfaces.
 
-Multi-threaded programs have a similar issue (though with Go it's much
-worse). If you fork a multi-threaded C program then you can only safely
-use AS-Safe glibc functions (those that are safe within a signal
-handler). But if you're just doing three syscalls this shouldn't be as
-big of a problem as Go where you can't even do said syscalls.
+Right now the kernel is already able to handle user faults with tagged
+pointers, due to these patches:
 
-> Anyway, it occurs to me that the real problem is that setns() and
-> chroot() are both overkill for this use case.
+1. 81cddd65 ("arm64: traps: fix userspace cache maintenance emulation on a
+             tagged pointer")
+2. 7dcd9dd8 ("arm64: hw_breakpoint: fix watchpoint matching for tagged
+	      pointers")
+3. 276e9327 ("arm64: entry: improve data abort handling of tagged
+	      pointers")
 
-I agree. My diversion to Go was to explain why it was particularly bad
-for cri-o/rkt/runc/Docker/etc.
+When passing tagged pointers to syscalls, there's a special case of such a
+pointer being passed to one of the memory syscalls (mmap, mprotect, etc.).
+These syscalls don't do memory accesses but rather deal with memory
+ranges, hence an untagged pointer is better suited.
 
-> What’s needed is to start your walk from /proc/pid-in-container/root,
-> with two twists:
-> 
-> 1. Do the walk as though rooted at a directory. This is basically just
-> your AT_THIS_ROOT, but the footgun is avoided because the dirfd you
-> use is from a foreign namespace, and, except for symlinks to absolute
-> paths, no amount of .. racing is going to escape the *namespace*.
+This patchset extends tagged pointer support to non-memory syscalls. This
+is done by reusing the untagged_addr macro to untag user pointers when the
+kernel performs pointer checking to find out whether the pointer comes
+from userspace (most notably in access_ok).
 
-This is quite clever and I'll admit I hadn't thought of this. This
-definitely fixes the ".." issue, but as you've said it won't handle
-absolute symlinks (which means userspace has the same races that we
-currently have even if you assume that you have a container process
-already running -- CVE-2018-15664 is one of many examples of this).
+The following testing approaches has been taken to find potential issues
+with user pointer untagging:
 
-(AT_THIS_ROOT using /proc/$container/root would in principle fix all of
-the mentioned issues -- but as I said before I'd like to see whether
-hardening ".." would be enough to solve the escape problem.)
+1. Static testing (with sparse [2] and separately with a custom static
+   analyzer based on Clang) to track casts of __user pointers to integer
+   types to find places where untagging needs to be done.
 
-> 2. Avoid /proc. It’s not just the *links* — you really don’t want to
-> walk into /proc/self. *Maybe* procfs is already careful enough when
-> mounted in a namespace?
+2. Dynamic testing: adding BUG_ON(has_tag(addr)) to find_vma() and running
+   a modified syzkaller version that passes tagged pointers to the kernel.
 
-I just tried it and /proc/self gives you -ENOENT. I believe this is
-because it does a check against the pid namespace that the procfs mount
-has pinned.
+Based on the results of the testing the requried patches have been added
+to the patchset.
+
+This patchset is a prerequisite for ARM's memory tagging hardware feature
+support [3].
+
+Thanks!
+
+[1] http://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html
+
+[2] https://github.com/lucvoo/sparse-dev/commit/5f960cb10f56ec2017c128ef9d16060e0145f292
+
+[3] https://community.arm.com/processors/b/blog/posts/arm-a-profile-architecture-2018-developments-armv85a
+
+Changes in v7:
+- Rebased onto 17b57b18 (4.19-rc6).
+- Dropped the "arm64: untag user address in __do_user_fault" patch, since
+  the existing patches already handle user faults properly.
+- Dropped the "usb, arm64: untag user addresses in devio" patch, since the
+  passed pointer must come from a vma and therefore be untagged.
+- Dropped the "arm64: annotate user pointers casts detected by sparse"
+  patch (see the discussion to the replies of the v6 of this patchset).
+- Added more context to the cover letter.
+- Updated Documentation/arm64/tagged-pointers.txt.
+
+Changes in v6:
+- Added annotations for user pointer casts found by sparse.
+- Rebased onto 050cdc6c (4.19-rc1+).
+
+Changes in v5:
+- Added 3 new patches that add untagging to places found with static
+  analysis.
+- Rebased onto 44c929e1 (4.18-rc8).
+
+Changes in v4:
+- Added a selftest for checking that passing tagged pointers to the
+  kernel succeeds.
+- Rebased onto 81e97f013 (4.18-rc1+).
+
+Changes in v3:
+- Rebased onto e5c51f30 (4.17-rc6+).
+- Added linux-arch@ to the list of recipients.
+
+Changes in v2:
+- Rebased onto 2d618bdf (4.17-rc3+).
+- Removed excessive untagging in gup.c.
+- Removed untagging pointers returned from __uaccess_mask_ptr.
+
+Changes in v1:
+- Rebased onto 4.17-rc1.
+
+Changes in RFC v2:
+- Added "#ifndef untagged_addr..." fallback in linux/uaccess.h instead of
+  defining it for each arch individually.
+- Updated Documentation/arm64/tagged-pointers.txt.
+- Dropped "mm, arm64: untag user addresses in memory syscalls".
+- Rebased onto 3eb2ce82 (4.16-rc7).
+
+Andrey Konovalov (8):
+  arm64: add type casts to untagged_addr macro
+  uaccess: add untagged_addr definition for other arches
+  arm64: untag user addresses in access_ok and __uaccess_mask_ptr
+  mm, arm64: untag user addresses in mm/gup.c
+  lib, arm64: untag addrs passed to strncpy_from_user and strnlen_user
+  fs, arm64: untag user address in copy_mount_options
+  arm64: update Documentation/arm64/tagged-pointers.txt
+  selftests, arm64: add a selftest for passing tagged pointers to kernel
+
+ Documentation/arm64/tagged-pointers.txt       | 24 +++++++++++--------
+ arch/arm64/include/asm/uaccess.h              | 14 +++++++----
+ fs/namespace.c                                |  2 +-
+ include/linux/uaccess.h                       |  4 ++++
+ lib/strncpy_from_user.c                       |  2 ++
+ lib/strnlen_user.c                            |  2 ++
+ mm/gup.c                                      |  4 ++++
+ tools/testing/selftests/arm64/.gitignore      |  1 +
+ tools/testing/selftests/arm64/Makefile        | 11 +++++++++
+ .../testing/selftests/arm64/run_tags_test.sh  | 12 ++++++++++
+ tools/testing/selftests/arm64/tags_test.c     | 19 +++++++++++++++
+ 11 files changed, 79 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/arm64/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/Makefile
+ create mode 100755 tools/testing/selftests/arm64/run_tags_test.sh
+ create mode 100644 tools/testing/selftests/arm64/tags_test.c
 
 -- 
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181002/5a858c93/attachment.sig>
+2.19.0.605.g01d371f741-goog
