@@ -1,58 +1,23 @@
-From: tglx at linutronix.de (Thomas Gleixner)
-Date: Tue, 2 Oct 2018 08:16:38 +0200 (CEST)
-Subject: Setting monotonic time?
-In-Reply-To: <20181001205124.GA23620@outlook.office365.com>
-References: <20180919205037.9574-1-dima@arista.com>
- <874lej6nny.fsf@xmission.com> <20180924205119.GA14833@outlook.office365.com>
- <874leezh8n.fsf@xmission.com> <20180925014150.GA6302@outlook.office365.com>
- <87zhw4rwiq.fsf@xmission.com>
- <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
- <87mus1ftb9.fsf@xmission.com>
- <alpine.DEB.2.21.1809282023350.1432@nanos.tec.linutronix.de>
- <877ej2xc23.fsf_-_@xmission.com>
- <20181001205124.GA23620@outlook.office365.com>
-Message-ID: <alpine.DEB.2.21.1810020815420.32062@nanos.tec.linutronix.de>
+From: davem at davemloft.net (David Miller)
+Date: Mon, 01 Oct 2018 23:19:14 -0700 (PDT)
+Subject: [PATCH net-next] selftests/tls: Fix recv(MSG_PEEK) & splice()
+ test cases
+In-Reply-To: <20180928161808.10363-1-vakul.garg@nxp.com>
+References: <20180928161808.10363-1-vakul.garg@nxp.com>
+Message-ID: <20181001.231914.2200760830649337187.davem@davemloft.net>
 
-On Mon, 1 Oct 2018, Andrey Vagin wrote:
-> On Mon, Oct 01, 2018 at 11:15:32AM +0200, Eric W. Biederman wrote:
-> > 
-> > In the context of process migration there is a simpler subproblem that I
-> > think it is worth exploring if we can do something about.
-> > 
-> > For a cluster of machines all running with synchronized
-> > clocks. CLOCK_REALTIME matches. CLOCK_MONOTNIC does not match between
-> > machines.   Not having a matching CLOCK_MONOTONIC prevents successful
-> > process migration between nodes in that cluster.
-> > 
-> > Would it be possible to allow setting CLOCK_MONOTONIC at the very
-> > beginning of time?  So that all of the nodes in a cluster can be in
-> > sync?
+From: Vakul Garg <vakul.garg at nxp.com>
+Date: Fri, 28 Sep 2018 21:48:08 +0530
+
+> TLS test cases splice_from_pipe, send_and_splice &
+> recv_peek_multiple_records expect to receive a given nummber of bytes
+> and then compare them against the number of bytes which were sent.
+> Therefore, system call recv() must not return before receiving the
+> requested number of bytes, otherwise the subsequent memcmp() fails.
+> This patch passes MSG_WAITALL flag to recv() so that it does not return
+> prematurely before requested number of bytes are copied to receive
+> buffer.
 > 
-> Here is a question about how to synchronize clocks between nodes. It
-> looks like we will need to have a working network for this, but a
-> network configuration may be non-trivial and it can require to run a few
-> processes which can use CLOCK_MONOTNIC...
-> 
-> > 
-> > No change in skew just in offset for CLOCK_MONOTONIC.
-> > 
-> > There are also dragons involved in coordinating things so that
-> > CLOCK_MONOTONIC gets set before CLOCK_MONOTONIC gets used.  So I don't
-> > know if allowing CLOCK_MONOTONIC to be set would be practical but it
-> > seems work exploring all on it's own.
-> > 
-> > Dmitry would setting CLOCK_MONOTONIC exactly once at boot time solve
-> > your problem that is you are looking at a time namespace to solve?
-> 
-> Process migration is only one of use-cases. Another use-case is
-> restoring from snapshots. It may be even more popular than process
-> migration. We can't guarantee that all snapshots will be done in one
-> cluster. For example, a user meets a bug, does a container snapshot and
-> attaches it to a bug report.
+> Signed-off-by: Vakul Garg <vakul.garg at nxp.com>
 
-Sure, but see my reply to Eric. That could be solved with that extra clock
-id, which then gets mapped to monotonic for name spaces.
-
-Thanks,
-
-	tglx
+Applied.
