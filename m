@@ -1,56 +1,63 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Wed, 3 Oct 2018 08:42:13 -0600
-Subject: [GIT PULL] kselftest fixes update for Linux-4.19-rc7
-Message-ID: <ec2d8d2b-c5ac-5ac2-57fd-74efaa7ed0b6@kernel.org>
+From: catalin.marinas@arm.com (Catalin Marinas)
+Date: Wed, 3 Oct 2018 18:32:57 +0100
+Subject: [PATCH v7 7/8] arm64: update
+ Documentation/arm64/tagged-pointers.txt
+In-Reply-To: <47a464307d4df3c0cb65f88d1fe83f9a741dd74b.1538485901.git.andreyknvl@google.com>
+References: <cover.1538485901.git.andreyknvl@google.com>
+ <47a464307d4df3c0cb65f88d1fe83f9a741dd74b.1538485901.git.andreyknvl@google.com>
+Message-ID: <20181003173256.GG12998@arrakis.emea.arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181003144213.gUKHj-tGRbDF3CTQvXL4rcdLasZBfggG_27P4geRFcI@z>
+Message-ID: <20181003173257.tE8OyzystxjJry0cIw_1tnuvO9B7riyDjmX5MmIaizU@z>
 
-Hi Greg,
+On Tue, Oct 02, 2018@03:12:42PM +0200, Andrey Konovalov wrote:
+> diff --git a/Documentation/arm64/tagged-pointers.txt b/Documentation/arm64/tagged-pointers.txt
+> index a25a99e82bb1..ae877d185fdb 100644
+> --- a/Documentation/arm64/tagged-pointers.txt
+> +++ b/Documentation/arm64/tagged-pointers.txt
+> @@ -17,13 +17,21 @@ this byte for application use.
+>  Passing tagged addresses to the kernel
+>  --------------------------------------
+>  
+> -All interpretation of userspace memory addresses by the kernel assumes
+> -an address tag of 0x00.
+> +Some initial work for supporting non-zero address tags passed to the
+> +kernel has been done. As of now, the kernel supports tags in:
 
-Please pull the following kselftest for 4.19-rc7.
+With my maintainer hat on, the above statement leads me to think this
+new ABI is work in progress, so not yet suitable for upstream.
 
-linux-kselftest-4.19-rc7
+Also, how is user space supposed to know that it can now pass tagged
+pointers into the kernel? An ABI change (or relaxation), needs to be
+advertised by the kernel, usually via a new HWCAP bit (e.g. HWCAP_TBI).
+Once we have a HWCAP bit in place, we need to be pretty clear about
+which syscalls can and cannot cope with tagged pointers. The "as of now"
+implies potential further relaxation which, again, would need to be
+advertised to user in some (additional) way.
 
-This fixes update for 4.19-rc7 consists one fix to rseq test to prevent
-it from seg-faulting when compiled with -fpie.
+> -This includes, but is not limited to, addresses found in:
+> +  - user fault addresses
 
-diff is attached.
+While the kernel currently supports this in some way (by clearing the
+tag exception entry, el0_da), the above implies (at least to me) that
+sigcontext.fault_address would contain the tagged address. That's not
+the case (unless I missed it in your patches).
 
-thanks,
--- Shuah
+> - - pointer arguments to system calls, including pointers in structures
+> -   passed to system calls,
+> +  - pointer arguments (including pointers in structures), which don't
+> +    describe virtual memory ranges, passed to system calls
 
-----------------------------------------------------------------
+I think we need to be more precise here...
 
-The following changes since commit 7876320f88802b22d4e2daf7eb027dd14175a0f8:
+> +All other interpretations of userspace memory addresses by the kernel
+> +assume an address tag of 0x00. This includes, but is not limited to,
+> +addresses found in:
+> +
+> + - pointer arguments (including pointers in structures), which describe
+> +   virtual memory ranges, passed to memory system calls (mmap, mprotect,
+> +   etc.)
 
-  Linux 4.19-rc4 (2018-09-16 11:52:37 -0700)
+...and probably a full list here.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-4.19-rc7
-
-for you to fetch changes up to ce01a1575f45bf319e374592656441021a7f5823:
-
-  rseq/selftests: fix parametrized test with -fpie (2018-09-27 12:59:19 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-4.19-rc7
-
-This fixes update for 4.19-rc7 consists one fix to rseq test to prevent
-it from seg-faulting when compiled with -fpie.
-
-----------------------------------------------------------------
-Mathieu Desnoyers (1):
-      rseq/selftests: fix parametrized test with -fpie
-
- tools/testing/selftests/rseq/param_test.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
-
-----------------------------------------------------------------
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: linux-kselftest-4.19-rc7.diff
-Type: text/x-patch
-Size: 1450 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181003/4ce5e752/attachment.bin>
+-- 
+Catalin
