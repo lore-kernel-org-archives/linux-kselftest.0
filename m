@@ -1,71 +1,94 @@
-From: tglx at linutronix.de (Thomas Gleixner)
-Date: Tue, 2 Oct 2018 23:26:30 +0200 (CEST)
-Subject: [RFC 00/20] ns: Introduce Time Namespace
-In-Reply-To: <CAJwJo6a+WWpAxVAUuYt8TrCF+1a=BdoFQjU9vto0iiUN5vygsA@mail.gmail.com>
+From: ebiederm at xmission.com (Eric W. Biederman)
+Date: Wed, 03 Oct 2018 06:50:47 +0200
+Subject: Setting monotonic time?
+In-Reply-To: <alpine.DEB.2.21.1810022205080.1435@nanos.tec.linutronix.de>
+ (Thomas Gleixner's message of "Tue, 2 Oct 2018 22:06:28 +0200 (CEST)")
 References: <20180919205037.9574-1-dima@arista.com>
- <874lej6nny.fsf@xmission.com> <20180924205119.GA14833@outlook.office365.com>
- <874leezh8n.fsf@xmission.com> <20180925014150.GA6302@outlook.office365.com>
+ <874lej6nny.fsf@xmission.com>
+ <20180924205119.GA14833@outlook.office365.com>
+ <874leezh8n.fsf@xmission.com>
+ <20180925014150.GA6302@outlook.office365.com>
  <87zhw4rwiq.fsf@xmission.com>
  <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
- <alpine.DEB.2.21.1809272335430.8118@nanos.tec.linutronix.de>
- <20181001232033.GA31324@outlook.office365.com>
- <alpine.DEB.2.21.1810020811290.32062@nanos.tec.linutronix.de>
- <CAJwJo6a+WWpAxVAUuYt8TrCF+1a=BdoFQjU9vto0iiUN5vygsA@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.1810022310360.1435@nanos.tec.linutronix.de>
+ <87mus1ftb9.fsf@xmission.com>
+ <alpine.DEB.2.21.1809282023350.1432@nanos.tec.linutronix.de>
+ <877ej2xc23.fsf_-_@xmission.com>
+ <alpine.DEB.2.21.1810012047520.32062@nanos.tec.linutronix.de>
+ <CAK8P3a2zTqrCGURE3XVpn3_w6C4R5O+cq8TdtbyKCMGyRk9_jw@mail.gmail.com>
+ <alpine.DEB.2.21.1810022205080.1435@nanos.tec.linutronix.de>
+Message-ID: <87in2jskew.fsf@xmission.com>
 
-Dmitry,
+Thomas Gleixner <tglx at linutronix.de> writes:
 
-On Tue, 2 Oct 2018, Dmitry Safonov wrote:
-> On Tue, 2 Oct 2018 at 07:15, Thomas Gleixner <tglx at linutronix.de> wrote:
-> > I explained that in detail in this thread, but it's not about the initial
-> > setting of clock mono/boot before any timers have been armed.
-> >
-> > It's about setting the offset or clock realtime (via settimeofday) when
-> > timers are already armed. Also having a entirely different time domain,
-> > e.g. separate NTP adjustments, makes that necessary.
-> 
-> It looks like, there is a bit of misunderstanding each other:
-> Andrei was talking about the current RFC version, where we haven't
-> introduced offsets for clock realtime. While Thomas IIUC, is looking
-> how-to expand time namespace over realtime.
+> On Tue, 2 Oct 2018, Arnd Bergmann wrote:
+>> On Mon, Oct 1, 2018 at 8:53 PM Thomas Gleixner <tglx at linutronix.de> wrote:
+>> >
+>> > On Mon, 1 Oct 2018, Eric W. Biederman wrote:
+>> > > In the context of process migration there is a simpler subproblem that I
+>> > > think it is worth exploring if we can do something about.
+>> > >
+>> > > For a cluster of machines all running with synchronized
+>> > > clocks. CLOCK_REALTIME matches. CLOCK_MONOTNIC does not match between
+>> > > machines.   Not having a matching CLOCK_MONOTONIC prevents successful
+>> > > process migration between nodes in that cluster.
+>> > >
+>> > > Would it be possible to allow setting CLOCK_MONOTONIC at the very
+>> > > beginning of time?  So that all of the nodes in a cluster can be in
+>> > > sync?
+>> > >
+>> > > No change in skew just in offset for CLOCK_MONOTONIC.
+>> > >
+>> > > There are also dragons involved in coordinating things so that
+>> > > CLOCK_MONOTONIC gets set before CLOCK_MONOTONIC gets used.  So I don't
+>> > > know if allowing CLOCK_MONOTONIC to be set would be practical but it
+>> > > seems work exploring all on it's own.
+>> >
+>> > It's used very early on in the kernel, so that would be a major surprise
+>> > for many things including user space which has expectations on clock
+>> > monotonic.
+>> >
+>> > It would be reasonably easy to add CLOCK_MONONOTIC_SYNC which can be set in
+>> > the way you described and then in name spaces make it possible to magically
+>> > map CLOCK_MONOTONIC to CLOCK_MONOTONIC_SYNC.
+>> >
+>> > It still wouldn't allow to have different NTP/PTP time domains, but might
+>> > be a good start to address the main migration headaches.
+>> 
+>> If we make CLOCK_MONOTONIC settable this way in a namespace,
+>> do you think that should include device drivers that report timestamps
+>> in CLOCK_MONOTONIC base, or only the timekeeping clock and timer
+>> interfaces?
 >
-> As CLOCK_REALTIME virtualization raises so many complex questions
-> like a different length of the second or list of realtime timers in ns we
-> haven't added any realization for it.
-> 
-> It seems like an initial introduction for timens can be expanded after to cover
-> realtime clocks too. While it may seem incomplete, it solves issues for
-> restoring/migration of real-world applications like nodejs, Oracle DB server
-> which fails after being restored if there is a leap in monotonic time.
+> Uurgh. That gets messy very fast.
+>
+>> Examples for drivers that can report timestamps are input, sound, v4l,
+>> and drm. I think most of these can report stamps in either monotonic
+>> or realtime base, while socket timestamps notably are always in
+>> realtime.
+>> 
+>> We can probably get away with not setting the timebase for those
+>> device drivers as long as the checkpoint/restart and migration features
+>> are not expected to restore the state of an open character device
+>> in that way. I don't know if that is a reasonable assumption to make
+>> for the examples I listed.
+>
+> No idea. I'm not a container migration wizard.
 
-Well, yes. But you really have to think about the full picture. Just adding
-part of the overall solution right now, just because it can be glued into
-the code easily, is not the best approach IMO as it might result in
-substantial rework of the whole thing sooner than later. I really don't
-want to end up with something which is not extensible and has to be
-supported forever.
+Direct access to hardware/drivers and not through an abstraction like
+the vfs (an abstraction over block devices) can legitimately be handled
+by hotplug events.  I unplug one keyboard I plug in another.
 
-Just for the record, the current approach with name space offsets for
-monotonic is also prone to malfunction vs. timers, unless you can prevent
-changing the offset _after_ the namespace has been set up and timers have
-been armed. I admit, that I did not look close enough to verify that.
+I don't know if the input layer is more of a general abstraction
+or more of a hardware device.  I have not dug into it but my guess
+is abstraction from what I have heard.
 
-> While solving the mentioned issues, it doesn't bring overhead.
-> (well, Andy noted that cmp for zero-offsets on vdso can be optimized too,
-> which will be done in v1).
-> 
-> Thomas, thanks much for your input - now we know that we'll need to
-> introduce list for timers in namespace when we'll add realtime clocks.
-> Do you believe that CLOCK_MONOTONIC_SYNC would be an easier
-> concept than offsets per-namespace?
+The scary difficulty here is if after restart input is reporting times
+in CLOCK_MONOTONIC and the applications in the namespace are talking
+about times in CLOCK_MONOTONIC_SYNC.  Then there is an issue.  As even
+with a fixed offset the times don't match up.
 
-Haven't thought it through. This was just an idea in reaction to Eric's
-question whether setting clock monotonic might be feasible. But yes, it
-might be worth to think about it.
+So a time namespace absolutely needs to do is figure out how to deal
+with all of the kernel interfaces reporting times and figure out how to
+report them in the current time namespace.
 
-I think you should really define the long term requirements for time
-namespaces and perhaps set some limitations in functionality upfront.
-
-Thanks,
-
-	tglx
+Eric
