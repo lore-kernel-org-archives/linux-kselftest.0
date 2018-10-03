@@ -1,13 +1,10 @@
-From: ebiederm@xmission.com (Eric W. Biederman)
-Date: Wed, 03 Oct 2018 06:50:47 +0200
+From: tglx@linutronix.de (Thomas Gleixner)
+Date: Wed, 3 Oct 2018 07:25:35 +0200 (CEST)
 Subject: Setting monotonic time?
-In-Reply-To: <alpine.DEB.2.21.1810022205080.1435@nanos.tec.linutronix.de>
- (Thomas Gleixner's message of "Tue, 2 Oct 2018 22:06:28 +0200 (CEST)")
+In-Reply-To: <87in2jskew.fsf@xmission.com>
 References: <20180919205037.9574-1-dima@arista.com>
- <874lej6nny.fsf@xmission.com>
- <20180924205119.GA14833@outlook.office365.com>
- <874leezh8n.fsf@xmission.com>
- <20180925014150.GA6302@outlook.office365.com>
+ <874lej6nny.fsf@xmission.com> <20180924205119.GA14833@outlook.office365.com>
+ <874leezh8n.fsf@xmission.com> <20180925014150.GA6302@outlook.office365.com>
  <87zhw4rwiq.fsf@xmission.com>
  <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
  <87mus1ftb9.fsf@xmission.com>
@@ -16,81 +13,36 @@ References: <20180919205037.9574-1-dima@arista.com>
  <alpine.DEB.2.21.1810012047520.32062@nanos.tec.linutronix.de>
  <CAK8P3a2zTqrCGURE3XVpn3_w6C4R5O+cq8TdtbyKCMGyRk9_jw@mail.gmail.com>
  <alpine.DEB.2.21.1810022205080.1435@nanos.tec.linutronix.de>
-Message-ID: <87in2jskew.fsf@xmission.com>
+ <87in2jskew.fsf@xmission.com>
+Message-ID: <alpine.DEB.2.21.1810030711520.1435@nanos.tec.linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181003045047.HlG0eeEQ7cA3YN7DczJf0U94SY3ccUD3YKXzzrWo_6I@z>
+Message-ID: <20181003052535.EocFpt6KZqYhdlqQ6SZYHiHVS-3Fd78gyTO-63bJSxY@z>
 
-Thomas Gleixner <tglx at linutronix.de> writes:
+On Wed, 3 Oct 2018, Eric W. Biederman wrote:
+> Direct access to hardware/drivers and not through an abstraction like
+> the vfs (an abstraction over block devices) can legitimately be handled
+> by hotplug events.  I unplug one keyboard I plug in another.
+> 
+> I don't know if the input layer is more of a general abstraction
+> or more of a hardware device.  I have not dug into it but my guess
+> is abstraction from what I have heard.
+> 
+> The scary difficulty here is if after restart input is reporting times
+> in CLOCK_MONOTONIC and the applications in the namespace are talking
+> about times in CLOCK_MONOTONIC_SYNC.  Then there is an issue.  As even
+> with a fixed offset the times don't match up.
+> 
+> So a time namespace absolutely needs to do is figure out how to deal
+> with all of the kernel interfaces reporting times and figure out how to
+> report them in the current time namespace.
 
-> On Tue, 2 Oct 2018, Arnd Bergmann wrote:
->> On Mon, Oct 1, 2018@8:53 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->> >
->> > On Mon, 1 Oct 2018, Eric W. Biederman wrote:
->> > > In the context of process migration there is a simpler subproblem that I
->> > > think it is worth exploring if we can do something about.
->> > >
->> > > For a cluster of machines all running with synchronized
->> > > clocks. CLOCK_REALTIME matches. CLOCK_MONOTNIC does not match between
->> > > machines.   Not having a matching CLOCK_MONOTONIC prevents successful
->> > > process migration between nodes in that cluster.
->> > >
->> > > Would it be possible to allow setting CLOCK_MONOTONIC at the very
->> > > beginning of time?  So that all of the nodes in a cluster can be in
->> > > sync?
->> > >
->> > > No change in skew just in offset for CLOCK_MONOTONIC.
->> > >
->> > > There are also dragons involved in coordinating things so that
->> > > CLOCK_MONOTONIC gets set before CLOCK_MONOTONIC gets used.  So I don't
->> > > know if allowing CLOCK_MONOTONIC to be set would be practical but it
->> > > seems work exploring all on it's own.
->> >
->> > It's used very early on in the kernel, so that would be a major surprise
->> > for many things including user space which has expectations on clock
->> > monotonic.
->> >
->> > It would be reasonably easy to add CLOCK_MONONOTIC_SYNC which can be set in
->> > the way you described and then in name spaces make it possible to magically
->> > map CLOCK_MONOTONIC to CLOCK_MONOTONIC_SYNC.
->> >
->> > It still wouldn't allow to have different NTP/PTP time domains, but might
->> > be a good start to address the main migration headaches.
->> 
->> If we make CLOCK_MONOTONIC settable this way in a namespace,
->> do you think that should include device drivers that report timestamps
->> in CLOCK_MONOTONIC base, or only the timekeeping clock and timer
->> interfaces?
->
-> Uurgh. That gets messy very fast.
->
->> Examples for drivers that can report timestamps are input, sound, v4l,
->> and drm. I think most of these can report stamps in either monotonic
->> or realtime base, while socket timestamps notably are always in
->> realtime.
->> 
->> We can probably get away with not setting the timebase for those
->> device drivers as long as the checkpoint/restart and migration features
->> are not expected to restore the state of an open character device
->> in that way. I don't know if that is a reasonable assumption to make
->> for the examples I listed.
->
-> No idea. I'm not a container migration wizard.
+So you want to talk to Arnd who is leading the y2038 effort. He knowns how
+many and which interfaces are involved aside of the obvious core timer
+ones. It's quite an amount and the problem is that you really need to do
+that at the interface level, because many of those time stamps are taken in
+contexts which are completely oblivious of name spaces. Ditto for timeouts
+and similar things which are handed in through these interfaces.
 
-Direct access to hardware/drivers and not through an abstraction like
-the vfs (an abstraction over block devices) can legitimately be handled
-by hotplug events.  I unplug one keyboard I plug in another.
+Thanks,
 
-I don't know if the input layer is more of a general abstraction
-or more of a hardware device.  I have not dug into it but my guess
-is abstraction from what I have heard.
-
-The scary difficulty here is if after restart input is reporting times
-in CLOCK_MONOTONIC and the applications in the namespace are talking
-about times in CLOCK_MONOTONIC_SYNC.  Then there is an issue.  As even
-with a fixed offset the times don't match up.
-
-So a time namespace absolutely needs to do is figure out how to deal
-with all of the kernel interfaces reporting times and figure out how to
-report them in the current time namespace.
-
-Eric
+	tglx
