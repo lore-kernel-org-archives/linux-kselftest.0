@@ -1,63 +1,32 @@
-From: David.Laight@ACULAB.COM (David Laight)
-Date: Wed, 3 Oct 2018 13:21:59 +0000
-Subject: [PATCH 0/3] namei: implement various scoping AT_* flags
-In-Reply-To: <20181001161535.3zslyuk6vmnpioy6@ryuk>
-References: <20180929103453.12025-1-cyphar@cyphar.com>
- <1f1d699b1c8d472495a5b07199c31a6e@AcuMS.aculab.com>
- <20181001161535.3zslyuk6vmnpioy6@ryuk>
-Message-ID: <71b13208253f4b3fa82640ec96bf9301@AcuMS.aculab.com>
+From: luc.vanoostenryck@gmail.com (Luc Van Oostenryck)
+Date: Wed, 3 Oct 2018 15:31:12 +0200
+Subject: [PATCH v7 0/8] arm64: untag user pointers passed to the kernel
+In-Reply-To: <cover.1538485901.git.andreyknvl@google.com>
+References: <cover.1538485901.git.andreyknvl@google.com>
+Message-ID: <20181003133110.4y3xhexjrvffivff@ltop.local>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181003132159.6hb6YXDC4DjlpgvOmVmxL8ujpFSDDTHz43H3-jfXF0s@z>
+Message-ID: <20181003133112.QEKRzFJRS1OmAsXTz9jKHLdWkYg9dqsI9jT_XDku-jo@z>
 
-From: Aleksa Sarai
-> Sent: 01 October 2018 17:16
-> 
-> On 2018-10-01, David Laight <David.Laight@ACULAB.COM> wrote:
+On Tue, Oct 02, 2018@03:12:35PM +0200, Andrey Konovalov wrote:
 ...
-> > >   * Mountpoint crossings are blocked by AT_XDEV.
-> >
-> > You might want a mountpoint flag that allows crossing into the mounted
-> > filesystem (you may need to get out in order to do pwd()).
-> 
-> Like a mount flag? I'm not sure how I feel about that. The intention is
-> to allow for a process to have control over how path lookups are
-> handled, and tying it to a mount flag means that it's no longer entirely
-> up to the process.
 
-Right, but you may have some mount points that you don't want to cross
-and others that it is perfectly fine to cross.
-For example you might want to be able to cross into a 'tmp' filesystem.
+> Changes in v7:
+> - Rebased onto 17b57b18 (4.19-rc6).
+> - Dropped the "arm64: untag user address in __do_user_fault" patch, since
+>   the existing patches already handle user faults properly.
+> - Dropped the "usb, arm64: untag user addresses in devio" patch, since the
+>   passed pointer must come from a vma and therefore be untagged.
+> - Dropped the "arm64: annotate user pointers casts detected by sparse"
+>   patch (see the discussion to the replies of the v6 of this patchset).
+> - Added more context to the cover letter.
+> - Updated Documentation/arm64/tagged-pointers.txt.
 
-...
-> > If you make the flags a property of the directory vnode (perhaps as
-> > well as any syscall flags), and make it inherited by vnode lookup then
-> > it can be used to stop library functions (or entire binaries) using
-> > blocked paths.
-> > You'd then only need to add an fcntl() call to set the flags (but never
-> > clear them) to get the restriction applied to every lookup.
-> 
-> This seems like it might be useful, but it could always be done as a
-> follow-up patch by just setting LOOKUP_BLAH if the dirfd has the flag
-> set. I'm also a little bit concerned that (because fd flags are set on
-> the 'struct file') if you start sharing fds then you can no longer use
-> the lookup scoping for security (a racing process could remove the
-> flags while the management process resolves through it).
+Hi,
 
-I was thinking that the flags would never be removable.
-A management process might have to flip its cwd back and forth
-in order to clear the flags (opendir(".") should give a different
-struct file).
+I'm quite hapy now with what concerns me (sparse).
+Please, feel free to add my:
+Reviewed-by: Luc Van Oostenryck <luc.vanoostenryck at gmail.com>
 
-This all gets tied up with the slight requirement for per-thread cwd.
 
-I had another thought that the crudentials structure used for a file
-lookup could also be taken from the cwd (not sure how it would
-get there - especially if you need the correct group list).
-That would allow a 'management' process to open a file in the context
-of the target user process.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Cheers,
+-- Luc Van Oostenryck
