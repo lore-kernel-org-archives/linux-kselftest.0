@@ -1,91 +1,61 @@
-From: arnd at arndb.de (Arnd Bergmann)
-Date: Wed, 3 Oct 2018 09:02:00 +0200
-Subject: Setting monotonic time?
-In-Reply-To: <87in2jo8u6.fsf@xmission.com>
-References: <20180919205037.9574-1-dima@arista.com>
- <874lej6nny.fsf@xmission.com>
- <20180924205119.GA14833@outlook.office365.com> <874leezh8n.fsf@xmission.com>
- <20180925014150.GA6302@outlook.office365.com> <87zhw4rwiq.fsf@xmission.com>
- <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
- <87mus1ftb9.fsf@xmission.com>
- <alpine.DEB.2.21.1809282023350.1432@nanos.tec.linutronix.de>
- <877ej2xc23.fsf_-_@xmission.com>
- <alpine.DEB.2.21.1810012047520.32062@nanos.tec.linutronix.de>
- <CAK8P3a2zTqrCGURE3XVpn3_w6C4R5O+cq8TdtbyKCMGyRk9_jw@mail.gmail.com>
- <alpine.DEB.2.21.1810022205080.1435@nanos.tec.linutronix.de>
- <87in2jskew.fsf@xmission.com>
- <alpine.DEB.2.21.1810030711520.1435@nanos.tec.linutronix.de>
- <87in2jo8u6.fsf@xmission.com>
-Message-ID: <CAK8P3a2cM4AWKQ9VsZFzUu0qJ-fYiLK5fMXRoTsVcgmFwoeJxg@mail.gmail.com>
+From: David.Laight at ACULAB.COM (David Laight)
+Date: Wed, 3 Oct 2018 13:21:59 +0000
+Subject: [PATCH 0/3] namei: implement various scoping AT_* flags
+In-Reply-To: <20181001161535.3zslyuk6vmnpioy6@ryuk>
+References: <20180929103453.12025-1-cyphar@cyphar.com>
+ <1f1d699b1c8d472495a5b07199c31a6e@AcuMS.aculab.com>
+ <20181001161535.3zslyuk6vmnpioy6@ryuk>
+Message-ID: <71b13208253f4b3fa82640ec96bf9301@AcuMS.aculab.com>
 
-On Wed, Oct 3, 2018 at 8:14 AM Eric W. Biederman <ebiederm at xmission.com> wrote:
->
-> Thomas Gleixner <tglx at linutronix.de> writes:
->
-> > On Wed, 3 Oct 2018, Eric W. Biederman wrote:
-> >> Direct access to hardware/drivers and not through an abstraction like
-> >> the vfs (an abstraction over block devices) can legitimately be handled
-> >> by hotplug events.  I unplug one keyboard I plug in another.
-> >>
-> >> I don't know if the input layer is more of a general abstraction
-> >> or more of a hardware device.  I have not dug into it but my guess
-> >> is abstraction from what I have heard.
-> >>
-> >> The scary difficulty here is if after restart input is reporting times
-> >> in CLOCK_MONOTONIC and the applications in the namespace are talking
-> >> about times in CLOCK_MONOTONIC_SYNC.  Then there is an issue.  As even
-> >> with a fixed offset the times don't match up.
-> >>
-> >> So a time namespace absolutely needs to do is figure out how to deal
-> >> with all of the kernel interfaces reporting times and figure out how to
-> >> report them in the current time namespace.
+From: Aleksa Sarai
+> Sent: 01 October 2018 17:16
+> 
+> On 2018-10-01, David Laight <David.Laight at ACULAB.COM> wrote:
+...
+> > >   * Mountpoint crossings are blocked by AT_XDEV.
 > >
-> > So you want to talk to Arnd who is leading the y2038 effort. He knowns how
-> > many and which interfaces are involved aside of the obvious core timer
-> > ones. It's quite an amount and the problem is that you really need to do
-> > that at the interface level, because many of those time stamps are taken in
-> > contexts which are completely oblivious of name spaces. Ditto for timeouts
-> > and similar things which are handed in through these interfaces.
->
-> Yep.  That sounds right.
+> > You might want a mountpoint flag that allows crossing into the mounted
+> > filesystem (you may need to get out in order to do pwd()).
+> 
+> Like a mount flag? I'm not sure how I feel about that. The intention is
+> to allow for a process to have control over how path lookups are
+> handled, and tying it to a mount flag means that it's no longer entirely
+> up to the process.
 
-Let's stay with the input event example for the moment: Here, we have a
-character device, and a user calls read() to retrieve one or more records
-of type 'struct input_event' using the evdev_read() function. The original
-timestamp gets put there using this logic:
+Right, but you may have some mount points that you don't want to cross
+and others that it is perfectly fine to cross.
+For example you might want to be able to cross into a 'tmp' filesystem.
 
-        ktime_t time;
-        struct timespec64 ts;
-        time = client->clk_type == EV_CLK_REAL ?
-                        ktime_get_real() :
-                        client->clk_type == EV_CLK_MONO ?
-                                ktime_get() :
-                                ktime_get_boottime();
-        ts = ktime_to_timespec64(time);
-        ev.input_event_sec = ts.tv_sec;
-        ev.input_event_usec = ts.tv_nsec / NSEC_PER_USEC;
+...
+> > If you make the flags a property of the directory vnode (perhaps as
+> > well as any syscall flags), and make it inherited by vnode lookup then
+> > it can be used to stop library functions (or entire binaries) using
+> > blocked paths.
+> > You'd then only need to add an fcntl() call to set the flags (but never
+> > clear them) to get the restriction applied to every lookup.
+> 
+> This seems like it might be useful, but it could always be done as a
+> follow-up patch by just setting LOOKUP_BLAH if the dirfd has the flag
+> set. I'm also a little bit concerned that (because fd flags are set on
+> the 'struct file') if you start sharing fds then you can no longer use
+> the lookup scoping for security (a racing process could remove the
+> flags while the management process resolves through it).
 
-clk_type can get set using an ioctl() to real, monotonic or
-boottime. We have to stop using EV_CLK_REAL in the
-future because that breaks in y2038, but I guess EV_CLK_MONO
-and EV_CLK_BOOK should stay.
+I was thinking that the flags would never be removable.
+A management process might have to flip its cwd back and forth
+in order to clear the flags (opendir(".") should give a different
+struct file).
 
-If we want this to work correctly in a namespace that has a
-user defined CLOCK_MONOTONIC timebase, one way to
-do it might be to always call ktime_get() when we record
-the timestamp in the kernel-internal CLOCK_MONOTONIC
-base, but then convert it to the correct base when copying to
-user space.
+This all gets tied up with the slight requirement for per-thread cwd.
 
-Note that AFAIU practically all users of evdev do /not/ actually
-care about the time base, they only care about the elapsed
-time between intervals, e.g. to track how fast a pointer should
-move based on input from a trackpad. I don't see any reason
-why one would compare this timestamp to a clock_gettime()
-value, but of course at the moment this has well-defined
-behavior that would break if we change clock_gettime(), and
-we have a process in the namespace that opens
-/dev/input/eventX and relies on meaningful timestamps
-relative to a particular base.
+I had another thought that the crudentials structure used for a file
+lookup could also be taken from the cwd (not sure how it would
+get there - especially if you need the correct group list).
+That would allow a 'management' process to open a file in the context
+of the target user process.
 
-       Arnd
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
