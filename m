@@ -1,123 +1,102 @@
-From: jannh@google.com (Jann Horn)
-Date: Thu, 4 Oct 2018 20:26:20 +0200
-Subject: [PATCH 2/3] namei: implement AT_THIS_ROOT chroot-like path
- resolution
-In-Reply-To: <20181004162611.vdlujbdguvagalpt@ryuk>
-References: <20180929103453.12025-1-cyphar@cyphar.com>
- <20180929131534.24472-1-cyphar@cyphar.com>
- <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
- <20181004162611.vdlujbdguvagalpt@ryuk>
-Message-ID:
- <CAG48ez2u--Wac7d9n3idC92Pd-M40QzYtR6FKR8PAYr=VQHUBQ@mail.gmail.com>
+From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
+Date: Thu,  4 Oct 2018 15:04:30 -0400
+Subject: [PATCH backport for 4.18] rseq/selftests: fix parametrized test with
+ -fpie
+Message-ID: <20181004190430.812-1-mathieu.desnoyers@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181004182620.dshKJS6Lr_wxFDULi0mb3A2-Gc4TvGgEtM9XERxBHyY@z>
+Message-ID: <20181004190430.pgKWkaWhvhoHO7WCi2k-f1Z0R8XvcbZ1XHtfTqG6b1A@z>
 
-On Thu, Oct 4, 2018@6:26 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
-> On 2018-09-29, Jann Horn <jannh@google.com> wrote:
-> > You attempt to open "C/../../etc/passwd" under the root "/A/B".
-> > Something else concurrently moves /A/B/C to /A/C. This can result in
-> > the following:
-> >
-> > 1. You start the path walk and reach /A/B/C.
-> > 2. The other process moves /A/B/C to /A/C. Your path walk is now at /A/C.
-> > 3. Your path walk follows the first ".." up into /A. This is outside
-> > the process root, but you never actually encountered the process root,
-> > so you don't notice.
-> > 4. Your path walk follows the second ".." up to /. Again, this is
-> > outside the process root, but you don't notice.
-> > 5. Your path walk walks down to /etc/passwd, and the open completes
-> > successfully. You now have an fd pointing outside your chroot.
->
-> I've been playing with this and I have the following patch, which
-> according to my testing protects against attacks where ".." skips over
-> nd->root. It abuses __d_path to figure out if nd->path can be resolved
-> from nd->root (obviously a proper version of this patch would refactor
-> __d_path so it could be used like this -- and would not return
-> -EMULTIHOP).
->
-> I've also attached my reproducer. With it, I was seeing fairly constant
-> breakouts before this patch and after it I didn't see a single breakout
-> after running it overnight. Obviously this is not conclusive, but I'm
-> hoping that it can show what my idea for protecting against ".." was.
->
-> Does this patch make sense? Or is there something wrong with it that I'm
-> not seeing?
->
-> --8<-------------------------------------------------------------------
->
-> There is a fairly easy-to-exploit race condition with chroot(2) (and
-> thus by extension AT_THIS_ROOT and AT_BENEATH) where a rename(2) of a
-> path can be used to "skip over" nd->root and thus escape to the
-> filesystem above nd->root.
->
->   thread1 [attacker]:
->     for (;;)
->       renameat2(AT_FDCWD, "/a/b/c", AT_FDCWD, "/a/d", RENAME_EXCHANGE);
->   thread2 [victim]:
->     for (;;)
->       openat(dirb, "b/c/../../etc/shadow", O_THISROOT);
->
-> With fairly significant regularity, thread2 will resolve to
-> "/etc/shadow" rather than "/a/b/etc/shadow". With this patch, such cases
-> will be detected during ".." resolution (which is the weak point of
-> chroot(2) -- since walking *into* a subdirectory tautologically cannot
-> result in you walking *outside* nd->root).
->
-> The use of __d_path here might seem suspect, however we don't mind if a
-> path is moved from within the chroot to outside the chroot and we
-> incorrectly decide it is safe (because at that point we are still within
-> the set of files which were accessible at the beginning of resolution).
-> However, we can fail resolution on the next path component if it remains
-> outside of the root. A path which has always been outside nd->root
-> during resolution will never be resolveable from nd->root and thus will
-> always be blocked.
->
-> DO NOT MERGE: Currently this code returns -EMULTIHOP in this case,
->               purely as a debugging measure (so that you can see that
->               the protection actually does something). Obviously in the
->               proper patch this will return -EXDEV.
->
-> Signed-off-by: Aleksa Sarai <cyphar at cyphar.com>
-> ---
->  fs/namei.c | 32 ++++++++++++++++++++++++++++++--
->  1 file changed, 30 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/namei.c b/fs/namei.c
-> index 6f995e6de6b1..c8349693d47b 100644
-> --- a/fs/namei.c
-> +++ b/fs/namei.c
-> @@ -53,8 +53,8 @@
->   * The new code replaces the old recursive symlink resolution with
->   * an iterative one (in case of non-nested symlink chains).  It does
->   * this with calls to <fs>_follow_link().
-> - * As a side effect, dir_namei(), _namei() and follow_link() are now
-> - * replaced with a single function lookup_dentry() that can handle all
-> + * As a side effect, dir_namei(), _namei() and follow_link() are now
-> + * replaced with a single function lookup_dentry() that can handle all
->   * the special cases of the former code.
->   *
->   * With the new dcache, the pathname is stored at each inode, at least as
-> @@ -1375,6 +1375,20 @@ static int follow_dotdot_rcu(struct nameidata *nd)
->                                 return -EXDEV;
->                         break;
->                 }
-> +               if (unlikely(nd->flags & (LOOKUP_BENEATH | LOOKUP_CHROOT))) {
-> +                       char *pathbuf, *pathptr;
-> +
-> +                       pathbuf = kmalloc(PATH_MAX, GFP_ATOMIC);
-> +                       if (!pathbuf)
-> +                               return -ECHILD;
-> +                       pathptr = __d_path(&nd->path, &nd->root, pathbuf, PATH_MAX);
-> +                       kfree(pathbuf);
-> +                       if (IS_ERR_OR_NULL(pathptr)) {
-> +                               if (!pathptr)
-> +                                       pathptr = ERR_PTR(-EMULTIHOP);
-> +                               return PTR_ERR(pathptr);
-> +                       }
-> +               }
+commit ce01a1575f45bf319e374592656441021a7f5823 upstream.
 
-One somewhat problematic thing about this approach is that if someone
-tries to lookup
-"a/a/a/a/a/a/a/a/a/a/[...]/../../../../../../../../../.." for some
-reason, you'll have quadratic runtime: For each "..", you'll have to
-walk up to the root.
+On x86-64, the parametrized selftest code for rseq crashes with a
+segmentation fault when compiled with -fpie. This happens when the
+param_test binary is loaded at an address beyond 32-bit on x86-64.
+
+The issue is caused by use of a 32-bit register to hold the address
+of the loop counter variable.
+
+Fix this by using a 64-bit register to calculate the address of the
+loop counter variables as an offset from rip.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+Acked-by: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
+Cc: <stable at vger.kernel.org> # v4.18
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Joel Fernandes <joelaf at google.com>
+Cc: Peter Zijlstra <peterz at infradead.org>
+Cc: Catalin Marinas <catalin.marinas at arm.com>
+Cc: Dave Watson <davejwatson at fb.com>
+Cc: Will Deacon <will.deacon at arm.com>
+Cc: Andi Kleen <andi at firstfloor.org>
+Cc: linux-kselftest at vger.kernel.org
+Cc: "H . Peter Anvin" <hpa at zytor.com>
+Cc: Chris Lameter <cl at linux.com>
+Cc: Russell King <linux at arm.linux.org.uk>
+Cc: Michael Kerrisk <mtk.manpages at gmail.com>
+Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
+Cc: Paul Turner <pjt at google.com>
+Cc: Boqun Feng <boqun.feng at gmail.com>
+Cc: Josh Triplett <josh at joshtriplett.org>
+Cc: Steven Rostedt <rostedt at goodmis.org>
+Cc: Ben Maurer <bmaurer at fb.com>
+Cc: Andy Lutomirski <luto at amacapital.net>
+Cc: Andrew Morton <akpm at linux-foundation.org>
+Cc: Linus Torvalds <torvalds at linux-foundation.org>
+---
+ tools/testing/selftests/rseq/param_test.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/rseq/param_test.c b/tools/testing/selftests/rseq/param_test.c
+index 615252331813..4bc071525bf7 100644
+--- a/tools/testing/selftests/rseq/param_test.c
++++ b/tools/testing/selftests/rseq/param_test.c
+@@ -56,15 +56,13 @@ unsigned int yield_mod_cnt, nr_abort;
+ 			printf(fmt, ## __VA_ARGS__);	\
+ 	} while (0)
+ 
+-#if defined(__x86_64__) || defined(__i386__)
++#ifdef __i386__
+ 
+ #define INJECT_ASM_REG	"eax"
+ 
+ #define RSEQ_INJECT_CLOBBER \
+ 	, INJECT_ASM_REG
+ 
+-#ifdef __i386__
+-
+ #define RSEQ_INJECT_ASM(n) \
+ 	"mov asm_loop_cnt_" #n ", %%" INJECT_ASM_REG "\n\t" \
+ 	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
+@@ -76,9 +74,16 @@ unsigned int yield_mod_cnt, nr_abort;
+ 
+ #elif defined(__x86_64__)
+ 
++#define INJECT_ASM_REG_P	"rax"
++#define INJECT_ASM_REG		"eax"
++
++#define RSEQ_INJECT_CLOBBER \
++	, INJECT_ASM_REG_P \
++	, INJECT_ASM_REG
++
+ #define RSEQ_INJECT_ASM(n) \
+-	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG "\n\t" \
+-	"mov (%%" INJECT_ASM_REG "), %%" INJECT_ASM_REG "\n\t" \
++	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG_P "\n\t" \
++	"mov (%%" INJECT_ASM_REG_P "), %%" INJECT_ASM_REG "\n\t" \
+ 	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
+ 	"jz 333f\n\t" \
+ 	"222:\n\t" \
+@@ -86,10 +91,6 @@ unsigned int yield_mod_cnt, nr_abort;
+ 	"jnz 222b\n\t" \
+ 	"333:\n\t"
+ 
+-#else
+-#error "Unsupported architecture"
+-#endif
+-
+ #elif defined(__ARMEL__)
+ 
+ #define RSEQ_INJECT_INPUT \
+-- 
+2.17.1
