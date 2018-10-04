@@ -1,52 +1,160 @@
-From: naresh.kamboju@linaro.org (Naresh Kamboju)
-Date: Thu, 4 Oct 2018 15:04:04 +0530
-Subject: selftests/rseq: run_param_test.sh runs long
-Message-ID:
- <CA+G9fYt-rZ-aYdZZ8hDXHi_uB2C27VqVMn0Qxs6CJ3EFDVQTVA@mail.gmail.com>
+From: cyphar@cyphar.com (Aleksa Sarai)
+Date: Fri, 5 Oct 2018 02:26:11 +1000
+Subject: [PATCH 2/3] namei: implement AT_THIS_ROOT chroot-like path
+ resolution
+In-Reply-To: <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
+References: <20180929103453.12025-1-cyphar@cyphar.com>
+ <20180929131534.24472-1-cyphar@cyphar.com>
+ <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
+Message-ID: <20181004162611.vdlujbdguvagalpt@ryuk>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181004093404.vNK5JtsnjJoWlKd4U0HSYo0PY6haLLsRpOwmDZFZ-8o@z>
+Message-ID: <20181004162611.58nMldREraMUtWsJfktuudrYIXe0UOY1eJVoWp0Xc9M@z>
 
-Restart able sequences test "run_param_test.sh" test case running long
-on target devices. I have listed test duration on x86_64, arm64 and
-arm32.
+On 2018-09-29, Jann Horn <jannh@google.com> wrote:
+> You attempt to open "C/../../etc/passwd" under the root "/A/B".
+> Something else concurrently moves /A/B/C to /A/C. This can result in
+> the following:
+> 
+> 1. You start the path walk and reach /A/B/C.
+> 2. The other process moves /A/B/C to /A/C. Your path walk is now at /A/C.
+> 3. Your path walk follows the first ".." up into /A. This is outside
+> the process root, but you never actually encountered the process root,
+> so you don't notice.
+> 4. Your path walk follows the second ".." up to /. Again, this is
+> outside the process root, but you don't notice.
+> 5. Your path walk walks down to /etc/passwd, and the open completes
+> successfully. You now have an fd pointing outside your chroot.
 
-Steps:
-# cd selftests/rseq
-# time ./run_param_test.sh
+I've been playing with this and I have the following patch, which
+according to my testing protects against attacks where ".." skips over
+nd->root. It abuses __d_path to figure out if nd->path can be resolved
+from nd->root (obviously a proper version of this patch would refactor
+__d_path so it could be used like this -- and would not return
+-EMULTIHOP).
 
-x86_64:
-real 10m7.311s
-user 3m5.740s
-sys 20m11.961s
+I've also attached my reproducer. With it, I was seeing fairly constant
+breakouts before this patch and after it I didn't see a single breakout
+after running it overnight. Obviously this is not conclusive, but I'm
+hoping that it can show what my idea for protecting against ".." was.
 
-Juno-r2 (arm64):
-real 26m33.530s
-user 13m40.909s
-sys 116m52.032s
+Does this patch make sense? Or is there something wrong with it that I'm
+not seeing?
 
-Dragonboard-410c (arm64):
-More than hour and counting
+--8<-------------------------------------------------------------------
 
-Beagleboard x15 (arm32):
-More than hour and counting
+There is a fairly easy-to-exploit race condition with chroot(2) (and
+thus by extension AT_THIS_ROOT and AT_BENEATH) where a rename(2) of a
+path can be used to "skip over" nd->root and thus escape to the
+filesystem above nd->root.
 
-Full test job on Juno (arm64):
-https://lkft.validation.linaro.org/scheduler/job/451267#L1331
+  thread1 [attacker]:
+    for (;;)
+      renameat2(AT_FDCWD, "/a/b/c", AT_FDCWD, "/a/d", RENAME_EXCHANGE);
+  thread2 [victim]:
+    for (;;)
+      openat(dirb, "b/c/../../etc/shadow", O_THISROOT);
 
-Full test job on x15 (arm32):
-https://lkft.validation.linaro.org/scheduler/job/451310
+With fairly significant regularity, thread2 will resolve to
+"/etc/shadow" rather than "/a/b/etc/shadow". With this patch, such cases
+will be detected during ".." resolution (which is the weak point of
+chroot(2) -- since walking *into* a subdirectory tautologically cannot
+result in you walking *outside* nd->root).
 
+The use of __d_path here might seem suspect, however we don't mind if a
+path is moved from within the chroot to outside the chroot and we
+incorrectly decide it is safe (because at that point we are still within
+the set of files which were accessible at the beginning of resolution).
+However, we can fail resolution on the next path component if it remains
+outside of the root. A path which has always been outside nd->root
+during resolution will never be resolveable from nd->root and thus will
+always be blocked.
 
-Any chance we could reduce the number of loops (REPS=1000) ?
-or
-Is it more of bench marking performance test case than functional test case ?
+DO NOT MERGE: Currently this code returns -EMULTIHOP in this case,
+	      purely as a debugging measure (so that you can see that
+	      the protection actually does something). Obviously in the
+	      proper patch this will return -EXDEV.
 
-Single test case running more than hour on device under testing (DUT)
-is not a great idea for testing per commit / push. Your feedback is
-appreciated on running or skipping (exclude from default run) this
-test case from selftest full run.
+Signed-off-by: Aleksa Sarai <cyphar at cyphar.com>
+---
+ fs/namei.c | 32 ++++++++++++++++++++++++++++++--
+ 1 file changed, 30 insertions(+), 2 deletions(-)
 
-Thank you.
+diff --git a/fs/namei.c b/fs/namei.c
+index 6f995e6de6b1..c8349693d47b 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -53,8 +53,8 @@
+  * The new code replaces the old recursive symlink resolution with
+  * an iterative one (in case of non-nested symlink chains).  It does
+  * this with calls to <fs>_follow_link().
+- * As a side effect, dir_namei(), _namei() and follow_link() are now 
+- * replaced with a single function lookup_dentry() that can handle all 
++ * As a side effect, dir_namei(), _namei() and follow_link() are now
++ * replaced with a single function lookup_dentry() that can handle all
+  * the special cases of the former code.
+  *
+  * With the new dcache, the pathname is stored at each inode, at least as
+@@ -1375,6 +1375,20 @@ static int follow_dotdot_rcu(struct nameidata *nd)
+ 				return -EXDEV;
+ 			break;
+ 		}
++		if (unlikely(nd->flags & (LOOKUP_BENEATH | LOOKUP_CHROOT))) {
++			char *pathbuf, *pathptr;
++
++			pathbuf = kmalloc(PATH_MAX, GFP_ATOMIC);
++			if (!pathbuf)
++				return -ECHILD;
++			pathptr = __d_path(&nd->path, &nd->root, pathbuf, PATH_MAX);
++			kfree(pathbuf);
++			if (IS_ERR_OR_NULL(pathptr)) {
++				if (!pathptr)
++					pathptr = ERR_PTR(-EMULTIHOP);
++				return PTR_ERR(pathptr);
++			}
++		}
+ 		if (nd->path.dentry != nd->path.mnt->mnt_root) {
+ 			struct dentry *old = nd->path.dentry;
+ 			struct dentry *parent = old->d_parent;
+@@ -1510,6 +1524,20 @@ static int follow_dotdot(struct nameidata *nd)
+ 				return -EXDEV;
+ 			break;
+ 		}
++		if (unlikely(nd->flags & (LOOKUP_BENEATH | LOOKUP_CHROOT))) {
++			char *pathbuf, *pathptr;
++
++			pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
++			if (!pathbuf)
++				return -ENOMEM;
++			pathptr = __d_path(&nd->path, &nd->root, pathbuf, PATH_MAX);
++			kfree(pathbuf);
++			if (IS_ERR_OR_NULL(pathptr)) {
++				if (!pathptr)
++					pathptr = ERR_PTR(-EMULTIHOP);
++				return PTR_ERR(pathptr);
++			}
++		}
+ 		if (nd->path.dentry != nd->path.mnt->mnt_root) {
+ 			int ret = path_parent_directory(&nd->path);
+ 			if (ret)
+-- 
+2.19.0
 
-Best regards
-Naresh Kamboju
+-- 
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: rename_attack.c
+Type: text/x-c
+Size: 3172 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181005/d6950882/attachment.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181005/d6950882/attachment.sig>
