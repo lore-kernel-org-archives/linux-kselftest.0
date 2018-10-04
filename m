@@ -1,55 +1,97 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Thu, 4 Oct 2018 19:20:51 +0200
-Subject: [PATCH 1/3] namei: implement O_BENEATH-style AT_* flags
-In-Reply-To: <20181001160431.emb6b2hf32b754cl@ryuk>
-References: <20180929103453.12025-1-cyphar@cyphar.com>
- <20180929103453.12025-2-cyphar@cyphar.com>
- <CAG48ez17EQuJQAZUg5hDFXhkjnnVFh39=aD+j0FBdsoTONSGEA@mail.gmail.com>
- <20181001130038.s5ztphs3pl2zt3ut@brauner.io>
- <20181001160431.emb6b2hf32b754cl@ryuk>
-Message-ID: <20181004172050.wja5nwjkfa3jjmzw@brauner.io>
+From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
+Date: Thu, 4 Oct 2018 13:25:55 -0400 (EDT)
+Subject: selftests/rseq: run_param_test.sh runs long
+In-Reply-To: <CA+G9fYt-rZ-aYdZZ8hDXHi_uB2C27VqVMn0Qxs6CJ3EFDVQTVA@mail.gmail.com>
+References: <CA+G9fYt-rZ-aYdZZ8hDXHi_uB2C27VqVMn0Qxs6CJ3EFDVQTVA@mail.gmail.com>
+Message-ID: <1350032918.3214.1538673955923.JavaMail.zimbra@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181004172051.bZr7W204ous5P-Tfp0V1HE-4X9nf5ZffT0zHOofR4vE@z>
+Message-ID: <20181004172555.bW8NQ5ULESw8-1qAlio_DFx2FhkVluZc8qK5qfvYnGg@z>
 
-On Tue, Oct 02, 2018@02:04:31AM +1000, Aleksa Sarai wrote:
-> On 2018-10-01, Christian Brauner <christian@brauner.io> wrote:
-> > On Mon, Oct 01, 2018@02:28:03PM +0200, Jann Horn wrote:
-> > > On Sat, Sep 29, 2018@4:28 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
-> > > > * AT_BENEATH: Disallow ".." or absolute paths (either in the path or
-> > > >   found during symlink resolution) to escape the starting point of name
-> > > >   resolution, though ".." is permitted in cases like "foo/../bar".
-> > > >   Relative symlinks are still allowed (as long as they don't escape the
-> > > >   starting point).
-> > > 
-> > > As I said on the other thread, I would strongly prefer an API that
-> > > behaves along the lines of David Drysdale's old patch
-> > > https://lore.kernel.org/lkml/1439458366-8223-2-git-send-email-drysdale at google.com/
-> > > : Forbid any use of "..". This would also be more straightforward to
-> > > implement safely. If that doesn't work for you, I would like it if you
-> > > could at least make that an option. I would like it if this API could
-> > > mitigate straightforward directory traversal bugs such as
-> > > https://bugs.chromium.org/p/project-zero/issues/detail?id=1583, where
-> > > a confused deputy attempts to access a path like
-> > > "/mnt/media_rw/../../data" while intending to access a directory under
-> > > "/mnt/media_rw".
-> > 
-> > Oh, the semantics for this changed in this patchset, hah. I was still on
-> > vacation so didn't get to look at it before it was sent out. From prior
-> > discussion I remember that the original intention actual was what you
-> > argue for. And the patchset should be as tight as possible. Having
-> > special cases where ".." is allowed just sounds like an invitation for
-> > userspace to get it wrong.
-> > Aleksa, did you have a specific use-case in mind that made you change
-> > this or was it already present in an earlier iteration of the patchset
-> > by someone else?
-> 
-> Al's original patchset allowed "..". A quick survey of my machine shows
-> that there are 100k symlinks that contain ".." (~37% of all symlinks on
-> my machine). This indicates to me that you would be restricting a large
-> amount of reasonable resolutions because of this restriction.
-> 
-> I posted a proposed way to protect against ".." shenanigans. If it's
-> turns out this is not possible, I'm okay with disallowing ".." (assuming
-> Al is also okay with that).
+Hi Naresh,
 
-Sounds acceptable to me.
+----- On Oct 4, 2018,@5:34 AM, naresh kamboju naresh.kamboju@linaro.org wrote:
+
+> Restart able sequences test "run_param_test.sh" test case running long
+> on target devices. I have listed test duration on x86_64, arm64 and
+> arm32.
+
+Considering that failures only happen randomly when the scheduler
+preempts threads running in a rseq critical section, we need to have
+some amount of repetition in there.
+
+There are however other aspects that we might want to tweak based on the
+detected system configuration.
+
+As a baseline, run_param_test.sh completes in 3m49s on my 16-core x86-64
+(+hyperthreading).
+
+I see that your x86-64 completes in 10m. We might want to tweak the number of
+threads used in each test (currently always at its default of 200) based on the
+number of detected cpus. The formula nr_cpus * 5 is an estimate that would
+be close to the 200 threads that are configured to run in about 4m on my
+main test system. It can be specified to param_test with the following
+option:
+
+	[-t N] Number of threads (default 200)
+
+The goal behind having 5 threads per cpu is to ensure the scheduler will preempt
+the running threads frequently enough.
+
+I am really tempted to adapt the number of threads based on the number of
+detected cpus rather than make the number of loops smaller, so we can keep
+the current amount of work per cpu (and therefore likelihood to trigger a
+rseq failure scenario).
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+
+> 
+> Steps:
+> # cd selftests/rseq
+> # time ./run_param_test.sh
+> 
+> x86_64:
+> real 10m7.311s
+> user 3m5.740s
+> sys 20m11.961s
+> 
+> Juno-r2 (arm64):
+> real 26m33.530s
+> user 13m40.909s
+> sys 116m52.032s
+> 
+> Dragonboard-410c (arm64):
+> More than hour and counting
+> 
+> Beagleboard x15 (arm32):
+> More than hour and counting
+> 
+> Full test job on Juno (arm64):
+> https://lkft.validation.linaro.org/scheduler/job/451267#L1331
+> 
+> Full test job on x15 (arm32):
+> https://lkft.validation.linaro.org/scheduler/job/451310
+> 
+> 
+> Any chance we could reduce the number of loops (REPS=1000) ?
+> or
+> Is it more of bench marking performance test case than functional test case ?
+> 
+> Single test case running more than hour on device under testing (DUT)
+> is not a great idea for testing per commit / push. Your feedback is
+> appreciated on running or skipping (exclude from default run) this
+> test case from selftest full run.
+> 
+> Thank you.
+> 
+> Best regards
+> Naresh Kamboju
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
