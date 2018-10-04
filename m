@@ -1,95 +1,87 @@
-From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
-Date: Thu, 4 Oct 2018 13:25:55 -0400 (EDT)
-Subject: selftests/rseq: run_param_test.sh runs long
-In-Reply-To: <CA+G9fYt-rZ-aYdZZ8hDXHi_uB2C27VqVMn0Qxs6CJ3EFDVQTVA@mail.gmail.com>
-References: <CA+G9fYt-rZ-aYdZZ8hDXHi_uB2C27VqVMn0Qxs6CJ3EFDVQTVA@mail.gmail.com>
-Message-ID: <1350032918.3214.1538673955923.JavaMail.zimbra@efficios.com>
+From: christian at brauner.io (Christian Brauner)
+Date: Thu, 4 Oct 2018 19:27:34 +0200
+Subject: [PATCH 2/3] namei: implement AT_THIS_ROOT chroot-like path
+ resolution
+In-Reply-To: <20181001161833.sg5iy6gk7n7crcvy@ryuk>
+References: <20180929103453.12025-1-cyphar@cyphar.com>
+ <20180929131534.24472-1-cyphar@cyphar.com>
+ <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
+ <20181001054246.gfinmx3api7kjhmc@ryuk>
+ <CAG48ez3ApZC5cGzTxyt1ej0CyhYPD4PUEf5nbkqPmNbO+daOXQ@mail.gmail.com>
+ <20181001161833.sg5iy6gk7n7crcvy@ryuk>
+Message-ID: <20181004172733.x75nmwqan2iu3kyv@brauner.io>
 
-Hi Naresh,
-
------ On Oct 4, 2018, at 5:34 AM, naresh kamboju naresh.kamboju at linaro.org wrote:
-
-> Restart able sequences test "run_param_test.sh" test case running long
-> on target devices. I have listed test duration on x86_64, arm64 and
-> arm32.
-
-Considering that failures only happen randomly when the scheduler
-preempts threads running in a rseq critical section, we need to have
-some amount of repetition in there.
-
-There are however other aspects that we might want to tweak based on the
-detected system configuration.
-
-As a baseline, run_param_test.sh completes in 3m49s on my 16-core x86-64
-(+hyperthreading).
-
-I see that your x86-64 completes in 10m. We might want to tweak the number of
-threads used in each test (currently always at its default of 200) based on the
-number of detected cpus. The formula nr_cpus * 5 is an estimate that would
-be close to the 200 threads that are configured to run in about 4m on my
-main test system. It can be specified to param_test with the following
-option:
-
-	[-t N] Number of threads (default 200)
-
-The goal behind having 5 threads per cpu is to ensure the scheduler will preempt
-the running threads frequently enough.
-
-I am really tempted to adapt the number of threads based on the number of
-detected cpus rather than make the number of loops smaller, so we can keep
-the current amount of work per cpu (and therefore likelihood to trigger a
-rseq failure scenario).
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
-
-
+On Tue, Oct 02, 2018 at 02:18:33AM +1000, Aleksa Sarai wrote:
+> On 2018-10-01, Jann Horn <jannh at google.com> wrote:
+> > > If this is an issue for AT_THIS_ROOT, I believe this might also be an
+> > > issue for AT_BENEATH since they are effectively both using the same
+> > > nd->root trick (so you could similarly trick AT_BENEATH to not error
+> > > out). So we'd need to figure out how to solve this problem in order for
+> > > AT_BENEATH to be safe.
+> > 
+> > Oh, wait, what? I think I didn't notice that the semantics of
+> > AT_BENEATH changed like that since the original posting of David
+> > Drysdale's O_BENEATH_ONLY patch
+> > (https://lore.kernel.org/lkml/1439458366-8223-2-git-send-email-drysdale at google.com/).
+> > David's patch had nice, straightforward semantics, blocking any form
+> > of upwards traversal. Why was that changed? Does anyone actually want
+> > to use paths that contain ".." with AT_BENEATH? I would strongly
+> > prefer something that blocks any use of "..".
+> > 
+> > @Al: It looks like this already changed back when you posted
+> > https://lore.kernel.org/lkml/20170429220414.GT29622 at ZenIV.linux.org.uk/
+> > ?
 > 
-> Steps:
-> # cd selftests/rseq
-> # time ./run_param_test.sh
+> Yes, I copied the semantics from Al's patchset. I don't know why he felt
+> strongly that this was the best idea, but in my opinion allowing paths
+> like "a/../b/../c" seems like it's quite useful because otherwise you
+> wouldn't be able to operate on most distribution root filesystems (many
+> have symlinks that have ".." components). Looking at my own (openSUSE)
+> machine there are something like 100k such symlinks (~37% of symlinks on
+> my machine).
 > 
-> x86_64:
-> real 10m7.311s
-> user 3m5.740s
-> sys 20m11.961s
+> While I do understand that the easiest way of solving this problem is to
+> disallow ".." entirely with AT_BENEATH, given that support ".." has
+> utility, I would like to know whether it's actually not possible to have
+> this work safely.
 > 
-> Juno-r2 (arm64):
-> real 26m33.530s
-> user 13m40.909s
-> sys 116m52.032s
+> > > Speaking naively, doesn't it make sense to invalidate the walk if a path
+> > > component was modified? Or is this something that would be far too
+> > > costly with little benefit? What if we do more aggressive nd->root
+> > > checks when resolving with AT_BENEATH or AT_THIS_ROOT (or if nd->root !=
+> > > current->mnt_ns->root)?
+> > 
+> > It seems to me like doing that would basically require looking at each
+> > node in the path walk twice? And it'd be difficult to guarantee
+> > forward progress unless you're willing to do some fairly heavy
+> > locking.
 > 
-> Dragonboard-410c (arm64):
-> More than hour and counting
+> I had another idea since I wrote my previous mail -- since the issue (at
+> least the way I understand it) is that ".." can "skip" over nd->root
+> because of the rename, what if we had some sort of is_descendant() check
+> within follow_dotdot()? (FWIW, ".." already has some pretty interesting
+> "hand-over-hand" locking semantics.) This should be effectively similar
+> to how prepend_path() deals with a path that is not reachable from @root
+> (I'm not sure if the locking is acceptable for the namei path though).
 > 
-> Beagleboard x15 (arm32):
-> More than hour and counting
+> Since ".." with AT_THIS_ROOT (or AT_BENEATH) is not going to be the most
+> common component type (and we only need to do these checks for those
+> flags), I would think that the extra cost would not be _that_ awful.
 > 
-> Full test job on Juno (arm64):
-> https://lkft.validation.linaro.org/scheduler/job/451267#L1331
+> Would this work?
 > 
-> Full test job on x15 (arm32):
-> https://lkft.validation.linaro.org/scheduler/job/451310
+> > > You're right about this -- for C runtimes. In Go we cannot do a raw
+> > > clone() or fork() (if you do it manually with RawSyscall you'll end with
+> > > broken runtime state). So you're forced to do fork+exec (which then
+> > > means that you can't use CLONE_FILES and must use SCM_RIGHTS). Same goes
+> > > for CLONE_VFORK.
+> > 
+> > If you insist on implementing every last bit of your code in Go, I guess.
 > 
-> 
-> Any chance we could reduce the number of loops (REPS=1000) ?
-> or
-> Is it more of bench marking performance test case than functional test case ?
-> 
-> Single test case running more than hour on device under testing (DUT)
-> is not a great idea for testing per commit / push. Your feedback is
-> appreciated on running or skipping (exclude from default run) this
-> test case from selftest full run.
-> 
-> Thank you.
-> 
-> Best regards
-> Naresh Kamboju
+> Fair enough, though I believe this would affect most multi-threaded
+> programs as well (regardless of the language they're written in).
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+(Depends on whether you do any explicit locking and have atfork handlers
+for your locks and so on. If you do a clone syscall directly to avoid
+having libc running any additional atfork handlers (flushing streams
+etc.) it's doable though not ideal.)
