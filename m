@@ -1,160 +1,55 @@
-From: cyphar@cyphar.com (Aleksa Sarai)
-Date: Fri, 5 Oct 2018 02:26:11 +1000
-Subject: [PATCH 2/3] namei: implement AT_THIS_ROOT chroot-like path
- resolution
-In-Reply-To: <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
+From: christian@brauner.io (Christian Brauner)
+Date: Thu, 4 Oct 2018 19:20:51 +0200
+Subject: [PATCH 1/3] namei: implement O_BENEATH-style AT_* flags
+In-Reply-To: <20181001160431.emb6b2hf32b754cl@ryuk>
 References: <20180929103453.12025-1-cyphar@cyphar.com>
- <20180929131534.24472-1-cyphar@cyphar.com>
- <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
-Message-ID: <20181004162611.vdlujbdguvagalpt@ryuk>
+ <20180929103453.12025-2-cyphar@cyphar.com>
+ <CAG48ez17EQuJQAZUg5hDFXhkjnnVFh39=aD+j0FBdsoTONSGEA@mail.gmail.com>
+ <20181001130038.s5ztphs3pl2zt3ut@brauner.io>
+ <20181001160431.emb6b2hf32b754cl@ryuk>
+Message-ID: <20181004172050.wja5nwjkfa3jjmzw@brauner.io>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181004162611.58nMldREraMUtWsJfktuudrYIXe0UOY1eJVoWp0Xc9M@z>
+Message-ID: <20181004172051.bZr7W204ous5P-Tfp0V1HE-4X9nf5ZffT0zHOofR4vE@z>
 
-On 2018-09-29, Jann Horn <jannh@google.com> wrote:
-> You attempt to open "C/../../etc/passwd" under the root "/A/B".
-> Something else concurrently moves /A/B/C to /A/C. This can result in
-> the following:
+On Tue, Oct 02, 2018@02:04:31AM +1000, Aleksa Sarai wrote:
+> On 2018-10-01, Christian Brauner <christian@brauner.io> wrote:
+> > On Mon, Oct 01, 2018@02:28:03PM +0200, Jann Horn wrote:
+> > > On Sat, Sep 29, 2018@4:28 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
+> > > > * AT_BENEATH: Disallow ".." or absolute paths (either in the path or
+> > > >   found during symlink resolution) to escape the starting point of name
+> > > >   resolution, though ".." is permitted in cases like "foo/../bar".
+> > > >   Relative symlinks are still allowed (as long as they don't escape the
+> > > >   starting point).
+> > > 
+> > > As I said on the other thread, I would strongly prefer an API that
+> > > behaves along the lines of David Drysdale's old patch
+> > > https://lore.kernel.org/lkml/1439458366-8223-2-git-send-email-drysdale at google.com/
+> > > : Forbid any use of "..". This would also be more straightforward to
+> > > implement safely. If that doesn't work for you, I would like it if you
+> > > could at least make that an option. I would like it if this API could
+> > > mitigate straightforward directory traversal bugs such as
+> > > https://bugs.chromium.org/p/project-zero/issues/detail?id=1583, where
+> > > a confused deputy attempts to access a path like
+> > > "/mnt/media_rw/../../data" while intending to access a directory under
+> > > "/mnt/media_rw".
+> > 
+> > Oh, the semantics for this changed in this patchset, hah. I was still on
+> > vacation so didn't get to look at it before it was sent out. From prior
+> > discussion I remember that the original intention actual was what you
+> > argue for. And the patchset should be as tight as possible. Having
+> > special cases where ".." is allowed just sounds like an invitation for
+> > userspace to get it wrong.
+> > Aleksa, did you have a specific use-case in mind that made you change
+> > this or was it already present in an earlier iteration of the patchset
+> > by someone else?
 > 
-> 1. You start the path walk and reach /A/B/C.
-> 2. The other process moves /A/B/C to /A/C. Your path walk is now at /A/C.
-> 3. Your path walk follows the first ".." up into /A. This is outside
-> the process root, but you never actually encountered the process root,
-> so you don't notice.
-> 4. Your path walk follows the second ".." up to /. Again, this is
-> outside the process root, but you don't notice.
-> 5. Your path walk walks down to /etc/passwd, and the open completes
-> successfully. You now have an fd pointing outside your chroot.
+> Al's original patchset allowed "..". A quick survey of my machine shows
+> that there are 100k symlinks that contain ".." (~37% of all symlinks on
+> my machine). This indicates to me that you would be restricting a large
+> amount of reasonable resolutions because of this restriction.
+> 
+> I posted a proposed way to protect against ".." shenanigans. If it's
+> turns out this is not possible, I'm okay with disallowing ".." (assuming
+> Al is also okay with that).
 
-I've been playing with this and I have the following patch, which
-according to my testing protects against attacks where ".." skips over
-nd->root. It abuses __d_path to figure out if nd->path can be resolved
-from nd->root (obviously a proper version of this patch would refactor
-__d_path so it could be used like this -- and would not return
--EMULTIHOP).
-
-I've also attached my reproducer. With it, I was seeing fairly constant
-breakouts before this patch and after it I didn't see a single breakout
-after running it overnight. Obviously this is not conclusive, but I'm
-hoping that it can show what my idea for protecting against ".." was.
-
-Does this patch make sense? Or is there something wrong with it that I'm
-not seeing?
-
---8<-------------------------------------------------------------------
-
-There is a fairly easy-to-exploit race condition with chroot(2) (and
-thus by extension AT_THIS_ROOT and AT_BENEATH) where a rename(2) of a
-path can be used to "skip over" nd->root and thus escape to the
-filesystem above nd->root.
-
-  thread1 [attacker]:
-    for (;;)
-      renameat2(AT_FDCWD, "/a/b/c", AT_FDCWD, "/a/d", RENAME_EXCHANGE);
-  thread2 [victim]:
-    for (;;)
-      openat(dirb, "b/c/../../etc/shadow", O_THISROOT);
-
-With fairly significant regularity, thread2 will resolve to
-"/etc/shadow" rather than "/a/b/etc/shadow". With this patch, such cases
-will be detected during ".." resolution (which is the weak point of
-chroot(2) -- since walking *into* a subdirectory tautologically cannot
-result in you walking *outside* nd->root).
-
-The use of __d_path here might seem suspect, however we don't mind if a
-path is moved from within the chroot to outside the chroot and we
-incorrectly decide it is safe (because at that point we are still within
-the set of files which were accessible at the beginning of resolution).
-However, we can fail resolution on the next path component if it remains
-outside of the root. A path which has always been outside nd->root
-during resolution will never be resolveable from nd->root and thus will
-always be blocked.
-
-DO NOT MERGE: Currently this code returns -EMULTIHOP in this case,
-	      purely as a debugging measure (so that you can see that
-	      the protection actually does something). Obviously in the
-	      proper patch this will return -EXDEV.
-
-Signed-off-by: Aleksa Sarai <cyphar at cyphar.com>
----
- fs/namei.c | 32 ++++++++++++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
-
-diff --git a/fs/namei.c b/fs/namei.c
-index 6f995e6de6b1..c8349693d47b 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -53,8 +53,8 @@
-  * The new code replaces the old recursive symlink resolution with
-  * an iterative one (in case of non-nested symlink chains).  It does
-  * this with calls to <fs>_follow_link().
-- * As a side effect, dir_namei(), _namei() and follow_link() are now 
-- * replaced with a single function lookup_dentry() that can handle all 
-+ * As a side effect, dir_namei(), _namei() and follow_link() are now
-+ * replaced with a single function lookup_dentry() that can handle all
-  * the special cases of the former code.
-  *
-  * With the new dcache, the pathname is stored at each inode, at least as
-@@ -1375,6 +1375,20 @@ static int follow_dotdot_rcu(struct nameidata *nd)
- 				return -EXDEV;
- 			break;
- 		}
-+		if (unlikely(nd->flags & (LOOKUP_BENEATH | LOOKUP_CHROOT))) {
-+			char *pathbuf, *pathptr;
-+
-+			pathbuf = kmalloc(PATH_MAX, GFP_ATOMIC);
-+			if (!pathbuf)
-+				return -ECHILD;
-+			pathptr = __d_path(&nd->path, &nd->root, pathbuf, PATH_MAX);
-+			kfree(pathbuf);
-+			if (IS_ERR_OR_NULL(pathptr)) {
-+				if (!pathptr)
-+					pathptr = ERR_PTR(-EMULTIHOP);
-+				return PTR_ERR(pathptr);
-+			}
-+		}
- 		if (nd->path.dentry != nd->path.mnt->mnt_root) {
- 			struct dentry *old = nd->path.dentry;
- 			struct dentry *parent = old->d_parent;
-@@ -1510,6 +1524,20 @@ static int follow_dotdot(struct nameidata *nd)
- 				return -EXDEV;
- 			break;
- 		}
-+		if (unlikely(nd->flags & (LOOKUP_BENEATH | LOOKUP_CHROOT))) {
-+			char *pathbuf, *pathptr;
-+
-+			pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
-+			if (!pathbuf)
-+				return -ENOMEM;
-+			pathptr = __d_path(&nd->path, &nd->root, pathbuf, PATH_MAX);
-+			kfree(pathbuf);
-+			if (IS_ERR_OR_NULL(pathptr)) {
-+				if (!pathptr)
-+					pathptr = ERR_PTR(-EMULTIHOP);
-+				return PTR_ERR(pathptr);
-+			}
-+		}
- 		if (nd->path.dentry != nd->path.mnt->mnt_root) {
- 			int ret = path_parent_directory(&nd->path);
- 			if (ret)
--- 
-2.19.0
-
--- 
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: rename_attack.c
-Type: text/x-c
-Size: 3172 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181005/d6950882/attachment.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181005/d6950882/attachment.sig>
+Sounds acceptable to me.
