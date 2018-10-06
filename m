@@ -1,33 +1,114 @@
-From: shuah@kernel.org (Shuah Khan (Samsung OSG))
-Date: Fri,  5 Oct 2018 16:17:43 -0600
-Subject: [PATCH] selftests: usbip: add wait after attach and before checking
- port status
-Message-ID: <20181005221744.21605-1-shuah@kernel.org>
+From: cyphar@cyphar.com (Aleksa Sarai)
+Date: Sat, 6 Oct 2018 12:10:02 +1000
+Subject: [PATCH 2/3] namei: implement AT_THIS_ROOT chroot-like path
+ resolution
+In-Reply-To: <CAG48ez3FG0axt92F=+vDe1Q=kj-YngmCgFqDET7E2xCE1mOgeg@mail.gmail.com>
+References: <20180929103453.12025-1-cyphar@cyphar.com>
+ <20180929131534.24472-1-cyphar@cyphar.com>
+ <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
+ <20181004162611.vdlujbdguvagalpt@ryuk>
+ <CAG48ez2u--Wac7d9n3idC92Pd-M40QzYtR6FKR8PAYr=VQHUBQ@mail.gmail.com>
+ <20181005150728.mgqnpkbukpeu3bsm@ryuk>
+ <CAG48ez3FG0axt92F=+vDe1Q=kj-YngmCgFqDET7E2xCE1mOgeg@mail.gmail.com>
+Message-ID: <20181006021002.6vzsdwd3klddbmji@ryuk>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181005221743.I_L-ZFaEAubKkZpgyvGuG42wr0LNfSsSEw8tS4X_HaU@z>
+Message-ID: <20181006021002.V21gdHh2OWmTM5h_oFh_i0jD06gO0FaM89pvNYK1_tc@z>
 
-Add sleep between attach and "usbip port" check to make sure status is
-updated. Running attach and query back shows incorrect status.
+On 2018-10-05, Jann Horn <jannh@google.com> wrote:
+> > What if we took rename_lock (call it nd->r_seq) at the start of the
+> > resolution, and then only tried the __d_path-style check
+> >
+> >   if (read_seqretry(&rename_lock, nd->r_seq) ||
+> >       read_seqretry(&mount_lock, nd->m_seq))
+> >           /* do the __d_path lookup. */
+> >
+> > That way you would only hit the slow path if there were concurrent
+> > renames or mounts *and* you are doing a path resolution with
+> > AT_THIS_ROOT or AT_BENEATH. I've attached a modified patch that does
+> > this (and after some testing it also appears to work).
+> 
+> Yeah, I think that might do the job.
 
-Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
----
- tools/testing/selftests/drivers/usb/usbip/usbip_test.sh | 4 ++++
- 1 file changed, 4 insertions(+)
+*phew* I was all out of other ideas. :P
 
-diff --git a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
-index a72df93cf1f8..128f0ab24307 100755
---- a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
-+++ b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
-@@ -141,6 +141,10 @@ echo "Import devices from localhost - should work"
- src/usbip attach -r localhost -b $busid;
- echo "=============================================================="
- 
-+# Wait for sysfs file to be updated. Without this sleep, usbip port
-+# shows no imported devices.
-+sleep 3;
-+
- echo "List imported devices - expect to see imported devices";
- src/usbip port;
- echo "=============================================================="
+> > ---
+> >  fs/namei.c | 49 ++++++++++++++++++++++++++++++++++++++++++++++---
+> >  1 file changed, 46 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/fs/namei.c b/fs/namei.c
+> > index 6f995e6de6b1..12c9be175cb4 100644
+> > --- a/fs/namei.c
+> > +++ b/fs/namei.c
+> > @@ -493,7 +493,7 @@ struct nameidata {
+> >         struct path     root;
+> >         struct inode    *inode; /* path.dentry.d_inode */
+> >         unsigned int    flags;
+> > -       unsigned        seq, m_seq;
+> > +       unsigned        seq, m_seq, r_seq;
+> >         int             last_type;
+> >         unsigned        depth;
+> >         int             total_link_count;
+> > @@ -1375,6 +1375,27 @@ static int follow_dotdot_rcu(struct nameidata *nd)
+> >                                 return -EXDEV;
+> >                         break;
+> >                 }
+> > +               if (unlikely((nd->flags & (LOOKUP_BENEATH | LOOKUP_CHROOT)) &&
+> > +                            (read_seqretry(&rename_lock, nd->r_seq) ||
+> > +                             read_seqretry(&mount_lock, nd->m_seq)))) {
+> > +                       char *pathbuf, *pathptr;
+> > +
+> > +                       nd->r_seq = read_seqbegin(&rename_lock);
+> > +                       /* Cannot take m_seq here. */
+> > +
+> > +                       pathbuf = kmalloc(PATH_MAX, GFP_ATOMIC);
+> > +                       if (!pathbuf)
+> > +                               return -ECHILD;
+> > +                       pathptr = __d_path(&nd->path, &nd->root, pathbuf, PATH_MAX);
+> > +                       kfree(pathbuf);
+> 
+> You're doing this check before actually looking up the parent, right?
+> So as long as I don't trigger the "path_equal(&nd->path, &nd->root)"
+> check that you do for O_BENEATH, escaping up by one level is possible,
+> right? You should probably move this check so that it happens after
+> following "..".
+
+Yup, you're right. I'll do that.
+
+> (Also: I assume that you're going to get rid of that memory allocation
+> in a future version.)
+
+Sure. Would you prefer adding some scratch space in nameidata, or that I
+change __d_path so it accepts NULL as the buffer (and thus it doesn't
+actually do any string operations)?
+
+> >                 if (nd->path.dentry != nd->path.mnt->mnt_root) {
+> >                         int ret = path_parent_directory(&nd->path);
+> >                         if (ret)
+> > @@ -2269,6 +2311,9 @@ static const char *path_init(struct nameidata *nd, unsigned flags)
+> >         nd->last_type = LAST_ROOT; /* if there are only slashes... */
+> >         nd->flags = flags | LOOKUP_JUMPED | LOOKUP_PARENT;
+> >         nd->depth = 0;
+> > +       nd->m_seq = read_seqbegin(&mount_lock);
+> > +       nd->r_seq = read_seqbegin(&rename_lock);
+> 
+> This means that now, attempting to perform a lookup while something is
+> holding the rename_lock will spin on the lock. I don't know whether
+> that's a problem in practice though. Does anyone on this thread know
+> whether this is problematic?
+
+I could make it so that we only take &rename_lock
+  if (nd->flags & (FOLLOW_BENEATH | FOLLOW_CHROOT)),
+since it's not used outside of that path.
+
 -- 
-2.17.0
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181006/bf2ebeee/attachment.sig>
