@@ -1,112 +1,66 @@
-From: cyphar at cyphar.com (Aleksa Sarai)
-Date: Sat, 6 Oct 2018 12:10:02 +1000
+From: fw at deneb.enyo.de (Florian Weimer)
+Date: Sat, 06 Oct 2018 22:56:23 +0200
 Subject: [PATCH 2/3] namei: implement AT_THIS_ROOT chroot-like path
  resolution
-In-Reply-To: <CAG48ez3FG0axt92F=+vDe1Q=kj-YngmCgFqDET7E2xCE1mOgeg@mail.gmail.com>
+In-Reply-To: <20181002073220.7mzndna4tdnxdvdt@ryuk> (Aleksa Sarai's message of
+ "Tue, 2 Oct 2018 17:32:20 +1000")
 References: <20180929103453.12025-1-cyphar@cyphar.com>
  <20180929131534.24472-1-cyphar@cyphar.com>
  <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
- <20181004162611.vdlujbdguvagalpt@ryuk>
- <CAG48ez2u--Wac7d9n3idC92Pd-M40QzYtR6FKR8PAYr=VQHUBQ@mail.gmail.com>
- <20181005150728.mgqnpkbukpeu3bsm@ryuk>
- <CAG48ez3FG0axt92F=+vDe1Q=kj-YngmCgFqDET7E2xCE1mOgeg@mail.gmail.com>
-Message-ID: <20181006021002.6vzsdwd3klddbmji@ryuk>
+ <20181001054246.gfinmx3api7kjhmc@ryuk>
+ <C89D720F-3CC4-4FA9-9CBB-E41A67360A6B@amacapital.net>
+ <20181002073220.7mzndna4tdnxdvdt@ryuk>
+Message-ID: <875zyeg5fs.fsf@mid.deneb.enyo.de>
 
-On 2018-10-05, Jann Horn <jannh at google.com> wrote:
-> > What if we took rename_lock (call it nd->r_seq) at the start of the
-> > resolution, and then only tried the __d_path-style check
-> >
-> >   if (read_seqretry(&rename_lock, nd->r_seq) ||
-> >       read_seqretry(&mount_lock, nd->m_seq))
-> >           /* do the __d_path lookup. */
-> >
-> > That way you would only hit the slow path if there were concurrent
-> > renames or mounts *and* you are doing a path resolution with
-> > AT_THIS_ROOT or AT_BENEATH. I've attached a modified patch that does
-> > this (and after some testing it also appears to work).
-> 
-> Yeah, I think that might do the job.
+* Aleksa Sarai:
 
-*phew* I was all out of other ideas. :P
+> On 2018-10-01, Andy Lutomirski <luto at amacapital.net> wrote:
+>> >>> Currently most container runtimes try to do this resolution in
+>> >>> userspace[1], causing many potential race conditions. In addition, the
+>> >>> "obvious" alternative (actually performing a {ch,pivot_}root(2))
+>> >>> requires a fork+exec which is *very* costly if necessary for every
+>> >>> filesystem operation involving a container.
+>> >> 
+>> >> Wait. fork() I understand, but why exec? And actually, you don't need
+>> >> a full fork() either, clone() lets you do this with some process parts
+>> >> shared. And then you also shouldn't need to use SCM_RIGHTS, just keep
+>> >> the file descriptor table shared. And why chroot()/pivot_root(),
+>> >> wouldn't you want to use setns()?
+>> > 
+>> > You're right about this -- for C runtimes. In Go we cannot do a raw
+>> > clone() or fork() (if you do it manually with RawSyscall you'll end with
+>> > broken runtime state). So you're forced to do fork+exec (which then
+>> > means that you can't use CLONE_FILES and must use SCM_RIGHTS). Same goes
+>> > for CLONE_VFORK.
+>> 
+>> I must admit that I’m not very sympathetic to the argument that “Go’s
+>> runtime model is incompatible with the simpler solution.”
+>
+> Multi-threaded programs have a similar issue (though with Go it's much
+> worse). If you fork a multi-threaded C program then you can only safely
+> use AS-Safe glibc functions (those that are safe within a signal
+> handler). But if you're just doing three syscalls this shouldn't be as
+> big of a problem as Go where you can't even do said syscalls.
 
-> > ---
-> >  fs/namei.c | 49 ++++++++++++++++++++++++++++++++++++++++++++++---
-> >  1 file changed, 46 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/fs/namei.c b/fs/namei.c
-> > index 6f995e6de6b1..12c9be175cb4 100644
-> > --- a/fs/namei.c
-> > +++ b/fs/namei.c
-> > @@ -493,7 +493,7 @@ struct nameidata {
-> >         struct path     root;
-> >         struct inode    *inode; /* path.dentry.d_inode */
-> >         unsigned int    flags;
-> > -       unsigned        seq, m_seq;
-> > +       unsigned        seq, m_seq, r_seq;
-> >         int             last_type;
-> >         unsigned        depth;
-> >         int             total_link_count;
-> > @@ -1375,6 +1375,27 @@ static int follow_dotdot_rcu(struct nameidata *nd)
-> >                                 return -EXDEV;
-> >                         break;
-> >                 }
-> > +               if (unlikely((nd->flags & (LOOKUP_BENEATH | LOOKUP_CHROOT)) &&
-> > +                            (read_seqretry(&rename_lock, nd->r_seq) ||
-> > +                             read_seqretry(&mount_lock, nd->m_seq)))) {
-> > +                       char *pathbuf, *pathptr;
-> > +
-> > +                       nd->r_seq = read_seqbegin(&rename_lock);
-> > +                       /* Cannot take m_seq here. */
-> > +
-> > +                       pathbuf = kmalloc(PATH_MAX, GFP_ATOMIC);
-> > +                       if (!pathbuf)
-> > +                               return -ECHILD;
-> > +                       pathptr = __d_path(&nd->path, &nd->root, pathbuf, PATH_MAX);
-> > +                       kfree(pathbuf);
-> 
-> You're doing this check before actually looking up the parent, right?
-> So as long as I don't trigger the "path_equal(&nd->path, &nd->root)"
-> check that you do for O_BENEATH, escaping up by one level is possible,
-> right? You should probably move this check so that it happens after
-> following "..".
+The situation is a bit more complicated.  There are many programs out
+there which use malloc and free (at least indirectly) after a fork,
+and we cannot break them.  In glibc, we have a couple of subsystems
+which are put into a known state before calling the fork/clone system
+call if the application calls fork.  The price we pay for that is a
+fork which is not POSIX-compliant because it is not async-signal-safe.
+Admittedly, other libcs chose different trade-offs.
 
-Yup, you're right. I'll do that.
+However, what is the same across libcs is this: You cannot call the
+clone system call directly and get a fully working new process.  Some
+things break.  For example, for recursive mutexes, we need to know the
+TID of the current thread, and we cannot perform a system call to get
+it for performance reasons.  So everyone has a TID cache for that.
+But the TID cache does not get reset when you bypass the fork
+implementation in libc, so you end up with subtle corruption bugs on
+TID reuse.
 
-> (Also: I assume that you're going to get rid of that memory allocation
-> in a future version.)
-
-Sure. Would you prefer adding some scratch space in nameidata, or that I
-change __d_path so it accepts NULL as the buffer (and thus it doesn't
-actually do any string operations)?
-
-> >                 if (nd->path.dentry != nd->path.mnt->mnt_root) {
-> >                         int ret = path_parent_directory(&nd->path);
-> >                         if (ret)
-> > @@ -2269,6 +2311,9 @@ static const char *path_init(struct nameidata *nd, unsigned flags)
-> >         nd->last_type = LAST_ROOT; /* if there are only slashes... */
-> >         nd->flags = flags | LOOKUP_JUMPED | LOOKUP_PARENT;
-> >         nd->depth = 0;
-> > +       nd->m_seq = read_seqbegin(&mount_lock);
-> > +       nd->r_seq = read_seqbegin(&rename_lock);
-> 
-> This means that now, attempting to perform a lookup while something is
-> holding the rename_lock will spin on the lock. I don't know whether
-> that's a problem in practice though. Does anyone on this thread know
-> whether this is problematic?
-
-I could make it so that we only take &rename_lock
-  if (nd->flags & (FOLLOW_BENEATH | FOLLOW_CHROOT)),
-since it's not used outside of that path.
-
--- 
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181006/bf2ebeee/attachment.sig>
+So I'd say that in most cases, the C situation is pretty much the same
+as the Go situation.  If I recall correctly, the problem for Go is
+that it cannot call setns from Go code because it fails in the kernel
+for multi-threaded processes, and Go processes are already
+multi-threaded when user Go code runs.
