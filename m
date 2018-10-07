@@ -1,95 +1,72 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Sat, 6 Oct 2018 23:49:17 +0200
-Subject: [PATCH 2/3] namei: implement AT_THIS_ROOT chroot-like path
- resolution
-In-Reply-To: <875zyeg5fs.fsf@mid.deneb.enyo.de>
-References: <20180929103453.12025-1-cyphar@cyphar.com>
- <20180929131534.24472-1-cyphar@cyphar.com>
- <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
- <20181001054246.gfinmx3api7kjhmc@ryuk>
- <C89D720F-3CC4-4FA9-9CBB-E41A67360A6B@amacapital.net>
- <20181002073220.7mzndna4tdnxdvdt@ryuk> <875zyeg5fs.fsf@mid.deneb.enyo.de>
-Message-ID:
- <CAHrFyr7213j+dEuKvSg9HFRMec3VK7hubJXCpQrWN+erTJ9hWw@mail.gmail.com>
+From: lizhijian@cn.fujitsu.com (Li Zhijian)
+Date: Sun, 7 Oct 2018 22:32:12 +0800
+Subject: [PATCH] selftests/gpio: fix compiling errors
+In-Reply-To: <1537524021-3371-1-git-send-email-lizhijian@cn.fujitsu.com>
+References: <1537524021-3371-1-git-send-email-lizhijian@cn.fujitsu.com>
+Message-ID: <1372e275-d276-7982-127e-dd339ead1b67@cn.fujitsu.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181006214917.txIs_HmF7NG4YOkyi61waJK-XiinFF8HSEulrTd5Aug@z>
+Message-ID: <20181007143212.tIHm_w-n0lWYuB10jE2J0S9pj6DWVw_Ee6v35A_GKvg@z>
 
-On Sat, Oct 6, 2018@10:56 PM Florian Weimer <fw@deneb.enyo.de> wrote:
->
-> * Aleksa Sarai:
->
-> > On 2018-10-01, Andy Lutomirski <luto@amacapital.net> wrote:
-> >> >>> Currently most container runtimes try to do this resolution in
-> >> >>> userspace[1], causing many potential race conditions. In addition, the
-> >> >>> "obvious" alternative (actually performing a {ch,pivot_}root(2))
-> >> >>> requires a fork+exec which is *very* costly if necessary for every
-> >> >>> filesystem operation involving a container.
-> >> >>
-> >> >> Wait. fork() I understand, but why exec? And actually, you don't need
-> >> >> a full fork() either, clone() lets you do this with some process parts
-> >> >> shared. And then you also shouldn't need to use SCM_RIGHTS, just keep
-> >> >> the file descriptor table shared. And why chroot()/pivot_root(),
-> >> >> wouldn't you want to use setns()?
-> >> >
-> >> > You're right about this -- for C runtimes. In Go we cannot do a raw
-> >> > clone() or fork() (if you do it manually with RawSyscall you'll end with
-> >> > broken runtime state). So you're forced to do fork+exec (which then
-> >> > means that you can't use CLONE_FILES and must use SCM_RIGHTS). Same goes
-> >> > for CLONE_VFORK.
-> >>
-> >> I must admit that I’m not very sympathetic to the argument that “Go’s
-> >> runtime model is incompatible with the simpler solution.”
-> >
-> > Multi-threaded programs have a similar issue (though with Go it's much
-> > worse). If you fork a multi-threaded C program then you can only safely
-> > use AS-Safe glibc functions (those that are safe within a signal
-> > handler). But if you're just doing three syscalls this shouldn't be as
-> > big of a problem as Go where you can't even do said syscalls.
->
-> The situation is a bit more complicated.  There are many programs out
-> there which use malloc and free (at least indirectly) after a fork,
-> and we cannot break them.  In glibc, we have a couple of subsystems
-> which are put into a known state before calling the fork/clone system
-> call if the application calls fork.  The price we pay for that is a
-> fork which is not POSIX-compliant because it is not async-signal-safe.
-> Admittedly, other libcs chose different trade-offs.
->
-> However, what is the same across libcs is this: You cannot call the
-> clone system call directly and get a fully working new process.  Some
-> things break.  For example, for recursive mutexes, we need to know the
-> TID of the current thread, and we cannot perform a system call to get
-> it for performance reasons.  So everyone has a TID cache for that.
-> But the TID cache does not get reset when you bypass the fork
-> implementation in libc, so you end up with subtle corruption bugs on
-> TID reuse.
+ping
 
-Sure, but recursive mutexes etc. are very specific use-case.
-I'd even go so far to say that if you use mutexes + threads and then
-also fork in those threads you're hosed anyway. If you don't things get a little
-cleaner assuming you don't call library functions that use mutexes
-internally.
-Event then you might (sometimes at least) still get around most problems
-with atfork handlers (thought I really don't like him). But you know more
-about this then I do. :)
 
+On 09/21/2018 06:00 PM, Li Zhijian wrote:
+> lizhijian at haswell-OptiPlex-9020:/home/lizj/linux/tools/testing/selftests$ make
+> [...snip...]
+> make ARCH=x86 CROSS_COMPILE= -C ../../../gpio
+> make[2]: Entering directory '/home/lizj/linux/tools/gpio'
+> [...snip...]
+> make[3]: Leaving directory '/home/lizj/linux/tools/gpio'
+>    LINK     /home/lizj/linux/tools/testing/selftests/gpiogpio-event-mon
+> make[2]: Leaving directory '/home/lizj/linux/tools/gpio'
+> gcc -O2 -g -std=gnu99 -Wall -I../../../../usr/include/ gpio-mockup-chardev.c ../../../gpio/gpio-utils.o  -lmount -I/usr/include/libmount -o gpio-mockup-chardev
+> gcc: error: ../../../gpio/gpio-utils.o: No such file or directory
+> <builtin>: recipe for target 'gpio-mockup-chardev' failed
+> make[1]: *** [gpio-mockup-chardev] Error 1
+> make[1]: Leaving directory
+> '/home/lizj/linux/tools/testing/selftests/gpio'
+> Makefile:85: recipe for target 'all' failed
+> make: *** [all] Error 2
 >
-> So I'd say that in most cases, the C situation is pretty much the same
-> as the Go situation.  If I recall correctly, the problem for Go is
-> that it cannot call setns from Go code because it fails in the kernel
-> for multi-threaded processes, and Go processes are already
-> multi-threaded when user Go code runs.
+> in this patch
+> - correct target name to $OUTPUTgpio-utils.o
+> - pass OUTPUT to tools/gpio/Makefile
+> - support cleanup ../gpiogpio-hammer.o
+>
+> CC: Bamvor Jian Zhang <bamv2005 at gmail.com>
+> CC: Bartosz Golaszewski <brgl at bgdev.pl>
+> CC: Shuah Khan <shuah at kernel.org>
+> CC: linux-gpio at vger.kernel.org
+> Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
+> ---
+>   tools/testing/selftests/gpio/Makefile | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
+> index 4665cdb..7f9354a 100644
+> --- a/tools/testing/selftests/gpio/Makefile
+> +++ b/tools/testing/selftests/gpio/Makefile
+> @@ -7,7 +7,7 @@ EXTRA_PROGS := ../gpiogpio-event-mon ../gpiogpio-hammer ../gpiolsgpio
+>   EXTRA_DIRS := ../gpioinclude/
+>   EXTRA_OBJS := ../gpiogpio-event-mon-in.o ../gpiogpio-event-mon.o
+>   EXTRA_OBJS += ../gpiogpio-hammer-in.o ../gpiogpio-utils.o ../gpiolsgpio-in.o
+> -EXTRA_OBJS += ../gpiolsgpio.o
+> +EXTRA_OBJS += ../gpiolsgpio.o ../gpiogpio-hammer.o
+>   
+>   include ../lib.mk
+>   
+> @@ -22,7 +22,7 @@ CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
+>   LDLIBS += -lmount -I/usr/include/libmount
+>   
+>   $(BINARIES):| khdr
+> -$(BINARIES): ../../../gpio/gpio-utils.o
+> +$(BINARIES): ../gpiogpio-utils.o
+>   
+> -../../../gpio/gpio-utils.o:
+> -	make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
+> +../gpiogpio-utils.o:
+> +	make OUTPUT=$(OUTPUT) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
 
-That is true for *some* namespaces (user, mount) but not for all.
-For example, setns(CLONE_NEWNET) would be fine from go.
-But the go runtime thinks it's clever to clone a new thread in between
-entry and exit of a syscall. If you switch namespaces you might end
-up with a new thread that belongs to the wrong namespace which is
-very problematic.
-So you can either rely on calling some go magic that locks
-you to a specific os thread but that does only work in later go versions or
-you go the constructor route, i.e. you e.g. implement a (dummy)
-subcommand that you can call and that triggers the execution of a
-C function that is marked with __attribute__((constructor)) that runs
-before the go runtime and in which you can do setns(), fork() and
-friends (somewhat) safely. This has very
-bad performance and is a nasty hack but it's really unavoidable.
+-- 
+Best regards.
+Li Zhijian (8528)
