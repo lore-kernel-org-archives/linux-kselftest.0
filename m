@@ -1,70 +1,109 @@
-From: lizhijian at cn.fujitsu.com (Li Zhijian)
-Date: Sun, 7 Oct 2018 22:32:12 +0800
-Subject: [PATCH] selftests/gpio: fix compiling errors
-In-Reply-To: <1537524021-3371-1-git-send-email-lizhijian@cn.fujitsu.com>
-References: <1537524021-3371-1-git-send-email-lizhijian@cn.fujitsu.com>
-Message-ID: <1372e275-d276-7982-127e-dd339ead1b67@cn.fujitsu.com>
+From: jannh at google.com (Jann Horn)
+Date: Mon, 8 Oct 2018 12:50:34 +0200
+Subject: [PATCH 2/3] namei: implement AT_THIS_ROOT chroot-like path
+ resolution
+In-Reply-To: <20181006021002.6vzsdwd3klddbmji@ryuk>
+References: <20180929103453.12025-1-cyphar@cyphar.com>
+ <20180929131534.24472-1-cyphar@cyphar.com>
+ <CAG48ez30WJhbsro2HOc_DR7V91M+hNFzBP5ogRMZaxbAORvqzg@mail.gmail.com>
+ <20181004162611.vdlujbdguvagalpt@ryuk>
+ <CAG48ez2u--Wac7d9n3idC92Pd-M40QzYtR6FKR8PAYr=VQHUBQ@mail.gmail.com>
+ <20181005150728.mgqnpkbukpeu3bsm@ryuk>
+ <CAG48ez3FG0axt92F=+vDe1Q=kj-YngmCgFqDET7E2xCE1mOgeg@mail.gmail.com>
+ <20181006021002.6vzsdwd3klddbmji@ryuk>
+Message-ID: <CAG48ez3M84-iL7_9__G81L+16K1eT3j-=QTjL_kVy6BC6sYZzQ@mail.gmail.com>
 
-ping
-
-
-On 09/21/2018 06:00 PM, Li Zhijian wrote:
-> lizhijian at haswell-OptiPlex-9020:/home/lizj/linux/tools/testing/selftests$ make
-> [...snip...]
-> make ARCH=x86 CROSS_COMPILE= -C ../../../gpio
-> make[2]: Entering directory '/home/lizj/linux/tools/gpio'
-> [...snip...]
-> make[3]: Leaving directory '/home/lizj/linux/tools/gpio'
->    LINK     /home/lizj/linux/tools/testing/selftests/gpiogpio-event-mon
-> make[2]: Leaving directory '/home/lizj/linux/tools/gpio'
-> gcc -O2 -g -std=gnu99 -Wall -I../../../../usr/include/ gpio-mockup-chardev.c ../../../gpio/gpio-utils.o  -lmount -I/usr/include/libmount -o gpio-mockup-chardev
-> gcc: error: ../../../gpio/gpio-utils.o: No such file or directory
-> <builtin>: recipe for target 'gpio-mockup-chardev' failed
-> make[1]: *** [gpio-mockup-chardev] Error 1
-> make[1]: Leaving directory
-> '/home/lizj/linux/tools/testing/selftests/gpio'
-> Makefile:85: recipe for target 'all' failed
-> make: *** [all] Error 2
+On Sat, Oct 6, 2018 at 4:10 AM Aleksa Sarai <cyphar at cyphar.com> wrote:
+> On 2018-10-05, Jann Horn <jannh at google.com> wrote:
+> > > What if we took rename_lock (call it nd->r_seq) at the start of the
+> > > resolution, and then only tried the __d_path-style check
+> > >
+> > >   if (read_seqretry(&rename_lock, nd->r_seq) ||
+> > >       read_seqretry(&mount_lock, nd->m_seq))
+> > >           /* do the __d_path lookup. */
+> > >
+> > > That way you would only hit the slow path if there were concurrent
+> > > renames or mounts *and* you are doing a path resolution with
+> > > AT_THIS_ROOT or AT_BENEATH. I've attached a modified patch that does
+> > > this (and after some testing it also appears to work).
+> >
+> > Yeah, I think that might do the job.
 >
-> in this patch
-> - correct target name to $OUTPUTgpio-utils.o
-> - pass OUTPUT to tools/gpio/Makefile
-> - support cleanup ../gpiogpio-hammer.o
+> *phew* I was all out of other ideas. :P
 >
-> CC: Bamvor Jian Zhang <bamv2005 at gmail.com>
-> CC: Bartosz Golaszewski <brgl at bgdev.pl>
-> CC: Shuah Khan <shuah at kernel.org>
-> CC: linux-gpio at vger.kernel.org
-> Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
-> ---
->   tools/testing/selftests/gpio/Makefile | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
+> > > ---
+> > >  fs/namei.c | 49 ++++++++++++++++++++++++++++++++++++++++++++++---
+> > >  1 file changed, 46 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/fs/namei.c b/fs/namei.c
+> > > index 6f995e6de6b1..12c9be175cb4 100644
+> > > --- a/fs/namei.c
+> > > +++ b/fs/namei.c
+> > > @@ -493,7 +493,7 @@ struct nameidata {
+> > >         struct path     root;
+> > >         struct inode    *inode; /* path.dentry.d_inode */
+> > >         unsigned int    flags;
+> > > -       unsigned        seq, m_seq;
+> > > +       unsigned        seq, m_seq, r_seq;
+> > >         int             last_type;
+> > >         unsigned        depth;
+> > >         int             total_link_count;
+> > > @@ -1375,6 +1375,27 @@ static int follow_dotdot_rcu(struct nameidata *nd)
+> > >                                 return -EXDEV;
+> > >                         break;
+> > >                 }
+> > > +               if (unlikely((nd->flags & (LOOKUP_BENEATH | LOOKUP_CHROOT)) &&
+> > > +                            (read_seqretry(&rename_lock, nd->r_seq) ||
+> > > +                             read_seqretry(&mount_lock, nd->m_seq)))) {
+> > > +                       char *pathbuf, *pathptr;
+> > > +
+> > > +                       nd->r_seq = read_seqbegin(&rename_lock);
+> > > +                       /* Cannot take m_seq here. */
+> > > +
+> > > +                       pathbuf = kmalloc(PATH_MAX, GFP_ATOMIC);
+> > > +                       if (!pathbuf)
+> > > +                               return -ECHILD;
+> > > +                       pathptr = __d_path(&nd->path, &nd->root, pathbuf, PATH_MAX);
+> > > +                       kfree(pathbuf);
+> >
+> > You're doing this check before actually looking up the parent, right?
+> > So as long as I don't trigger the "path_equal(&nd->path, &nd->root)"
+> > check that you do for O_BENEATH, escaping up by one level is possible,
+> > right? You should probably move this check so that it happens after
+> > following "..".
 >
-> diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-> index 4665cdb..7f9354a 100644
-> --- a/tools/testing/selftests/gpio/Makefile
-> +++ b/tools/testing/selftests/gpio/Makefile
-> @@ -7,7 +7,7 @@ EXTRA_PROGS := ../gpiogpio-event-mon ../gpiogpio-hammer ../gpiolsgpio
->   EXTRA_DIRS := ../gpioinclude/
->   EXTRA_OBJS := ../gpiogpio-event-mon-in.o ../gpiogpio-event-mon.o
->   EXTRA_OBJS += ../gpiogpio-hammer-in.o ../gpiogpio-utils.o ../gpiolsgpio-in.o
-> -EXTRA_OBJS += ../gpiolsgpio.o
-> +EXTRA_OBJS += ../gpiolsgpio.o ../gpiogpio-hammer.o
->   
->   include ../lib.mk
->   
-> @@ -22,7 +22,7 @@ CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
->   LDLIBS += -lmount -I/usr/include/libmount
->   
->   $(BINARIES):| khdr
-> -$(BINARIES): ../../../gpio/gpio-utils.o
-> +$(BINARIES): ../gpiogpio-utils.o
->   
-> -../../../gpio/gpio-utils.o:
-> -	make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
-> +../gpiogpio-utils.o:
-> +	make OUTPUT=$(OUTPUT) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
+> Yup, you're right. I'll do that.
+>
+> > (Also: I assume that you're going to get rid of that memory allocation
+> > in a future version.)
+>
+> Sure. Would you prefer adding some scratch space in nameidata, or that I
+> change __d_path so it accepts NULL as the buffer (and thus it doesn't
+> actually do any string operations)?
 
--- 
-Best regards.
-Li Zhijian (8528)
+Well, I think accepting a NULL buffer would be much cleaner; but keep
+in mind that I'm just someone making suggestions, Al Viro is the one
+who has to like your code. :P
+
+> > >                 if (nd->path.dentry != nd->path.mnt->mnt_root) {
+> > >                         int ret = path_parent_directory(&nd->path);
+> > >                         if (ret)
+> > > @@ -2269,6 +2311,9 @@ static const char *path_init(struct nameidata *nd, unsigned flags)
+> > >         nd->last_type = LAST_ROOT; /* if there are only slashes... */
+> > >         nd->flags = flags | LOOKUP_JUMPED | LOOKUP_PARENT;
+> > >         nd->depth = 0;
+> > > +       nd->m_seq = read_seqbegin(&mount_lock);
+> > > +       nd->r_seq = read_seqbegin(&rename_lock);
+> >
+> > This means that now, attempting to perform a lookup while something is
+> > holding the rename_lock will spin on the lock. I don't know whether
+> > that's a problem in practice though. Does anyone on this thread know
+> > whether this is problematic?
+>
+> I could make it so that we only take &rename_lock
+>   if (nd->flags & (FOLLOW_BENEATH | FOLLOW_CHROOT)),
+> since it's not used outside of that path.
+
+I think that might be a sensible change; but as I said, I don't
+actually know whether it's necessary, and it would be very helpful if
+someone who actually knows commented on this.
