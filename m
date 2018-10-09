@@ -1,35 +1,26 @@
 From: naresh.kamboju at linaro.org (Naresh Kamboju)
-Date: Tue, 9 Oct 2018 23:26:30 +0530
+Date: Tue, 9 Oct 2018 23:27:44 +0530
 Subject: selftests/bpf: test_kmod.sh hangs on all devices
-In-Reply-To: <CA+G9fYuEFofW=L0cmmAAJGaO4ZvaPYUg=h6XgjAY=PiacXM3JA@mail.gmail.com>
+In-Reply-To: <27013725-5543-3eb5-00b9-869d809adbbf@samsung.com>
 References: <CA+G9fYumFxZghmxndq7STURbDbM4jgUzESr88yCgWvv=S+hbRA@mail.gmail.com>
  <febf5bc7-9e4e-1383-33bc-00416cc90e20@iogearbox.net>
+ <CGME20181008145518epcas2p462a233d189f10d7d95dcb73fc16ff083@epcas2p4.samsung.com>
  <CA+G9fYuEFofW=L0cmmAAJGaO4ZvaPYUg=h6XgjAY=PiacXM3JA@mail.gmail.com>
-Message-ID: <CA+G9fYtGNFaX_F=436cKC=xNrS4VvpRhzK98w_jr4MCimufivg@mail.gmail.com>
+ <27013725-5543-3eb5-00b9-869d809adbbf@samsung.com>
+Message-ID: <CA+G9fYu1hY0Sfw=gCRm-SD2oZedyLPN2DNyrjMHY1DPd9_c_4Q@mail.gmail.com>
 
-> > > OTOH,
-> > > There is a kernel BUG,
-> >
-> > This is quite an old linux-next kernel, should be fixed by 100811936f89 ("bpf: test_bpf:
-> > add init_net to dev for flow_dissector"). Please make sure you have that commit included
-> > in your testing:
+Hi Shuah,
 
-This patch included in the linux next tree.
-
+On Mon, 8 Oct 2018 at 20:46, Shuah Khan <shuah.kh at samsung.com> wrote:
 >
-> I will re-validate on latest code base and let you know.
+> Hi Naresh,
+>
+> Please use shuah at kernel.org for faster responses. I updated MAINTAINERS
+> entry a while back removing shuahkh at osg.samsung.com address due to IT
+> infrastructure changes at Samsung.
++1
 
-test_kmod.sh PASS on linux-next.
+Thank you.
 
-+ ./test_kmod.sh
-[ JIT enabled:0 hardened:0 ]
-[   25.886816] test_bpf: #0 TAX jited:0 441 435 436 PASS
-[   25.889223] test_bpf: #1 TXA jited:0 144 143 143 PASS
-<trim>
-[  105.557950] test_bpf: #377 JNE signed compare, test 7 jited:1 46 PASS
-[  105.564354] test_bpf: Summary: 378 PASSED, 0 FAILED, [366/366 JIT'ed]
-test_bpf: ok
-[  105.564354] test_bpf: Summary: 378 PASSED, 0 FAILED
-
-Thank you
-- Naresh
+Best Regards
+Naresh Kamboju
