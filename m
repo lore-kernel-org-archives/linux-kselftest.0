@@ -1,107 +1,186 @@
-From: gregkh at linuxfoundation.org (Greg Kroah-Hartman)
-Date: Mon,  8 Oct 2018 20:29:41 +0200
-Subject: [PATCH 4.18 001/168] rseq/selftests: fix parametrized test with -fpie
-In-Reply-To: <20181008175620.043587728@linuxfoundation.org>
-References: <20181008175620.043587728@linuxfoundation.org>
-Message-ID: <20181008175620.096912313@linuxfoundation.org>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Tue, 9 Oct 2018 09:29:10 +0200
+Subject: [PATCH v2] sysctl: kselftests: fix test_modprobe issue
+In-Reply-To: <1536229374-25699-1-git-send-email-Lei.Yang@windriver.com>
+References: <1536229374-25699-1-git-send-email-Lei.Yang@windriver.com>
+Message-ID: <CADYN=9+0RxfJRHhTM5GLMOi-EsOfe3tv+jvSfyQLLcSQB5FzHw@mail.gmail.com>
 
-4.18-stable review patch.  If anyone has any objections, please let me know.
+On Thu, 6 Sep 2018 at 12:20, Lei Yang <Lei.Yang at windriver.com> wrote:
+>
+> when CONFIG_TEST_SYSCTL=y, there is no "/sys/module/test_sysctl/"
+> when CONFIG_TEST_SYSCTL=m, checking /sys/module/test_sysctl/ is
+> before kernel module loading
+>
+> you'll get below error message
+> root at intel-x86-64:/tmp/sysctl# ./sysctl.sh
+> Checking production write strict setting ... ok
+> ./sysctl.sh: /sys/module/test_sysctl/ not present
+> You must have the following enabled in your kernel:
+>
+> This patch will fix this issue.
+> when CONFIG_TEST_SYSCTL=y, it has no chance to check "/sys/module/test_sysctl/"
+> when CONFIG_TEST_SYSCTL=m, it will load kernel module first before checking sys
+> interface.
+>
+> Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
+> ---
+>  tools/testing/selftests/sysctl/sysctl.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
+> index 584eb8e..08dc995 100755
+> --- a/tools/testing/selftests/sysctl/sysctl.sh
+> +++ b/tools/testing/selftests/sysctl/sysctl.sh
+> @@ -120,6 +120,7 @@ test_reqs()
+>
+>  function load_req_mod()
+>  {
+> +        trap "test_modprobe" EXIT
+>         if [ ! -d $DIR ]; then
+>                 if ! modprobe -q -n $TEST_DRIVER; then
+>                         echo "$0: module $TEST_DRIVER not found [SKIP]"
+> @@ -770,7 +771,6 @@ function parse_args()
+>  test_reqs
+>  allow_user_defaults
+>  check_production_sysctl_writes_strict
+> -test_modprobe
+>  load_req_mod
+>
+>  trap "test_finish" EXIT
+> --
+> 1.9.1
+>
 
-------------------
+do we really nead the test_modprobe function?
+I think we can just remove that completely.
+Also remove a lot in load_req_mod and only do: modprobe $TEST_DRIVER
+if it fails its a non fatal error and we can go on and have a new
+function in all
+the tests sysctl_test_000(1|2|3|4|5) that checks for the files.
+Maybe do something like this:
 
-From: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+diff --git a/tools/testing/selftests/sysctl/sysctl.sh
+b/tools/testing/selftests/sysctl/sysctl.sh
+index 584eb8ea780a..a925d040dfe0 100755
+--- a/tools/testing/selftests/sysctl/sysctl.sh
++++ b/tools/testing/selftests/sysctl/sysctl.sh
+@@ -19,7 +19,6 @@ ksft_skip=4
 
-commit ce01a1575f45bf319e374592656441021a7f5823 upstream.
+ TEST_NAME="sysctl"
+ TEST_DRIVER="test_${TEST_NAME}"
+-TEST_DIR=$(dirname $0)
+ TEST_FILE=$(mktemp)
 
-On x86-64, the parametrized selftest code for rseq crashes with a
-segmentation fault when compiled with -fpie. This happens when the
-param_test binary is loaded at an address beyond 32-bit on x86-64.
+ # This represents
+@@ -38,21 +37,8 @@ ALL_TESTS="$ALL_TESTS 0003:1:1"
+ ALL_TESTS="$ALL_TESTS 0004:1:1"
+ ALL_TESTS="$ALL_TESTS 0005:3:1"
 
-The issue is caused by use of a 32-bit register to hold the address
-of the loop counter variable.
-
-Fix this by using a 64-bit register to calculate the address of the
-loop counter variables as an offset from rip.
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
-Acked-by: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
-Cc: <stable at vger.kernel.org> # v4.18
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: Joel Fernandes <joelaf at google.com>
-Cc: Peter Zijlstra <peterz at infradead.org>
-Cc: Catalin Marinas <catalin.marinas at arm.com>
-Cc: Dave Watson <davejwatson at fb.com>
-Cc: Will Deacon <will.deacon at arm.com>
-Cc: Andi Kleen <andi at firstfloor.org>
-Cc: linux-kselftest at vger.kernel.org
-Cc: "H . Peter Anvin" <hpa at zytor.com>
-Cc: Chris Lameter <cl at linux.com>
-Cc: Russell King <linux at arm.linux.org.uk>
-Cc: Michael Kerrisk <mtk.manpages at gmail.com>
-Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
-Cc: Paul Turner <pjt at google.com>
-Cc: Boqun Feng <boqun.feng at gmail.com>
-Cc: Josh Triplett <josh at joshtriplett.org>
-Cc: Steven Rostedt <rostedt at goodmis.org>
-Cc: Ben Maurer <bmaurer at fb.com>
-Cc: Andy Lutomirski <luto at amacapital.net>
-Cc: Andrew Morton <akpm at linux-foundation.org>
-Cc: Linus Torvalds <torvalds at linux-foundation.org>
-Signed-off-by: Shuah Khan (Samsung OSG) <shuah at kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
-
-
----
- tools/testing/selftests/rseq/param_test.c |   19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
-
---- a/tools/testing/selftests/rseq/param_test.c
-+++ b/tools/testing/selftests/rseq/param_test.c
-@@ -56,15 +56,13 @@ unsigned int yield_mod_cnt, nr_abort;
- 			printf(fmt, ## __VA_ARGS__);	\
- 	} while (0)
- 
--#if defined(__x86_64__) || defined(__i386__)
-+#ifdef __i386__
- 
- #define INJECT_ASM_REG	"eax"
- 
- #define RSEQ_INJECT_CLOBBER \
- 	, INJECT_ASM_REG
- 
--#ifdef __i386__
+-test_modprobe()
+-{
+-       if [ ! -d $DIR ]; then
+-               echo "$0: $DIR not present" >&2
+-               echo "You must have the following enabled in your kernel:" >&2
+-               cat $TEST_DIR/config >&2
+-               exit $ksft_skip
+-       fi
+-}
 -
- #define RSEQ_INJECT_ASM(n) \
- 	"mov asm_loop_cnt_" #n ", %%" INJECT_ASM_REG "\n\t" \
- 	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
-@@ -76,9 +74,16 @@ unsigned int yield_mod_cnt, nr_abort;
- 
- #elif defined(__x86_64__)
- 
-+#define INJECT_ASM_REG_P	"rax"
-+#define INJECT_ASM_REG		"eax"
+ function allow_user_defaults()
+ {
+-       if [ -z $DIR ]; then
+-               DIR="/sys/module/test_sysctl/"
+-       fi
+        if [ -z $DEFAULT_NUM_TESTS ]; then
+                DEFAULT_NUM_TESTS=50
+        fi
+@@ -120,16 +106,7 @@ test_reqs()
+
+ function load_req_mod()
+ {
+-       if [ ! -d $DIR ]; then
+-               if ! modprobe -q -n $TEST_DRIVER; then
+-                       echo "$0: module $TEST_DRIVER not found [SKIP]"
+-                       exit $ksft_skip
+-               fi
+-               modprobe $TEST_DRIVER
+-               if [ $? -ne 0 ]; then
+-                       exit
+-               fi
+-       fi
++       modprobe $TEST_DRIVER
+ }
+
+ reset_vals()
+@@ -548,9 +525,18 @@ run_stringtests()
+        test_rc
+ }
+
++check_sysctl_file()
++{
++       if [ ! -f ${1} ]; then
++               echo "$0: ${1} not present" >&2
++               exit $ksft_skip
++       fi
++}
 +
-+#define RSEQ_INJECT_CLOBBER \
-+	, INJECT_ASM_REG_P \
-+	, INJECT_ASM_REG
-+
- #define RSEQ_INJECT_ASM(n) \
--	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG "\n\t" \
--	"mov (%%" INJECT_ASM_REG "), %%" INJECT_ASM_REG "\n\t" \
-+	"lea asm_loop_cnt_" #n "(%%rip), %%" INJECT_ASM_REG_P "\n\t" \
-+	"mov (%%" INJECT_ASM_REG_P "), %%" INJECT_ASM_REG "\n\t" \
- 	"test %%" INJECT_ASM_REG ",%%" INJECT_ASM_REG "\n\t" \
- 	"jz 333f\n\t" \
- 	"222:\n\t" \
-@@ -86,10 +91,6 @@ unsigned int yield_mod_cnt, nr_abort;
- 	"jnz 222b\n\t" \
- 	"333:\n\t"
- 
--#else
--#error "Unsupported architecture"
--#endif
+ sysctl_test_0001()
+ {
+        TARGET="${SYSCTL}/int_0001"
++       check_sysctl_file ${TARGET}
+        reset_vals
+        ORIG=$(cat "${TARGET}")
+        TEST_STR=$(( $ORIG + 1 ))
+@@ -562,6 +548,7 @@ sysctl_test_0001()
+ sysctl_test_0002()
+ {
+        TARGET="${SYSCTL}/string_0001"
++       check_sysctl_file ${TARGET}
+        reset_vals
+        ORIG=$(cat "${TARGET}")
+        TEST_STR="Testing sysctl"
+@@ -575,6 +562,7 @@ sysctl_test_0002()
+ sysctl_test_0003()
+ {
+        TARGET="${SYSCTL}/int_0002"
++       check_sysctl_file ${TARGET}
+        reset_vals
+        ORIG=$(cat "${TARGET}")
+        TEST_STR=$(( $ORIG + 1 ))
+@@ -587,6 +575,7 @@ sysctl_test_0003()
+ sysctl_test_0004()
+ {
+        TARGET="${SYSCTL}/uint_0001"
++       check_sysctl_file ${TARGET}
+        reset_vals
+        ORIG=$(cat "${TARGET}")
+        TEST_STR=$(( $ORIG + 1 ))
+@@ -599,6 +588,7 @@ sysctl_test_0004()
+ sysctl_test_0005()
+ {
+        TARGET="${SYSCTL}/int_0003"
++       check_sysctl_file ${TARGET}
+        reset_vals
+        ORIG=$(cat "${TARGET}")
+
+@@ -620,8 +610,6 @@ list_tests()
+        echo "0005 x $(get_test_count 0005) - tests proc_douintvec() array"
+ }
+
+-test_reqs
 -
- #elif defined(__ARMEL__)
- 
- #define RSEQ_INJECT_INPUT \
+ usage()
+ {
+        NUM_TESTS=$(grep -o ' ' <<<"$ALL_TESTS" | grep -c .)
+@@ -770,7 +758,6 @@ function parse_args()
+ test_reqs
+ allow_user_defaults
+ check_production_sysctl_writes_strict
+-test_modprobe
+ load_req_mod
+
+ trap "test_finish" EXIT
+
+
+Cheers,
+Anders
