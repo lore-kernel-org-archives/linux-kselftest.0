@@ -1,78 +1,35 @@
-From: andreyknvl at google.com (Andrey Konovalov)
-Date: Wed, 10 Oct 2018 16:09:25 +0200
-Subject: [PATCH v7 7/8] arm64: update
- Documentation/arm64/tagged-pointers.txt
-In-Reply-To: <20181003173256.GG12998@arrakis.emea.arm.com>
-References: <cover.1538485901.git.andreyknvl@google.com>
- <47a464307d4df3c0cb65f88d1fe83f9a741dd74b.1538485901.git.andreyknvl@google.com>
- <20181003173256.GG12998@arrakis.emea.arm.com>
-Message-ID: <CAAeHK+yPCRNAOSi6OpYC_Tdbo9SoXRVRbx8pjXNq96v8csO-Wg@mail.gmail.com>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Wed, 10 Oct 2018 16:27:04 +0200
+Subject: [PATCH] selftests: bpf: install script with_addr.sh
+Message-ID: <20181010142704.26990-1-anders.roxell@linaro.org>
 
-On Wed, Oct 3, 2018 at 7:32 PM, Catalin Marinas <catalin.marinas at arm.com> wrote:
-> On Tue, Oct 02, 2018 at 03:12:42PM +0200, Andrey Konovalov wrote:
->> diff --git a/Documentation/arm64/tagged-pointers.txt b/Documentation/arm64/tagged-pointers.txt
->> index a25a99e82bb1..ae877d185fdb 100644
->> --- a/Documentation/arm64/tagged-pointers.txt
->> +++ b/Documentation/arm64/tagged-pointers.txt
->> @@ -17,13 +17,21 @@ this byte for application use.
->>  Passing tagged addresses to the kernel
->>  --------------------------------------
->>
->> -All interpretation of userspace memory addresses by the kernel assumes
->> -an address tag of 0x00.
->> +Some initial work for supporting non-zero address tags passed to the
->> +kernel has been done. As of now, the kernel supports tags in:
->
-> With my maintainer hat on, the above statement leads me to think this
-> new ABI is work in progress, so not yet suitable for upstream.
+When test_flow_dissector.sh runs it complains that it can't find script
+with_addr.sh:
 
-OK, I think we can just say "The kernel supports tags in:" here. Will do in v8.
+./test_flow_dissector.sh: line 81: ./with_addr.sh: No such file or
+directory
 
->
-> Also, how is user space supposed to know that it can now pass tagged
-> pointers into the kernel? An ABI change (or relaxation), needs to be
-> advertised by the kernel, usually via a new HWCAP bit (e.g. HWCAP_TBI).
-> Once we have a HWCAP bit in place, we need to be pretty clear about
-> which syscalls can and cannot cope with tagged pointers. The "as of now"
-> implies potential further relaxation which, again, would need to be
-> advertised to user in some (additional) way.
+Rework so that with_addr.sh gets installed, add it to
+TEST_PROGS_EXTENDED variable.
 
-How exactly should I do that? Something like this [1]? Or is it only
-for hardware specific things and for this patchset I need to do
-something else?
+Fixes: 50b3ed57dee9 ("selftests/bpf: test bpf flow dissection")
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+---
+ tools/testing/selftests/bpf/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-[1] https://github.com/torvalds/linux/commit/7206dc93a58fb76421c4411eefa3c003337bcb2d
-
->
->> -This includes, but is not limited to, addresses found in:
->> +  - user fault addresses
->
-> While the kernel currently supports this in some way (by clearing the
-> tag exception entry, el0_da), the above implies (at least to me) that
-> sigcontext.fault_address would contain the tagged address. That's not
-> the case (unless I missed it in your patches).
-
-I'll update the doc to reflect this in v8.
-
->
->> - - pointer arguments to system calls, including pointers in structures
->> -   passed to system calls,
->> +  - pointer arguments (including pointers in structures), which don't
->> +    describe virtual memory ranges, passed to system calls
->
-> I think we need to be more precise here...
-
-In what way?
-
->
->> +All other interpretations of userspace memory addresses by the kernel
->> +assume an address tag of 0x00. This includes, but is not limited to,
->> +addresses found in:
->> +
->> + - pointer arguments (including pointers in structures), which describe
->> +   virtual memory ranges, passed to memory system calls (mmap, mprotect,
->> +   etc.)
->
-> ...and probably a full list here.
-
-Will add a full list in v8.
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 1381ab81099c..efd108ff737d 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -51,6 +51,8 @@ TEST_PROGS := test_kmod.sh \
+ 	test_skb_cgroup_id.sh \
+ 	test_flow_dissector.sh
+ 
++TEST_PROGS_EXTENDED := with_addr.sh
++
+ # Compile but not part of 'make run_tests'
+ TEST_GEN_PROGS_EXTENDED = test_libbpf_open test_sock_addr test_skb_cgroup_id_user \
+ 	flow_dissector_load test_flow_dissector
+-- 
+2.19.1
