@@ -1,38 +1,46 @@
 From: liu.song.a23@gmail.com (Song Liu)
-Date: Wed, 10 Oct 2018 09:06:48 -0700
-Subject: [PATCH] selftests: bpf: add config fragment LWTUNNEL
-In-Reply-To: <20181010092123.26218-1-anders.roxell@linaro.org>
-References: <20181010092123.26218-1-anders.roxell@linaro.org>
+Date: Wed, 10 Oct 2018 09:07:54 -0700
+Subject: [PATCH] selftests: bpf: install script with_addr.sh
+In-Reply-To: <20181010142704.26990-1-anders.roxell@linaro.org>
+References: <20181010142704.26990-1-anders.roxell@linaro.org>
 Message-ID:
- <CAPhsuW4BhxJoQvqzTM1Z-O_JKC7m=uS3HuGatX6vMwoEJvWNNw@mail.gmail.com>
+ <CAPhsuW7xqr91k0c6zQxWf1n5nDPk1tq9F5Fp_yarBdZxE7Vn9w@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181010160648.TtxUbqO7nBixS1iFRJliNQR4eUvGK9GQHR5Vb4NpatM@z>
+Message-ID: <20181010160754.tR4NX1h7LQrSFKpOEiFo-Pjvt0_nREMqngzix3F68Cs@z>
 
-On Wed, Oct 10, 2018@2:23 AM Anders Roxell <anders.roxell@linaro.org> wrote:
+On Wed, Oct 10, 2018@7:28 AM Anders Roxell <anders.roxell@linaro.org> wrote:
 >
-> When test_lwt_seg6local.sh was added commit c99a84eac026
-> ("selftests/bpf: test for seg6local End.BPF action") config fragment
-> wasn't added, and without CONFIG_LWTUNNEL enabled we see this:
-> Error: CONFIG_LWTUNNEL is not enabled in this kernel.
-> selftests: test_lwt_seg6local [FAILED]
+> When test_flow_dissector.sh runs it complains that it can't find script
+> with_addr.sh:
 >
+> ./test_flow_dissector.sh: line 81: ./with_addr.sh: No such file or
+> directory
+>
+> Rework so that with_addr.sh gets installed, add it to
+> TEST_PROGS_EXTENDED variable.
+>
+> Fixes: 50b3ed57dee9 ("selftests/bpf: test bpf flow dissection")
 > Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 
 Acked-by: Song Liu <songliubraving at fb.com>
 
 > ---
->  tools/testing/selftests/bpf/config | 1 +
->  1 file changed, 1 insertion(+)
+>  tools/testing/selftests/bpf/Makefile | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-> index 3655508f95fd..dd49df5e2df4 100644
-> --- a/tools/testing/selftests/bpf/config
-> +++ b/tools/testing/selftests/bpf/config
-> @@ -19,3 +19,4 @@ CONFIG_CRYPTO_SHA256=m
->  CONFIG_VXLAN=y
->  CONFIG_GENEVE=y
->  CONFIG_NET_CLS_FLOWER=m
-> +CONFIG_LWTUNNEL=y
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 1381ab81099c..efd108ff737d 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -51,6 +51,8 @@ TEST_PROGS := test_kmod.sh \
+>         test_skb_cgroup_id.sh \
+>         test_flow_dissector.sh
+>
+> +TEST_PROGS_EXTENDED := with_addr.sh
+> +
+>  # Compile but not part of 'make run_tests'
+>  TEST_GEN_PROGS_EXTENDED = test_libbpf_open test_sock_addr test_skb_cgroup_id_user \
+>         flow_dissector_load test_flow_dissector
 > --
 > 2.19.1
 >
