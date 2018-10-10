@@ -1,75 +1,72 @@
-From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
-Date: Wed, 10 Oct 2018 15:19:22 -0400
-Subject: [RFC PATCH for 4.21 02/16] rseq/selftests: Adapt number of threads to
- the number of detected cpus
-In-Reply-To: <20181010191936.7495-1-mathieu.desnoyers@efficios.com>
-References: <20181010191936.7495-1-mathieu.desnoyers@efficios.com>
-Message-ID: <20181010191936.7495-3-mathieu.desnoyers@efficios.com>
+From: shuah at kernel.org (Shuah Khan)
+Date: Wed, 10 Oct 2018 14:25:31 -0600
+Subject: [PATCH] selftests/gpio: fix compiling errors
+In-Reply-To: <1372e275-d276-7982-127e-dd339ead1b67@cn.fujitsu.com>
+References: <1537524021-3371-1-git-send-email-lizhijian@cn.fujitsu.com>
+ <1372e275-d276-7982-127e-dd339ead1b67@cn.fujitsu.com>
+Message-ID: <ae288c01-5350-5b95-8157-dd377e6738b1@kernel.org>
 
-On smaller systems, running a test with 200 threads can take a long
-time on machines with smaller number of CPUs.
+On 10/07/2018 08:32 AM, Li Zhijian wrote:
+> ping
+> 
+> 
+> On 09/21/2018 06:00 PM, Li Zhijian wrote:
+>> lizhijian at haswell-OptiPlex-9020:/home/lizj/linux/tools/testing/selftests$ make
+>> [...snip...]
+>> make ARCH=x86 CROSS_COMPILE= -C ../../../gpio
+>> make[2]: Entering directory '/home/lizj/linux/tools/gpio'
+>> [...snip...]
+>> make[3]: Leaving directory '/home/lizj/linux/tools/gpio'
+>>    LINK     /home/lizj/linux/tools/testing/selftests/gpiogpio-event-mon
+>> make[2]: Leaving directory '/home/lizj/linux/tools/gpio'
+>> gcc -O2 -g -std=gnu99 -Wall -I../../../../usr/include/ gpio-mockup-chardev.c ../../../gpio/gpio-utils.o  -lmount -I/usr/include/libmount -o gpio-mockup-chardev
+>> gcc: error: ../../../gpio/gpio-utils.o: No such file or directory
+>> <builtin>: recipe for target 'gpio-mockup-chardev' failed
+>> make[1]: *** [gpio-mockup-chardev] Error 1
+>> make[1]: Leaving directory
+>> '/home/lizj/linux/tools/testing/selftests/gpio'
+>> Makefile:85: recipe for target 'all' failed
+>> make: *** [all] Error 2
+>>
+>> in this patch
+>> - correct target name to $OUTPUTgpio-utils.o
+>> - pass OUTPUT to tools/gpio/Makefile
+>> - support cleanup ../gpiogpio-hammer.o
+>>
+>> CC: Bamvor Jian Zhang <bamv2005 at gmail.com>
+>> CC: Bartosz Golaszewski <brgl at bgdev.pl>
+>> CC: Shuah Khan <shuah at kernel.org>
+>> CC: linux-gpio at vger.kernel.org
+>> Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
+>> ---
+>>   tools/testing/selftests/gpio/Makefile | 8 ++++----
+>>   1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
+>> index 4665cdb..7f9354a 100644
+>> --- a/tools/testing/selftests/gpio/Makefile
+>> +++ b/tools/testing/selftests/gpio/Makefile
+>> @@ -7,7 +7,7 @@ EXTRA_PROGS := ../gpiogpio-event-mon ../gpiogpio-hammer ../gpiolsgpio
+>>   EXTRA_DIRS := ../gpioinclude/
+>>   EXTRA_OBJS := ../gpiogpio-event-mon-in.o ../gpiogpio-event-mon.o
+>>   EXTRA_OBJS += ../gpiogpio-hammer-in.o ../gpiogpio-utils.o ../gpiolsgpio-in.o
+>> -EXTRA_OBJS += ../gpiolsgpio.o
+>> +EXTRA_OBJS += ../gpiolsgpio.o ../gpiogpio-hammer.o
+>>     include ../lib.mk
+>>   @@ -22,7 +22,7 @@ CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
+>>   LDLIBS += -lmount -I/usr/include/libmount
+>>     $(BINARIES):| khdr
+>> -$(BINARIES): ../../../gpio/gpio-utils.o
+>> +$(BINARIES): ../gpiogpio-utils.o
+>>   -../../../gpio/gpio-utils.o:
+>> -    make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
+>> +../gpiogpio-utils.o:
+>> +    make OUTPUT=$(OUTPUT) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C ../../../gpio
+> 
+Is this still an issue in linux-kselftest next. I applied a few patches
+from Fathi Boudra
 
-Detect the number of online cpus at test runtime, and multiply that
-by 6 to have 6 rseq threads per cpu preempting each other.
+Please check and let me know if this is till an issue.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: Joel Fernandes <joelaf at google.com>
-Cc: Peter Zijlstra <peterz at infradead.org>
-Cc: Catalin Marinas <catalin.marinas at arm.com>
-Cc: Dave Watson <davejwatson at fb.com>
-Cc: Will Deacon <will.deacon at arm.com>
-Cc: Andi Kleen <andi at firstfloor.org>
-Cc: linux-kselftest at vger.kernel.org
-Cc: "H . Peter Anvin" <hpa at zytor.com>
-Cc: Chris Lameter <cl at linux.com>
-Cc: Russell King <linux at arm.linux.org.uk>
-Cc: Michael Kerrisk <mtk.manpages at gmail.com>
-Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
-Cc: Paul Turner <pjt at google.com>
-Cc: Boqun Feng <boqun.feng at gmail.com>
-Cc: Josh Triplett <josh at joshtriplett.org>
-Cc: Steven Rostedt <rostedt at goodmis.org>
-Cc: Ben Maurer <bmaurer at fb.com>
-Cc: Andy Lutomirski <luto at amacapital.net>
-Cc: Andrew Morton <akpm at linux-foundation.org>
-Cc: Linus Torvalds <torvalds at linux-foundation.org>
----
- tools/testing/selftests/rseq/run_param_test.sh | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/rseq/run_param_test.sh b/tools/testing/selftests/rseq/run_param_test.sh
-index 3acd6d75ff9f..e426304fd4a0 100755
---- a/tools/testing/selftests/rseq/run_param_test.sh
-+++ b/tools/testing/selftests/rseq/run_param_test.sh
-@@ -1,6 +1,8 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0+ or MIT
- 
-+NR_CPUS=`grep '^processor' /proc/cpuinfo | wc -l`
-+
- EXTRA_ARGS=${@}
- 
- OLDIFS="$IFS"
-@@ -28,15 +30,16 @@ IFS="$OLDIFS"
- 
- REPS=1000
- SLOW_REPS=100
-+NR_THREADS=$((6*${NR_CPUS}))
- 
- function do_tests()
- {
- 	local i=0
- 	while [ "$i" -lt "${#TEST_LIST[@]}" ]; do
- 		echo "Running test ${TEST_NAME[$i]}"
--		./param_test ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
-+		./param_test ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
- 		echo "Running compare-twice test ${TEST_NAME[$i]}"
--		./param_test_compare_twice ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
-+		./param_test_compare_twice ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
- 		let "i++"
- 	done
- }
--- 
-2.11.0
+thanks,
+-- Shuah
