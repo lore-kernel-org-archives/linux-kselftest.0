@@ -1,29 +1,81 @@
-From: anders.roxell@linaro.org (Anders Roxell)
-Date: Wed, 10 Oct 2018 11:21:23 +0200
-Subject: [PATCH] selftests: bpf: add config fragment LWTUNNEL
-Message-ID: <20181010092123.26218-1-anders.roxell@linaro.org>
+From: andreyknvl@google.com (Andrey Konovalov)
+Date: Wed, 10 Oct 2018 16:09:25 +0200
+Subject: [PATCH v7 7/8] arm64: update
+ Documentation/arm64/tagged-pointers.txt
+In-Reply-To: <20181003173256.GG12998@arrakis.emea.arm.com>
+References: <cover.1538485901.git.andreyknvl@google.com>
+ <47a464307d4df3c0cb65f88d1fe83f9a741dd74b.1538485901.git.andreyknvl@google.com>
+ <20181003173256.GG12998@arrakis.emea.arm.com>
+Message-ID:
+ <CAAeHK+yPCRNAOSi6OpYC_Tdbo9SoXRVRbx8pjXNq96v8csO-Wg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181010092123.oxRPFrHdn-szu9NUYezbXuJnOupQpP53LBBXq1xVsBA@z>
+Message-ID: <20181010140925.ArZxzGHDLclkI-PL6dJPdrUQ2wegpzvc6JpF4ID_vag@z>
 
-When test_lwt_seg6local.sh was added commit c99a84eac026
-("selftests/bpf: test for seg6local End.BPF action") config fragment
-wasn't added, and without CONFIG_LWTUNNEL enabled we see this:
-Error: CONFIG_LWTUNNEL is not enabled in this kernel.
-selftests: test_lwt_seg6local [FAILED]
+On Wed, Oct 3, 2018@7:32 PM, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> On Tue, Oct 02, 2018@03:12:42PM +0200, Andrey Konovalov wrote:
+>> diff --git a/Documentation/arm64/tagged-pointers.txt b/Documentation/arm64/tagged-pointers.txt
+>> index a25a99e82bb1..ae877d185fdb 100644
+>> --- a/Documentation/arm64/tagged-pointers.txt
+>> +++ b/Documentation/arm64/tagged-pointers.txt
+>> @@ -17,13 +17,21 @@ this byte for application use.
+>>  Passing tagged addresses to the kernel
+>>  --------------------------------------
+>>
+>> -All interpretation of userspace memory addresses by the kernel assumes
+>> -an address tag of 0x00.
+>> +Some initial work for supporting non-zero address tags passed to the
+>> +kernel has been done. As of now, the kernel supports tags in:
+>
+> With my maintainer hat on, the above statement leads me to think this
+> new ABI is work in progress, so not yet suitable for upstream.
 
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
----
- tools/testing/selftests/bpf/config | 1 +
- 1 file changed, 1 insertion(+)
+OK, I think we can just say "The kernel supports tags in:" here. Will do in v8.
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 3655508f95fd..dd49df5e2df4 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -19,3 +19,4 @@ CONFIG_CRYPTO_SHA256=m
- CONFIG_VXLAN=y
- CONFIG_GENEVE=y
- CONFIG_NET_CLS_FLOWER=m
-+CONFIG_LWTUNNEL=y
--- 
-2.19.1
+>
+> Also, how is user space supposed to know that it can now pass tagged
+> pointers into the kernel? An ABI change (or relaxation), needs to be
+> advertised by the kernel, usually via a new HWCAP bit (e.g. HWCAP_TBI).
+> Once we have a HWCAP bit in place, we need to be pretty clear about
+> which syscalls can and cannot cope with tagged pointers. The "as of now"
+> implies potential further relaxation which, again, would need to be
+> advertised to user in some (additional) way.
+
+How exactly should I do that? Something like this [1]? Or is it only
+for hardware specific things and for this patchset I need to do
+something else?
+
+[1] https://github.com/torvalds/linux/commit/7206dc93a58fb76421c4411eefa3c003337bcb2d
+
+>
+>> -This includes, but is not limited to, addresses found in:
+>> +  - user fault addresses
+>
+> While the kernel currently supports this in some way (by clearing the
+> tag exception entry, el0_da), the above implies (at least to me) that
+> sigcontext.fault_address would contain the tagged address. That's not
+> the case (unless I missed it in your patches).
+
+I'll update the doc to reflect this in v8.
+
+>
+>> - - pointer arguments to system calls, including pointers in structures
+>> -   passed to system calls,
+>> +  - pointer arguments (including pointers in structures), which don't
+>> +    describe virtual memory ranges, passed to system calls
+>
+> I think we need to be more precise here...
+
+In what way?
+
+>
+>> +All other interpretations of userspace memory addresses by the kernel
+>> +assume an address tag of 0x00. This includes, but is not limited to,
+>> +addresses found in:
+>> +
+>> + - pointer arguments (including pointers in structures), which describe
+>> +   virtual memory ranges, passed to memory system calls (mmap, mprotect,
+>> +   etc.)
+>
+> ...and probably a full list here.
+
+Will add a full list in v8.
