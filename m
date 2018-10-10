@@ -1,43 +1,271 @@
-From: liu.song.a23 at gmail.com (Song Liu)
-Date: Wed, 10 Oct 2018 09:07:54 -0700
-Subject: [PATCH] selftests: bpf: install script with_addr.sh
-In-Reply-To: <20181010142704.26990-1-anders.roxell@linaro.org>
-References: <20181010142704.26990-1-anders.roxell@linaro.org>
-Message-ID: <CAPhsuW7xqr91k0c6zQxWf1n5nDPk1tq9F5Fp_yarBdZxE7Vn9w@mail.gmail.com>
+From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
+Date: Wed, 10 Oct 2018 15:19:36 -0400
+Subject: [RFC PATCH for 4.21 16/16] cpu-opv/selftests: Provide Makefile,
+ scripts, gitignore
+In-Reply-To: <20181010191936.7495-1-mathieu.desnoyers@efficios.com>
+References: <20181010191936.7495-1-mathieu.desnoyers@efficios.com>
+Message-ID: <20181010191936.7495-17-mathieu.desnoyers@efficios.com>
 
-On Wed, Oct 10, 2018 at 7:28 AM Anders Roxell <anders.roxell at linaro.org> wrote:
->
-> When test_flow_dissector.sh runs it complains that it can't find script
-> with_addr.sh:
->
-> ./test_flow_dissector.sh: line 81: ./with_addr.sh: No such file or
-> directory
->
-> Rework so that with_addr.sh gets installed, add it to
-> TEST_PROGS_EXTENDED variable.
->
-> Fixes: 50b3ed57dee9 ("selftests/bpf: test bpf flow dissection")
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+A run_param_test.sh script runs many variants of the parametrizable
+tests.
 
-Acked-by: Song Liu <songliubraving at fb.com>
+Wire up the cpu-opv Makefile, add directory entry into MAINTAINERS file.
 
-> ---
->  tools/testing/selftests/bpf/Makefile | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 1381ab81099c..efd108ff737d 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -51,6 +51,8 @@ TEST_PROGS := test_kmod.sh \
->         test_skb_cgroup_id.sh \
->         test_flow_dissector.sh
->
-> +TEST_PROGS_EXTENDED := with_addr.sh
-> +
->  # Compile but not part of 'make run_tests'
->  TEST_GEN_PROGS_EXTENDED = test_libbpf_open test_sock_addr test_skb_cgroup_id_user \
->         flow_dissector_load test_flow_dissector
-> --
-> 2.19.1
->
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Joel Fernandes <joelaf at google.com>
+Cc: Peter Zijlstra <peterz at infradead.org>
+Cc: Catalin Marinas <catalin.marinas at arm.com>
+Cc: Dave Watson <davejwatson at fb.com>
+Cc: Will Deacon <will.deacon at arm.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Andi Kleen <andi at firstfloor.org>
+Cc: linux-kselftest at vger.kernel.org
+Cc: "H . Peter Anvin" <hpa at zytor.com>
+Cc: Chris Lameter <cl at linux.com>
+Cc: Russell King <linux at arm.linux.org.uk>
+Cc: Michael Kerrisk <mtk.manpages at gmail.com>
+Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
+Cc: Paul Turner <pjt at google.com>
+Cc: Boqun Feng <boqun.feng at gmail.com>
+Cc: Josh Triplett <josh at joshtriplett.org>
+Cc: Steven Rostedt <rostedt at goodmis.org>
+Cc: Ben Maurer <bmaurer at fb.com>
+Cc: linux-api at vger.kernel.org
+Cc: Andy Lutomirski <luto at amacapital.net>
+Cc: Andrew Morton <akpm at linux-foundation.org>
+Cc: Linus Torvalds <torvalds at linux-foundation.org>
+---
+ MAINTAINERS                                       |   1 +
+ tools/testing/selftests/Makefile                  |   1 +
+ tools/testing/selftests/cpu-opv/.gitignore        |   6 +
+ tools/testing/selftests/cpu-opv/Makefile          |  39 +++++++
+ tools/testing/selftests/cpu-opv/run_param_test.sh | 134 ++++++++++++++++++++++
+ 5 files changed, 181 insertions(+)
+ create mode 100644 tools/testing/selftests/cpu-opv/.gitignore
+ create mode 100644 tools/testing/selftests/cpu-opv/Makefile
+ create mode 100755 tools/testing/selftests/cpu-opv/run_param_test.sh
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3b50578fc5d9..206fe4597697 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3864,6 +3864,7 @@ L:	linux-kernel at vger.kernel.org
+ S:	Supported
+ F:	kernel/cpu_opv.c
+ F:	include/uapi/linux/cpu_opv.h
++F:	tools/testing/selftests/cpu-opv/
+ 
+ CRAMFS FILESYSTEM
+ M:	Nicolas Pitre <nico at linaro.org>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index f1fe492c8e17..42bcc6e5fc5d 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -6,6 +6,7 @@ TARGETS += capabilities
+ TARGETS += cgroup
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
++TARGETS += cpu-opv
+ TARGETS += efivarfs
+ TARGETS += exec
+ TARGETS += filesystems
+diff --git a/tools/testing/selftests/cpu-opv/.gitignore b/tools/testing/selftests/cpu-opv/.gitignore
+new file mode 100644
+index 000000000000..8c7bb1f8be79
+--- /dev/null
++++ b/tools/testing/selftests/cpu-opv/.gitignore
+@@ -0,0 +1,6 @@
++basic_cpu_opv_test
++basic_percpu_ops_test
++param_test
++param_test_benchmark
++param_test_compare_twice
++param_test_skip_fastpath
+diff --git a/tools/testing/selftests/cpu-opv/Makefile b/tools/testing/selftests/cpu-opv/Makefile
+new file mode 100644
+index 000000000000..46f49bf30bae
+--- /dev/null
++++ b/tools/testing/selftests/cpu-opv/Makefile
+@@ -0,0 +1,39 @@
++# SPDX-License-Identifier: GPL-2.0+ OR MIT
++CFLAGS += -O2 -Wall -g -I./ -I../rseq/ -I../../../../usr/include/ -L./ -Wl,-rpath=./
++LDLIBS += -lpthread
++
++# Own dependencies because we only want to build against 1st prerequisite, but
++# still track changes to header files and depend on shared object.
++OVERRIDE_TARGETS = 1
++
++TEST_GEN_PROGS = basic_cpu_opv_test basic_percpu_ops_test \
++		param_test param_test_skip_fastpath \
++		param_test_benchmark param_test_compare_twice
++
++TEST_GEN_PROGS_EXTENDED = librseq.so libcpu-op.so
++
++TEST_PROGS = run_param_test.sh
++
++include ../lib.mk
++
++$(OUTPUT)/libcpu-op.so: cpu-op.c cpu-op.h
++	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
++
++$(OUTPUT)/librseq.so: ../rseq/rseq.c ../rseq/rseq.h ../rseq/rseq-*.h
++	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
++
++$(OUTPUT)/%: %.c $(TEST_GEN_PROGS_EXTENDED) ../rseq/rseq.h ../rseq/rseq-*.h cpu-op.h percpu-op.h
++	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -lcpu-op -o $@
++
++$(OUTPUT)/param_test_skip_fastpath: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
++					../rseq/rseq.h ../rseq/rseq-*.h cpu-op.h percpu-op.h
++	$(CC) $(CFLAGS) -DRSEQ_SKIP_FASTPATH $< $(LDLIBS) -lrseq -lcpu-op -o $@
++
++$(OUTPUT)/param_test_benchmark: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
++					../rseq/rseq.h ../rseq/rseq-*.h cpu-op.h percpu-op.h
++	$(CC) $(CFLAGS) -DBENCHMARK $< $(LDLIBS) -lrseq -lcpu-op -o $@
++
++$(OUTPUT)/param_test_compare_twice: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
++					../rseq/rseq.h ../rseq/rseq-*.h cpu-op.h percpu-op.h
++	$(CC) $(CFLAGS) -DRSEQ_COMPARE_TWICE $< $(LDLIBS) -lrseq -lcpu-op -o $@
++
+diff --git a/tools/testing/selftests/cpu-opv/run_param_test.sh b/tools/testing/selftests/cpu-opv/run_param_test.sh
+new file mode 100755
+index 000000000000..066d2479893c
+--- /dev/null
++++ b/tools/testing/selftests/cpu-opv/run_param_test.sh
+@@ -0,0 +1,134 @@
++#!/bin/bash
++
++NR_CPUS=`grep '^processor' /proc/cpuinfo | wc -l`
++
++EXTRA_ARGS=${@}
++
++OLDIFS="$IFS"
++IFS=$'\n'
++TEST_LIST=(
++	"-T s"
++	"-T l"
++	"-T b"
++	"-T b -M"
++	"-T m"
++	"-T m -M"
++	"-T i"
++)
++
++TEST_NAME=(
++	"spinlock"
++	"list"
++	"buffer"
++	"buffer with barrier"
++	"memcpy"
++	"memcpy with barrier"
++	"increment"
++)
++IFS="$OLDIFS"
++
++REPS=1000
++SLOW_REPS=100
++NR_THREADS=$((6*${NR_CPUS}))
++
++function do_tests()
++{
++	local i=0
++	while [ "$i" -lt "${#TEST_LIST[@]}" ]; do
++		echo "Running test ${TEST_NAME[$i]}"
++		./param_test ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
++		echo "Running skip fast-path test ${TEST_NAME[$i]}"
++		./param_test_skip_fastpath ${TEST_LIST[$i]} -r ${SLOW_REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
++		echo "Running compare-twice test ${TEST_NAME[$i]}"
++		./param_test_compare_twice ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
++		let "i++"
++	done
++}
++
++echo "Default parameters"
++do_tests
++
++echo "Loop injection: 10000 loops"
++
++OLDIFS="$IFS"
++IFS=$'\n'
++INJECT_LIST=(
++	"1"
++	"2"
++	"3"
++	"4"
++	"5"
++	"6"
++	"7"
++	"8"
++	"9"
++)
++IFS="$OLDIFS"
++
++NR_LOOPS=10000
++
++i=0
++while [ "$i" -lt "${#INJECT_LIST[@]}" ]; do
++	echo "Injecting at <${INJECT_LIST[$i]}>"
++	do_tests -${INJECT_LIST[i]} ${NR_LOOPS}
++	let "i++"
++done
++NR_LOOPS=
++
++function inject_blocking()
++{
++	OLDIFS="$IFS"
++	IFS=$'\n'
++	INJECT_LIST=(
++		"7"
++		"8"
++		"9"
++	)
++	IFS="$OLDIFS"
++
++	NR_LOOPS=-1
++
++	i=0
++	while [ "$i" -lt "${#INJECT_LIST[@]}" ]; do
++		echo "Injecting at <${INJECT_LIST[$i]}>"
++		do_tests -${INJECT_LIST[i]} -1 ${@}
++		let "i++"
++	done
++	NR_LOOPS=
++}
++
++echo "Yield injection (25%)"
++inject_blocking -m 4 -y
++
++echo "Yield injection (50%)"
++inject_blocking -m 2 -y
++
++echo "Yield injection (100%)"
++inject_blocking -m 1 -y
++
++echo "Kill injection (25%)"
++inject_blocking -m 4 -k
++
++echo "Kill injection (50%)"
++inject_blocking -m 2 -k
++
++echo "Kill injection (100%)"
++inject_blocking -m 1 -k
++
++echo "Sleep injection (1ms, 25%)"
++inject_blocking -m 4 -s 1
++
++echo "Sleep injection (1ms, 50%)"
++inject_blocking -m 2 -s 1
++
++echo "Sleep injection (1ms, 100%)"
++inject_blocking -m 1 -s 1
++
++echo "Disable rseq for 25% threads"
++do_tests -D 4
++
++echo "Disable rseq for 50% threads"
++do_tests -D 2
++
++echo "Disable rseq"
++do_tests -d
+-- 
+2.11.0
