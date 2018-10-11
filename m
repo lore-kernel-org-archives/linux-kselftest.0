@@ -1,17 +1,21 @@
 From: daniel at iogearbox.net (Daniel Borkmann)
-Date: Thu, 11 Oct 2018 10:34:10 +0200
-Subject: [PATCH] selftests: bpf: add config fragment LWTUNNEL
-In-Reply-To: <20181010092123.26218-1-anders.roxell@linaro.org>
-References: <20181010092123.26218-1-anders.roxell@linaro.org>
-Message-ID: <0eb2f372-ff85-b4c8-ee51-b9cc7ab5971d@iogearbox.net>
+Date: Thu, 11 Oct 2018 10:36:36 +0200
+Subject: [PATCH] selftests: bpf: install script with_addr.sh
+In-Reply-To: <20181010142704.26990-1-anders.roxell@linaro.org>
+References: <20181010142704.26990-1-anders.roxell@linaro.org>
+Message-ID: <10e2cd79-b3b9-c2cc-8587-2885781716f8@iogearbox.net>
 
-On 10/10/2018 11:21 AM, Anders Roxell wrote:
-> When test_lwt_seg6local.sh was added commit c99a84eac026
-> ("selftests/bpf: test for seg6local End.BPF action") config fragment
-> wasn't added, and without CONFIG_LWTUNNEL enabled we see this:
-> Error: CONFIG_LWTUNNEL is not enabled in this kernel.
-> selftests: test_lwt_seg6local [FAILED]
+On 10/10/2018 04:27 PM, Anders Roxell wrote:
+> When test_flow_dissector.sh runs it complains that it can't find script
+> with_addr.sh:
 > 
+> ./test_flow_dissector.sh: line 81: ./with_addr.sh: No such file or
+> directory
+> 
+> Rework so that with_addr.sh gets installed, add it to
+> TEST_PROGS_EXTENDED variable.
+> 
+> Fixes: 50b3ed57dee9 ("selftests/bpf: test bpf flow dissection")
 > Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 
 Applied to bpf-next, thanks Anders!
