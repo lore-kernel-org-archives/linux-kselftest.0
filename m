@@ -1,23 +1,44 @@
-From: daniel@iogearbox.net (Daniel Borkmann)
-Date: Thu, 11 Oct 2018 10:36:36 +0200
-Subject: [PATCH] selftests: bpf: install script with_addr.sh
-In-Reply-To: <20181010142704.26990-1-anders.roxell@linaro.org>
-References: <20181010142704.26990-1-anders.roxell@linaro.org>
-Message-ID: <10e2cd79-b3b9-c2cc-8587-2885781716f8@iogearbox.net>
+From: peng.hao2@zte.com.cn (Peng Hao)
+Date: Fri, 12 Oct 2018 03:53:50 +0800
+Subject: [PATCH]  selftests: fix warning: "_GNU_SOURCE" redefined
+Message-ID: <1539287630-92982-1-git-send-email-peng.hao2@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181011083636.W5m3Tno7rrhZWqpWOARUMCVq-lY0l_a7KIbOtEKskw8@z>
+Message-ID: <20181011195350.AEgRZek-TbwmWxDCQ80UhcWy2I5O6ImyfPOPCvfXwCY@z>
 
-On 10/10/2018 04:27 PM, Anders Roxell wrote:
-> When test_flow_dissector.sh runs it complains that it can't find script
-> with_addr.sh:
-> 
-> ./test_flow_dissector.sh: line 81: ./with_addr.sh: No such file or
-> directory
-> 
-> Rework so that with_addr.sh gets installed, add it to
-> TEST_PROGS_EXTENDED variable.
-> 
-> Fixes: 50b3ed57dee9 ("selftests/bpf: test bpf flow dissection")
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+Makefile contains -D_GNU_SOURCE. remove define "_GNU_SOURCE"
+in c files.
 
-Applied to bpf-next, thanks Anders!
+Signed-off-by: Peng Hao <peng.hao2 at zte.com.cn>
+---
+ tools/testing/selftests/proc/fd-001-lookup.c  | 2 +-
+ tools/testing/selftests/proc/fd-003-kthread.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/proc/fd-001-lookup.c b/tools/testing/selftests/proc/fd-001-lookup.c
+index a2010df..60d7948 100644
+--- a/tools/testing/selftests/proc/fd-001-lookup.c
++++ b/tools/testing/selftests/proc/fd-001-lookup.c
+@@ -14,7 +14,7 @@
+  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+ // Test /proc/*/fd lookup.
+-#define _GNU_SOURCE
++
+ #undef NDEBUG
+ #include <assert.h>
+ #include <dirent.h>
+diff --git a/tools/testing/selftests/proc/fd-003-kthread.c b/tools/testing/selftests/proc/fd-003-kthread.c
+index 1d659d5..dc591f9 100644
+--- a/tools/testing/selftests/proc/fd-003-kthread.c
++++ b/tools/testing/selftests/proc/fd-003-kthread.c
+@@ -14,7 +14,7 @@
+  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+ // Test that /proc/$KERNEL_THREAD/fd/ is empty.
+-#define _GNU_SOURCE
++
+ #undef NDEBUG
+ #include <sys/syscall.h>
+ #include <assert.h>
+-- 
+1.8.3.1
