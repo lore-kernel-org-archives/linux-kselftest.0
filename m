@@ -1,9 +1,9 @@
-From: gorcunov at gmail.com (Cyrill Gorcunov)
-Date: Thu, 11 Oct 2018 22:42:10 +0300
+From: adobriyan at gmail.com (Alexey Dobriyan)
+Date: Thu, 11 Oct 2018 23:56:01 +0300
 Subject: [PATCH] proc: fix proc-self-map-files selftest for arm
 In-Reply-To: <20181011184359.15627-1-rafael.tinoco@linaro.org>
 References: <20181011184359.15627-1-rafael.tinoco@linaro.org>
-Message-ID: <20181011194210.GD2401@uranus.lan>
+Message-ID: <20181011205601.GA32757@avx2>
 
 On Thu, Oct 11, 2018 at 03:43:59PM -0300, Rafael David Tinoco wrote:
 > MAP_FIXED is important for this test but, unfortunately, lowest virtual
@@ -29,17 +29,6 @@ On Thu, Oct 11, 2018 at 03:43:59PM -0300, Rafael David Tinoco wrote:
 > -	p = mmap(NULL, PAGE_SIZE, PROT_NONE, MAP_PRIVATE|MAP_FILE|MAP_FIXED, fd, 0);
 > +	p = mmap((void *) (2 * PAGE_SIZE), PAGE_SIZE, PROT_NONE,
 > +			MAP_PRIVATE|MAP_FILE|MAP_FIXED, fd, 0);
-> +
->  	if (p == MAP_FAILED) {
->  		if (errno == EPERM)
->  			return 2;
 
-As far as I remember nil virtual address has been there only to be sure the
-vma allocated won't be merged with another vmas. Fore sure most of x86
-standart application won't be using 8K address as well, so should do the
-trick I think.
-
-(Strictlly speaking the test should be rather parsing own maps first and
- find unused address instead but whatever :)
-
-Reviewed-by: Cyrill Gorcunov <gorcunov at gmail.com>
+As the comment in the beginning says this test is specifically for addresss 0.
+Maybe it should be ifdeffed with __arm__ then.
