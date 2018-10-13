@@ -1,50 +1,32 @@
-From: dan.carpenter@oracle.com (Dan Carpenter)
-Date: Fri, 12 Oct 2018 11:53:54 +0300
-Subject: [bug report] Fix cg_read_strcmp()
-Message-ID: <20181012085354.GA25186@mwanda>
+From: colin.king@canonical.com (Colin King)
+Date: Sat, 13 Oct 2018 16:41:05 +0100
+Subject: [PATCH] kvm: selftests: fix spelling mistake "Insufficent" ->
+ "Insufficient"
+Message-ID: <20181013154105.5999-1-colin.king@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181012085354.dPpU3aDIoRGR4WFh1l368sLyFM-1raPtR5fSywnJg1w@z>
+Message-ID: <20181013154105.UEfr3YltnrLjO49wPihaDTNJDAfCJ8kYmH106w2B_Os@z>
 
-Hello Jay Kamat,
+From: Colin Ian King <colin.king@canonical.com>
 
-This is a semi-automatic email about new static checker warnings.
+Trivial fix to spelling mistake in TEST_ASSERT message text
 
-The patch 48c2bb0b9cf8: "Fix cg_read_strcmp()" from Sep 7, 2018,
-leads to the following Smatch complaint:
+Signed-off-by: Colin Ian King <colin.king at canonical.com>
+---
+ tools/testing/selftests/kvm/lib/kvm_util.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    ./tools/testing/selftests/cgroup/cgroup_util.c:111 cg_read_strcmp()
-    error: we previously assumed 'expected' could be null (see line 97)
-
-./tools/testing/selftests/cgroup/cgroup_util.c
-    96		/* Handle the case of comparing against empty string */
-    97		if (!expected)
-                     ^^^^^^^^
-Originally, we assumed that expected was non-NULL but we added a check
-here.  I feel like maybe the intention was to check was supposed to be:
-
-	if (expected[0] == '\0')
-
-but that's just a random guess.
-
-    98			size = 32;
-    99		else
-   100			size = strlen(expected) + 1;
-   101	
-   102		buf = malloc(size);
-   103		if (!buf)
-   104			return -1;
-   105	
-   106		if (cg_read(cgroup, control, buf, size)) {
-   107			free(buf);
-   108			return -1;
-   109		}
-   110	
-   111		ret = strcmp(expected, buf);
-                             ^^^^^^^^
-Unchecked dereference.
-
-   112		free(buf);
-   113		return ret;
-
-regards,
-dan carpenter
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 6fd8c089cafc..a56ef6b187bb 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -123,7 +123,7 @@ struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
+ 
+ 	/* Allocate memory. */
+ 	vm = calloc(1, sizeof(*vm));
+-	TEST_ASSERT(vm != NULL, "Insufficent Memory");
++	TEST_ASSERT(vm != NULL, "Insufficient Memory");
+ 
+ 	vm->mode = mode;
+ 	vm_open(vm, perm);
+-- 
+2.17.1
