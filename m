@@ -1,175 +1,238 @@
 From: brendanhiggins at google.com (Brendan Higgins)
-Date: Tue, 16 Oct 2018 16:51:14 -0700
-Subject: [RFC v1 25/31] kunit: added concept of platform mocking
+Date: Tue, 16 Oct 2018 16:51:17 -0700
+Subject: [RFC v1 28/31] kunit: added Python libraries for handing KUnit config
+ and kernel
 In-Reply-To: <20181016235120.138227-1-brendanhiggins@google.com>
 References: <20181016235120.138227-1-brendanhiggins@google.com>
-Message-ID: <20181016235120.138227-26-brendanhiggins@google.com>
+Message-ID: <20181016235120.138227-29-brendanhiggins@google.com>
 
-Platform mocking is the mocking of all platform specific functions that
-interact directly with hardware. In effect, this provides the ability to
-mock any hardware behavior.
+kunit_config.py:
+  - parses .config and Kconfig files
 
+kunit_kernel.py: provides helper functions to:
+  - configure the kernel using kunitconfig
+  - builds the kernel with the correct architecture
+  - provides function to invoke the kernel and stream the output back
+
+The kernel invocation is wrapped in a subprocess call within the module
+because regular invocation of the kernel (./linux) may modify TTY
+settings.
+
+Signed-off-by: Felix Guo <felixguoxiuping at gmail.com>
 Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
 ---
- drivers/base/Makefile                |  1 +
- drivers/base/platform-mock.c         | 65 ++++++++++++++++++++++++++++
- include/linux/platform_device_mock.h | 64 +++++++++++++++++++++++++++
- 3 files changed, 130 insertions(+)
- create mode 100644 drivers/base/platform-mock.c
- create mode 100644 include/linux/platform_device_mock.h
+ tools/testing/kunit/.gitignore      |   3 +
+ tools/testing/kunit/kunit_config.py |  60 ++++++++++++++
+ tools/testing/kunit/kunit_kernel.py | 123 ++++++++++++++++++++++++++++
+ 3 files changed, 186 insertions(+)
+ create mode 100644 tools/testing/kunit/.gitignore
+ create mode 100644 tools/testing/kunit/kunit_config.py
+ create mode 100644 tools/testing/kunit/kunit_kernel.py
 
-diff --git a/drivers/base/Makefile b/drivers/base/Makefile
-index 704f442958103..77cc599daa020 100644
---- a/drivers/base/Makefile
-+++ b/drivers/base/Makefile
-@@ -23,6 +23,7 @@ obj-$(CONFIG_PINCTRL) += pinctrl.o
- obj-$(CONFIG_DEV_COREDUMP) += devcoredump.o
- obj-$(CONFIG_GENERIC_MSI_IRQ_DOMAIN) += platform-msi.o
- obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) += arch_topology.o
-+obj-$(CONFIG_PLATFORM_MOCK) += platform-mock.o
- 
- obj-y			+= test/
- 
-diff --git a/drivers/base/platform-mock.c b/drivers/base/platform-mock.c
+diff --git a/tools/testing/kunit/.gitignore b/tools/testing/kunit/.gitignore
 new file mode 100644
-index 0000000000000..3df9f1b0bb50f
+index 0000000000000..c791ff59a37a9
 --- /dev/null
-+++ b/drivers/base/platform-mock.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Fake platform device API for unit testing platform drivers.
-+ *
-+ * Copyright (C) 2018, Google LLC.
-+ * Author: Brendan Higgins <brendanhiggins at google.com>
-+ */
-+
-+#include <linux/platform_device_mock.h>
-+#include <linux/of_platform.h>
-+
-+struct device_node *of_fake_node(struct test *test, const char *name)
-+{
-+	struct device_node *node;
-+
-+	node = test_kzalloc(test, sizeof(*node), GFP_KERNEL);
-+	if (!node)
-+		return NULL;
-+
-+	of_node_init(node);
-+
-+	return node;
-+}
-+
-+struct platform_device *
-+of_fake_probe_platform(struct test *test,
-+		       const struct platform_driver *driver,
-+		       const char *node_name)
-+{
-+	struct platform_device *pdev;
-+	struct device_node *of_node;
-+	int ret;
-+
-+	of_node = of_fake_node(test, node_name);
-+	if (!of_node)
-+		return ERR_PTR(-ENOMEM);
-+
-+	test_info(test, "Creating device");
-+	pdev = of_platform_device_create(of_node, node_name, NULL);
-+	if (!pdev)
-+		return ERR_PTR(-ENODEV);
-+
-+	test_info(test, "Probing");
-+	ret = driver->probe(pdev);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return pdev;
-+}
-+
-+struct platform_device *of_fake_probe_platform_by_name(struct test *test,
-+						       const char *driver_name,
-+						       const char *node_name)
-+{
-+	const struct device_driver *driver;
-+
-+	test_info(test, "Locating driver by name");
-+	driver = driver_find(driver_name, &platform_bus_type);
-+	if (!driver)
-+		return ERR_PTR(-ENODEV);
-+
-+	return of_fake_probe_platform(test,
-+				      to_platform_driver(driver),
-+				      node_name);
-+}
-diff --git a/include/linux/platform_device_mock.h b/include/linux/platform_device_mock.h
++++ b/tools/testing/kunit/.gitignore
+@@ -0,0 +1,3 @@
++# Byte-compiled / optimized / DLL files
++__pycache__/
++*.py[cod]
+\ No newline at end of file
+diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
 new file mode 100644
-index 0000000000000..898539d166f66
+index 0000000000000..183bd5e758762
 --- /dev/null
-+++ b/include/linux/platform_device_mock.h
-@@ -0,0 +1,64 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Fake platform device API for unit testing platform drivers.
-+ *
-+ * Copyright (C) 2018, Google LLC.
-+ * Author: Brendan Higgins <brendanhiggins at google.com>
-+ */
++++ b/tools/testing/kunit/kunit_config.py
+@@ -0,0 +1,60 @@
++# SPDX-License-Identifier: GPL-2.0
 +
-+#include <linux/platform_device.h>
-+#include <kunit/mock.h>
++import collections
++import re
 +
-+static inline struct platform_driver *platform_driver_find(const char *name)
-+{
-+	struct device_driver *driver;
++CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_\w+ is not set$'
++CONFIG_PATTERN = r'^CONFIG_\w+=\S+$'
 +
-+	driver = driver_find(name, &platform_bus_type);
-+	if (!driver)
-+		return NULL;
++KconfigEntryBase = collections.namedtuple('KconfigEntry', ['raw_entry'])
 +
-+	return to_platform_driver(driver);
-+}
 +
-+/**
-+ * of_fake_node()
-+ * @test: the test to associate node with
-+ * @name: name of the node
-+ *
-+ * The &struct device_node returned is allocated as a root node with the given
-+ * name and otherwise behaves as a real &struct device_node.
-+ *
-+ * Returns: the faked &struct device_node
-+ */
-+struct device_node *of_fake_node(struct test *test, const char *name);
++class KconfigEntry(KconfigEntryBase):
 +
-+/**
-+ * of_fake_probe_platform()
-+ * @test: the test to associate the fake platform device with
-+ * @driver: driver to probe
-+ * @node_name: name of the device node created
-+ *
-+ * Creates a &struct platform_device and an associated &struct device_node,
-+ * probes the provided &struct platform_driver with the &struct platform_device.
-+ *
-+ * Returns: the &struct platform_device that was created
-+ */
-+struct platform_device *
-+of_fake_probe_platform(struct test *test,
-+		       const struct platform_driver *driver,
-+		       const char *node_name);
++	def __str__(self) -> str:
++		return self.raw_entry
 +
-+/**
-+ * of_fake_probe_platform_by_name()
-+ * @test: the test to associate the fake platform device with
-+ * @driver_name: name of the driver to probe
-+ * @node_name: name of the device node created
-+ *
-+ * Same as of_fake_probe_platform() but looks up the &struct platform_driver by
-+ * the provided name.
-+ *
-+ * Returns: the &struct platform_device that was created
-+ */
-+struct platform_device *of_fake_probe_platform_by_name(struct test *test,
-+						       const char *driver_name,
-+						       const char *node_name);
++
++class KconfigParseError(Exception):
++	"""Error parsing Kconfig defconfig or .config."""
++
++
++class Kconfig(object):
++	"""Represents defconfig or .config specified using the Kconfig language."""
++
++	def __init__(self):
++		self._entries = []
++
++	def entries(self):
++		return set(self._entries)
++
++	def add_entry(self, entry: KconfigEntry) -> None:
++		self._entries.append(entry)
++
++	def is_subset_of(self, other: "Kconfig") -> bool:
++		return self.entries().issubset(other.entries())
++
++	def write_to_file(self, path: str) -> None:
++		with open(path, 'w') as f:
++			for entry in self.entries():
++				f.write(str(entry) + '\n')
++
++	def parse_from_string(self, blob: str) -> None:
++		"""Parses a string containing KconfigEntrys and populates this Kconfig."""
++		self._entries = []
++		is_not_set_matcher = re.compile(CONFIG_IS_NOT_SET_PATTERN)
++		config_matcher = re.compile(CONFIG_PATTERN)
++		for line in blob.split('\n'):
++			line = line.strip()
++			if not line:
++				continue
++			elif config_matcher.match(line) or is_not_set_matcher.match(line):
++				self._entries.append(KconfigEntry(line))
++			elif line[0] == '#':
++				continue
++			else:
++				raise KconfigParseError('Failed to parse: ' + line)
++
++	def read_from_file(self, path: str) -> None:
++		with open(path, 'r') as f:
++			self.parse_from_string(f.read())
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+new file mode 100644
+index 0000000000000..87abaede50513
+--- /dev/null
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -0,0 +1,123 @@
++# SPDX-License-Identifier: GPL-2.0
++
++import logging
++import subprocess
++import os
++
++import kunit_config
++
++KCONFIG_PATH = '.config'
++
++class ConfigError(Exception):
++	"""Represents an error trying to configure the Linux kernel."""
++
++
++class BuildError(Exception):
++	"""Represents an error trying to build the Linux kernel."""
++
++
++class LinuxSourceTreeOperations(object):
++	"""An abstraction over command line operations performed on a source tree."""
++
++	def make_mrproper(self):
++		try:
++			subprocess.check_output(['make', 'mrproper'])
++		except OSError as e:
++			raise ConfigError('Could not call make command: ' + e)
++		except subprocess.CalledProcessError as e:
++			raise ConfigError(e.output)
++
++	def make_olddefconfig(self):
++		try:
++			subprocess.check_output(['make', 'ARCH=um', 'olddefconfig'])
++		except OSError as e:
++			raise ConfigError('Could not call make command: ' + e)
++		except subprocess.CalledProcessError as e:
++			raise ConfigError(e.output)
++
++	def make(self):
++		try:
++			subprocess.check_output(['make', 'ARCH=um'])
++		except OSError as e:
++			raise BuildError('Could not call execute make: ' + e)
++		except subprocess.CalledProcessError as e:
++			raise BuildError(e.output)
++
++	def linux_bin(self, params, timeout):
++		"""Runs the Linux UML binary. Must be named 'linux'."""
++		process = subprocess.Popen(
++			['./linux'] + params,
++			stdin=subprocess.PIPE,
++			stdout=subprocess.PIPE,
++			stderr=subprocess.PIPE)
++		process.wait(timeout=timeout)
++		return process
++
++
++class LinuxSourceTree(object):
++	"""Represents a Linux kernel source tree with KUnit tests."""
++
++	def __init__(self):
++		self._kconfig = kunit_config.Kconfig()
++		self._kconfig.read_from_file('kunitconfig')
++		self._ops = LinuxSourceTreeOperations()
++
++	def clean(self):
++		try:
++			self._ops.make_mrproper()
++		except ConfigError as e:
++			logging.error(e)
++			return False
++		return True
++
++	def build_config(self):
++		self._kconfig.write_to_file(KCONFIG_PATH)
++		try:
++			self._ops.make_olddefconfig()
++		except ConfigError as e:
++			logging.error(e)
++			return False
++		validated_kconfig = kunit_config.Kconfig()
++		validated_kconfig.read_from_file(KCONFIG_PATH)
++		if not self._kconfig.is_subset_of(validated_kconfig):
++			logging.error('Provided Kconfig is not contained in validated .config!')
++			return False
++		return True
++
++	def build_reconfig(self):
++		"""Creates a new .config if it is not a subset of the kunitconfig."""
++		if os.path.exists(KCONFIG_PATH):
++			existing_kconfig = kunit_config.Kconfig()
++			existing_kconfig.read_from_file(KCONFIG_PATH)
++			if not self._kconfig.is_subset_of(existing_kconfig):
++				print('Regenerating .config ...')
++				os.remove(KCONFIG_PATH)
++				return self.build_config()
++			else:
++				return True
++		else:
++			print('Generating .config ...')
++			return self.build_config()
++
++	def build_um_kernel(self):
++		try:
++			self._ops.make_olddefconfig()
++			self._ops.make()
++		except (ConfigError, BuildError) as e:
++			logging.error(e)
++			return False
++		used_kconfig = kunit_config.Kconfig()
++		used_kconfig.read_from_file(KCONFIG_PATH)
++		if not self._kconfig.is_subset_of(used_kconfig):
++			logging.error('Provided Kconfig is not contained in final config!')
++			return False
++		return True
++
++	def run_kernel(self, args=[]):
++		timeout = None
++		args.extend(['mem=256M'])
++		process = self._ops.linux_bin(args, timeout)
++		with open('test.log', 'w') as f:
++			for line in process.stdout:
++				f.write(line.rstrip().decode('ascii') + '\n')
++				yield line.rstrip().decode('ascii')
 -- 
 2.19.1.331.ge82ca0e54c-goog
