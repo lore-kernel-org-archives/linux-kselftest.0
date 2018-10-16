@@ -1,51 +1,94 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Tue, 16 Oct 2018 08:53:45 -0600
-Subject: [PATCH] selftests: fix warning: "_GNU_SOURCE" redefined
-In-Reply-To: <1539287630-92982-1-git-send-email-peng.hao2@zte.com.cn>
-References: <1539287630-92982-1-git-send-email-peng.hao2@zte.com.cn>
-Message-ID: <5dbfc86b-17f9-4f56-ebaa-489f70436294@kernel.org>
+From: daniel.diaz@linaro.org (=?UTF-8?q?Daniel=20D=C3=ADaz?=)
+Date: Tue, 16 Oct 2018 12:02:20 -0500
+Subject: [PATCH] selftests/ftrace: Use colored output when available
+Message-ID: <20181016170220.31156-1-daniel.diaz@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181016145345.ohk5KkuGvhNqvNrLlvwK2LHYdSSleLrXdD8O3RhxqQs@z>
+Message-ID: <20181016170220.2vCG-UPoXMfHjvwVaHeRK6raN5adtvVxkL8kppMk8MQ@z>
 
-On 10/11/2018 01:53 PM, Peng Hao wrote:
-> Makefile contains -D_GNU_SOURCE. remove define "_GNU_SOURCE"
-> in c files.
-> 
-> Signed-off-by: Peng Hao <peng.hao2 at zte.com.cn>
-> ---
->  tools/testing/selftests/proc/fd-001-lookup.c  | 2 +-
->  tools/testing/selftests/proc/fd-003-kthread.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/proc/fd-001-lookup.c b/tools/testing/selftests/proc/fd-001-lookup.c
-> index a2010df..60d7948 100644
-> --- a/tools/testing/selftests/proc/fd-001-lookup.c
-> +++ b/tools/testing/selftests/proc/fd-001-lookup.c
-> @@ -14,7 +14,7 @@
->   * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
->   */
->  // Test /proc/*/fd lookup.
-> -#define _GNU_SOURCE
-> +
->  #undef NDEBUG
->  #include <assert.h>
->  #include <dirent.h>
-> diff --git a/tools/testing/selftests/proc/fd-003-kthread.c b/tools/testing/selftests/proc/fd-003-kthread.c
-> index 1d659d5..dc591f9 100644
-> --- a/tools/testing/selftests/proc/fd-003-kthread.c
-> +++ b/tools/testing/selftests/proc/fd-003-kthread.c
-> @@ -14,7 +14,7 @@
->   * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
->   */
->  // Test that /proc/$KERNEL_THREAD/fd/ is empty.
-> -#define _GNU_SOURCE
-> +
->  #undef NDEBUG
->  #include <sys/syscall.h>
->  #include <assert.h>
-> 
+If test is being directly executed (with stdout opened on the
+terminal) and the terminal capabilities indicate enough
+colors, then use the existing scheme of green, red, and blue
+to show when tests pass, fail or end in a different way.
 
-Thanks for the patch. Applied to linux-kselftest next for 4.20-rc1.
+When running the tests redirecting the stdout, for instance,
+to a file, then colors are not shown, thus producing a more
+readable output.
 
-thanks,
--- Shuah
+Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
+---
+ tools/testing/selftests/ftrace/ftracetest | 29 +++++++++++++++++------
+ 1 file changed, 22 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index 4946b2edfcff..d987bbec675f 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -152,6 +152,21 @@ else
+   date > $LOG_FILE
+ fi
+ 
++# Define text colors
++# Check available colors on the terminal, if any
++ncolors=`tput colors 2>/dev/null`
++color_reset=
++color_red=
++color_green=
++color_blue=
++# If stdout exists and number of colors is eight or more, use them
++if [ -t 1 -a "$ncolors" -a "$ncolors" -ge 8 ]; then
++  color_reset="\e[0m"
++  color_red="\e[31m"
++  color_green="\e[32m"
++  color_blue="\e[34m"
++fi
++
+ prlog() { # messages
+   [ -z "$LOG_FILE" ] && echo -e "$@" || echo -e "$@" | tee -a $LOG_FILE
+ }
+@@ -195,37 +210,37 @@ test_on_instance() { # testfile
+ eval_result() { # sigval
+   case $1 in
+     $PASS)
+-      prlog "	[\e[32mPASS\e[30m]"
++      prlog "	[${color_green}PASS${color_reset}]"
+       PASSED_CASES="$PASSED_CASES $CASENO"
+       return 0
+     ;;
+     $FAIL)
+-      prlog "	[\e[31mFAIL\e[30m]"
++      prlog "	[${color_red}FAIL${color_reset}]"
+       FAILED_CASES="$FAILED_CASES $CASENO"
+       return 1 # this is a bug.
+     ;;
+     $UNRESOLVED)
+-      prlog "	[\e[34mUNRESOLVED\e[30m]"
++      prlog "	[${color_blue}UNRESOLVED${color_reset}]"
+       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
+       return 1 # this is a kind of bug.. something happened.
+     ;;
+     $UNTESTED)
+-      prlog "	[\e[34mUNTESTED\e[30m]"
++      prlog "	[${color_blue}UNTESTED${color_reset}]"
+       UNTESTED_CASES="$UNTESTED_CASES $CASENO"
+       return 0
+     ;;
+     $UNSUPPORTED)
+-      prlog "	[\e[34mUNSUPPORTED\e[30m]"
++      prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
+       UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
+       return $UNSUPPORTED_RESULT # depends on use case
+     ;;
+     $XFAIL)
+-      prlog "	[\e[31mXFAIL\e[30m]"
++      prlog "	[${color_red}XFAIL${color_reset}]"
+       XFAILED_CASES="$XFAILED_CASES $CASENO"
+       return 0
+     ;;
+     *)
+-      prlog "	[\e[34mUNDEFINED\e[30m]"
++      prlog "	[${color_blue}UNDEFINED${color_reset}]"
+       UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
+       return 1 # this must be a test bug
+     ;;
+-- 
+2.17.1
