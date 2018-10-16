@@ -1,22 +1,13 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Tue, 16 Oct 2018 13:09:56 -0400
+From: shuah@kernel.org (Shuah Khan)
+Date: Tue, 16 Oct 2018 11:43:29 -0600
 Subject: [PATCH] selftests/ftrace: Use colored output when available
 In-Reply-To: <20181016170220.31156-1-daniel.diaz@linaro.org>
 References: <20181016170220.31156-1-daniel.diaz@linaro.org>
-Message-ID: <20181016130956.2be3b984@gandalf.local.home>
+Message-ID: <037e072a-5695-1343-35d1-37b9450581d4@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181016170956.Wd1vo88LQFlW-m9Is-u77ZSXSTgSW4N7CnA_66-uelk@z>
+Message-ID: <20181016174329.UtrgEz_oCVNTjlJP_FXpbIQvc31rdTq6t1cTcYNK1yU@z>
 
-
-Masami,
-
-Does this fix the issues you reported?
-
--- Steve
-
-On Tue, 16 Oct 2018 12:02:20 -0500
-Daniel Díaz <daniel.diaz@linaro.org> wrote:
-
+On 10/16/2018 11:02 AM, Daniel Díaz wrote:
 > If test is being directly executed (with stdout opened on the
 > terminal) and the terminal capabilities indicate enough
 > colors, then use the existing scheme of green, red, and blue
@@ -28,77 +19,14 @@ Daniel Díaz <daniel.diaz@linaro.org> wrote:
 > 
 > Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
 > ---
->  tools/testing/selftests/ftrace/ftracetest | 29 +++++++++++++++++------
->  1 file changed, 22 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> index 4946b2edfcff..d987bbec675f 100755
-> --- a/tools/testing/selftests/ftrace/ftracetest
-> +++ b/tools/testing/selftests/ftrace/ftracetest
-> @@ -152,6 +152,21 @@ else
->    date > $LOG_FILE
->  fi
->  
-> +# Define text colors
-> +# Check available colors on the terminal, if any
-> +ncolors=`tput colors 2>/dev/null`
-> +color_reset=
-> +color_red=
-> +color_green=
-> +color_blue=
-> +# If stdout exists and number of colors is eight or more, use them
-> +if [ -t 1 -a "$ncolors" -a "$ncolors" -ge 8 ]; then
-> +  color_reset="\e[0m"
-> +  color_red="\e[31m"
-> +  color_green="\e[32m"
-> +  color_blue="\e[34m"
-> +fi
-> +
->  prlog() { # messages
->    [ -z "$LOG_FILE" ] && echo -e "$@" || echo -e "$@" | tee -a $LOG_FILE
->  }
-> @@ -195,37 +210,37 @@ test_on_instance() { # testfile
->  eval_result() { # sigval
->    case $1 in
->      $PASS)
-> -      prlog "	[\e[32mPASS\e[30m]"
-> +      prlog "	[${color_green}PASS${color_reset}]"
->        PASSED_CASES="$PASSED_CASES $CASENO"
->        return 0
->      ;;
->      $FAIL)
-> -      prlog "	[\e[31mFAIL\e[30m]"
-> +      prlog "	[${color_red}FAIL${color_reset}]"
->        FAILED_CASES="$FAILED_CASES $CASENO"
->        return 1 # this is a bug.
->      ;;
->      $UNRESOLVED)
-> -      prlog "	[\e[34mUNRESOLVED\e[30m]"
-> +      prlog "	[${color_blue}UNRESOLVED${color_reset}]"
->        UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
->        return 1 # this is a kind of bug.. something happened.
->      ;;
->      $UNTESTED)
-> -      prlog "	[\e[34mUNTESTED\e[30m]"
-> +      prlog "	[${color_blue}UNTESTED${color_reset}]"
->        UNTESTED_CASES="$UNTESTED_CASES $CASENO"
->        return 0
->      ;;
->      $UNSUPPORTED)
-> -      prlog "	[\e[34mUNSUPPORTED\e[30m]"
-> +      prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
->        UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
->        return $UNSUPPORTED_RESULT # depends on use case
->      ;;
->      $XFAIL)
-> -      prlog "	[\e[31mXFAIL\e[30m]"
-> +      prlog "	[${color_red}XFAIL${color_reset}]"
->        XFAILED_CASES="$XFAILED_CASES $CASENO"
->        return 0
->      ;;
->      *)
-> -      prlog "	[\e[34mUNDEFINED\e[30m]"
-> +      prlog "	[${color_blue}UNDEFINED${color_reset}]"
->        UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
->        return 1 # this must be a test bug
->      ;;
+
+Hi Daniel,
+
+Thanks for the patch. Steve is working on adding this functionality. Please
+see the latest linux-kselftest next for the patch.
+
+Steve just sent an update to the patch to fix an issue. Please test and see
+if that solves the problem you are trying address with this patch.
+
+thanks,
+-- Shuah
