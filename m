@@ -1,68 +1,175 @@
 From: brendanhiggins at google.com (Brendan Higgins)
-Date: Tue, 16 Oct 2018 16:51:13 -0700
-Subject: [RFC v1 24/31] kunit: improved sigsegv stack trace printing
+Date: Tue, 16 Oct 2018 16:51:14 -0700
+Subject: [RFC v1 25/31] kunit: added concept of platform mocking
 In-Reply-To: <20181016235120.138227-1-brendanhiggins@google.com>
 References: <20181016235120.138227-1-brendanhiggins@google.com>
-Message-ID: <20181016235120.138227-25-brendanhiggins@google.com>
+Message-ID: <20181016235120.138227-26-brendanhiggins@google.com>
 
-Sacrificed the control of printing stack trace within the crash handler
-in the test runner for getting a better stack trace; this is still not
-ideal, but much better than before.
+Platform mocking is the mocking of all platform specific functions that
+interact directly with hardware. In effect, this provides the ability to
+mock any hardware behavior.
 
 Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
 ---
- arch/um/kernel/trap.c | 11 ++++++++++-
- kunit/test.c          | 13 +++++++++----
- 2 files changed, 19 insertions(+), 5 deletions(-)
+ drivers/base/Makefile                |  1 +
+ drivers/base/platform-mock.c         | 65 ++++++++++++++++++++++++++++
+ include/linux/platform_device_mock.h | 64 +++++++++++++++++++++++++++
+ 3 files changed, 130 insertions(+)
+ create mode 100644 drivers/base/platform-mock.c
+ create mode 100644 include/linux/platform_device_mock.h
 
-diff --git a/arch/um/kernel/trap.c b/arch/um/kernel/trap.c
-index 9b97712daf14f..c3ff8346800c4 100644
---- a/arch/um/kernel/trap.c
-+++ b/arch/um/kernel/trap.c
-@@ -226,8 +226,17 @@ unsigned long segv(struct faultinfo fi, unsigned long ip, int is_user,
- 		current->thread.segv_regs = container_of(regs, struct pt_regs, regs);
+diff --git a/drivers/base/Makefile b/drivers/base/Makefile
+index 704f442958103..77cc599daa020 100644
+--- a/drivers/base/Makefile
++++ b/drivers/base/Makefile
+@@ -23,6 +23,7 @@ obj-$(CONFIG_PINCTRL) += pinctrl.o
+ obj-$(CONFIG_DEV_COREDUMP) += devcoredump.o
+ obj-$(CONFIG_GENERIC_MSI_IRQ_DOMAIN) += platform-msi.o
+ obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) += arch_topology.o
++obj-$(CONFIG_PLATFORM_MOCK) += platform-mock.o
  
- 	catcher = current->thread.fault_catcher;
--	if (catcher && current->thread.is_running_test)
-+	if (catcher && current->thread.is_running_test) {
-+		/*
-+		 * TODO(b/77223210): Right now we don't have a way to store a
-+		 * copy of the stack, or a copy of information from the stack,
-+		 * so we need to print it now; otherwise, the stack will be
-+		 * destroyed by segv_run_catcher which works by popping off
-+		 * stack frames.
-+		 */
-+		show_stack(NULL, NULL);
- 		segv_run_catcher(catcher, (void *) address);
-+	}
- 	else if (!is_user && (address >= start_vm) && (address < end_vm)) {
- 		flush_tlb_kernel_vm();
- 		goto out;
-diff --git a/kunit/test.c b/kunit/test.c
-index 6ea60059b4918..5d78f76b421af 100644
---- a/kunit/test.c
-+++ b/kunit/test.c
-@@ -210,12 +210,17 @@ static void test_handle_test_crash(struct test *test,
- 				   struct test_module *module,
- 				   struct test_case *test_case)
- {
--	test_err(test, "%s crashed", test_case->name);
- 	/*
--	 * TODO(brendanhiggins at google.com): This prints the stack trace up
--	 * through this frame, not up to the frame that caused the crash.
-+	 * TODO(brendanhiggins at google.com): Right now we don't have a way to
-+	 * store a copy of the stack, or a copy of information from the stack,
-+	 * so we need to print it in the "trap" handler; otherwise, the stack
-+	 * will be destroyed when it returns to us by popping off the
-+	 * appropriate stack frames (see longjmp).
-+	 *
-+	 * Ideally we would print the stack trace here, but we do not have the
-+	 * ability to do so with meaningful information at this time.
- 	 */
--	show_stack(NULL, NULL);
-+	test_err(test, "%s crashed", test_case->name);
+ obj-y			+= test/
  
- 	test_case_internal_cleanup(test);
- }
+diff --git a/drivers/base/platform-mock.c b/drivers/base/platform-mock.c
+new file mode 100644
+index 0000000000000..3df9f1b0bb50f
+--- /dev/null
++++ b/drivers/base/platform-mock.c
+@@ -0,0 +1,65 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Fake platform device API for unit testing platform drivers.
++ *
++ * Copyright (C) 2018, Google LLC.
++ * Author: Brendan Higgins <brendanhiggins at google.com>
++ */
++
++#include <linux/platform_device_mock.h>
++#include <linux/of_platform.h>
++
++struct device_node *of_fake_node(struct test *test, const char *name)
++{
++	struct device_node *node;
++
++	node = test_kzalloc(test, sizeof(*node), GFP_KERNEL);
++	if (!node)
++		return NULL;
++
++	of_node_init(node);
++
++	return node;
++}
++
++struct platform_device *
++of_fake_probe_platform(struct test *test,
++		       const struct platform_driver *driver,
++		       const char *node_name)
++{
++	struct platform_device *pdev;
++	struct device_node *of_node;
++	int ret;
++
++	of_node = of_fake_node(test, node_name);
++	if (!of_node)
++		return ERR_PTR(-ENOMEM);
++
++	test_info(test, "Creating device");
++	pdev = of_platform_device_create(of_node, node_name, NULL);
++	if (!pdev)
++		return ERR_PTR(-ENODEV);
++
++	test_info(test, "Probing");
++	ret = driver->probe(pdev);
++	if (ret)
++		return ERR_PTR(ret);
++
++	return pdev;
++}
++
++struct platform_device *of_fake_probe_platform_by_name(struct test *test,
++						       const char *driver_name,
++						       const char *node_name)
++{
++	const struct device_driver *driver;
++
++	test_info(test, "Locating driver by name");
++	driver = driver_find(driver_name, &platform_bus_type);
++	if (!driver)
++		return ERR_PTR(-ENODEV);
++
++	return of_fake_probe_platform(test,
++				      to_platform_driver(driver),
++				      node_name);
++}
+diff --git a/include/linux/platform_device_mock.h b/include/linux/platform_device_mock.h
+new file mode 100644
+index 0000000000000..898539d166f66
+--- /dev/null
++++ b/include/linux/platform_device_mock.h
+@@ -0,0 +1,64 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Fake platform device API for unit testing platform drivers.
++ *
++ * Copyright (C) 2018, Google LLC.
++ * Author: Brendan Higgins <brendanhiggins at google.com>
++ */
++
++#include <linux/platform_device.h>
++#include <kunit/mock.h>
++
++static inline struct platform_driver *platform_driver_find(const char *name)
++{
++	struct device_driver *driver;
++
++	driver = driver_find(name, &platform_bus_type);
++	if (!driver)
++		return NULL;
++
++	return to_platform_driver(driver);
++}
++
++/**
++ * of_fake_node()
++ * @test: the test to associate node with
++ * @name: name of the node
++ *
++ * The &struct device_node returned is allocated as a root node with the given
++ * name and otherwise behaves as a real &struct device_node.
++ *
++ * Returns: the faked &struct device_node
++ */
++struct device_node *of_fake_node(struct test *test, const char *name);
++
++/**
++ * of_fake_probe_platform()
++ * @test: the test to associate the fake platform device with
++ * @driver: driver to probe
++ * @node_name: name of the device node created
++ *
++ * Creates a &struct platform_device and an associated &struct device_node,
++ * probes the provided &struct platform_driver with the &struct platform_device.
++ *
++ * Returns: the &struct platform_device that was created
++ */
++struct platform_device *
++of_fake_probe_platform(struct test *test,
++		       const struct platform_driver *driver,
++		       const char *node_name);
++
++/**
++ * of_fake_probe_platform_by_name()
++ * @test: the test to associate the fake platform device with
++ * @driver_name: name of the driver to probe
++ * @node_name: name of the device node created
++ *
++ * Same as of_fake_probe_platform() but looks up the &struct platform_driver by
++ * the provided name.
++ *
++ * Returns: the &struct platform_device that was created
++ */
++struct platform_device *of_fake_probe_platform_by_name(struct test *test,
++						       const char *driver_name,
++						       const char *node_name);
 -- 
 2.19.1.331.ge82ca0e54c-goog
