@@ -1,107 +1,53 @@
-From: john.stultz@linaro.org (John Stultz)
-Date: Tue, 16 Oct 2018 14:57:12 -0700
-Subject: [PATCH v2 1/2] mm: Add an F_SEAL_FS_WRITE seal to memfd
-In-Reply-To: <20181009222042.9781-1-joel@joelfernandes.org>
-References: <20181009222042.9781-1-joel@joelfernandes.org>
-Message-ID:
- <CALAqxLXD-vghiMP51tVtL1Aw8OqT-QhCeNMdFSKiHpyq10-WCw@mail.gmail.com>
+From: brendanhiggins@google.com (Brendan Higgins)
+Date: Tue, 16 Oct 2018 16:50:49 -0700
+Subject: [RFC v1 00/31] kunit: Introducing KUnit, the Linux kernel unit
+ testing framework
+Message-ID: <20181016235120.138227-1-brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181016215712.spRdIDDfv3CIYFS-4JXBNSYaoxoi2Ly355cREnKZMpc@z>
+Message-ID: <20181016235049.621pOz8XU08yAvEBoZcRIXs-Kav8pu1AC7Tf-zjI1H4@z>
 
-On Tue, Oct 9, 2018 at 3:20 PM, Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
-> Android uses ashmem for sharing memory regions. We are looking forward
-> to migrating all usecases of ashmem to memfd so that we can possibly
-> remove the ashmem driver in the future from staging while also
-> benefiting from using memfd and contributing to it. Note staging drivers
-> are also not ABI and generally can be removed at anytime.
->
-> One of the main usecases Android has is the ability to create a region
-> and mmap it as writeable, then drop its protection for "future" writes
-> while keeping the existing already mmap'ed writeable-region active.
-> This allows us to implement a usecase where receivers of the shared
-> memory buffer can get a read-only view, while the sender continues to
-> write to the buffer. See CursorWindow in Android for more details:
-> https://developer.android.com/reference/android/database/CursorWindow
->
-> This usecase cannot be implemented with the existing F_SEAL_WRITE seal.
-> To support the usecase, this patch adds a new F_SEAL_FS_WRITE seal which
-> prevents any future mmap and write syscalls from succeeding while
-> keeping the existing mmap active. The following program shows the seal
-> working in action:
->
-> int main() {
->     int ret, fd;
->     void *addr, *addr2, *addr3, *addr1;
->     ret = memfd_create_region("test_region", REGION_SIZE);
->     printf("ret=%d\n", ret);
->     fd = ret;
->
->     // Create map
->     addr = mmap(0, REGION_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
->     if (addr == MAP_FAILED)
->             printf("map 0 failed\n");
->     else
->             printf("map 0 passed\n");
->
->     if ((ret = write(fd, "test", 4)) != 4)
->             printf("write failed even though no fs-write seal "
->                    "(ret=%d errno =%d)\n", ret, errno);
->     else
->             printf("write passed\n");
->
->     addr1 = mmap(0, REGION_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
->     if (addr1 == MAP_FAILED)
->             perror("map 1 prot-write failed even though no seal\n");
->     else
->             printf("map 1 prot-write passed as expected\n");
->
->     ret = fcntl(fd, F_ADD_SEALS, F_SEAL_FS_WRITE);
->     if (ret == -1)
->             printf("fcntl failed, errno: %d\n", errno);
->     else
->             printf("fs-write seal now active\n");
->
->     if ((ret = write(fd, "test", 4)) != 4)
->             printf("write failed as expected due to fs-write seal\n");
->     else
->             printf("write passed (unexpected)\n");
->
->     addr2 = mmap(0, REGION_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
->     if (addr2 == MAP_FAILED)
->             perror("map 2 prot-write failed as expected due to seal\n");
->     else
->             printf("map 2 passed\n");
->
->     addr3 = mmap(0, REGION_SIZE, PROT_READ, MAP_SHARED, fd, 0);
->     if (addr3 == MAP_FAILED)
->             perror("map 3 failed\n");
->     else
->             printf("map 3 prot-read passed as expected\n");
-> }
->
-> The output of running this program is as follows:
-> ret=3
-> map 0 passed
-> write passed
-> map 1 prot-write passed as expected
-> fs-write seal now active
-> write failed as expected due to fs-write seal
-> map 2 prot-write failed as expected due to seal
-> : Permission denied
-> map 3 prot-read passed as expected
->
-> Note: This seal will also prevent growing and shrinking of the memfd.
-> This is not something we do in Android so it does not affect us, however
-> I have mentioned this behavior of the seal in the manpage.
->
-> Cc: jreck at google.com
-> Cc: john.stultz at linaro.org
-> Cc: tkjos at google.com
-> Cc: gregkh at linuxfoundation.org
-> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+This patch set proposes KUnit, a lightweight unit testing and mocking
+framework for the Linux kernel.
 
-Reviewed-by: John Stultz <john.stultz at linaro.org>
+Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+it does not require installing the kernel on a test machine or in a VM
+and does not require tests to be written in userspace running on a host
+kernel. Additionally, KUnit is fast: From invocation to completion KUnit
+can run several dozen tests in under a second. Currently, the entire
+KUnit test suite for KUnit runs in under a second from the initial
+invocation (build time excluded).
 
-thanks
--john
+KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+Googletest/Googlemock for C++. KUnit provides facilities for defining
+unit test cases, grouping related test cases into test suites, providing
+common infrastructure for running tests, mocking, spying, and much more.
+
+## What's so special about unit testing?
+
+A unit test is supposed to test a single unit of code in isolation,
+hence the name. There should be no dependencies outside the control of
+the test; this means no external dependencies, which makes tests orders
+of magnitudes faster. Likewise, since there are no external dependencies,
+there are no hoops to jump through to run the tests. Additionally, this
+makes unit tests deterministic: a failing unit test always indicates a
+problem. Finally, because unit tests necessarily have finer granularity,
+they are able to test all code paths easily solving the classic problem
+of difficulty in exercising error handling code.
+
+## Is KUnit trying to replace other testing frameworks for the kernel?
+
+No. Most existing tests for the Linux kernel are end-to-end tests, which
+have their place. A well tested system has lots of unit tests, a
+reasonable number of integration tests, and some end-to-end tests. KUnit
+is just trying to address the unit test space which is currently not
+being addressed.
+
+## More information on KUnit
+
+There is a bunch of documentation near the end of this patch set that
+describes how to use KUnit and best practices for writing unit tests.
+For convenience I am hosting the compiled docs here:
+https://google.github.io/kunit-docs/third_party/kernel/docs/
+
+-- 
+2.19.1.331.ge82ca0e54c-goog
