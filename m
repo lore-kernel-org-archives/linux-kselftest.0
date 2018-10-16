@@ -1,154 +1,249 @@
 From: brendanhiggins@google.com (Brendan Higgins)
-Date: Tue, 16 Oct 2018 16:51:08 -0700
-Subject: [RFC v1 19/31] kunit: mock: implemented nice,
- strict and naggy mock distinctions
+Date: Tue, 16 Oct 2018 16:51:06 -0700
+Subject: [RFC v1 17/31] kunit: mock: added struct param matcher
 In-Reply-To: <20181016235120.138227-1-brendanhiggins@google.com>
 References: <20181016235120.138227-1-brendanhiggins@google.com>
-Message-ID: <20181016235120.138227-20-brendanhiggins@google.com>
+Message-ID: <20181016235120.138227-18-brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181016235108.YiOpC7p-yXlGo50SJMcLB1OjziU59DeeiivKgCiR_hY@z>
+Message-ID: <20181016235106.gZc2quJTbQLKHGVtXhzs6UAzYeXd9_5ToSBn2T2lOJs@z>
 
-Nice mocks only fail when there is an expectation on a method, but none
-match a given call. Strict mocks only pass when there is a matching
-expectation for every call. Naggy mocks have the same pass/fail behavior
-as nice, but report a warning in any case a strict mock would fail.
+Added parameter matcher builder for matching struct values.
 
-Signed-off-by: Felix Guo <felixguoxiuping at gmail.com>
 Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
 ---
- include/kunit/mock.h     |  63 +++++++++++++
- kunit/mock-test.c        | 192 ++++++++++++++++++++++++++++++++++++++-
- kunit/mock.c             |  10 +-
- kunit/test-stream-test.c |   6 +-
- 4 files changed, 265 insertions(+), 6 deletions(-)
+ include/kunit/mock.h     |  56 +++++++++++++++
+ kunit/Makefile           |   5 +-
+ kunit/common-mocks.c     | 116 ++++++++++++++++++++++++++++++
+ kunit/mock-test.c        |  43 +++++++++++
+ kunit/test-stream-test.c | 150 +++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 368 insertions(+), 2 deletions(-)
+ create mode 100644 kunit/test-stream-test.c
 
 diff --git a/include/kunit/mock.h b/include/kunit/mock.h
-index 4f85b39d628d0..8d155b27a257a 100644
+index 1b7485e2cedb8..daf965cf954e6 100644
 --- a/include/kunit/mock.h
 +++ b/include/kunit/mock.h
-@@ -95,10 +95,17 @@ struct mock_method {
- 	struct list_head expectations;
- };
+@@ -760,6 +760,14 @@ struct mock_param_matcher *test_memeq(struct test *test,
+ 				      size_t size);
+ struct mock_param_matcher *test_streq(struct test *test, const char *str);
  
-+enum mock_type {
-+	MOCK_TYPE_NICE,
-+	MOCK_TYPE_NAGGY,
-+	MOCK_TYPE_STRICT
++struct mock_param_matcher *test_str_contains(struct test *test,
++					     const char *needle);
++
++/* Matches var-arg arguments. */
++struct mock_param_matcher *test_va_format_cmp(struct test *test,
++					 struct mock_param_matcher *fmt_matcher,
++					 struct mock_param_matcher *va_matcher);
++
+ struct mock_action *test_u8_return(struct test *test, u8 ret);
+ struct mock_action *test_u16_return(struct test *test, u16 ret);
+ struct mock_action *test_u32_return(struct test *test, u32 ret);
+@@ -778,4 +786,52 @@ struct mock_action *test_ulonglong_return(struct test *test,
+ 					  unsigned long long ret);
+ struct mock_action *test_ptr_return(struct test *test, void *ret);
+ 
++/**
++ * struct mock_struct_matcher_entry - composed with other &struct
++ *                                    mock_struct_matcher_entry to make a
++ *                                    &struct struct_matcher
++ * @member_offset: offset of this member
++ * @matcher: matcher for this particular member
++ *
++ * This is used for struct_cmp() matchers.
++ */
++struct mock_struct_matcher_entry {
++	size_t member_offset;
++	struct mock_param_matcher *matcher;
 +};
 +
- struct mock {
- 	struct test_post_condition parent;
- 	struct test *test;
- 	struct list_head methods;
-+	enum mock_type type;
- 	/* TODO(brendanhiggins at google.com): add locking to do_expect. */
- 	const void *(*do_expect)(struct mock *mock,
- 				 const char *method_name,
-@@ -108,6 +115,8 @@ struct mock {
- 				 int len);
- };
- 
-+#define DEFAULT_MOCK_TYPE MOCK_TYPE_NAGGY
-+
- void mock_init_ctrl(struct test *test, struct mock *mock);
- 
- void mock_validate_expectations(struct mock *mock);
-@@ -137,6 +146,60 @@ void mock_unregister_formatter(struct mock_param_formatter *formatter);
- 
- #define MOCK(name) name##_mock
- 
-+/**
-+ * STRICT_MOCK() - sets the mock to be strict and returns the mock
-+ * @mock: the mock
-+ *
-+ * For an example, see ``The Nice, the Strict, and the Naggy`` under
-+ * ``Using KUnit``.
-+ */
-+#define STRICT_MOCK(mock) \
-+({ \
-+	mock_get_ctrl(mock)->type = MOCK_TYPE_STRICT; \
-+	mock; \
-+})
-+
-+static inline bool is_strict_mock(struct mock *mock)
++static inline void init_mock_struct_matcher_entry_internal(
++		struct mock_struct_matcher_entry *entry,
++		size_t offset,
++		struct mock_param_matcher *matcher)
 +{
-+	return mock->type == MOCK_TYPE_STRICT;
++	entry->member_offset = offset;
++	entry->matcher = matcher;
 +}
 +
 +/**
-+ * NICE_MOCK() - sets the mock to be nice and returns the mock
-+ * @mock: the mock
++ * INIT_MOCK_STRUCT_MATCHER_ENTRY()
++ * @entry: the &struct mock_struct_matcher_entry to initialize
++ * @type: the struct being matched
++ * @member: the member of the struct being matched, used to calculate the offset
++ * @matcher: matcher to match that member
 + *
-+ * For an example, see ``The Nice, the Strict, and the Naggy`` under
-+ * ``Using KUnit``.
++ * Initializes ``entry`` to match ``type->member`` with ``matcher``.
 + */
-+#define NICE_MOCK(mock) \
-+({ \
-+	mock_get_ctrl(mock)->type = MOCK_TYPE_NICE; \
-+	mock; \
-+})
++#define INIT_MOCK_STRUCT_MATCHER_ENTRY(entry, type, member, matcher)	       \
++		init_mock_struct_matcher_entry_internal(entry,		       \
++							offsetof(type, member),\
++							matcher)
 +
-+static inline bool is_nice_mock(struct mock *mock)
++static inline void INIT_MOCK_STRUCT_MATCHER_ENTRY_LAST(
++		struct mock_struct_matcher_entry *entry)
 +{
-+	return mock->type == MOCK_TYPE_NICE;
++	entry->matcher = NULL;
 +}
 +
-+/**
-+ * NAGGY_MOCK() - sets the mock to be naggy and returns the mock
-+ * @mock: the mock
-+ *
-+ * For an example, see ``The Nice, the Strict, and the Naggy`` under
-+ * ``Using KUnit``.
-+ */
-+#define NAGGY_MOCK(mock) \
-+({ \
-+	mock_get_ctrl(mock)->type = MOCK_TYPE_NAGGY; \
-+	mock; \
-+})
++struct mock_param_matcher *test_struct_cmp(
++		struct test *test,
++		const char *struct_name,
++		struct mock_struct_matcher_entry *entries);
 +
-+static inline bool is_naggy_mock(struct mock *mock)
+ #endif /* _KUNIT_MOCK_H */
+diff --git a/kunit/Makefile b/kunit/Makefile
+index 6fccfcdbc6f84..e05fbcae8bfb0 100644
+--- a/kunit/Makefile
++++ b/kunit/Makefile
+@@ -1,5 +1,6 @@
+ obj-$(CONFIG_KUNIT)		+= test.o mock.o common-mocks.o string-stream.o \
+   test-stream.o
+-obj-$(CONFIG_KUNIT_TEST)		+= \
+-  test-test.o test-mock.o mock-macro-test.o mock-test.o string-stream-test.o
++obj-$(CONFIG_KUNIT_TEST)	+= \
++  test-test.o test-mock.o mock-macro-test.o mock-test.o string-stream-test.o \
++  test-stream-test.o
+ obj-$(CONFIG_EXAMPLE_TEST)	+= example-test.o
+diff --git a/kunit/common-mocks.c b/kunit/common-mocks.c
+index ecac9c1c29c0e..ef88f8b8acda3 100644
+--- a/kunit/common-mocks.c
++++ b/kunit/common-mocks.c
+@@ -207,6 +207,122 @@ struct mock_param_matcher *test_streq(struct test *test, const char *str)
+ 	return &matcher->matcher;
+ }
+ 
++struct mock_str_contains_matcher {
++	struct mock_param_matcher matcher;
++	const char *needle;
++};
++
++static bool match_str_contains(struct mock_param_matcher *pmatcher,
++			       struct test_stream *stream,
++			       const void *phaystack)
 +{
-+	return mock->type == MOCK_TYPE_NAGGY;
++	struct mock_str_contains_matcher *matcher =
++		container_of(pmatcher,
++			     struct mock_str_contains_matcher,
++			     matcher);
++	const char *haystack = CONVERT_TO_ACTUAL_TYPE(const char *, phaystack);
++	bool matches = strstr(haystack, matcher->needle);
++
++	if (matches)
++		stream->add(stream,
++			    "'%s' found in '%s'",
++			    matcher->needle,
++			    haystack);
++	else
++		stream->add(stream,
++			    "'%s' not found in '%s'",
++			    matcher->needle,
++			    haystack);
++	return matches;
 +}
 +
- /**
-  * TEST_EXPECT_CALL() - Declares a *call expectation* on a mock function.
-  * @expectation_call: a mocked method or function with parameters replaced with
++struct mock_param_matcher *test_str_contains(struct test *test, const char *str)
++{
++	struct mock_str_contains_matcher *matcher;
++
++	matcher = test_kzalloc(test, sizeof(*matcher), GFP_KERNEL);
++	if (!matcher)
++		return NULL;
++
++	matcher->matcher.match = match_str_contains;
++	matcher->needle = str;
++
++	return &matcher->matcher;
++}
++
++struct mock_param_matcher *test_va_format_cmp(
++		struct test *test,
++		struct mock_param_matcher *fmt_matcher,
++		struct mock_param_matcher *va_matcher)
++{
++	struct mock_struct_matcher_entry *entries;
++
++	entries = test_kzalloc(test, sizeof(*entries) * 3, GFP_KERNEL);
++	if (!entries)
++		return NULL;
++
++	INIT_MOCK_STRUCT_MATCHER_ENTRY(&entries[0],
++				       struct va_format,
++				       fmt,
++				       fmt_matcher);
++	INIT_MOCK_STRUCT_MATCHER_ENTRY(&entries[1],
++				       struct va_format,
++				       va,
++				       va_matcher);
++	INIT_MOCK_STRUCT_MATCHER_ENTRY_LAST(&entries[2]);
++
++	return test_struct_cmp(test, "va_format", entries);
++}
++
++struct mock_struct_matcher {
++	struct mock_param_matcher matcher;
++	const char *struct_name;
++	struct mock_struct_matcher_entry *entries;
++};
++
++static bool match_struct(struct mock_param_matcher *pmatcher,
++			 struct test_stream *stream,
++			 const void *pactual)
++{
++	struct mock_struct_matcher *matcher =
++			container_of(pmatcher,
++				     struct mock_struct_matcher,
++				     matcher);
++	struct mock_struct_matcher_entry *entry;
++	const char *actual = CONVERT_TO_ACTUAL_TYPE(const char *, pactual);
++	const char *member_ptr;
++	bool matches = true, tmp;
++
++	stream->add(stream, "struct %s {", matcher->struct_name);
++	for (entry = matcher->entries; entry->matcher; entry++) {
++		member_ptr = actual + entry->member_offset;
++		tmp = entry->matcher->match(entry->matcher, stream, member_ptr);
++		matches = matches && tmp;
++		stream->add(stream, ", ");
++	}
++	stream->add(stream, "}");
++
++	return matches;
++}
++
++struct mock_param_matcher *test_struct_cmp(
++		struct test *test,
++		const char *struct_name,
++		struct mock_struct_matcher_entry *entries)
++{
++	struct mock_struct_matcher *matcher;
++
++	matcher = test_kzalloc(test, sizeof(*matcher), GFP_KERNEL);
++	if (!matcher)
++		return NULL;
++
++	matcher->matcher.match = match_struct;
++	matcher->struct_name = struct_name;
++	matcher->entries = entries;
++
++	return &matcher->matcher;
++}
++
+ #define DEFINE_RETURN_ACTION_STRUCT(type_name, type)			       \
+ 		struct mock_##type_name##_action {			       \
+ 			struct mock_action action;			       \
 diff --git a/kunit/mock-test.c b/kunit/mock-test.c
-index 77b16ad754424..675387743ada4 100644
+index 523ddee8f24e2..77b16ad754424 100644
 --- a/kunit/mock-test.c
 +++ b/kunit/mock-test.c
-@@ -150,7 +150,7 @@ static void mock_test_failed_expect_call_fails_test(struct test *test)
- static void mock_test_do_expect_default_return(struct test *test)
- {
- 	struct mock_test_context *ctx = test->priv;
--	struct MOCK(test) *mock_test = ctx->mock_test;
-+	struct MOCK(test) *mock_test = NICE_MOCK(ctx->mock_test);
- 	struct test *trgt = mock_get_trgt(mock_test);
- 	struct mock *mock = ctx->mock;
- 	int param0 = 5, param1 = -5;
-@@ -187,6 +187,49 @@ static void mock_test_do_expect_default_return(struct test *test)
+@@ -187,6 +187,48 @@ static void mock_test_do_expect_default_return(struct test *test)
  	TEST_EXPECT_EQ(test, 0, expectation->times_called);
  }
  
-+/**
-+ * DOC: Testing the failure condition of different mock types.
-+ *
-+ * The following tests will test the behaviour of expectations under different
-+ * conditions. For example, what happens when an expectation:
-+ * - is not satisfied at the end of the test
-+ * - is fulfilled but the expected function is called again
-+ * - a function is called without expectations set on it
-+ *
-+ * For each of these conditions, there may be variations between the different
-+ * types of mocks: nice mocks, naggy mocks (the default) and strict mocks.
-+ *
-+ * More information about these mocks can be found in the kernel documentation
-+ * under Documentation/test/api/class-and-function-mocking
++/*
++ * Method called on naggy mock with no expectations will not fail, but will show
++ * a warning message
 + */
-+
-+/* Method called on strict mock with no expectations will fail */
-+static void mock_test_strict_no_expectations_will_fail(struct test *test)
++static void mock_test_naggy_no_expectations_no_fail(struct test *test)
 +{
 +	struct mock_test_context *ctx = test->priv;
 +	struct MOCK(test) *mock_test = ctx->mock_test;
@@ -158,51 +253,6 @@ index 77b16ad754424..675387743ada4 100644
 +	static const char * const two_param_types[] = {"int", "int"};
 +	const void *two_params[] = {&param0, &param1};
 +	struct mock_expectation *expectation;
-+
-+	mock->type = MOCK_TYPE_STRICT;
-+
-+	mock_set_default_action(mock,
-+				"test_printk",
-+				test_printk,
-+				test_int_return(trgt, -4));
-+
-+	expectation = TEST_EXPECT_CALL(fail(mock_get_ctrl(mock_test),
-+					    test_any(test)));
-+
-+	mock->do_expect(mock, "test_printk", test_printk, two_param_types,
-+		two_params, ARRAY_SIZE(two_params));
-+	mock_validate_expectations(mock);
-+}
-+
- /*
-  * Method called on naggy mock with no expectations will not fail, but will show
-  * a warning message
-@@ -202,6 +245,8 @@ static void mock_test_naggy_no_expectations_no_fail(struct test *test)
- 	const void *two_params[] = {&param0, &param1};
- 	struct mock_expectation *expectation;
- 
-+	mock->type = MOCK_TYPE_NAGGY;
-+
- 	mock_set_default_action(mock,
- 				"test_printk",
- 				test_printk,
-@@ -229,6 +274,93 @@ static void mock_test_naggy_no_expectations_no_fail(struct test *test)
- 	mock_validate_expectations(mock);
- }
- 
-+/* Method called on nice mock with no expectations will do nothing. */
-+static void mock_test_nice_no_expectations_do_nothing(struct test *test)
-+{
-+	struct mock_test_context *ctx = test->priv;
-+	struct MOCK(test) *mock_test = ctx->mock_test;
-+	struct test *trgt = mock_get_trgt(mock_test);
-+	struct mock *mock = ctx->mock;
-+	int param0 = 5, param1 = -5;
-+	static const char * const two_param_types[] = {"int", "int"};
-+	const void *two_params[] = {&param0, &param1};
-+	struct mock_expectation *expectation;
-+
-+	mock->type = MOCK_TYPE_NICE;
 +
 +	mock_set_default_action(mock,
 +				"test_printk",
@@ -214,11 +264,13 @@ index 77b16ad754424..675387743ada4 100644
 +	expectation->min_calls_expected = 0;
 +	expectation->max_calls_expected = 0;
 +
-+	expectation = TEST_EXPECT_CALL(mock_vprintk(mock_get_ctrl(mock_test),
-+						    test_any(test),
-+						    test_any(test)));
-+	expectation->min_calls_expected = 0;
-+	expectation->max_calls_expected = 0;
++	TEST_EXPECT_CALL(mock_vprintk(
++			mock_get_ctrl(mock_test),
++			test_any(test),
++			test_va_format_cmp(test,
++					   test_str_contains(test,
++							     "Method was called with no expectations declared"),
++					   test_any(test))));
 +
 +	mock->do_expect(mock,
 +			"test_printk",
@@ -229,195 +281,172 @@ index 77b16ad754424..675387743ada4 100644
 +	mock_validate_expectations(mock);
 +}
 +
-+/* Test that method called on a mock (of any type) with no matching expectations
-+ * will fail test and print all the tried expectations.
-+ */
-+static void
-+run_method_called_but_no_matching_expectation_test(struct test *test,
-+						   enum mock_type mock_type)
-+{
-+	struct mock_test_context *ctx = test->priv;
-+	struct MOCK(test) *mock_test = ctx->mock_test;
-+	struct test *trgt = mock_get_trgt(mock_test);
-+	struct mock *mock = ctx->mock;
-+	int param0 = 5, param1 = -5;
-+	static const char * const two_param_types[] = {"int", "int"};
-+	const void *two_params[] = {&param0, &param1};
-+	struct mock_expectation *handle;
-+	struct mock_param_matcher *two_matchers[] = {
-+		test_int_eq(trgt, 100),
-+		test_int_eq(trgt, 100)
-+	};
-+	mock_add_matcher(mock, "test_printk", test_printk, two_matchers,
-+		ARRAY_SIZE(two_matchers));
-+	handle = TEST_EXPECT_CALL(fail(mock_get_ctrl(mock_test),
-+				       test_any(test)));
-+
-+	mock->type = mock_type;
-+
-+	mock->do_expect(mock, "test_printk", test_printk, two_param_types,
-+		two_params, ARRAY_SIZE(two_params));
-+}
-+
-+static void mock_test_naggy_no_matching_expectations_fail(struct test *test)
-+{
-+	run_method_called_but_no_matching_expectation_test(test,
-+							   MOCK_TYPE_NAGGY);
-+}
-+
-+static void mock_test_strict_no_matching_expectations_fail(struct test *test)
-+{
-+	run_method_called_but_no_matching_expectation_test(test,
-+							   MOCK_TYPE_STRICT);
-+}
-+
-+static void mock_test_nice_no_matching_expectations_fail(struct test *test)
-+{
-+	run_method_called_but_no_matching_expectation_test(test,
-+							   MOCK_TYPE_NICE);
-+}
-+
  static void mock_test_mock_validate_expectations(struct test *test)
  {
  	struct mock_test_context *ctx = test->priv;
-@@ -257,6 +389,58 @@ static void mock_test_mock_validate_expectations(struct test *test)
- 	mock_validate_expectations(mock);
- }
- 
-+static void mock_test_validate_clears_expectations(struct test *test)
-+{
-+	struct mock_test_context *ctx = test->priv;
-+	struct MOCK(test) *mock_test = ctx->mock_test;
-+	struct test *trgt = mock_get_trgt(mock_test);
-+	struct mock *mock = ctx->mock;
-+	struct mock_param_matcher *matchers[] = {
-+		test_int_eq(trgt, 5),
-+		test_int_eq(trgt, -4)
-+	};
-+	int param0 = 5, param1 = -4;
-+	static const char * const two_param_types[] = {"int", "int"};
-+	const void *two_params[] = {&param0, &param1};
-+
-+	struct mock_expectation *expectation;
-+
-+	mock->type = MOCK_TYPE_STRICT;
-+
-+	/* If all goes well, the mock_test should not fail. */
-+	expectation = TEST_EXPECT_CALL(fail(mock_get_ctrl(mock_test),
-+					    test_any(test)));
-+	expectation->min_calls_expected = 0;
-+	expectation->max_calls_expected = 0;
-+
-+	/* Add an arbitrary matcher for 0 calls */
-+	expectation = mock_add_matcher(mock, "test_printk", test_printk,
-+		matchers, ARRAY_SIZE(matchers));
-+	expectation->times_called = 0;
-+	expectation->min_calls_expected = 0;
-+	expectation->max_calls_expected = 0;
-+
-+	/* Should have 0 calls and should clear the previous expectation */
-+	mock_validate_expectations(mock);
-+
-+	/* Add a new matcher for 1 call */
-+	expectation = mock_add_matcher(mock, "test_printk", test_printk,
-+		matchers, ARRAY_SIZE(matchers));
-+	expectation->times_called = 0;
-+	expectation->min_calls_expected = 1;
-+	expectation->max_calls_expected = 1;
-+
-+	/* Satisfy previous matcher */
-+	mock->do_expect(mock, "test_printk", test_printk, two_param_types,
-+		two_params, ARRAY_SIZE(two_params));
-+
-+	/*
-+	 * Validate previous satisfy; if we didn't clear the previous
-+	 * expectation, it would fail the mock_test.
-+	 */
-+	mock_validate_expectations(mock);
-+}
-+
- void *do_mocked_fail(struct mock_action *this, const void **params, int len)
- {
- 	static const int ret;
-@@ -306,7 +490,13 @@ static struct test_case mock_test_cases[] = {
+@@ -264,6 +306,7 @@ static struct test_case mock_test_cases[] = {
  	TEST_CASE(mock_test_failed_expect_call_fails_test),
  	TEST_CASE(mock_test_do_expect_default_return),
  	TEST_CASE(mock_test_mock_validate_expectations),
-+	TEST_CASE(mock_test_strict_no_expectations_will_fail),
- 	TEST_CASE(mock_test_naggy_no_expectations_no_fail),
-+	TEST_CASE(mock_test_nice_no_expectations_do_nothing),
-+	TEST_CASE(mock_test_strict_no_matching_expectations_fail),
-+	TEST_CASE(mock_test_naggy_no_matching_expectations_fail),
-+	TEST_CASE(mock_test_nice_no_matching_expectations_fail),
-+	TEST_CASE(mock_test_validate_clears_expectations),
++	TEST_CASE(mock_test_naggy_no_expectations_no_fail),
  	{},
  };
  
-diff --git a/kunit/mock.c b/kunit/mock.c
-index 9be6b2d3621c4..314cebb54e236 100644
---- a/kunit/mock.c
-+++ b/kunit/mock.c
-@@ -79,6 +79,7 @@ void mock_init_ctrl(struct test *test, struct mock *mock)
- 	mock->test = test;
- 	INIT_LIST_HEAD(&mock->methods);
- 	mock->do_expect = mock_do_expect;
-+	mock->type = DEFAULT_MOCK_TYPE;
- 	mock->parent.validate = mock_validate_wrapper;
- 	list_add_tail(&mock->parent.node, &test->post_conditions);
- }
-@@ -316,7 +317,12 @@ static struct mock_expectation *mock_apply_expectations(
- 		mock_add_method_expectation_error(test, stream,
- 			"Method was called with no expectations declared: ",
- 			mock, method, type_names, params, len);
--		stream->commit(stream);
-+		if (is_strict_mock(mock))
-+			test->fail(test, stream);
-+		else if (is_naggy_mock(mock))
-+			stream->commit(stream);
-+		else
-+			stream->clear(stream);
- 		return NULL;
- 	}
- 
-@@ -346,7 +352,7 @@ static struct mock_expectation *mock_apply_expectations(
- 		}
- 	}
- 
--	if (expectations_all_saturated) {
-+	if (expectations_all_saturated && !is_nice_mock(mock)) {
- 		mock_add_method_expectation_error(test, stream,
- 			"Method was called with fully saturated expectations: ",
- 			mock, method, type_names, params, len);
 diff --git a/kunit/test-stream-test.c b/kunit/test-stream-test.c
-index b335e09805a0f..738a2692f7ba4 100644
---- a/kunit/test-stream-test.c
+new file mode 100644
+index 0000000000000..875b0db15878d
+--- /dev/null
 +++ b/kunit/test-stream-test.c
-@@ -20,7 +20,7 @@ struct test_stream_test_context {
- static void test_stream_test_add(struct test *test)
- {
- 	struct test_stream_test_context *ctx = test->priv;
--	struct MOCK(test) *mock_test = ctx->mock_test;
-+	struct MOCK(test) *mock_test = NICE_MOCK(ctx->mock_test);
- 	struct test_stream *stream = ctx->stream;
- 
- 	stream->add(stream, "Foo");
-@@ -40,7 +40,7 @@ static void test_stream_test_add(struct test *test)
- static void test_stream_test_append(struct test *test)
- {
- 	struct test_stream_test_context *ctx = test->priv;
--	struct MOCK(test) *mock_test = ctx->mock_test;
-+	struct MOCK(test) *mock_test = NICE_MOCK(ctx->mock_test);
- 	struct test_stream *stream = ctx->stream;
- 	struct test_stream *other_stream;
- 
-@@ -63,7 +63,7 @@ static void test_stream_test_append(struct test *test)
- static void test_stream_error_message_when_no_level_set(struct test *test)
- {
- 	struct test_stream_test_context *ctx = test->priv;
--	struct MOCK(test) *mock_test = ctx->mock_test;
-+	struct MOCK(test) *mock_test = NICE_MOCK(ctx->mock_test);
- 	struct test_stream *stream = ctx->stream;
- 	struct test_stream *other_stream;
- 
+@@ -0,0 +1,150 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit test for struct test_stream.
++ *
++ * Copyright (C) 2018, Google LLC.
++ * Author: Brendan Higgins <brendanhiggins at google.com>
++ */
++
++#include <kunit/test.h>
++#include <kunit/mock.h>
++#include <kunit/test-stream.h>
++
++#include "test-mock.h"
++
++struct test_stream_test_context {
++	struct MOCK(test)	*mock_test;
++	struct test_stream	*stream;
++};
++
++static void test_stream_test_add(struct test *test)
++{
++	struct test_stream_test_context *ctx = test->priv;
++	struct MOCK(test) *mock_test = ctx->mock_test;
++	struct test_stream *stream = ctx->stream;
++
++	stream->add(stream, "Foo");
++	stream->add(stream, " %s", "bar");
++	stream->set_level(stream, KERN_INFO);
++
++	TEST_EXPECT_CALL(mock_vprintk(
++			mock_get_ctrl(mock_test),
++			test_any(test),
++			test_va_format_cmp(test,
++					   test_streq(test, "Foo bar"),
++					   test_any(test))));
++
++	stream->commit(stream);
++}
++
++static void test_stream_test_append(struct test *test)
++{
++	struct test_stream_test_context *ctx = test->priv;
++	struct MOCK(test) *mock_test = ctx->mock_test;
++	struct test_stream *stream = ctx->stream;
++	struct test_stream *other_stream;
++
++	stream->add(stream, "Foo");
++	stream->set_level(stream, KERN_INFO);
++	other_stream = test_new_stream(mock_get_trgt(mock_test));
++	other_stream->add(other_stream, " %s", "bar");
++
++	stream->append(stream, other_stream);
++	TEST_EXPECT_CALL(mock_vprintk(
++			mock_get_ctrl(mock_test),
++			test_any(test),
++			test_va_format_cmp(test,
++					   test_streq(test, "Foo bar"),
++					   test_any(test))));
++
++	stream->commit(stream);
++}
++
++static void test_stream_error_message_when_no_level_set(struct test *test)
++{
++	struct test_stream_test_context *ctx = test->priv;
++	struct MOCK(test) *mock_test = ctx->mock_test;
++	struct test_stream *stream = ctx->stream;
++	struct test_stream *other_stream;
++
++	stream->add(stream, "Foo bar");
++	other_stream = test_new_stream(mock_get_trgt(mock_test));
++
++	stream->append(stream, other_stream);
++	TEST_EXPECT_CALL(mock_vprintk(
++			mock_get_ctrl(mock_test),
++			test_any(test),
++			test_va_format_cmp(test,
++					   test_streq(test,
++						      "Stream was committed without a specified log level."),
++					   test_any(test))));
++	TEST_EXPECT_CALL(mock_vprintk(
++			mock_get_ctrl(mock_test),
++			test_any(test),
++			test_va_format_cmp(test,
++					   test_streq(test, "Foo bar"),
++					   test_any(test))));
++	stream->commit(stream);
++}
++
++static void test_stream_test_commits_any_uncommitted_when_cleanup(
++		struct test *test)
++{
++	struct test_stream_test_context *ctx = test->priv;
++	struct MOCK(test) *mock_test = ctx->mock_test;
++	struct test_stream *stream = ctx->stream;
++
++	stream->add(stream, "Hello World");
++	stream->set_level(stream, KERN_WARNING);
++
++	TEST_EXPECT_CALL(mock_vprintk(
++			mock_get_ctrl(mock_test),
++			test_any(test),
++			test_va_format_cmp(test,
++					   test_streq(test,
++						      "End of test case reached with uncommitted stream entries."),
++					   test_any(test))));
++	TEST_EXPECT_CALL(mock_vprintk(
++			mock_get_ctrl(mock_test),
++			test_any(test),
++			test_va_format_cmp(test,
++					   test_streq(test,
++						      "Hello World"),
++					   test_any(test))));
++	test_cleanup(mock_get_trgt(mock_test));
++}
++
++static int test_stream_test_init(struct test *test)
++{
++	struct test_stream_test_context *ctx;
++
++	ctx = test_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return -ENOMEM;
++	test->priv = ctx;
++
++	ctx->mock_test = CONSTRUCT_MOCK(test, test);
++	if (!ctx->mock_test)
++		return -EINVAL;
++
++	ctx->stream = test_new_stream(mock_get_trgt(ctx->mock_test));
++	if (!ctx->stream)
++		return -ENOMEM;
++
++	return 0;
++}
++
++static struct test_case test_stream_test_cases[] = {
++	TEST_CASE(test_stream_test_add),
++	TEST_CASE(test_stream_test_append),
++	TEST_CASE(test_stream_test_commits_any_uncommitted_when_cleanup),
++	TEST_CASE(test_stream_error_message_when_no_level_set),
++	{},
++};
++
++static struct test_module test_stream_test_module = {
++	.name = "test-stream-test",
++	.init = test_stream_test_init,
++	.test_cases = test_stream_test_cases,
++};
++module_test(test_stream_test_module);
 -- 
 2.19.1.331.ge82ca0e54c-goog
