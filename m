@@ -1,34 +1,50 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Tue, 16 Oct 2018 08:47:29 -0600
-Subject: [PATCH] kvm: selftests: fix spelling mistake "Insufficent" ->
- "Insufficient"
-In-Reply-To: <20181013154105.5999-1-colin.king@canonical.com>
-References: <20181013154105.5999-1-colin.king@canonical.com>
-Message-ID: <0dbed644-47bf-0b4d-78a8-a5a59945f663@kernel.org>
+Date: Tue, 16 Oct 2018 08:50:28 -0600
+Subject: [PATCH] selftests: kvm: Fix -Wformat warnings
+In-Reply-To: <20181016141346.19922-1-andrea.parri@amarulasolutions.com>
+References: <20181016141346.19922-1-andrea.parri@amarulasolutions.com>
+Message-ID: <2af4a102-f7ef-29bf-15a5-4b355e6d9be0@kernel.org>
 
-On 10/13/2018 09:41 AM, Colin King wrote:
-> From: Colin Ian King <colin.king at canonical.com>
+On 10/16/2018 08:13 AM, Andrea Parri wrote:
+> Fixes the following warnings:
 > 
-> Trivial fix to spelling mistake in TEST_ASSERT message text
+> dirty_log_test.c: In function ‘help’:
+> dirty_log_test.c:216:9: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 2 has type ‘int’ [-Wformat=]
+>   printf(" -i: specify iteration counts (default: %"PRIu64")\n",
+>          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> In file included from include/test_util.h:18:0,
+>                  from dirty_log_test.c:16:
+> /usr/include/inttypes.h:105:34: note: format string is defined here
+>  # define PRIu64  __PRI64_PREFIX "u"
+> dirty_log_test.c:218:9: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 2 has type ‘int’ [-Wformat=]
+>   printf(" -I: specify interval in ms (default: %"PRIu64" ms)\n",
+>          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> In file included from include/test_util.h:18:0,
+>                  from dirty_log_test.c:16:
+> /usr/include/inttypes.h:105:34: note: format string is defined here
+>  # define PRIu64  __PRI64_PREFIX "u"
 > 
-> Signed-off-by: Colin Ian King <colin.king at canonical.com>
+> Signed-off-by: Andrea Parri <andrea.parri at amarulasolutions.com>
 > ---
->  tools/testing/selftests/kvm/lib/kvm_util.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/testing/selftests/kvm/dirty_log_test.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 6fd8c089cafc..a56ef6b187bb 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -123,7 +123,7 @@ struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
+> diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
+> index 0c2cdc105f968..a9c4b5e21d7e7 100644
+> --- a/tools/testing/selftests/kvm/dirty_log_test.c
+> +++ b/tools/testing/selftests/kvm/dirty_log_test.c
+> @@ -31,9 +31,9 @@
+>  /* How many pages to dirty for each guest loop */
+>  #define  TEST_PAGES_PER_LOOP            1024
+>  /* How many host loops to run (one KVM_GET_DIRTY_LOG for each loop) */
+> -#define  TEST_HOST_LOOP_N               32
+> +#define  TEST_HOST_LOOP_N               32UL
+>  /* Interval for each host loop (ms) */
+> -#define  TEST_HOST_LOOP_INTERVAL        10
+> +#define  TEST_HOST_LOOP_INTERVAL        10UL
 >  
->  	/* Allocate memory. */
->  	vm = calloc(1, sizeof(*vm));
-> -	TEST_ASSERT(vm != NULL, "Insufficent Memory");
-> +	TEST_ASSERT(vm != NULL, "Insufficient Memory");
->  
->  	vm->mode = mode;
->  	vm_open(vm, perm);
+>  /*
+>   * Guest variables.  We use these variables to share data between host
 > 
 
 Thanks for the patch. Applied to linux-kselftest next for 4.20-rc1
