@@ -1,53 +1,49 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Tue, 16 Oct 2018 08:50:28 -0600
-Subject: [PATCH] selftests: kvm: Fix -Wformat warnings
-In-Reply-To: <20181016141346.19922-1-andrea.parri@amarulasolutions.com>
-References: <20181016141346.19922-1-andrea.parri@amarulasolutions.com>
-Message-ID: <2af4a102-f7ef-29bf-15a5-4b355e6d9be0@kernel.org>
+Date: Tue, 16 Oct 2018 08:53:45 -0600
+Subject: [PATCH] selftests: fix warning: "_GNU_SOURCE" redefined
+In-Reply-To: <1539287630-92982-1-git-send-email-peng.hao2@zte.com.cn>
+References: <1539287630-92982-1-git-send-email-peng.hao2@zte.com.cn>
+Message-ID: <5dbfc86b-17f9-4f56-ebaa-489f70436294@kernel.org>
 
-On 10/16/2018 08:13 AM, Andrea Parri wrote:
-> Fixes the following warnings:
+On 10/11/2018 01:53 PM, Peng Hao wrote:
+> Makefile contains -D_GNU_SOURCE. remove define "_GNU_SOURCE"
+> in c files.
 > 
-> dirty_log_test.c: In function ‘help’:
-> dirty_log_test.c:216:9: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 2 has type ‘int’ [-Wformat=]
->   printf(" -i: specify iteration counts (default: %"PRIu64")\n",
->          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from include/test_util.h:18:0,
->                  from dirty_log_test.c:16:
-> /usr/include/inttypes.h:105:34: note: format string is defined here
->  # define PRIu64  __PRI64_PREFIX "u"
-> dirty_log_test.c:218:9: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 2 has type ‘int’ [-Wformat=]
->   printf(" -I: specify interval in ms (default: %"PRIu64" ms)\n",
->          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from include/test_util.h:18:0,
->                  from dirty_log_test.c:16:
-> /usr/include/inttypes.h:105:34: note: format string is defined here
->  # define PRIu64  __PRI64_PREFIX "u"
-> 
-> Signed-off-by: Andrea Parri <andrea.parri at amarulasolutions.com>
+> Signed-off-by: Peng Hao <peng.hao2 at zte.com.cn>
 > ---
->  tools/testing/selftests/kvm/dirty_log_test.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  tools/testing/selftests/proc/fd-001-lookup.c  | 2 +-
+>  tools/testing/selftests/proc/fd-003-kthread.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
-> index 0c2cdc105f968..a9c4b5e21d7e7 100644
-> --- a/tools/testing/selftests/kvm/dirty_log_test.c
-> +++ b/tools/testing/selftests/kvm/dirty_log_test.c
-> @@ -31,9 +31,9 @@
->  /* How many pages to dirty for each guest loop */
->  #define  TEST_PAGES_PER_LOOP            1024
->  /* How many host loops to run (one KVM_GET_DIRTY_LOG for each loop) */
-> -#define  TEST_HOST_LOOP_N               32
-> +#define  TEST_HOST_LOOP_N               32UL
->  /* Interval for each host loop (ms) */
-> -#define  TEST_HOST_LOOP_INTERVAL        10
-> +#define  TEST_HOST_LOOP_INTERVAL        10UL
->  
->  /*
->   * Guest variables.  We use these variables to share data between host
+> diff --git a/tools/testing/selftests/proc/fd-001-lookup.c b/tools/testing/selftests/proc/fd-001-lookup.c
+> index a2010df..60d7948 100644
+> --- a/tools/testing/selftests/proc/fd-001-lookup.c
+> +++ b/tools/testing/selftests/proc/fd-001-lookup.c
+> @@ -14,7 +14,7 @@
+>   * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+>   */
+>  // Test /proc/*/fd lookup.
+> -#define _GNU_SOURCE
+> +
+>  #undef NDEBUG
+>  #include <assert.h>
+>  #include <dirent.h>
+> diff --git a/tools/testing/selftests/proc/fd-003-kthread.c b/tools/testing/selftests/proc/fd-003-kthread.c
+> index 1d659d5..dc591f9 100644
+> --- a/tools/testing/selftests/proc/fd-003-kthread.c
+> +++ b/tools/testing/selftests/proc/fd-003-kthread.c
+> @@ -14,7 +14,7 @@
+>   * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+>   */
+>  // Test that /proc/$KERNEL_THREAD/fd/ is empty.
+> -#define _GNU_SOURCE
+> +
+>  #undef NDEBUG
+>  #include <sys/syscall.h>
+>  #include <assert.h>
 > 
 
-Thanks for the patch. Applied to linux-kselftest next for 4.20-rc1
+Thanks for the patch. Applied to linux-kselftest next for 4.20-rc1.
 
 thanks,
 -- Shuah
