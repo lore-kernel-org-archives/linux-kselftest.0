@@ -1,26 +1,33 @@
-From: rob.herring@linaro.org (Rob Herring)
-Date: Wed, 17 Oct 2018 17:46:54 -0500
-Subject: [RFC v1 22/31] kunit: mock: add the concept of spyable functions
-In-Reply-To: <20181016235120.138227-23-brendanhiggins@google.com>
-References: <20181016235120.138227-1-brendanhiggins@google.com>
- <20181016235120.138227-23-brendanhiggins@google.com>
-Message-ID:
- <CABGGiswwS9NJJ__WVgimcFUiTy_76AtDOxeSbSuv-oz1xjjD5w@mail.gmail.com>
+From: shuah@kernel.org (Shuah Khan)
+Date: Wed, 17 Oct 2018 17:01:46 -0600
+Subject: [PATCH] selftests/ftrace: Use colored output when available
+In-Reply-To: <20181017164103.4fb8692f@gandalf.local.home>
+References: <20181016170220.31156-1-daniel.diaz@linaro.org>
+ <20181017164103.4fb8692f@gandalf.local.home>
+Message-ID: <ba605b17-9de2-3fc8-4b2a-daf9edfa96c9@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181017224654.I7Ik1WSGV5jgEbJ25hG0V4qIjW4IXamKVVsSjTLuXS4@z>
+Message-ID: <20181017230146.5gPaIqRwYIa-dE3HeJldODjXL4v-I3it4WHsbSrfW40@z>
 
-On Tue, Oct 16, 2018 at 6:54 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> Adds the concept of spying like in Mockito
-> (http://static.javadoc.io/org.mockito/mockito-core/2.20.0/org/mockito/Mockito.html#spy-T-).
-> This allows a function declaration to be labled as spyable which allows
-> the function to be mocked *and* to allow the mock to invoke the original
-> function definition.
+On 10/17/2018 02:41 PM, Steven Rostedt wrote:
+> On Tue, 16 Oct 2018 12:02:20 -0500
+> Daniel Díaz <daniel.diaz@linaro.org> wrote:
+> 
+>> If test is being directly executed (with stdout opened on the
+>> terminal) and the terminal capabilities indicate enough
+>> colors, then use the existing scheme of green, red, and blue
+>> to show when tests pass, fail or end in a different way.
+>>
+>> When running the tests redirecting the stdout, for instance,
+>> to a file, then colors are not shown, thus producing a more
+>> readable output.
+>>
+>> Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
+> 
+> Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+> 
+> Shuah, can you pull this into your tree?
+> 
+Applied to linux-ksefltest next for 4.20-rc1
 
-We can already hook into arbitrary functions ftrace. Wouldn't
-utilizing that simplify features like this and avoid having to touch
-existing code for testing? Not sure what it would take to enable
-ftrace on UML. It is at least partially compiler dependent.
-
-Rob
+thanks,
+-- Shuah
