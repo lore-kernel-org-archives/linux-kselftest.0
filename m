@@ -1,56 +1,74 @@
-From: brendanhiggins@google.com (Brendan Higgins)
-Date: Wed, 17 Oct 2018 10:43:17 -0700
-Subject: [RFC v1 06/31] arch: um: enabled running kunit from User Mode
- Linux
-In-Reply-To: <f0d64a0a-7914-f390-c0b5-dc7626b45476@ideasonboard.com>
-References: <20181016235120.138227-1-brendanhiggins@google.com>
- <20181016235120.138227-7-brendanhiggins@google.com>
- <f0d64a0a-7914-f390-c0b5-dc7626b45476@ideasonboard.com>
-Message-ID:
- <CAFd5g46WZ9A0bDf3G2jkuc=w-hkyk8cMdF=HWzdO8nxNuvjpWA@mail.gmail.com>
+From: joel@joelfernandes.org (Joel Fernandes)
+Date: Wed, 17 Oct 2018 10:45:27 -0700
+Subject: [PATCH v2 1/2] mm: Add an F_SEAL_FS_WRITE seal to memfd
+In-Reply-To: <20181017120829.GA19731@infradead.org>
+References: <20181009222042.9781-1-joel@joelfernandes.org>
+ <20181017095155.GA354@infradead.org>
+ <20181017103958.GB230639@joelaf.mtv.corp.google.com>
+ <20181017120829.GA19731@infradead.org>
+Message-ID: <20181017174527.GA107185@joelaf.mtv.corp.google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181017174317.fzNtvyZX_cNS603zuBpHlVooNHVsFSQNZlLH6WxF7n0@z>
+Message-ID: <20181017174527.9urZQHh7nt_7wVevSRwUUnJeTxwa7RTs2XrKlKq28JE@z>
 
-On Wed, Oct 17, 2018 at 8:29 AM Kieran Bingham
-<kieran.bingham@ideasonboard.com> wrote:
->
-> Hi Brendan,
->
-> I very excitedly jumped on these patches to try them out, as this is
-> essentially something I was trying to do a few weeks back.
->
-> On 17/10/18 00:50, Brendan Higgins wrote:
-> > Makes minimum number of changes outside of the KUnit directories for
-> > KUnit to build and run using UML.
-> >
-> > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> > ---
-> >  Makefile             | 2 +-
-> >  arch/um/Kconfig.rest | 3 +++
->
-> But this file isn't present on v4.19-rc8
->
-> It looks like the file is removed at f163977d21a2 ("um: cleanup Kconfig
-> files")
+On Wed, Oct 17, 2018@05:08:29AM -0700, Christoph Hellwig wrote:
+> On Wed, Oct 17, 2018@03:39:58AM -0700, Joel Fernandes wrote:
+> > > > This usecase cannot be implemented with the existing F_SEAL_WRITE seal.
+> > > > To support the usecase, this patch adds a new F_SEAL_FS_WRITE seal which
+> > > > prevents any future mmap and write syscalls from succeeding while
+> > > > keeping the existing mmap active. The following program shows the seal
+> > > > working in action:
+> > > 
+> > > Where does the FS come from?  I'd rather expect this to be implemented
+> > > as a 'force' style flag that applies the seal even if the otherwise
+> > > required precondition is not met.
+> > 
+> > The "FS" was meant to convey that the seal is preventing writes at the VFS
+> > layer itself, for example vfs_write checks FMODE_WRITE and does not proceed,
+> > it instead returns an error if the flag is not set. I could not find a better
+> > name for it, I could call it F_SEAL_VFS_WRITE if you prefer?
+> 
+> I don't think there is anything VFS or FS about that - at best that
+> is an implementation detail.
+> 
+> Either do something like the force flag I suggested in the last mail,
+> or give it a name that matches the intention, e.g F_SEAL_FUTURE_WRITE.
+> 
 
-Whoops.
+Ok, I agree. I like the name F_SEAL_FUTURE_WRITE you are proposing so I will
+use that.
 
->
-> What version have you currently based these patches on?
+> > I could make it such that this seal would not be allowed unless F_SEAL_SHRINK
+> > and F_SEAL_GROW are either previously set, or they are passed along with this
+> > seal. Would that make more sense to you?
+> 
+> Yes.
 
-This patch set is based on 4.18, but I have versions for 4.4, 4.9,
-4.14, 4.16, and 4.17.
+Cool.
 
-I will rebase this patch set to 4.19-rc8 and send it out shortly.
+> > > >  static int memfd_add_seals(struct file *file, unsigned int seals)
+> > > >  {
+> > > > @@ -219,6 +220,9 @@ static int memfd_add_seals(struct file *file, unsigned int seals)
+> > > >  		}
+> > > >  	}
+> > > >  
+> > > > +	if ((seals & F_SEAL_FS_WRITE) && !(*file_seals & F_SEAL_FS_WRITE))
+> > > > +		file->f_mode &= ~(FMODE_WRITE | FMODE_PWRITE);
+> > > > +
+> > > 
+> > > This seems to lack any synchronization for f_mode.
+> > 
+> > The f_mode is set when the struct file is first created and then memfd sets
+> > additional flags in memfd_create. Then later we are changing it here at the
+> > time of setting the seal. I donot see any possiblity of a race since it is
+> > impossible to set the seal before memfd_create returns. Could you provide
+> > more details about what kind of synchronization is needed and what is the
+> > race condition scenario you were thinking off?
+> 
+> Even if no one changes these specific flags we still need a lock due
+> to rmw cycles on the field.  For example fadvise can set or clear
+> FMODE_RANDOM.  It seems to use file->f_lock for synchronization.
 
-> Do you expect to keep a branch somewhere that's easy to pull in?
+Ok, I will acquire the f_lock before setting these, thanks for the
+explanation. Will post updated patches today.
 
-I have one here: https://kunit-review.googlesource.com/c/linux/+/1030
-(you can check it out with git fetch
-https://kunit.googlesource.com/linux refs/changes/30/1030/4 && git
-checkout FETCH_HEAD)
-
->
-> Please add me to the CC list as an interested party on later versions :-)
-
-Will do.
+ - Joel
