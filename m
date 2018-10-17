@@ -1,72 +1,51 @@
-From: joel at joelfernandes.org (Joel Fernandes)
-Date: Wed, 17 Oct 2018 10:45:27 -0700
-Subject: [PATCH v2 1/2] mm: Add an F_SEAL_FS_WRITE seal to memfd
-In-Reply-To: <20181017120829.GA19731@infradead.org>
-References: <20181009222042.9781-1-joel@joelfernandes.org>
- <20181017095155.GA354@infradead.org>
- <20181017103958.GB230639@joelaf.mtv.corp.google.com>
- <20181017120829.GA19731@infradead.org>
-Message-ID: <20181017174527.GA107185@joelaf.mtv.corp.google.com>
+From: Tim.Bird at sony.com (Tim.Bird at sony.com)
+Date: Wed, 17 Oct 2018 17:49:24 +0000
+Subject: [RFC v1 00/31] kunit: Introducing KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20181016235120.138227-1-brendanhiggins@google.com>
+References: <20181016235120.138227-1-brendanhiggins@google.com>
+Message-ID: <ECADFF3FD767C149AD96A924E7EA6EAF805242EE@USCULXMSG01.am.sony.com>
 
-On Wed, Oct 17, 2018 at 05:08:29AM -0700, Christoph Hellwig wrote:
-> On Wed, Oct 17, 2018 at 03:39:58AM -0700, Joel Fernandes wrote:
-> > > > This usecase cannot be implemented with the existing F_SEAL_WRITE seal.
-> > > > To support the usecase, this patch adds a new F_SEAL_FS_WRITE seal which
-> > > > prevents any future mmap and write syscalls from succeeding while
-> > > > keeping the existing mmap active. The following program shows the seal
-> > > > working in action:
-> > > 
-> > > Where does the FS come from?  I'd rather expect this to be implemented
-> > > as a 'force' style flag that applies the seal even if the otherwise
-> > > required precondition is not met.
-> > 
-> > The "FS" was meant to convey that the seal is preventing writes at the VFS
-> > layer itself, for example vfs_write checks FMODE_WRITE and does not proceed,
-> > it instead returns an error if the flag is not set. I could not find a better
-> > name for it, I could call it F_SEAL_VFS_WRITE if you prefer?
+> -----Original Message-----
+> From: Brendan Higgins
 > 
-> I don't think there is anything VFS or FS about that - at best that
-> is an implementation detail.
-> 
-> Either do something like the force flag I suggested in the last mail,
-> or give it a name that matches the intention, e.g F_SEAL_FUTURE_WRITE.
-> 
+> This patch set proposes KUnit, a lightweight unit testing and mocking
+> framework for the Linux kernel.
 
-Ok, I agree. I like the name F_SEAL_FUTURE_WRITE you are proposing so I will
-use that.
+I'm interested in this, and think the kernel might benefit from this,
+but I have lots of questions.
 
-> > I could make it such that this seal would not be allowed unless F_SEAL_SHRINK
-> > and F_SEAL_GROW are either previously set, or they are passed along with this
-> > seal. Would that make more sense to you?
-> 
-> Yes.
+> Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+> it does not require installing the kernel on a test machine or in a VM
+> and does not require tests to be written in userspace running on a host
+> kernel.
 
-Cool.
 
-> > > >  static int memfd_add_seals(struct file *file, unsigned int seals)
-> > > >  {
-> > > > @@ -219,6 +220,9 @@ static int memfd_add_seals(struct file *file, unsigned int seals)
-> > > >  		}
-> > > >  	}
-> > > >  
-> > > > +	if ((seals & F_SEAL_FS_WRITE) && !(*file_seals & F_SEAL_FS_WRITE))
-> > > > +		file->f_mode &= ~(FMODE_WRITE | FMODE_PWRITE);
-> > > > +
-> > > 
-> > > This seems to lack any synchronization for f_mode.
-> > 
-> > The f_mode is set when the struct file is first created and then memfd sets
-> > additional flags in memfd_create. Then later we are changing it here at the
-> > time of setting the seal. I donot see any possiblity of a race since it is
-> > impossible to set the seal before memfd_create returns. Could you provide
-> > more details about what kind of synchronization is needed and what is the
-> > race condition scenario you were thinking off?
-> 
-> Even if no one changes these specific flags we still need a lock due
-> to rmw cycles on the field.  For example fadvise can set or clear
-> FMODE_RANDOM.  It seems to use file->f_lock for synchronization.
+This is stated here and a few places in the documentation.  Just to clarify,
+KUnit works by compiling the unit under test, along with the test code
+itself, and then runs it on the machine where the compilation took
+place?  Is this right?  How does cross-compiling enter into the equation?
+If not what I described, then what exactly is happening?
 
-Ok, I will acquire the f_lock before setting these, thanks for the
-explanation. Will post updated patches today.
+Sorry - I haven't had time to look through the patches in detail.
 
- - Joel
+Another issue is, what requirements does this place on the tested
+code?  Is extra instrumentation required?  I didn't see any, but I
+didn't look exhaustively at the code.
+
+Are all unit tests stored separately from the unit-under-test, or are
+they expected to be in the same directory?  Who is expected to
+maintain the unit tests?  How often are they expected to change?
+(Would it be every time the unit-under-test changed?)
+
+Does the test code require the same level of expertise to write
+and maintain as the unit-under-test code?  That is, could this be
+a new opportunity for additional developers (especially relative
+newcomers) to add value to the kernel by writing and maintaining
+test code, or does this add to the already large burden of code
+maintenance for our existing maintainers.
+
+Thanks,
+ -- Tim
+
+...
