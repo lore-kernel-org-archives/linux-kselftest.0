@@ -1,45 +1,43 @@
-From: Tim.Bird at sony.com (Tim.Bird at sony.com)
-Date: Wed, 17 Oct 2018 17:52:08 +0000
-Subject: [RFC v1 06/31] arch: um: enabled running kunit from User Mode
- Linux
-In-Reply-To: <f0d64a0a-7914-f390-c0b5-dc7626b45476@ideasonboard.com>
-References: <20181016235120.138227-1-brendanhiggins@google.com>
- <20181016235120.138227-7-brendanhiggins@google.com>
- <f0d64a0a-7914-f390-c0b5-dc7626b45476@ideasonboard.com>
-Message-ID: <ECADFF3FD767C149AD96A924E7EA6EAF8052436B@USCULXMSG01.am.sony.com>
+From: eugenis at google.com (Evgenii Stepanov)
+Date: Wed, 17 Oct 2018 13:25:42 -0700
+Subject: [PATCH v7 0/8] arm64: untag user pointers passed to the kernel
+In-Reply-To: <CAAeHK+yEZTLjgSj8YUzeJec9Pp2TwuLT5nCa1OpfBLXJkx_hhg@mail.gmail.com>
+References: <cover.1538485901.git.andreyknvl@google.com>
+ <be684ce5-92fd-e970-b002-83452cf50abd@arm.com>
+ <CAAeHK+yEZTLjgSj8YUzeJec9Pp2TwuLT5nCa1OpfBLXJkx_hhg@mail.gmail.com>
+Message-ID: <CAFKCwrh4-BvFB_R1J0LWcbfeR=d02OazowFuMU+hmq8Y=Dx+4w@mail.gmail.com>
 
+On Wed, Oct 17, 2018 at 7:20 AM, Andrey Konovalov <andreyknvl at google.com> wrote:
+> On Wed, Oct 17, 2018 at 4:06 PM, Vincenzo Frascino
+> <vincenzo.frascino at arm.com> wrote:
+>> Hi Andrey,
+>> I have been thinking a bit lately on how to address the problem of user tagged pointers passed to the kernel through syscalls, and IMHO probably the best way we have to catch them all and make sure that the approach is maintainable in the long term is to introduce shims that tag/untag the pointers passed to the kernel.
+>>
+>> In details, what I am proposing can live either in userspace (preferred solution so that we do not have to relax the ABI) or in kernel space and can be summarized as follows:
+>>  - A shim is specific to a syscall and is called by the libc when it needs to invoke the respective syscall.
+>>  - It is required only if the syscall accepts pointers.
+>>  - It saves the tags of a pointers passed to the syscall in memory (same approach if the we are passing a struct that contains pointers to the kernel, with the difference that all the tags of the pointers in the struct need to be saved singularly)
+>>  - Untags the pointers
+>>  - Invokes the syscall
+>>  - Retags the pointers with the tags stored in memory
+>>  - Returns
+>>
+>> What do you think?
+>
+> Hi Vincenzo,
+>
+> If I correctly understand what you are proposing, I'm not sure if that
+> would work with the countless number of different ioctl calls. For
+> example when an ioctl accepts a struct with a bunch of pointer fields.
+> In this case a shim like the one you propose can't live in userspace,
+> since libc doesn't know about the interface of all ioctls, so it can't
+> know which fields to untag. The kernel knows about those interfaces
+> (since the kernel implements them), but then we would need a custom
+> shim for each ioctl variation, which doesn't seem practical.
 
-
-> -----Original Message-----
-> From: Kieran Bingham 
-> 
-> Hi Brendan,
-> 
-> I very excitedly jumped on these patches to try them out, as this is
-> essentially something I was trying to do a few weeks back.
-> 
-> On 17/10/18 00:50, Brendan Higgins wrote:
-> > Makes minimum number of changes outside of the KUnit directories for
-> > KUnit to build and run using UML.
-> >
-> > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> > ---
-> >  Makefile             | 2 +-
-> >  arch/um/Kconfig.rest | 3 +++
-> 
-> But this file isn't present on v4.19-rc8
-> 
-> It looks like the file is removed at f163977d21a2 ("um: cleanup Kconfig
-> files")
-> 
-> What version have you currently based these patches on?
-> Do you expect to keep a branch somewhere that's easy to pull in?
-> 
-> Please add me to the CC list as an interested party on later versions :-)
-> 
-> It might be of interest to the automated testing mailing list too ? (Tim?)
-
- I think this is interesting to groups doing automated testing of the kernel
-(including myself) as another set of tests to run.  Right now I don't see it
-as having any special attributes related to automation.  But I could be wrong.
- -- Tim
+The current patchset handles majority of pointers in a just a few
+common places, like copy_from_user. Userspace shims will need to untag
+& retag all pointer arguments - we are looking at hundreds if not
+thousands of shims. They will also be located in a different code base
+from the syscall / ioctl implementations, which would make them
+impossible to keep up to date.
