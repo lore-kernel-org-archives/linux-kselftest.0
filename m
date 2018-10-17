@@ -1,31 +1,36 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Wed, 17 Oct 2018 17:02:31 -0600
-Subject: [PATCH] selftests/ftrace: Strip escape sequences for log file
-In-Reply-To: <20181017164514.23bcc9c3@gandalf.local.home>
-References: <20181017100305.0b3c03461b098f8943805455@gmail.com>
- <153974720272.17748.17439079576533415951.stgit@devbox>
- <20181017164514.23bcc9c3@gandalf.local.home>
-Message-ID: <cd3b8cc9-fdf0-9b29-5445-1d8e24e148d8@kernel.org>
+From: rdunlap@infradead.org (Randy Dunlap)
+Date: Wed, 17 Oct 2018 16:12:00 -0700
+Subject: [RFC v1 00/31] kunit: Introducing KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20181016235120.138227-1-brendanhiggins@google.com>
+References: <20181016235120.138227-1-brendanhiggins@google.com>
+Message-ID: <42737f55-0d42-dffe-7b34-e24666e713a0@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181017230231.7ZB5prty9yQLhTgj-1WSMm2zFZ0RiTmyOoGwKc5HXkY@z>
+Message-ID: <20181017231200.KIMzPxRk_C5nEEQ0jA9Cszbf6HqhWSXGZdqXcRS4cAQ@z>
 
-On 10/17/2018 02:45 PM, Steven Rostedt wrote:
-> On Wed, 17 Oct 2018 12:33:23 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> 
->> Strip escape sequences from the stream to the ftracetest
->> summary log file. Note that all test-case results are
->> dumped raw in each file.
->>
-> 
-> Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-> 
-> Shuah,
-> 
-> Please take this one too.
-> 
+On 10/16/18 4:50 PM, Brendan Higgins wrote:
+> This patch set proposes KUnit, a lightweight unit testing and mocking
+> framework for the Linux kernel.
 
-Yup. Applied to linux-kselftest for 4.20-rc1.
+Hi,
 
-thanks,
--- Shuah
+Just a general comment:
+
+Documentation/process/submitting-patches.rst says:
+<<Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+to do frotz", as if you are giving orders to the codebase to change
+its behaviour.>>
+
+That also means saying things like:
+... test: add
+instead of ... test: added
+and "enable" instead of "enabled"
+and "improve" instead of "improved"
+and "implement" instead of "implemented".
+
+
+
+thanks.
+-- 
+~Randy
