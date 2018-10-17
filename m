@@ -1,73 +1,46 @@
-From: daniel@ffwll.ch (Daniel Vetter)
-Date: Wed, 17 Oct 2018 11:08:19 +0200
-Subject: [RFC v1 00/31] kunit: Introducing KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <20181016235120.138227-1-brendanhiggins@google.com>
-References: <20181016235120.138227-1-brendanhiggins@google.com>
-Message-ID: <20181017090819.GM31561@phenom.ffwll.local>
+From: hch@infradead.org (Christoph Hellwig)
+Date: Wed, 17 Oct 2018 02:51:55 -0700
+Subject: [PATCH v2 1/2] mm: Add an F_SEAL_FS_WRITE seal to memfd
+In-Reply-To: <20181009222042.9781-1-joel@joelfernandes.org>
+References: <20181009222042.9781-1-joel@joelfernandes.org>
+Message-ID: <20181017095155.GA354@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181017090819.UVLiS7umIRsME7UHQSC-Cfj5kwiXxgxFvOlFv2p9ffY@z>
+Message-ID: <20181017095155.a2VveE0YvIqYS88DqUgCBqV4v4ep4t5bPTSIIm5kyg4@z>
 
-On Tue, Oct 16, 2018@04:50:49PM -0700, Brendan Higgins wrote:
-> This patch set proposes KUnit, a lightweight unit testing and mocking
-> framework for the Linux kernel.
-> 
-> Unlike Autotest and kselftest, KUnit is a true unit testing framework;
-> it does not require installing the kernel on a test machine or in a VM
-> and does not require tests to be written in userspace running on a host
-> kernel. Additionally, KUnit is fast: From invocation to completion KUnit
-> can run several dozen tests in under a second. Currently, the entire
-> KUnit test suite for KUnit runs in under a second from the initial
-> invocation (build time excluded).
-> 
-> KUnit is heavily inspired by JUnit, Python's unittest.mock, and
-> Googletest/Googlemock for C++. KUnit provides facilities for defining
-> unit test cases, grouping related test cases into test suites, providing
-> common infrastructure for running tests, mocking, spying, and much more.
-> 
-> ## What's so special about unit testing?
-> 
-> A unit test is supposed to test a single unit of code in isolation,
-> hence the name. There should be no dependencies outside the control of
-> the test; this means no external dependencies, which makes tests orders
-> of magnitudes faster. Likewise, since there are no external dependencies,
-> there are no hoops to jump through to run the tests. Additionally, this
-> makes unit tests deterministic: a failing unit test always indicates a
-> problem. Finally, because unit tests necessarily have finer granularity,
-> they are able to test all code paths easily solving the classic problem
-> of difficulty in exercising error handling code.
-> 
-> ## Is KUnit trying to replace other testing frameworks for the kernel?
-> 
-> No. Most existing tests for the Linux kernel are end-to-end tests, which
-> have their place. A well tested system has lots of unit tests, a
-> reasonable number of integration tests, and some end-to-end tests. KUnit
-> is just trying to address the unit test space which is currently not
-> being addressed.
-> 
-> ## More information on KUnit
-> 
-> There is a bunch of documentation near the end of this patch set that
-> describes how to use KUnit and best practices for writing unit tests.
-> For convenience I am hosting the compiled docs here:
-> https://google.github.io/kunit-docs/third_party/kernel/docs/
+On Tue, Oct 09, 2018@03:20:41PM -0700, Joel Fernandes (Google) wrote:
+> One of the main usecases Android has is the ability to create a region
+> and mmap it as writeable, then drop its protection for "future" writes
+> while keeping the existing already mmap'ed writeable-region active.
 
-We've started our own unit test framework (very early, and not any real
-infrastructure yet) under drivers/gpu/drm/selftests. They're all meant to
-test functions and small pieces of functionality of our libraries in
-isolation, without any need for a real (or virtual) gpu driver. It kinda
-integrates both with kselftests and with our graphics test suite, but
-directly running tests using UML as part of the build process sounds much,
-much better. Having proper and standardized infrastructure for kernel unit
-tests sounds terrific.
+s/drop/add/ ?
 
-In other words: I want.
+Otherwise this doesn't make much sense to me.
 
-Please keep dri-devel at lists.freedesktop.org in the loop on future
-versions.
+> This usecase cannot be implemented with the existing F_SEAL_WRITE seal.
+> To support the usecase, this patch adds a new F_SEAL_FS_WRITE seal which
+> prevents any future mmap and write syscalls from succeeding while
+> keeping the existing mmap active. The following program shows the seal
+> working in action:
 
-Cheers, Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Where does the FS come from?  I'd rather expect this to be implemented
+as a 'force' style flag that applies the seal even if the otherwise
+required precondition is not met.
+
+> Note: This seal will also prevent growing and shrinking of the memfd.
+> This is not something we do in Android so it does not affect us, however
+> I have mentioned this behavior of the seal in the manpage.
+
+This seems odd, as that is otherwise split into the F_SEAL_SHRINK /
+F_SEAL_GROW flags.
+
+>  static int memfd_add_seals(struct file *file, unsigned int seals)
+>  {
+> @@ -219,6 +220,9 @@ static int memfd_add_seals(struct file *file, unsigned int seals)
+>  		}
+>  	}
+>  
+> +	if ((seals & F_SEAL_FS_WRITE) && !(*file_seals & F_SEAL_FS_WRITE))
+> +		file->f_mode &= ~(FMODE_WRITE | FMODE_PWRITE);
+> +
+
+This seems to lack any synchronization for f_mode.
