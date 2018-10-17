@@ -1,39 +1,54 @@
-From: andreyknvl@google.com (Andrey Konovalov)
-Date: Wed, 17 Oct 2018 16:20:41 +0200
-Subject: [PATCH v7 0/8] arm64: untag user pointers passed to the kernel
-In-Reply-To: <be684ce5-92fd-e970-b002-83452cf50abd@arm.com>
-References: <cover.1538485901.git.andreyknvl@google.com>
- <be684ce5-92fd-e970-b002-83452cf50abd@arm.com>
-Message-ID:
- <CAAeHK+yEZTLjgSj8YUzeJec9Pp2TwuLT5nCa1OpfBLXJkx_hhg@mail.gmail.com>
+From: shuah@kernel.org (Shuah Khan)
+Date: Wed, 17 Oct 2018 09:19:39 -0600
+Subject: [PATCH] selftests/ftrace: Use colored output when available
+In-Reply-To: <20181016143404.6847beb4@gandalf.local.home>
+References: <20181016170220.31156-1-daniel.diaz@linaro.org>
+ <037e072a-5695-1343-35d1-37b9450581d4@kernel.org>
+ <20181016143404.6847beb4@gandalf.local.home>
+Message-ID: <b5b4a38f-d81d-2702-67f7-4fc9cc262776@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181017142041.k2qf0YPc-vBLBft3B9A4q4qZKLv5-bzKDYnD9EWnyZc@z>
+Message-ID: <20181017151939.VFa7riQjZ1txEyUReDa8CRWL72i0A3s_m5fHnEqIcvg@z>
 
-On Wed, Oct 17, 2018 at 4:06 PM, Vincenzo Frascino
-<vincenzo.frascino@arm.com> wrote:
-> Hi Andrey,
-> I have been thinking a bit lately on how to address the problem of user tagged pointers passed to the kernel through syscalls, and IMHO probably the best way we have to catch them all and make sure that the approach is maintainable in the long term is to introduce shims that tag/untag the pointers passed to the kernel.
->
-> In details, what I am proposing can live either in userspace (preferred solution so that we do not have to relax the ABI) or in kernel space and can be summarized as follows:
->  - A shim is specific to a syscall and is called by the libc when it needs to invoke the respective syscall.
->  - It is required only if the syscall accepts pointers.
->  - It saves the tags of a pointers passed to the syscall in memory (same approach if the we are passing a struct that contains pointers to the kernel, with the difference that all the tags of the pointers in the struct need to be saved singularly)
->  - Untags the pointers
->  - Invokes the syscall
->  - Retags the pointers with the tags stored in memory
->  - Returns
->
-> What do you think?
+On 10/16/2018 12:34 PM, Steven Rostedt wrote:
+> On Tue, 16 Oct 2018 11:43:29 -0600
+> Shuah Khan <shuah@kernel.org> wrote:
+> 
+>> On 10/16/2018 11:02 AM, Daniel Díaz wrote:
+>>> If test is being directly executed (with stdout opened on the
+>>> terminal) and the terminal capabilities indicate enough
+>>> colors, then use the existing scheme of green, red, and blue
+>>> to show when tests pass, fail or end in a different way.
+>>>
+>>> When running the tests redirecting the stdout, for instance,
+>>> to a file, then colors are not shown, thus producing a more
+>>> readable output.
+>>>
+>>> Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
+>>> ---  
+>>
+>> Hi Daniel,
+>>
+>> Thanks for the patch. Steve is working on adding this functionality. Please
+>> see the latest linux-kselftest next for the patch.
+>>
+>> Steve just sent an update to the patch to fix an issue. Please test and see
+>> if that solves the problem you are trying address with this patch.
+>>
+> 
+> Hi Shuah,
+> 
+> I think this patch actually addresses the issue of my last patch, and I
+> haven't sent another one.
+> 
+> I'm waiting to hear from Masami if it fixes the issues he saw.
+> 
+> -- Steve
+> 
 
-Hi Vincenzo,
+Steve,
 
-If I correctly understand what you are proposing, I'm not sure if that
-would work with the countless number of different ioctl calls. For
-example when an ioctl accepts a struct with a bunch of pointer fields.
-In this case a shim like the one you propose can't live in userspace,
-since libc doesn't know about the interface of all ioctls, so it can't
-know which fields to untag. The kernel knows about those interfaces
-(since the kernel implements them), but then we would need a custom
-shim for each ioctl variation, which doesn't seem practical.
+Do you want me to apply this patch from Daniel or do you plan to send
+one. If you want to me take this one, just Ack it.
 
-Thanks!
+thanks,
+-- Shuah
