@@ -1,27 +1,32 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Wed, 17 Oct 2018 16:45:14 -0400
-Subject: [PATCH] selftests/ftrace: Strip escape sequences for log file
-In-Reply-To: <153974720272.17748.17439079576533415951.stgit@devbox>
-References: <20181017100305.0b3c03461b098f8943805455@gmail.com>
- <153974720272.17748.17439079576533415951.stgit@devbox>
-Message-ID: <20181017164514.23bcc9c3@gandalf.local.home>
+From: brendanhiggins@google.com (Brendan Higgins)
+Date: Wed, 17 Oct 2018 14:09:06 -0700
+Subject: [RFC v1 06/31] arch: um: enabled running kunit from User Mode
+ Linux
+In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF8052436B@USCULXMSG01.am.sony.com>
+References: <20181016235120.138227-1-brendanhiggins@google.com>
+ <20181016235120.138227-7-brendanhiggins@google.com>
+ <f0d64a0a-7914-f390-c0b5-dc7626b45476@ideasonboard.com>
+ <ECADFF3FD767C149AD96A924E7EA6EAF8052436B@USCULXMSG01.am.sony.com>
+Message-ID:
+ <CAFd5g45owvjnVh633_kqf9DKeWQDYdGNi9j1crNZC3k02r=v1A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181017204514.W38ofyPiuZ5SWw4Uycupq9XOOQBdDVG0z_Jskq0S7Gc@z>
+Message-ID: <20181017210906.Uij0rhSQoz8exKiq97yIkYs_bK8V9Vw68L0613m-7VE@z>
 
-On Wed, 17 Oct 2018 12:33:23 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+On Wed, Oct 17, 2018@10:52 AM <Tim.Bird@sony.com> wrote:
+> >
+> > It might be of interest to the automated testing mailing list too ? (Tim?)
+>
+>  I think this is interesting to groups doing automated testing of the kernel
+> (including myself) as another set of tests to run.  Right now I don't see it
+> as having any special attributes related to automation.  But I could be wrong.
 
-> Strip escape sequences from the stream to the ftracetest
-> summary log file. Note that all test-case results are
-> dumped raw in each file.
-> 
+Pardon my ignorance, but by automated testing you mean a CI server
+with presubmits, nightlys, and things of the sort?
 
-Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-
-Shuah,
-
-Please take this one too.
-
-Thanks!
-
--- Steve
+If that's the case, KUnit could be helpful because of the low resource
+cost in running them and the speed at which they run. There are some
+other features we would like to add which would help with that goal as
+well like test isolation. We actually have a presubmit server
+internally for running KUnit tests that can usually respond to patches
+with test results within a couple minutes. Would something like that
+be interesting?
