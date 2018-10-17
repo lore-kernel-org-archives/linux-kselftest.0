@@ -1,65 +1,39 @@
-From: vincenzo.frascino@arm.com (Vincenzo Frascino)
-Date: Wed, 17 Oct 2018 15:06:53 +0100
+From: andreyknvl@google.com (Andrey Konovalov)
+Date: Wed, 17 Oct 2018 16:20:41 +0200
 Subject: [PATCH v7 0/8] arm64: untag user pointers passed to the kernel
-In-Reply-To: <cover.1538485901.git.andreyknvl@google.com>
+In-Reply-To: <be684ce5-92fd-e970-b002-83452cf50abd@arm.com>
 References: <cover.1538485901.git.andreyknvl@google.com>
-Message-ID: <be684ce5-92fd-e970-b002-83452cf50abd@arm.com>
+ <be684ce5-92fd-e970-b002-83452cf50abd@arm.com>
+Message-ID:
+ <CAAeHK+yEZTLjgSj8YUzeJec9Pp2TwuLT5nCa1OpfBLXJkx_hhg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181017140653.IRPP1Tumlj02iGHlfxW8VUMSWop5-9pGyJzqOOQK5VQ@z>
+Message-ID: <20181017142041.k2qf0YPc-vBLBft3B9A4q4qZKLv5-bzKDYnD9EWnyZc@z>
 
-Hi Andrey,
+On Wed, Oct 17, 2018 at 4:06 PM, Vincenzo Frascino
+<vincenzo.frascino@arm.com> wrote:
+> Hi Andrey,
+> I have been thinking a bit lately on how to address the problem of user tagged pointers passed to the kernel through syscalls, and IMHO probably the best way we have to catch them all and make sure that the approach is maintainable in the long term is to introduce shims that tag/untag the pointers passed to the kernel.
+>
+> In details, what I am proposing can live either in userspace (preferred solution so that we do not have to relax the ABI) or in kernel space and can be summarized as follows:
+>  - A shim is specific to a syscall and is called by the libc when it needs to invoke the respective syscall.
+>  - It is required only if the syscall accepts pointers.
+>  - It saves the tags of a pointers passed to the syscall in memory (same approach if the we are passing a struct that contains pointers to the kernel, with the difference that all the tags of the pointers in the struct need to be saved singularly)
+>  - Untags the pointers
+>  - Invokes the syscall
+>  - Retags the pointers with the tags stored in memory
+>  - Returns
+>
+> What do you think?
 
-On 02/10/2018 14:12, Andrey Konovalov wrote:
-> arm64 has a feature called Top Byte Ignore, which allows to embed pointer
-> tags into the top byte of each pointer. Userspace programs (such as
-> HWASan, a memory debugging tool [1]) might use this feature and pass
-> tagged user pointers to the kernel through syscalls or other interfaces.
-> 
-> Right now the kernel is already able to handle user faults with tagged
-> pointers, due to these patches:
-> 
-> 1. 81cddd65 ("arm64: traps: fix userspace cache maintenance emulation on a
->              tagged pointer")
-> 2. 7dcd9dd8 ("arm64: hw_breakpoint: fix watchpoint matching for tagged
-> 	      pointers")
-> 3. 276e9327 ("arm64: entry: improve data abort handling of tagged
-> 	      pointers")
-> 
-> When passing tagged pointers to syscalls, there's a special case of such a
-> pointer being passed to one of the memory syscalls (mmap, mprotect, etc.).
-> These syscalls don't do memory accesses but rather deal with memory
-> ranges, hence an untagged pointer is better suited.
-> 
-> This patchset extends tagged pointer support to non-memory syscalls. This
-> is done by reusing the untagged_addr macro to untag user pointers when the
-> kernel performs pointer checking to find out whether the pointer comes
-> from userspace (most notably in access_ok).
-> 
-> The following testing approaches has been taken to find potential issues
-> with user pointer untagging:
-> 
-> 1. Static testing (with sparse [2] and separately with a custom static
->    analyzer based on Clang) to track casts of __user pointers to integer
->    types to find places where untagging needs to be done.
-> 
-> 2. Dynamic testing: adding BUG_ON(has_tag(addr)) to find_vma() and running
->    a modified syzkaller version that passes tagged pointers to the kernel.
-> 
-...
+Hi Vincenzo,
 
-I have been thinking a bit lately on how to address the problem of user tagged pointers passed to the kernel through syscalls, and IMHO probably the best way we have to catch them all and make sure that the approach is maintainable in the long term is to introduce shims that tag/untag the pointers passed to the kernel.
+If I correctly understand what you are proposing, I'm not sure if that
+would work with the countless number of different ioctl calls. For
+example when an ioctl accepts a struct with a bunch of pointer fields.
+In this case a shim like the one you propose can't live in userspace,
+since libc doesn't know about the interface of all ioctls, so it can't
+know which fields to untag. The kernel knows about those interfaces
+(since the kernel implements them), but then we would need a custom
+shim for each ioctl variation, which doesn't seem practical.
 
-In details, what I am proposing can live either in userspace (preferred solution so that we do not have to relax the ABI) or in kernel space and can be summarized as follows:
- - A shim is specific to a syscall and is called by the libc when it needs to invoke the respective syscall.
- - It is required only if the syscall accepts pointers.
- - It saves the tags of a pointers passed to the syscall in memory (same approach if the we are passing a struct that contains pointers to the kernel, with the difference that all the tags of the pointers in the struct need to be saved singularly)
- - Untags the pointers
- - Invokes the syscall
- - Retags the pointers with the tags stored in memory
- - Returns
-
-What do you think?
-
--- 
-Regards,
-Vincenzo
+Thanks!
