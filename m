@@ -1,54 +1,48 @@
 From: Tim.Bird@sony.com (Tim.Bird@sony.com)
-Date: Wed, 17 Oct 2018 17:49:24 +0000
-Subject: [RFC v1 00/31] kunit: Introducing KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <20181016235120.138227-1-brendanhiggins@google.com>
+Date: Wed, 17 Oct 2018 17:52:08 +0000
+Subject: [RFC v1 06/31] arch: um: enabled running kunit from User Mode
+ Linux
+In-Reply-To: <f0d64a0a-7914-f390-c0b5-dc7626b45476@ideasonboard.com>
 References: <20181016235120.138227-1-brendanhiggins@google.com>
+ <20181016235120.138227-7-brendanhiggins@google.com>
+ <f0d64a0a-7914-f390-c0b5-dc7626b45476@ideasonboard.com>
 Message-ID:
- <ECADFF3FD767C149AD96A924E7EA6EAF805242EE@USCULXMSG01.am.sony.com>
+ <ECADFF3FD767C149AD96A924E7EA6EAF8052436B@USCULXMSG01.am.sony.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181017174924.01Wu8KhGZNjWmXKCV9WXmD5Y14iZ95DugP9BPsBnO_g@z>
+Message-ID: <20181017175208.HCq5XQavnFz8_XKIIjyko7_xpOISExFuirOxknRsqrM@z>
+
+
 
 > -----Original Message-----
-> From: Brendan Higgins
+> From: Kieran Bingham 
 > 
-> This patch set proposes KUnit, a lightweight unit testing and mocking
-> framework for the Linux kernel.
+> Hi Brendan,
+> 
+> I very excitedly jumped on these patches to try them out, as this is
+> essentially something I was trying to do a few weeks back.
+> 
+> On 17/10/18 00:50, Brendan Higgins wrote:
+> > Makes minimum number of changes outside of the KUnit directories for
+> > KUnit to build and run using UML.
+> >
+> > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+> > ---
+> >  Makefile             | 2 +-
+> >  arch/um/Kconfig.rest | 3 +++
+> 
+> But this file isn't present on v4.19-rc8
+> 
+> It looks like the file is removed at f163977d21a2 ("um: cleanup Kconfig
+> files")
+> 
+> What version have you currently based these patches on?
+> Do you expect to keep a branch somewhere that's easy to pull in?
+> 
+> Please add me to the CC list as an interested party on later versions :-)
+> 
+> It might be of interest to the automated testing mailing list too ? (Tim?)
 
-I'm interested in this, and think the kernel might benefit from this,
-but I have lots of questions.
-
-> Unlike Autotest and kselftest, KUnit is a true unit testing framework;
-> it does not require installing the kernel on a test machine or in a VM
-> and does not require tests to be written in userspace running on a host
-> kernel.
-
-
-This is stated here and a few places in the documentation.  Just to clarify,
-KUnit works by compiling the unit under test, along with the test code
-itself, and then runs it on the machine where the compilation took
-place?  Is this right?  How does cross-compiling enter into the equation?
-If not what I described, then what exactly is happening?
-
-Sorry - I haven't had time to look through the patches in detail.
-
-Another issue is, what requirements does this place on the tested
-code?  Is extra instrumentation required?  I didn't see any, but I
-didn't look exhaustively at the code.
-
-Are all unit tests stored separately from the unit-under-test, or are
-they expected to be in the same directory?  Who is expected to
-maintain the unit tests?  How often are they expected to change?
-(Would it be every time the unit-under-test changed?)
-
-Does the test code require the same level of expertise to write
-and maintain as the unit-under-test code?  That is, could this be
-a new opportunity for additional developers (especially relative
-newcomers) to add value to the kernel by writing and maintaining
-test code, or does this add to the already large burden of code
-maintenance for our existing maintainers.
-
-Thanks,
+ I think this is interesting to groups doing automated testing of the kernel
+(including myself) as another set of tests to run.  Right now I don't see it
+as having any special attributes related to automation.  But I could be wrong.
  -- Tim
-
-...
