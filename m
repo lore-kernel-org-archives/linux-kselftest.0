@@ -1,130 +1,117 @@
-From: brendanhiggins@google.com (Brendan Higgins)
-Date: Wed, 17 Oct 2018 15:22:50 -0700
-Subject: [RFC v1 00/31] kunit: Introducing KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF805242EE@USCULXMSG01.am.sony.com>
+From: robh@kernel.org (Rob Herring)
+Date: Wed, 17 Oct 2018 17:28:04 -0500
+Subject: [RFC v1 26/31] arch: um: added stubs for mock iomem for KUnit
+In-Reply-To: <20181016235120.138227-27-brendanhiggins@google.com>
 References: <20181016235120.138227-1-brendanhiggins@google.com>
- <ECADFF3FD767C149AD96A924E7EA6EAF805242EE@USCULXMSG01.am.sony.com>
+ <20181016235120.138227-27-brendanhiggins@google.com>
 Message-ID:
- <CAFd5g46kWMFY_JXei=VqNS74wwm3TtzESK7ZsYeOFu26z4D8hw@mail.gmail.com>
+ <CABGGisyMYC12UZtZ3wBw_1GO1Qq9-MEzSznq0r8796kVsQ6DoA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181017222250.1Bxk9GiV7SpdgZumkGKuxjDmk4n_8qTeUH1gF3M6kZg@z>
+Message-ID: <20181017222804.ldTctGbdrzGziI_Fu2nDeexhiHjL_pitHCaSiWeuWCA@z>
 
-On Wed, Oct 17, 2018@10:49 AM <Tim.Bird@sony.com> wrote:
+On Tue, Oct 16, 2018 at 6:54 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
 >
-> > -----Original Message-----
-> > From: Brendan Higgins
-> >
-> > This patch set proposes KUnit, a lightweight unit testing and mocking
-> > framework for the Linux kernel.
+> This mocks out some iomem functions (functions like readl and writel),
+> for mocking hardware interfaces.
 >
-> I'm interested in this, and think the kernel might benefit from this,
-> but I have lots of questions.
+> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+> ---
+>  arch/um/Kconfig.common               |  8 +++++-
+>  arch/um/Kconfig.um                   |  5 ++++
+>  arch/um/include/asm/Kbuild           |  1 -
+>  arch/um/include/asm/io-mock-shared.h | 33 +++++++++++++++++++++
+>  arch/um/include/asm/io-mock.h        | 43 ++++++++++++++++++++++++++++
+>  arch/um/include/asm/io.h             |  8 ++++++
+>  arch/um/kernel/Makefile              |  1 +
+>  arch/um/kernel/io-mock.c             | 40 ++++++++++++++++++++++++++
+>  kunit/Kconfig                        |  1 +
+>  9 files changed, 138 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/um/include/asm/io-mock-shared.h
+>  create mode 100644 arch/um/include/asm/io-mock.h
+>  create mode 100644 arch/um/kernel/io-mock.c
 >
-Awesome!
-
-> > Unlike Autotest and kselftest, KUnit is a true unit testing framework;
-> > it does not require installing the kernel on a test machine or in a VM
-> > and does not require tests to be written in userspace running on a host
-> > kernel.
+> diff --git a/arch/um/Kconfig.common b/arch/um/Kconfig.common
+> index 07f84c842cc31..72e7efb74f7fd 100644
+> --- a/arch/um/Kconfig.common
+> +++ b/arch/um/Kconfig.common
+> @@ -19,7 +19,13 @@ config MMU
+>         default y
 >
+>  config NO_IOMEM
+> -       def_bool y
+> +       bool
+> +       default y if !KUNIT
+> +
+> +config HAS_IOMEM
+
+HAS_IOMEM is essentially a disable flag for lots of drivers on UML.
+Ignoring drivers, it doesn't really control a significant amount of
+code (albeit small amount of code you need for this series). As a
+driver disable, it does a poor job as lots of drivers aren't MMIO and
+aren't disabled. I think we should decouple these 2 things. Perhaps
+get rid of the driver disable part altogether. We already do 'depends
+on ARCH_FOO || COMPILE_TEST' for lots of drivers.
+
+Also, I wouldn't be surprised if turning on HAS_IOMEM causes UML
+randconfig failures. Arnd does lots of randconfig testing and might be
+willing to help check.
+
+> +       bool "Turns on fake IOMEM support for KUnit"
+> +       depends on KUNIT
+> +       select MOCK_IOMEM
 >
-> This is stated here and a few places in the documentation.  Just to clarify,
-> KUnit works by compiling the unit under test, along with the test code
-> itself, and then runs it on the machine where the compilation took
-> place?  Is this right?  How does cross-compiling enter into the equation?
-> If not what I described, then what exactly is happening?
+>  config ISA
+>         bool
+> diff --git a/arch/um/Kconfig.um b/arch/um/Kconfig.um
+> index 20da5a8ca9490..8d35e0e2c23d1 100644
+> --- a/arch/um/Kconfig.um
+> +++ b/arch/um/Kconfig.um
+> @@ -122,3 +122,8 @@ config SECCOMP
+>           defined by each seccomp mode.
 >
-Yep, that's exactly right!
+>           If unsure, say Y.
+> +
+> +config PLATFORM_MOCK
+> +       bool "Enable a mock architecture used for unit testing."
+> +       depends on KUNIT && OF
+> +       default n
+> diff --git a/arch/um/include/asm/Kbuild b/arch/um/include/asm/Kbuild
+> index b10dde6cb793b..9fd2827ab76d1 100644
+> --- a/arch/um/include/asm/Kbuild
+> +++ b/arch/um/include/asm/Kbuild
+> @@ -12,7 +12,6 @@ generic-y += ftrace.h
+>  generic-y += futex.h
+>  generic-y += hardirq.h
+>  generic-y += hw_irq.h
+> -generic-y += io.h
+>  generic-y += irq_regs.h
+>  generic-y += irq_work.h
+>  generic-y += kdebug.h
+> diff --git a/arch/um/include/asm/io-mock-shared.h b/arch/um/include/asm/io-mock-shared.h
+> new file mode 100644
+> index 0000000000000..6baf59cb17a58
+> --- /dev/null
+> +++ b/arch/um/include/asm/io-mock-shared.h
+> @@ -0,0 +1,33 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ASM_UM_IO_MOCK_SHARED_H
+> +#define _ASM_UM_IO_MOCK_SHARED_H
+> +
+> +#define readb readb
+> +u8 readb(const volatile void __iomem *);
 
-The test and the code under test are linked together in the same
-binary and are compiled under Kbuild. Right now I am linking
-everything into a UML kernel, but I would ultimately like to make
-tests compile into completely independent test binaries. So each test
-file would get compiled into its own test binary and would link
-against only the code needed to run the test, but we are a bit of a
-ways off from that.
+What about all the other flavors of MMIO accessors like __raw_readb,
+readb_relaxed, etc.? readX/writeX is intended for PCI based drivers
+which doesn't seem to be what you are targeting in this series.
 
-For now, tests compile as part of a UML kernel and a test script boots
-the UML kernel, tests run as part of the boot process, and the script
-extracts test results and reports them.
+I think it would be good if this capability was not just on UML. I
+could also imagine wanting to run tests on real h/w. Perhaps you just
+want to log and/or check i/o accesses. Or you need some dependencies
+in place rather than trying to fake everything (clocks, gpios, pinmux,
+irq, etc.). That being said, I'm not trying to add a bunch of things
+for you to do. Though maybe it makes sense to split this series some.
+How many of the patches are needed to convert the DT unittests for
+example?
 
-I intentionally made it so the KUnit test libraries could be
-relatively easily ported to other architectures, but in the long term,
-tests that depend on being built into a real kernel that boots on real
-hardware would be a lot more difficult to maintain and we would never
-be able to provide the kind of resources and infrastructure as we
-could for tests that run as normal user space binaries.
-
-Does that answer your question?
-
-> Sorry - I haven't had time to look through the patches in detail.
->
-> Another issue is, what requirements does this place on the tested
-> code?  Is extra instrumentation required?  I didn't see any, but I
-> didn't look exhaustively at the code.
->
-Nope, no special instrumentation. As long as the code under tests can
-be compiled under COMPILE_TEST for the host architecture, you should
-be able to use KUnit.
-
-> Are all unit tests stored separately from the unit-under-test, or are
-> they expected to be in the same directory?  Who is expected to
-> maintain the unit tests?  How often are they expected to change?
-> (Would it be every time the unit-under-test changed?)
->
-Tests are in the same directory as the code under test. For example,
-if I have a driver drivers/i2c/busses/i2c-aspeed.c, I would write a
-test drivers/i2c/busses/i2c-aspeed-test.c (that's my opinion anyway).
-
-Unit tests should be the responsibility of the person who is
-responsible for the code. So one way to do this would be that unit
-tests should be the responsibility of the maintainer who would in turn
-require that new tests are written for any new code added, and that
-all tests should pass for every patch sent for review.
-
-A well written unit test tests public interfaces (by public I just
-mean functions exported outside of a .c file, so non-static functions
-and functions which are shared as a member of a struct) so a unit test
-should change at a slower rate than the code under test, but you would
-likely have to change the test anytime the public interface changes
-(intended behavior changes, function signature changes, new public
-feature added, etc). More succinctly, if the contract that your code
-provide changes your test should probably change, if the contract
-doesn't change, your test probably shouldn't change. Does that make
-sense?
-
-> Does the test code require the same level of expertise to write
-> and maintain as the unit-under-test code?  That is, could this be
-> a new opportunity for additional developers (especially relative
-> newcomers) to add value to the kernel by writing and maintaining
-> test code, or does this add to the already large burden of code
-> maintenance for our existing maintainers.
-
-So a couple things, in order to write a unit test, the person who
-writes the test must understand what the code they are testing is
-supposed to do. To some extent that will probably require someone with
-some expertise to ensure that the test makes sense, and indeed a
-change that breaks a test should be accompanied by a update to the
-test.
-
-On the other hand, I think understanding what pre-existing code does
-and is supposed to do is much easier than writing new code from
-scratch, and probably doesn't require too much expertise. I actually
-did a bit of an experiment internally on this: I had some people with
-no prior knowledge of the kernel write some tests for existing kernel
-code and they were able to do it with only minimal guidance. I was so
-happy with the result that I was already thinking that it might have
-some potential for onboarding newcomers.
-
-Now, how much burden does this add to maintainers? As someone who
-pretty regularly reviews code that come in with unit tests and code
-that comes in without unit tests. I find it much easier to review code
-that comes in with unit tests. I would actually say that from the
-standpoint of being an owner of a code base, unit tests actually
-reduce the amount of work I have to do overall. Code with unit tests
-is usually cleaner, the tests tell me exactly what the code is
-supposed to do, and I can run the tests (or ideally have an automated
-service run the tests) that tell me that the code actually does what
-the tests say it should. Even when it comes to writing code I find
-that writing code with unit tests ends up saving me time overall.
+Rob
