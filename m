@@ -1,28 +1,32 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Wed, 17 Oct 2018 16:41:03 -0400
-Subject: [PATCH] selftests/ftrace: Use colored output when available
-In-Reply-To: <20181016170220.31156-1-daniel.diaz@linaro.org>
-References: <20181016170220.31156-1-daniel.diaz@linaro.org>
-Message-ID: <20181017164103.4fb8692f@gandalf.local.home>
+From: robh at kernel.org (Rob Herring)
+Date: Wed, 17 Oct 2018 15:43:45 -0500
+Subject: [RFC v1 00/31] kunit: Introducing KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20181016235120.138227-1-brendanhiggins@google.com>
+References: <20181016235120.138227-1-brendanhiggins@google.com>
+Message-ID: <CABGGisyc_MnO-izpK5ANYV9HEcWCUM5XTiouZPvN8-mO977A6Q@mail.gmail.com>
 
-On Tue, 16 Oct 2018 12:02:20 -0500
-Daniel Díaz <daniel.diaz at linaro.org> wrote:
+On Tue, Oct 16, 2018 at 6:53 PM Brendan Higgins
+<brendanhiggins at google.com> wrote:
+>
+> This patch set proposes KUnit, a lightweight unit testing and mocking
+> framework for the Linux kernel.
+>
+> Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+> it does not require installing the kernel on a test machine or in a VM
+> and does not require tests to be written in userspace running on a host
+> kernel. Additionally, KUnit is fast: From invocation to completion KUnit
+> can run several dozen tests in under a second. Currently, the entire
+> KUnit test suite for KUnit runs in under a second from the initial
+> invocation (build time excluded).
+>
+> KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+> Googletest/Googlemock for C++. KUnit provides facilities for defining
+> unit test cases, grouping related test cases into test suites, providing
+> common infrastructure for running tests, mocking, spying, and much more.
 
-> If test is being directly executed (with stdout opened on the
-> terminal) and the terminal capabilities indicate enough
-> colors, then use the existing scheme of green, red, and blue
-> to show when tests pass, fail or end in a different way.
-> 
-> When running the tests redirecting the stdout, for instance,
-> to a file, then colors are not shown, thus producing a more
-> readable output.
-> 
-> Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
+I very much like this. The DT code too has unit tests with our own,
+simple infrastructure. They too can run under UML (and every other
+arch).
 
-Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-
-Shuah, can you pull this into your tree?
-
-Thanks,
-
--- Steve
+Rob
