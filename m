@@ -1,33 +1,27 @@
 From: brendanhiggins at google.com (Brendan Higgins)
-Date: Wed, 17 Oct 2018 18:32:27 -0700
-Subject: [RFC v1 22/31] kunit: mock: add the concept of spyable functions
-In-Reply-To: <CABGGiswwS9NJJ__WVgimcFUiTy_76AtDOxeSbSuv-oz1xjjD5w@mail.gmail.com>
+Date: Wed, 17 Oct 2018 19:05:49 -0700
+Subject: [RFC v1 00/31] kunit: Introducing KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <42737f55-0d42-dffe-7b34-e24666e713a0@infradead.org>
 References: <20181016235120.138227-1-brendanhiggins@google.com>
- <20181016235120.138227-23-brendanhiggins@google.com>
- <CABGGiswwS9NJJ__WVgimcFUiTy_76AtDOxeSbSuv-oz1xjjD5w@mail.gmail.com>
-Message-ID: <CAFd5g44v3BrRYosoFhD8iP4nxEKdJJ=VjhN3aMexOtWJ87WX-g@mail.gmail.com>
+ <42737f55-0d42-dffe-7b34-e24666e713a0@infradead.org>
+Message-ID: <CAFd5g440GaxOzii9pXF6ykmeT3ihUFduG8EpbRXCMpTLROPhtQ@mail.gmail.com>
 
-On Wed, Oct 17, 2018 at 3:47 PM Rob Herring <rob.herring at linaro.org> wrote:
+On Wed, Oct 17, 2018 at 4:12 PM Randy Dunlap <rdunlap at infradead.org> wrote:
 >
-> On Tue, Oct 16, 2018 at 6:54 PM Brendan Higgins
-> <brendanhiggins at google.com> wrote:
-> >
-> > Adds the concept of spying like in Mockito
-> > (http://static.javadoc.io/org.mockito/mockito-core/2.20.0/org/mockito/Mockito.html#spy-T-).
-> > This allows a function declaration to be labled as spyable which allows
-> > the function to be mocked *and* to allow the mock to invoke the original
-> > function definition.
+> On 10/16/18 4:50 PM, Brendan Higgins wrote:
+> > This patch set proposes KUnit, a lightweight unit testing and mocking
+> > framework for the Linux kernel.
 >
-> We can already hook into arbitrary functions ftrace. Wouldn't
-> utilizing that simplify features like this and avoid having to touch
-> existing code for testing? Not sure what it would take to enable
-> ftrace on UML. It is at least partially compiler dependent.
+> Hi,
+>
+> Just a general comment:
+>
+> Documentation/process/submitting-patches.rst says:
+> <<Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+> instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+> to do frotz", as if you are giving orders to the codebase to change
+> its behaviour.>>
+>
 
-Regardless of what we end up doing, this definitely needs more work.
-
-After looking at include/linux/ftrace.h, it does look feasible to use
-ftrace for spying. I totally agree that we don't want to reinvent this
-wheel if we can avoid it, but I have no idea what getting it working
-on UML would look like. Dependence on compiler features could be an
-issue: pretty much anyone who can build the kernel should be able to
-run our tests.
+Thanks! I will fix this in the next revision.
