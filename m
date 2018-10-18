@@ -1,130 +1,56 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Thu, 18 Oct 2018 00:08:58 -0700
-Subject: [PATCH v3 2/2] selftests/memfd: Add tests for F_SEAL_FS_WRITE seal
-In-Reply-To: <20181018065908.254389-2-joel@joelfernandes.org>
-References: <20181018065908.254389-1-joel@joelfernandes.org>
- <20181018065908.254389-2-joel@joelfernandes.org>
-Message-ID:
- <CAEXW_YTDWgY3JAeiY0Ti0BBL=iJMcSkR5V7USJYv6UxHiCpN-g@mail.gmail.com>
+From: catalin.marinas@arm.com (Catalin Marinas)
+Date: Thu, 18 Oct 2018 18:31:36 +0100
+Subject: [PATCH v7 7/8] arm64: update
+ Documentation/arm64/tagged-pointers.txt
+In-Reply-To: <CAAeHK+yPCRNAOSi6OpYC_Tdbo9SoXRVRbx8pjXNq96v8csO-Wg@mail.gmail.com>
+References: <cover.1538485901.git.andreyknvl@google.com>
+ <47a464307d4df3c0cb65f88d1fe83f9a741dd74b.1538485901.git.andreyknvl@google.com>
+ <20181003173256.GG12998@arrakis.emea.arm.com>
+ <CAAeHK+yPCRNAOSi6OpYC_Tdbo9SoXRVRbx8pjXNq96v8csO-Wg@mail.gmail.com>
+Message-ID: <20181018173135.GF237391@arrakis.emea.arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181018070858._IBg4dJjtg2X2zGFGpVQ4ujN_opCxCURCMj7VDM4GRk@z>
+Message-ID: <20181018173136.CnaytPxcq4-BAYaLUeFVVU_s0F3IpCvkteq4MSsCaO0@z>
 
-On Wed, Oct 17, 2018 at 11:59 PM, Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
-> Add tests to verify sealing memfds with the F_SEAL_FS_WRITE works as
-> expected.
+On Wed, Oct 10, 2018@04:09:25PM +0200, Andrey Konovalov wrote:
+> On Wed, Oct 3, 2018@7:32 PM, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > On Tue, Oct 02, 2018@03:12:42PM +0200, Andrey Konovalov wrote:
+[...]
+> > Also, how is user space supposed to know that it can now pass tagged
+> > pointers into the kernel? An ABI change (or relaxation), needs to be
+> > advertised by the kernel, usually via a new HWCAP bit (e.g. HWCAP_TBI).
+> > Once we have a HWCAP bit in place, we need to be pretty clear about
+> > which syscalls can and cannot cope with tagged pointers. The "as of now"
+> > implies potential further relaxation which, again, would need to be
+> > advertised to user in some (additional) way.
+> 
+> How exactly should I do that? Something like this [1]? Or is it only
+> for hardware specific things and for this patchset I need to do
+> something else?
+> 
+> [1] https://github.com/torvalds/linux/commit/7206dc93a58fb76421c4411eefa3c003337bcb2d
 
-I messed the commit message it should be "F_SEAL_FUTURE_WRITE", but
-otherwise this
-patch itself is good and I'll resend it with the corrected commit
-message after further review.
+Thinking some more on this, we should probably keep the HWCAP_* bits for
+actual hardware features. Maybe someone else has a better idea (the
+linux-abi list?). An option would be to make use of AT_FLAGS auxv
+(currently 0) in Linux. I've seen some MIPS patches in the past but
+nothing upstream.
 
-thanks,
+Yet another option would be for the user to probe on some innocuous
+syscall currently returning -EFAULT on tagged pointer arguments but I
+don't particularly like this.
 
- - Joel
+> >> - - pointer arguments to system calls, including pointers in structures
+> >> -   passed to system calls,
+> >> +  - pointer arguments (including pointers in structures), which don't
+> >> +    describe virtual memory ranges, passed to system calls
+> >
+> > I think we need to be more precise here...
+> 
+> In what way?
 
+In the way of being explicit about which syscalls support tagged
+pointers, unless we find a good reason to support tagged pointers on all
+syscalls and avoid any lists.
 
-
-> Cc: dancol at google.com
-> Cc: minchan at kernel.org
-> Reviewed-by: John Stultz <john.stultz at linaro.org>
-> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> ---
->  tools/testing/selftests/memfd/memfd_test.c | 74 ++++++++++++++++++++++
->  1 file changed, 74 insertions(+)
->
-> diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-> index 10baa1652fc2..32b207ca7372 100644
-> --- a/tools/testing/selftests/memfd/memfd_test.c
-> +++ b/tools/testing/selftests/memfd/memfd_test.c
-> @@ -692,6 +692,79 @@ static void test_seal_write(void)
->         close(fd);
->  }
->
-> +/*
-> + * Test SEAL_FUTURE_WRITE
-> + * Test whether SEAL_FUTURE_WRITE actually prevents modifications.
-> + */
-> +static void test_seal_future_write(void)
-> +{
-> +       int fd;
-> +       void *p;
-> +
-> +       printf("%s SEAL-FUTURE-WRITE\n", memfd_str);
-> +
-> +       fd = mfd_assert_new("kern_memfd_seal_future_write",
-> +                           mfd_def_size,
-> +                           MFD_CLOEXEC | MFD_ALLOW_SEALING);
-> +
-> +       p = mfd_assert_mmap_shared(fd);
-> +
-> +       mfd_assert_has_seals(fd, 0);
-> +       /* Not adding grow/shrink seals makes the future write
-> +        * seal fail to get added
-> +        */
-> +       mfd_fail_add_seals(fd, F_SEAL_FUTURE_WRITE);
-> +
-> +       mfd_assert_add_seals(fd, F_SEAL_GROW);
-> +       mfd_assert_has_seals(fd, F_SEAL_GROW);
-> +
-> +       /* Should still fail since shrink seal has
-> +        * not yet been added
-> +        */
-> +       mfd_fail_add_seals(fd, F_SEAL_FUTURE_WRITE);
-> +
-> +       mfd_assert_add_seals(fd, F_SEAL_SHRINK);
-> +       mfd_assert_has_seals(fd, F_SEAL_GROW |
-> +                                F_SEAL_SHRINK);
-> +
-> +       /* Now should succeed, also verifies that the seal
-> +        * could be added with an existing writable mmap
-> +        */
-> +       mfd_assert_add_seals(fd, F_SEAL_FUTURE_WRITE);
-> +       mfd_assert_has_seals(fd, F_SEAL_SHRINK |
-> +                                F_SEAL_GROW |
-> +                                F_SEAL_FUTURE_WRITE);
-> +
-> +       /* read should pass, writes should fail */
-> +       mfd_assert_read(fd);
-> +       mfd_fail_write(fd);
-> +
-> +       munmap(p, mfd_def_size);
-> +       close(fd);
-> +
-> +       /* Test adding all seals (grow, shrink, future write) at once */
-> +       fd = mfd_assert_new("kern_memfd_seal_future_write2",
-> +                           mfd_def_size,
-> +                           MFD_CLOEXEC | MFD_ALLOW_SEALING);
-> +
-> +       p = mfd_assert_mmap_shared(fd);
-> +
-> +       mfd_assert_has_seals(fd, 0);
-> +       mfd_assert_add_seals(fd, F_SEAL_SHRINK |
-> +                                F_SEAL_GROW |
-> +                                F_SEAL_FUTURE_WRITE);
-> +       mfd_assert_has_seals(fd, F_SEAL_SHRINK |
-> +                                F_SEAL_GROW |
-> +                                F_SEAL_FUTURE_WRITE);
-> +
-> +       /* read should pass, writes should fail */
-> +       mfd_assert_read(fd);
-> +       mfd_fail_write(fd);
-> +
-> +       munmap(p, mfd_def_size);
-> +       close(fd);
-> +}
-> +
->  /*
->   * Test SEAL_SHRINK
->   * Test whether SEAL_SHRINK actually prevents shrinking
-> @@ -945,6 +1018,7 @@ int main(int argc, char **argv)
->         test_basic();
->
->         test_seal_write();
-> +       test_seal_future_write();
->         test_seal_shrink();
->         test_seal_grow();
->         test_seal_resize();
-> --
-> 2.19.1.331.ge82ca0e54c-goog
->
+-- 
+Catalin
