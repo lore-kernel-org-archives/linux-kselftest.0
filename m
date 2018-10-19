@@ -1,31 +1,27 @@
-From: pbonzini@redhat.com (Paolo Bonzini)
-Date: Fri, 19 Oct 2018 18:15:05 +0200
-Subject: [PATCH] selftests/kvm: add missing executables to .gitignore
-In-Reply-To: <20181019143816.4509-1-anders.roxell@linaro.org>
-References: <20181019143816.4509-1-anders.roxell@linaro.org>
-Message-ID: <54a935cb-4023-b414-c55a-c89cbefe942c@redhat.com>
+From: valdis.kletnieks@vt.edu (valdis.kletnieks@vt.edu)
+Date: Fri, 19 Oct 2018 13:32:02 -0400
+Subject: [PATCH v3 1/2] mm: Add an F_SEAL_FUTURE_WRITE seal to memfd
+In-Reply-To: <20181018065908.254389-1-joel@joelfernandes.org>
+References: <20181018065908.254389-1-joel@joelfernandes.org>
+Message-ID: <42922.1539970322@turing-police.cc.vt.edu>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181019161505.K1L77MNmhrkYNpvWhaPFmNiVRT_FUdIdOt3SH0fmBAU@z>
+Message-ID: <20181019173202.xhZGxW-tGGmz2qkBC8Dbr5khFY9lOdOHnSHntw918wk@z>
 
-On 19/10/2018 16:38, Anders Roxell wrote:
-> Fixes: 18178ff86217 ("KVM: selftests: add Enlightened VMCS test")
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
-> ---
->  tools/testing/selftests/kvm/.gitignore | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index 552b0d9a49f4..6210ba41c29e 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -1,4 +1,5 @@
->  /x86_64/cr4_cpuid_sync_test
-> +/x86_64/evmcs_test
->  /x86_64/platform_info_test
->  /x86_64/set_sregs_test
->  /x86_64/sync_regs_test
-> 
+On Wed, 17 Oct 2018 23:59:07 -0700, "Joel Fernandes (Google)" said:
+> This usecase cannot be implemented with the existing F_SEAL_WRITE seal.
+> To support the usecase, this patch adds a new F_SEAL_FUTURE_WRITE seal
+> which prevents any future mmap and write syscalls from succeeding while
+> keeping the existing mmap active. The following program shows the seal
+> working in action:
 
-Queued, thanks.
+What is supposed to happen if some other process has an already existing R/W
+mmap of the region?  (For that matter, the test program doesn't seem to
+actually test that the existing mmap region remains writable?)
 
-Paolo
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 486 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181019/75adf5b2/attachment.sig>
