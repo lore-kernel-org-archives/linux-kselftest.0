@@ -1,197 +1,130 @@
-From: avagin@gmail.com (Andrei Vagin)
-Date: Sat, 20 Oct 2018 20:54:36 -0700
-Subject: [RFC 00/20] ns: Introduce Time Namespace
-In-Reply-To: <20181021014121.GA23474@gmail.com>
-References: <20180919205037.9574-1-dima@arista.com>
- <874lej6nny.fsf@xmission.com>
- <20180924205119.GA14833@outlook.office365.com>
- <874leezh8n.fsf@xmission.com>
- <20180925014150.GA6302@outlook.office365.com>
- <87zhw4rwiq.fsf@xmission.com>
- <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
- <87mus1ftb9.fsf@xmission.com> <20181021014121.GA23474@gmail.com>
-Message-ID: <20181021035435.GA21328@gmail.com>
+From: joel@joelfernandes.org (Joel Fernandes)
+Date: Mon, 22 Oct 2018 16:49:06 -0700
+Subject: [PATCH v3 1/2] mm: Add an F_SEAL_FUTURE_WRITE seal to memfd
+In-Reply-To: <20181018065908.254389-1-joel@joelfernandes.org>
+References: <20181018065908.254389-1-joel@joelfernandes.org>
+Message-ID: <20181022234906.GA22110@joelaf.mtv.corp.google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181021035436.OosCt59uINa5f8_NsytwDTIr9rc3wUQIK4egsXdQPm0@z>
+Message-ID: <20181022234906.4tzDTC9KcM7fzEguirrTxKbrvJPiZixrody6CPcHl_Q@z>
 
-On Sat, Oct 20, 2018@06:41:23PM -0700, Andrei Vagin wrote:
-> On Fri, Sep 28, 2018@07:03:22PM +0200, Eric W. Biederman wrote:
-> > Thomas Gleixner <tglx at linutronix.de> writes:
-> > 
-> > > On Wed, 26 Sep 2018, Eric W. Biederman wrote:
-> > >> Reading the code the calling sequence there is:
-> > >> tick_sched_do_timer
-> > >>    tick_do_update_jiffies64
-> > >>       update_wall_time
-> > >>           timekeeping_advance
-> > >>              timekeepging_update
-> > >> 
-> > >> If I read that properly under the right nohz circumstances that update
-> > >> can be delayed indefinitely.
-> > >> 
-> > >> So I think we could prototype a time namespace that was per
-> > >> timekeeping_update and just had update_wall_time iterate through
-> > >> all of the time namespaces.
-> > >
-> > > Please don't go there. timekeeping_update() is already heavy and walking
-> > > through a gazillion of namespaces will just make it horrible,
-> > >
-> > >> I don't think the naive version would scale to very many time
-> > >> namespaces.
-> > >
-> > > :)
-> > >
-> > >> At the same time using the techniques from the nohz work and a little
-> > >> smarts I expect we could get the code to scale.
-> > >
-> > > You'd need to invoke the update when the namespace is switched in and
-> > > hasn't been updated since the last tick happened. That might be doable, but
-> > > you also need to take the wraparound constraints of the underlying
-> > > clocksources into account, which again can cause walking all name spaces
-> > > when they are all idle long enough.
-> > 
-> > The wrap around constraints being how long before the time sources wrap
-> > around so you have to read them once per wrap around?  I have not dug
-> > deeply enough into the code to see that yet.
-> > 
-> > > From there it becomes hairy, because it's not only timekeeping,
-> > > i.e. reading time, this is also affecting all timers which are armed from a
-> > > namespace.
-> > >
-> > > That gets really ugly because when you do settimeofday() or adjtimex() for
-> > > a particular namespace, then you have to search for all armed timers of
-> > > that namespace and adjust them.
-> > >
-> > > The original posix timer code had the same issue because it mapped the
-> > > clock realtime timers to the timer wheel so any setting of the clock caused
-> > > a full walk of all armed timers, disarming, adjusting and requeing
-> > > them. That's horrible not only performance wise, it's also a locking
-> > > nightmare of all sorts.
-> > >
-> > > Add time skew via NTP/PTP into the picture and you might have to adjust
-> > > timers as well, because you need to guarantee that they are not expiring
-> > > early.
-> > >
-> > > I haven't looked through Dimitry's patches yet, but I don't see how this
-> > > can work at all without introducing subtle issues all over the place.
-> > 
-> > Then it sounds like this will take some more digging.
-> > 
-> > Please pardon me for thinking out load.
-> > 
-> > There are one or more time sources that we use to compute the time
-> > and for each time source we have a conversion from ticks of the
-> > time source to nanoseconds.
-> > 
-> > Each time source needs to be sampled at least once per wrap-around
-> > and something incremented so that we don't loose time when looking
-> > at that time source.
-> > 
-> > There are several clocks presented to userspace and they all share the
-> > same length of second and are all fundamentally offsets from
-> > CLOCK_MONOTONIC.
-> > 
-> > I see two fundamental driving cases for a time namespace.
-> > 1) Migration from one node to another node in a cluster in almost
-> >    real time.
-> > 
-> >    The problem is that CLOCK_MONOTONIC between nodes in the cluster
-> >    has not relation ship to each other (except a synchronized length of
-> >    the second).  So applications that migrate can see CLOCK_MONOTONIC
-> >    and CLOCK_BOOTTIME go backwards.
-> > 
-> >    This is the truly pressing problem and adding some kind of offset
-> >    sounds like it would be the solution.  Possibly by allowing a boot
-> >    time synchronization of CLOCK_BOOTTIME and CLOCK_MONOTONIC.
-> > 
-> > 2) Dealing with two separate time management domains.  Say a machine
-> >    that needes to deal with both something inside of google where they
-> >    slew time to avoid leap time seconds and something in the outside
-> >    world proper UTC time is kept as an offset from TAI with the
-> >    occasional leap seconds.
-> > 
-> >    In the later case it would fundamentally require having seconds of
-> >    different length.
-> > 
+On Wed, Oct 17, 2018@11:59:07PM -0700, Joel Fernandes (Google) wrote:
+> Android uses ashmem for sharing memory regions. We are looking forward
+> to migrating all usecases of ashmem to memfd so that we can possibly
+> remove the ashmem driver in the future from staging while also
+> benefiting from using memfd and contributing to it. Note staging drivers
+> are also not ABI and generally can be removed at anytime.
 > 
-> I want to add that the second case should be optional.
+> One of the main usecases Android has is the ability to create a region
+> and mmap it as writeable, then add protection against making any
+> "future" writes while keeping the existing already mmap'ed
+> writeable-region active.  This allows us to implement a usecase where
+> receivers of the shared memory buffer can get a read-only view, while
+> the sender continues to write to the buffer.
+> See CursorWindow documentation in Android for more details:
+> https://developer.android.com/reference/android/database/CursorWindow
 > 
-> When a container is migrated to another host, we have to restore its
-> monotonic and boottime clocks, but we still expect that the container
-> will continue using the host real-time clock.
+> This usecase cannot be implemented with the existing F_SEAL_WRITE seal.
+> To support the usecase, this patch adds a new F_SEAL_FUTURE_WRITE seal
+> which prevents any future mmap and write syscalls from succeeding while
+> keeping the existing mmap active. The following program shows the seal
+> working in action:
 > 
-> Before stating this series, I was thinking about this, I decided that
-> these cases can be solved independently. Probably, the full isolation of
-> the time sub-system will have much higher overhead than just offsets for
-> a few clocks. And the idea that isolation of the real-time clock should
-> be optional gives us another hint that offsets for monotonic and
-> boot-time clocks can be implemented independently.
+>  #include <stdio.h>
+>  #include <errno.h>
+>  #include <sys/mman.h>
+>  #include <linux/memfd.h>
+>  #include <linux/fcntl.h>
+>  #include <asm/unistd.h>
+>  #include <unistd.h>
+>  #define F_SEAL_FUTURE_WRITE 0x0010
+>  #define REGION_SIZE (5 * 1024 * 1024)
 > 
-> Eric and Tomas, what do you think about this? If you agree that these
+> int memfd_create_region(const char *name, size_t size)
+> {
+>     int ret;
+>     int fd = syscall(__NR_memfd_create, name, MFD_ALLOW_SEALING);
+>     if (fd < 0) return fd;
+>     ret = ftruncate(fd, size);
+>     if (ret < 0) { close(fd); return ret; }
+>     return fd;
+> }
+> 
+> int main() {
+>     int ret, fd;
+>     void *addr, *addr2, *addr3, *addr1;
+>     ret = memfd_create_region("test_region", REGION_SIZE);
+>     printf("ret=%d\n", ret);
+>     fd = ret;
+> 
+>     // Create map
+>     addr = mmap(0, REGION_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+>     if (addr == MAP_FAILED)
+> 	    printf("map 0 failed\n");
+>     else
+> 	    printf("map 0 passed\n");
+> 
+>     if ((ret = write(fd, "test", 4)) != 4)
+> 	    printf("write failed even though no future-write seal "
+> 		   "(ret=%d errno =%d)\n", ret, errno);
+>     else
+> 	    printf("write passed\n");
+> 
+>     addr1 = mmap(0, REGION_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+>     if (addr1 == MAP_FAILED)
+> 	    perror("map 1 prot-write failed even though no seal\n");
+>     else
+> 	    printf("map 1 prot-write passed as expected\n");
+> 
+>     ret = fcntl(fd, F_ADD_SEALS, F_SEAL_FUTURE_WRITE |
+> 				 F_SEAL_GROW |
+> 				 F_SEAL_SHRINK);
+>     if (ret == -1)
+> 	    printf("fcntl failed, errno: %d\n", errno);
+>     else
+> 	    printf("future-write seal now active\n");
+> 
+>     if ((ret = write(fd, "test", 4)) != 4)
+> 	    printf("write failed as expected due to future-write seal\n");
+>     else
+> 	    printf("write passed (unexpected)\n");
+> 
+>     addr2 = mmap(0, REGION_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+>     if (addr2 == MAP_FAILED)
+> 	    perror("map 2 prot-write failed as expected due to seal\n");
+>     else
+> 	    printf("map 2 passed\n");
+> 
+>     addr3 = mmap(0, REGION_SIZE, PROT_READ, MAP_SHARED, fd, 0);
+>     if (addr3 == MAP_FAILED)
+> 	    perror("map 3 failed\n");
+>     else
+> 	    printf("map 3 prot-read passed as expected\n");
+> }
+> 
+> The output of running this program is as follows:
+> ret=3
+> map 0 passed
+> write passed
+> map 1 prot-write passed as expected
+> future-write seal now active
+> write failed as expected due to future-write seal
+> map 2 prot-write failed as expected due to seal
+> : Permission denied
+> map 3 prot-read passed as expected
+> 
+> Cc: jreck at google.com
+> Cc: john.stultz at linaro.org
+> Cc: tkjos at google.com
+> Cc: gregkh at linuxfoundation.org
+> Cc: hch at infradead.org
+> Reviewed-by: John Stultz <john.stultz at linaro.org>
+> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
 
-Sorry Thomas, I mistyped your name.
+Apologies for the follow-up. Now that merge window has opened, just checking
+if this patch (which IMO has been beaten to death) can make it for 4.20?  Its
+pretty much completed and is well tested at this point (tests are in 2/2).
+Then I can move onto other memfd enhancements I'm planning.
 
-> two cases can be implemented separately, what should we do with this
-> series to make it ready to be merged?
-> 
-> I know that we need to:
-> 
-> * look at device drivers that report timestamps in CLOCK_MONOTONIC base.
-> * forbid changing offsets after creating timers
-> 
-> Anything else?
-> 
-> Thanks,
-> Andrei
-> 
-> > 
-> > A pure 64bit nanoseond counter is good for 500 years.  So 64bit
-> > variables can be used to hold time, and everything can be converted from
-> > there.
-> > 
-> > This suggests we can for ticks have two values.
-> > - The number of ticks from the time source.
-> > - The number of times the ticks would have rolled over.
-> > 
-> > That sounds like it may be a little simplistic as it would require being
-> > very diligent about firing a timer exactly at rollover and not losing
-> > that, but for a handwaving argument is probably enough to generate
-> > a 64bit tick counter.
-> > 
-> > If the focus is on a 64bit tick counter then what update_wall_time
-> > has to do is very limited.  Just deal the accounting needed to cope with
-> > tick rollover.
-> > 
-> > Getting the actual time looks like it would be as simple as now, with
-> > perhaps an extra addition to account for the number of times the tick
-> > counter has rolled over.  With limited precision arithmetic and various
-> > optimizations I don't think it is that simple to implement but it feels
-> > like it should be very little extra work.
-> > 
-> > For timers my inclination would be to assume no adjustments to the
-> > current time parameters and set the timer to go off then.   If the time
-> > on the appropriate clock has been changed since the timer was set and
-> > the timer is going off early reschedule so the timer fires at the
-> > appropriate time.
-> > 
-> > With the above I think it is theoretically possible to build a time
-> > namespace that supports multiple lengths of second, and does not have
-> > much overhead.
-> > 
-> > Not that I think a final implementation would necessary look like what I
-> > have described. I just think it is possible with extreme care to evolve
-> > the current code base into something that can efficiently handle
-> > multiple time domains with slightly different lenghts of second.
-> > 
-> > Thomas does it sound like I am completely out of touch with reality?
-> > 
-> > It does though sound like it is going to take some serious digging
-> > through the code to understand how what everything does and how and why
-> > everthing works the way it does.  Not something grafted on top with just
-> > a cursory understanding of how the code works.
-> > 
-> > Eric
-> > _______________________________________________
-> > Containers mailing list
-> > Containers at lists.linux-foundation.org
-> > https://lists.linuxfoundation.org/mailman/listinfo/containers
+thanks,
+
+ - Joel
