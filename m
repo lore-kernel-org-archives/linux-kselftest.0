@@ -1,212 +1,405 @@
 From: brendanhiggins at google.com (Brendan Higgins)
-Date: Tue, 23 Oct 2018 16:57:43 -0700
-Subject: [RFC v2 07/14] kunit: test: add initial tests
+Date: Tue, 23 Oct 2018 16:57:37 -0700
+Subject: [RFC v2 01/14] kunit: test: add KUnit test runner core
 In-Reply-To: <20181023235750.103146-1-brendanhiggins@google.com>
 References: <20181023235750.103146-1-brendanhiggins@google.com>
-Message-ID: <20181023235750.103146-8-brendanhiggins@google.com>
+Message-ID: <20181023235750.103146-2-brendanhiggins@google.com>
 
-Add a test for string stream along with a simpler example.
+Add core facilities for defining unit tests; this provides a common way
+to define test cases, functions that execute code which is under test
+and determine whether the code under test behaves as expected; this also
+provides a way to group together related test cases in test suites (here
+we call them test_modules).
+
+Just define test cases and how to execute them for now; setting
+expectations on code will be defined later.
 
 Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
 ---
- kunit/Kconfig              | 12 ++++++
- kunit/Makefile             |  4 +-
- kunit/example-test.c       | 88 ++++++++++++++++++++++++++++++++++++++
- kunit/string-stream-test.c | 61 ++++++++++++++++++++++++++
- 4 files changed, 164 insertions(+), 1 deletion(-)
- create mode 100644 kunit/example-test.c
- create mode 100644 kunit/string-stream-test.c
+ include/kunit/test.h | 165 ++++++++++++++++++++++++++++++++++++++++++
+ kunit/Kconfig        |  17 +++++
+ kunit/Makefile       |   1 +
+ kunit/test.c         | 168 +++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 351 insertions(+)
+ create mode 100644 include/kunit/test.h
+ create mode 100644 kunit/Kconfig
+ create mode 100644 kunit/Makefile
+ create mode 100644 kunit/test.c
 
-diff --git a/kunit/Kconfig b/kunit/Kconfig
-index 49b44c4f6630a..c3dc7bca83f9d 100644
---- a/kunit/Kconfig
-+++ b/kunit/Kconfig
-@@ -14,4 +14,16 @@ config KUNIT
- 	  special hardware. For more information, please see
- 	  Documentation/kunit/
- 
-+config KUNIT_TEST
-+	bool "KUnit test for KUnit"
-+	depends on KUNIT
-+	help
-+	  Enables KUnit test to test KUnit.
-+
-+config KUNIT_EXAMPLE_TEST
-+	bool "Example test for KUnit"
-+	depends on KUNIT
-+	help
-+	  Enables example KUnit test to demo features of KUnit.
-+
- endmenu
-diff --git a/kunit/Makefile b/kunit/Makefile
-index 5b4562ea7f322..b437bd546ab70 100644
---- a/kunit/Makefile
-+++ b/kunit/Makefile
-@@ -1 +1,3 @@
--obj-$(CONFIG_KUNIT)		+= test.o string-stream.o test-stream.o
-+obj-$(CONFIG_KUNIT)			+= test.o string-stream.o test-stream.o
-+obj-$(CONFIG_KUNIT_TEST)		+= string-stream-test.o
-+obj-$(CONFIG_KUNIT_EXAMPLE_TEST)	+= example-test.o
-diff --git a/kunit/example-test.c b/kunit/example-test.c
+diff --git a/include/kunit/test.h b/include/kunit/test.h
 new file mode 100644
-index 0000000000000..e9bd2b41c5fd2
+index 0000000000000..e0b14b227ac44
 --- /dev/null
-+++ b/kunit/example-test.c
-@@ -0,0 +1,88 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/include/kunit/test.h
+@@ -0,0 +1,165 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * Example KUnit test to show how to use KUnit.
++ * Base unit test (KUnit) API.
 + *
 + * Copyright (C) 2018, Google LLC.
 + * Author: Brendan Higgins <brendanhiggins at google.com>
 + */
 +
++#ifndef _KUNIT_TEST_H
++#define _KUNIT_TEST_H
++
++#include <linux/types.h>
++#include <linux/slab.h>
++
++struct test;
++
++/**
++ * struct test_case - represents an individual test case.
++ * @run_case: the function representing the actual test case.
++ * @name: the name of the test case.
++ *
++ * A test case is a function with the signature, ``void (*)(struct test *)``
++ * that makes expectations (see TEST_EXPECT_TRUE()) about code under test. Each
++ * test case is associated with a &struct test_module and will be run after the
++ * module's init function and followed by the module's exit function.
++ *
++ * A test case should be static and should only be created with the TEST_CASE()
++ * macro; additionally, every array of test cases should be terminated with an
++ * empty test case.
++ *
++ * Example:
++ *
++ * .. code-block:: c
++ *
++ *	void add_test_basic(struct test *test)
++ *	{
++ *		TEST_EXPECT_EQ(test, 1, add(1, 0));
++ *		TEST_EXPECT_EQ(test, 2, add(1, 1));
++ *		TEST_EXPECT_EQ(test, 0, add(-1, 1));
++ *		TEST_EXPECT_EQ(test, INT_MAX, add(0, INT_MAX));
++ *		TEST_EXPECT_EQ(test, -1, add(INT_MAX, INT_MIN));
++ *	}
++ *
++ *	static struct test_case example_test_cases[] = {
++ *		TEST_CASE(add_test_basic),
++ *		{},
++ *	};
++ *
++ */
++struct test_case {
++	void (*run_case)(struct test *test);
++	const char name[256];
++
++	/* private: internal use only. */
++	bool success;
++};
++
++/**
++ * TEST_CASE - A helper for creating a &struct test_case
++ * @test_name: a reference to a test case function.
++ *
++ * Takes a symbol for a function representing a test case and creates a &struct
++ * test_case object from it. See the documentation for &struct test_case for an
++ * example on how to use it.
++ */
++#define TEST_CASE(test_name) { .run_case = test_name, .name = #test_name }
++
++/**
++ * struct test_module - describes a related collection of &struct test_case s.
++ * @name: the name of the test. Purely informational.
++ * @init: called before every test case.
++ * @exit: called after every test case.
++ * @test_cases: a null terminated array of test cases.
++ *
++ * A test_module is a collection of related &struct test_case s, such that
++ * @init is called before every test case and @exit is called after every test
++ * case, similar to the notion of a *test fixture* or a *test class* in other
++ * unit testing frameworks like JUnit or Googletest.
++ *
++ * Every &struct test_case must be associated with a test_module for KUnit to
++ * run it.
++ */
++struct test_module {
++	const char name[256];
++	int (*init)(struct test *test);
++	void (*exit)(struct test *test);
++	struct test_case *test_cases;
++};
++
++/**
++ * struct test - represents a running instance of a test.
++ * @priv: for user to store arbitrary data. Commonly used to pass data created
++ * in the init function (see &struct test_module).
++ *
++ * Used to store information about the current context under which the test is
++ * running. Most of this data is private and should only be accessed indirectly
++ * via public functions; the one exception is @priv which can be used by the
++ * test writer to store arbitrary data.
++ */
++struct test {
++	void *priv;
++
++	/* private: internal use only. */
++	const char *name; /* Read only after initialization! */
++	spinlock_t lock; /* Gaurds all mutable test state. */
++	bool success; /* Protected by lock. */
++	void (*vprintk)(const struct test *test,
++			const char *level,
++			struct va_format *vaf);
++};
++
++int test_init_test(struct test *test, const char *name);
++
++int test_run_tests(struct test_module *module);
++
++/**
++ * module_test() - used to register a &struct test_module with KUnit.
++ * @module: a statically allocated &struct test_module.
++ *
++ * Registers @module with the test framework. See &struct test_module for more
++ * information.
++ */
++#define module_test(module) \
++		static int module_test_init##module(void) \
++		{ \
++			return test_run_tests(&module); \
++		} \
++		late_initcall(module_test_init##module)
++
++void __printf(3, 4) test_printk(const char *level,
++				const struct test *test,
++				const char *fmt, ...);
++
++/**
++ * test_info() - Prints an INFO level message associated with the current test.
++ * @test: The test context object.
++ * @fmt: A printk() style format string.
++ *
++ * Prints an info level message associated with the test module being run. Takes
++ * a variable number of format parameters just like printk().
++ */
++#define test_info(test, fmt, ...) \
++		test_printk(KERN_INFO, test, fmt, ##__VA_ARGS__)
++
++/**
++ * test_warn() - Prints a WARN level message associated with the current test.
++ * @test: The test context object.
++ * @fmt: A printk() style format string.
++ *
++ * See test_info().
++ */
++#define test_warn(test, fmt, ...) \
++		test_printk(KERN_WARNING, test, fmt, ##__VA_ARGS__)
++
++/**
++ * test_err() - Prints an ERROR level message associated with the current test.
++ * @test: The test context object.
++ * @fmt: A printk() style format string.
++ *
++ * See test_info().
++ */
++#define test_err(test, fmt, ...) \
++		test_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
++
++#endif /* _KUNIT_TEST_H */
+diff --git a/kunit/Kconfig b/kunit/Kconfig
+new file mode 100644
+index 0000000000000..49b44c4f6630a
+--- /dev/null
++++ b/kunit/Kconfig
+@@ -0,0 +1,17 @@
++#
++# KUnit base configuration
++#
++
++menu "KUnit support"
++
++config KUNIT
++	bool "Enable support for unit tests (KUnit)"
++	depends on UML
++	help
++	  Enables support for kernel unit tests (KUnit), a lightweight unit
++	  testing and mocking framework for the Linux kernel. These tests are
++	  able to be run locally on a developer's workstation without a VM or
++	  special hardware. For more information, please see
++	  Documentation/kunit/
++
++endmenu
+diff --git a/kunit/Makefile b/kunit/Makefile
+new file mode 100644
+index 0000000000000..dd7a0299514b7
+--- /dev/null
++++ b/kunit/Makefile
+@@ -0,0 +1 @@
++obj-$(CONFIG_KUNIT)		+= test.o
+diff --git a/kunit/test.c b/kunit/test.c
+new file mode 100644
+index 0000000000000..4732e5f0d7575
+--- /dev/null
++++ b/kunit/test.c
+@@ -0,0 +1,168 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Base unit test (KUnit) API.
++ *
++ * Copyright (C) 2018, Google LLC.
++ * Author: Brendan Higgins <brendanhiggins at google.com>
++ */
++
++#include <linux/sched.h>
++#include <linux/sched/debug.h>
++#include <os.h>
 +#include <kunit/test.h>
 +
-+/*
-+ * This is the most fundamental element of KUnit, the test case. A test case
-+ * makes a set EXPECTATIONs and ASSERTIONs about the behavior of some code; if
-+ * any expectations or assertions are not met, the test fails; otherwise, the
-+ * test passes.
-+ *
-+ * In KUnit, a test case is just a function with the signature
-+ * `void (*)(struct test *)`. `struct test` is a context object that stores
-+ * information about the current test.
-+ */
-+static void example_simple_test(struct test *test)
++static bool test_get_success(struct test *test)
 +{
-+	/*
-+	 * This is an EXPECTATION; it is how KUnit tests things. When you want
-+	 * to test a piece of code, you set some expectations about what the
-+	 * code should do. KUnit then runs the test and verifies that the code's
-+	 * behavior matched what was expected.
-+	 */
-+	TEST_EXPECT_EQ(test, 1 + 1, 2);
++	unsigned long flags;
++	bool success;
++
++	spin_lock_irqsave(&test->lock, flags);
++	success = test->success;
++	spin_unlock_irqrestore(&test->lock, flags);
++
++	return success;
 +}
 +
-+/*
-+ * This is run once before each test case, see the comment on
-+ * example_test_module for more information.
-+ */
-+static int example_test_init(struct test *test)
++static void test_set_success(struct test *test, bool success)
 +{
-+	test_info(test, "initializing");
++	unsigned long flags;
++
++	spin_lock_irqsave(&test->lock, flags);
++	test->success = success;
++	spin_unlock_irqrestore(&test->lock, flags);
++}
++
++static int test_vprintk_emit(const struct test *test,
++			     int level,
++			     const char *fmt,
++			     va_list args)
++{
++	return vprintk_emit(0, level, NULL, 0, fmt, args);
++}
++
++static int test_printk_emit(const struct test *test,
++			    int level,
++			    const char *fmt, ...)
++{
++	va_list args;
++	int ret;
++
++	va_start(args, fmt);
++	ret = test_vprintk_emit(test, level, fmt, args);
++	va_end(args);
++
++	return ret;
++}
++
++static void test_vprintk(const struct test *test,
++			 const char *level,
++			 struct va_format *vaf)
++{
++	test_printk_emit(test,
++			 level[1] - '0',
++			 "kunit %s: %pV", test->name, vaf);
++}
++
++int test_init_test(struct test *test, const char *name)
++{
++	spin_lock_init(&test->lock);
++	test->name = name;
++	test->vprintk = test_vprintk;
 +
 +	return 0;
 +}
 +
 +/*
-+ * Here we make a list of all the test cases we want to add to the test module
-+ * below.
++ * Initializes and runs test case. Does not clean up or do post validations.
 + */
-+static struct test_case example_test_cases[] = {
-+	/*
-+	 * This is a helper to create a test case object from a test case
-+	 * function; its exact function is not important to understand how to
-+	 * use KUnit, just know that this is how you associate test cases with a
-+	 * test module.
-+	 */
-+	TEST_CASE(example_simple_test),
-+	{},
-+};
-+
-+/*
-+ * This defines a suite or grouping of tests.
-+ *
-+ * Test cases are defined as belonging to the suite by adding them to
-+ * `test_cases`.
-+ *
-+ * Often it is desirable to run some function which will set up things which
-+ * will be used by every test; this is accomplished with an `init` function
-+ * which runs before each test case is invoked. Similarly, an `exit` function
-+ * may be specified which runs after every test case and can be used to for
-+ * cleanup. For clarity, running tests in a test module would behave as follows:
-+ *
-+ * module.init(test);
-+ * module.test_case[0](test);
-+ * module.exit(test);
-+ * module.init(test);
-+ * module.test_case[1](test);
-+ * module.exit(test);
-+ * ...;
-+ */
-+static struct test_module example_test_module = {
-+	.name = "example",
-+	.init = example_test_init,
-+	.test_cases = example_test_cases,
-+};
-+
-+/*
-+ * This registers the above test module telling KUnit that this is a suite of
-+ * tests that need to be run.
-+ */
-+module_test(example_test_module);
-diff --git a/kunit/string-stream-test.c b/kunit/string-stream-test.c
-new file mode 100644
-index 0000000000000..07c626cbfffbf
---- /dev/null
-+++ b/kunit/string-stream-test.c
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit test for struct string_stream.
-+ *
-+ * Copyright (C) 2018, Google LLC.
-+ * Author: Brendan Higgins <brendanhiggins at google.com>
-+ */
-+
-+#include <linux/slab.h>
-+#include <kunit/test.h>
-+#include <kunit/string-stream.h>
-+
-+static void string_stream_test_get_string(struct test *test)
++static void test_run_case_internal(struct test *test,
++				   struct test_module *module,
++				   struct test_case *test_case)
 +{
-+	struct string_stream *stream = new_string_stream();
-+	char *output;
++	int ret;
 +
-+	stream->add(stream, "Foo");
-+	stream->add(stream, " %s", "bar");
++	if (module->init) {
++		ret = module->init(test);
++		if (ret) {
++			test_err(test, "failed to initialize: %d", ret);
++			test_set_success(test, false);
++			return;
++		}
++	}
 +
-+	output = stream->get_string(stream);
-+	TEST_EXPECT_STREQ(test, output, "Foo bar");
-+	kfree(output);
-+	destroy_string_stream(stream);
++	test_case->run_case(test);
 +}
 +
-+static void string_stream_test_add_and_clear(struct test *test)
++/*
++ * Performs post validations and cleanup after a test case was run.
++ * XXX: Should ONLY BE CALLED AFTER test_run_case_internal!
++ */
++static void test_run_case_cleanup(struct test *test,
++				  struct test_module *module,
++				  struct test_case *test_case)
 +{
-+	struct string_stream *stream = new_string_stream();
-+	char *output;
-+	int i;
-+
-+	for (i = 0; i < 10; i++)
-+		stream->add(stream, "A");
-+
-+	output = stream->get_string(stream);
-+	TEST_EXPECT_STREQ(test, output, "AAAAAAAAAA");
-+	TEST_EXPECT_EQ(test, stream->length, 10);
-+	TEST_EXPECT_FALSE(test, stream->is_empty(stream));
-+	kfree(output);
-+
-+	stream->clear(stream);
-+
-+	output = stream->get_string(stream);
-+	TEST_EXPECT_STREQ(test, output, "");
-+	TEST_EXPECT_TRUE(test, stream->is_empty(stream));
-+	destroy_string_stream(stream);
++	if (module->exit)
++		module->exit(test);
 +}
 +
-+static struct test_case string_stream_test_cases[] = {
-+	TEST_CASE(string_stream_test_get_string),
-+	TEST_CASE(string_stream_test_add_and_clear),
-+	{}
-+};
++/*
++ * Performs all logic to run a test case.
++ */
++static bool test_run_case(struct test *test,
++			  struct test_module *module,
++			  struct test_case *test_case)
++{
++	test_set_success(test, true);
 +
-+static struct test_module string_stream_test_module = {
-+	.name = "string-stream-test",
-+	.test_cases = string_stream_test_cases
-+};
-+module_test(string_stream_test_module);
++	test_run_case_internal(test, module, test_case);
++	test_run_case_cleanup(test, module, test_case);
 +
++	return test_get_success(test);
++}
++
++int test_run_tests(struct test_module *module)
++{
++	bool all_passed = true, success;
++	struct test_case *test_case;
++	struct test test;
++	int ret;
++
++	ret = test_init_test(&test, module->name);
++	if (ret)
++		return ret;
++
++	for (test_case = module->test_cases; test_case->run_case; test_case++) {
++		success = test_run_case(&test, module, test_case);
++		if (!success)
++			all_passed = false;
++
++		test_info(&test,
++			  "%s %s",
++			  test_case->name,
++			  success ? "passed" : "failed");
++	}
++
++	if (all_passed)
++		test_info(&test, "all tests passed");
++	else
++		test_info(&test, "one or more tests failed");
++
++	return 0;
++}
++
++void test_printk(const char *level,
++		 const struct test *test,
++		 const char *fmt, ...)
++{
++	struct va_format vaf;
++	va_list args;
++
++	va_start(args, fmt);
++
++	vaf.fmt = fmt;
++	vaf.va = &args;
++
++	test->vprintk(test, level, &vaf);
++
++	va_end(args);
++}
 -- 
 2.19.1.568.g152ad8e336-goog
