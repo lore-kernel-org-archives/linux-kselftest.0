@@ -1,126 +1,287 @@
 From: brendanhiggins@google.com (Brendan Higgins)
-Date: Tue, 23 Oct 2018 16:57:47 -0700
-Subject: [RFC v2 11/14] kunit: add KUnit wrapper script and simple output
- parser
+Date: Tue, 23 Oct 2018 16:57:41 -0700
+Subject: [RFC v2 05/14] kunit: test: add the concept of expectations
 In-Reply-To: <20181023235750.103146-1-brendanhiggins@google.com>
 References: <20181023235750.103146-1-brendanhiggins@google.com>
-Message-ID: <20181023235750.103146-12-brendanhiggins@google.com>
+Message-ID: <20181023235750.103146-6-brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181023235747.JfMdHn67MckI_VeCEd2-Ocx640GafkV_veZBdQvRG_U@z>
+Message-ID: <20181023235741.JLejpQzY1O_PSwtlacLWlhhIpMfERNft7NoHGFTl7qY@z>
 
-The KUnit wrapper script interfaces with the two modules
-(kunit_config.py and kunit_kernel.py) and provides a command line
-interface for running KUnit tests. This interface allows the caller to
-specify options like test timeouts. The script handles configuring,
-building and running the kernel and tests.
+Add support for expectations, which allow properties to be specified and
+then verified in tests.
 
-The output parser (kunit_parser.py) simply strips out all the output
-from the kernel that is outputted as part of it's initialization
-sequence. This ensures that only the output from KUnit is displayed
-on the screen.
-
-A full version of the output is written to test.log, or can be seen by
-passing --raw_output to the wrapper script.
-
-Signed-off-by: Felix Guo <felixguoxiuping at gmail.com>
 Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
 ---
- tools/testing/kunit/kunit.py        | 40 +++++++++++++++++++++++++++++
- tools/testing/kunit/kunit_kernel.py |  3 +--
- tools/testing/kunit/kunit_parser.py | 24 +++++++++++++++++
- 3 files changed, 65 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/kunit/kunit.py
- create mode 100644 tools/testing/kunit/kunit_parser.py
+ include/kunit/test.h | 259 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 259 insertions(+)
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-new file mode 100755
-index 0000000000000..1356be404996b
---- /dev/null
-+++ b/tools/testing/kunit/kunit.py
-@@ -0,0 +1,40 @@
-+#!/usr/bin/python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# A thin wrapper on top of the KUnit Kernel
-+
-+import argparse
-+import sys
-+import os
-+
-+import kunit_config
-+import kunit_kernel
-+import kunit_parser
-+
-+parser = argparse.ArgumentParser(description='Runs KUnit tests.')
-+
-+parser.add_argument('--raw_output', help='don\'t format output from kernel',
-+		    action='store_true')
-+
-+parser.add_argument('--timeout', help='maximum number of seconds to allow for '
-+		    'all tests to run. This does not include time taken to '
-+		    'build the tests.', type=int, default=300,
-+		    metavar='timeout')
-+
-+cli_args = parser.parse_args()
-+linux = kunit_kernel.LinuxSourceTree()
-+
-+success = linux.build_reconfig()
-+if not success:
-+	quit()
-+
-+print('Building KUnit Kernel ...')
-+success = linux.build_um_kernel()
-+if not success:
-+	quit()
-+
-+print('Starting KUnit Kernel ...')
-+if cli_args.raw_output:
-+	kunit_parser.raw_output(linux.run_kernel(timeout=cli_args.timeout))
-+else:
-+	kunit_parser.parse_run_tests(linux.run_kernel(timeout=cli_args.timeout))
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 87abaede50513..c1259b174f7d4 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -113,8 +113,7 @@ class LinuxSourceTree(object):
- 			return False
- 		return True
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 68320fa2452de..d652825d7296f 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -273,4 +273,263 @@ void __printf(3, 4) test_printk(const char *level,
+ #define test_err(test, fmt, ...) \
+ 		test_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
  
--	def run_kernel(self, args=[]):
--		timeout = None
-+	def run_kernel(self, args=[], timeout=None):
- 		args.extend(['mem=256M'])
- 		process = self._ops.linux_bin(args, timeout)
- 		with open('test.log', 'w') as f:
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-new file mode 100644
-index 0000000000000..1dff3adb73bd3
---- /dev/null
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -0,0 +1,24 @@
-+# SPDX-License-Identifier: GPL-2.0
++static inline struct test_stream *test_expect_start(struct test *test,
++						    const char *file,
++						    const char *line)
++{
++	struct test_stream *stream = test_new_stream(test);
 +
-+import re
++	stream->add(stream, "EXPECTATION FAILED at %s:%s\n\t", file, line);
 +
-+kunit_start_re = re.compile('console .* enabled')
-+kunit_end_re = re.compile('List of all partitions:')
++	return stream;
++}
 +
-+def isolate_kunit_output(kernel_output):
-+	started = False
-+	for line in kernel_output:
-+		if kunit_start_re.match(line):
-+			started = True
-+		elif kunit_end_re.match(line):
-+			break
-+		elif started:
-+			yield line
++static inline void test_expect_end(struct test *test,
++				   bool success,
++				   struct test_stream *stream)
++{
++	if (!success)
++		test->fail(test, stream);
++	else
++		stream->clear(stream);
++}
 +
-+def raw_output(kernel_output):
-+	for line in kernel_output:
-+		print(line)
++#define TEST_EXPECT_START(test) \
++		test_expect_start(test, __FILE__, __stringify(__LINE__))
 +
-+def parse_run_tests(kernel_output):
-+	for output in isolate_kunit_output(kernel_output):
-+		print(output)
++#define TEST_EXPECT_END(test, success, stream) \
++		test_expect_end(test, success, stream)
++
++#define TEST_EXPECT(test, success, message) do {			       \
++	struct test_stream *__stream = TEST_EXPECT_START(test);		       \
++									       \
++	__stream->add(__stream, message);				       \
++	TEST_EXPECT_END(test, success, __stream);			       \
++} while (0)
++
++/**
++ * TEST_SUCCEED() - A no-op expectation. Only exists for code clarity.
++ * @test: The test context object.
++ *
++ * The opposite of TEST_FAIL(), it is an expectation that cannot fail. In other
++ * words, it does nothing and only exists for code clarity. See
++ * TEST_EXPECT_TRUE() for more information.
++ */
++#define TEST_SUCCEED(test) do {} while (0)
++
++/**
++ * TEST_FAIL() - Always causes a test to fail when evaluated.
++ * @test: The test context object.
++ * @message: an informational message to be printed when the assertion is made.
++ *
++ * The opposite of TEST_SUCCEED(), it is an expectation that always fails. In
++ * other words, it always results in a failed expectation, and consequently
++ * always causes the test case to fail when evaluated. See TEST_EXPECT_TRUE()
++ * for more information.
++ */
++#define TEST_FAIL(test, message) TEST_EXPECT(test, false, message)
++
++/**
++ * TEST_EXPECT_TRUE() - Causes a test failure when the expression is not true.
++ * @test: The test context object.
++ * @condition: an arbitrary boolean expression. The test fails when this does
++ * not evaluate to true.
++ *
++ * This and expectations of the form `TEST_EXPECT_*` will cause the test case to
++ * fail when the specified condition is not met; however, it will not prevent
++ * the test case from continuing to run; this is otherwise known as an
++ * *expectation failure*.
++ */
++#define TEST_EXPECT_TRUE(test, condition)				       \
++		TEST_EXPECT(test, (condition),				       \
++		       "Expected " #condition " is true, but is false.")
++
++/**
++ * TEST_EXPECT_FALSE() - Causes a test failure when the expression is not false.
++ * @test: The test context object.
++ * @condition: an arbitrary boolean expression. The test fails when this does
++ * not evaluate to false.
++ *
++ * Sets an expectation that @condition evaluates to false. See
++ * TEST_EXPECT_TRUE() for more information.
++ */
++#define TEST_EXPECT_FALSE(test, condition)				       \
++		TEST_EXPECT(test, !(condition),				       \
++		       "Expected " #condition " is false, but is true.")
++
++static inline void test_expect_binary(struct test *test,
++				      long long left, const char *left_name,
++				      long long right, const char *right_name,
++				      bool compare_result,
++				      const char *compare_name,
++				      const char *file,
++				      const char *line)
++{
++	struct test_stream *stream = test_expect_start(test, file, line);
++
++	stream->add(stream,
++		    "Expected %s %s %s, but\n",
++		    left_name, compare_name, right_name);
++	stream->add(stream, "\t\t%s == %lld\n", left_name, left);
++	stream->add(stream, "\t\t%s == %lld", right_name, right);
++
++	test_expect_end(test, compare_result, stream);
++}
++
++/*
++ * A factory macro for defining the expectations for the basic comparisons
++ * defined for the built in types.
++ *
++ * Unfortunately, there is no common type that all types can be promoted to for
++ * which all the binary operators behave the same way as for the actual types
++ * (for example, there is no type that long long and unsigned long long can
++ * both be cast to where the comparison result is preserved for all values). So
++ * the best we can do is do the comparison in the original types and then coerce
++ * everything to long long for printing; this way, the comparison behaves
++ * correctly and the printed out value usually makes sense without
++ * interpretation, but can always be interpretted to figure out the actual
++ * value.
++ */
++#define TEST_EXPECT_BINARY(test, left, condition, right) do {		       \
++	typeof(left) __left = (left);					       \
++	typeof(right) __right = (right);				       \
++	test_expect_binary(test,					       \
++			   (long long) __left, #left,			       \
++			   (long long) __right, #right,			       \
++			   __left condition __right, #condition,	       \
++			   __FILE__, __stringify(__LINE__));		       \
++} while (0)
++
++/**
++ * TEST_EXPECT_EQ() - Sets an expectation that @left and @right are equal.
++ * @test: The test context object.
++ * @left: an arbitrary expression that evaluates to a primitive C type.
++ * @right: an arbitrary expression that evaluates to a primitive C type.
++ *
++ * Sets an expectation that the values that @left and @right evaluate to are
++ * equal. This is semantically equivalent to
++ * TEST_EXPECT_TRUE(@test, (@left) == (@right)). See TEST_EXPECT_TRUE() for more
++ * information.
++ */
++#define TEST_EXPECT_EQ(test, left, right) \
++		TEST_EXPECT_BINARY(test, left, ==, right)
++
++/**
++ * TEST_EXPECT_NE() - An expectation that @left and @right are not equal.
++ * @test: The test context object.
++ * @left: an arbitrary expression that evaluates to a primitive C type.
++ * @right: an arbitrary expression that evaluates to a primitive C type.
++ *
++ * Sets an expectation that the values that @left and @right evaluate to are not
++ * equal. This is semantically equivalent to
++ * TEST_EXPECT_TRUE(@test, (@left) != (@right)). See TEST_EXPECT_TRUE() for more
++ * information.
++ */
++#define TEST_EXPECT_NE(test, left, right) \
++		TEST_EXPECT_BINARY(test, left, !=, right)
++
++/**
++ * TEST_EXPECT_LT() - An expectation that @left is less than @right.
++ * @test: The test context object.
++ * @left: an arbitrary expression that evaluates to a primitive C type.
++ * @right: an arbitrary expression that evaluates to a primitive C type.
++ *
++ * Sets an expectation that the value that @left evaluates to is less than the
++ * value that @right evaluates to. This is semantically equivalent to
++ * TEST_EXPECT_TRUE(@test, (@left) < (@right)). See TEST_EXPECT_TRUE() for more
++ * information.
++ */
++#define TEST_EXPECT_LT(test, left, right) \
++		TEST_EXPECT_BINARY(test, left, <, right)
++
++/**
++ * TEST_EXPECT_LE() - An expectation that @left is less than or equal to @right.
++ * @test: The test context object.
++ * @left: an arbitrary expression that evaluates to a primitive C type.
++ * @right: an arbitrary expression that evaluates to a primitive C type.
++ *
++ * Sets an expectation that the value that @left evaluates to is less than or
++ * equal to the value that @right evaluates to. Semantically this is equivalent
++ * to TEST_EXPECT_TRUE(@test, (@left) <= (@right)). See TEST_EXPECT_TRUE() for
++ * more information.
++ */
++#define TEST_EXPECT_LE(test, left, right) \
++		TEST_EXPECT_BINARY(test, left, <=, right)
++
++/**
++ * TEST_EXPECT_GT() - An expectation that @left is greater than @right.
++ * @test: The test context object.
++ * @left: an arbitrary expression that evaluates to a primitive C type.
++ * @right: an arbitrary expression that evaluates to a primitive C type.
++ *
++ * Sets an expectation that the value that @left evaluates to is greater than
++ * the value that @right evaluates to. This is semantically equivalent to
++ * TEST_EXPECT_TRUE(@test, (@left) > (@right)). See TEST_EXPECT_TRUE() for more
++ * information.
++ */
++#define TEST_EXPECT_GT(test, left, right) \
++		TEST_EXPECT_BINARY(test, left, >, right)
++
++/**
++ * TEST_EXPECT_GE() - Expects that @left is greater than or equal to @right.
++ * @test: The test context object.
++ * @left: an arbitrary expression that evaluates to a primitive C type.
++ * @right: an arbitrary expression that evaluates to a primitive C type.
++ *
++ * Sets an expectation that the value that @left evaluates to is greater than
++ * the value that @right evaluates to. This is semantically equivalent to
++ * TEST_EXPECT_TRUE(@test, (@left) >= (@right)). See TEST_EXPECT_TRUE() for more
++ * information.
++ */
++#define TEST_EXPECT_GE(test, left, right) \
++		TEST_EXPECT_BINARY(test, left, >=, right)
++
++/**
++ * TEST_EXPECT_STREQ() - An expectation that strings @left and @right are equal.
++ * @test: The test context object.
++ * @left: an arbitrary expression that evaluates to a null terminated string.
++ * @right: an arbitrary expression that evaluates to a null terminated string.
++ *
++ * Sets an expectation that the values that @left and @right evaluate to are
++ * equal. This is semantically equivalent to
++ * TEST_EXPECT_TRUE(@test, !strcmp((@left), (@right))). See TEST_EXPECT_TRUE()
++ * for more information.
++ */
++#define TEST_EXPECT_STREQ(test, left, right) do {			       \
++	struct test_stream *__stream = TEST_EXPECT_START(test);		       \
++	typeof(left) __left = (left);					       \
++	typeof(right) __right = (right);				       \
++									       \
++	__stream->add(__stream, "Expected " #left " == " #right ", but\n");    \
++	__stream->add(__stream, "\t\t%s == %s\n", #left, __left);	       \
++	__stream->add(__stream, "\t\t%s == %s\n", #right, __right);	       \
++									       \
++	TEST_EXPECT_END(test, !strcmp(left, right), __stream);		       \
++} while (0)
++
++/**
++ * TEST_EXPECT_NOT_ERR_OR_NULL() - Expects that @ptr is not null and not err.
++ * @test: The test context object.
++ * @ptr: an arbitrary pointer.
++ *
++ * Sets an expectation that the value that @ptr evaluates to is not null and not
++ * an errno stored in a pointer. This is semantically equivalent to
++ * TEST_EXPECT_TRUE(@test, !IS_ERR_OR_NULL(@ptr)). See TEST_EXPECT_TRUE() for
++ * more information.
++ */
++#define TEST_EXPECT_NOT_ERR_OR_NULL(test, ptr) do {			       \
++	struct test_stream *__stream = TEST_EXPECT_START(test);		       \
++	typeof(ptr) __ptr = (ptr);					       \
++									       \
++	if (!__ptr)							       \
++		__stream->add(__stream,					       \
++			      "Expected " #ptr " is not null, but is.");       \
++	if (IS_ERR(__ptr))						       \
++		__stream->add(__stream,					       \
++			      "Expected " #ptr " is not error, but is: %ld",   \
++			      PTR_ERR(__ptr));				       \
++									       \
++	TEST_EXPECT_END(test, !IS_ERR_OR_NULL(__ptr), __stream);	       \
++} while (0)
++
+ #endif /* _KUNIT_TEST_H */
 -- 
 2.19.1.568.g152ad8e336-goog
