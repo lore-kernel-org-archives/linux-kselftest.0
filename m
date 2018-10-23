@@ -1,37 +1,39 @@
 From: joel at jms.id.au (Joel Stanley)
-Date: Tue, 23 Oct 2018 16:46:54 +1030
-Subject: [PATCH 3/6] selftests: powerpc/ptrace: Fix linking against pthread
+Date: Tue, 23 Oct 2018 16:46:55 +1030
+Subject: [PATCH 4/6] selftests: powerpc/signal: Make tests build
 In-Reply-To: <20181023061657.18007-1-joel@jms.id.au>
 References: <20181023061657.18007-1-joel@jms.id.au>
-Message-ID: <20181023061657.18007-4-joel@jms.id.au>
+Message-ID: <20181023061657.18007-5-joel@jms.id.au>
 
-Some of the ptrace tests require -ptrace when linking:
+According to lib.mk, TEST_PROGS is for shell scripts. It appears we need
+to define the programs as TEST_GEN_PROGS to ensure they are built.
 
- /usr/bin/ld: /tmp/ccH32S9w.o: in function `init_child_sync':
- core-pkey.c:(.text+0x1d64): undefined reference to `sem_init'
-
-The targets for these tests are modfied in lib.mk to add the $(OUTPUT)
-prefix. The makefile needs to specify that modifying those rules, or
-else they do not match and we miss out on the extra flags.
+The definition must also happen below the inclusion of lib.mk.
 
 Signed-off-by: Joel Stanley <joel at jms.id.au>
 ---
- tools/testing/selftests/powerpc/ptrace/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/powerpc/signal/Makefile | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/powerpc/ptrace/Makefile b/tools/testing/selftests/powerpc/ptrace/Makefile
-index 58de6d4a0cf4..8d3f006c98cc 100644
---- a/tools/testing/selftests/powerpc/ptrace/Makefile
-+++ b/tools/testing/selftests/powerpc/ptrace/Makefile
-@@ -9,7 +9,7 @@ include ../../lib.mk
+diff --git a/tools/testing/selftests/powerpc/signal/Makefile b/tools/testing/selftests/powerpc/signal/Makefile
+index d34a7c7710db..25d0973df5b3 100644
+--- a/tools/testing/selftests/powerpc/signal/Makefile
++++ b/tools/testing/selftests/powerpc/signal/Makefile
+@@ -1,7 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-TEST_PROGS := signal signal_tm
+-
+-$(TEST_PROGS): ../harness.c ../utils.c signal.S
++TEST_GEN_PROGS := signal signal_tm
  
- CFLAGS += -m64 -I../../../../../usr/include -I../tm -mhtm -fno-pie
+ CFLAGS += -maltivec
+ signal_tm: CFLAGS += -mhtm
+@@ -9,5 +7,4 @@ signal_tm: CFLAGS += -mhtm
+ top_srcdir = ../../../../..
+ include ../../lib.mk
  
--ptrace-pkey core-pkey: child.h
--ptrace-pkey core-pkey: LDLIBS += -pthread
-+$(OUTPUT)/ptrace-pkey $(OUTPUT)/core-pkey: child.h
-+$(OUTPUT)/ptrace-pkey $(OUTPUT)/core-pkey: LDLIBS += -pthread
- 
- $(TEST_GEN_PROGS): ../harness.c ../utils.c ../lib/reg.S ptrace.h
+-clean:
+-	rm -f $(TEST_PROGS) *.o
++$(TEST_GEN_PROGS): ../harness.c ../utils.c signal.S
 -- 
 2.19.1
