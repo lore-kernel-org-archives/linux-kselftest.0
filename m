@@ -1,40 +1,36 @@
 From: joel@jms.id.au (Joel Stanley)
-Date: Tue, 23 Oct 2018 16:46:52 +1030
-Subject: [PATCH 1/6] selftests: powerpc/ptrace: Make tests build
+Date: Tue, 23 Oct 2018 16:46:53 +1030
+Subject: [PATCH 2/6] selftests: powerpc/ptrace: Remove clean rule
 In-Reply-To: <20181023061657.18007-1-joel@jms.id.au>
 References: <20181023061657.18007-1-joel@jms.id.au>
-Message-ID: <20181023061657.18007-2-joel@jms.id.au>
+Message-ID: <20181023061657.18007-3-joel@jms.id.au>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181023061652.0xJzK-dd3xDIDAclQj-JYuvLJ4u4bZunTP4JUldC9T8@z>
+Message-ID: <20181023061653.P_f8PUJqbFqiIAIy4tDZ1Tw64REzaJHzBySC93dM3AE@z>
 
-According to lib.mk, TEST_PROGS is for shell scripts. It appears we need
-to define the programs as TEST_GEN_PROGS to ensure they are built.
+When running 'make ptrace':
+
+ make[1]: Entering directory 'tools/testing/selftests/powerpc/ptrace'
+ Makefile:18: warning: overriding recipe for target 'clean'
+ ../../lib.mk:137: warning: ignoring old recipe for target 'clean'
+
+The rule is unnecessary as TEST_GEN_FILES are cleaned up by the rule in
+lib.mk.
 
 Signed-off-by: Joel Stanley <joel at jms.id.au>
 ---
- tools/testing/selftests/powerpc/ptrace/Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/powerpc/ptrace/Makefile | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/tools/testing/selftests/powerpc/ptrace/Makefile b/tools/testing/selftests/powerpc/ptrace/Makefile
-index 6ac71b629276..e9a3850aae86 100644
+index e9a3850aae86..58de6d4a0cf4 100644
 --- a/tools/testing/selftests/powerpc/ptrace/Makefile
 +++ b/tools/testing/selftests/powerpc/ptrace/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--TEST_PROGS := ptrace-gpr ptrace-tm-gpr ptrace-tm-spd-gpr \
-+TEST_GEN_PROGS := ptrace-gpr ptrace-tm-gpr ptrace-tm-spd-gpr \
-               ptrace-tar ptrace-tm-tar ptrace-tm-spd-tar ptrace-vsx ptrace-tm-vsx \
-               ptrace-tm-spd-vsx ptrace-tm-spr ptrace-hwbreak ptrace-pkey core-pkey \
-               perf-hwbreak ptrace-syscall
-@@ -12,7 +12,7 @@ CFLAGS += -m64 -I../../../../../usr/include -I../tm -mhtm -fno-pie
- ptrace-pkey core-pkey: child.h
+@@ -13,6 +13,3 @@ ptrace-pkey core-pkey: child.h
  ptrace-pkey core-pkey: LDLIBS += -pthread
  
--$(TEST_PROGS): ../harness.c ../utils.c ../lib/reg.S ptrace.h
-+$(TEST_GEN_PROGS): ../harness.c ../utils.c ../lib/reg.S ptrace.h
- 
- clean:
--	rm -f $(TEST_PROGS) *.o
-+	rm -f $(TEST_GEN_PROGS) *.o
+ $(TEST_GEN_PROGS): ../harness.c ../utils.c ../lib/reg.S ptrace.h
+-
+-clean:
+-	rm -f $(TEST_GEN_PROGS) *.o
 -- 
 2.19.1
