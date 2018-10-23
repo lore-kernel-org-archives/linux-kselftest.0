@@ -1,177 +1,86 @@
 From: brendanhiggins@google.com (Brendan Higgins)
-Date: Tue, 23 Oct 2018 16:57:48 -0700
-Subject: [RFC v2 12/14] kunit.py: improve output from python wrapper
+Date: Tue, 23 Oct 2018 16:57:44 -0700
+Subject: [RFC v2 08/14] arch: um: add shim to trap to allow installing a fault
+ catcher for tests
 In-Reply-To: <20181023235750.103146-1-brendanhiggins@google.com>
 References: <20181023235750.103146-1-brendanhiggins@google.com>
-Message-ID: <20181023235750.103146-13-brendanhiggins@google.com>
+Message-ID: <20181023235750.103146-9-brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181023235748.M8q1BaO6Ij0RRpYjg6loU37O3KnpT9wVkXbhiu5QAgY@z>
+Message-ID: <20181023235744.Snmw8v0ZgeFC26fYGA8ejNtHRt2ZDBrkSCmiGD8N2lk@z>
 
-- add colors to displayed output
-- add timing and summary
+Add context to current thread that allows a test to specify that it
+wants to skip the normal checks to run an installed fault catcher.
 
-Signed-off-by: Felix Guo <felixguoxiuping at gmail.com>
 Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
 ---
- tools/testing/kunit/kunit.py        | 20 ++++++-
- tools/testing/kunit/kunit_parser.py | 93 ++++++++++++++++++++++++++++-
- 2 files changed, 109 insertions(+), 4 deletions(-)
+ arch/um/include/asm/processor-generic.h |  4 +++-
+ arch/um/kernel/trap.c                   | 15 +++++++++++----
+ 2 files changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 1356be404996b..b36c7b7924567 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -6,6 +6,7 @@
- import argparse
- import sys
- import os
-+import time
+diff --git a/arch/um/include/asm/processor-generic.h b/arch/um/include/asm/processor-generic.h
+index b58b746d3f2ca..d566cd416ff02 100644
+--- a/arch/um/include/asm/processor-generic.h
++++ b/arch/um/include/asm/processor-generic.h
+@@ -27,6 +27,7 @@ struct thread_struct {
+ 	struct task_struct *prev_sched;
+ 	struct arch_thread arch;
+ 	jmp_buf switch_buf;
++	bool is_running_test;
+ 	struct {
+ 		int op;
+ 		union {
+@@ -51,7 +52,8 @@ struct thread_struct {
+ 	.fault_addr		= NULL, \
+ 	.prev_sched		= NULL, \
+ 	.arch			= INIT_ARCH_THREAD, \
+-	.request		= { 0 } \
++	.request		= { 0 }, \
++	.is_running_test	= false, \
+ }
  
- import kunit_config
- import kunit_kernel
-@@ -24,17 +25,32 @@ parser.add_argument('--timeout', help='maximum number of seconds to allow for '
- cli_args = parser.parse_args()
- linux = kunit_kernel.LinuxSourceTree()
+ static inline void release_thread(struct task_struct *task)
+diff --git a/arch/um/kernel/trap.c b/arch/um/kernel/trap.c
+index cced829460427..bf90e678b3d71 100644
+--- a/arch/um/kernel/trap.c
++++ b/arch/um/kernel/trap.c
+@@ -201,6 +201,12 @@ void segv_handler(int sig, struct siginfo *unused_si, struct uml_pt_regs *regs)
+ 	segv(*fi, UPT_IP(regs), UPT_IS_USER(regs), regs);
+ }
  
-+config_start = time.time()
- success = linux.build_reconfig()
-+config_end = time.time()
- if not success:
- 	quit()
++static void segv_run_catcher(jmp_buf *catcher, void *fault_addr)
++{
++	current->thread.fault_addr = fault_addr;
++	UML_LONGJMP(catcher, 1);
++}
++
+ /*
+  * We give a *copy* of the faultinfo in the regs to segv.
+  * This must be done, since nesting SEGVs could overwrite
+@@ -219,7 +225,10 @@ unsigned long segv(struct faultinfo fi, unsigned long ip, int is_user,
+ 	if (!is_user && regs)
+ 		current->thread.segv_regs = container_of(regs, struct pt_regs, regs);
  
--print('Building KUnit Kernel ...')
-+kunit_parser.print_with_timestamp('Building KUnit Kernel ...')
-+
-+build_start = time.time()
- success = linux.build_um_kernel()
-+build_end = time.time()
- if not success:
- 	quit()
+-	if (!is_user && (address >= start_vm) && (address < end_vm)) {
++	catcher = current->thread.fault_catcher;
++	if (catcher && current->thread.is_running_test)
++		segv_run_catcher(catcher, (void *) address);
++	else if (!is_user && (address >= start_vm) && (address < end_vm)) {
+ 		flush_tlb_kernel_vm();
+ 		goto out;
+ 	}
+@@ -246,12 +255,10 @@ unsigned long segv(struct faultinfo fi, unsigned long ip, int is_user,
+ 		address = 0;
+ 	}
  
--print('Starting KUnit Kernel ...')
-+kunit_parser.print_with_timestamp('Starting KUnit Kernel ...')
-+test_start = time.time()
-+
- if cli_args.raw_output:
- 	kunit_parser.raw_output(linux.run_kernel(timeout=cli_args.timeout))
- else:
- 	kunit_parser.parse_run_tests(linux.run_kernel(timeout=cli_args.timeout))
-+
-+test_end = time.time()
-+
-+kunit_parser.print_with_timestamp((
-+	"Elapsed time: %.3fs total, %.3fs configuring, %.3fs " +
-+	"building, %.3fs running.\n") % (test_end - config_start,
-+	config_end - config_start, build_end - build_start,
-+	test_end - test_start))
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 1dff3adb73bd3..d9051e407d5a7 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- import re
-+from datetime import datetime
- 
- kunit_start_re = re.compile('console .* enabled')
- kunit_end_re = re.compile('List of all partitions:')
-@@ -19,6 +20,94 @@ def raw_output(kernel_output):
- 	for line in kernel_output:
- 		print(line)
- 
-+DIVIDER = "=" * 30
-+
-+RESET = '\033[0;0m'
-+
-+def red(text):
-+	return '\033[1;31m' + text + RESET
-+
-+def yellow(text):
-+	return '\033[1;33m' + text + RESET
-+
-+def green(text):
-+	return '\033[1;32m' + text + RESET
-+
-+def print_with_timestamp(message):
-+	print('[%s] %s' % (datetime.now().strftime('%H:%M:%S'), message))
-+
-+def print_log(log):
-+	for m in log:
-+		print_with_timestamp(m)
-+
- def parse_run_tests(kernel_output):
--	for output in isolate_kunit_output(kernel_output):
--		print(output)
-+	test_case_output = re.compile('^kunit .*?: (.*)$')
-+
-+	test_module_success = re.compile('^kunit .*: all tests passed')
-+	test_module_fail = re.compile('^kunit .*: one or more tests failed')
-+
-+	test_case_success = re.compile('^kunit (.*): (.*) passed')
-+	test_case_fail = re.compile('^kunit (.*): (.*) failed')
-+	test_case_crash = re.compile('^kunit (.*): (.*) crashed')
-+
-+	total_tests = set()
-+	failed_tests = set()
-+	crashed_tests = set()
-+
-+	def get_test_name(match):
-+		return match.group(1) + ":" + match.group(2)
-+
-+	current_case_log = []
-+	def end_one_test(match, log):
-+		log.clear()
-+		total_tests.add(get_test_name(match))
-+
-+	print_with_timestamp(DIVIDER)
-+	for line in isolate_kunit_output(kernel_output):
-+		# Ignore module output:
-+		if (test_module_success.match(line) or
-+		    test_module_fail.match(line)):
-+			print_with_timestamp(DIVIDER)
-+			continue
-+
-+		match = re.match(test_case_success, line)
-+		if match:
-+			print_with_timestamp(green("[PASSED] ") +
-+					     get_test_name(match))
-+			end_one_test(match, current_case_log)
-+			continue
-+
-+		match = re.match(test_case_fail, line)
-+		# Crashed tests will report as both failed and crashed. We only
-+		# want to show and count it once.
-+		if match and get_test_name(match) not in crashed_tests:
-+			failed_tests.add(get_test_name(match))
-+			print_with_timestamp(red("[FAILED] " +
-+						 get_test_name(match)))
-+			print_log(map(yellow, current_case_log))
-+			print_with_timestamp("")
-+			end_one_test(match, current_case_log)
-+			continue
-+
-+		match = re.match(test_case_crash, line)
-+		if match:
-+			crashed_tests.add(get_test_name(match))
-+			print_with_timestamp(yellow("[CRASH] " +
-+						    get_test_name(match)))
-+			print_log(current_case_log)
-+			print_with_timestamp("")
-+			end_one_test(match, current_case_log)
-+			continue
-+
-+		# Strip off the `kunit module-name:` prefix
-+		match = re.match(test_case_output, line)
-+		if match:
-+			current_case_log.append(match.group(1))
-+		else:
-+			current_case_log.append(line)
-+
-+	fmt = green if (len(failed_tests) + len(crashed_tests) == 0) else red
-+	print_with_timestamp(
-+		fmt("Testing complete. %d tests run. %d failed. %d crashed." %
-+		    (len(total_tests), len(failed_tests), len(crashed_tests))))
-+
+-	catcher = current->thread.fault_catcher;
+ 	if (!err)
+ 		goto out;
+ 	else if (catcher != NULL) {
+-		current->thread.fault_addr = (void *) address;
+-		UML_LONGJMP(catcher, 1);
++		segv_run_catcher(catcher, (void *) address);
+ 	}
+ 	else if (current->thread.fault_addr != NULL)
+ 		panic("fault_addr set but no fault catcher");
 -- 
 2.19.1.568.g152ad8e336-goog
