@@ -1,34 +1,37 @@
 From: joel at jms.id.au (Joel Stanley)
-Date: Tue, 23 Oct 2018 16:46:53 +1030
-Subject: [PATCH 2/6] selftests: powerpc/ptrace: Remove clean rule
+Date: Tue, 23 Oct 2018 16:46:54 +1030
+Subject: [PATCH 3/6] selftests: powerpc/ptrace: Fix linking against pthread
 In-Reply-To: <20181023061657.18007-1-joel@jms.id.au>
 References: <20181023061657.18007-1-joel@jms.id.au>
-Message-ID: <20181023061657.18007-3-joel@jms.id.au>
+Message-ID: <20181023061657.18007-4-joel@jms.id.au>
 
-When running 'make ptrace':
+Some of the ptrace tests require -ptrace when linking:
 
- make[1]: Entering directory 'tools/testing/selftests/powerpc/ptrace'
- Makefile:18: warning: overriding recipe for target 'clean'
- ../../lib.mk:137: warning: ignoring old recipe for target 'clean'
+ /usr/bin/ld: /tmp/ccH32S9w.o: in function `init_child_sync':
+ core-pkey.c:(.text+0x1d64): undefined reference to `sem_init'
 
-The rule is unnecessary as TEST_GEN_FILES are cleaned up by the rule in
-lib.mk.
+The targets for these tests are modfied in lib.mk to add the $(OUTPUT)
+prefix. The makefile needs to specify that modifying those rules, or
+else they do not match and we miss out on the extra flags.
 
 Signed-off-by: Joel Stanley <joel at jms.id.au>
 ---
- tools/testing/selftests/powerpc/ptrace/Makefile | 3 ---
- 1 file changed, 3 deletions(-)
+ tools/testing/selftests/powerpc/ptrace/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/powerpc/ptrace/Makefile b/tools/testing/selftests/powerpc/ptrace/Makefile
-index e9a3850aae86..58de6d4a0cf4 100644
+index 58de6d4a0cf4..8d3f006c98cc 100644
 --- a/tools/testing/selftests/powerpc/ptrace/Makefile
 +++ b/tools/testing/selftests/powerpc/ptrace/Makefile
-@@ -13,6 +13,3 @@ ptrace-pkey core-pkey: child.h
- ptrace-pkey core-pkey: LDLIBS += -pthread
+@@ -9,7 +9,7 @@ include ../../lib.mk
+ 
+ CFLAGS += -m64 -I../../../../../usr/include -I../tm -mhtm -fno-pie
+ 
+-ptrace-pkey core-pkey: child.h
+-ptrace-pkey core-pkey: LDLIBS += -pthread
++$(OUTPUT)/ptrace-pkey $(OUTPUT)/core-pkey: child.h
++$(OUTPUT)/ptrace-pkey $(OUTPUT)/core-pkey: LDLIBS += -pthread
  
  $(TEST_GEN_PROGS): ../harness.c ../utils.c ../lib/reg.S ptrace.h
--
--clean:
--	rm -f $(TEST_GEN_PROGS) *.o
 -- 
 2.19.1
