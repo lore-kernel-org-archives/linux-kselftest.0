@@ -1,69 +1,213 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Thu, 25 Oct 2018 11:40:18 -0600
-Subject: [RFC v2 00/14] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <20181023235750.103146-1-brendanhiggins@google.com>
-References: <20181023235750.103146-1-brendanhiggins@google.com>
-Message-ID: <4b6eb273-8fe0-75be-dea0-fbbf17a7158c@kernel.org>
+Date: Thu, 25 Oct 2018 12:36:16 -0600
+Subject: [GIT PULL] kselftest update for Linux 4.20-rc1
+Message-ID: <407e4b9c-36eb-d533-331c-2396460c6f67@kernel.org>
 
-On 10/23/2018 05:57 PM, Brendan Higgins wrote:
-> This patch set proposes KUnit, a lightweight unit testing and mocking
-> framework for the Linux kernel.
-> 
-> Unlike Autotest and kselftest, KUnit is a true unit testing framework;
-> it does not require installing the kernel on a test machine or in a VM
-> and does not require tests to be written in userspace running on a host
-> kernel. Additionally, KUnit is fast: From invocation to completion KUnit
-> can run several dozen tests in under a second. Currently, the entire
-> KUnit test suite for KUnit runs in under a second from the initial
-> invocation (build time excluded).
-> 
-> KUnit is heavily inspired by JUnit, Python's unittest.mock, and
-> Googletest/Googlemock for C++. KUnit provides facilities for defining
-> unit test cases, grouping related test cases into test suites, providing
-> common infrastructure for running tests, mocking, spying, and much more.
-> 
-> ## What's so special about unit testing?
-> 
-> A unit test is supposed to test a single unit of code in isolation,
-> hence the name. There should be no dependencies outside the control of
-> the test; this means no external dependencies, which makes tests orders
-> of magnitudes faster. Likewise, since there are no external dependencies,
-> there are no hoops to jump through to run the tests. Additionally, this
-> makes unit tests deterministic: a failing unit test always indicates a
-> problem. Finally, because unit tests necessarily have finer granularity,
-> they are able to test all code paths easily solving the classic problem
-> of difficulty in exercising error handling code.
-> 
-> ## Is KUnit trying to replace other testing frameworks for the kernel?
-> 
-> No. Most existing tests for the Linux kernel are end-to-end tests, which
-> have their place. A well tested system has lots of unit tests, a
-> reasonable number of integration tests, and some end-to-end tests. KUnit
-> is just trying to address the unit test space which is currently not
-> being addressed.
-> 
-> ## More information on KUnit
-> 
-> There is a bunch of documentation near the end of this patch set that
-> describes how to use KUnit and best practices for writing unit tests.
-> For convenience I am hosting the compiled docs here:
-> https://google.github.io/kunit-docs/third_party/kernel/docs/
-> 
-> ## Changes Since Last Version
-> 
->  - Updated patchset to apply cleanly on 4.19.
->  - Stripped down patchset to focus on just the core features (I dropped
->    mocking, spying, and the MMIO stuff for now; you can find these
->    patches here: https://kunit-review.googlesource.com/c/linux/+/1132),
->    as suggested by Rob.
->  - Cleaned up some of the commit messages and tweaked commit order a
->    bit based on suggestions.
-> 
+Hi Linus,
 
-I am a bit behind on reviewing this patch series.
+Please pull the following kselftest update for Linux 4.20-rc1
 
-Just a quick note that I will start looking at these early next week.
+This Kselftest update for Linux 4.20-rc1 consists of:
+
+- Improvements to ftrace test suite from Masami Hiramatsu.
+- Color coded ftrace PASS / FAIL results from Steven Rostedt (VMware)
+  to improve readability of reports.
+- watchdog Fixes and enhancement to add gettimeout and get|set pretimeout
+  options from Jerry Hoemann.
+- Several fixes to warnings and spelling etc.
+
+Please note that these patches have been in linux-next for a while and I did
+a rebase to Linux 4.19 just to make sure there are no conflicts.
+
+diff is attached.
+
+Also, there  is a conflict in tools/testing/selftests/kvm/dirty_log_test.c
+
+between commit:
+
+  fff8dcd7b4a2 ("kvm: selftests: port dirty_log_test to aarch64")
+
+from the kvm tree and commit:
+
+  cda94d9ffa0e ("selftests: kvm: Fix -Wformat warnings")
+
+Stephen Rothwell fixed this up.
 
 thanks,
 -- Shuah
+
+----------------------------------------------------------------
+The following changes since commit 84df9525b0c27f3ebc2ebb1864fa62a97fdedb7d:
+
+  Linux 4.19 (2018-10-22 07:37:37 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-4.20-rc1
+
+for you to fetch changes up to f73581f8d9a367459f36e6a4ef0065997ab14c75:
+
+  selftests/ftrace: Strip escape sequences for log file (2018-10-24 14:49:37 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-4.20-rc1
+
+This Kselftest update for Linux 4.20-rc1 consists of:
+
+- Improvements to ftrace test suite from Masami Hiramatsu.
+- Color coded ftrace PASS / FAIL results from Steven Rostedt (VMware)
+  to improve readability of reports.
+- watchdog Fixes and enhancement to add gettimeout and get|set pretimeout
+  options from Jerry Hoemann.
+- Several fixes to warnings and spelling etc.
+
+----------------------------------------------------------------
+Andrea Parri (1):
+      selftests: kvm: Fix -Wformat warnings
+
+Colin Ian King (1):
+      kvm: selftests: fix spelling mistake "Insufficent" -> "Insufficient"
+
+Daniel Díaz (2):
+      selftests: gpio: Fix OUTPUT directory in Makefile
+      selftests/ftrace: Use colored output when available
+
+Fathi Boudra (1):
+      selftests: gpio: restructure Makefile
+
+Jerry Hoemann (2):
+      selftests: watchdog: Fix error message.
+      selftests: watchdog: Add gettimeout and get|set pretimeout
+
+Masami Hiramatsu (29):
+      selftests/ftrace: Add --stop-fail hidden option for debug
+      selftests/ftrace: Add --console hidden option
+      selftests/ftrace: Add case number prefix to logfile
+      selftests/ftrace: More initialize features in initialize_ftrace
+      selftests/ftrace: Add SPDX License Identifier to template
+      selftests/ftrace: Cleanup ftrace after running test
+      selftests/ftrace: Remove unneeded per-test init/cleanup ftrace
+      selftests/ftrace: Fix to test kprobe $comm arg only if available
+      selftests/ftrace: Fix checkbashisms errors
+      selftests/ftrace: Use loopback address instead of localhost
+      selftests/ftrace: Improve kprobe on module testcase to load/unload module
+      selftests/ftrace: Improve kprobe testcase to check log data
+      selftests/ftrace: Improve kretprobe testcase to check log data
+      selftests/ftrace: Test kprobe-event argument with various bitsize
+      selftests/ftrace: Check set_event_pid result
+      selftests/ftrace: Add kprobe event with $comm argument testcase
+      selftests/ftrace: Add kprobe profile testcase
+      selftests/ftrace: Add kprobe-event with symbol argument test
+      selftests/ftrace: Add trace_printk sample module test
+      selftests/ftrace: Add ringbuffer size changing testcase
+      selftests/ftrace: Add function profiling stat testcase
+      selftests/ftrace: Add max stack tracer testcase
+      selftests/ftrace: Add function filter on module testcase
+      selftests/ftrace: Add trace_pipe testcase
+      selftests/ftrace: Add stacktrace ftrace filter command testcase
+      selftests/ftrace: Add wakeup tracer testcase
+      selftests/ftrace: Add wakeup_rt tracer testcase
+      selftests/ftrace: Add ftrace cpumask testcase
+      selftests/ftrace: Strip escape sequences for log file
+
+Peng Hao (1):
+      selftests: fix warning: "_GNU_SOURCE" redefined
+
+Shuah Khan (Samsung OSG) (2):
+      selftests: watchdog: fix message when /dev/watchdog open fails
+      selftests: watchdog: Fix ioctl SET* error paths to take oneshot exit path
+
+Steven Rostedt (VMware) (1):
+      selftests/ftrace: Add color to the PASS / FAIL results
+
+ tools/testing/selftests/ftrace/config              |  6 ++
+ tools/testing/selftests/ftrace/ftracetest          | 72 ++++++++++++++++++----
+ .../ftrace/test.d/00basic/ringbuffer_size.tc       | 22 +++++++
+ .../selftests/ftrace/test.d/00basic/trace_pipe.tc  | 16 +++++
+ .../selftests/ftrace/test.d/event/event-enable.tc  | 10 ---
+ .../selftests/ftrace/test.d/event/event-pid.tc     |  8 +--
+ .../ftrace/test.d/event/subsystem-enable.tc        | 10 ---
+ .../ftrace/test.d/event/toplevel-enable.tc         | 10 ---
+ .../selftests/ftrace/test.d/event/trace_printk.tc  | 27 ++++++++
+ .../ftrace/test.d/ftrace/fgraph-filter-stack.tc    |  4 --
+ .../ftrace/test.d/ftrace/fgraph-filter.tc          |  9 ---
+ .../ftrace/test.d/ftrace/func-filter-pid.tc        | 10 ---
+ .../ftrace/test.d/ftrace/func-filter-stacktrace.tc | 12 ++++
+ .../selftests/ftrace/test.d/ftrace/func_cpumask.tc | 42 +++++++++++++
+ .../ftrace/test.d/ftrace/func_event_triggers.tc    |  3 -
+ .../ftrace/test.d/ftrace/func_mod_trace.tc         | 24 ++++++++
+ .../ftrace/test.d/ftrace/func_profile_stat.tc      | 22 +++++++
+ .../ftrace/test.d/ftrace/func_profiler.tc          |  4 --
+ .../ftrace/test.d/ftrace/func_set_ftrace_file.tc   | 13 ----
+ .../ftrace/test.d/ftrace/func_stack_tracer.tc      | 39 ++++++++++++
+ .../test.d/ftrace/func_traceonoff_triggers.tc      | 11 ----
+ tools/testing/selftests/ftrace/test.d/functions    | 11 ++++
+ .../ftrace/test.d/kprobe/add_and_remove.tc         |  3 -
+ .../selftests/ftrace/test.d/kprobe/busy_check.tc   |  3 -
+ .../selftests/ftrace/test.d/kprobe/kprobe_args.tc  |  8 ++-
+ .../ftrace/test.d/kprobe/kprobe_args_comm.tc       | 17 +++++
+ .../ftrace/test.d/kprobe/kprobe_args_string.tc     |  5 --
+ .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     | 39 ++++++++++++
+ .../ftrace/test.d/kprobe/kprobe_args_syntax.tc     |  8 +--
+ .../ftrace/test.d/kprobe/kprobe_args_type.tc       | 52 ++++++++++------
+ .../ftrace/test.d/kprobe/kprobe_eventname.tc       |  5 --
+ .../ftrace/test.d/kprobe/kprobe_ftrace.tc          |  9 ---
+ .../ftrace/test.d/kprobe/kprobe_module.tc          | 36 +++++++++--
+ .../ftrace/test.d/kprobe/kretprobe_args.tc         |  9 ++-
+ .../ftrace/test.d/kprobe/kretprobe_maxactive.tc    |  4 --
+ .../ftrace/test.d/kprobe/multiple_kprobes.tc       |  5 --
+ .../selftests/ftrace/test.d/kprobe/probepoint.tc   |  4 --
+ .../selftests/ftrace/test.d/kprobe/profile.tc      | 15 +++++
+ tools/testing/selftests/ftrace/test.d/template     |  1 +
+ .../selftests/ftrace/test.d/tracer/wakeup.tc       | 25 ++++++++
+ .../selftests/ftrace/test.d/tracer/wakeup_rt.tc    | 25 ++++++++
+ .../inter-event/trigger-extended-error-support.tc  | 12 ----
+ .../inter-event/trigger-field-variable-support.tc  | 15 +----
+ .../trigger-inter-event-combined-hist.tc           | 15 +----
+ .../inter-event/trigger-multi-actions-accept.tc    | 14 -----
+ .../inter-event/trigger-onmatch-action-hist.tc     | 16 +----
+ .../trigger-onmatch-onmax-action-hist.tc           | 16 +----
+ .../inter-event/trigger-onmax-action-hist.tc       | 16 +----
+ .../trigger-synthetic-event-createremove.tc        | 12 ----
+ .../ftrace/test.d/trigger/trigger-eventonoff.tc    | 12 ----
+ .../ftrace/test.d/trigger/trigger-filter.tc        | 14 -----
+ .../ftrace/test.d/trigger/trigger-hist-mod.tc      | 12 ----
+ .../ftrace/test.d/trigger/trigger-hist.tc          | 12 ----
+ .../ftrace/test.d/trigger/trigger-multihist.tc     | 16 -----
+ .../ftrace/test.d/trigger/trigger-snapshot.tc      | 12 ----
+ .../ftrace/test.d/trigger/trigger-stacktrace.tc    | 12 ----
+ .../test.d/trigger/trigger-trace-marker-hist.tc    | 11 ----
+ .../trigger/trigger-trace-marker-snapshot.tc       | 16 +----
+ .../trigger-trace-marker-synthetic-kernel.tc       | 12 ----
+ .../trigger/trigger-trace-marker-synthetic.tc      | 12 ----
+ .../ftrace/test.d/trigger/trigger-traceonoff.tc    | 12 ----
+ tools/testing/selftests/gpio/Makefile              | 32 +++++-----
+ tools/testing/selftests/kvm/dirty_log_test.c       |  4 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c         |  2 +-
+ tools/testing/selftests/proc/fd-001-lookup.c       |  2 +-
+ tools/testing/selftests/proc/fd-003-kthread.c      |  2 +-
+ tools/testing/selftests/watchdog/watchdog-test.c   | 61 +++++++++++++++---
+ 67 files changed, 564 insertions(+), 466 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/ringbuffer_size.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/trace_pipe.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_profile_stat.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/func_stack_tracer.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/tracer/wakeup.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc
+
+----------------------------------------------------------------
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux-kselftest-4.20-rc1.diff
+Type: text/x-patch
+Size: 73117 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181025/57b9c877/attachment-0001.bin>
