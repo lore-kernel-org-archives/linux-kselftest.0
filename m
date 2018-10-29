@@ -1,35 +1,78 @@
-From: lizhijian at cn.fujitsu.com (Li Zhijian)
-Date: Mon, 29 Oct 2018 19:14:29 +0800
-Subject: [PATCH] kselftests/bpf: use ping6 as the default ipv6 ping binary if
- it exists
-Message-ID: <1540811669-24696-1-git-send-email-lizhijian@cn.fujitsu.com>
+From: tglx at linutronix.de (Thomas Gleixner)
+Date: Mon, 29 Oct 2018 21:33:14 +0100 (CET)
+Subject: [RFC 00/20] ns: Introduce Time Namespace
+In-Reply-To: <20181021014121.GA23474@gmail.com>
+References: <20180919205037.9574-1-dima@arista.com>
+ <874lej6nny.fsf@xmission.com> <20180924205119.GA14833@outlook.office365.com>
+ <874leezh8n.fsf@xmission.com> <20180925014150.GA6302@outlook.office365.com>
+ <87zhw4rwiq.fsf@xmission.com>
+ <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
+ <87mus1ftb9.fsf@xmission.com> <20181021014121.GA23474@gmail.com>
+Message-ID: <alpine.DEB.2.21.1810292026040.5984@nanos.tec.linutronix.de>
 
-ping binary on some distros doesn't support "ping -6" anymore.
+Andrei,
 
-Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
----
- tools/testing/selftests/bpf/test_skb_cgroup_id.sh | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Sat, 20 Oct 2018, Andrei Vagin wrote:
+> When a container is migrated to another host, we have to restore its
+> monotonic and boottime clocks, but we still expect that the container
+> will continue using the host real-time clock.
+> 
+> Before stating this series, I was thinking about this, I decided that
+> these cases can be solved independently. Probably, the full isolation of
+> the time sub-system will have much higher overhead than just offsets for
+> a few clocks. And the idea that isolation of the real-time clock should
+> be optional gives us another hint that offsets for monotonic and
+> boot-time clocks can be implemented independently.
+> 
+> Eric and Tomas, what do you think about this? If you agree that these
+> two cases can be implemented separately, what should we do with this
+> series to make it ready to be merged?
+> 
+> I know that we need to:
+> 
+> * look at device drivers that report timestamps in CLOCK_MONOTONIC base.
 
-diff --git a/tools/testing/selftests/bpf/test_skb_cgroup_id.sh b/tools/testing/selftests/bpf/test_skb_cgroup_id.sh
-index 42544a9..a9bc6f8 100755
---- a/tools/testing/selftests/bpf/test_skb_cgroup_id.sh
-+++ b/tools/testing/selftests/bpf/test_skb_cgroup_id.sh
-@@ -10,7 +10,7 @@ wait_for_ip()
- 	echo -n "Wait for testing link-local IP to become available "
- 	for _i in $(seq ${MAX_PING_TRIES}); do
- 		echo -n "."
--		if ping -6 -q -c 1 -W 1 ff02::1%${TEST_IF} >/dev/null 2>&1; then
-+		if $PING6 -c 1 -W 1 ff02::1%${TEST_IF} >/dev/null 2>&1; then
- 			echo " OK"
- 			return
- 		fi
-@@ -58,5 +58,6 @@ BPF_PROG_OBJ="${DIR}/test_skb_cgroup_id_kern.o"
- BPF_PROG_SECTION="cgroup_id_logger"
- BPF_PROG_ID=0
- PROG="${DIR}/test_skb_cgroup_id_user"
-+type ping6 >/dev/null 2>&1 && PING6="ping6" || PING6="ping -6"
- 
- main
--- 
-2.7.4
+and CLOCK_BOOTTIME and that's quite a few.
+
+> * forbid changing offsets after creating timers
+
+There are more things to think about. What about interfaces which expose
+boot time or monotonic time in /proc?
+
+Aside of that (I finally came around to look at the series in more detail)
+I'm really unhappy about the unconditional overhead once the Time namespace
+config switch is enabled. This applies especially to the VDSO. We spent
+quite some time recently to squeeze a few cycles out of those functions and
+it would be a pity to pointlessly waste cycles for the !namespace case.
+
+I can see the urge for this, but please let us think it through properly
+before rushing anything in which we are going to regret once we want to do
+more sophisticated time domain management, e.g. support for isolated clock
+real time. I'm worried, that without a clear plan about the overall
+picture, we end up with duct tape which is hard to distangle after the
+fact.
+
+There have been a few other things brought up versus time management in
+general, like the TSN folks utilizing grand clock masters which expose
+random time instead of proper TAI. Plus some requirements for exposing some
+sort of 'monotonic' clocks which are derived from external synchronization
+mechanisms, but should not affect the regular time keeping clocks.
+
+While different issues, these all fall into the category of separate time
+domains, so taking a step back to the drawing board is probably the best
+thing what we can do now.
+
+There are certainly a few things which can be looked at independently,
+e.g. the VDSO mechanics or general mechanisms to avoid plastering the whole
+kernel with these name space functions applying offsets left and right. I
+rather have dedicated core functionality which replaces/amends existing
+timer functions to become time namespace aware.
+
+I'll try to find some time in the next weeks to look deeper into that, but
+I can't promise anything before returning from LPC. Btw, LPC would be a
+great opportunity to discuss that. Are you and the other name space wizards
+there by any chance?
+
+Thanks,
+
+	tglx
