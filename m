@@ -1,78 +1,104 @@
-From: cyphar at cyphar.com (Aleksa Sarai)
-Date: Thu,  1 Nov 2018 02:25:43 +1100
-Subject: [PATCH v2 2/2] trace: remove kretprobed checks
-In-Reply-To: <20181031152543.12138-1-cyphar@cyphar.com>
-References: <20181031152543.12138-1-cyphar@cyphar.com>
-Message-ID: <20181031152543.12138-3-cyphar@cyphar.com>
+From: avagin at gmail.com (Andrei Vagin)
+Date: Wed, 31 Oct 2018 09:26:53 -0700
+Subject: [RFC 00/20] ns: Introduce Time Namespace
+In-Reply-To: <alpine.DEB.2.21.1810292026040.5984@nanos.tec.linutronix.de>
+References: <20180919205037.9574-1-dima@arista.com>
+ <874lej6nny.fsf@xmission.com>
+ <20180924205119.GA14833@outlook.office365.com>
+ <874leezh8n.fsf@xmission.com>
+ <20180925014150.GA6302@outlook.office365.com>
+ <87zhw4rwiq.fsf@xmission.com>
+ <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
+ <87mus1ftb9.fsf@xmission.com> <20181021014121.GA23474@gmail.com>
+ <alpine.DEB.2.21.1810292026040.5984@nanos.tec.linutronix.de>
+Message-ID: <20181031162650.GB26067@gmail.com>
 
-This is effectively a reversion of commit 76094a2cf46e ("ftrace:
-distinguish kretprobe'd functions in trace logs"), as the checking of
-kretprobe_trampoline *for tracing* is no longer necessary with the new
-kretprobe stack trace changes.
+On Mon, Oct 29, 2018 at 09:33:14PM +0100, Thomas Gleixner wrote:
+> Andrei,
+> 
+> On Sat, 20 Oct 2018, Andrei Vagin wrote:
+> > When a container is migrated to another host, we have to restore its
+> > monotonic and boottime clocks, but we still expect that the container
+> > will continue using the host real-time clock.
+> > 
+> > Before stating this series, I was thinking about this, I decided that
+> > these cases can be solved independently. Probably, the full isolation of
+> > the time sub-system will have much higher overhead than just offsets for
+> > a few clocks. And the idea that isolation of the real-time clock should
+> > be optional gives us another hint that offsets for monotonic and
+> > boot-time clocks can be implemented independently.
+> > 
+> > Eric and Tomas, what do you think about this? If you agree that these
+> > two cases can be implemented separately, what should we do with this
+> > series to make it ready to be merged?
+> > 
+> > I know that we need to:
+> > 
+> > * look at device drivers that report timestamps in CLOCK_MONOTONIC base.
+> 
+> and CLOCK_BOOTTIME and that's quite a few.
+> 
+> > * forbid changing offsets after creating timers
+> 
+> There are more things to think about. What about interfaces which expose
+> boot time or monotonic time in /proc?
 
-Signed-off-by: Aleksa Sarai <cyphar at cyphar.com>
----
- kernel/trace/trace_output.c | 34 ++++------------------------------
- 1 file changed, 4 insertions(+), 30 deletions(-)
+We didn't find any proc files where boot or monotonic time is reported,
+but we will double check this.
 
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index 6e6cc64faa38..951de16bd4fd 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -321,36 +321,14 @@ int trace_output_call(struct trace_iterator *iter, char *name, char *fmt, ...)
- }
- EXPORT_SYMBOL_GPL(trace_output_call);
- 
--#ifdef CONFIG_KRETPROBES
--static inline const char *kretprobed(const char *name)
--{
--	static const char tramp_name[] = "kretprobe_trampoline";
--	int size = sizeof(tramp_name);
--
--	if (strncmp(tramp_name, name, size) == 0)
--		return "[unknown/kretprobe'd]";
--	return name;
--}
--#else
--static inline const char *kretprobed(const char *name)
--{
--	return name;
--}
--#endif /* CONFIG_KRETPROBES */
--
- static void
- seq_print_sym_short(struct trace_seq *s, const char *fmt, unsigned long address)
- {
- 	char str[KSYM_SYMBOL_LEN];
- #ifdef CONFIG_KALLSYMS
--	const char *name;
--
- 	kallsyms_lookup(address, NULL, NULL, NULL, str);
--
--	name = kretprobed(str);
--
--	if (name && strlen(name)) {
--		trace_seq_printf(s, fmt, name);
-+	if (strlen(str)) {
-+		trace_seq_printf(s, fmt, str);
- 		return;
- 	}
- #endif
-@@ -364,13 +342,9 @@ seq_print_sym_offset(struct trace_seq *s, const char *fmt,
- {
- 	char str[KSYM_SYMBOL_LEN];
- #ifdef CONFIG_KALLSYMS
--	const char *name;
--
- 	sprint_symbol(str, address);
--	name = kretprobed(str);
--
--	if (name && strlen(name)) {
--		trace_seq_printf(s, fmt, name);
-+	if (strlen(str)) {
-+		trace_seq_printf(s, fmt, str);
- 		return;
- 	}
- #endif
--- 
-2.19.1
+> 
+> Aside of that (I finally came around to look at the series in more detail)
+> I'm really unhappy about the unconditional overhead once the Time namespace
+> config switch is enabled. This applies especially to the VDSO. We spent
+> quite some time recently to squeeze a few cycles out of those functions and
+> it would be a pity to pointlessly waste cycles for the !namespace case.
+
+It is a good point. We will work on it.
+
+> 
+> I can see the urge for this, but please let us think it through properly
+> before rushing anything in which we are going to regret once we want to do
+> more sophisticated time domain management, e.g. support for isolated clock
+> real time. I'm worried, that without a clear plan about the overall
+> picture, we end up with duct tape which is hard to distangle after the
+> fact.
+
+Thomas, there is no rush at all. This functionality is critical for
+CRUI, but we have enough time to solve it properly.
+
+The only thing what I want is that this functionality continues moving
+forward and will not be put in the back burner.
+
+> 
+> There have been a few other things brought up versus time management in
+> general, like the TSN folks utilizing grand clock masters which expose
+> random time instead of proper TAI. Plus some requirements for exposing some
+> sort of 'monotonic' clocks which are derived from external synchronization
+> mechanisms, but should not affect the regular time keeping clocks.
+> 
+> While different issues, these all fall into the category of separate time
+> domains, so taking a step back to the drawing board is probably the best
+> thing what we can do now.
+> 
+> There are certainly a few things which can be looked at independently,
+> e.g. the VDSO mechanics or general mechanisms to avoid plastering the whole
+> kernel with these name space functions applying offsets left and right. I
+> rather have dedicated core functionality which replaces/amends existing
+> timer functions to become time namespace aware.
+> 
+> I'll try to find some time in the next weeks to look deeper into that, but
+> I can't promise anything before returning from LPC. Btw, LPC would be a
+> great opportunity to discuss that. Are you and the other name space wizards
+> there by any chance?
+
+Dmitry and I are going to be there.
+
+Thanks!
+Andrei
+
+> 
+> Thanks,
+> 
+> 	tglx
+> 
+> 
