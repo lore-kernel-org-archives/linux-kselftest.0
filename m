@@ -1,61 +1,53 @@
-From: liu.song.a23 at gmail.com (Song Liu)
-Date: Tue, 30 Oct 2018 11:35:21 -0700
-Subject: [PATCH v2] kselftests/bpf: use ping6 as the default ipv6 ping
- binary if it exists
-In-Reply-To: <1540869355-13324-1-git-send-email-lizhijian@cn.fujitsu.com>
-References: <1540869355-13324-1-git-send-email-lizhijian@cn.fujitsu.com>
-Message-ID: <CAPhsuW4Bm2H7sV8xgzcD9s=9d_z1bpeEYbo2OMTTh9mcgmrC0w@mail.gmail.com>
+From: cyphar at cyphar.com (Aleksa Sarai)
+Date: Thu,  1 Nov 2018 02:25:41 +1100
+Subject: [PATCH v2 0/2] kretprobe: produce sane stack traces
+Message-ID: <20181031152543.12138-1-cyphar@cyphar.com>
 
-On Mon, Oct 29, 2018 at 7:35 PM Li Zhijian <lizhijian at cn.fujitsu.com> wrote:
->
-> ping binary on some distros doesn't support "ping -6" anymore.
->
-> Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
+Historically, kretprobe has always produced unusable stack traces
+(kretprobe_trampoline is the only entry in most cases, because of the
+funky stack pointer overwriting). This has caused quite a few annoyances
+when using tracing to debug problems[1] -- since return values are only
+available with kretprobes but stack traces were only usable for kprobes,
+users had to probe both and then manually associate them.
 
-I think this should go bpf-next. Please resubmit when the bpf-next tree is open
-(after the merge window). Other than this:
+This patch series stores the stack trace within kretprobe_instance on
+the kprobe entry used to set up the kretprobe. This allows for
+DTrace-style stack aggregation between function entry and exit with
+tools like BPFtrace -- which would not really be doable if the stack
+unwinder understood kretprobe_trampoline.
 
-Acked-by: Song Liu <songliubraving at fb.com>
+We also revert commit 76094a2cf46e ("ftrace: distinguish kretprobe'd
+functions in trace logs") and any follow-up changes because that code is
+no longer necessary now that stack traces are sane. *However* this patch
+might be a bit contentious since the original usecase (that ftrace
+returns shouldn't show kretprobe_trampoline) is arguably still an
+issue. Feel free to drop it if you think it is wrong.
 
-> ---
->  tools/testing/selftests/bpf/test_skb_cgroup_id.sh | 3 ++-
->  tools/testing/selftests/bpf/test_sock_addr.sh     | 3 ++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/test_skb_cgroup_id.sh b/tools/testing/selftests/bpf/test_skb_cgroup_id.sh
-> index 42544a9..a9bc6f8 100755
-> --- a/tools/testing/selftests/bpf/test_skb_cgroup_id.sh
-> +++ b/tools/testing/selftests/bpf/test_skb_cgroup_id.sh
-> @@ -10,7 +10,7 @@ wait_for_ip()
->         echo -n "Wait for testing link-local IP to become available "
->         for _i in $(seq ${MAX_PING_TRIES}); do
->                 echo -n "."
-> -               if ping -6 -q -c 1 -W 1 ff02::1%${TEST_IF} >/dev/null 2>&1; then
-> +               if $PING6 -c 1 -W 1 ff02::1%${TEST_IF} >/dev/null 2>&1; then
->                         echo " OK"
->                         return
->                 fi
-> @@ -58,5 +58,6 @@ BPF_PROG_OBJ="${DIR}/test_skb_cgroup_id_kern.o"
->  BPF_PROG_SECTION="cgroup_id_logger"
->  BPF_PROG_ID=0
->  PROG="${DIR}/test_skb_cgroup_id_user"
-> +type ping6 >/dev/null 2>&1 && PING6="ping6" || PING6="ping -6"
->
->  main
-> diff --git a/tools/testing/selftests/bpf/test_sock_addr.sh b/tools/testing/selftests/bpf/test_sock_addr.sh
-> index 9832a87..3b9fdb8 100755
-> --- a/tools/testing/selftests/bpf/test_sock_addr.sh
-> +++ b/tools/testing/selftests/bpf/test_sock_addr.sh
-> @@ -4,7 +4,8 @@ set -eu
->
->  ping_once()
->  {
-> -       ping -${1} -q -c 1 -W 1 ${2%%/*} >/dev/null 2>&1
-> +       type ping${1} >/dev/null 2>&1 && PING="ping${1}" || PING="ping -${1}"
-> +       $PING -q -c 1 -W 1 ${2%%/*} >/dev/null 2>&1
->  }
->
->  wait_for_ip()
-> --
-> 2.7.4
->
+Patch changelog:
+ v2:
+   * documentation: mention kretprobe stack-stashing
+   * ftrace: add self-test for fixed kretprobe stacktraces
+   * ftrace: remove [unknown/kretprobe'd] handling
+   * kprobe: remove needless EXPORT statements
+   * kprobe: minor corrections to current_kretprobe_instance (switch
+     away from hlist_for_each_entry_safe)
+   * kprobe: make maximum stack size 127, which is the ftrace default
+
+(I forgot to Cc the BPF folks in v1, I've added them now.)
+
+Aleksa Sarai (2):
+  kretprobe: produce sane stack traces
+  trace: remove kretprobed checks
+
+ Documentation/kprobes.txt                     |   6 +-
+ include/linux/kprobes.h                       |  15 +++
+ kernel/events/callchain.c                     |   8 +-
+ kernel/kprobes.c                              | 101 +++++++++++++++++-
+ kernel/trace/trace.c                          |  11 +-
+ kernel/trace/trace_output.c                   |  34 +-----
+ .../test.d/kprobe/kretprobe_stacktrace.tc     |  25 +++++
+ 7 files changed, 165 insertions(+), 35 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_stacktrace.tc
+
+-- 
+2.19.1
