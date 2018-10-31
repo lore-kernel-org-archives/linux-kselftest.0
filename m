@@ -1,106 +1,114 @@
-From: avagin@gmail.com (Andrei Vagin)
-Date: Wed, 31 Oct 2018 09:26:53 -0700
-Subject: [RFC 00/20] ns: Introduce Time Namespace
-In-Reply-To: <alpine.DEB.2.21.1810292026040.5984@nanos.tec.linutronix.de>
-References: <20180919205037.9574-1-dima@arista.com>
- <874lej6nny.fsf@xmission.com>
- <20180924205119.GA14833@outlook.office365.com>
- <874leezh8n.fsf@xmission.com>
- <20180925014150.GA6302@outlook.office365.com>
- <87zhw4rwiq.fsf@xmission.com>
- <alpine.DEB.2.21.1809272247270.8118@nanos.tec.linutronix.de>
- <87mus1ftb9.fsf@xmission.com> <20181021014121.GA23474@gmail.com>
- <alpine.DEB.2.21.1810292026040.5984@nanos.tec.linutronix.de>
-Message-ID: <20181031162650.GB26067@gmail.com>
+From: lkp@intel.com (kbuild test robot)
+Date: Thu, 1 Nov 2018 04:18:19 +0800
+Subject: [PATCH v2 1/2] kretprobe: produce sane stack traces
+In-Reply-To: <20181031152543.12138-2-cyphar@cyphar.com>
+References: <20181031152543.12138-2-cyphar@cyphar.com>
+Message-ID: <201811010431.4BRyGN60%fengguang.wu@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181031162653.ZaJLjfX5f86HN2UfD_BfPsjSA7_uUGNAlyx685kWey0@z>
+Message-ID: <20181031201819.TRCXaq-PFC_qqluNbJ-YZOV7eVgiFA_emhXOUhRUNGA@z>
 
-On Mon, Oct 29, 2018@09:33:14PM +0100, Thomas Gleixner wrote:
-> Andrei,
-> 
-> On Sat, 20 Oct 2018, Andrei Vagin wrote:
-> > When a container is migrated to another host, we have to restore its
-> > monotonic and boottime clocks, but we still expect that the container
-> > will continue using the host real-time clock.
-> > 
-> > Before stating this series, I was thinking about this, I decided that
-> > these cases can be solved independently. Probably, the full isolation of
-> > the time sub-system will have much higher overhead than just offsets for
-> > a few clocks. And the idea that isolation of the real-time clock should
-> > be optional gives us another hint that offsets for monotonic and
-> > boot-time clocks can be implemented independently.
-> > 
-> > Eric and Tomas, what do you think about this? If you agree that these
-> > two cases can be implemented separately, what should we do with this
-> > series to make it ready to be merged?
-> > 
-> > I know that we need to:
-> > 
-> > * look at device drivers that report timestamps in CLOCK_MONOTONIC base.
-> 
-> and CLOCK_BOOTTIME and that's quite a few.
-> 
-> > * forbid changing offsets after creating timers
-> 
-> There are more things to think about. What about interfaces which expose
-> boot time or monotonic time in /proc?
+Hi Aleksa,
 
-We didn't find any proc files where boot or monotonic time is reported,
-but we will double check this.
+Thank you for the patch! Yet something to improve:
 
-> 
-> Aside of that (I finally came around to look at the series in more detail)
-> I'm really unhappy about the unconditional overhead once the Time namespace
-> config switch is enabled. This applies especially to the VDSO. We spent
-> quite some time recently to squeeze a few cycles out of those functions and
-> it would be a pity to pointlessly waste cycles for the !namespace case.
+[auto build test ERROR on tip/perf/core]
+[also build test ERROR on v4.19 next-20181031]
+[if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
 
-It is a good point. We will work on it.
+url:    https://github.com/0day-ci/linux/commits/Aleksa-Sarai/kretprobe-produce-sane-stack-traces/20181101-034104
+config: i386-tinyconfig (attached as .config)
+compiler: gcc-7 (Debian 7.3.0-1) 7.3.0
+reproduce:
+        # save the attached .config to linux build tree
+        make ARCH=i386 
 
-> 
-> I can see the urge for this, but please let us think it through properly
-> before rushing anything in which we are going to regret once we want to do
-> more sophisticated time domain management, e.g. support for isolated clock
-> real time. I'm worried, that without a clear plan about the overall
-> picture, we end up with duct tape which is hard to distangle after the
-> fact.
+All error/warnings (new ones prefixed by >>):
 
-Thomas, there is no rush at all. This functionality is critical for
-CRUI, but we have enough time to solve it properly.
+   kernel/events/callchain.c: In function 'get_perf_callchain':
+>> kernel/events/callchain.c:201:35: error: implicit declaration of function 'current_kretprobe_instance'; did you mean 'current_top_of_stack'? [-Werror=implicit-function-declaration]
+      struct kretprobe_instance *ri = current_kretprobe_instance();
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+                                      current_top_of_stack
+>> kernel/events/callchain.c:201:35: warning: initialization makes pointer from integer without a cast [-Wint-conversion]
+>> kernel/events/callchain.c:206:4: error: implicit declaration of function 'kretprobe_perf_callchain_kernel'; did you mean 'perf_callchain_kernel'? [-Werror=implicit-function-declaration]
+       kretprobe_perf_callchain_kernel(ri, &ctx);
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       perf_callchain_kernel
+   cc1: some warnings being treated as errors
 
-The only thing what I want is that this functionality continues moving
-forward and will not be put in the back burner.
+vim +201 kernel/events/callchain.c
 
-> 
-> There have been a few other things brought up versus time management in
-> general, like the TSN folks utilizing grand clock masters which expose
-> random time instead of proper TAI. Plus some requirements for exposing some
-> sort of 'monotonic' clocks which are derived from external synchronization
-> mechanisms, but should not affect the regular time keeping clocks.
-> 
-> While different issues, these all fall into the category of separate time
-> domains, so taking a step back to the drawing board is probably the best
-> thing what we can do now.
-> 
-> There are certainly a few things which can be looked at independently,
-> e.g. the VDSO mechanics or general mechanisms to avoid plastering the whole
-> kernel with these name space functions applying offsets left and right. I
-> rather have dedicated core functionality which replaces/amends existing
-> timer functions to become time namespace aware.
-> 
-> I'll try to find some time in the next weeks to look deeper into that, but
-> I can't promise anything before returning from LPC. Btw, LPC would be a
-> great opportunity to discuss that. Are you and the other name space wizards
-> there by any chance?
+   178	
+   179	struct perf_callchain_entry *
+   180	get_perf_callchain(struct pt_regs *regs, u32 init_nr, bool kernel, bool user,
+   181			   u32 max_stack, bool crosstask, bool add_mark)
+   182	{
+   183		struct perf_callchain_entry *entry;
+   184		struct perf_callchain_entry_ctx ctx;
+   185		int rctx;
+   186	
+   187		entry = get_callchain_entry(&rctx);
+   188		if (rctx == -1)
+   189			return NULL;
+   190	
+   191		if (!entry)
+   192			goto exit_put;
+   193	
+   194		ctx.entry     = entry;
+   195		ctx.max_stack = max_stack;
+   196		ctx.nr	      = entry->nr = init_nr;
+   197		ctx.contexts       = 0;
+   198		ctx.contexts_maxed = false;
+   199	
+   200		if (kernel && !user_mode(regs)) {
+ > 201			struct kretprobe_instance *ri = current_kretprobe_instance();
+   202	
+   203			if (add_mark)
+   204				perf_callchain_store_context(&ctx, PERF_CONTEXT_KERNEL);
+   205			if (ri)
+ > 206				kretprobe_perf_callchain_kernel(ri, &ctx);
+   207			else
+   208				perf_callchain_kernel(&ctx, regs);
+   209		}
+   210	
+   211		if (user) {
+   212			if (!user_mode(regs)) {
+   213				if  (current->mm)
+   214					regs = task_pt_regs(current);
+   215				else
+   216					regs = NULL;
+   217			}
+   218	
+   219			if (regs) {
+   220				mm_segment_t fs;
+   221	
+   222				if (crosstask)
+   223					goto exit_put;
+   224	
+   225				if (add_mark)
+   226					perf_callchain_store_context(&ctx, PERF_CONTEXT_USER);
+   227	
+   228				fs = get_fs();
+   229				set_fs(USER_DS);
+   230				perf_callchain_user(&ctx, regs);
+   231				set_fs(fs);
+   232			}
+   233		}
+   234	
+   235	exit_put:
+   236		put_callchain_entry(rctx);
+   237	
+   238		return entry;
+   239	}
+   240	
 
-Dmitry and I are going to be there.
-
-Thanks!
-Andrei
-
-> 
-> Thanks,
-> 
-> 	tglx
-> 
-> 
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config.gz
+Type: application/gzip
+Size: 6493 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181101/928d4c2c/attachment.bin>
