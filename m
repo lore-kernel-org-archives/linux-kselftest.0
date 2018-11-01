@@ -1,377 +1,75 @@
-From: cyphar at cyphar.com (Aleksa Sarai)
-Date: Thu,  1 Nov 2018 19:35:50 +1100
-Subject: [PATCH v3 1/2] kretprobe: produce sane stack traces
-In-Reply-To: <20181101083551.3805-1-cyphar@cyphar.com>
-References: <20181101083551.3805-1-cyphar@cyphar.com>
-Message-ID: <20181101083551.3805-2-cyphar@cyphar.com>
+From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
+Date: Thu,  1 Nov 2018 10:58:30 +0100
+Subject: [RFC PATCH for 4.21 02/16] rseq/selftests: Adapt number of threads to
+ the number of detected cpus
+In-Reply-To: <20181101095844.24462-1-mathieu.desnoyers@efficios.com>
+References: <20181101095844.24462-1-mathieu.desnoyers@efficios.com>
+Message-ID: <20181101095844.24462-3-mathieu.desnoyers@efficios.com>
 
-Historically, kretprobe has always produced unusable stack traces
-(kretprobe_trampoline is the only entry in most cases, because of the
-funky stack pointer overwriting). This has caused quite a few annoyances
-when using tracing to debug problems[1] -- since return values are only
-available with kretprobes but stack traces were only usable for kprobes,
-users had to probe both and then manually associate them.
+On smaller systems, running a test with 200 threads can take a long
+time on machines with smaller number of CPUs.
 
-With the advent of bpf_trace, users would have been able to do this
-association in bpf, but this was less than ideal (because
-bpf_get_stackid would still produce rubbish and programs that didn't
-know better would get silly results). The main usecase for stack traces
-(at least with bpf_trace) is for DTrace-style aggregation on stack
-traces (both entry and exit). Therefore we cannot simply correct the
-stack trace on exit -- we must stash away the stack trace and return the
-entry stack trace when it is requested.
+Detect the number of online cpus at test runtime, and multiply that
+by 6 to have 6 rseq threads per cpu preempting each other.
 
-[1]: https://github.com/iovisor/bpftrace/issues/101
-
-Cc: Brendan Gregg <bgregg at netflix.com>
-Cc: Christian Brauner <christian at brauner.io>
-Signed-off-by: Aleksa Sarai <cyphar at cyphar.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Joel Fernandes <joelaf at google.com>
+Cc: Peter Zijlstra <peterz at infradead.org>
+Cc: Catalin Marinas <catalin.marinas at arm.com>
+Cc: Dave Watson <davejwatson at fb.com>
+Cc: Will Deacon <will.deacon at arm.com>
+Cc: Andi Kleen <andi at firstfloor.org>
+Cc: linux-kselftest at vger.kernel.org
+Cc: "H . Peter Anvin" <hpa at zytor.com>
+Cc: Chris Lameter <cl at linux.com>
+Cc: Russell King <linux at arm.linux.org.uk>
+Cc: Michael Kerrisk <mtk.manpages at gmail.com>
+Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
+Cc: Paul Turner <pjt at google.com>
+Cc: Boqun Feng <boqun.feng at gmail.com>
+Cc: Josh Triplett <josh at joshtriplett.org>
+Cc: Steven Rostedt <rostedt at goodmis.org>
+Cc: Ben Maurer <bmaurer at fb.com>
+Cc: Andy Lutomirski <luto at amacapital.net>
+Cc: Andrew Morton <akpm at linux-foundation.org>
+Cc: Linus Torvalds <torvalds at linux-foundation.org>
 ---
- Documentation/kprobes.txt                     |   6 +-
- include/linux/kprobes.h                       |  27 +++++
- kernel/events/callchain.c                     |   8 +-
- kernel/kprobes.c                              | 101 +++++++++++++++++-
- kernel/trace/trace.c                          |  11 +-
- .../test.d/kprobe/kretprobe_stacktrace.tc     |  25 +++++
- 6 files changed, 173 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_stacktrace.tc
+ tools/testing/selftests/rseq/run_param_test.sh | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/kprobes.txt b/Documentation/kprobes.txt
-index 10f4499e677c..1965585848f4 100644
---- a/Documentation/kprobes.txt
-+++ b/Documentation/kprobes.txt
-@@ -597,7 +597,11 @@ address with the trampoline's address, stack backtraces and calls
- to __builtin_return_address() will typically yield the trampoline's
- address instead of the real return address for kretprobed functions.
- (As far as we can tell, __builtin_return_address() is used only
--for instrumentation and error reporting.)
-+for instrumentation and error reporting.) However, since return probes
-+are used extensively in tracing (where stack backtraces are useful),
-+return probes will stash away the stack backtrace during function entry
-+so that return probe handlers can use the entry backtrace instead of
-+having a trace with just kretprobe_trampoline.
+diff --git a/tools/testing/selftests/rseq/run_param_test.sh b/tools/testing/selftests/rseq/run_param_test.sh
+index 3acd6d75ff9f..e426304fd4a0 100755
+--- a/tools/testing/selftests/rseq/run_param_test.sh
++++ b/tools/testing/selftests/rseq/run_param_test.sh
+@@ -1,6 +1,8 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0+ or MIT
  
- If the number of times a function is called does not match the number
- of times it returns, registering a return probe on that function may
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index e909413e4e38..1a1629544e56 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -40,6 +40,8 @@
- #include <linux/rcupdate.h>
- #include <linux/mutex.h>
- #include <linux/ftrace.h>
-+#include <linux/stacktrace.h>
-+#include <linux/perf_event.h>
- #include <asm/kprobes.h>
- 
- #ifdef CONFIG_KPROBES
-@@ -168,11 +170,18 @@ struct kretprobe {
- 	raw_spinlock_t lock;
- };
- 
-+#define KRETPROBE_TRACE_SIZE 127
-+struct kretprobe_trace {
-+	int nr_entries;
-+	unsigned long entries[KRETPROBE_TRACE_SIZE];
-+};
++NR_CPUS=`grep '^processor' /proc/cpuinfo | wc -l`
 +
- struct kretprobe_instance {
- 	struct hlist_node hlist;
- 	struct kretprobe *rp;
- 	kprobe_opcode_t *ret_addr;
- 	struct task_struct *task;
-+	struct kretprobe_trace entry;
- 	char data[0];
- };
+ EXTRA_ARGS=${@}
  
-@@ -371,6 +380,12 @@ void unregister_kretprobe(struct kretprobe *rp);
- int register_kretprobes(struct kretprobe **rps, int num);
- void unregister_kretprobes(struct kretprobe **rps, int num);
+ OLDIFS="$IFS"
+@@ -28,15 +30,16 @@ IFS="$OLDIFS"
  
-+struct kretprobe_instance *current_kretprobe_instance(void);
-+void kretprobe_save_stack_trace(struct kretprobe_instance *ri,
-+				struct stack_trace *trace);
-+void kretprobe_perf_callchain_kernel(struct kretprobe_instance *ri,
-+				     struct perf_callchain_entry_ctx *ctx);
-+
- void kprobe_flush_task(struct task_struct *tk);
- void recycle_rp_inst(struct kretprobe_instance *ri, struct hlist_head *head);
+ REPS=1000
+ SLOW_REPS=100
++NR_THREADS=$((6*${NR_CPUS}))
  
-@@ -397,6 +412,18 @@ static inline struct kprobe *kprobe_running(void)
+ function do_tests()
  {
- 	return NULL;
+ 	local i=0
+ 	while [ "$i" -lt "${#TEST_LIST[@]}" ]; do
+ 		echo "Running test ${TEST_NAME[$i]}"
+-		./param_test ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
++		./param_test ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
+ 		echo "Running compare-twice test ${TEST_NAME[$i]}"
+-		./param_test_compare_twice ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
++		./param_test_compare_twice ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
+ 		let "i++"
+ 	done
  }
-+static inline struct kretprobe_instance *current_kretprobe_instance(void)
-+{
-+	return NULL;
-+}
-+static inline void kretprobe_save_stack_trace(struct kretprobe_instance *ri,
-+					      struct stack_trace *trace)
-+{
-+}
-+static inline void kretprobe_perf_callchain_kernel(struct kretprobe_instance *ri,
-+						   struct perf_callchain_entry_ctx *ctx)
-+{
-+}
- static inline int register_kprobe(struct kprobe *p)
- {
- 	return -ENOSYS;
-diff --git a/kernel/events/callchain.c b/kernel/events/callchain.c
-index 24a77c34e9ad..98edcd8a6987 100644
---- a/kernel/events/callchain.c
-+++ b/kernel/events/callchain.c
-@@ -12,6 +12,7 @@
- #include <linux/perf_event.h>
- #include <linux/slab.h>
- #include <linux/sched/task_stack.h>
-+#include <linux/kprobes.h>
- 
- #include "internal.h"
- 
-@@ -197,9 +198,14 @@ get_perf_callchain(struct pt_regs *regs, u32 init_nr, bool kernel, bool user,
- 	ctx.contexts_maxed = false;
- 
- 	if (kernel && !user_mode(regs)) {
-+		struct kretprobe_instance *ri = current_kretprobe_instance();
-+
- 		if (add_mark)
- 			perf_callchain_store_context(&ctx, PERF_CONTEXT_KERNEL);
--		perf_callchain_kernel(&ctx, regs);
-+		if (ri)
-+			kretprobe_perf_callchain_kernel(ri, &ctx);
-+		else
-+			perf_callchain_kernel(&ctx, regs);
- 	}
- 
- 	if (user) {
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 90e98e233647..fca3964d18cd 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1206,6 +1206,16 @@ __releases(hlist_lock)
- }
- NOKPROBE_SYMBOL(kretprobe_table_unlock);
- 
-+static bool kretprobe_hash_is_locked(struct task_struct *tsk)
-+{
-+	unsigned long hash = hash_ptr(tsk, KPROBE_HASH_BITS);
-+	raw_spinlock_t *hlist_lock;
-+
-+	hlist_lock = kretprobe_table_lock_ptr(hash);
-+	return raw_spin_is_locked(hlist_lock);
-+}
-+NOKPROBE_SYMBOL(kretprobe_hash_is_locked);
-+
- /*
-  * This function is called from finish_task_switch when task tk becomes dead,
-  * so that we can recycle any function-return probe instances associated
-@@ -1800,6 +1810,13 @@ unsigned long __weak arch_deref_entry_point(void *entry)
- 	return (unsigned long)entry;
- }
- 
-+static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs);
-+
-+static inline bool kprobe_is_retprobe(struct kprobe *kp)
-+{
-+	return kp->pre_handler == pre_handler_kretprobe;
-+}
-+
- #ifdef CONFIG_KRETPROBES
- /*
-  * This kprobe pre_handler is registered with every kretprobe. When probe
-@@ -1826,6 +1843,8 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
- 	hash = hash_ptr(current, KPROBE_HASH_BITS);
- 	raw_spin_lock_irqsave(&rp->lock, flags);
- 	if (!hlist_empty(&rp->free_instances)) {
-+		struct stack_trace trace = {};
-+
- 		ri = hlist_entry(rp->free_instances.first,
- 				struct kretprobe_instance, hlist);
- 		hlist_del(&ri->hlist);
-@@ -1834,6 +1853,11 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
- 		ri->rp = rp;
- 		ri->task = current;
- 
-+		trace.entries = &ri->entry.entries[0];
-+		trace.max_entries = KRETPROBE_TRACE_SIZE;
-+		save_stack_trace_regs(regs, &trace);
-+		ri->entry.nr_entries = trace.nr_entries;
-+
- 		if (rp->entry_handler && rp->entry_handler(ri, regs)) {
- 			raw_spin_lock_irqsave(&rp->lock, flags);
- 			hlist_add_head(&ri->hlist, &rp->free_instances);
-@@ -1856,6 +1880,65 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
- }
- NOKPROBE_SYMBOL(pre_handler_kretprobe);
- 
-+/*
-+ * Return the kretprobe_instance associated with the current_kprobe. Calling
-+ * this is only reasonable from within a kretprobe handler context (otherwise
-+ * return NULL).
-+ *
-+ * Must be called within a kretprobe_hash_lock(current, ...) context.
-+ */
-+struct kretprobe_instance *current_kretprobe_instance(void)
-+{
-+	struct kprobe *kp;
-+	struct kretprobe *rp;
-+	struct kretprobe_instance *ri;
-+	struct hlist_head *head;
-+	unsigned long hash = hash_ptr(current, KPROBE_HASH_BITS);
-+
-+	kp = kprobe_running();
-+	if (!kp || !kprobe_is_retprobe(kp))
-+		return NULL;
-+	if (WARN_ON(!kretprobe_hash_is_locked(current)))
-+		return NULL;
-+
-+	rp = container_of(kp, struct kretprobe, kp);
-+	head = &kretprobe_inst_table[hash];
-+
-+	hlist_for_each_entry(ri, head, hlist) {
-+		if (ri->task == current && ri->rp == rp)
-+			return ri;
-+	}
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(current_kretprobe_instance);
-+NOKPROBE_SYMBOL(current_kretprobe_instance);
-+
-+void kretprobe_save_stack_trace(struct kretprobe_instance *ri,
-+				struct stack_trace *trace)
-+{
-+	int i;
-+	struct kretprobe_trace *krt = &ri->entry;
-+
-+	for (i = trace->skip; i < krt->nr_entries; i++) {
-+		if (trace->nr_entries >= trace->max_entries)
-+			break;
-+		trace->entries[trace->nr_entries++] = krt->entries[i];
-+	}
-+}
-+
-+void kretprobe_perf_callchain_kernel(struct kretprobe_instance *ri,
-+				     struct perf_callchain_entry_ctx *ctx)
-+{
-+	int i;
-+	struct kretprobe_trace *krt = &ri->entry;
-+
-+	for (i = 0; i < krt->nr_entries; i++) {
-+		if (krt->entries[i] == ULONG_MAX)
-+			break;
-+		perf_callchain_store(ctx, (u64) krt->entries[i]);
-+	}
-+}
-+
- bool __weak arch_kprobe_on_func_entry(unsigned long offset)
- {
- 	return !offset;
-@@ -2005,6 +2088,22 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
- }
- NOKPROBE_SYMBOL(pre_handler_kretprobe);
- 
-+struct kretprobe_instance *current_kretprobe_instance(void)
-+{
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(current_kretprobe_instance);
-+NOKPROBE_SYMBOL(current_kretprobe_instance);
-+
-+void kretprobe_save_stack_trace(struct kretprobe_instance *ri,
-+				struct stack_trace *trace)
-+{
-+}
-+
-+void kretprobe_perf_callchain_kernel(struct kretprobe_instance *ri,
-+				     struct perf_callchain_entry_ctx *ctx)
-+{
-+}
- #endif /* CONFIG_KRETPROBES */
- 
- /* Set the kprobe gone and remove its instruction buffer. */
-@@ -2241,7 +2340,7 @@ static void report_probe(struct seq_file *pi, struct kprobe *p,
- 	char *kprobe_type;
- 	void *addr = p->addr;
- 
--	if (p->pre_handler == pre_handler_kretprobe)
-+	if (kprobe_is_retprobe(p))
- 		kprobe_type = "r";
- 	else
- 		kprobe_type = "k";
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index bf6f1d70484d..2210d38a4dbf 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -42,6 +42,7 @@
- #include <linux/nmi.h>
- #include <linux/fs.h>
- #include <linux/trace.h>
-+#include <linux/kprobes.h>
- #include <linux/sched/clock.h>
- #include <linux/sched/rt.h>
- 
-@@ -2590,6 +2591,7 @@ static void __ftrace_trace_stack(struct ring_buffer *buffer,
- 	struct ring_buffer_event *event;
- 	struct stack_entry *entry;
- 	struct stack_trace trace;
-+	struct kretprobe_instance *ri = current_kretprobe_instance();
- 	int use_stack;
- 	int size = FTRACE_STACK_ENTRIES;
- 
-@@ -2626,7 +2628,9 @@ static void __ftrace_trace_stack(struct ring_buffer *buffer,
- 		trace.entries		= this_cpu_ptr(ftrace_stack.calls);
- 		trace.max_entries	= FTRACE_STACK_MAX_ENTRIES;
- 
--		if (regs)
-+		if (ri)
-+			kretprobe_save_stack_trace(ri, &trace);
-+		else if (regs)
- 			save_stack_trace_regs(regs, &trace);
- 		else
- 			save_stack_trace(&trace);
-@@ -2653,7 +2657,10 @@ static void __ftrace_trace_stack(struct ring_buffer *buffer,
- 	else {
- 		trace.max_entries	= FTRACE_STACK_ENTRIES;
- 		trace.entries		= entry->caller;
--		if (regs)
-+
-+		if (ri)
-+			kretprobe_save_stack_trace(ri, &trace);
-+		else if (regs)
- 			save_stack_trace_regs(regs, &trace);
- 		else
- 			save_stack_trace(&trace);
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_stacktrace.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_stacktrace.tc
-new file mode 100644
-index 000000000000..03146c6a1a3c
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_stacktrace.tc
-@@ -0,0 +1,25 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0+
-+# description: Kretprobe dynamic event with a stacktrace
-+
-+[ -f kprobe_events ] || exit_unsupported # this is configurable
-+
-+echo 0 > events/enable
-+echo 1 > options/stacktrace
-+
-+echo 'r:teststackprobe sched_fork $retval' > kprobe_events
-+grep teststackprobe kprobe_events
-+test -d events/kprobes/teststackprobe
-+
-+clear_trace
-+echo 1 > events/kprobes/teststackprobe/enable
-+( echo "forked")
-+echo 0 > events/kprobes/teststackprobe/enable
-+
-+# Make sure we don't see kretprobe_trampoline and we see _do_fork.
-+! grep 'kretprobe' trace
-+grep '_do_fork' trace
-+
-+echo '-:teststackprobe' >> kprobe_events
-+clear_trace
-+test -d events/kprobes/teststackprobe && exit_fail || exit_pass
 -- 
-2.19.1
+2.11.0
