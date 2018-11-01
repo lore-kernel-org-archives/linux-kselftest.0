@@ -1,38 +1,53 @@
-From: petrm at mellanox.com (Petr Machata)
-Date: Fri, 01 Jun 2018 00:37:47 +0200
-Subject: [PATCH net-next 2/2] selftests: forwarding: mirror_vlan: Change test
- description
-In-Reply-To: <cover.1527805500.git.petrm@mellanox.com>
-References: <cover.1527805500.git.petrm@mellanox.com>
-Message-ID: <2771471a59b715ec664cb95b17a2fc4f33a98803.1527805500.git.petrm@mellanox.com>
+From: cyphar at cyphar.com (Aleksa Sarai)
+Date: Thu,  1 Nov 2018 19:35:49 +1100
+Subject: [PATCH v3 0/2] kretprobe: produce sane stack traces
+Message-ID: <20181101083551.3805-1-cyphar@cyphar.com>
 
-The test description is displayed with the PASS/FAIL resolution after
-the test is ran. There however already is one other test described
-exactly like this, which makes it unclear which of the tests passed or
-failed. Make the description unique.
+Historically, kretprobe has always produced unusable stack traces
+(kretprobe_trampoline is the only entry in most cases, because of the
+funky stack pointer overwriting). This has caused quite a few annoyances
+when using tracing to debug problems[1] -- since return values are only
+available with kretprobes but stack traces were only usable for kprobes,
+users had to probe both and then manually associate them.
 
-Signed-off-by: Petr Machata <petrm at mellanox.com>
----
- tools/testing/selftests/net/forwarding/mirror_vlan.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch series stores the stack trace within kretprobe_instance on
+the kprobe entry used to set up the kretprobe. This allows for
+DTrace-style stack aggregation between function entry and exit with
+tools like BPFtrace -- which would not really be doable if the stack
+unwinder understood kretprobe_trampoline.
 
-diff --git a/tools/testing/selftests/net/forwarding/mirror_vlan.sh b/tools/testing/selftests/net/forwarding/mirror_vlan.sh
-index c22e949..efade19 100755
---- a/tools/testing/selftests/net/forwarding/mirror_vlan.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_vlan.sh
-@@ -129,7 +129,7 @@ test_tagged_vlan_dir()
- 				  192.0.2.17 192.0.2.18
- 	mirror_uninstall $swp1 $direction
- 
--	log_test "$direction mirror to vlan ($tcflags)"
-+	log_test "$direction mirror tagged to vlan ($tcflags)"
- }
- 
- test_tagged_vlan()
+We also revert commit 76094a2cf46e ("ftrace: distinguish kretprobe'd
+functions in trace logs") and any follow-up changes because that code is
+no longer necessary now that stack traces are sane. *However* this patch
+might be a bit contentious since the original usecase (that ftrace
+returns shouldn't show kretprobe_trampoline) is arguably still an
+issue. Feel free to drop it if you think it is wrong.
+
+Patch changelog:
+ v3:
+   * kprobe: fix build on !CONFIG_KPROBES
+ v2:
+   * documentation: mention kretprobe stack-stashing
+   * ftrace: add self-test for fixed kretprobe stacktraces
+   * ftrace: remove [unknown/kretprobe'd] handling
+   * kprobe: remove needless EXPORT statements
+   * kprobe: minor corrections to current_kretprobe_instance (switch
+     away from hlist_for_each_entry_safe)
+   * kprobe: make maximum stack size 127, which is the ftrace default
+
+Aleksa Sarai (2):
+  kretprobe: produce sane stack traces
+  trace: remove kretprobed checks
+
+ Documentation/kprobes.txt                     |   6 +-
+ include/linux/kprobes.h                       |  27 +++++
+ kernel/events/callchain.c                     |   8 +-
+ kernel/kprobes.c                              | 101 +++++++++++++++++-
+ kernel/trace/trace.c                          |  11 +-
+ kernel/trace/trace_output.c                   |  34 +-----
+ .../test.d/kprobe/kretprobe_stacktrace.tc     |  25 +++++
+ 7 files changed, 177 insertions(+), 35 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_stacktrace.tc
+
 -- 
-2.4.11
-
---
-To unsubscribe from this list: send the line "unsubscribe linux-kselftest" in
-the body of a message to majordomo at vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+2.19.1
