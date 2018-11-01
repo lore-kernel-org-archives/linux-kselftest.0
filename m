@@ -1,55 +1,80 @@
 From: cyphar@cyphar.com (Aleksa Sarai)
-Date: Thu,  1 Nov 2018 19:35:49 +1100
-Subject: [PATCH v3 0/2] kretprobe: produce sane stack traces
-Message-ID: <20181101083551.3805-1-cyphar@cyphar.com>
+Date: Thu,  1 Nov 2018 19:35:51 +1100
+Subject: [PATCH v3 2/2] trace: remove kretprobed checks
+In-Reply-To: <20181101083551.3805-1-cyphar@cyphar.com>
+References: <20181101083551.3805-1-cyphar@cyphar.com>
+Message-ID: <20181101083551.3805-3-cyphar@cyphar.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181101083549.x1RkKT2Za9KejaTi3hAnZGZhokw-yng5rmOYXRazIu4@z>
+Message-ID: <20181101083551.P4sfYWdeLMe65LPLueY6OywVH33dZv8yTPk7bTW_0CI@z>
 
-Historically, kretprobe has always produced unusable stack traces
-(kretprobe_trampoline is the only entry in most cases, because of the
-funky stack pointer overwriting). This has caused quite a few annoyances
-when using tracing to debug problems[1] -- since return values are only
-available with kretprobes but stack traces were only usable for kprobes,
-users had to probe both and then manually associate them.
+This is effectively a reversion of commit 76094a2cf46e ("ftrace:
+distinguish kretprobe'd functions in trace logs"), as the checking of
+kretprobe_trampoline *for tracing* is no longer necessary with the new
+kretprobe stack trace changes.
 
-This patch series stores the stack trace within kretprobe_instance on
-the kprobe entry used to set up the kretprobe. This allows for
-DTrace-style stack aggregation between function entry and exit with
-tools like BPFtrace -- which would not really be doable if the stack
-unwinder understood kretprobe_trampoline.
+Signed-off-by: Aleksa Sarai <cyphar at cyphar.com>
+---
+ kernel/trace/trace_output.c | 34 ++++------------------------------
+ 1 file changed, 4 insertions(+), 30 deletions(-)
 
-We also revert commit 76094a2cf46e ("ftrace: distinguish kretprobe'd
-functions in trace logs") and any follow-up changes because that code is
-no longer necessary now that stack traces are sane. *However* this patch
-might be a bit contentious since the original usecase (that ftrace
-returns shouldn't show kretprobe_trampoline) is arguably still an
-issue. Feel free to drop it if you think it is wrong.
-
-Patch changelog:
- v3:
-   * kprobe: fix build on !CONFIG_KPROBES
- v2:
-   * documentation: mention kretprobe stack-stashing
-   * ftrace: add self-test for fixed kretprobe stacktraces
-   * ftrace: remove [unknown/kretprobe'd] handling
-   * kprobe: remove needless EXPORT statements
-   * kprobe: minor corrections to current_kretprobe_instance (switch
-     away from hlist_for_each_entry_safe)
-   * kprobe: make maximum stack size 127, which is the ftrace default
-
-Aleksa Sarai (2):
-  kretprobe: produce sane stack traces
-  trace: remove kretprobed checks
-
- Documentation/kprobes.txt                     |   6 +-
- include/linux/kprobes.h                       |  27 +++++
- kernel/events/callchain.c                     |   8 +-
- kernel/kprobes.c                              | 101 +++++++++++++++++-
- kernel/trace/trace.c                          |  11 +-
- kernel/trace/trace_output.c                   |  34 +-----
- .../test.d/kprobe/kretprobe_stacktrace.tc     |  25 +++++
- 7 files changed, 177 insertions(+), 35 deletions(-)
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_stacktrace.tc
-
+diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+index 6e6cc64faa38..951de16bd4fd 100644
+--- a/kernel/trace/trace_output.c
++++ b/kernel/trace/trace_output.c
+@@ -321,36 +321,14 @@ int trace_output_call(struct trace_iterator *iter, char *name, char *fmt, ...)
+ }
+ EXPORT_SYMBOL_GPL(trace_output_call);
+ 
+-#ifdef CONFIG_KRETPROBES
+-static inline const char *kretprobed(const char *name)
+-{
+-	static const char tramp_name[] = "kretprobe_trampoline";
+-	int size = sizeof(tramp_name);
+-
+-	if (strncmp(tramp_name, name, size) == 0)
+-		return "[unknown/kretprobe'd]";
+-	return name;
+-}
+-#else
+-static inline const char *kretprobed(const char *name)
+-{
+-	return name;
+-}
+-#endif /* CONFIG_KRETPROBES */
+-
+ static void
+ seq_print_sym_short(struct trace_seq *s, const char *fmt, unsigned long address)
+ {
+ 	char str[KSYM_SYMBOL_LEN];
+ #ifdef CONFIG_KALLSYMS
+-	const char *name;
+-
+ 	kallsyms_lookup(address, NULL, NULL, NULL, str);
+-
+-	name = kretprobed(str);
+-
+-	if (name && strlen(name)) {
+-		trace_seq_printf(s, fmt, name);
++	if (strlen(str)) {
++		trace_seq_printf(s, fmt, str);
+ 		return;
+ 	}
+ #endif
+@@ -364,13 +342,9 @@ seq_print_sym_offset(struct trace_seq *s, const char *fmt,
+ {
+ 	char str[KSYM_SYMBOL_LEN];
+ #ifdef CONFIG_KALLSYMS
+-	const char *name;
+-
+ 	sprint_symbol(str, address);
+-	name = kretprobed(str);
+-
+-	if (name && strlen(name)) {
+-		trace_seq_printf(s, fmt, name);
++	if (strlen(str)) {
++		trace_seq_printf(s, fmt, str);
+ 		return;
+ 	}
+ #endif
 -- 
 2.19.1
