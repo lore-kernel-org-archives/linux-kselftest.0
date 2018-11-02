@@ -1,104 +1,61 @@
 From: cyphar at cyphar.com (Aleksa Sarai)
-Date: Fri, 2 Nov 2018 15:37:33 +1100
+Date: Fri, 2 Nov 2018 16:05:09 +1100
 Subject: [PATCH v3 1/2] kretprobe: produce sane stack traces
-In-Reply-To: <20181102120441.d00af1b57e6a739d0e7c7a91@kernel.org>
+In-Reply-To: <20181101204720.6ed3fe37@vmware.local.home>
 References: <20181101083551.3805-1-cyphar@cyphar.com>
  <20181101083551.3805-2-cyphar@cyphar.com>
- <20181102002039.8f22c10fa47cae75fa709165@kernel.org>
- <20181101211343.yooxwqfnoloprb5h@yavin>
- <20181102120441.d00af1b57e6a739d0e7c7a91@kernel.org>
-Message-ID: <20181102043733.qqimup5vuevjua5w@yavin>
+ <20181101204720.6ed3fe37@vmware.local.home>
+Message-ID: <20181102050509.tw3dhvj5urudvtjl@yavin>
 
-On 2018-11-02, Masami Hiramatsu <mhiramat at kernel.org> wrote:
-> On Fri, 2 Nov 2018 08:13:43 +1100
+On 2018-11-01, Steven Rostedt <rostedt at goodmis.org> wrote:
+> On Thu,  1 Nov 2018 19:35:50 +1100
 > Aleksa Sarai <cyphar at cyphar.com> wrote:
+> > @@ -1834,6 +1853,11 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
+> >  		ri->rp = rp;
+> >  		ri->task = current;
+> >  
+> > +		trace.entries = &ri->entry.entries[0];
+> > +		trace.max_entries = KRETPROBE_TRACE_SIZE;
+> > +		save_stack_trace_regs(regs, &trace);
+> > +		ri->entry.nr_entries = trace.nr_entries;
+> > +
 > 
-> > On 2018-11-02, Masami Hiramatsu <mhiramat at kernel.org> wrote:
-> > > Please split the test case as an independent patch.
-> > 
-> > Will do. Should the Documentation/ change also be a separate patch?
+> So basically your saving a copy of the stack trace for each probe, for
+> something that may not ever be used?
 > 
-> I think the Documentation change can be coupled with code change
-> if the change is small. But selftests is different, that can be
-> backported soon for testing the stable kernels.
+> This adds quite a lot of overhead for something not used often.
 > 
+> I think the real answer is to fix kretprobes (and I just checked, the
+> return call of function graph tracer stack trace doesn't go past the
+> return_to_handler function either. It's just that a stack trace was
+> never done on the return side).
 > 
-> > > > new file mode 100644
-> > > > index 000000000000..03146c6a1a3c
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_stacktrace.tc
-> > > > @@ -0,0 +1,25 @@
-> > > > +#!/bin/sh
-> > > > +# SPDX-License-Identifier: GPL-2.0+
-> > > > +# description: Kretprobe dynamic event with a stacktrace
-> > > > +
-> > > > +[ -f kprobe_events ] || exit_unsupported # this is configurable
-> > > > +
-> > > > +echo 0 > events/enable
-> > > > +echo 1 > options/stacktrace
-> > > > +
-> > > > +echo 'r:teststackprobe sched_fork $retval' > kprobe_events
-> > > > +grep teststackprobe kprobe_events
-> > > > +test -d events/kprobes/teststackprobe
-> > > 
-> > > Hmm, what happen if we have 2 or more kretprobes on same stack?
-> > > It seems you just save stack in pre_handler, but that stack can already
-> > > includes another kretprobe's trampline address...
-> > 
-> > Yeah, you're quite right...
-> > 
-> > My first instinct was to do something awful like iterate over the set of
-> > "kretprobe_instance"s with ->task == current, and then correct
-> > kretprobe_trampoline entries using ->ret_addr. (I think this would be
-> > correct because each task can only be in one context at once, and in
-> > order to get to a particular kretprobe all of your caller kretprobes
-> > were inserted before you and any sibling or later kretprobe_instances
-> > will have been removed. But I might be insanely wrong on this front.)
-> 
-> yeah, you are right. 
-> 
-> > 
-> > However (as I noted in the other thread), there is a problem where
-> > kretprobe_trampoline actually stops the unwinder in its tracks and thus
-> > you only get the first kretprobe_trampoline. This is something I'm going
-> > to look into some more (despite not having made progress on it last
-> > time) since now it's something that actually needs to be fixed (and
-> > as I mentioned in the other thread, show_stack() actually works on x86
-> > in this context unlike the other stack_trace users).
-> 
-> I should read the unwinder code, but anyway, fixing it up in kretprobe
-> handler context is not hard. Since each instance is on an hlist, so when
-> we hit the kretprobe_trampoline, we can search it.
+> The more I look at this patch, the less I like it.
 
-As in, find the stored stack and merge the two? Interesting idea, though
-Steven has shot this down because of the associated cost (I was
-considering making it a kprobe flag, but that felt far too dirty).
+That's more than fair.
 
-> However, the problem is the case where the out of kretprobe handler
-> context. In that context we need to try to lock the hlist and search
-> the list, which will be a costful operation.
+There's also an issue that Masami noted -- nested kretprobes don't give
+you the full stack trace with this solution since the stack was already
+overwritten. I think that the only real option is to fix the unwinder to
+work in a kretprobe context -- which is what I'm looking at now.
 
-I think the best solution would be to unify all of the kretprobe-like
-things so that we don't need to handle non-kretprobe contexts for
-basically the same underlying idea. If we wanted to do it like this.
+Unfortunately, I'm having a lot of trouble understanding how the current
+ftrace hooking works -- ORC has a couple of ftrace hooks that seem
+reasonable on the surface but I don't understand (for instance) how
+HAVE_FUNCTION_GRAPH_RET_ADDR_PTR *actually* works. Though your comment
+appears to indicate that it doesn't work for stack traces?
 
-I think a potentially better option would be to just fix the unwinder to
-correctly handle kretprobes (like it handles ftrace today).
+For kretprobes I think it would be fairly easy to reconstruct what
+landed you into a kretprobe_trampoline by walking the set of
+kretprobe_instances (since all new ones are added to the head, you can
+get the real return address in-order).
 
-> On the other hand, func-graph tracer introduces a shadow return address
-> stack for each task (thread), and when we hit its trampoline on the stack,
-> we can easily search the entry from "current" task without locking the
-> shadow stack (and we already did it). This may need to pay a cost (1 page)
-> for each task, but smarter than kretprobe, which makes a system-wide 
-> hash-table and need to search from hlist which has return addresses
-> of other context coexist.
+But I still have to figure out what is actually stopping the
+save_stack_trace() unwinder that isn't stopping the show_stacks()
+unwinder (though the show_stacks() code is more ... liberal with the
+degree of certainty it has about the unwind).
 
-Probably a silly question (I've been staring at the function_graph code
-trying to understand how it handles return addresses -- and I'm really
-struggling), is this what ->ret_stack (and ->curr_ret_stack) do?
-
-Can you explain how the .retp handling works, because I'm really missing
-how the core arch/ hooks know to pass the correct retp value.
+Am I barking up the wrong tree?
 
 -- 
 Aleksa Sarai
@@ -111,4 +68,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 833 bytes
 Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181102/6b344e18/attachment.sig>
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181102/da830d68/attachment.sig>
