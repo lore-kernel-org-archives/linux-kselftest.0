@@ -1,7 +1,7 @@
-From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Sun, 4 Nov 2018 01:34:30 +0900
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Sat, 3 Nov 2018 13:30:21 -0400
 Subject: [PATCH v3 1/2] kretprobe: produce sane stack traces
-In-Reply-To: <20181103091341.3d32683e@vmware.local.home>
+In-Reply-To: <20181104013430.9d3e91b8ebbae7dcb6860ef1@kernel.org>
 References: <20181101083551.3805-1-cyphar@cyphar.com>
  <20181101083551.3805-2-cyphar@cyphar.com>
  <20181101204720.6ed3fe37@vmware.local.home>
@@ -12,69 +12,71 @@ References: <20181101083551.3805-1-cyphar@cyphar.com>
  <20181102121307.32e99414@gandalf.local.home>
  <20181103220012.55ecd97e671c43e4959c8b62@kernel.org>
  <20181103091341.3d32683e@vmware.local.home>
-Message-ID: <20181104013430.9d3e91b8ebbae7dcb6860ef1@kernel.org>
+ <20181104013430.9d3e91b8ebbae7dcb6860ef1@kernel.org>
+Message-ID: <20181103133021.6676708c@vmware.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181103163430.b9RWKJwgwkYWaAe9rUKVErGsqwyJ2CD3mwIQPpsR75Q@z>
+Message-ID: <20181103173021.JTZ3Txmlphpw4VIMG7kExmd5-4uURfWIOgfVi1bv7xM@z>
 
-On Sat, 3 Nov 2018 09:13:41 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> On Sat, 3 Nov 2018 22:00:12 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+On Sun, 4 Nov 2018 01:34:30 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > 
-> > On Fri, 2 Nov 2018 12:13:07 -0400
-> > Steven Rostedt <rostedt@goodmis.org> wrote:
-> > 
+> > I was thinking of a bitmask that represents the handlers, and use that
+> > to map which handler gets called for which shadow entry for a
+> > particular task.  
 > 
-> > > Because that means if function graph tracer is active, then you can't
-> > > do a kretprobe, and vice versa. I'd really like to have it working for
-> > > multiple users, then we could trace different graph functions and store
-> > > them in different buffers. It would also allow for perf to use function
-> > > graph tracer too.  
-> > 
-> > Steve, how woul you allow multiple users on it? Something like this?
-> > 
-> > ret_trampoline_multiple(){
-> >    list_for_each(handler, &shadow_entry[i].handlers, list)
-> > 	handler(shadow_entry[i]);
-> >    restore_retval_and_jump_to(shadow_entry[i].orig);
-> > }
-> >
+> Hmm, I doubt that is too complicated and not scalable. I rather like to see
+> the open shadow entry...
+
+It can scale and not too complex (I already played a little with it).
+But that said, I'm not committed to it, and using the shadow stack is
+also an interesting idea.
+
 > 
-> Something like that. But since it's not a single mapping between shadow
-> entries and handlers, that is we have multiple tasks with multiple
-> shadow entries and multiple handlers, we can't use a link list (two
-> different parents per handler).
+> entry: [[original_retaddr][function][modified_retaddr]]
+> 
+> So if there are many users on same function, the entries will be like this 
+> 
+> [[original_return_address][function][trampoline_A]]
+> [[trampline_A][function][trampoline_B]]
+> [[trampline_B][function][trampoline_C]]
+> 
+> And on the top of the stack, there is trampline_C instead of original_return_address.
+> In this case, return to trampoline_C(), it jumps back to trampline_B() and then
+> it jumps back to trampline_A(). And eventually it jumps back to
+> original_return_address.
 
-Yes, I understand it.
+Where are trampolines A, B, and C made? Do we also need to dynamically
+create them? If I register multiple function tracing ones, each one
+will need its own trampoline?
 
-> I was thinking of a bitmask that represents the handlers, and use that
-> to map which handler gets called for which shadow entry for a
-> particular task.
+> 
+> This way, we don't need allocate another bitmap/pages for the shadow stack.
+> We only need a shadow stack for each task.
+> Also, unwinder can easily find the trampline_C from the shadow stack and restores
+> original_return_address. (of course trampline_A,B,C must be registered so that
+> search function can skip it.)
 
-Hmm, I doubt that is too complicated and not scalable. I rather like to see
-the open shadow entry...
+What I was thinking was to store a count and the functions to be called:
 
-entry: [[original_retaddr][function][modified_retaddr]]
 
-So if there are many users on same function, the entries will be like this 
+	[original_return_address]
+	[function_A]
+	[function_B]
+	[function_C]
+	[ 3 ]
 
-[[original_return_address][function][trampoline_A]]
-[[trampline_A][function][trampoline_B]]
-[[trampline_B][function][trampoline_C]]
+Then the trampoline that processes the return codes for ftrace (and
+kretprobes and everyone else) can simply do:
 
-And on the top of the stack, there is trampline_C instead of original_return_address.
-In this case, return to trampoline_C(), it jumps back to trampline_B() and then
-it jumps back to trampline_A(). And eventually it jumps back to
-original_return_address.
+	count = pop_shadow_stack();
+	for (i = 0; i < count; i++) {
+		func = pop_shadow_stack();
+		func(...);
+	}
+	return_address = pop_shadow_stack();
 
-This way, we don't need allocate another bitmap/pages for the shadow stack.
-We only need a shadow stack for each task.
-Also, unwinder can easily find the trampline_C from the shadow stack and restores
-original_return_address. (of course trampline_A,B,C must be registered so that
-search function can skip it.)
+That way we only need to register a function to the return handler and
+it will be called, without worrying about making trampolines. There
+will just be a single trampoline that handles all the work.
 
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+-- Steve
