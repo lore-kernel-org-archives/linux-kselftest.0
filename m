@@ -1,136 +1,61 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Sat, 3 Nov 2018 21:47:07 +0900
+Date: Sat, 3 Nov 2018 22:00:12 +0900
 Subject: [PATCH v3 1/2] kretprobe: produce sane stack traces
-In-Reply-To: <20181102043733.qqimup5vuevjua5w@yavin>
+In-Reply-To: <20181102121307.32e99414@gandalf.local.home>
 References: <20181101083551.3805-1-cyphar@cyphar.com>
  <20181101083551.3805-2-cyphar@cyphar.com>
- <20181102002039.8f22c10fa47cae75fa709165@kernel.org>
- <20181101211343.yooxwqfnoloprb5h@yavin>
- <20181102120441.d00af1b57e6a739d0e7c7a91@kernel.org>
- <20181102043733.qqimup5vuevjua5w@yavin>
-Message-ID: <20181103214707.e31f45fd5c87a2adab5857ae@kernel.org>
+ <20181101204720.6ed3fe37@vmware.local.home>
+ <20181102050509.tw3dhvj5urudvtjl@yavin>
+ <20181102065932.bdt4pubbrkvql4mp@yavin>
+ <20181102091658.1bc979a4@gandalf.local.home>
+ <20181102154325.bt6xoysl4xdl33wd@treble>
+ <20181102121307.32e99414@gandalf.local.home>
+Message-ID: <20181103220012.55ecd97e671c43e4959c8b62@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181103124707.pWu3XnsUJERw7ZkLH0WwqesGEJ7XlSeUImb9HhcwoZE@z>
+Message-ID: <20181103130012.Roveb7-JteIquo9i4lZjO9S3eHB_QRMEHekiw9udkhY@z>
 
-On Fri, 2 Nov 2018 15:37:33 +1100
-Aleksa Sarai <cyphar@cyphar.com> wrote:
+On Fri, 2 Nov 2018 12:13:07 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> On 2018-11-02, Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > On Fri, 2 Nov 2018 08:13:43 +1100
-> > Aleksa Sarai <cyphar@cyphar.com> wrote:
-> > 
-> > > On 2018-11-02, Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > > Please split the test case as an independent patch.
-> > > 
-> > > Will do. Should the Documentation/ change also be a separate patch?
-> > 
-> > I think the Documentation change can be coupled with code change
-> > if the change is small. But selftests is different, that can be
-> > backported soon for testing the stable kernels.
-> > 
-> > 
-> > > > > new file mode 100644
-> > > > > index 000000000000..03146c6a1a3c
-> > > > > --- /dev/null
-> > > > > +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_stacktrace.tc
-> > > > > @@ -0,0 +1,25 @@
-> > > > > +#!/bin/sh
-> > > > > +# SPDX-License-Identifier: GPL-2.0+
-> > > > > +# description: Kretprobe dynamic event with a stacktrace
-> > > > > +
-> > > > > +[ -f kprobe_events ] || exit_unsupported # this is configurable
-> > > > > +
-> > > > > +echo 0 > events/enable
-> > > > > +echo 1 > options/stacktrace
-> > > > > +
-> > > > > +echo 'r:teststackprobe sched_fork $retval' > kprobe_events
-> > > > > +grep teststackprobe kprobe_events
-> > > > > +test -d events/kprobes/teststackprobe
-> > > > 
-> > > > Hmm, what happen if we have 2 or more kretprobes on same stack?
-> > > > It seems you just save stack in pre_handler, but that stack can already
-> > > > includes another kretprobe's trampline address...
-> > > 
-> > > Yeah, you're quite right...
-> > > 
-> > > My first instinct was to do something awful like iterate over the set of
-> > > "kretprobe_instance"s with ->task == current, and then correct
-> > > kretprobe_trampoline entries using ->ret_addr. (I think this would be
-> > > correct because each task can only be in one context at once, and in
-> > > order to get to a particular kretprobe all of your caller kretprobes
-> > > were inserted before you and any sibling or later kretprobe_instances
-> > > will have been removed. But I might be insanely wrong on this front.)
-> > 
-> > yeah, you are right. 
-> > 
-> > > 
-> > > However (as I noted in the other thread), there is a problem where
-> > > kretprobe_trampoline actually stops the unwinder in its tracks and thus
-> > > you only get the first kretprobe_trampoline. This is something I'm going
-> > > to look into some more (despite not having made progress on it last
-> > > time) since now it's something that actually needs to be fixed (and
-> > > as I mentioned in the other thread, show_stack() actually works on x86
-> > > in this context unlike the other stack_trace users).
-> > 
-> > I should read the unwinder code, but anyway, fixing it up in kretprobe
-> > handler context is not hard. Since each instance is on an hlist, so when
-> > we hit the kretprobe_trampoline, we can search it.
+> On Fri, 2 Nov 2018 10:43:26 -0500
+> Josh Poimboeuf <jpoimboe@redhat.com> wrote:
 > 
-> As in, find the stored stack and merge the two? Interesting idea, though
-> Steven has shot this down because of the associated cost (I was
-> considering making it a kprobe flag, but that felt far too dirty).
-
-I think we don't need the flag, we just need to register a trampoline and
-the trampoline must restore(just pop) the original address from shadow
-stack.
-Also the stack unwinder query restored address from the stack if it
-hits the unfamilier address (or registered address).
-
-> > However, the problem is the case where the out of kretprobe handler
-> > context. In that context we need to try to lock the hlist and search
-> > the list, which will be a costful operation.
+> > > I'll hopefully have a prototype ready by plumbers.  
+> > 
+> > Why do we need multiple users?  It would be a lot simpler if we could
+> > just enforce a single user per fgraphed/kretprobed function (and return
+> > -EBUSY if it's already being traced/probed).
 > 
-> I think the best solution would be to unify all of the kretprobe-like
-> things so that we don't need to handle non-kretprobe contexts for
-> basically the same underlying idea. If we wanted to do it like this.
+> Because that means if function graph tracer is active, then you can't
+> do a kretprobe, and vice versa. I'd really like to have it working for
+> multiple users, then we could trace different graph functions and store
+> them in different buffers. It would also allow for perf to use function
+> graph tracer too.
 
-Yes, anyway, current kretprobe instance idea is not good, it requires
-locks, and user must specify "enough amount of instances" for each
-kretprobe.
+Steve, how woul you allow multiple users on it? Something like this?
 
-> I think a potentially better option would be to just fix the unwinder to
-> correctly handle kretprobes (like it handles ftrace today).
+ret_trampoline_multiple(){
+   list_for_each(handler, &shadow_entry[i].handlers, list)
+	handler(shadow_entry[i]);
+   restore_retval_and_jump_to(shadow_entry[i].orig);
+}
 
-I think both can be fixed by same way.
 
+> > > And this too will require each architecture to probably change. As a
+> > > side project to this, I'm going to try to consolidate the function
+> > > graph code among all the architectures as well. Not an easy task.  
+> > 
+> > Do you mean implementing HAVE_FUNCTION_GRAPH_RET_ADDR_PTR for all the
+> > arches?  If so, I think have an old crusty patch which attempted to
+> > that.  I could try to dig it up if you're interested.
+> > 
 > 
-> > On the other hand, func-graph tracer introduces a shadow return address
-> > stack for each task (thread), and when we hit its trampoline on the stack,
-> > we can easily search the entry from "current" task without locking the
-> > shadow stack (and we already did it). This may need to pay a cost (1 page)
-> > for each task, but smarter than kretprobe, which makes a system-wide 
-> > hash-table and need to search from hlist which has return addresses
-> > of other context coexist.
-> 
-> Probably a silly question (I've been staring at the function_graph code
-> trying to understand how it handles return addresses -- and I'm really
-> struggling), is this what ->ret_stack (and ->curr_ret_stack) do?
+> I'd like to have that, but it still requires some work. But I'd just
+> the truly architecture dependent code be in the architecture (basically
+> the asm code), and have the ability to move most of the duplicate code
+> out of the archs.
 
-Yes.
-
-> 
-> Can you explain how the .retp handling works, because I'm really missing
-> how the core arch/ hooks know to pass the correct retp value.
-
-Sure, the current->ret_stack can be an hidden stack array, it will save the original
-return address, function address and the modified address for each entry.
-(Kretprobe can be searched by function address.)
-
-Stack unwinder will check the unwinded stack entry on comparing with
-current->ret_stack[i].retp and if it is same, it can find the original return
-address from ret_stack[i].ret.
-
-This should make things simpler and solve in generic way.
+I will also do that for kretprobe handlers.
 
 Thank you,
 
