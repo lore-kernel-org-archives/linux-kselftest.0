@@ -1,126 +1,78 @@
 From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Sat, 3 Nov 2018 22:23:29 +0900
+Date: Sun, 4 Nov 2018 01:34:30 +0900
 Subject: [PATCH v3 1/2] kretprobe: produce sane stack traces
-In-Reply-To: <20181102091658.1bc979a4@gandalf.local.home>
+In-Reply-To: <20181103091341.3d32683e@vmware.local.home>
 References: <20181101083551.3805-1-cyphar@cyphar.com>
  <20181101083551.3805-2-cyphar@cyphar.com>
  <20181101204720.6ed3fe37@vmware.local.home>
  <20181102050509.tw3dhvj5urudvtjl@yavin>
  <20181102065932.bdt4pubbrkvql4mp@yavin>
  <20181102091658.1bc979a4@gandalf.local.home>
-Message-ID: <20181103222329.4e2a4188d297724cbb4c9883@kernel.org>
+ <20181102154325.bt6xoysl4xdl33wd@treble>
+ <20181102121307.32e99414@gandalf.local.home>
+ <20181103220012.55ecd97e671c43e4959c8b62@kernel.org>
+ <20181103091341.3d32683e@vmware.local.home>
+Message-ID: <20181104013430.9d3e91b8ebbae7dcb6860ef1@kernel.org>
 
-On Fri, 2 Nov 2018 09:16:58 -0400
+On Sat, 3 Nov 2018 09:13:41 -0400
 Steven Rostedt <rostedt at goodmis.org> wrote:
 
-> On Fri, 2 Nov 2018 17:59:32 +1100
-> Aleksa Sarai <cyphar at cyphar.com> wrote:
+> On Sat, 3 Nov 2018 22:00:12 +0900
+> Masami Hiramatsu <mhiramat at kernel.org> wrote:
 > 
-> > As an aside, I just tested with the frame unwinder and it isn't thrown
-> > off-course by kretprobe_trampoline (though obviously the stack is still
-> > wrong). So I think we just need to hook into the ORC unwinder to get it
-> > to continue skipping up the stack, as well as add the rewriting code for
-> > the stack traces (for all unwinders I guess -- though ideally we should
+> > On Fri, 2 Nov 2018 12:13:07 -0400
+> > Steven Rostedt <rostedt at goodmis.org> wrote:
+> > 
 > 
-> I agree that this is the right solution.
+> > > Because that means if function graph tracer is active, then you can't
+> > > do a kretprobe, and vice versa. I'd really like to have it working for
+> > > multiple users, then we could trace different graph functions and store
+> > > them in different buffers. It would also allow for perf to use function
+> > > graph tracer too.  
+> > 
+> > Steve, how woul you allow multiple users on it? Something like this?
+> > 
+> > ret_trampoline_multiple(){
+> >    list_for_each(handler, &shadow_entry[i].handlers, list)
+> > 	handler(shadow_entry[i]);
+> >    restore_retval_and_jump_to(shadow_entry[i].orig);
+> > }
+> >
 > 
-> > do this without having to add the same code to every architecture).
-> 
-> True, and there's an art to consolidating the code between
-> architectures.
-> 
-> I'm currently looking at function graph and seeing if I can consolidate
-> it too. And I'm also trying to get multiple uses to hook into its
-> infrastructure. I think I finally figured out a way to do so.
+> Something like that. But since it's not a single mapping between shadow
+> entries and handlers, that is we have multiple tasks with multiple
+> shadow entries and multiple handlers, we can't use a link list (two
+> different parents per handler).
 
-For supporting multiple users without any memory allocation, I think
-each user should consume the shadow stack and store on it.
-My old generic retstack implementation did that.
+Yes, I understand it.
 
-https://github.com/mhiramat/linux/commit/8804f76580cd863d555854b41b9c6df719f8087e
+> I was thinking of a bitmask that represents the handlers, and use that
+> to map which handler gets called for which shadow entry for a
+> particular task.
 
-I hope this may give you any insites.
-My idea is to generalize shadow stack, not func graph tracer, since
-I don't like making kretprobe depends on func graph tracer, but only
-the shadow stack.
+Hmm, I doubt that is too complicated and not scalable. I rather like to see
+the open shadow entry...
 
-> 
-> The reason it is difficult, is that you need to maintain state between
-> the entry of a function and the exit for each task and callback that is
-> registered. Hence, it's a 3x tuple (function stack, task, callbacks).
-> And this must be maintained with preemption. A task may sleep for
-> minutes, and the state needs to be retained.
+entry: [[original_retaddr][function][modified_retaddr]]
 
-Would you mean preeempt_disable()? Anyway, we just need to increment index
-atomically, don't we?
+So if there are many users on same function, the entries will be like this 
 
-> The only state that must be retained is the function stack with the
-> task, because if that gets out of sync, the system crashes. But the
-> callback state can be removed.
-> 
-> Here's what is there now:
-> 
->  When something is registered with the function graph tracer, every
->  task gets a shadowed stack. A hook is added to fork to add shadow
->  stacks to new tasks. Once a shadow stack is added to a task, that
->  shadow stack is never removed until the task exits.
-> 
->  When the function is entered, the real return code is stored in the
->  shadow stack and the trampoline address is put in its place.
-> 
->  On return, the trampoline is called, and it will pop off the return
->  code from the shadow stack and return to that.
-> 
-> The issue with multiple users, is that different users may want to
-> trace different functions. On entry, the user could say it doesn't want
-> to trace the current function, and the return part must not be called
-> on exit. Keeping track of which user needs the return called is the
-> tricky part.
+[[original_return_address][function][trampoline_A]]
+[[trampline_A][function][trampoline_B]]
+[[trampline_B][function][trampoline_C]]
 
-So that I think only the "shadow stack" part should be generalized.
+And on the top of the stack, there is trampline_C instead of original_return_address.
+In this case, return to trampoline_C(), it jumps back to trampline_B() and then
+it jumps back to trampline_A(). And eventually it jumps back to
+original_return_address.
 
-> 
-> Here's what I plan on implementing:
-> 
->  Along with a shadow stack, I was going to add a 4096 byte (one page)
->  array that holds 64 8 byte masks to every task as well. This will allow
->  64 simultaneous users (which is rather extreme). If we need to support
->  more, we could allocate another page for all tasks. The 8 byte mask
->  will represent each depth (allowing to do this for 64 function call
->  stack depth, which should also be enough).
-> 
->  Each user will be assigned one of the masks. Each bit in the mask
->  represents the depth of the shadow stack. When a function is called,
->  each user registered with the function graph tracer will get called
->  (if they asked to be called for this function, via the ftrace_ops
->  hashes) and if they want to trace the function, then the bit is set in
->  the mask for that stack depth.
-> 
->  When the function exits the function and we pop off the return code
->  from the shadow stack, we then look at all the bits set for the
->  corresponding users, and call their return callbacks, and ignore
->  anything that is not set.
-> 
-
-It sounds too complicated... why we don't just open the shadow stack for
-each user? Of course it may requires a bit "repeat" unwind on the shadow
-stack, but it is simple.
+This way, we don't need allocate another bitmap/pages for the shadow stack.
+We only need a shadow stack for each task.
+Also, unwinder can easily find the trampline_C from the shadow stack and restores
+original_return_address. (of course trampline_A,B,C must be registered so that
+search function can skip it.)
 
 Thank you,
-
-> When a user is unregistered, it the corresponding bits that represent
-> it are cleared, and it the return callback will not be called. But the
-> tasks being traced will still have their shadow stack to allow it to
-> get back to normal.
-> 
-> I'll hopefully have a prototype ready by plumbers.
-> 
-> And this too will require each architecture to probably change. As a
-> side project to this, I'm going to try to consolidate the function
-> graph code among all the architectures as well. Not an easy task.
-> 
-> -- Steve
-
 
 -- 
 Masami Hiramatsu <mhiramat at kernel.org>
