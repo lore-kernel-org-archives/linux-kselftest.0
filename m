@@ -1,99 +1,87 @@
-From: shuah at kernel.org (Shuah Khan)
-Date: Fri, 2 Nov 2018 12:44:46 -0600
-Subject: [RFC v2 01/14] kunit: test: add KUnit test runner core
-In-Reply-To: <20181023235750.103146-2-brendanhiggins@google.com>
-References: <20181023235750.103146-1-brendanhiggins@google.com>
- <20181023235750.103146-2-brendanhiggins@google.com>
-Message-ID: <017b111f-d960-c1ef-46ae-eb0eb639fe5b@kernel.org>
+From: cyphar at cyphar.com (Aleksa Sarai)
+Date: Sat, 3 Nov 2018 18:02:53 +1100
+Subject: [PATCH v3 1/2] kretprobe: produce sane stack traces
+In-Reply-To: <20181102091658.1bc979a4@gandalf.local.home>
+References: <20181101083551.3805-1-cyphar@cyphar.com>
+ <20181101083551.3805-2-cyphar@cyphar.com>
+ <20181101204720.6ed3fe37@vmware.local.home>
+ <20181102050509.tw3dhvj5urudvtjl@yavin>
+ <20181102065932.bdt4pubbrkvql4mp@yavin>
+ <20181102091658.1bc979a4@gandalf.local.home>
+Message-ID: <20181103070253.ajrqzs5xu2vf5stu@yavin>
 
-On 10/23/2018 05:57 PM, Brendan Higgins wrote:
-> Add core facilities for defining unit tests; this provides a common way
-> to define test cases, functions that execute code which is under test
-> and determine whether the code under test behaves as expected; this also
-> provides a way to group together related test cases in test suites (here
-> we call them test_modules).
+On 2018-11-02, Steven Rostedt <rostedt at goodmis.org> wrote:
+> > As an aside, I just tested with the frame unwinder and it isn't thrown
+> > off-course by kretprobe_trampoline (though obviously the stack is still
+> > wrong). So I think we just need to hook into the ORC unwinder to get it
+> > to continue skipping up the stack, as well as add the rewriting code for
+> > the stack traces (for all unwinders I guess -- though ideally we should
 > 
-> Just define test cases and how to execute them for now; setting
-> expectations on code will be defined later.
+> I agree that this is the right solution.
 > 
-> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> ---
->  include/kunit/test.h | 165 ++++++++++++++++++++++++++++++++++++++++++
->  kunit/Kconfig        |  17 +++++
->  kunit/Makefile       |   1 +
->  kunit/test.c         | 168 +++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 351 insertions(+)
->  create mode 100644 include/kunit/test.h
->  create mode 100644 kunit/Kconfig
->  create mode 100644 kunit/Makefile
->  create mode 100644 kunit/test.c
+> > do this without having to add the same code to every architecture).
 > 
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> new file mode 100644
-> index 0000000000000..e0b14b227ac44
-> --- /dev/null
-> +++ b/include/kunit/test.h
-> @@ -0,0 +1,165 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Base unit test (KUnit) API.
-> + *
-> + * Copyright (C) 2018, Google LLC.
-> + * Author: Brendan Higgins <brendanhiggins at google.com>
-> + */
-> +
-> +#ifndef _KUNIT_TEST_H
-> +#define _KUNIT_TEST_H
-> +
-> +#include <linux/types.h>
-> +#include <linux/slab.h>
-> +
-> +struct test;
-> +
-> +/**
-> + * struct test_case - represents an individual test case.
-> + * @run_case: the function representing the actual test case.
-> + * @name: the name of the test case.
-> + *
-> + * A test case is a function with the signature, ``void (*)(struct test *)``
-> + * that makes expectations (see TEST_EXPECT_TRUE()) about code under test. Each
-> + * test case is associated with a &struct test_module and will be run after the
-> + * module's init function and followed by the module's exit function.
-> + *
-> + * A test case should be static and should only be created with the TEST_CASE()
-> + * macro; additionally, every array of test cases should be terminated with an
-> + * empty test case.
-> + *
-> + * Example:
-> + *
-> + * .. code-block:: c
-> + *
-> + *	void add_test_basic(struct test *test)
-> + *	{
-> + *		TEST_EXPECT_EQ(test, 1, add(1, 0));
-> + *		TEST_EXPECT_EQ(test, 2, add(1, 1));
-> + *		TEST_EXPECT_EQ(test, 0, add(-1, 1));
-> + *		TEST_EXPECT_EQ(test, INT_MAX, add(0, INT_MAX));
-> + *		TEST_EXPECT_EQ(test, -1, add(INT_MAX, INT_MIN));
-> + *	}
-> + *
-> + *	static struct test_case example_test_cases[] = {
-> + *		TEST_CASE(add_test_basic),
-> + *		{},
-> + *	};
-> + *
-> + */
-> +struct test_case {
-> +	void (*run_case)(struct test *test);
-> +	const char name[256];
-> +
-> +	/* private: internal use only. */
-> +	bool success;
-> +};
-> +
+> True, and there's an art to consolidating the code between
+> architectures.
+> 
+> I'm currently looking at function graph and seeing if I can consolidate
+> it too. And I'm also trying to get multiple uses to hook into its
+> infrastructure. I think I finally figured out a way to do so.
+> 
+> The reason it is difficult, is that you need to maintain state between
+> the entry of a function and the exit for each task and callback that is
+> registered. Hence, it's a 3x tuple (function stack, task, callbacks).
+> And this must be maintained with preemption. A task may sleep for
+> minutes, and the state needs to be retained.
+> 
+> The only state that must be retained is the function stack with the
+> task, because if that gets out of sync, the system crashes. But the
+> callback state can be removed.
+> 
+> Here's what is there now:
+> 
+>  When something is registered with the function graph tracer, every
+>  task gets a shadowed stack. A hook is added to fork to add shadow
+>  stacks to new tasks. Once a shadow stack is added to a task, that
+>  shadow stack is never removed until the task exits.
+> 
+>  When the function is entered, the real return code is stored in the
+>  shadow stack and the trampoline address is put in its place.
+> 
+>  On return, the trampoline is called, and it will pop off the return
+>  code from the shadow stack and return to that.
 
-Introducing a prefix kunit_* might be a good idea for the API.
-This comment applies to the rest of patches as well.
+I was playing with a toy version of this using the existing kretprobe
+architecture (by borrowing the shadow stack concept of storing the
+stack_addr() -- though it's actually stored inside the existing
+kretprobe_instance and thus doesn't need separate push-pop code).
 
-thanks,
--- Shuah
+The rewriting of kretprobe_trampoline in the stack unwinder *works* on
+x86 now except for the regs handling (the current function is still
+incorrectly shown as kretprobe_trampoline). This is actually a general
+bug in ftrace as well, because (for instance) while the unwinder calls
+into ftrace_graph_ret_addr() while walking up the stack this isn't used
+to correct regs->ip in perf_callchain_kernel(). I think this is the
+cause of the bug in ftrace-graph (if you switch to the "frame" unwinder
+you might be able to see it more clearly) -- but when trying to fix it
+I'm having trouble figuring out what retp should be (stack_addr(regs)
+doesn't give the right result for some reason).
+
+I will try to fix it up and attach it, but if you're already working on
+a prototype the unifies all the users that works too. The patch I have
+at the moment duplicates each of the key ftrace_graph_return_addr
+invocations with a matching kretprobe_return_addr (though there's only
+three of these).
+
+-- 
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181103/56058ea4/attachment.sig>
