@@ -1,60 +1,63 @@
-From: cyphar at cyphar.com (Aleksa Sarai)
-Date: Sun, 4 Nov 2018 22:59:13 +1100
-Subject: [PATCH v3 1/2] kretprobe: produce sane stack traces
-In-Reply-To: <20181103070253.ajrqzs5xu2vf5stu@yavin>
-References: <20181101083551.3805-1-cyphar@cyphar.com>
- <20181101083551.3805-2-cyphar@cyphar.com>
- <20181101204720.6ed3fe37@vmware.local.home>
- <20181102050509.tw3dhvj5urudvtjl@yavin>
- <20181102065932.bdt4pubbrkvql4mp@yavin>
- <20181102091658.1bc979a4@gandalf.local.home>
- <20181103070253.ajrqzs5xu2vf5stu@yavin>
-Message-ID: <20181104115913.74l4yzecisvtt2j5@yavin>
+From: rdunlap at infradead.org (Randy Dunlap)
+Date: Sun, 4 Nov 2018 14:06:23 -0800
+Subject: [PATCH resend] Documentation/dev-tools: clean up kselftest.rst
+Message-ID: <67201746-13c6-2b05-7f3d-2b200e4d9af0@infradead.org>
 
-On 2018-11-03, Aleksa Sarai <cyphar at cyphar.com> wrote:
-> This is actually a general bug in ftrace as well, because (for
-> instance) while the unwinder calls into ftrace_graph_ret_addr() while
-> walking up the stack this isn't used to correct regs->ip in
-> perf_callchain_kernel(). I think this is the cause of the bug in
-> ftrace-graph (if you switch to the "frame" unwinder you might be able
-> to see it more clearly) -- but when trying to fix it I'm having
-> trouble figuring out what retp should be (stack_addr(regs) doesn't
-> give the right result for some reason).
+From: Randy Dunlap <rdunlap at infradead.org>
 
-@Steven, @Masami: Can you verify whether this is an actual bug? The
-snippet is like (arch/x86/events/core.c):
+This is a small cleanup to kselftest.rst:
 
-  void
-  perf_callchain_kernel(struct perf_callchain_entry_ctx *entry, struct pt_regs *regs)
-  {
-    /* ... */
-	if (perf_callchain_store(entry, regs->ip))
-		return;
-	/* rest of unwind code */
-  }
+- Fix some language typos in the usage instructions.
+- Change one non-ASCII space to an ASCII space.
 
-And it seems to me that there's an ftrace_graph_ret_addr missing here
-(though I was having trouble figuring out what the right retp would be
-in this context -- both stack_addr(regs) and &regs->sp appear to be
-wrong when I was trying to get this to work with kretprobes -- while my
-patch worked with all other kretprobe_trampoline cases in the unwinder).
+Signed-off-by: Randy Dunlap <rdunlap at infradead.org>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Jonathan Corbet <corbet at lwn.net>
+Cc: linux-kselftest at vger.kernel.org
+Cc: linux-doc at vger.kernel.org
+---
+ Documentation/dev-tools/kselftest.rst |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-The same issue is present in __save_stack_trace
-(arch/x86/kernel/stacktrace.c). This is likely the only reason that --
-as Steven said -- stacktraces wouldn't work with ftrace-graph (and thus
-with the refactor both of you are discussing).
-
-Thanks.
-
--- 
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181104/9a4eaf00/attachment.sig>
+--- linux-next-20181101.orig/Documentation/dev-tools/kselftest.rst
++++ linux-next-20181101/Documentation/dev-tools/kselftest.rst
+@@ -9,7 +9,7 @@ and booting a kernel.
+ 
+ On some systems, hot-plug tests could hang forever waiting for cpu and
+ memory to be ready to be offlined. A special hot-plug target is created
+-to run full range of hot-plug tests. In default mode, hot-plug tests run
++to run the full range of hot-plug tests. In default mode, hot-plug tests run
+ in safe mode with a limited scope. In limited mode, cpu-hotplug test is
+ run on a single cpu as opposed to all hotplug capable cpus, and memory
+ hotplug test is run on 2% of hotplug capable memory instead of 10%.
+@@ -89,9 +89,9 @@ Note that some tests will require root p
+ Install selftests
+ =================
+ 
+-You can use kselftest_install.sh tool installs selftests in default
+-location which is tools/testing/selftests/kselftest or a user specified
+-location.
++You can use the kselftest_install.sh tool to install selftests in the
++default location, which is tools/testing/selftests/kselftest, or in a
++user specified location.
+ 
+ To install selftests in default location::
+ 
+@@ -109,7 +109,7 @@ Running installed selftests
+ Kselftest install as well as the Kselftest tarball provide a script
+ named "run_kselftest.sh" to run the tests.
+ 
+-You can simply do the following to run the installed Kselftests. Please
++You can simply do the following to run the installed Kselftests. Please
+ note some tests will require root privileges::
+ 
+    $ cd kselftest
+@@ -139,7 +139,7 @@ Contributing new tests (details)
+    default.
+ 
+    TEST_CUSTOM_PROGS should be used by tests that require custom build
+-   rule and prevent common build rule use.
++   rules and prevent common build rule use.
+ 
+    TEST_PROGS are for test shell scripts. Please ensure shell script has
+    its exec bit set. Otherwise, lib.mk run_tests will generate a warning.
