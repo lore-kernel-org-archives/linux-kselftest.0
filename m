@@ -1,42 +1,33 @@
-From: lizhijian@cn.fujitsu.com (Li Zhijian)
-Date: Mon,  5 Nov 2018 16:57:48 +0800
-Subject: [PATCH v2] kselftests/bpf: use ping6 as the default ipv6 ping binary
- when it exists
-Message-ID: <1541408268-11256-1-git-send-email-lizhijian@cn.fujitsu.com>
+From: shuah@kernel.org (Shuah Khan)
+Date: Mon, 5 Nov 2018 11:46:20 -0700
+Subject: [PATCH resend] Documentation/dev-tools: clean up kselftest.rst
+In-Reply-To: <67201746-13c6-2b05-7f3d-2b200e4d9af0@infradead.org>
+References: <67201746-13c6-2b05-7f3d-2b200e4d9af0@infradead.org>
+Message-ID: <759a6f00-a45f-0f04-4efe-6beff9e724ae@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181105085748.DIxHIfPL86w8nhBn3rYElFx2WgcCsWUuhgo1tbUnA14@z>
+Message-ID: <20181105184620.853ZQP1rquNUtMYB9t8fTLkYt8IdXNXVqZt8LJARhVM@z>
 
-At commit deee2cae27d1 ("kselftests/bpf: use ping6 as the default ipv6 ping
-binary if it exists"), it fixed similar issues for shell script, but it
-missed a same issue in the C code.
+On 11/04/2018 03:06 PM, Randy Dunlap wrote:
+> From: Randy Dunlap <rdunlap at infradead.org>
+> 
+> This is a small cleanup to kselftest.rst:
+> 
+> - Fix some language typos in the usage instructions.
+> - Change one non-ASCII space to an ASCII space.
+> 
+> Signed-off-by: Randy Dunlap <rdunlap at infradead.org>
+> Cc: Shuah Khan <shuah at kernel.org>
+> Cc: Jonathan Corbet <corbet at lwn.net>
+> Cc: linux-kselftest at vger.kernel.org
+> Cc: linux-doc at vger.kernel.org
+> ---
+>  Documentation/dev-tools/kselftest.rst |   12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
 
-Fixes: 371e4fcc9d96 ("selftests/bpf: cgroup local storage-based network counters")
-CC: Philip Li <philip.li at intel.com>
-Reported-by: kernel test robot <rong.a.chen at intel.com>
-Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
----
-V2: Fix coding style: remove '{}' and 80+ characters per line
+Thanks for the patch. Here is my Ack for it go through doc tree
 
-Signed-off-by: Li Zhijian <lizhijian at cn.fujitsu.com>
----
- tools/testing/selftests/bpf/test_netcnt.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Acked-by: Shuah Khan <shuah at kernel.org>
 
-diff --git a/tools/testing/selftests/bpf/test_netcnt.c b/tools/testing/selftests/bpf/test_netcnt.c
-index 7887df6..44ed7f2 100644
---- a/tools/testing/selftests/bpf/test_netcnt.c
-+++ b/tools/testing/selftests/bpf/test_netcnt.c
-@@ -81,7 +81,10 @@ int main(int argc, char **argv)
- 		goto err;
- 	}
- 
--	assert(system("ping localhost -6 -c 10000 -f -q > /dev/null") == 0);
-+	if (system("which ping6 &>/dev/null") == 0)
-+		assert(!system("ping6 localhost -c 10000 -f -q > /dev/null"));
-+	else
-+		assert(!system("ping -6 localhost -c 10000 -f -q > /dev/null"));
- 
- 	if (bpf_prog_query(cgroup_fd, BPF_CGROUP_INET_EGRESS, 0, NULL, NULL,
- 			   &prog_cnt)) {
--- 
-2.7.4
+thanks,
+-- Shuah
