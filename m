@@ -1,14 +1,16 @@
-From: jakub.kicinski@netronome.com (Jakub Kicinski)
-Date: Wed, 7 Nov 2018 12:03:40 -0800
+From: quentin.monnet@netronome.com (Quentin Monnet)
+Date: Wed, 7 Nov 2018 20:08:53 +0000
 Subject: [PATCH bpf-next 2/2] bpftool: support loading flow dissector
 In-Reply-To: <20181107193552.77894-3-sdf@google.com>
 References: <20181107193552.77894-1-sdf@google.com>
  <20181107193552.77894-3-sdf@google.com>
-Message-ID: <20181107120340.27001209@cakuba.netronome.com>
+Message-ID: <484ea7f5-0d4c-b828-c5fe-1fd4d9bf847d@netronome.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181107200340.kJJanoBtrWbWPWfTD0PuSLB6HQKUlMkek5E2-ZTXcjA@z>
+Message-ID: <20181107200853.bSyQa9iBeCNKqeLERnZvFWHzXc9GvegIWdKkJCnxhDo@z>
 
-On Wed,  7 Nov 2018 11:35:52 -0800, Stanislav Fomichev wrote:
+Hi Stanislav,
+
+2018-11-07 11:35 UTC-0800 ~ Stanislav Fomichev <sdf at google.com>
 > This commit adds support for loading/attaching/detaching flow
 > dissector program. The structure of the flow dissector program is
 > assumed to be the same as in the selftests:
@@ -38,9 +40,6 @@ On Wed,  7 Nov 2018 11:35:52 -0800, Stanislav Fomichev wrote:
 >  tools/bpf/bpftool/common.c                    |  32 +++--
 >  tools/bpf/bpftool/main.h                      |   1 +
 >  tools/bpf/bpftool/prog.c                      | 135 +++++++++++++++---
-
-Please add the new attach type to bash completions.
-
 >  4 files changed, 141 insertions(+), 43 deletions(-)
 > 
 > diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
@@ -65,6 +64,10 @@ Please add the new attach type to bash completions.
 > -|       *ATTACH_TYPE* := { **msg_verdict** | **skb_verdict** | **skb_parse** }
 > +|       *ATTACH_TYPE* := {
 > +|	|	**msg_verdict** | **skb_verdict** | **skb_parse** | **flow_dissector**
+
+        ^
+Nitpick: Could you please remove the above pipe?
+
 > +|	}
 >  
 >  
@@ -78,12 +81,7 @@ Please add the new attach type to bash completions.
 >                    Attach bpf program *PROG* (with type specified by *ATTACH_TYPE*)
 > -                  to the map *MAP*.
 > +                  to the optional map *MAP*.
-
-Perhaps we can do better on help?  Attach BPF program *PROG* (with type
-specified by *ATTACH_TYPE*).  Most *ATTACH_TYPEs* require a *MAP*
-parameter, with the exception of *flow_dissector* which is attached to
-current networking name space.
-
+>  
 > -        **bpftool prog detach** *PROG* *ATTACH_TYPE* *MAP*
 > +        **bpftool prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
 >                    Detach bpf program *PROG* (with type specified by *ATTACH_TYPE*)
@@ -96,7 +94,45 @@ current networking name space.
 > index 25af85304ebe..963881142dfb 100644
 > --- a/tools/bpf/bpftool/common.c
 > +++ b/tools/bpf/bpftool/common.c
-
+> @@ -169,34 +169,24 @@ int open_obj_pinned_any(char *path, enum bpf_obj_type exp_type)
+>  	return fd;
+>  }
+>  
+> -int do_pin_fd(int fd, const char *name)
+> +int mount_bpffs_for_pin(const char *name)
+>  {
+>  	char err_str[ERR_MAX_LEN];
+>  	char *file;
+>  	char *dir;
+>  	int err = 0;
+>  
+> -	err = bpf_obj_pin(fd, name);
+> -	if (!err)
+> -		goto out;
+> -
+>  	file = malloc(strlen(name) + 1);
+>  	strcpy(file, name);
+>  	dir = dirname(file);
+>  
+> -	if (errno != EPERM || is_bpffs(dir)) {
+> -		p_err("can't pin the object (%s): %s", name, strerror(errno));
+> +	if (is_bpffs(dir)) {
+> +		/* nothing to do if already mounted */
+>  		goto out_free;
+>  	}
+>  
+> -	/* Attempt to mount bpffs, then retry pinning. */
+>  	err = mnt_bpffs(dir, err_str, ERR_MAX_LEN);
+> -	if (!err) {
+> -		err = bpf_obj_pin(fd, name);
+> -		if (err)
+> -			p_err("can't pin the object (%s): %s", name,
+> -			      strerror(errno));
+> -	} else {
+> +	if (err) {
+>  		err_str[ERR_MAX_LEN - 1] = '\0';
+>  		p_err("can't mount BPF file system to pin the object (%s): %s",
+>  		      name, err_str);
 > @@ -204,10 +194,22 @@ int do_pin_fd(int fd, const char *name)
 >  
 >  out_free:
@@ -108,17 +144,10 @@ current networking name space.
 > +int do_pin_fd(int fd, const char *name)
 > +{
 > +	int err = mount_bpffs_for_pin(name);
-
-Please don't initialize the error variable with a non-trivial function
-call.
-
+> +
 > +	if (err) {
 > +		p_err("can't mount bpffs for pin %s: %s",
 > +		      name, strerror(errno));
-
-I think mount_bpffs_for_pin() will already print an error.  We can't
-print two errors, because it will break JSON output.
-
 > +		return err;
 > +	}
 > +
@@ -128,7 +157,18 @@ print two errors, because it will break JSON output.
 >  int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(__u32))
 >  {
 >  	unsigned int id;
-
+> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+> index 28322ace2856..1383824c9baf 100644
+> --- a/tools/bpf/bpftool/main.h
+> +++ b/tools/bpf/bpftool/main.h
+> @@ -129,6 +129,7 @@ const char *get_fd_type_name(enum bpf_obj_type type);
+>  char *get_fdinfo(int fd, const char *key);
+>  int open_obj_pinned(char *path);
+>  int open_obj_pinned_any(char *path, enum bpf_obj_type exp_type);
+> +int mount_bpffs_for_pin(const char *name);
+>  int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(__u32));
+>  int do_pin_fd(int fd, const char *name);
+>  
 > diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
 > index 5302ee282409..f3a07ec3a444 100644
 > --- a/tools/bpf/bpftool/prog.c
@@ -163,10 +203,6 @@ print two errors, because it will break JSON output.
 > -	if (mapfd < 0)
 > -		return mapfd;
 > +	if (argc > 0) {
-
-Flow dissector can't need a map right?  I think explicitly checking for
-the correct number of arguments once attach type is known would be good.
-
 > +		mapfd = map_parse_fd(&argc, &argv);
 > +		if (mapfd < 0)
 > +			return mapfd;
@@ -221,9 +257,7 @@ the correct number of arguments once attach type is known would be good.
 > +	struct bpf_program *pos;
 > +	int i = 0;
 > +	int prog_fd, jmp_table_fd, fd;
-
-Please order variables longest to shortest.
-
+> +
 > +	prog_fd = bpf_program__fd(prog);
 > +	if (prog_fd < 0) {
 > +		p_err("failed to get fd of main prog");
@@ -232,9 +266,6 @@ Please order variables longest to shortest.
 > +
 > +	jmp_table = bpf_object__find_map_by_name(obj, jmp_table_map);
 > +	if (jmp_table == NULL) {
-
-nit: !jmp_table
-
 > +		p_err("failed to find '%s' map", jmp_table_map);
 > +		return -1;
 > +	}
@@ -271,9 +302,6 @@ nit: !jmp_table
 >  	unsigned int old_map_fds = 0;
 > -	struct bpf_program *prog;
 > +	struct bpf_program *prog, *pos;
-
-variable order
-
 >  	struct bpf_object *obj;
 >  	struct bpf_map *map;
 >  	const char *pinfile;
@@ -287,6 +315,10 @@ variable order
 > +		 * section flow_dissector; other progs are tail calls
 > +		 */
 > +		prog = bpf_object__find_program_by_title(obj, "flow_dissector");
+
+Is the section always called like this? Or could we use instead the same
+assumption as above, i.e. the main program is the first one?
+
 > +	} else {
 > +		prog = bpf_program__next(NULL, obj);
 > +	}
@@ -312,6 +344,12 @@ variable order
 > +		bpf_program__set_expected_attach_type(pos,
 > +						      expected_attach_type);
 > +	}
+
+I believe it is possible to load program of several types or attach
+types from a same object file? If so, we would need to get individual
+prog types and attach types for each program with
+libbpf_prog_type_by_name().
+
 >  
 >  	qsort(map_replace, old_map_fds, sizeof(*map_replace),
 >  	      map_replace_compar);
@@ -323,9 +361,6 @@ variable order
 > +	err = mount_bpffs_for_pin(pinfile);
 > +	if (err) {
 > +		p_err("failed to mount bpffs for pin '%s'", pinfile);
-
-Probably would be a duplicated error again?
-
 >  		goto err_close_obj;
 > +	}
 > +
@@ -337,15 +372,18 @@ Probably would be a duplicated error again?
 > +		}
 > +		/* flow dissector consist of multiple programs,
 > +		 * we want to pin them all
-
-Why pin them all shouldn't the main program be the only one pinned?
-
 > +		 */
 > +		err = bpf_object__pin(obj, pinfile);
 > +		if (err) {
 > +			p_err("failed to pin flow dissector object");
 > +			goto err_close_obj;
 > +		}
+
+What happens for the programs previously loaded and pinned in one of the
+program fails? Do they remain loaded and pinned even if all programs
+were not successfully loaded? Or should we consider removing all links
+we added instead and go back to a "clean" state?
+
 > +	} else {
 > +		err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
 > +		if (err) {
@@ -353,4 +391,38 @@ Why pin them all shouldn't the main program be the only one pinned?
 > +			      bpf_program__title(prog, false));
 > +			goto err_close_obj;
 > +		}
+
+I don't have the same opinion as Jakub for pinning :). I was hoping we
+could also load additional programs (for tail calls) for
+non-flow_dissector programs. Could this be an occasion to update the
+code in that direction?
+
 > +	}
+>  
+>  	if (json_output)
+>  		jsonw_null(json_wtr);
+> @@ -1037,8 +1129,8 @@ static int do_help(int argc, char **argv)
+>  		"       %s %s pin   PROG FILE\n"
+>  		"       %s %s load  OBJ  FILE [type TYPE] [dev NAME] \\\n"
+>  		"                         [map { idx IDX | name NAME } MAP]\n"
+> -		"       %s %s attach PROG ATTACH_TYPE MAP\n"
+> -		"       %s %s detach PROG ATTACH_TYPE MAP\n"
+> +		"       %s %s attach PROG ATTACH_TYPE [MAP]\n"
+> +		"       %s %s detach PROG ATTACH_TYPE [MAP]\n"
+>  		"       %s %s help\n"
+>  		"\n"
+>  		"       " HELP_SPEC_MAP "\n"
+> @@ -1050,7 +1142,8 @@ static int do_help(int argc, char **argv)
+>  		"                 cgroup/bind4 | cgroup/bind6 | cgroup/post_bind4 |\n"
+>  		"                 cgroup/post_bind6 | cgroup/connect4 | cgroup/connect6 |\n"
+>  		"                 cgroup/sendmsg4 | cgroup/sendmsg6 }\n"
+> -		"       ATTACH_TYPE := { msg_verdict | skb_verdict | skb_parse }\n"
+> +		"       ATTACH_TYPE := { msg_verdict | skb_verdict | skb_parse |\n"
+> +		"                        flow_dissector }\n"
+>  		"       " HELP_SPEC_OPTIONS "\n"
+>  		"",
+>  		bin_name, argv[-2], bin_name, argv[-2], bin_name, argv[-2],
+> 
+
+Thanks a lot for the set!
+Quentin
