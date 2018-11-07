@@ -1,45 +1,38 @@
 From: sdf at google.com (Stanislav Fomichev)
-Date: Wed,  7 Nov 2018 14:43:54 -0800
-Subject: [PATCH bpf-next 1/3] selftests/bpf: rename flow dissector section to
- flow_dissector
-In-Reply-To: <20181107224356.73080-1-sdf@google.com>
-References: <20181107224356.73080-1-sdf@google.com>
-Message-ID: <20181107224356.73080-2-sdf@google.com>
+Date: Wed,  7 Nov 2018 14:43:53 -0800
+Subject: [PATCH v2 bpf-next 0/3] bpftool: support loading flow dissector
+Message-ID: <20181107224356.73080-1-sdf@google.com>
 
-Makes it compatible with the logic that derives program type
-from section name in libbpf_prog_type_by_name.
+v2 changes:
+* addressed comments/style issues from Jakub Kicinski & Quentin Monnet
+* removed logic that populates jump table
+* added cleanup for partial failure in bpf_object__pin
 
-Signed-off-by: Stanislav Fomichev <sdf at google.com>
----
- tools/testing/selftests/bpf/bpf_flow.c             | 2 +-
- tools/testing/selftests/bpf/test_flow_dissector.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This patch series adds support for loading and attaching flow dissector
+programs from the bpftool:
 
-diff --git a/tools/testing/selftests/bpf/bpf_flow.c b/tools/testing/selftests/bpf/bpf_flow.c
-index 107350a7821d..b9798f558ca7 100644
---- a/tools/testing/selftests/bpf/bpf_flow.c
-+++ b/tools/testing/selftests/bpf/bpf_flow.c
-@@ -116,7 +116,7 @@ static __always_inline int parse_eth_proto(struct __sk_buff *skb, __be16 proto)
- 	return BPF_DROP;
- }
- 
--SEC("dissect")
-+SEC("flow_dissector")
- int _dissect(struct __sk_buff *skb)
- {
- 	if (!skb->vlan_present)
-diff --git a/tools/testing/selftests/bpf/test_flow_dissector.sh b/tools/testing/selftests/bpf/test_flow_dissector.sh
-index c0fb073b5eab..d23d4da66b83 100755
---- a/tools/testing/selftests/bpf/test_flow_dissector.sh
-+++ b/tools/testing/selftests/bpf/test_flow_dissector.sh
-@@ -59,7 +59,7 @@ else
- fi
- 
- # Attach BPF program
--./flow_dissector_load -p bpf_flow.o -s dissect
-+./flow_dissector_load -p bpf_flow.o -s flow_dissector
- 
- # Setup
- tc qdisc add dev lo ingress
+* first patch fixes flow dissector section name in the selftests (so
+  libbpf auto-detection works)
+* second patch adds proper cleanup to bpf_object__pin which is now being
+  used to attach all flow dissector progs/maps
+* third patch adds actual support to the bpftool
+
+See third patch for the description/details.
+
+Stanislav Fomichev (3):
+  selftests/bpf: rename flow dissector section to flow_dissector
+  libbpf: cleanup after partial failure in bpf_object__pin
+  bpftool: support loading flow dissector
+
+ .../bpftool/Documentation/bpftool-prog.rst    | 26 +++--
+ tools/bpf/bpftool/bash-completion/bpftool     |  2 +-
+ tools/bpf/bpftool/common.c                    | 30 +++---
+ tools/bpf/bpftool/main.h                      |  1 +
+ tools/bpf/bpftool/prog.c                      | 94 ++++++++++++++-----
+ tools/lib/bpf/libbpf.c                        | 58 ++++++++++--
+ tools/testing/selftests/bpf/bpf_flow.c        |  2 +-
+ .../selftests/bpf/test_flow_dissector.sh      |  2 +-
+ 8 files changed, 151 insertions(+), 64 deletions(-)
+
 -- 
 2.19.1.930.g4563a0d9d0-goog
