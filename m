@@ -1,31 +1,28 @@
-From: frowand.list at gmail.com (Frank Rowand)
-Date: Wed, 7 Nov 2018 09:46:41 -0800
-Subject: [RFC v2 00/14] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <CAFd5g45Tgcx4RisrCF8QHneR7ELezPfpEPKh_mH8KEUi3skE7g@mail.gmail.com>
-References: <20181023235750.103146-1-brendanhiggins@google.com>
- <f3682d48-6f27-5eef-8274-02f90dd65188@kernel.org>
- <CAFd5g45Tgcx4RisrCF8QHneR7ELezPfpEPKh_mH8KEUi3skE7g@mail.gmail.com>
-Message-ID: <04f677b1-bc44-f004-cf2a-51b47baf0965@gmail.com>
+From: sdf at google.com (Stanislav Fomichev)
+Date: Wed,  7 Nov 2018 11:35:50 -0800
+Subject: [PATCH bpf-next 0/2] bpftool: support loading flow dissector
+Message-ID: <20181107193552.77894-1-sdf@google.com>
 
-On 11/6/18 5:17 PM, Brendan Higgins wrote:
-> On Fri, Nov 2, 2018 at 11:23 AM Shuah Khan <shuah at kernel.org> wrote:
->>
->> Hi Brendan,
-> <snip>
->> Framework looks good. I think it would be helpful to include a real test
-> 
-> Great to hear!
-> 
->> in the patch series to get a feel for how effective it is.
-> 
-> Alright, will do. Rob suggested converting
-> https://elixir.bootlin.com/linux/v4.19/source/drivers/of/unittest.c to
-> KUnit, so that might offer a good comparison.
+This patch series adds support for loading and attaching flow dissector
+programs from the bpftool:
 
-drivers/of/unittest.c might be a bit bigger and more complex test than
-you want to start with.
+* first patch fixes flow dissector section name in the selftests (so
+  libbpf auto-detection works)
+* second patch adds actual support to the bpftool
 
--Frank
+See second patch for the description/details.
 
-< snip >
+Stanislav Fomichev (2):
+  selftests/bpf: rename flow dissector section to flow_dissector
+  bpftool: support loading flow dissector
+
+ .../bpftool/Documentation/bpftool-prog.rst    |  16 ++-
+ tools/bpf/bpftool/common.c                    |  32 +++--
+ tools/bpf/bpftool/main.h                      |   1 +
+ tools/bpf/bpftool/prog.c                      | 135 +++++++++++++++---
+ tools/testing/selftests/bpf/bpf_flow.c        |   2 +-
+ .../selftests/bpf/test_flow_dissector.sh      |   2 +-
+ 6 files changed, 143 insertions(+), 45 deletions(-)
+
+-- 
+2.19.1.930.g4563a0d9d0-goog
