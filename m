@@ -1,49 +1,33 @@
-From: brendanhiggins@google.com (Brendan Higgins)
-Date: Tue, 6 Nov 2018 17:28:43 -0800
-Subject: [RFC v2 01/14] kunit: test: add KUnit test runner core
-In-Reply-To: <017b111f-d960-c1ef-46ae-eb0eb639fe5b@kernel.org>
+From: frowand.list@gmail.com (Frank Rowand)
+Date: Wed, 7 Nov 2018 09:46:41 -0800
+Subject: [RFC v2 00/14] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <CAFd5g45Tgcx4RisrCF8QHneR7ELezPfpEPKh_mH8KEUi3skE7g@mail.gmail.com>
 References: <20181023235750.103146-1-brendanhiggins@google.com>
- <20181023235750.103146-2-brendanhiggins@google.com>
- <017b111f-d960-c1ef-46ae-eb0eb639fe5b@kernel.org>
-Message-ID:
- <CAFd5g45KNNGPVh4EBm8vKGdVhqajZZA0TU=CFbceJziYufb0Ug@mail.gmail.com>
+ <f3682d48-6f27-5eef-8274-02f90dd65188@kernel.org>
+ <CAFd5g45Tgcx4RisrCF8QHneR7ELezPfpEPKh_mH8KEUi3skE7g@mail.gmail.com>
+Message-ID: <04f677b1-bc44-f004-cf2a-51b47baf0965@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181107012843._4iFhnifh9qlTBId2NffWopX_9Os2lYZz6WdhA84mVc@z>
+Message-ID: <20181107174641.opdLjSwPSPm_P2nq_9BpPMWHk57SGMRgCQWBDGS6DMY@z>
 
-On Fri, Nov 2, 2018@11:44 AM Shuah Khan <shuah@kernel.org> wrote:
->
-> On 10/23/2018 05:57 PM, Brendan Higgins wrote:
-<snip>
-> > + * Example:
-> > + *
-> > + * .. code-block:: c
-> > + *
-> > + *   void add_test_basic(struct test *test)
-> > + *   {
-> > + *           TEST_EXPECT_EQ(test, 1, add(1, 0));
-> > + *           TEST_EXPECT_EQ(test, 2, add(1, 1));
-> > + *           TEST_EXPECT_EQ(test, 0, add(-1, 1));
-> > + *           TEST_EXPECT_EQ(test, INT_MAX, add(0, INT_MAX));
-> > + *           TEST_EXPECT_EQ(test, -1, add(INT_MAX, INT_MIN));
-> > + *   }
-> > + *
-> > + *   static struct test_case example_test_cases[] = {
-> > + *           TEST_CASE(add_test_basic),
-> > + *           {},
-> > + *   };
-> > + *
-> > + */
-> > +struct test_case {
-> > +     void (*run_case)(struct test *test);
-> > +     const char name[256];
-> > +
-> > +     /* private: internal use only. */
-> > +     bool success;
-> > +};
-> > +
->
-> Introducing a prefix kunit_* might be a good idea for the API.
-> This comment applies to the rest of patches as well.
+On 11/6/18 5:17 PM, Brendan Higgins wrote:
+> On Fri, Nov 2, 2018@11:23 AM Shuah Khan <shuah@kernel.org> wrote:
+>>
+>> Hi Brendan,
+> <snip>
+>> Framework looks good. I think it would be helpful to include a real test
+> 
+> Great to hear!
+> 
+>> in the patch series to get a feel for how effective it is.
+> 
+> Alright, will do. Rob suggested converting
+> https://elixir.bootlin.com/linux/v4.19/source/drivers/of/unittest.c to
+> KUnit, so that might offer a good comparison.
 
-What about kunit_* instead of test_* and kmock_* instead of mock_*?
-Does that seem reasonable?
+drivers/of/unittest.c might be a bit bigger and more complex test than
+you want to start with.
+
+-Frank
+
+< snip >
