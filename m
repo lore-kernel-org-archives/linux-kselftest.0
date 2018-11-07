@@ -1,124 +1,138 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Tue, 6 Nov 2018 17:15:01 -0500
-Subject: [PATCH v3 1/2] kretprobe: produce sane stack traces
-In-Reply-To: <20181104115913.74l4yzecisvtt2j5@yavin>
-References: <20181101083551.3805-1-cyphar@cyphar.com>
- <20181101083551.3805-2-cyphar@cyphar.com>
- <20181101204720.6ed3fe37@vmware.local.home>
- <20181102050509.tw3dhvj5urudvtjl@yavin>
- <20181102065932.bdt4pubbrkvql4mp@yavin>
- <20181102091658.1bc979a4@gandalf.local.home>
- <20181103070253.ajrqzs5xu2vf5stu@yavin>
- <20181104115913.74l4yzecisvtt2j5@yavin>
-Message-ID: <20181106171501.59ccabbc@gandalf.local.home>
+From: brendanhiggins at google.com (Brendan Higgins)
+Date: Tue, 6 Nov 2018 17:17:27 -0800
+Subject: [RFC v2 00/14] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <f3682d48-6f27-5eef-8274-02f90dd65188@kernel.org>
+References: <20181023235750.103146-1-brendanhiggins@google.com>
+ <f3682d48-6f27-5eef-8274-02f90dd65188@kernel.org>
+Message-ID: <CAFd5g45Tgcx4RisrCF8QHneR7ELezPfpEPKh_mH8KEUi3skE7g@mail.gmail.com>
 
-On Sun, 4 Nov 2018 22:59:13 +1100
-Aleksa Sarai <cyphar at cyphar.com> wrote:
+On Fri, Nov 2, 2018 at 11:23 AM Shuah Khan <shuah at kernel.org> wrote:
+>
+> Hi Brendan,
+<snip>
+> Framework looks good. I think it would be helpful to include a real test
 
-> The same issue is present in __save_stack_trace
-> (arch/x86/kernel/stacktrace.c). This is likely the only reason that --
-> as Steven said -- stacktraces wouldn't work with ftrace-graph (and thus
-> with the refactor both of you are discussing).
+Great to hear!
 
-By the way, I was playing with the the orc unwinder and stack traces
-from the function graph tracer return code, and got it working with the
-below patch. Caution, that patch also has a stack trace hardcoded in
-the return path of the function graph tracer, so you don't want to run
-function graph tracing without filtering.
+> in the patch series to get a feel for how effective it is.
 
-You can apply the patch and do:
+Alright, will do. Rob suggested converting
+https://elixir.bootlin.com/linux/v4.19/source/drivers/of/unittest.c to
+KUnit, so that might offer a good comparison.
 
- # cd /sys/kernel/debug/tracing
- # echo schedule > set_ftrace_filter
- # echo function_graph > current_tracer
- # cat trace
+>
+> On one hand, KUnit stands on its own as its own and maybe it should be placed in
+> under tools/testing/KUnit, however I am wondering would it be beneficial for the
+> framework to under selftests.
+>
+> I am a bit concerned about the number of test framework we have at the moment and
+> are we running the risk of fragmenting the landscape. I am concerned if this would
+> lead to developer confusion as to where to add tests.
 
- 3)               |  schedule() {
-     rcu_preempt-10    [003] ....    91.160297: <stack trace>
- => ftrace_return_to_handler
- => return_to_handler
- => schedule_timeout
- => rcu_gp_kthread
- => kthread
- => ret_from_fork
- 3) # 4009.085 us |  }
- 3)               |  schedule() {
-     kworker/1:0-17    [001] ....    91.163288: <stack trace>
- => ftrace_return_to_handler
- => return_to_handler
- => worker_thread
- => kthread
- => ret_from_fork
- 1) # 7000.070 us |  }
- 1)               |  schedule() {
-     rcu_preempt-10    [003] ....    91.164311: <stack trace>
- => ftrace_return_to_handler
- => return_to_handler
- => schedule_timeout
- => rcu_gp_kthread
- => kthread
- => ret_from_fork
- 3) # 4006.540 us |  }
+On one hand separating them makes sense because they are different
+things. kselftest seems to do its job, writing end-to-end tests,
+pretty well. Trying to associate KUnit with it could also be confusing
+since they have different requirements and should be used for
+different things. But on the other hand, you are right, it would be
+nice to have a coherent experience for developers. In either case, we
+will still need developers to understand when they should be writing
+unit tests and when they should be writing end-to-end tests. So in the
+end, I don't think it will matter too much, we will still need to
+address this confusion either way.
 
+The main reason I made it separate was just because I thought people
+would find it strange to have essentially normal kernel code depend on
+something in `tools/testing/`. You, me, and Greg had talked about this
+elsewhere, in summary, I am trying to do in-tree unit testing, so
+tests should live side-by-side with the code it tests, and the tests
+run at the same level of abstraction as the code that is under test.
+The tests do not run as userspace programs on an installed kernel
+under test. The goal is to be able to run arbitrary kernel code in
+isolation.
 
-Where just adding the stack trace without the other code, these traces
-ended at "return_to_handler".
+Although it would be *possible* to put KUnit under `tools/testing/`,
+my understanding is that `tools/testing/` is for programs that compile
+independently of the kernel, rather they do not link against anything
+built-in to the kernel. (I saw there are some test drivers, but they
+seem to be modeled as out of tree drivers that have no option to be
+built into the kernel.) KUnit does not fall into this category as
+KUnit links directly against arbitrary kernel code, and actually
+reuses kernel infrastructure to provide an environment to run kernel
+code in.
 
-This patch is not for inclusion, it was just a test to see how to make
-this work.
+I do not feel strongly about where KUnit lives, but by my
+understanding, putting KUnit in `tools/testing/` might break
+assumptions about the relationship between `tools/` and the rest of
+the kernel.
 
--- Steve
+I know you previously said that there are unit tests under kselftest
+(like maybe this one:
+https://elixir.bootlin.com/linux/v4.19/source/lib/locking-selftest.c
+?). I agree that something like this example is trying to be a unit
+test, but the kselftest infrastructure is built around the idea of
+booting kernels and running tests against them; I know that some
+kselftests load test modules, but the point is the intention is to run
+the kernel somewhere. My end goal with KUnit is that we should not
+need to run a kernel anywhere (I know right now I am using UML, but
+the goal is to get away from that). So I think that decidedly makes
+them two different things.
 
-diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-index 91b2cff4b79a..4bcd646ae1f4 100644
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -320,13 +320,15 @@ ENTRY(ftrace_graph_caller)
- ENDPROC(ftrace_graph_caller)
- 
- ENTRY(return_to_handler)
--	UNWIND_HINT_EMPTY
--	subq  $24, %rsp
-+	subq $8, %rsp
-+	UNWIND_HINT_FUNC
-+	subq  $16, %rsp
- 
- 	/* Save the return values */
- 	movq %rax, (%rsp)
- 	movq %rdx, 8(%rsp)
- 	movq %rbp, %rdi
-+	leaq 16(%rsp), %rsi
- 
- 	call ftrace_return_to_handler
- 
-diff --git a/kernel/trace/trace_functions_graph.c b/kernel/trace/trace_functions_graph.c
-index 169b3c44ee97..aaeca73218cc 100644
---- a/kernel/trace/trace_functions_graph.c
-+++ b/kernel/trace/trace_functions_graph.c
-@@ -242,13 +242,16 @@ ftrace_pop_return_trace(struct ftrace_graph_ret *trace, unsigned long *ret,
- 	trace->calltime = current->ret_stack[index].calltime;
- 	trace->overrun = atomic_read(&current->trace_overrun);
- 	trace->depth = index;
-+
-+	trace_dump_stack(0);
- }
- 
- /*
-  * Send the trace to the ring-buffer.
-  * @return the original return address.
-  */
--unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
-+unsigned long ftrace_return_to_handler(unsigned long frame_pointer,
-+	unsigned long *ptr)
- {
- 	struct ftrace_graph_ret trace;
- 	unsigned long ret;
-@@ -257,6 +260,8 @@ unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
- 	trace.rettime = trace_clock_local();
- 	barrier();
- 	current->curr_ret_stack--;
-+	*ptr = ret;
-+
- 	/*
- 	 * The curr_ret_stack can be less than -1 only if it was
- 	 * filtered out and it's about to return from the function.
+The number of test frameworks is a problem, I definitely agree with
+that. Most of the other tests I have seen for the kernel are
+indisputably end-to-end tests; it seems that kselftest is decidedly
+the favorite, maybe we should move those under kselftest?
+
+I know there are other things that don't fit. Maybe we could start off
+with some suggestions for best practices for what to use and when?
+>
+> That being said, I don't have a strong opinion one way or the other.
+
+I think it is pretty common on other projects to have unit tests
+separated from end-to-end tests in some way or another. You want to be
+able to run unit tests quickly and all the time, whereas you usually
+only want to run your end-to-end tests when you make a submission or a
+release. Regardless of where we put KUnit and what its relationship to
+kselftest becomes, we should definitely make it easy to run unit tests
+separate from all the end-to-end tests.
+>
+> btw I started playing with kunit following the instructions and ran into problems:
+>
+> ./tools/testing/kunit/kunit.py
+> usage: kunit.py [-h] {run,new} ...
+>
+> Helps writing and running KUnit tests.
+>
+> positional arguments:
+>   {run,new}
+>     run       Runs KUnit tests.
+>     new       Prints out boilerplate for writing new tests.
+>
+> optional arguments:
+>   -h, --help  show this help message and exit
+>
+> ./tools/testing/kunit/kunit.py run
+> Regenerating .config ...
+> ERROR:root:Provided Kconfig is not contained in validated .config!
+
+Oh sorry, I need to write some documentation for that.
+
+I take it you checked out
+https://kunit.googlesource.com/linux/+/kunit/alpha/master ?
+
+If so, you need a "kunitconfig" in the root of your kernel source with
+the following Kconfig options:
+CONFIG_TEST=y
+CONFIG_TEST_TEST=y
+CONFIG_EXAMPLE_TEST=y
+
+I am guessing what happened is that you used the "stable" branch which
+we have been using internally, but follow the instructions I posted
+for this patchset. Some of the Kconfig options have deviated between
+them. Sorry about the confusion.
+
+>
+> thanks,
+> -- Shuah
+
+Thank you!
