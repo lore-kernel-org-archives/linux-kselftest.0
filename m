@@ -1,52 +1,47 @@
-From: sdf@fomichev.me (Stanislav Fomichev)
-Date: Wed, 7 Nov 2018 14:15:06 -0800
-Subject: [PATCH bpf-next 2/2] bpftool: support loading flow dissector
-In-Reply-To: <6628387d-cf89-573f-7b9c-2d49ef19634e@netronome.com>
-References: <20181107193552.77894-1-sdf@google.com>
- <20181107193552.77894-3-sdf@google.com>
- <484ea7f5-0d4c-b828-c5fe-1fd4d9bf847d@netronome.com>
- <20181107123231.6d2f4782@cakuba.netronome.com>
- <6628387d-cf89-573f-7b9c-2d49ef19634e@netronome.com>
-Message-ID: <20181107221506.ha4c7wr4p2zswgjd@mini-arch>
+From: sdf@google.com (Stanislav Fomichev)
+Date: Wed,  7 Nov 2018 14:43:54 -0800
+Subject: [PATCH bpf-next 1/3] selftests/bpf: rename flow dissector section to
+ flow_dissector
+In-Reply-To: <20181107224356.73080-1-sdf@google.com>
+References: <20181107224356.73080-1-sdf@google.com>
+Message-ID: <20181107224356.73080-2-sdf@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181107221506.Utt8CsM_sK58tFYYDD16lVLz1KWNdINu6HXXWfAel54@z>
+Message-ID: <20181107224354.nqsV2_udeZcQrF6Iq_ordLanJdhnBjbC9c3jSQ82zxc@z>
 
-On 11/07, Quentin Monnet wrote:
-> 2018-11-07 12:32 UTC-0800 ~ Jakub Kicinski <jakub.kicinski at netronome.com>
-> > On Wed, 7 Nov 2018 20:08:53 +0000, Quentin Monnet wrote:
-> > > > +		err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
-> > > > +		if (err) {
-> > > > +			p_err("failed to pin program %s",
-> > > > +			      bpf_program__title(prog, false));
-> > > > +			goto err_close_obj;
-> > > > +		}
-> > > 
-> > > I don't have the same opinion as Jakub for pinning :). I was hoping we
-> > > could also load additional programs (for tail calls) for
-> > > non-flow_dissector programs. Could this be an occasion to update the
-> > > code in that direction?
-> > 
-> > Do you mean having the bpftool construct an array for tail calling
-> > automatically when loading an object?  Or do a "mass pin" of all
-> > programs in an object file?
-> > 
-> > I'm not convinced about this strategy of auto assembling a tail call
-> > array by assuming that a flow dissector object carries programs for
-> > protocols in order (apart from the main program which doesn't have to
-> > be first, for some reason).
-> 
-> Not constructing the prog array, I don't think this should be the role of
-> bpftool either. Much more a "mass pin", so that you have a link to each
-> program loaded from the object file and can later add them to a prog array
-> map with subsequent calls to bpftool.
-I agree, constructing the jmp_table is a bit fragile with all the
-dependencies on the order of the progs. I'll drop that and will send a
-v2 that pins all the programs from the obj file instead and offloads
-jmp_table construction to the user. So the supposed use case would be
-something like the following:
+Makes it compatible with the logic that derives program type
+from section name in libbpf_prog_type_by_name.
 
-bpftool prog load bpf_flow.o /sys/fs/bpf/flow type flow_dissector
-bpftool map update pinned /sys/fs/bpf/flow/jmp_table \
-	key ... value pinned /sys/fs/bpf/flow/<PROTO>/0
-bpftool map update ...
-bpftool prog attach pinned /sys/fs/bpf/flow/flow_dissector/0 flow_dissector
+Signed-off-by: Stanislav Fomichev <sdf at google.com>
+---
+ tools/testing/selftests/bpf/bpf_flow.c             | 2 +-
+ tools/testing/selftests/bpf/test_flow_dissector.sh | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/bpf_flow.c b/tools/testing/selftests/bpf/bpf_flow.c
+index 107350a7821d..b9798f558ca7 100644
+--- a/tools/testing/selftests/bpf/bpf_flow.c
++++ b/tools/testing/selftests/bpf/bpf_flow.c
+@@ -116,7 +116,7 @@ static __always_inline int parse_eth_proto(struct __sk_buff *skb, __be16 proto)
+ 	return BPF_DROP;
+ }
+ 
+-SEC("dissect")
++SEC("flow_dissector")
+ int _dissect(struct __sk_buff *skb)
+ {
+ 	if (!skb->vlan_present)
+diff --git a/tools/testing/selftests/bpf/test_flow_dissector.sh b/tools/testing/selftests/bpf/test_flow_dissector.sh
+index c0fb073b5eab..d23d4da66b83 100755
+--- a/tools/testing/selftests/bpf/test_flow_dissector.sh
++++ b/tools/testing/selftests/bpf/test_flow_dissector.sh
+@@ -59,7 +59,7 @@ else
+ fi
+ 
+ # Attach BPF program
+-./flow_dissector_load -p bpf_flow.o -s dissect
++./flow_dissector_load -p bpf_flow.o -s flow_dissector
+ 
+ # Setup
+ tc qdisc add dev lo ingress
+-- 
+2.19.1.930.g4563a0d9d0-goog
