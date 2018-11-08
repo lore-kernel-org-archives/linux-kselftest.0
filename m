@@ -1,115 +1,49 @@
-From: joel@joelfernandes.org (Joel Fernandes (Google))
-Date: Wed,  7 Nov 2018 20:15:37 -0800
-Subject: [PATCH v3 resend 2/2] selftests/memfd: Add tests for
- F_SEAL_FUTURE_WRITE seal
-In-Reply-To: <20181108041537.39694-1-joel@joelfernandes.org>
-References: <20181108041537.39694-1-joel@joelfernandes.org>
-Message-ID: <20181108041537.39694-2-joel@joelfernandes.org>
+From: sdf@google.com (Stanislav Fomichev)
+Date: Wed,  7 Nov 2018 21:39:53 -0800
+Subject: [PATCH v3 bpf-next 0/4] bpftool: support loading flow dissector
+Message-ID: <20181108053957.205681-1-sdf@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181108041537.QM_gLALwQkcKihp_jLP_L8-0UbBlbNBdLlfab2_lusU@z>
+Message-ID: <20181108053953.ZY6G52c2xfRm7MV7ScAOBQx5EG2F1I6zJibnW00viYQ@z>
 
-Add tests to verify sealing memfds with the F_SEAL_FUTURE_WRITE works as
-expected.
+v3 changes:
+* (maybe) better cleanup for partial failure in bpf_object__pin
+* added special case in bpf_program__pin for programs with single
+  instances
 
-Cc: dancol at google.com
-Cc: minchan at kernel.org
-Reviewed-by: John Stultz <john.stultz at linaro.org>
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
- tools/testing/selftests/memfd/memfd_test.c | 74 ++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+v2 changes:
+* addressed comments/style issues from Jakub Kicinski & Quentin Monnet
+* removed logic that populates jump table
+* added cleanup for partial failure in bpf_object__pin
 
-diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-index 10baa1652fc2..32b207ca7372 100644
---- a/tools/testing/selftests/memfd/memfd_test.c
-+++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -692,6 +692,79 @@ static void test_seal_write(void)
- 	close(fd);
- }
- 
-+/*
-+ * Test SEAL_FUTURE_WRITE
-+ * Test whether SEAL_FUTURE_WRITE actually prevents modifications.
-+ */
-+static void test_seal_future_write(void)
-+{
-+	int fd;
-+	void *p;
-+
-+	printf("%s SEAL-FUTURE-WRITE\n", memfd_str);
-+
-+	fd = mfd_assert_new("kern_memfd_seal_future_write",
-+			    mfd_def_size,
-+			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
-+
-+	p = mfd_assert_mmap_shared(fd);
-+
-+	mfd_assert_has_seals(fd, 0);
-+	/* Not adding grow/shrink seals makes the future write
-+	 * seal fail to get added
-+	 */
-+	mfd_fail_add_seals(fd, F_SEAL_FUTURE_WRITE);
-+
-+	mfd_assert_add_seals(fd, F_SEAL_GROW);
-+	mfd_assert_has_seals(fd, F_SEAL_GROW);
-+
-+	/* Should still fail since shrink seal has
-+	 * not yet been added
-+	 */
-+	mfd_fail_add_seals(fd, F_SEAL_FUTURE_WRITE);
-+
-+	mfd_assert_add_seals(fd, F_SEAL_SHRINK);
-+	mfd_assert_has_seals(fd, F_SEAL_GROW |
-+				 F_SEAL_SHRINK);
-+
-+	/* Now should succeed, also verifies that the seal
-+	 * could be added with an existing writable mmap
-+	 */
-+	mfd_assert_add_seals(fd, F_SEAL_FUTURE_WRITE);
-+	mfd_assert_has_seals(fd, F_SEAL_SHRINK |
-+				 F_SEAL_GROW |
-+				 F_SEAL_FUTURE_WRITE);
-+
-+	/* read should pass, writes should fail */
-+	mfd_assert_read(fd);
-+	mfd_fail_write(fd);
-+
-+	munmap(p, mfd_def_size);
-+	close(fd);
-+
-+	/* Test adding all seals (grow, shrink, future write) at once */
-+	fd = mfd_assert_new("kern_memfd_seal_future_write2",
-+			    mfd_def_size,
-+			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
-+
-+	p = mfd_assert_mmap_shared(fd);
-+
-+	mfd_assert_has_seals(fd, 0);
-+	mfd_assert_add_seals(fd, F_SEAL_SHRINK |
-+				 F_SEAL_GROW |
-+				 F_SEAL_FUTURE_WRITE);
-+	mfd_assert_has_seals(fd, F_SEAL_SHRINK |
-+				 F_SEAL_GROW |
-+				 F_SEAL_FUTURE_WRITE);
-+
-+	/* read should pass, writes should fail */
-+	mfd_assert_read(fd);
-+	mfd_fail_write(fd);
-+
-+	munmap(p, mfd_def_size);
-+	close(fd);
-+}
-+
- /*
-  * Test SEAL_SHRINK
-  * Test whether SEAL_SHRINK actually prevents shrinking
-@@ -945,6 +1018,7 @@ int main(int argc, char **argv)
- 	test_basic();
- 
- 	test_seal_write();
-+	test_seal_future_write();
- 	test_seal_shrink();
- 	test_seal_grow();
- 	test_seal_resize();
+This patch series adds support for loading and attaching flow dissector
+programs from the bpftool:
+
+* first patch fixes flow dissector section name in the selftests (so
+  libbpf auto-detection works)
+* second patch adds proper cleanup to bpf_object__pin which is now being
+  used to attach all flow dissector progs/maps
+* third patch adds special case in bpf_program__pin for programs with
+  single instances (we don't create <prog>/0 pin anymore, just <prog>)
+* forth patch adds actual support to the bpftool
+
+See forth patch for the description/details.
+
+Stanislav Fomichev (4):
+  selftests/bpf: rename flow dissector section to flow_dissector
+  libbpf: cleanup after partial failure in bpf_object__pin
+  libbpf: bpf_program__pin: add special case for instances.nr == 1
+  bpftool: support loading flow dissector
+
+ .../bpftool/Documentation/bpftool-prog.rst    |  36 ++-
+ tools/bpf/bpftool/bash-completion/bpftool     |   6 +-
+ tools/bpf/bpftool/common.c                    |  30 +-
+ tools/bpf/bpftool/main.h                      |   1 +
+ tools/bpf/bpftool/prog.c                      | 112 ++++++--
+ tools/lib/bpf/libbpf.c                        | 258 ++++++++++++++++--
+ tools/lib/bpf/libbpf.h                        |  11 +
+ tools/testing/selftests/bpf/bpf_flow.c        |   2 +-
+ .../selftests/bpf/test_flow_dissector.sh      |   2 +-
+ 9 files changed, 368 insertions(+), 90 deletions(-)
+
 -- 
 2.19.1.930.g4563a0d9d0-goog
