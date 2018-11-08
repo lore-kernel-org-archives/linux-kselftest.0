@@ -1,55 +1,189 @@
-From: sdf@fomichev.me (Stanislav Fomichev)
-Date: Wed, 7 Nov 2018 16:40:23 -0800
-Subject: [PATCH bpf-next 3/3] bpftool: support loading flow dissector
-In-Reply-To: <20181107154155.4e7ca3b3@cakuba.netronome.com>
-References: <20181107224356.73080-1-sdf@google.com>
- <20181107224356.73080-4-sdf@google.com>
- <20181107150944.5d5480ba@cakuba.netronome.com>
- <20181107231333.n34ffy4dl6rtbs7e@mini-arch>
- <20181107152917.729ea83c@cakuba.netronome.com>
- <20181107233448.r7vcnxtdzfnzegas@mini-arch>
- <20181107154155.4e7ca3b3@cakuba.netronome.com>
-Message-ID: <20181108004023.4zwhen2xj6yolf5e@mini-arch>
+From: joel@joelfernandes.org (Joel Fernandes (Google))
+Date: Wed,  7 Nov 2018 20:15:36 -0800
+Subject: [PATCH v3 resend 1/2] mm: Add an F_SEAL_FUTURE_WRITE seal to memfd
+Message-ID: <20181108041537.39694-1-joel@joelfernandes.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181108004023.61E_EyG-gEQZUOXAxA_RqCPF1TEpr-_mIAOpygBT8MY@z>
+Message-ID: <20181108041536.U9XOJWv-737N-O5h7g-cBCiRiVRgvldnKlThRLp4uvU@z>
 
-On 11/07, Jakub Kicinski wrote:
-> On Wed, 7 Nov 2018 15:34:48 -0800, Stanislav Fomichev wrote:
-> > On 11/07, Jakub Kicinski wrote:
-> > > On Wed, 7 Nov 2018 15:13:33 -0800, Stanislav Fomichev wrote:  
-> > > > On 11/07, Jakub Kicinski wrote:  
-> > > > > On Wed,  7 Nov 2018 14:43:56 -0800, Stanislav Fomichev wrote:    
-> > > > > > bpftool map update pinned /sys/fs/bpf/flow/jmp_table \
-> > > > > >         key 0 0 0 0 \
-> > > > > >         value pinned /sys/fs/bpf/flow/IP/0    
-> > > > > 
-> > > > > Where is that /0 coming from ?  Is that in source code?  I don't see
-> > > > > libbpf adding it, maybe I'm missing something.    
-> > > > libbpf adds that, that's a program instance:
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/lib/bpf/libbpf.c#n1744  
-> > > 
-> > > Ugh, I was looking at bpf_object__pin() which uses names :(
-> > > 
-> > > We never use this multi-instance thing, and I don't think bpftool ever
-> > > will, so IMHO it'd be good if we just re-did the pinning loop in
-> > > bpftool.  
-> > I wonder whether I should just add special case to bpf_program__pin: don't
-> > create a subdir when instances.nr == 1 (and just create a file pin for
-> > single instance)? In that case I can continue to use libbpf and don't reinvent
-> > the wheel. Any objections?
-> 
-> Mm.. I'm afraid libbpf needs to keep backward compatibility.  We'd have
-> to add some way for the user (bpftool code) to request the instance ID
-> does not appear, but (potential) existing users should keep seeing them.
-> Perhaps others disagree.
-AFAICT, nobody (seriously) uses bpf_object__pin in the kernel tree and I
-have a feeling that the situation is the same outside of the kernel tree.
-We can revert/work around if we break somebody, I just don't want to
-reimplement the same code in bpftool while there is a possibility that
-nobody is using that.
+Android uses ashmem for sharing memory regions. We are looking forward
+to migrating all usecases of ashmem to memfd so that we can possibly
+remove the ashmem driver in the future from staging while also
+benefiting from using memfd and contributing to it. Note staging drivers
+are also not ABI and generally can be removed at anytime.
 
-I'll post my proposal as v3, let's see whether other people have
-the same objections.
+One of the main usecases Android has is the ability to create a region
+and mmap it as writeable, then add protection against making any
+"future" writes while keeping the existing already mmap'ed
+writeable-region active.  This allows us to implement a usecase where
+receivers of the shared memory buffer can get a read-only view, while
+the sender continues to write to the buffer.
+See CursorWindow documentation in Android for more details:
+https://developer.android.com/reference/android/database/CursorWindow
 
-Btw, did we officially commit to the libbpf api/abi somewhere? It always
-felt to me like an internal and work-in-progress library.
+This usecase cannot be implemented with the existing F_SEAL_WRITE seal.
+To support the usecase, this patch adds a new F_SEAL_FUTURE_WRITE seal
+which prevents any future mmap and write syscalls from succeeding while
+keeping the existing mmap active. The following program shows the seal
+working in action:
+
+ #include <stdio.h>
+ #include <errno.h>
+ #include <sys/mman.h>
+ #include <linux/memfd.h>
+ #include <linux/fcntl.h>
+ #include <asm/unistd.h>
+ #include <unistd.h>
+ #define F_SEAL_FUTURE_WRITE 0x0010
+ #define REGION_SIZE (5 * 1024 * 1024)
+
+int memfd_create_region(const char *name, size_t size)
+{
+    int ret;
+    int fd = syscall(__NR_memfd_create, name, MFD_ALLOW_SEALING);
+    if (fd < 0) return fd;
+    ret = ftruncate(fd, size);
+    if (ret < 0) { close(fd); return ret; }
+    return fd;
+}
+
+int main() {
+    int ret, fd;
+    void *addr, *addr2, *addr3, *addr1;
+    ret = memfd_create_region("test_region", REGION_SIZE);
+    printf("ret=%d\n", ret);
+    fd = ret;
+
+    // Create map
+    addr = mmap(0, REGION_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+    if (addr == MAP_FAILED)
+	    printf("map 0 failed\n");
+    else
+	    printf("map 0 passed\n");
+
+    if ((ret = write(fd, "test", 4)) != 4)
+	    printf("write failed even though no future-write seal "
+		   "(ret=%d errno =%d)\n", ret, errno);
+    else
+	    printf("write passed\n");
+
+    addr1 = mmap(0, REGION_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+    if (addr1 == MAP_FAILED)
+	    perror("map 1 prot-write failed even though no seal\n");
+    else
+	    printf("map 1 prot-write passed as expected\n");
+
+    ret = fcntl(fd, F_ADD_SEALS, F_SEAL_FUTURE_WRITE |
+				 F_SEAL_GROW |
+				 F_SEAL_SHRINK);
+    if (ret == -1)
+	    printf("fcntl failed, errno: %d\n", errno);
+    else
+	    printf("future-write seal now active\n");
+
+    if ((ret = write(fd, "test", 4)) != 4)
+	    printf("write failed as expected due to future-write seal\n");
+    else
+	    printf("write passed (unexpected)\n");
+
+    addr2 = mmap(0, REGION_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+    if (addr2 == MAP_FAILED)
+	    perror("map 2 prot-write failed as expected due to seal\n");
+    else
+	    printf("map 2 passed\n");
+
+    addr3 = mmap(0, REGION_SIZE, PROT_READ, MAP_SHARED, fd, 0);
+    if (addr3 == MAP_FAILED)
+	    perror("map 3 failed\n");
+    else
+	    printf("map 3 prot-read passed as expected\n");
+}
+
+The output of running this program is as follows:
+ret=3
+map 0 passed
+write passed
+map 1 prot-write passed as expected
+future-write seal now active
+write failed as expected due to future-write seal
+map 2 prot-write failed as expected due to seal
+: Permission denied
+map 3 prot-read passed as expected
+
+Cc: jreck at google.com
+Cc: john.stultz at linaro.org
+Cc: tkjos at google.com
+Cc: gregkh at linuxfoundation.org
+Cc: hch at infradead.org
+Reviewed-by: John Stultz <john.stultz at linaro.org>
+Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+---
+v1->v2: No change, just added selftests to the series. manpages are
+ready and I'll submit them once the patches are accepted.
+
+v2->v3: Updated commit message to have more support code (John Stultz)
+ 	Renamed seal from F_SEAL_FS_WRITE to F_SEAL_FUTURE_WRITE
+						(Christoph Hellwig)
+	Allow for this seal only if grow/shrink seals are also
+	either previous set, or are requested along with this seal.
+						(Christoph Hellwig)
+	Added locking to synchronize access to file->f_mode.
+						(Christoph Hellwig)
+
+ include/uapi/linux/fcntl.h |  1 +
+ mm/memfd.c                 | 22 +++++++++++++++++++++-
+ 2 files changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
+index 6448cdd9a350..a2f8658f1c55 100644
+--- a/include/uapi/linux/fcntl.h
++++ b/include/uapi/linux/fcntl.h
+@@ -41,6 +41,7 @@
+ #define F_SEAL_SHRINK	0x0002	/* prevent file from shrinking */
+ #define F_SEAL_GROW	0x0004	/* prevent file from growing */
+ #define F_SEAL_WRITE	0x0008	/* prevent writes */
++#define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
+ /* (1U << 31) is reserved for signed error codes */
+ 
+ /*
+diff --git a/mm/memfd.c b/mm/memfd.c
+index 2bb5e257080e..5ba9804e9515 100644
+--- a/mm/memfd.c
++++ b/mm/memfd.c
+@@ -150,7 +150,8 @@ static unsigned int *memfd_file_seals_ptr(struct file *file)
+ #define F_ALL_SEALS (F_SEAL_SEAL | \
+ 		     F_SEAL_SHRINK | \
+ 		     F_SEAL_GROW | \
+-		     F_SEAL_WRITE)
++		     F_SEAL_WRITE | \
++		     F_SEAL_FUTURE_WRITE)
+ 
+ static int memfd_add_seals(struct file *file, unsigned int seals)
+ {
+@@ -219,6 +220,25 @@ static int memfd_add_seals(struct file *file, unsigned int seals)
+ 		}
+ 	}
+ 
++	if ((seals & F_SEAL_FUTURE_WRITE) &&
++	    !(*file_seals & F_SEAL_FUTURE_WRITE)) {
++		/*
++		 * The FUTURE_WRITE seal also prevents growing and shrinking
++		 * so we need them to be already set, or requested now.
++		 */
++		int test_seals = (seals | *file_seals) &
++				 (F_SEAL_GROW | F_SEAL_SHRINK);
++
++		if (test_seals != (F_SEAL_GROW | F_SEAL_SHRINK)) {
++			error = -EINVAL;
++			goto unlock;
++		}
++
++		spin_lock(&file->f_lock);
++		file->f_mode &= ~(FMODE_WRITE | FMODE_PWRITE);
++		spin_unlock(&file->f_lock);
++	}
++
+ 	*file_seals |= seals;
+ 	error = 0;
+ 
+-- 
+2.19.1.930.g4563a0d9d0-goog
