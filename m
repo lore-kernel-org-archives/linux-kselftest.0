@@ -1,47 +1,55 @@
 From: sdf@google.com (Stanislav Fomichev)
-Date: Wed,  7 Nov 2018 21:39:54 -0800
-Subject: [PATCH v3 bpf-next 1/4] selftests/bpf: rename flow dissector section
- to flow_dissector
+Date: Wed,  7 Nov 2018 21:39:56 -0800
+Subject: [PATCH v3 bpf-next 3/4] libbpf: bpf_program__pin: add special case
+ for instances.nr == 1
 In-Reply-To: <20181108053957.205681-1-sdf@google.com>
 References: <20181108053957.205681-1-sdf@google.com>
-Message-ID: <20181108053957.205681-2-sdf@google.com>
+Message-ID: <20181108053957.205681-4-sdf@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181108053954.9lnoYT-HnlBVVyZ_HE7QTPODhPpqTMyvYvbtRH5ZpBU@z>
+Message-ID: <20181108053956.9gJEGwoa-5jgJmfMXp28UFJhCPzeeQgpWSji9jg59AQ@z>
 
-Makes it compatible with the logic that derives program type
-from section name in libbpf_prog_type_by_name.
+When bpf_program has only one instance, don't create a subdirectory with
+per-instance pin files (<prog>/0). Instead, just create a single pin file
+for that single instance. This simplifies object pinning by not creating
+unnecessary subdirectories.
+
+This can potentially break existing users that depend on the case
+where '/0' is always created. However, I couldn't find any serious
+usage of bpf_program__pin inside the kernel tree and I suppose there
+should be none outside.
 
 Signed-off-by: Stanislav Fomichev <sdf at google.com>
 ---
- tools/testing/selftests/bpf/bpf_flow.c             | 2 +-
- tools/testing/selftests/bpf/test_flow_dissector.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/lib/bpf/libbpf.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/bpf_flow.c b/tools/testing/selftests/bpf/bpf_flow.c
-index 107350a7821d..b9798f558ca7 100644
---- a/tools/testing/selftests/bpf/bpf_flow.c
-+++ b/tools/testing/selftests/bpf/bpf_flow.c
-@@ -116,7 +116,7 @@ static __always_inline int parse_eth_proto(struct __sk_buff *skb, __be16 proto)
- 	return BPF_DROP;
- }
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index db84c85554e7..8407a880acbe 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -1761,6 +1761,11 @@ int bpf_program__pin(struct bpf_program *prog, const char *path)
+ 		return -EINVAL;
+ 	}
  
--SEC("dissect")
-+SEC("flow_dissector")
- int _dissect(struct __sk_buff *skb)
- {
- 	if (!skb->vlan_present)
-diff --git a/tools/testing/selftests/bpf/test_flow_dissector.sh b/tools/testing/selftests/bpf/test_flow_dissector.sh
-index c0fb073b5eab..d23d4da66b83 100755
---- a/tools/testing/selftests/bpf/test_flow_dissector.sh
-+++ b/tools/testing/selftests/bpf/test_flow_dissector.sh
-@@ -59,7 +59,7 @@ else
- fi
++	if (prog->instances.nr == 1) {
++		/* don't create subdirs when pinning single instance */
++		return bpf_program__pin_instance(prog, path, 0);
++	}
++
+ 	err = make_dir(path);
+ 	if (err)
+ 		return err;
+@@ -1823,6 +1828,11 @@ int bpf_program__unpin(struct bpf_program *prog, const char *path)
+ 		return -EINVAL;
+ 	}
  
- # Attach BPF program
--./flow_dissector_load -p bpf_flow.o -s dissect
-+./flow_dissector_load -p bpf_flow.o -s flow_dissector
- 
- # Setup
- tc qdisc add dev lo ingress
++	if (prog->instances.nr == 1) {
++		/* don't create subdirs when pinning single instance */
++		return bpf_program__unpin_instance(prog, path, 0);
++	}
++
+ 	for (i = 0; i < prog->instances.nr; i++) {
+ 		char buf[PATH_MAX];
+ 		int len;
 -- 
 2.19.1.930.g4563a0d9d0-goog
