@@ -1,62 +1,60 @@
 From: sdf@fomichev.me (Stanislav Fomichev)
-Date: Thu, 8 Nov 2018 13:20:12 -0800
+Date: Thu, 8 Nov 2018 13:25:39 -0800
 Subject: [PATCH v3 bpf-next 4/4] bpftool: support loading flow dissector
-In-Reply-To: <20181108113503.0f4ce2e7@cakuba.hsd1.ca.comcast.net>
+In-Reply-To: <20181108114544.1ac0cd44@cakuba.hsd1.ca.comcast.net>
 References: <20181108053957.205681-1-sdf@google.com>
  <20181108053957.205681-5-sdf@google.com>
  <8c35340e-3ed7-70cd-3123-7cd0fb8824a7@netronome.com>
- <20181108180153.tbssxcgkkq5xcdxc@mini-arch>
- <d61e20cb-ccb1-1502-3119-8f71fb8d3570@netronome.com>
- <20181108113503.0f4ce2e7@cakuba.hsd1.ca.comcast.net>
-Message-ID: <20181108212012.wijumgzknr5b7gdx@mini-arch>
+ <20181108114544.1ac0cd44@cakuba.hsd1.ca.comcast.net>
+Message-ID: <20181108212539.esqjw4k5hz2pxowu@mini-arch>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181108212012.NmPywaPONegYaJEZCvHWMQ-7v_ogT6jA9a0IOY7VV3c@z>
+Message-ID: <20181108212539.8R_K1OVZV2cSArzbMpP4FN9ylKEO7KVu-8P8EsPIppU@z>
 
 On 11/08, Jakub Kicinski wrote:
-> On Thu, 8 Nov 2018 18:21:24 +0000, Quentin Monnet wrote:
-> > >>> @@ -79,8 +82,11 @@ DESCRIPTION
-> > >>>   		  contain a dot character ('.'), which is reserved for future
-> > >>>   		  extensions of *bpffs*.
-> > >>> -	**bpftool prog load** *OBJ* *FILE* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*]
-> > >>> +	**bpftool prog { load | loadall }** *OBJ* *FILE* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*]
-> > >>>   		  Load bpf program from binary *OBJ* and pin as *FILE*.
-> > >>> +		  **bpftool prog load** will pin only the first bpf program
-> > >>> +		  from the *OBJ*, **bpftool prog loadall** will pin all maps
-> > >>> +		  and programs from the *OBJ*.  
-> > >>
-> > >> This could be improved regarding maps: with "bpftool prog load" I think we
-> > >> also load and pin all maps, but your description implies this is only the
-> > >> case with "loadall"  
-> > > I don't think we pin any maps with `bpftool prog load`, we certainly load
-> > > them, but we don't pin any afaict. Can you point me to the code where we
-> > > pin the maps?
-> > >   
-> > 
-> > My bad. I read "pin" but thought "load". It does not pin them indeed,
-> > sorry about that.
+> On Thu, 8 Nov 2018 11:16:43 +0000, Quentin Monnet wrote:
+> > > -	bpf_program__set_ifindex(prog, ifindex);
+> > >   	if (attr.prog_type == BPF_PROG_TYPE_UNSPEC) {
+> > > +		if (!prog) {
+> > > +			p_err("can not guess program type when loading all programs\n");
 > 
-> Right, but I don't see much reason why prog loadall should pin maps.
-It does seem convenient to have an option to pin everything, so we
-don't require anything else to find the ids of the maps.
-If we are pinning all progs, might as well pin the maps, why not? See
-my example in the commit message, for example, where I just hard code
-the expected map name. Convenient :-)
+> No new lines in p_err(), beaks JSON.
+Thanks, I'll probably remove that altogether and do auto inference of
+prog_type from the section name here.
 
-> The reason to pin program(s) is to hold some reference and to be able
-> to find them.  Since we have the programs pinned we should be able to
-> find their maps with relative ease.
+> > > +			goto err_close_obj;
+> > > +		}
+> > > +
+> > >   		const char *sec_name = bpf_program__title(prog, false);
+> > >   
+> > >   		err = libbpf_prog_type_by_name(sec_name, &attr.prog_type,
+> > > @@ -936,8 +958,13 @@ static int do_load(int argc, char **argv)
+> > >   			goto err_close_obj;
+> > >   		}
+> > >   	}
+> > > -	bpf_program__set_type(prog, attr.prog_type);
+> > > -	bpf_program__set_expected_attach_type(prog, expected_attach_type);
+> > > +
+> > > +	bpf_object__for_each_program(pos, obj) {
+> > > +		bpf_program__set_ifindex(pos, ifindex);
+> > > +		bpf_program__set_type(pos, attr.prog_type);
+> > > +		bpf_program__set_expected_attach_type(pos,
+> > > +						      expected_attach_type);
+> > > +	}  
+> > 
+> > I still believe you can have programs of different types here, and be 
+> > able to load them. I tried it and managed to have it working fine. If no 
+> > type is provided from command line we can retrieve types for each 
+> > program from its section name. If a type is provided on the command 
+> > line, we can do the same, but I am not sure we should do it, or impose 
+> > that type for all programs instead.
 > 
-> $ bpftool prog show pinned /sys/fs/bpf/prog
-> 7: cgroup_skb  tag 2a142ef67aaad174  gpl
-> 	loaded_at 2018-11-08T11:02:25-0800  uid 0
-> 	xlated 296B  jited 229B  memlock 4096B  map_ids 6,7
-> 
-> possibly:
-> 
-> $ bpftool -j prog show pinned /sys/fs/bpf/prog | jq '.map_ids[0]'
-> 6
-> 
-> Moreover, I think program and map names may collide making ELFs
-> unloadable..
-It doesn't sound like a big problem, sounds like a constraint we can live
-with.
+> attr->prog_type is one per object, though.  How do we set that one?
+Isn't it used only in __bpf_object__open_xattr to require/not-require kernel
+version in the bpf prog?
+
+It will probably work quite nicely for both of our options:
+
+* type not specified: prog_type = BPF_PROG_TYPE_UNSPEC, need kernel
+  version (over cautious?)
+* type specified (and applied to all progs): using bpf_prog_type__needs_kver
+  to require/not requqire kernel version
