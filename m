@@ -1,61 +1,54 @@
-From: andreyknvl at google.com (Andrey Konovalov)
-Date: Thu,  8 Nov 2018 15:36:10 +0100
-Subject: [PATCH v8 3/8] arm64: untag user addresses in access_ok and
- __uaccess_mask_ptr
-In-Reply-To: <cover.1541687720.git.andreyknvl@google.com>
-References: <cover.1541687720.git.andreyknvl@google.com>
-Message-ID: <b23c2374235a33328817f2586cc055c69d91a2ec.1541687720.git.andreyknvl@google.com>
+From: jpoimboe at redhat.com (Josh Poimboeuf)
+Date: Thu, 8 Nov 2018 08:44:37 -0600
+Subject: [PATCH v3 1/2] kretprobe: produce sane stack traces
+In-Reply-To: <20181108080448.rggfn4zawi3por23@yavin>
+References: <20181101083551.3805-2-cyphar@cyphar.com>
+ <20181101204720.6ed3fe37@vmware.local.home>
+ <20181102050509.tw3dhvj5urudvtjl@yavin>
+ <20181102065932.bdt4pubbrkvql4mp@yavin>
+ <20181102091658.1bc979a4@gandalf.local.home>
+ <20181103070253.ajrqzs5xu2vf5stu@yavin>
+ <20181104115913.74l4yzecisvtt2j5@yavin>
+ <20181106171501.59ccabbc@gandalf.local.home>
+ <20181108074612.ldy6rozdpsdps6bf@yavin>
+ <20181108080448.rggfn4zawi3por23@yavin>
+Message-ID: <20181108144437.l3proaovfqm5osnr@treble>
 
-copy_from_user (and a few other similar functions) are used to copy data
-from user memory into the kernel memory or vice versa. Since a user can
-provided a tagged pointer to one of the syscalls that use copy_from_user,
-we need to correctly handle such pointers.
+On Thu, Nov 08, 2018 at 07:04:48PM +1100, Aleksa Sarai wrote:
+> On 2018-11-08, Aleksa Sarai <cyphar at cyphar.com> wrote:
+> > I will attach what I have at the moment to hopefully explain what the
+> > issue I've found is (re-using the kretprobe architecture but with the
+> > shadow-stack idea).
+> 
+> Here is the patch I have at the moment (it works, except for the
+> question I have about how to handle the top-level pt_regs -- I've marked
+> that code with XXX).
+> 
+> -- 
+> Aleksa Sarai
+> Senior Software Engineer (Containers)
+> SUSE Linux GmbH
+> <https://www.cyphar.com/>
+> 
+> --8<---------------------------------------------------------------------
+> 
+> Since the return address is modified by kretprobe, the various unwinders
+> can produce invalid and confusing stack traces. ftrace mostly solved
+> this problem by teaching each unwinder how to find the original return
+> address for stack trace purposes. This same technique can be applied to
+> kretprobes by simply adding a pointer to where the return address was
+> replaced in the stack, and then looking up the relevant
+> kretprobe_instance when a stack trace is requested.
+> 
+> [WIP: This is currently broken because the *first entry* will not be
+>       overwritten since it looks like the stack pointer is different
+>       when we are provided pt_regs. All other addresses are correctly
+>       handled.]
 
-Do this by untagging user pointers in access_ok and in __uaccess_mask_ptr,
-before performing access validity checks.
+When you see this problem, what does regs->ip point to?  If it's
+pointing to generated code, then we don't _currently_ have a way of
+dealing with that.  If it's pointing to a real function, we can fix that
+with unwind hints.
 
-Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
----
- arch/arm64/include/asm/uaccess.h | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-index c1325271e368..abc35cba134b 100644
---- a/arch/arm64/include/asm/uaccess.h
-+++ b/arch/arm64/include/asm/uaccess.h
-@@ -104,7 +104,8 @@ static inline unsigned long __range_ok(const void __user *addr, unsigned long si
- #define untagged_addr(addr)		\
- 	((__typeof__(addr))sign_extend64((__u64)(addr), 55))
- 
--#define access_ok(type, addr, size)	__range_ok(addr, size)
-+#define access_ok(type, addr, size)	\
-+	__range_ok(untagged_addr(addr), size)
- #define user_addr_max			get_fs
- 
- #define _ASM_EXTABLE(from, to)						\
-@@ -236,7 +237,8 @@ static inline void uaccess_enable_not_uao(void)
- 
- /*
-  * Sanitise a uaccess pointer such that it becomes NULL if above the
-- * current addr_limit.
-+ * current addr_limit. In case the pointer is tagged (has the top byte set),
-+ * untag the pointer before checking.
-  */
- #define uaccess_mask_ptr(ptr) (__typeof__(ptr))__uaccess_mask_ptr(ptr)
- static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
-@@ -244,10 +246,11 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
- 	void __user *safe_ptr;
- 
- 	asm volatile(
--	"	bics	xzr, %1, %2\n"
-+	"	bics	xzr, %3, %2\n"
- 	"	csel	%0, %1, xzr, eq\n"
- 	: "=&r" (safe_ptr)
--	: "r" (ptr), "r" (current_thread_info()->addr_limit)
-+	: "r" (ptr), "r" (current_thread_info()->addr_limit),
-+	  "r" (untagged_addr(ptr))
- 	: "cc");
- 
- 	csdb();
 -- 
-2.19.1.930.g4563a0d9d0-goog
+Josh
