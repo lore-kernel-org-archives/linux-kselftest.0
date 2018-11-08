@@ -1,515 +1,152 @@
-From: quentin.monnet@netronome.com (Quentin Monnet)
-Date: Thu, 8 Nov 2018 11:16:43 +0000
-Subject: [PATCH v3 bpf-next 4/4] bpftool: support loading flow dissector
-In-Reply-To: <20181108053957.205681-5-sdf@google.com>
-References: <20181108053957.205681-1-sdf@google.com>
- <20181108053957.205681-5-sdf@google.com>
-Message-ID: <8c35340e-3ed7-70cd-3123-7cd0fb8824a7@netronome.com>
+From: andreyknvl@google.com (Andrey Konovalov)
+Date: Thu,  8 Nov 2018 15:36:07 +0100
+Subject: [PATCH v8 0/8] arm64: untag user pointers passed to the kernel
+Message-ID: <cover.1541687720.git.andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181108111643.Z-S7BWCiur4gnnP_MV9VcJffg9HxOoVGUPGx6oleSi8@z>
+Message-ID: <20181108143607.VdCzV1COyW_kvPE_EZMveim9Hj2u-auwjj9Lrj_9seQ@z>
 
-Hi Stanislav, thanks for the changes! More comments below.
+arm64 has a feature called Top Byte Ignore, which allows to embed pointer
+tags into the top byte of each pointer. Userspace programs (such as
+HWASan, a memory debugging tool [1]) might use this feature and pass
+tagged user pointers to the kernel through syscalls or other interfaces.
 
-2018-11-07 21:39 UTC-0800 ~ Stanislav Fomichev <sdf at google.com>
-> This commit adds support for loading/attaching/detaching flow
-> dissector program. The structure of the flow dissector program is
-> assumed to be the same as in the selftests:
-> 
-> * flow_dissector section with the main entry point
-> * a bunch of tail call progs
-> * a jmp_table map that is populated with the tail call progs
-> 
-> When `bpftool load` is called with a flow_dissector prog (i.e. when the
-> first section is flow_dissector of 'type flow_dissector' argument is
-> passed), we load and pin all the programs/maps. User is responsible to
-> construct the jump table for the tail calls.
-> 
-> The last argument of `bpftool attach` is made optional for this use
-> case.
-> 
-> Example:
-> bpftool prog load tools/testing/selftests/bpf/bpf_flow.o \
-> 	/sys/fs/bpf/flow type flow_dissector
-> 
-> bpftool map update pinned /sys/fs/bpf/flow/jmp_table \
->          key 0 0 0 0 \
->          value pinned /sys/fs/bpf/flow/IP
-> 
-> bpftool map update pinned /sys/fs/bpf/flow/jmp_table \
->          key 1 0 0 0 \
->          value pinned /sys/fs/bpf/flow/IPV6
-> 
-> bpftool map update pinned /sys/fs/bpf/flow/jmp_table \
->          key 2 0 0 0 \
->          value pinned /sys/fs/bpf/flow/IPV6OP
-> 
-> bpftool map update pinned /sys/fs/bpf/flow/jmp_table \
->          key 3 0 0 0 \
->          value pinned /sys/fs/bpf/flow/IPV6FR
-> 
-> bpftool map update pinned /sys/fs/bpf/flow/jmp_table \
->          key 4 0 0 0 \
->          value pinned /sys/fs/bpf/flow/MPLS
-> 
-> bpftool map update pinned /sys/fs/bpf/flow/jmp_table \
->          key 5 0 0 0 \
->          value pinned /sys/fs/bpf/flow/VLAN
-> 
-> bpftool prog attach pinned /sys/fs/bpf/flow/flow_dissector flow_dissector
-> 
-> Tested by using the above lines to load the prog in
-> the test_flow_dissector.sh selftest.
-> 
-> Signed-off-by: Stanislav Fomichev <sdf at google.com>
-> ---
->   .../bpftool/Documentation/bpftool-prog.rst    |  36 ++++--
->   tools/bpf/bpftool/bash-completion/bpftool     |   6 +-
->   tools/bpf/bpftool/common.c                    |  30 ++---
->   tools/bpf/bpftool/main.h                      |   1 +
->   tools/bpf/bpftool/prog.c                      | 112 +++++++++++++-----
->   5 files changed, 126 insertions(+), 59 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> index ac4e904b10fb..0374634c3087 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> @@ -15,7 +15,8 @@ SYNOPSIS
->   	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-f** | **--bpffs** } }
->   
->   	*COMMANDS* :=
-> -	{ **show** | **list** | **dump xlated** | **dump jited** | **pin** | **load** | **help** }
-> +	{ **show** | **list** | **dump xlated** | **dump jited** | **pin** | **load**
-> +	| **loadall** | **help** }
->   
->   MAP COMMANDS
->   =============
-> @@ -24,9 +25,9 @@ MAP COMMANDS
->   |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual**}]
->   |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes**}]
->   |	**bpftool** **prog pin** *PROG* *FILE*
-> -|	**bpftool** **prog load** *OBJ* *FILE* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*]
-> -|       **bpftool** **prog attach** *PROG* *ATTACH_TYPE* *MAP*
-> -|       **bpftool** **prog detach** *PROG* *ATTACH_TYPE* *MAP*
-> +|	**bpftool** **prog { load | loadall }** *OBJ* *FILE* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*]
-> +|       **bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
-> +|       **bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
->   |	**bpftool** **prog help**
->   |
->   |	*MAP* := { **id** *MAP_ID* | **pinned** *FILE* }
-> @@ -39,7 +40,9 @@ MAP COMMANDS
->   |		**cgroup/bind4** | **cgroup/bind6** | **cgroup/post_bind4** | **cgroup/post_bind6** |
->   |		**cgroup/connect4** | **cgroup/connect6** | **cgroup/sendmsg4** | **cgroup/sendmsg6**
->   |	}
-> -|       *ATTACH_TYPE* := { **msg_verdict** | **skb_verdict** | **skb_parse** }
-> +|       *ATTACH_TYPE* := {
-> +|		**msg_verdict** | **skb_verdict** | **skb_parse** | **flow_dissector**
-> +|	}
->   
->   
->   DESCRIPTION
-> @@ -79,8 +82,11 @@ DESCRIPTION
->   		  contain a dot character ('.'), which is reserved for future
->   		  extensions of *bpffs*.
->   
-> -	**bpftool prog load** *OBJ* *FILE* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*]
-> +	**bpftool prog { load | loadall }** *OBJ* *FILE* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*]
->   		  Load bpf program from binary *OBJ* and pin as *FILE*.
-> +		  **bpftool prog load** will pin only the first bpf program
-> +		  from the *OBJ*, **bpftool prog loadall** will pin all maps
-> +		  and programs from the *OBJ*.
+Right now the kernel is already able to handle user faults with tagged
+pointers, due to these patches:
 
-This could be improved regarding maps: with "bpftool prog load" I think 
-we also load and pin all maps, but your description implies this is only 
-the case with "loadall"
+1. 81cddd65 ("arm64: traps: fix userspace cache maintenance emulation on a
+             tagged pointer")
+2. 7dcd9dd8 ("arm64: hw_breakpoint: fix watchpoint matching for tagged
+	      pointers")
+3. 276e9327 ("arm64: entry: improve data abort handling of tagged
+	      pointers")
 
->   		  **type** is optional, if not specified program type will be
->   		  inferred from section names.
->   		  By default bpftool will create new maps as declared in the ELF
-> @@ -97,13 +103,17 @@ DESCRIPTION
->   		  contain a dot character ('.'), which is reserved for future
->   		  extensions of *bpffs*.
->   
-> -        **bpftool prog attach** *PROG* *ATTACH_TYPE* *MAP*
-> -                  Attach bpf program *PROG* (with type specified by *ATTACH_TYPE*)
-> -                  to the map *MAP*.
-> -
-> -        **bpftool prog detach** *PROG* *ATTACH_TYPE* *MAP*
-> -                  Detach bpf program *PROG* (with type specified by *ATTACH_TYPE*)
-> -                  from the map *MAP*.
-> +        **bpftool prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
-> +                  Attach bpf program *PROG* (with type specified by
-> +                  *ATTACH_TYPE*). Most *ATTACH_TYPEs* require a *MAP*
-> +                  parameter, with the exception of *flow_dissector* which is
-> +                  attached to current networking name space.
-> +
-> +        **bpftool prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
-> +                  Detach bpf program *PROG* (with type specified by
-> +                  *ATTACH_TYPE*). Most *ATTACH_TYPEs* require a *MAP*
-> +                  parameter, with the exception of *flow_dissector* which is
-> +                  detached from the current networking name space.
+When passing tagged pointers to syscalls, there's a special case of such a
+pointer being passed to one of the memory syscalls (mmap, mprotect, etc.).
+These syscalls don't do memory accesses but rather deal with memory
+ranges, hence an untagged pointer is better suited.
 
-While at it could you please fix those two paragraphs to use tabs for 
-indentation, as the rest of the doc? Thanks!
+This patchset extends tagged pointer support to non-memory syscalls. This
+is done by reusing the untagged_addr macro to untag user pointers when the
+kernel performs pointer checking to find out whether the pointer comes
+from userspace (most notably in access_ok). The untagging is done only
+when the pointer is being checked, the tag is preserved as the pointer
+makes its way through the kernel.
 
->   
->   	**bpftool prog help**
->   		  Print short help message.
-> diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-> index 3f78e6404589..ad0fc919f7ec 100644
-> --- a/tools/bpf/bpftool/bash-completion/bpftool
-> +++ b/tools/bpf/bpftool/bash-completion/bpftool
-> @@ -243,7 +243,7 @@ _bpftool()
->       # Completion depends on object and command in use
->       case $object in
->           prog)
-> -            if [[ $command != "load" ]]; then
-> +            if [[ $command != "load" && $command != "loadall" ]]; then
->                   case $prev in
->                       id)
->                           _bpftool_get_prog_ids
-> @@ -299,7 +299,7 @@ _bpftool()
->                       fi
->   
->                       if [[ ${#words[@]} == 6 ]]; then
-> -                        COMPREPLY=( $( compgen -W "msg_verdict skb_verdict skb_parse" -- "$cur" ) )
-> +                        COMPREPLY=( $( compgen -W "msg_verdict skb_verdict skb_parse flow_dissector" -- "$cur" ) )
->                           return 0
->                       fi
->   
-> @@ -309,7 +309,7 @@ _bpftool()
->                       fi
->                       return 0
->                       ;;
-> -                load)
-> +                load|loadall)
->                       local obj
->   
->                       if [[ ${#words[@]} -lt 6 ]]; then
+One of the alternative approaches to untagging that was considered is to
+completely strip the pointer tag as the pointer enters the kernel with
+some kind of a syscall wrapper, but that won't work with the countless
+number of different ioctl calls. With this approach we would need a custom
+wrapper for each ioctl variation, which doesn't seem practical.
 
-You also want to update completion for the program types, at line 341 or 
-so. Feel free to split that list on several lines, by the way :).
+The following testing approaches has been taken to find potential issues
+with user pointer untagging:
 
-> diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-> index 25af85304ebe..f671a921dec5 100644
-> --- a/tools/bpf/bpftool/common.c
-> +++ b/tools/bpf/bpftool/common.c
-> @@ -169,34 +169,24 @@ int open_obj_pinned_any(char *path, enum bpf_obj_type exp_type)
->   	return fd;
->   }
->   
-> -int do_pin_fd(int fd, const char *name)
-> +int mount_bpffs_for_pin(const char *name)
->   {
->   	char err_str[ERR_MAX_LEN];
->   	char *file;
->   	char *dir;
->   	int err = 0;
->   
-> -	err = bpf_obj_pin(fd, name);
-> -	if (!err)
-> -		goto out;
-> -
->   	file = malloc(strlen(name) + 1);
->   	strcpy(file, name);
->   	dir = dirname(file);
->   
-> -	if (errno != EPERM || is_bpffs(dir)) {
-> -		p_err("can't pin the object (%s): %s", name, strerror(errno));
-> +	if (is_bpffs(dir)) {
-> +		/* nothing to do if already mounted */
->   		goto out_free;
->   	}
+1. Static testing (with sparse [2] and separately with a custom static
+   analyzer based on Clang) to track casts of __user pointers to integer
+   types to find places where untagging needs to be done.
 
-Nitpick: unnecessary brackets.
+2. Dynamic testing: adding BUG_ON(has_tag(addr)) to find_vma() and running
+   a modified syzkaller version that passes tagged pointers to the kernel.
 
->   
-> -	/* Attempt to mount bpffs, then retry pinning. */
->   	err = mnt_bpffs(dir, err_str, ERR_MAX_LEN);
-> -	if (!err) {
-> -		err = bpf_obj_pin(fd, name);
-> -		if (err)
-> -			p_err("can't pin the object (%s): %s", name,
-> -			      strerror(errno));
-> -	} else {
-> +	if (err) {
->   		err_str[ERR_MAX_LEN - 1] = '\0';
->   		p_err("can't mount BPF file system to pin the object (%s): %s",
->   		      name, err_str);
-> @@ -204,10 +194,20 @@ int do_pin_fd(int fd, const char *name)
->   
->   out_free:
->   	free(file);
-> -out:
->   	return err;
->   }
->   
-> +int do_pin_fd(int fd, const char *name)
-> +{
-> +	int err;
-> +
-> +	err = mount_bpffs_for_pin(name);
-> +	if (err)
-> +		return err;
-> +
-> +	return bpf_obj_pin(fd, name);
-> +}
-> +
->   int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(__u32))
->   {
->   	unsigned int id;
-> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-> index 28322ace2856..1383824c9baf 100644
-> --- a/tools/bpf/bpftool/main.h
-> +++ b/tools/bpf/bpftool/main.h
-> @@ -129,6 +129,7 @@ const char *get_fd_type_name(enum bpf_obj_type type);
->   char *get_fdinfo(int fd, const char *key);
->   int open_obj_pinned(char *path);
->   int open_obj_pinned_any(char *path, enum bpf_obj_type exp_type);
-> +int mount_bpffs_for_pin(const char *name);
->   int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(__u32));
->   int do_pin_fd(int fd, const char *name);
->   
-> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-> index 5302ee282409..a4346dd673b1 100644
-> --- a/tools/bpf/bpftool/prog.c
-> +++ b/tools/bpf/bpftool/prog.c
-> @@ -81,6 +81,7 @@ static const char * const attach_type_strings[] = {
->   	[BPF_SK_SKB_STREAM_PARSER] = "stream_parser",
->   	[BPF_SK_SKB_STREAM_VERDICT] = "stream_verdict",
->   	[BPF_SK_MSG_VERDICT] = "msg_verdict",
-> +	[BPF_FLOW_DISSECTOR] = "flow_dissector",
->   	[__MAX_BPF_ATTACH_TYPE] = NULL,
->   };
->   
-> @@ -724,10 +725,11 @@ int map_replace_compar(const void *p1, const void *p2)
->   static int do_attach(int argc, char **argv)
->   {
->   	enum bpf_attach_type attach_type;
-> -	int err, mapfd, progfd;
-> +	int err, progfd;
-> +	int mapfd = 0;
->   
-> -	if (!REQ_ARGS(5)) {
-> -		p_err("too few parameters for map attach");
-> +	if (!REQ_ARGS(3)) {
-> +		p_err("too few parameters for attach");
->   		return -EINVAL;
->   	}
->   
-> @@ -740,11 +742,17 @@ static int do_attach(int argc, char **argv)
->   		p_err("invalid attach type");
->   		return -EINVAL;
->   	}
-> -	NEXT_ARG();
-> +	if (attach_type != BPF_FLOW_DISSECTOR) {
-> +		NEXT_ARG();
-> +		if (!REQ_ARGS(2)) {
-> +			p_err("too few parameters for map attach");
-> +			return -EINVAL;
-> +		}
->   
-> -	mapfd = map_parse_fd(&argc, &argv);
-> -	if (mapfd < 0)
-> -		return mapfd;
-> +		mapfd = map_parse_fd(&argc, &argv);
-> +		if (mapfd < 0)
-> +			return mapfd;
-> +	}
->   
->   	err = bpf_prog_attach(progfd, mapfd, attach_type, 0);
->   	if (err) {
-> @@ -760,10 +768,11 @@ static int do_attach(int argc, char **argv)
->   static int do_detach(int argc, char **argv)
->   {
->   	enum bpf_attach_type attach_type;
-> -	int err, mapfd, progfd;
-> +	int err, progfd;
-> +	int mapfd = 0;
->   
-> -	if (!REQ_ARGS(5)) {
-> -		p_err("too few parameters for map detach");
-> +	if (!REQ_ARGS(3)) {
-> +		p_err("too few parameters for detach");
->   		return -EINVAL;
->   	}
->   
-> @@ -776,11 +785,17 @@ static int do_detach(int argc, char **argv)
->   		p_err("invalid attach type");
->   		return -EINVAL;
->   	}
-> -	NEXT_ARG();
-> +	if (attach_type != BPF_FLOW_DISSECTOR) {
-> +		NEXT_ARG();
-> +		if (!REQ_ARGS(2)) {
-> +			p_err("too few parameters for map detach");
-> +			return -EINVAL;
-> +		}
+Based on the results of the testing the requried patches have been added
+to the patchset.
 
-Would that make sense to factor argument checks or parsing for 
-do_attach() and do_detach() to some extent? In order to reduce the 
-number of attach-type-based exceptions to add in the code if we have 
-other attach types that do not take maps in the future.
+This patchset has been merged into the Pixel 2 kernel tree and is now
+being used to enable testing of Pixel 2 phones with HWASan.
 
->   
-> -	mapfd = map_parse_fd(&argc, &argv);
-> -	if (mapfd < 0)
-> -		return mapfd;
-> +		mapfd = map_parse_fd(&argc, &argv);
-> +		if (mapfd < 0)
-> +			return mapfd;
-> +	}
->   
->   	err = bpf_prog_detach2(progfd, mapfd, attach_type);
->   	if (err) {
-> @@ -792,15 +807,16 @@ static int do_detach(int argc, char **argv)
->   		jsonw_null(json_wtr);
->   	return 0;
->   }
-> -static int do_load(int argc, char **argv)
-> +
-> +static int load_with_options(int argc, char **argv, bool first_prog_only)
->   {
->   	enum bpf_attach_type expected_attach_type;
->   	struct bpf_object_open_attr attr = {
->   		.prog_type	= BPF_PROG_TYPE_UNSPEC,
->   	};
->   	struct map_replace *map_replace = NULL;
-> +	struct bpf_program *prog = NULL, *pos;
->   	unsigned int old_map_fds = 0;
-> -	struct bpf_program *prog;
->   	struct bpf_object *obj;
->   	struct bpf_map *map;
->   	const char *pinfile;
-> @@ -918,14 +934,20 @@ static int do_load(int argc, char **argv)
->   		goto err_free_reuse_maps;
->   	}
->   
-> -	prog = bpf_program__next(NULL, obj);
-> -	if (!prog) {
-> -		p_err("object file doesn't contain any bpf program");
-> -		goto err_close_obj;
-> +	if (first_prog_only) {
-> +		prog = bpf_program__next(NULL, obj);
-> +		if (!prog) {
-> +			p_err("object file doesn't contain any bpf program");
-> +			goto err_close_obj;
-> +		}
->   	}
->   
-> -	bpf_program__set_ifindex(prog, ifindex);
->   	if (attr.prog_type == BPF_PROG_TYPE_UNSPEC) {
-> +		if (!prog) {
-> +			p_err("can not guess program type when loading all programs\n");
-> +			goto err_close_obj;
-> +		}
-> +
->   		const char *sec_name = bpf_program__title(prog, false);
->   
->   		err = libbpf_prog_type_by_name(sec_name, &attr.prog_type,
-> @@ -936,8 +958,13 @@ static int do_load(int argc, char **argv)
->   			goto err_close_obj;
->   		}
->   	}
-> -	bpf_program__set_type(prog, attr.prog_type);
-> -	bpf_program__set_expected_attach_type(prog, expected_attach_type);
-> +
-> +	bpf_object__for_each_program(pos, obj) {
-> +		bpf_program__set_ifindex(pos, ifindex);
-> +		bpf_program__set_type(pos, attr.prog_type);
-> +		bpf_program__set_expected_attach_type(pos,
-> +						      expected_attach_type);
-> +	}
+This patchset is a prerequisite for ARM's memory tagging hardware feature
+support [3].
 
-I still believe you can have programs of different types here, and be 
-able to load them. I tried it and managed to have it working fine. If no 
-type is provided from command line we can retrieve types for each 
-program from its section name. If a type is provided on the command 
-line, we can do the same, but I am not sure we should do it, or impose 
-that type for all programs instead.
+Thanks!
 
->   
->   	qsort(map_replace, old_map_fds, sizeof(*map_replace),
->   	      map_replace_compar);
-> @@ -1001,9 +1028,25 @@ static int do_load(int argc, char **argv)
->   		goto err_close_obj;
->   	}
->   
-> -	if (do_pin_fd(bpf_program__fd(prog), pinfile))
-> +	err = mount_bpffs_for_pin(pinfile);
-> +	if (err)
->   		goto err_close_obj;
->   
-> +	if (prog) {
+[1] http://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html
 
-Nit: Maybe "if (first_prog_only) {" instead? If I understand correctly, 
-at this stage it should be equivalent, but in my opinion it would make 
-it easier to understand why we have two cases here.
+[2] https://github.com/lucvoo/sparse-dev/commit/5f960cb10f56ec2017c128ef9d16060e0145f292
 
-> +		err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
-> +		if (err) {
-> +			p_err("failed to pin program %s",
-> +			      bpf_program__title(prog, false));
-> +			goto err_close_obj;
-> +		}
-> +	} else {
-> +		err = bpf_object__pin(obj, pinfile);
-> +		if (err) {
-> +			p_err("failed to pin all programs");
-> +			goto err_close_obj;
-> +		}
-> +	}
-> +
->   	if (json_output)
->   		jsonw_null(json_wtr);
->   
-> @@ -1023,6 +1066,16 @@ static int do_load(int argc, char **argv)
->   	return -1;
->   }
->   
-> +static int do_load(int argc, char **argv)
-> +{
-> +	return load_with_options(argc, argv, true);
-> +}
-> +
-> +static int do_loadall(int argc, char **argv)
-> +{
-> +	return load_with_options(argc, argv, false);
-> +}
-> +
->   static int do_help(int argc, char **argv)
->   {
->   	if (json_output) {
-> @@ -1035,10 +1088,11 @@ static int do_help(int argc, char **argv)
->   		"       %s %s dump xlated PROG [{ file FILE | opcodes | visual }]\n"
->   		"       %s %s dump jited  PROG [{ file FILE | opcodes }]\n"
->   		"       %s %s pin   PROG FILE\n"
-> -		"       %s %s load  OBJ  FILE [type TYPE] [dev NAME] \\\n"
-> +		"       %s %s { load | loadall } OBJ  FILE \\\n"
-> +		"                         [type TYPE] [dev NAME] \\\n"
->   		"                         [map { idx IDX | name NAME } MAP]\n"
-> -		"       %s %s attach PROG ATTACH_TYPE MAP\n"
-> -		"       %s %s detach PROG ATTACH_TYPE MAP\n"
-> +		"       %s %s attach PROG ATTACH_TYPE [MAP]\n"
-> +		"       %s %s detach PROG ATTACH_TYPE [MAP]\n"
->   		"       %s %s help\n"
->   		"\n"
->   		"       " HELP_SPEC_MAP "\n"
-> @@ -1050,7 +1104,8 @@ static int do_help(int argc, char **argv)
->   		"                 cgroup/bind4 | cgroup/bind6 | cgroup/post_bind4 |\n"
->   		"                 cgroup/post_bind6 | cgroup/connect4 | cgroup/connect6 |\n"
->   		"                 cgroup/sendmsg4 | cgroup/sendmsg6 }\n"
-> -		"       ATTACH_TYPE := { msg_verdict | skb_verdict | skb_parse }\n"
-> +		"       ATTACH_TYPE := { msg_verdict | skb_verdict | skb_parse |\n"
-> +		"                        flow_dissector }\n"
->   		"       " HELP_SPEC_OPTIONS "\n"
->   		"",
->   		bin_name, argv[-2], bin_name, argv[-2], bin_name, argv[-2],
-> @@ -1067,6 +1122,7 @@ static const struct cmd cmds[] = {
->   	{ "dump",	do_dump },
->   	{ "pin",	do_pin },
->   	{ "load",	do_load },
-> +	{ "loadall",	do_loadall },
->   	{ "attach",	do_attach },
->   	{ "detach",	do_detach },
->   	{ 0 }
-> 
+[3] https://community.arm.com/processors/b/blog/posts/arm-a-profile-architecture-2018-developments-armv85a
+
+Changes in v8:
+- Rebased onto 65102238 (4.20-rc1).
+- Added a note to the cover letter on why syscall wrappers/shims that untag
+  user pointers won't work.
+- Added a note to the cover letter that this patchset has been merged into
+  the Pixel 2 kernel tree.
+- Documentation fixes, in particular added a list of syscalls that don't
+  support tagged user pointers.
+
+Changes in v7:
+- Rebased onto 17b57b18 (4.19-rc6).
+- Dropped the "arm64: untag user address in __do_user_fault" patch, since
+  the existing patches already handle user faults properly.
+- Dropped the "usb, arm64: untag user addresses in devio" patch, since the
+  passed pointer must come from a vma and therefore be untagged.
+- Dropped the "arm64: annotate user pointers casts detected by sparse"
+  patch (see the discussion to the replies of the v6 of this patchset).
+- Added more context to the cover letter.
+- Updated Documentation/arm64/tagged-pointers.txt.
+
+Changes in v6:
+- Added annotations for user pointer casts found by sparse.
+- Rebased onto 050cdc6c (4.19-rc1+).
+
+Changes in v5:
+- Added 3 new patches that add untagging to places found with static
+  analysis.
+- Rebased onto 44c929e1 (4.18-rc8).
+
+Changes in v4:
+- Added a selftest for checking that passing tagged pointers to the
+  kernel succeeds.
+- Rebased onto 81e97f013 (4.18-rc1+).
+
+Changes in v3:
+- Rebased onto e5c51f30 (4.17-rc6+).
+- Added linux-arch@ to the list of recipients.
+
+Changes in v2:
+- Rebased onto 2d618bdf (4.17-rc3+).
+- Removed excessive untagging in gup.c.
+- Removed untagging pointers returned from __uaccess_mask_ptr.
+
+Changes in v1:
+- Rebased onto 4.17-rc1.
+
+Changes in RFC v2:
+- Added "#ifndef untagged_addr..." fallback in linux/uaccess.h instead of
+  defining it for each arch individually.
+- Updated Documentation/arm64/tagged-pointers.txt.
+- Dropped "mm, arm64: untag user addresses in memory syscalls".
+- Rebased onto 3eb2ce82 (4.16-rc7).
+
+Reviewed-by: Luc Van Oostenryck <luc.vanoostenryck at gmail.com>
+Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+
+Andrey Konovalov (8):
+  arm64: add type casts to untagged_addr macro
+  uaccess: add untagged_addr definition for other arches
+  arm64: untag user addresses in access_ok and __uaccess_mask_ptr
+  mm, arm64: untag user addresses in mm/gup.c
+  lib, arm64: untag addrs passed to strncpy_from_user and strnlen_user
+  fs, arm64: untag user address in copy_mount_options
+  arm64: update Documentation/arm64/tagged-pointers.txt
+  selftests, arm64: add a selftest for passing tagged pointers to kernel
+
+ Documentation/arm64/tagged-pointers.txt       | 25 +++++++++++--------
+ arch/arm64/include/asm/uaccess.h              | 14 +++++++----
+ fs/namespace.c                                |  2 +-
+ include/linux/uaccess.h                       |  4 +++
+ lib/strncpy_from_user.c                       |  2 ++
+ lib/strnlen_user.c                            |  2 ++
+ mm/gup.c                                      |  4 +++
+ tools/testing/selftests/arm64/.gitignore      |  1 +
+ tools/testing/selftests/arm64/Makefile        | 11 ++++++++
+ .../testing/selftests/arm64/run_tags_test.sh  | 12 +++++++++
+ tools/testing/selftests/arm64/tags_test.c     | 19 ++++++++++++++
+ 11 files changed, 80 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/arm64/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/Makefile
+ create mode 100755 tools/testing/selftests/arm64/run_tags_test.sh
+ create mode 100644 tools/testing/selftests/arm64/tags_test.c
+
+-- 
+2.19.1.930.g4563a0d9d0-goog
