@@ -1,102 +1,127 @@
 From: sdf at google.com (Stanislav Fomichev)
-Date: Fri,  9 Nov 2018 08:21:43 -0800
-Subject: [PATCH v5 bpf-next 4/7] libbpf: add internal pin_name
+Date: Fri,  9 Nov 2018 08:21:45 -0800
+Subject: [PATCH v5 bpf-next 6/7] bpftool: add pinmaps argument to the
+ load/loadall
 In-Reply-To: <20181109162146.78019-1-sdf@google.com>
 References: <20181109162146.78019-1-sdf@google.com>
-Message-ID: <20181109162146.78019-5-sdf@google.com>
+Message-ID: <20181109162146.78019-7-sdf@google.com>
 
-pin_name is the same as section_name where '/' is replaced
-by '_'. bpf_object__pin_programs is converted to use pin_name
-to avoid the situation where section_name would require creating another
-subdirectory for a pin (as, for example, when calling bpf_object__pin_programs
-for programs in sections like "cgroup/connect6").
+This new additional argument lets users pin all maps from the object at
+specified path.
 
 Signed-off-by: Stanislav Fomichev <sdf at google.com>
+Acked-by: Jakub Kicinski <jakub.kicinski at netronome.com>
 ---
- tools/lib/bpf/libbpf.c | 29 ++++++++++++++++++++++++++---
- 1 file changed, 26 insertions(+), 3 deletions(-)
+ .../bpftool/Documentation/bpftool-prog.rst    |  4 +++-
+ tools/bpf/bpftool/bash-completion/bpftool     |  3 ++-
+ tools/bpf/bpftool/prog.c                      | 24 ++++++++++++++++++-
+ 3 files changed, 28 insertions(+), 3 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 97ce9f214002..e827542ffa3a 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -124,6 +124,10 @@ struct bpf_program {
- 	char *name;
- 	int prog_ifindex;
- 	char *section_name;
-+	/* section_name with / replaced by _; makes recursive pinning
-+	 * in bpf_object__pin_programs easier
-+	 */
-+	char *pin_name;
- 	struct bpf_insn *insns;
- 	size_t insns_cnt, main_prog_cnt;
- 	enum bpf_prog_type type;
-@@ -253,6 +257,7 @@ static void bpf_program__exit(struct bpf_program *prog)
- 	bpf_program__unload(prog);
- 	zfree(&prog->name);
- 	zfree(&prog->section_name);
-+	zfree(&prog->pin_name);
- 	zfree(&prog->insns);
- 	zfree(&prog->reloc_desc);
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+index 984d125c507a..15e9172f7e55 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -80,7 +80,7 @@ DESCRIPTION
+ 		  contain a dot character ('.'), which is reserved for future
+ 		  extensions of *bpffs*.
  
-@@ -261,6 +266,17 @@ static void bpf_program__exit(struct bpf_program *prog)
- 	prog->idx = -1;
- }
+-	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*]
++	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
+ 		  Load bpf program(s) from binary *OBJ* and pin as *PATH*.
+ 		  **bpftool prog load** pins only the first program from the
+ 		  *OBJ* as *PATH*. **bpftool prog loadall** pins all programs
+@@ -96,6 +96,8 @@ DESCRIPTION
+ 		  use, referring to it by **id** or through a **pinned** file.
+ 		  If **dev** *NAME* is specified program will be loaded onto
+ 		  given networking device (offload).
++		  Optional **pinmaps** argument can be provided to pin all
++		  maps under *MAP_DIR* directory.
  
-+static char *__bpf_program__pin_name(struct bpf_program *prog)
-+{
-+	char *name, *p;
+ 		  Note: *PATH* must be located in *bpffs* mount. It must not
+ 		  contain a dot character ('.'), which is reserved for future
+diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
+index 780ebafb756a..a05d0071f39f 100644
+--- a/tools/bpf/bpftool/bash-completion/bpftool
++++ b/tools/bpf/bpftool/bash-completion/bpftool
+@@ -346,7 +346,7 @@ _bpftool()
+                             _bpftool_get_map_ids
+                             return 0
+                             ;;
+-                        pinned)
++                        pinned|pinmaps)
+                             _filedir
+                             return 0
+                             ;;
+@@ -358,6 +358,7 @@ _bpftool()
+                             COMPREPLY=( $( compgen -W "map" -- "$cur" ) )
+                             _bpftool_once_attr 'type'
+                             _bpftool_once_attr 'dev'
++                            _bpftool_once_attr 'pinmaps'
+                             return 0
+                             ;;
+                     esac
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 3abfee5533e6..4bd6ad19fc05 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -802,6 +802,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 	struct map_replace *map_replace = NULL;
+ 	struct bpf_program *prog = NULL, *pos;
+ 	unsigned int old_map_fds = 0;
++	const char *pinmaps = NULL;
+ 	struct bpf_object *obj;
+ 	struct bpf_map *map;
+ 	const char *pinfile;
+@@ -906,6 +907,13 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 				goto err_free_reuse_maps;
+ 			}
+ 			NEXT_ARG();
++		} else if (is_prefix(*argv, "pinmaps")) {
++			NEXT_ARG();
 +
-+	name = p = strdup(prog->section_name);
-+	while ((p = strchr(p, '/')))
-+		*p = '_';
++			if (!REQ_ARGS(1))
++				goto err_free_reuse_maps;
 +
-+	return name;
-+}
-+
- static int
- bpf_program__init(void *data, size_t size, char *section_name, int idx,
- 		  struct bpf_program *prog)
-@@ -279,6 +295,13 @@ bpf_program__init(void *data, size_t size, char *section_name, int idx,
- 		goto errout;
++			pinmaps = GET_ARG();
+ 		} else {
+ 			p_err("expected no more arguments, 'type', 'map' or 'dev', got: '%s'?",
+ 			      *argv);
+@@ -1026,6 +1034,14 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 		}
  	}
  
-+	prog->pin_name = __bpf_program__pin_name(prog);
-+	if (!prog->pin_name) {
-+		pr_warning("failed to alloc pin name for prog under section(%d) %s\n",
-+			   idx, section_name);
-+		goto errout;
++	if (pinmaps) {
++		err = bpf_object__pin_maps(obj, pinmaps);
++		if (err) {
++			p_err("failed to pin all maps");
++			goto err_unpin;
++		}
 +	}
 +
- 	prog->insns = malloc(size);
- 	if (!prog->insns) {
- 		pr_warning("failed to alloc insns for prog under section %s\n",
-@@ -2006,7 +2029,7 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
- 		int len;
+ 	if (json_output)
+ 		jsonw_null(json_wtr);
  
- 		len = snprintf(buf, PATH_MAX, "%s/%s", path,
--			       prog->section_name);
-+			       prog->pin_name);
- 		if (len < 0) {
- 			err = -EINVAL;
- 			goto err_unpin_programs;
-@@ -2028,7 +2051,7 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
- 		int len;
+@@ -1036,6 +1052,11 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
  
- 		len = snprintf(buf, PATH_MAX, "%s/%s", path,
--			       prog->section_name);
-+			       prog->pin_name);
- 		if (len < 0)
- 			continue;
- 		else if (len >= PATH_MAX)
-@@ -2053,7 +2076,7 @@ int bpf_object__unpin_programs(struct bpf_object *obj, const char *path)
- 		int len;
+ 	return 0;
  
- 		len = snprintf(buf, PATH_MAX, "%s/%s", path,
--			       prog->section_name);
-+			       prog->pin_name);
- 		if (len < 0)
- 			return -EINVAL;
- 		else if (len >= PATH_MAX)
++err_unpin:
++	if (first_prog_only)
++		unlink(pinfile);
++	else
++		bpf_object__unpin_programs(obj, pinfile);
+ err_close_obj:
+ 	bpf_object__close(obj);
+ err_free_reuse_maps:
+@@ -1069,7 +1090,8 @@ static int do_help(int argc, char **argv)
+ 		"       %s %s pin   PROG FILE\n"
+ 		"       %s %s { load | loadall } OBJ  PATH \\\n"
+ 		"                         [type TYPE] [dev NAME] \\\n"
+-		"                         [map { idx IDX | name NAME } MAP]\n"
++		"                         [map { idx IDX | name NAME } MAP]\\\n"
++		"                         [pinmaps MAP_DIR]\n"
+ 		"       %s %s attach PROG ATTACH_TYPE MAP\n"
+ 		"       %s %s detach PROG ATTACH_TYPE MAP\n"
+ 		"       %s %s help\n"
 -- 
 2.19.1.930.g4563a0d9d0-goog
