@@ -1,67 +1,128 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Fri, 9 Nov 2018 16:26:32 +0900
-Subject: [PATCH v3 1/2] kretprobe: produce sane stack traces
-In-Reply-To: <20181108144437.l3proaovfqm5osnr@treble>
-References: <20181101083551.3805-2-cyphar@cyphar.com>
- <20181101204720.6ed3fe37@vmware.local.home>
- <20181102050509.tw3dhvj5urudvtjl@yavin>
- <20181102065932.bdt4pubbrkvql4mp@yavin>
- <20181102091658.1bc979a4@gandalf.local.home>
- <20181103070253.ajrqzs5xu2vf5stu@yavin>
- <20181104115913.74l4yzecisvtt2j5@yavin>
- <20181106171501.59ccabbc@gandalf.local.home>
- <20181108074612.ldy6rozdpsdps6bf@yavin>
- <20181108080448.rggfn4zawi3por23@yavin>
- <20181108144437.l3proaovfqm5osnr@treble>
-Message-ID: <20181109162632.9a3694eea8ac8056302a8262@kernel.org>
+From: joel at joelfernandes.org (Joel Fernandes)
+Date: Fri, 9 Nov 2018 00:49:28 -0800
+Subject: [PATCH v3 resend 1/2] mm: Add an F_SEAL_FUTURE_WRITE seal to memfd
+In-Reply-To: <20181108041537.39694-1-joel@joelfernandes.org>
+References: <20181108041537.39694-1-joel@joelfernandes.org>
+Message-ID: <20181109084928.GA37614@google.com>
 
-On Thu, 8 Nov 2018 08:44:37 -0600
-Josh Poimboeuf <jpoimboe at redhat.com> wrote:
-
-> On Thu, Nov 08, 2018 at 07:04:48PM +1100, Aleksa Sarai wrote:
-> > On 2018-11-08, Aleksa Sarai <cyphar at cyphar.com> wrote:
-> > > I will attach what I have at the moment to hopefully explain what the
-> > > issue I've found is (re-using the kretprobe architecture but with the
-> > > shadow-stack idea).
-> > 
-> > Here is the patch I have at the moment (it works, except for the
-> > question I have about how to handle the top-level pt_regs -- I've marked
-> > that code with XXX).
-> > 
-> > -- 
-> > Aleksa Sarai
-> > Senior Software Engineer (Containers)
-> > SUSE Linux GmbH
-> > <https://www.cyphar.com/>
-> > 
-> > --8<---------------------------------------------------------------------
-> > 
-> > Since the return address is modified by kretprobe, the various unwinders
-> > can produce invalid and confusing stack traces. ftrace mostly solved
-> > this problem by teaching each unwinder how to find the original return
-> > address for stack trace purposes. This same technique can be applied to
-> > kretprobes by simply adding a pointer to where the return address was
-> > replaced in the stack, and then looking up the relevant
-> > kretprobe_instance when a stack trace is requested.
-> > 
-> > [WIP: This is currently broken because the *first entry* will not be
-> >       overwritten since it looks like the stack pointer is different
-> >       when we are provided pt_regs. All other addresses are correctly
-> >       handled.]
+On Wed, Nov 07, 2018 at 08:15:36PM -0800, Joel Fernandes (Google) wrote:
+> Android uses ashmem for sharing memory regions. We are looking forward
+> to migrating all usecases of ashmem to memfd so that we can possibly
+> remove the ashmem driver in the future from staging while also
+> benefiting from using memfd and contributing to it. Note staging drivers
+> are also not ABI and generally can be removed at anytime.
 > 
-> When you see this problem, what does regs->ip point to?  If it's
-> pointing to generated code, then we don't _currently_ have a way of
-> dealing with that.  If it's pointing to a real function, we can fix that
-> with unwind hints.
+> One of the main usecases Android has is the ability to create a region
+> and mmap it as writeable, then add protection against making any
+> "future" writes while keeping the existing already mmap'ed
+> writeable-region active.  This allows us to implement a usecase where
+> receivers of the shared memory buffer can get a read-only view, while
+> the sender continues to write to the buffer.
+> See CursorWindow documentation in Android for more details:
+> https://developer.android.com/reference/android/database/CursorWindow
+> 
+> This usecase cannot be implemented with the existing F_SEAL_WRITE seal.
+> To support the usecase, this patch adds a new F_SEAL_FUTURE_WRITE seal
+> which prevents any future mmap and write syscalls from succeeding while
+> keeping the existing mmap active. The following program shows the seal
+> working in action:
+> 
+[...] 
+> The output of running this program is as follows:
+> ret=3
+> map 0 passed
+> write passed
+> map 1 prot-write passed as expected
+> future-write seal now active
+> write failed as expected due to future-write seal
+> map 2 prot-write failed as expected due to seal
+> : Permission denied
+> map 3 prot-read passed as expected
+> 
+> Cc: jreck at google.com
+> Cc: john.stultz at linaro.org
+> Cc: tkjos at google.com
+> Cc: gregkh at linuxfoundation.org
+> Cc: hch at infradead.org
+> Reviewed-by: John Stultz <john.stultz at linaro.org>
+> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> ---
+> v1->v2: No change, just added selftests to the series. manpages are
+> ready and I'll submit them once the patches are accepted.
+> 
+> v2->v3: Updated commit message to have more support code (John Stultz)
+>  	Renamed seal from F_SEAL_FS_WRITE to F_SEAL_FUTURE_WRITE
+> 						(Christoph Hellwig)
+> 	Allow for this seal only if grow/shrink seals are also
+> 	either previous set, or are requested along with this seal.
+> 						(Christoph Hellwig)
+> 	Added locking to synchronize access to file->f_mode.
+> 						(Christoph Hellwig)
 
-As I replied, If the stackdump is called from kretprobe event, regs->ip
-always points trampoline function. Otherwise (maybe from kprobe event,
-or panic, BUG etc.) it always be the address which the event occurs.
 
-So fixing regs->ip is correct.
+Christoph, do the patches look Ok to you now? If so, then could you give an
+Acked-by or Reviewed-by tag?
 
-Thank you,
+Thanks a lot,
+
+ - Joel
 
 
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+>  include/uapi/linux/fcntl.h |  1 +
+>  mm/memfd.c                 | 22 +++++++++++++++++++++-
+>  2 files changed, 22 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
+> index 6448cdd9a350..a2f8658f1c55 100644
+> --- a/include/uapi/linux/fcntl.h
+> +++ b/include/uapi/linux/fcntl.h
+> @@ -41,6 +41,7 @@
+>  #define F_SEAL_SHRINK	0x0002	/* prevent file from shrinking */
+>  #define F_SEAL_GROW	0x0004	/* prevent file from growing */
+>  #define F_SEAL_WRITE	0x0008	/* prevent writes */
+> +#define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
+>  /* (1U << 31) is reserved for signed error codes */
+>  
+>  /*
+> diff --git a/mm/memfd.c b/mm/memfd.c
+> index 2bb5e257080e..5ba9804e9515 100644
+> --- a/mm/memfd.c
+> +++ b/mm/memfd.c
+> @@ -150,7 +150,8 @@ static unsigned int *memfd_file_seals_ptr(struct file *file)
+>  #define F_ALL_SEALS (F_SEAL_SEAL | \
+>  		     F_SEAL_SHRINK | \
+>  		     F_SEAL_GROW | \
+> -		     F_SEAL_WRITE)
+> +		     F_SEAL_WRITE | \
+> +		     F_SEAL_FUTURE_WRITE)
+>  
+>  static int memfd_add_seals(struct file *file, unsigned int seals)
+>  {
+> @@ -219,6 +220,25 @@ static int memfd_add_seals(struct file *file, unsigned int seals)
+>  		}
+>  	}
+>  
+> +	if ((seals & F_SEAL_FUTURE_WRITE) &&
+> +	    !(*file_seals & F_SEAL_FUTURE_WRITE)) {
+> +		/*
+> +		 * The FUTURE_WRITE seal also prevents growing and shrinking
+> +		 * so we need them to be already set, or requested now.
+> +		 */
+> +		int test_seals = (seals | *file_seals) &
+> +				 (F_SEAL_GROW | F_SEAL_SHRINK);
+> +
+> +		if (test_seals != (F_SEAL_GROW | F_SEAL_SHRINK)) {
+> +			error = -EINVAL;
+> +			goto unlock;
+> +		}
+> +
+> +		spin_lock(&file->f_lock);
+> +		file->f_mode &= ~(FMODE_WRITE | FMODE_PWRITE);
+> +		spin_unlock(&file->f_lock);
+> +	}
+> +
+>  	*file_seals |= seals;
+>  	error = 0;
+>  
+> -- 
+> 2.19.1.930.g4563a0d9d0-goog
