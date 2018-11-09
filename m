@@ -1,305 +1,102 @@
 From: sdf at google.com (Stanislav Fomichev)
-Date: Fri,  9 Nov 2018 08:21:44 -0800
-Subject: [PATCH v5 bpf-next 5/7] bpftool: add loadall command
+Date: Fri,  9 Nov 2018 08:21:43 -0800
+Subject: [PATCH v5 bpf-next 4/7] libbpf: add internal pin_name
 In-Reply-To: <20181109162146.78019-1-sdf@google.com>
 References: <20181109162146.78019-1-sdf@google.com>
-Message-ID: <20181109162146.78019-6-sdf@google.com>
+Message-ID: <20181109162146.78019-5-sdf@google.com>
 
-This patch adds new *loadall* command which slightly differs from the
-existing *load*. *load* command loads all programs from the obj file,
-but pins only the first programs. *loadall* pins all programs from the
-obj file under specified directory.
-
-The intended usecase is flow_dissector, where we want to load a bunch
-of progs, pin them all and after that construct a jump table.
+pin_name is the same as section_name where '/' is replaced
+by '_'. bpf_object__pin_programs is converted to use pin_name
+to avoid the situation where section_name would require creating another
+subdirectory for a pin (as, for example, when calling bpf_object__pin_programs
+for programs in sections like "cgroup/connect6").
 
 Signed-off-by: Stanislav Fomichev <sdf at google.com>
-Acked-by: Jakub Kicinski <jakub.kicinski at netronome.com>
 ---
- .../bpftool/Documentation/bpftool-prog.rst    | 14 ++--
- tools/bpf/bpftool/bash-completion/bpftool     |  4 +-
- tools/bpf/bpftool/common.c                    | 31 ++++----
- tools/bpf/bpftool/main.h                      |  1 +
- tools/bpf/bpftool/prog.c                      | 74 ++++++++++++++-----
- 5 files changed, 81 insertions(+), 43 deletions(-)
+ tools/lib/bpf/libbpf.c | 29 ++++++++++++++++++++++++++---
+ 1 file changed, 26 insertions(+), 3 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index ac4e904b10fb..984d125c507a 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -15,7 +15,8 @@ SYNOPSIS
- 	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-f** | **--bpffs** } }
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 97ce9f214002..e827542ffa3a 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -124,6 +124,10 @@ struct bpf_program {
+ 	char *name;
+ 	int prog_ifindex;
+ 	char *section_name;
++	/* section_name with / replaced by _; makes recursive pinning
++	 * in bpf_object__pin_programs easier
++	 */
++	char *pin_name;
+ 	struct bpf_insn *insns;
+ 	size_t insns_cnt, main_prog_cnt;
+ 	enum bpf_prog_type type;
+@@ -253,6 +257,7 @@ static void bpf_program__exit(struct bpf_program *prog)
+ 	bpf_program__unload(prog);
+ 	zfree(&prog->name);
+ 	zfree(&prog->section_name);
++	zfree(&prog->pin_name);
+ 	zfree(&prog->insns);
+ 	zfree(&prog->reloc_desc);
  
- 	*COMMANDS* :=
--	{ **show** | **list** | **dump xlated** | **dump jited** | **pin** | **load** | **help** }
-+	{ **show** | **list** | **dump xlated** | **dump jited** | **pin** | **load**
-+	| **loadall** | **help** }
- 
- MAP COMMANDS
- =============
-@@ -24,7 +25,7 @@ MAP COMMANDS
- |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual**}]
- |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes**}]
- |	**bpftool** **prog pin** *PROG* *FILE*
--|	**bpftool** **prog load** *OBJ* *FILE* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*]
-+|	**bpftool** **prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*]
- |       **bpftool** **prog attach** *PROG* *ATTACH_TYPE* *MAP*
- |       **bpftool** **prog detach** *PROG* *ATTACH_TYPE* *MAP*
- |	**bpftool** **prog help**
-@@ -79,8 +80,11 @@ DESCRIPTION
- 		  contain a dot character ('.'), which is reserved for future
- 		  extensions of *bpffs*.
- 
--	**bpftool prog load** *OBJ* *FILE* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*]
--		  Load bpf program from binary *OBJ* and pin as *FILE*.
-+	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*]
-+		  Load bpf program(s) from binary *OBJ* and pin as *PATH*.
-+		  **bpftool prog load** pins only the first program from the
-+		  *OBJ* as *PATH*. **bpftool prog loadall** pins all programs
-+		  from the *OBJ* under *PATH* directory.
- 		  **type** is optional, if not specified program type will be
- 		  inferred from section names.
- 		  By default bpftool will create new maps as declared in the ELF
-@@ -93,7 +97,7 @@ DESCRIPTION
- 		  If **dev** *NAME* is specified program will be loaded onto
- 		  given networking device (offload).
- 
--		  Note: *FILE* must be located in *bpffs* mount. It must not
-+		  Note: *PATH* must be located in *bpffs* mount. It must not
- 		  contain a dot character ('.'), which is reserved for future
- 		  extensions of *bpffs*.
- 
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 3f78e6404589..780ebafb756a 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -243,7 +243,7 @@ _bpftool()
-     # Completion depends on object and command in use
-     case $object in
-         prog)
--            if [[ $command != "load" ]]; then
-+            if [[ $command != "load" && $command != "loadall" ]]; then
-                 case $prev in
-                     id)
-                         _bpftool_get_prog_ids
-@@ -309,7 +309,7 @@ _bpftool()
-                     fi
-                     return 0
-                     ;;
--                load)
-+                load|loadall)
-                     local obj
- 
-                     if [[ ${#words[@]} -lt 6 ]]; then
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index 25af85304ebe..21ce556c15e1 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -169,34 +169,23 @@ int open_obj_pinned_any(char *path, enum bpf_obj_type exp_type)
- 	return fd;
+@@ -261,6 +266,17 @@ static void bpf_program__exit(struct bpf_program *prog)
+ 	prog->idx = -1;
  }
  
--int do_pin_fd(int fd, const char *name)
-+int mount_bpffs_for_pin(const char *name)
- {
- 	char err_str[ERR_MAX_LEN];
- 	char *file;
- 	char *dir;
- 	int err = 0;
- 
--	err = bpf_obj_pin(fd, name);
--	if (!err)
--		goto out;
--
- 	file = malloc(strlen(name) + 1);
- 	strcpy(file, name);
- 	dir = dirname(file);
- 
--	if (errno != EPERM || is_bpffs(dir)) {
--		p_err("can't pin the object (%s): %s", name, strerror(errno));
-+	if (is_bpffs(dir))
-+		/* nothing to do if already mounted */
- 		goto out_free;
--	}
- 
--	/* Attempt to mount bpffs, then retry pinning. */
- 	err = mnt_bpffs(dir, err_str, ERR_MAX_LEN);
--	if (!err) {
--		err = bpf_obj_pin(fd, name);
--		if (err)
--			p_err("can't pin the object (%s): %s", name,
--			      strerror(errno));
--	} else {
-+	if (err) {
- 		err_str[ERR_MAX_LEN - 1] = '\0';
- 		p_err("can't mount BPF file system to pin the object (%s): %s",
- 		      name, err_str);
-@@ -204,10 +193,20 @@ int do_pin_fd(int fd, const char *name)
- 
- out_free:
- 	free(file);
--out:
- 	return err;
- }
- 
-+int do_pin_fd(int fd, const char *name)
++static char *__bpf_program__pin_name(struct bpf_program *prog)
 +{
-+	int err;
++	char *name, *p;
 +
-+	err = mount_bpffs_for_pin(name);
-+	if (err)
-+		return err;
++	name = p = strdup(prog->section_name);
++	while ((p = strchr(p, '/')))
++		*p = '_';
 +
-+	return bpf_obj_pin(fd, name);
++	return name;
 +}
 +
- int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(__u32))
- {
- 	unsigned int id;
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 28322ace2856..1383824c9baf 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -129,6 +129,7 @@ const char *get_fd_type_name(enum bpf_obj_type type);
- char *get_fdinfo(int fd, const char *key);
- int open_obj_pinned(char *path);
- int open_obj_pinned_any(char *path, enum bpf_obj_type exp_type);
-+int mount_bpffs_for_pin(const char *name);
- int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(__u32));
- int do_pin_fd(int fd, const char *name);
- 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 5302ee282409..3abfee5533e6 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -792,15 +792,16 @@ static int do_detach(int argc, char **argv)
- 		jsonw_null(json_wtr);
- 	return 0;
- }
--static int do_load(int argc, char **argv)
-+
-+static int load_with_options(int argc, char **argv, bool first_prog_only)
- {
- 	enum bpf_attach_type expected_attach_type;
- 	struct bpf_object_open_attr attr = {
- 		.prog_type	= BPF_PROG_TYPE_UNSPEC,
- 	};
- 	struct map_replace *map_replace = NULL;
-+	struct bpf_program *prog = NULL, *pos;
- 	unsigned int old_map_fds = 0;
--	struct bpf_program *prog;
- 	struct bpf_object *obj;
- 	struct bpf_map *map;
- 	const char *pinfile;
-@@ -918,26 +919,25 @@ static int do_load(int argc, char **argv)
- 		goto err_free_reuse_maps;
+ static int
+ bpf_program__init(void *data, size_t size, char *section_name, int idx,
+ 		  struct bpf_program *prog)
+@@ -279,6 +295,13 @@ bpf_program__init(void *data, size_t size, char *section_name, int idx,
+ 		goto errout;
  	}
  
--	prog = bpf_program__next(NULL, obj);
--	if (!prog) {
--		p_err("object file doesn't contain any bpf program");
--		goto err_close_obj;
--	}
-+	bpf_object__for_each_program(pos, obj) {
-+		enum bpf_prog_type prog_type = attr.prog_type;
- 
--	bpf_program__set_ifindex(prog, ifindex);
--	if (attr.prog_type == BPF_PROG_TYPE_UNSPEC) {
--		const char *sec_name = bpf_program__title(prog, false);
-+		if (attr.prog_type == BPF_PROG_TYPE_UNSPEC) {
-+			const char *sec_name = bpf_program__title(pos, false);
- 
--		err = libbpf_prog_type_by_name(sec_name, &attr.prog_type,
--					       &expected_attach_type);
--		if (err < 0) {
--			p_err("failed to guess program type based on section name %s\n",
--			      sec_name);
--			goto err_close_obj;
-+			err = libbpf_prog_type_by_name(sec_name, &prog_type,
-+						       &expected_attach_type);
-+			if (err < 0) {
-+				p_err("failed to guess program type based on section name %s\n",
-+				      sec_name);
-+				goto err_close_obj;
-+			}
- 		}
-+
-+		bpf_program__set_ifindex(pos, ifindex);
-+		bpf_program__set_type(pos, prog_type);
-+		bpf_program__set_expected_attach_type(pos, expected_attach_type);
- 	}
--	bpf_program__set_type(prog, attr.prog_type);
--	bpf_program__set_expected_attach_type(prog, expected_attach_type);
- 
- 	qsort(map_replace, old_map_fds, sizeof(*map_replace),
- 	      map_replace_compar);
-@@ -1001,9 +1001,31 @@ static int do_load(int argc, char **argv)
- 		goto err_close_obj;
- 	}
- 
--	if (do_pin_fd(bpf_program__fd(prog), pinfile))
-+	err = mount_bpffs_for_pin(pinfile);
-+	if (err)
- 		goto err_close_obj;
- 
-+	if (first_prog_only) {
-+		prog = bpf_program__next(NULL, obj);
-+		if (!prog) {
-+			p_err("object file doesn't contain any bpf program");
-+			goto err_close_obj;
-+		}
-+
-+		err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
-+		if (err) {
-+			p_err("failed to pin program %s",
-+			      bpf_program__title(prog, false));
-+			goto err_close_obj;
-+		}
-+	} else {
-+		err = bpf_object__pin_programs(obj, pinfile);
-+		if (err) {
-+			p_err("failed to pin all programs");
-+			goto err_close_obj;
-+		}
++	prog->pin_name = __bpf_program__pin_name(prog);
++	if (!prog->pin_name) {
++		pr_warning("failed to alloc pin name for prog under section(%d) %s\n",
++			   idx, section_name);
++		goto errout;
 +	}
 +
- 	if (json_output)
- 		jsonw_null(json_wtr);
+ 	prog->insns = malloc(size);
+ 	if (!prog->insns) {
+ 		pr_warning("failed to alloc insns for prog under section %s\n",
+@@ -2006,7 +2029,7 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ 		int len;
  
-@@ -1023,6 +1045,16 @@ static int do_load(int argc, char **argv)
- 	return -1;
- }
+ 		len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-			       prog->section_name);
++			       prog->pin_name);
+ 		if (len < 0) {
+ 			err = -EINVAL;
+ 			goto err_unpin_programs;
+@@ -2028,7 +2051,7 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ 		int len;
  
-+static int do_load(int argc, char **argv)
-+{
-+	return load_with_options(argc, argv, true);
-+}
-+
-+static int do_loadall(int argc, char **argv)
-+{
-+	return load_with_options(argc, argv, false);
-+}
-+
- static int do_help(int argc, char **argv)
- {
- 	if (json_output) {
-@@ -1035,7 +1067,8 @@ static int do_help(int argc, char **argv)
- 		"       %s %s dump xlated PROG [{ file FILE | opcodes | visual }]\n"
- 		"       %s %s dump jited  PROG [{ file FILE | opcodes }]\n"
- 		"       %s %s pin   PROG FILE\n"
--		"       %s %s load  OBJ  FILE [type TYPE] [dev NAME] \\\n"
-+		"       %s %s { load | loadall } OBJ  PATH \\\n"
-+		"                         [type TYPE] [dev NAME] \\\n"
- 		"                         [map { idx IDX | name NAME } MAP]\n"
- 		"       %s %s attach PROG ATTACH_TYPE MAP\n"
- 		"       %s %s detach PROG ATTACH_TYPE MAP\n"
-@@ -1067,6 +1100,7 @@ static const struct cmd cmds[] = {
- 	{ "dump",	do_dump },
- 	{ "pin",	do_pin },
- 	{ "load",	do_load },
-+	{ "loadall",	do_loadall },
- 	{ "attach",	do_attach },
- 	{ "detach",	do_detach },
- 	{ 0 }
+ 		len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-			       prog->section_name);
++			       prog->pin_name);
+ 		if (len < 0)
+ 			continue;
+ 		else if (len >= PATH_MAX)
+@@ -2053,7 +2076,7 @@ int bpf_object__unpin_programs(struct bpf_object *obj, const char *path)
+ 		int len;
+ 
+ 		len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-			       prog->section_name);
++			       prog->pin_name);
+ 		if (len < 0)
+ 			return -EINVAL;
+ 		else if (len >= PATH_MAX)
 -- 
 2.19.1.930.g4563a0d9d0-goog
