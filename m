@@ -1,50 +1,119 @@
-From: luto at amacapital.net (Andy Lutomirski)
-Date: Fri, 9 Nov 2018 15:14:02 -0800
+From: joel at joelfernandes.org (Joel Fernandes)
+Date: Fri, 9 Nov 2018 15:46:36 -0800
 Subject: [PATCH v3 resend 1/2] mm: Add an F_SEAL_FUTURE_WRITE seal to memfd
-In-Reply-To: <CAKOZuetZrL10zWwn4Jzzg0QL2nd3Fm0JxGtzC79SZAfOK525Ag@mail.gmail.com>
+In-Reply-To: <CAG48ez1h=v-JYnDw81HaYJzOfrNhwYksxmc2r=cJvdQVgYM+NA@mail.gmail.com>
 References: <20181108041537.39694-1-joel@joelfernandes.org>
  <CAG48ez1h=v-JYnDw81HaYJzOfrNhwYksxmc2r=cJvdQVgYM+NA@mail.gmail.com>
- <CAKOZuesw1wG-YynWL7bVb+4BWtYp0Ei62vweWF+mqF1Ln-_2Tg@mail.gmail.com>
- <BB64C995-F374-49EB-8469-4820231D8152@amacapital.net>
- <CAKOZuetZrL10zWwn4Jzzg0QL2nd3Fm0JxGtzC79SZAfOK525Ag@mail.gmail.com>
-Message-ID: <F8A6A5DC-3BA0-43BD-B7EC-EDE199B33A02@amacapital.net>
+Message-ID: <20181109234636.GA136491@google.com>
 
-
-
-> On Nov 9, 2018, at 2:42 PM, Daniel Colascione <dancol at google.com> wrote:
+On Fri, Nov 09, 2018 at 10:06:31PM +0100, Jann Horn wrote:
+> +linux-api for API addition
+> +hughd as FYI since this is somewhat related to mm/shmem
 > 
-> On Fri, Nov 9, 2018 at 2:37 PM, Andy Lutomirski <luto at amacapital.net> wrote:
->>> Another, more general fix might be to prevent /proc/pid/fd/N opens
->>> from "upgrading" access modes. But that'd be a bigger ABI break.
->> 
->> I think we should fix that, too.  I consider it a bug fix, not an ABI break, personally.
+> On Fri, Nov 9, 2018 at 9:46 PM Joel Fernandes (Google)
+> <joel at joelfernandes.org> wrote:
+> > Android uses ashmem for sharing memory regions. We are looking forward
+> > to migrating all usecases of ashmem to memfd so that we can possibly
+> > remove the ashmem driver in the future from staging while also
+> > benefiting from using memfd and contributing to it. Note staging drivers
+> > are also not ABI and generally can be removed at anytime.
+> >
+> > One of the main usecases Android has is the ability to create a region
+> > and mmap it as writeable, then add protection against making any
+> > "future" writes while keeping the existing already mmap'ed
+> > writeable-region active.  This allows us to implement a usecase where
+> > receivers of the shared memory buffer can get a read-only view, while
+> > the sender continues to write to the buffer.
+> > See CursorWindow documentation in Android for more details:
+> > https://developer.android.com/reference/android/database/CursorWindow
+> >
+> > This usecase cannot be implemented with the existing F_SEAL_WRITE seal.
+> > To support the usecase, this patch adds a new F_SEAL_FUTURE_WRITE seal
+> > which prevents any future mmap and write syscalls from succeeding while
+> > keeping the existing mmap active.
 > 
-> Someone, somewhere is probably relying on it though, and that means
-> that we probably can't change it unless it's actually causing
-> problems.
-> 
-> <mumble>spacebar heating</mumble>
+> Please CC linux-api@ on patches like this. If you had done that, I
+> might have criticized your v1 patch instead of your v3 patch...
 
-I think it has caused problems in the past. It’s certainly extremely surprising behavior.  I’d say it should be fixed and, if needed, a sysctl to unfix it might be okay.
+Ok, will do from next time.
 
+> > The following program shows the seal
+> > working in action:
+> [...]
+> > Cc: jreck at google.com
+> > Cc: john.stultz at linaro.org
+> > Cc: tkjos at google.com
+> > Cc: gregkh at linuxfoundation.org
+> > Cc: hch at infradead.org
+> > Reviewed-by: John Stultz <john.stultz at linaro.org>
+> > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> > ---
+> [...]
+> > diff --git a/mm/memfd.c b/mm/memfd.c
+> > index 2bb5e257080e..5ba9804e9515 100644
+> > --- a/mm/memfd.c
+> > +++ b/mm/memfd.c
+> [...]
+> > @@ -219,6 +220,25 @@ static int memfd_add_seals(struct file *file, unsigned int seals)
+> >                 }
+> >         }
+> >
+> > +       if ((seals & F_SEAL_FUTURE_WRITE) &&
+> > +           !(*file_seals & F_SEAL_FUTURE_WRITE)) {
+> > +               /*
+> > +                * The FUTURE_WRITE seal also prevents growing and shrinking
+> > +                * so we need them to be already set, or requested now.
+> > +                */
+> > +               int test_seals = (seals | *file_seals) &
+> > +                                (F_SEAL_GROW | F_SEAL_SHRINK);
+> > +
+> > +               if (test_seals != (F_SEAL_GROW | F_SEAL_SHRINK)) {
+> > +                       error = -EINVAL;
+> > +                       goto unlock;
+> > +               }
+> > +
+> > +               spin_lock(&file->f_lock);
+> > +               file->f_mode &= ~(FMODE_WRITE | FMODE_PWRITE);
+> > +               spin_unlock(&file->f_lock);
+> > +       }
 > 
->>>> That aside: I wonder whether a better API would be something that
->>>> allows you to create a new readonly file descriptor, instead of
->>>> fiddling with the writability of an existing fd.
->>> 
->>> That doesn't work, unfortunately. The ashmem API we're replacing with
->>> memfd requires file descriptor continuity. I also looked into opening
->>> a new FD and dup2(2)ing atop the old one, but this approach doesn't
->>> work in the case that the old FD has already leaked to some other
->>> context (e.g., another dup, SCM_RIGHTS). See
->>> https://developer.android.com/ndk/reference/group/memory. We can't
->>> break ASharedMemory_setProt.
->> 
->> 
->> Hmm.  If we fix the general reopen bug, a way to drop write access from an existing struct file would do what Android needs, right?  I don’t know if there are general VFS issues with that.
+> So you're fiddling around with the file, but not the inode? How are
+> you preventing code like the following from re-opening the file as
+> writable?
 > 
-> I also proposed that. :-) Maybe it'd work best as a special case of
-> the perennial revoke(2) that people keep proposing. You'd be able to
-> selectively revoke all access or just write access.
+> $ cat memfd.c
+> #define _GNU_SOURCE
+> #include <unistd.h>
+> #include <sys/syscall.h>
+> #include <printf.h>
+> #include <fcntl.h>
+> #include <err.h>
+> #include <stdio.h>
+> 
+> int main(void) {
+>   int fd = syscall(__NR_memfd_create, "testfd", 0);
+>   if (fd == -1) err(1, "memfd");
+>   char path[100];
+>   sprintf(path, "/proc/self/fd/%d", fd);
+>   int fd2 = open(path, O_RDWR);
+>   if (fd2 == -1) err(1, "reopen");
+>   printf("reopen successful: %d\n", fd2);
+> }
+> $ gcc -o memfd memfd.c
+> $ ./memfd
+> reopen successful: 4
 
-Sounds good to me, modulo possible races, but that shouldn’t be too hard to deal with.
+Great catch and this is indeed an issue :-(. I verified it too.
+
+> That aside: I wonder whether a better API would be something that
+> allows you to create a new readonly file descriptor, instead of
+> fiddling with the writability of an existing fd.
+
+Android usecases cannot deal with a new fd number because it breaks the
+continuity of having the same old fd, as Dan also pointed out.
+
+Also such API will have the same issues you brought up?
+
+thanks,
+
+ - Joel
