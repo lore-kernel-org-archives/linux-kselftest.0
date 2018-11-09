@@ -1,44 +1,70 @@
-From: jakub.kicinski@netronome.com (Jakub Kicinski)
-Date: Thu, 8 Nov 2018 13:54:26 -0800
-Subject: [PATCH v3 bpf-next 4/4] bpftool: support loading flow dissector
-In-Reply-To: <20181108212940.wvfnkanxqs2owcy6@mini-arch>
-References: <20181108053957.205681-1-sdf@google.com>
- <20181108053957.205681-5-sdf@google.com>
- <20181108114630.28907570@cakuba.hsd1.ca.comcast.net>
- <20181108212940.wvfnkanxqs2owcy6@mini-arch>
-Message-ID: <20181108135426.616baf8f@cakuba.hsd1.ca.comcast.net>
+From: sdf@fomichev.me (Stanislav Fomichev)
+Date: Thu,  8 Nov 2018 16:22:06 -0800
+Subject: [PATCH v4 bpf-next 0/7] bpftool: support loading flow dissector
+Message-ID: <20181109002213.5914-1-s@fomichev.me>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181108215426.f5Gw8VrJwdVQVPgo9UvAW_xJI-VCuHYJmVIDvCfi9SY@z>
+Message-ID: <20181109002206.LKd5p6ai1TxXrWhP1ErA0yNp5BrmT3q6f-3RctMMaaI@z>
 
-On Thu, 8 Nov 2018 13:29:40 -0800, Stanislav Fomichev wrote:
-> On 11/08, Jakub Kicinski wrote:
-> > On Wed,  7 Nov 2018 21:39:57 -0800, Stanislav Fomichev wrote:  
-> > > This commit adds support for loading/attaching/detaching flow
-> > > dissector program. The structure of the flow dissector program is
-> > > assumed to be the same as in the selftests:
-> > > 
-> > > * flow_dissector section with the main entry point
-> > > * a bunch of tail call progs
-> > > * a jmp_table map that is populated with the tail call progs  
-> > 
-> > Could you split the loadall changes and the flow_dissector changes into
-> > two separate patches?  
-> Sure, will do, but let's first agree on the semantical differences of
-> load vs loadall.
-> 
-> So far *load* actually loads _all_ progs (via bpf_object__load), but pins
-> only the first program. Is that what we want? I wonder whether the
-> assumption there was that there is only single program in the object.
-> Should we load only the first program in *load*?
-> 
-> If we add *loadall*, then the difference would be:
-> *load*:
->   * loads all maps and only the first program, pins only the first
->     program
-> *loadall*:
->   * loads all maps and all programs, pins everything (maps and programs)
-> 
-> Is this the expected behavior?
+From: Stanislav Fomichev <sdf@google.com>
 
-Loading all programs and maps for "load" is just a libbpf limitation we
-can remove at some point.
+v4 changes:
+* addressed another round of comments/style issues from Jakub Kicinski &
+  Quentin Monnet (thanks!)
+* implemented bpf_object__pin_maps and bpf_object__pin_programs helpers and
+  used them in bpf_program__pin
+* added new pin_name to bpf_program so bpf_program__pin
+  works with sections that contain '/'
+* moved *loadall* command implementation into a separate patch
+* added patch that implements *pinmaps* to pin maps when doing
+  load/loadall
+
+v3 changes:
+* (maybe) better cleanup for partial failure in bpf_object__pin
+* added special case in bpf_program__pin for programs with single
+  instances
+
+v2 changes:
+* addressed comments/style issues from Jakub Kicinski & Quentin Monnet
+* removed logic that populates jump table
+* added cleanup for partial failure in bpf_object__pin
+
+This patch series adds support for loading and attaching flow dissector
+programs from the bpftool:
+
+* first patch fixes flow dissector section name in the selftests (so
+  libbpf auto-detection works)
+* second patch adds proper cleanup to bpf_object__pin, parts of which are now
+  being used to attach all flow dissector progs/maps
+* third patch adds special case in bpf_program__pin for programs with
+  single instances (we don't create <prog>/0 pin anymore, just <prog>)
+* forth patch adds pin_name to the bpf_program struct
+  which is now used as a pin name in bpf_program__pin et al
+* fifth patch adds *loadall* command that pins all programs, not just
+  the first one
+* sixth patch adds *pinmaps* argument to load/loadall to let users pin
+  all maps of the obj file
+* seventh patch adds actual flow_dissector support to the bpftool and
+  an example
+
+Stanislav Fomichev (7):
+  selftests/bpf: rename flow dissector section to flow_dissector
+  libbpf: cleanup after partial failure in bpf_object__pin
+  libbpf: bpf_program__pin: add special case for instances.nr == 1
+  libbpf: add internal pin_name
+  bpftool: add loadall command
+  bpftool: add pinmaps argument to the load/loadall
+  bpftool: support loading flow dissector
+
+ .../bpftool/Documentation/bpftool-prog.rst    |  42 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |  21 +-
+ tools/bpf/bpftool/common.c                    |  31 +-
+ tools/bpf/bpftool/main.h                      |   1 +
+ tools/bpf/bpftool/prog.c                      | 185 ++++++---
+ tools/lib/bpf/libbpf.c                        | 364 ++++++++++++++++--
+ tools/lib/bpf/libbpf.h                        |  18 +
+ tools/testing/selftests/bpf/bpf_flow.c        |   2 +-
+ .../selftests/bpf/test_flow_dissector.sh      |   2 +-
+ 9 files changed, 546 insertions(+), 120 deletions(-)
+
+-- 
+2.19.1.930.g4563a0d9d0-goog
