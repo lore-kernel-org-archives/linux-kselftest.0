@@ -1,57 +1,18 @@
-From: sdf@fomichev.me (Stanislav Fomichev)
-Date: Thu,  8 Nov 2018 16:22:09 -0800
-Subject: [PATCH v4 bpf-next 3/7] libbpf: bpf_program__pin: add special case
- for instances.nr == 1
-In-Reply-To: <20181109002213.5914-1-s@fomichev.me>
+From: jakub.kicinski@netronome.com (Jakub Kicinski)
+Date: Thu, 8 Nov 2018 19:37:05 -0800
+Subject: [PATCH v4 bpf-next 2/7] libbpf: cleanup after partial failure
+ in bpf_object__pin
+In-Reply-To: <20181109002213.5914-3-s@fomichev.me>
 References: <20181109002213.5914-1-s@fomichev.me>
-Message-ID: <20181109002213.5914-4-s@fomichev.me>
+ <20181109002213.5914-3-s@fomichev.me>
+Message-ID: <20181108193705.2933c2bc@cakuba.netronome.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181109002209.BFtFzKyzMrV577jLpvbPIEpAbUVEWVCwiY_ZcL1p9sk@z>
+Message-ID: <20181109033705.QSZcQMDBJlSibTQZQP2i85Jua7JNwQiDvtkPQUS_Koo@z>
 
-From: Stanislav Fomichev <sdf@google.com>
+On Thu,  8 Nov 2018 16:22:08 -0800, Stanislav Fomichev wrote:
+> +	for (map = bpf_map__prev(map, obj);
+> +	     map != NULL;
+> +	     map = bpf_map__prev(map, obj)) {
 
-When bpf_program has only one instance, don't create a subdirectory with
-per-instance pin files (<prog>/0). Instead, just create a single pin file
-for that single instance. This simplifies object pinning by not creating
-unnecessary subdirectories.
-
-This can potentially break existing users that depend on the case
-where '/0' is always created. However, I couldn't find any serious
-usage of bpf_program__pin inside the kernel tree and I suppose there
-should be none outside.
-
-Signed-off-by: Stanislav Fomichev <sdf at google.com>
----
- tools/lib/bpf/libbpf.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index f8590490a9dd..cfa269c91e11 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -1761,6 +1761,11 @@ int bpf_program__pin(struct bpf_program *prog, const char *path)
- 		return -EINVAL;
- 	}
- 
-+	if (prog->instances.nr == 1) {
-+		/* don't create subdirs when pinning single instance */
-+		return bpf_program__pin_instance(prog, path, 0);
-+	}
-+
- 	err = make_dir(path);
- 	if (err)
- 		return err;
-@@ -1823,6 +1828,11 @@ int bpf_program__unpin(struct bpf_program *prog, const char *path)
- 		return -EINVAL;
- 	}
- 
-+	if (prog->instances.nr == 1) {
-+		/* don't create subdirs when pinning single instance */
-+		return bpf_program__unpin_instance(prog, path, 0);
-+	}
-+
- 	for (i = 0; i < prog->instances.nr; i++) {
- 		char buf[PATH_MAX];
- 		int len;
--- 
-2.19.1.930.g4563a0d9d0-goog
+nit pick: if you need to respin all these for loops on error paths could
+          have been more concise while loops
