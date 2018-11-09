@@ -1,73 +1,45 @@
 From: sdf at google.com (Stanislav Fomichev)
-Date: Fri,  9 Nov 2018 08:21:39 -0800
-Subject: [PATCH v5 bpf-next 0/7] bpftool: support loading flow dissector
-Message-ID: <20181109162146.78019-1-sdf@google.com>
+Date: Fri,  9 Nov 2018 08:21:40 -0800
+Subject: [PATCH v5 bpf-next 1/7] selftests/bpf: rename flow dissector section
+ to flow_dissector
+In-Reply-To: <20181109162146.78019-1-sdf@google.com>
+References: <20181109162146.78019-1-sdf@google.com>
+Message-ID: <20181109162146.78019-2-sdf@google.com>
 
-v5 changes:
-* FILE -> PATH for load/loadall (can be either file or directory now)
-* simpler implementation for __bpf_program__pin_name
-* removed p_err for REQ_ARGS checks
-* parse_atach_detach_args -> parse_attach_detach_args
-* for -> while in bpf_object__pin_{programs,maps} recovery
+Makes it compatible with the logic that derives program type
+from section name in libbpf_prog_type_by_name.
 
-v4 changes:
-* addressed another round of comments/style issues from Jakub Kicinski &
-  Quentin Monnet (thanks!)
-* implemented bpf_object__pin_maps and bpf_object__pin_programs helpers and
-  used them in bpf_program__pin
-* added new pin_name to bpf_program so bpf_program__pin
-  works with sections that contain '/'
-* moved *loadall* command implementation into a separate patch
-* added patch that implements *pinmaps* to pin maps when doing
-  load/loadall
+Signed-off-by: Stanislav Fomichev <sdf at google.com>
+---
+ tools/testing/selftests/bpf/bpf_flow.c             | 2 +-
+ tools/testing/selftests/bpf/test_flow_dissector.sh | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-v3 changes:
-* (maybe) better cleanup for partial failure in bpf_object__pin
-* added special case in bpf_program__pin for programs with single
-  instances
-
-v2 changes:
-* addressed comments/style issues from Jakub Kicinski & Quentin Monnet
-* removed logic that populates jump table
-* added cleanup for partial failure in bpf_object__pin
-
-This patch series adds support for loading and attaching flow dissector
-programs from the bpftool:
-
-* first patch fixes flow dissector section name in the selftests (so
-  libbpf auto-detection works)
-* second patch adds proper cleanup to bpf_object__pin, parts of which are now
-  being used to attach all flow dissector progs/maps
-* third patch adds special case in bpf_program__pin for programs with
-  single instances (we don't create <prog>/0 pin anymore, just <prog>)
-* forth patch adds pin_name to the bpf_program struct
-  which is now used as a pin name in bpf_program__pin et al
-* fifth patch adds *loadall* command that pins all programs, not just
-  the first one
-* sixth patch adds *pinmaps* argument to load/loadall to let users pin
-  all maps of the obj file
-* seventh patch adds actual flow_dissector support to the bpftool and
-  an example
-
-Stanislav Fomichev (7):
-  selftests/bpf: rename flow dissector section to flow_dissector
-  libbpf: cleanup after partial failure in bpf_object__pin
-  libbpf: bpf_program__pin: add special case for instances.nr == 1
-  libbpf: add internal pin_name
-  bpftool: add loadall command
-  bpftool: add pinmaps argument to the load/loadall
-  bpftool: support loading flow dissector
-
- .../bpftool/Documentation/bpftool-prog.rst    |  42 +-
- tools/bpf/bpftool/bash-completion/bpftool     |  21 +-
- tools/bpf/bpftool/common.c                    |  31 +-
- tools/bpf/bpftool/main.h                      |   1 +
- tools/bpf/bpftool/prog.c                      | 183 ++++++---
- tools/lib/bpf/libbpf.c                        | 359 ++++++++++++++++--
- tools/lib/bpf/libbpf.h                        |  18 +
- tools/testing/selftests/bpf/bpf_flow.c        |   2 +-
- .../selftests/bpf/test_flow_dissector.sh      |   2 +-
- 9 files changed, 537 insertions(+), 122 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/bpf_flow.c b/tools/testing/selftests/bpf/bpf_flow.c
+index 107350a7821d..b9798f558ca7 100644
+--- a/tools/testing/selftests/bpf/bpf_flow.c
++++ b/tools/testing/selftests/bpf/bpf_flow.c
+@@ -116,7 +116,7 @@ static __always_inline int parse_eth_proto(struct __sk_buff *skb, __be16 proto)
+ 	return BPF_DROP;
+ }
+ 
+-SEC("dissect")
++SEC("flow_dissector")
+ int _dissect(struct __sk_buff *skb)
+ {
+ 	if (!skb->vlan_present)
+diff --git a/tools/testing/selftests/bpf/test_flow_dissector.sh b/tools/testing/selftests/bpf/test_flow_dissector.sh
+index c0fb073b5eab..d23d4da66b83 100755
+--- a/tools/testing/selftests/bpf/test_flow_dissector.sh
++++ b/tools/testing/selftests/bpf/test_flow_dissector.sh
+@@ -59,7 +59,7 @@ else
+ fi
+ 
+ # Attach BPF program
+-./flow_dissector_load -p bpf_flow.o -s dissect
++./flow_dissector_load -p bpf_flow.o -s flow_dissector
+ 
+ # Setup
+ tc qdisc add dev lo ingress
 -- 
 2.19.1.930.g4563a0d9d0-goog
