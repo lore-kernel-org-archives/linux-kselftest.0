@@ -1,16 +1,29 @@
-From: jakub.kicinski at netronome.com (Jakub Kicinski)
-Date: Fri, 9 Nov 2018 12:15:11 -0800
-Subject: [PATCH v5 bpf-next 0/7] bpftool: support loading flow dissector
-In-Reply-To: <20181109162146.78019-1-sdf@google.com>
-References: <20181109162146.78019-1-sdf@google.com>
-Message-ID: <20181109121511.254dfd59@cakuba.netronome.com>
+From: akpm at linux-foundation.org (Andrew Morton)
+Date: Fri, 9 Nov 2018 12:36:34 -0800
+Subject: [PATCH v3 resend 1/2] mm: Add an F_SEAL_FUTURE_WRITE seal to memfd
+In-Reply-To: <20181108041537.39694-1-joel@joelfernandes.org>
+References: <20181108041537.39694-1-joel@joelfernandes.org>
+Message-ID: <20181109123634.6fe7467bb9237851250c9c56@linux-foundation.org>
 
-On Fri,  9 Nov 2018 08:21:39 -0800, Stanislav Fomichev wrote:
-> v5 changes:
-> * FILE -> PATH for load/loadall (can be either file or directory now)
-> * simpler implementation for __bpf_program__pin_name
-> * removed p_err for REQ_ARGS checks
-> * parse_atach_detach_args -> parse_attach_detach_args
-> * for -> while in bpf_object__pin_{programs,maps} recovery
+On Wed,  7 Nov 2018 20:15:36 -0800 "Joel Fernandes (Google)" <joel at joelfernandes.org> wrote:
 
-Thanks!  Patch 3 needs attention from maintainers but the rest LGTM!
+> Android uses ashmem for sharing memory regions. We are looking forward
+> to migrating all usecases of ashmem to memfd so that we can possibly
+> remove the ashmem driver in the future from staging while also
+> benefiting from using memfd and contributing to it. Note staging drivers
+> are also not ABI and generally can be removed at anytime.
+> 
+> One of the main usecases Android has is the ability to create a region
+> and mmap it as writeable, then add protection against making any
+> "future" writes while keeping the existing already mmap'ed
+> writeable-region active.  This allows us to implement a usecase where
+> receivers of the shared memory buffer can get a read-only view, while
+> the sender continues to write to the buffer.
+> See CursorWindow documentation in Android for more details:
+> https://developer.android.com/reference/android/database/CursorWindow
+
+It appears that the memfd_create and fcntl manpages will require
+updating.  Please attend to this at the appropriate time?
+
+Actually, it would help the review process if those updates were
+available now.
