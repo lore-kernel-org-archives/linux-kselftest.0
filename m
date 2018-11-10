@@ -1,149 +1,23 @@
-From: joel at joelfernandes.org (Joel Fernandes)
-Date: Sat, 10 Nov 2018 09:10:58 -0800
-Subject: [PATCH v3 resend 1/2] mm: Add an F_SEAL_FUTURE_WRITE seal to memfd
-In-Reply-To: <CAKOZuethC7+YrRyyGciUCfhSSa9cCcAFJ8g_qEw9uh3TBbyOcg@mail.gmail.com>
-References: <20181108041537.39694-1-joel@joelfernandes.org>
- <CAG48ez1h=v-JYnDw81HaYJzOfrNhwYksxmc2r=cJvdQVgYM+NA@mail.gmail.com>
- <CAG48ez0kQ4d566bXTFOYANDgii-stL-Qj-oyaBzvfxdV=PU-7g@mail.gmail.com>
- <20181110032005.GA22238@google.com>
- <CAKOZuethC7+YrRyyGciUCfhSSa9cCcAFJ8g_qEw9uh3TBbyOcg@mail.gmail.com>
-Message-ID: <20181110171058.GA242356@google.com>
+From: adobriyan at gmail.com (Alexey Dobriyan)
+Date: Sat, 10 Nov 2018 20:47:27 +0300
+Subject: [PATCH] proc: fix and merge proc-self-map-file tests
+In-Reply-To: <20181109113036.21512-1-rafael.tinoco@linaro.org>
+References: <20181108111105.GC13195@uranus.lan>
+ <20181109113036.21512-1-rafael.tinoco@linaro.org>
+Message-ID: <20181110174727.GA26417@avx2>
 
-On Sat, Nov 10, 2018 at 04:26:46AM -0800, Daniel Colascione wrote:
-> On Friday, November 9, 2018, Joel Fernandes <joel at joelfernandes.org> wrote:
+On Fri, Nov 09, 2018 at 09:30:36AM -0200, Rafael David Tinoco wrote:
+> Merge proc-self-map-files tests into one since this test should focus in
+> testing readlink in /proc/self/map_files/* only, and not trying to test
+> mapping virtual address 0.
 > 
-> > On Fri, Nov 09, 2018 at 10:19:03PM +0100, Jann Horn wrote:
-> > > On Fri, Nov 9, 2018 at 10:06 PM Jann Horn <jannh at google.com> wrote:
-> > > > On Fri, Nov 9, 2018 at 9:46 PM Joel Fernandes (Google)
-> > > > <joel at joelfernandes.org> wrote:
-> > > > > Android uses ashmem for sharing memory regions. We are looking
-> > forward
-> > > > > to migrating all usecases of ashmem to memfd so that we can possibly
-> > > > > remove the ashmem driver in the future from staging while also
-> > > > > benefiting from using memfd and contributing to it. Note staging
-> > drivers
-> > > > > are also not ABI and generally can be removed at anytime.
-> > > > >
-> > > > > One of the main usecases Android has is the ability to create a
-> > region
-> > > > > and mmap it as writeable, then add protection against making any
-> > > > > "future" writes while keeping the existing already mmap'ed
-> > > > > writeable-region active.  This allows us to implement a usecase where
-> > > > > receivers of the shared memory buffer can get a read-only view, while
-> > > > > the sender continues to write to the buffer.
-> > > > > See CursorWindow documentation in Android for more details:
-> > > > > https://developer.android.com/reference/android/database/
-> > CursorWindow
-> > > > >
-> > > > > This usecase cannot be implemented with the existing F_SEAL_WRITE
-> > seal.
-> > > > > To support the usecase, this patch adds a new F_SEAL_FUTURE_WRITE
-> > seal
-> > > > > which prevents any future mmap and write syscalls from succeeding
-> > while
-> > > > > keeping the existing mmap active.
-> > > >
-> > > > Please CC linux-api@ on patches like this. If you had done that, I
-> > > > might have criticized your v1 patch instead of your v3 patch...
-> > > >
-> > > > > The following program shows the seal
-> > > > > working in action:
-> > > > [...]
-> > > > > Cc: jreck at google.com
-> > > > > Cc: john.stultz at linaro.org
-> > > > > Cc: tkjos at google.com
-> > > > > Cc: gregkh at linuxfoundation.org
-> > > > > Cc: hch at infradead.org
-> > > > > Reviewed-by: John Stultz <john.stultz at linaro.org>
-> > > > > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> > > > > ---
-> > > > [...]
-> > > > > diff --git a/mm/memfd.c b/mm/memfd.c
-> > > > > index 2bb5e257080e..5ba9804e9515 100644
-> > > > > --- a/mm/memfd.c
-> > > > > +++ b/mm/memfd.c
-> > > > [...]
-> > > > > @@ -219,6 +220,25 @@ static int memfd_add_seals(struct file *file,
-> > unsigned int seals)
-> > > > >                 }
-> > > > >         }
-> > > > >
-> > > > > +       if ((seals & F_SEAL_FUTURE_WRITE) &&
-> > > > > +           !(*file_seals & F_SEAL_FUTURE_WRITE)) {
-> > > > > +               /*
-> > > > > +                * The FUTURE_WRITE seal also prevents growing and
-> > shrinking
-> > > > > +                * so we need them to be already set, or requested
-> > now.
-> > > > > +                */
-> > > > > +               int test_seals = (seals | *file_seals) &
-> > > > > +                                (F_SEAL_GROW | F_SEAL_SHRINK);
-> > > > > +
-> > > > > +               if (test_seals != (F_SEAL_GROW | F_SEAL_SHRINK)) {
-> > > > > +                       error = -EINVAL;
-> > > > > +                       goto unlock;
-> > > > > +               }
-> > > > > +
-> > > > > +               spin_lock(&file->f_lock);
-> > > > > +               file->f_mode &= ~(FMODE_WRITE | FMODE_PWRITE);
-> > > > > +               spin_unlock(&file->f_lock);
-> > > > > +       }
-> > > >
-> > > > So you're fiddling around with the file, but not the inode? How are
-> > > > you preventing code like the following from re-opening the file as
-> > > > writable?
-> > > >
-> > > > $ cat memfd.c
-> > > > #define _GNU_SOURCE
-> > > > #include <unistd.h>
-> > > > #include <sys/syscall.h>
-> > > > #include <printf.h>
-> > > > #include <fcntl.h>
-> > > > #include <err.h>
-> > > > #include <stdio.h>
-> > > >
-> > > > int main(void) {
-> > > >   int fd = syscall(__NR_memfd_create, "testfd", 0);
-> > > >   if (fd == -1) err(1, "memfd");
-> > > >   char path[100];
-> > > >   sprintf(path, "/proc/self/fd/%d", fd);
-> > > >   int fd2 = open(path, O_RDWR);
-> > > >   if (fd2 == -1) err(1, "reopen");
-> > > >   printf("reopen successful: %d\n", fd2);
-> > > > }
-> > > > $ gcc -o memfd memfd.c
-> > > > $ ./memfd
-> > > > reopen successful: 4
-> > > > $
-> > > >
-> > > > That aside: I wonder whether a better API would be something that
-> > > > allows you to create a new readonly file descriptor, instead of
-> > > > fiddling with the writability of an existing fd.
-> > >
-> > > My favorite approach would be to forbid open() on memfds, hope that
-> > > nobody notices the tiny API break, and then add an ioctl for "reopen
-> > > this memfd with reduced permissions" - but that's just my personal
-> > > opinion.
-> >
-> > I did something along these lines and it fixes the issue, but I forbid open
-> > of memfd only when the F_SEAL_FUTURE_WRITE seal is in place. So then its
-> > not
-> > an ABI break because this is a brand new seal. That seems the least
-> > intrusive
-> > solution and it works. Do you mind testing it and I'll add your and
-> > Tested-by
-> > to the new fix? The patch is based on top of this series.
-> >
-> 
-> Please don't forbid reopens entirely. You're taking a feature that works
-> generally (reopens) and breaking it in one specific case (memfd write
-> sealed files). The open modes are available in .open in the struct file:
-> you can deny *only* opens for write instead of denying reopens generally.
+> Lowest virtual address for user space mapping in other architectures,
+> like arm, is *at least* *(PAGE_SIZE * 2) and NULL hint does not
+> guarantee that when MAP_FIXED flag, important to this test, is given.
+> This patch also fixes this issue in remaining test.
 
-Yes, as we discussed over chat already, I will implement it that way.
+> -	p = mmap(NULL, PAGE_SIZE, PROT_NONE, MAP_PRIVATE|MAP_FILE, fd, 0);
+> +	p = mmap((void *) (2 * PAGE_SIZE), PAGE_SIZE, PROT_NONE,
 
-Also lets continue to discuss Andy's concerns he raised on the other thread.
-
-thanks,
-
- - Joel
+I don't know ARM. Is this 2 page limitation a limitation of hardware or
+kernel's?
