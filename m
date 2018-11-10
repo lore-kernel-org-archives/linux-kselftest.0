@@ -1,176 +1,151 @@
-From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Sun, 11 Nov 2018 00:31:37 +0900
-Subject: [PATCH v3 1/2] kretprobe: produce sane stack traces
-In-Reply-To: <20181109150629.wpedwxsgbftkl3ab@mikami>
-References: <20181101204720.6ed3fe37@vmware.local.home>
- <20181102050509.tw3dhvj5urudvtjl@yavin>
- <20181102065932.bdt4pubbrkvql4mp@yavin>
- <20181102091658.1bc979a4@gandalf.local.home>
- <20181103070253.ajrqzs5xu2vf5stu@yavin>
- <20181104115913.74l4yzecisvtt2j5@yavin>
- <20181106171501.59ccabbc@gandalf.local.home>
- <20181108074612.ldy6rozdpsdps6bf@yavin>
- <20181108080448.rggfn4zawi3por23@yavin>
- <20181109161551.6b96bd7d932c71432ac65e83@kernel.org>
- <20181109150629.wpedwxsgbftkl3ab@mikami>
-Message-ID: <20181111003137.c9df7a077d983cde57c06ee8@kernel.org>
+From: joel@joelfernandes.org (Joel Fernandes)
+Date: Sat, 10 Nov 2018 09:10:58 -0800
+Subject: [PATCH v3 resend 1/2] mm: Add an F_SEAL_FUTURE_WRITE seal to memfd
+In-Reply-To: <CAKOZuethC7+YrRyyGciUCfhSSa9cCcAFJ8g_qEw9uh3TBbyOcg@mail.gmail.com>
+References: <20181108041537.39694-1-joel@joelfernandes.org>
+ <CAG48ez1h=v-JYnDw81HaYJzOfrNhwYksxmc2r=cJvdQVgYM+NA@mail.gmail.com>
+ <CAG48ez0kQ4d566bXTFOYANDgii-stL-Qj-oyaBzvfxdV=PU-7g@mail.gmail.com>
+ <20181110032005.GA22238@google.com>
+ <CAKOZuethC7+YrRyyGciUCfhSSa9cCcAFJ8g_qEw9uh3TBbyOcg@mail.gmail.com>
+Message-ID: <20181110171058.GA242356@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181110153137.UAqKWcEAfIDdBm3ktencBhj7VQjpRdoGZFJcyW1cEZI@z>
+Message-ID: <20181110171058.CPzb4UChw7f3KMmXhv5AZ2YGLFh9xRk4FVK5E8T_9bk@z>
 
-On Sat, 10 Nov 2018 02:06:29 +1100
-Aleksa Sarai <asarai@suse.de> wrote:
-
-> On 2018-11-09, Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > diff --git a/arch/x86/include/asm/ptrace.h b/arch/x86/include/asm/ptrace.h
-> > > index ee696efec99f..c4dfafd43e11 100644
-> > > --- a/arch/x86/include/asm/ptrace.h
-> > > +++ b/arch/x86/include/asm/ptrace.h
-> > > @@ -172,6 +172,7 @@ static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
-> > >  	return regs->sp;
-> > >  }
-> > >  #endif
-> > > +#define stack_addr(regs) ((unsigned long *) kernel_stack_pointer(regs))
-> > 
-> > No, you should use kernel_stack_pointer(regs) itself instead of stack_addr().
-> > 
-> > > 
-> > >  #define GET_IP(regs) ((regs)->ip)
-> > >  #define GET_FP(regs) ((regs)->bp)
-> > > diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-> > > index b0d1e81c96bb..eb4da885020c 100644
-> > > --- a/arch/x86/kernel/kprobes/core.c
-> > > +++ b/arch/x86/kernel/kprobes/core.c
-> > > @@ -69,8 +69,6 @@
-> > >  DEFINE_PER_CPU(struct kprobe *, current_kprobe) = NULL;
-> > >  DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
-> > >  
-> > > -#define stack_addr(regs) ((unsigned long *)kernel_stack_pointer(regs))
-> > 
-> > I don't like keeping this meaningless macro... this should be replaced with generic
-> > kernel_stack_pointer() macro.
+On Sat, Nov 10, 2018@04:26:46AM -0800, Daniel Colascione wrote:
+> On Friday, November 9, 2018, Joel Fernandes <joel@joelfernandes.org> wrote:
 > 
-> Sure. This patch was just an example -- I can remove stack_addr() all
-> over.
+> > On Fri, Nov 09, 2018@10:19:03PM +0100, Jann Horn wrote:
+> > > On Fri, Nov 9, 2018@10:06 PM Jann Horn <jannh@google.com> wrote:
+> > > > On Fri, Nov 9, 2018 at 9:46 PM Joel Fernandes (Google)
+> > > > <joel@joelfernandes.org> wrote:
+> > > > > Android uses ashmem for sharing memory regions. We are looking
+> > forward
+> > > > > to migrating all usecases of ashmem to memfd so that we can possibly
+> > > > > remove the ashmem driver in the future from staging while also
+> > > > > benefiting from using memfd and contributing to it. Note staging
+> > drivers
+> > > > > are also not ABI and generally can be removed at anytime.
+> > > > >
+> > > > > One of the main usecases Android has is the ability to create a
+> > region
+> > > > > and mmap it as writeable, then add protection against making any
+> > > > > "future" writes while keeping the existing already mmap'ed
+> > > > > writeable-region active.  This allows us to implement a usecase where
+> > > > > receivers of the shared memory buffer can get a read-only view, while
+> > > > > the sender continues to write to the buffer.
+> > > > > See CursorWindow documentation in Android for more details:
+> > > > > https://developer.android.com/reference/android/database/
+> > CursorWindow
+> > > > >
+> > > > > This usecase cannot be implemented with the existing F_SEAL_WRITE
+> > seal.
+> > > > > To support the usecase, this patch adds a new F_SEAL_FUTURE_WRITE
+> > seal
+> > > > > which prevents any future mmap and write syscalls from succeeding
+> > while
+> > > > > keeping the existing mmap active.
+> > > >
+> > > > Please CC linux-api@ on patches like this. If you had done that, I
+> > > > might have criticized your v1 patch instead of your v3 patch...
+> > > >
+> > > > > The following program shows the seal
+> > > > > working in action:
+> > > > [...]
+> > > > > Cc: jreck at google.com
+> > > > > Cc: john.stultz at linaro.org
+> > > > > Cc: tkjos at google.com
+> > > > > Cc: gregkh at linuxfoundation.org
+> > > > > Cc: hch at infradead.org
+> > > > > Reviewed-by: John Stultz <john.stultz at linaro.org>
+> > > > > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> > > > > ---
+> > > > [...]
+> > > > > diff --git a/mm/memfd.c b/mm/memfd.c
+> > > > > index 2bb5e257080e..5ba9804e9515 100644
+> > > > > --- a/mm/memfd.c
+> > > > > +++ b/mm/memfd.c
+> > > > [...]
+> > > > > @@ -219,6 +220,25 @@ static int memfd_add_seals(struct file *file,
+> > unsigned int seals)
+> > > > >                 }
+> > > > >         }
+> > > > >
+> > > > > +       if ((seals & F_SEAL_FUTURE_WRITE) &&
+> > > > > +           !(*file_seals & F_SEAL_FUTURE_WRITE)) {
+> > > > > +               /*
+> > > > > +                * The FUTURE_WRITE seal also prevents growing and
+> > shrinking
+> > > > > +                * so we need them to be already set, or requested
+> > now.
+> > > > > +                */
+> > > > > +               int test_seals = (seals | *file_seals) &
+> > > > > +                                (F_SEAL_GROW | F_SEAL_SHRINK);
+> > > > > +
+> > > > > +               if (test_seals != (F_SEAL_GROW | F_SEAL_SHRINK)) {
+> > > > > +                       error = -EINVAL;
+> > > > > +                       goto unlock;
+> > > > > +               }
+> > > > > +
+> > > > > +               spin_lock(&file->f_lock);
+> > > > > +               file->f_mode &= ~(FMODE_WRITE | FMODE_PWRITE);
+> > > > > +               spin_unlock(&file->f_lock);
+> > > > > +       }
+> > > >
+> > > > So you're fiddling around with the file, but not the inode? How are
+> > > > you preventing code like the following from re-opening the file as
+> > > > writable?
+> > > >
+> > > > $ cat memfd.c
+> > > > #define _GNU_SOURCE
+> > > > #include <unistd.h>
+> > > > #include <sys/syscall.h>
+> > > > #include <printf.h>
+> > > > #include <fcntl.h>
+> > > > #include <err.h>
+> > > > #include <stdio.h>
+> > > >
+> > > > int main(void) {
+> > > >   int fd = syscall(__NR_memfd_create, "testfd", 0);
+> > > >   if (fd == -1) err(1, "memfd");
+> > > >   char path[100];
+> > > >   sprintf(path, "/proc/self/fd/%d", fd);
+> > > >   int fd2 = open(path, O_RDWR);
+> > > >   if (fd2 == -1) err(1, "reopen");
+> > > >   printf("reopen successful: %d\n", fd2);
+> > > > }
+> > > > $ gcc -o memfd memfd.c
+> > > > $ ./memfd
+> > > > reopen successful: 4
+> > > > $
+> > > >
+> > > > That aside: I wonder whether a better API would be something that
+> > > > allows you to create a new readonly file descriptor, instead of
+> > > > fiddling with the writability of an existing fd.
+> > >
+> > > My favorite approach would be to forbid open() on memfds, hope that
+> > > nobody notices the tiny API break, and then add an ioctl for "reopen
+> > > this memfd with reduced permissions" - but that's just my personal
+> > > opinion.
+> >
+> > I did something along these lines and it fixes the issue, but I forbid open
+> > of memfd only when the F_SEAL_FUTURE_WRITE seal is in place. So then its
+> > not
+> > an ABI break because this is a brand new seal. That seems the least
+> > intrusive
+> > solution and it works. Do you mind testing it and I'll add your and
+> > Tested-by
+> > to the new fix? The patch is based on top of this series.
+> >
 > 
-> > > -	if (regs)
-> > > -		save_stack_address(trace, regs->ip, nosched);
-> > > +	if (regs) {
-> > > +		/* XXX: Currently broken -- stack_addr(regs) doesn't match entry. */
-> > > +		addr = regs->ip;
-> > 
-> > Since this part is for storing regs->ip as a top of call-stack, this
-> > seems correct code. Stack unwind will be done next block.
-> 
-> This comment was referring to the usage of stack_addr(). stack_addr()
-> doesn't give you the right result (it isn't the address of the return
-> address -- it's slightly wrong). This is the main issue I was having --
-> am I doing something wrong here?
+> Please don't forbid reopens entirely. You're taking a feature that works
+> generally (reopens) and breaking it in one specific case (memfd write
+> sealed files). The open modes are available in .open in the struct file:
+> you can deny *only* opens for write instead of denying reopens generally.
 
-Of course stack_addr() actually just returns where the stack is. It should
-not return address, but maybe a return address from this event happens.
-Note that the "regs != NULL" means you will be in the interrupt handler
-and it will be returned to the regs->ip.
+Yes, as we discussed over chat already, I will implement it that way.
 
+Also lets continue to discuss Andy's concerns he raised on the other thread.
 
-> > > +		//addr = ftrace_graph_ret_addr(current, &state.graph_idx, addr, stack_addr(regs));
-> > 
-> > so func graph return trampoline address will be shown only when unwinding stack entries.
-> > I mean func-graph tracer is not used as an event, so it never kicks stackdump.
-> 
-> Just to make sure I understand what you're saying -- func-graph trace
-> will never actually call __ftrace_stack_trace? Because if it does, then
-> this code will be necessary (and then I'm a bit confused why the
-> unwinder has func-graph trace code -- if stack traces are never taken
-> under func-graph then the code in the unwinder is not necessary)
+thanks,
 
-You seems misunderstanding. Even if this is not called from func-graph
-tracer, the stack entries are already replaced with func-graph trampoline.
-However, regs->ip (IRQ return address) is never replaced by the func-graph
-trampoline.
-
-> My reason for commenting this out is because at this point "state" isn't
-> initialised and thus .graph_idx would not be correctly handled during
-> unwind (and it's the same reason I commented it out later).
-
-OK, but anyway, I think we don't need it.
-
-> > > +		addr = kretprobe_ret_addr(current, addr, stack_addr(regs));
-> > 
-> > But since kretprobe will be an event, which can kick the stackdump.
-> > BTW, from kretprobe, regs->ip should always be the trampoline handler, 
-> > see arch/x86/kernel/kprobes/core.c:772 :-)
-> > So it must be fixed always.
-> 
-> Right, but kretprobe_ret_addr() is returning the *original* return
-> address (and we need to do an (addr == kretprobe_trampoline)). The
-> real problem is that stack_addr(regs) isn't the same as it is during
-> kretprobe setup (but kretprobe_ret_addr() works everywhere else).
-
-I think stack_addr(regs) should be same when this is called from kretprobe
-handler context. Otherwise, yes, it is not same, but in that case, regs->ip
-is not kretprobe_trampoline too.
-
-If you find kretprobe_trampoline on the "stack", of course it's address should be
-same as it is during kretprobe setup, but if you find kretprobe_trampoline on the
-regs->ip, that should always happen on kretprobe handler context. Otherwise,
-some critical violation happens on kretprobe_trampoline. In that case, we should
-dump the kretprobe_trampoline address itself, should not recover it.
-
-> > > @@ -1856,6 +1870,41 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
-> > >  }
-> > >  NOKPROBE_SYMBOL(pre_handler_kretprobe);
-> > >  
-> > > +unsigned long kretprobe_ret_addr(struct task_struct *tsk, unsigned long ret,
-> > > +				 unsigned long *retp)
-> > > +{
-> > > +	struct kretprobe_instance *ri;
-> > > +	unsigned long flags = 0;
-> > > +	struct hlist_head *head;
-> > > +	bool need_lock;
-> > > +
-> > > +	if (likely(ret != (unsigned long) &kretprobe_trampoline))
-> > > +		return ret;
-> > > +
-> > > +	need_lock = !kretprobe_hash_is_locked(tsk);
-> > > +	if (WARN_ON(need_lock))
-> > > +		kretprobe_hash_lock(tsk, &head, &flags);
-> > > +	else
-> > > +		head = kretprobe_inst_table_head(tsk);
-> > 
-> > This may not work unless this is called from the kretprobe handler context,
-> > since if we are out of kretprobe handler context, another CPU can lock the
-> > hash table and it can be detected by kretprobe_hash_is_locked();.
-> 
-> Yeah, I noticed this as well when writing it (but needed a quick impl
-> that I could test). I will fix this, thanks!
-> 
-> By is_kretprobe_handler_context() I imagine you are referring to
-> checking is_kretprobe(current_kprobe())?
-
-yes, that's correct :)
-
-Thank you,
-
-> 
-> > So, we should check we are in the kretprobe handler context if tsk == current,
-> > if not, we definately can lock the hash lock without any warning. This can
-> > be something like;
-> > 
-> > if (is_kretprobe_handler_context()) {
-> >   // kretprobe_hash_lock(current == tsk) has been locked by caller  
-> >   if (tsk != current && kretprobe_hash(tsk) != kretprobe_hash(current))
-> >     // the hash of tsk and current can be same.
-> >     need_lock = true;
-> > } else
-> >   // we should take a lock for tsk.
-> >   need_lock = true;
-> 
-> -- 
-> Aleksa Sarai
-> Senior Software Engineer (Containers)
-> SUSE Linux GmbH
-> <https://www.cyphar.com/>
-
-
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+ - Joel
