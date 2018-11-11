@@ -1,10 +1,8 @@
-From: luto at amacapital.net (Andy Lutomirski)
-Date: Sat, 10 Nov 2018 19:40:10 -0800
+From: joel at joelfernandes.org (Joel Fernandes)
+Date: Sat, 10 Nov 2018 20:01:02 -0800
 Subject: [PATCH v3 resend 1/2] mm: Add an F_SEAL_FUTURE_WRITE seal to memfd
-In-Reply-To: <20181111023808.GA174670@google.com>
-References: <20181108041537.39694-1-joel@joelfernandes.org>
- <CAG48ez1h=v-JYnDw81HaYJzOfrNhwYksxmc2r=cJvdQVgYM+NA@mail.gmail.com>
- <CAG48ez0kQ4d566bXTFOYANDgii-stL-Qj-oyaBzvfxdV=PU-7g@mail.gmail.com>
+In-Reply-To: <543A5181-3A16-438E-B372-97BEC48A74F8@amacapital.net>
+References: <CAG48ez0kQ4d566bXTFOYANDgii-stL-Qj-oyaBzvfxdV=PU-7g@mail.gmail.com>
  <20181110032005.GA22238@google.com>
  <69CE06CC-E47C-4992-848A-66EB23EE6C74@amacapital.net>
  <20181110182405.GB242356@google.com>
@@ -13,143 +11,157 @@ References: <20181108041537.39694-1-joel@joelfernandes.org>
  <20181110220933.GB96924@google.com>
  <907D942E-E321-4BD7-BED7-ACD1D96A3643@amacapital.net>
  <20181111023808.GA174670@google.com>
-Message-ID: <543A5181-3A16-438E-B372-97BEC48A74F8@amacapital.net>
+ <543A5181-3A16-438E-B372-97BEC48A74F8@amacapital.net>
+Message-ID: <20181111040102.GA204245@google.com>
 
-
-
-> On Nov 10, 2018, at 6:38 PM, Joel Fernandes <joel at joelfernandes.org> wrote:
+On Sat, Nov 10, 2018 at 07:40:10PM -0800, Andy Lutomirski wrote:
 > 
->> On Sat, Nov 10, 2018 at 02:18:23PM -0800, Andy Lutomirski wrote:
->> 
->>>> On Nov 10, 2018, at 2:09 PM, Joel Fernandes <joel at joelfernandes.org> wrote:
->>>> 
->>>>> On Sat, Nov 10, 2018 at 11:11:27AM -0800, Daniel Colascione wrote:
->>>>>> On Sat, Nov 10, 2018 at 10:45 AM, Daniel Colascione <dancol at google.com> wrote:
->>>>>> On Sat, Nov 10, 2018 at 10:24 AM, Joel Fernandes <joel at joelfernandes.org> wrote:
->>>>>> Thanks Andy for your thoughts, my comments below:
->>>> [snip]
->>>>>> I don't see it as warty, different seals will work differently. It works
->>>>>> quite well for our usecase, and since Linux is all about solving real
->>>>>> problems in the real work, it would be useful to have it.
->>>>>> 
->>>>>>> - causes a probably-observable effect in the file mode in F_GETFL.
->>>>>> 
->>>>>> Wouldn't that be the right thing to observe anyway?
->>>>>> 
->>>>>>> - causes reopen to fail.
->>>>>> 
->>>>>> So this concern isn't true anymore if we make reopen fail only for WRITE
->>>>>> opens as Daniel suggested. I will make this change so that the security fix
->>>>>> is a clean one.
->>>>>> 
->>>>>>> - does *not* affect other struct files that may already exist on the same inode.
->>>>>> 
->>>>>> TBH if you really want to block all writes to the file, then you want
->>>>>> F_SEAL_WRITE, not this seal. The usecase we have is the fd is sent over IPC
->>>>>> to another process and we want to prevent any new writes in the receiver
->>>>>> side. There is no way this other receiving process can have an existing fd
->>>>>> unless it was already sent one without the seal applied.  The proposed seal
->>>>>> could be renamed to F_SEAL_FD_WRITE if that is preferred.
->>>>>> 
->>>>>>> - mysteriously malfunctions if you try to set it again on another struct
->>>>>>> file that already exists
->>>>>>> 
->>>>>> 
->>>>>> I didn't follow this, could you explain more?
->>>>>> 
->>>>>>> - probably is insecure when used on hugetlbfs.
->>>>>> 
->>>>>> The usecase is not expected to prevent all writes, indeed the usecase
->>>>>> requires existing mmaps to continue to be able to write into the memory map.
->>>>>> So would you call that a security issue too? The use of the seal wants to
->>>>>> allow existing mmap regions to be continue to be written into (I mentioned
->>>>>> more details in the cover letter).
->>>>>> 
->>>>>>> I see two reasonable solutions:
->>>>>>> 
->>>>>>> 1. Don’t fiddle with the struct file at all. Instead make the inode flag
->>>>>>> work by itself.
->>>>>> 
->>>>>> Currently, the various VFS paths check only the struct file's f_mode to deny
->>>>>> writes of already opened files. This would mean more checking in all those
->>>>>> paths (and modification of all those paths).
->>>>>> 
->>>>>> Anyway going with that idea, we could
->>>>>> 1. call deny_write_access(file) from the memfd's seal path which decrements
->>>>>> the inode::i_writecount.
->>>>>> 2. call get_write_access(inode) in the various VFS paths in addition to
->>>>>> checking for FMODE_*WRITE and deny the write (incase i_writecount is negative)
->>>>>> 
->>>>>> That will prevent both reopens, and writes from succeeding. However I worry a
->>>>>> bit about 2 not being too familiar with VFS internals, about what the
->>>>>> consequences of doing that may be.
->>>>> 
->>>>> IMHO, modifying both the inode and the struct file separately is fine,
->>>>> since they mean different things. In regular filesystems, it's fine to
->>>>> have a read-write open file description for a file whose inode grants
->>>>> write permission to nobody. Speaking of which: is fchmod enough to
->>>>> prevent this attack?
->>>> 
->>>> Well, yes and no. fchmod does prevent reopening the file RW, but
->>>> anyone with permissions (owner, CAP_FOWNER) can just fchmod it back. A
->>>> seal is supposed to be irrevocable, so fchmod-as-inode-seal probably
->>>> isn't sufficient by itself. While it might be good enough for Android
->>>> (in the sense that it'll prevent RW-reopens from other security
->>>> contexts to which we send an open memfd file), it's still conceptually
->>>> ugly, IMHO. Let's go with the original approach of just tweaking the
->>>> inode so that open-for-write is permanently blocked.
->>> 
->>> Agreed with the idea of modifying both file and inode flags. I was thinking
->>> modifying i_mode may do the trick but as you pointed it probably could be
->>> reverted by chmod or some other attribute setting calls.
->>> 
->>> OTOH, I don't think deny_write_access(file) can be reverted from any
->>> user-facing path so we could do that from the seal to prevent the future
->>> opens in write mode. I'll double check and test that out tomorrow.
->>> 
->>> 
->> 
->> This seems considerably more complicated and more fragile than needed. Just
->> add a new F_SEAL_WRITE_FUTURE.  Grep for F_SEAL_WRITE and make the _FUTURE
->> variant work exactly like it with two exceptions:
->> 
->> - shmem_mmap and maybe its hugetlbfs equivalent should check for it and act
->> accordingly.
 > 
-> There's more to it than that, we also need to block future writes through
-> write syscall, so we have to hook into the write path too once the seal is
-> set, not just the mmap. That means we have to add code in mm/shmem.c to do
-> that in all those handlers, to check for the seal (and hope we didn't miss a
-> file_operations handler). Is that what you are proposing?
-
-The existing code already does this. That’s why I suggested grepping :)
-
+> > On Nov 10, 2018, at 6:38 PM, Joel Fernandes <joel at joelfernandes.org> wrote:
+> > 
+> >> On Sat, Nov 10, 2018 at 02:18:23PM -0800, Andy Lutomirski wrote:
+> >> 
+> >>>> On Nov 10, 2018, at 2:09 PM, Joel Fernandes <joel at joelfernandes.org> wrote:
+> >>>> 
+> >>>>> On Sat, Nov 10, 2018 at 11:11:27AM -0800, Daniel Colascione wrote:
+> >>>>>> On Sat, Nov 10, 2018 at 10:45 AM, Daniel Colascione <dancol at google.com> wrote:
+> >>>>>> On Sat, Nov 10, 2018 at 10:24 AM, Joel Fernandes <joel at joelfernandes.org> wrote:
+> >>>>>> Thanks Andy for your thoughts, my comments below:
+> >>>> [snip]
+> >>>>>> I don't see it as warty, different seals will work differently. It works
+> >>>>>> quite well for our usecase, and since Linux is all about solving real
+> >>>>>> problems in the real work, it would be useful to have it.
+> >>>>>> 
+> >>>>>>> - causes a probably-observable effect in the file mode in F_GETFL.
+> >>>>>> 
+> >>>>>> Wouldn't that be the right thing to observe anyway?
+> >>>>>> 
+> >>>>>>> - causes reopen to fail.
+> >>>>>> 
+> >>>>>> So this concern isn't true anymore if we make reopen fail only for WRITE
+> >>>>>> opens as Daniel suggested. I will make this change so that the security fix
+> >>>>>> is a clean one.
+> >>>>>> 
+> >>>>>>> - does *not* affect other struct files that may already exist on the same inode.
+> >>>>>> 
+> >>>>>> TBH if you really want to block all writes to the file, then you want
+> >>>>>> F_SEAL_WRITE, not this seal. The usecase we have is the fd is sent over IPC
+> >>>>>> to another process and we want to prevent any new writes in the receiver
+> >>>>>> side. There is no way this other receiving process can have an existing fd
+> >>>>>> unless it was already sent one without the seal applied.  The proposed seal
+> >>>>>> could be renamed to F_SEAL_FD_WRITE if that is preferred.
+> >>>>>> 
+> >>>>>>> - mysteriously malfunctions if you try to set it again on another struct
+> >>>>>>> file that already exists
+> >>>>>>> 
+> >>>>>> 
+> >>>>>> I didn't follow this, could you explain more?
+> >>>>>> 
+> >>>>>>> - probably is insecure when used on hugetlbfs.
+> >>>>>> 
+> >>>>>> The usecase is not expected to prevent all writes, indeed the usecase
+> >>>>>> requires existing mmaps to continue to be able to write into the memory map.
+> >>>>>> So would you call that a security issue too? The use of the seal wants to
+> >>>>>> allow existing mmap regions to be continue to be written into (I mentioned
+> >>>>>> more details in the cover letter).
+> >>>>>> 
+> >>>>>>> I see two reasonable solutions:
+> >>>>>>> 
+> >>>>>>> 1. Don’t fiddle with the struct file at all. Instead make the inode flag
+> >>>>>>> work by itself.
+> >>>>>> 
+> >>>>>> Currently, the various VFS paths check only the struct file's f_mode to deny
+> >>>>>> writes of already opened files. This would mean more checking in all those
+> >>>>>> paths (and modification of all those paths).
+> >>>>>> 
+> >>>>>> Anyway going with that idea, we could
+> >>>>>> 1. call deny_write_access(file) from the memfd's seal path which decrements
+> >>>>>> the inode::i_writecount.
+> >>>>>> 2. call get_write_access(inode) in the various VFS paths in addition to
+> >>>>>> checking for FMODE_*WRITE and deny the write (incase i_writecount is negative)
+> >>>>>> 
+> >>>>>> That will prevent both reopens, and writes from succeeding. However I worry a
+> >>>>>> bit about 2 not being too familiar with VFS internals, about what the
+> >>>>>> consequences of doing that may be.
+> >>>>> 
+> >>>>> IMHO, modifying both the inode and the struct file separately is fine,
+> >>>>> since they mean different things. In regular filesystems, it's fine to
+> >>>>> have a read-write open file description for a file whose inode grants
+> >>>>> write permission to nobody. Speaking of which: is fchmod enough to
+> >>>>> prevent this attack?
+> >>>> 
+> >>>> Well, yes and no. fchmod does prevent reopening the file RW, but
+> >>>> anyone with permissions (owner, CAP_FOWNER) can just fchmod it back. A
+> >>>> seal is supposed to be irrevocable, so fchmod-as-inode-seal probably
+> >>>> isn't sufficient by itself. While it might be good enough for Android
+> >>>> (in the sense that it'll prevent RW-reopens from other security
+> >>>> contexts to which we send an open memfd file), it's still conceptually
+> >>>> ugly, IMHO. Let's go with the original approach of just tweaking the
+> >>>> inode so that open-for-write is permanently blocked.
+> >>> 
+> >>> Agreed with the idea of modifying both file and inode flags. I was thinking
+> >>> modifying i_mode may do the trick but as you pointed it probably could be
+> >>> reverted by chmod or some other attribute setting calls.
+> >>> 
+> >>> OTOH, I don't think deny_write_access(file) can be reverted from any
+> >>> user-facing path so we could do that from the seal to prevent the future
+> >>> opens in write mode. I'll double check and test that out tomorrow.
+> >>> 
+> >>> 
+> >> 
+> >> This seems considerably more complicated and more fragile than needed. Just
+> >> add a new F_SEAL_WRITE_FUTURE.  Grep for F_SEAL_WRITE and make the _FUTURE
+> >> variant work exactly like it with two exceptions:
+> >> 
+> >> - shmem_mmap and maybe its hugetlbfs equivalent should check for it and act
+> >> accordingly.
+> > 
+> > There's more to it than that, we also need to block future writes through
+> > write syscall, so we have to hook into the write path too once the seal is
+> > set, not just the mmap. That means we have to add code in mm/shmem.c to do
+> > that in all those handlers, to check for the seal (and hope we didn't miss a
+> > file_operations handler). Is that what you are proposing?
 > 
-> Also, it means we have to keep CONFIG_TMPFS enabled so that the
-> shmem_file_operations write handlers like write_iter are hooked up. Currently
-> memfd works even with !CONFIG_TMPFS.
+> The existing code already does this. That’s why I suggested grepping :)
 
-If so, that sounds like it may already be a bug.
+Ahh sorry I see your point now. Ok let me try this approach. Thank you!
+Probably we can make this work this way and it is sufficient.
 
+> > 
+> > Also, it means we have to keep CONFIG_TMPFS enabled so that the
+> > shmem_file_operations write handlers like write_iter are hooked up. Currently
+> > memfd works even with !CONFIG_TMPFS.
 > 
->> - add_seals won’t need the wait_for_pins and mapping_deny_write logic.
->> 
->> That really should be all that’s needed.
-> 
-> It seems a fair idea what you're saying. But I don't see how its less
-> complex.. IMO its far more simple to have VFS do the denial of the operations
-> based on the flags of its datastructures.. and if it works (which I will test
-> to be sure it will), then we should be good.
+> If so, that sounds like it may already be a bug.
 
-I agree it’s complicated, but the code is already written.  You should just need to adjust some masks.
+Actually, its not a bug. If CONFIG_TMPFS is disabled, then IIRC write syscall
+will be prevented anyway and then the mmap is the only way. I'll double check
+that once I work on this idea.
 
+> > 
+> >> - add_seals won’t need the wait_for_pins and mapping_deny_write logic.
+> >> 
+> >> That really should be all that’s needed.
+> > 
+> > It seems a fair idea what you're saying. But I don't see how its less
+> > complex.. IMO its far more simple to have VFS do the denial of the operations
+> > based on the flags of its datastructures.. and if it works (which I will test
+> > to be sure it will), then we should be good.
 > 
-> Btw by any chance, are you also coming by LPC conference next week?
+> I agree it’s complicated, but the code is already written.  You should just
+> need to adjust some masks.
 > 
 
-No.  I’d like to, but I can’t make the trip this year.
+Right.
 
-> thanks!
+> > 
+> > Btw by any chance, are you also coming by LPC conference next week?
+> > 
 > 
-> - Joel
-> 
+> No.  I’d like to, but I can’t make the trip this year.
+
+Ok, no worries.
+
+thanks,
+
+- Joel
