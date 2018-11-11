@@ -1,5 +1,5 @@
 From: joel at joelfernandes.org (Joel Fernandes)
-Date: Sat, 10 Nov 2018 20:01:02 -0800
+Date: Sun, 11 Nov 2018 00:09:45 -0800
 Subject: [PATCH v3 resend 1/2] mm: Add an F_SEAL_FUTURE_WRITE seal to memfd
 In-Reply-To: <543A5181-3A16-438E-B372-97BEC48A74F8@amacapital.net>
 References: <CAG48ez0kQ4d566bXTFOYANDgii-stL-Qj-oyaBzvfxdV=PU-7g@mail.gmail.com>
@@ -12,59 +12,10 @@ References: <CAG48ez0kQ4d566bXTFOYANDgii-stL-Qj-oyaBzvfxdV=PU-7g@mail.gmail.com>
  <907D942E-E321-4BD7-BED7-ACD1D96A3643@amacapital.net>
  <20181111023808.GA174670@google.com>
  <543A5181-3A16-438E-B372-97BEC48A74F8@amacapital.net>
-Message-ID: <20181111040102.GA204245@google.com>
+Message-ID: <20181111080945.GA78191@google.com>
 
 On Sat, Nov 10, 2018 at 07:40:10PM -0800, Andy Lutomirski wrote:
-> 
-> 
-> > On Nov 10, 2018, at 6:38 PM, Joel Fernandes <joel at joelfernandes.org> wrote:
-> > 
-> >> On Sat, Nov 10, 2018 at 02:18:23PM -0800, Andy Lutomirski wrote:
-> >> 
-> >>>> On Nov 10, 2018, at 2:09 PM, Joel Fernandes <joel at joelfernandes.org> wrote:
-> >>>> 
-> >>>>> On Sat, Nov 10, 2018 at 11:11:27AM -0800, Daniel Colascione wrote:
-> >>>>>> On Sat, Nov 10, 2018 at 10:45 AM, Daniel Colascione <dancol at google.com> wrote:
-> >>>>>> On Sat, Nov 10, 2018 at 10:24 AM, Joel Fernandes <joel at joelfernandes.org> wrote:
-> >>>>>> Thanks Andy for your thoughts, my comments below:
-> >>>> [snip]
-> >>>>>> I don't see it as warty, different seals will work differently. It works
-> >>>>>> quite well for our usecase, and since Linux is all about solving real
-> >>>>>> problems in the real work, it would be useful to have it.
-> >>>>>> 
-> >>>>>>> - causes a probably-observable effect in the file mode in F_GETFL.
-> >>>>>> 
-> >>>>>> Wouldn't that be the right thing to observe anyway?
-> >>>>>> 
-> >>>>>>> - causes reopen to fail.
-> >>>>>> 
-> >>>>>> So this concern isn't true anymore if we make reopen fail only for WRITE
-> >>>>>> opens as Daniel suggested. I will make this change so that the security fix
-> >>>>>> is a clean one.
-> >>>>>> 
-> >>>>>>> - does *not* affect other struct files that may already exist on the same inode.
-> >>>>>> 
-> >>>>>> TBH if you really want to block all writes to the file, then you want
-> >>>>>> F_SEAL_WRITE, not this seal. The usecase we have is the fd is sent over IPC
-> >>>>>> to another process and we want to prevent any new writes in the receiver
-> >>>>>> side. There is no way this other receiving process can have an existing fd
-> >>>>>> unless it was already sent one without the seal applied.  The proposed seal
-> >>>>>> could be renamed to F_SEAL_FD_WRITE if that is preferred.
-> >>>>>> 
-> >>>>>>> - mysteriously malfunctions if you try to set it again on another struct
-> >>>>>>> file that already exists
-> >>>>>>> 
-> >>>>>> 
-> >>>>>> I didn't follow this, could you explain more?
-> >>>>>> 
-> >>>>>>> - probably is insecure when used on hugetlbfs.
-> >>>>>> 
-> >>>>>> The usecase is not expected to prevent all writes, indeed the usecase
-> >>>>>> requires existing mmaps to continue to be able to write into the memory map.
-> >>>>>> So would you call that a security issue too? The use of the seal wants to
-> >>>>>> allow existing mmap regions to be continue to be written into (I mentioned
-> >>>>>> more details in the cover letter).
-> >>>>>> 
+[...]
 > >>>>>>> I see two reasonable solutions:
 > >>>>>>> 
 > >>>>>>> 1. Don’t fiddle with the struct file at all. Instead make the inode flag
@@ -123,21 +74,14 @@ On Sat, Nov 10, 2018 at 07:40:10PM -0800, Andy Lutomirski wrote:
 > > file_operations handler). Is that what you are proposing?
 > 
 > The existing code already does this. That’s why I suggested grepping :)
-
-Ahh sorry I see your point now. Ok let me try this approach. Thank you!
-Probably we can make this work this way and it is sufficient.
-
+> 
 > > 
 > > Also, it means we have to keep CONFIG_TMPFS enabled so that the
 > > shmem_file_operations write handlers like write_iter are hooked up. Currently
 > > memfd works even with !CONFIG_TMPFS.
 > 
 > If so, that sounds like it may already be a bug.
-
-Actually, its not a bug. If CONFIG_TMPFS is disabled, then IIRC write syscall
-will be prevented anyway and then the mmap is the only way. I'll double check
-that once I work on this idea.
-
+> 
 > > 
 > >> - add_seals won’t need the wait_for_pins and mapping_deny_write logic.
 > >> 
@@ -152,16 +96,112 @@ that once I work on this idea.
 > need to adjust some masks.
 > 
 
-Right.
+Its actually not that bad and a great idea, I did something like the
+following and it works pretty well. I would say its cleaner than the old
+approach for sure (and I also added a /proc/pid/fd/N reopen test to the
+selftest and made sure that issue goes away).
 
-> > 
-> > Btw by any chance, are you also coming by LPC conference next week?
-> > 
-> 
-> No.  I’d like to, but I can’t make the trip this year.
+Side note: One subtelty I discovered from the existing selftests is once the
+F_SEAL_WRITE are active, an mmap of PROT_READ and MAP_SHARED region is
+expected to fail. This is also evident from this code in mmap_region:
+		if (vm_flags & VM_SHARED) {
+			error = mapping_map_writable(file->f_mapping);
+			if (error)
+				goto allow_write_and_free_vma;
+		}
 
-Ok, no worries.
+---8<-----------------------
 
-thanks,
+From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
+Subject: [PATCH] mm/memfd: implement future write seal using shmem ops
 
-- Joel
+Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+---
+ fs/hugetlbfs/inode.c |  2 +-
+ mm/memfd.c           | 19 -------------------
+ mm/shmem.c           | 13 ++++++++++---
+ 3 files changed, 11 insertions(+), 23 deletions(-)
+
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index 32920a10100e..1978581abfdf 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -530,7 +530,7 @@ static long hugetlbfs_punch_hole(struct inode *inode, loff_t offset, loff_t len)
+ 		inode_lock(inode);
+ 
+ 		/* protected by i_mutex */
+-		if (info->seals & F_SEAL_WRITE) {
++		if (info->seals & (F_SEAL_WRITE | F_SEAL_FUTURE_WRITE)) {
+ 			inode_unlock(inode);
+ 			return -EPERM;
+ 		}
+diff --git a/mm/memfd.c b/mm/memfd.c
+index 5ba9804e9515..a9ece5fab439 100644
+--- a/mm/memfd.c
++++ b/mm/memfd.c
+@@ -220,25 +220,6 @@ static int memfd_add_seals(struct file *file, unsigned int seals)
+ 		}
+ 	}
+ 
+-	if ((seals & F_SEAL_FUTURE_WRITE) &&
+-	    !(*file_seals & F_SEAL_FUTURE_WRITE)) {
+-		/*
+-		 * The FUTURE_WRITE seal also prevents growing and shrinking
+-		 * so we need them to be already set, or requested now.
+-		 */
+-		int test_seals = (seals | *file_seals) &
+-				 (F_SEAL_GROW | F_SEAL_SHRINK);
+-
+-		if (test_seals != (F_SEAL_GROW | F_SEAL_SHRINK)) {
+-			error = -EINVAL;
+-			goto unlock;
+-		}
+-
+-		spin_lock(&file->f_lock);
+-		file->f_mode &= ~(FMODE_WRITE | FMODE_PWRITE);
+-		spin_unlock(&file->f_lock);
+-	}
+-
+ 	*file_seals |= seals;
+ 	error = 0;
+ 
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 446942677cd4..7dad7efd8b99 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -2163,6 +2163,12 @@ int shmem_lock(struct file *file, int lock, struct user_struct *user)
+ 
+ static int shmem_mmap(struct file *file, struct vm_area_struct *vma)
+ {
++	struct shmem_inode_info *info = SHMEM_I(file_inode(file));
++
++	/* New shared mmaps are not allowed when "future write" seal active. */
++	if ((vma->vm_flags & VM_SHARED) && (info->seals & F_SEAL_FUTURE_WRITE))
++		return -EPERM;
++
+ 	file_accessed(file);
+ 	vma->vm_ops = &shmem_vm_ops;
+ 	if (IS_ENABLED(CONFIG_TRANSPARENT_HUGE_PAGECACHE) &&
+@@ -2391,8 +2397,9 @@ shmem_write_begin(struct file *file, struct address_space *mapping,
+ 	pgoff_t index = pos >> PAGE_SHIFT;
+ 
+ 	/* i_mutex is held by caller */
+-	if (unlikely(info->seals & (F_SEAL_WRITE | F_SEAL_GROW))) {
+-		if (info->seals & F_SEAL_WRITE)
++	if (unlikely(info->seals & (F_SEAL_GROW |
++				   F_SEAL_WRITE | F_SEAL_FUTURE_WRITE))) {
++		if (info->seals & (F_SEAL_WRITE | F_SEAL_FUTURE_WRITE))
+ 			return -EPERM;
+ 		if ((info->seals & F_SEAL_GROW) && pos + len > inode->i_size)
+ 			return -EPERM;
+@@ -2657,7 +2664,7 @@ static long shmem_fallocate(struct file *file, int mode, loff_t offset,
+ 		DECLARE_WAIT_QUEUE_HEAD_ONSTACK(shmem_falloc_waitq);
+ 
+ 		/* protected by i_mutex */
+-		if (info->seals & F_SEAL_WRITE) {
++		if (info->seals & F_SEAL_WRITE || info->seals & F_SEAL_FUTURE_WRITE) {
+ 			error = -EPERM;
+ 			goto out;
+ 		}
+-- 
+2.19.1.930.g4563a0d9d0-goog
