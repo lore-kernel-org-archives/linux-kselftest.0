@@ -1,66 +1,77 @@
-From: asarai at suse.de (Aleksa Sarai)
-Date: Mon, 12 Nov 2018 21:38:22 +1100
-Subject: [PATCH v3 1/2] kretprobe: produce sane stack traces
-In-Reply-To: <20181111003137.c9df7a077d983cde57c06ee8@kernel.org>
-References: <20181102065932.bdt4pubbrkvql4mp@yavin>
- <20181102091658.1bc979a4@gandalf.local.home>
- <20181103070253.ajrqzs5xu2vf5stu@yavin>
- <20181104115913.74l4yzecisvtt2j5@yavin>
- <20181106171501.59ccabbc@gandalf.local.home>
- <20181108074612.ldy6rozdpsdps6bf@yavin>
- <20181108080448.rggfn4zawi3por23@yavin>
- <20181109161551.6b96bd7d932c71432ac65e83@kernel.org>
- <20181109150629.wpedwxsgbftkl3ab@mikami>
- <20181111003137.c9df7a077d983cde57c06ee8@kernel.org>
-Message-ID: <20181112103822.ktd4fx7o4cqpfk4q@mikami>
+From: adobriyan at gmail.com (Alexey Dobriyan)
+Date: Mon, 12 Nov 2018 17:14:57 +0300
+Subject: [PATCH] proc: fixup map_files test on arm
+In-Reply-To: <1541904527.857883.1572718104.2AE8D0DA@webmail.messagingengine.com>
+References: <20181110184920.GA18252@avx2>
+ <1541904527.857883.1572718104.2AE8D0DA@webmail.messagingengine.com>
+Message-ID: <20181112141456.GA15690@avx2>
 
-On 2018-11-11, Masami Hiramatsu <mhiramat at kernel.org> wrote:
-> > > > +		addr = kretprobe_ret_addr(current, addr, stack_addr(regs));
-> > > 
-> > > But since kretprobe will be an event, which can kick the stackdump.
-> > > BTW, from kretprobe, regs->ip should always be the trampoline handler, 
-> > > see arch/x86/kernel/kprobes/core.c:772 :-)
-> > > So it must be fixed always.
-> > 
-> > Right, but kretprobe_ret_addr() is returning the *original* return
-> > address (and we need to do an (addr == kretprobe_trampoline)). The
-> > real problem is that stack_addr(regs) isn't the same as it is during
-> > kretprobe setup (but kretprobe_ret_addr() works everywhere else).
+On Sun, Nov 11, 2018 at 12:48:47AM -0200, Rafael David Tinoco wrote:
+> Including Shuah and kselftest list...
 > 
-> I think stack_addr(regs) should be same when this is called from kretprobe
-> handler context. Otherwise, yes, it is not same, but in that case, regs->ip
-> is not kretprobe_trampoline too.
+> On Sat, Nov 10, 2018, at 4:49 PM, Alexey Dobriyan wrote:
+> > https://bugs.linaro.org/show_bug.cgi?id=3782
+> > 
+> > Turns out arm doesn't allow to map address 0, so try minimum virtual
+> > address instead.
+> > 
+> > Reported-by: Rafael David Tinoco <rafael.tinoco at linaro.org>
+> > Signed-off-by: Alexey Dobriyan <adobriyan at gmail.com>
+> > ---
+> > 
+> >  tools/testing/selftests/proc/proc-self-map-files-002.c |    9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > 
+> > --- a/tools/testing/selftests/proc/proc-self-map-files-002.c
+> > +++ b/tools/testing/selftests/proc/proc-self-map-files-002.c
+> > @@ -13,7 +13,7 @@
+> >   * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT 
+> > OF
+> >   * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+> >   */
+> > -/* Test readlink /proc/self/map_files/... with address 0. */
+> > +/* Test readlink /proc/self/map_files/... with minimum address. */
+> >  #include <errno.h>
+> >  #include <sys/types.h>
+> >  #include <sys/stat.h>
+> > @@ -47,6 +47,11 @@ static void fail(const char *fmt, unsigned long a, 
+> > unsigned long b)
+> >  int main(void)
+> >  {
+> >  	const unsigned int PAGE_SIZE = sysconf(_SC_PAGESIZE);
+> > +#ifdef __arm__
+> > +	unsigned long va = 2 * PAGE_SIZE;
+> > +#else
+> > +	unsigned long va = 0;
+> > +#endif
+> >  	void *p;
+> >  	int fd;
+> >  	unsigned long a, b;
+> > @@ -55,7 +60,7 @@ int main(void)
+> >  	if (fd == -1)
+> >  		return 1;
+> >  
+> > -	p = mmap(NULL, PAGE_SIZE, PROT_NONE, MAP_PRIVATE|MAP_FILE|MAP_FIXED, fd, 0);
+> > +	p = mmap(va, PAGE_SIZE, PROT_NONE, MAP_PRIVATE|MAP_FILE|MAP_FIXED, fd, 0);
+> >  	if (p == MAP_FAILED) {
+> >  		if (errno == EPERM)
+> >  			return 2;
+> 
+> I have sent a patch removing proc-self-map-files-002 AND making 001 to use as a
+> HINT for mmap (MAP_FIXED) *at least*  *(2 * PAGE_SIZE), which would, likely,
+> attend all  architectures, avoiding trying to make the test specific to one,
+> and, still, test the symlinks for issues (like bad chars, spaces, so on).
 
-I figured it out.
+If the goal is to test the lowest address then going for 2*PAGE_SIZE is
+a mistake.
 
-It should be (regs->sp - 1) (just like it is inside the relevant
-unwinder function for ORC). I now have a prototype which works under the
-frame unwinder[*] -- however under ORC you can only see the top-most
-function (the unwinder doesn't see the other function calls). I'm
-playing with ORC hints with kretprobe_trampoline to try to improve
-things but it's still a bit screwy.
+Which BTW hints to add a test for the highest address.
 
+> Both tests (001 and 002) have pretty much the same code, while they could have 2
+> tests in a single code, using kselftest framework. Is NULL hint + MAP_FIXED
+> something imperative for this test ? Why not to have all in a single test ?
 
-[*]: However, I've noticed that the stack traces between the two traces
-	 no longer match. On kprobe you get function_name+1, but on
-	 kretprobe you get function_caller+foo. Obviously it's working but
-	 the return address results in slightly different stack traces. This
-	 means that stack trace aggregation between kprobe and kretprobe
-	 won't work anymore -- at least not like it did in my original
-	 patch. So I'm really not sure where to go from here.
+I dislike tests which lump everything together into one process.
 
-I can send around another patchset to illustrate the problem if you like
-(as well as show how the current unwinding code works).
-
--- 
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181112/562e3359/attachment.sig>
+> Are you keeping the NULL hint just to test mmap, apart" from the core of
+> this test ?
