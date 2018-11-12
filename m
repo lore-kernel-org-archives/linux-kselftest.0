@@ -1,9 +1,9 @@
-From: sinara-group@bk.ru (Daniel Murray)
-Date: Sun, 11 Nov 2018 15:35:39 +0000 (UTC)
-Subject: Price Inquiry
-Message-ID: <20181111162109.D700F590834@mail.hanqfast.cf>
+From: sinara-group@bk.ru (sinara-group@bk.ru)
+Date: Mon, 12 Nov 2018 08:58:14 +0000 (UTC)
+Subject: Inquiry 12/11/2018
+Message-ID: <20181112091259.2867F90ED9D@mail.hanqfast.cf>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181111153539.GTvtBvEWWT7OWWeY5hATb6zYGykY2w6hO1Oiai257vY@z>
+Message-ID: <20181112085814.J7R_aDus6HL1Z5mHeE2R-6byeET_WkwLDau28zkZyxg@z>
 
 Hi,friend,
  
