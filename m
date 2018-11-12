@@ -1,7 +1,7 @@
-From: sinara-group at bk.ru (Daniel Murray)
-Date: Sun, 11 Nov 2018 15:35:39 +0000 (UTC)
-Subject: Price Inquiry
-Message-ID: <20181111162109.D700F590834@mail.hanqfast.cf>
+From: sinara-group at bk.ru (sinara-group at bk.ru)
+Date: Mon, 12 Nov 2018 08:58:14 +0000 (UTC)
+Subject: Inquiry 12/11/2018
+Message-ID: <20181112091259.2867F90ED9D@mail.hanqfast.cf>
 
 Hi,friend,
  
