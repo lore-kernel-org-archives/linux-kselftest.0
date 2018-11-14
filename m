@@ -1,78 +1,69 @@
-From: broonie@kernel.org (Mark Brown)
-Date: Wed, 14 Nov 2018 11:50:43 -0800
-Subject: [PATCH RFC 2/2] selftests/x86/fsgsbase: Default to trying to run the
- test repeatedly
-In-Reply-To: <20181114195043.8021-1-broonie@kernel.org>
-References: <20181114195043.8021-1-broonie@kernel.org>
-Message-ID: <20181114195043.8021-3-broonie@kernel.org>
+From: ahmedsoliman@mena.vt.edu (Ahmed Soliman)
+Date: Wed, 14 Nov 2018 23:29:59 +0200
+Subject: KVM selftests are failing
+In-Reply-To: <CANBxJ=G4xdF8ZOR4zyoX1edNa=jYxk1xrzoi+7Xgcqt9qDoM2w@mail.gmail.com>
+References: <CANBxJ=EQOt1t=PkLsMvtfB2SbiLMPeGvFxB7SJXf7m3OkcionQ@mail.gmail.com>
+ <20181114180807.6crs7awhvo26ldbr@hawk.localdomain>
+ <CADYN=9Jh10guVNFfhS8XH+RwZAouLJQu7Svg4+Tz3rQDexzDkg@mail.gmail.com>
+ <CANBxJ=G4xdF8ZOR4zyoX1edNa=jYxk1xrzoi+7Xgcqt9qDoM2w@mail.gmail.com>
+Message-ID:
+ <CANBxJ=EB8izWM8iLd49Uvd1z1O-gLvkGmiKNHjfHifFohj2xbg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181114195043.NCpk3Z3K7NHiKLUTWSbb-P9Zmhi7Av8jEgd7oQ5KwdA@z>
+Message-ID: <20181114212959.JNC9f2fvqQypg3A0wQM6HL9bnij_5gX43C0Ou9SRjUE@z>
 
-In automated testing it has been found that on many systems the fsgsbase
-test fails intermittently.  This was reported and discussed a while
-back:
+Hello again,
+On Wed, Nov 14, 2018@9:23 PM Ahmed Soliman <ahmedsoliman@mena.vt.edu> wrote:
+> I don't do a make clean normally, but I will do it this time when
+> bisecting, also I only use shallow
+>  clones so it will also take some time pulling. Also to note, The arch
+> I am using is Haswell, I am not
+> sure if that should make any difference though.
 
-    https://lore.kernel.org/lkml/20180126153631.ha7yc33fj5uhitjo at xps/
+I started bisecting from commit 783e9e51266ebb7f78c606a53cb0fa41bb7c31a0
+which introduces kvm selftests. I started from complete clean kernel build and
+run, but unfortunately, I got the Assert there too.
 
-with the analysis concluding that this is a hardware issue affecting a
-subset of systems but no fix has been merged as yet.  As well as the
-actual problem found by testing the intermittent test failure is causing
-issues for the people doing the automated testing due to the noise.
+Just in case it might help identifying the issue, this is the output
+of my lscpu:
+    Architecture:        x86_64
+    CPU op-mode(s):      32-bit, 64-bit
+    Byte Order:          Little Endian
+    CPU(s):              4
+    On-line CPU(s) list: 0-3
+    Thread(s) per core:  2
+    Core(s) per socket:  2
+    Socket(s):           1
+    NUMA node(s):        1
+    Vendor ID:           GenuineIntel
+    CPU family:          6
+    Model:               69
+    Model name:          Intel(R) Core(TM) i7-4500U CPU @ 1.80GHz
+    Stepping:            1
+    CPU MHz:             897.938
+    CPU max MHz:         3000.0000
+    CPU min MHz:         800.0000
+    BogoMIPS:            4788.69
+    Virtualization:      VT-x
+    L1d cache:           32K
+    L1i cache:           32K
+    L2 cache:            256K
+    L3 cache:            4096K
+    NUMA node0 CPU(s):   0-3
+    Flags:           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca
+                     cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm
+                     pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon
+                     pebs bts rep_good nopl xtopology nonstop_tsc cpuid
+                     aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2
+                     ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 movbe
+                     popcnt aes xsave avx f16c rdrand lahf_lm abm cpuid_fault
+                     epb invpcid_single pti tpr_shadow vnmi flexpriority ept
+                     vpid fsgsbase tsc_adjust bmi1 avx2 s mep bmi2 erms invpcid
+                     xsaveopt dtherm ida arat pln pts
 
-In order to make the testing stable modify the test program to iterate
-through the test repeatedly, choosing 5000 iterations based on prior
-reports and local testing.  This unfortunately greatly increases the
-execution time for the selftests when things succeed which isn't great,
-in my local tests on a range of systems it pushes the execution time up
-to approximately a minute when no failures are encountered.
 
-Reported-by: Dan Rue <dan.rue at linaro.org>
-Signed-off-by: Mark Brown <broonie at kernel.org>
----
- tools/testing/selftests/x86/fsgsbase.c | 27 +++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+> > What would be the difference in CONFIG_* fragments that you both have enabled?
+>
+> Here is my config file:
+> https://pastebin.com/fCNV2z8c
 
-diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
-index 6cda6daa1f8c..83410749ff1f 100644
---- a/tools/testing/selftests/x86/fsgsbase.c
-+++ b/tools/testing/selftests/x86/fsgsbase.c
-@@ -379,7 +379,7 @@ static void test_unexpected_base(void)
- 	}
- }
- 
--int main()
-+int test()
- {
- 	pthread_t thread;
- 
-@@ -437,3 +437,28 @@ int main()
- 
- 	return nerrs == 0 ? 0 : 1;
- }
-+
-+int main()
-+{
-+	int tries = 5000;
-+	int i;
-+
-+	if (tries > 1)
-+		quiet = true;
-+
-+	for (i = 0; i < tries; i++) {
-+		if (test() != 0)
-+			break;
-+	}
-+
-+	if (quiet) {
-+		if (nerrs) {
-+			printf("[FAIL] %d errors detected in %d tries\n",
-+				nerrs, i + 1);
-+		} else {
-+			printf("[PASS] %d runs succeeded\n", i);
-+		}
-+	}
-+
-+	return nerrs == 0 ? 0 : 1;
-+}
--- 
-2.19.1
+Kind regard,
