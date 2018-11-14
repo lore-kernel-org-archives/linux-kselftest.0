@@ -1,38 +1,41 @@
-From: dave.hansen at intel.com (Dave Hansen)
-Date: Tue, 13 Nov 2018 13:51:06 -0800
-Subject: [PATCH RFC] selftests/x86: Add a selftest for SGX
-In-Reply-To: <20181113214038.16136-1-jarkko.sakkinen@linux.intel.com>
-References: <20181113214038.16136-1-jarkko.sakkinen@linux.intel.com>
-Message-ID: <ace87d75-2ba0-38f6-0a77-25d45b692d7d@intel.com>
+From: ahmedsoliman at mena.vt.edu (Ahmed Soliman)
+Date: Wed, 14 Nov 2018 17:30:28 +0200
+Subject: KVM selftests are failing
+Message-ID: <CANBxJ=EQOt1t=PkLsMvtfB2SbiLMPeGvFxB7SJXf7m3OkcionQ@mail.gmail.com>
 
-On 11/13/18 1:40 PM, Jarkko Sakkinen wrote:
-> +int main(int argc, char **argv)
-> +{
-> +	unsigned long bin_size = (unsigned long)&encl_bin_end -
-> +				 (unsigned long)&encl_bin;
-> +	struct sgx_secs secs;
-> +	uint64_t result = 0;
-> +
-> +	if (!encl_load(&secs, bin_size))
-> +		exit(1);
-> +
-> +	sgx_call((void *)&MAGIC, &result, (void *)secs.base);
-> +	if (result != MAGIC) {
-> +		fprintf(stderr, "0x%lx != 0x%lx\n", result, MAGIC);
-> +		exit(1);
-> +	}
-> +
-> +	exit(0);
-> +}
+Hello,
 
-Well, I guess 100 lines of code for something a wee bit shy of hello
-world isn't bad. :)
+KVM Self tests located at tools/testing/selftests/kvm seams to be failing.
+I have tried:
+ - dirty_log_test
+ - x86_64/cr4_cpuid_sync_test
+ - x86_64/evmcs_test
+ - x86_64/platform_info_test
+ - x86_64/set_sregs_test
+ - x86_64/state_test
+ - x86_64/sync_regs_test
+ - x86_64/vmx_tsc_adjust_test
 
-In general, this looks fine, but probably needs some better commenting
-and probably some messages that make it a bit more clear what is going on.
+All of them triggered the following assert:
 
-It would be _nice_, for instance to try to do some CPUID detection of
-SGX so that the error (or success?) message can tell you whether you're
-missing hardware support or kernel support.
+        ==== Test Assertion Failure ====
+        lib/kvm_util.c:596: ret == 0
+        pid=24507 tid=24507 - Invalid argument
+            1  0x000056360774e468: ?? ??:0
+            2  0x000056360774e609: ?? ??:0
+            3  0x00005636077537a0: ?? ??:0
+            4  0x000056360774d35e: ?? ??:0
+            5  0x00007f3117571ae6: ?? ??:0
+            6  0x000056360774d4a9: ?? ??:0
+        madvise failed,
+        addr: 0x7f3117350000
+        length: 0x200000
+        src_type: 0
 
-Thanks for doing this, though.  It's sorely needed.
+I have tried the tests on both kvm(next) branch
+commit 22a7cdcae6a4a3c89748 as well as
+torvald's master  4.20-rc2.
+-- 
+Ahmed,
+Junior Researcher, IoT and Cyber Security lab, SmartCI, Alexandria
+University, & CIS @  VMI
