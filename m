@@ -1,31 +1,31 @@
-From: ahmedsoliman@mena.vt.edu (Ahmed Soliman)
-Date: Wed, 14 Nov 2018 21:23:41 +0200
-Subject: KVM selftests are failing
-In-Reply-To: <CADYN=9Jh10guVNFfhS8XH+RwZAouLJQu7Svg4+Tz3rQDexzDkg@mail.gmail.com>
-References: <CANBxJ=EQOt1t=PkLsMvtfB2SbiLMPeGvFxB7SJXf7m3OkcionQ@mail.gmail.com>
- <20181114180807.6crs7awhvo26ldbr@hawk.localdomain>
- <CADYN=9Jh10guVNFfhS8XH+RwZAouLJQu7Svg4+Tz3rQDexzDkg@mail.gmail.com>
-Message-ID:
- <CANBxJ=G4xdF8ZOR4zyoX1edNa=jYxk1xrzoi+7Xgcqt9qDoM2w@mail.gmail.com>
+From: broonie@kernel.org (Mark Brown)
+Date: Wed, 14 Nov 2018 11:50:41 -0800
+Subject: [PATCH RFC 0/2] Make fsgsbase test more stable
+Message-ID: <20181114195043.8021-1-broonie@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181114192341.W4D9aQl-uUAWBlq41mhMpm7K9RWeJxfb55W2qIAReDo@z>
+Message-ID: <20181114195041.KOum1k7aeaC9rJgOh8aan2oVuZfxxEGpZlY10A1O7Vw@z>
 
-Hello,
+This series attempts to make the fsgsbase test in the x86 kselftest
+report a stable result.  On some Intel systems there are intermittent
+failures in this testcase which have been reported and discussed 
+previously:
 
-> > I couldn't reproduce this on a Westmere. Are you sure you're testing
-> > a clean compilation? Can you bisect the kernel?
-I don't do a make clean normally, but I will do it this time when
-bisecting, also I only use shallow
- clones so it will also take some time pulling. Also to note, The arch
-I am using is Haswell, I am not
-sure if that should make any difference though.
-> What would be the difference in CONFIG_* fragments that you both have enabled?
+   https://lore.kernel.org/lkml/20180126153631.ha7yc33fj5uhitjo at xps/
 
-Here is my config file:
-https://pastebin.com/fCNV2z8c
+with the analysis concluding that this is a hardware issue affecting a
+subset of systems but no fix has been merged as yet.  In order to at
+least make the test more solid for use in automated testing this series
+modifies it to execute the test often enough to reproduce the problem
+reliably.
 
-Thanks,
--- 
-Ahmed,
-Junior Researcher, IoT and Cyber Security lab, SmartCI, Alexandria
-University, & CIS @  VMI
+I'm not happy with this since it doesn't fix the actual problem, the
+code isn't particularly clean and it makes the execution time for the
+selftests much longer - my main goal here is to restart the discussion
+of the test failure, I don't think merging this is a great idea.
+
+Mark Brown (2):
+      selftests/x86/fsgsbase: Indirect output through a wrapper function
+      selftests/x86/fsgsbase: Default to trying to run the test repeatedly
+
+ tools/testing/selftests/x86/fsgsbase.c | 79 +++++++++++++++++++++++++---------
+ 1 file changed, 58 insertions(+), 21 deletions(-)
