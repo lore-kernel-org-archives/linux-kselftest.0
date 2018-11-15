@@ -1,50 +1,44 @@
-From: ahmedsoliman at mena.vt.edu (Ahmed Abd El Mawgood)
-Date: Thu, 15 Nov 2018 20:09:07 +0200
-Subject: [PATCH] SelfTest: KVM: Drop Asserts for madvise failures
-Message-ID: <20181115180907.13974-1-ahmedsoliman0x666@gmail.com>
+From: jarkko.sakkinen at linux.intel.com (Jarkko Sakkinen)
+Date: Thu, 15 Nov 2018 22:33:56 +0200
+Subject: [PATCH RFC] selftests/x86: Add a selftest for SGX
+In-Reply-To: <ace87d75-2ba0-38f6-0a77-25d45b692d7d@intel.com>
+References: <20181113214038.16136-1-jarkko.sakkinen@linux.intel.com>
+ <ace87d75-2ba0-38f6-0a77-25d45b692d7d@intel.com>
+Message-ID: <20181115203356.GC26875@linux.intel.com>
 
-From: Ahmed Abd El Mawgood <ahmedsoliman at mena.vt.edu>
+On Tue, Nov 13, 2018 at 01:51:06PM -0800, Dave Hansen wrote:
+> On 11/13/18 1:40 PM, Jarkko Sakkinen wrote:
+> > +int main(int argc, char **argv)
+> > +{
+> > +	unsigned long bin_size = (unsigned long)&encl_bin_end -
+> > +				 (unsigned long)&encl_bin;
+> > +	struct sgx_secs secs;
+> > +	uint64_t result = 0;
+> > +
+> > +	if (!encl_load(&secs, bin_size))
+> > +		exit(1);
+> > +
+> > +	sgx_call((void *)&MAGIC, &result, (void *)secs.base);
+> > +	if (result != MAGIC) {
+> > +		fprintf(stderr, "0x%lx != 0x%lx\n", result, MAGIC);
+> > +		exit(1);
+> > +	}
+> > +
+> > +	exit(0);
+> > +}
+> 
+> Well, I guess 100 lines of code for something a wee bit shy of hello
+> world isn't bad. :)
+> 
+> In general, this looks fine, but probably needs some better commenting
+> and probably some messages that make it a bit more clear what is going on.
+> 
+> It would be _nice_, for instance to try to do some CPUID detection of
+> SGX so that the error (or success?) message can tell you whether you're
+> missing hardware support or kernel support.
+> 
+> Thanks for doing this, though.  It's sorely needed.
 
-madvise() returns -1 without CONFIG_TRANSPARENT_HUGEPAGE=y. That would
-trigger asserts when checking for return value of madvice. Following
-similar decision to [1]. I thought it is ok to assume that madvise()
-failures implies that THP is not supported by host kernel.
+Great, thanks, I see what I can do.
 
-Other options were to check for Transparent Huge Page support in
-/sys/kernel/mm/transparent_hugepage/enabled.
-
--- links --
-[1] https://lists.gnu.org/archive/html/qemu-devel/2015-11/msg04514.html
-
-Signed-off-by: Ahmed Abd El Mawgood <ahmedsoliman at mena.vt.edu>
----
- tools/testing/selftests/kvm/lib/kvm_util.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 1b41e71283d5..7725cfdf1b79 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -586,14 +586,12 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 				 src_type == VM_MEM_SRC_ANONYMOUS_THP ?  huge_page_size : 1);
- 
- 	/* As needed perform madvise */
--	if (src_type == VM_MEM_SRC_ANONYMOUS || src_type == VM_MEM_SRC_ANONYMOUS_THP) {
--		ret = madvise(region->host_mem, npages * vm->page_size,
--			     src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
--		TEST_ASSERT(ret == 0, "madvise failed,\n"
--			    "  addr: %p\n"
--			    "  length: 0x%lx\n"
--			    "  src_type: %x",
--			    region->host_mem, npages * vm->page_size, src_type);
-+	if (src_type == VM_MEM_SRC_ANONYMOUS) {
-+		madvise(region->host_mem, npages * vm->page_size,
-+				MADV_NOHUGEPAGE);
-+	} else if (src_type == VM_MEM_SRC_ANONYMOUS_THP) {
-+		madvise(region->host_mem, npages * vm->page_size,
-+				MADV_HUGEPAGE);
- 	}
- 
- 	region->unused_phy_pages = sparsebit_alloc();
--- 
-2.18.1
+/Jarkko
