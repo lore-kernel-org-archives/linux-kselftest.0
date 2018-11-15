@@ -1,59 +1,50 @@
-From: vkuznets at redhat.com (Vitaly Kuznetsov)
-Date: Thu, 15 Nov 2018 17:39:01 +0100
-Subject: KVM selftests are failing
-In-Reply-To: <CANBxJ=EGR=7RrO8ZtJFUwpNZRy_adjCObNtWtcMA=y4rLgeWaQ@mail.gmail.com>
-References: <CANBxJ=EQOt1t=PkLsMvtfB2SbiLMPeGvFxB7SJXf7m3OkcionQ@mail.gmail.com>
- <20181114180807.6crs7awhvo26ldbr@hawk.localdomain>
- <CADYN=9Jh10guVNFfhS8XH+RwZAouLJQu7Svg4+Tz3rQDexzDkg@mail.gmail.com>
- <CANBxJ=G4xdF8ZOR4zyoX1edNa=jYxk1xrzoi+7Xgcqt9qDoM2w@mail.gmail.com>
- <CANBxJ=EB8izWM8iLd49Uvd1z1O-gLvkGmiKNHjfHifFohj2xbg@mail.gmail.com>
- <20181115090203.5z25gwa2yznj6mmu@kamzik.brq.redhat.com>
- <CANBxJ=EHkuxKFoQw=K21o=9_FMhi_=on=Poq+ZF37eieoKV4zg@mail.gmail.com>
- <20181115145028.qijg7hjswcuabrt2@kamzik.brq.redhat.com>
- <CANBxJ=EGR=7RrO8ZtJFUwpNZRy_adjCObNtWtcMA=y4rLgeWaQ@mail.gmail.com>
-Message-ID: <87efbmqore.fsf@vitty.brq.redhat.com>
+From: ahmedsoliman at mena.vt.edu (Ahmed Abd El Mawgood)
+Date: Thu, 15 Nov 2018 20:09:07 +0200
+Subject: [PATCH] SelfTest: KVM: Drop Asserts for madvise failures
+Message-ID: <20181115180907.13974-1-ahmedsoliman0x666@gmail.com>
 
-Ahmed Soliman <ahmedsoliman at mena.vt.edu> writes:
+From: Ahmed Abd El Mawgood <ahmedsoliman at mena.vt.edu>
 
-> Hello,
-> On Thu, Nov 15, 2018 at 4:50 PM Andrew Jones <drjones at redhat.com> wrote:
->>
->> On Thu, Nov 15, 2018 at 03:36:44PM +0200, Ahmed Soliman wrote:
->> > mmap(NULL, 6291456, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS,
->> > -1, 0) = 0x7f46ea2a1000
->> > madvise(0x7f46ea2a1000, 6291456, MADV_NOHUGEPAGE) = -1 EINVAL (Invalid argument)
->> >
->> > For comprehension, this is done on intel core i7-4500U CPU @ 1.80GHz
->>
->> Argh. I see what it is. Your config doesn't have CONFIG_TRANSPARENT_HUGEPAGE=y,
->> so madvise_behavior_valid() returns false, which causes madvise() to
->> immediately return EINVAL. We should be more careful in kvm selftests with
->> our madvise behavior use.
->>
->> >
->> > As for now I will comment the madvise line and the assert when writing
->> > my own kvm self test. I think it wouldn't cause any trouble?, If it is
->> > not the case, please let me know.
->> >
->>
->> You may not need madvise() at all for your test, depending on what you're
->> doing. So leaving it out may be fine. Reworking kvm selftests to ensure
->> only valid madvise behaviors are used (and only when necessary), before
->> adding new tests, would be best.
->
-> Confirmed it worked after CONFIG_TRANSPARENT_HUGEPAGE=y
-> I will send a patch soon that should make the self test check if
-> Transparent huge pages are enabled first before issuing the related
-> madvise()
+madvise() returns -1 without CONFIG_TRANSPARENT_HUGEPAGE=y. That would
+trigger asserts when checking for return value of madvice. Following
+similar decision to [1]. I thought it is ok to assume that madvise()
+failures implies that THP is not supported by host kernel.
 
-Just ignore -EINVAL returned from madvise(), QEMU went even further,
-see:
+Other options were to check for Transparent Huge Page support in
+/sys/kernel/mm/transparent_hugepage/enabled.
 
-commit 1d7414396f926651c4d7a673eb3a10aca5246d76
-Author: Dr. David Alan Gilbert <dgilbert at redhat.com>
-Date:   Thu Nov 19 15:27:48 2015 +0000
+-- links --
+[1] https://lists.gnu.org/archive/html/qemu-devel/2015-11/msg04514.html
 
-    Assume madvise for (no)hugepage works
+Signed-off-by: Ahmed Abd El Mawgood <ahmedsoliman at mena.vt.edu>
+---
+ tools/testing/selftests/kvm/lib/kvm_util.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 1b41e71283d5..7725cfdf1b79 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -586,14 +586,12 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ 				 src_type == VM_MEM_SRC_ANONYMOUS_THP ?  huge_page_size : 1);
+ 
+ 	/* As needed perform madvise */
+-	if (src_type == VM_MEM_SRC_ANONYMOUS || src_type == VM_MEM_SRC_ANONYMOUS_THP) {
+-		ret = madvise(region->host_mem, npages * vm->page_size,
+-			     src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
+-		TEST_ASSERT(ret == 0, "madvise failed,\n"
+-			    "  addr: %p\n"
+-			    "  length: 0x%lx\n"
+-			    "  src_type: %x",
+-			    region->host_mem, npages * vm->page_size, src_type);
++	if (src_type == VM_MEM_SRC_ANONYMOUS) {
++		madvise(region->host_mem, npages * vm->page_size,
++				MADV_NOHUGEPAGE);
++	} else if (src_type == VM_MEM_SRC_ANONYMOUS_THP) {
++		madvise(region->host_mem, npages * vm->page_size,
++				MADV_HUGEPAGE);
+ 	}
+ 
+ 	region->unused_phy_pages = sparsebit_alloc();
 -- 
-Vitaly
+2.18.1
