@@ -1,44 +1,35 @@
 From: drjones@redhat.com (Andrew Jones)
-Date: Thu, 15 Nov 2018 09:41:38 +0100
+Date: Thu, 15 Nov 2018 10:02:03 +0100
 Subject: KVM selftests are failing
-In-Reply-To: <CANBxJ=G4xdF8ZOR4zyoX1edNa=jYxk1xrzoi+7Xgcqt9qDoM2w@mail.gmail.com>
+In-Reply-To: <CANBxJ=EB8izWM8iLd49Uvd1z1O-gLvkGmiKNHjfHifFohj2xbg@mail.gmail.com>
 References: <CANBxJ=EQOt1t=PkLsMvtfB2SbiLMPeGvFxB7SJXf7m3OkcionQ@mail.gmail.com>
  <20181114180807.6crs7awhvo26ldbr@hawk.localdomain>
  <CADYN=9Jh10guVNFfhS8XH+RwZAouLJQu7Svg4+Tz3rQDexzDkg@mail.gmail.com>
  <CANBxJ=G4xdF8ZOR4zyoX1edNa=jYxk1xrzoi+7Xgcqt9qDoM2w@mail.gmail.com>
-Message-ID: <20181115084138.m7oflwso6f72tgsx@kamzik.brq.redhat.com>
+ <CANBxJ=EB8izWM8iLd49Uvd1z1O-gLvkGmiKNHjfHifFohj2xbg@mail.gmail.com>
+Message-ID: <20181115090203.5z25gwa2yznj6mmu@kamzik.brq.redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181115084138.BwQLkh_HtpOKD4qbUMJTUYU4koWsBtz2ruaJi0L3oaw@z>
+Message-ID: <20181115090203.1O-s4QIFgrt9429FgaXgKRPWmTZ3ixvPpZI4EkDn6vA@z>
 
-On Wed, Nov 14, 2018@09:23:41PM +0200, Ahmed Soliman wrote:
-> Hello,
+On Wed, Nov 14, 2018@11:29:59PM +0200, Ahmed Soliman wrote:
+> Hello again,
+> On Wed, Nov 14, 2018@9:23 PM Ahmed Soliman <ahmedsoliman@mena.vt.edu> wrote:
+> > I don't do a make clean normally, but I will do it this time when
+> > bisecting, also I only use shallow
+> >  clones so it will also take some time pulling. Also to note, The arch
+> > I am using is Haswell, I am not
+> > sure if that should make any difference though.
 > 
-> > > I couldn't reproduce this on a Westmere. Are you sure you're testing
-> > > a clean compilation? Can you bisect the kernel?
-> I don't do a make clean normally, but I will do it this time when
-> bisecting,
+> I started bisecting from commit 783e9e51266ebb7f78c606a53cb0fa41bb7c31a0
+> which introduces kvm selftests. I started from complete clean kernel build and
+> run, but unfortunately, I got the Assert there too.
 
-Sorry, I meant a clean build of the kvm selftests, not the kernel. The
-kvm selftests makefile is a bit lacking and I've noticed that tests can
-assert in random places if they aren't built from scratch - ensuring all
-changed dependencies also get recompiled. Fixing up the makefile is on
-my todo, but it wasn't very high on it, since 'make clean && make' is
-fast enough.
+I think you should be able to pre-compile the selftests and save them,
+and then bisect the kernel further back than their introduction. Actually
+you may want to simplify the test case to just a mmap/madvise pair and
+see if that reproduces, since kvm selftests doesn't do much more than
+that. (Other than all the /dev/kvm ioctls - you have the right perms
+on /dev/kvm, or are running as root, right?)
 
-> also I only use shallow
->  clones so it will also take some time pulling. Also to note, The arch
-> I am using is Haswell, I am not
-> sure if that should make any difference though.
-
-I'm not sure either, and unfortunately I don't have the same hardware
-as you to try and reproduce.
-
-> > What would be the difference in CONFIG_* fragments that you both have enabled?
-> 
-> Here is my config file:
-> https://pastebin.com/fCNV2z8c
-
-I checked the differences but nothing interesting stood out. I'm using a
-defconfig config with a couple extra file system modules tacked on.
-
+Thanks,
 drew
