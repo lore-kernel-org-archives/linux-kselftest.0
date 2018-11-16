@@ -1,68 +1,50 @@
-From: drjones@redhat.com (Andrew Jones)
-Date: Fri, 16 Nov 2018 13:58:58 +0100
-Subject: [PATCH V2] SelfTest: KVM: Drop Asserts for madvise
- MADV_NOHUGEPAGE failure
-In-Reply-To: <20181116115055.7415-1-ahmedsoliman0x666@gmail.com>
-References: <20181116115055.7415-1-ahmedsoliman0x666@gmail.com>
-Message-ID: <20181116125858.yujwx5xkpg2kgyxe@kamzik.brq.redhat.com>
+From: vkuznets@redhat.com (Vitaly Kuznetsov)
+Date: Fri, 16 Nov 2018 14:36:54 +0100
+Subject: KVM selftests are failing
+In-Reply-To: <CANBxJ=FDOpySC7w1fVbWCOy+ASO=A7WcsFiDJEcGtzWbYM6NqQ@mail.gmail.com>
+References: <CANBxJ=EQOt1t=PkLsMvtfB2SbiLMPeGvFxB7SJXf7m3OkcionQ@mail.gmail.com>
+ <20181114180807.6crs7awhvo26ldbr@hawk.localdomain>
+ <CADYN=9Jh10guVNFfhS8XH+RwZAouLJQu7Svg4+Tz3rQDexzDkg@mail.gmail.com>
+ <CANBxJ=G4xdF8ZOR4zyoX1edNa=jYxk1xrzoi+7Xgcqt9qDoM2w@mail.gmail.com>
+ <CANBxJ=EB8izWM8iLd49Uvd1z1O-gLvkGmiKNHjfHifFohj2xbg@mail.gmail.com>
+ <20181115090203.5z25gwa2yznj6mmu@kamzik.brq.redhat.com>
+ <CANBxJ=EHkuxKFoQw=K21o=9_FMhi_=on=Poq+ZF37eieoKV4zg@mail.gmail.com>
+ <20181115145028.qijg7hjswcuabrt2@kamzik.brq.redhat.com>
+ <CANBxJ=EGR=7RrO8ZtJFUwpNZRy_adjCObNtWtcMA=y4rLgeWaQ@mail.gmail.com>
+ <87efbmqore.fsf@vitty.brq.redhat.com>
+ <CANBxJ=FDOpySC7w1fVbWCOy+ASO=A7WcsFiDJEcGtzWbYM6NqQ@mail.gmail.com>
+Message-ID: <8736s1qh3d.fsf@vitty.brq.redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181116125858.uytXQQN_iy6LCiYQQNwHxZRV3cuMx3PXex7_UoSZMmY@z>
+Message-ID: <20181116133654.-ByvyOQSTvlqrm0KUGhYOmREgCPJexu5YdcUOt2CaCg@z>
 
-On Fri, Nov 16, 2018@01:50:55PM +0200, Ahmed Abd El Mawgood wrote:
-> From: Ahmed Abd El Mawgood <ahmedsoliman at mena.vt.edu>
-> 
-> madvise() returns -1 without CONFIG_TRANSPARENT_HUGEPAGE=y. That would
-> trigger asserts when checking for return value of madvice. Following
-> similar decision to [1]. I thought it is ok to assume that madvise()
-> MADV_NOHUGEPAGE failures implies that THP is not supported by host kernel.
-> 
-> Other options was to check for Transparent Huge Page support in
-> /sys/kernel/mm/transparent_hugepage/enabled.
-> 
-> -- links --
-> [1] https://lists.gnu.org/archive/html/qemu-devel/2015-11/msg04514.html
-> 
-> Signed-off-by: Ahmed Abd El Mawgood <ahmedsoliman at mena.vt.edu>
-> ---
->  tools/testing/selftests/kvm/lib/kvm_util.c | 21 +++++++++++++++------
->  1 file changed, 15 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 1b41e71283d5..437c5bb48061 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -586,14 +586,23 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->  				 src_type == VM_MEM_SRC_ANONYMOUS_THP ?  huge_page_size : 1);
->  
->  	/* As needed perform madvise */
-> -	if (src_type == VM_MEM_SRC_ANONYMOUS || src_type == VM_MEM_SRC_ANONYMOUS_THP) {
-> +	if (src_type == VM_MEM_SRC_ANONYMOUS) {
-> +		/*
-> +		 * Neglect madvise error because it is ok to not have THP
-> +		 * support in this case.
-> +		 */
-> +		madvise(region->host_mem, npages * vm->page_size,
-> +			MADV_NOHUGEPAGE);
-> +	} else if (src_type == VM_MEM_SRC_ANONYMOUS_THP) {
->  		ret = madvise(region->host_mem, npages * vm->page_size,
-> -			     src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
-> +			MADV_HUGEPAGE);
->  		TEST_ASSERT(ret == 0, "madvise failed,\n"
-> -			    "  addr: %p\n"
-> -			    "  length: 0x%lx\n"
-> -			    "  src_type: %x",
-> -			    region->host_mem, npages * vm->page_size, src_type);
-> +			"Does the kernel have CONFIG_TRANSPARENT_HUGEPAGE=y\n"
-> +			"  addr: %p\n"
-> +			"  length: 0x%lx\n"
-> +			"  src_type: %x\n",
-> +			region->host_mem, npages * vm->page_size,
-> +			src_type);
->  	}
->  
->  	region->unused_phy_pages = sparsebit_alloc();
-> -- 
-> 2.18.1
+Ahmed Soliman <ahmedsoliman at mena.vt.edu> writes:
+
+> Hello once again,
+>
+> I noticed that there is still more problems with kvmself test (at
+> least on my machine)
+>
+> Any test that would successfully reach the guest's code immediately
+> VMexit by a shutdown.
+>
+> $ ./vmx_tsc_adjust_test
+> ==== Test Assertion Failure ====
+>  x86_64/vmx_tsc_adjust_test.c:156: run->exit_reason == KVM_EXIT_IO
+>  pid=8499 tid=8499 - Success
+>     1  0x00005604f07bd36c: ?? ??:0
+>     2  0x00007f5c0dc53ae6: ?? ??:0
+>     3  0x00005604f07bd4b9: ?? ??:0
+>  Got exit_reason other than KVM_EXIT_IO: 8 (SHUTDOWN)
 >
 
-Reviewed-by: Andrew Jones <drjones at redhat.com>
+Hm, this is weird. Do other KVM users, e.g. qemu work on this host? Are
+you sure this happens on the first VCPU_RUN invocation?
+
+Could you try doing 
+
+trace-cmd record -e kvm  ./x86_64/vmx_tsc_adjust_test && trace-cmd report 
+
+to see if there's anything suspicious?
+
+-- 
+Vitaly
