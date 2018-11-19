@@ -1,50 +1,79 @@
-From: rafael.tinoco at linaro.org (Rafael David Tinoco)
-Date: Sun, 18 Nov 2018 18:44:50 -0200
-Subject: [PATCH v5] selftests: membarrier: re-organize test
-In-Reply-To: <20181109154911.24464-1-rafael.tinoco@linaro.org>
-References: <dcc20b51-3069-6854-3190-b8958e2f9b96@kernel.org>
- <20181109154911.24464-1-rafael.tinoco@linaro.org>
-Message-ID: <4b31ee44-6463-6f6b-ca43-f03af8b06e35@linaro.org>
+From: idosch at mellanox.com (Ido Schimmel)
+Date: Mon, 19 Nov 2018 16:11:06 +0000
+Subject: [PATCH net-next 00/18] selftests: Add tests for VXLAN at an 802.1d
+ bridge
+Message-ID: <20181119161006.5405-1-idosch@mellanox.com>
 
->> Why do we need to add new routines for these conditions. Why can't handle these strings in array. For example you can define an array of strings for passed unexpectedly etc. and the pass the string to appropriate ksft_* interface instead of adding of these routines. Also it is hard to review the code this way.
+Petr says:
 
-I was able to fit all the logic in the 80 char limit and, still, give a 
-notion what was being called on each condition (instead of using an 
-array number or equivalent). Considering this is not the core code, and 
-the this has been already accepted and reviewed in LTP project, would 
-you mind accepting it so both can be maintained together ? It is much 
-better than the existing one, anyway...
+This patchset adds several tests for VXLAN attached to an 802.1d bridge
+and fixes a related bug.
 
-Note: I have removed the part where we test for older return codes, 
-since kselftest is not focusing in those (but LTP does).
+First patch #1 fixes a bug in propagating SKB already-forwarded marks
+over veth to bridges, where they are irrelevant. This bug causes the
+vxlan_bridge_1d test suite from this patchset to fail as the packets
+aren't forwarded by br2.
 
->> I do like the direction though. Also please run get_maintainer.pl and cc everybody it suggests.
+In patches #2 and #3, lib.sh is extended to support network namespaces.
+The use of namespaces is necessitated by VXLAN, which allows only one
+VXLAN device with a given VNI per namespace. Thus to host full topology
+on a single box for selftests, the "remote" endpoints need to be in
+namespaces.
 
-Done in v5.
+In patches #4-#6, lib.sh is extended in other ways to facilitate the
+following patches.
 
-Thanks a lot.
+In patches #7-#15, first the skeleton, and later the generic tests
+themselves are added.
 
->> 
->> thanks,
->> -- Shuah
+Patch #16 then adds another test that serves as a wrapper around the
+previous one, and runs it with a non-default port number.
 
+Patches #17 and #18 add mlxsw-specific tests. About those, Ido writes:
 
-> This commit re-organizes membarrier test, solving issues when testing
-> LTS kernels. Now, the code:
-> 
->   - always run the same amount of tests (even on older kernels).
->   - allows each test to succeed, fail or be skipped independently.
->   - allows testing features even when explicitly unsupported (force=1).
->   - checks false positive/negative by checking ret code and errno.
->   - can be extended easily: to expand an array with commands.
-> 
-> Note: like this, the test is pretty close to the LTP membarrier basic
-> tests, and both can be maintained together.
-> 
-> Link: https://bugs.linaro.org/show_bug.cgi?id=3771
-> Link: http://lists.linux.it/pipermail/ltp/2018-October/009578.html
-> Signed-off-by: Rafael David Tinoco <rafael.tinoco at linaro.org>
-> ---
+The first test creates various configurations with regards to the VxLAN
+and bridge devices and makes sure the driver correctly forbids
+unsupported configuration and permits supported ones. It also verifies
+that the driver correctly sets the offload indication on FDB entries and
+the local route used for VxLAN decapsulation.
+
+The second test verifies that the driver correctly configures the singly
+linked list used to flood BUM traffic and that traffic is flooded as
+expected.
+
+Ido Schimmel (2):
+  selftests: mlxsw: Add a test for VxLAN configuration
+  selftests: mlxsw: Add a test for VxLAN flooding
+
+Petr Machata (16):
+  net: skb_scrub_packet(): Scrub offload_fwd_mark
+  selftests: forwarding: lib: Support NUM_NETIFS of 0
+  selftests: forwarding: lib: Add in_ns()
+  selftests: forwarding: ping{6,}_test(): Add description argument
+  selftests: forwarding: ping{6,}_do(): Allow passing ping arguments
+  selftests: forwarding: lib: Add link_stats_rx_errors_get()
+  selftests: forwarding: Add a skeleton of vxlan_bridge_1d
+  selftests: forwarding: vxlan_bridge_1d: Add ping test
+  selftests: forwarding: vxlan_bridge_1d: Add flood test
+  selftests: forwarding: vxlan_bridge_1d: Add unicast test
+  selftests: forwarding: vxlan_bridge_1d: Reconfigure & rerun tests
+  selftests: forwarding: vxlan_bridge_1d: Add a TTL test
+  selftests: forwarding: vxlan_bridge_1d: Add a TOS test
+  selftests: forwarding: vxlan_bridge_1d: Add an ECN encap test
+  selftests: forwarding: vxlan_bridge_1d: Add an ECN decap test
+  selftests: forwarding: vxlan_bridge_1d_port_8472: New test
+
+ net/core/skbuff.c                             |   5 +
+ .../selftests/drivers/net/mlxsw/vxlan.sh      | 664 +++++++++++++++++
+ .../drivers/net/mlxsw/vxlan_flooding.sh       | 309 ++++++++
+ tools/testing/selftests/net/forwarding/lib.sh |  42 +-
+ .../net/forwarding/vxlan_bridge_1d.sh         | 678 ++++++++++++++++++
+ .../forwarding/vxlan_bridge_1d_port_8472.sh   |  10 +
+ 6 files changed, 1700 insertions(+), 8 deletions(-)
+ create mode 100755 tools/testing/selftests/drivers/net/mlxsw/vxlan.sh
+ create mode 100755 tools/testing/selftests/drivers/net/mlxsw/vxlan_flooding.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/vxlan_bridge_1d.sh
+ create mode 100755 tools/testing/selftests/net/forwarding/vxlan_bridge_1d_port_8472.sh
+
 -- 
-Rafael D. Tinoco
-Linaro Kernel Validation
+2.19.1
