@@ -1,47 +1,70 @@
 From: idosch@mellanox.com (Ido Schimmel)
-Date: Mon, 19 Nov 2018 16:11:15 +0000
-Subject: [PATCH net-next 08/18] selftests: forwarding: vxlan_bridge_1d: Add
- ping test
+Date: Mon, 19 Nov 2018 16:11:20 +0000
+Subject: [PATCH net-next 12/18] selftests: forwarding: vxlan_bridge_1d: Add a
+ TTL test
 In-Reply-To: <20181119161006.5405-1-idosch@mellanox.com>
 References: <20181119161006.5405-1-idosch@mellanox.com>
-Message-ID: <20181119161006.5405-9-idosch@mellanox.com>
+Message-ID: <20181119161006.5405-13-idosch@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181119161115.mJ3cpm8RN3rgo9bQ-gdxoUqqqkLuhCW_5dyFLnzzHvQ@z>
+Message-ID: <20181119161120.2OxuKBGlhP4f2WZR1sTfvNG-rYxMz7HCCmZrnJLt5xM@z>
 
 From: Petr Machata <petrm@mellanox.com>
 
-Test end-to-end reachability between local and remote endpoints.
-
-Note that because learning is disabled on the VXLAN device, the ICMP
-requests will end up being flooded to all remotes.
+This tests whether TTL of VXLAN envelope packets is properly set based
+on the device configuration.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
 Signed-off-by: Ido Schimmel <idosch at mellanox.com>
 ---
- tools/testing/selftests/net/forwarding/vxlan_bridge_1d.sh | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../net/forwarding/vxlan_bridge_1d.sh         | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
 diff --git a/tools/testing/selftests/net/forwarding/vxlan_bridge_1d.sh b/tools/testing/selftests/net/forwarding/vxlan_bridge_1d.sh
-index af88e1c146a7..0e3d7abc70d3 100755
+index a943d8da14b9..0c17b0d427ba 100755
 --- a/tools/testing/selftests/net/forwarding/vxlan_bridge_1d.sh
 +++ b/tools/testing/selftests/net/forwarding/vxlan_bridge_1d.sh
-@@ -65,6 +65,7 @@
- export VXPORT
- 
- : ${ALL_TESTS:="
-+	ping_ipv4
-     "}
- 
- NUM_NETIFS=6
-@@ -281,6 +282,13 @@ cleanup()
- 	vrf_cleanup
+@@ -68,6 +68,7 @@ export VXPORT
+ 	ping_ipv4
+ 	test_flood
+ 	test_unicast
++	test_ttl
+ 	reapply_config
+ 	ping_ipv4
+ 	test_flood
+@@ -474,6 +475,38 @@ test_unicast()
+ 	done
  }
  
-+ping_ipv4()
++vxlan_ping_test()
 +{
-+	ping_test $h1 192.0.2.2 ": local->local"
-+	ping_test $h1 192.0.2.3 ": local->remote 1"
-+	ping_test $h1 192.0.2.4 ": local->remote 2"
++	local ping_dev=$1; shift
++	local ping_dip=$1; shift
++	local ping_args=$1; shift
++	local capture_dev=$1; shift
++	local capture_dir=$1; shift
++	local capture_pref=$1; shift
++	local expect=$1; shift
++
++	local t0=$(tc_rule_stats_get $capture_dev $capture_pref $capture_dir)
++	ping_do $ping_dev $ping_dip "$ping_args"
++	local t1=$(tc_rule_stats_get $capture_dev $capture_pref $capture_dir)
++	local delta=$((t1 - t0))
++
++	# Tolerate a couple stray extra packets.
++	((expect <= delta && delta <= expect + 2))
++	check_err $? "$capture_dev: Expected to capture $expect packets, got $delta."
++}
++
++test_ttl()
++{
++	RET=0
++
++	tc filter add dev v1 egress pref 77 prot ip \
++		flower ip_ttl 99 action pass
++	vxlan_ping_test $h1 192.0.2.3 "" v1 egress 77 10
++	tc filter del dev v1 egress pref 77 prot ip
++
++	log_test "VXLAN: envelope TTL"
 +}
 +
  test_all()
