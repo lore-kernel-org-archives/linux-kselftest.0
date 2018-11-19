@@ -1,17 +1,19 @@
 From: petrm at mellanox.com (Petr Machata)
-Date: Mon, 19 Nov 2018 16:21:25 +0000
-Subject: [PATCH net-next 17/18] selftests: mlxsw: Add a test for VxLAN
- configuration
-In-Reply-To: <20181119161006.5405-18-idosch@mellanox.com> (Ido Schimmel's
- message of "Mon, 19 Nov 2018 17:11:26 +0100")
+Date: Mon, 19 Nov 2018 16:25:23 +0000
+Subject: [PATCH net-next 18/18] selftests: mlxsw: Add a test for VxLAN
+ flooding
+In-Reply-To: <20181119161006.5405-19-idosch@mellanox.com> (Ido Schimmel's
+ message of "Mon, 19 Nov 2018 17:11:27 +0100")
 References: <20181119161006.5405-1-idosch@mellanox.com>
- <20181119161006.5405-18-idosch@mellanox.com>
-Message-ID: <wihva4thwcn.fsf@dev-r-vrt-156.mtr.labs.mlnx>
+ <20181119161006.5405-19-idosch@mellanox.com>
+Message-ID: <wihr2fhhwah.fsf@dev-r-vrt-156.mtr.labs.mlnx>
 
 Ido Schimmel <idosch at mellanox.com> writes:
 
-> Test various aspects of VxLAN offloading which are specific to mlxsw,
-> such as sanitization of invalid configurations and offload indication.
+> The device stores flood records in a singly linked list where each
+> record stores up to three IPv4 addresses of remote VTEPs. The test
+> verifies that packets are correctly flooded in various cases such as
+> deletion of a record in the middle of the list.
 >
 > Signed-off-by: Ido Schimmel <idosch at mellanox.com>
 
