@@ -1,52 +1,50 @@
 From: idosch@mellanox.com (Ido Schimmel)
-Date: Mon, 19 Nov 2018 16:11:07 +0000
-Subject: [PATCH net-next 01/18] net: skb_scrub_packet(): Scrub offload_fwd_mark
+Date: Mon, 19 Nov 2018 16:11:08 +0000
+Subject: [PATCH net-next 02/18] selftests: forwarding: lib: Support NUM_NETIFS
+ of 0
 In-Reply-To: <20181119161006.5405-1-idosch@mellanox.com>
 References: <20181119161006.5405-1-idosch@mellanox.com>
-Message-ID: <20181119161006.5405-2-idosch@mellanox.com>
+Message-ID: <20181119161006.5405-3-idosch@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181119161107.7SV08HYg6UN41Ob1tV_Kk3_8RgTG2vxLJh_kMrHVoI4@z>
+Message-ID: <20181119161108.RFBHY79NwklF5UMNxrOKJ-YprcMB4lk-n2552JF0M-8@z>
 
 From: Petr Machata <petrm@mellanox.com>
 
-When a packet is trapped and the corresponding SKB marked as
-already-forwarded, it retains this marking even after it is forwarded
-across veth links into another bridge. There, since it ingresses the
-bridge over veth, which doesn't have offload_fwd_mark, it triggers a
-warning in nbp_switchdev_frame_mark().
+So far the case of NUM_NETIFS of 0 has not been interesting. However if
+one wishes to reuse the lib.sh routines in a setup of a separate
+namespace, being able to import like this is handy.
 
-Then nbp_switchdev_allowed_egress() decides not to allow egress from
-this bridge through another veth, because the SKB is already marked, and
-the mark (of 0) of course matches. Thus the packet is incorrectly
-blocked.
-
-Solve by resetting offload_fwd_mark() in skb_scrub_packet(). That
-function is called from tunnels and also from veth, and thus catches the
-cases where traffic is forwarded between bridges and transformed in a
-way that invalidates the marking.
+Therefore replace the {1..$NUM_NETIFS} references, which cause iteration
+over 1 and 0, with an explicit for loop like we do in setup_wait() and
+tc_offload_check(), so that for NUM_NETIFS of 0 no iteration is done.
 
 Signed-off-by: Petr Machata <petrm at mellanox.com>
-Suggested-by: Ido Schimmel <idosch at mellanox.com>
 Signed-off-by: Ido Schimmel <idosch at mellanox.com>
 ---
- net/core/skbuff.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/net/forwarding/lib.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index a1be7f19d998..9a8a72cefe9b 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -4882,6 +4882,11 @@ void skb_scrub_packet(struct sk_buff *skb, bool xnet)
- 	nf_reset(skb);
- 	nf_reset_trace(skb);
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 85d253546684..bb0e9fdf893e 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -104,7 +104,7 @@ create_netif_veth()
+ {
+ 	local i
  
-+#ifdef CONFIG_NET_SWITCHDEV
-+	skb->offload_fwd_mark = 0;
-+	skb->offload_mr_fwd_mark = 0;
-+#endif
-+
- 	if (!xnet)
- 		return;
+-	for i in $(eval echo {1..$NUM_NETIFS}); do
++	for ((i = 1; i <= NUM_NETIFS; ++i)); do
+ 		local j=$((i+1))
  
+ 		ip link show dev ${NETIFS[p$i]} &> /dev/null
+@@ -135,7 +135,7 @@ if [[ "$NETIF_CREATE" = "yes" ]]; then
+ 	create_netif
+ fi
+ 
+-for i in $(eval echo {1..$NUM_NETIFS}); do
++for ((i = 1; i <= NUM_NETIFS; ++i)); do
+ 	ip link show dev ${NETIFS[p$i]} &> /dev/null
+ 	if [[ $? -ne 0 ]]; then
+ 		echo "SKIP: could not find all required interfaces"
 -- 
 2.19.1
