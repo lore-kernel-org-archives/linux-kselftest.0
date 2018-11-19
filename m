@@ -1,326 +1,680 @@
 From: idosch at mellanox.com (Ido Schimmel)
-Date: Mon, 19 Nov 2018 16:11:27 +0000
-Subject: [PATCH net-next 18/18] selftests: mlxsw: Add a test for VxLAN flooding
+Date: Mon, 19 Nov 2018 16:11:26 +0000
+Subject: [PATCH net-next 17/18] selftests: mlxsw: Add a test for VxLAN
+ configuration
 In-Reply-To: <20181119161006.5405-1-idosch@mellanox.com>
 References: <20181119161006.5405-1-idosch@mellanox.com>
-Message-ID: <20181119161006.5405-19-idosch@mellanox.com>
+Message-ID: <20181119161006.5405-18-idosch@mellanox.com>
 
-The device stores flood records in a singly linked list where each
-record stores up to three IPv4 addresses of remote VTEPs. The test
-verifies that packets are correctly flooded in various cases such as
-deletion of a record in the middle of the list.
+Test various aspects of VxLAN offloading which are specific to mlxsw,
+such as sanitization of invalid configurations and offload indication.
 
 Signed-off-by: Ido Schimmel <idosch at mellanox.com>
 ---
- .../drivers/net/mlxsw/vxlan_flooding.sh       | 309 ++++++++++++++++++
- 1 file changed, 309 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/mlxsw/vxlan_flooding.sh
+ .../selftests/drivers/net/mlxsw/vxlan.sh      | 664 ++++++++++++++++++
+ 1 file changed, 664 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/mlxsw/vxlan.sh
 
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/vxlan_flooding.sh b/tools/testing/selftests/drivers/net/mlxsw/vxlan_flooding.sh
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/vxlan.sh b/tools/testing/selftests/drivers/net/mlxsw/vxlan.sh
 new file mode 100755
-index 000000000000..fedcb7b35af9
+index 000000000000..52e78adfe081
 --- /dev/null
-+++ b/tools/testing/selftests/drivers/net/mlxsw/vxlan_flooding.sh
-@@ -0,0 +1,309 @@
++++ b/tools/testing/selftests/drivers/net/mlxsw/vxlan.sh
+@@ -0,0 +1,664 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# Test VxLAN flooding. The device stores flood records in a singly linked list
-+# where each record stores up to three IPv4 addresses of remote VTEPs. The test
-+# verifies that packets are correctly flooded in various cases such as deletion
-+# of a record in the middle of the list.
-+#
-+# +--------------------+
-+# | H1 (vrf)           |
-+# |    + $h1           |
-+# |    | 203.0.113.1/24|
-+# +----|---------------+
-+#      |
-+# +----|----------------------------------------------------------------------+
-+# | SW |                                                                      |
-+# | +--|--------------------------------------------------------------------+ |
-+# | |  + $swp1                   BR0 (802.1d)                               | |
-+# | |                                                                       | |
-+# | |  + vxlan0 (vxlan)                                                     | |
-+# | |    local 198.51.100.1                                                 | |
-+# | |    remote 198.51.100.{2..13}                                          | |
-+# | |    id 10 dstport 4789                                                 | |
-+# | +-----------------------------------------------------------------------+ |
-+# |                                                                           |
-+# |  198.51.100.0/24 via 192.0.2.2                                            |
-+# |                                                                           |
-+# |    + $rp1                                                                 |
-+# |    | 192.0.2.1/24                                                         |
-+# +----|----------------------------------------------------------------------+
-+#      |
-+# +----|--------------------------------------------------------+
-+# |    |                                               R2 (vrf) |
-+# |    + $rp2                                                   |
-+# |      192.0.2.2/24                                           |
-+# |                                                             |
-+# +-------------------------------------------------------------+
++# Test various aspects of VxLAN offloading which are specific to mlxsw, such
++# as sanitization of invalid configurations and offload indication.
 +
 +lib_dir=$(dirname $0)/../../../net/forwarding
 +
-+ALL_TESTS="flooding_test"
-+NUM_NETIFS=4
-+source $lib_dir/tc_common.sh
++ALL_TESTS="sanitization_test offload_indication_test"
++NUM_NETIFS=2
 +source $lib_dir/lib.sh
-+
-+h1_create()
-+{
-+	simple_if_init $h1 203.0.113.1/24
-+}
-+
-+h1_destroy()
-+{
-+	simple_if_fini $h1 203.0.113.1/24
-+}
-+
-+switch_create()
-+{
-+	# Make sure the bridge uses the MAC address of the local port and
-+	# not that of the VxLAN's device
-+	ip link add dev br0 type bridge mcast_snooping 0
-+	ip link set dev br0 address $(mac_get $swp1)
-+
-+	ip link add name vxlan0 type vxlan id 10 nolearning noudpcsum \
-+		ttl 20 tos inherit local 198.51.100.1 dstport 4789
-+
-+	ip address add 198.51.100.1/32 dev lo
-+
-+	ip link set dev $swp1 master br0
-+	ip link set dev vxlan0 master br0
-+
-+	ip link set dev br0 up
-+	ip link set dev $swp1 up
-+	ip link set dev vxlan0 up
-+}
-+
-+switch_destroy()
-+{
-+	ip link set dev vxlan0 down
-+	ip link set dev $swp1 down
-+	ip link set dev br0 down
-+
-+	ip link set dev vxlan0 nomaster
-+	ip link set dev $swp1 nomaster
-+
-+	ip address del 198.51.100.1/32 dev lo
-+
-+	ip link del dev vxlan0
-+
-+	ip link del dev br0
-+}
-+
-+router1_create()
-+{
-+	# This router is in the default VRF, where the VxLAN device is
-+	# performing the L3 lookup
-+	ip link set dev $rp1 up
-+	ip address add 192.0.2.1/24 dev $rp1
-+	ip route add 198.51.100.0/24 via 192.0.2.2
-+}
-+
-+router1_destroy()
-+{
-+	ip route del 198.51.100.0/24 via 192.0.2.2
-+	ip address del 192.0.2.1/24 dev $rp1
-+	ip link set dev $rp1 down
-+}
-+
-+router2_create()
-+{
-+	# This router is not in the default VRF, so use simple_if_init()
-+	simple_if_init $rp2 192.0.2.2/24
-+}
-+
-+router2_destroy()
-+{
-+	simple_if_fini $rp2 192.0.2.2/24
-+}
 +
 +setup_prepare()
 +{
-+	h1=${NETIFS[p1]}
-+	swp1=${NETIFS[p2]}
++	swp1=${NETIFS[p1]}
++	swp2=${NETIFS[p2]}
 +
-+	rp1=${NETIFS[p3]}
-+	rp2=${NETIFS[p4]}
-+
-+	vrf_prepare
-+
-+	h1_create
-+
-+	switch_create
-+
-+	router1_create
-+	router2_create
-+
-+	forwarding_enable
++	ip link set dev $swp1 up
++	ip link set dev $swp2 up
 +}
 +
 +cleanup()
 +{
 +	pre_cleanup
 +
-+	forwarding_restore
-+
-+	router2_destroy
-+	router1_destroy
-+
-+	switch_destroy
-+
-+	h1_destroy
-+
-+	vrf_cleanup
++	ip link set dev $swp2 down
++	ip link set dev $swp1 down
 +}
 +
-+flooding_remotes_add()
++sanitization_single_dev_test_pass()
 +{
-+	local num_remotes=$1
-+	local lsb
-+	local i
++	ip link set dev $swp1 master br0
++	check_err $?
++	ip link set dev vxlan0 master br0
++	check_err $?
 +
-+	for i in $(eval echo {1..$num_remotes}); do
-+		lsb=$((i + 1))
++	ip link set dev $swp1 nomaster
 +
-+		bridge fdb append 00:00:00:00:00:00 dev vxlan0 self \
-+			dst 198.51.100.$lsb
-+	done
++	ip link set dev $swp1 master br0
++	check_err $?
 +}
 +
-+flooding_filters_add()
++sanitization_single_dev_test_fail()
 +{
-+	local num_remotes=$1
-+	local lsb
-+	local i
++	ip link set dev $swp1 master br0
++	check_err $?
++	ip link set dev vxlan0 master br0 &> /dev/null
++	check_fail $?
 +
-+	tc qdisc add dev $rp2 clsact
++	ip link set dev $swp1 nomaster
 +
-+	for i in $(eval echo {1..$num_remotes}); do
-+		lsb=$((i + 1))
-+
-+		tc filter add dev $rp2 ingress protocol ip pref $i handle $i \
-+			flower ip_proto udp dst_ip 198.51.100.$lsb \
-+			dst_port 4789 skip_sw action drop
-+	done
++	ip link set dev vxlan0 master br0
++	check_err $?
++	ip link set dev $swp1 master br0 &> /dev/null
++	check_fail $?
 +}
 +
-+flooding_filters_del()
++sanitization_single_dev_valid_test()
 +{
-+	local num_remotes=$1
-+	local i
++	RET=0
 +
-+	for i in $(eval echo {1..$num_remotes}); do
-+		tc filter del dev $rp2 ingress protocol ip pref $i \
-+			handle $i flower
-+	done
++	ip link add dev br0 type bridge mcast_snooping 0
 +
-+	tc qdisc del dev $rp2 clsact
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 4789
++
++	sanitization_single_dev_test_pass
++
++	ip link del dev vxlan0
++	ip link del dev br0
++
++	log_test "vxlan device - valid configuration"
 +}
 +
-+flooding_check_packets()
++sanitization_single_dev_vlan_aware_test()
 +{
-+	local packets=("$@")
-+	local num_remotes=${#packets[@]}
-+	local i
++	RET=0
 +
-+	for i in $(eval echo {1..$num_remotes}); do
-+		tc_check_packets "dev $rp2 ingress" $i ${packets[i - 1]}
-+		check_err $? "remote $i - did not get expected number of packets"
-+	done
++	ip link add dev br0 type bridge mcast_snooping 0 vlan_filtering 1
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 4789
++
++	sanitization_single_dev_test_fail
++
++	ip link del dev vxlan0
++	ip link del dev br0
++
++	log_test "vxlan device with a vlan-aware bridge"
 +}
 +
-+flooding_test()
++sanitization_single_dev_mcast_enabled_test()
 +{
-+	# Use 12 remote VTEPs that will be stored in 4 records. The array
-+	# 'packets' will store how many packets are expected to be received
-+	# by each remote VTEP at each stage of the test
-+	declare -a packets=(1 1 1 1 1 1 1 1 1 1 1 1)
-+	local num_remotes=12
++	RET=0
++
++	ip link add dev br0 type bridge
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 4789
++
++	sanitization_single_dev_test_fail
++
++	ip link del dev vxlan0
++	ip link del dev br0
++
++	log_test "vxlan device with a multicast enabled bridge"
++}
++
++sanitization_single_dev_mcast_group_test()
++{
++	RET=0
++
++	ip link add dev br0 type bridge mcast_snooping 0
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 4789 \
++		dev $swp2 group 239.0.0.1
++
++	sanitization_single_dev_test_fail
++
++	ip link del dev vxlan0
++	ip link del dev br0
++
++	log_test "vxlan device with a multicast group"
++}
++
++sanitization_single_dev_no_local_ip_test()
++{
++	RET=0
++
++	ip link add dev br0 type bridge mcast_snooping 0
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl 20 tos inherit dstport 4789
++
++	sanitization_single_dev_test_fail
++
++	ip link del dev vxlan0
++	ip link del dev br0
++
++	log_test "vxlan device with no local ip"
++}
++
++sanitization_single_dev_local_ipv6_test()
++{
++	RET=0
++
++	ip link add dev br0 type bridge mcast_snooping 0
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl 20 tos inherit local 2001:db8::1 dstport 4789
++
++	sanitization_single_dev_test_fail
++
++	ip link del dev vxlan0
++	ip link del dev br0
++
++	log_test "vxlan device with local ipv6 address"
++}
++
++sanitization_single_dev_learning_enabled_test()
++{
++	RET=0
++
++	ip link add dev br0 type bridge mcast_snooping 0
++
++	ip link add name vxlan0 up type vxlan id 10 learning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 4789
++
++	sanitization_single_dev_test_fail
++
++	ip link del dev vxlan0
++	ip link del dev br0
++
++	log_test "vxlan device with learning enabled"
++}
++
++sanitization_single_dev_local_interface_test()
++{
++	RET=0
++
++	ip link add dev br0 type bridge mcast_snooping 0
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 4789 dev $swp2
++
++	sanitization_single_dev_test_fail
++
++	ip link del dev vxlan0
++	ip link del dev br0
++
++	log_test "vxlan device with local interface"
++}
++
++sanitization_single_dev_port_range_test()
++{
++	RET=0
++
++	ip link add dev br0 type bridge mcast_snooping 0
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 4789 \
++		srcport 4000 5000
++
++	sanitization_single_dev_test_fail
++
++	ip link del dev vxlan0
++	ip link del dev br0
++
++	log_test "vxlan device with udp source port range"
++}
++
++sanitization_single_dev_tos_static_test()
++{
++	RET=0
++
++	ip link add dev br0 type bridge mcast_snooping 0
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl 20 tos 20 local 198.51.100.1 dstport 4789
++
++	sanitization_single_dev_test_fail
++
++	ip link del dev vxlan0
++	ip link del dev br0
++
++	log_test "vxlan device with static tos"
++}
++
++sanitization_single_dev_ttl_inherit_test()
++{
++	RET=0
++
++	ip link add dev br0 type bridge mcast_snooping 0
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl inherit tos inherit local 198.51.100.1 dstport 4789
++
++	sanitization_single_dev_test_fail
++
++	ip link del dev vxlan0
++	ip link del dev br0
++
++	log_test "vxlan device with inherit ttl"
++}
++
++sanitization_single_dev_udp_checksum_test()
++{
++	RET=0
++
++	ip link add dev br0 type bridge mcast_snooping 0
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning udpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 4789
++
++	sanitization_single_dev_test_fail
++
++	ip link del dev vxlan0
++	ip link del dev br0
++
++	log_test "vxlan device with udp checksum"
++}
++
++sanitization_single_dev_test()
++{
++	# These tests make sure that we correctly sanitize VxLAN device
++	# configurations we do not support
++	sanitization_single_dev_valid_test
++	sanitization_single_dev_vlan_aware_test
++	sanitization_single_dev_mcast_enabled_test
++	sanitization_single_dev_mcast_group_test
++	sanitization_single_dev_no_local_ip_test
++	sanitization_single_dev_local_ipv6_test
++	sanitization_single_dev_learning_enabled_test
++	sanitization_single_dev_local_interface_test
++	sanitization_single_dev_port_range_test
++	sanitization_single_dev_tos_static_test
++	sanitization_single_dev_ttl_inherit_test
++	sanitization_single_dev_udp_checksum_test
++}
++
++sanitization_multi_devs_test_pass()
++{
++	ip link set dev $swp1 master br0
++	check_err $?
++	ip link set dev vxlan0 master br0
++	check_err $?
++	ip link set dev $swp2 master br1
++	check_err $?
++	ip link set dev vxlan1 master br1
++	check_err $?
++
++	ip link set dev $swp2 nomaster
++	ip link set dev $swp1 nomaster
++
++	ip link set dev $swp1 master br0
++	check_err $?
++	ip link set dev $swp2 master br1
++	check_err $?
++}
++
++sanitization_multi_devs_test_fail()
++{
++	ip link set dev $swp1 master br0
++	check_err $?
++	ip link set dev vxlan0 master br0
++	check_err $?
++	ip link set dev $swp2 master br1
++	check_err $?
++	ip link set dev vxlan1 master br1 &> /dev/null
++	check_fail $?
++
++	ip link set dev $swp2 nomaster
++	ip link set dev $swp1 nomaster
++
++	ip link set dev vxlan1 master br1
++	check_err $?
++	ip link set dev $swp1 master br0
++	check_err $?
++	ip link set dev $swp2 master br1 &> /dev/null
++	check_fail $?
++}
++
++sanitization_multi_devs_valid_test()
++{
++	RET=0
++
++	ip link add dev br0 type bridge mcast_snooping 0
++	ip link add dev br1 type bridge mcast_snooping 0
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 4789
++	ip link add name vxlan1 up type vxlan id 20 nolearning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 4789
++
++	sanitization_multi_devs_test_pass
++
++	ip link del dev vxlan1
++	ip link del dev vxlan0
++	ip link del dev br1
++	ip link del dev br0
++
++	log_test "multiple vxlan devices - valid configuration"
++}
++
++sanitization_multi_devs_ttl_test()
++{
++	RET=0
++
++	ip link add dev br0 type bridge mcast_snooping 0
++	ip link add dev br1 type bridge mcast_snooping 0
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 4789
++	ip link add name vxlan1 up type vxlan id 20 nolearning noudpcsum \
++		ttl 40 tos inherit local 198.51.100.1 dstport 4789
++
++	sanitization_multi_devs_test_fail
++
++	ip link del dev vxlan1
++	ip link del dev vxlan0
++	ip link del dev br1
++	ip link del dev br0
++
++	log_test "multiple vxlan devices with different ttl"
++}
++
++sanitization_multi_devs_udp_dstport_test()
++{
++	RET=0
++
++	ip link add dev br0 type bridge mcast_snooping 0
++	ip link add dev br1 type bridge mcast_snooping 0
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 4789
++	ip link add name vxlan1 up type vxlan id 20 nolearning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 5789
++
++	sanitization_multi_devs_test_fail
++
++	ip link del dev vxlan1
++	ip link del dev vxlan0
++	ip link del dev br1
++	ip link del dev br0
++
++	log_test "multiple vxlan devices with different udp destination port"
++}
++
++sanitization_multi_devs_local_ip_test()
++{
++	RET=0
++
++	ip link add dev br0 type bridge mcast_snooping 0
++	ip link add dev br1 type bridge mcast_snooping 0
++
++	ip link add name vxlan0 up type vxlan id 10 nolearning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.1 dstport 4789
++	ip link add name vxlan1 up type vxlan id 20 nolearning noudpcsum \
++		ttl 20 tos inherit local 198.51.100.2 dstport 4789
++
++	sanitization_multi_devs_test_fail
++
++	ip link del dev vxlan1
++	ip link del dev vxlan0
++	ip link del dev br1
++	ip link del dev br0
++
++	log_test "multiple vxlan devices with different local ip"
++}
++
++sanitization_multi_devs_test()
++{
++	# The device has a single VTEP, which means all the VxLAN devices
++	# we offload must share certain properties such as source IP and
++	# UDP destination port. These tests make sure that we forbid
++	# configurations that violate this limitation
++	sanitization_multi_devs_valid_test
++	sanitization_multi_devs_ttl_test
++	sanitization_multi_devs_udp_dstport_test
++	sanitization_multi_devs_local_ip_test
++}
++
++sanitization_test()
++{
++	sanitization_single_dev_test
++	sanitization_multi_devs_test
++}
++
++offload_indication_setup_create()
++{
++	# Create a simple setup with two bridges, each with a VxLAN device
++	# and one local port
++	ip link add name br0 up type bridge mcast_snooping 0
++	ip link add name br1 up type bridge mcast_snooping 0
++
++	ip link set dev $swp1 master br0
++	ip link set dev $swp2 master br1
++
++	ip address add 198.51.100.1/32 dev lo
++
++	ip link add name vxlan0 up master br0 type vxlan id 10 nolearning \
++		noudpcsum ttl 20 tos inherit local 198.51.100.1 dstport 4789
++	ip link add name vxlan1 up master br1 type vxlan id 20 nolearning \
++		noudpcsum ttl 20 tos inherit local 198.51.100.1 dstport 4789
++}
++
++offload_indication_setup_destroy()
++{
++	ip link del dev vxlan1
++	ip link del dev vxlan0
++
++	ip address del 198.51.100.1/32 dev lo
++
++	ip link set dev $swp2 nomaster
++	ip link set dev $swp1 nomaster
++
++	ip link del dev br1
++	ip link del dev br0
++}
++
++offload_indication_fdb_flood_test()
++{
++	RET=0
++
++	bridge fdb append 00:00:00:00:00:00 dev vxlan0 self dst 198.51.100.2
++
++	bridge fdb show brport vxlan0 | grep 00:00:00:00:00:00 \
++		| grep -q offload
++	check_err $?
++
++	bridge fdb del 00:00:00:00:00:00 dev vxlan0 self
++
++	log_test "vxlan flood entry offload indication"
++}
++
++offload_indication_fdb_bridge_test()
++{
++	RET=0
++
++	bridge fdb add de:ad:be:ef:13:37 dev vxlan0 self master static \
++		dst 198.51.100.2
++
++	bridge fdb show brport vxlan0 | grep de:ad:be:ef:13:37 | grep self \
++		| grep -q offload
++	check_err $?
++	bridge fdb show brport vxlan0 | grep de:ad:be:ef:13:37 | grep -v self \
++		| grep -q offload
++	check_err $?
++
++	log_test "vxlan entry offload indication - initial state"
++
++	# Remove FDB entry from the bridge driver and check that corresponding
++	# entry in the VxLAN driver is not marked as offloaded
++	RET=0
++
++	bridge fdb del de:ad:be:ef:13:37 dev vxlan0 master
++	bridge fdb show brport vxlan0 | grep de:ad:be:ef:13:37 | grep self \
++		| grep -q offload
++	check_fail $?
++
++	log_test "vxlan entry offload indication - after removal from bridge"
++
++	# Add the FDB entry back to the bridge driver and make sure it is
++	# marked as offloaded in both drivers
++	RET=0
++
++	bridge fdb add de:ad:be:ef:13:37 dev vxlan0 master static
++	bridge fdb show brport vxlan0 | grep de:ad:be:ef:13:37 | grep self \
++		| grep -q offload
++	check_err $?
++	bridge fdb show brport vxlan0 | grep de:ad:be:ef:13:37 | grep -v self \
++		| grep -q offload
++	check_err $?
++
++	log_test "vxlan entry offload indication - after re-add to bridge"
++
++	# Remove FDB entry from the VxLAN driver and check that corresponding
++	# entry in the bridge driver is not marked as offloaded
++	RET=0
++
++	bridge fdb del de:ad:be:ef:13:37 dev vxlan0 self
++	bridge fdb show brport vxlan0 | grep de:ad:be:ef:13:37 | grep -v self \
++		| grep -q offload
++	check_fail $?
++
++	log_test "vxlan entry offload indication - after removal from vxlan"
++
++	# Add the FDB entry back to the VxLAN driver and make sure it is
++	# marked as offloaded in both drivers
++	RET=0
++
++	bridge fdb add de:ad:be:ef:13:37 dev vxlan0 self dst 198.51.100.2
++	bridge fdb show brport vxlan0 | grep de:ad:be:ef:13:37 | grep self \
++		| grep -q offload
++	check_err $?
++	bridge fdb show brport vxlan0 | grep de:ad:be:ef:13:37 | grep -v self \
++		| grep -q offload
++	check_err $?
++
++	log_test "vxlan entry offload indication - after re-add to vxlan"
++
++	bridge fdb del de:ad:be:ef:13:37 dev vxlan0 self master
++}
++
++offload_indication_fdb_test()
++{
++	offload_indication_fdb_flood_test
++	offload_indication_fdb_bridge_test
++}
++
++offload_indication_decap_route_test()
++{
++	RET=0
++
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_err $?
++
++	ip link set dev vxlan0 down
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_err $?
++
++	ip link set dev vxlan1 down
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_fail $?
++
++	log_test "vxlan decap route - vxlan device down"
 +
 +	RET=0
 +
-+	# Add FDB entries for remote VTEPs and corresponding tc filters on the
-+	# ingress of the nexthop router. These filters will count how many
-+	# packets were flooded to each remote VTEP
-+	flooding_remotes_add $num_remotes
-+	flooding_filters_add $num_remotes
++	ip link set dev vxlan1 up
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_err $?
 +
-+	# Send one packet and make sure it is flooded to all the remote VTEPs
-+	$MZ $h1 -q -p 64 -b de:ad:be:ef:13:37 -t ip -c 1
-+	flooding_check_packets "${packets[@]}"
-+	log_test "flood after 1 packet"
++	ip link set dev vxlan0 up
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_err $?
 +
-+	# Delete the third record which corresponds to VTEPs with LSB 8..10
-+	# and check that packet is flooded correctly when we remove a record
-+	# from the middle of the list
-+	RET=0
-+
-+	packets=(2 2 2 2 2 2 1 1 1 2 2 2)
-+	bridge fdb del 00:00:00:00:00:00 dev vxlan0 self dst 198.51.100.8
-+	bridge fdb del 00:00:00:00:00:00 dev vxlan0 self dst 198.51.100.9
-+	bridge fdb del 00:00:00:00:00:00 dev vxlan0 self dst 198.51.100.10
-+
-+	$MZ $h1 -q -p 64 -b de:ad:be:ef:13:37 -t ip -c 1
-+	flooding_check_packets "${packets[@]}"
-+	log_test "flood after 2 packets"
-+
-+	# Delete the first record and make sure the packet is flooded correctly
-+	RET=0
-+
-+	packets=(2 2 2 3 3 3 1 1 1 3 3 3)
-+	bridge fdb del 00:00:00:00:00:00 dev vxlan0 self dst 198.51.100.2
-+	bridge fdb del 00:00:00:00:00:00 dev vxlan0 self dst 198.51.100.3
-+	bridge fdb del 00:00:00:00:00:00 dev vxlan0 self dst 198.51.100.4
-+
-+	$MZ $h1 -q -p 64 -b de:ad:be:ef:13:37 -t ip -c 1
-+	flooding_check_packets "${packets[@]}"
-+	log_test "flood after 3 packets"
-+
-+	# Delete the last record and make sure the packet is flooded correctly
-+	RET=0
-+
-+	packets=(2 2 2 4 4 4 1 1 1 3 3 3)
-+	bridge fdb del 00:00:00:00:00:00 dev vxlan0 self dst 198.51.100.11
-+	bridge fdb del 00:00:00:00:00:00 dev vxlan0 self dst 198.51.100.12
-+	bridge fdb del 00:00:00:00:00:00 dev vxlan0 self dst 198.51.100.13
-+
-+	$MZ $h1 -q -p 64 -b de:ad:be:ef:13:37 -t ip -c 1
-+	flooding_check_packets "${packets[@]}"
-+	log_test "flood after 4 packets"
-+
-+	# Delete the last record, one entry at a time and make sure single
-+	# entries are correctly removed
-+	RET=0
-+
-+	packets=(2 2 2 4 5 5 1 1 1 3 3 3)
-+	bridge fdb del 00:00:00:00:00:00 dev vxlan0 self dst 198.51.100.5
-+
-+	$MZ $h1 -q -p 64 -b de:ad:be:ef:13:37 -t ip -c 1
-+	flooding_check_packets "${packets[@]}"
-+	log_test "flood after 5 packets"
++	log_test "vxlan decap route - vxlan device up"
 +
 +	RET=0
 +
-+	packets=(2 2 2 4 5 6 1 1 1 3 3 3)
-+	bridge fdb del 00:00:00:00:00:00 dev vxlan0 self dst 198.51.100.6
++	ip address delete 198.51.100.1/32 dev lo
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_fail $?
 +
-+	$MZ $h1 -q -p 64 -b de:ad:be:ef:13:37 -t ip -c 1
-+	flooding_check_packets "${packets[@]}"
-+	log_test "flood after 6 packets"
++	ip address add 198.51.100.1/32 dev lo
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_err $?
++
++	log_test "vxlan decap route - add local route"
 +
 +	RET=0
 +
-+	packets=(2 2 2 4 5 6 1 1 1 3 3 3)
-+	bridge fdb del 00:00:00:00:00:00 dev vxlan0 self dst 198.51.100.7
++	ip link set dev $swp1 nomaster
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_err $?
 +
-+	$MZ $h1 -q -p 64 -b de:ad:be:ef:13:37 -t ip -c 1
-+	flooding_check_packets "${packets[@]}"
-+	log_test "flood after 7 packets"
++	ip link set dev $swp2 nomaster
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_fail $?
 +
-+	flooding_filters_del $num_remotes
++	ip link set dev $swp1 master br0
++	ip link set dev $swp2 master br1
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_err $?
++
++	log_test "vxlan decap route - local ports enslavement"
++
++	RET=0
++
++	ip link del dev br0
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_err $?
++
++	ip link del dev br1
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_fail $?
++
++	log_test "vxlan decap route - bridge device deletion"
++
++	RET=0
++
++	ip link add name br0 up type bridge mcast_snooping 0
++	ip link add name br1 up type bridge mcast_snooping 0
++	ip link set dev $swp1 master br0
++	ip link set dev $swp2 master br1
++	ip link set dev vxlan0 master br0
++	ip link set dev vxlan1 master br1
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_err $?
++
++	ip link del dev vxlan0
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_err $?
++
++	ip link del dev vxlan1
++	ip route show table local | grep 198.51.100.1 | grep -q offload
++	check_fail $?
++
++	log_test "vxlan decap route - vxlan device deletion"
++
++	ip link add name vxlan0 up master br0 type vxlan id 10 nolearning \
++		noudpcsum ttl 20 tos inherit local 198.51.100.1 dstport 4789
++	ip link add name vxlan1 up master br1 type vxlan id 20 nolearning \
++		noudpcsum ttl 20 tos inherit local 198.51.100.1 dstport 4789
++}
++
++offload_indication_test()
++{
++	offload_indication_setup_create
++	offload_indication_fdb_test
++	offload_indication_decap_route_test
++	offload_indication_setup_destroy
 +}
 +
 +trap cleanup EXIT
