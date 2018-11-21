@@ -1,43 +1,54 @@
-From: ys114321@gmail.com (Y Song)
-Date: Wed, 21 Nov 2018 09:53:47 -0800
-Subject: selftests/bpf :get_cgroup_id_user: File not found:
- /sys/kernel/debug/tracing/events/syscalls/sys_enter_nanosleep/id
-In-Reply-To: <CA+G9fYuruRUVVqR669UCB4vjAh5H==Ry3_sbFMQytMu+BZme7w@mail.gmail.com>
-References: <CA+G9fYuruRUVVqR669UCB4vjAh5H==Ry3_sbFMQytMu+BZme7w@mail.gmail.com>
-Message-ID:
- <CAH3MdRVOFSQYYYNL_43o5DuXuShqQWhVutzQ5rpytenhObPWxQ@mail.gmail.com>
+From: mcgrof@kernel.org (Luis Chamberlain)
+Date: Wed, 21 Nov 2018 14:27:30 -0800
+Subject: [PATCH v2] sysctl: kselftests: fix test_modprobe issue
+In-Reply-To: <1536229374-25699-1-git-send-email-Lei.Yang@windriver.com>
+References: <1536229374-25699-1-git-send-email-Lei.Yang@windriver.com>
+Message-ID: <20181121222730.GA4922@garbanzo.do-not-panic.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181121175347.mZLEI3XFqo3Lin9M4nfRYmQkauuoXP0xa6eOax8L6sQ@z>
+Message-ID: <20181121222730.GuoDrwCHRcGw_IlAQJj40Amr8MWSNjG2SOIZRsx6rQU@z>
 
-On Wed, Nov 21, 2018 at 3:44 AM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
->
-> Kselftest bpf get_cgroup_id_user is failed on all devices.
->
-> selftests: bpf: get_cgroup_id_user
-> main:PASS:setup_cgroup_environment
-> main:PASS:create_and_get_cgroup
-> main:PASS:join_cgroup
-> main:PASS:bpf_prog_load
-> main:PASS:bpf_find_map
-> main:PASS:bpf_find_map
-> main:FAIL:open err -1 errno 2
-> not ok 1..15 selftests: bpf: get_cgroup_id_user [FAIL]
->
-> The strace output shows,
-> This expected file not found,
-> "/sys/kernel/debug/tracing/events/syscalls/sys_enter_nanosleep/id"
->
-> bpf(BPF_MAP_UPDATE_ELEM, {map_fd=5, key=0x7fff0c68c138,
-> value=0x7fff0c68c13c, flags=BPF_ANY}, 72) = 0
-> open(\"/sys/kernel/debug/tracing/events/syscalls/sys_enter_nanosleep/id\",
-> O_RDONLY) = -1 ENOENT (No such file or directory)
-> write(1, \"main:FAIL:open err -1 errno 2\n\", 30main:FAIL:open err -1 errno 2
->
-> Am I missing any pre-requirement ?
+On Thu, Sep 06, 2018@06:22:54PM +0800, Lei Yang wrote:
+> when CONFIG_TEST_SYSCTL=y, there is no "/sys/module/test_sysctl/"
+> when CONFIG_TEST_SYSCTL=m, checking /sys/module/test_sysctl/ is
+> before kernel module loading
+> 
+> you'll get below error message
+> root at intel-x86-64:/tmp/sysctl# ./sysctl.sh
+> Checking production write strict setting ... ok
+> ./sysctl.sh: /sys/module/test_sysctl/ not present
+> You must have the following enabled in your kernel:
+> 
+> This patch will fix this issue.
+> when CONFIG_TEST_SYSCTL=y, it has no chance to check "/sys/module/test_sysctl/"
+> when CONFIG_TEST_SYSCTL=m, it will load kernel module first before checking sys
+> interface.
+> 
+> Signed-off-by: Lei Yang <Lei.Yang at windriver.com>
+> ---
+>  tools/testing/selftests/sysctl/sysctl.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
+> index 584eb8e..08dc995 100755
+> --- a/tools/testing/selftests/sysctl/sysctl.sh
+> +++ b/tools/testing/selftests/sysctl/sysctl.sh
+> @@ -120,6 +120,7 @@ test_reqs()
+>  
+>  function load_req_mod()
+>  {
+> +        trap "test_modprobe" EXIT
+>  	if [ ! -d $DIR ]; then
+>  		if ! modprobe -q -n $TEST_DRIVER; then
+>  			echo "$0: module $TEST_DRIVER not found [SKIP]"
+> @@ -770,7 +771,6 @@ function parse_args()
+>  test_reqs
+>  allow_user_defaults
+>  check_production_sysctl_writes_strict
+> -test_modprobe
 
-You probably miss kernel config CONFIG_FTRACE_SYSCALLS.
+Better yet, we can just depend on /proc/config stuff for test modules,
+refer to check_mods() on tools/testing/selftests/firmware/fw_lib.sh.
+Feel free to make helpers if you can come up with a generic directory,
+otherwise just duplicate the effort for now.
 
->
-> Best regards
-> Naresh Kamboju
+  Luis
