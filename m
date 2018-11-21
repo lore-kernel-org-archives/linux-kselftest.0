@@ -1,35 +1,47 @@
 From: naresh.kamboju@linaro.org (Naresh Kamboju)
-Date: Wed, 21 Nov 2018 16:59:12 +0530
-Subject: selftests/bpf :get_cgroup_id_user: File not found:
- /sys/kernel/debug/tracing/events/syscalls/sys_enter_nanosleep/id
+Date: Wed, 21 Nov 2018 17:34:47 +0530
+Subject: selftests/bpf: libbpf: object file doesn't contain bpf program
 Message-ID:
- <CA+G9fYuruRUVVqR669UCB4vjAh5H==Ry3_sbFMQytMu+BZme7w@mail.gmail.com>
+ <CA+G9fYsJB2PBN=CFKXv7w6DekLq1inGKpWAM9aomHgNREk5W1Q@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181121112912.okFnk7ARU23-r9JGk-MWnnZWK3ApXoO-OkVhOhw-D0s@z>
+Message-ID: <20181121120447.dC29ELsgUb9tp3i0-mvP8D9m6FdSgSHZtDSjrK66FDY@z>
 
-Kselftest bpf get_cgroup_id_user is failed on all devices.
+The listed bpf test case failed due to,
+libbpf: object file doesn't contain bpf program
 
-selftests: bpf: get_cgroup_id_user
-main:PASS:setup_cgroup_environment
-main:PASS:create_and_get_cgroup
-main:PASS:join_cgroup
-main:PASS:bpf_prog_load
-main:PASS:bpf_find_map
-main:PASS:bpf_find_map
-main:FAIL:open err -1 errno 2
-not ok 1..15 selftests: bpf: get_cgroup_id_user [FAIL]
+We are cross compiling, installing selftests on device under test
+and running tests by using run_kselftest.sh script file.
 
-The strace output shows,
-This expected file not found,
-"/sys/kernel/debug/tracing/events/syscalls/sys_enter_nanosleep/id"
+selftests: bpf: test_maps
+libbpf: object file doesn't contain bpf program
+Failed to load SK_SKB parse prog
+not ok 1..3 selftests: bpf: test_maps [FAIL]
 
-bpf(BPF_MAP_UPDATE_ELEM, {map_fd=5, key=0x7fff0c68c138,
-value=0x7fff0c68c13c, flags=BPF_ANY}, 72) = 0
-open(\"/sys/kernel/debug/tracing/events/syscalls/sys_enter_nanosleep/id\",
-O_RDONLY) = -1 ENOENT (No such file or directory)
-write(1, \"main:FAIL:open err -1 errno 2\n\", 30main:FAIL:open err -1 errno 2
+selftests: bpf: test_progs
+libbpf: object file doesn't contain bpf program
+libbpf: object file doesn't contain bpf program
+libbpf: object file doesn't contain bpf program
+libbpf: object file doesn't contain bpf program
+libbpf: ./test_tcp_estats.o doesn't provide kernel version
+libbpf: object file doesn't contain bpf program
 
-Am I missing any pre-requirement ?
+selftests: bpf: test_tcpbpf_user
+libbpf: object file doesn't contain bpf program
+FAILED: load_bpf_file failed for: test_tcpbpf_kern.o
+not ok 1..10 selftests: bpf: test_tcpbpf_user [FAIL]
+
+selftests: bpf: test_tcpnotify_user
+libbpf: object file doesn't contain bpf program
+FAILED: load_bpf_file failed for: test_tcpnotify_kern.o
+not ok 1..21 selftests: bpf: test_tcpnotify_user [FAIL]
+
+selftests: bpf: test_flow_dissector.sh
+bpffs not mounted. Mounting...
+libbpf: object file doesn't contain bpf program
+./flow_dissector_load: bpf_prog_load bpf_flow.o
+selftests: test_flow_dissector [FAILED]
+
+Do you see problem when running on target devices ?
 
 Best regards
 Naresh Kamboju
