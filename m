@@ -1,10 +1,9 @@
-From: willy at infradead.org (Matthew Wilcox)
-Date: Sat, 24 Nov 2018 16:47:36 -0800
+From: joel at joelfernandes.org (Joel Fernandes)
+Date: Mon, 26 Nov 2018 05:35:36 -0800
 Subject: [PATCH -next 1/2] mm/memfd: make F_SEAL_FUTURE_WRITE seal more
  robust
-In-Reply-To: <20181124164229.89c670b6e7a3530ef7b0a40c@linux-foundation.org>
-References: <20181120183926.GA124387@google.com>
- <20181121070658.011d576d@canb.auug.org.au>
+In-Reply-To: <20181125004736.GA3065@bombadil.infradead.org>
+References: <20181121070658.011d576d@canb.auug.org.au>
  <469B80CB-D982-4802-A81D-95AC493D7E87@amacapital.net>
  <20181120204710.GB22801@google.com>
  <F8E28229-C99E-4711-982B-5B5DE0F70F16@amacapital.net>
@@ -13,11 +12,25 @@ References: <20181120183926.GA124387@google.com>
  <CALCETrUGyhqi+M3cTdqJNNOPfTWn-R-ekM_R5heq2mbdVqPUAw@mail.gmail.com>
  <20181122230906.GA198127@google.com>
  <20181124164229.89c670b6e7a3530ef7b0a40c@linux-foundation.org>
-Message-ID: <20181125004736.GA3065@bombadil.infradead.org>
+ <20181125004736.GA3065@bombadil.infradead.org>
+Message-ID: <20181126133536.GB242510@google.com>
 
-On Sat, Nov 24, 2018 at 04:42:29PM -0800, Andrew Morton wrote:
-> This changelog doesn't have the nifty test case code which was in
-> earlier versions?
+On Sat, Nov 24, 2018 at 04:47:36PM -0800, Matthew Wilcox wrote:
+> On Sat, Nov 24, 2018 at 04:42:29PM -0800, Andrew Morton wrote:
+> > This changelog doesn't have the nifty test case code which was in
+> > earlier versions?
+> 
+> Why do we put regression tests in the changelogs anyway?  We have
+> tools/testing/selftests/vm/ already, perhaps they should go there?
 
-Why do we put regression tests in the changelogs anyway?  We have
-tools/testing/selftests/vm/ already, perhaps they should go there?
+The reason is I didn't add it was that test case went out of date and the
+updated version of the test case went into the selftests in patch 2/2. I
+thought that would suffice which covers all the cases. That's why I dropped
+it.  Would that be Ok?
+
+The changelog of the previous series had it because the selftest was added
+only later.
+
+Let me know, thanks,
+
+ - Joel
