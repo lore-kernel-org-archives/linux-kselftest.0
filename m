@@ -1,38 +1,31 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Mon, 26 Nov 2018 05:35:36 -0800
-Subject: [PATCH -next 1/2] mm/memfd: make F_SEAL_FUTURE_WRITE seal more
- robust
-In-Reply-To: <20181125004736.GA3065@bombadil.infradead.org>
-References: <20181121070658.011d576d@canb.auug.org.au>
- <469B80CB-D982-4802-A81D-95AC493D7E87@amacapital.net>
- <20181120204710.GB22801@google.com>
- <F8E28229-C99E-4711-982B-5B5DE0F70F16@amacapital.net>
- <20181120211335.GC22801@google.com>
- <20181121182701.0d8a775fda6af1f8d2be8f25@linux-foundation.org>
- <CALCETrUGyhqi+M3cTdqJNNOPfTWn-R-ekM_R5heq2mbdVqPUAw@mail.gmail.com>
- <20181122230906.GA198127@google.com>
- <20181124164229.89c670b6e7a3530ef7b0a40c@linux-foundation.org>
- <20181125004736.GA3065@bombadil.infradead.org>
-Message-ID: <20181126133536.GB242510@google.com>
+From: colin.king@canonical.com (Colin King)
+Date: Mon, 26 Nov 2018 16:08:14 +0000
+Subject: [PATCH] kvm: selftests: fix spelling mistake "begining" -> "beginning"
+Message-ID: <20181126160814.27473-1-colin.king@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181126133536.p5glZEkWFXS8Vqbv9eVRBDBGoaUHC01lUdZ7YTaBijo@z>
+Message-ID: <20181126160814._Ti2HA7qB1cgrZxLrVFQd3Jq-jsukSpFTMjVswHWYzs@z>
 
-On Sat, Nov 24, 2018@04:47:36PM -0800, Matthew Wilcox wrote:
-> On Sat, Nov 24, 2018@04:42:29PM -0800, Andrew Morton wrote:
-> > This changelog doesn't have the nifty test case code which was in
-> > earlier versions?
-> 
-> Why do we put regression tests in the changelogs anyway?  We have
-> tools/testing/selftests/vm/ already, perhaps they should go there?
+From: Colin Ian King <colin.king@canonical.com>
 
-The reason is I didn't add it was that test case went out of date and the
-updated version of the test case went into the selftests in patch 2/2. I
-thought that would suffice which covers all the cases. That's why I dropped
-it.  Would that be Ok?
+The text in a TEST_ASSERT message contains a spelling mistake, fix it.
 
-The changelog of the previous series had it because the selftest was added
-only later.
+Signed-off-by: Colin Ian King <colin.king at canonical.com>
+---
+ tools/testing/selftests/kvm/lib/elf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Let me know, thanks,
-
- - Joel
+diff --git a/tools/testing/selftests/kvm/lib/elf.c b/tools/testing/selftests/kvm/lib/elf.c
+index 5eb857584aa3..53c48f7587d3 100644
+--- a/tools/testing/selftests/kvm/lib/elf.c
++++ b/tools/testing/selftests/kvm/lib/elf.c
+@@ -141,7 +141,7 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename,
+ 		offset = hdr.e_phoff + (n1 * hdr.e_phentsize);
+ 		offset_rv = lseek(fd, offset, SEEK_SET);
+ 		TEST_ASSERT(offset_rv == offset,
+-			"Failed to seek to begining of program header %u,\n"
++			"Failed to seek to beginning of program header %u,\n"
+ 			"  filename: %s\n"
+ 			"  rv: %jd errno: %i",
+ 			n1, filename, (intmax_t) offset_rv, errno);
+-- 
+2.19.1
