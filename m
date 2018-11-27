@@ -1,31 +1,76 @@
-From: dan.rue at linaro.org (Dan Rue)
-Date: Mon, 26 Nov 2018 21:12:16 -0600
-Subject: [PATCH 2/2] selftests: firmware: add
- CONFIG_FW_LOADER_USER_HELPER_FALLBACK to config
-In-Reply-To: <20181127031218.24419-1-dan.rue@linaro.org>
-References: <20181127031218.24419-1-dan.rue@linaro.org>
-Message-ID: <20181127031218.24419-3-dan.rue@linaro.org>
+From: murphyt7 at tcd.ie (Tom Murphy)
+Date: Tue, 27 Nov 2018 10:33:08 +0000
+Subject: [PATCH] fix dma-buf/udmabuf selftest
+Message-ID: <20181127103312.19368-1-murphyt7@tcd.ie>
 
-CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y is required for fw_fallback.sh.
-Without it, fw_fallback.sh fails with 'usermode helper disabled so
-ignoring test'. Enable the config in selftest so that it gets built by
-default.
+This patch fixes the udmabuf selftest. Currently the selftest is broken. 
+I fixed the selftest by setting the F_SEAL_SHRINK seal on the memfd 
+file descriptor which is required by udmabuf and added the test to 
+the selftest Makefile. 
 
-Signed-off-by: Dan Rue <dan.rue at linaro.org>
+Signed-off-by: Tom Murphy <murphyt7 at tcd.ie>
 ---
- tools/testing/selftests/firmware/config | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/Makefile                  |  1 +
+ tools/testing/selftests/drivers/dma-buf/Makefile  |  2 ++
+ tools/testing/selftests/drivers/dma-buf/udmabuf.c | 11 +++++++++--
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/firmware/config b/tools/testing/selftests/firmware/config
-index bf634dda0720..913a25a4a32b 100644
---- a/tools/testing/selftests/firmware/config
-+++ b/tools/testing/selftests/firmware/config
-@@ -1,5 +1,6 @@
- CONFIG_TEST_FIRMWARE=y
- CONFIG_FW_LOADER=y
- CONFIG_FW_LOADER_USER_HELPER=y
-+CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y
- CONFIG_IKCONFIG=y
- CONFIG_IKCONFIG_PROC=y
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index f1fe492c8e17..25efcde61d95 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -6,6 +6,7 @@ TARGETS += capabilities
+ TARGETS += cgroup
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
++TARGETS += drivers/dma-buf
+ TARGETS += efivarfs
+ TARGETS += exec
+ TARGETS += filesystems
+diff --git a/tools/testing/selftests/drivers/dma-buf/Makefile b/tools/testing/selftests/drivers/dma-buf/Makefile
+index 4154c3d7aa58..f22c3f7cf612 100644
+--- a/tools/testing/selftests/drivers/dma-buf/Makefile
++++ b/tools/testing/selftests/drivers/dma-buf/Makefile
+@@ -2,4 +2,6 @@ CFLAGS += -I../../../../../usr/include/
+ 
+ TEST_GEN_PROGS := udmabuf
+ 
++top_srcdir ?=../../../../..
++
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+index 376b1d6730bd..4de902ea14d8 100644
+--- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
++++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+@@ -4,7 +4,7 @@
+ #include <unistd.h>
+ #include <string.h>
+ #include <errno.h>
+-#include <fcntl.h>
++#include <linux/fcntl.h>
+ #include <malloc.h>
+ 
+ #include <sys/ioctl.h>
+@@ -33,12 +33,19 @@ int main(int argc, char *argv[])
+ 		exit(77);
+ 	}
+ 
+-	memfd = memfd_create("udmabuf-test", MFD_CLOEXEC);
++	memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
+ 	if (memfd < 0) {
+ 		printf("%s: [skip,no-memfd]\n", TEST_PREFIX);
+ 		exit(77);
+ 	}
+ 
++	ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
++	if (ret < 0) {
++		printf("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
++		exit(77);
++	}
++
++
+ 	size = getpagesize() * NUM_PAGES;
+ 	ret = ftruncate(memfd, size);
+ 	if (ret == -1) {
 -- 
-2.19.1
+2.11.0
