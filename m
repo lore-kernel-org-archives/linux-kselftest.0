@@ -1,45 +1,41 @@
 From: joeypabalinas@gmail.com (Joey Pabalinas)
-Date: Tue, 27 Nov 2018 12:49:00 -1000
+Date: Tue, 27 Nov 2018 12:53:07 -1000
 Subject: [PATCH] selftests: add TPM 2.0 tests
-In-Reply-To: <20181127221059.25966-1-jarkko.sakkinen@linux.intel.com>
+In-Reply-To: <20181127224900.fpbqujcsqwgxpwyq@gmail.com>
 References: <20181127221059.25966-1-jarkko.sakkinen@linux.intel.com>
-Message-ID: <20181127224900.fpbqujcsqwgxpwyq@gmail.com>
+ <20181127224900.fpbqujcsqwgxpwyq@gmail.com>
+Message-ID: <20181127225307.3wc3gd7zmfauie6i@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181127224900.kHh38Eg_VsoEC4E-PvwJOB_XqcwyW_T0EwyWxyuq0_g@z>
+Message-ID: <20181127225307.6koNj_Hfv21LHNqJ2C26_8Pcf62aOmHE-sfGZSa9lM0@z>
 
-On Tue, Nov 27, 2018@02:10:48PM -0800, Jarkko Sakkinen wrote:
-> Added the tests that I've been using for testing TPM 2.0 functionality
-> for long time but have out-of-tree so far residing in
+On Tue, Nov 27, 2018@12:49:00PM -1000, Joey Pabalinas wrote:
+> > +    def start_auth_session(self, session_type, name_alg = TPM2_ALG_SHA1):
+> > +        fmt = '>HII IIH16sHBHH'
+> > +        cmd = struct.pack(fmt,
+> > +                          TPM2_ST_NO_SESSIONS,
+> > +                          struct.calcsize(fmt),
+> > +                          TPM2_CC_START_AUTH_SESSION,
+> > +                          TPM2_RH_NULL,
+> > +                          TPM2_RH_NULL,
+> > +                          16,
+> > +                          '\0' * 16,
+> > +                          0,
+> > +                          session_type,
+> > +                          TPM2_ALG_NULL,
+> > +                          name_alg)
+> > +
+> > +        return struct.unpack('>I', self.send_cmd(cmd)[10:14])[0]
+> > +
+> > +    def __calc_pcr_digest(self, pcrs, bank_alg = TPM2_ALG_SHA1,
+> > +                          digest_alg = TPM2_ALG_SHA1):
+> > +        x = []
 > 
-> https://github.com/jsakkine-intel/tpm2-scripts
-> 
-> Cc: Tadeusz Struk <tadeusz.struk at intel.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen at linux.intel.com>
+> Is there a reason for using `'\0' * 16` there instead of just 0?
 
-Just one thing I didn't really understand:
+Nevermind, I keep forgetting that the * operator on strings performs
+repetition. I've been programming too much C lately, it seems.
 
-> +    def start_auth_session(self, session_type, name_alg = TPM2_ALG_SHA1):
-> +        fmt = '>HII IIH16sHBHH'
-> +        cmd = struct.pack(fmt,
-> +                          TPM2_ST_NO_SESSIONS,
-> +                          struct.calcsize(fmt),
-> +                          TPM2_CC_START_AUTH_SESSION,
-> +                          TPM2_RH_NULL,
-> +                          TPM2_RH_NULL,
-> +                          16,
-> +                          '\0' * 16,
-> +                          0,
-> +                          session_type,
-> +                          TPM2_ALG_NULL,
-> +                          name_alg)
-> +
-> +        return struct.unpack('>I', self.send_cmd(cmd)[10:14])[0]
-> +
-> +    def __calc_pcr_digest(self, pcrs, bank_alg = TPM2_ALG_SHA1,
-> +                          digest_alg = TPM2_ALG_SHA1):
-> +        x = []
-
-Is there a reason for using `'\0' * 16` there instead of just 0?
+Acked-By: Joey Pabalinas <joeypabalinas at gmail.com>
 
 -- 
 Cheers,
@@ -50,4 +46,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 833 bytes
 Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181127/8ffbc7a8/attachment.sig>
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181127/5d9ae9f6/attachment.sig>
