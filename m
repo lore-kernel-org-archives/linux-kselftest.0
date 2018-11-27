@@ -1,44 +1,30 @@
 From: jarkko.sakkinen at linux.intel.com (Jarkko Sakkinen)
-Date: Tue, 27 Nov 2018 15:13:48 -0800
+Date: Tue, 27 Nov 2018 15:15:39 -0800
 Subject: [PATCH] selftests: add TPM 2.0 tests
-In-Reply-To: <20181127225307.3wc3gd7zmfauie6i@gmail.com>
+In-Reply-To: <0929dfe2-83aa-ff39-e37e-35bc499aaa0a@intel.com>
 References: <20181127221059.25966-1-jarkko.sakkinen@linux.intel.com>
- <20181127224900.fpbqujcsqwgxpwyq@gmail.com>
- <20181127225307.3wc3gd7zmfauie6i@gmail.com>
-Message-ID: <20181127231348.GB26051@linux.intel.com>
+ <0929dfe2-83aa-ff39-e37e-35bc499aaa0a@intel.com>
+Message-ID: <20181127231539.GC26051@linux.intel.com>
 
-On Tue, Nov 27, 2018 at 12:53:07PM -1000, Joey Pabalinas wrote:
-> On Tue, Nov 27, 2018 at 12:49:00PM -1000, Joey Pabalinas wrote:
-> > > +    def start_auth_session(self, session_type, name_alg = TPM2_ALG_SHA1):
-> > > +        fmt = '>HII IIH16sHBHH'
-> > > +        cmd = struct.pack(fmt,
-> > > +                          TPM2_ST_NO_SESSIONS,
-> > > +                          struct.calcsize(fmt),
-> > > +                          TPM2_CC_START_AUTH_SESSION,
-> > > +                          TPM2_RH_NULL,
-> > > +                          TPM2_RH_NULL,
-> > > +                          16,
-> > > +                          '\0' * 16,
-> > > +                          0,
-> > > +                          session_type,
-> > > +                          TPM2_ALG_NULL,
-> > > +                          name_alg)
-> > > +
-> > > +        return struct.unpack('>I', self.send_cmd(cmd)[10:14])[0]
-> > > +
-> > > +    def __calc_pcr_digest(self, pcrs, bank_alg = TPM2_ALG_SHA1,
-> > > +                          digest_alg = TPM2_ALG_SHA1):
-> > > +        x = []
+On Tue, Nov 27, 2018 at 02:34:39PM -0800, Tadeusz Struk wrote:
+> On 11/27/18 2:10 PM, Jarkko Sakkinen wrote:
+> > Added the tests that I've been using for testing TPM 2.0 functionality
+> > for long time but have out-of-tree so far residing in
 > > 
-> > Is there a reason for using `'\0' * 16` there instead of just 0?
+> > https://github.com/jsakkine-intel/tpm2-scripts
+> > 
+> > Cc: Tadeusz Struk <tadeusz.struk at intel.com>
+> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen at linux.intel.com>
+> > ---
+> > Tadeusz: does not include your test. Better that you send them after
+> > this has been accepted to get proper SOB info.
 > 
-> Nevermind, I keep forgetting that the * operator on strings performs
-> repetition. I've been programming too much C lately, it seems.
-> 
-> Acked-By: Joey Pabalinas <joeypabalinas at gmail.com>
+> Sure I can follow up after this is merged.
+> Thanks,
 
-Thank you! Would be good to have these merged to the kernel tree so that
-one can include both functionality and test case when needed to the
-patch set.
+Hey, noticed that there was extra parentheses in open() for tpmrm0. Not
+a biggie, I fixed it in my tpm2-scripts tree, but when you actually go
+on to make the commit and send it here for review run both test_smoke.sh
+and test_space.sh.
 
 /Jarkko
