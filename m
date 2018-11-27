@@ -1,44 +1,32 @@
-From: keescook at chromium.org (Kees Cook)
-Date: Tue, 27 Nov 2018 09:56:39 -0800
-Subject: [PATCH 2/2] selftests: firmware: add
- CONFIG_FW_LOADER_USER_HELPER_FALLBACK to config
-In-Reply-To: <20181127031218.24419-3-dan.rue@linaro.org>
-References: <20181127031218.24419-1-dan.rue@linaro.org>
- <20181127031218.24419-3-dan.rue@linaro.org>
-Message-ID: <CAGXu5jK=oOHsM50iGDcp4PzOHv58r2-XfryAs0N=gfjD+rEaQg@mail.gmail.com>
+From: yhs at fb.com (Yonghong Song)
+Date: Tue, 27 Nov 2018 18:00:02 +0000
+Subject: [PATCH] selftests/bpf: add config fragment CONFIG_FTRACE_SYSCALLS
+In-Reply-To: <1543332284-15694-1-git-send-email-naresh.kamboju@linaro.org>
+References: <1543332284-15694-1-git-send-email-naresh.kamboju@linaro.org>
+Message-ID: <b8f390b1-6dd4-a437-f996-bee11617d1c0@fb.com>
 
-On Mon, Nov 26, 2018 at 7:12 PM, Dan Rue <dan.rue at linaro.org> wrote:
-> CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y is required for fw_fallback.sh.
-> Without it, fw_fallback.sh fails with 'usermode helper disabled so
-> ignoring test'. Enable the config in selftest so that it gets built by
-> default.
->
-> Signed-off-by: Dan Rue <dan.rue at linaro.org>
 
-Acked-by: Kees Cook <keescook at chromium.org>
 
--Kees
+On 11/27/18 7:24 AM, Naresh Kamboju wrote:
+> CONFIG_FTRACE_SYSCALLS=y is required for get_cgroup_id_user test case
+> this test reads a file from debug trace path
+> /sys/kernel/debug/tracing/events/syscalls/sys_enter_nanosleep/id
+> 
+> Signed-off-by: Naresh Kamboju <naresh.kamboju at linaro.org>
+
+Acked-by: Yonghong Song <yhs at fb.com>
 
 > ---
->  tools/testing/selftests/firmware/config | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/tools/testing/selftests/firmware/config b/tools/testing/selftests/firmware/config
-> index bf634dda0720..913a25a4a32b 100644
-> --- a/tools/testing/selftests/firmware/config
-> +++ b/tools/testing/selftests/firmware/config
-> @@ -1,5 +1,6 @@
->  CONFIG_TEST_FIRMWARE=y
->  CONFIG_FW_LOADER=y
->  CONFIG_FW_LOADER_USER_HELPER=y
-> +CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y
->  CONFIG_IKCONFIG=y
->  CONFIG_IKCONFIG_PROC=y
-> --
-> 2.19.1
->
-
-
-
--- 
-Kees Cook
+>   tools/testing/selftests/bpf/config | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+> index 7f90d3645af8..37f947ec44ed 100644
+> --- a/tools/testing/selftests/bpf/config
+> +++ b/tools/testing/selftests/bpf/config
+> @@ -22,3 +22,4 @@ CONFIG_NET_CLS_FLOWER=m
+>   CONFIG_LWTUNNEL=y
+>   CONFIG_BPF_STREAM_PARSER=y
+>   CONFIG_XDP_SOCKETS=y
+> +CONFIG_FTRACE_SYSCALLS=y
+> 
