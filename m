@@ -1,31 +1,53 @@
-From: daniel@iogearbox.net (Daniel Borkmann)
-Date: Wed, 28 Nov 2018 22:14:07 +0100
-Subject: [PATCH] selftests/bpf: add config fragment CONFIG_FTRACE_SYSCALLS
-In-Reply-To: <1543332284-15694-1-git-send-email-naresh.kamboju@linaro.org>
-References: <1543332284-15694-1-git-send-email-naresh.kamboju@linaro.org>
-Message-ID: <1522472d-f8de-ffab-ffa1-eed2d74fb2a4@iogearbox.net>
+From: robh@kernel.org (Rob Herring)
+Date: Wed, 28 Nov 2018 15:16:34 -0600
+Subject: [RFC v3 16/19] arch: um: make UML unflatten device tree when
+ testing
+In-Reply-To: <20181128193636.254378-17-brendanhiggins@google.com>
+References: <20181128193636.254378-1-brendanhiggins@google.com>
+ <20181128193636.254378-17-brendanhiggins@google.com>
+Message-ID:
+ <CAL_JsqK5cG=QzMBFSZ31_-3ujnxqxv=jj3XYajbRLT7yWYZbfw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181128211407.IxybMnT2QOkgK5GHjJOsRrTNzfm0IVjH1rSbyExImE0@z>
+Message-ID: <20181128211634.5A2xau4kaP3buqPVUwz55joCE0XbX2qrKrKxbcdi1VU@z>
 
-On 11/27/2018 04:24 PM, Naresh Kamboju wrote:
-> CONFIG_FTRACE_SYSCALLS=y is required for get_cgroup_id_user test case
-> this test reads a file from debug trace path
-> /sys/kernel/debug/tracing/events/syscalls/sys_enter_nanosleep/id
-> 
-> Signed-off-by: Naresh Kamboju <naresh.kamboju at linaro.org>
+On Wed, Nov 28, 2018 at 1:38 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> Make UML unflatten any present device trees when running KUnit tests.
+>
+> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
 > ---
->  tools/testing/selftests/bpf/config | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-> index 7f90d3645af8..37f947ec44ed 100644
-> --- a/tools/testing/selftests/bpf/config
-> +++ b/tools/testing/selftests/bpf/config
-> @@ -22,3 +22,4 @@ CONFIG_NET_CLS_FLOWER=m
->  CONFIG_LWTUNNEL=y
->  CONFIG_BPF_STREAM_PARSER=y
->  CONFIG_XDP_SOCKETS=y
-> +CONFIG_FTRACE_SYSCALLS=y
-> 
+>  arch/um/kernel/um_arch.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
+> index a818ccef30ca2..bd58ae3bf4148 100644
+> --- a/arch/um/kernel/um_arch.c
+> +++ b/arch/um/kernel/um_arch.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/sched.h>
+>  #include <linux/sched/task.h>
+>  #include <linux/kmsg_dump.h>
+> +#include <linux/of_fdt.h>
+>
+>  #include <asm/pgtable.h>
+>  #include <asm/processor.h>
+> @@ -347,6 +348,9 @@ void __init setup_arch(char **cmdline_p)
+>         read_initrd();
+>
+>         paging_init();
+> +#if IS_ENABLED(CONFIG_OF_UNITTEST)
+> +       unflatten_device_tree();
+> +#endif
 
-Applied to bpf-next, thanks!
+Kind of strange to have this in the arch code. I'd rather have this in
+the unittest code if possible. Can we have an initcall conditional on
+CONFIG_UM in the unittest do this? Side note, use a C if with
+IS_ENABLED() whenever possible instead of pre-processor #if.
+
+I'll take a fix separately as it was on my todo to fix. I've got the
+unit tests running in a gitlab CI job now[1].
+
+Rob
+
+[1] https://gitlab.com/robherring/linux-dt-unittest/pipelines
