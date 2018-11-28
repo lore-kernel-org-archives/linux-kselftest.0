@@ -1,50 +1,23 @@
 From: robh at kernel.org (Rob Herring)
-Date: Wed, 28 Nov 2018 15:16:34 -0600
-Subject: [RFC v3 16/19] arch: um: make UML unflatten device tree when
- testing
-In-Reply-To: <20181128193636.254378-17-brendanhiggins@google.com>
+Date: Wed, 28 Nov 2018 15:26:03 -0600
+Subject: [RFC v3 06/19] arch: um: enable running kunit from User Mode Linux
+In-Reply-To: <20181128193636.254378-7-brendanhiggins@google.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
- <20181128193636.254378-17-brendanhiggins@google.com>
-Message-ID: <CAL_JsqK5cG=QzMBFSZ31_-3ujnxqxv=jj3XYajbRLT7yWYZbfw@mail.gmail.com>
+ <20181128193636.254378-7-brendanhiggins@google.com>
+Message-ID: <CAL_JsqJLNSg-38hej8LV+Oh-YXBM2hRGomie3b_psa9LvzoRYg@mail.gmail.com>
 
-On Wed, Nov 28, 2018 at 1:38 PM Brendan Higgins
+On Wed, Nov 28, 2018 at 1:37 PM Brendan Higgins
 <brendanhiggins at google.com> wrote:
 >
-> Make UML unflatten any present device trees when running KUnit tests.
->
-> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> ---
->  arch/um/kernel/um_arch.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
-> index a818ccef30ca2..bd58ae3bf4148 100644
-> --- a/arch/um/kernel/um_arch.c
-> +++ b/arch/um/kernel/um_arch.c
-> @@ -13,6 +13,7 @@
->  #include <linux/sched.h>
->  #include <linux/sched/task.h>
->  #include <linux/kmsg_dump.h>
-> +#include <linux/of_fdt.h>
->
->  #include <asm/pgtable.h>
->  #include <asm/processor.h>
-> @@ -347,6 +348,9 @@ void __init setup_arch(char **cmdline_p)
->         read_initrd();
->
->         paging_init();
-> +#if IS_ENABLED(CONFIG_OF_UNITTEST)
-> +       unflatten_device_tree();
-> +#endif
+> Make minimum number of changes outside of the KUnit directories for
+> KUnit to build and run using UML.
 
-Kind of strange to have this in the arch code. I'd rather have this in
-the unittest code if possible. Can we have an initcall conditional on
-CONFIG_UM in the unittest do this? Side note, use a C if with
-IS_ENABLED() whenever possible instead of pre-processor #if.
+There's nothing in this patch limiting this to UML. Only patch 1 does
+that and I would remove that depends. I'd guess most folks will want
+to run under something other than UML. DRM for instance (though the
+virtual KMS stuff may work in UML?).
 
-I'll take a fix separately as it was on my todo to fix. I've got the
-unit tests running in a gitlab CI job now[1].
+Plus you want to make sure this all builds with allmodconfig for x86
+(or ARM) because those get the most (and quickest) compile coverage.
 
 Rob
-
-[1] https://gitlab.com/robherring/linux-dt-unittest/pipelines
