@@ -1,163 +1,124 @@
 From: brendanhiggins at google.com (Brendan Higgins)
-Date: Wed, 28 Nov 2018 11:36:27 -0800
-Subject: [RFC v3 10/19] kunit: test: add test managed resource tests
+Date: Wed, 28 Nov 2018 11:36:29 -0800
+Subject: [RFC v3 12/19] kunit: add KUnit wrapper script and simple output
+ parser
 In-Reply-To: <20181128193636.254378-1-brendanhiggins@google.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
-Message-ID: <20181128193636.254378-11-brendanhiggins@google.com>
+Message-ID: <20181128193636.254378-13-brendanhiggins@google.com>
 
-Tests how tests interact with test managed resources in their lifetime.
+The KUnit wrapper script interfaces with the two modules
+(kunit_config.py and kunit_kernel.py) and provides a command line
+interface for running KUnit tests. This interface allows the caller to
+specify options like test timeouts. The script handles configuring,
+building and running the kernel and tests.
 
-Signed-off-by: Avinash Kondareddy <avikr at google.com>
+The output parser (kunit_parser.py) simply strips out all the output
+from the kernel that is outputted as part of it's initialization
+sequence. This ensures that only the output from KUnit is displayed
+on the screen.
+
+A full version of the output is written to test.log, or can be seen by
+passing --raw_output to the wrapper script.
+
+Signed-off-by: Felix Guo <felixguoxiuping at gmail.com>
 Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
 ---
- kunit/test-test.c | 121 +++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 110 insertions(+), 11 deletions(-)
+ tools/testing/kunit/kunit.py        | 40 +++++++++++++++++++++++++++++
+ tools/testing/kunit/kunit_kernel.py |  3 +--
+ tools/testing/kunit/kunit_parser.py | 24 +++++++++++++++++
+ 3 files changed, 65 insertions(+), 2 deletions(-)
+ create mode 100755 tools/testing/kunit/kunit.py
+ create mode 100644 tools/testing/kunit/kunit_parser.py
 
-diff --git a/kunit/test-test.c b/kunit/test-test.c
-index 88b3bcf9c4e00..36fd95c90a26a 100644
---- a/kunit/test-test.c
-+++ b/kunit/test-test.c
-@@ -7,31 +7,130 @@
-  */
- #include <kunit/test.h>
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+new file mode 100755
+index 0000000000000..1356be404996b
+--- /dev/null
++++ b/tools/testing/kunit/kunit.py
+@@ -0,0 +1,40 @@
++#!/usr/bin/python3
++# SPDX-License-Identifier: GPL-2.0
++
++# A thin wrapper on top of the KUnit Kernel
++
++import argparse
++import sys
++import os
++
++import kunit_config
++import kunit_kernel
++import kunit_parser
++
++parser = argparse.ArgumentParser(description='Runs KUnit tests.')
++
++parser.add_argument('--raw_output', help='don\'t format output from kernel',
++		    action='store_true')
++
++parser.add_argument('--timeout', help='maximum number of seconds to allow for '
++		    'all tests to run. This does not include time taken to '
++		    'build the tests.', type=int, default=300,
++		    metavar='timeout')
++
++cli_args = parser.parse_args()
++linux = kunit_kernel.LinuxSourceTree()
++
++success = linux.build_reconfig()
++if not success:
++	quit()
++
++print('Building KUnit Kernel ...')
++success = linux.build_um_kernel()
++if not success:
++	quit()
++
++print('Starting KUnit Kernel ...')
++if cli_args.raw_output:
++	kunit_parser.raw_output(linux.run_kernel(timeout=cli_args.timeout))
++else:
++	kunit_parser.parse_run_tests(linux.run_kernel(timeout=cli_args.timeout))
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index bba7ea7ca1869..623f25b16f6c8 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -116,8 +116,7 @@ class LinuxSourceTree(object):
+ 			return False
+ 		return True
  
--static void test_test_catches_segfault(struct kunit *test)
-+static void kunit_test_catches_segfault(struct kunit *test)
- {
- 	void (*invalid_func)(void) = (void (*)(void)) SIZE_MAX;
- 
- 	KUNIT_ASSERT_SIGSEGV(test, invalid_func());
- }
- 
--static int test_test_init(struct kunit *test)
-+/*
-+ * Context for testing test managed resources
-+ * is_resource_initialized is used to test arbitrary resources
-+ */
-+struct kunit_test_context {
-+	struct kunit test;
-+	bool is_resource_initialized;
-+};
+-	def run_kernel(self, args=[]):
+-		timeout = None
++	def run_kernel(self, args=[], timeout=None):
+ 		args.extend(['mem=256M'])
+ 		process = self._ops.linux_bin(args, timeout)
+ 		with open('test.log', 'w') as f:
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+new file mode 100644
+index 0000000000000..1dff3adb73bd3
+--- /dev/null
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -0,0 +1,24 @@
++# SPDX-License-Identifier: GPL-2.0
 +
-+static int fake_resource_init(struct kunit_resource *res, void *context)
- {
-+	struct kunit_test_context *ctx = context;
++import re
 +
-+	res->allocation = &ctx->is_resource_initialized;
-+	ctx->is_resource_initialized = true;
- 	return 0;
- }
- 
--static void test_test_exit(struct kunit *test)
-+static void fake_resource_free(struct kunit_resource *res)
-+{
-+	bool *is_resource_initialized = res->allocation;
++kunit_start_re = re.compile('console .* enabled')
++kunit_end_re = re.compile('List of all partitions:')
 +
-+	*is_resource_initialized = false;
-+}
++def isolate_kunit_output(kernel_output):
++	started = False
++	for line in kernel_output:
++		if kunit_start_re.match(line):
++			started = True
++		elif kunit_end_re.match(line):
++			break
++		elif started:
++			yield line
 +
-+static void kunit_test_init_resources(struct kunit *test)
-+{
-+	struct kunit_test_context *ctx = test->priv;
++def raw_output(kernel_output):
++	for line in kernel_output:
++		print(line)
 +
-+	kunit_init_test(&ctx->test, "testing_test_init_test");
-+
-+	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
-+}
-+
-+static void kunit_test_alloc_resource(struct kunit *test)
-+{
-+	struct kunit_test_context *ctx = test->priv;
-+	struct kunit_resource *res;
-+	kunit_resource_free_t free = fake_resource_free;
-+
-+	res = kunit_alloc_resource(&ctx->test,
-+				   fake_resource_init,
-+				   fake_resource_free,
-+				   ctx);
-+
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, res);
-+	KUNIT_EXPECT_EQ(test, &ctx->is_resource_initialized, res->allocation);
-+	KUNIT_EXPECT_TRUE(test, list_is_last(&res->node, &ctx->test.resources));
-+	KUNIT_EXPECT_EQ(test, free, res->free);
-+}
-+
-+static void kunit_test_free_resource(struct kunit *test)
- {
-+	struct kunit_test_context *ctx = test->priv;
-+	struct kunit_resource *res = kunit_alloc_resource(&ctx->test,
-+							  fake_resource_init,
-+							  fake_resource_free,
-+							  ctx);
-+
-+	kunit_free_resource(&ctx->test, res);
-+
-+	KUNIT_EXPECT_EQ(test, false, ctx->is_resource_initialized);
-+	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
-+}
-+
-+static void kunit_test_cleanup_resources(struct kunit *test)
-+{
-+	int i;
-+	const int num_res = 5;
-+	struct kunit_test_context *ctx = test->priv;
-+	struct kunit_resource *resources[num_res];
-+
-+	for (i = 0; i < num_res; i++) {
-+		resources[i] = kunit_alloc_resource(&ctx->test,
-+						    fake_resource_init,
-+						    fake_resource_free,
-+						    ctx);
-+	}
-+
-+	kunit_cleanup(&ctx->test);
-+
-+	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
-+}
-+
-+static int kunit_test_init(struct kunit *test)
-+{
-+	struct kunit_test_context *ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-+
-+	if (!ctx)
-+		return -ENOMEM;
-+	test->priv = ctx;
-+
-+	kunit_init_test(&ctx->test, "test_test_context");
-+	return 0;
-+}
-+
-+static void kunit_test_exit(struct kunit *test)
-+{
-+	struct kunit_test_context *ctx = test->priv;
-+
-+	kunit_cleanup(&ctx->test);
-+	kfree(ctx);
- }
- 
--static struct kunit_case test_test_cases[] = {
--	KUNIT_CASE(test_test_catches_segfault),
-+static struct kunit_case kunit_test_cases[] = {
-+	KUNIT_CASE(kunit_test_catches_segfault),
-+	KUNIT_CASE(kunit_test_init_resources),
-+	KUNIT_CASE(kunit_test_alloc_resource),
-+	KUNIT_CASE(kunit_test_free_resource),
-+	KUNIT_CASE(kunit_test_cleanup_resources),
- 	{},
- };
- 
--static struct kunit_module test_test_module = {
--	.name = "test-test",
--	.init = test_test_init,
--	.exit = test_test_exit,
--	.test_cases = test_test_cases,
-+static struct kunit_module kunit_test_module = {
-+	.name = "kunit-test",
-+	.init = kunit_test_init,
-+	.exit = kunit_test_exit,
-+	.test_cases = kunit_test_cases,
- };
--module_test(test_test_module);
-+module_test(kunit_test_module);
++def parse_run_tests(kernel_output):
++	for output in isolate_kunit_output(kernel_output):
++		print(output)
 -- 
 2.20.0.rc0.387.gc7a69e6b6c-goog
