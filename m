@@ -1,40 +1,41 @@
 From: brendanhiggins@google.com (Brendan Higgins)
-Date: Wed, 28 Nov 2018 11:36:33 -0800
-Subject: [RFC v3 16/19] arch: um: make UML unflatten device tree when testing
+Date: Wed, 28 Nov 2018 11:36:32 -0800
+Subject: [RFC v3 15/19] MAINTAINERS: add entry for KUnit the unit testing
+ framework
 In-Reply-To: <20181128193636.254378-1-brendanhiggins@google.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
-Message-ID: <20181128193636.254378-17-brendanhiggins@google.com>
+Message-ID: <20181128193636.254378-16-brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181128193633.YymoS_jpm5FQ1hLKZSfA4Ov_KkMy1eMtBTweK37s88s@z>
+Message-ID: <20181128193632.lVjxEAUhPEn2rIotscCJr4ker_w7Jl7yoFxCV2z8NGg@z>
 
-Make UML unflatten any present device trees when running KUnit tests.
+Add myself as maintainer of KUnit, the Linux kernel's unit testing
+framework.
 
 Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
 ---
- arch/um/kernel/um_arch.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ MAINTAINERS | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
-index a818ccef30ca2..bd58ae3bf4148 100644
---- a/arch/um/kernel/um_arch.c
-+++ b/arch/um/kernel/um_arch.c
-@@ -13,6 +13,7 @@
- #include <linux/sched.h>
- #include <linux/sched/task.h>
- #include <linux/kmsg_dump.h>
-+#include <linux/of_fdt.h>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b2f710eee67a7..8c9b56dbc9645 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7988,6 +7988,16 @@ S:	Maintained
+ F:	tools/testing/selftests/
+ F:	Documentation/dev-tools/kselftest*
  
- #include <asm/pgtable.h>
- #include <asm/processor.h>
-@@ -347,6 +348,9 @@ void __init setup_arch(char **cmdline_p)
- 	read_initrd();
- 
- 	paging_init();
-+#if IS_ENABLED(CONFIG_OF_UNITTEST)
-+	unflatten_device_tree();
-+#endif
- 	strlcpy(boot_command_line, command_line, COMMAND_LINE_SIZE);
- 	*cmdline_p = command_line;
- 	setup_hostinfo(host_info, sizeof host_info);
++KERNEL UNIT TESTING FRAMEWORK (KUnit)
++M:	Brendan Higgins <brendanhiggins at google.com>
++L:	kunit-dev at googlegroups.com
++W:	https://google.github.io/kunit-docs/third_party/kernel/docs/
++S:	Maintained
++F:	Documentation/kunit/
++F:	include/kunit/
++F:	kunit/
++F:	tools/testing/kunit/
++
+ KERNEL USERMODE HELPER
+ M:	"Luis R. Rodriguez" <mcgrof at kernel.org>
+ L:	linux-kernel at vger.kernel.org
 -- 
 2.20.0.rc0.387.gc7a69e6b6c-goog
