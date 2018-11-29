@@ -1,55 +1,25 @@
-From: zanussi at kernel.org (Tom Zanussi)
-Date: Thu, 29 Nov 2018 10:43:13 -0600
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Thu, 29 Nov 2018 11:49:11 -0500
 Subject: [PATCH] sefltests/ftrace: Use /bin/echo for output with options
-In-Reply-To: <154350406317.4422.7595059658374071660.stgit@devbox>
+In-Reply-To: <1543509793.2018.2.camel@kernel.org>
 References: <20181129235407.9788e718a4ae7830f9e5d225@kernel.org>
  <154350406317.4422.7595059658374071660.stgit@devbox>
-Message-ID: <1543509793.2018.2.camel@kernel.org>
+ <1543509793.2018.2.camel@kernel.org>
+Message-ID: <20181129114911.7dcc8905@gandalf.local.home>
 
-Hi Masami,
+On Thu, 29 Nov 2018 10:43:13 -0600
+Tom Zanussi <zanussi at kernel.org> wrote:
 
-On Fri, 2018-11-30 at 00:07 +0900, Masami Hiramatsu wrote:
-> Use /bin/echo for console output with options like non
-> newline (-n) and/or backslash escape (-e).
+> I tried this on the three systems mentioned before, and it worked fine
+> on all of them.
 > 
-> Tom Zanussi reported that when he tested ftracetest, it
-> shows "-e" and "-n" options on the console, since a system
-> which uses dash as the alias of /bin/sh, uses dash built-in
-> echo command which doesn't accept "-e".
-> 
-> To avoid this issue, use /bin/echo instead of echo for
-> the output with options.
-> 
-> Fixes: 8f381ac4d321 ("selftests/ftrace: Add color to the PASS / FAIL
-> results")
-> Link: http://lkml.kernel.org/r/cover.1542221862.git.tom.zanussi at linux
-> .intel.com
-> Reported-by: Tom Zanussi <zanussi at kernel.org>
-> Suggested-by: Tom Zanussi <zanussi at kernel.org>
-> Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
-> ---
->  tools/testing/selftests/ftrace/ftracetest |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/ftracetest
-> b/tools/testing/selftests/ftrace/ftracetest
-> index 75244db70331..ba670b452bdb 100755
-> --- a/tools/testing/selftests/ftrace/ftracetest
-> +++ b/tools/testing/selftests/ftrace/ftracetest
-> @@ -173,8 +173,8 @@ strip_esc() {
->  }
->  
->  prlog() { # messages
-> -  echo -e "$@"
-> -  [ "$LOG_FILE" ] && echo -e "$@" | strip_esc >> $LOG_FILE
-> +  /bin/echo -e "$@"
-> +  [ "$LOG_FILE" ] && /bin/echo -e "$@" | strip_esc >> $LOG_FILE
->  }
->  catlog() { #file
->    cat $1
-> 
+> Tested-by: Tom Zanussi <tom.zanussi at linux.intel.com>
 
-I tried this on the three systems mentioned before, and it worked fine
-on all of them.
 
-Tested-by: Tom Zanussi <tom.zanussi at linux.intel.com>
+Shuah,
+
+Can you take this in your tree. I already acked it.
+
+Thanks!
+
+-- Steve
