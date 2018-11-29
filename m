@@ -1,45 +1,40 @@
 From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Thu, 29 Nov 2018 18:16:51 +0000
-Subject: [PATCH v8 0/8] arm64: untag user pointers passed to the kernel
-In-Reply-To: <CAAeHK+w1Qv6owkdWfjbXMFqOA8BURDN5gviw8vpgi3eon1dWmA@mail.gmail.com>
+Date: Thu, 29 Nov 2018 18:22:18 +0000
+Subject: [PATCH v8 1/8] arm64: add type casts to untagged_addr macro
+In-Reply-To: <4a4063a3e074608b99cf22ab447fecc36d056251.1541687720.git.andreyknvl@google.com>
 References: <cover.1541687720.git.andreyknvl@google.com>
- <CAAeHK+w1Qv6owkdWfjbXMFqOA8BURDN5gviw8vpgi3eon1dWmA@mail.gmail.com>
-Message-ID: <20181129181650.GG22027@arrakis.emea.arm.com>
+ <4a4063a3e074608b99cf22ab447fecc36d056251.1541687720.git.andreyknvl@google.com>
+Message-ID: <20181129182218.GH22027@arrakis.emea.arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181129181651.tj7xs67P_7ykce1vVZtab_Uf6P8zO2Ilvy2DboG8Un0@z>
+Message-ID: <20181129182218.vm5KTygLRTTU8a-DFeo0Q8i9xGaeUJPCJebyG8ZMZs0@z>
 
-Hi Andrey,
-
-On Thu, Nov 08, 2018@03:48:10PM +0100, Andrey Konovalov wrote:
-> On Thu, Nov 8, 2018@3:36 PM, Andrey Konovalov <andreyknvl@google.com> wrote:
-> > Changes in v8:
-> > - Rebased onto 65102238 (4.20-rc1).
-> > - Added a note to the cover letter on why syscall wrappers/shims that untag
-> >   user pointers won't work.
-> > - Added a note to the cover letter that this patchset has been merged into
-> >   the Pixel 2 kernel tree.
-> > - Documentation fixes, in particular added a list of syscalls that don't
-> >   support tagged user pointers.
+On Thu, Nov 08, 2018@03:36:08PM +0100, Andrey Konovalov wrote:
+> This patch makes the untagged_addr macro accept all kinds of address types
+> (void *, unsigned long, etc.) and allows not to specify type casts in each
+> place where it is used. This is done by using __typeof__.
 > 
-> I've changed the documentation to be more specific, please take a look.
+> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+> ---
+>  arch/arm64/include/asm/uaccess.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> I haven't done anything about adding a way for the user to find out
-> that the kernel supports this ABI extension. I don't know what would
-> the the preferred way to do this, and we haven't received any comments
-> on that from anybody else. Probing "on some innocuous syscall
-> currently returning -EFAULT on tagged pointer arguments" works though,
-> as you mentioned.
+> diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+> index 07c34087bd5e..c1325271e368 100644
+> --- a/arch/arm64/include/asm/uaccess.h
+> +++ b/arch/arm64/include/asm/uaccess.h
+> @@ -101,7 +101,8 @@ static inline unsigned long __range_ok(const void __user *addr, unsigned long si
+>   * up with a tagged userland pointer. Clear the tag to get a sane pointer to
+>   * pass on to access_ok(), for instance.
+>   */
+> -#define untagged_addr(addr)		sign_extend64(addr, 55)
+> +#define untagged_addr(addr)		\
+> +	((__typeof__(addr))sign_extend64((__u64)(addr), 55))
 
-We've had some internal discussions and also talked to some people at
-Plumbers. I think the best option is to introduce an AT_FLAGS bit to
-describe the ABI relaxation on tagged pointers. Vincenzo is going to
-propose a patch on top of this series.
+Nitpick: same comment as here (use u64):
 
-> As mentioned in the cover letter, this patchset has been merged into
-> the Pixel 2 kernel tree.
+http://lkml.kernel.org/r/20181123173739.osgvnnhmptdgtlnl at lakrids.cambridge.arm.com
 
-I just hope it's not enabled on production kernels, it would introduce
-a user ABI that may differ from what ends up upstream.
+Acked-by: Catalin Marinas <catalin.marinas at arm.com>
 
--- 
-Catalin
+(not acking the whole series just yet, only specific patches to remember
+what I reviewed)
