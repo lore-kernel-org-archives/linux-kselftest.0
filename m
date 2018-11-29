@@ -1,21 +1,78 @@
-From: catalin.marinas at arm.com (Catalin Marinas)
-Date: Thu, 29 Nov 2018 18:24:48 +0000
-Subject: [PATCH v8 3/8] arm64: untag user addresses in access_ok and
- __uaccess_mask_ptr
-In-Reply-To: <b23c2374235a33328817f2586cc055c69d91a2ec.1541687720.git.andreyknvl@google.com>
-References: <cover.1541687720.git.andreyknvl@google.com>
- <b23c2374235a33328817f2586cc055c69d91a2ec.1541687720.git.andreyknvl@google.com>
-Message-ID: <20181129182446.GJ22027@arrakis.emea.arm.com>
+From: rafael.tinoco at linaro.org (Rafael David Tinoco)
+Date: Thu, 29 Nov 2018 17:57:05 -0200
+Subject: [PATCH 1/4] selftests: timers: move PIE tests out of rtctest
+In-Reply-To: <20180419125030.5076-2-alexandre.belloni@bootlin.com>
+References: <20180419125030.5076-1-alexandre.belloni@bootlin.com>
+ <20180419125030.5076-2-alexandre.belloni@bootlin.com>
+Message-ID: <a304b6f1-11db-543b-2cb3-372f34dc7697@linaro.org>
 
-On Thu, Nov 08, 2018 at 03:36:10PM +0100, Andrey Konovalov wrote:
-> copy_from_user (and a few other similar functions) are used to copy data
-> from user memory into the kernel memory or vice versa. Since a user can
-> provided a tagged pointer to one of the syscalls that use copy_from_user,
-> we need to correctly handle such pointers.
+On 4/19/18 9:50 AM, Alexandre Belloni wrote:
+> Since commit 6610e0893b8bc ("RTC: Rework RTC code to use timerqueue for
+> events"), PIE are completely handled using hrtimers, without actually using
+> any underlying hardware RTC.
 > 
-> Do this by untagging user pointers in access_ok and in __uaccess_mask_ptr,
-> before performing access validity checks.
+> Move PIE testing out of rtctest. It still depends on the presence of an RTC
+> (to access the device file) but doesn't depend on it actually working.
 > 
-> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+> Signed-off-by: Alexandre Belloni <alexandre.belloni at bootlin.com>
+> ---
+>  tools/testing/selftests/timers/.gitignore |   1 +
+>  tools/testing/selftests/timers/Makefile   |   2 +-
+>  tools/testing/selftests/timers/rtcpie.c   | 132 ++++++++++++++++++++++
+>  tools/testing/selftests/timers/rtctest.c  |  83 +-------------
+>  4 files changed, 138 insertions(+), 80 deletions(-)
+>  create mode 100644 tools/testing/selftests/timers/rtcpie.c
+> 
+...
+> +	/* The frequencies 128Hz, 256Hz, ... 8192Hz are only allowed for root. */
+> +	for (tmp=2; tmp<=64; tmp*=2) {
+> +
+> +		retval = ioctl(fd, RTC_IRQP_SET, tmp);
+> +		if (retval == -1) {
+> +			/* not all RTCs can change their periodic IRQ rate */
+> +			if (errno == EINVAL) {
+> +				fprintf(stderr,
+> +					"\n...Periodic IRQ rate is fixed\n");
+> +				goto done;
+> +			}
+> +			perror("RTC_IRQP_SET ioctl");
+> +			exit(errno);
+> +		}
 
-Reviewed-by: Catalin Marinas <catalin.marinas at arm.com>
+Hello Alexandre,
+
+In our tests, having failures under 64Hz is quite common in embedded
+systems with few number of CPUs/Cores:
+
+--------
+root at bug3402:opt$ find /sys -name rtc0
+/sys/devices/platform/9010000.pl031/rtc/rtc0
+/sys/class/rtc/rtc0
+
+selftests: timers: rtcpie
+Periodic IRQ rate is 1Hz.
+Counting 20 interrupts at:
+2Hz:	 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+4Hz:	 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+8Hz:	 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+16Hz:	 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+32Hz:	 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+64Hz:	
+PIE delta error: 0.017697 should be close to 0.015625
+not ok 1..9 selftests: timers: rtcpie [FAIL]
+--------
+
+Mainly because 64Hz gives us.. ~16ms in the test, and the variation
+being taken in consideration for an error, for this test, is 10%, which
+is ~1.6ms... pretty close to scheduler limit for lower number of CPUs in
+a functional testing environment.
+
+Would you mind if we change the default for up to 32Hz ? Or, do you have
+any other suggestion ?
+
+Best Rgds
+Rafael
+
+-- 
+Rafael D. Tinoco
+Linaro - Kernel Validation
