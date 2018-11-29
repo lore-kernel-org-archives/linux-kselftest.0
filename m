@@ -1,68 +1,42 @@
-From: dan.carpenter at oracle.com (Dan Carpenter)
-Date: Thu, 29 Nov 2018 17:38:16 +0300
-Subject: [bug report] kvm: selftests: introduce ucall
-Message-ID: <20181129143816.tjgiq3o7hrw74d2o@kili.mountain>
+From: mhiramat at kernel.org (Masami Hiramatsu)
+Date: Fri, 30 Nov 2018 00:07:43 +0900
+Subject: [PATCH] sefltests/ftrace: Use /bin/echo for output with options
+In-Reply-To: <20181129235407.9788e718a4ae7830f9e5d225@kernel.org>
+References: <20181129235407.9788e718a4ae7830f9e5d225@kernel.org>
+Message-ID: <154350406317.4422.7595059658374071660.stgit@devbox>
 
-Hello Andrew Jones,
+Use /bin/echo for console output with options like non
+newline (-n) and/or backslash escape (-e).
 
-The patch 14c47b7530e2: "kvm: selftests: introduce ucall" from Sep
-18, 2018, leads to the following static checker warning:
+Tom Zanussi reported that when he tested ftracetest, it
+shows "-e" and "-n" options on the console, since a system
+which uses dash as the alias of /bin/sh, uses dash built-in
+echo command which doesn't accept "-e".
 
-	./tools/testing/selftests/kvm/lib/ucall.c:61 ucall_init()
-	warn: always true condition '(gpa >= 0) => (0-u64max >= 0)'
+To avoid this issue, use /bin/echo instead of echo for
+the output with options.
 
-./tools/testing/selftests/kvm/lib/ucall.c
-    28  void ucall_init(struct kvm_vm *vm, ucall_type_t type, void *arg)
-    29  {
-    30          ucall_type = type;
-    31          sync_global_to_guest(vm, ucall_type);
-    32  
-    33          if (type == UCALL_PIO)
-    34                  return;
-    35  
-    36          if (type == UCALL_MMIO) {
-    37                  vm_paddr_t gpa, start, end, step;
+Fixes: 8f381ac4d321 ("selftests/ftrace: Add color to the PASS / FAIL results")
+Link: http://lkml.kernel.org/r/cover.1542221862.git.tom.zanussi at linux.intel.com
+Reported-by: Tom Zanussi <zanussi at kernel.org>
+Suggested-by: Tom Zanussi <zanussi at kernel.org>
+Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
+---
+ tools/testing/selftests/ftrace/ftracetest |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-vm_paddr_t is a u64.
-
-
-    38                  bool ret;
-    39  
-    40                  if (arg) {
-    41                          gpa = (vm_paddr_t)arg;
-    42                          ret = ucall_mmio_init(vm, gpa);
-    43                          TEST_ASSERT(ret, "Can't set ucall mmio address to %lx", gpa);
-    44                          return;
-    45                  }
-    46  
-    47                  /*
-    48                   * Find an address within the allowed virtual address space,
-    49                   * that does _not_ have a KVM memory region associated with it.
-    50                   * Identity mapping an address like this allows the guest to
-    51                   * access it, but as KVM doesn't know what to do with it, it
-    52                   * will assume it's something userspace handles and exit with
-    53                   * KVM_EXIT_MMIO. Well, at least that's how it works for AArch64.
-    54                   * Here we start with a guess that the addresses around two
-    55                   * thirds of the VA space are unmapped and then work both down
-    56                   * and up from there in 1/6 VA space sized steps.
-    57                   */
-    58                  start = 1ul << (vm->va_bits * 2 / 3);
-    59                  end = 1ul << vm->va_bits;
-    60                  step = 1ul << (vm->va_bits / 6);
-    61                  for (gpa = start; gpa >= 0; gpa -= step) {
-                                          ^^^^^^^^
-So this doesn't work.
-
-    62                          if (ucall_mmio_init(vm, gpa & ~(vm->page_size - 1)))
-    63                                  return;
-    64                  }
-    65                  for (gpa = start + step; gpa < end; gpa += step) {
-    66                          if (ucall_mmio_init(vm, gpa & ~(vm->page_size - 1)))
-    67                                  return;
-    68                  }
-    69                  TEST_ASSERT(false, "Can't find a ucall mmio address");
-    70          }
-    71  }
-
-regards,
-dan carpenter
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index 75244db70331..ba670b452bdb 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -173,8 +173,8 @@ strip_esc() {
+ }
+ 
+ prlog() { # messages
+-  echo -e "$@"
+-  [ "$LOG_FILE" ] && echo -e "$@" | strip_esc >> $LOG_FILE
++  /bin/echo -e "$@"
++  [ "$LOG_FILE" ] && /bin/echo -e "$@" | strip_esc >> $LOG_FILE
+ }
+ catlog() { #file
+   cat $1
