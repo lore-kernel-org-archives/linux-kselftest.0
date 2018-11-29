@@ -1,14 +1,14 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Thu, 29 Nov 2018 11:32:40 -0500
+From: zanussi at kernel.org (Tom Zanussi)
+Date: Thu, 29 Nov 2018 10:43:13 -0600
 Subject: [PATCH] sefltests/ftrace: Use /bin/echo for output with options
 In-Reply-To: <154350406317.4422.7595059658374071660.stgit@devbox>
 References: <20181129235407.9788e718a4ae7830f9e5d225@kernel.org>
  <154350406317.4422.7595059658374071660.stgit@devbox>
-Message-ID: <20181129113240.163cbfa9@gandalf.local.home>
+Message-ID: <1543509793.2018.2.camel@kernel.org>
 
-On Fri, 30 Nov 2018 00:07:43 +0900
-Masami Hiramatsu <mhiramat at kernel.org> wrote:
+Hi Masami,
 
+On Fri, 2018-11-30 at 00:07 +0900, Masami Hiramatsu wrote:
 > Use /bin/echo for console output with options like non
 > newline (-n) and/or backslash escape (-e).
 > 
@@ -20,8 +20,10 @@ Masami Hiramatsu <mhiramat at kernel.org> wrote:
 > To avoid this issue, use /bin/echo instead of echo for
 > the output with options.
 > 
-> Fixes: 8f381ac4d321 ("selftests/ftrace: Add color to the PASS / FAIL results")
-> Link: http://lkml.kernel.org/r/cover.1542221862.git.tom.zanussi at linux.intel.com
+> Fixes: 8f381ac4d321 ("selftests/ftrace: Add color to the PASS / FAIL
+> results")
+> Link: http://lkml.kernel.org/r/cover.1542221862.git.tom.zanussi at linux
+> .intel.com
 > Reported-by: Tom Zanussi <zanussi at kernel.org>
 > Suggested-by: Tom Zanussi <zanussi at kernel.org>
 > Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
@@ -29,7 +31,8 @@ Masami Hiramatsu <mhiramat at kernel.org> wrote:
 >  tools/testing/selftests/ftrace/ftracetest |    4 ++--
 >  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+> diff --git a/tools/testing/selftests/ftrace/ftracetest
+> b/tools/testing/selftests/ftrace/ftracetest
 > index 75244db70331..ba670b452bdb 100755
 > --- a/tools/testing/selftests/ftrace/ftracetest
 > +++ b/tools/testing/selftests/ftrace/ftracetest
@@ -44,10 +47,9 @@ Masami Hiramatsu <mhiramat at kernel.org> wrote:
 >  }
 >  catlog() { #file
 >    cat $1
+> 
 
-I'm fine with this change but I wonder if we should have a $ECHO that
-is defined to something that can be overwritten if need be.
+I tried this on the three systems mentioned before, and it worked fine
+on all of them.
 
-Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-
--- Steve
+Tested-by: Tom Zanussi <tom.zanussi at linux.intel.com>
