@@ -1,25 +1,43 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Thu, 29 Nov 2018 11:49:11 -0500
-Subject: [PATCH] sefltests/ftrace: Use /bin/echo for output with options
-In-Reply-To: <1543509793.2018.2.camel@kernel.org>
-References: <20181129235407.9788e718a4ae7830f9e5d225@kernel.org>
- <154350406317.4422.7595059658374071660.stgit@devbox>
- <1543509793.2018.2.camel@kernel.org>
-Message-ID: <20181129114911.7dcc8905@gandalf.local.home>
+From: catalin.marinas at arm.com (Catalin Marinas)
+Date: Thu, 29 Nov 2018 18:16:51 +0000
+Subject: [PATCH v8 0/8] arm64: untag user pointers passed to the kernel
+In-Reply-To: <CAAeHK+w1Qv6owkdWfjbXMFqOA8BURDN5gviw8vpgi3eon1dWmA@mail.gmail.com>
+References: <cover.1541687720.git.andreyknvl@google.com>
+ <CAAeHK+w1Qv6owkdWfjbXMFqOA8BURDN5gviw8vpgi3eon1dWmA@mail.gmail.com>
+Message-ID: <20181129181650.GG22027@arrakis.emea.arm.com>
 
-On Thu, 29 Nov 2018 10:43:13 -0600
-Tom Zanussi <zanussi at kernel.org> wrote:
+Hi Andrey,
 
-> I tried this on the three systems mentioned before, and it worked fine
-> on all of them.
+On Thu, Nov 08, 2018 at 03:48:10PM +0100, Andrey Konovalov wrote:
+> On Thu, Nov 8, 2018 at 3:36 PM, Andrey Konovalov <andreyknvl at google.com> wrote:
+> > Changes in v8:
+> > - Rebased onto 65102238 (4.20-rc1).
+> > - Added a note to the cover letter on why syscall wrappers/shims that untag
+> >   user pointers won't work.
+> > - Added a note to the cover letter that this patchset has been merged into
+> >   the Pixel 2 kernel tree.
+> > - Documentation fixes, in particular added a list of syscalls that don't
+> >   support tagged user pointers.
 > 
-> Tested-by: Tom Zanussi <tom.zanussi at linux.intel.com>
+> I've changed the documentation to be more specific, please take a look.
+> 
+> I haven't done anything about adding a way for the user to find out
+> that the kernel supports this ABI extension. I don't know what would
+> the the preferred way to do this, and we haven't received any comments
+> on that from anybody else. Probing "on some innocuous syscall
+> currently returning -EFAULT on tagged pointer arguments" works though,
+> as you mentioned.
 
+We've had some internal discussions and also talked to some people at
+Plumbers. I think the best option is to introduce an AT_FLAGS bit to
+describe the ABI relaxation on tagged pointers. Vincenzo is going to
+propose a patch on top of this series.
 
-Shuah,
+> As mentioned in the cover letter, this patchset has been merged into
+> the Pixel 2 kernel tree.
 
-Can you take this in your tree. I already acked it.
+I just hope it's not enabled on production kernels, it would introduce
+a user ABI that may differ from what ends up upstream.
 
-Thanks!
-
--- Steve
+-- 
+Catalin
