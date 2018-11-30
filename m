@@ -1,62 +1,82 @@
-From: liuwl.fnst@cn.fujitsu.com (Liu, Wenlong)
-Date: Fri, 30 Nov 2018 03:09:02 +0000
-Subject: seccomp/seccomp_bpf: test terminated by the not expected behavior
-In-Reply-To: <CAGXu5j+B_+UggW50bFVuZKM2Fsou7g6ZMrCL_kPHyc7tsWFDSA@mail.gmail.com>
-References: <F40213214988A94A9DDBFC5F7146FC5E01AF2E2998@G08CNEXMBPEKD01.g08.fujitsu.local>
- <CAGXu5j+B_+UggW50bFVuZKM2Fsou7g6ZMrCL_kPHyc7tsWFDSA@mail.gmail.com>
-Message-ID:
- <F40213214988A94A9DDBFC5F7146FC5E01AF2E29AC@G08CNEXMBPEKD01.g08.fujitsu.local>
+From: mcgrof@kernel.org (Luis Chamberlain)
+Date: Thu, 29 Nov 2018 19:14:38 -0800
+Subject: [RFC v3 01/19] kunit: test: add KUnit test runner core
+In-Reply-To: <20181128193636.254378-2-brendanhiggins@google.com>
+References: <20181128193636.254378-1-brendanhiggins@google.com>
+ <20181128193636.254378-2-brendanhiggins@google.com>
+Message-ID: <20181130031438.GQ4922@garbanzo.do-not-panic.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181130030902.pCn-kmlW4BGPopWDO2lI0fsvVc9MaTM3Kf7u9mIU1CM@z>
+Message-ID: <20181130031438.VIXilTeUAUh8b2GmUIjnGzpLSgik-gVYPHnCMStvoLI@z>
 
-> -----Original Message-----
-> From: Kees Cook [mailto:keescook at chromium.org]
-> Sent: Friday, November 30, 2018 10:58 AM
-> To: Liu, Wenlong/刘 文龙 <liuwl.fnst at cn.fujitsu.com>
-> Cc: Andy Lutomirski <luto at amacapital.net>; Will Drewry
-> <wad at chromium.org>; Shuah Khan <shuah at kernel.org>; open list:KERNEL
-> SELFTEST FRAMEWORK <linux-kselftest at vger.kernel.org>;
-> yuichi.kusakabe at denso-ten.com; kisuke.kawamura at denso-ten.com
-> Subject: Re: seccomp/seccomp_bpf: test terminated by the not expected
-> behavior
-> > ---
-> > Although I am not so familiar with SECCOMP and BPF, I checked some related
-> documents and codes.
-> > About the failures above, what the most confused me is that why it always
-> give ENOSYS.
-> >
-> > Am I missing something?
-> > Thanks in advance.
-> >
-> > PS:
-> > I didn't run "make kselftest-merge" before compiling the kernel that I'm
-> using.
-> >
-> > ---
-> > The Test Environment:
-> > - Kernel version: v4.14.0
-> 
-> Hi!
-> 
-> It appears you're attempting to use a newer seccomp selftest on an older
-> kernel. That isn't a supported way to test seccomp. You'll need to build
-> 4.14's seccomp_bpf test binary and run it instead.
+On Wed, Nov 28, 2018@11:36:18AM -0800, Brendan Higgins wrote:
+> +#define module_test(module) \
+> +		static int module_kunit_init##module(void) \
+> +		{ \
+> +			return kunit_run_tests(&module); \
+> +		} \
+> +		late_initcall(module_kunit_init##module)
 
-Thanks for your reply.
+Here in lies an assumption that suffices. I'm inclined to believe we
+need new initcall level here so to ensure we *do* run after all the
+respective kernels iniut calls. Otherwise we're left at the whims of
+link order for kunit. For instance if a kunit test relies on frameworks
+which are also late_initcall() we'd have complete incompatibility with
+anything linked *after* kunit.
 
-Indeed, there is little difference between the version of kernel and kselftest.
+> diff --git a/kunit/Kconfig b/kunit/Kconfig
+> new file mode 100644
+> index 0000000000000..49b44c4f6630a
+> --- /dev/null
+> +++ b/kunit/Kconfig
+> @@ -0,0 +1,17 @@
+> +#
+> +# KUnit base configuration
+> +#
+> +
+> +menu "KUnit support"
+> +
+> +config KUNIT
+> +	bool "Enable support for unit tests (KUnit)"
+> +	depends on UML
 
-Someone(or doc) tells me that,
-If you run a kernel xyz, then always run the BPF kernel selftests from that kernel xyz as well. 
-Do not expect that the BPF selftest from the latest mainline tree will pass all the time.
+Consider using:
 
-But I forget that, the little difference in my case is different "z". :-)  My fault.
+if UML
+   ...
+endif
 
-Thanks again.
+That allows the depends to be done once.
 
-Best regards
-Liu
+> +	help
+> +	  Enables support for kernel unit tests (KUnit), a lightweight unit
+> +	  testing and mocking framework for the Linux kernel. These tests are
+> +	  able to be run locally on a developer's workstation without a VM or
+> +	  special hardware.
 
-> --
-> Kees Cook
-> 
+
+Some mention of UML may be good here?
+
+> For more information, please see
+> +	  Documentation/kunit/
+> +
+> +endmenu
+
+I'm a bit conflicted here. This currently depends on UML but yet you
+noted on RFC v2 that your intention is to liberate kunit from UML and
+ideally allow unit tests to depend only on userspace. I've addressed
+tests using both selftests kernels drivers and also re-written kernel
+APIs to userspace to test there. I think we may need to live with both.
+
+Then for the UML stuff, I think if we *really* accept that UML will
+always be a viable option we should probably consider now throwing these
+things under drivers/platform/uml/. This follows the pattern of arch
+specific drivers. Whether or not we end up with a complete userspace
+component independent of UML may implicate having a shared component
+somewhere else.
+
+Likewise, I realize the goal is to *avoid* using a virtual machine for
+these tests, but would it in any way make sense to share kunit to be
+supported for other architectures to allow easier-to-write tests as
+well?
+
+  Luis
