@@ -1,27 +1,23 @@
 From: mcgrof@kernel.org (Luis Chamberlain)
-Date: Thu, 29 Nov 2018 19:40:01 -0800
-Subject: [RFC v3 07/19] kunit: test: add initial tests
-In-Reply-To: <20181128193636.254378-8-brendanhiggins@google.com>
+Date: Thu, 29 Nov 2018 19:41:35 -0800
+Subject: [RFC v3 08/19] arch: um: add shim to trap to allow installing a
+ fault catcher for tests
+In-Reply-To: <20181128193636.254378-9-brendanhiggins@google.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
- <20181128193636.254378-8-brendanhiggins@google.com>
-Message-ID: <20181130034001.GM18410@garbanzo.do-not-panic.com>
+ <20181128193636.254378-9-brendanhiggins@google.com>
+Message-ID: <20181130034135.GN18410@garbanzo.do-not-panic.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181130034001.hXci4z0CcpasslNoHhaKNFS2bniup0lOhqnYi4Hb1x0@z>
+Message-ID: <20181130034135.3mmQvVSuRSwWdunlJgrsAMVdD4kuCmEYvRL6HmM8RM4@z>
 
-On Wed, Nov 28, 2018@11:36:24AM -0800, Brendan Higgins wrote:
-> Add a test for string stream along with a simpler example.
-> 
-> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> ---
->  kunit/Kconfig              | 12 ++++++
->  kunit/Makefile             |  4 ++
->  kunit/example-test.c       | 88 ++++++++++++++++++++++++++++++++++++++
+On Wed, Nov 28, 2018@11:36:25AM -0800, Brendan Higgins wrote:
+> +static void segv_run_catcher(jmp_buf *catcher, void *fault_addr)
+> +{
+> +	current->thread.fault_addr = fault_addr;
+> +	UML_LONGJMP(catcher, 1);
+> +}
 
-BTW if you need another more concrete but very simple example I think it
-may be possible to port tools/testing/selftests/sysctl/sysctl.sh +
-lib/test_sysctl.c into a kunit test. Correct me if I'm wrong.
-
-I think that would show the differences clearly between selftests and
-kunit as well.
+Some documentation about what this does exactly would be appreciated.
+With the goal it may be useful to others wanting to consider support
+for other archs -- if that actually ends up being desirable.
 
   Luis
