@@ -1,32 +1,57 @@
-From: mcgrof at kernel.org (Luis Chamberlain)
-Date: Thu, 29 Nov 2018 18:37:32 -0800
-Subject: [PATCH 1/2] selftests: firmware: remove use of non-standard diff
- -Z option
-In-Reply-To: <20181127031218.24419-2-dan.rue@linaro.org>
-References: <20181127031218.24419-1-dan.rue@linaro.org>
- <20181127031218.24419-2-dan.rue@linaro.org>
-Message-ID: <20181130023732.GO4922@garbanzo.do-not-panic.com>
+From: liuwl.fnst at cn.fujitsu.com (Liu, Wenlong)
+Date: Fri, 30 Nov 2018 02:51:02 +0000
+Subject: seccomp/seccomp_bpf: test terminated by the not expected behavior
+Message-ID: <F40213214988A94A9DDBFC5F7146FC5E01AF2E2998@G08CNEXMBPEKD01.g08.fujitsu.local>
 
-On Mon, Nov 26, 2018 at 09:12:15PM -0600, Dan Rue wrote:
-> diff -Z is used to trim the trailing whitespace when comparing the
-> loaded firmware file with the source firmware file. However, per the
-> comment in the source code, -Z should not be necessary. In testing, the
-> input and output files are identical.
-> 
-> Additionally, -Z is not a standard option and is not available in
-> environments such as busybox. When -Z is not supported, diff fails with
-> a usage error, which is suppressed, but then causes read_firmwares() to
-> exit with a false failure message.
+Hi,
 
-NACK -- this breaks testing on debian:
+The test outputs of those failures in seccomp_bpf as below:
+---
+m3ulcb:/opt/kselftest/seccomp# ./seccomp_bpf 61
+[ RUN      ] global.syscall_restart
+seccomp_bpf.c:2754:global.syscall_restart:Expected 0x200 (512) == msg (256)
+global.syscall_restart: Test terminated by assertion
+[     FAIL ] global.syscall_restart
+m3ulcb:/opt/kselftest/seccomp# seccomp_bpf.c:2685:global.syscall_restart:Expected 0 (0) == nanosleep(&timeout, ((void *)0)) (-1)
+seccomp_bpf.c:2686:global.syscall_restart:Call to nanosleep() failed (errno 38)
+seccomp_bpf.c:2690:global.syscall_restart:Expected 1 (1) == read(pipefd[0], &buf, 1) (0)
+seccomp_bpf.c:2691:global.syscall_restart:Failed final read() from parent
+seccomp_bpf.c:2693:global.syscall_restart:Expected '!' (33) == buf (46)
+seccomp_bpf.c:2694:global.syscall_restart:Failed to get final data from read()
 
-Testing with the file present...
-Batched request_firmware() try #1: Files
-/tmp/tmp.8GWkoSo5jZ/test-firmware.bin and
-/sys/devices/virtual/misc/test_firmware/read_firmware differ
-request #0: firmware was not loaded
+m3ulcb:/opt/kselftest/seccomp# ./seccomp_bpf 53
+[ RUN      ] global.detect_seccomp_filter_flags
+seccomp_bpf.c:2104:global.detect_seccomp_filter_flags:Expected 14 (14) == (*__errno_location ()) (22)
+seccomp_bpf.c:2106:global.detect_seccomp_filter_flags:Failed to detect that a known-good filter flag (0x4) is supported!
+seccomp_bpf.c:2115:global.detect_seccomp_filter_flags:Expected 14 (14) == (*__errno_location ()) (22)
+seccomp_bpf.c:2117:global.detect_seccomp_filter_flags:Failed to detect that all known-good filter flags (0x7) are supported!
+global.detect_seccomp_filter_flags: Test failed at step #6
+[     FAIL ] global.detect_seccomp_filter_flags
 
-Please add a quirks check, enable it by default, and remove it for
-Busybox.
+m3ulcb:/opt/kselftest/seccomp# ./seccomp_bpf 64
+[ RUN      ] global.get_metadata
+seccomp_bpf.c:2914:global.get_metadata:Expected sizeof(md) (16) == ptrace(0x420d, pid, sizeof(md), &md) (-1)
+global.get_metadata: Test terminated by assertion
+[     FAIL ] global.get_metadata
 
-   Luis
+---
+Although I am not so familiar with SECCOMP and BPF, I checked some related documents and codes.
+About the failures above, what the most confused me is that why it always give ENOSYS.
+
+Am I missing something?
+Thanks in advance.
+
+PS:
+I didn't run "make kselftest-merge" before compiling the kernel that I'm using.
+
+---
+The Test Environment:
+- Kernel version: v4.14.0
+
+The following configs were enabled.
+- CONFIG_HAVE_ARCH_SECCOMP_FILTER=y
+- CONFIG_SECCOMP_FILTER=y
+- CONFIG_SECCOMP=y
+
+Best regards
+Liu
