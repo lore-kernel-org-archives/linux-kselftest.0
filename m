@@ -1,85 +1,80 @@
 From: mcgrof@kernel.org (Luis Chamberlain)
-Date: Thu, 29 Nov 2018 16:59:42 -0800
-Subject: [RFC v2 00/14] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <abf3aff0-dfb3-717e-f14f-02dbe5574f49@kernel.org>
-References: <20181023235750.103146-1-brendanhiggins@google.com>
- <1543036529.4680.655.camel@oracle.com>
- <CAFd5g45oPSp870hJLDSHiMfU7Mh-EvpYcFdAaOQxecXNde5PSw@mail.gmail.com>
- <1543434888.4680.862.camel@oracle.com>
- <abf3aff0-dfb3-717e-f14f-02dbe5574f49@kernel.org>
-Message-ID: <20181130005942.GL4922@garbanzo.do-not-panic.com>
+Date: Thu, 29 Nov 2018 18:31:15 -0800
+Subject: [PATCH 2/2] selftests: firmware: add
+ CONFIG_FW_LOADER_USER_HELPER_FALLBACK to config
+In-Reply-To: <20181127031218.24419-3-dan.rue@linaro.org>
+References: <20181127031218.24419-1-dan.rue@linaro.org>
+ <20181127031218.24419-3-dan.rue@linaro.org>
+Message-ID: <20181130023115.GN4922@garbanzo.do-not-panic.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181130005942.SP6VNhwx5mjGp30PbcTdi0ZCXoFKaMho2VYZJU_9iiY@z>
+Message-ID: <20181130023115.r2cKGIrvOVlqPRu13fsX2QOvR0IkTb5TK4gBd5ONYkQ@z>
 
-On Wed, Nov 28, 2018@01:50:01PM -0700, shuah wrote:
-> On 11/28/18 12:54 PM, Knut Omang wrote:
-> > On Mon, 2018-11-26@17:41 -0800, Brendan Higgins wrote:
-> > Both approaches provide assertion macros for running tests inside the kernel,
-> > I doubt the kernel community would like to see yet two such sets of macros,
-> > with differing syntax merged. One of the good reasons to have a *framework*
-> > is that it is widely used and understood, so that people coming from one part of the
-> > kernel can easily run, understand and relate to selected tests from another part.
-> > 
-> > The goal with KTF is to allow this for any kernel, old or new, not just kernels
-> > built specifically for testing purposes. We felt that providing it as a separate git
-> > module (still open source, for anyone to contribute to) is a more efficient approach
-> > until we have more examples and experience with using it in different parts
-> > of the kernel. We can definitely post the kernel side of KTF as a patch series fairly soon
-> > if the community wants us to. Except for hybrid tests, the ktf.ko module works fine
-> > independently of any user side support, just using the debugfs interface to run and
-> > examine tests.
-> > 
+On Mon, Nov 26, 2018@09:12:16PM -0600, Dan Rue wrote:
+> CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y is required for fw_fallback.sh.
+> Without it, fw_fallback.sh fails with 'usermode helper disabled so
+> ignoring test'. Enable the config in selftest so that it gets built by
+> default.
 > 
-> Having test framework in the kernel sources tree has benefits. It allows
-> us (kernel developers) to do co-development of kernel features and tests
-> for these features.
-
-Agreed!
-
-> It encourages developers to write regression tests. More importantly,
-> kernel features and tests for these features are included in the same
-> release in most cases and/or allows us freedom to do so if test framework
-> and tests are part of the kernel sources.
+> Signed-off-by: Dan Rue <dan.rue at linaro.org>
+> ---
+>  tools/testing/selftests/firmware/config | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> We have seen this with our experience with kselftest. It would not have
-> see the same level of attention and growth if it stayed outside the
-> kernel sources.
-> 
-> Most kernel developers would not want to include a externally maintained
-> module for testing. As a general rule, it has to be easy to run tests.
-> 
-> > I think there are good uses cases for having the ability to maintain a
-> > single source for tests that can be run against multiple kernels,
-> > also distro kernels that the test framework cannot expect to be able to modify,
-> > except from using the module interfaces.
-> 
-> Same reasons as above. Having the tests included in the kernel sources
-> makes it easier for distros to run those tests and include running them
-> during their qualification.
+> diff --git a/tools/testing/selftests/firmware/config b/tools/testing/selftests/firmware/config
+> index bf634dda0720..913a25a4a32b 100644
+> --- a/tools/testing/selftests/firmware/config
+> +++ b/tools/testing/selftests/firmware/config
+> @@ -1,5 +1,6 @@
+>  CONFIG_TEST_FIRMWARE=y
+>  CONFIG_FW_LOADER=y
+>  CONFIG_FW_LOADER_USER_HELPER=y
+> +CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y
+>  CONFIG_IKCONFIG=y
+>  CONFIG_IKCONFIG_PROC=y
 
-Also... selftests are an example of tests which *are* upstream and yet
-there are teams out there using them to test these tests on older
-kernels. So the scripts for instance are supposed to work with older
-kernels. So if you expand on a feature your selftest script should
-detect if the new mechanism is present or not, and also be backward
-compatible with older kernels.
+NACK -- the point of the changes was to *allow* us to mimic such
+configuration through a proc sysctl knob.
 
-> > And there are good arguments for having (at least parts of)
-> > the test framework easily available within the kernel under test.
-> > 
-> 
-> When Kernel unit, functional, and regressions tests reside in the kernel
-> sources, they evolve quicker as kernel developers contribute tests as
-> part of their kernel work-flow. Maintaining tests and framework
-> separately will make it harder to maintain them and keep them updated
-> for us the kernel community.
+You aren forcing CONFIG_FW_LOADER_USER_HELPER_FALLBACK but just having
+CONFIG_FW_LOADER_USER_HELPER suffices to emulate the_FALLBACK
+functionality.
 
-Agreed!
+The issue here seems to be that *all* tests fail once a configuration is
+found which is not suitable a tests. With the shiny new proc sysctls we
+can test all 3 kernel configurations in one shot. Since we test 3
+different kernel configurations naturally some of these won't have the
+features needed, so that failure should be treated as non-fatal to allow
+the chain of other tests to continue.
 
-Also, I actually see no issue with having *both* kunit / ktest merged
-upstream. IMHO we should not be forcing people to pick one or the other
-but rather we should: let the best test framework win. Similar as we
-did with LSMs. Each test framework has its own gains / advantages.
+This issue was a regression due to commit a6a9be9270c87 ("selftests:
+firmware: return Kselftest Skip code for skipped tests") by Shuah for
+the verify_reqs(). We need to treat this as a non-fatal / don't skip
+return value.
+
+The following would fix this chaining issue:
+
+diff --git a/tools/testing/selftests/firmware/fw_lib.sh b/tools/testing/selftests/firmware/fw_lib.sh
+index 6c5f1b2ffb74..1cbb12e284a6 100755
+--- a/tools/testing/selftests/firmware/fw_lib.sh
++++ b/tools/testing/selftests/firmware/fw_lib.sh
+@@ -91,7 +91,7 @@ verify_reqs()
+ 	if [ "$TEST_REQS_FW_SYSFS_FALLBACK" = "yes" ]; then
+ 		if [ ! "$HAS_FW_LOADER_USER_HELPER" = "yes" ]; then
+ 			echo "usermode helper disabled so ignoring test"
+-			exit $ksft_skip
++			exit 0
+ 		fi
+ 	fi
+ }
+
+However its not clear to me if instead we want some new special return
+value for selftests so that the framework can detect an that an error
+is non-fatal, and can continue. This is a tricky situation given the
+script, existing upstream kernel module, are aware of such emulation
+hacks via sysctl, but knowledge of this is not obvious to selftests.
+
+Shuah, how do you suggest we handle this corner case? If you are OK
+with the above hunk for now I can send a fix for it. In either case
+this commit was added on v4.18, so the fix would be a stable fix.
 
   Luis
