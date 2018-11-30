@@ -1,21 +1,30 @@
 From: mcgrof at kernel.org (Luis Chamberlain)
-Date: Thu, 29 Nov 2018 19:41:35 -0800
-Subject: [RFC v3 08/19] arch: um: add shim to trap to allow installing a
- fault catcher for tests
-In-Reply-To: <20181128193636.254378-9-brendanhiggins@google.com>
+Date: Thu, 29 Nov 2018 19:44:25 -0800
+Subject: [RFC v3 11/19] kunit: add Python libraries for handing KUnit
+ config and kernel
+In-Reply-To: <20181128193636.254378-12-brendanhiggins@google.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
- <20181128193636.254378-9-brendanhiggins@google.com>
-Message-ID: <20181130034135.GN18410@garbanzo.do-not-panic.com>
+ <20181128193636.254378-12-brendanhiggins@google.com>
+Message-ID: <20181130034425.GO18410@garbanzo.do-not-panic.com>
 
-On Wed, Nov 28, 2018 at 11:36:25AM -0800, Brendan Higgins wrote:
-> +static void segv_run_catcher(jmp_buf *catcher, void *fault_addr)
-> +{
-> +	current->thread.fault_addr = fault_addr;
-> +	UML_LONGJMP(catcher, 1);
-> +}
+On Wed, Nov 28, 2018 at 11:36:28AM -0800, Brendan Higgins wrote:
+> The ultimate goal is to create minimal isolated test binaries; in the
+> meantime we are using UML to provide the infrastructure to run tests, so
+> define an abstract way to configure and run tests that allow us to
+> change the context in which tests are built without affecting the user.
+> This also makes pretty and dynamic error reporting, and a lot of other
+> nice features easier.
+> 
+> kunit_config.py:
+>   - parse .config and Kconfig files.
+>
+> 
+> kunit_kernel.py: provides helper functions to:
+>   - configure the kernel using kunitconfig.
 
-Some documentation about what this does exactly would be appreciated.
-With the goal it may be useful to others wanting to consider support
-for other archs -- if that actually ends up being desirable.
+We get the tools to run the config stuff, build, etc, but not a top
+level 'make kunitconfig' or whatever. We have things like 'make
+kvmconfig' and 'make xenconfig', I think it would be reasonable to
+add similar for this.
 
   Luis
