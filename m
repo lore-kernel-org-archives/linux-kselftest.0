@@ -1,129 +1,68 @@
 From: brendanhiggins@google.com (Brendan Higgins)
-Date: Fri, 30 Nov 2018 17:51:11 -0800
+Date: Fri, 30 Nov 2018 18:08:36 -0800
 Subject: [RFC v3 01/19] kunit: test: add KUnit test runner core
-In-Reply-To: <20181130031438.GQ4922@garbanzo.do-not-panic.com>
+In-Reply-To: <20181130032802.GG18410@garbanzo.do-not-panic.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
  <20181128193636.254378-2-brendanhiggins@google.com>
- <20181130031438.GQ4922@garbanzo.do-not-panic.com>
+ <20181130032802.GG18410@garbanzo.do-not-panic.com>
 Message-ID:
- <CAFd5g47t94RR78_sZ7Xr7ArDh+hJGYHNwmmG2HJb7AW+i=u3ew@mail.gmail.com>
+ <CAFd5g45F0RViYDQyXRwyxVPAU=CO_Goqy3yHz=BbcMeAT7o6-g@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181201015111.6c-lz8icVafBK4RrJ8YIZawfFPnaRgmrBOa1CVXIiV0@z>
+Message-ID: <20181201020836.kZrwB576nBJ5KqoJaGLTY6c0U2BtVM3MCouA_P4udAw@z>
 
-On Thu, Nov 29, 2018@7:14 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+On Thu, Nov 29, 2018@7:28 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
 >
-> On Wed, Nov 28, 2018@11:36:18AM -0800, Brendan Higgins wrote:
-> > +#define module_test(module) \
-> > +             static int module_kunit_init##module(void) \
-> > +             { \
-> > +                     return kunit_run_tests(&module); \
-> > +             } \
-> > +             late_initcall(module_kunit_init##module)
->
-> Here in lies an assumption that suffices. I'm inclined to believe we
-> need new initcall level here so to ensure we *do* run after all the
-> respective kernels iniut calls. Otherwise we're left at the whims of
-> link order for kunit. For instance if a kunit test relies on frameworks
-> which are also late_initcall() we'd have complete incompatibility with
-> anything linked *after* kunit.
-
-Yep, I have some patches that address this, but I thought this is
-sufficient for the initial patchset (I figured that's the type of
-thing that people will have opinions about so best to get it out of
-the critical path). Do you want me to add those in the next revision?
-
->
-> > diff --git a/kunit/Kconfig b/kunit/Kconfig
-> > new file mode 100644
-> > index 0000000000000..49b44c4f6630a
-> > --- /dev/null
-> > +++ b/kunit/Kconfig
-> > @@ -0,0 +1,17 @@
-> > +#
-> > +# KUnit base configuration
-> > +#
+> > +static void kunit_run_case_internal(struct kunit *test,
+> > +                                 struct kunit_module *module,
+> > +                                 struct kunit_case *test_case)
+> > +{
+> > +     int ret;
 > > +
-> > +menu "KUnit support"
+> > +     if (module->init) {
+> > +             ret = module->init(test);
+> > +             if (ret) {
+> > +                     kunit_err(test, "failed to initialize: %d", ret);
+> > +                     kunit_set_success(test, false);
+> > +                     return;
+> > +             }
+> > +     }
 > > +
-> > +config KUNIT
-> > +     bool "Enable support for unit tests (KUnit)"
-> > +     depends on UML
+> > +     test_case->run_case(test);
+> > +}
 >
-> Consider using:
+> <-- snip -->
 >
-> if UML
->    ...
-> endif
->
-> That allows the depends to be done once.
-
-If you want to eliminate depends, wouldn't it be best to have KUNIT
-depend on whatever it needs, and then do `if KUNIT` below that? That
-seems cleaner over the long term. Anyway, Kees actually asked me to
-change it to the way it is now; I really don't care either way.
-
->
-> > +     help
-> > +       Enables support for kernel unit tests (KUnit), a lightweight unit
-> > +       testing and mocking framework for the Linux kernel. These tests are
-> > +       able to be run locally on a developer's workstation without a VM or
-> > +       special hardware.
->
->
-> Some mention of UML may be good here?
-
-Good point.
->
-> > For more information, please see
-> > +       Documentation/kunit/
+> > +static bool kunit_run_case(struct kunit *test,
+> > +                        struct kunit_module *module,
+> > +                        struct kunit_case *test_case)
+> > +{
+> > +     kunit_set_success(test, true);
 > > +
-> > +endmenu
+> > +     kunit_run_case_internal(test, module, test_case);
+> > +     kunit_run_case_cleanup(test, module, test_case);
+> > +
+> > +     return kunit_get_success(test);
+> > +}
 >
-> I'm a bit conflicted here. This currently depends on UML but yet you
-> noted on RFC v2 that your intention is to liberate kunit from UML and
-> ideally allow unit tests to depend only on userspace. I've addressed
-> tests using both selftests kernels drivers and also re-written kernel
-> APIs to userspace to test there. I think we may need to live with both.
+> So we are running the module->init() for each test case... is that
+> correct? Shouldn't the init run once? Also, typically init calls are
 
-I am not entirely opposed. The greater isolation we can achieve, the
-fewer dependencies, and barriers to setting up test fixtures the
-better. I think the best way to do that in most cases is allowing
-minimal test binaries to be built that have the absolute minimum
-amount of code necessary to test the desired property. That being
-said, integration tests are a thing and drawing a line between them
-and unit tests is not always possible, so supporting other
-architectures might be necessary.
+Yep, it's correct. `module->init()` should run once before every test
+case, reason being that the kunit_module serves as a test fixture in
+which each test cases should be run completely independently of every
+other. init and exit is supposed to allow code common to all test
+cases to run since it is so common to have dependencies needed for a
+test to be common to every test case.
 
->
-> Then for the UML stuff, I think if we *really* accept that UML will
-> always be a viable option we should probably consider now throwing these
-> things under drivers/platform/uml/. This follows the pattern of arch
-> specific drivers. Whether or not we end up with a complete userspace
-> component independent of UML may implicate having a shared component
-> somewhere else.
+Maybe it is confusing that I call it kunit_module? Maybe I should call
+it kunit_fixture or something?
 
-Fair enough. What specifically are you suggesting should go in
-`drivers/platform/uml`? Just the bits that are completely tied to UML
-or a concrete architecture?
+> pegged with __init so we free them later. You seem to have skipped the
+> init annotations. Why?
 
->
-> Likewise, I realize the goal is to *avoid* using a virtual machine for
-> these tests, but would it in any way make sense to share kunit to be
-> supported for other architectures to allow easier-to-write tests as
-> well?
+Like I said above, these aren't normal init functions. A
+kunit_module->init() function should run once before each test case
+and thus should reside in the same linker section as any other KUnit
+test code.
 
-You are not the first person to ask for this.
-
-For the vast majority of tests, I think we can (and consequently
-should) make them run without any external dependencies. Doing so
-makes it such that someone can run a test without knowing anything
-about it, which allows you to do a lot of things. For one, I, as a
-developer, don't have to hunt down somebody's QEMU patches, or
-whatever. But it also means I, as someone maintaining part of the
-kernel, can make nice test runners and build things like presubmit
-servers on top of them.
-
-Nevertheless, I accept that there are things which are just easier to
-do with hardware or a VM (for integration tests it is necessary).
-Still, I think we need to make sure the vast majority of unit tests do
-not depend on real hardware or a VM.
+Cheers
