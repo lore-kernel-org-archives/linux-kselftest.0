@@ -1,91 +1,65 @@
-From: alexandre.belloni at bootlin.com (Alexandre Belloni)
-Date: Sat, 1 Dec 2018 10:55:51 +0100
-Subject: [PATCH 1/4] selftests: timers: move PIE tests out of rtctest
-In-Reply-To: <a304b6f1-11db-543b-2cb3-372f34dc7697@linaro.org>
-References: <20180419125030.5076-1-alexandre.belloni@bootlin.com>
- <20180419125030.5076-2-alexandre.belloni@bootlin.com>
- <a304b6f1-11db-543b-2cb3-372f34dc7697@linaro.org>
-Message-ID: <20181201095551.GN8952@piout.net>
+From: pmladek at suse.com (Petr Mladek)
+Date: Mon, 3 Dec 2018 11:55:17 +0100
+Subject: [RFC v3 03/19] kunit: test: add string_stream a std::stream like
+ string builder
+In-Reply-To: <20181130032924.GH18410@garbanzo.do-not-panic.com>
+References: <20181128193636.254378-1-brendanhiggins@google.com>
+ <20181128193636.254378-4-brendanhiggins@google.com>
+ <20181130032924.GH18410@garbanzo.do-not-panic.com>
+Message-ID: <20181203105517.vbedwygttxxbdtan@pathway.suse.cz>
 
-Hello,
-
-On 29/11/2018 17:57:05-0200, Rafael David Tinoco wrote:
-> On 4/19/18 9:50 AM, Alexandre Belloni wrote:
-> > Since commit 6610e0893b8bc ("RTC: Rework RTC code to use timerqueue for
-> > events"), PIE are completely handled using hrtimers, without actually using
-> > any underlying hardware RTC.
+On Thu 2018-11-29 19:29:24, Luis Chamberlain wrote:
+> On Wed, Nov 28, 2018 at 11:36:20AM -0800, Brendan Higgins wrote:
+> > A number of test features need to do pretty complicated string printing
+> > where it may not be possible to rely on a single preallocated string
+> > with parameters.
 > > 
-> > Move PIE testing out of rtctest. It still depends on the presence of an RTC
-> > (to access the device file) but doesn't depend on it actually working.
-> > 
-> > Signed-off-by: Alexandre Belloni <alexandre.belloni at bootlin.com>
-> > ---
-> >  tools/testing/selftests/timers/.gitignore |   1 +
-> >  tools/testing/selftests/timers/Makefile   |   2 +-
-> >  tools/testing/selftests/timers/rtcpie.c   | 132 ++++++++++++++++++++++
-> >  tools/testing/selftests/timers/rtctest.c  |  83 +-------------
-> >  4 files changed, 138 insertions(+), 80 deletions(-)
-> >  create mode 100644 tools/testing/selftests/timers/rtcpie.c
-> > 
-> ...
-> > +	/* The frequencies 128Hz, 256Hz, ... 8192Hz are only allowed for root. */
-> > +	for (tmp=2; tmp<=64; tmp*=2) {
-> > +
-> > +		retval = ioctl(fd, RTC_IRQP_SET, tmp);
-> > +		if (retval == -1) {
-> > +			/* not all RTCs can change their periodic IRQ rate */
-> > +			if (errno == EINVAL) {
-> > +				fprintf(stderr,
-> > +					"\n...Periodic IRQ rate is fixed\n");
-> > +				goto done;
-> > +			}
-> > +			perror("RTC_IRQP_SET ioctl");
-> > +			exit(errno);
-> > +		}
+> > So provide a library for constructing the string as you go similar to
+> > C++'s std::string.
 > 
-> Hello Alexandre,
-> 
-> In our tests, having failures under 64Hz is quite common in embedded
-> systems with few number of CPUs/Cores:
-> 
-> --------
-> root at bug3402:opt$ find /sys -name rtc0
-> /sys/devices/platform/9010000.pl031/rtc/rtc0
-> /sys/class/rtc/rtc0
-> 
-> selftests: timers: rtcpie
-> Periodic IRQ rate is 1Hz.
-> Counting 20 interrupts at:
-> 2Hz:	 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-> 4Hz:	 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-> 8Hz:	 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-> 16Hz:	 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-> 32Hz:	 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-> 64Hz:	
-> PIE delta error: 0.017697 should be close to 0.015625
-> not ok 1..9 selftests: timers: rtcpie [FAIL]
-> --------
-> 
-> Mainly because 64Hz gives us.. ~16ms in the test, and the variation
-> being taken in consideration for an error, for this test, is 10%, which
-> is ~1.6ms... pretty close to scheduler limit for lower number of CPUs in
-> a functional testing environment.
-> 
+> Hrm, what's the potential for such thing actually being eventually
+> generically useful for printk folks, I wonder? Petr?
 
-I would think that enabling HR timers would actually make things better,
-not matter how many CPUs are in the system. At least, this was the case
-for AT91.
+printk() is a bit tricky:
 
-> Would you mind if we change the default for up to 32Hz ? Or, do you have
-> any other suggestion ?
-> 
+   + It should work in any context. Any additional lock adds risk of a
+     deadlock. Especially the NMI and scheduler contexts are problematic.
+     There are problems with any other code that might be called
+     from console drivers and calls printk() under a lock.
 
-I must admit that the whole point of moving this test out of rtctest was
-that I didn't want to maintain it. John is the one responsible for the
-timers so he will have to take that decision.
+   + It should work also when the system is out of memory. Especially
+     atomic context is problematic because we could not wait for
+     memory reclaim or swap.
+
+   + We also do to the best effort to get the message out on the
+     console. It is important when the system is about to die.
+     Any extra buffering layer might cause delay and avoid seeing the
+     message.
+
+>From this point of views, this API is not generally usable with printk().
+
+Now, the question is how many of the above fits also for unit testing.
+At least, you might need to be careful when allocating memory in
+atomic context.
+
+BTW: There are more existing printk APIs: Well, I admit the they are
+not easily reusable in unit testing:
+
+   + printk() is old, crappy code, complicated with all the
+     cornercases and consoles.
+
+   + include/linux/seq_buf.h is simple buffering. It is used primary
+     for sysfs output. It might be usable if you add support for
+     loglevel and use big enough buffer. I quess that you should
+     flush the buffer regularly anyway.
+
+   + trace_printk() uses lockless per-CPU buffers. It currently does not
+     support loglevels. But it might be pretty interesting choice as well.
 
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I do not say that you have to use one of the existing API. But you
+might consider them if you encouter any problems and maintaining
+your variant gets complicated.
+
+Best Regards,
+Petr
