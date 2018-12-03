@@ -1,85 +1,67 @@
-From: mcgrof at kernel.org (Luis Chamberlain)
-Date: Mon, 3 Dec 2018 15:46:28 -0800
-Subject: [RFC v3 08/19] arch: um: add shim to trap to allow installing a
- fault catcher for tests
-In-Reply-To: <CAFd5g45+MAVaSW8HN9x57Y8Um=TV1Oa=-K8yExPBS-4KjLyciQ@mail.gmail.com>
+From: brendanhiggins at google.com (Brendan Higgins)
+Date: Mon, 3 Dec 2018 15:48:15 -0800
+Subject: [RFC v3 11/19] kunit: add Python libraries for handing KUnit
+ config and kernel
+In-Reply-To: <841cf4ae-501b-05ae-5863-a51010709b67@ideasonboard.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
- <20181128193636.254378-9-brendanhiggins@google.com>
- <20181130033429.GK18410@garbanzo.do-not-panic.com>
- <CAFd5g45+MAVaSW8HN9x57Y8Um=TV1Oa=-K8yExPBS-4KjLyciQ@mail.gmail.com>
-Message-ID: <20181203234628.GR28501@garbanzo.do-not-panic.com>
+ <20181128193636.254378-12-brendanhiggins@google.com>
+ <841cf4ae-501b-05ae-5863-a51010709b67@ideasonboard.com>
+Message-ID: <CAFd5g47x-UNja72k-CWPmWz9+LTn8pF8Wj5Poq+2FJ93E=vymA@mail.gmail.com>
 
-On Mon, Dec 03, 2018 at 03:34:57PM -0800, Brendan Higgins wrote:
-> On Thu, Nov 29, 2018 at 7:34 PM Luis Chamberlain <mcgrof at kernel.org> wrote:
-> >
-> > On Wed, Nov 28, 2018 at 11:36:25AM -0800, Brendan Higgins wrote:
-> > > diff --git a/arch/um/kernel/trap.c b/arch/um/kernel/trap.c
-> > > index cced829460427..bf90e678b3d71 100644
-> > > --- a/arch/um/kernel/trap.c
-> > > +++ b/arch/um/kernel/trap.c
-> > > @@ -201,6 +201,12 @@ void segv_handler(int sig, struct siginfo *unused_si, struct uml_pt_regs *regs)
-> > >       segv(*fi, UPT_IP(regs), UPT_IS_USER(regs), regs);
-> > >  }
-> > >
-> > > +static void segv_run_catcher(jmp_buf *catcher, void *fault_addr)
-> > > +{
-> > > +     current->thread.fault_addr = fault_addr;
-> > > +     UML_LONGJMP(catcher, 1);
-> > > +}
-> > > +
-> > >  /*
-> > >   * We give a *copy* of the faultinfo in the regs to segv.
-> > >   * This must be done, since nesting SEGVs could overwrite
-> > > @@ -219,7 +225,10 @@ unsigned long segv(struct faultinfo fi, unsigned long ip, int is_user,
-> > >       if (!is_user && regs)
-> > >               current->thread.segv_regs = container_of(regs, struct pt_regs, regs);
-> > >
-> > > -     if (!is_user && (address >= start_vm) && (address < end_vm)) {
-> > > +     catcher = current->thread.fault_catcher;
-> >
-> > This and..
-> >
-> > > +     if (catcher && current->thread.is_running_test)
-> > > +             segv_run_catcher(catcher, (void *) address);
-> > > +     else if (!is_user && (address >= start_vm) && (address < end_vm)) {
-> > >               flush_tlb_kernel_vm();
-> > >               goto out;
-> > >       }
-> >
-> > *not this*
-> 
-> I don't understand. Are you saying the previous block of code is good
-> and this one is bad?
+On Thu, Nov 29, 2018 at 5:54 AM Kieran Bingham
+<kieran.bingham at ideasonboard.com> wrote:
+>
+> Hi Brendan,
+>
+> Thanks again for this series!
+>
+> On 28/11/2018 19:36, Brendan Higgins wrote:
+> > The ultimate goal is to create minimal isolated test binaries; in the
+> > meantime we are using UML to provide the infrastructure to run tests, so
+> > define an abstract way to configure and run tests that allow us to
+> > change the context in which tests are built without affecting the user.
+> > This also makes pretty and dynamic error reporting, and a lot of other
+> > nice features easier.
+>
+>
+> I wonder if we could somehow generate a shared library object
+> 'libkernel' or 'libumlinux' from a UM configured set of headers and
+> objects so that we could create binary targets directly ?
 
-No, I was saying that the above block of code is a functional change,
-but I was also pointing out other areas which were not and could be
-folded into a separate atomic patch where no functionality changes.
+That's an interesting idea. I think it would be difficult to figure
+out exactly where to draw the line of what goes in there and what
+needs to be built specific to a test a priori. Of course, that leads
+into the biggest problem in general, needed to know what I need to
+build to test the thing that I want to test.
 
-> > > @@ -246,12 +255,10 @@ unsigned long segv(struct faultinfo fi, unsigned long ip, int is_user,
-> > >               address = 0;
-> > >       }
-> > >
-> > > -     catcher = current->thread.fault_catcher;
-> > >       if (!err)
-> > >               goto out;
-> > >       else if (catcher != NULL) {
-> > > -             current->thread.fault_addr = (void *) address;
-> > > -             UML_LONGJMP(catcher, 1);
-> > > +             segv_run_catcher(catcher, (void *) address);
-> > >       }
-> > >       else if (current->thread.fault_addr != NULL)
-> > >               panic("fault_addr set but no fault catcher");
-> >
-> > But with this seems one atomic change which should be submitted
-> > separately, its just a helper. Think it would make the actual
-> > change needed easier to review, ie, your needed changes would
-> > be smaller and clearer for what you need.
-> 
-> Are you suggesting that I pull out the bits needed to implement abort
-> in the next patch and squash it into this one?
+Nevertheless, I could definitely imagine that being useful in a lot of cases.
 
-No, I'm suggesting you can probably split this patch in 2, one which
-wraps things with no functional changes, and another which adds your
-changes.
+> > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> > new file mode 100644
+> > index 0000000000000..bba7ea7ca1869
+> > --- /dev/null
+> > +++ b/tools/testing/kunit/kunit_kernel.py
+...
+> > +     def make(self, jobs):
+> > +             try:
+> > +                     subprocess.check_output([
+> > +                                     'make',
+> > +                                     'ARCH=um',
+> > +                                     '--jobs=' + str(jobs)])
+>
+> Perhaps as a future extension:
+>
+> It would be nice if we could set an O= here to keep the source tree
+> pristine.
+>
+> In fact I might even suggest that this should always be set so that the
+> unittesting could live along side an existing kernel build? :
+>
+>  O ?= $KBUILD_SRC/
+>  O := $(O)/kunittest/$(ARCH)/build
 
-  Luis
+I agree with that. It would be pretty annoying to run a unit test and
+have it mess up your .config and force you to rebuild everything else.
+(I have actually done this to myself a couple of times...)
+
+Cheers
