@@ -1,29 +1,37 @@
-From: brendanhiggins@google.com (Brendan Higgins)
-Date: Mon, 3 Dec 2018 15:37:13 -0800
-Subject: [RFC v3 08/19] arch: um: add shim to trap to allow installing a
- fault catcher for tests
-In-Reply-To: <20181130034135.GN18410@garbanzo.do-not-panic.com>
+From: mcgrof@kernel.org (Luis Chamberlain)
+Date: Mon, 3 Dec 2018 15:43:55 -0800
+Subject: [RFC v3 07/19] kunit: test: add initial tests
+In-Reply-To: <CAFd5g47CJnfE3Gqc03onidd5FiZSW43-6_dA5czb30-Rb3dyfg@mail.gmail.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
- <20181128193636.254378-9-brendanhiggins@google.com>
- <20181130034135.GN18410@garbanzo.do-not-panic.com>
-Message-ID:
- <CAFd5g45+1wHteYs5YiL19x=L=g=oab5uJrabdKO8q_jS4-ojbg@mail.gmail.com>
+ <20181128193636.254378-8-brendanhiggins@google.com>
+ <20181130034001.GM18410@garbanzo.do-not-panic.com>
+ <CAFd5g47CJnfE3Gqc03onidd5FiZSW43-6_dA5czb30-Rb3dyfg@mail.gmail.com>
+Message-ID: <20181203234355.GQ28501@garbanzo.do-not-panic.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181203233713.-Y7AgdurLt0sEAyzHJyzb59dwl0_dEgoIAb_TEhgw80@z>
+Message-ID: <20181203234355.z_0KXX-Srv20uZ9wVEDwDt-r0kZpwiLqHu-sIOXqD2k@z>
 
-On Thu, Nov 29, 2018@7:41 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Wed, Nov 28, 2018@11:36:25AM -0800, Brendan Higgins wrote:
-> > +static void segv_run_catcher(jmp_buf *catcher, void *fault_addr)
-> > +{
-> > +     current->thread.fault_addr = fault_addr;
-> > +     UML_LONGJMP(catcher, 1);
-> > +}
->
-> Some documentation about what this does exactly would be appreciated.
-> With the goal it may be useful to others wanting to consider support
-> for other archs -- if that actually ends up being desirable.
+On Mon, Dec 03, 2018@03:26:26PM -0800, Brendan Higgins wrote:
+> On Thu, Nov 29, 2018@7:40 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Wed, Nov 28, 2018@11:36:24AM -0800, Brendan Higgins wrote:
+> > > Add a test for string stream along with a simpler example.
+> > >
+> > > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+> > > ---
+> > >  kunit/Kconfig              | 12 ++++++
+> > >  kunit/Makefile             |  4 ++
+> > >  kunit/example-test.c       | 88 ++++++++++++++++++++++++++++++++++++++
+> >
+> > BTW if you need another more concrete but very simple example I think it
+> > may be possible to port tools/testing/selftests/sysctl/sysctl.sh +
+> > lib/test_sysctl.c into a kunit test. Correct me if I'm wrong.
+> 
+> I think that is pretty doable. I don't know that I want to shoot for
+> that on the next revision. But I can definitely do it in a later
+> revision, or a later patchset, unless you would strongly prefer it
+> now, that is.
 
-Yeah, I should. Should this go in the wrapper around the abort() hack?
-Or do you think I should write some documentation on how KUnit works
-under Documentation/ ?
+No rush on my end, just figured I'd mention a simple candidate in case
+you needed another one to evaluate.
+
+  Luis
