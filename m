@@ -1,80 +1,94 @@
 From: brendanhiggins@google.com (Brendan Higgins)
-Date: Mon, 3 Dec 2018 16:35:12 -0800
-Subject: [RFC v3 03/19] kunit: test: add string_stream a std::stream like
- string builder
-In-Reply-To: <20181203105517.vbedwygttxxbdtan@pathway.suse.cz>
+Date: Mon, 3 Dec 2018 16:44:56 -0800
+Subject: [RFC v3 08/19] arch: um: add shim to trap to allow installing a
+ fault catcher for tests
+In-Reply-To: <20181203234628.GR28501@garbanzo.do-not-panic.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
- <20181128193636.254378-4-brendanhiggins@google.com>
- <20181130032924.GH18410@garbanzo.do-not-panic.com>
- <20181203105517.vbedwygttxxbdtan@pathway.suse.cz>
+ <20181128193636.254378-9-brendanhiggins@google.com>
+ <20181130033429.GK18410@garbanzo.do-not-panic.com>
+ <CAFd5g45+MAVaSW8HN9x57Y8Um=TV1Oa=-K8yExPBS-4KjLyciQ@mail.gmail.com>
+ <20181203234628.GR28501@garbanzo.do-not-panic.com>
 Message-ID:
- <CAFd5g47pWbPso4LG93ffRUZjLhxnqws5VfYc5SfFf8FbuYCWvA@mail.gmail.com>
+ <CAFd5g45p55GXuk-PcaknVHywJ25LsM+7N83L_g0ob6Q0FTwSrg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181204003512.UEuVaECdtBJ0y-oDhmTe7HjtyK4ZRUvU2r2Ya4eVl3I@z>
+Message-ID: <20181204004456.U1dhuA5fn_-LqdlPVgK8g6mZRZ7lLXDZU6W-Bhm21-8@z>
 
-On Mon, Dec 3, 2018@2:55 AM Petr Mladek <pmladek@suse.com> wrote:
+On Mon, Dec 3, 2018@3:46 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
 >
-> On Thu 2018-11-29 19:29:24, Luis Chamberlain wrote:
-> > On Wed, Nov 28, 2018@11:36:20AM -0800, Brendan Higgins wrote:
-> > > A number of test features need to do pretty complicated string printing
-> > > where it may not be possible to rely on a single preallocated string
-> > > with parameters.
+> On Mon, Dec 03, 2018@03:34:57PM -0800, Brendan Higgins wrote:
+> > On Thu, Nov 29, 2018@7:34 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
 > > >
-> > > So provide a library for constructing the string as you go similar to
-> > > C++'s std::string.
+> > > On Wed, Nov 28, 2018@11:36:25AM -0800, Brendan Higgins wrote:
+> > > > diff --git a/arch/um/kernel/trap.c b/arch/um/kernel/trap.c
+> > > > index cced829460427..bf90e678b3d71 100644
+> > > > --- a/arch/um/kernel/trap.c
+> > > > +++ b/arch/um/kernel/trap.c
+> > > > @@ -201,6 +201,12 @@ void segv_handler(int sig, struct siginfo *unused_si, struct uml_pt_regs *regs)
+> > > >       segv(*fi, UPT_IP(regs), UPT_IS_USER(regs), regs);
+> > > >  }
+> > > >
+> > > > +static void segv_run_catcher(jmp_buf *catcher, void *fault_addr)
+> > > > +{
+> > > > +     current->thread.fault_addr = fault_addr;
+> > > > +     UML_LONGJMP(catcher, 1);
+> > > > +}
+> > > > +
+> > > >  /*
+> > > >   * We give a *copy* of the faultinfo in the regs to segv.
+> > > >   * This must be done, since nesting SEGVs could overwrite
+> > > > @@ -219,7 +225,10 @@ unsigned long segv(struct faultinfo fi, unsigned long ip, int is_user,
+> > > >       if (!is_user && regs)
+> > > >               current->thread.segv_regs = container_of(regs, struct pt_regs, regs);
+> > > >
+> > > > -     if (!is_user && (address >= start_vm) && (address < end_vm)) {
+> > > > +     catcher = current->thread.fault_catcher;
+> > >
+> > > This and..
+> > >
+> > > > +     if (catcher && current->thread.is_running_test)
+> > > > +             segv_run_catcher(catcher, (void *) address);
+> > > > +     else if (!is_user && (address >= start_vm) && (address < end_vm)) {
+> > > >               flush_tlb_kernel_vm();
+> > > >               goto out;
+> > > >       }
+> > >
+> > > *not this*
 > >
-> > Hrm, what's the potential for such thing actually being eventually
-> > generically useful for printk folks, I wonder? Petr?
+> > I don't understand. Are you saying the previous block of code is good
+> > and this one is bad?
 >
-> printk() is a bit tricky:
+> No, I was saying that the above block of code is a functional change,
+> but I was also pointing out other areas which were not and could be
+> folded into a separate atomic patch where no functionality changes.
 >
->    + It should work in any context. Any additional lock adds risk of a
->      deadlock. Especially the NMI and scheduler contexts are problematic.
->      There are problems with any other code that might be called
->      from console drivers and calls printk() under a lock.
+> > > > @@ -246,12 +255,10 @@ unsigned long segv(struct faultinfo fi, unsigned long ip, int is_user,
+> > > >               address = 0;
+> > > >       }
+> > > >
+> > > > -     catcher = current->thread.fault_catcher;
+> > > >       if (!err)
+> > > >               goto out;
+> > > >       else if (catcher != NULL) {
+> > > > -             current->thread.fault_addr = (void *) address;
+> > > > -             UML_LONGJMP(catcher, 1);
+> > > > +             segv_run_catcher(catcher, (void *) address);
+> > > >       }
+> > > >       else if (current->thread.fault_addr != NULL)
+> > > >               panic("fault_addr set but no fault catcher");
+> > >
+> > > But with this seems one atomic change which should be submitted
+> > > separately, its just a helper. Think it would make the actual
+> > > change needed easier to review, ie, your needed changes would
+> > > be smaller and clearer for what you need.
+> >
+> > Are you suggesting that I pull out the bits needed to implement abort
+> > in the next patch and squash it into this one?
 >
->    + It should work also when the system is out of memory. Especially
->      atomic context is problematic because we could not wait for
->      memory reclaim or swap.
+> No, I'm suggesting you can probably split this patch in 2, one which
+> wraps things with no functional changes, and another which adds your
+> changes.
 >
->    + We also do to the best effort to get the message out on the
->      console. It is important when the system is about to die.
->      Any extra buffering layer might cause delay and avoid seeing the
->      message.
->
-> From this point of views, this API is not generally usable with printk().
 
-Yeah, that makes sense. I wouldn't really expect this to work well in
-those cases.
+That makes sense.
 
-> Now, the question is how many of the above fits also for unit testing.
-> At least, you might need to be careful when allocating memory in
-> atomic context.
-
-True, but this is only supposed to be used for constructing
-expectation failure messages which should only happen from a
-non-atomic context.
-
->
-> BTW: There are more existing printk APIs: Well, I admit the they are
-> not easily reusable in unit testing:
->
->    + printk() is old, crappy code, complicated with all the
->      cornercases and consoles.
->
->    + include/linux/seq_buf.h is simple buffering. It is used primary
->      for sysfs output. It might be usable if you add support for
->      loglevel and use big enough buffer. I quess that you should
->      flush the buffer regularly anyway.
->
->    + trace_printk() uses lockless per-CPU buffers. It currently does not
->      support loglevels. But it might be pretty interesting choice as well.
->
->
-> I do not say that you have to use one of the existing API. But you
-> might consider them if you encouter any problems and maintaining
-> your variant gets complicated.
-
-Alright, I will take a look.
-
-Thanks!
+Thanks for the clarification!
