@@ -1,47 +1,31 @@
 From: brendanhiggins@google.com (Brendan Higgins)
-Date: Mon, 3 Dec 2018 16:02:31 -0800
-Subject: [RFC v3 16/19] arch: um: make UML unflatten device tree when
- testing
-In-Reply-To: <20181130034623.GQ18410@garbanzo.do-not-panic.com>
+Date: Mon, 3 Dec 2018 16:13:58 -0800
+Subject: [RFC v3 17/19] of: unittest: migrate tests to run on KUnit
+In-Reply-To: <18814973-8f0a-4647-a097-fcc3dc0b3cd3@infradead.org>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
- <20181128193636.254378-17-brendanhiggins@google.com>
- <20181130034623.GQ18410@garbanzo.do-not-panic.com>
+ <20181128193636.254378-18-brendanhiggins@google.com>
+ <CAL_Jsq+09Kx7yMBC_Jw45QGmk6U_fp4N6HOZDwYrM4tWw+_dOA@mail.gmail.com>
+ <18814973-8f0a-4647-a097-fcc3dc0b3cd3@infradead.org>
 Message-ID:
- <CAFd5g463cxzsF+DJ06aL=mjGzNX1NcE5Xp8b584U2TAJ5joQKw@mail.gmail.com>
+ <CAFd5g475RK9v9X4qxmXwuHiPMOs05WrZAw6EJWNdVoAHQWguFQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181204000231.HylkCOTz8mgHheBSRGLLihBkd8sbCRhtRhf4AZVCVvg@z>
+Message-ID: <20181204001358.VwKJOXVYluCZkmBq4Rfy7NXXRwNJf5aQw5CtQDUywJY@z>
 
-On Thu, Nov 29, 2018@7:46 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+On Thu, Nov 29, 2018@4:40 PM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> On Wed, Nov 28, 2018@11:36:33AM -0800, Brendan Higgins wrote:
-> > Make UML unflatten any present device trees when running KUnit tests.
-> >
-> > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> > ---
-> >  arch/um/kernel/um_arch.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
-> > index a818ccef30ca2..bd58ae3bf4148 100644
-> > --- a/arch/um/kernel/um_arch.c
-> > +++ b/arch/um/kernel/um_arch.c
-> > @@ -13,6 +13,7 @@
-> >  #include <linux/sched.h>
-> >  #include <linux/sched/task.h>
-> >  #include <linux/kmsg_dump.h>
-> > +#include <linux/of_fdt.h>
-> >
-> >  #include <asm/pgtable.h>
-> >  #include <asm/processor.h>
-> > @@ -347,6 +348,9 @@ void __init setup_arch(char **cmdline_p)
-> >       read_initrd();
-> >
-> >       paging_init();
-> > +#if IS_ENABLED(CONFIG_OF_UNITTEST)
-> > +     unflatten_device_tree();
-> > +#endif
+> On 11/28/18 12:56 PM, Rob Herring wrote:
+> >> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+> >> index ad3fcad4d75b8..f309399deac20 100644
+> >> --- a/drivers/of/Kconfig
+> >> +++ b/drivers/of/Kconfig
+> >> @@ -15,6 +15,7 @@ if OF
+> >>  config OF_UNITTEST
+> >>         bool "Device Tree runtime unit tests"
+> >>         depends on !SPARC
+> >> +       depends on KUNIT
+> > Unless KUNIT has depends, better to be a select here.
 >
-> *Why?*
+> That's just style or taste.  I would prefer to use depends
+> instead of select, but that's also just my preference.
 
-Whoops, I didn't realize how bad that looked. In anycase, doing what
-Rob suggested as a separate patch should clear this up.
+I prefer depends too, but Rob is the maintainer here.
