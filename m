@@ -1,51 +1,36 @@
 From: frowand.list at gmail.com (Frank Rowand)
-Date: Tue, 4 Dec 2018 02:52:11 -0800
-Subject: [RFC v3 00/19] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <20181128193636.254378-1-brendanhiggins@google.com>
+Date: Tue, 4 Dec 2018 02:58:28 -0800
+Subject: [RFC v3 18/19] of: unittest: split out a couple of test cases
+ from unittest
+In-Reply-To: <20181128193636.254378-19-brendanhiggins@google.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
-Message-ID: <8807ac55-44e7-0ab7-176d-a0f71bff07e6@gmail.com>
+ <20181128193636.254378-19-brendanhiggins@google.com>
+Message-ID: <990bfc7d-dc5e-d8d3-c151-9b321ff2ac10@gmail.com>
+
+Hi Brendan,
 
 On 11/28/18 11:36 AM, Brendan Higgins wrote:
-> This patch set proposes KUnit, a lightweight unit testing and mocking
-> framework for the Linux kernel.
+> Split out a couple of test cases that these features in base.c from the
+> unittest.c monolith. The intention is that we will eventually split out
+> all test cases and group them together based on what portion of device
+> tree they test.
+
+Why does splitting this file apart improve the implementation?
+
+
 > 
-> Unlike Autotest and kselftest, KUnit is a true unit testing framework;
-> it does not require installing the kernel on a test machine or in a VM
-> and does not require tests to be written in userspace running on a host
-> kernel. Additionally, KUnit is fast: From invocation to completion KUnit
-> can run several dozen tests in under a second. Currently, the entire
-> KUnit test suite for KUnit runs in under a second from the initial
-> invocation (build time excluded).
-> 
-> KUnit is heavily inspired by JUnit, Python's unittest.mock, and
-> Googletest/Googlemock for C++. KUnit provides facilities for defining
-> unit test cases, grouping related test cases into test suites, providing
-> common infrastructure for running tests, mocking, spying, and much more.
-> 
-> ## What's so special about unit testing?
-> 
-
-
-> A unit test is supposed to test a single unit of code in isolation,
-> hence the name. There should be no dependencies outside the control of
-> the test; this means no external dependencies, which makes tests orders
-> of magnitudes faster. Likewise, since there are no external dependencies,
-> there are no hoops to jump through to run the tests. Additionally, this
-
-This question might be a misunderstanding of the intent of some of the
-terminology in the above paragraph, so this is mostly a request for
-clarification.
-
-With my pre-conception of what unit tests are, I read "test a single unit
-of code" to mean a relatively narrow piece of a subsystem.  So if I
-understand correctly, taking examples from patch 17 "of: unittest:
-migrate tests to run on KUnit", each function call like
-KUNIT_ASSERT_NOT_ERR_OR_NULL(), KUNIT_EXPECT_STREQ_MSG(), and
-KUNIT_EXPECT_EQ_MSG() are each a separate unit test, and thus the
-paragraph says that each of these function calls should have no
-dependencies outside the test.  Do I understand that correctly?
-
+> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+> ---
+>  drivers/of/Makefile      |   2 +-
+>  drivers/of/base-test.c   | 214 ++++++++++++++++++++++++++
+>  drivers/of/test-common.c | 149 ++++++++++++++++++
+>  drivers/of/test-common.h |  16 ++
+>  drivers/of/unittest.c    | 316 +--------------------------------------
+>  5 files changed, 381 insertions(+), 316 deletions(-)
+>  create mode 100644 drivers/of/base-test.c
+>  create mode 100644 drivers/of/test-common.c
+>  create mode 100644 drivers/of/test-common.h
+>
 < snip >
 
 -Frank
