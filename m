@@ -1,144 +1,62 @@
-From: robh at kernel.org (Rob Herring)
-Date: Tue, 4 Dec 2018 07:49:22 -0600
-Subject: [RFC v3 00/19] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <f34ee937-83d6-3ff6-12b3-c6cd9acbfc38@gmail.com>
+From: mcgrof at kernel.org (Luis Chamberlain)
+Date: Tue, 4 Dec 2018 12:47:01 -0800
+Subject: [RFC v3 11/19] kunit: add Python libraries for handing KUnit
+ config and kernel
+In-Reply-To: <CAFd5g47x-UNja72k-CWPmWz9+LTn8pF8Wj5Poq+2FJ93E=vymA@mail.gmail.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
- <f34ee937-83d6-3ff6-12b3-c6cd9acbfc38@gmail.com>
-Message-ID: <CAL_JsqL0t_p8=Ueq4mHS5i2YEQdc7S7AtPWfkcOsj1g2SixUkA@mail.gmail.com>
+ <20181128193636.254378-12-brendanhiggins@google.com>
+ <841cf4ae-501b-05ae-5863-a51010709b67@ideasonboard.com>
+ <CAFd5g47x-UNja72k-CWPmWz9+LTn8pF8Wj5Poq+2FJ93E=vymA@mail.gmail.com>
+Message-ID: <20181204204701.GT28501@garbanzo.do-not-panic.com>
 
-On Tue, Dec 4, 2018 at 5:40 AM Frank Rowand <frowand.list at gmail.com> wrote:
->
-> Hi Brendan, Rob,
->
-> On 11/28/18 11:36 AM, Brendan Higgins wrote:
-> > This patch set proposes KUnit, a lightweight unit testing and mocking
-> > framework for the Linux kernel.
+On Mon, Dec 03, 2018 at 03:48:15PM -0800, Brendan Higgins wrote:
+> On Thu, Nov 29, 2018 at 5:54 AM Kieran Bingham
+> <kieran.bingham at ideasonboard.com> wrote:
 > >
-> > Unlike Autotest and kselftest, KUnit is a true unit testing framework;
-> > it does not require installing the kernel on a test machine or in a VM
-> > and does not require tests to be written in userspace running on a host
-> > kernel. Additionally, KUnit is fast: From invocation to completion KUnit
-> > can run several dozen tests in under a second. Currently, the entire
-> > KUnit test suite for KUnit runs in under a second from the initial
-> > invocation (build time excluded).
+> > Hi Brendan,
 > >
-> > KUnit is heavily inspired by JUnit, Python's unittest.mock, and
-> > Googletest/Googlemock for C++. KUnit provides facilities for defining
-> > unit test cases, grouping related test cases into test suites, providing
-> > common infrastructure for running tests, mocking, spying, and much more.
+> > Thanks again for this series!
 > >
-> > ## What's so special about unit testing?
+> > On 28/11/2018 19:36, Brendan Higgins wrote:
+> > > The ultimate goal is to create minimal isolated test binaries; in the
+> > > meantime we are using UML to provide the infrastructure to run tests, so
+> > > define an abstract way to configure and run tests that allow us to
+> > > change the context in which tests are built without affecting the user.
+> > > This also makes pretty and dynamic error reporting, and a lot of other
+> > > nice features easier.
 > >
-> > A unit test is supposed to test a single unit of code in isolation,
-> > hence the name. There should be no dependencies outside the control of
-> > the test; this means no external dependencies, which makes tests orders
-> > of magnitudes faster. Likewise, since there are no external dependencies,
-> > there are no hoops to jump through to run the tests. Additionally, this
-> > makes unit tests deterministic: a failing unit test always indicates a
-> > problem. Finally, because unit tests necessarily have finer granularity,
-> > they are able to test all code paths easily solving the classic problem
-> > of difficulty in exercising error handling code.
 > >
-> > ## Is KUnit trying to replace other testing frameworks for the kernel?
-> >
-> > No. Most existing tests for the Linux kernel are end-to-end tests, which
-> > have their place. A well tested system has lots of unit tests, a
-> > reasonable number of integration tests, and some end-to-end tests. KUnit
-> > is just trying to address the unit test space which is currently not
-> > being addressed.
-> >
-> > ## More information on KUnit
-> >
-> > There is a bunch of documentation near the end of this patch set that
-> > describes how to use KUnit and best practices for writing unit tests.
-> > For convenience I am hosting the compiled docs here:
-> > https://google.github.io/kunit-docs/third_party/kernel/docs/
-> > Additionally for convenience, I have applied these patches to a branch:
-> > https://kunit.googlesource.com/linux/+/kunit/rfc/4.19/v3
-> > The repo may be cloned with:
-> > git clone https://kunit.googlesource.com/linux
-> > This patchset is on the kunit/rfc/4.19/v3 branch.
-> >
-> > ## Changes Since Last Version
-> >
-> >  - Changed namespace prefix from `test_*` to `kunit_*` as requested by
-> >    Shuah.
->
->
-> >  - Started converting/cleaning up the device tree unittest to use KUnit.
-> >  - Started adding KUnit expectations with custom messages.
-> >
->
-> Sorry I missed your reply to me in the v1 patch thread.  I've been
-> traveling a lot the last few weeks.  I'm starting to read messages
-> that occurred late in the v1 patch thread and the v2 patch thread,
-> so I'm just coming up to speed on this.
->
-> My comments below are motivated by adding the devicetree unittest to
-> this version of the patch series.
->
-> Pulling a comment from way back in the v1 patch thread:
->
-> On 10/17/18 3:22 PM, Brendan Higgins wrote:
-> > On Wed, Oct 17, 2018 at 10:49 AM <Tim.Bird at sony.com> wrote:
->
-> < snip >
->
-> > The test and the code under test are linked together in the same
-> > binary and are compiled under Kbuild. Right now I am linking
-> > everything into a UML kernel, but I would ultimately like to make
-> > tests compile into completely independent test binaries. So each test
-> > file would get compiled into its own test binary and would link
-> > against only the code needed to run the test, but we are a bit of a
-> > ways off from that.
->
-> I have never used UML, so you should expect naive questions from me,
-> exhibiting my lack of understanding.
->
-> Does this mean that I have to build a UML architecture kernel to run
-> the KUnit tests?
+> > I wonder if we could somehow generate a shared library object
+> > 'libkernel' or 'libumlinux' from a UM configured set of headers and
+> > objects so that we could create binary targets directly ?
+> 
+> That's an interesting idea. I think it would be difficult to figure
+> out exactly where to draw the line of what goes in there and what
+> needs to be built specific to a test a priori. Of course, that leads
+> into the biggest problem in general, needed to know what I need to
+> build to test the thing that I want to test.
+> 
+> Nevertheless, I could definitely imagine that being useful in a lot of cases.
 
-In this version of the patch series, yes.
+Whether or not we can abstract away the kernel into such a mechanism
+with uml libraries is a good question worth exploring.
 
-> *** Rob, if the answer is yes, then it seems like for my workflow,
-> which is to build for real ARM hardware, my work is doubled (or
-> worse), because for every patch/commit that I apply, I not only have
-> to build the ARM kernel and boot on the real hardware to test, I also
-> have to build the UML kernel and boot in UML.  If that is correct
-> then I see this as a major problem for me.
+Developers working upstream do modify their kernels a lot, so we'd have
+to update such libraries quite a bit, but I think that's fine too. The
+*real* value I think from the above suggestion would be enterprise /
+mobile distros or stable kernel maintainers which have a static kernel
+they need to support for a relatively *long time*, consider a 10 year
+time frame. Running unit tests without qemu with uml and libraries for
+respective kernels seems real worthy.
 
-I've already raised this issue elsewhere in the series. Restricting
-the DT tests to UML is a non-starter.
+The overhead for testing a unit test for said targets, *ideally*, would
+just be to to reboot into the system with such libraries available, a
+unit test would just look for the respective uname -r library and mimic
+that kernel, much the same way enterprise distributions today rely on
+having debugging symbols available to run against crash / gdb. Having
+debug modules / kernel for crash requires such effort already, so this
+would just be an extra layer of other prospect tests.
 
-> Brenden, in the above quote you said that in the future you would
-> like to make the "tests compile into completely independent test
-> binaries".  I am assuming those are intended to run as standalone
-> user space programs instead of inside UML.  Is that correct?  If
-> so, how will KUnit tests be able to test code that uses locking
-> mechanisms that require instructions that are not available to
-> user space execution?  (I _think_ that such instructions may be
-> present, depending on which locking mechanism, but I might be
-> mistaken.)
+All ideaware for now, but the roadmap seems to be paving itself.
 
-I think he means as kernel modules as kunit is for testing internal
-kernel interfaces. kselftest is userspace level tests.
-
-If this were true about locking, then UML itself would not be viable.
-
-> Another possible concern that I have for removing the devicetree
-> unit tests from my normal kernel build process is that I think
-> that the ability to use sparse to analyze the source in the
-> unit tests is removed.  Please correct me if I misunderstand
-> that.
->
-> Another issue is that the devicetree unit tests will no longer
-> be cross compiled with my ARM compiler, so I lose a small
-> amount of testing for compiler related issues.
-
-0-day does that for you. :)
-
-> Overall, I'm still trying to learn enough to determine whether
-> the gains from moving to KUnit outweigh the losses.
->
-> -Frank
+  Luis
