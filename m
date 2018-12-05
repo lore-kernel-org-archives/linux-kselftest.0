@@ -1,155 +1,98 @@
-From: sashal@kernel.org (Sasha Levin)
-Date: Wed,  5 Dec 2018 04:41:46 -0500
-Subject: [PATCH AUTOSEL 4.14 08/69] selftests: add script to stress-test nft
- packet path vs. control plane
-In-Reply-To: <20181205094247.6556-1-sashal@kernel.org>
-References: <20181205094247.6556-1-sashal@kernel.org>
-Message-ID: <20181205094247.6556-8-sashal@kernel.org>
+From: anton.ivanov@cambridgegreys.com (Anton Ivanov)
+Date: Wed, 5 Dec 2018 13:15:28 +0000
+Subject: [RFC v3 01/19] kunit: test: add KUnit test runner core
+In-Reply-To: <20181130031438.GQ4922@garbanzo.do-not-panic.com>
+References: <20181128193636.254378-1-brendanhiggins@google.com>
+ <20181128193636.254378-2-brendanhiggins@google.com>
+ <20181130031438.GQ4922@garbanzo.do-not-panic.com>
+Message-ID: <e2ed9df2-c06b-f0d3-d50a-d03166f586df@cambridgegreys.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181205094146.1e7f1mJZLnLhU6XJu-WMlil_CouPUL6wroEx_3MXFyo@z>
+Message-ID: <20181205131528.oEPawcEn52o-fox3uBcQTM10YFzNBTh1DmA7WIDmJew@z>
 
-From: Florian Westphal <fw@strlen.de>
+On 30/11/2018 03:14, Luis Chamberlain wrote:
+> On Wed, Nov 28, 2018@11:36:18AM -0800, Brendan Higgins wrote:
+>> +#define module_test(module) \
+>> +		static int module_kunit_init##module(void) \
+>> +		{ \
+>> +			return kunit_run_tests(&module); \
+>> +		} \
+>> +		late_initcall(module_kunit_init##module)
+> Here in lies an assumption that suffices. I'm inclined to believe we
+> need new initcall level here so to ensure we *do* run after all the
+> respective kernels iniut calls. Otherwise we're left at the whims of
+> link order for kunit. For instance if a kunit test relies on frameworks
+> which are also late_initcall() we'd have complete incompatibility with
+> anything linked *after* kunit.
+>
+>> diff --git a/kunit/Kconfig b/kunit/Kconfig
+>> new file mode 100644
+>> index 0000000000000..49b44c4f6630a
+>> --- /dev/null
+>> +++ b/kunit/Kconfig
+>> @@ -0,0 +1,17 @@
+>> +#
+>> +# KUnit base configuration
+>> +#
+>> +
+>> +menu "KUnit support"
+>> +
+>> +config KUNIT
+>> +	bool "Enable support for unit tests (KUnit)"
+>> +	depends on UML
+> Consider using:
+>
+> if UML
+>     ...
+> endif
+>
+> That allows the depends to be done once.
+>
+>> +	help
+>> +	  Enables support for kernel unit tests (KUnit), a lightweight unit
+>> +	  testing and mocking framework for the Linux kernel. These tests are
+>> +	  able to be run locally on a developer's workstation without a VM or
+>> +	  special hardware.
+>
+> Some mention of UML may be good here?
+>
+>> For more information, please see
+>> +	  Documentation/kunit/
+>> +
+>> +endmenu
+> I'm a bit conflicted here. This currently depends on UML but yet you
+> noted on RFC v2 that your intention is to liberate kunit from UML and
+> ideally allow unit tests to depend only on userspace. I've addressed
+> tests using both selftests kernels drivers and also re-written kernel
+> APIs to userspace to test there. I think we may need to live with both.
+>
+> Then for the UML stuff, I think if we *really* accept that UML will
+> always be a viable option we should probably consider now throwing these
+> things under drivers/platform/uml/. This follows the pattern of arch
+> specific drivers. Whether or not we end up with a complete userspace
 
-[ Upstream commit 25d8bcedbf4329895dbaf9dd67baa6f18dad918c ]
+UML platform drivers predate that and are under arch/um/drivers/
 
-Start flood ping for each cpu while loading/flushing rulesets to make
-sure we do not access already-free'd rules from nf_tables evaluation loop.
+We should either keep to current convention or consider relocating the 
+existing ones - having things spread in different places around the tree 
+is not good in the long run (UML already has a few of those under the 
+x86 tree, let's not increase the number).
 
-Also add this to TARGETS so 'make run_tests' in selftest dir runs it
-automatically.
+> component independent of UML may implicate having a shared component
+> somewhere else.
+>
+> Likewise, I realize the goal is to *avoid* using a virtual machine for
+> these tests, but would it in any way make sense to share kunit to be
+> supported for other architectures to allow easier-to-write tests as
+> well?
+>
+>    Luis
+>
+> _______________________________________________
+> linux-um mailing list
+> linux-um at lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-um
+>
 
-This would have caught the bug fixed in previous change
-("netfilter: nf_tables: do not skip inactive chains during generation update")
-sooner.
-
-Signed-off-by: Florian Westphal <fw at strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo at netfilter.org>
-Signed-off-by: Sasha Levin <sashal at kernel.org>
----
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/netfilter/Makefile    |  6 ++
- tools/testing/selftests/netfilter/config      |  2 +
- .../selftests/netfilter/nft_trans_stress.sh   | 78 +++++++++++++++++++
- 4 files changed, 87 insertions(+)
- create mode 100644 tools/testing/selftests/netfilter/Makefile
- create mode 100644 tools/testing/selftests/netfilter/config
- create mode 100755 tools/testing/selftests/netfilter/nft_trans_stress.sh
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index ea300e7818a7..10b89f5b9af7 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -20,6 +20,7 @@ TARGETS += memory-hotplug
- TARGETS += mount
- TARGETS += mqueue
- TARGETS += net
-+TARGETS += netfilter
- TARGETS += nsfs
- TARGETS += powerpc
- TARGETS += pstore
-diff --git a/tools/testing/selftests/netfilter/Makefile b/tools/testing/selftests/netfilter/Makefile
-new file mode 100644
-index 000000000000..47ed6cef93fb
---- /dev/null
-+++ b/tools/testing/selftests/netfilter/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Makefile for netfilter selftests
-+
-+TEST_PROGS := nft_trans_stress.sh
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/netfilter/config b/tools/testing/selftests/netfilter/config
-new file mode 100644
-index 000000000000..1017313e41a8
---- /dev/null
-+++ b/tools/testing/selftests/netfilter/config
-@@ -0,0 +1,2 @@
-+CONFIG_NET_NS=y
-+NF_TABLES_INET=y
-diff --git a/tools/testing/selftests/netfilter/nft_trans_stress.sh b/tools/testing/selftests/netfilter/nft_trans_stress.sh
-new file mode 100755
-index 000000000000..f1affd12c4b1
---- /dev/null
-+++ b/tools/testing/selftests/netfilter/nft_trans_stress.sh
-@@ -0,0 +1,78 @@
-+#!/bin/bash
-+#
-+# This test is for stress-testing the nf_tables config plane path vs.
-+# packet path processing: Make sure we never release rules that are
-+# still visible to other cpus.
-+#
-+# set -e
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+testns=testns1
-+tables="foo bar baz quux"
-+
-+nft --version > /dev/null 2>&1
-+if [ $? -ne 0 ];then
-+	echo "SKIP: Could not run test without nft tool"
-+	exit $ksft_skip
-+fi
-+
-+ip -Version > /dev/null 2>&1
-+if [ $? -ne 0 ];then
-+	echo "SKIP: Could not run test without ip tool"
-+	exit $ksft_skip
-+fi
-+
-+tmp=$(mktemp)
-+
-+for table in $tables; do
-+	echo add table inet "$table" >> "$tmp"
-+	echo flush table inet "$table" >> "$tmp"
-+
-+	echo "add chain inet $table INPUT { type filter hook input priority 0; }" >> "$tmp"
-+	echo "add chain inet $table OUTPUT { type filter hook output priority 0; }" >> "$tmp"
-+	for c in $(seq 1 400); do
-+		chain=$(printf "chain%03u" "$c")
-+		echo "add chain inet $table $chain" >> "$tmp"
-+	done
-+
-+	for c in $(seq 1 400); do
-+		chain=$(printf "chain%03u" "$c")
-+		for BASE in INPUT OUTPUT; do
-+			echo "add rule inet $table $BASE counter jump $chain" >> "$tmp"
-+		done
-+		echo "add rule inet $table $chain counter return" >> "$tmp"
-+	done
-+done
-+
-+ip netns add "$testns"
-+ip -netns "$testns" link set lo up
-+
-+lscpu | grep ^CPU\(s\): | ( read cpu cpunum ;
-+cpunum=$((cpunum-1))
-+for i in $(seq 0 $cpunum);do
-+	mask=$(printf 0x%x $((1<<$i)))
-+        ip netns exec "$testns" taskset $mask ping -4 127.0.0.1 -fq > /dev/null &
-+        ip netns exec "$testns" taskset $mask ping -6 ::1 -fq > /dev/null &
-+done)
-+
-+sleep 1
-+
-+for i in $(seq 1 10) ; do ip netns exec "$testns" nft -f "$tmp" & done
-+
-+for table in $tables;do
-+	randsleep=$((RANDOM%10))
-+	sleep $randsleep
-+	ip netns exec "$testns" nft delete table inet $table 2>/dev/null
-+done
-+
-+randsleep=$((RANDOM%10))
-+sleep $randsleep
-+
-+pkill -9 ping
-+
-+wait
-+
-+rm -f "$tmp"
-+ip netns del "$testns"
 -- 
-2.17.1
+Anton R. Ivanov
+Cambridgegreys Limited. Registered in England. Company Number 10273661
