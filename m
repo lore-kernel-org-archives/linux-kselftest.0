@@ -1,10 +1,10 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Wed,  5 Dec 2018 04:46:27 -0500
-Subject: [PATCH AUTOSEL 4.9 06/45] selftests: add script to stress-test nft
+Date: Wed,  5 Dec 2018 04:41:46 -0500
+Subject: [PATCH AUTOSEL 4.14 08/69] selftests: add script to stress-test nft
  packet path vs. control plane
-In-Reply-To: <20181205094706.7225-1-sashal@kernel.org>
-References: <20181205094706.7225-1-sashal@kernel.org>
-Message-ID: <20181205094706.7225-6-sashal@kernel.org>
+In-Reply-To: <20181205094247.6556-1-sashal@kernel.org>
+References: <20181205094247.6556-1-sashal@kernel.org>
+Message-ID: <20181205094247.6556-8-sashal@kernel.org>
 
 From: Florian Westphal <fw at strlen.de>
 
@@ -34,10 +34,10 @@ Signed-off-by: Sasha Levin <sashal at kernel.org>
  create mode 100755 tools/testing/selftests/netfilter/nft_trans_stress.sh
 
 diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 76faf5bf0b32..d37dfc6608c6 100644
+index ea300e7818a7..10b89f5b9af7 100644
 --- a/tools/testing/selftests/Makefile
 +++ b/tools/testing/selftests/Makefile
-@@ -15,6 +15,7 @@ TARGETS += memory-hotplug
+@@ -20,6 +20,7 @@ TARGETS += memory-hotplug
  TARGETS += mount
  TARGETS += mqueue
  TARGETS += net
