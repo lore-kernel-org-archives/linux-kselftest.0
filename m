@@ -1,41 +1,62 @@
-From: dan.rue@linaro.org (Dan Rue)
-Date: Wed, 5 Dec 2018 14:43:41 -0600
-Subject: [PATCH 1/2] selftests: firmware: remove use of non-standard diff
- -Z option
-In-Reply-To: <20181130023732.GO4922@garbanzo.do-not-panic.com>
-References: <20181127031218.24419-1-dan.rue@linaro.org>
- <20181127031218.24419-2-dan.rue@linaro.org>
- <20181130023732.GO4922@garbanzo.do-not-panic.com>
-Message-ID: <20181205204341.7fd4ob5c6pwx375m@xps.therub.org>
+From: linus.walleij@linaro.org (Linus Walleij)
+Date: Wed, 5 Dec 2018 22:49:58 +0100
+Subject: [PATCH] selftests: gpio: Find libmount with pkg-config if
+ available
+In-Reply-To: <20181016214659.22362-1-daniel.diaz@linaro.org>
+References: <20181016214659.22362-1-daniel.diaz@linaro.org>
+Message-ID:
+ <CACRpkda1i_NDnBGgrEoY2ewdSvSnJFVLWWvmSGCu0sNS0hLyiQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181205204341.mJ_TNsyUsB6xjTe69htd_9uSLxPABF5tRETG9DY9dlQ@z>
+Message-ID: <20181205214958.p1vq23ezE7HOjcf4p8rPYZzOPFViTPpNA4P9GsRz6Is@z>
 
-On Thu, Nov 29, 2018@06:37:32PM -0800, Luis Chamberlain wrote:
-> On Mon, Nov 26, 2018@09:12:15PM -0600, Dan Rue wrote:
-> > diff -Z is used to trim the trailing whitespace when comparing the
-> > loaded firmware file with the source firmware file. However, per the
-> > comment in the source code, -Z should not be necessary. In testing, the
-> > input and output files are identical.
-> > 
-> > Additionally, -Z is not a standard option and is not available in
-> > environments such as busybox. When -Z is not supported, diff fails with
-> > a usage error, which is suppressed, but then causes read_firmwares() to
-> > exit with a false failure message.
-> 
-> NACK -- this breaks testing on debian:
-> 
-> Testing with the file present...
-> Batched request_firmware() try #1: Files
-> /tmp/tmp.8GWkoSo5jZ/test-firmware.bin and
-> /sys/devices/virtual/misc/test_firmware/read_firmware differ
-> request #0: firmware was not loaded
-> 
-> Please add a quirks check, enable it by default, and remove it for
-> Busybox.
+Sorry for top-posting,
 
-Thanks for the review. Shuah, can you please drop this one?
+I don't understand the selftest environment very well so I do not know
+if this is the right thing to do.
 
-Dan
+I can merge the patch through the GPIO tree but I need a nod from
+someone wise, like Shuah Khan or Anders Roxell (Anders has been
+using the GPIO selftests) that this is the direction we want to go.
 
--- 
-Linaro - Kernel Validation
+Yours,
+Linus Walleij
+
+On Tue, Oct 16, 2018@11:47 PM Daniel Díaz <daniel.diaz@linaro.org> wrote:
+
+> If pkg-config is available, use it to define the CFLAGS and
+> LDLIBS needed for libmount; else, use the current hard-coded
+> paths and options.
+>
+> Using pkg-config is very helpful for cross-compilation
+> environments, and is sometimes readily available on developer
+> boxes to ensure we get the right compiler/linker options for
+> the given package.
+>
+> Signed-off-by: Daniel Díaz <daniel.diaz at linaro.org>
+> ---
+>  tools/testing/selftests/gpio/Makefile | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
+> index 46648427d537..f22b22aef7bf 100644
+> --- a/tools/testing/selftests/gpio/Makefile
+> +++ b/tools/testing/selftests/gpio/Makefile
+> @@ -1,7 +1,13 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>
+> -CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/
+> -LDLIBS += -lmount -I/usr/include/libmount
+> +MOUNT_CFLAGS := $(shell pkg-config --cflags mount 2>/dev/null)
+> +MOUNT_LDLIBS := $(shell pkg-config --libs mount 2>/dev/null)
+> +ifeq ($(MOUNT_LDLIBS),)
+> +MOUNT_LDLIBS := -lmount -I/usr/include/libmount
+> +endif
+> +
+> +CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/ $(MOUNT_CFLAGS)
+> +LDLIBS += $(MOUNT_LDLIBS)
+>
+>  TEST_PROGS := gpio-mockup.sh
+>  TEST_FILES := gpio-mockup-sysfs.sh
+> --
+> 2.17.1
+>
