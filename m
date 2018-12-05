@@ -1,17 +1,41 @@
-From: davem@davemloft.net (David Miller)
-Date: Wed, 05 Dec 2018 11:38:43 -0800 (PST)
-Subject: [PATCH net-next 0/8] Pass extack to NETDEV_PRE_UP
-In-Reply-To: <cover.1544006963.git.petrm@mellanox.com>
-References: <cover.1544006963.git.petrm@mellanox.com>
-Message-ID: <20181205.113843.1342804787283427751.davem@davemloft.net>
+From: dan.rue@linaro.org (Dan Rue)
+Date: Wed, 5 Dec 2018 14:43:41 -0600
+Subject: [PATCH 1/2] selftests: firmware: remove use of non-standard diff
+ -Z option
+In-Reply-To: <20181130023732.GO4922@garbanzo.do-not-panic.com>
+References: <20181127031218.24419-1-dan.rue@linaro.org>
+ <20181127031218.24419-2-dan.rue@linaro.org>
+ <20181130023732.GO4922@garbanzo.do-not-panic.com>
+Message-ID: <20181205204341.7fd4ob5c6pwx375m@xps.therub.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181205193843.QWPb6JDzK8KIXlEr9yEHdmlxl1fAbrtvVWu4h_OeBBw@z>
+Message-ID: <20181205204341.mJ_TNsyUsB6xjTe69htd_9uSLxPABF5tRETG9DY9dlQ@z>
 
+On Thu, Nov 29, 2018@06:37:32PM -0800, Luis Chamberlain wrote:
+> On Mon, Nov 26, 2018@09:12:15PM -0600, Dan Rue wrote:
+> > diff -Z is used to trim the trailing whitespace when comparing the
+> > loaded firmware file with the source firmware file. However, per the
+> > comment in the source code, -Z should not be necessary. In testing, the
+> > input and output files are identical.
+> > 
+> > Additionally, -Z is not a standard option and is not available in
+> > environments such as busybox. When -Z is not supported, diff fails with
+> > a usage error, which is suppressed, but then causes read_firmwares() to
+> > exit with a false failure message.
+> 
+> NACK -- this breaks testing on debian:
+> 
+> Testing with the file present...
+> Batched request_firmware() try #1: Files
+> /tmp/tmp.8GWkoSo5jZ/test-firmware.bin and
+> /sys/devices/virtual/misc/test_firmware/read_firmware differ
+> request #0: firmware was not loaded
+> 
+> Please add a quirks check, enable it by default, and remove it for
+> Busybox.
 
-Your CC list is so huge that vger.kernel.org dropped all of your postings.
+Thanks for the review. Shuah, can you please drop this one?
 
-That CC list is not reasonable at all, trim it down to the most minimum
-set.  Probably 2 or 3 mailing lists, primarily netdev, and maybe a small
-handful of specific developers.
+Dan
 
-Nothing more.
+-- 
+Linaro - Kernel Validation
