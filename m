@@ -1,34 +1,59 @@
-From: shuah@kernel.org (shuah)
-Date: Wed, 5 Dec 2018 16:21:30 -0700
-Subject: [PATCH] selftests: gpio: Find libmount with pkg-config if
- available
-In-Reply-To: <CADYN=9LEVUgz_ou6kWrXZGBpUZ5Ti7BB+0Uxp1NtP18BJDVHCg@mail.gmail.com>
-References: <20181016214659.22362-1-daniel.diaz@linaro.org>
- <CACRpkda1i_NDnBGgrEoY2ewdSvSnJFVLWWvmSGCu0sNS0hLyiQ@mail.gmail.com>
- <CADYN=9LEVUgz_ou6kWrXZGBpUZ5Ti7BB+0Uxp1NtP18BJDVHCg@mail.gmail.com>
-Message-ID: <6dc6f709-6940-4f63-c8d0-9cbbbd39ac2a@kernel.org>
+From: brendanhiggins@google.com (Brendan Higgins)
+Date: Wed, 5 Dec 2018 15:42:46 -0800
+Subject: [RFC v3 17/19] of: unittest: migrate tests to run on KUnit
+In-Reply-To: <CAL_JsqL_PivQbrJFEusdKAy-2EQtKL3OHbmyYSK9bzuTOQegqA@mail.gmail.com>
+References: <20181128193636.254378-1-brendanhiggins@google.com>
+ <20181128193636.254378-18-brendanhiggins@google.com>
+ <CAL_Jsq+09Kx7yMBC_Jw45QGmk6U_fp4N6HOZDwYrM4tWw+_dOA@mail.gmail.com>
+ <18814973-8f0a-4647-a097-fcc3dc0b3cd3@infradead.org>
+ <CAFd5g475RK9v9X4qxmXwuHiPMOs05WrZAw6EJWNdVoAHQWguFQ@mail.gmail.com>
+ <CAL_JsqL_PivQbrJFEusdKAy-2EQtKL3OHbmyYSK9bzuTOQegqA@mail.gmail.com>
+Message-ID:
+ <CAFd5g45-HGytAPTx7OQD8B0oAdLncDGSMMTyHCTtyobeUJ15AQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181205232130.AZzMm_kAHvmZY4w2K8fhPTiRXmTxnK0PH6-R81O_JhU@z>
+Message-ID: <20181205234246.-nLhLywUtRui9XVOt920Fn_KHMXjdckhA5taZ9DaGWk@z>
 
-On 12/5/18 4:15 PM, Anders Roxell wrote:
-> On Wed, 5 Dec 2018@22:50, Linus Walleij <linus.walleij@linaro.org> wrote:
->>
->> Sorry for top-posting,
->>
->> I don't understand the selftest environment very well so I do not know
->> if this is the right thing to do.
->>
->> I can merge the patch through the GPIO tree but I need a nod from
->> someone wise, like Shuah Khan or Anders Roxell (Anders has been
->> using the GPIO selftests) that this is the direction we want to go.
-> 
-> Yes this makes sense and its already in linux-next.
-> 
+On Tue, Dec 4, 2018@5:41 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, Dec 3, 2018 at 6:14 PM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
+> >
+> > On Thu, Nov 29, 2018@4:40 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+> > >
+> > > On 11/28/18 12:56 PM, Rob Herring wrote:
+> > > >> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+> > > >> index ad3fcad4d75b8..f309399deac20 100644
+> > > >> --- a/drivers/of/Kconfig
+> > > >> +++ b/drivers/of/Kconfig
+> > > >> @@ -15,6 +15,7 @@ if OF
+> > > >>  config OF_UNITTEST
+> > > >>         bool "Device Tree runtime unit tests"
+> > > >>         depends on !SPARC
+> > > >> +       depends on KUNIT
+> > > > Unless KUNIT has depends, better to be a select here.
+> > >
+> > > That's just style or taste.  I would prefer to use depends
+> > > instead of select, but that's also just my preference.
+> >
+> > I prefer depends too, but Rob is the maintainer here.
+>
+> Well, we should be consistent, not the follow the whims of each maintainer.
 
-Linus,
+Sorry, I don't think that came out the way I meant it. I don't really
+think we are consistent on this point across the kernel, and I don't
+feel very strongly about the point, so I was just looking to follow
+the path of least resistance. (I also just assumed Rob would keep us
+consistent within drivers/of/.)
 
-Great. I pulled this in last week into kselftest next for 4.21-rc1 
-thinking that this is a good direction.
+I figure if we are running unit tests from the test runner script or
+from an automated system, you won't be hunting for dependencies for a
+single test every time you want to run a test, so select doesn't make
+it easier to configure in most imagined use cases.
 
-thanks,
--- Shuah
+KUNIT hypothetically should not depend on anything, so select should
+be safe to use.
+
+On the other hand, if we end up being wrong on this point and KUnit
+gains widespread adoption, I would prefer not to be in a position
+where I have to change a bunch of configs all over the kernel because
+this example got copied and pasted.
