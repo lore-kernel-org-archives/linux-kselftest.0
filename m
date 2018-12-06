@@ -1,51 +1,108 @@
-From: catalin.marinas at arm.com (Catalin Marinas)
-Date: Thu, 6 Dec 2018 14:08:36 +0000
-Subject: [PATCH v8 0/8] arm64: untag user pointers passed to the kernel
-In-Reply-To: <CAAeHK+x9CuqqgvP6pZEV1Gz5cFHNpwsuUDbWQFHFzTy8GBMPKA@mail.gmail.com>
-References: <cover.1541687720.git.andreyknvl@google.com>
- <CAAeHK+w1Qv6owkdWfjbXMFqOA8BURDN5gviw8vpgi3eon1dWmA@mail.gmail.com>
- <20181129181650.GG22027@arrakis.emea.arm.com>
- <CAAeHK+x9CuqqgvP6pZEV1Gz5cFHNpwsuUDbWQFHFzTy8GBMPKA@mail.gmail.com>
-Message-ID: <20181206140836.vhhfnv7hta6pzwd4@localhost>
+From: willy at infradead.org (Matthew Wilcox)
+Date: Thu, 6 Dec 2018 07:37:18 -0800
+Subject: [RFC v3 11/19] kunit: add Python libraries for handing KUnit
+ config and kernel
+In-Reply-To: <f8722f4a-44c8-24c2-c433-5178f9f40b82@ideasonboard.com>
+References: <20181128193636.254378-1-brendanhiggins@google.com>
+ <20181128193636.254378-12-brendanhiggins@google.com>
+ <841cf4ae-501b-05ae-5863-a51010709b67@ideasonboard.com>
+ <CAFd5g47x-UNja72k-CWPmWz9+LTn8pF8Wj5Poq+2FJ93E=vymA@mail.gmail.com>
+ <20181204204701.GT28501@garbanzo.do-not-panic.com>
+ <f8722f4a-44c8-24c2-c433-5178f9f40b82@ideasonboard.com>
+Message-ID: <20181206153718.GD24603@bombadil.infradead.org>
 
-On Thu, Dec 06, 2018 at 01:44:24PM +0100, Andrey Konovalov wrote:
-> On Thu, Nov 29, 2018 at 7:16 PM Catalin Marinas <catalin.marinas at arm.com> wrote:
-> > On Thu, Nov 08, 2018 at 03:48:10PM +0100, Andrey Konovalov wrote:
-> > > On Thu, Nov 8, 2018 at 3:36 PM, Andrey Konovalov <andreyknvl at google.com> wrote:
-> > > > Changes in v8:
-> > > > - Rebased onto 65102238 (4.20-rc1).
-> > > > - Added a note to the cover letter on why syscall wrappers/shims that untag
-> > > >   user pointers won't work.
-> > > > - Added a note to the cover letter that this patchset has been merged into
-> > > >   the Pixel 2 kernel tree.
-> > > > - Documentation fixes, in particular added a list of syscalls that don't
-> > > >   support tagged user pointers.
-> > >
-> > > I've changed the documentation to be more specific, please take a look.
-> > >
-> > > I haven't done anything about adding a way for the user to find out
-> > > that the kernel supports this ABI extension. I don't know what would
-> > > the the preferred way to do this, and we haven't received any comments
-> > > on that from anybody else. Probing "on some innocuous syscall
-> > > currently returning -EFAULT on tagged pointer arguments" works though,
-> > > as you mentioned.
-> >
-> > We've had some internal discussions and also talked to some people at
-> > Plumbers. I think the best option is to introduce an AT_FLAGS bit to
-> > describe the ABI relaxation on tagged pointers. Vincenzo is going to
-> > propose a patch on top of this series.
+On Thu, Dec 06, 2018 at 12:32:47PM +0000, Kieran Bingham wrote:
+> On 04/12/2018 20:47, Luis Chamberlain wrote:
+> > On Mon, Dec 03, 2018 at 03:48:15PM -0800, Brendan Higgins wrote:
+> >> On Thu, Nov 29, 2018 at 5:54 AM Kieran Bingham
+> >> <kieran.bingham at ideasonboard.com> wrote:
+> >>>
+> >>> Hi Brendan,
+> >>>
+> >>> Thanks again for this series!
+> >>>
+> >>> On 28/11/2018 19:36, Brendan Higgins wrote:
+> >>>> The ultimate goal is to create minimal isolated test binaries; in the
+> >>>> meantime we are using UML to provide the infrastructure to run tests, so
+> >>>> define an abstract way to configure and run tests that allow us to
+> >>>> change the context in which tests are built without affecting the user.
+> >>>> This also makes pretty and dynamic error reporting, and a lot of other
+> >>>> nice features easier.
+> >>>
+> >>>
+> >>> I wonder if we could somehow generate a shared library object
+> >>> 'libkernel' or 'libumlinux' from a UM configured set of headers and
+> >>> objects so that we could create binary targets directly ?
+> >>
+> >> That's an interesting idea. I think it would be difficult to figure
+> >> out exactly where to draw the line of what goes in there and what
+> >> needs to be built specific to a test a priori. Of course, that leads
+> >> into the biggest problem in general, needed to know what I need to
+> >> build to test the thing that I want to test.
+> >>
+> >> Nevertheless, I could definitely imagine that being useful in a lot of cases.
+> > 
+> > Whether or not we can abstract away the kernel into such a mechanism
+> > with uml libraries is a good question worth exploring.
+> > 
+> > Developers working upstream do modify their kernels a lot, so we'd have
+> > to update such libraries quite a bit, but I think that's fine too. The
+> > *real* value I think from the above suggestion would be enterprise /
+> > mobile distros or stable kernel maintainers which have a static kernel
+> > they need to support for a relatively *long time*, consider a 10 year
+> > time frame. Running unit tests without qemu with uml and libraries for
+> > respective kernels seems real worthy.
 > 
-> So should I wait for a patch from Vincenzo before posting v9 or post
-> it as is? Or try to develop this patch myself?
+> I think any such library might be something generated by the kernel
+> build system, so if someone makes substantial changes to a core
+> component provided by the library - it can be up to them to build a
+> corresponding userspace library as well.
+> 
+> We could also consider to only provide *static* libraries rather than
+> dynamic. So any one building some userspace tool / test with this would
+> be required to compile against (the version of) the kernel they expect
+> perhaps... - much like we expect modules to be compiled currently.
+> 
+> And then the userspace binary would be sufficiently able to live it's
+> life on it's own :)
+> 
+> > The overhead for testing a unit test for said targets, *ideally*, would
+> > just be to to reboot into the system with such libraries available, a
+> > unit test would just look for the respective uname -r library and mimic
+> > that kernel, much the same way enterprise distributions today rely on
+> > having debugging symbols available to run against crash / gdb. Having
+> > debug modules / kernel for crash requires such effort already, so this
+> > would just be an extra layer of other prospect tests.
+> 
+> Oh - although, yes - there are some good concepts there - but I'm a bit
+> weary of how easy it would be to 'run' the said test against multiple
+> kernel version libraries... there would be a lot of possible ABI
+> conflicts perhaps.
+> 
+> My main initial idea for a libumlinux is to provide infrastructure such
+> as our linked-lists and other kernel formatting so that we can take
+> kernel code directly to userspace for test and debug (assuming that
+> there are no hardware dependencies or things that we can't mock out)
+> 
+> I think all of this could complement kunit of course - this isn't
+> suggesting an alternative implementation :-)
 
-The reason Vincenzo hasn't posted his patches yet is that we are still
-debating internally how to document which syscalls accept non-zero
-top-byte, what to do with future syscalls for which we don't know the
-semantics.
+I suspect the reason Luis cc'd me on this is that we already have some
+artisinally-crafted userspace kernel-mocking interfaces under tools/.
+The tools/testing/radix-tree directory is the source of some of this,
+but I've been moving pieces out into tools/ more generally where it
+makes sense to.
 
-Happy to take the discussion to the public list if Vincenzo posts his
-patches. The conclusion of the ABI discussion may have an impact on the
-actual implementation that you are proposing in this series.
+We have liburcu already, which is good.  The main sticking points are:
 
--- 
-Catalin
+ - No emulation of kernel thread interfaces
+ - The kernel does not provide the ability to aggressively fail memory
+   allocations (which is useful when trying to exercise the memory failure
+   paths).
+ - printk has started adding a lot of %pX enhancements which printf
+   obviously doesn't know about.
+ - No global pseudo-random number generator in the kernel.  Probably
+   we should steal the i915 one.
+
+I know Dan Williams has also done a lot of working mocking kernel
+interfaces for libnvdimm.
