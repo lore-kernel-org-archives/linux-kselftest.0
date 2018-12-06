@@ -1,32 +1,57 @@
-From: brendanhiggins@google.com (Brendan Higgins)
-Date: Wed, 5 Dec 2018 15:54:34 -0800
-Subject: [RFC v3 18/19] of: unittest: split out a couple of test cases
- from unittest
-In-Reply-To: <990bfc7d-dc5e-d8d3-c151-9b321ff2ac10@gmail.com>
+From: kieran.bingham@ideasonboard.com (Kieran Bingham)
+Date: Thu, 6 Dec 2018 12:16:33 +0000
+Subject: [RFC v3 14/19] Documentation: kunit: add documentation for KUnit
+In-Reply-To: <CAFd5g47Cew6pmebsopjzmkd4RpnnC3zLAUfxCybjdhrO35OBpQ@mail.gmail.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
- <20181128193636.254378-19-brendanhiggins@google.com>
- <990bfc7d-dc5e-d8d3-c151-9b321ff2ac10@gmail.com>
-Message-ID:
- <CAFd5g45tOGgf_sKGYRC=fpnTBKGaG=8frbQdgZ3ZTkQFyTfP5A@mail.gmail.com>
+ <20181128193636.254378-15-brendanhiggins@google.com>
+ <b4c72234-8c56-6efa-8003-f89d99a9779e@ideasonboard.com>
+ <20181130034525.GP18410@garbanzo.do-not-panic.com>
+ <CAFd5g47Cew6pmebsopjzmkd4RpnnC3zLAUfxCybjdhrO35OBpQ@mail.gmail.com>
+Message-ID: <0927c42a-8e65-f410-e6ed-27576572577f@ideasonboard.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181205235434.GRXgNiwfjbFWU0pkP8IO1bHQTDt5Hm2dKkvvvS1Gxio@z>
+Message-ID: <20181206121633.9lyeHxjllmhygIslQO1gbn_oWXQ99vN_HMlyhCqPZ0s@z>
 
-On Tue, Dec 4, 2018@2:58 AM Frank Rowand <frowand.list@gmail.com> wrote:
->
-> Hi Brendan,
->
-> On 11/28/18 11:36 AM, Brendan Higgins wrote:
-> > Split out a couple of test cases that these features in base.c from the
-> > unittest.c monolith. The intention is that we will eventually split out
-> > all test cases and group them together based on what portion of device
-> > tree they test.
->
-> Why does splitting this file apart improve the implementation?
+Hi Brendan,
 
-This is in preparation for patch 19/19 and other hypothetical future
-patches where test cases are split up and grouped together by what
-portion of DT they test (for example the parsing tests and the
-platform/device tests would probably go separate files as well). This
-patch by itself does not do anything useful, but I figured it made
-patch 19/19 (and, if you like what I am doing, subsequent patches)
-easier to review.
+On 03/12/2018 23:53, Brendan Higgins wrote:
+> On Thu, Nov 29, 2018@7:45 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>>
+>> On Thu, Nov 29, 2018@01:56:37PM +0000, Kieran Bingham wrote:
+>>> Hi Brendan,
+>>>
+>>> Please excuse the top posting, but I'm replying here as I'm following
+>>> the section "Creating a kunitconfig" in Documentation/kunit/start.rst.
+>>>
+>>> Could the three line kunitconfig file live under say
+>>>        arch/um/configs/kunit_defconfig?
+
+
+Further consideration to this topic - I mentioned putting it in
+  arch/um/configs
+
+- but I think this is wrong.
+
+We now have a location for config-fragments, which is essentially what
+this is, under kernel/configs
+
+So perhaps an addition as :
+
+ kernel/configs/kunit.config
+
+Would be more appropriate - and less (UM) architecture specific.
+
+
+
+>>>
+>>> So that it's always provided? And could even be extended with tests
+>>> which people would expect to be run by default? (say in distributions)
+>>
+>> Indeed, and then a top level 'make kunitconfig' could use it as well.
+> 
+> Yep, I totally agree.
+> 
+
+-- 
+Regards
+--
+Kieran
