@@ -1,34 +1,53 @@
 From: andreyknvl@google.com (Andrey Konovalov)
-Date: Thu, 6 Dec 2018 13:36:46 +0100
-Subject: [PATCH v8 2/8] uaccess: add untagged_addr definition for other
- arches
-In-Reply-To: <20181129182323.GI22027@arrakis.emea.arm.com>
+Date: Thu, 6 Dec 2018 13:44:24 +0100
+Subject: [PATCH v8 0/8] arm64: untag user pointers passed to the kernel
+In-Reply-To: <20181129181650.GG22027@arrakis.emea.arm.com>
 References: <cover.1541687720.git.andreyknvl@google.com>
- <c9028422854fb5bfb79d798397b30d4701207062.1541687720.git.andreyknvl@google.com>
- <20181129182323.GI22027@arrakis.emea.arm.com>
+ <CAAeHK+w1Qv6owkdWfjbXMFqOA8BURDN5gviw8vpgi3eon1dWmA@mail.gmail.com>
+ <20181129181650.GG22027@arrakis.emea.arm.com>
 Message-ID:
- <CAAeHK+y7AwdXsEgBYqLUzps2K8aGcbDsSpS+obCs11voZX55og@mail.gmail.com>
+ <CAAeHK+x9CuqqgvP6pZEV1Gz5cFHNpwsuUDbWQFHFzTy8GBMPKA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181206123646.bGmwM_HWcoAT5NLo5_ROr09OSrTz7o46aHsZgX39UOk@z>
+Message-ID: <20181206124424.mESlIh3bFtgbnPlBR43GsMKQUGOfuCSsR3Xlbr4nzi4@z>
 
-On Thu, Nov 29, 2018@7:23 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+On Thu, Nov 29, 2018@7:16 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
 >
-> On Thu, Nov 08, 2018@03:36:09PM +0100, Andrey Konovalov wrote:
-> > diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-> > index efe79c1cdd47..c045b4eff95e 100644
-> > --- a/include/linux/uaccess.h
-> > +++ b/include/linux/uaccess.h
-> > @@ -13,6 +13,10 @@
+> Hi Andrey,
+>
+> On Thu, Nov 08, 2018@03:48:10PM +0100, Andrey Konovalov wrote:
+> > On Thu, Nov 8, 2018@3:36 PM, Andrey Konovalov <andreyknvl@google.com> wrote:
+> > > Changes in v8:
+> > > - Rebased onto 65102238 (4.20-rc1).
+> > > - Added a note to the cover letter on why syscall wrappers/shims that untag
+> > >   user pointers won't work.
+> > > - Added a note to the cover letter that this patchset has been merged into
+> > >   the Pixel 2 kernel tree.
+> > > - Documentation fixes, in particular added a list of syscalls that don't
+> > >   support tagged user pointers.
 > >
-> >  #include <asm/uaccess.h>
+> > I've changed the documentation to be more specific, please take a look.
 > >
-> > +#ifndef untagged_addr
-> > +#define untagged_addr(addr) addr
-> > +#endif
+> > I haven't done anything about adding a way for the user to find out
+> > that the kernel supports this ABI extension. I don't know what would
+> > the the preferred way to do this, and we haven't received any comments
+> > on that from anybody else. Probing "on some innocuous syscall
+> > currently returning -EFAULT on tagged pointer arguments" works though,
+> > as you mentioned.
 >
-> Nitpick: add braces around (addr). Otherwise:
+> We've had some internal discussions and also talked to some people at
+> Plumbers. I think the best option is to introduce an AT_FLAGS bit to
+> describe the ABI relaxation on tagged pointers. Vincenzo is going to
+> propose a patch on top of this series.
 
-Will do in v9, thanks!
+So should I wait for a patch from Vincenzo before posting v9 or post
+it as is? Or try to develop this patch myself?
 
 >
-> Acked-by: Catalin Marinas <catalin.marinas at arm.com>
+> > As mentioned in the cover letter, this patchset has been merged into
+> > the Pixel 2 kernel tree.
+>
+> I just hope it's not enabled on production kernels, it would introduce
+> a user ABI that may differ from what ends up upstream.
+>
+> --
+> Catalin
