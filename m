@@ -1,61 +1,48 @@
 From: andreyknvl at google.com (Andrey Konovalov)
-Date: Mon, 10 Dec 2018 13:51:04 +0100
-Subject: [PATCH v9 7/8] arm64: update Documentation/arm64/tagged-pointers.txt
+Date: Mon, 10 Dec 2018 13:51:02 +0100
+Subject: [PATCH v9 5/8] lib,
+ arm64: untag addrs passed to strncpy_from_user and strnlen_user
 In-Reply-To: <cover.1544445454.git.andreyknvl@google.com>
 References: <cover.1544445454.git.andreyknvl@google.com>
-Message-ID: <5b08153a9d69a5aa958071dcc5477c881f56dcde.1544445454.git.andreyknvl@google.com>
+Message-ID: <2c573564b456327708d175f3124256bc71081bd8.1544445454.git.andreyknvl@google.com>
 
-Document the changes in Documentation/arm64/tagged-pointers.txt.
+strncpy_from_user and strnlen_user accept user addresses as arguments, and
+do not go through the same path as copy_from_user and others, so here we
+need to handle the case of tagged user addresses separately.
+
+Untag user pointers passed to these functions.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- Documentation/arm64/tagged-pointers.txt | 25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
+ lib/strncpy_from_user.c | 2 ++
+ lib/strnlen_user.c      | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/Documentation/arm64/tagged-pointers.txt b/Documentation/arm64/tagged-pointers.txt
-index a25a99e82bb1..f4cf1f5cf362 100644
---- a/Documentation/arm64/tagged-pointers.txt
-+++ b/Documentation/arm64/tagged-pointers.txt
-@@ -17,13 +17,22 @@ this byte for application use.
- Passing tagged addresses to the kernel
- --------------------------------------
+diff --git a/lib/strncpy_from_user.c b/lib/strncpy_from_user.c
+index b53e1b5d80f4..97467cd2bc59 100644
+--- a/lib/strncpy_from_user.c
++++ b/lib/strncpy_from_user.c
+@@ -106,6 +106,8 @@ long strncpy_from_user(char *dst, const char __user *src, long count)
+ 	if (unlikely(count <= 0))
+ 		return 0;
  
--All interpretation of userspace memory addresses by the kernel assumes
--an address tag of 0x00.
-+The kernel supports tags in pointer arguments (including pointers in
-+structures) for a limited set of syscalls, the exceptions are:
- 
--This includes, but is not limited to, addresses found in:
-+ - memory syscalls: brk, madvise, mbind, mincore, mlock, mlock2, move_pages,
-+   mprotect, mremap, msync, munlock, munmap, pkey_mprotect, process_vm_readv,
-+   process_vm_writev, remap_file_pages;
- 
-- - pointer arguments to system calls, including pointers in structures
--   passed to system calls,
-+ - ioctls that accept user pointers that describe virtual memory ranges;
++	src = untagged_addr(src);
 +
-+ - TCP_ZEROCOPY_RECEIVE setsockopt.
+ 	max_addr = user_addr_max();
+ 	src_addr = (unsigned long)src;
+ 	if (likely(src_addr < max_addr)) {
+diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
+index 60d0bbda8f5e..8b5f56466e00 100644
+--- a/lib/strnlen_user.c
++++ b/lib/strnlen_user.c
+@@ -108,6 +108,8 @@ long strnlen_user(const char __user *str, long count)
+ 	if (unlikely(count <= 0))
+ 		return 0;
+ 
++	str = untagged_addr(str);
 +
-+The kernel supports tags in user fault addresses. However the fault_address
-+field in the sigcontext struct will contain an untagged address.
-+
-+All other interpretations of userspace memory addresses by the kernel
-+assume an address tag of 0x00, in particular:
- 
-  - the stack pointer (sp), e.g. when interpreting it to deliver a
-    signal,
-@@ -33,11 +42,7 @@ This includes, but is not limited to, addresses found in:
- 
- Using non-zero address tags in any of these locations may result in an
- error code being returned, a (fatal) signal being raised, or other modes
--of failure.
--
--For these reasons, passing non-zero address tags to the kernel via
--system calls is forbidden, and using a non-zero address tag for sp is
--strongly discouraged.
-+of failure. Using a non-zero address tag for sp is strongly discouraged.
- 
- Programs maintaining a frame pointer and frame records that use non-zero
- address tags may suffer impaired or inaccurate debug and profiling
+ 	max_addr = user_addr_max();
+ 	src_addr = (unsigned long)str;
+ 	if (likely(src_addr < max_addr)) {
 -- 
 2.20.0.rc2.403.gdbc3b29805-goog
