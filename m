@@ -1,129 +1,258 @@
-From: vincenzo.frascino@arm.com (Vincenzo Frascino)
-Date: Mon, 10 Dec 2018 14:30:41 +0000
-Subject: [RFC][PATCH 0/3] arm64 relaxed ABI
-In-Reply-To: <cover.1544445454.git.andreyknvl@google.com>
-References: <cover.1544445454.git.andreyknvl@google.com>
-Message-ID: <20181210143044.12714-1-vincenzo.frascino@arm.com>
+From: keescook@chromium.org (Kees Cook)
+Date: Mon, 10 Dec 2018 09:30:45 -0800
+Subject: [PATCH] selftests: do not macro-expand failed assertion
+ expressions
+In-Reply-To: <20181209230047.GA1738@altlinux.org>
+References: <20181209230047.GA1738@altlinux.org>
+Message-ID:
+ <CAGXu5jKLHbfgZLGqxwG8LRs=0hy+iJGYQd61Ad5LghrkDWV=4w@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181210143041.oud2j5np5hZFff5CMtg4YPBUKErNb5RO7oLUzdfoXpQ@z>
+Message-ID: <20181210173045.AZPTjvWROj0QXUAUS53Hjk173pMCzUNgUl72UupfGPA@z>
 
-On arm64 the TCR_EL1.TBI0 bit has been set since Linux 3.x hence
-the userspace (EL0) is allowed to set a non-zero value in the top
-byte but the resulting pointers are not allowed at the user-kernel
-syscall ABI boundary.
+On Sun, Dec 9, 2018@3:00 PM Dmitry V. Levin <ldv@altlinux.org> wrote:
+>
+> I've stumbled over the current macro-expand behaviour of the test
+> harness:
+>
+> $ gcc -Wall -xc - <<'__EOF__'
+> TEST(macro) {
+>         int status = 0;
+>         ASSERT_TRUE(WIFSIGNALED(status));
+> }
+> TEST_HARNESS_MAIN
+> __EOF__
+> $ ./a.out
+> [==========] Running 1 tests from 1 test cases.
+> [ RUN      ] global.macro
+> <stdin>:4:global.macro:Expected 0 (0) != (((signed char) (((status) & 0x7f) + 1) >> 1) > 0) (0)
+> global.macro: Test terminated by assertion
+> [     FAIL ] global.macro
+> [==========] 0 / 1 tests passed.
+> [  FAILED  ]
+>
+> With this change the output of the same test looks much more
+> comprehensible:
+>
+> [==========] Running 1 tests from 1 test cases.
+> [ RUN      ] global.macro
+> <stdin>:4:global.macro:Expected 0 (0) != WIFSIGNALED(status) (0)
+> global.macro: Test terminated by assertion
+> [     FAIL ] global.macro
+> [==========] 0 / 1 tests passed.
+> [  FAILED  ]
+>
+> The issue is very similar to the bug fixed in glibc assert(3)
+> three years ago:
+> https://sourceware.org/bugzilla/show_bug.cgi?id=18604
+>
+> Cc: Shuah Khan <shuah at kernel.org>
+> Cc: Kees Cook <keescook at chromium.org>
+> Cc: Andy Lutomirski <luto at amacapital.net>
+> Cc: Will Drewry <wad at chromium.org>
+> Cc: linux-kselftest at vger.kernel.org
+> Signed-off-by: Dmitry V. Levin <ldv at altlinux.org>
 
-This patchset proposes a relaxation of the ABI and a mechanism to
-advertise it to the userspace via an AT_FLAGS.
+Yeah, good idea.
 
-The rationale behind the choice of AT_FLAGS is that the Unix System V
-ABI defines AT_FLAGS as "flags", leaving some degree of freedom in
-interpretation.
-There are two previous attempts of using AT_FLAGS in the Linux Kernel
-for different reasons: the first was more generic and was used to expose
-the support for the GNU STACK NX feature [1] and the second was done for
-the MIPS architecture and was used to expose the support of "MIPS ABI
-Extension for IEEE Std 754 Non-Compliant Interlinking" [2].
-Both the changes are currently _not_ merged in mainline.
-The only architecture that reserves some of the bits in AT_FLAGS is
-currently MIPS, which introduced the concept of platform specific ABI
-(psABI) reserving the top-byte [3].
+Acked-by: Kees Cook <keescook at chromium.org>
 
-When ARM64_AT_FLAGS_SYSCALL_TBI is set the kernel is advertising
-to the userspace that a relaxed ABI is supported hence this type
-of pointers are now allowed to be passed to the syscalls when they are
-in memory ranges obtained by anonymous mmap() or brk().
+-Kees
 
-The userspace _must_ verify that the flag is set before passing tagged
-pointers to the syscalls allowed by this relaxation.
 
-More in general, exposing the ARM64_AT_FLAGS_SYSCALL_TBI flag and mandating
-to the software to check that the feature is present, before using the
-associated functionality, it provides a degree of control on the decision
-of disabling such a feature in future without consequently breaking the
-userspace.
+> ---
+>  tools/testing/selftests/kselftest_harness.h | 42 ++++++++++-----------
+>  1 file changed, 21 insertions(+), 21 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+> index 6ae3730c4ee3..76d654ef3234 100644
+> --- a/tools/testing/selftests/kselftest_harness.h
+> +++ b/tools/testing/selftests/kselftest_harness.h
+> @@ -354,7 +354,7 @@
+>   * ASSERT_EQ(expected, measured): expected == measured
+>   */
+>  #define ASSERT_EQ(expected, seen) \
+> -       __EXPECT(expected, seen, ==, 1)
+> +       __EXPECT(expected, #expected, seen, #seen, ==, 1)
+>
+>  /**
+>   * ASSERT_NE(expected, seen)
+> @@ -365,7 +365,7 @@
+>   * ASSERT_NE(expected, measured): expected != measured
+>   */
+>  #define ASSERT_NE(expected, seen) \
+> -       __EXPECT(expected, seen, !=, 1)
+> +       __EXPECT(expected, #expected, seen, #seen, !=, 1)
+>
+>  /**
+>   * ASSERT_LT(expected, seen)
+> @@ -376,7 +376,7 @@
+>   * ASSERT_LT(expected, measured): expected < measured
+>   */
+>  #define ASSERT_LT(expected, seen) \
+> -       __EXPECT(expected, seen, <, 1)
+> +       __EXPECT(expected, #expected, seen, #seen, <, 1)
+>
+>  /**
+>   * ASSERT_LE(expected, seen)
+> @@ -387,7 +387,7 @@
+>   * ASSERT_LE(expected, measured): expected <= measured
+>   */
+>  #define ASSERT_LE(expected, seen) \
+> -       __EXPECT(expected, seen, <=, 1)
+> +       __EXPECT(expected, #expected, seen, #seen, <=, 1)
+>
+>  /**
+>   * ASSERT_GT(expected, seen)
+> @@ -398,7 +398,7 @@
+>   * ASSERT_GT(expected, measured): expected > measured
+>   */
+>  #define ASSERT_GT(expected, seen) \
+> -       __EXPECT(expected, seen, >, 1)
+> +       __EXPECT(expected, #expected, seen, #seen, >, 1)
+>
+>  /**
+>   * ASSERT_GE(expected, seen)
+> @@ -409,7 +409,7 @@
+>   * ASSERT_GE(expected, measured): expected >= measured
+>   */
+>  #define ASSERT_GE(expected, seen) \
+> -       __EXPECT(expected, seen, >=, 1)
+> +       __EXPECT(expected, #expected, seen, #seen, >=, 1)
+>
+>  /**
+>   * ASSERT_NULL(seen)
+> @@ -419,7 +419,7 @@
+>   * ASSERT_NULL(measured): NULL == measured
+>   */
+>  #define ASSERT_NULL(seen) \
+> -       __EXPECT(NULL, seen, ==, 1)
+> +       __EXPECT(NULL, "NULL", seen, #seen, ==, 1)
+>
+>  /**
+>   * ASSERT_TRUE(seen)
+> @@ -429,7 +429,7 @@
+>   * ASSERT_TRUE(measured): measured != 0
+>   */
+>  #define ASSERT_TRUE(seen) \
+> -       ASSERT_NE(0, seen)
+> +       __EXPECT(0, "0", seen, #seen, !=, 1)
+>
+>  /**
+>   * ASSERT_FALSE(seen)
+> @@ -439,7 +439,7 @@
+>   * ASSERT_FALSE(measured): measured == 0
+>   */
+>  #define ASSERT_FALSE(seen) \
+> -       ASSERT_EQ(0, seen)
+> +       __EXPECT(0, "0", seen, #seen, ==, 1)
+>
+>  /**
+>   * ASSERT_STREQ(expected, seen)
+> @@ -472,7 +472,7 @@
+>   * EXPECT_EQ(expected, measured): expected == measured
+>   */
+>  #define EXPECT_EQ(expected, seen) \
+> -       __EXPECT(expected, seen, ==, 0)
+> +       __EXPECT(expected, #expected, seen, #seen, ==, 0)
+>
+>  /**
+>   * EXPECT_NE(expected, seen)
+> @@ -483,7 +483,7 @@
+>   * EXPECT_NE(expected, measured): expected != measured
+>   */
+>  #define EXPECT_NE(expected, seen) \
+> -       __EXPECT(expected, seen, !=, 0)
+> +       __EXPECT(expected, #expected, seen, #seen, !=, 0)
+>
+>  /**
+>   * EXPECT_LT(expected, seen)
+> @@ -494,7 +494,7 @@
+>   * EXPECT_LT(expected, measured): expected < measured
+>   */
+>  #define EXPECT_LT(expected, seen) \
+> -       __EXPECT(expected, seen, <, 0)
+> +       __EXPECT(expected, #expected, seen, #seen, <, 0)
+>
+>  /**
+>   * EXPECT_LE(expected, seen)
+> @@ -505,7 +505,7 @@
+>   * EXPECT_LE(expected, measured): expected <= measured
+>   */
+>  #define EXPECT_LE(expected, seen) \
+> -       __EXPECT(expected, seen, <=, 0)
+> +       __EXPECT(expected, #expected, seen, #seen, <=, 0)
+>
+>  /**
+>   * EXPECT_GT(expected, seen)
+> @@ -516,7 +516,7 @@
+>   * EXPECT_GT(expected, measured): expected > measured
+>   */
+>  #define EXPECT_GT(expected, seen) \
+> -       __EXPECT(expected, seen, >, 0)
+> +       __EXPECT(expected, #expected, seen, #seen, >, 0)
+>
+>  /**
+>   * EXPECT_GE(expected, seen)
+> @@ -527,7 +527,7 @@
+>   * EXPECT_GE(expected, measured): expected >= measured
+>   */
+>  #define EXPECT_GE(expected, seen) \
+> -       __EXPECT(expected, seen, >=, 0)
+> +       __EXPECT(expected, #expected, seen, #seen, >=, 0)
+>
+>  /**
+>   * EXPECT_NULL(seen)
+> @@ -537,7 +537,7 @@
+>   * EXPECT_NULL(measured): NULL == measured
+>   */
+>  #define EXPECT_NULL(seen) \
+> -       __EXPECT(NULL, seen, ==, 0)
+> +       __EXPECT(NULL, "NULL", seen, #seen, ==, 0)
+>
+>  /**
+>   * EXPECT_TRUE(seen)
+> @@ -547,7 +547,7 @@
+>   * EXPECT_TRUE(measured): 0 != measured
+>   */
+>  #define EXPECT_TRUE(seen) \
+> -       EXPECT_NE(0, seen)
+> +       __EXPECT(0, "0", seen, #seen, !=, 0)
+>
+>  /**
+>   * EXPECT_FALSE(seen)
+> @@ -557,7 +557,7 @@
+>   * EXPECT_FALSE(measured): 0 == measured
+>   */
+>  #define EXPECT_FALSE(seen) \
+> -       EXPECT_EQ(0, seen)
+> +       __EXPECT(0, "0", seen, #seen, ==, 0)
+>
+>  /**
+>   * EXPECT_STREQ(expected, seen)
+> @@ -597,7 +597,7 @@
+>         if (_metadata->passed && _metadata->step < 255) \
+>                 _metadata->step++;
+>
+> -#define __EXPECT(_expected, _seen, _t, _assert) do { \
+> +#define __EXPECT(_expected, _expected_str, _seen, _seen_str, _t, _assert) do { \
+>         /* Avoid multiple evaluation of the cases */ \
+>         __typeof__(_expected) __exp = (_expected); \
+>         __typeof__(_seen) __seen = (_seen); \
+> @@ -606,8 +606,8 @@
+>                 unsigned long long __exp_print = (uintptr_t)__exp; \
+>                 unsigned long long __seen_print = (uintptr_t)__seen; \
+>                 __TH_LOG("Expected %s (%llu) %s %s (%llu)", \
+> -                        #_expected, __exp_print, #_t, \
+> -                        #_seen, __seen_print); \
+> +                        _expected_str, __exp_print, #_t, \
+> +                        _seen_str, __seen_print); \
+>                 _metadata->passed = 0; \
+>                 /* Ensure the optional handler is triggered */ \
+>                 _metadata->trigger = 1; \
+> --
+> ldv
 
-The change required a modification of the elf common code, because in Linux
-the AT_FLAGS are currently set to zero by default by the kernel.
 
-The newly added flag has been verified on arm64 using the code below.
-#include <stdio.h>
-#include <stdbool.h>
-#include <sys/auxv.h>
 
-#define ARM64_AT_FLAGS_SYSCALL_TBI     (1 << 0)
-
-bool arm64_syscall_tbi_is_present(void)
-{
-        unsigned long at_flags = getauxval(AT_FLAGS);
-        if (at_flags & ARM64_AT_FLAGS_SYSCALL_TBI)
-                return true;
-
-        return false;
-}
-
-void main()
-{
-        if (arm64_syscall_tbi_is_present())
-                printf("ARM64_AT_FLAGS_SYSCALL_TBI is present\n");
-}
-
-This patchset should be merged together with [4].
-
-[1] https://patchwork.ozlabs.org/patch/579578/
-[2] https://lore.kernel.org/patchwork/cover/618280/
-[3] ftp://www.linux-mips.org/pub/linux/mips/doc/ABI/psABI_mips3.0.pdf
-[4] https://patchwork.kernel.org/cover/10674351/
-
-ABI References:
----------------
-Sco SysV ABI: http://www.sco.com/developers/gabi/2003-12-17/contents.html
-PowerPC AUXV: http://openpowerfoundation.org/wp-content/uploads/resources/leabi/content/dbdoclet.50655242_98651.html
-AMD64 ABI: https://www.cs.tufts.edu/comp/40-2012f/readings/amd64-abi.pdf
-x86 ABI: https://www.uclibc.org/docs/psABI-i386.pdf
-MIPS ABI: ftp://www.linux-mips.org/pub/linux/mips/doc/ABI/psABI_mips3.0.pdf
-ARM ABI: http://infocenter.arm.com/help/topic/com.arm.doc.ihi0044f/IHI0044F_aaelf.pdf
-SPARC ABI: http://math-atlas.sourceforge.net/devel/assembly/abi_sysV_sparc.pdf
-
-Cc: Catalin Marinas <catalin.marinas at arm.com>
-Cc: Will Deacon <will.deacon at arm.com>
-Cc: Mark Rutland <mark.rutland at arm.com>
-Cc: Robin Murphy <robin.murphy at arm.com>
-Cc: Kees Cook <keescook at chromium.org>
-Cc: Kate Stewart <kstewart at linuxfoundation.org>
-Cc: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
-Cc: Andrew Morton <akpm at linux-foundation.org>
-Cc: Ingo Molnar <mingo at kernel.org>
-Cc: "Kirill A . Shutemov" <kirill.shutemov at linux.intel.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Chintan Pandya <cpandya at codeaurora.org>
-Cc: Jacob Bramley <Jacob.Bramley at arm.com>
-Cc: Ruben Ayrapetyan <Ruben.Ayrapetyan at arm.com>
-Cc: Andrey Konovalov <andreyknvl at google.com>
-Cc: Lee Smith <Lee.Smith at arm.com>
-Cc: Kostya Serebryany <kcc at google.com>
-Cc: Dmitry Vyukov <dvyukov at google.com>,
-Cc: Ramana Radhakrishnan <Ramana.Radhakrishnan at arm.com>
-Cc: Luc Van Oostenryck <luc.vanoostenryck at gmail.com>
-Cc: Evgeniy Stepanov <eugenis at google.com>
-CC: Alexander Viro <viro at zeniv.linux.org.uk>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
-
-Vincenzo Frascino (3):
-  elf: Make AT_FLAGS arch configurable
-  arm64: Define Documentation/arm64/elf_at_flags.txt
-  arm64: elf: Advertise relaxed ABI
-
- Documentation/arm64/elf_at_flags.txt  | 111 ++++++++++++++++++++++++++
- arch/arm64/include/asm/atflags.h      |   7 ++
- arch/arm64/include/asm/elf.h          |   5 ++
- arch/arm64/include/uapi/asm/atflags.h |   8 ++
- fs/binfmt_elf.c                       |   6 +-
- fs/binfmt_elf_fdpic.c                 |   6 +-
- fs/compat_binfmt_elf.c                |   5 ++
- 7 files changed, 146 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/arm64/elf_at_flags.txt
- create mode 100644 arch/arm64/include/asm/atflags.h
- create mode 100644 arch/arm64/include/uapi/asm/atflags.h
-
--- 
-2.19.2
+--
+Kees Cook
