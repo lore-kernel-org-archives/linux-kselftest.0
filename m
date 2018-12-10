@@ -1,322 +1,37 @@
-From: ldv at altlinux.org (Dmitry V. Levin)
-Date: Mon, 10 Dec 2018 07:31:33 +0300
-Subject: [PATCH v5 25/25] selftests/ptrace: add a test case for
- PTRACE_GET_SYSCALL_INFO
-References: <20181210042352.GA6092@altlinux.org>
-Message-ID: <20181210043133.GY6131@altlinux.org>
+From: andreyknvl at google.com (Andrey Konovalov)
+Date: Mon, 10 Dec 2018 13:50:59 +0100
+Subject: [PATCH v9 2/8] uaccess: add untagged_addr definition for other arches
+In-Reply-To: <cover.1544445454.git.andreyknvl@google.com>
+References: <cover.1544445454.git.andreyknvl@google.com>
+Message-ID: <35f97a89d5cc881f0f4052f43d56b3b7ed736581.1544445454.git.andreyknvl@google.com>
 
-Check whether PTRACE_GET_SYSCALL_INFO semantics implemented in the kernel
-matches userspace expectations.
+To allow arm64 syscalls accept tagged pointers from userspace, we must
+untag them when they are passed to the kernel. Since untagging is done in
+generic parts of the kernel, the untagged_addr macro needs to be defined
+for all architectures.
 
-Cc: Oleg Nesterov <oleg at redhat.com>
-Cc: Andy Lutomirski <luto at kernel.org>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Elvira Khabirova <lineprinter at altlinux.org>
-Cc: Eugene Syromyatnikov <esyr at redhat.com>
-Cc: linux-kselftest at vger.kernel.org
-Signed-off-by: Dmitry V. Levin <ldv at altlinux.org>
+Define it as a noop for other architectures besides arm64.
+
+Acked-by: Catalin Marinas <catalin.marinas at arm.com>
+Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- tools/testing/selftests/ptrace/.gitignore     |   1 +
- tools/testing/selftests/ptrace/Makefile       |   2 +-
- .../selftests/ptrace/get_syscall_info.c       | 272 ++++++++++++++++++
- 3 files changed, 274 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/ptrace/get_syscall_info.c
+ include/linux/uaccess.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/ptrace/.gitignore b/tools/testing/selftests/ptrace/.gitignore
-index b3e59d41fd82..cfcc49a7def7 100644
---- a/tools/testing/selftests/ptrace/.gitignore
-+++ b/tools/testing/selftests/ptrace/.gitignore
-@@ -1 +1,2 @@
-+get_syscall_info
- peeksiginfo
-diff --git a/tools/testing/selftests/ptrace/Makefile b/tools/testing/selftests/ptrace/Makefile
-index 8a2bc5562179..4bc550b6b845 100644
---- a/tools/testing/selftests/ptrace/Makefile
-+++ b/tools/testing/selftests/ptrace/Makefile
-@@ -1,5 +1,5 @@
- CFLAGS += -iquote../../../../include/uapi -Wall
+diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+index efe79c1cdd47..42b7a4ac65e2 100644
+--- a/include/linux/uaccess.h
++++ b/include/linux/uaccess.h
+@@ -13,6 +13,10 @@
  
--TEST_GEN_PROGS := peeksiginfo
-+TEST_GEN_PROGS := get_syscall_info peeksiginfo
+ #include <asm/uaccess.h>
  
- include ../lib.mk
-diff --git a/tools/testing/selftests/ptrace/get_syscall_info.c b/tools/testing/selftests/ptrace/get_syscall_info.c
-new file mode 100644
-index 000000000000..21d1180d117e
---- /dev/null
-+++ b/tools/testing/selftests/ptrace/get_syscall_info.c
-@@ -0,0 +1,272 @@
-+/*
-+ * SPDX-License-Identifier: GPL-2.0-or-later
-+ *
-+ * Copyright (c) 2018 Dmitry V. Levin <ldv at altlinux.org>
-+ * All rights reserved.
-+ *
-+ * Check whether PTRACE_GET_SYSCALL_INFO semantics implemented in the kernel
-+ * matches userspace expectations.
-+ */
++#ifndef untagged_addr
++#define untagged_addr(addr) (addr)
++#endif
 +
-+#include "../kselftest_harness.h"
-+#include <err.h>
-+#include <signal.h>
-+#include <asm/unistd.h>
-+#include "linux/ptrace.h"
-+
-+static int
-+kill_tracee(pid_t pid)
-+{
-+	if (!pid)
-+		return 0;
-+
-+	int saved_errno = errno;
-+
-+	int rc = kill(pid, SIGKILL);
-+
-+	errno = saved_errno;
-+	return rc;
-+}
-+
-+static long
-+sys_ptrace(int request, pid_t pid, unsigned long addr, unsigned long data)
-+{
-+	return syscall(__NR_ptrace, request, pid, addr, data);
-+}
-+
-+#define LOG_KILL_TRACEE(fmt, ...)				\
-+	do {							\
-+		kill_tracee(pid);				\
-+		TH_LOG("wait #%d: " fmt,			\
-+		       ptrace_stop, ##__VA_ARGS__);		\
-+	} while (0)
-+
-+TEST(get_syscall_info)
-+{
-+	static const unsigned long args[][7] = {
-+		/* a sequence of architecture-agnostic syscalls */
-+		{
-+			__NR_chdir,
-+			(unsigned long) "",
-+			0xbad1fed1,
-+			0xbad2fed2,
-+			0xbad3fed3,
-+			0xbad4fed4,
-+			0xbad5fed5
-+		},
-+		{
-+			__NR_gettid,
-+			0xcaf0bea0,
-+			0xcaf1bea1,
-+			0xcaf2bea2,
-+			0xcaf3bea3,
-+			0xcaf4bea4,
-+			0xcaf5bea5
-+		},
-+		{
-+			__NR_exit_group,
-+			0,
-+			0xfac1c0d1,
-+			0xfac2c0d2,
-+			0xfac3c0d3,
-+			0xfac4c0d4,
-+			0xfac5c0d5
-+		}
-+	};
-+	const unsigned long *exp_args;
-+
-+	pid_t pid = fork();
-+
-+	ASSERT_LE(0, pid) {
-+		TH_LOG("fork: %m");
-+	}
-+
-+	if (pid == 0) {
-+		/* get the pid before PTRACE_TRACEME */
-+		pid = getpid();
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_TRACEME, 0, 0, 0)) {
-+			TH_LOG("PTRACE_TRACEME: %m");
-+		}
-+		ASSERT_EQ(0, kill(pid, SIGSTOP)) {
-+			/* cannot happen */
-+			TH_LOG("kill SIGSTOP: %m");
-+		}
-+		for (unsigned int i = 0; i < ARRAY_SIZE(args); ++i) {
-+			syscall(args[i][0],
-+				args[i][1], args[i][2], args[i][3],
-+				args[i][4], args[i][5], args[i][6]);
-+		}
-+		/* unreachable */
-+		_exit(1);
-+	}
-+
-+	const struct {
-+		unsigned int is_error;
-+		int rval;
-+	} *exp_param, exit_param[] = {
-+		{ 1, -ENOENT },	/* chdir */
-+		{ 0, pid }	/* gettid */
-+	};
-+
-+	unsigned int ptrace_stop;
-+
-+	for (ptrace_stop = 0; ; ++ptrace_stop) {
-+		struct ptrace_syscall_info info = {
-+			.op = 0xff	/* invalid PTRACE_SYSCALL_INFO_* op */
-+		};
-+		const size_t size = sizeof(info);
-+		const int expected_none_size =
-+			(void *) &info.entry - (void *) &info;
-+		const int expected_entry_size =
-+			(void *) &info.entry.args[6] - (void *) &info;
-+		const int expected_exit_size =
-+			(void *) (&info.exit.is_error + 1) -
-+			(void *) &info;
-+		int status;
-+		long rc;
-+
-+		ASSERT_EQ(pid, wait(&status)) {
-+			/* cannot happen */
-+			LOG_KILL_TRACEE("wait: %m");
-+		}
-+		if (WIFEXITED(status)) {
-+			pid = 0;	/* the tracee is no more */
-+			ASSERT_EQ(0, WEXITSTATUS(status));
-+			break;
-+		}
-+		ASSERT_FALSE(WIFSIGNALED(status)) {
-+			pid = 0;	/* the tracee is no more */
-+			LOG_KILL_TRACEE("unexpected signal %u",
-+					WTERMSIG(status));
-+		}
-+		ASSERT_TRUE(WIFSTOPPED(status)) {
-+			/* cannot happen */
-+			LOG_KILL_TRACEE("unexpected wait status %#x", status);
-+		}
-+
-+		switch (WSTOPSIG(status)) {
-+		case SIGSTOP:
-+			ASSERT_EQ(0, ptrace_stop) {
-+				LOG_KILL_TRACEE("unexpected signal stop");
-+			}
-+			ASSERT_EQ(0, sys_ptrace(PTRACE_SETOPTIONS, pid, 0,
-+						PTRACE_O_TRACESYSGOOD)) {
-+				LOG_KILL_TRACEE("PTRACE_SETOPTIONS: %m");
-+			}
-+			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
-+						      pid, size,
-+						      (unsigned long) &info))) {
-+				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
-+			}
-+			ASSERT_LE(expected_none_size, rc) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_EQ(PTRACE_SYSCALL_INFO_NONE, info.op) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_TRUE(info.arch) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_TRUE(info.instruction_pointer) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_TRUE(info.stack_pointer) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			break;
-+
-+		case SIGTRAP | 0x80:
-+			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
-+						      pid, size,
-+						      (unsigned long) &info))) {
-+				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
-+			}
-+			switch (ptrace_stop) {
-+			case 1: /* entering chdir */
-+			case 3: /* entering gettid */
-+			case 5: /* entering exit_group */
-+				exp_args = args[ptrace_stop / 2];
-+				ASSERT_LE(expected_entry_size, rc) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(PTRACE_SYSCALL_INFO_ENTRY, info.op) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.arch) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.instruction_pointer) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.stack_pointer) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[0], info.entry.nr) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[1], info.entry.args[0]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[2], info.entry.args[1]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[3], info.entry.args[2]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[4], info.entry.args[3]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[5], info.entry.args[4]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[6], info.entry.args[5]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				break;
-+			case 2: /* exiting chdir */
-+			case 4: /* exiting gettid */
-+				exp_param = &exit_param[ptrace_stop / 2 - 1];
-+				ASSERT_LE(expected_exit_size, rc) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(PTRACE_SYSCALL_INFO_EXIT, info.op) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.arch) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.instruction_pointer) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.stack_pointer) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(exp_param->is_error,
-+					  info.exit.is_error) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(exp_param->rval, info.exit.rval) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				break;
-+			default:
-+				LOG_KILL_TRACEE("unexpected syscall stop");
-+				abort();
-+			}
-+			break;
-+
-+		default:
-+			LOG_KILL_TRACEE("unexpected stop signal %#x",
-+					WSTOPSIG(status));
-+			abort();
-+		}
-+
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_SYSCALL, pid, 0, 0)) {
-+			LOG_KILL_TRACEE("PTRACE_SYSCALL: %m");
-+		}
-+	}
-+
-+	ASSERT_EQ(ARRAY_SIZE(args) * 2, ptrace_stop);
-+}
-+
-+TEST_HARNESS_MAIN
+ /*
+  * Architectures should provide two primitives (raw_copy_{to,from}_user())
+  * and get rid of their private instances of copy_{to,from}_user() and
 -- 
-ldv
+2.20.0.rc2.403.gdbc3b29805-goog
