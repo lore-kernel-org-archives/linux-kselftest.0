@@ -1,48 +1,43 @@
 From: andreyknvl at google.com (Andrey Konovalov)
-Date: Mon, 10 Dec 2018 13:51:02 +0100
-Subject: [PATCH v9 5/8] lib,
- arm64: untag addrs passed to strncpy_from_user and strnlen_user
+Date: Mon, 10 Dec 2018 13:51:01 +0100
+Subject: [PATCH v9 4/8] mm, arm64: untag user addresses in mm/gup.c
 In-Reply-To: <cover.1544445454.git.andreyknvl@google.com>
 References: <cover.1544445454.git.andreyknvl@google.com>
-Message-ID: <2c573564b456327708d175f3124256bc71081bd8.1544445454.git.andreyknvl@google.com>
+Message-ID: <f67011f11f676bf7b947bf819273e22b828b9b9b.1544445454.git.andreyknvl@google.com>
 
-strncpy_from_user and strnlen_user accept user addresses as arguments, and
-do not go through the same path as copy_from_user and others, so here we
-need to handle the case of tagged user addresses separately.
+mm/gup.c provides a kernel interface that accepts user addresses and
+manipulates user pages directly (for example get_user_pages, that is used
+by the futex syscall). Since a user can provided tagged addresses, we need
+to handle such case.
 
-Untag user pointers passed to these functions.
+Add untagging to gup.c functions that use user addresses for vma lookup.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- lib/strncpy_from_user.c | 2 ++
- lib/strnlen_user.c      | 2 ++
- 2 files changed, 4 insertions(+)
+ mm/gup.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/lib/strncpy_from_user.c b/lib/strncpy_from_user.c
-index b53e1b5d80f4..97467cd2bc59 100644
---- a/lib/strncpy_from_user.c
-+++ b/lib/strncpy_from_user.c
-@@ -106,6 +106,8 @@ long strncpy_from_user(char *dst, const char __user *src, long count)
- 	if (unlikely(count <= 0))
+diff --git a/mm/gup.c b/mm/gup.c
+index 8cb68a50dbdf..409aedb1e2d5 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -683,6 +683,8 @@ static long __get_user_pages(struct task_struct *tsk, struct mm_struct *mm,
+ 	if (!nr_pages)
  		return 0;
  
-+	src = untagged_addr(src);
++	start = untagged_addr(start);
 +
- 	max_addr = user_addr_max();
- 	src_addr = (unsigned long)src;
- 	if (likely(src_addr < max_addr)) {
-diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
-index 60d0bbda8f5e..8b5f56466e00 100644
---- a/lib/strnlen_user.c
-+++ b/lib/strnlen_user.c
-@@ -108,6 +108,8 @@ long strnlen_user(const char __user *str, long count)
- 	if (unlikely(count <= 0))
- 		return 0;
+ 	VM_BUG_ON(!!pages != !!(gup_flags & FOLL_GET));
  
-+	str = untagged_addr(str);
+ 	/*
+@@ -845,6 +847,8 @@ int fixup_user_fault(struct task_struct *tsk, struct mm_struct *mm,
+ 	struct vm_area_struct *vma;
+ 	vm_fault_t ret, major = 0;
+ 
++	address = untagged_addr(address);
 +
- 	max_addr = user_addr_max();
- 	src_addr = (unsigned long)str;
- 	if (likely(src_addr < max_addr)) {
+ 	if (unlocked)
+ 		fault_flags |= FAULT_FLAG_ALLOW_RETRY;
+ 
 -- 
 2.20.0.rc2.403.gdbc3b29805-goog
