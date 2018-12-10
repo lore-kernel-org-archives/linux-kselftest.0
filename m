@@ -1,239 +1,324 @@
 From: ldv@altlinux.org (Dmitry V. Levin)
-Date: Mon, 10 Dec 2018 02:00:47 +0300
-Subject: [PATCH] selftests: do not macro-expand failed assertion expressions
-Message-ID: <20181209230047.GA1738@altlinux.org>
+Date: Mon, 10 Dec 2018 07:31:33 +0300
+Subject: [PATCH v5 25/25] selftests/ptrace: add a test case for
+ PTRACE_GET_SYSCALL_INFO
+References: <20181210042352.GA6092@altlinux.org>
+Message-ID: <20181210043133.GY6131@altlinux.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181209230047._XcdHiOFGLpO6XguezQ1fsRKmnPQFwD2hTRN8AphWXI@z>
+Message-ID: <20181210043133.KXLBtvZ0h7YDRAl5chh-41W-aOcyNjSgPWzdTQB6h_U@z>
 
-I've stumbled over the current macro-expand behaviour of the test
-harness:
+Check whether PTRACE_GET_SYSCALL_INFO semantics implemented in the kernel
+matches userspace expectations.
 
-$ gcc -Wall -xc - <<'__EOF__'
-TEST(macro) {
-	int status = 0;
-	ASSERT_TRUE(WIFSIGNALED(status));
-}
-TEST_HARNESS_MAIN
-__EOF__
-$ ./a.out
-[==========] Running 1 tests from 1 test cases.
-[ RUN      ] global.macro
-<stdin>:4:global.macro:Expected 0 (0) != (((signed char) (((status) & 0x7f) + 1) >> 1) > 0) (0)
-global.macro: Test terminated by assertion
-[     FAIL ] global.macro
-[==========] 0 / 1 tests passed.
-[  FAILED  ]
-
-With this change the output of the same test looks much more
-comprehensible:
-
-[==========] Running 1 tests from 1 test cases.
-[ RUN      ] global.macro
-<stdin>:4:global.macro:Expected 0 (0) != WIFSIGNALED(status) (0)
-global.macro: Test terminated by assertion
-[     FAIL ] global.macro
-[==========] 0 / 1 tests passed.
-[  FAILED  ]
-
-The issue is very similar to the bug fixed in glibc assert(3)
-three years ago:
-https://sourceware.org/bugzilla/show_bug.cgi?id=18604
-
+Cc: Oleg Nesterov <oleg at redhat.com>
+Cc: Andy Lutomirski <luto at kernel.org>
 Cc: Shuah Khan <shuah at kernel.org>
-Cc: Kees Cook <keescook at chromium.org>
-Cc: Andy Lutomirski <luto at amacapital.net>
-Cc: Will Drewry <wad at chromium.org>
+Cc: Elvira Khabirova <lineprinter at altlinux.org>
+Cc: Eugene Syromyatnikov <esyr at redhat.com>
 Cc: linux-kselftest at vger.kernel.org
 Signed-off-by: Dmitry V. Levin <ldv at altlinux.org>
 ---
- tools/testing/selftests/kselftest_harness.h | 42 ++++++++++-----------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+ tools/testing/selftests/ptrace/.gitignore     |   1 +
+ tools/testing/selftests/ptrace/Makefile       |   2 +-
+ .../selftests/ptrace/get_syscall_info.c       | 272 ++++++++++++++++++
+ 3 files changed, 274 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/ptrace/get_syscall_info.c
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 6ae3730c4ee3..76d654ef3234 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -354,7 +354,7 @@
-  * ASSERT_EQ(expected, measured): expected == measured
-  */
- #define ASSERT_EQ(expected, seen) \
--	__EXPECT(expected, seen, ==, 1)
-+	__EXPECT(expected, #expected, seen, #seen, ==, 1)
+diff --git a/tools/testing/selftests/ptrace/.gitignore b/tools/testing/selftests/ptrace/.gitignore
+index b3e59d41fd82..cfcc49a7def7 100644
+--- a/tools/testing/selftests/ptrace/.gitignore
++++ b/tools/testing/selftests/ptrace/.gitignore
+@@ -1 +1,2 @@
++get_syscall_info
+ peeksiginfo
+diff --git a/tools/testing/selftests/ptrace/Makefile b/tools/testing/selftests/ptrace/Makefile
+index 8a2bc5562179..4bc550b6b845 100644
+--- a/tools/testing/selftests/ptrace/Makefile
++++ b/tools/testing/selftests/ptrace/Makefile
+@@ -1,5 +1,5 @@
+ CFLAGS += -iquote../../../../include/uapi -Wall
  
- /**
-  * ASSERT_NE(expected, seen)
-@@ -365,7 +365,7 @@
-  * ASSERT_NE(expected, measured): expected != measured
-  */
- #define ASSERT_NE(expected, seen) \
--	__EXPECT(expected, seen, !=, 1)
-+	__EXPECT(expected, #expected, seen, #seen, !=, 1)
+-TEST_GEN_PROGS := peeksiginfo
++TEST_GEN_PROGS := get_syscall_info peeksiginfo
  
- /**
-  * ASSERT_LT(expected, seen)
-@@ -376,7 +376,7 @@
-  * ASSERT_LT(expected, measured): expected < measured
-  */
- #define ASSERT_LT(expected, seen) \
--	__EXPECT(expected, seen, <, 1)
-+	__EXPECT(expected, #expected, seen, #seen, <, 1)
- 
- /**
-  * ASSERT_LE(expected, seen)
-@@ -387,7 +387,7 @@
-  * ASSERT_LE(expected, measured): expected <= measured
-  */
- #define ASSERT_LE(expected, seen) \
--	__EXPECT(expected, seen, <=, 1)
-+	__EXPECT(expected, #expected, seen, #seen, <=, 1)
- 
- /**
-  * ASSERT_GT(expected, seen)
-@@ -398,7 +398,7 @@
-  * ASSERT_GT(expected, measured): expected > measured
-  */
- #define ASSERT_GT(expected, seen) \
--	__EXPECT(expected, seen, >, 1)
-+	__EXPECT(expected, #expected, seen, #seen, >, 1)
- 
- /**
-  * ASSERT_GE(expected, seen)
-@@ -409,7 +409,7 @@
-  * ASSERT_GE(expected, measured): expected >= measured
-  */
- #define ASSERT_GE(expected, seen) \
--	__EXPECT(expected, seen, >=, 1)
-+	__EXPECT(expected, #expected, seen, #seen, >=, 1)
- 
- /**
-  * ASSERT_NULL(seen)
-@@ -419,7 +419,7 @@
-  * ASSERT_NULL(measured): NULL == measured
-  */
- #define ASSERT_NULL(seen) \
--	__EXPECT(NULL, seen, ==, 1)
-+	__EXPECT(NULL, "NULL", seen, #seen, ==, 1)
- 
- /**
-  * ASSERT_TRUE(seen)
-@@ -429,7 +429,7 @@
-  * ASSERT_TRUE(measured): measured != 0
-  */
- #define ASSERT_TRUE(seen) \
--	ASSERT_NE(0, seen)
-+	__EXPECT(0, "0", seen, #seen, !=, 1)
- 
- /**
-  * ASSERT_FALSE(seen)
-@@ -439,7 +439,7 @@
-  * ASSERT_FALSE(measured): measured == 0
-  */
- #define ASSERT_FALSE(seen) \
--	ASSERT_EQ(0, seen)
-+	__EXPECT(0, "0", seen, #seen, ==, 1)
- 
- /**
-  * ASSERT_STREQ(expected, seen)
-@@ -472,7 +472,7 @@
-  * EXPECT_EQ(expected, measured): expected == measured
-  */
- #define EXPECT_EQ(expected, seen) \
--	__EXPECT(expected, seen, ==, 0)
-+	__EXPECT(expected, #expected, seen, #seen, ==, 0)
- 
- /**
-  * EXPECT_NE(expected, seen)
-@@ -483,7 +483,7 @@
-  * EXPECT_NE(expected, measured): expected != measured
-  */
- #define EXPECT_NE(expected, seen) \
--	__EXPECT(expected, seen, !=, 0)
-+	__EXPECT(expected, #expected, seen, #seen, !=, 0)
- 
- /**
-  * EXPECT_LT(expected, seen)
-@@ -494,7 +494,7 @@
-  * EXPECT_LT(expected, measured): expected < measured
-  */
- #define EXPECT_LT(expected, seen) \
--	__EXPECT(expected, seen, <, 0)
-+	__EXPECT(expected, #expected, seen, #seen, <, 0)
- 
- /**
-  * EXPECT_LE(expected, seen)
-@@ -505,7 +505,7 @@
-  * EXPECT_LE(expected, measured): expected <= measured
-  */
- #define EXPECT_LE(expected, seen) \
--	__EXPECT(expected, seen, <=, 0)
-+	__EXPECT(expected, #expected, seen, #seen, <=, 0)
- 
- /**
-  * EXPECT_GT(expected, seen)
-@@ -516,7 +516,7 @@
-  * EXPECT_GT(expected, measured): expected > measured
-  */
- #define EXPECT_GT(expected, seen) \
--	__EXPECT(expected, seen, >, 0)
-+	__EXPECT(expected, #expected, seen, #seen, >, 0)
- 
- /**
-  * EXPECT_GE(expected, seen)
-@@ -527,7 +527,7 @@
-  * EXPECT_GE(expected, measured): expected >= measured
-  */
- #define EXPECT_GE(expected, seen) \
--	__EXPECT(expected, seen, >=, 0)
-+	__EXPECT(expected, #expected, seen, #seen, >=, 0)
- 
- /**
-  * EXPECT_NULL(seen)
-@@ -537,7 +537,7 @@
-  * EXPECT_NULL(measured): NULL == measured
-  */
- #define EXPECT_NULL(seen) \
--	__EXPECT(NULL, seen, ==, 0)
-+	__EXPECT(NULL, "NULL", seen, #seen, ==, 0)
- 
- /**
-  * EXPECT_TRUE(seen)
-@@ -547,7 +547,7 @@
-  * EXPECT_TRUE(measured): 0 != measured
-  */
- #define EXPECT_TRUE(seen) \
--	EXPECT_NE(0, seen)
-+	__EXPECT(0, "0", seen, #seen, !=, 0)
- 
- /**
-  * EXPECT_FALSE(seen)
-@@ -557,7 +557,7 @@
-  * EXPECT_FALSE(measured): 0 == measured
-  */
- #define EXPECT_FALSE(seen) \
--	EXPECT_EQ(0, seen)
-+	__EXPECT(0, "0", seen, #seen, ==, 0)
- 
- /**
-  * EXPECT_STREQ(expected, seen)
-@@ -597,7 +597,7 @@
- 	if (_metadata->passed && _metadata->step < 255) \
- 		_metadata->step++;
- 
--#define __EXPECT(_expected, _seen, _t, _assert) do { \
-+#define __EXPECT(_expected, _expected_str, _seen, _seen_str, _t, _assert) do { \
- 	/* Avoid multiple evaluation of the cases */ \
- 	__typeof__(_expected) __exp = (_expected); \
- 	__typeof__(_seen) __seen = (_seen); \
-@@ -606,8 +606,8 @@
- 		unsigned long long __exp_print = (uintptr_t)__exp; \
- 		unsigned long long __seen_print = (uintptr_t)__seen; \
- 		__TH_LOG("Expected %s (%llu) %s %s (%llu)", \
--			 #_expected, __exp_print, #_t, \
--			 #_seen, __seen_print); \
-+			 _expected_str, __exp_print, #_t, \
-+			 _seen_str, __seen_print); \
- 		_metadata->passed = 0; \
- 		/* Ensure the optional handler is triggered */ \
- 		_metadata->trigger = 1; \
+ include ../lib.mk
+diff --git a/tools/testing/selftests/ptrace/get_syscall_info.c b/tools/testing/selftests/ptrace/get_syscall_info.c
+new file mode 100644
+index 000000000000..21d1180d117e
+--- /dev/null
++++ b/tools/testing/selftests/ptrace/get_syscall_info.c
+@@ -0,0 +1,272 @@
++/*
++ * SPDX-License-Identifier: GPL-2.0-or-later
++ *
++ * Copyright (c) 2018 Dmitry V. Levin <ldv at altlinux.org>
++ * All rights reserved.
++ *
++ * Check whether PTRACE_GET_SYSCALL_INFO semantics implemented in the kernel
++ * matches userspace expectations.
++ */
++
++#include "../kselftest_harness.h"
++#include <err.h>
++#include <signal.h>
++#include <asm/unistd.h>
++#include "linux/ptrace.h"
++
++static int
++kill_tracee(pid_t pid)
++{
++	if (!pid)
++		return 0;
++
++	int saved_errno = errno;
++
++	int rc = kill(pid, SIGKILL);
++
++	errno = saved_errno;
++	return rc;
++}
++
++static long
++sys_ptrace(int request, pid_t pid, unsigned long addr, unsigned long data)
++{
++	return syscall(__NR_ptrace, request, pid, addr, data);
++}
++
++#define LOG_KILL_TRACEE(fmt, ...)				\
++	do {							\
++		kill_tracee(pid);				\
++		TH_LOG("wait #%d: " fmt,			\
++		       ptrace_stop, ##__VA_ARGS__);		\
++	} while (0)
++
++TEST(get_syscall_info)
++{
++	static const unsigned long args[][7] = {
++		/* a sequence of architecture-agnostic syscalls */
++		{
++			__NR_chdir,
++			(unsigned long) "",
++			0xbad1fed1,
++			0xbad2fed2,
++			0xbad3fed3,
++			0xbad4fed4,
++			0xbad5fed5
++		},
++		{
++			__NR_gettid,
++			0xcaf0bea0,
++			0xcaf1bea1,
++			0xcaf2bea2,
++			0xcaf3bea3,
++			0xcaf4bea4,
++			0xcaf5bea5
++		},
++		{
++			__NR_exit_group,
++			0,
++			0xfac1c0d1,
++			0xfac2c0d2,
++			0xfac3c0d3,
++			0xfac4c0d4,
++			0xfac5c0d5
++		}
++	};
++	const unsigned long *exp_args;
++
++	pid_t pid = fork();
++
++	ASSERT_LE(0, pid) {
++		TH_LOG("fork: %m");
++	}
++
++	if (pid == 0) {
++		/* get the pid before PTRACE_TRACEME */
++		pid = getpid();
++		ASSERT_EQ(0, sys_ptrace(PTRACE_TRACEME, 0, 0, 0)) {
++			TH_LOG("PTRACE_TRACEME: %m");
++		}
++		ASSERT_EQ(0, kill(pid, SIGSTOP)) {
++			/* cannot happen */
++			TH_LOG("kill SIGSTOP: %m");
++		}
++		for (unsigned int i = 0; i < ARRAY_SIZE(args); ++i) {
++			syscall(args[i][0],
++				args[i][1], args[i][2], args[i][3],
++				args[i][4], args[i][5], args[i][6]);
++		}
++		/* unreachable */
++		_exit(1);
++	}
++
++	const struct {
++		unsigned int is_error;
++		int rval;
++	} *exp_param, exit_param[] = {
++		{ 1, -ENOENT },	/* chdir */
++		{ 0, pid }	/* gettid */
++	};
++
++	unsigned int ptrace_stop;
++
++	for (ptrace_stop = 0; ; ++ptrace_stop) {
++		struct ptrace_syscall_info info = {
++			.op = 0xff	/* invalid PTRACE_SYSCALL_INFO_* op */
++		};
++		const size_t size = sizeof(info);
++		const int expected_none_size =
++			(void *) &info.entry - (void *) &info;
++		const int expected_entry_size =
++			(void *) &info.entry.args[6] - (void *) &info;
++		const int expected_exit_size =
++			(void *) (&info.exit.is_error + 1) -
++			(void *) &info;
++		int status;
++		long rc;
++
++		ASSERT_EQ(pid, wait(&status)) {
++			/* cannot happen */
++			LOG_KILL_TRACEE("wait: %m");
++		}
++		if (WIFEXITED(status)) {
++			pid = 0;	/* the tracee is no more */
++			ASSERT_EQ(0, WEXITSTATUS(status));
++			break;
++		}
++		ASSERT_FALSE(WIFSIGNALED(status)) {
++			pid = 0;	/* the tracee is no more */
++			LOG_KILL_TRACEE("unexpected signal %u",
++					WTERMSIG(status));
++		}
++		ASSERT_TRUE(WIFSTOPPED(status)) {
++			/* cannot happen */
++			LOG_KILL_TRACEE("unexpected wait status %#x", status);
++		}
++
++		switch (WSTOPSIG(status)) {
++		case SIGSTOP:
++			ASSERT_EQ(0, ptrace_stop) {
++				LOG_KILL_TRACEE("unexpected signal stop");
++			}
++			ASSERT_EQ(0, sys_ptrace(PTRACE_SETOPTIONS, pid, 0,
++						PTRACE_O_TRACESYSGOOD)) {
++				LOG_KILL_TRACEE("PTRACE_SETOPTIONS: %m");
++			}
++			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
++						      pid, size,
++						      (unsigned long) &info))) {
++				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
++			}
++			ASSERT_LE(expected_none_size, rc) {
++				LOG_KILL_TRACEE("signal stop mismatch");
++			}
++			ASSERT_EQ(PTRACE_SYSCALL_INFO_NONE, info.op) {
++				LOG_KILL_TRACEE("signal stop mismatch");
++			}
++			ASSERT_TRUE(info.arch) {
++				LOG_KILL_TRACEE("signal stop mismatch");
++			}
++			ASSERT_TRUE(info.instruction_pointer) {
++				LOG_KILL_TRACEE("signal stop mismatch");
++			}
++			ASSERT_TRUE(info.stack_pointer) {
++				LOG_KILL_TRACEE("signal stop mismatch");
++			}
++			break;
++
++		case SIGTRAP | 0x80:
++			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
++						      pid, size,
++						      (unsigned long) &info))) {
++				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
++			}
++			switch (ptrace_stop) {
++			case 1: /* entering chdir */
++			case 3: /* entering gettid */
++			case 5: /* entering exit_group */
++				exp_args = args[ptrace_stop / 2];
++				ASSERT_LE(expected_entry_size, rc) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_EQ(PTRACE_SYSCALL_INFO_ENTRY, info.op) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_TRUE(info.arch) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_TRUE(info.instruction_pointer) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_TRUE(info.stack_pointer) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_EQ(exp_args[0], info.entry.nr) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_EQ(exp_args[1], info.entry.args[0]) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_EQ(exp_args[2], info.entry.args[1]) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_EQ(exp_args[3], info.entry.args[2]) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_EQ(exp_args[4], info.entry.args[3]) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_EQ(exp_args[5], info.entry.args[4]) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_EQ(exp_args[6], info.entry.args[5]) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				break;
++			case 2: /* exiting chdir */
++			case 4: /* exiting gettid */
++				exp_param = &exit_param[ptrace_stop / 2 - 1];
++				ASSERT_LE(expected_exit_size, rc) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				ASSERT_EQ(PTRACE_SYSCALL_INFO_EXIT, info.op) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				ASSERT_TRUE(info.arch) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				ASSERT_TRUE(info.instruction_pointer) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				ASSERT_TRUE(info.stack_pointer) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				ASSERT_EQ(exp_param->is_error,
++					  info.exit.is_error) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				ASSERT_EQ(exp_param->rval, info.exit.rval) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				break;
++			default:
++				LOG_KILL_TRACEE("unexpected syscall stop");
++				abort();
++			}
++			break;
++
++		default:
++			LOG_KILL_TRACEE("unexpected stop signal %#x",
++					WSTOPSIG(status));
++			abort();
++		}
++
++		ASSERT_EQ(0, sys_ptrace(PTRACE_SYSCALL, pid, 0, 0)) {
++			LOG_KILL_TRACEE("PTRACE_SYSCALL: %m");
++		}
++	}
++
++	ASSERT_EQ(ARRAY_SIZE(args) * 2, ptrace_stop);
++}
++
++TEST_HARNESS_MAIN
 -- 
 ldv
