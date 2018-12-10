@@ -1,22 +1,95 @@
-From: kirill@shutemov.name (Kirill A. Shutemov)
-Date: Mon, 10 Dec 2018 16:30:18 +0300
-Subject: [PATCH] selftests/vm/gup_benchmark.c: match gup struct to kernel
-In-Reply-To: <20181208020645.GA28467@alison-desk.jf.intel.com>
-References: <20181208020645.GA28467@alison-desk.jf.intel.com>
-Message-ID: <20181210133018.hfvjodnsagkdsiwj@kshutemo-mobl1>
+From: vincenzo.frascino@arm.com (Vincenzo Frascino)
+Date: Mon, 10 Dec 2018 14:30:42 +0000
+Subject: [RFC][PATCH 1/3] elf: Make AT_FLAGS arch configurable
+In-Reply-To: <20181210143044.12714-1-vincenzo.frascino@arm.com>
+References: <cover.1544445454.git.andreyknvl@google.com>
+ <20181210143044.12714-1-vincenzo.frascino@arm.com>
+Message-ID: <20181210143044.12714-2-vincenzo.frascino@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181210133018.pCzXqCWz_hpWVL7q80lPGy_3-AQMSi7brRm_UqutN9U@z>
+Message-ID: <20181210143042.0yptBidWXuB1RledOt8Bv_aB0pU-RM7IdZyFAM_SrHM@z>
 
-On Fri, Dec 07, 2018@06:06:45PM -0800, Alison Schofield wrote:
-> An expansion field was added to the kernel copy of this structure for
-> future use. See mm/gup_benchmark.c.
-> 
-> Add the same expansion field here, so that the IOCTL command decodes
-> correctly. Otherwise, it fails with EINVAL.
-> 
-> Signed-off-by: Alison Schofield <alison.schofield at intel.com>
+Currently, the AT_FLAGS in the elf auxiliary vector are set to 0
+by default by the kernel.
+Some architectures might need to expose to the userspace a non-zero
+value to advertise some platform specific ABI functionalities.
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov at linux.intel.com>
+This patch makes AT_FLAGS configurable by the architectures that
+require it.
 
+Cc: Catalin Marinas <catalin.marinas at arm.com>
+Cc: Will Deacon <will.deacon at arm.com>
+CC: Andrey Konovalov <andreyknvl at google.com>
+CC: Alexander Viro <viro at zeniv.linux.org.uk>
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
+---
+ fs/binfmt_elf.c        | 6 +++++-
+ fs/binfmt_elf_fdpic.c  | 6 +++++-
+ fs/compat_binfmt_elf.c | 5 +++++
+ 3 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 54207327f98f..9fa20cc4a437 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -86,6 +86,10 @@ static int elf_core_dump(struct coredump_params *cprm);
+ #define ELF_CORE_EFLAGS	0
+ #endif
+ 
++#ifndef ELF_AT_FLAGS
++#define ELF_AT_FLAGS	0
++#endif
++
+ #define ELF_PAGESTART(_v) ((_v) & ~(unsigned long)(ELF_MIN_ALIGN-1))
+ #define ELF_PAGEOFFSET(_v) ((_v) & (ELF_MIN_ALIGN-1))
+ #define ELF_PAGEALIGN(_v) (((_v) + ELF_MIN_ALIGN - 1) & ~(ELF_MIN_ALIGN - 1))
+@@ -251,7 +255,7 @@ create_elf_tables(struct linux_binprm *bprm, struct elfhdr *exec,
+ 	NEW_AUX_ENT(AT_PHENT, sizeof(struct elf_phdr));
+ 	NEW_AUX_ENT(AT_PHNUM, exec->e_phnum);
+ 	NEW_AUX_ENT(AT_BASE, interp_load_addr);
+-	NEW_AUX_ENT(AT_FLAGS, 0);
++	NEW_AUX_ENT(AT_FLAGS, ELF_AT_FLAGS);
+ 	NEW_AUX_ENT(AT_ENTRY, exec->e_entry);
+ 	NEW_AUX_ENT(AT_UID, from_kuid_munged(cred->user_ns, cred->uid));
+ 	NEW_AUX_ENT(AT_EUID, from_kuid_munged(cred->user_ns, cred->euid));
+diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
+index b53bb3729ac1..cf1e680a6b88 100644
+--- a/fs/binfmt_elf_fdpic.c
++++ b/fs/binfmt_elf_fdpic.c
+@@ -82,6 +82,10 @@ static int elf_fdpic_map_file_by_direct_mmap(struct elf_fdpic_params *,
+ static int elf_fdpic_core_dump(struct coredump_params *cprm);
+ #endif
+ 
++#ifndef ELF_AT_FLAGS
++#define ELF_AT_FLAGS	0
++#endif
++
+ static struct linux_binfmt elf_fdpic_format = {
+ 	.module		= THIS_MODULE,
+ 	.load_binary	= load_elf_fdpic_binary,
+@@ -651,7 +655,7 @@ static int create_elf_fdpic_tables(struct linux_binprm *bprm,
+ 	NEW_AUX_ENT(AT_PHENT,	sizeof(struct elf_phdr));
+ 	NEW_AUX_ENT(AT_PHNUM,	exec_params->hdr.e_phnum);
+ 	NEW_AUX_ENT(AT_BASE,	interp_params->elfhdr_addr);
+-	NEW_AUX_ENT(AT_FLAGS,	0);
++	NEW_AUX_ENT(AT_FLAGS,	ELF_AT_FLAGS);
+ 	NEW_AUX_ENT(AT_ENTRY,	exec_params->entry_addr);
+ 	NEW_AUX_ENT(AT_UID,	(elf_addr_t) from_kuid_munged(cred->user_ns, cred->uid));
+ 	NEW_AUX_ENT(AT_EUID,	(elf_addr_t) from_kuid_munged(cred->user_ns, cred->euid));
+diff --git a/fs/compat_binfmt_elf.c b/fs/compat_binfmt_elf.c
+index 15f6e96b3bd9..a21cf99701ae 100644
+--- a/fs/compat_binfmt_elf.c
++++ b/fs/compat_binfmt_elf.c
+@@ -79,6 +79,11 @@
+ #define	ELF_HWCAP2		COMPAT_ELF_HWCAP2
+ #endif
+ 
++#ifdef	COMPAT_ELF_AT_FLAGS
++#undef	ELF_AT_FLAGS
++#define	ELF_AT_FLAGS		COMPAT_ELF_AT_FLAGS
++#endif
++
+ #ifdef	COMPAT_ARCH_DLINFO
+ #undef	ARCH_DLINFO
+ #define	ARCH_DLINFO		COMPAT_ARCH_DLINFO
 -- 
- Kirill A. Shutemov
+2.19.2
