@@ -1,73 +1,117 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Wed, 12 Dec 2018 15:02:30 +0000
-Subject: [RFC][PATCH 0/3] arm64 relaxed ABI
-In-Reply-To: <CAAeHK+xPZ-Z9YUAq=3+hbjj4uyJk32qVaxZkhcSAHYC4mHAkvQ@mail.gmail.com>
+From: Dave.Martin@arm.com (Dave Martin)
+Date: Wed, 12 Dec 2018 17:01:12 +0000
+Subject: [PATCH v9 0/8] arm64: untag user pointers passed to the kernel
+In-Reply-To: <cover.1544445454.git.andreyknvl@google.com>
 References: <cover.1544445454.git.andreyknvl@google.com>
- <20181210143044.12714-1-vincenzo.frascino@arm.com>
- <CAAeHK+xPZ-Z9YUAq=3+hbjj4uyJk32qVaxZkhcSAHYC4mHAkvQ@mail.gmail.com>
-Message-ID: <20181212150230.GH65138@arrakis.emea.arm.com>
+Message-ID: <20181212170108.GZ3505@e103592.cambridge.arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181212150230.Now9Xm63IkCN0ErRXunDJTochEOaqUbbGKvJCn5TDT0@z>
+Message-ID: <20181212170112.e6ismg5SWA5JmTjS7KdcqCHVdNmEZ9rm2LWtq9phwPk@z>
 
-Hi Andrey,
+On Mon, Dec 10, 2018@01:50:57PM +0100, Andrey Konovalov wrote:
+> arm64 has a feature called Top Byte Ignore, which allows to embed pointer
+> tags into the top byte of each pointer. Userspace programs (such as
+> HWASan, a memory debugging tool [1]) might use this feature and pass
+> tagged user pointers to the kernel through syscalls or other interfaces.
+> 
+> Right now the kernel is already able to handle user faults with tagged
+> pointers, due to these patches:
+> 
+> 1. 81cddd65 ("arm64: traps: fix userspace cache maintenance emulation on a
+>              tagged pointer")
+> 2. 7dcd9dd8 ("arm64: hw_breakpoint: fix watchpoint matching for tagged
+>               pointers")
+> 3. 276e9327 ("arm64: entry: improve data abort handling of tagged
+>               pointers")
+> 
+> When passing tagged pointers to syscalls, there's a special case of such a
+> pointer being passed to one of the memory syscalls (mmap, mprotect, etc.).
+> These syscalls don't do memory accesses but rather deal with memory
+> ranges, hence an untagged pointer is better suited.
+> 
+> This patchset extends tagged pointer support to non-memory syscalls. This
+> is done by reusing the untagged_addr macro to untag user pointers when the
+> kernel performs pointer checking to find out whether the pointer comes
+> from userspace (most notably in access_ok). The untagging is done only
+> when the pointer is being checked, the tag is preserved as the pointer
+> makes its way through the kernel.
+> 
+> One of the alternative approaches to untagging that was considered is to
+> completely strip the pointer tag as the pointer enters the kernel with
+> some kind of a syscall wrapper, but that won't work with the countless
+> number of different ioctl calls. With this approach we would need a custom
+> wrapper for each ioctl variation, which doesn't seem practical.
+> 
+> The following testing approaches has been taken to find potential issues
+> with user pointer untagging:
+> 
+> 1. Static testing (with sparse [2] and separately with a custom static
+>    analyzer based on Clang) to track casts of __user pointers to integer
+>    types to find places where untagging needs to be done.
+> 
+> 2. Dynamic testing: adding BUG_ON(has_tag(addr)) to find_vma() and running
+>    a modified syzkaller version that passes tagged pointers to the kernel.
+> 
+> Based on the results of the testing the requried patches have been added
+> to the patchset.
+> 
+> This patchset has been merged into the Pixel 2 kernel tree and is now
+> being used to enable testing of Pixel 2 phones with HWASan.
 
-On Wed, Dec 12, 2018@03:23:25PM +0100, Andrey Konovalov wrote:
-> On Mon, Dec 10, 2018 at 3:31 PM Vincenzo Frascino
-> <vincenzo.frascino@arm.com> wrote:
-> > On arm64 the TCR_EL1.TBI0 bit has been set since Linux 3.x hence
-> > the userspace (EL0) is allowed to set a non-zero value in the top
-> > byte but the resulting pointers are not allowed at the user-kernel
-> > syscall ABI boundary.
-> >
-> > This patchset proposes a relaxation of the ABI and a mechanism to
-> > advertise it to the userspace via an AT_FLAGS.
-> >
-> > The rationale behind the choice of AT_FLAGS is that the Unix System V
-> > ABI defines AT_FLAGS as "flags", leaving some degree of freedom in
-> > interpretation.
-> > There are two previous attempts of using AT_FLAGS in the Linux Kernel
-> > for different reasons: the first was more generic and was used to expose
-> > the support for the GNU STACK NX feature [1] and the second was done for
-> > the MIPS architecture and was used to expose the support of "MIPS ABI
-> > Extension for IEEE Std 754 Non-Compliant Interlinking" [2].
-> > Both the changes are currently _not_ merged in mainline.
-> > The only architecture that reserves some of the bits in AT_FLAGS is
-> > currently MIPS, which introduced the concept of platform specific ABI
-> > (psABI) reserving the top-byte [3].
-> >
-> > When ARM64_AT_FLAGS_SYSCALL_TBI is set the kernel is advertising
-> > to the userspace that a relaxed ABI is supported hence this type
-> > of pointers are now allowed to be passed to the syscalls when they are
-> > in memory ranges obtained by anonymous mmap() or brk().
-> >
-> > The userspace _must_ verify that the flag is set before passing tagged
-> > pointers to the syscalls allowed by this relaxation.
-> >
-> > More in general, exposing the ARM64_AT_FLAGS_SYSCALL_TBI flag and mandating
-> > to the software to check that the feature is present, before using the
-> > associated functionality, it provides a degree of control on the decision
-> > of disabling such a feature in future without consequently breaking the
-> > userspace.
-[...]
-> Acked-by: Andrey Konovalov <andreyknvl at google.com>
+Do you have an idea of how much of the user/kernel interface is covered
+by this workload?
 
-Thanks for the ack. However, if we go ahead with this ABI proposal it
-means that your patches need to be reworked to allow a non-zero top byte
-in all syscalls, including mmap() and friends, ioctl(). There are ABI
-concerns in either case but I'd rather have this discussion in the open.
-It doesn't necessarily mean that I endorse this proposal, I would like
-feedback and not just from kernel developers but user space ones.
+> This patchset is a prerequisite for ARM's memory tagging hardware feature
+> support [3].
 
-The summary of our internal discussions (mostly between kernel
-developers) is that we can't properly describe a user ABI that covers
-future syscalls or syscall extensions while not all syscalls accept
-tagged pointers. So we tweaked the requirements slightly to only allow
-tagged pointers back into the kernel *if* the originating address is
-from an anonymous mmap() or below sbrk(0). This should cover some of the
-ioctls or getsockopt(TCP_ZEROCOPY_RECEIVE) where the user passes a
-pointer to a buffer obtained via mmap() on the device operations.
+It looks like there's been a lot of progress made here towards smoking
+out most of the sites in the kernel where pointers need to be untagged.
 
-(sorry for not being clear on what Vincenzo's proposal implies)
+However, I do think that we need a clear policy for how existing kernel
+interfaces are to be interpreted in the presence of tagged pointers.
+Unless we have that nailed down, we are likely to be able to make only
+vague guarantees to userspace about what works, and the ongoing risk
+of ABI regressions and inconsistencies seems high.
 
--- 
-Catalin
+I don't really see how we can advertise a full system interface if we
+know some subset of it doesn't work for foreseeable userspace
+environments.  I feel that presenting the current changes as an ABI
+relaxation may be a recipe for future problems, since the forwards
+compatibility guarantees we're able to make today are few and rather
+vague.
+
+Can we define an opt-in for tagged-pointer userspace, that rejects all
+syscalls that we haven't checked and whitelisted (or that are
+uncheckable like ioctl)?  This reflects the reality that we don't have
+a regular userspace environment in which standards-compliant software
+that uses address tags in a reasonable way will just work.
+
+It might be feasible to promote this to be enabled by default later on,
+if it becomes sufficiently complete.
+
+
+In the meantime, I think we really need to nail down the kernel's
+policies on
+
+ * in the default configuration (without opt-in), is the presence of
+non-address bits in pointers exchanged with the kernel simply
+considered broken?  (Even with this series, the de factor answer
+generally seems to be "yes", although many specific things will now
+work fine)
+
+ * if not, how do we tighten syscall / interface specifications to
+describe what happens with pointers containing non-address bits, while
+keeping the existing behaviour for untagged pointers?
+
+We would want a general recipe that gives clear guidance on what
+userspace should expect an arbitrarily chosen syscall to do with its
+pointers, without having to enumerate each and every case.
+
+To be sustainable, we would also need to solve that in a way that
+doesn't need to be reintented per-arch.
+
+
+There may already be some background on these topics -- can you throw me
+a link if so?
+
+Cheers
+---Dave
