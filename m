@@ -1,117 +1,194 @@
 From: Dave.Martin@arm.com (Dave Martin)
-Date: Wed, 12 Dec 2018 17:01:12 +0000
-Subject: [PATCH v9 0/8] arm64: untag user pointers passed to the kernel
-In-Reply-To: <cover.1544445454.git.andreyknvl@google.com>
+Date: Wed, 12 Dec 2018 17:34:57 +0000
+Subject: [RFC][PATCH 2/3] arm64: Define
+ Documentation/arm64/elf_at_flags.txt
+In-Reply-To: <20181210143044.12714-3-vincenzo.frascino@arm.com>
 References: <cover.1544445454.git.andreyknvl@google.com>
-Message-ID: <20181212170108.GZ3505@e103592.cambridge.arm.com>
+ <20181210143044.12714-1-vincenzo.frascino@arm.com>
+ <20181210143044.12714-3-vincenzo.frascino@arm.com>
+Message-ID: <20181212173457.GA3505@e103592.cambridge.arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181212170112.e6ismg5SWA5JmTjS7KdcqCHVdNmEZ9rm2LWtq9phwPk@z>
+Message-ID: <20181212173457._WL7ZqHP2pHuFlqA2clwEhpLQZZ93krxFj6ElIFjwHI@z>
 
-On Mon, Dec 10, 2018@01:50:57PM +0100, Andrey Konovalov wrote:
-> arm64 has a feature called Top Byte Ignore, which allows to embed pointer
-> tags into the top byte of each pointer. Userspace programs (such as
-> HWASan, a memory debugging tool [1]) might use this feature and pass
-> tagged user pointers to the kernel through syscalls or other interfaces.
+On Mon, Dec 10, 2018@02:30:43PM +0000, Vincenzo Frascino wrote:
+> On arm64 the TCR_EL1.TBI0 bit has been set since Linux 3.x hence
+> the userspace (EL0) is allowed to set a non-zero value in the
+> top byte but the resulting pointers are not allowed at the
+> user-kernel syscall ABI boundary.
 > 
-> Right now the kernel is already able to handle user faults with tagged
-> pointers, due to these patches:
+> With the relaxed ABI proposed through this document, it is now possible
+> to pass tagged pointers to the syscalls, when these pointers are in
+> memory ranges obtained by an anonymous (MAP_ANONYMOUS) mmap() or brk().
+
+What about other anonymous memory such as the process stack?
+
+What about MAP_PRIVATE mappings of /dev/zero (i.e., oldskool "anonymous"
+mappings)?
+
+I wonder whether this should really say MAP_PRIVATE rather than
+MAP_ANONYMOUS.  There are two requirements here:
+
+ * the memory must be the exclusive property of a single process,
+   otherwise tagging it on-the-fly could break some other process;
+
+ * the memory should be regular memory, i.e., not something like a
+   mapped device.  Since copy-on-write mappings of devices make little
+   sense, and we want writes to devices to propagate to the hardware
+   directly, MAP_PRIVATE doesn't make a lot of sense for such mappings.
+
+MAP_ANONYMOUS | MAP_SHARED is theoretically possible, and we should
+make sure that it does the expected thing.  Tagging such memory is
+probably a bad idea, just like any other MAP_SHARED memory.
+
+I'm assuming here that tagging some currently shared copy-on-write pages
+would throw a page fault and trigger a copy, so that we end up tagging
+the calling process's private copy of the page.
+
+I also don't see how the above requirements conflict with regular file-
+backed mappings (which would need to work if you want to be able to
+tag objects in .bss or .data etc.)
+
+> This change in the ABI requires a mechanism to inform the userspace
+> that such an option is available.
 > 
-> 1. 81cddd65 ("arm64: traps: fix userspace cache maintenance emulation on a
->              tagged pointer")
-> 2. 7dcd9dd8 ("arm64: hw_breakpoint: fix watchpoint matching for tagged
->               pointers")
-> 3. 276e9327 ("arm64: entry: improve data abort handling of tagged
->               pointers")
+> This patch specifies and documents the way on which AT_FLAGS can be
+> used to advertise this feature to the userspace.
 > 
-> When passing tagged pointers to syscalls, there's a special case of such a
-> pointer being passed to one of the memory syscalls (mmap, mprotect, etc.).
-> These syscalls don't do memory accesses but rather deal with memory
-> ranges, hence an untagged pointer is better suited.
+> Cc: Catalin Marinas <catalin.marinas at arm.com>
+> Cc: Will Deacon <will.deacon at arm.com>
+> CC: Andrey Konovalov <andreyknvl at google.com>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
+> ---
+>  Documentation/arm64/elf_at_flags.txt | 111 +++++++++++++++++++++++++++
+>  1 file changed, 111 insertions(+)
+>  create mode 100644 Documentation/arm64/elf_at_flags.txt
 > 
-> This patchset extends tagged pointer support to non-memory syscalls. This
-> is done by reusing the untagged_addr macro to untag user pointers when the
-> kernel performs pointer checking to find out whether the pointer comes
-> from userspace (most notably in access_ok). The untagging is done only
-> when the pointer is being checked, the tag is preserved as the pointer
-> makes its way through the kernel.
-> 
-> One of the alternative approaches to untagging that was considered is to
-> completely strip the pointer tag as the pointer enters the kernel with
-> some kind of a syscall wrapper, but that won't work with the countless
-> number of different ioctl calls. With this approach we would need a custom
-> wrapper for each ioctl variation, which doesn't seem practical.
-> 
-> The following testing approaches has been taken to find potential issues
-> with user pointer untagging:
-> 
-> 1. Static testing (with sparse [2] and separately with a custom static
->    analyzer based on Clang) to track casts of __user pointers to integer
->    types to find places where untagging needs to be done.
-> 
-> 2. Dynamic testing: adding BUG_ON(has_tag(addr)) to find_vma() and running
->    a modified syzkaller version that passes tagged pointers to the kernel.
-> 
-> Based on the results of the testing the requried patches have been added
-> to the patchset.
-> 
-> This patchset has been merged into the Pixel 2 kernel tree and is now
-> being used to enable testing of Pixel 2 phones with HWASan.
+> diff --git a/Documentation/arm64/elf_at_flags.txt b/Documentation/arm64/elf_at_flags.txt
+> new file mode 100644
+> index 000000000000..153e657c058a
+> --- /dev/null
+> +++ b/Documentation/arm64/elf_at_flags.txt
+> @@ -0,0 +1,111 @@
+> +ARM64 ELF AT_FLAGS
+> +==================
+> +
+> +This document describes the usage and semantics of AT_FLAGS on arm64.
+> +
+> +1. Introduction
+> +---------------
+> +
+> +AT_FLAGS is part of the Auxiliary Vector, contains the flags and it
+> +is currently set to zero by the kernel on arm64.
+> +
+> +The auxiliary vector can be accessed by the userspace using the
+> +getauxval() API provided by the C library.
+> +getauxval() returns an unsigned long and when a flag is present in
+> +the AT_FLAGS, the corresponding bit in the returned value is set to 1.
+> +
+> +The AT_FLAGS with a "defined semantic" on arm64 are exposed to the
+> +userspace via user API (uapi/asm/atflags.h).
+> +The AT_FLAGS bits with "undefined semantics" are set to zero by default.
+> +This means that the AT_FLAGS bits to which this document does not assign
+> +an explicit meaning are to be intended reserved for future use.
+> +The kernel will populate all such bits with zero until meanings are
+> +assigned to them. If and when meanings are assigned, it is guaranteed
+> +that they will not impact the functional operation of existing userspace
+> +software. Userspace software should ignore any AT_FLAGS bit whose meaning
+> +is not defined when the software is written.
+> +
+> +The userspace software can test for features by acquiring the AT_FLAGS
+> +entry of the auxiliary vector, and testing whether a relevant flag
+> +is set.
+> +
+> +Example of a userspace test function:
+> +
+> +bool feature_x_is_present(void)
+> +{
+> +	unsigned long at_flags = getauxval(AT_FLAGS);
+> +	if (at_flags & FEATURE_X)
+> +		return true;
+> +
+> +	return false;
+> +}
+> +
+> +Where the software relies on a feature advertised by AT_FLAGS, it
+> +should check that the feature is present before attempting to
+> +use it.
+> +
+> +2. Features exposed via AT_FLAGS
+> +--------------------------------
+> +
+> +bit[0]: ARM64_AT_FLAGS_SYSCALL_TBI
+> +
+> +    On arm64 the TCR_EL1.TBI0 bit has been set since Linux 3.x hence
+> +    the userspace (EL0) is allowed to set a non-zero value in the top
+> +    byte but the resulting pointers are not allowed at the user-kernel
+> +    syscall ABI boundary.
+> +    When bit[0] is set to 1 the kernel is advertising to the userspace
+> +    that a relaxed ABI is supported hence this type of pointers are now
+> +    allowed to be passed to the syscalls, when these pointers are in
+> +    memory ranges obtained by anonymous (MAP_ANONYMOUS) mmap() or brk().
 
-Do you have an idea of how much of the user/kernel interface is covered
-by this workload?
+"TBI" is a slightly odd name.
 
-> This patchset is a prerequisite for ARM's memory tagging hardware feature
-> support [3].
+The kernel seems not to be ignoring the top byte, otherwise how could
+it make a difference whehter the memory is anonymous or something else?
 
-It looks like there's been a lot of progress made here towards smoking
-out most of the sites in the kernel where pointers need to be untagged.
+(With memory tagging enabled, the top byte is also not architecturally
+ignored.)
 
-However, I do think that we need a clear policy for how existing kernel
-interfaces are to be interpreted in the presence of tagged pointers.
-Unless we have that nailed down, we are likely to be able to make only
-vague guarantees to userspace about what works, and the ongoing risk
-of ABI regressions and inconsistencies seems high.
+> +    In these cases the tag is preserved as the pointer goes through the
+> +    kernel. Only when the kernel needs to check if a pointer is coming
+> +    from userspace (i.e. access_ok()) an untag operation is required.
 
-I don't really see how we can advertise a full system interface if we
-know some subset of it doesn't work for foreseeable userspace
-environments.  I feel that presenting the current changes as an ABI
-relaxation may be a recipe for future problems, since the forwards
-compatibility guarantees we're able to make today are few and rather
-vague.
+Does the last sentence belong here?  That's about kernel internals,
+whereas the rest all seems user-facing.
 
-Can we define an opt-in for tagged-pointer userspace, that rejects all
-syscalls that we haven't checked and whitelisted (or that are
-uncheckable like ioctl)?  This reflects the reality that we don't have
-a regular userspace environment in which standards-compliant software
-that uses address tags in a reasonable way will just work.
+> +
+> +3. ARM64_AT_FLAGS_SYSCALL_TBI
+> +-----------------------------
+> +
+> +When ARM64_AT_FLAGS_SYSCALL_TBI is enabled every syscalls can accept tagged
+> +pointers, when these pointers are in memory ranges obtained by an anonymous
+> +(MAP_ANONYMOUS) mmap() or brk().
+> +
+> +A definition of the meaning of tagged pointers on arm64 can be found in:
+> +Documentation/arm64/tagged-pointers.txt.
+> +
+> +When a pointer does not are in a memory range obtained by an anonymous mmap()
+> +or brk(), this can not be passed to a syscall if it is tagged.
+> +
+> +To be more explicit: a syscall can accept pointers whose memory range is
+> +obtained by a non-anonymous mmap() or brk() if and only if the tag encoded in
+> +the top-byte is 0x00.
+> +
+> +When a new syscall is added, this can accept tagged pointers if and only if
+> +these pointers are in memory ranges obtained by an anonymous (MAP_ANONYMOUS)
+> +mmap() or brk(). In all the other cases, the tag encoded in the top-byte is
+> +expected to be 0x00.
 
-It might be feasible to promote this to be enabled by default later on,
-if it becomes sufficiently complete.
+Does this apply to kernel interfaces that are not syscalls?
+
+And does it apply to ioctls in general (I think from discussions
+elsewhere that it can't).
+
+What about things that flow through the kernel, like an
+si_value.sival_ptr that propagates from sigqueue(2) to the signal frame
+of the signalled thread, or registered with the kernel via aio_read(2)?
+
+This kind of thing is why I would like to define a set of rules for
+making an educated guess about how the kernel should interpret
+arbitrary arguments (in an ideal world).
 
 
-In the meantime, I think we really need to nail down the kernel's
-policies on
+With issues like this in the mix, it seems difficult to extract general
+guarantees from ARM64_AT_FLAGS_SYSCALL_TBI.  If it means that just
+certain specific uses of a few specific syscalls work with tagged
+pointers, that may not be very useful by ifself?  It sounds like if
+you are tagging memory at all, you suddenly need to port every random
+library you're using.
 
- * in the default configuration (without opt-in), is the presence of
-non-address bits in pointers exchanged with the kernel simply
-considered broken?  (Even with this series, the de factor answer
-generally seems to be "yes", although many specific things will now
-work fine)
-
- * if not, how do we tighten syscall / interface specifications to
-describe what happens with pointers containing non-address bits, while
-keeping the existing behaviour for untagged pointers?
-
-We would want a general recipe that gives clear guidance on what
-userspace should expect an arbitrarily chosen syscall to do with its
-pointers, without having to enumerate each and every case.
-
-To be sustainable, we would also need to solve that in a way that
-doesn't need to be reintented per-arch.
-
-
-There may already be some background on these topics -- can you throw me
-a link if so?
+[...]
 
 Cheers
 ---Dave
