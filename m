@@ -1,63 +1,32 @@
-From: sashal@kernel.org (Sasha Levin)
-Date: Wed, 12 Dec 2018 23:27:31 -0500
-Subject: [PATCH AUTOSEL 4.19 06/73] tools/bpf: fix two test_btf unit test cases
-In-Reply-To: <20181213042838.75160-1-sashal@kernel.org>
-References: <20181213042838.75160-1-sashal@kernel.org>
-Message-ID: <20181213042838.75160-6-sashal@kernel.org>
+From: colin.king@canonical.com (Colin King)
+Date: Thu, 13 Dec 2018 09:40:15 +0000
+Subject: [PATCH][next] selftests: watchdog: fix spelling mistake "experies" ->
+ "expires"
+Message-ID: <20181213094015.31397-1-colin.king@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181213042731._JoxWg1RO1MtV69PhpWqgB69mi2aoJeLhveAgjkn9xY@z>
+Message-ID: <20181213094015.NlMHokmXkUEF9IxiCXU1M1P4-ZX4mKLDzNEcMP1a5CU@z>
 
-From: Martin KaFai Lau <kafai@fb.com>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit 8800cd031af085807028656c6ba7eb7908d78262 ]
+There is a spelling mistake in the --gettimeleft help text, fix it.
 
-There are two unit test cases, which should encode
-TYPEDEF type, but instead encode PTR type.
-The error is flagged out after enforcing name
-checking in the previous patch.
-
-Fixes: c0fa1b6c3efc ("bpf: btf: Add BTF tests")
-Signed-off-by: Martin KaFai Lau <kafai at fb.com>
-Signed-off-by: Yonghong Song <yhs at fb.com>
-Signed-off-by: Alexei Starovoitov <ast at kernel.org>
-Signed-off-by: Sasha Levin <sashal at kernel.org>
+Signed-off-by: Colin Ian King <colin.king at canonical.com>
 ---
- tools/testing/selftests/bpf/test_btf.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ tools/testing/selftests/watchdog/watchdog-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_btf.c b/tools/testing/selftests/bpf/test_btf.c
-index 6b5cfeb7a9cc..4909aab4d6ab 100644
---- a/tools/testing/selftests/bpf/test_btf.c
-+++ b/tools/testing/selftests/bpf/test_btf.c
-@@ -431,11 +431,11 @@ static struct btf_raw_test raw_tests[] = {
- 		/* const void* */	/* [3] */
- 		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 2),
- 		/* typedef const void * const_void_ptr */
--		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 3),
--		/* struct A { */	/* [4] */
-+		BTF_TYPEDEF_ENC(NAME_TBD, 3),	/* [4] */
-+		/* struct A { */	/* [5] */
- 		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 1), sizeof(void *)),
- 		/* const_void_ptr m; */
--		BTF_MEMBER_ENC(NAME_TBD, 3, 0),
-+		BTF_MEMBER_ENC(NAME_TBD, 4, 0),
- 		/* } */
- 		BTF_END_RAW,
- 	},
-@@ -493,10 +493,10 @@ static struct btf_raw_test raw_tests[] = {
- 		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_CONST, 0, 0), 0),
- 		/* const void* */	/* [3] */
- 		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 2),
--		/* typedef const void * const_void_ptr */	/* [4] */
--		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 3),
--		/* const_void_ptr[4] */	/* [5] */
--		BTF_TYPE_ARRAY_ENC(3, 1, 4),
-+		/* typedef const void * const_void_ptr */
-+		BTF_TYPEDEF_ENC(NAME_TBD, 3),	/* [4] */
-+		/* const_void_ptr[4] */
-+		BTF_TYPE_ARRAY_ENC(4, 1, 4),	/* [5] */
- 		BTF_END_RAW,
- 	},
- 	.str_sec = "\0const_void_ptr",
+diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
+index dac907a932ce..c2333c78cf04 100644
+--- a/tools/testing/selftests/watchdog/watchdog-test.c
++++ b/tools/testing/selftests/watchdog/watchdog-test.c
+@@ -78,7 +78,7 @@ static void usage(char *progname)
+ 	printf(" -T, --gettimeout    Get the timeout\n");
+ 	printf(" -n, --pretimeout=T  Set the pretimeout to T seconds\n");
+ 	printf(" -N, --getpretimeout Get the pretimeout\n");
+-	printf(" -L, --gettimeleft   Get the time left until timer experies\n");
++	printf(" -L, --gettimeleft   Get the time left until timer expires\n");
+ 	printf("\n");
+ 	printf("Parameters are parsed left-to-right in real-time.\n");
+ 	printf("Example: %s -d -t 10 -p 5 -e\n", progname);
 -- 
 2.19.1
