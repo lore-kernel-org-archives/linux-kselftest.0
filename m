@@ -1,37 +1,39 @@
-From: daniel.vetter at ffwll.ch (Daniel Vetter)
-Date: Wed, 12 Dec 2018 22:56:32 +0100
-Subject: [PATCH] fix dma-buf/udmabuf selftest
-In-Reply-To: <81c4efd9-2ccd-53ec-98e7-663c95d6d5c4@kernel.org>
-References: <20181127103312.19368-1-murphyt7@tcd.ie>
- <81c4efd9-2ccd-53ec-98e7-663c95d6d5c4@kernel.org>
-Message-ID: <CAKMK7uF0Anr5+Z+Mnpnch_X5QqMj0gAvX99ifov9cC8rDMigAg@mail.gmail.com>
+From: sashal at kernel.org (Sasha Levin)
+Date: Wed, 12 Dec 2018 23:30:22 -0500
+Subject: [PATCH AUTOSEL 4.14 09/41] bpf: Fix verifier log string check for bad
+ alignment.
+In-Reply-To: <20181213043054.75891-1-sashal@kernel.org>
+References: <20181213043054.75891-1-sashal@kernel.org>
+Message-ID: <20181213043054.75891-9-sashal@kernel.org>
 
-On Wed, Dec 12, 2018 at 10:16 PM shuah <shuah at kernel.org> wrote:
->
-> Hi Daniel,
->
-> On 11/27/18 3:33 AM, Tom Murphy wrote:
-> > This patch fixes the udmabuf selftest. Currently the selftest is broken.
-> > I fixed the selftest by setting the F_SEAL_SHRINK seal on the memfd
-> > file descriptor which is required by udmabuf and added the test to
-> > the selftest Makefile.
-> >
-> > Signed-off-by: Tom Murphy <murphyt7 at tcd.ie>
->
-> Does this change look good you? I plan to get this in for 4.21-rc1. Let
-> me know if you have any objections.
+From: David Miller <davem at davemloft.net>
 
-No idea, would need Gerd's ack I think. And maybe we need to update
-MAINTAINERS, to make sure dri-devel gets cc'ed on patches touching the
-dma-buf testcases.
--Daniel
+[ Upstream commit c01ac66b38660f2b507ccd0b75d28e3002d56fbb ]
 
-> thanks,
-> -- Shuah
->
+The message got changed a lot time ago.
 
+This was responsible for 36 test case failures on sparc64.
 
+Fixes: f1174f77b50c ("bpf/verifier: rework value tracking")
+Signed-off-by: David S. Miller <davem at davemloft.net>
+Signed-off-by: Alexei Starovoitov <ast at kernel.org>
+Signed-off-by: Sasha Levin <sashal at kernel.org>
+---
+ tools/testing/selftests/bpf/test_verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 041dbbb30ff0..a0591d06c61b 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -8070,7 +8070,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 
+ 	reject_from_alignment = fd_prog < 0 &&
+ 				(test->flags & F_NEEDS_EFFICIENT_UNALIGNED_ACCESS) &&
+-				strstr(bpf_vlog, "Unknown alignment.");
++				strstr(bpf_vlog, "misaligned");
+ #ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ 	if (reject_from_alignment) {
+ 		printf("FAIL\nFailed due to alignment despite having efficient unaligned access: '%s'!\n",
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-+41 (0) 79 365 57 48 - http://blog.ffwll.ch
+2.19.1
