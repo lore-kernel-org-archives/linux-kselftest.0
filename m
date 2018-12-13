@@ -1,39 +1,416 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Wed, 12 Dec 2018 23:27:48 -0500
-Subject: [PATCH AUTOSEL 4.19 23/73] bpf: Fix verifier log string check for bad
- alignment.
+Date: Wed, 12 Dec 2018 23:27:32 -0500
+Subject: [PATCH AUTOSEL 4.19 07/73] tools/bpf: add addition type tests to
+ test_btf
 In-Reply-To: <20181213042838.75160-1-sashal@kernel.org>
 References: <20181213042838.75160-1-sashal@kernel.org>
-Message-ID: <20181213042838.75160-23-sashal@kernel.org>
+Message-ID: <20181213042838.75160-7-sashal@kernel.org>
 
-From: David Miller <davem at davemloft.net>
+From: Yonghong Song <yhs at fb.com>
 
-[ Upstream commit c01ac66b38660f2b507ccd0b75d28e3002d56fbb ]
+[ Upstream commit d08489125e04a9f73d9323caea43270fd22d395f ]
 
-The message got changed a lot time ago.
+The following additional unit testcases are added to test_btf:
+...
+BTF raw test[42] (typedef (invalid name, name_off = 0)): OK
+BTF raw test[43] (typedef (invalid name, invalid identifier)): OK
+BTF raw test[44] (ptr type (invalid name, name_off <> 0)): OK
+BTF raw test[45] (volatile type (invalid name, name_off <> 0)): OK
+BTF raw test[46] (const type (invalid name, name_off <> 0)): OK
+BTF raw test[47] (restrict type (invalid name, name_off <> 0)): OK
+BTF raw test[48] (fwd type (invalid name, name_off = 0)): OK
+BTF raw test[49] (fwd type (invalid name, invalid identifier)): OK
+BTF raw test[50] (array type (invalid name, name_off <> 0)): OK
+BTF raw test[51] (struct type (name_off = 0)): OK
+BTF raw test[52] (struct type (invalid name, invalid identifier)): OK
+BTF raw test[53] (struct member (name_off = 0)): OK
+BTF raw test[54] (struct member (invalid name, invalid identifier)): OK
+BTF raw test[55] (enum type (name_off = 0)): OK
+BTF raw test[56] (enum type (invalid name, invalid identifier)): OK
+BTF raw test[57] (enum member (invalid name, name_off = 0)): OK
+BTF raw test[58] (enum member (invalid name, invalid identifier)): OK
+...
 
-This was responsible for 36 test case failures on sparc64.
-
-Fixes: f1174f77b50c ("bpf/verifier: rework value tracking")
-Signed-off-by: David S. Miller <davem at davemloft.net>
+Fixes: c0fa1b6c3efc ("bpf: btf: Add BTF tests")
+Acked-by: Martin KaFai Lau <kafai at fb.com>
+Signed-off-by: Yonghong Song <yhs at fb.com>
 Signed-off-by: Alexei Starovoitov <ast at kernel.org>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/bpf/test_verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_btf.c | 361 +++++++++++++++++++++++++
+ 1 file changed, 361 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 67c412d19c09..d80c36465c1c 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -12746,7 +12746,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+diff --git a/tools/testing/selftests/bpf/test_btf.c b/tools/testing/selftests/bpf/test_btf.c
+index 4909aab4d6ab..29116366a9fc 100644
+--- a/tools/testing/selftests/bpf/test_btf.c
++++ b/tools/testing/selftests/bpf/test_btf.c
+@@ -1291,6 +1291,367 @@ static struct btf_raw_test raw_tests[] = {
+ 	.err_str = "type != 0",
+ },
  
- 	reject_from_alignment = fd_prog < 0 &&
- 				(test->flags & F_NEEDS_EFFICIENT_UNALIGNED_ACCESS) &&
--				strstr(bpf_vlog, "Unknown alignment.");
-+				strstr(bpf_vlog, "misaligned");
- #ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- 	if (reject_from_alignment) {
- 		printf("FAIL\nFailed due to alignment despite having efficient unaligned access: '%s'!\n",
++{
++	.descr = "typedef (invalid name, name_off = 0)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		BTF_TYPEDEF_ENC(0, 1),				/* [2] */
++		BTF_END_RAW,
++	},
++	.str_sec = "\0__int",
++	.str_sec_size = sizeof("\0__int"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "typedef_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
++
++{
++	.descr = "typedef (invalid name, invalid identifier)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		BTF_TYPEDEF_ENC(NAME_TBD, 1),			/* [2] */
++		BTF_END_RAW,
++	},
++	.str_sec = "\0__!int",
++	.str_sec_size = sizeof("\0__!int"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "typedef_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
++
++{
++	.descr = "ptr type (invalid name, name_off <> 0)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(NAME_TBD,
++			     BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 1),	/* [2] */
++		BTF_END_RAW,
++	},
++	.str_sec = "\0__int",
++	.str_sec_size = sizeof("\0__int"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "ptr_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
++
++{
++	.descr = "volatile type (invalid name, name_off <> 0)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(NAME_TBD,
++			     BTF_INFO_ENC(BTF_KIND_VOLATILE, 0, 0), 1),	/* [2] */
++		BTF_END_RAW,
++	},
++	.str_sec = "\0__int",
++	.str_sec_size = sizeof("\0__int"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "volatile_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
++
++{
++	.descr = "const type (invalid name, name_off <> 0)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(NAME_TBD,
++			     BTF_INFO_ENC(BTF_KIND_CONST, 0, 0), 1),	/* [2] */
++		BTF_END_RAW,
++	},
++	.str_sec = "\0__int",
++	.str_sec_size = sizeof("\0__int"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "const_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
++
++{
++	.descr = "restrict type (invalid name, name_off <> 0)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 1),	/* [2] */
++		BTF_TYPE_ENC(NAME_TBD,
++			     BTF_INFO_ENC(BTF_KIND_RESTRICT, 0, 0), 2),	/* [3] */
++		BTF_END_RAW,
++	},
++	.str_sec = "\0__int",
++	.str_sec_size = sizeof("\0__int"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "restrict_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
++
++{
++	.descr = "fwd type (invalid name, name_off = 0)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_FWD, 0, 0), 0),	/* [2] */
++		BTF_END_RAW,
++	},
++	.str_sec = "\0__skb",
++	.str_sec_size = sizeof("\0__skb"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "fwd_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
++
++{
++	.descr = "fwd type (invalid name, invalid identifier)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(NAME_TBD,
++			     BTF_INFO_ENC(BTF_KIND_FWD, 0, 0), 0),	/* [2] */
++		BTF_END_RAW,
++	},
++	.str_sec = "\0__!skb",
++	.str_sec_size = sizeof("\0__!skb"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "fwd_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
++
++{
++	.descr = "array type (invalid name, name_off <> 0)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(NAME_TBD,
++			     BTF_INFO_ENC(BTF_KIND_ARRAY, 0, 0), 0),	/* [2] */
++		BTF_ARRAY_ENC(1, 1, 4),
++		BTF_END_RAW,
++	},
++	.str_sec = "\0__skb",
++	.str_sec_size = sizeof("\0__skb"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "array_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
++
++{
++	.descr = "struct type (name_off = 0)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(0,
++			     BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 1), 4),	/* [2] */
++		BTF_MEMBER_ENC(NAME_TBD, 1, 0),
++		BTF_END_RAW,
++	},
++	.str_sec = "\0A",
++	.str_sec_size = sizeof("\0A"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "struct_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++},
++
++{
++	.descr = "struct type (invalid name, invalid identifier)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(NAME_TBD,
++			     BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 1), 4),	/* [2] */
++		BTF_MEMBER_ENC(NAME_TBD, 1, 0),
++		BTF_END_RAW,
++	},
++	.str_sec = "\0A!\0B",
++	.str_sec_size = sizeof("\0A!\0B"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "struct_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
++
++{
++	.descr = "struct member (name_off = 0)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(0,
++			     BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 1), 4),	/* [2] */
++		BTF_MEMBER_ENC(NAME_TBD, 1, 0),
++		BTF_END_RAW,
++	},
++	.str_sec = "\0A",
++	.str_sec_size = sizeof("\0A"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "struct_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++},
++
++{
++	.descr = "struct member (invalid name, invalid identifier)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(NAME_TBD,
++			     BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 1), 4),	/* [2] */
++		BTF_MEMBER_ENC(NAME_TBD, 1, 0),
++		BTF_END_RAW,
++	},
++	.str_sec = "\0A\0B*",
++	.str_sec_size = sizeof("\0A\0B*"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "struct_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
++
++{
++	.descr = "enum type (name_off = 0)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(0,
++			     BTF_INFO_ENC(BTF_KIND_ENUM, 0, 1),
++			     sizeof(int)),				/* [2] */
++		BTF_ENUM_ENC(NAME_TBD, 0),
++		BTF_END_RAW,
++	},
++	.str_sec = "\0A\0B",
++	.str_sec_size = sizeof("\0A\0B"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "enum_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++},
++
++{
++	.descr = "enum type (invalid name, invalid identifier)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(NAME_TBD,
++			     BTF_INFO_ENC(BTF_KIND_ENUM, 0, 1),
++			     sizeof(int)),				/* [2] */
++		BTF_ENUM_ENC(NAME_TBD, 0),
++		BTF_END_RAW,
++	},
++	.str_sec = "\0A!\0B",
++	.str_sec_size = sizeof("\0A!\0B"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "enum_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
++
++{
++	.descr = "enum member (invalid name, name_off = 0)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(0,
++			     BTF_INFO_ENC(BTF_KIND_ENUM, 0, 1),
++			     sizeof(int)),				/* [2] */
++		BTF_ENUM_ENC(0, 0),
++		BTF_END_RAW,
++	},
++	.str_sec = "",
++	.str_sec_size = sizeof(""),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "enum_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
++
++{
++	.descr = "enum member (invalid name, invalid identifier)",
++	.raw_types = {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
++		BTF_TYPE_ENC(0,
++			     BTF_INFO_ENC(BTF_KIND_ENUM, 0, 1),
++			     sizeof(int)),				/* [2] */
++		BTF_ENUM_ENC(NAME_TBD, 0),
++		BTF_END_RAW,
++	},
++	.str_sec = "\0A!",
++	.str_sec_size = sizeof("\0A!"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "enum_type_check_btf",
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.key_type_id = 1,
++	.value_type_id = 1,
++	.max_entries = 4,
++	.btf_load_err = true,
++	.err_str = "Invalid name",
++},
+ {
+ 	.descr = "arraymap invalid btf key (a bit field)",
+ 	.raw_types = {
 -- 
 2.19.1
