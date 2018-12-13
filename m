@@ -1,12 +1,12 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Wed, 12 Dec 2018 23:30:22 -0500
-Subject: [PATCH AUTOSEL 4.14 09/41] bpf: Fix verifier log string check for bad
+Date: Wed, 12 Dec 2018 23:27:48 -0500
+Subject: [PATCH AUTOSEL 4.19 23/73] bpf: Fix verifier log string check for bad
  alignment.
-In-Reply-To: <20181213043054.75891-1-sashal@kernel.org>
-References: <20181213043054.75891-1-sashal@kernel.org>
-Message-ID: <20181213043054.75891-9-sashal@kernel.org>
+In-Reply-To: <20181213042838.75160-1-sashal@kernel.org>
+References: <20181213042838.75160-1-sashal@kernel.org>
+Message-ID: <20181213042838.75160-23-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181213043022.0oxeD2w9H59Hp-hamZyWrlS8dpRDahSRpjZdfewVEdo@z>
+Message-ID: <20181213042748.b89b0ZwVtBC1P5ujKvPgiL_1OUt8db8sVjIAaYqq2m0@z>
 
 From: David Miller <davem@davemloft.net>
 
@@ -25,10 +25,10 @@ Signed-off-by: Sasha Levin <sashal at kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 041dbbb30ff0..a0591d06c61b 100644
+index 67c412d19c09..d80c36465c1c 100644
 --- a/tools/testing/selftests/bpf/test_verifier.c
 +++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -8070,7 +8070,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+@@ -12746,7 +12746,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
  
  	reject_from_alignment = fd_prog < 0 &&
  				(test->flags & F_NEEDS_EFFICIENT_UNALIGNED_ACCESS) &&
