@@ -1,44 +1,204 @@
-From: pbonzini@redhat.com (Paolo Bonzini)
-Date: Fri, 14 Dec 2018 10:52:44 +0100
+From: khalid.aziz@oracle.com (Khalid Aziz)
+Date: Fri, 14 Dec 2018 13:43:44 -0700
 Subject: [PATCH] selftests: Fix test errors related to lib.mk khdr target
-In-Reply-To: <b6ed53db-981e-9d9b-8838-fcd7773e7f42@kernel.org>
+In-Reply-To: <20181213200011.10779-1-shuah@kernel.org>
 References: <20181213200011.10779-1-shuah@kernel.org>
- <623cdf7b-fc3c-2a93-c61a-a043e3d7f75b@redhat.com>
- <25593aa4-a2a7-6567-11f2-b702b6e5563c@kernel.org>
- <f4dddfa8-1493-5fd5-58a9-ea6ff2b25f9c@redhat.com>
- <b6ed53db-981e-9d9b-8838-fcd7773e7f42@kernel.org>
-Message-ID: <63f872e4-b0be-7ba3-735a-f6b04cd3db0c@redhat.com>
+Message-ID: <ccfefc44-c750-8691-17e0-269237d2fe2a@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181214095244.GY5htNAq9HA8deQM715ifU6nsvdnnwli8TWDxE8gYhw@z>
+Message-ID: <20181214204344.VBeQ8p5xt4JcqCxNZTxuG9grSFXoLdA2AUgfBNnUjkI@z>
 
-On 14/12/18 00:56, shuah wrote:
-> On 12/13/18 4:40 PM, Paolo Bonzini wrote:
->> On 13/12/18 23:50, shuah wrote:
->>>>
->>>> Looks good.  Could you please provide a topic branch so that we can
->>>> avoid conflicts between our trees at the next merge window.
->>>>
->>>
->>> Thanks. The topic branch is
->>>
->>> git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
->>>
->>> I will apply it in a day or two to get ready for the merge window.
->>
->> There are already other patches in that branch; a topic branch only
->> includes this one on top of Linus's tree, so that it is independent from
->> other changes being made in both your and my tree.
->>
->> You should create a new branch in linux-kselftest.git, pull it into
->> next, and tell me the name so that I can pull the same branch into
->> kvm.git.
->>
+On 12/13/18 1:00 PM, shuah@kernel.org wrote:
+> From: Shuah Khan <shuah at kernel.org>
 > 
-> You can find just this patch on top of 4.20-rc6 in
+> Commit b2d35fa5fc80 ("selftests: add headers_install to lib.mk") added
+> khdr target to run headers_install target from the main Makefile. The
+> logic uses KSFT_KHDR_INSTALL and top_srcdir as controls to initialize
+> variables and include files to run headers_install from the top level
+> Makefile. There are a few problems with this logic.
 > 
-> git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
-> khdr_fix topic branch.
+> 1. Exposes top_srcdir to all tests
+> 2. Common logic impacts all tests
+> 3. Uses KSFT_KHDR_INSTALL, top_srcdir, and khdr in an adhoc way. Tests
+>     add "khdr" dependency in their Makefiles to TEST_PROGS_EXTENDED in
+>     some cases, and STATIC_LIBS in other cases. This makes this framework
+>     confusing to use.
+> 
+> The common logic that runs for all tests even when KSFT_KHDR_INSTALL
+> isn't defined by the test. top_srcdir is initialized to a default value
+> when test doesn't initialize it. It works for all tests without a sub-dir
+> structure and tests with sub-dir structure fail to build.
+> 
+> e.g: make -C sparc64/drivers/ or make -C drivers/dma-buf
+> 
+> ../../lib.mk:20: ../../../../scripts/subarch.include: No such file or directory
+> make: *** No rule to make target '../../../../scripts/subarch.include'.  Stop.
+> 
+> There is no reason to require all tests to define top_srcdir and there is
+> no need to require tests to add khdr dependency using adhoc changes to
+> TEST_* and other variables.
+> 
+> Fix it with a consistent use of KSFT_KHDR_INSTALL and top_srcdir from tests
+> that have the dependency on headers_install.
+> 
+> Change common logic to include khdr target define and "all" target with
+> dependency on khdr when KSFT_KHDR_INSTALL is defined.
+> 
+> Only tests that have dependency on headers_install have to define just
+> the KSFT_KHDR_INSTALL, and top_srcdir variables and there is no need to
+> specify khdr dependency in the test Makefiles.
+> 
+> Fixes: b2d35fa5fc80 ("selftests: add headers_install to lib.mk")
+> Cc: stable at vger.kernel.org
+> Signed-off-by: Shuah Khan <shuah at kernel.org>
+> 
+> ---
 
-Great, thanks.
+Looks reasonable to me. Commit 7e0cf1c983b5 ("selftests/powerpc: Fix 
+Makefiles for headers_install change") probably should be redone after 
+this change.
 
-Paolo
+Reviewed-by: Khalid Aziz <khalid.aziz at oracle.com>
+
+>   tools/testing/selftests/android/Makefile                 | 2 +-
+>   tools/testing/selftests/futex/functional/Makefile        | 1 +
+>   tools/testing/selftests/gpio/Makefile                    | 6 +++---
+>   tools/testing/selftests/kvm/Makefile                     | 2 +-
+>   tools/testing/selftests/lib.mk                           | 8 ++++----
+>   tools/testing/selftests/networking/timestamping/Makefile | 1 +
+>   tools/testing/selftests/tc-testing/bpf/Makefile          | 1 +
+>   tools/testing/selftests/vm/Makefile                      | 1 +
+>   8 files changed, 13 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/android/Makefile b/tools/testing/selftests/android/Makefile
+> index d9a725478375..72c25a3cb658 100644
+> --- a/tools/testing/selftests/android/Makefile
+> +++ b/tools/testing/selftests/android/Makefile
+> @@ -6,7 +6,7 @@ TEST_PROGS := run.sh
+>   
+>   include ../lib.mk
+>   
+> -all: khdr
+> +all:
+>   	@for DIR in $(SUBDIRS); do		\
+>   		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
+>   		mkdir $$BUILD_TARGET  -p;	\
+> diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+> index ad1eeb14fda7..30996306cabc 100644
+> --- a/tools/testing/selftests/futex/functional/Makefile
+> +++ b/tools/testing/selftests/futex/functional/Makefile
+> @@ -19,6 +19,7 @@ TEST_GEN_FILES := \
+>   TEST_PROGS := run.sh
+>   
+>   top_srcdir = ../../../../..
+> +KSFT_KHDR_INSTALL := 1
+>   include ../../lib.mk
+>   
+>   $(TEST_GEN_FILES): $(HEADERS)
+> diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
+> index 46648427d537..07f572a1bd3f 100644
+> --- a/tools/testing/selftests/gpio/Makefile
+> +++ b/tools/testing/selftests/gpio/Makefile
+> @@ -10,8 +10,6 @@ TEST_PROGS_EXTENDED := gpio-mockup-chardev
+>   GPIODIR := $(realpath ../../../gpio)
+>   GPIOOBJ := gpio-utils.o
+>   
+> -include ../lib.mk
+> -
+>   all: $(TEST_PROGS_EXTENDED)
+>   
+>   override define CLEAN
+> @@ -19,7 +17,9 @@ override define CLEAN
+>   	$(MAKE) -C $(GPIODIR) OUTPUT=$(GPIODIR)/ clean
+>   endef
+>   
+> -$(TEST_PROGS_EXTENDED):| khdr
+> +KSFT_KHDR_INSTALL := 1
+> +include ../lib.mk
+> +
+>   $(TEST_PROGS_EXTENDED): $(GPIODIR)/$(GPIOOBJ)
+>   
+>   $(GPIODIR)/$(GPIOOBJ):
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 01a219229238..52bfe5e76907 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -1,6 +1,7 @@
+>   all:
+>   
+>   top_srcdir = ../../../..
+> +KSFT_KHDR_INSTALL := 1
+>   UNAME_M := $(shell uname -m)
+>   
+>   LIBKVM = lib/assert.c lib/elf.c lib/io.c lib/kvm_util.c lib/ucall.c lib/sparsebit.c
+> @@ -44,7 +45,6 @@ $(OUTPUT)/libkvm.a: $(LIBKVM_OBJ)
+>   
+>   all: $(STATIC_LIBS)
+>   $(TEST_GEN_PROGS): $(STATIC_LIBS)
+> -$(STATIC_LIBS):| khdr
+>   
+>   cscope: include_paths = $(LINUX_TOOL_INCLUDE) $(LINUX_HDR_PATH) include lib ..
+>   cscope:
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 0a8e75886224..8b0f16409ed7 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -16,18 +16,18 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
+>   TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
+>   TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
+>   
+> +ifdef KSFT_KHDR_INSTALL
+>   top_srcdir ?= ../../../..
+>   include $(top_srcdir)/scripts/subarch.include
+>   ARCH		?= $(SUBARCH)
+>   
+> -all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
+> -
+>   .PHONY: khdr
+>   khdr:
+>   	make ARCH=$(ARCH) -C $(top_srcdir) headers_install
+>   
+> -ifdef KSFT_KHDR_INSTALL
+> -$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES):| khdr
+> +all: khdr $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
+> +else
+> +all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
+>   endif
+>   
+>   .ONESHELL:
+> diff --git a/tools/testing/selftests/networking/timestamping/Makefile b/tools/testing/selftests/networking/timestamping/Makefile
+> index 14cfcf006936..c46c0eefab9e 100644
+> --- a/tools/testing/selftests/networking/timestamping/Makefile
+> +++ b/tools/testing/selftests/networking/timestamping/Makefile
+> @@ -6,6 +6,7 @@ TEST_PROGS := hwtstamp_config rxtimestamp timestamping txtimestamp
+>   all: $(TEST_PROGS)
+>   
+>   top_srcdir = ../../../../..
+> +KSFT_KHDR_INSTALL := 1
+>   include ../../lib.mk
+>   
+>   clean:
+> diff --git a/tools/testing/selftests/tc-testing/bpf/Makefile b/tools/testing/selftests/tc-testing/bpf/Makefile
+> index dc92eb271d9a..be5a5e542804 100644
+> --- a/tools/testing/selftests/tc-testing/bpf/Makefile
+> +++ b/tools/testing/selftests/tc-testing/bpf/Makefile
+> @@ -4,6 +4,7 @@ APIDIR := ../../../../include/uapi
+>   TEST_GEN_FILES = action.o
+>   
+>   top_srcdir = ../../../../..
+> +KSFT_KHDR_INSTALL := 1
+>   include ../../lib.mk
+>   
+>   CLANG ?= clang
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index 6e67e726e5a5..e13eb6cc8901 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -25,6 +25,7 @@ TEST_GEN_FILES += virtual_address_range
+>   
+>   TEST_PROGS := run_vmtests
+>   
+> +KSFT_KHDR_INSTALL := 1
+>   include ../lib.mk
+>   
+>   $(OUTPUT)/userfaultfd: LDLIBS += -lpthread
+> 
