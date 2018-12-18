@@ -1,46 +1,47 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Tue, 18 Dec 2018 17:59:38 +0000
-Subject: [RFC][PATCH 0/3] arm64 relaxed ABI
-In-Reply-To: <CAAeHK+zxYJDJ7DJuDAOuOMgGvckFwMAoVUTDJzb6MX3WsXhRTQ@mail.gmail.com>
-References: <cover.1544445454.git.andreyknvl@google.com>
- <20181210143044.12714-1-vincenzo.frascino@arm.com>
- <CAAeHK+xPZ-Z9YUAq=3+hbjj4uyJk32qVaxZkhcSAHYC4mHAkvQ@mail.gmail.com>
- <20181212150230.GH65138@arrakis.emea.arm.com>
- <CAAeHK+zxYJDJ7DJuDAOuOMgGvckFwMAoVUTDJzb6MX3WsXhRTQ@mail.gmail.com>
-Message-ID: <20181218175938.GD20197@arrakis.emea.arm.com>
+From: alexandre.belloni@bootlin.com (Alexandre Belloni)
+Date: Tue, 18 Dec 2018 22:34:20 +0100
+Subject: [PATCH 1/2] selftests: rtc: rtctest: fix alarm tests
+Message-ID: <20181218213421.15447-1-alexandre.belloni@bootlin.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181218175938.piIAmPRH4r-Z-z1PPx4mpQDPiX-Dn7BXFGy1kcLkfyI@z>
+Message-ID: <20181218213420.nNnheTNHgTsLE4nNaihjOqzn6swJg7yp1q32lzAZ9Dk@z>
 
-On Tue, Dec 18, 2018@04:03:38PM +0100, Andrey Konovalov wrote:
-> On Wed, Dec 12, 2018@4:02 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > The summary of our internal discussions (mostly between kernel
-> > developers) is that we can't properly describe a user ABI that covers
-> > future syscalls or syscall extensions while not all syscalls accept
-> > tagged pointers. So we tweaked the requirements slightly to only allow
-> > tagged pointers back into the kernel *if* the originating address is
-> > from an anonymous mmap() or below sbrk(0). This should cover some of the
-> > ioctls or getsockopt(TCP_ZEROCOPY_RECEIVE) where the user passes a
-> > pointer to a buffer obtained via mmap() on the device operations.
-> >
-> > (sorry for not being clear on what Vincenzo's proposal implies)
-> 
-> OK, I see. So I need to make the following changes to my patchset AFAIU.
-> 
-> 1. Make sure that we only allow tagged user addresses that originate
-> from an anonymous mmap() or below sbrk(0). How exactly should this
-> check be performed?
+Return values for select are not checked properly and timeouts may not be
+detected.
 
-I don't think we should perform such checks. That's rather stating that
-the kernel only guarantees that the tagged pointers work if they
-originated from these memory ranges.
+Signed-off-by: Alexandre Belloni <alexandre.belloni at bootlin.com>
+---
+ tools/testing/selftests/rtc/rtctest.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-> 2. Allow tagged addressed passed to memory syscalls (as long as (1) is
-> satisfied). Do I understand correctly that this means that I need to
-> locate all find_vma() callers outside of mm/ and fix them up as well?
-
-Yes (unless anyone as a better idea or objections to this approach).
-
-BTW, I'll be off until the new year, so won't be able to follow up.
-
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index e20b017e7073..dea4e3d6d9e1 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -145,15 +145,12 @@ TEST_F(rtc, alarm_alm_set) {
+ 
+ 	rc = select(self->fd + 1, &readfds, NULL, NULL, &tv);
+ 	ASSERT_NE(-1, rc);
+-	EXPECT_NE(0, rc);
++	ASSERT_NE(0, rc);
+ 
+ 	/* Disable alarm interrupts */
+ 	rc = ioctl(self->fd, RTC_AIE_OFF, 0);
+ 	ASSERT_NE(-1, rc);
+ 
+-	if (rc == 0)
+-		return;
+-
+ 	rc = read(self->fd, &data, sizeof(unsigned long));
+ 	ASSERT_NE(-1, rc);
+ 	TH_LOG("data: %lx", data);
+@@ -202,7 +199,7 @@ TEST_F(rtc, alarm_wkalm_set) {
+ 
+ 	rc = select(self->fd + 1, &readfds, NULL, NULL, &tv);
+ 	ASSERT_NE(-1, rc);
+-	EXPECT_NE(0, rc);
++	ASSERT_NE(0, rc);
+ 
+ 	rc = read(self->fd, &data, sizeof(unsigned long));
+ 	ASSERT_NE(-1, rc);
 -- 
-Catalin
+2.20.0
