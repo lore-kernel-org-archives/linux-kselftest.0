@@ -1,75 +1,81 @@
-From: shuah at kernel.org (shuah)
-Date: Tue, 18 Dec 2018 07:53:36 -0700
-Subject: selftests/net: udpgso: LTS kernels supportability ?
-In-Reply-To: <1de7a003-0aac-1f4f-b836-267136e30a0a@linaro.org>
-References: <bbabafb5-e16c-4025-31d0-d9e5feb5f39a@linaro.org>
- <1d2c9a10-6caf-49ff-b921-8b93dbe96f78@kernel.org>
- <1de7a003-0aac-1f4f-b836-267136e30a0a@linaro.org>
-Message-ID: <fd4c527a-daeb-1c73-c423-95d02e1b8e86@kernel.org>
+From: andreyknvl at google.com (Andrey Konovalov)
+Date: Tue, 18 Dec 2018 16:03:38 +0100
+Subject: [RFC][PATCH 0/3] arm64 relaxed ABI
+In-Reply-To: <20181212150230.GH65138@arrakis.emea.arm.com>
+References: <cover.1544445454.git.andreyknvl@google.com>
+ <20181210143044.12714-1-vincenzo.frascino@arm.com>
+ <CAAeHK+xPZ-Z9YUAq=3+hbjj4uyJk32qVaxZkhcSAHYC4mHAkvQ@mail.gmail.com>
+ <20181212150230.GH65138@arrakis.emea.arm.com>
+Message-ID: <CAAeHK+zxYJDJ7DJuDAOuOMgGvckFwMAoVUTDJzb6MX3WsXhRTQ@mail.gmail.com>
 
-On 12/18/18 4:37 AM, Rafael David Tinoco wrote:
-> On 12/17/18 4:42 PM, shuah wrote:
->> Hi Rafael,
->>
->> On 12/17/18 10:53 AM, Rafael David Tinoco wrote:
->>> Shuah,
->>>
->>> I was recently investigating some errors coming out of our functional
->>> tests and we, Dan and I, came up with a discussion that might not be new
->>> for you, but, interests us, in defining how to better use kselftests as
->>> a regression mechanism/tool in our LKFT (https://lkft.linaro.org).
->>>
->>> David / Willem,
->>>
->>> I'm only using udpgso as an example for what I'd like to ask Shuah. Feel
->>> free to jump in in the discussion if you think its worth.
->>>
->>> All,
->>>
->>> Regarding: udpgso AND https://bugs.linaro.org/show_bug.cgi?id=3980
->>>
->>> udpgso tests are failing in kernels bellow 4.18 because of 2 main
->>> reasons:
->>>
->>> 1) udp4_ufo_fragment does not seem to demand the GSO SKB to be > than
->>> the MTU for older kernels (4th test case in udpgso.c).
->>>
->>> 2) setsockopt(...UDP_SEGMENT) support is not present for older kernels.
->>> (commits "udp: generate gso with UDP_SEGMENT" and its fixes seem to be
->>> needed).
->>
->> This case is easy right? Based on the test output below , I can see that
->> the failure is due to
->>
->> ./udpgso: setsockopt udp segment: Protocol not available. setsockopt()
->> is returning an error to clearly indicate that this options isn't
->> supported. This will be a test change to say test is a skip as opposed
->> to fail.
-> 
-> You referred to (2). (1) isn't that straightforward.
-> 
->> We have a solution for this - test should SKIP as opposed to FAIL.
->>
->>> With that explained, finally the question/discussion:
->>>
->>> Shouldn't we enforce a versioning mechanism for tests that are testing
->>> recently added features ? I mean, some of the tests inside udpgso
->>> selftest are good enough for older kernels...
->>
->> Right - we do have generic way to handle that by detecting if feature is
->> supported and skip instead of using Kernel version which is going to be
->> hard to maintain.
-> 
-> You can't distinguish case (1) failures between real failures OR older
-> kernel behaving differently then testcase expects.
-> 
->>>
->>> But, because we have no control over "kernel features" and "supported
->>> test cases", we, Linaro, have to end up blacklisting all selftests that
->>> have new feature oriented tests, because one or two test cases only.
->>>
+On Wed, Dec 12, 2018 at 4:02 PM Catalin Marinas <catalin.marinas at arm.com> wrote:
+>
+> Hi Andrey,
+>
+> On Wed, Dec 12, 2018 at 03:23:25PM +0100, Andrey Konovalov wrote:
+> > On Mon, Dec 10, 2018 at 3:31 PM Vincenzo Frascino
+> > <vincenzo.frascino at arm.com> wrote:
+> > > On arm64 the TCR_EL1.TBI0 bit has been set since Linux 3.x hence
+> > > the userspace (EL0) is allowed to set a non-zero value in the top
+> > > byte but the resulting pointers are not allowed at the user-kernel
+> > > syscall ABI boundary.
+> > >
+> > > This patchset proposes a relaxation of the ABI and a mechanism to
+> > > advertise it to the userspace via an AT_FLAGS.
+> > >
+> > > The rationale behind the choice of AT_FLAGS is that the Unix System V
+> > > ABI defines AT_FLAGS as "flags", leaving some degree of freedom in
+> > > interpretation.
+> > > There are two previous attempts of using AT_FLAGS in the Linux Kernel
+> > > for different reasons: the first was more generic and was used to expose
+> > > the support for the GNU STACK NX feature [1] and the second was done for
+> > > the MIPS architecture and was used to expose the support of "MIPS ABI
+> > > Extension for IEEE Std 754 Non-Compliant Interlinking" [2].
+> > > Both the changes are currently _not_ merged in mainline.
+> > > The only architecture that reserves some of the bits in AT_FLAGS is
+> > > currently MIPS, which introduced the concept of platform specific ABI
+> > > (psABI) reserving the top-byte [3].
+> > >
+> > > When ARM64_AT_FLAGS_SYSCALL_TBI is set the kernel is advertising
+> > > to the userspace that a relaxed ABI is supported hence this type
+> > > of pointers are now allowed to be passed to the syscalls when they are
+> > > in memory ranges obtained by anonymous mmap() or brk().
+> > >
+> > > The userspace _must_ verify that the flag is set before passing tagged
+> > > pointers to the syscalls allowed by this relaxation.
+> > >
+> > > More in general, exposing the ARM64_AT_FLAGS_SYSCALL_TBI flag and mandating
+> > > to the software to check that the feature is present, before using the
+> > > associated functionality, it provides a degree of control on the decision
+> > > of disabling such a feature in future without consequently breaking the
+> > > userspace.
+> [...]
+> > Acked-by: Andrey Konovalov <andreyknvl at google.com>
+>
+> Thanks for the ack. However, if we go ahead with this ABI proposal it
+> means that your patches need to be reworked to allow a non-zero top byte
+> in all syscalls, including mmap() and friends, ioctl(). There are ABI
+> concerns in either case but I'd rather have this discussion in the open.
+> It doesn't necessarily mean that I endorse this proposal, I would like
+> feedback and not just from kernel developers but user space ones.
+>
+> The summary of our internal discussions (mostly between kernel
+> developers) is that we can't properly describe a user ABI that covers
+> future syscalls or syscall extensions while not all syscalls accept
+> tagged pointers. So we tweaked the requirements slightly to only allow
+> tagged pointers back into the kernel *if* the originating address is
+> from an anonymous mmap() or below sbrk(0). This should cover some of the
+> ioctls or getsockopt(TCP_ZEROCOPY_RECEIVE) where the user passes a
+> pointer to a buffer obtained via mmap() on the device operations.
+>
+> (sorry for not being clear on what Vincenzo's proposal implies)
 
-Can you share the blacklisted tests?
+OK, I see. So I need to make the following changes to my patchset AFAIU.
 
-thanks,
--- Shuah
+1. Make sure that we only allow tagged user addresses that originate
+from an anonymous mmap() or below sbrk(0). How exactly should this
+check be performed?
+
+2. Allow tagged addressed passed to memory syscalls (as long as (1) is
+satisfied). Do I understand correctly that this means that I need to
+locate all find_vma() callers outside of mm/ and fix them up as well?
