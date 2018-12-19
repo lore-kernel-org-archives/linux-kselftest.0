@@ -1,130 +1,158 @@
-From: alexandre.belloni at bootlin.com (Alexandre Belloni)
-Date: Tue, 18 Dec 2018 22:34:21 +0100
-Subject: [PATCH 2/2] selftests: rtc: rtctest: add alarm test on minute boundary
-In-Reply-To: <20181218213421.15447-1-alexandre.belloni@bootlin.com>
-References: <20181218213421.15447-1-alexandre.belloni@bootlin.com>
-Message-ID: <20181218213421.15447-2-alexandre.belloni@bootlin.com>
+From: Dave.Martin at arm.com (Dave Martin)
+Date: Wed, 19 Dec 2018 12:52:52 +0000
+Subject: [RFC][PATCH 0/3] arm64 relaxed ABI
+In-Reply-To: <20181218175938.GD20197@arrakis.emea.arm.com>
+References: <cover.1544445454.git.andreyknvl@google.com>
+ <20181210143044.12714-1-vincenzo.frascino@arm.com>
+ <CAAeHK+xPZ-Z9YUAq=3+hbjj4uyJk32qVaxZkhcSAHYC4mHAkvQ@mail.gmail.com>
+ <20181212150230.GH65138@arrakis.emea.arm.com>
+ <CAAeHK+zxYJDJ7DJuDAOuOMgGvckFwMAoVUTDJzb6MX3WsXhRTQ@mail.gmail.com>
+ <20181218175938.GD20197@arrakis.emea.arm.com>
+Message-ID: <20181219125249.GB22067@e103592.cambridge.arm.com>
 
-Unfortunately, some RTC don't have a second resolution for alarm so also
-test for alarm on a minute boundary.
+On Tue, Dec 18, 2018 at 05:59:38PM +0000, Catalin Marinas wrote:
+> On Tue, Dec 18, 2018 at 04:03:38PM +0100, Andrey Konovalov wrote:
+> > On Wed, Dec 12, 2018 at 4:02 PM Catalin Marinas <catalin.marinas at arm.com> wrote:
+> > > The summary of our internal discussions (mostly between kernel
+> > > developers) is that we can't properly describe a user ABI that covers
+> > > future syscalls or syscall extensions while not all syscalls accept
+> > > tagged pointers. So we tweaked the requirements slightly to only allow
+> > > tagged pointers back into the kernel *if* the originating address is
+> > > from an anonymous mmap() or below sbrk(0). This should cover some of the
+> > > ioctls or getsockopt(TCP_ZEROCOPY_RECEIVE) where the user passes a
+> > > pointer to a buffer obtained via mmap() on the device operations.
+> > >
+> > > (sorry for not being clear on what Vincenzo's proposal implies)
+> > 
+> > OK, I see. So I need to make the following changes to my patchset AFAIU.
+> > 
+> > 1. Make sure that we only allow tagged user addresses that originate
+> > from an anonymous mmap() or below sbrk(0). How exactly should this
+> > check be performed?
+> 
+> I don't think we should perform such checks. That's rather stating that
+> the kernel only guarantees that the tagged pointers work if they
+> originated from these memory ranges.
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni at bootlin.com>
----
- tools/testing/selftests/rtc/rtctest.c | 102 ++++++++++++++++++++++++++
- 1 file changed, 102 insertions(+)
+I concur.
 
-diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-index dea4e3d6d9e1..b2065536d407 100644
---- a/tools/testing/selftests/rtc/rtctest.c
-+++ b/tools/testing/selftests/rtc/rtctest.c
-@@ -211,6 +211,108 @@ TEST_F(rtc, alarm_wkalm_set) {
- 	ASSERT_EQ(new, secs);
- }
- 
-+TEST_F(rtc, alarm_alm_set_minute) {
-+	struct timeval tv = { .tv_sec = 62 };
-+	unsigned long data;
-+	struct rtc_time tm;
-+	fd_set readfds;
-+	time_t secs, new;
-+	int rc;
-+
-+	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
-+	ASSERT_NE(-1, rc);
-+
-+	secs = timegm((struct tm *)&tm) + 60 - tm.tm_sec;
-+	gmtime_r(&secs, (struct tm *)&tm);
-+
-+	rc = ioctl(self->fd, RTC_ALM_SET, &tm);
-+	if (rc == -1) {
-+		ASSERT_EQ(EINVAL, errno);
-+		TH_LOG("skip alarms are not supported.");
-+		return;
-+	}
-+
-+	rc = ioctl(self->fd, RTC_ALM_READ, &tm);
-+	ASSERT_NE(-1, rc);
-+
-+	TH_LOG("Alarm time now set to %02d:%02d:%02d.",
-+	       tm.tm_hour, tm.tm_min, tm.tm_sec);
-+
-+	/* Enable alarm interrupts */
-+	rc = ioctl(self->fd, RTC_AIE_ON, 0);
-+	ASSERT_NE(-1, rc);
-+
-+	FD_ZERO(&readfds);
-+	FD_SET(self->fd, &readfds);
-+
-+	rc = select(self->fd + 1, &readfds, NULL, NULL, &tv);
-+	ASSERT_NE(-1, rc);
-+	ASSERT_NE(0, rc);
-+
-+	/* Disable alarm interrupts */
-+	rc = ioctl(self->fd, RTC_AIE_OFF, 0);
-+	ASSERT_NE(-1, rc);
-+
-+	rc = read(self->fd, &data, sizeof(unsigned long));
-+	ASSERT_NE(-1, rc);
-+	TH_LOG("data: %lx", data);
-+
-+	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
-+	ASSERT_NE(-1, rc);
-+
-+	new = timegm((struct tm *)&tm);
-+	ASSERT_EQ(new, secs);
-+}
-+
-+TEST_F(rtc, alarm_wkalm_set_minute) {
-+	struct timeval tv = { .tv_sec = 62 };
-+	struct rtc_wkalrm alarm = { 0 };
-+	struct rtc_time tm;
-+	unsigned long data;
-+	fd_set readfds;
-+	time_t secs, new;
-+	int rc;
-+
-+	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
-+	ASSERT_NE(-1, rc);
-+
-+	secs = timegm((struct tm *)&alarm.time) + 60 - alarm.time.tm_sec;
-+	gmtime_r(&secs, (struct tm *)&alarm.time);
-+
-+	alarm.enabled = 1;
-+
-+	rc = ioctl(self->fd, RTC_WKALM_SET, &alarm);
-+	if (rc == -1) {
-+		ASSERT_EQ(EINVAL, errno);
-+		TH_LOG("skip alarms are not supported.");
-+		return;
-+	}
-+
-+	rc = ioctl(self->fd, RTC_WKALM_RD, &alarm);
-+	ASSERT_NE(-1, rc);
-+
-+	TH_LOG("Alarm time now set to %02d/%02d/%02d %02d:%02d:%02d.",
-+	       alarm.time.tm_mday, alarm.time.tm_mon + 1,
-+	       alarm.time.tm_year + 1900, alarm.time.tm_hour,
-+	       alarm.time.tm_min, alarm.time.tm_sec);
-+
-+	FD_ZERO(&readfds);
-+	FD_SET(self->fd, &readfds);
-+
-+	rc = select(self->fd + 1, &readfds, NULL, NULL, &tv);
-+	ASSERT_NE(-1, rc);
-+	ASSERT_NE(0, rc);
-+
-+	rc = read(self->fd, &data, sizeof(unsigned long));
-+	ASSERT_NE(-1, rc);
-+
-+	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
-+	ASSERT_NE(-1, rc);
-+
-+	new = timegm((struct tm *)&tm);
-+	ASSERT_EQ(new, secs);
-+}
-+
- static void __attribute__((constructor))
- __constructor_order_last(void)
- {
--- 
-2.20.0
+Really, the kernel should do the expected thing with all "non-weird"
+memory.
+
+In lieu of a proper definition of "non-weird", I think we should have
+some lists of things that are explicitly included, and also excluded:
+
+OK:
+	kernel-allocated process stack
+	brk area
+	MAP_ANONYMOUS | MAP_PRIVATE
+	MAP_PRIVATE mappings of /dev/zero
+
+Not OK:
+	MAP_SHARED
+	mmaps of non-memory-like devices
+	mmaps of anything that is not a regular file
+	the VDSO
+	...
+
+In general, userspace can tag memory that it "owns", and we do not assume
+a transfer of ownership except in the "OK" list above.  Otherwise, it's
+the kernel's memory, or the owner is simply not well defined.
+
+
+I would also like to see advice for userspace developers, particularly
+things like (strawman, please challenge!):
+
+ * Userspace should set tags at the point of allocation only.
+
+ * If you don't know how an object was allocated, you cannot modify the
+   tag, period.
+
+ * A single C object should be accessed using a single, fixed pointer tag
+   throughout its entire lifetime.
+
+ * Tags can be changed only when there are no outstanding pointers to
+   the affected object or region that may be used to access the object
+   or region (i.e., if the object were allocated from the C heap and
+   is it safe to realloc() it, then it is safe to change the tag; for
+   other types of allocation, analogous arguments can be applied).
+
+ * When the kernel dereferences a pointer on userspace's behalf, it
+   shall behave equivalently to userspace dereferencing the same pointer,
+   including use of the same tag (where passed by userspace).
+
+ * Where the pointer tag affects pointer dereference behaviour (i.e.,
+   with hardware memory colouring) the kernel makes no guarantee to
+   honour pointer tags correctly for every location a buffer based on a
+   pointer passed by userspace to the kernel.
+
+   (This means for example that for a read(fd, buf, size), we can check
+   the tag for a single arbitrary location in *(char (*)[size])buf
+   before passing the buffer to get_user_pages().  Hopefully this could
+   be done in get_user_pages() itself rather than hunting call sites.
+   For userspace, it means that you're on your own if you ask the
+   kernel to operate on a buffer than spans multiple, independently-
+   allocated objects, or a deliberately striped single object.)
+
+ * The kernel shall not extend the lifetime of user pointers in ways
+   that are not clear from the specification of the syscall or
+   interface to which the pointer is passed (and in any case shall not
+   extend pointer lifetimes without good reason).
+
+   So no clever transparent caching between syscalls, unless it _really_
+   is transparent in the presence of tags.
+
+ * For purposes other than dereference, the kernel shall accept any
+   legitimately tagged pointer (according to the above rules) as
+   identifying the associated memory location.
+
+   So, mprotect(some_page_aligned_object, ...); is valid irrespective
+   of where page_aligned_object() came from.  There is no implicit
+   derefence by the kernel here, hence no tag check.
+
+   The kernel does not guarantee to work correctly if the wrong tag
+   is used, but there is not always a well-defined "right" tag, so
+   we can't really guarantee to check it.  So a pointer derived by
+   any reasonable means by userspace has to be treated as equally
+   valid.
+  
+
+We would need to get some cross-arch buy-in for this, otherwise core
+maintainers might just refuse to maintain the necessary guarantees.
+
+
+> > 2. Allow tagged addressed passed to memory syscalls (as long as (1) is
+> > satisfied). Do I understand correctly that this means that I need to
+> > locate all find_vma() callers outside of mm/ and fix them up as well?
+> 
+> Yes (unless anyone as a better idea or objections to this approach).
+
+Also, watch out for code that pokes about inside struct vma directly.
+
+I'm wondering, could we define an explicit type, say,
+
+	struct user_vaddr {
+		unsigned long addr;
+	};
+
+to replace the unsigned longs in struct vma the mm API?  This would
+turn ad-hoc (unsigned long) casts into build breaks.  We could have
+an explicit conversion functions, say,
+
+	struct user_vaddr __user_vaddr_unsafe(void __user *);
+	void __user *__user_ptr_unsafe(struct user_vaddr);
+
+that we robotically insert in all the relevant places to mark
+unaudited code.
+
+This allows us to keep the kernel buildable, while flagging things
+that will need review.  We would also need to warn the mm folks to
+reject any new code using these unsafe conversions.
+
+Of course, it would be a non-trivial effort...
+
+> 
+> BTW, I'll be off until the new year, so won't be able to follow up.
+
+Cheers
+---Dave
