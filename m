@@ -1,115 +1,112 @@
 From: shuah@kernel.org (shuah)
-Date: Fri, 21 Dec 2018 09:45:50 -0700
-Subject: [GIT PULL] kselftest update for Linux 4.21-rc1
-Message-ID: <6d5aa143-4c9b-0bd9-4c14-8801f64ac40c@kernel.org>
+Date: Fri, 21 Dec 2018 09:52:32 -0700
+Subject: ir test compile errors
+Message-ID: <f209e2d2-63c7-eb0a-171d-4db193070a45@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20181221164550.FysV79SqCTvoRkf0LFYHylwMz39U-63tSyHlFeNm4Yo@z>
+Message-ID: <20181221165232.NFXwwTZSNabCtCo6gsYQJyDi0sdVcoo_bygeme93H5s@z>
 
-Hi Linus,
+Hi Sean,
 
-Please pull the following Kselftest update for Linux 4.21-rc1.
+I started to see compile errors on ir test. Could you please take a look 
+and see if you can fix them.
 
-This Kselftest update for Linux 4.21-rc1 consists of:
 
-- fixes, and improvements to the framework, and individual tests.
-- a new media test for IR encoders from Sean Young.
-- a new watchdog test option to find time left on a timer.
+ir_loopback.c:32:16: error: field ‘proto’ has incomplete type
+   enum rc_proto proto;
+                 ^~~~~
+ir_loopback.c:37:4: error: ‘RC_PROTO_RC5’ undeclared here (not in a 
+function)
+   { RC_PROTO_RC5, "rc-5", 0x1f7f, "rc-5" },
+     ^~~~~~~~~~~~
+ir_loopback.c:38:4: error: ‘RC_PROTO_RC5X_20’ undeclared here (not in a 
+function); did you mean ‘RC_PROTO_RC5’?
+   { RC_PROTO_RC5X_20, "rc-5x-20", 0x1f7f3f, "rc-5" },
+     ^~~~~~~~~~~~~~~~
+     RC_PROTO_RC5
+ir_loopback.c:39:4: error: ‘RC_PROTO_RC5_SZ’ undeclared here (not in a 
+function); did you mean ‘RC_PROTO_RC5X_20’?
+   { RC_PROTO_RC5_SZ, "rc-5-sz", 0x2fff, "rc-5-sz" },
+     ^~~~~~~~~~~~~~~
+     RC_PROTO_RC5X_20
+ir_loopback.c:40:4: error: ‘RC_PROTO_JVC’ undeclared here (not in a 
+function); did you mean ‘RC_PROTO_RC5’?
+   { RC_PROTO_JVC, "jvc", 0xffff, "jvc" },
+     ^~~~~~~~~~~~
+     RC_PROTO_RC5
+ir_loopback.c:41:4: error: ‘RC_PROTO_SONY12’ undeclared here (not in a 
+function); did you mean ‘RC_PROTO_JVC’?
+   { RC_PROTO_SONY12, "sony-12", 0x1f007f, "sony" },
+     ^~~~~~~~~~~~~~~
+     RC_PROTO_JVC
+ir_loopback.c:42:4: error: ‘RC_PROTO_SONY15’ undeclared here (not in a 
+function); did you mean ‘RC_PROTO_SONY12’?
+   { RC_PROTO_SONY15, "sony-15", 0xff007f, "sony" },
+     ^~~~~~~~~~~~~~~
+     RC_PROTO_SONY12
+ir_loopback.c:43:4: error: ‘RC_PROTO_SONY20’ undeclared here (not in a 
+function); did you mean ‘RC_PROTO_SONY15’?
+   { RC_PROTO_SONY20, "sony-20", 0x1fff7f, "sony" },
+     ^~~~~~~~~~~~~~~
+     RC_PROTO_SONY15
+ir_loopback.c:44:4: error: ‘RC_PROTO_NEC’ undeclared here (not in a 
+function); did you mean ‘RC_PROTO_JVC’?
+   { RC_PROTO_NEC, "nec", 0xffff, "nec" },
+     ^~~~~~~~~~~~
+     RC_PROTO_JVC
+ir_loopback.c:45:4: error: ‘RC_PROTO_NECX’ undeclared here (not in a 
+function); did you mean ‘RC_PROTO_NEC’?
+   { RC_PROTO_NECX, "nec-x", 0xffffff, "nec" },
+     ^~~~~~~~~~~~~
+     RC_PROTO_NEC
+ir_loopback.c:46:4: error: ‘RC_PROTO_NEC32’ undeclared here (not in a 
+function); did you mean ‘RC_PROTO_NECX’?
+   { RC_PROTO_NEC32, "nec-32", 0xffffffff, "nec" },
+     ^~~~~~~~~~~~~~
+     RC_PROTO_NECX
+ir_loopback.c:47:4: error: ‘RC_PROTO_SANYO’ undeclared here (not in a 
+function); did you mean ‘RC_PROTO_SONY20’?
+   { RC_PROTO_SANYO, "sanyo", 0x1fffff, "sanyo" },
+     ^~~~~~~~~~~~~~
+     RC_PROTO_SONY20
+ir_loopback.c:48:4: error: ‘RC_PROTO_RC6_0’ undeclared here (not in a 
+function); did you mean ‘RC_PROTO_RC5_SZ’?
+   { RC_PROTO_RC6_0, "rc-6-0", 0xffff, "rc-6" },
+     ^~~~~~~~~~~~~~
+     RC_PROTO_RC5_SZ
+ir_loopback.c:49:4: error: ‘RC_PROTO_RC6_6A_20’ undeclared here (not in 
+a function); did you mean ‘RC_PROTO_RC6_0’?
+   { RC_PROTO_RC6_6A_20, "rc-6-6a-20", 0xfffff, "rc-6" },
+     ^~~~~~~~~~~~~~~~~~
+     RC_PROTO_RC6_0
+ir_loopback.c:50:4: error: ‘RC_PROTO_RC6_6A_24’ undeclared here (not in 
+a function); did you mean ‘RC_PROTO_RC6_6A_20’?
+   { RC_PROTO_RC6_6A_24, "rc-6-6a-24", 0xffffff, "rc-6" },
+     ^~~~~~~~~~~~~~~~~~
+     RC_PROTO_RC6_6A_20
+ir_loopback.c:51:4: error: ‘RC_PROTO_RC6_6A_32’ undeclared here (not in 
+a function); did you mean ‘RC_PROTO_RC6_6A_24’?
+   { RC_PROTO_RC6_6A_32, "rc-6-6a-32", 0xffffffff, "rc-6" },
+     ^~~~~~~~~~~~~~~~~~
+     RC_PROTO_RC6_6A_24
+ir_loopback.c:52:4: error: ‘RC_PROTO_RC6_MCE’ undeclared here (not in a 
+function); did you mean ‘RC_PROTO_RC6_0’?
+   { RC_PROTO_RC6_MCE, "rc-6-mce", 0x00007fff, "rc-6" },
+     ^~~~~~~~~~~~~~~~
+     RC_PROTO_RC6_0
+ir_loopback.c:53:4: error: ‘RC_PROTO_SHARP’ undeclared here (not in a 
+function); did you mean ‘RC_PROTO_SANYO’?
+   { RC_PROTO_SHARP, "sharp", 0x1fff, "sharp" },
+     ^~~~~~~~~~~~~~
+     RC_PROTO_SANYO
+ir_loopback.c: In function ‘main’:
+ir_loopback.c:101:9: error: ‘LIRC_MODE_SCANCODE’ undeclared (first use 
+in this function); did you mean ‘LIRC_MODE_LIRCCODE’?
+   mode = LIRC_MODE_SCANCODE;
+          ^~~~~~~~~~~~~~~~~~
+          LIRC_MODE_LIRCCODE
+ir_loopback.c:101:9: note: each undeclared identifier is reported only 
+once for each function it appears in
 
-diff is attached.
 
 thanks,
 -- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 651022382c7f8da46cb4872a545ee1da6d097d2a:
-
-   Linux 4.20-rc1 (2018-11-04 15:37:52 -0800)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
-tags/linux-kselftest-4.21-rc1
-
-for you to fetch changes up to 283ac6d5fb2a47f12bcef7806b78acf6ad89907e:
-
-   selftests: Fix test errors related to lib.mk khdr target (2018-12-17 
-09:17:55 -0700)
-
-----------------------------------------------------------------
-linux-kselftest-4.21-rc1
-
-This Kselftest update for Linux 4.21-rc1 consists of:
-
-- fixes, and improvements to the framework, and individual tests.
-- a new media test for IR encoders from Sean Young.
-- a new watchdog test option to find time left on a timer.
-
-----------------------------------------------------------------
-Colin Ian King (1):
-       selftests: watchdog: fix spelling mistake "experies" -> "expires"
-
-Dan Rue (2):
-       selftests: firmware: remove use of non-standard diff -Z option
-       selftests: firmware: add CONFIG_FW_LOADER_USER_HELPER_FALLBACK to 
-config
-
-Daniel Díaz (1):
-       selftests: gpio: Find libmount with pkg-config if available
-
-Dmitry V. Levin (1):
-       selftests: do not macro-expand failed assertion expressions
-
-Jerry Hoemann (1):
-       selftests: watchdog: Add gettimeleft command line arg
-
-Sean Young (1):
-       media: rc: self test for IR encoders and decoders
-
-Shuah Khan (1):
-       selftests: Fix test errors related to lib.mk khdr target
-
-Thomas Gleixner (1):
-       selftests/ftrace: Fix invalid SPDX identifiers
-
-Tom Murphy (1):
-       fix dma-buf/udmabuf selftest
-
-tools/testing/selftests/Makefile                   |   2 +
-  tools/testing/selftests/android/Makefile           |   2 +-
-  tools/testing/selftests/drivers/dma-buf/Makefile   |   2 +
-  tools/testing/selftests/drivers/dma-buf/udmabuf.c  |  11 +-
-  tools/testing/selftests/firmware/config            |   1 +
-  tools/testing/selftests/firmware/fw_filesystem.sh  |   9 +-
-  .../ftrace/test.d/ftrace/func-filter-stacktrace.tc |   2 +-
-  .../selftests/ftrace/test.d/ftrace/func_cpumask.tc |   2 +-
-  tools/testing/selftests/ftrace/test.d/template     |   2 +-
-  .../selftests/ftrace/test.d/tracer/wakeup.tc       |   2 +-
-  .../selftests/ftrace/test.d/tracer/wakeup_rt.tc    |   2 +-
-  tools/testing/selftests/futex/functional/Makefile  |   1 +
-  tools/testing/selftests/gpio/Makefile              |  16 +-
-  tools/testing/selftests/ir/.gitignore              |   1 +
-  tools/testing/selftests/ir/Makefile                |   5 +
-  tools/testing/selftests/ir/ir_loopback.c           | 199 
-+++++++++++++++++++++
-  tools/testing/selftests/ir/ir_loopback.sh          |  20 +++
-  tools/testing/selftests/kselftest_harness.h        |  42 ++---
-  tools/testing/selftests/kvm/Makefile               |   2 +-
-  tools/testing/selftests/lib.mk                     |   8 +-
-  .../selftests/networking/timestamping/Makefile     |   1 +
-  tools/testing/selftests/tc-testing/bpf/Makefile    |   1 +
-  tools/testing/selftests/vm/Makefile                |   1 +
-  tools/testing/selftests/watchdog/watchdog-test.c   |  13 +-
-  24 files changed, 301 insertions(+), 46 deletions(-)
-  create mode 100644 tools/testing/selftests/ir/.gitignore
-  create mode 100644 tools/testing/selftests/ir/Makefile
-  create mode 100644 tools/testing/selftests/ir/ir_loopback.c
-  create mode 100755 tools/testing/selftests/ir/ir_loopback.sh
-
-----------------------------------------------------------------
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: linux-kselftest-4.21-rc1.diff
-Type: text/x-patch
-Size: 24361 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20181221/049b84e5/attachment-0001.bin>
