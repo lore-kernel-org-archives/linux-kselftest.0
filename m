@@ -1,158 +1,27 @@
-From: Dave.Martin at arm.com (Dave Martin)
-Date: Wed, 19 Dec 2018 12:52:52 +0000
-Subject: [RFC][PATCH 0/3] arm64 relaxed ABI
-In-Reply-To: <20181218175938.GD20197@arrakis.emea.arm.com>
-References: <cover.1544445454.git.andreyknvl@google.com>
- <20181210143044.12714-1-vincenzo.frascino@arm.com>
- <CAAeHK+xPZ-Z9YUAq=3+hbjj4uyJk32qVaxZkhcSAHYC4mHAkvQ@mail.gmail.com>
- <20181212150230.GH65138@arrakis.emea.arm.com>
- <CAAeHK+zxYJDJ7DJuDAOuOMgGvckFwMAoVUTDJzb6MX3WsXhRTQ@mail.gmail.com>
- <20181218175938.GD20197@arrakis.emea.arm.com>
-Message-ID: <20181219125249.GB22067@e103592.cambridge.arm.com>
+From: liuxiaozhou at bytedance.com (Xiaozhou Liu)
+Date: Fri, 21 Dec 2018 17:35:11 +0800
+Subject: [PATCH bpf-next] selftests/bpf: fix error printing in test_devmap()
+Message-ID: <20181221093512.117777-1-liuxiaozhou@bytedance.com>
 
-On Tue, Dec 18, 2018 at 05:59:38PM +0000, Catalin Marinas wrote:
-> On Tue, Dec 18, 2018 at 04:03:38PM +0100, Andrey Konovalov wrote:
-> > On Wed, Dec 12, 2018 at 4:02 PM Catalin Marinas <catalin.marinas at arm.com> wrote:
-> > > The summary of our internal discussions (mostly between kernel
-> > > developers) is that we can't properly describe a user ABI that covers
-> > > future syscalls or syscall extensions while not all syscalls accept
-> > > tagged pointers. So we tweaked the requirements slightly to only allow
-> > > tagged pointers back into the kernel *if* the originating address is
-> > > from an anonymous mmap() or below sbrk(0). This should cover some of the
-> > > ioctls or getsockopt(TCP_ZEROCOPY_RECEIVE) where the user passes a
-> > > pointer to a buffer obtained via mmap() on the device operations.
-> > >
-> > > (sorry for not being clear on what Vincenzo's proposal implies)
-> > 
-> > OK, I see. So I need to make the following changes to my patchset AFAIU.
-> > 
-> > 1. Make sure that we only allow tagged user addresses that originate
-> > from an anonymous mmap() or below sbrk(0). How exactly should this
-> > check be performed?
-> 
-> I don't think we should perform such checks. That's rather stating that
-> the kernel only guarantees that the tagged pointers work if they
-> originated from these memory ranges.
+As a simple fix, just print the correct map type.
 
-I concur.
+Signed-off-by: Xiaozhou Liu <liuxiaozhou at bytedance.com>
+---
+ tools/testing/selftests/bpf/test_maps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Really, the kernel should do the expected thing with all "non-weird"
-memory.
-
-In lieu of a proper definition of "non-weird", I think we should have
-some lists of things that are explicitly included, and also excluded:
-
-OK:
-	kernel-allocated process stack
-	brk area
-	MAP_ANONYMOUS | MAP_PRIVATE
-	MAP_PRIVATE mappings of /dev/zero
-
-Not OK:
-	MAP_SHARED
-	mmaps of non-memory-like devices
-	mmaps of anything that is not a regular file
-	the VDSO
-	...
-
-In general, userspace can tag memory that it "owns", and we do not assume
-a transfer of ownership except in the "OK" list above.  Otherwise, it's
-the kernel's memory, or the owner is simply not well defined.
-
-
-I would also like to see advice for userspace developers, particularly
-things like (strawman, please challenge!):
-
- * Userspace should set tags at the point of allocation only.
-
- * If you don't know how an object was allocated, you cannot modify the
-   tag, period.
-
- * A single C object should be accessed using a single, fixed pointer tag
-   throughout its entire lifetime.
-
- * Tags can be changed only when there are no outstanding pointers to
-   the affected object or region that may be used to access the object
-   or region (i.e., if the object were allocated from the C heap and
-   is it safe to realloc() it, then it is safe to change the tag; for
-   other types of allocation, analogous arguments can be applied).
-
- * When the kernel dereferences a pointer on userspace's behalf, it
-   shall behave equivalently to userspace dereferencing the same pointer,
-   including use of the same tag (where passed by userspace).
-
- * Where the pointer tag affects pointer dereference behaviour (i.e.,
-   with hardware memory colouring) the kernel makes no guarantee to
-   honour pointer tags correctly for every location a buffer based on a
-   pointer passed by userspace to the kernel.
-
-   (This means for example that for a read(fd, buf, size), we can check
-   the tag for a single arbitrary location in *(char (*)[size])buf
-   before passing the buffer to get_user_pages().  Hopefully this could
-   be done in get_user_pages() itself rather than hunting call sites.
-   For userspace, it means that you're on your own if you ask the
-   kernel to operate on a buffer than spans multiple, independently-
-   allocated objects, or a deliberately striped single object.)
-
- * The kernel shall not extend the lifetime of user pointers in ways
-   that are not clear from the specification of the syscall or
-   interface to which the pointer is passed (and in any case shall not
-   extend pointer lifetimes without good reason).
-
-   So no clever transparent caching between syscalls, unless it _really_
-   is transparent in the presence of tags.
-
- * For purposes other than dereference, the kernel shall accept any
-   legitimately tagged pointer (according to the above rules) as
-   identifying the associated memory location.
-
-   So, mprotect(some_page_aligned_object, ...); is valid irrespective
-   of where page_aligned_object() came from.  There is no implicit
-   derefence by the kernel here, hence no tag check.
-
-   The kernel does not guarantee to work correctly if the wrong tag
-   is used, but there is not always a well-defined "right" tag, so
-   we can't really guarantee to check it.  So a pointer derived by
-   any reasonable means by userspace has to be treated as equally
-   valid.
-  
-
-We would need to get some cross-arch buy-in for this, otherwise core
-maintainers might just refuse to maintain the necessary guarantees.
-
-
-> > 2. Allow tagged addressed passed to memory syscalls (as long as (1) is
-> > satisfied). Do I understand correctly that this means that I need to
-> > locate all find_vma() callers outside of mm/ and fix them up as well?
-> 
-> Yes (unless anyone as a better idea or objections to this approach).
-
-Also, watch out for code that pokes about inside struct vma directly.
-
-I'm wondering, could we define an explicit type, say,
-
-	struct user_vaddr {
-		unsigned long addr;
-	};
-
-to replace the unsigned longs in struct vma the mm API?  This would
-turn ad-hoc (unsigned long) casts into build breaks.  We could have
-an explicit conversion functions, say,
-
-	struct user_vaddr __user_vaddr_unsafe(void __user *);
-	void __user *__user_ptr_unsafe(struct user_vaddr);
-
-that we robotically insert in all the relevant places to mark
-unaudited code.
-
-This allows us to keep the kernel buildable, while flagging things
-that will need review.  We would also need to warn the mm folks to
-reject any new code using these unsafe conversions.
-
-Of course, it would be a non-trivial effort...
-
-> 
-> BTW, I'll be off until the new year, so won't be able to follow up.
-
-Cheers
----Dave
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index 9c79ee017df3..e2b9eee37187 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -510,7 +510,7 @@ static void test_devmap(int task, void *data)
+ 	fd = bpf_create_map(BPF_MAP_TYPE_DEVMAP, sizeof(key), sizeof(value),
+ 			    2, 0);
+ 	if (fd < 0) {
+-		printf("Failed to create arraymap '%s'!\n", strerror(errno));
++		printf("Failed to create devmap '%s'!\n", strerror(errno));
+ 		exit(1);
+ 	}
+ 
+-- 
+2.11.0
