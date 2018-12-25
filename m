@@ -1,79 +1,66 @@
-From: ahmedsoliman at mena.vt.edu (Ahmed Soliman)
-Date: Mon, 24 Dec 2018 16:56:50 +0200
-Subject: [PATCH V2] SelfTest: KVM: Drop Asserts for madvise
- MADV_NOHUGEPAGE failure
-In-Reply-To: <20181116125858.yujwx5xkpg2kgyxe@kamzik.brq.redhat.com>
-References: <20181116115055.7415-1-ahmedsoliman0x666@gmail.com>
- <20181116125858.yujwx5xkpg2kgyxe@kamzik.brq.redhat.com>
-Message-ID: <CANBxJ=EeosO1EOfvQ6OFLps+D9ZQRBKTmByvcJ5r=h-4ahbekQ@mail.gmail.com>
+From: po-hsu.lin at canonical.com (Po-Hsu Lin)
+Date: Tue, 25 Dec 2018 16:59:45 +0800
+Subject: [PATCH] selftests/efivarfs: clean up test files from test_create*()
+Message-ID: <20181225085945.13686-1-po-hsu.lin@canonical.com>
 
-Kind reminder to merge my patch into next
+Test files created by test_create*() tests will stay in the $efivarfs_mount
+directory until next reboot.
 
-thanks.
+When the tester tries to run this efivarfs test again on the same system, the
+immutable characteristics in that directory with those previously generated
+files will cause some "Permission denied" noises and a false-positive test
+result to the test_create_read() test.
 
-On Fri, Nov 16, 2018 at 2:59 PM Andrew Jones <drjones at redhat.com> wrote:
->
-> On Fri, Nov 16, 2018 at 01:50:55PM +0200, Ahmed Abd El Mawgood wrote:
-> > From: Ahmed Abd El Mawgood <ahmedsoliman at mena.vt.edu>
-> >
-> > madvise() returns -1 without CONFIG_TRANSPARENT_HUGEPAGE=y. That would
-> > trigger asserts when checking for return value of madvice. Following
-> > similar decision to [1]. I thought it is ok to assume that madvise()
-> > MADV_NOHUGEPAGE failures implies that THP is not supported by host kernel.
-> >
-> > Other options was to check for Transparent Huge Page support in
-> > /sys/kernel/mm/transparent_hugepage/enabled.
-> >
-> > -- links --
-> > [1] https://lists.gnu.org/archive/html/qemu-devel/2015-11/msg04514.html
-> >
-> > Signed-off-by: Ahmed Abd El Mawgood <ahmedsoliman at mena.vt.edu>
-> > ---
-> >  tools/testing/selftests/kvm/lib/kvm_util.c | 21 +++++++++++++++------
-> >  1 file changed, 15 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > index 1b41e71283d5..437c5bb48061 100644
-> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > @@ -586,14 +586,23 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
-> >                                src_type == VM_MEM_SRC_ANONYMOUS_THP ?  huge_page_size : 1);
-> >
-> >       /* As needed perform madvise */
-> > -     if (src_type == VM_MEM_SRC_ANONYMOUS || src_type == VM_MEM_SRC_ANONYMOUS_THP) {
-> > +     if (src_type == VM_MEM_SRC_ANONYMOUS) {
-> > +             /*
-> > +              * Neglect madvise error because it is ok to not have THP
-> > +              * support in this case.
-> > +              */
-> > +             madvise(region->host_mem, npages * vm->page_size,
-> > +                     MADV_NOHUGEPAGE);
-> > +     } else if (src_type == VM_MEM_SRC_ANONYMOUS_THP) {
-> >               ret = madvise(region->host_mem, npages * vm->page_size,
-> > -                          src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
-> > +                     MADV_HUGEPAGE);
-> >               TEST_ASSERT(ret == 0, "madvise failed,\n"
-> > -                         "  addr: %p\n"
-> > -                         "  length: 0x%lx\n"
-> > -                         "  src_type: %x",
-> > -                         region->host_mem, npages * vm->page_size, src_type);
-> > +                     "Does the kernel have CONFIG_TRANSPARENT_HUGEPAGE=y\n"
-> > +                     "  addr: %p\n"
-> > +                     "  length: 0x%lx\n"
-> > +                     "  src_type: %x\n",
-> > +                     region->host_mem, npages * vm->page_size,
-> > +                     src_type);
-> >       }
-> >
-> >       region->unused_phy_pages = sparsebit_alloc();
-> > --
-> > 2.18.1
-> >
->
-> Reviewed-by: Andrew Jones <drjones at redhat.com>
+Remove those test files in the end of each test to solve this issue.
 
+Link: https://bugs.launchpad.net/bugs/1809704
 
+Signed-off-by: Po-Hsu Lin <po-hsu.lin at canonical.com>
+---
+ tools/testing/selftests/efivarfs/efivarfs.sh | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
+diff --git a/tools/testing/selftests/efivarfs/efivarfs.sh b/tools/testing/selftests/efivarfs/efivarfs.sh
+index a47029a..ea2e2a0 100755
+--- a/tools/testing/selftests/efivarfs/efivarfs.sh
++++ b/tools/testing/selftests/efivarfs/efivarfs.sh
+@@ -60,6 +60,12 @@ test_create()
+ 		echo "$file has invalid size" >&2
+ 		exit 1
+ 	fi
++
++        rm $file 2>/dev/null
++        if [ $? -ne 0 ]; then
++                chattr -i $file
++                rm $file
++        fi
+ }
+ 
+ test_create_empty()
+@@ -72,12 +78,24 @@ test_create_empty()
+ 		echo "$file can not be created without writing" >&2
+ 		exit 1
+ 	fi
++
++        rm $file 2>/dev/null
++        if [ $? -ne 0 ]; then
++                chattr -i $file
++                rm $file
++        fi
+ }
+ 
+ test_create_read()
+ {
+ 	local file=$efivarfs_mount/$FUNCNAME-$test_guid
+ 	./create-read $file
++
++        rm $file 2>/dev/null
++        if [ $? -ne 0 ]; then
++                chattr -i $file
++                rm $file
++        fi
+ }
+ 
+ test_delete()
 -- 
-Junior Researcher, IoT and Cyber Security lab, SmartCI, Alexandria
-University, & CIS @  VMI
+2.7.4
