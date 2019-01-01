@@ -1,29 +1,16 @@
-From: pvorel@suse.cz (Petr Vorel)
-Date: Fri,  1 Mar 2019 00:30:30 +0100
-Subject: [PATCH] selftests/ima: Add missing '=y' to config options
-Message-ID: <20190228233030.10480-1-pvorel@suse.cz>
+From: daniel@iogearbox.net (Daniel Borkmann)
+Date: Tue, 1 Jan 2019 13:52:00 +0100
+Subject: [PATCH bpf-next] selftests/bpf: fix error printing in
+ test_devmap()
+In-Reply-To: <20181221093512.117777-1-liuxiaozhou@bytedance.com>
+References: <20181221093512.117777-1-liuxiaozhou@bytedance.com>
+Message-ID: <0adc725f-ef35-d55c-b201-228973b97126@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190228233030.KTK1N_4Z-woo4sukzpGuOei6QHKL3c1NlINZhoNxAP8@z>
+Message-ID: <20190101125200.vg826FpM3reo2GWMXPFXryE_7h0uYJw8wrUkN1VrKzg@z>
 
-so the file can be used as kernel config snippet.
+On 12/21/2018 10:35 AM, Xiaozhou Liu wrote:
+> As a simple fix, just print the correct map type.
+> 
+> Signed-off-by: Xiaozhou Liu <liuxiaozhou at bytedance.com>
 
-Signed-off-by: Petr Vorel <pvorel at suse.cz>
----
- tools/testing/selftests/ima/config | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/ima/config b/tools/testing/selftests/ima/config
-index 6bc86d4d9bb4..9b968cd55199 100644
---- a/tools/testing/selftests/ima/config
-+++ b/tools/testing/selftests/ima/config
-@@ -1,4 +1,4 @@
--CONFIG_IMA_APPRAISE
--CONFIG_IMA_ARCH_POLICY
--CONFIG_SECURITYFS
--CONFIG_KEXEC_VERIFY_SIG
-+CONFIG_IMA_APPRAISE=y
-+CONFIG_IMA_ARCH_POLICY=y
-+CONFIG_SECURITYFS=y
-+CONFIG_KEXEC_VERIFY_SIG=y
--- 
-2.20.1
+Applied to bpf, thanks!
