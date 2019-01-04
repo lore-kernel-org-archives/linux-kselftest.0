@@ -1,114 +1,84 @@
 From: geert at linux-m68k.org (Geert Uytterhoeven)
-Date: Fri, 4 Jan 2019 14:15:55 +0100
-Subject: [PATCH v4] selftests: add headers_install to lib.mk
-In-Reply-To: <CADYN=9+mrrNN3m5FNCfiNC1ENe-aViYuGvmKsFOYdqMC2hMfAg@mail.gmail.com>
-References: <20180413090351.25662-1-anders.roxell@linaro.org>
- <20180607110911.12252-1-anders.roxell@linaro.org>
- <CADYN=9J=hSFb2wCZ1+dXL=023p9y05MEGUPvH48WfPX7XDZvwQ@mail.gmail.com>
- <f222aa8d-88b8-140c-30ed-83fd908bfd09@kernel.org>
- <CADYN=9LSA60E4mFwrbeY-RGi4kZV6hO0ygz0-C6QB3+KKaoxQg@mail.gmail.com>
- <3f332e65-0b33-9952-6aba-f9c8953a1f26@kernel.org>
- <CAK7LNAQ6hNmjmZc8J54KWCtR6x4Megn3mbdzprGgSZL5Zk9GCg@mail.gmail.com>
- <CADYN=9+mrrNN3m5FNCfiNC1ENe-aViYuGvmKsFOYdqMC2hMfAg@mail.gmail.com>
-Message-ID: <CAMuHMdXeA0XBv-OTvcChCs3CHszkNB15R0FpOXMgQfjpfDcs-g@mail.gmail.com>
+Date: Fri, 4 Jan 2019 18:16:31 +0100
+Subject: selftests/bpf doesn't compile
+In-Reply-To: <295553a4-aadc-e5d1-229e-22d1966bc9f5@kernel.org>
+References: <20170908111923.27434-1-thomas@m3y3r.de>
+ <20170908230155.esge2mctk5d5g7gb@ast-mbp>
+ <59B32231.9090406@iogearbox.net>
+ <ed20875b-7a01-fbc8-e8d1-3929ba35c8ac@kernel.org>
+ <295553a4-aadc-e5d1-229e-22d1966bc9f5@kernel.org>
+Message-ID: <CAMuHMdXRN=mSKTjZNBSxQi-pkgSrKqeANxD-GB+hqC8pDjx7nQ@mail.gmail.com>
 
-Hi Anders,
+Hi Shuah,
 
-On Wed, Aug 8, 2018 at 12:46 PM Anders Roxell <anders.roxell at linaro.org> wrote:
-> On Tue, 7 Aug 2018 at 04:33, Masahiro Yamada
-> <yamada.masahiro at socionext.com> wrote:
-> > 2018-08-07 2:03 GMT+09:00 Shuah Khan <shuah at kernel.org>:
-> > > On 07/25/2018 10:08 AM, Anders Roxell wrote:
-> > >> On Tue, 24 Jul 2018 at 19:11, Shuah Khan <shuah at kernel.org> wrote:
-> > >>> On 07/23/2018 02:49 PM, Anders Roxell wrote:
-> > >>>> On Thu, 7 Jun 2018 at 13:09, Anders Roxell <anders.roxell at linaro.org> wrote:
-> > >>>>>
-> > >>>>> If the kernel headers aren't installed we can't build all the tests.
-> > >>>>> Add a new make target rule 'khdr' in the file lib.mk to generate the
-> > >>>>> kernel headers and that gets include for every test-dir Makefile that
-> > >>>>> includes lib.mk If the testdir in turn have its own sub-dirs the
-> > >>>>> top_srcdir needs to be set to the linux-rootdir to be able to generate
-> > >>>>> the kernel headers.
-> > >>>>>
-> > >>>>> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
-> > >>>>> Reviewed-by: Fathi Boudra <fathi.boudra at linaro.org>
-> > >>>>> ---
-> > >>>>>  Makefile                                           | 14 +-------------
-> > >>>>>  scripts/subarch.include                            | 13 +++++++++++++
-> > >>>>>  tools/testing/selftests/android/Makefile           |  2 +-
-> > >>>>>  tools/testing/selftests/android/ion/Makefile       |  2 ++
-> > >>>>>  tools/testing/selftests/futex/functional/Makefile  |  1 +
-> > >>>>>  tools/testing/selftests/gpio/Makefile              |  7 ++-----
-> > >>>>>  tools/testing/selftests/kvm/Makefile               |  7 ++-----
-> > >>>>>  tools/testing/selftests/lib.mk                     | 12 ++++++++++++
-> > >>>>>  tools/testing/selftests/net/Makefile               |  1 +
-> > >>>>>  .../selftests/networking/timestamping/Makefile     |  1 +
-> > >>>>>  tools/testing/selftests/vm/Makefile                |  4 ----
-> > >>>>>  11 files changed, 36 insertions(+), 28 deletions(-)
-> > >>>>>  create mode 100644 scripts/subarch.include
-> > >>>>>
-> > >>>>> diff --git a/Makefile b/Makefile
-> > >>>>> index 6b9aea95ae3a..8050072300fa 100644
-> > >>>>> --- a/Makefile
-> > >>>>> +++ b/Makefile
-> > >>>>> @@ -286,19 +286,7 @@ KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
-> > >>>>>  KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
-> > >>>>>  export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
-> > >>>>>
-> > >>>>> -# SUBARCH tells the usermode build what the underlying arch is.  That is set
-> > >>>>> -# first, and if a usermode build is happening, the "ARCH=um" on the command
-> > >>>>> -# line overrides the setting of ARCH below.  If a native build is happening,
-> > >>>>> -# then ARCH is assigned, getting whatever value it gets normally, and
-> > >>>>> -# SUBARCH is subsequently ignored.
-> > >>>>> -
-> > >>>>> -SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
-> > >>>>> -                                 -e s/sun4u/sparc64/ \
-> > >>>>> -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
-> > >>>>> -                                 -e s/s390x/s390/ -e s/parisc64/parisc/ \
-> > >>>>> -                                 -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
-> > >>>>> -                                 -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
-> > >>>>> -                                 -e s/riscv.*/riscv/)
-> > >>>>> +include scripts/subarch.include
-> > >>>
-> > >>> What is the reason for this SUBARCH block move to to scripts/subarch.include?
-> > >>> Is this necessary for adding headers install dependency to lib.mk?
-> > >>
-> > >> This is needed to create headers for cross build.
-> > >
-> > > I am sorry for the delay on this patch. I am going to get this into 4.19.
-> > > If anybody has objections, please let me.
-> > >
-> > > Anders! Will be able to rebase the patch and send me the latest. I think
-> > > I have Acks from kvm, android, and vm so far.
-> >
-> > I may be missing something about the tools/ directory,
-> > but why isn't it like this?
-> >
-> >
-> > kselftest: headers_install
-> >         $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+CC kbuild, gpio
+
+On Thu, Sep 14, 2017 at 5:34 PM Shuah Khan <shuah at kernel.org> wrote:
+> bpf test depends on clang and fails to compile when
 >
-> That wont work if you cross compile, since you wont run the tests
-> where you build them.
+> ------------------------------------------------------
+> make -C tools/testing/selftests/bpf run_tests
+>
+>
+> make: clang: Command not found
+> Makefile:39: recipe for target '.linux-kselftest/tools/testing/selftests/bpf/test_pkt_access.o' failed
+> make: *** [./linux-kselftest/tools/testing/selftests/bpf/test_pkt_access.o] Error 127
+> make: Leaving directory '.linux-kselftest/tools/testing/selftests/bpf'
 
-So why does a similar dependency work for samples in the main Makefile
-(even listed twice!)?
+The above failure is indeed due to missing clang.
 
-    Documentation/ samples/: headers_install
+> With "make TARGETS=bpf kselftest" it fails earlier:
+>
+> make[3]: Entering directory './linux-kselftest/tools/lib/bpf'
+> Makefile:40: tools/scripts/Makefile.arch: No such file or directory
+> Makefile:84: tools/build/Makefile.feature: No such file or directory
+> Makefile:143: tools/build/Makefile.include: No such file or directory
 
-    samples: headers_install
+This is due to srctree being "." instead of the actual source tree,
+when invoked as "make kselftest".
+When using "make -C tools/testing/selftests", srctree is correct.
 
-Or perhaps this also doesn't work?
+tools/testing/selftests/bpf/Makefile has:
 
-> Then you can argue that we should break it up in a build and run rule.
-> However, my understanding how people just build and run the the tests
-> for that particular subsystem that they develop for, like:
-> make -C tools/testing/selftests/<subsystem>/
+    $(BPFOBJ): force
+            $(MAKE) -C $(BPFDIR) OUTPUT=$(OUTPUT)/
 
-I'm still a bit puzzled: how can you "build and run" the tests when
-cross-compiling, as you don't run the tests where you build them?
+to enter the tools/lib/bpf directory to force a build of libbpf.a
+
+Note that tools/gpio has the same issue.
+
+There seem to be _four_ different ways to build kselftests
+(Documentation/dev-tools/kselftest.rst):
+
+    make kselftest
+    make O=/path/to/output kselftest
+    make -C tools/testing/selftests
+    make O=/path/to/output -C tools/testing/selftests
+
+I'm not so fond of the latter two, as they basically run make from
+somewhere inside the tree, which complicates things. I believe we don't
+support this anywhere else.
+
+Each of the four seem to have (different) issues. Especially when you
+throw cross-compiling into the mix. And care about where installed
+headers end up (yes, kselftest calls headers_install internally).
+
+I'm working on fixes for some of them, but I don't know how to fix the
+srctree issue.
+
+Anyone with a suggestion?
 
 Thanks!
+
+> make[3]: *** No rule to make target 'tools/build/Makefile.include'.  Stop.
+> make[3]: Leaving directory '.linux-kselftest/tools/lib/bpf'
+> Makefile:34: recipe for target './linux-kselftest/tools/testing/selftests/bpf/libbpf.a' failed
+> make[2]: *** [./linux-kselftest/tools/testing/selftests/bpf/libbpf.a] Error 2
+> make[2]: Leaving directory './linux-kselftest/tools/testing/selftests/bpf'
+> Makefile:69: recipe for target 'all' failed
+> make[1]: *** [all] Error 2
+> Makefile:1190: recipe for target 'kselftest' failed
+> make: *** [kselftest] Error 2
 
 Gr{oetje,eeting}s,
 
