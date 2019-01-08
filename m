@@ -1,247 +1,108 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Tue,  8 Jan 2019 14:25:28 -0500
-Subject: [PATCH AUTOSEL 4.20 060/117] selftests: do not macro-expand failed
- assertion expressions
+Date: Tue,  8 Jan 2019 14:24:39 -0500
+Subject: [PATCH AUTOSEL 4.20 011/117] selftests/bpf: enable (uncomment) all
+ tests in test_libbpf.sh
 In-Reply-To: <20190108192628.121270-1-sashal@kernel.org>
 References: <20190108192628.121270-1-sashal@kernel.org>
-Message-ID: <20190108192628.121270-60-sashal@kernel.org>
+Message-ID: <20190108192628.121270-11-sashal@kernel.org>
 
-From: "Dmitry V. Levin" <ldv at altlinux.org>
+From: Quentin Monnet <quentin.monnet at netronome.com>
 
-[ Upstream commit b708a3cc9600390ccaa2b68a88087dd265154b2b ]
+[ Upstream commit f96afa767baffba7645f5e10998f5178948bb9aa ]
 
-I've stumbled over the current macro-expand behaviour of the test
-harness:
+libbpf is now able to load successfully test_l4lb_noinline.o and
+samples/bpf/tracex3_kern.o.
 
-$ gcc -Wall -xc - <<'__EOF__'
-TEST(macro) {
-	int status = 0;
-	ASSERT_TRUE(WIFSIGNALED(status));
-}
-TEST_HARNESS_MAIN
-__EOF__
-$ ./a.out
-[==========] Running 1 tests from 1 test cases.
-[ RUN      ] global.macro
-<stdin>:4:global.macro:Expected 0 (0) != (((signed char) (((status) & 0x7f) + 1) >> 1) > 0) (0)
-global.macro: Test terminated by assertion
-[     FAIL ] global.macro
-[==========] 0 / 1 tests passed.
-[  FAILED  ]
+For the test_l4lb_noinline, uncomment related tests from test_libbpf.c
+and remove the associated "TODO".
 
-With this change the output of the same test looks much more
-comprehensible:
+For tracex3_kern.o, instead of loading a program from samples/bpf/ that
+might not have been compiled at this stage, try loading a program from
+BPF selftests. Since this test case is about loading a program compiled
+without the "-target bpf" flag, change the Makefile to compile one
+program accordingly (instead of passing the flag for compiling all
+programs).
 
-[==========] Running 1 tests from 1 test cases.
-[ RUN      ] global.macro
-<stdin>:4:global.macro:Expected 0 (0) != WIFSIGNALED(status) (0)
-global.macro: Test terminated by assertion
-[     FAIL ] global.macro
-[==========] 0 / 1 tests passed.
-[  FAILED  ]
+Regarding test_xdp_noinline.o: in its current shape the program fails to
+load because it provides no version section, but the loader needs one.
+The test was added to make sure that libbpf could load XDP programs even
+if they do not provide a version number in a dedicated section. But
+libbpf is already capable of doing that: in our case loading fails
+because the loader does not know that this is an XDP program (it does
+not need to, since it does not attach the program). So trying to load
+test_xdp_noinline.o does not bring much here: just delete this subtest.
 
-The issue is very similar to the bug fixed in glibc assert(3)
-three years ago:
-https://sourceware.org/bugzilla/show_bug.cgi?id=18604
+For the record, the error message obtained with tracex3_kern.o was
+fixed by commit e3d91b0ca523 ("tools/libbpf: handle issues with bpf ELF
+objects containing .eh_frames")
 
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Kees Cook <keescook at chromium.org>
-Cc: Andy Lutomirski <luto at amacapital.net>
-Cc: Will Drewry <wad at chromium.org>
-Cc: linux-kselftest at vger.kernel.org
-Signed-off-by: Dmitry V. Levin <ldv at altlinux.org>
-Acked-by: Kees Cook <keescook at chromium.org>
-Signed-off-by: Shuah Khan <shuah at kernel.org>
+I have not been abled to reproduce the "libbpf: incorrect bpf_call
+opcode" error for test_l4lb_noinline.o, even with the version of libbpf
+present at the time when test_libbpf.sh and test_libbpf_open.c were
+created.
+
+RFC -> v1:
+- Compile test_xdp without the "-target bpf" flag, and try to load it
+  instead of ../../samples/bpf/tracex3_kern.o.
+- Delete test_xdp_noinline.o subtest.
+
+Cc: Jesper Dangaard Brouer <brouer at redhat.com>
+Signed-off-by: Quentin Monnet <quentin.monnet at netronome.com>
+Acked-by: Jakub Kicinski <jakub.kicinski at netronome.com>
+Acked-by: Jesper Dangaard Brouer <brouer at redhat.com>
+Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/kselftest_harness.h | 42 ++++++++++-----------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+ tools/testing/selftests/bpf/Makefile       | 10 ++++++++++
+ tools/testing/selftests/bpf/test_libbpf.sh | 14 ++++----------
+ 2 files changed, 14 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 6ae3730c4ee3..76d654ef3234 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -354,7 +354,7 @@
-  * ASSERT_EQ(expected, measured): expected == measured
-  */
- #define ASSERT_EQ(expected, seen) \
--	__EXPECT(expected, seen, ==, 1)
-+	__EXPECT(expected, #expected, seen, #seen, ==, 1)
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index e39dfb4e7970..ecd79b7fb107 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -135,6 +135,16 @@ endif
+ endif
+ endif
  
- /**
-  * ASSERT_NE(expected, seen)
-@@ -365,7 +365,7 @@
-  * ASSERT_NE(expected, measured): expected != measured
-  */
- #define ASSERT_NE(expected, seen) \
--	__EXPECT(expected, seen, !=, 1)
-+	__EXPECT(expected, #expected, seen, #seen, !=, 1)
++# Have one program compiled without "-target bpf" to test whether libbpf loads
++# it successfully
++$(OUTPUT)/test_xdp.o: test_xdp.c
++	$(CLANG) $(CLANG_FLAGS) \
++		-O2 -emit-llvm -c $< -o - | \
++	$(LLC) -march=bpf -mcpu=$(CPU) $(LLC_FLAGS) -filetype=obj -o $@
++ifeq ($(DWARF2BTF),y)
++	$(BTF_PAHOLE) -J $@
++endif
++
+ $(OUTPUT)/%.o: %.c
+ 	$(CLANG) $(CLANG_FLAGS) \
+ 		 -O2 -target bpf -emit-llvm -c $< -o - |      \
+diff --git a/tools/testing/selftests/bpf/test_libbpf.sh b/tools/testing/selftests/bpf/test_libbpf.sh
+index 156d89f1edcc..2989b2e2d856 100755
+--- a/tools/testing/selftests/bpf/test_libbpf.sh
++++ b/tools/testing/selftests/bpf/test_libbpf.sh
+@@ -33,17 +33,11 @@ trap exit_handler 0 2 3 6 9
  
- /**
-  * ASSERT_LT(expected, seen)
-@@ -376,7 +376,7 @@
-  * ASSERT_LT(expected, measured): expected < measured
-  */
- #define ASSERT_LT(expected, seen) \
--	__EXPECT(expected, seen, <, 1)
-+	__EXPECT(expected, #expected, seen, #seen, <, 1)
+ libbpf_open_file test_l4lb.o
  
- /**
-  * ASSERT_LE(expected, seen)
-@@ -387,7 +387,7 @@
-  * ASSERT_LE(expected, measured): expected <= measured
-  */
- #define ASSERT_LE(expected, seen) \
--	__EXPECT(expected, seen, <=, 1)
-+	__EXPECT(expected, #expected, seen, #seen, <=, 1)
+-# TODO: fix libbpf to load noinline functions
+-# [warning] libbpf: incorrect bpf_call opcode
+-#libbpf_open_file test_l4lb_noinline.o
++# Load a program with BPF-to-BPF calls
++libbpf_open_file test_l4lb_noinline.o
  
- /**
-  * ASSERT_GT(expected, seen)
-@@ -398,7 +398,7 @@
-  * ASSERT_GT(expected, measured): expected > measured
-  */
- #define ASSERT_GT(expected, seen) \
--	__EXPECT(expected, seen, >, 1)
-+	__EXPECT(expected, #expected, seen, #seen, >, 1)
+-# TODO: fix test_xdp_meta.c to load with libbpf
+-# [warning] libbpf: test_xdp_meta.o doesn't provide kernel version
+-#libbpf_open_file test_xdp_meta.o
+-
+-# TODO: fix libbpf to handle .eh_frame
+-# [warning] libbpf: relocation failed: no section(10)
+-#libbpf_open_file ../../../../samples/bpf/tracex3_kern.o
++# Load a program compiled without the "-target bpf" flag
++libbpf_open_file test_xdp.o
  
- /**
-  * ASSERT_GE(expected, seen)
-@@ -409,7 +409,7 @@
-  * ASSERT_GE(expected, measured): expected >= measured
-  */
- #define ASSERT_GE(expected, seen) \
--	__EXPECT(expected, seen, >=, 1)
-+	__EXPECT(expected, #expected, seen, #seen, >=, 1)
- 
- /**
-  * ASSERT_NULL(seen)
-@@ -419,7 +419,7 @@
-  * ASSERT_NULL(measured): NULL == measured
-  */
- #define ASSERT_NULL(seen) \
--	__EXPECT(NULL, seen, ==, 1)
-+	__EXPECT(NULL, "NULL", seen, #seen, ==, 1)
- 
- /**
-  * ASSERT_TRUE(seen)
-@@ -429,7 +429,7 @@
-  * ASSERT_TRUE(measured): measured != 0
-  */
- #define ASSERT_TRUE(seen) \
--	ASSERT_NE(0, seen)
-+	__EXPECT(0, "0", seen, #seen, !=, 1)
- 
- /**
-  * ASSERT_FALSE(seen)
-@@ -439,7 +439,7 @@
-  * ASSERT_FALSE(measured): measured == 0
-  */
- #define ASSERT_FALSE(seen) \
--	ASSERT_EQ(0, seen)
-+	__EXPECT(0, "0", seen, #seen, ==, 1)
- 
- /**
-  * ASSERT_STREQ(expected, seen)
-@@ -472,7 +472,7 @@
-  * EXPECT_EQ(expected, measured): expected == measured
-  */
- #define EXPECT_EQ(expected, seen) \
--	__EXPECT(expected, seen, ==, 0)
-+	__EXPECT(expected, #expected, seen, #seen, ==, 0)
- 
- /**
-  * EXPECT_NE(expected, seen)
-@@ -483,7 +483,7 @@
-  * EXPECT_NE(expected, measured): expected != measured
-  */
- #define EXPECT_NE(expected, seen) \
--	__EXPECT(expected, seen, !=, 0)
-+	__EXPECT(expected, #expected, seen, #seen, !=, 0)
- 
- /**
-  * EXPECT_LT(expected, seen)
-@@ -494,7 +494,7 @@
-  * EXPECT_LT(expected, measured): expected < measured
-  */
- #define EXPECT_LT(expected, seen) \
--	__EXPECT(expected, seen, <, 0)
-+	__EXPECT(expected, #expected, seen, #seen, <, 0)
- 
- /**
-  * EXPECT_LE(expected, seen)
-@@ -505,7 +505,7 @@
-  * EXPECT_LE(expected, measured): expected <= measured
-  */
- #define EXPECT_LE(expected, seen) \
--	__EXPECT(expected, seen, <=, 0)
-+	__EXPECT(expected, #expected, seen, #seen, <=, 0)
- 
- /**
-  * EXPECT_GT(expected, seen)
-@@ -516,7 +516,7 @@
-  * EXPECT_GT(expected, measured): expected > measured
-  */
- #define EXPECT_GT(expected, seen) \
--	__EXPECT(expected, seen, >, 0)
-+	__EXPECT(expected, #expected, seen, #seen, >, 0)
- 
- /**
-  * EXPECT_GE(expected, seen)
-@@ -527,7 +527,7 @@
-  * EXPECT_GE(expected, measured): expected >= measured
-  */
- #define EXPECT_GE(expected, seen) \
--	__EXPECT(expected, seen, >=, 0)
-+	__EXPECT(expected, #expected, seen, #seen, >=, 0)
- 
- /**
-  * EXPECT_NULL(seen)
-@@ -537,7 +537,7 @@
-  * EXPECT_NULL(measured): NULL == measured
-  */
- #define EXPECT_NULL(seen) \
--	__EXPECT(NULL, seen, ==, 0)
-+	__EXPECT(NULL, "NULL", seen, #seen, ==, 0)
- 
- /**
-  * EXPECT_TRUE(seen)
-@@ -547,7 +547,7 @@
-  * EXPECT_TRUE(measured): 0 != measured
-  */
- #define EXPECT_TRUE(seen) \
--	EXPECT_NE(0, seen)
-+	__EXPECT(0, "0", seen, #seen, !=, 0)
- 
- /**
-  * EXPECT_FALSE(seen)
-@@ -557,7 +557,7 @@
-  * EXPECT_FALSE(measured): 0 == measured
-  */
- #define EXPECT_FALSE(seen) \
--	EXPECT_EQ(0, seen)
-+	__EXPECT(0, "0", seen, #seen, ==, 0)
- 
- /**
-  * EXPECT_STREQ(expected, seen)
-@@ -597,7 +597,7 @@
- 	if (_metadata->passed && _metadata->step < 255) \
- 		_metadata->step++;
- 
--#define __EXPECT(_expected, _seen, _t, _assert) do { \
-+#define __EXPECT(_expected, _expected_str, _seen, _seen_str, _t, _assert) do { \
- 	/* Avoid multiple evaluation of the cases */ \
- 	__typeof__(_expected) __exp = (_expected); \
- 	__typeof__(_seen) __seen = (_seen); \
-@@ -606,8 +606,8 @@
- 		unsigned long long __exp_print = (uintptr_t)__exp; \
- 		unsigned long long __seen_print = (uintptr_t)__seen; \
- 		__TH_LOG("Expected %s (%llu) %s %s (%llu)", \
--			 #_expected, __exp_print, #_t, \
--			 #_seen, __seen_print); \
-+			 _expected_str, __exp_print, #_t, \
-+			 _seen_str, __seen_print); \
- 		_metadata->passed = 0; \
- 		/* Ensure the optional handler is triggered */ \
- 		_metadata->trigger = 1; \
+ # Success
+ exit 0
 -- 
 2.19.1
