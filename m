@@ -1,26 +1,25 @@
-From: pbonzini at redhat.com (Paolo Bonzini)
-Date: Tue, 8 Jan 2019 00:20:55 +0100
-Subject: [PATCH V2] SelfTest: KVM: Drop Asserts for madvise
- MADV_NOHUGEPAGE failure
-In-Reply-To: <218eb42a-ccbd-c454-e6f9-153f66c4478b@kernel.org>
-References: <20181116115055.7415-1-ahmedsoliman0x666@gmail.com>
- <20181116125858.yujwx5xkpg2kgyxe@kamzik.brq.redhat.com>
- <CANBxJ=EeosO1EOfvQ6OFLps+D9ZQRBKTmByvcJ5r=h-4ahbekQ@mail.gmail.com>
- <218eb42a-ccbd-c454-e6f9-153f66c4478b@kernel.org>
-Message-ID: <9008504a-df6a-3978-526f-7e908a079673@redhat.com>
+From: anders.roxell at linaro.org (Anders Roxell)
+Date: Tue,  8 Jan 2019 10:22:23 +0100
+Subject: [PATCH] selftests: bpf: add missing executables to .gitignore
+Message-ID: <20190108092223.12467-1-anders.roxell@linaro.org>
 
-On 27/12/18 01:44, shuah wrote:
-> Hi Paolo,
-> 
-> On 12/24/18 7:56 AM, Ahmed Soliman wrote:
->> Kind reminder to merge my patch into next
->>
->> thanks.
->>
-> 
-> I am assuming you will be picking this patch up. Please let me know if
-> you want me to take it through kselftest tree.
+Fixes: 8c4905b995c6 ("libbpf: make sure bpf headers are c++ include-able")
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+---
+ tools/testing/selftests/bpf/.gitignore | 1 +
+ 1 file changed, 1 insertion(+)
 
-Yes, I was on vacataion but I'm back now.
-
-Paolo
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index 4a9785043a39..6c17b6557e5d 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -11,6 +11,7 @@ test_progs
+ test_tcpbpf_user
+ test_verifier_log
+ feature
++test_libbpf
+ test_libbpf_open
+ test_sock
+ test_sock_addr
+-- 
+2.20.1
