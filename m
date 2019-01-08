@@ -1,108 +1,53 @@
-From: sashal at kernel.org (Sasha Levin)
-Date: Tue,  8 Jan 2019 14:24:39 -0500
-Subject: [PATCH AUTOSEL 4.20 011/117] selftests/bpf: enable (uncomment) all
- tests in test_libbpf.sh
-In-Reply-To: <20190108192628.121270-1-sashal@kernel.org>
-References: <20190108192628.121270-1-sashal@kernel.org>
-Message-ID: <20190108192628.121270-11-sashal@kernel.org>
+From: dan.carpenter at oracle.com (Dan Carpenter)
+Date: Tue, 8 Jan 2019 23:17:27 +0300
+Subject: [bug report] selftests: add seccomp suite
+In-Reply-To: <20180807115718.mqnrnp2aag4tkpqi@kili.mountain>
+References: <20180807115718.mqnrnp2aag4tkpqi@kili.mountain>
+Message-ID: <20190108201727.GH3253@kadam>
 
-From: Quentin Monnet <quentin.monnet at netronome.com>
+Hopefully everyone had a happy new year.  :)  This warning is still
+present.
 
-[ Upstream commit f96afa767baffba7645f5e10998f5178948bb9aa ]
+regards,
+dan carpenter
 
-libbpf is now able to load successfully test_l4lb_noinline.o and
-samples/bpf/tracex3_kern.o.
-
-For the test_l4lb_noinline, uncomment related tests from test_libbpf.c
-and remove the associated "TODO".
-
-For tracex3_kern.o, instead of loading a program from samples/bpf/ that
-might not have been compiled at this stage, try loading a program from
-BPF selftests. Since this test case is about loading a program compiled
-without the "-target bpf" flag, change the Makefile to compile one
-program accordingly (instead of passing the flag for compiling all
-programs).
-
-Regarding test_xdp_noinline.o: in its current shape the program fails to
-load because it provides no version section, but the loader needs one.
-The test was added to make sure that libbpf could load XDP programs even
-if they do not provide a version number in a dedicated section. But
-libbpf is already capable of doing that: in our case loading fails
-because the loader does not know that this is an XDP program (it does
-not need to, since it does not attach the program). So trying to load
-test_xdp_noinline.o does not bring much here: just delete this subtest.
-
-For the record, the error message obtained with tracex3_kern.o was
-fixed by commit e3d91b0ca523 ("tools/libbpf: handle issues with bpf ELF
-objects containing .eh_frames")
-
-I have not been abled to reproduce the "libbpf: incorrect bpf_call
-opcode" error for test_l4lb_noinline.o, even with the version of libbpf
-present at the time when test_libbpf.sh and test_libbpf_open.c were
-created.
-
-RFC -> v1:
-- Compile test_xdp without the "-target bpf" flag, and try to load it
-  instead of ../../samples/bpf/tracex3_kern.o.
-- Delete test_xdp_noinline.o subtest.
-
-Cc: Jesper Dangaard Brouer <brouer at redhat.com>
-Signed-off-by: Quentin Monnet <quentin.monnet at netronome.com>
-Acked-by: Jakub Kicinski <jakub.kicinski at netronome.com>
-Acked-by: Jesper Dangaard Brouer <brouer at redhat.com>
-Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
-Signed-off-by: Sasha Levin <sashal at kernel.org>
----
- tools/testing/selftests/bpf/Makefile       | 10 ++++++++++
- tools/testing/selftests/bpf/test_libbpf.sh | 14 ++++----------
- 2 files changed, 14 insertions(+), 10 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index e39dfb4e7970..ecd79b7fb107 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -135,6 +135,16 @@ endif
- endif
- endif
- 
-+# Have one program compiled without "-target bpf" to test whether libbpf loads
-+# it successfully
-+$(OUTPUT)/test_xdp.o: test_xdp.c
-+	$(CLANG) $(CLANG_FLAGS) \
-+		-O2 -emit-llvm -c $< -o - | \
-+	$(LLC) -march=bpf -mcpu=$(CPU) $(LLC_FLAGS) -filetype=obj -o $@
-+ifeq ($(DWARF2BTF),y)
-+	$(BTF_PAHOLE) -J $@
-+endif
-+
- $(OUTPUT)/%.o: %.c
- 	$(CLANG) $(CLANG_FLAGS) \
- 		 -O2 -target bpf -emit-llvm -c $< -o - |      \
-diff --git a/tools/testing/selftests/bpf/test_libbpf.sh b/tools/testing/selftests/bpf/test_libbpf.sh
-index 156d89f1edcc..2989b2e2d856 100755
---- a/tools/testing/selftests/bpf/test_libbpf.sh
-+++ b/tools/testing/selftests/bpf/test_libbpf.sh
-@@ -33,17 +33,11 @@ trap exit_handler 0 2 3 6 9
- 
- libbpf_open_file test_l4lb.o
- 
--# TODO: fix libbpf to load noinline functions
--# [warning] libbpf: incorrect bpf_call opcode
--#libbpf_open_file test_l4lb_noinline.o
-+# Load a program with BPF-to-BPF calls
-+libbpf_open_file test_l4lb_noinline.o
- 
--# TODO: fix test_xdp_meta.c to load with libbpf
--# [warning] libbpf: test_xdp_meta.o doesn't provide kernel version
--#libbpf_open_file test_xdp_meta.o
--
--# TODO: fix libbpf to handle .eh_frame
--# [warning] libbpf: relocation failed: no section(10)
--#libbpf_open_file ../../../../samples/bpf/tracex3_kern.o
-+# Load a program compiled without the "-target bpf" flag
-+libbpf_open_file test_xdp.o
- 
- # Success
- exit 0
--- 
-2.19.1
+On Tue, Aug 07, 2018 at 02:57:18PM +0300, Dan Carpenter wrote:
+> Hello Kees Cook,
+> 
+> The patch c99ee51a9d97: "selftests: add seccomp suite" from Jun 16,
+> 2015, leads to the following static checker warning:
+> 
+> 	./tools/testing/selftests/net/tls.c:206 tls_sendmsg_large()
+> 	warn: curly braces intended?
+> 
+> ./tools/testing/selftests/net/tls.c
+>    187  TEST_F(tls, sendmsg_large)
+>    188  {
+>    189          void *mem = malloc(16384);
+>    190          size_t send_len = 16384;
+>    191          size_t sends = 128;
+>    192          struct msghdr msg;
+>    193          size_t recvs = 0;
+>    194          size_t sent = 0;
+>    195  
+>    196          memset(&msg, 0, sizeof(struct msghdr));
+>    197          while (sent++ < sends) {
+>    198                  struct iovec vec = { (void *)mem, send_len };
+>    199  
+>    200                  msg.msg_iov = &vec;
+>    201                  msg.msg_iovlen = 1;
+>    202                  EXPECT_EQ(sendmsg(self->cfd, &msg, 0), send_len);
+>    203          }
+>    204  
+>    205          while (recvs++ < sends)
+>    206                  EXPECT_NE(recv(self->fd, mem, send_len, 0), -1);
+> 
+> The EXPECT_NE() macro has an OPTIONAL_HANDLER() which isn't inside the
+> do {} while(0).
+> 
+>    207  
+>    208          free(mem);
+>    209  }
+> 
+> regards,
+> dan carpenter
