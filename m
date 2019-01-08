@@ -1,34 +1,29 @@
 From: anders.roxell at linaro.org (Anders Roxell)
-Date: Tue,  8 Jan 2019 10:25:25 +0100
-Subject: [PATCH] selftests/networking: remove timestamping clean target
-Message-ID: <20190108092525.12817-1-anders.roxell@linaro.org>
+Date: Tue,  8 Jan 2019 10:26:54 +0100
+Subject: [PATCH] selftests/kvm: add missing executables to .gitignore
+Message-ID: <20190108092654.13113-1-anders.roxell@linaro.org>
 
-Commit cda261f421ba ("selftests: add txtimestamp kselftest") introduced
-a warning:
-
-Makefile:14: warning: overriding recipe for target 'clean'
-../../lib.mk:137: warning: ignoring old recipe for target 'clean'
-
-Theres no need for timestamping to have its own 'clean' target. The
-lib.mk file's 'clean' target gets included to the timestamping Makefile
-and that should be enough.
-
-Fixes: cda261f421ba ("selftests: add txtimestamp kselftest")
+Fixes: 2a31b9db1535 ("kvm: introduce manual dirty log reprotect")
+Fixes: 7edcb7343327 ("KVM: selftests: Add hyperv_cpuid test")
 Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 ---
- tools/testing/selftests/networking/timestamping/Makefile | 3 ---
- 1 file changed, 3 deletions(-)
+ tools/testing/selftests/kvm/.gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/networking/timestamping/Makefile b/tools/testing/selftests/networking/timestamping/Makefile
-index 9050eeea5f5f..1de8bd8ccf5d 100644
---- a/tools/testing/selftests/networking/timestamping/Makefile
-+++ b/tools/testing/selftests/networking/timestamping/Makefile
-@@ -9,6 +9,3 @@ all: $(TEST_PROGS)
- top_srcdir = ../../../../..
- KSFT_KHDR_INSTALL := 1
- include ../../lib.mk
--
--clean:
--	rm -fr $(TEST_GEN_FILES)
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index 6210ba41c29e..51ffd8a8bc38 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -1,8 +1,10 @@
+ /x86_64/cr4_cpuid_sync_test
+ /x86_64/evmcs_test
++/x86_64/hyperv_cpuid
+ /x86_64/platform_info_test
+ /x86_64/set_sregs_test
+ /x86_64/sync_regs_test
+ /x86_64/vmx_tsc_adjust_test
+ /x86_64/state_test
++/clear_dirty_log_test
+ /dirty_log_test
 -- 
 2.20.1
