@@ -1,10 +1,10 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Tue,  8 Jan 2019 14:31:54 -0500
-Subject: [PATCH AUTOSEL 4.14 26/53] selftests: do not macro-expand failed
+Date: Tue,  8 Jan 2019 14:28:57 -0500
+Subject: [PATCH AUTOSEL 4.19 48/97] selftests: do not macro-expand failed
  assertion expressions
-In-Reply-To: <20190108193222.123316-1-sashal@kernel.org>
-References: <20190108193222.123316-1-sashal@kernel.org>
-Message-ID: <20190108193222.123316-26-sashal@kernel.org>
+In-Reply-To: <20190108192949.122407-1-sashal@kernel.org>
+References: <20190108192949.122407-1-sashal@kernel.org>
+Message-ID: <20190108192949.122407-48-sashal@kernel.org>
 
 From: "Dmitry V. Levin" <ldv at altlinux.org>
 
@@ -58,10 +58,10 @@ Signed-off-by: Sasha Levin <sashal at kernel.org>
  1 file changed, 21 insertions(+), 21 deletions(-)
 
 diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index e81bd28bdd89..8f32d699d6c5 100644
+index 6ae3730c4ee3..76d654ef3234 100644
 --- a/tools/testing/selftests/kselftest_harness.h
 +++ b/tools/testing/selftests/kselftest_harness.h
-@@ -330,7 +330,7 @@
+@@ -354,7 +354,7 @@
   * ASSERT_EQ(expected, measured): expected == measured
   */
  #define ASSERT_EQ(expected, seen) \
@@ -70,7 +70,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * ASSERT_NE(expected, seen)
-@@ -341,7 +341,7 @@
+@@ -365,7 +365,7 @@
   * ASSERT_NE(expected, measured): expected != measured
   */
  #define ASSERT_NE(expected, seen) \
@@ -79,7 +79,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * ASSERT_LT(expected, seen)
-@@ -352,7 +352,7 @@
+@@ -376,7 +376,7 @@
   * ASSERT_LT(expected, measured): expected < measured
   */
  #define ASSERT_LT(expected, seen) \
@@ -88,7 +88,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * ASSERT_LE(expected, seen)
-@@ -363,7 +363,7 @@
+@@ -387,7 +387,7 @@
   * ASSERT_LE(expected, measured): expected <= measured
   */
  #define ASSERT_LE(expected, seen) \
@@ -97,7 +97,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * ASSERT_GT(expected, seen)
-@@ -374,7 +374,7 @@
+@@ -398,7 +398,7 @@
   * ASSERT_GT(expected, measured): expected > measured
   */
  #define ASSERT_GT(expected, seen) \
@@ -106,7 +106,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * ASSERT_GE(expected, seen)
-@@ -385,7 +385,7 @@
+@@ -409,7 +409,7 @@
   * ASSERT_GE(expected, measured): expected >= measured
   */
  #define ASSERT_GE(expected, seen) \
@@ -115,7 +115,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * ASSERT_NULL(seen)
-@@ -395,7 +395,7 @@
+@@ -419,7 +419,7 @@
   * ASSERT_NULL(measured): NULL == measured
   */
  #define ASSERT_NULL(seen) \
@@ -124,7 +124,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * ASSERT_TRUE(seen)
-@@ -405,7 +405,7 @@
+@@ -429,7 +429,7 @@
   * ASSERT_TRUE(measured): measured != 0
   */
  #define ASSERT_TRUE(seen) \
@@ -133,7 +133,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * ASSERT_FALSE(seen)
-@@ -415,7 +415,7 @@
+@@ -439,7 +439,7 @@
   * ASSERT_FALSE(measured): measured == 0
   */
  #define ASSERT_FALSE(seen) \
@@ -142,7 +142,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * ASSERT_STREQ(expected, seen)
-@@ -448,7 +448,7 @@
+@@ -472,7 +472,7 @@
   * EXPECT_EQ(expected, measured): expected == measured
   */
  #define EXPECT_EQ(expected, seen) \
@@ -151,7 +151,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * EXPECT_NE(expected, seen)
-@@ -459,7 +459,7 @@
+@@ -483,7 +483,7 @@
   * EXPECT_NE(expected, measured): expected != measured
   */
  #define EXPECT_NE(expected, seen) \
@@ -160,7 +160,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * EXPECT_LT(expected, seen)
-@@ -470,7 +470,7 @@
+@@ -494,7 +494,7 @@
   * EXPECT_LT(expected, measured): expected < measured
   */
  #define EXPECT_LT(expected, seen) \
@@ -169,7 +169,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * EXPECT_LE(expected, seen)
-@@ -481,7 +481,7 @@
+@@ -505,7 +505,7 @@
   * EXPECT_LE(expected, measured): expected <= measured
   */
  #define EXPECT_LE(expected, seen) \
@@ -178,7 +178,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * EXPECT_GT(expected, seen)
-@@ -492,7 +492,7 @@
+@@ -516,7 +516,7 @@
   * EXPECT_GT(expected, measured): expected > measured
   */
  #define EXPECT_GT(expected, seen) \
@@ -187,7 +187,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * EXPECT_GE(expected, seen)
-@@ -503,7 +503,7 @@
+@@ -527,7 +527,7 @@
   * EXPECT_GE(expected, measured): expected >= measured
   */
  #define EXPECT_GE(expected, seen) \
@@ -196,7 +196,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * EXPECT_NULL(seen)
-@@ -513,7 +513,7 @@
+@@ -537,7 +537,7 @@
   * EXPECT_NULL(measured): NULL == measured
   */
  #define EXPECT_NULL(seen) \
@@ -205,7 +205,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * EXPECT_TRUE(seen)
-@@ -523,7 +523,7 @@
+@@ -547,7 +547,7 @@
   * EXPECT_TRUE(measured): 0 != measured
   */
  #define EXPECT_TRUE(seen) \
@@ -214,7 +214,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * EXPECT_FALSE(seen)
-@@ -533,7 +533,7 @@
+@@ -557,7 +557,7 @@
   * EXPECT_FALSE(measured): 0 == measured
   */
  #define EXPECT_FALSE(seen) \
@@ -223,7 +223,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  
  /**
   * EXPECT_STREQ(expected, seen)
-@@ -573,7 +573,7 @@
+@@ -597,7 +597,7 @@
  	if (_metadata->passed && _metadata->step < 255) \
  		_metadata->step++;
  
@@ -232,7 +232,7 @@ index e81bd28bdd89..8f32d699d6c5 100644
  	/* Avoid multiple evaluation of the cases */ \
  	__typeof__(_expected) __exp = (_expected); \
  	__typeof__(_seen) __seen = (_seen); \
-@@ -582,8 +582,8 @@
+@@ -606,8 +606,8 @@
  		unsigned long long __exp_print = (uintptr_t)__exp; \
  		unsigned long long __seen_print = (uintptr_t)__seen; \
  		__TH_LOG("Expected %s (%llu) %s %s (%llu)", \
