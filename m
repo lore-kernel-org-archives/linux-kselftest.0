@@ -1,179 +1,249 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Tue,  8 Jan 2019 14:29:01 -0500
-Subject: [PATCH AUTOSEL 4.19 52/97] bpf: relax verifier restriction on BPF_MOV
- | BPF_ALU
-In-Reply-To: <20190108192949.122407-1-sashal@kernel.org>
-References: <20190108192949.122407-1-sashal@kernel.org>
-Message-ID: <20190108192949.122407-52-sashal@kernel.org>
+Date: Tue,  8 Jan 2019 14:31:54 -0500
+Subject: [PATCH AUTOSEL 4.14 26/53] selftests: do not macro-expand failed
+ assertion expressions
+In-Reply-To: <20190108193222.123316-1-sashal@kernel.org>
+References: <20190108193222.123316-1-sashal@kernel.org>
+Message-ID: <20190108193222.123316-26-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190108192901.5GmpbalyJn-HDux4jaFIvuAsHU9XLiqaKoDEe7SUH38@z>
+Message-ID: <20190108193154.Pbg1cZAGjCbWe8UjSpx_NB584euA9rB7Ifr-9SyFVVU@z>
 
-From: Jiong Wang <jiong.wang@netronome.com>
+From: "Dmitry V. Levin" <ldv@altlinux.org>
 
-[ Upstream commit e434b8cdf788568ba65a0a0fd9f3cb41f3ca1803 ]
+[ Upstream commit b708a3cc9600390ccaa2b68a88087dd265154b2b ]
 
-Currently, the destination register is marked as unknown for 32-bit
-sub-register move (BPF_MOV | BPF_ALU) whenever the source register type is
-SCALAR_VALUE.
+I've stumbled over the current macro-expand behaviour of the test
+harness:
 
-This is too conservative that some valid cases will be rejected.
-Especially, this may turn a constant scalar value into unknown value that
-could break some assumptions of verifier.
+$ gcc -Wall -xc - <<'__EOF__'
+TEST(macro) {
+	int status = 0;
+	ASSERT_TRUE(WIFSIGNALED(status));
+}
+TEST_HARNESS_MAIN
+__EOF__
+$ ./a.out
+[==========] Running 1 tests from 1 test cases.
+[ RUN      ] global.macro
+<stdin>:4:global.macro:Expected 0 (0) != (((signed char) (((status) & 0x7f) + 1) >> 1) > 0) (0)
+global.macro: Test terminated by assertion
+[     FAIL ] global.macro
+[==========] 0 / 1 tests passed.
+[  FAILED  ]
 
-For example, test_l4lb_noinline.c has the following C code:
+With this change the output of the same test looks much more
+comprehensible:
 
-    struct real_definition *dst
+[==========] Running 1 tests from 1 test cases.
+[ RUN      ] global.macro
+<stdin>:4:global.macro:Expected 0 (0) != WIFSIGNALED(status) (0)
+global.macro: Test terminated by assertion
+[     FAIL ] global.macro
+[==========] 0 / 1 tests passed.
+[  FAILED  ]
 
-1:  if (!get_packet_dst(&dst, &pckt, vip_info, is_ipv6))
-2:    return TC_ACT_SHOT;
-3:
-4:  if (dst->flags & F_IPV6) {
+The issue is very similar to the bug fixed in glibc assert(3)
+three years ago:
+https://sourceware.org/bugzilla/show_bug.cgi?id=18604
 
-get_packet_dst is responsible for initializing "dst" into valid pointer and
-return true (1), otherwise return false (0). The compiled instruction
-sequence using alu32 will be:
-
-  412: (54) (u32) r7 &= (u32) 1
-  413: (bc) (u32) r0 = (u32) r7
-  414: (95) exit
-
-insn 413, a BPF_MOV | BPF_ALU, however will turn r0 into unknown value even
-r7 contains SCALAR_VALUE 1.
-
-This causes trouble when verifier is walking the code path that hasn't
-initialized "dst" inside get_packet_dst, for which case 0 is returned and
-we would then expect verifier concluding line 1 in the above C code pass
-the "if" check, therefore would skip fall through path starting at line 4.
-Now, because r0 returned from callee has became unknown value, so verifier
-won't skip analyzing path starting at line 4 and "dst->flags" requires
-dereferencing the pointer "dst" which actually hasn't be initialized for
-this path.
-
-This patch relaxed the code marking sub-register move destination. For a
-SCALAR_VALUE, it is safe to just copy the value from source then truncate
-it into 32-bit.
-
-A unit test also included to demonstrate this issue. This test will fail
-before this patch.
-
-This relaxation could let verifier skipping more paths for conditional
-comparison against immediate. It also let verifier recording a more
-accurate/strict value for one register at one state, if this state end up
-with going through exit without rejection and it is used for state
-comparison later, then it is possible an inaccurate/permissive value is
-better. So the real impact on verifier processed insn number is complex.
-But in all, without this fix, valid program could be rejected.
-
->From real benchmarking on kernel selftests and Cilium bpf tests, there is
-no impact on processed instruction number when tests ares compiled with
-default compilation options. There is slightly improvements when they are
-compiled with -mattr=+alu32 after this patch.
-
-Also, test_xdp_noinline/-mattr=+alu32 now passed verification. It is
-rejected before this fix.
-
-Insn processed before/after this patch:
-
-                        default     -mattr=+alu32
-
-Kernel selftest
-
-===
-test_xdp.o              371/371      369/369
-test_l4lb.o             6345/6345    5623/5623
-test_xdp_noinline.o     2971/2971    rejected/2727
-test_tcp_estates.o      429/429      430/430
-
-Cilium bpf
-===
-bpf_lb-DLB_L3.o:        2085/2085     1685/1687
-bpf_lb-DLB_L4.o:        2287/2287     1986/1982
-bpf_lb-DUNKNOWN.o:      690/690       622/622
-bpf_lxc.o:              95033/95033   N/A
-bpf_netdev.o:           7245/7245     N/A
-bpf_overlay.o:          2898/2898     3085/2947
-
-NOTE:
-  - bpf_lxc.o and bpf_netdev.o compiled by -mattr=+alu32 are rejected by
-    verifier due to another issue inside verifier on supporting alu32
-    binary.
-  - Each cilium bpf program could generate several processed insn number,
-    above number is sum of them.
-
-v1->v2:
- - Restrict the change on SCALAR_VALUE.
- - Update benchmark numbers on Cilium bpf tests.
-
-Signed-off-by: Jiong Wang <jiong.wang at netronome.com>
-Signed-off-by: Alexei Starovoitov <ast at kernel.org>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Kees Cook <keescook at chromium.org>
+Cc: Andy Lutomirski <luto at amacapital.net>
+Cc: Will Drewry <wad at chromium.org>
+Cc: linux-kselftest at vger.kernel.org
+Signed-off-by: Dmitry V. Levin <ldv at altlinux.org>
+Acked-by: Kees Cook <keescook at chromium.org>
+Signed-off-by: Shuah Khan <shuah at kernel.org>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- kernel/bpf/verifier.c                       | 16 ++++++++++++----
- tools/testing/selftests/bpf/test_verifier.c | 13 +++++++++++++
- 2 files changed, 25 insertions(+), 4 deletions(-)
+ tools/testing/selftests/kselftest_harness.h | 42 ++++++++++-----------
+ 1 file changed, 21 insertions(+), 21 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 89cea3ed535d..341806668f03 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3285,12 +3285,15 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 			return err;
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index e81bd28bdd89..8f32d699d6c5 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -330,7 +330,7 @@
+  * ASSERT_EQ(expected, measured): expected == measured
+  */
+ #define ASSERT_EQ(expected, seen) \
+-	__EXPECT(expected, seen, ==, 1)
++	__EXPECT(expected, #expected, seen, #seen, ==, 1)
  
- 		if (BPF_SRC(insn->code) == BPF_X) {
-+			struct bpf_reg_state *src_reg = regs + insn->src_reg;
-+			struct bpf_reg_state *dst_reg = regs + insn->dst_reg;
-+
- 			if (BPF_CLASS(insn->code) == BPF_ALU64) {
- 				/* case: R1 = R2
- 				 * copy register state to dest reg
- 				 */
--				regs[insn->dst_reg] = regs[insn->src_reg];
--				regs[insn->dst_reg].live |= REG_LIVE_WRITTEN;
-+				*dst_reg = *src_reg;
-+				dst_reg->live |= REG_LIVE_WRITTEN;
- 			} else {
- 				/* R1 = (u32) R2 */
- 				if (is_pointer_value(env, insn->src_reg)) {
-@@ -3298,9 +3301,14 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 						"R%d partial copy of pointer\n",
- 						insn->src_reg);
- 					return -EACCES;
-+				} else if (src_reg->type == SCALAR_VALUE) {
-+					*dst_reg = *src_reg;
-+					dst_reg->live |= REG_LIVE_WRITTEN;
-+				} else {
-+					mark_reg_unknown(env, regs,
-+							 insn->dst_reg);
- 				}
--				mark_reg_unknown(env, regs, insn->dst_reg);
--				coerce_reg_to_size(&regs[insn->dst_reg], 4);
-+				coerce_reg_to_size(dst_reg, 4);
- 			}
- 		} else {
- 			/* case: R = imm
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index e436b67f2426..9db5a7378f40 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -2748,6 +2748,19 @@ static struct bpf_test tests[] = {
- 		.result_unpriv = REJECT,
- 		.result = ACCEPT,
- 	},
-+	{
-+		"alu32: mov u32 const",
-+		.insns = {
-+			BPF_MOV32_IMM(BPF_REG_7, 0),
-+			BPF_ALU32_IMM(BPF_AND, BPF_REG_7, 1),
-+			BPF_MOV32_REG(BPF_REG_0, BPF_REG_7),
-+			BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
-+			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_7, 0),
-+			BPF_EXIT_INSN(),
-+		},
-+		.result = ACCEPT,
-+		.retval = 0,
-+	},
- 	{
- 		"unpriv: partial copy of pointer",
- 		.insns = {
+ /**
+  * ASSERT_NE(expected, seen)
+@@ -341,7 +341,7 @@
+  * ASSERT_NE(expected, measured): expected != measured
+  */
+ #define ASSERT_NE(expected, seen) \
+-	__EXPECT(expected, seen, !=, 1)
++	__EXPECT(expected, #expected, seen, #seen, !=, 1)
+ 
+ /**
+  * ASSERT_LT(expected, seen)
+@@ -352,7 +352,7 @@
+  * ASSERT_LT(expected, measured): expected < measured
+  */
+ #define ASSERT_LT(expected, seen) \
+-	__EXPECT(expected, seen, <, 1)
++	__EXPECT(expected, #expected, seen, #seen, <, 1)
+ 
+ /**
+  * ASSERT_LE(expected, seen)
+@@ -363,7 +363,7 @@
+  * ASSERT_LE(expected, measured): expected <= measured
+  */
+ #define ASSERT_LE(expected, seen) \
+-	__EXPECT(expected, seen, <=, 1)
++	__EXPECT(expected, #expected, seen, #seen, <=, 1)
+ 
+ /**
+  * ASSERT_GT(expected, seen)
+@@ -374,7 +374,7 @@
+  * ASSERT_GT(expected, measured): expected > measured
+  */
+ #define ASSERT_GT(expected, seen) \
+-	__EXPECT(expected, seen, >, 1)
++	__EXPECT(expected, #expected, seen, #seen, >, 1)
+ 
+ /**
+  * ASSERT_GE(expected, seen)
+@@ -385,7 +385,7 @@
+  * ASSERT_GE(expected, measured): expected >= measured
+  */
+ #define ASSERT_GE(expected, seen) \
+-	__EXPECT(expected, seen, >=, 1)
++	__EXPECT(expected, #expected, seen, #seen, >=, 1)
+ 
+ /**
+  * ASSERT_NULL(seen)
+@@ -395,7 +395,7 @@
+  * ASSERT_NULL(measured): NULL == measured
+  */
+ #define ASSERT_NULL(seen) \
+-	__EXPECT(NULL, seen, ==, 1)
++	__EXPECT(NULL, "NULL", seen, #seen, ==, 1)
+ 
+ /**
+  * ASSERT_TRUE(seen)
+@@ -405,7 +405,7 @@
+  * ASSERT_TRUE(measured): measured != 0
+  */
+ #define ASSERT_TRUE(seen) \
+-	ASSERT_NE(0, seen)
++	__EXPECT(0, "0", seen, #seen, !=, 1)
+ 
+ /**
+  * ASSERT_FALSE(seen)
+@@ -415,7 +415,7 @@
+  * ASSERT_FALSE(measured): measured == 0
+  */
+ #define ASSERT_FALSE(seen) \
+-	ASSERT_EQ(0, seen)
++	__EXPECT(0, "0", seen, #seen, ==, 1)
+ 
+ /**
+  * ASSERT_STREQ(expected, seen)
+@@ -448,7 +448,7 @@
+  * EXPECT_EQ(expected, measured): expected == measured
+  */
+ #define EXPECT_EQ(expected, seen) \
+-	__EXPECT(expected, seen, ==, 0)
++	__EXPECT(expected, #expected, seen, #seen, ==, 0)
+ 
+ /**
+  * EXPECT_NE(expected, seen)
+@@ -459,7 +459,7 @@
+  * EXPECT_NE(expected, measured): expected != measured
+  */
+ #define EXPECT_NE(expected, seen) \
+-	__EXPECT(expected, seen, !=, 0)
++	__EXPECT(expected, #expected, seen, #seen, !=, 0)
+ 
+ /**
+  * EXPECT_LT(expected, seen)
+@@ -470,7 +470,7 @@
+  * EXPECT_LT(expected, measured): expected < measured
+  */
+ #define EXPECT_LT(expected, seen) \
+-	__EXPECT(expected, seen, <, 0)
++	__EXPECT(expected, #expected, seen, #seen, <, 0)
+ 
+ /**
+  * EXPECT_LE(expected, seen)
+@@ -481,7 +481,7 @@
+  * EXPECT_LE(expected, measured): expected <= measured
+  */
+ #define EXPECT_LE(expected, seen) \
+-	__EXPECT(expected, seen, <=, 0)
++	__EXPECT(expected, #expected, seen, #seen, <=, 0)
+ 
+ /**
+  * EXPECT_GT(expected, seen)
+@@ -492,7 +492,7 @@
+  * EXPECT_GT(expected, measured): expected > measured
+  */
+ #define EXPECT_GT(expected, seen) \
+-	__EXPECT(expected, seen, >, 0)
++	__EXPECT(expected, #expected, seen, #seen, >, 0)
+ 
+ /**
+  * EXPECT_GE(expected, seen)
+@@ -503,7 +503,7 @@
+  * EXPECT_GE(expected, measured): expected >= measured
+  */
+ #define EXPECT_GE(expected, seen) \
+-	__EXPECT(expected, seen, >=, 0)
++	__EXPECT(expected, #expected, seen, #seen, >=, 0)
+ 
+ /**
+  * EXPECT_NULL(seen)
+@@ -513,7 +513,7 @@
+  * EXPECT_NULL(measured): NULL == measured
+  */
+ #define EXPECT_NULL(seen) \
+-	__EXPECT(NULL, seen, ==, 0)
++	__EXPECT(NULL, "NULL", seen, #seen, ==, 0)
+ 
+ /**
+  * EXPECT_TRUE(seen)
+@@ -523,7 +523,7 @@
+  * EXPECT_TRUE(measured): 0 != measured
+  */
+ #define EXPECT_TRUE(seen) \
+-	EXPECT_NE(0, seen)
++	__EXPECT(0, "0", seen, #seen, !=, 0)
+ 
+ /**
+  * EXPECT_FALSE(seen)
+@@ -533,7 +533,7 @@
+  * EXPECT_FALSE(measured): 0 == measured
+  */
+ #define EXPECT_FALSE(seen) \
+-	EXPECT_EQ(0, seen)
++	__EXPECT(0, "0", seen, #seen, ==, 0)
+ 
+ /**
+  * EXPECT_STREQ(expected, seen)
+@@ -573,7 +573,7 @@
+ 	if (_metadata->passed && _metadata->step < 255) \
+ 		_metadata->step++;
+ 
+-#define __EXPECT(_expected, _seen, _t, _assert) do { \
++#define __EXPECT(_expected, _expected_str, _seen, _seen_str, _t, _assert) do { \
+ 	/* Avoid multiple evaluation of the cases */ \
+ 	__typeof__(_expected) __exp = (_expected); \
+ 	__typeof__(_seen) __seen = (_seen); \
+@@ -582,8 +582,8 @@
+ 		unsigned long long __exp_print = (uintptr_t)__exp; \
+ 		unsigned long long __seen_print = (uintptr_t)__seen; \
+ 		__TH_LOG("Expected %s (%llu) %s %s (%llu)", \
+-			 #_expected, __exp_print, #_t, \
+-			 #_seen, __seen_print); \
++			 _expected_str, __exp_print, #_t, \
++			 _seen_str, __seen_print); \
+ 		_metadata->passed = 0; \
+ 		/* Ensure the optional handler is triggered */ \
+ 		_metadata->trigger = 1; \
 -- 
 2.19.1
