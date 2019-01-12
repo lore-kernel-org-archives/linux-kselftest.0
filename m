@@ -1,14 +1,32 @@
-From: daniel@iogearbox.net (Daniel Borkmann)
-Date: Thu, 10 Jan 2019 16:00:34 +0100
-Subject: [PATCH] selftests: bpf: add missing executables to .gitignore
-In-Reply-To: <20190108092223.12467-1-anders.roxell@linaro.org>
-References: <20190108092223.12467-1-anders.roxell@linaro.org>
-Message-ID: <53ef245f-75c4-b4d0-2f16-a556a029a4c1@iogearbox.net>
+From: joel@joelfernandes.org (Joel Fernandes)
+Date: Sat, 12 Jan 2019 15:38:14 -0500
+Subject: [PATCH v4 0/2] Add a future write seal to memfd
+Message-ID: <20190112203816.85534-1-joel@joelfernandes.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190110150034.60YKKdQdmE2zV8-1-liBBUktzcq3IDUE9g1pTKwhANU@z>
+Message-ID: <20190112203814.0IIk_NJISHgdzfdk8Bh4IjL3KrbHj2zXE812AyHVRWI@z>
 
-On 01/08/2019 10:22 AM, Anders Roxell wrote:
-> Fixes: 8c4905b995c6 ("libbpf: make sure bpf headers are c++ include-able")
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
+From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 
-Fixed in (including libbpf): https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/commit/?id=e3ca63de8ade75757a067f6a5bd111d30cdcadb5
+This is just a resend of the previous series at
+https://lore.kernel.org/patchwork/patch/1014892/
+with a small if block refactor as Andy suggested:
+https://lore.kernel.org/patchwork/comment/1198679/
+
+All,
+Could you please provide your Reviewed-by / Acked-by tags?
+
+I will also resend the manpage changes shortly.
+
+Joel Fernandes (Google) (2):
+mm/memfd: Add an F_SEAL_FUTURE_WRITE seal to memfd
+selftests/memfd: Add tests for F_SEAL_FUTURE_WRITE seal
+
+fs/hugetlbfs/inode.c                       |  2 +-
+include/uapi/linux/fcntl.h                 |  1 +
+mm/memfd.c                                 |  3 +-
+mm/shmem.c                                 | 25 +++++++-
+tools/testing/selftests/memfd/memfd_test.c | 74 ++++++++++++++++++++++
+5 files changed, 100 insertions(+), 5 deletions(-)
+
+--
+2.20.1.97.g81188d93c3-goog
