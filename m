@@ -1,49 +1,38 @@
 From: geert+renesas at glider.be (Geert Uytterhoeven)
-Date: Mon, 14 Jan 2019 14:51:37 +0100
-Subject: [PATCH 05/12] selftests: seccomp: Fix test dependencies and rules
+Date: Mon, 14 Jan 2019 14:51:34 +0100
+Subject: [PATCH 02/12] selftests: Fix output directory with O=
 In-Reply-To: <20190114135144.26096-1-geert+renesas@glider.be>
 References: <20190114135144.26096-1-geert+renesas@glider.be>
-Message-ID: <20190114135144.26096-6-geert+renesas@glider.be>
+Message-ID: <20190114135144.26096-3-geert+renesas@glider.be>
 
-When building kselftest in a separate output directory, the seccomp_bpf
-binary ends up in the source directory instead of in the output
-directory, and the build of seccomp_benchmark fails:
+When building kselftest in a separate output directory, the individual
+test directories end up in the root of the output directory, instead of
+under tools/testing/selftests/.
 
-    make[5]: *** No rule to make target 'seccomp_benchmark', needed by 'all'.  Stop.
+Fix this by passing the expected path to the make subprocess.
 
-Fix this by declaring both test binaries using TEST_GEN_PROGS, and using
-the build support from lib.mk properly.
-
-Fixes: 967d7ba841513910 ("selftests/seccomp: Add simple seccomp overhead benchmark")
 Signed-off-by: Geert Uytterhoeven <geert+renesas at glider.be>
 ---
- tools/testing/selftests/seccomp/Makefile | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
-index fce7f4ce069251a6..c728bd7a366f78b9 100644
---- a/tools/testing/selftests/seccomp/Makefile
-+++ b/tools/testing/selftests/seccomp/Makefile
-@@ -1,17 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
--all:
+diff --git a/Makefile b/Makefile
+index 088059312237b5d5..ed7c1ea324e97ac2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1191,11 +1191,11 @@ endif
  
--include ../lib.mk
--
--.PHONY: all clean
--
--BINARIES := seccomp_bpf seccomp_benchmark
- CFLAGS += -Wl,-no-as-needed -Wall
-+LDFLAGS += -lpthread
+ PHONY += kselftest
+ kselftest:
+-	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
++	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests O=$(abspath $(objtree)/tools/testing/selftests)
  
--seccomp_bpf: seccomp_bpf.c ../kselftest_harness.h
--	$(CC) $(CFLAGS) $(LDFLAGS) -lpthread $< -o $@
-+TEST_GEN_PROGS = seccomp_bpf seccomp_benchmark
+ PHONY += kselftest-clean
+ kselftest-clean:
+-	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests clean
++	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests clean O=$(abspath $(objtree)/tools/testing/selftests)
  
--TEST_PROGS += $(BINARIES)
--EXTRA_CLEAN := $(BINARIES)
--
--all: $(BINARIES)
-+include ../lib.mk
+ PHONY += kselftest-merge
+ kselftest-merge:
 -- 
 2.17.1
