@@ -1,81 +1,59 @@
 From: geert+renesas@glider.be (Geert Uytterhoeven)
-Date: Mon, 14 Jan 2019 14:51:32 +0100
-Subject: [PATCH 00/12] selftests: Miscellaneous fixes
-Message-ID: <20190114135144.26096-1-geert+renesas@glider.be>
+Date: Mon, 14 Jan 2019 14:51:36 +0100
+Subject: [PATCH 04/12] selftests: android: ion: Fix ionmap_test dependencies
+In-Reply-To: <20190114135144.26096-1-geert+renesas@glider.be>
+References: <20190114135144.26096-1-geert+renesas@glider.be>
+Message-ID: <20190114135144.26096-5-geert+renesas@glider.be>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190114135132._anMp7WiukvWn60Bc3uDq2ZzkifPeO2LETnCVfWi6II@z>
+Message-ID: <20190114135136.K0KVaqAtUhZDEH3HKhVyeQ8OUpG6fN3WsIm7CSxti4o@z>
 
-	Hi all,
+When building kselftest in a separate output directory:
+
+    /tmp/cc44s4yX.o: In function `socket_send_fd':
+    tools/testing/selftests/android/ion/ionutils.c:221: undefined reference to `sendtosocket'
+    /tmp/cc44s4yX.o: In function `socket_receive_fd':
+    tools/testing/selftests/android/ion/ionutils.c:243: undefined reference to `receivefromsocket'
+
+The dependencies for the various test programs are expressed twice:
+  1. Once using $(TEST_GEN_FILES), which supports building in the source
+     directory only,
+  2. A second time using $(OUTPUT), which supports building in either
+     the source or build directory, but lacks a dependency of
+     ionmap_test on ipcsocket, causing the link error above.
+
+Fix this by:
+  - Adding the missing dependency to 2,
+  - Dropping superfluous rule 1.
+
+Remove the "all" target while at it, as that is already handled by the
+included lib.mk.
+
+Fixes: ac93f7046a5371ff ("selftests: ion: Add simple test with the vgem driver")
+Signed-off-by: Geert Uytterhoeven <geert+renesas at glider.be>
+---
+ tools/testing/selftests/android/ion/Makefile | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/android/ion/Makefile b/tools/testing/selftests/android/ion/Makefile
+index 88cfe88e466fb0e6..ce05c5f3594bcf87 100644
+--- a/tools/testing/selftests/android/ion/Makefile
++++ b/tools/testing/selftests/android/ion/Makefile
+@@ -4,10 +4,6 @@ CFLAGS := $(CFLAGS) $(INCLUDEDIR) -Wall -O2 -g
  
-This patch series contains several build fixes and cleanups for issues I
-encountered when trying to cross-build an rtctest binary in a separate
-output directory (like I use for all my kernel builds).
-
-Most patches are independent. Exceptions are:
-  - Patch 3 depends on patch 2,
-  - Patch 7 depends on patch 6,
-  - Patch 11 depends on patches 2 and 3,
-
-This has been tested with native (amd64):
-  - make kselftest-build
-  - make -C tools/testing/selftests
-  - make O=/tmp/kselftest kselftest-build
-  - make O=/tmp/kselftest -C tools/testing/selftests
-and cross-builds (arm):
-  - make kselftest-build (from a separate output directory).
-
-Known remaining issues (not introduced by this patch series):
-  - tools/lib/bpf fails to build in some cases (cfr.
-    https://lore.kernel.org/lkml/CAMuHMdXRN=mSKTjZNBSxQi-pkgSrKqeANxD-GB+hqC8pDjx7nQ at mail.gmail.com/),
-  - tools/gpio is not always built correctly,
-  - When building in a separate output directory, there are still files
-    created in the source directory under:
-        - arch/x86/include/generated/,
-	- arch/x86/tools/,
-	- include/generated/uapi/linux,
-	- scripts (fixdep and unifdef),
-  - Some tests may fail to find the installed header files,
-  - There may be^H^H^H^H^H^Hare more.
-
-Thanks for your comments!
-
-Geert Uytterhoeven (12):
-  selftests: gpio-mockup-chardev: Check asprintf() for error
-  selftests: Fix output directory with O=
-  selftests: Fix header install directory with O=
-  selftests: android: ion: Fix ionmap_test dependencies
-  selftests: seccomp: Fix test dependencies and rules
-  selftests: lib.mk: Add rule to build object file from C source file
-  selftests: memfd: Fix build with O=
-  selftests: timestamping: Remove superfluous rules
-  selftests: sparc64: Remove superfluous rules
-  selftests: intel_pstate: Remove unused header dependency rule
-  selftests: Add kselftest-build target
-  [RFC] selftests: gpio: Fix building tools/gpio from kselftests
-
- Documentation/dev-tools/kselftest.rst             |  4 ++++
- Makefile                                          |  9 +++++++--
- tools/testing/selftests/android/ion/Makefile      |  6 +-----
- tools/testing/selftests/gpio/Makefile             | 12 +++++++-----
- .../testing/selftests/gpio/gpio-mockup-chardev.c  |  9 ++++++---
- tools/testing/selftests/intel_pstate/Makefile     |  2 --
- tools/testing/selftests/lib.mk                    |  4 ++++
- tools/testing/selftests/memfd/Makefile            |  8 +++-----
- .../selftests/networking/timestamping/Makefile    |  5 -----
- tools/testing/selftests/seccomp/Makefile          | 15 +++------------
- tools/testing/selftests/sparc64/drivers/Makefile  |  4 ----
- 11 files changed, 35 insertions(+), 43 deletions(-)
-
+ TEST_GEN_FILES := ionapp_export ionapp_import ionmap_test
+ 
+-all: $(TEST_GEN_FILES)
+-
+-$(TEST_GEN_FILES): ipcsocket.c ionutils.c
+-
+ TEST_PROGS := ion_test.sh
+ 
+ KSFT_KHDR_INSTALL := 1
+@@ -16,4 +12,4 @@ include ../../lib.mk
+ 
+ $(OUTPUT)/ionapp_export: ionapp_export.c ipcsocket.c ionutils.c
+ $(OUTPUT)/ionapp_import: ionapp_import.c ipcsocket.c ionutils.c
+-$(OUTPUT)/ionmap_test: ionmap_test.c ionutils.c
++$(OUTPUT)/ionmap_test: ionmap_test.c ipcsocket.c ionutils.c
 -- 
 2.17.1
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert at linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
