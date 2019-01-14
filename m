@@ -1,37 +1,47 @@
 From: geert+renesas@glider.be (Geert Uytterhoeven)
-Date: Mon, 14 Jan 2019 14:51:40 +0100
-Subject: [PATCH 08/12] selftests: timestamping: Remove superfluous rules
+Date: Mon, 14 Jan 2019 14:51:39 +0100
+Subject: [PATCH 07/12] selftests: memfd: Fix build with O=
 In-Reply-To: <20190114135144.26096-1-geert+renesas@glider.be>
 References: <20190114135144.26096-1-geert+renesas@glider.be>
-Message-ID: <20190114135144.26096-9-geert+renesas@glider.be>
+Message-ID: <20190114135144.26096-8-geert+renesas@glider.be>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190114135140.tgtXbiHjrFOsL_jEZMi9CoXtjgCBk3RasypCbyDxz4w@z>
+Message-ID: <20190114135139.UWifL5wBw2Zz950aX0YRWpfxl-OxxYe-987IayVfoj4@z>
 
-    Makefile:14: warning: overriding recipe for target 'clean'
-    ../../lib.mk:137: warning: ignoring old recipe for target 'clean'
+When building kselftest in a separate output directory:
 
-"all" and "clean" are already handled by the included lib.mk.
+    make[3]: *** No rule to make target 'common.o', needed by '/tmp/kselftest/memfd/memfd_test'.  Stop.
+
+Fix this by explicitly listing common.o (in the output tree) in the
+build targets (allowing the EXTRA_CLEAN rule to be dropped), and
+updating the dependencies of the final executables.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas at glider.be>
 ---
- tools/testing/selftests/networking/timestamping/Makefile | 5 -----
- 1 file changed, 5 deletions(-)
+ tools/testing/selftests/memfd/Makefile | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/networking/timestamping/Makefile b/tools/testing/selftests/networking/timestamping/Makefile
-index 9050eeea5f5f2953..49ede79660c0208d 100644
---- a/tools/testing/selftests/networking/timestamping/Makefile
-+++ b/tools/testing/selftests/networking/timestamping/Makefile
-@@ -4,11 +4,6 @@ CFLAGS += -I../../../../../usr/include
- TEST_GEN_FILES := hwtstamp_config rxtimestamp timestamping txtimestamp
- TEST_PROGS := txtimestamp.sh
+diff --git a/tools/testing/selftests/memfd/Makefile b/tools/testing/selftests/memfd/Makefile
+index 53a848109f7bbbd0..f3e988e54ec81083 100644
+--- a/tools/testing/selftests/memfd/Makefile
++++ b/tools/testing/selftests/memfd/Makefile
+@@ -6,7 +6,7 @@ CFLAGS += -I../../../../usr/include/
  
--all: $(TEST_PROGS)
+ TEST_GEN_PROGS := memfd_test
+ TEST_PROGS := run_fuse_test.sh run_hugetlbfs_test.sh
+-TEST_GEN_FILES := fuse_mnt fuse_test
++TEST_GEN_FILES := fuse_mnt fuse_test common.o
+ 
+ fuse_mnt.o: CFLAGS += $(shell pkg-config fuse --cflags)
+ 
+@@ -14,7 +14,5 @@ include ../lib.mk
+ 
+ $(OUTPUT)/fuse_mnt: LDLIBS += $(shell pkg-config fuse --libs)
+ 
+-$(OUTPUT)/memfd_test: memfd_test.c common.o
+-$(OUTPUT)/fuse_test: fuse_test.c common.o
 -
- top_srcdir = ../../../../..
- KSFT_KHDR_INSTALL := 1
- include ../../lib.mk
--
--clean:
--	rm -fr $(TEST_GEN_FILES)
+-EXTRA_CLEAN = common.o
++$(OUTPUT)/memfd_test: memfd_test.c $(OUTPUT)/common.o
++$(OUTPUT)/fuse_test: fuse_test.c $(OUTPUT)/common.o
 -- 
 2.17.1
