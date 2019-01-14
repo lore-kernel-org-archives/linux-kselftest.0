@@ -1,44 +1,33 @@
 From: geert+renesas at glider.be (Geert Uytterhoeven)
-Date: Mon, 14 Jan 2019 14:51:38 +0100
-Subject: [PATCH 06/12] selftests: lib.mk: Add rule to build object file from C
- source file
+Date: Mon, 14 Jan 2019 14:51:35 +0100
+Subject: [PATCH 03/12] selftests: Fix header install directory with O=
 In-Reply-To: <20190114135144.26096-1-geert+renesas@glider.be>
 References: <20190114135144.26096-1-geert+renesas@glider.be>
-Message-ID: <20190114135144.26096-7-geert+renesas@glider.be>
+Message-ID: <20190114135144.26096-4-geert+renesas@glider.be>
 
-Currently there are rules to compile and link one or more C or
-assembler source files into a full executable, and to assemble a single
-assembler source into an object file.
+When building kselftest in a separate output directory, the kernel
+headers are still installed in the source directory, instead of in the
+specified output directory.
 
-Add a generic rule to compile a single C source file into an object
-file, for reuse of object files in multiple executables.
+Fix this by passing the expected path to the make subprocess.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas at glider.be>
 ---
- tools/testing/selftests/lib.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 8b0f16409ed7eb53..77a71264d8c5a743 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -141,6 +141,7 @@ clean:
- #
- ifneq ($(KBUILD_SRC),)
- LINK.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
-+COMPILE.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
- COMPILE.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
- LINK.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
- endif
-@@ -151,6 +152,9 @@ ifeq ($(OVERRIDE_TARGETS),)
- $(OUTPUT)/%:%.c
- 	$(LINK.c) $^ $(LDLIBS) -o $@
+diff --git a/Makefile b/Makefile
+index ed7c1ea324e97ac2..5355033dda6ed1ea 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1191,7 +1191,7 @@ endif
  
-+$(OUTPUT)/%.o:%.c
-+	$(COMPILE.c) $^ -o $@
-+
- $(OUTPUT)/%.o:%.S
- 	$(COMPILE.S) $^ -o $@
+ PHONY += kselftest
+ kselftest:
+-	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests O=$(abspath $(objtree)/tools/testing/selftests)
++	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests O=$(abspath $(objtree)/tools/testing/selftests) INSTALL_HDR_PATH=$(abspath $(INSTALL_HDR_PATH))
  
+ PHONY += kselftest-clean
+ kselftest-clean:
 -- 
 2.17.1
