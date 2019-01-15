@@ -1,35 +1,18 @@
-From: shuah@kernel.org (shuah)
-Date: Tue, 15 Jan 2019 13:46:24 -0700
-Subject: [PATCH] selftests/vm/gup_benchmark.c: match gup struct to kernel
-In-Reply-To: <20190115174521.GA3602@alison-desk.jf.intel.com>
-References: <20181208020645.GA28467@alison-desk.jf.intel.com>
- <20190115174521.GA3602@alison-desk.jf.intel.com>
-Message-ID: <ad317f98-f5de-a3bb-463b-32bb56a822fe@kernel.org>
+From: davem@davemloft.net (David Miller)
+Date: Tue, 15 Jan 2019 13:45:35 -0800 (PST)
+Subject: [PATCH net] selftests/txtimestamp: Fix an equals vs assign bug
+In-Reply-To: <20190109105007.GA14518@kadam>
+References: <20190109105007.GA14518@kadam>
+Message-ID: <20190115.134535.1816196657240429744.davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190115204624._5CjRb8eh6-RV7kffwj6GTnpAo2hZekO7Hj35RPoLZU@z>
+Message-ID: <20190115214535.LYQycOPWUr57QEf4Q9FbURhG3cl-dnN3p3RfsR7LVm0@z>
 
-On 1/15/19 10:45 AM, Alison Schofield wrote:
-> Hi Shauh,
-> 
-> Ping on this one. It has Kirill's ACK. Without this fix the
-> gup_benchmark fails to run (at all).
-> 
-> Thanks!
-> Alison
-> 
-> On Fri, Dec 07, 2018@06:06:45PM -0800, Alison Schofield wrote:
->> An expansion field was added to the kernel copy of this structure for
->> future use. See mm/gup_benchmark.c.
->>
->> Add the same expansion field here, so that the IOCTL command decodes
->> correctly. Otherwise, it fails with EINVAL.
->>
->> Signed-off-by: Alison Schofield <alison.schofield at intel.com>
-> Acked-by: Kirill A. Shutemov <kirill.shutemov at linux.intel.com>
-> 
+From: Dan Carpenter <dan.carpenter@oracle.com>
+Date: Wed, 9 Jan 2019 13:50:07 +0300
 
-Sorry for the delay and thanks for the ping. I will apply this for
-linux-kselftest fixes for 5.0-rc3
+> This should be == instead of =.
+> 
+> Fixes: b52354aa068e ("selftests: expand txtimestamp with ipv6 dgram + raw and pf_packet")
+> Signed-off-by: Dan Carpenter <dan.carpenter at oracle.com>
 
-thanks,
--- Shuah
+Applied.
