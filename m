@@ -1,34 +1,36 @@
-From: shuah at kernel.org (shuah)
-Date: Mon, 14 Jan 2019 18:45:19 -0700
-Subject: [PATCH] tools/testing/selftests/x86/unwind_vdso.c: Remove
- duplicate header
-In-Reply-To: <5c3c7dfe.1c69fb81.7c853.0be7@mx.google.com>
-References: <5c3c7dfe.1c69fb81.7c853.0be7@mx.google.com>
-Message-ID: <3242d93b-bd3d-bce3-b912-bd28144a2e9d@kernel.org>
+From: joel at joelfernandes.org (Joel Fernandes)
+Date: Tue, 15 Jan 2019 09:50:05 -0500
+Subject: [PATCH v4 2/2] selftests/memfd: Add tests for
+ F_SEAL_FUTURE_WRITE seal
+In-Reply-To: <f9ffb7f8-1ff8-3bec-ce79-f9322d8715dc@kernel.org>
+References: <20190112203816.85534-1-joel@joelfernandes.org>
+ <20190112203816.85534-3-joel@joelfernandes.org>
+ <f9ffb7f8-1ff8-3bec-ce79-f9322d8715dc@kernel.org>
+Message-ID: <20190115145005.GC36681@google.com>
 
-On 1/14/19 5:18 AM, Sabyasachi Gupta wrote:
-> Remove sys/ucontext.h which is included more than once.
+On Mon, Jan 14, 2019 at 06:39:59PM -0700, shuah wrote:
+> On 1/12/19 1:38 PM, Joel Fernandes wrote:
+> > From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
+> > 
+> > Add tests to verify sealing memfds with the F_SEAL_FUTURE_WRITE works as
+> > expected.
+> > 
+> > Cc: dancol at google.com
+> > Cc: minchan at kernel.org
+> > Cc: Jann Horn <jannh at google.com>
+> > Cc: John Stultz <john.stultz at linaro.org>
+> > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> > ---
 > 
-> Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
-> ---
->   tools/testing/selftests/x86/unwind_vdso.c | 1 -
->   1 file changed, 1 deletion(-)
+> Looks good to me. For selftest part of the series:
 > 
-> diff --git a/tools/testing/selftests/x86/unwind_vdso.c b/tools/testing/selftests/x86/unwind_vdso.c
-> index 00a26a8..9731133 100644
-> --- a/tools/testing/selftests/x86/unwind_vdso.c
-> +++ b/tools/testing/selftests/x86/unwind_vdso.c
-> @@ -44,7 +44,6 @@ int main()
->   #include <stdbool.h>
->   #include <sys/ptrace.h>
->   #include <sys/user.h>
-> -#include <sys/ucontext.h>
->   #include <link.h>
->   #include <sys/auxv.h>
->   #include <dlfcn.h>
-> 
+> Reviewed-by: Shuah Khan <shuah at kernel.org>
 
-Thanks for the patch. I will pull this in for 5.1-rc1
+Thanks!
+
+John, could you provide your Reviewed-by again for patch 1/2 ? I had dropped
+it since the patch had some more changes.
 
 thanks,
--- Shuah
+
+ - Joel
