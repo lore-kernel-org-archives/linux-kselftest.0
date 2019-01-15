@@ -1,72 +1,28 @@
-From: keescook at chromium.org (Kees Cook)
-Date: Mon, 14 Jan 2019 15:16:17 -0800
-Subject: [PATCH 05/12] selftests: seccomp: Fix test dependencies and rules
-In-Reply-To: <20190114135144.26096-6-geert+renesas@glider.be>
-References: <20190114135144.26096-1-geert+renesas@glider.be>
- <20190114135144.26096-6-geert+renesas@glider.be>
-Message-ID: <CAGXu5j+SHuqv0=gxdsYBqraPyZMWdVD+uxrtYrepVZBX3ZzTKw@mail.gmail.com>
+From: shuah at kernel.org (shuah)
+Date: Mon, 14 Jan 2019 18:39:59 -0700
+Subject: [PATCH v4 2/2] selftests/memfd: Add tests for F_SEAL_FUTURE_WRITE
+ seal
+In-Reply-To: <20190112203816.85534-3-joel@joelfernandes.org>
+References: <20190112203816.85534-1-joel@joelfernandes.org>
+ <20190112203816.85534-3-joel@joelfernandes.org>
+Message-ID: <f9ffb7f8-1ff8-3bec-ce79-f9322d8715dc@kernel.org>
 
-On Mon, Jan 14, 2019 at 5:51 AM Geert Uytterhoeven
-<geert+renesas at glider.be> wrote:
->
-> When building kselftest in a separate output directory, the seccomp_bpf
-> binary ends up in the source directory instead of in the output
-> directory, and the build of seccomp_benchmark fails:
->
->     make[5]: *** No rule to make target 'seccomp_benchmark', needed by 'all'.  Stop.
->
-> Fix this by declaring both test binaries using TEST_GEN_PROGS, and using
-> the build support from lib.mk properly.
->
-> Fixes: 967d7ba841513910 ("selftests/seccomp: Add simple seccomp overhead benchmark")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas at glider.be>
+On 1/12/19 1:38 PM, Joel Fernandes wrote:
+> From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
+> 
+> Add tests to verify sealing memfds with the F_SEAL_FUTURE_WRITE works as
+> expected.
+> 
+> Cc: dancol at google.com
+> Cc: minchan at kernel.org
+> Cc: Jann Horn <jannh at google.com>
+> Cc: John Stultz <john.stultz at linaro.org>
+> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
 > ---
->  tools/testing/selftests/seccomp/Makefile | 15 +++------------
->  1 file changed, 3 insertions(+), 12 deletions(-)
->
-> diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
-> index fce7f4ce069251a6..c728bd7a366f78b9 100644
-> --- a/tools/testing/selftests/seccomp/Makefile
-> +++ b/tools/testing/selftests/seccomp/Makefile
-> @@ -1,17 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -all:
->
-> -include ../lib.mk
-> -
-> -.PHONY: all clean
-> -
-> -BINARIES := seccomp_bpf seccomp_benchmark
->  CFLAGS += -Wl,-no-as-needed -Wall
-> +LDFLAGS += -lpthread
->
-> -seccomp_bpf: seccomp_bpf.c ../kselftest_harness.h
-> -       $(CC) $(CFLAGS) $(LDFLAGS) -lpthread $< -o $@
-> +TEST_GEN_PROGS = seccomp_bpf seccomp_benchmark
 
-This breaks the dep on ../kselftest_harness.h. Changes go unnoticed if
-this is changed:
+Looks good to me. For selftest part of the series:
 
-$ touch tools/testing/selftests/kselftest_harness.h
-$ make O=/tmp/kselftest -C tools/testing/selftests
-...
-make[1]: Entering directory
-'/home/kees/src/linux/tools/testing/selftests/seccomp'
-make[1]: Nothing to be done for 'all'.
-make[1]: Leaving directory
-'/home/kees/src/linux/tools/testing/selftests/seccomp'
-...
+Reviewed-by: Shuah Khan <shuah at kernel.org>
 
->
-> -TEST_PROGS += $(BINARIES)
-> -EXTRA_CLEAN := $(BINARIES)
-> -
-> -all: $(BINARIES)
-> +include ../lib.mk
-> --
-> 2.17.1
->
-
-
--- 
-Kees Cook
+thanks,
+-- Shuah
