@@ -1,60 +1,53 @@
-From: drjones@redhat.com (Andrew Jones)
-Date: Tue, 15 Jan 2019 17:32:45 +0100
-Subject: [PATCH] kvm: selftests: Fix region overlap check in kvm_util
-In-Reply-To: <20190114190653.203837-1-bgardon@google.com>
-References: <20190114190653.203837-1-bgardon@google.com>
-Message-ID: <20190115163245.sdntpkpgdesdoo2w@kamzik.brq.redhat.com>
+From: john.stultz@linaro.org (John Stultz)
+Date: Tue, 15 Jan 2019 09:36:52 -0800
+Subject: [PATCH v4 1/2] mm/memfd: Add an F_SEAL_FUTURE_WRITE seal to memfd
+In-Reply-To: <20190112203816.85534-2-joel@joelfernandes.org>
+References: <20190112203816.85534-1-joel@joelfernandes.org>
+ <20190112203816.85534-2-joel@joelfernandes.org>
+Message-ID:
+ <CALAqxLXFvktP+k8AWPEoT=-MM_vdu=1hzgzPYEzhSp8hXd-ADg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190115163245.51b682cclIi4p-Pb555_ozEO8qJD487k61aKCCNdHFI@z>
+Message-ID: <20190115173652.MrBKQXnBhswRGBe7TypJhoKBa1lciEmkj18jh3zmook@z>
 
-On Mon, Jan 14, 2019@11:06:53AM -0800, Ben Gardon wrote:
-> Fix a call to userspace_mem_region_find to conform to its spec of
-> taking an inclusive, inclusive range. It was previously being called
-> with an inclusive, exclusive range. Also remove a redundant region bounds
-> check in vm_userspace_mem_region_add. Region overlap checking is already
-> performed by the call to userspace_mem_region_find.
-> 
-> Tested: Compiled tools/testing/selftests/kvm with -static
-> 	Ran all resulting test binaries on an Intel Haswell test machine
-> 	All tests passed
-> 
-> Signed-off-by: Ben Gardon <bgardon at google.com>
-> Reviewed-by: Jim Mattson <jmattson at google.com>
+On Sat, Jan 12, 2019@12:38 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+>
+> From: "Joel Fernandes (Google)" <joel at joelfernandes.org>
+>
+> Android uses ashmem for sharing memory regions.  We are looking forward to
+> migrating all usecases of ashmem to memfd so that we can possibly remove
+> the ashmem driver in the future from staging while also benefiting from
+> using memfd and contributing to it.  Note staging drivers are also not ABI
+> and generally can be removed at anytime.
+>
+> One of the main usecases Android has is the ability to create a region and
+> mmap it as writeable, then add protection against making any "future"
+> writes while keeping the existing already mmap'ed writeable-region active.
+> This allows us to implement a usecase where receivers of the shared
+> memory buffer can get a read-only view, while the sender continues to
+> write to the buffer.  See CursorWindow documentation in Android for more
+> details:
+> https://developer.android.com/reference/android/database/CursorWindow
+>
+> This usecase cannot be implemented with the existing F_SEAL_WRITE seal.
+> To support the usecase, this patch adds a new F_SEAL_FUTURE_WRITE seal
+> which prevents any future mmap and write syscalls from succeeding while
+> keeping the existing mmap active.
+>
+> A better way to do F_SEAL_FUTURE_WRITE seal was discussed [1] last week
+> where we don't need to modify core VFS structures to get the same
+> behavior of the seal. This solves several side-effects pointed by Andy.
+> self-tests are provided in later patch to verify the expected semantics.
+>
+> [1] https://lore.kernel.org/lkml/20181111173650.GA256781 at google.com/
+>
+> [Thanks a lot to Andy for suggestions to improve code]
+> Cc: Andy Lutomirski <luto at kernel.org>
+> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
 > ---
->  tools/testing/selftests/kvm/lib/kvm_util.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 23022e9d32eb81..461e1a50779762 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -571,7 +571,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->  	 * already exist.
->  	 */
->  	region = (struct userspace_mem_region *) userspace_mem_region_find(
-> -		vm, guest_paddr, guest_paddr + npages * vm->page_size);
-> +		vm, guest_paddr, (guest_paddr + npages * vm->page_size) + 1);
+>  fs/hugetlbfs/inode.c       |  2 +-
+>  include/uapi/linux/fcntl.h |  1 +
+>  mm/memfd.c                 |  3 ++-
+>  mm/shmem.c                 | 25 ++++++++++++++++++++++---
+>  4 files changed, 26 insertions(+), 5 deletions(-)
 
-This should be '- 1', not '+ 1'.
-
->  	if (region != NULL)
->  		TEST_ASSERT(false, "overlapping userspace_mem_region already "
->  			"exists\n"
-> @@ -587,11 +587,6 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->  		region = region->next) {
->  		if (region->region.slot == slot)
->  			break;
-> -		if ((guest_paddr <= (region->region.guest_phys_addr
-> -				+ region->region.memory_size))
-> -			&& ((guest_paddr + npages * vm->page_size)
-> -				>= region->region.guest_phys_addr))
-> -			break;
->  	}
->  	if (region != NULL)
->  		TEST_ASSERT(false, "A mem region with the requested slot "
-
-This assert's message also states "or overlapping physical memory range",
-which should now be removed.
-
-Thanks,
-drew
+Acked-by: John Stultz <john.stultz at linaro.org>
