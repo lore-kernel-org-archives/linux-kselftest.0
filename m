@@ -1,76 +1,139 @@
-From: daniel.diaz@linaro.org (=?UTF-8?q?Daniel=20D=C3=ADaz?=)
-Date: Wed, 16 Jan 2019 11:43:20 -0600
-Subject: [PATCH 4/4] selftests: timers: use LDLIBS instead of LDFLAGS
-In-Reply-To: <20190116174320.14938-1-daniel.diaz@linaro.org>
+From: keescook@chromium.org (Kees Cook)
+Date: Wed, 16 Jan 2019 10:13:59 -0800
+Subject: [PATCH 3/4] selftests: seccomp: use LDLIBS instead of LDFLAGS
+In-Reply-To: <20190116174320.14938-3-daniel.diaz@linaro.org>
 References: <20190116174320.14938-1-daniel.diaz@linaro.org>
-Message-ID: <20190116174320.14938-4-daniel.diaz@linaro.org>
+ <20190116174320.14938-3-daniel.diaz@linaro.org>
+Message-ID:
+ <CAGXu5j+1tOvB0jHk=kCxfhTg-PEPjCHp2TQb++wZsGxJCcQxng@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190116174320.BwEN86IjsL3qrJOg7cMITY1cFxdGWPT-YOuRTvYnug0@z>
+Message-ID: <20190116181359.c9JmmU74k1Vt1z8U-P2BtS7GzW6y22eshEBuAdp7JuY@z>
 
-From: Fathi Boudra <fathi.boudra@linaro.org>
+On Wed, Jan 16, 2019@9:44 AM Daniel Díaz <daniel.diaz@linaro.org> wrote:
+>
+> From: Fathi Boudra <fathi.boudra at linaro.org>
+>
+> seccomp_bpf fails to build due to undefined reference errors:
+>
+>  aarch64-linaro-linux-gcc --sysroot=/build/tmp-rpb-glibc/sysroots/hikey
+>  -O2 -pipe -g -feliminate-unused-debug-types -Wl,-no-as-needed -Wall
+>  -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed -lpthread seccomp_bpf.c -o
+>  /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf
+>  /tmp/ccrlR3MW.o: In function `tsync_sibling':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1920: undefined reference to `sem_post'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1920: undefined reference to `sem_post'
+>  /tmp/ccrlR3MW.o: In function `TSYNC_setup':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1863: undefined reference to `sem_init'
+>  /tmp/ccrlR3MW.o: In function `TSYNC_teardown':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1904: undefined reference to `sem_destroy'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1897: undefined reference to `pthread_kill'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1898: undefined reference to `pthread_cancel'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1899: undefined reference to `pthread_join'
+>  /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+>  /tmp/ccrlR3MW.o: In function `TSYNC_siblings_fail_prctl':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1978: undefined reference to `sem_wait'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1990: undefined reference to `pthread_join'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1992: undefined reference to `pthread_join'
+>  /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+>  /tmp/ccrlR3MW.o: In function `TSYNC_two_siblings_with_ancestor':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2016: undefined reference to `sem_wait'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2032: undefined reference to `pthread_join'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2034: undefined reference to `pthread_join'
+>  /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+>  /tmp/ccrlR3MW.o: In function `TSYNC_two_sibling_want_nnp':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2046: undefined reference to `sem_wait'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2058: undefined reference to `pthread_join'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2060: undefined reference to `pthread_join'
+>  /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+>  /tmp/ccrlR3MW.o: In function `TSYNC_two_siblings_with_no_filter':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2073: undefined reference to `sem_wait'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2098: undefined reference to `pthread_join'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2100: undefined reference to `pthread_join'
+>  /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+>  /tmp/ccrlR3MW.o: In function `TSYNC_two_siblings_with_one_divergence':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2125: undefined reference to `sem_wait'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2143: undefined reference to `pthread_join'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2145: undefined reference to `pthread_join'
+>  /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+>  /tmp/ccrlR3MW.o: In function `TSYNC_two_siblings_not_under_filter':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2169: undefined reference to `sem_wait'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2202: undefined reference to `pthread_join'
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2227: undefined reference to `pthread_join'
+>  /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+>  /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+>
+> It's GNU Make and linker specific.
+>
+> The default Makefile rule looks like:
+>
+> $(CC) $(CFLAGS) $(LDFLAGS) $@ $^ $(LDLIBS)
+>
+> When linking is done by gcc itself, no issue, but when it needs to be passed
+> to proper ld, only LDLIBS follows and then ld cannot know what libs to link
+> with.
+>
+> More detail:
+> https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
+>
+> LDFLAGS
+> Extra flags to give to compilers when they are supposed to invoke the linker,
+> ‘ld’, such as -L. Libraries (-lfoo) should be added to the LDLIBS variable
+> instead.
+>
+> LDLIBS
+> Library flags or names given to compilers when they are supposed to invoke the
+> linker, ‘ld’. LOADLIBES is a deprecated (but still supported) alternative to
+> LDLIBS. Non-library linker flags, such as -L, should go in the LDFLAGS
+> variable.
+>
+> https://lkml.org/lkml/2010/2/10/362
+>
+> tools/perf: libraries must come after objects
+>
+> Link order matters, use LDLIBS instead of LDFLAGS to properly link against
+> libpthread.
+>
+> Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
 
-posix_timers fails to build due to undefined reference errors:
+Acked-by: Kees Cook <keescook at chromium.org>
 
- aarch64-linaro-linux-gcc --sysroot=/build/tmp-rpb-glibc/sysroots/hikey
- -O2 -pipe -g -feliminate-unused-debug-types -O3 -Wl,-no-as-needed -Wall
- -DKTEST  -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed -lrt -lpthread
- posix_timers.c
- -o /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/timers/posix_timers
- /tmp/cc1FTZzT.o: In function `check_timer_create':
- /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/timers/posix_timers.c:157:
- undefined reference to `timer_create'
- /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/timers/posix_timers.c:170:
- undefined reference to `timer_settime'
- collect2: error: ld returned 1 exit status
+Shuah, can you take this?
 
-It's GNU Make and linker specific.
+-Kees
 
-The default Makefile rule looks like:
+> ---
+>  tools/testing/selftests/seccomp/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
+> index fce7f4ce0692..1760b3e39730 100644
+> --- a/tools/testing/selftests/seccomp/Makefile
+> +++ b/tools/testing/selftests/seccomp/Makefile
+> @@ -9,7 +9,7 @@ BINARIES := seccomp_bpf seccomp_benchmark
+>  CFLAGS += -Wl,-no-as-needed -Wall
+>
+>  seccomp_bpf: seccomp_bpf.c ../kselftest_harness.h
+> -       $(CC) $(CFLAGS) $(LDFLAGS) -lpthread $< -o $@
+> +       $(CC) $(CFLAGS) $(LDFLAGS) $< -lpthread -o $@
+>
+>  TEST_PROGS += $(BINARIES)
+>  EXTRA_CLEAN := $(BINARIES)
+> --
+> 2.17.1
+>
 
-$(CC) $(CFLAGS) $(LDFLAGS) $@ $^ $(LDLIBS)
 
-When linking is done by gcc itself, no issue, but when it needs to be passed
-to proper ld, only LDLIBS follows and then ld cannot know what libs to link
-with.
-
-More detail:
-https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
-
-LDFLAGS
-Extra flags to give to compilers when they are supposed to invoke the linker,
-‘ld’, such as -L. Libraries (-lfoo) should be added to the LDLIBS variable
-instead.
-
-LDLIBS
-Library flags or names given to compilers when they are supposed to invoke the
-linker, ‘ld’. LOADLIBES is a deprecated (but still supported) alternative to
-LDLIBS. Non-library linker flags, such as -L, should go in the LDFLAGS
-variable.
-
-https://lkml.org/lkml/2010/2/10/362
-
-tools/perf: libraries must come after objects
-
-Link order matters, use LDLIBS instead of LDFLAGS to properly link against
-libpthread.
-
-Signed-off-by: Denys Dmytriyenko <denys at ti.com>
-Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
----
- tools/testing/selftests/timers/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/timers/Makefile b/tools/testing/selftests/timers/Makefile
-index c02683cfb6c9..7656c7ce79d9 100644
---- a/tools/testing/selftests/timers/Makefile
-+++ b/tools/testing/selftests/timers/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- CFLAGS += -O3 -Wl,-no-as-needed -Wall
--LDFLAGS += -lrt -lpthread -lm
-+LDLIBS += -lrt -lpthread -lm
- 
- # these are all "safe" tests that don't modify
- # system time or require escalated privileges
 -- 
-2.17.1
+Kees Cook
