@@ -1,30 +1,74 @@
 From: daniel.diaz@linaro.org (=?UTF-8?q?Daniel=20D=C3=ADaz?=)
-Date: Wed, 16 Jan 2019 11:43:18 -0600
-Subject: [PATCH 2/4] selftests: net: use LDLIBS instead of LDFLAGS
+Date: Wed, 16 Jan 2019 11:43:19 -0600
+Subject: [PATCH 3/4] selftests: seccomp: use LDLIBS instead of LDFLAGS
 In-Reply-To: <20190116174320.14938-1-daniel.diaz@linaro.org>
 References: <20190116174320.14938-1-daniel.diaz@linaro.org>
-Message-ID: <20190116174320.14938-2-daniel.diaz@linaro.org>
+Message-ID: <20190116174320.14938-3-daniel.diaz@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190116174318.gYY76TkhVAfu9pckOil0zkIeN4N0loRbe3I55R4_z8E@z>
+Message-ID: <20190116174319.CYhRjlQBqFM8dj0Z_Dosu4tmHOjpEiUKAkSMcgCw6tQ@z>
 
 From: Fathi Boudra <fathi.boudra@linaro.org>
 
-reuseport_bpf_numa fails to build due to undefined reference errors:
+seccomp_bpf fails to build due to undefined reference errors:
 
- aarch64-linaro-linux-gcc
- --sysroot=/build/tmp-rpb-glibc/sysroots/hikey -Wall
- -Wl,--no-as-needed -O2 -g -I../../../../usr/include/  -Wl,-O1
- -Wl,--hash-style=gnu -Wl,--as-needed -lnuma  reuseport_bpf_numa.c
- -o
- /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa
- /tmp/ccfUuExT.o: In function `send_from_node':
- /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:138:
- undefined reference to `numa_run_on_node'
- /tmp/ccfUuExT.o: In function `main':
- /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:230:
- undefined reference to `numa_available'
- /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:233:
- undefined reference to `numa_max_node'
+ aarch64-linaro-linux-gcc --sysroot=/build/tmp-rpb-glibc/sysroots/hikey
+ -O2 -pipe -g -feliminate-unused-debug-types -Wl,-no-as-needed -Wall
+ -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed -lpthread seccomp_bpf.c -o
+ /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf
+ /tmp/ccrlR3MW.o: In function `tsync_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1920: undefined reference to `sem_post'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1920: undefined reference to `sem_post'
+ /tmp/ccrlR3MW.o: In function `TSYNC_setup':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1863: undefined reference to `sem_init'
+ /tmp/ccrlR3MW.o: In function `TSYNC_teardown':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1904: undefined reference to `sem_destroy'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1897: undefined reference to `pthread_kill'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1898: undefined reference to `pthread_cancel'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1899: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /tmp/ccrlR3MW.o: In function `TSYNC_siblings_fail_prctl':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1978: undefined reference to `sem_wait'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1990: undefined reference to `pthread_join'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1992: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /tmp/ccrlR3MW.o: In function `TSYNC_two_siblings_with_ancestor':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2016: undefined reference to `sem_wait'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2032: undefined reference to `pthread_join'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2034: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /tmp/ccrlR3MW.o: In function `TSYNC_two_sibling_want_nnp':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2046: undefined reference to `sem_wait'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2058: undefined reference to `pthread_join'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2060: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /tmp/ccrlR3MW.o: In function `TSYNC_two_siblings_with_no_filter':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2073: undefined reference to `sem_wait'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2098: undefined reference to `pthread_join'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2100: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /tmp/ccrlR3MW.o: In function `TSYNC_two_siblings_with_one_divergence':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2125: undefined reference to `sem_wait'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2143: undefined reference to `pthread_join'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2145: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /tmp/ccrlR3MW.o: In function `TSYNC_two_siblings_not_under_filter':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2169: undefined reference to `sem_wait'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2202: undefined reference to `pthread_join'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2227: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
 
 It's GNU Make and linker specific.
 
@@ -55,24 +99,25 @@ https://lkml.org/lkml/2010/2/10/362
 tools/perf: libraries must come after objects
 
 Link order matters, use LDLIBS instead of LDFLAGS to properly link against
-libnuma.
+libpthread.
 
 Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
 ---
- tools/testing/selftests/net/Makefile | 2 +-
+ tools/testing/selftests/seccomp/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index f8f3e90700c0..1e6d14d2825c 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -21,6 +21,6 @@ TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls
- KSFT_KHDR_INSTALL := 1
- include ../lib.mk
+diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
+index fce7f4ce0692..1760b3e39730 100644
+--- a/tools/testing/selftests/seccomp/Makefile
++++ b/tools/testing/selftests/seccomp/Makefile
+@@ -9,7 +9,7 @@ BINARIES := seccomp_bpf seccomp_benchmark
+ CFLAGS += -Wl,-no-as-needed -Wall
  
--$(OUTPUT)/reuseport_bpf_numa: LDFLAGS += -lnuma
-+$(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
- $(OUTPUT)/tcp_mmap: LDFLAGS += -lpthread
- $(OUTPUT)/tcp_inq: LDFLAGS += -lpthread
+ seccomp_bpf: seccomp_bpf.c ../kselftest_harness.h
+-	$(CC) $(CFLAGS) $(LDFLAGS) -lpthread $< -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $< -lpthread -o $@
+ 
+ TEST_PROGS += $(BINARIES)
+ EXTRA_CLEAN := $(BINARIES)
 -- 
 2.17.1
