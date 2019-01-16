@@ -1,176 +1,55 @@
-From: shuah@kernel.org (shuah@kernel.org)
-Date: Tue, 15 Jan 2019 18:59:21 -0700
-Subject: [PATCH backport for 4.19] selftests: Fix test errors related to
- lib.mk khdr target
-Message-ID: <20190116015922.17979-1-shuah@kernel.org>
+From: bgardon@google.com (Ben Gardon)
+Date: Wed, 16 Jan 2019 09:41:15 -0800
+Subject: [PATCH v2] kvm: selftests: Fix region overlap check in kvm_util
+Message-ID: <20190116174115.95225-1-bgardon@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190116015921.dOoQi6S7JVMteCWmCXgTEnZ-4P24ab8JuaEx3oYBmok@z>
+Message-ID: <20190116174115.XMuIEnGvz9psIMq4KqHMePYHiKnF_iIOSJIf3_8sczA@z>
 
-From: Shuah Khan <shuah@kernel.org>
+Fix a call to userspace_mem_region_find to conform to its spec of
+taking an inclusive, inclusive range. It was previously being called
+with an inclusive, exclusive range. Also remove a redundant region bounds
+check in vm_userspace_mem_region_add. Region overlap checking is already
+performed by the call to userspace_mem_region_find.
 
-Upstream commit 211929fd3f7c ("selftests: Fix test errors related to
-lib.mk khdr target")
+Tested: Compiled tools/testing/selftests/kvm with -static
+	Ran all resulting test binaries on an Intel Haswell test machine
+	All tests passed
 
-This backport drops change to test that isn't in 4.19
-- tools/testing/selftests/tc-testing/bpf/Makefile
-
-The rest of the changes applied with minor changes to
-- tools/testing/selftests/gpio/Makefile
-- tools/testing/selftests/kvm/Makefile
-
-Commit b2d35fa5fc80 ("selftests: add headers_install to lib.mk") added
-khdr target to run headers_install target from the main Makefile. The
-logic uses KSFT_KHDR_INSTALL and top_srcdir as controls to initialize
-variables and include files to run headers_install from the top level
-Makefile. There are a few problems with this logic.
-
-1. Exposes top_srcdir to all tests
-2. Common logic impacts all tests
-3. Uses KSFT_KHDR_INSTALL, top_srcdir, and khdr in an adhoc way. Tests
-   add "khdr" dependency in their Makefiles to TEST_PROGS_EXTENDED in
-   some cases, and STATIC_LIBS in other cases. This makes this framework
-   confusing to use.
-
-The common logic that runs for all tests even when KSFT_KHDR_INSTALL
-isn't defined by the test. top_srcdir is initialized to a default value
-when test doesn't initialize it. It works for all tests without a sub-dir
-structure and tests with sub-dir structure fail to build.
-
-e.g: make -C sparc64/drivers/ or make -C drivers/dma-buf
-
-../../lib.mk:20: ../../../../scripts/subarch.include: No such file or directory
-make: *** No rule to make target '../../../../scripts/subarch.include'.  Stop.
-
-There is no reason to require all tests to define top_srcdir and there is
-no need to require tests to add khdr dependency using adhoc changes to
-TEST_* and other variables.
-
-Fix it with a consistent use of KSFT_KHDR_INSTALL and top_srcdir from tests
-that have the dependency on headers_install.
-
-Change common logic to include khdr target define and "all" target with
-dependency on khdr when KSFT_KHDR_INSTALL is defined.
-
-Only tests that have dependency on headers_install have to define just
-the KSFT_KHDR_INSTALL, and top_srcdir variables and there is no need to
-specify khdr dependency in the test Makefiles.
-
-Fixes: b2d35fa5fc80 ("selftests: add headers_install to lib.mk")
-Signed-off-by: Shuah Khan <shuah at kernel.org>
+Signed-off-by: Ben Gardon <bgardon at google.com>
+Reviewed-by: Jim Mattson <jmattson at google.com>
 ---
- tools/testing/selftests/android/Makefile                 | 2 +-
- tools/testing/selftests/futex/functional/Makefile        | 1 +
- tools/testing/selftests/gpio/Makefile                    | 1 +
- tools/testing/selftests/kvm/Makefile                     | 2 +-
- tools/testing/selftests/lib.mk                           | 8 ++++----
- tools/testing/selftests/networking/timestamping/Makefile | 1 +
- tools/testing/selftests/vm/Makefile                      | 1 +
- 7 files changed, 10 insertions(+), 6 deletions(-)
+ tools/testing/selftests/kvm/lib/kvm_util.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/android/Makefile b/tools/testing/selftests/android/Makefile
-index d9a725478375..72c25a3cb658 100644
---- a/tools/testing/selftests/android/Makefile
-+++ b/tools/testing/selftests/android/Makefile
-@@ -6,7 +6,7 @@ TEST_PROGS := run.sh
- 
- include ../lib.mk
- 
--all: khdr
-+all:
- 	@for DIR in $(SUBDIRS); do		\
- 		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
- 		mkdir $$BUILD_TARGET  -p;	\
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index ad1eeb14fda7..30996306cabc 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -19,6 +19,7 @@ TEST_GEN_FILES := \
- TEST_PROGS := run.sh
- 
- top_srcdir = ../../../../..
-+KSFT_KHDR_INSTALL := 1
- include ../../lib.mk
- 
- $(TEST_GEN_FILES): $(HEADERS)
-diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index 4665cdbf1a8d..59ea4c461978 100644
---- a/tools/testing/selftests/gpio/Makefile
-+++ b/tools/testing/selftests/gpio/Makefile
-@@ -9,6 +9,7 @@ EXTRA_OBJS := ../gpiogpio-event-mon-in.o ../gpiogpio-event-mon.o
- EXTRA_OBJS += ../gpiogpio-hammer-in.o ../gpiogpio-utils.o ../gpiolsgpio-in.o
- EXTRA_OBJS += ../gpiolsgpio.o
- 
-+KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
- all: $(BINARIES)
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index ec32dad3c3f0..cc83e2fd3787 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -1,6 +1,7 @@
- all:
- 
- top_srcdir = ../../../../
-+KSFT_KHDR_INSTALL := 1
- UNAME_M := $(shell uname -m)
- 
- LIBKVM = lib/assert.c lib/elf.c lib/io.c lib/kvm_util.c lib/sparsebit.c
-@@ -40,4 +41,3 @@ $(OUTPUT)/libkvm.a: $(LIBKVM_OBJ)
- 
- all: $(STATIC_LIBS)
- $(TEST_GEN_PROGS): $(STATIC_LIBS)
--$(STATIC_LIBS):| khdr
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 0a8e75886224..8b0f16409ed7 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -16,18 +16,18 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
- TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
- TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
- 
-+ifdef KSFT_KHDR_INSTALL
- top_srcdir ?= ../../../..
- include $(top_srcdir)/scripts/subarch.include
- ARCH		?= $(SUBARCH)
- 
--all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
--
- .PHONY: khdr
- khdr:
- 	make ARCH=$(ARCH) -C $(top_srcdir) headers_install
- 
--ifdef KSFT_KHDR_INSTALL
--$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES):| khdr
-+all: khdr $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
-+else
-+all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
- endif
- 
- .ONESHELL:
-diff --git a/tools/testing/selftests/networking/timestamping/Makefile b/tools/testing/selftests/networking/timestamping/Makefile
-index 14cfcf006936..c46c0eefab9e 100644
---- a/tools/testing/selftests/networking/timestamping/Makefile
-+++ b/tools/testing/selftests/networking/timestamping/Makefile
-@@ -6,6 +6,7 @@ TEST_PROGS := hwtstamp_config rxtimestamp timestamping txtimestamp
- all: $(TEST_PROGS)
- 
- top_srcdir = ../../../../..
-+KSFT_KHDR_INSTALL := 1
- include ../../lib.mk
- 
- clean:
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index e94b7b14bcb2..dc68340a6a96 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -24,6 +24,7 @@ TEST_GEN_FILES += virtual_address_range
- 
- TEST_PROGS := run_vmtests
- 
-+KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
- $(OUTPUT)/userfaultfd: LDLIBS += -lpthread
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 23022e9d32eb81..b52cfdefecbfe9 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -571,7 +571,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ 	 * already exist.
+ 	 */
+ 	region = (struct userspace_mem_region *) userspace_mem_region_find(
+-		vm, guest_paddr, guest_paddr + npages * vm->page_size);
++		vm, guest_paddr, (guest_paddr + npages * vm->page_size) - 1);
+ 	if (region != NULL)
+ 		TEST_ASSERT(false, "overlapping userspace_mem_region already "
+ 			"exists\n"
+@@ -587,15 +587,10 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ 		region = region->next) {
+ 		if (region->region.slot == slot)
+ 			break;
+-		if ((guest_paddr <= (region->region.guest_phys_addr
+-				+ region->region.memory_size))
+-			&& ((guest_paddr + npages * vm->page_size)
+-				>= region->region.guest_phys_addr))
+-			break;
+ 	}
+ 	if (region != NULL)
+ 		TEST_ASSERT(false, "A mem region with the requested slot "
+-			"or overlapping physical memory range already exists.\n"
++			"already exists.\n"
+ 			"  requested slot: %u paddr: 0x%lx npages: 0x%lx\n"
+ 			"  existing slot: %u paddr: 0x%lx size: 0x%lx",
+ 			slot, guest_paddr, npages,
 -- 
-2.17.1
+2.20.1.97.g81188d93c3-goog
