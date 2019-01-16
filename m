@@ -1,55 +1,31 @@
-From: bgardon@google.com (Ben Gardon)
-Date: Wed, 16 Jan 2019 09:41:15 -0800
-Subject: [PATCH v2] kvm: selftests: Fix region overlap check in kvm_util
-Message-ID: <20190116174115.95225-1-bgardon@google.com>
+From: daniel.diaz@linaro.org (=?UTF-8?q?Daniel=20D=C3=ADaz?=)
+Date: Wed, 16 Jan 2019 11:43:17 -0600
+Subject: [PATCH 1/4] selftests: lib: allow to override CC in the top-level
+ Makefile
+Message-ID: <20190116174320.14938-1-daniel.diaz@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190116174115.XMuIEnGvz9psIMq4KqHMePYHiKnF_iIOSJIf3_8sczA@z>
+Message-ID: <20190116174317.5HtUx-TZ5X1x50gt8ap_KQnH6C72liTx72TpRZDojmA@z>
 
-Fix a call to userspace_mem_region_find to conform to its spec of
-taking an inclusive, inclusive range. It was previously being called
-with an inclusive, exclusive range. Also remove a redundant region bounds
-check in vm_userspace_mem_region_add. Region overlap checking is already
-performed by the call to userspace_mem_region_find.
+From: Fathi Boudra <fathi.boudra@linaro.org>
 
-Tested: Compiled tools/testing/selftests/kvm with -static
-	Ran all resulting test binaries on an Intel Haswell test machine
-	All tests passed
+Relax CC assignment to allow to override CC in the top-level Makefile.
 
-Signed-off-by: Ben Gardon <bgardon at google.com>
-Reviewed-by: Jim Mattson <jmattson at google.com>
+Signed-off-by: Denys Dmytriyenko <denys at ti.com>
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ tools/testing/selftests/lib.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 23022e9d32eb81..b52cfdefecbfe9 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -571,7 +571,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 	 * already exist.
- 	 */
- 	region = (struct userspace_mem_region *) userspace_mem_region_find(
--		vm, guest_paddr, guest_paddr + npages * vm->page_size);
-+		vm, guest_paddr, (guest_paddr + npages * vm->page_size) - 1);
- 	if (region != NULL)
- 		TEST_ASSERT(false, "overlapping userspace_mem_region already "
- 			"exists\n"
-@@ -587,15 +587,10 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 		region = region->next) {
- 		if (region->region.slot == slot)
- 			break;
--		if ((guest_paddr <= (region->region.guest_phys_addr
--				+ region->region.memory_size))
--			&& ((guest_paddr + npages * vm->page_size)
--				>= region->region.guest_phys_addr))
--			break;
- 	}
- 	if (region != NULL)
- 		TEST_ASSERT(false, "A mem region with the requested slot "
--			"or overlapping physical memory range already exists.\n"
-+			"already exists.\n"
- 			"  requested slot: %u paddr: 0x%lx npages: 0x%lx\n"
- 			"  existing slot: %u paddr: 0x%lx size: 0x%lx",
- 			slot, guest_paddr, npages,
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 8b0f16409ed7..0f9c47eaaa6f 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -1,6 +1,6 @@
+ # This mimics the top-level Makefile. We do it explicitly here so that this
+ # Makefile can operate with or without the kbuild infrastructure.
+-CC := $(CROSS_COMPILE)gcc
++CC ?= $(CROSS_COMPILE)gcc
+ 
+ ifeq (0,$(MAKELEVEL))
+ OUTPUT := $(shell pwd)
 -- 
-2.20.1.97.g81188d93c3-goog
+2.17.1
