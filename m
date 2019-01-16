@@ -1,31 +1,78 @@
 From: daniel.diaz@linaro.org (=?UTF-8?q?Daniel=20D=C3=ADaz?=)
-Date: Wed, 16 Jan 2019 11:43:17 -0600
-Subject: [PATCH 1/4] selftests: lib: allow to override CC in the top-level
- Makefile
-Message-ID: <20190116174320.14938-1-daniel.diaz@linaro.org>
+Date: Wed, 16 Jan 2019 11:43:18 -0600
+Subject: [PATCH 2/4] selftests: net: use LDLIBS instead of LDFLAGS
+In-Reply-To: <20190116174320.14938-1-daniel.diaz@linaro.org>
+References: <20190116174320.14938-1-daniel.diaz@linaro.org>
+Message-ID: <20190116174320.14938-2-daniel.diaz@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190116174317.5HtUx-TZ5X1x50gt8ap_KQnH6C72liTx72TpRZDojmA@z>
+Message-ID: <20190116174318.gYY76TkhVAfu9pckOil0zkIeN4N0loRbe3I55R4_z8E@z>
 
 From: Fathi Boudra <fathi.boudra@linaro.org>
 
-Relax CC assignment to allow to override CC in the top-level Makefile.
+reuseport_bpf_numa fails to build due to undefined reference errors:
 
-Signed-off-by: Denys Dmytriyenko <denys at ti.com>
+ aarch64-linaro-linux-gcc
+ --sysroot=/build/tmp-rpb-glibc/sysroots/hikey -Wall
+ -Wl,--no-as-needed -O2 -g -I../../../../usr/include/  -Wl,-O1
+ -Wl,--hash-style=gnu -Wl,--as-needed -lnuma  reuseport_bpf_numa.c
+ -o
+ /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa
+ /tmp/ccfUuExT.o: In function `send_from_node':
+ /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:138:
+ undefined reference to `numa_run_on_node'
+ /tmp/ccfUuExT.o: In function `main':
+ /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:230:
+ undefined reference to `numa_available'
+ /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:233:
+ undefined reference to `numa_max_node'
+
+It's GNU Make and linker specific.
+
+The default Makefile rule looks like:
+
+$(CC) $(CFLAGS) $(LDFLAGS) $@ $^ $(LDLIBS)
+
+When linking is done by gcc itself, no issue, but when it needs to be passed
+to proper ld, only LDLIBS follows and then ld cannot know what libs to link
+with.
+
+More detail:
+https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
+
+LDFLAGS
+Extra flags to give to compilers when they are supposed to invoke the linker,
+‘ld’, such as -L. Libraries (-lfoo) should be added to the LDLIBS variable
+instead.
+
+LDLIBS
+Library flags or names given to compilers when they are supposed to invoke the
+linker, ‘ld’. LOADLIBES is a deprecated (but still supported) alternative to
+LDLIBS. Non-library linker flags, such as -L, should go in the LDFLAGS
+variable.
+
+https://lkml.org/lkml/2010/2/10/362
+
+tools/perf: libraries must come after objects
+
+Link order matters, use LDLIBS instead of LDFLAGS to properly link against
+libnuma.
+
+Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
 ---
- tools/testing/selftests/lib.mk | 2 +-
+ tools/testing/selftests/net/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 8b0f16409ed7..0f9c47eaaa6f 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -1,6 +1,6 @@
- # This mimics the top-level Makefile. We do it explicitly here so that this
- # Makefile can operate with or without the kbuild infrastructure.
--CC := $(CROSS_COMPILE)gcc
-+CC ?= $(CROSS_COMPILE)gcc
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index f8f3e90700c0..1e6d14d2825c 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -21,6 +21,6 @@ TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls
+ KSFT_KHDR_INSTALL := 1
+ include ../lib.mk
  
- ifeq (0,$(MAKELEVEL))
- OUTPUT := $(shell pwd)
+-$(OUTPUT)/reuseport_bpf_numa: LDFLAGS += -lnuma
++$(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
+ $(OUTPUT)/tcp_mmap: LDFLAGS += -lpthread
+ $(OUTPUT)/tcp_inq: LDFLAGS += -lpthread
 -- 
 2.17.1
