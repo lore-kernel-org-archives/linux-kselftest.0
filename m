@@ -1,74 +1,118 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Wed, 16 Jan 2019 16:35:25 -0800
-Subject: [PATCH] selftests/seccomp: Abort without user notification support
-Message-ID: <20190117003525.GA37918@beast>
+From: tycho@tycho.ws (Tycho Andersen)
+Date: Wed, 16 Jan 2019 17:44:16 -0700
+Subject: Linux 5.0-rc2 seccomp_bpf user_notification_basic test hangs
+In-Reply-To: <CAGXu5jLGqXstRCmM1_fxUxn4djs1YLUun2Fc8ExcaN4-CKyELQ@mail.gmail.com>
+References: <7cd7d5bc-1d69-57f5-4a98-81b036f81682@kernel.org>
+ <CAGXu5jLGqXstRCmM1_fxUxn4djs1YLUun2Fc8ExcaN4-CKyELQ@mail.gmail.com>
+Message-ID: <20190117004416.GA17449@cisco>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190117003525.0WjI0dptpbVWUCOh3rwkF7ExB3AXXH-wCW_zkKUW0Ho@z>
+Message-ID: <20190117004416._qt9jGmoN5-K8NKlTJXiT8972iInTNE-rjL3h2Q4eIk@z>
 
-In the face of missing user notification support, the self test needs
-to stop executing a test (ASSERT_*) instead of just reporting and
-continuing (EXPECT_*). This adjusts the user notification tests to do
-that where needed.
+On Wed, Jan 16, 2019@04:30:26PM -0800, Kees Cook wrote:
+> On Wed, Jan 16, 2019@4:01 PM shuah <shuah@kernel.org> wrote:
+> >
+> > Hi Kees and James,
+> >
+> > seccomp_bpf test hangs right after the following test passes
+> > with EBUSY. Please see log at the end.
+> >
+> > /* Installing a second listener in the chain should EBUSY */
+> >          EXPECT_EQ(user_trap_syscall(__NR_getpid,
+> >                                      SECCOMP_FILTER_FLAG_NEW_LISTENER),
+> >                    -1);
+> >          EXPECT_EQ(errno, EBUSY);
+> >
+> >
+> > The user_notification_basic test starts running I assume and then
+> > the hang.
+> >
+> > The only commit I see that could be suspect is the following as
+> > it talks about adding SECCOMP_RET_USER_NOTIF
+> >
+> > commit d9a7fa67b4bfe6ce93ee9aab23ae2e7ca0763e84
+> > Merge: f218a29c25ad 55b8cbe470d1
+> > Author: Linus Torvalds <torvalds at linux-foundation.org>
+> > Date:   Wed Jan 2 09:48:13 2019 -0800
+> >
+> >      Merge branch 'next-seccomp' of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security
+> >
+> >      Pull seccomp updates from James Morris:
+> >
+> >       - Add SECCOMP_RET_USER_NOTIF
+> >
+> >       - seccomp fixes for sparse warnings and s390 build (Tycho)
+> >
+> >      * 'next-seccomp' of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security:
+> >        seccomp, s390: fix build for syscall type change
+> >        seccomp: fix poor type promotion
+> >        samples: add an example of seccomp user trap
+> >        seccomp: add a return code to trap to userspace
+> >        seccomp: switch system call argument type to void *
+> >        seccomp: hoist struct seccomp_data recalculation higher
+> >
+> >
+> > Any ideas on how to proceed? Here is the log. The following
+> > reproduces the problem.
+> >
+> > make -C tools/testing/selftests/seccomp/ run_tests
+> >
+> >
+> > seccomp_bpf.c:2947:global.get_metadata:Expected 0 (0) ==
+> > seccomp(SECCOMP_SET_MODE_FILTER, SECCOMP_FILTER_FLAG_LOG, &prog)
+> > (18446744073709551615)
+> > seccomp_bpf.c:2959:global.get_metadata:Expected 1 (1) == read(pipefd[0],
+> > &buf, 1) (0)
+> > global.get_metadata: Test terminated by assertion
+> > [     FAIL ] global.get_metadata
+> > [ RUN      ] global.user_notification_basic
+> > seccomp_bpf.c:3036:global.user_notification_basic:Expected 0 (0) ==
+> > WEXITSTATUS(status) (1)
+> > seccomp_bpf.c:3039:global.user_notification_basic:Expected
+> > seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog) (18446744073709551615) == 0 (0)
+> > seccomp_bpf.c:3040:global.user_notification_basic:Expected
+> > seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog) (18446744073709551615) == 0 (0)
+> > seccomp_bpf.c:3041:global.user_notification_basic:Expected
+> > seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog) (18446744073709551615) == 0 (0)
+> > seccomp_bpf.c:3042:global.user_notification_basic:Expected
+> > seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog) (18446744073709551615) == 0 (0)
+> > seccomp_bpf.c:3047:global.user_notification_basic:Expected listener
+> > (18446744073709551615) >= 0 (0)
+> > seccomp_bpf.c:3053:global.user_notification_basic:Expected errno (13) ==
+> > EBUSY (16)
+> 
+> Looks like the test is unfriendly when running the current selftest on
+> an old kernel version. A quick look seems like it's missing some
+> ASSERT_* cases where EXPECT_* is used. I'll send a patch.
 
-Reported-by: Shuah Khan <shuah at kernel.org>
-Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
-Signed-off-by: Kees Cook <keescook at chromium.org>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ASSERT will kill the test case though right? I thought we were
+supposed to use EXPECT when we wanted it to keep going. In particular,
+it looks like in the get_metadata test, we should be using expect
+instead of assert in some places, so we can get to the write() that
+does the synchronization. Something like,
 
 diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 067cb4607d6c..496a9a8c773a 100644
+index 067cb4607d6c..4d2508af2483 100644
 --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
 +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -3044,7 +3044,7 @@ TEST(user_notification_basic)
- 	/* Check that the basic notification machinery works */
- 	listener = user_trap_syscall(__NR_getpid,
- 				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
--	EXPECT_GE(listener, 0);
-+	ASSERT_GE(listener, 0);
+@@ -2943,11 +2943,11 @@ TEST(get_metadata)
+ 		};
  
- 	/* Installing a second listener in the chain should EBUSY */
- 	EXPECT_EQ(user_trap_syscall(__NR_getpid,
-@@ -3103,7 +3103,7 @@ TEST(user_notification_kill_in_middle)
+ 		/* one with log, one without */
+-		ASSERT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER,
++		EXPECT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER,
+ 				     SECCOMP_FILTER_FLAG_LOG, &prog));
+-		ASSERT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog));
++		EXPECT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog));
  
- 	listener = user_trap_syscall(__NR_getpid,
- 				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
--	EXPECT_GE(listener, 0);
-+	ASSERT_GE(listener, 0);
+-		ASSERT_EQ(0, close(pipefd[0]));
++		EXPECT_EQ(0, close(pipefd[0]));
+ 		ASSERT_EQ(1, write(pipefd[1], "1", 1));
+ 		ASSERT_EQ(0, close(pipefd[1]));
  
- 	/*
- 	 * Check that nothing bad happens when we kill the task in the middle
-@@ -3152,7 +3152,7 @@ TEST(user_notification_signal)
- 
- 	listener = user_trap_syscall(__NR_gettid,
- 				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
--	EXPECT_GE(listener, 0);
-+	ASSERT_GE(listener, 0);
- 
- 	pid = fork();
- 	ASSERT_GE(pid, 0);
-@@ -3215,7 +3215,7 @@ TEST(user_notification_closed_listener)
- 
- 	listener = user_trap_syscall(__NR_getpid,
- 				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
--	EXPECT_GE(listener, 0);
-+	ASSERT_GE(listener, 0);
- 
- 	/*
- 	 * Check that we get an ENOSYS when the listener is closed.
-@@ -3376,7 +3376,7 @@ TEST(seccomp_get_notif_sizes)
- {
- 	struct seccomp_notif_sizes sizes;
- 
--	EXPECT_EQ(seccomp(SECCOMP_GET_NOTIF_SIZES, 0, &sizes), 0);
-+	ASSERT_EQ(seccomp(SECCOMP_GET_NOTIF_SIZES, 0, &sizes), 0);
- 	EXPECT_EQ(sizes.seccomp_notif, sizeof(struct seccomp_notif));
- 	EXPECT_EQ(sizes.seccomp_notif_resp, sizeof(struct seccomp_notif_resp));
- }
--- 
-2.17.1
 
+But also, is running new tests on an old kernel expected to work? I
+didn't know that :).
 
--- 
-Kees Cook
+Tycho
