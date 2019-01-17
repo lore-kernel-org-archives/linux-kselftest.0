@@ -1,370 +1,123 @@
-From: christian at brauner.io (Christian Brauner)
-Date: Thu, 17 Jan 2019 12:48:54 +0100
-Subject: [PATCH v3] selftests: add binderfs selftests
-Message-ID: <20190117114854.15132-1-christian@brauner.io>
+From: keescook at chromium.org (Kees Cook)
+Date: Thu, 17 Jan 2019 08:11:41 -0800
+Subject: Linux 5.0-rc2 seccomp_bpf user_notification_basic test hangs
+In-Reply-To: <20190117004416.GA17449@cisco>
+References: <7cd7d5bc-1d69-57f5-4a98-81b036f81682@kernel.org>
+ <CAGXu5jLGqXstRCmM1_fxUxn4djs1YLUun2Fc8ExcaN4-CKyELQ@mail.gmail.com>
+ <20190117004416.GA17449@cisco>
+Message-ID: <CAGXu5jJKrCo7Sf0-nq2KxZ6+LZZ-cPTw8FY41QFWXZ9o_Mpz_w@mail.gmail.com>
 
-This adds the promised selftest for binderfs. It will verify the following
-things:
-- binderfs mounting works
-- binder device allocation works
-- performing a binder ioctl() request through a binderfs device works
-- binder device removal works
-- binder-control removal fails
-- binderfs unmounting works
+On Wed, Jan 16, 2019 at 4:44 PM Tycho Andersen <tycho at tycho.ws> wrote:
+>
+> On Wed, Jan 16, 2019 at 04:30:26PM -0800, Kees Cook wrote:
+> > On Wed, Jan 16, 2019 at 4:01 PM shuah <shuah at kernel.org> wrote:
+> > >
+> > > Hi Kees and James,
+> > >
+> > > seccomp_bpf test hangs right after the following test passes
+> > > with EBUSY. Please see log at the end.
+> > >
+> > > /* Installing a second listener in the chain should EBUSY */
+> > >          EXPECT_EQ(user_trap_syscall(__NR_getpid,
+> > >                                      SECCOMP_FILTER_FLAG_NEW_LISTENER),
+> > >                    -1);
+> > >          EXPECT_EQ(errno, EBUSY);
+> > >
+> > >
+> > > The user_notification_basic test starts running I assume and then
+> > > the hang.
+> > >
+> > > The only commit I see that could be suspect is the following as
+> > > it talks about adding SECCOMP_RET_USER_NOTIF
+> > >
+> > > commit d9a7fa67b4bfe6ce93ee9aab23ae2e7ca0763e84
+> > > Merge: f218a29c25ad 55b8cbe470d1
+> > > Author: Linus Torvalds <torvalds at linux-foundation.org>
+> > > Date:   Wed Jan 2 09:48:13 2019 -0800
+> > >
+> > >      Merge branch 'next-seccomp' of
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security
+> > >
+> > >      Pull seccomp updates from James Morris:
+> > >
+> > >       - Add SECCOMP_RET_USER_NOTIF
+> > >
+> > >       - seccomp fixes for sparse warnings and s390 build (Tycho)
+> > >
+> > >      * 'next-seccomp' of
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security:
+> > >        seccomp, s390: fix build for syscall type change
+> > >        seccomp: fix poor type promotion
+> > >        samples: add an example of seccomp user trap
+> > >        seccomp: add a return code to trap to userspace
+> > >        seccomp: switch system call argument type to void *
+> > >        seccomp: hoist struct seccomp_data recalculation higher
+> > >
+> > >
+> > > Any ideas on how to proceed? Here is the log. The following
+> > > reproduces the problem.
+> > >
+> > > make -C tools/testing/selftests/seccomp/ run_tests
+> > >
+> > >
+> > > seccomp_bpf.c:2947:global.get_metadata:Expected 0 (0) ==
+> > > seccomp(SECCOMP_SET_MODE_FILTER, SECCOMP_FILTER_FLAG_LOG, &prog)
+> > > (18446744073709551615)
+> > > seccomp_bpf.c:2959:global.get_metadata:Expected 1 (1) == read(pipefd[0],
+> > > &buf, 1) (0)
+> > > global.get_metadata: Test terminated by assertion
+> > > [     FAIL ] global.get_metadata
+> > > [ RUN      ] global.user_notification_basic
+> > > seccomp_bpf.c:3036:global.user_notification_basic:Expected 0 (0) ==
+> > > WEXITSTATUS(status) (1)
+> > > seccomp_bpf.c:3039:global.user_notification_basic:Expected
+> > > seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog) (18446744073709551615) == 0 (0)
+> > > seccomp_bpf.c:3040:global.user_notification_basic:Expected
+> > > seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog) (18446744073709551615) == 0 (0)
+> > > seccomp_bpf.c:3041:global.user_notification_basic:Expected
+> > > seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog) (18446744073709551615) == 0 (0)
+> > > seccomp_bpf.c:3042:global.user_notification_basic:Expected
+> > > seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog) (18446744073709551615) == 0 (0)
+> > > seccomp_bpf.c:3047:global.user_notification_basic:Expected listener
+> > > (18446744073709551615) >= 0 (0)
+> > > seccomp_bpf.c:3053:global.user_notification_basic:Expected errno (13) ==
+> > > EBUSY (16)
+> >
+> > Looks like the test is unfriendly when running the current selftest on
+> > an old kernel version. A quick look seems like it's missing some
+> > ASSERT_* cases where EXPECT_* is used. I'll send a patch.
+>
+> ASSERT will kill the test case though right? I thought we were
+> supposed to use EXPECT when we wanted it to keep going. In particular,
+> it looks like in the get_metadata test, we should be using expect
+> instead of assert in some places, so we can get to the write() that
+> does the synchronization. Something like,
+>
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 067cb4607d6c..4d2508af2483 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -2943,11 +2943,11 @@ TEST(get_metadata)
+>                 };
+>
+>                 /* one with log, one without */
+> -               ASSERT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER,
+> +               EXPECT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER,
+>                                      SECCOMP_FILTER_FLAG_LOG, &prog));
+> -               ASSERT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog));
+> +               EXPECT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog));
+>
+> -               ASSERT_EQ(0, close(pipefd[0]));
+> +               EXPECT_EQ(0, close(pipefd[0]));
+>                 ASSERT_EQ(1, write(pipefd[1], "1", 1));
+>                 ASSERT_EQ(0, close(pipefd[1]));
 
-The tests are performed both privileged and unprivileged. The latter
-verifies that binderfs behaves correctly in user namespaces.
+Yeah, if it breaks badly on a failure, let's do it.
 
-Cc: Todd Kjos <tkjos at google.com>
-Signed-off-by: Christian Brauner <christian.brauner at ubuntu.com>
----
-/* Changelog */
-v3:
-- s/printf/ksft_print_msg/g
-- do not report misleading errno on short write
+> But also, is running new tests on an old kernel expected to work? I
+> didn't know that :).
 
-v2:
-- make failure to create /dev/binderfs directory fatal in all circumstances
-- make tests run in user namespace to test whether binderfs can be mounted
-  in user namespaces and so that unprivileged users can run the tests
-- use ksft_exit_skip()
+It should at least not hang. :)
 
-v1:
-- check for ENODEV on mount failure to detect whether binderfs is
-  available
-  If it is not, skip the test and exit with success.
----
- tools/testing/selftests/Makefile              |   1 +
- .../selftests/filesystems/binderfs/.gitignore |   1 +
- .../selftests/filesystems/binderfs/Makefile   |   6 +
- .../filesystems/binderfs/binderfs_test.c      | 275 ++++++++++++++++++
- .../selftests/filesystems/binderfs/config     |   3 +
- 5 files changed, 286 insertions(+)
- create mode 100644 tools/testing/selftests/filesystems/binderfs/.gitignore
- create mode 100644 tools/testing/selftests/filesystems/binderfs/Makefile
- create mode 100644 tools/testing/selftests/filesystems/binderfs/binderfs_test.c
- create mode 100644 tools/testing/selftests/filesystems/binderfs/config
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 1a2bd15c5b6e..400ee81a3043 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -10,6 +10,7 @@ TARGETS += drivers/dma-buf
- TARGETS += efivarfs
- TARGETS += exec
- TARGETS += filesystems
-+TARGETS += filesystems/binderfs
- TARGETS += firmware
- TARGETS += ftrace
- TARGETS += futex
-diff --git a/tools/testing/selftests/filesystems/binderfs/.gitignore b/tools/testing/selftests/filesystems/binderfs/.gitignore
-new file mode 100644
-index 000000000000..8a5d9bf63dd4
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/binderfs/.gitignore
-@@ -0,0 +1 @@
-+binderfs_test
-diff --git a/tools/testing/selftests/filesystems/binderfs/Makefile b/tools/testing/selftests/filesystems/binderfs/Makefile
-new file mode 100644
-index 000000000000..58cb659b56b4
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/binderfs/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+CFLAGS += -I../../../../../usr/include/
-+TEST_GEN_PROGS := binderfs_test
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-new file mode 100644
-index 000000000000..8c2ed962e1c7
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-@@ -0,0 +1,275 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+#include <linux/android/binder.h>
-+#include <linux/android/binderfs.h>
-+#include "../../kselftest.h"
-+
-+static ssize_t write_nointr(int fd, const void *buf, size_t count)
-+{
-+	ssize_t ret;
-+again:
-+	ret = write(fd, buf, count);
-+	if (ret < 0 && errno == EINTR)
-+		goto again;
-+
-+	return ret;
-+}
-+
-+static void write_to_file(const char *filename, const void *buf, size_t count,
-+			  int allowed_errno)
-+{
-+	int fd, saved_errno;
-+	ssize_t ret;
-+
-+	fd = open(filename, O_WRONLY | O_CLOEXEC);
-+	if (fd < 0)
-+		ksft_exit_fail_msg("%s - Failed to open file %s\n",
-+				   strerror(errno), filename);
-+
-+	ret = write_nointr(fd, buf, count);
-+	if (ret < 0) {
-+		if (allowed_errno && (errno == allowed_errno)) {
-+			close(fd);
-+			return;
-+		}
-+
-+		goto on_error;
-+	}
-+
-+	if ((size_t)ret != count)
-+		goto on_error;
-+
-+	close(fd);
-+	return;
-+
-+on_error:
-+	saved_errno = errno;
-+	close(fd);
-+	errno = saved_errno;
-+
-+	if (ret < 0)
-+		ksft_exit_fail_msg("%s - Failed to write to file %s\n",
-+				   strerror(errno), filename);
-+
-+	ksft_exit_fail_msg("Failed to write to file %s\n", filename);
-+}
-+
-+static void change_to_userns(void)
-+{
-+	int ret;
-+	uid_t uid;
-+	gid_t gid;
-+	/* {g,u}id_map files only allow a max of 4096 bytes written to them */
-+	char idmap[4096];
-+
-+	uid = getuid();
-+	gid = getgid();
-+
-+	ret = unshare(CLONE_NEWUSER);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("%s - Failed to unshare user namespace\n",
-+				   strerror(errno));
-+
-+	write_to_file("/proc/self/setgroups", "deny", strlen("deny"), ENOENT);
-+
-+	ret = snprintf(idmap, sizeof(idmap), "0 %d 1", uid);
-+	if (ret < 0 || (size_t)ret >= sizeof(idmap))
-+		ksft_exit_fail_msg("%s - Failed to prepare uid mapping\n",
-+				   strerror(errno));
-+
-+	write_to_file("/proc/self/uid_map", idmap, strlen(idmap), 0);
-+
-+	ret = snprintf(idmap, sizeof(idmap), "0 %d 1", gid);
-+	if (ret < 0 || (size_t)ret >= sizeof(idmap))
-+		ksft_exit_fail_msg("%s - Failed to prepare uid mapping\n",
-+				   strerror(errno));
-+
-+	write_to_file("/proc/self/gid_map", idmap, strlen(idmap), 0);
-+
-+	ret = setgid(0);
-+	if (ret)
-+		ksft_exit_fail_msg("%s - Failed to setgid(0)\n",
-+				   strerror(errno));
-+
-+	ret = setuid(0);
-+	if (ret)
-+		ksft_exit_fail_msg("%s - Failed to setgid(0)\n",
-+				   strerror(errno));
-+}
-+
-+static void change_to_mountns(void)
-+{
-+	int ret;
-+
-+	ret = unshare(CLONE_NEWNS);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("%s - Failed to unshare mount namespace\n",
-+				   strerror(errno));
-+
-+	ret = mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("%s - Failed to mount / as private\n",
-+				   strerror(errno));
-+}
-+
-+static void rmdir_protect_errno(const char *dir)
-+{
-+	int saved_errno = errno;
-+	(void)rmdir(dir);
-+	errno = saved_errno;
-+}
-+
-+static void __do_binderfs_test(void)
-+{
-+	int fd, ret, saved_errno;
-+	size_t len;
-+	ssize_t wret;
-+	bool keep = false;
-+	struct binderfs_device device = { 0 };
-+	struct binder_version version = { 0 };
-+
-+	change_to_mountns();
-+
-+	ret = mkdir("/dev/binderfs", 0755);
-+	if (ret < 0) {
-+		if (errno != EEXIST)
-+			ksft_exit_fail_msg(
-+				"%s - Failed to create binderfs mountpoint\n",
-+				strerror(errno));
-+
-+		keep = true;
-+	}
-+
-+	ret = mount(NULL, "/dev/binderfs", "binder", 0, 0);
-+	if (ret < 0) {
-+		if (errno != ENODEV)
-+			ksft_exit_fail_msg("%s - Failed to mount binderfs\n",
-+					   strerror(errno));
-+
-+		keep ? : rmdir_protect_errno("/dev/binderfs");
-+		ksft_exit_skip(
-+			"The Android binderfs filesystem is not available\n");
-+	}
-+
-+	/* binderfs mount test passed */
-+	ksft_inc_pass_cnt();
-+
-+	memcpy(device.name, "my-binder", strlen("my-binder"));
-+
-+	fd = open("/dev/binderfs/binder-control", O_RDONLY | O_CLOEXEC);
-+	if (fd < 0)
-+		ksft_exit_fail_msg(
-+			"%s - Failed to open binder-control device\n",
-+			strerror(errno));
-+
-+	ret = ioctl(fd, BINDER_CTL_ADD, &device);
-+	saved_errno = errno;
-+	close(fd);
-+	errno = saved_errno;
-+	if (ret < 0) {
-+		keep ? : rmdir_protect_errno("/dev/binderfs");
-+		ksft_exit_fail_msg(
-+			"%s - Failed to allocate new binder device\n",
-+			strerror(errno));
-+	}
-+
-+	ksft_print_msg(
-+		"Allocated new binder device with major %d, minor %d, and name %s\n",
-+		device.major, device.minor, device.name);
-+
-+	/* binder device allocation test passed */
-+	ksft_inc_pass_cnt();
-+
-+	fd = open("/dev/binderfs/my-binder", O_CLOEXEC | O_RDONLY);
-+	if (fd < 0) {
-+		keep ? : rmdir_protect_errno("/dev/binderfs");
-+		ksft_exit_fail_msg("%s - Failed to open my-binder device\n",
-+				   strerror(errno));
-+	}
-+
-+	ret = ioctl(fd, BINDER_VERSION, &version);
-+	saved_errno = errno;
-+	close(fd);
-+	errno = saved_errno;
-+	if (ret < 0) {
-+		keep ? : rmdir_protect_errno("/dev/binderfs");
-+		ksft_exit_fail_msg(
-+			"%s - Failed to open perform BINDER_VERSION request\n",
-+			strerror(errno));
-+	}
-+
-+	ksft_print_msg("Detected binder version: %d\n",
-+		       version.protocol_version);
-+
-+	/* binder transaction with binderfs binder device passed */
-+	ksft_inc_pass_cnt();
-+
-+	ret = unlink("/dev/binderfs/my-binder");
-+	if (ret < 0) {
-+		keep ? : rmdir_protect_errno("/dev/binderfs");
-+		ksft_exit_fail_msg("%s - Failed to delete binder device\n",
-+				   strerror(errno));
-+	}
-+
-+	/* binder device removal passed */
-+	ksft_inc_pass_cnt();
-+
-+	ret = unlink("/dev/binderfs/binder-control");
-+	if (!ret) {
-+		keep ? : rmdir_protect_errno("/dev/binderfs");
-+		ksft_exit_fail_msg("Managed to delete binder-control device\n");
-+	} else if (errno != EPERM) {
-+		keep ? : rmdir_protect_errno("/dev/binderfs");
-+		ksft_exit_fail_msg(
-+			"%s - Failed to delete binder-control device but exited with unexpected error code\n",
-+			strerror(errno));
-+	}
-+
-+	/* binder-control device removal failed as expected */
-+	ksft_inc_xfail_cnt();
-+
-+on_error:
-+	ret = umount2("/dev/binderfs", MNT_DETACH);
-+	keep ?: rmdir_protect_errno("/dev/binderfs");
-+	if (ret < 0)
-+		ksft_exit_fail_msg("%s - Failed to unmount binderfs\n",
-+				   strerror(errno));
-+
-+	/* binderfs unmount test passed */
-+	ksft_inc_pass_cnt();
-+}
-+
-+static void binderfs_test_privileged()
-+{
-+	if (geteuid() != 0)
-+		ksft_print_msg(
-+			"Tests are not run as root. Skipping privileged tests\n");
-+	else
-+		__do_binderfs_test();
-+}
-+
-+static void binderfs_test_unprivileged()
-+{
-+	change_to_userns();
-+	__do_binderfs_test();
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	binderfs_test_privileged();
-+	binderfs_test_unprivileged();
-+	ksft_exit_pass();
-+}
-diff --git a/tools/testing/selftests/filesystems/binderfs/config b/tools/testing/selftests/filesystems/binderfs/config
-new file mode 100644
-index 000000000000..02dd6cc9cf99
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/binderfs/config
-@@ -0,0 +1,3 @@
-+CONFIG_ANDROID=y
-+CONFIG_ANDROID_BINDERFS=y
-+CONFIG_ANDROID_BINDER_IPC=y
 -- 
-2.19.1
+Kees Cook
