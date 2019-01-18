@@ -1,52 +1,33 @@
-From: geert at linux-m68k.org (Geert Uytterhoeven)
-Date: Fri, 18 Jan 2019 08:57:27 +0100
-Subject: [PATCH 00/12] selftests: Miscellaneous fixes
-In-Reply-To: <CAK7LNASdA+5_pdTjr1dY-cKGSDq804Huc_CX_8-Gg+ypFCmajQ@mail.gmail.com>
-References: <20190114135144.26096-1-geert+renesas@glider.be>
- <CAK7LNASdA+5_pdTjr1dY-cKGSDq804Huc_CX_8-Gg+ypFCmajQ@mail.gmail.com>
-Message-ID: <CAMuHMdWGbJwWXMK7f10n2zPSiMEj7EHJfiK0Pj4ABHHu3f4sdw@mail.gmail.com>
+From: naresh.kamboju at linaro.org (Naresh Kamboju)
+Date: Fri, 18 Jan 2019 13:39:24 +0530
+Subject: selftests/bpf/test_netcnt failed on i386 - ibbpf: failed to create
+ map (name: 'percpu_netcnt'): Invalid argument
+Message-ID: <CA+G9fYu-ku4dCOnUReot5jz3X18P1dWKiZCnnZaAJJt+p_HNjQ@mail.gmail.com>
 
-Hi Yamada-san,
+Newly added test case bpf test_netcnt failed on i386 and qemu_i386 on
+mainline and -next kernel.
+Here we are running i386 kernel on x86_64 device.
+Pass on x86_64, arm64 and arm.
 
-On Fri, Jan 18, 2019 at 5:15 AM Masahiro Yamada
-<yamada.masahiro at socionext.com> wrote:
-> On Mon, Jan 14, 2019 at 10:52 PM Geert Uytterhoeven
-> <geert+renesas at glider.be> wrote:
-> > This patch series contains several build fixes and cleanups for issues I
-> > encountered when trying to cross-build an rtctest binary in a separate
-> > output directory (like I use for all my kernel builds).
->
-> Geert,
-> Thanks for working on this!
->
-> My fundamental question is,
-> why did tools/ opt out Kbuild?
+Am i missing any pre required Kconfigs ?
 
-Good question.  I think it originally started as a separate small project.
+Test output log,
+selftests: bpf: test_netcnt
+libbpf: failed to create map (name: 'percpu_netcnt'): Invalid argument
+libbpf: failed to load object './netcnt_prog.o'
+Failed to load bpf program
+not ok 1.. selftests: bpf: test_netcnt [FAIL]
+selftests: bpf_test_netcnt [FAIL]
 
-> I think lots of mess comes in
-> in order to support
->   cd tools/gpio; make
->
-> instead of
->
->   make tools/gpio/
->
-> Lots of files are duplicated in tools/build/
-> in order to invent a different build system for tools/
+Full test log,
+https://lkft.validation.linaro.org/scheduler/job/574652#L2903
 
-I agree switching to kbuild would be the best solution.
-Unfortunately my kbuild foo is not strong enough...
+Kernel Config,
+http://snapshots.linaro.org/openembedded/lkft/rocko/intel-core2-32/lkft/linux-mainline-ddiaz/52/config
 
-Thanks!
+Test results comparison of arm64, arm, x86_64 and i386 (kernel running
+on x86_64 machine).
+https://qa-reports.linaro.org/_/comparetest/?project=22&project=6&suite=kselftest&test=bpf_test_netcnt
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert at linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards
+Naresh Kamboju
