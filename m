@@ -1,53 +1,51 @@
-From: jarkko.sakkinen@linux.intel.com (Jarkko Sakkinen)
-Date: Fri, 18 Jan 2019 17:01:41 +0200
-Subject: [PATCH,RESEND] selftests: add TPM 2.0 tests
-In-Reply-To: <87r2dcqkq4.fsf@morokweng.localdomain>
-References: <20190116213102.25268-1-jarkko.sakkinen@linux.intel.com>
- <87r2dcqkq4.fsf@morokweng.localdomain>
-Message-ID: <20190118150141.GG4080@linux.intel.com>
+From: daniel.diaz@linaro.org (=?UTF-8?B?RGFuaWVsIETDrWF6?=)
+Date: Fri, 18 Jan 2019 11:54:06 -0600
+Subject: [PATCH 1/4] selftests: lib: allow to override CC in the top-level
+ Makefile
+In-Reply-To: <7d75f420-d624-d53d-4fa1-3827c90fa608@kernel.org>
+References: <20190116174320.14938-1-daniel.diaz@linaro.org>
+ <7d75f420-d624-d53d-4fa1-3827c90fa608@kernel.org>
+Message-ID:
+ <CAEUSe7_eYmMSovO4JAabh+83CtY2L8eeMoCVKKS5P-fs7zVhjg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190118150141.Yghbgjjd5deoNUqXYL_64QX3LODfY8FnH2yqtUOJVek@z>
+Message-ID: <20190118175406.3hg-a1EAxoFwlwCNVCv4MNw6D9YZnwwOVBKJFSHWPNw@z>
 
-On Wed, Jan 16, 2019@08:52:03PM -0200, Thiago Jung Bauermann wrote:
-> 
-> Hello,
-> 
-> Jarkko Sakkinen <jarkko.sakkinen at linux.intel.com> writes:
-> 
-> > Added the tests that I've been using for testing TPM 2.0 functionality
-> > for long time but have out-of-tree so far residing in
+Hello!
+
+On Wed, 16 Jan 2019@15:56, shuah <shuah@kernel.org> wrote:
+>
+> On 1/16/19 10:43 AM, Daniel Díaz wrote:
+> > From: Fathi Boudra <fathi.boudra at linaro.org>
 > >
-> > https://github.com/jsakkine-intel/tpm2-scripts
+> > Relax CC assignment to allow to override CC in the top-level Makefile.
 > >
-> > Cc: Tadeusz Struk <tadeusz.struk at intel.com>
-> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen at linux.intel.com>
-> > Acked-By: Joey Pabalinas <joeypabalinas at gmail.com>
+> > Signed-off-by: Denys Dmytriyenko <denys at ti.com>
 > > ---
-> >  tools/testing/selftests/Makefile           |   1 +
-> >  tools/testing/selftests/tpm2/Makefile      |   3 +
-> >  tools/testing/selftests/tpm2/test_smoke.sh |   4 +
-> >  tools/testing/selftests/tpm2/test_space.sh |   4 +
-> >  tools/testing/selftests/tpm2/tpm2.py       | 696 +++++++++++++++++++++
-> >  tools/testing/selftests/tpm2/tpm2_tests.py | 227 +++++++
-> >  6 files changed, 935 insertions(+)
-> >  create mode 100644 tools/testing/selftests/tpm2/Makefile
-> >  create mode 100755 tools/testing/selftests/tpm2/test_smoke.sh
-> >  create mode 100755 tools/testing/selftests/tpm2/test_space.sh
-> >  create mode 100644 tools/testing/selftests/tpm2/tpm2.py
-> >  create mode 100644 tools/testing/selftests/tpm2/tpm2_tests.py
+> >   tools/testing/selftests/lib.mk | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
 > >
-> > diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> > index 1a2bd15c5b6e..e4556132cbc4 100644
-> > --- a/tools/testing/selftests/Makefile
-> > +++ b/tools/testing/selftests/Makefile
-> > @@ -47,6 +47,7 @@ TARGETS += sysctl
-> >  ifneq (1, $(quicktest))
-> >  TARGETS += timers
-> >  endif
-> > +TARGETS += tpm
-> 
-> This should be tpm2, right?
+> > diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> > index 8b0f16409ed7..0f9c47eaaa6f 100644
+> > --- a/tools/testing/selftests/lib.mk
+> > +++ b/tools/testing/selftests/lib.mk
+> > @@ -1,6 +1,6 @@
+> >   # This mimics the top-level Makefile. We do it explicitly here so that this
+> >   # Makefile can operate with or without the kbuild infrastructure.
+> > -CC := $(CROSS_COMPILE)gcc
+> > +CC ?= $(CROSS_COMPILE)gcc
+> >
+> >   ifeq (0,$(MAKELEVEL))
+> >   OUTPUT := $(shell pwd)
+> >
+>
+> What problem does this fix?
 
-Yes, it should, thank you.
+Sometimes "$(CROSS_COMPILE)gcc" is not enough: For instance, we need
+to pass --sysroot to CC:
+  CC="aarch64-linaro-linux-gcc
+--sysroot=/oe/build/tmp-lkft-glibc/work/hikey-linaro-linux/kselftests-mainline/4.19-r0/recipe-sysroot"
 
-/Jarkko
+Greetings!
+
+Daniel Díaz
+daniel.diaz at linaro.org
