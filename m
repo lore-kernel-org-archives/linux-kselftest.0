@@ -1,79 +1,149 @@
 From: Babu.Moger at amd.com (Moger, Babu)
-Date: Fri, 18 Jan 2019 18:27:02 +0000
-Subject: [PATCH v5 01/13] selftests/resctrl: Add README for resctrl tests
+Date: Fri, 18 Jan 2019 18:27:05 +0000
+Subject: [PATCH v5 03/13] selftests/resctrl: Read memory bandwidth from perf
+ IMC counter and from resctrl file system
 In-Reply-To: <20190118182646.16594-1-babu.moger@amd.com>
 References: <20190118182646.16594-1-babu.moger@amd.com>
-Message-ID: <20190118182646.16594-2-babu.moger@amd.com>
+Message-ID: <20190118182646.16594-4-babu.moger@amd.com>
 
-From: Fenghua Yu <fenghua.yu at intel.com>
+From: Sai Praneeth Prakhya <sai.praneeth.prakhya at intel.com>
 
-resctrl tests will be implemented. README is added for the tool first.
+Total memory bandwidth can be monitored from perf IMC counter and from
+resctrl file system. Later the two will be compared to verify the total
+memory bandwidth read from resctrl is correct.
 
+Signed-off-by: Sai Praneeth Prakhya <sai.praneeth.prakhya at intel.com>
+Signed-off-by: Arshiya Hayatkhan Pathan <arshiya.hayatkhan.pathan at intel.com>
 Signed-off-by: Fenghua Yu <fenghua.yu at intel.com>
 Signed-off-by: Babu Moger <babu.moger at amd.com>
 ---
- tools/testing/selftests/resctrl/README | 53 ++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 tools/testing/selftests/resctrl/README
+ tools/testing/selftests/resctrl/resctrl_val.c | 118 ++++++++++++++++++++++++++
+ 1 file changed, 118 insertions(+)
+ create mode 100644 tools/testing/selftests/resctrl/resctrl_val.c
 
-diff --git a/tools/testing/selftests/resctrl/README b/tools/testing/selftests/resctrl/README
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
 new file mode 100644
-index 0000000..f9621d6
+index 0000000..12301ac
 --- /dev/null
-+++ b/tools/testing/selftests/resctrl/README
-@@ -0,0 +1,53 @@
-+resctrl_tests - resctrl file system test suit
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -0,0 +1,118 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Memory bandwidth monitoring and allocation library
++ *
++ * Copyright (C) 2018 Intel Corporation
++ *
++ * Authors:
++ *    Arshiya Hayatkhan Pathan <arshiya.hayatkhan.pathan at intel.com>
++ *    Sai Praneeth Prakhya <sai.praneeth.prakhya at intel.com>,
++ *    Fenghua Yu <fenghua.yu at intel.com>
++ */
++#include "resctrl.h"
 +
-+Authors:
-+	Fenghua Yu <fenghua.yu at intel.com>
-+	Sai Praneeth Prakhya <sai.praneeth.prakhya at intel.com>,
-+	Arshiya Hayatkhan Pathan <arshiya.hayatkhan.pathan at intel.com>
++#define UNCORE_IMC		"uncore_imc"
++#define READ_FILE_NAME		"events/cas_count_read"
++#define WRITE_FILE_NAME		"events/cas_count_write"
++#define DYN_PMU_PATH		"/sys/bus/event_source/devices"
++#define SCALE			0.00006103515625
++#define MAX_IMCS		20
++#define MAX_TOKENS		5
++#define READ			0
++#define WRITE			1
++#define CON_MON_MBM_LOCAL_BYTES_PATH				\
++	"%s/%s/mon_groups/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
 +
-+resctrl_tests tests various resctrl functionalities and interfaces including
-+both software and hardware.
++#define CON_MBM_LOCAL_BYTES_PATH		\
++	"%s/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
 +
-+Currently it supports Memory Bandwidth Monitoring test and Memory Bandwidth
-+Allocation test on Intel RDT hardware. More tests will be added in the future.
-+And the test suit can be extended to cover AMD QoS and ARM MPAM hardware
-+as well.
++#define MON_MBM_LOCAL_BYTES_PATH		\
++	"%s/mon_groups/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
 +
-+BUILD
-+-----
++#define MBM_LOCAL_BYTES_PATH			\
++	"%s/mon_data/mon_L3_%02d/mbm_local_bytes"
 +
-+Run "make" to build executable file "resctrl_tests".
++struct membw_read_format {
++	__u64 value;         /* The value of the event */
++	__u64 time_enabled;  /* if PERF_FORMAT_TOTAL_TIME_ENABLED */
++	__u64 time_running;  /* if PERF_FORMAT_TOTAL_TIME_RUNNING */
++	__u64 id;            /* if PERF_FORMAT_ID */
++};
 +
-+RUN
-+---
++struct imc_counter_config {
++	__u32 type;
++	__u64 event;
++	__u64 umask;
++	struct perf_event_attr pe;
++	struct membw_read_format return_value;
++	int fd;
++};
++static struct imc_counter_config imc_counters_config[MAX_IMCS][2];
 +
-+To use resctrl_tests, root or sudoer privileges are required. This is because
-+the test needs to mount resctrl file system and change contents in the file
-+system.
++void membw_initialize_perf_event_attr(int i, int j)
++{
++	memset(&imc_counters_config[i][j].pe, 0,
++	       sizeof(struct perf_event_attr));
++	imc_counters_config[i][j].pe.type = imc_counters_config[i][j].type;
++	imc_counters_config[i][j].pe.size = sizeof(struct perf_event_attr);
++	imc_counters_config[i][j].pe.disabled = 1;
++	imc_counters_config[i][j].pe.inherit = 1;
++	imc_counters_config[i][j].pe.exclude_guest = 1;
++	imc_counters_config[i][j].pe.config =
++		imc_counters_config[i][j].umask << 8 |
++		imc_counters_config[i][j].event;
++	imc_counters_config[i][j].pe.sample_type = PERF_SAMPLE_IDENTIFIER;
++	imc_counters_config[i][j].pe.read_format =
++		PERF_FORMAT_TOTAL_TIME_ENABLED | PERF_FORMAT_TOTAL_TIME_RUNNING;
++}
 +
-+Executing the test without any parameter will run all supported tests:
++void membw_ioctl_perf_event_ioc_reset_enable(int i, int j)
++{
++	ioctl(imc_counters_config[i][j].fd, PERF_EVENT_IOC_RESET, 0);
++	ioctl(imc_counters_config[i][j].fd, PERF_EVENT_IOC_ENABLE, 0);
++}
 +
-+	sudo ./resctrl_tests
++void membw_ioctl_perf_event_ioc_disable(int i, int j)
++{
++	ioctl(imc_counters_config[i][j].fd, PERF_EVENT_IOC_DISABLE, 0);
++}
 +
-+OVERVIEW OF EXECUTION
-+---------------------
++/*
++ * get_event_and_umask:	Parse config into event and umask
++ * @cas_count_cfg:	Config
++ * @count:		iMC number
++ * @op:			Operation (read/write)
++ */
++void get_event_and_umask(char *cas_count_cfg, int count, bool op)
++{
++	char *token[MAX_TOKENS];
++	int i = 0;
 +
-+A test case has four stages:
++	strcat(cas_count_cfg, ",");
++	token[0] = strtok(cas_count_cfg, "=,");
 +
-+  - setup: mount resctrl file system, create group, setup schemata, move test
-+    process pids to tasks, start benchmark.
-+  - execute: let benchmark run
-+  - verify: get resctrl data and verify the data with another source, e.g.
-+    perf event.
-+  - teardown: umount resctrl and clear temporary files.
++	for (i = 1; i < MAX_TOKENS; i++)
++		token[i] = strtok(NULL, "=,");
 +
-+ARGUMENTS
-+---------
++	for (i = 0; i < MAX_TOKENS; i++) {
++		if (!token[i])
++			break;
++		if (strcmp(token[i], "event") == 0) {
++			if (op == READ)
++				imc_counters_config[count][READ].event =
++				strtol(token[i + 1], NULL, 16);
++			else
++				imc_counters_config[count][WRITE].event =
++				strtol(token[i + 1], NULL, 16);
++		}
++		if (strcmp(token[i], "umask") == 0) {
++			if (op == READ)
++				imc_counters_config[count][READ].umask =
++				strtol(token[i + 1], NULL, 16);
++			else
++				imc_counters_config[count][WRITE].umask =
++				strtol(token[i + 1], NULL, 16);
++		}
++	}
++}
 +
-+Parameter '-h' shows usage information.
-+
-+usage: resctrl_tests [-h] [-b "benchmark_cmd [options]"] [-t test list] [-n no_of_bits]
-+        -b benchmark_cmd [options]: run specified benchmark for MBM, MBA and CQM default benchmark is builtin fill_buf
-+        -t test list: run tests specified in the test list, e.g. -t mbm, mba, cqm, cat
-+        -n no_of_bits: run cache tests using specified no of bits in cache bit mask
-+        -h: help
 -- 
 1.8.3.1
