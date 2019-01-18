@@ -1,42 +1,120 @@
-From: jeffrin@rajagiritech.edu.in (Jeffrin Jose T)
-Date: Fri, 18 Jan 2019 02:32:58 +0530
-Subject: [PATCH] selftests: kmod: worked on errors which breaks the overall
- execution of the test script
-Message-ID: <20190117210258.7871-1-jeffrin@rajagiritech.edu.in>
+From: yamada.masahiro@socionext.com (Masahiro Yamada)
+Date: Fri, 18 Jan 2019 13:14:14 +0900
+Subject: [PATCH 00/12] selftests: Miscellaneous fixes
+In-Reply-To: <20190114135144.26096-1-geert+renesas@glider.be>
+References: <20190114135144.26096-1-geert+renesas@glider.be>
+Message-ID:
+ <CAK7LNASdA+5_pdTjr1dY-cKGSDq804Huc_CX_8-Gg+ypFCmajQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190117210258.k52kE02AlXCb7Ss904iyMXpn3riV4TWrhnSWGIsgtMA@z>
+Message-ID: <20190118041414.AMGc57Lz79_knwSIjM1hhGYsA13lLPoZ35uhMbKgto0@z>
 
-The kmod.sh script breaks because an array is passed as input
-instead of a single element input.This patch takes elements
-one at a time and passed as input to the condition statement
-which in turn fixes the error.There was an issue which had
-the need for passing a single digit to the condition statement
-which is fixed using regular expression.
+On Mon, Jan 14, 2019 at 10:52 PM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+>         Hi all,
+>
+> This patch series contains several build fixes and cleanups for issues I
+> encountered when trying to cross-build an rtctest binary in a separate
+> output directory (like I use for all my kernel builds).
 
-Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
----
- tools/testing/selftests/kmod/kmod.sh | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+Geert,
+Thanks for working on this!
 
-diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-index 0a76314b4414..49b273c3646e 100755
---- a/tools/testing/selftests/kmod/kmod.sh
-+++ b/tools/testing/selftests/kmod/kmod.sh
-@@ -526,9 +526,12 @@ function run_all_tests()
- 		TEST_ID=${i%:*:*}
- 		ENABLED=$(get_test_enabled $TEST_ID)
- 		TEST_COUNT=$(get_test_count $TEST_ID)
--		if [[ $ENABLED -eq "1" ]]; then
--			test_case $TEST_ID $TEST_COUNT
--		fi
-+		for j in $ENABLED ; do
-+		         CHECK=${j#*:*:}
-+			 if [[ $CHECK -eq "1" ]]; then
-+			     test_case $TEST_ID $TEST_COUNT
-+			 fi
-+		done
- 	done
- }
- 
+
+My fundamental question is,
+why did tools/ opt out Kbuild?
+
+I think lots of mess comes in
+in order to support
+  cd tools/gpio; make
+
+instead of
+
+  make tools/gpio/
+
+
+Lots of files are duplicated in tools/build/
+in order to invent a different build system for tools/
+
+
+Similar, but not exactly the same files. For example,
+
+diff -u scripts/basic/fixdep.c tools/build/fixdep.c
+
+
+
+
+> Most patches are independent. Exceptions are:
+>   - Patch 3 depends on patch 2,
+>   - Patch 7 depends on patch 6,
+>   - Patch 11 depends on patches 2 and 3,
+>
+> This has been tested with native (amd64):
+>   - make kselftest-build
+>   - make -C tools/testing/selftests
+>   - make O=/tmp/kselftest kselftest-build
+>   - make O=/tmp/kselftest -C tools/testing/selftests
+> and cross-builds (arm):
+>   - make kselftest-build (from a separate output directory).
+>
+> Known remaining issues (not introduced by this patch series):
+>   - tools/lib/bpf fails to build in some cases (cfr.
+>     https://lore.kernel.org/lkml/CAMuHMdXRN=mSKTjZNBSxQi-pkgSrKqeANxD-GB+hqC8pDjx7nQ at mail.gmail.com/),
+>   - tools/gpio is not always built correctly,
+>   - When building in a separate output directory, there are still files
+>     created in the source directory under:
+>         - arch/x86/include/generated/,
+>         - arch/x86/tools/,
+>         - include/generated/uapi/linux,
+>         - scripts (fixdep and unifdef),
+>   - Some tests may fail to find the installed header files,
+>   - There may be^H^H^H^H^H^Hare more.
+>
+> Thanks for your comments!
+>
+> Geert Uytterhoeven (12):
+>   selftests: gpio-mockup-chardev: Check asprintf() for error
+>   selftests: Fix output directory with O=
+>   selftests: Fix header install directory with O=
+>   selftests: android: ion: Fix ionmap_test dependencies
+>   selftests: seccomp: Fix test dependencies and rules
+>   selftests: lib.mk: Add rule to build object file from C source file
+>   selftests: memfd: Fix build with O=
+>   selftests: timestamping: Remove superfluous rules
+>   selftests: sparc64: Remove superfluous rules
+>   selftests: intel_pstate: Remove unused header dependency rule
+>   selftests: Add kselftest-build target
+>   [RFC] selftests: gpio: Fix building tools/gpio from kselftests
+>
+>  Documentation/dev-tools/kselftest.rst             |  4 ++++
+>  Makefile                                          |  9 +++++++--
+>  tools/testing/selftests/android/ion/Makefile      |  6 +-----
+>  tools/testing/selftests/gpio/Makefile             | 12 +++++++-----
+>  .../testing/selftests/gpio/gpio-mockup-chardev.c  |  9 ++++++---
+>  tools/testing/selftests/intel_pstate/Makefile     |  2 --
+>  tools/testing/selftests/lib.mk                    |  4 ++++
+>  tools/testing/selftests/memfd/Makefile            |  8 +++-----
+>  .../selftests/networking/timestamping/Makefile    |  5 -----
+>  tools/testing/selftests/seccomp/Makefile          | 15 +++------------
+>  tools/testing/selftests/sparc64/drivers/Makefile  |  4 ----
+>  11 files changed, 35 insertions(+), 43 deletions(-)
+>
+> --
+> 2.17.1
+>
+> Gr{oetje,eeting}s,
+>
+>                                                 Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert at linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                                             -- Linus Torvalds
+
+
+
 -- 
-2.20.1
+Best Regards
+Masahiro Yamada
