@@ -1,33 +1,51 @@
-From: naresh.kamboju at linaro.org (Naresh Kamboju)
-Date: Fri, 18 Jan 2019 13:39:24 +0530
-Subject: selftests/bpf/test_netcnt failed on i386 - ibbpf: failed to create
- map (name: 'percpu_netcnt'): Invalid argument
-Message-ID: <CA+G9fYu-ku4dCOnUReot5jz3X18P1dWKiZCnnZaAJJt+p_HNjQ@mail.gmail.com>
+From: jarkko.sakkinen at linux.intel.com (Jarkko Sakkinen)
+Date: Fri, 18 Jan 2019 17:01:41 +0200
+Subject: [PATCH,RESEND] selftests: add TPM 2.0 tests
+In-Reply-To: <87r2dcqkq4.fsf@morokweng.localdomain>
+References: <20190116213102.25268-1-jarkko.sakkinen@linux.intel.com>
+ <87r2dcqkq4.fsf@morokweng.localdomain>
+Message-ID: <20190118150141.GG4080@linux.intel.com>
 
-Newly added test case bpf test_netcnt failed on i386 and qemu_i386 on
-mainline and -next kernel.
-Here we are running i386 kernel on x86_64 device.
-Pass on x86_64, arm64 and arm.
+On Wed, Jan 16, 2019 at 08:52:03PM -0200, Thiago Jung Bauermann wrote:
+> 
+> Hello,
+> 
+> Jarkko Sakkinen <jarkko.sakkinen at linux.intel.com> writes:
+> 
+> > Added the tests that I've been using for testing TPM 2.0 functionality
+> > for long time but have out-of-tree so far residing in
+> >
+> > https://github.com/jsakkine-intel/tpm2-scripts
+> >
+> > Cc: Tadeusz Struk <tadeusz.struk at intel.com>
+> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen at linux.intel.com>
+> > Acked-By: Joey Pabalinas <joeypabalinas at gmail.com>
+> > ---
+> >  tools/testing/selftests/Makefile           |   1 +
+> >  tools/testing/selftests/tpm2/Makefile      |   3 +
+> >  tools/testing/selftests/tpm2/test_smoke.sh |   4 +
+> >  tools/testing/selftests/tpm2/test_space.sh |   4 +
+> >  tools/testing/selftests/tpm2/tpm2.py       | 696 +++++++++++++++++++++
+> >  tools/testing/selftests/tpm2/tpm2_tests.py | 227 +++++++
+> >  6 files changed, 935 insertions(+)
+> >  create mode 100644 tools/testing/selftests/tpm2/Makefile
+> >  create mode 100755 tools/testing/selftests/tpm2/test_smoke.sh
+> >  create mode 100755 tools/testing/selftests/tpm2/test_space.sh
+> >  create mode 100644 tools/testing/selftests/tpm2/tpm2.py
+> >  create mode 100644 tools/testing/selftests/tpm2/tpm2_tests.py
+> >
+> > diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> > index 1a2bd15c5b6e..e4556132cbc4 100644
+> > --- a/tools/testing/selftests/Makefile
+> > +++ b/tools/testing/selftests/Makefile
+> > @@ -47,6 +47,7 @@ TARGETS += sysctl
+> >  ifneq (1, $(quicktest))
+> >  TARGETS += timers
+> >  endif
+> > +TARGETS += tpm
+> 
+> This should be tpm2, right?
 
-Am i missing any pre required Kconfigs ?
+Yes, it should, thank you.
 
-Test output log,
-selftests: bpf: test_netcnt
-libbpf: failed to create map (name: 'percpu_netcnt'): Invalid argument
-libbpf: failed to load object './netcnt_prog.o'
-Failed to load bpf program
-not ok 1.. selftests: bpf: test_netcnt [FAIL]
-selftests: bpf_test_netcnt [FAIL]
-
-Full test log,
-https://lkft.validation.linaro.org/scheduler/job/574652#L2903
-
-Kernel Config,
-http://snapshots.linaro.org/openembedded/lkft/rocko/intel-core2-32/lkft/linux-mainline-ddiaz/52/config
-
-Test results comparison of arm64, arm, x86_64 and i386 (kernel running
-on x86_64 machine).
-https://qa-reports.linaro.org/_/comparetest/?project=22&project=6&suite=kselftest&test=bpf_test_netcnt
-
-Best regards
-Naresh Kamboju
+/Jarkko
