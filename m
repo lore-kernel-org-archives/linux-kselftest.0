@@ -1,151 +1,34 @@
-From: Babu.Moger@amd.com (Moger, Babu)
-Date: Fri, 18 Jan 2019 18:27:05 +0000
-Subject: [PATCH v5 03/13] selftests/resctrl: Read memory bandwidth from perf
- IMC counter and from resctrl file system
-In-Reply-To: <20190118182646.16594-1-babu.moger@amd.com>
-References: <20190118182646.16594-1-babu.moger@amd.com>
-Message-ID: <20190118182646.16594-4-babu.moger@amd.com>
+From: tycho@tycho.ws (Tycho Andersen)
+Date: Fri, 18 Jan 2019 17:12:11 -0700
+Subject: [PATCH v1 0/6] seccomp test fixes
+Message-ID: <20190119001217.12660-1-tycho@tycho.ws>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190118182705.z0Qq36f1kHdtYz6cKQ92aduoRNog3ugKPWE4CFQkF2I@z>
+Message-ID: <20190119001211.UB4bzfETj2C87mTs-DPS1Mq1R3FWnJ0wER4bGF5y4L0@z>
 
-From: Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
+Hi all,
 
-Total memory bandwidth can be monitored from perf IMC counter and from
-resctrl file system. Later the two will be compared to verify the total
-memory bandwidth read from resctrl is correct.
+Here are the fixes I previously mentioned I would send. I previously
+assumed that the tests were mostly run as root, but it turns out
+everything else besides the stuff I wrote in the seccomp tests either
+sets NNP and doesn't require real root, so it all actually works. This
+set of fixes should make most of the other tests work unprivileged,
+while XFAIL-ing the one that requires real root.
 
-Signed-off-by: Sai Praneeth Prakhya <sai.praneeth.prakhya at intel.com>
-Signed-off-by: Arshiya Hayatkhan Pathan <arshiya.hayatkhan.pathan at intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu at intel.com>
-Signed-off-by: Babu Moger <babu.moger at amd.com>
----
- tools/testing/selftests/resctrl/resctrl_val.c | 118 ++++++++++++++++++++++++++
- 1 file changed, 118 insertions(+)
- create mode 100644 tools/testing/selftests/resctrl/resctrl_val.c
+Cheers,
 
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-new file mode 100644
-index 0000000..12301ac
---- /dev/null
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -0,0 +1,118 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Memory bandwidth monitoring and allocation library
-+ *
-+ * Copyright (C) 2018 Intel Corporation
-+ *
-+ * Authors:
-+ *    Arshiya Hayatkhan Pathan <arshiya.hayatkhan.pathan at intel.com>
-+ *    Sai Praneeth Prakhya <sai.praneeth.prakhya at intel.com>,
-+ *    Fenghua Yu <fenghua.yu at intel.com>
-+ */
-+#include "resctrl.h"
-+
-+#define UNCORE_IMC		"uncore_imc"
-+#define READ_FILE_NAME		"events/cas_count_read"
-+#define WRITE_FILE_NAME		"events/cas_count_write"
-+#define DYN_PMU_PATH		"/sys/bus/event_source/devices"
-+#define SCALE			0.00006103515625
-+#define MAX_IMCS		20
-+#define MAX_TOKENS		5
-+#define READ			0
-+#define WRITE			1
-+#define CON_MON_MBM_LOCAL_BYTES_PATH				\
-+	"%s/%s/mon_groups/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
-+
-+#define CON_MBM_LOCAL_BYTES_PATH		\
-+	"%s/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
-+
-+#define MON_MBM_LOCAL_BYTES_PATH		\
-+	"%s/mon_groups/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
-+
-+#define MBM_LOCAL_BYTES_PATH			\
-+	"%s/mon_data/mon_L3_%02d/mbm_local_bytes"
-+
-+struct membw_read_format {
-+	__u64 value;         /* The value of the event */
-+	__u64 time_enabled;  /* if PERF_FORMAT_TOTAL_TIME_ENABLED */
-+	__u64 time_running;  /* if PERF_FORMAT_TOTAL_TIME_RUNNING */
-+	__u64 id;            /* if PERF_FORMAT_ID */
-+};
-+
-+struct imc_counter_config {
-+	__u32 type;
-+	__u64 event;
-+	__u64 umask;
-+	struct perf_event_attr pe;
-+	struct membw_read_format return_value;
-+	int fd;
-+};
-+static struct imc_counter_config imc_counters_config[MAX_IMCS][2];
-+
-+void membw_initialize_perf_event_attr(int i, int j)
-+{
-+	memset(&imc_counters_config[i][j].pe, 0,
-+	       sizeof(struct perf_event_attr));
-+	imc_counters_config[i][j].pe.type = imc_counters_config[i][j].type;
-+	imc_counters_config[i][j].pe.size = sizeof(struct perf_event_attr);
-+	imc_counters_config[i][j].pe.disabled = 1;
-+	imc_counters_config[i][j].pe.inherit = 1;
-+	imc_counters_config[i][j].pe.exclude_guest = 1;
-+	imc_counters_config[i][j].pe.config =
-+		imc_counters_config[i][j].umask << 8 |
-+		imc_counters_config[i][j].event;
-+	imc_counters_config[i][j].pe.sample_type = PERF_SAMPLE_IDENTIFIER;
-+	imc_counters_config[i][j].pe.read_format =
-+		PERF_FORMAT_TOTAL_TIME_ENABLED | PERF_FORMAT_TOTAL_TIME_RUNNING;
-+}
-+
-+void membw_ioctl_perf_event_ioc_reset_enable(int i, int j)
-+{
-+	ioctl(imc_counters_config[i][j].fd, PERF_EVENT_IOC_RESET, 0);
-+	ioctl(imc_counters_config[i][j].fd, PERF_EVENT_IOC_ENABLE, 0);
-+}
-+
-+void membw_ioctl_perf_event_ioc_disable(int i, int j)
-+{
-+	ioctl(imc_counters_config[i][j].fd, PERF_EVENT_IOC_DISABLE, 0);
-+}
-+
-+/*
-+ * get_event_and_umask:	Parse config into event and umask
-+ * @cas_count_cfg:	Config
-+ * @count:		iMC number
-+ * @op:			Operation (read/write)
-+ */
-+void get_event_and_umask(char *cas_count_cfg, int count, bool op)
-+{
-+	char *token[MAX_TOKENS];
-+	int i = 0;
-+
-+	strcat(cas_count_cfg, ",");
-+	token[0] = strtok(cas_count_cfg, "=,");
-+
-+	for (i = 1; i < MAX_TOKENS; i++)
-+		token[i] = strtok(NULL, "=,");
-+
-+	for (i = 0; i < MAX_TOKENS; i++) {
-+		if (!token[i])
-+			break;
-+		if (strcmp(token[i], "event") == 0) {
-+			if (op == READ)
-+				imc_counters_config[count][READ].event =
-+				strtol(token[i + 1], NULL, 16);
-+			else
-+				imc_counters_config[count][WRITE].event =
-+				strtol(token[i + 1], NULL, 16);
-+		}
-+		if (strcmp(token[i], "umask") == 0) {
-+			if (op == READ)
-+				imc_counters_config[count][READ].umask =
-+				strtol(token[i + 1], NULL, 16);
-+			else
-+				imc_counters_config[count][WRITE].umask =
-+				strtol(token[i + 1], NULL, 16);
-+		}
-+	}
-+}
-+
+Tycho
+
+Tycho Andersen (6):
+  selftests: don't kill child immediately in get_metadata() test
+  selftests: fix typo in seccomp_bpf.c
+  selftest: include stdio.h in kselftest.h
+  selftests: skip seccomp get_metadata test if not real root
+  selftests: set NO_NEW_PRIVS bit in seccomp user tests
+  selftests: unshare userns in seccomp pidns testcases
+
+ tools/testing/selftests/kselftest.h           |  1 +
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 42 ++++++++++++++++---
+ 2 files changed, 38 insertions(+), 5 deletions(-)
+
 -- 
-1.8.3.1
+2.19.1
