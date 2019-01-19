@@ -1,40 +1,80 @@
 From: tycho at tycho.ws (Tycho Andersen)
-Date: Fri, 18 Jan 2019 17:12:17 -0700
-Subject: [PATCH 6/6] selftests: unshare userns in seccomp pidns testcases
+Date: Fri, 18 Jan 2019 17:12:16 -0700
+Subject: [PATCH 5/6] selftests: set NO_NEW_PRIVS bit in seccomp user tests
 In-Reply-To: <20190119001217.12660-1-tycho@tycho.ws>
 References: <20190119001217.12660-1-tycho@tycho.ws>
-Message-ID: <20190119001217.12660-7-tycho@tycho.ws>
+Message-ID: <20190119001217.12660-6-tycho@tycho.ws>
 
-The pid ns cannot be unshare()d as an unprivileged user without owning the
-userns as well. Let's unshare the userns so that we can subsequently
-unshare the pidns.
+seccomp() doesn't allow users who aren't root in their userns to attach
+filters unless they have the nnp bit set, so let's set it so that these
+tests can pass when run as an unprivileged user.
 
-This also means that we don't need to set the no new privs bit as in the
-other test cases, since we're unsharing the userns.
+This idea stolen from the other seccomp tests, which use this trick :)
 
 Signed-off-by: Tycho Andersen <tycho at tycho.ws>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
 diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index a4a7dce1a91b..8f6e95773225 100644
+index ab6b6620f522..a4a7dce1a91b 100644
 --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
 +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -3271,7 +3271,7 @@ TEST(user_notification_child_pid_ns)
+@@ -3026,6 +3026,11 @@ TEST(user_notification_basic)
+ 		.filter = filter,
+ 	};
+ 
++	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
++	}
++
+ 	pid = fork();
+ 	ASSERT_GE(pid, 0);
+ 
+@@ -3107,6 +3112,11 @@ TEST(user_notification_kill_in_middle)
  	struct seccomp_notif req = {};
  	struct seccomp_notif_resp resp = {};
  
--	ASSERT_EQ(unshare(CLONE_NEWPID), 0);
-+	ASSERT_EQ(unshare(CLONE_NEWUSER | CLONE_NEWPID), 0);
- 
- 	listener = user_trap_syscall(__NR_getpid, SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
++	}
++
+ 	listener = user_trap_syscall(__NR_getpid,
+ 				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
  	ASSERT_GE(listener, 0);
-@@ -3308,6 +3308,8 @@ TEST(user_notification_sibling_pid_ns)
+@@ -3154,6 +3164,11 @@ TEST(user_notification_signal)
+ 	struct seccomp_notif_resp resp = {};
+ 	char c;
+ 
++	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
++	}
++
+ 	ASSERT_EQ(socketpair(PF_LOCAL, SOCK_SEQPACKET, 0, sk_pair), 0);
+ 
+ 	listener = user_trap_syscall(__NR_gettid,
+@@ -3219,6 +3234,11 @@ TEST(user_notification_closed_listener)
+ 	long ret;
+ 	int status, listener;
+ 
++	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
++	}
++
+ 	listener = user_trap_syscall(__NR_getpid,
+ 				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
+@@ -3350,6 +3370,10 @@ TEST(user_notification_fault_recv)
  	struct seccomp_notif req = {};
  	struct seccomp_notif_resp resp = {};
  
-+	ASSERT_EQ(unshare(CLONE_NEWUSER), 0);
++	ASSERT_EQ(prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0), 0) {
++		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
++	}
 +
  	listener = user_trap_syscall(__NR_getpid, SECCOMP_FILTER_FLAG_NEW_LISTENER);
  	ASSERT_GE(listener, 0);
