@@ -1,41 +1,38 @@
 From: tycho at tycho.ws (Tycho Andersen)
-Date: Fri, 18 Jan 2019 17:12:15 -0700
-Subject: [PATCH 4/6] selftests: skip seccomp get_metadata test if not real root
+Date: Fri, 18 Jan 2019 17:12:14 -0700
+Subject: [PATCH 3/6] selftest: include stdio.h in kselftest.h
 In-Reply-To: <20190119001217.12660-1-tycho@tycho.ws>
 References: <20190119001217.12660-1-tycho@tycho.ws>
-Message-ID: <20190119001217.12660-5-tycho@tycho.ws>
+Message-ID: <20190119001217.12660-4-tycho@tycho.ws>
 
-The get_metadata() test requires real root, so let's skip it if we're not
-real root.
+While playing around with a way to skip the seccomp get_metadata test, I
+noticed that this header uses printf() without defining it, leading to,
 
-Note that I used XFAIL here because that's what the test does later if
-CONFIG_CHEKCKPOINT_RESTORE happens to not be enabled. After looking at the
-code, there doesn't seem to be a nice way to skip tests defined as TEST(),
-since there's no return code (I tried exit(KSFT_SKIP), but that didn't work
-either...). So let's do it this way to be consistent, and easier to fix
-when someone comes along and fixes it.
+../kselftest.h: In function ‘ksft_print_header’:
+../kselftest.h:61:3: warning: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
+   printf("TAP version 13\n");
+   ^~~~~~
+../kselftest.h:61:3: warning: incompatible implicit declaration of built-in function ‘printf’
+../kselftest.h:61:3: note: include ‘<stdio.h>’ or provide a declaration of ‘printf’
+
+if user code doesn't also use printf.
 
 Signed-off-by: Tycho Andersen <tycho at tycho.ws>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/testing/selftests/kselftest.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 912a2a5430dc..ab6b6620f522 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -2929,6 +2929,12 @@ TEST(get_metadata)
- 	struct seccomp_metadata md;
- 	long ret;
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index a3edb2c8e43d..47e1d995c182 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -13,6 +13,7 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <stdarg.h>
++#include <stdio.h>
  
-+	/* Only real root can get metadata. */
-+	if (geteuid()) {
-+		XFAIL(return, "get_metadata requires real root");
-+		return;
-+	}
-+
- 	ASSERT_EQ(0, pipe(pipefd));
- 
- 	pid = fork();
+ /* define kselftest exit codes */
+ #define KSFT_PASS  0
 -- 
 2.19.1
