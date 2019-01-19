@@ -1,32 +1,40 @@
 From: tycho at tycho.ws (Tycho Andersen)
-Date: Fri, 18 Jan 2019 17:12:11 -0700
-Subject: [PATCH v1 0/6] seccomp test fixes
-Message-ID: <20190119001217.12660-1-tycho@tycho.ws>
+Date: Fri, 18 Jan 2019 17:12:12 -0700
+Subject: [PATCH 1/6] selftests: don't kill child immediately in get_metadata()
+ test
+In-Reply-To: <20190119001217.12660-1-tycho@tycho.ws>
+References: <20190119001217.12660-1-tycho@tycho.ws>
+Message-ID: <20190119001217.12660-2-tycho@tycho.ws>
 
-Hi all,
+This this test forks a child, and then the parent waits for a write() to a
+pipe signalling the child is ready to be attached to. If something in the
+child ASSERTs before it does this write, the test will hang waiting for it.
+Instead, let's EXPECT, so that execution continues until we do the write.
+Any failure after that is fine and can ASSERT.
 
-Here are the fixes I previously mentioned I would send. I previously
-assumed that the tests were mostly run as root, but it turns out
-everything else besides the stuff I wrote in the seccomp tests either
-sets NNP and doesn't require real root, so it all actually works. This
-set of fixes should make most of the other tests work unprivileged,
-while XFAIL-ing the one that requires real root.
+Signed-off-by: Tycho Andersen <tycho at tycho.ws>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Cheers,
-
-Tycho
-
-Tycho Andersen (6):
-  selftests: don't kill child immediately in get_metadata() test
-  selftests: fix typo in seccomp_bpf.c
-  selftest: include stdio.h in kselftest.h
-  selftests: skip seccomp get_metadata test if not real root
-  selftests: set NO_NEW_PRIVS bit in seccomp user tests
-  selftests: unshare userns in seccomp pidns testcases
-
- tools/testing/selftests/kselftest.h           |  1 +
- tools/testing/selftests/seccomp/seccomp_bpf.c | 42 ++++++++++++++++---
- 2 files changed, 38 insertions(+), 5 deletions(-)
-
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 496a9a8c773a..9aba1b904089 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -2943,11 +2943,11 @@ TEST(get_metadata)
+ 		};
+ 
+ 		/* one with log, one without */
+-		ASSERT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER,
++		EXPECT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER,
+ 				     SECCOMP_FILTER_FLAG_LOG, &prog));
+-		ASSERT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog));
++		EXPECT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog));
+ 
+-		ASSERT_EQ(0, close(pipefd[0]));
++		EXPECT_EQ(0, close(pipefd[0]));
+ 		ASSERT_EQ(1, write(pipefd[1], "1", 1));
+ 		ASSERT_EQ(0, close(pipefd[1]));
+ 
 -- 
 2.19.1
