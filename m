@@ -1,38 +1,24 @@
-From: tycho at tycho.ws (Tycho Andersen)
-Date: Fri, 18 Jan 2019 17:12:14 -0700
-Subject: [PATCH 3/6] selftest: include stdio.h in kselftest.h
-In-Reply-To: <20190119001217.12660-1-tycho@tycho.ws>
-References: <20190119001217.12660-1-tycho@tycho.ws>
-Message-ID: <20190119001217.12660-4-tycho@tycho.ws>
+From: guro at fb.com (Roman Gushchin)
+Date: Sat, 19 Jan 2019 01:47:49 +0000
+Subject: selftests/bpf/test_netcnt failed on i386 - ibbpf: failed to
+ create map (name: 'percpu_netcnt'): Invalid argument
+In-Reply-To: <CA+G9fYu-ku4dCOnUReot5jz3X18P1dWKiZCnnZaAJJt+p_HNjQ@mail.gmail.com>
+References: <CA+G9fYu-ku4dCOnUReot5jz3X18P1dWKiZCnnZaAJJt+p_HNjQ@mail.gmail.com>
+Message-ID: <20190119014742.GA15935@castle.DHCP.thefacebook.com>
 
-While playing around with a way to skip the seccomp get_metadata test, I
-noticed that this header uses printf() without defining it, leading to,
+On Fri, Jan 18, 2019 at 01:39:24PM +0530, Naresh Kamboju wrote:
+> Newly added test case bpf test_netcnt failed on i386 and qemu_i386 on
+> mainline and -next kernel.
+> Here we are running i386 kernel on x86_64 device.
+> Pass on x86_64, arm64 and arm.
+> 
+> Am i missing any pre required Kconfigs ?
 
-../kselftest.h: In function ‘ksft_print_header’:
-../kselftest.h:61:3: warning: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
-   printf("TAP version 13\n");
-   ^~~~~~
-../kselftest.h:61:3: warning: incompatible implicit declaration of built-in function ‘printf’
-../kselftest.h:61:3: note: include ‘<stdio.h>’ or provide a declaration of ‘printf’
+Hi Naresh!
 
-if user code doesn't also use printf.
+Thank you for the report, I'll take a look.
 
-Signed-off-by: Tycho Andersen <tycho at tycho.ws>
----
- tools/testing/selftests/kselftest.h | 1 +
- 1 file changed, 1 insertion(+)
+Based on the results you've linked, it looks like there are many
+failed bpf tests, so I can assume there is one or more shared problems.
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index a3edb2c8e43d..47e1d995c182 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -13,6 +13,7 @@
- #include <stdlib.h>
- #include <unistd.h>
- #include <stdarg.h>
-+#include <stdio.h>
- 
- /* define kselftest exit codes */
- #define KSFT_PASS  0
--- 
-2.19.1
+Thanks!
