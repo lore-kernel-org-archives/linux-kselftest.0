@@ -1,31 +1,43 @@
 From: tycho at tycho.ws (Tycho Andersen)
-Date: Fri, 18 Jan 2019 17:12:13 -0700
-Subject: [PATCH 2/6] selftests: fix typo in seccomp_bpf.c
+Date: Fri, 18 Jan 2019 17:12:17 -0700
+Subject: [PATCH 6/6] selftests: unshare userns in seccomp pidns testcases
 In-Reply-To: <20190119001217.12660-1-tycho@tycho.ws>
 References: <20190119001217.12660-1-tycho@tycho.ws>
-Message-ID: <20190119001217.12660-3-tycho@tycho.ws>
+Message-ID: <20190119001217.12660-7-tycho@tycho.ws>
 
-There used to be an explanation here because it could trigger lockdep
-previously, but now we're not doing recursive locking, so it really is just
-for grins.
+The pid ns cannot be unshare()d as an unprivileged user without owning the
+userns as well. Let's unshare the userns so that we can subsequently
+unshare the pidns.
+
+This also means that we don't need to set the no new privs bit as in the
+other test cases, since we're unsharing the userns.
 
 Signed-off-by: Tycho Andersen <tycho at tycho.ws>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 9aba1b904089..912a2a5430dc 100644
+index a4a7dce1a91b..8f6e95773225 100644
 --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
 +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -3035,7 +3035,7 @@ TEST(user_notification_basic)
- 	EXPECT_EQ(true, WIFEXITED(status));
- 	EXPECT_EQ(0, WEXITSTATUS(status));
+@@ -3271,7 +3271,7 @@ TEST(user_notification_child_pid_ns)
+ 	struct seccomp_notif req = {};
+ 	struct seccomp_notif_resp resp = {};
  
--	/* Add some no-op filters so for grins. */
-+	/* Add some no-op filters for grins. */
- 	EXPECT_EQ(seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog), 0);
- 	EXPECT_EQ(seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog), 0);
- 	EXPECT_EQ(seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog), 0);
+-	ASSERT_EQ(unshare(CLONE_NEWPID), 0);
++	ASSERT_EQ(unshare(CLONE_NEWUSER | CLONE_NEWPID), 0);
+ 
+ 	listener = user_trap_syscall(__NR_getpid, SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
+@@ -3308,6 +3308,8 @@ TEST(user_notification_sibling_pid_ns)
+ 	struct seccomp_notif req = {};
+ 	struct seccomp_notif_resp resp = {};
+ 
++	ASSERT_EQ(unshare(CLONE_NEWUSER), 0);
++
+ 	listener = user_trap_syscall(__NR_getpid, SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
+ 
 -- 
 2.19.1
