@@ -1,36 +1,22 @@
-From: shuah@kernel.org (shuah)
-Date: Sun, 20 Jan 2019 12:28:19 -0700
-Subject: [PATCH v1 0/6] seccomp test fixes
-In-Reply-To: <CAGXu5jKtQZ5oKethjopCW75eDtj6fEdCANRqah+wUh2pYfdGiQ@mail.gmail.com>
-References: <20190119001217.12660-1-tycho@tycho.ws>
- <CAGXu5jKtQZ5oKethjopCW75eDtj6fEdCANRqah+wUh2pYfdGiQ@mail.gmail.com>
-Message-ID: <debaac10-04ec-2d59-d2a8-8fce156d5d40@kernel.org>
+From: gregkh@linuxfoundation.org (Greg KH)
+Date: Mon, 21 Jan 2019 13:22:24 +0100
+Subject: [PATCH backport for 4.19] selftests: Fix test errors related to
+ lib.mk khdr target
+In-Reply-To: <20190116015922.17979-1-shuah@kernel.org>
+References: <20190116015922.17979-1-shuah@kernel.org>
+Message-ID: <20190121122224.GC15873@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190120192819.uI9BMHGNZMzUG5H140WPFWoxt2Y8JZAZ2pQnpKbQ8Jw@z>
+Message-ID: <20190121122224.TGvO7vhlIrRKbWsby_dXN4Xn3kFVQlOWuVKdWHPFWfA@z>
 
-On 1/19/19 5:43 PM, Kees Cook wrote:
-> On Fri, Jan 18, 2019@4:12 PM Tycho Andersen <tycho@tycho.ws> wrote:
->>
->> Hi all,
->>
->> Here are the fixes I previously mentioned I would send. I previously
->> assumed that the tests were mostly run as root, but it turns out
->> everything else besides the stuff I wrote in the seccomp tests either
->> sets NNP and doesn't require real root, so it all actually works. This
->> set of fixes should make most of the other tests work unprivileged,
->> while XFAIL-ing the one that requires real root.
-
-Tycho, Thanks for a quick response in fixing the problems.
+On Tue, Jan 15, 2019@06:59:21PM -0700, shuah@kernel.org wrote:
+> From: Shuah Khan <shuah at kernel.org>
 > 
-> Awesome. This all looks good to me. :)
+> Upstream commit 211929fd3f7c ("selftests: Fix test errors related to
+> lib.mk khdr target")
 > 
-> Acked-by: Kees Cook <keescook at chromium.org>
-> 
-> Shuah, can you take this series?
-> 
+> This backport drops change to test that isn't in 4.19
+> - tools/testing/selftests/tc-testing/bpf/Makefile
 
+Thanks for the backport, now queued up.
 
-Yes. I will take these in for rc5.
-
-thanks,
--- Shuah
+greg k-h
