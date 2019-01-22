@@ -1,80 +1,60 @@
-From: shuah at kernel.org (shuah)
-Date: Tue, 22 Jan 2019 11:10:47 -0700
-Subject: {GIT PULL] Kselftest update for Linux 5.0-rc4
-Message-ID: <8e4a8f43-c135-1ac6-8ca1-5bc75f02d787@kernel.org>
+From: mcgrof at kernel.org (Luis Chamberlain)
+Date: Tue, 22 Jan 2019 11:43:52 -0800
+Subject: [PATCH] selftests: kmod: worked on errors which breaks the
+ overall execution of the test script
+In-Reply-To: <20190117210258.7871-1-jeffrin@rajagiritech.edu.in>
+References: <20190117210258.7871-1-jeffrin@rajagiritech.edu.in>
+Message-ID: <20190122194352.GA11489@garbanzo.do-not-panic.com>
 
-Hi Linus,
+On Fri, Jan 18, 2019 at 02:32:58AM +0530, Jeffrin Jose T wrote:
+> The kmod.sh script breaks
 
-Please pull the following Kselftest update for Linux 5.0-rc4
+First thanks for the patch! But now let's get to it: on what
+distribution and version of bash does this break? The commit log should
+refer to this and it would help me confirm the issue.
 
-This Kselftest update for Linux 5.0-rc4 consists of fixes to rtc,
-seccomp and other tests.
+> because an array is passed
 
-diff is attached.
+Which is the array?
 
-thanks,
--- Shuah
+> as input
+> instead of a single element input.This patch takes elements
+> one at a time and passed as input to the condition statement
+> which in turn fixes the error.There was an issue which had
+> the need for passing a single digit to the condition statement
+> which is fixed using regular expression.
+> 
+> Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
+> ---
+>  tools/testing/selftests/kmod/kmod.sh | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
+> index 0a76314b4414..49b273c3646e 100755
+> --- a/tools/testing/selftests/kmod/kmod.sh
+> +++ b/tools/testing/selftests/kmod/kmod.sh
+> @@ -526,9 +526,12 @@ function run_all_tests()
+>  		TEST_ID=${i%:*:*}
+>  		ENABLED=$(get_test_enabled $TEST_ID)
+>  		TEST_COUNT=$(get_test_count $TEST_ID)
+> -		if [[ $ENABLED -eq "1" ]]; then
+> -			test_case $TEST_ID $TEST_COUNT
+> -		fi
 
+get_test_enabled() is supposed to do what you do open-handed here.
+So the better question is why are you getting an array returned
+for your version of bash.
 
-----------------------------------------------------------------
-The following changes since commit bfeffd155283772bbe78c6a05dec7c0128ee500c:
+> +		for j in $ENABLED ; do
+> +		         CHECK=${j#*:*:}
+> +			 if [[ $CHECK -eq "1" ]]; then
+> +			     test_case $TEST_ID $TEST_COUNT
+> +			 fi
+> +		done
+>  	done
+>  }
+>  
+> -- 
+> 2.20.1
 
-   Linux 5.0-rc1 (2019-01-06 17:08:20 -0800)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
-tags/linux-kselftest-5.0-rc4
-
-for you to fetch changes up to 3d244c192afeee7dd4f5fb1b916ea4e47420d401:
-
-   selftests/seccomp: Abort without user notification support 
-(2019-01-17 11:00:23 -0700)
-
-----------------------------------------------------------------
-linux-kselftest-5.0-rc4
-
-This Kselftest update for Linux 5.0-rc4 consists of fixes to rtc, seccomp
-and other tests.
-
-----------------------------------------------------------------
-Alexandre Belloni (2):
-       selftests: rtc: rtctest: fix alarm tests
-       selftests: rtc: rtctest: add alarm test on minute boundary
-
-Alison Schofield (1):
-       selftests/vm/gup_benchmark.c: match gup struct to kernel
-
-Colin Ian King (1):
-       x86/mpx/selftests: fix spelling mistake "succeded" -> "succeeded"
-
-Fathi Boudra (1):
-       selftests: seccomp: use LDLIBS instead of LDFLAGS
-
-Geert Uytterhoeven (1):
-       selftests: gpio-mockup-chardev: Check asprintf() for error
-
-Kees Cook (1):
-       selftests/seccomp: Abort without user notification support
-
-Sabyasachi Gupta (1):
-       tools/testing/selftests/x86/unwind_vdso.c: Remove duplicate header
-
-  tools/testing/selftests/gpio/gpio-mockup-chardev.c |   9 +-
-  tools/testing/selftests/rtc/rtctest.c              | 109 
-++++++++++++++++++++-
-  tools/testing/selftests/seccomp/Makefile           |   2 +-
-  tools/testing/selftests/seccomp/seccomp_bpf.c      |  10 +-
-  tools/testing/selftests/vm/gup_benchmark.c         |   1 +
-  tools/testing/selftests/x86/mpx-mini-test.c        |   2 +-
-  tools/testing/selftests/x86/unwind_vdso.c          |   1 -
-  7 files changed, 118 insertions(+), 16 deletions(-)
-
-----------------------------------------------------------------
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: linux-kselftest-5.0-rc4.diff
-Type: text/x-patch
-Size: 7806 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190122/e6d5f49a/attachment.bin>
+  Luis
