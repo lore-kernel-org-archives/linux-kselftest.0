@@ -1,20 +1,29 @@
-From: gregkh at linuxfoundation.org (Greg KH)
-Date: Mon, 21 Jan 2019 13:22:24 +0100
-Subject: [PATCH backport for 4.19] selftests: Fix test errors related to
- lib.mk khdr target
-In-Reply-To: <20190116015922.17979-1-shuah@kernel.org>
-References: <20190116015922.17979-1-shuah@kernel.org>
-Message-ID: <20190121122224.GC15873@kroah.com>
+From: christophe.leroy at c-s.fr (Christophe Leroy)
+Date: Tue, 22 Jan 2019 13:54:57 +0000 (UTC)
+Subject: [PATCH] powerpc/selftest: fix type of mftb() in null_syscall
+Message-ID: <3c3638c1ece313ad3fa0a850f9a98a635ebe688a.1548165236.git.christophe.leroy@c-s.fr>
 
-On Tue, Jan 15, 2019 at 06:59:21PM -0700, shuah at kernel.org wrote:
-> From: Shuah Khan <shuah at kernel.org>
-> 
-> Upstream commit 211929fd3f7c ("selftests: Fix test errors related to
-> lib.mk khdr target")
-> 
-> This backport drops change to test that isn't in 4.19
-> - tools/testing/selftests/tc-testing/bpf/Makefile
+All callers of mftb() expect 'unsigned long', and the function itself
+only returns lower part of the TB so it really is 'unsigned long'
+not 'unsigned long long'
 
-Thanks for the backport, now queued up.
+Signed-off-by: Christophe Leroy <christophe.leroy at c-s.fr>
+---
+ tools/testing/selftests/powerpc/benchmarks/null_syscall.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-greg k-h
+diff --git a/tools/testing/selftests/powerpc/benchmarks/null_syscall.c b/tools/testing/selftests/powerpc/benchmarks/null_syscall.c
+index ecc14d68e101..908de689a902 100644
+--- a/tools/testing/selftests/powerpc/benchmarks/null_syscall.c
++++ b/tools/testing/selftests/powerpc/benchmarks/null_syscall.c
+@@ -25,7 +25,7 @@ unsigned long long clock_frequency;
+ unsigned long long timebase_frequency;
+ double timebase_multiplier;
+ 
+-static inline unsigned long long mftb(void)
++static inline unsigned long mftb(void)
+ {
+ 	unsigned long low;
+ 
+-- 
+2.13.3
