@@ -1,32 +1,82 @@
-From: christophe.leroy@c-s.fr (Christophe Leroy)
-Date: Tue, 22 Jan 2019 13:54:57 +0000 (UTC)
-Subject: [PATCH] powerpc/selftest: fix type of mftb() in null_syscall
-Message-ID:
- <3c3638c1ece313ad3fa0a850f9a98a635ebe688a.1548165236.git.christophe.leroy@c-s.fr>
+From: shuah@kernel.org (shuah)
+Date: Tue, 22 Jan 2019 11:10:47 -0700
+Subject: {GIT PULL] Kselftest update for Linux 5.0-rc4
+Message-ID: <8e4a8f43-c135-1ac6-8ca1-5bc75f02d787@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190122135457.gg1MNcihnMLhEF5IQfy7cwf8ob8Kg85n44N1_ozNlEI@z>
+Message-ID: <20190122181047.OGCzk_RDXyx3mnOoJQjMoceAp8jmJ-RjdigsjWvDqFs@z>
 
-All callers of mftb() expect 'unsigned long', and the function itself
-only returns lower part of the TB so it really is 'unsigned long'
-not 'unsigned long long'
+Hi Linus,
 
-Signed-off-by: Christophe Leroy <christophe.leroy at c-s.fr>
----
- tools/testing/selftests/powerpc/benchmarks/null_syscall.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please pull the following Kselftest update for Linux 5.0-rc4
 
-diff --git a/tools/testing/selftests/powerpc/benchmarks/null_syscall.c b/tools/testing/selftests/powerpc/benchmarks/null_syscall.c
-index ecc14d68e101..908de689a902 100644
---- a/tools/testing/selftests/powerpc/benchmarks/null_syscall.c
-+++ b/tools/testing/selftests/powerpc/benchmarks/null_syscall.c
-@@ -25,7 +25,7 @@ unsigned long long clock_frequency;
- unsigned long long timebase_frequency;
- double timebase_multiplier;
- 
--static inline unsigned long long mftb(void)
-+static inline unsigned long mftb(void)
- {
- 	unsigned long low;
- 
--- 
-2.13.3
+This Kselftest update for Linux 5.0-rc4 consists of fixes to rtc,
+seccomp and other tests.
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+
+----------------------------------------------------------------
+The following changes since commit bfeffd155283772bbe78c6a05dec7c0128ee500c:
+
+   Linux 5.0-rc1 (2019-01-06 17:08:20 -0800)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
+tags/linux-kselftest-5.0-rc4
+
+for you to fetch changes up to 3d244c192afeee7dd4f5fb1b916ea4e47420d401:
+
+   selftests/seccomp: Abort without user notification support 
+(2019-01-17 11:00:23 -0700)
+
+----------------------------------------------------------------
+linux-kselftest-5.0-rc4
+
+This Kselftest update for Linux 5.0-rc4 consists of fixes to rtc, seccomp
+and other tests.
+
+----------------------------------------------------------------
+Alexandre Belloni (2):
+       selftests: rtc: rtctest: fix alarm tests
+       selftests: rtc: rtctest: add alarm test on minute boundary
+
+Alison Schofield (1):
+       selftests/vm/gup_benchmark.c: match gup struct to kernel
+
+Colin Ian King (1):
+       x86/mpx/selftests: fix spelling mistake "succeded" -> "succeeded"
+
+Fathi Boudra (1):
+       selftests: seccomp: use LDLIBS instead of LDFLAGS
+
+Geert Uytterhoeven (1):
+       selftests: gpio-mockup-chardev: Check asprintf() for error
+
+Kees Cook (1):
+       selftests/seccomp: Abort without user notification support
+
+Sabyasachi Gupta (1):
+       tools/testing/selftests/x86/unwind_vdso.c: Remove duplicate header
+
+  tools/testing/selftests/gpio/gpio-mockup-chardev.c |   9 +-
+  tools/testing/selftests/rtc/rtctest.c              | 109 
+++++++++++++++++++++-
+  tools/testing/selftests/seccomp/Makefile           |   2 +-
+  tools/testing/selftests/seccomp/seccomp_bpf.c      |  10 +-
+  tools/testing/selftests/vm/gup_benchmark.c         |   1 +
+  tools/testing/selftests/x86/mpx-mini-test.c        |   2 +-
+  tools/testing/selftests/x86/unwind_vdso.c          |   1 -
+  7 files changed, 118 insertions(+), 16 deletions(-)
+
+----------------------------------------------------------------
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux-kselftest-5.0-rc4.diff
+Type: text/x-patch
+Size: 7806 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190122/e6d5f49a/attachment.bin>
