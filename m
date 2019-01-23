@@ -1,73 +1,48 @@
-From: colin.king at canonical.com (Colin Ian King)
-Date: Wed, 23 Jan 2019 13:25:05 +0000
-Subject: [PATCH][V2] selftests: cpu-hotplug: fix case where CPUs offline >
- CPUs present
-In-Reply-To: <20190110123802.13832-1-colin.king@canonical.com>
-References: <20190110123802.13832-1-colin.king@canonical.com>
-Message-ID: <abb5a36f-e513-e3ba-3286-4cc2026ef580@canonical.com>
+From: shuah at kernel.org (shuah)
+Date: Wed, 23 Jan 2019 07:15:01 -0700
+Subject: [PATCH v3] selftests: add binderfs selftests
+In-Reply-To: <20190123110052.GB22520@kroah.com>
+References: <20190117114854.15132-1-christian@brauner.io>
+ <20190123105457.k7oobylgq6rwka55@brauner.io>
+ <20190123110052.GB22520@kroah.com>
+Message-ID: <d1893da7-1222-d303-04c7-fb0500b55088@kernel.org>
 
-ping?
+On 1/23/19 4:00 AM, Greg KH wrote:
+> On Wed, Jan 23, 2019 at 11:54:58AM +0100, Christian Brauner wrote:
+>> On Thu, Jan 17, 2019 at 12:48:54PM +0100, Christian Brauner wrote:
+>>> This adds the promised selftest for binderfs. It will verify the following
+>>> things:
+>>> - binderfs mounting works
+>>> - binder device allocation works
+>>> - performing a binder ioctl() request through a binderfs device works
+>>> - binder device removal works
+>>> - binder-control removal fails
+>>> - binderfs unmounting works
+>>>
+>>> The tests are performed both privileged and unprivileged. The latter
+>>> verifies that binderfs behaves correctly in user namespaces.
+>>>
+>>> Cc: Todd Kjos <tkjos at google.com>
+>>> Signed-off-by: Christian Brauner <christian.brauner at ubuntu.com>
+>>
+>> Hey Shuah,
+>>
+>> If you're ok with the patch in its current form, can you please make
+>> sure that this still lands in 5.0? If at all possible I'd like to have
+>> all ducks in a row and release binderfs with selftests and everything.
+>> :)
+> 
 
-On 10/01/2019 12:38, Colin King wrote:
-> From: Colin Ian King <colin.king at canonical.com>
+The patch is good and I was planning to get this into 5.1.
+
+> I can take it in my tree with the other binderfs patches if I can get an
+> ack from Shuah.
 > 
-> The cpu-hotplug test assumes that we can offline the maximum CPU as
-> described by /sys/devices/system/cpu/offline.  However, in the case
-> where the number of CPUs exceeds like kernel configuration then
-> the offline count can be greater than the present count and we end
-> up trying to test the offlining of a CPU that is not available to
-> offline.  Fix this by testing the maximum present CPU instead.
-> 
-> Also, the test currently offlines the CPU and does not online it,
-> so fix this by onlining the CPU after the test.
-> 
-> Fixes: d89dffa976bc ("fault-injection: add selftests for cpu and memory hotplug")
-> Signed-off-by: Colin Ian King <colin.king at canonical.com>
-> 
-> ---
-> 
-> V2: remove some debug and an empty line
-> 
-> ---
->  .../selftests/cpu-hotplug/cpu-on-off-test.sh        | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-> index bab13dd025a6..0d26b5e3f966 100755
-> --- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-> +++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-> @@ -37,6 +37,10 @@ prerequisite()
->  		exit $ksft_skip
->  	fi
->  
-> +	present_cpus=`cat $SYSFS/devices/system/cpu/present`
-> +	present_max=${present_cpus##*-}
-> +	echo "present_cpus = $present_cpus present_max = $present_max"
-> +
->  	echo -e "\t Cpus in online state: $online_cpus"
->  
->  	offline_cpus=`cat $SYSFS/devices/system/cpu/offline`
-> @@ -151,6 +155,8 @@ online_cpus=0
->  online_max=0
->  offline_cpus=0
->  offline_max=0
-> +present_cpus=0
-> +present_max=0
->  
->  while getopts e:ahp: opt; do
->  	case $opt in
-> @@ -190,9 +196,10 @@ if [ $allcpus -eq 0 ]; then
->  	online_cpu_expect_success $online_max
->  
->  	if [[ $offline_cpus -gt 0 ]]; then
-> -		echo -e "\t offline to online to offline: cpu $offline_max"
-> -		online_cpu_expect_success $offline_max
-> -		offline_cpu_expect_success $offline_max
-> +		echo -e "\t offline to online to offline: cpu $present_max"
-> +		online_cpu_expect_success $present_max
-> +		offline_cpu_expect_success $present_max
-> +		online_cpu $present_max
->  	fi
->  	exit 0
->  else
-> 
+
+Great. It is good for the test patch to go with the other binderfs
+patches.
+
+Acked-by: Shuah Khan <shuah at kernel.org>
+
+thanks,
+-- Shuah
