@@ -1,14 +1,14 @@
 From: gregkh@linuxfoundation.org (Greg Kroah-Hartman)
-Date: Thu, 24 Jan 2019 20:20:13 +0100
-Subject: [PATCH 4.20 067/127] selftests: do not macro-expand failed assertion
+Date: Thu, 24 Jan 2019 20:20:09 +0100
+Subject: [PATCH 4.19 052/106] selftests: do not macro-expand failed assertion
  expressions
-In-Reply-To: <20190124190211.984305387@linuxfoundation.org>
-References: <20190124190211.984305387@linuxfoundation.org>
-Message-ID: <20190124190214.990956512@linuxfoundation.org>
+In-Reply-To: <20190124190206.342411005@linuxfoundation.org>
+References: <20190124190206.342411005@linuxfoundation.org>
+Message-ID: <20190124190209.733631568@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190124192013.XAwT_xfCT_O-A_zZu_3pAakR8TDtQigtF-J2Tr73df4@z>
+Message-ID: <20190124192009.8nxEPH_NmCcuolnEN5c54OJ0FLPspirLP3JVf8fb0Ps@z>
 
-4.20-stable review patch.  If anyone has any objections, please let me know.
+4.19-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
