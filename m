@@ -1,38 +1,251 @@
-From: shuah@kernel.org (shuah)
-Date: Wed, 23 Jan 2019 08:07:53 -0700
-Subject: [PATCH][V2] selftests: cpu-hotplug: fix case where CPUs offline >
- CPUs present
-In-Reply-To: <abb5a36f-e513-e3ba-3286-4cc2026ef580@canonical.com>
-References: <20190110123802.13832-1-colin.king@canonical.com>
- <abb5a36f-e513-e3ba-3286-4cc2026ef580@canonical.com>
-Message-ID: <c18c3293-631d-2deb-794d-b7057ea2c50d@kernel.org>
+From: gregkh@linuxfoundation.org (Greg Kroah-Hartman)
+Date: Thu, 24 Jan 2019 20:20:19 +0100
+Subject: [PATCH 4.14 30/63] selftests: do not macro-expand failed assertion
+ expressions
+In-Reply-To: <20190124190155.176570028@linuxfoundation.org>
+References: <20190124190155.176570028@linuxfoundation.org>
+Message-ID: <20190124190158.517260683@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190123150753.rgqlZUXlCRCzeWDbG-iH_boJuBppKCse-cRSxn2lk64@z>
+Message-ID: <20190124192019.hQuz_4mITllI_As11YubATrSHdG6vXN79IPtEiz1HSM@z>
 
-On 1/23/19 6:25 AM, Colin Ian King wrote:
-> ping?
-> 
-> On 10/01/2019 12:38, Colin King wrote:
->> From: Colin Ian King <colin.king at canonical.com>
->>
->> The cpu-hotplug test assumes that we can offline the maximum CPU as
->> described by /sys/devices/system/cpu/offline.  However, in the case
->> where the number of CPUs exceeds like kernel configuration then
->> the offline count can be greater than the present count and we end
->> up trying to test the offlining of a CPU that is not available to
->> offline.  Fix this by testing the maximum present CPU instead.
->>
->> Also, the test currently offlines the CPU and does not online it,
->> so fix this by onlining the CPU after the test.
->>
->> Fixes: d89dffa976bc ("fault-injection: add selftests for cpu and memory hotplug")
->> Signed-off-by: Colin Ian King <colin.king at canonical.com>
->>
->> ---
->>
->> V2: remove some debug and an empty line
+4.14-stable review patch.  If anyone has any objections, please let me know.
 
-Sorry for the delay. I will take this for 5.0-rc5
+------------------
 
-thanks,
--- Shuah
+[ Upstream commit b708a3cc9600390ccaa2b68a88087dd265154b2b ]
+
+I've stumbled over the current macro-expand behaviour of the test
+harness:
+
+$ gcc -Wall -xc - <<'__EOF__'
+TEST(macro) {
+	int status = 0;
+	ASSERT_TRUE(WIFSIGNALED(status));
+}
+TEST_HARNESS_MAIN
+__EOF__
+$ ./a.out
+[==========] Running 1 tests from 1 test cases.
+[ RUN      ] global.macro
+<stdin>:4:global.macro:Expected 0 (0) != (((signed char) (((status) & 0x7f) + 1) >> 1) > 0) (0)
+global.macro: Test terminated by assertion
+[     FAIL ] global.macro
+[==========] 0 / 1 tests passed.
+[  FAILED  ]
+
+With this change the output of the same test looks much more
+comprehensible:
+
+[==========] Running 1 tests from 1 test cases.
+[ RUN      ] global.macro
+<stdin>:4:global.macro:Expected 0 (0) != WIFSIGNALED(status) (0)
+global.macro: Test terminated by assertion
+[     FAIL ] global.macro
+[==========] 0 / 1 tests passed.
+[  FAILED  ]
+
+The issue is very similar to the bug fixed in glibc assert(3)
+three years ago:
+https://sourceware.org/bugzilla/show_bug.cgi?id=18604
+
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Kees Cook <keescook at chromium.org>
+Cc: Andy Lutomirski <luto at amacapital.net>
+Cc: Will Drewry <wad at chromium.org>
+Cc: linux-kselftest at vger.kernel.org
+Signed-off-by: Dmitry V. Levin <ldv at altlinux.org>
+Acked-by: Kees Cook <keescook at chromium.org>
+Signed-off-by: Shuah Khan <shuah at kernel.org>
+Signed-off-by: Sasha Levin <sashal at kernel.org>
+---
+ tools/testing/selftests/kselftest_harness.h | 42 ++++++++++-----------
+ 1 file changed, 21 insertions(+), 21 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index e81bd28bdd89..8f32d699d6c5 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -330,7 +330,7 @@
+  * ASSERT_EQ(expected, measured): expected == measured
+  */
+ #define ASSERT_EQ(expected, seen) \
+-	__EXPECT(expected, seen, ==, 1)
++	__EXPECT(expected, #expected, seen, #seen, ==, 1)
+ 
+ /**
+  * ASSERT_NE(expected, seen)
+@@ -341,7 +341,7 @@
+  * ASSERT_NE(expected, measured): expected != measured
+  */
+ #define ASSERT_NE(expected, seen) \
+-	__EXPECT(expected, seen, !=, 1)
++	__EXPECT(expected, #expected, seen, #seen, !=, 1)
+ 
+ /**
+  * ASSERT_LT(expected, seen)
+@@ -352,7 +352,7 @@
+  * ASSERT_LT(expected, measured): expected < measured
+  */
+ #define ASSERT_LT(expected, seen) \
+-	__EXPECT(expected, seen, <, 1)
++	__EXPECT(expected, #expected, seen, #seen, <, 1)
+ 
+ /**
+  * ASSERT_LE(expected, seen)
+@@ -363,7 +363,7 @@
+  * ASSERT_LE(expected, measured): expected <= measured
+  */
+ #define ASSERT_LE(expected, seen) \
+-	__EXPECT(expected, seen, <=, 1)
++	__EXPECT(expected, #expected, seen, #seen, <=, 1)
+ 
+ /**
+  * ASSERT_GT(expected, seen)
+@@ -374,7 +374,7 @@
+  * ASSERT_GT(expected, measured): expected > measured
+  */
+ #define ASSERT_GT(expected, seen) \
+-	__EXPECT(expected, seen, >, 1)
++	__EXPECT(expected, #expected, seen, #seen, >, 1)
+ 
+ /**
+  * ASSERT_GE(expected, seen)
+@@ -385,7 +385,7 @@
+  * ASSERT_GE(expected, measured): expected >= measured
+  */
+ #define ASSERT_GE(expected, seen) \
+-	__EXPECT(expected, seen, >=, 1)
++	__EXPECT(expected, #expected, seen, #seen, >=, 1)
+ 
+ /**
+  * ASSERT_NULL(seen)
+@@ -395,7 +395,7 @@
+  * ASSERT_NULL(measured): NULL == measured
+  */
+ #define ASSERT_NULL(seen) \
+-	__EXPECT(NULL, seen, ==, 1)
++	__EXPECT(NULL, "NULL", seen, #seen, ==, 1)
+ 
+ /**
+  * ASSERT_TRUE(seen)
+@@ -405,7 +405,7 @@
+  * ASSERT_TRUE(measured): measured != 0
+  */
+ #define ASSERT_TRUE(seen) \
+-	ASSERT_NE(0, seen)
++	__EXPECT(0, "0", seen, #seen, !=, 1)
+ 
+ /**
+  * ASSERT_FALSE(seen)
+@@ -415,7 +415,7 @@
+  * ASSERT_FALSE(measured): measured == 0
+  */
+ #define ASSERT_FALSE(seen) \
+-	ASSERT_EQ(0, seen)
++	__EXPECT(0, "0", seen, #seen, ==, 1)
+ 
+ /**
+  * ASSERT_STREQ(expected, seen)
+@@ -448,7 +448,7 @@
+  * EXPECT_EQ(expected, measured): expected == measured
+  */
+ #define EXPECT_EQ(expected, seen) \
+-	__EXPECT(expected, seen, ==, 0)
++	__EXPECT(expected, #expected, seen, #seen, ==, 0)
+ 
+ /**
+  * EXPECT_NE(expected, seen)
+@@ -459,7 +459,7 @@
+  * EXPECT_NE(expected, measured): expected != measured
+  */
+ #define EXPECT_NE(expected, seen) \
+-	__EXPECT(expected, seen, !=, 0)
++	__EXPECT(expected, #expected, seen, #seen, !=, 0)
+ 
+ /**
+  * EXPECT_LT(expected, seen)
+@@ -470,7 +470,7 @@
+  * EXPECT_LT(expected, measured): expected < measured
+  */
+ #define EXPECT_LT(expected, seen) \
+-	__EXPECT(expected, seen, <, 0)
++	__EXPECT(expected, #expected, seen, #seen, <, 0)
+ 
+ /**
+  * EXPECT_LE(expected, seen)
+@@ -481,7 +481,7 @@
+  * EXPECT_LE(expected, measured): expected <= measured
+  */
+ #define EXPECT_LE(expected, seen) \
+-	__EXPECT(expected, seen, <=, 0)
++	__EXPECT(expected, #expected, seen, #seen, <=, 0)
+ 
+ /**
+  * EXPECT_GT(expected, seen)
+@@ -492,7 +492,7 @@
+  * EXPECT_GT(expected, measured): expected > measured
+  */
+ #define EXPECT_GT(expected, seen) \
+-	__EXPECT(expected, seen, >, 0)
++	__EXPECT(expected, #expected, seen, #seen, >, 0)
+ 
+ /**
+  * EXPECT_GE(expected, seen)
+@@ -503,7 +503,7 @@
+  * EXPECT_GE(expected, measured): expected >= measured
+  */
+ #define EXPECT_GE(expected, seen) \
+-	__EXPECT(expected, seen, >=, 0)
++	__EXPECT(expected, #expected, seen, #seen, >=, 0)
+ 
+ /**
+  * EXPECT_NULL(seen)
+@@ -513,7 +513,7 @@
+  * EXPECT_NULL(measured): NULL == measured
+  */
+ #define EXPECT_NULL(seen) \
+-	__EXPECT(NULL, seen, ==, 0)
++	__EXPECT(NULL, "NULL", seen, #seen, ==, 0)
+ 
+ /**
+  * EXPECT_TRUE(seen)
+@@ -523,7 +523,7 @@
+  * EXPECT_TRUE(measured): 0 != measured
+  */
+ #define EXPECT_TRUE(seen) \
+-	EXPECT_NE(0, seen)
++	__EXPECT(0, "0", seen, #seen, !=, 0)
+ 
+ /**
+  * EXPECT_FALSE(seen)
+@@ -533,7 +533,7 @@
+  * EXPECT_FALSE(measured): 0 == measured
+  */
+ #define EXPECT_FALSE(seen) \
+-	EXPECT_EQ(0, seen)
++	__EXPECT(0, "0", seen, #seen, ==, 0)
+ 
+ /**
+  * EXPECT_STREQ(expected, seen)
+@@ -573,7 +573,7 @@
+ 	if (_metadata->passed && _metadata->step < 255) \
+ 		_metadata->step++;
+ 
+-#define __EXPECT(_expected, _seen, _t, _assert) do { \
++#define __EXPECT(_expected, _expected_str, _seen, _seen_str, _t, _assert) do { \
+ 	/* Avoid multiple evaluation of the cases */ \
+ 	__typeof__(_expected) __exp = (_expected); \
+ 	__typeof__(_seen) __seen = (_seen); \
+@@ -582,8 +582,8 @@
+ 		unsigned long long __exp_print = (uintptr_t)__exp; \
+ 		unsigned long long __seen_print = (uintptr_t)__seen; \
+ 		__TH_LOG("Expected %s (%llu) %s %s (%llu)", \
+-			 #_expected, __exp_print, #_t, \
+-			 #_seen, __seen_print); \
++			 _expected_str, __exp_print, #_t, \
++			 _seen_str, __seen_print); \
+ 		_metadata->passed = 0; \
+ 		/* Ensure the optional handler is triggered */ \
+ 		_metadata->trigger = 1; \
+-- 
+2.19.1
