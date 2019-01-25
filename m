@@ -1,81 +1,61 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Sat, 26 Jan 2019 06:43:47 +1300
-Subject: [PATCH][V2] selftests/seccomp: fix test failure on s390x because
- of
-In-Reply-To: <20190125145526.7106-1-colin.king@canonical.com>
-References: <20190125145526.7106-1-colin.king@canonical.com>
-Message-ID:
- <CAGXu5jLaXLNq_EGffGkadXAONYmqmg7ypDhf7MGN-X++5TJXDQ@mail.gmail.com>
+From: pbonzini@redhat.com (Paolo Bonzini)
+Date: Fri, 25 Jan 2019 18:50:59 +0100
+Subject: [PATCH v2] kvm: selftests: Fix region overlap check in kvm_util
+In-Reply-To: <20190116174115.95225-1-bgardon@google.com>
+References: <20190116174115.95225-1-bgardon@google.com>
+Message-ID: <db488873-d68b-3fe7-3931-a40e1663506d@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190125174347.BNN9ZYZtE4KkVpFHNZpCo6-CuhS1rUQNnLKHbaKk8Es@z>
+Message-ID: <20190125175059.aqmPUkKep1FeERlhEfj2SVl5fEjwZtcDDDgosOzLnAE@z>
 
-On Sat, Jan 26, 2019@3:55 AM Colin King <colin.king@canonical.com> wrote:
->
-> From: Colin Ian King <colin.king at canonical.com>
->
-> The error return being placed in regs.SYSCALL_RET is currently positive and
-> this is causing test failures on s390x. The return value should be -EPERM
-> rather than EPERM otherwise a failure is not detected and errno is not set
-> accordingly on s390x.
-
-Ah, hm, interesting. Yes, the selftest was accidentally encoding the
-wrong details. However, I think the test for the result is a bit more
-broken. EPERM is 1, so there isn't even a sanity check that the result
-is getting passed down (the -1 from syscall won't tell us if the errno
-actually landed too, so we need to check that with something that
-isn't EPERM).
-
-Let me send a patch to test on s390...
-
--Kees
-
-
->
-> Fixes: a33b2d0359a0 ("selftests/seccomp: Add tests for basic ptrace actions")
-> Signed-off-by: Colin Ian King <colin.king at canonical.com>
+On 16/01/19 18:41, Ben Gardon wrote:
+> Fix a call to userspace_mem_region_find to conform to its spec of
+> taking an inclusive, inclusive range. It was previously being called
+> with an inclusive, exclusive range. Also remove a redundant region bounds
+> check in vm_userspace_mem_region_add. Region overlap checking is already
+> performed by the call to userspace_mem_region_find.
+> 
+> Tested: Compiled tools/testing/selftests/kvm with -static
+> 	Ran all resulting test binaries on an Intel Haswell test machine
+> 	All tests passed
+> 
+> Signed-off-by: Ben Gardon <bgardon at google.com>
+> Reviewed-by: Jim Mattson <jmattson at google.com>
 > ---
->
-> V2: remove misplaced Content-Type and Content-Transfer-Encoding fields
->
-> ---
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index 496a9a8c773a..957344884360 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -1706,7 +1706,7 @@ void change_syscall(struct __test_metadata *_metadata,
->  #ifdef SYSCALL_NUM_RET_SHARE_REG
->                 TH_LOG("Can't modify syscall return on this architecture");
->  #else
-> -               regs.SYSCALL_RET = EPERM;
-> +               regs.SYSCALL_RET = -EPERM;
->  #endif
->
->  #ifdef HAVE_GETREGS
-> @@ -1850,7 +1850,7 @@ TEST_F(TRACE_syscall, ptrace_syscall_dropped)
->                                            true);
->
->         /* Tracer should skip the open syscall, resulting in EPERM. */
-> -       EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_openat));
-> +       EXPECT_SYSCALL_RETURN(-EPERM, syscall(__NR_openat));
->  }
->
->  TEST_F(TRACE_syscall, syscall_allowed)
-> @@ -1894,7 +1894,7 @@ TEST_F(TRACE_syscall, syscall_dropped)
->         ASSERT_EQ(0, ret);
->
->         /* gettid has been skipped and an altered return value stored. */
-> -       EXPECT_SYSCALL_RETURN(EPERM, syscall(__NR_gettid));
-> +       EXPECT_SYSCALL_RETURN(-EPERM, syscall(__NR_gettid));
->         EXPECT_NE(self->mytid, syscall(__NR_gettid));
->  }
->
-> --
-> 2.19.1
->
+>  tools/testing/selftests/kvm/lib/kvm_util.c | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 23022e9d32eb81..b52cfdefecbfe9 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -571,7 +571,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>  	 * already exist.
+>  	 */
+>  	region = (struct userspace_mem_region *) userspace_mem_region_find(
+> -		vm, guest_paddr, guest_paddr + npages * vm->page_size);
+> +		vm, guest_paddr, (guest_paddr + npages * vm->page_size) - 1);
+>  	if (region != NULL)
+>  		TEST_ASSERT(false, "overlapping userspace_mem_region already "
+>  			"exists\n"
+> @@ -587,15 +587,10 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>  		region = region->next) {
+>  		if (region->region.slot == slot)
+>  			break;
+> -		if ((guest_paddr <= (region->region.guest_phys_addr
+> -				+ region->region.memory_size))
+> -			&& ((guest_paddr + npages * vm->page_size)
+> -				>= region->region.guest_phys_addr))
+> -			break;
+>  	}
+>  	if (region != NULL)
+>  		TEST_ASSERT(false, "A mem region with the requested slot "
+> -			"or overlapping physical memory range already exists.\n"
+> +			"already exists.\n"
+>  			"  requested slot: %u paddr: 0x%lx npages: 0x%lx\n"
+>  			"  existing slot: %u paddr: 0x%lx size: 0x%lx",
+>  			slot, guest_paddr, npages,
+> 
 
+Queued, thanks.
 
--- 
-Kees Cook
+Paolo
