@@ -1,11 +1,9 @@
 From: colin.king@canonical.com (Colin King)
-Date: Fri, 25 Jan 2019 14:54:25 +0000
-Subject: [PATCH] selftests/seccomp: fix test failure on s390x because of
- positive error return Content-Type: text/plain;
- charset="utf-8" Content-Transfer-Encoding: 8bit
-Message-ID: <20190125145425.7039-1-colin.king@canonical.com>
+Date: Fri, 25 Jan 2019 14:55:26 +0000
+Subject: [PATCH][V2] selftests/seccomp: fix test failure on s390x because of
+Message-ID: <20190125145526.7106-1-colin.king@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190125145425.SoHLrbkMusTB_VyjhJ2bNT3JLW8Qxmfuh-y2DD2rLMo@z>
+Message-ID: <20190125145526.IZRLU7lx_1wTZ6NayuucMyAzp8uGqlgY7fXB8UG4wFk@z>
 
 From: Colin Ian King <colin.king@canonical.com>
 
@@ -16,6 +14,10 @@ accordingly on s390x.
 
 Fixes: a33b2d0359a0 ("selftests/seccomp: Add tests for basic ptrace actions")
 Signed-off-by: Colin Ian King <colin.king at canonical.com>
+---
+
+V2: remove misplaced Content-Type and Content-Transfer-Encoding fields
+
 ---
  tools/testing/selftests/seccomp/seccomp_bpf.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
