@@ -1,71 +1,55 @@
-From: liu.song.a23 at gmail.com (Song Liu)
-Date: Fri, 25 Jan 2019 15:01:02 -0800
-Subject: [PATCH -next] selftests: bpf: remove duplicated include
-In-Reply-To: <20190125024634.14580-1-yuehaibing@huawei.com>
-References: <20190125024634.14580-1-yuehaibing@huawei.com>
-Message-ID: <CAPhsuW7_ESxRbM5amk02VmS4=vUORJvD_R3m41=_Cc-kUZQGqw@mail.gmail.com>
+From: keescook at chromium.org (Kees Cook)
+Date: Sun, 27 Jan 2019 01:42:51 -0800
+Subject: [PATCH] selftests/harness: Update named initializer syntax
+Message-ID: <20190127094251.GA9391@beast>
 
-On Thu, Jan 24, 2019 at 6:49 PM YueHaibing <yuehaibing at huawei.com> wrote:
->
-> Remove duplicated include.
->
-> Signed-off-by: YueHaibing <yuehaibing at huawei.com>
+The harness was still using old-style GNU named initializer syntax.
+Fix this so Clang will stop warning:
 
-Acked-by: Song Liu <songliubraving at fb.com>
+seccomp_bpf.c:2924:1: warning: use of GNU old-style field designator extension
+      [-Wgnu-designator]
+./../kselftest_harness.h:147:25: note: expanded from macro 'TEST'
+                        ^
+./../kselftest_harness.h:172:5: note: expanded from macro '__TEST_IMPL'
+                  fn: &test_name, termsig: _signal }; \
+                  ^
 
-Thanks!
+Signed-off-by: Kees Cook <keescook at chromium.org>
+---
+ tools/testing/selftests/kselftest_harness.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-> ---
->  tools/testing/selftests/bpf/test_flow_dissector.c | 2 --
->  tools/testing/selftests/bpf/test_maps.c           | 1 -
->  tools/testing/selftests/bpf/test_sockmap.c        | 1 -
->  3 files changed, 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/test_flow_dissector.c b/tools/testing/selftests/bpf/test_flow_dissector.c
-> index 12b784a..01f0c63 100644
-> --- a/tools/testing/selftests/bpf/test_flow_dissector.c
-> +++ b/tools/testing/selftests/bpf/test_flow_dissector.c
-> @@ -16,7 +16,6 @@
->  #include <errno.h>
->  #include <linux/if_packet.h>
->  #include <linux/if_ether.h>
-> -#include <linux/if_packet.h>
->  #include <linux/ipv6.h>
->  #include <netinet/ip.h>
->  #include <netinet/in.h>
-> @@ -25,7 +24,6 @@
->  #include <stdbool.h>
->  #include <stdlib.h>
->  #include <stdio.h>
-> -#include <stdlib.h>
->  #include <string.h>
->  #include <sys/ioctl.h>
->  #include <sys/socket.h>
-> diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-> index e2b9eee..1dfef77 100644
-> --- a/tools/testing/selftests/bpf/test_maps.c
-> +++ b/tools/testing/selftests/bpf/test_maps.c
-> @@ -633,7 +633,6 @@ static void test_stackmap(int task, void *data)
->         close(fd);
->  }
->
-> -#include <sys/socket.h>
->  #include <sys/ioctl.h>
->  #include <arpa/inet.h>
->  #include <sys/select.h>
-> diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-> index e85a771..3845144 100644
-> --- a/tools/testing/selftests/bpf/test_sockmap.c
-> +++ b/tools/testing/selftests/bpf/test_sockmap.c
-> @@ -10,7 +10,6 @@
->  #include <unistd.h>
->  #include <string.h>
->  #include <errno.h>
-> -#include <sys/ioctl.h>
->  #include <stdbool.h>
->  #include <signal.h>
->  #include <fcntl.h>
-> --
-> 2.7.0
->
->
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 76d654ef3234..2d90c98eeb67 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -168,8 +168,8 @@
+ #define __TEST_IMPL(test_name, _signal) \
+ 	static void test_name(struct __test_metadata *_metadata); \
+ 	static struct __test_metadata _##test_name##_object = \
+-		{ name: "global." #test_name, \
+-		  fn: &test_name, termsig: _signal }; \
++		{ .name = "global." #test_name, \
++		  .fn = &test_name, .termsig = _signal }; \
+ 	static void __attribute__((constructor)) _register_##test_name(void) \
+ 	{ \
+ 		__register_test(&_##test_name##_object); \
+@@ -304,9 +304,9 @@
+ 	} \
+ 	static struct __test_metadata \
+ 		      _##fixture_name##_##test_name##_object = { \
+-		name: #fixture_name "." #test_name, \
+-		fn: &wrapper_##fixture_name##_##test_name, \
+-		termsig: signal, \
++		.name = #fixture_name "." #test_name, \
++		.fn = &wrapper_##fixture_name##_##test_name, \
++		.termsig = signal, \
+ 	 }; \
+ 	static void __attribute__((constructor)) \
+ 			_register_##fixture_name##_##test_name(void) \
+-- 
+2.17.1
+
+
+-- 
+Kees Cook
