@@ -1,64 +1,66 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Mon, 28 Jan 2019 10:57:32 -0500
-Subject: [PATCH AUTOSEL 4.19 146/258] selftests/bpf: use __bpf_constant_htons
- in test_prog.c
-In-Reply-To: <20190128155924.51521-1-sashal@kernel.org>
-References: <20190128155924.51521-1-sashal@kernel.org>
-Message-ID: <20190128155924.51521-146-sashal@kernel.org>
+Date: Mon, 28 Jan 2019 10:42:56 -0500
+Subject: [PATCH AUTOSEL 4.20 259/304] selftests: kvm: report failed stage when
+ exit reason is unexpected
+In-Reply-To: <20190128154341.47195-1-sashal@kernel.org>
+References: <20190128154341.47195-1-sashal@kernel.org>
+Message-ID: <20190128154341.47195-259-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190128155732.t1bwFQPzzH7yESpBPfzdBNL66U7lyl80tPFg7mv-TKc@z>
+Message-ID: <20190128154256.zhs85SyDSg9q-5SjJVqhSVqW5qgd1-j16odSkhJADtk@z>
 
-From: Stanislav Fomichev <sdf@google.com>
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-[ Upstream commit a0517a0f7ef23550b4484c37e2b9c2d32abebf64 ]
+[ Upstream commit b85c32dd27495075380350fcd5d614a6b45311b8 ]
 
-For some reason, my older GCC (< 4.8) isn't smart enough to optimize the
-!__builtin_constant_p() branch in bpf_htons, I see:
-  error: implicit declaration of function '__builtin_bswap16'
+When we get a report like
 
-Let's use __bpf_constant_htons as suggested by Daniel Borkmann.
+==== Test Assertion Failure ====
+  x86_64/state_test.c:157: run->exit_reason == KVM_EXIT_IO
+  pid=955 tid=955 - Success
+     1	0x0000000000401350: main at state_test.c:154
+     2	0x00007fc31c9e9412: ?? ??:0
+     3	0x000000000040159d: _start at ??:?
+  Unexpected exit reason: 8 (SHUTDOWN),
 
-I tried to use simple htons, but it produces the following:
-  test_progs.c:54:17: error: braced-group within expression allowed only
-  inside a function
-    .eth.h_proto = htons(ETH_P_IP),
+it is not obvious which particular stage failed. Add the info.
 
-Signed-off-by: Stanislav Fomichev <sdf at google.com>
-Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
-Signed-off-by: Alexei Starovoitov <ast at kernel.org>
+Signed-off-by: Vitaly Kuznetsov <vkuznets at redhat.com>
+Signed-off-by: Radim Krčmář <rkrcmar at redhat.com>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/bpf/test_progs.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/kvm/x86_64/evmcs_test.c | 4 ++--
+ tools/testing/selftests/kvm/x86_64/state_test.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 0ef68204c84b..d029cad08cbd 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -51,10 +51,10 @@ static struct {
- 	struct iphdr iph;
- 	struct tcphdr tcp;
- } __packed pkt_v4 = {
--	.eth.h_proto = bpf_htons(ETH_P_IP),
-+	.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
- 	.iph.ihl = 5,
- 	.iph.protocol = 6,
--	.iph.tot_len = bpf_htons(MAGIC_BYTES),
-+	.iph.tot_len = __bpf_constant_htons(MAGIC_BYTES),
- 	.tcp.urg_ptr = 123,
- };
+diff --git a/tools/testing/selftests/kvm/x86_64/evmcs_test.c b/tools/testing/selftests/kvm/x86_64/evmcs_test.c
+index 92c2cfd1b182..ea3c73e8f4f6 100644
+--- a/tools/testing/selftests/kvm/x86_64/evmcs_test.c
++++ b/tools/testing/selftests/kvm/x86_64/evmcs_test.c
+@@ -113,8 +113,8 @@ int main(int argc, char *argv[])
+ 	for (stage = 1;; stage++) {
+ 		_vcpu_run(vm, VCPU_ID);
+ 		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
+-			    "Unexpected exit reason: %u (%s),\n",
+-			    run->exit_reason,
++			    "Stage %d: unexpected exit reason: %u (%s),\n",
++			    stage, run->exit_reason,
+ 			    exit_reason_str(run->exit_reason));
  
-@@ -64,9 +64,9 @@ static struct {
- 	struct ipv6hdr iph;
- 	struct tcphdr tcp;
- } __packed pkt_v6 = {
--	.eth.h_proto = bpf_htons(ETH_P_IPV6),
-+	.eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
- 	.iph.nexthdr = 6,
--	.iph.payload_len = bpf_htons(MAGIC_BYTES),
-+	.iph.payload_len = __bpf_constant_htons(MAGIC_BYTES),
- 	.tcp.urg_ptr = 123,
- };
+ 		memset(&regs1, 0, sizeof(regs1));
+diff --git a/tools/testing/selftests/kvm/x86_64/state_test.c b/tools/testing/selftests/kvm/x86_64/state_test.c
+index 03da41f0f736..4b3f556265f1 100644
+--- a/tools/testing/selftests/kvm/x86_64/state_test.c
++++ b/tools/testing/selftests/kvm/x86_64/state_test.c
+@@ -152,8 +152,8 @@ int main(int argc, char *argv[])
+ 	for (stage = 1;; stage++) {
+ 		_vcpu_run(vm, VCPU_ID);
+ 		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
+-			    "Unexpected exit reason: %u (%s),\n",
+-			    run->exit_reason,
++			    "Stage %d: unexpected exit reason: %u (%s),\n",
++			    stage, run->exit_reason,
+ 			    exit_reason_str(run->exit_reason));
  
+ 		memset(&regs1, 0, sizeof(regs1));
 -- 
 2.19.1
