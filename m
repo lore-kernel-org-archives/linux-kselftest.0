@@ -1,21 +1,30 @@
-From: keescook at chromium.org (Kees Cook)
-Date: Mon, 28 Jan 2019 20:58:36 +1300
-Subject: [PATCH] selftests/seccomp: Actually sleep for 1/10th second
-In-Reply-To: <CAKwvOdkvV+1qVUTz7G+nfftdzUfTGL+RnQ_8rA_RAhRrpvRLBA@mail.gmail.com>
-References: <20190127094357.GA9436@beast>
- <CAKwvOdnUzTXSBPayebsy8pJGjJjPS3oi3qE8nRPtAhtv_PJ4xw@mail.gmail.com>
- <CAGXu5jKDdutht_+hVhKan6cNZ+bS7e0gom5yXmcMgKE9KuZwYg@mail.gmail.com>
- <CAKwvOdkvV+1qVUTz7G+nfftdzUfTGL+RnQ_8rA_RAhRrpvRLBA@mail.gmail.com>
-Message-ID: <CAGXu5jL8GHE3XLLo36Ldej3Z6ZHg+kN5Jfq-Pepvu3hzNsf52A@mail.gmail.com>
+From: shuah at kernel.org (shuah)
+Date: Mon, 28 Jan 2019 08:01:15 -0700
+Subject: [PATCH 1/4] selftests: lib: allow to override CC in the top-level
+ Makefile
+In-Reply-To: <CAEUSe7_eYmMSovO4JAabh+83CtY2L8eeMoCVKKS5P-fs7zVhjg@mail.gmail.com>
+References: <20190116174320.14938-1-daniel.diaz@linaro.org>
+ <7d75f420-d624-d53d-4fa1-3827c90fa608@kernel.org>
+ <CAEUSe7_eYmMSovO4JAabh+83CtY2L8eeMoCVKKS5P-fs7zVhjg@mail.gmail.com>
+Message-ID: <a68c3fdd-081a-74ea-8d98-30eaf3d70446@kernel.org>
 
-On Mon, Jan 28, 2019 at 8:37 AM Nick Desaulniers
-<ndesaulniers at google.com> wrote:
-> So this test has been broken? If so, do you know for how long? Or
-> who's monitoring them?  Either way, thanks for noticing and fixing.
+Hi Daniel,
 
-No, it's been working fine. It just consumes 100% cpu during the
-spin-wait. The intention was to sleep for a little bit to avoid a
-tight loop. It was just resource-inefficient.
+On 1/18/19 10:54 AM, Daniel Díaz wrote:
+> Hello!
+> 
+> On Wed, 16 Jan 2019 at 15:56, shuah <shuah at kernel.org> wrote:
+>>
+>> On 1/16/19 10:43 AM, Daniel Díaz wrote:
+>>> From: Fathi Boudra <fathi.boudra at linaro.org>
+>>>
+>>> Relax CC assignment to allow to override CC in the top-level Makefile.
+>>>
+>>> Signed-off-by: Denys Dmytriyenko <denys at ti.com>
 
--- 
-Kees Cook
+Author signed-off missing on this patch. I am dropping this patch
+from rc5 for now. Please fix it resend the patch. In the future,
+I would like to see that author sends the patch.
+
+thanks,
+-- Shuah
