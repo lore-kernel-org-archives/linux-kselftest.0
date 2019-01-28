@@ -1,30 +1,62 @@
-From: shuah at kernel.org (shuah)
-Date: Mon, 28 Jan 2019 08:01:15 -0700
-Subject: [PATCH 1/4] selftests: lib: allow to override CC in the top-level
- Makefile
-In-Reply-To: <CAEUSe7_eYmMSovO4JAabh+83CtY2L8eeMoCVKKS5P-fs7zVhjg@mail.gmail.com>
-References: <20190116174320.14938-1-daniel.diaz@linaro.org>
- <7d75f420-d624-d53d-4fa1-3827c90fa608@kernel.org>
- <CAEUSe7_eYmMSovO4JAabh+83CtY2L8eeMoCVKKS5P-fs7zVhjg@mail.gmail.com>
-Message-ID: <a68c3fdd-081a-74ea-8d98-30eaf3d70446@kernel.org>
+From: sashal at kernel.org (Sasha Levin)
+Date: Mon, 28 Jan 2019 10:41:29 -0500
+Subject: [PATCH AUTOSEL 4.20 172/304] selftests/bpf: use __bpf_constant_htons
+ in test_prog.c
+In-Reply-To: <20190128154341.47195-1-sashal@kernel.org>
+References: <20190128154341.47195-1-sashal@kernel.org>
+Message-ID: <20190128154341.47195-172-sashal@kernel.org>
 
-Hi Daniel,
+From: Stanislav Fomichev <sdf at google.com>
 
-On 1/18/19 10:54 AM, Daniel Díaz wrote:
-> Hello!
-> 
-> On Wed, 16 Jan 2019 at 15:56, shuah <shuah at kernel.org> wrote:
->>
->> On 1/16/19 10:43 AM, Daniel Díaz wrote:
->>> From: Fathi Boudra <fathi.boudra at linaro.org>
->>>
->>> Relax CC assignment to allow to override CC in the top-level Makefile.
->>>
->>> Signed-off-by: Denys Dmytriyenko <denys at ti.com>
+[ Upstream commit a0517a0f7ef23550b4484c37e2b9c2d32abebf64 ]
 
-Author signed-off missing on this patch. I am dropping this patch
-from rc5 for now. Please fix it resend the patch. In the future,
-I would like to see that author sends the patch.
+For some reason, my older GCC (< 4.8) isn't smart enough to optimize the
+!__builtin_constant_p() branch in bpf_htons, I see:
+  error: implicit declaration of function '__builtin_bswap16'
 
-thanks,
--- Shuah
+Let's use __bpf_constant_htons as suggested by Daniel Borkmann.
+
+I tried to use simple htons, but it produces the following:
+  test_progs.c:54:17: error: braced-group within expression allowed only
+  inside a function
+    .eth.h_proto = htons(ETH_P_IP),
+
+Signed-off-by: Stanislav Fomichev <sdf at google.com>
+Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
+Signed-off-by: Alexei Starovoitov <ast at kernel.org>
+Signed-off-by: Sasha Levin <sashal at kernel.org>
+---
+ tools/testing/selftests/bpf/test_progs.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 2d3c04f45530..6ac7232b0fde 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -51,10 +51,10 @@ static struct {
+ 	struct iphdr iph;
+ 	struct tcphdr tcp;
+ } __packed pkt_v4 = {
+-	.eth.h_proto = bpf_htons(ETH_P_IP),
++	.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
+ 	.iph.ihl = 5,
+ 	.iph.protocol = 6,
+-	.iph.tot_len = bpf_htons(MAGIC_BYTES),
++	.iph.tot_len = __bpf_constant_htons(MAGIC_BYTES),
+ 	.tcp.urg_ptr = 123,
+ };
+ 
+@@ -64,9 +64,9 @@ static struct {
+ 	struct ipv6hdr iph;
+ 	struct tcphdr tcp;
+ } __packed pkt_v6 = {
+-	.eth.h_proto = bpf_htons(ETH_P_IPV6),
++	.eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
+ 	.iph.nexthdr = 6,
+-	.iph.payload_len = bpf_htons(MAGIC_BYTES),
++	.iph.payload_len = __bpf_constant_htons(MAGIC_BYTES),
+ 	.tcp.urg_ptr = 123,
+ };
+ 
+-- 
+2.19.1
