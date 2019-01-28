@@ -1,57 +1,64 @@
-From: daniel.diaz@linaro.org (=?UTF-8?B?RGFuaWVsIETDrWF6?=)
-Date: Mon, 28 Jan 2019 11:01:33 -0600
-Subject: [PATCH 1/4] selftests: lib: allow to override CC in the top-level
- Makefile
-In-Reply-To: <4a5fc384-ee96-54ba-02f5-fc5ab7c79c47@kernel.org>
-References: <20190116174320.14938-1-daniel.diaz@linaro.org>
- <7d75f420-d624-d53d-4fa1-3827c90fa608@kernel.org>
- <CAEUSe7_eYmMSovO4JAabh+83CtY2L8eeMoCVKKS5P-fs7zVhjg@mail.gmail.com>
- <a68c3fdd-081a-74ea-8d98-30eaf3d70446@kernel.org>
- <20190128154242.GB15002@beryl>
- <4a5fc384-ee96-54ba-02f5-fc5ab7c79c47@kernel.org>
-Message-ID:
- <CAEUSe799jd1vpUUfzpMMs9HXNUPpB1Jy5w1hZBd7f5CRMqLygw@mail.gmail.com>
+From: sashal@kernel.org (Sasha Levin)
+Date: Mon, 28 Jan 2019 10:57:32 -0500
+Subject: [PATCH AUTOSEL 4.19 146/258] selftests/bpf: use __bpf_constant_htons
+ in test_prog.c
+In-Reply-To: <20190128155924.51521-1-sashal@kernel.org>
+References: <20190128155924.51521-1-sashal@kernel.org>
+Message-ID: <20190128155924.51521-146-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190128170133.7WuVnuH3-xTTKn0PzxDP2geYG-nIWF3MQHSIVe3KyWQ@z>
+Message-ID: <20190128155732.t1bwFQPzzH7yESpBPfzdBNL66U7lyl80tPFg7mv-TKc@z>
 
-Hello!
+From: Stanislav Fomichev <sdf@google.com>
 
-On Mon, 28 Jan 2019@10:28, shuah <shuah@kernel.org> wrote:
-> On 1/28/19 8:42 AM, Denys Dmytriyenko wrote:
-> > On Mon, Jan 28, 2019@08:01:15AM -0700, shuah wrote:
-> >> Hi Daniel,
-> >>
-> >> On 1/18/19 10:54 AM, Daniel Díaz wrote:
-> >>> Hello!
-> >>>
-> >>> On Wed, 16 Jan 2019@15:56, shuah <shuah@kernel.org> wrote:
-> >>>>
-> >>>> On 1/16/19 10:43 AM, Daniel Díaz wrote:
-> >>>>> From: Fathi Boudra <fathi.boudra at linaro.org>
->
-> This is the problem. It says, it came from Fathi Boudra
-> <fathi.boudra at linaro.org>
+[ Upstream commit a0517a0f7ef23550b4484c37e2b9c2d32abebf64 ]
 
-Denys, apologies for sending this patch as Fathi's. In our Git
-repository [1] he's marked as author, probably as it got copied from
-repo to repo.
+For some reason, my older GCC (< 4.8) isn't smart enough to optimize the
+!__builtin_constant_p() branch in bpf_htons, I see:
+  error: implicit declaration of function '__builtin_bswap16'
 
-Would you mind sending this patch yourself?
+Let's use __bpf_constant_htons as suggested by Daniel Borkmann.
 
-Thanks and greetings!
+I tried to use simple htons, but it produces the following:
+  test_progs.c:54:17: error: braced-group within expression allowed only
+  inside a function
+    .eth.h_proto = htons(ETH_P_IP),
 
-Daniel Díaz
-daniel.diaz at linaro.org
+Signed-off-by: Stanislav Fomichev <sdf at google.com>
+Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
+Signed-off-by: Alexei Starovoitov <ast at kernel.org>
+Signed-off-by: Sasha Levin <sashal at kernel.org>
+---
+ tools/testing/selftests/bpf/test_progs.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-[1] https://github.com/96boards/meta-rpb/blob/master/recipes-overlayed/kselftests/files/0001-selftests-lib-allow-to-override-CC-in-the-top-level-Makefile.patch
-
-
-> >>>>> Relax CC assignment to allow to override CC in the top-level Makefile.
-> >>>>>
-> >>>>> Signed-off-by: Denys Dmytriyenko <denys at ti.com>
-> >
-> > ^^^ I am the original author of the patch and this is my signed-off line.
-> >
->
-> thanks,
-> -- Shuah
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 0ef68204c84b..d029cad08cbd 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -51,10 +51,10 @@ static struct {
+ 	struct iphdr iph;
+ 	struct tcphdr tcp;
+ } __packed pkt_v4 = {
+-	.eth.h_proto = bpf_htons(ETH_P_IP),
++	.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
+ 	.iph.ihl = 5,
+ 	.iph.protocol = 6,
+-	.iph.tot_len = bpf_htons(MAGIC_BYTES),
++	.iph.tot_len = __bpf_constant_htons(MAGIC_BYTES),
+ 	.tcp.urg_ptr = 123,
+ };
+ 
+@@ -64,9 +64,9 @@ static struct {
+ 	struct ipv6hdr iph;
+ 	struct tcphdr tcp;
+ } __packed pkt_v6 = {
+-	.eth.h_proto = bpf_htons(ETH_P_IPV6),
++	.eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
+ 	.iph.nexthdr = 6,
+-	.iph.payload_len = bpf_htons(MAGIC_BYTES),
++	.iph.payload_len = __bpf_constant_htons(MAGIC_BYTES),
+ 	.tcp.urg_ptr = 123,
+ };
+ 
+-- 
+2.19.1
