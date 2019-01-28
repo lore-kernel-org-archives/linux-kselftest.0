@@ -1,64 +1,85 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Mon, 28 Jan 2019 10:42:56 -0500
-Subject: [PATCH AUTOSEL 4.20 259/304] selftests: kvm: report failed stage when
- exit reason is unexpected
+Date: Mon, 28 Jan 2019 10:41:33 -0500
+Subject: [PATCH AUTOSEL 4.20 176/304] fix dma-buf/udmabuf selftest
 In-Reply-To: <20190128154341.47195-1-sashal@kernel.org>
 References: <20190128154341.47195-1-sashal@kernel.org>
-Message-ID: <20190128154341.47195-259-sashal@kernel.org>
+Message-ID: <20190128154341.47195-176-sashal@kernel.org>
 
-From: Vitaly Kuznetsov <vkuznets at redhat.com>
+From: Tom Murphy <murphyt7 at tcd.ie>
 
-[ Upstream commit b85c32dd27495075380350fcd5d614a6b45311b8 ]
+[ Upstream commit 6edf2e3710f4ef2555ad7a2681dbeb4a69092b2d ]
 
-When we get a report like
+This patch fixes the udmabuf selftest. Currently the selftest is broken.
+I fixed the selftest by setting the F_SEAL_SHRINK seal on the memfd
+file descriptor which is required by udmabuf and added the test to
+the selftest Makefile.
 
-==== Test Assertion Failure ====
-  x86_64/state_test.c:157: run->exit_reason == KVM_EXIT_IO
-  pid=955 tid=955 - Success
-     1	0x0000000000401350: main at state_test.c:154
-     2	0x00007fc31c9e9412: ?? ??:0
-     3	0x000000000040159d: _start at ??:?
-  Unexpected exit reason: 8 (SHUTDOWN),
-
-it is not obvious which particular stage failed. Add the info.
-
-Signed-off-by: Vitaly Kuznetsov <vkuznets at redhat.com>
-Signed-off-by: Radim Krčmář <rkrcmar at redhat.com>
+Signed-off-by: Tom Murphy <murphyt7 at tcd.ie>
+Reviewed-by: Gerd Hoffmann <kraxel at redhat.com>
+Signed-off-by: Shuah Khan <shuah at kernel.org>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/kvm/x86_64/evmcs_test.c | 4 ++--
- tools/testing/selftests/kvm/x86_64/state_test.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/Makefile                  |  1 +
+ tools/testing/selftests/drivers/dma-buf/Makefile  |  2 ++
+ tools/testing/selftests/drivers/dma-buf/udmabuf.c | 11 +++++++++--
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/evmcs_test.c b/tools/testing/selftests/kvm/x86_64/evmcs_test.c
-index 92c2cfd1b182..ea3c73e8f4f6 100644
---- a/tools/testing/selftests/kvm/x86_64/evmcs_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/evmcs_test.c
-@@ -113,8 +113,8 @@ int main(int argc, char *argv[])
- 	for (stage = 1;; stage++) {
- 		_vcpu_run(vm, VCPU_ID);
- 		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
--			    "Unexpected exit reason: %u (%s),\n",
--			    run->exit_reason,
-+			    "Stage %d: unexpected exit reason: %u (%s),\n",
-+			    stage, run->exit_reason,
- 			    exit_reason_str(run->exit_reason));
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index f0017c831e57..a43a07a09a98 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -6,6 +6,7 @@ TARGETS += capabilities
+ TARGETS += cgroup
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
++TARGETS += drivers/dma-buf
+ TARGETS += efivarfs
+ TARGETS += exec
+ TARGETS += filesystems
+diff --git a/tools/testing/selftests/drivers/dma-buf/Makefile b/tools/testing/selftests/drivers/dma-buf/Makefile
+index 4154c3d7aa58..f22c3f7cf612 100644
+--- a/tools/testing/selftests/drivers/dma-buf/Makefile
++++ b/tools/testing/selftests/drivers/dma-buf/Makefile
+@@ -2,4 +2,6 @@ CFLAGS += -I../../../../../usr/include/
  
- 		memset(&regs1, 0, sizeof(regs1));
-diff --git a/tools/testing/selftests/kvm/x86_64/state_test.c b/tools/testing/selftests/kvm/x86_64/state_test.c
-index 03da41f0f736..4b3f556265f1 100644
---- a/tools/testing/selftests/kvm/x86_64/state_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/state_test.c
-@@ -152,8 +152,8 @@ int main(int argc, char *argv[])
- 	for (stage = 1;; stage++) {
- 		_vcpu_run(vm, VCPU_ID);
- 		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
--			    "Unexpected exit reason: %u (%s),\n",
--			    run->exit_reason,
-+			    "Stage %d: unexpected exit reason: %u (%s),\n",
-+			    stage, run->exit_reason,
- 			    exit_reason_str(run->exit_reason));
+ TEST_GEN_PROGS := udmabuf
  
- 		memset(&regs1, 0, sizeof(regs1));
++top_srcdir ?=../../../../..
++
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+index 376b1d6730bd..4de902ea14d8 100644
+--- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
++++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+@@ -4,7 +4,7 @@
+ #include <unistd.h>
+ #include <string.h>
+ #include <errno.h>
+-#include <fcntl.h>
++#include <linux/fcntl.h>
+ #include <malloc.h>
+ 
+ #include <sys/ioctl.h>
+@@ -33,12 +33,19 @@ int main(int argc, char *argv[])
+ 		exit(77);
+ 	}
+ 
+-	memfd = memfd_create("udmabuf-test", MFD_CLOEXEC);
++	memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
+ 	if (memfd < 0) {
+ 		printf("%s: [skip,no-memfd]\n", TEST_PREFIX);
+ 		exit(77);
+ 	}
+ 
++	ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
++	if (ret < 0) {
++		printf("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
++		exit(77);
++	}
++
++
+ 	size = getpagesize() * NUM_PAGES;
+ 	ret = ftruncate(memfd, size);
+ 	if (ret == -1) {
 -- 
 2.19.1
