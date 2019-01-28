@@ -1,85 +1,59 @@
-From: sashal at kernel.org (Sasha Levin)
-Date: Mon, 28 Jan 2019 10:41:33 -0500
-Subject: [PATCH AUTOSEL 4.20 176/304] fix dma-buf/udmabuf selftest
-In-Reply-To: <20190128154341.47195-1-sashal@kernel.org>
-References: <20190128154341.47195-1-sashal@kernel.org>
-Message-ID: <20190128154341.47195-176-sashal@kernel.org>
+From: jeffrin at rajagiritech.edu.in (Jeffrin Thalakkottoor)
+Date: Mon, 28 Jan 2019 23:37:51 +0530
+Subject: Fwd: [PATCH] selftests: kmod: worked on errors which breaks the
+ overall execution of the test script
+In-Reply-To: <CAG=yYwmeGp7fT_3wPpnpHgzFUdYJuFCThUBaPL=DW9e4OZt_BA@mail.gmail.com>
+References: <20190117210258.7871-1-jeffrin@rajagiritech.edu.in>
+ <20190122194352.GA11489@garbanzo.do-not-panic.com>
+ <CAG=yYwmeGp7fT_3wPpnpHgzFUdYJuFCThUBaPL=DW9e4OZt_BA@mail.gmail.com>
+Message-ID: <CAG=yYwmjWd5gkkSF+CWQTDPazoctF_D0VALPP8cNX3pZmRS_zg@mail.gmail.com>
 
-From: Tom Murphy <murphyt7 at tcd.ie>
+---------- Forwarded message ---------
+From: Jeffrin Thalakkottoor <jeffrin at rajagiritech.edu.in>
+Date: Mon, Jan 28, 2019 at 11:33 PM
+Subject: Re: [PATCH] selftests: kmod: worked on errors which breaks
+the overall execution of the test script
+To: Luis Chamberlain <mcgrof at kernel.org>
+Cc: Shuah Khan <shuah at kernel.org>, lkml
+<linux-kernel at vger.kernel.org>, <linux-kselftest at vger.kernel.org>,
+Andrew Morton <akpm at linux-foundation.org>
 
-[ Upstream commit 6edf2e3710f4ef2555ad7a2681dbeb4a69092b2d ]
 
-This patch fixes the udmabuf selftest. Currently the selftest is broken.
-I fixed the selftest by setting the F_SEAL_SHRINK seal on the memfd
-file descriptor which is required by udmabuf and added the test to
-the selftest Makefile.
 
-Signed-off-by: Tom Murphy <murphyt7 at tcd.ie>
-Reviewed-by: Gerd Hoffmann <kraxel at redhat.com>
-Signed-off-by: Shuah Khan <shuah at kernel.org>
-Signed-off-by: Sasha Levin <sashal at kernel.org>
----
- tools/testing/selftests/Makefile                  |  1 +
- tools/testing/selftests/drivers/dma-buf/Makefile  |  2 ++
- tools/testing/selftests/drivers/dma-buf/udmabuf.c | 11 +++++++++--
- 3 files changed, 12 insertions(+), 2 deletions(-)
+>
+> on what
+> distribution and version of bash does this break?
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index f0017c831e57..a43a07a09a98 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -6,6 +6,7 @@ TARGETS += capabilities
- TARGETS += cgroup
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
-+TARGETS += drivers/dma-buf
- TARGETS += efivarfs
- TARGETS += exec
- TARGETS += filesystems
-diff --git a/tools/testing/selftests/drivers/dma-buf/Makefile b/tools/testing/selftests/drivers/dma-buf/Makefile
-index 4154c3d7aa58..f22c3f7cf612 100644
---- a/tools/testing/selftests/drivers/dma-buf/Makefile
-+++ b/tools/testing/selftests/drivers/dma-buf/Makefile
-@@ -2,4 +2,6 @@ CFLAGS += -I../../../../../usr/include/
- 
- TEST_GEN_PROGS := udmabuf
- 
-+top_srcdir ?=../../../../..
-+
- include ../../lib.mk
-diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-index 376b1d6730bd..4de902ea14d8 100644
---- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-+++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-@@ -4,7 +4,7 @@
- #include <unistd.h>
- #include <string.h>
- #include <errno.h>
--#include <fcntl.h>
-+#include <linux/fcntl.h>
- #include <malloc.h>
- 
- #include <sys/ioctl.h>
-@@ -33,12 +33,19 @@ int main(int argc, char *argv[])
- 		exit(77);
- 	}
- 
--	memfd = memfd_create("udmabuf-test", MFD_CLOEXEC);
-+	memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
- 	if (memfd < 0) {
- 		printf("%s: [skip,no-memfd]\n", TEST_PREFIX);
- 		exit(77);
- 	}
- 
-+	ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
-+	if (ret < 0) {
-+		printf("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
-+		exit(77);
-+	}
-+
-+
- 	size = getpagesize() * NUM_PAGES;
- 	ret = ftruncate(memfd, size);
- 	if (ret == -1) {
+$cat /etc/issue
+Debian GNU/Linux buster/sid \n \l
+
+$
+$uname -a
+Linux debian 5.0.0-rc1+ #3 SMP Fri Jan 25 21:27:20 IST 2019 x86_64 GNU/Linux
+$echo $BASH_VERSION
+5.0.0(1)-release
+$
+
+
+>
+> The commit log should
+> refer to this and it would help me confirm the issue.
+
+i like to send another version of patch which has things in the commit log
+>
+> > because an array is passed
+> Which is the array?
+
+${TEST_DATA#*:*:}
+the above stuff sometimes contains array but not initially
+
+>
+> get_test_enabled() is supposed to do what you do open-handed here.
+> So the better question is why are you getting an array returned
+> for your version of bash.
+>
+iam not returning an array but ${TEST_DATA#*:*:}   sometimes holds array
+
 -- 
-2.19.1
+software engineer
+rajagiri school of engineering and technology
