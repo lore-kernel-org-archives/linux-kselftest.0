@@ -1,35 +1,38 @@
-From: marcelo.cerri@canonical.com (Marcelo Henrique Cerri)
-Date: Wed, 30 Jan 2019 16:19:03 -0200
+From: dsahern@gmail.com (David Ahern)
+Date: Wed, 30 Jan 2019 16:19:36 -0700
 Subject: [PATCH] selftests: net: fix "from" match test in fib_rule_tests.sh
-Message-ID: <20190130181903.16465-1-marcelo.cerri@canonical.com>
+In-Reply-To: <20190130181903.16465-1-marcelo.cerri@canonical.com>
+References: <20190130181903.16465-1-marcelo.cerri@canonical.com>
+Message-ID: <07230159-a2e3-31a9-6ada-d9bd24313d13@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190130181903.GN3Aj7udq34jaQdYt99kViMvMmI1QoQyXtd1b6N8D3c@z>
+Message-ID: <20190130231936.CyojLISRqCe4m4VMIl-WVRrq7JH8VLm50tVwlRyr8S0@z>
 
-Fix the IPv4 address of the dummy0 interface and ensure that ip_forward
-is enabled in the network space to get a valid response when checking
-for routes between the gateway and other hosts.
+On 1/30/19 11:19 AM, Marcelo Henrique Cerri wrote:
+> Fix the IPv4 address of the dummy0 interface and ensure that ip_forward
+> is enabled in the network space to get a valid response when checking
+> for routes between the gateway and other hosts.
 
-Signed-off-by: Marcelo Henrique Cerri <marcelo.cerri at canonical.com>
----
- tools/testing/selftests/net/fib_rule_tests.sh | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+you need a Fixes tag and to cc the author of said commit.
 
-diff --git a/tools/testing/selftests/net/fib_rule_tests.sh b/tools/testing/selftests/net/fib_rule_tests.sh
-index d4cfb6a7a086..552a9784e759 100755
---- a/tools/testing/selftests/net/fib_rule_tests.sh
-+++ b/tools/testing/selftests/net/fib_rule_tests.sh
-@@ -54,9 +54,11 @@ setup()
- 
- 	$IP link add dummy0 type dummy
- 	$IP link set dev dummy0 up
--	$IP address add 198.51.100.1/24 dev dummy0
-+	$IP address add 192.51.100.1/24 dev dummy0
- 	$IP -6 address add 2001:db8:1::1/64 dev dummy0
- 
-+	ip netns exec testns sysctl -w net.ipv4.ip_forward=1
-+
- 	set +e
- }
- 
--- 
-2.17.1
+> 
+> Signed-off-by: Marcelo Henrique Cerri <marcelo.cerri at canonical.com>
+> ---
+>  tools/testing/selftests/net/fib_rule_tests.sh | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/net/fib_rule_tests.sh b/tools/testing/selftests/net/fib_rule_tests.sh
+> index d4cfb6a7a086..552a9784e759 100755
+> --- a/tools/testing/selftests/net/fib_rule_tests.sh
+> +++ b/tools/testing/selftests/net/fib_rule_tests.sh
+> @@ -54,9 +54,11 @@ setup()
+>  
+>  	$IP link add dummy0 type dummy
+>  	$IP link set dev dummy0 up
+> -	$IP address add 198.51.100.1/24 dev dummy0
+> +	$IP address add 192.51.100.1/24 dev dummy0
+>  	$IP -6 address add 2001:db8:1::1/64 dev dummy0
+>  
+> +	ip netns exec testns sysctl -w net.ipv4.ip_forward=1
+
+ip_forward is not relevant for this test. It just adds routes and rules
+and uses ip route get to verify; no traffic is actually genrated.
