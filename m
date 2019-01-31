@@ -1,38 +1,45 @@
-From: dsahern@gmail.com (David Ahern)
-Date: Wed, 30 Jan 2019 16:19:36 -0700
-Subject: [PATCH] selftests: net: fix "from" match test in fib_rule_tests.sh
-In-Reply-To: <20190130181903.16465-1-marcelo.cerri@canonical.com>
-References: <20190130181903.16465-1-marcelo.cerri@canonical.com>
-Message-ID: <07230159-a2e3-31a9-6ada-d9bd24313d13@gmail.com>
+From: jeffrin@rajagiritech.edu.in (Jeffrin Jose T)
+Date: Fri,  1 Feb 2019 00:01:09 +0530
+Subject: [PATCH v2] selftests: kmod: worked on errors which breaks the overall
+ execution of the test script. i have manually edited for v2 of the patch by
+ changing the date and also commit log.
+Message-ID: <20190131183109.10919-1-jeffrin@rajagiritech.edu.in>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190130231936.CyojLISRqCe4m4VMIl-WVRrq7JH8VLm50tVwlRyr8S0@z>
+Message-ID: <20190131183109.gzMrNWFUPXg-C0wSKAt1ntflVe11jqgZQoyC9SufQs0@z>
 
-On 1/30/19 11:19 AM, Marcelo Henrique Cerri wrote:
-> Fix the IPv4 address of the dummy0 interface and ensure that ip_forward
-> is enabled in the network space to get a valid response when checking
-> for routes between the gateway and other hosts.
+The kmod.sh script breaks because an array is passed as input
+instead of a single element input.This patch takes elements
+one at a time and passed as input to the condition statement
+which in turn fixes the error.There was an issue which had
+the need for passing a single digit to the condition statement
+which is fixed using regular expression.
+Distribution: Debian GNU/Linux buster/sid
+Bash Version: 5.0.0(1)-release
 
-you need a Fixes tag and to cc the author of said commit.
+Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
+---
+ tools/testing/selftests/kmod/kmod.sh | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-> 
-> Signed-off-by: Marcelo Henrique Cerri <marcelo.cerri at canonical.com>
-> ---
->  tools/testing/selftests/net/fib_rule_tests.sh | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/net/fib_rule_tests.sh b/tools/testing/selftests/net/fib_rule_tests.sh
-> index d4cfb6a7a086..552a9784e759 100755
-> --- a/tools/testing/selftests/net/fib_rule_tests.sh
-> +++ b/tools/testing/selftests/net/fib_rule_tests.sh
-> @@ -54,9 +54,11 @@ setup()
->  
->  	$IP link add dummy0 type dummy
->  	$IP link set dev dummy0 up
-> -	$IP address add 198.51.100.1/24 dev dummy0
-> +	$IP address add 192.51.100.1/24 dev dummy0
->  	$IP -6 address add 2001:db8:1::1/64 dev dummy0
->  
-> +	ip netns exec testns sysctl -w net.ipv4.ip_forward=1
-
-ip_forward is not relevant for this test. It just adds routes and rules
-and uses ip route get to verify; no traffic is actually genrated.
+diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
+index 0a76314b4414..49b273c3646e 100755
+--- a/tools/testing/selftests/kmod/kmod.sh
++++ b/tools/testing/selftests/kmod/kmod.sh
+@@ -526,9 +526,12 @@ function run_all_tests()
+ 		TEST_ID=${i%:*:*}
+ 		ENABLED=$(get_test_enabled $TEST_ID)
+ 		TEST_COUNT=$(get_test_count $TEST_ID)
+-		if [[ $ENABLED -eq "1" ]]; then
+-			test_case $TEST_ID $TEST_COUNT
+-		fi
++		for j in $ENABLED ; do
++		         CHECK=${j#*:*:}
++			 if [[ $CHECK -eq "1" ]]; then
++			     test_case $TEST_ID $TEST_COUNT
++			 fi
++		done
+ 	done
+ }
+ 
+-- 
+2.20.1
