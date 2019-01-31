@@ -1,43 +1,71 @@
-From: jeffrin at rajagiritech.edu.in (Jeffrin Jose T)
-Date: Fri,  1 Feb 2019 00:01:09 +0530
-Subject: [PATCH v2] selftests: kmod: worked on errors which breaks the overall
- execution of the test script. i have manually edited for v2 of the patch by
- changing the date and also commit log.
-Message-ID: <20190131183109.10919-1-jeffrin@rajagiritech.edu.in>
+From: shuah at kernel.org (shuah)
+Date: Thu, 31 Jan 2019 11:35:36 -0700
+Subject: [GIT PULL] Kselftest update for Linux 5.0-rc5
+Message-ID: <861aa0ec-3f5e-27aa-8cfb-d7f2d3fdb24b@kernel.org>
 
-The kmod.sh script breaks because an array is passed as input
-instead of a single element input.This patch takes elements
-one at a time and passed as input to the condition statement
-which in turn fixes the error.There was an issue which had
-the need for passing a single digit to the condition statement
-which is fixed using regular expression.
-Distribution: Debian GNU/Linux buster/sid
-Bash Version: 5.0.0(1)-release
+Hi Linus,
 
-Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
----
- tools/testing/selftests/kmod/kmod.sh | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+Please pull the following Kselftest updated for Linux 5.0-rc5
 
-diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-index 0a76314b4414..49b273c3646e 100755
---- a/tools/testing/selftests/kmod/kmod.sh
-+++ b/tools/testing/selftests/kmod/kmod.sh
-@@ -526,9 +526,12 @@ function run_all_tests()
- 		TEST_ID=${i%:*:*}
- 		ENABLED=$(get_test_enabled $TEST_ID)
- 		TEST_COUNT=$(get_test_count $TEST_ID)
--		if [[ $ENABLED -eq "1" ]]; then
--			test_case $TEST_ID $TEST_COUNT
--		fi
-+		for j in $ENABLED ; do
-+		         CHECK=${j#*:*:}
-+			 if [[ $CHECK -eq "1" ]]; then
-+			     test_case $TEST_ID $TEST_COUNT
-+			 fi
-+		done
- 	done
- }
- 
--- 
-2.20.1
+This Kselftest update for Linux 5.0-rc5 consists of run-time fixes to
+cpu-hotplug, and seccomp tests, compile fixes to ir, net, and timers
+Makefiles.
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit 3d244c192afeee7dd4f5fb1b916ea4e47420d401:
+
+   selftests/seccomp: Abort without user notification support 
+(2019-01-17 11:00:23 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
+tags/linux-kselftest-5.0-rc5
+
+for you to fetch changes up to 7d4e591bc051d3382c45caaa2530969fb42ed23d:
+
+   selftests: timers: use LDLIBS instead of LDFLAGS (2019-01-28 08:02:12 
+-0700)
+
+----------------------------------------------------------------
+linux-kselftest-5.0-rc5
+
+This Kselftest update for Linux 5.0-rc5 consists of run-time fixes to
+cpu-hotplug, and seccomp tests, compile fixes to ir, net, and timers
+Makefiles.
+
+----------------------------------------------------------------
+Colin Ian King (1):
+       selftests: cpu-hotplug: fix case where CPUs offline > CPUs present
+
+Fathi Boudra (2):
+       selftests: net: use LDLIBS instead of LDFLAGS
+       selftests: timers: use LDLIBS instead of LDFLAGS
+
+Kees Cook (1):
+       selftests/seccomp: Enhance per-arch ptrace syscall skip tests
+
+Sean Young (1):
+       selftests: Use lirc.h from kernel tree, not from system
+
+  .../selftests/cpu-hotplug/cpu-on-off-test.sh       | 13 +++-
+  tools/testing/selftests/ir/Makefile                |  2 +
+  tools/testing/selftests/net/Makefile               |  2 +-
+  tools/testing/selftests/seccomp/seccomp_bpf.c      | 72 
++++++++++++++++++-----
+  tools/testing/selftests/timers/Makefile            |  2 +-
+  5 files changed, 71 insertions(+), 20 deletions(-)
+
+----------------------------------------------------------------
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux-kselftest-5.0-rc5.diff
+Type: text/x-patch
+Size: 7934 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190131/0a8696c4/attachment.bin>
