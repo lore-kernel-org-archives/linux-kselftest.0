@@ -1,71 +1,54 @@
-From: shuah at kernel.org (shuah)
-Date: Thu, 31 Jan 2019 11:35:36 -0700
-Subject: [GIT PULL] Kselftest update for Linux 5.0-rc5
-Message-ID: <861aa0ec-3f5e-27aa-8cfb-d7f2d3fdb24b@kernel.org>
+From: logang at deltatee.com (Logan Gunthorpe)
+Date: Thu, 31 Jan 2019 11:56:50 -0700
+Subject: [PATCH 3/9] PCI/switchtec: Add module parameter to request more
+ interrupts
+In-Reply-To: <20190131185656.17972-1-logang@deltatee.com>
+References: <20190131185656.17972-1-logang@deltatee.com>
+Message-ID: <20190131185656.17972-4-logang@deltatee.com>
 
-Hi Linus,
+Seeing the we want to use more interrupts in the NTB MSI code
+we need to be able allocate more (sometimes virtual) interrupts
+in the switchtec driver. Therefore add a module parameter to
+request to allocate additional interrupts.
 
-Please pull the following Kselftest updated for Linux 5.0-rc5
+This puts virtually no limit on the number of MSI interrupts available
+to NTB clients.
 
-This Kselftest update for Linux 5.0-rc5 consists of run-time fixes to
-cpu-hotplug, and seccomp tests, compile fixes to ir, net, and timers
-Makefiles.
+Signed-off-by: Logan Gunthorpe <logang at deltatee.com>
+Cc: Bjorn Helgaas <bhelgaas at google.com>
+---
+ drivers/pci/switch/switchtec.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 3d244c192afeee7dd4f5fb1b916ea4e47420d401:
-
-   selftests/seccomp: Abort without user notification support 
-(2019-01-17 11:00:23 -0700)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
-tags/linux-kselftest-5.0-rc5
-
-for you to fetch changes up to 7d4e591bc051d3382c45caaa2530969fb42ed23d:
-
-   selftests: timers: use LDLIBS instead of LDFLAGS (2019-01-28 08:02:12 
--0700)
-
-----------------------------------------------------------------
-linux-kselftest-5.0-rc5
-
-This Kselftest update for Linux 5.0-rc5 consists of run-time fixes to
-cpu-hotplug, and seccomp tests, compile fixes to ir, net, and timers
-Makefiles.
-
-----------------------------------------------------------------
-Colin Ian King (1):
-       selftests: cpu-hotplug: fix case where CPUs offline > CPUs present
-
-Fathi Boudra (2):
-       selftests: net: use LDLIBS instead of LDFLAGS
-       selftests: timers: use LDLIBS instead of LDFLAGS
-
-Kees Cook (1):
-       selftests/seccomp: Enhance per-arch ptrace syscall skip tests
-
-Sean Young (1):
-       selftests: Use lirc.h from kernel tree, not from system
-
-  .../selftests/cpu-hotplug/cpu-on-off-test.sh       | 13 +++-
-  tools/testing/selftests/ir/Makefile                |  2 +
-  tools/testing/selftests/net/Makefile               |  2 +-
-  tools/testing/selftests/seccomp/seccomp_bpf.c      | 72 
-+++++++++++++++++-----
-  tools/testing/selftests/timers/Makefile            |  2 +-
-  5 files changed, 71 insertions(+), 20 deletions(-)
-
-----------------------------------------------------------------
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: linux-kselftest-5.0-rc5.diff
-Type: text/x-patch
-Size: 7934 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190131/0a8696c4/attachment.bin>
+diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
+index e22766c79fe9..8b1db78197d9 100644
+--- a/drivers/pci/switch/switchtec.c
++++ b/drivers/pci/switch/switchtec.c
+@@ -30,6 +30,10 @@ module_param(use_dma_mrpc, bool, 0644);
+ MODULE_PARM_DESC(use_dma_mrpc,
+ 		 "Enable the use of the DMA MRPC feature");
+ 
++static int nirqs = 32;
++module_param(nirqs, int, 0644);
++MODULE_PARM_DESC(nirqs, "number of interrupts to allocate (more may be useful for NTB applications)");
++
+ static dev_t switchtec_devt;
+ static DEFINE_IDA(switchtec_minor_ida);
+ 
+@@ -1247,8 +1251,12 @@ static int switchtec_init_isr(struct switchtec_dev *stdev)
+ 	int dma_mrpc_irq;
+ 	int rc;
+ 
+-	nvecs = pci_alloc_irq_vectors(stdev->pdev, 1, 4,
+-				      PCI_IRQ_MSIX | PCI_IRQ_MSI);
++	if (nirqs < 4)
++		nirqs = 4;
++
++	nvecs = pci_alloc_irq_vectors(stdev->pdev, 1, nirqs,
++				      PCI_IRQ_MSIX | PCI_IRQ_MSI |
++				      PCI_IRQ_VIRTUAL);
+ 	if (nvecs < 0)
+ 		return nvecs;
+ 
+-- 
+2.19.0
