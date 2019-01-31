@@ -1,30 +1,27 @@
 From: shuah at kernel.org (Shuah Khan)
-Date: Thu, 31 Jan 2019 12:46:49 -0700
-Subject: [PATCH] selftests: ir: skip when non-root user runs the test
-Message-ID: <20190131194649.19248-1-shuah@kernel.org>
+Date: Thu, 31 Jan 2019 13:10:39 -0700
+Subject: [PATCH] selftests: ir: skip when lirc device doesn't exist.
+Message-ID: <20190131201039.20602-1-shuah@kernel.org>
 
-Skip instead of fail when non-root user runs the test.
+Skip instead of fail when lirc device doesn't exist.
 
 Signed-off-by: Shuah Khan <shuah at kernel.org>
 ---
- tools/testing/selftests/ir/ir_loopback.sh | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/ir/ir_loopback.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/ir/ir_loopback.sh b/tools/testing/selftests/ir/ir_loopback.sh
-index 0a0b8dfa39be..b90dc9939f45 100755
---- a/tools/testing/selftests/ir/ir_loopback.sh
-+++ b/tools/testing/selftests/ir/ir_loopback.sh
-@@ -4,6 +4,11 @@
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
+diff --git a/tools/testing/selftests/ir/ir_loopback.c b/tools/testing/selftests/ir/ir_loopback.c
+index 8cdf1b89ac9c..ff351bb7c163 100644
+--- a/tools/testing/selftests/ir/ir_loopback.c
++++ b/tools/testing/selftests/ir/ir_loopback.c
+@@ -76,7 +76,7 @@ int lirc_open(const char *rc)
+ 	}
  
-+if [ $UID != 0 ]; then
-+	echo "Please run ir_loopback test as root [SKIP]"
-+	exit $ksft_skip
-+fi
-+
- if ! /sbin/modprobe -q -n rc-loopback; then
-         echo "ir_loopback: module rc-loopback is not found [SKIP]"
-         exit $ksft_skip
+ 	if (!dent)
+-		ksft_exit_fail_msg("cannot find lirc device for %s\n", rc);
++		ksft_exit_skip("cannot find lirc device for %s\n", rc);
+ 
+ 	closedir(d);
+ 
 -- 
 2.17.1
