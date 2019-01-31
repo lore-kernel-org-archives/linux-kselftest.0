@@ -1,42 +1,21 @@
-From: anders.roxell@linaro.org (Anders Roxell)
-Date: Thu, 31 Jan 2019 20:09:01 +0100
-Subject: [PATCH] selftests/kvm: add missing executables to .gitignore
-In-Reply-To: <20190108092654.13113-1-anders.roxell@linaro.org>
-References: <20190108092654.13113-1-anders.roxell@linaro.org>
-Message-ID:
- <CADYN=9LXeLv=cxJSJmWLybHqDhDx=nG3arfc32cjwB42iSb7vA@mail.gmail.com>
+From: pr-tracker-bot@kernel.org (pr-tracker-bot@kernel.org)
+Date: Thu, 31 Jan 2019 19:30:05 +0000
+Subject: [GIT PULL] Kselftest update for Linux 5.0-rc5
+In-Reply-To: <861aa0ec-3f5e-27aa-8cfb-d7f2d3fdb24b@kernel.org>
+References: <861aa0ec-3f5e-27aa-8cfb-d7f2d3fdb24b@kernel.org>
+Message-ID: <154896300579.28776.22792124579750379.pr-tracker-bot@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190131190901.GCV00dsR3UqCqEkNpO0qQa-DXuhPz8y0mpyzwtRYcYo@z>
+Message-ID: <20190131193005.E9tREdxrKBc1kt4n1eul3bSDgni5TTh2PJyWOAguCaU@z>
 
-On Tue, 8 Jan 2019@10:27, Anders Roxell <anders.roxell@linaro.org> wrote:
->
-> Fixes: 2a31b9db1535 ("kvm: introduce manual dirty log reprotect")
-> Fixes: 7edcb7343327 ("KVM: selftests: Add hyperv_cpuid test")
-> Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
-> ---
->  tools/testing/selftests/kvm/.gitignore | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index 6210ba41c29e..51ffd8a8bc38 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -1,8 +1,10 @@
->  /x86_64/cr4_cpuid_sync_test
->  /x86_64/evmcs_test
-> +/x86_64/hyperv_cpuid
->  /x86_64/platform_info_test
->  /x86_64/set_sregs_test
->  /x86_64/sync_regs_test
->  /x86_64/vmx_tsc_adjust_test
->  /x86_64/state_test
-> +/clear_dirty_log_test
->  /dirty_log_test
-> --
-> 2.20.1
->
+The pull request you sent on Thu, 31 Jan 2019 11:35:36 -0700:
 
-Does this make sense or should I redo it?
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.0-rc5
 
-Cheers,
-Anders
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9f789567142c0cd1ffd6c28c56eed40cb36495ca
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
