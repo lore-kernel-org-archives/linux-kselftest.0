@@ -1,300 +1,128 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Tue, 30 Apr 2019 17:53:34 -0400
-Subject: [RFC][PATCH v2] ftrace/x86: Emulate call function while updating in
- breakpoint handler
-In-Reply-To: <20190430134913.4e29ce72@gandalf.local.home>
-References: <20190428133826.3e142cfd@oasis.local.home>
- <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
- <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
- <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
- <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
- <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
- <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
- <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
- <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
- <20190430135602.GD2589@hirez.programming.kicks-ass.net>
- <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
- <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
- <20190430130359.330e895b@gandalf.local.home>
- <20190430132024.0f03f5b8@gandalf.local.home>
- <20190430134913.4e29ce72@gandalf.local.home>
-Message-ID: <20190430175334.423821c0@gandalf.local.home>
+From: naresh.kamboju at linaro.org (Naresh Kamboju)
+Date: Fri, 1 Feb 2019 21:00:01 +0530
+Subject: bpf: test_tunnel.sh: BUG: unable to handle kernel NULL pointer
+ dereference
+Message-ID: <CA+G9fYu-RXRUPyTeAfSQjXXbtGQeTkbhns9-L5ZVhm12G3xhmQ@mail.gmail.com>
 
-From: "Steven Rostedt (VMware)" <rostedt at goodmis.org>
+Kernel panic while running bpf: test_tunnel.sh on linux -next
+5.0.0-rc4-next-20190129.
 
-Nicolai Stange discovered[1] that if live kernel patching is enabled, and the
-function tracer started tracing the same function that was patched, the
-conversion of the fentry call site during the translation of going from
-calling the live kernel patch trampoline to the iterator trampoline, would
-have as slight window where it didn't call anything.
+selftests: bpf: test_tunnel.sh
+[  273.997647] IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
+[  274.054068] ip (11458) used greatest stack depth: 11448 bytes left
+[  274.120445] BUG: unable to handle kernel NULL pointer dereference
+at 0000000000000000
+[  274.128285] #PF error: [INSTR]
+[  274.131351] PGD 8000000414a0e067 P4D 8000000414a0e067 PUD 3b6334067 PMD 0
+[  274.138241] Oops: 0010 [#1] SMP PTI
+[  274.141734] CPU: 1 PID: 11464 Comm: ping Not tainted
+5.0.0-rc4-next-20190129 #1
+[  274.149046] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[  274.156526] RIP: 0010:          (null)
+[  274.160280] Code: Bad RIP value.
+[  274.163509] RSP: 0018:ffffbc9681f83540 EFLAGS: 00010286
+[  274.168726] RAX: 0000000000000000 RBX: ffffdc967fa80a18 RCX: 0000000000000000
+[  274.175851] RDX: ffff9db2ee08b540 RSI: 000000000000000e RDI: ffffdc967fa809a0
+[  274.182974] RBP: ffffbc9681f83580 R08: ffff9db2c4d62690 R09: 000000000000000c
+[  274.190098] R10: 0000000000000000 R11: ffff9db2ee08b540 R12: ffff9db31ce7c000
+[  274.197222] R13: 0000000000000001 R14: 000000000000000c R15: ffff9db3179cf400
+[  274.204346] FS:  00007ff4ae7c5740(0000) GS:ffff9db31fa80000(0000)
+knlGS:0000000000000000
+[  274.212424] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  274.218162] CR2: ffffffffffffffd6 CR3: 00000004574da004 CR4: 00000000003606e0
+[  274.225292] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  274.232416] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  274.239541] Call Trace:
+[  274.241988]  ? tnl_update_pmtu+0x296/0x3b0
+[  274.246085]  ip_md_tunnel_xmit+0x1bc/0x520
+[  274.250176]  gre_fb_xmit+0x330/0x390
+[  274.253754]  gre_tap_xmit+0x128/0x180
+[  274.257414]  dev_hard_start_xmit+0xb7/0x300
+[  274.261598]  sch_direct_xmit+0xf6/0x290
+[  274.265430]  __qdisc_run+0x15d/0x5e0
+[  274.269007]  __dev_queue_xmit+0x2c5/0xc00
+[  274.273011]  ? dev_queue_xmit+0x10/0x20
+[  274.276842]  ? eth_header+0x2b/0xc0
+[  274.280326]  dev_queue_xmit+0x10/0x20
+[  274.283984]  ? dev_queue_xmit+0x10/0x20
+[  274.287813]  arp_xmit+0x1a/0xf0
+[  274.290952]  arp_send_dst.part.19+0x46/0x60
+[  274.295138]  arp_solicit+0x177/0x6b0
+[  274.298708]  ? mod_timer+0x18e/0x440
+[  274.302281]  neigh_probe+0x57/0x70
+[  274.305684]  __neigh_event_send+0x197/0x2d0
+[  274.309862]  neigh_resolve_output+0x18c/0x210
+[  274.314212]  ip_finish_output2+0x257/0x690
+[  274.318304]  ip_finish_output+0x219/0x340
+[  274.322314]  ? ip_finish_output+0x219/0x340
+[  274.326493]  ip_output+0x76/0x240
+[  274.329805]  ? ip_fragment.constprop.53+0x80/0x80
+[  274.334510]  ip_local_out+0x3f/0x70
+[  274.337992]  ip_send_skb+0x19/0x40
+[  274.341391]  ip_push_pending_frames+0x33/0x40
+[  274.345740]  raw_sendmsg+0xc15/0x11d0
+[  274.349403]  ? __might_fault+0x85/0x90
+[  274.353151]  ? _copy_from_user+0x6b/0xa0
+[  274.357070]  ? rw_copy_check_uvector+0x54/0x130
+[  274.361604]  inet_sendmsg+0x42/0x1c0
+[  274.365179]  ? inet_sendmsg+0x42/0x1c0
+[  274.368937]  sock_sendmsg+0x3e/0x50
+[  274.372460]  ___sys_sendmsg+0x26f/0x2d0
+[  274.376293]  ? lock_acquire+0x95/0x190
+[  274.380043]  ? __handle_mm_fault+0x7ce/0xb70
+[  274.384307]  ? lock_acquire+0x95/0x190
+[  274.388053]  ? __audit_syscall_entry+0xdd/0x130
+[  274.392586]  ? ktime_get_coarse_real_ts64+0x64/0xc0
+[  274.397461]  ? __audit_syscall_entry+0xdd/0x130
+[  274.401989]  ? trace_hardirqs_on+0x4c/0x100
+[  274.406173]  __sys_sendmsg+0x63/0xa0
+[  274.409744]  ? __sys_sendmsg+0x63/0xa0
+[  274.413488]  __x64_sys_sendmsg+0x1f/0x30
+[  274.417405]  do_syscall_64+0x55/0x190
+[  274.421064]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+[  274.426113] RIP: 0033:0x7ff4ae0e6e87
+[  274.429686] Code: 64 89 02 48 c7 c0 ff ff ff ff eb b9 0f 1f 80 00
+00 00 00 8b 05 ca d9 2b 00 48 63 d2 48 63 ff 85 c0 75 10 b8 2e 00 00
+00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 53 48 89 f3 48 83 ec 10 48 89 7c
+24 08
+[  274.448422] RSP: 002b:00007ffcd9b76db8 EFLAGS: 00000246 ORIG_RAX:
+000000000000002e
+[  274.455978] RAX: ffffffffffffffda RBX: 0000000000000040 RCX: 00007ff4ae0e6e87
+[  274.463104] RDX: 0000000000000000 RSI: 00000000006092e0 RDI: 0000000000000003
+[  274.470228] RBP: 0000000000000000 R08: 00007ffcd9bc40a0 R09: 00007ffcd9bc4080
+[  274.477349] R10: 000000000000060a R11: 0000000000000246 R12: 0000000000000003
+[  274.484475] R13: 0000000000000016 R14: 00007ffcd9b77fa0 R15: 00007ffcd9b78da4
+[  274.491602] Modules linked in: cls_bpf sch_ingress iptable_filter
+ip_tables algif_hash af_alg x86_pkg_temp_thermal fuse [last unloaded:
+test_bpf]
+[  274.504634] CR2: 0000000000000000
+[  274.507976] ---[ end trace 196d18386545eae1 ]---
+[  274.512588] RIP: 0010:          (null)
+[  274.516334] Code: Bad RIP value.
+[  274.519557] RSP: 0018:ffffbc9681f83540 EFLAGS: 00010286
+[  274.524775] RAX: 0000000000000000 RBX: ffffdc967fa80a18 RCX: 0000000000000000
+[  274.531921] RDX: ffff9db2ee08b540 RSI: 000000000000000e RDI: ffffdc967fa809a0
+[  274.539082] RBP: ffffbc9681f83580 R08: ffff9db2c4d62690 R09: 000000000000000c
+[  274.546205] R10: 0000000000000000 R11: ffff9db2ee08b540 R12: ffff9db31ce7c000
+[  274.553329] R13: 0000000000000001 R14: 000000000000000c R15: ffff9db3179cf400
+[  274.560456] FS:  00007ff4ae7c5740(0000) GS:ffff9db31fa80000(0000)
+knlGS:0000000000000000
+[  274.568541] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  274.574277] CR2: ffffffffffffffd6 CR3: 00000004574da004 CR4: 00000000003606e0
+[  274.581403] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  274.588535] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  274.595658] Kernel panic - not syncing: Fatal exception in interrupt
+[  274.602046] Kernel Offset: 0x14400000 from 0xffffffff81000000
+(relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+[  274.612827] ---[ end Kernel panic - not syncing: Fatal exception in
+interrupt ]---
+[  274.620387] ------------[ cut here ]------------
 
-As live kernel patching depends on ftrace to always call its code (to
-prevent the function being traced from being called, as it will redirect
-it). This small window would allow the old buggy function to be called, and
-this can cause undesirable results.
+The above log is from x86_64 device.
 
-Nicolai submitted new patches[2] but these were controversial. As this is
-similar to the static call emulation issues that came up a while ago[3],
-Linus suggested using per CPU data along with special trampolines[4] to emulate
-the calls.
+Full test log on arm64.
+https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190129/testrun/589455/log
 
-Linus's solution was for text poke (which was mostly what the static_call
-code did), but as ftrace has its own mechanism, it required doing its own
-thing.
-
-Having ftrace use its own per CPU data and having its own set of specialized
-trampolines solves the issue of missed calls that live kernel patching
-suffers.
-
-[1] http://lkml.kernel.org/r/20180726104029.7736-1-nstange at suse.de
-[2] http://lkml.kernel.org/r/20190427100639.15074-1-nstange at suse.de
-[3] http://lkml.kernel.org/r/3cf04e113d71c9f8e4be95fb84a510f085aa4afa.1541711457.git.jpoimboe at redhat.com
-[4] http://lkml.kernel.org/r/CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A at mail.gmail.com
-
-Inspired-by: Linus Torvalds <torvalds at linux-foundation.org>
-Cc: stable at vger.kernel.org
-Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
-Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
----
-
-Changes since v1:
-
-  - Use "push push ret" instead of indirect jumps (Linus)
-  - Handle 32 bit as well as non SMP
-  - Fool lockdep into thinking interrupts are enabled
-
-
- arch/x86/kernel/ftrace.c | 175 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 170 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index ef49517f6bb2..9160f5cc3b6d 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -17,6 +17,7 @@
- #include <linux/uaccess.h>
- #include <linux/ftrace.h>
- #include <linux/percpu.h>
-+#include <linux/frame.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
- #include <linux/init.h>
-@@ -232,6 +233,9 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
- 
- static unsigned long ftrace_update_func;
- 
-+/* Used within inline asm below */
-+unsigned long ftrace_update_func_call;
-+
- static int update_ftrace_func(unsigned long ip, void *new)
- {
- 	unsigned char old[MCOUNT_INSN_SIZE];
-@@ -259,6 +263,8 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
- 	unsigned char *new;
- 	int ret;
- 
-+	ftrace_update_func_call = (unsigned long)func;
-+
- 	new = ftrace_call_replace(ip, (unsigned long)func);
- 	ret = update_ftrace_func(ip, new);
- 
-@@ -280,6 +286,125 @@ static nokprobe_inline int is_ftrace_caller(unsigned long ip)
- 	return 0;
- }
- 
-+/*
-+ * We need to handle the "call func1" -> "call func2" case.
-+ * Just skipping the call is not sufficient as it will be like
-+ * changing to "nop" first and then updating the call. But some
-+ * users of ftrace require calls never to be missed.
-+ *
-+ * To emulate the call while converting the call site with a breakpoint,
-+ * some trampolines are used along with per CPU buffers.
-+ * There are three trampolines for the call sites and three trampolines
-+ * for the updating of the call in ftrace trampoline. The three
-+ * trampolines are:
-+ *
-+ * 1) Interrupts are enabled when the breakpoint is hit
-+ * 2) Interrupts are disabled when the breakpoint is hit
-+ * 3) The breakpoint was hit in an NMI
-+ *
-+ * As per CPU data is used, interrupts must be disabled to prevent them
-+ * from corrupting the data. A separate NMI trampoline is used for the
-+ * NMI case. If interrupts are already disabled, then the return path
-+ * of where the breakpoint was hit (saved in the per CPU data) is pushed
-+ * on the stack and then a jump to either the ftrace_caller (which will
-+ * loop through all registered ftrace_ops handlers depending on the ip
-+ * address), or if its a ftrace trampoline call update, it will call
-+ * ftrace_update_func_call which will hold the call that should be
-+ * called.
-+ */
-+extern asmlinkage void ftrace_emulate_call_irqon(void);
-+extern asmlinkage void ftrace_emulate_call_irqoff(void);
-+extern asmlinkage void ftrace_emulate_call_nmi(void);
-+extern asmlinkage void ftrace_emulate_call_update_irqoff(void);
-+extern asmlinkage void ftrace_emulate_call_update_irqon(void);
-+extern asmlinkage void ftrace_emulate_call_update_nmi(void);
-+
-+static DEFINE_PER_CPU(void *, ftrace_bp_call_return);
-+static DEFINE_PER_CPU(void *, ftrace_bp_call_nmi_return);
-+
-+#ifdef CONFIG_SMP
-+#ifdef CONFIG_X86_64
-+# define BP_CALL_RETURN		"%gs:ftrace_bp_call_return"
-+# define BP_CALL_NMI_RETURN	"%gs:ftrace_bp_call_nmi_return"
-+#else
-+# define BP_CALL_RETURN		"%fs:ftrace_bp_call_return"
-+# define BP_CALL_NMI_RETURN	"%fs:ftrace_bp_call_nmi_return"
-+#endif
-+#else /* SMP */
-+# define BP_CALL_RETURN		"ftrace_bp_call_return"
-+# define BP_CALL_NMI_RETURN	"ftrace_bp_call_nmi_return"
-+#endif
-+
-+/* To hold the ftrace_caller address to push on the stack */
-+void *ftrace_caller_func = (void *)ftrace_caller;
-+
-+asm(
-+	".text\n"
-+
-+	/* Trampoline for function update with interrupts enabled */
-+	".global ftrace_emulate_call_irqoff\n"
-+	".type ftrace_emulate_call_irqoff, @function\n"
-+	"ftrace_emulate_call_irqoff:\n\t"
-+		"push "BP_CALL_RETURN"\n\t"
-+		"push ftrace_caller_func\n"
-+		"sti\n\t"
-+		"ret\n\t"
-+	".size ftrace_emulate_call_irqoff, .-ftrace_emulate_call_irqoff\n"
-+
-+	/* Trampoline for function update with interrupts disabled*/
-+	".global ftrace_emulate_call_irqon\n"
-+	".type ftrace_emulate_call_irqon, @function\n"
-+	"ftrace_emulate_call_irqon:\n\t"
-+		"push "BP_CALL_RETURN"\n\t"
-+		"push ftrace_caller_func\n"
-+		"ret\n\t"
-+	".size ftrace_emulate_call_irqon, .-ftrace_emulate_call_irqon\n"
-+
-+	/* Trampoline for function update in an NMI */
-+	".global ftrace_emulate_call_nmi\n"
-+	".type ftrace_emulate_call_nmi, @function\n"
-+	"ftrace_emulate_call_nmi:\n\t"
-+		"push "BP_CALL_NMI_RETURN"\n\t"
-+		"push ftrace_caller_func\n"
-+		"ret\n\t"
-+	".size ftrace_emulate_call_nmi, .-ftrace_emulate_call_nmi\n"
-+
-+	/* Trampoline for ftrace trampoline call update with interrupts enabled */
-+	".global ftrace_emulate_call_update_irqoff\n"
-+	".type ftrace_emulate_call_update_irqoff, @function\n"
-+	"ftrace_emulate_call_update_irqoff:\n\t"
-+		"push "BP_CALL_RETURN"\n\t"
-+		"push ftrace_update_func_call\n"
-+		"sti\n\t"
-+		"ret\n\t"
-+	".size ftrace_emulate_call_update_irqoff, .-ftrace_emulate_call_update_irqoff\n"
-+
-+	/* Trampoline for ftrace trampoline call update with interrupts disabled */
-+	".global ftrace_emulate_call_update_irqon\n"
-+	".type ftrace_emulate_call_update_irqon, @function\n"
-+	"ftrace_emulate_call_update_irqon:\n\t"
-+		"push "BP_CALL_RETURN"\n\t"
-+		"push ftrace_update_func_call\n"
-+		"ret\n\t"
-+	".size ftrace_emulate_call_update_irqon, .-ftrace_emulate_call_update_irqon\n"
-+
-+	/* Trampoline for ftrace trampoline call update in an NMI */
-+	".global ftrace_emulate_call_update_nmi\n"
-+	".type ftrace_emulate_call_update_nmi, @function\n"
-+	"ftrace_emulate_call_update_nmi:\n\t"
-+		"push "BP_CALL_NMI_RETURN"\n\t"
-+		"push ftrace_update_func_call\n"
-+		"ret\n\t"
-+	".size ftrace_emulate_call_update_nmi, .-ftrace_emulate_call_update_nmi\n"
-+	".previous\n");
-+
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_irqoff);
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_irqon);
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_nmi);
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_update_irqoff);
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_update_irqon);
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_update_nmi);
-+
- /*
-  * A breakpoint was added to the code address we are about to
-  * modify, and this is the handle that will just skip over it.
-@@ -295,12 +420,49 @@ int ftrace_int3_handler(struct pt_regs *regs)
- 		return 0;
- 
- 	ip = regs->ip - 1;
--	if (!ftrace_location(ip) && !is_ftrace_caller(ip))
--		return 0;
--
--	regs->ip += MCOUNT_INSN_SIZE - 1;
-+	if (ftrace_location(ip)) {
-+		/* A breakpoint at the beginning of the function was hit */
-+		if (in_nmi()) {
-+			/* NMIs have their own trampoline */
-+			this_cpu_write(ftrace_bp_call_nmi_return, (void *)ip + MCOUNT_INSN_SIZE);
-+			regs->ip = (unsigned long) ftrace_emulate_call_nmi;
-+			return 1;
-+		}
-+		this_cpu_write(ftrace_bp_call_return, (void *)ip + MCOUNT_INSN_SIZE);
-+		if (regs->flags & X86_EFLAGS_IF) {
-+			regs->flags &= ~X86_EFLAGS_IF;
-+			regs->ip = (unsigned long) ftrace_emulate_call_irqoff;
-+			/* Tell lockdep here we are enabling interrupts */
-+			trace_hardirqs_on();
-+		} else {
-+			regs->ip = (unsigned long) ftrace_emulate_call_irqon;
-+		}
-+		return 1;
-+	} else if (is_ftrace_caller(ip)) {
-+		/* An ftrace trampoline is being updated */
-+		if (!ftrace_update_func_call) {
-+			/* If it's a jump, just need to skip it */
-+			regs->ip += MCOUNT_INSN_SIZE -1;
-+			return 1;
-+		}
-+		if (in_nmi()) {
-+			/* NMIs have their own trampoline */
-+			this_cpu_write(ftrace_bp_call_nmi_return, (void *)ip + MCOUNT_INSN_SIZE);
-+			regs->ip = (unsigned long) ftrace_emulate_call_update_nmi;
-+			return 1;
-+		}
-+		this_cpu_write(ftrace_bp_call_return, (void *)ip + MCOUNT_INSN_SIZE);
-+		if (regs->flags & X86_EFLAGS_IF) {
-+			regs->flags &= ~X86_EFLAGS_IF;
-+			regs->ip = (unsigned long) ftrace_emulate_call_update_irqoff;
-+			trace_hardirqs_on();
-+		} else {
-+			regs->ip = (unsigned long) ftrace_emulate_call_update_irqon;
-+		}
-+		return 1;
-+	}
- 
--	return 1;
-+	return 0;
- }
- NOKPROBE_SYMBOL(ftrace_int3_handler);
- 
-@@ -859,6 +1021,8 @@ void arch_ftrace_update_trampoline(struct ftrace_ops *ops)
- 
- 	func = ftrace_ops_get_func(ops);
- 
-+	ftrace_update_func_call = (unsigned long)func;
-+
- 	/* Do a safe modify in case the trampoline is executing */
- 	new = ftrace_call_replace(ip, (unsigned long)func);
- 	ret = update_ftrace_func(ip, new);
-@@ -960,6 +1124,7 @@ static int ftrace_mod_jmp(unsigned long ip, void *func)
- {
- 	unsigned char *new;
- 
-+	ftrace_update_func_call = 0;
- 	new = ftrace_jmp_replace(ip, (unsigned long)func);
- 
- 	return update_ftrace_func(ip, new);
--- 
-2.20.1
+Best regards
+Naresh Kamboju
