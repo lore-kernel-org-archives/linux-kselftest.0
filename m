@@ -1,76 +1,35 @@
-From: broonie at kernel.org (Mark Brown)
-Date: Sun,  3 Feb 2019 14:40:17 +0100
-Subject: [PATCH 2/2] selftests/x86/fsgsbase: Default to trying to run the test
- repeatedly
-In-Reply-To: <20190203134017.9375-1-broonie@kernel.org>
-References: <20190203134017.9375-1-broonie@kernel.org>
-Message-ID: <20190203134017.9375-3-broonie@kernel.org>
+From: pvorel at suse.cz (Petr Vorel)
+Date: Sun, 3 Feb 2019 23:26:55 +0100
+Subject: [PATCH] selftests: add TPM 2.0 tests
+In-Reply-To: <20190201175054.26105-1-jarkko.sakkinen@linux.intel.com>
+References: <20190201175054.26105-1-jarkko.sakkinen@linux.intel.com>
+Message-ID: <20190203222654.GA28988@x230>
 
-In automated testing it has been found that on many systems the fsgsbase
-test fails intermittently.  This was reported and discussed a while
-back:
+Hi Jarkko,
 
-    https://lore.kernel.org/lkml/20180126153631.ha7yc33fj5uhitjo at xps/
+> Added the tests that I've been using for testing TPM 2.0 functionality
+> for long time but have out-of-tree so far residing in
 
-with the analysis concluding that this is a hardware issue affecting a
-subset of systems but no fix has been merged as yet.  As well as the
-actual problem found by testing the intermittent test failure is causing
-issues for the people doing the automated testing due to the noise.
+> https://github.com/jsakkine-intel/tpm2-scripts
 
-In order to make the testing stable modify the test program to iterate
-through the test repeatedly, choosing 5000 iterations based on prior
-reports and local testing.  This unfortunately greatly increases the
-execution time for the selftests when things succeed which isn't great,
-in my local tests on a range of systems it pushes the execution time up
-to approximately a minute when no failures are encountered.
+> Cc: Tadeusz Struk <tadeusz.struk at intel.com>
+> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen at linux.intel.com>
+> Acked-By: Joey Pabalinas <joeypabalinas at gmail.com>
+Reviewed-by: Petr Vorel <petr.vorel at gmail.com>
 
-Reported-by: Dan Rue <dan.rue at linaro.org>
-Signed-off-by: Mark Brown <broonie at kernel.org>
----
- tools/testing/selftests/x86/fsgsbase.c | 27 +++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+> +++ b/tools/testing/selftests/tpm2/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+> +
+> +TEST_PROGS := test_smoke.sh test_space.sh
+Maybe include lib.mk, to avoid make No targets error? (well, it's reported for
+more tests)
 
-diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
-index 6cda6daa1f8c..83410749ff1f 100644
---- a/tools/testing/selftests/x86/fsgsbase.c
-+++ b/tools/testing/selftests/x86/fsgsbase.c
-@@ -379,7 +379,7 @@ static void test_unexpected_base(void)
- 	}
- }
- 
--int main()
-+int test()
- {
- 	pthread_t thread;
- 
-@@ -437,3 +437,28 @@ int main()
- 
- 	return nerrs == 0 ? 0 : 1;
- }
-+
-+int main()
-+{
-+	int tries = 5000;
-+	int i;
-+
-+	if (tries > 1)
-+		quiet = true;
-+
-+	for (i = 0; i < tries; i++) {
-+		if (test() != 0)
-+			break;
-+	}
-+
-+	if (quiet) {
-+		if (nerrs) {
-+			printf("[FAIL] %d errors detected in %d tries\n",
-+				nerrs, i + 1);
-+		} else {
-+			printf("[PASS] %d runs succeeded\n", i);
-+		}
-+	}
-+
-+	return nerrs == 0 ? 0 : 1;
-+}
--- 
-2.20.1
+include ../lib.mk
+
+make[1]: Entering directory '/home/pevik/install/src/linux.git/tools/testing/selftests/tpm2'
+make[1]: *** No targets.  Stop.
+
+
+Kind regards,
+Petr
