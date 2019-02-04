@@ -1,13 +1,59 @@
-From: pablo at netfilter.org (Pablo Neira Ayuso)
-Date: Mon, 4 Feb 2019 14:21:55 +0100
-Subject: [PATCH] selftests/netfilter: fix config fragment
- CONFIG_NF_TABLES_INET
-In-Reply-To: <20190129062835.31122-1-naresh.kamboju@linaro.org>
-References: <20190129062835.31122-1-naresh.kamboju@linaro.org>
-Message-ID: <20190204132155.wigblmuifkibg6dk@salvia>
+From: sean at mess.org (Sean Young)
+Date: Mon, 4 Feb 2019 20:47:14 +0000
+Subject: [PATCH] selftests: ir: fix =?utf-8?Q?w?=
+ =?utf-8?B?YXJuaW5nOiDigJglc+KAmQ==?= directive output may be truncated
+In-Reply-To: <20190131194312.19060-1-shuah@kernel.org>
+References: <20190131194312.19060-1-shuah@kernel.org>
+Message-ID: <20190204204714.pcfoacny7rypgfww@gofer.mess.org>
 
-On Tue, Jan 29, 2019 at 06:28:35AM +0000, Naresh Kamboju wrote:
-> In selftests the config fragment for netfilter was added as
-> NF_TABLES_INET=y and this patch correct it as CONFIG_NF_TABLES_INET=y
+On Thu, Jan 31, 2019 at 12:43:12PM -0700, Shuah Khan wrote:
+> Fix the following warning by sizing the buffer to max. of sysfs
+> path max. size + d_name max. size.
+> 
+> gcc -Wall -O2 -I../../../include/uapi ir_loopback.c  -o ../tools/testing/selftests/ir/ir_loopback
+> ir_loopback.c: In function ‘lirc_open’:
+> ir_loopback.c:71:37: warning: ‘%s’ directive output may be truncated writing up to 255 bytes into a region of size 95 [-Wformat-truncation=]
+>     snprintf(buf, sizeof(buf), "/dev/%s", dent->d_name);
+>                                      ^~
+> In file included from /usr/include/stdio.h:862:0,
+>                  from ir_loopback.c:14:
+> /usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: ‘__builtin___snprintf_chk’ output between 6 and 261 bytes into a destination of size 100
+>    return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+>           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>         __bos (__s), __fmt, __va_arg_pack ());
+>         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Signed-off-by: Shuah Khan <shuah at kernel.org>
 
-Applied, thanks.
+Thank you for catching and fixing these. For all three patches:
+
+Acked-by: Sean Young <sean at mess.org>
+
+> ---
+>  tools/testing/selftests/ir/ir_loopback.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/ir/ir_loopback.c b/tools/testing/selftests/ir/ir_loopback.c
+> index 858c19caf224..8cdf1b89ac9c 100644
+> --- a/tools/testing/selftests/ir/ir_loopback.c
+> +++ b/tools/testing/selftests/ir/ir_loopback.c
+> @@ -27,6 +27,8 @@
+>  
+>  #define TEST_SCANCODES	10
+>  #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+> +#define SYSFS_PATH_MAX 256
+> +#define DNAME_PATH_MAX 256
+>  
+>  static const struct {
+>  	enum rc_proto proto;
+> @@ -56,7 +58,7 @@ static const struct {
+>  int lirc_open(const char *rc)
+>  {
+>  	struct dirent *dent;
+> -	char buf[100];
+> +	char buf[SYSFS_PATH_MAX + DNAME_PATH_MAX];
+>  	DIR *d;
+>  	int fd;
+>  
+> -- 
+> 2.17.1
