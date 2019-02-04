@@ -1,61 +1,23 @@
-From: sean@mess.org (Sean Young)
-Date: Mon, 4 Feb 2019 20:47:14 +0000
-Subject: [PATCH] selftests: ir: fix =?utf-8?Q?w?=
- =?utf-8?B?YXJuaW5nOiDigJglc+KAmQ==?= directive output may be truncated
-In-Reply-To: <20190131194312.19060-1-shuah@kernel.org>
-References: <20190131194312.19060-1-shuah@kernel.org>
-Message-ID: <20190204204714.pcfoacny7rypgfww@gofer.mess.org>
+From: jarkko.sakkinen@linux.intel.com (Jarkko Sakkinen)
+Date: Tue, 5 Feb 2019 01:29:10 +0200
+Subject: [PATCH v3] selftests: add TPM 2.0 tests
+In-Reply-To: <20190204131640.11429-1-jarkko.sakkinen@linux.intel.com>
+References: <20190204131640.11429-1-jarkko.sakkinen@linux.intel.com>
+Message-ID: <20190204232910.GC14992@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190204204714.Khppg5_W5RLi8YjqwL4Iu5U1c1e5KSGDB-5VV9WZ9vQ@z>
+Message-ID: <20190204232910.RaZD7OI6nFHLseIHQP7kzGaFnPJ-tki6Vk6-F4lYdOE@z>
 
-On Thu, Jan 31, 2019@12:43:12PM -0700, Shuah Khan wrote:
-> Fix the following warning by sizing the buffer to max. of sysfs
-> path max. size + d_name max. size.
+On Mon, Feb 04, 2019@03:16:40PM +0200, Jarkko Sakkinen wrote:
+> Added the tests that I've been using for testing TPM 2.0 functionality
+> for a long time but have been out-of-tree so far, residing in
 > 
-> gcc -Wall -O2 -I../../../include/uapi ir_loopback.c  -o ../tools/testing/selftests/ir/ir_loopback
-> ir_loopback.c: In function ‘lirc_open’:
-> ir_loopback.c:71:37: warning: ‘%s’ directive output may be truncated writing up to 255 bytes into a region of size 95 [-Wformat-truncation=]
->     snprintf(buf, sizeof(buf), "/dev/%s", dent->d_name);
->                                      ^~
-> In file included from /usr/include/stdio.h:862:0,
->                  from ir_loopback.c:14:
-> /usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: ‘__builtin___snprintf_chk’ output between 6 and 261 bytes into a destination of size 100
->    return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
->           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->         __bos (__s), __fmt, __va_arg_pack ());
->         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> https://github.com/jsakkine-intel/tpm2-scripts
 > 
-> Signed-off-by: Shuah Khan <shuah at kernel.org>
+> Cc: Tadeusz Struk <tadeusz.struk at intel.com>
+> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen at linux.intel.com>
+> Acked-By: Joey Pabalinas <joeypabalinas at gmail.com>
+> Reviewed-by: Petr Vorel <petr.vorel at gmail.com>
 
-Thank you for catching and fixing these. For all three patches:
+Wondering if I can put this to my 5.1 PR?
 
-Acked-by: Sean Young <sean at mess.org>
-
-> ---
->  tools/testing/selftests/ir/ir_loopback.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/ir/ir_loopback.c b/tools/testing/selftests/ir/ir_loopback.c
-> index 858c19caf224..8cdf1b89ac9c 100644
-> --- a/tools/testing/selftests/ir/ir_loopback.c
-> +++ b/tools/testing/selftests/ir/ir_loopback.c
-> @@ -27,6 +27,8 @@
->  
->  #define TEST_SCANCODES	10
->  #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-> +#define SYSFS_PATH_MAX 256
-> +#define DNAME_PATH_MAX 256
->  
->  static const struct {
->  	enum rc_proto proto;
-> @@ -56,7 +58,7 @@ static const struct {
->  int lirc_open(const char *rc)
->  {
->  	struct dirent *dent;
-> -	char buf[100];
-> +	char buf[SYSFS_PATH_MAX + DNAME_PATH_MAX];
->  	DIR *d;
->  	int fd;
->  
-> -- 
-> 2.17.1
+/Jarkko
