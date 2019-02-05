@@ -1,28 +1,29 @@
-From: jmorris at namei.org (James Morris)
-Date: Wed, 6 Feb 2019 07:12:57 +1100 (AEDT)
-Subject: [PATCH v3] selftests: add TPM 2.0 tests
-In-Reply-To: <20190204232910.GC14992@linux.intel.com>
-References: <20190204131640.11429-1-jarkko.sakkinen@linux.intel.com>
- <20190204232910.GC14992@linux.intel.com>
-Message-ID: <alpine.LRH.2.21.1902060712500.3449@namei.org>
+From: tadeusz.struk at intel.com (Tadeusz Struk)
+Date: Tue, 05 Feb 2019 12:28:33 -0800
+Subject: [PATCH 1/2] selftests: tpm2: Open tpm dev in unbuffered mode
+Message-ID: <154939851385.18477.481518864800562919.stgit@tstruk-mobl1.jf.intel.com>
 
-On Tue, 5 Feb 2019, Jarkko Sakkinen wrote:
+In order to have control over how many bytes are read or written
+the device needs to be opened in unbuffered mode.
 
-> On Mon, Feb 04, 2019 at 03:16:40PM +0200, Jarkko Sakkinen wrote:
-> > Added the tests that I've been using for testing TPM 2.0 functionality
-> > for a long time but have been out-of-tree so far, residing in
-> > 
-> > https://github.com/jsakkine-intel/tpm2-scripts
-> > 
-> > Cc: Tadeusz Struk <tadeusz.struk at intel.com>
-> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen at linux.intel.com>
-> > Acked-By: Joey Pabalinas <joeypabalinas at gmail.com>
-> > Reviewed-by: Petr Vorel <petr.vorel at gmail.com>
-> 
-> Wondering if I can put this to my 5.1 PR?
+Signed-off-by: Tadeusz Struk <tadeusz.struk at intel.com>
+---
+ tools/testing/selftests/tpm2/tpm2.py |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Yep, should be fine.
-
--- 
-James Morris
-<jmorris at namei.org>
+diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
+index 40ea95ce2ead..c2b9f2b1a0ac 100644
+--- a/tools/testing/selftests/tpm2/tpm2.py
++++ b/tools/testing/selftests/tpm2/tpm2.py
+@@ -357,9 +357,9 @@ class Client:
+         self.flags = flags
+ 
+         if (self.flags & Client.FLAG_SPACE) == 0:
+-            self.tpm = open('/dev/tpm0', 'r+b')
++            self.tpm = open('/dev/tpm0', 'r+b', buffering=0)
+         else:
+-            self.tpm = open('/dev/tpmrm0', 'r+b')
++            self.tpm = open('/dev/tpmrm0', 'r+b', buffering=0)
+ 
+     def close(self):
+         self.tpm.close()
