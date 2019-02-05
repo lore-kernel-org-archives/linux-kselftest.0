@@ -1,49 +1,30 @@
-From: jacob.jun.pan@linux.intel.com (Jacob Pan)
-Date: Tue, 5 Feb 2019 11:19:39 -0800
-Subject: [PATCH 1/9] iommu/vt-d: Allow interrupts from the entire bus
- for aliased devices
-In-Reply-To: <398e6a0a-9cbd-c218-e20e-ed91f74a653d@deltatee.com>
-References: <20190131185656.17972-1-logang@deltatee.com>
- <20190131185656.17972-2-logang@deltatee.com>
- <20190201164401.GT32526@8bytes.org>
- <398e6a0a-9cbd-c218-e20e-ed91f74a653d@deltatee.com>
-Message-ID: <20190205111939.6f91739e@jacob-builder>
+From: jmorris@namei.org (James Morris)
+Date: Wed, 6 Feb 2019 07:12:57 +1100 (AEDT)
+Subject: [PATCH v3] selftests: add TPM 2.0 tests
+In-Reply-To: <20190204232910.GC14992@linux.intel.com>
+References: <20190204131640.11429-1-jarkko.sakkinen@linux.intel.com>
+ <20190204232910.GC14992@linux.intel.com>
+Message-ID: <alpine.LRH.2.21.1902060712500.3449@namei.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190205191939.TQGJc68SpV53u55-1H8hongauPnIT4X2ajZnfbtvxyA@z>
+Message-ID: <20190205201257.Pak1OFAys-LtB7R1AzjEW7Y45vtGmHF7GUlE5_kJBpI@z>
 
-On Fri, 1 Feb 2019 10:27:29 -0700
-Logan Gunthorpe <logang@deltatee.com> wrote:
+On Tue, 5 Feb 2019, Jarkko Sakkinen wrote:
 
-> On 2019-02-01 9:44 a.m., Joerg Roedel wrote:
-> > On Thu, Jan 31, 2019 at 11:56:48AM -0700, Logan Gunthorpe wrote:  
-> >> @@ -394,6 +402,10 @@ static int set_msi_sid(struct irte *irte,
-> >> struct pci_dev *dev) set_irte_sid(irte, SVT_VERIFY_BUS, SQ_ALL_16,
-> >>  			     PCI_DEVID(PCI_BUS_NUM(data.alias),
-> >>  				       dev->bus->number));
-I guess devfn can be removed also. but that is separate cleanup.
- 
-> >> +	else if (data.count >= 2 && data.busmatch_count ==
-> >> data.count)
-> >> +		set_irte_sid(irte, SVT_VERIFY_BUS, SQ_ALL_16,
-> >> +			     PCI_DEVID(dev->bus->number,
-> >> +				       dev->bus->number));  
+> On Mon, Feb 04, 2019@03:16:40PM +0200, Jarkko Sakkinen wrote:
+> > Added the tests that I've been using for testing TPM 2.0 functionality
+> > for a long time but have been out-of-tree so far, residing in
 > > 
-> > The dev->bus->number argument for the devfn parameter of PCI_DEVID
-> > is not needed, right?  
+> > https://github.com/jsakkine-intel/tpm2-scripts
+> > 
+> > Cc: Tadeusz Struk <tadeusz.struk at intel.com>
+> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen at linux.intel.com>
+> > Acked-By: Joey Pabalinas <joeypabalinas at gmail.com>
+> > Reviewed-by: Petr Vorel <petr.vorel at gmail.com>
 > 
-> Oh, yes. I think you are right.
-> 
-> > Also, this requires at least a comment to document that special
-> > case.  
-> 
-> I'll add a comment for v2.
-> 
-> Thanks for the review!
-> 
-> Logan
-> _______________________________________________
-> iommu mailing list
-> iommu at lists.linux-foundation.org
-> https://lists.linuxfoundation.org/mailman/listinfo/iommu
+> Wondering if I can put this to my 5.1 PR?
 
-[Jacob Pan]
+Yep, should be fine.
+
+-- 
+James Morris
+<jmorris at namei.org>
