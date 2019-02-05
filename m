@@ -1,103 +1,49 @@
-From: mcgrof@kernel.org (Luis Chamberlain)
-Date: Tue, 5 Feb 2019 11:14:17 -0800
-Subject: [PATCH 2/2] selftests: firmware: add
- CONFIG_FW_LOADER_USER_HELPER_FALLBACK to config
-In-Reply-To: <20190205024150.4ntyl5gccvk7soux@xps.therub.org>
-References: <20181127031218.24419-1-dan.rue@linaro.org>
- <20181127031218.24419-3-dan.rue@linaro.org>
- <20181130023115.GN4922@garbanzo.do-not-panic.com>
- <CAB=NE6Xxzee9+VeXWqe3o8Uf3Mb+jw=_-9C8RuqSSeWrVUXJng@mail.gmail.com>
- <20190205024150.4ntyl5gccvk7soux@xps.therub.org>
-Message-ID: <20190205191417.GV11489@garbanzo.do-not-panic.com>
+From: jacob.jun.pan@linux.intel.com (Jacob Pan)
+Date: Tue, 5 Feb 2019 11:19:39 -0800
+Subject: [PATCH 1/9] iommu/vt-d: Allow interrupts from the entire bus
+ for aliased devices
+In-Reply-To: <398e6a0a-9cbd-c218-e20e-ed91f74a653d@deltatee.com>
+References: <20190131185656.17972-1-logang@deltatee.com>
+ <20190131185656.17972-2-logang@deltatee.com>
+ <20190201164401.GT32526@8bytes.org>
+ <398e6a0a-9cbd-c218-e20e-ed91f74a653d@deltatee.com>
+Message-ID: <20190205111939.6f91739e@jacob-builder>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190205191417.A-5NrvEAqD4kElO2zCbjIaNBeBAj0ITzxF-jVG94ZLM@z>
+Message-ID: <20190205191939.TQGJc68SpV53u55-1H8hongauPnIT4X2ajZnfbtvxyA@z>
 
-On Mon, Feb 04, 2019@08:41:50PM -0600, Dan Rue wrote:
-> On Mon, Feb 04, 2019@05:39:57PM -0600, Luis Chamberlain wrote:
-> > On Thu, Nov 29, 2018@8:31 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > >
-> > > On Mon, Nov 26, 2018@09:12:16PM -0600, Dan Rue wrote:
-> > > > CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y is required for fw_fallback.sh.
-> > > > Without it, fw_fallback.sh fails with 'usermode helper disabled so
-> > > > ignoring test'. Enable the config in selftest so that it gets built by
-> > > > default.
-> > > >
-> > > > Signed-off-by: Dan Rue <dan.rue at linaro.org>
-> > > > ---
-> > > >  tools/testing/selftests/firmware/config | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > >
-> > > > diff --git a/tools/testing/selftests/firmware/config b/tools/testing/selftests/firmware/config
-> > > > index bf634dda0720..913a25a4a32b 100644
-> > > > --- a/tools/testing/selftests/firmware/config
-> > > > +++ b/tools/testing/selftests/firmware/config
-> > > > @@ -1,5 +1,6 @@
-> > > >  CONFIG_TEST_FIRMWARE=y
-> > > >  CONFIG_FW_LOADER=y
-> > > >  CONFIG_FW_LOADER_USER_HELPER=y
-> > > > +CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y
-> > > >  CONFIG_IKCONFIG=y
-> > > >  CONFIG_IKCONFIG_PROC=y
-> > >
-> > > NACK -- the point of the changes was to *allow* us to mimic such
-> > > configuration through a proc sysctl knob.
-> > >
-> > > You aren forcing CONFIG_FW_LOADER_USER_HELPER_FALLBACK but just having
-> > > CONFIG_FW_LOADER_USER_HELPER suffices to emulate the_FALLBACK
-> > > functionality.
+On Fri, 1 Feb 2019 10:27:29 -0700
+Logan Gunthorpe <logang@deltatee.com> wrote:
+
+> On 2019-02-01 9:44 a.m., Joerg Roedel wrote:
+> > On Thu, Jan 31, 2019 at 11:56:48AM -0700, Logan Gunthorpe wrote:  
+> >> @@ -394,6 +402,10 @@ static int set_msi_sid(struct irte *irte,
+> >> struct pci_dev *dev) set_irte_sid(irte, SVT_VERIFY_BUS, SQ_ALL_16,
+> >>  			     PCI_DEVID(PCI_BUS_NUM(data.alias),
+> >>  				       dev->bus->number));
+I guess devfn can be removed also. but that is separate cleanup.
+ 
+> >> +	else if (data.count >= 2 && data.busmatch_count ==
+> >> data.count)
+> >> +		set_irte_sid(irte, SVT_VERIFY_BUS, SQ_ALL_16,
+> >> +			     PCI_DEVID(dev->bus->number,
+> >> +				       dev->bus->number));  
 > > 
-> > Dan, again, you broke the whole point to the amount of work that went
-> > into emulating testing. As such anyone testing their changes would
-> > yield incorrect results.
-> > 
-> > > The issue here seems to be that *all* tests fail once a configuration is
-> > > found which is not suitable a tests. With the shiny new proc sysctls we
-> > > can test all 3 kernel configurations in one shot. Since we test 3
-> > > different kernel configurations naturally some of these won't have the
-> > > features needed, so that failure should be treated as non-fatal to allow
-> > > the chain of other tests to continue.
-> > >
-> > > This issue was a regression due to commit a6a9be9270c87 ("selftests:
-> > > firmware: return Kselftest Skip code for skipped tests") by Shuah for
-> > > the verify_reqs(). We need to treat this as a non-fatal / don't skip
-> > > return value.
-> > >
-> > > The following would fix this chaining issue:
-> > >
-> > > diff --git a/tools/testing/selftests/firmware/fw_lib.sh b/tools/testing/selftests/firmware/fw_lib.sh
-> > > index 6c5f1b2ffb74..1cbb12e284a6 100755
-> > > --- a/tools/testing/selftests/firmware/fw_lib.sh
-> > > +++ b/tools/testing/selftests/firmware/fw_lib.sh
-> > > @@ -91,7 +91,7 @@ verify_reqs()
-> > >         if [ "$TEST_REQS_FW_SYSFS_FALLBACK" = "yes" ]; then
-> > >                 if [ ! "$HAS_FW_LOADER_USER_HELPER" = "yes" ]; then
-> > >                         echo "usermode helper disabled so ignoring test"
-> > > -                       exit $ksft_skip
-> > > +                       exit 0
-> > >                 fi
-> > >         fi
-> > >  }
-> > >
-> > > However its not clear to me if instead we want some new special return
-> > > value for selftests so that the framework can detect an that an error
-> > > is non-fatal, and can continue. This is a tricky situation given the
-> > > script, existing upstream kernel module, are aware of such emulation
-> > > hacks via sysctl, but knowledge of this is not obvious to selftests.
-> > >
-> > > Shuah, how do you suggest we handle this corner case? If you are OK
-> > > with the above hunk for now I can send a fix for it. In either case
-> > > this commit was added on v4.18, so the fix would be a stable fix.
-> > 
-> > In lieu of any suggestion I'm going to request we revert this commit
-> > and send the above fix.
+> > The dev->bus->number argument for the devfn parameter of PCI_DEVID
+> > is not needed, right?  
 > 
-> Sorry, I didn't realize this was waiting on me. I agree with all of your
-> feedback. Please revert 7492902e8d22 ("selftests: firmware: add
-> CONFIG_FW_LOADER_USER_HELPER_FALLBACK to config") and add my Acked-by to
-> the proposed fix above.
+> Oh, yes. I think you are right.
 > 
-> Shuah, do I need to send a patch for that revert?
+> > Also, this requires at least a comment to document that special
+> > case.  
+> 
+> I'll add a comment for v2.
+> 
+> Thanks for the review!
+> 
+> Logan
+> _______________________________________________
+> iommu mailing list
+> iommu at lists.linux-foundation.org
+> https://lists.linuxfoundation.org/mailman/listinfo/iommu
 
-I can send the revert and the subsequent fix.
-
-  Luis
+[Jacob Pan]
