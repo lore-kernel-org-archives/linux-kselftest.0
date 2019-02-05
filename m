@@ -1,129 +1,45 @@
-From: tadeusz.struk@intel.com (Tadeusz Struk)
-Date: Tue, 05 Feb 2019 12:28:39 -0800
-Subject: [PATCH 2/2] selftests: tpm2: Extend tests to cover partial reads
-In-Reply-To: <154939851385.18477.481518864800562919.stgit@tstruk-mobl1.jf.intel.com>
-References: <154939851385.18477.481518864800562919.stgit@tstruk-mobl1.jf.intel.com>
-Message-ID:
- <154939851969.18477.13778157467131576825.stgit@tstruk-mobl1.jf.intel.com>
+From: logang@deltatee.com (Logan Gunthorpe)
+Date: Tue, 5 Feb 2019 13:40:36 -0700
+Subject: [PATCH 1/9] iommu/vt-d: Allow interrupts from the entire bus for
+ aliased devices
+In-Reply-To: <20190205111939.6f91739e@jacob-builder>
+References: <20190131185656.17972-1-logang@deltatee.com>
+ <20190131185656.17972-2-logang@deltatee.com>
+ <20190201164401.GT32526@8bytes.org>
+ <398e6a0a-9cbd-c218-e20e-ed91f74a653d@deltatee.com>
+ <20190205111939.6f91739e@jacob-builder>
+Message-ID: <d097d98b-0b8b-5b29-c411-a5dc3949a3e7@deltatee.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190205202839.Di7uYm28WPEhi1CWKgqCt2ZJgtKuRBrKOSyUGjCWaFo@z>
+Message-ID: <20190205204036.Ikfa2DOnVwW03UsXpZrO1t0RuX5iWiJcSUWdKICNp2w@z>
 
-Three new tests added:
-1. Send get random cmd, read header in 1st read, read the rest in second
-   read - expect success
-2. Send get random cmd, read only part of the response, send another
-   get random command, read the response - expect success
-3. Send get random cmd followed by another get random cmd, without
-   reading the first response - expect the second cmd to fail with -EBUSY
 
-Signed-off-by: Tadeusz Struk <tadeusz.struk at intel.com>
----
- tools/testing/selftests/tpm2/tpm2.py       |    1 
- tools/testing/selftests/tpm2/tpm2_tests.py |   82 ++++++++++++++++++++++++++++
- 2 files changed, 83 insertions(+)
 
-diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
-index c2b9f2b1a0ac..828c18584624 100644
---- a/tools/testing/selftests/tpm2/tpm2.py
-+++ b/tools/testing/selftests/tpm2/tpm2.py
-@@ -22,6 +22,7 @@ TPM2_CC_UNSEAL = 0x015E
- TPM2_CC_FLUSH_CONTEXT = 0x0165
- TPM2_CC_START_AUTH_SESSION = 0x0176
- TPM2_CC_GET_CAPABILITY	= 0x017A
-+TPM2_CC_GET_RANDOM = 0x017B
- TPM2_CC_PCR_READ = 0x017E
- TPM2_CC_POLICY_PCR = 0x017F
- TPM2_CC_PCR_EXTEND = 0x0182
-diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-index 3bb066fea4a0..3f6a65cbdd39 100644
---- a/tools/testing/selftests/tpm2/tpm2_tests.py
-+++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-@@ -158,6 +158,88 @@ class SmokeTest(unittest.TestCase):
-             pass
-         self.assertEqual(rejected, True)
- 
-+    def test_read_partial_resp(self):
-+        """Reads random in two subsequent reads"""
-+        log = logging.getLogger(__name__)
-+        try:
-+            fmt = '>HIIH'
-+            cmd = struct.pack(fmt,
-+                              tpm2.TPM2_ST_NO_SESSIONS,
-+                              struct.calcsize(fmt),
-+                              tpm2.TPM2_CC_GET_RANDOM,
-+                              0x20)
-+            self.client.tpm.write(cmd)
-+            hdr = self.client.tpm.read(10)
-+            sz = struct.unpack('>I', hdr[2:6])[0]
-+            rsp = self.client.tpm.read()
-+            log.debug("header:")
-+            log.debug(tpm2.hex_dump(hdr))
-+            log.debug("resp:")
-+            log.debug(tpm2.hex_dump(rsp))
-+        except:
-+            log.debug("Error:", sys.exc_info()[0])
-+            raise
-+
-+        self.assertEqual(sz, 10 + 2 + 32)
-+        self.assertEqual(len(rsp), 2 + 32)
-+
-+    def test_read_partial_overwrite(self):
-+        """Reads only part of the response and issue a new cmd"""
-+        log = logging.getLogger(__name__)
-+        try:
-+            fmt = '>HIIH'
-+            cmd = struct.pack(fmt,
-+                              tpm2.TPM2_ST_NO_SESSIONS,
-+                              struct.calcsize(fmt),
-+                              tpm2.TPM2_CC_GET_RANDOM,
-+                              0x20)
-+            self.client.tpm.write(cmd)
-+            # Read part of the respone
-+            rsp1 = self.client.tpm.read(15)
-+            log.debug("rsp 1:")
-+            log.debug(tpm2.hex_dump(rsp1))
-+
-+            # Send a new cmd
-+            self.client.tpm.write(cmd)
-+
-+            # Read the whole respone
-+            rsp2 = self.client.tpm.read()
-+            log.debug("rsp 2:")
-+            log.debug(tpm2.hex_dump(rsp2))
-+
-+        except:
-+            log.debug("Error:", sys.exc_info()[0])
-+            raise
-+
-+        self.assertEqual(len(rsp1), 15)
-+        self.assertEqual(len(rsp2), 10 + 2 + 32)
-+
-+    def test_send_two_cmds(self):
-+        """Send two cmds without reading a response"""
-+        rejected = False
-+        try:
-+            fmt = '>HIIH'
-+            cmd = struct.pack(fmt,
-+                              tpm2.TPM2_ST_NO_SESSIONS,
-+                              struct.calcsize(fmt),
-+                              tpm2.TPM2_CC_GET_RANDOM,
-+                              0x20)
-+            self.client.tpm.write(cmd)
-+
-+            # expect the second one to raise -EBUSY error
-+            self.client.tpm.write(cmd)
-+            rsp = self.client.tpm.read()
-+
-+        except IOError, e:
-+            # read the response
-+            rsp = self.client.tpm.read()
-+            rejected = True
-+            pass
-+        except:
-+            raise
-+
-+        self.assertEqual(rejected, True)
-+
- class SpaceTest(unittest.TestCase):
-     def setUp(self):
-         logging.basicConfig(filename='SpaceTest.log', level=logging.DEBUG)
+On 2019-02-05 12:19 p.m., Jacob Pan wrote:
+> On Fri, 1 Feb 2019 10:27:29 -0700
+> Logan Gunthorpe <logang@deltatee.com> wrote:
+> 
+>> On 2019-02-01 9:44 a.m., Joerg Roedel wrote:
+>>> On Thu, Jan 31, 2019 at 11:56:48AM -0700, Logan Gunthorpe wrote:  
+>>>> @@ -394,6 +402,10 @@ static int set_msi_sid(struct irte *irte,
+>>>> struct pci_dev *dev) set_irte_sid(irte, SVT_VERIFY_BUS, SQ_ALL_16,
+>>>>  			     PCI_DEVID(PCI_BUS_NUM(data.alias),
+>>>>  				       dev->bus->number));
+> I guess devfn can be removed also. but that is separate cleanup.
+
+Actually, no, I've dug into this and we *do* need the devfn here but
+it's needlessly confusing. We should not be using PCI_DEVID() as we
+aren't actually representing a DEVID in this case...
+
+According to the Intel VT-D spec, when using SVT_VERIFY_BUS, the MSB of
+the SID field represents the starting bus number and the LSB represents
+the end bus number. The requester id's bus number must then be within
+that range. The PCI_DEVID macro matches these semantics if you assume
+the devfn is the end bus, but doesn't really make sense here and just
+confuses the issue.
+
+So the code was correct, I'll just try to clean it up to make it less
+confusing.
+
+Thanks,
+
+Logan
