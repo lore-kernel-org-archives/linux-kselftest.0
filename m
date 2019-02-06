@@ -1,47 +1,43 @@
-From: jacob.jun.pan at linux.intel.com (Jacob Pan)
-Date: Tue, 5 Feb 2019 15:58:59 -0800
-Subject: [PATCH 1/9] iommu/vt-d: Allow interrupts from the entire bus
- for aliased devices
-In-Reply-To: <d097d98b-0b8b-5b29-c411-a5dc3949a3e7@deltatee.com>
-References: <20190131185656.17972-1-logang@deltatee.com>
- <20190131185656.17972-2-logang@deltatee.com>
- <20190201164401.GT32526@8bytes.org>
- <398e6a0a-9cbd-c218-e20e-ed91f74a653d@deltatee.com>
- <20190205111939.6f91739e@jacob-builder>
- <d097d98b-0b8b-5b29-c411-a5dc3949a3e7@deltatee.com>
-Message-ID: <20190205155859.0e96dd4f@jacob-builder>
+From: mcgrof at kernel.org (Luis Chamberlain)
+Date: Wed, 6 Feb 2019 11:52:02 -0800
+Subject: [PATCH 1/2] test_sysctl: add tests for >32-bit values written to
+ 32-bit integers
+Message-ID: <20190206195202.GF11489@garbanzo.do-not-panic.com>
 
-On Tue, 5 Feb 2019 13:40:36 -0700
-Logan Gunthorpe <logang at deltatee.com> wrote:
+Thanks for the patches, please include akpm at linux-foundation.org in the
+future, as we can merge the changes through Andrew as well.
 
-> On 2019-02-05 12:19 p.m., Jacob Pan wrote:
-> > On Fri, 1 Feb 2019 10:27:29 -0700
-> > Logan Gunthorpe <logang at deltatee.com> wrote:
-> >   
-> >> On 2019-02-01 9:44 a.m., Joerg Roedel wrote:  
-> >>> On Thu, Jan 31, 2019 at 11:56:48AM -0700, Logan Gunthorpe
-> >>> wrote:    
-> >>>> @@ -394,6 +402,10 @@ static int set_msi_sid(struct irte *irte,
-> >>>> struct pci_dev *dev) set_irte_sid(irte, SVT_VERIFY_BUS,
-> >>>> SQ_ALL_16, PCI_DEVID(PCI_BUS_NUM(data.alias),
-> >>>>  				       dev->bus->number));  
-> > I guess devfn can be removed also. but that is separate cleanup.  
-> 
-> Actually, no, I've dug into this and we *do* need the devfn here but
-> it's needlessly confusing. We should not be using PCI_DEVID() as we
-> aren't actually representing a DEVID in this case...
-> 
-> According to the Intel VT-D spec, when using SVT_VERIFY_BUS, the MSB
-> of the SID field represents the starting bus number and the LSB
-> represents the end bus number. The requester id's bus number must
-> then be within that range. The PCI_DEVID macro matches these
-> semantics if you assume the devfn is the end bus, but doesn't really
-> make sense here and just confuses the issue.
-> 
-> So the code was correct, I'll just try to clean it up to make it less
-> confusing.
-> 
-you are right, thanks for explaining.
-> Thanks,
-> 
-> Logan
+Also please Cc yzaikin at google.com, brendanhiggins at google.com in follow
+ups for now.  They are looking at the sysctl testing code as well.
+
+Some feedback below:
+
+In-Reply-To: <20181227111231.12912-2-zev at bewilderbeest.net>
+
+On Thu, Dec 27, 2018 at 05:12:29AM -0600, Zev Weiss wrote:
+> +run_wideint_tests()
+> +{
+> +	# check negative and positive 64-bit values, with and without
+> +	# bits set in the lower 31, and with and without bit 31 (sign
+> +	# bit of a 32-bit int) set.  None of these are representable
+> +	# in 32 bits, and hence all should fail.
+> +	check_failure 0x0000010000000000
+> +	check_failure 0x0000010080000000
+> +	check_failure 0x000001ff7fffffff
+> +	check_failure 0x000001ffffffffff
+> +	check_failure 0xffffffff7fffffff
+
+
+> +	check_failure 0xffffffffffffffff
+
+This s64 version of -1
+
+> +	check_failure 0xffffff0000000000
+> +	check_failure 0xffffff0080000000
+> +}
+
+It was still unclear from the comments and manually looking at the
+values why they are clear candidates to always test from all respective
+64-bit values. A comment per each would be useful.
+
+  Luis
