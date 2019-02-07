@@ -1,105 +1,90 @@
-From: joel at joelfernandes.org (Joel Fernandes (Google))
-Date: Thu,  7 Feb 2019 16:11:02 -0500
-Subject: [PATCH 2/2] Add selftests for module build using in-kernel headers
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Thu, 7 Feb 2019 17:52:39 -0500
+Subject: [PATCH 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
 In-Reply-To: <20190207211102.154634-1-joel@joelfernandes.org>
 References: <20190207211102.154634-1-joel@joelfernandes.org>
-Message-ID: <20190207211102.154634-2-joel@joelfernandes.org>
+Message-ID: <20190207175239.0607f5eb@gandalf.local.home>
 
-This test tries to build a module successfully using the in-kernel
-headers found in /proc/kheaders.txz.
+On Thu,  7 Feb 2019 16:11:01 -0500
+"Joel Fernandes (Google)" <joel at joelfernandes.org> wrote:
 
-Verified pass and fail scenarios by running:
-make -C tools/testing/selftests TARGETS=kheaders run_tests
+> +
+> +# Build a list of in-kernel headers for building kernel modules
+> +# Any other files will be stored in IKH_EXTRA variable.
+> +ikh_file_list := include/
+> +ikh_file_list += arch/$(ARCH)/Makefile
+> +ikh_file_list += arch/$(ARCH)/include/
+> +ikh_file_list += $(IKH_EXTRA)
+> +ikh_file_list += scripts/
+> +ikh_file_list += Makefile
+> +ikh_file_list += Module.symvers
+> +ifeq ($(CONFIG_STACK_VALIDATION), y)
+> +ikh_file_list += $(objtree)/tools/objtool/objtool
+> +endif
+> +
+> +$(obj)/kheaders.o: $(obj)/kheaders_data.h
+> +
+> +targets += kheaders_data.txz
+> +
+> +quiet_cmd_genikh = GEN     $(obj)/kheaders_data.txz
+> +cmd_genikh = $(srctree)/scripts/gen_ikh_data.sh $@ $^ >/dev/null 2>&1
+> +$(obj)/kheaders_data.txz: $(ikh_file_list) FORCE
+> +	$(call cmd,genikh)
+> +
+> +filechk_ikheadersxz = (echo "static const char kernel_headers_data[] __used = KH_MAGIC_START"; cat $< | scripts/bin2c; echo "KH_MAGIC_END;")
+> +
+> +targets += kheaders_data.h
+> +$(obj)/kheaders_data.h: $(obj)/kheaders_data.txz FORCE
+> +	$(call filechk,ikheadersxz)
+> diff --git a/scripts/gen_ikh_data.sh b/scripts/gen_ikh_data.sh
+> new file mode 100755
+> index 000000000000..609196b5cea2
+> --- /dev/null
+> +++ b/scripts/gen_ikh_data.sh
+> @@ -0,0 +1,19 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +spath="$(dirname "$(readlink -f "$0")")"
+> +
+> +rm -rf $1.tmp
+> +mkdir $1.tmp
+> +
+> +for f in "${@:2}";
+> +	do find "$f" ! -name "*.c" ! -name "*.o" ! -name "*.cmd" ! -name ".*";
 
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
- tools/testing/selftests/kheaders/Makefile     |  5 +++++
- tools/testing/selftests/kheaders/config       |  1 +
- .../kheaders/run_kheaders_modbuild.sh         | 18 ++++++++++++++++++
- .../selftests/kheaders/testmod/Makefile       |  3 +++
- .../testing/selftests/kheaders/testmod/test.c | 19 +++++++++++++++++++
- 5 files changed, 46 insertions(+)
- create mode 100644 tools/testing/selftests/kheaders/Makefile
- create mode 100644 tools/testing/selftests/kheaders/config
- create mode 100755 tools/testing/selftests/kheaders/run_kheaders_modbuild.sh
- create mode 100644 tools/testing/selftests/kheaders/testmod/Makefile
- create mode 100644 tools/testing/selftests/kheaders/testmod/test.c
+I wonder if it is a good idea to pick all files in the directories
+defined in ikh_file_list, and not just explicitly list what we want,
+with a '*.h' and such?
 
-diff --git a/tools/testing/selftests/kheaders/Makefile b/tools/testing/selftests/kheaders/Makefile
-new file mode 100644
-index 000000000000..51035ab0732b
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+TEST_PROGS := run_kheaders_modbuild.sh
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/kheaders/config b/tools/testing/selftests/kheaders/config
-new file mode 100644
-index 000000000000..5221f9fb5e79
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/config
-@@ -0,0 +1 @@
-+CONFIG_IKHEADERS_PROC=y
-diff --git a/tools/testing/selftests/kheaders/run_kheaders_modbuild.sh b/tools/testing/selftests/kheaders/run_kheaders_modbuild.sh
-new file mode 100755
-index 000000000000..c5cb191da9c7
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/run_kheaders_modbuild.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+HEADERS_XZ=/proc/kheaders.txz
-+TMP_DIR_HEADERS=$(mktemp -d)
-+TMP_DIR_MODULE=$(mktemp -d)
-+SPATH="$(dirname "$(readlink -f "$0")")"
-+
-+tar -xvf $HEADERS_XZ -C $TMP_DIR_HEADERS > /dev/null
-+
-+cp -r $SPATH/testmod $TMP_DIR_MODULE/
-+
-+pushd $TMP_DIR_MODULE/testmod
-+make -C $TMP_DIR_HEADERS M=$(pwd) modules
-+popd
-+
-+rm -rf $TMP_DIR_HEADERS
-+rm -rf $TMP_DIR_MODULE
-diff --git a/tools/testing/selftests/kheaders/testmod/Makefile b/tools/testing/selftests/kheaders/testmod/Makefile
-new file mode 100644
-index 000000000000..7083e28706e8
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/testmod/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-m += test.o
-diff --git a/tools/testing/selftests/kheaders/testmod/test.c b/tools/testing/selftests/kheaders/testmod/test.c
-new file mode 100644
-index 000000000000..eae030aab5db
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/testmod/test.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/init.h>
-+
-+static int __init hello_init(void)
-+{
-+	printk(KERN_INFO "Hello, world\n");
-+	return 0;
-+}
-+
-+static void __exit hello_exit(void)
-+{
-+	printk(KERN_INFO "Goodbye, world\n");
-+}
-+
-+module_init(hello_init);
-+module_exit(hello_exit);
--- 
-2.20.1.611.gfbb209baf1-goog
+
+> +done | cpio -pd $1.tmp
+> +
+> +for f in $(find $1.tmp); do
+> +	$spath/strip-comments.pl $f
+> +done
+> +
+> +tar -Jcf $1 -C $1.tmp/ . > /dev/null
+> +
+> +rm -rf $1.tmp
+> diff --git a/scripts/strip-comments.pl b/scripts/strip-comments.pl
+> new file mode 100755
+> index 000000000000..f8ada87c5802
+> --- /dev/null
+> +++ b/scripts/strip-comments.pl
+> @@ -0,0 +1,8 @@
+> +#!/usr/bin/perl -pi
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +# This script removes /**/ comments from a file, unless such comments
+> +# contain "SPDX". It is used when building compressed in-kernel headers.
+> +
+> +BEGIN {undef $/;}
+> +s/\/\*((?!SPDX).)*?\*\///smg;
+
+Hmm, I'm also wondering if we could us the C pre-processor for the
+stripping of everything from the header file. We would then even get
+the header files only having what is necessary for the running kernel.
+
+-- Steve
