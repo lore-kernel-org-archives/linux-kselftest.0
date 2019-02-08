@@ -1,72 +1,52 @@
-From: christophe.leroy@c-s.fr (Christophe Leroy)
-Date: Fri,  8 Feb 2019 15:02:55 +0000 (UTC)
-Subject: [PATCH] tools/selftest/vm: allow choosing mem size and page size in
- map_hugetlb
-Message-ID:
- <59dbb1bc305068dd0fe8e2d5a75c4213e0134549.1549638049.git.christophe.leroy@c-s.fr>
+From: shuah@kernel.org (shuah)
+Date: Fri, 8 Feb 2019 10:53:22 -0700
+Subject: [PATCH 1/2] selftests: firmware: remove use of non-standard diff
+ -Z option
+In-Reply-To: <CAB=NE6Wtfe_TafSTU+=0S-n9_vQXaT3FKOrcDrzHBNzj3bY47w@mail.gmail.com>
+References: <20181127031218.24419-1-dan.rue@linaro.org>
+ <20181127031218.24419-2-dan.rue@linaro.org>
+ <20181130023732.GO4922@garbanzo.do-not-panic.com>
+ <20181205204341.7fd4ob5c6pwx375m@xps.therub.org>
+ <CAB=NE6Wtfe_TafSTU+=0S-n9_vQXaT3FKOrcDrzHBNzj3bY47w@mail.gmail.com>
+Message-ID: <b44fc032-f2dc-dfa4-bc22-7b7689a9b836@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190208150255.qQ6Kh1D0jHH4V1SykG1mbQFmU_7Ib-fd9QMXS3KRxMY@z>
+Message-ID: <20190208175322.Rz3h1EqXJc5y-IzzbeZJzalRgOBiq-KSeGaJK7awW5Y@z>
 
-map_hugetlb maps 256Mbytes of memory with default hugepage size.
+On 2/7/19 11:20 AM, Luis Chamberlain wrote:
+> On Wed, Dec 5, 2018@2:43 PM Dan Rue <dan.rue@linaro.org> wrote:
+>>
+>> On Thu, Nov 29, 2018@06:37:32PM -0800, Luis Chamberlain wrote:
+>>> On Mon, Nov 26, 2018@09:12:15PM -0600, Dan Rue wrote:
+>>>> diff -Z is used to trim the trailing whitespace when comparing the
+>>>> loaded firmware file with the source firmware file. However, per the
+>>>> comment in the source code, -Z should not be necessary. In testing, the
+>>>> input and output files are identical.
+>>>>
+>>>> Additionally, -Z is not a standard option and is not available in
+>>>> environments such as busybox. When -Z is not supported, diff fails with
+>>>> a usage error, which is suppressed, but then causes read_firmwares() to
+>>>> exit with a false failure message.
+>>>
+>>> NACK -- this breaks testing on debian:
+>>>
+>>> Testing with the file present...
+>>> Batched request_firmware() try #1: Files
+>>> /tmp/tmp.8GWkoSo5jZ/test-firmware.bin and
+>>> /sys/devices/virtual/misc/test_firmware/read_firmware differ
+>>> request #0: firmware was not loaded
+>>>
+>>> Please add a quirks check, enable it by default, and remove it for
+>>> Busybox.
+>>
+>> Thanks for the review. Shuah, can you please drop this one?
+> 
+> So much for review. This patch was still merged. I'll have to request
+> this to be reverted now too.
+> 
+>    Luis
+> 
 
-This patch allows the user to pass the size and page shift as an
-argument in order to use different size and page size.
+Sorry about this. I will pull the reverts in.
 
-Signed-off-by: Christophe Leroy <christophe.leroy at c-s.fr>
----
- tools/testing/selftests/vm/map_hugetlb.c | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/vm/map_hugetlb.c b/tools/testing/selftests/vm/map_hugetlb.c
-index 9b777fa95f09..5a2d7b8efc40 100644
---- a/tools/testing/selftests/vm/map_hugetlb.c
-+++ b/tools/testing/selftests/vm/map_hugetlb.c
-@@ -23,6 +23,14 @@
- #define MAP_HUGETLB 0x40000 /* arch specific */
- #endif
- 
-+#ifndef MAP_HUGE_SHIFT
-+#define MAP_HUGE_SHIFT 26
-+#endif
-+
-+#ifndef MAP_HUGE_MASK
-+#define MAP_HUGE_MASK 0x3f
-+#endif
-+
- /* Only ia64 requires this */
- #ifdef __ia64__
- #define ADDR (void *)(0x8000000000000000UL)
-@@ -58,12 +66,29 @@ static int read_bytes(char *addr)
- 	return 0;
- }
- 
--int main(void)
-+int main(int argc, char **argv)
- {
- 	void *addr;
- 	int ret;
-+	size_t length = LENGTH;
-+	int flags = FLAGS;
-+	int shift = 0;
-+
-+	if (argc > 1)
-+		length = atol(argv[1]) << 20;
-+	if (argc > 2) {
-+		shift = atoi(argv[2]);
-+		if (shift)
-+			flags |= (shift & MAP_HUGE_MASK) << MAP_HUGE_SHIFT;
-+	}
-+
-+	if (shift)
-+		printf("%u kB hugepages\n", 1 << shift);
-+	else
-+		printf("Default size hugepages\n");
-+	printf("Mapping %lu Mbytes\n", (unsigned long)length >> 20);
- 
--	addr = mmap(ADDR, LENGTH, PROTECTION, FLAGS, -1, 0);
-+	addr = mmap(ADDR, length, PROTECTION, flags, -1, 0);
- 	if (addr == MAP_FAILED) {
- 		perror("mmap");
- 		exit(1);
--- 
-2.13.3
+thanks,
+-- Shuah
