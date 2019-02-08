@@ -1,88 +1,95 @@
-From: joel at joelfernandes.org (Joel Fernandes)
-Date: Thu, 7 Feb 2019 19:11:39 -0500
-Subject: [PATCH 1/2] Provide in-kernel headers for making it easy to
- extend the kernel
-In-Reply-To: <20190207185042.76c7d68f@gandalf.local.home>
-References: <20190207211102.154634-1-joel@joelfernandes.org>
- <20190207175239.0607f5eb@gandalf.local.home>
- <20190207233902.GA193818@google.com>
- <20190207185042.76c7d68f@gandalf.local.home>
-Message-ID: <20190208001139.GB193818@google.com>
+From: murphyt7 at tcd.ie (Tom Murphy)
+Date: Fri, 8 Feb 2019 14:31:07 +0000
+Subject: [PATCH] fix dma-buf/udmabuf selftest
+In-Reply-To: <CAMuHMdWX=5CE=vhazBSOEbzJYyAwiK2PSDryCrA67yXRVb0m3w@mail.gmail.com>
+References: <20181127103312.19368-1-murphyt7@tcd.ie>
+ <CAMuHMdWX=5CE=vhazBSOEbzJYyAwiK2PSDryCrA67yXRVb0m3w@mail.gmail.com>
+Message-ID: <CALQxJusnECzqS+Hn-TgfJnXKw--MbfB8DizrjYanejfDdA=gRA@mail.gmail.com>
 
-On Thu, Feb 07, 2019 at 06:50:42PM -0500, Steven Rostedt wrote:
-> On Thu, 7 Feb 2019 18:39:02 -0500
-> Joel Fernandes <joel at joelfernandes.org> wrote:
-> > > > +
-> > > > +spath="$(dirname "$(readlink -f "$0")")"
-> > > > +
-> > > > +rm -rf $1.tmp
-> > > > +mkdir $1.tmp
-> > > > +
-> > > > +for f in "${@:2}";
-> > > > +	do find "$f" ! -name "*.c" ! -name "*.o" ! -name "*.cmd" ! -name ".*";  
-> > > 
-> > > I wonder if it is a good idea to pick all files in the directories
-> > > defined in ikh_file_list, and not just explicitly list what we want,
-> > > with a '*.h' and such?  
-> > 
-> > I also need few files in the archive that are not .h, these don't take up
-> > much space but are needed to make an out-of-tree kernel module build succeed.
-> > 
-> > One of my goals with this was to make a self-contained module that could be
-> > loaded to build other modules. Majority of the files are kernel headers, but
-> > some are not, such as Module.symvers and other scripts. Then one can run
-> > systemtap on Android which can be made to build modules using the embedded
-> > headers.
-> 
-> Have you audited what it picks up? My main concern is that we start
-> adding files that are not necessary or just simply added in the
-> directory that are not needed for this.
+> However, we need <linux/fcntl.h> for F_ADD_SEALS, F_SEAL_SHRINK.
+>
+> Including both leads to lots of redefinition warnings.
+>
+> Can we fix that?
 
-Yes, I audited what is needed to be picked up. It turned out that I ended up
-nitpicking files for not much space-saving advantage while causing the list
-of files that need to be picked to be long, because most of the space is
-taken by the headers.
+I still haven't looked at this and probably won't get a chance anytime soon.
+linux/tools/testing/selftests/memfd/fuse_test.c also suffers from this
+(it needs the F_ADD_SEALS too) so that should also be fixed if anyone
+gets a chance
 
-> > > > +done | cpio -pd $1.tmp
-> > > > +
-> > > > +for f in $(find $1.tmp); do
-> > > > +	$spath/strip-comments.pl $f
-> > > > +done
-> > > > +
-> > > > +tar -Jcf $1 -C $1.tmp/ . > /dev/null
-> > > > +
-> > > > +rm -rf $1.tmp
-> > > > diff --git a/scripts/strip-comments.pl b/scripts/strip-comments.pl
-> > > > new file mode 100755
-> > > > index 000000000000..f8ada87c5802
-> > > > --- /dev/null
-> > > > +++ b/scripts/strip-comments.pl
-> > > > @@ -0,0 +1,8 @@
-> > > > +#!/usr/bin/perl -pi
-> > > > +# SPDX-License-Identifier: GPL-2.0
-> > > > +
-> > > > +# This script removes /**/ comments from a file, unless such comments
-> > > > +# contain "SPDX". It is used when building compressed in-kernel headers.
-> > > > +
-> > > > +BEGIN {undef $/;}
-> > > > +s/\/\*((?!SPDX).)*?\*\///smg;  
-> > > 
-> > > Hmm, I'm also wondering if we could us the C pre-processor for the
-> > > stripping of everything from the header file. We would then even get
-> > > the header files only having what is necessary for the running kernel.  
-> > 
-> > I thought about this too. An issue with that is it is going to be really slow
-> > due to the large number of headers. The other is, I think it will actually
-> > make the headers bigger and take up more space - because all the include
-> > directives will also be expanded and have more duplication. Let me know if I
-> > missed something though.
-> > 
-> 
-> Good point about the duplication. I was mostly thinking of getting rid
-> of "#ifdef" blocks.
-> BTW, these comments are more of a "have you thought about this" and not
-> really action comments.
 
-Ok, thanks for the comments :)
 
- - Joel
+
+On Wed, 9 Jan 2019 at 10:44, Geert Uytterhoeven <geert at linux-m68k.org> wrote:
+>
+> Hi Tom,
+>
+> On Tue, Nov 27, 2018 at 7:53 PM Tom Murphy <murphyt7 at tcd.ie> wrote:
+> > This patch fixes the udmabuf selftest. Currently the selftest is broken.
+> > I fixed the selftest by setting the F_SEAL_SHRINK seal on the memfd
+> > file descriptor which is required by udmabuf and added the test to
+> > the selftest Makefile.
+> >
+> > Signed-off-by: Tom Murphy <murphyt7 at tcd.ie>
+>
+> This is now commit 6edf2e3710f4ef25 ("fix dma-buf/udmabuf selftest").
+>
+> > --- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+> > +++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+> > @@ -4,7 +4,7 @@
+> >  #include <unistd.h>
+> >  #include <string.h>
+> >  #include <errno.h>
+> > -#include <fcntl.h>
+> > +#include <linux/fcntl.h>
+>
+> Not including <fcntl.h> means we get
+>
+> udmabuf.c:30:10: warning: implicit declaration of function ‘open’; did
+> you mean ‘popen’? [-Wimplicit-function-declaration]
+>   devfd = open("/dev/udmabuf", O_RDWR);
+> udmabuf.c:42:8: warning: implicit declaration of function ‘fcntl’; did
+> you mean ‘fcvt’? [-Wimplicit-function-declaration]
+>    ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
+>
+> However, we need <linux/fcntl.h> for F_ADD_SEALS, F_SEAL_SHRINK.
+>
+> Including both leads to lots of redefinition warnings.
+>
+> Can we fix that?
+>
+> >  #include <malloc.h>
+> >
+> >  #include <sys/ioctl.h>
+> > @@ -33,12 +33,19 @@ int main(int argc, char *argv[])
+> >                 exit(77);
+> >         }
+> >
+> > -       memfd = memfd_create("udmabuf-test", MFD_CLOEXEC);
+> > +       memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
+> >         if (memfd < 0) {
+> >                 printf("%s: [skip,no-memfd]\n", TEST_PREFIX);
+> >                 exit(77);
+> >         }
+> >
+> > +       ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
+> > +       if (ret < 0) {
+> > +               printf("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
+> > +               exit(77);
+> > +       }
+> > +
+> > +
+> >         size = getpagesize() * NUM_PAGES;
+> >         ret = ftruncate(memfd, size);
+> >         if (ret == -1) {
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert at linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
