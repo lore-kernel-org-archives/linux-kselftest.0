@@ -1,111 +1,99 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Mon, 11 Feb 2019 11:35:12 +0000
-Subject: [PATCH v9 0/8] arm64: untag user pointers passed to the kernel
-In-Reply-To: <20181212170108.GZ3505@e103592.cambridge.arm.com>
-References: <cover.1544445454.git.andreyknvl@google.com>
- <20181212170108.GZ3505@e103592.cambridge.arm.com>
-Message-ID: <20190211113511.GA165128@arrakis.emea.arm.com>
+From: kieran.bingham@ideasonboard.com (Kieran Bingham)
+Date: Mon, 11 Feb 2019 12:16:08 +0000
+Subject: [RFC v3 14/19] Documentation: kunit: add documentation for KUnit
+In-Reply-To: <CAFd5g44fKzriEs_pGyANxe7GuC9Ji2SD7EEz76__h8q9jjg8yA@mail.gmail.com>
+References: <20181128193636.254378-1-brendanhiggins@google.com>
+ <20181128193636.254378-15-brendanhiggins@google.com>
+ <b4c72234-8c56-6efa-8003-f89d99a9779e@ideasonboard.com>
+ <20181130034525.GP18410@garbanzo.do-not-panic.com>
+ <CAFd5g47Cew6pmebsopjzmkd4RpnnC3zLAUfxCybjdhrO35OBpQ@mail.gmail.com>
+ <0927c42a-8e65-f410-e6ed-27576572577f@ideasonboard.com>
+ <CAFd5g44fKzriEs_pGyANxe7GuC9Ji2SD7EEz76__h8q9jjg8yA@mail.gmail.com>
+Message-ID: <57c3dc86-236f-e981-249a-8bbfe5c19f0e@ideasonboard.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190211113512.DJ3pukU28q1lQUpeMNyI-dCNRtWGFp8I5gBNAg1f5oU@z>
+Message-ID: <20190211121608.F-5BnQufqRS1gwZjD2eixGkhQD3Mdolj8kEqyt-wDoo@z>
 
-Hi Dave,
+Hi Brendan,
 
-On Wed, Dec 12, 2018@05:01:12PM +0000, Dave P Martin wrote:
-> On Mon, Dec 10, 2018@01:50:57PM +0100, Andrey Konovalov wrote:
-> > arm64 has a feature called Top Byte Ignore, which allows to embed pointer
-> > tags into the top byte of each pointer. Userspace programs (such as
-> > HWASan, a memory debugging tool [1]) might use this feature and pass
-> > tagged user pointers to the kernel through syscalls or other interfaces.
-[...]
-> It looks like there's been a lot of progress made here towards smoking
-> out most of the sites in the kernel where pointers need to be untagged.
-
-In summary, based on last summer's analysis, there are two main (and
-rather broad) scenarios of __user pointers use in the kernel: (a)
-uaccess macros, together with access_ok() checks and (b) identifying
-of user address ranges (find_vma() and related, some ioctls). The
-patches here handle the former by allowing sign-extension in access_ok()
-and subsequent uaccess routines work fine with tagged pointers.
-Identifying the latter is a bit more problematic and the approach we
-took was tracking down pointer to long conversion which seems to cover
-the majority of cases. However, this approach doesn't scale as, for
-example, we'd rather change get_user_pages() to sign-extend the address
-rather than all the callers. In lots of other cases we don't even need
-untagging as we don't expect user space to tag such pointers (i.e.
-mmap() of device memory).
-
-We might be able to improve the static analysis by introducing a
-virt_addr_t but that's significant effort and we still won't cover all
-cases (e.g. it doesn't necessarily catch tcp_zerocopy_receive() which
-wouldn't use a pointer, just a u64 for address).
-
-> However, I do think that we need a clear policy for how existing kernel
-> interfaces are to be interpreted in the presence of tagged pointers.
-> Unless we have that nailed down, we are likely to be able to make only
-> vague guarantees to userspace about what works, and the ongoing risk
-> of ABI regressions and inconsistencies seems high.
-
-I agree.
-
-> Can we define an opt-in for tagged-pointer userspace, that rejects all
-> syscalls that we haven't checked and whitelisted (or that are
-> uncheckable like ioctl)? 
-
-Defining an opt-in is not a problem, however, rejecting all syscalls
-that we haven't whitelisted is not feasible. We can have an opt-in per
-process (that's what we were going to do with MTE) but the only thing
-we can reasonably do is change the behaviour of access_ok(). That's too
-big a knob and a new syscall that we haven't got around to whitelist may
-just work. This eventually leads to de-facto ABI and our whitelist would
-simply be ignored.
-
-I'm not really keen on a big syscall shim in the arm64 kernel which
-checks syscall arguments, including in-struct values. If we are to do
-this, I'd rather keep it in user space as part of the C library.
-
-> In the meantime, I think we really need to nail down the kernel's
-> policies on
+On 09/02/2019 00:56, Brendan Higgins wrote:
+> On Thu, Dec 6, 2018 at 4:16 AM Kieran Bingham
+> <kieran.bingham@ideasonboard.com> wrote:
+>>
+>> Hi Brendan,
+>>
+>> On 03/12/2018 23:53, Brendan Higgins wrote:
+>>> On Thu, Nov 29, 2018@7:45 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>>>>
+>>>> On Thu, Nov 29, 2018@01:56:37PM +0000, Kieran Bingham wrote:
+>>>>> Hi Brendan,
+>>>>>
+>>>>> Please excuse the top posting, but I'm replying here as I'm following
+>>>>> the section "Creating a kunitconfig" in Documentation/kunit/start.rst.
+>>>>>
+>>>>> Could the three line kunitconfig file live under say
+>>>>>        arch/um/configs/kunit_defconfig?
+>>
+>>
+>> Further consideration to this topic - I mentioned putting it in
+>>   arch/um/configs
+>>
+>> - but I think this is wrong.
+>>
+>> We now have a location for config-fragments, which is essentially what
+>> this is, under kernel/configs
+>>
+>> So perhaps an addition as :
+>>
+>>  kernel/configs/kunit.config
+>>
+>> Would be more appropriate - and less (UM) architecture specific.
 > 
->  * in the default configuration (without opt-in), is the presence of
-> non-address bits in pointers exchanged with the kernel simply
-> considered broken?  (Even with this series, the de factor answer
-> generally seems to be "yes", although many specific things will now
-> work fine)
-
-Without these patches, passing non-address bits in pointers is
-considered broken. I couldn't find a case where it would still work with
-non-zero tag but maybe I haven't looked hard enough.
-
->  * if not, how do we tighten syscall / interface specifications to
-> describe what happens with pointers containing non-address bits, while
-> keeping the existing behaviour for untagged pointers?
+> Sorry for the long radio silence.
 > 
-> We would want a general recipe that gives clear guidance on what
-> userspace should expect an arbitrarily chosen syscall to do with its
-> pointers, without having to enumerate each and every case.
+> I just got around to doing this and I found that there are some
+> configs that are desirable to have when running KUnit under x86 in a
+> VM, but not UML. 
 
-That's what we are aiming with the pointer origins, to move away from a
-syscall whitelist to a generic definition. That said, the two approaches
-are orthogonal, we can use the pointer origins as the base rule for
-which syscalls can be whitelisted.
+Should this behaviour you mention be handled by the KCONFIG depends flags?
 
-If we step back a bit to look at the use-case for TBI (and MTE), the
-normal application programmer shouldn't really care about this ABI
-(well, most of the time). The app gets a tagged pointer from the C
-library as a result of a malloc()/realloc() (possibly alloca()) call and
-it expects to be able to pass it back into the kernel (usually via the C
-library) without any awareness of the non-address bits. Now, we can't
-define a user/kernel ABI based on the provenance of the pointer in user
-space (i.e. we only support tags for heap and stack), so we are trying
-to generalise this based where the pointer originated from in the kernel
-(e.g. anonymous mmap()).
+depends on (KUMIT & UML)
+or
+depends on (KUNIT & !UML)
 
-> There may already be some background on these topics -- can you throw me
-> a link if so?
+or such?
 
-That's an interesting sub-thread to read:
+An example of which configs you are referring to would help to
+understand the issue perhaps.
 
-https://lore.kernel.org/lkml/5d54526e5ff2e5ad63d0dfdd9ab17cf359afa4f2.1535629099.git.andreyknvl at google.com/
+
+> So should we have one that goes in with
+> config-fragments and others that go into architectures? Another idea,
+> it would be nice to have a KUnit config that runs all known tests
+
+This might also be a config option added to the tests directly like
+COMPILE_TEST perhaps?
+
+(Not sure what that would be called though ... KUNIT_RUNTIME_TEST?)
+
+I think that might be more maintainable as otherwise each new test would
+have to modify the {min,def}{config,fragment} ...
+
+
+> (this probably won't work in practice once we start testing mutually
+> exclusive things or things with lots of ifdeffery, but it probably
+> something we should try to maintain as best as we can?); this probably
+> shouldn't go in with the fragments, right?
+
+Sounds like we agree there :)
+
+> 
+> I will be sending another revision out soon, but I figured I might be
+> able to catch you before I did so.
+
+Thanks for thinking of me.
+I hope I managed to reply in time to help and not hinder your progress.
 
 -- 
-Catalin
+Regards
+--
+Kieran
