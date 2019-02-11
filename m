@@ -1,119 +1,101 @@
-From: joel at joelfernandes.org (Joel Fernandes (Google))
-Date: Mon, 11 Feb 2019 09:36:00 -0500
-Subject: [PATCH v2 2/2] Add selftests for module build using in-kernel headers
-In-Reply-To: <20190211143600.15021-1-joel@joelfernandes.org>
-References: <20190211143600.15021-1-joel@joelfernandes.org>
-Message-ID: <20190211143600.15021-2-joel@joelfernandes.org>
+From: joel at joelfernandes.org (Joel Fernandes)
+Date: Mon, 11 Feb 2019 09:37:32 -0500
+Subject: [PATCH 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <CAK7LNAREaZdc6=SgR215j25+By3upKe11EpRFZFC-fYAFa5roQ@mail.gmail.com>
+References: <20190207211102.154634-1-joel@joelfernandes.org>
+ <CAK7LNAREaZdc6=SgR215j25+By3upKe11EpRFZFC-fYAFa5roQ@mail.gmail.com>
+Message-ID: <20190211143732.GA210318@google.com>
 
-This test tries to build a module successfully using the in-kernel
-headers found in /proc/kheaders.txz.
+On Mon, Feb 11, 2019 at 10:39:43AM +0900, Masahiro Yamada wrote:
+> On Fri, Feb 8, 2019 at 6:13 AM Joel Fernandes (Google)
+> <joel at joelfernandes.org> wrote:
+> >
+> > Introduce in-kernel headers and other artifacts which are made available
+> > as an archive through proc (/proc/kheaders.txz file). This archive makes
+> > it possible to build kernel modules, run eBPF programs, and other
+> > tracing programs that need to extend the kernel for tracing purposes
+> > without any dependency on the file system having headers and build
+> > artifacts.
+> >
+> > On Android and embedded systems, it is common to switch kernels but not
+> > have kernel headers available on the file system. Raw kernel headers
+> > also cannot be copied into the filesystem like they can be on other
+> > distros, due to licensing and other issues. There's no linux-headers
+> > package on Android. Further once a different kernel is booted, any
+> > headers stored on the file system will no longer be useful. By storing
+> > the headers as a compressed archive within the kernel, we can avoid these
+> > issues that have been a hindrance for a long time.
+> >
+> > The feature is also buildable as a module just in case the user desires
+> > it not being part of the kernel image. This makes it possible to load
+> > and unload the headers on demand. A tracing program, or a kernel module
+> > builder can load the module, do its operations, and then unload the
+> > module to save kernel memory. The total memory needed is 3.8MB.
+> >
+> > The code to read the headers is based on /proc/config.gz code and uses
+> > the same technique to embed the headers.
+> >
+> > To build a module, the below steps have been tested on an x86 machine:
+> > modprobe kheaders
+> > rm -rf $HOME/headers
+> > mkdir -p $HOME/headers
+> > tar -xvf /proc/kheaders.txz -C $HOME/headers >/dev/null
+> > cd my-kernel-module
+> > make -C $HOME/headers M=$(pwd) modules
+> > rmmod kheaders
+> >
+> > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> > ---
+> > Changes since RFC:
+> > Both changes bring size down to 3.8MB:
+> > - use xz for compression
+> > - strip comments except SPDX lines
+> > - Call out the module name in Kconfig
+> > - Also added selftests in second patch to ensure headers are always
+> > working.
+> >
+> >  Documentation/dontdiff    |  1 +
+> >  arch/x86/Makefile         |  2 ++
+> >  init/Kconfig              | 11 ++++++
+> >  kernel/.gitignore         |  2 ++
+> >  kernel/Makefile           | 29 +++++++++++++++
+> >  kernel/kheaders.c         | 74 +++++++++++++++++++++++++++++++++++++++
+> >  scripts/gen_ikh_data.sh   | 19 ++++++++++
+> >  scripts/strip-comments.pl |  8 +++++
+> >  8 files changed, 146 insertions(+)
+> >  create mode 100644 kernel/kheaders.c
+> >  create mode 100755 scripts/gen_ikh_data.sh
+> >  create mode 100755 scripts/strip-comments.pl
+> >
+> > diff --git a/Documentation/dontdiff b/Documentation/dontdiff
+> > index 2228fcc8e29f..05a2319ee2a2 100644
+> > --- a/Documentation/dontdiff
+> > +++ b/Documentation/dontdiff
+> > @@ -151,6 +151,7 @@ int8.c
+> >  kallsyms
+> >  kconfig
+> >  keywords.c
+> > +kheaders_data.h*
+> >  ksym.c*
+> >  ksym.h*
+> >  kxgettext
+> > diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> > index 88398fdf8129..ad176d669da4 100644
+> > --- a/arch/x86/Makefile
+> > +++ b/arch/x86/Makefile
+> > @@ -240,6 +240,8 @@ archmacros:
+> >  ASM_MACRO_FLAGS = -Wa,arch/x86/kernel/macros.s
+> >  export ASM_MACRO_FLAGS
+> >  KBUILD_CFLAGS += $(ASM_MACRO_FLAGS)
+> > +IKH_EXTRA += arch/x86/kernel/macros.s
+> > +export IKH_EXTRA
+> 
+> 
+> This does not exist in any of released kernels.
+> 
+> See commit 6ac389346e6
 
-Verified pass and fail scenarios by running:
-make -C tools/testing/selftests TARGETS=kheaders run_tests
+Ok, thanks fixed it in v2 which I just sent and rebased on linus master branch. 
 
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/kheaders/Makefile     |  5 +++++
- tools/testing/selftests/kheaders/config       |  1 +
- .../kheaders/run_kheaders_modbuild.sh         | 18 +++++++++++++++++
- .../selftests/kheaders/testmod/Makefile       |  3 +++
- .../testing/selftests/kheaders/testmod/test.c | 20 +++++++++++++++++++
- 6 files changed, 48 insertions(+)
- create mode 100644 tools/testing/selftests/kheaders/Makefile
- create mode 100644 tools/testing/selftests/kheaders/config
- create mode 100755 tools/testing/selftests/kheaders/run_kheaders_modbuild.sh
- create mode 100644 tools/testing/selftests/kheaders/testmod/Makefile
- create mode 100644 tools/testing/selftests/kheaders/testmod/test.c
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 400ee81a3043..5a9287fddd0d 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -20,6 +20,7 @@ TARGETS += intel_pstate
- TARGETS += ipc
- TARGETS += ir
- TARGETS += kcmp
-+TARGETS += kheaders
- TARGETS += kvm
- TARGETS += lib
- TARGETS += membarrier
-diff --git a/tools/testing/selftests/kheaders/Makefile b/tools/testing/selftests/kheaders/Makefile
-new file mode 100644
-index 000000000000..51035ab0732b
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+TEST_PROGS := run_kheaders_modbuild.sh
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/kheaders/config b/tools/testing/selftests/kheaders/config
-new file mode 100644
-index 000000000000..5221f9fb5e79
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/config
-@@ -0,0 +1 @@
-+CONFIG_IKHEADERS_PROC=y
-diff --git a/tools/testing/selftests/kheaders/run_kheaders_modbuild.sh b/tools/testing/selftests/kheaders/run_kheaders_modbuild.sh
-new file mode 100755
-index 000000000000..69d6fa237661
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/run_kheaders_modbuild.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+HEADERS_XZ=/proc/kheaders.txz
-+TMP_DIR_HEADERS=$(mktemp -d)
-+TMP_DIR_MODULE=$(mktemp -d)
-+SPATH="$(dirname "$(readlink -f "$0")")"
-+
-+tar -xvf $HEADERS_XZ -C $TMP_DIR_HEADERS > /dev/null
-+
-+cp -r $SPATH/testmod $TMP_DIR_MODULE/
-+
-+pushd $TMP_DIR_MODULE/testmod > /dev/null
-+make -C $TMP_DIR_HEADERS M=$(pwd) modules
-+popd > /dev/null
-+
-+rm -rf $TMP_DIR_HEADERS
-+rm -rf $TMP_DIR_MODULE
-diff --git a/tools/testing/selftests/kheaders/testmod/Makefile b/tools/testing/selftests/kheaders/testmod/Makefile
-new file mode 100644
-index 000000000000..7083e28706e8
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/testmod/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-m += test.o
-diff --git a/tools/testing/selftests/kheaders/testmod/test.c b/tools/testing/selftests/kheaders/testmod/test.c
-new file mode 100644
-index 000000000000..9178bf6f0cc8
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/testmod/test.c
-@@ -0,0 +1,20 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/init.h>
-+
-+static int __init hello_init(void)
-+{
-+	printk(KERN_INFO "Hello, world\n");
-+	return 0;
-+}
-+
-+static void __exit hello_exit(void)
-+{
-+	printk(KERN_INFO "Goodbye, world\n");
-+}
-+
-+module_init(hello_init);
-+module_exit(hello_exit);
-+MODULE_LICENSE("GPL");
--- 
-2.20.1.791.gb4d0f1c61a-goog
+- Joel
