@@ -1,125 +1,206 @@
-From: Dave.Martin at arm.com (Dave Martin)
-Date: Mon, 11 Feb 2019 17:02:16 +0000
-Subject: [PATCH v9 0/8] arm64: untag user pointers passed to the kernel
-In-Reply-To: <20190211113511.GA165128@arrakis.emea.arm.com>
+From: kevin.brodsky at arm.com (Kevin Brodsky)
+Date: Mon, 11 Feb 2019 17:28:31 +0000
+Subject: [RFC][PATCH 0/3] arm64 relaxed ABI
+In-Reply-To: <20181219125249.GB22067@e103592.cambridge.arm.com>
 References: <cover.1544445454.git.andreyknvl@google.com>
- <20181212170108.GZ3505@e103592.cambridge.arm.com>
- <20190211113511.GA165128@arrakis.emea.arm.com>
-Message-ID: <20190211170212.GH3567@e103592.cambridge.arm.com>
+ <20181210143044.12714-1-vincenzo.frascino@arm.com>
+ <CAAeHK+xPZ-Z9YUAq=3+hbjj4uyJk32qVaxZkhcSAHYC4mHAkvQ@mail.gmail.com>
+ <20181212150230.GH65138@arrakis.emea.arm.com>
+ <CAAeHK+zxYJDJ7DJuDAOuOMgGvckFwMAoVUTDJzb6MX3WsXhRTQ@mail.gmail.com>
+ <20181218175938.GD20197@arrakis.emea.arm.com>
+ <20181219125249.GB22067@e103592.cambridge.arm.com>
+Message-ID: <9bbacb1b-6237-f0bb-9bec-b4cf8d42bfc5@arm.com>
 
-On Mon, Feb 11, 2019 at 11:35:12AM +0000, Catalin Marinas wrote:
-> Hi Dave,
-> 
-> On Wed, Dec 12, 2018 at 05:01:12PM +0000, Dave P Martin wrote:
-> > On Mon, Dec 10, 2018 at 01:50:57PM +0100, Andrey Konovalov wrote:
-> > > arm64 has a feature called Top Byte Ignore, which allows to embed pointer
-> > > tags into the top byte of each pointer. Userspace programs (such as
-> > > HWASan, a memory debugging tool [1]) might use this feature and pass
-> > > tagged user pointers to the kernel through syscalls or other interfaces.
-> [...]
-> > It looks like there's been a lot of progress made here towards smoking
-> > out most of the sites in the kernel where pointers need to be untagged.
-> 
-> In summary, based on last summer's analysis, there are two main (and
-> rather broad) scenarios of __user pointers use in the kernel: (a)
-> uaccess macros, together with access_ok() checks and (b) identifying
-> of user address ranges (find_vma() and related, some ioctls). The
-> patches here handle the former by allowing sign-extension in access_ok()
-> and subsequent uaccess routines work fine with tagged pointers.
-> Identifying the latter is a bit more problematic and the approach we
-> took was tracking down pointer to long conversion which seems to cover
-> the majority of cases. However, this approach doesn't scale as, for
-> example, we'd rather change get_user_pages() to sign-extend the address
-> rather than all the callers. In lots of other cases we don't even need
-> untagging as we don't expect user space to tag such pointers (i.e.
-> mmap() of device memory).
-> 
-> We might be able to improve the static analysis by introducing a
-> virt_addr_t but that's significant effort and we still won't cover all
-> cases (e.g. it doesn't necessarily catch tcp_zerocopy_receive() which
-> wouldn't use a pointer, just a u64 for address).
-> 
-> > However, I do think that we need a clear policy for how existing kernel
-> > interfaces are to be interpreted in the presence of tagged pointers.
-> > Unless we have that nailed down, we are likely to be able to make only
-> > vague guarantees to userspace about what works, and the ongoing risk
-> > of ABI regressions and inconsistencies seems high.
-> 
-> I agree.
-> 
-> > Can we define an opt-in for tagged-pointer userspace, that rejects all
-> > syscalls that we haven't checked and whitelisted (or that are
-> > uncheckable like ioctl)? 
-> 
-> Defining an opt-in is not a problem, however, rejecting all syscalls
-> that we haven't whitelisted is not feasible. We can have an opt-in per
-> process (that's what we were going to do with MTE) but the only thing
-> we can reasonably do is change the behaviour of access_ok(). That's too
-> big a knob and a new syscall that we haven't got around to whitelist may
-> just work. This eventually leads to de-facto ABI and our whitelist would
-> simply be ignored.
-> 
-> I'm not really keen on a big syscall shim in the arm64 kernel which
-> checks syscall arguments, including in-struct values. If we are to do
-> this, I'd rather keep it in user space as part of the C library.
-> 
-> > In the meantime, I think we really need to nail down the kernel's
-> > policies on
-> > 
-> >  * in the default configuration (without opt-in), is the presence of
-> > non-address bits in pointers exchanged with the kernel simply
-> > considered broken?  (Even with this series, the de factor answer
-> > generally seems to be "yes", although many specific things will now
-> > work fine)
-> 
-> Without these patches, passing non-address bits in pointers is
-> considered broken. I couldn't find a case where it would still work with
-> non-zero tag but maybe I haven't looked hard enough.
-> 
-> >  * if not, how do we tighten syscall / interface specifications to
-> > describe what happens with pointers containing non-address bits, while
-> > keeping the existing behaviour for untagged pointers?
-> > 
-> > We would want a general recipe that gives clear guidance on what
-> > userspace should expect an arbitrarily chosen syscall to do with its
-> > pointers, without having to enumerate each and every case.
-> 
-> That's what we are aiming with the pointer origins, to move away from a
-> syscall whitelist to a generic definition. That said, the two approaches
-> are orthogonal, we can use the pointer origins as the base rule for
-> which syscalls can be whitelisted.
-> 
-> If we step back a bit to look at the use-case for TBI (and MTE), the
-> normal application programmer shouldn't really care about this ABI
-> (well, most of the time). The app gets a tagged pointer from the C
-> library as a result of a malloc()/realloc() (possibly alloca()) call and
-> it expects to be able to pass it back into the kernel (usually via the C
-> library) without any awareness of the non-address bits. Now, we can't
-> define a user/kernel ABI based on the provenance of the pointer in user
-> space (i.e. we only support tags for heap and stack), so we are trying
-> to generalise this based where the pointer originated from in the kernel
-> (e.g. anonymous mmap()).
+On 19/12/2018 12:52, Dave Martin wrote:
+> On Tue, Dec 18, 2018 at 05:59:38PM +0000, Catalin Marinas wrote:
+>> On Tue, Dec 18, 2018 at 04:03:38PM +0100, Andrey Konovalov wrote:
+>>> On Wed, Dec 12, 2018 at 4:02 PM Catalin Marinas<catalin.marinas at arm.com>  wrote:
+>>>> The summary of our internal discussions (mostly between kernel
+>>>> developers) is that we can't properly describe a user ABI that covers
+>>>> future syscalls or syscall extensions while not all syscalls accept
+>>>> tagged pointers. So we tweaked the requirements slightly to only allow
+>>>> tagged pointers back into the kernel *if* the originating address is
+>>>> from an anonymous mmap() or below sbrk(0). This should cover some of the
+>>>> ioctls or getsockopt(TCP_ZEROCOPY_RECEIVE) where the user passes a
+>>>> pointer to a buffer obtained via mmap() on the device operations.
+>>>>
+>>>> (sorry for not being clear on what Vincenzo's proposal implies)
+>>> OK, I see. So I need to make the following changes to my patchset AFAIU.
+>>>
+>>> 1. Make sure that we only allow tagged user addresses that originate
+>>> from an anonymous mmap() or below sbrk(0). How exactly should this
+>>> check be performed?
+>> I don't think we should perform such checks. That's rather stating that
+>> the kernel only guarantees that the tagged pointers work if they
+>> originated from these memory ranges.
+> I concur.
+>
+> Really, the kernel should do the expected thing with all "non-weird"
+> memory.
+>
+> In lieu of a proper definition of "non-weird", I think we should have
+> some lists of things that are explicitly included, and also excluded:
+>
+> OK:
+> 	kernel-allocated process stack
+> 	brk area
+> 	MAP_ANONYMOUS | MAP_PRIVATE
+> 	MAP_PRIVATE mappings of /dev/zero
+>
+> Not OK:
+> 	MAP_SHARED
+> 	mmaps of non-memory-like devices
+> 	mmaps of anything that is not a regular file
+> 	the VDSO
+> 	...
+>
+> In general, userspace can tag memory that it "owns", and we do not assume
+> a transfer of ownership except in the "OK" list above.  Otherwise, it's
+> the kernel's memory, or the owner is simply not well defined.
 
-This sounds generally reasonable.
+Agreed on the general idea: a process should be able to pass tagged pointers at the 
+syscall interface, as long as they point to memory privately owned by the process. I 
+think it would be possible to simplify the definition of "non-weird" memory by using 
+only this "OK" list:
+- mmap() done by the process itself, where either:
+   * flags = MAP_PRIVATE | MAP_ANONYMOUS
+   * flags = MAP_PRIVATE and fd refers to a regular file or a well-defined list of 
+device files (like /dev/zero)
+- brk() done by the process itself
+- Any memory mapped by the kernel in the new process's address space during execve(), 
+with the same restrictions as above ([vdso]/[vvar] are therefore excluded)
 
-It is not adequate for describing changing the tag on already-tagged
-memory (which a memory allocator will definitely do), but we may be able
-to come up with some weasel words to cover that.
+> I would also like to see advice for userspace developers, particularly
+> things like (strawman, please challenge!):
 
-It is also not adequete for describing tagging (and retagging) regions
-of the stack -- but as you say, we can rule that use-case out for now
-in the interest of simplicity, since we know we wouldn't be able to
-deploy it widely for now anyway due to the incompability with non-MTE-
-capable hardware.
+To some extent, one could call me a userspace developer, so I'll try to help :)
 
+>   * Userspace should set tags at the point of allocation only.
 
-Ideally we would clarify user/kernel interface semantics in terms of
-object and pointer lifetimes and accessibility, but that's a larger
-project that should be pursued separately (if at all).
+Yes, tags are only supposed to be set at the point of either allocation or 
+deallocation/reallocation. However, allocators can in principle be nested, so an 
+allocator could  take a region allocated by malloc() as input and subdivide it 
+(changing tags in the process). That said, this suballocator must not free() that 
+region until all the suballocations themselves have been freed (thereby restoring the 
+tags initially set by malloc()).
 
-I could also quibble about whether "anonymous mmap" is the right thing
-here -- we should still give specific examples of things that do / don't
-qualify, to make it clear what we mean.
+>   * If you don't know how an object was allocated, you cannot modify the
+>     tag, period.
 
-Cheers
----Dave
+Agreed, allocators that tag memory can only operate on memory with a well-defined 
+provenance (for instance anonymous mmap() or malloc()).
+
+>   * A single C object should be accessed using a single, fixed pointer tag
+>     throughout its entire lifetime.
+
+Agreed. Allocators themselves may need to be excluded though, depending on how they 
+represent their managed memory.
+
+>   * Tags can be changed only when there are no outstanding pointers to
+>     the affected object or region that may be used to access the object
+>     or region (i.e., if the object were allocated from the C heap and
+>     is it safe to realloc() it, then it is safe to change the tag; for
+>     other types of allocation, analogous arguments can be applied).
+
+Tags can only be changed at the point of deallocation/reallocation. Pointers to the 
+object become invalid and cannot be used after it has been deallocated; memory 
+tagging allows to catch such invalid usage.
+
+>   * When the kernel dereferences a pointer on userspace's behalf, it
+>     shall behave equivalently to userspace dereferencing the same pointer,
+>     including use of the same tag (where passed by userspace).
+>
+>   * Where the pointer tag affects pointer dereference behaviour (i.e.,
+>     with hardware memory colouring) the kernel makes no guarantee to
+>     honour pointer tags correctly for every location a buffer based on a
+>     pointer passed by userspace to the kernel.
+>
+>     (This means for example that for a read(fd, buf, size), we can check
+>     the tag for a single arbitrary location in *(char (*)[size])buf
+>     before passing the buffer to get_user_pages().  Hopefully this could
+>     be done in get_user_pages() itself rather than hunting call sites.
+>     For userspace, it means that you're on your own if you ask the
+>     kernel to operate on a buffer than spans multiple, independently-
+>     allocated objects, or a deliberately striped single object.)
+
+I think both points are reasonable. It is very valuable for the kernel to access 
+userspace memory using the user-provided tag, because it enables kernel accesses to 
+be checked in the same way as user accesses, allowing to detect bugs that are 
+potentially hard to find. For instance, if a pointer to an object is passed to the 
+kernel after it has been deallocated, this is invalid and should be detected. 
+However, you are absolutely right that the kernel cannot *guarantee* that such a 
+check is carried out for the entire memory range (or in fact at all); it should be a 
+best-effort approach.
+
+>   * The kernel shall not extend the lifetime of user pointers in ways
+>     that are not clear from the specification of the syscall or
+>     interface to which the pointer is passed (and in any case shall not
+>     extend pointer lifetimes without good reason).
+>
+>     So no clever transparent caching between syscalls, unless it _really_
+>     is transparent in the presence of tags.
+
+Do you have any particular case in mind? If such caching is really valuable, it is 
+always possible to access the object while ignoring the tag. For sure, the 
+user-provided tag can only be used during the syscall handling itself, not 
+asynchronously later on, unless otherwise specified.
+
+>   * For purposes other than dereference, the kernel shall accept any
+>     legitimately tagged pointer (according to the above rules) as
+>     identifying the associated memory location.
+>
+>     So, mprotect(some_page_aligned_object, ...); is valid irrespective
+>     of where page_aligned_object() came from.  There is no implicit
+>     derefence by the kernel here, hence no tag check.
+>
+>     The kernel does not guarantee to work correctly if the wrong tag
+>     is used, but there is not always a well-defined "right" tag, so
+>     we can't really guarantee to check it.  So a pointer derived by
+>     any reasonable means by userspace has to be treated as equally
+>     valid.
+
+This is a disputed point :) In my opinion, this is the the most reasonable approach.
+
+Cheers,
+Kevin
+
+> We would need to get some cross-arch buy-in for this, otherwise core
+> maintainers might just refuse to maintain the necessary guarantees.
+>
+>
+>>> 2. Allow tagged addressed passed to memory syscalls (as long as (1) is
+>>> satisfied). Do I understand correctly that this means that I need to
+>>> locate all find_vma() callers outside of mm/ and fix them up as well?
+>> Yes (unless anyone as a better idea or objections to this approach).
+> Also, watch out for code that pokes about inside struct vma directly.
+>
+> I'm wondering, could we define an explicit type, say,
+>
+> 	struct user_vaddr {
+> 		unsigned long addr;
+> 	};
+>
+> to replace the unsigned longs in struct vma the mm API?  This would
+> turn ad-hoc (unsigned long) casts into build breaks.  We could have
+> an explicit conversion functions, say,
+>
+> 	struct user_vaddr __user_vaddr_unsafe(void __user *);
+> 	void __user *__user_ptr_unsafe(struct user_vaddr);
+>
+> that we robotically insert in all the relevant places to mark
+> unaudited code.
+>
+> This allows us to keep the kernel buildable, while flagging things
+> that will need review.  We would also need to warn the mm folks to
+> reject any new code using these unsafe conversions.
+>
+> Of course, it would be a non-trivial effort...
+>
+>> BTW, I'll be off until the new year, so won't be able to follow up.
+> Cheers
+> ---Dave
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel at lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
