@@ -1,39 +1,121 @@
-From: broonie@kernel.org (Mark Brown)
-Date: Mon, 11 Feb 2019 13:02:02 +0000
-Subject: [PATCH 1/2] selftests/x86/fsgsbase: Indirect output through a
- wrapper function
-In-Reply-To: <20190211084543.GA62722@gmail.com>
-References: <20190203134017.9375-1-broonie@kernel.org>
- <20190203134017.9375-2-broonie@kernel.org>
- <20190211084543.GA62722@gmail.com>
-Message-ID: <20190211130202.GB22391@sirena.org.uk>
+From: joel@joelfernandes.org (Joel Fernandes (Google))
+Date: Mon, 11 Feb 2019 09:36:00 -0500
+Subject: [PATCH v2 2/2] Add selftests for module build using in-kernel headers
+In-Reply-To: <20190211143600.15021-1-joel@joelfernandes.org>
+References: <20190211143600.15021-1-joel@joelfernandes.org>
+Message-ID: <20190211143600.15021-2-joel@joelfernandes.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190211130202.GkfjFAyYRvIx5FTMpjrOYdShUQhrMHQSq7OGIqgj-a0@z>
+Message-ID: <20190211143600.IE69AAD61bfziVg_bEeeEd5bpBdCPdiXM9Od1xRELCA@z>
 
-On Mon, Feb 11, 2019@09:45:43AM +0100, Ingo Molnar wrote:
-> * Mark Brown <broonie@kernel.org> wrote:
+This test tries to build a module successfully using the in-kernel
+headers found in /proc/kheaders.txz.
 
-> > In preparation for a change to make this test run repeatedly which
-> > would generate huge amounts of output as is indirect all the printf()
-> > calls in the program through a wrapper and add a quiet flag which can
-> > be used to suppress the output.  This is fairly quick and dirty, I'm not
-> > 100% sure what would be idiomatic here.
+Verified pass and fail scenarios by running:
+make -C tools/testing/selftests TARGETS=kheaders run_tests
 
-> So this really loses useful output when there is a failure. After this 
-> patch I get:
+Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+---
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/kheaders/Makefile     |  5 +++++
+ tools/testing/selftests/kheaders/config       |  1 +
+ .../kheaders/run_kheaders_modbuild.sh         | 18 +++++++++++++++++
+ .../selftests/kheaders/testmod/Makefile       |  3 +++
+ .../testing/selftests/kheaders/testmod/test.c | 20 +++++++++++++++++++
+ 6 files changed, 48 insertions(+)
+ create mode 100644 tools/testing/selftests/kheaders/Makefile
+ create mode 100644 tools/testing/selftests/kheaders/config
+ create mode 100755 tools/testing/selftests/kheaders/run_kheaders_modbuild.sh
+ create mode 100644 tools/testing/selftests/kheaders/testmod/Makefile
+ create mode 100644 tools/testing/selftests/kheaders/testmod/test.c
 
->   dagon:~/tip/tools/testing/selftests/x86> ./fsgsbase_64 -vv
->   [FAIL] 24 errors detected in 1 tries
-
-> Not very helpful, and no real command-line way to see the failures.
-
-For clarity it's the second patch that breaks this, though you're right
-this isn't helpful and this patch needs a log level adding to really fix
-that.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 488 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190211/1cad5a1d/attachment.sig>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 400ee81a3043..5a9287fddd0d 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -20,6 +20,7 @@ TARGETS += intel_pstate
+ TARGETS += ipc
+ TARGETS += ir
+ TARGETS += kcmp
++TARGETS += kheaders
+ TARGETS += kvm
+ TARGETS += lib
+ TARGETS += membarrier
+diff --git a/tools/testing/selftests/kheaders/Makefile b/tools/testing/selftests/kheaders/Makefile
+new file mode 100644
+index 000000000000..51035ab0732b
+--- /dev/null
++++ b/tools/testing/selftests/kheaders/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++
++TEST_PROGS := run_kheaders_modbuild.sh
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/kheaders/config b/tools/testing/selftests/kheaders/config
+new file mode 100644
+index 000000000000..5221f9fb5e79
+--- /dev/null
++++ b/tools/testing/selftests/kheaders/config
+@@ -0,0 +1 @@
++CONFIG_IKHEADERS_PROC=y
+diff --git a/tools/testing/selftests/kheaders/run_kheaders_modbuild.sh b/tools/testing/selftests/kheaders/run_kheaders_modbuild.sh
+new file mode 100755
+index 000000000000..69d6fa237661
+--- /dev/null
++++ b/tools/testing/selftests/kheaders/run_kheaders_modbuild.sh
+@@ -0,0 +1,18 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++HEADERS_XZ=/proc/kheaders.txz
++TMP_DIR_HEADERS=$(mktemp -d)
++TMP_DIR_MODULE=$(mktemp -d)
++SPATH="$(dirname "$(readlink -f "$0")")"
++
++tar -xvf $HEADERS_XZ -C $TMP_DIR_HEADERS > /dev/null
++
++cp -r $SPATH/testmod $TMP_DIR_MODULE/
++
++pushd $TMP_DIR_MODULE/testmod > /dev/null
++make -C $TMP_DIR_HEADERS M=$(pwd) modules
++popd > /dev/null
++
++rm -rf $TMP_DIR_HEADERS
++rm -rf $TMP_DIR_MODULE
+diff --git a/tools/testing/selftests/kheaders/testmod/Makefile b/tools/testing/selftests/kheaders/testmod/Makefile
+new file mode 100644
+index 000000000000..7083e28706e8
+--- /dev/null
++++ b/tools/testing/selftests/kheaders/testmod/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++
++obj-m += test.o
+diff --git a/tools/testing/selftests/kheaders/testmod/test.c b/tools/testing/selftests/kheaders/testmod/test.c
+new file mode 100644
+index 000000000000..9178bf6f0cc8
+--- /dev/null
++++ b/tools/testing/selftests/kheaders/testmod/test.c
+@@ -0,0 +1,20 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/init.h>
++
++static int __init hello_init(void)
++{
++	printk(KERN_INFO "Hello, world\n");
++	return 0;
++}
++
++static void __exit hello_exit(void)
++{
++	printk(KERN_INFO "Goodbye, world\n");
++}
++
++module_init(hello_init);
++module_exit(hello_exit);
++MODULE_LICENSE("GPL");
+-- 
+2.20.1.791.gb4d0f1c61a-goog
