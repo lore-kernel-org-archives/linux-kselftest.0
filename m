@@ -1,231 +1,32 @@
-From: eugenis@google.com (Evgenii Stepanov)
-Date: Mon, 11 Feb 2019 12:32:55 -0800
-Subject: [RFC][PATCH 0/3] arm64 relaxed ABI
-In-Reply-To: <9bbacb1b-6237-f0bb-9bec-b4cf8d42bfc5@arm.com>
-References: <cover.1544445454.git.andreyknvl@google.com>
- <20181210143044.12714-1-vincenzo.frascino@arm.com>
- <CAAeHK+xPZ-Z9YUAq=3+hbjj4uyJk32qVaxZkhcSAHYC4mHAkvQ@mail.gmail.com>
- <20181212150230.GH65138@arrakis.emea.arm.com>
- <CAAeHK+zxYJDJ7DJuDAOuOMgGvckFwMAoVUTDJzb6MX3WsXhRTQ@mail.gmail.com>
- <20181218175938.GD20197@arrakis.emea.arm.com>
- <20181219125249.GB22067@e103592.cambridge.arm.com>
- <9bbacb1b-6237-f0bb-9bec-b4cf8d42bfc5@arm.com>
-Message-ID:
- <CAFKCwrhH5R3e5ntX0t-gxcE6zzbCNm06pzeFfYEN2K13c5WLTg@mail.gmail.com>
+From: mcgrof@kernel.org (Luis Chamberlain)
+Date: Mon, 11 Feb 2019 13:40:02 -0800
+Subject: [PATCH v2] selftests: kmod: worked on errors which breaks the
+ overall execution of the test script. i have manually edited for v2 of the
+ patch by changing the date and also commit log.
+In-Reply-To: <20190131183109.10919-1-jeffrin@rajagiritech.edu.in>
+References: <20190131183109.10919-1-jeffrin@rajagiritech.edu.in>
+Message-ID: <20190211214002.GV11489@garbanzo.do-not-panic.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190211203255.9O8OBqkJrO5detRFrai36Dttkbc_X3th2Sirrwyh--w@z>
+Message-ID: <20190211214002.zpnZDLNi82neVLfrSNk-YiLLwAGKqLW9mBAuJH3XHFA@z>
 
-On Mon, Feb 11, 2019@9:28 AM Kevin Brodsky <kevin.brodsky@arm.com> wrote:
->
-> On 19/12/2018 12:52, Dave Martin wrote:
-> > On Tue, Dec 18, 2018@05:59:38PM +0000, Catalin Marinas wrote:
-> >> On Tue, Dec 18, 2018@04:03:38PM +0100, Andrey Konovalov wrote:
-> >>> On Wed, Dec 12, 2018@4:02 PM Catalin Marinas<catalin.marinas@arm.com>  wrote:
-> >>>> The summary of our internal discussions (mostly between kernel
-> >>>> developers) is that we can't properly describe a user ABI that covers
-> >>>> future syscalls or syscall extensions while not all syscalls accept
-> >>>> tagged pointers. So we tweaked the requirements slightly to only allow
-> >>>> tagged pointers back into the kernel *if* the originating address is
-> >>>> from an anonymous mmap() or below sbrk(0). This should cover some of the
-> >>>> ioctls or getsockopt(TCP_ZEROCOPY_RECEIVE) where the user passes a
-> >>>> pointer to a buffer obtained via mmap() on the device operations.
-> >>>>
-> >>>> (sorry for not being clear on what Vincenzo's proposal implies)
-> >>> OK, I see. So I need to make the following changes to my patchset AFAIU.
-> >>>
-> >>> 1. Make sure that we only allow tagged user addresses that originate
-> >>> from an anonymous mmap() or below sbrk(0). How exactly should this
-> >>> check be performed?
-> >> I don't think we should perform such checks. That's rather stating that
-> >> the kernel only guarantees that the tagged pointers work if they
-> >> originated from these memory ranges.
-> > I concur.
-> >
-> > Really, the kernel should do the expected thing with all "non-weird"
-> > memory.
-> >
-> > In lieu of a proper definition of "non-weird", I think we should have
-> > some lists of things that are explicitly included, and also excluded:
-> >
-> > OK:
-> >       kernel-allocated process stack
-> >       brk area
-> >       MAP_ANONYMOUS | MAP_PRIVATE
-> >       MAP_PRIVATE mappings of /dev/zero
-> >
-> > Not OK:
-> >       MAP_SHARED
-> >       mmaps of non-memory-like devices
-> >       mmaps of anything that is not a regular file
-> >       the VDSO
-> >       ...
-> >
-> > In general, userspace can tag memory that it "owns", and we do not assume
-> > a transfer of ownership except in the "OK" list above.  Otherwise, it's
-> > the kernel's memory, or the owner is simply not well defined.
->
-> Agreed on the general idea: a process should be able to pass tagged pointers at the
-> syscall interface, as long as they point to memory privately owned by the process. I
-> think it would be possible to simplify the definition of "non-weird" memory by using
-> only this "OK" list:
-> - mmap() done by the process itself, where either:
->    * flags = MAP_PRIVATE | MAP_ANONYMOUS
->    * flags = MAP_PRIVATE and fd refers to a regular file or a well-defined list of
-> device files (like /dev/zero)
-> - brk() done by the process itself
-> - Any memory mapped by the kernel in the new process's address space during execve(),
-> with the same restrictions as above ([vdso]/[vvar] are therefore excluded)
->
-> > I would also like to see advice for userspace developers, particularly
-> > things like (strawman, please challenge!):
->
-> To some extent, one could call me a userspace developer, so I'll try to help :)
->
-> >   * Userspace should set tags at the point of allocation only.
->
-> Yes, tags are only supposed to be set at the point of either allocation or
-> deallocation/reallocation. However, allocators can in principle be nested, so an
-> allocator could  take a region allocated by malloc() as input and subdivide it
-> (changing tags in the process). That said, this suballocator must not free() that
-> region until all the suballocations themselves have been freed (thereby restoring the
-> tags initially set by malloc()).
->
-> >   * If you don't know how an object was allocated, you cannot modify the
-> >     tag, period.
->
-> Agreed, allocators that tag memory can only operate on memory with a well-defined
-> provenance (for instance anonymous mmap() or malloc()).
->
-> >   * A single C object should be accessed using a single, fixed pointer tag
-> >     throughout its entire lifetime.
->
-> Agreed. Allocators themselves may need to be excluded though, depending on how they
-> represent their managed memory.
->
-> >   * Tags can be changed only when there are no outstanding pointers to
-> >     the affected object or region that may be used to access the object
-> >     or region (i.e., if the object were allocated from the C heap and
-> >     is it safe to realloc() it, then it is safe to change the tag; for
-> >     other types of allocation, analogous arguments can be applied).
->
-> Tags can only be changed at the point of deallocation/reallocation. Pointers to the
-> object become invalid and cannot be used after it has been deallocated; memory
-> tagging allows to catch such invalid usage.
->
-> >   * When the kernel dereferences a pointer on userspace's behalf, it
-> >     shall behave equivalently to userspace dereferencing the same pointer,
-> >     including use of the same tag (where passed by userspace).
-> >
-> >   * Where the pointer tag affects pointer dereference behaviour (i.e.,
-> >     with hardware memory colouring) the kernel makes no guarantee to
-> >     honour pointer tags correctly for every location a buffer based on a
-> >     pointer passed by userspace to the kernel.
-> >
-> >     (This means for example that for a read(fd, buf, size), we can check
-> >     the tag for a single arbitrary location in *(char (*)[size])buf
-> >     before passing the buffer to get_user_pages().  Hopefully this could
-> >     be done in get_user_pages() itself rather than hunting call sites.
-> >     For userspace, it means that you're on your own if you ask the
-> >     kernel to operate on a buffer than spans multiple, independently-
-> >     allocated objects, or a deliberately striped single object.)
->
-> I think both points are reasonable. It is very valuable for the kernel to access
-> userspace memory using the user-provided tag, because it enables kernel accesses to
-> be checked in the same way as user accesses, allowing to detect bugs that are
-> potentially hard to find. For instance, if a pointer to an object is passed to the
-> kernel after it has been deallocated, this is invalid and should be detected.
-> However, you are absolutely right that the kernel cannot *guarantee* that such a
-> check is carried out for the entire memory range (or in fact at all); it should be a
-> best-effort approach.
+Your subject is too long.
 
-It would also be valuable to narrow down the set of "relaxed" (i.e.
-not tag-checking) syscalls as reasonably possible. We would want to
-provide tag-checking userspace wrappers for any important calls that
-are not checked in the kernel. Is it correct to assume that anything
-that goes through copy_from_user  / copy_to_user is checked?
+On Fri, Feb 01, 2019@12:01:09AM +0530, Jeffrin Jose T wrote:
+> The kmod.sh script breaks because an array is passed as input
+> instead of a single element input.This patch takes elements
+> one at a time and passed as input to the condition statement
+> which in turn fixes the error.There was an issue which had
+> the need for passing a single digit to the condition statement
+> which is fixed using regular expression.
+> Distribution: Debian GNU/Linux buster/sid
+> Bash Version: 5.0.0(1)-release
 
->
-> >   * The kernel shall not extend the lifetime of user pointers in ways
-> >     that are not clear from the specification of the syscall or
-> >     interface to which the pointer is passed (and in any case shall not
-> >     extend pointer lifetimes without good reason).
-> >
-> >     So no clever transparent caching between syscalls, unless it _really_
-> >     is transparent in the presence of tags.
->
-> Do you have any particular case in mind? If such caching is really valuable, it is
-> always possible to access the object while ignoring the tag. For sure, the
-> user-provided tag can only be used during the syscall handling itself, not
-> asynchronously later on, unless otherwise specified.
+I just tried Debian unstabe with bash 5.0-2 and the issue is not
+present there. Debian testing was on 4.4.18-3.1 for me prior to
+the upgrade.
 
-For aio* operations it would be nice if the tag was checked at the
-time of the actual userspace read/write, either instead of or in
-addition to at the time of the system call.
+*both* work fine.
 
->
-> >   * For purposes other than dereference, the kernel shall accept any
-> >     legitimately tagged pointer (according to the above rules) as
-> >     identifying the associated memory location.
-> >
-> >     So, mprotect(some_page_aligned_object, ...); is valid irrespective
-> >     of where page_aligned_object() came from.  There is no implicit
-> >     derefence by the kernel here, hence no tag check.
-> >
-> >     The kernel does not guarantee to work correctly if the wrong tag
-> >     is used, but there is not always a well-defined "right" tag, so
-> >     we can't really guarantee to check it.  So a pointer derived by
-> >     any reasonable means by userspace has to be treated as equally
-> >     valid.
->
-> This is a disputed point :) In my opinion, this is the the most reasonable approach.
+Please upgrade bash?
 
-Yes, it would be nice if the kernel explicitly promised, ex.
-mprotect() over a range of differently tagged pages to be allowed
-(i.e. address tag should be unchecked).
-
-
->
-> Cheers,
-> Kevin
->
-> > We would need to get some cross-arch buy-in for this, otherwise core
-> > maintainers might just refuse to maintain the necessary guarantees.
-> >
-> >
-> >>> 2. Allow tagged addressed passed to memory syscalls (as long as (1) is
-> >>> satisfied). Do I understand correctly that this means that I need to
-> >>> locate all find_vma() callers outside of mm/ and fix them up as well?
-> >> Yes (unless anyone as a better idea or objections to this approach).
-> > Also, watch out for code that pokes about inside struct vma directly.
-> >
-> > I'm wondering, could we define an explicit type, say,
-> >
-> >       struct user_vaddr {
-> >               unsigned long addr;
-> >       };
-> >
-> > to replace the unsigned longs in struct vma the mm API?  This would
-> > turn ad-hoc (unsigned long) casts into build breaks.  We could have
-> > an explicit conversion functions, say,
-> >
-> >       struct user_vaddr __user_vaddr_unsafe(void __user *);
-> >       void __user *__user_ptr_unsafe(struct user_vaddr);
-> >
-> > that we robotically insert in all the relevant places to mark
-> > unaudited code.
-> >
-> > This allows us to keep the kernel buildable, while flagging things
-> > that will need review.  We would also need to warn the mm folks to
-> > reject any new code using these unsafe conversions.
-> >
-> > Of course, it would be a non-trivial effort...
-> >
-> >> BTW, I'll be off until the new year, so won't be able to follow up.
-> > Cheers
-> > ---Dave
-> >
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel at lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
->
+  Luis
