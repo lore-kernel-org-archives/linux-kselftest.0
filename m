@@ -1,58 +1,37 @@
-From: mingo at kernel.org (Ingo Molnar)
-Date: Mon, 11 Feb 2019 13:51:46 +0100
-Subject: [PATCH 2/2] selftests/x86/fsgsbase: Default to trying to run the
- test repeatedly
-In-Reply-To: <20190211124738.GA22391@sirena.org.uk>
+From: broonie at kernel.org (Mark Brown)
+Date: Mon, 11 Feb 2019 13:02:02 +0000
+Subject: [PATCH 1/2] selftests/x86/fsgsbase: Indirect output through a
+ wrapper function
+In-Reply-To: <20190211084543.GA62722@gmail.com>
 References: <20190203134017.9375-1-broonie@kernel.org>
- <20190203134017.9375-3-broonie@kernel.org>
- <20190211084916.GB62722@gmail.com>
- <20190211124738.GA22391@sirena.org.uk>
-Message-ID: <20190211125146.GA66987@gmail.com>
+ <20190203134017.9375-2-broonie@kernel.org>
+ <20190211084543.GA62722@gmail.com>
+Message-ID: <20190211130202.GB22391@sirena.org.uk>
 
+On Mon, Feb 11, 2019 at 09:45:43AM +0100, Ingo Molnar wrote:
+> * Mark Brown <broonie at kernel.org> wrote:
 
-* Mark Brown <broonie at kernel.org> wrote:
+> > In preparation for a change to make this test run repeatedly which
+> > would generate huge amounts of output as is indirect all the printf()
+> > calls in the program through a wrapper and add a quiet flag which can
+> > be used to suppress the output.  This is fairly quick and dirty, I'm not
+> > 100% sure what would be idiomatic here.
 
-> On Mon, Feb 11, 2019 at 09:49:16AM +0100, Ingo Molnar wrote:
-> 
-> > So this isn't very user-friendly either, previously it would run a 
-> > testcase and immediately provide output.
-> 
-> > Now it's just starting and 'hanging':
-> 
-> >   galatea:~/linux/linux/tools/testing/selftests/x86> ./fsgsbase_64 
-> 
-> > I got bored and Ctrl-C-ed it after ~30 seconds.
-> 
-> > How long is this supposed to run, and why isn't the user informed?
-> 
-> On Intel systems I've got access to it's tended to only run for less
-> than 10 seconds for me with excursions up to ~30s at most, I'd have
-> projected it to be about a minute if the tests pass.  However retesting
-> with Debian's v4.19 kernel it seems to be running a lot more stably so
-> we're now seeing it run to completion reliably when just one copy of the
-> test is running.
-> 
-> AFAICT it's not terribly idiomatic to provide much output, and anything
-> that was per iteration would be *way* too spammy.
+> So this really loses useful output when there is a failure. After this 
+> patch I get:
 
-Certainly - but a "please wait" and updating the current count via \r 
-once every second isn't spammy.
+>   dagon:~/tip/tools/testing/selftests/x86> ./fsgsbase_64 -vv
+>   [FAIL] 24 errors detected in 1 tries
 
-> > Also, testcases should really be short, so I think a better approach 
-> > would be to thread the test-case and start an instance on every CPU. That 
-> > should also excercise SMP bugs, if any.
-> 
-> Well, a *better* approach would be for the underlying issue that the
-> test is finding to be fixed.
-> 
-> I didn't look at adding more threads as the test case is already
-> threaded, it does seem that running multiple copies simultaneously makes
-> things reproduce more quickly so it's definitely useful though it's
-> still taking multiple iterations.
+> Not very helpful, and no real command-line way to see the failures.
 
-multiple iterations are fine - waiting a minute with zero output on the 
-console isn't.
-
-Thanks,
-
-	Ingo
+For clarity it's the second patch that breaks this, though you're right
+this isn't helpful and this patch needs a log level adding to really fix
+that.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 488 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190211/1cad5a1d/attachment.sig>
