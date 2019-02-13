@@ -1,45 +1,59 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Tue, 12 Feb 2019 21:32:37 -0500
-Subject: [PATCH AUTOSEL 4.20 046/105] selftests: bpf: install files
- tcp_(server|client)*.py
+Date: Tue, 12 Feb 2019 21:32:28 -0500
+Subject: [PATCH AUTOSEL 4.20 037/105] selftests: forwarding: Add a test for
+ VLAN deletion
 In-Reply-To: <20190213023336.19019-1-sashal@kernel.org>
 References: <20190213023336.19019-1-sashal@kernel.org>
-Message-ID: <20190213023336.19019-46-sashal@kernel.org>
+Message-ID: <20190213023336.19019-37-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190213023237.S9riq2mgvdTwm9xYHRvXZojT-jD62YX0nlKWzL8uh7k@z>
+Message-ID: <20190213023228.IFr95BcyFyUDy3HZDczfUw_6V1nA6iKpB9TP5xWsp2U@z>
 
-From: Anders Roxell <anders.roxell@linaro.org>
+From: Ido Schimmel <idosch@mellanox.com>
 
-[ Upstream commit f98937c6bb73ae11717a15aec85c187d33ca5d34 ]
+[ Upstream commit 4fabf3bf93a194c7fa5288da3e0af37e4b943cf3 ]
 
-When test_tcpbpf_user runs it complains that it can't find files
-tcp_server.py and tcp_client.py.
+Add a VLAN on a bridge port, delete it and make sure the PVID VLAN is
+not affected.
 
-Rework so that tcp_server.py and tcp_client.py gets installed, added them
-to the variable TEST_PROGS_EXTENDED.
-
-Fixes: d6d4f60c3a09 ("bpf: add selftest for tcpbpf")
-Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
-Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
+Signed-off-by: Ido Schimmel <idosch at mellanox.com>
+Signed-off-by: David S. Miller <davem at davemloft.net>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../selftests/net/forwarding/bridge_vlan_aware.sh | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index ecd79b7fb107..74ece4f9fcce 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -53,7 +53,9 @@ TEST_PROGS := test_kmod.sh \
- 	test_flow_dissector.sh \
- 	test_xdp_vlan.sh
+diff --git a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
+index d8313d0438b7..04c6431b2bd8 100755
+--- a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
++++ b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
+@@ -1,7 +1,7 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
  
--TEST_PROGS_EXTENDED := with_addr.sh
-+TEST_PROGS_EXTENDED := with_addr.sh \
-+	tcp_client.py \
-+	tcp_server.py
+-ALL_TESTS="ping_ipv4 ping_ipv6 learning flooding"
++ALL_TESTS="ping_ipv4 ping_ipv6 learning flooding vlan_deletion"
+ NUM_NETIFS=4
+ CHECK_TC="yes"
+ source lib.sh
+@@ -96,6 +96,19 @@ flooding()
+ 	flood_test $swp2 $h1 $h2
+ }
  
- # Compile but not part of 'make run_tests'
- TEST_GEN_PROGS_EXTENDED = test_libbpf_open test_sock_addr test_skb_cgroup_id_user \
++vlan_deletion()
++{
++	# Test that the deletion of a VLAN on a bridge port does not affect
++	# the PVID VLAN
++	log_info "Add and delete a VLAN on bridge port $swp1"
++
++	bridge vlan add vid 10 dev $swp1
++	bridge vlan del vid 10 dev $swp1
++
++	ping_ipv4
++	ping_ipv6
++}
++
+ trap cleanup EXIT
+ 
+ setup_prepare
 -- 
 2.19.1
