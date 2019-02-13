@@ -1,58 +1,151 @@
-From: willemdebruijn.kernel@gmail.com (Willem de Bruijn)
-Date: Wed, 13 Feb 2019 09:44:49 -0500
-Subject: [PATCH 1/1] selftests: fix timestamping Makefile
-In-Reply-To: <20190213032932.2805-1-deepa.kernel@gmail.com>
-References: <20190213032932.2805-1-deepa.kernel@gmail.com>
-Message-ID:
- <CA+FuTSec8boukW_XLYxjqTfx2L+z3=qW__Y-NZ6HuG5N-atukg@mail.gmail.com>
+From: Dave.Martin@arm.com (Dave Martin)
+Date: Wed, 13 Feb 2019 14:58:37 +0000
+Subject: [RFC][PATCH 0/3] arm64 relaxed ABI
+In-Reply-To: <20190212180223.GD199333@arrakis.emea.arm.com>
+References: <cover.1544445454.git.andreyknvl@google.com>
+ <20181210143044.12714-1-vincenzo.frascino@arm.com>
+ <CAAeHK+xPZ-Z9YUAq=3+hbjj4uyJk32qVaxZkhcSAHYC4mHAkvQ@mail.gmail.com>
+ <20181212150230.GH65138@arrakis.emea.arm.com>
+ <CAAeHK+zxYJDJ7DJuDAOuOMgGvckFwMAoVUTDJzb6MX3WsXhRTQ@mail.gmail.com>
+ <20181218175938.GD20197@arrakis.emea.arm.com>
+ <20181219125249.GB22067@e103592.cambridge.arm.com>
+ <9bbacb1b-6237-f0bb-9bec-b4cf8d42bfc5@arm.com>
+ <CAFKCwrhH5R3e5ntX0t-gxcE6zzbCNm06pzeFfYEN2K13c5WLTg@mail.gmail.com>
+ <20190212180223.GD199333@arrakis.emea.arm.com>
+Message-ID: <20190213145834.GJ3567@e103592.cambridge.arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190213144449.uSxEdM0puE-su_69ykB_pYDuHiFQab5Ca4kJuPxZglc@z>
+Message-ID: <20190213145837.tjH1M77KD54BysJexj2lP1Ppsszw18p9XTMXXXJ8Wyo@z>
 
-On Tue, Feb 12, 2019@10:29 PM Deepa Dinamani <deepa.kernel@gmail.com> wrote:
->
-> The clean target in the makefile conflicts with the generic
-> kselftests lib.mk, and fails to properly remove the compiled
-> test programs.
->
-> Use TEST_GEN_PROGS macro to fit with lib.mk rules and
-> remove the conflicting and redundant clean.
+On Tue, Feb 12, 2019@06:02:24PM +0000, Catalin Marinas wrote:
+> On Mon, Feb 11, 2019@12:32:55PM -0800, Evgenii Stepanov wrote:
+> > On Mon, Feb 11, 2019@9:28 AM Kevin Brodsky <kevin.brodsky@arm.com> wrote:
+> > > On 19/12/2018 12:52, Dave Martin wrote:
 
-This is not the right fix. The files in TEST_GEN_PROGS are run
-directly from kselftests.sh.
+[...]
 
-These tests are intended to be run from intermediate shell scripts, so
-should be in TEST_GEN_FILES.
+> > > >   * A single C object should be accessed using a single, fixed
+> > > >     pointer tag throughout its entire lifetime.
+> > >
+> > > Agreed.  Allocators themselves may need to be excluded though,
+> > > depending on how they represent their managed memory.
+> > >
+> > > >   * Tags can be changed only when there are no outstanding pointers to
+> > > >     the affected object or region that may be used to access the object
+> > > >     or region (i.e., if the object were allocated from the C heap and
+> > > >     is it safe to realloc() it, then it is safe to change the tag; for
+> > > >     other types of allocation, analogous arguments can be applied).
+> > >
+> > > Tags can only be changed at the point of deallocation/
+> > > reallocation.  Pointers to the object become invalid and cannot
+> > > be used after it has been deallocated; memory tagging allows to
+> > > catch such invalid usage.
+>
+> All the above sound well but that's mostly a guideline on what a C
+> library can do. It doesn't help much with defining the kernel ABI.
+> Anyway, it's good to clarify the use-cases.
 
-See also https://lkml.org/lkml/2018/5/4/215
+My aim was to clarify the use case in userspace, since I wasn't directly
+involved in that.  The kernel ABI needs to be compatible with the the
+use case, but doesn't need to specify must of it.
 
-Please also add netdev to networking test changes and mark as PATCH net.
+I'm wondering whether we can piggy-back on existing concepts.
 
->
-> Signed-off-by: Deepa Dinamani <deepa.kernel at gmail.com>
-> ---
->  tools/testing/selftests/networking/timestamping/Makefile | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/networking/timestamping/Makefile b/tools/testing/selftests/networking/timestamping/Makefile
-> index 9050eeea5f5f..16ab85ba6409 100644
-> --- a/tools/testing/selftests/networking/timestamping/Makefile
-> +++ b/tools/testing/selftests/networking/timestamping/Makefile
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  CFLAGS += -I../../../../../usr/include
->
-> -TEST_GEN_FILES := hwtstamp_config rxtimestamp timestamping txtimestamp
-> +TEST_GEN_PROGS := hwtstamp_config rxtimestamp timestamping txtimestamp
->  TEST_PROGS := txtimestamp.sh
->
->  all: $(TEST_PROGS)
-> @@ -9,6 +9,3 @@ all: $(TEST_PROGS)
->  top_srcdir = ../../../../..
->  KSFT_KHDR_INSTALL := 1
->  include ../../lib.mk
-> -
-> -clean:
-> -       rm -fr $(TEST_GEN_FILES)
-> --
-> 2.17.1
->
+We could say that recolouring memory is safe when and only when
+unmapping of the page or removing permissions on the page (via
+munmap/mremap/mprotect) would be safe.  Otherwise, the resulting
+behaviour of the process is undefined.
+
+Hopefully there are friendly fuzzers testing this kind of thing.
+
+[...]
+
+> > It would also be valuable to narrow down the set of "relaxed" (i.e.
+> > not tag-checking) syscalls as reasonably possible. We would want to
+> > provide tag-checking userspace wrappers for any important calls that
+> > are not checked in the kernel. Is it correct to assume that anything
+> > that goes through copy_from_user  / copy_to_user is checked?
+> 
+> I lost track of the context of this thread but if it's just about
+> relaxing the ABI for hwasan, the kernel has no idea of the compiler
+> generated structures in user space, so nothing is checked.
+> 
+> If we talk about tags in the context of MTE, than yes, with the current
+> proposal the tag would be checked by copy_*_user() functions.
+
+Also put_user() and friends?
+
+It might be reasonable to do the check in access_ok() and skip it in
+__put_user() etc.
+
+(I seem to remember some separate discussion about abolishing
+__put_user() and friends though, due to the accident risk they pose.)
+
+> > For aio* operations it would be nice if the tag was checked at the
+> > time of the actual userspace read/write, either instead of or in
+> > addition to at the time of the system call.
+> 
+> With aio* (and synchronous iovec-based syscalls), the kernel may access
+> the memory while the corresponding user process is scheduled out. Given
+> that such access is not done in the context of the user process (and
+> using the user VA like copy_*_user), the kernel cannot handle potential
+> tag faults. Moreover, the transfer may be done by DMA and the device
+> does not understand tags.
+> 
+> I'd like to keep tags as a property of the pointer in a specific virtual
+> address space. The moment you convert it to a different address space
+> (e.g. kernel linear map, physical address), the tag property is stripped
+> and I don't think we should re-build it (and have it checked).
+
+This is probably reasonable.
+
+Ideally we would check the tag at the point of stripping it off, but
+most likely it's going to be rather best-effort.
+
+If memory tagging is essential a debugging feature then this seems
+an acceptable compromise.
+
+> > > >   * For purposes other than dereference, the kernel shall accept any
+> > > >     legitimately tagged pointer (according to the above rules) as
+> > > >     identifying the associated memory location.
+> > > >
+> > > >     So, mprotect(some_page_aligned_object, ...); is valid irrespective
+> > > >     of where page_aligned_object() came from.  There is no implicit
+> > > >     derefence by the kernel here, hence no tag check.
+> > > >
+> > > >     The kernel does not guarantee to work correctly if the wrong tag
+> > > >     is used, but there is not always a well-defined "right" tag, so
+> > > >     we can't really guarantee to check it.  So a pointer derived by
+> > > >     any reasonable means by userspace has to be treated as equally
+> > > >     valid.
+> > >
+> > > This is a disputed point :) In my opinion, this is the the most
+> > > reasonable approach.
+> > 
+> > Yes, it would be nice if the kernel explicitly promised, ex.
+> > mprotect() over a range of differently tagged pages to be allowed
+> > (i.e. address tag should be unchecked).
+> 
+> I don't think mprotect() over differently tagged pages was ever a
+> problem. I originally asked that mprotect() and friends do not accept
+> tagged pointers since these functions deal with memory ranges rather
+> than dereferencing such pointer (the reason being minimal kernel
+> changes). However, given how complicated it is to specify an ABI, I came
+> to the conclusion that a pointer passed to such function should be
+> allowed to have non-zero top byte. It would be the kernel's
+> responsibility to strip it out as appropriate.
+
+I think that if the page range is all the same colour then it should be
+legitimate to pass a matching tag.
+
+But it doesn't seem reasonable for the kernel to require this.  If
+free() calls munmap(), the page(s) will contain possibly randomly-
+coloured garbage.  There's no correct tag to pass in such a case.
+
+The most obvious solution is just to ignore the tags passed by userspace
+to such syscalls.  This would imply that the kernel must explicitly
+strip it out, as you suggest.
+
+The number of affected syscalls is relatively small though.
+
+Cheers
+---Dave
