@@ -1,78 +1,98 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Tue, 12 Feb 2019 21:36:59 -0500
-Subject: [PATCH AUTOSEL 4.19 81/83] selftests: forwarding: Add a test case for
- externally learned FDB entries
+Date: Tue, 12 Feb 2019 21:36:50 -0500
+Subject: [PATCH AUTOSEL 4.19 72/83] selftests/bpf: retry tests that expect
+ build-id
 In-Reply-To: <20190213023701.20286-1-sashal@kernel.org>
 References: <20190213023701.20286-1-sashal@kernel.org>
-Message-ID: <20190213023701.20286-81-sashal@kernel.org>
+Message-ID: <20190213023701.20286-72-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190213023659.sHciuSuqp2cyjjX_YdoiZpUO6yhPf3nd11URTyUgQOY@z>
+Message-ID: <20190213023650.m6CM8XtRHR3kXbLB2TdBm7cMlBYCKmFOZgM5np2VPJE@z>
 
-From: Ido Schimmel <idosch@mellanox.com>
+From: Stanislav Fomichev <sdf@google.com>
 
-[ Upstream commit 479a2b761d61c04e2ae97325aa391a8a8c99c23e ]
+[ Upstream commit f67ad87ab3120e82845521b18a2b99273a340308 ]
 
-Test that externally learned FDB entries can roam, but not age out.
+While running test_progs in a loop I found out that I'm sometimes hitting
+"Didn't find expected build ID from the map" error.
 
-Signed-off-by: Ido Schimmel <idosch at mellanox.com>
-Reviewed-by: Petr Machata <petrm at mellanox.com>
-Signed-off-by: David S. Miller <davem at davemloft.net>
+Looking at stack_map_get_build_id_offset() it seems that it is racy (by
+design) and can sometimes return BPF_STACK_BUILD_ID_IP (i.e. can't trylock
+current->mm->mmap_sem).
+
+Let's retry this test a single time.
+
+Fixes: 13790d1cc72c ("bpf: add selftest for stackmap with build_id in NMI context")
+Acked-by: Song Liu <songliubraving at fb.com>
+Signed-off-by: Stanislav Fomichev <sdf at google.com>
+Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- .../net/forwarding/bridge_vlan_aware.sh       | 34 ++++++++++++++++++-
- 1 file changed, 33 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_progs.c | 30 ++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
-index 04c6431b2bd8..b90dff8d3a94 100755
---- a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
-@@ -1,7 +1,7 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 0ef68204c84b..c94c7b6da53b 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -1136,7 +1136,9 @@ static void test_stacktrace_build_id(void)
+ 	int i, j;
+ 	struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
+ 	int build_id_matches = 0;
++	int retry = 1;
  
--ALL_TESTS="ping_ipv4 ping_ipv6 learning flooding vlan_deletion"
-+ALL_TESTS="ping_ipv4 ping_ipv6 learning flooding vlan_deletion extern_learn"
- NUM_NETIFS=4
- CHECK_TC="yes"
- source lib.sh
-@@ -109,6 +109,38 @@ vlan_deletion()
- 	ping_ipv6
- }
++retry:
+ 	err = bpf_prog_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
+ 	if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
+ 		goto out;
+@@ -1249,6 +1251,19 @@ static void test_stacktrace_build_id(void)
+ 		previous_key = key;
+ 	} while (bpf_map_get_next_key(stackmap_fd, &previous_key, &key) == 0);
  
-+extern_learn()
-+{
-+	local mac=de:ad:be:ef:13:37
-+	local ageing_time
++	/* stack_map_get_build_id_offset() is racy and sometimes can return
++	 * BPF_STACK_BUILD_ID_IP instead of BPF_STACK_BUILD_ID_VALID;
++	 * try it one more time.
++	 */
++	if (build_id_matches < 1 && retry--) {
++		ioctl(pmu_fd, PERF_EVENT_IOC_DISABLE);
++		close(pmu_fd);
++		bpf_object__close(obj);
++		printf("%s:WARN:Didn't find expected build ID from the map, retrying\n",
++		       __func__);
++		goto retry;
++	}
 +
-+	# Test that externally learned FDB entries can roam, but not age out
-+	RET=0
-+
-+	bridge fdb add de:ad:be:ef:13:37 dev $swp1 master extern_learn vlan 1
-+
-+	bridge fdb show brport $swp1 | grep -q de:ad:be:ef:13:37
-+	check_err $? "Did not find FDB entry when should"
-+
-+	# Wait for 10 seconds after the ageing time to make sure the FDB entry
-+	# was not aged out
-+	ageing_time=$(bridge_ageing_time_get br0)
-+	sleep $((ageing_time + 10))
-+
-+	bridge fdb show brport $swp1 | grep -q de:ad:be:ef:13:37
-+	check_err $? "FDB entry was aged out when should not"
-+
-+	$MZ $h2 -c 1 -p 64 -a $mac -t ip -q
-+
-+	bridge fdb show brport $swp2 | grep -q de:ad:be:ef:13:37
-+	check_err $? "FDB entry did not roam when should"
-+
-+	log_test "Externally learned FDB entry - ageing & roaming"
-+
-+	bridge fdb del de:ad:be:ef:13:37 dev $swp2 master vlan 1 &> /dev/null
-+	bridge fdb del de:ad:be:ef:13:37 dev $swp1 master vlan 1 &> /dev/null
-+}
-+
- trap cleanup EXIT
+ 	if (CHECK(build_id_matches < 1, "build id match",
+ 		  "Didn't find expected build ID from the map\n"))
+ 		goto disable_pmu;
+@@ -1289,7 +1304,9 @@ static void test_stacktrace_build_id_nmi(void)
+ 	int i, j;
+ 	struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
+ 	int build_id_matches = 0;
++	int retry = 1;
  
- setup_prepare
++retry:
+ 	err = bpf_prog_load(file, BPF_PROG_TYPE_PERF_EVENT, &obj, &prog_fd);
+ 	if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
+ 		return;
+@@ -1384,6 +1401,19 @@ static void test_stacktrace_build_id_nmi(void)
+ 		previous_key = key;
+ 	} while (bpf_map_get_next_key(stackmap_fd, &previous_key, &key) == 0);
+ 
++	/* stack_map_get_build_id_offset() is racy and sometimes can return
++	 * BPF_STACK_BUILD_ID_IP instead of BPF_STACK_BUILD_ID_VALID;
++	 * try it one more time.
++	 */
++	if (build_id_matches < 1 && retry--) {
++		ioctl(pmu_fd, PERF_EVENT_IOC_DISABLE);
++		close(pmu_fd);
++		bpf_object__close(obj);
++		printf("%s:WARN:Didn't find expected build ID from the map, retrying\n",
++		       __func__);
++		goto retry;
++	}
++
+ 	if (CHECK(build_id_matches < 1, "build id match",
+ 		  "Didn't find expected build ID from the map\n"))
+ 		goto disable_pmu;
 -- 
 2.19.1
