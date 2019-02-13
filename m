@@ -1,56 +1,43 @@
 From: logang@deltatee.com (Logan Gunthorpe)
-Date: Wed, 13 Feb 2019 10:54:48 -0700
-Subject: [PATCH v2 06/12] PCI/switchtec: Add module parameter to request more
- interrupts
+Date: Wed, 13 Feb 2019 10:54:50 -0700
+Subject: [PATCH v2 08/12] NTB: Rename ntb.c to support multiple source files
+ in the module
 In-Reply-To: <20190213175454.7506-1-logang@deltatee.com>
 References: <20190213175454.7506-1-logang@deltatee.com>
-Message-ID: <20190213175454.7506-7-logang@deltatee.com>
+Message-ID: <20190213175454.7506-9-logang@deltatee.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190213175448.9lQYUi7MWzh_pw7uoWtKRjB6TgNl2X0zSJ8q1yIWyVI@z>
+Message-ID: <20190213175450.4-MyFywCXRk91_L39XP6Ox8KS3Ou_8uTW2nR5MIPQEY@z>
 
-Seeing the we want to use more interrupts in the NTB MSI code
-we need to be able allocate more (sometimes virtual) interrupts
-in the switchtec driver. Therefore add a module parameter to
-request to allocate additional interrupts.
+The kbuild system does not support having multiple source files in
+a module if one of those source files has the same name as the module.
 
-This puts virtually no limit on the number of MSI interrupts available
-to NTB clients.
+Therefore, we must rename ntb.c to core.c, while the module remains
+ntb.ko.
+
+This is similar to the way the nvme modules are structured.
 
 Signed-off-by: Logan Gunthorpe <logang at deltatee.com>
-Cc: Bjorn Helgaas <bhelgaas at google.com>
+Cc: Jon Mason <jdmason at kudzu.us>
+Cc: Dave Jiang <dave.jiang at intel.com>
+Cc: Allen Hubbe <allenbh at gmail.com>
 ---
- drivers/pci/switch/switchtec.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/ntb/Makefile          | 2 ++
+ drivers/ntb/{ntb.c => core.c} | 0
+ 2 files changed, 2 insertions(+)
+ rename drivers/ntb/{ntb.c => core.c} (100%)
 
-diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
-index e22766c79fe9..8b1db78197d9 100644
---- a/drivers/pci/switch/switchtec.c
-+++ b/drivers/pci/switch/switchtec.c
-@@ -30,6 +30,10 @@ module_param(use_dma_mrpc, bool, 0644);
- MODULE_PARM_DESC(use_dma_mrpc,
- 		 "Enable the use of the DMA MRPC feature");
- 
-+static int nirqs = 32;
-+module_param(nirqs, int, 0644);
-+MODULE_PARM_DESC(nirqs, "number of interrupts to allocate (more may be useful for NTB applications)");
+diff --git a/drivers/ntb/Makefile b/drivers/ntb/Makefile
+index 1921dec1949d..537226f8e78d 100644
+--- a/drivers/ntb/Makefile
++++ b/drivers/ntb/Makefile
+@@ -1,2 +1,4 @@
+ obj-$(CONFIG_NTB) += ntb.o hw/ test/
+ obj-$(CONFIG_NTB_TRANSPORT) += ntb_transport.o
 +
- static dev_t switchtec_devt;
- static DEFINE_IDA(switchtec_minor_ida);
- 
-@@ -1247,8 +1251,12 @@ static int switchtec_init_isr(struct switchtec_dev *stdev)
- 	int dma_mrpc_irq;
- 	int rc;
- 
--	nvecs = pci_alloc_irq_vectors(stdev->pdev, 1, 4,
--				      PCI_IRQ_MSIX | PCI_IRQ_MSI);
-+	if (nirqs < 4)
-+		nirqs = 4;
-+
-+	nvecs = pci_alloc_irq_vectors(stdev->pdev, 1, nirqs,
-+				      PCI_IRQ_MSIX | PCI_IRQ_MSI |
-+				      PCI_IRQ_VIRTUAL);
- 	if (nvecs < 0)
- 		return nvecs;
- 
++ntb-y := core.o
+diff --git a/drivers/ntb/ntb.c b/drivers/ntb/core.c
+similarity index 100%
+rename from drivers/ntb/ntb.c
+rename to drivers/ntb/core.c
 -- 
 2.19.0
