@@ -1,35 +1,25 @@
-From: deepa.kernel@gmail.com (Deepa Dinamani)
-Date: Wed, 13 Feb 2019 09:09:13 -0800
-Subject: [PATCH net] selftests: fix timestamping Makefile
-Message-ID: <20190213170914.11991-1-deepa.kernel@gmail.com>
+From: jarkko.sakkinen@linux.intel.com (Jarkko Sakkinen)
+Date: Wed, 13 Feb 2019 19:19:28 +0200
+Subject: [PATCH  v3] selftests/tpm2: Extend tests to cover partial reads
+In-Reply-To: <155007601798.18778.10490966270922534995.stgit@tstruk-mobl1.jf.intel.com>
+References: <155007596864.18677.9373151400257566077.stgit@tstruk-mobl1.jf.intel.com>
+ <155007601798.18778.10490966270922534995.stgit@tstruk-mobl1.jf.intel.com>
+Message-ID: <20190213171928.GB23351@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190213170913.2tYxKlWLG8FeuKyLYo9Uzer8Xm9ucsa-_Y3pkFUZF2U@z>
+Message-ID: <20190213171928.5H4Y4MB19nHMnIBBpuOaX8cXN7T63wv-JZifhdd8KlY@z>
 
-The clean target in the makefile conflicts with the generic
-kselftests lib.mk, and fails to properly remove the compiled
-test programs.
+On Wed, Feb 13, 2019@08:40:18AM -0800, Tadeusz Struk wrote:
+> Three new tests added:
+> 1. Send get random cmd, read header in 1st read, read the rest in second
+>    read - expect success
+> 2. Send get random cmd, read only part of the response, send another
+>    get random command, read the response - expect success
+> 3. Send get random cmd followed by another get random cmd, without
+>    reading the first response - expect the second cmd to fail with -EBUSY
+> 
+> Signed-off-by: Tadeusz Struk <tadeusz.struk at intel.com>
+OK, great, thank you.
 
-Remove the redundant rule, the TEST_GEN_FILES will be already
-removed by the CLEAN macro in lib.mk.
+They are in my master branch now.
 
-Signed-off-by: Deepa Dinamani <deepa.kernel at gmail.com>
----
-
-* Changes since v1: as per review comments
-
- tools/testing/selftests/networking/timestamping/Makefile | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/tools/testing/selftests/networking/timestamping/Makefile b/tools/testing/selftests/networking/timestamping/Makefile
-index 9050eeea5f5f..1de8bd8ccf5d 100644
---- a/tools/testing/selftests/networking/timestamping/Makefile
-+++ b/tools/testing/selftests/networking/timestamping/Makefile
-@@ -9,6 +9,3 @@ all: $(TEST_PROGS)
- top_srcdir = ../../../../..
- KSFT_KHDR_INSTALL := 1
- include ../../lib.mk
--
--clean:
--	rm -fr $(TEST_GEN_FILES)
--- 
-2.17.1
+/Jarkko
