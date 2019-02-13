@@ -1,59 +1,146 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Tue, 12 Feb 2019 21:36:09 -0500
-Subject: [PATCH AUTOSEL 4.19 31/83] selftests: forwarding: Add a test for VLAN
- deletion
+Date: Tue, 12 Feb 2019 21:36:03 -0500
+Subject: [PATCH AUTOSEL 4.19 25/83] selftests/bpf: Test [::] -> [::1] rewrite
+ in sys_sendmsg in test_sock_addr
 In-Reply-To: <20190213023701.20286-1-sashal@kernel.org>
 References: <20190213023701.20286-1-sashal@kernel.org>
-Message-ID: <20190213023701.20286-31-sashal@kernel.org>
+Message-ID: <20190213023701.20286-25-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190213023609.2FptwLkVpF9uCEZONbizHYDFkIrsE94eltTx3qTGtNY@z>
+Message-ID: <20190213023603.LViDw0AhlF2tfjCqHULEQHYduw8jxriSdsQu5svXeAg@z>
 
-From: Ido Schimmel <idosch@mellanox.com>
+From: Andrey Ignatov <rdna@fb.com>
 
-[ Upstream commit 4fabf3bf93a194c7fa5288da3e0af37e4b943cf3 ]
+[ Upstream commit 976b4f3a4646fbf0d189caca25f91f82e4be4b5a ]
 
-Add a VLAN on a bridge port, delete it and make sure the PVID VLAN is
-not affected.
+Test that sys_sendmsg BPF hook doesn't break sys_sendmsg behaviour to
+rewrite destination IPv6 = [::] with [::1] (BSD'ism).
 
-Signed-off-by: Ido Schimmel <idosch at mellanox.com>
-Signed-off-by: David S. Miller <davem at davemloft.net>
+Two test cases are added:
+
+1) User passes dst IPv6 = [::] and BPF_CGROUP_UDP6_SENDMSG program
+   doesn't touch it.
+
+2) User passes dst IPv6 != [::], but BPF_CGROUP_UDP6_SENDMSG program
+   rewrites it with [::].
+
+In both cases [::1] is used by sys_sendmsg code eventually and datagram
+is sent successfully for unconnected UDP socket.
+
+Example of relevant output:
+  Test case: sendmsg6: set dst IP = [::] (BSD'ism) .. [PASS]
+  Test case: sendmsg6: preserve dst IP = [::] (BSD'ism) .. [PASS]
+
+Signed-off-by: Andrey Ignatov <rdna at fb.com>
+Signed-off-by: Alexei Starovoitov <ast at kernel.org>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- .../selftests/net/forwarding/bridge_vlan_aware.sh | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_sock_addr.c | 53 ++++++++++++++++++--
+ 1 file changed, 50 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
-index d8313d0438b7..04c6431b2bd8 100755
---- a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
-@@ -1,7 +1,7 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/bpf/test_sock_addr.c b/tools/testing/selftests/bpf/test_sock_addr.c
+index aeeb76a54d63..e38f1cb7089d 100644
+--- a/tools/testing/selftests/bpf/test_sock_addr.c
++++ b/tools/testing/selftests/bpf/test_sock_addr.c
+@@ -44,6 +44,7 @@
+ #define SERV6_V4MAPPED_IP	"::ffff:192.168.0.4"
+ #define SRC6_IP			"::1"
+ #define SRC6_REWRITE_IP		"::6"
++#define WILDCARD6_IP		"::"
+ #define SERV6_PORT		6060
+ #define SERV6_REWRITE_PORT	6666
  
--ALL_TESTS="ping_ipv4 ping_ipv6 learning flooding"
-+ALL_TESTS="ping_ipv4 ping_ipv6 learning flooding vlan_deletion"
- NUM_NETIFS=4
- CHECK_TC="yes"
- source lib.sh
-@@ -96,6 +96,19 @@ flooding()
- 	flood_test $swp2 $h1 $h2
+@@ -85,12 +86,14 @@ static int bind4_prog_load(const struct sock_addr_test *test);
+ static int bind6_prog_load(const struct sock_addr_test *test);
+ static int connect4_prog_load(const struct sock_addr_test *test);
+ static int connect6_prog_load(const struct sock_addr_test *test);
++static int sendmsg_allow_prog_load(const struct sock_addr_test *test);
+ static int sendmsg_deny_prog_load(const struct sock_addr_test *test);
+ static int sendmsg4_rw_asm_prog_load(const struct sock_addr_test *test);
+ static int sendmsg4_rw_c_prog_load(const struct sock_addr_test *test);
+ static int sendmsg6_rw_asm_prog_load(const struct sock_addr_test *test);
+ static int sendmsg6_rw_c_prog_load(const struct sock_addr_test *test);
+ static int sendmsg6_rw_v4mapped_prog_load(const struct sock_addr_test *test);
++static int sendmsg6_rw_wildcard_prog_load(const struct sock_addr_test *test);
+ 
+ static struct sock_addr_test tests[] = {
+ 	/* bind */
+@@ -462,6 +465,34 @@ static struct sock_addr_test tests[] = {
+ 		SRC6_REWRITE_IP,
+ 		SYSCALL_ENOTSUPP,
+ 	},
++	{
++		"sendmsg6: set dst IP = [::] (BSD'ism)",
++		sendmsg6_rw_wildcard_prog_load,
++		BPF_CGROUP_UDP6_SENDMSG,
++		BPF_CGROUP_UDP6_SENDMSG,
++		AF_INET6,
++		SOCK_DGRAM,
++		SERV6_IP,
++		SERV6_PORT,
++		SERV6_REWRITE_IP,
++		SERV6_REWRITE_PORT,
++		SRC6_REWRITE_IP,
++		SUCCESS,
++	},
++	{
++		"sendmsg6: preserve dst IP = [::] (BSD'ism)",
++		sendmsg_allow_prog_load,
++		BPF_CGROUP_UDP6_SENDMSG,
++		BPF_CGROUP_UDP6_SENDMSG,
++		AF_INET6,
++		SOCK_DGRAM,
++		WILDCARD6_IP,
++		SERV6_PORT,
++		SERV6_REWRITE_IP,
++		SERV6_PORT,
++		SRC6_IP,
++		SUCCESS,
++	},
+ 	{
+ 		"sendmsg6: deny call",
+ 		sendmsg_deny_prog_load,
+@@ -714,16 +745,27 @@ static int connect6_prog_load(const struct sock_addr_test *test)
+ 	return load_path(test, CONNECT6_PROG_PATH);
  }
  
-+vlan_deletion()
+-static int sendmsg_deny_prog_load(const struct sock_addr_test *test)
++static int sendmsg_ret_only_prog_load(const struct sock_addr_test *test,
++				      int32_t rc)
+ {
+ 	struct bpf_insn insns[] = {
+-		/* return 0 */
+-		BPF_MOV64_IMM(BPF_REG_0, 0),
++		/* return rc */
++		BPF_MOV64_IMM(BPF_REG_0, rc),
+ 		BPF_EXIT_INSN(),
+ 	};
+ 	return load_insns(test, insns, sizeof(insns) / sizeof(struct bpf_insn));
+ }
+ 
++static int sendmsg_allow_prog_load(const struct sock_addr_test *test)
 +{
-+	# Test that the deletion of a VLAN on a bridge port does not affect
-+	# the PVID VLAN
-+	log_info "Add and delete a VLAN on bridge port $swp1"
-+
-+	bridge vlan add vid 10 dev $swp1
-+	bridge vlan del vid 10 dev $swp1
-+
-+	ping_ipv4
-+	ping_ipv6
++	return sendmsg_ret_only_prog_load(test, /*rc*/ 1);
 +}
 +
- trap cleanup EXIT
++static int sendmsg_deny_prog_load(const struct sock_addr_test *test)
++{
++	return sendmsg_ret_only_prog_load(test, /*rc*/ 0);
++}
++
+ static int sendmsg4_rw_asm_prog_load(const struct sock_addr_test *test)
+ {
+ 	struct sockaddr_in dst4_rw_addr;
+@@ -844,6 +886,11 @@ static int sendmsg6_rw_v4mapped_prog_load(const struct sock_addr_test *test)
+ 	return sendmsg6_rw_dst_asm_prog_load(test, SERV6_V4MAPPED_IP);
+ }
  
- setup_prepare
++static int sendmsg6_rw_wildcard_prog_load(const struct sock_addr_test *test)
++{
++	return sendmsg6_rw_dst_asm_prog_load(test, WILDCARD6_IP);
++}
++
+ static int sendmsg6_rw_c_prog_load(const struct sock_addr_test *test)
+ {
+ 	return load_path(test, SENDMSG6_PROG_PATH);
 -- 
 2.19.1
