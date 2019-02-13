@@ -1,107 +1,112 @@
-From: Dave.Martin@arm.com (Dave Martin)
-Date: Wed, 13 Feb 2019 17:43:19 +0000
-Subject: [RFC][PATCH 0/3] arm64 relaxed ABI
-In-Reply-To: <90c54249-00dd-f8dd-6873-6bb8615c2c8a@arm.com>
-References: <CAAeHK+xPZ-Z9YUAq=3+hbjj4uyJk32qVaxZkhcSAHYC4mHAkvQ@mail.gmail.com>
- <20181212150230.GH65138@arrakis.emea.arm.com>
- <CAAeHK+zxYJDJ7DJuDAOuOMgGvckFwMAoVUTDJzb6MX3WsXhRTQ@mail.gmail.com>
- <20181218175938.GD20197@arrakis.emea.arm.com>
- <20181219125249.GB22067@e103592.cambridge.arm.com>
- <9bbacb1b-6237-f0bb-9bec-b4cf8d42bfc5@arm.com>
- <CAFKCwrhH5R3e5ntX0t-gxcE6zzbCNm06pzeFfYEN2K13c5WLTg@mail.gmail.com>
- <20190212180223.GD199333@arrakis.emea.arm.com>
- <20190213145834.GJ3567@e103592.cambridge.arm.com>
- <90c54249-00dd-f8dd-6873-6bb8615c2c8a@arm.com>
-Message-ID: <20190213174318.GM3567@e103592.cambridge.arm.com>
+From: logang@deltatee.com (Logan Gunthorpe)
+Date: Wed, 13 Feb 2019 10:54:49 -0700
+Subject: [PATCH v2 07/12] NTB: Introduce functions to calculate multi-port
+ resource index
+In-Reply-To: <20190213175454.7506-1-logang@deltatee.com>
+References: <20190213175454.7506-1-logang@deltatee.com>
+Message-ID: <20190213175454.7506-8-logang@deltatee.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190213174319.GDrP78jflSxYvBn_tIJH_WBUF_92qByT7kWtO8s_7sE@z>
+Message-ID: <20190213175449.mIffWtQsktNW7AkkxLwj3N_Lh-BnIme0ZnW8z6gLJ0k@z>
 
-On Wed, Feb 13, 2019@04:42:11PM +0000, Kevin Brodsky wrote:
-> (+Cc other people with MTE experience: Branislav, Ruben)
+When using multi-ports each port uses resources (dbs, msgs, mws, etc)
+on every other port. Creating a mapping for these resources such that
+each port has a corresponding resource on every other port is a bit
+tricky.
 
-[...]
+Introduce the ntb_peer_resource_idx() function for this purpose.
+It returns the peer resource number that will correspond with the
+local peer index on the remote peer.
 
-> >I'm wondering whether we can piggy-back on existing concepts.
-> >
-> >We could say that recolouring memory is safe when and only when
-> >unmapping of the page or removing permissions on the page (via
-> >munmap/mremap/mprotect) would be safe.  Otherwise, the resulting
-> >behaviour of the process is undefined.
-> 
-> Is that a sufficient requirement? I don't think that anything prevents you
-> from using mprotect() on say [vvar], but we don't necessarily want to map
-> [vvar] as tagged. I'm not sure it's easy to define what "safe" would mean
-> here.
+Also, introduce ntb_peer_highest_mw_idx() which will use
+ntb_peer_resource_idx() but return the MW index starting with the
+highest index and working down.
 
-I think the origin rules have to apply too: [vvar] is not a regular,
-private page but a weird, shared thing mapped for you by the kernel.
+Signed-off-by: Logan Gunthorpe <logang at deltatee.com>
+Cc: Jon Mason <jdmason at kudzu.us>
+Cc: Dave Jiang <dave.jiang at intel.com>
+Cc: Allen Hubbe <allenbh at gmail.com>
+---
+ include/linux/ntb.h | 70 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-Presumably userspace _cannot_ do mprotect(PROT_WRITE) on it.
-
-I'm also assuming that userspace cannot recolour memory in read-only
-pages.  That sounds bad if there's no way to prevent it.
-
-[...]
-
-> >It might be reasonable to do the check in access_ok() and skip it in
-> >__put_user() etc.
-> >
-> >(I seem to remember some separate discussion about abolishing
-> >__put_user() and friends though, due to the accident risk they pose.)
-> 
-> Keep in mind that with MTE, there is no need to do any explicit check when
-> accessing user memory via a user-provided pointer. The tagged user pointer
-> is directly passed to copy_*_user() or put_user(). If the load/store causes
-> a tag fault, then it is handled just like a page fault (i.e. invoking the
-> fixup handler). As far as I can tell, there's no need to do anything special
-> in access_ok() in that case.
-> 
-> [The above applies to precise mode. In imprecise mode, some more work will
-> be needed after the load/store to check whether a tag fault happened.]
-
-Fair enough, I'm a bit hazy on the details as of right now..
-
-[...]
-
-> There are many possible ways to deploy MTE, and debugging is just one of
-> them. For instance, you may want to turn on heap colouring for some
-> processes in the system, including in production.
-
-To implement enforceable protection, or as a diagnostic tool for when
-something goes wrong?
-
-In the latter case it's still OK for the kernel's tag checking not to be
-exhaustive.
-
-> Regarding those cases where it is impossible to check tags at the point of
-> accessing user memory, it is indeed possible to check the memory tags at the
-> point of stripping the tag from the user pointer. Given that some MTE
-> use-cases favour performance over tag check coverage, the ideal approach
-> would be to make these checks configurable (e.g. check one granule, check
-> all of them, or check none). I don't know how feasible this is in practice.
-
-Check all granules of a massive DMA buffer?
-
-That doesn't sounds feasible without explicit support in the hardware to
-have the DMA check tags itself as the memory is accessed.  MTE by itself
-doesn't provide for this IIUC (at least, it would require support in the
-platform, not just the CPU).
-
-We do not want to bake any assumptions into the ABI about whether a
-given data transfer may or may not be offloaded to DMA.  That feels
-like a slippery slope.
-
-Providing we get the checks for free in put_user/get_user/
-copy_{to,from}_user(), those will cover a lot of cases though, for
-non-bulk-IO cases.
-
-
-My assumption has been that at this point in time we are mainly aiming
-to support the debug/diagnostic use cases today.
-
-At least, those are the low(ish)-hanging fruit.
-
-Others are better placed than me to comment on the goals here.
-
-Cheers
----Dave
+diff --git a/include/linux/ntb.h b/include/linux/ntb.h
+index 181d16601dd9..f5c69d853489 100644
+--- a/include/linux/ntb.h
++++ b/include/linux/ntb.h
+@@ -1502,4 +1502,74 @@ static inline int ntb_peer_msg_write(struct ntb_dev *ntb, int pidx, int midx,
+ 	return ntb->ops->peer_msg_write(ntb, pidx, midx, msg);
+ }
+ 
++/**
++ * ntb_peer_resource_idx() - get a resource index for a given peer idx
++ * @ntb:	NTB device context.
++ * @pidx:	Peer port index.
++ *
++ * When constructing a graph of peers, each remote peer must use a different
++ * resource index (mw, doorbell, etc) to communicate with each other
++ * peer.
++ *
++ * In a two peer system, this function should always return 0 such that
++ * resource 0 points to the remote peer on both ports.
++ *
++ * In a 5 peer system, this function will return the following matrix
++ *
++ * pidx \ port    0    1    2    3    4
++ * 0              0    0    1    2    3
++ * 1              0    1    2    3    4
++ * 2              0    1    2    3    4
++ * 3              0    1    2    3    4
++ *
++ * For example, if this function is used to program peer's memory
++ * windows, port 0 will program MW 0 on all it's peers to point to itself.
++ * port 1 will program MW 0 in port 0 to point to itself and MW 1 on all
++ * other ports. etc.
++ *
++ * For the legacy two host case, ntb_port_number() and ntb_peer_port_number()
++ * both return zero and therefore this function will always return zero.
++ * So MW 0 on each host would be programmed to point to the other host.
++ *
++ * Return: the resource index to use for that peer.
++ */
++static inline int ntb_peer_resource_idx(struct ntb_dev *ntb, int pidx)
++{
++	int local_port, peer_port;
++
++	if (pidx >= ntb_peer_port_count(ntb))
++		return -EINVAL;
++
++	local_port = ntb_port_number(ntb);
++	peer_port = ntb_peer_port_number(ntb, pidx);
++
++	if (peer_port < local_port)
++		return local_port - 1;
++	else
++		return local_port;
++}
++
++/**
++ * ntb_peer_highest_mw_idx() - get a memory window index for a given peer idx
++ *	using the highest index memory windows first
++ *
++ * @ntb:	NTB device context.
++ * @pidx:	Peer port index.
++ *
++ * Like ntb_peer_resource_idx(), except it returns indexes starting with
++ * last memory window index.
++ *
++ * Return: the resource index to use for that peer.
++ */
++static inline int ntb_peer_highest_mw_idx(struct ntb_dev *ntb, int pidx)
++{
++	int ret;
++
++	ret = ntb_peer_resource_idx(ntb, pidx);
++	if (ret < 0)
++		return ret;
++
++	return ntb_mw_count(ntb, pidx) - ret - 1;
++}
++
+ #endif
+-- 
+2.19.0
