@@ -1,42 +1,43 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Tue, 12 Feb 2019 21:33:04 -0500
-Subject: [PATCH AUTOSEL 4.20 073/105] selftests/bpf: install with_tunnels.sh
- for test_flow_dissector.sh
+Date: Tue, 12 Feb 2019 21:32:37 -0500
+Subject: [PATCH AUTOSEL 4.20 046/105] selftests: bpf: install files
+ tcp_(server|client)*.py
 In-Reply-To: <20190213023336.19019-1-sashal@kernel.org>
 References: <20190213023336.19019-1-sashal@kernel.org>
-Message-ID: <20190213023336.19019-73-sashal@kernel.org>
+Message-ID: <20190213023336.19019-46-sashal@kernel.org>
 
-From: Stanislav Fomichev <sdf at google.com>
+From: Anders Roxell <anders.roxell at linaro.org>
 
-[ Upstream commit 1be72f29bfb98be27a95309f18b4ab5249967b59 ]
+[ Upstream commit f98937c6bb73ae11717a15aec85c187d33ca5d34 ]
 
-test_flow_dissector.sh depends on both with_addr.sh and with_tunnels.sh
-However, we install only with_addr.sh.
+When test_tcpbpf_user runs it complains that it can't find files
+tcp_server.py and tcp_client.py.
 
-Add with_tunnels.sh to TEST_PROGS_EXTENDED to make sure it gets
-installed as well.
+Rework so that tcp_server.py and tcp_client.py gets installed, added them
+to the variable TEST_PROGS_EXTENDED.
 
-Tested with: make TARGETS=bpf install INSTALL_PATH=$PWD/x
-
-Fixes: ef4ab8447aa26 ("selftests: bpf: install script with_addr.sh")
-Signed-off-by: Stanislav Fomichev <sdf at google.com>
+Fixes: d6d4f60c3a09 ("bpf: add selftest for tcpbpf")
+Signed-off-by: Anders Roxell <anders.roxell at linaro.org>
 Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/bpf/Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 74ece4f9fcce..d5e992f7c7dd 100644
+index ecd79b7fb107..74ece4f9fcce 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -54,6 +54,7 @@ TEST_PROGS := test_kmod.sh \
+@@ -53,7 +53,9 @@ TEST_PROGS := test_kmod.sh \
+ 	test_flow_dissector.sh \
  	test_xdp_vlan.sh
  
- TEST_PROGS_EXTENDED := with_addr.sh \
-+	with_tunnels.sh \
- 	tcp_client.py \
- 	tcp_server.py
+-TEST_PROGS_EXTENDED := with_addr.sh
++TEST_PROGS_EXTENDED := with_addr.sh \
++	tcp_client.py \
++	tcp_server.py
  
+ # Compile but not part of 'make run_tests'
+ TEST_GEN_PROGS_EXTENDED = test_libbpf_open test_sock_addr test_skb_cgroup_id_user \
 -- 
 2.19.1
