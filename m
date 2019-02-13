@@ -1,22 +1,42 @@
-From: jarkko.sakkinen at linux.intel.com (Jarkko Sakkinen)
-Date: Wed, 13 Feb 2019 20:07:59 +0200
-Subject: [PATCH v3] selftests/tpm2: Extend tests to cover partial reads
-In-Reply-To: <24290564-9c4d-93f4-d813-7ce4f1fd8745@intel.com>
-References: <155007596864.18677.9373151400257566077.stgit@tstruk-mobl1.jf.intel.com>
- <155007601798.18778.10490966270922534995.stgit@tstruk-mobl1.jf.intel.com>
- <20190213171928.GB23351@linux.intel.com>
- <24290564-9c4d-93f4-d813-7ce4f1fd8745@intel.com>
-Message-ID: <20190213180759.GB27173@linux.intel.com>
+From: shuah at kernel.org (shuah)
+Date: Wed, 13 Feb 2019 11:17:34 -0700
+Subject: [PATCH net] selftests: fix timestamping Makefile
+In-Reply-To: <20190213170914.11991-1-deepa.kernel@gmail.com>
+References: <20190213170914.11991-1-deepa.kernel@gmail.com>
+Message-ID: <afaa86d6-c1b3-0972-24c4-2eaaceeae3a9@kernel.org>
 
-On Wed, Feb 13, 2019 at 09:22:56AM -0800, Tadeusz Struk wrote:
-> On 2/13/19 9:19 AM, Jarkko Sakkinen wrote:
-> > OK, great, thank you.
-> > 
-> > They are in my master branch now.
+On 2/13/19 10:09 AM, Deepa Dinamani wrote:
+> The clean target in the makefile conflicts with the generic
+> kselftests lib.mk, and fails to properly remove the compiled
+> test programs.
 > 
-> Thanks Jarkko. Are you planning to push it also to 5.1?
+> Remove the redundant rule, the TEST_GEN_FILES will be already
+> removed by the CLEAN macro in lib.mk.
+> 
+> Signed-off-by: Deepa Dinamani <deepa.kernel at gmail.com>
+> ---
+> 
+> * Changes since v1: as per review comments
+> 
+>   tools/testing/selftests/networking/timestamping/Makefile | 3 ---
+>   1 file changed, 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/networking/timestamping/Makefile b/tools/testing/selftests/networking/timestamping/Makefile
+> index 9050eeea5f5f..1de8bd8ccf5d 100644
+> --- a/tools/testing/selftests/networking/timestamping/Makefile
+> +++ b/tools/testing/selftests/networking/timestamping/Makefile
+> @@ -9,6 +9,3 @@ all: $(TEST_PROGS)
+>   top_srcdir = ../../../../..
+>   KSFT_KHDR_INSTALL := 1
+>   include ../../lib.mk
+> -
+> -clean:
+> -	rm -fr $(TEST_GEN_FILES)
+> 
 
-I did already my v5.1 pull request but might do another one if there are
-regressions. So it depends.
+Thanks for the patch.
 
-/Jarkko
+Acked-by: Shuah Khan <shuah at kernel.org>
+
+thanks,
+-- Shuah
