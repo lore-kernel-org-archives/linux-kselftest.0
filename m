@@ -1,57 +1,39 @@
-From: sashal at kernel.org (Sasha Levin)
-Date: Tue, 12 Feb 2019 21:32:28 -0500
-Subject: [PATCH AUTOSEL 4.20 037/105] selftests: forwarding: Add a test for
- VLAN deletion
-In-Reply-To: <20190213023336.19019-1-sashal@kernel.org>
-References: <20190213023336.19019-1-sashal@kernel.org>
-Message-ID: <20190213023336.19019-37-sashal@kernel.org>
+From: deepa.kernel at gmail.com (Deepa Dinamani)
+Date: Tue, 12 Feb 2019 19:29:32 -0800
+Subject: [PATCH 1/1] selftests: fix timestamping Makefile
+Message-ID: <20190213032932.2805-1-deepa.kernel@gmail.com>
 
-From: Ido Schimmel <idosch at mellanox.com>
+The clean target in the makefile conflicts with the generic
+kselftests lib.mk, and fails to properly remove the compiled
+test programs.
 
-[ Upstream commit 4fabf3bf93a194c7fa5288da3e0af37e4b943cf3 ]
+Use TEST_GEN_PROGS macro to fit with lib.mk rules and
+remove the conflicting and redundant clean.
 
-Add a VLAN on a bridge port, delete it and make sure the PVID VLAN is
-not affected.
-
-Signed-off-by: Ido Schimmel <idosch at mellanox.com>
-Signed-off-by: David S. Miller <davem at davemloft.net>
-Signed-off-by: Sasha Levin <sashal at kernel.org>
+Signed-off-by: Deepa Dinamani <deepa.kernel at gmail.com>
 ---
- .../selftests/net/forwarding/bridge_vlan_aware.sh | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ tools/testing/selftests/networking/timestamping/Makefile | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
-index d8313d0438b7..04c6431b2bd8 100755
---- a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
+diff --git a/tools/testing/selftests/networking/timestamping/Makefile b/tools/testing/selftests/networking/timestamping/Makefile
+index 9050eeea5f5f..16ab85ba6409 100644
+--- a/tools/testing/selftests/networking/timestamping/Makefile
++++ b/tools/testing/selftests/networking/timestamping/Makefile
 @@ -1,7 +1,7 @@
- #!/bin/bash
  # SPDX-License-Identifier: GPL-2.0
+ CFLAGS += -I../../../../../usr/include
  
--ALL_TESTS="ping_ipv4 ping_ipv6 learning flooding"
-+ALL_TESTS="ping_ipv4 ping_ipv6 learning flooding vlan_deletion"
- NUM_NETIFS=4
- CHECK_TC="yes"
- source lib.sh
-@@ -96,6 +96,19 @@ flooding()
- 	flood_test $swp2 $h1 $h2
- }
+-TEST_GEN_FILES := hwtstamp_config rxtimestamp timestamping txtimestamp
++TEST_GEN_PROGS := hwtstamp_config rxtimestamp timestamping txtimestamp
+ TEST_PROGS := txtimestamp.sh
  
-+vlan_deletion()
-+{
-+	# Test that the deletion of a VLAN on a bridge port does not affect
-+	# the PVID VLAN
-+	log_info "Add and delete a VLAN on bridge port $swp1"
-+
-+	bridge vlan add vid 10 dev $swp1
-+	bridge vlan del vid 10 dev $swp1
-+
-+	ping_ipv4
-+	ping_ipv6
-+}
-+
- trap cleanup EXIT
- 
- setup_prepare
+ all: $(TEST_PROGS)
+@@ -9,6 +9,3 @@ all: $(TEST_PROGS)
+ top_srcdir = ../../../../..
+ KSFT_KHDR_INSTALL := 1
+ include ../../lib.mk
+-
+-clean:
+-	rm -fr $(TEST_GEN_FILES)
 -- 
-2.19.1
+2.17.1
