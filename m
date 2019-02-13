@@ -1,96 +1,44 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Tue, 12 Feb 2019 21:33:22 -0500
-Subject: [PATCH AUTOSEL 4.20 091/105] selftests/bpf: retry tests that expect
- build-id
+Date: Tue, 12 Feb 2019 21:33:13 -0500
+Subject: [PATCH AUTOSEL 4.20 082/105] selftests: tc-testing: fix tunnel_key
+ failure if dst_port is unspecified
 In-Reply-To: <20190213023336.19019-1-sashal@kernel.org>
 References: <20190213023336.19019-1-sashal@kernel.org>
-Message-ID: <20190213023336.19019-91-sashal@kernel.org>
+Message-ID: <20190213023336.19019-82-sashal@kernel.org>
 
-From: Stanislav Fomichev <sdf at google.com>
+From: Davide Caratti <dcaratti at redhat.com>
 
-[ Upstream commit f67ad87ab3120e82845521b18a2b99273a340308 ]
+[ Upstream commit 5216bd77798e2ed773ecd45f3f368dcaec63e5dd ]
 
-While running test_progs in a loop I found out that I'm sometimes hitting
-"Didn't find expected build ID from the map" error.
+After commit 1c25324caf82 ("net/sched: act_tunnel_key: Don't dump dst port
+if it wasn't set"), act_tunnel_key doesn't dump anymore the destination
+port, unless it was explicitly configured. This caused systematic failures
+in the following TDC test case:
 
-Looking at stack_map_get_build_id_offset() it seems that it is racy (by
-design) and can sometimes return BPF_STACK_BUILD_ID_IP (i.e. can't trylock
-current->mm->mmap_sem).
+ 7a88 - Add tunnel_key action with cookie parameter
 
-Let's retry this test a single time.
+Avoid matching zero values of TCA_TUNNEL_KEY_ENC_DST_PORT to let the test
+pass again.
 
-Fixes: 13790d1cc72c ("bpf: add selftest for stackmap with build_id in NMI context")
-Acked-by: Song Liu <songliubraving at fb.com>
-Signed-off-by: Stanislav Fomichev <sdf at google.com>
-Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
+Signed-off-by: Davide Caratti <dcaratti at redhat.com>
+Signed-off-by: David S. Miller <davem at davemloft.net>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/bpf/test_progs.c | 30 ++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ .../selftests/tc-testing/tc-tests/actions/tunnel_key.json       | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 2d3c04f45530..998b6cc77ed6 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -1136,7 +1136,9 @@ static void test_stacktrace_build_id(void)
- 	int i, j;
- 	struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
- 	int build_id_matches = 0;
-+	int retry = 1;
- 
-+retry:
- 	err = bpf_prog_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
- 	if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
- 		goto out;
-@@ -1249,6 +1251,19 @@ static void test_stacktrace_build_id(void)
- 		previous_key = key;
- 	} while (bpf_map_get_next_key(stackmap_fd, &previous_key, &key) == 0);
- 
-+	/* stack_map_get_build_id_offset() is racy and sometimes can return
-+	 * BPF_STACK_BUILD_ID_IP instead of BPF_STACK_BUILD_ID_VALID;
-+	 * try it one more time.
-+	 */
-+	if (build_id_matches < 1 && retry--) {
-+		ioctl(pmu_fd, PERF_EVENT_IOC_DISABLE);
-+		close(pmu_fd);
-+		bpf_object__close(obj);
-+		printf("%s:WARN:Didn't find expected build ID from the map, retrying\n",
-+		       __func__);
-+		goto retry;
-+	}
-+
- 	if (CHECK(build_id_matches < 1, "build id match",
- 		  "Didn't find expected build ID from the map\n"))
- 		goto disable_pmu;
-@@ -1289,7 +1304,9 @@ static void test_stacktrace_build_id_nmi(void)
- 	int i, j;
- 	struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
- 	int build_id_matches = 0;
-+	int retry = 1;
- 
-+retry:
- 	err = bpf_prog_load(file, BPF_PROG_TYPE_PERF_EVENT, &obj, &prog_fd);
- 	if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
- 		return;
-@@ -1384,6 +1401,19 @@ static void test_stacktrace_build_id_nmi(void)
- 		previous_key = key;
- 	} while (bpf_map_get_next_key(stackmap_fd, &previous_key, &key) == 0);
- 
-+	/* stack_map_get_build_id_offset() is racy and sometimes can return
-+	 * BPF_STACK_BUILD_ID_IP instead of BPF_STACK_BUILD_ID_VALID;
-+	 * try it one more time.
-+	 */
-+	if (build_id_matches < 1 && retry--) {
-+		ioctl(pmu_fd, PERF_EVENT_IOC_DISABLE);
-+		close(pmu_fd);
-+		bpf_object__close(obj);
-+		printf("%s:WARN:Didn't find expected build ID from the map, retrying\n",
-+		       __func__);
-+		goto retry;
-+	}
-+
- 	if (CHECK(build_id_matches < 1, "build id match",
- 		  "Didn't find expected build ID from the map\n"))
- 		goto disable_pmu;
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json b/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json
+index af5e99d27229..e7e15a7336b6 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json
+@@ -605,7 +605,7 @@
+         "cmdUnderTest": "$TC actions add action tunnel_key set src_ip 10.10.10.1 dst_ip 10.10.10.2 id 7 index 4 cookie aa11bb22cc33dd44ee55ff66aa11b1b2",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions get action tunnel_key index 4",
+-        "matchPattern": "action order [0-9]+: tunnel_key.*set.*src_ip 10.10.10.1.*dst_ip 10.10.10.2.*key_id 7.*dst_port 0.*csum pipe.*index 4 ref.*cookie aa11bb22cc33dd44ee55ff66aa11b1b2",
++        "matchPattern": "action order [0-9]+: tunnel_key.*set.*src_ip 10.10.10.1.*dst_ip 10.10.10.2.*key_id 7.*csum pipe.*index 4 ref.*cookie aa11bb22cc33dd44ee55ff66aa11b1b2",
+         "matchCount": "1",
+         "teardown": [
+             "$TC actions flush action tunnel_key"
 -- 
 2.19.1
