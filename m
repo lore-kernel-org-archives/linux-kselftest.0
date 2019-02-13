@@ -1,73 +1,78 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Tue, 12 Feb 2019 21:36:42 -0500
-Subject: [PATCH AUTOSEL 4.19 64/83] selftests: tc-testing: drop test on
- missing tunnel key id
+Date: Tue, 12 Feb 2019 21:36:59 -0500
+Subject: [PATCH AUTOSEL 4.19 81/83] selftests: forwarding: Add a test case for
+ externally learned FDB entries
 In-Reply-To: <20190213023701.20286-1-sashal@kernel.org>
 References: <20190213023701.20286-1-sashal@kernel.org>
-Message-ID: <20190213023701.20286-64-sashal@kernel.org>
+Message-ID: <20190213023701.20286-81-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190213023642.SlcVduGVyDICb20HtJ1jUT_g-gvE-Upsvzqjnd5La9Y@z>
+Message-ID: <20190213023659.sHciuSuqp2cyjjX_YdoiZpUO6yhPf3nd11URTyUgQOY@z>
 
-From: Davide Caratti <dcaratti@redhat.com>
+From: Ido Schimmel <idosch@mellanox.com>
 
-[ Upstream commit e413615502a3324daba038f529932ba9a5248af0 ]
+[ Upstream commit 479a2b761d61c04e2ae97325aa391a8a8c99c23e ]
 
-After merge of commit 80ef0f22ceda ("net/sched: act_tunnel_key: Allow
-key-less tunnels"), act_tunnel_key does not reject anymore requests to
-install 'set' rules where the key id is missing. Therefore, drop the
-following TDC testcase:
+Test that externally learned FDB entries can roam, but not age out.
 
- ba4e - Add tunnel_key set action with missing mandatory id parameter
-
-because it's going to become a systematic fail as soon as userspace
-iproute2 will start supporting key-less tunnels.
-
-Signed-off-by: Davide Caratti <dcaratti at redhat.com>
+Signed-off-by: Ido Schimmel <idosch at mellanox.com>
+Reviewed-by: Petr Machata <petrm at mellanox.com>
 Signed-off-by: David S. Miller <davem at davemloft.net>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- .../tc-tests/actions/tunnel_key.json          | 29 -------------------
- 1 file changed, 29 deletions(-)
+ .../net/forwarding/bridge_vlan_aware.sh       | 34 ++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json b/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json
-index 10b2d894e436..af5e99d27229 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json
-@@ -81,35 +81,6 @@
- 	    ]
-         ]
-     },
--    {
--        "id": "ba4e",
--        "name": "Add tunnel_key set action with missing mandatory id parameter",
--        "category": [
--            "actions",
--            "tunnel_key"
--        ],
--        "setup": [
--            [
--                "$TC actions flush action tunnel_key",
--                0,
--                1,
--                255
--            ]
--        ],
--        "cmdUnderTest": "$TC actions add action tunnel_key set src_ip 10.10.10.1 dst_ip 20.20.20.2",
--        "expExitCode": "255",
--        "verifyCmd": "$TC actions list action tunnel_key",
--        "matchPattern": "action order [0-9]+: tunnel_key set.*src_ip 10.10.10.1.*dst_ip 20.20.20.2",
--        "matchCount": "0",
--        "teardown": [
--	    [
--		"$TC actions flush action tunnel_key",
--		0,
--		1,
--		255
--	    ]
--        ]
--    },
-     {
-         "id": "a5e0",
-         "name": "Add tunnel_key set action with invalid src_ip parameter",
+diff --git a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
+index 04c6431b2bd8..b90dff8d3a94 100755
+--- a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
++++ b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
+@@ -1,7 +1,7 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-ALL_TESTS="ping_ipv4 ping_ipv6 learning flooding vlan_deletion"
++ALL_TESTS="ping_ipv4 ping_ipv6 learning flooding vlan_deletion extern_learn"
+ NUM_NETIFS=4
+ CHECK_TC="yes"
+ source lib.sh
+@@ -109,6 +109,38 @@ vlan_deletion()
+ 	ping_ipv6
+ }
+ 
++extern_learn()
++{
++	local mac=de:ad:be:ef:13:37
++	local ageing_time
++
++	# Test that externally learned FDB entries can roam, but not age out
++	RET=0
++
++	bridge fdb add de:ad:be:ef:13:37 dev $swp1 master extern_learn vlan 1
++
++	bridge fdb show brport $swp1 | grep -q de:ad:be:ef:13:37
++	check_err $? "Did not find FDB entry when should"
++
++	# Wait for 10 seconds after the ageing time to make sure the FDB entry
++	# was not aged out
++	ageing_time=$(bridge_ageing_time_get br0)
++	sleep $((ageing_time + 10))
++
++	bridge fdb show brport $swp1 | grep -q de:ad:be:ef:13:37
++	check_err $? "FDB entry was aged out when should not"
++
++	$MZ $h2 -c 1 -p 64 -a $mac -t ip -q
++
++	bridge fdb show brport $swp2 | grep -q de:ad:be:ef:13:37
++	check_err $? "FDB entry did not roam when should"
++
++	log_test "Externally learned FDB entry - ageing & roaming"
++
++	bridge fdb del de:ad:be:ef:13:37 dev $swp2 master vlan 1 &> /dev/null
++	bridge fdb del de:ad:be:ef:13:37 dev $swp1 master vlan 1 &> /dev/null
++}
++
+ trap cleanup EXIT
+ 
+ setup_prepare
 -- 
 2.19.1
