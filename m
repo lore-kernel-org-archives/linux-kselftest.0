@@ -1,43 +1,108 @@
 From: logang@deltatee.com (Logan Gunthorpe)
-Date: Wed, 13 Feb 2019 10:54:50 -0700
-Subject: [PATCH v2 08/12] NTB: Rename ntb.c to support multiple source files
- in the module
+Date: Wed, 13 Feb 2019 10:54:44 -0700
+Subject: [PATCH v2 02/12] NTB: ntb_transport: Ensure the destination buffer is
+ mapped for TX DMA
 In-Reply-To: <20190213175454.7506-1-logang@deltatee.com>
 References: <20190213175454.7506-1-logang@deltatee.com>
-Message-ID: <20190213175454.7506-9-logang@deltatee.com>
+Message-ID: <20190213175454.7506-3-logang@deltatee.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190213175450.4-MyFywCXRk91_L39XP6Ox8KS3Ou_8uTW2nR5MIPQEY@z>
+Message-ID: <20190213175444.UZN9U_4V29Kdl8hu26sF8E088Xf2u4KJ3KXm4o7Rq94@z>
 
-The kbuild system does not support having multiple source files in
-a module if one of those source files has the same name as the module.
+Presently, when ntb_transport is used with DMA and the IOMMU turned on,
+it fails with errors from the IOMMU such as:
 
-Therefore, we must rename ntb.c to core.c, while the module remains
-ntb.ko.
+  DMAR: DRHD: handling fault status reg 202
+  DMAR: [DMA Write] Request device [00:04.0] fault addr
+	381fc0340000 [fault reason 05] PTE Write access is not set
 
-This is similar to the way the nvme modules are structured.
+This is because ntb_transport does not map the BAR space with the IOMMU.
 
+To fix this, we map the entire MW region for each QP after we assign
+the DMA channel. This prevents needing an extra DMA map in the fast
+path.
+
+Link: https://lore.kernel.org/linux-pci/499934e7-3734-1aee-37dd-b42a5d2a2608 at intel.com/
 Signed-off-by: Logan Gunthorpe <logang at deltatee.com>
 Cc: Jon Mason <jdmason at kudzu.us>
 Cc: Dave Jiang <dave.jiang at intel.com>
 Cc: Allen Hubbe <allenbh at gmail.com>
 ---
- drivers/ntb/Makefile          | 2 ++
- drivers/ntb/{ntb.c => core.c} | 0
- 2 files changed, 2 insertions(+)
- rename drivers/ntb/{ntb.c => core.c} (100%)
+ drivers/ntb/ntb_transport.c | 28 ++++++++++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/ntb/Makefile b/drivers/ntb/Makefile
-index 1921dec1949d..537226f8e78d 100644
---- a/drivers/ntb/Makefile
-+++ b/drivers/ntb/Makefile
-@@ -1,2 +1,4 @@
- obj-$(CONFIG_NTB) += ntb.o hw/ test/
- obj-$(CONFIG_NTB_TRANSPORT) += ntb_transport.o
+diff --git a/drivers/ntb/ntb_transport.c b/drivers/ntb/ntb_transport.c
+index 3bfdb4562408..526b65afc16a 100644
+--- a/drivers/ntb/ntb_transport.c
++++ b/drivers/ntb/ntb_transport.c
+@@ -144,7 +144,9 @@ struct ntb_transport_qp {
+ 	struct list_head tx_free_q;
+ 	spinlock_t ntb_tx_free_q_lock;
+ 	void __iomem *tx_mw;
+-	dma_addr_t tx_mw_phys;
++	phys_addr_t tx_mw_phys;
++	size_t tx_mw_size;
++	dma_addr_t tx_mw_dma_addr;
+ 	unsigned int tx_index;
+ 	unsigned int tx_max_entry;
+ 	unsigned int tx_max_frame;
+@@ -1049,6 +1051,7 @@ static int ntb_transport_init_queue(struct ntb_transport_ctx *nt,
+ 	tx_size = (unsigned int)mw_size / num_qps_mw;
+ 	qp_offset = tx_size * (qp_num / mw_count);
+ 
++	qp->tx_mw_size = tx_size;
+ 	qp->tx_mw = nt->mw_vec[mw_num].vbase + qp_offset;
+ 	if (!qp->tx_mw)
+ 		return -EINVAL;
+@@ -1644,7 +1647,7 @@ static int ntb_async_tx_submit(struct ntb_transport_qp *qp,
+ 	dma_cookie_t cookie;
+ 
+ 	device = chan->device;
+-	dest = qp->tx_mw_phys + qp->tx_max_frame * entry->tx_index;
++	dest = qp->tx_mw_dma_addr + qp->tx_max_frame * entry->tx_index;
+ 	buff_off = (size_t)buf & ~PAGE_MASK;
+ 	dest_off = (size_t)dest & ~PAGE_MASK;
+ 
+@@ -1863,6 +1866,18 @@ ntb_transport_create_queue(void *data, struct device *client_dev,
+ 		qp->rx_dma_chan = NULL;
+ 	}
+ 
++	if (qp->tx_dma_chan) {
++		qp->tx_mw_dma_addr =
++			dma_map_resource(qp->tx_dma_chan->device->dev,
++					 qp->tx_mw_phys, qp->tx_mw_size,
++					 DMA_FROM_DEVICE, 0);
++		if (dma_mapping_error(qp->tx_dma_chan->device->dev,
++				      qp->tx_mw_dma_addr)) {
++			qp->tx_mw_dma_addr = 0;
++			goto err1;
++		}
++	}
 +
-+ntb-y := core.o
-diff --git a/drivers/ntb/ntb.c b/drivers/ntb/core.c
-similarity index 100%
-rename from drivers/ntb/ntb.c
-rename to drivers/ntb/core.c
+ 	dev_dbg(&pdev->dev, "Using %s memcpy for TX\n",
+ 		qp->tx_dma_chan ? "DMA" : "CPU");
+ 
+@@ -1904,6 +1919,10 @@ ntb_transport_create_queue(void *data, struct device *client_dev,
+ 	qp->rx_alloc_entry = 0;
+ 	while ((entry = ntb_list_rm(&qp->ntb_rx_q_lock, &qp->rx_free_q)))
+ 		kfree(entry);
++	if (qp->tx_mw_dma_addr)
++		dma_unmap_resource(qp->tx_dma_chan->device->dev,
++				   qp->tx_mw_dma_addr, qp->tx_mw_size,
++				   DMA_FROM_DEVICE, 0);
+ 	if (qp->tx_dma_chan)
+ 		dma_release_channel(qp->tx_dma_chan);
+ 	if (qp->rx_dma_chan)
+@@ -1945,6 +1964,11 @@ void ntb_transport_free_queue(struct ntb_transport_qp *qp)
+ 		 */
+ 		dma_sync_wait(chan, qp->last_cookie);
+ 		dmaengine_terminate_all(chan);
++
++		dma_unmap_resource(chan->device->dev,
++				   qp->tx_mw_dma_addr, qp->tx_mw_size,
++				   DMA_FROM_DEVICE, 0);
++
+ 		dma_release_channel(chan);
+ 	}
+ 
 -- 
 2.19.0
