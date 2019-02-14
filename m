@@ -1,44 +1,41 @@
-From: mcgrof at kernel.org (Luis Chamberlain)
-Date: Thu, 14 Feb 2019 09:26:39 -0800
-Subject: [RFC v3 14/19] Documentation: kunit: add documentation for KUnit
-In-Reply-To: <CAFd5g46cO_rZYjqKu6CooKcV-uAsCUJjuib38cQv6WHQS3ooaA@mail.gmail.com>
-References: <20181128193636.254378-15-brendanhiggins@google.com>
- <b4c72234-8c56-6efa-8003-f89d99a9779e@ideasonboard.com>
- <20181130034525.GP18410@garbanzo.do-not-panic.com>
- <CAFd5g47Cew6pmebsopjzmkd4RpnnC3zLAUfxCybjdhrO35OBpQ@mail.gmail.com>
- <0927c42a-8e65-f410-e6ed-27576572577f@ideasonboard.com>
- <CAFd5g44fKzriEs_pGyANxe7GuC9Ji2SD7EEz76__h8q9jjg8yA@mail.gmail.com>
- <57c3dc86-236f-e981-249a-8bbfe5c19f0e@ideasonboard.com>
- <CAFd5g46AEquMKzfrjLDVi+PP5-7aGs6C6pCunGAXDn3VRkJP+g@mail.gmail.com>
- <eade3052-0aa4-90b4-d55b-8c44556f98bc@ideasonboard.com>
- <CAFd5g46cO_rZYjqKu6CooKcV-uAsCUJjuib38cQv6WHQS3ooaA@mail.gmail.com>
-Message-ID: <20190214172639.GD11489@garbanzo.do-not-panic.com>
+From: jeffrin at rajagiritech.edu.in (Jeffrin Thalakkottoor)
+Date: Thu, 14 Feb 2019 23:56:46 +0530
+Subject: [PATCH v2] error message found related
+In-Reply-To: <20190211214002.GV11489@garbanzo.do-not-panic.com>
+References: <20190131183109.10919-1-jeffrin@rajagiritech.edu.in>
+ <20190211214002.GV11489@garbanzo.do-not-panic.com>
+Message-ID: <CAG=yYwkYwiB1dfDJg=VB_Kd1Hu+i-WrFN8SyKT9hKP55WzyA3w@mail.gmail.com>
 
-On Wed, Feb 13, 2019 at 04:17:13PM -0800, Brendan Higgins wrote:
-> On Wed, Feb 13, 2019 at 1:55 PM Kieran Bingham
-> <kieran.bingham at ideasonboard.com> wrote:
-> Oh, yep, you are right. Does that mean we should bother at all with a defconfig?
+> Your subject is too long.
+ok . i have changed it
 
-If one wanted a qemu enabled type of kernel and also for kuniut one
-could imply run:
 
-make kvmconfig
-make kunitconfig
+> Please upgrade bash?
+anyway now i have an upgraded one.
 
-That would get what you suggest above of default "bells and whistles"
-and keep the kuniut as a fragment.
+here  is a clipping related to the error
+---------------------x-------------------x----------------
+Thu Feb 14 23:49:13 IST 2019
+Running test: kmod_test_0007 - run #4
+kmod_test_0005: OK! - loading kmod test
+kmod_test_0005: OK! - Return value: 0 (SUCCESS), expected SUCCESS
+kmod_test_0006: OK! - loading kmod test
+kmod_test_0006: OK! - Return value: 0 (SUCCESS), expected SUCCESS
+./kmod.sh: line 529: [[: 1 0002:3:1 0003:1:1 0004:1:1 0005:10:1
+0006:10:1 0007:5:1 0008:150:1 0009:150:1: syntax error in expression
+(error token is "0002:3:1 0003:1:1 0004:1:1 0005:10:1 0006:10:1
+0007:5:1 0008:150:1 0009:150:1")
+./kmod.sh: line 529: [[: 1 0002:3:1 0003:1:1 0004:1:1 0005:10:1
+0006:10:1 0007:5:1 0008:150:1 0009:150:1: syntax error in expression
+(error token is "0002:3:1 0003:1:1 0004:1:1 0005:10:1 0006:10:1
+0007:5:1 0008:150:1 0009:150:1")
+Test completed
+$
+------------------x---------------------x----------------------
 
-Hm, actually the kvmconfig doesn't really enable the required fragments
-for qemu, so perhaps one would be good. It would have the serial stuff
-for instance.
 
-> Luis, I know you said you wanted one. I am thinking just stick with
-> the UML one? The downside there is we then get stuck having to
-> maintain the fragment and the defconfig. I right now (in the new
-> revision I am working on) have the Python kunit_tool copy the
-> defconfig if no kunitconfig is provided and a flag is set. It would be
-> pretty straightforward to make it merge in the fragment instead.
 
-Up to you in the end.
 
-  Luis
+-- 
+software engineer
+rajagiri school of engineering and technology
