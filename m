@@ -1,190 +1,141 @@
-From: brendanhiggins@google.com (Brendan Higgins)
-Date: Wed, 13 Feb 2019 16:17:13 -0800
-Subject: [RFC v3 14/19] Documentation: kunit: add documentation for KUnit
-In-Reply-To: <eade3052-0aa4-90b4-d55b-8c44556f98bc@ideasonboard.com>
-References: <20181128193636.254378-1-brendanhiggins@google.com>
- <20181128193636.254378-15-brendanhiggins@google.com>
- <b4c72234-8c56-6efa-8003-f89d99a9779e@ideasonboard.com>
- <20181130034525.GP18410@garbanzo.do-not-panic.com>
- <CAFd5g47Cew6pmebsopjzmkd4RpnnC3zLAUfxCybjdhrO35OBpQ@mail.gmail.com>
- <0927c42a-8e65-f410-e6ed-27576572577f@ideasonboard.com>
- <CAFd5g44fKzriEs_pGyANxe7GuC9Ji2SD7EEz76__h8q9jjg8yA@mail.gmail.com>
- <57c3dc86-236f-e981-249a-8bbfe5c19f0e@ideasonboard.com>
- <CAFd5g46AEquMKzfrjLDVi+PP5-7aGs6C6pCunGAXDn3VRkJP+g@mail.gmail.com>
- <eade3052-0aa4-90b4-d55b-8c44556f98bc@ideasonboard.com>
-Message-ID:
- <CAFd5g46cO_rZYjqKu6CooKcV-uAsCUJjuib38cQv6WHQS3ooaA@mail.gmail.com>
+From: kevin.brodsky@arm.com (Kevin Brodsky)
+Date: Thu, 14 Feb 2019 11:22:52 +0000
+Subject: [RFC][PATCH 0/3] arm64 relaxed ABI
+In-Reply-To: <CAFKCwrgV0VNJ_jEU79XwkX0o7qLFcqh3MbVMg2=Vs8VKYyY9=Q@mail.gmail.com>
+References: <CAAeHK+xPZ-Z9YUAq=3+hbjj4uyJk32qVaxZkhcSAHYC4mHAkvQ@mail.gmail.com>
+ <20181212150230.GH65138@arrakis.emea.arm.com>
+ <CAAeHK+zxYJDJ7DJuDAOuOMgGvckFwMAoVUTDJzb6MX3WsXhRTQ@mail.gmail.com>
+ <20181218175938.GD20197@arrakis.emea.arm.com>
+ <20181219125249.GB22067@e103592.cambridge.arm.com>
+ <9bbacb1b-6237-f0bb-9bec-b4cf8d42bfc5@arm.com>
+ <CAFKCwrhH5R3e5ntX0t-gxcE6zzbCNm06pzeFfYEN2K13c5WLTg@mail.gmail.com>
+ <20190212180223.GD199333@arrakis.emea.arm.com>
+ <20190213145834.GJ3567@e103592.cambridge.arm.com>
+ <90c54249-00dd-f8dd-6873-6bb8615c2c8a@arm.com>
+ <20190213174318.GM3567@e103592.cambridge.arm.com>
+ <CAFKCwrgV0VNJ_jEU79XwkX0o7qLFcqh3MbVMg2=Vs8VKYyY9=Q@mail.gmail.com>
+Message-ID: <8047504c-3b9d-0c46-c0cf-9d584f5ca241@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190214001713.f5Q7fEeh9oyJfxaWCdXmyLdqJAf3Bo_ynW0zxYJHRyE@z>
+Message-ID: <20190214112252.OdMw_VXUDpYUaqFQLjPUQoj22Idvsic6fQ_JN5iXRJs@z>
 
-On Wed, Feb 13, 2019 at 1:55 PM Kieran Bingham
-<kieran.bingham@ideasonboard.com> wrote:
->
-> Hi Brendan,
->
-> On 12/02/2019 22:10, Brendan Higgins wrote:
-> > On Mon, Feb 11, 2019 at 4:16 AM Kieran Bingham
-> > <kieran.bingham@ideasonboard.com> wrote:
-> >>
-> >> Hi Brendan,
-> >>
-> >> On 09/02/2019 00:56, Brendan Higgins wrote:
-> >>> On Thu, Dec 6, 2018 at 4:16 AM Kieran Bingham
-> >>> <kieran.bingham@ideasonboard.com> wrote:
-> >>>>
-> >>>> Hi Brendan,
-> >>>>
-> >>>> On 03/12/2018 23:53, Brendan Higgins wrote:
-> >>>>> On Thu, Nov 29, 2018@7:45 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >>>>>>
-> >>>>>> On Thu, Nov 29, 2018@01:56:37PM +0000, Kieran Bingham wrote:
-> >>>>>>> Hi Brendan,
-> >>>>>>>
-> >>>>>>> Please excuse the top posting, but I'm replying here as I'm following
-> >>>>>>> the section "Creating a kunitconfig" in Documentation/kunit/start.rst.
-> >>>>>>>
-> >>>>>>> Could the three line kunitconfig file live under say
-> >>>>>>>        arch/um/configs/kunit_defconfig?
-> >>>>
-> >>>>
-> >>>> Further consideration to this topic - I mentioned putting it in
-> >>>>   arch/um/configs
-> >>>>
-> >>>> - but I think this is wrong.
-> >>>>
-> >>>> We now have a location for config-fragments, which is essentially what
-> >>>> this is, under kernel/configs
-> >>>>
-> >>>> So perhaps an addition as :
-> >>>>
-> >>>>  kernel/configs/kunit.config
-> >>>>
-> >>>> Would be more appropriate - and less (UM) architecture specific.
-> >>>
-> >>> Sorry for the long radio silence.
-> >>>
-> >>> I just got around to doing this and I found that there are some
-> >>> configs that are desirable to have when running KUnit under x86 in a
-> >>> VM, but not UML.
-> >>
-> >> Should this behaviour you mention be handled by the KCONFIG depends flags?
-> >>
-> >> depends on (KUMIT & UML)
-> >> or
-> >> depends on (KUNIT & !UML)
-> >>
-> >> or such?
-> >
-> > Not really. Anything that is strictly necessary to run KUnit on an
-> > architectures should of course be turned on as a dependency like you
-> > suggest, but I am talking about stuff that you would probably want to
-> > get yourself going, but is by no means necessary.
-> >
-> >>
-> >> An example of which configs you are referring to would help to
-> >> understand the issue perhaps.
-> >>
-> >
-> > For example, you might want to enable a serial console that is known
-> > to work with a fairly generic qemu setup when building for x86:
-> > CONFIG_SERIAL_8250=y
-> > CONFIG_SERIAL_8250_CONSOLE=y
-> >
-> > Obviously not a dependency, and not even particularly useful to people
-> > who know what they are doing, but to someone who is new or just wants
-> > something to work out of the box would probably want that.
->
-> It sounds like that would be a config fragment for qemu ?
->
-> Although - perhaps this is already covered by the following fragment:
->    kernel/configs/kvm_guest.config
->
+On 13/02/2019 21:41, Evgenii Stepanov wrote:
+> On Wed, Feb 13, 2019@9:43 AM Dave Martin <Dave.Martin@arm.com> wrote:
+>> On Wed, Feb 13, 2019@04:42:11PM +0000, Kevin Brodsky wrote:
+>>> (+Cc other people with MTE experience: Branislav, Ruben)
+>> [...]
+>>
+>>>> I'm wondering whether we can piggy-back on existing concepts.
+>>>>
+>>>> We could say that recolouring memory is safe when and only when
+>>>> unmapping of the page or removing permissions on the page (via
+>>>> munmap/mremap/mprotect) would be safe.  Otherwise, the resulting
+>>>> behaviour of the process is undefined.
+>>> Is that a sufficient requirement? I don't think that anything prevents you
+>>> from using mprotect() on say [vvar], but we don't necessarily want to map
+>>> [vvar] as tagged. I'm not sure it's easy to define what "safe" would mean
+>>> here.
+>> I think the origin rules have to apply too: [vvar] is not a regular,
+>> private page but a weird, shared thing mapped for you by the kernel.
+>>
+>> Presumably userspace _cannot_ do mprotect(PROT_WRITE) on it.
+>>
+>> I'm also assuming that userspace cannot recolour memory in read-only
+>> pages.  That sounds bad if there's no way to prevent it.
+> That sounds like something we would like to do to catch out of bounds
+> read of .rodata globals.
+> Another potentially interesting use case for MTE is infinite hardware
+> watchpoints - that would require trapping reads for individual tagging
+> granules, include those in read-only binary segment.
 
-Oh, yep, you are right. Does that mean we should bother at all with a defconfig?
-
-Luis, I know you said you wanted one. I am thinking just stick with
-the UML one? The downside there is we then get stuck having to
-maintain the fragment and the defconfig. I right now (in the new
-revision I am working on) have the Python kunit_tool copy the
-defconfig if no kunitconfig is provided and a flag is set. It would be
-pretty straightforward to make it merge in the fragment instead.
-
-All that being said, I think I am going to drop the arch/x86
-defconfig, since I think we all agree that it is not very useful, but
-keep the UML defconfig and the fragment. That will at least given
-something concrete to discuss.
+I think we should keep this discussion for a later, separate thread. Vincenzo's 
+proposal is about allowing userspace to pass tags at the syscall interface. The set 
+of mappings allowed to be tagged by userspace (in MTE) should be contained in the set 
+of mappings that userspace can pass tagged pointers to (at the syscall interface), 
+but they are not necessarily the same. Private read-only mappings are an edge case 
+(you can pass tagged pointers to them, the memory may or may not be mapped as tagged, 
+but in any case it is not possible to change the memory tags via such mapping).
 
 >
-> >>> So should we have one that goes in with
-> >>> config-fragments and others that go into architectures? Another idea,
-> >>> it would be nice to have a KUnit config that runs all known tests
-> >>
-> >> This might also be a config option added to the tests directly like
-> >> COMPILE_TEST perhaps?
-> >
-> > That just allows a bunch of drivers to be compiled, it does not
-> > actually go through and turn the configs on, right? I mean, there is
-> > no a priori way to know that there is a configuration which spans all
-> > possible options available under COMPILE_TEST, right? Maybe I
-> > misunderstand what you are suggesting...
->
-> Bah - you're right of course. I was mis-remembering the functionality of
-> COMPILE_TEST as if it were some sort of 'select' but it's just an enable..
->
-> Sorry for the confusion.
->
+>> [...]
+>>
+>>>> It might be reasonable to do the check in access_ok() and skip it in
+>>>> __put_user() etc.
+>>>>
+>>>> (I seem to remember some separate discussion about abolishing
+>>>> __put_user() and friends though, due to the accident risk they pose.)
+>>> Keep in mind that with MTE, there is no need to do any explicit check when
+>>> accessing user memory via a user-provided pointer. The tagged user pointer
+>>> is directly passed to copy_*_user() or put_user(). If the load/store causes
+>>> a tag fault, then it is handled just like a page fault (i.e. invoking the
+>>> fixup handler). As far as I can tell, there's no need to do anything special
+>>> in access_ok() in that case.
+>>>
+>>> [The above applies to precise mode. In imprecise mode, some more work will
+>>> be needed after the load/store to check whether a tag fault happened.]
+>> Fair enough, I'm a bit hazy on the details as of right now..
+>>
+>> [...]
+>>
+>>> There are many possible ways to deploy MTE, and debugging is just one of
+>>> them. For instance, you may want to turn on heap colouring for some
+>>> processes in the system, including in production.
+>> To implement enforceable protection, or as a diagnostic tool for when
+>> something goes wrong?
+>>
+>> In the latter case it's still OK for the kernel's tag checking not to be
+>> exhaustive.
+>>
+>>> Regarding those cases where it is impossible to check tags at the point of
+>>> accessing user memory, it is indeed possible to check the memory tags at the
+>>> point of stripping the tag from the user pointer. Given that some MTE
+>>> use-cases favour performance over tag check coverage, the ideal approach
+>>> would be to make these checks configurable (e.g. check one granule, check
+>>> all of them, or check none). I don't know how feasible this is in practice.
+>> Check all granules of a massive DMA buffer?
+>>
+>> That doesn't sounds feasible without explicit support in the hardware to
+>> have the DMA check tags itself as the memory is accessed.  MTE by itself
+>> doesn't provide for this IIUC (at least, it would require support in the
+>> platform, not just the CPU).
+>>
+>> We do not want to bake any assumptions into the ABI about whether a
+>> given data transfer may or may not be offloaded to DMA.  That feels
+>> like a slippery slope.
+>>
+>> Providing we get the checks for free in put_user/get_user/
+>> copy_{to,from}_user(), those will cover a lot of cases though, for
+>> non-bulk-IO cases.
+>>
+>>
+>> My assumption has been that at this point in time we are mainly aiming
+>> to support the debug/diagnostic use cases today.
 
-No problem, I thought for a second that was a good example too (and I
-wish it were. It would make my life so much easier!). I remember
-getting emails with a COMPILE_TEST config attached that demonstrates
-an invalid build caused by my changes, presumably that email bot just
-tries random configs with a new change until it finds one that breaks.
+MTE can be used both for diagnostics (imprecise mode is especially suitable for 
+that), and to halt execution when something wrong is detected. Even in the latter 
+case, one cannot expect exhaustive checking from MTE, because the way it works is 
+fundamentally statistical; an invalid pointer may by chance have the right tag to 
+access the given location. So again, I think that a best-effort approach is 
+appropriate when the kernel accesses user memory, in terms of checking that tags match.
 
->
-> >> (Not sure what that would be called though ... KUNIT_RUNTIME_TEST?)
-> >>
-> >> I think that might be more maintainable as otherwise each new test would
-> >> have to modify the {min,def}{config,fragment} ...
-> >>
-> >
-> > Looking at kselftest-merge, they just start out with a set of
-> > fragments in which the union should contain all tests and then merge
-> > it with a base .config (probably intended to be $(ARCH)_defconfig).
-> > However, I don't know if that is the state of the art.
-> >
-> >>
-> >>> (this probably won't work in practice once we start testing mutually
-> >>> exclusive things or things with lots of ifdeffery, but it probably
-> >>> something we should try to maintain as best as we can?); this probably
-> >>> shouldn't go in with the fragments, right?
-> >>
-> >> Sounds like we agree there :)
-> >
-> > Totally. Long term we will need something a lot more sophisticated
-> > than anything under discussion here. I was talking about this with
-> > Luis on another thread:
-> > https://groups.google.com/forum/#!topic/kunit-dev/EQ1x0SzrUus (feel
-> > free to chime in!). Nevertheless, that's a really hard problem and I
-> > figure some variant of defconfigs and config fragments will work well
-> > enough until we reach that point.
-> >
-> >>
-> >>>
-> >>> I will be sending another revision out soon, but I figured I might be
-> >>> able to catch you before I did so.
-> >>
-> >> Thanks for thinking of me.
-> >
-> > How can I forget? You have been super helpful!
-> >
-> >> I hope I managed to reply in time to help and not hinder your progress.
-> >
-> > Yep, no trouble at all. You are the one helping me :-)
-> >
-> > Thanks!
-> >
->
-> --
-> Regards
-> --
-> Kieran
+More specifically, different use-cases come with different tradeoffs (performance / 
+tag check coverage). That's why I am suggesting that in the cases where tag checks 
+would need to be done _explicitly_ (before losing the user-provided tag), it would be 
+nice to be able to choose how much should be checked. I am not suggesting that always 
+checking all the granules by default is sane. Maybe checking just the first granule 
+is the right default.
+
+I don't think we need to get to the bottom of this specific aspect at this point. 
+This ABI proposal is not about memory tagging, so there is no need to specify how or 
+when tag checking is done. As long as this ABI allows tagged pointers, pointing to 
+mappings that could be potentially tagged, to be passed to syscalls, I don't think 
+further relaxations are needed to enable memory tagging.
+
+Kevin
+
+>>
+>> At least, those are the low(ish)-hanging fruit.
+>>
+>> Others are better placed than me to comment on the goals here.
+>>
+>> Cheers
+>> ---Dave
