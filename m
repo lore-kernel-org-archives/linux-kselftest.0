@@ -1,285 +1,194 @@
 From: brendanhiggins@google.com (Brendan Higgins)
-Date: Thu, 14 Feb 2019 13:37:14 -0800
-Subject: [RFC v4 02/17] kunit: test: add test resource management API
-In-Reply-To: <20190214213729.21702-1-brendanhiggins@google.com>
-References: <20190214213729.21702-1-brendanhiggins@google.com>
-Message-ID: <20190214213729.21702-3-brendanhiggins@google.com>
+Date: Thu, 14 Feb 2019 13:52:35 -0800
+Subject: [RFC v3 17/19] of: unittest: migrate tests to run on KUnit
+In-Reply-To: <CAL_JsqL=NthWW6q==TXjado83AAWuC1jYZ9CR+T9wPtgQLC4hw@mail.gmail.com>
+References: <20181128193636.254378-1-brendanhiggins@google.com>
+ <20181128193636.254378-18-brendanhiggins@google.com>
+ <CAL_Jsq+09Kx7yMBC_Jw45QGmk6U_fp4N6HOZDwYrM4tWw+_dOA@mail.gmail.com>
+ <CAFd5g46NehKo=TT4reQ8r74bDTG9BkR=ELg+Q3n5YooUxFwBmA@mail.gmail.com>
+ <CAL_JsqL=NthWW6q==TXjado83AAWuC1jYZ9CR+T9wPtgQLC4hw@mail.gmail.com>
+Message-ID:
+ <CAFd5g44dn-w5s4npCY-8kwj3EvqvFmMP_3SzDzNpHVjiB35fXQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190214213714.UdupxvIBiDoSDNwM_cxYdgJrjLETBNTtVX2jWmDYL_k@z>
+Message-ID: <20190214215235.3OTbXIx_FXJFRy6HAv83uKanenqlqQNlNBXR_NcxpbQ@z>
 
-Create a common API for test managed resources like memory and test
-objects. A lot of times a test will want to set up infrastructure to be
-used in test cases; this could be anything from just wanting to allocate
-some memory to setting up a driver stack; this defines facilities for
-creating "test resources" which are managed by the test infrastructure
-and are automatically cleaned up at the conclusion of the test.
+On Thu, Feb 14, 2019@12:10 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, Feb 12, 2019 at 7:44 PM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
+> >
+> > On Wed, Nov 28, 2018@12:56 PM Rob Herring <robh@kernel.org> wrote:
+> > >
+> > > On Wed, Nov 28, 2018 at 1:38 PM Brendan Higgins
+> > > <brendanhiggins@google.com> wrote:
+> > > >
+> > > > Migrate tests without any cleanup, or modifying test logic in anyway to
+> > > > run under KUnit using the KUnit expectation and assertion API.
+> > >
+> > > Nice! You beat me to it. This is probably going to conflict with what
+> > > is in the DT tree for 4.21. Also, please Cc the DT list for
+> > > drivers/of/ changes.
+> > >
+> > > Looks good to me, but a few mostly formatting comments below.
+> >
+> > I just realized that we never talked about your other comments, and I
+> > still have some questions. (Sorry, it was the last thing I looked at
+> > while getting v4 ready.) No worries if you don't get to it before I
+> > send v4 out, I just didn't want you to think I was ignoring you.
+> >
+> > >
+> > > >
+> > > > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+> > > > ---
+> > > >  drivers/of/Kconfig    |    1 +
+> > > >  drivers/of/unittest.c | 1405 ++++++++++++++++++++++-------------------
+> > > >  2 files changed, 752 insertions(+), 654 deletions(-)
+> > > >
+> > <snip>
+> > > > diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+> > > > index 41b49716ac75f..a5ef44730ffdb 100644
+> > > > --- a/drivers/of/unittest.c
+> > > > +++ b/drivers/of/unittest.c
+> > <snip>
+> > > > -
+> > > > -static void __init of_unittest_find_node_by_name(void)
+> > > > +static void of_unittest_find_node_by_name(struct kunit *test)
+> > >
+> > > Why do we have to drop __init everywhere? The tests run later?
+> >
+> > From the standpoint of a unit test __init doesn't really make any
+> > sense, right? I know that right now we are running as part of a
+> > kernel, but the goal should be that a unit test is not part of a
+> > kernel and we just include what we need.
+>
+> Well, the test only runs during boot and better to free the space when
+> done with it. There was some desire to make it a kernel module and
+> then we'd also need to get rid of __init too.
+>
+> > Even so, that's the future. For now, I did not put the KUnit
+> > infrastructure in the .init section because I didn't think it belonged
+> > there. In practice, KUnit only knows how to run during the init phase
+> > of the kernel, but I don't think it should be restricted there. You
+> > should be able to run tests whenever you want because you should be
+> > able to test anything right? I figured any restriction on that is
+> > misleading and will potentially get in the way at worst, and
+> > unnecessary at best especially since people shouldn't build a
+> > production kernel with all kinds of unit tests inside.
+>
+> More folks will run things if they can be enabled on production
+> kernels. If size is the only issue, modules mitigate that. However,
+> there's probably APIs to test which we don't want to export to
+> modules.
+>
+> I think in general, we change things in the kernel when needed, not
+> for something in the future. Changing __init is simple enough to do
+> later.
+>
+> OTOH, things get copied and maybe this we don't want copied, so we can
+> remove it if you want to.
 
-Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
----
- include/kunit/test.h | 109 +++++++++++++++++++++++++++++++++++++++++++
- kunit/test.c         |  95 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 204 insertions(+)
+Mmmm...I just realized that the patch I sent you the other day makes
+this patch unhappy because unflatten_device_tree is in the .init
+section. So I will need to fix that. I still think that the correct
+course of action is to make KUnit non init. Luis pointed out in
+another thread that to be 100% sure that everything will be properly
+initialized, KUnit must be able to run after all initialization takes
+place.
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 23c2ebedd6dd9..21abc9e953969 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -12,6 +12,69 @@
- #include <linux/types.h>
- #include <linux/slab.h>
- 
-+struct kunit_resource;
-+
-+typedef int (*kunit_resource_init_t)(struct kunit_resource *, void *);
-+typedef void (*kunit_resource_free_t)(struct kunit_resource *);
-+
-+/**
-+ * struct kunit_resource - represents a *test managed resource*
-+ * @allocation: for the user to store arbitrary data.
-+ * @free: a user supplied function to free the resource. Populated by
-+ * kunit_alloc_resource().
-+ *
-+ * Represents a *test managed resource*, a resource which will automatically be
-+ * cleaned up at the end of a test case.
-+ *
-+ * Example:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	struct kunit_kmalloc_params {
-+ *		size_t size;
-+ *		gfp_t gfp;
-+ *	};
-+ *
-+ *	static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
-+ *	{
-+ *		struct kunit_kmalloc_params *params = context;
-+ *		res->allocation = kmalloc(params->size, params->gfp);
-+ *
-+ *		if (!res->allocation)
-+ *			return -ENOMEM;
-+ *
-+ *		return 0;
-+ *	}
-+ *
-+ *	static void kunit_kmalloc_free(struct kunit_resource *res)
-+ *	{
-+ *		kfree(res->allocation);
-+ *	}
-+ *
-+ *	void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
-+ *	{
-+ *		struct kunit_kmalloc_params params;
-+ *		struct kunit_resource *res;
-+ *
-+ *		params.size = size;
-+ *		params.gfp = gfp;
-+ *
-+ *		res = kunit_alloc_resource(test, kunit_kmalloc_init,
-+ *			kunit_kmalloc_free, &params);
-+ *		if (res)
-+ *			return res->allocation;
-+ *		else
-+ *			return NULL;
-+ *	}
-+ */
-+struct kunit_resource {
-+	void *allocation;
-+	kunit_resource_free_t free;
-+
-+	/* private: internal use only. */
-+	struct list_head node;
-+};
-+
- struct kunit;
- 
- /**
-@@ -104,6 +167,7 @@ struct kunit {
- 	const char *name; /* Read only after initialization! */
- 	spinlock_t lock; /* Gaurds all mutable test state. */
- 	bool success; /* Protected by lock. */
-+	struct list_head resources; /* Protected by lock. */
- 	void (*vprintk)(const struct kunit *test,
- 			const char *level,
- 			struct va_format *vaf);
-@@ -127,6 +191,51 @@ int kunit_run_tests(struct kunit_module *module);
- 		} \
- 		late_initcall(module_kunit_init##module)
- 
-+/**
-+ * kunit_alloc_resource() - Allocates a *test managed resource*.
-+ * @test: The test context object.
-+ * @init: a user supplied function to initialize the resource.
-+ * @free: a user supplied function to free the resource.
-+ * @context: for the user to pass in arbitrary data.
-+ *
-+ * Allocates a *test managed resource*, a resource which will automatically be
-+ * cleaned up at the end of a test case. See &struct kunit_resource for an
-+ * example.
-+ */
-+struct kunit_resource *kunit_alloc_resource(struct kunit *test,
-+					    kunit_resource_init_t init,
-+					    kunit_resource_free_t free,
-+					    void *context);
-+
-+void kunit_free_resource(struct kunit *test, struct kunit_resource *res);
-+
-+/**
-+ * kunit_kmalloc() - Like kmalloc() except the allocation is *test managed*.
-+ * @test: The test context object.
-+ * @size: The size in bytes of the desired memory.
-+ * @gfp: flags passed to underlying kmalloc().
-+ *
-+ * Just like `kmalloc(...)`, except the allocation is managed by the test case
-+ * and is automatically cleaned up after the test case concludes. See &struct
-+ * kunit_resource for more information.
-+ */
-+void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp);
-+
-+/**
-+ * kunit_kzalloc() - Just like kunit_kmalloc(), but zeroes the allocation.
-+ * @test: The test context object.
-+ * @size: The size in bytes of the desired memory.
-+ * @gfp: flags passed to underlying kmalloc().
-+ *
-+ * See kzalloc() and kunit_kmalloc() for more information.
-+ */
-+static inline void *kunit_kzalloc(struct kunit *test, size_t size, gfp_t gfp)
-+{
-+	return kunit_kmalloc(test, size, gfp | __GFP_ZERO);
-+}
-+
-+void kunit_cleanup(struct kunit *test);
-+
- void __printf(3, 4) kunit_printk(const char *level,
- 				 const struct kunit *test,
- 				 const char *fmt, ...);
-diff --git a/kunit/test.c b/kunit/test.c
-index 0b4396f92086e..84f2e1c040af3 100644
---- a/kunit/test.c
-+++ b/kunit/test.c
-@@ -66,6 +66,7 @@ static void kunit_vprintk(const struct kunit *test,
- int kunit_init_test(struct kunit *test, const char *name)
- {
- 	spin_lock_init(&test->lock);
-+	INIT_LIST_HEAD(&test->resources);
- 	test->name = name;
- 	test->vprintk = kunit_vprintk;
- 
-@@ -93,6 +94,11 @@ static void kunit_run_case_internal(struct kunit *test,
- 	test_case->run_case(test);
- }
- 
-+static void kunit_case_internal_cleanup(struct kunit *test)
-+{
-+	kunit_cleanup(test);
-+}
-+
- /*
-  * Performs post validations and cleanup after a test case was run.
-  * XXX: Should ONLY BE CALLED AFTER kunit_run_case_internal!
-@@ -103,6 +109,8 @@ static void kunit_run_case_cleanup(struct kunit *test,
- {
- 	if (module->exit)
- 		module->exit(test);
-+
-+	kunit_case_internal_cleanup(test);
- }
- 
- /*
-@@ -150,6 +158,93 @@ int kunit_run_tests(struct kunit_module *module)
- 	return 0;
- }
- 
-+struct kunit_resource *kunit_alloc_resource(struct kunit *test,
-+					    kunit_resource_init_t init,
-+					    kunit_resource_free_t free,
-+					    void *context)
-+{
-+	struct kunit_resource *res;
-+	unsigned long flags;
-+	int ret;
-+
-+	res = kzalloc(sizeof(*res), GFP_KERNEL);
-+	if (!res)
-+		return NULL;
-+
-+	ret = init(res, context);
-+	if (ret)
-+		return NULL;
-+
-+	res->free = free;
-+	spin_lock_irqsave(&test->lock, flags);
-+	list_add_tail(&res->node, &test->resources);
-+	spin_unlock_irqrestore(&test->lock, flags);
-+
-+	return res;
-+}
-+
-+void kunit_free_resource(struct kunit *test, struct kunit_resource *res)
-+{
-+	res->free(res);
-+	list_del(&res->node);
-+	kfree(res);
-+}
-+
-+struct kunit_kmalloc_params {
-+	size_t size;
-+	gfp_t gfp;
-+};
-+
-+static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
-+{
-+	struct kunit_kmalloc_params *params = context;
-+
-+	res->allocation = kmalloc(params->size, params->gfp);
-+	if (!res->allocation)
-+		return -ENOMEM;
-+
-+	return 0;
-+}
-+
-+static void kunit_kmalloc_free(struct kunit_resource *res)
-+{
-+	kfree(res->allocation);
-+}
-+
-+void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
-+{
-+	struct kunit_kmalloc_params params;
-+	struct kunit_resource *res;
-+
-+	params.size = size;
-+	params.gfp = gfp;
-+
-+	res = kunit_alloc_resource(test,
-+				   kunit_kmalloc_init,
-+				   kunit_kmalloc_free,
-+				   &params);
-+
-+	if (res)
-+		return res->allocation;
-+	else
-+		return NULL;
-+}
-+
-+void kunit_cleanup(struct kunit *test)
-+{
-+	struct kunit_resource *resource, *resource_safe;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&test->lock, flags);
-+	list_for_each_entry_safe(resource,
-+				 resource_safe,
-+				 &test->resources,
-+				 node) {
-+		kunit_free_resource(test, resource);
-+	}
-+	spin_unlock_irqrestore(&test->lock, flags);
-+}
-+
- void kunit_printk(const char *level,
- 		  const struct kunit *test,
- 		  const char *fmt, ...)
--- 
-2.21.0.rc0.258.g878e2cd30e-goog
+>
+> > <snip>
+> > > >
+> > > > -static void __init of_unittest_property_string(void)
+> > > > +static void of_unittest_property_string(struct kunit *test)
+> > > >  {
+> > > >         const char *strings[4];
+> > > >         struct device_node *np;
+> > > >         int rc;
+> > > >
+> > > >         np = of_find_node_by_path("/testcase-data/phandle-tests/consumer-a");
+> > > > -       if (!np) {
+> > > > -               pr_err("No testcase data in device tree\n");
+> > > > -               return;
+> > > > -       }
+> > > > -
+> > > > -       rc = of_property_match_string(np, "phandle-list-names", "first");
+> > > > -       unittest(rc == 0, "first expected:0 got:%i\n", rc);
+> > > > -       rc = of_property_match_string(np, "phandle-list-names", "second");
+> > > > -       unittest(rc == 1, "second expected:1 got:%i\n", rc);
+> > > > -       rc = of_property_match_string(np, "phandle-list-names", "third");
+> > > > -       unittest(rc == 2, "third expected:2 got:%i\n", rc);
+> > > > -       rc = of_property_match_string(np, "phandle-list-names", "fourth");
+> > > > -       unittest(rc == -ENODATA, "unmatched string; rc=%i\n", rc);
+> > > > -       rc = of_property_match_string(np, "missing-property", "blah");
+> > > > -       unittest(rc == -EINVAL, "missing property; rc=%i\n", rc);
+> > > > -       rc = of_property_match_string(np, "empty-property", "blah");
+> > > > -       unittest(rc == -ENODATA, "empty property; rc=%i\n", rc);
+> > > > -       rc = of_property_match_string(np, "unterminated-string", "blah");
+> > > > -       unittest(rc == -EILSEQ, "unterminated string; rc=%i\n", rc);
+> > > > +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
+> > > > +
+> > > > +       KUNIT_EXPECT_EQ(test,
+> > > > +                       of_property_match_string(np,
+> > > > +                                                "phandle-list-names",
+> > > > +                                                "first"),
+> > > > +                       0);
+> > > > +       KUNIT_EXPECT_EQ(test,
+> > > > +                       of_property_match_string(np,
+> > > > +                                                "phandle-list-names",
+> > > > +                                                "second"),
+> > > > +                       1);
+> > >
+> > > Fewer lines on these would be better even if we go over 80 chars.
+> >
+> > On the of_property_match_string(...), I have no opinion. I will do
+> > whatever you like best.
+> >
+> > Nevertheless, as far as the KUNIT_EXPECT_*(...), I do have an opinion: I am
+> > trying to establish a good, readable convention. Given an expect statement
+> > structured as
+> > ```
+> > KUNIT_EXPECT_*(
+> >     test,
+> >     expect_arg_0, ..., expect_arg_n,
+> >     fmt_str, fmt_arg_0, ..., fmt_arg_n)
+> > ```
+> > where `test` is the `struct kunit` context argument, `expect_arg_{0, ..., n}`
+> > are the arguments the expectations is being made about (so in the above example,
+> > `of_property_match_string(...)` and `1`), and `fmt_*` is the optional format
+> > string that comes at the end of some expectations.
+> >
+> > The pattern I had been trying to promote is the following:
+> >
+> > 1) If everything fits on 1 line, do that.
+> > 2) If you must make a line split, prefer to keep `test` on its own line,
+> > `expect_arg_{0, ..., n}` should be kept together, if possible, and the format
+> > string should follow the conventions already most commonly used with format
+> > strings.
+> > 3) If you must split up `expect_arg_{0, ..., n}` each argument should get its
+> > own line and should not share a line with either `test` or any `fmt_*`.
+>
+> You'd better write a checkpatch.pl check or else good luck enforcing that. :)
+
+Absolutely. Well I already had to touch checkpatch.pl for something
+else, so at least I know roughly what I am getting myself into.
+
+>
+> > The reason I care about this so much is because expectations should be
+> > extremely easy to read; they are the most important part of a unit
+> > test because they tell you what the test is verifying. I am not
+> > married to the formatting I proposed above, but I want something that
+> > will be extremely easy to identify the arguments that the expectation
+> > is on. Maybe that means that I need to add some syntactic fluff to
+> > make it clearer, I don't know, but this is definitely something we
+> > need to get right, especially in the earliest examples.
+>
+> Makes sense. I think putting the test (of_property_match_string) on
+> one line furthers the readability.
+
+Fair enough, I tried to apply your comments the best that I could on
+v4, but I think I will probably need to make another pass (especially
+given the init thing).
+
+Anyway, let's continue the discussion on v4.
+
+Cheers
