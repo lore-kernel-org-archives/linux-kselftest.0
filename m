@@ -1,169 +1,69 @@
-From: robh at kernel.org (Rob Herring)
-Date: Thu, 14 Feb 2019 14:10:17 -0600
-Subject: [RFC v3 17/19] of: unittest: migrate tests to run on KUnit
-In-Reply-To: <CAFd5g46NehKo=TT4reQ8r74bDTG9BkR=ELg+Q3n5YooUxFwBmA@mail.gmail.com>
-References: <20181128193636.254378-1-brendanhiggins@google.com>
- <20181128193636.254378-18-brendanhiggins@google.com>
- <CAL_Jsq+09Kx7yMBC_Jw45QGmk6U_fp4N6HOZDwYrM4tWw+_dOA@mail.gmail.com>
- <CAFd5g46NehKo=TT4reQ8r74bDTG9BkR=ELg+Q3n5YooUxFwBmA@mail.gmail.com>
-Message-ID: <CAL_JsqL=NthWW6q==TXjado83AAWuC1jYZ9CR+T9wPtgQLC4hw@mail.gmail.com>
+From: brendanhiggins at google.com (Brendan Higgins)
+Date: Thu, 14 Feb 2019 13:37:12 -0800
+Subject: [RFC v4 00/17] kunit: introduce KUnit,
+ the Linux kernel unit testing framework
+Message-ID: <20190214213729.21702-1-brendanhiggins@google.com>
 
-On Tue, Feb 12, 2019 at 7:44 PM Brendan Higgins
-<brendanhiggins at google.com> wrote:
->
-> On Wed, Nov 28, 2018 at 12:56 PM Rob Herring <robh at kernel.org> wrote:
-> >
-> > On Wed, Nov 28, 2018 at 1:38 PM Brendan Higgins
-> > <brendanhiggins at google.com> wrote:
-> > >
-> > > Migrate tests without any cleanup, or modifying test logic in anyway to
-> > > run under KUnit using the KUnit expectation and assertion API.
-> >
-> > Nice! You beat me to it. This is probably going to conflict with what
-> > is in the DT tree for 4.21. Also, please Cc the DT list for
-> > drivers/of/ changes.
-> >
-> > Looks good to me, but a few mostly formatting comments below.
->
-> I just realized that we never talked about your other comments, and I
-> still have some questions. (Sorry, it was the last thing I looked at
-> while getting v4 ready.) No worries if you don't get to it before I
-> send v4 out, I just didn't want you to think I was ignoring you.
->
-> >
-> > >
-> > > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> > > ---
-> > >  drivers/of/Kconfig    |    1 +
-> > >  drivers/of/unittest.c | 1405 ++++++++++++++++++++++-------------------
-> > >  2 files changed, 752 insertions(+), 654 deletions(-)
-> > >
-> <snip>
-> > > diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-> > > index 41b49716ac75f..a5ef44730ffdb 100644
-> > > --- a/drivers/of/unittest.c
-> > > +++ b/drivers/of/unittest.c
-> <snip>
-> > > -
-> > > -static void __init of_unittest_find_node_by_name(void)
-> > > +static void of_unittest_find_node_by_name(struct kunit *test)
-> >
-> > Why do we have to drop __init everywhere? The tests run later?
->
-> From the standpoint of a unit test __init doesn't really make any
-> sense, right? I know that right now we are running as part of a
-> kernel, but the goal should be that a unit test is not part of a
-> kernel and we just include what we need.
+This patch set proposes KUnit, a lightweight unit testing and mocking
+framework for the Linux kernel.
 
-Well, the test only runs during boot and better to free the space when
-done with it. There was some desire to make it a kernel module and
-then we'd also need to get rid of __init too.
+Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+it does not require installing the kernel on a test machine or in a VM
+and does not require tests to be written in userspace running on a host
+kernel. Additionally, KUnit is fast: From invocation to completion KUnit
+can run several dozen tests in under a second. Currently, the entire
+KUnit test suite for KUnit runs in under a second from the initial
+invocation (build time excluded).
 
-> Even so, that's the future. For now, I did not put the KUnit
-> infrastructure in the .init section because I didn't think it belonged
-> there. In practice, KUnit only knows how to run during the init phase
-> of the kernel, but I don't think it should be restricted there. You
-> should be able to run tests whenever you want because you should be
-> able to test anything right? I figured any restriction on that is
-> misleading and will potentially get in the way at worst, and
-> unnecessary at best especially since people shouldn't build a
-> production kernel with all kinds of unit tests inside.
+KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+Googletest/Googlemock for C++. KUnit provides facilities for defining
+unit test cases, grouping related test cases into test suites, providing
+common infrastructure for running tests, mocking, spying, and much more.
 
-More folks will run things if they can be enabled on production
-kernels. If size is the only issue, modules mitigate that. However,
-there's probably APIs to test which we don't want to export to
-modules.
+## What's so special about unit testing?
 
-I think in general, we change things in the kernel when needed, not
-for something in the future. Changing __init is simple enough to do
-later.
+A unit test is supposed to test a single unit of code in isolation,
+hence the name. There should be no dependencies outside the control of
+the test; this means no external dependencies, which makes tests orders
+of magnitudes faster. Likewise, since there are no external dependencies,
+there are no hoops to jump through to run the tests. Additionally, this
+makes unit tests deterministic: a failing unit test always indicates a
+problem. Finally, because unit tests necessarily have finer granularity,
+they are able to test all code paths easily solving the classic problem
+of difficulty in exercising error handling code.
 
-OTOH, things get copied and maybe this we don't want copied, so we can
-remove it if you want to.
+## Is KUnit trying to replace other testing frameworks for the kernel?
 
-> <snip>
-> > >
-> > > -static void __init of_unittest_property_string(void)
-> > > +static void of_unittest_property_string(struct kunit *test)
-> > >  {
-> > >         const char *strings[4];
-> > >         struct device_node *np;
-> > >         int rc;
-> > >
-> > >         np = of_find_node_by_path("/testcase-data/phandle-tests/consumer-a");
-> > > -       if (!np) {
-> > > -               pr_err("No testcase data in device tree\n");
-> > > -               return;
-> > > -       }
-> > > -
-> > > -       rc = of_property_match_string(np, "phandle-list-names", "first");
-> > > -       unittest(rc == 0, "first expected:0 got:%i\n", rc);
-> > > -       rc = of_property_match_string(np, "phandle-list-names", "second");
-> > > -       unittest(rc == 1, "second expected:1 got:%i\n", rc);
-> > > -       rc = of_property_match_string(np, "phandle-list-names", "third");
-> > > -       unittest(rc == 2, "third expected:2 got:%i\n", rc);
-> > > -       rc = of_property_match_string(np, "phandle-list-names", "fourth");
-> > > -       unittest(rc == -ENODATA, "unmatched string; rc=%i\n", rc);
-> > > -       rc = of_property_match_string(np, "missing-property", "blah");
-> > > -       unittest(rc == -EINVAL, "missing property; rc=%i\n", rc);
-> > > -       rc = of_property_match_string(np, "empty-property", "blah");
-> > > -       unittest(rc == -ENODATA, "empty property; rc=%i\n", rc);
-> > > -       rc = of_property_match_string(np, "unterminated-string", "blah");
-> > > -       unittest(rc == -EILSEQ, "unterminated string; rc=%i\n", rc);
-> > > +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
-> > > +
-> > > +       KUNIT_EXPECT_EQ(test,
-> > > +                       of_property_match_string(np,
-> > > +                                                "phandle-list-names",
-> > > +                                                "first"),
-> > > +                       0);
-> > > +       KUNIT_EXPECT_EQ(test,
-> > > +                       of_property_match_string(np,
-> > > +                                                "phandle-list-names",
-> > > +                                                "second"),
-> > > +                       1);
-> >
-> > Fewer lines on these would be better even if we go over 80 chars.
->
-> On the of_property_match_string(...), I have no opinion. I will do
-> whatever you like best.
->
-> Nevertheless, as far as the KUNIT_EXPECT_*(...), I do have an opinion: I am
-> trying to establish a good, readable convention. Given an expect statement
-> structured as
-> ```
-> KUNIT_EXPECT_*(
->     test,
->     expect_arg_0, ..., expect_arg_n,
->     fmt_str, fmt_arg_0, ..., fmt_arg_n)
-> ```
-> where `test` is the `struct kunit` context argument, `expect_arg_{0, ..., n}`
-> are the arguments the expectations is being made about (so in the above example,
-> `of_property_match_string(...)` and `1`), and `fmt_*` is the optional format
-> string that comes at the end of some expectations.
->
-> The pattern I had been trying to promote is the following:
->
-> 1) If everything fits on 1 line, do that.
-> 2) If you must make a line split, prefer to keep `test` on its own line,
-> `expect_arg_{0, ..., n}` should be kept together, if possible, and the format
-> string should follow the conventions already most commonly used with format
-> strings.
-> 3) If you must split up `expect_arg_{0, ..., n}` each argument should get its
-> own line and should not share a line with either `test` or any `fmt_*`.
+No. Most existing tests for the Linux kernel are end-to-end tests, which
+have their place. A well tested system has lots of unit tests, a
+reasonable number of integration tests, and some end-to-end tests. KUnit
+is just trying to address the unit test space which is currently not
+being addressed.
 
-You'd better write a checkpatch.pl check or else good luck enforcing that. :)
+## More information on KUnit
 
-> The reason I care about this so much is because expectations should be
-> extremely easy to read; they are the most important part of a unit
-> test because they tell you what the test is verifying. I am not
-> married to the formatting I proposed above, but I want something that
-> will be extremely easy to identify the arguments that the expectation
-> is on. Maybe that means that I need to add some syntactic fluff to
-> make it clearer, I don't know, but this is definitely something we
-> need to get right, especially in the earliest examples.
+There is a bunch of documentation near the end of this patch set that
+describes how to use KUnit and best practices for writing unit tests.
+For convenience I am hosting the compiled docs here:
+https://google.github.io/kunit-docs/third_party/kernel/docs/
+Additionally for convenience, I have applied these patches to a branch:
+https://kunit.googlesource.com/linux/+/kunit/rfc/5.0-rc5/v4
+The repo may be cloned with:
+git clone https://kunit.googlesource.com/linux
+This patchset is on the kunit/rfc/5.0-rc5/v4 branch.
 
-Makes sense. I think putting the test (of_property_match_string) on
-one line furthers the readability.
+## Changes Since Last Version
 
-Rob
+ - Got KUnit working on (hypothetically) all architectures (tested on
+   x86), as per Rob's (and other's) request
+ - Punting all KUnit features/patches depending on UML for now.
+ - Broke out UML specific support into arch/um/* as per "[RFC v3 01/19]
+   kunit: test: add KUnit test runner core", as requested by Luis.
+ - Added support to kunit_tool to allow it to build kernels in external
+   directories, as suggested by Kieran.
+ - Added a UML defconfig, and a config fragment for KUnit as suggested
+   by Kieran and Luis.
+ - Cleaned up, and reformatted a bunch of stuff.
+
+-- 
+2.21.0.rc0.258.g878e2cd30e-goog
