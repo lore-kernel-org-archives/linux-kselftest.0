@@ -1,53 +1,28 @@
-From: sashal at kernel.org (Sasha Levin)
-Date: Thu, 14 Feb 2019 21:07:56 -0500
-Subject: [PATCH AUTOSEL 4.20 18/77] selftests: rtc: rtctest: fix alarm tests
-In-Reply-To: <20190215020855.176727-1-sashal@kernel.org>
-References: <20190215020855.176727-1-sashal@kernel.org>
-Message-ID: <20190215020855.176727-18-sashal@kernel.org>
+From: alexei.starovoitov at gmail.com (Alexei Starovoitov)
+Date: Thu, 14 Feb 2019 19:19:29 -0800
+Subject: [PATCH v2 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <20190211143600.15021-1-joel@joelfernandes.org>
+References: <20190211143600.15021-1-joel@joelfernandes.org>
+Message-ID: <20190215031926.ljzluy2cfxp64u6o@ast-mbp>
 
-From: Alexandre Belloni <alexandre.belloni at bootlin.com>
+On Mon, Feb 11, 2019 at 09:35:59AM -0500, Joel Fernandes (Google) wrote:
+> Introduce in-kernel headers and other artifacts which are made available
+> as an archive through proc (/proc/kheaders.txz file). This archive makes
+> it possible to build kernel modules, run eBPF programs, and other
+> tracing programs that need to extend the kernel for tracing purposes
+> without any dependency on the file system having headers and build
+> artifacts.
+> 
+> On Android and embedded systems, it is common to switch kernels but not
+> have kernel headers available on the file system. Raw kernel headers
+> also cannot be copied into the filesystem like they can be on other
+> distros, due to licensing and other issues. There's no linux-headers
+> package on Android. Further once a different kernel is booted, any
+> headers stored on the file system will no longer be useful. By storing
+> the headers as a compressed archive within the kernel, we can avoid these
+> issues that have been a hindrance for a long time.
 
-[ Upstream commit fdac94489c4d247088b3885875b39b3e1eb621ef ]
-
-Return values for select are not checked properly and timeouts may not be
-detected.
-
-Signed-off-by: Alexandre Belloni <alexandre.belloni at bootlin.com>
-Signed-off-by: Shuah Khan <shuah at kernel.org>
-Signed-off-by: Sasha Levin <sashal at kernel.org>
----
- tools/testing/selftests/rtc/rtctest.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-index e20b017e7073..dea4e3d6d9e1 100644
---- a/tools/testing/selftests/rtc/rtctest.c
-+++ b/tools/testing/selftests/rtc/rtctest.c
-@@ -145,15 +145,12 @@ TEST_F(rtc, alarm_alm_set) {
- 
- 	rc = select(self->fd + 1, &readfds, NULL, NULL, &tv);
- 	ASSERT_NE(-1, rc);
--	EXPECT_NE(0, rc);
-+	ASSERT_NE(0, rc);
- 
- 	/* Disable alarm interrupts */
- 	rc = ioctl(self->fd, RTC_AIE_OFF, 0);
- 	ASSERT_NE(-1, rc);
- 
--	if (rc == 0)
--		return;
--
- 	rc = read(self->fd, &data, sizeof(unsigned long));
- 	ASSERT_NE(-1, rc);
- 	TH_LOG("data: %lx", data);
-@@ -202,7 +199,7 @@ TEST_F(rtc, alarm_wkalm_set) {
- 
- 	rc = select(self->fd + 1, &readfds, NULL, NULL, &tv);
- 	ASSERT_NE(-1, rc);
--	EXPECT_NE(0, rc);
-+	ASSERT_NE(0, rc);
- 
- 	rc = read(self->fd, &data, sizeof(unsigned long));
- 	ASSERT_NE(-1, rc);
--- 
-2.19.1
+The set looks good to me and since the main use case is building bpf progs
+I can route it via bpf-next tree if there are no objections.
+Masahiro, could you please ack it?
