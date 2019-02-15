@@ -1,55 +1,42 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Thu, 14 Feb 2019 21:10:28 -0500
-Subject: [PATCH AUTOSEL 4.19 12/65] selftests: rtc: rtctest: fix alarm tests
-In-Reply-To: <20190215021121.177674-1-sashal@kernel.org>
-References: <20190215021121.177674-1-sashal@kernel.org>
-Message-ID: <20190215021121.177674-12-sashal@kernel.org>
+Date: Thu, 14 Feb 2019 21:08:54 -0500
+Subject: [PATCH AUTOSEL 4.20 76/77] KVM: selftests: check returned evmcs
+ version range
+In-Reply-To: <20190215020855.176727-1-sashal@kernel.org>
+References: <20190215020855.176727-1-sashal@kernel.org>
+Message-ID: <20190215020855.176727-76-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190215021028.Jop4aomAFSFfS19qS5PhcyTYDYhx4JXN7BT89ohZmJU@z>
+Message-ID: <20190215020854.zSpuOI4OCE3cqk-wHneC_VjX87Z6weHj0CXpMQhdJeU@z>
 
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-[ Upstream commit fdac94489c4d247088b3885875b39b3e1eb621ef ]
+[ Upstream commit 35b531a1e7fc30ac8c62e5ac1794eb1460da614e ]
 
-Return values for select are not checked properly and timeouts may not be
-detected.
+Check that KVM_CAP_HYPERV_ENLIGHTENED_VMCS returns correct version range.
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni at bootlin.com>
-Signed-off-by: Shuah Khan <shuah at kernel.org>
+Signed-off-by: Vitaly Kuznetsov <vkuznets at redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini at redhat.com>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/rtc/rtctest.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ tools/testing/selftests/kvm/x86_64/evmcs_test.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-index e20b017e7073..dea4e3d6d9e1 100644
---- a/tools/testing/selftests/rtc/rtctest.c
-+++ b/tools/testing/selftests/rtc/rtctest.c
-@@ -145,15 +145,12 @@ TEST_F(rtc, alarm_alm_set) {
+diff --git a/tools/testing/selftests/kvm/x86_64/evmcs_test.c b/tools/testing/selftests/kvm/x86_64/evmcs_test.c
+index 92c2cfd1b182..5d89b30ddde2 100644
+--- a/tools/testing/selftests/kvm/x86_64/evmcs_test.c
++++ b/tools/testing/selftests/kvm/x86_64/evmcs_test.c
+@@ -103,6 +103,12 @@ int main(int argc, char *argv[])
  
- 	rc = select(self->fd + 1, &readfds, NULL, NULL, &tv);
- 	ASSERT_NE(-1, rc);
--	EXPECT_NE(0, rc);
-+	ASSERT_NE(0, rc);
+ 	vcpu_ioctl(vm, VCPU_ID, KVM_ENABLE_CAP, &enable_evmcs_cap);
  
- 	/* Disable alarm interrupts */
- 	rc = ioctl(self->fd, RTC_AIE_OFF, 0);
- 	ASSERT_NE(-1, rc);
++	/* KVM should return supported EVMCS version range */
++	TEST_ASSERT(((evmcs_ver >> 8) >= (evmcs_ver & 0xff)) &&
++		    (evmcs_ver & 0xff) > 0,
++		    "Incorrect EVMCS version range: %x:%x\n",
++		    evmcs_ver & 0xff, evmcs_ver >> 8);
++
+ 	run = vcpu_state(vm, VCPU_ID);
  
--	if (rc == 0)
--		return;
--
- 	rc = read(self->fd, &data, sizeof(unsigned long));
- 	ASSERT_NE(-1, rc);
- 	TH_LOG("data: %lx", data);
-@@ -202,7 +199,7 @@ TEST_F(rtc, alarm_wkalm_set) {
- 
- 	rc = select(self->fd + 1, &readfds, NULL, NULL, &tv);
- 	ASSERT_NE(-1, rc);
--	EXPECT_NE(0, rc);
-+	ASSERT_NE(0, rc);
- 
- 	rc = read(self->fd, &data, sizeof(unsigned long));
- 	ASSERT_NE(-1, rc);
+ 	vcpu_regs_get(vm, VCPU_ID, &regs1);
 -- 
 2.19.1
