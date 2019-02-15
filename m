@@ -1,118 +1,129 @@
-From: frowand.list@gmail.com (Frank Rowand)
-Date: Thu, 14 Feb 2019 18:05:47 -0800
-Subject: [RFC v3 18/19] of: unittest: split out a couple of test cases
- from unittest
-In-Reply-To: <CAFd5g444f-FBq4x3U7BL-EY+bFxP0rsJhJ14=mjOi89PhMkURg@mail.gmail.com>
-References: <20181128193636.254378-1-brendanhiggins@google.com>
- <20181128193636.254378-19-brendanhiggins@google.com>
- <990bfc7d-dc5e-d8d3-c151-9b321ff2ac10@gmail.com>
- <CAFd5g45tOGgf_sKGYRC=fpnTBKGaG=8frbQdgZ3ZTkQFyTfP5A@mail.gmail.com>
- <88fe0546-7850-5bb4-9673-b1aef2dccb3e@gmail.com>
- <CAFd5g444f-FBq4x3U7BL-EY+bFxP0rsJhJ14=mjOi89PhMkURg@mail.gmail.com>
-Message-ID: <0e311e88-c4d4-e98d-1720-53a04bd526fc@gmail.com>
+From: sashal@kernel.org (Sasha Levin)
+Date: Thu, 14 Feb 2019 21:12:46 -0500
+Subject: [PATCH AUTOSEL 4.14 13/40] selftests: seccomp: use LDLIBS instead of
+ LDFLAGS
+In-Reply-To: <20190215021313.178476-1-sashal@kernel.org>
+References: <20190215021313.178476-1-sashal@kernel.org>
+Message-ID: <20190215021313.178476-13-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190215020547.8t0lhuFsWTb6vPKI_LGeOvi0vRYBRpvDxGdsqAmr63Y@z>
+Message-ID: <20190215021246.JJ3i-7ryelrJAdiMDPE1Jxs2rTBcsS7iz6s-96hC3rA@z>
 
-On 2/14/19 4:56 PM, Brendan Higgins wrote:
-> On Thu, Feb 14, 2019@3:57 PM Frank Rowand <frowand.list@gmail.com> wrote:
->>
->> On 12/5/18 3:54 PM, Brendan Higgins wrote:
->>> On Tue, Dec 4, 2018@2:58 AM Frank Rowand <frowand.list@gmail.com> wrote:
->>>>
->>>> Hi Brendan,
->>>>
->>>> On 11/28/18 11:36 AM, Brendan Higgins wrote:
->>>>> Split out a couple of test cases that these features in base.c from the
->>>>> unittest.c monolith. The intention is that we will eventually split out
->>>>> all test cases and group them together based on what portion of device
->>>>> tree they test.
->>>>
->>>> Why does splitting this file apart improve the implementation?
->>>
->>> This is in preparation for patch 19/19 and other hypothetical future
->>> patches where test cases are split up and grouped together by what
->>> portion of DT they test (for example the parsing tests and the
->>> platform/device tests would probably go separate files as well). This
->>> patch by itself does not do anything useful, but I figured it made
->>> patch 19/19 (and, if you like what I am doing, subsequent patches)
->>> easier to review.
->>
->> I do not see any value in splitting the devicetree tests into
->> multiple files.
->>
->> Please help me understand what the benefits of such a split are.
+From: Fathi Boudra <fathi.boudra@linaro.org>
 
-Note that my following comments are specific to the current devicetree
-unittests, and may not apply to the general case of unit tests in other
-subsystems.
+[ Upstream commit 5bbc73a841d7f0bbe025a342146dde462a796a5a ]
 
+seccomp_bpf fails to build due to undefined reference errors:
 
-> Sorry, I thought it made sense in context of what I am doing in the
-> following patch. All I am trying to do is to provide an effective way
-> of grouping test cases. To be clear, the idea, assuming you agree, is
+ aarch64-linaro-linux-gcc --sysroot=/build/tmp-rpb-glibc/sysroots/hikey
+ -O2 -pipe -g -feliminate-unused-debug-types -Wl,-no-as-needed -Wall
+ -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed -lpthread seccomp_bpf.c -o
+ /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf
+ /tmp/ccrlR3MW.o: In function `tsync_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1920: undefined reference to `sem_post'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1920: undefined reference to `sem_post'
+ /tmp/ccrlR3MW.o: In function `TSYNC_setup':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1863: undefined reference to `sem_init'
+ /tmp/ccrlR3MW.o: In function `TSYNC_teardown':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1904: undefined reference to `sem_destroy'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1897: undefined reference to `pthread_kill'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1898: undefined reference to `pthread_cancel'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1899: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /tmp/ccrlR3MW.o: In function `TSYNC_siblings_fail_prctl':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1978: undefined reference to `sem_wait'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1990: undefined reference to `pthread_join'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1992: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /tmp/ccrlR3MW.o: In function `TSYNC_two_siblings_with_ancestor':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2016: undefined reference to `sem_wait'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2032: undefined reference to `pthread_join'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2034: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /tmp/ccrlR3MW.o: In function `TSYNC_two_sibling_want_nnp':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2046: undefined reference to `sem_wait'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2058: undefined reference to `pthread_join'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2060: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /tmp/ccrlR3MW.o: In function `TSYNC_two_siblings_with_no_filter':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2073: undefined reference to `sem_wait'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2098: undefined reference to `pthread_join'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2100: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /tmp/ccrlR3MW.o: In function `TSYNC_two_siblings_with_one_divergence':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2125: undefined reference to `sem_wait'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2143: undefined reference to `pthread_join'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2145: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
+ /tmp/ccrlR3MW.o: In function `TSYNC_two_siblings_not_under_filter':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2169: undefined reference to `sem_wait'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2202: undefined reference to `pthread_join'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:2227: undefined reference to `pthread_join'
+ /tmp/ccrlR3MW.o: In function `tsync_start_sibling':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/seccomp/seccomp_bpf.c:1941: undefined reference to `pthread_create'
 
-Looking at _just_ the first few fragments of the following patch, the
-change is to break down a moderate size function of related tests,
-of_unittest_find_node_by_name(), into a lot of extremely small functions.
-Then to find the execution order of the many small functions requires
-finding the array of_test_find_node_by_name_cases[].  Then I have to
-chase off into the kunit test runner core, where I find that the set
-of tests in of_test_find_node_by_name_cases[] is processed by a
-late_initcall().  So now the order of the various test groupings,
-declared via module_test(), are subject to the fragile orderings
-of initcalls.
+It's GNU Make and linker specific.
 
-There are ordering dependencies within the devicetree unittests.
+The default Makefile rule looks like:
 
-I do not like breaking the test cases down into such small atoms.
+$(CC) $(CFLAGS) $(LDFLAGS) $@ $^ $(LDLIBS)
 
-I do not see any value __for devicetree unittests__ of having
-such small atoms.
+When linking is done by gcc itself, no issue, but when it needs to be passed
+to proper ld, only LDLIBS follows and then ld cannot know what libs to link
+with.
 
-It makes it harder for me to read the source of the tests and
-understand the order they will execute.  It also makes it harder
-for me to read through the actual tests (in this example the
-tests that are currently grouped in of_unittest_find_node_by_name())
-because of all the extra function headers injected into the
-existing single function to break it apart into many smaller
-functions.
+More detail:
+https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
 
-Breaking the tests into separate chunks, each chunk invoked
-independently as the result of module_test() of each chunk,
-loses the summary result for the devicetree unittests of
-how many tests are run and how many passed.  This is the
-only statistic that I need to determine whether the
-unittests have detected a new fault caused by a specific
-patch or commit.  I don't need to look at any individual
-test result unless the overall result reports a failure.
+LDFLAGS
+Extra flags to give to compilers when they are supposed to invoke the linker,
+‘ld’, such as -L. Libraries (-lfoo) should be added to the LDLIBS variable
+instead.
 
+LDLIBS
+Library flags or names given to compilers when they are supposed to invoke the
+linker, ‘ld’. LOADLIBES is a deprecated (but still supported) alternative to
+LDLIBS. Non-library linker flags, such as -L, should go in the LDFLAGS
+variable.
 
-> that we would follow up with several other patches like this one and
-> the subsequent patch, one which would pull out a couple test
-> functions, as I have done here, and another that splits those
-> functions up into a bunch of proper test cases.
-> 
-> I thought that having that many unrelated test cases in a single file
-> would just be a pain to sort through deal with, review, whatever.
+https://lkml.org/lkml/2010/2/10/362
 
-Having all the test cases in a single file makes it easier for me to
-read, understand, modify, and maintain the tests.
+tools/perf: libraries must come after objects
 
+Link order matters, use LDLIBS instead of LDFLAGS to properly link against
+libpthread.
 
-> This is not something I feel particularly strongly about, it is just
-> pretty atypical from my experience to have so many unrelated test
-> cases in a single file.
-> 
-> Maybe you would prefer that I break up the test cases first, and then
-> we split up the file as appropriate?
+Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
+Acked-by: Kees Cook <keescook at chromium.org>
+Signed-off-by: Shuah Khan <shuah at kernel.org>
+Signed-off-by: Sasha Levin <sashal at kernel.org>
+---
+ tools/testing/selftests/seccomp/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I prefer that the test cases not be broken up arbitrarily.  There _may_
-be cases where the devicetree unittests are currently not well grouped
-and may benefit from change, but if so that should be handled independently
-of any transformation into a KUnit framework.
-
-
-> I just assumed that we would agree it would be way too much stuff for
-> a single file, so I went ahead and broke it up first, because I
-> thought it would make it easier to review in that order rather than
-> the other way around.
+diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
+index fce7f4ce0692..1760b3e39730 100644
+--- a/tools/testing/selftests/seccomp/Makefile
++++ b/tools/testing/selftests/seccomp/Makefile
+@@ -9,7 +9,7 @@ BINARIES := seccomp_bpf seccomp_benchmark
+ CFLAGS += -Wl,-no-as-needed -Wall
+ 
+ seccomp_bpf: seccomp_bpf.c ../kselftest_harness.h
+-	$(CC) $(CFLAGS) $(LDFLAGS) -lpthread $< -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $< -lpthread -o $@
+ 
+ TEST_PROGS += $(BINARIES)
+ EXTRA_CLEAN := $(BINARIES)
+-- 
+2.19.1
