@@ -1,42 +1,64 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Thu, 14 Feb 2019 21:08:54 -0500
-Subject: [PATCH AUTOSEL 4.20 76/77] KVM: selftests: check returned evmcs
- version range
+Date: Thu, 14 Feb 2019 21:08:53 -0500
+Subject: [PATCH AUTOSEL 4.20 75/77] kvm: selftests: Fix region overlap check
+ in kvm_util
 In-Reply-To: <20190215020855.176727-1-sashal@kernel.org>
 References: <20190215020855.176727-1-sashal@kernel.org>
-Message-ID: <20190215020855.176727-76-sashal@kernel.org>
+Message-ID: <20190215020855.176727-75-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190215020854.zSpuOI4OCE3cqk-wHneC_VjX87Z6weHj0CXpMQhdJeU@z>
+Message-ID: <20190215020853.fBsu6D-PoGv5cixHySjiLvmpTvT6j23ZjXSqRNX-NJ8@z>
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Ben Gardon <bgardon@google.com>
 
-[ Upstream commit 35b531a1e7fc30ac8c62e5ac1794eb1460da614e ]
+[ Upstream commit 94a980c39c8e3f8abaff5d3b5bbcd4ccf1c02c4f ]
 
-Check that KVM_CAP_HYPERV_ENLIGHTENED_VMCS returns correct version range.
+Fix a call to userspace_mem_region_find to conform to its spec of
+taking an inclusive, inclusive range. It was previously being called
+with an inclusive, exclusive range. Also remove a redundant region bounds
+check in vm_userspace_mem_region_add. Region overlap checking is already
+performed by the call to userspace_mem_region_find.
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets at redhat.com>
+Tested: Compiled tools/testing/selftests/kvm with -static
+	Ran all resulting test binaries on an Intel Haswell test machine
+	All tests passed
+
+Signed-off-by: Ben Gardon <bgardon at google.com>
+Reviewed-by: Jim Mattson <jmattson at google.com>
 Signed-off-by: Paolo Bonzini <pbonzini at redhat.com>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/kvm/x86_64/evmcs_test.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/testing/selftests/kvm/lib/kvm_util.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/evmcs_test.c b/tools/testing/selftests/kvm/x86_64/evmcs_test.c
-index 92c2cfd1b182..5d89b30ddde2 100644
---- a/tools/testing/selftests/kvm/x86_64/evmcs_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/evmcs_test.c
-@@ -103,6 +103,12 @@ int main(int argc, char *argv[])
- 
- 	vcpu_ioctl(vm, VCPU_ID, KVM_ENABLE_CAP, &enable_evmcs_cap);
- 
-+	/* KVM should return supported EVMCS version range */
-+	TEST_ASSERT(((evmcs_ver >> 8) >= (evmcs_ver & 0xff)) &&
-+		    (evmcs_ver & 0xff) > 0,
-+		    "Incorrect EVMCS version range: %x:%x\n",
-+		    evmcs_ver & 0xff, evmcs_ver >> 8);
-+
- 	run = vcpu_state(vm, VCPU_ID);
- 
- 	vcpu_regs_get(vm, VCPU_ID, &regs1);
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 1b41e71283d5..6ee49133ad22 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -532,7 +532,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ 	 * already exist.
+ 	 */
+ 	region = (struct userspace_mem_region *) userspace_mem_region_find(
+-		vm, guest_paddr, guest_paddr + npages * vm->page_size);
++		vm, guest_paddr, (guest_paddr + npages * vm->page_size) - 1);
+ 	if (region != NULL)
+ 		TEST_ASSERT(false, "overlapping userspace_mem_region already "
+ 			"exists\n"
+@@ -548,15 +548,10 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ 		region = region->next) {
+ 		if (region->region.slot == slot)
+ 			break;
+-		if ((guest_paddr <= (region->region.guest_phys_addr
+-				+ region->region.memory_size))
+-			&& ((guest_paddr + npages * vm->page_size)
+-				>= region->region.guest_phys_addr))
+-			break;
+ 	}
+ 	if (region != NULL)
+ 		TEST_ASSERT(false, "A mem region with the requested slot "
+-			"or overlapping physical memory range already exists.\n"
++			"already exists.\n"
+ 			"  requested slot: %u paddr: 0x%lx npages: 0x%lx\n"
+ 			"  existing slot: %u paddr: 0x%lx size: 0x%lx",
+ 			slot, guest_paddr, npages,
 -- 
 2.19.1
