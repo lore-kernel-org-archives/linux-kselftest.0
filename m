@@ -1,62 +1,57 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Thu, 14 Feb 2019 21:08:53 -0500
-Subject: [PATCH AUTOSEL 4.20 75/77] kvm: selftests: Fix region overlap check
- in kvm_util
+Date: Thu, 14 Feb 2019 21:08:08 -0500
+Subject: [PATCH AUTOSEL 4.20 30/77] selftests: gpio-mockup-chardev: Check
+ asprintf() for error
 In-Reply-To: <20190215020855.176727-1-sashal@kernel.org>
 References: <20190215020855.176727-1-sashal@kernel.org>
-Message-ID: <20190215020855.176727-75-sashal@kernel.org>
+Message-ID: <20190215020855.176727-30-sashal@kernel.org>
 
-From: Ben Gardon <bgardon at google.com>
+From: Geert Uytterhoeven <geert+renesas at glider.be>
 
-[ Upstream commit 94a980c39c8e3f8abaff5d3b5bbcd4ccf1c02c4f ]
+[ Upstream commit 508cacd7da6659ae7b7bdd0a335f675422277758 ]
 
-Fix a call to userspace_mem_region_find to conform to its spec of
-taking an inclusive, inclusive range. It was previously being called
-with an inclusive, exclusive range. Also remove a redundant region bounds
-check in vm_userspace_mem_region_add. Region overlap checking is already
-performed by the call to userspace_mem_region_find.
+With gcc 7.3.0:
 
-Tested: Compiled tools/testing/selftests/kvm with -static
-	Ran all resulting test binaries on an Intel Haswell test machine
-	All tests passed
+    gpio-mockup-chardev.c: In function ‘get_debugfs’:
+    gpio-mockup-chardev.c:62:3: warning: ignoring return value of ‘asprintf’, declared with attribute warn_unused_result [-Wunused-result]
+       asprintf(path, "%s/gpio", mnt_fs_get_target(fs));
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Signed-off-by: Ben Gardon <bgardon at google.com>
-Reviewed-by: Jim Mattson <jmattson at google.com>
-Signed-off-by: Paolo Bonzini <pbonzini at redhat.com>
+Handle asprintf() failures to fix this.
+
+Signed-off-by: Geert Uytterhoeven <geert+renesas at glider.be>
+Signed-off-by: Shuah Khan <shuah at kernel.org>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ tools/testing/selftests/gpio/gpio-mockup-chardev.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 1b41e71283d5..6ee49133ad22 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -532,7 +532,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 	 * already exist.
- 	 */
- 	region = (struct userspace_mem_region *) userspace_mem_region_find(
--		vm, guest_paddr, guest_paddr + npages * vm->page_size);
-+		vm, guest_paddr, (guest_paddr + npages * vm->page_size) - 1);
- 	if (region != NULL)
- 		TEST_ASSERT(false, "overlapping userspace_mem_region already "
- 			"exists\n"
-@@ -548,15 +548,10 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 		region = region->next) {
- 		if (region->region.slot == slot)
+diff --git a/tools/testing/selftests/gpio/gpio-mockup-chardev.c b/tools/testing/selftests/gpio/gpio-mockup-chardev.c
+index f8d468f54e98..aaa1e9f083c3 100644
+--- a/tools/testing/selftests/gpio/gpio-mockup-chardev.c
++++ b/tools/testing/selftests/gpio/gpio-mockup-chardev.c
+@@ -37,7 +37,7 @@ static int get_debugfs(char **path)
+ 	struct libmnt_table *tb;
+ 	struct libmnt_iter *itr = NULL;
+ 	struct libmnt_fs *fs;
+-	int found = 0;
++	int found = 0, ret;
+ 
+ 	cxt = mnt_new_context();
+ 	if (!cxt)
+@@ -58,8 +58,11 @@ static int get_debugfs(char **path)
  			break;
--		if ((guest_paddr <= (region->region.guest_phys_addr
--				+ region->region.memory_size))
--			&& ((guest_paddr + npages * vm->page_size)
--				>= region->region.guest_phys_addr))
--			break;
+ 		}
  	}
- 	if (region != NULL)
- 		TEST_ASSERT(false, "A mem region with the requested slot "
--			"or overlapping physical memory range already exists.\n"
-+			"already exists.\n"
- 			"  requested slot: %u paddr: 0x%lx npages: 0x%lx\n"
- 			"  existing slot: %u paddr: 0x%lx size: 0x%lx",
- 			slot, guest_paddr, npages,
+-	if (found)
+-		asprintf(path, "%s/gpio", mnt_fs_get_target(fs));
++	if (found) {
++		ret = asprintf(path, "%s/gpio", mnt_fs_get_target(fs));
++		if (ret < 0)
++			err(EXIT_FAILURE, "failed to format string");
++	}
+ 
+ 	mnt_free_iter(itr);
+ 	mnt_free_context(cxt);
 -- 
 2.19.1
