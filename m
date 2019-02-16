@@ -1,23 +1,55 @@
-From: davem@davemloft.net (David Miller)
-Date: Fri, 15 Feb 2019 20:32:42 -0800 (PST)
-Subject: [PATCH net-next] selftests: forwarding: Add some missing
- configuration symbols
-In-Reply-To: <20190215181457.21101-1-f.fainelli@gmail.com>
-References: <20190215181457.21101-1-f.fainelli@gmail.com>
-Message-ID: <20190215.203242.1751897990893074948.davem@davemloft.net>
+From: linux@manojrajarao.com (Manoj)
+Date: Sat, 16 Feb 2019 11:10:14 -0800
+Subject: [PATCH v2 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <20190215034720.GA230433@google.com>
+References: <20190211143600.15021-1-joel@joelfernandes.org>
+ <20190215031926.ljzluy2cfxp64u6o@ast-mbp>
+ <20190215034720.GA230433@google.com>
+Message-ID: <8736on1re1.fsf@manojrajarao.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190216043242.yXFXePmSAPgU6BbFFxvxiZuJKiiokmjeuEMR72muuKc@z>
+Message-ID: <20190216191014.fTwd5yuEFdvhKV31Xo3Th-6zw2li4PYcDsmhun0Z9BU@z>
 
-From: Florian Fainelli <f.fainelli@gmail.com>
-Date: Fri, 15 Feb 2019 10:14:52 -0800
 
-> For the forwarding selftests to work, we need network namespaces when
-> using veth/vrf otherwise ping/ping6 commands like these:
-> 
-> ip vrf exec vveth0 /bin/ping 192.0.2.2 -c 10 -i 0.1 -w 5
-> 
-> will fail because network namespaces may not be enabled.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli at gmail.com>
+Joel Fernandes writes:
 
-Applied.
+> On Thu, Feb 14, 2019@07:19:29PM -0800, Alexei Starovoitov wrote:
+>> On Mon, Feb 11, 2019@09:35:59AM -0500, Joel Fernandes (Google) wrote:
+>> > Introduce in-kernel headers and other artifacts which are made available
+>> > as an archive through proc (/proc/kheaders.txz file). This archive makes
+>> > it possible to build kernel modules, run eBPF programs, and other
+>> > tracing programs that need to extend the kernel for tracing purposes
+>> > without any dependency on the file system having headers and build
+>> > artifacts.
+>> > 
+>> > On Android and embedded systems, it is common to switch kernels but not
+>> > have kernel headers available on the file system. Raw kernel headers
+>> > also cannot be copied into the filesystem like they can be on other
+>> > distros, due to licensing and other issues. There's no linux-headers
+>> > package on Android. Further once a different kernel is booted, any
+>> > headers stored on the file system will no longer be useful. By storing
+>> > the headers as a compressed archive within the kernel, we can avoid these
+>> > issues that have been a hindrance for a long time.
+>> 
+>> The set looks good to me and since the main use case is building bpf progs
+>> I can route it via bpf-next tree if there are no objections.
+>> Masahiro, could you please ack it?
+>> 
+>
+> Yes, eBPF is one of the usecases. After this, I am also planning to send
+> patches to BCC so that it can use this feature when compiling C to eBPF.
+>
+
+Tested-by: Manoj Rao <linux at manojrajarao.com>
+
+I think this can definitely make it easier to use eBPF on
+Android. Thanks for initiating this.
+
+> Thanks!
+>
+>  - Joel
+
+
+-- 
+Manoj
+http://www.mycpu.org
