@@ -1,53 +1,30 @@
-From: linux at manojrajarao.com (Manoj)
-Date: Sat, 16 Feb 2019 11:10:14 -0800
-Subject: [PATCH v2 1/2] Provide in-kernel headers for making it easy to
- extend the kernel
-In-Reply-To: <20190215034720.GA230433@google.com>
-References: <20190211143600.15021-1-joel@joelfernandes.org>
- <20190215031926.ljzluy2cfxp64u6o@ast-mbp>
- <20190215034720.GA230433@google.com>
-Message-ID: <8736on1re1.fsf@manojrajarao.com>
+From: colin.king at canonical.com (Colin King)
+Date: Sun, 17 Feb 2019 22:40:11 +0000
+Subject: [PATCH] kvm: selftests: fix spelling mistake "begining" -> "beginning"
+Message-ID: <20190217224011.16949-1-colin.king@canonical.com>
 
+From: Colin Ian King <colin.king at canonical.com>
 
-Joel Fernandes writes:
+There is a spelling mistake in the message test of a TEST_ASSERT macro,
+fix it.
 
-> On Thu, Feb 14, 2019 at 07:19:29PM -0800, Alexei Starovoitov wrote:
->> On Mon, Feb 11, 2019 at 09:35:59AM -0500, Joel Fernandes (Google) wrote:
->> > Introduce in-kernel headers and other artifacts which are made available
->> > as an archive through proc (/proc/kheaders.txz file). This archive makes
->> > it possible to build kernel modules, run eBPF programs, and other
->> > tracing programs that need to extend the kernel for tracing purposes
->> > without any dependency on the file system having headers and build
->> > artifacts.
->> > 
->> > On Android and embedded systems, it is common to switch kernels but not
->> > have kernel headers available on the file system. Raw kernel headers
->> > also cannot be copied into the filesystem like they can be on other
->> > distros, due to licensing and other issues. There's no linux-headers
->> > package on Android. Further once a different kernel is booted, any
->> > headers stored on the file system will no longer be useful. By storing
->> > the headers as a compressed archive within the kernel, we can avoid these
->> > issues that have been a hindrance for a long time.
->> 
->> The set looks good to me and since the main use case is building bpf progs
->> I can route it via bpf-next tree if there are no objections.
->> Masahiro, could you please ack it?
->> 
->
-> Yes, eBPF is one of the usecases. After this, I am also planning to send
-> patches to BCC so that it can use this feature when compiling C to eBPF.
->
+Signed-off-by: Colin Ian King <colin.king at canonical.com>
+---
+ tools/testing/selftests/kvm/lib/elf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Tested-by: Manoj Rao <linux at manojrajarao.com>
-
-I think this can definitely make it easier to use eBPF on
-Android. Thanks for initiating this.
-
-> Thanks!
->
->  - Joel
-
-
+diff --git a/tools/testing/selftests/kvm/lib/elf.c b/tools/testing/selftests/kvm/lib/elf.c
+index 5eb857584aa3..53c48f7587d3 100644
+--- a/tools/testing/selftests/kvm/lib/elf.c
++++ b/tools/testing/selftests/kvm/lib/elf.c
+@@ -141,7 +141,7 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename,
+ 		offset = hdr.e_phoff + (n1 * hdr.e_phentsize);
+ 		offset_rv = lseek(fd, offset, SEEK_SET);
+ 		TEST_ASSERT(offset_rv == offset,
+-			"Failed to seek to begining of program header %u,\n"
++			"Failed to seek to beginning of program header %u,\n"
+ 			"  filename: %s\n"
+ 			"  rv: %jd errno: %i",
+ 			n1, filename, (intmax_t) offset_rv, errno);
 -- 
-Manoj
-http://www.mycpu.org
+2.20.1
