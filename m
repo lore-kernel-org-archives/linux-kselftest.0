@@ -1,280 +1,380 @@
 From: frowand.list at gmail.com (Frank Rowand)
-Date: Mon, 18 Feb 2019 14:25:59 -0800
-Subject: [RFC v3 18/19] of: unittest: split out a couple of test cases
- from unittest
-In-Reply-To: <CAFd5g44NTZoSAJPMvXP2xvJgn7m5QoV-KJu2AMrr67+eL+CKrQ@mail.gmail.com>
+Date: Mon, 18 Feb 2019 14:56:03 -0800
+Subject: [RFC v3 17/19] of: unittest: migrate tests to run on KUnit
+In-Reply-To: <CAFd5g46NehKo=TT4reQ8r74bDTG9BkR=ELg+Q3n5YooUxFwBmA@mail.gmail.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
- <20181128193636.254378-19-brendanhiggins@google.com>
- <990bfc7d-dc5e-d8d3-c151-9b321ff2ac10@gmail.com>
- <CAFd5g45tOGgf_sKGYRC=fpnTBKGaG=8frbQdgZ3ZTkQFyTfP5A@mail.gmail.com>
- <88fe0546-7850-5bb4-9673-b1aef2dccb3e@gmail.com>
- <CAFd5g444f-FBq4x3U7BL-EY+bFxP0rsJhJ14=mjOi89PhMkURg@mail.gmail.com>
- <0e311e88-c4d4-e98d-1720-53a04bd526fc@gmail.com>
- <CAFd5g44NTZoSAJPMvXP2xvJgn7m5QoV-KJu2AMrr67+eL+CKrQ@mail.gmail.com>
-Message-ID: <d9f7e000-4cac-a35a-3ff9-60130e12ebea@gmail.com>
+ <20181128193636.254378-18-brendanhiggins@google.com>
+ <CAL_Jsq+09Kx7yMBC_Jw45QGmk6U_fp4N6HOZDwYrM4tWw+_dOA@mail.gmail.com>
+ <CAFd5g46NehKo=TT4reQ8r74bDTG9BkR=ELg+Q3n5YooUxFwBmA@mail.gmail.com>
+Message-ID: <1d72f04e-08ba-e3dd-c8c0-512946126113@gmail.com>
 
-On 2/15/19 2:56 AM, Brendan Higgins wrote:
-> On Thu, Feb 14, 2019 at 6:05 PM Frank Rowand <frowand.list at gmail.com> wrote:
+On 2/12/19 5:44 PM, Brendan Higgins wrote:
+> On Wed, Nov 28, 2018 at 12:56 PM Rob Herring <robh at kernel.org> wrote:
 >>
->> On 2/14/19 4:56 PM, Brendan Higgins wrote:
->>> On Thu, Feb 14, 2019 at 3:57 PM Frank Rowand <frowand.list at gmail.com> wrote:
->>>>
->>>> On 12/5/18 3:54 PM, Brendan Higgins wrote:
->>>>> On Tue, Dec 4, 2018 at 2:58 AM Frank Rowand <frowand.list at gmail.com> wrote:
->>>>>>
->>>>>> Hi Brendan,
->>>>>>
->>>>>> On 11/28/18 11:36 AM, Brendan Higgins wrote:
->>>>>>> Split out a couple of test cases that these features in base.c from the
->>>>>>> unittest.c monolith. The intention is that we will eventually split out
->>>>>>> all test cases and group them together based on what portion of device
->>>>>>> tree they test.
->>>>>>
->>>>>> Why does splitting this file apart improve the implementation?
->>>>>
->>>>> This is in preparation for patch 19/19 and other hypothetical future
->>>>> patches where test cases are split up and grouped together by what
->>>>> portion of DT they test (for example the parsing tests and the
->>>>> platform/device tests would probably go separate files as well). This
->>>>> patch by itself does not do anything useful, but I figured it made
->>>>> patch 19/19 (and, if you like what I am doing, subsequent patches)
->>>>> easier to review.
->>>>
->>>> I do not see any value in splitting the devicetree tests into
->>>> multiple files.
->>>>
->>>> Please help me understand what the benefits of such a split are.
->>
->> Note that my following comments are specific to the current devicetree
->> unittests, and may not apply to the general case of unit tests in other
->> subsystems.
->>
-> Note taken.
->>
->>> Sorry, I thought it made sense in context of what I am doing in the
->>> following patch. All I am trying to do is to provide an effective way
->>> of grouping test cases. To be clear, the idea, assuming you agree, is
->>
->> Looking at _just_ the first few fragments of the following patch, the
->> change is to break down a moderate size function of related tests,
->> of_unittest_find_node_by_name(), into a lot of extremely small functions.
-> 
-> Hmm...I wouldn't call that a moderate function. By my standards those
-> functions are pretty large. In any case, I want to limit the
-> discussion to specifically what a test case should look like, and the
-> general consensus outside of the kernel is that unit test cases should
-> be very very small. The reason is that each test case is supposed to> test one specific property; it should be obvious what that property
-> is; and it should be obvious what is needed to exercise that property.
-
-That is a valid model and philosophy of unit test design.
-
-It is not a model that the devicetree unit tests can be shoe horned
-into.  Sort of...  In a sense, the existing devicetree unit tests
-already to that, if you consider each unittest() (and sometime a few
-lines of code that creates the result that unittest() checks) to be a separate
-unit test.  But the kunit model does not consider the sort of
-equivalent KUNIT_EXPECT_EQ(), etc, to be a unit test, the unit test
-in kunit would be KUNIT_CASE().  Although it is a little confusing to
-me that the initialization and clean up on exit occur one level
-higher than KUNIT_CASE(), in struct kunit_module.  I think the
-confusion is just a matter of slight conflict in the documentation
-(btw, the documents where very helpful for me to understand the
-overall concepts and model).
-
-
->> Then to find the execution order of the many small functions requires
->> finding the array of_test_find_node_by_name_cases[].  Then I have to
-> 
-> Execution order shouldn't matter. Each test case should be totally
-> hermetic. Obviously in this case we depend on the preceeding test case
-> to clean up properly, but that is something I am working on.
-
-But the order _does_ matter for the devicetree unit tests.
-
-That is one of the problems.  The devicetree unit tests are not small,
-independent tests.  Some of the tests change state in a way that
-following tests depend upon.
-
-The design documents also mention that each unit test should have
-a pre-test initialization, and a post-test cleanup to remove the
-results of the initialization.
-
-The devicetree unit tests have a large, intrusive initialization.
-Once again, not a good fit for this model.
-
-The devicetree unit tests also have an undocumented (and not at all
-obvious) need to leave state changed in some cases after the test
-completes.  There are cases where the way that I fully validate
-the success of the tests is to examine the state of the live
-devicetree via /proc/devicetree/. Ideally, this would be done by
-a script or a program, but creating that is not near the top of
-my todo list.
-
-
->> chase off into the kunit test runner core, where I find that the set
->> of tests in of_test_find_node_by_name_cases[] is processed by a
->> late_initcall().  So now the order of the various test groupings,
-> 
-> That's fair. You are not the only one to complain about that. The
-> late_initcall is a hack which I plan on replacing shortly (and yes I
-> know that me planning on doing something doesn't mean much in this
-> discussion, but that's what I got); regardless, order shouldn't
-> matter.
-
-But again, it does.
-
-
->> declared via module_test(), are subject to the fragile orderings
->> of initcalls.
->>
->> There are ordering dependencies within the devicetree unittests.
-> 
-> There is now in the current devicetree unittests, but, if I may be so
-> bold, that is something that I would like to fix.
-> 
->>
->> I do not like breaking the test cases down into such small atoms.
->>
->> I do not see any value __for devicetree unittests__ of having
->> such small atoms.
-> 
-> I imagine it probably makes less sense in the context of a strict
-> dependency order, but that is something that I want to do away with.
-> Ideally, when you look at a test case you shouldn't need to think
-> about anything other than the code under test and the test case
-> itself; so in my universe, a smaller test case should mean less you
-> need to think about.
-
-For the general case, I think that is an excellent model.
-
-
-> I don't want to get hung up on size too much because I don't think
-> this is what it is really about. I think you and I can agree that a
-> test should be as simple and complete as possible. The ideal test
-> should cover all behavior, and should be obviously correct (since
-> otherwise we would have to test the test too). Obviously, these two
-> goals are at odds, so the compromise I attempt to make is to make a
-> bunch of test cases which are separately simple enough to be obviously
-> correct at first glance, and the sum total of all the tests provides
-> the necessary coverage. Additionally, because each test case is
-> independent of every other test case, they can be reasoned about
-> individually, and it is not necessary to reason about them as a group.
-> Hypothetically, this should give you the best of both worlds.
-> 
-> So even if I failed in execution, I think the principle is good.
-> 
->>
->> It makes it harder for me to read the source of the tests and
->> understand the order they will execute.  It also makes it harder
->> for me to read through the actual tests (in this example the
->> tests that are currently grouped in of_unittest_find_node_by_name())
->> because of all the extra function headers injected into the
->> existing single function to break it apart into many smaller
->> functions.
-> 
-> Well now the same groups are expressed as test modules, it's just a
-> collection of closely related test cases, but they are grouped
-> together for just that reason. Nevertheless, I argue this is superior
-> to grouping them together in a function, because a test module
-> (elsewhere called a test suite) relates test cases together, but makes
-> it clear that they are still logically independent, two test cases in
-> a suite should run completely independently of each other.
-
-That is missing my point.  Converting to the kunit format adds a
-lot of boilerplate function declarations.  Compare that extra
-boilerplate to a one line comment.  This is a clarity of source
-code argument that I am making.
-
-It may be a little hard to see my point given the current state of
-unittest.c.  I could definitely make that much more readable using
-the current model.
-
-
->>
->> Breaking the tests into separate chunks, each chunk invoked
->> independently as the result of module_test() of each chunk,
->> loses the summary result for the devicetree unittests of
->> how many tests are run and how many passed.  This is the
-> 
-> We still provide that. Well, we provide a total result of all tests
-> run, but they are already grouped by test module, and we could provide
-> module level summaries, that would be pretty trivial.
-
-Providing the module level summary (assuming that all of the devicetree
-tests were in a single module) would meet this need.
-
-
->> only statistic that I need to determine whether the
->> unittests have detected a new fault caused by a specific
->> patch or commit.  I don't need to look at any individual
->> test result unless the overall result reports a failure.
-> 
-> Yep, we do that too.
-
-Well, when you add the module level summary...
-
-
->>
->>
->>> that we would follow up with several other patches like this one and
->>> the subsequent patch, one which would pull out a couple test
->>> functions, as I have done here, and another that splits those
->>> functions up into a bunch of proper test cases.
+>> On Wed, Nov 28, 2018 at 1:38 PM Brendan Higgins
+>> <brendanhiggins at google.com> wrote:
 >>>
->>> I thought that having that many unrelated test cases in a single file
->>> would just be a pain to sort through deal with, review, whatever.
+>>> Migrate tests without any cleanup, or modifying test logic in anyway to
+>>> run under KUnit using the KUnit expectation and assertion API.
 >>
->> Having all the test cases in a single file makes it easier for me to
->> read, understand, modify, and maintain the tests.
+>> Nice! You beat me to it. This is probably going to conflict with what
+>> is in the DT tree for 4.21. Also, please Cc the DT list for
+>> drivers/of/ changes.
+>>
+>> Looks good to me, but a few mostly formatting comments below.
 > 
-> Alright, well that's a much harder thing to make a strong statement
-> about. From my experience, I have usually seen one or two *maybe
-> three* test suites in a single file, and you have a lot more than that
-> in the file right now, but this sounds like a discussion for later
-> anyway.
-
-drivers/of/test-common.c is already split out by the patch series.
-
-
+> I just realized that we never talked about your other comments, and I
+> still have some questions. (Sorry, it was the last thing I looked at
+> while getting v4 ready.) No worries if you don't get to it before I
+> send v4 out, I just didn't want you to think I was ignoring you.
+> 
 >>
->>> This is not something I feel particularly strongly about, it is just
->>> pretty atypical from my experience to have so many unrelated test
->>> cases in a single file.
 >>>
->>> Maybe you would prefer that I break up the test cases first, and then
->>> we split up the file as appropriate?
+>>> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+>>> ---
+>>>  drivers/of/Kconfig    |    1 +
+>>>  drivers/of/unittest.c | 1405 ++++++++++++++++++++++-------------------
+>>>  2 files changed, 752 insertions(+), 654 deletions(-)
+>>>
+> <snip>
+>>> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+>>> index 41b49716ac75f..a5ef44730ffdb 100644
+>>> --- a/drivers/of/unittest.c
+>>> +++ b/drivers/of/unittest.c
+> <snip>
+>>> -
+>>> -static void __init of_unittest_find_node_by_name(void)
+>>> +static void of_unittest_find_node_by_name(struct kunit *test)
 >>
->> I prefer that the test cases not be broken up arbitrarily.  There _may_
+>> Why do we have to drop __init everywhere? The tests run later?
 > 
-> I wasn't trying to break them up arbitrarily. I thought I was doing it
-> according to a pattern (breaking up the file, that is), but maybe I
-> just hadn't looked at enough examples.
+>>From the standpoint of a unit test __init doesn't really make any
+> sense, right? I know that right now we are running as part of a
+> kernel, but the goal should be that a unit test is not part of a
+> kernel and we just include what we need.
+> 
+> Even so, that's the future. For now, I did not put the KUnit
+> infrastructure in the .init section because I didn't think it belonged
+> there. In practice, KUnit only knows how to run during the init phase
+> of the kernel, but I don't think it should be restricted there. You
+> should be able to run tests whenever you want because you should be
+> able to test anything right? I figured any restriction on that is
+> misleading and will potentially get in the way at worst, and
+> unnecessary at best especially since people shouldn't build a
+> production kernel with all kinds of unit tests inside.
+> 
+>>
+>>>  {
+>>>         struct device_node *np;
+>>>         const char *options, *name;
+>>>
+> <snip>
+>>>
+>>>
+>>> -       np = of_find_node_by_path("/testcase-data/missing-path");
+>>> -       unittest(!np, "non-existent path returned node %pOF\n", np);
+>>> +       KUNIT_EXPECT_EQ_MSG(test,
+>>> +                           of_find_node_by_path("/testcase-data/missing-path"),
+>>> +                           NULL,
+>>> +                           "non-existent path returned node %pOF\n", np);
+>>
+>> 1 tab indent would help with less vertical code (in general, not this
+>> one so much).
+> 
+> Will do.
+> 
+>>
+>>>         of_node_put(np);
+>>>
+>>> -       np = of_find_node_by_path("missing-alias");
+>>> -       unittest(!np, "non-existent alias returned node %pOF\n", np);
+>>> +       KUNIT_EXPECT_EQ_MSG(test, of_find_node_by_path("missing-alias"), NULL,
+>>> +                           "non-existent alias returned node %pOF\n", np);
+>>>         of_node_put(np);
+>>>
+>>> -       np = of_find_node_by_path("testcase-alias/missing-path");
+>>> -       unittest(!np, "non-existent alias with relative path returned node %pOF\n", np);
+>>> +       KUNIT_EXPECT_EQ_MSG(test,
+>>> +                           of_find_node_by_path("testcase-alias/missing-path"),
+>>> +                           NULL,
+>>> +                           "non-existent alias with relative path returned node %pOF\n",
+>>> +                           np);
+>>>         of_node_put(np);
+>>>
+> <snip>
+>>>
+>>> -static void __init of_unittest_property_string(void)
+>>> +static void of_unittest_property_string(struct kunit *test)
+>>>  {
+>>>         const char *strings[4];
+>>>         struct device_node *np;
+>>>         int rc;
+>>>
+>>>         np = of_find_node_by_path("/testcase-data/phandle-tests/consumer-a");
+>>> -       if (!np) {
+>>> -               pr_err("No testcase data in device tree\n");
+>>> -               return;
+>>> -       }
+>>> -
+>>> -       rc = of_property_match_string(np, "phandle-list-names", "first");
+>>> -       unittest(rc == 0, "first expected:0 got:%i\n", rc);
+>>> -       rc = of_property_match_string(np, "phandle-list-names", "second");
+>>> -       unittest(rc == 1, "second expected:1 got:%i\n", rc);
+>>> -       rc = of_property_match_string(np, "phandle-list-names", "third");
+>>> -       unittest(rc == 2, "third expected:2 got:%i\n", rc);
+>>> -       rc = of_property_match_string(np, "phandle-list-names", "fourth");
+>>> -       unittest(rc == -ENODATA, "unmatched string; rc=%i\n", rc);
+>>> -       rc = of_property_match_string(np, "missing-property", "blah");
+>>> -       unittest(rc == -EINVAL, "missing property; rc=%i\n", rc);
+>>> -       rc = of_property_match_string(np, "empty-property", "blah");
+>>> -       unittest(rc == -ENODATA, "empty property; rc=%i\n", rc);
+>>> -       rc = of_property_match_string(np, "unterminated-string", "blah");
+>>> -       unittest(rc == -EILSEQ, "unterminated string; rc=%i\n", rc);
+>>> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
+>>> +
+>>> +       KUNIT_EXPECT_EQ(test,
+>>> +                       of_property_match_string(np,
+>>> +                                                "phandle-list-names",
+>>> +                                                "first"),
+>>> +                       0);
+>>> +       KUNIT_EXPECT_EQ(test,
+>>> +                       of_property_match_string(np,
+>>> +                                                "phandle-list-names",
+>>> +                                                "second"),
+>>> +                       1);
+>>
+>> Fewer lines on these would be better even if we go over 80 chars.
 
-This goes back to the kunit model of putting each test into a separate
-function that can be a KUNIT_CASE().  That is a model that I do not agree
-with for devicetree.
+Agreed.  unittest.c already is a greater than 80 char file in general, and
+is a file that benefits from that.
 
 
->> be cases where the devicetree unittests are currently not well grouped
->> and may benefit from change, but if so that should be handled independently
->> of any transformation into a KUnit framework.
+> On the of_property_match_string(...), I have no opinion. I will do
+> whatever you like best.
 > 
-> I agree. I did this because I wanted to illustrate what I thought real
-> world KUnit unit tests should look like (I also wanted to be able to
-> show off KUnit test features that help you write these kinds of
-> tests); I was not necessarily intending that all the of: unittest
-> patches would get merged in with the whole RFC. I was mostly trying to
-> create cause for discussion (which it seems like I succeeded at ;-) ).
+> Nevertheless, as far as the KUNIT_EXPECT_*(...), I do have an opinion: I am
+> trying to establish a good, readable convention. Given an expect statement
+> structured as
+> ```
+> KUNIT_EXPECT_*(
+>     test,
+>     expect_arg_0, ..., expect_arg_n,
+>     fmt_str, fmt_arg_0, ..., fmt_arg_n)
+> ```
+> where `test` is the `struct kunit` context argument, `expect_arg_{0, ..., n}`
+> are the arguments the expectations is being made about (so in the above example,
+> `of_property_match_string(...)` and `1`), and `fmt_*` is the optional format
+> string that comes at the end of some expectations.
 > 
-> So fair enough, I will propose these patches separately and later
-> (except of course this one that splits up the file). Do you want the
-> initial transformation to the KUnit framework in the main KUnit
-> patchset, or do you want that to be done separately? If I recall, Rob
-> suggested this as a good initial example that other people could refer
-> to, and some people seemed to think that I needed one to help guide
-> the discussion and provide direction for early users. I don't
-> necessarily think that means the initial real world example needs to
-> be a part of the initial patchset though.
+> The pattern I had been trying to promote is the following:
 > 
-> Cheers
+> 1) If everything fits on 1 line, do that.
+> 2) If you must make a line split, prefer to keep `test` on its own line,
+> `expect_arg_{0, ..., n}` should be kept together, if possible, and the format
+> string should follow the conventions already most commonly used with format
+> strings.
+> 3) If you must split up `expect_arg_{0, ..., n}` each argument should get its
+> own line and should not share a line with either `test` or any `fmt_*`.
+> 
+> The reason I care about this so much is because expectations should be
+> extremely easy to read; they are the most important part of a unit
+> test because they tell you what the test is verifying. I am not
+> married to the formatting I proposed above, but I want something that
+> will be extremely easy to identify the arguments that the expectation
+> is on. Maybe that means that I need to add some syntactic fluff to
+> make it clearer, I don't know, but this is definitely something we
+> need to get right, especially in the earliest examples.
+
+I will probably raise the ire of the kernel formatting rule makers by offering
+what I think is a _much_ more readable format __for this specific case__.
+In other words for drivers/of/unittest.c.
+
+If you can not make your mail window _very_ wide, or if this email has been
+line wrapped, this example will not be clear.
+
+Two possible formats:
+
+
+### -----  version 1, as created by the patch series
+
+static void of_unittest_property_string(struct kunit *test)
+{
+        const char *strings[4];
+        struct device_node *np;
+        int rc;
+
+        np = of_find_node_by_path("/testcase-data/phandle-tests/consumer-a");
+        KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
+
+        KUNIT_EXPECT_EQ(
+                test,
+                of_property_match_string(np, "phandle-list-names", "first"),
+                0);
+        KUNIT_EXPECT_EQ(
+                test,
+                of_property_match_string(np, "phandle-list-names", "second"),
+                1);
+        KUNIT_EXPECT_EQ(
+                test,
+                of_property_match_string(np, "phandle-list-names", "third"),
+                2);
+        KUNIT_EXPECT_EQ_MSG(
+                test,
+                of_property_match_string(np, "phandle-list-names", "fourth"),
+                -ENODATA,
+                "unmatched string");
+        KUNIT_EXPECT_EQ_MSG(
+                test,
+                of_property_match_string(np, "missing-property", "blah"),
+                -EINVAL,
+                "missing property");
+        KUNIT_EXPECT_EQ_MSG(
+                test,
+                of_property_match_string(np, "empty-property", "blah"),
+                -ENODATA,
+                "empty property");
+        KUNIT_EXPECT_EQ_MSG(
+                test,
+                of_property_match_string(np, "unterminated-string", "blah"),
+                -EILSEQ,
+                "unterminated string");
+
+        /* of_property_count_strings() tests */
+        KUNIT_EXPECT_EQ(test,
+                        of_property_count_strings(np, "string-property"), 1);
+        KUNIT_EXPECT_EQ(test,
+                        of_property_count_strings(np, "phandle-list-names"), 3);
+        KUNIT_EXPECT_EQ_MSG(
+                test,
+                of_property_count_strings(np, "unterminated-string"), -EILSEQ,
+                "unterminated string");
+        KUNIT_EXPECT_EQ_MSG(
+                test,
+                of_property_count_strings(np, "unterminated-string-list"),
+                -EILSEQ,
+                "unterminated string array");
+
+
+
+
+### -----  version 2, modified to use really long lines
+
+static void of_unittest_property_string(struct kunit *test)
+{
+        const char *strings[4];
+        struct device_node *np;
+        int rc;
+
+        np = of_find_node_by_path("/testcase-data/phandle-tests/consumer-a");
+        KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
+
+        KUNIT_EXPECT_EQ(    test, of_property_match_string(np, "phandle-list-names", "first"),  0);
+        KUNIT_EXPECT_EQ(    test, of_property_match_string(np, "phandle-list-names", "second"), 1);
+        KUNIT_EXPECT_EQ(    test, of_property_match_string(np, "phandle-list-names", "third"),  2);
+        KUNIT_EXPECT_EQ_MSG(test, of_property_match_string(np, "phandle-list-names", "fourth"), -ENODATA, "unmatched string");
+        KUNIT_EXPECT_EQ_MSG(test, of_property_match_string(np, "missing-property", "blah"),     -EINVAL, "missing property");
+        KUNIT_EXPECT_EQ_MSG(test, of_property_match_string(np, "empty-property", "blah"),       -ENODATA, "empty property");
+        KUNIT_EXPECT_EQ_MSG(test, of_property_match_string(np, "unterminated-string", "blah"),  -EILSEQ, "unterminated string");
+
+        /* of_property_count_strings() tests */
+        KUNIT_EXPECT_EQ(    test, of_property_count_strings(np, "string-property"),             1);
+        KUNIT_EXPECT_EQ(    test, of_property_count_strings(np, "phandle-list-names"),          3);
+        KUNIT_EXPECT_EQ_MSG(test, of_property_count_strings(np, "unterminated-string"),         -EILSEQ, "unterminated string");
+        KUNIT_EXPECT_EQ_MSG(test, of_property_count_strings(np, "unterminated-string-list"),    -EILSEQ, "unterminated string array");
+
+        
+        ------------------------  ------------------------------------------------------------- --------------------------------------
+             ^                         ^                                                             ^
+             |                         |                                                             |
+             |                         |                                                             |
+            mostly boilerplate        what is being tested                                          expected result, error message
+            (can vary in relop
+             and _MSG or not)
+
+In my opinion, the second version is much more readable.  It is easy to see the
+differences in the boilerplate.  It is easy to see what is being tested, and how
+the arguments of the tested function vary for each test.  It is easy to see the
+expected result and error message.  The entire block fits into a single short
+window (though much wider).
+
+- Frank
+
+>>
+>>> +       KUNIT_EXPECT_EQ(test,
+>>> +                       of_property_match_string(np,
+>>> +                                                "phandle-list-names",
+>>> +                                                "third"),
+>>> +                       2);
+>>> +       KUNIT_EXPECT_EQ_MSG(test,
+>>> +                           of_property_match_string(np,
+>>> +                                                    "phandle-list-names",
+>>> +                                                    "fourth"),
+>>> +                           -ENODATA,
+>>> +                           "unmatched string");
+>>> +       KUNIT_EXPECT_EQ_MSG(test,
+>>> +                           of_property_match_string(np,
+>>> +                                                    "missing-property",
+>>> +                                                    "blah"),
+>>> +                           -EINVAL,
+>>> +                           "missing property");
+>>> +       KUNIT_EXPECT_EQ_MSG(test,
+>>> +                           of_property_match_string(np,
+>>> +                                                    "empty-property",
+>>> +                                                    "blah"),
+>>> +                           -ENODATA,
+>>> +                           "empty property");
+>>> +       KUNIT_EXPECT_EQ_MSG(test,
+>>> +                           of_property_match_string(np,
+>>> +                                                    "unterminated-string",
+>>> +                                                    "blah"),
+>>> +                           -EILSEQ,
+>>> +                           "unterminated string");
+> <snip>
+>>>  /* test insertion of a bus with parent devices */
+>>> -static void __init of_unittest_overlay_10(void)
+>>> +static void of_unittest_overlay_10(struct kunit *test)
+>>>  {
+>>> -       int ret;
+>>>         char *child_path;
+>>>
+>>>         /* device should disable */
+>>> -       ret = of_unittest_apply_overlay_check(10, 10, 0, 1, PDEV_OVERLAY);
+>>> -       if (unittest(ret == 0,
+>>> -                       "overlay test %d failed; overlay application\n", 10))
+>>> -               return;
+>>> +       KUNIT_ASSERT_EQ_MSG(test,
+>>> +                           of_unittest_apply_overlay_check(test,
+>>> +                                                           10,
+>>> +                                                           10,
+>>> +                                                           0,
+>>> +                                                           1,
+>>> +                                                           PDEV_OVERLAY),
+>>
+>> I prefer putting multiple args on a line and having fewer lines.
+> 
+> Looking at this now, I tend to agree, but I don't think I saw a
+> consistent way to break them up for these functions. I figured there
+> should be some type of pattern.
+> 
+>>
+>>> +                           0,
+>>> +                           "overlay test %d failed; overlay application\n",
+>>> +                           10);
+>>>
+>>>         child_path = kasprintf(GFP_KERNEL, "%s/test-unittest101",
+>>>                         unittest_path(10, PDEV_OVERLAY));
+>>> -       if (unittest(child_path, "overlay test %d failed; kasprintf\n", 10))
+>>> -               return;
+>>> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, child_path);
+>>>
+>>> -       ret = of_path_device_type_exists(child_path, PDEV_OVERLAY);
+>>> +       KUNIT_EXPECT_TRUE_MSG(test,
+>>> +                             of_path_device_type_exists(child_path,
+>>> +                                                        PDEV_OVERLAY),
+>>> +                             "overlay test %d failed; no child device\n", 10);
+>>>         kfree(child_path);
+>>> -
+>>> -       unittest(ret, "overlay test %d failed; no child device\n", 10);
+>>>  }
+> <snip>
 > 
