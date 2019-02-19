@@ -1,380 +1,205 @@
-From: frowand.list at gmail.com (Frank Rowand)
-Date: Mon, 18 Feb 2019 14:56:03 -0800
-Subject: [RFC v3 17/19] of: unittest: migrate tests to run on KUnit
-In-Reply-To: <CAFd5g46NehKo=TT4reQ8r74bDTG9BkR=ELg+Q3n5YooUxFwBmA@mail.gmail.com>
-References: <20181128193636.254378-1-brendanhiggins@google.com>
- <20181128193636.254378-18-brendanhiggins@google.com>
- <CAL_Jsq+09Kx7yMBC_Jw45QGmk6U_fp4N6HOZDwYrM4tWw+_dOA@mail.gmail.com>
- <CAFd5g46NehKo=TT4reQ8r74bDTG9BkR=ELg+Q3n5YooUxFwBmA@mail.gmail.com>
-Message-ID: <1d72f04e-08ba-e3dd-c8c0-512946126113@gmail.com>
+From: yamada.masahiro at socionext.com (Masahiro Yamada)
+Date: Tue, 19 Feb 2019 13:14:11 +0900
+Subject: [PATCH v2 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <20190215031926.ljzluy2cfxp64u6o@ast-mbp>
+References: <20190211143600.15021-1-joel@joelfernandes.org>
+ <20190215031926.ljzluy2cfxp64u6o@ast-mbp>
+Message-ID: <CAK7LNAThSm1n1B_Ss0gRDZ3H-DWj2bvpZ+6Ui2jEo4Pt9YynEA@mail.gmail.com>
 
-On 2/12/19 5:44 PM, Brendan Higgins wrote:
-> On Wed, Nov 28, 2018 at 12:56 PM Rob Herring <robh at kernel.org> wrote:
->>
->> On Wed, Nov 28, 2018 at 1:38 PM Brendan Higgins
->> <brendanhiggins at google.com> wrote:
->>>
->>> Migrate tests without any cleanup, or modifying test logic in anyway to
->>> run under KUnit using the KUnit expectation and assertion API.
->>
->> Nice! You beat me to it. This is probably going to conflict with what
->> is in the DT tree for 4.21. Also, please Cc the DT list for
->> drivers/of/ changes.
->>
->> Looks good to me, but a few mostly formatting comments below.
-> 
-> I just realized that we never talked about your other comments, and I
-> still have some questions. (Sorry, it was the last thing I looked at
-> while getting v4 ready.) No worries if you don't get to it before I
-> send v4 out, I just didn't want you to think I was ignoring you.
-> 
->>
->>>
->>> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
->>> ---
->>>  drivers/of/Kconfig    |    1 +
->>>  drivers/of/unittest.c | 1405 ++++++++++++++++++++++-------------------
->>>  2 files changed, 752 insertions(+), 654 deletions(-)
->>>
-> <snip>
->>> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
->>> index 41b49716ac75f..a5ef44730ffdb 100644
->>> --- a/drivers/of/unittest.c
->>> +++ b/drivers/of/unittest.c
-> <snip>
->>> -
->>> -static void __init of_unittest_find_node_by_name(void)
->>> +static void of_unittest_find_node_by_name(struct kunit *test)
->>
->> Why do we have to drop __init everywhere? The tests run later?
-> 
->>From the standpoint of a unit test __init doesn't really make any
-> sense, right? I know that right now we are running as part of a
-> kernel, but the goal should be that a unit test is not part of a
-> kernel and we just include what we need.
-> 
-> Even so, that's the future. For now, I did not put the KUnit
-> infrastructure in the .init section because I didn't think it belonged
-> there. In practice, KUnit only knows how to run during the init phase
-> of the kernel, but I don't think it should be restricted there. You
-> should be able to run tests whenever you want because you should be
-> able to test anything right? I figured any restriction on that is
-> misleading and will potentially get in the way at worst, and
-> unnecessary at best especially since people shouldn't build a
-> production kernel with all kinds of unit tests inside.
-> 
->>
->>>  {
->>>         struct device_node *np;
->>>         const char *options, *name;
->>>
-> <snip>
->>>
->>>
->>> -       np = of_find_node_by_path("/testcase-data/missing-path");
->>> -       unittest(!np, "non-existent path returned node %pOF\n", np);
->>> +       KUNIT_EXPECT_EQ_MSG(test,
->>> +                           of_find_node_by_path("/testcase-data/missing-path"),
->>> +                           NULL,
->>> +                           "non-existent path returned node %pOF\n", np);
->>
->> 1 tab indent would help with less vertical code (in general, not this
->> one so much).
-> 
-> Will do.
-> 
->>
->>>         of_node_put(np);
->>>
->>> -       np = of_find_node_by_path("missing-alias");
->>> -       unittest(!np, "non-existent alias returned node %pOF\n", np);
->>> +       KUNIT_EXPECT_EQ_MSG(test, of_find_node_by_path("missing-alias"), NULL,
->>> +                           "non-existent alias returned node %pOF\n", np);
->>>         of_node_put(np);
->>>
->>> -       np = of_find_node_by_path("testcase-alias/missing-path");
->>> -       unittest(!np, "non-existent alias with relative path returned node %pOF\n", np);
->>> +       KUNIT_EXPECT_EQ_MSG(test,
->>> +                           of_find_node_by_path("testcase-alias/missing-path"),
->>> +                           NULL,
->>> +                           "non-existent alias with relative path returned node %pOF\n",
->>> +                           np);
->>>         of_node_put(np);
->>>
-> <snip>
->>>
->>> -static void __init of_unittest_property_string(void)
->>> +static void of_unittest_property_string(struct kunit *test)
->>>  {
->>>         const char *strings[4];
->>>         struct device_node *np;
->>>         int rc;
->>>
->>>         np = of_find_node_by_path("/testcase-data/phandle-tests/consumer-a");
->>> -       if (!np) {
->>> -               pr_err("No testcase data in device tree\n");
->>> -               return;
->>> -       }
->>> -
->>> -       rc = of_property_match_string(np, "phandle-list-names", "first");
->>> -       unittest(rc == 0, "first expected:0 got:%i\n", rc);
->>> -       rc = of_property_match_string(np, "phandle-list-names", "second");
->>> -       unittest(rc == 1, "second expected:1 got:%i\n", rc);
->>> -       rc = of_property_match_string(np, "phandle-list-names", "third");
->>> -       unittest(rc == 2, "third expected:2 got:%i\n", rc);
->>> -       rc = of_property_match_string(np, "phandle-list-names", "fourth");
->>> -       unittest(rc == -ENODATA, "unmatched string; rc=%i\n", rc);
->>> -       rc = of_property_match_string(np, "missing-property", "blah");
->>> -       unittest(rc == -EINVAL, "missing property; rc=%i\n", rc);
->>> -       rc = of_property_match_string(np, "empty-property", "blah");
->>> -       unittest(rc == -ENODATA, "empty property; rc=%i\n", rc);
->>> -       rc = of_property_match_string(np, "unterminated-string", "blah");
->>> -       unittest(rc == -EILSEQ, "unterminated string; rc=%i\n", rc);
->>> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
->>> +
->>> +       KUNIT_EXPECT_EQ(test,
->>> +                       of_property_match_string(np,
->>> +                                                "phandle-list-names",
->>> +                                                "first"),
->>> +                       0);
->>> +       KUNIT_EXPECT_EQ(test,
->>> +                       of_property_match_string(np,
->>> +                                                "phandle-list-names",
->>> +                                                "second"),
->>> +                       1);
->>
->> Fewer lines on these would be better even if we go over 80 chars.
-
-Agreed.  unittest.c already is a greater than 80 char file in general, and
-is a file that benefits from that.
+On Fri, Feb 15, 2019 at 11:48 PM Alexei Starovoitov
+<alexei.starovoitov at gmail.com> wrote:
+>
+> On Mon, Feb 11, 2019 at 09:35:59AM -0500, Joel Fernandes (Google) wrote:
+> > Introduce in-kernel headers and other artifacts which are made available
+> > as an archive through proc (/proc/kheaders.txz file).
 
 
-> On the of_property_match_string(...), I have no opinion. I will do
-> whatever you like best.
-> 
-> Nevertheless, as far as the KUNIT_EXPECT_*(...), I do have an opinion: I am
-> trying to establish a good, readable convention. Given an expect statement
-> structured as
-> ```
-> KUNIT_EXPECT_*(
->     test,
->     expect_arg_0, ..., expect_arg_n,
->     fmt_str, fmt_arg_0, ..., fmt_arg_n)
-> ```
-> where `test` is the `struct kunit` context argument, `expect_arg_{0, ..., n}`
-> are the arguments the expectations is being made about (so in the above example,
-> `of_property_match_string(...)` and `1`), and `fmt_*` is the optional format
-> string that comes at the end of some expectations.
-> 
-> The pattern I had been trying to promote is the following:
-> 
-> 1) If everything fits on 1 line, do that.
-> 2) If you must make a line split, prefer to keep `test` on its own line,
-> `expect_arg_{0, ..., n}` should be kept together, if possible, and the format
-> string should follow the conventions already most commonly used with format
-> strings.
-> 3) If you must split up `expect_arg_{0, ..., n}` each argument should get its
-> own line and should not share a line with either `test` or any `fmt_*`.
-> 
-> The reason I care about this so much is because expectations should be
-> extremely easy to read; they are the most important part of a unit
-> test because they tell you what the test is verifying. I am not
-> married to the formatting I proposed above, but I want something that
-> will be extremely easy to identify the arguments that the expectation
-> is on. Maybe that means that I need to add some syntactic fluff to
-> make it clearer, I don't know, but this is definitely something we
-> need to get right, especially in the earliest examples.
-
-I will probably raise the ire of the kernel formatting rule makers by offering
-what I think is a _much_ more readable format __for this specific case__.
-In other words for drivers/of/unittest.c.
-
-If you can not make your mail window _very_ wide, or if this email has been
-line wrapped, this example will not be clear.
-
-Two possible formats:
+The extension '.txz' is not used in kernel code.
 
 
-### -----  version 1, as created by the patch series
+'.tar.xz' is used for 'tarxz-pkg', 'perf-tarxz-src-pkg' etc.
 
-static void of_unittest_property_string(struct kunit *test)
-{
-        const char *strings[4];
-        struct device_node *np;
-        int rc;
 
-        np = of_find_node_by_path("/testcase-data/phandle-tests/consumer-a");
-        KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
+$ git grep  '\.txz'
+$ git grep  '\.tar\.xz'
+Documentation/admin-guide/README.rst:     xz -cd linux-4.X.tar.xz | tar xvf -
+arch/x86/crypto/camellia-aesni-avx-asm_64.S: *
+http://koti.mbnet.fi/axh/crypto/camellia-BSD-1.2.0-aesni1.tar.xz
+crypto/testmgr.h: *   https://bench.cr.yp.to/supercop/supercop-20170228.tar.xz
+crypto/testmgr.h: *   https://bench.cr.yp.to/supercop/supercop-20170228.tar.xz
+crypto/testmgr.h: *   https://bench.cr.yp.to/supercop/supercop-20170228.tar.xz
+crypto/testmgr.h: *   https://bench.cr.yp.to/supercop/supercop-20170228.tar.xz
+crypto/testmgr.h: *   https://bench.cr.yp.to/supercop/supercop-20170228.tar.xz
+scripts/package/Makefile:       @echo '  perf-tarxz-src-pkg  - Build
+$(perf-tar).tar.xz source tarball'
+tools/testing/selftests/gen_kselftest_tar.sh:
+ ext=".tar.xz"
 
-        KUNIT_EXPECT_EQ(
-                test,
-                of_property_match_string(np, "phandle-list-names", "first"),
-                0);
-        KUNIT_EXPECT_EQ(
-                test,
-                of_property_match_string(np, "phandle-list-names", "second"),
-                1);
-        KUNIT_EXPECT_EQ(
-                test,
-                of_property_match_string(np, "phandle-list-names", "third"),
-                2);
-        KUNIT_EXPECT_EQ_MSG(
-                test,
-                of_property_match_string(np, "phandle-list-names", "fourth"),
-                -ENODATA,
-                "unmatched string");
-        KUNIT_EXPECT_EQ_MSG(
-                test,
-                of_property_match_string(np, "missing-property", "blah"),
-                -EINVAL,
-                "missing property");
-        KUNIT_EXPECT_EQ_MSG(
-                test,
-                of_property_match_string(np, "empty-property", "blah"),
-                -ENODATA,
-                "empty property");
-        KUNIT_EXPECT_EQ_MSG(
-                test,
-                of_property_match_string(np, "unterminated-string", "blah"),
-                -EILSEQ,
-                "unterminated string");
 
-        /* of_property_count_strings() tests */
-        KUNIT_EXPECT_EQ(test,
-                        of_property_count_strings(np, "string-property"), 1);
-        KUNIT_EXPECT_EQ(test,
-                        of_property_count_strings(np, "phandle-list-names"), 3);
-        KUNIT_EXPECT_EQ_MSG(
-                test,
-                of_property_count_strings(np, "unterminated-string"), -EILSEQ,
-                "unterminated string");
-        KUNIT_EXPECT_EQ_MSG(
-                test,
-                of_property_count_strings(np, "unterminated-string-list"),
-                -EILSEQ,
-                "unterminated string array");
+
+I prefer '.tar.xz' for consistency.
 
 
 
 
-### -----  version 2, modified to use really long lines
 
-static void of_unittest_property_string(struct kunit *test)
-{
-        const char *strings[4];
-        struct device_node *np;
-        int rc;
 
-        np = of_find_node_by_path("/testcase-data/phandle-tests/consumer-a");
-        KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
+BTW, have you ever looked at scripts/extract-ikconfig?
 
-        KUNIT_EXPECT_EQ(    test, of_property_match_string(np, "phandle-list-names", "first"),  0);
-        KUNIT_EXPECT_EQ(    test, of_property_match_string(np, "phandle-list-names", "second"), 1);
-        KUNIT_EXPECT_EQ(    test, of_property_match_string(np, "phandle-list-names", "third"),  2);
-        KUNIT_EXPECT_EQ_MSG(test, of_property_match_string(np, "phandle-list-names", "fourth"), -ENODATA, "unmatched string");
-        KUNIT_EXPECT_EQ_MSG(test, of_property_match_string(np, "missing-property", "blah"),     -EINVAL, "missing property");
-        KUNIT_EXPECT_EQ_MSG(test, of_property_match_string(np, "empty-property", "blah"),       -ENODATA, "empty property");
-        KUNIT_EXPECT_EQ_MSG(test, of_property_match_string(np, "unterminated-string", "blah"),  -EILSEQ, "unterminated string");
+You added IKHD_ST and IKHD_ED
+just to mimic kernel/configs.c
 
-        /* of_property_count_strings() tests */
-        KUNIT_EXPECT_EQ(    test, of_property_count_strings(np, "string-property"),             1);
-        KUNIT_EXPECT_EQ(    test, of_property_count_strings(np, "phandle-list-names"),          3);
-        KUNIT_EXPECT_EQ_MSG(test, of_property_count_strings(np, "unterminated-string"),         -EILSEQ, "unterminated string");
-        KUNIT_EXPECT_EQ_MSG(test, of_property_count_strings(np, "unterminated-string-list"),    -EILSEQ, "unterminated string array");
+It is currently pointless without the extracting tool,
+but you might think it is useful to extract headers
+from vmlinux or the module without mounting procfs.
 
-        
-        ------------------------  ------------------------------------------------------------- --------------------------------------
-             ^                         ^                                                             ^
-             |                         |                                                             |
-             |                         |                                                             |
-            mostly boilerplate        what is being tested                                          expected result, error message
-            (can vary in relop
-             and _MSG or not)
 
-In my opinion, the second version is much more readable.  It is easy to see the
-differences in the boilerplate.  It is easy to see what is being tested, and how
-the arguments of the tested function vary for each test.  It is easy to see the
-expected result and error message.  The entire block fits into a single short
-window (though much wider).
 
-- Frank
 
->>
->>> +       KUNIT_EXPECT_EQ(test,
->>> +                       of_property_match_string(np,
->>> +                                                "phandle-list-names",
->>> +                                                "third"),
->>> +                       2);
->>> +       KUNIT_EXPECT_EQ_MSG(test,
->>> +                           of_property_match_string(np,
->>> +                                                    "phandle-list-names",
->>> +                                                    "fourth"),
->>> +                           -ENODATA,
->>> +                           "unmatched string");
->>> +       KUNIT_EXPECT_EQ_MSG(test,
->>> +                           of_property_match_string(np,
->>> +                                                    "missing-property",
->>> +                                                    "blah"),
->>> +                           -EINVAL,
->>> +                           "missing property");
->>> +       KUNIT_EXPECT_EQ_MSG(test,
->>> +                           of_property_match_string(np,
->>> +                                                    "empty-property",
->>> +                                                    "blah"),
->>> +                           -ENODATA,
->>> +                           "empty property");
->>> +       KUNIT_EXPECT_EQ_MSG(test,
->>> +                           of_property_match_string(np,
->>> +                                                    "unterminated-string",
->>> +                                                    "blah"),
->>> +                           -EILSEQ,
->>> +                           "unterminated string");
-> <snip>
->>>  /* test insertion of a bus with parent devices */
->>> -static void __init of_unittest_overlay_10(void)
->>> +static void of_unittest_overlay_10(struct kunit *test)
->>>  {
->>> -       int ret;
->>>         char *child_path;
->>>
->>>         /* device should disable */
->>> -       ret = of_unittest_apply_overlay_check(10, 10, 0, 1, PDEV_OVERLAY);
->>> -       if (unittest(ret == 0,
->>> -                       "overlay test %d failed; overlay application\n", 10))
->>> -               return;
->>> +       KUNIT_ASSERT_EQ_MSG(test,
->>> +                           of_unittest_apply_overlay_check(test,
->>> +                                                           10,
->>> +                                                           10,
->>> +                                                           0,
->>> +                                                           1,
->>> +                                                           PDEV_OVERLAY),
->>
->> I prefer putting multiple args on a line and having fewer lines.
-> 
-> Looking at this now, I tend to agree, but I don't think I saw a
-> consistent way to break them up for these functions. I figured there
-> should be some type of pattern.
-> 
->>
->>> +                           0,
->>> +                           "overlay test %d failed; overlay application\n",
->>> +                           10);
->>>
->>>         child_path = kasprintf(GFP_KERNEL, "%s/test-unittest101",
->>>                         unittest_path(10, PDEV_OVERLAY));
->>> -       if (unittest(child_path, "overlay test %d failed; kasprintf\n", 10))
->>> -               return;
->>> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, child_path);
->>>
->>> -       ret = of_path_device_type_exists(child_path, PDEV_OVERLAY);
->>> +       KUNIT_EXPECT_TRUE_MSG(test,
->>> +                             of_path_device_type_exists(child_path,
->>> +                                                        PDEV_OVERLAY),
->>> +                             "overlay test %d failed; no child device\n", 10);
->>>         kfree(child_path);
->>> -
->>> -       unittest(ret, "overlay test %d failed; no child device\n", 10);
->>>  }
-> <snip>
-> 
+> > This archive makes
+> > it possible to build kernel modules, run eBPF programs, and other
+> > tracing programs that need to extend the kernel for tracing purposes
+> > without any dependency on the file system having headers and build
+> > artifacts.
+> >
+> > On Android and embedded systems, it is common to switch kernels but not
+> > have kernel headers available on the file system. Raw kernel headers
+> > also cannot be copied into the filesystem like they can be on other
+> > distros, due to licensing and other issues. There's no linux-headers
+> > package on Android. Further once a different kernel is booted, any
+> > headers stored on the file system will no longer be useful. By storing
+> > the headers as a compressed archive within the kernel, we can avoid these
+> > issues that have been a hindrance for a long time.
+>
+> The set looks good to me and since the main use case is building bpf progs
+> I can route it via bpf-next tree if there are no objections.
+> Masahiro, could you please ack it?
+
+
+Honestly, I was not tracking this thread
+since I did not know I was responsible for this.
+
+
+I just started to take a closer look, then immediately got scared.
+
+This version is not mature enough for the merge.
+
+
+
+First of all, this patch cannot be compiled out-of-tree (O= option).
+
+
+I do not know why 0-day bot did not catch this apparent breakage.
+
+
+$ make -j8 O=hoge
+make[1]: Entering directory '/home/masahiro/workspace/bsp/linux/hoge'
+  GEN     Makefile
+  Using .. as source for kernel
+  DESCEND  objtool
+  CALL    ../scripts/checksyscalls.sh
+  CHK     include/generated/compile.h
+make[2]: *** No rule to make target 'Module.symvers', needed by
+'kernel/kheaders_data.txz'.  Stop.
+make[2]: *** Waiting for unfinished jobs....
+/home/masahiro/workspace/bsp/linux/Makefile:1043: recipe for target
+'kernel' failed
+make[1]: *** [kernel] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make[1]: Leaving directory '/home/masahiro/workspace/bsp/linux/hoge'
+Makefile:152: recipe for target 'sub-make' failed
+make: *** [sub-make] Error 2
+
+
+
+
+
+I was able to compile it in-tree
+but it makes the incremental build extremely slow.
+
+(Here, the incremental build means
+"make" without changing any code after the full build.)
+
+
+
+
+Before this patch, "make -j8" took 11 sec on my machine.
+
+real 0m11.777s
+user 0m16.608s
+sys 0m5.164s
+
+
+
+After this patch, x86_64_defconfig + CONFIG_IKHEADERS_PROC=y
+takes 53 sec for me since kernel/kheaders_data.txz is regenerated
+every time even when you did not touch any source file.
+
+
+$ time make -j8
+  DESCEND  objtool
+  CALL    scripts/checksyscalls.sh
+  CHK     include/generated/compile.h
+  GEN     kernel/kheaders_data.txz
+  UPD     kernel/kheaders_data.h
+  CC      kernel/kheaders.o
+  AR      kernel/built-in.a
+  GEN     .version
+  CHK     include/generated/compile.h
+  UPD     include/generated/compile.h
+  CC      init/version.o
+  AR      init/built-in.a
+  AR      built-in.a
+  LD      vmlinux.o
+  MODPOST vmlinux.o
+  KSYM    .tmp_kallsyms1.o
+  KSYM    .tmp_kallsyms2.o
+  LD      vmlinux
+  SORTEX  vmlinux
+  SYSMAP  System.map
+  Building modules, stage 2.
+  CC      arch/x86/boot/version.o
+  MODPOST 17 modules
+  VOFFSET arch/x86/boot/compressed/../voffset.h
+  OBJCOPY arch/x86/boot/compressed/vmlinux.bin
+  RELOCS  arch/x86/boot/compressed/vmlinux.relocs
+  CC      arch/x86/boot/compressed/kaslr.o
+  GZIP    arch/x86/boot/compressed/vmlinux.bin.gz
+  CC      arch/x86/boot/compressed/misc.o
+  MKPIGGY arch/x86/boot/compressed/piggy.S
+  AS      arch/x86/boot/compressed/piggy.o
+  LD      arch/x86/boot/compressed/vmlinux
+  ZOFFSET arch/x86/boot/zoffset.h
+  OBJCOPY arch/x86/boot/vmlinux.bin
+  AS      arch/x86/boot/header.o
+  LD      arch/x86/boot/setup.elf
+  OBJCOPY arch/x86/boot/setup.bin
+  BUILD   arch/x86/boot/bzImage
+Setup is 15612 bytes (padded to 15872 bytes).
+System is 12673 kB
+CRC 697aaf88
+Kernel: arch/x86/boot/bzImage is ready  (#6)
+
+real 0m53.024s
+user 0m32.076s
+sys 0m9.296s
+
+
+
+
+Also, I notice $(ARCH) must be fixed to $(SRCARCH),
+but that is one of minor issues.
+
+
+
+We should take time for careful review and test.
+
+
+Please give me more time for thorough review.
+
+
+
+--
+Best Regards
+Masahiro Yamada
