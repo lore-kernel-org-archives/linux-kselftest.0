@@ -1,53 +1,35 @@
 From: brendanhiggins at google.com (Brendan Higgins)
-Date: Tue, 19 Feb 2019 15:20:18 -0800
-Subject: [RFC v4 10/17] kunit: test: add test managed resource tests
-In-Reply-To: <155026408761.115909.17855438744578437385@swboyd.mtv.corp.google.com>
+Date: Tue, 19 Feb 2019 15:24:01 -0800
+Subject: [RFC v4 02/17] kunit: test: add test resource management API
+In-Reply-To: <155026451067.115909.17082794837098610153@swboyd.mtv.corp.google.com>
 References: <20190214213729.21702-1-brendanhiggins@google.com>
- <20190214213729.21702-11-brendanhiggins@google.com>
- <155026408761.115909.17855438744578437385@swboyd.mtv.corp.google.com>
-Message-ID: <CAFd5g44Dizk-VsFOmGn++E0d40sZmH6V+j05Eu6zUXaBj1xfcA@mail.gmail.com>
+ <20190214213729.21702-3-brendanhiggins@google.com>
+ <155026451067.115909.17082794837098610153@swboyd.mtv.corp.google.com>
+Message-ID: <CAFd5g47yPUQFiEb4PaN_6xgY-ORTr-Z6W_gf8sWmpQ82fuSB_g@mail.gmail.com>
 
-On Fri, Feb 15, 2019 at 12:54 PM Stephen Boyd <sboyd at kernel.org> wrote:
+On Fri, Feb 15, 2019 at 1:01 PM Stephen Boyd <sboyd at kernel.org> wrote:
 >
-> Quoting Brendan Higgins (2019-02-14 13:37:22)
-> > diff --git a/kunit/test-test.c b/kunit/test-test.c
-> > index 0b4ad6690310d..bb34431398526 100644
-> > --- a/kunit/test-test.c
-> > +++ b/kunit/test-test.c
-> [...]
-> > +
-> > +#define KUNIT_RESOURCE_NUM 5
-> > +static void kunit_resource_test_cleanup_resources(struct kunit *test)
-> > +{
-> > +       int i;
-> > +       struct kunit_test_resource_context *ctx = test->priv;
-> > +       struct kunit_resource *resources[KUNIT_RESOURCE_NUM];
-> > +
-> > +       for (i = 0; i < KUNIT_RESOURCE_NUM; i++) {
+> Quoting Brendan Higgins (2019-02-14 13:37:14)
+> > @@ -104,6 +167,7 @@ struct kunit {
+> >         const char *name; /* Read only after initialization! */
+> >         spinlock_t lock; /* Gaurds all mutable test state. */
+> >         bool success; /* Protected by lock. */
+> > +       struct list_head resources; /* Protected by lock. */
+> >         void (*vprintk)(const struct kunit *test,
+> >                         const char *level,
+> >                         struct va_format *vaf);
+> > @@ -127,6 +191,51 @@ int kunit_run_tests(struct kunit_module *module);
+> >                 } \
+> >                 late_initcall(module_kunit_init##module)
+> >
+> > +/**
+> > + * kunit_alloc_resource() - Allocates a *test managed resource*.
+> > + * @test: The test context object.
+> > + * @init: a user supplied function to initialize the resource.
+> > + * @free: a user supplied function to free the resource.
+> > + * @context: for the user to pass in arbitrary data.
 >
-> Nitpick: This could use ARRAY_SIZE(resources) and then the #define could
-> be dropped.
+> Nitpick: "pass in arbitrary data to the init function"? Maybe that
+> provides some more clarity.
 
-Noted. Will fix in next revision.
-
->
-> > +               resources[i] = kunit_alloc_resource(&ctx->test,
-> > +                                                   fake_resource_init,
-> > +                                                   fake_resource_free,
-> > +                                                   ctx);
-> > +       }
-> > +
-> > +       kunit_cleanup(&ctx->test);
-> > +
-> > +       KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
-> > +}
-> > +
-> [...]
-> > +
-> > +static struct kunit_case kunit_resource_test_cases[] = {
->
-> Can these arrays be const?
-
-There is some private mutable state inside of `struct kunit_case` that
-would be kind of annoying to pull out; I don't think it would make it
-cleaner.
+I think that makes sense. Will fix in next revision.
