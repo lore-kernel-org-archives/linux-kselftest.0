@@ -1,195 +1,212 @@
-From: ci_notify at linaro.org (ci_notify at linaro.org)
-Date: Thu, 21 Feb 2019 11:00:35 +0000 (UTC)
-Subject: next-20190221 kselftest results
-Message-ID: <214431927.2837.1550746836610.JavaMail.jenkins@dc828b94788c>
+From: yamada.masahiro at socionext.com (Masahiro Yamada)
+Date: Thu, 21 Feb 2019 23:34:41 +0900
+Subject: [PATCH v2 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <20190219151652.GA110907@google.com>
+References: <20190211143600.15021-1-joel@joelfernandes.org>
+ <20190215031926.ljzluy2cfxp64u6o@ast-mbp>
+ <CAK7LNAThSm1n1B_Ss0gRDZ3H-DWj2bvpZ+6Ui2jEo4Pt9YynEA@mail.gmail.com>
+ <CAK7LNATf4adEEqWko2YO46wHHi-Vvc+_LBjQGNnM7rt8GSOgZQ@mail.gmail.com>
+ <20190219151652.GA110907@google.com>
+Message-ID: <CAK7LNAQ7GqCNc008ZZ4K0_BdTVMdwwVUgnfqBO-kDBmw4ikr3w@mail.gmail.com>
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.0.0-rc7
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: 550f4769c7c4a84e3966f20887c6e249c5f2afc4
-git describe: next-20190221
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190221
+On Wed, Feb 20, 2019 at 12:17 AM Joel Fernandes <joel at joelfernandes.org> wrote:
 
-Regressions (compared to build next-20190220)
-------------------------------------------------------------------------
-dragonboard-410c - arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_fields                                                                                                         
-hi6220-hikey - arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_maps                                                                                                         
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_fields                                                                                                         
-x86_64:                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190220)                                                                   
-------------------------------------------------------------------------                                               
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-qemu_x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sockmap                                                                                                         
+>
+> Firstly, I want to apologize for not testing this and other corner cases you
+> brought up. I should have known better. Since my build was working, I assumed
+> that the feature is working. For that, I am very sorry.
 
 
-In total:
-------------------------------------------------------------------------
-Ran 352 total tests in the following environments and test suites.
-pass 260
-fail 92
-xfail 0
-skip 0
-
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
+You do not need to apologize. 0day bot usually catches build errors.
+I guess 0day bot performs compile-tests only incrementally
+and that is why we did not get any report.
 
 
-Failures
-------------------------------------------------------------------------
 
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-qemu_x86_64:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-x15:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-qemu_arm64:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sock_fields
-
-hi6220-hikey:
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-
-dragonboard-410c:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sock_fields
-
-juno-r2:
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-
-x86:
-* kselftest-vsyscall-mode-native/bpf_test_btf
-* kselftest-vsyscall-mode-native/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-native/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/bpf_test_btf
-* kselftest-vsyscall-mode-none/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
+> Secondly, it turns out Module.symvers circularly dependency problem also
+> exists with another use case.
+> If one does 'make modules_prepare' in a base kernel tree and then tries to
+> build modules with that tree, a warning like this is printed but the module
+> still gets built:
+>
+>   WARNING: Symbol version dump ./Module.symvers
+>            is missing; modules will have no dependencies and modversions.
+>
+>   CC [M]  /tmp/testmod/test.o
+>   Building modules, stage 2.
+>   MODPOST 1 modules
+>   CC      /tmp/testmod/test.mod.o
+>   LD [M]  /tmp/testmod/test.ko
+>
+> So, I am thinking that at least for first pass I will just drop the inclusion
+> of Module.symvers in the archive and allow any modules built using
+> /proc/kheaders.tar.xz to not use it.
+>
+> Kbuild will print a warning anyway when anyone tries to build using
+> /proc/kheaders.tar.xz, so if the user really wants module symbol versioning
+> then they should probably use a full kernel source tree with Module.symvers
+> available. For our usecase, kernel symbol versioning is a bit useless when
+> using /proc/kheaders.tar.gz because the proc file is generated with the same
+> kernel that the module is being built against, and subsequently loaded into
+> the kernel. So it is not likely that the CRC of a kernel symbol will be
+> different from what the module expects.
 
 
-Skips
-------------------------------------------------------------------------
-No skips
+Without Module.symver, modpost cannot check whether references are
+resolvable or not.
+
+You will see "WARNING ... undefined" for every symbol referenced from
+the module.
 
 
--- 
-Linaro LKFT
-https://lkft.linaro.org
+I am not an Android developer.
+So, I will leave this judge to other people.
+
+
+
+
+One more request if you have a chance to submit the next version.
+Please do not hide error messages.
+
+I wondered why you redirected stdout/stderr from the script.
+
+I applied the following patch, and I tested.  Then I see why.
+
+Please fix your code instead of hiding underlying problems.
+
+
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 1d13a7a..a76ccbd 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -148,7 +148,7 @@ $(obj)/kheaders.o: $(obj)/kheaders_data.h
+ targets += kheaders_data.txz
+
+ quiet_cmd_genikh = GEN     $(obj)/kheaders_data.txz
+-cmd_genikh = $(srctree)/scripts/gen_ikh_data.sh $@ $^ >/dev/null 2>&1
++cmd_genikh = $(srctree)/scripts/gen_ikh_data.sh $@ $^
+ $(obj)/kheaders_data.txz: $(ikh_file_list) FORCE
+        $(call cmd,genikh)
+
+
+
+
+
+
+masahiro at grover:~/workspace/linux-yamada$ make
+  CALL    scripts/checksyscalls.sh
+  DESCEND  objtool
+  CHK     include/generated/compile.h
+  GEN     kernel/kheaders_data.txz
+find: ‘FORCE’: No such file or directory
+70106 blocks
+Can't do inplace edit: kernel/kheaders_data.txz.tmp is not a regular file.
+Can't do inplace edit: kernel/kheaders_data.txz.tmp/arch is not a regular file.
+Can't do inplace edit: kernel/kheaders_data.txz.tmp/arch/x86 is not a
+regular file.
+Can't do inplace edit: kernel/kheaders_data.txz.tmp/arch/x86/include
+is not a regular file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/uapi is not a regular
+file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/uapi/asm is not a
+regular file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/generated is not a
+regular file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/generated/uapi is not a
+regular file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/generated/uapi/asm is
+not a regular file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/generated/asm is not a
+regular file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/asm is not a regular
+file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/asm/xen is not a regular
+file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/asm/uv is not a regular
+file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/asm/numachip is not a
+regular file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/asm/e820 is not a
+regular file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/asm/fpu is not a regular
+file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/asm/crypto is not a
+regular file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/arch/x86/include/asm/trace is not a
+regular file.
+Can't do inplace edit: kernel/kheaders_data.txz.tmp/scripts is not a
+regular file.
+Can't do inplace edit: kernel/kheaders_data.txz.tmp/scripts/genksyms
+is not a regular file.
+Can't do inplace edit: kernel/kheaders_data.txz.tmp/scripts/ksymoops
+is not a regular file.
+Can't do inplace edit: kernel/kheaders_data.txz.tmp/scripts/gdb is not
+a regular file.
+Can't do inplace edit: kernel/kheaders_data.txz.tmp/scripts/gdb/linux
+is not a regular file.
+Can't do inplace edit: kernel/kheaders_data.txz.tmp/scripts/basic is
+not a regular file.
+Can't do inplace edit: kernel/kheaders_data.txz.tmp/scripts/dtc is not
+a regular file.
+Can't do inplace edit: kernel/kheaders_data.txz.tmp/scripts/dtc/libfdt
+is not a regular file.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/scripts/dtc/include-prefixes is not a
+regular file.
+Can't open kernel/kheaders_data.txz.tmp/scripts/dtc/include-prefixes/arm64:
+No such file or directory.
+Can't open kernel/kheaders_data.txz.tmp/scripts/dtc/include-prefixes/xtensa:
+No such file or directory.
+Can't open kernel/kheaders_data.txz.tmp/scripts/dtc/include-prefixes/openrisc:
+No such file or directory.
+Can't open kernel/kheaders_data.txz.tmp/scripts/dtc/include-prefixes/nios2:
+No such file or directory.
+Can't open kernel/kheaders_data.txz.tmp/scripts/dtc/include-prefixes/mips:
+No such file or directory.
+Can't open kernel/kheaders_data.txz.tmp/scripts/dtc/include-prefixes/arm:
+No such file or directory.
+Can't open kernel/kheaders_data.txz.tmp/scripts/dtc/include-prefixes/microblaze:
+No such file or directory.
+Can't open kernel/kheaders_data.txz.tmp/scripts/dtc/include-prefixes/arc:
+No such file or directory.
+Can't open kernel/kheaders_data.txz.tmp/scripts/dtc/include-prefixes/sh:
+No such file or directory.
+Can't open kernel/kheaders_data.txz.tmp/scripts/dtc/include-prefixes/powerpc:
+No such file or directory.
+Can't do inplace edit:
+kernel/kheaders_data.txz.tmp/scripts/dtc/include-prefixes/dt-bindings
+is not a regular file.
+
+  [ massive amount of error messages continues ]
+
+
+
+
+
+
+> I can't think any other ways at the moment to break the circular dependency
+> so I'm thinking this is good enough for now especially since Kbuild will
+> print a proper warning. Let me know what you think?
+>
+> thanks,
+>
+>  - Joel
+>
+--
+Best Regards
+Masahiro Yamada
