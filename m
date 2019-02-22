@@ -1,42 +1,35 @@
 From: andreyknvl at google.com (Andrey Konovalov)
-Date: Fri, 22 Feb 2019 13:53:19 +0100
-Subject: [PATCH v10 07/12] fs, arm64: untag user pointers in fs/userfaultfd.c
+Date: Fri, 22 Feb 2019 13:53:18 +0100
+Subject: [PATCH v10 06/12] fs, arm64: untag user pointers in copy_mount_options
 In-Reply-To: <cover.1550839937.git.andreyknvl@google.com>
 References: <cover.1550839937.git.andreyknvl@google.com>
-Message-ID: <8343cd77ca301df15839796f3b446b75ce5ffbbf.1550839937.git.andreyknvl@google.com>
+Message-ID: <a958e202cdbe6e1bac8a37b7f3d9881d1b22993d.1550839937.git.andreyknvl@google.com>
 
-userfaultfd_register() and userfaultfd_unregister() use provided user
-pointers for vma lookups, which can only by done with untagged pointers.
+In copy_mount_options a user address is being subtracted from TASK_SIZE.
+If the address is lower than TASK_SIZE, the size is calculated to not
+allow the exact_copy_from_user() call to cross TASK_SIZE boundary.
+However if the address is tagged, then the size will be calculated
+incorrectly.
 
-Untag user pointers in these functions.
+Untag the address before subtracting.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- fs/userfaultfd.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ fs/namespace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 89800fc7dc9d..a3b70e0d9756 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1320,6 +1320,9 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
- 		goto out;
- 	}
+diff --git a/fs/namespace.c b/fs/namespace.c
+index a677b59efd74..d4b7adef9204 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -2730,7 +2730,7 @@ void *copy_mount_options(const void __user * data)
+ 	 * the remainder of the page.
+ 	 */
+ 	/* copy_from_user cannot cross TASK_SIZE ! */
+-	size = TASK_SIZE - (unsigned long)data;
++	size = TASK_SIZE - (unsigned long)untagged_addr(data);
+ 	if (size > PAGE_SIZE)
+ 		size = PAGE_SIZE;
  
-+	uffdio_register.range.start =
-+		untagged_addr(uffdio_register.range.start);
-+
- 	ret = validate_range(mm, uffdio_register.range.start,
- 			     uffdio_register.range.len);
- 	if (ret)
-@@ -1507,6 +1510,8 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 	if (copy_from_user(&uffdio_unregister, buf, sizeof(uffdio_unregister)))
- 		goto out;
- 
-+	uffdio_unregister.start = untagged_addr(uffdio_unregister.start);
-+
- 	ret = validate_range(mm, uffdio_unregister.start,
- 			     uffdio_unregister.len);
- 	if (ret)
 -- 
 2.21.0.rc0.258.g878e2cd30e-goog
