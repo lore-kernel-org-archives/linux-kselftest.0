@@ -1,23 +1,28 @@
 From: dave.hansen at intel.com (Dave Hansen)
-Date: Fri, 22 Feb 2019 14:54:51 -0800
-Subject: [PATCH v10 00/12] arm64: untag user pointers passed to the kernel
-In-Reply-To: <cover.1550839937.git.andreyknvl@google.com>
+Date: Fri, 22 Feb 2019 15:03:15 -0800
+Subject: [PATCH v10 06/12] fs, arm64: untag user pointers in
+ copy_mount_options
+In-Reply-To: <a958e202cdbe6e1bac8a37b7f3d9881d1b22993d.1550839937.git.andreyknvl@google.com>
 References: <cover.1550839937.git.andreyknvl@google.com>
-Message-ID: <2ad5f897-25c0-90cf-f54f-827876873a0a@intel.com>
+ <a958e202cdbe6e1bac8a37b7f3d9881d1b22993d.1550839937.git.andreyknvl@google.com>
+Message-ID: <a38275b0-f6cd-20e1-3c48-544846586a16@intel.com>
 
 On 2/22/19 4:53 AM, Andrey Konovalov wrote:
-> The following testing approaches has been taken to find potential issues
-> with user pointer untagging:
-> 
-> 1. Static testing (with sparse [3] and separately with a custom static
->    analyzer based on Clang) to track casts of __user pointers to integer
->    types to find places where untagging needs to be done.
+> --- a/fs/namespace.c
+> +++ b/fs/namespace.c
+> @@ -2730,7 +2730,7 @@ void *copy_mount_options(const void __user * data)
+>  	 * the remainder of the page.
+>  	 */
+>  	/* copy_from_user cannot cross TASK_SIZE ! */
+> -	size = TASK_SIZE - (unsigned long)data;
+> +	size = TASK_SIZE - (unsigned long)untagged_addr(data);
+>  	if (size > PAGE_SIZE)
+>  		size = PAGE_SIZE;
 
-First of all, it's really cool that you took this approach.  Sounds like
-there was a lot of systematic work to fix up the sites in the existing
-codebase.
+I would have thought that copy_from_user() *is* entirely capable of
+detecting and returning an error in the case that its arguments cross
+TASK_SIZE.  It will fail and return an error, but that's what it's
+supposed to do.
 
-But, isn't this a _bit_ fragile going forward?  Folks can't just "make
-sparse" to find issues with missing untags.  This seems like something
-where we would ideally add an __tagged annotation (or something) to the
-source tree and then have sparse rules that can look for missed untags.
+I'd question why this code needs to be doing its own checking in the
+first place.  Is there something subtle going on?
