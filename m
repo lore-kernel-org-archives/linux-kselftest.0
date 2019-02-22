@@ -1,54 +1,30 @@
-From: shuah@kernel.org (shuah)
-Date: Fri, 22 Feb 2019 15:33:50 -0700
-Subject: [RESEND PATCH v2 1/2] selftests/ftrace: Replace echo -e with
- printf
-In-Reply-To: <20190222205351.743-2-juergh@canonical.com>
-References: <20190222091021.10178-1-juergh@canonical.com>
- <20190222205351.743-1-juergh@canonical.com>
- <20190222205351.743-2-juergh@canonical.com>
-Message-ID: <93621fe0-c098-ac00-f780-043be5925917@kernel.org>
+From: dsahern@gmail.com (David Ahern)
+Date: Fri, 22 Feb 2019 17:37:41 -0500
+Subject: [PATCH] selftests: fib_tests: sleep after changing carrier. again.
+In-Reply-To: <20190222102741.31173-1-cascardo@canonical.com>
+References: <20190222102741.31173-1-cascardo@canonical.com>
+Message-ID: <767c0a6e-41a4-e1cd-00a4-197cbcb41af5@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190222223350.jBMQ48vcz1OdwyUTmQ92tGgIM-ka0i3nrrEUTQlxnOE@z>
+Message-ID: <20190222223741.khuDLmpQzJy0D2VbV8GiV6675IJes19P1vRz3SzBm5E@z>
 
-On 2/22/19 1:53 PM, Juerg Haefliger wrote:
-> echo -e is not POSIX. Depending on what /bin/sh is, we can get
-> incorrect output like:
-> $ -e -n [1] Basic trace file check
-> $ -e 	[PASS]
+On 2/22/19 5:27 AM, Thadeu Lima de Souza Cascardo wrote:
+> Just like commit e2ba732a1681 ("selftests: fib_tests: sleep after
+> changing carrier"), wait one second to allow linkwatch to propagate the
+> carrier change to the stack.
 > 
-> Fix that by using printf instead.
+> There are two sets of carrier tests. The first slept after the carrier
+> was set to off, and when the second set ran, it was likely that the
+> linkwatch would be able to run again without much delay, reducing the
+> likelihood of a race. However, if you run 'fib_tests.sh -t carrier' on a
+> loop, you will quickly notice the failures.
 > 
-> Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-> Acked-by: Masami Hiramatsu <mhiramat at kernel.org>
-> Signed-off-by: Juerg Haefliger <juergh at canonical.com>
+> Sleeping on the second set of tests make the failures go away.
+> 
+> Cc: David Ahern <dsahern at gmail.com>
+> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo at canonical.com>
 > ---
->   tools/testing/selftests/ftrace/ftracetest | 9 +++++++--
->   1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> index fc755e1b50f1..20c9c0ad8682 100755
-> --- a/tools/testing/selftests/ftrace/ftracetest
-> +++ b/tools/testing/selftests/ftrace/ftracetest
-> @@ -173,8 +173,13 @@ strip_esc() {
->   }
->   
->   prlog() { # messages
-> -  echo -e "$@"
-> -  [ "$LOG_FILE" ] && echo -e "$@" | strip_esc >> $LOG_FILE
-> +  newline="\n"
-> +  if [ "$1" = "-n" ] ; then
-> +    newline=
-> +    shift
-> +  fi
-> +  printf "$*$newline"
-> +  [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
->   }
->   catlog() { #file
->     cat $1
+>  tools/testing/selftests/net/fib_tests.sh | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
-This patch applied to linux-kselftest next which is at 5.0rc6
-I queued this for 5.1-rc1.
-
-thanks,
--- Shuah
+Reviewed-by: David Ahern <dsahern at gmail.com>
