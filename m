@@ -1,42 +1,33 @@
 From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Fri, 22 Feb 2019 10:26:27 +0900
-Subject: [PATCH selftests 0/2] Add checkbashisms meta-testcase
-Message-ID: <155079878723.5157.12433171255092403676.stgit@devbox>
+Date: Fri, 22 Feb 2019 10:26:57 +0900
+Subject: [PATCH selftests 1/2] selftests/ftrace: Make a script checkbashisms
+ clean
+In-Reply-To: <155079878723.5157.12433171255092403676.stgit@devbox>
+References: <155079878723.5157.12433171255092403676.stgit@devbox>
+Message-ID: <155079881689.5157.10494170079333363559.stgit@devbox>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190222012627.1KwE0i1BjSTYiFKL1yRYfwjVInyvYUex1imbOR9J5Rc@z>
+Message-ID: <20190222012657.5j3rv5_hXfG27SQBnsq-vP_QzS-pgIFdvoMXaBxNYbc@z>
 
-Hi,
+Make kprobe_ftrace.tc checkbashisms clean. Since
+"grep function available_tracers" causes an error
+on checkbashisms, fix it by explicitly escaping
+with double-quotations.
 
-Here are patches for making sure the ftracetest testcases
-are checkbashisms clean.
-
-This actually needs a patch from Juerg, "selftests/ftrace:
-Make the coloring POSIX compliant" to complete the work.
-
-http://lkml.kernel.org/r/20190220161333.28109-1-juergh at canonical.com
-(Note that this is still under development)
-
-So as Juerg pointed, recently ftracetest becomes not POSIX
-compliant, and such kind of issues happened repeatedly.
-To avoid those anymore, I decided to introduce a testcase
-which runs checkbasisms on ftracetest and its testcases.
-I think this can help us to find out whether it was
-written in a way out of POSIX.
-
-Thank you,
-
+Signed-off-by: Masami Hiramatsu <mhiramat at kernel.org>
 ---
-
-Masami Hiramatsu (2):
-      selftests/ftrace: Make a script checkbashisms clean
-      selftests/ftrace: Add checkbashisms meta-testcase
-
-
- tools/testing/selftests/ftrace/ftracetest          |    1 +
  .../ftrace/test.d/kprobe/kprobe_ftrace.tc          |    2 +-
- .../selftests/ftrace/test.d/selftest/bashisms.tc   |   21 ++++++++++++++++++++
- 3 files changed, 23 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---
-Masami Hiramatsu (Linaro) <mhiramat at kernel.org>
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_ftrace.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_ftrace.tc
+index 492426e95e09..7650a82db3f5 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_ftrace.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_ftrace.tc
+@@ -3,7 +3,7 @@
+ # description: Kprobe dynamic event with function tracer
+ 
+ [ -f kprobe_events ] || exit_unsupported # this is configurable
+-grep function available_tracers || exit_unsupported # this is configurable
++grep "function" available_tracers || exit_unsupported # this is configurable
+ 
+ # prepare
+ echo nop > current_tracer
