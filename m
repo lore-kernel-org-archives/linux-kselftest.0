@@ -1,24 +1,46 @@
 From: juerg.haefliger@canonical.com (Juerg Haefliger)
-Date: Fri, 22 Feb 2019 21:53:49 +0100
-Subject: [RESEND PATCH v2 0/2] selftests/ftrace: Make ftracetest POSIX
- compliant
-In-Reply-To: <20190222091021.10178-1-juergh@canonical.com>
+Date: Fri, 22 Feb 2019 21:53:50 +0100
+Subject: [RESEND PATCH v2 1/2] selftests/ftrace: Replace echo -e with printf
+In-Reply-To: <20190222205351.743-1-juergh@canonical.com>
 References: <20190222091021.10178-1-juergh@canonical.com>
-Message-ID: <20190222205351.743-1-juergh@canonical.com>
+ <20190222205351.743-1-juergh@canonical.com>
+Message-ID: <20190222205351.743-2-juergh@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190222205349.Z8vDRFIWD05ge2Cv9mkP-4nF5dVgtcN-gG_sQT-4pa8@z>
+Message-ID: <20190222205350.tBk--_dtN8qOnPrzvE6Syclmlx_1JdyGJFSQt4JkmEQ@z>
 
-Add shuah at kernel.org and linux-kselftest at vger.kernel.org.
+echo -e is not POSIX. Depending on what /bin/sh is, we can get
+incorrect output like:
+$ -e -n [1] Basic trace file check
+$ -e 	[PASS]
 
-The recent addition of colored output introduced some non-POSIX-compliant
-constructs. Fix that.
+Fix that by using printf instead.
 
-Juerg Haefliger (2):
-  selftests/ftrace: Replace echo -e with printf
-  selftests/ftrace: Replace \e with \033
+Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+Acked-by: Masami Hiramatsu <mhiramat at kernel.org>
+Signed-off-by: Juerg Haefliger <juergh at canonical.com>
+---
+ tools/testing/selftests/ftrace/ftracetest | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
- tools/testing/selftests/ftrace/ftracetest | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
-
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index fc755e1b50f1..20c9c0ad8682 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -173,8 +173,13 @@ strip_esc() {
+ }
+ 
+ prlog() { # messages
+-  echo -e "$@"
+-  [ "$LOG_FILE" ] && echo -e "$@" | strip_esc >> $LOG_FILE
++  newline="\n"
++  if [ "$1" = "-n" ] ; then
++    newline=
++    shift
++  fi
++  printf "$*$newline"
++  [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
+ }
+ catlog() { #file
+   cat $1
 -- 
 2.19.1
