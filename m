@@ -1,20 +1,39 @@
-From: patch-notifications@ellerman.id.au (Michael Ellerman)
-Date: Fri, 22 Feb 2019 20:47:39 +1100 (AEDT)
-Subject: powerpc/selftest: fix type of mftb() in null_syscall
-In-Reply-To: <3c3638c1ece313ad3fa0a850f9a98a635ebe688a.1548165236.git.christophe.leroy@c-s.fr>
-Message-ID: <445RMv3S7Gz9sB8@ozlabs.org>
+From: cascardo@canonical.com (Thadeu Lima de Souza Cascardo)
+Date: Fri, 22 Feb 2019 07:27:41 -0300
+Subject: [PATCH] selftests: fib_tests: sleep after changing carrier. again.
+Message-ID: <20190222102741.31173-1-cascardo@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190222094739.ZGgjwphW9dtGjc3Gv0WYpz61SqNXkgpElM4X7T9geuM@z>
+Message-ID: <20190222102741.mcJIlMU1Z09WWO3RvtY44l40Jk-ZfOujCLlIC1hkaL4@z>
 
-On Tue, 2019-01-22@13:54:57 UTC, Christophe Leroy wrote:
-> All callers of mftb() expect 'unsigned long', and the function itself
-> only returns lower part of the TB so it really is 'unsigned long'
-> not 'unsigned long long'
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy at c-s.fr>
+Just like commit e2ba732a1681 ("selftests: fib_tests: sleep after
+changing carrier"), wait one second to allow linkwatch to propagate the
+carrier change to the stack.
 
-Applied to powerpc next, thanks.
+There are two sets of carrier tests. The first slept after the carrier
+was set to off, and when the second set ran, it was likely that the
+linkwatch would be able to run again without much delay, reducing the
+likelihood of a race. However, if you run 'fib_tests.sh -t carrier' on a
+loop, you will quickly notice the failures.
 
-https://git.kernel.org/powerpc/c/beb4f4722cf60d9f0803054dec4eb502
+Sleeping on the second set of tests make the failures go away.
 
-cheers
+Cc: David Ahern <dsahern at gmail.com>
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo at canonical.com>
+---
+ tools/testing/selftests/net/fib_tests.sh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+index 802b4af18729..1080ff55a788 100755
+--- a/tools/testing/selftests/net/fib_tests.sh
++++ b/tools/testing/selftests/net/fib_tests.sh
+@@ -388,6 +388,7 @@ fib_carrier_unicast_test()
+ 
+ 	set -e
+ 	$IP link set dev dummy0 carrier off
++	sleep 1
+ 	set +e
+ 
+ 	echo "    Carrier down"
+-- 
+2.20.1
