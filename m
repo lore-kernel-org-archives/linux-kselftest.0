@@ -1,47 +1,23 @@
-From: shuah at kernel.org (shuah)
-Date: Fri, 22 Feb 2019 15:46:03 -0700
-Subject: [RESEND PATCH v2 2/2] selftests/ftrace: Replace \e with \033
-In-Reply-To: <20190222205351.743-3-juergh@canonical.com>
-References: <20190222091021.10178-1-juergh@canonical.com>
- <20190222205351.743-1-juergh@canonical.com>
- <20190222205351.743-3-juergh@canonical.com>
-Message-ID: <aedb3a7e-058e-ec62-93c7-0767717b9ea9@kernel.org>
+From: dave.hansen at intel.com (Dave Hansen)
+Date: Fri, 22 Feb 2019 14:54:51 -0800
+Subject: [PATCH v10 00/12] arm64: untag user pointers passed to the kernel
+In-Reply-To: <cover.1550839937.git.andreyknvl@google.com>
+References: <cover.1550839937.git.andreyknvl@google.com>
+Message-ID: <2ad5f897-25c0-90cf-f54f-827876873a0a@intel.com>
 
-On 2/22/19 1:53 PM, Juerg Haefliger wrote:
-> The \e sequence character is not POSIX. Fix that by using \033 instead.
+On 2/22/19 4:53 AM, Andrey Konovalov wrote:
+> The following testing approaches has been taken to find potential issues
+> with user pointer untagging:
 > 
-> Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-> Acked-by: Masami Hiramatsu <mhiramat at kernel.org>
-> Signed-off-by: Juerg Haefliger <juergh at canonical.com>
-> ---
->   tools/testing/selftests/ftrace/ftracetest | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> index 20c9c0ad8682..136387422b00 100755
-> --- a/tools/testing/selftests/ftrace/ftracetest
-> +++ b/tools/testing/selftests/ftrace/ftracetest
-> @@ -161,10 +161,10 @@ color_green=
->   color_blue=
->   # If stdout exists and number of colors is eight or more, use them
->   if [ -t 1 -a "$ncolors" -ge 8 ]; then
-> -  color_reset="\e[0m"
-> -  color_red="\e[31m"
-> -  color_green="\e[32m"
-> -  color_blue="\e[34m"
-> +  color_reset="\033[0m"
-> +  color_red="\033[31m"
-> +  color_green="\033[32m"
-> +  color_blue="\033[34m"
->   fi
->   
->   strip_esc() {
-> 
+> 1. Static testing (with sparse [3] and separately with a custom static
+>    analyzer based on Clang) to track casts of __user pointers to integer
+>    types to find places where untagging needs to be done.
 
-Which release is this patch based on?
+First of all, it's really cool that you took this approach.  Sounds like
+there was a lot of systematic work to fix up the sites in the existing
+codebase.
 
-This one failed to apply to linux-kselftest next - I resolved a minor
-merge conflict and applied it. Please review to make sure it looks good.
-
-thanks,
--- Shuah
+But, isn't this a _bit_ fragile going forward?  Folks can't just "make
+sparse" to find issues with missing untags.  This seems like something
+where we would ideally add an __tagged annotation (or something) to the
+source tree and then have sparse rules that can look for missed untags.
