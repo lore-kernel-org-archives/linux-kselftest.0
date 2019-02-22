@@ -1,22 +1,20 @@
 From: patch-notifications@ellerman.id.au (Michael Ellerman)
-Date: Fri, 22 Feb 2019 20:47:50 +1100 (AEDT)
-Subject: tools/selftest/vm: allow choosing mem size and page size in
- map_hugetlb
-In-Reply-To: <59dbb1bc305068dd0fe8e2d5a75c4213e0134549.1549638049.git.christophe.leroy@c-s.fr>
-Message-ID: <445RN711R5z9sNG@ozlabs.org>
+Date: Fri, 22 Feb 2019 20:47:39 +1100 (AEDT)
+Subject: powerpc/selftest: fix type of mftb() in null_syscall
+In-Reply-To: <3c3638c1ece313ad3fa0a850f9a98a635ebe688a.1548165236.git.christophe.leroy@c-s.fr>
+Message-ID: <445RMv3S7Gz9sB8@ozlabs.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190222094750.FsYek5wcJ-jBGs09uKrevmcRp-434m8UEgAwb12aQ5k@z>
+Message-ID: <20190222094739.ZGgjwphW9dtGjc3Gv0WYpz61SqNXkgpElM4X7T9geuM@z>
 
-On Fri, 2019-02-08@15:02:55 UTC, Christophe Leroy wrote:
-> map_hugetlb maps 256Mbytes of memory with default hugepage size.
-> 
-> This patch allows the user to pass the size and page shift as an
-> argument in order to use different size and page size.
+On Tue, 2019-01-22@13:54:57 UTC, Christophe Leroy wrote:
+> All callers of mftb() expect 'unsigned long', and the function itself
+> only returns lower part of the TB so it really is 'unsigned long'
+> not 'unsigned long long'
 > 
 > Signed-off-by: Christophe Leroy <christophe.leroy at c-s.fr>
 
 Applied to powerpc next, thanks.
 
-https://git.kernel.org/powerpc/c/fa7b9a805c797b729022029aaa3a2b7c
+https://git.kernel.org/powerpc/c/beb4f4722cf60d9f0803054dec4eb502
 
 cheers
