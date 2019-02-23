@@ -1,107 +1,195 @@
-From: jrdr.linux at gmail.com (Souptick Joarder)
-Date: Sat, 23 Feb 2019 12:39:02 +0530
-Subject: [PATCH] tools: testing: selftests: Remove duplicate headers
-Message-ID: <20190223070901.GA10274@jordon-HP-15-Notebook-PC>
+From: ci_notify at linaro.org (ci_notify at linaro.org)
+Date: Sat, 23 Feb 2019 08:00:26 +0000 (UTC)
+Subject: next-20190221 kselftest results
+Message-ID: <1182260861.27.1550908826932.JavaMail.jenkins@a6c5c67cda76>
 
-Remove duplicate headers which are included twice.
+Summary
+------------------------------------------------------------------------
+kernel: 5.0.0-rc7
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: 550f4769c7c4a84e3966f20887c6e249c5f2afc4
+git describe: next-20190221
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190221
 
-Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
-Signed-off-by: Souptick Joarder <jrdr.linux at gmail.com>
----
- tools/testing/selftests/gpio/gpio-mockup-chardev.c          | 1 -
- tools/testing/selftests/net/udpgso.c                        | 1 -
- tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c | 1 -
- tools/testing/selftests/proc/proc-self-syscall.c            | 1 -
- tools/testing/selftests/rseq/rseq.h                         | 1 -
- tools/testing/selftests/timers/skew_consistency.c           | 1 -
- tools/testing/selftests/x86/mpx-dig.c                       | 2 --
- 7 files changed, 8 deletions(-)
+Regressions (compared to build next-20190220)
+------------------------------------------------------------------------
+dragonboard-410c - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_fields                                                                                                         
+hi6220-hikey - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_maps                                                                                                         
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_fields                                                                                                         
+x86_64:                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * bpf_test_sockmap                                                                                                         
+                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190220)                                                                   
+------------------------------------------------------------------------                                               
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sockmap                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sockmap                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sockmap                                                                                                         
 
-diff --git a/tools/testing/selftests/gpio/gpio-mockup-chardev.c b/tools/testing/selftests/gpio/gpio-mockup-chardev.c
-index aaa1e9f..d587c81 100644
---- a/tools/testing/selftests/gpio/gpio-mockup-chardev.c
-+++ b/tools/testing/selftests/gpio/gpio-mockup-chardev.c
-@@ -12,7 +12,6 @@
- #include <unistd.h>
- #include <stdio.h>
- #include <stdlib.h>
--#include <stdio.h>
- #include <errno.h>
- #include <string.h>
- #include <fcntl.h>
-diff --git a/tools/testing/selftests/net/udpgso.c b/tools/testing/selftests/net/udpgso.c
-index e279051..b8265ee 100644
---- a/tools/testing/selftests/net/udpgso.c
-+++ b/tools/testing/selftests/net/udpgso.c
-@@ -17,7 +17,6 @@
- #include <stdbool.h>
- #include <stdlib.h>
- #include <stdio.h>
--#include <stdlib.h>
- #include <string.h>
- #include <sys/ioctl.h>
- #include <sys/socket.h>
-diff --git a/tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c b/tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c
-index 167135b..af1b802 100644
---- a/tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c
-+++ b/tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c
-@@ -11,7 +11,6 @@
- #include <sys/wait.h>
- #include <unistd.h>
- #include <setjmp.h>
--#include <signal.h>
- 
- #include "ebb.h"
- 
-diff --git a/tools/testing/selftests/proc/proc-self-syscall.c b/tools/testing/selftests/proc/proc-self-syscall.c
-index 5ab5f48..3a4fec3 100644
---- a/tools/testing/selftests/proc/proc-self-syscall.c
-+++ b/tools/testing/selftests/proc/proc-self-syscall.c
-@@ -20,7 +20,6 @@
- #include <sys/stat.h>
- #include <fcntl.h>
- #include <errno.h>
--#include <unistd.h>
- #include <string.h>
- #include <stdio.h>
- 
-diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
-index c72eb70..6c1126e7 100644
---- a/tools/testing/selftests/rseq/rseq.h
-+++ b/tools/testing/selftests/rseq/rseq.h
-@@ -16,7 +16,6 @@
- #include <errno.h>
- #include <stdio.h>
- #include <stdlib.h>
--#include <sched.h>
- #include <linux/rseq.h>
- 
- /*
-diff --git a/tools/testing/selftests/timers/skew_consistency.c b/tools/testing/selftests/timers/skew_consistency.c
-index 022b711..8066be9 100644
---- a/tools/testing/selftests/timers/skew_consistency.c
-+++ b/tools/testing/selftests/timers/skew_consistency.c
-@@ -32,7 +32,6 @@
- #include <sys/types.h>
- #include <sys/stat.h>
- #include <fcntl.h>
--#include <stdlib.h>
- #include <string.h>
- #include <sys/wait.h>
- #include "../kselftest.h"
-diff --git a/tools/testing/selftests/x86/mpx-dig.c b/tools/testing/selftests/x86/mpx-dig.c
-index c13607e..880fbf6 100644
---- a/tools/testing/selftests/x86/mpx-dig.c
-+++ b/tools/testing/selftests/x86/mpx-dig.c
-@@ -8,9 +8,7 @@
- #include <unistd.h>
- #include <stdio.h>
- #include <errno.h>
--#include <sys/types.h>
- #include <sys/stat.h>
--#include <unistd.h>
- #include <sys/mman.h>
- #include <string.h>
- #include <fcntl.h>
+
+In total:
+------------------------------------------------------------------------
+Ran 352 total tests in the following environments and test suites.
+pass 260
+fail 92
+xfail 0
+skip 0
+
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
+
+Test Suites
+-----------
+* kselftest
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
+
+
+Failures
+------------------------------------------------------------------------
+
+qemu_i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+
+qemu_x86_64:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+
+qemu_arm:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+
+i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+
+x15:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+
+qemu_arm64:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sock_fields
+
+hi6220-hikey:
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+
+dragonboard-410c:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sock_fields
+
+juno-r2:
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+
+x86:
+* kselftest-vsyscall-mode-native/bpf_test_btf
+* kselftest-vsyscall-mode-native/bpf_test_libbpf.sh
+* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-native/bpf_test_progs
+* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-native/bpf_test_sockmap
+* kselftest-vsyscall-mode-none/bpf_test_btf
+* kselftest-vsyscall-mode-none/bpf_test_libbpf.sh
+* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-none/bpf_test_progs
+* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-none/bpf_test_sockmap
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
 -- 
-1.9.1
+Linaro LKFT
+https://lkft.linaro.org
