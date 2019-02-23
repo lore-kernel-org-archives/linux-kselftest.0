@@ -1,72 +1,291 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Sat, 23 Feb 2019 16:08:01 -0500
-Subject: [PATCH AUTOSEL 4.14 11/45] selftests: cpu-hotplug: fix case where
- CPUs offline > CPUs present
-In-Reply-To: <20190223210835.201708-1-sashal@kernel.org>
-References: <20190223210835.201708-1-sashal@kernel.org>
-Message-ID: <20190223210835.201708-11-sashal@kernel.org>
+Date: Sat, 23 Feb 2019 16:06:33 -0500
+Subject: [PATCH AUTOSEL 4.19 58/65] proc: fix /proc/net/* after setns(2)
+In-Reply-To: <20190223210640.200911-1-sashal@kernel.org>
+References: <20190223210640.200911-1-sashal@kernel.org>
+Message-ID: <20190223210640.200911-58-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190223210801.MlSARy-sf1kBukMREwP7HDq1i6rfP_XpKhLrtg15Lck@z>
+Message-ID: <20190223210633.daiONd2LvHsEGoZER7CbK0UNJugeDyKamNd5qrZcE3k@z>
 
-From: Colin Ian King <colin.king@canonical.com>
+From: Alexey Dobriyan <adobriyan@gmail.com>
 
-[ Upstream commit 2b531b6137834a55857a337ac17510d6436b6fbb ]
+[ Upstream commit 1fde6f21d90f8ba5da3cb9c54ca991ed72696c43 ]
 
-The cpu-hotplug test assumes that we can offline the maximum CPU as
-described by /sys/devices/system/cpu/offline.  However, in the case
-where the number of CPUs exceeds like kernel configuration then
-the offline count can be greater than the present count and we end
-up trying to test the offlining of a CPU that is not available to
-offline.  Fix this by testing the maximum present CPU instead.
+/proc entries under /proc/net/* can't be cached into dcache because
+setns(2) can change current net namespace.
 
-Also, the test currently offlines the CPU and does not online it,
-so fix this by onlining the CPU after the test.
-
-Fixes: d89dffa976bc ("fault-injection: add selftests for cpu and memory hotplug")
-Signed-off-by: Colin Ian King <colin.king at canonical.com>
-Signed-off-by: Shuah Khan <shuah at kernel.org>
+[akpm at linux-foundation.org: coding-style fixes]
+[akpm at linux-foundation.org: avoid vim miscolorization]
+[adobriyan at gmail.com: write test, add dummy ->d_revalidate hook: necessary if /proc/net/* is pinned at setns time]
+  Link: http://lkml.kernel.org/r/20190108192350.GA12034 at avx2
+Link: http://lkml.kernel.org/r/20190107162336.GA9239 at avx2
+Fixes: 1da4d377f943fe4194ffb9fb9c26cc58fad4dd24 ("proc: revalidate misc dentries")
+Signed-off-by: Alexey Dobriyan <adobriyan at gmail.com>
+Reported-by: Mateusz Stępień <mateusz.stepien at netrounds.com>
+Reported-by: Ahmad Fatoum <a.fatoum at pengutronix.de>
+Cc: Al Viro <viro at zeniv.linux.org.uk>
+Signed-off-by: Andrew Morton <akpm at linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds at linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- .../selftests/cpu-hotplug/cpu-on-off-test.sh        | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ fs/proc/generic.c                           |   4 +-
+ fs/proc/internal.h                          |   1 +
+ fs/proc/proc_net.c                          |  20 +++
+ tools/testing/selftests/proc/.gitignore     |   1 +
+ tools/testing/selftests/proc/Makefile       |   1 +
+ tools/testing/selftests/proc/setns-dcache.c | 129 ++++++++++++++++++++
+ 6 files changed, 155 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/proc/setns-dcache.c
 
-diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-index f3a8933c12755..49ccd22933438 100755
---- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-+++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-@@ -35,6 +35,10 @@ prerequisite()
- 		exit 0
- 	fi
+diff --git a/fs/proc/generic.c b/fs/proc/generic.c
+index 8ae109429a883..e39bac94dead0 100644
+--- a/fs/proc/generic.c
++++ b/fs/proc/generic.c
+@@ -256,7 +256,7 @@ struct dentry *proc_lookup_de(struct inode *dir, struct dentry *dentry,
+ 		inode = proc_get_inode(dir->i_sb, de);
+ 		if (!inode)
+ 			return ERR_PTR(-ENOMEM);
+-		d_set_d_op(dentry, &proc_misc_dentry_ops);
++		d_set_d_op(dentry, de->proc_dops);
+ 		return d_splice_alias(inode, dentry);
+ 	}
+ 	read_unlock(&proc_subdir_lock);
+@@ -429,6 +429,8 @@ static struct proc_dir_entry *__proc_create(struct proc_dir_entry **parent,
+ 	INIT_LIST_HEAD(&ent->pde_openers);
+ 	proc_set_user(ent, (*parent)->uid, (*parent)->gid);
  
-+	present_cpus=`cat $SYSFS/devices/system/cpu/present`
-+	present_max=${present_cpus##*-}
-+	echo "present_cpus = $present_cpus present_max = $present_max"
++	ent->proc_dops = &proc_misc_dentry_ops;
 +
- 	echo -e "\t Cpus in online state: $online_cpus"
+ out:
+ 	return ent;
+ }
+diff --git a/fs/proc/internal.h b/fs/proc/internal.h
+index 5185d7f6a51ee..95b14196f2842 100644
+--- a/fs/proc/internal.h
++++ b/fs/proc/internal.h
+@@ -44,6 +44,7 @@ struct proc_dir_entry {
+ 	struct completion *pde_unload_completion;
+ 	const struct inode_operations *proc_iops;
+ 	const struct file_operations *proc_fops;
++	const struct dentry_operations *proc_dops;
+ 	union {
+ 		const struct seq_operations *seq_ops;
+ 		int (*single_show)(struct seq_file *, void *);
+diff --git a/fs/proc/proc_net.c b/fs/proc/proc_net.c
+index d5e0fcb3439e9..a7b12435519e0 100644
+--- a/fs/proc/proc_net.c
++++ b/fs/proc/proc_net.c
+@@ -38,6 +38,22 @@ static struct net *get_proc_net(const struct inode *inode)
+ 	return maybe_get_net(PDE_NET(PDE(inode)));
+ }
  
- 	offline_cpus=`cat $SYSFS/devices/system/cpu/offline`
-@@ -149,6 +153,8 @@ online_cpus=0
- online_max=0
- offline_cpus=0
- offline_max=0
-+present_cpus=0
-+present_max=0
++static int proc_net_d_revalidate(struct dentry *dentry, unsigned int flags)
++{
++	return 0;
++}
++
++static const struct dentry_operations proc_net_dentry_ops = {
++	.d_revalidate	= proc_net_d_revalidate,
++	.d_delete	= always_delete_dentry,
++};
++
++static void pde_force_lookup(struct proc_dir_entry *pde)
++{
++	/* /proc/net/ entries can be changed under us by setns(CLONE_NEWNET) */
++	pde->proc_dops = &proc_net_dentry_ops;
++}
++
+ static int seq_open_net(struct inode *inode, struct file *file)
+ {
+ 	unsigned int state_size = PDE(inode)->state_size;
+@@ -90,6 +106,7 @@ struct proc_dir_entry *proc_create_net_data(const char *name, umode_t mode,
+ 	p = proc_create_reg(name, mode, &parent, data);
+ 	if (!p)
+ 		return NULL;
++	pde_force_lookup(p);
+ 	p->proc_fops = &proc_net_seq_fops;
+ 	p->seq_ops = ops;
+ 	p->state_size = state_size;
+@@ -133,6 +150,7 @@ struct proc_dir_entry *proc_create_net_data_write(const char *name, umode_t mode
+ 	p = proc_create_reg(name, mode, &parent, data);
+ 	if (!p)
+ 		return NULL;
++	pde_force_lookup(p);
+ 	p->proc_fops = &proc_net_seq_fops;
+ 	p->seq_ops = ops;
+ 	p->state_size = state_size;
+@@ -181,6 +199,7 @@ struct proc_dir_entry *proc_create_net_single(const char *name, umode_t mode,
+ 	p = proc_create_reg(name, mode, &parent, data);
+ 	if (!p)
+ 		return NULL;
++	pde_force_lookup(p);
+ 	p->proc_fops = &proc_net_single_fops;
+ 	p->single_show = show;
+ 	return proc_register(parent, p);
+@@ -223,6 +242,7 @@ struct proc_dir_entry *proc_create_net_single_write(const char *name, umode_t mo
+ 	p = proc_create_reg(name, mode, &parent, data);
+ 	if (!p)
+ 		return NULL;
++	pde_force_lookup(p);
+ 	p->proc_fops = &proc_net_single_fops;
+ 	p->single_show = show;
+ 	p->write = write;
+diff --git a/tools/testing/selftests/proc/.gitignore b/tools/testing/selftests/proc/.gitignore
+index 82121a81681f7..29bac5ef9a93d 100644
+--- a/tools/testing/selftests/proc/.gitignore
++++ b/tools/testing/selftests/proc/.gitignore
+@@ -10,4 +10,5 @@
+ /proc-uptime-002
+ /read
+ /self
++/setns-dcache
+ /thread-self
+diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
+index 1c12c34cf85d8..434d033ee0677 100644
+--- a/tools/testing/selftests/proc/Makefile
++++ b/tools/testing/selftests/proc/Makefile
+@@ -14,6 +14,7 @@ TEST_GEN_PROGS += proc-uptime-001
+ TEST_GEN_PROGS += proc-uptime-002
+ TEST_GEN_PROGS += read
+ TEST_GEN_PROGS += self
++TEST_GEN_PROGS += setns-dcache
+ TEST_GEN_PROGS += thread-self
  
- while getopts e:ahp: opt; do
- 	case $opt in
-@@ -188,9 +194,10 @@ if [ $allcpus -eq 0 ]; then
- 	online_cpu_expect_success $online_max
- 
- 	if [[ $offline_cpus -gt 0 ]]; then
--		echo -e "\t offline to online to offline: cpu $offline_max"
--		online_cpu_expect_success $offline_max
--		offline_cpu_expect_success $offline_max
-+		echo -e "\t offline to online to offline: cpu $present_max"
-+		online_cpu_expect_success $present_max
-+		offline_cpu_expect_success $present_max
-+		online_cpu $present_max
- 	fi
- 	exit 0
- else
+ include ../lib.mk
+diff --git a/tools/testing/selftests/proc/setns-dcache.c b/tools/testing/selftests/proc/setns-dcache.c
+new file mode 100644
+index 0000000000000..60ab197a73fc9
+--- /dev/null
++++ b/tools/testing/selftests/proc/setns-dcache.c
+@@ -0,0 +1,129 @@
++/*
++ * Copyright © 2019 Alexey Dobriyan <adobriyan at gmail.com>
++ *
++ * Permission to use, copy, modify, and distribute this software for any
++ * purpose with or without fee is hereby granted, provided that the above
++ * copyright notice and this permission notice appear in all copies.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
++ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
++ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
++ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
++ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
++ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
++ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
++ */
++/*
++ * Test that setns(CLONE_NEWNET) points to new /proc/net content even
++ * if old one is in dcache.
++ *
++ * FIXME /proc/net/unix is under CONFIG_UNIX which can be disabled.
++ */
++#undef NDEBUG
++#include <assert.h>
++#include <errno.h>
++#include <sched.h>
++#include <signal.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <sys/socket.h>
++
++static pid_t pid = -1;
++
++static void f(void)
++{
++	if (pid > 0) {
++		kill(pid, SIGTERM);
++	}
++}
++
++int main(void)
++{
++	int fd[2];
++	char _ = 0;
++	int nsfd;
++
++	atexit(f);
++
++	/* Check for priviledges and syscall availability straight away. */
++	if (unshare(CLONE_NEWNET) == -1) {
++		if (errno == ENOSYS || errno == EPERM) {
++			return 4;
++		}
++		return 1;
++	}
++	/* Distinguisher between two otherwise empty net namespaces. */
++	if (socket(AF_UNIX, SOCK_STREAM, 0) == -1) {
++		return 1;
++	}
++
++	if (pipe(fd) == -1) {
++		return 1;
++	}
++
++	pid = fork();
++	if (pid == -1) {
++		return 1;
++	}
++
++	if (pid == 0) {
++		if (unshare(CLONE_NEWNET) == -1) {
++			return 1;
++		}
++
++		if (write(fd[1], &_, 1) != 1) {
++			return 1;
++		}
++
++		pause();
++
++		return 0;
++	}
++
++	if (read(fd[0], &_, 1) != 1) {
++		return 1;
++	}
++
++	{
++		char buf[64];
++		snprintf(buf, sizeof(buf), "/proc/%u/ns/net", pid);
++		nsfd = open(buf, O_RDONLY);
++		if (nsfd == -1) {
++			return 1;
++		}
++	}
++
++	/* Reliably pin dentry into dcache. */
++	(void)open("/proc/net/unix", O_RDONLY);
++
++	if (setns(nsfd, CLONE_NEWNET) == -1) {
++		return 1;
++	}
++
++	kill(pid, SIGTERM);
++	pid = 0;
++
++	{
++		char buf[4096];
++		ssize_t rv;
++		int fd;
++
++		fd = open("/proc/net/unix", O_RDONLY);
++		if (fd == -1) {
++			return 1;
++		}
++
++#define S "Num       RefCount Protocol Flags    Type St Inode Path\n"
++		rv = read(fd, buf, sizeof(buf));
++
++		assert(rv == strlen(S));
++		assert(memcmp(buf, S, strlen(S)) == 0);
++	}
++
++	return 0;
++}
 -- 
 2.19.1
