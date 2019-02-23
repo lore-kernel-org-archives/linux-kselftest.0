@@ -1,81 +1,70 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Sat, 23 Feb 2019 16:03:50 -0500
-Subject: [PATCH AUTOSEL 4.20 40/72] selftests: net: use LDLIBS instead of
- LDFLAGS
+Date: Sat, 23 Feb 2019 16:03:35 -0500
+Subject: [PATCH AUTOSEL 4.20 25/72] selftests: cpu-hotplug: fix case where
+ CPUs offline > CPUs present
 In-Reply-To: <20190223210422.199966-1-sashal@kernel.org>
 References: <20190223210422.199966-1-sashal@kernel.org>
-Message-ID: <20190223210422.199966-40-sashal@kernel.org>
+Message-ID: <20190223210422.199966-25-sashal@kernel.org>
 
-From: Fathi Boudra <fathi.boudra at linaro.org>
+From: Colin Ian King <colin.king at canonical.com>
 
-[ Upstream commit 870f193d48c25a97d61a8e6c04e3c29a2c606850 ]
+[ Upstream commit 2b531b6137834a55857a337ac17510d6436b6fbb ]
 
-reuseport_bpf_numa fails to build due to undefined reference errors:
+The cpu-hotplug test assumes that we can offline the maximum CPU as
+described by /sys/devices/system/cpu/offline.  However, in the case
+where the number of CPUs exceeds like kernel configuration then
+the offline count can be greater than the present count and we end
+up trying to test the offlining of a CPU that is not available to
+offline.  Fix this by testing the maximum present CPU instead.
 
- aarch64-linaro-linux-gcc
- --sysroot=/build/tmp-rpb-glibc/sysroots/hikey -Wall
- -Wl,--no-as-needed -O2 -g -I../../../../usr/include/  -Wl,-O1
- -Wl,--hash-style=gnu -Wl,--as-needed -lnuma  reuseport_bpf_numa.c
- -o
- /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa
- /tmp/ccfUuExT.o: In function `send_from_node':
- /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:138:
- undefined reference to `numa_run_on_node'
- /tmp/ccfUuExT.o: In function `main':
- /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:230:
- undefined reference to `numa_available'
- /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:233:
- undefined reference to `numa_max_node'
+Also, the test currently offlines the CPU and does not online it,
+so fix this by onlining the CPU after the test.
 
-It's GNU Make and linker specific.
-
-The default Makefile rule looks like:
-
-$(CC) $(CFLAGS) $(LDFLAGS) $@ $^ $(LDLIBS)
-
-When linking is done by gcc itself, no issue, but when it needs to be passed
-to proper ld, only LDLIBS follows and then ld cannot know what libs to link
-with.
-
-More detail:
-https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
-
-LDFLAGS
-Extra flags to give to compilers when they are supposed to invoke the linker,
-‘ld’, such as -L. Libraries (-lfoo) should be added to the LDLIBS variable
-instead.
-
-LDLIBS
-Library flags or names given to compilers when they are supposed to invoke the
-linker, ‘ld’. LOADLIBES is a deprecated (but still supported) alternative to
-LDLIBS. Non-library linker flags, such as -L, should go in the LDFLAGS
-variable.
-
-https://lkml.org/lkml/2010/2/10/362
-
-tools/perf: libraries must come after objects
-
-Link order matters, use LDLIBS instead of LDFLAGS to properly link against
-libnuma.
-
-Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
+Fixes: d89dffa976bc ("fault-injection: add selftests for cpu and memory hotplug")
+Signed-off-by: Colin Ian King <colin.king at canonical.com>
 Signed-off-by: Shuah Khan <shuah at kernel.org>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/net/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../selftests/cpu-hotplug/cpu-on-off-test.sh        | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 923570a9708ae..68e2295e7589a 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -19,6 +19,6 @@ TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls
- KSFT_KHDR_INSTALL := 1
- include ../lib.mk
+diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+index bab13dd025a63..0d26b5e3f9667 100755
+--- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
++++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+@@ -37,6 +37,10 @@ prerequisite()
+ 		exit $ksft_skip
+ 	fi
  
--$(OUTPUT)/reuseport_bpf_numa: LDFLAGS += -lnuma
-+$(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
- $(OUTPUT)/tcp_mmap: LDFLAGS += -lpthread
- $(OUTPUT)/tcp_inq: LDFLAGS += -lpthread
++	present_cpus=`cat $SYSFS/devices/system/cpu/present`
++	present_max=${present_cpus##*-}
++	echo "present_cpus = $present_cpus present_max = $present_max"
++
+ 	echo -e "\t Cpus in online state: $online_cpus"
+ 
+ 	offline_cpus=`cat $SYSFS/devices/system/cpu/offline`
+@@ -151,6 +155,8 @@ online_cpus=0
+ online_max=0
+ offline_cpus=0
+ offline_max=0
++present_cpus=0
++present_max=0
+ 
+ while getopts e:ahp: opt; do
+ 	case $opt in
+@@ -190,9 +196,10 @@ if [ $allcpus -eq 0 ]; then
+ 	online_cpu_expect_success $online_max
+ 
+ 	if [[ $offline_cpus -gt 0 ]]; then
+-		echo -e "\t offline to online to offline: cpu $offline_max"
+-		online_cpu_expect_success $offline_max
+-		offline_cpu_expect_success $offline_max
++		echo -e "\t offline to online to offline: cpu $present_max"
++		online_cpu_expect_success $present_max
++		offline_cpu_expect_success $present_max
++		online_cpu $present_max
+ 	fi
+ 	exit 0
+ else
 -- 
 2.19.1
