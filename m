@@ -1,33 +1,30 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Sat, 23 Feb 2019 16:06:11 -0500
-Subject: [PATCH AUTOSEL 4.19 36/65] selftests: net: use LDLIBS instead of
+Date: Sat, 23 Feb 2019 16:06:12 -0500
+Subject: [PATCH AUTOSEL 4.19 37/65] selftests: timers: use LDLIBS instead of
  LDFLAGS
 In-Reply-To: <20190223210640.200911-1-sashal@kernel.org>
 References: <20190223210640.200911-1-sashal@kernel.org>
-Message-ID: <20190223210640.200911-36-sashal@kernel.org>
+Message-ID: <20190223210640.200911-37-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190223210611.b8b-rXqrWIHo9IqO2LsnkkjdTtRFdDPlmUhDLx-jK9o@z>
+Message-ID: <20190223210612.zMO24H_9jKgKbg3wpi_wyy5isREjBcJap4hqaba3Yh4@z>
 
 From: Fathi Boudra <fathi.boudra@linaro.org>
 
-[ Upstream commit 870f193d48c25a97d61a8e6c04e3c29a2c606850 ]
+[ Upstream commit 7d4e591bc051d3382c45caaa2530969fb42ed23d ]
 
-reuseport_bpf_numa fails to build due to undefined reference errors:
+posix_timers fails to build due to undefined reference errors:
 
- aarch64-linaro-linux-gcc
- --sysroot=/build/tmp-rpb-glibc/sysroots/hikey -Wall
- -Wl,--no-as-needed -O2 -g -I../../../../usr/include/  -Wl,-O1
- -Wl,--hash-style=gnu -Wl,--as-needed -lnuma  reuseport_bpf_numa.c
- -o
- /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa
- /tmp/ccfUuExT.o: In function `send_from_node':
- /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:138:
- undefined reference to `numa_run_on_node'
- /tmp/ccfUuExT.o: In function `main':
- /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:230:
- undefined reference to `numa_available'
- /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:233:
- undefined reference to `numa_max_node'
+ aarch64-linaro-linux-gcc --sysroot=/build/tmp-rpb-glibc/sysroots/hikey
+ -O2 -pipe -g -feliminate-unused-debug-types -O3 -Wl,-no-as-needed -Wall
+ -DKTEST  -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed -lrt -lpthread
+ posix_timers.c
+ -o /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/timers/posix_timers
+ /tmp/cc1FTZzT.o: In function `check_timer_create':
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/timers/posix_timers.c:157:
+ undefined reference to `timer_create'
+ /usr/src/debug/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/timers/posix_timers.c:170:
+ undefined reference to `timer_settime'
+ collect2: error: ld returned 1 exit status
 
 It's GNU Make and linker specific.
 
@@ -58,26 +55,27 @@ https://lkml.org/lkml/2010/2/10/362
 tools/perf: libraries must come after objects
 
 Link order matters, use LDLIBS instead of LDFLAGS to properly link against
-libnuma.
+libpthread.
 
+Signed-off-by: Denys Dmytriyenko <denys at ti.com>
 Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
 Signed-off-by: Shuah Khan <shuah at kernel.org>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/net/Makefile | 2 +-
+ tools/testing/selftests/timers/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 919aa2ac00af7..9a3764a1084ea 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -18,6 +18,6 @@ TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls
- KSFT_KHDR_INSTALL := 1
- include ../lib.mk
+diff --git a/tools/testing/selftests/timers/Makefile b/tools/testing/selftests/timers/Makefile
+index c02683cfb6c9a..7656c7ce79d90 100644
+--- a/tools/testing/selftests/timers/Makefile
++++ b/tools/testing/selftests/timers/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ CFLAGS += -O3 -Wl,-no-as-needed -Wall
+-LDFLAGS += -lrt -lpthread -lm
++LDLIBS += -lrt -lpthread -lm
  
--$(OUTPUT)/reuseport_bpf_numa: LDFLAGS += -lnuma
-+$(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
- $(OUTPUT)/tcp_mmap: LDFLAGS += -lpthread
- $(OUTPUT)/tcp_inq: LDFLAGS += -lpthread
+ # these are all "safe" tests that don't modify
+ # system time or require escalated privileges
 -- 
 2.19.1
