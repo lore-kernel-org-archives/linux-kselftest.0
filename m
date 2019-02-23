@@ -1,291 +1,83 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Sat, 23 Feb 2019 16:06:33 -0500
-Subject: [PATCH AUTOSEL 4.19 58/65] proc: fix /proc/net/* after setns(2)
+Date: Sat, 23 Feb 2019 16:06:11 -0500
+Subject: [PATCH AUTOSEL 4.19 36/65] selftests: net: use LDLIBS instead of
+ LDFLAGS
 In-Reply-To: <20190223210640.200911-1-sashal@kernel.org>
 References: <20190223210640.200911-1-sashal@kernel.org>
-Message-ID: <20190223210640.200911-58-sashal@kernel.org>
+Message-ID: <20190223210640.200911-36-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190223210633.daiONd2LvHsEGoZER7CbK0UNJugeDyKamNd5qrZcE3k@z>
+Message-ID: <20190223210611.b8b-rXqrWIHo9IqO2LsnkkjdTtRFdDPlmUhDLx-jK9o@z>
 
-From: Alexey Dobriyan <adobriyan@gmail.com>
+From: Fathi Boudra <fathi.boudra@linaro.org>
 
-[ Upstream commit 1fde6f21d90f8ba5da3cb9c54ca991ed72696c43 ]
+[ Upstream commit 870f193d48c25a97d61a8e6c04e3c29a2c606850 ]
 
-/proc entries under /proc/net/* can't be cached into dcache because
-setns(2) can change current net namespace.
+reuseport_bpf_numa fails to build due to undefined reference errors:
 
-[akpm at linux-foundation.org: coding-style fixes]
-[akpm at linux-foundation.org: avoid vim miscolorization]
-[adobriyan at gmail.com: write test, add dummy ->d_revalidate hook: necessary if /proc/net/* is pinned at setns time]
-  Link: http://lkml.kernel.org/r/20190108192350.GA12034 at avx2
-Link: http://lkml.kernel.org/r/20190107162336.GA9239 at avx2
-Fixes: 1da4d377f943fe4194ffb9fb9c26cc58fad4dd24 ("proc: revalidate misc dentries")
-Signed-off-by: Alexey Dobriyan <adobriyan at gmail.com>
-Reported-by: Mateusz Stępień <mateusz.stepien at netrounds.com>
-Reported-by: Ahmad Fatoum <a.fatoum at pengutronix.de>
-Cc: Al Viro <viro at zeniv.linux.org.uk>
-Signed-off-by: Andrew Morton <akpm at linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds at linux-foundation.org>
+ aarch64-linaro-linux-gcc
+ --sysroot=/build/tmp-rpb-glibc/sysroots/hikey -Wall
+ -Wl,--no-as-needed -O2 -g -I../../../../usr/include/  -Wl,-O1
+ -Wl,--hash-style=gnu -Wl,--as-needed -lnuma  reuseport_bpf_numa.c
+ -o
+ /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa
+ /tmp/ccfUuExT.o: In function `send_from_node':
+ /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:138:
+ undefined reference to `numa_run_on_node'
+ /tmp/ccfUuExT.o: In function `main':
+ /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:230:
+ undefined reference to `numa_available'
+ /build/tmp-rpb-glibc/work/hikey-linaro-linux/kselftests/4.12-r0/linux-4.12-rc7/tools/testing/selftests/net/reuseport_bpf_numa.c:233:
+ undefined reference to `numa_max_node'
+
+It's GNU Make and linker specific.
+
+The default Makefile rule looks like:
+
+$(CC) $(CFLAGS) $(LDFLAGS) $@ $^ $(LDLIBS)
+
+When linking is done by gcc itself, no issue, but when it needs to be passed
+to proper ld, only LDLIBS follows and then ld cannot know what libs to link
+with.
+
+More detail:
+https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
+
+LDFLAGS
+Extra flags to give to compilers when they are supposed to invoke the linker,
+‘ld’, such as -L. Libraries (-lfoo) should be added to the LDLIBS variable
+instead.
+
+LDLIBS
+Library flags or names given to compilers when they are supposed to invoke the
+linker, ‘ld’. LOADLIBES is a deprecated (but still supported) alternative to
+LDLIBS. Non-library linker flags, such as -L, should go in the LDFLAGS
+variable.
+
+https://lkml.org/lkml/2010/2/10/362
+
+tools/perf: libraries must come after objects
+
+Link order matters, use LDLIBS instead of LDFLAGS to properly link against
+libnuma.
+
+Signed-off-by: Fathi Boudra <fathi.boudra at linaro.org>
+Signed-off-by: Shuah Khan <shuah at kernel.org>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- fs/proc/generic.c                           |   4 +-
- fs/proc/internal.h                          |   1 +
- fs/proc/proc_net.c                          |  20 +++
- tools/testing/selftests/proc/.gitignore     |   1 +
- tools/testing/selftests/proc/Makefile       |   1 +
- tools/testing/selftests/proc/setns-dcache.c | 129 ++++++++++++++++++++
- 6 files changed, 155 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/proc/setns-dcache.c
+ tools/testing/selftests/net/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/proc/generic.c b/fs/proc/generic.c
-index 8ae109429a883..e39bac94dead0 100644
---- a/fs/proc/generic.c
-+++ b/fs/proc/generic.c
-@@ -256,7 +256,7 @@ struct dentry *proc_lookup_de(struct inode *dir, struct dentry *dentry,
- 		inode = proc_get_inode(dir->i_sb, de);
- 		if (!inode)
- 			return ERR_PTR(-ENOMEM);
--		d_set_d_op(dentry, &proc_misc_dentry_ops);
-+		d_set_d_op(dentry, de->proc_dops);
- 		return d_splice_alias(inode, dentry);
- 	}
- 	read_unlock(&proc_subdir_lock);
-@@ -429,6 +429,8 @@ static struct proc_dir_entry *__proc_create(struct proc_dir_entry **parent,
- 	INIT_LIST_HEAD(&ent->pde_openers);
- 	proc_set_user(ent, (*parent)->uid, (*parent)->gid);
- 
-+	ent->proc_dops = &proc_misc_dentry_ops;
-+
- out:
- 	return ent;
- }
-diff --git a/fs/proc/internal.h b/fs/proc/internal.h
-index 5185d7f6a51ee..95b14196f2842 100644
---- a/fs/proc/internal.h
-+++ b/fs/proc/internal.h
-@@ -44,6 +44,7 @@ struct proc_dir_entry {
- 	struct completion *pde_unload_completion;
- 	const struct inode_operations *proc_iops;
- 	const struct file_operations *proc_fops;
-+	const struct dentry_operations *proc_dops;
- 	union {
- 		const struct seq_operations *seq_ops;
- 		int (*single_show)(struct seq_file *, void *);
-diff --git a/fs/proc/proc_net.c b/fs/proc/proc_net.c
-index d5e0fcb3439e9..a7b12435519e0 100644
---- a/fs/proc/proc_net.c
-+++ b/fs/proc/proc_net.c
-@@ -38,6 +38,22 @@ static struct net *get_proc_net(const struct inode *inode)
- 	return maybe_get_net(PDE_NET(PDE(inode)));
- }
- 
-+static int proc_net_d_revalidate(struct dentry *dentry, unsigned int flags)
-+{
-+	return 0;
-+}
-+
-+static const struct dentry_operations proc_net_dentry_ops = {
-+	.d_revalidate	= proc_net_d_revalidate,
-+	.d_delete	= always_delete_dentry,
-+};
-+
-+static void pde_force_lookup(struct proc_dir_entry *pde)
-+{
-+	/* /proc/net/ entries can be changed under us by setns(CLONE_NEWNET) */
-+	pde->proc_dops = &proc_net_dentry_ops;
-+}
-+
- static int seq_open_net(struct inode *inode, struct file *file)
- {
- 	unsigned int state_size = PDE(inode)->state_size;
-@@ -90,6 +106,7 @@ struct proc_dir_entry *proc_create_net_data(const char *name, umode_t mode,
- 	p = proc_create_reg(name, mode, &parent, data);
- 	if (!p)
- 		return NULL;
-+	pde_force_lookup(p);
- 	p->proc_fops = &proc_net_seq_fops;
- 	p->seq_ops = ops;
- 	p->state_size = state_size;
-@@ -133,6 +150,7 @@ struct proc_dir_entry *proc_create_net_data_write(const char *name, umode_t mode
- 	p = proc_create_reg(name, mode, &parent, data);
- 	if (!p)
- 		return NULL;
-+	pde_force_lookup(p);
- 	p->proc_fops = &proc_net_seq_fops;
- 	p->seq_ops = ops;
- 	p->state_size = state_size;
-@@ -181,6 +199,7 @@ struct proc_dir_entry *proc_create_net_single(const char *name, umode_t mode,
- 	p = proc_create_reg(name, mode, &parent, data);
- 	if (!p)
- 		return NULL;
-+	pde_force_lookup(p);
- 	p->proc_fops = &proc_net_single_fops;
- 	p->single_show = show;
- 	return proc_register(parent, p);
-@@ -223,6 +242,7 @@ struct proc_dir_entry *proc_create_net_single_write(const char *name, umode_t mo
- 	p = proc_create_reg(name, mode, &parent, data);
- 	if (!p)
- 		return NULL;
-+	pde_force_lookup(p);
- 	p->proc_fops = &proc_net_single_fops;
- 	p->single_show = show;
- 	p->write = write;
-diff --git a/tools/testing/selftests/proc/.gitignore b/tools/testing/selftests/proc/.gitignore
-index 82121a81681f7..29bac5ef9a93d 100644
---- a/tools/testing/selftests/proc/.gitignore
-+++ b/tools/testing/selftests/proc/.gitignore
-@@ -10,4 +10,5 @@
- /proc-uptime-002
- /read
- /self
-+/setns-dcache
- /thread-self
-diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
-index 1c12c34cf85d8..434d033ee0677 100644
---- a/tools/testing/selftests/proc/Makefile
-+++ b/tools/testing/selftests/proc/Makefile
-@@ -14,6 +14,7 @@ TEST_GEN_PROGS += proc-uptime-001
- TEST_GEN_PROGS += proc-uptime-002
- TEST_GEN_PROGS += read
- TEST_GEN_PROGS += self
-+TEST_GEN_PROGS += setns-dcache
- TEST_GEN_PROGS += thread-self
- 
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 919aa2ac00af7..9a3764a1084ea 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -18,6 +18,6 @@ TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls
+ KSFT_KHDR_INSTALL := 1
  include ../lib.mk
-diff --git a/tools/testing/selftests/proc/setns-dcache.c b/tools/testing/selftests/proc/setns-dcache.c
-new file mode 100644
-index 0000000000000..60ab197a73fc9
---- /dev/null
-+++ b/tools/testing/selftests/proc/setns-dcache.c
-@@ -0,0 +1,129 @@
-+/*
-+ * Copyright © 2019 Alexey Dobriyan <adobriyan at gmail.com>
-+ *
-+ * Permission to use, copy, modify, and distribute this software for any
-+ * purpose with or without fee is hereby granted, provided that the above
-+ * copyright notice and this permission notice appear in all copies.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-+ */
-+/*
-+ * Test that setns(CLONE_NEWNET) points to new /proc/net content even
-+ * if old one is in dcache.
-+ *
-+ * FIXME /proc/net/unix is under CONFIG_UNIX which can be disabled.
-+ */
-+#undef NDEBUG
-+#include <assert.h>
-+#include <errno.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <fcntl.h>
-+#include <sys/socket.h>
-+
-+static pid_t pid = -1;
-+
-+static void f(void)
-+{
-+	if (pid > 0) {
-+		kill(pid, SIGTERM);
-+	}
-+}
-+
-+int main(void)
-+{
-+	int fd[2];
-+	char _ = 0;
-+	int nsfd;
-+
-+	atexit(f);
-+
-+	/* Check for priviledges and syscall availability straight away. */
-+	if (unshare(CLONE_NEWNET) == -1) {
-+		if (errno == ENOSYS || errno == EPERM) {
-+			return 4;
-+		}
-+		return 1;
-+	}
-+	/* Distinguisher between two otherwise empty net namespaces. */
-+	if (socket(AF_UNIX, SOCK_STREAM, 0) == -1) {
-+		return 1;
-+	}
-+
-+	if (pipe(fd) == -1) {
-+		return 1;
-+	}
-+
-+	pid = fork();
-+	if (pid == -1) {
-+		return 1;
-+	}
-+
-+	if (pid == 0) {
-+		if (unshare(CLONE_NEWNET) == -1) {
-+			return 1;
-+		}
-+
-+		if (write(fd[1], &_, 1) != 1) {
-+			return 1;
-+		}
-+
-+		pause();
-+
-+		return 0;
-+	}
-+
-+	if (read(fd[0], &_, 1) != 1) {
-+		return 1;
-+	}
-+
-+	{
-+		char buf[64];
-+		snprintf(buf, sizeof(buf), "/proc/%u/ns/net", pid);
-+		nsfd = open(buf, O_RDONLY);
-+		if (nsfd == -1) {
-+			return 1;
-+		}
-+	}
-+
-+	/* Reliably pin dentry into dcache. */
-+	(void)open("/proc/net/unix", O_RDONLY);
-+
-+	if (setns(nsfd, CLONE_NEWNET) == -1) {
-+		return 1;
-+	}
-+
-+	kill(pid, SIGTERM);
-+	pid = 0;
-+
-+	{
-+		char buf[4096];
-+		ssize_t rv;
-+		int fd;
-+
-+		fd = open("/proc/net/unix", O_RDONLY);
-+		if (fd == -1) {
-+			return 1;
-+		}
-+
-+#define S "Num       RefCount Protocol Flags    Type St Inode Path\n"
-+		rv = read(fd, buf, sizeof(buf));
-+
-+		assert(rv == strlen(S));
-+		assert(memcmp(buf, S, strlen(S)) == 0);
-+	}
-+
-+	return 0;
-+}
+ 
+-$(OUTPUT)/reuseport_bpf_numa: LDFLAGS += -lnuma
++$(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
+ $(OUTPUT)/tcp_mmap: LDFLAGS += -lpthread
+ $(OUTPUT)/tcp_inq: LDFLAGS += -lpthread
 -- 
 2.19.1
