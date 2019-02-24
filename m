@@ -1,70 +1,26 @@
-From: sashal at kernel.org (Sasha Levin)
-Date: Sat, 23 Feb 2019 16:03:35 -0500
-Subject: [PATCH AUTOSEL 4.20 25/72] selftests: cpu-hotplug: fix case where
- CPUs offline > CPUs present
-In-Reply-To: <20190223210422.199966-1-sashal@kernel.org>
-References: <20190223210422.199966-1-sashal@kernel.org>
-Message-ID: <20190223210422.199966-25-sashal@kernel.org>
+From: davem at davemloft.net (David Miller)
+Date: Sat, 23 Feb 2019 18:34:35 -0800 (PST)
+Subject: [PATCH] selftests: fib_tests: sleep after changing carrier. again.
+In-Reply-To: <20190222102741.31173-1-cascardo@canonical.com>
+References: <20190222102741.31173-1-cascardo@canonical.com>
+Message-ID: <20190223.183435.22949869818395441.davem@davemloft.net>
 
-From: Colin Ian King <colin.king at canonical.com>
+From: Thadeu Lima de Souza Cascardo <cascardo at canonical.com>
+Date: Fri, 22 Feb 2019 07:27:41 -0300
 
-[ Upstream commit 2b531b6137834a55857a337ac17510d6436b6fbb ]
+> Just like commit e2ba732a1681 ("selftests: fib_tests: sleep after
+> changing carrier"), wait one second to allow linkwatch to propagate the
+> carrier change to the stack.
+> 
+> There are two sets of carrier tests. The first slept after the carrier
+> was set to off, and when the second set ran, it was likely that the
+> linkwatch would be able to run again without much delay, reducing the
+> likelihood of a race. However, if you run 'fib_tests.sh -t carrier' on a
+> loop, you will quickly notice the failures.
+> 
+> Sleeping on the second set of tests make the failures go away.
+> 
+> Cc: David Ahern <dsahern at gmail.com>
+> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo at canonical.com>
 
-The cpu-hotplug test assumes that we can offline the maximum CPU as
-described by /sys/devices/system/cpu/offline.  However, in the case
-where the number of CPUs exceeds like kernel configuration then
-the offline count can be greater than the present count and we end
-up trying to test the offlining of a CPU that is not available to
-offline.  Fix this by testing the maximum present CPU instead.
-
-Also, the test currently offlines the CPU and does not online it,
-so fix this by onlining the CPU after the test.
-
-Fixes: d89dffa976bc ("fault-injection: add selftests for cpu and memory hotplug")
-Signed-off-by: Colin Ian King <colin.king at canonical.com>
-Signed-off-by: Shuah Khan <shuah at kernel.org>
-Signed-off-by: Sasha Levin <sashal at kernel.org>
----
- .../selftests/cpu-hotplug/cpu-on-off-test.sh        | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-index bab13dd025a63..0d26b5e3f9667 100755
---- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-+++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-@@ -37,6 +37,10 @@ prerequisite()
- 		exit $ksft_skip
- 	fi
- 
-+	present_cpus=`cat $SYSFS/devices/system/cpu/present`
-+	present_max=${present_cpus##*-}
-+	echo "present_cpus = $present_cpus present_max = $present_max"
-+
- 	echo -e "\t Cpus in online state: $online_cpus"
- 
- 	offline_cpus=`cat $SYSFS/devices/system/cpu/offline`
-@@ -151,6 +155,8 @@ online_cpus=0
- online_max=0
- offline_cpus=0
- offline_max=0
-+present_cpus=0
-+present_max=0
- 
- while getopts e:ahp: opt; do
- 	case $opt in
-@@ -190,9 +196,10 @@ if [ $allcpus -eq 0 ]; then
- 	online_cpu_expect_success $online_max
- 
- 	if [[ $offline_cpus -gt 0 ]]; then
--		echo -e "\t offline to online to offline: cpu $offline_max"
--		online_cpu_expect_success $offline_max
--		offline_cpu_expect_success $offline_max
-+		echo -e "\t offline to online to offline: cpu $present_max"
-+		online_cpu_expect_success $present_max
-+		offline_cpu_expect_success $present_max
-+		online_cpu $present_max
- 	fi
- 	exit 0
- else
--- 
-2.19.1
+Applied, thanks.
