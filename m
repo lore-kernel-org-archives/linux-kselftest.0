@@ -1,73 +1,108 @@
-From: juerg.haefliger@canonical.com (Juerg Haefliger)
-Date: Mon, 25 Feb 2019 16:02:57 +0100
-Subject: [RESEND PATCH] selftests/ftrace: Handle the absence of tput
-In-Reply-To: <41adf479-e6e3-8233-4066-983d5e701177@kernel.org>
-References: <20190220153706.24686-1-juergh@canonical.com>
- <20190225131450.4775-1-juergh@canonical.com>
- <41adf479-e6e3-8233-4066-983d5e701177@kernel.org>
-Message-ID: <20190225160257.1a96e26e@gollum>
+From: catalin.marinas@arm.com (Catalin Marinas)
+Date: Mon, 25 Feb 2019 16:57:21 +0000
+Subject: [RFC][PATCH 0/3] arm64 relaxed ABI
+In-Reply-To: <ac8f4e3b-84b8-6067-6a7a-fac7dc48daea@arm.com>
+References: <20181210143044.12714-1-vincenzo.frascino@arm.com>
+ <CAAeHK+xPZ-Z9YUAq=3+hbjj4uyJk32qVaxZkhcSAHYC4mHAkvQ@mail.gmail.com>
+ <20181212150230.GH65138@arrakis.emea.arm.com>
+ <CAAeHK+zxYJDJ7DJuDAOuOMgGvckFwMAoVUTDJzb6MX3WsXhRTQ@mail.gmail.com>
+ <20181218175938.GD20197@arrakis.emea.arm.com>
+ <20181219125249.GB22067@e103592.cambridge.arm.com>
+ <9bbacb1b-6237-f0bb-9bec-b4cf8d42bfc5@arm.com>
+ <CAFKCwrhH5R3e5ntX0t-gxcE6zzbCNm06pzeFfYEN2K13c5WLTg@mail.gmail.com>
+ <20190212180223.GD199333@arrakis.emea.arm.com>
+ <ac8f4e3b-84b8-6067-6a7a-fac7dc48daea@arm.com>
+Message-ID: <20190225165720.GA79300@arrakis.emea.arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190225150257.JzU0iY4KJigCvR9q1Rf5CeXnNHjP8bM9HSfOG9r3n4g@z>
+Message-ID: <20190225165721.0_0A2aOCzKzCRyoXltLnangBbIRAmgTbZevOg0EhnsI@z>
 
-On Mon, 25 Feb 2019 07:51:13 -0700
-shuah <shuah@kernel.org> wrote:
+Hi Szabolcs,
 
-> On 2/25/19 6:14 AM, Juerg Haefliger wrote:
-> > In environments where tput is not available, we get the following
-> > error
-> > $ ./ftracetest: 163: [: Illegal number:
-> > because ncolors is an empty string. Fix that by setting it to 0 if the
-> > tput command fails.
-> > 
-> > Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-> > Acked-by: Masami Hiramatsu <mhiramat at kernel.org>
-> > Signed-off-by: Juerg Haefliger <juergh at canonical.com>
-> > ---
-> >   tools/testing/selftests/ftrace/ftracetest | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> > index 75244db70331..fc755e1b50f1 100755
-> > --- a/tools/testing/selftests/ftrace/ftracetest
-> > +++ b/tools/testing/selftests/ftrace/ftracetest
-> > @@ -154,13 +154,13 @@ fi
-> >   
-> >   # Define text colors
-> >   # Check available colors on the terminal, if any
-> > -ncolors=`tput colors 2>/dev/null`
-> > +ncolors=`tput colors 2>/dev/null || echo 0`
-> >   color_reset=
-> >   color_red=
-> >   color_green=
-> >   color_blue=
-> >   # If stdout exists and number of colors is eight or more, use them
-> > -if [ -t 1 -a "$ncolors" -a "$ncolors" -ge 8 ]; then
-> > +if [ -t 1 -a "$ncolors" -ge 8 ]; then
-> >     color_reset="\e[0m"
-> >     color_red="\e[31m"
-> >     color_green="\e[32m"
-> >   
+Thanks for looking into this. Comments below.
+
+On Tue, Feb 19, 2019@06:38:31PM +0000, Szabolcs Nagy wrote:
+> i think these rules work for the cases i care about, a more
+> tricky question is when/how to check for the new syscall abi
+> and when/how the TCR_EL1.TBI0 setting may be turned off.
+
+I don't think turning TBI0 off is critical (it's handy for PAC with
+52-bit VA but then it's short-lived if you want more security features
+like MTE).
+
+> consider the following cases (tb == top byte):
 > 
-> Juerg!
+> binary 1: user tb = any, syscall tb = 0
+>   tbi is on, "legacy binary"
 > 
-> Thanks for the resend. Applied to linux-kselftest next for 5.1-rc1.
+> binary 2: user tb = any, syscall tb = any
+>   tbi is on, "new binary using tb"
+>   for backward compat it needs to check for new syscall abi.
 > 
-> Since I applied this patch out of order, I had to resolve minor merge
-> conflict. Please review.
+> binary 3: user tb = 0, syscall tb = 0
+>   tbi can be off, "new binary",
+>   binary is marked to indicate unused tb,
+>   kernel may turn tbi off: additional pac bits.
+> 
+> binary 4: user tb = mte, syscall tb = mte
+>   like binary 3, but with mte, "new binary using mte"
+>   does it have to check for new syscall abi?
+>   or MTE HWCAP would imply it?
+>   (is it possible to use mte without new syscall abi?)
 
-Looks good.
+I think MTE HWCAP should imply it.
 
-Thanks Shuah!
-..Juerg
+> in userspace we want most binaries to be like binary 3 and 4
+> eventually, i.e. marked as not-relying-on-tbi, if a dso is
+> loaded that is unmarked (legacy or new tb user), then either
+> the load fails (e.g. if mte is already used? or can we turn
+> mte off at runtime?) or tbi has to be enabled (prctl? does
+> this work with pac? or multi-threads?).
 
+We could enable it via prctl. That's the plan for MTE as well (in
+addition maybe to some ELF flag).
 
-> thanks,
-> -- Shuah
+> as for checking the new syscall abi: i don't see much semantic
+> difference between AT_HWCAP and AT_FLAGS (either way, the user
+> has to check a feature flag before using the feature of the
+> underlying system and it does not matter much if it's a syscall
+> abi feature or cpu feature), but i don't see anything wrong
+> with AT_FLAGS if the kernel prefers that.
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190225/7ddcf672/attachment-0001.sig>
+The AT_FLAGS is aimed at capturing binary 2 case above, i.e. the
+relaxation of the syscall ABI to accept tb = any. The MTE support will
+have its own AT_HWCAP, likely in addition to AT_FLAGS. Arguably,
+AT_FLAGS is either redundant here if MTE implies it (and no harm in
+keeping it around) or the meaning is different: a tb != 0 may be checked
+by the kernel against the allocation tag (i.e. get_user() could fail,
+the tag is not entirely ignored).
+
+> the discussion here was mostly about binary 2,
+
+That's because passing tb != 0 into the syscall ABI is the main blocker
+here that needs clearing out before merging the MTE support. There is,
+of course, a variation of binary 1 for MTE:
+
+binary 5: user tb = mte, syscall tb = 0
+
+but this requires a lot of C lib changes to support properly.
+
+> but for
+> me the open question is if we can make binary 3/4 work.
+> (which requires some elf binary marking, that is recognised
+> by the kernel and dynamic loader, and efficient handling of
+> the TBI0 bit, ..if it's not possible, then i don't see how
+> mte will be deployed).
+
+If we ignore binary 3, we can keep TBI0 = 1 permanently, whether we have
+MTE or not.
+
+> and i guess on the kernel side the open question is if the
+> rules 1/2/3/4 can be made to work in corner cases e.g. when
+> pointers embedded into structs are passed down in ioctl.
+
+We've been trying to track these down since last summer and we came to
+the conclusion that it should be (mostly) fine for the non-weird memory
+described above.
+
+-- 
+Catalin
