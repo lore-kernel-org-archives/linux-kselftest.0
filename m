@@ -1,28 +1,167 @@
-From: davem@davemloft.net (David Miller)
-Date: Sat, 23 Feb 2019 18:34:35 -0800 (PST)
-Subject: [PATCH] selftests: fib_tests: sleep after changing carrier. again.
-In-Reply-To: <20190222102741.31173-1-cascardo@canonical.com>
-References: <20190222102741.31173-1-cascardo@canonical.com>
-Message-ID: <20190223.183435.22949869818395441.davem@davemloft.net>
+From: ci_notify@linaro.org (ci_notify@linaro.org)
+Date: Mon, 25 Feb 2019 12:00:46 +0000 (UTC)
+Subject: next-20190225 kselftest results
+Message-ID: <709230021.475.1551096046882.JavaMail.jenkins@a6c5c67cda76>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190224023435.t7zqkWzmFdtnQxtGg_JePccC4rItgepKf0VpV8pFud0@z>
+Message-ID: <20190225120046.fJ7hYfdRHz1L1KQP5AV8xxwTrNIYTA8eDaoNnd6tU50@z>
 
-From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Date: Fri, 22 Feb 2019 07:27:41 -0300
+Summary
+------------------------------------------------------------------------
+kernel: 5.0.0-rc7
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: 2b46440ea71508f7037566dbbab3567d1a64093d
+git describe: next-20190225
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190225
 
-> Just like commit e2ba732a1681 ("selftests: fib_tests: sleep after
-> changing carrier"), wait one second to allow linkwatch to propagate the
-> carrier change to the stack.
-> 
-> There are two sets of carrier tests. The first slept after the carrier
-> was set to off, and when the second set ran, it was likely that the
-> linkwatch would be able to run again without much delay, reducing the
-> likelihood of a race. However, if you run 'fib_tests.sh -t carrier' on a
-> loop, you will quickly notice the failures.
-> 
-> Sleeping on the second set of tests make the failures go away.
-> 
-> Cc: David Ahern <dsahern at gmail.com>
-> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo at canonical.com>
+Regressions (compared to build next-20190222)
+------------------------------------------------------------------------
+No regressions                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190222)                                                                   
+------------------------------------------------------------------------                                               
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_fields                                                                                                         
 
-Applied, thanks.
+
+In total:
+------------------------------------------------------------------------
+Ran 320 total tests in the following environments and test suites.
+pass 240
+fail 80
+xfail 0
+skip 0
+
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
+
+Test Suites
+-----------
+* kselftest
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
+
+
+Failures
+------------------------------------------------------------------------
+
+qemu_arm:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+
+qemu_i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+
+qemu_x86_64:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sockmap
+
+x15:
+
+i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+
+dragonboard-410c:
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sock_fields
+
+qemu_arm64:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sockmap
+
+juno-r2:
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+
+hi6220-hikey:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+
+x86:
+* kselftest-vsyscall-mode-native/bpf_test_libbpf.sh
+* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-native/bpf_test_progs
+* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-native/bpf_test_sockmap
+* kselftest-vsyscall-mode-none/bpf_test_btf
+* kselftest-vsyscall-mode-none/bpf_test_libbpf.sh
+* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-none/bpf_test_progs
+* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-none/bpf_test_sockmap
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sockmap
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
