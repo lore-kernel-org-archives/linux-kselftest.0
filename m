@@ -1,165 +1,62 @@
-From: ci_notify at linaro.org (ci_notify at linaro.org)
-Date: Mon, 25 Feb 2019 12:00:46 +0000 (UTC)
-Subject: next-20190225 kselftest results
-Message-ID: <709230021.475.1551096046882.JavaMail.jenkins@a6c5c67cda76>
+From: shuah at kernel.org (shuah)
+Date: Mon, 25 Feb 2019 06:00:44 -0700
+Subject: [RESEND PATCH v2 2/2] selftests/ftrace: Replace \e with \033
+In-Reply-To: <20190223132551.5afc02bb@smeagol>
+References: <20190222091021.10178-1-juergh@canonical.com>
+ <20190222205351.743-1-juergh@canonical.com>
+ <20190222205351.743-3-juergh@canonical.com>
+ <aedb3a7e-058e-ec62-93c7-0767717b9ea9@kernel.org>
+ <20190223132551.5afc02bb@smeagol>
+Message-ID: <92139bfa-0538-f912-a164-f962b37856ee@kernel.org>
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.0.0-rc7
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: 2b46440ea71508f7037566dbbab3567d1a64093d
-git describe: next-20190225
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190225
+On 2/23/19 5:25 AM, Juerg Haefliger wrote:
+> On Fri, 22 Feb 2019 15:46:03 -0700
+> shuah <shuah at kernel.org> wrote:
+> 
+>> On 2/22/19 1:53 PM, Juerg Haefliger wrote:
+>>> The \e sequence character is not POSIX. Fix that by using \033 instead.
+>>>
+>>> Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+>>> Acked-by: Masami Hiramatsu <mhiramat at kernel.org>
+>>> Signed-off-by: Juerg Haefliger <juergh at canonical.com>
+>>> ---
+>>>    tools/testing/selftests/ftrace/ftracetest | 8 ++++----
+>>>    1 file changed, 4 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+>>> index 20c9c0ad8682..136387422b00 100755
+>>> --- a/tools/testing/selftests/ftrace/ftracetest
+>>> +++ b/tools/testing/selftests/ftrace/ftracetest
+>>> @@ -161,10 +161,10 @@ color_green=
+>>>    color_blue=
+>>>    # If stdout exists and number of colors is eight or more, use them
+>>>    if [ -t 1 -a "$ncolors" -ge 8 ]; then
+>>> -  color_reset="\e[0m"
+>>> -  color_red="\e[31m"
+>>> -  color_green="\e[32m"
+>>> -  color_blue="\e[34m"
+>>> +  color_reset="\033[0m"
+>>> +  color_red="\033[31m"
+>>> +  color_green="\033[32m"
+>>> +  color_blue="\033[34m"
+>>>    fi
+>>>    
+>>>    strip_esc() {
+>>>    
+>>
+>> Which release is this patch based on?
+>>
+>> This one failed to apply to linux-kselftest next - I resolved a minor
+>> merge conflict and applied it. Please review to make sure it looks good.
+> 
+> Looks good. It didn't apply cleanly because you don't have
+> https://lore.kernel.org/lkml/20190220153706.24686-1-juergh at canonical.com/T/#u
+> Sorry about not copying you on that patch. Want me to resend?
+> 
+> ...Juerg
+> 
 
-Regressions (compared to build next-20190222)
-------------------------------------------------------------------------
-No regressions                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190222)                                                                   
-------------------------------------------------------------------------                                               
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_fields                                                                                                         
+Yes. Please.
 
-
-In total:
-------------------------------------------------------------------------
-Ran 320 total tests in the following environments and test suites.
-pass 240
-fail 80
-xfail 0
-skip 0
-
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
-
-
-Failures
-------------------------------------------------------------------------
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-qemu_x86_64:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-x15:
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-
-dragonboard-410c:
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sock_fields
-
-qemu_arm64:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-juno-r2:
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-
-hi6220-hikey:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-
-x86:
-* kselftest-vsyscall-mode-native/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-native/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/bpf_test_btf
-* kselftest-vsyscall-mode-none/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+thanks,
+-- Shuah
