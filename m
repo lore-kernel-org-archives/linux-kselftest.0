@@ -1,146 +1,130 @@
 From: zohar@linux.ibm.com (Mimi Zohar)
-Date: Tue, 26 Feb 2019 18:27:00 -0500
-Subject: [PATCH v2 5/5] selftests/ima: loading kernel modules
+Date: Tue, 26 Feb 2019 18:26:58 -0500
+Subject: [PATCH v2 3/5] selftests/ima: define common logging functions
 In-Reply-To: <1551223620-11586-1-git-send-email-zohar@linux.ibm.com>
 References: <1551223620-11586-1-git-send-email-zohar@linux.ibm.com>
-Message-ID: <1551223620-11586-6-git-send-email-zohar@linux.ibm.com>
+Message-ID: <1551223620-11586-4-git-send-email-zohar@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190226232700.cMyEFQyRX0mXbs1-5myDBcnaRUTPNA72msPr8KOkU3g@z>
+Message-ID: <20190226232658.m_BzSvXMpijYxg9pzjdWqONzuNTXjwzfhzKiVjM_sfo@z>
 
-While the appended kernel module signature can be verified, when loading
-a kernel module via either the init_module or the finit_module syscall,
-verifying the IMA signature requires access to the file descriptor,
-which is only available via the finit_module syscall.  As "modprobe"
-does not provide a flag allowing the syscall - init_module or
-finit_module - to be specified, this patch does not load a kernel
-module.
+Define log_info, log_pass, log_fail, and log_skip functions.
 
-This test simply verifies that on secure boot enabled systems with
-"CONFIG_IMA_ARCH_POLICY" configured, that at least an appended kernel
-module signature or an IMA signature is required based on the Kconfig
-and the runtime IMA policy.
-
+Suggested-by: Petr Vorel <pvorel at suse.cz>
 Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
 ---
- tools/testing/selftests/ima/Makefile              |  2 +-
- tools/testing/selftests/ima/test_kernel_module.sh | 96 +++++++++++++++++++++++
- 2 files changed, 97 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/ima/test_kernel_module.sh
+ tools/testing/selftests/ima/common_lib.sh      | 43 +++++++++++++++++++++++---
+ tools/testing/selftests/ima/test_kexec_load.sh | 19 +++---------
+ 2 files changed, 43 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/ima/Makefile b/tools/testing/selftests/ima/Makefile
-index 049c83c9426c..ef5201ff0bea 100644
---- a/tools/testing/selftests/ima/Makefile
-+++ b/tools/testing/selftests/ima/Makefile
-@@ -4,7 +4,7 @@ uname_M := $(shell uname -m 2>/dev/null || echo not)
- ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
- 
- ifeq ($(ARCH),x86)
--TEST_PROGS := test_kexec_load.sh test_kexec_file_load.sh
-+TEST_PROGS := test_kexec_load.sh test_kexec_file_load.sh test_kernel_module.sh
- TEST_FILES := common_lib.sh
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/ima/test_kernel_module.sh b/tools/testing/selftests/ima/test_kernel_module.sh
-new file mode 100755
-index 000000000000..4009e1b60b03
---- /dev/null
-+++ b/tools/testing/selftests/ima/test_kernel_module.sh
-@@ -0,0 +1,96 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-or-later
+diff --git a/tools/testing/selftests/ima/common_lib.sh b/tools/testing/selftests/ima/common_lib.sh
+index 5583ea74c14e..c6d04006281d 100755
+--- a/tools/testing/selftests/ima/common_lib.sh
++++ b/tools/testing/selftests/ima/common_lib.sh
+@@ -1,5 +1,36 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0-or-later
 +#
-+# On secure boot enabled systems with "CONFIG_IMA_ARCH_POLICY" configured,
-+# this test verifies that at least an appended kernel module signature or
-+# an IMA signature is required.  It does not attempt to load a kernel module.
++# Kselftest framework defines: ksft_pass=0, ksft_fail=1, ksft_skip=4
 +
-+TEST="KERNEL_MODULE"
-+. ./common_lib.sh
++VERBOSE="${VERBOSE:-1}"
 +
-+trap "{ rm -f $IKCONFIG ; }" EXIT
-+
-+# Some of the IMA builtin policies may require the kernel modules to
-+# be signed, but these policy rules may be replaced with a custom
-+# policy.  Only CONFIG_IMA_APPRAISE_REQUIRE_MODULE_SIGS persists after
-+# loading a custom policy.  Check if it is enabled, before reading the
-+# IMA runtime sysfs policy file.
-+# Return 1 for IMA signature required and 0 for not required.
-+is_ima_sig_required()
++log_info()
 +{
-+	local ret=0
-+
-+	kconfig_enabled "CONFIG_IMA_APPRAISE_REQUIRE_MODULE_SIGS=y" \
-+		"IMA kernel module signature required"
-+	if [ $? -eq 1 ]; then
-+		log_info "IMA kernel module signature required"
-+		return 1
-+	fi
-+
-+	# The architecture specific or a custom policy may require the
-+	# kernel module to be signed.  Policy rules are walked sequentially.
-+	# As a result, a policy rule may be defined, but might not necessarily
-+	# be used.  This test assumes if a policy rule is specified, that is
-+	# the intent.
-+	if [ $ima_read_policy -eq 1 ]; then
-+		check_ima_policy "appraise" "func=MODULE_CHECK" \
-+			"appraise_type=imasig"
-+		ret=$?
-+		[ $ret -eq 1 ] && log_info "IMA signature required";
-+	fi
-+	return $ret
++	[ $VERBOSE -ne 0 ] && echo "[INFO] $1"
 +}
 +
-+# loading kernel modules requires root privileges
-+if [ $(id -ru) -ne 0 ]; then
-+	log_skip "requires root privileges"
-+fi
++# The ksefltest framework requirement returns 0 for PASS.
++log_pass()
++{
 +
-+# Are appended signatures required?
-+if [ -e /sys/module/module/parameters/sig_enforce ]; then
-+	sig_enforce=$(cat /sys/module/module/parameters/sig_enforce)
-+	if [ $sig_enforce = "Y" ]; then
-+		log_pass "appended kernel module signature required"
-+	fi
-+fi
++	[ $VERBOSE -ne 0 ] && echo "$1 [PASS]"
++	exit 0
++}
 +
-+get_secureboot_mode
-+if [ $? -eq 0 ]; then
-+	log_skip "secure boot not enabled"
-+fi
++# The ksefltest framework requirement returns 1 for FAIL.
++log_fail()
++{
++	[ $VERBOSE -ne 0 ] && echo "$1 [FAIL]"
++	exit 1
++}
 +
-+# get the kernel config
-+get_kconfig
++# The ksefltest framework requirement returns 4 for SKIP.
++log_skip()
++{
++	[ $VERBOSE -ne 0 ] && echo "$1"
++	exit 4
++}
+ 
+ # The secure boot mode can be accessed either as the last integer
+ # of "od -An -t u1 /sys/firmware/efi/efivars/SecureBoot-*" or from
+@@ -8,17 +39,19 @@
+ get_secureboot_mode()
+ {
+ 	local efivarfs="/sys/firmware/efi/efivars"
 +
-+# Determine which kernel config options are enabled
-+kconfig_enabled "CONFIG_IMA_ARCH_POLICY=y" \
-+	"architecture specific policy enabled"
-+arch_policy=$?
+ 	# Make sure that efivars is mounted in the normal location
+ 	if ! grep -q "^\S\+ $efivarfs efivarfs" /proc/mounts; then
+-		echo "$TEST: efivars is not mounted on $efivarfs" >&2
+-		exit $ksft_skip
++		log_skip "efivars is not mounted on $efivarfs"
+ 	fi
+ 
+ 	# Get secureboot mode
+ 	local file="$efivarfs/../vars/SecureBoot-*/data"
+ 	if [ ! -e $file ]; then
+-		echo "$TEST: unknown secureboot mode" >&2
+-		exit $ksft_skip
++		log_skip "unknown secureboot mode"
+ 	fi
+-	return `od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data`
++	ret=`od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data`
++	[ $ret -eq 1 ] && log_info "secure boot mode enabled"
 +
-+kconfig_enabled "CONFIG_MODULE_SIG=y" \
-+	"appended kernel modules signature enabled"
-+appended_sig_enabled=$?
-+
-+kconfig_enabled "CONFIG_IMA_READ_POLICY=y" "reading IMA policy permitted"
-+ima_read_policy=$?
-+
-+is_ima_sig_required
-+ima_sig_required=$?
-+
-+if [ $arch_policy -eq 0 ]; then
-+	log_skip "architecture specific policy not enabled"
-+fi
-+
-+if [ $appended_sig_enabled -eq 1 ]; then
-+	log_fail "appended kernel module signature enabled, but not required"
-+fi
-+
-+if [ $ima_sig_required -eq 1 ]; then
-+	log_pass "IMA kernel module signature required"
-+fi
-+
-+if [ $ima_read_policy -eq 1 ]; then
-+	log_fail "IMA kernel module signature not required"
-+else
-+	log_skip "reading IMA policy not permitted"
-+fi
++	return $ret
+ }
+diff --git a/tools/testing/selftests/ima/test_kexec_load.sh b/tools/testing/selftests/ima/test_kexec_load.sh
+index 35934e0665f1..8b99017538ba 100755
+--- a/tools/testing/selftests/ima/test_kexec_load.sh
++++ b/tools/testing/selftests/ima/test_kexec_load.sh
+@@ -6,15 +6,10 @@
+ 
+ TEST="$0"
+ . ./common_lib.sh
+-rc=0
+-
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
+ 
+ # kexec requires root privileges
+ if [ $(id -ru) -ne 0 ]; then
+-	echo "$TEST: requires root privileges" >&2
+-	exit $ksft_skip
++	log_skip "requires root privileges" >&2
+ fi
+ 
+ get_secureboot_mode
+@@ -26,18 +21,14 @@ kexec --load $KERNEL_IMAGE 2>&1 > /dev/null
+ if [ $? -eq 0 ]; then
+ 	kexec --unload
+ 	if [ $secureboot -eq 1 ]; then
+-		echo "$TEST: kexec_load succeeded [FAIL]"
+-		rc=1
++		log_fail "kexec_load succeeded"
+ 	else
+-		echo "$TEST: kexec_load succeeded [PASS]"
++		log_pass "kexec_load succeeded"
+ 	fi
+ else
+ 	if [ $secureboot -eq 1 ]; then
+-		echo "$TEST: kexec_load failed [PASS]"
++		log_pass "kexec_load failed"
+ 	else
+-		echo "$TEST: kexec_load failed [FAIL]"
+-		rc=1
++		log_fail "kexec_load failed"
+ 	fi
+ fi
+-
+-exit $rc
 -- 
 2.7.5
