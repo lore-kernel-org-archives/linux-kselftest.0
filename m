@@ -1,46 +1,23 @@
-From: andreyknvl@google.com (Andrey Konovalov)
-Date: Tue, 26 Feb 2019 15:41:26 +0100
-Subject: [PATCH v10 04/12] mm,
- arm64: untag user pointers passed to memory syscalls
-In-Reply-To: <81ea4e77-90a4-4fd9-2bc8-135e0da30044@intel.com>
-References: <cover.1550839937.git.andreyknvl@google.com>
- <3875fa863b755d8cb43afa7bb0fe543e5fd05a5d.1550839937.git.andreyknvl@google.com>
- <81ea4e77-90a4-4fd9-2bc8-135e0da30044@intel.com>
-Message-ID:
- <CAAeHK+z2qw__Kpeih2mEyhVJ-gbor1vYsOZddT5E71JDiSg7pg@mail.gmail.com>
+From: logang@deltatee.com (Logan Gunthorpe)
+Date: Tue, 26 Feb 2019 09:18:30 -0700
+Subject: [PATCH v2 00/12] Support using MSI interrupts in ntb_transport
+In-Reply-To: <20190226093445.GC19617@8bytes.org>
+References: <20190213175454.7506-1-logang@deltatee.com>
+ <20190226093445.GC19617@8bytes.org>
+Message-ID: <f0eaeb8d-caf2-d20a-5687-2a3995407bdb@deltatee.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190226144126.N7uybr-MNtKIDPxwnqfqIgV6GkznUkHUf7ISSGWr5uI@z>
+Message-ID: <20190226161830.ZfkpdLxjvh-mNmb30w5NeLOmBwZCFa1Hq4jeo1QkBbM@z>
 
-On Sat, Feb 23, 2019@12:07 AM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 2/22/19 4:53 AM, Andrey Konovalov wrote:
-> > --- a/mm/mprotect.c
-> > +++ b/mm/mprotect.c
-> > @@ -578,6 +578,7 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
-> >  SYSCALL_DEFINE3(mprotect, unsigned long, start, size_t, len,
-> >               unsigned long, prot)
-> >  {
-> > +     start = untagged_addr(start);
-> >       return do_mprotect_pkey(start, len, prot, -1);
-> >  }
-> >
-> > @@ -586,6 +587,7 @@ SYSCALL_DEFINE3(mprotect, unsigned long, start, size_t, len,
-> >  SYSCALL_DEFINE4(pkey_mprotect, unsigned long, start, size_t, len,
-> >               unsigned long, prot, int, pkey)
-> >  {
-> > +     start = untagged_addr(start);
-> >       return do_mprotect_pkey(start, len, prot, pkey);
-> >  }
->
-> This seems to have taken the approach of going as close as possible to
-> the syscall boundary and untagging the pointer there.  I guess that's
-> OK, but it does lead to more churn than necessary.  For instance, why
-> not just do the untagging in do_mprotect_pkey()?
 
-I think that makes more sense, will do in the next version, thanks!
 
->
-> I think that's an overall design question.  I kinda asked the same thing
-> about patching call sites vs. VMA lookup functions.
+On 2019-02-26 2:34 a.m., Joerg Roedel wrote:
+> On Wed, Feb 13, 2019@10:54:42AM -0700, Logan Gunthorpe wrote:
+>>   iommu/vt-d: Add helper to set an IRTE to verify only the bus number
+>>   iommu/vt-d: Allow interrupts from the entire bus for aliased devices
+> 
+> Applied these two to the iommu tree, thanks.
+> 
 
-Replied in the other thread.
+Thanks!
+
+Logan
