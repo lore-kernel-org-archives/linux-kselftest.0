@@ -1,47 +1,55 @@
-From: luc.vanoostenryck at gmail.com (Luc Van Oostenryck)
-Date: Wed, 27 Feb 2019 00:17:49 +0100
-Subject: [PATCH v10 00/12] arm64: untag user pointers passed to the kernel
-In-Reply-To: <CAAeHK+xCi2MxaykYWCz9mwbOzNpjrFcHex7B-VXektNNWBT+Hw@mail.gmail.com>
-References: <cover.1550839937.git.andreyknvl@google.com>
- <2ad5f897-25c0-90cf-f54f-827876873a0a@intel.com>
- <CAAeHK+xCi2MxaykYWCz9mwbOzNpjrFcHex7B-VXektNNWBT+Hw@mail.gmail.com>
-Message-ID: <20190226231747.z3lc6yr6xmrw5q2z@ltop.local>
+From: zohar at linux.ibm.com (Mimi Zohar)
+Date: Tue, 26 Feb 2019 18:26:55 -0500
+Subject: [PATCH v2 0/5] selftests/ima: add kexec and kernel module tests
+Message-ID: <1551223620-11586-1-git-send-email-zohar@linux.ibm.com>
 
-On Tue, Feb 26, 2019 at 06:18:25PM +0100, Andrey Konovalov wrote:
-> On Fri, Feb 22, 2019 at 11:55 PM Dave Hansen <dave.hansen at intel.com> wrote:
-> >
-> > On 2/22/19 4:53 AM, Andrey Konovalov wrote:
-> > > The following testing approaches has been taken to find potential issues
-> > > with user pointer untagging:
-> > >
-> > > 1. Static testing (with sparse [3] and separately with a custom static
-> > >    analyzer based on Clang) to track casts of __user pointers to integer
-> > >    types to find places where untagging needs to be done.
-> >
-> > First of all, it's really cool that you took this approach.  Sounds like
-> > there was a lot of systematic work to fix up the sites in the existing
-> > codebase.
-> >
-> > But, isn't this a _bit_ fragile going forward?  Folks can't just "make
-> > sparse" to find issues with missing untags.
-> 
-> Yes, this static approach can only be used as a hint to find some
-> places where untagging is needed, but certainly not all.
-> 
-> > This seems like something
-> > where we would ideally add an __tagged annotation (or something) to the
-> > source tree and then have sparse rules that can look for missed untags.
-> 
-> This has been suggested before, search for __untagged here [1].
-> However there are many places in the kernel where a __user pointer is
-> casted into unsigned long and passed further. I'm not sure if it's
-> possible apply a __tagged/__untagged kind of attribute to non-pointer
-> types, is it?
-> 
-> [1] https://patchwork.kernel.org/patch/10581535/
+The kernel can be configured to require kexec kernel images and kernel
+modules are signed.  An IMA policy can be specified on the boot command
+line or a custom IMA policy loaded requiring the kexec kernel image and
+kernel modules be signed.  In addition, systems booted in secure boot
+mode with the IMA architecture specific policy enabled, require validly
+signed kexec kernel images and kernel modules.
 
-It's something that should need to be added to sparse since it's
-different from what sparse already have (the existing __bitwise and
-concept of address-space doesn't seem to do the job here).
+There are two methods of signing kernel images and two methods of
+signing kernel modules.  In addition, there are two syscalls for each.
 
--- Luc Van Oostenryck
+kernel image:  PE signature, IMA signature
+kexec syscalls: kexec_load, kexec_file_load
+
+Both the PE and IMA kernel image signature can only be verified when
+loaded via the kexec_file_load syscall.
+
+kernel moodule: appended signature, IMA signature
+kernel module syscalls: init_module, finit_module
+
+The appended kernel module signature can be verified when the kernel
+module is loaded via either syscall.  The IMA kernel module signature
+can only be verified when the kernel module is loaded via the
+finit_module syscall.
+
+The selftests in this patch set verify that only signed kernel images
+and kernel modules are loaded as required, based on the kernel config,
+the secure boot mode, and the IMA runtime policy.
+
+Loading a kernel image or kernel module requires root privileges.  To
+run just the IMA selftests: sudo make TARGETS=ima kselftest
+
+Mimi Zohar (5):
+  selftests/ima: cleanup the kexec selftest
+  selftests/ima: define a set of common functions
+  selftests/ima: define common logging functions
+  selftests/ima: kexec_file_load syscall test
+  selftests/ima: loading kernel modules
+
+ tools/testing/selftests/ima/Makefile               |   3 +-
+ tools/testing/selftests/ima/common_lib.sh          | 154 ++++++++++++++++
+ tools/testing/selftests/ima/test_kernel_module.sh  |  96 ++++++++++
+ .../testing/selftests/ima/test_kexec_file_load.sh  | 195 +++++++++++++++++++++
+ tools/testing/selftests/ima/test_kexec_load.sh     |  53 ++----
+ 5 files changed, 463 insertions(+), 38 deletions(-)
+ create mode 100755 tools/testing/selftests/ima/common_lib.sh
+ create mode 100755 tools/testing/selftests/ima/test_kernel_module.sh
+ create mode 100755 tools/testing/selftests/ima/test_kexec_file_load.sh
+
+-- 
+2.7.5
