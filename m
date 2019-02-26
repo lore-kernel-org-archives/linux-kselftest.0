@@ -1,130 +1,67 @@
 From: zohar@linux.ibm.com (Mimi Zohar)
-Date: Tue, 26 Feb 2019 18:26:58 -0500
-Subject: [PATCH v2 3/5] selftests/ima: define common logging functions
+Date: Tue, 26 Feb 2019 18:26:56 -0500
+Subject: [PATCH v2 1/5] selftests/ima: cleanup the kexec selftest
 In-Reply-To: <1551223620-11586-1-git-send-email-zohar@linux.ibm.com>
 References: <1551223620-11586-1-git-send-email-zohar@linux.ibm.com>
-Message-ID: <1551223620-11586-4-git-send-email-zohar@linux.ibm.com>
+Message-ID: <1551223620-11586-2-git-send-email-zohar@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190226232658.m_BzSvXMpijYxg9pzjdWqONzuNTXjwzfhzKiVjM_sfo@z>
+Message-ID: <20190226232656.R5jldvLhRRtKmXP4Aiv0vaJftsOv1jsu8a4NJ0EZpn4@z>
 
-Define log_info, log_pass, log_fail, and log_skip functions.
+Remove the few bashisms and use the complete option name for clarity.
 
-Suggested-by: Petr Vorel <pvorel at suse.cz>
 Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
+Reviewed-by: Petr Vorel <pvorel at suse.cz>
 ---
- tools/testing/selftests/ima/common_lib.sh      | 43 +++++++++++++++++++++++---
- tools/testing/selftests/ima/test_kexec_load.sh | 19 +++---------
- 2 files changed, 43 insertions(+), 19 deletions(-)
+ tools/testing/selftests/ima/test_kexec_load.sh | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/ima/common_lib.sh b/tools/testing/selftests/ima/common_lib.sh
-index 5583ea74c14e..c6d04006281d 100755
---- a/tools/testing/selftests/ima/common_lib.sh
-+++ b/tools/testing/selftests/ima/common_lib.sh
-@@ -1,5 +1,36 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Kselftest framework defines: ksft_pass=0, ksft_fail=1, ksft_skip=4
-+
-+VERBOSE="${VERBOSE:-1}"
-+
-+log_info()
-+{
-+	[ $VERBOSE -ne 0 ] && echo "[INFO] $1"
-+}
-+
-+# The ksefltest framework requirement returns 0 for PASS.
-+log_pass()
-+{
-+
-+	[ $VERBOSE -ne 0 ] && echo "$1 [PASS]"
-+	exit 0
-+}
-+
-+# The ksefltest framework requirement returns 1 for FAIL.
-+log_fail()
-+{
-+	[ $VERBOSE -ne 0 ] && echo "$1 [FAIL]"
-+	exit 1
-+}
-+
-+# The ksefltest framework requirement returns 4 for SKIP.
-+log_skip()
-+{
-+	[ $VERBOSE -ne 0 ] && echo "$1"
-+	exit 4
-+}
- 
- # The secure boot mode can be accessed either as the last integer
- # of "od -An -t u1 /sys/firmware/efi/efivars/SecureBoot-*" or from
-@@ -8,17 +39,19 @@
- get_secureboot_mode()
- {
- 	local efivarfs="/sys/firmware/efi/efivars"
-+
- 	# Make sure that efivars is mounted in the normal location
- 	if ! grep -q "^\S\+ $efivarfs efivarfs" /proc/mounts; then
--		echo "$TEST: efivars is not mounted on $efivarfs" >&2
--		exit $ksft_skip
-+		log_skip "efivars is not mounted on $efivarfs"
- 	fi
- 
- 	# Get secureboot mode
- 	local file="$efivarfs/../vars/SecureBoot-*/data"
- 	if [ ! -e $file ]; then
--		echo "$TEST: unknown secureboot mode" >&2
--		exit $ksft_skip
-+		log_skip "unknown secureboot mode"
- 	fi
--	return `od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data`
-+	ret=`od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data`
-+	[ $ret -eq 1 ] && log_info "secure boot mode enabled"
-+
-+	return $ret
- }
 diff --git a/tools/testing/selftests/ima/test_kexec_load.sh b/tools/testing/selftests/ima/test_kexec_load.sh
-index 35934e0665f1..8b99017538ba 100755
+index 1c10093fb526..0345803e7bec 100755
 --- a/tools/testing/selftests/ima/test_kexec_load.sh
 +++ b/tools/testing/selftests/ima/test_kexec_load.sh
-@@ -6,15 +6,10 @@
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+-# SPDX-License-Identifier: GPL-2.0+
++# SPDX-License-Identifier: GPL-2.0-or-later
+ # Loading a kernel image via the kexec_load syscall should fail
+-# when the kerne is CONFIG_KEXEC_VERIFY_SIG enabled and the system
++# when the kernel is CONFIG_KEXEC_VERIFY_SIG enabled and the system
+ # is booted in secureboot mode.
  
  TEST="$0"
- . ./common_lib.sh
--rc=0
--
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
+@@ -12,8 +12,8 @@ rc=0
+ ksft_skip=4
  
  # kexec requires root privileges
- if [ $(id -ru) -ne 0 ]; then
--	echo "$TEST: requires root privileges" >&2
--	exit $ksft_skip
-+	log_skip "requires root privileges" >&2
+-if [ $UID != 0 ]; then
+-	echo "$TEST: must be run as root" >&2
++if [ $(id -ru) -ne 0 ]; then
++	echo "$TEST: requires root privileges" >&2
+ 	exit $ksft_skip
  fi
  
- get_secureboot_mode
-@@ -26,18 +21,14 @@ kexec --load $KERNEL_IMAGE 2>&1 > /dev/null
- if [ $? -eq 0 ]; then
- 	kexec --unload
- 	if [ $secureboot -eq 1 ]; then
--		echo "$TEST: kexec_load succeeded [FAIL]"
--		rc=1
-+		log_fail "kexec_load succeeded"
+@@ -33,17 +33,17 @@ secureboot=`hexdump $file | awk '{print substr($4,length($4),1)}'`
+ 
+ # kexec_load should fail in secure boot mode
+ KERNEL_IMAGE="/boot/vmlinuz-`uname -r`"
+-kexec -l $KERNEL_IMAGE &>> /dev/null
+-if [ $? == 0 ]; then
+-	kexec -u
+-	if [ "$secureboot" == "1" ]; then
++kexec --load $KERNEL_IMAGE 2>&1 > /dev/null
++if [ $? -eq 0 ]; then
++	kexec --unload
++	if [ $secureboot -eq 1 ]; then
+ 		echo "$TEST: kexec_load succeeded [FAIL]"
+ 		rc=1
  	else
--		echo "$TEST: kexec_load succeeded [PASS]"
-+		log_pass "kexec_load succeeded"
+ 		echo "$TEST: kexec_load succeeded [PASS]"
  	fi
  else
- 	if [ $secureboot -eq 1 ]; then
--		echo "$TEST: kexec_load failed [PASS]"
-+		log_pass "kexec_load failed"
+-	if [ "$secureboot" == "1" ]; then
++	if [ $secureboot -eq 1 ]; then
+ 		echo "$TEST: kexec_load failed [PASS]"
  	else
--		echo "$TEST: kexec_load failed [FAIL]"
--		rc=1
-+		log_fail "kexec_load failed"
- 	fi
- fi
--
--exit $rc
+ 		echo "$TEST: kexec_load failed [FAIL]"
 -- 
 2.7.5
