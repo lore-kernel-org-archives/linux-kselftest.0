@@ -1,128 +1,32 @@
-From: Szabolcs.Nagy at arm.com (Szabolcs Nagy)
-Date: Mon, 25 Feb 2019 18:02:50 +0000
-Subject: [RFC][PATCH 0/3] arm64 relaxed ABI
-In-Reply-To: <20190225165720.GA79300@arrakis.emea.arm.com>
-References: <20181210143044.12714-1-vincenzo.frascino@arm.com>
- <CAAeHK+xPZ-Z9YUAq=3+hbjj4uyJk32qVaxZkhcSAHYC4mHAkvQ@mail.gmail.com>
- <20181212150230.GH65138@arrakis.emea.arm.com>
- <CAAeHK+zxYJDJ7DJuDAOuOMgGvckFwMAoVUTDJzb6MX3WsXhRTQ@mail.gmail.com>
- <20181218175938.GD20197@arrakis.emea.arm.com>
- <20181219125249.GB22067@e103592.cambridge.arm.com>
- <9bbacb1b-6237-f0bb-9bec-b4cf8d42bfc5@arm.com>
- <CAFKCwrhH5R3e5ntX0t-gxcE6zzbCNm06pzeFfYEN2K13c5WLTg@mail.gmail.com>
- <20190212180223.GD199333@arrakis.emea.arm.com>
- <ac8f4e3b-84b8-6067-6a7a-fac7dc48daea@arm.com>
- <20190225165720.GA79300@arrakis.emea.arm.com>
-Message-ID: <7afa18b8-f135-036d-943c-b6216e7da481@arm.com>
+From: mpe at ellerman.id.au (Michael Ellerman)
+Date: Tue, 26 Feb 2019 12:48:47 +1100
+Subject: [PATCH] tools: testing: selftests: Remove duplicate headers
+In-Reply-To: <20190223070901.GA10274@jordon-HP-15-Notebook-PC>
+References: <20190223070901.GA10274@jordon-HP-15-Notebook-PC>
+Message-ID: <87tvgr1fr4.fsf@concordia.ellerman.id.au>
 
-On 25/02/2019 16:57, Catalin Marinas wrote:
-> On Tue, Feb 19, 2019 at 06:38:31PM +0000, Szabolcs Nagy wrote:
->> i think these rules work for the cases i care about, a more
->> tricky question is when/how to check for the new syscall abi
->> and when/how the TCR_EL1.TBI0 setting may be turned off.
-> 
-> I don't think turning TBI0 off is critical (it's handy for PAC with
-> 52-bit VA but then it's short-lived if you want more security features
-> like MTE).
+Souptick Joarder <jrdr.linux at gmail.com> writes:
+> Remove duplicate headers which are included twice.
+>
+> Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
+> Signed-off-by: Souptick Joarder <jrdr.linux at gmail.com>
+> ---
+...
+>  tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c | 1 -
 
-yes, i made a mistake assuming TBI0 off is
-required for (or at least compatible with) MTE.
+I took this hunk via the powerpc tree.
 
-if TBI0 needs to be on for MTE then some of my
-analysis is wrong, and i expect TBI0 to be on
-in the foreseeable future.
+> diff --git a/tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c b/tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c
+> index 167135b..af1b802 100644
+> --- a/tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c
+> +++ b/tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c
+> @@ -11,7 +11,6 @@
+>  #include <sys/wait.h>
+>  #include <unistd.h>
+>  #include <setjmp.h>
+> -#include <signal.h>
+>  
+>  #include "ebb.h"
 
->> consider the following cases (tb == top byte):
->>
->> binary 1: user tb = any, syscall tb = 0
->>   tbi is on, "legacy binary"
->>
->> binary 2: user tb = any, syscall tb = any
->>   tbi is on, "new binary using tb"
->>   for backward compat it needs to check for new syscall abi.
->>
->> binary 3: user tb = 0, syscall tb = 0
->>   tbi can be off, "new binary",
->>   binary is marked to indicate unused tb,
->>   kernel may turn tbi off: additional pac bits.
->>
->> binary 4: user tb = mte, syscall tb = mte
->>   like binary 3, but with mte, "new binary using mte"
 
-so this should be "like binary 2, but with mte".
-
->>   does it have to check for new syscall abi?
->>   or MTE HWCAP would imply it?
->>   (is it possible to use mte without new syscall abi?)
-> 
-> I think MTE HWCAP should imply it.
-> 
->> in userspace we want most binaries to be like binary 3 and 4
->> eventually, i.e. marked as not-relying-on-tbi, if a dso is
->> loaded that is unmarked (legacy or new tb user), then either
->> the load fails (e.g. if mte is already used? or can we turn
->> mte off at runtime?) or tbi has to be enabled (prctl? does
->> this work with pac? or multi-threads?).
-> 
-> We could enable it via prctl. That's the plan for MTE as well (in
-> addition maybe to some ELF flag).
-> 
->> as for checking the new syscall abi: i don't see much semantic
->> difference between AT_HWCAP and AT_FLAGS (either way, the user
->> has to check a feature flag before using the feature of the
->> underlying system and it does not matter much if it's a syscall
->> abi feature or cpu feature), but i don't see anything wrong
->> with AT_FLAGS if the kernel prefers that.
-> 
-> The AT_FLAGS is aimed at capturing binary 2 case above, i.e. the
-> relaxation of the syscall ABI to accept tb = any. The MTE support will
-> have its own AT_HWCAP, likely in addition to AT_FLAGS. Arguably,
-> AT_FLAGS is either redundant here if MTE implies it (and no harm in
-> keeping it around) or the meaning is different: a tb != 0 may be checked
-> by the kernel against the allocation tag (i.e. get_user() could fail,
-> the tag is not entirely ignored).
-> 
->> the discussion here was mostly about binary 2,
-> 
-> That's because passing tb != 0 into the syscall ABI is the main blocker
-> here that needs clearing out before merging the MTE support. There is,
-> of course, a variation of binary 1 for MTE:
-> 
-> binary 5: user tb = mte, syscall tb = 0
-> 
-> but this requires a lot of C lib changes to support properly.
-
-yes, i don't think we want to do that.
-
-but it's ok to have both syscall tbi AT_FLAGS and MTE HWCAP.
-
->> but for
->> me the open question is if we can make binary 3/4 work.
->> (which requires some elf binary marking, that is recognised
->> by the kernel and dynamic loader, and efficient handling of
->> the TBI0 bit, ..if it's not possible, then i don't see how
->> mte will be deployed).
-> 
-> If we ignore binary 3, we can keep TBI0 = 1 permanently, whether we have
-> MTE or not.
-> 
->> and i guess on the kernel side the open question is if the
->> rules 1/2/3/4 can be made to work in corner cases e.g. when
->> pointers embedded into structs are passed down in ioctl.
-> 
-> We've been trying to track these down since last summer and we came to
-> the conclusion that it should be (mostly) fine for the non-weird memory
-> described above.
-
-i think an interesting case is when userspace passes
-a pointer to the kernel and later gets it back,
-which is why i proposed rule 4 (kernel has to keep
-the tag then).
-
-but i wonder what's the right thing to do for sp
-(user can malloc thread/sigalt/makecontext stack
-which will be mte tagged in practice with mte on)
-does tagged sp work? should userspace untag the
-stack memory before setting it up as a stack?
-(but then user pointers to that allocation may get
-broken..)
+cheers
