@@ -1,181 +1,49 @@
-From: ci_notify@linaro.org (ci_notify@linaro.org)
-Date: Tue, 26 Feb 2019 22:00:24 +0000 (UTC)
-Subject: next-20190226 kselftest results
-Message-ID: <1552946746.675.1551218425695.JavaMail.jenkins@a6c5c67cda76>
+From: luc.vanoostenryck@gmail.com (Luc Van Oostenryck)
+Date: Wed, 27 Feb 2019 00:17:49 +0100
+Subject: [PATCH v10 00/12] arm64: untag user pointers passed to the kernel
+In-Reply-To: <CAAeHK+xCi2MxaykYWCz9mwbOzNpjrFcHex7B-VXektNNWBT+Hw@mail.gmail.com>
+References: <cover.1550839937.git.andreyknvl@google.com>
+ <2ad5f897-25c0-90cf-f54f-827876873a0a@intel.com>
+ <CAAeHK+xCi2MxaykYWCz9mwbOzNpjrFcHex7B-VXektNNWBT+Hw@mail.gmail.com>
+Message-ID: <20190226231747.z3lc6yr6xmrw5q2z@ltop.local>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190226220024.kQcmuCz3ocgfuc5bW3DDgg5mLhOrdg5-m9rqkJRdRCQ@z>
+Message-ID: <20190226231749.Vn_pOW0wR01ey6k31kMm0MaCBAWccj_pvKNyJ93sllY@z>
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.0.0-rc8
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: 8e7f81e2ebc4a71a8fe81bcffb72ecdc9a0bbe75
-git describe: next-20190226
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190226
+On Tue, Feb 26, 2019@06:18:25PM +0100, Andrey Konovalov wrote:
+> On Fri, Feb 22, 2019@11:55 PM Dave Hansen <dave.hansen@intel.com> wrote:
+> >
+> > On 2/22/19 4:53 AM, Andrey Konovalov wrote:
+> > > The following testing approaches has been taken to find potential issues
+> > > with user pointer untagging:
+> > >
+> > > 1. Static testing (with sparse [3] and separately with a custom static
+> > >    analyzer based on Clang) to track casts of __user pointers to integer
+> > >    types to find places where untagging needs to be done.
+> >
+> > First of all, it's really cool that you took this approach.  Sounds like
+> > there was a lot of systematic work to fix up the sites in the existing
+> > codebase.
+> >
+> > But, isn't this a _bit_ fragile going forward?  Folks can't just "make
+> > sparse" to find issues with missing untags.
+> 
+> Yes, this static approach can only be used as a hint to find some
+> places where untagging is needed, but certainly not all.
+> 
+> > This seems like something
+> > where we would ideally add an __tagged annotation (or something) to the
+> > source tree and then have sparse rules that can look for missed untags.
+> 
+> This has been suggested before, search for __untagged here [1].
+> However there are many places in the kernel where a __user pointer is
+> casted into unsigned long and passed further. I'm not sure if it's
+> possible apply a __tagged/__untagged kind of attribute to non-pointer
+> types, is it?
+> 
+> [1] https://patchwork.kernel.org/patch/10581535/
 
-Regressions (compared to build next-20190225)
-------------------------------------------------------------------------
-hi6220-hikey - arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_fields                                                                                                         
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_fields                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190225)                                                                   
-------------------------------------------------------------------------                                               
-dragonboard-410c - arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_fields                                                                                                         
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sockmap                                                                                                         
+It's something that should need to be added to sparse since it's
+different from what sparse already have (the existing __bitwise and
+concept of address-space doesn't seem to do the job here).
 
-
-In total:
-------------------------------------------------------------------------
-Ran 329 total tests in the following environments and test suites.
-pass 244
-fail 85
-xfail 0
-skip 0
-
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
-
-
-Failures
-------------------------------------------------------------------------
-
-qemu_x86_64:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-qemu_arm64:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sock_fields
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-x15:
-
-hi6220-hikey:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-
-juno-r2:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-
-dragonboard-410c:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-x86:
-* kselftest-vsyscall-mode-native/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-native/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+-- Luc Van Oostenryck
