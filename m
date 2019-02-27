@@ -1,168 +1,48 @@
-From: ci_notify at linaro.org (ci_notify at linaro.org)
-Date: Wed, 27 Feb 2019 11:00:25 +0000 (UTC)
-Subject: next-20190227 kselftest results
-Message-ID: <965174441.783.1551265226280.JavaMail.jenkins@a6c5c67cda76>
+From: zohar at linux.ibm.com (Mimi Zohar)
+Date: Wed, 27 Feb 2019 09:14:53 -0500
+Subject: [PATCH v2 5/5] selftests/ima: loading kernel modules
+In-Reply-To: <19d494c6-ecb1-b884-2d23-5f556b3ec05b@kernel.org>
+References: <1551223620-11586-1-git-send-email-zohar@linux.ibm.com>
+ <1551223620-11586-6-git-send-email-zohar@linux.ibm.com>
+ <19d494c6-ecb1-b884-2d23-5f556b3ec05b@kernel.org>
+Message-ID: <1551276893.10911.23.camel@linux.ibm.com>
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.0.0-rc8
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: 7b827ff9af88b718189fcddd862b9d135ee4cab6
-git describe: next-20190227
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190227
+Hi Shuah,
 
-Regressions (compared to build next-20190226)
-------------------------------------------------------------------------
-hi6220-hikey - arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_maps                                                                                                         
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190226)                                                                   
-------------------------------------------------------------------------                                               
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_fields                                                                                                         
+> > diff --git a/tools/testing/selftests/ima/test_kernel_module.sh b/tools/testing/selftests/ima/test_kernel_module.sh
+> > new file mode 100755
+> > index 000000000000..4009e1b60b03
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/ima/test_kernel_module.sh
+> > @@ -0,0 +1,96 @@
+> > +#!/bin/sh
+> > +# SPDX-License-Identifier: GPL-2.0-or-later
+> 
+> Same here
+> 
+> # SPDX-License-Identifier: GPL-2.0
+
+Sure, I'll make the change here and in the other places.
 
 
-In total:
-------------------------------------------------------------------------
-Ran 291 total tests in the following environments and test suites.
-pass 213
-fail 78
-xfail 0
-skip 0
+> > +get_secureboot_mode
+> > +if [ $? -eq 0 ]; then
+> > +	log_skip "secure boot not enabled"
+> > +fi
+> > +
+> > +# get the kernel config
+> > +get_kconfig
+> > +
+> 
+> get_kconfig() will be good candidate as a kselftest common
+> function. Is that possible?
 
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
+Sure, where would it go?  get_kconfig calls log_skip.  I didn't see
+any common logging functions.  Petr suggested defining a set of common
+logging functions.  Did you want to only make "log_skip" a common
+function or the other logging functions log_pass, log_fail, log_info
+as well?
 
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-none
+Thanks,
 
-
-Failures
-------------------------------------------------------------------------
-
-qemu_x86_64:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-x86:
-* kselftest-vsyscall-mode-none/bpf_test_btf
-* kselftest-vsyscall-mode-none/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-dragonboard-410c:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-
-qemu_arm64:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-hi6220-hikey:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-
-x15:
-
-juno-r2:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+Mimi
