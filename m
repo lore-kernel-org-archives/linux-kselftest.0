@@ -1,52 +1,39 @@
 From: pvorel at suse.cz (Petr Vorel)
-Date: Thu, 28 Feb 2019 23:32:55 +0100
+Date: Fri, 1 Mar 2019 00:14:41 +0100
 Subject: [PATCH v2 5/5] selftests/ima: loading kernel modules
-In-Reply-To: <1551223620-11586-6-git-send-email-zohar@linux.ibm.com>
+In-Reply-To: <ab45b574-4791-d42a-f566-ab9886525549@kernel.org>
 References: <1551223620-11586-1-git-send-email-zohar@linux.ibm.com>
  <1551223620-11586-6-git-send-email-zohar@linux.ibm.com>
-Message-ID: <20190228223255.GE20335@dell5510>
+ <19d494c6-ecb1-b884-2d23-5f556b3ec05b@kernel.org>
+ <1551276893.10911.23.camel@linux.ibm.com>
+ <ab45b574-4791-d42a-f566-ab9886525549@kernel.org>
+Message-ID: <20190228231441.GF20335@dell5510>
 
-Hi Mimi,
+Hi Shuah,
 
-> While the appended kernel module signature can be verified, when loading
-> a kernel module via either the init_module or the finit_module syscall,
-> verifying the IMA signature requires access to the file descriptor,
-> which is only available via the finit_module syscall.  As "modprobe"
-> does not provide a flag allowing the syscall - init_module or
-> finit_module - to be specified, this patch does not load a kernel
-> module.
+> We can do this as a separate effort in the interest of getting these
+> in the interest of getting these in.
 
-> This test simply verifies that on secure boot enabled systems with
-> "CONFIG_IMA_ARCH_POLICY" configured, that at least an appended kernel
-> module signature or an IMA signature is required based on the Kconfig
-> and the runtime IMA policy.
+> We have common functions in ksefltest.h for c and we don't have them
+> for tests scripts. We might be able to collect common routines such
+> as get_kconfig into a common .sh and include in tests. If you have time
+> to do this, that will be great. It can be done as a separate effort.
+Some inspiration, what sort of helpers can be for shell see LTP shell API [1].
+These helpers tests help tests to be short, readable and with unified output.
+(I like library variables [2] which are self describing and making test even
+shorter), setup and cleanup functions called automatically, ...
+The same applies for C API [3] (e.g. SAFE_*() helpers for handling errors, ...).
 
-> Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
-Reviewed-by: Petr Vorel <pvorel at suse.cz>
+I wonder if there is even any interest of having any sort of helpers or even
+framework for shell, when so far there was nothing.
 
-...
-> diff --git a/tools/testing/selftests/ima/test_kernel_module.sh b/tools/testing/selftests/ima/test_kernel_module.sh
-...
-> +# Are appended signatures required?
-> +if [ -e /sys/module/module/parameters/sig_enforce ]; then
-> +	sig_enforce=$(cat /sys/module/module/parameters/sig_enforce)
-> +	if [ $sig_enforce = "Y" ]; then
-> +		log_pass "appended kernel module signature required"
-> +	fi
-> +fi
-Another possible helper [1]:
-is_enabled() # or sysfs_enabled
-{
-	[ -f "$1" ] && [ "$(cat $1)" = "Y" -o "$(cat $1)" = "1" ]
-}
-
-is_enabled /sys/module/module/parameters/sig_enforce && \
-	log_pass "appended kernel module signature required"
-
-...
+> thanks,
+> -- Shuah
 
 
 Kind regards,
 Petr
 
-[1] https://github.com/linux-test-project/ltp/blob/master/ver_linux#L30
+[1] https://github.com/linux-test-project/ltp/wiki/Test-Writing-Guidelines#23-writing-a-testcase-in-shell
+[2] https://github.com/linux-test-project/ltp/wiki/Test-Writing-Guidelines#232-library-variables
+[3] https://github.com/linux-test-project/ltp/wiki/Test-Writing-Guidelines#22-writing-a-test-in-c
