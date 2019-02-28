@@ -1,60 +1,41 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Thu, 28 Feb 2019 14:10:36 -0500
-Subject: [PATCH v3 1/2] Provide in-kernel headers for making it easy to
- extend the kernel
-In-Reply-To: <b100f0a2-7966-b6a2-dcd5-ca11abe57ead@arm.com>
-References: <20190227193748.132301-1-joel@joelfernandes.org>
- <20190228135343.23kzkilig3bsioov@e107158-lin.cambridge.arm.com>
- <20190228144759.GA156098@google.com>
- <b100f0a2-7966-b6a2-dcd5-ca11abe57ead@arm.com>
-Message-ID: <20190228191036.GA203889@google.com>
+From: pvorel@suse.cz (Petr Vorel)
+Date: Thu, 28 Feb 2019 20:54:35 +0100
+Subject: [PATCH v2 2/5] selftests/ima: define a set of common functions
+In-Reply-To: <1551223620-11586-3-git-send-email-zohar@linux.ibm.com>
+References: <1551223620-11586-1-git-send-email-zohar@linux.ibm.com>
+ <1551223620-11586-3-git-send-email-zohar@linux.ibm.com>
+Message-ID: <20190228195435.GA20335@dell5510>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190228191036.JvPgOo49EwUOM03ly0t2WnS9dvwV-n06iKfsW7TpTko@z>
+Message-ID: <20190228195435.9xowUAPawhoXvmYgWrfYHX3B6wwwN4eNDfCiVUegWDg@z>
 
-On Thu, Feb 28, 2019@05:04:59PM +0100, Dietmar Eggemann wrote:
-[...]                      ^
-> kernel/kheaders_data.h:1:1: note: in expansion of macro ‘KH_MAGIC_END’
->  KH_MAGIC_END;
->  ^~~~~~~~~~~~
-> kernel/kheaders.c: In function ‘ikheaders_read_current’:
-> kernel/kheaders.c:38:12: error: ‘kernel_headers_data’ undeclared (first use
-> in this function); did you mean ‘kernel_headers_data_size’?
->             kernel_headers_data + KH_MAGIC_SIZE,
->             ^~~~~~~~~~~~~~~~~~~
->             kernel_headers_data_size
-> kernel/kheaders.c:38:12: note: each undeclared identifier is reported only
-> once for each function it appears in
-> kernel/kheaders.c: In function ‘ikheaders_init’:
-> kernel/kheaders.c:31:10: error: ‘kernel_headers_data’ undeclared (first use
-> in this function); did you mean ‘kernel_headers_data_size’?
->   (sizeof(kernel_headers_data) - 1 - KH_MAGIC_SIZE * 2)
->           ^
-> kernel/kheaders.c:57:23: note: in expansion of macro
-> ‘kernel_headers_data_size’
->   proc_set_size(entry, kernel_headers_data_size);
->                        ^~~~~~~~~~~~~~~~~~~~~~~~
-> kernel/kheaders.c: In function ‘ikheaders_read_current’:
-> kernel/kheaders.c:40:1: warning: control reaches end of non-void function
-> [-Wreturn-type]
->  }
-> 
-> 
-> The reason for me to stay on v4.20 is that with v5.0-rc8 I don't have ebpf
-> 'raw tracepoint' support any more on my arm64 board. But this issue is not
-> related to your patch though.
+Hi Mimi,
 
-I'm glad mainline fixed your issue though as you said in the other thread ;-)
-I will refer to your email here later when doing backports if I hit the issue.
+> Define, update and move get_secureboot_mode() to a common file for use
+> by other tests.
 
-> Another point which supports the functionality your patch provides is the
-> fact that maintainers don't want to see new TRACE_EVENTs in their code. So
-> here your patch comes handy when using ebpf for tracing in embedded
-> environments.
+> Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
+Reviewed-by: Petr Vorel <pvorel at suse.cz>
 
-Yes, I agree. One can also use the series to build custom kernel modules
-which can also contain tracepoints in their own right. Glad you also find it
-useful. I will CC you on it for next spin.
+...
+>  ifeq ($(ARCH),x86)
+>  TEST_PROGS := test_kexec_load.sh
+> +TEST_FILES := common_lib.sh
+In case there might be some common library for whole selftest, I'd name this ima_lib.sh.
+(even it won't be in the same directory it might be better for readability).
 
-thanks,
+>  include ../lib.mk
 
- - Joel
+> diff --git a/tools/testing/selftests/ima/common_lib.sh b/tools/testing/selftests/ima/common_lib.sh
+> new file mode 100755
+> index 000000000000..5583ea74c14e
+> --- /dev/null
+> +++ b/tools/testing/selftests/ima/common_lib.sh
+> @@ -0,0 +1,24 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0-or-later
+I'm sorry, that was me who advised GPL v2+ instead of GPL v2 only :).
+
+...
+
+Kind regards,
+Petr
