@@ -1,12 +1,12 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Thu, 28 Feb 2019 10:15:08 -0500
-Subject: [PATCH AUTOSEL 4.9 12/19] selftests: netfilter: add simple
+Date: Thu, 28 Feb 2019 10:13:27 -0500
+Subject: [PATCH AUTOSEL 4.14 26/36] selftests: netfilter: add simple
  masq/redirect test cases
-In-Reply-To: <20190228151517.12705-1-sashal@kernel.org>
-References: <20190228151517.12705-1-sashal@kernel.org>
-Message-ID: <20190228151517.12705-12-sashal@kernel.org>
+In-Reply-To: <20190228151337.12176-1-sashal@kernel.org>
+References: <20190228151337.12176-1-sashal@kernel.org>
+Message-ID: <20190228151337.12176-26-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190228151508.R_PR8YQB2fn66vxhIgsG7-UpaZwQX-HYxa1P8lNxwzs@z>
+Message-ID: <20190228151327.Co7MThtLTDHlyaO6Fg4EsXGf0w5Wn5Yry8Pl8AUPNH8@z>
 
 From: Florian Westphal <fw@strlen.de>
 
