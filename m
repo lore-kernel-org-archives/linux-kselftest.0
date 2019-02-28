@@ -1,5 +1,5 @@
 From: qais.yousef at arm.com (Qais Yousef)
-Date: Thu, 28 Feb 2019 16:22:46 +0000
+Date: Thu, 28 Feb 2019 16:48:01 +0000
 Subject: [PATCH v3 1/2] Provide in-kernel headers for making it easy to
  extend the kernel
 In-Reply-To: <b100f0a2-7966-b6a2-dcd5-ca11abe57ead@arm.com>
@@ -7,7 +7,7 @@ References: <20190227193748.132301-1-joel@joelfernandes.org>
  <20190228135343.23kzkilig3bsioov@e107158-lin.cambridge.arm.com>
  <20190228144759.GA156098@google.com>
  <b100f0a2-7966-b6a2-dcd5-ca11abe57ead@arm.com>
-Message-ID: <20190228162246.yhqts47g7h3dqbjs@e107158-lin.cambridge.arm.com>
+Message-ID: <20190228164801.iahwphx5o2zeks4n@e107158-lin.cambridge.arm.com>
 
 On 02/28/19 17:04, Dietmar Eggemann wrote:
 > Hi Joel,
@@ -63,17 +63,6 @@ On 02/28/19 17:04, Dietmar Eggemann wrote:
 >  #define KH_MAGIC_END "IKHD_ED"
 >                       ^
 > kernel/kheaders_data.h:1:1: note: in expansion of macro ‘KH_MAGIC_END’
-
-I believe this is caused by this change ad774086356d (kbuild: change filechk
-to surround the given command with { }) which changes how filechk defined - and
-since filechk_ikheadersxz is used to generate kheaders_data.h it fails when
-backported because the syntax has changed.
-
-HTH
-
---
-Qais Yousef
-
 >  KH_MAGIC_END;
 >  ^~~~~~~~~~~~
 > kernel/kheaders.c: In function ‘ikheaders_read_current’:
@@ -102,6 +91,25 @@ Qais Yousef
 > The reason for me to stay on v4.20 is that with v5.0-rc8 I don't have ebpf
 > 'raw tracepoint' support any more on my arm64 board. But this issue is not
 > related to your patch though.
+
+And this is caused by a38d1107f937 (bpf: support raw tracepoints in modules)
+which renamed bpf_find_raw_tracepoint() which bcc-tools relies on to detect if
+raw tracepoints are supported..
+
+https://github.com/iovisor/bcc/blob/master/src/python/bcc/__init__.py#L860
+
+Speaking of fragile depedencies :-)
+
+I guess the check can be extended to check for both symbols - but it'll stay
+fragile. Not sure if they can do better.
+
+I filed a bug
+
+https://github.com/iovisor/bcc/issues/2240
+
+--
+Qais Yousef
+
 > 
 > Another point which supports the functionality your patch provides is the
 > fact that maintainers don't want to see new TRACE_EVENTs in their code. So
