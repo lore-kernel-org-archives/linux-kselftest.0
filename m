@@ -1,85 +1,49 @@
-From: sashal@kernel.org (Sasha Levin)
-Date: Thu, 28 Feb 2019 10:07:37 -0500
-Subject: [PATCH AUTOSEL 4.20 45/81] bpf,
- selftests: fix handling of sparse CPU allocations
-In-Reply-To: <20190228150813.10256-1-sashal@kernel.org>
-References: <20190228150813.10256-1-sashal@kernel.org>
-Message-ID: <20190228150813.10256-45-sashal@kernel.org>
+From: joel@joelfernandes.org (Joel Fernandes)
+Date: Thu, 28 Feb 2019 10:37:41 -0500
+Subject: [PATCH v3 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <20190228153026.GG8481@kroah.com>
+References: <20190227193748.132301-1-joel@joelfernandes.org>
+ <20190228173444.54403795211d80ba540b61cb@kernel.org>
+ <20190228150054.GB156098@google.com>
+ <20190228153026.GG8481@kroah.com>
+Message-ID: <20190228153741.GA168373@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190228150737.2fF1b_2_csM7k9dA_NErXl8qMmW5jVQqRRVrAkv32ZM@z>
+Message-ID: <20190228153741.-rjc4i0Xou4iiyE6TTU7rfHxc95DVP9h1mMmqj9z81k@z>
 
-From: Martynas Pumputis <m@lambda.lt>
+On Thu, Feb 28, 2019@04:30:26PM +0100, Greg KH wrote:
+> On Thu, Feb 28, 2019@10:00:54AM -0500, Joel Fernandes wrote:
+> > > Hmm, isn't it easier to add kernel-headers package on Android?
+> > 
+> > I have already been down that road. In the Android ecosystem, the Android
+> > teams only provide a "userspace system image" which goes on the system
+> > partition of the flash (and a couple other images are also provided but
+> > system is the main one). The system image cannot contain GPL source code.
+> 
+> Note, that last sentance is not true, it can contain whatever license
+> code it wants to, as long as the group doing the distribution abides by
+> the license of the code contained in it.
+> 
+> The split of system and other images has nothing to do with license
+> issues, but rather functional requirements.  There _might_ be GPL
+> licensed code in the image if it meets a requirement for the proper
+> functionality of the system, you never know :)
 
-[ Upstream commit 1bb54c4071f585ebef56ce8fdfe6026fa2cbcddd ]
+I am not a lawyer either but I know I tried to convince people to allow
+headers (GPL sources) on the system image for this same reason and was told
+that is not something allowed (allowed can also mean "people are Ok with").
 
-Previously, bpf_num_possible_cpus() had a bug when calculating a
-number of possible CPUs in the case of sparse CPU allocations, as
-it was considering only the first range or element of
-/sys/devices/system/cpu/possible.
+In any case, it is not practical to provide headers for every kernel version on
+the system image and maintain them, it will take up too much space and has to
+be periodically packaged. Not to mention that there will be kernel versions
+that are booting Android that simply don't have anyone maintaining headers
+for. So the proposed solution is an easier path.
 
-E.g. in the case of "0,2-3" (CPU 1 is not available), the function
-returned 1 instead of 3.
+thanks,
 
-This patch fixes the function by making it parse all CPU ranges and
-elements.
+ - Joel
 
-Signed-off-by: Martynas Pumputis <m at lambda.lt>
-Acked-by: Yonghong Song <yhs at fb.com>
-Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
-Signed-off-by: Sasha Levin <sashal at kernel.org>
----
- tools/testing/selftests/bpf/bpf_util.h | 30 +++++++++++++++++---------
- 1 file changed, 20 insertions(+), 10 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
-index 315a44fa32af3..84fd6f1bf33e7 100644
---- a/tools/testing/selftests/bpf/bpf_util.h
-+++ b/tools/testing/selftests/bpf/bpf_util.h
-@@ -13,7 +13,7 @@ static inline unsigned int bpf_num_possible_cpus(void)
- 	unsigned int start, end, possible_cpus = 0;
- 	char buff[128];
- 	FILE *fp;
--	int n;
-+	int len, n, i, j = 0;
- 
- 	fp = fopen(fcpu, "r");
- 	if (!fp) {
-@@ -21,17 +21,27 @@ static inline unsigned int bpf_num_possible_cpus(void)
- 		exit(1);
- 	}
- 
--	while (fgets(buff, sizeof(buff), fp)) {
--		n = sscanf(buff, "%u-%u", &start, &end);
--		if (n == 0) {
--			printf("Failed to retrieve # possible CPUs!\n");
--			exit(1);
--		} else if (n == 1) {
--			end = start;
-+	if (!fgets(buff, sizeof(buff), fp)) {
-+		printf("Failed to read %s!\n", fcpu);
-+		exit(1);
-+	}
-+
-+	len = strlen(buff);
-+	for (i = 0; i <= len; i++) {
-+		if (buff[i] == ',' || buff[i] == '\0') {
-+			buff[i] = '\0';
-+			n = sscanf(&buff[j], "%u-%u", &start, &end);
-+			if (n <= 0) {
-+				printf("Failed to retrieve # possible CPUs!\n");
-+				exit(1);
-+			} else if (n == 1) {
-+				end = start;
-+			}
-+			possible_cpus += end - start + 1;
-+			j = i + 1;
- 		}
--		possible_cpus = start == 0 ? end + 1 : 0;
--		break;
- 	}
-+
- 	fclose(fp);
- 
- 	return possible_cpus;
--- 
-2.19.1
+> 
+> thanks,
+> 
+> greg "not a lawyer but I work with a lot of them all the time" k-h
