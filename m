@@ -1,46 +1,174 @@
 From: pvorel@suse.cz (Petr Vorel)
-Date: Thu, 28 Feb 2019 22:01:54 +0100
-Subject: [PATCH v2 3/5] selftests/ima: define common logging functions
-In-Reply-To: <1551223620-11586-4-git-send-email-zohar@linux.ibm.com>
+Date: Thu, 28 Feb 2019 23:00:39 +0100
+Subject: [PATCH v2 4/5] selftests/ima: kexec_file_load syscall test
+In-Reply-To: <1551223620-11586-5-git-send-email-zohar@linux.ibm.com>
 References: <1551223620-11586-1-git-send-email-zohar@linux.ibm.com>
- <1551223620-11586-4-git-send-email-zohar@linux.ibm.com>
-Message-ID: <20190228210154.GA28402@dell5510>
+ <1551223620-11586-5-git-send-email-zohar@linux.ibm.com>
+Message-ID: <20190228220039.GC20335@dell5510>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190228210154.GV8T4L2RAmyr5ordKJ-R0np1w9PLkzBiomNmHTjple4@z>
+Message-ID: <20190228220039.1xfYI4_RiQ6IchGhWI68ZV2VWvuVInGFDU196DkqFRk@z>
 
 Hi Mimi,
 
-> Define log_info, log_pass, log_fail, and log_skip functions.
+> The kernel can be configured to verify PE signed kernel images, IMA
+> kernel image signatures, both types of signatures, or none.  This test
+> verifies only properly signed kernel images are loaded into memory,
+> based on the kernel configuration and runtime policies.
 
-> Suggested-by: Petr Vorel <pvorel at suse.cz>
 > Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
 Reviewed-by: Petr Vorel <pvorel at suse.cz>
-> ---
->  tools/testing/selftests/ima/common_lib.sh      | 43 +++++++++++++++++++++++---
->  tools/testing/selftests/ima/test_kexec_load.sh | 19 +++---------
->  2 files changed, 43 insertions(+), 19 deletions(-)
 
+LGTM, minor comments below.
 ...
-> diff --git a/tools/testing/selftests/ima/common_lib.sh b/tools/testing/selftests/ima/common_lib.sh
-> index 5583ea74c14e..c6d04006281d 100755
-> --- a/tools/testing/selftests/ima/common_lib.sh
+> +++ b/tools/testing/selftests/ima/common_lib.sh
 ...
->  	# Get secureboot mode
->  	local file="$efivarfs/../vars/SecureBoot-*/data"
->  	if [ ! -e $file ]; then
-> -		echo "$TEST: unknown secureboot mode" >&2
-> -		exit $ksft_skip
-> +		log_skip "unknown secureboot mode"
->  	fi
-> -	return `od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data`
-> +	ret=`od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data`
-Missing local. Usually it's good to put all locals at the top.
-
-> +	[ $ret -eq 1 ] && log_info "secure boot mode enabled"
+> +# Look for config option in Kconfig file.
+> +# Return 1 for found and 0 for not found.
+> +kconfig_enabled()
+> +{
+> +	local config="$1"
+> +	local msg="$2"
 > +
-> +	return $ret
->  }
+Mixing tabs and spaces (spaces below).
+> +        grep -E -q $config $IKCONFIG
+> +        if [ $? -eq 0 ]; then
+> +                log_info "$msg"
+> +                return 1
+> +        fi
+> +        return 0
+> +}
+> +
+> +# Attempt to get the kernel config first via proc, and then by
+> +# extracting it from the kernel image or the configs.ko using
+> +# scripts/extract-ikconfig.
+> +# Return 1 for found and 0 for not found.
+> +get_kconfig()
+> +{
+> +	local proc_config="/proc/config.gz"
+> +	local module_dir="/lib/modules/`uname -r`"
+> +	local configs_module="$module_dir/kernel/kernel/configs.ko"
+> +
+> +	if [ ! -f $proc_config ]; then
+> +		modprobe configs > /dev/null 2>&1
+> +	fi
+> +	if [ -f $proc_config ]; then
+> +		cat $proc_config | gunzip > $IKCONFIG 2>/dev/null
+> +		if [ $? -eq 0 ]; then
+> +			return 1
+> +		fi
+> +	fi
+> +
+> +	local extract_ikconfig="$module_dir/source/scripts/extract-ikconfig"
+> +	if [ ! -f $extract_ikconfig ]; then
+> +		log_skip "extract-ikconfig not found"
+> +	fi
+> +
+> +	$extract_ikconfig $KERNEL_IMAGE > $IKCONFIG 2>/dev/null
+> +	if [ $? -eq 1 ]; then
+> +		if [ ! -f $configs_module ]; then
+> +			log_skip "CONFIG_IKCONFIG not enabled"
+> +		fi
+> +		$extract_ikconfig $configs_module > $IKCONFIG
+> +		if [ $? -eq 1 ]; then
+> +			log_skip "CONFIG_IKCONFIG not enabled"
+> +		fi
+> +	fi
+> +	return 1
+> +}
+> +
+> +# Make sure that securityfs is mounted
+> +mount_securityfs()
+> +{
+> +	if [ -z $SECURITYFS ]; then
+> +		SECURITYFS=/sys/kernel/security
+> +		mount -t securityfs security $SECURITYFS
+> +	fi
+> +
+> +	if [ ! -d "$SECURITYFS" ]; then
+> +		log_fail "$SECURITYFS :securityfs is not mounted"
+		log_fail "$SECURITYFS: securityfs is not mounted"
+> +	fi
+> +}
+> +
+> +# The policy rule format is an "action" followed by key-value pairs.  This
+> +# function supports up to two key-value pairs, in any order.
+> +# For example: action func=<keyword> [appraise_type=<type>]
+> +# Return 1 for found and 0 for not found.
+> +check_ima_policy()
+> +{
+> +	local action=$1
+	local action="$1"
+(sorry this is nitpicking, I'd be consistent)
+> +	local keypair1="$2"
+> +	local keypair2="$3"
+> +
+> +	mount_securityfs
+> +
+> +	local ima_policy=$SECURITYFS/ima/policy
+> +	if [ ! -e $ima_policy ]; then
+> +		log_fail "$ima_policy not found"
+> +	fi
+> +
+> +	if [ -n $keypair2 ]; then
+> +		grep -e "^$action.*$keypair1" "$ima_policy" | \
+> +			grep -q -e "$keypair2"
+> +	else
+> +		grep -q -e "^$action.*$keypair1" "$ima_policy"
+> +	fi
+> +
+> +	[ $? -eq 0 ] && ret=1 || ret=0
+> +        return $ret
+return $? is enough here (+ ret was not defined as local and mixing tabs with spaces)
+> +}
+> diff --git a/tools/testing/selftests/ima/test_kexec_file_load.sh b/tools/testing/selftests/ima/test_kexec_file_load.sh
+> new file mode 100755
+> index 000000000000..e08c7e6cf28c
+> --- /dev/null
+> +++ b/tools/testing/selftests/ima/test_kexec_file_load.sh
 ...
+
+> +	# The architecture specific or a custom policy may require the
+> +	# kexec kernel image be signed.  Policy rules are walked
+> +	# sequentially.  As a result, a policy rule may be defined, but
+> +	# might not necessarily be used.  This test assumes if a policy
+> +	# rule is specified, that is the intent.
+> +	if [ $ima_read_policy -eq 1 ]; then
+> +		check_ima_policy "appraise" "func=KEXEC_KERNEL_CHECK" \
+> +			"appraise_type=imasig"
+> +		ret=$?
+> +		[ $ret -eq 1 ] && log_info "IMA signature required";
+> +	fi
+> +	return $ret
+> +}
+> +
+> +# The kexec_file_load_test() is complicated enough, require pesign.
+> +# Return 1 for PE signature found and 0 for not found.
+> +check_for_pesig()
+> +{
+> +	which pesign > /dev/null 2>&1
+> +	if [ $?	-eq 1 ]; then
+> +		log_skip "pesign not found"
+> +	fi
+Maybe just (matter of preference)
+	which pesign > /dev/null 2>&1 || log_skip "pesign not found"
+> +
+> +	pesign -i $KERNEL_IMAGE --show-signature | grep -q "No signatures"
+> +	local ret=$?
+> +	if [ $ret -eq 1 ]; then
+> +		log_info "kexec kernel image PE signed"
+> +	else
+> +		log_info "kexec kernel image not PE signed"
+> +	fi
+> +	return $ret
+> +}
+
+...
+> +# kexec requires root privileges
+> +if [ $(id -ru) -ne 0 ]; then
+> +	log_skip "requires root privileges"
+> +fi
+This is repeated several times => good candidate for helper even here in IMA
+specific library.
 
 Kind regards,
 Petr
