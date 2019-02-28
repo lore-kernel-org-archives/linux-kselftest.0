@@ -1,17 +1,206 @@
-From: dave.hansen@intel.com (Dave Hansen)
-Date: Wed, 27 Feb 2019 14:30:47 -0800
-Subject: [PATCH] x86/selftests/xsave: Introduce XSAVE tests
-In-Reply-To: <6be796c64cb4ba21ef879facc65f5b3b476cacfd.camel@intel.com>
-References: <20190227212422.11845-1-yu-cheng.yu@intel.com>
- <67fa7d2a-31e2-efdf-7ffe-39c3e2a9b4a2@intel.com>
- <6be796c64cb4ba21ef879facc65f5b3b476cacfd.camel@intel.com>
-Message-ID: <0b58fa72-73f1-b3d8-73e9-254f42f0fa08@intel.com>
+From: brendanhiggins@google.com (Brendan Higgins)
+Date: Wed, 27 Feb 2019 16:29:04 -0800
+Subject: [RFC v3 17/19] of: unittest: migrate tests to run on KUnit
+In-Reply-To: <1d72f04e-08ba-e3dd-c8c0-512946126113@gmail.com>
+References: <20181128193636.254378-1-brendanhiggins@google.com>
+ <20181128193636.254378-18-brendanhiggins@google.com>
+ <CAL_Jsq+09Kx7yMBC_Jw45QGmk6U_fp4N6HOZDwYrM4tWw+_dOA@mail.gmail.com>
+ <CAFd5g46NehKo=TT4reQ8r74bDTG9BkR=ELg+Q3n5YooUxFwBmA@mail.gmail.com>
+ <1d72f04e-08ba-e3dd-c8c0-512946126113@gmail.com>
+Message-ID:
+ <CAFd5g45GjG871ynfMADN+4zmecfARCk2ribY7MsMSc4=QkNqgQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190227223047._D4I0nRtV6msCfA1u9xYq5SalOnV6Y2LS4sNe5iICGQ@z>
+Message-ID: <20190228002904.0GBZ5PPIeeTVCzUIN6dmICIM8z78Qu_Q-gNNTW9Tjm4@z>
 
-On 2/27/19 2:19 PM, Yu-cheng Yu wrote:
-> I am hoping that, should any test fail, one can easily modify the test to find
-> out why.
+On Mon, Feb 18, 2019@2:56 PM Frank Rowand <frowand.list@gmail.com> wrote:
+>
+> On 2/12/19 5:44 PM, Brendan Higgins wrote:
+> > On Wed, Nov 28, 2018@12:56 PM Rob Herring <robh@kernel.org> wrote:
+> >>
+> >> On Wed, Nov 28, 2018 at 1:38 PM Brendan Higgins
+> >> <brendanhiggins@google.com> wrote:
+<snip>
+> >>> ---
+> >>>  drivers/of/Kconfig    |    1 +
+> >>>  drivers/of/unittest.c | 1405 ++++++++++++++++++++++-------------------
+> >>>  2 files changed, 752 insertions(+), 654 deletions(-)
+> >>>
+> > <snip>
+> >>> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+> >>> index 41b49716ac75f..a5ef44730ffdb 100644
+> >>> --- a/drivers/of/unittest.c
+> >>> +++ b/drivers/of/unittest.c
+<snip>
+> >>> +
+> >>> +       KUNIT_EXPECT_EQ(test,
+> >>> +                       of_property_match_string(np,
+> >>> +                                                "phandle-list-names",
+> >>> +                                                "first"),
+> >>> +                       0);
+> >>> +       KUNIT_EXPECT_EQ(test,
+> >>> +                       of_property_match_string(np,
+> >>> +                                                "phandle-list-names",
+> >>> +                                                "second"),
+> >>> +                       1);
+> >>
+> >> Fewer lines on these would be better even if we go over 80 chars.
+>
+> Agreed.  unittest.c already is a greater than 80 char file in general, and
+> is a file that benefits from that.
+>
 
-Yeah, but that's what error messages are for.  If we did this for
-protection_keys, we would have about 30 .c files. :)
+Noted.
+
+>
+> > On the of_property_match_string(...), I have no opinion. I will do
+> > whatever you like best.
+> >
+> > Nevertheless, as far as the KUNIT_EXPECT_*(...), I do have an opinion: I am
+> > trying to establish a good, readable convention. Given an expect statement
+> > structured as
+> > ```
+> > KUNIT_EXPECT_*(
+> >     test,
+> >     expect_arg_0, ..., expect_arg_n,
+> >     fmt_str, fmt_arg_0, ..., fmt_arg_n)
+> > ```
+> > where `test` is the `struct kunit` context argument, `expect_arg_{0, ..., n}`
+> > are the arguments the expectations is being made about (so in the above example,
+> > `of_property_match_string(...)` and `1`), and `fmt_*` is the optional format
+> > string that comes at the end of some expectations.
+> >
+> > The pattern I had been trying to promote is the following:
+> >
+> > 1) If everything fits on 1 line, do that.
+> > 2) If you must make a line split, prefer to keep `test` on its own line,
+> > `expect_arg_{0, ..., n}` should be kept together, if possible, and the format
+> > string should follow the conventions already most commonly used with format
+> > strings.
+> > 3) If you must split up `expect_arg_{0, ..., n}` each argument should get its
+> > own line and should not share a line with either `test` or any `fmt_*`.
+> >
+> > The reason I care about this so much is because expectations should be
+> > extremely easy to read; they are the most important part of a unit
+> > test because they tell you what the test is verifying. I am not
+> > married to the formatting I proposed above, but I want something that
+> > will be extremely easy to identify the arguments that the expectation
+> > is on. Maybe that means that I need to add some syntactic fluff to
+> > make it clearer, I don't know, but this is definitely something we
+> > need to get right, especially in the earliest examples.
+>
+> I will probably raise the ire of the kernel formatting rule makers by offering
+> what I think is a _much_ more readable format __for this specific case__.
+> In other words for drivers/of/unittest.c.
+>
+> If you can not make your mail window _very_ wide, or if this email has been
+> line wrapped, this example will not be clear.
+>
+> Two possible formats:
+>
+>
+> ### -----  version 1, as created by the patch series
+>
+> static void of_unittest_property_string(struct kunit *test)
+> {
+>         const char *strings[4];
+>         struct device_node *np;
+>         int rc;
+>
+>         np = of_find_node_by_path("/testcase-data/phandle-tests/consumer-a");
+>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
+>
+>         KUNIT_EXPECT_EQ(
+>                 test,
+>                 of_property_match_string(np, "phandle-list-names", "first"),
+>                 0);
+>         KUNIT_EXPECT_EQ(
+>                 test,
+>                 of_property_match_string(np, "phandle-list-names", "second"),
+>                 1);
+>         KUNIT_EXPECT_EQ(
+>                 test,
+>                 of_property_match_string(np, "phandle-list-names", "third"),
+>                 2);
+>         KUNIT_EXPECT_EQ_MSG(
+>                 test,
+>                 of_property_match_string(np, "phandle-list-names", "fourth"),
+>                 -ENODATA,
+>                 "unmatched string");
+>         KUNIT_EXPECT_EQ_MSG(
+>                 test,
+>                 of_property_match_string(np, "missing-property", "blah"),
+>                 -EINVAL,
+>                 "missing property");
+>         KUNIT_EXPECT_EQ_MSG(
+>                 test,
+>                 of_property_match_string(np, "empty-property", "blah"),
+>                 -ENODATA,
+>                 "empty property");
+>         KUNIT_EXPECT_EQ_MSG(
+>                 test,
+>                 of_property_match_string(np, "unterminated-string", "blah"),
+>                 -EILSEQ,
+>                 "unterminated string");
+>
+>         /* of_property_count_strings() tests */
+>         KUNIT_EXPECT_EQ(test,
+>                         of_property_count_strings(np, "string-property"), 1);
+>         KUNIT_EXPECT_EQ(test,
+>                         of_property_count_strings(np, "phandle-list-names"), 3);
+>         KUNIT_EXPECT_EQ_MSG(
+>                 test,
+>                 of_property_count_strings(np, "unterminated-string"), -EILSEQ,
+>                 "unterminated string");
+>         KUNIT_EXPECT_EQ_MSG(
+>                 test,
+>                 of_property_count_strings(np, "unterminated-string-list"),
+>                 -EILSEQ,
+>                 "unterminated string array");
+>
+>
+>
+>
+> ### -----  version 2, modified to use really long lines
+>
+> static void of_unittest_property_string(struct kunit *test)
+> {
+>         const char *strings[4];
+>         struct device_node *np;
+>         int rc;
+>
+>         np = of_find_node_by_path("/testcase-data/phandle-tests/consumer-a");
+>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
+>
+>         KUNIT_EXPECT_EQ(    test, of_property_match_string(np, "phandle-list-names", "first"),  0);
+>         KUNIT_EXPECT_EQ(    test, of_property_match_string(np, "phandle-list-names", "second"), 1);
+>         KUNIT_EXPECT_EQ(    test, of_property_match_string(np, "phandle-list-names", "third"),  2);
+>         KUNIT_EXPECT_EQ_MSG(test, of_property_match_string(np, "phandle-list-names", "fourth"), -ENODATA, "unmatched string");
+>         KUNIT_EXPECT_EQ_MSG(test, of_property_match_string(np, "missing-property", "blah"),     -EINVAL, "missing property");
+>         KUNIT_EXPECT_EQ_MSG(test, of_property_match_string(np, "empty-property", "blah"),       -ENODATA, "empty property");
+>         KUNIT_EXPECT_EQ_MSG(test, of_property_match_string(np, "unterminated-string", "blah"),  -EILSEQ, "unterminated string");
+>
+>         /* of_property_count_strings() tests */
+>         KUNIT_EXPECT_EQ(    test, of_property_count_strings(np, "string-property"),             1);
+>         KUNIT_EXPECT_EQ(    test, of_property_count_strings(np, "phandle-list-names"),          3);
+>         KUNIT_EXPECT_EQ_MSG(test, of_property_count_strings(np, "unterminated-string"),         -EILSEQ, "unterminated string");
+>         KUNIT_EXPECT_EQ_MSG(test, of_property_count_strings(np, "unterminated-string-list"),    -EILSEQ, "unterminated string array");
+>
+>
+>         ------------------------  ------------------------------------------------------------- --------------------------------------
+>              ^                         ^                                                             ^
+>              |                         |                                                             |
+>              |                         |                                                             |
+>             mostly boilerplate        what is being tested                                          expected result, error message
+>             (can vary in relop
+>              and _MSG or not)
+>
+> In my opinion, the second version is much more readable.  It is easy to see the
+> differences in the boilerplate.  It is easy to see what is being tested, and how
+> the arguments of the tested function vary for each test.  It is easy to see the
+> expected result and error message.  The entire block fits into a single short
+> window (though much wider).
+
+I have no opinion on the over 80 char thing, so as long as everyone
+else is okay with it, I have no complaints.
+
+Cheers
