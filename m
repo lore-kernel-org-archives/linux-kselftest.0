@@ -1,256 +1,168 @@
-From: brendanhiggins at google.com (Brendan Higgins)
-Date: Thu, 28 Feb 2019 01:03:24 -0800
-Subject: [RFC v4 08/17] kunit: test: add support for test abort
-In-Reply-To: <155121334527.260864.5324117081460979741@swboyd.mtv.corp.google.com>
-References: <20190214213729.21702-1-brendanhiggins@google.com>
- <20190214213729.21702-9-brendanhiggins@google.com>
- <155121334527.260864.5324117081460979741@swboyd.mtv.corp.google.com>
-Message-ID: <CAFd5g46QCisA4PHQXo57-LC6sNdk=OUjBE0O1s4005uBz_Vo6Q@mail.gmail.com>
+From: ci_notify at linaro.org (ci_notify at linaro.org)
+Date: Thu, 28 Feb 2019 11:00:24 +0000 (UTC)
+Subject: next-20190228 kselftest results
+Message-ID: <153471780.965.1551351625022.JavaMail.jenkins@a6c5c67cda76>
 
-On Tue, Feb 26, 2019 at 12:35 PM Stephen Boyd <sboyd at kernel.org> wrote:
->
-> Quoting Brendan Higgins (2019-02-14 13:37:20)
-> > Add support for aborting/bailing out of test cases. Needed for
-> > implementing assertions.
->
-> Can you add some more text here with the motivating reasons for
-> implementing assertions and bailing out of test cases?
+Summary
+------------------------------------------------------------------------
+kernel: 5.0.0-rc8
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: 42fd8df9d1d9c83046226e771a4f5f3d05a706ff
+git describe: next-20190228
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190228
 
-Sure. Yeah, this comes before the commit that adds assertions, so I
-should probably put a better explanation here.
->
-> For example, I wonder why unit tests can't just return with a failure
+Regressions (compared to build next-20190227)
+------------------------------------------------------------------------
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_fields                                                                                                         
+                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190227)                                                                   
+------------------------------------------------------------------------                                               
+hi6220-hikey - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_maps                                                                                                         
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sockmap                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sockmap                                                                                                         
 
-Well, you could. You can just do the check as you would without KUnit,
-except call KUNIT_FAIL(...) before you return. For example, instead
-of:
 
-KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
+In total:
+------------------------------------------------------------------------
+Ran 290 total tests in the following environments and test suites.
+pass 214
+fail 76
+xfail 0
+skip 0
 
-you could do:
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
 
-if (IS_ERR_OR_NULL(ptr)) {
-        KUNIT_FAIL(test, "ptr is an errno or null: %ld", ptr);
-        return;
-}
+Test Suites
+-----------
+* kselftest
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
 
-> when they need to abort and then the test runner would detect that error
-> via the return value from the 'run test' function. That would be a more
-> direct approach, but also more verbose than a single KUNIT_ASSERT()
-> line. It would be more kernel idiomatic too because the control flow
 
-Yeah, I was intentionally going against that idiom. I think that idiom
-makes test logic more complicated than it needs to be, especially if
-the assertion failure happens in a helper function; then you have to
-pass that error all the way back up. It is important that test code
-should be as simple as possible to the point of being immediately
-obviously correct at first glance because there are no tests for
-tests.
+Failures
+------------------------------------------------------------------------
 
-The idea with assertions is that you use them to state all the
-preconditions for your test. Logically speaking, these are the
-premises of the test case, so if a premise isn't true, there is no
-point in continuing the test case because there are no conclusions
-that can be drawn without the premises. Whereas, the expectation is
-the thing you are trying to prove. It is not used universally in
-x-unit style test frameworks, but I really like it as a convention.
-You could still express the idea of a premise using the above idiom,
-but I think KUNIT_ASSERT_* states the intended idea perfectly.
+x86:
+* kselftest-vsyscall-mode-native/bpf_test_progs
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_progs
+* kselftest-vsyscall-mode-none/bpf_test_btf
+* kselftest-vsyscall-mode-none/bpf_test_libbpf.sh
+* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-none/bpf_test_progs
+* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-none/bpf_test_sockmap
 
-> isn't hidden inside a macro and it isn't intimately connected with
-> kthreads and completions.
+qemu_arm:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
 
-Yeah, I wasn't a fan of that myself, but it was broadly available. My
-previous version (still the architecture specific version for UML, not
-in this patchset though) relies on UML_LONGJMP, but is obviously only
-works on UML. A number of people wanted support for other
-architectures. Rob and Luis specifically wanted me to provide a
-version of abort that would work on any architecture, even if it only
-had reduced functionality; I thought this fit the bill okay.
+qemu_x86_64:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
 
->
-> >
-> > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> [...]
-> > diff --git a/kunit/test-test.c b/kunit/test-test.c
-> > new file mode 100644
-> > index 0000000000000..a936c041f1c8f
->
-> Could this whole file be another patch? It seems to be a test for the
-> try catch mechanism.
+qemu_i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
 
-Sure.
+hi6220-hikey:
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_progs
 
->
-> > diff --git a/kunit/test.c b/kunit/test.c
-> > index d18c50d5ed671..6e5244642ab07 100644
-> > --- a/kunit/test.c
-> > +++ b/kunit/test.c
-> [...]
-> > +
-> > +static void kunit_generic_throw(struct kunit_try_catch *try_catch)
-> > +{
-> > +       try_catch->context.try_result = -EFAULT;
-> > +       complete_and_exit(try_catch->context.try_completion, -EFAULT);
-> > +}
-> > +
-> > +static int kunit_generic_run_threadfn_adapter(void *data)
-> > +{
-> > +       struct kunit_try_catch *try_catch = data;
-> >
-> > +       try_catch->try(&try_catch->context);
-> > +
-> > +       complete_and_exit(try_catch->context.try_completion, 0);
->
-> The exit code doesn't matter, right? If so, it might be clearer to just
-> return 0 from this function because kthreads exit themselves as far as I
-> recall.
+x15:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
 
-You mean complete and then return?
+juno-r2:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
 
->
-> > +}
-> > +
-> > +static void kunit_generic_run_try_catch(struct kunit_try_catch *try_catch)
-> > +{
-> > +       struct task_struct *task_struct;
-> > +       struct kunit *test = try_catch->context.test;
-> > +       int exit_code, wake_result;
-> > +       DECLARE_COMPLETION(test_case_completion);
->
-> DECLARE_COMPLETION_ONSTACK()?
+qemu_arm64:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sock_fields
 
-Whoops, yeah, that one.
+i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
 
->
-> > +
-> > +       try_catch->context.try_completion = &test_case_completion;
-> > +       try_catch->context.try_result = 0;
-> > +       task_struct = kthread_create(kunit_generic_run_threadfn_adapter,
-> > +                                            try_catch,
-> > +                                            "kunit_try_catch_thread");
-> > +       if (IS_ERR_OR_NULL(task_struct)) {
->
-> It looks like NULL is never returned from kthread_create(), so don't
-> check for it here.
 
-Bad habit, sorry.
+Skips
+------------------------------------------------------------------------
+No skips
 
->
-> > +               try_catch->catch(&try_catch->context);
-> > +               return;
-> > +       }
-> > +
-> > +       wake_result = wake_up_process(task_struct);
-> > +       if (wake_result != 0 && wake_result != 1) {
->
-> These are the only two possible return values of wake_up_process(), so
-> why not just use kthread_run() and check for an error on the process
-> creation?
 
-Good point, I am not sure why I did that.
-
->
-> > +               kunit_err(test, "task was not woken properly: %d", wake_result);
-> > +               try_catch->catch(&try_catch->context);
-> > +       }
-> > +
-> > +       /*
-> > +        * TODO(brendanhiggins at google.com): We should probably have some type of
-> > +        * timeout here. The only question is what that timeout value should be.
-> > +        *
-> > +        * The intention has always been, at some point, to be able to label
-> > +        * tests with some type of size bucket (unit/small, integration/medium,
-> > +        * large/system/end-to-end, etc), where each size bucket would get a
-> > +        * default timeout value kind of like what Bazel does:
-> > +        * https://docs.bazel.build/versions/master/be/common-definitions.html#test.size
-> > +        * There is still some debate to be had on exactly how we do this. (For
-> > +        * one, we probably want to have some sort of test runner level
-> > +        * timeout.)
-> > +        *
-> > +        * For more background on this topic, see:
-> > +        * https://mike-bland.com/2011/11/01/small-medium-large.html
-> > +        */
-> > +       wait_for_completion(&test_case_completion);
->
-> It doesn't seem like a bad idea to make this have some arbitrarily large
-> timeout value to start with. Just to make sure the whole thing doesn't
-> get wedged. It's a timeout, so in theory it should never trigger if it's
-> large enough.
-
-Seems reasonable.
-
->
-> > +
-> > +       exit_code = try_catch->context.try_result;
-> > +       if (exit_code == -EFAULT)
-> > +               try_catch->catch(&try_catch->context);
-> > +       else if (exit_code == -EINTR)
-> > +               kunit_err(test, "wake_up_process() was never called.");
->
-> Does kunit_err() add newlines? It would be good to stick to the rest of
-> kernel style (printk, tracing, etc.) and rely on the callers to have the
-> newlines they want. Also, remove the full-stop because it isn't really
-> necessary to have those in error logs.
-
-Will do.
-
->
-> > +       else if (exit_code)
-> > +               kunit_err(test, "Unknown error: %d", exit_code);
-> > +}
-> > +
-> > +void kunit_generic_try_catch_init(struct kunit_try_catch *try_catch)
-> > +{
-> > +       try_catch->run = kunit_generic_run_try_catch;
->
-> Is the idea that 'run' would be anything besides
-> 'kunit_generic_run_try_catch'? If it isn't going to be different, then
-
-Yeah, it can be overridden with an architecture specific version.
-
-> maybe it's simpler to just have a function like
-> kunit_generic_run_try_catch() that is called by the unit tests instead
-> of having to write 'try_catch->run(try_catch)' and indirect for the
-> basic case. Maybe I've missed the point entirely though and this is all
-> scaffolding for more complicated exception handling later on.
-
-Yeah, the idea is that different architectures can override exception
-handling with their own implementation. This is just the generic one.
-For example, UML has one that doesn't depend on kthreads or
-completions; the UML version also allows recovery from some segfault
-conditions.
-
->
-> > +       try_catch->throw = kunit_generic_throw;
-> > +}
-> > +
-> > +void __weak kunit_try_catch_init(struct kunit_try_catch *try_catch)
-> > +{
-> > +       kunit_generic_try_catch_init(try_catch);
-> > +}
-> > +
-> > +static void kunit_try_run_case(struct kunit_try_catch_context *context)
-> > +{
-> > +       struct kunit_try_catch_context *ctx = context;
-> > +       struct kunit *test = ctx->test;
-> > +       struct kunit_module *module = ctx->module;
-> > +       struct kunit_case *test_case = ctx->test_case;
-> > +
-> > +       /*
-> > +        * kunit_run_case_internal may encounter a fatal error; if it does, we
-> > +        * will jump to ENTER_HANDLER above instead of continuing normal control
->
-> Where is 'ENTER_HANDLER' above?
-
-Whoops, sorry, that is left over from v3. Will remove.
-
->
-> > +        * flow.
-> > +        */
-> >         kunit_run_case_internal(test, module, test_case);
-> > +       /* This line may never be reached. */
-> >         kunit_run_case_cleanup(test, module, test_case);
-> > +}
-
-Thanks!
+-- 
+Linaro LKFT
+https://lkft.linaro.org
