@@ -1,12 +1,12 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Thu, 28 Feb 2019 10:13:26 -0500
-Subject: [PATCH AUTOSEL 4.14 25/36] selftests: netfilter: fix config fragment
+Date: Thu, 28 Feb 2019 10:15:07 -0500
+Subject: [PATCH AUTOSEL 4.9 11/19] selftests: netfilter: fix config fragment
  CONFIG_NF_TABLES_INET
-In-Reply-To: <20190228151337.12176-1-sashal@kernel.org>
-References: <20190228151337.12176-1-sashal@kernel.org>
-Message-ID: <20190228151337.12176-25-sashal@kernel.org>
+In-Reply-To: <20190228151517.12705-1-sashal@kernel.org>
+References: <20190228151517.12705-1-sashal@kernel.org>
+Message-ID: <20190228151517.12705-11-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190228151326.0wrPvQO5PfqbifPIRAC4tVdAawHdiPB1Jz1P6GRuJLQ@z>
+Message-ID: <20190228151507.HlUhGdshsI9ggd-FrtmMV_N5PeMlvl4cfshRZeQAtCc@z>
 
 From: Naresh Kamboju <naresh.kamboju@linaro.org>
 
