@@ -1,116 +1,153 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Thu, 28 Feb 2019 22:26:11 -0500
+From: yamada.masahiro@socionext.com (Masahiro Yamada)
+Date: Fri, 1 Mar 2019 15:25:05 +0900
 Subject: [PATCH v3 1/2] Provide in-kernel headers for making it easy to
  extend the kernel
-In-Reply-To: <20190301112826.ced40b59fb7e8118fa5b40d6@kernel.org>
+In-Reply-To: <20190228144306.GA138215@google.com>
 References: <20190227193748.132301-1-joel@joelfernandes.org>
- <20190228173444.54403795211d80ba540b61cb@kernel.org>
- <20190228150054.GB156098@google.com>
- <20190301112826.ced40b59fb7e8118fa5b40d6@kernel.org>
-Message-ID: <20190301032611.GA78818@google.com>
+ <CAK7LNAR=dpw7y+Y20m0n4ZqzQtqY2XrS3CKk5bQA-Azhp0SN6g@mail.gmail.com>
+ <20190228144306.GA138215@google.com>
+Message-ID:
+ <CAK7LNARTHJP=HzyBg_oBBL4whpxHXeijqk=zKLYpt=1GBLNGAA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190301032611.Jt47lzrV2KKn4S_uPmc8H3wdblR6oPS15C8Ohkse2dk@z>
+Message-ID: <20190301062505.Z2mHVlAu9LEzN3lRfURoKaXqG4rWm2DoFA1JbXUwYwo@z>
 
-On Fri, Mar 01, 2019@11:28:26AM +0900, Masami Hiramatsu wrote:
-> Hi Joel,
+On Fri, Mar 1, 2019@12:06 AM Joel Fernandes <joel@joelfernandes.org> wrote:
+>
+> On Thu, Feb 28, 2019@11:17:51AM +0900, Masahiro Yamada wrote:
+> > Hi Joel,
+> >
+> >
+> > On Thu, Feb 28, 2019 at 4:40 AM Joel Fernandes (Google)
+> > <joel@joelfernandes.org> wrote:
+> > >
+> > > Introduce in-kernel headers and other artifacts which are made available
+> > > as an archive through proc (/proc/kheaders.tar.xz file). This archive makes
+> > > it possible to build kernel modules, run eBPF programs, and other
+> > > tracing programs that need to extend the kernel for tracing purposes
+> > > without any dependency on the file system having headers and build
+> > > artifacts.
+> > >
+> > > On Android and embedded systems, it is common to switch kernels but not
+> > > have kernel headers available on the file system. Raw kernel headers
+> > > also cannot be copied into the filesystem like they can be on other
+> > > distros, due to licensing and other issues. There's no linux-headers
+> > > package on Android. Further once a different kernel is booted, any
+> > > headers stored on the file system will no longer be useful. By storing
+> > > the headers as a compressed archive within the kernel, we can avoid these
+> > > issues that have been a hindrance for a long time.
+> > >
+> > > The feature is also buildable as a module just in case the user desires
+> > > it not being part of the kernel image. This makes it possible to load
+> > > and unload the headers on demand. A tracing program, or a kernel module
+> > > builder can load the module, do its operations, and then unload the
+> > > module to save kernel memory. The total memory needed is 3.8MB.
+> > >
+> > > The code to read the headers is based on /proc/config.gz code and uses
+> > > the same technique to embed the headers.
+> >
+> >
+> >
+> > Please let me ask a question about the actual use-case.
+> >
+> >
+> > To build embedded systems including Android,
+> > I use an x86 build machine.
+> >
+> > In other words, I cross-compile vmlinux and in-tree modules.
+> > So,
+> >
+> >   target-arch: arm64
+> >   host-arch:   x86
+> >
+> >
+> >
+> > > To build a module, the below steps have been tested on an x86 machine:
+> > > modprobe kheaders
+> > > rm -rf $HOME/headers
+> > > mkdir -p $HOME/headers
+> > > tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
+> > > cd my-kernel-module
+> > > make -C $HOME/headers M=$(pwd) modules
+> > > rmmod kheaders
+> >
+> > I am guessing the user will run these commands
+> > on the target system.
+> > In other words, external modules are native-compiled.
+> > So,
+> >
+> >   target-arch: arm64
+> >   host-arch:   arm64
+> >
+> >
+> > Is this correct?
+> >
+> >
+> > If I understood the assumed use-case correctly,
+> > kheaders.tar.xw will contain host-programs compiled for x86,
+> > which will not work on the target system.
+> >
+>
+> You are right, the above commands in the commit message work only if the
+> host/target are same arch due to scripts.
+>
+> However we can build with arm64 device connected to a host, like this (which
+> I tested):
+>
+> adb shell modprobe kheaders; adb pull /proc/kheaders.tar.xz
+> rm -rf $HOME/headers; mkdir -p $HOME/headers
+> tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
+> cd my-kernel-module
+> make -C $HOME/headers M=$(pwd) ARCH=arm64 CROSS_COMPILE=aarch64- modules
+> adb push test.ko /data/; adb shell rmmod kheaders
+>
+> The other way we can make this work is using x86 usermode emulation inside a
+> chroot on the Android device which will make the earlier commands work. One
+> thing to note is that Android also runs on x86 hardware so the commands in
+> the commit message will work even for x86 Android targets already.
+>
+> Also note that this the "module building" part is really only one of the
+> usecases. eBPF is another which needs the headers - and the headers are vast
+> majority of the archive. Headers take 3.1MB out of 3.6MB of the archive on
+> arm64 builds.
+>
+> How do you want to proceed here, should I mention these points in the commit
+> message?
 
-Hi Masami,
 
-> On Thu, 28 Feb 2019 10:00:54 -0500
-> Joel Fernandes <joel@joelfernandes.org> wrote:
-> 
-> > > Hmm, isn't it easier to add kernel-headers package on Android?
-> > 
-> > I have already been down that road. In the Android ecosystem, the Android
-> > teams only provide a "userspace system image" which goes on the system
-> > partition of the flash (and a couple other images are also provided but
-> > system is the main one). The system image cannot contain GPL source code. It
-> > is also not possible to put kernel headers for every kernel version on the
-> > system images that ship and is not practical. Android boots on 1000s of forked
-> > kernels. It does not make sense to provide headers on the system image for
-> > every kernel version and I already had many discussions on the subject with
-> > the teams, it is something that is just not done. Now for kernel modules,
-> > there's another image called the "vendor image" which is flashed onto the
-> > vendor parition, this is where kernel modules go.  This vendor image is not
-> > provided by Google for non-Pixel devices. So we have no control over what
-> > goes there BUT we do know that kernel modules that are enabled will go there,
-> > and we do have control over enforcing that certain kernel modules should be
-> > built and available as they are mandatory for Android to function properly.
-> > We would also possibly make it a built-in option as well. Anyway my point is
-> > keeping it in the kernel is really the easiest and the smartest choice IMO.
-> 
-> Sorry, I'm not convinced yet. This sounds like "because Android decided not
-> to put the header files on vendor partition, but kernel module is OK"
-> Why don't google ask vendors to put their kernel headers (or header tarball)
-> on vendor partition instead?
 
-May be Google can do that, but I think you missed the point of the patches.
-Making it a module is not mandatory, people can build it into the kernel as
-well (CONFIG_IKHEADERS_PROC=y). In this case, the proc entry will be
-available on boot without any dependency on the filesystem. If you go through
-the other threads such as folks from ARM who replied, they just boot a kernel
-image for debug purpose and want headers on device available without any
-additional step of copying headers to the filesystem. And folks from Google
-also said that they wanted a built-in option.
+I do not request a re-spin just for a matter of commit log,
+but this version produces an empty tarball.
+So, you will have a chance to update the patch anyway.
 
-There are many usecases for this, I have often run into issues with Linux
-over the years not only with Android, but other distros, where I boot custom
-kernels with no linux-headers package. This is quite painful. It is
-convenient to have it as /proc file since the file is dependent on kernel
-being booted up and this will work across all Linux distros and systems. I
-feel that if you can keep an open mind about it, you will see that a lot of
-people will use this feature if it is accepted and there is a lot of positive
-feedback in earlier posts of this set.
+In the next version, it would be nice to note that
+"external modules must be built on the same host arch
+as built vmlinux".
 
-> > > > The code to read the headers is based on /proc/config.gz code and uses
-> > > > the same technique to embed the headers.
-> > > > 
-> > > > To build a module, the below steps have been tested on an x86 machine:
-> > > > modprobe kheaders
-> > > > rm -rf $HOME/headers
-> > > > mkdir -p $HOME/headers
-> > > > tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
-> > > > cd my-kernel-module
-> > > > make -C $HOME/headers M=$(pwd) modules
-> > > > rmmod kheaders
-> > > 
-> > > It seems a bit complex, but no difference from compared with carrying
-> > > kheaders.tar.gz. I think we would better have a psudo filesystem
-> > > which can mount this compressed header file directly :) Then it becomes
-> > > simpler, like
-> > > 
-> > > modprobe headerfs
-> > > mkdir $HOME/headers
-> > > mount -t headerfs $HOME/headers
-> > > 
-> > > And this doesn't consume any disk-space.
-> > 
-> > I felt using a compressed tar is really the easiest way because of all the
-> > tools are already available.
-> 
-> As I asked above, if the pure tarball is useful, you can simply ask vendors
-> to put the header tarball on their vendor directory. I feel making it as
-> a module is not a right way.
 
-I don't see what is the drawback of making it a module, it makes it well
-integrated into kernel build and ecosystem. I also didn't see any
-justification you're providing about why it cannot be a module. If you go
-through this and earlier threads, a lot of people are Ok with having a module
-option. And I asked several top kernel maintainers at LPC and many people
-suggested having it as a module.
 
-> > There isn't a compressed in-ram filesystem right
-> > now that I'm aware off that can achieve the kind of high compression ratio
-> > this patchset does.
-> 
-> I think if linux can support something like tarfs(or compressed initramfs)
-> in kernel, it gives linux an improvement not only a hack. :-)
 
-Agreed, that sounds like a good idea. I will consider doing it once the
-series in its current form can be accepted. I am saying so since this series
-is simple, and I can do that as a next step since that idea will take a lot
-of time to implement. But I am keen on doing it.
+Let me ask one more question.
 
-thanks,
+I guess this patch is motivated by
+how difficult to convey kernel headers
+from vendors to users.
 
- - Joel
+In that situation, how will the user find
+the right compiler to use for building external modules?
+
+
+
+
+Greg KH said:
+
+We don't ever support the system of loading a module built with anything
+other than the _exact_ same compiler than the kernel was.
+
+
+For the full context, see this:
+https://lore.kernel.org/patchwork/patch/836247/#1031547
+
+
+-- 
+Best Regards
+Masahiro Yamada
