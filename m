@@ -1,97 +1,88 @@
 From: joel@joelfernandes.org (Joel Fernandes)
-Date: Fri, 1 Mar 2019 12:19:54 -0500
+Date: Fri, 1 Mar 2019 12:21:58 -0500
 Subject: [PATCH v3 1/2] Provide in-kernel headers for making it easy to
  extend the kernel
-In-Reply-To: <CAK7LNARTHJP=HzyBg_oBBL4whpxHXeijqk=zKLYpt=1GBLNGAA@mail.gmail.com>
+In-Reply-To: <20190301160309.2ddadeeb4aadbab4cdc88171@kernel.org>
 References: <20190227193748.132301-1-joel@joelfernandes.org>
- <CAK7LNAR=dpw7y+Y20m0n4ZqzQtqY2XrS3CKk5bQA-Azhp0SN6g@mail.gmail.com>
- <20190228144306.GA138215@google.com>
- <CAK7LNARTHJP=HzyBg_oBBL4whpxHXeijqk=zKLYpt=1GBLNGAA@mail.gmail.com>
-Message-ID: <20190301171954.GA217990@google.com>
+ <20190228173444.54403795211d80ba540b61cb@kernel.org>
+ <20190228150054.GB156098@google.com>
+ <20190301112826.ced40b59fb7e8118fa5b40d6@kernel.org>
+ <20190301032611.GA78818@google.com>
+ <20190301160309.2ddadeeb4aadbab4cdc88171@kernel.org>
+Message-ID: <20190301172158.GB217990@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190301171954.kYS-NgXURExZb73GhyTT5OvZFWsj2-eS-p5GgZgN9dM@z>
+Message-ID: <20190301172158.G5Fykdt2qRNClclOzBBdA_sWz1Hl7KMHF9-qV3-_FWE@z>
 
-On Fri, Mar 01, 2019@03:25:05PM +0900, Masahiro Yamada wrote:
-[...]
-> > > I am guessing the user will run these commands
-> > > on the target system.
-> > > In other words, external modules are native-compiled.
-> > > So,
-> > >
-> > >   target-arch: arm64
-> > >   host-arch:   arm64
-> > >
-> > >
-> > > Is this correct?
-> > >
-> > >
-> > > If I understood the assumed use-case correctly,
-> > > kheaders.tar.xw will contain host-programs compiled for x86,
-> > > which will not work on the target system.
-> > >
-> >
-> > You are right, the above commands in the commit message work only if the
-> > host/target are same arch due to scripts.
-> >
-> > However we can build with arm64 device connected to a host, like this (which
-> > I tested):
-> >
-> > adb shell modprobe kheaders; adb pull /proc/kheaders.tar.xz
-> > rm -rf $HOME/headers; mkdir -p $HOME/headers
-> > tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
-> > cd my-kernel-module
-> > make -C $HOME/headers M=$(pwd) ARCH=arm64 CROSS_COMPILE=aarch64- modules
-> > adb push test.ko /data/; adb shell rmmod kheaders
-> >
-> > The other way we can make this work is using x86 usermode emulation inside a
-> > chroot on the Android device which will make the earlier commands work. One
-> > thing to note is that Android also runs on x86 hardware so the commands in
-> > the commit message will work even for x86 Android targets already.
-> >
-> > Also note that this the "module building" part is really only one of the
-> > usecases. eBPF is another which needs the headers - and the headers are vast
-> > majority of the archive. Headers take 3.1MB out of 3.6MB of the archive on
-> > arm64 builds.
-> >
-> > How do you want to proceed here, should I mention these points in the commit
-> > message?
+On Fri, Mar 01, 2019@04:03:09PM +0900, Masami Hiramatsu wrote:
+> Hi Joel,
 > 
+> On Thu, 28 Feb 2019 22:26:11 -0500
+> Joel Fernandes <joel@joelfernandes.org> wrote:
 > 
+> > On Fri, Mar 01, 2019@11:28:26AM +0900, Masami Hiramatsu wrote:
+[..]
+> > There are many usecases for this, I have often run into issues with Linux
+> > over the years not only with Android, but other distros, where I boot custom
+> > kernels with no linux-headers package. This is quite painful. It is
+> > convenient to have it as /proc file since the file is dependent on kernel
+> > being booted up and this will work across all Linux distros and systems. I
+> > feel that if you can keep an open mind about it, you will see that a lot of
+> > people will use this feature if it is accepted and there is a lot of positive
+> > feedback in earlier posts of this set.
 > 
-> I do not request a re-spin just for a matter of commit log,
-> but this version produces an empty tarball.
-> So, you will have a chance to update the patch anyway.
-> 
-> In the next version, it would be nice to note that
-> "external modules must be built on the same host arch
-> as built vmlinux".
+> I don't complain about having headers for custom boot kernel. I agree with you
+> that having kernel headers for debugging is always good. :)
+> So google recommends built-in, it is reasonable.
 
-Ok, I respun it with 1 more minor nit for arm64 building. Please take a look.
+Ok, thanks :)
 
-> Let me ask one more question.
+> > > > > > The code to read the headers is based on /proc/config.gz code and uses
+> > > > > > the same technique to embed the headers.
+> > > > > > 
+> > > > > > To build a module, the below steps have been tested on an x86 machine:
+> > > > > > modprobe kheaders
+> > > > > > rm -rf $HOME/headers
+> > > > > > mkdir -p $HOME/headers
+> > > > > > tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
+> > > > > > cd my-kernel-module
+> > > > > > make -C $HOME/headers M=$(pwd) modules
+> > > > > > rmmod kheaders
+> > > > > 
+> > > > > It seems a bit complex, but no difference from compared with carrying
+> > > > > kheaders.tar.gz. I think we would better have a psudo filesystem
+> > > > > which can mount this compressed header file directly :) Then it becomes
+> > > > > simpler, like
+> > > > > 
+> > > > > modprobe headerfs
+> > > > > mkdir $HOME/headers
+> > > > > mount -t headerfs $HOME/headers
+> > > > > 
+> > > > > And this doesn't consume any disk-space.
+> > > > 
+> > > > I felt using a compressed tar is really the easiest way because of all the
+> > > > tools are already available.
+> > > 
+> > > As I asked above, if the pure tarball is useful, you can simply ask vendors
+> > > to put the header tarball on their vendor directory. I feel making it as
+> > > a module is not a right way.
+> > 
+> > I don't see what is the drawback of making it a module, it makes it well
+> > integrated into kernel build and ecosystem. I also didn't see any
+> > justification you're providing about why it cannot be a module. If you go
+> > through this and earlier threads, a lot of people are Ok with having a module
+> > option. And I asked several top kernel maintainers at LPC and many people
+> > suggested having it as a module.
 > 
-> I guess this patch is motivated by
-> how difficult to convey kernel headers
-> from vendors to users.
+> I meant, if we have a tarball, we don't need any operation of loading/unloading
+> kmodules. But if we have this as built-in, yes, this would be much easier to
+> deploy it to device.
 > 
-> In that situation, how will the user find
-> the right compiler to use for building external modules?
+> Anyway, having that option (make it as a module) is not bad. IMHO, that may
+> be more complicated than just have a tarball file, but it is a user's choice.
 > 
-> 
-> 
-> 
-> Greg KH said:
-> 
-> We don't ever support the system of loading a module built with anything
-> other than the _exact_ same compiler than the kernel was.
-> 
-> 
-> For the full context, see this:
-> https://lore.kernel.org/patchwork/patch/836247/#1031547
+> OK, now I understand it.
 
-IMO this issue is not related to this patch but is just an issue with
-building external modules in general. It is up to the user to use the right
-compiler, etc. I will let Greg comment more on that.
+Sounds good. :) Just sent out v4.
 
 thanks,
 
