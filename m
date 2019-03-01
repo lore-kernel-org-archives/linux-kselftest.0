@@ -1,28 +1,105 @@
-From: dave.hansen at intel.com (Dave Hansen)
-Date: Fri, 1 Mar 2019 10:37:04 -0800
-Subject: [PATCH v10 07/12] fs, arm64: untag user pointers in
- fs/userfaultfd.c
-In-Reply-To: <20190301165908.GA130541@arrakis.emea.arm.com>
-References: <cover.1550839937.git.andreyknvl@google.com>
- <8343cd77ca301df15839796f3b446b75ce5ffbbf.1550839937.git.andreyknvl@google.com>
- <73f2f3fe-9a66-22a1-5aae-c282779a75f5@intel.com>
- <CAAeHK+yQU8khtOoyDKqmHterCa16P7oWe9AMiPnrxE+Gyb_7aw@mail.gmail.com>
- <20190301165908.GA130541@arrakis.emea.arm.com>
-Message-ID: <fb721f0b-fad7-2310-4f17-8bf046413d40@intel.com>
+From: luto at kernel.org (Andy Lutomirski)
+Date: Fri, 1 Mar 2019 11:59:24 -0800
+Subject: [PATCH] selftests: x86: add version check in test_syscall_vdso
+In-Reply-To: <20190301001806.154271-1-smuckle@google.com>
+References: <20190301001806.154271-1-smuckle@google.com>
+Message-ID: <CALCETrUcH9R62gDdiG-EGTfSt2kQktv-0+bYmPcLn4PWNMrHSQ@mail.gmail.com>
 
-On 3/1/19 8:59 AM, Catalin Marinas wrote:
->>> So, we have to patch all these sites before the tagged values get to the
->>> point of hitting the vma lookup functions.  Dumb question: Why don't we
->>> just patch the vma lookup functions themselves instead of all of these
->>> callers?
->> That might be a working approach as well. We'll still need to fix up
->> places where the vma fields are accessed directly. Catalin, what do
->> you think?
-> Most callers of find_vma*() always follow it by a check of
-> vma->vma_start against some tagged address ('end' in the
-> userfaultfd_(un)register()) case. So it's not sufficient to untag it in
-> find_vma().
+> On Feb 28, 2019, at 4:18 PM, Steve Muckle <smuckle at google.com> wrote:
+>
+> Since 4.17 registers r8-r11 are not clobbered/zeroed by a 64-bit kernel
+> handling a 32-bit syscall and this behavior is enforced by the
+> test_syscall_vdso testcase. See commit 8bb2610bc496
+> ("x86/entry/64/compat: Preserve r8-r11 in int $0x80").
+>
+> Permit the old behavior in the testcase for kernels prior to 4.17.
 
-If that's truly the common case, sounds like we should have a find_vma()
-that does the vma_end checking as well.  Then at least the common case
-would not have to worry about tagging.
+NAK.  If you want an old buggy kernel to pass a test, please either
+patch the kernel or run an old test.
+
+
+>
+> Signed-off-by: Steve Muckle <smuckle at google.com>
+> ---
+> .../testing/selftests/x86/test_syscall_vdso.c | 30 +++++++++++++++++++
+> 1 file changed, 30 insertions(+)
+>
+> diff --git a/tools/testing/selftests/x86/test_syscall_vdso.c b/tools/testing/selftests/x86/test_syscall_vdso.c
+> index c9c3281077bc..f7284dc4c32b 100644
+> --- a/tools/testing/selftests/x86/test_syscall_vdso.c
+> +++ b/tools/testing/selftests/x86/test_syscall_vdso.c
+> @@ -30,6 +30,7 @@
+> #include <sys/time.h>
+> #include <elf.h>
+> #include <sys/ptrace.h>
+> +#include <sys/utsname.h>
+> #include <sys/wait.h>
+>
+> #if !defined(__i386__)
+> @@ -71,6 +72,7 @@ struct regs64 {
+> };
+> struct regs64 regs64;
+> int kernel_is_64bit;
+> +int clobber_ok;
+>
+> asm (
+>    "    .pushsection .text\n"
+> @@ -130,6 +132,28 @@ void print_regs64(void)
+>    printf("12:%016llx 13:%016llx 14:%016llx 15:%016llx\n", regs64.r12,  regs64.r13,  regs64.r14,  regs64.r15);
+> }
+>
+> +static void get_kernel_version(int *version, int *patchlevel)
+> +{
+> +    int ret, sublevel;
+> +    struct utsname utsname;
+> +
+> +    ret = uname(&utsname);
+> +    if (ret) {
+> +        perror("uname");
+> +        exit(1);
+> +    }
+> +
+> +    ret = sscanf(utsname.release, "%d.%d.%d", version, patchlevel,
+> +             &sublevel);
+> +    if (ret < 0) {
+> +        perror("sscanf");
+> +        exit(1);
+> +    } else if (ret != 3) {
+> +        printf("Malformed kernel version %s\n", &utsname.release);
+> +        exit(1);
+> +    }
+> +}
+> +
+> int check_regs64(void)
+> {
+>    int err = 0;
+> @@ -166,6 +190,8 @@ int check_regs64(void)
+>             * Historically (and probably unintentionally), they
+>             * were clobbered or zeroed.
+>             */
+> +            if (clobber_ok && *r64 == 0 && num <= 11)
+> +                continue;
+>        }
+>        printf("[FAIL]\tR%d has changed:%016llx\n", num, *r64);
+>        err++;
+> @@ -385,6 +411,7 @@ int main(int argc, char **argv, char **envp)
+> {
+>    int exitcode = 0;
+>    int cs;
+> +    int version, patchlevel;
+>
+>    asm("\n"
+>    "    movl    %%cs, %%eax\n"
+> @@ -394,6 +421,9 @@ int main(int argc, char **argv, char **envp)
+>    if (!kernel_is_64bit)
+>        printf("[NOTE]\tNot a 64-bit kernel, won't test R8..R15 leaks\n");
+>
+> +    get_kernel_version(&version, &patchlevel);
+> +    clobber_ok = version < 4 || (version == 4 && patchlevel < 17);
+> +
+>    /* This only works for non-static builds:
+>     * syscall_addr = dlsym(dlopen("linux-gate.so.1", RTLD_NOW), "__kernel_vsyscall");
+>     */
+> --
+> 2.21.0.352.gf09ad66450-goog
+>
