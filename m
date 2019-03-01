@@ -1,119 +1,34 @@
-From: joel at joelfernandes.org (Joel Fernandes (Google))
-Date: Fri,  1 Mar 2019 11:08:56 -0500
-Subject: [PATCH v4 2/2] Add selftests for module build using in-kernel headers
-In-Reply-To: <20190301160856.129678-1-joel@joelfernandes.org>
-References: <20190301160856.129678-1-joel@joelfernandes.org>
-Message-ID: <20190301160856.129678-2-joel@joelfernandes.org>
+From: catalin.marinas at arm.com (Catalin Marinas)
+Date: Fri, 1 Mar 2019 16:59:08 +0000
+Subject: [PATCH v10 07/12] fs, arm64: untag user pointers in
+ fs/userfaultfd.c
+In-Reply-To: <CAAeHK+yQU8khtOoyDKqmHterCa16P7oWe9AMiPnrxE+Gyb_7aw@mail.gmail.com>
+References: <cover.1550839937.git.andreyknvl@google.com>
+ <8343cd77ca301df15839796f3b446b75ce5ffbbf.1550839937.git.andreyknvl@google.com>
+ <73f2f3fe-9a66-22a1-5aae-c282779a75f5@intel.com>
+ <CAAeHK+yQU8khtOoyDKqmHterCa16P7oWe9AMiPnrxE+Gyb_7aw@mail.gmail.com>
+Message-ID: <20190301165908.GA130541@arrakis.emea.arm.com>
 
-This test tries to build a module successfully using the in-kernel
-headers found in /proc/kheaders.tar.xz.
+On Tue, Feb 26, 2019 at 03:39:08PM +0100, Andrey Konovalov wrote:
+> On Sat, Feb 23, 2019 at 12:06 AM Dave Hansen <dave.hansen at intel.com> wrote:
+> >
+> > On 2/22/19 4:53 AM, Andrey Konovalov wrote:
+> > > userfaultfd_register() and userfaultfd_unregister() use provided user
+> > > pointers for vma lookups, which can only by done with untagged pointers.
+> >
+> > So, we have to patch all these sites before the tagged values get to the
+> > point of hitting the vma lookup functions.  Dumb question: Why don't we
+> > just patch the vma lookup functions themselves instead of all of these
+> > callers?
+> 
+> That might be a working approach as well. We'll still need to fix up
+> places where the vma fields are accessed directly. Catalin, what do
+> you think?
 
-Verified pass and fail scenarios by running:
-make -C tools/testing/selftests TARGETS=kheaders run_tests
+Most callers of find_vma*() always follow it by a check of
+vma->vma_start against some tagged address ('end' in the
+userfaultfd_(un)register()) case. So it's not sufficient to untag it in
+find_vma().
 
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/kheaders/Makefile     |  5 +++++
- tools/testing/selftests/kheaders/config       |  1 +
- .../kheaders/run_kheaders_modbuild.sh         | 18 +++++++++++++++++
- .../selftests/kheaders/testmod/Makefile       |  3 +++
- .../testing/selftests/kheaders/testmod/test.c | 20 +++++++++++++++++++
- 6 files changed, 48 insertions(+)
- create mode 100644 tools/testing/selftests/kheaders/Makefile
- create mode 100644 tools/testing/selftests/kheaders/config
- create mode 100755 tools/testing/selftests/kheaders/run_kheaders_modbuild.sh
- create mode 100644 tools/testing/selftests/kheaders/testmod/Makefile
- create mode 100644 tools/testing/selftests/kheaders/testmod/test.c
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 400ee81a3043..5a9287fddd0d 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -20,6 +20,7 @@ TARGETS += intel_pstate
- TARGETS += ipc
- TARGETS += ir
- TARGETS += kcmp
-+TARGETS += kheaders
- TARGETS += kvm
- TARGETS += lib
- TARGETS += membarrier
-diff --git a/tools/testing/selftests/kheaders/Makefile b/tools/testing/selftests/kheaders/Makefile
-new file mode 100644
-index 000000000000..51035ab0732b
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+TEST_PROGS := run_kheaders_modbuild.sh
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/kheaders/config b/tools/testing/selftests/kheaders/config
-new file mode 100644
-index 000000000000..5221f9fb5e79
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/config
-@@ -0,0 +1 @@
-+CONFIG_IKHEADERS_PROC=y
-diff --git a/tools/testing/selftests/kheaders/run_kheaders_modbuild.sh b/tools/testing/selftests/kheaders/run_kheaders_modbuild.sh
-new file mode 100755
-index 000000000000..f001568e08b0
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/run_kheaders_modbuild.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+HEADERS_XZ=/proc/kheaders.tar.xz
-+TMP_DIR_HEADERS=$(mktemp -d)
-+TMP_DIR_MODULE=$(mktemp -d)
-+SPATH="$(dirname "$(readlink -f "$0")")"
-+
-+tar -xvf $HEADERS_XZ -C $TMP_DIR_HEADERS > /dev/null
-+
-+cp -r $SPATH/testmod $TMP_DIR_MODULE/
-+
-+pushd $TMP_DIR_MODULE/testmod > /dev/null
-+make -C $TMP_DIR_HEADERS M=$(pwd) modules
-+popd > /dev/null
-+
-+rm -rf $TMP_DIR_HEADERS
-+rm -rf $TMP_DIR_MODULE
-diff --git a/tools/testing/selftests/kheaders/testmod/Makefile b/tools/testing/selftests/kheaders/testmod/Makefile
-new file mode 100644
-index 000000000000..7083e28706e8
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/testmod/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-m += test.o
-diff --git a/tools/testing/selftests/kheaders/testmod/test.c b/tools/testing/selftests/kheaders/testmod/test.c
-new file mode 100644
-index 000000000000..6eb0b8492ffa
---- /dev/null
-+++ b/tools/testing/selftests/kheaders/testmod/test.c
-@@ -0,0 +1,20 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/init.h>
-+
-+static int __init hello_init(void)
-+{
-+	printk(KERN_INFO "Hello, world\n");
-+	return 0;
-+}
-+
-+static void __exit hello_exit(void)
-+{
-+	printk(KERN_INFO "Goodbye, world\n");
-+}
-+
-+module_init(hello_init);
-+module_exit(hello_exit);
-+MODULE_LICENSE("GPL v2");
 -- 
-2.21.0.352.gf09ad66450-goog
+Catalin
