@@ -1,105 +1,133 @@
-From: luto at kernel.org (Andy Lutomirski)
-Date: Fri, 1 Mar 2019 11:59:24 -0800
-Subject: [PATCH] selftests: x86: add version check in test_syscall_vdso
-In-Reply-To: <20190301001806.154271-1-smuckle@google.com>
-References: <20190301001806.154271-1-smuckle@google.com>
-Message-ID: <CALCETrUcH9R62gDdiG-EGTfSt2kQktv-0+bYmPcLn4PWNMrHSQ@mail.gmail.com>
+From: yamada.masahiro at socionext.com (Masahiro Yamada)
+Date: Sat, 2 Mar 2019 11:13:07 +0900
+Subject: [PATCH v3 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <20190301171954.GA217990@google.com>
+References: <20190227193748.132301-1-joel@joelfernandes.org>
+ <CAK7LNAR=dpw7y+Y20m0n4ZqzQtqY2XrS3CKk5bQA-Azhp0SN6g@mail.gmail.com>
+ <20190228144306.GA138215@google.com>
+ <CAK7LNARTHJP=HzyBg_oBBL4whpxHXeijqk=zKLYpt=1GBLNGAA@mail.gmail.com>
+ <20190301171954.GA217990@google.com>
+Message-ID: <CAK7LNAShVt=zOPP1TUuBbR_H8kmc+zuLAyRXucjMMKrALkW_6A@mail.gmail.com>
 
-> On Feb 28, 2019, at 4:18 PM, Steve Muckle <smuckle at google.com> wrote:
+On Sat, Mar 2, 2019 at 3:03 AM Joel Fernandes <joel at joelfernandes.org> wrote:
 >
-> Since 4.17 registers r8-r11 are not clobbered/zeroed by a 64-bit kernel
-> handling a 32-bit syscall and this behavior is enforced by the
-> test_syscall_vdso testcase. See commit 8bb2610bc496
-> ("x86/entry/64/compat: Preserve r8-r11 in int $0x80").
+> On Fri, Mar 01, 2019 at 03:25:05PM +0900, Masahiro Yamada wrote:
+> [...]
+> > > > I am guessing the user will run these commands
+> > > > on the target system.
+> > > > In other words, external modules are native-compiled.
+> > > > So,
+> > > >
+> > > >   target-arch: arm64
+> > > >   host-arch:   arm64
+> > > >
+> > > >
+> > > > Is this correct?
+> > > >
+> > > >
+> > > > If I understood the assumed use-case correctly,
+> > > > kheaders.tar.xw will contain host-programs compiled for x86,
+> > > > which will not work on the target system.
+> > > >
+> > >
+> > > You are right, the above commands in the commit message work only if the
+> > > host/target are same arch due to scripts.
+> > >
+> > > However we can build with arm64 device connected to a host, like this (which
+> > > I tested):
+> > >
+> > > adb shell modprobe kheaders; adb pull /proc/kheaders.tar.xz
+> > > rm -rf $HOME/headers; mkdir -p $HOME/headers
+> > > tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
+> > > cd my-kernel-module
+> > > make -C $HOME/headers M=$(pwd) ARCH=arm64 CROSS_COMPILE=aarch64- modules
+> > > adb push test.ko /data/; adb shell rmmod kheaders
+> > >
+> > > The other way we can make this work is using x86 usermode emulation inside a
+> > > chroot on the Android device which will make the earlier commands work. One
+> > > thing to note is that Android also runs on x86 hardware so the commands in
+> > > the commit message will work even for x86 Android targets already.
+> > >
+> > > Also note that this the "module building" part is really only one of the
+> > > usecases. eBPF is another which needs the headers - and the headers are vast
+> > > majority of the archive. Headers take 3.1MB out of 3.6MB of the archive on
+> > > arm64 builds.
+> > >
+> > > How do you want to proceed here, should I mention these points in the commit
+> > > message?
+> >
+> >
+> >
+> > I do not request a re-spin just for a matter of commit log,
+> > but this version produces an empty tarball.
+> > So, you will have a chance to update the patch anyway.
+> >
+> > In the next version, it would be nice to note that
+> > "external modules must be built on the same host arch
+> > as built vmlinux".
 >
-> Permit the old behavior in the testcase for kernels prior to 4.17.
+> Ok, I respun it with 1 more minor nit for arm64 building. Please take a look.
 
-NAK.  If you want an old buggy kernel to pass a test, please either
-patch the kernel or run an old test.
+
+I have not checked code-diff in v3 yet.
+
+Anyway, I will add comments to v4
+if I notice something.
 
 
+> > Let me ask one more question.
+> >
+> > I guess this patch is motivated by
+> > how difficult to convey kernel headers
+> > from vendors to users.
+> >
+> > In that situation, how will the user find
+> > the right compiler to use for building external modules?
+> >
+> >
+> >
+> >
+> > Greg KH said:
+> >
+> > We don't ever support the system of loading a module built with anything
+> > other than the _exact_ same compiler than the kernel was.
+> >
+> >
+> > For the full context, see this:
+> > https://lore.kernel.org/patchwork/patch/836247/#1031547
 >
-> Signed-off-by: Steve Muckle <smuckle at google.com>
-> ---
-> .../testing/selftests/x86/test_syscall_vdso.c | 30 +++++++++++++++++++
-> 1 file changed, 30 insertions(+)
+> IMO this issue is not related to this patch but is just an issue with
+> building external modules in general.
+
+
+I do not think it is an issue of the build system, at least.
+
+As far as I understood Greg's comment, it is troublesome
+without the assumption that vmlinux and modules are built
+by the same compiler.
+
+It is related to this patch since this patch assumes use-cases
+where external modules are built in a completely different environment,
+where a different compiler is probably installed.
+
+
+
+> It is up to the user to use the right
+> compiler, etc. I will let Greg comment more on that.
+
+
+
+
+
+
+
+> thanks,
 >
-> diff --git a/tools/testing/selftests/x86/test_syscall_vdso.c b/tools/testing/selftests/x86/test_syscall_vdso.c
-> index c9c3281077bc..f7284dc4c32b 100644
-> --- a/tools/testing/selftests/x86/test_syscall_vdso.c
-> +++ b/tools/testing/selftests/x86/test_syscall_vdso.c
-> @@ -30,6 +30,7 @@
-> #include <sys/time.h>
-> #include <elf.h>
-> #include <sys/ptrace.h>
-> +#include <sys/utsname.h>
-> #include <sys/wait.h>
+>  - Joel
 >
-> #if !defined(__i386__)
-> @@ -71,6 +72,7 @@ struct regs64 {
-> };
-> struct regs64 regs64;
-> int kernel_is_64bit;
-> +int clobber_ok;
->
-> asm (
->    "    .pushsection .text\n"
-> @@ -130,6 +132,28 @@ void print_regs64(void)
->    printf("12:%016llx 13:%016llx 14:%016llx 15:%016llx\n", regs64.r12,  regs64.r13,  regs64.r14,  regs64.r15);
-> }
->
-> +static void get_kernel_version(int *version, int *patchlevel)
-> +{
-> +    int ret, sublevel;
-> +    struct utsname utsname;
-> +
-> +    ret = uname(&utsname);
-> +    if (ret) {
-> +        perror("uname");
-> +        exit(1);
-> +    }
-> +
-> +    ret = sscanf(utsname.release, "%d.%d.%d", version, patchlevel,
-> +             &sublevel);
-> +    if (ret < 0) {
-> +        perror("sscanf");
-> +        exit(1);
-> +    } else if (ret != 3) {
-> +        printf("Malformed kernel version %s\n", &utsname.release);
-> +        exit(1);
-> +    }
-> +}
-> +
-> int check_regs64(void)
-> {
->    int err = 0;
-> @@ -166,6 +190,8 @@ int check_regs64(void)
->             * Historically (and probably unintentionally), they
->             * were clobbered or zeroed.
->             */
-> +            if (clobber_ok && *r64 == 0 && num <= 11)
-> +                continue;
->        }
->        printf("[FAIL]\tR%d has changed:%016llx\n", num, *r64);
->        err++;
-> @@ -385,6 +411,7 @@ int main(int argc, char **argv, char **envp)
-> {
->    int exitcode = 0;
->    int cs;
-> +    int version, patchlevel;
->
->    asm("\n"
->    "    movl    %%cs, %%eax\n"
-> @@ -394,6 +421,9 @@ int main(int argc, char **argv, char **envp)
->    if (!kernel_is_64bit)
->        printf("[NOTE]\tNot a 64-bit kernel, won't test R8..R15 leaks\n");
->
-> +    get_kernel_version(&version, &patchlevel);
-> +    clobber_ok = version < 4 || (version == 4 && patchlevel < 17);
-> +
->    /* This only works for non-static builds:
->     * syscall_addr = dlsym(dlopen("linux-gate.so.1", RTLD_NOW), "__kernel_vsyscall");
->     */
-> --
-> 2.21.0.352.gf09ad66450-goog
->
+
+
+-- 
+Best Regards
+Masahiro Yamada
