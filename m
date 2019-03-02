@@ -1,37 +1,41 @@
-From: shuah at kernel.org (shuah)
-Date: Sat, 2 Mar 2019 11:31:16 -0700
-Subject: [PATCH] selftests: x86: add version check in test_syscall_vdso
-In-Reply-To: <20190302091047.GA14963@kroah.com>
-References: <20190301001806.154271-1-smuckle@google.com>
- <CALCETrUcH9R62gDdiG-EGTfSt2kQktv-0+bYmPcLn4PWNMrHSQ@mail.gmail.com>
- <20190302091047.GA14963@kroah.com>
-Message-ID: <b9805f57-5fc8-454e-c1c8-c06dab86e863@kernel.org>
+From: lkp at intel.com (kbuild test robot)
+Date: Sun, 3 Mar 2019 05:59:58 +0800
+Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <20190301160856.129678-1-joel@joelfernandes.org>
+References: <20190301160856.129678-1-joel@joelfernandes.org>
+Message-ID: <201903030526.3AuYFiuN%fengguang.wu@intel.com>
 
-On 3/2/19 2:10 AM, Greg KH wrote:
-> On Fri, Mar 01, 2019 at 11:59:24AM -0800, Andy Lutomirski wrote:
->>> On Feb 28, 2019, at 4:18 PM, Steve Muckle <smuckle at google.com> wrote:
->>>
->>> Since 4.17 registers r8-r11 are not clobbered/zeroed by a 64-bit kernel
->>> handling a 32-bit syscall and this behavior is enforced by the
->>> test_syscall_vdso testcase. See commit 8bb2610bc496
->>> ("x86/entry/64/compat: Preserve r8-r11 in int $0x80").
->>>
->>> Permit the old behavior in the testcase for kernels prior to 4.17.
->>
->> NAK.  If you want an old buggy kernel to pass a test, please either
->> patch the kernel or run an old test.
-> 
-> Yeah, this isn't ok, especially as you might have 4.14 or 4.9 kernels
-> that can pass the test if the needed patches were backported.  Checking
-> kernel version numbers should never be used for anything.
-> 
+Hi Joel,
 
-Also, this test failure can tell us if we should backport important
-fixes. I have had requests to add kernel version checking in tests
-before and the recommendation is "don't check kernel versions and
-reply on feature type checks". In the case of fixes like this one,
-it is better for the test to fail than make us feel warm and fuzzy
-by making it pass.
+Thank you for the patch! Yet something to improve:
 
-thanks,
--- Shuah
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.0-rc8]
+[cannot apply to next-20190301]
+[if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
+
+url:    https://github.com/0day-ci/linux/commits/Joel-Fernandes-Google/Provide-in-kernel-headers-for-making-it-easy-to-extend-the-kernel/20190303-014850
+config: sh-allmodconfig (attached as .config)
+compiler: sh4-linux-gnu-gcc (Debian 8.2.0-11) 8.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # save the attached .config to linux build tree
+        GCC_VERSION=8.2.0 make.cross ARCH=sh 
+
+All errors (new ones prefixed by >>):
+
+>> find: 'arch/sh/kernel/module.lds': No such file or directory
+>> find: 'arch/sh/kernel/module.lds': No such file or directory
+
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config.gz
+Type: application/gzip
+Size: 50810 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190303/d38d151a/attachment-0001.bin>
