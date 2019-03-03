@@ -1,12 +1,12 @@
 From: lkp@intel.com (kbuild test robot)
-Date: Sun, 3 Mar 2019 05:59:58 +0800
+Date: Sun, 3 Mar 2019 10:04:39 +0800
 Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
  extend the kernel
 In-Reply-To: <20190301160856.129678-1-joel@joelfernandes.org>
 References: <20190301160856.129678-1-joel@joelfernandes.org>
-Message-ID: <201903030526.3AuYFiuN%fengguang.wu@intel.com>
+Message-ID: <201903031026.gHhuddZ8%fengguang.wu@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190302215958.J2R4EWadCJYUkjBDNretz5sbJtLi8daHAXYpEPWHIzY@z>
+Message-ID: <20190303020439.Rwq_u07z5VzAgbccMWRybJQ-mmn8XATnREQ3c9iCOHw@z>
 
 Hi Joel,
 
@@ -18,18 +18,18 @@ Thank you for the patch! Yet something to improve:
 [if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
 
 url:    https://github.com/0day-ci/linux/commits/Joel-Fernandes-Google/Provide-in-kernel-headers-for-making-it-easy-to-extend-the-kernel/20190303-014850
-config: sh-allmodconfig (attached as .config)
-compiler: sh4-linux-gnu-gcc (Debian 8.2.0-11) 8.2.0
+config: microblaze-allmodconfig (attached as .config)
+compiler: microblaze-linux-gcc (GCC) 8.2.0
 reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # save the attached .config to linux build tree
-        GCC_VERSION=8.2.0 make.cross ARCH=sh 
+        GCC_VERSION=8.2.0 make.cross ARCH=microblaze 
 
 All errors (new ones prefixed by >>):
 
->> find: 'arch/sh/kernel/module.lds': No such file or directory
->> find: 'arch/sh/kernel/module.lds': No such file or directory
+>> find: 'arch/microblaze/kernel/module.lds': No such file or directory
+>> find: 'arch/microblaze/kernel/module.lds': No such file or directory
 
 ---
 0-DAY kernel test infrastructure                Open Source Technology Center
@@ -38,6 +38,6 @@ https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
 A non-text attachment was scrubbed...
 Name: .config.gz
 Type: application/gzip
-Size: 50810 bytes
+Size: 56201 bytes
 Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190303/d38d151a/attachment-0001.bin>
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190303/7572fd61/attachment-0001.bin>
