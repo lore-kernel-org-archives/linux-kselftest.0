@@ -1,29 +1,14 @@
-From: jrdr.linux at gmail.com (Souptick Joarder)
-Date: Tue, 5 Mar 2019 00:21:27 +0530
-Subject: [PATCH] selftest/x86/mpx-dig.c: Remove duplicate header
-Message-ID: <20190304185127.GA6951@jordon-HP-15-Notebook-PC>
+From: peterz at infradead.org (Peter Zijlstra)
+Date: Mon, 4 Mar 2019 19:49:58 +0100
+Subject: [PATCH] selftest/rseq: Remove duplicate header
+In-Reply-To: <20190304183827.GA6809@jordon-HP-15-Notebook-PC>
+References: <20190304183827.GA6809@jordon-HP-15-Notebook-PC>
+Message-ID: <20190304184958.GR32494@hirez.programming.kicks-ass.net>
 
-Remove duplicate header which is included twice.
+On Tue, Mar 05, 2019 at 12:08:27AM +0530, Souptick Joarder wrote:
+> Remove duplicate header which is included twice
+> 
+> Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
+> Signed-off-by: Souptick Joarder <jrdr.linux at gmail.com>
 
-Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
-Signed-off-by: Souptick Joarder <jrdr.linux at gmail.com>
----
- tools/testing/selftests/x86/mpx-dig.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/tools/testing/selftests/x86/mpx-dig.c b/tools/testing/selftests/x86/mpx-dig.c
-index c13607e..880fbf6 100644
---- a/tools/testing/selftests/x86/mpx-dig.c
-+++ b/tools/testing/selftests/x86/mpx-dig.c
-@@ -8,9 +8,7 @@
- #include <unistd.h>
- #include <stdio.h>
- #include <errno.h>
--#include <sys/types.h>
- #include <sys/stat.h>
--#include <unistd.h>
- #include <sys/mman.h>
- #include <string.h>
- #include <fcntl.h>
--- 
-1.9.1
+That SoB chain is invalid.
