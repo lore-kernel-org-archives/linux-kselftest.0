@@ -1,32 +1,64 @@
-From: zanussi at kernel.org (Tom Zanussi)
-Date: Mon, 04 Mar 2019 14:09:17 -0600
-Subject: [PATCH] sefltests/ftrace: Use /bin/echo for output with options
-In-Reply-To: <20181129114911.7dcc8905@gandalf.local.home>
-References: <20181129235407.9788e718a4ae7830f9e5d225@kernel.org>
- <154350406317.4422.7595059658374071660.stgit@devbox>
- <1543509793.2018.2.camel@kernel.org>
- <20181129114911.7dcc8905@gandalf.local.home>
-Message-ID: <1551730157.4658.0.camel@kernel.org>
+From: adrian.ratiu at collabora.com (Adrian Ratiu)
+Date: Mon,  4 Mar 2019 22:50:19 +0200
+Subject: [PATCH] selftests/bpf: Add arm target register definitions
+Message-ID: <20190304205019.15071-1-adrian.ratiu@collabora.com>
 
-On Thu, 2018-11-29 at 11:49 -0500, Steven Rostedt wrote:
-> On Thu, 29 Nov 2018 10:43:13 -0600
-> Tom Zanussi <zanussi at kernel.org> wrote:
-> 
-> > I tried this on the three systems mentioned before, and it worked
-> > fine
-> > on all of them.
-> > 
-> > Tested-by: Tom Zanussi <tom.zanussi at linux.intel.com>
-> 
-> 
-> Shuah,
-> 
-> Can you take this in your tree. I already acked it.
-> 
+eBPF "restricted C" code can be compiled with LLVM/clang using target
+triplets like armv7l-unknown-linux-gnueabihf and loaded/run with small
+cross-compiled gobpf/elf [1] programs without requiring a full BCC
+port which is also undesirable on small embedded systems due to its
+size footprint. The only missing pieces are these helper macros which
+otherwise have to be redefined by each eBPF arm program.
 
-Ping...
+[1] https://github.com/iovisor/gobpf/tree/master/elf
 
+Signed-off-by: Adrian Ratiu <adrian.ratiu at collabora.com>
+---
+ tools/testing/selftests/bpf/bpf_helpers.h | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-> Thanks!
-> 
-> -- Steve
+diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
+index 6c77cf7bedce..f7883576f445 100644
+--- a/tools/testing/selftests/bpf/bpf_helpers.h
++++ b/tools/testing/selftests/bpf/bpf_helpers.h
+@@ -232,6 +232,9 @@ static int (*bpf_skb_pull_data)(void *, int len) =
+ #elif defined(__TARGET_ARCH_s930x)
+ 	#define bpf_target_s930x
+ 	#define bpf_target_defined
++#elif defined(__TARGET_ARCH_arm)
++	#define bpf_target_arm
++	#define bpf_target_defined
+ #elif defined(__TARGET_ARCH_arm64)
+ 	#define bpf_target_arm64
+ 	#define bpf_target_defined
+@@ -254,6 +257,8 @@ static int (*bpf_skb_pull_data)(void *, int len) =
+ 	#define bpf_target_x86
+ #elif defined(__s390x__)
+ 	#define bpf_target_s930x
++#elif defined(__arm__)
++	#define bpf_target_arm
+ #elif defined(__aarch64__)
+ 	#define bpf_target_arm64
+ #elif defined(__mips__)
+@@ -291,6 +296,19 @@ static int (*bpf_skb_pull_data)(void *, int len) =
+ #define PT_REGS_SP(x) ((x)->gprs[15])
+ #define PT_REGS_IP(x) ((x)->psw.addr)
+ 
++#elif defined(bpf_target_arm)
++
++#define PT_REGS_PARM1(x) ((x)->uregs[0])
++#define PT_REGS_PARM2(x) ((x)->uregs[1])
++#define PT_REGS_PARM3(x) ((x)->uregs[2])
++#define PT_REGS_PARM4(x) ((x)->uregs[3])
++#define PT_REGS_PARM5(x) ((x)->uregs[4])
++#define PT_REGS_RET(x) ((x)->uregs[14])
++#define PT_REGS_FP(x) ((x)->uregs[11]) /* Works only with CONFIG_FRAME_POINTER */
++#define PT_REGS_RC(x) ((x)->uregs[0])
++#define PT_REGS_SP(x) ((x)->uregs[13])
++#define PT_REGS_IP(x) ((x)->uregs[12])
++
+ #elif defined(bpf_target_arm64)
+ 
+ #define PT_REGS_PARM1(x) ((x)->regs[0])
+-- 
+2.20.1
