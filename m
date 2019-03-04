@@ -1,79 +1,67 @@
-From: liu.song.a23@gmail.com (Song Liu)
-Date: Mon, 4 Mar 2019 14:59:14 -0800
-Subject: [PATCH] selftests/bpf: Add arm target register definitions
-In-Reply-To: <20190304205019.15071-1-adrian.ratiu@collabora.com>
-References: <20190304205019.15071-1-adrian.ratiu@collabora.com>
+From: brendanhiggins@google.com (Brendan Higgins)
+Date: Mon, 4 Mar 2019 15:01:55 -0800
+Subject: [RFC v4 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20190214213729.21702-1-brendanhiggins@google.com>
+References: <20190214213729.21702-1-brendanhiggins@google.com>
 Message-ID:
- <CAPhsuW4kbZhE=1v4t6v803zA6PnRjzGA5UaAu5Nrbo7mrYyw5Q@mail.gmail.com>
+ <CAFd5g45F3YUsAjse+Vt5hj5CLjaXrRWgr5zCZZ6CJKc0hboP6Q@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190304225914.UyhHQJruMKcvKFh-JFTxLQS7gZv6LHeBNiqFF9_59lQ@z>
+Message-ID: <20190304230155.htKOqM2YlixrT66Iyjx7dFNptJOjzs3IxyjK0DCwGeo@z>
 
-On Mon, Mar 4, 2019@12:50 PM Adrian Ratiu <adrian.ratiu@collabora.com> wrote:
+On Thu, Feb 14, 2019 at 1:38 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
 >
-> eBPF "restricted C" code can be compiled with LLVM/clang using target
-> triplets like armv7l-unknown-linux-gnueabihf and loaded/run with small
-> cross-compiled gobpf/elf [1] programs without requiring a full BCC
-> port which is also undesirable on small embedded systems due to its
-> size footprint. The only missing pieces are these helper macros which
-> otherwise have to be redefined by each eBPF arm program.
+> This patch set proposes KUnit, a lightweight unit testing and mocking
+> framework for the Linux kernel.
 >
-> [1] https://github.com/iovisor/gobpf/tree/master/elf
->
-> Signed-off-by: Adrian Ratiu <adrian.ratiu at collabora.com>
 
-I think this is for bpf-next tree, which is closed during the merge window.
-Please resubmit when the bpf-next trees is opened (usually in 2 weeks).
+<snip>
 
-Thanks,
-Song
-
-> ---
->  tools/testing/selftests/bpf/bpf_helpers.h | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+> ## More information on KUnit
 >
-> diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
-> index 6c77cf7bedce..f7883576f445 100644
-> --- a/tools/testing/selftests/bpf/bpf_helpers.h
-> +++ b/tools/testing/selftests/bpf/bpf_helpers.h
-> @@ -232,6 +232,9 @@ static int (*bpf_skb_pull_data)(void *, int len) =
->  #elif defined(__TARGET_ARCH_s930x)
->         #define bpf_target_s930x
->         #define bpf_target_defined
-> +#elif defined(__TARGET_ARCH_arm)
-> +       #define bpf_target_arm
-> +       #define bpf_target_defined
->  #elif defined(__TARGET_ARCH_arm64)
->         #define bpf_target_arm64
->         #define bpf_target_defined
-> @@ -254,6 +257,8 @@ static int (*bpf_skb_pull_data)(void *, int len) =
->         #define bpf_target_x86
->  #elif defined(__s390x__)
->         #define bpf_target_s930x
-> +#elif defined(__arm__)
-> +       #define bpf_target_arm
->  #elif defined(__aarch64__)
->         #define bpf_target_arm64
->  #elif defined(__mips__)
-> @@ -291,6 +296,19 @@ static int (*bpf_skb_pull_data)(void *, int len) =
->  #define PT_REGS_SP(x) ((x)->gprs[15])
->  #define PT_REGS_IP(x) ((x)->psw.addr)
+> There is a bunch of documentation near the end of this patch set that
+> describes how to use KUnit and best practices for writing unit tests.
+> For convenience I am hosting the compiled docs here:
+> https://google.github.io/kunit-docs/third_party/kernel/docs/
+> Additionally for convenience, I have applied these patches to a branch:
+> https://kunit.googlesource.com/linux/+/kunit/rfc/5.0-rc5/v4
+> The repo may be cloned with:
+> git clone https://kunit.googlesource.com/linux
+> This patchset is on the kunit/rfc/5.0-rc5/v4 branch.
 >
-> +#elif defined(bpf_target_arm)
-> +
-> +#define PT_REGS_PARM1(x) ((x)->uregs[0])
-> +#define PT_REGS_PARM2(x) ((x)->uregs[1])
-> +#define PT_REGS_PARM3(x) ((x)->uregs[2])
-> +#define PT_REGS_PARM4(x) ((x)->uregs[3])
-> +#define PT_REGS_PARM5(x) ((x)->uregs[4])
-> +#define PT_REGS_RET(x) ((x)->uregs[14])
-> +#define PT_REGS_FP(x) ((x)->uregs[11]) /* Works only with CONFIG_FRAME_POINTER */
-> +#define PT_REGS_RC(x) ((x)->uregs[0])
-> +#define PT_REGS_SP(x) ((x)->uregs[13])
-> +#define PT_REGS_IP(x) ((x)->uregs[12])
-> +
->  #elif defined(bpf_target_arm64)
+> ## Changes Since Last Version
 >
->  #define PT_REGS_PARM1(x) ((x)->regs[0])
+>  - Got KUnit working on (hypothetically) all architectures (tested on
+>    x86), as per Rob's (and other's) request
+>  - Punting all KUnit features/patches depending on UML for now.
+>  - Broke out UML specific support into arch/um/* as per "[RFC v3 01/19]
+>    kunit: test: add KUnit test runner core", as requested by Luis.
+>  - Added support to kunit_tool to allow it to build kernels in external
+>    directories, as suggested by Kieran.
+>  - Added a UML defconfig, and a config fragment for KUnit as suggested
+>    by Kieran and Luis.
+>  - Cleaned up, and reformatted a bunch of stuff.
+>
 > --
-> 2.20.1
+> 2.21.0.rc0.258.g878e2cd30e-goog
 >
+
+Someone suggested I should send the next revision out as "PATCH"
+instead of "RFC" since there seems to be general consensus about
+everything at a high level, with a couple exceptions.
+
+At this time I am planning on sending the next revision out as "[PATCH
+v1 00/NN] kunit: introduce KUnit, the Linux kernel unit testing
+framework". Initially I wasn't sure if the next revision should be
+"[PATCH v1 ...]" or "[PATCH v5 ...]". Please let me know if you have a
+strong objection to the former.
+
+In the next revision, I will be dropping the last two of three patches
+for the DT unit tests as there doesn't seem to be enough features
+currently available to justify the heavy refactoring I did; however, I
+will still include the patch that just converts everything over to
+KUnit without restructuring the test cases:
+https://lkml.org/lkml/2019/2/14/1133
+
+I should have the next revision out in a week or so.
