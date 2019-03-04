@@ -1,18 +1,39 @@
-From: davem@davemloft.net (David Miller)
-Date: Mon, 04 Mar 2019 11:36:04 -0800 (PST)
-Subject: [PATCH] selftest/net: Remove duplicate header
-In-Reply-To: <20190304182048.GA6553@jordon-HP-15-Notebook-PC>
-References: <20190304182048.GA6553@jordon-HP-15-Notebook-PC>
-Message-ID: <20190304.113604.327224113776361328.davem@davemloft.net>
+From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
+Date: Mon, 4 Mar 2019 14:57:47 -0500 (EST)
+Subject: [PATCH] selftest/rseq: Remove duplicate header
+In-Reply-To: <CAFqt6zarwg3NnkbNYKEO-jrdHUw8GwMqUrLDTqgQV3D1dux-qQ@mail.gmail.com>
+References: <20190304183827.GA6809@jordon-HP-15-Notebook-PC>
+ <20190304184958.GR32494@hirez.programming.kicks-ass.net>
+ <CAFqt6zarwg3NnkbNYKEO-jrdHUw8GwMqUrLDTqgQV3D1dux-qQ@mail.gmail.com>
+Message-ID: <712691085.1137.1551729467392.JavaMail.zimbra@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190304193604.ytiM1ZWYmehwm4yZaNLFf_crxVSn7bDmHAwrmsbIcLI@z>
+Message-ID: <20190304195747.ZD8_EF8tE6jNS0q4STxanetY0z55z2gF2jpH7j-8eEQ@z>
 
-From: Souptick Joarder <jrdr.linux@gmail.com>
-Date: Mon, 4 Mar 2019 23:50:48 +0530
+----- On Mar 4, 2019,@1:53 PM, Souptick Joarder jrdr.linux@gmail.com wrote:
 
-> Remove duplicate header which is included twice.
+> On Tue, Mar 5, 2019@12:20 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>>
+>> On Tue, Mar 05, 2019@12:08:27AM +0530, Souptick Joarder wrote:
+>> > Remove duplicate header which is included twice
+>> >
+>> > Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
+>> > Signed-off-by: Souptick Joarder <jrdr.linux at gmail.com>
+>>
+>> That SoB chain is invalid.
 > 
-> Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
-> Signed-off-by: Souptick Joarder <jrdr.linux at gmail.com>
+> I didn't get why it is invalid ?
 
-Applied, thank you.
+I think it's about having the author of the patch (From) as first
+Signed-off-by, and then apply following Signed-off-by by maintainers
+who pick up the patch. (That's what I am used to see)
+
+What is the intent behind the second Signed-off-by by Sabyasachi Gupta ?
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
