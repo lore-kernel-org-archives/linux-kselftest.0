@@ -1,64 +1,176 @@
-From: adrian.ratiu at collabora.com (Adrian Ratiu)
-Date: Mon,  4 Mar 2019 22:50:19 +0200
-Subject: [PATCH] selftests/bpf: Add arm target register definitions
-Message-ID: <20190304205019.15071-1-adrian.ratiu@collabora.com>
+From: ci_notify at linaro.org (ci_notify at linaro.org)
+Date: Mon, 4 Mar 2019 22:00:29 +0000 (UTC)
+Subject: next-20190304 kselftest results
+Message-ID: <1058109989.1774.1551736830298.JavaMail.jenkins@a6c5c67cda76>
 
-eBPF "restricted C" code can be compiled with LLVM/clang using target
-triplets like armv7l-unknown-linux-gnueabihf and loaded/run with small
-cross-compiled gobpf/elf [1] programs without requiring a full BCC
-port which is also undesirable on small embedded systems due to its
-size footprint. The only missing pieces are these helper macros which
-otherwise have to be redefined by each eBPF arm program.
+Summary
+------------------------------------------------------------------------
+kernel: 5.0.0-rc8
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: 5d57915a1c8b22938f5fd60405fc159da21b87f6
+git describe: next-20190304
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190304
 
-[1] https://github.com/iovisor/gobpf/tree/master/elf
+Regressions (compared to build next-20190301)
+------------------------------------------------------------------------
+No regressions                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190301)                                                                   
+------------------------------------------------------------------------                                               
+No fixes
 
-Signed-off-by: Adrian Ratiu <adrian.ratiu at collabora.com>
----
- tools/testing/selftests/bpf/bpf_helpers.h | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+In total:
+------------------------------------------------------------------------
+Ran 373 total tests in the following environments and test suites.
+pass 279
+fail 94
+xfail 0
+skip 0
 
-diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
-index 6c77cf7bedce..f7883576f445 100644
---- a/tools/testing/selftests/bpf/bpf_helpers.h
-+++ b/tools/testing/selftests/bpf/bpf_helpers.h
-@@ -232,6 +232,9 @@ static int (*bpf_skb_pull_data)(void *, int len) =
- #elif defined(__TARGET_ARCH_s930x)
- 	#define bpf_target_s930x
- 	#define bpf_target_defined
-+#elif defined(__TARGET_ARCH_arm)
-+	#define bpf_target_arm
-+	#define bpf_target_defined
- #elif defined(__TARGET_ARCH_arm64)
- 	#define bpf_target_arm64
- 	#define bpf_target_defined
-@@ -254,6 +257,8 @@ static int (*bpf_skb_pull_data)(void *, int len) =
- 	#define bpf_target_x86
- #elif defined(__s390x__)
- 	#define bpf_target_s930x
-+#elif defined(__arm__)
-+	#define bpf_target_arm
- #elif defined(__aarch64__)
- 	#define bpf_target_arm64
- #elif defined(__mips__)
-@@ -291,6 +296,19 @@ static int (*bpf_skb_pull_data)(void *, int len) =
- #define PT_REGS_SP(x) ((x)->gprs[15])
- #define PT_REGS_IP(x) ((x)->psw.addr)
- 
-+#elif defined(bpf_target_arm)
-+
-+#define PT_REGS_PARM1(x) ((x)->uregs[0])
-+#define PT_REGS_PARM2(x) ((x)->uregs[1])
-+#define PT_REGS_PARM3(x) ((x)->uregs[2])
-+#define PT_REGS_PARM4(x) ((x)->uregs[3])
-+#define PT_REGS_PARM5(x) ((x)->uregs[4])
-+#define PT_REGS_RET(x) ((x)->uregs[14])
-+#define PT_REGS_FP(x) ((x)->uregs[11]) /* Works only with CONFIG_FRAME_POINTER */
-+#define PT_REGS_RC(x) ((x)->uregs[0])
-+#define PT_REGS_SP(x) ((x)->uregs[13])
-+#define PT_REGS_IP(x) ((x)->uregs[12])
-+
- #elif defined(bpf_target_arm64)
- 
- #define PT_REGS_PARM1(x) ((x)->regs[0])
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
+
+Test Suites
+-----------
+* kselftest
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
+
+
+Failures
+------------------------------------------------------------------------
+
+qemu_arm:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+
+qemu_i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+
+qemu_x86_64:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sockmap
+
+x15:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+
+i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+
+dragonboard-410c:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sockmap
+
+hi6220-hikey:
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sockmap
+
+qemu_arm64:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sockmap
+
+juno-r2:
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+
+x86:
+* kselftest-vsyscall-mode-native/bpf_test_btf
+* kselftest-vsyscall-mode-native/bpf_test_libbpf.sh
+* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-native/bpf_test_progs
+* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-native/bpf_test_sockmap
+* kselftest-vsyscall-mode-none/bpf_test_btf
+* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-none/bpf_test_progs
+* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-none/bpf_test_sockmap
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sockmap
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
 -- 
-2.20.1
+Linaro LKFT
+https://lkft.linaro.org
