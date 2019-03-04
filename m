@@ -1,178 +1,33 @@
-From: ci_notify@linaro.org (ci_notify@linaro.org)
-Date: Mon, 4 Mar 2019 22:00:29 +0000 (UTC)
-Subject: next-20190304 kselftest results
-Message-ID: <1058109989.1774.1551736830298.JavaMail.jenkins@a6c5c67cda76>
+From: brendanhiggins@google.com (Brendan Higgins)
+Date: Mon, 4 Mar 2019 14:28:05 -0800
+Subject: [RFC v4 08/17] kunit: test: add support for test abort
+In-Reply-To: <20190228135403.GD9806@kadam>
+References: <20190214213729.21702-1-brendanhiggins@google.com>
+ <20190214213729.21702-9-brendanhiggins@google.com>
+ <155121334527.260864.5324117081460979741@swboyd.mtv.corp.google.com>
+ <CAFd5g46QCisA4PHQXo57-LC6sNdk=OUjBE0O1s4005uBz_Vo6Q@mail.gmail.com>
+ <20190228135403.GD9806@kadam>
+Message-ID:
+ <CAFd5g46iqZ6+r9BUzPLSrEmomJQfei=Bb0CH1Tb2ZDr3f1s0jQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190304220029.Y0Yai2vrETaElMBfBNs39p_Pvyko9o631YhwYtwAEWU@z>
+Message-ID: <20190304222805.8FA5ZLyekHVtMZQFkXmaVpTFZiW-pbPBx0M_MsRMyiQ@z>
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.0.0-rc8
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: 5d57915a1c8b22938f5fd60405fc159da21b87f6
-git describe: next-20190304
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190304
+On Thu, Feb 28, 2019@5:55 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> On Thu, Feb 28, 2019@01:03:24AM -0800, Brendan Higgins wrote:
+> > you could do:
+> >
+> > if (IS_ERR_OR_NULL(ptr)) {
+> >         KUNIT_FAIL(test, "ptr is an errno or null: %ld", ptr);
+> >         return;
+> > }
+>
+> It's best to not mix error pointers and NULL but when we do mix them,
+> it means that NULL is a special kind of success.  Like we try to load
+> a feature and we get back:
+>
+>     valid pointer <-- success
+>     null          <-- feature is disabled.  not an error.
+>     error pointer <-- feature is broken.  fail.
 
-Regressions (compared to build next-20190301)
-------------------------------------------------------------------------
-No regressions                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190301)                                                                   
-------------------------------------------------------------------------                                               
-No fixes
-
-In total:
-------------------------------------------------------------------------
-Ran 373 total tests in the following environments and test suites.
-pass 279
-fail 94
-xfail 0
-skip 0
-
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
-
-
-Failures
-------------------------------------------------------------------------
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-qemu_x86_64:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-x15:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-
-dragonboard-410c:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-hi6220-hikey:
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-qemu_arm64:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-juno-r2:
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-
-x86:
-* kselftest-vsyscall-mode-native/bpf_test_btf
-* kselftest-vsyscall-mode-native/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-native/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/bpf_test_btf
-* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+Thanks for pointing that out! Will fix.
