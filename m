@@ -1,44 +1,72 @@
-From: joelaf at google.com (Joel Fernandes)
-Date: Sun, 3 Mar 2019 08:11:59 -0800
-Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
+From: yamada.masahiro at socionext.com (Masahiro Yamada)
+Date: Mon, 4 Mar 2019 14:40:44 +0900
+Subject: [PATCH v3 1/2] Provide in-kernel headers for making it easy to
  extend the kernel
-In-Reply-To: <201903030526.3AuYFiuN%fengguang.wu@intel.com>
-References: <20190301160856.129678-1-joel@joelfernandes.org>
- <201903030526.3AuYFiuN%fengguang.wu@intel.com>
-Message-ID: <CAJWu+op541tQ_TBJs-kOyRRBYDWiN0Znpb=cUQFxuLg-SmjO_g@mail.gmail.com>
+In-Reply-To: <20190302023940.GA55262@google.com>
+References: <20190227193748.132301-1-joel@joelfernandes.org>
+ <CAK7LNAR=dpw7y+Y20m0n4ZqzQtqY2XrS3CKk5bQA-Azhp0SN6g@mail.gmail.com>
+ <20190228144306.GA138215@google.com>
+ <CAK7LNARTHJP=HzyBg_oBBL4whpxHXeijqk=zKLYpt=1GBLNGAA@mail.gmail.com>
+ <20190301171954.GA217990@google.com>
+ <CAK7LNAShVt=zOPP1TUuBbR_H8kmc+zuLAyRXucjMMKrALkW_6A@mail.gmail.com>
+ <20190302023940.GA55262@google.com>
+Message-ID: <CAK7LNATjNE2g_HJnuqvTU7NuUeeUCa0Ogxf0Qru0yzkOT+n2-w@mail.gmail.com>
 
-This report is for an older version of the patch so ignore it. The
-issue is already resolved.
+> > > > Let me ask one more question.
+> > > >
+> > > > I guess this patch is motivated by
+> > > > how difficult to convey kernel headers
+> > > > from vendors to users.
+> > > >
+> > > > In that situation, how will the user find
+> > > > the right compiler to use for building external modules?
+> > > >
+> > > >
+> > > >
+> > > >
+> > > > Greg KH said:
+> > > >
+> > > > We don't ever support the system of loading a module built with anything
+> > > > other than the _exact_ same compiler than the kernel was.
+> > > >
+> > > >
+> > > > For the full context, see this:
+> > > > https://lore.kernel.org/patchwork/patch/836247/#1031547
+> > >
+> > > IMO this issue is not related to this patch but is just an issue with
+> > > building external modules in general.
+> >
+> >
+> > I do not think it is an issue of the build system, at least.
+> >
+> > As far as I understood Greg's comment, it is troublesome
+> > without the assumption that vmlinux and modules are built
+> > by the same compiler.
+> > It is related to this patch since this patch assumes use-cases
+> > where external modules are built in a completely different environment,
+> > where a different compiler is probably installed.
+>
+> Yes, but what I'm trying to say is the same issue exists with all other
+> solutions today that do this. Such as debian you have linux-headers package.
 
-On Sat, Mar 2, 2019 at 2:00 PM kbuild test robot <lkp at intel.com> wrote:
+
+Distributions provide the compiler in the standard path (/usr/bin/gcc),
+and users are supposed to use it for building external modules.
+That's the difference.
+
+
+
+> A user could totally use the build artifacts obtained from somewhere to build
+> a kernel module with a completely different compiler. That issue has just to
+> do with the reality, and isn't an issue caused by any one solution such as
+> this one.  I agree care must be taken whenever user is building external
+> kernel modules independent of kernel sources.  Did I miss something else?
 >
-> Hi Joel,
+> thanks a lot,
 >
-> Thank you for the patch! Yet something to improve:
+>  - Joel
 >
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on v5.0-rc8]
-> [cannot apply to next-20190301]
-> [if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
->
-> url:    https://github.com/0day-ci/linux/commits/Joel-Fernandes-Google/Provide-in-kernel-headers-for-making-it-easy-to-extend-the-kernel/20190303-014850
-> config: sh-allmodconfig (attached as .config)
-> compiler: sh4-linux-gnu-gcc (Debian 8.2.0-11) 8.2.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # save the attached .config to linux build tree
->         GCC_VERSION=8.2.0 make.cross ARCH=sh
->
-> All errors (new ones prefixed by >>):
->
-> >> find: 'arch/sh/kernel/module.lds': No such file or directory
-> >> find: 'arch/sh/kernel/module.lds': No such file or directory
->
-> ---
-> 0-DAY kernel test infrastructure                Open Source Technology Center
-> https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
->
-> --
-> You received this message because you are subscribed to the Google Groups "kernel-team" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe at android.com.
+
+--
+Best Regards
+Masahiro Yamada
