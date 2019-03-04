@@ -1,19 +1,16 @@
-From: jrdr.linux at gmail.com (Souptick Joarder)
-Date: Tue, 5 Mar 2019 00:23:42 +0530
-Subject: [PATCH] selftest/rseq: Remove duplicate header
-In-Reply-To: <20190304184958.GR32494@hirez.programming.kicks-ass.net>
-References: <20190304183827.GA6809@jordon-HP-15-Notebook-PC>
- <20190304184958.GR32494@hirez.programming.kicks-ass.net>
-Message-ID: <CAFqt6zarwg3NnkbNYKEO-jrdHUw8GwMqUrLDTqgQV3D1dux-qQ@mail.gmail.com>
+From: davem at davemloft.net (David Miller)
+Date: Mon, 04 Mar 2019 11:36:04 -0800 (PST)
+Subject: [PATCH] selftest/net: Remove duplicate header
+In-Reply-To: <20190304182048.GA6553@jordon-HP-15-Notebook-PC>
+References: <20190304182048.GA6553@jordon-HP-15-Notebook-PC>
+Message-ID: <20190304.113604.327224113776361328.davem@davemloft.net>
 
-On Tue, Mar 5, 2019 at 12:20 AM Peter Zijlstra <peterz at infradead.org> wrote:
->
-> On Tue, Mar 05, 2019 at 12:08:27AM +0530, Souptick Joarder wrote:
-> > Remove duplicate header which is included twice
-> >
-> > Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
-> > Signed-off-by: Souptick Joarder <jrdr.linux at gmail.com>
->
-> That SoB chain is invalid.
+From: Souptick Joarder <jrdr.linux at gmail.com>
+Date: Mon, 4 Mar 2019 23:50:48 +0530
 
-I didn't get why it is invalid ?
+> Remove duplicate header which is included twice.
+> 
+> Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
+> Signed-off-by: Souptick Joarder <jrdr.linux at gmail.com>
+
+Applied, thank you.
