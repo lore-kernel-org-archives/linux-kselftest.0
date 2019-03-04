@@ -1,80 +1,79 @@
-From: dietmar.eggemann@arm.com (Dietmar Eggemann)
-Date: Mon, 4 Mar 2019 23:48:52 +0100
-Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
- extend the kernel
-In-Reply-To: <20190301160856.129678-1-joel@joelfernandes.org>
-References: <20190301160856.129678-1-joel@joelfernandes.org>
-Message-ID: <934dc2dc-18b6-bc7c-9845-dac0577f7b47@arm.com>
+From: liu.song.a23@gmail.com (Song Liu)
+Date: Mon, 4 Mar 2019 14:59:14 -0800
+Subject: [PATCH] selftests/bpf: Add arm target register definitions
+In-Reply-To: <20190304205019.15071-1-adrian.ratiu@collabora.com>
+References: <20190304205019.15071-1-adrian.ratiu@collabora.com>
+Message-ID:
+ <CAPhsuW4kbZhE=1v4t6v803zA6PnRjzGA5UaAu5Nrbo7mrYyw5Q@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190304224852.wI3-pLohQONd8tFyQkYcSfRpfgQP3-XK5E4BrnAIlBw@z>
+Message-ID: <20190304225914.UyhHQJruMKcvKFh-JFTxLQS7gZv6LHeBNiqFF9_59lQ@z>
 
-On 3/1/19 5:08 PM, Joel Fernandes (Google) wrote:
-> Introduce in-kernel headers and other artifacts which are made available
-> as an archive through proc (/proc/kheaders.tar.xz file). This archive makes
-> it possible to build kernel modules, run eBPF programs, and other
-> tracing programs that need to extend the kernel for tracing purposes
-> without any dependency on the file system having headers and build
-> artifacts.
-> 
-> On Android and embedded systems, it is common to switch kernels but not
-> have kernel headers available on the file system. Raw kernel headers
-> also cannot be copied into the filesystem like they can be on other
-> distros, due to licensing and other issues. There's no linux-headers
-> package on Android. Further once a different kernel is booted, any
-> headers stored on the file system will no longer be useful. By storing
-> the headers as a compressed archive within the kernel, we can avoid these
-> issues that have been a hindrance for a long time.
-> 
-> The feature is also buildable as a module just in case the user desires
-> it not being part of the kernel image. This makes it possible to load
-> and unload the headers on demand. A tracing program, or a kernel module
-> builder can load the module, do its operations, and then unload the
-> module to save kernel memory. The total memory needed is 3.8MB.
-> 
-> The code to read the headers is based on /proc/config.gz code and uses
-> the same technique to embed the headers.
-> 
-> To build a module, the below steps have been tested on an x86 machine:
-> modprobe kheaders
-> rm -rf $HOME/headers
-> mkdir -p $HOME/headers
-> tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
-> cd my-kernel-module
-> make -C $HOME/headers M=$(pwd) modules
-> rmmod kheaders
-> 
-> Additional notes:
-> (1) external modules must be built on the same arch as the host that
-> built vmlinux. This can be done either in a qemu emulated chroot on the
-> target, or natively. This is due to host arch dependency of kernel
-> scripts.
-> 
-> (2)
-> A limitation of module building with this is, since Module.symvers is
-> not available in the archive due to a cyclic dependency with building of
-> the archive into the kernel or module binaries, the modules built using
-> the archive will not contain symbol versioning (modversion). This is
-> usually not an issue since the idea of this patch is to build a kernel
-> module on the fly and load it into the same kernel. An appropriate
-> warning is already printed by the kernel to alert the user of modules
-> not having modversions when built using the archive. For building with
-> modversions, the user can use traditional header packages. For our
-> tracing usecases, we build modules on the fly with this so it is not a
-> concern.
-> 
-> (3) I have left IKHD_ST and IKHD_ED markers as is to facilitate
-> future patches that would extract the headers from a kernel or module
-> image.
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+On Mon, Mar 4, 2019@12:50 PM Adrian Ratiu <adrian.ratiu@collabora.com> wrote:
+>
+> eBPF "restricted C" code can be compiled with LLVM/clang using target
+> triplets like armv7l-unknown-linux-gnueabihf and loaded/run with small
+> cross-compiled gobpf/elf [1] programs without requiring a full BCC
+> port which is also undesirable on small embedded systems due to its
+> size footprint. The only missing pieces are these helper macros which
+> otherwise have to be redefined by each eBPF arm program.
+>
+> [1] https://github.com/iovisor/gobpf/tree/master/elf
+>
+> Signed-off-by: Adrian Ratiu <adrian.ratiu at collabora.com>
+
+I think this is for bpf-next tree, which is closed during the merge window.
+Please resubmit when the bpf-next trees is opened (usually in 2 weeks).
+
+Thanks,
+Song
+
 > ---
-> 
->      Changes since v3:
->      - Blank tar was being generated because of a one line I
->        forgot to push. It is updated now.
->      - Added module.lds since arm64 needs it to build modules.
-
-Tested on x86 with eBPF scripts and exporting an alternative 
-BCC_KERNEL_SOURCE.
-
-Tested-by: Dietmar Eggemann <dietmar.eggemann at arm.com>
+>  tools/testing/selftests/bpf/bpf_helpers.h | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
+> index 6c77cf7bedce..f7883576f445 100644
+> --- a/tools/testing/selftests/bpf/bpf_helpers.h
+> +++ b/tools/testing/selftests/bpf/bpf_helpers.h
+> @@ -232,6 +232,9 @@ static int (*bpf_skb_pull_data)(void *, int len) =
+>  #elif defined(__TARGET_ARCH_s930x)
+>         #define bpf_target_s930x
+>         #define bpf_target_defined
+> +#elif defined(__TARGET_ARCH_arm)
+> +       #define bpf_target_arm
+> +       #define bpf_target_defined
+>  #elif defined(__TARGET_ARCH_arm64)
+>         #define bpf_target_arm64
+>         #define bpf_target_defined
+> @@ -254,6 +257,8 @@ static int (*bpf_skb_pull_data)(void *, int len) =
+>         #define bpf_target_x86
+>  #elif defined(__s390x__)
+>         #define bpf_target_s930x
+> +#elif defined(__arm__)
+> +       #define bpf_target_arm
+>  #elif defined(__aarch64__)
+>         #define bpf_target_arm64
+>  #elif defined(__mips__)
+> @@ -291,6 +296,19 @@ static int (*bpf_skb_pull_data)(void *, int len) =
+>  #define PT_REGS_SP(x) ((x)->gprs[15])
+>  #define PT_REGS_IP(x) ((x)->psw.addr)
+>
+> +#elif defined(bpf_target_arm)
+> +
+> +#define PT_REGS_PARM1(x) ((x)->uregs[0])
+> +#define PT_REGS_PARM2(x) ((x)->uregs[1])
+> +#define PT_REGS_PARM3(x) ((x)->uregs[2])
+> +#define PT_REGS_PARM4(x) ((x)->uregs[3])
+> +#define PT_REGS_PARM5(x) ((x)->uregs[4])
+> +#define PT_REGS_RET(x) ((x)->uregs[14])
+> +#define PT_REGS_FP(x) ((x)->uregs[11]) /* Works only with CONFIG_FRAME_POINTER */
+> +#define PT_REGS_RC(x) ((x)->uregs[0])
+> +#define PT_REGS_SP(x) ((x)->uregs[13])
+> +#define PT_REGS_IP(x) ((x)->uregs[12])
+> +
+>  #elif defined(bpf_target_arm64)
+>
+>  #define PT_REGS_PARM1(x) ((x)->regs[0])
+> --
+> 2.20.1
+>
