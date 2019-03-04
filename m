@@ -1,150 +1,78 @@
-From: brendanhiggins at google.com (Brendan Higgins)
-Date: Mon, 4 Mar 2019 14:39:47 -0800
-Subject: [RFC v4 08/17] kunit: test: add support for test abort
-In-Reply-To: <155137694423.260864.2846034318906225490@swboyd.mtv.corp.google.com>
-References: <20190214213729.21702-1-brendanhiggins@google.com>
- <20190214213729.21702-9-brendanhiggins@google.com>
- <155121334527.260864.5324117081460979741@swboyd.mtv.corp.google.com>
- <CAFd5g46QCisA4PHQXo57-LC6sNdk=OUjBE0O1s4005uBz_Vo6Q@mail.gmail.com>
- <155137694423.260864.2846034318906225490@swboyd.mtv.corp.google.com>
-Message-ID: <CAFd5g46v5tYRcXaAj9j6XBaO14q1R+2-7LOSgdgJSkwWqDim4g@mail.gmail.com>
+From: dietmar.eggemann at arm.com (Dietmar Eggemann)
+Date: Mon, 4 Mar 2019 23:48:52 +0100
+Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <20190301160856.129678-1-joel@joelfernandes.org>
+References: <20190301160856.129678-1-joel@joelfernandes.org>
+Message-ID: <934dc2dc-18b6-bc7c-9845-dac0577f7b47@arm.com>
 
-On Thu, Feb 28, 2019 at 10:02 AM Stephen Boyd <sboyd at kernel.org> wrote:
->
-> Quoting Brendan Higgins (2019-02-28 01:03:24)
-> > On Tue, Feb 26, 2019 at 12:35 PM Stephen Boyd <sboyd at kernel.org> wrote:
-> > >
-> > > when they need to abort and then the test runner would detect that error
-> > > via the return value from the 'run test' function. That would be a more
-> > > direct approach, but also more verbose than a single KUNIT_ASSERT()
-> > > line. It would be more kernel idiomatic too because the control flow
-> >
-> > Yeah, I was intentionally going against that idiom. I think that idiom
-> > makes test logic more complicated than it needs to be, especially if
-> > the assertion failure happens in a helper function; then you have to
-> > pass that error all the way back up. It is important that test code
-> > should be as simple as possible to the point of being immediately
-> > obviously correct at first glance because there are no tests for
-> > tests.
-> >
-> > The idea with assertions is that you use them to state all the
-> > preconditions for your test. Logically speaking, these are the
-> > premises of the test case, so if a premise isn't true, there is no
-> > point in continuing the test case because there are no conclusions
-> > that can be drawn without the premises. Whereas, the expectation is
-> > the thing you are trying to prove. It is not used universally in
-> > x-unit style test frameworks, but I really like it as a convention.
-> > You could still express the idea of a premise using the above idiom,
-> > but I think KUNIT_ASSERT_* states the intended idea perfectly.
->
-> Fair enough. It would be great if these sorts of things were described
-> in the commit text.
+On 3/1/19 5:08 PM, Joel Fernandes (Google) wrote:
+> Introduce in-kernel headers and other artifacts which are made available
+> as an archive through proc (/proc/kheaders.tar.xz file). This archive makes
+> it possible to build kernel modules, run eBPF programs, and other
+> tracing programs that need to extend the kernel for tracing purposes
+> without any dependency on the file system having headers and build
+> artifacts.
+> 
+> On Android and embedded systems, it is common to switch kernels but not
+> have kernel headers available on the file system. Raw kernel headers
+> also cannot be copied into the filesystem like they can be on other
+> distros, due to licensing and other issues. There's no linux-headers
+> package on Android. Further once a different kernel is booted, any
+> headers stored on the file system will no longer be useful. By storing
+> the headers as a compressed archive within the kernel, we can avoid these
+> issues that have been a hindrance for a long time.
+> 
+> The feature is also buildable as a module just in case the user desires
+> it not being part of the kernel image. This makes it possible to load
+> and unload the headers on demand. A tracing program, or a kernel module
+> builder can load the module, do its operations, and then unload the
+> module to save kernel memory. The total memory needed is 3.8MB.
+> 
+> The code to read the headers is based on /proc/config.gz code and uses
+> the same technique to embed the headers.
+> 
+> To build a module, the below steps have been tested on an x86 machine:
+> modprobe kheaders
+> rm -rf $HOME/headers
+> mkdir -p $HOME/headers
+> tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
+> cd my-kernel-module
+> make -C $HOME/headers M=$(pwd) modules
+> rmmod kheaders
+> 
+> Additional notes:
+> (1) external modules must be built on the same arch as the host that
+> built vmlinux. This can be done either in a qemu emulated chroot on the
+> target, or natively. This is due to host arch dependency of kernel
+> scripts.
+> 
+> (2)
+> A limitation of module building with this is, since Module.symvers is
+> not available in the archive due to a cyclic dependency with building of
+> the archive into the kernel or module binaries, the modules built using
+> the archive will not contain symbol versioning (modversion). This is
+> usually not an issue since the idea of this patch is to build a kernel
+> module on the fly and load it into the same kernel. An appropriate
+> warning is already printed by the kernel to alert the user of modules
+> not having modversions when built using the archive. For building with
+> modversions, the user can use traditional header packages. For our
+> tracing usecases, we build modules on the fly with this so it is not a
+> concern.
+> 
+> (3) I have left IKHD_ST and IKHD_ED markers as is to facilitate
+> future patches that would extract the headers from a kernel or module
+> image.
+> 
+> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> ---
+> 
+>      Changes since v3:
+>      - Blank tar was being generated because of a one line I
+>        forgot to push. It is updated now.
+>      - Added module.lds since arm64 needs it to build modules.
 
-Good point. Will fix.
+Tested on x86 with eBPF scripts and exporting an alternative 
+BCC_KERNEL_SOURCE.
 
->
-> Is the assumption that things like held locks and refcounted elements
-> won't exist when one of these assertions is made? It sounds like some of
-> the cleanup logic could be fairly complicated if a helper function
-> changes some state and then an assert fails and we have to unwind all
-> the state from a corrupt location. A similar problem exists for a test
-> timeout too. How do we get back to a sane state if the test locks up for
-> a long time? Just don't try?
-
-It depends on the situation, if it is part of a KUnit test itself
-(probably not code under test), then you can use the kunit_resource
-API: https://lkml.org/lkml/2019/2/14/1125; it is inspired by the
-devm_* family of functions, such that when a KUnit test case ends, for
-any reason, all the kunit_resources are automatically cleaned up.
-Similarly, kunit_module.exit is called at the end of every test case,
-regardless of how it terminates.
-
->
-> >
-> > > isn't hidden inside a macro and it isn't intimately connected with
-> > > kthreads and completions.
-> >
-> > Yeah, I wasn't a fan of that myself, but it was broadly available. My
-> > previous version (still the architecture specific version for UML, not
-> > in this patchset though) relies on UML_LONGJMP, but is obviously only
-> > works on UML. A number of people wanted support for other
-> > architectures. Rob and Luis specifically wanted me to provide a
-> > version of abort that would work on any architecture, even if it only
-> > had reduced functionality; I thought this fit the bill okay.
->
-> Ok.
->
-> >
-> > >
-> > > >
-> > > > diff --git a/kunit/test.c b/kunit/test.c
-> > > > index d18c50d5ed671..6e5244642ab07 100644
-> > > > --- a/kunit/test.c
-> > > > +++ b/kunit/test.c
-> > > [...]
-> > > > +
-> > > > +static void kunit_generic_throw(struct kunit_try_catch *try_catch)
-> > > > +{
-> > > > +       try_catch->context.try_result = -EFAULT;
-> > > > +       complete_and_exit(try_catch->context.try_completion, -EFAULT);
-> > > > +}
-> > > > +
-> > > > +static int kunit_generic_run_threadfn_adapter(void *data)
-> > > > +{
-> > > > +       struct kunit_try_catch *try_catch = data;
-> > > >
-> > > > +       try_catch->try(&try_catch->context);
-> > > > +
-> > > > +       complete_and_exit(try_catch->context.try_completion, 0);
-> > >
-> > > The exit code doesn't matter, right? If so, it might be clearer to just
-> > > return 0 from this function because kthreads exit themselves as far as I
-> > > recall.
-> >
-> > You mean complete and then return?
->
-> Yes. I was confused for a minute because I thought the exit code was
-> checked, but it isn't. Instead, the try_catch->context.try_result is
-> where the test result goes, so calling exit explicitly doesn't seem to
-> be important here, but it is important in the throw case.
-
-Yep.
-
->
-> >
-> > >
-> > > > +       else if (exit_code)
-> > > > +               kunit_err(test, "Unknown error: %d", exit_code);
-> > > > +}
-> > > > +
-> > > > +void kunit_generic_try_catch_init(struct kunit_try_catch *try_catch)
-> > > > +{
-> > > > +       try_catch->run = kunit_generic_run_try_catch;
-> > >
-> > > Is the idea that 'run' would be anything besides
-> > > 'kunit_generic_run_try_catch'? If it isn't going to be different, then
-> >
-> > Yeah, it can be overridden with an architecture specific version.
-> >
-> > > maybe it's simpler to just have a function like
-> > > kunit_generic_run_try_catch() that is called by the unit tests instead
-> > > of having to write 'try_catch->run(try_catch)' and indirect for the
-> > > basic case. Maybe I've missed the point entirely though and this is all
-> > > scaffolding for more complicated exception handling later on.
-> >
-> > Yeah, the idea is that different architectures can override exception
-> > handling with their own implementation. This is just the generic one.
-> > For example, UML has one that doesn't depend on kthreads or
-> > completions; the UML version also allows recovery from some segfault
-> > conditions.
->
-> Ok, got it. It may still be nice to have a wrapper or macro for that
-> try_catch->run(try_catch) statement so we don't have to know that a
-> try_catch struct has a run member.
->
->         static inline void kunit_run_try_catch(struct kunit_try_catch *try_catch)
->         {
->                 try_catch->run(try_catch);
->         }
-
-Makes sense. Will fix in the next revision.
+Tested-by: Dietmar Eggemann <dietmar.eggemann at arm.com>
