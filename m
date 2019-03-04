@@ -1,72 +1,45 @@
-From: yamada.masahiro at socionext.com (Masahiro Yamada)
-Date: Mon, 4 Mar 2019 14:40:44 +0900
-Subject: [PATCH v3 1/2] Provide in-kernel headers for making it easy to
- extend the kernel
-In-Reply-To: <20190302023940.GA55262@google.com>
-References: <20190227193748.132301-1-joel@joelfernandes.org>
- <CAK7LNAR=dpw7y+Y20m0n4ZqzQtqY2XrS3CKk5bQA-Azhp0SN6g@mail.gmail.com>
- <20190228144306.GA138215@google.com>
- <CAK7LNARTHJP=HzyBg_oBBL4whpxHXeijqk=zKLYpt=1GBLNGAA@mail.gmail.com>
- <20190301171954.GA217990@google.com>
- <CAK7LNAShVt=zOPP1TUuBbR_H8kmc+zuLAyRXucjMMKrALkW_6A@mail.gmail.com>
- <20190302023940.GA55262@google.com>
-Message-ID: <CAK7LNATjNE2g_HJnuqvTU7NuUeeUCa0Ogxf0Qru0yzkOT+n2-w@mail.gmail.com>
+From: jrdr.linux at gmail.com (Souptick Joarder)
+Date: Mon, 4 Mar 2019 16:19:29 +0530
+Subject: [PATCH] tools: testing: selftests: Remove duplicate headers
+In-Reply-To: <CAFqt6zY0HV7E+_6_s5A3eG+jEj+4hgQnAgJQm-Pc1gyX4Vnbpg@mail.gmail.com>
+References: <20190223070901.GA10274@jordon-HP-15-Notebook-PC>
+ <87tvgr1fr4.fsf@concordia.ellerman.id.au>
+ <CAFqt6zY0HV7E+_6_s5A3eG+jEj+4hgQnAgJQm-Pc1gyX4Vnbpg@mail.gmail.com>
+Message-ID: <CAFqt6zYqa6aCAcs51AdePtBSL58hMa1BSA87ZMLbwUJA=rWNLA@mail.gmail.com>
 
-> > > > Let me ask one more question.
-> > > >
-> > > > I guess this patch is motivated by
-> > > > how difficult to convey kernel headers
-> > > > from vendors to users.
-> > > >
-> > > > In that situation, how will the user find
-> > > > the right compiler to use for building external modules?
-> > > >
-> > > >
-> > > >
-> > > >
-> > > > Greg KH said:
-> > > >
-> > > > We don't ever support the system of loading a module built with anything
-> > > > other than the _exact_ same compiler than the kernel was.
-> > > >
-> > > >
-> > > > For the full context, see this:
-> > > > https://lore.kernel.org/patchwork/patch/836247/#1031547
+On Tue, Feb 26, 2019 at 10:59 AM Souptick Joarder <jrdr.linux at gmail.com> wrote:
+>
+> On Tue, Feb 26, 2019 at 7:18 AM Michael Ellerman <mpe at ellerman.id.au> wrote:
+> >
+> > Souptick Joarder <jrdr.linux at gmail.com> writes:
+> > > Remove duplicate headers which are included twice.
 > > >
-> > > IMO this issue is not related to this patch but is just an issue with
-> > > building external modules in general.
+> > > Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
+> > > Signed-off-by: Souptick Joarder <jrdr.linux at gmail.com>
+> > > ---
+> > ...
+> > >  tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c | 1 -
+> >
+> > I took this hunk via the powerpc tree.
+>
+> How about taking this entirely through a single tree ?
+> or Shall I send these changes in different patches ?
+
+If no comment, can we get this patch in queue for 5.1 ?
+
+>
+> >
+> > > diff --git a/tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c b/tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c
+> > > index 167135b..af1b802 100644
+> > > --- a/tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c
+> > > +++ b/tools/testing/selftests/powerpc/pmu/ebb/fork_cleanup_test.c
+> > > @@ -11,7 +11,6 @@
+> > >  #include <sys/wait.h>
+> > >  #include <unistd.h>
+> > >  #include <setjmp.h>
+> > > -#include <signal.h>
+> > >
+> > >  #include "ebb.h"
 > >
 > >
-> > I do not think it is an issue of the build system, at least.
-> >
-> > As far as I understood Greg's comment, it is troublesome
-> > without the assumption that vmlinux and modules are built
-> > by the same compiler.
-> > It is related to this patch since this patch assumes use-cases
-> > where external modules are built in a completely different environment,
-> > where a different compiler is probably installed.
->
-> Yes, but what I'm trying to say is the same issue exists with all other
-> solutions today that do this. Such as debian you have linux-headers package.
-
-
-Distributions provide the compiler in the standard path (/usr/bin/gcc),
-and users are supposed to use it for building external modules.
-That's the difference.
-
-
-
-> A user could totally use the build artifacts obtained from somewhere to build
-> a kernel module with a completely different compiler. That issue has just to
-> do with the reality, and isn't an issue caused by any one solution such as
-> this one.  I agree care must be taken whenever user is building external
-> kernel modules independent of kernel sources.  Did I miss something else?
->
-> thanks a lot,
->
->  - Joel
->
-
---
-Best Regards
-Masahiro Yamada
+> > cheers
