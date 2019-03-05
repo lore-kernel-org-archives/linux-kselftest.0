@@ -1,14 +1,14 @@
 From: joel at joelfernandes.org (Joel Fernandes)
-Date: Tue, 5 Mar 2019 11:25:23 -0500
+Date: Tue, 5 Mar 2019 11:27:00 -0500
 Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
  extend the kernel
-In-Reply-To: <934dc2dc-18b6-bc7c-9845-dac0577f7b47@arm.com>
+In-Reply-To: <20190304140059.5t2bhq7x27jbiuqx@e107158-lin.cambridge.arm.com>
 References: <20190301160856.129678-1-joel@joelfernandes.org>
- <934dc2dc-18b6-bc7c-9845-dac0577f7b47@arm.com>
-Message-ID: <20190305162523.GA78911@google.com>
+ <20190304140059.5t2bhq7x27jbiuqx@e107158-lin.cambridge.arm.com>
+Message-ID: <20190305162700.GB78911@google.com>
 
-On Mon, Mar 04, 2019 at 11:48:52PM +0100, Dietmar Eggemann wrote:
-> On 3/1/19 5:08 PM, Joel Fernandes (Google) wrote:
+On Mon, Mar 04, 2019 at 02:00:59PM +0000, Qais Yousef wrote:
+> On 03/01/19 11:08, Joel Fernandes (Google) wrote:
 > > Introduce in-kernel headers and other artifacts which are made available
 > > as an archive through proc (/proc/kheaders.tar.xz file). This archive makes
 > > it possible to build kernel modules, run eBPF programs, and other
@@ -67,18 +67,14 @@ On Mon, Mar 04, 2019 at 11:48:52PM +0100, Dietmar Eggemann wrote:
 > > image.
 > > 
 > > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> > ---
-> > 
-> >      Changes since v3:
-> >      - Blank tar was being generated because of a one line I
-> >        forgot to push. It is updated now.
-> >      - Added module.lds since arm64 needs it to build modules.
 > 
-> Tested on x86 with eBPF scripts and exporting an alternative
-> BCC_KERNEL_SOURCE.
+> I could get the headers using this patch in both built-in and modules options.
 > 
-> Tested-by: Dietmar Eggemann <dietmar.eggemann at arm.com>
+> You can add my tested-and-reviewed-by: Qais Yousef <qais.yousef at arm.com>
+> 
+> I am not familiar with running kselftests so didn't get a chance to try the
+> next patch.
 
-Thank you! Will repost with the tags soon.
+Thanks a lot for testing! Will repost with the tags soon.
 
-- Joel
+ - Joel
