@@ -1,39 +1,77 @@
-From: andreyknvl@google.com (Andrey Konovalov)
-Date: Tue, 5 Mar 2019 18:47:37 +0100
-Subject: [PATCH v10 07/12] fs,
- arm64: untag user pointers in fs/userfaultfd.c
-In-Reply-To: <fb721f0b-fad7-2310-4f17-8bf046413d40@intel.com>
-References: <cover.1550839937.git.andreyknvl@google.com>
- <8343cd77ca301df15839796f3b446b75ce5ffbbf.1550839937.git.andreyknvl@google.com>
- <73f2f3fe-9a66-22a1-5aae-c282779a75f5@intel.com>
- <CAAeHK+yQU8khtOoyDKqmHterCa16P7oWe9AMiPnrxE+Gyb_7aw@mail.gmail.com>
- <20190301165908.GA130541@arrakis.emea.arm.com>
- <fb721f0b-fad7-2310-4f17-8bf046413d40@intel.com>
-Message-ID:
- <CAAeHK+ydurtkoVtvyoQdfcXuR3ZnZ+=ixoZkXEFRTZARg+GtRQ@mail.gmail.com>
+From: mathieu.desnoyers@efficios.com (Mathieu Desnoyers)
+Date: Tue,  5 Mar 2019 14:47:55 -0500
+Subject: [PATCH for 5.1 3/3] rseq/selftests: Adapt number of threads to the
+ number of detected cpus
+In-Reply-To: <20190305194755.2602-1-mathieu.desnoyers@efficios.com>
+References: <20190305194755.2602-1-mathieu.desnoyers@efficios.com>
+Message-ID: <20190305194755.2602-4-mathieu.desnoyers@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190305174737.ER4Cy7XnmlVWv96_CQJemE-qEhE_rl-B244SGOtB8tc@z>
+Message-ID: <20190305194755.X_MXg0Zx8f_dCaGY8JG8MP89rfM4zZy6y6I95L_cH3k@z>
 
-On Fri, Mar 1, 2019@7:37 PM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 3/1/19 8:59 AM, Catalin Marinas wrote:
-> >>> So, we have to patch all these sites before the tagged values get to the
-> >>> point of hitting the vma lookup functions.  Dumb question: Why don't we
-> >>> just patch the vma lookup functions themselves instead of all of these
-> >>> callers?
-> >> That might be a working approach as well. We'll still need to fix up
-> >> places where the vma fields are accessed directly. Catalin, what do
-> >> you think?
-> > Most callers of find_vma*() always follow it by a check of
-> > vma->vma_start against some tagged address ('end' in the
-> > userfaultfd_(un)register()) case. So it's not sufficient to untag it in
-> > find_vma().
->
-> If that's truly the common case, sounds like we should have a find_vma()
-> that does the vma_end checking as well.  Then at least the common case
-> would not have to worry about tagging.
+On smaller systems, running a test with 200 threads can take a long
+time on machines with smaller number of CPUs.
 
-It seems that a lot of find_vma() callers indeed do different kinds of
-checking/subtractions of vma->vma_start and a tagged address, which
-look hardly unifiable. So untagging the addresses in find_vma()
-callers looks like a more suitable solution.
+Detect the number of online cpus at test runtime, and multiply that
+by 6 to have 6 rseq threads per cpu preempting each other.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Joel Fernandes <joelaf at google.com>
+Cc: Peter Zijlstra <peterz at infradead.org>
+Cc: Catalin Marinas <catalin.marinas at arm.com>
+Cc: Dave Watson <davejwatson at fb.com>
+Cc: Will Deacon <will.deacon at arm.com>
+Cc: Andi Kleen <andi at firstfloor.org>
+Cc: linux-kselftest at vger.kernel.org
+Cc: "H . Peter Anvin" <hpa at zytor.com>
+Cc: Chris Lameter <cl at linux.com>
+Cc: Russell King <linux at arm.linux.org.uk>
+Cc: Michael Kerrisk <mtk.manpages at gmail.com>
+Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
+Cc: Paul Turner <pjt at google.com>
+Cc: Boqun Feng <boqun.feng at gmail.com>
+Cc: Josh Triplett <josh at joshtriplett.org>
+Cc: Steven Rostedt <rostedt at goodmis.org>
+Cc: Ben Maurer <bmaurer at fb.com>
+Cc: Andy Lutomirski <luto at amacapital.net>
+Cc: Andrew Morton <akpm at linux-foundation.org>
+Cc: Linus Torvalds <torvalds at linux-foundation.org>
+---
+ tools/testing/selftests/rseq/run_param_test.sh | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/rseq/run_param_test.sh b/tools/testing/selftests/rseq/run_param_test.sh
+index 3acd6d75ff9f..e426304fd4a0 100755
+--- a/tools/testing/selftests/rseq/run_param_test.sh
++++ b/tools/testing/selftests/rseq/run_param_test.sh
+@@ -1,6 +1,8 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0+ or MIT
+ 
++NR_CPUS=`grep '^processor' /proc/cpuinfo | wc -l`
++
+ EXTRA_ARGS=${@}
+ 
+ OLDIFS="$IFS"
+@@ -28,15 +30,16 @@ IFS="$OLDIFS"
+ 
+ REPS=1000
+ SLOW_REPS=100
++NR_THREADS=$((6*${NR_CPUS}))
+ 
+ function do_tests()
+ {
+ 	local i=0
+ 	while [ "$i" -lt "${#TEST_LIST[@]}" ]; do
+ 		echo "Running test ${TEST_NAME[$i]}"
+-		./param_test ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
++		./param_test ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
+ 		echo "Running compare-twice test ${TEST_NAME[$i]}"
+-		./param_test_compare_twice ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
++		./param_test_compare_twice ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
+ 		let "i++"
+ 	done
+ }
+-- 
+2.11.0
