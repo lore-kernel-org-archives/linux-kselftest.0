@@ -1,29 +1,49 @@
 From: jrdr.linux@gmail.com (Souptick Joarder)
-Date: Tue, 5 Mar 2019 10:21:46 +0530
-Subject: [PATCH] selftest/proc: Remove duplicate header
-In-Reply-To: <20190304163739.fbd2e5a508cfcf087a117620@linux-foundation.org>
-References: <20190304182719.GA6606@jordon-HP-15-Notebook-PC>
- <20190304163739.fbd2e5a508cfcf087a117620@linux-foundation.org>
+Date: Tue, 5 Mar 2019 12:07:16 +0530
+Subject: [PATCH] selftest/rseq: Remove duplicate header
+In-Reply-To: <712691085.1137.1551729467392.JavaMail.zimbra@efficios.com>
+References: <20190304183827.GA6809@jordon-HP-15-Notebook-PC>
+ <20190304184958.GR32494@hirez.programming.kicks-ass.net>
+ <CAFqt6zarwg3NnkbNYKEO-jrdHUw8GwMqUrLDTqgQV3D1dux-qQ@mail.gmail.com>
+ <712691085.1137.1551729467392.JavaMail.zimbra@efficios.com>
 Message-ID:
- <CAFqt6zYX4TEv7wT3iYB6gbzHmTEg6ap09EU1CmpSP7xwDOQVFw@mail.gmail.com>
+ <CAFqt6zaNsiMdq_XxYrEdFxJigW3v8unSbFys+B3d-vBGWEj4+Q@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190305045146.8cmwkqgysq9tCk1xftncZ6FqB7jm4I30lEMEIry_lpM@z>
+Message-ID: <20190305063716.MEf3aMudKj61QNls-sLlU_7vjqW32k0z3e8QHcUljzE@z>
 
-On Tue, Mar 5, 2019@6:07 AM Andrew Morton <akpm@linux-foundation.org> wrote:
+On Tue, Mar 5, 2019 at 1:27 AM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
 >
-> On Mon, 4 Mar 2019 23:57:19 +0530 Souptick Joarder <jrdr.linux@gmail.com> wrote:
+> ----- On Mar 4, 2019,@1:53 PM, Souptick Joarder jrdr.linux@gmail.com wrote:
 >
-> > Remove duplicate header which is included twice.
+> > On Tue, Mar 5, 2019@12:20 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >>
+> >> On Tue, Mar 05, 2019@12:08:27AM +0530, Souptick Joarder wrote:
+> >> > Remove duplicate header which is included twice
+> >> >
+> >> > Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
+> >> > Signed-off-by: Souptick Joarder <jrdr.linux at gmail.com>
+> >>
+> >> That SoB chain is invalid.
 > >
-> > Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
-> > Signed-off-by: Souptick Joarder <jrdr.linux at gmail.com>
+> > I didn't get why it is invalid ?
 >
-> This signoff order makes me suspect that Sabyasachi was the author.  If
-> so, the patch should have had Sabyasachi's From: line at the start of
-> the changelog.
+> I think it's about having the author of the patch (From) as first
+> Signed-off-by, and then apply following Signed-off-by by maintainers
+> who pick up the patch. (That's what I am used to see)
 >
-> Please clafify?
+> What is the intent behind the second Signed-off-by by Sabyasachi Gupta ?
 
-yes, sabyasachi was the author, but due to some email client issue
-I am posting on behalf of him.
-Ok, I will add Sabyasachi's From: line and post v2.
+Sabyasachi is the author and I am posting his patches as his email client
+has some issue. I think I need to add Sabyasachi's From: @ the
+beginning of change log.
+Andrew suggested the same in another thread.
+>
+> Thanks,
+>
+> Mathieu
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
