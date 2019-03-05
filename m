@@ -1,46 +1,178 @@
-From: jrdr.linux at gmail.com (Souptick Joarder)
-Date: Tue, 5 Mar 2019 12:07:16 +0530
-Subject: [PATCH] selftest/rseq: Remove duplicate header
-In-Reply-To: <712691085.1137.1551729467392.JavaMail.zimbra@efficios.com>
-References: <20190304183827.GA6809@jordon-HP-15-Notebook-PC>
- <20190304184958.GR32494@hirez.programming.kicks-ass.net>
- <CAFqt6zarwg3NnkbNYKEO-jrdHUw8GwMqUrLDTqgQV3D1dux-qQ@mail.gmail.com>
- <712691085.1137.1551729467392.JavaMail.zimbra@efficios.com>
-Message-ID: <CAFqt6zaNsiMdq_XxYrEdFxJigW3v8unSbFys+B3d-vBGWEj4+Q@mail.gmail.com>
+From: ci_notify at linaro.org (ci_notify at linaro.org)
+Date: Tue, 5 Mar 2019 11:00:30 +0000 (UTC)
+Subject: next-20190305 kselftest results
+Message-ID: <1414711743.1840.1551783630586.JavaMail.jenkins@a6c5c67cda76>
 
-On Tue, Mar 5, 2019 at 1:27 AM Mathieu Desnoyers
-<mathieu.desnoyers at efficios.com> wrote:
->
-> ----- On Mar 4, 2019, at 1:53 PM, Souptick Joarder jrdr.linux at gmail.com wrote:
->
-> > On Tue, Mar 5, 2019 at 12:20 AM Peter Zijlstra <peterz at infradead.org> wrote:
-> >>
-> >> On Tue, Mar 05, 2019 at 12:08:27AM +0530, Souptick Joarder wrote:
-> >> > Remove duplicate header which is included twice
-> >> >
-> >> > Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
-> >> > Signed-off-by: Souptick Joarder <jrdr.linux at gmail.com>
-> >>
-> >> That SoB chain is invalid.
-> >
-> > I didn't get why it is invalid ?
->
-> I think it's about having the author of the patch (From) as first
-> Signed-off-by, and then apply following Signed-off-by by maintainers
-> who pick up the patch. (That's what I am used to see)
->
-> What is the intent behind the second Signed-off-by by Sabyasachi Gupta ?
+Summary
+------------------------------------------------------------------------
+kernel: 5.0.0
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: baf5a9d1f9b95eb97e9eb54932e20dbbf814771c
+git describe: next-20190305
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190305
 
-Sabyasachi is the author and I am posting his patches as his email client
-has some issue. I think I need to add Sabyasachi's From: @ the
-beginning of change log.
-Andrew suggested the same in another thread.
->
-> Thanks,
->
-> Mathieu
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+Regressions (compared to build next-20190304)
+------------------------------------------------------------------------
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_maps                                                                                                         
+                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190304)                                                                   
+------------------------------------------------------------------------                                               
+dragonboard-410c - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sockmap                                                                                                         
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sockmap                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sockmap                                                                                                         
+
+
+In total:
+------------------------------------------------------------------------
+Ran 317 total tests in the following environments and test suites.
+pass 233
+fail 84
+xfail 0
+skip 0
+
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
+
+Test Suites
+-----------
+* kselftest
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
+
+
+Failures
+------------------------------------------------------------------------
+
+qemu_x86_64:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+
+qemu_arm:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+
+qemu_i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+
+x86:
+* kselftest-vsyscall-mode-native/bpf_test_btf
+* kselftest-vsyscall-mode-native/bpf_test_libbpf.sh
+* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-native/bpf_test_progs
+* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-native/bpf_test_sockmap
+* kselftest-vsyscall-mode-none/bpf_test_btf
+* kselftest-vsyscall-mode-none/bpf_test_libbpf.sh
+* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-none/bpf_test_progs
+* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-none/bpf_test_sockmap
+
+x15:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+
+dragonboard-410c:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+
+qemu_arm64:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+
+hi6220-hikey:
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sockmap
+
+i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+
+juno-r2:
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
