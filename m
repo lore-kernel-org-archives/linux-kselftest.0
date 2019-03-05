@@ -1,82 +1,39 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Tue, 5 Mar 2019 11:27:00 -0500
-Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
- extend the kernel
-In-Reply-To: <20190304140059.5t2bhq7x27jbiuqx@e107158-lin.cambridge.arm.com>
-References: <20190301160856.129678-1-joel@joelfernandes.org>
- <20190304140059.5t2bhq7x27jbiuqx@e107158-lin.cambridge.arm.com>
-Message-ID: <20190305162700.GB78911@google.com>
+From: andreyknvl@google.com (Andrey Konovalov)
+Date: Tue, 5 Mar 2019 18:47:37 +0100
+Subject: [PATCH v10 07/12] fs,
+ arm64: untag user pointers in fs/userfaultfd.c
+In-Reply-To: <fb721f0b-fad7-2310-4f17-8bf046413d40@intel.com>
+References: <cover.1550839937.git.andreyknvl@google.com>
+ <8343cd77ca301df15839796f3b446b75ce5ffbbf.1550839937.git.andreyknvl@google.com>
+ <73f2f3fe-9a66-22a1-5aae-c282779a75f5@intel.com>
+ <CAAeHK+yQU8khtOoyDKqmHterCa16P7oWe9AMiPnrxE+Gyb_7aw@mail.gmail.com>
+ <20190301165908.GA130541@arrakis.emea.arm.com>
+ <fb721f0b-fad7-2310-4f17-8bf046413d40@intel.com>
+Message-ID:
+ <CAAeHK+ydurtkoVtvyoQdfcXuR3ZnZ+=ixoZkXEFRTZARg+GtRQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190305162700.3lUVJ-mH53uI5TBRftG8uiTFhaG6sUGAw9PouimYBps@z>
+Message-ID: <20190305174737.ER4Cy7XnmlVWv96_CQJemE-qEhE_rl-B244SGOtB8tc@z>
 
-On Mon, Mar 04, 2019@02:00:59PM +0000, Qais Yousef wrote:
-> On 03/01/19 11:08, Joel Fernandes (Google) wrote:
-> > Introduce in-kernel headers and other artifacts which are made available
-> > as an archive through proc (/proc/kheaders.tar.xz file). This archive makes
-> > it possible to build kernel modules, run eBPF programs, and other
-> > tracing programs that need to extend the kernel for tracing purposes
-> > without any dependency on the file system having headers and build
-> > artifacts.
-> > 
-> > On Android and embedded systems, it is common to switch kernels but not
-> > have kernel headers available on the file system. Raw kernel headers
-> > also cannot be copied into the filesystem like they can be on other
-> > distros, due to licensing and other issues. There's no linux-headers
-> > package on Android. Further once a different kernel is booted, any
-> > headers stored on the file system will no longer be useful. By storing
-> > the headers as a compressed archive within the kernel, we can avoid these
-> > issues that have been a hindrance for a long time.
-> > 
-> > The feature is also buildable as a module just in case the user desires
-> > it not being part of the kernel image. This makes it possible to load
-> > and unload the headers on demand. A tracing program, or a kernel module
-> > builder can load the module, do its operations, and then unload the
-> > module to save kernel memory. The total memory needed is 3.8MB.
-> > 
-> > The code to read the headers is based on /proc/config.gz code and uses
-> > the same technique to embed the headers.
-> > 
-> > To build a module, the below steps have been tested on an x86 machine:
-> > modprobe kheaders
-> > rm -rf $HOME/headers
-> > mkdir -p $HOME/headers
-> > tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
-> > cd my-kernel-module
-> > make -C $HOME/headers M=$(pwd) modules
-> > rmmod kheaders
-> > 
-> > Additional notes:
-> > (1) external modules must be built on the same arch as the host that
-> > built vmlinux. This can be done either in a qemu emulated chroot on the
-> > target, or natively. This is due to host arch dependency of kernel
-> > scripts.
-> > 
-> > (2)
-> > A limitation of module building with this is, since Module.symvers is
-> > not available in the archive due to a cyclic dependency with building of
-> > the archive into the kernel or module binaries, the modules built using
-> > the archive will not contain symbol versioning (modversion). This is
-> > usually not an issue since the idea of this patch is to build a kernel
-> > module on the fly and load it into the same kernel. An appropriate
-> > warning is already printed by the kernel to alert the user of modules
-> > not having modversions when built using the archive. For building with
-> > modversions, the user can use traditional header packages. For our
-> > tracing usecases, we build modules on the fly with this so it is not a
-> > concern.
-> > 
-> > (3) I have left IKHD_ST and IKHD_ED markers as is to facilitate
-> > future patches that would extract the headers from a kernel or module
-> > image.
-> > 
-> > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> 
-> I could get the headers using this patch in both built-in and modules options.
-> 
-> You can add my tested-and-reviewed-by: Qais Yousef <qais.yousef at arm.com>
-> 
-> I am not familiar with running kselftests so didn't get a chance to try the
-> next patch.
+On Fri, Mar 1, 2019@7:37 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 3/1/19 8:59 AM, Catalin Marinas wrote:
+> >>> So, we have to patch all these sites before the tagged values get to the
+> >>> point of hitting the vma lookup functions.  Dumb question: Why don't we
+> >>> just patch the vma lookup functions themselves instead of all of these
+> >>> callers?
+> >> That might be a working approach as well. We'll still need to fix up
+> >> places where the vma fields are accessed directly. Catalin, what do
+> >> you think?
+> > Most callers of find_vma*() always follow it by a check of
+> > vma->vma_start against some tagged address ('end' in the
+> > userfaultfd_(un)register()) case. So it's not sufficient to untag it in
+> > find_vma().
+>
+> If that's truly the common case, sounds like we should have a find_vma()
+> that does the vma_end checking as well.  Then at least the common case
+> would not have to worry about tagging.
 
-Thanks a lot for testing! Will repost with the tags soon.
-
- - Joel
+It seems that a lot of find_vma() callers indeed do different kinds of
+checking/subtractions of vma->vma_start and a tagged address, which
+look hardly unifiable. So untagging the addresses in find_vma()
+callers looks like a more suitable solution.
