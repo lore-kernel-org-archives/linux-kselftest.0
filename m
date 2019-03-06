@@ -1,73 +1,160 @@
-From: joel at joelfernandes.org (Joel Fernandes)
-Date: Wed, 6 Mar 2019 13:16:53 -0500
-Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
- extend the kernel
-In-Reply-To: <CAJWu+op541tQ_TBJs-kOyRRBYDWiN0Znpb=cUQFxuLg-SmjO_g@mail.gmail.com>
-References: <20190301160856.129678-1-joel@joelfernandes.org>
- <201903030526.3AuYFiuN%fengguang.wu@intel.com>
- <CAJWu+op541tQ_TBJs-kOyRRBYDWiN0Znpb=cUQFxuLg-SmjO_g@mail.gmail.com>
-Message-ID: <20190306181653.GB34256@google.com>
+From: logang at deltatee.com (Logan Gunthorpe)
+Date: Wed, 6 Mar 2019 12:11:11 -0700
+Subject: [PATCH v2 07/12] NTB: Introduce functions to calculate multi-port
+ resource index
+In-Reply-To: <20190306012420.wjeatxgb7nwq3j5q@mobilestation>
+References: <20190213175454.7506-1-logang@deltatee.com>
+ <20190213175454.7506-8-logang@deltatee.com>
+ <20190306012420.wjeatxgb7nwq3j5q@mobilestation>
+Message-ID: <bd72f24f-5982-0fe7-59df-2fbbfe9f798a@deltatee.com>
 
- 
-> On Sat, Mar 2, 2019 at 2:00 PM kbuild test robot <lkp at intel.com> wrote:
-> >
-> > Hi Joel,
-> >
-> > Thank you for the patch! Yet something to improve:
-> >
-> > [auto build test ERROR on linus/master]
-> > [also build test ERROR on v5.0-rc8]
-> > [cannot apply to next-20190301]
-> > [if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
-> >
-> > url:    https://github.com/0day-ci/linux/commits/Joel-Fernandes-Google/Provide-in-kernel-headers-for-making-it-easy-to-extend-the-kernel/20190303-014850
-> > config: sh-allmodconfig (attached as .config)
-> > compiler: sh4-linux-gnu-gcc (Debian 8.2.0-11) 8.2.0
-> > reproduce:
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # save the attached .config to linux build tree
-> >         GCC_VERSION=8.2.0 make.cross ARCH=sh
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> find: 'arch/sh/kernel/module.lds': No such file or directory
-> > >> find: 'arch/sh/kernel/module.lds': No such file or directory
-On Sun, Mar 03, 2019 at 08:11:59AM -0800, Joel Fernandes wrote:
-> This report is for an older version of the patch so ignore it. The
-> issue is already resolved.
->
 
-Apologies, this issue is real. However it does not cause any failure. It is
-only causing find command to be a bit noisy.
 
-The below diff fixes it and I'll update the patch for v5:
+On 2019-03-05 6:24 p.m., Serge Semin wrote:
+>> + * In a 5 peer system, this function will return the following matrix
+>> + *
+>> + * pidx \ port    0    1    2    3    4
+>> + * 0              0    0    1    2    3
+>> + * 1              0    1    2    3    4
+>> + * 2              0    1    2    3    4
+>> + * 3              0    1    2    3    4
+>> + *
 
-diff --git a/scripts/gen_ikh_data.sh b/scripts/gen_ikh_data.sh
-index 1fa5628fcc30..9a7ea856acbc 100755
---- a/scripts/gen_ikh_data.sh
-+++ b/scripts/gen_ikh_data.sh
-@@ -1,5 +1,6 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
-+set -e
- 
- spath="$(dirname "$(readlink -f "$0")")"
- kroot="$spath/.."
-@@ -11,12 +12,14 @@ file_list=${@:2}
- 
- src_file_list=""
- for f in $file_list; do
-+	if [ ! -f "$kroot/$f" ] && [ ! -d "$kroot/$f" ]; then continue; fi
- 	src_file_list="$src_file_list $(echo $f | grep -v OBJDIR)"
- done
- 
- obj_file_list=""
- for f in $file_list; do
- 	f=$(echo $f | grep OBJDIR | sed -e 's/OBJDIR\///g')
-+	if [ ! -f $f ] && [ ! -d $f ]; then continue; fi
- 	obj_file_list="$obj_file_list $f";
- done
- 
--- 
-2.21.0.352.gf09ad66450-goog
+Oh, first, oops: looks like I copied this down wrong anyway; the code
+was what I had intended, but the documented example should have been:
+
+pidx \ local_port     0    1    2    3    4
+ 0                    0    0    1    2    3
+ 1                    0    1    1    2    3
+ 2                    0    1    2    2    3
+ 3                    0    1    2    3    3
+
+And this is definitely the correct table we are aiming for.
+ntb_peer_resource_idx() is supposed to return the result of
+ntb_peer_port_idx(ntb, local_port) when run on the peer specified by pidx.
+
+Note: this table also makes sense because it only uses 4 resources for 5
+ports which is the best case scenario. (In other words, to communicate
+between N ports, N-1 resources are required on each peer).
+
+> This table is too simplified to represent a generic case of port-index
+> mapping table. In particular the IDT PCIe switch got it ports numbered
+> with uneven integers like: 0 2 4 6 8 12 16 20 or 0 8 16, and so on.
+> Moreover some of the ports might be disabled or may have NTB functions
+> deactivated, in which case these ports shouldn't be considered by NTB subsystem
+> at all. Basically we may have any increasing subset of that port
+> numbers depending on the current IDT PCIe-switch ports setup.
+
+Yes, I did not consider situations where there would be gaps in the
+"port number" space. It wasn't at all clear from the code that this was
+possible. Switchtec hardware could be configured for such an
+arrangement, but I don't know why anyone would do that as it just
+needlessly complicates everything.
+
+As you point out, with a gap, we end up with something that is wrong:
+
+pidx \ port     0    1    3    4    5
+ 0              0    0    2    3    4
+ 1              0    1    2    3    4
+ 2              0    1    3    3    4
+ 3              0    1    3    4    4
+
+Here, the relationship between ntb_peer_resource_idx() and
+ntb_peer_port_idx() is not maintained and it seems to prescribe 5
+resources for 5 ports. If there were more gaps it would be even more wrong.
+
+>> +static inline int ntb_peer_resource_idx(struct ntb_dev *ntb, int pidx)
+>> +{
+>> +	int local_port, peer_port;
+>> +
+>> +	if (pidx >= ntb_peer_port_count(ntb))
+>> +		return -EINVAL;
+>> +
+>> +	local_port = ntb_port_number(ntb);
+>> +	peer_port = ntb_peer_port_number(ntb, pidx);
+>> +
+>> +	if (peer_port < local_port)
+>> +		return local_port - 1;
+>> +	else
+>> +		return local_port;
+>> +}
+>> +
+> 
+> Instead of redefining the port-index table we can just fix the
+> ntb_peer_resource_idx() method, so it would return a global port index
+> instead of some number based on the port number. It can be done just by
+> the next modification:
+> 
+> +     if (peer_port <= local_port)
+> +             return pidx;
+> +     else
+> +             return pidx + 1;
+> 
+
+This creates a table that looks like:
+
+pidx \ port     0    1    2    3    4
+ 0              1    0    0    0    0
+ 1              2    2    1    1    1
+ 2              3    3    3    2    2
+ 3              4    4    4    4    3
+
+Which is not correct. In fact, it seems to require 5 resources for 5
+ports. This appears to be what is done in the current ntb_perf and I
+think I figured it out several months ago but it's way too messy and
+hard to understand and I don't want to spend the time to figure it out
+again.
+
+IMO, in order to support gaps, we'd need to, on some layer, create an
+un-gapped numbering scheme for the ports. I think the easiest thing is
+to just have Logical and Physical port numbers; so we would have
+something like:
+
+Physical Port Number: 0  2  4  6  8  12  16  20
+Logical Port Number:  0  1  2  3  4  5   6   7
+Peer Index (Port 0):  x  0  1  2  3  4   5   6
+Port Index (Port 8):  0  1  2  3  x  4   5   6
+(etc)
+
+Where the Physical Port Number is whatever the hardware uses and the
+logical port number is a numbering scheme starting with zero with no
+gaps. Then the port indexes are still as we currently have them. If we
+say that the port numbers we have now are the Logical Port Number, then
+ntb_peer_resource_idx() is correct.
+
+I would strongly argue that the clients don't need to know anything
+about the Physical Port Number and these should be handled strictly
+inside the drivers. If multiple drivers need to do something similar to
+map the logical to physical port numbers then we should introduce helper
+functions to allow them to do so. If the Physical Numbers are not
+contained in the driver than the API would need to be expanded to expose
+which numbers are actually used to avoid needing to constantly loop
+through all the indexes to find this out.
+
+On a similar vein, I'd  suggest that most clients shouldn't even really
+need to do anything with the Logical Port Number and should deal largely
+with Port Indexes. Ideally, Logical Port Numbers should only be used by
+helper code in the common layer to help assign resources used by the
+clients (like ntb_peer_resource_idx()).
+
+This world view isn't far off from what we have now, though you *may*
+need to adjust your IDT driver and we will have to eventually clean up
+the existing test clients to use the new helper functions.
+
+> Personally I'd prefer the first solution even though it may lead to the
+> "Unsupported TLP" errors and cause a greater code changes. Here is why:
+> 1) the error might be IDT-specific, so we shouldn't limit the API due to
+> one particular hardware peculiarity,
+> 2) port-index table with global indexes implementation shall simplify the IDT
+> NTB hw driver and provide a cleaner NTB API with simpler shared resources
+> utilization code.
+
+> The final decision is after the NTB subsystem maintainers. If they agree with
+> solution #1 I'll send a corresponding patchset on this week, so you can
+> alter this patchset being based on it.
+
+I think what we have right now is close enough and we just have to clean
+up the code and fix things. I don't think we need to do another big
+change to the semantics. I *certainly* don't want to risk breaking
+everything again to do it.
+ Logan
