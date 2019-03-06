@@ -1,32 +1,112 @@
-From: logang at deltatee.com (Logan Gunthorpe)
-Date: Wed, 6 Mar 2019 14:39:32 -0700
-Subject: [PATCH v2 10/12] NTB: Introduce NTB MSI Test Client
-In-Reply-To: <20190306204400.hzpizimya7fq6swi@mobilestation>
-References: <20190213175454.7506-1-logang@deltatee.com>
- <20190213175454.7506-11-logang@deltatee.com>
- <20190306204400.hzpizimya7fq6swi@mobilestation>
-Message-ID: <284dae8b-4e8a-1d7b-e806-bf7fed2a39a7@deltatee.com>
+From: tobin at kernel.org (Tobin C. Harding)
+Date: Thu,  7 Mar 2019 08:42:19 +1100
+Subject: [PATCH v3 0/7] lib/string: Add strscpy_pad() function
+Message-ID: <20190306214226.14598-1-tobin@kernel.org>
+
+Hi,
+
+strscpy_pad() patch set now with added test shenanigans. 
+
+This version adds 5 initial patches to the set and splits the single
+patch from v2 into two separate patches (6 and 7).
+
+While doing the testing for strscpy_pad() it was noticed that there is
+duplication in how test modules are being fed to kselftest and also in
+the test modules themselves.
+
+This set makes an attempt at adding a framework to kselftest for writing
+kernel test modules.  It also adds a script for use in creating script
+test runners for kselftest.  My macro-foo is not great, all criticism
+and suggestions very much appreciated.  The design is based on test
+modules lib/test_printf.c, lib/test_bitmap.c, lib/test_xarray.c. 
+
+Shua, I'm by no means a kselftest expert, if this approach does not fit
+in with your general direction please say so.
+
+Kees, I put the strscpy_pad() addition patch separate so if this goes in
+through Shua's tree (and if it goes in at all) its a single patch to
+grab if we want to start playing around with strscpy_pad().
+
+ 
+Patch 1 fixes module unload for lib/test_printf in preparation for the
+        rest of the series.
+
+Patch 2 Adds a shell script that can be used to create shell script test
+        runners. 
+
+Patch 3 Converts current shell script runners in
+        tools/testing/selftests/lib/ to use the script introduced in
+        patch 2.
+
+Patch 4 Adds the test framework by way of a header file (inc. documentation)
+
+Patch 5 Converts a couple of current test modules to make some use of
+        the newly added test framework.
+
+Patch 6 Adds strscpy_pad()
+
+Patch 7 Adds test module for strscpy_pad() using the new framework and script.
+
+
+If you are a testing geek and you would like to play with this; if you
+are already running a kernel built recently from your tree you may
+want to just apply the first 5 patches then you don't need to build/boot
+a new kernel, just config and build the lib/ test modules (test_printf
+etc.) and then:
+
+	sudo make TARGETS=lib kselftest
+
+Late in the development of this I found that a bunch of boiler plate had
+to be added to the script to handle running tests with:
+
+	make O=/path/to/kout kselftest
+
+The reason is that during the build we are in the output directory but
+the script is in the source directory.  I get the feeling that a better
+understanding of how the kernel build process works would provide a
+better solution to this.  The current solution is disappointing since
+removing duplication and boiler plate was the point of the whole
+exercise.  I'd love a better way to solve this?
+
+One final interesting note: there are 36 test modules in lib/ only 3 of
+them are run by kselftest from tools/testing/selfests/lib?
+
+
+Thanks for looking at this,
+Tobin.
 
 
 
-On 2019-03-06 1:44 p.m., Serge Semin wrote:
-> Alas the test driver is not going to work with IDT NTB hardware,
-> since it uses Spad only, which aren't supported by IDT devices. IDT NTB
-> PCIe functions provide message registers to communicate with peers. See
-> ntb_perf driver code for reference of portable driver design.
-> 
-> In order to make the test driver portable the following alterations
-> are needed:
-> 1) Add NTB Message register API usage together with Scratchpad+Doorbell.
-> 2) When NTB MSI library is updated with functions like
-> ntb_msi_peer_setup_mws()/ntb_msi_peer_clear_mws() they are needed to be
-> utilized in the test driver as well to set a translation address on the
-> peer side.
+Tobin C. Harding (7):
+  lib/test_printf: Add empty module_exit function
+  kselftest: Add test runner creation script
+  kselftest/lib: Use new shell runner to define tests
+  kselftest: Add test module framework header
+  lib: Use new kselftest header
+  lib/string: Add strscpy_pad() function
+  lib: Add test module for strscpy_pad
 
-Per, the discussion on the previous email, we can update this later once
-we actually have sensible infrastructure for it. The mess in ntb_perf is
-not something I want to replicate and we don't have any interest in
-creating a large amount of infrastructure to support hardware we don't
-care about.
+ Documentation/dev-tools/kselftest.rst        | 108 ++++++++++++-
+ include/linux/string.h                       |   4 +
+ lib/Kconfig.debug                            |   3 +
+ lib/Makefile                                 |   1 +
+ lib/string.c                                 |  47 +++++-
+ lib/test_bitmap.c                            |  20 +--
+ lib/test_printf.c                            |  17 +--
+ lib/test_strscpy.c                           | 150 +++++++++++++++++++
+ tools/testing/selftests/kselftest_module.h   |  48 ++++++
+ tools/testing/selftests/kselftest_module.sh  |  75 ++++++++++
+ tools/testing/selftests/lib/Makefile         |   2 +-
+ tools/testing/selftests/lib/bitmap.sh        |  25 ++--
+ tools/testing/selftests/lib/config           |   1 +
+ tools/testing/selftests/lib/prime_numbers.sh |  23 ++-
+ tools/testing/selftests/lib/printf.sh        |  25 ++--
+ tools/testing/selftests/lib/strscpy.sh       |  17 +++
+ 16 files changed, 490 insertions(+), 76 deletions(-)
+ create mode 100644 lib/test_strscpy.c
+ create mode 100644 tools/testing/selftests/kselftest_module.h
+ create mode 100755 tools/testing/selftests/kselftest_module.sh
+ create mode 100755 tools/testing/selftests/lib/strscpy.sh
 
-Logan
+-- 
+2.20.1
