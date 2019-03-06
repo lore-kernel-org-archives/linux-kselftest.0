@@ -1,89 +1,142 @@
-From: shuah@kernel.org (shuah)
-Date: Wed, 6 Mar 2019 14:04:20 -0700
-Subject: [GIT PULL] Kselftest update for Linux 5.1-rc1
-Message-ID: <0935afa2-ad88-0db9-ca68-1b99544b8397@kernel.org>
+From: logang@deltatee.com (Logan Gunthorpe)
+Date: Wed, 6 Mar 2019 14:35:53 -0700
+Subject: [PATCH v2 09/12] NTB: Introduce MSI library
+In-Reply-To: <20190306202631.3vc3b64e45ackcna@mobilestation>
+References: <20190213175454.7506-1-logang@deltatee.com>
+ <20190213175454.7506-10-logang@deltatee.com>
+ <20190306202631.3vc3b64e45ackcna@mobilestation>
+Message-ID: <5b420eb7-5010-aae3-e9bd-1c612af409ae@deltatee.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190306210420.oLRJ57WOJC29tiCBCDCTkMazuw0G03SMONMWsdgc8JQ@z>
-
-Hi Linus,
-
-Please pull the following Kselftest update for Linux 5.1-rc1
-
-This Kselftest update for Linux 5.1-rc1 consists of
-
-- ir test compile warnings fixes
-- seccomp test fixes and improvements from Tycho Andersen and Kees Cook
-- ftrace fixes to non-POSIX-compliant constructs in colored output code
-   and handling absence of tput from Juerg Haefliger
-
-diff is attached.
-
-thanks,
--- Shuah
+Message-ID: <20190306213553.7NhFe44jQUYvItHomJ4lDQAeZyVfazpJSQFG76wGSF8@z>
 
 
-----------------------------------------------------------------
-The following changes since commit d13937116f1e82bf508a6325111b322c30c85eb9:
 
-   Linux 5.0-rc6 (2019-02-10 14:42:20 -0800)
+On 2019-03-06 1:26 p.m., Serge Semin wrote:
+> First of all, It might be unsafe to have some resources consumed by NTB
+> MSI or some other library without a simple way to warn NTB client drivers
+> about their attempts to access that resources, since it might lead to random
+> errors. When I thought about implementing a transport library based on the
+> Message/Spad+Doorbell registers, I had in mind to create an internal bits-field
+> array with the resources busy-flags. If, for instance, some message or
+> scratchpad register is occupied by the library (MSI, transport or some else),
+> then it would be impossible to access these resources directly through NTB API
+> methods. So NTB client driver shall retrieve an error in an attempt to
+> write/read data to/from busy message or scratchpad register, or in an attempt
+> to set some occupied doorbell bit. The same thing can be done for memory windows.
 
-are available in the Git repository at:
+Yes, it would be nice to have a generic library to manage all the
+resources, but right now we don't and it's unfair to expect us to take
+on this work to get the features we care about merged. Right now, it's
+not at all unsafe as the client is quite capable of ensuring it has the
+resources for the MSI library. The changes for ntb_transport to ensure
+this are quite reasonable.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
-tags/linux-kselftest-5.1-rc1
+> Second tiny concern is about documentation. Since there is a special file for
+> all NTB-related doc, it would be good to have some description about the
+> NTB MSI library there as well:
+> Documentation/ntb.txt
 
-for you to fetch changes up to 0e27ded1159f62ab1a4e723796246bd5b1793b93:
+Sure, I'll add a short blurb for v3. Though, I noticed it's quite out of
+date since your changes. Especially in the ntb_tool section...
 
-   selftests/ftrace: Handle the absence of tput (2019-02-25 07:48:01 -0700)
+>> +	u32 *peer_mws[];
+> 
+> Shouldn't we use the __iomem attribute here since later the devm_ioremap() is
+> used to map MWs at these pointers?
 
-----------------------------------------------------------------
-linux-kselftest-5.1-rc1
+Yes, will change for v3.
 
-This Kselftest update for Linux 5.1-rc1 consists of
 
-- ir test compile warnings fixes
-- seccomp test fixes and improvements from Tycho Andersen and Kees Cook
-- ftrace fixes to non-POSIX-compliant constructs in colored output code
-   and handling absence of tput from Juerg Haefliger
+> Simpler and faster cleanup-code would be:
 
-----------------------------------------------------------------
-Juerg Haefliger (3):
-       selftests/ftrace: Replace echo -e with printf
-       selftests/ftrace: Replace \e with \033
-       selftests/ftrace: Handle the absence of tput
+> + unroll:
+> + 	for (--i; i >= 0; --i)
+> + 		devm_iounmap(&ntb->dev, ntb->msi->peer_mws[i]);
 
-Kees Cook (2):
-       selftests/harness: Update named initializer syntax
-       selftests/seccomp: Actually sleep for 1/10th second
+Faster, maybe, but I would not consider this simpler. It's much more
+complicated to reason about and ensure it's correct. I prefer my way
+because I don't care about speed, but I do care about readability.
 
-Shuah Khan (3):
-       selftests: ir: fix warning: "%s" directive output may be 
-truncated ’ directive output may be truncated
-       selftests: ir: skip when lirc device doesn't exist.
-       selftests: ir: skip when non-root user runs the test
 
-Tycho Andersen (6):
-       selftests: don't kill child immediately in get_metadata() test
-       selftests: fix typo in seccomp_bpf.c
-       selftest: include stdio.h in kselftest.h
-       selftests: skip seccomp get_metadata test if not real root
-       selftests: set NO_NEW_PRIVS bit in seccomp user tests
-       selftests: unshare userns in seccomp pidns testcases
+> Alas calling the ntb_mw_set_trans() method isn't enough to fully initialize
+> NTB Memory Windows. Yes, the library will work for Intel/AMD/Switchtec
+> (two-ports legacy configuration), but will fail for IDT due to being based on
+> the outbound MW xlat interface. So the library at this stage isn't portable
+> across all NTB hardware. In order to make it working the translation address is
+> supposed to be transferred to the peer side, where a peer code should call
+> ntb_peer_mw_set_trans() method with the retrieved xlat address.
+> See documentation for details:
 
-  tools/testing/selftests/ftrace/ftracetest     | 21 +++++++-----
-  tools/testing/selftests/ir/ir_loopback.c      |  6 ++--
-  tools/testing/selftests/ir/ir_loopback.sh     |  5 +++
-  tools/testing/selftests/kselftest.h           |  1 +
-  tools/testing/selftests/kselftest_harness.h   | 10 +++---
-  tools/testing/selftests/seccomp/seccomp_bpf.c | 47 
-+++++++++++++++++++++++----
-  6 files changed, 68 insertions(+), 22 deletions(-)
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/Documentation/ntb.txt
+> 
+> ntb_perf driver can be also used as a reference of the portable NTB MWs setup.
 
-----------------------------------------------------------------
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: linux-kselftest-5.1-rc1.diff
-Type: text/x-patch
-Size: 8798 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190306/7ce3eea8/attachment-0001.bin>
+Gross. Well, given that ntb_transport doesn't even support this and we
+don't really have a sensible library to transfer this information, I'm
+going to leave it as is for now. Someone can update ntb_msi when they
+update ntb_transport, preferably after we have a nice library to handle
+the transfers for us seeing I absolutely do not want to replicate the
+mess in ntb_perf.
+
+Actually, if we had a generic spad/msg communication library, it would
+probably be better to have a common ntb_mw_set_trans() function that
+uses the communications library to send the data and automatically call
+ntb_peer_mw_set_trans() on the peer. That way we don't have to push this
+mess into the clients.
+
+> The same cleanup pattern can be utilized here:
+> +error_out:
+> +	for (--peer; peer >= 0; --peer) {
+> +		peer_widx = ntb_peer_highest_mw_idx(ntb, peer);
+> +		ntb_mw_clear_trans(ntb, i, peer_widx);
+> +	}
+> 
+> So you won't need "i" variable here anymore. You also don't need to check the
+> return value of ntb_peer_highest_mw_idx() in the cleanup loop because it
+> was already checked in the main algo code.
+
+See above.
+
+>> +EXPORT_SYMBOL(ntb_msi_clear_mws);
+>> +
+> 
+> Similarly something like ntb_msi_peer_clear_mws() should be added to
+> unset a translation address on the peer side.
+
+Well, we can table that for when ntb_msi supports the peer MW setting
+functions.
+>> +int ntb_msi_peer_trigger(struct ntb_dev *ntb, int peer,
+>> +			 struct ntb_msi_desc *desc)
+>> +{
+>> +	int idx;
+>> +
+>> +	if (!ntb->msi)
+>> +		return -EINVAL;
+>> +
+>> +	idx = desc->addr_offset / sizeof(*ntb->msi->peer_mws[peer]);
+>> +
+>> +	ntb->msi->peer_mws[peer][idx] = desc->data;
+>> +
+> 
+> Shouldn't we use iowrite32() here instead of direct access to the IO-memory?
+
+Yes, as above I'll fix it for v3.
+
+>> @@ -425,6 +427,10 @@ struct ntb_dev {
+>>  	spinlock_t			ctx_lock;
+>>  	/* block unregister until device is fully released */
+>>  	struct completion		released;
+>> +
+>> +	#ifdef CONFIG_NTB_MSI
+>> +	struct ntb_msi *msi;
+>> +	#endif
+> 
+> I'd align the macro-condition to the most left position:
+> +#ifdef CONFIG_NTB_MSI
+> +	struct ntb_msi *msi;
+> +#endif
+
+Fixed for v3.
+
+
+Logan
