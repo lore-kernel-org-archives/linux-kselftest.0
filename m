@@ -1,184 +1,222 @@
-From: ci_notify@linaro.org (ci_notify@linaro.org)
-Date: Wed, 6 Mar 2019 10:00:28 +0000 (UTC)
-Subject: next-20190306 kselftest results
-Message-ID: <815468790.1962.1551866428934.JavaMail.jenkins@a6c5c67cda76>
+From: yamada.masahiro@socionext.com (Masahiro Yamada)
+Date: Wed, 6 Mar 2019 21:26:14 +0900
+Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <CAJWu+op541tQ_TBJs-kOyRRBYDWiN0Znpb=cUQFxuLg-SmjO_g@mail.gmail.com>
+References: <20190301160856.129678-1-joel@joelfernandes.org>
+ <201903030526.3AuYFiuN%fengguang.wu@intel.com>
+ <CAJWu+op541tQ_TBJs-kOyRRBYDWiN0Znpb=cUQFxuLg-SmjO_g@mail.gmail.com>
+Message-ID:
+ <CAK7LNARGQE9y6hr7ZoTbn5-GkPBN2Gk-4=3=Cfnr7Oy-+q69kg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190306100028.ZNGTwN-POY2Ql3wbPVvEuM6RsKlOlq3S1H_HyAYjz6o@z>
+Message-ID: <20190306122614.1zB9VsTlZ59KBmdxlfZbjneGmI9521kjbQRbOsLw0dY@z>
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.0.0
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: cf08baa29613dd899954089e7cc7dba1d478b365
-git describe: next-20190306
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190306
-
-Regressions (compared to build next-20190305)
-------------------------------------------------------------------------
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-qemu_x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190305)                                                                   
-------------------------------------------------------------------------                                               
-No fixes
-
-In total:
-------------------------------------------------------------------------
-Ran 351 total tests in the following environments and test suites.
-pass 257
-fail 94
-xfail 0
-skip 0
-
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
+On Mon, Mar 4, 2019@1:15 AM Joel Fernandes <joelaf@google.com> wrote:
+>
+> This report is for an older version of the patch so ignore it. The
+> issue is already resolved.
+>
+> On Sat, Mar 2, 2019@2:00 PM kbuild test robot <lkp@intel.com> wrote:
+> >
+> > Hi Joel,
+> >
+> > Thank you for the patch! Yet something to improve:
+> >
+> > [auto build test ERROR on linus/master]
+> > [also build test ERROR on v5.0-rc8]
+> > [cannot apply to next-20190301]
+> > [if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
+> >
+> > url:    https://github.com/0day-ci/linux/commits/Joel-Fernandes-Google/Provide-in-kernel-headers-for-making-it-easy-to-extend-the-kernel/20190303-014850
+> > config: sh-allmodconfig (attached as .config)
+> > compiler: sh4-linux-gnu-gcc (Debian 8.2.0-11) 8.2.0
+> > reproduce:
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # save the attached .config to linux build tree
+> >         GCC_VERSION=8.2.0 make.cross ARCH=sh
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> find: 'arch/sh/kernel/module.lds': No such file or directory
+> > >> find: 'arch/sh/kernel/module.lds': No such file or directory
+> >
+> > ---
+> > 0-DAY kernel test infrastructure                Open Source Technology Center
+> > https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+> >
+> > --
+> > You received this message because you are subscribed to the Google Groups "kernel-team" group.
+> > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe at android.com.
 
 
-Failures
-------------------------------------------------------------------------
 
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
+Honestly speaking, I am worried about some flaws
+in this feature, but anyway I read your code.
 
-qemu_x86_64:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
+Here are just comments from the build system point of view
+in case something might be useful.
 
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
+Please feel free to adopt some of them if you think they are good.
 
-x15:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-x86:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/bpf_test_btf
-* kselftest-vsyscall-mode-none/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest-vsyscall-mode-native/bpf_test_btf
-* kselftest-vsyscall-mode-native/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-native/bpf_test_sockmap
-
-qemu_arm64:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-hi6220-hikey:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-
-juno-r2:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-
-dragonboard-410c:
+(I do not think you need to re-post a patch just for
+adding Reviewed-by/Tested-by tags, but anyway looks like you are
+planning to post a new version.)
 
 
-Skips
-------------------------------------------------------------------------
-No skips
+
+[1]
+
+Please do not ignore kbuild test robot.
+
+It never makes such a mistake like
+replying to a new patch about the test result from old version.
+
+The reports are really addressing this version (v4).
+
+I see the error message even on x86.
+
+
+[2]
+
+The shell script keeps running
+even when an error occurs.
+
+If any line in a shell script fails,
+probably it went already wrong.
+
+I highly recommend to add 'set -e'
+at the very beginning of your shell script.
+
+It will propagate the error to Make.
+
+
+
+[3]
+
+targets += kheaders_data.tar.xz
+targets += kheaders_data.h
+targets += kheaders.md5
+
+These three lines are unneeded because
+'targets' is necessary just for if_changed or if_changed_rule.
+
+Instead, please add
+
+clean-files := kheaders_data.tar.xz kheaders_data.h kheaders.md5
+
+
+[4]
+
+It is pointless to pass 'ikh_file_list'
+from Makefile to the shell script.
+
+
+You can directly describe the following in gen_ikh_data.sh
+
+You do not need to use sed.
+
+
+src_file_list="
+include/
+arch/$SRCARCH/Makefile
+arch/$SRCARCH/include/
+arch/$SRCARCH/kernel/module.lds
+scripts/
+Makefile
+"
+
+obj_file_list="
+scripts/
+include/
+arch/$SRCARCH/include/
+"
+
+if grep -q "^CONFIG_STACK_VALIDATION=y" $KCONFIG_CONFIG; then
+        obj_file_list="$obj_file_list tools/objtool/objtool"
+fi
+
+
+
+Be careful about module.lds
+so that it will work for all architectures.
+
+
+
+
+[5]
+strip-comments.pl is short enough,
+and I do not assume any other user.
+
+
+IMHO, it would be cleaner to embed the one-liner perl
+into the shell script, for example, like follows:
+
+find  $cpio_dir -type f -print0 |
+ xargs -0 -P8 -n1 perl -pi -e 'BEGIN {undef $/;}; s/\/\*((?!SPDX).)*?\*\///smg;'
+
+
+
+[6]
+It might be better to move
+scripts/gen_ikh_data.sh to kernel/gen_ikh_data.sh
+
+It will make this feature self-contained in kernel/.
+And (more importantly to me), it would reduce my maintenance field.
+
+
+
+[7]
+I do not understand for what 'tarfile_md5' is used.
+Is it necessary?
+
+
+
+[8]
+Is it more efficient to pipe the header files
+to perl script like this?
+
+
+ cat (header) | perl 'do something' > (tmp directory)
+
+
+Actually, I am not sure if it is more efficient than
+stripping comments in-line. I could be wrong...
+
+
+[9]
+
+I'd prefer avoiding 'pushd && popd' if possible.
+
+Hint: Kbuild already runs at the top directory
+of objtree.
+
+
+It is OK if the change would mess up the script.
+
+
+[10]
+
+You can embed a binary directly into C file
+without producing a giant header file.
+
+I refactored kernel/configs.c
+https://lore.kernel.org/patchwork/patch/1042013/
+
+Be careful; my patch has not been merged yet into the mainline.
+
+It has been a while in linux-next,
+and I have not received any problem report.
+
+So, I am guessing it will probably be merged
+in the current MW.
+
+
+
+
+That's all from me.
 
 
 -- 
-Linaro LKFT
-https://lkft.linaro.org
+Best Regards
+Masahiro Yamada
