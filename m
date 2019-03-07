@@ -1,65 +1,65 @@
-From: bo.tong@intel.com (Tong Bo)
-Date: Thu,  7 Mar 2019 16:25:40 +0800
-Subject: [PATCH] selftests/x86: Support Atom for syscall_arg_fault test
-Message-ID: <1551947140-22166-1-git-send-email-bo.tong@intel.com>
+From: geert@linux-m68k.org (Geert Uytterhoeven)
+Date: Thu, 7 Mar 2019 09:58:24 +0100
+Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <20190301160856.129678-1-joel@joelfernandes.org>
+References: <20190301160856.129678-1-joel@joelfernandes.org>
+Message-ID:
+ <CAMuHMdU77UyUs-LvRx-NN_k0Y7MZXQkBdgL2i83veCkvdzeeqA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190307082540.1Ss4duf5XZZj0WKMqWu7szBtRl8s_6rq0O3lRO41Z5k@z>
+Message-ID: <20190307085824.TFT9_IUyM64NjXrN9b_aHJDs-wEpnaAUnLuz4vqPlG4@z>
 
-Atom-based CPUs trigger stack fault when invoke 32-bit SYSENTER instruction
-with invalid register values. So we also need sigbus handling in this case.
+Hi Joel,
 
-Following is assembly when the fault expception happens.
+On Fri, Mar 1, 2019 at 5:10 PM Joel Fernandes (Google)
+<joel@joelfernandes.org> wrote:
+> Introduce in-kernel headers and other artifacts which are made available
+> as an archive through proc (/proc/kheaders.tar.xz file). This archive makes
+> it possible to build kernel modules, run eBPF programs, and other
+> tracing programs that need to extend the kernel for tracing purposes
+> without any dependency on the file system having headers and build
+> artifacts.
+>
+> On Android and embedded systems, it is common to switch kernels but not
+> have kernel headers available on the file system. Raw kernel headers
+> also cannot be copied into the filesystem like they can be on other
+> distros, due to licensing and other issues. There's no linux-headers
+> package on Android. Further once a different kernel is booted, any
+> headers stored on the file system will no longer be useful. By storing
+> the headers as a compressed archive within the kernel, we can avoid these
+> issues that have been a hindrance for a long time.
+>
+> The feature is also buildable as a module just in case the user desires
+> it not being part of the kernel image. This makes it possible to load
+> and unload the headers on demand. A tracing program, or a kernel module
+> builder can load the module, do its operations, and then unload the
+> module to save kernel memory. The total memory needed is 3.8MB.
+>
+> The code to read the headers is based on /proc/config.gz code and uses
+> the same technique to embed the headers.
+>
+> To build a module, the below steps have been tested on an x86 machine:
+> modprobe kheaders
+> rm -rf $HOME/headers
+> mkdir -p $HOME/headers
+> tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
+> cd my-kernel-module
+> make -C $HOME/headers M=$(pwd) modules
+> rmmod kheaders
 
-(gdb) disassemble $eip
-Dump of assembler code for function __kernel_vsyscall:
-   0xf7fd8fe0 <+0>:     push   %ecx
-   0xf7fd8fe1 <+1>:     push   %edx
-   0xf7fd8fe2 <+2>:     push   %ebp
-   0xf7fd8fe3 <+3>:     mov    %esp,%ebp
-   0xf7fd8fe5 <+5>:     sysenter
-   0xf7fd8fe7 <+7>:     int    $0x80
-=> 0xf7fd8fe9 <+9>:     pop    %ebp
-   0xf7fd8fea <+10>:    pop    %edx
-   0xf7fd8feb <+11>:    pop    %ecx
-   0xf7fd8fec <+12>:    ret
-End of assembler dump.
+As the usage pattern will be accessing the individual files, what about
+implementing a file system that provides read-only access to the internal
+kheaders archive?
 
-Accroding to Intel SDM, this could also be a Stack Segment Fault(#SS, 12),
-except a normal Page Fault(#PF, 14). Especially, in section 6.9 of Vol.3A,
-both stack and page faults are within the 10th(lowest priority) class, and
-as it said, "exceptions within each class are implementation-dependent and
-may vary from processor to processor". It's expected for processors like
-Intel Atom to trigger stack fault(sigbus), while we get page fault(sigsegv)
-from common Core processors.
+    mount kheaders $HOME/headers -t kheaders
 
-Signed-off-by: Tong Bo <bo.tong at intel.com>
----
- tools/testing/selftests/x86/syscall_arg_fault.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Gr{oetje,eeting}s,
 
-diff --git a/tools/testing/selftests/x86/syscall_arg_fault.c b/tools/testing/selftests/x86/syscall_arg_fault.c
-index 7db4fc9..38cd246 100644
---- a/tools/testing/selftests/x86/syscall_arg_fault.c
-+++ b/tools/testing/selftests/x86/syscall_arg_fault.c
-@@ -43,7 +43,7 @@ static sigjmp_buf jmpbuf;
- 
- static volatile sig_atomic_t n_errs;
- 
--static void sigsegv(int sig, siginfo_t *info, void *ctx_void)
-+static void sigsegv_or_sigbus(int sig, siginfo_t *info, void *ctx_void)
- {
- 	ucontext_t *ctx = (ucontext_t*)ctx_void;
- 
-@@ -73,7 +73,9 @@ int main()
- 	if (sigaltstack(&stack, NULL) != 0)
- 		err(1, "sigaltstack");
- 
--	sethandler(SIGSEGV, sigsegv, SA_ONSTACK);
-+	sethandler(SIGSEGV, sigsegv_or_sigbus, SA_ONSTACK);
-+	/* Atom CPUs may trigger sigbus for below SYSENTER exception case */
-+	sethandler(SIGBUS, sigsegv_or_sigbus, SA_ONSTACK);
- 	sethandler(SIGILL, sigill, SA_ONSTACK);
- 
- 	/*
+                        Geert
+
 -- 
-2.7.4
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert at linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
