@@ -1,179 +1,107 @@
-From: logang at deltatee.com (Logan Gunthorpe)
-Date: Wed, 6 Mar 2019 16:22:33 -0700
-Subject: [PATCH v2 07/12] NTB: Introduce functions to calculate multi-port
- resource index
-In-Reply-To: <20190306224542.4eu2dvsixfzc75gr@mobilestation>
-References: <20190213175454.7506-1-logang@deltatee.com>
- <20190213175454.7506-8-logang@deltatee.com>
- <20190306012420.wjeatxgb7nwq3j5q@mobilestation>
- <bd72f24f-5982-0fe7-59df-2fbbfe9f798a@deltatee.com>
- <20190306224542.4eu2dvsixfzc75gr@mobilestation>
-Message-ID: <4acf79c1-766b-1db6-45c1-4cdd4cbba437@deltatee.com>
+From: yamada.masahiro at socionext.com (Masahiro Yamada)
+Date: Thu, 7 Mar 2019 13:54:51 +0900
+Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <20190306181653.GB34256@google.com>
+References: <20190301160856.129678-1-joel@joelfernandes.org>
+ <201903030526.3AuYFiuN%fengguang.wu@intel.com>
+ <CAJWu+op541tQ_TBJs-kOyRRBYDWiN0Znpb=cUQFxuLg-SmjO_g@mail.gmail.com>
+ <20190306181653.GB34256@google.com>
+Message-ID: <CAK7LNARA0_C2a8sRCfAr3EV4xF-z5vEq4KkwUcyr7jCKhRpKFg@mail.gmail.com>
+
+On Thu, Mar 7, 2019 at 5:31 AM Joel Fernandes <joel at joelfernandes.org> wrote:
+>
+>
+> > On Sat, Mar 2, 2019 at 2:00 PM kbuild test robot <lkp at intel.com> wrote:
+> > >
+> > > Hi Joel,
+> > >
+> > > Thank you for the patch! Yet something to improve:
+> > >
+> > > [auto build test ERROR on linus/master]
+> > > [also build test ERROR on v5.0-rc8]
+> > > [cannot apply to next-20190301]
+> > > [if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
+> > >
+> > > url:    https://github.com/0day-ci/linux/commits/Joel-Fernandes-Google/Provide-in-kernel-headers-for-making-it-easy-to-extend-the-kernel/20190303-014850
+> > > config: sh-allmodconfig (attached as .config)
+> > > compiler: sh4-linux-gnu-gcc (Debian 8.2.0-11) 8.2.0
+> > > reproduce:
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # save the attached .config to linux build tree
+> > >         GCC_VERSION=8.2.0 make.cross ARCH=sh
+> > >
+> > > All errors (new ones prefixed by >>):
+> > >
+> > > >> find: 'arch/sh/kernel/module.lds': No such file or directory
+> > > >> find: 'arch/sh/kernel/module.lds': No such file or directory
+> On Sun, Mar 03, 2019 at 08:11:59AM -0800, Joel Fernandes wrote:
+> > This report is for an older version of the patch so ignore it. The
+> > issue is already resolved.
+> >
+>
+> Apologies, this issue is real. However it does not cause any failure. It is
+> only causing find command to be a bit noisy.
+>
+> The below diff fixes it and I'll update the patch for v5:
+
+
+
+Let's take a look a little bit closer.
+
+
+$ find  arch  -name module.lds
+arch/ia64/module.lds
+arch/powerpc/kernel/module.lds
+arch/riscv/kernel/module.lds
+arch/arm/kernel/module.lds
+arch/m68k/kernel/module.lds
+arch/arm64/kernel/module.lds
+
+
+
+(1) module.lds may not exist for some architectures
+(2) module.lds may be located in a different directory (ia64)
+
+Your fix-up missed (2).
 
 
 
 
 
-On 2019-03-06 3:45 p.m., Serge Semin wrote:
-[Snip]
 
-Pretty sure everything above is just agreement...
 
-> So your current approach is inbound MW-centralized, while mine is developed
-> around the outbound MWs.
+> diff --git a/scripts/gen_ikh_data.sh b/scripts/gen_ikh_data.sh
+> index 1fa5628fcc30..9a7ea856acbc 100755
+> --- a/scripts/gen_ikh_data.sh
+> +++ b/scripts/gen_ikh_data.sh
+> @@ -1,5 +1,6 @@
+>  #!/bin/bash
+>  # SPDX-License-Identifier: GPL-2.0
+> +set -e
+>
+>  spath="$(dirname "$(readlink -f "$0")")"
+>  kroot="$spath/.."
+> @@ -11,12 +12,14 @@ file_list=${@:2}
+>
+>  src_file_list=""
+>  for f in $file_list; do
+> +       if [ ! -f "$kroot/$f" ] && [ ! -d "$kroot/$f" ]; then continue; fi
+>         src_file_list="$src_file_list $(echo $f | grep -v OBJDIR)"
+>  done
+>
+>  obj_file_list=""
+>  for f in $file_list; do
+>         f=$(echo $f | grep OBJDIR | sed -e 's/OBJDIR\///g')
+> +       if [ ! -f $f ] && [ ! -d $f ]; then continue; fi
+>         obj_file_list="$obj_file_list $f";
+>  done
+>
+> --
+> 2.21.0.352.gf09ad66450-goog
+>
 
-I don't think this has anything to do with inbound vs outbound. The
-problem is the same no matter from which direction you assign things.
-
->> Physical Port Number: 0  2  4  6  8  12  16  20
->> Logical Port Number:  0  1  2  3  4  5   6   7
->> Peer Index (Port 0):  x  0  1  2  3  4   5   6
->> Port Index (Port 8):  0  1  2  3  x  4   5   6
->> (etc)
-> 
-> That's what I suggested in the two possible solutions:
-> 1st solution: replace current pidx with Logical Port Number,
-> 2nd solution: alter ntb_peer_resource_idx() so it would return the Logical Port Number.
-
-Well my solution wasn't to change pidx and no, we don't want to change
-ntb_peer_resource_idx() to return the logical port number because that's
-not how it's being used and I have no use for a
-ntb_peer_port_global_idx() function. Functions are supposed to be added
-by code that needs to call them, not by some grand design. Part of the
-reason we have this confusing mess is because the API was reviewed and
-merged before any users of the API were presented. Usually this is not
-accepted in kernel development.
-
-My suggestion is to simply say that the existing port numbers are the
-logical port number and have the drivers handle the physical port number
-mapping internally. That requires the fewest changes.
-
-> IMO In case of the 2nd solution I'd also suggest to rename the
-> ntb_peer_resource_idx() method into ntb_peer_port_global_idx(),
-> and then consider the current port indexes used in the NTB API
-> as local port indexes. The resource indexing can be abstracted
-> by a macro like this:
-> #define ntb_peer_resource_idx ntb_peer_port_global_idx
-
-That define would not be useful.
-
-> Finally in order to close the space up we'd also need to define
-> a method: ntb_port_global_idx(), which would return a Logical (global)
-> index of local port.
-
-Again, I'd rather not add a bunch of large semantic and infrastructure
-changes at this point. It's confusing enough as it is and we don't need
-to introduce yet another indexing scheme API to the clients that really
-do not need it. What the clients need is a simple API to decide which
-resources to use for which peers, and to figure out which peers used
-which resources. ntb_peer_port_idx() and ntb_peer_resource_idx() suit
-these purposes. Nothing else really needs to exist.
-
->> Where the Physical Port Number is whatever the hardware uses and the
->> logical port number is a numbering scheme starting with zero with no
->> gaps. Then the port indexes are still as we currently have them. If we
->> say that the port numbers we have now are the Logical Port Number, then
->> ntb_peer_resource_idx() is correct.
->>
-> 
-> Current port numbers are the physical port numbers with gaps. 
-
-I think that's up for interpretation as, based on the existing code, I
-naturally interpreted it the other way and therefore it's pretty simple
-to say that it's the logical port number and fix the one driver that
-needs to change.
-
-> That's why we
-> introduced the port-index NTB API abstraction in the first place, to have these gaps
-> eliminated and to provide a simple way of bulk setup. Although that abstraction
-> turned out not that suitable to distribute the shared resources. So
-> the Logical (Global) indexing is needed to do it (that's what ntb_pingpong used
-> to do and ntb_perf still does now).
-
-My interpretation of the port-index was simply to match what was done in
-the two port case seeing code like ntb_transport simply uses the default
-0 as the port index. There was no reason to believe, based on the code,
-that there would be gaps.
-
->> I would strongly argue that the clients don't need to know anything
->> about the Physical Port Number and these should be handled strictly
->> inside the drivers. If multiple drivers need to do something similar to
->> map the logical to physical port numbers then we should introduce helper
->> functions to allow them to do so. If the Physical Numbers are not
->> contained in the driver than the API would need to be expanded to expose
->> which numbers are actually used to avoid needing to constantly loop
->> through all the indexes to find this out.
->>
-> 
-> Absolutely agree with you. The main idea of NTB API was to provide a set
-> of methods to access the NTB hardware without any abstractions but
-> with possible useful helpers, like your NTB MSI library, or transport library,
-> or anything else. So the physical port numbers must be available for
-> the client drivers.
-
-Huh? How can you say you absolutely agree with me? I said the clients
-should not need to know about physical port numbers and you said the
-physical port numbers *must* be available to clients. I think this
-statement needs to be justified. Why should the clients need to know
-about the physical port numbers?
-
->> On a similar vein, I'd  suggest that most clients shouldn't even really
->> need to do anything with the Logical Port Number and should deal largely
->> with Port Indexes. Ideally, Logical Port Numbers should only be used by
->> helper code in the common layer to help assign resources used by the
->> clients (like ntb_peer_resource_idx()).
->>
-> 
-> This is the main question. Do we really need the current port indexes
-> implementation at all? After all these years of NTB API usage I don't really
-> see it useful in any case except to loop over the outbound MW resources
-> automatically skipping the local port (usefulness of this is also questionable).
-> As I already said I created the port-index table this way due to the IDT NTB
-> MWs peculiarity, which doesn't seem to me a big problem now comparing to all
-> these additional complications we intend to introduce.
-
-To me, it seems like the port indexes are used everywhere. A client
-almost always wants to deal with every port except itself. That seems
-entirely natural to me. Using the port index as the resource index makes
-perfect sense (which is why I implemented the inverse
-ntb_peer_resource_idx()).
-
-> The rest of the drivers code really need to have the Logical (global)
-> port indexes, at least to distribute the shared resources, and don't use
-> the current pidx that much.
-
-Drivers don't care about port indexes or how the resources are
-distributed. I would expect that all they'd do is map the port index
-(which all existing APIs take) to the physical address and program
-hardware as necessary.
-
-> Wouldn't it be better to just redefine the current port-index table
-> in the following way?
-> ntb_port_number() - local physical port number,
-> ntb_port_idx() - local port logical (global) index,
-> ntb_peer_port_count() - total number of ports NTB device provide (including the local one),
-> ntb_peer_port_number() - physical port number of the peer with passed logical port index,
-> ntb_peer_port_idx - logical port index of the passed physical port number.
-
-No, from the perspective of the client, the physical port numbers are
-useless. I don't want the count to include the local one because that
-means I'd always have to subtract one every time I want to loop through
-all peers (I never want to loop through all ports including the local
-one).  I have no idea what your distinction between logical (global)
-index and logical port index is. In fact I find this all confusing.
-
-> while currently we have:
-> ntb_port_number() - local physical port number,
-> ntb_peer_port_count() - total number of ports NTB device provide (excluding the local one),
-> ntb_peer_port_number() - physical port number of the peer with passed port index,
-> ntb_peer_port_idx - port index of the passed physical port number;
-
-What we currently have all makes perfect sense to me and is exactly what
-I want for the clients, except I think ntb_port_number() needs to be the
-logical port number (with the gaps removed), so that we can more easily
-implement ntb_peer_resource_idx(). If ntb_port_number() corresponds to
-the physical port number, then the correct implementation of
-ntb_peer_resource_idx() is going to be crazy, essentially needing to
-generate a logical port number for every port, every time it's called.
-
-Logan
+--
+Best Regards
+Masahiro Yamada
