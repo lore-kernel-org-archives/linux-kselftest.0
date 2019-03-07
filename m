@@ -1,51 +1,28 @@
-From: luto@kernel.org (Andy Lutomirski)
-Date: Thu, 7 Mar 2019 10:09:51 -0800
-Subject: [PATCH] selftests/x86: Support Atom for syscall_arg_fault test
-In-Reply-To: <1551947140-22166-1-git-send-email-bo.tong@intel.com>
-References: <1551947140-22166-1-git-send-email-bo.tong@intel.com>
-Message-ID:
- <CALCETrXvs1thKLHgnHOe94o1kAunxTSw8k-v9_GgoodB=R9M5g@mail.gmail.com>
+From: me@tobin.cc (Tobin C. Harding)
+Date: Fri, 8 Mar 2019 08:18:58 +1100
+Subject: [PATCH v3 0/7] lib/string: Add strscpy_pad() function
+In-Reply-To: <20190306214934.GA16461@eros.localdomain>
+References: <20190306214226.14598-1-tobin@kernel.org>
+ <20190306214934.GA16461@eros.localdomain>
+Message-ID: <20190307211858.GA28495@eros.localdomain>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190307180951.aXeklmbDu9Ag8rxMmmpp6LwUmD26cbu22O6BqC2GSBM@z>
+Message-ID: <20190307211858.64_2FIMPMCoK6M7rka4-NkoY-VB-P3pPcJwlKnHbpXg@z>
 
-On Thu, Mar 7, 2019@12:22 AM Tong Bo <bo.tong@intel.com> wrote:
->
-> Atom-based CPUs trigger stack fault when invoke 32-bit SYSENTER instruction
-> with invalid register values. So we also need sigbus handling in this case.
->
-> Following is assembly when the fault expception happens.
->
-> (gdb) disassemble $eip
-> Dump of assembler code for function __kernel_vsyscall:
->    0xf7fd8fe0 <+0>:     push   %ecx
->    0xf7fd8fe1 <+1>:     push   %edx
->    0xf7fd8fe2 <+2>:     push   %ebp
->    0xf7fd8fe3 <+3>:     mov    %esp,%ebp
->    0xf7fd8fe5 <+5>:     sysenter
->    0xf7fd8fe7 <+7>:     int    $0x80
-> => 0xf7fd8fe9 <+9>:     pop    %ebp
->    0xf7fd8fea <+10>:    pop    %edx
->    0xf7fd8feb <+11>:    pop    %ecx
->    0xf7fd8fec <+12>:    ret
-> End of assembler dump.
->
-> Accroding to Intel SDM, this could also be a Stack Segment Fault(#SS, 12),
-> except a normal Page Fault(#PF, 14).
+On Thu, Mar 07, 2019@08:49:34AM +1100, Tobin C. Harding wrote:
+> On Thu, Mar 07, 2019@08:42:19AM +1100, Tobin C. Harding wrote:
+> > Hi,
+> 
+> Man, I didn't see the merge window was open, I thought rc8 only came out
+> on Sunday.
+> 
+> Sorry, please ignore this.  Will re-send again later in the cycle.
 
-Really?  What is in the SS register that makes a stack segment fault
-possible?  Is it because we're overflowing ESP?  Would a value like -5
-instead of -1 in the register change things?
+Multiple people have suggested to me (offlist) that it is fine to go
+right ahead and send patches whenever.
 
-Anyway, I'm okay with the patch, but I think that you should improve
-the comment:
+Shuah, do you take patches to kselftest at any stage of the dev cycle?
 
-> -       sethandler(SIGSEGV, sigsegv, SA_ONSTACK);
-> +       sethandler(SIGSEGV, sigsegv_or_sigbus, SA_ONSTACK);
-> +       /* Atom CPUs may trigger sigbus for below SYSENTER exception case */
-> +       sethandler(SIGBUS, sigsegv_or_sigbus, SA_ONSTACK);
+Kees, same question please?
 
-How about "The actual exception can vary.  On Atom CPUs, we get #SS
-instead of #PF when the vDSO fails to access the stack when ESP is too
-close to 2^32, and #SS causes SIGBUS".
-
---Andy
+thanks,
+Tobin.
