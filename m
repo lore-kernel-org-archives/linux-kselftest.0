@@ -1,34 +1,53 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Fri, 8 Mar 2019 05:42:32 -0800
+From: lkml@metux.net (Enrico Weigelt, metux IT consult)
+Date: Fri, 8 Mar 2019 14:57:24 +0100
 Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
  extend the kernel
-In-Reply-To: <CAMuHMdW_7BTZREsnz7uMTToCZ4HDOZboMJH8k8UZica2pB=Jew@mail.gmail.com>
+In-Reply-To: <CAEXW_YQUcA+bnav20tAFQPXYE=epMie4X85diudKs_s-TJ7dsw@mail.gmail.com>
 References: <20190301160856.129678-1-joel@joelfernandes.org>
  <CAMuHMdU77UyUs-LvRx-NN_k0Y7MZXQkBdgL2i83veCkvdzeeqA@mail.gmail.com>
  <20190307150343.GB258852@google.com>
  <CAMuHMdW_7BTZREsnz7uMTToCZ4HDOZboMJH8k8UZica2pB=Jew@mail.gmail.com>
-Message-ID:
  <CAEXW_YQUcA+bnav20tAFQPXYE=epMie4X85diudKs_s-TJ7dsw@mail.gmail.com>
+Message-ID: <05942dfd-b05d-0a26-f8e4-85e2a73b8feb@metux.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190308134232.bFBiBI2wURDErQ9rAdwDVAIrTV2yoHaUoOkRLB4RJk8@z>
+Message-ID: <20190308135724.nsAYwZFIKVCos2ZnIVO_6DvqnSInZWBOnLtgpt2ae8k@z>
 
-HI Geert,
+On 08.03.19 14:42, Joel Fernandes wrote:
 
-On Fri, Mar 8, 2019, 3:53 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > It is just so much easier to use tar + xz at build time, and leave the
-> > decompression task to the user. After decompression, the files will live on
-> > the disk and the page-cache mechanism will free memory when/if the files fall
-> > off the LRUs.
->
-> I'm also considering how generic and extensible the solution is.
-> What if people need other build artifacts in the future (e.g. signing key to
-> load signed modules)?
+Hi folks,
 
-That sounds like it could be useful. I don't see any reason off the
-top why that would not be possible to add to the list of archived
-files in the future. The patch allows populating the list of files
-from Kbuild using ikh_file_list variable.
+> That sounds like it could be useful. I don't see any reason off the
+> top why that would not be possible to add to the list of archived
+> files in the future. The patch allows populating the list of files
+> from Kbuild using ikh_file_list variable.
 
-thanks,
+It seems the whole thing's going into a direction where a whole own
+subtopic is coming up: compressed built-in filesystem.
 
- - Joel
+Haven't had a deeper thought about it yet, whether or not existing
+filesystems like squashfs, initramfs, etc are the right thing for that,
+or something new should be invented, but a generic mechanism for
+compiled-in compressed (ro) filesystems could also be interesting
+for very small devices, that perhaps even dont need any persistence.
+
+Some requirements coming up in mind:
+
+1. it shall be possible to have any number of instances - possibly by
+   separate modules.
+2. it shall be possible to use an bootloader/firmware provided image
+   (so it can serve as initrd)
+2. data should stay compressed as long as possible, but uncompressed
+   data might be cached - do decompression on-demand
+3. only needs to be ro (write access could be done via unionfs+friends)
+4. it shall be swappable (if swap is enabled)
+
+In that scenario, these in-kernel headers would just one consumer,
+I can imagine lots of others.
+
+
+--mtx
+
+-- 
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info at metux.net -- +49-151-27565287
