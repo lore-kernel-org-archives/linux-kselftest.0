@@ -1,5 +1,5 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Fri, 8 Mar 2019 12:58:59 -0500
+From: geert@linux-m68k.org (Geert Uytterhoeven)
+Date: Fri, 8 Mar 2019 18:59:23 +0100
 Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
  extend the kernel
 In-Reply-To: <20190308140251.GC25768@kroah.com>
@@ -9,14 +9,15 @@ References: <20190301160856.129678-1-joel@joelfernandes.org>
  <CAMuHMdW_7BTZREsnz7uMTToCZ4HDOZboMJH8k8UZica2pB=Jew@mail.gmail.com>
  <CAEXW_YQUcA+bnav20tAFQPXYE=epMie4X85diudKs_s-TJ7dsw@mail.gmail.com>
  <20190308140251.GC25768@kroah.com>
-Message-ID: <20190308175859.GA61742@google.com>
+Message-ID:
+ <CAMuHMdUmnrJtu8bBeUgtiU6y_TLHM27z1WxpPia4dXMpApeijw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190308175859.Jym8N8hQa9PAQzs0N76vyjPorC1KG7Szp2cActyouI4@z>
+Message-ID: <20190308175923.2C_myPSCMeTxFCVjw4tk0Mu73Bl9b2zGnCZeqvdTfI4@z>
 
-On Fri, Mar 08, 2019@03:02:51PM +0100, Greg KH wrote:
+Hi Greg,
+
+On Fri, Mar 8, 2019@6:05 PM Greg KH <gregkh@linuxfoundation.org> wrote:
 > On Fri, Mar 08, 2019@05:42:32AM -0800, Joel Fernandes wrote:
-> > HI Geert,
-> > 
 > > On Fri, Mar 8, 2019, 3:53 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 > > > > It is just so much easier to use tar + xz at build time, and leave the
 > > > > decompression task to the user. After decompression, the files will live on
@@ -26,24 +27,25 @@ On Fri, Mar 08, 2019@03:02:51PM +0100, Greg KH wrote:
 > > > I'm also considering how generic and extensible the solution is.
 > > > What if people need other build artifacts in the future (e.g. signing key to
 > > > load signed modules)?
-> > 
+> >
 > > That sounds like it could be useful. I don't see any reason off the
 > > top why that would not be possible to add to the list of archived
 > > files in the future. The patch allows populating the list of files
 > > from Kbuild using ikh_file_list variable.
-> 
+>
 > Um, no, you don't want the signing key in the kernel itself, as that
 > totally defeats the purpose of the signing key :)
 
-*Bangs self to desk*. You are right, didn't think that one through ;)
+In a loadable module?
+He who has the module, can build and sign more modules.
 
-By the way, my v5 is ready to send. But I am avoiding sending it due to the
-merge window going on. I posted it yesterday in this thread as well:
-https://lore.kernel.org/patchwork/comment/1241077/
+Gr{oetje,eeting}s,
 
-This is likely to be the final version or so, unless Masahiro or you or other
-reviewers have any more comments.
+                        Geert
 
-thanks,
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert at linux-m68k.org
 
- - Joel
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
