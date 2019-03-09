@@ -1,8 +1,8 @@
-From: gregkh at linuxfoundation.org (Greg KH)
-Date: Sat, 9 Mar 2019 08:16:48 +0100
+From: geert at linux-m68k.org (Geert Uytterhoeven)
+Date: Sat, 9 Mar 2019 12:40:01 +0100
 Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
  extend the kernel
-In-Reply-To: <CAMuHMdUmnrJtu8bBeUgtiU6y_TLHM27z1WxpPia4dXMpApeijw@mail.gmail.com>
+In-Reply-To: <20190309071648.GE3882@kroah.com>
 References: <20190301160856.129678-1-joel@joelfernandes.org>
  <CAMuHMdU77UyUs-LvRx-NN_k0Y7MZXQkBdgL2i83veCkvdzeeqA@mail.gmail.com>
  <20190307150343.GB258852@google.com>
@@ -10,42 +10,75 @@ References: <20190301160856.129678-1-joel@joelfernandes.org>
  <CAEXW_YQUcA+bnav20tAFQPXYE=epMie4X85diudKs_s-TJ7dsw@mail.gmail.com>
  <20190308140251.GC25768@kroah.com>
  <CAMuHMdUmnrJtu8bBeUgtiU6y_TLHM27z1WxpPia4dXMpApeijw@mail.gmail.com>
-Message-ID: <20190309071648.GE3882@kroah.com>
+ <20190309071648.GE3882@kroah.com>
+Message-ID: <CAMuHMdUT+UGt9p2QhOXzAtCUmqy-a8YN-ceDa-0qANJE53pWBA@mail.gmail.com>
 
-On Fri, Mar 08, 2019 at 06:59:23PM +0100, Geert Uytterhoeven wrote:
-> Hi Greg,
-> 
-> On Fri, Mar 8, 2019 at 6:05 PM Greg KH <gregkh at linuxfoundation.org> wrote:
-> > On Fri, Mar 08, 2019 at 05:42:32AM -0800, Joel Fernandes wrote:
-> > > On Fri, Mar 8, 2019, 3:53 AM Geert Uytterhoeven <geert at linux-m68k.org> wrote:
-> > > > > It is just so much easier to use tar + xz at build time, and leave the
-> > > > > decompression task to the user. After decompression, the files will live on
-> > > > > the disk and the page-cache mechanism will free memory when/if the files fall
-> > > > > off the LRUs.
+Hi Greg,
+
+On Sat, Mar 9, 2019 at 8:16 AM Greg KH <gregkh at linuxfoundation.org> wrote:
+> On Fri, Mar 08, 2019 at 06:59:23PM +0100, Geert Uytterhoeven wrote:
+> > On Fri, Mar 8, 2019 at 6:05 PM Greg KH <gregkh at linuxfoundation.org> wrote:
+> > > On Fri, Mar 08, 2019 at 05:42:32AM -0800, Joel Fernandes wrote:
+> > > > On Fri, Mar 8, 2019, 3:53 AM Geert Uytterhoeven <geert at linux-m68k.org> wrote:
+> > > > > > It is just so much easier to use tar + xz at build time, and leave the
+> > > > > > decompression task to the user. After decompression, the files will live on
+> > > > > > the disk and the page-cache mechanism will free memory when/if the files fall
+> > > > > > off the LRUs.
+> > > > >
+> > > > > I'm also considering how generic and extensible the solution is.
+> > > > > What if people need other build artifacts in the future (e.g. signing key to
+> > > > > load signed modules)?
 > > > >
-> > > > I'm also considering how generic and extensible the solution is.
-> > > > What if people need other build artifacts in the future (e.g. signing key to
-> > > > load signed modules)?
+> > > > That sounds like it could be useful. I don't see any reason off the
+> > > > top why that would not be possible to add to the list of archived
+> > > > files in the future. The patch allows populating the list of files
+> > > > from Kbuild using ikh_file_list variable.
 > > >
-> > > That sounds like it could be useful. I don't see any reason off the
-> > > top why that would not be possible to add to the list of archived
-> > > files in the future. The patch allows populating the list of files
-> > > from Kbuild using ikh_file_list variable.
+> > > Um, no, you don't want the signing key in the kernel itself, as that
+> > > totally defeats the purpose of the signing key :)
 > >
-> > Um, no, you don't want the signing key in the kernel itself, as that
-> > totally defeats the purpose of the signing key :)
-> 
-> In a loadable module?
-> He who has the module, can build and sign more modules.
+> > In a loadable module?
+> > He who has the module, can build and sign more modules.
+>
+> Again, that's pretty foolish.
+>
+> Signing keys should be kept secure, or better yet, just deleted entirely
+> after creating and signing with them.  That's what I do for my kernels
+> and I'm pretty sure that some distros also do this.  That way there's no
+> chance that someone else can sign a module and have it loaded without
+> detection, which is what signing is supposed to prevent from happening.
 
-Again, that's pretty foolish.
+If you want that kind of security, there's no point in allowing to extend the
+kernel by building more kernel modules after deployment.
 
-Signing keys should be kept secure, or better yet, just deleted entirely
-after creating and signing with them.  That's what I do for my kernels
-and I'm pretty sure that some distros also do this.  That way there's no
-chance that someone else can sign a module and have it loaded without
-detection, which is what signing is supposed to prevent from happening.
+The more I think about this (embedding a kernel headers archive in the
+kernel or a kernel module), the more I feel this is a workaround for a distro
+issue.
+Files are distributed with the kernel image, e.g. loadable kernel modules,
+so distributing more files is not a technical issue (and if it is, working
+around that might be as simple as "mv kheaders.tar.xz kheaders.ko",
+and letting module install take care of it ;-)
+It makes sense to provide /proc/kconfig.gz, as this is unique
+configuration info.  The kernel headers can easily by derived from this
+config, and the kernel sources (which are GPL).
 
-thanks,
+"Raw kernel headers also cannot be copied into the filesystem like they
+ can be on other distros, due to licensing and other issues. There's no
+ linux-headers package on Android."
 
-greg k-h
+What's the licensing issue? What's the (legal) difference between having
+the headers on the file system, and having a kernel module including the
+headers on the file system?
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert at linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
