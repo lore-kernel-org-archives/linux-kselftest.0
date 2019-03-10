@@ -1,67 +1,34 @@
-From: karim.yaghmour at opersys.com (Karim Yaghmour)
-Date: Sat, 9 Mar 2019 16:44:31 -0500
-Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
- extend the kernel
-In-Reply-To: <CAMuHMdV8+XTyGf1ZJ+gMf=zQpzqh3-+b7wgi+gAmXQ6HpUAw3A@mail.gmail.com>
-References: <20190301160856.129678-1-joel@joelfernandes.org>
- <CAMuHMdU77UyUs-LvRx-NN_k0Y7MZXQkBdgL2i83veCkvdzeeqA@mail.gmail.com>
- <20190307150343.GB258852@google.com>
- <CAMuHMdW_7BTZREsnz7uMTToCZ4HDOZboMJH8k8UZica2pB=Jew@mail.gmail.com>
- <CAEXW_YQUcA+bnav20tAFQPXYE=epMie4X85diudKs_s-TJ7dsw@mail.gmail.com>
- <20190308140251.GC25768@kroah.com>
- <CAMuHMdUmnrJtu8bBeUgtiU6y_TLHM27z1WxpPia4dXMpApeijw@mail.gmail.com>
- <20190309071648.GE3882@kroah.com>
- <CAMuHMdUT+UGt9p2QhOXzAtCUmqy-a8YN-ceDa-0qANJE53pWBA@mail.gmail.com>
- <20190309121141.GA30173@kroah.com>
- <b7296377-9e0c-aed7-61f0-93d24d1ceddd@opersys.com>
- <CAMuHMdV8+XTyGf1ZJ+gMf=zQpzqh3-+b7wgi+gAmXQ6HpUAw3A@mail.gmail.com>
-Message-ID: <3e84e1ef-e266-e983-5874-6c26ac7f38b8@opersys.com>
+From: zohar at linux.ibm.com (Mimi Zohar)
+Date: Sun, 10 Mar 2019 13:48:07 -0400
+Subject: [PATCH] selftests/ima: Add missing '=y' to config options
+In-Reply-To: <20190228233030.10480-1-pvorel@suse.cz>
+References: <20190228233030.10480-1-pvorel@suse.cz>
+Message-ID: <1552240087.5062.9.camel@linux.ibm.com>
 
+On Fri, 2019-03-01 at 00:30 +0100, Petr Vorel wrote:
+> so the file can be used as kernel config snippet.
+> 
+> Signed-off-by: Petr Vorel <pvorel at suse.cz>
 
-Hi Geert,
+Thanks!  The tests now read the kernel config.  Removing
+"CONFIG_KEXEC_VERIFY_SIG" permits testing with/without it configured.
 
-On 3/9/19 2:26 PM, Geert Uytterhoeven wrote:
-> Thanks for the explanation!
+Mimi
 
-Happy this was useful :)
-
-> So how does this work, with kernel images and kernel modules supplied
-> by separate parties, not "bound" by the same kernel headers/API, as they
-> can be replaced separately?
-
-The thing with Android is that there isn't a "one size fits all". Google 
-provides guidance, policies and at least one example implementation 
-through the Pixel lines.
-
-Each vendor however is allowed a great degree of latitude with regards 
-to what they decide to do. Personally, if I was advising a team working 
-on an Android device where Joel's patch was available as part of their 
-kernel I would just recommend that they build it in -- i.e. not as a 
-module. Hence, there would be no module chasing game.
-
-With regards to Google's guidelines for manufacturers, though, Google 
-states that CONFIG_MODVERSIONS needs to be enabled, see here:
-https://source.android.com/devices/architecture/kernel/modular-kernels
-FWIW, that doesn't mean that modules are actually used. Devices don't 
-necessarily have to be using modules.
-
-> Isn't the need for kernel headers for user-space tools something different,
-> as this is limited to the uapi versions, which are less (almost not) subject
-> to change, compared to the kernel headers needed for compiling kernel
-> modules?
-
-Sorry, I should've been clearer. I'm including eBPF/BCC into the 
-"user-space tools" here. That was in fact my prime motivation in 
-encouraging Joel at the last LPC to look at this. I've been integrating 
-the teaching of eBPF into my AOSP debugging and performance analysis 
-class (see CC courseware here: 
-http://www.opersys.com/training/android-debug-and-performance), and it 
-was pretty messy trying to show people how to benefit from such tools 
-under Android. Joel's present set of patches would obviate this problem.
-
-HTH,
-
--- 
-Karim Yaghmour
-CEO - Opersys inc. / www.opersys.com
-http://twitter.com/karimyaghmour
+> ---
+>  tools/testing/selftests/ima/config | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ima/config b/tools/testing/selftests/ima/config
+> index 6bc86d4d9bb4..9b968cd55199 100644
+> --- a/tools/testing/selftests/ima/config
+> +++ b/tools/testing/selftests/ima/config
+> @@ -1,4 +1,4 @@
+> -CONFIG_IMA_APPRAISE
+> -CONFIG_IMA_ARCH_POLICY
+> -CONFIG_SECURITYFS
+> -CONFIG_KEXEC_VERIFY_SIG
+> +CONFIG_IMA_APPRAISE=y
+> +CONFIG_IMA_ARCH_POLICY=y
+> +CONFIG_SECURITYFS=y
+> +CONFIG_KEXEC_VERIFY_SIG=y
