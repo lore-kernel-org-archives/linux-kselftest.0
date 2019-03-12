@@ -1,56 +1,40 @@
-From: karim.yaghmour at opersys.com (Karim Yaghmour)
-Date: Tue, 12 Mar 2019 08:15:18 -0700
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Tue, 12 Mar 2019 11:26:50 -0400
 Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
  extend the kernel
-In-Reply-To: <CAMuHMdVw=b_oS70F1LhXV0b9fn_p6OuCo2RDUQC=49PdJVW7xA@mail.gmail.com>
-References: <20190301160856.129678-1-joel@joelfernandes.org>
- <CAMuHMdU77UyUs-LvRx-NN_k0Y7MZXQkBdgL2i83veCkvdzeeqA@mail.gmail.com>
- <20190307150343.GB258852@google.com>
- <CAMuHMdW_7BTZREsnz7uMTToCZ4HDOZboMJH8k8UZica2pB=Jew@mail.gmail.com>
- <CAEXW_YQUcA+bnav20tAFQPXYE=epMie4X85diudKs_s-TJ7dsw@mail.gmail.com>
- <20190308140251.GC25768@kroah.com>
- <CAMuHMdUmnrJtu8bBeUgtiU6y_TLHM27z1WxpPia4dXMpApeijw@mail.gmail.com>
- <20190309071648.GE3882@kroah.com>
+In-Reply-To: <20190312014522.jfxg3pdav2piuaqs@ast-mbp>
+References: <20190309071648.GE3882@kroah.com>
  <CAMuHMdUT+UGt9p2QhOXzAtCUmqy-a8YN-ceDa-0qANJE53pWBA@mail.gmail.com>
  <20190309121141.GA30173@kroah.com>
  <b7296377-9e0c-aed7-61f0-93d24d1ceddd@opersys.com>
  <CAMuHMdV8+XTyGf1ZJ+gMf=zQpzqh3-+b7wgi+gAmXQ6HpUAw3A@mail.gmail.com>
  <3e84e1ef-e266-e983-5874-6c26ac7f38b8@opersys.com>
- <CAMuHMdVw=b_oS70F1LhXV0b9fn_p6OuCo2RDUQC=49PdJVW7xA@mail.gmail.com>
-Message-ID: <a034919f-d4ca-b8f2-b80b-5de3d4606b97@opersys.com>
+ <20190311193612.4f09bf11@oasis.local.home>
+ <CAKOZuetHG0O-CiO6h5tD7aht_MT70ebwWMMSPkRUHdiM3wVq0Q@mail.gmail.com>
+ <20190312003912.GA170478@google.com>
+ <20190311212823.60684182@oasis.local.home>
+ <20190312014522.jfxg3pdav2piuaqs@ast-mbp>
+Message-ID: <20190312112650.680e27c4@gandalf.local.home>
 
+On Mon, 11 Mar 2019 18:45:24 -0700
+Alexei Starovoitov <alexei.starovoitov at gmail.com> wrote:
 
-Hi Geert,
+> what you're asking for we already have. It's called BTF.
 
-On 3/11/19 4:03 AM, Geert Uytterhoeven wrote:
-[ snip ]
-> OK.
-> 
-> Now about the actual solution: what is your opinion on embedding e.g.
-> a squashfs image in the kernel instead, which would be a more generic
-> solution, not adding more ABI to /proc?
+Cool.
 
-I'm not familiar enough with the intricacies of squashfs to have an 
-educated opinion, but I hear that it's got its quirks (need for 
-user-space tools, etc.) and possibly security issues. Also, I wonder 
-whether it's a generalized solution that still kicks the ABI can down 
-the road -- ultimately the kernel would still have a path/format/foo for 
-making kheaders available in that squashfs image and that convention 
-would become ABI. The only "benefit" being that said ABI wouldn't appear 
-under /proc, and, tbh, I'm not sure that that's actually a benefit or is 
-even idiomatic since kconfig.gz is already under /proc. To an extent, 
-the precedent set by kconfig favors kheaders to also be available in the 
-same location using a similar mechanism ... i.e. bonus points for 
-consistency.
+> pahole takes vmlinux dwarf and convert it into ~1Mbyte of BTF that includes
+> all kernel types.
+> With gzip it can be compressed further if necessary.
+> We also have a prototype to generate all_vmlinux_types.h from BTF.
+> But it's not a substitute for kernel headers.
+> We've had a long discussion during last LPC regarding this:
+> http://vger.kernel.org/lpc-bpf2018.html#session-2
+> tldr: many tracing use cases will be solved with BTF, but kernel headers
+> are here to stay.
 
-But that's my hand-wavy gut-reaction response to your question. I'm sure 
-others on this thread have far more informed opinions about the 
-specifics than I could have. My priority was to clarify the basis for 
-the need being addressed.
+Is this work a result of that session? (I was only able to attend part
+of the BPF sessions due to conflicts). I guess I should watch the
+videos.
 
-Cheers,
-
--- 
-Karim Yaghmour
-CEO - Opersys inc. / www.opersys.com
-http://twitter.com/karimyaghmour
+-- Steve
