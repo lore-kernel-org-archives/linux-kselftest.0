@@ -1,51 +1,49 @@
-From: pvorel@suse.cz (Petr Vorel)
-Date: Wed, 13 Mar 2019 11:14:36 +0100
-Subject: [PATCH v3 5/7] selftests/ima: kexec_file_load syscall test
-In-Reply-To: <1552409474.24794.63.camel@linux.ibm.com>
-References: <1552304473-3966-1-git-send-email-zohar@linux.ibm.com>
- <1552304473-3966-6-git-send-email-zohar@linux.ibm.com>
- <20190312121001.GA18510@dhcp-128-65.nay.redhat.com>
- <1552409474.24794.63.camel@linux.ibm.com>
-Message-ID: <20190313101436.GB25643@dell5510>
+From: sashal@kernel.org (Sasha Levin)
+Date: Wed, 13 Mar 2019 15:12:50 -0400
+Subject: [PATCH AUTOSEL 4.19 48/48] selftests: fib_tests: sleep after changing
+ carrier. again.
+In-Reply-To: <20190313191250.158955-1-sashal@kernel.org>
+References: <20190313191250.158955-1-sashal@kernel.org>
+Message-ID: <20190313191250.158955-48-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190313101436.XLNn8ZN_-7k52vZSc3KSG6mz5rK-nM9Pen72aC93T78@z>
+Message-ID: <20190313191250.chM9r24QKMwmuG5toOZq29PAwjH9vVSthmcEuLjvZtI@z>
 
-Hi Mimi, Dave,
+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-> > Frankly I did not read and followup much about the testing code changes,
-> > not sure if it is doable or not.  The code sharing under testing folder
-> > seems not very good.  For example the basic check_root is needed by
-> > different parts, but all have its own implementation.  Anyway this is
-> > not the duty of this patch set.
-> > Also the selftests/lib/ is not a folder for sharing code for different
-> > tests, it looks a standalone test instead.
-Yes. Thus lib/ folder name is a bit confusing.
+[ Upstream commit af548a27b158d548d41e56255e6eaca1658cc3be ]
 
-> Shuah suggested upstreaming these tests first and defer introducing a
-> common set of functions to later.
-Make sense.
+Just like commit e2ba732a1681 ("selftests: fib_tests: sleep after
+changing carrier"), wait one second to allow linkwatch to propagate the
+carrier change to the stack.
 
-> > So if split kexec tests to another folder is not doable please just
-> > ignore the comment.
+There are two sets of carrier tests. The first slept after the carrier
+was set to off, and when the second set ran, it was likely that the
+linkwatch would be able to run again without much delay, reducing the
+likelihood of a race. However, if you run 'fib_tests.sh -t carrier' on a
+loop, you will quickly notice the failures.
 
-> Left in the selftests/ima is a similar test for kernel modules, which
-> uses the "common" functions.  So either we wait to move the kexec
-> tests or allow them to reach into the ima directory and use the
-> ima_common_lib functions.
-I guess just load ima_common_lib.sh for now would be good enough.
-@Dave: BTW I has starting to work on kselftest common library.
-I thought I'd spent some time on it before posting it, but I might even send
-the small part I've done so far so we can discuss it.
+Sleeping on the second set of tests make the failures go away.
 
-> > BTW, does CONFIG_KEXEC* is checked?  in case a kernel without KEXEC or
-> > KEXEC_FILE compiled in then the tests can just return directly.
+Cc: David Ahern <dsahern at gmail.com>
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo at canonical.com>
+Reviewed-by: David Ahern <dsahern at gmail.com>
+Signed-off-by: David S. Miller <davem at davemloft.net>
+Signed-off-by: Sasha Levin <sashal at kernel.org>
+---
+ tools/testing/selftests/net/fib_tests.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Good point.  Now that there is a common function for reading the
-> Kconfig, I'll add that check to both the test_kexec_load.sh and
-> test_kexec_file_load.sh tests respectively.
-
-> Mimi
-
-
-Kind regards,
-Petr
+diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+index 0f45633bd634..a4ccde0e473b 100755
+--- a/tools/testing/selftests/net/fib_tests.sh
++++ b/tools/testing/selftests/net/fib_tests.sh
+@@ -385,6 +385,7 @@ fib_carrier_unicast_test()
+ 
+ 	set -e
+ 	$IP link set dev dummy0 carrier off
++	sleep 1
+ 	set +e
+ 
+ 	echo "    Carrier down"
+-- 
+2.19.1
