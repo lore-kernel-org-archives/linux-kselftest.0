@@ -1,83 +1,47 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Wed, 13 Mar 2019 15:12:41 -0400
-Subject: [PATCH AUTOSEL 4.19 39/48] bpf, lpm: fix lookup bug in map_delete_elem
-In-Reply-To: <20190313191250.158955-1-sashal@kernel.org>
-References: <20190313191250.158955-1-sashal@kernel.org>
-Message-ID: <20190313191250.158955-39-sashal@kernel.org>
+Date: Wed, 13 Mar 2019 15:10:21 -0400
+Subject: [PATCH AUTOSEL 4.20 60/60] selftests: fib_tests: sleep after changing
+ carrier. again.
+In-Reply-To: <20190313191021.158171-1-sashal@kernel.org>
+References: <20190313191021.158171-1-sashal@kernel.org>
+Message-ID: <20190313191021.158171-60-sashal@kernel.org>
 
-From: Alban Crequy <alban at kinvolk.io>
+From: Thadeu Lima de Souza Cascardo <cascardo at canonical.com>
 
-[ Upstream commit 7c0cdf0b3940f63d9777c3fcf250a2f83859ca54 ]
+[ Upstream commit af548a27b158d548d41e56255e6eaca1658cc3be ]
 
-trie_delete_elem() was deleting an entry even though it was not matching
-if the prefixlen was correct. This patch adds a check on matchlen.
+Just like commit e2ba732a1681 ("selftests: fib_tests: sleep after
+changing carrier"), wait one second to allow linkwatch to propagate the
+carrier change to the stack.
 
-Reproducer:
+There are two sets of carrier tests. The first slept after the carrier
+was set to off, and when the second set ran, it was likely that the
+linkwatch would be able to run again without much delay, reducing the
+likelihood of a race. However, if you run 'fib_tests.sh -t carrier' on a
+loop, you will quickly notice the failures.
 
-$ sudo bpftool map create /sys/fs/bpf/mylpm type lpm_trie key 8 value 1 entries 128 name mylpm flags 1
-$ sudo bpftool map update pinned /sys/fs/bpf/mylpm key hex 10 00 00 00 aa bb cc dd value hex 01
-$ sudo bpftool map dump pinned /sys/fs/bpf/mylpm
-key: 10 00 00 00 aa bb cc dd  value: 01
-Found 1 element
-$ sudo bpftool map delete pinned /sys/fs/bpf/mylpm key hex 10 00 00 00 ff ff ff ff
-$ echo $?
-0
-$ sudo bpftool map dump pinned /sys/fs/bpf/mylpm
-Found 0 elements
+Sleeping on the second set of tests make the failures go away.
 
-A similar reproducer is added in the selftests.
-
-Without the patch:
-
-$ sudo ./tools/testing/selftests/bpf/test_lpm_map
-test_lpm_map: test_lpm_map.c:485: test_lpm_delete: Assertion `bpf_map_delete_elem(map_fd, key) == -1 && errno == ENOENT' failed.
-Aborted
-
-With the patch: test_lpm_map runs without errors.
-
-Fixes: e454cf595853 ("bpf: Implement map_delete_elem for BPF_MAP_TYPE_LPM_TRIE")
-Cc: Craig Gallek <kraig at google.com>
-Signed-off-by: Alban Crequy <alban at kinvolk.io>
-Acked-by: Craig Gallek <kraig at google.com>
-Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
+Cc: David Ahern <dsahern at gmail.com>
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo at canonical.com>
+Reviewed-by: David Ahern <dsahern at gmail.com>
+Signed-off-by: David S. Miller <davem at davemloft.net>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- kernel/bpf/lpm_trie.c                      |  1 +
- tools/testing/selftests/bpf/test_lpm_map.c | 10 ++++++++++
- 2 files changed, 11 insertions(+)
+ tools/testing/selftests/net/fib_tests.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 9058317ba9de..4f3138e6ecb2 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -432,6 +432,7 @@ static int trie_delete_elem(struct bpf_map *map, void *_key)
- 	}
+diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+index 802b4af18729..1080ff55a788 100755
+--- a/tools/testing/selftests/net/fib_tests.sh
++++ b/tools/testing/selftests/net/fib_tests.sh
+@@ -388,6 +388,7 @@ fib_carrier_unicast_test()
  
- 	if (!node || node->prefixlen != key->prefixlen ||
-+	    node->prefixlen != matchlen ||
- 	    (node->flags & LPM_TREE_NODE_FLAG_IM)) {
- 		ret = -ENOENT;
- 		goto out;
-diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/test_lpm_map.c
-index 147e34cfceb7..02d7c871862a 100644
---- a/tools/testing/selftests/bpf/test_lpm_map.c
-+++ b/tools/testing/selftests/bpf/test_lpm_map.c
-@@ -474,6 +474,16 @@ static void test_lpm_delete(void)
- 	assert(bpf_map_lookup_elem(map_fd, key, &value) == -1 &&
- 		errno == ENOENT);
+ 	set -e
+ 	$IP link set dev dummy0 carrier off
++	sleep 1
+ 	set +e
  
-+	key->prefixlen = 30; // unused prefix so far
-+	inet_pton(AF_INET, "192.255.0.0", key->data);
-+	assert(bpf_map_delete_elem(map_fd, key) == -1 &&
-+		errno == ENOENT);
-+
-+	key->prefixlen = 16; // same prefix as the root node
-+	inet_pton(AF_INET, "192.255.0.0", key->data);
-+	assert(bpf_map_delete_elem(map_fd, key) == -1 &&
-+		errno == ENOENT);
-+
- 	/* assert initial lookup */
- 	key->prefixlen = 32;
- 	inet_pton(AF_INET, "192.168.0.1", key->data);
+ 	echo "    Carrier down"
 -- 
 2.19.1
