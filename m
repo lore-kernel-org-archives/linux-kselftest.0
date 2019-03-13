@@ -1,73 +1,49 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Wed, 13 Mar 2019 10:18:43 +0900
-Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
- extend the kernel
-In-Reply-To: <CAJWu+oqsD_wHGWfzj6POFowiY2qcu04auVzkA6Lu9R+LR4gkrQ@mail.gmail.com>
-References: <20190308140251.GC25768@kroah.com>
- <CAMuHMdUmnrJtu8bBeUgtiU6y_TLHM27z1WxpPia4dXMpApeijw@mail.gmail.com>
- <20190309071648.GE3882@kroah.com>
- <CAMuHMdUT+UGt9p2QhOXzAtCUmqy-a8YN-ceDa-0qANJE53pWBA@mail.gmail.com>
- <20190309121141.GA30173@kroah.com>
- <b7296377-9e0c-aed7-61f0-93d24d1ceddd@opersys.com>
- <CAMuHMdV8+XTyGf1ZJ+gMf=zQpzqh3-+b7wgi+gAmXQ6HpUAw3A@mail.gmail.com>
- <3e84e1ef-e266-e983-5874-6c26ac7f38b8@opersys.com>
- <20190311193612.4f09bf11@oasis.local.home>
- <CAKOZuetHG0O-CiO6h5tD7aht_MT70ebwWMMSPkRUHdiM3wVq0Q@mail.gmail.com>
- <20190312003912.GA170478@google.com>
- <20190311212823.60684182@oasis.local.home>
- <CAJWu+oqsD_wHGWfzj6POFowiY2qcu04auVzkA6Lu9R+LR4gkrQ@mail.gmail.com>
-Message-ID: <20190313101843.800dd8d6a9babb635580ebdc@kernel.org>
+From: pvorel at suse.cz (Petr Vorel)
+Date: Wed, 13 Mar 2019 11:14:36 +0100
+Subject: [PATCH v3 5/7] selftests/ima: kexec_file_load syscall test
+In-Reply-To: <1552409474.24794.63.camel@linux.ibm.com>
+References: <1552304473-3966-1-git-send-email-zohar@linux.ibm.com>
+ <1552304473-3966-6-git-send-email-zohar@linux.ibm.com>
+ <20190312121001.GA18510@dhcp-128-65.nay.redhat.com>
+ <1552409474.24794.63.camel@linux.ibm.com>
+Message-ID: <20190313101436.GB25643@dell5510>
 
-On Mon, 11 Mar 2019 18:38:49 -0700
-Joel Fernandes <joelaf at google.com> wrote:
+Hi Mimi, Dave,
 
-> On Mon, Mar 11, 2019 at 6:28 PM Steven Rostedt <rostedt at goodmis.org> wrote:
-> >
-> > On Mon, 11 Mar 2019 20:39:12 -0400
-> > Joel Fernandes <joel at joelfernandes.org> wrote:
-> >
-> > > I think even though the kernel-headers can't have information about all data
-> > > structures, they do already contain a lot of data structure definitions we
-> > > need already. And anything needed can/should arguably be moved to include/ if
-> > > they are really needed for kernel extension by something "external" to the
-> > > kernel such as kernel modules or eBPF, right?
-> >
-> > That's not my worry. I would like to be able to easily walk data
-> > structures from within the kernel, without having to do a lot of work
-> > in userspace to get that information. The kprobe_events could then be
-> > passed type casts or such to access data fields of arguments to
-> > functions and such.
-> 
-> Ok.
-> 
-> > > In any case, such a solution such as what Steve suggested, still cannot do
-> > > what we can with headers - such as build kernel modules on the fly using the
-> > > C-compiler without any auto-generation of C code from any debug artifiacts.
-> > > Think systemtap working with the module-backend without any need for
-> > > linux-headers package on the file system. So such a solution would still be a
-> > > bit orthogonal in scope to what this proposed solution can solve IMO.
-> > >
-> >
-> > With the information I would like to have, it would be trivial to read
-> > the data to create the header files needed for modules.
-> 
-> But there are macros and other #define things too. We lose all of them
-> and can't recreate them from just DWARF (AFAIK). Including
-> include/generated/autoconf.h which #defines the CONFIG options. For
-> that we either need headers, or full kernel's sources with build
-> artifacts.
+> > Frankly I did not read and followup much about the testing code changes,
+> > not sure if it is doable or not.  The code sharing under testing folder
+> > seems not very good.  For example the basic check_root is needed by
+> > different parts, but all have its own implementation.  Anyway this is
+> > not the duty of this patch set.
+> > Also the selftests/lib/ is not a folder for sharing code for different
+> > tests, it looks a standalone test instead.
+Yes. Thus lib/ folder name is a bit confusing.
 
-What kind of macros would you concern?
+> Shuah suggested upstreaming these tests first and defer introducing a
+> common set of functions to later.
+Make sense.
 
-> I do see a use case for the debug info you are talking about as you
-> mentioned for the kprobe_events argument list types, and I already
-> thought about it. But it does not seem to work for all the use cases I
-> am referring to here.
+> > So if split kexec tests to another folder is not doable please just
+> > ignore the comment.
 
-But the eBPF is based on kprobe-events. What kind of usage would you
-expected? (with macros??)
+> Left in the selftests/ima is a similar test for kernel modules, which
+> uses the "common" functions.  So either we wait to move the kexec
+> tests or allow them to reach into the ima directory and use the
+> ima_common_lib functions.
+I guess just load ima_common_lib.sh for now would be good enough.
+@Dave: BTW I has starting to work on kselftest common library.
+I thought I'd spent some time on it before posting it, but I might even send
+the small part I've done so far so we can discuss it.
 
-Thank you,
+> > BTW, does CONFIG_KEXEC* is checked?  in case a kernel without KEXEC or
+> > KEXEC_FILE compiled in then the tests can just return directly.
 
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+> Good point.  Now that there is a common function for reading the
+> Kconfig, I'll add that check to both the test_kexec_load.sh and
+> test_kexec_file_load.sh tests respectively.
+
+> Mimi
+
+
+Kind regards,
+Petr
