@@ -1,116 +1,363 @@
 From: zohar at linux.ibm.com (Mimi Zohar)
-Date: Thu, 14 Mar 2019 14:41:11 -0400
-Subject: [PATCH v4 3/8] selftests/kexec: define a set of common functions
+Date: Thu, 14 Mar 2019 14:41:14 -0400
+Subject: [PATCH v4 6/8] selftests/kexec: kexec_file_load syscall test
 In-Reply-To: <1552588876-28481-1-git-send-email-zohar@linux.ibm.com>
 References: <1552588876-28481-1-git-send-email-zohar@linux.ibm.com>
-Message-ID: <1552588876-28481-4-git-send-email-zohar@linux.ibm.com>
+Message-ID: <1552588876-28481-7-git-send-email-zohar@linux.ibm.com>
 
-Define, update and move get_secureboot_mode() to a common file for use
-by other tests.
-
-Updated to check both the efivar SecureBoot-$(UUID) and
-SetupMode-$(UUID), based on Dave Young's review.
+The kernel can be configured to verify PE signed kernel images, IMA
+kernel image signatures, both types of signatures, or none.  This test
+verifies only properly signed kernel images are loaded into memory,
+based on the kernel configuration and runtime policies.
 
 Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
 Reviewed-by: Petr Vorel <pvorel at suse.cz>
-Cc: Dave Young <dyoung at redhat.com>
 ---
- tools/testing/selftests/kexec/Makefile            |  1 +
- tools/testing/selftests/kexec/kexec_common_lib.sh | 38 +++++++++++++++++++++++
- tools/testing/selftests/kexec/test_kexec_load.sh  | 17 ++--------
- 3 files changed, 42 insertions(+), 14 deletions(-)
- create mode 100755 tools/testing/selftests/kexec/kexec_common_lib.sh
+ tools/testing/selftests/kexec/Makefile             |   4 +-
+ tools/testing/selftests/kexec/kexec_common_lib.sh  |  99 +++++++++++
+ .../selftests/kexec/test_kexec_file_load.sh        | 190 +++++++++++++++++++++
+ tools/testing/selftests/kexec/test_kexec_load.sh   |   1 -
+ 4 files changed, 291 insertions(+), 3 deletions(-)
+ create mode 100755 tools/testing/selftests/kexec/test_kexec_file_load.sh
 
 diff --git a/tools/testing/selftests/kexec/Makefile b/tools/testing/selftests/kexec/Makefile
-index 0b3adf5444b6..1a795861040b 100644
+index 1a795861040b..8e9b27a7452f 100644
 --- a/tools/testing/selftests/kexec/Makefile
 +++ b/tools/testing/selftests/kexec/Makefile
-@@ -5,6 +5,7 @@ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+@@ -1,10 +1,10 @@
+-# Makefile for kexec_load
++# Makefile for kexec tests
+ 
+ uname_M := $(shell uname -m 2>/dev/null || echo not)
+ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
  
  ifeq ($(ARCH),x86)
- TEST_PROGS := test_kexec_load.sh
-+TEST_FILES := kexec_common_lib.sh
+-TEST_PROGS := test_kexec_load.sh
++TEST_PROGS := test_kexec_load.sh test_kexec_file_load.sh
+ TEST_FILES := kexec_common_lib.sh
  
  include ../lib.mk
- 
 diff --git a/tools/testing/selftests/kexec/kexec_common_lib.sh b/tools/testing/selftests/kexec/kexec_common_lib.sh
-new file mode 100755
-index 000000000000..05376be6a6f7
---- /dev/null
+index 1af892cee726..51ae64c79c41 100755
+--- a/tools/testing/selftests/kexec/kexec_common_lib.sh
 +++ b/tools/testing/selftests/kexec/kexec_common_lib.sh
-@@ -0,0 +1,38 @@
+@@ -4,6 +4,9 @@
+ # Kselftest framework defines: ksft_pass=0, ksft_fail=1, ksft_skip=4
+ 
+ VERBOSE="${VERBOSE:-1}"
++IKCONFIG="/tmp/config-`uname -r`"
++KERNEL_IMAGE="/boot/vmlinuz-`uname -r`"
++SECURITYFS=$(grep "securityfs" /proc/mounts | awk '{print $2}')
+ 
+ log_info()
+ {
+@@ -74,3 +77,99 @@ require_root_privileges()
+ 		log_skip "requires root privileges"
+ 	fi
+ }
++
++# Look for config option in Kconfig file.
++# Return 1 for found and 0 for not found.
++kconfig_enabled()
++{
++	local config="$1"
++	local msg="$2"
++
++	grep -E -q $config $IKCONFIG
++	if [ $? -eq 0 ]; then
++		log_info "$msg"
++		return 1
++	fi
++	return 0
++}
++
++# Attempt to get the kernel config first via proc, and then by
++# extracting it from the kernel image or the configs.ko using
++# scripts/extract-ikconfig.
++# Return 1 for found.
++get_kconfig()
++{
++	local proc_config="/proc/config.gz"
++	local module_dir="/lib/modules/`uname -r`"
++	local configs_module="$module_dir/kernel/kernel/configs.ko"
++
++	if [ ! -f $proc_config ]; then
++		modprobe configs > /dev/null 2>&1
++	fi
++	if [ -f $proc_config ]; then
++		cat $proc_config | gunzip > $IKCONFIG 2>/dev/null
++		if [ $? -eq 0 ]; then
++			return 1
++		fi
++	fi
++
++	local extract_ikconfig="$module_dir/source/scripts/extract-ikconfig"
++	if [ ! -f $extract_ikconfig ]; then
++		log_skip "extract-ikconfig not found"
++	fi
++
++	$extract_ikconfig $KERNEL_IMAGE > $IKCONFIG 2>/dev/null
++	if [ $? -eq 1 ]; then
++		if [ ! -f $configs_module ]; then
++			log_skip "CONFIG_IKCONFIG not enabled"
++		fi
++		$extract_ikconfig $configs_module > $IKCONFIG
++		if [ $? -eq 1 ]; then
++			log_skip "CONFIG_IKCONFIG not enabled"
++		fi
++	fi
++	return 1
++}
++
++# Make sure that securityfs is mounted
++mount_securityfs()
++{
++	if [ -z $SECURITYFS ]; then
++		SECURITYFS=/sys/kernel/security
++		mount -t securityfs security $SECURITYFS
++	fi
++
++	if [ ! -d "$SECURITYFS" ]; then
++		log_fail "$SECURITYFS :securityfs is not mounted"
++	fi
++}
++
++# The policy rule format is an "action" followed by key-value pairs.  This
++# function supports up to two key-value pairs, in any order.
++# For example: action func=<keyword> [appraise_type=<type>]
++# Return 1 for found and 0 for not found.
++check_ima_policy()
++{
++	local action="$1"
++	local keypair1="$2"
++	local keypair2="$3"
++	local ret=0
++
++	mount_securityfs
++
++	local ima_policy=$SECURITYFS/ima/policy
++	if [ ! -e $ima_policy ]; then
++		log_fail "$ima_policy not found"
++	fi
++
++	if [ -n $keypair2 ]; then
++		grep -e "^$action.*$keypair1" "$ima_policy" | \
++			grep -q -e "$keypair2"
++	else
++		grep -q -e "^$action.*$keypair1" "$ima_policy"
++	fi
++
++	# invert "grep -q" result, returning 1 for found.
++	[ $? -eq 0 ] && ret=1
++	return $ret
++}
+diff --git a/tools/testing/selftests/kexec/test_kexec_file_load.sh b/tools/testing/selftests/kexec/test_kexec_file_load.sh
+new file mode 100755
+index 000000000000..6cf6a99f6a64
+--- /dev/null
++++ b/tools/testing/selftests/kexec/test_kexec_file_load.sh
+@@ -0,0 +1,190 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
++#
++# Loading a kernel image via the kexec_file_load syscall can verify either
++# the IMA signature stored in the security.ima xattr or the PE signature,
++# both signatures depending on the IMA policy, or none.
++#
++# To determine whether the kernel image is signed, this test depends
++# on pesign and getfattr.  This test also requires the kernel to be
++# built with CONFIG_IKCONFIG enabled and either CONFIG_IKCONFIG_PROC
++# enabled or access to the extract-ikconfig script.
 +
-+# Check efivar SecureBoot-$(the UUID) and SetupMode-$(the UUID).
-+# The secure boot mode can be accessed either as the last integer
-+# of "od -An -t u1 /sys/firmware/efi/efivars/SecureBoot-*" or from
-+# "od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data".  The efi
-+# SetupMode can be similarly accessed.
-+# Return 1 for SecureBoot mode enabled and SetupMode mode disabled.
-+get_secureboot_mode()
-+{
-+	local efivarfs="/sys/firmware/efi/efivars"
-+	local secure_boot_file="$efivarfs/../vars/SecureBoot-*/data"
-+	local setup_mode_file="$efivarfs/../vars/SetupMode-*/data"
-+	local secureboot_mode=0
-+	local setup_mode=0
-+
-+	# Make sure that efivars is mounted in the normal location
-+	if ! grep -q "^\S\+ $efivarfs efivarfs" /proc/mounts; then
-+		log_skip "efivars is not mounted on $efivarfs"
-+	fi
-+
-+	# Due to globbing, quoting "secure_boot_file" and "setup_mode_file"
-+	# is not possible.  (Todo: initialize variables using find or ls.)
-+	if [ ! -e $secure_boot_file ] || [ ! -e $setup_mode_file ]; then
-+		log_skip "unknown secureboot/setup mode"
-+	fi
-+
-+	secureboot_mode=`od -An -t u1 $secure_boot_file`
-+	setup_mode=`od -An -t u1 $setup_mode_file`
-+
-+	if [ $secureboot_mode -eq 1 ] && [ $setup_mode -eq 0 ]; then
-+		log_info "secure boot mode enabled"
-+		return 1;
-+	fi
-+	log_info "secure boot mode not enabled"
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/kexec/test_kexec_load.sh b/tools/testing/selftests/kexec/test_kexec_load.sh
-index 82a01a4d5c8d..86625c3f1e5d 100755
---- a/tools/testing/selftests/kexec/test_kexec_load.sh
-+++ b/tools/testing/selftests/kexec/test_kexec_load.sh
-@@ -5,7 +5,7 @@
- # is booted in secureboot mode.
- 
- TEST="$0"
--EFIVARFS="/sys/firmware/efi/efivars"
++TEST="KEXEC_FILE_LOAD"
 +. ./kexec_common_lib.sh
- rc=0
- 
- # Kselftest framework requirement - SKIP code is 4.
-@@ -17,19 +17,8 @@ if [ $(id -ru) -ne 0 ]; then
- 	exit $ksft_skip
- fi
- 
--# Make sure that efivars is mounted in the normal location
--if ! grep -q "^\S\+ $EFIVARFS efivarfs" /proc/mounts; then
--	echo "$TEST: efivars is not mounted on $EFIVARFS" >&2
--	exit $ksft_skip
--fi
--
--# Get secureboot mode
--file="$EFIVARFS/SecureBoot-*"
--if [ ! -e $file ]; then
--	echo "$TEST: unknown secureboot mode" >&2
--	exit $ksft_skip
--fi
--secureboot=`hexdump $file | awk '{print substr($4,length($4),1)}'`
++
++trap "{ rm -f $IKCONFIG ; }" EXIT
++
++# Some of the IMA builtin policies may require the kexec kernel image to
++# be signed, but these policy rules may be replaced with a custom
++# policy.  Only CONFIG_IMA_APPRAISE_REQUIRE_KEXEC_SIGS persists after
++# loading a custom policy.  Check if it is enabled, before reading the
++# IMA runtime sysfs policy file.
++# Return 1 for IMA signature required and 0 for not required.
++is_ima_sig_required()
++{
++	local ret=0
++
++	kconfig_enabled "CONFIG_IMA_APPRAISE_REQUIRE_KEXEC_SIGS=y" \
++		"IMA kernel image signature required"
++	if [ $? -eq 1 ]; then
++		log_info "IMA signature required"
++		return 1
++	fi
++
++	# The architecture specific or a custom policy may require the
++	# kexec kernel image be signed.  Policy rules are walked
++	# sequentially.  As a result, a policy rule may be defined, but
++	# might not necessarily be used.  This test assumes if a policy
++	# rule is specified, that is the intent.
++	if [ $ima_read_policy -eq 1 ]; then
++		check_ima_policy "appraise" "func=KEXEC_KERNEL_CHECK" \
++			"appraise_type=imasig"
++		ret=$?
++		[ $ret -eq 1 ] && log_info "IMA signature required";
++	fi
++	return $ret
++}
++
++# The kexec_file_load_test() is complicated enough, require pesign.
++# Return 1 for PE signature found and 0 for not found.
++check_for_pesig()
++{
++	which pesign > /dev/null 2>&1 || log_skip "pesign not found"
++
++	pesign -i $KERNEL_IMAGE --show-signature | grep -q "No signatures"
++	local ret=$?
++	if [ $ret -eq 1 ]; then
++		log_info "kexec kernel image PE signed"
++	else
++		log_info "kexec kernel image not PE signed"
++	fi
++	return $ret
++}
++
++# The kexec_file_load_test() is complicated enough, require getfattr.
++# Return 1 for IMA signature found and 0 for not found.
++check_for_imasig()
++{
++	local ret=0
++
++	which getfattr > /dev/null 2>&1
++	if [ $?	-eq 1 ]; then
++		log_skip "getfattr not found"
++	fi
++
++	line=$(getfattr -n security.ima -e hex --absolute-names $KERNEL_IMAGE 2>&1)
++	echo $line | grep -q "security.ima=0x03"
++	if [ $? -eq 0 ]; then
++		ret=1
++		log_info "kexec kernel image IMA signed"
++	else
++		log_info "kexec kernel image not IMA signed"
++	fi
++	return $ret
++}
++
++kexec_file_load_test()
++{
++	local succeed_msg="kexec_file_load succeeded"
++	local failed_msg="kexec_file_load failed"
++	local key_msg="try enabling the CONFIG_INTEGRITY_PLATFORM_KEYRING"
++
++	line=$(kexec --load --kexec-file-syscall $KERNEL_IMAGE 2>&1)
++
++	if [ $? -eq 0 ]; then
++		kexec --unload --kexec-file-syscall
++
++		# In secureboot mode with an architecture  specific
++		# policy, make sure either an IMA or PE signature exists.
++		if [ $secureboot -eq 1 ] && [ $arch_policy -eq 1 ] && \
++			[ $ima_signed -eq 0 ] && [ $pe_signed -eq 0 ]; then
++			log_fail "$succeed_msg (missing sig)"
++		fi
++
++		if [ $pe_sig_required -eq 1 ] && [ $pe_signed -eq 0 ]; then
++			log_fail "$succeed_msg (missing PE sig)"
++		fi
++
++		if [ $ima_sig_required -eq 1 ] && [ $ima_signed -eq 0 ]; then
++			log_fail "$succeed_msg (missing IMA sig)"
++		fi
++
++		if [ $pe_sig_required -eq 0 ] && [ $ima_sig_required -eq 0 ] \
++		    && [ $ima_read_policy -eq 0 ] && [ $ima_signed -eq 0 ]; then
++			log_fail "$succeed_msg (possibly missing IMA sig)"
++		fi
++
++		log_pass "$succeed_msg"
++	fi
++
++	# Check the reason for the kexec_file_load failure
++	echo $line | grep -q "Required key not available"
++	if [ $? -eq 0 ]; then
++		if [ $platform_keyring -eq 0 ]; then
++			log_pass "$failed_msg (-ENOKEY), $key_msg"
++		else
++			log_pass "$failed_msg (-ENOKEY)"
++		fi
++	fi
++
++	if [ $pe_sig_required -eq 1 ] && [ $pe_signed -eq 0 ]; then
++		log_pass "$failed_msg (missing PE sig)"
++	fi
++
++	if [ $ima_sig_required -eq 1 ] && [ $ima_signed -eq 0 ]; then
++		log_pass "$failed_msg (missing IMA sig)"
++	fi
++
++	if [ $pe_sig_required -eq 0 ] && [ $ima_sig_required -eq 0 ] \
++	    && [ $ima_read_policy -eq 0 ] && [ $ima_signed -eq 0 ]; then
++		log_pass "$failed_msg (possibly missing IMA sig)"
++	fi
++
++	log_pass "$failed_msg"
++	return 0
++}
++
++# kexec requires root privileges
++require_root_privileges
++
++# get the kernel config
++get_kconfig
++
++# Determine which kernel config options are enabled
++kconfig_enabled "CONFIG_IMA_ARCH_POLICY=y" \
++	"architecture specific policy enabled"
++arch_policy=$?
++
++kconfig_enabled "CONFIG_INTEGRITY_PLATFORM_KEYRING=y" \
++	"platform keyring enabled"
++platform_keyring=$?
++
++kconfig_enabled "CONFIG_IMA_READ_POLICY=y" "reading IMA policy permitted"
++ima_read_policy=$?
++
++kconfig_enabled "CONFIG_KEXEC_BZIMAGE_VERIFY_SIG=y" \
++	"PE signed kernel image required"
++pe_sig_required=$?
++
++is_ima_sig_required
++ima_sig_required=$?
++
 +get_secureboot_mode
 +secureboot=$?
++
++if [ $secureboot -eq 0 ] && [ $arch_policy -eq 0 ] && \
++   [ $pe_sig_required -eq 0 ] && [ $ima_sig_required -eq 0 ] && \
++   [ $ima_read_policy -eq 1 ]; then
++	log_skip "No signature verification required"
++fi
++
++# Are there pe and ima signatures
++check_for_pesig
++pe_signed=$?
++
++check_for_imasig
++ima_signed=$?
++
++# Test loading the kernel image via kexec_file_load syscall
++kexec_file_load_test
+diff --git a/tools/testing/selftests/kexec/test_kexec_load.sh b/tools/testing/selftests/kexec/test_kexec_load.sh
+index 49545fcdc646..afd440ee23cb 100755
+--- a/tools/testing/selftests/kexec/test_kexec_load.sh
++++ b/tools/testing/selftests/kexec/test_kexec_load.sh
+@@ -14,7 +14,6 @@ get_secureboot_mode
+ secureboot=$?
  
  # kexec_load should fail in secure boot mode
- KERNEL_IMAGE="/boot/vmlinuz-`uname -r`"
+-KERNEL_IMAGE="/boot/vmlinuz-`uname -r`"
+ kexec --load $KERNEL_IMAGE > /dev/null 2>&1
+ if [ $? -eq 0 ]; then
+ 	kexec --unload
 -- 
 2.7.5
