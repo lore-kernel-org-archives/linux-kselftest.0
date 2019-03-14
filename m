@@ -1,85 +1,85 @@
-From: sashal@kernel.org (Sasha Levin)
-Date: Wed, 13 Mar 2019 15:10:12 -0400
-Subject: [PATCH AUTOSEL 4.20 51/60] bpf, lpm: fix lookup bug in map_delete_elem
-In-Reply-To: <20190313191021.158171-1-sashal@kernel.org>
-References: <20190313191021.158171-1-sashal@kernel.org>
-Message-ID: <20190313191021.158171-51-sashal@kernel.org>
+From: joel@joelfernandes.org (Joel Fernandes)
+Date: Thu, 14 Mar 2019 08:27:48 -0400
+Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <20190313101843.800dd8d6a9babb635580ebdc@kernel.org>
+References: <20190309121141.GA30173@kroah.com>
+ <b7296377-9e0c-aed7-61f0-93d24d1ceddd@opersys.com>
+ <CAMuHMdV8+XTyGf1ZJ+gMf=zQpzqh3-+b7wgi+gAmXQ6HpUAw3A@mail.gmail.com>
+ <3e84e1ef-e266-e983-5874-6c26ac7f38b8@opersys.com>
+ <20190311193612.4f09bf11@oasis.local.home>
+ <CAKOZuetHG0O-CiO6h5tD7aht_MT70ebwWMMSPkRUHdiM3wVq0Q@mail.gmail.com>
+ <20190312003912.GA170478@google.com>
+ <20190311212823.60684182@oasis.local.home>
+ <CAJWu+oqsD_wHGWfzj6POFowiY2qcu04auVzkA6Lu9R+LR4gkrQ@mail.gmail.com>
+ <20190313101843.800dd8d6a9babb635580ebdc@kernel.org>
+Message-ID: <20190314122748.GA101545@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190313191012.zulg5cwjG0KCCZnct2JtdyMuNgdoLwYMpxCphBWejno@z>
+Message-ID: <20190314122748.vc_12-go2NAPmUx_FAPHEsxLD5eaQBCRdGqz6rBj32c@z>
 
-From: Alban Crequy <alban@kinvolk.io>
+Hi Masami,
+Sorry for late reply as I was traveling.
 
-[ Upstream commit 7c0cdf0b3940f63d9777c3fcf250a2f83859ca54 ]
+On Wed, Mar 13, 2019@10:18:43AM +0900, Masami Hiramatsu wrote:
+> On Mon, 11 Mar 2019 18:38:49 -0700
+> Joel Fernandes <joelaf@google.com> wrote:
+> 
+> > On Mon, Mar 11, 2019@6:28 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> > >
+> > > On Mon, 11 Mar 2019 20:39:12 -0400
+> > > Joel Fernandes <joel@joelfernandes.org> wrote:
+> > >
+> > > > I think even though the kernel-headers can't have information about all data
+> > > > structures, they do already contain a lot of data structure definitions we
+> > > > need already. And anything needed can/should arguably be moved to include/ if
+> > > > they are really needed for kernel extension by something "external" to the
+> > > > kernel such as kernel modules or eBPF, right?
+> > >
+> > > That's not my worry. I would like to be able to easily walk data
+> > > structures from within the kernel, without having to do a lot of work
+> > > in userspace to get that information. The kprobe_events could then be
+> > > passed type casts or such to access data fields of arguments to
+> > > functions and such.
+> > 
+> > Ok.
+> > 
+> > > > In any case, such a solution such as what Steve suggested, still cannot do
+> > > > what we can with headers - such as build kernel modules on the fly using the
+> > > > C-compiler without any auto-generation of C code from any debug artifiacts.
+> > > > Think systemtap working with the module-backend without any need for
+> > > > linux-headers package on the file system. So such a solution would still be a
+> > > > bit orthogonal in scope to what this proposed solution can solve IMO.
+> > > >
+> > >
+> > > With the information I would like to have, it would be trivial to read
+> > > the data to create the header files needed for modules.
+> > 
+> > But there are macros and other #define things too. We lose all of them
+> > and can't recreate them from just DWARF (AFAIK). Including
+> > include/generated/autoconf.h which #defines the CONFIG options. For
+> > that we either need headers, or full kernel's sources with build
+> > artifacts.
+> 
+> What kind of macros would you concern?
+> 
+> > I do see a use case for the debug info you are talking about as you
+> > mentioned for the kprobe_events argument list types, and I already
+> > thought about it. But it does not seem to work for all the use cases I
+> > am referring to here.
+> 
+> But the eBPF is based on kprobe-events. What kind of usage would you
+> expected? (with macros??)
 
-trie_delete_elem() was deleting an entry even though it was not matching
-if the prefixlen was correct. This patch adds a check on matchlen.
+eBPF C programs are compiled with kernel headers. They can execute inline
+functions or refer to macros in the kernel headers. They are similar to
+kernel modules where you build a C program that then later is executed in
+kernel context. It goes through the whole compiler pipeline. This is slightly
+different usage from pure kprobe-events.  Also eBPF kprobe programs need
+LINUX_VERSION_CODE (or similarly named) macro which it provides to the bpf(2)
+syscall when loading kprobe programs. This is because eBPF implementation in
+the kernel checks if the eBPF programs that use kprobes are being loaded
+against the right kernel.
 
-Reproducer:
+thanks,
 
-$ sudo bpftool map create /sys/fs/bpf/mylpm type lpm_trie key 8 value 1 entries 128 name mylpm flags 1
-$ sudo bpftool map update pinned /sys/fs/bpf/mylpm key hex 10 00 00 00 aa bb cc dd value hex 01
-$ sudo bpftool map dump pinned /sys/fs/bpf/mylpm
-key: 10 00 00 00 aa bb cc dd  value: 01
-Found 1 element
-$ sudo bpftool map delete pinned /sys/fs/bpf/mylpm key hex 10 00 00 00 ff ff ff ff
-$ echo $?
-0
-$ sudo bpftool map dump pinned /sys/fs/bpf/mylpm
-Found 0 elements
-
-A similar reproducer is added in the selftests.
-
-Without the patch:
-
-$ sudo ./tools/testing/selftests/bpf/test_lpm_map
-test_lpm_map: test_lpm_map.c:485: test_lpm_delete: Assertion `bpf_map_delete_elem(map_fd, key) == -1 && errno == ENOENT' failed.
-Aborted
-
-With the patch: test_lpm_map runs without errors.
-
-Fixes: e454cf595853 ("bpf: Implement map_delete_elem for BPF_MAP_TYPE_LPM_TRIE")
-Cc: Craig Gallek <kraig at google.com>
-Signed-off-by: Alban Crequy <alban at kinvolk.io>
-Acked-by: Craig Gallek <kraig at google.com>
-Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
-Signed-off-by: Sasha Levin <sashal at kernel.org>
----
- kernel/bpf/lpm_trie.c                      |  1 +
- tools/testing/selftests/bpf/test_lpm_map.c | 10 ++++++++++
- 2 files changed, 11 insertions(+)
-
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 9058317ba9de..4f3138e6ecb2 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -432,6 +432,7 @@ static int trie_delete_elem(struct bpf_map *map, void *_key)
- 	}
- 
- 	if (!node || node->prefixlen != key->prefixlen ||
-+	    node->prefixlen != matchlen ||
- 	    (node->flags & LPM_TREE_NODE_FLAG_IM)) {
- 		ret = -ENOENT;
- 		goto out;
-diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/test_lpm_map.c
-index 147e34cfceb7..02d7c871862a 100644
---- a/tools/testing/selftests/bpf/test_lpm_map.c
-+++ b/tools/testing/selftests/bpf/test_lpm_map.c
-@@ -474,6 +474,16 @@ static void test_lpm_delete(void)
- 	assert(bpf_map_lookup_elem(map_fd, key, &value) == -1 &&
- 		errno == ENOENT);
- 
-+	key->prefixlen = 30; // unused prefix so far
-+	inet_pton(AF_INET, "192.255.0.0", key->data);
-+	assert(bpf_map_delete_elem(map_fd, key) == -1 &&
-+		errno == ENOENT);
-+
-+	key->prefixlen = 16; // same prefix as the root node
-+	inet_pton(AF_INET, "192.255.0.0", key->data);
-+	assert(bpf_map_delete_elem(map_fd, key) == -1 &&
-+		errno == ENOENT);
-+
- 	/* assert initial lookup */
- 	key->prefixlen = 32;
- 	inet_pton(AF_INET, "192.168.0.1", key->data);
--- 
-2.19.1
+- Joel
