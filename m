@@ -1,32 +1,49 @@
 From: zohar at linux.ibm.com (Mimi Zohar)
-Date: Thu, 14 Mar 2019 14:41:15 -0400
-Subject: [PATCH v4 7/8] selftests/kexec: Add missing '=y' to config options
+Date: Thu, 14 Mar 2019 14:41:13 -0400
+Subject: [PATCH v4 5/8] kselftest/kexec: define "require_root_privileges"
 In-Reply-To: <1552588876-28481-1-git-send-email-zohar@linux.ibm.com>
 References: <1552588876-28481-1-git-send-email-zohar@linux.ibm.com>
-Message-ID: <1552588876-28481-8-git-send-email-zohar@linux.ibm.com>
+Message-ID: <1552588876-28481-6-git-send-email-zohar@linux.ibm.com>
 
-From: Petr Vorel <pvorel at suse.cz>
+Many tests require root privileges.  Define a common function.
 
-so the file can be used as kernel config snippet.
-
-Signed-off-by: Petr Vorel <pvorel at suse.cz>
-[zohar at linux.ibm.com: remove CONFIG_KEXEC_VERIFY_SIG from config]
+Suggested-by: Petr Vorel <pvorel at suse.cz>
 Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
+Reviewed-by: Petr Vorel <pvorel at suse.cz>
 ---
- tools/testing/selftests/kexec/config | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ tools/testing/selftests/kexec/kexec_common_lib.sh | 7 +++++++
+ tools/testing/selftests/kexec/test_kexec_load.sh  | 4 +---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kexec/config b/tools/testing/selftests/kexec/config
-index 6bc86d4d9bb4..8962e862b2b8 100644
---- a/tools/testing/selftests/kexec/config
-+++ b/tools/testing/selftests/kexec/config
-@@ -1,4 +1,3 @@
--CONFIG_IMA_APPRAISE
--CONFIG_IMA_ARCH_POLICY
--CONFIG_SECURITYFS
--CONFIG_KEXEC_VERIFY_SIG
-+CONFIG_IMA_APPRAISE=y
-+CONFIG_IMA_ARCH_POLICY=y
-+CONFIG_SECURITYFS=y
+diff --git a/tools/testing/selftests/kexec/kexec_common_lib.sh b/tools/testing/selftests/kexec/kexec_common_lib.sh
+index d108ac538f14..1af892cee726 100755
+--- a/tools/testing/selftests/kexec/kexec_common_lib.sh
++++ b/tools/testing/selftests/kexec/kexec_common_lib.sh
+@@ -67,3 +67,10 @@ get_secureboot_mode()
+ 	log_info "secure boot mode not enabled"
+ 	return 0;
+ }
++
++require_root_privileges()
++{
++	if [ $(id -ru) -ne 0 ]; then
++		log_skip "requires root privileges"
++	fi
++}
+diff --git a/tools/testing/selftests/kexec/test_kexec_load.sh b/tools/testing/selftests/kexec/test_kexec_load.sh
+index cbf598a380d2..49545fcdc646 100755
+--- a/tools/testing/selftests/kexec/test_kexec_load.sh
++++ b/tools/testing/selftests/kexec/test_kexec_load.sh
+@@ -8,9 +8,7 @@ TEST="$0"
+ . ./kexec_common_lib.sh
+ 
+ # kexec requires root privileges
+-if [ $(id -ru) -ne 0 ]; then
+-	log_skip "requires root privileges"
+-fi
++require_root_privileges
+ 
+ get_secureboot_mode
+ secureboot=$?
 -- 
 2.7.5
