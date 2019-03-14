@@ -1,39 +1,29 @@
-From: mcgrof at kernel.org (Luis Chamberlain)
-Date: Thu, 14 Mar 2019 14:20:26 +0000
-Subject: [PATCH v2] error message found related
-In-Reply-To: <CAG=yYwkYwiB1dfDJg=VB_Kd1Hu+i-WrFN8SyKT9hKP55WzyA3w@mail.gmail.com>
-References: <20190131183109.10919-1-jeffrin@rajagiritech.edu.in>
- <20190211214002.GV11489@garbanzo.do-not-panic.com>
- <CAG=yYwkYwiB1dfDJg=VB_Kd1Hu+i-WrFN8SyKT9hKP55WzyA3w@mail.gmail.com>
-Message-ID: <20190314142026.GE1038@42.do-not-panic.com>
+From: zohar at linux.ibm.com (Mimi Zohar)
+Date: Thu, 14 Mar 2019 14:38:37 -0400
+Subject: [PATCH v3 5/7] selftests/ima: kexec_file_load syscall test
+In-Reply-To: <20190313101436.GB25643@dell5510>
+References: <1552304473-3966-1-git-send-email-zohar@linux.ibm.com>
+ <1552304473-3966-6-git-send-email-zohar@linux.ibm.com>
+ <20190312121001.GA18510@dhcp-128-65.nay.redhat.com>
+ <1552409474.24794.63.camel@linux.ibm.com> <20190313101436.GB25643@dell5510>
+Message-ID: <1552588717.8658.5.camel@linux.ibm.com>
 
-On Thu, Feb 14, 2019 at 11:56:46PM +0530, Jeffrin Thalakkottoor wrote:
-> > Your subject is too long.
-> ok . i have changed it
-> 
-> 
-> > Please upgrade bash?
-> anyway now i have an upgraded one.
-> 
-> here  is a clipping related to the error
-> ---------------------x-------------------x----------------
-> Thu Feb 14 23:49:13 IST 2019
-> Running test: kmod_test_0007 - run #4
-> kmod_test_0005: OK! - loading kmod test
-> kmod_test_0005: OK! - Return value: 0 (SUCCESS), expected SUCCESS
-> kmod_test_0006: OK! - loading kmod test
-> kmod_test_0006: OK! - Return value: 0 (SUCCESS), expected SUCCESS
-> ./kmod.sh: line 529: [[: 1 0002:3:1 0003:1:1 0004:1:1 0005:10:1
-> 0006:10:1 0007:5:1 0008:150:1 0009:150:1: syntax error in expression
-> (error token is "0002:3:1 0003:1:1 0004:1:1 0005:10:1 0006:10:1
-> 0007:5:1 0008:150:1 0009:150:1")
-> ./kmod.sh: line 529: [[: 1 0002:3:1 0003:1:1 0004:1:1 0005:10:1
-> 0006:10:1 0007:5:1 0008:150:1 0009:150:1: syntax error in expression
-> (error token is "0002:3:1 0003:1:1 0004:1:1 0005:10:1 0006:10:1
-> 0007:5:1 0008:150:1 0009:150:1")
-> Test completed
-> $
+On Wed, 2019-03-13 at 11:14 +0100, Petr Vorel wrote:
 
-I do not see this at all. Does anyone else see it?
+> > > So if split kexec tests to another folder is not doable please just
+> > > ignore the comment.
+> 
+> > Left in the selftests/ima is a similar test for kernel modules, which
+> > uses the "common" functions.  So either we wait to move the kexec
+> > tests or allow them to reach into the ima directory and use the
+> > ima_common_lib functions.
+> I guess just load ima_common_lib.sh for now would be good enough.
 
-  Luis
+After thinking about it some more, I've decided to remove the kernel
+module test from this patch set and to simply move everything from the
+selftests/ima to selftests/kexec.
+
+The kernel module test will access scripts/kexec/kexec_common_lib.sh
+until there is a generic set of functions.
+
+Mimi
