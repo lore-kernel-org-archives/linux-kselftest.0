@@ -1,101 +1,99 @@
 From: zohar at linux.ibm.com (Mimi Zohar)
-Date: Thu, 14 Mar 2019 14:41:09 -0400
-Subject: [PATCH v4 1/8] selftests/kexec: move the IMA kexec_load selftest to
- selftests/kexec
+Date: Thu, 14 Mar 2019 14:41:11 -0400
+Subject: [PATCH v4 3/8] selftests/kexec: define a set of common functions
 In-Reply-To: <1552588876-28481-1-git-send-email-zohar@linux.ibm.com>
 References: <1552588876-28481-1-git-send-email-zohar@linux.ibm.com>
-Message-ID: <1552588876-28481-2-git-send-email-zohar@linux.ibm.com>
+Message-ID: <1552588876-28481-4-git-send-email-zohar@linux.ibm.com>
 
-As requested move the existing kexec_load selftest and subsequent kexec
-tests to the selftests/kexec directory.
+Define, update and move get_secureboot_mode() to a common file for use
+by other tests.
 
-Suggested-by: Dave Young <dyoung at redhat.com>
+Updated to check both the efivar SecureBoot-$(UUID) and
+SetupMode-$(UUID), based on Dave Young's review.
+
 Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
+Reviewed-by: Petr Vorel <pvorel at suse.cz>
+Cc: Dave Young <dyoung at redhat.com>
 ---
- tools/testing/selftests/Makefile                 |  2 +-
- tools/testing/selftests/ima/Makefile             | 11 -----
- tools/testing/selftests/ima/config               |  4 --
- tools/testing/selftests/ima/test_kexec_load.sh   | 54 ------------------------
- tools/testing/selftests/kexec/Makefile           | 11 +++++
- tools/testing/selftests/kexec/config             |  4 ++
- tools/testing/selftests/kexec/test_kexec_load.sh | 54 ++++++++++++++++++++++++
- 7 files changed, 70 insertions(+), 70 deletions(-)
- delete mode 100644 tools/testing/selftests/ima/Makefile
- delete mode 100644 tools/testing/selftests/ima/config
- delete mode 100755 tools/testing/selftests/ima/test_kexec_load.sh
- create mode 100644 tools/testing/selftests/kexec/Makefile
- create mode 100644 tools/testing/selftests/kexec/config
- create mode 100755 tools/testing/selftests/kexec/test_kexec_load.sh
+ tools/testing/selftests/kexec/Makefile            |  1 +
+ tools/testing/selftests/kexec/kexec_common_lib.sh | 38 +++++++++++++++++++++++
+ tools/testing/selftests/kexec/test_kexec_load.sh  | 17 ++--------
+ 3 files changed, 42 insertions(+), 14 deletions(-)
+ create mode 100755 tools/testing/selftests/kexec/kexec_common_lib.sh
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 1a2bd15c5b6e..6da1e32d2b99 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -14,11 +14,11 @@ TARGETS += firmware
- TARGETS += ftrace
- TARGETS += futex
- TARGETS += gpio
--TARGETS += ima
- TARGETS += intel_pstate
- TARGETS += ipc
- TARGETS += ir
- TARGETS += kcmp
-+TARGETS += kexec
- TARGETS += kvm
- TARGETS += lib
- TARGETS += membarrier
-diff --git a/tools/testing/selftests/ima/Makefile b/tools/testing/selftests/ima/Makefile
-deleted file mode 100644
-index 0b3adf5444b6..000000000000
---- a/tools/testing/selftests/ima/Makefile
-+++ /dev/null
-@@ -1,11 +0,0 @@
--# Makefile for kexec_load
--
--uname_M := $(shell uname -m 2>/dev/null || echo not)
--ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
--
--ifeq ($(ARCH),x86)
--TEST_PROGS := test_kexec_load.sh
--
--include ../lib.mk
--
--endif
-diff --git a/tools/testing/selftests/ima/config b/tools/testing/selftests/ima/config
-deleted file mode 100644
-index 6bc86d4d9bb4..000000000000
---- a/tools/testing/selftests/ima/config
-+++ /dev/null
-@@ -1,4 +0,0 @@
--CONFIG_IMA_APPRAISE
--CONFIG_IMA_ARCH_POLICY
--CONFIG_SECURITYFS
--CONFIG_KEXEC_VERIFY_SIG
-diff --git a/tools/testing/selftests/ima/test_kexec_load.sh b/tools/testing/selftests/ima/test_kexec_load.sh
-deleted file mode 100755
-index 1c10093fb526..000000000000
---- a/tools/testing/selftests/ima/test_kexec_load.sh
-+++ /dev/null
-@@ -1,54 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0+
--# Loading a kernel image via the kexec_load syscall should fail
--# when the kerne is CONFIG_KEXEC_VERIFY_SIG enabled and the system
--# is booted in secureboot mode.
--
--TEST="$0"
+diff --git a/tools/testing/selftests/kexec/Makefile b/tools/testing/selftests/kexec/Makefile
+index 0b3adf5444b6..1a795861040b 100644
+--- a/tools/testing/selftests/kexec/Makefile
++++ b/tools/testing/selftests/kexec/Makefile
+@@ -5,6 +5,7 @@ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+ 
+ ifeq ($(ARCH),x86)
+ TEST_PROGS := test_kexec_load.sh
++TEST_FILES := kexec_common_lib.sh
+ 
+ include ../lib.mk
+ 
+diff --git a/tools/testing/selftests/kexec/kexec_common_lib.sh b/tools/testing/selftests/kexec/kexec_common_lib.sh
+new file mode 100755
+index 000000000000..05376be6a6f7
+--- /dev/null
++++ b/tools/testing/selftests/kexec/kexec_common_lib.sh
+@@ -0,0 +1,38 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++# Check efivar SecureBoot-$(the UUID) and SetupMode-$(the UUID).
++# The secure boot mode can be accessed either as the last integer
++# of "od -An -t u1 /sys/firmware/efi/efivars/SecureBoot-*" or from
++# "od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data".  The efi
++# SetupMode can be similarly accessed.
++# Return 1 for SecureBoot mode enabled and SetupMode mode disabled.
++get_secureboot_mode()
++{
++	local efivarfs="/sys/firmware/efi/efivars"
++	local secure_boot_file="$efivarfs/../vars/SecureBoot-*/data"
++	local setup_mode_file="$efivarfs/../vars/SetupMode-*/data"
++	local secureboot_mode=0
++	local setup_mode=0
++
++	# Make sure that efivars is mounted in the normal location
++	if ! grep -q "^\S\+ $efivarfs efivarfs" /proc/mounts; then
++		log_skip "efivars is not mounted on $efivarfs"
++	fi
++
++	# Due to globbing, quoting "secure_boot_file" and "setup_mode_file"
++	# is not possible.  (Todo: initialize variables using find or ls.)
++	if [ ! -e $secure_boot_file ] || [ ! -e $setup_mode_file ]; then
++		log_skip "unknown secureboot/setup mode"
++	fi
++
++	secureboot_mode=`od -An -t u1 $secure_boot_file`
++	setup_mode=`od -An -t u1 $setup_mode_file`
++
++	if [ $secureboot_mode -eq 1 ] && [ $setup_mode -eq 0 ]; then
++		log_info "secure boot mode enabled"
++		return 1;
++	fi
++	log_info "secure boot mode not enabled"
++	return 0;
++}
+diff --git a/tools/testing/selftests/kexec/test_kexec_load.sh b/tools/testing/selftests/kexec/test_kexec_load.sh
+index 82a01a4d5c8d..86625c3f1e5d 100755
+--- a/tools/testing/selftests/kexec/test_kexec_load.sh
++++ b/tools/testing/selftests/kexec/test_kexec_load.sh
+@@ -5,7 +5,7 @@
+ # is booted in secureboot mode.
+ 
+ TEST="$0"
 -EFIVARFS="/sys/firmware/efi/efivars"
--rc=0
--
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
--
--# kexec requires root privileges
--if [ $UID != 0 ]; then
--	echo "$TEST: must be run as root" >&2
--	exit $ksft_skip
--fi
--
++. ./kexec_common_lib.sh
+ rc=0
+ 
+ # Kselftest framework requirement - SKIP code is 4.
+@@ -17,19 +17,8 @@ if [ $(id -ru) -ne 0 ]; then
+ 	exit $ksft_skip
+ fi
+ 
 -# Make sure that efivars is mounted in the normal location
 -if ! grep -q "^\S\+ $EFIVARFS efivarfs" /proc/mounts; then
 -	echo "$TEST: efivars is not mounted on $EFIVARFS" >&2
@@ -109,114 +107,10 @@ index 1c10093fb526..000000000000
 -	exit $ksft_skip
 -fi
 -secureboot=`hexdump $file | awk '{print substr($4,length($4),1)}'`
--
--# kexec_load should fail in secure boot mode
--KERNEL_IMAGE="/boot/vmlinuz-`uname -r`"
--kexec -l $KERNEL_IMAGE &>> /dev/null
--if [ $? == 0 ]; then
--	kexec -u
--	if [ "$secureboot" == "1" ]; then
--		echo "$TEST: kexec_load succeeded [FAIL]"
--		rc=1
--	else
--		echo "$TEST: kexec_load succeeded [PASS]"
--	fi
--else
--	if [ "$secureboot" == "1" ]; then
--		echo "$TEST: kexec_load failed [PASS]"
--	else
--		echo "$TEST: kexec_load failed [FAIL]"
--		rc=1
--	fi
--fi
--
--exit $rc
-diff --git a/tools/testing/selftests/kexec/Makefile b/tools/testing/selftests/kexec/Makefile
-new file mode 100644
-index 000000000000..0b3adf5444b6
---- /dev/null
-+++ b/tools/testing/selftests/kexec/Makefile
-@@ -0,0 +1,11 @@
-+# Makefile for kexec_load
-+
-+uname_M := $(shell uname -m 2>/dev/null || echo not)
-+ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
-+
-+ifeq ($(ARCH),x86)
-+TEST_PROGS := test_kexec_load.sh
-+
-+include ../lib.mk
-+
-+endif
-diff --git a/tools/testing/selftests/kexec/config b/tools/testing/selftests/kexec/config
-new file mode 100644
-index 000000000000..6bc86d4d9bb4
---- /dev/null
-+++ b/tools/testing/selftests/kexec/config
-@@ -0,0 +1,4 @@
-+CONFIG_IMA_APPRAISE
-+CONFIG_IMA_ARCH_POLICY
-+CONFIG_SECURITYFS
-+CONFIG_KEXEC_VERIFY_SIG
-diff --git a/tools/testing/selftests/kexec/test_kexec_load.sh b/tools/testing/selftests/kexec/test_kexec_load.sh
-new file mode 100755
-index 000000000000..1c10093fb526
---- /dev/null
-+++ b/tools/testing/selftests/kexec/test_kexec_load.sh
-@@ -0,0 +1,54 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0+
-+# Loading a kernel image via the kexec_load syscall should fail
-+# when the kerne is CONFIG_KEXEC_VERIFY_SIG enabled and the system
-+# is booted in secureboot mode.
-+
-+TEST="$0"
-+EFIVARFS="/sys/firmware/efi/efivars"
-+rc=0
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+# kexec requires root privileges
-+if [ $UID != 0 ]; then
-+	echo "$TEST: must be run as root" >&2
-+	exit $ksft_skip
-+fi
-+
-+# Make sure that efivars is mounted in the normal location
-+if ! grep -q "^\S\+ $EFIVARFS efivarfs" /proc/mounts; then
-+	echo "$TEST: efivars is not mounted on $EFIVARFS" >&2
-+	exit $ksft_skip
-+fi
-+
-+# Get secureboot mode
-+file="$EFIVARFS/SecureBoot-*"
-+if [ ! -e $file ]; then
-+	echo "$TEST: unknown secureboot mode" >&2
-+	exit $ksft_skip
-+fi
-+secureboot=`hexdump $file | awk '{print substr($4,length($4),1)}'`
-+
-+# kexec_load should fail in secure boot mode
-+KERNEL_IMAGE="/boot/vmlinuz-`uname -r`"
-+kexec -l $KERNEL_IMAGE &>> /dev/null
-+if [ $? == 0 ]; then
-+	kexec -u
-+	if [ "$secureboot" == "1" ]; then
-+		echo "$TEST: kexec_load succeeded [FAIL]"
-+		rc=1
-+	else
-+		echo "$TEST: kexec_load succeeded [PASS]"
-+	fi
-+else
-+	if [ "$secureboot" == "1" ]; then
-+		echo "$TEST: kexec_load failed [PASS]"
-+	else
-+		echo "$TEST: kexec_load failed [FAIL]"
-+		rc=1
-+	fi
-+fi
-+
-+exit $rc
++get_secureboot_mode
++secureboot=$?
+ 
+ # kexec_load should fail in secure boot mode
+ KERNEL_IMAGE="/boot/vmlinuz-`uname -r`"
 -- 
 2.7.5
