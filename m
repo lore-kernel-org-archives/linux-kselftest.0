@@ -1,104 +1,65 @@
 From: zohar at linux.ibm.com (Mimi Zohar)
-Date: Thu, 14 Mar 2019 14:41:12 -0400
-Subject: [PATCH v4 4/8] selftests/kexec: define common logging functions
+Date: Thu, 14 Mar 2019 14:41:10 -0400
+Subject: [PATCH v4 2/8] selftests/kexec: cleanup the kexec selftest
 In-Reply-To: <1552588876-28481-1-git-send-email-zohar@linux.ibm.com>
 References: <1552588876-28481-1-git-send-email-zohar@linux.ibm.com>
-Message-ID: <1552588876-28481-5-git-send-email-zohar@linux.ibm.com>
+Message-ID: <1552588876-28481-3-git-send-email-zohar@linux.ibm.com>
 
-Define log_info, log_pass, log_fail, and log_skip functions.
+Remove the few bashisms and use the complete option name for clarity.
 
-Suggested-by: Petr Vorel <pvorel at suse.cz>
 Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
 Reviewed-by: Petr Vorel <pvorel at suse.cz>
 ---
- tools/testing/selftests/kexec/kexec_common_lib.sh | 31 +++++++++++++++++++++++
- tools/testing/selftests/kexec/test_kexec_load.sh  | 19 ++++----------
- 2 files changed, 36 insertions(+), 14 deletions(-)
+ tools/testing/selftests/kexec/test_kexec_load.sh | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/kexec/kexec_common_lib.sh b/tools/testing/selftests/kexec/kexec_common_lib.sh
-index 05376be6a6f7..d108ac538f14 100755
---- a/tools/testing/selftests/kexec/kexec_common_lib.sh
-+++ b/tools/testing/selftests/kexec/kexec_common_lib.sh
-@@ -1,5 +1,36 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
-+#
-+# Kselftest framework defines: ksft_pass=0, ksft_fail=1, ksft_skip=4
-+
-+VERBOSE="${VERBOSE:-1}"
-+
-+log_info()
-+{
-+	[ $VERBOSE -ne 0 ] && echo "[INFO] $1"
-+}
-+
-+# The ksefltest framework requirement returns 0 for PASS.
-+log_pass()
-+{
-+
-+	[ $VERBOSE -ne 0 ] && echo "$1 [PASS]"
-+	exit 0
-+}
-+
-+# The ksefltest framework requirement returns 1 for FAIL.
-+log_fail()
-+{
-+	[ $VERBOSE -ne 0 ] && echo "$1 [FAIL]"
-+	exit 1
-+}
-+
-+# The ksefltest framework requirement returns 4 for SKIP.
-+log_skip()
-+{
-+	[ $VERBOSE -ne 0 ] && echo "$1"
-+	exit 4
-+}
- 
- # Check efivar SecureBoot-$(the UUID) and SetupMode-$(the UUID).
- # The secure boot mode can be accessed either as the last integer
 diff --git a/tools/testing/selftests/kexec/test_kexec_load.sh b/tools/testing/selftests/kexec/test_kexec_load.sh
-index 86625c3f1e5d..cbf598a380d2 100755
+index 1c10093fb526..82a01a4d5c8d 100755
 --- a/tools/testing/selftests/kexec/test_kexec_load.sh
 +++ b/tools/testing/selftests/kexec/test_kexec_load.sh
-@@ -6,15 +6,10 @@
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+-# SPDX-License-Identifier: GPL-2.0+
++# SPDX-License-Identifier: GPL-2.0
+ # Loading a kernel image via the kexec_load syscall should fail
+-# when the kerne is CONFIG_KEXEC_VERIFY_SIG enabled and the system
++# when the kernel is CONFIG_KEXEC_VERIFY_SIG enabled and the system
+ # is booted in secureboot mode.
  
  TEST="$0"
- . ./kexec_common_lib.sh
--rc=0
--
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
+@@ -12,8 +12,8 @@ rc=0
+ ksft_skip=4
  
  # kexec requires root privileges
- if [ $(id -ru) -ne 0 ]; then
--	echo "$TEST: requires root privileges" >&2
--	exit $ksft_skip
-+	log_skip "requires root privileges"
+-if [ $UID != 0 ]; then
+-	echo "$TEST: must be run as root" >&2
++if [ $(id -ru) -ne 0 ]; then
++	echo "$TEST: requires root privileges" >&2
+ 	exit $ksft_skip
  fi
  
- get_secureboot_mode
-@@ -26,18 +21,14 @@ kexec --load $KERNEL_IMAGE > /dev/null 2>&1
- if [ $? -eq 0 ]; then
- 	kexec --unload
- 	if [ $secureboot -eq 1 ]; then
--		echo "$TEST: kexec_load succeeded [FAIL]"
--		rc=1
-+		log_fail "kexec_load succeeded"
+@@ -33,17 +33,17 @@ secureboot=`hexdump $file | awk '{print substr($4,length($4),1)}'`
+ 
+ # kexec_load should fail in secure boot mode
+ KERNEL_IMAGE="/boot/vmlinuz-`uname -r`"
+-kexec -l $KERNEL_IMAGE &>> /dev/null
+-if [ $? == 0 ]; then
+-	kexec -u
+-	if [ "$secureboot" == "1" ]; then
++kexec --load $KERNEL_IMAGE > /dev/null 2>&1
++if [ $? -eq 0 ]; then
++	kexec --unload
++	if [ $secureboot -eq 1 ]; then
+ 		echo "$TEST: kexec_load succeeded [FAIL]"
+ 		rc=1
  	else
--		echo "$TEST: kexec_load succeeded [PASS]"
-+		log_pass "kexec_load succeeded"
+ 		echo "$TEST: kexec_load succeeded [PASS]"
  	fi
  else
- 	if [ $secureboot -eq 1 ]; then
--		echo "$TEST: kexec_load failed [PASS]"
-+		log_pass "kexec_load failed"
+-	if [ "$secureboot" == "1" ]; then
++	if [ $secureboot -eq 1 ]; then
+ 		echo "$TEST: kexec_load failed [PASS]"
  	else
--		echo "$TEST: kexec_load failed [FAIL]"
--		rc=1
-+		log_fail "kexec_load failed"
- 	fi
- fi
--
--exit $rc
+ 		echo "$TEST: kexec_load failed [FAIL]"
 -- 
 2.7.5
