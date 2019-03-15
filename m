@@ -1,58 +1,50 @@
 From: andreyknvl@google.com (Andrey Konovalov)
-Date: Fri, 15 Mar 2019 20:51:33 +0100
-Subject: [PATCH v11 09/14] kernel, arm64: untag user pointers in prctl_set_mm*
+Date: Fri, 15 Mar 2019 20:51:29 +0100
+Subject: [PATCH v11 05/14] mm, arm64: untag user pointers in mm/gup.c
 In-Reply-To: <cover.1552679409.git.andreyknvl@google.com>
 References: <cover.1552679409.git.andreyknvl@google.com>
 Message-ID:
- <c4d65de9867cb3349af6800242da0de751260c6c.1552679409.git.andreyknvl@google.com>
+ <f46caf7bea6bdbb7e50f2abedc83df13d075735c.1552679409.git.andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190315195133.QDI4PfwlwOb3xb1jvS9Hm5za3OL-ozZPa-cfIB2rJKw@z>
+Message-ID: <20190315195129.YTU6Q10kArJdH11MDTzEvY1p-2OW6gWW8y8YAhwLTM4@z>
 
 This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-prctl_set_mm() and prctl_set_mm_map() use provided user pointers for vma
-lookups, which can only by done with untagged pointers.
+mm/gup.c provides a kernel interface that accepts user addresses and
+manipulates user pages directly (for example get_user_pages, that is used
+by the futex syscall). Since a user can provided tagged addresses, we need
+to handle this case.
 
-Untag user pointers in these functions.
+Add untagging to gup.c functions that use user addresses for vma lookups.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- kernel/sys.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ mm/gup.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/kernel/sys.c b/kernel/sys.c
-index 12df0e5434b8..8e56d87cc6db 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -1993,6 +1993,18 @@ static int prctl_set_mm_map(int opt, const void __user *addr, unsigned long data
- 	if (copy_from_user(&prctl_map, addr, sizeof(prctl_map)))
- 		return -EFAULT;
+diff --git a/mm/gup.c b/mm/gup.c
+index f84e22685aaa..3192741e0b3a 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -686,6 +686,8 @@ static long __get_user_pages(struct task_struct *tsk, struct mm_struct *mm,
+ 	if (!nr_pages)
+ 		return 0;
  
-+	prctl_map->start_code	= untagged_addr(prctl_map.start_code);
-+	prctl_map->end_code	= untagged_addr(prctl_map.end_code);
-+	prctl_map->start_data	= untagged_addr(prctl_map.start_data);
-+	prctl_map->end_data	= untagged_addr(prctl_map.end_data);
-+	prctl_map->start_brk	= untagged_addr(prctl_map.start_brk);
-+	prctl_map->brk		= untagged_addr(prctl_map.brk);
-+	prctl_map->start_stack	= untagged_addr(prctl_map.start_stack);
-+	prctl_map->arg_start	= untagged_addr(prctl_map.arg_start);
-+	prctl_map->arg_end	= untagged_addr(prctl_map.arg_end);
-+	prctl_map->env_start	= untagged_addr(prctl_map.env_start);
-+	prctl_map->env_end	= untagged_addr(prctl_map.env_end);
++	start = untagged_addr(start);
 +
- 	error = validate_prctl_map(&prctl_map);
- 	if (error)
- 		return error;
-@@ -2106,6 +2118,8 @@ static int prctl_set_mm(int opt, unsigned long addr,
- 			      opt != PR_SET_MM_MAP_SIZE)))
- 		return -EINVAL;
+ 	VM_BUG_ON(!!pages != !!(gup_flags & FOLL_GET));
  
-+	addr = untagged_addr(addr);
+ 	/*
+@@ -848,6 +850,8 @@ int fixup_user_fault(struct task_struct *tsk, struct mm_struct *mm,
+ 	struct vm_area_struct *vma;
+ 	vm_fault_t ret, major = 0;
+ 
++	address = untagged_addr(address);
 +
- #ifdef CONFIG_CHECKPOINT_RESTORE
- 	if (opt == PR_SET_MM_MAP || opt == PR_SET_MM_MAP_SIZE)
- 		return prctl_set_mm_map(opt, (const void __user *)addr, arg4);
+ 	if (unlocked)
+ 		fault_flags |= FAULT_FLAG_ALLOW_RETRY;
+ 
 -- 
 2.21.0.360.g471c308f928-goog
