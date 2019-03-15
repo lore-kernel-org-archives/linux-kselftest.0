@@ -1,74 +1,114 @@
-From: sdf at fomichev.me (Stanislav Fomichev)
-Date: Fri, 15 Mar 2019 13:08:47 -0700
-Subject: [PATCH net-next] selftests: bpf: modify urandom_read and link it
- non-statically
-In-Reply-To: <20190315200414.32346-1-ivecera@redhat.com>
-References: <20190315200414.32346-1-ivecera@redhat.com>
-Message-ID: <20190315200847.GC5481@mini-arch.hsd1.ca.comcast.net>
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Fri, 15 Mar 2019 16:14:14 -0400
+Subject: [PATCH v11 10/14] tracing, arm64: untag user pointers in
+ seq_print_user_ip
+In-Reply-To: <355e7c0dadaa2bb79d22e0b7aac7e4efc1114d49.1552679409.git.andreyknvl@google.com>
+References: <cover.1552679409.git.andreyknvl@google.com>
+ <355e7c0dadaa2bb79d22e0b7aac7e4efc1114d49.1552679409.git.andreyknvl@google.com>
+Message-ID: <20190315161414.4b31fb03@gandalf.local.home>
 
-On 03/15, Ivan Vecera wrote:
-> After some experiences I found that urandom_read does not need to be
-> linked statically. When the 'read' syscall call is moved to separate
-> non-inlined function then bpf_get_stackid() is able to find
-> the executable in stack trace and extract its build_id from it.
-But why? Do you have some problems with it being linked statically?
+On Fri, 15 Mar 2019 20:51:34 +0100
+Andrey Konovalov <andreyknvl at google.com> wrote:
 
+> This patch is a part of a series that extends arm64 kernel ABI to allow to
+> pass tagged user pointers (with the top byte set to something else other
+> than 0x00) as syscall arguments.
 > 
-> Signed-off-by: Ivan Vecera <ivecera at redhat.com>
+> seq_print_user_ip() uses provided user pointers for vma lookups, which
+> can only by done with untagged pointers.
+> 
+> Untag user pointers in this function.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 > ---
->  tools/testing/selftests/bpf/Makefile       |  2 +-
->  tools/testing/selftests/bpf/urandom_read.c | 15 +++++++++++----
->  2 files changed, 12 insertions(+), 5 deletions(-)
+>  kernel/trace/trace_output.c |  5 +++--
+>  p                           | 45 +++++++++++++++++++++++++++++++++++++
+>  2 files changed, 48 insertions(+), 2 deletions(-)
+>  create mode 100644 p
 > 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 2aed37ea61a4..c33900a8fec0 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -69,7 +69,7 @@ TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read
->  all: $(TEST_CUSTOM_PROGS)
->  
->  $(OUTPUT)/urandom_read: $(OUTPUT)/%: %.c
-> -	$(CC) -o $@ -static $< -Wl,--build-id
-> +	$(CC) -o $@ $< -Wl,--build-id
->  
->  BPFOBJ := $(OUTPUT)/libbpf.a
->  
-> diff --git a/tools/testing/selftests/bpf/urandom_read.c b/tools/testing/selftests/bpf/urandom_read.c
-> index 9de8b7cb4e6d..db781052758d 100644
-> --- a/tools/testing/selftests/bpf/urandom_read.c
-> +++ b/tools/testing/selftests/bpf/urandom_read.c
-> @@ -7,11 +7,19 @@
->  
->  #define BUF_SIZE 256
->  
-> +static __attribute__((noinline))
-> +void urandom_read(int fd, int count)
-> +{
-> +       char buf[BUF_SIZE];
-> +       int i;
-> +
-> +       for (i = 0; i < count; ++i)
-> +               read(fd, buf, BUF_SIZE);
-> +}
-> +
->  int main(int argc, char *argv[])
+> diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+> index 54373d93e251..6376bee93c84 100644
+> --- a/kernel/trace/trace_output.c
+> +++ b/kernel/trace/trace_output.c
+> @@ -370,6 +370,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
 >  {
->  	int fd = open("/dev/urandom", O_RDONLY);
-> -	int i;
-> -	char buf[BUF_SIZE];
->  	int count = 4;
+>  	struct file *file = NULL;
+>  	unsigned long vmstart = 0;
+> +	unsigned long untagged_ip = untagged_addr(ip);
+>  	int ret = 1;
 >  
->  	if (fd < 0)
-> @@ -20,8 +28,7 @@ int main(int argc, char *argv[])
->  	if (argc == 2)
->  		count = atoi(argv[1]);
+>  	if (s->full)
+> @@ -379,7 +380,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
+>  		const struct vm_area_struct *vma;
 >  
-> -	for (i = 0; i < count; ++i)
-> -		read(fd, buf, BUF_SIZE);
-> +	urandom_read(fd, count);
->  
->  	close(fd);
->  	return 0;
-> -- 
-> 2.19.2
-> 
+>  		down_read(&mm->mmap_sem);
+> -		vma = find_vma(mm, ip);
+> +		vma = find_vma(mm, untagged_ip);
+>  		if (vma) {
+>  			file = vma->vm_file;
+>  			vmstart = vma->vm_start;
+> @@ -388,7 +389,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
+>  			ret = trace_seq_path(s, &file->f_path);
+>  			if (ret)
+>  				trace_seq_printf(s, "[+0x%lx]",
+> -						 ip - vmstart);
+> +						 untagged_ip - vmstart);
+>  		}
+>  		up_read(&mm->mmap_sem);
+>  	}
+> diff --git a/p b/p
+> new file mode 100644
+> index 000000000000..9d6fa5386e55
+> --- /dev/null
+> +++ b/p
+> @@ -0,0 +1,45 @@
+> +commit 1fa6fadf644859e8a6a8ecce258444b49be8c7ee
+> +Author: Andrey Konovalov <andreyknvl at google.com>
+> +Date:   Mon Mar 4 17:20:32 2019 +0100
+> +
+> +    kasan: fix coccinelle warnings in kasan_p*_table
+> +    
+> +    kasan_p4d_table, kasan_pmd_table and kasan_pud_table are declared as
+> +    returning bool, but return 0 instead of false, which produces a coccinelle
+> +    warning. Fix it.
+> +    
+> +    Fixes: 0207df4fa1a8 ("kernel/memremap, kasan: make ZONE_DEVICE with work with KASAN")
+> +    Reported-by: kbuild test robot <lkp at intel.com>
+> +    Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+
+Did you mean to append this commit to this patch?
+
+-- Steve
+
+> +
+> +diff --git a/mm/kasan/init.c b/mm/kasan/init.c
+> +index 45a1b5e38e1e..fcaa1ca03175 100644
+> +--- a/mm/kasan/init.c
+> ++++ b/mm/kasan/init.c
+> +@@ -42,7 +42,7 @@ static inline bool kasan_p4d_table(pgd_t pgd)
+> + #else
+> + static inline bool kasan_p4d_table(pgd_t pgd)
+> + {
+> +-	return 0;
+> ++	return false;
+> + }
+> + #endif
+> + #if CONFIG_PGTABLE_LEVELS > 3
+> +@@ -54,7 +54,7 @@ static inline bool kasan_pud_table(p4d_t p4d)
+> + #else
+> + static inline bool kasan_pud_table(p4d_t p4d)
+> + {
+> +-	return 0;
+> ++	return false;
+> + }
+> + #endif
+> + #if CONFIG_PGTABLE_LEVELS > 2
+> +@@ -66,7 +66,7 @@ static inline bool kasan_pmd_table(pud_t pud)
+> + #else
+> + static inline bool kasan_pmd_table(pud_t pud)
+> + {
+> +-	return 0;
+> ++	return false;
+> + }
+> + #endif
+> + pte_t kasan_early_shadow_pte[PTRS_PER_PTE] __page_aligned_bss;
