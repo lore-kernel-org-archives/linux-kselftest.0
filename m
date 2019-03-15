@@ -1,45 +1,70 @@
-From: eric.dumazet@gmail.com (Eric Dumazet)
-Date: Fri, 15 Mar 2019 13:03:30 -0700
-Subject: [PATCH v11 08/14] net, arm64: untag user pointers in
- tcp_zerocopy_receive
-In-Reply-To: <56d3373c1c5007d776fcd5de4523f4b9da341fb6.1552679409.git.andreyknvl@google.com>
-References: <cover.1552679409.git.andreyknvl@google.com>
- <56d3373c1c5007d776fcd5de4523f4b9da341fb6.1552679409.git.andreyknvl@google.com>
-Message-ID: <04c5b2de-7fde-7625-9d42-228160879ea0@gmail.com>
+From: ivecera@redhat.com (Ivan Vecera)
+Date: Fri, 15 Mar 2019 21:04:14 +0100
+Subject: [PATCH net-next] selftests: bpf: modify urandom_read and link it
+ non-statically
+Message-ID: <20190315200414.32346-1-ivecera@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190315200330.9z6q4UO0R3SVav38T8veutdcaXWJeOFMsh7uc9LWLSI@z>
+Message-ID: <20190315200414.z5KJC5byZ2fHsBdr-YTZhngXTPFT-5glesNboaZ-gak@z>
 
+After some experiences I found that urandom_read does not need to be
+linked statically. When the 'read' syscall call is moved to separate
+non-inlined function then bpf_get_stackid() is able to find
+the executable in stack trace and extract its build_id from it.
 
+Signed-off-by: Ivan Vecera <ivecera at redhat.com>
+---
+ tools/testing/selftests/bpf/Makefile       |  2 +-
+ tools/testing/selftests/bpf/urandom_read.c | 15 +++++++++++----
+ 2 files changed, 12 insertions(+), 5 deletions(-)
 
-On 03/15/2019 12:51 PM, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
-> 
-> tcp_zerocopy_receive() uses provided user pointers for vma lookups, which
-> can only by done with untagged pointers.
-> 
-> Untag user pointers in this function.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
-> ---
->  net/ipv4/tcp.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index 6baa6dc1b13b..89db3b4fc753 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -1758,6 +1758,8 @@ static int tcp_zerocopy_receive(struct sock *sk,
->  	int inq;
->  	int ret;
->  
-> +	address = untagged_addr(address);
-> +
->  	if (address & (PAGE_SIZE - 1) || address != zc->address)
-
-The second test will fail, if the top bits are changed in address but not in zc->address
-
->  		return -EINVAL;
->  
-> 
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 2aed37ea61a4..c33900a8fec0 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -69,7 +69,7 @@ TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read
+ all: $(TEST_CUSTOM_PROGS)
+ 
+ $(OUTPUT)/urandom_read: $(OUTPUT)/%: %.c
+-	$(CC) -o $@ -static $< -Wl,--build-id
++	$(CC) -o $@ $< -Wl,--build-id
+ 
+ BPFOBJ := $(OUTPUT)/libbpf.a
+ 
+diff --git a/tools/testing/selftests/bpf/urandom_read.c b/tools/testing/selftests/bpf/urandom_read.c
+index 9de8b7cb4e6d..db781052758d 100644
+--- a/tools/testing/selftests/bpf/urandom_read.c
++++ b/tools/testing/selftests/bpf/urandom_read.c
+@@ -7,11 +7,19 @@
+ 
+ #define BUF_SIZE 256
+ 
++static __attribute__((noinline))
++void urandom_read(int fd, int count)
++{
++       char buf[BUF_SIZE];
++       int i;
++
++       for (i = 0; i < count; ++i)
++               read(fd, buf, BUF_SIZE);
++}
++
+ int main(int argc, char *argv[])
+ {
+ 	int fd = open("/dev/urandom", O_RDONLY);
+-	int i;
+-	char buf[BUF_SIZE];
+ 	int count = 4;
+ 
+ 	if (fd < 0)
+@@ -20,8 +28,7 @@ int main(int argc, char *argv[])
+ 	if (argc == 2)
+ 		count = atoi(argv[1]);
+ 
+-	for (i = 0; i < count; ++i)
+-		read(fd, buf, BUF_SIZE);
++	urandom_read(fd, count);
+ 
+ 	close(fd);
+ 	return 0;
+-- 
+2.19.2
