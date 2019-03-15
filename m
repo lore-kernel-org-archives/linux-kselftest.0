@@ -1,42 +1,71 @@
-From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Fri, 15 Mar 2019 22:14:07 +0900
-Subject: [PATCH v4 1/2] Provide in-kernel headers for making it easy to
- extend the kernel
-In-Reply-To: <20190314122748.GA101545@google.com>
-References: <20190309121141.GA30173@kroah.com>
- <b7296377-9e0c-aed7-61f0-93d24d1ceddd@opersys.com>
- <CAMuHMdV8+XTyGf1ZJ+gMf=zQpzqh3-+b7wgi+gAmXQ6HpUAw3A@mail.gmail.com>
- <3e84e1ef-e266-e983-5874-6c26ac7f38b8@opersys.com>
- <20190311193612.4f09bf11@oasis.local.home>
- <CAKOZuetHG0O-CiO6h5tD7aht_MT70ebwWMMSPkRUHdiM3wVq0Q@mail.gmail.com>
- <20190312003912.GA170478@google.com>
- <20190311212823.60684182@oasis.local.home>
- <CAJWu+oqsD_wHGWfzj6POFowiY2qcu04auVzkA6Lu9R+LR4gkrQ@mail.gmail.com>
- <20190313101843.800dd8d6a9babb635580ebdc@kernel.org>
- <20190314122748.GA101545@google.com>
-Message-ID: <20190315221407.790154f634fc5fc084d7bf15@kernel.org>
+From: andreyknvl@google.com (Andrey Konovalov)
+Date: Fri, 15 Mar 2019 20:51:26 +0100
+Subject: [PATCH v11 02/14] arm64: untag user pointers in access_ok and
+ __uaccess_mask_ptr
+In-Reply-To: <cover.1552679409.git.andreyknvl@google.com>
+References: <cover.1552679409.git.andreyknvl@google.com>
+Message-ID:
+ <f7b263a20223da2b8b26f6a5b0d84a575af28010.1552679409.git.andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190315131407.2vxmZR2dJKLfS5hRvWTcWrp5NLxEbeNBws_wXWsl24Q@z>
+Message-ID: <20190315195126.21uDvFdPA_BhVr4KM8re3fa3z-SHHmWFFYcMyA0ISS0@z>
 
-On Thu, 14 Mar 2019 08:27:48 -0400
-Joel Fernandes <joel@joelfernandes.org> wrote:
+This patch is a part of a series that extends arm64 kernel ABI to allow to
+pass tagged user pointers (with the top byte set to something else other
+than 0x00) as syscall arguments.
 
-> > But the eBPF is based on kprobe-events. What kind of usage would you
-> > expected? (with macros??)
-> 
-> eBPF C programs are compiled with kernel headers. They can execute inline
-> functions or refer to macros in the kernel headers. They are similar to
-> kernel modules where you build a C program that then later is executed in
-> kernel context. It goes through the whole compiler pipeline. This is slightly
-> different usage from pure kprobe-events.  Also eBPF kprobe programs need
-> LINUX_VERSION_CODE (or similarly named) macro which it provides to the bpf(2)
-> syscall when loading kprobe programs. This is because eBPF implementation in
-> the kernel checks if the eBPF programs that use kprobes are being loaded
-> against the right kernel.
+copy_from_user (and a few other similar functions) are used to copy data
+from user memory into the kernel memory or vice versa. Since a user can
+provided a tagged pointer to one of the syscalls that use copy_from_user,
+we need to correctly handle such pointers.
 
-Ah, I got it. It's similar to SystemTap. :)
+Do this by untagging user pointers in access_ok and in __uaccess_mask_ptr,
+before performing access validity checks.
 
-Thank you,
+Note, that this patch only temporarily untags the pointers to perform the
+checks, but then passes them as is into the kernel internals.
 
+Reviewed-by: Catalin Marinas <catalin.marinas at arm.com>
+Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+---
+ arch/arm64/include/asm/uaccess.h | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+index e5d5f31c6d36..9164ecb5feca 100644
+--- a/arch/arm64/include/asm/uaccess.h
++++ b/arch/arm64/include/asm/uaccess.h
+@@ -94,7 +94,7 @@ static inline unsigned long __range_ok(const void __user *addr, unsigned long si
+ 	return ret;
+ }
+ 
+-#define access_ok(addr, size)	__range_ok(addr, size)
++#define access_ok(addr, size)	__range_ok(untagged_addr(addr), size)
+ #define user_addr_max			get_fs
+ 
+ #define _ASM_EXTABLE(from, to)						\
+@@ -226,7 +226,8 @@ static inline void uaccess_enable_not_uao(void)
+ 
+ /*
+  * Sanitise a uaccess pointer such that it becomes NULL if above the
+- * current addr_limit.
++ * current addr_limit. In case the pointer is tagged (has the top byte set),
++ * untag the pointer before checking.
+  */
+ #define uaccess_mask_ptr(ptr) (__typeof__(ptr))__uaccess_mask_ptr(ptr)
+ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
+@@ -234,10 +235,11 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
+ 	void __user *safe_ptr;
+ 
+ 	asm volatile(
+-	"	bics	xzr, %1, %2\n"
++	"	bics	xzr, %3, %2\n"
+ 	"	csel	%0, %1, xzr, eq\n"
+ 	: "=&r" (safe_ptr)
+-	: "r" (ptr), "r" (current_thread_info()->addr_limit)
++	: "r" (ptr), "r" (current_thread_info()->addr_limit),
++	  "r" (untagged_addr(ptr))
+ 	: "cc");
+ 
+ 	csdb();
 -- 
-Masami Hiramatsu <mhiramat at kernel.org>
+2.21.0.360.g471c308f928-goog
