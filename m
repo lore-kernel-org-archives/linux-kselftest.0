@@ -1,71 +1,234 @@
 From: andreyknvl@google.com (Andrey Konovalov)
-Date: Fri, 15 Mar 2019 20:51:26 +0100
-Subject: [PATCH v11 02/14] arm64: untag user pointers in access_ok and
- __uaccess_mask_ptr
+Date: Fri, 15 Mar 2019 20:51:28 +0100
+Subject: [PATCH v11 04/14] mm,
+ arm64: untag user pointers passed to memory syscalls
 In-Reply-To: <cover.1552679409.git.andreyknvl@google.com>
 References: <cover.1552679409.git.andreyknvl@google.com>
 Message-ID:
- <f7b263a20223da2b8b26f6a5b0d84a575af28010.1552679409.git.andreyknvl@google.com>
+ <42332fc5b15c434cfa4730e5906cd303fb8a901a.1552679409.git.andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190315195126.21uDvFdPA_BhVr4KM8re3fa3z-SHHmWFFYcMyA0ISS0@z>
+Message-ID: <20190315195128.8aB4TeKZas2o9MuFZ9Ookl8xS0lbLUAE-vVscrwTvXY@z>
 
 This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-copy_from_user (and a few other similar functions) are used to copy data
-from user memory into the kernel memory or vice versa. Since a user can
-provided a tagged pointer to one of the syscalls that use copy_from_user,
-we need to correctly handle such pointers.
+This patch allows tagged pointers to be passed to the following memory
+syscalls: madvise, mbind, get_mempolicy, mincore, mlock, mlock2, brk,
+mmap_pgoff, old_mmap, munmap, remap_file_pages, mprotect, pkey_mprotect,
+mremap, msync and shmdt.
 
-Do this by untagging user pointers in access_ok and in __uaccess_mask_ptr,
-before performing access validity checks.
+This is done by untagging pointers passed to these syscalls in the
+prologues of their handlers.
 
-Note, that this patch only temporarily untags the pointers to perform the
-checks, but then passes them as is into the kernel internals.
-
-Reviewed-by: Catalin Marinas <catalin.marinas at arm.com>
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- arch/arm64/include/asm/uaccess.h | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ ipc/shm.c      | 2 ++
+ mm/madvise.c   | 2 ++
+ mm/mempolicy.c | 5 +++++
+ mm/migrate.c   | 1 +
+ mm/mincore.c   | 2 ++
+ mm/mlock.c     | 5 +++++
+ mm/mmap.c      | 7 +++++++
+ mm/mprotect.c  | 1 +
+ mm/mremap.c    | 2 ++
+ mm/msync.c     | 2 ++
+ 10 files changed, 29 insertions(+)
 
-diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-index e5d5f31c6d36..9164ecb5feca 100644
---- a/arch/arm64/include/asm/uaccess.h
-+++ b/arch/arm64/include/asm/uaccess.h
-@@ -94,7 +94,7 @@ static inline unsigned long __range_ok(const void __user *addr, unsigned long si
- 	return ret;
+diff --git a/ipc/shm.c b/ipc/shm.c
+index ce1ca9f7c6e9..7af8951e6c41 100644
+--- a/ipc/shm.c
++++ b/ipc/shm.c
+@@ -1593,6 +1593,7 @@ SYSCALL_DEFINE3(shmat, int, shmid, char __user *, shmaddr, int, shmflg)
+ 	unsigned long ret;
+ 	long err;
+ 
++	shmaddr = untagged_addr(shmaddr);
+ 	err = do_shmat(shmid, shmaddr, shmflg, &ret, SHMLBA);
+ 	if (err)
+ 		return err;
+@@ -1732,6 +1733,7 @@ long ksys_shmdt(char __user *shmaddr)
+ 
+ SYSCALL_DEFINE1(shmdt, char __user *, shmaddr)
+ {
++	shmaddr = untagged_addr(shmaddr);
+ 	return ksys_shmdt(shmaddr);
  }
  
--#define access_ok(addr, size)	__range_ok(addr, size)
-+#define access_ok(addr, size)	__range_ok(untagged_addr(addr), size)
- #define user_addr_max			get_fs
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 21a7881a2db4..64e6d34a7f9b 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -809,6 +809,8 @@ SYSCALL_DEFINE3(madvise, unsigned long, start, size_t, len_in, int, behavior)
+ 	size_t len;
+ 	struct blk_plug plug;
  
- #define _ASM_EXTABLE(from, to)						\
-@@ -226,7 +226,8 @@ static inline void uaccess_enable_not_uao(void)
++	start = untagged_addr(start);
++
+ 	if (!madvise_behavior_valid(behavior))
+ 		return error;
  
- /*
-  * Sanitise a uaccess pointer such that it becomes NULL if above the
-- * current addr_limit.
-+ * current addr_limit. In case the pointer is tagged (has the top byte set),
-+ * untag the pointer before checking.
-  */
- #define uaccess_mask_ptr(ptr) (__typeof__(ptr))__uaccess_mask_ptr(ptr)
- static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
-@@ -234,10 +235,11 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
- 	void __user *safe_ptr;
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index af171ccb56a2..31691737c59c 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -1334,6 +1334,7 @@ static long kernel_mbind(unsigned long start, unsigned long len,
+ 	int err;
+ 	unsigned short mode_flags;
  
- 	asm volatile(
--	"	bics	xzr, %1, %2\n"
-+	"	bics	xzr, %3, %2\n"
- 	"	csel	%0, %1, xzr, eq\n"
- 	: "=&r" (safe_ptr)
--	: "r" (ptr), "r" (current_thread_info()->addr_limit)
-+	: "r" (ptr), "r" (current_thread_info()->addr_limit),
-+	  "r" (untagged_addr(ptr))
- 	: "cc");
++	start = untagged_addr(start);
+ 	mode_flags = mode & MPOL_MODE_FLAGS;
+ 	mode &= ~MPOL_MODE_FLAGS;
+ 	if (mode >= MPOL_MAX)
+@@ -1491,6 +1492,8 @@ static int kernel_get_mempolicy(int __user *policy,
+ 	int uninitialized_var(pval);
+ 	nodemask_t nodes;
  
- 	csdb();
++	addr = untagged_addr(addr);
++
+ 	if (nmask != NULL && maxnode < nr_node_ids)
+ 		return -EINVAL;
+ 
+@@ -1576,6 +1579,8 @@ COMPAT_SYSCALL_DEFINE6(mbind, compat_ulong_t, start, compat_ulong_t, len,
+ 	unsigned long nr_bits, alloc_size;
+ 	nodemask_t bm;
+ 
++	start = untagged_addr(start);
++
+ 	nr_bits = min_t(unsigned long, maxnode-1, MAX_NUMNODES);
+ 	alloc_size = ALIGN(nr_bits, BITS_PER_LONG) / 8;
+ 
+diff --git a/mm/migrate.c b/mm/migrate.c
+index ac6f4939bb59..ecc6dcdefb1f 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -1612,6 +1612,7 @@ static int do_pages_move(struct mm_struct *mm, nodemask_t task_nodes,
+ 		if (get_user(node, nodes + i))
+ 			goto out_flush;
+ 		addr = (unsigned long)p;
++		addr = untagged_addr(addr);
+ 
+ 		err = -ENODEV;
+ 		if (node < 0 || node >= MAX_NUMNODES)
+diff --git a/mm/mincore.c b/mm/mincore.c
+index 218099b5ed31..c4a3f4484b6b 100644
+--- a/mm/mincore.c
++++ b/mm/mincore.c
+@@ -228,6 +228,8 @@ SYSCALL_DEFINE3(mincore, unsigned long, start, size_t, len,
+ 	unsigned long pages;
+ 	unsigned char *tmp;
+ 
++	start = untagged_addr(start);
++
+ 	/* Check the start address: needs to be page-aligned.. */
+ 	if (start & ~PAGE_MASK)
+ 		return -EINVAL;
+diff --git a/mm/mlock.c b/mm/mlock.c
+index 080f3b36415b..6934ec92bf39 100644
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -715,6 +715,7 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
+ 
+ SYSCALL_DEFINE2(mlock, unsigned long, start, size_t, len)
+ {
++	start = untagged_addr(start);
+ 	return do_mlock(start, len, VM_LOCKED);
+ }
+ 
+@@ -722,6 +723,8 @@ SYSCALL_DEFINE3(mlock2, unsigned long, start, size_t, len, int, flags)
+ {
+ 	vm_flags_t vm_flags = VM_LOCKED;
+ 
++	start = untagged_addr(start);
++
+ 	if (flags & ~MLOCK_ONFAULT)
+ 		return -EINVAL;
+ 
+@@ -735,6 +738,8 @@ SYSCALL_DEFINE2(munlock, unsigned long, start, size_t, len)
+ {
+ 	int ret;
+ 
++	start = untagged_addr(start);
++
+ 	len = PAGE_ALIGN(len + (offset_in_page(start)));
+ 	start &= PAGE_MASK;
+ 
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 41eb48d9b527..512c679c7f33 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -199,6 +199,8 @@ SYSCALL_DEFINE1(brk, unsigned long, brk)
+ 	bool downgraded = false;
+ 	LIST_HEAD(uf);
+ 
++	brk = untagged_addr(brk);
++
+ 	if (down_write_killable(&mm->mmap_sem))
+ 		return -EINTR;
+ 
+@@ -1571,6 +1573,8 @@ unsigned long ksys_mmap_pgoff(unsigned long addr, unsigned long len,
+ 	struct file *file = NULL;
+ 	unsigned long retval;
+ 
++	addr = untagged_addr(addr);
++
+ 	if (!(flags & MAP_ANONYMOUS)) {
+ 		audit_mmap_fd(fd, flags);
+ 		file = fget(fd);
+@@ -2867,6 +2871,7 @@ EXPORT_SYMBOL(vm_munmap);
+ 
+ SYSCALL_DEFINE2(munmap, unsigned long, addr, size_t, len)
+ {
++	addr = untagged_addr(addr);
+ 	profile_munmap(addr);
+ 	return __vm_munmap(addr, len, true);
+ }
+@@ -2885,6 +2890,8 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
+ 	unsigned long ret = -EINVAL;
+ 	struct file *file;
+ 
++	start = untagged_addr(start);
++
+ 	pr_warn_once("%s (%d) uses deprecated remap_file_pages() syscall. See Documentation/vm/remap_file_pages.rst.\n",
+ 		     current->comm, current->pid);
+ 
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 028c724dcb1a..3c2b11629f89 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -468,6 +468,7 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
+ 	if (grows == (PROT_GROWSDOWN|PROT_GROWSUP)) /* can't be both */
+ 		return -EINVAL;
+ 
++	start = untagged_addr(start);
+ 	if (start & ~PAGE_MASK)
+ 		return -EINVAL;
+ 	if (!len)
+diff --git a/mm/mremap.c b/mm/mremap.c
+index e3edef6b7a12..6422aeee65bb 100644
+--- a/mm/mremap.c
++++ b/mm/mremap.c
+@@ -605,6 +605,8 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
+ 	LIST_HEAD(uf_unmap_early);
+ 	LIST_HEAD(uf_unmap);
+ 
++	addr = untagged_addr(addr);
++
+ 	if (flags & ~(MREMAP_FIXED | MREMAP_MAYMOVE))
+ 		return ret;
+ 
+diff --git a/mm/msync.c b/mm/msync.c
+index ef30a429623a..c3bd3e75f687 100644
+--- a/mm/msync.c
++++ b/mm/msync.c
+@@ -37,6 +37,8 @@ SYSCALL_DEFINE3(msync, unsigned long, start, size_t, len, int, flags)
+ 	int unmapped_error = 0;
+ 	int error = -EINVAL;
+ 
++	start = untagged_addr(start);
++
+ 	if (flags & ~(MS_ASYNC | MS_INVALIDATE | MS_SYNC))
+ 		goto out;
+ 	if (offset_in_page(start))
 -- 
 2.21.0.360.g471c308f928-goog
