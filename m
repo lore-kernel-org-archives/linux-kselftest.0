@@ -1,39 +1,39 @@
-From: sdf at fomichev.me (Stanislav Fomichev)
-Date: Fri, 15 Mar 2019 15:05:54 -0700
-Subject: [PATCH net-next] selftests: bpf: modify urandom_read and link it
- non-statically
-In-Reply-To: <1595006055.9467881.1552686646726.JavaMail.zimbra@redhat.com>
-References: <20190315200414.32346-1-ivecera@redhat.com>
- <20190315200847.GC5481@mini-arch.hsd1.ca.comcast.net>
- <2dcdc11c-4d04-4b0e-ddb7-04d969d04651@redhat.com>
- <20190315205652.GD5481@mini-arch.hsd1.ca.comcast.net>
- <1595006055.9467881.1552686646726.JavaMail.zimbra@redhat.com>
-Message-ID: <20190315220554.GA7431@mini-arch.hsd1.ca.comcast.net>
+From: guroan at gmail.com (Roman Gushchin)
+Date: Sat, 16 Mar 2019 10:58:08 -0700
+Subject: [PATCH v9 5/9] kselftests: cgroup: don't fail on cg_kill_all() error
+ in cg_destroy()
+In-Reply-To: <20190316175812.6787-1-guro@fb.com>
+References: <20190316175812.6787-1-guro@fb.com>
+Message-ID: <20190316175812.6787-6-guro@fb.com>
 
-On 03/15, Ivan Vecera wrote:
-> 
-> ----- Stanislav Fomichev <sdf at fomichev.me> wrote:
-> > On 03/15, Ivan Vecera wrote:
-> > > On 15. 03. 19 21:08, Stanislav Fomichev wrote:
-> > > > On 03/15, Ivan Vecera wrote:
-> > > > > After some experiences I found that urandom_read does not need to be
-> > > > > linked statically. When the 'read' syscall call is moved to separate
-> > > > > non-inlined function then bpf_get_stackid() is able to find
-> > > > > the executable in stack trace and extract its build_id from it.
-> > > > But why? Do you have some problems with it being linked statically?
-> > > > 
-> > > Dependency... you don't need to install static glibc to compile the bpf
-> > > samples. Shared libc is available everytime.
-> > Oh, the distros that do -devel _and_ -static packages :-)
-> > 
-> > So your patch essentially adds a call, that leaves a trace on the stack
-> > with our build-id. I guess that works as well.
-> 
-> Without that additional call this does not work and build_id selftest fails.
-Oh, yeah, I was just trying to clarify why it fails without -static and why
-your patch makes it work for non-static :-)
-You can put more details in the commit message; you'd have to resubmit
-whenever net-next/bpf-next opens anyway.
+If the cgroup destruction races with an exit() of a belonging
+process(es), cg_kill_all() may fail. It's not a good reason to make
+cg_destroy() fail and leave the cgroup in place, potentially causing
+next test runs to fail.
 
-> 
-> I.
+Signed-off-by: Roman Gushchin <guro at fb.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Tejun Heo <tj at kernel.org>
+Cc: kernel-team at fb.com
+Cc: linux-kselftest at vger.kernel.org
+---
+ tools/testing/selftests/cgroup/cgroup_util.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index 14c9fe284806..eba06f94433b 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -227,9 +227,7 @@ int cg_destroy(const char *cgroup)
+ retry:
+ 	ret = rmdir(cgroup);
+ 	if (ret && errno == EBUSY) {
+-		ret = cg_killall(cgroup);
+-		if (ret)
+-			return ret;
++		cg_killall(cgroup);
+ 		usleep(100);
+ 		goto retry;
+ 	}
+-- 
+2.20.1
