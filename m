@@ -1,124 +1,53 @@
 From: andreyknvl@google.com (Andrey Konovalov)
-Date: Mon, 18 Mar 2019 14:11:48 +0100
-Subject: [PATCH v11 10/14] tracing,
- arm64: untag user pointers in seq_print_user_ip
-In-Reply-To: <20190315161414.4b31fb03@gandalf.local.home>
+Date: Mon, 18 Mar 2019 14:14:33 +0100
+Subject: [PATCH v11 08/14] net,
+ arm64: untag user pointers in tcp_zerocopy_receive
+In-Reply-To: <04c5b2de-7fde-7625-9d42-228160879ea0@gmail.com>
 References: <cover.1552679409.git.andreyknvl@google.com>
- <355e7c0dadaa2bb79d22e0b7aac7e4efc1114d49.1552679409.git.andreyknvl@google.com>
- <20190315161414.4b31fb03@gandalf.local.home>
+ <56d3373c1c5007d776fcd5de4523f4b9da341fb6.1552679409.git.andreyknvl@google.com>
+ <04c5b2de-7fde-7625-9d42-228160879ea0@gmail.com>
 Message-ID:
- <CAAeHK+w5L+yD-9c94vgX3KcQuzyaKhoDemgGcZ8SJWpc7GhE9g@mail.gmail.com>
+ <CAAeHK+xXLypBpF1EE73KuzQAo0E6Y=apS46wo+swo2AB6cy3YA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190318131148.LZpdsjzBlQMdus3JV_M-TPz0Fq5CO-TzNET2O0S72xA@z>
+Message-ID: <20190318131433.U478Pr-2lZBSqV_QpGPN7CupqtyhNITPUj37_8Gkt0M@z>
 
-On Fri, Mar 15, 2019@9:14 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, Mar 15, 2019@9:03 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
 >
-> On Fri, 15 Mar 2019 20:51:34 +0100
-> Andrey Konovalov <andreyknvl@google.com> wrote:
 >
+>
+> On 03/15/2019 12:51 PM, Andrey Konovalov wrote:
 > > This patch is a part of a series that extends arm64 kernel ABI to allow to
 > > pass tagged user pointers (with the top byte set to something else other
 > > than 0x00) as syscall arguments.
 > >
-> > seq_print_user_ip() uses provided user pointers for vma lookups, which
+> > tcp_zerocopy_receive() uses provided user pointers for vma lookups, which
 > > can only by done with untagged pointers.
 > >
 > > Untag user pointers in this function.
 > >
 > > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 > > ---
-> >  kernel/trace/trace_output.c |  5 +++--
-> >  p                           | 45 +++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 48 insertions(+), 2 deletions(-)
-> >  create mode 100644 p
+> >  net/ipv4/tcp.c | 2 ++
+> >  1 file changed, 2 insertions(+)
 > >
-> > diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-> > index 54373d93e251..6376bee93c84 100644
-> > --- a/kernel/trace/trace_output.c
-> > +++ b/kernel/trace/trace_output.c
-> > @@ -370,6 +370,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
-> >  {
-> >       struct file *file = NULL;
-> >       unsigned long vmstart = 0;
-> > +     unsigned long untagged_ip = untagged_addr(ip);
-> >       int ret = 1;
+> > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> > index 6baa6dc1b13b..89db3b4fc753 100644
+> > --- a/net/ipv4/tcp.c
+> > +++ b/net/ipv4/tcp.c
+> > @@ -1758,6 +1758,8 @@ static int tcp_zerocopy_receive(struct sock *sk,
+> >       int inq;
+> >       int ret;
 > >
-> >       if (s->full)
-> > @@ -379,7 +380,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
-> >               const struct vm_area_struct *vma;
-> >
-> >               down_read(&mm->mmap_sem);
-> > -             vma = find_vma(mm, ip);
-> > +             vma = find_vma(mm, untagged_ip);
-> >               if (vma) {
-> >                       file = vma->vm_file;
-> >                       vmstart = vma->vm_start;
-> > @@ -388,7 +389,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
-> >                       ret = trace_seq_path(s, &file->f_path);
-> >                       if (ret)
-> >                               trace_seq_printf(s, "[+0x%lx]",
-> > -                                              ip - vmstart);
-> > +                                              untagged_ip - vmstart);
-> >               }
-> >               up_read(&mm->mmap_sem);
-> >       }
-> > diff --git a/p b/p
-> > new file mode 100644
-> > index 000000000000..9d6fa5386e55
-> > --- /dev/null
-> > +++ b/p
-> > @@ -0,0 +1,45 @@
-> > +commit 1fa6fadf644859e8a6a8ecce258444b49be8c7ee
-> > +Author: Andrey Konovalov <andreyknvl at google.com>
-> > +Date:   Mon Mar 4 17:20:32 2019 +0100
+> > +     address = untagged_addr(address);
 > > +
-> > +    kasan: fix coccinelle warnings in kasan_p*_table
-> > +
-> > +    kasan_p4d_table, kasan_pmd_table and kasan_pud_table are declared as
-> > +    returning bool, but return 0 instead of false, which produces a coccinelle
-> > +    warning. Fix it.
-> > +
-> > +    Fixes: 0207df4fa1a8 ("kernel/memremap, kasan: make ZONE_DEVICE with work with KASAN")
-> > +    Reported-by: kbuild test robot <lkp at intel.com>
-> > +    Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+> >       if (address & (PAGE_SIZE - 1) || address != zc->address)
 >
-> Did you mean to append this commit to this patch?
+> The second test will fail, if the top bits are changed in address but not in zc->address
 
-No, did it by mistake. Will remove in v12, thanks for noticing!
+Will fix in v12, thanks Eric!
 
 >
-> -- Steve
->
-> > +
-> > +diff --git a/mm/kasan/init.c b/mm/kasan/init.c
-> > +index 45a1b5e38e1e..fcaa1ca03175 100644
-> > +--- a/mm/kasan/init.c
-> > ++++ b/mm/kasan/init.c
-> > +@@ -42,7 +42,7 @@ static inline bool kasan_p4d_table(pgd_t pgd)
-> > + #else
-> > + static inline bool kasan_p4d_table(pgd_t pgd)
-> > + {
-> > +-    return 0;
-> > ++    return false;
-> > + }
-> > + #endif
-> > + #if CONFIG_PGTABLE_LEVELS > 3
-> > +@@ -54,7 +54,7 @@ static inline bool kasan_pud_table(p4d_t p4d)
-> > + #else
-> > + static inline bool kasan_pud_table(p4d_t p4d)
-> > + {
-> > +-    return 0;
-> > ++    return false;
-> > + }
-> > + #endif
-> > + #if CONFIG_PGTABLE_LEVELS > 2
-> > +@@ -66,7 +66,7 @@ static inline bool kasan_pmd_table(pud_t pud)
-> > + #else
-> > + static inline bool kasan_pmd_table(pud_t pud)
-> > + {
-> > +-    return 0;
-> > ++    return false;
-> > + }
-> > + #endif
-> > + pte_t kasan_early_shadow_pte[PTRS_PER_PTE] __page_aligned_bss;
+> >               return -EINVAL;
+> >
+> >
 >
