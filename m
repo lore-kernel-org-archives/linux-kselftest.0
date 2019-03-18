@@ -1,149 +1,175 @@
 From: vincenzo.frascino at arm.com (Vincenzo Frascino)
-Date: Mon, 18 Mar 2019 16:35:29 +0000
-Subject: [PATCH v2 0/4] arm64 relaxed ABI
-In-Reply-To: <cover.1552679409.git.andreyknvl@google.com>
+Date: Mon, 18 Mar 2019 16:35:31 +0000
+Subject: [PATCH v2 2/4] arm64: Define Documentation/arm64/elf_at_flags.txt
+In-Reply-To: <20190318163533.26838-1-vincenzo.frascino@arm.com>
 References: <cover.1552679409.git.andreyknvl@google.com>
-Message-ID: <20190318163533.26838-1-vincenzo.frascino@arm.com>
+ <20190318163533.26838-1-vincenzo.frascino@arm.com>
+Message-ID: <20190318163533.26838-3-vincenzo.frascino@arm.com>
 
-On arm64 the TCR_EL1.TBI0 bit has been always enabled in the Linux
-kernel hence the userspace (EL0) is allowed to set a non-zero value
-in the top byte but the resulting pointers are not allowed at the
+On arm64 the TCR_EL1.TBI0 bit has been always enabled hence
+the userspace (EL0) is allowed to set a non-zero value in the
+top byte but the resulting pointers are not allowed at the
 user-kernel syscall ABI boundary.
 
-This patchset proposes a relaxation of the ABI and a mechanism to
-advertise it to the userspace via an AT_FLAGS.
+With the relaxed ABI proposed through this document, it is now possible
+to pass tagged pointers to the syscalls, when these pointers are in
+memory ranges obtained by an anonymous (MAP_ANONYMOUS) mmap() or brk().
 
-The rationale behind the choice of AT_FLAGS is that the Unix System V
-ABI defines AT_FLAGS as "flags", leaving some degree of freedom in
-interpretation.
-There are two previous attempts of using AT_FLAGS in the Linux Kernel
-for different reasons: the first was more generic and was used to expose
-the support for the GNU STACK NX feature [1] and the second was done for
-the MIPS architecture and was used to expose the support of "MIPS ABI
-Extension for IEEE Std 754 Non-Compliant Interlinking" [2].
-Both the changes are currently _not_ merged in mainline.
-The only architecture that reserves some of the bits in AT_FLAGS is
-currently MIPS, which introduced the concept of platform specific ABI
-(psABI) reserving the top-byte [3].
+This change in the ABI requires a mechanism to inform the userspace
+that such an option is available.
 
-When ARM64_AT_FLAGS_SYSCALL_TBI is set the kernel is advertising
-to the userspace that a relaxed ABI is supported hence this type
-of pointers are now allowed to be passed to the syscalls when they are
-in memory ranges obtained by anonymous mmap() or brk().
+Specify and document the way in which AT_FLAGS can be used to advertise
+this feature to the userspace.
 
-The userspace _must_ verify that the flag is set before passing tagged
-pointers to the syscalls allowed by this relaxation.
-
-More in general, exposing the ARM64_AT_FLAGS_SYSCALL_TBI flag and mandating
-to the software to check that the feature is present, before using the
-associated functionality, it provides a degree of control on the decision
-of disabling such a feature in future without consequently breaking the
-userspace.
-
-The change required a modification of the elf common code, because in Linux
-the AT_FLAGS are currently set to zero by default by the kernel.
-
-The newly added flag has been verified on arm64 using the code below.
-#include <stdio.h>
-#include <stdbool.h>
-#include <sys/auxv.h>
-
-#define ARM64_AT_FLAGS_SYSCALL_TBI     (1 << 0)
-
-bool arm64_syscall_tbi_is_present(void)
-{
-        unsigned long at_flags = getauxval(AT_FLAGS);
-        if (at_flags & ARM64_AT_FLAGS_SYSCALL_TBI)
-                return true;
-
-        return false;
-}
-
-void main()
-{
-        if (arm64_syscall_tbi_is_present())
-                printf("ARM64_AT_FLAGS_SYSCALL_TBI is present\n");
-}
-
-This patchset should be merged together with [4].
-
-[1] https://patchwork.ozlabs.org/patch/579578/
-[2] https://lore.kernel.org/patchwork/cover/618280/
-[3] ftp://www.linux-mips.org/pub/linux/mips/doc/ABI/psABI_mips3.0.pdf
-[4] https://patchwork.kernel.org/cover/10674351/
-
-ABI References:
----------------
-Sco SysV ABI: http://www.sco.com/developers/gabi/2003-12-17/contents.html
-PowerPC AUXV: http://openpowerfoundation.org/wp-content/uploads/resources/leabi/content/dbdoclet.50655242_98651.html
-AMD64 ABI: https://www.cs.tufts.edu/comp/40-2012f/readings/amd64-abi.pdf
-x86 ABI: https://www.uclibc.org/docs/psABI-i386.pdf
-MIPS ABI: ftp://www.linux-mips.org/pub/linux/mips/doc/ABI/psABI_mips3.0.pdf
-ARM ABI: http://infocenter.arm.com/help/topic/com.arm.doc.ihi0044f/IHI0044F_aaelf.pdf
-SPARC ABI: http://math-atlas.sourceforge.net/devel/assembly/abi_sysV_sparc.pdf
-
-CC: Alexander Viro <viro at zeniv.linux.org.uk>
-Cc: Alexei Starovoitov <ast at kernel.org>
-Cc: Andrew Morton <akpm at linux-foundation.org>
-Cc: Andrey Konovalov <andreyknvl at google.com>
-Cc: Arnaldo Carvalho de Melo <acme at kernel.org>
-Cc: Branislav Rankov <Branislav.Rankov at arm.com>
 Cc: Catalin Marinas <catalin.marinas at arm.com>
-Cc: Chintan Pandya <cpandya at codeaurora.org>
-Cc: Daniel Borkmann <daniel at iogearbox.net>
-Cc: Dave Martin <Dave.Martin at arm.com>
-Cc: "David S. Miller" <davem at davemloft.net>
-Cc: Dmitry Vyukov <dvyukov at google.com>
-Cc: Eric Dumazet <edumazet at google.com>
-Cc: Evgeniy Stepanov <eugenis at google.com>
-Cc: Graeme Barnes <Graeme.Barnes at arm.com>
-Cc: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
-Cc: Ingo Molnar <mingo at kernel.org>
-Cc: Jacob Bramley <Jacob.Bramley at arm.com>
-Cc: Kate Stewart <kstewart at linuxfoundation.org>
-Cc: Kees Cook <keescook at chromium.org>
-Cc: Kevin Brodsky <kevin.brodsky at arm.com>
-Cc: "Kirill A . Shutemov" <kirill.shutemov at linux.intel.com>
-Cc: Kostya Serebryany <kcc at google.com>
-Cc: Lee Smith <Lee.Smith at arm.com>
-Cc: Luc Van Oostenryck <luc.vanoostenryck at gmail.com>
-Cc: Mark Rutland <mark.rutland at arm.com>
-Cc: Peter Zijlstra <peterz at infradead.org>
-Cc: Ramana Radhakrishnan <Ramana.Radhakrishnan at arm.com>
-Cc: Robin Murphy <robin.murphy at arm.com>
-Cc: Ruben Ayrapetyan <Ruben.Ayrapetyan at arm.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Steven Rostedt <rostedt at goodmis.org>
-Cc: Szabolcs Nagy <Szabolcs.Nagy at arm.com>
 Cc: Will Deacon <will.deacon at arm.com>
+CC: Andrey Konovalov <andreyknvl at google.com>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
 
-Changes:
---------
-v2:
-  - Rebased on 5.1-rc1
-  - Addressed review comments
-  - Modified tagged-pointers.txt to be compliant with the
-    new ABI relaxation
-
-Vincenzo Frascino (4):
-  elf: Make AT_FLAGS arch configurable
-  arm64: Define Documentation/arm64/elf_at_flags.txt
-  arm64: Relax Documentation/arm64/tagged-pointers.txt
-  arm64: elf: Advertise relaxed ABI
-
- Documentation/arm64/elf_at_flags.txt    | 133 ++++++++++++++++++++++++
- Documentation/arm64/tagged-pointers.txt |  23 ++--
- arch/arm64/include/asm/atflags.h        |   7 ++
- arch/arm64/include/asm/elf.h            |   5 +
- arch/arm64/include/uapi/asm/atflags.h   |   8 ++
- fs/binfmt_elf.c                         |   6 +-
- fs/binfmt_elf_fdpic.c                   |   6 +-
- fs/compat_binfmt_elf.c                  |   5 +
- 8 files changed, 184 insertions(+), 9 deletions(-)
+Squash with "arm64: Define Documentation/arm64/elf_at_flags.txt"
+---
+ Documentation/arm64/elf_at_flags.txt | 133 +++++++++++++++++++++++++++
+ 1 file changed, 133 insertions(+)
  create mode 100644 Documentation/arm64/elf_at_flags.txt
- create mode 100644 arch/arm64/include/asm/atflags.h
- create mode 100644 arch/arm64/include/uapi/asm/atflags.h
 
+diff --git a/Documentation/arm64/elf_at_flags.txt b/Documentation/arm64/elf_at_flags.txt
+new file mode 100644
+index 000000000000..9b3494207c14
+--- /dev/null
++++ b/Documentation/arm64/elf_at_flags.txt
+@@ -0,0 +1,133 @@
++ARM64 ELF AT_FLAGS
++==================
++
++This document describes the usage and semantics of AT_FLAGS on arm64.
++
++1. Introduction
++---------------
++
++AT_FLAGS is part of the Auxiliary Vector, contains the flags and it
++is set to zero by the kernel on arm64 unless one or more of the
++features detailed in paragraph 2 are present.
++
++The auxiliary vector can be accessed by the userspace using the
++getauxval() API provided by the C library.
++getauxval() returns an unsigned long and when a flag is present in
++the AT_FLAGS, the corresponding bit in the returned value is set to 1.
++
++The AT_FLAGS with a "defined semantics" on arm64 are exposed to the
++userspace via user API (uapi/asm/atflags.h).
++The AT_FLAGS bits with "undefined semantics" are set to zero by default.
++This means that the AT_FLAGS bits to which this document does not assign
++an explicit meaning are to be intended reserved for future use.
++The kernel will populate all such bits with zero until meanings are
++assigned to them. If and when meanings are assigned, it is guaranteed
++that they will not impact the functional operation of existing userspace
++software. Userspace software should ignore any AT_FLAGS bit whose meaning
++is not defined when the software is written.
++
++The userspace software can test for features by acquiring the AT_FLAGS
++entry of the auxiliary vector, and testing whether a relevant flag
++is set.
++
++Example of a userspace test function:
++
++bool feature_x_is_present(void)
++{
++	unsigned long at_flags = getauxval(AT_FLAGS);
++	if (at_flags & FEATURE_X)
++		return true;
++
++	return false;
++}
++
++Where the software relies on a feature advertised by AT_FLAGS, it
++must check that the feature is present before attempting to
++use it.
++
++2. Features exposed via AT_FLAGS
++--------------------------------
++
++bit[0]: ARM64_AT_FLAGS_SYSCALL_TBI
++
++    On arm64 the TCR_EL1.TBI0 bit has been always enabled on the arm64
++    kernel, hence the userspace (EL0) is allowed to set a non-zero value
++    in the top byte but the resulting pointers are not allowed at the
++    user-kernel syscall ABI boundary.
++    When bit[0] is set to 1 the kernel is advertising to the userspace
++    that a relaxed ABI is supported hence this type of pointers are now
++    allowed to be passed to the syscalls, when these pointers are in
++    memory ranges privately owned by a process and obtained by the
++    process in accordance with the definition of "valid tagged pointer"
++    in paragraph 3.
++    In these cases the tag is preserved as the pointer goes through the
++    kernel. Only when the kernel needs to check if a pointer is coming
++    from userspace an untag operation is required.
++
++3. ARM64_AT_FLAGS_SYSCALL_TBI
++-----------------------------
++
++From the kernel syscall interface prospective, we define, for the purposes
++of this document, a "valid tagged pointer" as a pointer that either it has
++a zero value set in the top byte or it has a non-zero value, it is in memory
++ranges privately owned by a userspace process and it is obtained in one of
++the following ways:
++  - mmap() done by the process itself, where either:
++    * flags = MAP_PRIVATE | MAP_ANONYMOUS
++    * flags = MAP_PRIVATE and the file descriptor refers to a regular
++      file or "/dev/zero"
++  - a mapping below sbrk(0) done by the process itself
++  - any memory mapped by the kernel in the process's address space during
++    creation and following the restrictions presented above (i.e. data, bss,
++    stack).
++
++When the ARM64_AT_FLAGS_SYSCALL_TBI flag is set by the kernel, the following
++behaviours are guaranteed by the ABI:
++
++  - Every current or newly introduced syscall can accept any valid tagged
++    pointers.
++
++  - If a non valid tagged pointer is passed to a syscall then the behaviour
++    is undefined.
++
++  - Every valid tagged pointer is expected to work as an untagged one.
++
++  - The kernel preserves any valid tagged pointers and returns them to the
++    userspace unchanged in all the cases except the ones documented in the
++    "Preserving tags" paragraph of tagged-pointers.txt.
++
++A definition of the meaning of tagged pointers on arm64 can be found in:
++Documentation/arm64/tagged-pointers.txt.
++
++Example of correct usage (pseudo-code) for a userspace application:
++
++bool arm64_syscall_tbi_is_present(void)
++{
++	unsigned long at_flags = getauxval(AT_FLAGS);
++	if (at_flags & ARM64_AT_FLAGS_SYSCALL_TBI)
++			return true;
++
++	return false;
++}
++
++void main(void)
++{
++	char *addr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE,
++			  MAP_ANONYMOUS, -1, 0);
++
++	int fd = open("test.txt", O_WRONLY);
++
++	/* Check if the relaxed ABI is supported */
++	if (arm64_syscall_tbi_is_present()) {
++		/* Add a tag to the pointer */
++		addr = tag_pointer(addr);
++	}
++
++	strcpy("Hello World\n", addr);
++
++	/* Write to a file */
++	write(fd, addr, sizeof(addr));
++
++	close(fd);
++}
++
 -- 
 2.21.0
