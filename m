@@ -1,66 +1,59 @@
-From: kevin.brodsky at arm.com (Kevin Brodsky)
-Date: Mon, 18 Mar 2019 11:47:15 +0000
-Subject: [PATCH v11 09/14] kernel, arm64: untag user pointers in
- prctl_set_mm*
-In-Reply-To: <c4d65de9867cb3349af6800242da0de751260c6c.1552679409.git.andreyknvl@google.com>
-References: <cover.1552679409.git.andreyknvl@google.com>
- <c4d65de9867cb3349af6800242da0de751260c6c.1552679409.git.andreyknvl@google.com>
-Message-ID: <96675b72-d325-0682-4864-b6a96f63f8fd@arm.com>
+From: naresh.kamboju at linaro.org (Naresh Kamboju)
+Date: Mon, 18 Mar 2019 18:31:53 +0530
+Subject: selftests: bpf: test_align Failed to find match 1:
+ R1=ctx(id=0,off=0,imm=0) func#0 @0
+Message-ID: <CA+G9fYuNFJSjH39P71UfZTE4SPGsT4AM2Eg_k++B61ck86k42w@mail.gmail.com>
 
-On 15/03/2019 19:51, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
->
-> prctl_set_mm() and prctl_set_mm_map() use provided user pointers for vma
-> lookups, which can only by done with untagged pointers.
->
-> Untag user pointers in these functions.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
-> ---
->   kernel/sys.c | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
->
-> diff --git a/kernel/sys.c b/kernel/sys.c
-> index 12df0e5434b8..8e56d87cc6db 100644
-> --- a/kernel/sys.c
-> +++ b/kernel/sys.c
-> @@ -1993,6 +1993,18 @@ static int prctl_set_mm_map(int opt, const void __user *addr, unsigned long data
->   	if (copy_from_user(&prctl_map, addr, sizeof(prctl_map)))
->   		return -EFAULT;
->   
-> +	prctl_map->start_code	= untagged_addr(prctl_map.start_code);
-> +	prctl_map->end_code	= untagged_addr(prctl_map.end_code);
-> +	prctl_map->start_data	= untagged_addr(prctl_map.start_data);
-> +	prctl_map->end_data	= untagged_addr(prctl_map.end_data);
-> +	prctl_map->start_brk	= untagged_addr(prctl_map.start_brk);
-> +	prctl_map->brk		= untagged_addr(prctl_map.brk);
-> +	prctl_map->start_stack	= untagged_addr(prctl_map.start_stack);
-> +	prctl_map->arg_start	= untagged_addr(prctl_map.arg_start);
-> +	prctl_map->arg_end	= untagged_addr(prctl_map.arg_end);
-> +	prctl_map->env_start	= untagged_addr(prctl_map.env_start);
-> +	prctl_map->env_end	= untagged_addr(prctl_map.env_end);
+selftests: bpf: test_align failed on all devices ( arm64, armv7,
+x86_64 and i386) running Linux -next kernel 5.1.0-rc1 tag:
+next-20190318.
 
-As the buildbot suggests, those -> should be . instead :) You might want to check 
-your local build with CONFIG_CHECKPOINT_RESTORE=y.
+Here is the log from arm64,
 
-> +
->   	error = validate_prctl_map(&prctl_map);
->   	if (error)
->   		return error;
-> @@ -2106,6 +2118,8 @@ static int prctl_set_mm(int opt, unsigned long addr,
->   			      opt != PR_SET_MM_MAP_SIZE)))
->   		return -EINVAL;
->   
-> +	addr = untagged_addr(addr);
+selftests: bpf: test_align
+Test   0: mov ... Failed to find match 1: R1=ctx(id=0,off=0,imm=0)
+func#0 @0
+0: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R10=fp0,call_-1
+0: (b7) r3 = 2
+1: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv2 R10=fp0,call_-1
+1: (b7) r3 = 4
+2: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv4 R10=fp0,call_-1
+2: (b7) r3 = 8
+3: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv8 R10=fp0,call_-1
+3: (b7) r3 = 16
+4: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv16 R10=fp0,call_-1
+4: (b7) r3 = 32
+5: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv32 R10=fp0,call_-1
+5: (b7) r0 = 0
+6: R0_w=inv0 R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv32 R10=fp0,call_-1
+6: (95) exit
+processed 7 insns (limit 131072), stack depth 0
+FAIL
+Test   1: shift ... Failed to find match 1: R1=ctx(id=0,off=0,imm=0)
+func#0 @0
+...
+processed 6 insns (limit 131072), stack depth 0
+FAIL
+...
+processed 22 insns (limit 131072), stack depth 0
+FAIL
+Results: 0 pass 12 fail
+not ok 1..7 selftests: bpf: test_align [FAIL]
+selftests: bpf_test_align [FAIL]
 
-This is a bit too coarse, addr is indeed used for find_vma() later on, but it is also 
-used to access memory, by prctl_set_mm_mmap() and prctl_set_auxv().
+Test results comparison,
+https://qa-reports.linaro.org/lkft/linux-next-oe/tests/kselftest/bpf_test_align
 
-Kevin
+Test complete log (  and you might notice large number of bpf test failure)
+https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190318/testrun/644906/log
 
-> +
->   #ifdef CONFIG_CHECKPOINT_RESTORE
->   	if (opt == PR_SET_MM_MAP || opt == PR_SET_MM_MAP_SIZE)
->   		return prctl_set_mm_map(opt, (const void __user *)addr, arg4);
+Good linux -next tag: next-20190306
+Bad linux -next tag: next-20190318
+git branch     master
+git commit    b9998194591467dc562c23ecefb63af4eff7530b
+git describe  next-20190318
+git repo
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+Best regards
+Naresh Kamboju
