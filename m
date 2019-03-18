@@ -1,59 +1,121 @@
-From: naresh.kamboju at linaro.org (Naresh Kamboju)
-Date: Mon, 18 Mar 2019 18:31:53 +0530
-Subject: selftests: bpf: test_align Failed to find match 1:
- R1=ctx(id=0,off=0,imm=0) func#0 @0
-Message-ID: <CA+G9fYuNFJSjH39P71UfZTE4SPGsT4AM2Eg_k++B61ck86k42w@mail.gmail.com>
+From: andreyknvl at google.com (Andrey Konovalov)
+Date: Mon, 18 Mar 2019 14:11:48 +0100
+Subject: [PATCH v11 10/14] tracing,
+ arm64: untag user pointers in seq_print_user_ip
+In-Reply-To: <20190315161414.4b31fb03@gandalf.local.home>
+References: <cover.1552679409.git.andreyknvl@google.com>
+ <355e7c0dadaa2bb79d22e0b7aac7e4efc1114d49.1552679409.git.andreyknvl@google.com>
+ <20190315161414.4b31fb03@gandalf.local.home>
+Message-ID: <CAAeHK+w5L+yD-9c94vgX3KcQuzyaKhoDemgGcZ8SJWpc7GhE9g@mail.gmail.com>
 
-selftests: bpf: test_align failed on all devices ( arm64, armv7,
-x86_64 and i386) running Linux -next kernel 5.1.0-rc1 tag:
-next-20190318.
+On Fri, Mar 15, 2019 at 9:14 PM Steven Rostedt <rostedt at goodmis.org> wrote:
+>
+> On Fri, 15 Mar 2019 20:51:34 +0100
+> Andrey Konovalov <andreyknvl at google.com> wrote:
+>
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > seq_print_user_ip() uses provided user pointers for vma lookups, which
+> > can only by done with untagged pointers.
+> >
+> > Untag user pointers in this function.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+> > ---
+> >  kernel/trace/trace_output.c |  5 +++--
+> >  p                           | 45 +++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 48 insertions(+), 2 deletions(-)
+> >  create mode 100644 p
+> >
+> > diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+> > index 54373d93e251..6376bee93c84 100644
+> > --- a/kernel/trace/trace_output.c
+> > +++ b/kernel/trace/trace_output.c
+> > @@ -370,6 +370,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
+> >  {
+> >       struct file *file = NULL;
+> >       unsigned long vmstart = 0;
+> > +     unsigned long untagged_ip = untagged_addr(ip);
+> >       int ret = 1;
+> >
+> >       if (s->full)
+> > @@ -379,7 +380,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
+> >               const struct vm_area_struct *vma;
+> >
+> >               down_read(&mm->mmap_sem);
+> > -             vma = find_vma(mm, ip);
+> > +             vma = find_vma(mm, untagged_ip);
+> >               if (vma) {
+> >                       file = vma->vm_file;
+> >                       vmstart = vma->vm_start;
+> > @@ -388,7 +389,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
+> >                       ret = trace_seq_path(s, &file->f_path);
+> >                       if (ret)
+> >                               trace_seq_printf(s, "[+0x%lx]",
+> > -                                              ip - vmstart);
+> > +                                              untagged_ip - vmstart);
+> >               }
+> >               up_read(&mm->mmap_sem);
+> >       }
+> > diff --git a/p b/p
+> > new file mode 100644
+> > index 000000000000..9d6fa5386e55
+> > --- /dev/null
+> > +++ b/p
+> > @@ -0,0 +1,45 @@
+> > +commit 1fa6fadf644859e8a6a8ecce258444b49be8c7ee
+> > +Author: Andrey Konovalov <andreyknvl at google.com>
+> > +Date:   Mon Mar 4 17:20:32 2019 +0100
+> > +
+> > +    kasan: fix coccinelle warnings in kasan_p*_table
+> > +
+> > +    kasan_p4d_table, kasan_pmd_table and kasan_pud_table are declared as
+> > +    returning bool, but return 0 instead of false, which produces a coccinelle
+> > +    warning. Fix it.
+> > +
+> > +    Fixes: 0207df4fa1a8 ("kernel/memremap, kasan: make ZONE_DEVICE with work with KASAN")
+> > +    Reported-by: kbuild test robot <lkp at intel.com>
+> > +    Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+>
+> Did you mean to append this commit to this patch?
 
-Here is the log from arm64,
+No, did it by mistake. Will remove in v12, thanks for noticing!
 
-selftests: bpf: test_align
-Test   0: mov ... Failed to find match 1: R1=ctx(id=0,off=0,imm=0)
-func#0 @0
-0: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R10=fp0,call_-1
-0: (b7) r3 = 2
-1: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv2 R10=fp0,call_-1
-1: (b7) r3 = 4
-2: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv4 R10=fp0,call_-1
-2: (b7) r3 = 8
-3: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv8 R10=fp0,call_-1
-3: (b7) r3 = 16
-4: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv16 R10=fp0,call_-1
-4: (b7) r3 = 32
-5: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv32 R10=fp0,call_-1
-5: (b7) r0 = 0
-6: R0_w=inv0 R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv32 R10=fp0,call_-1
-6: (95) exit
-processed 7 insns (limit 131072), stack depth 0
-FAIL
-Test   1: shift ... Failed to find match 1: R1=ctx(id=0,off=0,imm=0)
-func#0 @0
-...
-processed 6 insns (limit 131072), stack depth 0
-FAIL
-...
-processed 22 insns (limit 131072), stack depth 0
-FAIL
-Results: 0 pass 12 fail
-not ok 1..7 selftests: bpf: test_align [FAIL]
-selftests: bpf_test_align [FAIL]
-
-Test results comparison,
-https://qa-reports.linaro.org/lkft/linux-next-oe/tests/kselftest/bpf_test_align
-
-Test complete log (  and you might notice large number of bpf test failure)
-https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190318/testrun/644906/log
-
-Good linux -next tag: next-20190306
-Bad linux -next tag: next-20190318
-git branch     master
-git commit    b9998194591467dc562c23ecefb63af4eff7530b
-git describe  next-20190318
-git repo
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-
-Best regards
-Naresh Kamboju
+>
+> -- Steve
+>
+> > +
+> > +diff --git a/mm/kasan/init.c b/mm/kasan/init.c
+> > +index 45a1b5e38e1e..fcaa1ca03175 100644
+> > +--- a/mm/kasan/init.c
+> > ++++ b/mm/kasan/init.c
+> > +@@ -42,7 +42,7 @@ static inline bool kasan_p4d_table(pgd_t pgd)
+> > + #else
+> > + static inline bool kasan_p4d_table(pgd_t pgd)
+> > + {
+> > +-    return 0;
+> > ++    return false;
+> > + }
+> > + #endif
+> > + #if CONFIG_PGTABLE_LEVELS > 3
+> > +@@ -54,7 +54,7 @@ static inline bool kasan_pud_table(p4d_t p4d)
+> > + #else
+> > + static inline bool kasan_pud_table(p4d_t p4d)
+> > + {
+> > +-    return 0;
+> > ++    return false;
+> > + }
+> > + #endif
+> > + #if CONFIG_PGTABLE_LEVELS > 2
+> > +@@ -66,7 +66,7 @@ static inline bool kasan_pmd_table(pud_t pud)
+> > + #else
+> > + static inline bool kasan_pmd_table(pud_t pud)
+> > + {
+> > +-    return 0;
+> > ++    return false;
+> > + }
+> > + #endif
+> > + pte_t kasan_early_shadow_pte[PTRS_PER_PTE] __page_aligned_bss;
+>
