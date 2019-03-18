@@ -1,68 +1,92 @@
-From: ys114321 at gmail.com (Y Song)
-Date: Mon, 18 Mar 2019 09:26:48 -0700
-Subject: selftests: bpf: test_align Failed to find match 1:
- R1=ctx(id=0,off=0,imm=0) func#0 @0
-In-Reply-To: <CA+G9fYuNFJSjH39P71UfZTE4SPGsT4AM2Eg_k++B61ck86k42w@mail.gmail.com>
-References: <CA+G9fYuNFJSjH39P71UfZTE4SPGsT4AM2Eg_k++B61ck86k42w@mail.gmail.com>
-Message-ID: <CAH3MdRUMv6wQikBRE4KkAmRZ1wS9cQYxT_QcW-=wqfR+YfunmA@mail.gmail.com>
+From: vincenzo.frascino at arm.com (Vincenzo Frascino)
+Date: Mon, 18 Mar 2019 16:35:30 +0000
+Subject: [PATCH v2 1/4] elf: Make AT_FLAGS arch configurable
+In-Reply-To: <20190318163533.26838-1-vincenzo.frascino@arm.com>
+References: <cover.1552679409.git.andreyknvl@google.com>
+ <20190318163533.26838-1-vincenzo.frascino@arm.com>
+Message-ID: <20190318163533.26838-2-vincenzo.frascino@arm.com>
 
-On Mon, Mar 18, 2019 at 6:03 AM Naresh Kamboju
-<naresh.kamboju at linaro.org> wrote:
->
-> selftests: bpf: test_align failed on all devices ( arm64, armv7,
-> x86_64 and i386) running Linux -next kernel 5.1.0-rc1 tag:
-> next-20190318.
->
-> Here is the log from arm64,
->
-> selftests: bpf: test_align
-> Test   0: mov ... Failed to find match 1: R1=ctx(id=0,off=0,imm=0)
-> func#0 @0
-> 0: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R10=fp0,call_-1
-> 0: (b7) r3 = 2
-> 1: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv2 R10=fp0,call_-1
-> 1: (b7) r3 = 4
-> 2: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv4 R10=fp0,call_-1
-> 2: (b7) r3 = 8
-> 3: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv8 R10=fp0,call_-1
-> 3: (b7) r3 = 16
-> 4: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv16 R10=fp0,call_-1
-> 4: (b7) r3 = 32
-> 5: R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv32 R10=fp0,call_-1
-> 5: (b7) r0 = 0
-> 6: R0_w=inv0 R1=ctx(id=0 ref_obj_id=0,off=0,imm=0) R3_w=inv32 R10=fp0,call_-1
-> 6: (95) exit
-> processed 7 insns (limit 131072), stack depth 0
-> FAIL
-> Test   1: shift ... Failed to find match 1: R1=ctx(id=0,off=0,imm=0)
+Currently, the AT_FLAGS in the elf auxiliary vector are set to 0
+by default by the kernel.
+Some architectures might need to expose to the userspace a non-zero
+value to advertise some platform specific ABI functionalities.
 
-New dump has ref_obj_id=0, so maybe the test needs to be updated.
+Make AT_FLAGS configurable by the architectures that require it.
 
+Cc: Catalin Marinas <catalin.marinas at arm.com>
+Cc: Will Deacon <will.deacon at arm.com>
+CC: Andrey Konovalov <andreyknvl at google.com>
+CC: Alexander Viro <viro at zeniv.linux.org.uk>
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
+---
+ fs/binfmt_elf.c        | 6 +++++-
+ fs/binfmt_elf_fdpic.c  | 6 +++++-
+ fs/compat_binfmt_elf.c | 5 +++++
+ 3 files changed, 15 insertions(+), 2 deletions(-)
 
-> func#0 @0
-> ...
-> processed 6 insns (limit 131072), stack depth 0
-> FAIL
-> ...
-> processed 22 insns (limit 131072), stack depth 0
-> FAIL
-> Results: 0 pass 12 fail
-> not ok 1..7 selftests: bpf: test_align [FAIL]
-> selftests: bpf_test_align [FAIL]
->
-> Test results comparison,
-> https://qa-reports.linaro.org/lkft/linux-next-oe/tests/kselftest/bpf_test_align
->
-> Test complete log (  and you might notice large number of bpf test failure)
-> https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190318/testrun/644906/log
->
-> Good linux -next tag: next-20190306
-> Bad linux -next tag: next-20190318
-> git branch     master
-> git commit    b9998194591467dc562c23ecefb63af4eff7530b
-> git describe  next-20190318
-> git repo
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->
-> Best regards
-> Naresh Kamboju
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 7d09d125f148..f699a9ef5112 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -84,6 +84,10 @@ static int elf_core_dump(struct coredump_params *cprm);
+ #define ELF_CORE_EFLAGS	0
+ #endif
+ 
++#ifndef ELF_AT_FLAGS
++#define ELF_AT_FLAGS	0
++#endif
++
+ #define ELF_PAGESTART(_v) ((_v) & ~(unsigned long)(ELF_MIN_ALIGN-1))
+ #define ELF_PAGEOFFSET(_v) ((_v) & (ELF_MIN_ALIGN-1))
+ #define ELF_PAGEALIGN(_v) (((_v) + ELF_MIN_ALIGN - 1) & ~(ELF_MIN_ALIGN - 1))
+@@ -249,7 +253,7 @@ create_elf_tables(struct linux_binprm *bprm, struct elfhdr *exec,
+ 	NEW_AUX_ENT(AT_PHENT, sizeof(struct elf_phdr));
+ 	NEW_AUX_ENT(AT_PHNUM, exec->e_phnum);
+ 	NEW_AUX_ENT(AT_BASE, interp_load_addr);
+-	NEW_AUX_ENT(AT_FLAGS, 0);
++	NEW_AUX_ENT(AT_FLAGS, ELF_AT_FLAGS);
+ 	NEW_AUX_ENT(AT_ENTRY, exec->e_entry);
+ 	NEW_AUX_ENT(AT_UID, from_kuid_munged(cred->user_ns, cred->uid));
+ 	NEW_AUX_ENT(AT_EUID, from_kuid_munged(cred->user_ns, cred->euid));
+diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
+index b53bb3729ac1..cf1e680a6b88 100644
+--- a/fs/binfmt_elf_fdpic.c
++++ b/fs/binfmt_elf_fdpic.c
+@@ -82,6 +82,10 @@ static int elf_fdpic_map_file_by_direct_mmap(struct elf_fdpic_params *,
+ static int elf_fdpic_core_dump(struct coredump_params *cprm);
+ #endif
+ 
++#ifndef ELF_AT_FLAGS
++#define ELF_AT_FLAGS	0
++#endif
++
+ static struct linux_binfmt elf_fdpic_format = {
+ 	.module		= THIS_MODULE,
+ 	.load_binary	= load_elf_fdpic_binary,
+@@ -651,7 +655,7 @@ static int create_elf_fdpic_tables(struct linux_binprm *bprm,
+ 	NEW_AUX_ENT(AT_PHENT,	sizeof(struct elf_phdr));
+ 	NEW_AUX_ENT(AT_PHNUM,	exec_params->hdr.e_phnum);
+ 	NEW_AUX_ENT(AT_BASE,	interp_params->elfhdr_addr);
+-	NEW_AUX_ENT(AT_FLAGS,	0);
++	NEW_AUX_ENT(AT_FLAGS,	ELF_AT_FLAGS);
+ 	NEW_AUX_ENT(AT_ENTRY,	exec_params->entry_addr);
+ 	NEW_AUX_ENT(AT_UID,	(elf_addr_t) from_kuid_munged(cred->user_ns, cred->uid));
+ 	NEW_AUX_ENT(AT_EUID,	(elf_addr_t) from_kuid_munged(cred->user_ns, cred->euid));
+diff --git a/fs/compat_binfmt_elf.c b/fs/compat_binfmt_elf.c
+index 15f6e96b3bd9..a21cf99701ae 100644
+--- a/fs/compat_binfmt_elf.c
++++ b/fs/compat_binfmt_elf.c
+@@ -79,6 +79,11 @@
+ #define	ELF_HWCAP2		COMPAT_ELF_HWCAP2
+ #endif
+ 
++#ifdef	COMPAT_ELF_AT_FLAGS
++#undef	ELF_AT_FLAGS
++#define	ELF_AT_FLAGS		COMPAT_ELF_AT_FLAGS
++#endif
++
+ #ifdef	COMPAT_ARCH_DLINFO
+ #undef	ARCH_DLINFO
+ #define	ARCH_DLINFO		COMPAT_ARCH_DLINFO
+-- 
+2.21.0
