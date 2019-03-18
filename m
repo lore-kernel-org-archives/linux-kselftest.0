@@ -1,51 +1,47 @@
 From: andreyknvl at google.com (Andrey Konovalov)
-Date: Mon, 18 Mar 2019 18:17:40 +0100
-Subject: [PATCH v12 08/13] net,
- arm64: untag user pointers in tcp_zerocopy_receive
+Date: Mon, 18 Mar 2019 18:17:37 +0100
+Subject: [PATCH v12 05/13] mm, arm64: untag user pointers in mm/gup.c
 In-Reply-To: <cover.1552929301.git.andreyknvl@google.com>
 References: <cover.1552929301.git.andreyknvl@google.com>
-Message-ID: <80e79c47dc7c5ee3572034a1d69bb724fbed2ecb.1552929301.git.andreyknvl@google.com>
+Message-ID: <f46caf7bea6bdbb7e50f2abedc83df13d075735c.1552929301.git.andreyknvl@google.com>
 
 This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-tcp_zerocopy_receive() uses provided user pointers for vma lookups, which
-can only by done with untagged pointers.
+mm/gup.c provides a kernel interface that accepts user addresses and
+manipulates user pages directly (for example get_user_pages, that is used
+by the futex syscall). Since a user can provided tagged addresses, we need
+to handle this case.
 
-Untag user pointers in this function.
+Add untagging to gup.c functions that use user addresses for vma lookups.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- net/ipv4/tcp.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ mm/gup.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 6baa6dc1b13b..e76beb5ff1ff 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -1749,7 +1749,7 @@ EXPORT_SYMBOL(tcp_mmap);
- static int tcp_zerocopy_receive(struct sock *sk,
- 				struct tcp_zerocopy_receive *zc)
- {
--	unsigned long address = (unsigned long)zc->address;
-+	unsigned long address;
- 	const skb_frag_t *frags = NULL;
- 	u32 length = 0, seq, offset;
- 	struct vm_area_struct *vma;
-@@ -1758,7 +1758,12 @@ static int tcp_zerocopy_receive(struct sock *sk,
- 	int inq;
- 	int ret;
+diff --git a/mm/gup.c b/mm/gup.c
+index f84e22685aaa..3192741e0b3a 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -686,6 +686,8 @@ static long __get_user_pages(struct task_struct *tsk, struct mm_struct *mm,
+ 	if (!nr_pages)
+ 		return 0;
  
--	if (address & (PAGE_SIZE - 1) || address != zc->address)
-+	address = (unsigned long)untagged_addr(zc->address);
++	start = untagged_addr(start);
 +
-+	/* The second test in this if detects if the u64->unsigned long
-+	 * conversion had any truncated bits.
-+	 */
-+	if (address & (PAGE_SIZE - 1) || address != untagged_addr(zc->address))
- 		return -EINVAL;
+ 	VM_BUG_ON(!!pages != !!(gup_flags & FOLL_GET));
  
- 	if (sk->sk_state == TCP_LISTEN)
+ 	/*
+@@ -848,6 +850,8 @@ int fixup_user_fault(struct task_struct *tsk, struct mm_struct *mm,
+ 	struct vm_area_struct *vma;
+ 	vm_fault_t ret, major = 0;
+ 
++	address = untagged_addr(address);
++
+ 	if (unlocked)
+ 		fault_flags |= FAULT_FLAG_ALLOW_RETRY;
+ 
 -- 
 2.21.0.225.g810b269d1ac-goog
