@@ -1,106 +1,79 @@
-From: sdf@fomichev.me (Stanislav Fomichev)
-Date: Tue, 19 Mar 2019 09:01:15 -0700
-Subject: [PATCH] bpf, tests: tweak endianness selection
-In-Reply-To: <20190319023331.23207-1-sergey.senozhatsky@gmail.com>
-References: <20190319023331.23207-1-sergey.senozhatsky@gmail.com>
-Message-ID: <20190319160115.GD7431@mini-arch.hsd1.ca.comcast.net>
+From: andreyknvl@google.com (Andrey Konovalov)
+Date: Tue, 19 Mar 2019 17:14:47 +0100
+Subject: [PATCH v12 08/13] net,
+ arm64: untag user pointers in tcp_zerocopy_receive
+In-Reply-To: <CANn89iJ4SeccE79gKiv5RFqaouFV8shFA+0dCS8+2D_1aRq_Kw@mail.gmail.com>
+References: <cover.1552929301.git.andreyknvl@google.com>
+ <80e79c47dc7c5ee3572034a1d69bb724fbed2ecb.1552929301.git.andreyknvl@google.com>
+ <CANn89iJ4SeccE79gKiv5RFqaouFV8shFA+0dCS8+2D_1aRq_Kw@mail.gmail.com>
+Message-ID:
+ <CAAeHK+xi4-6pgDYG8ypM8NsbhgncpsxgJeEXL1-BpkARXONvEQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190319160115.AxByIqGHf4tqURG0YTTKoPicqEzCqcEMcEgfn0wy8VQ@z>
+Message-ID: <20190319161447.Q9EAZN04RQoXW5eYCLUc6lFZ2W20q45HEI56F6RGOHs@z>
 
-On 03/19, Sergey Senozhatsky wrote:
-> Not all compilers have __builtin_bswap16() and __builtin_bswap32(),
-> thus not all compilers are able to compile the following code
-> (bpf_htons):
-> 
-> 	(__builtin_constant_p(x) ? \
-> 	 	___constant_swab16(x) : __builtin_bswap16(x))
-> 
-> That's why, for instance, bpf_htons() doesn't work on GCC < 4.8:
-> 
-> 	error: implicit declaration of function '__builtin_bswap16'
-> 
-> We can use __builtin_bswap16() only if compiler has this built-in,
-> that is, only if __HAVE_BUILTIN_BSWAP16__ is defined. Standard UAPI
-> __swab16()/__swab32() take care of that, and, additionally, handle
-> __builtin_constant_p() cases as well (if compiler doesn't provide
-> builtin bswap with constants folding):
-> 
->  #ifdef __HAVE_BUILTIN_BSWAP16__
->  #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
->  #else
->  #define __swab16(x)                             \
->          (__builtin_constant_p((__u16)(x)) ?     \
->          ___constant_swab16(x) :                 \
->          __fswab16(x))
->  #endif
-> 
-> So we can tweak selftests/bpf/bpf_endian.h and use UAPI
-> __swab16()/__swab32().
-> 
-> Signed-off-by: Sergey Senozhatsky <sergey.senozhatsky at gmail.com>
-> ---
->  tools/testing/selftests/bpf/bpf_endian.h | 37 +++++-------------------
->  1 file changed, 8 insertions(+), 29 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/bpf_endian.h b/tools/testing/selftests/bpf/bpf_endian.h
-> index b25595ea4a78..ba06222963d5 100644
-> --- a/tools/testing/selftests/bpf/bpf_endian.h
-> +++ b/tools/testing/selftests/bpf/bpf_endian.h
-> @@ -20,38 +20,17 @@
->   * use different targets.
->   */
->  #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-> -# define __bpf_ntohs(x)			__builtin_bswap16(x)
-> -# define __bpf_htons(x)			__builtin_bswap16(x)
-> -# define __bpf_constant_ntohs(x)	___constant_swab16(x)
-> -# define __bpf_constant_htons(x)	___constant_swab16(x)
-This breaks the build until your next patch is applied (in other
-words, breaks bisection). Can we do it in three steps?
-Convert to swab (without breaking existing tests), convert the tests,
-remove unused __bpf_xyz defines?
+On Mon, Mar 18, 2019@6:35 PM Eric Dumazet <edumazet@google.com> wrote:
+>
+> On Mon, Mar 18, 2019@10:18 AM Andrey Konovalov <andreyknvl@google.com> wrote:
+> >
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > tcp_zerocopy_receive() uses provided user pointers for vma lookups, which
+> > can only by done with untagged pointers.
+> >
+> > Untag user pointers in this function.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+> > ---
+> >  net/ipv4/tcp.c | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> > index 6baa6dc1b13b..e76beb5ff1ff 100644
+> > --- a/net/ipv4/tcp.c
+> > +++ b/net/ipv4/tcp.c
+> > @@ -1749,7 +1749,7 @@ EXPORT_SYMBOL(tcp_mmap);
+> >  static int tcp_zerocopy_receive(struct sock *sk,
+> >                                 struct tcp_zerocopy_receive *zc)
+> >  {
+> > -       unsigned long address = (unsigned long)zc->address;
+> > +       unsigned long address;
+> >         const skb_frag_t *frags = NULL;
+> >         u32 length = 0, seq, offset;
+> >         struct vm_area_struct *vma;
+> > @@ -1758,7 +1758,12 @@ static int tcp_zerocopy_receive(struct sock *sk,
+> >         int inq;
+> >         int ret;
+> >
+> > -       if (address & (PAGE_SIZE - 1) || address != zc->address)
+> > +       address = (unsigned long)untagged_addr(zc->address);
+> > +
+> > +       /* The second test in this if detects if the u64->unsigned long
+> > +        * conversion had any truncated bits.
+> > +        */
+> > +       if (address & (PAGE_SIZE - 1) || address != untagged_addr(zc->address))
+> >                 return -EINVAL;
+> >
+> >         if (sk->sk_state == TCP_LISTEN)
+>
+>
+> This is quite ugly, the comment does not really help nor belong to this patch.
+>
+> What about using  untagged_addr()  only once ?
+>
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index 6baa6dc1b13b0b94b1da238668b93e167cf444fe..855a1f68c1ea9b0d07a92bd7f5e7c24840a99d3d
+> 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -1761,6 +1761,8 @@ static int tcp_zerocopy_receive(struct sock *sk,
+>         if (address & (PAGE_SIZE - 1) || address != zc->address)
+>                 return -EINVAL;
+>
+> +       address = untagged_addr(address);
+> +
+>         if (sk->sk_state == TCP_LISTEN)
+>                 return -ENOTCONN;
 
-Could you also send it as a series (git format-patch --thread)? Those
-patches depend on each other. And pls use [PATCH bpf-next] ... subj.
-
-> -# define __bpf_ntohl(x)			__builtin_bswap32(x)
-> -# define __bpf_htonl(x)			__builtin_bswap32(x)
-> -# define __bpf_constant_ntohl(x)	___constant_swab32(x)
-> -# define __bpf_constant_htonl(x)	___constant_swab32(x)
-> +# define bpf_ntohs(x)		__swab16(x)
-> +# define bpf_htons(x)		__swab16(x)
-> +# define bpf_ntohl(x)		__swab32(x)
-> +# define bpf_htonl(x)		__swab32(x)
->  #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-> -# define __bpf_ntohs(x)			(x)
-> -# define __bpf_htons(x)			(x)
-> -# define __bpf_constant_ntohs(x)	(x)
-> -# define __bpf_constant_htons(x)	(x)
-> -# define __bpf_ntohl(x)			(x)
-> -# define __bpf_htonl(x)			(x)
-> -# define __bpf_constant_ntohl(x)	(x)
-> -# define __bpf_constant_htonl(x)	(x)
-> +# define bpf_ntohs(x)		(x)
-> +# define bpf_htons(x)		(x)
-> +# define bpf_ntohl(x)		(x)
-> +# define bpf_htonl(x)		(x)
->  #else
->  # error "Fix your compiler's __BYTE_ORDER__?!"
->  #endif
->  
-> -#define bpf_htons(x)				\
-> -	(__builtin_constant_p(x) ?		\
-> -	 __bpf_constant_htons(x) : __bpf_htons(x))
-> -#define bpf_ntohs(x)				\
-> -	(__builtin_constant_p(x) ?		\
-> -	 __bpf_constant_ntohs(x) : __bpf_ntohs(x))
-> -#define bpf_htonl(x)				\
-> -	(__builtin_constant_p(x) ?		\
-> -	 __bpf_constant_htonl(x) : __bpf_htonl(x))
-> -#define bpf_ntohl(x)				\
-> -	(__builtin_constant_p(x) ?		\
-> -	 __bpf_constant_ntohl(x) : __bpf_ntohl(x))
-> -
->  #endif /* __BPF_ENDIAN__ */
-> -- 
-> 2.21.0
-> 
+Looks good, will do it like this in the next version. Thanks!
