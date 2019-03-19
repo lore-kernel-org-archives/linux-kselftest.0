@@ -1,440 +1,106 @@
-From: ci_notify@linaro.org (ci_notify@linaro.org)
-Date: Tue, 19 Mar 2019 11:00:26 +0000 (UTC)
-Subject: next-20190319 kselftest results
-Message-ID: <1044403214.3971.1552993227306.JavaMail.jenkins@a6c5c67cda76>
+From: sdf@fomichev.me (Stanislav Fomichev)
+Date: Tue, 19 Mar 2019 09:01:15 -0700
+Subject: [PATCH] bpf, tests: tweak endianness selection
+In-Reply-To: <20190319023331.23207-1-sergey.senozhatsky@gmail.com>
+References: <20190319023331.23207-1-sergey.senozhatsky@gmail.com>
+Message-ID: <20190319160115.GD7431@mini-arch.hsd1.ca.comcast.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190319110026.hSNf4qwQ6hCuuQeRCOuTnM1bkjikLgXXuMDtP3aW2BI@z>
+Message-ID: <20190319160115.AxByIqGHf4tqURG0YTTKoPicqEzCqcEMcEgfn0wy8VQ@z>
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.1.0-rc1
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: 75e6a83b189c5edd5c0a5409cfd8de98126a2bae
-git describe: next-20190319
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190319
+On 03/19, Sergey Senozhatsky wrote:
+> Not all compilers have __builtin_bswap16() and __builtin_bswap32(),
+> thus not all compilers are able to compile the following code
+> (bpf_htons):
+> 
+> 	(__builtin_constant_p(x) ? \
+> 	 	___constant_swab16(x) : __builtin_bswap16(x))
+> 
+> That's why, for instance, bpf_htons() doesn't work on GCC < 4.8:
+> 
+> 	error: implicit declaration of function '__builtin_bswap16'
+> 
+> We can use __builtin_bswap16() only if compiler has this built-in,
+> that is, only if __HAVE_BUILTIN_BSWAP16__ is defined. Standard UAPI
+> __swab16()/__swab32() take care of that, and, additionally, handle
+> __builtin_constant_p() cases as well (if compiler doesn't provide
+> builtin bswap with constants folding):
+> 
+>  #ifdef __HAVE_BUILTIN_BSWAP16__
+>  #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+>  #else
+>  #define __swab16(x)                             \
+>          (__builtin_constant_p((__u16)(x)) ?     \
+>          ___constant_swab16(x) :                 \
+>          __fswab16(x))
+>  #endif
+> 
+> So we can tweak selftests/bpf/bpf_endian.h and use UAPI
+> __swab16()/__swab32().
+> 
+> Signed-off-by: Sergey Senozhatsky <sergey.senozhatsky at gmail.com>
+> ---
+>  tools/testing/selftests/bpf/bpf_endian.h | 37 +++++-------------------
+>  1 file changed, 8 insertions(+), 29 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/bpf_endian.h b/tools/testing/selftests/bpf/bpf_endian.h
+> index b25595ea4a78..ba06222963d5 100644
+> --- a/tools/testing/selftests/bpf/bpf_endian.h
+> +++ b/tools/testing/selftests/bpf/bpf_endian.h
+> @@ -20,38 +20,17 @@
+>   * use different targets.
+>   */
+>  #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+> -# define __bpf_ntohs(x)			__builtin_bswap16(x)
+> -# define __bpf_htons(x)			__builtin_bswap16(x)
+> -# define __bpf_constant_ntohs(x)	___constant_swab16(x)
+> -# define __bpf_constant_htons(x)	___constant_swab16(x)
+This breaks the build until your next patch is applied (in other
+words, breaks bisection). Can we do it in three steps?
+Convert to swab (without breaking existing tests), convert the tests,
+remove unused __bpf_xyz defines?
 
-Regressions (compared to build next-20190318)
-------------------------------------------------------------------------
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_maps                                                                                                         
-x86_64:                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-x86_64:                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190318)                                                                   
-------------------------------------------------------------------------                                               
-hi6220-hikey - arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sockmap                                                                                                         
+Could you also send it as a series (git format-patch --thread)? Those
+patches depend on each other. And pls use [PATCH bpf-next] ... subj.
 
-
-In total:
-------------------------------------------------------------------------
-Ran 1600 total tests in the following environments and test suites.
-pass 1061
-fail 338
-xfail 0
-skip 201
-
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
-
-
-Failures
-------------------------------------------------------------------------
-
-qemu_x86_64:
-* kselftest/bpf_test_align
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pstore_pstore_tests
-
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_align
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pstore_pstore_tests
-* kselftest/seccomp_seccomp_bpf
-* kselftest/size_get_size
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_syscall_arg_fault_32
-
-dragonboard-410c:
-
-qemu_arm64:
-* kselftest/bpf_test_align
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-
-x86:
-* kselftest-vsyscall-mode-native/bpf_test_align
-* kselftest-vsyscall-mode-native/bpf_test_btf
-* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-native/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-native/bpf_test_sockmap
-* kselftest-vsyscall-mode-native/cgroup_test_core
-* kselftest-vsyscall-mode-native/dma-buf_udmabuf
-* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-native/net_fib-onlink-tests.sh
-* kselftest-vsyscall-mode-native/net_ip_defrag.sh
-* kselftest-vsyscall-mode-native/net_psock_snd.sh
-* kselftest-vsyscall-mode-native/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-native/pstore_pstore_tests
-* kselftest-vsyscall-mode-native/timestamping_txtimestamp.sh
-* kselftest-vsyscall-mode-none/bpf_test_align
-* kselftest-vsyscall-mode-none/bpf_test_btf
-* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-none/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/cgroup_test_core
-* kselftest-vsyscall-mode-none/dma-buf_udmabuf
-* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-none/net_fib-onlink-tests.sh
-* kselftest-vsyscall-mode-none/net_ip_defrag.sh
-* kselftest-vsyscall-mode-none/net_psock_snd.sh
-* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-none/pstore_pstore_tests
-* kselftest-vsyscall-mode-none/timestamping_txtimestamp.sh
-* kselftest/bpf_test_align
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-
-x15:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_msg_zerocopy.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/seccomp_seccomp_bpf
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_align
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_msg_zerocopy.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/seccomp_seccomp_bpf
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-
-juno-r2:
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-
-i386:
-* kselftest/bpf_test_align
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-
-hi6220-hikey:
-* kselftest/bpf_test_align
-* kselftest/bpf_test_btf
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+> -# define __bpf_ntohl(x)			__builtin_bswap32(x)
+> -# define __bpf_htonl(x)			__builtin_bswap32(x)
+> -# define __bpf_constant_ntohl(x)	___constant_swab32(x)
+> -# define __bpf_constant_htonl(x)	___constant_swab32(x)
+> +# define bpf_ntohs(x)		__swab16(x)
+> +# define bpf_htons(x)		__swab16(x)
+> +# define bpf_ntohl(x)		__swab32(x)
+> +# define bpf_htonl(x)		__swab32(x)
+>  #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+> -# define __bpf_ntohs(x)			(x)
+> -# define __bpf_htons(x)			(x)
+> -# define __bpf_constant_ntohs(x)	(x)
+> -# define __bpf_constant_htons(x)	(x)
+> -# define __bpf_ntohl(x)			(x)
+> -# define __bpf_htonl(x)			(x)
+> -# define __bpf_constant_ntohl(x)	(x)
+> -# define __bpf_constant_htonl(x)	(x)
+> +# define bpf_ntohs(x)		(x)
+> +# define bpf_htons(x)		(x)
+> +# define bpf_ntohl(x)		(x)
+> +# define bpf_htonl(x)		(x)
+>  #else
+>  # error "Fix your compiler's __BYTE_ORDER__?!"
+>  #endif
+>  
+> -#define bpf_htons(x)				\
+> -	(__builtin_constant_p(x) ?		\
+> -	 __bpf_constant_htons(x) : __bpf_htons(x))
+> -#define bpf_ntohs(x)				\
+> -	(__builtin_constant_p(x) ?		\
+> -	 __bpf_constant_ntohs(x) : __bpf_ntohs(x))
+> -#define bpf_htonl(x)				\
+> -	(__builtin_constant_p(x) ?		\
+> -	 __bpf_constant_htonl(x) : __bpf_htonl(x))
+> -#define bpf_ntohl(x)				\
+> -	(__builtin_constant_p(x) ?		\
+> -	 __bpf_constant_ntohl(x) : __bpf_ntohl(x))
+> -
+>  #endif /* __BPF_ENDIAN__ */
+> -- 
+> 2.21.0
+> 
