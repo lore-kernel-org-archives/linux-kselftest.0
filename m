@@ -1,66 +1,34 @@
-From: sergey.senozhatsky.work@gmail.com (Sergey Senozhatsky)
-Date: Tue, 19 Mar 2019 11:48:43 +0900
-Subject: [PATCH] bpf, tests: don't use __bpf_constant_htons()
-Message-ID: <20190319024843.30807-1-sergey.senozhatsky@gmail.com>
+From: zhangxiaoxu5@huawei.com (ZhangXiaoxu)
+Date: Tue, 19 Mar 2019 11:24:31 +0800
+Subject: [PATCH] selftests: efivarfs: remove the test_create_read file if it
+ was exist
+Message-ID: <1552965871-77209-1-git-send-email-zhangxiaoxu5@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190319024843.aQwR9lM2i_71yWGFntrC2mKYViCTzyBRC_ybOWCrpZU@z>
+Message-ID: <20190319032431.1UdMVpynZ_ADipFi4bjcLXXI4zMY1ueL6ve9K36ucQA@z>
 
-Prefer bpf_htons() instead (since __bpf_constant_htons() was removed).
+After the first run, the test case 'test_create_read' will always
+fail because the file is exist and file's attr is 'S_IMMUTABLE',
+open with 'O_RDWR' will always return -EPERM.
 
-Signed-off-by: Sergey Senozhatsky <sergey.senozhatsky at gmail.com>
+Signed-off-by: ZhangXiaoxu <zhangxiaoxu5 at huawei.com>
 ---
- tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 4 ++--
- tools/testing/selftests/bpf/test_progs.c                | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ tools/testing/selftests/efivarfs/efivarfs.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-index bcbd928c96ab..a194305f98d1 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-@@ -28,7 +28,7 @@ static struct bpf_flow_keys pkt_v4_flow_keys = {
- 	.thoff = sizeof(struct iphdr),
- 	.addr_proto = ETH_P_IP,
- 	.ip_proto = IPPROTO_TCP,
--	.n_proto = __bpf_constant_htons(ETH_P_IP),
-+	.n_proto = bpf_htons(ETH_P_IP),
- };
+diff --git a/tools/testing/selftests/efivarfs/efivarfs.sh b/tools/testing/selftests/efivarfs/efivarfs.sh
+index a47029a..d386610 100755
+--- a/tools/testing/selftests/efivarfs/efivarfs.sh
++++ b/tools/testing/selftests/efivarfs/efivarfs.sh
+@@ -77,6 +77,10 @@ test_create_empty()
+ test_create_read()
+ {
+ 	local file=$efivarfs_mount/$FUNCNAME-$test_guid
++	if [ -f $file]; then
++		chattr -i $file
++		rm -rf $file
++	fi
+ 	./create-read $file
+ }
  
- static struct bpf_flow_keys pkt_v6_flow_keys = {
-@@ -36,7 +36,7 @@ static struct bpf_flow_keys pkt_v6_flow_keys = {
- 	.thoff = sizeof(struct ipv6hdr),
- 	.addr_proto = ETH_P_IPV6,
- 	.ip_proto = IPPROTO_TCP,
--	.n_proto = __bpf_constant_htons(ETH_P_IPV6),
-+	.n_proto = bpf_htons(ETH_P_IPV6),
- };
- 
- void test_flow_dissector(void)
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 5d10aee9e277..909b339f97f4 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -11,18 +11,18 @@ int error_cnt, pass_cnt;
- bool jit_enabled;
- 
- struct ipv4_packet pkt_v4 = {
--	.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
-+	.eth.h_proto = bpf_htons(ETH_P_IP),
- 	.iph.ihl = 5,
- 	.iph.protocol = IPPROTO_TCP,
--	.iph.tot_len = __bpf_constant_htons(MAGIC_BYTES),
-+	.iph.tot_len = bpf_htons(MAGIC_BYTES),
- 	.tcp.urg_ptr = 123,
- 	.tcp.doff = 5,
- };
- 
- struct ipv6_packet pkt_v6 = {
--	.eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
-+	.eth.h_proto = bpf_htons(ETH_P_IPV6),
- 	.iph.nexthdr = IPPROTO_TCP,
--	.iph.payload_len = __bpf_constant_htons(MAGIC_BYTES),
-+	.iph.payload_len = bpf_htons(MAGIC_BYTES),
- 	.tcp.urg_ptr = 123,
- 	.tcp.doff = 5,
- };
 -- 
-2.21.0
+2.7.4
