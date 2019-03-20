@@ -1,42 +1,157 @@
-From: jrdr.linux@gmail.com (Souptick Joarder)
-Date: Wed, 20 Mar 2019 11:27:52 +0530
-Subject: [PATCH v2] selftest/gpio: Remove duplicate header
-In-Reply-To: <20190306162018.GA3187@jordon-HP-15-Notebook-PC>
-References: <20190306162018.GA3187@jordon-HP-15-Notebook-PC>
-Message-ID:
- <CAFqt6zbwdPnkQ3YrrcELzAHuMFxvKsf=xg62Qj-056T03ThRQQ@mail.gmail.com>
+From: dyoung@redhat.com (Dave Young)
+Date: Wed, 20 Mar 2019 17:04:01 +0800
+Subject: [PATCH v4 0/8] selftests/kexec: add kexec tests
+In-Reply-To: <1552932562.8658.274.camel@linux.ibm.com>
+References: <1552588876-28481-1-git-send-email-zohar@linux.ibm.com>
+ <20190318140643.GA17706@dhcp-128-65.nay.redhat.com>
+ <1552932562.8658.274.camel@linux.ibm.com>
+Message-ID: <20190320090401.GA2591@dhcp-128-65.nay.redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190320055752.OuKet-98wwxWxabS4pmW8hpkX-VWe8J27BjSwiZI9nE@z>
+Message-ID: <20190320090401.6fDs3SnAX4zGN42q0C_vxUa3AaZuVprlgygeBTc-w0s@z>
 
-On Wed, Mar 6, 2019@9:45 PM Souptick Joarder <jrdr.linux@gmail.com> wrote:
->
-> From: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
->
-> Remove duplicate header which are included twice.
->
-> Signed-off-by: Sabyasachi Gupta <sabyasachi.linux at gmail.com>
-> Signed-off-by: Souptick Joarder <jrdr.linux at gmail.com>
-> ---
-> v2: Corrected format.
+Hi Mimi,
 
-Any comment on this patch ?
+Thank you for help about the pointer about IMA testing.
+Probably I should cc list as well since we are talking about the patch
+itself.  For the ima test itself I could still ask for help in a private
+email thread.
 
->
->  tools/testing/selftests/gpio/gpio-mockup-chardev.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/gpio/gpio-mockup-chardev.c b/tools/testing/selftests/gpio/gpio-mockup-chardev.c
-> index aaa1e9f..d587c81 100644
-> --- a/tools/testing/selftests/gpio/gpio-mockup-chardev.c
-> +++ b/tools/testing/selftests/gpio/gpio-mockup-chardev.c
-> @@ -12,7 +12,6 @@
->  #include <unistd.h>
->  #include <stdio.h>
->  #include <stdlib.h>
-> -#include <stdio.h>
->  #include <errno.h>
->  #include <string.h>
->  #include <fcntl.h>
-> --
-> 1.9.1
->
+On 03/18/19@02:09pm, Mimi Zohar wrote:
+> On Mon, 2019-03-18@22:06 +0800, Dave Young wrote:
+> > Hi Mimi,
+> > 
+> > On 03/14/19@02:41pm, Mimi Zohar wrote:
+> > > The kernel may be configured or an IMA policy specified on the boot
+> > > command line requiring the kexec kernel image signature to be verified.
+> > > At runtime a custom IMA policy may be loaded, replacing the policy
+> > > specified on the boot command line.  In addition, the arch specific
+> > > policy rules are dynamically defined based on the secure boot mode that
+> > > may require the kernel image signature to be verified.
+> > > 
+> > > The kernel image may have a PE signature, an IMA signature, or both. In
+> > > addition, there are two kexec syscalls - kexec_load and kexec_file_load
+> > > - but only the kexec_file_load syscall can verify signatures.
+> > > 
+> > > These kexec selftests verify that only properly signed kernel images are
+> > > loaded as required, based on the kernel config, the secure boot mode,
+> > > and the IMA runtime policy.
+> > > 
+> > > Loading a kernel image or kernel module requires root privileges.  To
+> > > run just the KEXEC selftests: sudo make TARGETS=kexec kselftest
+> > > 
+> > > Changelog v4:
+> > > - Moved the kexec tests to selftests/kexec, as requested by Dave Young.
+> > > - Removed the kernel module selftest from this patch set.
+> > > - Rewritten cover letter, removing reference to kernel modules.
+> > > 
+> > > Changelog v3:
+> > > - Updated tests based on Petr's review, including the defining a common
+> > >   test to check for root privileges.
+> > > - Modified config, removing the CONFIG_KEXEC_VERIFY_SIG requirement.
+> > > - Updated the SPDX license to GPL-2.0 based on Shuah's review.
+> > > - Updated the secureboot mode test to check the SetupMode as well, based
+> > >   on David Young's review.
+> > > 
+> > > 
+> > I was trying to review the patches although I'm slow due to something
+> > else.
+> > 
+> > But I still did not setup a IMA testable system, need check your old
+> > email about how to setup it.
+> 
+> (The ima-evm-utils package contains a README with directions.)
+> 
+> > 
+> > A quick testing gives me below results
+> > 
+> > /* test #1, my default kconfig
+> > # NO CONFIG_INTEGRITY compiled in
+> > */
+> > 
+> > make[1]: Nothing to be done for 'all'.
+> > make[1]: Leaving directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
+> > make[1]: Entering directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
+> > TAP version 13
+> > selftests: kexec: test_kexec_load.sh
+> > ========================================
+> > selftests: kexec: test_kexec_load.sh: Warning: file
+> > test_kexec_load.sh is not executable, correct this.
+> > not ok 1..1 selftests: kexec: test_kexec_load.sh [FAIL]
+> 
+> That's really weird.  Both before and after applying these patches
+> test_kexec_load.sh is executable (stable linux-5.0.y).  Could
+> something else be preventing it from executing?
+> 
+> > selftests: kexec: test_kexec_file_load.sh
+> > ========================================
+> > [INFO] kexec_file_load is enabled
+> > [INFO] secure boot mode not enabled
+> > [INFO] kexec kernel image PE signed
+> > [INFO] kexec kernel image not IMA signed
+> > kexec_file_load succeeded (possibly missing IMA sig) [FAIL]
+> > not ok 1..2 selftests: kexec: test_kexec_file_load.sh [FAIL]
+> > make[1]: Leaving directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
+> > make: Leaving directory '/home/dyoung/git/github/linux/tools/testing/selftests'
+> 
+> This message is because neither CONFIG_KEXEC_BZIMAGE_VERIFY_SIG or an
+> IMA signature is required.  It couldn't read the IMA runtime policy
+> rules to determine if an IMA signature is required.  So, it's trying
+> to provide a hint as to what happened.
+> 
+> I'll update the test to see if CONFIG_IMA_APPRAISE is enabled, before
+> emitting this message.
+> 
+> > 
+> > /* test #2, enabled IMA kconfigs, simply test without other ima
+> > setup eg. use a policy etc. need to follow up some guide to test the
+> > ima functionality (TODO..)
+> > */
+> > 
+> > 
+> > [root at dhcp-128-65 linux-x86]# make -C tools/testing/selftests TARGETS=kexec run_tests
+> > make: Entering directory '/home/dyoung/git/github/linux/tools/testing/selftests'
+> > make[1]: Entering directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
+> > make[1]: Nothing to be done for 'all'.
+> > make[1]: Leaving directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
+> > make[1]: Entering directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
+> > TAP version 13
+> > selftests: kexec: test_kexec_load.sh
+> > ========================================
+> > selftests: kexec: test_kexec_load.sh: Warning: file test_kexec_load.sh is not executable, correct this.
+> > not ok 1..1 selftests: kexec: test_kexec_load.sh [FAIL]
+> > selftests: kexec: test_kexec_file_load.sh
+> > ========================================
+> > [INFO] kexec_file_load is enabled
+> > [INFO] reading IMA policy permitted
+> > [INFO] secure boot mode not enabled
+> > No signature verification required
+> > not ok 1..2 selftests: kexec: test_kexec_file_load.sh [SKIP]
+> > make[1]: Leaving directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
+> > make: Leaving directory '/home/dyoung/git/github/linux/tools/testing/selftests'
+> 
+> The purpose of these tests was to coordinate kernel image signature
+> verification.
+> 
+> If you require a PE signature, load an IMA policy requiring an IMA
+> signature, or even enable CONFIG_IMA_ARCH_POLICY, the test would
+> require some form of signature verification.
+
+Did a test with a embedded ima key in kernel, with secure boot disabled,
+but with Secure Boot enabled, but failed to sign the kernel with both
+pesign and evmctl, will continue to see how to work on it and ask in
+private email if needed :)
+
+About the patch itself, as we talked in another email, I would expect it
+can work with other test cases eg. without IMA/secure boot.  But if that
+is not easy, maybe you can change the test script filename to something
+like:  test_kexec_load_sigcheck.sh and test_kexec_file_load_sigcheck.sh 
+then we can add other non-sigcheck related cases to other test scripts
+later.  But ideally if we can handle them in current files it would be
+better.
+
+Another issue I noticed is even if boot with ima_appraise=off, kexec
+load still checking the conditions. Will see if I'm having something
+wrong in test steps.
+
+Thanks
+Dave
