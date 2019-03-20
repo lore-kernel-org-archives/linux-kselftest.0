@@ -1,157 +1,555 @@
-From: dyoung@redhat.com (Dave Young)
-Date: Wed, 20 Mar 2019 17:04:01 +0800
-Subject: [PATCH v4 0/8] selftests/kexec: add kexec tests
-In-Reply-To: <1552932562.8658.274.camel@linux.ibm.com>
-References: <1552588876-28481-1-git-send-email-zohar@linux.ibm.com>
- <20190318140643.GA17706@dhcp-128-65.nay.redhat.com>
- <1552932562.8658.274.camel@linux.ibm.com>
-Message-ID: <20190320090401.GA2591@dhcp-128-65.nay.redhat.com>
+From: ci_notify@linaro.org (ci_notify@linaro.org)
+Date: Wed, 20 Mar 2019 10:00:43 +0000 (UTC)
+Subject: next-20190320 kselftest results
+Message-ID: <2068117060.4104.1553076044320.JavaMail.jenkins@a6c5c67cda76>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190320090401.6fDs3SnAX4zGN42q0C_vxUa3AaZuVprlgygeBTc-w0s@z>
+Message-ID: <20190320100043.SXkOnyxAOkZ3x5RPCM4R5i76XEgk9kCxndV6-x4uOnA@z>
 
-Hi Mimi,
+Summary
+------------------------------------------------------------------------
+kernel: 5.1.0-rc1
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: 835727301ed31a91cfd7fb57163cda722646ced6
+git describe: next-20190320
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190320
 
-Thank you for help about the pointer about IMA testing.
-Probably I should cc list as well since we are talking about the patch
-itself.  For the ima test itself I could still ask for help in a private
-email thread.
+Regressions (compared to build next-20190319)
+------------------------------------------------------------------------
+juno-r2 - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_netcnt                                                                                                         
+                                                                                         
+    * net_pmtu.sh                                                                                                         
+qemu_arm:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_netcnt                                                                                                         
+                                                                                         
+    * net_pmtu.sh                                                                                                         
+                                                                                         
+    * timers_rtcpie                                                                                                         
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_netcnt                                                                                                         
+                                                                                         
+    * net_pmtu.sh                                                                                                         
+qemu_i386:                                                                                                      
+ kselftest:                                                                                         
+    * net_pmtu.sh                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_netcnt                                                                                                         
+                                                                                         
+    * net_pmtu.sh                                                                                                         
+x15 - arm:                                                                                                      
+ kselftest:                                                                                         
+    * net_pmtu.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_netcnt                                                                                                         
+                                                                                         
+    * net_pmtu.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_netcnt                                                                                                         
+                                                                                         
+    * net_pmtu.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * bpf_test_netcnt                                                                                                         
+                                                                                         
+    * net_pmtu.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_netcnt                                                                                                         
+                                                                                         
+    * net_pmtu.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_netcnt                                                                                                         
+                                                                                         
+    * net_pmtu.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * bpf_test_netcnt                                                                                                         
+                                                                                         
+    * net_pmtu.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_netcnt                                                                                                         
+                                                                                         
+    * net_pmtu.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_netcnt                                                                                                         
+                                                                                         
+    * net_pmtu.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * bpf_test_netcnt                                                                                                         
+                                                                                         
+    * net_pmtu.sh                                                                                                         
+                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190319)                                                                   
+------------------------------------------------------------------------                                               
+hi6220-hikey - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_maps                                                                                                         
+i386:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_btf                                                                                                         
+juno-r2 - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_btf                                                                                                         
+                                                                                         
+    * bpf_test_libbpf.sh                                                                                                         
+                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+qemu_arm:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_btf                                                                                                         
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_btf                                                                                                         
+                                                                                         
+    * bpf_test_libbpf.sh                                                                                                         
+qemu_i386:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_btf                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_btf                                                                                                         
+                                                                                         
+    * bpf_test_libbpf.sh                                                                                                         
+                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_btf                                                                                                         
+                                                                                         
+    * bpf_test_libbpf.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_btf                                                                                                         
+                                                                                         
+    * bpf_test_libbpf.sh                                                                                                         
+                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * bpf_test_sockmap                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * bpf_test_btf                                                                                                         
+                                                                                         
+    * bpf_test_libbpf.sh                                                                                                         
+                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * bpf_test_sockmap                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_btf                                                                                                         
+                                                                                         
+    * bpf_test_libbpf.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_btf                                                                                                         
+                                                                                         
+    * bpf_test_libbpf.sh                                                                                                         
+                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * bpf_test_sockmap                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * bpf_test_btf                                                                                                         
+                                                                                         
+    * bpf_test_libbpf.sh                                                                                                         
+                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * bpf_test_sockmap                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_btf                                                                                                         
+                                                                                         
+    * bpf_test_libbpf.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_btf                                                                                                         
+                                                                                         
+    * bpf_test_libbpf.sh                                                                                                         
+                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * bpf_test_sockmap                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * bpf_test_btf                                                                                                         
+                                                                                         
+    * bpf_test_libbpf.sh                                                                                                         
+                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * bpf_test_sockmap                                                                                                         
 
-On 03/18/19@02:09pm, Mimi Zohar wrote:
-> On Mon, 2019-03-18@22:06 +0800, Dave Young wrote:
-> > Hi Mimi,
-> > 
-> > On 03/14/19@02:41pm, Mimi Zohar wrote:
-> > > The kernel may be configured or an IMA policy specified on the boot
-> > > command line requiring the kexec kernel image signature to be verified.
-> > > At runtime a custom IMA policy may be loaded, replacing the policy
-> > > specified on the boot command line.  In addition, the arch specific
-> > > policy rules are dynamically defined based on the secure boot mode that
-> > > may require the kernel image signature to be verified.
-> > > 
-> > > The kernel image may have a PE signature, an IMA signature, or both. In
-> > > addition, there are two kexec syscalls - kexec_load and kexec_file_load
-> > > - but only the kexec_file_load syscall can verify signatures.
-> > > 
-> > > These kexec selftests verify that only properly signed kernel images are
-> > > loaded as required, based on the kernel config, the secure boot mode,
-> > > and the IMA runtime policy.
-> > > 
-> > > Loading a kernel image or kernel module requires root privileges.  To
-> > > run just the KEXEC selftests: sudo make TARGETS=kexec kselftest
-> > > 
-> > > Changelog v4:
-> > > - Moved the kexec tests to selftests/kexec, as requested by Dave Young.
-> > > - Removed the kernel module selftest from this patch set.
-> > > - Rewritten cover letter, removing reference to kernel modules.
-> > > 
-> > > Changelog v3:
-> > > - Updated tests based on Petr's review, including the defining a common
-> > >   test to check for root privileges.
-> > > - Modified config, removing the CONFIG_KEXEC_VERIFY_SIG requirement.
-> > > - Updated the SPDX license to GPL-2.0 based on Shuah's review.
-> > > - Updated the secureboot mode test to check the SetupMode as well, based
-> > >   on David Young's review.
-> > > 
-> > > 
-> > I was trying to review the patches although I'm slow due to something
-> > else.
-> > 
-> > But I still did not setup a IMA testable system, need check your old
-> > email about how to setup it.
-> 
-> (The ima-evm-utils package contains a README with directions.)
-> 
-> > 
-> > A quick testing gives me below results
-> > 
-> > /* test #1, my default kconfig
-> > # NO CONFIG_INTEGRITY compiled in
-> > */
-> > 
-> > make[1]: Nothing to be done for 'all'.
-> > make[1]: Leaving directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
-> > make[1]: Entering directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
-> > TAP version 13
-> > selftests: kexec: test_kexec_load.sh
-> > ========================================
-> > selftests: kexec: test_kexec_load.sh: Warning: file
-> > test_kexec_load.sh is not executable, correct this.
-> > not ok 1..1 selftests: kexec: test_kexec_load.sh [FAIL]
-> 
-> That's really weird.  Both before and after applying these patches
-> test_kexec_load.sh is executable (stable linux-5.0.y).  Could
-> something else be preventing it from executing?
-> 
-> > selftests: kexec: test_kexec_file_load.sh
-> > ========================================
-> > [INFO] kexec_file_load is enabled
-> > [INFO] secure boot mode not enabled
-> > [INFO] kexec kernel image PE signed
-> > [INFO] kexec kernel image not IMA signed
-> > kexec_file_load succeeded (possibly missing IMA sig) [FAIL]
-> > not ok 1..2 selftests: kexec: test_kexec_file_load.sh [FAIL]
-> > make[1]: Leaving directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
-> > make: Leaving directory '/home/dyoung/git/github/linux/tools/testing/selftests'
-> 
-> This message is because neither CONFIG_KEXEC_BZIMAGE_VERIFY_SIG or an
-> IMA signature is required.  It couldn't read the IMA runtime policy
-> rules to determine if an IMA signature is required.  So, it's trying
-> to provide a hint as to what happened.
-> 
-> I'll update the test to see if CONFIG_IMA_APPRAISE is enabled, before
-> emitting this message.
-> 
-> > 
-> > /* test #2, enabled IMA kconfigs, simply test without other ima
-> > setup eg. use a policy etc. need to follow up some guide to test the
-> > ima functionality (TODO..)
-> > */
-> > 
-> > 
-> > [root at dhcp-128-65 linux-x86]# make -C tools/testing/selftests TARGETS=kexec run_tests
-> > make: Entering directory '/home/dyoung/git/github/linux/tools/testing/selftests'
-> > make[1]: Entering directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
-> > make[1]: Nothing to be done for 'all'.
-> > make[1]: Leaving directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
-> > make[1]: Entering directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
-> > TAP version 13
-> > selftests: kexec: test_kexec_load.sh
-> > ========================================
-> > selftests: kexec: test_kexec_load.sh: Warning: file test_kexec_load.sh is not executable, correct this.
-> > not ok 1..1 selftests: kexec: test_kexec_load.sh [FAIL]
-> > selftests: kexec: test_kexec_file_load.sh
-> > ========================================
-> > [INFO] kexec_file_load is enabled
-> > [INFO] reading IMA policy permitted
-> > [INFO] secure boot mode not enabled
-> > No signature verification required
-> > not ok 1..2 selftests: kexec: test_kexec_file_load.sh [SKIP]
-> > make[1]: Leaving directory '/home/dyoung/git/github/linux/tools/testing/selftests/kexec'
-> > make: Leaving directory '/home/dyoung/git/github/linux/tools/testing/selftests'
-> 
-> The purpose of these tests was to coordinate kernel image signature
-> verification.
-> 
-> If you require a PE signature, load an IMA policy requiring an IMA
-> signature, or even enable CONFIG_IMA_ARCH_POLICY, the test would
-> require some form of signature verification.
 
-Did a test with a embedded ima key in kernel, with secure boot disabled,
-but with Secure Boot enabled, but failed to sign the kernel with both
-pesign and evmctl, will continue to see how to work on it and ask in
-private email if needed :)
+In total:
+------------------------------------------------------------------------
+Ran 1424 total tests in the following environments and test suites.
+pass 937
+fail 298
+xfail 0
+skip 189
 
-About the patch itself, as we talked in another email, I would expect it
-can work with other test cases eg. without IMA/secure boot.  But if that
-is not easy, maybe you can change the test script filename to something
-like:  test_kexec_load_sigcheck.sh and test_kexec_file_load_sigcheck.sh 
-then we can add other non-sigcheck related cases to other test scripts
-later.  But ideally if we can handle them in current files it would be
-better.
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
 
-Another issue I noticed is even if boot with ima_appraise=off, kexec
-load still checking the conditions. Will see if I'm having something
-wrong in test steps.
+Test Suites
+-----------
+* kselftest
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
 
-Thanks
-Dave
+
+Failures
+------------------------------------------------------------------------
+
+qemu_x86_64:
+* kselftest/bpf_test_align
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pstore_pstore_tests
+* kselftest/timestamping_txtimestamp.sh
+
+qemu_i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_align
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_xdp_vlan.sh
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/size_get_size
+* kselftest/timestamping_txtimestamp.sh
+
+juno-r2:
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pstore_pstore_tests
+* kselftest/timestamping_txtimestamp.sh
+
+x15:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_align
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_xdp_vlan.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pidfd_pidfd_test
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+
+qemu_arm64:
+* kselftest/bpf_test_align
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sockmap
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pstore_pstore_tests
+* kselftest/timestamping_txtimestamp.sh
+
+qemu_arm:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_align
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_xdp_vlan.sh
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pidfd_pidfd_test
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timers_rtcpie
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+
+dragonboard-410c:
+
+x86:
+* kselftest-vsyscall-mode-native/bpf_test_align
+* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-native/bpf_test_netcnt
+* kselftest-vsyscall-mode-native/bpf_test_progs
+* kselftest-vsyscall-mode-native/cgroup_test_core
+* kselftest-vsyscall-mode-native/dma-buf_udmabuf
+* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
+* kselftest-vsyscall-mode-native/net_fib-onlink-tests.sh
+* kselftest-vsyscall-mode-native/net_ip_defrag.sh
+* kselftest-vsyscall-mode-native/net_pmtu.sh
+* kselftest-vsyscall-mode-native/net_psock_snd.sh
+* kselftest-vsyscall-mode-native/net_test_vxlan_under_vrf.sh
+* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
+* kselftest-vsyscall-mode-native/pstore_pstore_tests
+* kselftest-vsyscall-mode-none/bpf_test_align
+* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-none/bpf_test_netcnt
+* kselftest-vsyscall-mode-none/bpf_test_progs
+* kselftest-vsyscall-mode-none/cgroup_test_core
+* kselftest-vsyscall-mode-none/dma-buf_udmabuf
+* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
+* kselftest-vsyscall-mode-none/net_fib-onlink-tests.sh
+* kselftest-vsyscall-mode-none/net_ip_defrag.sh
+* kselftest-vsyscall-mode-none/net_pmtu.sh
+* kselftest-vsyscall-mode-none/net_psock_snd.sh
+* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
+* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
+* kselftest-vsyscall-mode-none/pstore_pstore_tests
+* kselftest-vsyscall-mode-none/timestamping_txtimestamp.sh
+* kselftest/bpf_test_align
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sockmap
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pstore_pstore_tests
+* kselftest/timestamping_txtimestamp.sh
+
+hi6220-hikey:
+
+i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_align
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_xdp_vlan.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
