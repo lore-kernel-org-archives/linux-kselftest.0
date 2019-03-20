@@ -1,270 +1,376 @@
-From: andreyknvl@google.com (Andrey Konovalov)
-Date: Wed, 20 Mar 2019 15:51:14 +0100
-Subject: [PATCH v13 00/20] arm64: untag user pointers passed to the kernel
-Message-ID: <cover.1553093420.git.andreyknvl@google.com>
+From: joel@joelfernandes.org (Joel Fernandes (Google))
+Date: Wed, 20 Mar 2019 12:31:14 -0400
+Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending kernel
+ easier
+Message-ID: <20190320163116.39275-1-joel@joelfernandes.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190320145114.lmoCurB3XvzxLyBBTDtWTAaUkVVytNbm8fvgVTCQt78@z>
+Message-ID: <20190320163114.S_euRlNOsvatCyuq6KKJc2f0t0aKqT6Jo9NmCCspt48@z>
 
-=== Overview
+Introduce in-kernel headers and other artifacts which are made available
+as an archive through proc (/proc/kheaders.tar.xz file). This archive makes
+it possible to build kernel modules, run eBPF programs, and other
+tracing programs that need to extend the kernel for tracing purposes
+without any dependency on the file system having headers and build
+artifacts.
 
-arm64 has a feature called Top Byte Ignore, which allows to embed pointer
-tags into the top byte of each pointer. Userspace programs (such as
-HWASan, a memory debugging tool [1]) might use this feature and pass
-tagged user pointers to the kernel through syscalls or other interfaces.
+On Android and embedded systems, it is common to switch kernels but not
+have kernel headers available on the file system. Further once a
+different kernel is booted, any headers stored on the file system will
+no longer be useful. By storing the headers as a compressed archive
+within the kernel, we can avoid these issues that have been a hindrance
+for a long time.
 
-Right now the kernel is already able to handle user faults with tagged
-pointers, due to these patches:
+The best way to use this feature is by building it in. Several users
+have a need for this, when they switch debug kernels, they donot want to
+update the filesystem or worry about it where to store the headers on
+it. However, the feature is also buildable as a module in case the user
+desires it not being part of the kernel image. This makes it possible to
+load and unload the headers from memory on demand. A tracing program, or
+a kernel module builder can load the module, do its operations, and then
+unload the module to save kernel memory. The total memory needed is 3.8MB.
 
-1. 81cddd65 ("arm64: traps: fix userspace cache maintenance emulation on a
-             tagged pointer")
-2. 7dcd9dd8 ("arm64: hw_breakpoint: fix watchpoint matching for tagged
-	      pointers")
-3. 276e9327 ("arm64: entry: improve data abort handling of tagged
-	      pointers")
+By having the archive available at a fixed location independent of
+filesystem dependencies and conventions, all debugging tools can
+directly refer to the fixed location for the archive, without concerning
+with where the headers on a typical filesystem which significantly
+simplifies tooling that needs kernel headers.
 
-This patchset extends tagged pointer support to syscall arguments.
+The code to read the headers is based on /proc/config.gz code and uses
+the same technique to embed the headers.
 
-As per the proposed ABI change [3], tagged pointers are only allowed to be
-passed to syscalls when they point to memory ranges obtained by anonymous
-mmap() or sbrk() (see the patchset [3] for more details).
+To build a module, the below steps have been tested on an x86 machine:
+modprobe kheaders
+rm -rf $HOME/headers
+mkdir -p $HOME/headers
+tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
+cd my-kernel-module
+make -C $HOME/headers M=$(pwd) modules
+rmmod kheaders
 
-For non-memory syscalls this is done by untaging user pointers when the
-kernel performs pointer checking to find out whether the pointer comes
-from userspace (most notably in access_ok). The untagging is done only
-when the pointer is being checked, the tag is preserved as the pointer
-makes its way through the kernel and stays tagged when the kernel
-dereferences the pointer when perfoming user memory accesses.
+Additional notes:
+(1) external modules must be built on the same arch as the host that
+built vmlinux. This can be done either in a qemu emulated chroot on the
+target, or natively. This is due to host arch dependency of kernel
+scripts.
 
-Memory syscalls (mmap, mprotect, etc.) don't do user memory accesses but
-rather deal with memory ranges, and untagged pointers are better suited to
-describe memory ranges internally. Thus for memory syscalls we untag
-pointers completely when they enter the kernel.
+(2)
+If module building is used, since Module.symvers is not available in the
+archive due to a cyclic dependency with building of the archive into the
+kernel or module binaries, the modules built using the archive will not
+contain symbol versioning (modversion). This is usually not an issue
+since the idea of this patch is to build a kernel module on the fly and
+load it into the same kernel. An appropriate warning is already printed
+by the kernel to alert the user of modules not having modversions when
+built using the archive. For building with modversions, the user can use
+traditional header packages. For our tracing usecases, we build modules
+on the fly with this so it is not a concern.
 
-=== Other approaches
+(3) I have left IKHD_ST and IKHD_ED markers as is to facilitate
+future patches that would extract the headers from a kernel or module
+image.
 
-One of the alternative approaches to untagging that was considered is to
-completely strip the pointer tag as the pointer enters the kernel with
-some kind of a syscall wrapper, but that won't work with the countless
-number of different ioctl calls. With this approach we would need a custom
-wrapper for each ioctl variation, which doesn't seem practical.
+(v4 was Tested-by the following folks,
+ v5 only has minor changes and has passed my testing).
+Tested-by: qais.yousef at arm.com
+Tested-by: dietmar.eggemann at arm.com
+Tested-by: linux at manojrajarao.com
+Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+---
 
-An alternative approach to untagging pointers in memory syscalls prologues
-is to inspead allow tagged pointers to be passed to find_vma() (and other
-vma related functions) and untag them there. Unfortunately, a lot of
-find_vma() callers then compare or subtract the returned vma start and end
-fields against the pointer that was being searched. Thus this approach
-would still require changing all find_vma() callers.
+    v4 -> v5:
+    (Thanks to Masahiro Yamada for several excellent suggestions)
+    - used incbin instead of bin2c (Masahiro did similar idea)
+    - added module.lds if ia64 otherwise ia64 may fail to build.
+    - added clean-files rule to Makefile
+    - removed strip-comments script and doing it inline
+    - added set -e to header generated to die on errorsr
+    - fixed a minor issue where find command was noisy.
+    - removed unneeded tar.xz rule from kernel/.gitignore
+    - added Tested-by tags from ARM folks.
 
-=== Testing
+    Changes since v3:
+    - Blank tar was being generated because of a one line I
+      forgot to push. It is updated now.
+    - Added module.lds since arm64 needs it to build modules.
 
-The following testing approaches has been taken to find potential issues
-with user pointer untagging:
+    Changes since v2:
+    (Thanks to Masahiro Yamada for several excellent suggestions)
+    - Added support for out of tree builds.
+    - Added incremental build support bringing down build time of
+      incremental builds from 50 seconds to 5 seconds.
+    - Fixed various small nits / cleanups.
+    - clean ups to kheaders.c pointed by Alexey Dobriyan.
+    - Fixed MODULE_LICENSE in test module and kheaders.c
+    - Dropped Module.symvers from archive due to circular dependency.
 
-1. Static testing (with sparse [2] and separately with a custom static
-   analyzer based on Clang) to track casts of __user pointers to integer
-   types to find places where untagging needs to be done.
+    Changes since v1:
+    - removed IKH_EXTRA variable, not needed (Masahiro Yamada)
+    - small fix ups to selftest
+       - added target to main Makefile etc
+       - added MODULE_LICENSE to test module
+       - made selftest more quiet
 
-2. Static testing with grep to find parts of the kernel that call
-   find_vma() (and other similar functions) or directly compare against
-   vm_start/vm_end fields of vma.
+    Changes since RFC:
+    Both changes bring size down to 3.8MB:
+    - use xz for compression
+    - strip comments except SPDX lines
+    - Call out the module name in Kconfig
+    - Also added selftests in second patch to ensure headers are always
+    working.
 
-3. Static testing with grep to find parts of the kernel that compare
-   user pointers with TASK_SIZE or other similar consts and macros.
+ init/Kconfig            | 11 ++++++
+ kernel/.gitignore       |  1 +
+ kernel/Makefile         | 28 ++++++++++++++
+ kernel/kheaders.c       | 73 +++++++++++++++++++++++++++++++++++
+ scripts/gen_ikh_data.sh | 84 +++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 197 insertions(+)
+ create mode 100644 kernel/kheaders.c
+ create mode 100755 scripts/gen_ikh_data.sh
 
-4. Dynamic testing: adding BUG_ON(has_tag(addr)) to find_vma() and running
-   a modified syzkaller version that passes tagged pointers to the kernel.
-
-Based on the results of the testing the requried patches have been added
-to the patchset.
-
-=== Notes
-
-This patchset is meant to be merged together with "arm64 relaxed ABI" [3].
-
-This patchset is a prerequisite for ARM's memory tagging hardware feature
-support [4].
-
-This patchset has been merged into the Pixel 2 kernel tree and is now
-being used to enable testing of Pixel 2 phones with HWASan.
-
-Thanks!
-
-[1] http://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html
-
-[2] https://github.com/lucvoo/sparse-dev/commit/5f960cb10f56ec2017c128ef9d16060e0145f292
-
-[3] https://lkml.org/lkml/2019/3/18/819
-
-[4] https://community.arm.com/processors/b/blog/posts/arm-a-profile-architecture-2018-developments-armv85a
-
-Changes in v13:
-- Simplified untagging in tcp_zerocopy_receive().
-- Looked at find_vma() callers in drivers/, which allowed to identify a
-  few other places where untagging is needed.
-- Added patch "mm, arm64: untag user pointers in get_vaddr_frames".
-- Added patch "drm/amdgpu, arm64: untag user pointers in
-  amdgpu_ttm_tt_get_user_pages".
-- Added patch "drm/radeon, arm64: untag user pointers in
-  radeon_ttm_tt_pin_userptr".
-- Added patch "IB/mlx4, arm64: untag user pointers in mlx4_get_umem_mr".
-- Added patch "media/v4l2-core, arm64: untag user pointers in
-  videobuf_dma_contig_user_get".
-- Added patch "tee/optee, arm64: untag user pointers in check_mem_type".
-- Added patch "vfio/type1, arm64: untag user pointers".
-
-Changes in v12:
-- Changed untagging in tcp_zerocopy_receive() to also untag zc->address.
-- Fixed untagging in prctl_set_mm* to only untag pointers for vma lookups
-  and validity checks, but leave them as is for actual user space accesses.
-- Updated the link to the v2 of the "arm64 relaxed ABI" patchset [3].
-- Dropped the documentation patch, as the "arm64 relaxed ABI" patchset [3]
-  handles that.
-
-Changes in v11:
-- Added "uprobes, arm64: untag user pointers in find_active_uprobe" patch.
-- Added "bpf, arm64: untag user pointers in stack_map_get_build_id_offset"
-  patch.
-- Fixed "tracing, arm64: untag user pointers in seq_print_user_ip" to
-  correctly perform subtration with a tagged addr.
-- Moved untagged_addr() from SYSCALL_DEFINE3(mprotect) and
-  SYSCALL_DEFINE4(pkey_mprotect) to do_mprotect_pkey().
-- Moved untagged_addr() definition for other arches from
-  include/linux/memory.h to include/linux/mm.h.
-- Changed untagging in strn*_user() to perform userspace accesses through
-  tagged pointers.
-- Updated the documentation to mention that passing tagged pointers to
-  memory syscalls is allowed.
-- Updated the test to use malloc'ed memory instead of stack memory.
-
-Changes in v10:
-- Added "mm, arm64: untag user pointers passed to memory syscalls" back.
-- New patch "fs, arm64: untag user pointers in fs/userfaultfd.c".
-- New patch "net, arm64: untag user pointers in tcp_zerocopy_receive".
-- New patch "kernel, arm64: untag user pointers in prctl_set_mm*".
-- New patch "tracing, arm64: untag user pointers in seq_print_user_ip".
-
-Changes in v9:
-- Rebased onto 4.20-rc6.
-- Used u64 instead of __u64 in type casts in the untagged_addr macro for
-  arm64.
-- Added braces around (addr) in the untagged_addr macro for other arches.
-
-Changes in v8:
-- Rebased onto 65102238 (4.20-rc1).
-- Added a note to the cover letter on why syscall wrappers/shims that untag
-  user pointers won't work.
-- Added a note to the cover letter that this patchset has been merged into
-  the Pixel 2 kernel tree.
-- Documentation fixes, in particular added a list of syscalls that don't
-  support tagged user pointers.
-
-Changes in v7:
-- Rebased onto 17b57b18 (4.19-rc6).
-- Dropped the "arm64: untag user address in __do_user_fault" patch, since
-  the existing patches already handle user faults properly.
-- Dropped the "usb, arm64: untag user addresses in devio" patch, since the
-  passed pointer must come from a vma and therefore be untagged.
-- Dropped the "arm64: annotate user pointers casts detected by sparse"
-  patch (see the discussion to the replies of the v6 of this patchset).
-- Added more context to the cover letter.
-- Updated Documentation/arm64/tagged-pointers.txt.
-
-Changes in v6:
-- Added annotations for user pointer casts found by sparse.
-- Rebased onto 050cdc6c (4.19-rc1+).
-
-Changes in v5:
-- Added 3 new patches that add untagging to places found with static
-  analysis.
-- Rebased onto 44c929e1 (4.18-rc8).
-
-Changes in v4:
-- Added a selftest for checking that passing tagged pointers to the
-  kernel succeeds.
-- Rebased onto 81e97f013 (4.18-rc1+).
-
-Changes in v3:
-- Rebased onto e5c51f30 (4.17-rc6+).
-- Added linux-arch@ to the list of recipients.
-
-Changes in v2:
-- Rebased onto 2d618bdf (4.17-rc3+).
-- Removed excessive untagging in gup.c.
-- Removed untagging pointers returned from __uaccess_mask_ptr.
-
-Changes in v1:
-- Rebased onto 4.17-rc1.
-
-Changes in RFC v2:
-- Added "#ifndef untagged_addr..." fallback in linux/uaccess.h instead of
-  defining it for each arch individually.
-- Updated Documentation/arm64/tagged-pointers.txt.
-- Dropped "mm, arm64: untag user addresses in memory syscalls".
-- Rebased onto 3eb2ce82 (4.16-rc7).
-
-Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
-
-Andrey Konovalov (20):
-  uaccess: add untagged_addr definition for other arches
-  arm64: untag user pointers in access_ok and __uaccess_mask_ptr
-  lib, arm64: untag user pointers in strn*_user
-  mm, arm64: untag user pointers passed to memory syscalls
-  mm, arm64: untag user pointers in mm/gup.c
-  mm, arm64: untag user pointers in get_vaddr_frames
-  fs, arm64: untag user pointers in copy_mount_options
-  fs, arm64: untag user pointers in fs/userfaultfd.c
-  net, arm64: untag user pointers in tcp_zerocopy_receive
-  kernel, arm64: untag user pointers in prctl_set_mm*
-  tracing, arm64: untag user pointers in seq_print_user_ip
-  uprobes, arm64: untag user pointers in find_active_uprobe
-  bpf, arm64: untag user pointers in stack_map_get_build_id_offset
-  drm/amdgpu, arm64: untag user pointers in amdgpu_ttm_tt_get_user_pages
-  drm/radeon, arm64: untag user pointers in radeon_ttm_tt_pin_userptr
-  IB/mlx4, arm64: untag user pointers in mlx4_get_umem_mr
-  media/v4l2-core, arm64: untag user pointers in
-    videobuf_dma_contig_user_get
-  tee/optee, arm64: untag user pointers in check_mem_type
-  vfio/type1, arm64: untag user pointers in vaddr_get_pfn
-  selftests, arm64: add a selftest for passing tagged pointers to kernel
-
- arch/arm64/include/asm/uaccess.h              | 10 +++--
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c       |  5 ++-
- drivers/gpu/drm/radeon/radeon_ttm.c           |  5 ++-
- drivers/infiniband/hw/mlx4/mr.c               |  7 +--
- drivers/media/v4l2-core/videobuf-dma-contig.c |  9 ++--
- drivers/tee/optee/call.c                      |  1 +
- drivers/vfio/vfio_iommu_type1.c               |  2 +
- fs/namespace.c                                |  2 +-
- fs/userfaultfd.c                              |  5 +++
- include/linux/mm.h                            |  4 ++
- ipc/shm.c                                     |  2 +
- kernel/bpf/stackmap.c                         |  6 ++-
- kernel/events/uprobes.c                       |  2 +
- kernel/sys.c                                  | 44 +++++++++++++------
- kernel/trace/trace_output.c                   |  5 ++-
- lib/strncpy_from_user.c                       |  3 +-
- lib/strnlen_user.c                            |  3 +-
- mm/frame_vector.c                             |  2 +
- mm/gup.c                                      |  4 ++
- mm/madvise.c                                  |  2 +
- mm/mempolicy.c                                |  5 +++
- mm/migrate.c                                  |  1 +
- mm/mincore.c                                  |  2 +
- mm/mlock.c                                    |  5 +++
- mm/mmap.c                                     |  7 +++
- mm/mprotect.c                                 |  1 +
- mm/mremap.c                                   |  2 +
- mm/msync.c                                    |  2 +
- net/ipv4/tcp.c                                |  2 +
- tools/testing/selftests/arm64/.gitignore      |  1 +
- tools/testing/selftests/arm64/Makefile        | 11 +++++
- .../testing/selftests/arm64/run_tags_test.sh  | 12 +++++
- tools/testing/selftests/arm64/tags_test.c     | 21 +++++++++
- 33 files changed, 159 insertions(+), 36 deletions(-)
- create mode 100644 tools/testing/selftests/arm64/.gitignore
- create mode 100644 tools/testing/selftests/arm64/Makefile
- create mode 100755 tools/testing/selftests/arm64/run_tags_test.sh
- create mode 100644 tools/testing/selftests/arm64/tags_test.c
-
+diff --git a/init/Kconfig b/init/Kconfig
+index 4592bf7997c0..ea75bfbf7dfa 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -580,6 +580,17 @@ config IKCONFIG_PROC
+ 	  This option enables access to the kernel configuration file
+ 	  through /proc/config.gz.
+ 
++config IKHEADERS_PROC
++	tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
++	depends on PROC_FS
++	help
++	  This option enables access to the kernel header and other artifacts that
++          are generated during the build process. These can be used to build kernel
++          modules or by other in-kernel programs such as those generated by eBPF
++          and systemtap tools. If you build the headers as a module, a module
++          called kheaders.ko is built which can be loaded on-demand to get access
++          to the headers.
++
+ config LOG_BUF_SHIFT
+ 	int "Kernel log buffer size (16 => 64KB, 17 => 128KB)"
+ 	range 12 25
+diff --git a/kernel/.gitignore b/kernel/.gitignore
+index 6e699100872f..34d1e77ee9df 100644
+--- a/kernel/.gitignore
++++ b/kernel/.gitignore
+@@ -1,5 +1,6 @@
+ #
+ # Generated files
+ #
++kheaders.md5
+ timeconst.h
+ hz.bc
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 6c57e78817da..7c486bc25fd7 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -70,6 +70,7 @@ obj-$(CONFIG_UTS_NS) += utsname.o
+ obj-$(CONFIG_USER_NS) += user_namespace.o
+ obj-$(CONFIG_PID_NS) += pid_namespace.o
+ obj-$(CONFIG_IKCONFIG) += configs.o
++obj-$(CONFIG_IKHEADERS_PROC) += kheaders.o
+ obj-$(CONFIG_SMP) += stop_machine.o
+ obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
+ obj-$(CONFIG_AUDIT) += audit.o auditfilter.o
+@@ -121,3 +122,30 @@ $(obj)/configs.o: $(obj)/config_data.gz
+ targets += config_data.gz
+ $(obj)/config_data.gz: $(KCONFIG_CONFIG) FORCE
+ 	$(call if_changed,gzip)
++
++# Build a list of in-kernel headers for building kernel modules
++ikh_file_list := include/
++ikh_file_list += arch/$(SRCARCH)/Makefile
++ikh_file_list += arch/$(SRCARCH)/include/
++ikh_file_list += arch/$(SRCARCH)/module.lds
++ikh_file_list += arch/$(SRCARCH)/kernel/module.lds
++ikh_file_list += scripts/
++ikh_file_list += Makefile
++
++# Things we need from the $objtree. "OBJDIR" is for the gen_ikh_data.sh
++# script to identify that this comes from the $objtree directory
++ikh_file_list += OBJDIR/scripts/
++ikh_file_list += OBJDIR/include/
++ikh_file_list += OBJDIR/arch/$(SRCARCH)/include/
++ifeq ($(CONFIG_STACK_VALIDATION), y)
++ikh_file_list += OBJDIR/tools/objtool/objtool
++endif
++
++$(obj)/kheaders.o: $(obj)/kheaders_data.tar.xz
++
++quiet_cmd_genikh = GEN     $(obj)/kheaders_data.tar.xz
++cmd_genikh = $(srctree)/scripts/gen_ikh_data.sh $@ $(ikh_file_list)
++$(obj)/kheaders_data.tar.xz: FORCE
++	$(call cmd,genikh)
++
++clean-files := kheaders_data.tar.xz kheaders.md5
+diff --git a/kernel/kheaders.c b/kernel/kheaders.c
+new file mode 100644
+index 000000000000..d072a958a8f1
+--- /dev/null
++++ b/kernel/kheaders.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * kernel/kheaders.c
++ * Provide headers and artifacts needed to build kernel modules.
++ * (Borrowed code from kernel/configs.c)
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/proc_fs.h>
++#include <linux/init.h>
++#include <linux/uaccess.h>
++
++/*
++ * Define kernel_headers_data and kernel_headers_data_end, within which the the
++ * compressed kernel headers are stpred. The file is first compressed with xz.
++ */
++
++asm (
++"	.pushsection .rodata, \"a\"		\n"
++"	.global kernel_headers_data		\n"
++"kernel_headers_data:				\n"
++"	.incbin \"kernel/kheaders_data.tar.xz\"	\n"
++"	.global kernel_headers_data_end		\n"
++"kernel_headers_data_end:			\n"
++"	.popsection				\n"
++);
++
++extern char kernel_headers_data;
++extern char kernel_headers_data_end;
++
++static ssize_t
++ikheaders_read_current(struct file *file, char __user *buf,
++		      size_t len, loff_t *offset)
++{
++	return simple_read_from_buffer(buf, len, offset,
++				       &kernel_headers_data,
++				       &kernel_headers_data_end -
++				       &kernel_headers_data);
++}
++
++static const struct file_operations ikheaders_file_ops = {
++	.read = ikheaders_read_current,
++	.llseek = default_llseek,
++};
++
++static int __init ikheaders_init(void)
++{
++	struct proc_dir_entry *entry;
++
++	/* create the current headers file */
++	entry = proc_create("kheaders.tar.xz", S_IRUGO, NULL,
++			    &ikheaders_file_ops);
++	if (!entry)
++		return -ENOMEM;
++
++	proc_set_size(entry,
++		      &kernel_headers_data_end -
++		      &kernel_headers_data);
++	return 0;
++}
++
++static void __exit ikheaders_cleanup(void)
++{
++	remove_proc_entry("kheaders.tar.xz", NULL);
++}
++
++module_init(ikheaders_init);
++module_exit(ikheaders_cleanup);
++
++MODULE_LICENSE("GPL v2");
++MODULE_AUTHOR("Joel Fernandes");
++MODULE_DESCRIPTION("Echo the kernel header artifacts used to build the kernel");
+diff --git a/scripts/gen_ikh_data.sh b/scripts/gen_ikh_data.sh
+new file mode 100755
+index 000000000000..3f9cae72c2a4
+--- /dev/null
++++ b/scripts/gen_ikh_data.sh
+@@ -0,0 +1,84 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++# This script generates an archive consisting of kernel headers
++# for CONFIG_IKHEADERS_PROC.
++set -e
++
++spath="$(dirname "$(readlink -f "$0")")"
++kroot="$spath/.."
++outdir="$(pwd)"
++tarfile=$1
++cpio_dir=$outdir/$tarfile.tmp
++
++file_list=${@:2}
++
++src_file_list=""
++for f in $file_list; do
++	if [ ! -f "$kroot/$f" ] && [ ! -d "$kroot/$f" ]; then continue; fi
++	src_file_list="$src_file_list $(echo $f | grep -v OBJDIR)"
++done
++
++obj_file_list=""
++for f in $file_list; do
++	f=$(echo $f | grep OBJDIR | sed -e 's/OBJDIR\///g')
++	if [ ! -f $f ] && [ ! -d $f ]; then continue; fi
++	obj_file_list="$obj_file_list $f";
++done
++
++# Support incremental builds by skipping archive generation
++# if timestamps of files being archived are not changed.
++
++# This block is useful for debugging the incremental builds.
++# Uncomment it for debugging.
++# iter=1
++# if [ ! -f /tmp/iter ]; then echo 1 > /tmp/iter;
++# else; 	iter=$(($(cat /tmp/iter) + 1)); fi
++# find $src_file_list -type f | xargs ls -lR > /tmp/src-ls-$iter
++# find $obj_file_list -type f | xargs ls -lR > /tmp/obj-ls-$iter
++
++# modules.order and include/generated/compile.h are ignored because these are
++# touched even when none of the source files changed. This causes pointless
++# regeneration, so let us ignore them for md5 calculation.
++pushd $kroot > /dev/null
++src_files_md5="$(find $src_file_list -type f ! -name modules.order |
++		grep -v "include/generated/compile.h"		   |
++		xargs ls -lR | md5sum | cut -d ' ' -f1)"
++popd > /dev/null
++obj_files_md5="$(find $obj_file_list -type f ! -name modules.order |
++		grep -v "include/generated/compile.h"		   |
++		xargs ls -lR | md5sum | cut -d ' ' -f1)"
++
++if [ -f $tarfile ]; then tarfile_md5="$(md5sum $tarfile | cut -d ' ' -f1)"; fi
++if [ -f kernel/kheaders.md5 ] &&
++	[ "$(cat kernel/kheaders.md5|head -1)" == "$src_files_md5" ] &&
++	[ "$(cat kernel/kheaders.md5|head -2|tail -1)" == "$obj_files_md5" ] &&
++	[ "$(cat kernel/kheaders.md5|tail -1)" == "$tarfile_md5" ]; then
++		exit
++fi
++
++rm -rf $cpio_dir
++mkdir $cpio_dir
++
++pushd $kroot > /dev/null
++for f in $src_file_list;
++	do find "$f" ! -name "*.c" ! -name "*.o" ! -name "*.cmd" ! -name ".*";
++done | cpio --quiet -pd $cpio_dir
++popd > /dev/null
++
++# The second CPIO can complain if files already exist which can
++# happen with out of tree builds. Just silence CPIO for now.
++for f in $obj_file_list;
++	do find "$f" ! -name "*.c" ! -name "*.o" ! -name "*.cmd" ! -name ".*";
++done | cpio --quiet -pd $cpio_dir >/dev/null 2>&1
++
++find  $cpio_dir -type f -print0 |
++	xargs -0 -P8 -n1 perl -pi -e 'BEGIN {undef $/;}; s/\/\*((?!SPDX).)*?\*\///smg;'
++
++tar -Jcf $tarfile -C $cpio_dir/ . > /dev/null
++
++echo "$src_files_md5" > kernel/kheaders.md5
++echo "$obj_files_md5" >> kernel/kheaders.md5
++echo "$(md5sum $tarfile | cut -d ' ' -f1)" >> kernel/kheaders.md5
++
++rm -rf $cpio_dir
 -- 
 2.21.0.225.g810b269d1ac-goog
