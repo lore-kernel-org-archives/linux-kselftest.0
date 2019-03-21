@@ -1,24 +1,55 @@
-From: sergey.senozhatsky.work@gmail.com (Sergey Senozhatsky)
-Date: Thu, 21 Mar 2019 09:34:26 +0900
-Subject: [PATCHv2 bpf-next 1/3] bpf, tests: tweak endianness selection
-In-Reply-To: <20190320222759.GQ7431@mini-arch.hsd1.ca.comcast.net>
-References: <20190320125335.19621-1-sergey.senozhatsky@gmail.com>
- <20190320171332.GJ7431@mini-arch.hsd1.ca.comcast.net>
- <4c6db4e5-8e77-2e01-a4ab-25808df2b857@fb.com>
- <20190320222759.GQ7431@mini-arch.hsd1.ca.comcast.net>
-Message-ID: <20190321003426.GB2097@jagdpanzerIV>
+From: logang@deltatee.com (Logan Gunthorpe)
+Date: Wed, 20 Mar 2019 19:07:34 -0600
+Subject: [RFC v4 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20190214213729.21702-1-brendanhiggins@google.com>
+References: <20190214213729.21702-1-brendanhiggins@google.com>
+Message-ID: <6d9b3b21-1179-3a45-7545-30aa15306cb4@deltatee.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190321003426.nIZDlNQDkQAwaAhvBG4Cx3eSf-Pvz5bMKF6oKVltyn0@z>
+Message-ID: <20190321010734.gFQKP8o3_Sh7oKxsNqkj6MhREMZjh1yWwNtfeuQB9bg@z>
 
-On (03/20/19 15:27), Stanislav Fomichev wrote:
-[..]
-> > Inside kernel clang compiler header (linux/compiler-clang.h) does not 
-> > define __HAVE_BUILTIN_BSWAP16__. So it will go to the "else" branch in 
-> > the above. So I think it should work with clang + bpf.
-> Hm, isn't it the opposite of what we want then? I think for llvm+bpf we always
-> want to use the builtins to make it properly generate
-> BPF_TO_BE/BPF_TO_LE instructions.
+Hi,
 
-Oh, hmm, OK. I see your point now. bpf insn set for variables.
+On 2019-02-14 2:37 p.m., Brendan Higgins wrote:
+> This patch set proposes KUnit, a lightweight unit testing and mocking
+> framework for the Linux kernel.
 
-	-ss
+I haven't followed the entire conversation but I saw the KUnit write-up
+on LWN and ended up, as an exercise, giving it a try.
+
+I really like the idea of having a fast unit testing infrastructure in
+the kernel. Occasionally, I write userspace tests for tricky functions
+that I essentially write by copying the code over to a throw away C file
+and exercise them as I need. I think it would be great to be able to
+keep these tests around in a way that they can be run by anyone who
+wants to touch the code.
+
+I was just dealing with some functions that required some mocked up
+tests so I thought I'd give KUnit a try. I found writing the code very
+easy and the infrastructure I was testing was quite simple to mock out
+the hardware.
+
+However, I got a bit hung up by one issue: I was writing unit tests for
+code in the NTB tree which itself depends on CONFIG_PCI which cannot be
+enabled in UML (for what should be obvious reasons). I managed to work
+around this because, as luck would have it, all the functions I cared
+about testing were actually static inline functions in headers. So I
+placed my test code in the kunit folder (so it would compile) and hacked
+around a couple a of functions I didn't care about that would not be
+compiled.
+
+In the end I got it to work acceptably, but I get the impression that
+KUnit will not be usable for wide swaths of kernel code that can't be
+compiled in UML. Has there been any discussion or ideas on how to work
+around this so it can be more generally useful? Or will this feature be
+restricted roughly to non-drivers and functions in headers that don't
+have #ifdefs around them?
+
+If you're interested in seeing the unit tests I ended up writing you can
+find the commits here[1].
+
+Thanks,
+
+Logan
+
+[1] https://github.com/sbates130272/linux-p2pmem/ ntb_kunit
