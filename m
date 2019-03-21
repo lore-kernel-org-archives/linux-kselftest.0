@@ -1,149 +1,153 @@
-From: kevin.brodsky at arm.com (Kevin Brodsky)
-Date: Thu, 21 Mar 2019 17:52:37 +0000
-Subject: [PATCH v13 10/20] kernel, arm64: untag user pointers in
- prctl_set_mm*
-In-Reply-To: <76f96eb9162b3a7fa5949d71af38bf8fdf6924c4.1553093421.git.andreyknvl@google.com>
-References: <cover.1553093420.git.andreyknvl@google.com>
- <76f96eb9162b3a7fa5949d71af38bf8fdf6924c4.1553093421.git.andreyknvl@google.com>
-Message-ID: <c5b9f421-0dd8-d56f-c591-0c841cbdfe3b@arm.com>
+From: knut.omang at oracle.com (Knut Omang)
+Date: Thu, 21 Mar 2019 20:13:56 +0100
+Subject: [RFC v4 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <CAFd5g45LKU+SZAFzn3RNCoxhzum0NAr9t+UJ80SJDMc_FeKgBQ@mail.gmail.com>
+References: <20190214213729.21702-1-brendanhiggins@google.com>
+ <6d9b3b21-1179-3a45-7545-30aa15306cb4@deltatee.com>
+ <01b2a950f661e8ebd6acbc45c2f89c8f10063daf.camel@oracle.com>
+ <ce355f5c-189c-816c-cde4-fb4e816d44e7@deltatee.com>
+ <CAFd5g45LKU+SZAFzn3RNCoxhzum0NAr9t+UJ80SJDMc_FeKgBQ@mail.gmail.com>
+Message-ID: <73b62e929f631038a9d8d21d261aa22ac3c18949.camel@oracle.com>
 
-On 20/03/2019 14:51, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
->
-> prctl_set_mm() and prctl_set_mm_map() use provided user pointers for vma
-> lookups and do some pointer comparisons to perform validation, which can
-> only by done with untagged pointers.
->
-> Untag user pointers in these functions for vma lookup and validity checks.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
-> ---
->   kernel/sys.c | 44 ++++++++++++++++++++++++++++++--------------
->   1 file changed, 30 insertions(+), 14 deletions(-)
->
-> diff --git a/kernel/sys.c b/kernel/sys.c
-> index 12df0e5434b8..fe26ccf3c9e6 100644
-> --- a/kernel/sys.c
-> +++ b/kernel/sys.c
-> @@ -1885,11 +1885,12 @@ static int prctl_set_mm_exe_file(struct mm_struct *mm, unsigned int fd)
->    * WARNING: we don't require any capability here so be very careful
->    * in what is allowed for modification from userspace.
->    */
-> -static int validate_prctl_map(struct prctl_mm_map *prctl_map)
-> +static int validate_prctl_map(struct prctl_mm_map *tagged_prctl_map)
->   {
->   	unsigned long mmap_max_addr = TASK_SIZE;
->   	struct mm_struct *mm = current->mm;
->   	int error = -EINVAL, i;
-> +	struct prctl_mm_map prctl_map;
->   
->   	static const unsigned char offsets[] = {
->   		offsetof(struct prctl_mm_map, start_code),
-> @@ -1905,12 +1906,25 @@ static int validate_prctl_map(struct prctl_mm_map *prctl_map)
->   		offsetof(struct prctl_mm_map, env_end),
->   	};
->   
-> +	memcpy(&prctl_map, tagged_prctl_map, sizeof(prctl_map));
-> +	prctl_map.start_code	= untagged_addr(prctl_map.start_code);
-> +	prctl_map.end_code	= untagged_addr(prctl_map.end_code);
-> +	prctl_map.start_data	= untagged_addr(prctl_map.start_data);
-> +	prctl_map.end_data	= untagged_addr(prctl_map.end_data);
-> +	prctl_map.start_brk	= untagged_addr(prctl_map.start_brk);
-> +	prctl_map.brk		= untagged_addr(prctl_map.brk);
-> +	prctl_map.start_stack	= untagged_addr(prctl_map.start_stack);
-> +	prctl_map.arg_start	= untagged_addr(prctl_map.arg_start);
-> +	prctl_map.arg_end	= untagged_addr(prctl_map.arg_end);
-> +	prctl_map.env_start	= untagged_addr(prctl_map.env_start);
-> +	prctl_map.env_end	= untagged_addr(prctl_map.env_end);
-> +
->   	/*
->   	 * Make sure the members are not somewhere outside
->   	 * of allowed address space.
->   	 */
->   	for (i = 0; i < ARRAY_SIZE(offsets); i++) {
-> -		u64 val = *(u64 *)((char *)prctl_map + offsets[i]);
-> +		u64 val = *(u64 *)((char *)&prctl_map + offsets[i]);
->   
->   		if ((unsigned long)val >= mmap_max_addr ||
->   		    (unsigned long)val < mmap_min_addr)
-> @@ -1921,8 +1935,8 @@ static int validate_prctl_map(struct prctl_mm_map *prctl_map)
->   	 * Make sure the pairs are ordered.
->   	 */
->   #define __prctl_check_order(__m1, __op, __m2)				\
-> -	((unsigned long)prctl_map->__m1 __op				\
-> -	 (unsigned long)prctl_map->__m2) ? 0 : -EINVAL
-> +	((unsigned long)prctl_map.__m1 __op				\
-> +	 (unsigned long)prctl_map.__m2) ? 0 : -EINVAL
->   	error  = __prctl_check_order(start_code, <, end_code);
->   	error |= __prctl_check_order(start_data, <, end_data);
->   	error |= __prctl_check_order(start_brk, <=, brk);
-> @@ -1937,23 +1951,24 @@ static int validate_prctl_map(struct prctl_mm_map *prctl_map)
->   	/*
->   	 * @brk should be after @end_data in traditional maps.
->   	 */
-> -	if (prctl_map->start_brk <= prctl_map->end_data ||
-> -	    prctl_map->brk <= prctl_map->end_data)
-> +	if (prctl_map.start_brk <= prctl_map.end_data ||
-> +	    prctl_map.brk <= prctl_map.end_data)
->   		goto out;
->   
->   	/*
->   	 * Neither we should allow to override limits if they set.
->   	 */
-> -	if (check_data_rlimit(rlimit(RLIMIT_DATA), prctl_map->brk,
-> -			      prctl_map->start_brk, prctl_map->end_data,
-> -			      prctl_map->start_data))
-> +	if (check_data_rlimit(rlimit(RLIMIT_DATA), prctl_map.brk,
-> +			      prctl_map.start_brk, prctl_map.end_data,
-> +			      prctl_map.start_data))
->   			goto out;
->   
->   	/*
->   	 * Someone is trying to cheat the auxv vector.
->   	 */
-> -	if (prctl_map->auxv_size) {
-> -		if (!prctl_map->auxv || prctl_map->auxv_size > sizeof(mm->saved_auxv))
-> +	if (prctl_map.auxv_size) {
-> +		if (!prctl_map.auxv || prctl_map.auxv_size >
-> +						sizeof(mm->saved_auxv))
->   			goto out;
->   	}
->   
-> @@ -1962,7 +1977,7 @@ static int validate_prctl_map(struct prctl_mm_map *prctl_map)
->   	 * change /proc/pid/exe link: only local sys admin should
->   	 * be allowed to.
->   	 */
-> -	if (prctl_map->exe_fd != (u32)-1) {
-> +	if (prctl_map.exe_fd != (u32)-1) {
->   		if (!ns_capable(current_user_ns(), CAP_SYS_ADMIN))
->   			goto out;
->   	}
-> @@ -2120,13 +2135,14 @@ static int prctl_set_mm(int opt, unsigned long addr,
->   	if (opt == PR_SET_MM_AUXV)
->   		return prctl_set_auxv(mm, addr, arg4);
->   
-> -	if (addr >= TASK_SIZE || addr < mmap_min_addr)
-> +	if (untagged_addr(addr) >= TASK_SIZE ||
-> +			untagged_addr(addr) < mmap_min_addr)
->   		return -EINVAL;
->   
->   	error = -EINVAL;
->   
->   	down_write(&mm->mmap_sem);
-> -	vma = find_vma(mm, addr);
-> +	vma = find_vma(mm, untagged_addr(addr));
->   
->   	prctl_map.start_code	= mm->start_code;
->   	prctl_map.end_code	= mm->end_code;
+On Thu, 2019-03-21 at 09:55 -0700, Brendan Higgins wrote:
+> On Thu, Mar 21, 2019 at 8:56 AM Logan Gunthorpe <logang at deltatee.com> wrote:
+> > 
+> > 
+> > On 2019-03-20 11:23 p.m., Knut Omang wrote:
+> > > Testing drivers, hardware and firmware within production kernels was the
+> > > use
+> > > case that inspired KTF (Kernel Test Framework). Currently KTF is available
+> > > as a
+> > > standalone git repository. That's been the most efficient form for us so
+> > > far,
+> > > as we typically want tests to be developed once but deployed on many
+> > > different
+> > > kernel versions simultaneously, as part of continuous integration.
+> > 
+> > Interesting. It seems like it's really in direct competition with KUnit.
+> 
+> I won't speak for Knut, but I don't think we are in competition. 
 
-I think this new version is consistent w.r.t. tagged/untagged pointer usage. However, 
-I also note that a significant change has been introduced: it is now possible to set 
-MM fields to tagged addresses (tags are ignored by validate_prctl_map()). I am not 
-opposed to this as such, but have you considered the implications? Does it make sense 
-to have a tagged value for e.g. prctl_map.arg_start? Is the kernel able to handle 
-tagged values in those fields? I have the feeling that it's safer to discard tags for 
-now, and if necessary allow them to be preserved later on.
+I would rather say we have some overlap in functionality :)
+My understanding is that we have a common goal of providing better
+infrastructure for testing, but have approached this whole problem complex from
+somewhat different perspectives.
 
-Kevin
+> I see
+> KTF as a novel way to do a kind of white box end-to-end testing for
+> the Linux kernel, which is a valuable thing, especially in some
+> circumstances. I could see KTF having a lot of value for someone who
+> wants to maintain out of tree drivers, in particular.
+
+The best argument here is really good examples.
+I'm not sure the distinction between "black box" and "white box" testing is
+useful here, there's always underlying assumptions behind specific,
+deterministic tests. Writing a test is a very good way to get to 
+understand a piece of code. Just look at the flow of the example in
+https://blogs.oracle.com/linux/writing-kernel-tests-with-the-new-kernel-test-framework-ktf, clearly unit tests, but the knowledge gathering is an important
+part and motivation!
+
+> Nevertheless, I don't really see KTF as a real unit testing framework
+> for a number of different reasons; you pointed out some below, but I
+> think the main one being that it requires booting a real kernel on
+> actual hardware; 
+
+That depends on what you want to test. If you need hardware (or simulated or
+emulated hardware) for the test, of course you would need to have that hardware,
+but if, lets say, you just wanted to run tests like the skbuff example tests
+(see link above) you wouldn't need anything more than what you need to run KUnit
+tests.
+
+> I imagine it could be made to work on a VM, but that
+> isn't really the point; it fundamentally depends on having part of the
+> test, or at least driving the test from userspace on top of the kernel
+> under test. Knut, myself, and others, had a previous discussion to
+> this effect here: https://lkml.org/lkml/2018/11/24/170
+
+> > I didn't really go into it in too much detail but these are my thoughts:
+> > 
+> > From a developer perspective I think KTF not being in the kernel tree is
+> > a huge negative. I want minimal effort to include my tests in a patch
+> > series and minimal effort for other developers to be able to use them.
+> > Needing to submit these tests to another project or use another project
+> > to run them is too much friction.
+
+As said, I recognize the need to upstream KTF, and we are working to do that,
+that's why I bother to write this :)
+
+> > Also I think the goal of having tests that run on any kernel version is
+> > a pipe dream. 
+
+I have fulfilled that dream, so I know it is possible (Inifinband driver,
+kernels from 2.6.39 to 4.8.x or so..) I know a lot of projects would benefit
+from support for such workflows, but that's not really the point here - we want
+to achieve both goals!
+
+> > You'd absolutely need a way to encode which kernel
+> > versions a test is expected to pass on because the tests might not make
+> > sense until a feature is finished in upstream. And this makes it even
+> > harder to develop these tests because, when we write them, we might not
+> > even know which kernel version the feature will be added to. Similarly,
+> > if a feature is removed or substantially changed, someone will have to
+> > do a patch to disable the test for subsequent kernel versions and create
+> > a new test for changed features. So, IMO, tests absolutely have to be
+> > part of the kernel tree so they can be changed with the respective
+> > features they test.
+
+Of course a feature that is not part of a kernel cannot easily pass for that
+kernel. And yes, testing for kernel version might be necessary in some cases,
+and even to write a section of extra code to handle differences, still that's 
+worth the benefit.
+And that's also a use case: "Can I use kernel v.X.Y.Z if I need feature w?"
+Lets assume we had a set of tests covering a particular feature, and someone
+needed that feature, then they could just run the latest set of tests for that
+feature on an older kernel to determine if they had enough support for what they
+needed. If necessary, they could then backport the feature, and run the tests to
+verify that they actually implemented it correctly.
+
+On example I recall of this from the Infiniband driver times was 
+the need to have a predictable way to efficiently use huge scatterlists across
+kernels. We relied upon scatterlist chaining in a particular way, and the API
+descriptions did not really specify to a detailed enough level how the
+guaranteed semantics were supposed to be.
+I wrote a few simple KTF tests that tested the driver code for the semantics we
+expected, and ran them against older and newer kernels and used them to make
+sure we would have a driver that worked across a few subtle changes to
+scatterlists and their use. 
+
+> > Kunit's ability to run without having to build and run the entire kernel
+> >  is also a huge plus. 
+
+IMHO the UML kernel is still a kernel running inside a user land program,
+and so is a QEMU/KVM VM, which is my favourite KTF test environment.
+ 
+Also with UML it is more difficult/less useful to deploy user space tools such
+as valgrind, which IMHO would be my main reason for getting kernel code out of
+the kernel. I recognize that there's a need for 
+doing just that (e.g. compiling complicated data structures entirely in user
+space with mocked interfaces) but I think it would be much more useful 
+to be able to do that without the additional complexity of UML (or QEMU).
+
+> > (Assuming there's a way to get around the build
+> > dependency issues). Because of this, it can be very quick to run these
+> > tests which makes development a *lot* easier seeing you don't have to
+> > reboot a machine every time you want to test a fix.
+
+If your target component under test can be built as a kernel module, or set of
+modules, with KTF your workflow would not involve booting at all (unless you
+happened to crash the system with one of your tests, that is :) )
+
+You would just unload your module under test and the test module, recompile the
+two and insmod again. My work current work cycle on this is just a few seconds.
+
+> I will reply to your comments directly on your original email. I don't
+> want to hijack this thread, in case we want to discuss the topic of
+> KUnit vs. KTF further.
+
+Good idea!
+We can at least agree upon that such an important matter as this can 
+be worthy a good, detailed discussion! :)
+
+Thanks!
+Knut
