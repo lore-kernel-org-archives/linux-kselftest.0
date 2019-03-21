@@ -1,30 +1,49 @@
-From: sdf@fomichev.me (Stanislav Fomichev)
-Date: Thu, 21 Mar 2019 08:49:28 -0700
-Subject: [PATCHv2 bpf-next 1/3] bpf, tests: tweak endianness selection
-In-Reply-To: <20190321050852.GA1534@jagdpanzerIV>
-References: <20190320125335.19621-1-sergey.senozhatsky@gmail.com>
- <20190321032429.2e7jddbltblaekjc@ast-mbp.dhcp.thefacebook.com>
- <20190321050852.GA1534@jagdpanzerIV>
-Message-ID: <20190321154928.GT7431@mini-arch.hsd1.ca.comcast.net>
+From: logang@deltatee.com (Logan Gunthorpe)
+Date: Thu, 21 Mar 2019 09:56:10 -0600
+Subject: [RFC v4 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <01b2a950f661e8ebd6acbc45c2f89c8f10063daf.camel@oracle.com>
+References: <20190214213729.21702-1-brendanhiggins@google.com>
+ <6d9b3b21-1179-3a45-7545-30aa15306cb4@deltatee.com>
+ <01b2a950f661e8ebd6acbc45c2f89c8f10063daf.camel@oracle.com>
+Message-ID: <ce355f5c-189c-816c-cde4-fb4e816d44e7@deltatee.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190321154928.UATGI70zi-Ama6Mx-bG8B2Tl1G3t1kenLV8Lqrz-TOk@z>
+Message-ID: <20190321155610.p37nw3BKlmUNwRkEKCR15iCrKp_Npy_w97BlzGcLgBw@z>
 
-On 03/21, Sergey Senozhatsky wrote:
-> On (03/20/19 20:24), Alexei Starovoitov wrote:
-> > On Wed, Mar 20, 2019@09:53:33PM +0900, Sergey Senozhatsky wrote:
-> > > Not all compilers have __builtin_bswap16() and __builtin_bswap32(),
-> > > thus not all compilers are able to compile the following code:
-> > > 
-> > >         (__builtin_constant_p(x) ? \
-> > >                 ___constant_swab16(x) : __builtin_bswap16(x))
-> > > 
-> > > That's the reason why bpf_ntohl() doesn't work on GCC < 4.8, for
-> > > instance:
-> > 
-> > nack to fixes to support such old compilers.
-> 
-> Fair enough.
-What is too old? Documentation/process/changes.rst says that minimum
-supported gcc is 4.6, do we lift that requirement for the tests?
 
-> 	-ss
+
+On 2019-03-20 11:23 p.m., Knut Omang wrote:
+> Testing drivers, hardware and firmware within production kernels was the use
+> case that inspired KTF (Kernel Test Framework). Currently KTF is available as a
+> standalone git repository. That's been the most efficient form for us so far, 
+> as we typically want tests to be developed once but deployed on many different
+> kernel versions simultaneously, as part of continuous integration.
+
+Interesting. It seems like it's really in direct competition with KUnit.
+I didn't really go into it in too much detail but these are my thoughts:
+
+>From a developer perspective I think KTF not being in the kernel tree is
+a huge negative. I want minimal effort to include my tests in a patch
+series and minimal effort for other developers to be able to use them.
+Needing to submit these tests to another project or use another project
+to run them is too much friction.
+
+Also I think the goal of having tests that run on any kernel version is
+a pipe dream. You'd absolutely need a way to encode which kernel
+versions a test is expected to pass on because the tests might not make
+sense until a feature is finished in upstream. And this makes it even
+harder to develop these tests because, when we write them, we might not
+even know which kernel version the feature will be added to. Similarly,
+if a feature is removed or substantially changed, someone will have to
+do a patch to disable the test for subsequent kernel versions and create
+a new test for changed features. So, IMO, tests absolutely have to be
+part of the kernel tree so they can be changed with the respective
+features they test.
+
+Kunit's ability to run without having to build and run the entire kernel
+ is also a huge plus. (Assuming there's a way to get around the build
+dependency issues). Because of this, it can be very quick to run these
+tests which makes development a *lot* easier seeing you don't have to
+reboot a machine every time you want to test a fix.
+
+Logan
