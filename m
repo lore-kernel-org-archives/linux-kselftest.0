@@ -1,115 +1,145 @@
 From: logang at deltatee.com (Logan Gunthorpe)
-Date: Thu, 21 Mar 2019 18:06:43 -0600
-Subject: [PATCH v3 08/10] NTB: Add ntb_msi_test support to ntb_test
-In-Reply-To: <20190322000645.15580-1-logang@deltatee.com>
-References: <20190322000645.15580-1-logang@deltatee.com>
-Message-ID: <20190322000645.15580-9-logang@deltatee.com>
+Date: Thu, 21 Mar 2019 18:06:35 -0600
+Subject: [PATCH v3 00/10] Support using MSI interrupts in ntb_transport
+Message-ID: <20190322000645.15580-1-logang@deltatee.com>
 
-When the ntb_msi_test module is available, the test code will trigger
-each of the interrupts and ensure the corresponding occurrences files
-gets incremented.
+This is version 3 of the MSI interrupts for ntb_transport patchset.
 
-Signed-off-by: Logan Gunthorpe <logang at deltatee.com>
-Cc: Jon Mason <jdmason at kudzu.us>
-Cc: Dave Jiang <dave.jiang at intel.com>
-Cc: Allen Hubbe <allenbh at gmail.com>
----
- tools/testing/selftests/ntb/ntb_test.sh | 54 ++++++++++++++++++++++++-
- 1 file changed, 52 insertions(+), 2 deletions(-)
+I've addressed the feedback so far and rebased on the latest kernel
+and would like this to be considered for merging this cycle.
 
-diff --git a/tools/testing/selftests/ntb/ntb_test.sh b/tools/testing/selftests/ntb/ntb_test.sh
-index 17ca36403d04..1a10b8f67727 100755
---- a/tools/testing/selftests/ntb/ntb_test.sh
-+++ b/tools/testing/selftests/ntb/ntb_test.sh
-@@ -87,10 +87,10 @@ set -e
- 
- function _modprobe()
- {
--	modprobe "$@"
-+	modprobe "$@" || return 1
- 
- 	if [[ "$REMOTE_HOST" != "" ]]; then
--		ssh "$REMOTE_HOST" modprobe "$@"
-+		ssh "$REMOTE_HOST" modprobe "$@" || return 1
- 	fi
- }
- 
-@@ -451,6 +451,30 @@ function pingpong_test()
- 	echo "  Passed"
- }
- 
-+function msi_test()
-+{
-+	LOC=$1
-+	REM=$2
-+
-+	write_file 1 $LOC/ready
-+
-+	echo "Running MSI interrupt tests on: $(subdirname $LOC) / $(subdirname $REM)"
-+
-+	CNT=$(read_file "$LOC/count")
-+	for ((i = 0; i < $CNT; i++)); do
-+		START=$(read_file $REM/../irq${i}_occurrences)
-+		write_file $i $LOC/trigger
-+		END=$(read_file $REM/../irq${i}_occurrences)
-+
-+		if [[ $(($END - $START)) != 1 ]]; then
-+			echo "MSI did not trigger the interrupt on the remote side!" >&2
-+			exit 1
-+		fi
-+	done
-+
-+	echo "  Passed"
-+}
-+
- function perf_test()
- {
- 	USE_DMA=$1
-@@ -529,6 +553,29 @@ function ntb_pingpong_tests()
- 	_modprobe -r ntb_pingpong
- }
- 
-+function ntb_msi_tests()
-+{
-+	LOCAL_MSI="$DEBUGFS/ntb_msi_test/$LOCAL_DEV"
-+	REMOTE_MSI="$REMOTE_HOST:$DEBUGFS/ntb_msi_test/$REMOTE_DEV"
-+
-+	echo "Starting ntb_msi_test tests..."
-+
-+	if ! _modprobe ntb_msi_test 2> /dev/null; then
-+		echo "  Not doing MSI tests seeing the module is not available."
-+		return
-+	fi
-+
-+	port_test $LOCAL_MSI $REMOTE_MSI
-+
-+	LOCAL_PEER="$LOCAL_MSI/peer$LOCAL_PIDX"
-+	REMOTE_PEER="$REMOTE_MSI/peer$REMOTE_PIDX"
-+
-+	msi_test $LOCAL_PEER $REMOTE_PEER
-+	msi_test $REMOTE_PEER $LOCAL_PEER
-+
-+	_modprobe -r ntb_msi_test
-+}
-+
- function ntb_perf_tests()
- {
- 	LOCAL_PERF="$DEBUGFS/ntb_perf/$LOCAL_DEV"
-@@ -550,6 +597,7 @@ function cleanup()
- 	_modprobe -r ntb_perf 2> /dev/null
- 	_modprobe -r ntb_pingpong 2> /dev/null
- 	_modprobe -r ntb_transport 2> /dev/null
-+	_modprobe -r ntb_msi_test 2> /dev/null
- 	set -e
- }
- 
-@@ -586,5 +634,7 @@ ntb_tool_tests
- echo
- ntb_pingpong_tests
- echo
-+ntb_msi_tests
-+echo
- ntb_perf_tests
- echo
--- 
+The only outstanding issue I know of is that it still will not work
+with IDT hardware, but ntb_transport doesn't work with IDT hardware
+and there is still no sensible common infrastructure to support
+ntb_peer_mw_set_trans(). Thus, I decline to consider that complication
+in this patchset. However, I'll be happy to review work that adds this
+feature in the future.
+
+Also as the port number and resource index stuff is a bit complicated,
+I made a quick out of tree test fixture to ensure it's correct[1]. As
+an excerise I also wrote some test code[2] using the upcomming KUnit
+feature.
+
+Logan
+
+[1] https://repl.it/repls/ExcitingPresentFile
+[2] https://github.com/sbates130272/linux-p2pmem/commits/ntb_kunit
+
+--
+
+Changes in v3:
+
+* Rebased onto v5.1-rc1 (Dropped the first two patches as they have
+  been merged, and cleaned up some minor conflicts in the PCI tree)
+
+* Added a new patch (#3) to calculate logical port numbers that
+  are port numbers from 0 to (number of ports - 1). This is
+  then used in ntb_peer_resource_idx() to fix the issues brought
+  up by Serge.
+
+* Fixed missing __iomem and iowrite calls (as noticed by Serge)
+
+* Added patch 10 which describes ntb_msi_test in the documentation
+  file (as requested by Serge)
+
+* A couple other minor nits and documentation fixes
+
+--
+
+Changes in v2:
+
+* Cleaned up the changes in intel_irq_remapping.c to make them
+  less confusing and add a comment. (Per discussion with Jacob and
+  Joerg)
+
+* Fixed a nit from Bjorn and collected his Ack
+
+* Added a Kconfig dependancy on CONFIG_PCI_MSI for CONFIG_NTB_MSI
+  as the Kbuild robot hit a random config that didn't build
+  without it.
+
+* Worked in a callback for when the MSI descriptor changes so that
+  the clients can resend the new address and data values to the peer.
+  On my test system this was never necessary, but there may be
+  other platforms where this can occur. I tested this by hacking
+  in a path to rewrite the MSI descriptor when I change the cpu
+  affinity of an IRQ. There's a bit of uncertainty over the latency
+  of the change, but without hardware this can acctually occur on
+  we can't test this. This was the result of a discussion with Dave.
+
+--
+
+This patch series adds optional support for using MSI interrupts instead
+of NTB doorbells in ntb_transport. This is desirable seeing doorbells on
+current hardware are quite slow and therefore switching to MSI interrupts
+provides a significant performance gain. On switchtec hardware, a simple
+apples-to-apples comparison shows ntb_netdev/iperf numbers going from
+3.88Gb/s to 14.1Gb/s when switching to MSI interrupts.
+
+To do this, a couple changes are required outside of the NTB tree:
+
+1) The IOMMU must know to accept MSI requests from aliased bused numbers
+seeing NTB hardware typically sends proxied request IDs through
+additional requester IDs. The first patch in this series adds support
+for the Intel IOMMU. A quirk to add these aliases for switchtec hardware
+was already accepted. See commit ad281ecf1c7d ("PCI: Add DMA alias quirk
+for Microsemi Switchtec NTB") for a description of NTB proxy IDs and why
+this is necessary.
+
+2) NTB transport (and other clients) may often need more MSI interrupts
+than the NTB hardware actually advertises support for. However, seeing
+these interrupts will not be triggered by the hardware but through an
+NTB memory window, the hardware does not actually need support or need
+to know about them. Therefore we add the concept of Virtual MSI
+interrupts which are allocated just like any other MSI interrupt but
+are not programmed into the hardware's MSI table. This is done in
+Patch 2 and then made use of in Patch 3.
+
+The remaining patches in this series add a library for dealing with MSI
+interrupts, a test client and finally support in ntb_transport.
+
+The series is based off of v5.1-rc1 plus the patches in ntb-next.
+A git repo is available here:
+
+https://github.com/sbates130272/linux-p2pmem/ ntb_transport_msi_v3
+
+Thanks,
+
+Logan
+
+--
+
+Logan Gunthorpe (10):
+  PCI/MSI: Support allocating virtual MSI interrupts
+  PCI/switchtec: Add module parameter to request more interrupts
+  NTB: Introduce helper functions to calculate logical port number
+  NTB: Introduce functions to calculate multi-port resource index
+  NTB: Rename ntb.c to support multiple source files in the module
+  NTB: Introduce MSI library
+  NTB: Introduce NTB MSI Test Client
+  NTB: Add ntb_msi_test support to ntb_test
+  NTB: Add MSI interrupt support to ntb_transport
+  NTB: Describe the ntb_msi_test client in the documentation.
+
+ Documentation/ntb.txt                   |  27 ++
+ drivers/ntb/Kconfig                     |  11 +
+ drivers/ntb/Makefile                    |   3 +
+ drivers/ntb/{ntb.c => core.c}           |   0
+ drivers/ntb/msi.c                       | 415 +++++++++++++++++++++++
+ drivers/ntb/ntb_transport.c             | 169 ++++++++-
+ drivers/ntb/test/Kconfig                |   9 +
+ drivers/ntb/test/Makefile               |   1 +
+ drivers/ntb/test/ntb_msi_test.c         | 433 ++++++++++++++++++++++++
+ drivers/pci/msi.c                       |  54 ++-
+ drivers/pci/switch/switchtec.c          |  12 +-
+ include/linux/msi.h                     |   8 +
+ include/linux/ntb.h                     | 196 ++++++++++-
+ include/linux/pci.h                     |   9 +
+ tools/testing/selftests/ntb/ntb_test.sh |  54 ++-
+ 15 files changed, 1386 insertions(+), 15 deletions(-)
+ rename drivers/ntb/{ntb.c => core.c} (100%)
+ create mode 100644 drivers/ntb/msi.c
+ create mode 100644 drivers/ntb/test/ntb_msi_test.c
+
+--
 2.20.1
