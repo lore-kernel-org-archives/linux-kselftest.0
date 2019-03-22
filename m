@@ -1,329 +1,191 @@
-From: ldv at altlinux.org (Dmitry V. Levin)
-Date: Fri, 22 Mar 2019 07:16:24 +0300
-Subject: [PATCH linux-next v8 7/7] selftests/ptrace: add a test case for
- PTRACE_GET_SYSCALL_INFO
-In-Reply-To: <20190322041409.GA27266@altlinux.org>
-References: <20190322041409.GA27266@altlinux.org>
-Message-ID: <20190322041624.GH27266@altlinux.org>
+From: amit.kachhap at arm.com (Amit Daniel Kachhap)
+Date: Fri, 22 Mar 2019 11:52:37 +0530
+Subject: [PATCH v2 2/4] arm64: Define Documentation/arm64/elf_at_flags.txt
+In-Reply-To: <20190318163533.26838-3-vincenzo.frascino@arm.com>
+References: <cover.1552679409.git.andreyknvl@google.com>
+ <20190318163533.26838-1-vincenzo.frascino@arm.com>
+ <20190318163533.26838-3-vincenzo.frascino@arm.com>
+Message-ID: <CADGdYn7HYcj4vxw2bCS6McdNRmWu7o13=VAQra5A1Z18JNPMXQ@mail.gmail.com>
 
-Check whether PTRACE_GET_SYSCALL_INFO semantics implemented in the kernel
-matches userspace expectations.
+Hi Vincenzo,
 
-Cc: Oleg Nesterov <oleg at redhat.com>
-Cc: Andy Lutomirski <luto at kernel.org>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Elvira Khabirova <lineprinter at altlinux.org>
-Cc: Eugene Syromyatnikov <esyr at redhat.com>
-Cc: linux-kselftest at vger.kernel.org
-Signed-off-by: Dmitry V. Levin <ldv at altlinux.org>
----
+On Mon, Mar 18, 2019 at 10:06 PM Vincenzo Frascino
+<vincenzo.frascino at arm.com> wrote:
+>
+> On arm64 the TCR_EL1.TBI0 bit has been always enabled hence
+> the userspace (EL0) is allowed to set a non-zero value in the
+> top byte but the resulting pointers are not allowed at the
+> user-kernel syscall ABI boundary.
+>
+> With the relaxed ABI proposed through this document, it is now possible
+> to pass tagged pointers to the syscalls, when these pointers are in
+> memory ranges obtained by an anonymous (MAP_ANONYMOUS) mmap() or brk().
+>
+> This change in the ABI requires a mechanism to inform the userspace
+> that such an option is available.
+>
+> Specify and document the way in which AT_FLAGS can be used to advertise
+> this feature to the userspace.
+>
+> Cc: Catalin Marinas <catalin.marinas at arm.com>
+> Cc: Will Deacon <will.deacon at arm.com>
+> CC: Andrey Konovalov <andreyknvl at google.com>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
+>
+> Squash with "arm64: Define Documentation/arm64/elf_at_flags.txt"
+> ---
+>  Documentation/arm64/elf_at_flags.txt | 133 +++++++++++++++++++++++++++
+>  1 file changed, 133 insertions(+)
+>  create mode 100644 Documentation/arm64/elf_at_flags.txt
+>
+> diff --git a/Documentation/arm64/elf_at_flags.txt b/Documentation/arm64/elf_at_flags.txt
+> new file mode 100644
+> index 000000000000..9b3494207c14
+> --- /dev/null
+> +++ b/Documentation/arm64/elf_at_flags.txt
+> @@ -0,0 +1,133 @@
+> +ARM64 ELF AT_FLAGS
+> +==================
+> +
+> +This document describes the usage and semantics of AT_FLAGS on arm64.
+> +
+> +1. Introduction
+> +---------------
+> +
+> +AT_FLAGS is part of the Auxiliary Vector, contains the flags and it
+> +is set to zero by the kernel on arm64 unless one or more of the
+> +features detailed in paragraph 2 are present.
+> +
+> +The auxiliary vector can be accessed by the userspace using the
+> +getauxval() API provided by the C library.
+> +getauxval() returns an unsigned long and when a flag is present in
+> +the AT_FLAGS, the corresponding bit in the returned value is set to 1.
+> +
+> +The AT_FLAGS with a "defined semantics" on arm64 are exposed to the
+> +userspace via user API (uapi/asm/atflags.h).
+> +The AT_FLAGS bits with "undefined semantics" are set to zero by default.
+> +This means that the AT_FLAGS bits to which this document does not assign
+> +an explicit meaning are to be intended reserved for future use.
+> +The kernel will populate all such bits with zero until meanings are
+> +assigned to them. If and when meanings are assigned, it is guaranteed
+> +that they will not impact the functional operation of existing userspace
+> +software. Userspace software should ignore any AT_FLAGS bit whose meaning
+> +is not defined when the software is written.
+> +
+> +The userspace software can test for features by acquiring the AT_FLAGS
+> +entry of the auxiliary vector, and testing whether a relevant flag
+> +is set.
+> +
+> +Example of a userspace test function:
+> +
+> +bool feature_x_is_present(void)
+> +{
+> +       unsigned long at_flags = getauxval(AT_FLAGS);
+> +       if (at_flags & FEATURE_X)
+> +               return true;
+> +
+> +       return false;
+> +}
+> +
+> +Where the software relies on a feature advertised by AT_FLAGS, it
+> +must check that the feature is present before attempting to
+> +use it.
+> +
+> +2. Features exposed via AT_FLAGS
+> +--------------------------------
+> +
+> +bit[0]: ARM64_AT_FLAGS_SYSCALL_TBI
+> +
+> +    On arm64 the TCR_EL1.TBI0 bit has been always enabled on the arm64
+> +    kernel, hence the userspace (EL0) is allowed to set a non-zero value
+> +    in the top byte but the resulting pointers are not allowed at the
+> +    user-kernel syscall ABI boundary.
+> +    When bit[0] is set to 1 the kernel is advertising to the userspace
+> +    that a relaxed ABI is supported hence this type of pointers are now
+> +    allowed to be passed to the syscalls, when these pointers are in
+> +    memory ranges privately owned by a process and obtained by the
+> +    process in accordance with the definition of "valid tagged pointer"
+> +    in paragraph 3.
+> +    In these cases the tag is preserved as the pointer goes through the
+> +    kernel. Only when the kernel needs to check if a pointer is coming
+> +    from userspace an untag operation is required.
+> +
+> +3. ARM64_AT_FLAGS_SYSCALL_TBI
+> +-----------------------------
+> +
+> +From the kernel syscall interface prospective, we define, for the purposes
+> +of this document, a "valid tagged pointer" as a pointer that either it has
+> +a zero value set in the top byte or it has a non-zero value, it is in memory
+> +ranges privately owned by a userspace process and it is obtained in one of
+> +the following ways:
+> +  - mmap() done by the process itself, where either:
+> +    * flags = MAP_PRIVATE | MAP_ANONYMOUS
+> +    * flags = MAP_PRIVATE and the file descriptor refers to a regular
+> +      file or "/dev/zero"
+> +  - a mapping below sbrk(0) done by the process itself
+> +  - any memory mapped by the kernel in the process's address space during
+> +    creation and following the restrictions presented above (i.e. data, bss,
+> +    stack).
+> +
+> +When the ARM64_AT_FLAGS_SYSCALL_TBI flag is set by the kernel, the following
+> +behaviours are guaranteed by the ABI:
+> +
+> +  - Every current or newly introduced syscall can accept any valid tagged
+> +    pointers.
+> +
+> +  - If a non valid tagged pointer is passed to a syscall then the behaviour
+> +    is undefined.
+> +
+> +  - Every valid tagged pointer is expected to work as an untagged one.
+> +
+> +  - The kernel preserves any valid tagged pointers and returns them to the
+> +    userspace unchanged in all the cases except the ones documented in the
+> +    "Preserving tags" paragraph of tagged-pointers.txt.
+> +
+> +A definition of the meaning of tagged pointers on arm64 can be found in:
+> +Documentation/arm64/tagged-pointers.txt.
+> +
+> +Example of correct usage (pseudo-code) for a userspace application:
+> +
+> +bool arm64_syscall_tbi_is_present(void)
+> +{
+> +       unsigned long at_flags = getauxval(AT_FLAGS);
+> +       if (at_flags & ARM64_AT_FLAGS_SYSCALL_TBI)
+> +                       return true;
+> +
+> +       return false;
+> +}
+> +
+> +void main(void)
+> +{
+> +       char *addr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE,
+> +                         MAP_ANONYMOUS, -1, 0);
+> +
+> +       int fd = open("test.txt", O_WRONLY);
+> +
+> +       /* Check if the relaxed ABI is supported */
+> +       if (arm64_syscall_tbi_is_present()) {
+> +               /* Add a tag to the pointer */
+> +               addr = tag_pointer(addr);
+> +       }
+> +
+> +       strcpy("Hello World\n", addr);
+Nit: s/strcpy("Hello World\n", addr)/strcpy(addr, "Hello World\n")
 
-Notes:
-    v8: unchanged
-    v7: unchanged
-    v6: made PTRACE_GET_SYSCALL_INFO return value checks strict
-    v5: initial revision
-
- tools/testing/selftests/ptrace/.gitignore     |   1 +
- tools/testing/selftests/ptrace/Makefile       |   2 +-
- .../selftests/ptrace/get_syscall_info.c       | 271 ++++++++++++++++++
- 3 files changed, 273 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/ptrace/get_syscall_info.c
-
-diff --git a/tools/testing/selftests/ptrace/.gitignore b/tools/testing/selftests/ptrace/.gitignore
-index b3e59d41fd82..cfcc49a7def7 100644
---- a/tools/testing/selftests/ptrace/.gitignore
-+++ b/tools/testing/selftests/ptrace/.gitignore
-@@ -1 +1,2 @@
-+get_syscall_info
- peeksiginfo
-diff --git a/tools/testing/selftests/ptrace/Makefile b/tools/testing/selftests/ptrace/Makefile
-index 8a2bc5562179..4bc550b6b845 100644
---- a/tools/testing/selftests/ptrace/Makefile
-+++ b/tools/testing/selftests/ptrace/Makefile
-@@ -1,5 +1,5 @@
- CFLAGS += -iquote../../../../include/uapi -Wall
- 
--TEST_GEN_PROGS := peeksiginfo
-+TEST_GEN_PROGS := get_syscall_info peeksiginfo
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/ptrace/get_syscall_info.c b/tools/testing/selftests/ptrace/get_syscall_info.c
-new file mode 100644
-index 000000000000..28e972825b74
---- /dev/null
-+++ b/tools/testing/selftests/ptrace/get_syscall_info.c
-@@ -0,0 +1,271 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later
-+ *
-+ * Copyright (c) 2018 Dmitry V. Levin <ldv at altlinux.org>
-+ * All rights reserved.
-+ *
-+ * Check whether PTRACE_GET_SYSCALL_INFO semantics implemented in the kernel
-+ * matches userspace expectations.
-+ */
-+
-+#include "../kselftest_harness.h"
-+#include <err.h>
-+#include <signal.h>
-+#include <asm/unistd.h>
-+#include "linux/ptrace.h"
-+
-+static int
-+kill_tracee(pid_t pid)
-+{
-+	if (!pid)
-+		return 0;
-+
-+	int saved_errno = errno;
-+
-+	int rc = kill(pid, SIGKILL);
-+
-+	errno = saved_errno;
-+	return rc;
-+}
-+
-+static long
-+sys_ptrace(int request, pid_t pid, unsigned long addr, unsigned long data)
-+{
-+	return syscall(__NR_ptrace, request, pid, addr, data);
-+}
-+
-+#define LOG_KILL_TRACEE(fmt, ...)				\
-+	do {							\
-+		kill_tracee(pid);				\
-+		TH_LOG("wait #%d: " fmt,			\
-+		       ptrace_stop, ##__VA_ARGS__);		\
-+	} while (0)
-+
-+TEST(get_syscall_info)
-+{
-+	static const unsigned long args[][7] = {
-+		/* a sequence of architecture-agnostic syscalls */
-+		{
-+			__NR_chdir,
-+			(unsigned long) "",
-+			0xbad1fed1,
-+			0xbad2fed2,
-+			0xbad3fed3,
-+			0xbad4fed4,
-+			0xbad5fed5
-+		},
-+		{
-+			__NR_gettid,
-+			0xcaf0bea0,
-+			0xcaf1bea1,
-+			0xcaf2bea2,
-+			0xcaf3bea3,
-+			0xcaf4bea4,
-+			0xcaf5bea5
-+		},
-+		{
-+			__NR_exit_group,
-+			0,
-+			0xfac1c0d1,
-+			0xfac2c0d2,
-+			0xfac3c0d3,
-+			0xfac4c0d4,
-+			0xfac5c0d5
-+		}
-+	};
-+	const unsigned long *exp_args;
-+
-+	pid_t pid = fork();
-+
-+	ASSERT_LE(0, pid) {
-+		TH_LOG("fork: %m");
-+	}
-+
-+	if (pid == 0) {
-+		/* get the pid before PTRACE_TRACEME */
-+		pid = getpid();
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_TRACEME, 0, 0, 0)) {
-+			TH_LOG("PTRACE_TRACEME: %m");
-+		}
-+		ASSERT_EQ(0, kill(pid, SIGSTOP)) {
-+			/* cannot happen */
-+			TH_LOG("kill SIGSTOP: %m");
-+		}
-+		for (unsigned int i = 0; i < ARRAY_SIZE(args); ++i) {
-+			syscall(args[i][0],
-+				args[i][1], args[i][2], args[i][3],
-+				args[i][4], args[i][5], args[i][6]);
-+		}
-+		/* unreachable */
-+		_exit(1);
-+	}
-+
-+	const struct {
-+		unsigned int is_error;
-+		int rval;
-+	} *exp_param, exit_param[] = {
-+		{ 1, -ENOENT },	/* chdir */
-+		{ 0, pid }	/* gettid */
-+	};
-+
-+	unsigned int ptrace_stop;
-+
-+	for (ptrace_stop = 0; ; ++ptrace_stop) {
-+		struct ptrace_syscall_info info = {
-+			.op = 0xff	/* invalid PTRACE_SYSCALL_INFO_* op */
-+		};
-+		const size_t size = sizeof(info);
-+		const int expected_none_size =
-+			(void *) &info.entry - (void *) &info;
-+		const int expected_entry_size =
-+			(void *) &info.entry.args[6] - (void *) &info;
-+		const int expected_exit_size =
-+			(void *) (&info.exit.is_error + 1) -
-+			(void *) &info;
-+		int status;
-+		long rc;
-+
-+		ASSERT_EQ(pid, wait(&status)) {
-+			/* cannot happen */
-+			LOG_KILL_TRACEE("wait: %m");
-+		}
-+		if (WIFEXITED(status)) {
-+			pid = 0;	/* the tracee is no more */
-+			ASSERT_EQ(0, WEXITSTATUS(status));
-+			break;
-+		}
-+		ASSERT_FALSE(WIFSIGNALED(status)) {
-+			pid = 0;	/* the tracee is no more */
-+			LOG_KILL_TRACEE("unexpected signal %u",
-+					WTERMSIG(status));
-+		}
-+		ASSERT_TRUE(WIFSTOPPED(status)) {
-+			/* cannot happen */
-+			LOG_KILL_TRACEE("unexpected wait status %#x", status);
-+		}
-+
-+		switch (WSTOPSIG(status)) {
-+		case SIGSTOP:
-+			ASSERT_EQ(0, ptrace_stop) {
-+				LOG_KILL_TRACEE("unexpected signal stop");
-+			}
-+			ASSERT_EQ(0, sys_ptrace(PTRACE_SETOPTIONS, pid, 0,
-+						PTRACE_O_TRACESYSGOOD)) {
-+				LOG_KILL_TRACEE("PTRACE_SETOPTIONS: %m");
-+			}
-+			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
-+						      pid, size,
-+						      (unsigned long) &info))) {
-+				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
-+			}
-+			ASSERT_EQ(expected_none_size, rc) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_EQ(PTRACE_SYSCALL_INFO_NONE, info.op) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_TRUE(info.arch) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_TRUE(info.instruction_pointer) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_TRUE(info.stack_pointer) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			break;
-+
-+		case SIGTRAP | 0x80:
-+			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
-+						      pid, size,
-+						      (unsigned long) &info))) {
-+				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
-+			}
-+			switch (ptrace_stop) {
-+			case 1: /* entering chdir */
-+			case 3: /* entering gettid */
-+			case 5: /* entering exit_group */
-+				exp_args = args[ptrace_stop / 2];
-+				ASSERT_EQ(expected_entry_size, rc) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(PTRACE_SYSCALL_INFO_ENTRY, info.op) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.arch) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.instruction_pointer) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.stack_pointer) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[0], info.entry.nr) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[1], info.entry.args[0]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[2], info.entry.args[1]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[3], info.entry.args[2]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[4], info.entry.args[3]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[5], info.entry.args[4]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[6], info.entry.args[5]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				break;
-+			case 2: /* exiting chdir */
-+			case 4: /* exiting gettid */
-+				exp_param = &exit_param[ptrace_stop / 2 - 1];
-+				ASSERT_EQ(expected_exit_size, rc) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(PTRACE_SYSCALL_INFO_EXIT, info.op) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.arch) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.instruction_pointer) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.stack_pointer) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(exp_param->is_error,
-+					  info.exit.is_error) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(exp_param->rval, info.exit.rval) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				break;
-+			default:
-+				LOG_KILL_TRACEE("unexpected syscall stop");
-+				abort();
-+			}
-+			break;
-+
-+		default:
-+			LOG_KILL_TRACEE("unexpected stop signal %#x",
-+					WSTOPSIG(status));
-+			abort();
-+		}
-+
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_SYSCALL, pid, 0, 0)) {
-+			LOG_KILL_TRACEE("PTRACE_SYSCALL: %m");
-+		}
-+	}
-+
-+	ASSERT_EQ(ARRAY_SIZE(args) * 2, ptrace_stop);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-ldv
+Thanks,
+Amit D
+> +
+> +       /* Write to a file */
+> +       write(fd, addr, sizeof(addr));
+> +
+> +       close(fd);
+> +}
+> +
+> --
+> 2.21.0
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel at lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
