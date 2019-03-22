@@ -1,90 +1,194 @@
-From: frowand.list at gmail.com (Frank Rowand)
-Date: Thu, 21 Mar 2019 18:23:53 -0700
-Subject: [RFC v4 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <CAFd5g45F3YUsAjse+Vt5hj5CLjaXrRWgr5zCZZ6CJKc0hboP6Q@mail.gmail.com>
-References: <20190214213729.21702-1-brendanhiggins@google.com>
- <CAFd5g45F3YUsAjse+Vt5hj5CLjaXrRWgr5zCZZ6CJKc0hboP6Q@mail.gmail.com>
-Message-ID: <0e6eb370-3e62-e1a5-1b91-bccc5868e8e4@gmail.com>
+From: brendanhiggins at google.com (Brendan Higgins)
+Date: Thu, 21 Mar 2019 18:30:38 -0700
+Subject: [RFC v3 18/19] of: unittest: split out a couple of test cases
+ from unittest
+In-Reply-To: <bb5bcd3d-a09a-cfbe-c7fa-16e5eb75b0e4@gmail.com>
+References: <20181128193636.254378-1-brendanhiggins@google.com>
+ <20181128193636.254378-19-brendanhiggins@google.com>
+ <990bfc7d-dc5e-d8d3-c151-9b321ff2ac10@gmail.com>
+ <CAFd5g45tOGgf_sKGYRC=fpnTBKGaG=8frbQdgZ3ZTkQFyTfP5A@mail.gmail.com>
+ <88fe0546-7850-5bb4-9673-b1aef2dccb3e@gmail.com>
+ <CAFd5g444f-FBq4x3U7BL-EY+bFxP0rsJhJ14=mjOi89PhMkURg@mail.gmail.com>
+ <0e311e88-c4d4-e98d-1720-53a04bd526fc@gmail.com>
+ <CAFd5g44NTZoSAJPMvXP2xvJgn7m5QoV-KJu2AMrr67+eL+CKrQ@mail.gmail.com>
+ <d9f7e000-4cac-a35a-3ff9-60130e12ebea@gmail.com>
+ <72cd1c5b-6f68-73ad-c8fd-f3a3268a0529@gmail.com>
+ <CAFd5g46UU9wk+F6A5wnKYYtYKmmtv__SaY8eg6v-T9xUjsoxhA@mail.gmail.com>
+ <bb5bcd3d-a09a-cfbe-c7fa-16e5eb75b0e4@gmail.com>
+Message-ID: <CAFd5g448xQLOJwVYU5Zmu4+OPWuboiWZPhBvK6au8Pgm5B9haQ@mail.gmail.com>
 
-On 3/4/19 3:01 PM, Brendan Higgins wrote:
-> On Thu, Feb 14, 2019 at 1:38 PM Brendan Higgins
-> <brendanhiggins at google.com> wrote:
->>
->> This patch set proposes KUnit, a lightweight unit testing and mocking
->> framework for the Linux kernel.
->>
-> 
-> <snip>
-> 
->> ## More information on KUnit
->>
->> There is a bunch of documentation near the end of this patch set that
->> describes how to use KUnit and best practices for writing unit tests.
->> For convenience I am hosting the compiled docs here:
->> https://google.github.io/kunit-docs/third_party/kernel/docs/
->> Additionally for convenience, I have applied these patches to a branch:
->> https://kunit.googlesource.com/linux/+/kunit/rfc/5.0-rc5/v4
->> The repo may be cloned with:
->> git clone https://kunit.googlesource.com/linux
->> This patchset is on the kunit/rfc/5.0-rc5/v4 branch.
->>
->> ## Changes Since Last Version
->>
->>  - Got KUnit working on (hypothetically) all architectures (tested on
->>    x86), as per Rob's (and other's) request
->>  - Punting all KUnit features/patches depending on UML for now.
->>  - Broke out UML specific support into arch/um/* as per "[RFC v3 01/19]
->>    kunit: test: add KUnit test runner core", as requested by Luis.
->>  - Added support to kunit_tool to allow it to build kernels in external
->>    directories, as suggested by Kieran.
->>  - Added a UML defconfig, and a config fragment for KUnit as suggested
->>    by Kieran and Luis.
->>  - Cleaned up, and reformatted a bunch of stuff.
->>
->> --
->> 2.21.0.rc0.258.g878e2cd30e-goog
->>
-> 
-> Someone suggested I should send the next revision out as "PATCH"
-> instead of "RFC" since there seems to be general consensus about
-> everything at a high level, with a couple exceptions.
-> 
-> At this time I am planning on sending the next revision out as "[PATCH
-> v1 00/NN] kunit: introduce KUnit, the Linux kernel unit testing
-> framework". Initially I wasn't sure if the next revision should be
-> "[PATCH v1 ...]" or "[PATCH v5 ...]". Please let me know if you have a
-> strong objection to the former.
-> 
-> In the next revision, I will be dropping the last two of three patches
-> for the DT unit tests as there doesn't seem to be enough features
-> currently available to justify the heavy refactoring I did; however, I
+On Thu, Mar 21, 2019 at 5:22 PM Frank Rowand <frowand.list at gmail.com> wrote:
+>
+> On 2/27/19 7:52 PM, Brendan Higgins wrote:
+> > On Wed, Feb 20, 2019 at 12:45 PM Frank Rowand <frowand.list at gmail.com> wrote:
+> >>
+> >> On 2/18/19 2:25 PM, Frank Rowand wrote:
+> >>> On 2/15/19 2:56 AM, Brendan Higgins wrote:
+> >>>> On Thu, Feb 14, 2019 at 6:05 PM Frank Rowand <frowand.list at gmail.com> wrote:
+> >>>>>
+> >>>>> On 2/14/19 4:56 PM, Brendan Higgins wrote:
+> >>>>>> On Thu, Feb 14, 2019 at 3:57 PM Frank Rowand <frowand.list at gmail.com> wrote:
+> >>>>>>>
+> >>>>>>> On 12/5/18 3:54 PM, Brendan Higgins wrote:
+> >>>>>>>> On Tue, Dec 4, 2018 at 2:58 AM Frank Rowand <frowand.list at gmail.com> wrote:
+< snip >
+> >>
+> >> In the base version, the order of execution of the test code requires
+> >> bouncing back and forth between the test functions and the coding of
+> >> of_test_find_node_by_name_cases[].
+> >
+> > You shouldn't need to bounce back and forth because the order in which
+> > the tests run shouldn't matter.
+>
+> If one can't guarantee total independence of all of the tests, with no
+> side effects, then yes.  But that is not my world.  To make that
+> guarantee, I would need to be able to run just a single test in an
+> entire test run.
+>
+> I actually want to make side effects possible.  Whether from other
+> tests or from live kernel code that is accessing the live devicetree.
+> Any extra stress makes me happier.
+>
+> I forget the exact term that has been tossed around, but to me the
+> devicetree unittests are more like system validation, release tests,
+> acceptance tests, and stress tests.  Not unit tests in the philosophy
+> of KUnit.
 
-Thank you.
+Ah, I understand. I thought that they were actually trying to be unit
+tests; that pretty much voids this discussion then. Integration tests
+and end to end tests are valuable as long as that is actually what you
+are trying to do.
 
+>
+> I do see the value of pure unit tests, and there are rare times that
+> my devicetree use case might be better served by that approach.  But
+> if so, it is very easy for me to add a simple pure test when debugging.
+> My general use case does not map onto this model.
 
-> will still include the patch that just converts everything over to
-> KUnit without restructuring the test cases:
-> https://lkml.org/lkml/2019/2/14/1133
+Why do you think it is rare that you would actually want unit tests?
 
-The link doesn't work for me (don't worry about that), so I'm assuming
-this is:
+I mean, if you don't get much code churn, then maybe it's not going to
+provide you a ton of value to immediately go and write a bunch of unit
+tests right now, but I can't think of a single time where it's hurt.
+Unit tests, from my experience, are usually the easiest tests to
+maintain, and the most helpful when I am developing.
 
-   [RFC v4 15/17] of: unittest: migrate tests to run on KUnit
+Maybe I need to understand your use case better.
 
-The conversation on that patch ended after:
+>
+>
+> >>
+> >> In the frank version the order of execution of the test code is obvious.
+> >
+> > So I know we were arguing before over whether order *does* matter in
+> > some of the other test cases (none in the example that you or I
+> > posted), but wouldn't it be better if the order of execution didn't
+> > matter? If you don't allow a user to depend on the execution of test
+> > cases, then arguably these test case dependencies would never form and
+> > the order wouldn't matter.
+>
+> Reality intrudes.  Order does matter.
+>
+>
+> >>
+> >> It is possible that a test function could be left out of
+> >> of_test_find_node_by_name_cases[], in error.  This will result in a compile
+> >> warning (I think warning instead of error, but I have not verified that)
+> >> so it might be caught or it might be overlooked.
+> >>
+> >> The base version is 265 lines.  The frank version is 208 lines, 57 lines
+> >> less.  Less is better.
+> >
+> > I agree that less is better, but there are different kinds of less to
+> > consider. I prefer less logic in a function to fewer lines overall.
+> >
+> > It seems we are in agreement that test cases should be small and
+> > simple, so I won't dwell on that point any longer. I agree that the
+>
+> As a general guide for simple unit tests, sure.
+>
+> For my case, no.  Reality intrudes.
+>
+> KUnit has a nice architectural view of what a unit test should be.
 
-   >> After adding patch 15, there are a lot of "unittest internal error" messages.
-   > 
-   > Yeah, I meant to ask you about that. I thought it was due to a change
-   > you made, but after further examination, just now, I found it was my
-   > fault. Sorry for not mentioning that anywhere. I will fix it in v5.
+Cool, I am glad you think so! That actually means a lot to me. I was
+afraid I wasn't conveying the idea properly and that was the root of
+this debate.
 
-It is not worth my time to look at patch 15 when it is that broken.  So I
-have not done any review of it.
+>
+> The existing devicetree "unittests" are not such unit tests.  They
+> simply share the same name.
+>
+> The devicetree unittests do not fit into a clean:
+>   - initialize
+>   - do one test
+>   - clean up
+> model.
+>
+> Trying to force them into that model will not work.  The initialize
+> is not a simple, easy to decompose thing.  And trying to decompose
+> it can actually make the code more complex and messier.
+>
+> Clean up can NOT occur, because part of my test validation is looking
+> at the state of the device tree after the tests complete, viewed
+> through the /proc/device-tree/ interface.
+>
 
-So no, I think you are still in the RFC stage unless you drop patch 15.
+Again, if they are not actually intended to be unit tests, then I
+think that is fine.
 
-> 
-> I should have the next revision out in a week or so.
-> 
+< snip >
+
+> > Compare the test cases for adding of_test_dynamic_basic,
+> > of_test_dynamic_add_existing_property,
+> > of_test_dynamic_modify_existing_property, and
+> > of_test_dynamic_modify_non_existent_property to the originals. My
+> > version is much longer overall, but I think is still much easier to
+> > understand. I can say from when I was trying to split this up in the
+> > first place, it was not obvious what properties were expected to be
+> > populated as a precondition for a given test case (except the first
+> > one of course). Whereas, in my version, it is immediately obvious what
+> > the preconditions are for a test case. I think you can apply this same
+> > logic to the examples you provided, in frank version, I don't
+> > immediately know if one test cases does something that is a
+> > precondition for another test case.
+>
+> Yes, that is a real problem in the current code, but easily fixed
+> with comments.
+
+I think it is best when you don't need comments, but in this case, I
+think I have to agree with you.
+
+>
+>
+> > My version also makes it easier to run a test case entirely by itself
+> > which is really valuable for debugging purposes. A common thing that
+> > happens when you have lots of unit tests is something breaks and lots
+> > of tests fail. If the test cases are good, there should be just a
+> > couple (ideally one) test cases that directly assert the violated
+> > property; those are the test cases you actually want to focus on, the
+> > rest are noise for the purposes of that breakage. In my version, it is
+> > much easier to turn off the test cases that you don't care about and
+> > then focus in on the ones that exercise the violated property.
+> >
+> > Now I know that, hermeticity especially, but other features as well
+> > (test suite summary, error on unused test case function, etc) are not
+> > actually in KUnit as it is under consideration here. Maybe it would be
+> > best to save these last two patches (18/19, and 19/19) until I have
+> > these other features checked in and reconsider them then?
+>
+> Thanks for leaving 18/19 and 19/19 off in v4.
+
+Sure, no problem. It was pretty clear that it was a waste of both of
+our times to continue discussing those at this juncture. :-)
+
+Do you still want me to try to convert the DT not-exactly-unittest to
+KUnit? I would kind of prefer (I don't feel *super* strongly about the
+matter) we don't call it that since I was intending for it to be the
+flagship initial example, but I certainly don't mind trying to clean
+this patch up to get it up to snuff. It's really just a question of
+whether it is worth it to you.
+
+< snip >
+
+Cheers!
