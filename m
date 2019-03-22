@@ -1,145 +1,41 @@
 From: logang at deltatee.com (Logan Gunthorpe)
-Date: Thu, 21 Mar 2019 18:06:35 -0600
-Subject: [PATCH v3 00/10] Support using MSI interrupts in ntb_transport
-Message-ID: <20190322000645.15580-1-logang@deltatee.com>
+Date: Thu, 21 Mar 2019 18:06:40 -0600
+Subject: [PATCH v3 05/10] NTB: Rename ntb.c to support multiple source files
+ in the module
+In-Reply-To: <20190322000645.15580-1-logang@deltatee.com>
+References: <20190322000645.15580-1-logang@deltatee.com>
+Message-ID: <20190322000645.15580-6-logang@deltatee.com>
 
-This is version 3 of the MSI interrupts for ntb_transport patchset.
+The kbuild system does not support having multiple source files in
+a module if one of those source files has the same name as the module.
 
-I've addressed the feedback so far and rebased on the latest kernel
-and would like this to be considered for merging this cycle.
+Therefore, we must rename ntb.c to core.c, while the module remains
+ntb.ko.
 
-The only outstanding issue I know of is that it still will not work
-with IDT hardware, but ntb_transport doesn't work with IDT hardware
-and there is still no sensible common infrastructure to support
-ntb_peer_mw_set_trans(). Thus, I decline to consider that complication
-in this patchset. However, I'll be happy to review work that adds this
-feature in the future.
+This is similar to the way the nvme modules are structured.
 
-Also as the port number and resource index stuff is a bit complicated,
-I made a quick out of tree test fixture to ensure it's correct[1]. As
-an excerise I also wrote some test code[2] using the upcomming KUnit
-feature.
-
-Logan
-
-[1] https://repl.it/repls/ExcitingPresentFile
-[2] https://github.com/sbates130272/linux-p2pmem/commits/ntb_kunit
-
---
-
-Changes in v3:
-
-* Rebased onto v5.1-rc1 (Dropped the first two patches as they have
-  been merged, and cleaned up some minor conflicts in the PCI tree)
-
-* Added a new patch (#3) to calculate logical port numbers that
-  are port numbers from 0 to (number of ports - 1). This is
-  then used in ntb_peer_resource_idx() to fix the issues brought
-  up by Serge.
-
-* Fixed missing __iomem and iowrite calls (as noticed by Serge)
-
-* Added patch 10 which describes ntb_msi_test in the documentation
-  file (as requested by Serge)
-
-* A couple other minor nits and documentation fixes
-
---
-
-Changes in v2:
-
-* Cleaned up the changes in intel_irq_remapping.c to make them
-  less confusing and add a comment. (Per discussion with Jacob and
-  Joerg)
-
-* Fixed a nit from Bjorn and collected his Ack
-
-* Added a Kconfig dependancy on CONFIG_PCI_MSI for CONFIG_NTB_MSI
-  as the Kbuild robot hit a random config that didn't build
-  without it.
-
-* Worked in a callback for when the MSI descriptor changes so that
-  the clients can resend the new address and data values to the peer.
-  On my test system this was never necessary, but there may be
-  other platforms where this can occur. I tested this by hacking
-  in a path to rewrite the MSI descriptor when I change the cpu
-  affinity of an IRQ. There's a bit of uncertainty over the latency
-  of the change, but without hardware this can acctually occur on
-  we can't test this. This was the result of a discussion with Dave.
-
---
-
-This patch series adds optional support for using MSI interrupts instead
-of NTB doorbells in ntb_transport. This is desirable seeing doorbells on
-current hardware are quite slow and therefore switching to MSI interrupts
-provides a significant performance gain. On switchtec hardware, a simple
-apples-to-apples comparison shows ntb_netdev/iperf numbers going from
-3.88Gb/s to 14.1Gb/s when switching to MSI interrupts.
-
-To do this, a couple changes are required outside of the NTB tree:
-
-1) The IOMMU must know to accept MSI requests from aliased bused numbers
-seeing NTB hardware typically sends proxied request IDs through
-additional requester IDs. The first patch in this series adds support
-for the Intel IOMMU. A quirk to add these aliases for switchtec hardware
-was already accepted. See commit ad281ecf1c7d ("PCI: Add DMA alias quirk
-for Microsemi Switchtec NTB") for a description of NTB proxy IDs and why
-this is necessary.
-
-2) NTB transport (and other clients) may often need more MSI interrupts
-than the NTB hardware actually advertises support for. However, seeing
-these interrupts will not be triggered by the hardware but through an
-NTB memory window, the hardware does not actually need support or need
-to know about them. Therefore we add the concept of Virtual MSI
-interrupts which are allocated just like any other MSI interrupt but
-are not programmed into the hardware's MSI table. This is done in
-Patch 2 and then made use of in Patch 3.
-
-The remaining patches in this series add a library for dealing with MSI
-interrupts, a test client and finally support in ntb_transport.
-
-The series is based off of v5.1-rc1 plus the patches in ntb-next.
-A git repo is available here:
-
-https://github.com/sbates130272/linux-p2pmem/ ntb_transport_msi_v3
-
-Thanks,
-
-Logan
-
---
-
-Logan Gunthorpe (10):
-  PCI/MSI: Support allocating virtual MSI interrupts
-  PCI/switchtec: Add module parameter to request more interrupts
-  NTB: Introduce helper functions to calculate logical port number
-  NTB: Introduce functions to calculate multi-port resource index
-  NTB: Rename ntb.c to support multiple source files in the module
-  NTB: Introduce MSI library
-  NTB: Introduce NTB MSI Test Client
-  NTB: Add ntb_msi_test support to ntb_test
-  NTB: Add MSI interrupt support to ntb_transport
-  NTB: Describe the ntb_msi_test client in the documentation.
-
- Documentation/ntb.txt                   |  27 ++
- drivers/ntb/Kconfig                     |  11 +
- drivers/ntb/Makefile                    |   3 +
- drivers/ntb/{ntb.c => core.c}           |   0
- drivers/ntb/msi.c                       | 415 +++++++++++++++++++++++
- drivers/ntb/ntb_transport.c             | 169 ++++++++-
- drivers/ntb/test/Kconfig                |   9 +
- drivers/ntb/test/Makefile               |   1 +
- drivers/ntb/test/ntb_msi_test.c         | 433 ++++++++++++++++++++++++
- drivers/pci/msi.c                       |  54 ++-
- drivers/pci/switch/switchtec.c          |  12 +-
- include/linux/msi.h                     |   8 +
- include/linux/ntb.h                     | 196 ++++++++++-
- include/linux/pci.h                     |   9 +
- tools/testing/selftests/ntb/ntb_test.sh |  54 ++-
- 15 files changed, 1386 insertions(+), 15 deletions(-)
+Signed-off-by: Logan Gunthorpe <logang at deltatee.com>
+Cc: Jon Mason <jdmason at kudzu.us>
+Cc: Dave Jiang <dave.jiang at intel.com>
+Cc: Allen Hubbe <allenbh at gmail.com>
+---
+ drivers/ntb/Makefile          | 2 ++
+ drivers/ntb/{ntb.c => core.c} | 0
+ 2 files changed, 2 insertions(+)
  rename drivers/ntb/{ntb.c => core.c} (100%)
- create mode 100644 drivers/ntb/msi.c
- create mode 100644 drivers/ntb/test/ntb_msi_test.c
 
---
+diff --git a/drivers/ntb/Makefile b/drivers/ntb/Makefile
+index 1921dec1949d..537226f8e78d 100644
+--- a/drivers/ntb/Makefile
++++ b/drivers/ntb/Makefile
+@@ -1,2 +1,4 @@
+ obj-$(CONFIG_NTB) += ntb.o hw/ test/
+ obj-$(CONFIG_NTB_TRANSPORT) += ntb_transport.o
++
++ntb-y := core.o
+diff --git a/drivers/ntb/ntb.c b/drivers/ntb/core.c
+similarity index 100%
+rename from drivers/ntb/ntb.c
+rename to drivers/ntb/core.c
+-- 
 2.20.1
