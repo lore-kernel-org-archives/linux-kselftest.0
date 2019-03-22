@@ -1,74 +1,225 @@
 From: frowand.list at gmail.com (Frank Rowand)
-Date: Thu, 21 Mar 2019 17:27:54 -0700
-Subject: [RFC v3 00/19] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <CAFd5g47cDKSdXGAL8pbDxEU2O8A-9Ajq1wCM+PtPF40T4wYKow@mail.gmail.com>
-References: <20181128193636.254378-1-brendanhiggins@google.com>
- <f34ee937-83d6-3ff6-12b3-c6cd9acbfc38@gmail.com>
- <CAL_JsqL0t_p8=Ueq4mHS5i2YEQdc7S7AtPWfkcOsj1g2SixUkA@mail.gmail.com>
- <CAFd5g47cDKSdXGAL8pbDxEU2O8A-9Ajq1wCM+PtPF40T4wYKow@mail.gmail.com>
-Message-ID: <ec4c1020-4b53-e0f2-4a9d-3fc73af56746@gmail.com>
+Date: Thu, 21 Mar 2019 18:09:55 -0700
+Subject: [RFC v4 08/17] kunit: test: add support for test abort
+In-Reply-To: <CAFd5g47EDmsBWKNiW0jpHW2VG_GWCfe8UO+=ofgM2_ru+_UBQA@mail.gmail.com>
+References: <20190214213729.21702-1-brendanhiggins@google.com>
+ <20190214213729.21702-9-brendanhiggins@google.com>
+ <da1995fa-a362-dfe6-8184-7fcdf2b923e8@gmail.com>
+ <CAFd5g467OV8wTB7zEshgZw8g8=zoq0dLVfwx3wDH-8UA+9GWFA@mail.gmail.com>
+ <0124ed28-466c-e954-ddde-495419630a9f@gmail.com>
+ <CAFd5g47EDmsBWKNiW0jpHW2VG_GWCfe8UO+=ofgM2_ru+_UBQA@mail.gmail.com>
+Message-ID: <118d89b7-d468-6d68-a48d-4d6d9cefd106@gmail.com>
 
-On 12/5/18 3:10 PM, Brendan Higgins wrote:
-> On Tue, Dec 4, 2018 at 5:49 AM Rob Herring <robh at kernel.org> wrote:
+On 2/27/19 11:42 PM, Brendan Higgins wrote:
+> On Tue, Feb 19, 2019 at 10:44 PM Frank Rowand <frowand.list at gmail.com> wrote:
 >>
->> On Tue, Dec 4, 2018 at 5:40 AM Frank Rowand <frowand.list at gmail.com> wrote:
+>> On 2/19/19 7:39 PM, Brendan Higgins wrote:
+>>> On Mon, Feb 18, 2019 at 11:52 AM Frank Rowand <frowand.list at gmail.com> wrote:
+>>>>
+>>>> On 2/14/19 1:37 PM, Brendan Higgins wrote:
+>>>>> Add support for aborting/bailing out of test cases. Needed for
+>>>>> implementing assertions.
+>>>>>
+>>>>> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+>>>>> ---
+>>>>> Changes Since Last Version
+>>>>>  - This patch is new introducing a new cross-architecture way to abort
+>>>>>    out of a test case (needed for KUNIT_ASSERT_*, see next patch for
+>>>>>    details).
+>>>>>  - On a side note, this is not a complete replacement for the UML abort
+>>>>>    mechanism, but covers the majority of necessary functionality. UML
+>>>>>    architecture specific featurs have been dropped from the initial
+>>>>>    patchset.
+>>>>> ---
+>>>>>  include/kunit/test.h |  24 +++++
+>>>>>  kunit/Makefile       |   3 +-
+>>>>>  kunit/test-test.c    | 127 ++++++++++++++++++++++++++
+>>>>>  kunit/test.c         | 208 +++++++++++++++++++++++++++++++++++++++++--
+>>>>>  4 files changed, 353 insertions(+), 9 deletions(-)
+>>>>>  create mode 100644 kunit/test-test.c
+>>>>
+>>>> < snip >
+>>>>
+>>>>> diff --git a/kunit/test.c b/kunit/test.c
+>>>>> index d18c50d5ed671..6e5244642ab07 100644
+>>>>> --- a/kunit/test.c
+>>>>> +++ b/kunit/test.c
+>>>>> @@ -6,9 +6,9 @@
+>>>>>   * Author: Brendan Higgins <brendanhiggins at google.com>
+>>>>>   */
+>>>>>
+>>>>> -#include <linux/sched.h>
+>>>>>  #include <linux/sched/debug.h>
+>>>>> -#include <os.h>
+>>>>> +#include <linux/completion.h>
+>>>>> +#include <linux/kthread.h>
+>>>>>  #include <kunit/test.h>
+>>>>>
+>>>>>  static bool kunit_get_success(struct kunit *test)
+>>>>> @@ -32,6 +32,27 @@ static void kunit_set_success(struct kunit *test, bool success)
+>>>>>       spin_unlock_irqrestore(&test->lock, flags);
+>>>>>  }
+>>>>>
+>>>>> +static bool kunit_get_death_test(struct kunit *test)
+>>>>> +{
+>>>>> +     unsigned long flags;
+>>>>> +     bool death_test;
+>>>>> +
+>>>>> +     spin_lock_irqsave(&test->lock, flags);
+>>>>> +     death_test = test->death_test;
+>>>>> +     spin_unlock_irqrestore(&test->lock, flags);
+>>>>> +
+>>>>> +     return death_test;
+>>>>> +}
+>>>>> +
+>>>>> +static void kunit_set_death_test(struct kunit *test, bool death_test)
+>>>>> +{
+>>>>> +     unsigned long flags;
+>>>>> +
+>>>>> +     spin_lock_irqsave(&test->lock, flags);
+>>>>> +     test->death_test = death_test;
+>>>>> +     spin_unlock_irqrestore(&test->lock, flags);
+>>>>> +}
+>>>>> +
+>>>>>  static int kunit_vprintk_emit(const struct kunit *test,
+>>>>>                             int level,
+>>>>>                             const char *fmt,
+>>>>> @@ -70,13 +91,29 @@ static void kunit_fail(struct kunit *test, struct kunit_stream *stream)
+>>>>>       stream->commit(stream);
+>>>>>  }
+>>>>>
+>>>>> +static void __noreturn kunit_abort(struct kunit *test)
+>>>>> +{
+>>>>> +     kunit_set_death_test(test, true);
+>>>>> +
+>>>>> +     test->try_catch.throw(&test->try_catch);
+>>>>> +
+>>>>> +     /*
+>>>>> +      * Throw could not abort from test.
+>>>>> +      */
+>>>>> +     kunit_err(test, "Throw could not abort from test!");
+>>>>> +     show_stack(NULL, NULL);
+>>>>> +     BUG();
+>>>>
+>>>> kunit_abort() is what will be call as the result of an assert failure.
 >>>
->>> Hi Brendan, Rob,
+>>> Yep. Does that need clarified somewhere.
+>>>>
+>>>> BUG(), which is a panic, which is crashing the system is not acceptable
+>>>> in the Linux kernel.  You will just annoy Linus if you submit this.
 >>>
->>> Pulling a comment from way back in the v1 patch thread:
->>>
->>> On 10/17/18 3:22 PM, Brendan Higgins wrote:
->>>> On Wed, Oct 17, 2018 at 10:49 AM <Tim.Bird at sony.com> wrote:
->>>
->>> < snip >
->>>
->>>> The test and the code under test are linked together in the same
->>>> binary and are compiled under Kbuild. Right now I am linking
->>>> everything into a UML kernel, but I would ultimately like to make
->>>> tests compile into completely independent test binaries. So each test
->>>> file would get compiled into its own test binary and would link
->>>> against only the code needed to run the test, but we are a bit of a
->>>> ways off from that.
->>>
->>> I have never used UML, so you should expect naive questions from me,
->>> exhibiting my lack of understanding.
->>>
->>> Does this mean that I have to build a UML architecture kernel to run
->>> the KUnit tests?
+>>> Sorry, I thought this was an acceptable use case since, a) this should
+>>> never be compiled in a production kernel, b) we are in a pretty bad,
+>>> unpredictable state if we get here and keep going. I think you might
+>>> have said elsewhere that you think "a" is not valid? In any case, I
+>>> can replace this with a WARN, would that be acceptable?
 >>
->> In this version of the patch series, yes.
+>> A WARN may or may not make sense, depending on the context.  It may
+>> be sufficient to simply report a test failure (as in the old version
+>> of case (2) below.
 >>
->>> *** Rob, if the answer is yes, then it seems like for my workflow,
->>> which is to build for real ARM hardware, my work is doubled (or
->>> worse), because for every patch/commit that I apply, I not only have
->>> to build the ARM kernel and boot on the real hardware to test, I also
->>> have to build the UML kernel and boot in UML.  If that is correct
->>> then I see this as a major problem for me.
+>> Answers to "a)" and "b)":
 >>
->> I've already raised this issue elsewhere in the series. Restricting
->> the DT tests to UML is a non-starter.
+>> a) it might be in a production kernel
 > 
+> Sorry for a possibly stupid question, how might it be so? Why would
+> someone intentionally build unit tests into a production kernel?
 
-> I have already stated my position elsewhere on the matter, but in
-> summary: Ensuring most tests can run without external dependencies
-> (hardware, VM, etc) has a lot of benefits and should be supported in
-> nearly all cases, but such tests should also work when compiled to run
-> on real hardware/VM; the tooling might not be as good in the latter
-> case, but I understand that there are good reasons to support it
-> nonetheless.
+People do things.  Just expect it.
 
-And my needs are the exact opposite.  My tests must run on real hardware,
-in the context of the real operating system subsystems and drivers
-potentially causing issues.
 
-It is useful if the tests can also run without that dependency.
+>>
+>> a') it is not acceptable in my development kernel either
+> 
+> Fair enough.
+> 
+>>
+>> b) No.  You don't crash a developer's kernel either unless it is
+>> required to avoid data corruption.
+> 
+> Alright, I thought that was one of those cases, but I am not going to
+> push the point. Also, in case it wasn't clear, the path where BUG()
+> gets called only happens if there is a bug in KUnit itself, not just
+> because a test case fails catastrophically.
 
--Frank
+Still not out of the woods.  Still facing Lions and Tigers and Bears,
+Oh my!
+
+So kunit_abort() is normally called as the result of an assert
+failure (as written many lines further above).
+
+kunit_abort()
+   test->try_catch.throw(&test->try_catch)
+   // this is really kunit_generic_throw(), yes?
+      complete_and_exit()
+         if (comp)
+            // comp is test_case_completion?
+            complete(comp)
+         do_exit()
+            // void __noreturn do_exit(long code)
+            // depending on the task, either panic
+            // or the task dies
+
+I did not read through enough of the code to understand what is going
+on here.  Is each kunit_module executed in a newly created thread?
+And if kunit_abort() is called then that thread dies?  Or something
+else?
+
+
+>>
+>> b') And you can not do replacements like:
+>>
+>> (1) in of_unittest_check_tree_linkage()
+>>
+>> -----  old  -----
+>>
+>>         if (!of_root)
+>>                 return;
+>>
+>> -----  new  -----
+>>
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, of_root);
+>>
+>> (2) in of_unittest_property_string()
+>>
+>> -----  old  -----
+>>
+>>         /* of_property_read_string_index() tests */
+>>         rc = of_property_read_string_index(np, "string-property", 0, strings);
+>>         unittest(rc == 0 && !strcmp(strings[0], "foobar"), "of_property_read_string_index() failure; rc=%i\n", rc);
+>>
+>> -----  new  -----
+>>
+>>         /* of_property_read_string_index() tests */
+>>         rc = of_property_read_string_index(np, "string-property", 0, strings);
+>>         KUNIT_ASSERT_EQ(test, rc, 0);
+>>         KUNIT_EXPECT_STREQ(test, strings[0], "foobar");
+>>
+>>
+>> If a test fails, that is no reason to abort testing.  The remainder of the unit
+>> tests can still run.  There may be cascading failures, but that is ok.
+> 
+> Sure, that's what I am trying to do. I don't see how (1) changes
+> anything, a failed KUNIT_ASSERT_* only bails on the current test case,
+> it does not quit the entire test suite let alone crash the kernel.
+
+This may be another case of whether a kunit_module is approximately a
+single KUNIT_EXPECT_*() or a larger number of them.
+
+I still want, for example, of_unittest_property_string() to include a large
+number of KUNIT_EXPECT_*() instances.  In that case I still want the rest of
+the tests in the kunit_module to be executed even after a KUNIT_ASSERT_*()
+fails.  The existing test code has that property.
 
 
 > 
-> So I am going to try to add basic support for running tests on other
-> architectures in the next version or two.
-
-< snip >
+> In case it wasn't clear above,
+>>>>> +     test->try_catch.throw(&test->try_catch);
+> should never, ever return. The only time it would, would be if KUnit
+> was very broken. This should never actually happen, even if the
+> assertion that called it was violated. KUNIT_ASSERT_* just says, "this
+> is a prerequisite property for this test case"; if it is violated, the
+> test case should fail and bail because the preconditions for the test
+> case cannot be satisfied. Nevertheless, other tests cases will still
+> run.
+> 
