@@ -1,43 +1,56 @@
-From: joel at joelfernandes.org (Joel Fernandes (Google))
-Date: Fri, 22 Mar 2019 23:46:19 -0400
-Subject: [PATCH] rcutorture: Select from only online CPUs
-Message-ID: <20190323034619.15792-1-joel@joelfernandes.org>
+From: mhiramat at kernel.org (Masami Hiramatsu)
+Date: Sat, 23 Mar 2019 19:27:46 +0900
+Subject: [PATCH selftests 0/2] Add checkbashisms meta-testcase
+In-Reply-To: <155079878723.5157.12433171255092403676.stgit@devbox>
+References: <155079878723.5157.12433171255092403676.stgit@devbox>
+Message-ID: <20190323192746.59739e5e9ea0445791ac14ed@kernel.org>
 
-The rcutorture jitter.sh script selects a random CPU but does not check
-if it is offline or online. This leads to taskset errors many times. On
-my machine, hyper threading is disabled so half the cores are offline
-causing taskset errors a lot of times. Let us fix this by checking from
-only the online CPUs on the system.
+Hi Shuah,
 
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
- tools/testing/selftests/rcutorture/bin/jitter.sh | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Could you pick this to your tree? I think this can prevent further
+simillar errors before release...
 
-diff --git a/tools/testing/selftests/rcutorture/bin/jitter.sh b/tools/testing/selftests/rcutorture/bin/jitter.sh
-index 3633828375e3..53bf9d99b5cd 100755
---- a/tools/testing/selftests/rcutorture/bin/jitter.sh
-+++ b/tools/testing/selftests/rcutorture/bin/jitter.sh
-@@ -47,10 +47,19 @@ do
- 		exit 0;
- 	fi
- 
--	# Set affinity to randomly selected CPU
-+	# Set affinity to randomly selected online CPU
- 	cpus=`ls /sys/devices/system/cpu/*/online |
- 		sed -e 's,/[^/]*$,,' -e 's/^[^0-9]*//' |
- 		grep -v '^0*$'`
-+
-+	for c in $cpus; do
-+		if [ "$(cat /sys/devices/system/cpu/cpu$c/online)" == "1" ];
-+		then
-+			cpus_tmp="$cpus_tmp $c"
-+		fi
-+	done
-+	cpus=$cpus_tmp
-+
- 	cpumask=`awk -v cpus="$cpus" -v me=$me -v n=$n 'BEGIN {
- 		srand(n + me + systime());
- 		ncpus = split(cpus, ca);
+Thank you,
+
+On Fri, 22 Feb 2019 10:26:27 +0900
+Masami Hiramatsu <mhiramat at kernel.org> wrote:
+
+> Hi,
+> 
+> Here are patches for making sure the ftracetest testcases
+> are checkbashisms clean.
+> 
+> This actually needs a patch from Juerg, "selftests/ftrace:
+> Make the coloring POSIX compliant" to complete the work.
+> 
+> http://lkml.kernel.org/r/20190220161333.28109-1-juergh at canonical.com
+> (Note that this is still under development)
+> 
+> So as Juerg pointed, recently ftracetest becomes not POSIX
+> compliant, and such kind of issues happened repeatedly.
+> To avoid those anymore, I decided to introduce a testcase
+> which runs checkbasisms on ftracetest and its testcases.
+> I think this can help us to find out whether it was
+> written in a way out of POSIX.
+> 
+> Thank you,
+> 
+> ---
+> 
+> Masami Hiramatsu (2):
+>       selftests/ftrace: Make a script checkbashisms clean
+>       selftests/ftrace: Add checkbashisms meta-testcase
+> 
+> 
+>  tools/testing/selftests/ftrace/ftracetest          |    1 +
+>  .../ftrace/test.d/kprobe/kprobe_ftrace.tc          |    2 +-
+>  .../selftests/ftrace/test.d/selftest/bashisms.tc   |   21 ++++++++++++++++++++
+>  3 files changed, 23 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc
+> 
+> --
+> Masami Hiramatsu (Linaro) <mhiramat at kernel.org>
+
+
 -- 
-2.21.0.392.gf8f6787159e-goog
+Masami Hiramatsu <mhiramat at kernel.org>
