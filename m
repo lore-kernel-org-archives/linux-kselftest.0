@@ -1,148 +1,340 @@
-From: dyoung at redhat.com (Dave Young)
-Date: Mon, 25 Mar 2019 16:09:35 +0800
-Subject: [PATCH v4a 1/2] selftests/kexec: make tests independent of IMA
- being enabled
-In-Reply-To: <1553283351-6310-1-git-send-email-zohar@linux.ibm.com>
-References: <1553283351-6310-1-git-send-email-zohar@linux.ibm.com>
-Message-ID: <20190325080935.GA12497@dhcp-128-65.nay.redhat.com>
+From: ci_notify at linaro.org (ci_notify at linaro.org)
+Date: Mon, 25 Mar 2019 09:00:25 +0000 (UTC)
+Subject: next-20190325 kselftest results
+Message-ID: <1082847990.5096.1553504425957.JavaMail.jenkins@a6c5c67cda76>
 
-Hi Mimi
-On 03/22/19 at 03:35pm, Mimi Zohar wrote:
-> Verify IMA is enabled before failing tests or emitting irrelevant
-> messages.  Also, don't skip the test if signatures are not required.
-> 
-> Suggested-by: Dave Young <dyoung at redhat.com>
-> Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
-> ---
-> Dave, if this patch resolves the outstanding issues, I can fold these
-> changes into the original patches. (Reminder, these patches will need to
-> be updated to support the "lockdown" patch set.)
+Summary
+------------------------------------------------------------------------
+kernel: 5.1.0-rc2
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: 9e864317704b7e0d1a8384005fe3dd9083c99134
+git describe: next-20190325
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190325
 
-They looks good to me, thanks for the update
+Regressions (compared to build next-20190322)
+------------------------------------------------------------------------
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_select_reuseport                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_select_reuseport                                                                                                         
+                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190322)                                                                   
+------------------------------------------------------------------------                                               
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sockmap                                                                                                         
+x86_64:                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * bpf_test_sockmap                                                                                                         
 
-Feel free to add my reviewed-by, I did some tests although not cover all
-ima cases.
 
-Thanks
-Dave
+In total:
+------------------------------------------------------------------------
+Ran 906 total tests in the following environments and test suites.
+pass 533
+fail 235
+xfail 0
+skip 138
 
-> 
->  .../selftests/kexec/test_kexec_file_load.sh        | 27 ++++++++++++++--------
->  tools/testing/selftests/kexec/test_kexec_load.sh   | 24 ++++++++++++-------
->  2 files changed, 33 insertions(+), 18 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kexec/test_kexec_file_load.sh b/tools/testing/selftests/kexec/test_kexec_file_load.sh
-> index 1d2e5e799523..57b636792086 100755
-> --- a/tools/testing/selftests/kexec/test_kexec_file_load.sh
-> +++ b/tools/testing/selftests/kexec/test_kexec_file_load.sh
-> @@ -110,11 +110,20 @@ kexec_file_load_test()
->  			log_fail "$succeed_msg (missing IMA sig)"
->  		fi
->  
-> -		if [ $pe_sig_required -eq 0 ] && [ $ima_sig_required -eq 0 ] \
-> -		    && [ $ima_read_policy -eq 0 ] && [ $ima_signed -eq 0 ]; then
-> +		if [ $pe_sig_required -eq 0 ] && [ $ima_appraise -eq 1 ] \
-> +		    && [ $ima_sig_required -eq 0 ] && [ $ima_signed -eq 0 ] \
-> +	            && [ $ima_read_policy -eq 0 ]; then
->  			log_fail "$succeed_msg (possibly missing IMA sig)"
->  		fi
->  
-> +		if [ $pe_sig_required -eq 0 ] && [ $ima_appraise -eq 0 ]; then
-> +			log_info "No signature verification required"
-> +		elif [ $pe_sig_required -eq 0 ] && [ $ima_appraise -eq 1 ] \
-> +		    && [ $ima_sig_required -eq 0 ] && [ $ima_signed -eq 0 ] \
-> +	            && [ $ima_read_policy -eq 1 ]; then
-> +			log_info "No signature verification required"
-> +		fi
-> +
->  		log_pass "$succeed_msg"
->  	fi
->  
-> @@ -136,8 +145,9 @@ kexec_file_load_test()
->  		log_pass "$failed_msg (missing IMA sig)"
->  	fi
->  
-> -	if [ $pe_sig_required -eq 0 ] && [ $ima_sig_required -eq 0 ] \
-> -	    && [ $ima_read_policy -eq 0 ] && [ $ima_signed -eq 0 ]; then
-> +	if [ $pe_sig_required -eq 0 ] && [ $ima_appraise -eq 1 ] \
-> +	    && [ $ima_sig_required -eq 0 ] && [ $ima_read_policy -eq 0 ] \
-> +	    && [ $ima_signed -eq 0 ]; then
->  		log_pass "$failed_msg (possibly missing IMA sig)"
->  	fi
->  
-> @@ -157,6 +167,9 @@ if [ $? -eq 0 ]; then
->  fi
->  
->  # Determine which kernel config options are enabled
-> +kconfig_enabled "CONFIG_IMA_APPRAISE=y" "IMA enabled"
-> +ima_appraise=$?
-> +
->  kconfig_enabled "CONFIG_IMA_ARCH_POLICY=y" \
->  	"architecture specific policy enabled"
->  arch_policy=$?
-> @@ -178,12 +191,6 @@ ima_sig_required=$?
->  get_secureboot_mode
->  secureboot=$?
->  
-> -if [ $secureboot -eq 0 ] && [ $arch_policy -eq 0 ] && \
-> -   [ $pe_sig_required -eq 0 ] && [ $ima_sig_required -eq 0 ] && \
-> -   [ $ima_read_policy -eq 1 ]; then
-> -	log_skip "No signature verification required"
-> -fi
-> -
->  # Are there pe and ima signatures
->  check_for_pesig
->  pe_signed=$?
-> diff --git a/tools/testing/selftests/kexec/test_kexec_load.sh b/tools/testing/selftests/kexec/test_kexec_load.sh
-> index 2a66c8897f55..49c6aa929137 100755
-> --- a/tools/testing/selftests/kexec/test_kexec_load.sh
-> +++ b/tools/testing/selftests/kexec/test_kexec_load.sh
-> @@ -1,8 +1,8 @@
->  #!/bin/sh
->  # SPDX-License-Identifier: GPL-2.0
-> -# Loading a kernel image via the kexec_load syscall should fail
-> -# when the kernel is CONFIG_KEXEC_VERIFY_SIG enabled and the system
-> -# is booted in secureboot mode.
-> +#
-> +# Prevent loading a kernel image via the kexec_load syscall when
-> +# signatures are required.  (Dependent on CONFIG_IMA_ARCH_POLICY.)
->  
->  TEST="$0"
->  . ./kexec_common_lib.sh
-> @@ -18,20 +18,28 @@ if [ $? -eq 0 ]; then
->  	log_skip "kexec_load is not enabled"
->  fi
->  
-> +kconfig_enabled "CONFIG_IMA_APPRAISE=y" "IMA enabled"
-> +ima_appraise=$?
-> +
-> +kconfig_enabled "CONFIG_IMA_ARCH_POLICY=y" \
-> +	"IMA architecture specific policy enabled"
-> +arch_policy=$?
-> +
->  get_secureboot_mode
->  secureboot=$?
->  
-> -# kexec_load should fail in secure boot mode
-> +# kexec_load should fail in secure boot mode and CONFIG_IMA_ARCH_POLICY enabled
->  kexec --load $KERNEL_IMAGE > /dev/null 2>&1
->  if [ $? -eq 0 ]; then
->  	kexec --unload
-> -	if [ $secureboot -eq 1 ]; then
-> +	if [ $secureboot -eq 1 ] && [ $arch_policy -eq 1 ]; then
->  		log_fail "kexec_load succeeded"
-> -	else
-> -		log_pass "kexec_load succeeded"
-> +	elif [ $ima_appraise -eq 0 -o $arch_policy -eq 0 ]; then
-> +		log_info "Either IMA or the IMA arch policy is not enabled"
->  	fi
-> +	log_pass "kexec_load succeeded"
->  else
-> -	if [ $secureboot -eq 1 ]; then
-> +	if [ $secureboot -eq 1 ] && [ $arch_policy -eq 1 ] ; then
->  		log_pass "kexec_load failed"
->  	else
->  		log_fail "kexec_load failed"
-> -- 
-> 2.7.5
-> 
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
+
+Test Suites
+-----------
+* kselftest
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
+
+
+Failures
+------------------------------------------------------------------------
+
+qemu_i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_xdp_vlan.sh
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+
+qemu_x86_64:
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+
+qemu_arm64:
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+
+x15:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_xdp_vlan.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_reuseport_bpf_numa
+
+qemu_arm:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_xdp_vlan.sh
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_reuseport_bpf_numa
+
+hi6220-hikey:
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+
+dragonboard-410c:
+
+i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_xdp_vlan.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+
+juno-r2:
+
+x86:
+* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-native/bpf_test_netcnt
+* kselftest-vsyscall-mode-native/bpf_test_progs
+* kselftest-vsyscall-mode-native/bpf_test_select_reuseport
+* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-native/cgroup_test_core
+* kselftest-vsyscall-mode-native/dma-buf_udmabuf
+* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
+* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-none/bpf_test_netcnt
+* kselftest-vsyscall-mode-none/bpf_test_progs
+* kselftest-vsyscall-mode-none/bpf_test_sockmap
+* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
+* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-none/cgroup_test_core
+* kselftest-vsyscall-mode-none/dma-buf_udmabuf
+* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
