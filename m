@@ -1,8 +1,8 @@
 From: brendanhiggins at google.com (Brendan Higgins)
-Date: Mon, 25 Mar 2019 15:15:45 -0700
+Date: Mon, 25 Mar 2019 15:18:12 -0700
 Subject: [RFC v3 18/19] of: unittest: split out a couple of test cases
  from unittest
-In-Reply-To: <bf094685-3f2a-dc7b-7291-0340136b87f3@gmail.com>
+In-Reply-To: <767d14bf-3429-58b7-dcbf-c8ef86133265@gmail.com>
 References: <20181128193636.254378-1-brendanhiggins@google.com>
  <20181128193636.254378-19-brendanhiggins@google.com>
  <990bfc7d-dc5e-d8d3-c151-9b321ff2ac10@gmail.com>
@@ -15,45 +15,26 @@ References: <20181128193636.254378-1-brendanhiggins@google.com>
  <72cd1c5b-6f68-73ad-c8fd-f3a3268a0529@gmail.com>
  <CAFd5g46UU9wk+F6A5wnKYYtYKmmtv__SaY8eg6v-T9xUjsoxhA@mail.gmail.com>
  <bb5bcd3d-a09a-cfbe-c7fa-16e5eb75b0e4@gmail.com>
- <CAFd5g448xQLOJwVYU5Zmu4+OPWuboiWZPhBvK6au8Pgm5B9haQ@mail.gmail.com>
- <bf094685-3f2a-dc7b-7291-0340136b87f3@gmail.com>
-Message-ID: <CAFd5g46tpL8KaqKnAEWNRSBWpYMcptu1Eig+nEzq9HX7DF1YUA@mail.gmail.com>
+ <767d14bf-3429-58b7-dcbf-c8ef86133265@gmail.com>
+Message-ID: <CAFd5g45yNw5VA5teZ0fBzqND47yfGZyFJiEfNqZfvNYJqiG78Q@mail.gmail.com>
 
-On Thu, Mar 21, 2019 at 6:47 PM Frank Rowand <frowand.list at gmail.com> wrote:
+On Thu, Mar 21, 2019 at 6:34 PM Frank Rowand <frowand.list at gmail.com> wrote:
 >
-> On 3/21/19 6:30 PM, Brendan Higgins wrote:
-> > On Thu, Mar 21, 2019 at 5:22 PM Frank Rowand <frowand.list at gmail.com> wrote:
-> >>
-> >> On 2/27/19 7:52 PM, Brendan Higgins wrote:
+> On 3/21/19 5:22 PM, Frank Rowand wrote:
+> > On 2/27/19 7:52 PM, Brendan Higgins wrote:
 >
-> < snip >  but thanks for the comments in the snipped section.
+> < snip >
 >
->
-> >>
-> >> Thanks for leaving 18/19 and 19/19 off in v4.
+> >> Now I know that, hermeticity especially, but other features as well
+> >> (test suite summary, error on unused test case function, etc) are not
+> >> actually in KUnit as it is under consideration here. Maybe it would be
+> >> best to save these last two patches (18/19, and 19/19) until I have
+> >> these other features checked in and reconsider them then?
 > >
-> > Sure, no problem. It was pretty clear that it was a waste of both of
-> > our times to continue discussing those at this juncture. :-)
-> >
-> > Do you still want me to try to convert the DT not-exactly-unittest to
-> > KUnit? I would kind of prefer (I don't feel *super* strongly about the
-> > matter) we don't call it that since I was intending for it to be the
-> > flagship initial example, but I certainly don't mind trying to clean
-> > this patch up to get it up to snuff. It's really just a question of
-> > whether it is worth it to you.
+> > Thanks for leaving 18/19 and 19/19 off in v4.
 >
-> In the long term, if KUnit is adopted by the kernel, then I think it
-> probably makes sense for devicetree unittest to convert from using
-> our own unittest() function to report an individual test pass/fail
-> to instead use something like KUNIT_EXPECT_*() to provide more
-> consistent test messages to test frameworks.  That is assuming
-> KUNIT_EXPECT_*() provides comparable functionality.  I still have
-> not looked into that question since the converted tests (patch 15/17
-> in v4) still does not execute without throwing internal errors.
+> Oops, they got into v4 but as 16/17 and 17/17, I think.  But it sounds
+> like you are planning to leave them out of v5.
 
-Sounds good.
-
->
-> If that conversion occurred, I would also avoid the ASSERTs.
-
-Noted.
+Oh, I thought you meant v5 when you were thanking me. In any case, to
+confirm, I will be leaving off 16/17, and 17/17 in the next version.
