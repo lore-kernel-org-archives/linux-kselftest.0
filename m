@@ -1,342 +1,48 @@
-From: ci_notify@linaro.org (ci_notify@linaro.org)
-Date: Mon, 25 Mar 2019 09:00:25 +0000 (UTC)
-Subject: next-20190325 kselftest results
-Message-ID: <1082847990.5096.1553504425957.JavaMail.jenkins@a6c5c67cda76>
+From: alan.maguire@oracle.com (Alan Maguire)
+Date: Mon, 25 Mar 2019 09:36:37 +0000 (GMT)
+Subject: [PATCH bpf-next] bpf: test_tc_tunnel.sh needs reverse path filtering
+ disabled
+Message-ID:
+ <alpine.LRH.2.20.1903250930270.2818@dhcp-10-175-167-141.vpn.oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190325090025.HsZwoRa55cBNiLIDLB-ssy4rZLEzSt-5Pdx2Eszyxsc@z>
+Message-ID: <20190325093637.r3_-NqcZ10zJ7uDhVSL-rZY5Jb_2JMl55yIgtJcuqos@z>
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.1.0-rc2
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: 9e864317704b7e0d1a8384005fe3dd9083c99134
-git describe: next-20190325
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190325
+test_tc_tunnel.sh sets up a pair of namespaces connected by a
+veth pair to verify encap/decap using bpf_skb_adjust_room.  In
+testing this, it uses tunnel links as the peer of the bpf-based
+encap/decap.  However because the same IP header is used for inner
+and outer IP, when packets arrive at the tunnel interface they will
+be dropped by reverse path filtering as those packets are expected
+on the veth interface (where the destination IP of the decapped
+packet is configured).
 
-Regressions (compared to build next-20190322)
-------------------------------------------------------------------------
-qemu_x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_select_reuseport                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_select_reuseport                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190322)                                                                   
-------------------------------------------------------------------------                                               
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-x86_64:                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * bpf_test_sockmap                                                                                                         
+To avoid this, ensure reverse path filtering is disabled for the
+namespace using tunneling.
 
+Fixes: 98cdabcd0798 ("selftests/bpf: bpf tunnel encap test")
+Signed-off-by: Alan Maguire <alan.maguire at oracle.com>
+---
+ tools/testing/selftests/bpf/test_tc_tunnel.sh | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-In total:
-------------------------------------------------------------------------
-Ran 906 total tests in the following environments and test suites.
-pass 533
-fail 235
-xfail 0
-skip 138
-
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
-
-
-Failures
-------------------------------------------------------------------------
-
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-
-qemu_x86_64:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-
-qemu_arm64:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-
-x15:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_reuseport_bpf_numa
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_reuseport_bpf_numa
-
-hi6220-hikey:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-
-dragonboard-410c:
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-
-juno-r2:
-
-x86:
-* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-native/bpf_test_netcnt
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_select_reuseport
-* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-native/cgroup_test_core
-* kselftest-vsyscall-mode-native/dma-buf_udmabuf
-* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-none/bpf_test_netcnt
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-none/cgroup_test_core
-* kselftest-vsyscall-mode-none/dma-buf_udmabuf
-* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
+diff --git a/tools/testing/selftests/bpf/test_tc_tunnel.sh b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+index dcf3206..c805adb 100755
+--- a/tools/testing/selftests/bpf/test_tc_tunnel.sh
++++ b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+@@ -160,6 +160,14 @@ server_listen
+ # client can connect again
+ ip netns exec "${ns2}" ip link add dev testtun0 type "${tuntype}" \
+ 	remote "${addr1}" local "${addr2}"
++# Because packets are decapped by the tunnel they arrive on testtun0 from
++# the IP stack perspective.  Ensure reverse path filtering is disabled
++# otherwise we drop the TCP SYN as arriving on testtun0 instead of the
++# expected veth2 (veth2 is where 192.168.1.2 is configured).
++ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.all.rp_filter=0
++# rp needs to be disabled for both all and testtun0 as the rp value is
++# selected as the max of the "all" and device-specific values.
++ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.testtun0.rp_filter=0
+ ip netns exec "${ns2}" ip link set dev testtun0 up
+ echo "test bpf encap with tunnel device decap"
+ client_connect
 -- 
-Linaro LKFT
-https://lkft.linaro.org
+1.8.3.1
