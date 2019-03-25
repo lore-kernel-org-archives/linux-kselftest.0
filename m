@@ -1,60 +1,22 @@
-From: paulmck@linux.ibm.com (Paul E. McKenney)
-Date: Mon, 25 Mar 2019 09:42:53 -0700
-Subject: [PATCH] rcutorture: Select from only online CPUs
-In-Reply-To: <CAEXW_YRDfOEr-hdbKGDC6amRaaqTCCBsowRhVwDqJd-1BoO17g@mail.gmail.com>
-References: <20190323034619.15792-1-joel@joelfernandes.org>
- <20190325150133.GA4102@linux.ibm.com>
- <CAEXW_YRDfOEr-hdbKGDC6amRaaqTCCBsowRhVwDqJd-1BoO17g@mail.gmail.com>
-Message-ID: <20190325164253.GE4102@linux.ibm.com>
+From: logang@deltatee.com (Logan Gunthorpe)
+Date: Mon, 25 Mar 2019 13:08:24 -0600
+Subject: [PATCH v3 09/10] NTB: Add MSI interrupt support to ntb_transport
+In-Reply-To: <20190322164743.GN251185@google.com>
+References: <20190322000645.15580-1-logang@deltatee.com>
+ <20190322000645.15580-10-logang@deltatee.com>
+ <20190322164743.GN251185@google.com>
+Message-ID: <ef64a491-cfad-5192-3b2f-515206036440@deltatee.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190325164253.ebZoid-YIi2hRyOOFKWWvhxcWh8w8cRCPE6RNi_ggpQ@z>
+Message-ID: <20190325190824.8o2dOupvt7xLFREmSuE0yPNQYpIWLeU3DSUdIQ3-yA4@z>
 
-On Mon, Mar 25, 2019@12:33:37PM -0400, Joel Fernandes wrote:
-> On Mon, Mar 25, 2019@11:02 AM Paul E. McKenney <paulmck@linux.ibm.com> wrote:
-> >
-> > On Fri, Mar 22, 2019@11:46:19PM -0400, Joel Fernandes (Google) wrote:
-> > > The rcutorture jitter.sh script selects a random CPU but does not check
-> > > if it is offline or online. This leads to taskset errors many times. On
-> > > my machine, hyper threading is disabled so half the cores are offline
-> > > causing taskset errors a lot of times. Let us fix this by checking from
-> > > only the online CPUs on the system.
-> > >
-> > > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> >
-> > Good catch!
-> >
-> > Please see below for one suggestion for simplification.
-> >
-> >                                                         Thanx, Paul
-> >
-> > > ---
-> > >  tools/testing/selftests/rcutorture/bin/jitter.sh | 11 ++++++++++-
-> > >  1 file changed, 10 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/testing/selftests/rcutorture/bin/jitter.sh b/tools/testing/selftests/rcutorture/bin/jitter.sh
-> > > index 3633828375e3..53bf9d99b5cd 100755
-> > > --- a/tools/testing/selftests/rcutorture/bin/jitter.sh
-> > > +++ b/tools/testing/selftests/rcutorture/bin/jitter.sh
-> > > @@ -47,10 +47,19 @@ do
-> > >               exit 0;
-> > >       fi
-> > >
-> > > -     # Set affinity to randomly selected CPU
-> > > +     # Set affinity to randomly selected online CPU
-> > >       cpus=`ls /sys/devices/system/cpu/*/online |
-> >
-> >         cpus=`grep 1 /sys/devices/system/cpu/*/online |
-> 
-> Yes, this is better. Lets do it this way :)
-> 
-> > >               sed -e 's,/[^/]*$,,' -e 's/^[^0-9]*//' |
-> > >               grep -v '^0*$'`
-> >
-> > Of course, now I have no idea why I excluded CPU 0...  :-/
-> 
-> Yes, I was wondering as well about that :-)
 
-Please feel free to try including CPU 0 and running the set of single-CPU
-rcutorture scenarios.  ;-)
 
-							Thanx, Paul
+On 2019-03-22 10:47 a.m., Bjorn Helgaas wrote:
+> Hi Logan,
+> 
+> Drive-by nits:
+
+Thanks Bjorn! I've updated my patches for v4 which I'll send out in a
+week or two.
+
+Logan
