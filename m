@@ -1,74 +1,59 @@
 From: brendanhiggins at google.com (Brendan Higgins)
-Date: Mon, 25 Mar 2019 15:12:05 -0700
-Subject: [RFC v4 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <aea24c8e-5ce8-5f33-c81b-d2eeef588ec8@gmail.com>
-References: <20190214213729.21702-1-brendanhiggins@google.com>
- <6d9b3b21-1179-3a45-7545-30aa15306cb4@deltatee.com>
- <CAFd5g47G=mTdk+=wpO+rkyO0+mAbEfPAg=Pr7_507Uek4sdWeA@mail.gmail.com>
- <3bdbe44c-5bd8-db37-89f9-a518cd5a21a8@deltatee.com>
- <CAFd5g45u6oX=nK9anAEdfsV+8SET8Zo_Dpy0WfzCna19r_jSyw@mail.gmail.com>
- <aea24c8e-5ce8-5f33-c81b-d2eeef588ec8@gmail.com>
-Message-ID: <CAFd5g46ky5617JB=h-gcgdYMZzKtn9zv=qzvbyyHZpQW0m_84Q@mail.gmail.com>
+Date: Mon, 25 Mar 2019 15:15:45 -0700
+Subject: [RFC v3 18/19] of: unittest: split out a couple of test cases
+ from unittest
+In-Reply-To: <bf094685-3f2a-dc7b-7291-0340136b87f3@gmail.com>
+References: <20181128193636.254378-1-brendanhiggins@google.com>
+ <20181128193636.254378-19-brendanhiggins@google.com>
+ <990bfc7d-dc5e-d8d3-c151-9b321ff2ac10@gmail.com>
+ <CAFd5g45tOGgf_sKGYRC=fpnTBKGaG=8frbQdgZ3ZTkQFyTfP5A@mail.gmail.com>
+ <88fe0546-7850-5bb4-9673-b1aef2dccb3e@gmail.com>
+ <CAFd5g444f-FBq4x3U7BL-EY+bFxP0rsJhJ14=mjOi89PhMkURg@mail.gmail.com>
+ <0e311e88-c4d4-e98d-1720-53a04bd526fc@gmail.com>
+ <CAFd5g44NTZoSAJPMvXP2xvJgn7m5QoV-KJu2AMrr67+eL+CKrQ@mail.gmail.com>
+ <d9f7e000-4cac-a35a-3ff9-60130e12ebea@gmail.com>
+ <72cd1c5b-6f68-73ad-c8fd-f3a3268a0529@gmail.com>
+ <CAFd5g46UU9wk+F6A5wnKYYtYKmmtv__SaY8eg6v-T9xUjsoxhA@mail.gmail.com>
+ <bb5bcd3d-a09a-cfbe-c7fa-16e5eb75b0e4@gmail.com>
+ <CAFd5g448xQLOJwVYU5Zmu4+OPWuboiWZPhBvK6au8Pgm5B9haQ@mail.gmail.com>
+ <bf094685-3f2a-dc7b-7291-0340136b87f3@gmail.com>
+Message-ID: <CAFd5g46tpL8KaqKnAEWNRSBWpYMcptu1Eig+nEzq9HX7DF1YUA@mail.gmail.com>
 
-On Thu, Mar 21, 2019 at 6:12 PM Frank Rowand <frowand.list at gmail.com> wrote:
+On Thu, Mar 21, 2019 at 6:47 PM Frank Rowand <frowand.list at gmail.com> wrote:
 >
-> On 3/21/19 4:33 PM, Brendan Higgins wrote:
-> > On Thu, Mar 21, 2019 at 3:27 PM Logan Gunthorpe <logang at deltatee.com> wrote:
+> On 3/21/19 6:30 PM, Brendan Higgins wrote:
+> > On Thu, Mar 21, 2019 at 5:22 PM Frank Rowand <frowand.list at gmail.com> wrote:
 > >>
-> >>
-> >>
-> >> On 2019-03-21 4:07 p.m., Brendan Higgins wrote:
-> >>> A couple of points, as for needing CONFIG_PCI; my plan to deal with
-> >>> that type of thing has been that we would add support for a KUnit/UML
-> >>> version that is just for KUnit. It would mock out the necessary bits
-> >>> to provide a fake hardware implementation for anything that might
-> >>> depend on it. I wrote a prototype for mocking/faking MMIO that I
-> >>> presented to the list here[1]; it is not part of the current patchset
-> >>> because we decided it would be best to focus on getting an MVP in, but
-> >>> I plan on bringing it back up at some point. Anyway, what do you
-> >>> generally think of this approach?
-> >>
-> >> Yes, I was wondering if that might be possible. I think that's a great
-> >> approach but it will unfortunately take a lot of work before larger
-> >> swaths of the kernel are testable in Kunit with UML. Having more common
-> >> mocked infrastructure will be great by-product of it though.
-> >
-> > Yeah, it's unfortunate that the best way to do something often takes
-> > so much longer.
-> >
-> >>
-> >>> Awesome, I looked at the code you posted and it doesn't look like you
-> >>> have had too many troubles. One thing that stood out to me, why did
-> >>> you need to put it in the kunit/ dir?
-> >>
-> >> Yeah, writing the code was super easy. Only after, did I realized I
-> >> couldn't get it to easily build.
-> >
-> > Yeah, we really need to fix that; unfortunately, broadly addressing
-> > that problem is really hard and will most likely take a long time.
-> >
-> >>
-> >> Putting it in the kunit directory was necessary because nothing in the
-> >> NTB tree builds unless CONFIG_NTB is set (see drivers/Makefile) and
-> >> CONFIG_NTB depends on CONFIG_PCI. I didn't experiment to see how hard it
-> >> would be to set CONFIG_NTB without CONFIG_PCI; I assumed it would be tricky.
-> >>
-> >>> I am looking forward to see what you think!
-> >>
-> >> Generally, I'm impressed and want to see this work in upstream as soon
-> >> as possible so I can start to make use of it!
-> >
-> > Great to hear! I was trying to get the next revision out this week,
-> > but addressing some of the comments is taking a little longer than
-> > expected. I should have something together fairly soon though
-> > (hopefully next week). Good news is that next revision will be
-> > non-RFC; most of the feedback has settled down and I think we are
-> > ready to start figuring out how to merge it. Fingers crossed :-)
-> >
-> > Cheers
+> >> On 2/27/19 7:52 PM, Brendan Higgins wrote:
 >
-> I'll be out of the office next week and will not be able to review.
-> Please hold off on any devicetree related files until after I review.
+> < snip >  but thanks for the comments in the snipped section.
+>
+>
+> >>
+> >> Thanks for leaving 18/19 and 19/19 off in v4.
+> >
+> > Sure, no problem. It was pretty clear that it was a waste of both of
+> > our times to continue discussing those at this juncture. :-)
+> >
+> > Do you still want me to try to convert the DT not-exactly-unittest to
+> > KUnit? I would kind of prefer (I don't feel *super* strongly about the
+> > matter) we don't call it that since I was intending for it to be the
+> > flagship initial example, but I certainly don't mind trying to clean
+> > this patch up to get it up to snuff. It's really just a question of
+> > whether it is worth it to you.
+>
+> In the long term, if KUnit is adopted by the kernel, then I think it
+> probably makes sense for devicetree unittest to convert from using
+> our own unittest() function to report an individual test pass/fail
+> to instead use something like KUNIT_EXPECT_*() to provide more
+> consistent test messages to test frameworks.  That is assuming
+> KUNIT_EXPECT_*() provides comparable functionality.  I still have
+> not looked into that question since the converted tests (patch 15/17
+> in v4) still does not execute without throwing internal errors.
 
-Will do.
+Sounds good.
+
+>
+> If that conversion occurred, I would also avoid the ASSERTs.
+
+Noted.
