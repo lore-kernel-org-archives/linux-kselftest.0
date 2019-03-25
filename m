@@ -1,79 +1,75 @@
 From: brendanhiggins@google.com (Brendan Higgins)
-Date: Mon, 25 Mar 2019 15:04:08 -0700
-Subject: [RFC v3 00/19] kunit: introduce KUnit, the Linux kernel unit
+Date: Mon, 25 Mar 2019 15:11:14 -0700
+Subject: [RFC v4 00/17] kunit: introduce KUnit, the Linux kernel unit
  testing framework
-In-Reply-To: <ec4c1020-4b53-e0f2-4a9d-3fc73af56746@gmail.com>
-References: <20181128193636.254378-1-brendanhiggins@google.com>
- <f34ee937-83d6-3ff6-12b3-c6cd9acbfc38@gmail.com>
- <CAL_JsqL0t_p8=Ueq4mHS5i2YEQdc7S7AtPWfkcOsj1g2SixUkA@mail.gmail.com>
- <CAFd5g47cDKSdXGAL8pbDxEU2O8A-9Ajq1wCM+PtPF40T4wYKow@mail.gmail.com>
- <ec4c1020-4b53-e0f2-4a9d-3fc73af56746@gmail.com>
+In-Reply-To: <0e6eb370-3e62-e1a5-1b91-bccc5868e8e4@gmail.com>
+References: <20190214213729.21702-1-brendanhiggins@google.com>
+ <CAFd5g45F3YUsAjse+Vt5hj5CLjaXrRWgr5zCZZ6CJKc0hboP6Q@mail.gmail.com>
+ <0e6eb370-3e62-e1a5-1b91-bccc5868e8e4@gmail.com>
 Message-ID:
- <CAFd5g46u8cQMVbcDv06HGL7mL=j35ziMxnqPXhrwYS5CD1ZeZA@mail.gmail.com>
+ <CAFd5g46ZW5PqQ1-k0gXRxZ+Zp3ukYWmhGYBz589NoFre7f+kzA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190325220408.FPTbEI4H3dXIJvk3UFkyaMYOOhfsUlD4G8CeUzVGWJs@z>
+Message-ID: <20190325221114.2LWiEe2X569CUhZZjyFcn9KcaWQB1W9MX7RtuXTaBfw@z>
 
-On Thu, Mar 21, 2019@5:28 PM Frank Rowand <frowand.list@gmail.com> wrote:
+On Thu, Mar 21, 2019@6:23 PM Frank Rowand <frowand.list@gmail.com> wrote:
 >
-> On 12/5/18 3:10 PM, Brendan Higgins wrote:
-> > On Tue, Dec 4, 2018@5:49 AM Rob Herring <robh@kernel.org> wrote:
-> >>
-> >> On Tue, Dec 4, 2018@5:40 AM Frank Rowand <frowand.list@gmail.com> wrote:
-> >>>
-> >>> Hi Brendan, Rob,
-> >>>
-> >>> Pulling a comment from way back in the v1 patch thread:
-> >>>
-> >>> On 10/17/18 3:22 PM, Brendan Higgins wrote:
-> >>>> On Wed, Oct 17, 2018@10:49 AM <Tim.Bird@sony.com> wrote:
-> >>>
-> >>> < snip >
-> >>>
-> >>>> The test and the code under test are linked together in the same
-> >>>> binary and are compiled under Kbuild. Right now I am linking
-> >>>> everything into a UML kernel, but I would ultimately like to make
-> >>>> tests compile into completely independent test binaries. So each test
-> >>>> file would get compiled into its own test binary and would link
-> >>>> against only the code needed to run the test, but we are a bit of a
-> >>>> ways off from that.
-> >>>
-> >>> I have never used UML, so you should expect naive questions from me,
-> >>> exhibiting my lack of understanding.
-> >>>
-> >>> Does this mean that I have to build a UML architecture kernel to run
-> >>> the KUnit tests?
-> >>
-> >> In this version of the patch series, yes.
-> >>
-> >>> *** Rob, if the answer is yes, then it seems like for my workflow,
-> >>> which is to build for real ARM hardware, my work is doubled (or
-> >>> worse), because for every patch/commit that I apply, I not only have
-> >>> to build the ARM kernel and boot on the real hardware to test, I also
-> >>> have to build the UML kernel and boot in UML.  If that is correct
-> >>> then I see this as a major problem for me.
-> >>
-> >> I've already raised this issue elsewhere in the series. Restricting
-> >> the DT tests to UML is a non-starter.
+> On 3/4/19 3:01 PM, Brendan Higgins wrote:
+> > On Thu, Feb 14, 2019 at 1:38 PM Brendan Higgins
+< snip >
+> > Someone suggested I should send the next revision out as "PATCH"
+> > instead of "RFC" since there seems to be general consensus about
+> > everything at a high level, with a couple exceptions.
+> >
+> > At this time I am planning on sending the next revision out as "[PATCH
+> > v1 00/NN] kunit: introduce KUnit, the Linux kernel unit testing
+> > framework". Initially I wasn't sure if the next revision should be
+> > "[PATCH v1 ...]" or "[PATCH v5 ...]". Please let me know if you have a
+> > strong objection to the former.
+> >
+> > In the next revision, I will be dropping the last two of three patches
+> > for the DT unit tests as there doesn't seem to be enough features
+> > currently available to justify the heavy refactoring I did; however, I
+>
+> Thank you.
+>
+>
+> > will still include the patch that just converts everything over to
+> > KUnit without restructuring the test cases:
+> > https://lkml.org/lkml/2019/2/14/1133
+>
+> The link doesn't work for me (don't worry about that), so I'm assuming
+> this is:
+>
+>    [RFC v4 15/17] of: unittest: migrate tests to run on KUnit
+
+That's correct.
+
+>
+> The conversation on that patch ended after:
+>
+>    >> After adding patch 15, there are a lot of "unittest internal error" messages.
+>    >
+>    > Yeah, I meant to ask you about that. I thought it was due to a change
+>    > you made, but after further examination, just now, I found it was my
+>    > fault. Sorry for not mentioning that anywhere. I will fix it in v5.
+>
+> It is not worth my time to look at patch 15 when it is that broken.  So I
+> have not done any review of it.
+
+Right, I didn't expect you to, we were still discussing things on RFC
+v3 at the time. I think I got you comments on v3 in a very short time
+frame around sending out v4; hence why your comments were not
+addressed.
+
+>
+> So no, I think you are still in the RFC stage unless you drop patch 15.
+
+Noted. I might split that out into a separate RFC then.
+
+>
+> >
+> > I should have the next revision out in a week or so.
 > >
 >
-> > I have already stated my position elsewhere on the matter, but in
-> > summary: Ensuring most tests can run without external dependencies
-> > (hardware, VM, etc) has a lot of benefits and should be supported in
-> > nearly all cases, but such tests should also work when compiled to run
-> > on real hardware/VM; the tooling might not be as good in the latter
-> > case, but I understand that there are good reasons to support it
-> > nonetheless.
->
-> And my needs are the exact opposite.  My tests must run on real hardware,
-> in the context of the real operating system subsystems and drivers
-> potentially causing issues.
 
-Right, Rob pointed this out, and I fixed this in v4. To be clear, as
-of RFC v4 you can run KUnit tests on non-UML architectures, we tested
-it on x86 and ARM.
-
->
-> It is useful if the tests can also run without that dependency.
-
-This, of course, is still the main intended use case, but there is
-nothing to stop you from using it on real hardware.
+Cheers!
