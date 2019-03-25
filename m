@@ -1,22 +1,37 @@
-From: logang@deltatee.com (Logan Gunthorpe)
-Date: Mon, 25 Mar 2019 13:08:24 -0600
-Subject: [PATCH v3 09/10] NTB: Add MSI interrupt support to ntb_transport
-In-Reply-To: <20190322164743.GN251185@google.com>
-References: <20190322000645.15580-1-logang@deltatee.com>
- <20190322000645.15580-10-logang@deltatee.com>
- <20190322164743.GN251185@google.com>
-Message-ID: <ef64a491-cfad-5192-3b2f-515206036440@deltatee.com>
+From: zohar@linux.ibm.com (Mimi Zohar)
+Date: Mon, 25 Mar 2019 16:37:16 -0400
+Subject: [PATCH v4a 1/2] selftests/kexec: make tests independent of IMA
+ being enabled
+In-Reply-To: <20190325080935.GA12497@dhcp-128-65.nay.redhat.com>
+References: <1553283351-6310-1-git-send-email-zohar@linux.ibm.com>
+ <20190325080935.GA12497@dhcp-128-65.nay.redhat.com>
+Message-ID: <1553546236.5561.7.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190325190824.8o2dOupvt7xLFREmSuE0yPNQYpIWLeU3DSUdIQ3-yA4@z>
+Message-ID: <20190325203716.Dz7CzOn8eC4HodCbEeZPwfJmxueiyh9LY9lbNt651SY@z>
 
-
-
-On 2019-03-22 10:47 a.m., Bjorn Helgaas wrote:
-> Hi Logan,
+On Mon, 2019-03-25@16:09 +0800, Dave Young wrote:
+> Hi Mimi
+> On 03/22/19@03:35pm, Mimi Zohar wrote:
+> > Verify IMA is enabled before failing tests or emitting irrelevant
+> > messages.  Also, don't skip the test if signatures are not required.
+> > 
+> > Suggested-by: Dave Young <dyoung at redhat.com>
+> > Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
+> > ---
+> > Dave, if this patch resolves the outstanding issues, I can fold these
+> > changes into the original patches. (Reminder, these patches will need to
+> > be updated to support the "lockdown" patch set.)
 > 
-> Drive-by nits:
+> They looks good to me, thanks for the update
 
-Thanks Bjorn! I've updated my patches for v4 which I'll send out in a
-week or two.
+I've folded the kexec_file_load changes into the kexec_file_load test.
+ The remaining kexec_load change is left as a separate patch, since it
+is dependent on the ikconfig change.
 
-Logan
+> Feel free to add my reviewed-by, I did some tests although not cover all
+> ima cases.
+
+Thanks!  Is this meant as a general "reviewed-by" for all of the
+patches or just this specific one?
+
+Mimi
