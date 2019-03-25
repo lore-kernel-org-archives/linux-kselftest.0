@@ -1,58 +1,150 @@
-From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Sat, 23 Mar 2019 19:27:46 +0900
-Subject: [PATCH selftests 0/2] Add checkbashisms meta-testcase
-In-Reply-To: <155079878723.5157.12433171255092403676.stgit@devbox>
-References: <155079878723.5157.12433171255092403676.stgit@devbox>
-Message-ID: <20190323192746.59739e5e9ea0445791ac14ed@kernel.org>
+From: dyoung@redhat.com (Dave Young)
+Date: Mon, 25 Mar 2019 16:09:35 +0800
+Subject: [PATCH v4a 1/2] selftests/kexec: make tests independent of IMA
+ being enabled
+In-Reply-To: <1553283351-6310-1-git-send-email-zohar@linux.ibm.com>
+References: <1553283351-6310-1-git-send-email-zohar@linux.ibm.com>
+Message-ID: <20190325080935.GA12497@dhcp-128-65.nay.redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190323102746.ZzEZ8-f1bf2g6ErxcsSdo6vVLR1pBvu0KDq9ENMUbME@z>
+Message-ID: <20190325080935.3kBzI2lPw92E5VPbrGfoOxLEBT0xCFEV5_1W3PapGWo@z>
 
-Hi Shuah,
-
-Could you pick this to your tree? I think this can prevent further
-simillar errors before release...
-
-Thank you,
-
-On Fri, 22 Feb 2019 10:26:27 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
-
-> Hi,
+Hi Mimi
+On 03/22/19@03:35pm, Mimi Zohar wrote:
+> Verify IMA is enabled before failing tests or emitting irrelevant
+> messages.  Also, don't skip the test if signatures are not required.
 > 
-> Here are patches for making sure the ftracetest testcases
-> are checkbashisms clean.
-> 
-> This actually needs a patch from Juerg, "selftests/ftrace:
-> Make the coloring POSIX compliant" to complete the work.
-> 
-> http://lkml.kernel.org/r/20190220161333.28109-1-juergh at canonical.com
-> (Note that this is still under development)
-> 
-> So as Juerg pointed, recently ftracetest becomes not POSIX
-> compliant, and such kind of issues happened repeatedly.
-> To avoid those anymore, I decided to introduce a testcase
-> which runs checkbasisms on ftracetest and its testcases.
-> I think this can help us to find out whether it was
-> written in a way out of POSIX.
-> 
-> Thank you,
-> 
+> Suggested-by: Dave Young <dyoung at redhat.com>
+> Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
 > ---
-> 
-> Masami Hiramatsu (2):
->       selftests/ftrace: Make a script checkbashisms clean
->       selftests/ftrace: Add checkbashisms meta-testcase
-> 
-> 
->  tools/testing/selftests/ftrace/ftracetest          |    1 +
->  .../ftrace/test.d/kprobe/kprobe_ftrace.tc          |    2 +-
->  .../selftests/ftrace/test.d/selftest/bashisms.tc   |   21 ++++++++++++++++++++
->  3 files changed, 23 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc
-> 
-> --
-> Masami Hiramatsu (Linaro) <mhiramat at kernel.org>
+> Dave, if this patch resolves the outstanding issues, I can fold these
+> changes into the original patches. (Reminder, these patches will need to
+> be updated to support the "lockdown" patch set.)
 
+They looks good to me, thanks for the update
 
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+Feel free to add my reviewed-by, I did some tests although not cover all
+ima cases.
+
+Thanks
+Dave
+
+> 
+>  .../selftests/kexec/test_kexec_file_load.sh        | 27 ++++++++++++++--------
+>  tools/testing/selftests/kexec/test_kexec_load.sh   | 24 ++++++++++++-------
+>  2 files changed, 33 insertions(+), 18 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kexec/test_kexec_file_load.sh b/tools/testing/selftests/kexec/test_kexec_file_load.sh
+> index 1d2e5e799523..57b636792086 100755
+> --- a/tools/testing/selftests/kexec/test_kexec_file_load.sh
+> +++ b/tools/testing/selftests/kexec/test_kexec_file_load.sh
+> @@ -110,11 +110,20 @@ kexec_file_load_test()
+>  			log_fail "$succeed_msg (missing IMA sig)"
+>  		fi
+>  
+> -		if [ $pe_sig_required -eq 0 ] && [ $ima_sig_required -eq 0 ] \
+> -		    && [ $ima_read_policy -eq 0 ] && [ $ima_signed -eq 0 ]; then
+> +		if [ $pe_sig_required -eq 0 ] && [ $ima_appraise -eq 1 ] \
+> +		    && [ $ima_sig_required -eq 0 ] && [ $ima_signed -eq 0 ] \
+> +	            && [ $ima_read_policy -eq 0 ]; then
+>  			log_fail "$succeed_msg (possibly missing IMA sig)"
+>  		fi
+>  
+> +		if [ $pe_sig_required -eq 0 ] && [ $ima_appraise -eq 0 ]; then
+> +			log_info "No signature verification required"
+> +		elif [ $pe_sig_required -eq 0 ] && [ $ima_appraise -eq 1 ] \
+> +		    && [ $ima_sig_required -eq 0 ] && [ $ima_signed -eq 0 ] \
+> +	            && [ $ima_read_policy -eq 1 ]; then
+> +			log_info "No signature verification required"
+> +		fi
+> +
+>  		log_pass "$succeed_msg"
+>  	fi
+>  
+> @@ -136,8 +145,9 @@ kexec_file_load_test()
+>  		log_pass "$failed_msg (missing IMA sig)"
+>  	fi
+>  
+> -	if [ $pe_sig_required -eq 0 ] && [ $ima_sig_required -eq 0 ] \
+> -	    && [ $ima_read_policy -eq 0 ] && [ $ima_signed -eq 0 ]; then
+> +	if [ $pe_sig_required -eq 0 ] && [ $ima_appraise -eq 1 ] \
+> +	    && [ $ima_sig_required -eq 0 ] && [ $ima_read_policy -eq 0 ] \
+> +	    && [ $ima_signed -eq 0 ]; then
+>  		log_pass "$failed_msg (possibly missing IMA sig)"
+>  	fi
+>  
+> @@ -157,6 +167,9 @@ if [ $? -eq 0 ]; then
+>  fi
+>  
+>  # Determine which kernel config options are enabled
+> +kconfig_enabled "CONFIG_IMA_APPRAISE=y" "IMA enabled"
+> +ima_appraise=$?
+> +
+>  kconfig_enabled "CONFIG_IMA_ARCH_POLICY=y" \
+>  	"architecture specific policy enabled"
+>  arch_policy=$?
+> @@ -178,12 +191,6 @@ ima_sig_required=$?
+>  get_secureboot_mode
+>  secureboot=$?
+>  
+> -if [ $secureboot -eq 0 ] && [ $arch_policy -eq 0 ] && \
+> -   [ $pe_sig_required -eq 0 ] && [ $ima_sig_required -eq 0 ] && \
+> -   [ $ima_read_policy -eq 1 ]; then
+> -	log_skip "No signature verification required"
+> -fi
+> -
+>  # Are there pe and ima signatures
+>  check_for_pesig
+>  pe_signed=$?
+> diff --git a/tools/testing/selftests/kexec/test_kexec_load.sh b/tools/testing/selftests/kexec/test_kexec_load.sh
+> index 2a66c8897f55..49c6aa929137 100755
+> --- a/tools/testing/selftests/kexec/test_kexec_load.sh
+> +++ b/tools/testing/selftests/kexec/test_kexec_load.sh
+> @@ -1,8 +1,8 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+> -# Loading a kernel image via the kexec_load syscall should fail
+> -# when the kernel is CONFIG_KEXEC_VERIFY_SIG enabled and the system
+> -# is booted in secureboot mode.
+> +#
+> +# Prevent loading a kernel image via the kexec_load syscall when
+> +# signatures are required.  (Dependent on CONFIG_IMA_ARCH_POLICY.)
+>  
+>  TEST="$0"
+>  . ./kexec_common_lib.sh
+> @@ -18,20 +18,28 @@ if [ $? -eq 0 ]; then
+>  	log_skip "kexec_load is not enabled"
+>  fi
+>  
+> +kconfig_enabled "CONFIG_IMA_APPRAISE=y" "IMA enabled"
+> +ima_appraise=$?
+> +
+> +kconfig_enabled "CONFIG_IMA_ARCH_POLICY=y" \
+> +	"IMA architecture specific policy enabled"
+> +arch_policy=$?
+> +
+>  get_secureboot_mode
+>  secureboot=$?
+>  
+> -# kexec_load should fail in secure boot mode
+> +# kexec_load should fail in secure boot mode and CONFIG_IMA_ARCH_POLICY enabled
+>  kexec --load $KERNEL_IMAGE > /dev/null 2>&1
+>  if [ $? -eq 0 ]; then
+>  	kexec --unload
+> -	if [ $secureboot -eq 1 ]; then
+> +	if [ $secureboot -eq 1 ] && [ $arch_policy -eq 1 ]; then
+>  		log_fail "kexec_load succeeded"
+> -	else
+> -		log_pass "kexec_load succeeded"
+> +	elif [ $ima_appraise -eq 0 -o $arch_policy -eq 0 ]; then
+> +		log_info "Either IMA or the IMA arch policy is not enabled"
+>  	fi
+> +	log_pass "kexec_load succeeded"
+>  else
+> -	if [ $secureboot -eq 1 ]; then
+> +	if [ $secureboot -eq 1 ] && [ $arch_policy -eq 1 ] ; then
+>  		log_pass "kexec_load failed"
+>  	else
+>  		log_fail "kexec_load failed"
+> -- 
+> 2.7.5
+> 
