@@ -1,62 +1,76 @@
-From: joel at joelfernandes.org (Joel Fernandes)
-Date: Mon, 25 Mar 2019 18:02:37 -0400
-Subject: [PATCH] rcutorture: Select from only online CPUs
-In-Reply-To: <20190325164253.GE4102@linux.ibm.com>
-References: <20190323034619.15792-1-joel@joelfernandes.org>
- <20190325150133.GA4102@linux.ibm.com>
- <CAEXW_YRDfOEr-hdbKGDC6amRaaqTCCBsowRhVwDqJd-1BoO17g@mail.gmail.com>
- <20190325164253.GE4102@linux.ibm.com>
-Message-ID: <20190325220237.GA22743@google.com>
+From: brendanhiggins at google.com (Brendan Higgins)
+Date: Mon, 25 Mar 2019 15:04:08 -0700
+Subject: [RFC v3 00/19] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <ec4c1020-4b53-e0f2-4a9d-3fc73af56746@gmail.com>
+References: <20181128193636.254378-1-brendanhiggins@google.com>
+ <f34ee937-83d6-3ff6-12b3-c6cd9acbfc38@gmail.com>
+ <CAL_JsqL0t_p8=Ueq4mHS5i2YEQdc7S7AtPWfkcOsj1g2SixUkA@mail.gmail.com>
+ <CAFd5g47cDKSdXGAL8pbDxEU2O8A-9Ajq1wCM+PtPF40T4wYKow@mail.gmail.com>
+ <ec4c1020-4b53-e0f2-4a9d-3fc73af56746@gmail.com>
+Message-ID: <CAFd5g46u8cQMVbcDv06HGL7mL=j35ziMxnqPXhrwYS5CD1ZeZA@mail.gmail.com>
 
-On Mon, Mar 25, 2019 at 09:42:53AM -0700, Paul E. McKenney wrote:
-> On Mon, Mar 25, 2019 at 12:33:37PM -0400, Joel Fernandes wrote:
-> > On Mon, Mar 25, 2019 at 11:02 AM Paul E. McKenney <paulmck at linux.ibm.com> wrote:
-> > >
-> > > On Fri, Mar 22, 2019 at 11:46:19PM -0400, Joel Fernandes (Google) wrote:
-> > > > The rcutorture jitter.sh script selects a random CPU but does not check
-> > > > if it is offline or online. This leads to taskset errors many times. On
-> > > > my machine, hyper threading is disabled so half the cores are offline
-> > > > causing taskset errors a lot of times. Let us fix this by checking from
-> > > > only the online CPUs on the system.
-> > > >
-> > > > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> > >
-> > > Good catch!
-> > >
-> > > Please see below for one suggestion for simplification.
-> > >
-> > >                                                         Thanx, Paul
-> > >
-> > > > ---
-> > > >  tools/testing/selftests/rcutorture/bin/jitter.sh | 11 ++++++++++-
-> > > >  1 file changed, 10 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/rcutorture/bin/jitter.sh b/tools/testing/selftests/rcutorture/bin/jitter.sh
-> > > > index 3633828375e3..53bf9d99b5cd 100755
-> > > > --- a/tools/testing/selftests/rcutorture/bin/jitter.sh
-> > > > +++ b/tools/testing/selftests/rcutorture/bin/jitter.sh
-> > > > @@ -47,10 +47,19 @@ do
-> > > >               exit 0;
-> > > >       fi
-> > > >
-> > > > -     # Set affinity to randomly selected CPU
-> > > > +     # Set affinity to randomly selected online CPU
-> > > >       cpus=`ls /sys/devices/system/cpu/*/online |
-> > >
-> > >         cpus=`grep 1 /sys/devices/system/cpu/*/online |
-> > 
-> > Yes, this is better. Lets do it this way :)
-> > 
-> > > >               sed -e 's,/[^/]*$,,' -e 's/^[^0-9]*//' |
-> > > >               grep -v '^0*$'`
-> > >
-> > > Of course, now I have no idea why I excluded CPU 0...  :-/
-> > 
-> > Yes, I was wondering as well about that :-)
-> 
-> Please feel free to try including CPU 0 and running the set of single-CPU
-> rcutorture scenarios.  ;-)
+On Thu, Mar 21, 2019 at 5:28 PM Frank Rowand <frowand.list at gmail.com> wrote:
+>
+> On 12/5/18 3:10 PM, Brendan Higgins wrote:
+> > On Tue, Dec 4, 2018 at 5:49 AM Rob Herring <robh at kernel.org> wrote:
+> >>
+> >> On Tue, Dec 4, 2018 at 5:40 AM Frank Rowand <frowand.list at gmail.com> wrote:
+> >>>
+> >>> Hi Brendan, Rob,
+> >>>
+> >>> Pulling a comment from way back in the v1 patch thread:
+> >>>
+> >>> On 10/17/18 3:22 PM, Brendan Higgins wrote:
+> >>>> On Wed, Oct 17, 2018 at 10:49 AM <Tim.Bird at sony.com> wrote:
+> >>>
+> >>> < snip >
+> >>>
+> >>>> The test and the code under test are linked together in the same
+> >>>> binary and are compiled under Kbuild. Right now I am linking
+> >>>> everything into a UML kernel, but I would ultimately like to make
+> >>>> tests compile into completely independent test binaries. So each test
+> >>>> file would get compiled into its own test binary and would link
+> >>>> against only the code needed to run the test, but we are a bit of a
+> >>>> ways off from that.
+> >>>
+> >>> I have never used UML, so you should expect naive questions from me,
+> >>> exhibiting my lack of understanding.
+> >>>
+> >>> Does this mean that I have to build a UML architecture kernel to run
+> >>> the KUnit tests?
+> >>
+> >> In this version of the patch series, yes.
+> >>
+> >>> *** Rob, if the answer is yes, then it seems like for my workflow,
+> >>> which is to build for real ARM hardware, my work is doubled (or
+> >>> worse), because for every patch/commit that I apply, I not only have
+> >>> to build the ARM kernel and boot on the real hardware to test, I also
+> >>> have to build the UML kernel and boot in UML.  If that is correct
+> >>> then I see this as a major problem for me.
+> >>
+> >> I've already raised this issue elsewhere in the series. Restricting
+> >> the DT tests to UML is a non-starter.
+> >
+>
+> > I have already stated my position elsewhere on the matter, but in
+> > summary: Ensuring most tests can run without external dependencies
+> > (hardware, VM, etc) has a lot of benefits and should be supported in
+> > nearly all cases, but such tests should also work when compiled to run
+> > on real hardware/VM; the tooling might not be as good in the latter
+> > case, but I understand that there are good reasons to support it
+> > nonetheless.
+>
+> And my needs are the exact opposite.  My tests must run on real hardware,
+> in the context of the real operating system subsystems and drivers
+> potentially causing issues.
 
-Sounds good, I will test that out on your latest dev branch. Thanks,
+Right, Rob pointed this out, and I fixed this in v4. To be clear, as
+of RFC v4 you can run KUnit tests on non-UML architectures, we tested
+it on x86 and ARM.
 
-- Joel
+>
+> It is useful if the tests can also run without that dependency.
+
+This, of course, is still the main intended use case, but there is
+nothing to stop you from using it on real hardware.
