@@ -1,54 +1,75 @@
-From: zohar at linux.ibm.com (Mimi Zohar)
-Date: Tue, 26 Mar 2019 09:56:50 -0400
-Subject: [PATCH v4a 1/2] selftests/kexec: make tests independent of IMA
- being enabled
-In-Reply-To: <20190326074942.GA19708@dhcp-128-65.nay.redhat.com>
-References: <1553283351-6310-1-git-send-email-zohar@linux.ibm.com>
- <20190325080935.GA12497@dhcp-128-65.nay.redhat.com>
- <1553546236.5561.7.camel@linux.ibm.com>
- <20190326074942.GA19708@dhcp-128-65.nay.redhat.com>
-Message-ID: <1553608610.3960.37.camel@linux.ibm.com>
+From: paulmck at linux.ibm.com (Paul E. McKenney)
+Date: Tue, 26 Mar 2019 09:01:40 -0700
+Subject: [PATCH] rcutorture: Select from only online CPUs
+In-Reply-To: <CAEXW_YT8dS--pBrQoBO=G_d+4Ffi7o2++PQukh6dyNHqX-TLBg@mail.gmail.com>
+References: <20190323034619.15792-1-joel@joelfernandes.org>
+ <20190325150133.GA4102@linux.ibm.com>
+ <CAEXW_YRDfOEr-hdbKGDC6amRaaqTCCBsowRhVwDqJd-1BoO17g@mail.gmail.com>
+ <20190325164253.GE4102@linux.ibm.com>
+ <CAEXW_YT8dS--pBrQoBO=G_d+4Ffi7o2++PQukh6dyNHqX-TLBg@mail.gmail.com>
+Message-ID: <20190326160140.GP4102@linux.ibm.com>
 
-On Tue, 2019-03-26 at 15:49 +0800, Dave Young wrote:
-> On 03/25/19 at 04:37pm, Mimi Zohar wrote:
-> > On Mon, 2019-03-25 at 16:09 +0800, Dave Young wrote:
-> > > Hi Mimi
-> > > On 03/22/19 at 03:35pm, Mimi Zohar wrote:
-> > > > Verify IMA is enabled before failing tests or emitting irrelevant
-> > > > messages.  Also, don't skip the test if signatures are not required.
-> > > > 
-> > > > Suggested-by: Dave Young <dyoung at redhat.com>
-> > > > Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
-> > > > ---
-> > > > Dave, if this patch resolves the outstanding issues, I can fold these
-> > > > changes into the original patches. (Reminder, these patches will need to
-> > > > be updated to support the "lockdown" patch set.)
-> > > 
-> > > They looks good to me, thanks for the update
-> > 
-> > I've folded the kexec_file_load changes into the kexec_file_load test.
-> >  The remaining kexec_load change is left as a separate patch, since it
-> > is dependent on the ikconfig change.
-> > 
-> > > Feel free to add my reviewed-by, I did some tests although not cover all
-> > > ima cases.
-> > 
-> > Thanks!  Is this meant as a general "reviewed-by" for all of the
-> > patches or just this specific one?
+On Mon, Mar 25, 2019 at 06:40:17PM -0400, Joel Fernandes wrote:
+> On Mon, Mar 25, 2019 at 12:42 PM Paul E. McKenney <paulmck at linux.ibm.com> wrote:
+> >
+> > On Mon, Mar 25, 2019 at 12:33:37PM -0400, Joel Fernandes wrote:
+> > > On Mon, Mar 25, 2019 at 11:02 AM Paul E. McKenney <paulmck at linux.ibm.com> wrote:
+> > > >
+> > > > On Fri, Mar 22, 2019 at 11:46:19PM -0400, Joel Fernandes (Google) wrote:
+> > > > > The rcutorture jitter.sh script selects a random CPU but does not check
+> > > > > if it is offline or online. This leads to taskset errors many times. On
+> > > > > my machine, hyper threading is disabled so half the cores are offline
+> > > > > causing taskset errors a lot of times. Let us fix this by checking from
+> > > > > only the online CPUs on the system.
+> > > > >
+> > > > > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> > > >
+> > > > Good catch!
+> > > >
+> > > > Please see below for one suggestion for simplification.
+> > > >
+> > > >                                                         Thanx, Paul
+> > > >
+> > > > > ---
+> > > > >  tools/testing/selftests/rcutorture/bin/jitter.sh | 11 ++++++++++-
+> > > > >  1 file changed, 10 insertions(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/tools/testing/selftests/rcutorture/bin/jitter.sh b/tools/testing/selftests/rcutorture/bin/jitter.sh
+> > > > > index 3633828375e3..53bf9d99b5cd 100755
+> > > > > --- a/tools/testing/selftests/rcutorture/bin/jitter.sh
+> > > > > +++ b/tools/testing/selftests/rcutorture/bin/jitter.sh
+> > > > > @@ -47,10 +47,19 @@ do
+> > > > >               exit 0;
+> > > > >       fi
+> > > > >
+> > > > > -     # Set affinity to randomly selected CPU
+> > > > > +     # Set affinity to randomly selected online CPU
+> > > > >       cpus=`ls /sys/devices/system/cpu/*/online |
+> > > >
+> > > >         cpus=`grep 1 /sys/devices/system/cpu/*/online |
+> > >
+> > > Yes, this is better. Lets do it this way :)
+> > >
+> > > > >               sed -e 's,/[^/]*$,,' -e 's/^[^0-9]*//' |
+> > > > >               grep -v '^0*$'`
+> > > >
+> > > > Of course, now I have no idea why I excluded CPU 0...  :-/
+> > >
+> > > Yes, I was wondering as well about that :-)
+> >
+> > Please feel free to try including CPU 0 and running the set of single-CPU
+> > rcutorture scenarios.  ;-)
 > 
-> Thank you for taking this as a separate kexec tests, I think it can
-> be used for these delta fixes
+> Will do and then will update the patch by adding the CPU back, if all
+> is well. Thanks.
 
-Ok, I just re-posted the patches, folding part of this patch into the
-kexec_file_load test.  I've added your Reviewed-by on the remaining
-patch.
+And rcutorture doesn't like the rcu_is_cpu_rrupt_from_idle() patch on
+scenarios SRCU-P, TASKS01, and TREE05, which are the Tree RCU scenarios
+that enable CONFIG_PROVE_RCU.  The compiler error is:
 
-> 
-> I read all the patches and reviewed the kexec stuff, but I do not
-> understand all the IMA logic yet although I did some simple ima
-> tests.
+kernel/rcu/tree.c:391:2: error: implicit declaration of function ‘_this_cpu_read’ [-Werror=implicit-function-declaration]
 
-I understand.  There are many different aspects to the integrity
-subsystem.  I'm happy to answer any questions you have.
+My guess is that the initial underscore needs to go.  I will drop
+these two patches in favor of an update from you.  ;-)
 
-Mimi
+							Thanx, Paul
