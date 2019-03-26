@@ -1,106 +1,72 @@
 From: zohar@linux.ibm.com (Mimi Zohar)
-Date: Tue, 26 Mar 2019 09:34:12 -0400
-Subject: [PATCH v5 4/9] selftests/kexec: define common logging functions
+Date: Tue, 26 Mar 2019 09:34:17 -0400
+Subject: [PATCH v5 9/9] selftests/kexec: make kexec_load test independent of
+ IMA being enabled
 In-Reply-To: <1553607257-18906-1-git-send-email-zohar@linux.ibm.com>
 References: <1553607257-18906-1-git-send-email-zohar@linux.ibm.com>
-Message-ID: <1553607257-18906-5-git-send-email-zohar@linux.ibm.com>
+Message-ID: <1553607257-18906-10-git-send-email-zohar@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190326133412.ruhj8wIfRc9Cf3R6keoXyrmaqz4OkhNgN9ZisYbF4Ho@z>
+Message-ID: <20190326133417.9F9y8id3CUdYI0fx92p4Nv9bIR_9jLBc69mXM3ZKcNU@z>
 
-Define log_info, log_pass, log_fail, and log_skip functions.
+Verify IMA is enabled before failing tests or emitting irrelevant
+messages.
 
-Suggested-by: Petr Vorel <pvorel at suse.cz>
+Suggested-by: Dave Young <dyoung at redhat.com>
 Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
-Reviewed-by: Petr Vorel <pvorel at suse.cz>
+Reviewed-by: Dave Young <dyoung at redhat.com>
 ---
- tools/testing/selftests/kexec/kexec_common_lib.sh | 31 +++++++++++++++++++++++
- tools/testing/selftests/kexec/test_kexec_load.sh  | 19 ++++----------
- 2 files changed, 36 insertions(+), 14 deletions(-)
+ tools/testing/selftests/kexec/test_kexec_load.sh | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/kexec/kexec_common_lib.sh b/tools/testing/selftests/kexec/kexec_common_lib.sh
-index 05376be6a6f7..d108ac538f14 100755
---- a/tools/testing/selftests/kexec/kexec_common_lib.sh
-+++ b/tools/testing/selftests/kexec/kexec_common_lib.sh
-@@ -1,5 +1,36 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
-+#
-+# Kselftest framework defines: ksft_pass=0, ksft_fail=1, ksft_skip=4
-+
-+VERBOSE="${VERBOSE:-1}"
-+
-+log_info()
-+{
-+	[ $VERBOSE -ne 0 ] && echo "[INFO] $1"
-+}
-+
-+# The ksefltest framework requirement returns 0 for PASS.
-+log_pass()
-+{
-+
-+	[ $VERBOSE -ne 0 ] && echo "$1 [PASS]"
-+	exit 0
-+}
-+
-+# The ksefltest framework requirement returns 1 for FAIL.
-+log_fail()
-+{
-+	[ $VERBOSE -ne 0 ] && echo "$1 [FAIL]"
-+	exit 1
-+}
-+
-+# The ksefltest framework requirement returns 4 for SKIP.
-+log_skip()
-+{
-+	[ $VERBOSE -ne 0 ] && echo "$1"
-+	exit 4
-+}
- 
- # Check efivar SecureBoot-$(the UUID) and SetupMode-$(the UUID).
- # The secure boot mode can be accessed either as the last integer
 diff --git a/tools/testing/selftests/kexec/test_kexec_load.sh b/tools/testing/selftests/kexec/test_kexec_load.sh
-index 86625c3f1e5d..cbf598a380d2 100755
+index 2a66c8897f55..49c6aa929137 100755
 --- a/tools/testing/selftests/kexec/test_kexec_load.sh
 +++ b/tools/testing/selftests/kexec/test_kexec_load.sh
-@@ -6,15 +6,10 @@
+@@ -1,8 +1,8 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+-# Loading a kernel image via the kexec_load syscall should fail
+-# when the kernel is CONFIG_KEXEC_VERIFY_SIG enabled and the system
+-# is booted in secureboot mode.
++#
++# Prevent loading a kernel image via the kexec_load syscall when
++# signatures are required.  (Dependent on CONFIG_IMA_ARCH_POLICY.)
  
  TEST="$0"
  . ./kexec_common_lib.sh
--rc=0
--
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
- 
- # kexec requires root privileges
- if [ $(id -ru) -ne 0 ]; then
--	echo "$TEST: requires root privileges" >&2
--	exit $ksft_skip
-+	log_skip "requires root privileges"
+@@ -18,20 +18,28 @@ if [ $? -eq 0 ]; then
+ 	log_skip "kexec_load is not enabled"
  fi
  
++kconfig_enabled "CONFIG_IMA_APPRAISE=y" "IMA enabled"
++ima_appraise=$?
++
++kconfig_enabled "CONFIG_IMA_ARCH_POLICY=y" \
++	"IMA architecture specific policy enabled"
++arch_policy=$?
++
  get_secureboot_mode
-@@ -26,18 +21,14 @@ kexec --load $KERNEL_IMAGE > /dev/null 2>&1
+ secureboot=$?
+ 
+-# kexec_load should fail in secure boot mode
++# kexec_load should fail in secure boot mode and CONFIG_IMA_ARCH_POLICY enabled
+ kexec --load $KERNEL_IMAGE > /dev/null 2>&1
  if [ $? -eq 0 ]; then
  	kexec --unload
- 	if [ $secureboot -eq 1 ]; then
--		echo "$TEST: kexec_load succeeded [FAIL]"
--		rc=1
-+		log_fail "kexec_load succeeded"
- 	else
--		echo "$TEST: kexec_load succeeded [PASS]"
-+		log_pass "kexec_load succeeded"
+-	if [ $secureboot -eq 1 ]; then
++	if [ $secureboot -eq 1 ] && [ $arch_policy -eq 1 ]; then
+ 		log_fail "kexec_load succeeded"
+-	else
+-		log_pass "kexec_load succeeded"
++	elif [ $ima_appraise -eq 0 -o $arch_policy -eq 0 ]; then
++		log_info "Either IMA or the IMA arch policy is not enabled"
  	fi
++	log_pass "kexec_load succeeded"
  else
- 	if [ $secureboot -eq 1 ]; then
--		echo "$TEST: kexec_load failed [PASS]"
-+		log_pass "kexec_load failed"
+-	if [ $secureboot -eq 1 ]; then
++	if [ $secureboot -eq 1 ] && [ $arch_policy -eq 1 ] ; then
+ 		log_pass "kexec_load failed"
  	else
--		echo "$TEST: kexec_load failed [FAIL]"
--		rc=1
-+		log_fail "kexec_load failed"
- 	fi
- fi
--
--exit $rc
+ 		log_fail "kexec_load failed"
 -- 
 2.7.5
