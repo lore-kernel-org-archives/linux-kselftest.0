@@ -1,70 +1,54 @@
 From: zohar at linux.ibm.com (Mimi Zohar)
-Date: Tue, 26 Mar 2019 09:34:17 -0400
-Subject: [PATCH v5 9/9] selftests/kexec: make kexec_load test independent of
- IMA being enabled
-In-Reply-To: <1553607257-18906-1-git-send-email-zohar@linux.ibm.com>
-References: <1553607257-18906-1-git-send-email-zohar@linux.ibm.com>
-Message-ID: <1553607257-18906-10-git-send-email-zohar@linux.ibm.com>
+Date: Tue, 26 Mar 2019 09:56:50 -0400
+Subject: [PATCH v4a 1/2] selftests/kexec: make tests independent of IMA
+ being enabled
+In-Reply-To: <20190326074942.GA19708@dhcp-128-65.nay.redhat.com>
+References: <1553283351-6310-1-git-send-email-zohar@linux.ibm.com>
+ <20190325080935.GA12497@dhcp-128-65.nay.redhat.com>
+ <1553546236.5561.7.camel@linux.ibm.com>
+ <20190326074942.GA19708@dhcp-128-65.nay.redhat.com>
+Message-ID: <1553608610.3960.37.camel@linux.ibm.com>
 
-Verify IMA is enabled before failing tests or emitting irrelevant
-messages.
+On Tue, 2019-03-26 at 15:49 +0800, Dave Young wrote:
+> On 03/25/19 at 04:37pm, Mimi Zohar wrote:
+> > On Mon, 2019-03-25 at 16:09 +0800, Dave Young wrote:
+> > > Hi Mimi
+> > > On 03/22/19 at 03:35pm, Mimi Zohar wrote:
+> > > > Verify IMA is enabled before failing tests or emitting irrelevant
+> > > > messages.  Also, don't skip the test if signatures are not required.
+> > > > 
+> > > > Suggested-by: Dave Young <dyoung at redhat.com>
+> > > > Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
+> > > > ---
+> > > > Dave, if this patch resolves the outstanding issues, I can fold these
+> > > > changes into the original patches. (Reminder, these patches will need to
+> > > > be updated to support the "lockdown" patch set.)
+> > > 
+> > > They looks good to me, thanks for the update
+> > 
+> > I've folded the kexec_file_load changes into the kexec_file_load test.
+> >  The remaining kexec_load change is left as a separate patch, since it
+> > is dependent on the ikconfig change.
+> > 
+> > > Feel free to add my reviewed-by, I did some tests although not cover all
+> > > ima cases.
+> > 
+> > Thanks!  Is this meant as a general "reviewed-by" for all of the
+> > patches or just this specific one?
+> 
+> Thank you for taking this as a separate kexec tests, I think it can
+> be used for these delta fixes
 
-Suggested-by: Dave Young <dyoung at redhat.com>
-Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
-Reviewed-by: Dave Young <dyoung at redhat.com>
----
- tools/testing/selftests/kexec/test_kexec_load.sh | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+Ok, I just re-posted the patches, folding part of this patch into the
+kexec_file_load test.  I've added your Reviewed-by on the remaining
+patch.
 
-diff --git a/tools/testing/selftests/kexec/test_kexec_load.sh b/tools/testing/selftests/kexec/test_kexec_load.sh
-index 2a66c8897f55..49c6aa929137 100755
---- a/tools/testing/selftests/kexec/test_kexec_load.sh
-+++ b/tools/testing/selftests/kexec/test_kexec_load.sh
-@@ -1,8 +1,8 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
--# Loading a kernel image via the kexec_load syscall should fail
--# when the kernel is CONFIG_KEXEC_VERIFY_SIG enabled and the system
--# is booted in secureboot mode.
-+#
-+# Prevent loading a kernel image via the kexec_load syscall when
-+# signatures are required.  (Dependent on CONFIG_IMA_ARCH_POLICY.)
- 
- TEST="$0"
- . ./kexec_common_lib.sh
-@@ -18,20 +18,28 @@ if [ $? -eq 0 ]; then
- 	log_skip "kexec_load is not enabled"
- fi
- 
-+kconfig_enabled "CONFIG_IMA_APPRAISE=y" "IMA enabled"
-+ima_appraise=$?
-+
-+kconfig_enabled "CONFIG_IMA_ARCH_POLICY=y" \
-+	"IMA architecture specific policy enabled"
-+arch_policy=$?
-+
- get_secureboot_mode
- secureboot=$?
- 
--# kexec_load should fail in secure boot mode
-+# kexec_load should fail in secure boot mode and CONFIG_IMA_ARCH_POLICY enabled
- kexec --load $KERNEL_IMAGE > /dev/null 2>&1
- if [ $? -eq 0 ]; then
- 	kexec --unload
--	if [ $secureboot -eq 1 ]; then
-+	if [ $secureboot -eq 1 ] && [ $arch_policy -eq 1 ]; then
- 		log_fail "kexec_load succeeded"
--	else
--		log_pass "kexec_load succeeded"
-+	elif [ $ima_appraise -eq 0 -o $arch_policy -eq 0 ]; then
-+		log_info "Either IMA or the IMA arch policy is not enabled"
- 	fi
-+	log_pass "kexec_load succeeded"
- else
--	if [ $secureboot -eq 1 ]; then
-+	if [ $secureboot -eq 1 ] && [ $arch_policy -eq 1 ] ; then
- 		log_pass "kexec_load failed"
- 	else
- 		log_fail "kexec_load failed"
--- 
-2.7.5
+> 
+> I read all the patches and reviewed the kexec stuff, but I do not
+> understand all the IMA logic yet although I did some simple ima
+> tests.
+
+I understand.  There are many different aspects to the integrity
+subsystem.  I'm happy to answer any questions you have.
+
+Mimi
