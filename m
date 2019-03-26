@@ -1,97 +1,113 @@
-From: joel@joelfernandes.org (Joel Fernandes (Google))
-Date: Tue, 26 Mar 2019 15:24:09 -0400
-Subject: [PATCH v2 2/4] rcutree: Add checks for dynticks counters in
- rcu_is_cpu_rrupt_from_idle
-In-Reply-To: <20190326192411.198070-1-joel@joelfernandes.org>
-References: <20190326192411.198070-1-joel@joelfernandes.org>
-Message-ID: <20190326192411.198070-2-joel@joelfernandes.org>
+From: paulmck@linux.ibm.com (Paul E. McKenney)
+Date: Tue, 26 Mar 2019 13:46:13 -0700
+Subject: [PATCH] rcutorture: Select from only online CPUs
+In-Reply-To: <20190326184013.GA114492@google.com>
+References: <20190323034619.15792-1-joel@joelfernandes.org>
+ <20190325150133.GA4102@linux.ibm.com>
+ <CAEXW_YRDfOEr-hdbKGDC6amRaaqTCCBsowRhVwDqJd-1BoO17g@mail.gmail.com>
+ <20190325164253.GE4102@linux.ibm.com>
+ <CAEXW_YT8dS--pBrQoBO=G_d+4Ffi7o2++PQukh6dyNHqX-TLBg@mail.gmail.com>
+ <20190326160140.GP4102@linux.ibm.com>
+ <20190326183549.GA162738@google.com>
+ <20190326184013.GA114492@google.com>
+Message-ID: <20190326204613.GS4102@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190326192409.7jvPZzxtQAB5yFbRx35FW0MY1q9YZKxhR3kn3cAEtKE@z>
+Message-ID: <20190326204613.Q-DeQalUNz7K9CBxiOZc2h2VnM9l71RtN6bKcAc2kO8@z>
 
-In the future we would like to combine the dynticks and dynticks_nesting
-counters thus leading to simplifying the code. At the moment we cannot
-do that due to concerns about usermode upcalls appearing to RCU as half
-of an interrupt. Byungchul tried to do it in [1] but the
-"half-interrupt" concern was raised. It is half because, what RCU
-expects is rcu_irq_enter() and rcu_irq_exit() pairs when the usermode
-exception happens. However, only rcu_irq_enter() is observed. This
-concern may not be valid anymore, but at least it used to be the case.
+On Tue, Mar 26, 2019@02:40:13PM -0400, Joel Fernandes wrote:
+> On Tue, Mar 26, 2019@02:35:49PM -0400, Joel Fernandes wrote:
+> > On Tue, Mar 26, 2019@09:01:40AM -0700, Paul E. McKenney wrote:
+> > > On Mon, Mar 25, 2019@06:40:17PM -0400, Joel Fernandes wrote:
+> > > > On Mon, Mar 25, 2019@12:42 PM Paul E. McKenney <paulmck@linux.ibm.com> wrote:
+> > > > >
+> > > > > On Mon, Mar 25, 2019@12:33:37PM -0400, Joel Fernandes wrote:
+> > > > > > On Mon, Mar 25, 2019@11:02 AM Paul E. McKenney <paulmck@linux.ibm.com> wrote:
+> > > > > > >
+> > > > > > > On Fri, Mar 22, 2019@11:46:19PM -0400, Joel Fernandes (Google) wrote:
+> > > > > > > > The rcutorture jitter.sh script selects a random CPU but does not check
+> > > > > > > > if it is offline or online. This leads to taskset errors many times. On
+> > > > > > > > my machine, hyper threading is disabled so half the cores are offline
+> > > > > > > > causing taskset errors a lot of times. Let us fix this by checking from
+> > > > > > > > only the online CPUs on the system.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> > > > > > >
+> > > > > > > Good catch!
+> > > > > > >
+> > > > > > > Please see below for one suggestion for simplification.
+> > > > > > >
+> > > > > > >                                                         Thanx, Paul
+> > > > > > >
+> > > > > > > > ---
+> > > > > > > >  tools/testing/selftests/rcutorture/bin/jitter.sh | 11 ++++++++++-
+> > > > > > > >  1 file changed, 10 insertions(+), 1 deletion(-)
+> > > > > > > >
+> > > > > > > > diff --git a/tools/testing/selftests/rcutorture/bin/jitter.sh b/tools/testing/selftests/rcutorture/bin/jitter.sh
+> > > > > > > > index 3633828375e3..53bf9d99b5cd 100755
+> > > > > > > > --- a/tools/testing/selftests/rcutorture/bin/jitter.sh
+> > > > > > > > +++ b/tools/testing/selftests/rcutorture/bin/jitter.sh
+> > > > > > > > @@ -47,10 +47,19 @@ do
+> > > > > > > >               exit 0;
+> > > > > > > >       fi
+> > > > > > > >
+> > > > > > > > -     # Set affinity to randomly selected CPU
+> > > > > > > > +     # Set affinity to randomly selected online CPU
+> > > > > > > >       cpus=`ls /sys/devices/system/cpu/*/online |
+> > > > > > >
+> > > > > > >         cpus=`grep 1 /sys/devices/system/cpu/*/online |
+> > > > > >
+> > > > > > Yes, this is better. Lets do it this way :)
+> > > > > >
+> > > > > > > >               sed -e 's,/[^/]*$,,' -e 's/^[^0-9]*//' |
+> > > > > > > >               grep -v '^0*$'`
+> > > > > > >
+> > > > > > > Of course, now I have no idea why I excluded CPU 0...  :-/
+> > > > > >
+> > > > > > Yes, I was wondering as well about that :-)
+> > > > >
+> > > > > Please feel free to try including CPU 0 and running the set of single-CPU
+> > > > > rcutorture scenarios.  ;-)
+> > > > 
+> > > > Will do and then will update the patch by adding the CPU back, if all
+> > > > is well. Thanks.
+> > > 
+> > > And rcutorture doesn't like the rcu_is_cpu_rrupt_from_idle() patch on
+> > > scenarios SRCU-P, TASKS01, and TREE05, which are the Tree RCU scenarios
+> > > that enable CONFIG_PROVE_RCU.  The compiler error is:
+> > > 
+> > > kernel/rcu/tree.c:391:2: error: implicit declaration of function ‘_this_cpu_read’ [-Werror=implicit-function-declaration]
+> > > 
+> > > My guess is that the initial underscore needs to go.  I will drop
+> > > these two patches in favor of an update from you.  ;-)
+> > 
+> > Sorry, I fixed that up and running tests now.
 
-Out of abundance of caution, Paul added warnings [2] in the RCU code
-which if not fired by 2021 may allow us to assume that such
-half-interrupt scenario cannot happen any more, which can lead to
-simplification of this code.
+Very good.  ;-)
 
-Summary of the changes are the following:
+> > By the way, may be you decided to not run the jitter on CPU0 just because on
+> > some systems, CPU0 does not have an 'online' file? In this case, the grep may
+> > throw errors I guess which troubles the script.
+> > 
+> > From the old cpu hotplug docs, I found that if CONFIG_BOOTPARAM_HOTPLUG_CPU0
+> > or cpu0_hotplug boot command line option is not passed, then cpu0 cannot be
+> > offlined in which case, presumably the 'online' file will be missing, like
+> > some systems I am testing on.
+> 
+> Never mind, the "*" in your path search would take care of not erroring out :-)
+> 
+> The other reason you may have done it is for making the jitter be
+> consistent across systems that can offline CPU0, and the others that can't :-).
+> I am just guessing.
 
-(1) In preparation for this combination of counters in the future, we
-first need to first be sure that rcu_rrupt_from_idle cannot be called
-from anywhere but a hard-interrupt because previously, the comments
-suggested otherwise so let us be sure. We discussed this here [3]. We
-use the services of lockdep to accomplish this.
+Or maybe I was just being stupid.  If I wasn't being stupid, it might have
+been that in the uniprocessor case the jitter caused some failure.  But the
+kernel is a lot better about handling preemption these days, so that might
+well be an obsolete concern.  Who knows?  ;-)
 
-(2) Further rcu_rrupt_from_idle() is not explicit about how it is using
-the counters which can lead to weird future bugs. This patch therefore
-makes it more explicit about the specific counter values being tested
+> Any way, I will just add back CPU0 forcefully to the cpus list in my testing,
+> without checking for the online file existence, and see what happens :-) If
+> there's no smoke, then I'll roll that into a patch and send it out.
 
-(3) Lastly, we check for counter underflows just to be sure these are
-not happening, because the previous code in rcu_rrupt_from_idle() was
-allowing the case where the counters can underflow, and the function
-would still return true. Now we are checking for specific values so let
-us be confident by additional checking, that such underflows don't
-happen. Any case, if they do, we should fix them and the screaming
-warning is appropriate. All these checks checks are NOOPs if PROVE_RCU
-and PROVE_LOCKING are disabled.
+Sounds good, especially if you include a few of the uniprocessor tests.  ;-)
 
-[1] https://lore.kernel.org/patchwork/patch/952349/
-[2] Commit e11ec65cc8d6 ("rcu: Add warning to detect half-interrupts")
-[3] https://lore.kernel.org/lkml/20190312150514.GB249405 at google.com/
-
-Cc: byungchul.park at lge.com
-Cc: kernel-team at android.com
-Cc: rcu at vger.kernel.org
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
- kernel/rcu/tree.c | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 9180158756d2..dbff8a274c46 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -381,16 +381,29 @@ static void __maybe_unused rcu_momentary_dyntick_idle(void)
- }
- 
- /**
-- * rcu_is_cpu_rrupt_from_idle - see if idle or immediately interrupted from idle
-+ * rcu_is_cpu_rrupt_from_idle - see if interrupted from idle
-  *
-- * If the current CPU is idle or running at a first-level (not nested)
-+ * If the current CPU is idle and running at a first-level (not nested)
-  * interrupt from idle, return true.  The caller must have at least
-  * disabled preemption.
-  */
- static int rcu_is_cpu_rrupt_from_idle(void)
- {
--	return __this_cpu_read(rcu_data.dynticks_nesting) <= 0 &&
--	       __this_cpu_read(rcu_data.dynticks_nmi_nesting) <= 1;
-+	/* Called only from within the scheduling-clock interrupt */
-+	lockdep_assert_in_irq();
-+
-+	/* Check for counter underflows */
-+	RCU_LOCKDEP_WARN(__this_cpu_read(rcu_data.dynticks_nesting) < 0,
-+			 "RCU dynticks_nesting counter underflow!");
-+	RCU_LOCKDEP_WARN(__this_cpu_read(rcu_data.dynticks_nmi_nesting) <= 0,
-+			 "RCU dynticks_nmi_nesting counter underflow/zero!");
-+
-+	/* Are we at first interrupt nesting level? */
-+	if (__this_cpu_read(rcu_data.dynticks_nmi_nesting) != 1)
-+		return false;
-+
-+	/* Does CPU appear to be idle from an RCU standpoint? */
-+	return __this_cpu_read(rcu_data.dynticks_nesting) == 0;
- }
- 
- #define DEFAULT_RCU_BLIMIT 10     /* Maximum callbacks per rcu_do_batch. */
--- 
-2.21.0.392.gf8f6787159e-goog
+							Thanx, Paul
