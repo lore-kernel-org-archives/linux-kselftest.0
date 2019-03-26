@@ -1,65 +1,32 @@
 From: zohar at linux.ibm.com (Mimi Zohar)
-Date: Tue, 26 Mar 2019 09:34:10 -0400
-Subject: [PATCH v5 2/9] selftests/kexec: cleanup the kexec selftest
+Date: Tue, 26 Mar 2019 09:34:15 -0400
+Subject: [PATCH v5 7/9] selftests/kexec: Add missing '=y' to config options
 In-Reply-To: <1553607257-18906-1-git-send-email-zohar@linux.ibm.com>
 References: <1553607257-18906-1-git-send-email-zohar@linux.ibm.com>
-Message-ID: <1553607257-18906-3-git-send-email-zohar@linux.ibm.com>
+Message-ID: <1553607257-18906-8-git-send-email-zohar@linux.ibm.com>
 
-Remove the few bashisms and use the complete option name for clarity.
+From: Petr Vorel <pvorel at suse.cz>
 
+so the file can be used as kernel config snippet.
+
+Signed-off-by: Petr Vorel <pvorel at suse.cz>
+[zohar at linux.ibm.com: remove CONFIG_KEXEC_VERIFY_SIG from config]
 Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
-Reviewed-by: Petr Vorel <pvorel at suse.cz>
 ---
- tools/testing/selftests/kexec/test_kexec_load.sh | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ tools/testing/selftests/kexec/config | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/kexec/test_kexec_load.sh b/tools/testing/selftests/kexec/test_kexec_load.sh
-index 1c10093fb526..82a01a4d5c8d 100755
---- a/tools/testing/selftests/kexec/test_kexec_load.sh
-+++ b/tools/testing/selftests/kexec/test_kexec_load.sh
-@@ -1,7 +1,7 @@
- #!/bin/sh
--# SPDX-License-Identifier: GPL-2.0+
-+# SPDX-License-Identifier: GPL-2.0
- # Loading a kernel image via the kexec_load syscall should fail
--# when the kerne is CONFIG_KEXEC_VERIFY_SIG enabled and the system
-+# when the kernel is CONFIG_KEXEC_VERIFY_SIG enabled and the system
- # is booted in secureboot mode.
- 
- TEST="$0"
-@@ -12,8 +12,8 @@ rc=0
- ksft_skip=4
- 
- # kexec requires root privileges
--if [ $UID != 0 ]; then
--	echo "$TEST: must be run as root" >&2
-+if [ $(id -ru) -ne 0 ]; then
-+	echo "$TEST: requires root privileges" >&2
- 	exit $ksft_skip
- fi
- 
-@@ -33,17 +33,17 @@ secureboot=`hexdump $file | awk '{print substr($4,length($4),1)}'`
- 
- # kexec_load should fail in secure boot mode
- KERNEL_IMAGE="/boot/vmlinuz-`uname -r`"
--kexec -l $KERNEL_IMAGE &>> /dev/null
--if [ $? == 0 ]; then
--	kexec -u
--	if [ "$secureboot" == "1" ]; then
-+kexec --load $KERNEL_IMAGE > /dev/null 2>&1
-+if [ $? -eq 0 ]; then
-+	kexec --unload
-+	if [ $secureboot -eq 1 ]; then
- 		echo "$TEST: kexec_load succeeded [FAIL]"
- 		rc=1
- 	else
- 		echo "$TEST: kexec_load succeeded [PASS]"
- 	fi
- else
--	if [ "$secureboot" == "1" ]; then
-+	if [ $secureboot -eq 1 ]; then
- 		echo "$TEST: kexec_load failed [PASS]"
- 	else
- 		echo "$TEST: kexec_load failed [FAIL]"
+diff --git a/tools/testing/selftests/kexec/config b/tools/testing/selftests/kexec/config
+index 6bc86d4d9bb4..8962e862b2b8 100644
+--- a/tools/testing/selftests/kexec/config
++++ b/tools/testing/selftests/kexec/config
+@@ -1,4 +1,3 @@
+-CONFIG_IMA_APPRAISE
+-CONFIG_IMA_ARCH_POLICY
+-CONFIG_SECURITYFS
+-CONFIG_KEXEC_VERIFY_SIG
++CONFIG_IMA_APPRAISE=y
++CONFIG_IMA_ARCH_POLICY=y
++CONFIG_SECURITYFS=y
 -- 
 2.7.5
