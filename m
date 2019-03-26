@@ -1,115 +1,49 @@
 From: zohar at linux.ibm.com (Mimi Zohar)
-Date: Tue, 26 Mar 2019 09:34:11 -0400
-Subject: [PATCH v5 3/9] selftests/kexec: define a set of common functions
+Date: Tue, 26 Mar 2019 09:34:13 -0400
+Subject: [PATCH v5 5/9] kselftest/kexec: define "require_root_privileges"
 In-Reply-To: <1553607257-18906-1-git-send-email-zohar@linux.ibm.com>
 References: <1553607257-18906-1-git-send-email-zohar@linux.ibm.com>
-Message-ID: <1553607257-18906-4-git-send-email-zohar@linux.ibm.com>
+Message-ID: <1553607257-18906-6-git-send-email-zohar@linux.ibm.com>
 
-Define, update and move get_secureboot_mode() to a common file for use
-by other tests.
+Many tests require root privileges.  Define a common function.
 
-Updated to check both the efivar SecureBoot-$(UUID) and
-SetupMode-$(UUID), based on Dave Young's review.
-
+Suggested-by: Petr Vorel <pvorel at suse.cz>
 Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
 Reviewed-by: Petr Vorel <pvorel at suse.cz>
 ---
- tools/testing/selftests/kexec/Makefile            |  1 +
- tools/testing/selftests/kexec/kexec_common_lib.sh | 38 +++++++++++++++++++++++
- tools/testing/selftests/kexec/test_kexec_load.sh  | 17 ++--------
- 3 files changed, 42 insertions(+), 14 deletions(-)
- create mode 100755 tools/testing/selftests/kexec/kexec_common_lib.sh
+ tools/testing/selftests/kexec/kexec_common_lib.sh | 7 +++++++
+ tools/testing/selftests/kexec/test_kexec_load.sh  | 4 +---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kexec/Makefile b/tools/testing/selftests/kexec/Makefile
-index 0b3adf5444b6..1a795861040b 100644
---- a/tools/testing/selftests/kexec/Makefile
-+++ b/tools/testing/selftests/kexec/Makefile
-@@ -5,6 +5,7 @@ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
- 
- ifeq ($(ARCH),x86)
- TEST_PROGS := test_kexec_load.sh
-+TEST_FILES := kexec_common_lib.sh
- 
- include ../lib.mk
- 
 diff --git a/tools/testing/selftests/kexec/kexec_common_lib.sh b/tools/testing/selftests/kexec/kexec_common_lib.sh
-new file mode 100755
-index 000000000000..05376be6a6f7
---- /dev/null
+index d108ac538f14..1af892cee726 100755
+--- a/tools/testing/selftests/kexec/kexec_common_lib.sh
 +++ b/tools/testing/selftests/kexec/kexec_common_lib.sh
-@@ -0,0 +1,38 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
+@@ -67,3 +67,10 @@ get_secureboot_mode()
+ 	log_info "secure boot mode not enabled"
+ 	return 0;
+ }
 +
-+# Check efivar SecureBoot-$(the UUID) and SetupMode-$(the UUID).
-+# The secure boot mode can be accessed either as the last integer
-+# of "od -An -t u1 /sys/firmware/efi/efivars/SecureBoot-*" or from
-+# "od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data".  The efi
-+# SetupMode can be similarly accessed.
-+# Return 1 for SecureBoot mode enabled and SetupMode mode disabled.
-+get_secureboot_mode()
++require_root_privileges()
 +{
-+	local efivarfs="/sys/firmware/efi/efivars"
-+	local secure_boot_file="$efivarfs/../vars/SecureBoot-*/data"
-+	local setup_mode_file="$efivarfs/../vars/SetupMode-*/data"
-+	local secureboot_mode=0
-+	local setup_mode=0
-+
-+	# Make sure that efivars is mounted in the normal location
-+	if ! grep -q "^\S\+ $efivarfs efivarfs" /proc/mounts; then
-+		log_skip "efivars is not mounted on $efivarfs"
++	if [ $(id -ru) -ne 0 ]; then
++		log_skip "requires root privileges"
 +	fi
-+
-+	# Due to globbing, quoting "secure_boot_file" and "setup_mode_file"
-+	# is not possible.  (Todo: initialize variables using find or ls.)
-+	if [ ! -e $secure_boot_file ] || [ ! -e $setup_mode_file ]; then
-+		log_skip "unknown secureboot/setup mode"
-+	fi
-+
-+	secureboot_mode=`od -An -t u1 $secure_boot_file`
-+	setup_mode=`od -An -t u1 $setup_mode_file`
-+
-+	if [ $secureboot_mode -eq 1 ] && [ $setup_mode -eq 0 ]; then
-+		log_info "secure boot mode enabled"
-+		return 1;
-+	fi
-+	log_info "secure boot mode not enabled"
-+	return 0;
 +}
 diff --git a/tools/testing/selftests/kexec/test_kexec_load.sh b/tools/testing/selftests/kexec/test_kexec_load.sh
-index 82a01a4d5c8d..86625c3f1e5d 100755
+index cbf598a380d2..49545fcdc646 100755
 --- a/tools/testing/selftests/kexec/test_kexec_load.sh
 +++ b/tools/testing/selftests/kexec/test_kexec_load.sh
-@@ -5,7 +5,7 @@
- # is booted in secureboot mode.
+@@ -8,9 +8,7 @@ TEST="$0"
+ . ./kexec_common_lib.sh
  
- TEST="$0"
--EFIVARFS="/sys/firmware/efi/efivars"
-+. ./kexec_common_lib.sh
- rc=0
- 
- # Kselftest framework requirement - SKIP code is 4.
-@@ -17,19 +17,8 @@ if [ $(id -ru) -ne 0 ]; then
- 	exit $ksft_skip
- fi
- 
--# Make sure that efivars is mounted in the normal location
--if ! grep -q "^\S\+ $EFIVARFS efivarfs" /proc/mounts; then
--	echo "$TEST: efivars is not mounted on $EFIVARFS" >&2
--	exit $ksft_skip
+ # kexec requires root privileges
+-if [ $(id -ru) -ne 0 ]; then
+-	log_skip "requires root privileges"
 -fi
--
--# Get secureboot mode
--file="$EFIVARFS/SecureBoot-*"
--if [ ! -e $file ]; then
--	echo "$TEST: unknown secureboot mode" >&2
--	exit $ksft_skip
--fi
--secureboot=`hexdump $file | awk '{print substr($4,length($4),1)}'`
-+get_secureboot_mode
-+secureboot=$?
++require_root_privileges
  
- # kexec_load should fail in secure boot mode
- KERNEL_IMAGE="/boot/vmlinuz-`uname -r`"
+ get_secureboot_mode
+ secureboot=$?
 -- 
 2.7.5
