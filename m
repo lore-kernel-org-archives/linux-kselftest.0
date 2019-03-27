@@ -1,51 +1,63 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Wed, 27 Mar 2019 14:08:55 -0400
-Subject: [PATCH AUTOSEL 4.19 103/192] selftests: skip seccomp get_metadata
- test if not real root
-In-Reply-To: <20190327181025.13507-1-sashal@kernel.org>
-References: <20190327181025.13507-1-sashal@kernel.org>
-Message-ID: <20190327181025.13507-103-sashal@kernel.org>
+Date: Wed, 27 Mar 2019 14:01:13 -0400
+Subject: [PATCH AUTOSEL 5.0 218/262] selftests/bpf: suppress readelf stderr
+ when probing for BTF support
+In-Reply-To: <20190327180158.10245-1-sashal@kernel.org>
+References: <20190327180158.10245-1-sashal@kernel.org>
+Message-ID: <20190327180158.10245-218-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190327180855.BdUqKOJ4BuR1CT4Mxuat8FsOUcqq-6H9mR8sY44WjpA@z>
+Message-ID: <20190327180113.-mFnKMcfr3VoYZOBcMTPY7rej-OQnWxp5jRRE2y-euw@z>
 
-From: Tycho Andersen <tycho@tycho.ws>
+From: Stanislav Fomichev <sdf@google.com>
 
-[ Upstream commit 3aa415dd2128e478ea3225b59308766de0e94d6b ]
+[ Upstream commit 2f0921262ba943fe9d9f59037a033927d8c4789b ]
 
-The get_metadata() test requires real root, so let's skip it if we're not
-real root.
+Before:
+$ make -s -C tools/testing/selftests/bpf
+readelf: Error: Missing knowledge of 32-bit reloc types used in DWARF
+sections of machine number 247
+readelf: Warning: unable to apply unsupported reloc type 10 to section
+.debug_info
+readelf: Warning: unable to apply unsupported reloc type 1 to section
+.debug_info
+readelf: Warning: unable to apply unsupported reloc type 10 to section
+.debug_info
 
-Note that I used XFAIL here because that's what the test does later if
-CONFIG_CHEKCKPOINT_RESTORE happens to not be enabled. After looking at the
-code, there doesn't seem to be a nice way to skip tests defined as TEST(),
-since there's no return code (I tried exit(KSFT_SKIP), but that didn't work
-either...). So let's do it this way to be consistent, and easier to fix
-when someone comes along and fixes it.
+After:
+$ make -s -C tools/testing/selftests/bpf
 
-Signed-off-by: Tycho Andersen <tycho at tycho.ws>
-Acked-by: Kees Cook <keescook at chromium.org>
-Signed-off-by: Shuah Khan <shuah at kernel.org>
+v2:
+* use llvm-readelf instead of redirecting binutils' readelf stderr to
+  /dev/null
+
+Signed-off-by: Stanislav Fomichev <sdf at google.com>
+Acked-by: Song Liu <songliubraving at fb.com>
+Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/testing/selftests/bpf/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 83057fa9d391..14cad657bc6a 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -2920,6 +2920,12 @@ TEST(get_metadata)
- 	struct seccomp_metadata md;
- 	long ret;
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 41ab7a3668b3..936f726f7cd9 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -96,6 +96,7 @@ $(BPFOBJ): force
+ CLANG ?= clang
+ LLC   ?= llc
+ LLVM_OBJCOPY ?= llvm-objcopy
++LLVM_READELF ?= llvm-readelf
+ BTF_PAHOLE ?= pahole
  
-+	/* Only real root can get metadata. */
-+	if (geteuid()) {
-+		XFAIL(return, "get_metadata requires real root");
-+		return;
-+	}
-+
- 	ASSERT_EQ(0, pipe(pipefd));
+ PROBE := $(shell $(LLC) -march=bpf -mcpu=probe -filetype=null /dev/null 2>&1)
+@@ -132,7 +133,7 @@ BTF_PAHOLE_PROBE := $(shell $(BTF_PAHOLE) --help 2>&1 | grep BTF)
+ BTF_OBJCOPY_PROBE := $(shell $(LLVM_OBJCOPY) --help 2>&1 | grep -i 'usage.*llvm')
+ BTF_LLVM_PROBE := $(shell echo "int main() { return 0; }" | \
+ 			  $(CLANG) -target bpf -O2 -g -c -x c - -o ./llvm_btf_verify.o; \
+-			  readelf -S ./llvm_btf_verify.o | grep BTF; \
++			  $(LLVM_READELF) -S ./llvm_btf_verify.o | grep BTF; \
+ 			  /bin/rm -f ./llvm_btf_verify.o)
  
- 	pid = fork();
+ ifneq ($(BTF_LLVM_PROBE),)
 -- 
 2.19.1
