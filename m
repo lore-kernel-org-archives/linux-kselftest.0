@@ -1,77 +1,51 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Wed, 27 Mar 2019 14:09:39 -0400
-Subject: [PATCH AUTOSEL 4.19 147/192] selftests/bpf: skip verifier tests for
- unsupported program types
+Date: Wed, 27 Mar 2019 14:08:55 -0400
+Subject: [PATCH AUTOSEL 4.19 103/192] selftests: skip seccomp get_metadata
+ test if not real root
 In-Reply-To: <20190327181025.13507-1-sashal@kernel.org>
 References: <20190327181025.13507-1-sashal@kernel.org>
-Message-ID: <20190327181025.13507-147-sashal@kernel.org>
+Message-ID: <20190327181025.13507-103-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190327180939.u6iKnhbK6Eg9yG85TKlGSgBbt7BvfBlar4kwYaHjRVo@z>
+Message-ID: <20190327180855.BdUqKOJ4BuR1CT4Mxuat8FsOUcqq-6H9mR8sY44WjpA@z>
 
-From: Stanislav Fomichev <sdf@google.com>
+From: Tycho Andersen <tycho@tycho.ws>
 
-[ Upstream commit 8184d44c9a577a2f1842ed6cc844bfd4a9981d8e ]
+[ Upstream commit 3aa415dd2128e478ea3225b59308766de0e94d6b ]
 
-Use recently introduced bpf_probe_prog_type() to skip tests in the
-test_verifier() if bpf_verify_program() fails. The skipped test is
-indicated in the output.
+The get_metadata() test requires real root, so let's skip it if we're not
+real root.
 
-Example:
+Note that I used XFAIL here because that's what the test does later if
+CONFIG_CHEKCKPOINT_RESTORE happens to not be enabled. After looking at the
+code, there doesn't seem to be a nice way to skip tests defined as TEST(),
+since there's no return code (I tried exit(KSFT_SKIP), but that didn't work
+either...). So let's do it this way to be consistent, and easier to fix
+when someone comes along and fixes it.
 
-...
-679/p bpf_get_stack return R0 within range SKIP (unsupported program
-type 5)
-680/p ld_abs: invalid op 1 OK
-...
-Summary: 863 PASSED, 165 SKIPPED, 3 FAILED
-
-Signed-off-by: Stanislav Fomichev <sdf at google.com>
-Signed-off-by: Daniel Borkmann <daniel at iogearbox.net>
+Signed-off-by: Tycho Andersen <tycho at tycho.ws>
+Acked-by: Kees Cook <keescook at chromium.org>
+Signed-off-by: Shuah Khan <shuah at kernel.org>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/bpf/test_verifier.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 9db5a7378f40..294fc18aba2a 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -32,6 +32,7 @@
- #include <linux/if_ether.h>
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 83057fa9d391..14cad657bc6a 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -2920,6 +2920,12 @@ TEST(get_metadata)
+ 	struct seccomp_metadata md;
+ 	long ret;
  
- #include <bpf/bpf.h>
-+#include <bpf/libbpf.h>
- 
- #ifdef HAVE_GENHDR
- # include "autoconf.h"
-@@ -56,6 +57,7 @@
- 
- #define UNPRIV_SYSCTL "kernel/unprivileged_bpf_disabled"
- static bool unpriv_disabled = false;
-+static int skips;
- 
- struct bpf_test {
- 	const char *descr;
-@@ -12770,6 +12772,11 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
- 	fd_prog = bpf_verify_program(prog_type ? : BPF_PROG_TYPE_SOCKET_FILTER,
- 				     prog, prog_len, test->flags & F_LOAD_WITH_STRICT_ALIGNMENT,
- 				     "GPL", 0, bpf_vlog, sizeof(bpf_vlog), 1);
-+	if (fd_prog < 0 && !bpf_probe_prog_type(prog_type, 0)) {
-+		printf("SKIP (unsupported program type %d)\n", prog_type);
-+		skips++;
-+		goto close_fds;
++	/* Only real root can get metadata. */
++	if (geteuid()) {
++		XFAIL(return, "get_metadata requires real root");
++		return;
 +	}
++
+ 	ASSERT_EQ(0, pipe(pipefd));
  
- 	expected_ret = unpriv && test->result_unpriv != UNDEF ?
- 		       test->result_unpriv : test->result;
-@@ -12905,7 +12912,7 @@ static void get_unpriv_disabled()
- 
- static int do_test(bool unpriv, unsigned int from, unsigned int to)
- {
--	int i, passes = 0, errors = 0, skips = 0;
-+	int i, passes = 0, errors = 0;
- 
- 	for (i = from; i < to; i++) {
- 		struct bpf_test *test = &tests[i];
+ 	pid = fork();
 -- 
 2.19.1
