@@ -1,318 +1,76 @@
-From: ci_notify at linaro.org (ci_notify at linaro.org)
-Date: Wed, 27 Mar 2019 05:00:27 +0000 (UTC)
-Subject: next-20190326 kselftest results
-Message-ID: <724389729.5546.1553662827873.JavaMail.jenkins@a6c5c67cda76>
+From: dan.carpenter at oracle.com (Dan Carpenter)
+Date: Wed, 27 Mar 2019 10:29:06 +0300
+Subject: [bug report] x86/mpx, selftests: Add MPX self test
+Message-ID: <20190327072906.GA14812@kadam>
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.1.0-rc2
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: ab8bba4ec4b9a1a63c02741e1e420d1d53d1a1c8
-git describe: next-20190326
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190326
+Hello Dave Hansen,
 
-Regressions (compared to build next-20190325)
-------------------------------------------------------------------------
-x86_64:                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190325)                                                                   
-------------------------------------------------------------------------                                               
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_select_reuseport                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_select_reuseport                                                                                                         
+The patch e754aedc26ef: "x86/mpx, selftests: Add MPX self test" from
+Jun 8, 2016, leads to the following static checker warning:
 
+	./tools/testing/selftests/x86/mpx-dig.c:435 inspect_pid()
+	error: uninitialized symbol 'inspect_self'.
 
-In total:
-------------------------------------------------------------------------
-Ran 868 total tests in the following environments and test suites.
-pass 516
-fail 218
-xfail 0
-skip 134
+./tools/testing/selftests/x86/mpx-dig.c
+    411 int inspect_pid(int pid)
+    412 {
+    413 	static int dig_nr;
+    414 	long offset_inside_bounds_dir;
+    415 	char bounds_dir_buf[sizeof(unsigned long) * (1UL << 15)];
+    416 	char *dig_bounds_dir_ptr;
+    417 	int total_entries = 0;
+    418 	int nr_populated_bdes = 0;
+    419 	int inspect_self;
+                    ^^^^^^^^^^^^
 
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
+    420 
+    421 	if (getpid() == pid) {
+    422 		dprintf4("inspecting self\n");
+    423 		inspect_self = 1;
+                        ^^^^^^^^^^^^^^^^
 
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
+    424 	} else {
+    425 		dprintf4("inspecting pid %d\n", pid);
+    426 		mpx_dig_abort();
+                        ^^^^^^^^^^^^^^^
+Maybe this doesn't return?
 
+    427 	}
+    428 
+    429 	for (offset_inside_bounds_dir = 0;
+    430 	     offset_inside_bounds_dir < MPX_BOUNDS_TABLE_SIZE_BYTES;
+    431 	     offset_inside_bounds_dir += sizeof(bounds_dir_buf)) {
+    432 		static int bufs_skipped;
+    433 		int this_entries;
+    434 
+--> 435 		if (inspect_self) {
+                            ^^^^^^^^^^^^
+This is never set to zero.
 
-Failures
-------------------------------------------------------------------------
+    436 			dig_bounds_dir_ptr =
+    437 				fill_bounds_dir_buf_self(offset_inside_bounds_dir,
+    438 							 sizeof(bounds_dir_buf),
+    439 							 &bounds_dir_buf[0]);
+    440 		} else {
+    441 			dig_bounds_dir_ptr =
+    442 				fill_bounds_dir_buf_other(offset_inside_bounds_dir,
+    443 							  sizeof(bounds_dir_buf),
+    444 							  &bounds_dir_buf[0]);
+    445 		}
+    446 		if (!dig_bounds_dir_ptr) {
+    447 			bufs_skipped++;
+    448 			continue;
+    449 		}
+    450 		this_entries = search_bd_buf(dig_bounds_dir_ptr,
+    451 					sizeof(bounds_dir_buf),
+    452 					offset_inside_bounds_dir,
+    453 					&nr_populated_bdes);
+    454 		total_entries += this_entries;
+    455 	}
+    456 	printf("mpx dig (%3d) complete, SUCCESS (%8d / %4d)\n", ++dig_nr,
+    457 			total_entries, nr_populated_bdes);
+    458 	return total_entries + nr_populated_bdes;
+    459 }
 
-qemu_x86_64:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-
-x15:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_reuseport_bpf_numa
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_reuseport_bpf_numa
-
-qemu_arm64:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-
-hi6220-hikey:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-
-dragonboard-410c:
-
-juno-r2:
-
-x86:
-* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-native/bpf_test_netcnt
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_sockmap
-* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-native/cgroup_test_core
-* kselftest-vsyscall-mode-native/dma-buf_udmabuf
-* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-none/bpf_test_netcnt
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-none/cgroup_test_core
-* kselftest-vsyscall-mode-none/dma-buf_udmabuf
-* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+regards,
+dan carpenter
