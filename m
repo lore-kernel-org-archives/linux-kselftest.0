@@ -1,78 +1,82 @@
 From: dan.carpenter@oracle.com (Dan Carpenter)
-Date: Wed, 27 Mar 2019 10:29:06 +0300
-Subject: [bug report] x86/mpx, selftests: Add MPX self test
-Message-ID: <20190327072906.GA14812@kadam>
+Date: Wed, 27 Mar 2019 10:32:04 +0300
+Subject: [bug report] selftests: cgroup: add memory controller self-tests
+Message-ID: <20190327073204.GA15448@kadam>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190327072906.tAeo-BTnTZXThD48PeucMTYqYbPzVmHdjGfmZLf987g@z>
+Message-ID: <20190327073204.E0sWeul28fXvqcPuzBVNO7dFO2GXkgv5lBwDf_SB6xM@z>
 
-Hello Dave Hansen,
+Hello Roman Gushchin,
 
-The patch e754aedc26ef: "x86/mpx, selftests: Add MPX self test" from
-Jun 8, 2016, leads to the following static checker warning:
+The patch 84092dbcf901: "selftests: cgroup: add memory controller
+self-tests" from May 11, 2018, leads to the following static checker
+warning:
 
-	./tools/testing/selftests/x86/mpx-dig.c:435 inspect_pid()
-	error: uninitialized symbol 'inspect_self'.
+	./tools/testing/selftests/cgroup/test_memcontrol.c:77 test_memcg_subtree_control()
+	error: uninitialized symbol 'child2'.
 
-./tools/testing/selftests/x86/mpx-dig.c
-    411 int inspect_pid(int pid)
-    412 {
-    413 	static int dig_nr;
-    414 	long offset_inside_bounds_dir;
-    415 	char bounds_dir_buf[sizeof(unsigned long) * (1UL << 15)];
-    416 	char *dig_bounds_dir_ptr;
-    417 	int total_entries = 0;
-    418 	int nr_populated_bdes = 0;
-    419 	int inspect_self;
-                    ^^^^^^^^^^^^
+./tools/testing/selftests/cgroup/test_memcontrol.c
+    27 static int test_memcg_subtree_control(const char *root)
+    28 {
+    29 	char *parent, *child, *parent2, *child2;
+                               ^^^^^^^^^^^^^^^^
+    30 	int ret = KSFT_FAIL;
+    31 	char buf[PAGE_SIZE];
+    32 
+    33 	/* Create two nested cgroups with the memory controller enabled */
+    34 	parent = cg_name(root, "memcg_test_0");
+    35 	child = cg_name(root, "memcg_test_0/memcg_test_1");
+    36 	if (!parent || !child)
+    37 		goto cleanup;
+                ^^^^^^^^^^^^
 
-    420 
-    421 	if (getpid() == pid) {
-    422 		dprintf4("inspecting self\n");
-    423 		inspect_self = 1;
-                        ^^^^^^^^^^^^^^^^
-
-    424 	} else {
-    425 		dprintf4("inspecting pid %d\n", pid);
-    426 		mpx_dig_abort();
-                        ^^^^^^^^^^^^^^^
-Maybe this doesn't return?
-
-    427 	}
-    428 
-    429 	for (offset_inside_bounds_dir = 0;
-    430 	     offset_inside_bounds_dir < MPX_BOUNDS_TABLE_SIZE_BYTES;
-    431 	     offset_inside_bounds_dir += sizeof(bounds_dir_buf)) {
-    432 		static int bufs_skipped;
-    433 		int this_entries;
-    434 
---> 435 		if (inspect_self) {
-                            ^^^^^^^^^^^^
-This is never set to zero.
-
-    436 			dig_bounds_dir_ptr =
-    437 				fill_bounds_dir_buf_self(offset_inside_bounds_dir,
-    438 							 sizeof(bounds_dir_buf),
-    439 							 &bounds_dir_buf[0]);
-    440 		} else {
-    441 			dig_bounds_dir_ptr =
-    442 				fill_bounds_dir_buf_other(offset_inside_bounds_dir,
-    443 							  sizeof(bounds_dir_buf),
-    444 							  &bounds_dir_buf[0]);
-    445 		}
-    446 		if (!dig_bounds_dir_ptr) {
-    447 			bufs_skipped++;
-    448 			continue;
-    449 		}
-    450 		this_entries = search_bd_buf(dig_bounds_dir_ptr,
-    451 					sizeof(bounds_dir_buf),
-    452 					offset_inside_bounds_dir,
-    453 					&nr_populated_bdes);
-    454 		total_entries += this_entries;
-    455 	}
-    456 	printf("mpx dig (%3d) complete, SUCCESS (%8d / %4d)\n", ++dig_nr,
-    457 			total_entries, nr_populated_bdes);
-    458 	return total_entries + nr_populated_bdes;
-    459 }
+    38 
+    39 	if (cg_create(parent))
+    40 		goto cleanup;
+    41 
+    42 	if (cg_write(parent, "cgroup.subtree_control", "+memory"))
+    43 		goto cleanup;
+    44 
+    45 	if (cg_create(child))
+    46 		goto cleanup;
+    47 
+    48 	if (cg_read_strstr(child, "cgroup.controllers", "memory"))
+    49 		goto cleanup;
+    50 
+    51 	/* Create two nested cgroups without enabling memory controller */
+    52 	parent2 = cg_name(root, "memcg_test_1");
+    53 	child2 = cg_name(root, "memcg_test_1/memcg_test_1");
+    54 	if (!parent2 || !child2)
+    55 		goto cleanup;
+    56 
+    57 	if (cg_create(parent2))
+    58 		goto cleanup;
+    59 
+    60 	if (cg_create(child2))
+    61 		goto cleanup;
+    62 
+    63 	if (cg_read(child2, "cgroup.controllers", buf, sizeof(buf)))
+    64 		goto cleanup;
+    65 
+    66 	if (!cg_read_strstr(child2, "cgroup.controllers", "memory"))
+    67 		goto cleanup;
+    68 
+    69 	ret = KSFT_PASS;
+    70 
+    71 cleanup:
+    72 	cg_destroy(child);
+    73 	cg_destroy(parent);
+    74 	free(parent);
+    75 	free(child);
+    76 
+--> 77 	cg_destroy(child2);
+        ^^^^^^^^^^^^^^^^^
+    78 	cg_destroy(parent2);
+        ^^^^^^^^^^^^^^^^^^
+    79 	free(parent2);
+    80 	free(child2);
+    81 
+    82 	return ret;
+    83 }
 
 regards,
 dan carpenter
