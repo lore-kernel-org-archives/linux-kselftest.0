@@ -1,33 +1,34 @@
-From: guro at fb.com (Roman Gushchin)
-Date: Thu, 28 Mar 2019 02:58:25 +0000
-Subject: [bug report] selftests: cgroup: add memory controller self-tests
-In-Reply-To: <1488fd2f-3b02-9c20-4fc6-70cfe73ca692@kernel.org>
-References: <20190327073204.GA15448@kadam> <20190327222429.GA11226@castle>
- <1488fd2f-3b02-9c20-4fc6-70cfe73ca692@kernel.org>
-Message-ID: <20190328025816.GA25735@castle>
+From: mojha at codeaurora.org (Mukesh Ojha)
+Date: Thu, 28 Mar 2019 12:03:41 +0530
+Subject: [PATCH] selftests:powerpc/tm/tm-vmx-unavail.c : Remove duplicate
+ header
+In-Reply-To: <1553723356-40069-1-git-send-email-jagdsh.linux@gmail.com>
+References: <1553723356-40069-1-git-send-email-jagdsh.linux@gmail.com>
+Message-ID: <682ef220-efac-3c11-0205-35c00fa4b611@codeaurora.org>
 
-On Wed, Mar 27, 2019 at 04:50:14PM -0600, shuah wrote:
-> On 3/27/19 4:24 PM, Roman Gushchin wrote:
-> > On Wed, Mar 27, 2019 at 10:32:04AM +0300, Dan Carpenter wrote:
-> > > Hello Roman Gushchin,
-> > > 
-> > > The patch 84092dbcf901: "selftests: cgroup: add memory controller
-> > > self-tests" from May 11, 2018, leads to the following static checker
-> > > warning:
-> > 
-> > Hi Dan!
-> > 
-> > As I remember, this problem has been reported already, and I've
-> > proposed a fix for it: https://patchwork.kernel.org/patch/10489785/
-> > However, for some reason it hasn't been merged.
-> > 
-> > Shuakh, can you, please, merge it? Do you want me to respin and resend it?
-> > 
-> 
-> Sorry for the delay!!
-> 
-> Please rebase and resend to me. I will pull this in.
 
-Just sent. Thank you!
+On 3/28/2019 3:19 AM, jagdsh.linux at gmail.com wrote:
+> From: Jagadeesh Pagadala <jagdsh.linux at gmail.com>
+>
+> Remove duplicate header which is included twice.
+>
+> Signed-off-by: Jagadeesh Pagadala <jagdsh.linux at gmail.com>
+Reviewed-by: Mukesh Ojha <mojha at codeaurora.org>
 
-Roman
+-Mukesh
+> ---
+>   tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c | 1 -
+>   1 file changed, 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c b/tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c
+> index 137185b..1cb963a 100644
+> --- a/tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c
+> +++ b/tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c
+> @@ -17,7 +17,6 @@
+>   #include <pthread.h>
+>   #include <sys/mman.h>
+>   #include <unistd.h>
+> -#include <pthread.h>
+>   
+>   #include "tm.h"
+>   #include "utils.h"
