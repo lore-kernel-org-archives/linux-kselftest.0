@@ -1,30 +1,14 @@
-From: jeffrin@rajagiritech.edu.in (Jeffrin Thalakkottoor)
-Date: Tue, 2 Apr 2019 01:30:52 +0530
+From: fw@strlen.de (Florian Westphal)
+Date: Mon, 1 Apr 2019 22:16:07 +0200
 Subject: about selftests/netfilter test related issue
-In-Reply-To: <20190401194513.e3ck3ze5peyvvfam@breakpoint.cc>
+In-Reply-To: <CAG=yYw=VMJ5vK9aXcZ7AgC7f_dx+5ebKgwz68mV3=m6pOA_syA@mail.gmail.com>
 References: <CAG=yYw=VMJ5vK9aXcZ7AgC7f_dx+5ebKgwz68mV3=m6pOA_syA@mail.gmail.com>
- <20190401194513.e3ck3ze5peyvvfam@breakpoint.cc>
-Message-ID:
- <CAG=yYwmzxYAJvaBiPpj4=H=Ou+y8ZcSTEBoYqK+qyzwJs_7kug@mail.gmail.com>
+Message-ID: <20190401201607.ruzxt33qbxxn56ic@breakpoint.cc>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190401200052.cvGhEQbaeg7dxJFTPWhlqh1Qy6HKQSpn7pibxzuoQaQ@z>
+Message-ID: <20190401201607.TlW6daRxG6Hl4Hzr_AJ0alwxZN2GAB70ar7hicTwcJY@z>
 
-anyway thanks for the reply. let me look on what you said and learn
+Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in> wrote:
+> Error: Unknown device type.
 
-On Tue, Apr 2, 2019@1:15 AM Florian Westphal <fw@strlen.de> wrote:
->
-> Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in> wrote:
-> > i think the script nft_nat.sh  is assuming devices eth0 and eth1
->
-> No it does not.
-> These are arbitrary names given to veth devices.
->
-> > Error: Unknown device type.
->
-> No Veth device support in kernel?
-
-
-
--- 
-software engineer
-rajagiri school of engineering and technology
+Feel free to send a patch that makes it display a more reasonable
+exit+error here.
