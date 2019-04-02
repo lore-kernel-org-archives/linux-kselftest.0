@@ -1,230 +1,134 @@
 From: keescook@chromium.org (Kees Cook)
-Date: Tue, 2 Apr 2019 14:31:09 -0700
-Subject: [PATCH v3 4/7] kselftest: Add test module framework header
-In-Reply-To: <20190306214226.14598-5-tobin@kernel.org>
+Date: Tue, 2 Apr 2019 14:32:19 -0700
+Subject: [PATCH v3 5/7] lib: Use new kselftest header
+In-Reply-To: <20190306214226.14598-6-tobin@kernel.org>
 References: <20190306214226.14598-1-tobin@kernel.org>
- <20190306214226.14598-5-tobin@kernel.org>
+ <20190306214226.14598-6-tobin@kernel.org>
 Message-ID:
- <CAGXu5j+Ux+w5KMYvGV+N_ZC-+tMQ=TpM3i5z-p1kCFnF0Ld9eA@mail.gmail.com>
+ <CAGXu5jLpC8tGNfa2N3H24eby6j=HMWZKgkQaM=3W8MznLQsAOw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190402213109.F4_wLGVl3vTnKYhbjTvzKoWFNl2UCDZ5DNPLTiTRYd4@z>
+Message-ID: <20190402213219.sNP9oC-10tD7oOpw7ZQTNNoNZ0HS7mHgi-m1k8pSuiQ@z>
 
 On Wed, Mar 6, 2019@1:43 PM Tobin C. Harding <tobin@kernel.org> wrote:
 >
-> kselftest runs as a userspace process.  Sometimes we need to test things
-> from kernel space.  One way of doing this is by creating a test module.
-> Currently doing so requires developers to write a bunch of boiler plate
-> in the module if kselftest is to be used to run the tests.  This means
-> we currently have a load of duplicate code to achieve these ends.  If we
-> have a uniform method for implementing test modules then we can reduce
-> code duplication, ensure uniformity in the test framework, ease code
-> maintenance, and reduce the work required to create tests.  This all
-> helps to encourage developers to write and run tests.
+> We just added a new C header file for use with test modules that are
+> intended to be run with kselftest.  We can reduce code duplication by
+> using this header.
 >
-> Add a C header file that can be included in test modules.  This provides
-> a single point for common test functions/macros.  Implement a few macros
-> that make up the start of the test framework.
->
-> Add documentation for new kselftest header and script to kselftest
-> documentation.
+> Use new kselftest header to reduce code duplication in test_printf and
+> test_bitmap test modules.
 >
 > Signed-off-by: Tobin C. Harding <tobin at kernel.org>
 
-I like this!
+Nice consolidation.
 
 Acked-by: Kees Cook <keescook at chromium.org>
 
 -Kees
 
 > ---
->  Documentation/dev-tools/kselftest.rst      | 108 ++++++++++++++++++++-
->  tools/testing/selftests/kselftest_module.h |  48 +++++++++
->  2 files changed, 154 insertions(+), 2 deletions(-)
->  create mode 100644 tools/testing/selftests/kselftest_module.h
+>  lib/test_bitmap.c | 20 ++++----------------
+>  lib/test_printf.c | 23 +++++------------------
+>  2 files changed, 9 insertions(+), 34 deletions(-)
 >
-> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-> index 7756f7a7c23b..fb7790d47147 100644
-> --- a/Documentation/dev-tools/kselftest.rst
-> +++ b/Documentation/dev-tools/kselftest.rst
-> @@ -14,6 +14,10 @@ in safe mode with a limited scope. In limited mode, cpu-hotplug test is
->  run on a single cpu as opposed to all hotplug capable cpus, and memory
->  hotplug test is run on 2% of hotplug capable memory instead of 10%.
+> diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+> index 6cd7d0740005..792d90608052 100644
+> --- a/lib/test_bitmap.c
+> +++ b/lib/test_bitmap.c
+> @@ -12,6 +12,8 @@
+>  #include <linux/slab.h>
+>  #include <linux/string.h>
 >
-> +kselftest runs as a userspace process.  Tests that can be written/run in
-> +userspace may wish to use the `Test Harness`_.  Tests that need to be
-> +run in kernel space may wish to use a `Test Module`_.
+> +#include "../tools/testing/selftests/kselftest_module.h"
 > +
->  Running the selftests (hotplug tests are run in limited mode)
->  =============================================================
+>  static unsigned total_tests __initdata;
+>  static unsigned failed_tests __initdata;
 >
-> @@ -161,11 +165,111 @@ Contributing new tests (details)
+> @@ -361,7 +363,7 @@ static void noinline __init test_mem_optimisations(void)
+>         }
+>  }
 >
->     e.g: tools/testing/selftests/android/config
+> -static int __init test_bitmap_init(void)
+> +static void __init selftest(void)
+>  {
+>         test_zero_clear();
+>         test_fill_set();
+> @@ -369,22 +371,8 @@ static int __init test_bitmap_init(void)
+>         test_bitmap_arr32();
+>         test_bitmap_parselist();
+>         test_mem_optimisations();
+> -
+> -       if (failed_tests == 0)
+> -               pr_info("all %u tests passed\n", total_tests);
+> -       else
+> -               pr_warn("failed %u out of %u tests\n",
+> -                       failed_tests, total_tests);
+> -
+> -       return failed_tests ? -EINVAL : 0;
+>  }
 >
-> +Test Module
-> +===========
-> +
-> +Kselftest tests the kernel from userspace.  Sometimes things need
-> +testing from within the kernel, one method of doing this is to create a
-> +test module.  We can tie the module into the kselftest framework by
-> +using a shell script test runner.  ``kselftest_module.sh`` is designed
-> +to facilitate this process.  There is also a header file provided to
-> +assist writing kernel modules that are for use with kselftest:
-> +
-> +- ``tools/testing/kselftest/kselftest_module.h``
-> +- ``tools/testing/kselftest/kselftest_module.sh``
-> +
-> +How to use
-> +----------
-> +
-> +Here we show the typical steps to create a test module and tie it into
-> +kselftest.  We use kselftests for lib/ as an example.
-> +
-> +1. Create the test module
-> +
-> +2. Create the test script that will run (load/unload) the module
-> +   e.g. ``tools/testing/selftests/lib/printf.sh``
-> +
-> +3. Add line to config file e.g. ``tools/testing/selftests/lib/config``
-> +
-> +4. Add test script to makefile  e.g. ``tools/testing/selftests/lib/Makefile``
-> +
-> +5. Verify it works:
-> +
-> +.. code-block:: sh
-> +
-> +   # Assumes you have booted a fresh build of this kernel tree
-> +   cd /path/to/linux/tree
-> +   make kselftest-merge
-> +   make modules
-> +   sudo make modules_install
-> +   make TARGETS=lib kselftest
-> +
-> +Example Module
-> +--------------
-> +
-> +A bare bones test module might look like this:
-> +
-> +.. code-block:: c
-> +
-> +   // SPDX-License-Identifier: GPL-2.0+
-> +
-> +   #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +   #include "../tools/testing/selftests/kselftest_module.h"
-> +
-> +   KSTM_MODULE_GLOBALS();
-> +
-> +   /*
-> +    * Kernel module for testing the foobinator
-> +    */
-> +
-> +   static int __init test_function()
-> +   {
-> +           ...
-> +   }
-> +
-> +   static void __init selftest(void)
-> +   {
-> +           KSTM_CHECK_ZERO(do_test_case("", 0));
-> +   }
-> +
-> +   KSTM_MODULE_LOADERS(test_foo);
-> +   MODULE_AUTHOR("John Developer <jd at fooman.org>");
-> +   MODULE_LICENSE("GPL");
-> +
-> +Example test script
-> +-------------------
-> +
-> +.. code-block:: sh
-> +
-> +    #!/bin/bash
-> +    # SPDX-License-Identifier: GPL-2.0+
-> +
-> +    module_name="test_foo"             # Module name (without the .ko).
-> +    description="foo"                  # Output prefix.
-> +
-> +    #
-> +    # Shouldn't need to edit anything below here.
-> +    #
-> +
-> +    file="kselftest_module.sh"
-> +    path="../$file"
-> +    if [[ ! $KBUILD_SRC == "" ]]; then
-> +        path="${KBUILD_SRC}/tools/testing/selftests/$file"
-> +    fi
-> +
-> +    $path $module_name $description
-> +
-> +
->  Test Harness
->  ============
+> -static void __exit test_bitmap_cleanup(void)
+> -{
+> -}
+> -
+> -module_init(test_bitmap_init);
+> -module_exit(test_bitmap_cleanup);
+> -
+> +KSTM_MODULE_LOADERS(test_bitmap);
+>  MODULE_AUTHOR("david decotigny <david.decotigny at googlers.com>");
+>  MODULE_LICENSE("GPL");
+> diff --git a/lib/test_printf.c b/lib/test_printf.c
+> index 601e8519319a..f4fcc1c43739 100644
+> --- a/lib/test_printf.c
+> +++ b/lib/test_printf.c
+> @@ -21,6 +21,8 @@
+>  #include <linux/gfp.h>
+>  #include <linux/mm.h>
 >
-> -The kselftest_harness.h file contains useful helpers to build tests.  The tests
-> -from tools/testing/selftests/seccomp/seccomp_bpf.c can be used as example.
-> +The kselftest_harness.h file contains useful helpers to build tests.  The
-> +test harness is for userspace testing, for kernel space testing see `Test
-> +Module`_ above.
+> +#include "../tools/testing/selftests/kselftest_module.h"
 > +
-> +The tests from tools/testing/selftests/seccomp/seccomp_bpf.c can be used as
-> +example.
+>  #define BUF_SIZE 256
+>  #define PAD_SIZE 16
+>  #define FILL_CHAR '$'
+> @@ -590,12 +592,11 @@ test_pointer(void)
+>         flags();
+>  }
 >
->  Example
->  -------
-> diff --git a/tools/testing/selftests/kselftest_module.h b/tools/testing/selftests/kselftest_module.h
-> new file mode 100644
-> index 000000000000..e8eafaf0941a
-> --- /dev/null
-> +++ b/tools/testing/selftests/kselftest_module.h
-> @@ -0,0 +1,48 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-> +#ifndef __KSELFTEST_MODULE_H
-> +#define __KSELFTEST_MODULE_H
-> +
-> +#include <linux/module.h>
-> +
-> +/*
-> + * Test framework for writing test modules to be loaded by kselftest.
-> + * See Documentation/dev-tools/kselftest.rst for an example test module.
-> + */
-> +
-> +#define KSTM_MODULE_GLOBALS()                  \
-> +static unsigned int total_tests __initdata;    \
-> +static unsigned int failed_tests __initdata
-> +
-> +#define KSTM_CHECK_ZERO(x) do {                                                \
-> +       total_tests++;                                                  \
-> +       if (x) {                                                        \
-> +               pr_warn("TC failed at %s:%d\n", __func__, __LINE__);    \
-> +               failed_tests++;                                         \
-> +       }                                                               \
-> +} while (0)
-> +
-> +static inline int kstm_report(unsigned int total_tests, unsigned int failed_tests)
-> +{
-> +       if (failed_tests == 0)
-> +               pr_info("all %u tests passed\n", total_tests);
-> +       else
-> +               pr_warn("failed %u out of %u tests\n", failed_tests, total_tests);
-> +
-> +       return failed_tests ? -EINVAL : 0;
-> +}
-> +
-> +#define KSTM_MODULE_LOADERS(__module)                  \
-> +static int __init __module##_init(void)                        \
-> +{                                                      \
-> +       pr_info("loaded.\n");                           \
-> +       selftest();                                     \
-> +       return kstm_report(total_tests, failed_tests);  \
-> +}                                                      \
-> +static void __exit __module##_exit(void)               \
-> +{                                                      \
-> +       pr_info("unloaded.\n");                         \
-> +}                                                      \
-> +module_init(__module##_init);                          \
-> +module_exit(__module##_exit)
-> +
-> +#endif /* __KSELFTEST_MODULE_H */
+> -static int __init
+> -test_printf_init(void)
+> +static void __init selftest(void)
+>  {
+>         alloced_buffer = kmalloc(BUF_SIZE + 2*PAD_SIZE, GFP_KERNEL);
+>         if (!alloced_buffer)
+> -               return -ENOMEM;
+> +               return;
+>         test_buffer = alloced_buffer + PAD_SIZE;
+>
+>         test_basic();
+> @@ -604,22 +605,8 @@ test_printf_init(void)
+>         test_pointer();
+>
+>         kfree(alloced_buffer);
+> -
+> -       if (failed_tests == 0)
+> -               pr_info("all %u tests passed\n", total_tests);
+> -       else
+> -               pr_warn("failed %u out of %u tests\n", failed_tests, total_tests);
+> -
+> -       return failed_tests ? -EINVAL : 0;
+>  }
+>
+> -module_init(test_printf_init);
+> -
+> -static void __exit test_printf_exit(void)
+> -{
+> -}
+> -
+> -module_exit(test_printf_exit);
+> -
+> +KSTM_MODULE_LOADERS(test_printf);
+>  MODULE_AUTHOR("Rasmus Villemoes <linux at rasmusvillemoes.dk>");
+>  MODULE_LICENSE("GPL");
 > --
 > 2.20.1
 >
