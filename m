@@ -1,127 +1,438 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Mon,  1 Apr 2019 18:40:24 -0600
-Subject: [PATCH v15 6/6] selftests: media_dev_allocator api test
-In-Reply-To: <cover.1554155701.git.shuah@kernel.org>
-References: <cover.1554155701.git.shuah@kernel.org>
-Message-ID:
- <8ca86361d12184ba3d346f34294d5046babd119a.1554155704.git.shuah@kernel.org>
+From: ci_notify@linaro.org (ci_notify@linaro.org)
+Date: Tue, 2 Apr 2019 15:00:28 +0000 (UTC)
+Subject: next-20190401 kselftest results
+Message-ID: <453939634.8316.1554217228584.JavaMail.jenkins@a6c5c67cda76>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190402004024.y8I0kmr2iuIyAhhaXhsFA3Rcoo4Hn71SmfXRFYok2eg@z>
+Message-ID: <20190402150028.I_O5ATJG5yr2DWrNaZbo-EmHqSgCPVYWOsbgbRGx5Bc@z>
 
-Add a new test for Media Device Allocator API.
+Summary
+------------------------------------------------------------------------
+kernel: 5.1.0-rc2
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: e3ecb83ee707a3b2a4d12e19509ecbda7f793cc2
+git describe: next-20190401
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190401
 
-Media Device Allocator API to allows multiple drivers share a media device.
-This API solves a very common use-case for media devices where one physical
-device (an USB stick) provides both audio and video. When such media device
-exposes a standard USB Audio class, a proprietary Video class, two or more
-independent drivers will share a single physical USB bridge. In such cases,
-it is necessary to coordinate access to the shared resource.
+Regressions (compared to build next-20190329)
+------------------------------------------------------------------------
+x86_64:                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190329)                                                                   
+------------------------------------------------------------------------                                               
+juno-r2 - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * net_fib-onlink-tests.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_sockmap                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * net_fib-onlink-tests.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_sockmap                                                                                                         
 
-Using this API, drivers can allocate a media device with the shared struct
-device as the key. Once the media device is allocated by a driver, other
-drivers can get a reference to it. The media device is released when all
-the references are released.
 
-This test does a series of unbind/bind tests to make sure media device
-is released correctly when it is no longer is use and when the last
-driver releases the reference.
+In total:
+------------------------------------------------------------------------
+Ran 1431 total tests in the following environments and test suites.
+pass 915
+fail 334
+xfail 0
+skip 182
 
-Signed-off-by: Shuah Khan <shuah at kernel.org>
----
- .../media_tests/media_dev_allocator.sh        | 85 +++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100755 tools/testing/selftests/media_tests/media_dev_allocator.sh
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
 
-diff --git a/tools/testing/selftests/media_tests/media_dev_allocator.sh b/tools/testing/selftests/media_tests/media_dev_allocator.sh
-new file mode 100755
-index 000000000000..ffe00c59a483
---- /dev/null
-+++ b/tools/testing/selftests/media_tests/media_dev_allocator.sh
-@@ -0,0 +1,85 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Media Device Allocator API test script
-+# Copyright (c) 2019 Shuah Khan <shuah at kernel.org>
-+
-+echo "Media Device Allocator testing: unbind and bind"
-+echo "media driver $1 audio driver $2"
-+
-+MDRIVER=/sys/bus/usb/drivers/$1
-+cd $MDRIVER
-+MDEV=$(ls -d *\-*)
-+
-+ADRIVER=/sys/bus/usb/drivers/$2
-+cd $ADRIVER
-+ADEV=$(ls -d *\-*.1)
-+
-+echo "=================================="
-+echo "Test unbind both devices - start"
-+echo "Running unbind of $MDEV from $MDRIVER"
-+echo $MDEV > $MDRIVER/unbind;
-+
-+echo "Media device should still be present!"
-+ls -l /dev/media*
-+
-+echo "sound driver is at: $ADRIVER"
-+echo "Device is: $ADEV"
-+
-+echo "Running unbind of $ADEV from $ADRIVER"
-+echo $ADEV > $ADRIVER/unbind;
-+
-+echo "Media device should have been deleted!"
-+ls -l /dev/media*
-+echo "Test unbind both devices - end"
-+
-+echo "=================================="
-+
-+echo "Test bind both devices - start"
-+echo "Running bind of $MDEV from $MDRIVER"
-+echo $MDEV > $MDRIVER/bind;
-+
-+echo "Media device should be present!"
-+ls -l /dev/media*
-+
-+echo "Running bind of $ADEV from $ADRIVER"
-+echo $ADEV > $ADRIVER/bind;
-+
-+echo "Media device should be there!"
-+ls -l /dev/media*
-+
-+echo "Test bind both devices - end"
-+
-+echo "=================================="
-+
-+echo "Test unbind $MDEV - bind $MDEV - unbind $ADEV - bind $ADEV start"
-+
-+echo "Running unbind of $MDEV from $MDRIVER"
-+echo $MDEV > $MDRIVER/unbind;
-+
-+echo "Media device should be there!"
-+ls -l /dev/media*
-+
-+sleep 1
-+
-+echo "Running bind of $MDEV from $MDRIVER"
-+echo $MDEV > $MDRIVER/bind;
-+
-+echo "Media device should be there!"
-+ls -l /dev/media*
-+
-+echo "Running unbind of $ADEV from $ADRIVER"
-+echo $ADEV > $ADRIVER/unbind;
-+
-+echo "Media device should be there!"
-+ls -l /dev/media*
-+
-+sleep 1
-+
-+echo "Running bind of $ADEV from $ADRIVER"
-+echo $ADEV > $ADRIVER/bind;
-+
-+echo "Media device should be there!"
-+ls -l /dev/media*
-+
-+echo "Test unbind $MDEV - bind $MDEV - unbind $ADEV - bind $ADEV end"
-+echo "=================================="
+Test Suites
+-----------
+* kselftest
+* kselftest-vsyscall-mode-native
+
+
+Failures
+------------------------------------------------------------------------
+
+qemu_i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_xdp_vlan.sh
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/size_get_size
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+* kselftest/x86_syscall_arg_fault_32
+
+qemu_x86_64:
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pstore_pstore_tests
+* kselftest/timestamping_txtimestamp.sh
+
+qemu_arm:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_xdp_vlan.sh
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pidfd_pidfd_test
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+
+x15:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_xdp_vlan.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pidfd_pidfd_test
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+
+juno-r2:
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/timestamping_txtimestamp.sh
+
+qemu_arm64:
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pstore_pstore_tests
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+
+i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_xdp_vlan.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+
+hi6220-hikey:
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pstore_pstore_tests
+* kselftest/timestamping_txtimestamp.sh
+
+x86:
+* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-native/bpf_test_netcnt
+* kselftest-vsyscall-mode-native/bpf_test_progs
+* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-native/bpf_test_tc_edt.sh
+* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-native/cgroup_test_core
+* kselftest-vsyscall-mode-native/dma-buf_udmabuf
+* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
+* kselftest-vsyscall-mode-native/net_fib-onlink-tests.sh
+* kselftest-vsyscall-mode-native/net_ip_defrag.sh
+* kselftest-vsyscall-mode-native/net_pmtu.sh
+* kselftest-vsyscall-mode-native/net_psock_snd.sh
+* kselftest-vsyscall-mode-native/net_test_vxlan_under_vrf.sh
+* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
+* kselftest-vsyscall-mode-native/timestamping_txtimestamp.sh
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/timestamping_txtimestamp.sh
+
+dragonboard-410c:
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
 -- 
-2.17.1
+Linaro LKFT
+https://lkft.linaro.org
