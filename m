@@ -1,36 +1,86 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Wed, 3 Apr 2019 08:28:16 -0700
-Subject: [PATCH v3.1] selftests: Clean up module testing shell script
-In-Reply-To: <20190403002355.GA29296@eros.localdomain>
-References: <20190402222610.GA15100@beast>
- <20190403002355.GA29296@eros.localdomain>
-Message-ID:
- <CAGXu5jL16hn=_uY1tojAGqEi=a_nU=ScUZkTVO9_nbWnS+2wSw@mail.gmail.com>
+From: catalin.marinas@arm.com (Catalin Marinas)
+Date: Wed, 3 Apr 2019 17:50:31 +0100
+Subject: [PATCH v2 2/4] arm64: Define Documentation/arm64/elf_at_flags.txt
+In-Reply-To: <859341c2-b352-e914-312a-d3de652495b6@arm.com>
+References: <cover.1552679409.git.andreyknvl@google.com>
+ <20190318163533.26838-1-vincenzo.frascino@arm.com>
+ <20190318163533.26838-3-vincenzo.frascino@arm.com>
+ <859341c2-b352-e914-312a-d3de652495b6@arm.com>
+Message-ID: <20190403165031.GE34351@arrakis.emea.arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190403152816.S0gtZ0PIl9S6uiCmmuTCH1Cth9xPozn2qDEtb0BS5So@z>
+Message-ID: <20190403165031.G-V-v3KAnefg7gIpVNZkTl1Lgv3SyYypfXSUi6goBNw@z>
 
-On Tue, Apr 2, 2019@5:24 PM Tobin C. Harding <me@tobin.cc> wrote:
->
-> On Tue, Apr 02, 2019@03:26:10PM -0700, Kees Cook wrote:
-> > This adjusts kselftest_module.sh to take an option "args" argument for
-> > modprobe arguments, removes bash-isms (since some system's /bin/sh may
-> > not be bash), and refactors the lib/ scripts into a shorter calling
-> > convention.
-> >
-> > Signed-off-by: Kees Cook <keescook at chromium.org>
-> > ---
-> > This is my suggested clean-up for the module testing script for the
-> > strscpy_pad() series...
->
-> You are seriously at risk of being the most awesome code reviewer on
-> LKML.  Beer is on me next time I see you.
+On Fri, Mar 22, 2019@03:52:49PM +0000, Kevin Brodsky wrote:
+> On 18/03/2019 16:35, Vincenzo Frascino wrote:
+> > +2. Features exposed via AT_FLAGS
+> > +--------------------------------
+> > +
+> > +bit[0]: ARM64_AT_FLAGS_SYSCALL_TBI
+> > +
+> > +    On arm64 the TCR_EL1.TBI0 bit has been always enabled on the arm64
+> > +    kernel, hence the userspace (EL0) is allowed to set a non-zero value
+> > +    in the top byte but the resulting pointers are not allowed at the
+> > +    user-kernel syscall ABI boundary.
+> > +    When bit[0] is set to 1 the kernel is advertising to the userspace
+> > +    that a relaxed ABI is supported hence this type of pointers are now
+> > +    allowed to be passed to the syscalls, when these pointers are in
+> > +    memory ranges privately owned by a process and obtained by the
+> > +    process in accordance with the definition of "valid tagged pointer"
+> > +    in paragraph 3.
+> > +    In these cases the tag is preserved as the pointer goes through the
+> > +    kernel. Only when the kernel needs to check if a pointer is coming
+> > +    from userspace an untag operation is required.
+> 
+> I would leave this last sentence out, because:
+> 1. It is an implementation detail that doesn't impact this user ABI.
+> 2. It is not entirely accurate: untagging the pointer may be needed for
+> various kinds of address lookup (like finding the corresponding VMA), at
+> which point the kernel usually already knows it is a userspace pointer.
 
-And slowest! ;)
+I fully agree, the above paragraph should not be part of the user ABI
+document.
 
-> I will roll this into a v4 for the strscpy_pad() set.  Would you like a
-> Co-developed-by tag or just a mention in the commit log?
+> > +3. ARM64_AT_FLAGS_SYSCALL_TBI
+> > +-----------------------------
+> > +
+> > +From the kernel syscall interface prospective, we define, for the purposes
+> > +of this document, a "valid tagged pointer" as a pointer that either it has
+> > +a zero value set in the top byte or it has a non-zero value, it is in memory
+> > +ranges privately owned by a userspace process and it is obtained in one of
+> > +the following ways:
+> > +  - mmap() done by the process itself, where either:
+> > +    * flags = MAP_PRIVATE | MAP_ANONYMOUS
+> > +    * flags = MAP_PRIVATE and the file descriptor refers to a regular
+> > +      file or "/dev/zero"
+> > +  - a mapping below sbrk(0) done by the process itself
+> 
+> I don't think that's very clear, this doesn't say how the mapping is
+> obtained. Maybe "a mapping obtained by the process using brk() or sbrk()"?
 
-I'm happy either way. I really just tweaked it; maybe commit log?
+I think what we mean here is anything in the "[heap]" section as per
+/proc/*/maps (in the kernel this would be start_brk to brk).
+
+> > +  - any memory mapped by the kernel in the process's address space during
+> > +    creation and following the restrictions presented above (i.e. data, bss,
+> > +    stack).
+> 
+> With the rules above, the code section is included as well. Replacing "i.e."
+> with "e.g." would avoid having to list every single section (which is
+> probably not a good idea anyway).
+
+We could mention [stack] explicitly as that's documented in the
+Documentation/filesystems/proc.txt and it's likely considered ABI
+already.
+
+The code section is MAP_PRIVATE, and can be done by the dynamic loader
+(user process), so it falls under the mmap() rules listed above. I guess
+we could simply drop "done by the process itself" here and allow
+MAP_PRIVATE|MAP_ANONYMOUS or MAP_PRIVATE of regular file. This would
+cover the [heap] and [stack] and we won't have to debate the brk() case
+at all.
+
+We probably mention somewhere (or we should in the tagged pointers doc)
+that we don't support tagged PC.
 
 -- 
-Kees Cook
+Catalin
