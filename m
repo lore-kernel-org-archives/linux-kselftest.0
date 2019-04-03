@@ -1,86 +1,100 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Wed, 3 Apr 2019 17:50:31 +0100
-Subject: [PATCH v2 2/4] arm64: Define Documentation/arm64/elf_at_flags.txt
-In-Reply-To: <859341c2-b352-e914-312a-d3de652495b6@arm.com>
-References: <cover.1552679409.git.andreyknvl@google.com>
- <20190318163533.26838-1-vincenzo.frascino@arm.com>
- <20190318163533.26838-3-vincenzo.frascino@arm.com>
- <859341c2-b352-e914-312a-d3de652495b6@arm.com>
-Message-ID: <20190403165031.GE34351@arrakis.emea.arm.com>
+From: joel@joelfernandes.org (Joel Fernandes)
+Date: Wed, 3 Apr 2019 13:20:31 -0400
+Subject: [PATCH v2 1/2] Provide in-kernel headers for making it easy to
+ extend the kernel
+In-Reply-To: <CAK7LNARcaVtgHvco-Q=E5jhOXduk=55g9AC7nFn2esFxnk9Naw@mail.gmail.com>
+References: <20190211143600.15021-1-joel@joelfernandes.org>
+ <20190215031926.ljzluy2cfxp64u6o@ast-mbp>
+ <20190325134947.GA187133@google.com>
+ <20190327173103.GA205980@google.com>
+ <CAK7LNARcaVtgHvco-Q=E5jhOXduk=55g9AC7nFn2esFxnk9Naw@mail.gmail.com>
+Message-ID: <20190403172031.GA260189@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190403165031.G-V-v3KAnefg7gIpVNZkTl1Lgv3SyYypfXSUi6goBNw@z>
+Message-ID: <20190403172031.RsXzuxhhWPx5y9WB4vOzaVZP6EoVJDrI2gb-okxlFn0@z>
 
-On Fri, Mar 22, 2019@03:52:49PM +0000, Kevin Brodsky wrote:
-> On 18/03/2019 16:35, Vincenzo Frascino wrote:
-> > +2. Features exposed via AT_FLAGS
-> > +--------------------------------
-> > +
-> > +bit[0]: ARM64_AT_FLAGS_SYSCALL_TBI
-> > +
-> > +    On arm64 the TCR_EL1.TBI0 bit has been always enabled on the arm64
-> > +    kernel, hence the userspace (EL0) is allowed to set a non-zero value
-> > +    in the top byte but the resulting pointers are not allowed at the
-> > +    user-kernel syscall ABI boundary.
-> > +    When bit[0] is set to 1 the kernel is advertising to the userspace
-> > +    that a relaxed ABI is supported hence this type of pointers are now
-> > +    allowed to be passed to the syscalls, when these pointers are in
-> > +    memory ranges privately owned by a process and obtained by the
-> > +    process in accordance with the definition of "valid tagged pointer"
-> > +    in paragraph 3.
-> > +    In these cases the tag is preserved as the pointer goes through the
-> > +    kernel. Only when the kernel needs to check if a pointer is coming
-> > +    from userspace an untag operation is required.
+On Wed, Apr 03, 2019@04:48:37PM +0900, Masahiro Yamada wrote:
+> On Thu, Mar 28, 2019@2:32 AM Joel Fernandes <joel@joelfernandes.org> wrote:
+> >
+> > On Mon, Mar 25, 2019@09:49:47AM -0400, Joel Fernandes wrote:
+> > > On Thu, Feb 14, 2019@07:19:29PM -0800, Alexei Starovoitov wrote:
+> > > > On Mon, Feb 11, 2019@09:35:59AM -0500, Joel Fernandes (Google) wrote:
+> > > > > Introduce in-kernel headers and other artifacts which are made available
+> > > > > as an archive through proc (/proc/kheaders.txz file). This archive makes
+> > > > > it possible to build kernel modules, run eBPF programs, and other
+> > > > > tracing programs that need to extend the kernel for tracing purposes
+> > > > > without any dependency on the file system having headers and build
+> > > > > artifacts.
+> > > > >
+> > > > > On Android and embedded systems, it is common to switch kernels but not
+> > > > > have kernel headers available on the file system. Raw kernel headers
+> > > > > also cannot be copied into the filesystem like they can be on other
+> > > > > distros, due to licensing and other issues. There's no linux-headers
+> > > > > package on Android. Further once a different kernel is booted, any
+> > > > > headers stored on the file system will no longer be useful. By storing
+> > > > > the headers as a compressed archive within the kernel, we can avoid these
+> > > > > issues that have been a hindrance for a long time.
+> > > >
+> > > > The set looks good to me and since the main use case is building bpf progs
+> > > > I can route it via bpf-next tree if there are no objections.
+> > > > Masahiro, could you please ack it?
+> > >
+> > > FYI, Masahiro's comments were all address by v5:
+> > > https://lore.kernel.org/patchwork/project/lkml/list/?series=387311
+> > >
+> > > I believe aren't more outstanding concerns. Could we consider it for v5.2?
+> >
+> > Just to highlight the problem, today I booted v5.0 on an emulated Android
+> > device for some testing, that didn't have a set of prebuilt headers that we
+> > have been packaging on well known kernels, to get around this issue. This
+> > caused great pain and issues with what I was doing. I know me and many others
+> > really want this. With this I can boot an emulated Android device with
+> > IKCONFIG_PROC=y and run BCC with that that. Also I want to do the BCC side of
+> > the development, but first want to know if we can merge this upstream.
+> >
+> > Masahiro, I believe due diligence has been done in solidifying it as posted
+> > in the v5.  Anything else we need to do here? Are you with the patches?
 > 
-> I would leave this last sentence out, because:
-> 1. It is an implementation detail that doesn't impact this user ABI.
-> 2. It is not entirely accurate: untagging the pointer may be needed for
-> various kinds of address lookup (like finding the corresponding VMA), at
-> which point the kernel usually already knows it is a userspace pointer.
-
-I fully agree, the above paragraph should not be part of the user ABI
-document.
-
-> > +3. ARM64_AT_FLAGS_SYSCALL_TBI
-> > +-----------------------------
-> > +
-> > +From the kernel syscall interface prospective, we define, for the purposes
-> > +of this document, a "valid tagged pointer" as a pointer that either it has
-> > +a zero value set in the top byte or it has a non-zero value, it is in memory
-> > +ranges privately owned by a userspace process and it is obtained in one of
-> > +the following ways:
-> > +  - mmap() done by the process itself, where either:
-> > +    * flags = MAP_PRIVATE | MAP_ANONYMOUS
-> > +    * flags = MAP_PRIVATE and the file descriptor refers to a regular
-> > +      file or "/dev/zero"
-> > +  - a mapping below sbrk(0) done by the process itself
 > 
-> I don't think that's very clear, this doesn't say how the mapping is
-> obtained. Maybe "a mapping obtained by the process using brk() or sbrk()"?
-
-I think what we mean here is anything in the "[heap]" section as per
-/proc/*/maps (in the kernel this would be start_brk to brk).
-
-> > +  - any memory mapped by the kernel in the process's address space during
-> > +    creation and following the restrictions presented above (i.e. data, bss,
-> > +    stack).
+> As you said, these updates are "cosmetic".
+> Nobody is worried about (or interested in) them.
+> Even if we miss something, they are fixable later.
 > 
-> With the rules above, the code section is included as well. Replacing "i.e."
-> with "e.g." would avoid having to list every single section (which is
-> probably not a good idea anyway).
+> I accept embedding headers in the kernel,
+> but I do not like the part about external module build.
+>  - kernel embeds build artifacts that depend on a
+>    particular host-arch
+>  - users do not know which compiler to use
+> Perhaps, you may remember my concerns.
+> https://lore.kernel.org/patchwork/patch/1046307/#1239501
 
-We could mention [stack] explicitly as that's documented in the
-Documentation/filesystems/proc.txt and it's likely considered ABI
-already.
+Masahiro,
+I think we already discussed this right. The compiler issue is a user-issue -
+it is not a problem that has arisen because this patch. Anyone can build a
+kernel module today without this patch - using a compiler that is different
+from the running kernel. So I did not fully understand your concern. This
+patch does not ship a compiler in the archive. The compiler is upto the user
+based on user environment. They can already shoot themself in foot without
+this patch.
 
-The code section is MAP_PRIVATE, and can be done by the dynamic loader
-(user process), so it falls under the mmap() rules listed above. I guess
-we could simply drop "done by the process itself" here and allow
-MAP_PRIVATE|MAP_ANONYMOUS or MAP_PRIVATE of regular file. This would
-cover the [heap] and [stack] and we won't have to debate the brk() case
-at all.
+Greg,
+Would be great to get your thoughts here as well about Masami's concern.
 
-We probably mention somewhere (or we should in the tagged pointers doc)
-that we don't support tagged PC.
+Honestly, the "kernel module building artifacts" bit is a bonus with this
+patch. The main thing we are adding or that we need is really the headers
+(for BCC). I just thought shipping the kernel build artifacts would also be
+awesome because people can now build kernel modules without needing a kernel
+tree at all.
 
--- 
-Catalin
+But I also want this stuff merged so if folks are really unhappy with the
+module build artifacts and only want headers - then that's also fine with me
+and I can yank them - that would also mean though that this work cannot be a
+replacement for linux-headers package on distros, so that would be sad.
+
+thanks!
+
+- Joel
+
+> 
+> --
+> Best Regards
+> Masahiro Yamada
