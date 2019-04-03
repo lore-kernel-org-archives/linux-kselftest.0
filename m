@@ -1,503 +1,136 @@
-From: ci_notify at linaro.org (ci_notify at linaro.org)
-Date: Wed, 3 Apr 2019 13:00:27 +0000 (UTC)
-Subject: next-20190403 kselftest results
-Message-ID: <1728310050.8709.1554296427532.JavaMail.jenkins@a6c5c67cda76>
+From: zohar at linux.ibm.com (Mimi Zohar)
+Date: Wed, 03 Apr 2019 10:06:09 -0400
+Subject: [PATCH] selftests/kexec: update get_secureboot_mode
+In-Reply-To: <1553607257-18906-1-git-send-email-zohar@linux.ibm.com>
+References: <1553607257-18906-1-git-send-email-zohar@linux.ibm.com>
+Message-ID: <1554300369.7309.59.camel@linux.ibm.com>
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.1.0-rc3
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: bf97b82f37c6d90e16de001d0659644c57fa490d
-git describe: next-20190403
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190403
+The get_secureboot_mode() function unnecessarily requires both
+CONFIG_EFIVAR_FS and CONFIG_EFI_VARS to be enabled to determine if the
+system is booted in secure boot mode.  On some systems the old EFI
+variable support is not enabled or, possibly, even implemented.
 
-Regressions (compared to build next-20190402)
-------------------------------------------------------------------------
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_select_reuseport                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * bpf_test_select_reuseport                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_select_reuseport                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * bpf_test_select_reuseport                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_select_reuseport                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * bpf_test_select_reuseport                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190402)                                                                   
-------------------------------------------------------------------------                                               
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-qemu_x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_select_reuseport                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
+This patch first checks the efivars filesystem for the SecureBoot and
+SetupMode flags, but falls back to using the old EFI variable support.
 
+The "secure_boot_file" and "setup_mode_file" couldn't be quoted due to
+globbing.  This patch also removes the globbing.
 
-In total:
-------------------------------------------------------------------------
-Ran 1593 total tests in the following environments and test suites.
-pass 1034
-fail 358
-xfail 0
-skip 201
+Signed-off-by: Mimi Zohar <zohar at linux.ibm.com>
+---
+ tools/testing/selftests/kexec/kexec_common_lib.sh | 87 +++++++++++++++++------
+ 1 file changed, 67 insertions(+), 20 deletions(-)
 
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
-
-
-Failures
-------------------------------------------------------------------------
-
-qemu_x86_64:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_fsgsbase_64
-
-qemu_arm64:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pstore_pstore_tests
-* kselftest/seccomp_seccomp_bpf
-* kselftest/size_get_size
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_syscall_arg_fault_32
-
-dragonboard-410c:
-
-x15:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_msg_zerocopy.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/seccomp_seccomp_bpf
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-
-hi6220-hikey:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_msg_zerocopy.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/seccomp_seccomp_bpf
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-
-x86:
-* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-native/bpf_test_netcnt
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_select_reuseport
-* kselftest-vsyscall-mode-native/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-native/cgroup_test_core
-* kselftest-vsyscall-mode-native/dma-buf_udmabuf
-* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-native/net_fib-onlink-tests.sh
-* kselftest-vsyscall-mode-native/net_ip_defrag.sh
-* kselftest-vsyscall-mode-native/net_pmtu.sh
-* kselftest-vsyscall-mode-native/net_psock_snd.sh
-* kselftest-vsyscall-mode-native/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-native/timestamping_txtimestamp.sh
-* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-none/bpf_test_netcnt
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_select_reuseport
-* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-none/cgroup_test_core
-* kselftest-vsyscall-mode-none/dma-buf_udmabuf
-* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-none/net_ip_defrag.sh
-* kselftest-vsyscall-mode-none/net_pmtu.sh
-* kselftest-vsyscall-mode-none/net_psock_snd.sh
-* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-none/timestamping_txtimestamp.sh
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/timestamping_txtimestamp.sh
-
-juno-r2:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
+diff --git a/tools/testing/selftests/kexec/kexec_common_lib.sh b/tools/testing/selftests/kexec/kexec_common_lib.sh
+index b7ac8f3fa025..4d3ff08bdb81 100755
+--- a/tools/testing/selftests/kexec/kexec_common_lib.sh
++++ b/tools/testing/selftests/kexec/kexec_common_lib.sh
+@@ -35,6 +35,64 @@ log_skip()
+ }
+ 
+ # Check efivar SecureBoot-$(the UUID) and SetupMode-$(the UUID).
++# (Based on kdump-lib.sh)
++get_efivarfs_secureboot_mode()
++{
++	local efivarfs="/sys/firmware/efi/efivars"
++	local secure_boot_file=""
++	local setup_mode_file=""
++	local secureboot_mode=0
++	local setup_mode=0
++
++	# Make sure that efivar_fs is mounted in the normal location
++	if ! grep -q "^\S\+ $efivarfs efivarfs" /proc/mounts; then
++		log_info "efivars is not mounted on $efivarfs"
++		return 0;
++	fi
++	secure_boot_file=$(find "$efivarfs" -name SecureBoot-* 2>/dev/null)
++	setup_mode_file=$(find "$efivarfs" -name SetupMode-* 2>/dev/null)
++	if [ -f "$secure_boot_file" ] && [ -f "$setup_mode_file" ]; then
++		secureboot_mode=$(hexdump -v -e '/1 "%d\ "' \
++			"$secure_boot_file"|cut -d' ' -f 5)
++		setup_mode=$(hexdump -v -e '/1 "%d\ "' \
++			"$setup_mode_file"|cut -d' ' -f 5)
++
++		if [ $secureboot_mode -eq 1 ] && [ $setup_mode -eq 0 ]; then
++			log_info "secure boot mode enabled (efivar_fs)"
++			return 1;
++		fi
++	fi
++	return 0;
++}
++
++get_efi_var_secureboot_mode()
++{
++	local efi_vars="/sys/firmware/efi/vars"
++	local secure_boot_file=""
++	local setup_mode_file=""
++	local secureboot_mode=0
++	local setup_mode=0
++
++	if [ ! -d "$efi_vars" ]; then
++		log_skip "efi_vars is not enabled\n"
++		return 0;
++	fi
++	secure_boot_file=$(find "$efi_vars" -name SecureBoot-* 2>/dev/null)
++	setup_mode_file=$(find "$efi_vars" -name SetupMode-* 2>/dev/null)
++	if [ -f "$secure_boot_file/data" ] && \
++	   [ -f "$setup_mode_file/data" ]; then
++		secureboot_mode=`od -An -t u1 "$secure_boot_file/data"`
++		setup_mode=`od -An -t u1 "$setup_mode_file/data"`
++
++		if [ $secureboot_mode -eq 1 ] && [ $setup_mode -eq 0 ]; then
++			log_info "secure boot mode enabled (efi_var)"
++			return 1;
++		fi
++	fi
++	return 0;
++}
++
++# Check efivar SecureBoot-$(the UUID) and SetupMode-$(the UUID).
+ # The secure boot mode can be accessed either as the last integer
+ # of "od -An -t u1 /sys/firmware/efi/efivars/SecureBoot-*" or from
+ # "od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data".  The efi
+@@ -42,32 +100,21 @@ log_skip()
+ # Return 1 for SecureBoot mode enabled and SetupMode mode disabled.
+ get_secureboot_mode()
+ {
+-	local efivarfs="/sys/firmware/efi/efivars"
+-	local secure_boot_file="$efivarfs/../vars/SecureBoot-*/data"
+-	local setup_mode_file="$efivarfs/../vars/SetupMode-*/data"
+ 	local secureboot_mode=0
+-	local setup_mode=0
+ 
+-	# Make sure that efivars is mounted in the normal location
+-	if ! grep -q "^\S\+ $efivarfs efivarfs" /proc/mounts; then
+-		log_skip "efivars is not mounted on $efivarfs"
+-	fi
++	get_efivarfs_secureboot_mode
++	secureboot_mode=$?
+ 
+-	# Due to globbing, quoting "secure_boot_file" and "setup_mode_file"
+-	# is not possible.  (Todo: initialize variables using find or ls.)
+-	if [ ! -e $secure_boot_file ] || [ ! -e $setup_mode_file ]; then
+-		log_skip "unknown secureboot/setup mode"
++	# fallback to using the efi_var files
++	if [ $secureboot_mode -eq 0 ]; then
++		get_efi_var_secureboot_mode
++		secureboot_mode=$?
+ 	fi
+ 
+-	secureboot_mode=`od -An -t u1 $secure_boot_file`
+-	setup_mode=`od -An -t u1 $setup_mode_file`
+-
+-	if [ $secureboot_mode -eq 1 ] && [ $setup_mode -eq 0 ]; then
+-		log_info "secure boot mode enabled"
+-		return 1;
++	if [ $secureboot_mode -eq 0 ]; then
++		log_info "secure boot mode not enabled"
+ 	fi
+-	log_info "secure boot mode not enabled"
+-	return 0;
++	return $secureboot_mode;
+ }
+ 
+ require_root_privileges()
 -- 
-Linaro LKFT
-https://lkft.linaro.org
+2.7.5
