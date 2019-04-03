@@ -1,109 +1,34 @@
-From: rdunlap at infradead.org (Randy Dunlap)
-Date: Tue, 2 Apr 2019 15:31:41 -0700
-Subject: [PATCH v3.1] selftests: Clean up module testing shell script
-In-Reply-To: <20190402222610.GA15100@beast>
-References: <20190402222610.GA15100@beast>
-Message-ID: <ce347ca9-7b94-f77c-bbcd-9e73861e7182@infradead.org>
+From: shuah at kernel.org (shuah)
+Date: Tue, 2 Apr 2019 18:29:39 -0600
+Subject: [PATCH v3 0/7] lib/string: Add strscpy_pad() function
+In-Reply-To: <20190403002527.GB29296@eros.localdomain>
+References: <20190306214226.14598-1-tobin@kernel.org>
+ <CAGXu5jJeFOBBiofjG6_rqbf+_0fbKC46pzyfoACWt+NBg-bXtg@mail.gmail.com>
+ <20190403002527.GB29296@eros.localdomain>
+Message-ID: <5c780987-e8d4-a1cf-2ea6-a16087e4491d@kernel.org>
 
-Hi,
-
-Minor corrections below:
-
-On 4/2/19 3:26 PM, Kees Cook wrote:
-> This adjusts kselftest_module.sh to take an option "args" argument for
-> modprobe arguments, removes bash-isms (since some system's /bin/sh may
-> not be bash), and refactors the lib/ scripts into a shorter calling
-> convention.
+On 4/2/19 6:25 PM, Tobin C. Harding wrote:
+> On Tue, Apr 02, 2019 at 02:37:57PM -0700, Kees Cook wrote:
+>> On Wed, Mar 6, 2019 at 1:43 PM Tobin C. Harding <tobin at kernel.org> wrote:
+>>> This set makes an attempt at adding a framework to kselftest for writing
+>>> kernel test modules.  It also adds a script for use in creating script
+>>> test runners for kselftest.  My macro-foo is not great, all criticism
+>>> and suggestions very much appreciated.  The design is based on test
+>>> modules lib/test_printf.c, lib/test_bitmap.c, lib/test_xarray.c.
+>>
+>> Hi Shuah,
+>>
+>> The bulk of this series is in the kselftests. Would you be willing to
+>> carry this series?
+>>
+>> I think it might be able to use a v4 just to clean up the
+>> script-finding logic, but I might be entirely missing something about
+>> the best way to do it.
 > 
-> Signed-off-by: Kees Cook <keescook at chromium.org>
-> ---
-> This is my suggested clean-up for the module testing script for the
-> strscpy_pad() series...
-> ---
->  tools/testing/selftests/kselftest_module.sh  | 24 ++++++++++++--------
->  tools/testing/selftests/lib/bitmap.sh        | 17 +-------------
->  tools/testing/selftests/lib/prime_numbers.sh | 17 ++------------
->  tools/testing/selftests/lib/printf.sh        | 16 +------------
->  tools/testing/selftests/lib/strscpy.sh       | 17 ++------------
->  5 files changed, 20 insertions(+), 71 deletions(-)
+> v4 to come once I grok the bash stuff you suggested in 'PATCH v3.1'.
 > 
-> diff --git a/tools/testing/selftests/kselftest_module.sh b/tools/testing/selftests/kselftest_module.sh
-> index b5d446738614..20a897d21fde 100755
-> --- a/tools/testing/selftests/kselftest_module.sh
-> +++ b/tools/testing/selftests/kselftest_module.sh
-> @@ -2,19 +2,20 @@
->  # SPDX-License-Identifier: GPL-2.0+
->  
->  #
-> -# Runs an individual test module.  kselftest expects a separate
-> -# executable for each test.  So test should each have an individial
-> +# Runs an individual test module. kselftest expects a separate
-> +# executable for each test. So test should each have an individial
 
-                                  tests (?)                individual
+Yes I can take care of these. Will wait for v4
 
->  # script that can call this script.
->  #
->  
->  # Individual test scrits should define these:
-
-                     scripts
-
->  module=""			# filename (without the .ko).
->  desc=""				# Output prefix.
-> +args=""				# modprobe arguments
->  
->  modprobe="/sbin/modprobe"
->  
->  main() {
-> -    parse_args $@
-> +    parse_args "$@"
->      assert_root
->      assert_have_module
->      run_module
-> @@ -23,17 +24,20 @@ main() {
->  parse_args() {
->      script=${0##*/}
->  
-> -    if [[ ! $# -eq 2 ]]; then
-> -	echo "Usage: $script <module_name> <description> [FAIL]"
-> +    if [ $# -lt 2 ]; then
-> +	echo "Usage: $script <description> <module_name> [FAIL]"
->  	exit 1
->      fi
->  
-> -    module=$1
-> -    desc=$2
-> +    desc="$1"
-> +    shift || true
-> +    module="$1"
-> +    shift || true
-> +    args="$@"
->  }
->  
->  assert_root() {
-> -    if [[ $EUID -ne 0 ]]; then
-> +    if [ ! -w /dev ]; then
->  	skip "please run as root"
->      fi
->  }
-> @@ -45,7 +49,7 @@ assert_have_module() {
->  }
->  
->  run_module() {
-> -    if $modprobe -q $module; then
-> +    if $modprobe -q $module $args; then
->  	$modprobe -q -r $module
->  	say "ok"
->      else
-> @@ -72,4 +76,4 @@ skip() {
->  #
->  # Main script
->  #
-> -main $@
-> +main "$@"
-
-
-ciao.
--- 
-~Randy
+thanks,
+-- Shuah
