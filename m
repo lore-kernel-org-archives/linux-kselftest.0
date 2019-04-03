@@ -1,28 +1,31 @@
 From: me@tobin.cc (Tobin C. Harding)
-Date: Wed, 3 Apr 2019 11:23:55 +1100
-Subject: [PATCH v3.1] selftests: Clean up module testing shell script
-In-Reply-To: <20190402222610.GA15100@beast>
-References: <20190402222610.GA15100@beast>
-Message-ID: <20190403002355.GA29296@eros.localdomain>
+Date: Wed, 3 Apr 2019 11:25:27 +1100
+Subject: [PATCH v3 0/7] lib/string: Add strscpy_pad() function
+In-Reply-To: <CAGXu5jJeFOBBiofjG6_rqbf+_0fbKC46pzyfoACWt+NBg-bXtg@mail.gmail.com>
+References: <20190306214226.14598-1-tobin@kernel.org>
+ <CAGXu5jJeFOBBiofjG6_rqbf+_0fbKC46pzyfoACWt+NBg-bXtg@mail.gmail.com>
+Message-ID: <20190403002527.GB29296@eros.localdomain>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190403002355.0wxQ1Nw7Ijuic_CBO7bKHTzRWtSy1_mlY7omlo4zH0M@z>
+Message-ID: <20190403002527.BLmJgdrFLEfQwi0H1lQyrQlaZKfBTmvppLS41gHPJQY@z>
 
-On Tue, Apr 02, 2019@03:26:10PM -0700, Kees Cook wrote:
-> This adjusts kselftest_module.sh to take an option "args" argument for
-> modprobe arguments, removes bash-isms (since some system's /bin/sh may
-> not be bash), and refactors the lib/ scripts into a shorter calling
-> convention.
+On Tue, Apr 02, 2019@02:37:57PM -0700, Kees Cook wrote:
+> On Wed, Mar 6, 2019@1:43 PM Tobin C. Harding <tobin@kernel.org> wrote:
+> > This set makes an attempt at adding a framework to kselftest for writing
+> > kernel test modules.  It also adds a script for use in creating script
+> > test runners for kselftest.  My macro-foo is not great, all criticism
+> > and suggestions very much appreciated.  The design is based on test
+> > modules lib/test_printf.c, lib/test_bitmap.c, lib/test_xarray.c.
 > 
-> Signed-off-by: Kees Cook <keescook at chromium.org>
-> ---
-> This is my suggested clean-up for the module testing script for the
-> strscpy_pad() series...
+> Hi Shuah,
+> 
+> The bulk of this series is in the kselftests. Would you be willing to
+> carry this series?
+> 
+> I think it might be able to use a v4 just to clean up the
+> script-finding logic, but I might be entirely missing something about
+> the best way to do it.
 
-You are seriously at risk of being the most awesome code reviewer on
-LKML.  Beer is on me next time I see you.
-
-I will roll this into a v4 for the strscpy_pad() set.  Would you like a
-Co-developed-by tag or just a mention in the commit log?
+v4 to come once I grok the bash stuff you suggested in 'PATCH v3.1'.
 
 thanks,
 Tobin.
