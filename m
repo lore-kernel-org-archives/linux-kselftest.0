@@ -1,83 +1,20 @@
-From: brendanhiggins at google.com (Brendan Higgins)
-Date: Thu,  4 Apr 2019 15:06:35 -0700
-Subject: [PATCH v1 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-Message-ID: <20190404220652.19765-1-brendanhiggins@google.com>
+From: me at tobin.cc (Tobin C. Harding)
+Date: Fri, 5 Apr 2019 10:16:13 +1100
+Subject: [PATCH v3 2/7] kselftest: Add test runner creation script
+In-Reply-To: <32a2dca5-d3cd-e7d3-e73b-406d897ae174@infradead.org>
+References: <20190306214226.14598-1-tobin@kernel.org>
+ <20190306214226.14598-3-tobin@kernel.org>
+ <CAGXu5j+=O3C6z7H5j93Z4mQkpS3f0ea_7T+LRQEnRCZCoKX8zw@mail.gmail.com>
+ <32a2dca5-d3cd-e7d3-e73b-406d897ae174@infradead.org>
+Message-ID: <20190404231613.GA30424@eros.localdomain>
 
-This patch set proposes KUnit, a lightweight unit testing and mocking
-framework for the Linux kernel.
+On Tue, Apr 02, 2019 at 02:33:12PM -0700, Randy Dunlap wrote:
+> Hi,
+> 
+> nits/typos below:
 
-Unlike Autotest and kselftest, KUnit is a true unit testing framework;
-it does not require installing the kernel on a test machine or in a VM
-and does not require tests to be written in userspace running on a host
-kernel. Additionally, KUnit is fast: From invocation to completion KUnit
-can run several dozen tests in under a second. Currently, the entire
-KUnit test suite for KUnit runs in under a second from the initial
-invocation (build time excluded).
+Hey thanks for reviewing this Randy, first time I read it I got mixed up
+and thought the nits were against Kees' additions but I was wrong,
+thanks again.
 
-KUnit is heavily inspired by JUnit, Python's unittest.mock, and
-Googletest/Googlemock for C++. KUnit provides facilities for defining
-unit test cases, grouping related test cases into test suites, providing
-common infrastructure for running tests, mocking, spying, and much more.
-
-## What's so special about unit testing?
-
-A unit test is supposed to test a single unit of code in isolation,
-hence the name. There should be no dependencies outside the control of
-the test; this means no external dependencies, which makes tests orders
-of magnitudes faster. Likewise, since there are no external dependencies,
-there are no hoops to jump through to run the tests. Additionally, this
-makes unit tests deterministic: a failing unit test always indicates a
-problem. Finally, because unit tests necessarily have finer granularity,
-they are able to test all code paths easily solving the classic problem
-of difficulty in exercising error handling code.
-
-## Is KUnit trying to replace other testing frameworks for the kernel?
-
-No. Most existing tests for the Linux kernel are end-to-end tests, which
-have their place. A well tested system has lots of unit tests, a
-reasonable number of integration tests, and some end-to-end tests. KUnit
-is just trying to address the unit test space which is currently not
-being addressed.
-
-## More information on KUnit
-
-There is a bunch of documentation near the end of this patch set that
-describes how to use KUnit and best practices for writing unit tests.
-For convenience I am hosting the compiled docs here:
-https://google.github.io/kunit-docs/third_party/kernel/docs/
-Additionally for convenience, I have applied these patches to a branch:
-https://kunit.googlesource.com/linux/+/kunit/rfc/v5.1-rc2/v1
-The repo may be cloned with:
-git clone https://kunit.googlesource.com/linux
-This patchset is on the kunit/rfc/v5.1-rc2/v1 branch.
-
-## Changes Since Last Version
-
-Last version was RFC v4. It seemed we were pretty much done with the RFC
-phase, so I started the numbering over again. Sorry if anyone finds that
-confusing.
-
- - Reduced usage of object oriented style of member functions as
-   suggested by Frank.
- - Did a bunch of heavy clean up of the kunit_abort stuff as suggested
-   by Frank and Stephen:
-   - Biggest change was to reduce the usage of direct calls of member
-     functions.
-   - Added a better explanation of what abort is for and further
-     explained the rationale for KUNIT_ASSERT_* vs. KUNIT_EXPECT_*
-   - Dropped BUG() usage
-   - Also moved try_catch interface to a new file since it seemed
-     obscured by being mixed in with the code that used it.
- - Fixed some other minor issues pointed out by Stephen.
- - Updated email address of one of the contributors.
- - Dropped DT unittest port since it seemed like there was a lot more
-   discussion to be had: it wasn't ready to leave the RFC phase.
-   Instead, I added a KUnit test written by Iurii for PROC SYSCTL that
-   was requested by Luis some time ago.
-
-For reference, RFC v4 can be found here:
-https://lkml.org/lkml/2019/2/14/1144
-
--- 
-2.21.0.392.gf8f6787159e-goog
+	Tobin
