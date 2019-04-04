@@ -1,31 +1,41 @@
 From: brendanhiggins@google.com (Brendan Higgins)
-Date: Thu,  4 Apr 2019 15:06:52 -0700
-Subject: [PATCH v1 17/17] MAINTAINERS: add proc sysctl KUnit test to PROC
- SYSCTL section
+Date: Thu,  4 Apr 2019 15:06:50 -0700
+Subject: [PATCH v1 15/17] MAINTAINERS: add entry for KUnit the unit testing
+ framework
 In-Reply-To: <20190404220652.19765-1-brendanhiggins@google.com>
 References: <20190404220652.19765-1-brendanhiggins@google.com>
-Message-ID: <20190404220652.19765-18-brendanhiggins@google.com>
+Message-ID: <20190404220652.19765-16-brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190404220652.PCOE44jkZyzRCCACS0W7Wm53nHwmVkRyeZIBC7QigD0@z>
+Message-ID: <20190404220650.3-2QCVQDdd5rVI-k54h2FqSblSmi4F3HV1bEfIdDeFA@z>
 
-Add entry for the new proc sysctl KUnit test to the PROC SYSCTL section.
+Add myself as maintainer of KUnit, the Linux kernel's unit testing
+framework.
 
 Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ MAINTAINERS | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index fc2cedbd9b43e..03054e4c6386c 100644
+index 3e5a5d263f299..fc2cedbd9b43e 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -12523,6 +12523,7 @@ S:	Maintained
- F:	fs/proc/proc_sysctl.c
- F:	include/linux/sysctl.h
- F:	kernel/sysctl.c
-+F:	kernel/sysctl-test.c
- F:	tools/testing/selftests/sysctl/
+@@ -8448,6 +8448,16 @@ S:	Maintained
+ F:	tools/testing/selftests/
+ F:	Documentation/dev-tools/kselftest*
  
- PS3 NETWORK SUPPORT
++KERNEL UNIT TESTING FRAMEWORK (KUnit)
++M:	Brendan Higgins <brendanhiggins at google.com>
++L:	kunit-dev at googlegroups.com
++W:	https://google.github.io/kunit-docs/third_party/kernel/docs/
++S:	Maintained
++F:	Documentation/kunit/
++F:	include/kunit/
++F:	kunit/
++F:	tools/testing/kunit/
++
+ KERNEL USERMODE HELPER
+ M:	Luis Chamberlain <mcgrof at kernel.org>
+ L:	linux-kernel at vger.kernel.org
 -- 
 2.21.0.392.gf8f6787159e-goog
