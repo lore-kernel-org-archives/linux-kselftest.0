@@ -1,121 +1,69 @@
 From: tobin at kernel.org (Tobin C. Harding)
-Date: Fri,  5 Apr 2019 12:58:57 +1100
-Subject: [PATCH v4 4/6] lib: Use new kselftest header
-In-Reply-To: <20190405015859.32755-1-tobin@kernel.org>
-References: <20190405015859.32755-1-tobin@kernel.org>
-Message-ID: <20190405015859.32755-5-tobin@kernel.org>
+Date: Fri,  5 Apr 2019 12:58:53 +1100
+Subject: [PATCH v4 0/6] lib/string: Add strscpy_pad() function
+Message-ID: <20190405015859.32755-1-tobin@kernel.org>
 
-We just added a new C header file for use with test modules that are
-intended to be run with kselftest.  We can reduce code duplication by
-using this header.
+Hi Shua,
 
-Use new kselftest header to reduce code duplication in test_printf and
-test_bitmap test modules.
+Here is the set with cleanup as suggested by Kees on v3.
 
-Acked-by: Kees Cook <keescook at chromium.org>
-Signed-off-by: Tobin C. Harding <tobin at kernel.org>
----
- lib/test_bitmap.c | 20 ++++----------------
- lib/test_printf.c | 23 +++++------------------
- 2 files changed, 9 insertions(+), 34 deletions(-)
+Configured, built, and tested all modules loaded by
+tools/testing/selftests/lib/*.sh
 
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index 6cd7d0740005..792d90608052 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -12,6 +12,8 @@
- #include <linux/slab.h>
- #include <linux/string.h>
- 
-+#include "../tools/testing/selftests/kselftest_module.h"
-+
- static unsigned total_tests __initdata;
- static unsigned failed_tests __initdata;
- 
-@@ -361,7 +363,7 @@ static void noinline __init test_mem_optimisations(void)
- 	}
- }
- 
--static int __init test_bitmap_init(void)
-+static void __init selftest(void)
- {
- 	test_zero_clear();
- 	test_fill_set();
-@@ -369,22 +371,8 @@ static int __init test_bitmap_init(void)
- 	test_bitmap_arr32();
- 	test_bitmap_parselist();
- 	test_mem_optimisations();
--
--	if (failed_tests == 0)
--		pr_info("all %u tests passed\n", total_tests);
--	else
--		pr_warn("failed %u out of %u tests\n",
--			failed_tests, total_tests);
--
--	return failed_tests ? -EINVAL : 0;
- }
- 
--static void __exit test_bitmap_cleanup(void)
--{
--}
--
--module_init(test_bitmap_init);
--module_exit(test_bitmap_cleanup);
--
-+KSTM_MODULE_LOADERS(test_bitmap);
- MODULE_AUTHOR("david decotigny <david.decotigny at googlers.com>");
- MODULE_LICENSE("GPL");
-diff --git a/lib/test_printf.c b/lib/test_printf.c
-index 601e8519319a..f4fcc1c43739 100644
---- a/lib/test_printf.c
-+++ b/lib/test_printf.c
-@@ -21,6 +21,8 @@
- #include <linux/gfp.h>
- #include <linux/mm.h>
- 
-+#include "../tools/testing/selftests/kselftest_module.h"
-+
- #define BUF_SIZE 256
- #define PAD_SIZE 16
- #define FILL_CHAR '$'
-@@ -590,12 +592,11 @@ test_pointer(void)
- 	flags();
- }
- 
--static int __init
--test_printf_init(void)
-+static void __init selftest(void)
- {
- 	alloced_buffer = kmalloc(BUF_SIZE + 2*PAD_SIZE, GFP_KERNEL);
- 	if (!alloced_buffer)
--		return -ENOMEM;
-+		return;
- 	test_buffer = alloced_buffer + PAD_SIZE;
- 
- 	test_basic();
-@@ -604,22 +605,8 @@ test_printf_init(void)
- 	test_pointer();
- 
- 	kfree(alloced_buffer);
--
--	if (failed_tests == 0)
--		pr_info("all %u tests passed\n", total_tests);
--	else
--		pr_warn("failed %u out of %u tests\n", failed_tests, total_tests);
--
--	return failed_tests ? -EINVAL : 0;
- }
- 
--module_init(test_printf_init);
--
--static void __exit test_printf_exit(void)
--{
--}
--
--module_exit(test_printf_exit);
--
-+KSTM_MODULE_LOADERS(test_printf);
- MODULE_AUTHOR("Rasmus Villemoes <linux at rasmusvillemoes.dk>");
- MODULE_LICENSE("GPL");
+>From previous cover letters ...
+
+While doing the testing for strscpy_pad() it was noticed that there is
+duplication in how test modules are being fed to kselftest and also in
+the test modules themselves.
+
+This set makes an attempt at adding a framework to kselftest for writing
+kernel test modules.  It also adds a script for use in creating script
+test runners for kselftest.  My macro-foo is not great, all criticism
+and suggestions very much appreciated.  The design is based on test
+modules lib/test_printf.c, lib/test_bitmap.c, lib/test_xarray.c.
+
+Changes since last version:
+
+ - Remove dependency on Bash (thanks Kees)
+ - Use oneliner to implement kselftest test runners (thanks Kees)
+ - Squash patch that adds kselftest script creator script with patch
+   that uses it. 
+ - Fix typos (thanks Randy)
+ - Add Kees' Acked-by tags to all patches
+
+thanks,
+Tobin.
+
+
+Tobin C. Harding (6):
+  lib/test_printf: Add empty module_exit function
+  kselftest: Add test runner creation script
+  kselftest: Add test module framework header
+  lib: Use new kselftest header
+  lib/string: Add strscpy_pad() function
+  lib: Add test module for strscpy_pad
+
+ Documentation/dev-tools/kselftest.rst        |  94 +++++++++++-
+ include/linux/string.h                       |   4 +
+ lib/Kconfig.debug                            |   3 +
+ lib/Makefile                                 |   1 +
+ lib/string.c                                 |  47 +++++-
+ lib/test_bitmap.c                            |  20 +--
+ lib/test_printf.c                            |  17 +--
+ lib/test_strscpy.c                           | 150 +++++++++++++++++++
+ tools/testing/selftests/kselftest_module.h   |  48 ++++++
+ tools/testing/selftests/kselftest_module.sh  |  84 +++++++++++
+ tools/testing/selftests/lib/Makefile         |   2 +-
+ tools/testing/selftests/lib/bitmap.sh        |  18 +--
+ tools/testing/selftests/lib/config           |   1 +
+ tools/testing/selftests/lib/prime_numbers.sh |  17 +--
+ tools/testing/selftests/lib/printf.sh        |  19 +--
+ tools/testing/selftests/lib/strscpy.sh       |   3 +
+ 16 files changed, 440 insertions(+), 88 deletions(-)
+ create mode 100644 lib/test_strscpy.c
+ create mode 100644 tools/testing/selftests/kselftest_module.h
+ create mode 100755 tools/testing/selftests/kselftest_module.sh
+ create mode 100755 tools/testing/selftests/lib/strscpy.sh
+
 -- 
 2.21.0
