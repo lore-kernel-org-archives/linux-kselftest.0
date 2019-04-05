@@ -1,81 +1,38 @@
-From: pvorel@suse.cz (Petr Vorel)
-Date: Fri, 5 Apr 2019 14:47:51 +0200
-Subject: [PATCH] selftests/kexec: update get_secureboot_mode
-In-Reply-To: <1554300369.7309.59.camel@linux.ibm.com>
-References: <1553607257-18906-1-git-send-email-zohar@linux.ibm.com>
- <1554300369.7309.59.camel@linux.ibm.com>
-Message-ID: <20190405124751.GA26595@dell5510>
+From: jeffrin@rajagiritech.edu.in (Jeffrin Jose T)
+Date: Fri,  5 Apr 2019 22:03:38 +0530
+Subject: [PATCH] selftests : netfilter: Wrote a error and exit code for a
+ command which needed veth kernel module.
+Message-ID: <20190405163338.7361-1-jeffrin@rajagiritech.edu.in>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190405124751.6g9v-Ynx1OF5j_SX3Wa5UDi_gEPe77L6oKozyu18Jkc@z>
+Message-ID: <20190405163338.3ggAZ2n9WH8bQREkgYt7uohNzRgV5JgWNEKdD1w4oyk@z>
 
-Hi Mimi,
+A test for  the basic NAT functionality uses ip command which
+needs veth device.There is a condition where the kernel support
+for veth is not compiled into the kernel and the test script
+breaks.This patch contains code for reasonable error display
+and correct code exit.
 
-Reviewed-by: Petr Vorel <pvorel at suse.cz>
+Signed-off-by: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
+---
+ tools/testing/selftests/netfilter/nft_nat.sh | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Some minor comments below.
-
-...
-> diff --git a/tools/testing/selftests/kexec/kexec_common_lib.sh b/tools/testing/selftests/kexec/kexec_common_lib.sh
-...
->  # Check efivar SecureBoot-$(the UUID) and SetupMode-$(the UUID).
-> +# (Based on kdump-lib.sh)
-> +get_efivarfs_secureboot_mode()
-> +{
-> +	local efivarfs="/sys/firmware/efi/efivars"
-> +	local secure_boot_file=""
-> +	local setup_mode_file=""
-> +	local secureboot_mode=0
-> +	local setup_mode=0
-NOTE: variables does not need to be initialized (in both functions).
-> +
-> +	# Make sure that efivar_fs is mounted in the normal location
-> +	if ! grep -q "^\S\+ $efivarfs efivarfs" /proc/mounts; then
-> +		log_info "efivars is not mounted on $efivarfs"
-> +		return 0;
-> +	fi
-> +	secure_boot_file=$(find "$efivarfs" -name SecureBoot-* 2>/dev/null)
-> +	setup_mode_file=$(find "$efivarfs" -name SetupMode-* 2>/dev/null)
-> +	if [ -f "$secure_boot_file" ] && [ -f "$setup_mode_file" ]; then
-> +		secureboot_mode=$(hexdump -v -e '/1 "%d\ "' \
-> +			"$secure_boot_file"|cut -d' ' -f 5)
-> +		setup_mode=$(hexdump -v -e '/1 "%d\ "' \
-> +			"$setup_mode_file"|cut -d' ' -f 5)
-> +
-> +		if [ $secureboot_mode -eq 1 ] && [ $setup_mode -eq 0 ]; then
-> +			log_info "secure boot mode enabled (efivar_fs)"
-Instead of efivar_fs maybe CONFIG_EFIVAR_FS or EFIVAR_FS?
-
-> +			return 1;
-> +		fi
-> +	fi
-> +	return 0;
-> +}
-> +
-> +get_efi_var_secureboot_mode()
-> +{
-> +	local efi_vars="/sys/firmware/efi/vars"
-> +	local secure_boot_file=""
-> +	local setup_mode_file=""
-> +	local secureboot_mode=0
-> +	local setup_mode=0
-> +
-> +	if [ ! -d "$efi_vars" ]; then
-> +		log_skip "efi_vars is not enabled\n"
-> +		return 0;
-Return is not needed (log_skip exits).
-> +	fi
-> +	secure_boot_file=$(find "$efi_vars" -name SecureBoot-* 2>/dev/null)
-> +	setup_mode_file=$(find "$efi_vars" -name SetupMode-* 2>/dev/null)
-> +	if [ -f "$secure_boot_file/data" ] && \
-> +	   [ -f "$setup_mode_file/data" ]; then
-> +		secureboot_mode=`od -An -t u1 "$secure_boot_file/data"`
-> +		setup_mode=`od -An -t u1 "$setup_mode_file/data"`
-> +
-> +		if [ $secureboot_mode -eq 1 ] && [ $setup_mode -eq 0 ]; then
-> +			log_info "secure boot mode enabled (efi_var)"
-Instead of efi_var maybe CONFIG_EFI_VARS or EFI_VARS?
-
-...
-
-Kind regards,
-Petr
+diff --git a/tools/testing/selftests/netfilter/nft_nat.sh b/tools/testing/selftests/netfilter/nft_nat.sh
+index 8ec76681605c..f25f72a75cf3 100755
+--- a/tools/testing/selftests/netfilter/nft_nat.sh
++++ b/tools/testing/selftests/netfilter/nft_nat.sh
+@@ -23,7 +23,11 @@ ip netns add ns0
+ ip netns add ns1
+ ip netns add ns2
+ 
+-ip link add veth0 netns ns0 type veth peer name eth0 netns ns1
++ip link add veth0 netns ns0 type veth peer name eth0 netns ns1 > /dev/null 2>&1
++if [ $? -ne 0 ];then
++    echo "SKIP: No virtual ethernet pair device support in kernel"
++    exit $ksft_skip
++fi
+ ip link add veth1 netns ns0 type veth peer name eth0 netns ns2
+ 
+ ip -net ns0 link set lo up
+-- 
+2.20.1
