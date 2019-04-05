@@ -1,22 +1,39 @@
-From: me@tobin.cc (Tobin C. Harding)
-Date: Fri, 5 Apr 2019 10:16:13 +1100
-Subject: [PATCH v3 2/7] kselftest: Add test runner creation script
-In-Reply-To: <32a2dca5-d3cd-e7d3-e73b-406d897ae174@infradead.org>
-References: <20190306214226.14598-1-tobin@kernel.org>
- <20190306214226.14598-3-tobin@kernel.org>
- <CAGXu5j+=O3C6z7H5j93Z4mQkpS3f0ea_7T+LRQEnRCZCoKX8zw@mail.gmail.com>
- <32a2dca5-d3cd-e7d3-e73b-406d897ae174@infradead.org>
-Message-ID: <20190404231613.GA30424@eros.localdomain>
+From: tobin@kernel.org (Tobin C. Harding)
+Date: Fri,  5 Apr 2019 12:58:54 +1100
+Subject: [PATCH v4 1/6] lib/test_printf: Add empty module_exit function
+In-Reply-To: <20190405015859.32755-1-tobin@kernel.org>
+References: <20190405015859.32755-1-tobin@kernel.org>
+Message-ID: <20190405015859.32755-2-tobin@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190404231613.NH2jwpZs5UCIi7LkwNUMFeQ7ZmA0OwoAgRMpyaZBc4E@z>
+Message-ID: <20190405015854.yaLNCobVDc6ATJQqkZ2vHfRBPE7-xIsE5VWC8eumukA@z>
 
-On Tue, Apr 02, 2019@02:33:12PM -0700, Randy Dunlap wrote:
-> Hi,
-> 
-> nits/typos below:
+Currently the test_printf module does not have an exit function, this
+prevents the module from being unloaded.  If we cannot unload the
+module we cannot run the tests a second time.
 
-Hey thanks for reviewing this Randy, first time I read it I got mixed up
-and thought the nits were against Kees' additions but I was wrong,
-thanks again.
+Add an empty exit function.
 
-	Tobin
+Acked-by: Kees Cook <keescook at chromium.org>
+Signed-off-by: Tobin C. Harding <tobin at kernel.org>
+---
+ lib/test_printf.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index 659b6cc0d483..601e8519319a 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -615,5 +615,11 @@ test_printf_init(void)
+ 
+ module_init(test_printf_init);
+ 
++static void __exit test_printf_exit(void)
++{
++}
++
++module_exit(test_printf_exit);
++
+ MODULE_AUTHOR("Rasmus Villemoes <linux at rasmusvillemoes.dk>");
+ MODULE_LICENSE("GPL");
+-- 
+2.21.0
