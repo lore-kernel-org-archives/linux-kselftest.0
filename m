@@ -1,37 +1,113 @@
 From: guro@fb.com (Roman Gushchin)
-Date: Mon, 8 Apr 2019 21:46:33 +0000
+Date: Mon, 8 Apr 2019 15:12:30 -0700
 Subject: [PATCH kselftest-next] selftests: cgroup: fix cleanup path in
  test_memcg_subtree_control()
-In-Reply-To: <32b7ae48-99dd-1261-4086-37d416ffcfd5@kernel.org>
-References: <20190328025659.25684-1-guro@fb.com>
- <32b7ae48-99dd-1261-4086-37d416ffcfd5@kernel.org>
-Message-ID: <20190408214628.GA14748@castle>
+Message-ID: <20190408221230.1891761-1-guro@fb.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190408214633.hj_htg_uuJ4UNTTTnsjiDYC6jJEzpoWXk_Q1EkhnVQ0@z>
+Message-ID: <20190408221230.uUAZ-Z-JUZZPJyTkbbfJ_a38jSdjAjfZAl9Lj9K1p2c@z>
 
-On Mon, Apr 08, 2019@12:53:39PM -0600, shuah wrote:
-> On 3/27/19 8:56 PM, Roman Gushchin wrote:
-> > Dan reported, that cleanup path in test_memcg_subtree_control()
-> > triggers a static checker warning:
-> >    ./tools/testing/selftests/cgroup/test_memcontrol.c:76 \
-> >    test_memcg_subtree_control()
-> >    error: uninitialized symbol 'child2'.
-> > 
-> > Fix this by initializing child2 and parent2 variables and
-> > split the cleanup path into few stages.
-> > 
-> > Signed-off-by: Roman Gushchin <guro at fb.com>
-> > Fixes: 84092dbcf901 ("selftests: cgroup: add memory controller self-tests")
-> > Reported-by: Dan Carpenter <dan.carpenter at oracle.com>
-> > Cc: Dan Carpenter <dan.carpenter at oracle.com>
-> > Cc: Shuah Khan (Samsung OSG) <shuah at kernel.org>
-> > Cc: Mike Rapoport <rppt at linux.vnet.ibm.com>
-> 
-> 
-> From and Signed-off don't match. Please fix it and resend the patch.
+Dan reported, that cleanup path in test_memcg_subtree_control()
+triggers a static checker warning:
+  ./tools/testing/selftests/cgroup/test_memcontrol.c:76 \
+  test_memcg_subtree_control()
+  error: uninitialized symbol 'child2'.
 
-Done.
+Fix this by initializing child2 and parent2 variables and
+split the cleanup path into few stages.
 
-Thank you!
+Signed-off-by: Roman Gushchin <guro at fb.com>
+Fixes: 84092dbcf901 ("selftests: cgroup: add memory controller self-tests")
+Reported-by: Dan Carpenter <dan.carpenter at oracle.com>
+Cc: Dan Carpenter <dan.carpenter at oracle.com>
+Cc: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+Cc: Mike Rapoport <rppt at linux.vnet.ibm.com>
+---
+ .../selftests/cgroup/test_memcontrol.c        | 38 ++++++++++---------
+ 1 file changed, 21 insertions(+), 17 deletions(-)
 
-Roman
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 28d321ba311b..6f339882a6ca 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -26,7 +26,7 @@
+  */
+ static int test_memcg_subtree_control(const char *root)
+ {
+-	char *parent, *child, *parent2, *child2;
++	char *parent, *child, *parent2 = NULL, *child2 = NULL;
+ 	int ret = KSFT_FAIL;
+ 	char buf[PAGE_SIZE];
+ 
+@@ -34,50 +34,54 @@ static int test_memcg_subtree_control(const char *root)
+ 	parent = cg_name(root, "memcg_test_0");
+ 	child = cg_name(root, "memcg_test_0/memcg_test_1");
+ 	if (!parent || !child)
+-		goto cleanup;
++		goto cleanup_free;
+ 
+ 	if (cg_create(parent))
+-		goto cleanup;
++		goto cleanup_free;
+ 
+ 	if (cg_write(parent, "cgroup.subtree_control", "+memory"))
+-		goto cleanup;
++		goto cleanup_parent;
+ 
+ 	if (cg_create(child))
+-		goto cleanup;
++		goto cleanup_parent;
+ 
+ 	if (cg_read_strstr(child, "cgroup.controllers", "memory"))
+-		goto cleanup;
++		goto cleanup_child;
+ 
+ 	/* Create two nested cgroups without enabling memory controller */
+ 	parent2 = cg_name(root, "memcg_test_1");
+ 	child2 = cg_name(root, "memcg_test_1/memcg_test_1");
+ 	if (!parent2 || !child2)
+-		goto cleanup;
++		goto cleanup_free2;
+ 
+ 	if (cg_create(parent2))
+-		goto cleanup;
++		goto cleanup_free2;
+ 
+ 	if (cg_create(child2))
+-		goto cleanup;
++		goto cleanup_parent2;
+ 
+ 	if (cg_read(child2, "cgroup.controllers", buf, sizeof(buf)))
+-		goto cleanup;
++		goto cleanup_all;
+ 
+ 	if (!cg_read_strstr(child2, "cgroup.controllers", "memory"))
+-		goto cleanup;
++		goto cleanup_all;
+ 
+ 	ret = KSFT_PASS;
+ 
+-cleanup:
+-	cg_destroy(child);
+-	cg_destroy(parent);
+-	free(parent);
+-	free(child);
+-
++cleanup_all:
+ 	cg_destroy(child2);
++cleanup_parent2:
+ 	cg_destroy(parent2);
++cleanup_free2:
+ 	free(parent2);
+ 	free(child2);
++cleanup_child:
++	cg_destroy(child);
++cleanup_parent:
++	cg_destroy(parent);
++cleanup_free:
++	free(parent);
++	free(child);
+ 
+ 	return ret;
+ }
+-- 
+2.17.2
