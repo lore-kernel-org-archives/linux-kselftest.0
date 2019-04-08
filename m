@@ -1,32 +1,32 @@
 From: shuah@kernel.org (shuah)
-Date: Mon, 8 Apr 2019 12:51:48 -0600
-Subject: [GIT PULL] Kselftest update for Linux 5.1-rc4
-In-Reply-To: <ea18a3f7-721e-0234-11e5-f91bf3ef1415@kernel.org>
-References: <ea18a3f7-721e-0234-11e5-f91bf3ef1415@kernel.org>
-Message-ID: <7cab83da-76d5-4498-f2dc-9cb5d2a0a723@kernel.org>
+Date: Mon, 8 Apr 2019 12:53:39 -0600
+Subject: [PATCH kselftest-next] selftests: cgroup: fix cleanup path in
+ test_memcg_subtree_control()
+In-Reply-To: <20190328025659.25684-1-guro@fb.com>
+References: <20190328025659.25684-1-guro@fb.com>
+Message-ID: <32b7ae48-99dd-1261-4086-37d416ffcfd5@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190408185148.VyZD0W6Yt2trFHrfVBQjeFzRrZtP3Ftz1SMg-k8Q03w@z>
+Message-ID: <20190408185339.PNLrzgu1mV0PnICGEw7wd-23nNVBgG0c-YyZ8vVS1uk@z>
 
-On 4/3/19 7:34 PM, shuah wrote:
-> Hi Linus,
+On 3/27/19 8:56 PM, Roman Gushchin wrote:
+> Dan reported, that cleanup path in test_memcg_subtree_control()
+> triggers a static checker warning:
+>    ./tools/testing/selftests/cgroup/test_memcontrol.c:76 \
+>    test_memcg_subtree_control()
+>    error: uninitialized symbol 'child2'.
 > 
-> Please pull the following Kselftest update for Linux 5.1-rc4
+> Fix this by initializing child2 and parent2 variables and
+> split the cleanup path into few stages.
 > 
-> This Kselftest update for Linux 5.1-rc4 consists of fixes to rseq,
-> cgroup, and efivarfs tests.
-> 
-> diff is attached.
-> 
-> thanks,
-> -- Shuah
-> 
+> Signed-off-by: Roman Gushchin <guro at fb.com>
+> Fixes: 84092dbcf901 ("selftests: cgroup: add memory controller self-tests")
+> Reported-by: Dan Carpenter <dan.carpenter at oracle.com>
+> Cc: Dan Carpenter <dan.carpenter at oracle.com>
+> Cc: Shuah Khan (Samsung OSG) <shuah at kernel.org>
+> Cc: Mike Rapoport <rppt at linux.vnet.ibm.com>
 
-Hi Linus,
 
-I just noticed that one commit in this pull request has mismatched
-author and signed-off. Please disregard the pull request.
-
-I will fix this and send a new pull request. Sorry for the noise.
+ From and Signed-off don't match. Please fix it and resend the patch.
 
 thanks,
 -- Shuah
