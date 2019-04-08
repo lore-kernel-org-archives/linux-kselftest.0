@@ -1,73 +1,44 @@
 From: keescook at chromium.org (Kees Cook)
-Date: Mon, 8 Apr 2019 10:13:44 -0700
-Subject: [PATCH] selftests/ipc: Fix msgque compiler warnings
-Message-ID: <20190408171344.GA22803@beast>
+Date: Mon, 8 Apr 2019 10:20:07 -0700
+Subject: TAP 13 output format
+In-Reply-To: <2aa1eeb7-f12d-a5fc-e929-c30846c1fbee@kernel.org>
+References: <CAGXu5jLzyjtkF4Z1Rm7rsp85EiEmTqyLFcgXYPWEgxGVuprG9w@mail.gmail.com>
+ <2aa1eeb7-f12d-a5fc-e929-c30846c1fbee@kernel.org>
+Message-ID: <CAGXu5jJnvf8R9Htx2oCoAvMM7QYSCn5TkSUwU1F4MznC6O5oEw@mail.gmail.com>
 
-This fixes the various compiler warnings when building the msgque
-selftest. The primary change is using sys/msg.h instead of linux/msg.h
-directly to gain the API declarations.
+On Mon, Apr 8, 2019 at 10:08 AM shuah <shuah at kernel.org> wrote:
+> Can you point me to the TAP parser you are using? I would like to
+> run a few tests and see if we can make it fully TAP13 compliant.
 
-Fixes: 3a665531a3b7 ("selftests: IPC message queue copy feature test")
-Signed-off-by: Kees Cook <keescook at chromium.org>
----
- tools/testing/selftests/ipc/msgque.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Mainly this was just with my eyes, but I was hoping to use "tappy" for
+summaries and it is quite unhappy with the current state of things:
 
-diff --git a/tools/testing/selftests/ipc/msgque.c b/tools/testing/selftests/ipc/msgque.c
-index dac927e82336..4c156aeab6b8 100644
---- a/tools/testing/selftests/ipc/msgque.c
-+++ b/tools/testing/selftests/ipc/msgque.c
-@@ -1,9 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
- #include <stdlib.h>
- #include <stdio.h>
- #include <string.h>
- #include <errno.h>
--#include <linux/msg.h>
-+#include <sys/msg.h>
- #include <fcntl.h>
- 
- #include "../kselftest.h"
-@@ -73,7 +74,7 @@ int restore_queue(struct msgque_data *msgque)
- 	return 0;
- 
- destroy:
--	if (msgctl(id, IPC_RMID, 0))
-+	if (msgctl(id, IPC_RMID, NULL))
- 		printf("Failed to destroy queue: %d\n", -errno);
- 	return ret;
- }
-@@ -120,7 +121,7 @@ int check_and_destroy_queue(struct msgque_data *msgque)
- 
- 	ret = 0;
- err:
--	if (msgctl(msgque->msq_id, IPC_RMID, 0)) {
-+	if (msgctl(msgque->msq_id, IPC_RMID, NULL)) {
- 		printf("Failed to destroy queue: %d\n", -errno);
- 		return -errno;
- 	}
-@@ -129,7 +130,7 @@ int check_and_destroy_queue(struct msgque_data *msgque)
- 
- int dump_queue(struct msgque_data *msgque)
- {
--	struct msqid64_ds ds;
-+	struct msqid_ds ds;
- 	int kern_id;
- 	int i, ret;
- 
-@@ -245,7 +246,7 @@ int main(int argc, char **argv)
- 	return ksft_exit_pass();
- 
- err_destroy:
--	if (msgctl(msgque.msq_id, IPC_RMID, 0)) {
-+	if (msgctl(msgque.msq_id, IPC_RMID, NULL)) {
- 		printf("Failed to destroy queue: %d\n", -errno);
- 		return ksft_exit_fail();
- 	}
--- 
-2.17.1
+$ (cd tools/testing/selftests/ && make --silent -C lib run_tests) | tappy
+FFFF
+======================================================================
+FAIL: <file=stream>
+..1 selftests: lib: printf.sh [SKIP]
+----------------------------------------------------------------------
 
+======================================================================
+FAIL: <file=stream>
+..2 selftests: lib: bitmap.sh [SKIP]
+----------------------------------------------------------------------
+
+======================================================================
+FAIL: <file=stream>
+..3 selftests: lib: prime_numbers.sh [SKIP]
+----------------------------------------------------------------------
+
+======================================================================
+FAIL: <file=stream>
+Missing a plan.
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.000s
+
+FAILED (failures=4)
 
 -- 
 Kees Cook
