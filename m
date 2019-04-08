@@ -1,61 +1,34 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Mon, 8 Apr 2019 12:46:42 -0700
-Subject: [RFC][PATCH] selftests/lib.mk: Move test output to diagnostic
- lines
-In-Reply-To: <20190408190243.GA33074@beast>
-References: <20190408190243.GA33074@beast>
-Message-ID:
- <CAGXu5jLjbSxaL7_F2d+K9mMpvnhC_vBvR7DmOvVE=3QV3Y+5VQ@mail.gmail.com>
+From: dave@stgolabs.net (Davidlohr Bueso)
+Date: Mon, 8 Apr 2019 13:01:41 -0700
+Subject: [PATCH] selftests/ipc: Fix msgque compiler warnings
+In-Reply-To: <20190408171344.GA22803@beast>
+References: <20190408171344.GA22803@beast>
+Message-ID: <20190408200141.uusxqlqly6tab6h7@linux-r8p5>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190408194642.s3_z7RVVh5NDENj-UzGyIlEsku1Fq8ZHH3OgX5gdF1I@z>
+Message-ID: <20190408200141.wdBgmoiq_lvMzoSPNt93hdX8sNqVMmebFu2yhgbIyPA@z>
 
-On Mon, Apr 8, 2019@12:02 PM Kees Cook <keescook@chromium.org> wrote:
-> Also, while "sed -u" is used to add the "# " line prefixes, this
-> still doesn't work for all output. For example, the "timer" lists
-> print out text, then do the work, then print a result and a newline.
-> This isn't visible any more. And some tests still show nothing until
-> they finish. I haven't found a way to force the prefixing while keeping
-> the output entirely unbuffered. :(
+On Mon, 08 Apr 2019, Kees Cook wrote:
 
-Oh, I think I've solved this. :)
+>This fixes the various compiler warnings when building the msgque
+>selftest. The primary change is using sys/msg.h instead of linux/msg.h
+>directly to gain the API declarations.
+>
+>Fixes: 3a665531a3b7 ("selftests: IPC message queue copy feature test")
+>Signed-off-by: Kees Cook <keescook at chromium.org>
 
-$ cat prefix.pl
-#!/usr/bin/perl
-use strict;
+(Not really related to this patch)
 
-binmode STDIN;
-binmode STDOUT;
+Given that the selftest/ipc/ only consists of this test, I wonder if
+the test should just be moved to ltp, where the ipc tests are a lot
+more complete and robust -- and which I've been using for years for
+basic testing code changes.
 
-STDOUT->autoflush(1);
+Don't get me wrong, I'm all for having ipc tests in the kernel, but it
+seems rather impractical to have them in both places considering the
+relevance of ltp in the community and how long they have existed there.
 
-my $needed = 1;
-while (1) {
-        my $char;
-        my $bytes = sysread(STDIN, $char, 1);
-        exit 0 if ($bytes == 0);
-        if ($needed) {
-                print "# ";
-                $needed = 0;
-        }
-        print $char;
-        $needed = 1 if ($char eq "\n");
-}
+I'm also speaking on the basis that by ipc we are referring only to
+sysv and posix flavors.
 
-> +                       (./$$BASENAME_TEST > /tmp/$$BASENAME_TEST 2>&1 &&\
-> +                               echo "ok $$test_num $$TEST_HDR_MSG") || \
-
--                       (((((./$$BASENAME_TEST 2>&1; echo $$? >&3) |    \
--                               sed -ue 's/^/# /' >&4) 3>&1) |          \
-+                       (((((stdbuf -i0 -o0 -e0 ./$$BASENAME_TEST
-2>&1; echo $$? >&3) | \
-+                               ../prefix.pl >&4) 3>&1) |               \
-
-This also, I think, solve the "recursive TAP output" issue too, since
-sub-tests will be entirely contained in the #-indented output and
-could be parsed out of the diagnostics by just doing a 2-character
-left-strip.
-
-Thoughts?
-
--- 
-Kees Cook
+Thanks,
+Davidlohr
