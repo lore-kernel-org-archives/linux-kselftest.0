@@ -1,135 +1,65 @@
-From: olof at lixom.net (Olof Johansson)
-Date: Mon, 8 Apr 2019 09:53:54 -0700
-Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending kernel
- easier
-In-Reply-To: <CAKOZuetS6Bg0ubxQgCBKVKeWOzuwH_C=nCRn-OPmHYJvs6sybQ@mail.gmail.com>
-References: <20190320163116.39275-1-joel@joelfernandes.org>
- <CAOesGMheoZda84OSz9spQ7p66wot5S_9aaqaKC=QYp+8utASXA@mail.gmail.com>
- <CAKOZuetS6Bg0ubxQgCBKVKeWOzuwH_C=nCRn-OPmHYJvs6sybQ@mail.gmail.com>
-Message-ID: <CAOesGMi++NMi-60smmd9f+P4C1d9oQiz-hS6QWa6ViqzqJrfBA@mail.gmail.com>
+From: alan.maguire at oracle.com (Alan Maguire)
+Date: Mon,  8 Apr 2019 17:57:44 +0100
+Subject: [PATCH v2 bpf-next 0/4] L2 encap support for bpf_skb_adjust_room
+Message-ID: <1554742668-28313-1-git-send-email-alan.maguire@oracle.com>
 
-On Mon, Apr 8, 2019 at 9:37 AM Daniel Colascione <dancol at google.com> wrote:
->
-> On Mon, Apr 8, 2019 at 9:29 AM Olof Johansson <olof at lixom.net> wrote:
-> >
-> > Hi,
-> >
-> > On Wed, Mar 20, 2019 at 9:31 AM Joel Fernandes (Google)
-> > <joel at joelfernandes.org> wrote:
-> > >
-> > > Introduce in-kernel headers and other artifacts which are made available
-> > > as an archive through proc (/proc/kheaders.tar.xz file). This archive makes
-> > > it possible to build kernel modules, run eBPF programs, and other
-> > > tracing programs that need to extend the kernel for tracing purposes
-> > > without any dependency on the file system having headers and build
-> > > artifacts.
-> > >
-> > > On Android and embedded systems, it is common to switch kernels but not
-> > > have kernel headers available on the file system. Further once a
-> > > different kernel is booted, any headers stored on the file system will
-> > > no longer be useful. By storing the headers as a compressed archive
-> > > within the kernel, we can avoid these issues that have been a hindrance
-> > > for a long time.
-> > >
-> > > The best way to use this feature is by building it in. Several users
-> > > have a need for this, when they switch debug kernels, they donot want to
-> > > update the filesystem or worry about it where to store the headers on
-> > > it. However, the feature is also buildable as a module in case the user
-> > > desires it not being part of the kernel image. This makes it possible to
-> > > load and unload the headers from memory on demand. A tracing program, or
-> > > a kernel module builder can load the module, do its operations, and then
-> > > unload the module to save kernel memory. The total memory needed is 3.8MB.
-> > >
-> > > By having the archive available at a fixed location independent of
-> > > filesystem dependencies and conventions, all debugging tools can
-> > > directly refer to the fixed location for the archive, without concerning
-> > > with where the headers on a typical filesystem which significantly
-> > > simplifies tooling that needs kernel headers.
-> > >
-> > > The code to read the headers is based on /proc/config.gz code and uses
-> > > the same technique to embed the headers.
-> > >
-> > > To build a module, the below steps have been tested on an x86 machine:
-> > > modprobe kheaders
-> > > rm -rf $HOME/headers
-> > > mkdir -p $HOME/headers
-> > > tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
-> > > cd my-kernel-module
-> > > make -C $HOME/headers M=$(pwd) modules
-> > > rmmod kheaders
-> > >
-> > > Additional notes:
-> > > (1) external modules must be built on the same arch as the host that
-> > > built vmlinux. This can be done either in a qemu emulated chroot on the
-> > > target, or natively. This is due to host arch dependency of kernel
-> > > scripts.
-> > >
-> > > (2)
-> > > If module building is used, since Module.symvers is not available in the
-> > > archive due to a cyclic dependency with building of the archive into the
-> > > kernel or module binaries, the modules built using the archive will not
-> > > contain symbol versioning (modversion). This is usually not an issue
-> > > since the idea of this patch is to build a kernel module on the fly and
-> > > load it into the same kernel. An appropriate warning is already printed
-> > > by the kernel to alert the user of modules not having modversions when
-> > > built using the archive. For building with modversions, the user can use
-> > > traditional header packages. For our tracing usecases, we build modules
-> > > on the fly with this so it is not a concern.
-> > >
-> > > (3) I have left IKHD_ST and IKHD_ED markers as is to facilitate
-> > > future patches that would extract the headers from a kernel or module
-> > > image.
-> > >
-> > > (v4 was Tested-by the following folks,
-> > >  v5 only has minor changes and has passed my testing).
-> > > Tested-by: qais.yousef at arm.com
-> > > Tested-by: dietmar.eggemann at arm.com
-> > > Tested-by: linux at manojrajarao.com
-> > > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> >
-> > Sorry to be late at the party with this kind of feedback, but I find
-> > the whole ".tar.gz in procfs" to be an awkward solution, especially if
-> > there's expected to be userspace tooling that depends on this
-> > long-term.
-> > [snip]
->
-> The approaches you proposed were explored in detail on this thread and
-> other related threads.
+Extend bpf_skb_adjust_room growth to mark inner MAC header so that
+L2 encapsulation can be used for tc tunnels.
 
-Not on this thread, but maybe on others. Since they weren't linked and
-referenced, I didn't find them. Having them summarized in the patch
-description would be a great idea.
+Patch #1 extends the existing test_tc_tunnel to support UDP
+encapsulation; later we want to be able to test MPLS over UDP and
+MPLS over GRE encapsulation.
 
-> The tarball in proc approach is a simple,
-> pragmatic approach that allows makes a lot of scenarios Just Work
-> where they didn't before.
+Patch #2 adds the BPF_F_ADJ_ROOM_ENCAP_L2(len) macro, which
+allows specification of inner mac length.  Other approaches were
+explored prior to taking this approach.  Specifically, I tried
+automatically computing the inner mac length on the basis of the
+specified flags (so inner maclen for GRE/IPv4 encap is the len_diff
+specified to bpf_skb_adjust_room minus GRE + IPv4 header length
+for example).  Problem with this is that we don't know for sure
+what form of GRE/UDP header we have; is it a full GRE header,
+or is it a FOU UDP header or generic UDP encap header? My fear
+here was we'd end up with an explosion of flags.  The other approach
+tried was to support inner L2 header marking as a separate room
+adjustment, i.e. adjust for L3/L4 encap, then call
+bpf_skb_adjust_room for L2 encap.  This can be made to work but
+because it imposed an order on operations, felt a bit clunky.
 
-"My pragmatic solution, your messy hack".
+Patch #3 syncs tools/ bpf.h.
 
-It's an awkward solution that will now be permanently locked in due to
-the /proc interface being an ABI.
+Patch #4 extends the tests again to support MPLSoverGRE,
+MPLSoverUDP, and transparent ethernet bridging (TEB) where
+the inner L2 header is an ethernet header.  Testing of BPF
+encap against tunnels is done for cases where configuration
+of such tunnels is possible (MPLSoverGRE[6], MPLSoverUDP,
+gre[6]tap), and skipped otherwise.  Testing of BPF encap/decap
+is always carried out.
 
-> Approaches like a new filesystem, a
-> mountable block device, a custom debuginfo format, and so on add
-> complexity without providing concrete gains in functionality.
+Changes since v1:
+ - fixed formatting of commit references.
+ - BPF_F_ADJ_ROOM_FIXED_GSO flag enabled on all variants (patch 1)
+ - fixed fou6 options for UDP encap; checksum errors observed were
+   due to the fact fou6 tunnel was not set up with correct ipproto
+   options (41 -6).  0 checksums work fine (patch 1)
+ - added definitions for mask and shift used in setting L2 length
+   (patch 2)
+ - allow udp encap with fixed GSO (patch 2)
+ - changed "elen" to "l2_len" to be more descriptive (patch 4)
+ - added support for ethernet L2 encap to tests; testing against
+   gre[6]tap tunnels (patch 4).
 
-It definitely provides concrete gains in functionality, in particular
-it provides a significantly less fragile way of providing the data
-such that having it out of sync with the running kernel is a lot less
-accident-prone.
+Alan Maguire (4):
+  selftests_bpf: add UDP encap to test_tc_tunnel
+  bpf: add layer 2 encap support to bpf_skb_adjust_room
+  bpf: sync bpf.h to tools/ for BPF_F_ADJ_ROOM_ENCAP_L2
+  selftests_bpf: add L2 encap to test_tc_tunnel
 
-> We'd
-> like to get this work into the tree sooner rather than later.
+ include/uapi/linux/bpf.h                           |  10 +
+ net/core/filter.c                                  |  15 +-
+ tools/include/uapi/linux/bpf.h                     |  10 +
+ tools/testing/selftests/bpf/progs/test_tc_tunnel.c | 335 +++++++++++++++++----
+ tools/testing/selftests/bpf/test_tc_tunnel.sh      | 147 +++++++--
+ 5 files changed, 427 insertions(+), 90 deletions(-)
 
-That has _never_ been a good argument for picking up something that
-will need to be supported as an ABI forever.
-
-We've solved these kind of things in the past without exporting
-tarballs from the kernel. We can do it again.
-
-
-I literally didn't hear a single valid reason for why this patch
-should go in from you.
-
-
--Olof
+-- 
+1.8.3.1
