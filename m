@@ -1,196 +1,141 @@
-From: keescook at chromium.org (Kees Cook)
-Date: Mon, 8 Apr 2019 13:30:12 -0700
-Subject: [PATCH] selftests/lib.mk: Move test output to diagnostic lines
-Message-ID: <20190408203012.GA566@beast>
+From: joel at joelfernandes.org (Joel Fernandes)
+Date: Mon, 8 Apr 2019 16:36:01 -0400
+Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending
+ kernel easier
+In-Reply-To: <CAOesGMheoZda84OSz9spQ7p66wot5S_9aaqaKC=QYp+8utASXA@mail.gmail.com>
+References: <20190320163116.39275-1-joel@joelfernandes.org>
+ <CAOesGMheoZda84OSz9spQ7p66wot5S_9aaqaKC=QYp+8utASXA@mail.gmail.com>
+Message-ID: <20190408203601.GF133872@google.com>
 
-This changes the selftest output is several ways:
-- total test count is reported at start.
-- each test's result is on a single line with "# SKIP" as needed per spec.
-- each test's output is prefixed with "# " as a "diagnostic line".
+On Mon, Apr 08, 2019 at 09:29:30AM -0700, Olof Johansson wrote:
+> Hi,
+> 
+> On Wed, Mar 20, 2019 at 9:31 AM Joel Fernandes (Google)
+> <joel at joelfernandes.org> wrote:
+> >
+> > Introduce in-kernel headers and other artifacts which are made available
+> > as an archive through proc (/proc/kheaders.tar.xz file). This archive makes
+> > it possible to build kernel modules, run eBPF programs, and other
+> > tracing programs that need to extend the kernel for tracing purposes
+> > without any dependency on the file system having headers and build
+> > artifacts.
+> >
+> > On Android and embedded systems, it is common to switch kernels but not
+> > have kernel headers available on the file system. Further once a
+> > different kernel is booted, any headers stored on the file system will
+> > no longer be useful. By storing the headers as a compressed archive
+> > within the kernel, we can avoid these issues that have been a hindrance
+> > for a long time.
+> >
+> > The best way to use this feature is by building it in. Several users
+> > have a need for this, when they switch debug kernels, they donot want to
+> > update the filesystem or worry about it where to store the headers on
+> > it. However, the feature is also buildable as a module in case the user
+> > desires it not being part of the kernel image. This makes it possible to
+> > load and unload the headers from memory on demand. A tracing program, or
+> > a kernel module builder can load the module, do its operations, and then
+> > unload the module to save kernel memory. The total memory needed is 3.8MB.
+> >
+> > By having the archive available at a fixed location independent of
+> > filesystem dependencies and conventions, all debugging tools can
+> > directly refer to the fixed location for the archive, without concerning
+> > with where the headers on a typical filesystem which significantly
+> > simplifies tooling that needs kernel headers.
+> >
+> > The code to read the headers is based on /proc/config.gz code and uses
+> > the same technique to embed the headers.
+> >
+> > To build a module, the below steps have been tested on an x86 machine:
+> > modprobe kheaders
+> > rm -rf $HOME/headers
+> > mkdir -p $HOME/headers
+> > tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
+> > cd my-kernel-module
+> > make -C $HOME/headers M=$(pwd) modules
+> > rmmod kheaders
+> >
+> > Additional notes:
+> > (1) external modules must be built on the same arch as the host that
+> > built vmlinux. This can be done either in a qemu emulated chroot on the
+> > target, or natively. This is due to host arch dependency of kernel
+> > scripts.
+> >
+> > (2)
+> > If module building is used, since Module.symvers is not available in the
+> > archive due to a cyclic dependency with building of the archive into the
+> > kernel or module binaries, the modules built using the archive will not
+> > contain symbol versioning (modversion). This is usually not an issue
+> > since the idea of this patch is to build a kernel module on the fly and
+> > load it into the same kernel. An appropriate warning is already printed
+> > by the kernel to alert the user of modules not having modversions when
+> > built using the archive. For building with modversions, the user can use
+> > traditional header packages. For our tracing usecases, we build modules
+> > on the fly with this so it is not a concern.
+> >
+> > (3) I have left IKHD_ST and IKHD_ED markers as is to facilitate
+> > future patches that would extract the headers from a kernel or module
+> > image.
+> >
+> > (v4 was Tested-by the following folks,
+> >  v5 only has minor changes and has passed my testing).
+> > Tested-by: qais.yousef at arm.com
+> > Tested-by: dietmar.eggemann at arm.com
+> > Tested-by: linux at manojrajarao.com
+> > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> 
+> Sorry to be late at the party with this kind of feedback, but I find
+> the whole ".tar.gz in procfs" to be an awkward solution, especially if
+> there's expected to be userspace tooling that depends on this
+> long-term.
 
-This creates a bit of a kernel-specific TAP dialect where the diagnostics
-precede the results. The TAP spec isn't entirely clear about this, though,
-so I think it's the correct solution so as to keep interactive runs making
-sense. If the output _followed_ the result line in the spec-suggested
-YAML form, each test would dump all of its output at once instead of as
-it went, making debugging harder.
+No problem, your feedback is welcome.
 
-This does, however, solve the recursive TAP output problem, as sub-tests
-will simply be prefixed by "# ". Parsing sub-tests becomes a simple
-problem of just removing the first two characters of a given top-level
-test's diagnostic output, and parsing the results.
+> Wouldn't it be more convenient to provide it in a standardized format
+> such that you won't have to take an additional step, and always have
+> This is that form IMO.
 
-Note that the shell construct needed to both get an exit code from
-the first command in a pipe and still filter the pipe (to add the "# "
-prefix) uses a POSIX solution rather than the bash "pipefail" option
-which is not supported by dash.
+The location of the archive is fixed/known. If you are talking of the
+location where the user decompresses it to, then they a;ready know where they
+are decompressing to.
 
-Example:
+> Something like:
+> 
+>  - Pseudo-filesystem, that can just be mounted under
+> /sys/kernel/headers or something (similar to debugfs or
+> /proc/device-tree).
 
-	$ tools/testing/selftests
-	$ make --silent -C x86 run_tests
-	TAP version 13
-	1..15 selftests: x86
-	# selftests: x86: single_step_syscall_64
-	# [RUN] Set TF and check nop
-	# [OK]  Survived with TF set and 9 traps
-	# [RUN] Set TF and check syscall-less opportunistic sysret
-	# [OK]  Survived with TF set and 12 traps
-	# [RUN] Set TF and check a fast syscall
-	# [OK]  Survived with TF set and 22 traps
-	# [RUN] Fast syscall with TF cleared
-	# [OK]  Nothing unexpected happened
-	ok 1 selftests: x86: single_step_syscall_64
-	# selftests: x86: sysret_ss_attrs_64
-	# [RUN] Syscalls followed by SS validation
-	# [OK]  We survived
-	ok 2 selftests: x86: sysret_ss_attrs_64
-	# selftests: x86: syscall_nt_64
-	# [RUN] Set NT and issue a syscall
-	# [OK]  The syscall worked and flags are still set
-	# [RUN] Set NT|TF and issue a syscall
-	# [OK]  The syscall worked and flags are still set
-	ok 3 selftests: x86: syscall_nt_64
-	...[skipping example output]...
-	ok 15 selftests: x86: sysret_rip_64
+The headers are huge if uncompressed (~30MB). Currently we use xz compression
+in the archive. It would be a huge waste to decompress everything into
+memory such as through an in-memory filesystem. And compressing on a
+per-file basis would be too slow for build time. Currently the build of the
+archive is extrememly fast.
 
-	$ make --silent -C x86 run_tests | tappy
-	............F..
-	======================================================================
-	FAIL: <file=stream>
-	selftests: x86: mov_ss_trap_64
-	----------------------------------------------------------------------
+>  - Exporting something like a squashfs image instead, allowing
+> loopback mounting of it (or by providing a pseudo-/dev entry for it),
+> again allowing direct export of the contents and avoiding the
+> extracted directory from being out of sync with currently running
+> kernel.
 
-	----------------------------------------------------------------------
-	Ran 15 tests in 0.000s
+One drawback of squashfs (other than possibly the compression ratio) is that
+this would be kernel build unfriendly in comparison to tar+xz. On my machine,
+squashfs-tools needed to be installed. For users who don't have this package,
+that would break their kernel build.
 
-	FAILED (failures=1)
+> Having to copy and extract the tarball is the most awkward step, IMHO.
+> I also find the waste of kernel memory for it to be an issue, but
+> given that it can be built as a module I guess that's the obvious
+> solution for those who care about memory consumption.
 
-Signed-off-by: Kees Cook <keescook at chromium.org>
----
-No longer RFC! :)
----
- tools/testing/selftests/lib.mk    | 59 ++++++++++++++++++-------------
- tools/testing/selftests/prefix.pl | 23 ++++++++++++
- 2 files changed, 57 insertions(+), 25 deletions(-)
- create mode 100755 tools/testing/selftests/prefix.pl
+Yes. We discussed in previous threads that for users who really want the
+archive to be completely uncompressed and in-memory, can just load the
+module, decompress into tmpfs, and unload the module. That is an extra step,
+yes.
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 8b0f16409ed7..d3267c08a7b1 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -5,6 +5,8 @@ CC := $(CROSS_COMPILE)gcc
- ifeq (0,$(MAKELEVEL))
- OUTPUT := $(shell pwd)
- endif
-+testname = $(notdir $(shell pwd))
-+selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
- 
- # The following are built by lib.mk common compile rules.
- # TEST_CUSTOM_PROGS should be used by tests that require
-@@ -32,38 +34,45 @@ endif
- 
- .ONESHELL:
- define RUN_TEST_PRINT_RESULT
--	TEST_HDR_MSG="selftests: "`basename $$PWD`:" $$BASENAME_TEST";	\
--	echo $$TEST_HDR_MSG;					\
--	echo "========================================";	\
-+	TEST_HDR_MSG="selftests: $(testname): $$BASENAME_TEST";	\
- 	if [ ! -x $$TEST ]; then	\
--		echo "$$TEST_HDR_MSG: Warning: file $$BASENAME_TEST is not executable, correct this.";\
--		echo "not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]"; \
--	else					\
--		cd `dirname $$TEST` > /dev/null; \
--		if [ "X$(summary)" != "X" ]; then	\
--			(./$$BASENAME_TEST > /tmp/$$BASENAME_TEST 2>&1 && \
--			echo "ok 1..$$test_num $$TEST_HDR_MSG [PASS]") || \
--			(if [ $$? -eq $$skip ]; then	\
--				echo "not ok 1..$$test_num $$TEST_HDR_MSG [SKIP]";				\
--			else echo "not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]";					\
--			fi;)			\
--		else				\
--			(./$$BASENAME_TEST &&	\
--			echo "ok 1..$$test_num $$TEST_HDR_MSG [PASS]") ||						\
--			(if [ $$? -eq $$skip ]; then \
--				echo "not ok 1..$$test_num $$TEST_HDR_MSG [SKIP]"; \
--			else echo "not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]";				\
--			fi;)		\
--		fi;				\
--		cd - > /dev/null;		\
-+		if [ "X$(summary)" = "X" ]; then			\
-+			echo "# warning: 'file $$TEST is not executable, correct this.'";\
-+		fi;							\
-+		echo "not ok $$test_num $$TEST_HDR_MSG";		\
-+	else								\
-+		cd `dirname $$TEST` > /dev/null;			\
-+		if [ "X$(summary)" != "X" ]; then			\
-+			(./$$BASENAME_TEST > /tmp/$$BASENAME_TEST 2>&1 &&\
-+				echo "ok $$test_num $$TEST_HDR_MSG") || \
-+			(if [ $$? -eq $$skip ]; then			\
-+				echo "not ok $$test_num $$TEST_HDR_MSG # SKIP";	\
-+			else						\
-+				echo "not ok $$test_num $$TEST_HDR_MSG";\
-+			fi);						\
-+		else							\
-+			echo "# $$TEST_HDR_MSG";			\
-+			(((((stdbuf -i0 -o0 -e0 ./$$BASENAME_TEST 2>&1; echo $$? >&3) |	\
-+				$(selfdir)/prefix.pl >&4) 3>&1) |		\
-+				(read xs; exit $$xs)) 4>&1 &&		\
-+				echo "ok $$test_num $$TEST_HDR_MSG") || \
-+			(if [ $$? -eq $$skip ]; then			\
-+				echo "not ok $$test_num $$TEST_HDR_MSG # SKIP";	\
-+			else						\
-+				echo "not ok $$test_num $$TEST_HDR_MSG";\
-+			fi);						\
-+		fi;							\
-+		cd - > /dev/null;					\
- 	fi;
- endef
- 
- define RUN_TESTS
- 	@export KSFT_TAP_LEVEL=`echo 1`;		\
--	test_num=`echo 0`;				\
--	skip=`echo 4`;					\
-+	test_num=0;					\
-+	total=`echo "$(1)" | wc -w`;			\
-+	skip=4;						\
- 	echo "TAP version 13";				\
-+	echo "1..$$total selftests: $(testname)";	\
- 	for TEST in $(1); do				\
- 		BASENAME_TEST=`basename $$TEST`;	\
- 		test_num=`echo $$test_num+1 | bc`;	\
-diff --git a/tools/testing/selftests/prefix.pl b/tools/testing/selftests/prefix.pl
-new file mode 100755
-index 000000000000..ec7e48118183
---- /dev/null
-+++ b/tools/testing/selftests/prefix.pl
-@@ -0,0 +1,23 @@
-+#!/usr/bin/perl
-+# SPDX-License-Identifier: GPL-2.0
-+# Prefix all lines with "# ", unbuffered. Command being piped in may need
-+# to have unbuffering forced with "stdbuf -i0 -o0 -e0 $cmd".
-+use strict;
-+
-+binmode STDIN;
-+binmode STDOUT;
-+
-+STDOUT->autoflush(1);
-+
-+my $needed = 1;
-+while (1) {
-+	my $char;
-+	my $bytes = sysread(STDIN, $char, 1);
-+	exit 0 if ($bytes == 0);
-+	if ($needed) {
-+		print "# ";
-+		$needed = 0;
-+	}
-+	print $char;
-+	$needed = 1 if ($char eq "\n");
-+}
--- 
-2.17.1
+We had close to 2-3 months of discussions now with various folks up until v5.
+I am about to post v6 which is in line with Masahiro Yamada's expecations. In
+that I will be dropping module building artifacts due to his module building
+concerns and only include the headers.
 
+thanks,
 
--- 
-Kees Cook
+- Joel
