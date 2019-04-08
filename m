@@ -1,56 +1,73 @@
-From: shuah at kernel.org (shuah)
-Date: Mon, 8 Apr 2019 11:08:06 -0600
-Subject: TAP 13 output format
-In-Reply-To: <CAGXu5jLzyjtkF4Z1Rm7rsp85EiEmTqyLFcgXYPWEgxGVuprG9w@mail.gmail.com>
-References: <CAGXu5jLzyjtkF4Z1Rm7rsp85EiEmTqyLFcgXYPWEgxGVuprG9w@mail.gmail.com>
-Message-ID: <2aa1eeb7-f12d-a5fc-e929-c30846c1fbee@kernel.org>
+From: keescook at chromium.org (Kees Cook)
+Date: Mon, 8 Apr 2019 10:13:44 -0700
+Subject: [PATCH] selftests/ipc: Fix msgque compiler warnings
+Message-ID: <20190408171344.GA22803@beast>
 
-On 4/8/19 10:46 AM, Kees Cook wrote:
-> Hi,
-> 
-> I'm working on writing a LKDTM selftest, and I noticed that the output
-> format for the existing selftest tests don't seem to actually conform
-> to the TAP 13 specification[1]. Namely, there is a ton of output
-> between the "ok" and "not ok" lines, in various places for various
-> reasons. IIUC, the spec says these lines should follow the "ok" lines
-> and be (at least) indented to be parsed as YAML.
-> 
-> How does the existing CI do the selftest output parsing? Is there some
-> other spec I should have read for the correct interpretation here?
-> (TAP 13 says this part isn't exactly agreed on yet.)
-> 
+This fixes the various compiler warnings when building the msgque
+selftest. The primary change is using sys/msg.h instead of linux/msg.h
+directly to gain the API declarations.
 
-===============================
-It is possible, we missed the making a distinction and adding a
-diagnostic block, as in the following example.
+Fixes: 3a665531a3b7 ("selftests: IPC message queue copy feature test")
+Signed-off-by: Kees Cook <keescook at chromium.org>
+---
+ tools/testing/selftests/ipc/msgque.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-TAP version 13
-1..N
-ok 1 Description # Directive
-# Diagnostic
-   ---
-   message: 'Failure message'
-   severity: fail
-   data:
-     got:
-       - 1
-       - 3
-       - 2
-     expect:
-       - 1
-       - 2
-       - 3
-   ...
-ok 47 Description
-ok 48 Description
-=================================
+diff --git a/tools/testing/selftests/ipc/msgque.c b/tools/testing/selftests/ipc/msgque.c
+index dac927e82336..4c156aeab6b8 100644
+--- a/tools/testing/selftests/ipc/msgque.c
++++ b/tools/testing/selftests/ipc/msgque.c
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <errno.h>
+-#include <linux/msg.h>
++#include <sys/msg.h>
+ #include <fcntl.h>
+ 
+ #include "../kselftest.h"
+@@ -73,7 +74,7 @@ int restore_queue(struct msgque_data *msgque)
+ 	return 0;
+ 
+ destroy:
+-	if (msgctl(id, IPC_RMID, 0))
++	if (msgctl(id, IPC_RMID, NULL))
+ 		printf("Failed to destroy queue: %d\n", -errno);
+ 	return ret;
+ }
+@@ -120,7 +121,7 @@ int check_and_destroy_queue(struct msgque_data *msgque)
+ 
+ 	ret = 0;
+ err:
+-	if (msgctl(msgque->msq_id, IPC_RMID, 0)) {
++	if (msgctl(msgque->msq_id, IPC_RMID, NULL)) {
+ 		printf("Failed to destroy queue: %d\n", -errno);
+ 		return -errno;
+ 	}
+@@ -129,7 +130,7 @@ int check_and_destroy_queue(struct msgque_data *msgque)
+ 
+ int dump_queue(struct msgque_data *msgque)
+ {
+-	struct msqid64_ds ds;
++	struct msqid_ds ds;
+ 	int kern_id;
+ 	int i, ret;
+ 
+@@ -245,7 +246,7 @@ int main(int argc, char **argv)
+ 	return ksft_exit_pass();
+ 
+ err_destroy:
+-	if (msgctl(msgque.msq_id, IPC_RMID, 0)) {
++	if (msgctl(msgque.msq_id, IPC_RMID, NULL)) {
+ 		printf("Failed to destroy queue: %d\n", -errno);
+ 		return ksft_exit_fail();
+ 	}
+-- 
+2.17.1
 
-We discussed the nesting TAB13 support a bit, but I don't think we
-talked much about the diagnostic type messages that tests print that
-end up between the header and the ok/notok lines.
 
-Can you point me to the TAP parser you are using? I would like to
-run a few tests and see if we can make it fully TAP13 compliant.
-
-thanks,
--- Shuah
+-- 
+Kees Cook
