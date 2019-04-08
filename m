@@ -1,92 +1,138 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Mon, 8 Apr 2019 09:46:21 -0700
-Subject: TAP 13 output format
+From: olof@lixom.net (Olof Johansson)
+Date: Mon, 8 Apr 2019 09:53:54 -0700
+Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending kernel
+ easier
+In-Reply-To: <CAKOZuetS6Bg0ubxQgCBKVKeWOzuwH_C=nCRn-OPmHYJvs6sybQ@mail.gmail.com>
+References: <20190320163116.39275-1-joel@joelfernandes.org>
+ <CAOesGMheoZda84OSz9spQ7p66wot5S_9aaqaKC=QYp+8utASXA@mail.gmail.com>
+ <CAKOZuetS6Bg0ubxQgCBKVKeWOzuwH_C=nCRn-OPmHYJvs6sybQ@mail.gmail.com>
 Message-ID:
- <CAGXu5jLzyjtkF4Z1Rm7rsp85EiEmTqyLFcgXYPWEgxGVuprG9w@mail.gmail.com>
+ <CAOesGMi++NMi-60smmd9f+P4C1d9oQiz-hS6QWa6ViqzqJrfBA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190408164621.GyoKYHkc1aLpLss2xb1aphu_bJXX8ydJYMilM5LO12A@z>
+Message-ID: <20190408165354.mv0NrY5mTbdkOypDW5uaR3BiVkLOkxyeuOIxOIKlVGY@z>
 
-Hi,
+On Mon, Apr 8, 2019@9:37 AM Daniel Colascione <dancol@google.com> wrote:
+>
+> On Mon, Apr 8, 2019@9:29 AM Olof Johansson <olof@lixom.net> wrote:
+> >
+> > Hi,
+> >
+> > On Wed, Mar 20, 2019 at 9:31 AM Joel Fernandes (Google)
+> > <joel@joelfernandes.org> wrote:
+> > >
+> > > Introduce in-kernel headers and other artifacts which are made available
+> > > as an archive through proc (/proc/kheaders.tar.xz file). This archive makes
+> > > it possible to build kernel modules, run eBPF programs, and other
+> > > tracing programs that need to extend the kernel for tracing purposes
+> > > without any dependency on the file system having headers and build
+> > > artifacts.
+> > >
+> > > On Android and embedded systems, it is common to switch kernels but not
+> > > have kernel headers available on the file system. Further once a
+> > > different kernel is booted, any headers stored on the file system will
+> > > no longer be useful. By storing the headers as a compressed archive
+> > > within the kernel, we can avoid these issues that have been a hindrance
+> > > for a long time.
+> > >
+> > > The best way to use this feature is by building it in. Several users
+> > > have a need for this, when they switch debug kernels, they donot want to
+> > > update the filesystem or worry about it where to store the headers on
+> > > it. However, the feature is also buildable as a module in case the user
+> > > desires it not being part of the kernel image. This makes it possible to
+> > > load and unload the headers from memory on demand. A tracing program, or
+> > > a kernel module builder can load the module, do its operations, and then
+> > > unload the module to save kernel memory. The total memory needed is 3.8MB.
+> > >
+> > > By having the archive available at a fixed location independent of
+> > > filesystem dependencies and conventions, all debugging tools can
+> > > directly refer to the fixed location for the archive, without concerning
+> > > with where the headers on a typical filesystem which significantly
+> > > simplifies tooling that needs kernel headers.
+> > >
+> > > The code to read the headers is based on /proc/config.gz code and uses
+> > > the same technique to embed the headers.
+> > >
+> > > To build a module, the below steps have been tested on an x86 machine:
+> > > modprobe kheaders
+> > > rm -rf $HOME/headers
+> > > mkdir -p $HOME/headers
+> > > tar -xvf /proc/kheaders.tar.xz -C $HOME/headers >/dev/null
+> > > cd my-kernel-module
+> > > make -C $HOME/headers M=$(pwd) modules
+> > > rmmod kheaders
+> > >
+> > > Additional notes:
+> > > (1) external modules must be built on the same arch as the host that
+> > > built vmlinux. This can be done either in a qemu emulated chroot on the
+> > > target, or natively. This is due to host arch dependency of kernel
+> > > scripts.
+> > >
+> > > (2)
+> > > If module building is used, since Module.symvers is not available in the
+> > > archive due to a cyclic dependency with building of the archive into the
+> > > kernel or module binaries, the modules built using the archive will not
+> > > contain symbol versioning (modversion). This is usually not an issue
+> > > since the idea of this patch is to build a kernel module on the fly and
+> > > load it into the same kernel. An appropriate warning is already printed
+> > > by the kernel to alert the user of modules not having modversions when
+> > > built using the archive. For building with modversions, the user can use
+> > > traditional header packages. For our tracing usecases, we build modules
+> > > on the fly with this so it is not a concern.
+> > >
+> > > (3) I have left IKHD_ST and IKHD_ED markers as is to facilitate
+> > > future patches that would extract the headers from a kernel or module
+> > > image.
+> > >
+> > > (v4 was Tested-by the following folks,
+> > >  v5 only has minor changes and has passed my testing).
+> > > Tested-by: qais.yousef at arm.com
+> > > Tested-by: dietmar.eggemann at arm.com
+> > > Tested-by: linux at manojrajarao.com
+> > > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> >
+> > Sorry to be late at the party with this kind of feedback, but I find
+> > the whole ".tar.gz in procfs" to be an awkward solution, especially if
+> > there's expected to be userspace tooling that depends on this
+> > long-term.
+> > [snip]
+>
+> The approaches you proposed were explored in detail on this thread and
+> other related threads.
 
-I'm working on writing a LKDTM selftest, and I noticed that the output
-format for the existing selftest tests don't seem to actually conform
-to the TAP 13 specification[1]. Namely, there is a ton of output
-between the "ok" and "not ok" lines, in various places for various
-reasons. IIUC, the spec says these lines should follow the "ok" lines
-and be (at least) indented to be parsed as YAML.
+Not on this thread, but maybe on others. Since they weren't linked and
+referenced, I didn't find them. Having them summarized in the patch
+description would be a great idea.
 
-How does the existing CI do the selftest output parsing? Is there some
-other spec I should have read for the correct interpretation here?
-(TAP 13 says this part isn't exactly agreed on yet.)
+> The tarball in proc approach is a simple,
+> pragmatic approach that allows makes a lot of scenarios Just Work
+> where they didn't before.
 
-e.g., I see this right now:
+"My pragmatic solution, your messy hack".
 
-# cd tools/testing/selftests
-# make --silent -C lib run_tests
-TAP version 13
-selftests: lib: printf.sh
-========================================
-printf: module test_printf is not found [SKIP]
-not ok 1..1 selftests: lib: printf.sh [SKIP]
-selftests: lib: bitmap.sh
-========================================
-bitmap: module test_bitmap is not found [SKIP]
-not ok 1..2 selftests: lib: bitmap.sh [SKIP]
-selftests: lib: prime_numbers.sh
-========================================
-prime_numbers: module prime_numbers is not found [SKIP]
-not ok 1..3 selftests: lib: prime_numbers.sh [SKIP]
+It's an awkward solution that will now be permanently locked in due to
+the /proc interface being an ABI.
 
-There is no "plan" line, lots of lines between test lines, and the
-test numbering is non-spec. I would have expected the following
-output:
+> Approaches like a new filesystem, a
+> mountable block device, a custom debuginfo format, and so on add
+> complexity without providing concrete gains in functionality.
 
-TAP version 13
-1..3 lib
-not ok 1 lib: printf.sh # SKIP module test_printf is not found
-not ok 2 lib: bitmap.sh # SKIP module test_bitmap is not found
-not ok 3 lib: prime_numbers.sh # SKIP module prime_numbers is not found
+It definitely provides concrete gains in functionality, in particular
+it provides a significantly less fragile way of providing the data
+such that having it out of sync with the running kernel is a lot less
+accident-prone.
 
-And for output, here's another:
+> We'd
+> like to get this work into the tree sooner rather than later.
 
-# make --silent -C ipc run_tests
-TAP version 13
-selftests: ipc: msgque
-========================================
-Pass 0 Fail 0 Xfail 0 Xpass 0 Skip 0 Error 0
-1..0
-ok 1..1 selftests: ipc: msgque [PASS]
+That has _never_ been a good argument for picking up something that
+will need to be supported as an ABI forever.
 
-The test-specific output should be after the "ok" line:
+We've solved these kind of things in the past without exporting
+tarballs from the kernel. We can do it again.
 
-TAP version 13
-1..1 ipc
-ok 1 ipc: msgque
- ---
- output: |+
-  Pass 0 Fail 0 Xfail 0 Xpass 0 Skip 0 Error 0
- ...
 
-The test runner knows how many tests are going to be run, so the
-"plan" line can be correct. The ok/not-ok lines can be fixed to avoid
-the prefixed "1..", and the output during the tests can be captured
-and indented for valid YAML (above uses "output" to capture the text
-output with a literal block quote style of "|+"[2]).
+I literally didn't hear a single valid reason for why this patch
+should go in from you.
 
-It seems like the current output cannot be parsed by things like
-Test::Harness. The spec is pretty specific about "Any output that is
-not a version, a plan, a test line, a YAML block, a diagnostic or a
-bail out is incorrect."
 
-Has this been discussed before? I spent a little time looking but
-couldn't find an earlier thread...
-
-Thanks!
-
--Kees
-
-[1] https://testanything.org/tap-version-13-specification.html
-[2] https://yaml-multiline.info
-
--- 
-Kees Cook
+-Olof
