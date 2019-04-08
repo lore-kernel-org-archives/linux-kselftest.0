@@ -1,334 +1,219 @@
-From: joel at joelfernandes.org (Joel Fernandes (Google))
-Date: Mon,  8 Apr 2019 17:28:54 -0400
-Subject: [PATCH v6 1/2] Provide in-kernel headers to make extending kernel
- easier
-Message-ID: <20190408212855.233198-1-joel@joelfernandes.org>
+From: shuah at kernel.org (shuah)
+Date: Mon, 8 Apr 2019 15:32:07 -0600
+Subject: [PATCH] selftests/lib.mk: Move test output to diagnostic lines
+In-Reply-To: <20190408203012.GA566@beast>
+References: <20190408203012.GA566@beast>
+Message-ID: <ac089bd1-0abb-da5b-a418-b81ea9957a28@kernel.org>
 
-Introduce in-kernel headers which are made available as an archive
-through proc (/proc/kheaders.tar.xz file). This archive makes it
-possible to run eBPF and other tracing programs tracing programs that
-need to extend the kernel for tracing purposes without any dependency on
-the file system having headers.
+Hi Kees,
 
-On Android and embedded systems, it is common to switch kernels but not
-have kernel headers available on the file system. Further once a
-different kernel is booted, any headers stored on the file system will
-no longer be useful. By storing the headers as a compressed archive
-within the kernel, we can avoid these issues that have been a hindrance
-for a long time.
+On 4/8/19 2:30 PM, Kees Cook wrote:
+> This changes the selftest output is several ways:
+> - total test count is reported at start.
+> - each test's result is on a single line with "# SKIP" as needed per spec.
+> - each test's output is prefixed with "# " as a "diagnostic line".
+> 
+Thanks for taking this on. I like the way you are doing this. A few
+comments and concerns.
 
-The best way to use this feature is by building it in. Several users
-have a need for this, when they switch debug kernels, they donot want to
-update the filesystem or worry about it where to store the headers on
-it. However, the feature is also buildable as a module in case the user
-desires it not being part of the kernel image. This makes it possible to
-load and unload the headers from memory on demand. A tracing program, or
-a kernel module builder can load the module, do its operations, and then
-unload the module to save kernel memory. The total memory needed is 3.8MB.
+> This creates a bit of a kernel-specific TAP dialect where the diagnostics
+> precede the results. The TAP spec isn't entirely clear about this, though,
+> so I think it's the correct solution so as to keep interactive runs making
+> sense. If the output _followed_ the result line in the spec-suggested
+> YAML form, each test would dump all of its output at once instead of as
+> it went, making debugging harder.
+> 
+> This does, however, solve the recursive TAP output problem, as sub-tests
+> will simply be prefixed by "# ". Parsing sub-tests becomes a simple
+> problem of just removing the first two characters of a given top-level
+> test's diagnostic output, and parsing the results.
+> 
+> Note that the shell construct needed to both get an exit code from
+> the first command in a pipe and still filter the pipe (to add the "# "
+> prefix) uses a POSIX solution rather than the bash "pipefail" option
+> which is not supported by dash.
 
-By having the archive available at a fixed location independent of
-filesystem dependencies and conventions, all debugging tools can
-directly refer to the fixed location for the archive, without concerning
-with where the headers on a typical filesystem which significantly
-simplifies tooling that needs kernel headers.
+Couple of things to consider:
+- will this work on embedded test system with limited applications shell
+   support?
+- It does add dependecy on perl for running tests - not a problem since
+   kernel build system uses it, however it might not be the case when
+   tests get run on system without perl.
+- there is the emit_tests support that creates a shell script that runs.
+   The results format should stay the is same when tests get run using
+   run_tests vs. tests are built and installed. Take a look at emit_tests
+   and EMIT_TESTS in Makefile and lib.mk
 
-The code to read the headers is based on /proc/config.gz code and uses
-the same technique to embed the headers.
+> 
+> Example:
+> 
+> 	$ tools/testing/selftests
+> 	$ make --silent -C x86 run_tests
+> 	TAP version 13
+> 	1..15 selftests: x86
+> 	# selftests: x86: single_step_syscall_64
+> 	# [RUN] Set TF and check nop
+> 	# [OK]  Survived with TF set and 9 traps
+> 	# [RUN] Set TF and check syscall-less opportunistic sysret
+> 	# [OK]  Survived with TF set and 12 traps
+> 	# [RUN] Set TF and check a fast syscall
+> 	# [OK]  Survived with TF set and 22 traps
+> 	# [RUN] Fast syscall with TF cleared
+> 	# [OK]  Nothing unexpected happened
+> 	ok 1 selftests: x86: single_step_syscall_64
+> 	# selftests: x86: sysret_ss_attrs_64
+> 	# [RUN] Syscalls followed by SS validation
+> 	# [OK]  We survived
+> 	ok 2 selftests: x86: sysret_ss_attrs_64
+> 	# selftests: x86: syscall_nt_64
+> 	# [RUN] Set NT and issue a syscall
+> 	# [OK]  The syscall worked and flags are still set
+> 	# [RUN] Set NT|TF and issue a syscall
+> 	# [OK]  The syscall worked and flags are still set
+> 	ok 3 selftests: x86: syscall_nt_64
+> 	...[skipping example output]...
+> 	ok 15 selftests: x86: sysret_rip_64
+> 
+> 	$ make --silent -C x86 run_tests | tappy
+> 	............F..
+> 	======================================================================
+> 	FAIL: <file=stream>
+> 	selftests: x86: mov_ss_trap_64
+> 	----------------------------------------------------------------------
+> 
+> 	----------------------------------------------------------------------
+> 	Ran 15 tests in 0.000s
+> 
+> 	FAILED (failures=1)
+> 
+> Signed-off-by: Kees Cook <keescook at chromium.org>
+> ---
+> No longer RFC! :)
+> ---
+>   tools/testing/selftests/lib.mk    | 59 ++++++++++++++++++-------------
+>   tools/testing/selftests/prefix.pl | 23 ++++++++++++
+>   2 files changed, 57 insertions(+), 25 deletions(-)
+>   create mode 100755 tools/testing/selftests/prefix.pl
 
-IKHD_ST and IKHD_ED markers as is to facilitate future patches that
-would extract the headers from a kernel or module image.
+Can we change the name to say tap13_prefix.pl
 
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
+Anyway this can be a shell instead of perl?
 
-    v5 -> v6: (Masahiro Yamada suggestions mostly)
-    - Dropped support for module building.
-    - Rebuild archive if script changes.
-    - Move archive file list to script.
-    - Move build script to kernel directory.
+> 
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 8b0f16409ed7..d3267c08a7b1 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -5,6 +5,8 @@ CC := $(CROSS_COMPILE)gcc
+>   ifeq (0,$(MAKELEVEL))
+>   OUTPUT := $(shell pwd)
+>   endif
+> +testname = $(notdir $(shell pwd))
+> +selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
+>   
+>   # The following are built by lib.mk common compile rules.
+>   # TEST_CUSTOM_PROGS should be used by tests that require
+> @@ -32,38 +34,45 @@ endif
+>   
+>   .ONESHELL:
+>   define RUN_TEST_PRINT_RESULT
+> -	TEST_HDR_MSG="selftests: "`basename $$PWD`:" $$BASENAME_TEST";	\
+> -	echo $$TEST_HDR_MSG;					\
+> -	echo "========================================";	\
+> +	TEST_HDR_MSG="selftests: $(testname): $$BASENAME_TEST";	\
+>   	if [ ! -x $$TEST ]; then	\
+> -		echo "$$TEST_HDR_MSG: Warning: file $$BASENAME_TEST is not executable, correct this.";\
+> -		echo "not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]"; \
+> -	else					\
+> -		cd `dirname $$TEST` > /dev/null; \
+> -		if [ "X$(summary)" != "X" ]; then	\
+> -			(./$$BASENAME_TEST > /tmp/$$BASENAME_TEST 2>&1 && \
+> -			echo "ok 1..$$test_num $$TEST_HDR_MSG [PASS]") || \
+> -			(if [ $$? -eq $$skip ]; then	\
+> -				echo "not ok 1..$$test_num $$TEST_HDR_MSG [SKIP]";				\
+> -			else echo "not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]";					\
+> -			fi;)			\
+> -		else				\
+> -			(./$$BASENAME_TEST &&	\
+> -			echo "ok 1..$$test_num $$TEST_HDR_MSG [PASS]") ||						\
+> -			(if [ $$? -eq $$skip ]; then \
+> -				echo "not ok 1..$$test_num $$TEST_HDR_MSG [SKIP]"; \
+> -			else echo "not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]";				\
+> -			fi;)		\
+> -		fi;				\
+> -		cd - > /dev/null;		\
+> +		if [ "X$(summary)" = "X" ]; then			\
+> +			echo "# warning: 'file $$TEST is not executable, correct this.'";\
+> +		fi;							\
+> +		echo "not ok $$test_num $$TEST_HDR_MSG";		\
+> +	else								\
+> +		cd `dirname $$TEST` > /dev/null;			\
+> +		if [ "X$(summary)" != "X" ]; then			\
+> +			(./$$BASENAME_TEST > /tmp/$$BASENAME_TEST 2>&1 &&\
+> +				echo "ok $$test_num $$TEST_HDR_MSG") || \
+> +			(if [ $$? -eq $$skip ]; then			\
+> +				echo "not ok $$test_num $$TEST_HDR_MSG # SKIP";	\
+> +			else						\
+> +				echo "not ok $$test_num $$TEST_HDR_MSG";\
+> +			fi);						\
+> +		else							\
+> +			echo "# $$TEST_HDR_MSG";			\
+> +			(((((stdbuf -i0 -o0 -e0 ./$$BASENAME_TEST 2>&1; echo $$? >&3) |	\
+> +				$(selfdir)/prefix.pl >&4) 3>&1) |		\
+> +				(read xs; exit $$xs)) 4>&1 &&		\
+> +				echo "ok $$test_num $$TEST_HDR_MSG") || \
+> +			(if [ $$? -eq $$skip ]; then			\
+> +				echo "not ok $$test_num $$TEST_HDR_MSG # SKIP";	\
+> +			else						\
+> +				echo "not ok $$test_num $$TEST_HDR_MSG";\
+> +			fi);						\
+> +		fi;							\
+> +		cd - > /dev/null;					\
+>   	fi;
+>   endef
+>   
+>   define RUN_TESTS
+>   	@export KSFT_TAP_LEVEL=`echo 1`;		\
+> -	test_num=`echo 0`;				\
+> -	skip=`echo 4`;					\
+> +	test_num=0;					\
+> +	total=`echo "$(1)" | wc -w`;			\
+> +	skip=4;						\
+>   	echo "TAP version 13";				\
+> +	echo "1..$$total selftests: $(testname)";	\
+>   	for TEST in $(1); do				\
+>   		BASENAME_TEST=`basename $$TEST`;	\
+>   		test_num=`echo $$test_num+1 | bc`;	\
+> diff --git a/tools/testing/selftests/prefix.pl b/tools/testing/selftests/prefix.pl
+> new file mode 100755
+> index 000000000000..ec7e48118183
+> --- /dev/null
+> +++ b/tools/testing/selftests/prefix.pl
+> @@ -0,0 +1,23 @@
+> +#!/usr/bin/perl
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Prefix all lines with "# ", unbuffered. Command being piped in may need
+> +# to have unbuffering forced with "stdbuf -i0 -o0 -e0 $cmd".
+> +use strict;
+> +
+> +binmode STDIN;
+> +binmode STDOUT;
+> +
+> +STDOUT->autoflush(1);
+> +
+> +my $needed = 1;
+> +while (1) {
+> +	my $char;
+> +	my $bytes = sysread(STDIN, $char, 1);
+> +	exit 0 if ($bytes == 0);
+> +	if ($needed) {
+> +		print "# ";
+> +		$needed = 0;
+> +	}
+> +	print $char;
+> +	$needed = 1 if ($char eq "\n");
+> +}
+> 
 
-    v4 -> v5:
-    (v4 was Tested-by the following folks)
-        Tested-by: qais.yousef at arm.com
-        Tested-by: dietmar.eggemann at arm.com
-        Tested-by: linux at manojrajarao.com
-    (Thanks to Masahiro Yamada for several excellent suggestions)
-    - used incbin instead of bin2c (Masahiro did similar idea)
-    - added module.lds if ia64 otherwise ia64 may fail to build.
-    - added clean-files rule to Makefile
-    - removed strip-comments script and doing it inline
-    - added set -e to header generated to die on errorsr
-    - fixed a minor issue where find command was noisy.
-    - removed unneeded tar.xz rule from kernel/.gitignore
-    - added Tested-by tags from ARM folks.
-
-    Changes since v3:
-    - Blank tar was being generated because of a one line I
-      forgot to push. It is updated now.
-    - Added module.lds since arm64 needs it to build modules.
-
-    Changes since v2:
-    (Thanks to Masahiro Yamada for several excellent suggestions)
-    - Added support for out of tree builds.
-    - Added incremental build support bringing down build time of
-      incremental builds from 50 seconds to 5 seconds.
-    - Fixed various small nits / cleanups.
-    - clean ups to kheaders.c pointed by Alexey Dobriyan.
-    - Fixed MODULE_LICENSE in test module and kheaders.c
-    - Dropped Module.symvers from archive due to circular dependency.
-
-    Changes since v1:
-    - removed IKH_EXTRA variable, not needed (Masahiro Yamada)
-    - small fix ups to selftest
-       - added target to main Makefile etc
-       - added MODULE_LICENSE to test module
-       - made selftest more quiet
-
-    Changes since RFC:
-    Both changes bring size down to 3.8MB:
-    - use xz for compression
-    - strip comments except SPDX lines
-    - Call out the module name in Kconfig
-    - Also added selftests in second patch to ensure headers are always
-    working.
-
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-
- init/Kconfig           | 11 ++++++
- kernel/.gitignore      |  1 +
- kernel/Makefile        | 10 +++++
- kernel/gen_ikh_data.sh | 84 ++++++++++++++++++++++++++++++++++++++++++
- kernel/kheaders.c      | 73 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 179 insertions(+)
- create mode 100755 kernel/gen_ikh_data.sh
- create mode 100644 kernel/kheaders.c
-
-diff --git a/init/Kconfig b/init/Kconfig
-index 4592bf7997c0..ea75bfbf7dfa 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -580,6 +580,17 @@ config IKCONFIG_PROC
- 	  This option enables access to the kernel configuration file
- 	  through /proc/config.gz.
- 
-+config IKHEADERS_PROC
-+	tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
-+	depends on PROC_FS
-+	help
-+	  This option enables access to the kernel header and other artifacts that
-+          are generated during the build process. These can be used to build kernel
-+          modules or by other in-kernel programs such as those generated by eBPF
-+          and systemtap tools. If you build the headers as a module, a module
-+          called kheaders.ko is built which can be loaded on-demand to get access
-+          to the headers.
-+
- config LOG_BUF_SHIFT
- 	int "Kernel log buffer size (16 => 64KB, 17 => 128KB)"
- 	range 12 25
-diff --git a/kernel/.gitignore b/kernel/.gitignore
-index 6e699100872f..34d1e77ee9df 100644
---- a/kernel/.gitignore
-+++ b/kernel/.gitignore
-@@ -1,5 +1,6 @@
- #
- # Generated files
- #
-+kheaders.md5
- timeconst.h
- hz.bc
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 6c57e78817da..e3c581d8cde7 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -70,6 +70,7 @@ obj-$(CONFIG_UTS_NS) += utsname.o
- obj-$(CONFIG_USER_NS) += user_namespace.o
- obj-$(CONFIG_PID_NS) += pid_namespace.o
- obj-$(CONFIG_IKCONFIG) += configs.o
-+obj-$(CONFIG_IKHEADERS_PROC) += kheaders.o
- obj-$(CONFIG_SMP) += stop_machine.o
- obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
- obj-$(CONFIG_AUDIT) += audit.o auditfilter.o
-@@ -121,3 +122,12 @@ $(obj)/configs.o: $(obj)/config_data.gz
- targets += config_data.gz
- $(obj)/config_data.gz: $(KCONFIG_CONFIG) FORCE
- 	$(call if_changed,gzip)
-+
-+$(obj)/kheaders.o: $(obj)/kheaders_data.tar.xz
-+
-+quiet_cmd_genikh = GEN     $(obj)/kheaders_data.tar.xz
-+cmd_genikh = $(srctree)/kernel/gen_ikh_data.sh $@
-+$(obj)/kheaders_data.tar.xz: FORCE
-+	$(call cmd,genikh)
-+
-+clean-files := kheaders_data.tar.xz kheaders.md5
-diff --git a/kernel/gen_ikh_data.sh b/kernel/gen_ikh_data.sh
-new file mode 100755
-index 000000000000..ef72c2740d01
---- /dev/null
-+++ b/kernel/gen_ikh_data.sh
-@@ -0,0 +1,84 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# This script generates an archive consisting of kernel headers
-+# for CONFIG_IKHEADERS_PROC.
-+set -e
-+spath="$(dirname "$(readlink -f "$0")")"
-+kroot="$spath/.."
-+outdir="$(pwd)"
-+tarfile=$1
-+cpio_dir=$outdir/$tarfile.tmp
-+
-+# Script filename relative to the kernel source root
-+# We add it to the archive because it is small and any changes
-+# to this script will also cause a rebuild of the archive.
-+sfile="$(realpath --relative-to $kroot "$(readlink -f "$0")")"
-+
-+src_file_list="
-+include/
-+arch/$SRCARCH/include/
-+$sfile
-+"
-+
-+obj_file_list="
-+include/
-+arch/$SRCARCH/include/
-+"
-+
-+# Support incremental builds by skipping archive generation
-+# if timestamps of files being archived are not changed.
-+
-+# This block is useful for debugging the incremental builds.
-+# Uncomment it for debugging.
-+# iter=1
-+# if [ ! -f /tmp/iter ]; then echo 1 > /tmp/iter;
-+# else; 	iter=$(($(cat /tmp/iter) + 1)); fi
-+# find $src_file_list -type f | xargs ls -lR > /tmp/src-ls-$iter
-+# find $obj_file_list -type f | xargs ls -lR > /tmp/obj-ls-$iter
-+
-+# include/generated/compile.h is ignored because it is touched even when none
-+# of the source files changed. This causes pointless regeneration, so let us
-+# ignore them for md5 calculation.
-+pushd $kroot > /dev/null
-+src_files_md5="$(find $src_file_list -type f                       |
-+		grep -v "include/generated/compile.h"		   |
-+		xargs ls -lR | md5sum | cut -d ' ' -f1)"
-+popd > /dev/null
-+obj_files_md5="$(find $obj_file_list -type f                       |
-+		grep -v "include/generated/compile.h"		   |
-+		xargs ls -lR | md5sum | cut -d ' ' -f1)"
-+
-+if [ -f $tarfile ]; then tarfile_md5="$(md5sum $tarfile | cut -d ' ' -f1)"; fi
-+if [ -f kernel/kheaders.md5 ] &&
-+	[ "$(cat kernel/kheaders.md5|head -1)" == "$src_files_md5" ] &&
-+	[ "$(cat kernel/kheaders.md5|head -2|tail -1)" == "$obj_files_md5" ] &&
-+	[ "$(cat kernel/kheaders.md5|tail -1)" == "$tarfile_md5" ]; then
-+		exit
-+fi
-+
-+rm -rf $cpio_dir
-+mkdir $cpio_dir
-+
-+pushd $kroot > /dev/null
-+for f in $src_file_list;
-+	do find "$f" ! -name "*.cmd" ! -name ".*";
-+done | cpio --quiet -pd $cpio_dir
-+popd > /dev/null
-+
-+# The second CPIO can complain if files already exist which can
-+# happen with out of tree builds. Just silence CPIO for now.
-+for f in $obj_file_list;
-+	do find "$f" ! -name "*.cmd" ! -name ".*";
-+done | cpio --quiet -pd $cpio_dir >/dev/null 2>&1
-+
-+find  $cpio_dir -type f -print0 |
-+	xargs -0 -P8 -n1 perl -pi -e 'BEGIN {undef $/;}; s/\/\*((?!SPDX).)*?\*\///smg;'
-+
-+tar -Jcf $tarfile -C $cpio_dir/ . > /dev/null
-+
-+echo "$src_files_md5" > kernel/kheaders.md5
-+echo "$obj_files_md5" >> kernel/kheaders.md5
-+echo "$(md5sum $tarfile | cut -d ' ' -f1)" >> kernel/kheaders.md5
-+
-+rm -rf $cpio_dir
-diff --git a/kernel/kheaders.c b/kernel/kheaders.c
-new file mode 100644
-index 000000000000..d072a958a8f1
---- /dev/null
-+++ b/kernel/kheaders.c
-@@ -0,0 +1,73 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * kernel/kheaders.c
-+ * Provide headers and artifacts needed to build kernel modules.
-+ * (Borrowed code from kernel/configs.c)
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/proc_fs.h>
-+#include <linux/init.h>
-+#include <linux/uaccess.h>
-+
-+/*
-+ * Define kernel_headers_data and kernel_headers_data_end, within which the the
-+ * compressed kernel headers are stpred. The file is first compressed with xz.
-+ */
-+
-+asm (
-+"	.pushsection .rodata, \"a\"		\n"
-+"	.global kernel_headers_data		\n"
-+"kernel_headers_data:				\n"
-+"	.incbin \"kernel/kheaders_data.tar.xz\"	\n"
-+"	.global kernel_headers_data_end		\n"
-+"kernel_headers_data_end:			\n"
-+"	.popsection				\n"
-+);
-+
-+extern char kernel_headers_data;
-+extern char kernel_headers_data_end;
-+
-+static ssize_t
-+ikheaders_read_current(struct file *file, char __user *buf,
-+		      size_t len, loff_t *offset)
-+{
-+	return simple_read_from_buffer(buf, len, offset,
-+				       &kernel_headers_data,
-+				       &kernel_headers_data_end -
-+				       &kernel_headers_data);
-+}
-+
-+static const struct file_operations ikheaders_file_ops = {
-+	.read = ikheaders_read_current,
-+	.llseek = default_llseek,
-+};
-+
-+static int __init ikheaders_init(void)
-+{
-+	struct proc_dir_entry *entry;
-+
-+	/* create the current headers file */
-+	entry = proc_create("kheaders.tar.xz", S_IRUGO, NULL,
-+			    &ikheaders_file_ops);
-+	if (!entry)
-+		return -ENOMEM;
-+
-+	proc_set_size(entry,
-+		      &kernel_headers_data_end -
-+		      &kernel_headers_data);
-+	return 0;
-+}
-+
-+static void __exit ikheaders_cleanup(void)
-+{
-+	remove_proc_entry("kheaders.tar.xz", NULL);
-+}
-+
-+module_init(ikheaders_init);
-+module_exit(ikheaders_cleanup);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_AUTHOR("Joel Fernandes");
-+MODULE_DESCRIPTION("Echo the kernel header artifacts used to build the kernel");
--- 
-2.21.0.392.gf8f6787159e-goog
+thanks,
+-- Shuah
