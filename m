@@ -1,52 +1,58 @@
-From: alan.maguire@oracle.com (Alan Maguire)
-Date: Mon,  8 Apr 2019 17:57:47 +0100
-Subject: [PATCH v2 bpf-next 3/4] bpf: sync bpf.h to tools/ for
- BPF_F_ADJ_ROOM_ENCAP_L2
-In-Reply-To: <1554742668-28313-1-git-send-email-alan.maguire@oracle.com>
-References: <1554742668-28313-1-git-send-email-alan.maguire@oracle.com>
-Message-ID: <1554742668-28313-4-git-send-email-alan.maguire@oracle.com>
+From: shuah@kernel.org (shuah)
+Date: Mon, 8 Apr 2019 11:08:06 -0600
+Subject: TAP 13 output format
+In-Reply-To: <CAGXu5jLzyjtkF4Z1Rm7rsp85EiEmTqyLFcgXYPWEgxGVuprG9w@mail.gmail.com>
+References: <CAGXu5jLzyjtkF4Z1Rm7rsp85EiEmTqyLFcgXYPWEgxGVuprG9w@mail.gmail.com>
+Message-ID: <2aa1eeb7-f12d-a5fc-e929-c30846c1fbee@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190408165747.GxLMASXO0pQFeKuHCSGGaggqjwaQlSihYSkPzplGjH0@z>
+Message-ID: <20190408170806.SSstXB6auFdeYJv6eh-gACm5NdJ_hugBNa_9rAAFoXM@z>
 
-Sync include/uapi/linux/bpf.h with tools/ equivalent to add
-BPF_F_ADJ_ROOM_ENCAP_L2(len) macro.
+On 4/8/19 10:46 AM, Kees Cook wrote:
+> Hi,
+> 
+> I'm working on writing a LKDTM selftest, and I noticed that the output
+> format for the existing selftest tests don't seem to actually conform
+> to the TAP 13 specification[1]. Namely, there is a ton of output
+> between the "ok" and "not ok" lines, in various places for various
+> reasons. IIUC, the spec says these lines should follow the "ok" lines
+> and be (at least) indented to be parsed as YAML.
+> 
+> How does the existing CI do the selftest output parsing? Is there some
+> other spec I should have read for the correct interpretation here?
+> (TAP 13 says this part isn't exactly agreed on yet.)
+> 
 
-Signed-off-by: Alan Maguire <alan.maguire at oracle.com>
----
- tools/include/uapi/linux/bpf.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+===============================
+It is possible, we missed the making a distinction and adding a
+diagnostic block, as in the following example.
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 8370245..912391c 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1500,6 +1500,10 @@ struct bpf_stack_build_id {
-  *		* **BPF_F_ADJ_ROOM_ENCAP_L4_UDP **:
-  *		  Use with ENCAP_L3 flags to further specify the tunnel type.
-  *
-+ *		* **BPF_F_ADJ_ROOM_ENCAP_L2(len) **:
-+ *		  Use with ENCAP_L3/L4 flags to further specify the tunnel
-+ *		  type; **len** is the length of the inner MAC header.
-+ *
-  * 		A call to this helper is susceptible to change the underlaying
-  * 		packet buffer. Therefore, at load time, all checks on pointers
-  * 		previously done by the verifier are invalidated and must be
-@@ -2641,10 +2645,16 @@ enum bpf_func_id {
- /* BPF_FUNC_skb_adjust_room flags. */
- #define BPF_F_ADJ_ROOM_FIXED_GSO	(1ULL << 0)
- 
-+#define	BPF_ADJ_ROOM_ENCAP_L2_MASK	0xff
-+#define	BPF_ADJ_ROOM_ENCAP_L2_SHIFT	56
-+
- #define BPF_F_ADJ_ROOM_ENCAP_L3_IPV4	(1ULL << 1)
- #define BPF_F_ADJ_ROOM_ENCAP_L3_IPV6	(1ULL << 2)
- #define BPF_F_ADJ_ROOM_ENCAP_L4_GRE	(1ULL << 3)
- #define BPF_F_ADJ_ROOM_ENCAP_L4_UDP	(1ULL << 4)
-+#define	BPF_F_ADJ_ROOM_ENCAP_L2(len)	(((__u64)len & \
-+					  BPF_ADJ_ROOM_ENCAP_L2_MASK) \
-+					 << BPF_ADJ_ROOM_ENCAP_L2_SHIFT)
- 
- /* Mode for BPF_FUNC_skb_adjust_room helper. */
- enum bpf_adj_room_mode {
--- 
-1.8.3.1
+TAP version 13
+1..N
+ok 1 Description # Directive
+# Diagnostic
+   ---
+   message: 'Failure message'
+   severity: fail
+   data:
+     got:
+       - 1
+       - 3
+       - 2
+     expect:
+       - 1
+       - 2
+       - 3
+   ...
+ok 47 Description
+ok 48 Description
+=================================
+
+We discussed the nesting TAB13 support a bit, but I don't think we
+talked much about the diagnostic type messages that tests print that
+end up between the header and the ok/notok lines.
+
+Can you point me to the TAP parser you are using? I would like to
+run a few tests and see if we can make it fully TAP13 compliant.
+
+thanks,
+-- Shuah
