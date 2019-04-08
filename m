@@ -1,40 +1,52 @@
 From: pvorel at suse.cz (Petr Vorel)
-Date: Mon, 8 Apr 2019 14:29:01 +0200
-Subject: [RFC PATCH 0/2] Kselftest shell (or even C) API
-In-Reply-To: <1554725685.17244.61.camel@linux.ibm.com>
+Date: Mon, 8 Apr 2019 15:07:50 +0200
+Subject: [RFC PATCH 1/2] selftests: Start shell API
+In-Reply-To: <20190408113841.GA2418@rei.lan>
 References: <20190406214915.16914-1-pvorel@suse.cz>
- <1554725685.17244.61.camel@linux.ibm.com>
-Message-ID: <20190408122901.GA6493@dell5510>
+ <20190406214915.16914-2-pvorel@suse.cz>
+ <20190408113841.GA2418@rei.lan>
+Message-ID: <20190408130750.GE6493@dell5510>
 
-Hi Mimi, Shuah,
-> Hi Petr, Shuah,
+Hi,
 
-> On Sat, 2019-04-06 at 23:49 +0200, Petr Vorel wrote:
-> > Hi,
+> > +ksft_pass()
+> > +{
+> > +	echo "[PASS] $TEST: $1"
+> > +	exit $KSFT_PASS
+> > +}
+> > +
+> > +ksft_fail()
+> > +{
+> > +	echo "[FAIL] $TEST: $1"
+> > +	exit $KSFT_FAIL
+> > +}
 
-> > this is a draft trying to define some API in order to remove some
-> > redundancy from kselftest shell scripts. Existing kselftest.h already
-> > defines some sort of API for C, there is none for shell.
+> I think that the main disadvantage here is that these functions call
+> exit instead of storing the results which leads to a common pattern of
+> passing the result up the function call chain which is prone to errors.
 
-> Shuah, when the tests were in the selftests/ima directory I was
-> planning on including them in my pull request; and then they moved to
-> selftests/kexec.  As they were still IMA related, I was still
-> shepherding them and planned on including them in my pull request. (Is
-> this Okay?  Your Review/Ack would be much appreciated.)  This patch
-> set, however, introduces a set of "common" set of kselftest functions.
+> What I have learned the hard way over the years is that the result
+> reporting should be separated from the functions that exit the tests and
+> that the test code should not be trusted with passing the overall test
+> result at the end. I've seen too many cases where the actuall failure
+> was ignored becaues the failure was lost on it's way to the main
+> function.
 
-> Originally, you suggested deferring defining a set of "common"
-> kselftests functions to prevent delaying upstreaming the tests.  With
-> these patches, that time is here.  How do you want to handle this?
+> Another lesson is that tests shouldn't implement the main() function,
+> that is something that the test library should do, which allows for
+> resources to be listed in a declarative way instead of calling init
+> funcitons at the start of the tests. Which means that in LTP you can say
+> "mount at least 512MB device formatted with ext4 to this mount point"
+> and all this handled in the test library before the actual test starts.
 
-I agree with separation of common kselftests functions / proper API effort.
-kexec tests are ready and IMHO should not be delayed with this effort.
-"common functions" proposed by this patchset are more for to start a discussion
-about it, what I brought doesn't help much. Proper design takes some time.
+> As the last point this completely misses a cleanup callback support,
+> i.e. function that is called to clean up if you need to exit in the
+> middle of a test in a case of an error.
 
-> Thanks,
-
-> Mimi
+Agree with all mentioned. My patchset was mainly to bring the discussion.
+Although library defining some general functions and constants to reduce
+duplicity is itself a small improvement, kselftest deserves a proper API.
+For both C and shell.
 
 Kind regards,
 Petr
