@@ -1,45 +1,36 @@
 From: chrubis at suse.cz (Cyril Hrubis)
-Date: Mon, 8 Apr 2019 13:38:42 +0200
-Subject: [RFC PATCH 1/2] selftests: Start shell API
-In-Reply-To: <20190406214915.16914-2-pvorel@suse.cz>
+Date: Mon, 8 Apr 2019 13:43:06 +0200
+Subject: [RFC PATCH 0/2] Kselftest shell (or even C) API
+In-Reply-To: <20190406214915.16914-1-pvorel@suse.cz>
 References: <20190406214915.16914-1-pvorel@suse.cz>
- <20190406214915.16914-2-pvorel@suse.cz>
-Message-ID: <20190408113841.GA2418@rei.lan>
+Message-ID: <20190408114306.GB2418@rei.lan>
 
 Hi!
-> +ksft_pass()
-> +{
-> +	echo "[PASS] $TEST: $1"
-> +	exit $KSFT_PASS
-> +}
-> +
-> +ksft_fail()
-> +{
-> +	echo "[FAIL] $TEST: $1"
-> +	exit $KSFT_FAIL
-> +}
+> It's just a small example how things could be. Draft, not meant to be
+> really merged. But instead of defining shell library (with more useful
+> helpers), I'd rather adopt LTP shell [1] and C [2] API to kselftest.
+> LTP API [1] is more like a framework, easy to use with a lot of helpers
+> making tests 1) small, concentrating on the problem itself 2) have
+> unique output. API is well documented [3] [4], it's creator Cyril Hrubis
+> made it after years experience of handling (at the time) quite bad
+> quality LTP code.  Rewriting LTP tests to use this API improved tests a
+> lot (less buggy, easier to read).
+> 
+> Some examples of advantages of LTP API:
+> * SAFE_*() macros for C, which handles errors inside a library
+> * unified messages, unified test status, unified way to exit testing due
+> missing functionality, at the end of testing there is summary of passed,
+> failed and skipped tests
+> * many prepared functionality for both C and shell
+> * handling threads, parent-child synchronization
+> * setup and cleanup functions
+> * "flags" for defining requirements or certain functionality (need root, temporary
+> directory, ...)
+> * and many other
 
-I think that the main disadvantage here is that these functions call
-exit instead of storing the results which leads to a common pattern of
-passing the result up the function call chain which is prone to errors.
-
-What I have learned the hard way over the years is that the result
-reporting should be separated from the functions that exit the tests and
-that the test code should not be trusted with passing the overall test
-result at the end. I've seen too many cases where the actuall failure
-was ignored becaues the failure was lost on it's way to the main
-function.
-
-Another lesson is that tests shouldn't implement the main() function,
-that is something that the test library should do, which allows for
-resources to be listed in a declarative way instead of calling init
-funcitons at the start of the tests. Which means that in LTP you can say
-"mount at least 512MB device formatted with ext4 to this mount point"
-and all this handled in the test library before the actual test starts.
-
-As the last point this completely misses a cleanup callback support,
-i.e. function that is called to clean up if you need to exit in the
-middle of a test in a case of an error.
+I guess that I can help to create a library with a subset of LTP C API
+that could be used to implement C tests if that is something that has a
+good chance to get adopted.
 
 -- 
 Cyril Hrubis
