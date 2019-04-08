@@ -1,66 +1,83 @@
 From: willemdebruijn.kernel@gmail.com (Willem de Bruijn)
-Date: Mon, 8 Apr 2019 15:07:39 -0400
-Subject: [PATCH v2 bpf-next 2/4] bpf: add layer 2 encap support to
- bpf_skb_adjust_room
-In-Reply-To: <1554742668-28313-3-git-send-email-alan.maguire@oracle.com>
+Date: Mon, 8 Apr 2019 15:07:43 -0400
+Subject: [PATCH v2 bpf-next 1/4] selftests_bpf: add UDP encap to
+ test_tc_tunnel
+In-Reply-To: <1554742668-28313-2-git-send-email-alan.maguire@oracle.com>
 References: <1554742668-28313-1-git-send-email-alan.maguire@oracle.com>
- <1554742668-28313-3-git-send-email-alan.maguire@oracle.com>
+ <1554742668-28313-2-git-send-email-alan.maguire@oracle.com>
 Message-ID:
- <CAF=yD-K9Ld3jqCtE29P0n4noWYgC0i5A2TJvKyJAUkssnDOJ2w@mail.gmail.com>
+ <CAF=yD-KkWQJDrjRH1mS0KcaWPANJ_Twwmhs-2R+=V2fMNj=0VA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190408190739.CYjWgAnCFnWz89_d62rygKcnV_htwCh6EIIms8QhhVQ@z>
+Message-ID: <20190408190743.4zef2vfI5CnE2xQx0aHfiZGOZyeaEvmIPTEl8_uDajo@z>
 
-On Mon, Apr 8, 2019@12:59 PM Alan Maguire <alan.maguire@oracle.com> wrote:
+On Mon, Apr 8, 2019@1:01 PM Alan Maguire <alan.maguire@oracle.com> wrote:
 >
 > commit 868d523535c2 ("bpf: add bpf_skb_adjust_room encap flags")
 > introduced support to bpf_skb_adjust_room for GSO-friendly GRE
-> and UDP encapsulation.
->
-> For GSO to work for skbs, the inner headers (mac and network) need to
-> be marked.  For L3 encapsulation using bpf_skb_adjust_room, the mac
-> and network headers are identical.  Here we provide a way of specifying
-> the inner mac header length for cases where L2 encap is desired.  Such
-> an approach can support encapsulated ethernet headers, MPLS headers etc.
-> For example to convert from a packet of form [eth][ip][tcp] to
-> [eth][ip][udp][inner mac][ip][tcp], something like the following could
-> be done:
->
->         headroom = sizeof(iph) + sizeof(struct udphdr) + inner_maclen;
->
->         ret = bpf_skb_adjust_room(skb, headroom, BPF_ADJ_ROOM_MAC,
->                                   BPF_F_ADJ_ROOM_ENCAP_L4_UDP |
->                                   BPF_F_ADJ_ROOM_ENCAP_L3_IPV4 |
->                                   BPF_F_ADJ_ROOM_ENCAP_L2(inner_maclen));
+> and UDP encapsulation and later introduced associated test_tc_tunnel
+> tests.  Here those tests are extended to cover UDP encapsulation also.
 >
 > Signed-off-by: Alan Maguire <alan.maguire at oracle.com>
 
->  static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
->                             u64 flags)
->  {
-> +       u16 mac_len = 0, inner_mac = 0, inner_net = 0, inner_trans = 0;
->         bool encap = flags & BPF_F_ADJ_ROOM_ENCAP_L3_MASK;
-> -       u16 mac_len = 0, inner_net = 0, inner_trans = 0;
->         unsigned int gso_type = SKB_GSO_DODGY;
-> +       u8 inner_mac_len = flags >> BPF_ADJ_ROOM_ENCAP_L2_SHIFT;
->         int ret;
+> +       struct v4hdr h_outer;
+> +       struct udphdr *udph;
+
+nit: unused?
+
+>  # serverside, insert decap module
+>  # server is still running
+>  # client can connect again
+> -ip netns exec "${ns2}" ip link add dev testtun0 type "${tuntype}" \
+> -       remote "${addr1}" local "${addr2}"
+> -# Because packets are decapped by the tunnel they arrive on testtun0 from
+> -# the IP stack perspective.  Ensure reverse path filtering is disabled
+> -# otherwise we drop the TCP SYN as arriving on testtun0 instead of the
+> -# expected veth2 (veth2 is where 192.168.1.2 is configured).
+> +
+> +if [[ "$tuntype" =~ "udp" ]]; then
+> +       # Set up fou tunnel.
+> +       ttype="${foutype}"
+> +       targs="encap fou encap-sport auto encap-dport $udpport"
+> +       # fou may be a module; allow this to fail.
+> +       modprobe "${foumod}" ||true
+> +       ip netns exec "${ns2}" ip fou add port 5555 ipproto ${fouproto}
+> +else
+> +       ttype=$tuntype
+> +       targs=""
+> +fi
+> +ip netns exec "${ns2}" ip link add name testtun0 type "${ttype}" \
+> +       remote "${addr1}" local "${addr2}" $targs
+> +# Because packets are decapped by the tunnel they arrive on testtun0
+> +# from the IP stack perspective.  Ensure reverse path filtering is
+> +# disabled otherwise we drop the TCP SYN as arriving on testtun0
+> +# instead of the expected veth2 (veth2 is where 192.168.1.2 is
+> +# configured).
+
+nit: these lines are not really part of the change
+
+>  ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.all.rp_filter=0
+>  # rp needs to be disabled for both all and testtun0 as the rp value is
+>  # selected as the max of the "all" and device-specific values.
+> @@ -172,13 +208,13 @@ ip netns exec "${ns2}" ip link set dev testtun0 up
+>  echo "test bpf encap with tunnel device decap"
+>  client_connect
+>  verify_data
+> +ip netns exec "${ns2}" ip link del dev testtun0
 >
->         if (skb_is_gso(skb) && !skb_is_gso_tcp(skb)) {
-> @@ -3008,6 +3011,9 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
+> +server_listen
+>  # serverside, use BPF for decap
+> -ip netns exec "${ns2}" ip link del dev testtun0
+
+nit: not needed to move this outside of this block.
+
+
+>  ip netns exec "${ns2}" tc qdisc add dev veth2 clsact
+>  ip netns exec "${ns2}" tc filter add dev veth2 ingress \
+>         bpf direct-action object-file ./test_tc_tunnel.o section decap
+> -server_listen
+>  echo "test bpf encap with bpf decap"
+>  client_connect
+>  verify_data
+> --
+> 1.8.3.1
 >
->                 mac_len = skb->network_header - skb->mac_header;
->                 inner_net = skb->network_header;
-> +               if (inner_mac_len > len_diff)
-> +                       return -EINVAL;
-> +               inner_mac = inner_net - inner_mac_len;
-
-nit: variable inner_mac is not needed.
-
-> @@ -3031,7 +3036,7 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
->                         gso_type |= SKB_GSO_GRE;
->                 else if (flags & BPF_F_ADJ_ROOM_ENCAP_L3_IPV6)
->                         gso_type |= SKB_GSO_IPXIP6;
-> -               else
-> +               else if (flags & BPF_F_ADJ_ROOM_ENCAP_L3_IPV4)
->                         gso_type |= SKB_GSO_IPXIP4;
-
-Nice catch. L2 encap should also work without L3 encap.
