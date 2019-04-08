@@ -1,83 +1,61 @@
-From: willemdebruijn.kernel@gmail.com (Willem de Bruijn)
-Date: Mon, 8 Apr 2019 15:07:43 -0400
-Subject: [PATCH v2 bpf-next 1/4] selftests_bpf: add UDP encap to
- test_tc_tunnel
-In-Reply-To: <1554742668-28313-2-git-send-email-alan.maguire@oracle.com>
-References: <1554742668-28313-1-git-send-email-alan.maguire@oracle.com>
- <1554742668-28313-2-git-send-email-alan.maguire@oracle.com>
+From: keescook@chromium.org (Kees Cook)
+Date: Mon, 8 Apr 2019 12:46:42 -0700
+Subject: [RFC][PATCH] selftests/lib.mk: Move test output to diagnostic
+ lines
+In-Reply-To: <20190408190243.GA33074@beast>
+References: <20190408190243.GA33074@beast>
 Message-ID:
- <CAF=yD-KkWQJDrjRH1mS0KcaWPANJ_Twwmhs-2R+=V2fMNj=0VA@mail.gmail.com>
+ <CAGXu5jLjbSxaL7_F2d+K9mMpvnhC_vBvR7DmOvVE=3QV3Y+5VQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190408190743.4zef2vfI5CnE2xQx0aHfiZGOZyeaEvmIPTEl8_uDajo@z>
+Message-ID: <20190408194642.s3_z7RVVh5NDENj-UzGyIlEsku1Fq8ZHH3OgX5gdF1I@z>
 
-On Mon, Apr 8, 2019@1:01 PM Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> commit 868d523535c2 ("bpf: add bpf_skb_adjust_room encap flags")
-> introduced support to bpf_skb_adjust_room for GSO-friendly GRE
-> and UDP encapsulation and later introduced associated test_tc_tunnel
-> tests.  Here those tests are extended to cover UDP encapsulation also.
->
-> Signed-off-by: Alan Maguire <alan.maguire at oracle.com>
+On Mon, Apr 8, 2019@12:02 PM Kees Cook <keescook@chromium.org> wrote:
+> Also, while "sed -u" is used to add the "# " line prefixes, this
+> still doesn't work for all output. For example, the "timer" lists
+> print out text, then do the work, then print a result and a newline.
+> This isn't visible any more. And some tests still show nothing until
+> they finish. I haven't found a way to force the prefixing while keeping
+> the output entirely unbuffered. :(
 
-> +       struct v4hdr h_outer;
-> +       struct udphdr *udph;
+Oh, I think I've solved this. :)
 
-nit: unused?
+$ cat prefix.pl
+#!/usr/bin/perl
+use strict;
 
->  # serverside, insert decap module
->  # server is still running
->  # client can connect again
-> -ip netns exec "${ns2}" ip link add dev testtun0 type "${tuntype}" \
-> -       remote "${addr1}" local "${addr2}"
-> -# Because packets are decapped by the tunnel they arrive on testtun0 from
-> -# the IP stack perspective.  Ensure reverse path filtering is disabled
-> -# otherwise we drop the TCP SYN as arriving on testtun0 instead of the
-> -# expected veth2 (veth2 is where 192.168.1.2 is configured).
-> +
-> +if [[ "$tuntype" =~ "udp" ]]; then
-> +       # Set up fou tunnel.
-> +       ttype="${foutype}"
-> +       targs="encap fou encap-sport auto encap-dport $udpport"
-> +       # fou may be a module; allow this to fail.
-> +       modprobe "${foumod}" ||true
-> +       ip netns exec "${ns2}" ip fou add port 5555 ipproto ${fouproto}
-> +else
-> +       ttype=$tuntype
-> +       targs=""
-> +fi
-> +ip netns exec "${ns2}" ip link add name testtun0 type "${ttype}" \
-> +       remote "${addr1}" local "${addr2}" $targs
-> +# Because packets are decapped by the tunnel they arrive on testtun0
-> +# from the IP stack perspective.  Ensure reverse path filtering is
-> +# disabled otherwise we drop the TCP SYN as arriving on testtun0
-> +# instead of the expected veth2 (veth2 is where 192.168.1.2 is
-> +# configured).
+binmode STDIN;
+binmode STDOUT;
 
-nit: these lines are not really part of the change
+STDOUT->autoflush(1);
 
->  ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.all.rp_filter=0
->  # rp needs to be disabled for both all and testtun0 as the rp value is
->  # selected as the max of the "all" and device-specific values.
-> @@ -172,13 +208,13 @@ ip netns exec "${ns2}" ip link set dev testtun0 up
->  echo "test bpf encap with tunnel device decap"
->  client_connect
->  verify_data
-> +ip netns exec "${ns2}" ip link del dev testtun0
->
-> +server_listen
->  # serverside, use BPF for decap
-> -ip netns exec "${ns2}" ip link del dev testtun0
+my $needed = 1;
+while (1) {
+        my $char;
+        my $bytes = sysread(STDIN, $char, 1);
+        exit 0 if ($bytes == 0);
+        if ($needed) {
+                print "# ";
+                $needed = 0;
+        }
+        print $char;
+        $needed = 1 if ($char eq "\n");
+}
 
-nit: not needed to move this outside of this block.
+> +                       (./$$BASENAME_TEST > /tmp/$$BASENAME_TEST 2>&1 &&\
+> +                               echo "ok $$test_num $$TEST_HDR_MSG") || \
 
+-                       (((((./$$BASENAME_TEST 2>&1; echo $$? >&3) |    \
+-                               sed -ue 's/^/# /' >&4) 3>&1) |          \
++                       (((((stdbuf -i0 -o0 -e0 ./$$BASENAME_TEST
+2>&1; echo $$? >&3) | \
++                               ../prefix.pl >&4) 3>&1) |               \
 
->  ip netns exec "${ns2}" tc qdisc add dev veth2 clsact
->  ip netns exec "${ns2}" tc filter add dev veth2 ingress \
->         bpf direct-action object-file ./test_tc_tunnel.o section decap
-> -server_listen
->  echo "test bpf encap with bpf decap"
->  client_connect
->  verify_data
-> --
-> 1.8.3.1
->
+This also, I think, solve the "recursive TAP output" issue too, since
+sub-tests will be entirely contained in the #-indented output and
+could be parsed out of the diagnostics by just doing a 2-character
+left-strip.
+
+Thoughts?
+
+-- 
+Kees Cook
