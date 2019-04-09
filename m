@@ -1,256 +1,47 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Tue, 9 Apr 2019 09:08:04 -0700
-Subject: [PATCH] kselftest/lkdtm: Create selftest driving scripts for LKDTM
-Message-ID: <20190409160804.GA19767@beast>
+From: shuah@kernel.org (shuah)
+Date: Tue, 9 Apr 2019 10:56:10 -0600
+Subject: [PATCH] selftests/lib.mk: Move test output to diagnostic lines
+In-Reply-To: <CAGXu5j+_b-w+e_4rn1D5zH=KF_O=ktz-xV3hEFd1cqSmcWpWhQ@mail.gmail.com>
+References: <20190408203012.GA566@beast>
+ <ac089bd1-0abb-da5b-a418-b81ea9957a28@kernel.org>
+ <CAGXu5j+_b-w+e_4rn1D5zH=KF_O=ktz-xV3hEFd1cqSmcWpWhQ@mail.gmail.com>
+Message-ID: <d0647ccf-b2a2-8fd4-adc4-16914b68ffbf@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190409160804.lHD8x4atMBWdIMTqkOfLM_tX_Yj_c36B8afuV-xjW-c@z>
+Message-ID: <20190409165610.XUJ9ERg0rPaUh5AmOUedjv9q0Hblwdy1ZTv1YS-Zc2I@z>
 
-This adds most of the non-system-crashing selftests that exist in LKDTM.
-The ones that leave the system in an unstable state are marked as "SKIP"
-in the test run. Since output can change based on architecture and other
-kernel configs, all output is reported during the tests.
+On 4/9/19 10:06 AM, Kees Cook wrote:
+> On Mon, Apr 8, 2019@2:32 PM shuah <shuah@kernel.org> wrote:
+>> Couple of things to consider:
+>> - will this work on embedded test system with limited applications shell
+>>     support?
+> 
+> I was assuming the availability of "stdbuf" which is part of
+> coreutils, and "perl" which is already required for at least one other
+> test (sysctl). What do you have in mind for the "maximum supported
+> environment" (and where's best to document this)? Also, I see python
+> is used by several tests. Should python be considered instead of perl?
+> 
+>> - It does add dependecy on perl for running tests - not a problem since
+>>     kernel build system uses it, however it might not be the case when
+>>     tests get run on system without perl.
+> 
+> I could likely rewrite the "prefix.pl" in C, and the test could use a
+> built binary instead? Or in python (as noted above). Where are tests
+> being run right now with such a limited environment?
+> 
 
-Example output:
+Some embedded systems as I recall with just busybox env. I am thinking
+shell rather C/perl/python.
 
-	# cd tools/testing/selftests
-	# make --silent -C lkdtm run_tests
-	TAP version 13
-	1..64 selftests: lkdtm
-	# selftests: lkdtm: PANIC.sh
-	# PANIC: crashes entire system [SKIP]
-	not ok 1 selftests: lkdtm: PANIC.sh # SKIP
-	# selftests: lkdtm: BUG.sh
-	# [19716.955023] lkdtm: Performing direct entry BUG
-	# [19716.956236] ------------[ cut here ]------------
-	# [19716.957318] kernel BUG at drivers/misc/lkdtm/bugs.c:63!
-	...
-	# BUG: saw 'call trace:': ok
-	ok 2 selftests: lkdtm: BUG.sh
-	...
+>> - there is the emit_tests support that creates a shell script that runs.
+>>     The results format should stay the is same when tests get run using
+>>     run_tests vs. tests are built and installed. Take a look at emit_tests
+>>     and EMIT_TESTS in Makefile and lib.mk
+> 
+> Ah yeah. I will adjust EMIT_TESTS too.
+> 
+> Thanks!
+> 
 
-Signed-off-by: Kees Cook <keescook at chromium.org>
----
- MAINTAINERS                              |  1 +
- tools/testing/selftests/lkdtm/.gitignore |  1 +
- tools/testing/selftests/lkdtm/Makefile   | 11 +++
- tools/testing/selftests/lkdtm/config     |  1 +
- tools/testing/selftests/lkdtm/run.sh     | 86 ++++++++++++++++++++++++
- tools/testing/selftests/lkdtm/tests.txt  | 64 ++++++++++++++++++
- 6 files changed, 164 insertions(+)
- create mode 100644 tools/testing/selftests/lkdtm/.gitignore
- create mode 100644 tools/testing/selftests/lkdtm/Makefile
- create mode 100644 tools/testing/selftests/lkdtm/config
- create mode 100755 tools/testing/selftests/lkdtm/run.sh
- create mode 100644 tools/testing/selftests/lkdtm/tests.txt
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3e5a5d263f29..716d6f0fbd0c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8976,6 +8976,7 @@ LINUX KERNEL DUMP TEST MODULE (LKDTM)
- M:	Kees Cook <keescook at chromium.org>
- S:	Maintained
- F:	drivers/misc/lkdtm/*
-+F:	tools/testing/selftests/lkdtm/*
- 
- LINUX KERNEL MEMORY CONSISTENCY MODEL (LKMM)
- M:	Alan Stern <stern at rowland.harvard.edu>
-diff --git a/tools/testing/selftests/lkdtm/.gitignore b/tools/testing/selftests/lkdtm/.gitignore
-new file mode 100644
-index 000000000000..09df4a4da272
---- /dev/null
-+++ b/tools/testing/selftests/lkdtm/.gitignore
-@@ -0,0 +1 @@
-+[A-Z][A-Z]*.sh
-diff --git a/tools/testing/selftests/lkdtm/Makefile b/tools/testing/selftests/lkdtm/Makefile
-new file mode 100644
-index 000000000000..f322d281fd8e
---- /dev/null
-+++ b/tools/testing/selftests/lkdtm/Makefile
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Makefile for LKDTM regression tests
-+
-+include ../lib.mk
-+
-+# NOTE: $(OUTPUT) won't get default value if used before lib.mk
-+TEST_GEN_PROGS = $(patsubst %,$(OUTPUT)/%.sh,$(shell awk '{print $$1}' tests.txt | sed -e 's/\#//'))
-+all: $(TEST_GEN_PROGS)
-+
-+$(OUTPUT)/%: run.sh tests.txt
-+	install -m 0744 run.sh $@
-diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
-new file mode 100644
-index 000000000000..d874990e442b
---- /dev/null
-+++ b/tools/testing/selftests/lkdtm/config
-@@ -0,0 +1 @@
-+CONFIG_LKDTM=y
-diff --git a/tools/testing/selftests/lkdtm/run.sh b/tools/testing/selftests/lkdtm/run.sh
-new file mode 100755
-index 000000000000..a166b925c43d
---- /dev/null
-+++ b/tools/testing/selftests/lkdtm/run.sh
-@@ -0,0 +1,86 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# This reads tests.txt for the list of LKDTM tests to invoke. Any marked
-+# with a leading "#" are skipped. The line after the test name is either
-+# the text to look for in dmesg for a "success", or the rationale for why
-+# a test is marked to be skipped.
-+#
-+set -e
-+TRIGGER=/sys/kernel/debug/provoke-crash/DIRECT
-+
-+# Verify we have LKDTM available in the kernel.
-+if [ ! -r $TRIGGER ] ; then
-+	/sbin/modprobe -q lkdtm || true
-+	if [ ! -r $TRIGGER ] ; then
-+		echo "Cannot find $TRIGGER (missing CONFIG_LKDTM?) [SKIP]"
-+	else
-+		echo "Cannot write $TRIGGER (need to run as root?) [SKIP]"
-+	fi
-+	# Skip this test
-+	exit 4
-+fi
-+
-+# Figure out which test to run from our script name.
-+test=$(basename $0 .sh)
-+# Look up details about the test from master list of LKDTM tests.
-+line=$(egrep '^#?'"$test"'\b' tests.txt)
-+if [ -z "$line" ]; then
-+	echo "Missing test '$test' [SKIP]"
-+	exit 4
-+fi
-+# Check that the test is known to LKDTM.
-+if ! egrep -q '^'"$test"'$' "$TRIGGER" ; then
-+	echo "'$test' missing in $TRIGGER! [SKIP]"
-+	exit 4
-+fi
-+
-+# Extract notes/expected output from test list.
-+test=$(echo "$line" | cut -d" " -f1)
-+if echo "$line" | grep -q ' ' ; then
-+	expect=$(echo "$line" | cut -d" " -f2-)
-+else
-+	expect=""
-+fi
-+
-+# If the test is commented out, report a skip
-+if echo "$test" | grep -q '^#' ; then
-+	test=$(echo "$test" | cut -c2-)
-+	if [ -z "$expect" ]; then
-+		expect="crashes entire system"
-+	fi
-+	echo "$test: $expect [SKIP]"
-+	exit 4
-+fi
-+
-+# If no expected output given, assume an Oops with back trace is success.
-+if [ -z "$expect" ]; then
-+	expect="call trace:"
-+fi
-+
-+# Clear out dmesg for output reporting
-+dmesg -c >/dev/null
-+
-+# Prepare log for report checking
-+LOG=$(mktemp --tmpdir -t lkdtm-XXXXXX)
-+cleanup() {
-+	rm -f "$LOG"
-+}
-+trap cleanup EXIT
-+
-+# Most shells yell about signals and we're expecting the "cat" process
-+# to usually be killed by the kernel. So we have to run it in a sub-shell
-+# and silence errors.
-+($SHELL -c 'cat <(echo '"$test"') >'"$TRIGGER" 2>/dev/null) || true
-+
-+# Record and dump the results
-+dmesg -c >"$LOG"
-+cat "$LOG"
-+# Check for expected output
-+if grep -qi "$expect" "$LOG" ; then
-+	echo "$test: saw '$expect': ok"
-+	exit 0
-+else
-+	echo "$test: missing '$expect': [FAIL]"
-+	exit 1
-+fi
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-new file mode 100644
-index 000000000000..3ee43df87d71
---- /dev/null
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -0,0 +1,64 @@
-+#PANIC
-+BUG
-+WARNING
-+EXCEPTION
-+#LOOP Hangs the system
-+#EXHAUST_STACK Corrupts memory on failure
-+#CORRUPT_STACK Crashes entire system on success
-+#CORRUPT_STACK_STRONG Crashes entire system on success
-+CORRUPT_LIST_ADD
-+CORRUPT_LIST_DEL
-+CORRUPT_USER_DS
-+STACK_GUARD_PAGE_LEADING
-+STACK_GUARD_PAGE_TRAILING
-+UNALIGNED_LOAD_STORE_WRITE
-+#OVERWRITE_ALLOCATION Corrupts memory on failure
-+#WRITE_AFTER_FREE Corrupts memory on failure
-+READ_AFTER_FREE
-+#WRITE_BUDDY_AFTER_FREE Corrupts memory on failure
-+READ_BUDDY_AFTER_FREE
-+#SOFTLOCKUP Hangs the system
-+#HARDLOCKUP Hangs the system
-+#SPINLOCKUP Hangs the system
-+#HUNG_TASK Hangs the system
-+EXEC_DATA
-+EXEC_STACK
-+EXEC_KMALLOC
-+EXEC_VMALLOC
-+EXEC_RODATA
-+EXEC_USERSPACE
-+EXEC_NULL
-+ACCESS_USERSPACE
-+ACCESS_NULL
-+WRITE_RO
-+WRITE_RO_AFTER_INIT
-+WRITE_KERN
-+REFCOUNT_INC_OVERFLOW
-+REFCOUNT_ADD_OVERFLOW
-+REFCOUNT_INC_NOT_ZERO_OVERFLOW
-+REFCOUNT_ADD_NOT_ZERO_OVERFLOW
-+REFCOUNT_DEC_ZERO
-+REFCOUNT_DEC_NEGATIVE Negative detected: saturated
-+REFCOUNT_DEC_AND_TEST_NEGATIVE Negative detected: saturated
-+REFCOUNT_SUB_AND_TEST_NEGATIVE Negative detected: saturated
-+REFCOUNT_INC_ZERO
-+REFCOUNT_ADD_ZERO
-+REFCOUNT_INC_SATURATED Saturation detected: still saturated
-+REFCOUNT_DEC_SATURATED Saturation detected: still saturated
-+REFCOUNT_ADD_SATURATED Saturation detected: still saturated
-+REFCOUNT_INC_NOT_ZERO_SATURATED
-+REFCOUNT_ADD_NOT_ZERO_SATURATED
-+REFCOUNT_DEC_AND_TEST_SATURATED Saturation detected: still saturated
-+REFCOUNT_SUB_AND_TEST_SATURATED Saturation detected: still saturated
-+#REFCOUNT_TIMING timing only
-+#ATOMIC_TIMING timing only
-+USERCOPY_HEAP_SIZE_TO
-+USERCOPY_HEAP_SIZE_FROM
-+USERCOPY_HEAP_WHITELIST_TO
-+USERCOPY_HEAP_WHITELIST_FROM
-+USERCOPY_STACK_FRAME_TO
-+USERCOPY_STACK_FRAME_FROM
-+USERCOPY_STACK_BEYOND
-+USERCOPY_KERNEL
-+USERCOPY_KERNEL_DS
-+STACKLEAK_ERASING
--- 
-2.17.1
-
-
--- 
-Kees Cook
+thanks,
+-- Shuah
