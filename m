@@ -1,84 +1,38 @@
 From: keescook@chromium.org (Kees Cook)
-Date: Tue,  9 Apr 2019 16:55:52 -0700
-Subject: [PATCH 2/6] selftests: Use runner.sh for emit targets
-In-Reply-To: <20190409235556.3967-1-keescook@chromium.org>
-References: <20190409235556.3967-1-keescook@chromium.org>
-Message-ID: <20190409235556.3967-3-keescook@chromium.org>
+Date: Tue,  9 Apr 2019 16:55:50 -0700
+Subject: [PATCH 0/6] selftests: Move test output to diagnostic lines
+Message-ID: <20190409235556.3967-1-keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190409235552.N0piGKfwVvBG5O3LlH7K5KdLrHVLALqoCW9lsRo5XaE@z>
+Message-ID: <20190409235550.Dkk6oHLWBQAwbmOeSACUxZSLjD0ByIGU47lhkeIUoj4@z>
 
-This reuses the new runner.sh for the emit targets instead of manually
-running each test via run_kselftest.sh.
+This refactors the selftest Makefiles to extract the test running logic
+to be reused between "run_tests" and "emit_tests", while also fixing
+up the test output to be TAP version 13 compliant:
+- added "plan" line
+- fixed result line syntax
+- moved all test output to be "# "-prefixed as TAP "diagnostic" lines
 
-Signed-off-by: Kees Cook <keescook at chromium.org>
----
- tools/testing/selftests/Makefile | 11 +++++------
- tools/testing/selftests/lib.mk   | 15 ++-------------
- 2 files changed, 7 insertions(+), 19 deletions(-)
+The prefixing code includes a fallback mode for limited execution
+environments.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 971fc8428117..45327e921169 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -131,7 +131,8 @@ ALL_SCRIPT := $(INSTALL_PATH)/run_kselftest.sh
- install:
- ifdef INSTALL_PATH
- 	@# Ask all targets to install their files
--	mkdir -p $(INSTALL_PATH)
-+	mkdir -p $(INSTALL_PATH)/kselftest
-+	install -m 744 kselftest/runner.sh $(INSTALL_PATH)/kselftest/
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
- 		make OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
-@@ -141,15 +142,13 @@ ifdef INSTALL_PATH
- 	echo "#!/bin/sh" > $(ALL_SCRIPT)
- 	echo "BASE_DIR=\$$(realpath \$$(dirname \$$0))" >> $(ALL_SCRIPT)
- 	echo "cd \$$BASE_DIR" >> $(ALL_SCRIPT)
-+	echo ". ./kselftest/runner.sh" >> $(ALL_SCRIPT)
- 	echo "ROOT=\$$PWD" >> $(ALL_SCRIPT)
- 	echo "if [ \"\$$1\" = \"--summary\" ]; then" >> $(ALL_SCRIPT)
--	echo "  OUTPUT=\$$BASE_DIR/output.log" >> $(ALL_SCRIPT)
--	echo "  cat /dev/null > \$$OUTPUT" >> $(ALL_SCRIPT)
--	echo "else" >> $(ALL_SCRIPT)
--	echo "  OUTPUT=/dev/stdout" >> $(ALL_SCRIPT)
-+	echo "  logfile=\$$BASE_DIR/output.log" >> $(ALL_SCRIPT)
-+	echo "  cat /dev/null > \$$logfile" >> $(ALL_SCRIPT)
- 	echo "fi" >> $(ALL_SCRIPT)
- 	echo "export KSFT_TAP_LEVEL=1" >> $(ALL_SCRIPT)
--	echo "export skip=4" >> $(ALL_SCRIPT)
- 
- 	for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 7da79fe0bb78..8a4fad5d3934 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -78,24 +78,13 @@ else
- 	$(error Error: set INSTALL_PATH to use install)
- endif
- 
--define EMIT_TESTS
-+emit_tests:
- 	@test_num=`echo 0`;				\
- 	for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
- 		BASENAME_TEST=`basename $$TEST`;	\
- 		test_num=`echo $$test_num+1 | bc`;	\
--		TEST_HDR_MSG="selftests: "`basename $$PWD`:" $$BASENAME_TEST";	\
--		echo "echo $$TEST_HDR_MSG";	\
--		if [ ! -x $$TEST ]; then	\
--			echo "echo \"$$TEST_HDR_MSG: Warning: file $$BASENAME_TEST is not executable, correct this.\"";		\
--			echo "echo \"not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]\""; \
--		else
--			echo "(./$$BASENAME_TEST >> \$$OUTPUT 2>&1 && echo \"ok 1..$$test_num $$TEST_HDR_MSG [PASS]\") || (if [ \$$? -eq \$$skip ]; then echo \"not ok 1..$$test_num $$TEST_HDR_MSG [SKIP]\"; else echo \"not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]\"; fi;)"; \
--		fi;		\
-+		echo "run_one \"$$BASENAME_TEST\" \"$$test_num\"";	\
- 	done;
--endef
--
--emit_tests:
--	$(EMIT_TESTS)
- 
- # define if isn't already. It is undefined in make O= case.
- ifeq ($(RM),)
+-Kees
+
+Kees Cook (6):
+  selftests: Extract single-test shell logic from lib.mk
+  selftests: Use runner.sh for emit targets
+  selftests: Extract logic for multiple test runs
+  selftests/runner: Add plan line and fix result line syntax
+  selftests/runner: Distinguish between missing and non-executable
+  selftests: Move test output to diagnostic lines
+
+ tools/testing/selftests/.gitignore          |  1 -
+ tools/testing/selftests/Makefile            | 18 +++--
+ tools/testing/selftests/kselftest/prefix.pl | 23 ++++++
+ tools/testing/selftests/kselftest/runner.sh | 80 +++++++++++++++++++++
+ tools/testing/selftests/lib.mk              | 61 +++-------------
+ 5 files changed, 119 insertions(+), 64 deletions(-)
+ create mode 100755 tools/testing/selftests/kselftest/prefix.pl
+ create mode 100644 tools/testing/selftests/kselftest/runner.sh
+
 -- 
 2.17.1
