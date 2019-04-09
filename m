@@ -1,77 +1,38 @@
-From: joel at joelfernandes.org (Joel Fernandes)
-Date: Tue, 9 Apr 2019 11:11:27 -0400
-Subject: [PATCH v6 1/2] Provide in-kernel headers to make extending
- kernel easier
-In-Reply-To: <20190409150034.qkeceveap4tblk25@e107158-lin.cambridge.arm.com>
-References: <20190408212855.233198-1-joel@joelfernandes.org>
- <20190409150034.qkeceveap4tblk25@e107158-lin.cambridge.arm.com>
-Message-ID: <20190409151127.GA248418@google.com>
+From: keescook at chromium.org (Kees Cook)
+Date: Tue, 9 Apr 2019 09:06:26 -0700
+Subject: [PATCH] selftests/lib.mk: Move test output to diagnostic lines
+In-Reply-To: <ac089bd1-0abb-da5b-a418-b81ea9957a28@kernel.org>
+References: <20190408203012.GA566@beast>
+ <ac089bd1-0abb-da5b-a418-b81ea9957a28@kernel.org>
+Message-ID: <CAGXu5j+_b-w+e_4rn1D5zH=KF_O=ktz-xV3hEFd1cqSmcWpWhQ@mail.gmail.com>
 
-On Tue, Apr 09, 2019 at 04:00:34PM +0100, Qais Yousef wrote:
-> On 04/08/19 17:28, Joel Fernandes (Google) wrote:
-> > Introduce in-kernel headers which are made available as an archive
-> > through proc (/proc/kheaders.tar.xz file). This archive makes it
-> > possible to run eBPF and other tracing programs tracing programs that
-> > need to extend the kernel for tracing purposes without any dependency on
-> > the file system having headers.
-> > 
-> > On Android and embedded systems, it is common to switch kernels but not
-> > have kernel headers available on the file system. Further once a
-> > different kernel is booted, any headers stored on the file system will
-> > no longer be useful. By storing the headers as a compressed archive
-> > within the kernel, we can avoid these issues that have been a hindrance
-> > for a long time.
-> > 
-> > The best way to use this feature is by building it in. Several users
-> > have a need for this, when they switch debug kernels, they donot want to
-> > update the filesystem or worry about it where to store the headers on
-> > it. However, the feature is also buildable as a module in case the user
-> > desires it not being part of the kernel image. This makes it possible to
-> > load and unload the headers from memory on demand. A tracing program, or
-> > a kernel module builder can load the module, do its operations, and then
-> > unload the module to save kernel memory. The total memory needed is 3.8MB.
-> > 
-> > By having the archive available at a fixed location independent of
-> > filesystem dependencies and conventions, all debugging tools can
-> > directly refer to the fixed location for the archive, without concerning
-> > with where the headers on a typical filesystem which significantly
-> > simplifies tooling that needs kernel headers.
-> > 
-> > The code to read the headers is based on /proc/config.gz code and uses
-> > the same technique to embed the headers.
-> > 
-> > IKHD_ST and IKHD_ED markers as is to facilitate future patches that
-> > would extract the headers from a kernel or module image.
-> > 
-> > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> 
-> I applied both patches on 5.1-rc2 and managed to compile and run several
-> eBPF programs using the untarred headers from /proc/kheaders.tar.xz on my juno.
-> 
-> Tested-by: Qais Yousef <qais.yousef at arm.com>
+On Mon, Apr 8, 2019 at 2:32 PM shuah <shuah at kernel.org> wrote:
+> Couple of things to consider:
+> - will this work on embedded test system with limited applications shell
+>    support?
 
-Thank you Qais!  Masahiro, if Ok with you now could you give your tag?
+I was assuming the availability of "stdbuf" which is part of
+coreutils, and "perl" which is already required for at least one other
+test (sysctl). What do you have in mind for the "maximum supported
+environment" (and where's best to document this)? Also, I see python
+is used by several tests. Should python be considered instead of perl?
 
-thanks,
+> - It does add dependecy on perl for running tests - not a problem since
+>    kernel build system uses it, however it might not be the case when
+>    tests get run on system without perl.
 
- - Joel
+I could likely rewrite the "prefix.pl" in C, and the test could use a
+built binary instead? Or in python (as noted above). Where are tests
+being run right now with such a limited environment?
 
+> - there is the emit_tests support that creates a shell script that runs.
+>    The results format should stay the is same when tests get run using
+>    run_tests vs. tests are built and installed. Take a look at emit_tests
+>    and EMIT_TESTS in Makefile and lib.mk
 
-> > ---
-> > 
-> >     v5 -> v6: (Masahiro Yamada suggestions mostly)
-> >     - Dropped support for module building.
-> >     - Rebuild archive if script changes.
-> >     - Move archive file list to script.
-> >     - Move build script to kernel directory.
-> > 
-> >     v4 -> v5:
-> >     (v4 was Tested-by the following folks)
-> >         Tested-by: qais.yousef at arm.com
-> >         Tested-by: dietmar.eggemann at arm.com
-> >         Tested-by: linux at manojrajarao.com
-> 
-> Thanks!
-> 
-> --
-> Qais Yousef
+Ah yeah. I will adjust EMIT_TESTS too.
+
+Thanks!
+
+-- 
+Kees Cook
