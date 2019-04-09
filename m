@@ -1,55 +1,54 @@
-From: shuah@kernel.org (shuah)
-Date: Tue, 9 Apr 2019 11:04:21 -0600
-Subject: [PATCH] selftests/lib.mk: Move test output to diagnostic lines
-In-Reply-To: <CAGXu5jLta_gWu+5SXMrkQY3pTVnZ43CAK24Z5xAXdzJMwYWojQ@mail.gmail.com>
-References: <20190408203012.GA566@beast>
- <ac089bd1-0abb-da5b-a418-b81ea9957a28@kernel.org>
- <CAGXu5j+_b-w+e_4rn1D5zH=KF_O=ktz-xV3hEFd1cqSmcWpWhQ@mail.gmail.com>
- <d0647ccf-b2a2-8fd4-adc4-16914b68ffbf@kernel.org>
- <CAGXu5jLta_gWu+5SXMrkQY3pTVnZ43CAK24Z5xAXdzJMwYWojQ@mail.gmail.com>
-Message-ID: <62918747-3306-b1ba-9a0f-92d52b84438f@kernel.org>
+From: keescook@chromium.org (Kees Cook)
+Date: Tue,  9 Apr 2019 16:55:54 -0700
+Subject: [PATCH 4/6] selftests/runner: Add plan line and fix result line syntax
+In-Reply-To: <20190409235556.3967-1-keescook@chromium.org>
+References: <20190409235556.3967-1-keescook@chromium.org>
+Message-ID: <20190409235556.3967-5-keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190409170421.nrXsT-NxC54Df1sjiPDCCwnwejK8jCXy7cVp0lDMYe8@z>
+Message-ID: <20190409235554.cwLRmoOnUk70EufPZgT9rscwwd0Vua1x8X209RTww68@z>
 
-On 4/9/19 10:57 AM, Kees Cook wrote:
-> On Tue, Apr 9, 2019@9:56 AM shuah <shuah@kernel.org> wrote:
->>
->> On 4/9/19 10:06 AM, Kees Cook wrote:
->>> On Mon, Apr 8, 2019@2:32 PM shuah <shuah@kernel.org> wrote:
->>>> Couple of things to consider:
->>>> - will this work on embedded test system with limited applications shell
->>>>      support?
->>>
->>> I was assuming the availability of "stdbuf" which is part of
->>> coreutils, and "perl" which is already required for at least one other
->>> test (sysctl). What do you have in mind for the "maximum supported
->>> environment" (and where's best to document this)? Also, I see python
->>> is used by several tests. Should python be considered instead of perl?
->>>
->>>> - It does add dependecy on perl for running tests - not a problem since
->>>>      kernel build system uses it, however it might not be the case when
->>>>      tests get run on system without perl.
->>>
->>> I could likely rewrite the "prefix.pl" in C, and the test could use a
->>> built binary instead? Or in python (as noted above). Where are tests
->>> being run right now with such a limited environment?
->>>
->>
->> Some embedded systems as I recall with just busybox env. I am thinking
->> shell rather C/perl/python.
-> 
-> It can't be done with shell alone if we want to retain the unbuffered
-> output. Don't we already ship binaries in this situation, though?
-> (i.e. such environments clearly aren't building test binaries...) Why
-> not also ship kselftest binaries?
-> 
+The TAP version 13 spec requires a "plan" line, which has been missing.
+Since we always know how many tests we're going to run, emit the count on
+the plan line. This also fixes the result lines to remove the "1.." prefix
+which is against spec, and to mark skips with the correct "# SKIP" suffix.
 
-They don't build them and run from install. Let's give this a try with
-perl and see how this will work. Once you have the emit_tests covered,
-I will upload it to a kselftest topic branch and we can ask Kernci and
-Linaro folks to test this in their environments.
+Signed-off-by: Kees Cook <keescook at chromium.org>
+---
+ tools/testing/selftests/kselftest/runner.sh | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Thanks for working on this.
-
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index 51139f42a6ca..7f8d6b127693 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -18,15 +18,15 @@ run_one()
+ 	echo "========================================"
+ 	if [ ! -x "$TEST" ]; then
+ 		echo "$TEST_HDR_MSG: Warning: file $TEST is not executable, correct this."
+-		echo "not ok 1..$test_num $TEST_HDR_MSG [FAIL]"
++		echo "not ok $test_num $TEST_HDR_MSG"
+ 	else
+ 		cd `dirname $TEST` > /dev/null
+ 		(./$BASENAME_TEST >> "$logfile" 2>&1 &&
+-		echo "ok 1..$test_num $TEST_HDR_MSG [PASS]") ||
++		echo "ok $test_num $TEST_HDR_MSG") ||
+ 		(if [ $? -eq $skip_rc ]; then	\
+-			echo "not ok 1..$test_num $TEST_HDR_MSG [SKIP]"
++			echo "not ok $test_num $TEST_HDR_MSG # SKIP"
+ 		else
+-			echo "not ok 1..$test_num $TEST_HDR_MSG [FAIL]"
++			echo "not ok $test_num $TEST_HDR_MSG"
+ 		fi)
+ 		cd - >/dev/null
+ 	fi
+@@ -37,6 +37,8 @@ run_many()
+ 	echo "TAP version 13"
+ 	DIR=$(basename "$PWD")
+ 	test_num=0
++	total=$(echo "$@" | wc -w)
++	echo "1..$total"
+ 	for TEST in "$@"; do
+ 		test_num=$(( test_num + 1 ))
+ 		run_one "$DIR" "$TEST" "$test_num"
+-- 
+2.17.1
