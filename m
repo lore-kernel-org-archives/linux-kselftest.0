@@ -1,573 +1,386 @@
-From: ci_notify@linaro.org (ci_notify@linaro.org)
-Date: Tue, 9 Apr 2019 14:00:27 +0000 (UTC)
-Subject: next-20190409 kselftest results
-Message-ID: <768456018.10831.1554818428036.JavaMail.jenkins@a6c5c67cda76>
+From: alan.maguire@oracle.com (Alan Maguire)
+Date: Tue,  9 Apr 2019 15:06:40 +0100
+Subject: [PATCH v3 bpf-next 1/4] selftests_bpf: extend test_tc_tunnel for UDP
+ encap
+In-Reply-To: <1554818803-4070-1-git-send-email-alan.maguire@oracle.com>
+References: <1554818803-4070-1-git-send-email-alan.maguire@oracle.com>
+Message-ID: <1554818803-4070-2-git-send-email-alan.maguire@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190409140027.0DeFZ45Hj2v9jyNUpvRzp-qym1mWc2a7o6WcLFHDW7k@z>
+Message-ID: <20190409140640.-skEl-DyzD0Hg2ougrC_d2ban83cjVL9hIdAlVodMbk@z>
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.1.0-rc4
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: cfd24a53adb86cdeeaf04d4351d8cb7f6e94795f
-git describe: next-20190409
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190409
+commit 868d523535c2 ("bpf: add bpf_skb_adjust_room encap flags")
+introduced support to bpf_skb_adjust_room for GSO-friendly GRE
+and UDP encapsulation and later introduced associated test_tc_tunnel
+tests.  Here those tests are extended to cover UDP encapsulation also.
 
-Regressions (compared to build next-20190408)
-------------------------------------------------------------------------
-hi6220-hikey - arm64:                                                                                                      
- kselftest:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-i386:                                                                                                      
- kselftest:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-juno-r2 - arm64:                                                                                                      
- kselftest:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-qemu_arm:                                                                                                      
- kselftest:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-qemu_i386:                                                                                                      
- kselftest:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-qemu_x86_64:                                                                                                      
- kselftest:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-x15 - arm:                                                                                                      
- kselftest:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * lib_bitmap.sh                                                                                                         
-                                                                                         
-    * lib_printf.sh                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190408)                                                                   
-------------------------------------------------------------------------                                               
-juno-r2 - arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_maps                                                                                                         
-qemu_x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_maps                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sockmap                                                                                                         
-                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
+Signed-off-by: Alan Maguire <alan.maguire at oracle.com>
+---
+ tools/testing/selftests/bpf/config                 |   4 +
+ tools/testing/selftests/bpf/progs/test_tc_tunnel.c | 140 ++++++++++++++-------
+ tools/testing/selftests/bpf/test_tc_tunnel.sh      |  47 ++++++-
+ 3 files changed, 143 insertions(+), 48 deletions(-)
 
-
-In total:
-------------------------------------------------------------------------
-Ran 1578 total tests in the following environments and test suites.
-pass 999
-fail 390
-xfail 0
-skip 189
-
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
-
-
-Failures
-------------------------------------------------------------------------
-
-qemu_x86_64:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_fsgsbase_64
-
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/seccomp_seccomp_bpf
-* kselftest/size_get_size
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_syscall_arg_fault_32
-
-qemu_arm64:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-
-x86:
-* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-native/bpf_test_netcnt
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_sockmap
-* kselftest-vsyscall-mode-native/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-native/cgroup_test_core
-* kselftest-vsyscall-mode-native/dma-buf_udmabuf
-* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-native/lib_bitmap.sh
-* kselftest-vsyscall-mode-native/lib_prime_numbers.sh
-* kselftest-vsyscall-mode-native/lib_printf.sh
-* kselftest-vsyscall-mode-native/lib_strscpy.sh
-* kselftest-vsyscall-mode-native/net_fib-onlink-tests.sh
-* kselftest-vsyscall-mode-native/net_ip_defrag.sh
-* kselftest-vsyscall-mode-native/net_pmtu.sh
-* kselftest-vsyscall-mode-native/net_psock_snd.sh
-* kselftest-vsyscall-mode-native/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-none/bpf_test_netcnt
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-none/cgroup_test_core
-* kselftest-vsyscall-mode-none/dma-buf_udmabuf
-* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-none/lib_bitmap.sh
-* kselftest-vsyscall-mode-none/lib_prime_numbers.sh
-* kselftest-vsyscall-mode-none/lib_printf.sh
-* kselftest-vsyscall-mode-none/lib_strscpy.sh
-* kselftest-vsyscall-mode-none/net_fib-onlink-tests.sh
-* kselftest-vsyscall-mode-none/net_ip_defrag.sh
-* kselftest-vsyscall-mode-none/net_pmtu.sh
-* kselftest-vsyscall-mode-none/net_psock_snd.sh
-* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/timestamping_txtimestamp.sh
-
-dragonboard-410c:
-
-x15:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_msg_zerocopy.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/seccomp_seccomp_bpf
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_msg_zerocopy.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/seccomp_seccomp_bpf
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-
-hi6220-hikey:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-
-juno-r2:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_xdp_vlan.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index a42f4fc..8e749c1 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -25,3 +25,7 @@ CONFIG_XDP_SOCKETS=y
+ CONFIG_FTRACE_SYSCALLS=y
+ CONFIG_IPV6_TUNNEL=y
+ CONFIG_IPV6_GRE=y
++CONFIG_NET_FOU=m
++CONFIG_NET_FOU_IP_TUNNELS=y
++CONFIG_IPV6_FOU=m
++CONFIG_IPV6_FOU_TUNNEL=m
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+index f541c2d..33b338e 100644
+--- a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
++++ b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+@@ -12,6 +12,7 @@
+ #include <linux/ip.h>
+ #include <linux/ipv6.h>
+ #include <linux/tcp.h>
++#include <linux/udp.h>
+ #include <linux/pkt_cls.h>
+ #include <linux/types.h>
+ 
+@@ -20,16 +21,27 @@
+ 
+ static const int cfg_port = 8000;
+ 
+-struct grev4hdr {
+-	struct iphdr ip;
++static const int cfg_udp_src = 20000;
++static const int cfg_udp_dst = 5555;
++
++struct gre_hdr {
+ 	__be16 flags;
+ 	__be16 protocol;
+ } __attribute__((packed));
+ 
+-struct grev6hdr {
++union l4hdr {
++	struct udphdr udp;
++	struct gre_hdr gre;
++};
++
++struct v4hdr {
++	struct iphdr ip;
++	union l4hdr l4hdr;
++} __attribute__((packed));
++
++struct v6hdr {
+ 	struct ipv6hdr ip;
+-	__be16 flags;
+-	__be16 protocol;
++	union l4hdr l4hdr;
+ } __attribute__((packed));
+ 
+ static __always_inline void set_ipv4_csum(struct iphdr *iph)
+@@ -47,10 +59,10 @@ static __always_inline void set_ipv4_csum(struct iphdr *iph)
+ 	iph->check = ~((csum & 0xffff) + (csum >> 16));
+ }
+ 
+-static __always_inline int encap_ipv4(struct __sk_buff *skb, bool with_gre)
++static __always_inline int encap_ipv4(struct __sk_buff *skb, __u8 encap_proto)
+ {
+-	struct grev4hdr h_outer;
+ 	struct iphdr iph_inner;
++	struct v4hdr h_outer;
+ 	struct tcphdr tcph;
+ 	__u64 flags;
+ 	int olen;
+@@ -70,12 +82,29 @@ static __always_inline int encap_ipv4(struct __sk_buff *skb, bool with_gre)
+ 	if (tcph.dest != __bpf_constant_htons(cfg_port))
+ 		return TC_ACT_OK;
+ 
++	olen = sizeof(h_outer.ip);
++
+ 	flags = BPF_F_ADJ_ROOM_FIXED_GSO | BPF_F_ADJ_ROOM_ENCAP_L3_IPV4;
+-	if (with_gre) {
++	switch (encap_proto) {
++	case IPPROTO_GRE:
+ 		flags |= BPF_F_ADJ_ROOM_ENCAP_L4_GRE;
+-		olen = sizeof(h_outer);
+-	} else {
+-		olen = sizeof(h_outer.ip);
++		olen += sizeof(h_outer.l4hdr.gre);
++		h_outer.l4hdr.gre.protocol = bpf_htons(ETH_P_IP);
++		h_outer.l4hdr.gre.flags = 0;
++		break;
++	case IPPROTO_UDP:
++		flags |= BPF_F_ADJ_ROOM_ENCAP_L4_UDP;
++		olen += sizeof(h_outer.l4hdr.udp);
++		h_outer.l4hdr.udp.source = __bpf_constant_htons(cfg_udp_src);
++		h_outer.l4hdr.udp.dest = __bpf_constant_htons(cfg_udp_dst);
++		h_outer.l4hdr.udp.check = 0;
++		h_outer.l4hdr.udp.len = bpf_htons(bpf_ntohs(iph_inner.tot_len) +
++						  sizeof(h_outer.l4hdr.udp));
++		break;
++	case IPPROTO_IPIP:
++		break;
++	default:
++		return TC_ACT_OK;
+ 	}
+ 
+ 	/* add room between mac and network header */
+@@ -85,16 +114,10 @@ static __always_inline int encap_ipv4(struct __sk_buff *skb, bool with_gre)
+ 	/* prepare new outer network header */
+ 	h_outer.ip = iph_inner;
+ 	h_outer.ip.tot_len = bpf_htons(olen +
+-				      bpf_htons(h_outer.ip.tot_len));
+-	if (with_gre) {
+-		h_outer.ip.protocol = IPPROTO_GRE;
+-		h_outer.protocol = bpf_htons(ETH_P_IP);
+-		h_outer.flags = 0;
+-	} else {
+-		h_outer.ip.protocol = IPPROTO_IPIP;
+-	}
++				       bpf_ntohs(h_outer.ip.tot_len));
++	h_outer.ip.protocol = encap_proto;
+ 
+-	set_ipv4_csum((void *)&h_outer.ip);
++	set_ipv4_csum(&h_outer.ip);
+ 
+ 	/* store new outer network header */
+ 	if (bpf_skb_store_bytes(skb, ETH_HLEN, &h_outer, olen,
+@@ -104,11 +127,12 @@ static __always_inline int encap_ipv4(struct __sk_buff *skb, bool with_gre)
+ 	return TC_ACT_OK;
+ }
+ 
+-static __always_inline int encap_ipv6(struct __sk_buff *skb, bool with_gre)
++static __always_inline int encap_ipv6(struct __sk_buff *skb, __u8 encap_proto)
+ {
+ 	struct ipv6hdr iph_inner;
+-	struct grev6hdr h_outer;
++	struct v6hdr h_outer;
+ 	struct tcphdr tcph;
++	__u16 tot_len;
+ 	__u64 flags;
+ 	int olen;
+ 
+@@ -124,15 +148,32 @@ static __always_inline int encap_ipv6(struct __sk_buff *skb, bool with_gre)
+ 	if (tcph.dest != __bpf_constant_htons(cfg_port))
+ 		return TC_ACT_OK;
+ 
++	olen = sizeof(h_outer.ip);
++
+ 	flags = BPF_F_ADJ_ROOM_FIXED_GSO | BPF_F_ADJ_ROOM_ENCAP_L3_IPV6;
+-	if (with_gre) {
++	switch (encap_proto) {
++	case IPPROTO_GRE:
+ 		flags |= BPF_F_ADJ_ROOM_ENCAP_L4_GRE;
+-		olen = sizeof(h_outer);
+-	} else {
+-		olen = sizeof(h_outer.ip);
++		olen += sizeof(h_outer.l4hdr.gre);
++		h_outer.l4hdr.gre.protocol = bpf_htons(ETH_P_IPV6);
++		h_outer.l4hdr.gre.flags = 0;
++		break;
++	case IPPROTO_UDP:
++		flags |= BPF_F_ADJ_ROOM_ENCAP_L4_UDP;
++		olen += sizeof(h_outer.l4hdr.udp);
++		h_outer.l4hdr.udp.source = __bpf_constant_htons(cfg_udp_src);
++		h_outer.l4hdr.udp.dest = __bpf_constant_htons(cfg_udp_dst);
++		tot_len = bpf_ntohs(iph_inner.payload_len) + sizeof(iph_inner) +
++			  sizeof(h_outer.l4hdr.udp);
++		h_outer.l4hdr.udp.check = 0;
++		h_outer.l4hdr.udp.len = bpf_htons(tot_len);
++		break;
++	case IPPROTO_IPV6:
++		break;
++	default:
++		return TC_ACT_OK;
+ 	}
+ 
+-
+ 	/* add room between mac and network header */
+ 	if (bpf_skb_adjust_room(skb, olen, BPF_ADJ_ROOM_MAC, flags))
+ 		return TC_ACT_SHOT;
+@@ -141,13 +182,8 @@ static __always_inline int encap_ipv6(struct __sk_buff *skb, bool with_gre)
+ 	h_outer.ip = iph_inner;
+ 	h_outer.ip.payload_len = bpf_htons(olen +
+ 					   bpf_ntohs(h_outer.ip.payload_len));
+-	if (with_gre) {
+-		h_outer.ip.nexthdr = IPPROTO_GRE;
+-		h_outer.protocol = bpf_htons(ETH_P_IPV6);
+-		h_outer.flags = 0;
+-	} else {
+-		h_outer.ip.nexthdr = IPPROTO_IPV6;
+-	}
++
++	h_outer.ip.nexthdr = encap_proto;
+ 
+ 	/* store new outer network header */
+ 	if (bpf_skb_store_bytes(skb, ETH_HLEN, &h_outer, olen,
+@@ -161,7 +197,7 @@ static __always_inline int encap_ipv6(struct __sk_buff *skb, bool with_gre)
+ int __encap_ipip(struct __sk_buff *skb)
+ {
+ 	if (skb->protocol == __bpf_constant_htons(ETH_P_IP))
+-		return encap_ipv4(skb, false);
++		return encap_ipv4(skb, IPPROTO_IPIP);
+ 	else
+ 		return TC_ACT_OK;
+ }
+@@ -170,7 +206,16 @@ int __encap_ipip(struct __sk_buff *skb)
+ int __encap_gre(struct __sk_buff *skb)
+ {
+ 	if (skb->protocol == __bpf_constant_htons(ETH_P_IP))
+-		return encap_ipv4(skb, true);
++		return encap_ipv4(skb, IPPROTO_GRE);
++	else
++		return TC_ACT_OK;
++}
++
++SEC("encap_udp")
++int __encap_udp(struct __sk_buff *skb)
++{
++	if (skb->protocol == __bpf_constant_htons(ETH_P_IP))
++		return encap_ipv4(skb, IPPROTO_UDP);
+ 	else
+ 		return TC_ACT_OK;
+ }
+@@ -179,7 +224,7 @@ int __encap_gre(struct __sk_buff *skb)
+ int __encap_ip6tnl(struct __sk_buff *skb)
+ {
+ 	if (skb->protocol == __bpf_constant_htons(ETH_P_IPV6))
+-		return encap_ipv6(skb, false);
++		return encap_ipv6(skb, IPPROTO_IPV6);
+ 	else
+ 		return TC_ACT_OK;
+ }
+@@ -188,23 +233,34 @@ int __encap_ip6tnl(struct __sk_buff *skb)
+ int __encap_ip6gre(struct __sk_buff *skb)
+ {
+ 	if (skb->protocol == __bpf_constant_htons(ETH_P_IPV6))
+-		return encap_ipv6(skb, true);
++		return encap_ipv6(skb, IPPROTO_GRE);
++	else
++		return TC_ACT_OK;
++}
++
++SEC("encap_ip6udp")
++int __encap_ip6udp(struct __sk_buff *skb)
++{
++	if (skb->protocol == __bpf_constant_htons(ETH_P_IPV6))
++		return encap_ipv6(skb, IPPROTO_UDP);
+ 	else
+ 		return TC_ACT_OK;
+ }
+ 
+ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+ {
+-	char buf[sizeof(struct grev6hdr)];
+-	int olen;
++	char buf[sizeof(struct v6hdr)];
++	int olen = len;
+ 
+ 	switch (proto) {
+ 	case IPPROTO_IPIP:
+ 	case IPPROTO_IPV6:
+-		olen = len;
+ 		break;
+ 	case IPPROTO_GRE:
+-		olen = len + 4 /* gre hdr */;
++		olen += sizeof(struct gre_hdr);
++		break;
++	case IPPROTO_UDP:
++		olen += sizeof(struct udphdr);
+ 		break;
+ 	default:
+ 		return TC_ACT_OK;
+diff --git a/tools/testing/selftests/bpf/test_tc_tunnel.sh b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+index c805adb..64f3091 100755
+--- a/tools/testing/selftests/bpf/test_tc_tunnel.sh
++++ b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+@@ -15,6 +15,9 @@ readonly ns2_v4=192.168.1.2
+ readonly ns1_v6=fd::1
+ readonly ns2_v6=fd::2
+ 
++# Must match port used by bpf program
++readonly udpport=5555
++
+ readonly infile="$(mktemp)"
+ readonly outfile="$(mktemp)"
+ 
+@@ -38,8 +41,8 @@ setup() {
+ 	# clamp route to reserve room for tunnel headers
+ 	ip -netns "${ns1}" -4 route flush table main
+ 	ip -netns "${ns1}" -6 route flush table main
+-	ip -netns "${ns1}" -4 route add "${ns2_v4}" mtu 1476 dev veth1
+-	ip -netns "${ns1}" -6 route add "${ns2_v6}" mtu 1456 dev veth1
++	ip -netns "${ns1}" -4 route add "${ns2_v4}" mtu 1472 dev veth1
++	ip -netns "${ns1}" -6 route add "${ns2_v6}" mtu 1452 dev veth1
+ 
+ 	sleep 1
+ 
+@@ -103,6 +106,18 @@ if [[ "$#" -eq "0" ]]; then
+ 	echo "ip6 gre gso"
+ 	$0 ipv6 ip6gre 2000
+ 
++	echo "ip udp"
++	$0 ipv4 udp 100
++
++	echo "ip6 udp"
++	$0 ipv6 ip6udp 100
++
++	echo "ip udp gso"
++	$0 ipv4 udp 2000
++
++	echo "ip6 udp gso"
++	$0 ipv6 ip6udp 2000
++
+ 	echo "OK. All tests passed"
+ 	exit 0
+ fi
+@@ -117,12 +132,20 @@ case "$1" in
+ "ipv4")
+ 	readonly addr1="${ns1_v4}"
+ 	readonly addr2="${ns2_v4}"
+-	readonly netcat_opt=-4
++	readonly ipproto=4
++	readonly netcat_opt=-${ipproto}
++	readonly foumod=fou
++	readonly foutype=ipip
++	readonly fouproto=4
+ 	;;
+ "ipv6")
+ 	readonly addr1="${ns1_v6}"
+ 	readonly addr2="${ns2_v6}"
+-	readonly netcat_opt=-6
++	readonly ipproto=6
++	readonly netcat_opt=-${ipproto}
++	readonly foumod=fou6
++	readonly foutype=ip6tnl
++	readonly fouproto="41 -6"
+ 	;;
+ *)
+ 	echo "unknown arg: $1"
+@@ -155,11 +178,23 @@ echo "test bpf encap without decap (expect failure)"
+ server_listen
+ ! client_connect
+ 
++if [[ "$tuntype" =~ "udp" ]]; then
++	# Set up fou tunnel.
++	ttype="${foutype}"
++	targs="encap fou encap-sport auto encap-dport $udpport"
++	# fou may be a module; allow this to fail.
++	modprobe "${foumod}" ||true
++	ip netns exec "${ns2}" ip fou add port 5555 ipproto ${fouproto}
++else
++	ttype=$tuntype
++	targs=""
++fi
++
+ # serverside, insert decap module
+ # server is still running
+ # client can connect again
+-ip netns exec "${ns2}" ip link add dev testtun0 type "${tuntype}" \
+-	remote "${addr1}" local "${addr2}"
++ip netns exec "${ns2}" ip link add name testtun0 type "${ttype}" \
++	remote "${addr1}" local "${addr2}" $targs
+ # Because packets are decapped by the tunnel they arrive on testtun0 from
+ # the IP stack perspective.  Ensure reverse path filtering is disabled
+ # otherwise we drop the TCP SYN as arriving on testtun0 instead of the
 -- 
-Linaro LKFT
-https://lkft.linaro.org
+1.8.3.1
