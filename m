@@ -1,91 +1,33 @@
-From: olof at lixom.net (Olof Johansson)
-Date: Wed, 10 Apr 2019 08:15:59 -0700
+From: dancol at google.com (Daniel Colascione)
+Date: Wed, 10 Apr 2019 08:44:54 -0700
 Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending kernel
  easier
-In-Reply-To: <79b6bdbc-890a-5a51-7fa1-aec57889046a@opersys.com>
+In-Reply-To: <CAOesGMgGFunOeMt93f57fPspdDSHp2twahhudEDhMvZ=VPJHaQ@mail.gmail.com>
 References: <20190320163116.39275-1-joel@joelfernandes.org>
  <CAOesGMheoZda84OSz9spQ7p66wot5S_9aaqaKC=QYp+8utASXA@mail.gmail.com>
  <79b6bdbc-890a-5a51-7fa1-aec57889046a@opersys.com>
-Message-ID: <CAOesGMgGFunOeMt93f57fPspdDSHp2twahhudEDhMvZ=VPJHaQ@mail.gmail.com>
+ <CAOesGMgGFunOeMt93f57fPspdDSHp2twahhudEDhMvZ=VPJHaQ@mail.gmail.com>
+Message-ID: <CAKOZueuQFiUVA2N0jj3cb6WkN1AjwDz2C+Q85W_spcjyMLYmjA@mail.gmail.com>
 
-On Mon, Apr 8, 2019 at 1:52 PM Karim Yaghmour
-<karim.yaghmour at opersys.com> wrote:
->
->
-> Hi Olof,
->
-> On 4/8/19 12:29 PM, Olof Johansson wrote:
-> > Sorry to be late at the party with this kind of feedback, but I find
-> > the whole ".tar.gz in procfs" to be an awkward solution, especially if
-> > there's expected to be userspace tooling that depends on this
-> > long-term.
-> >
-> > Wouldn't it be more convenient to provide it in a standardized format
-> > such that you won't have to take an additional step, and always have
-> > it in a known location?
-> >
-> > Something like:
-> >
-> >   - Pseudo-filesystem, that can just be mounted under
-> > /sys/kernel/headers or something (similar to debugfs or
-> > /proc/device-tree).
-> >   - Exporting something like a squashfs image instead, allowing
-> > loopback mounting of it (or by providing a pseudo-/dev entry for it),
-> > again allowing direct export of the contents and avoiding the
-> > extracted directory from being out of sync with currently running
-> > kernel.
-> >
-> > Having to copy and extract the tarball is the most awkward step, IMHO.
-> > I also find the waste of kernel memory for it to be an issue, but
-> > given that it can be built as a module I guess that's the obvious
-> > solution for those who care about memory consumption.
->
-> One of the things I pointed out earlier in the thread is that
-> /proc/config.gz has already set a precedent as to the interface for this
-> sort of artifact. It's a plain compressed file and it's directly
-> accessible from toplevel /proc. From a consistency perspective there's
-> an idiomatic angle to some sort of "/proc/kheaders.gz".
+On Wed, Apr 10, 2019 at 8:16 AM Olof Johansson <olof at lixom.net> wrote:
+> Anyway, see my other reply just now -- CPIO + a filesystem view, and
+> providing said cpio archive in debugfs for those who want to copy it
+> off themselves might be something that fits everybody.
 
-I'm not arguing against providing the headers in some format, I think
-that's a good idea.
+I don't think it's worth increasing the complexity of the kernel for
+the sake of a little userspace convenience. By including the headers
+in the kernel, we solve an important coordination problem --- but we
+should solve this problem in the simplest possible way, pushing
+whatever complexity possible to userspace, which is more flexible and
+which evolves faster. Providing a compressed archive is fine. The user
+burden is not large: it's just extracting an archive from a standard
+container format. The kernel has no special advantageous way of doing
+this job. If userspace wants to cache extraction, it can hash the
+compressed archive itself and use the result as a key: it's only 3MB.
+But extracting the archive every time is fine. We're not talking about
+a huge amount of data, and I don't see a need for the kind of
+long-term caching that would require revalidation.
 
-On similarities, there are some but there are also substantial
-differences in the use model.
-
-For the config file, the main use cases are:
-
- - Checking to make sure that the running kernel has a particular set
-of config options set or cleared.
- - Ease of cloning the config of a running kernel when building a new one.
-
-The file format is just a plain text file, even if compressed. No real
-internal structure to consider.
-
-Both of the above uses are relatively rare (well, the first might be
-done in some startup scripts, etc).
-
-The kernel headers case is different. The file format is more complex
-(tarball, which would also include the structure of said tarball). You
-can't just zgrep to get some data out.
-
-Also, the way the contents is used is different, in that it will be
-needed by runtime tools that build and load eBPF programs. For the
-build to always be known to be against the running headers, every
-build would likely need to decompress and stage said tarball
-independently and not rely on previous state. If that's needed, why
-not just provide it once in the right format and avoid people building
-userspace solutions in several different ways to do the same thing?
-
-> In some offline discussions I was also told that squashfs (I'm no expert
-> of it) required special user-space tools and had some security issues.
-
-I'm unaware of what the security issues are, and there's indeed a
-GPLv2 tool needed to construct the filesystem. The latter can be
-solved, the former I don't know enough about to have an opinion.
-
-Anyway, see my other reply just now -- CPIO + a filesystem view, and
-providing said cpio archive in debugfs for those who want to copy it
-off themselves might be something that fits everybody.
-
-
--Olof
+As for cpio vs tar: IME, people are much more familiar with the
+latter, and they're both omnipresent on unixish systems. I think it's
+fine to rely on a tool that's been part of POSIX for over 30 years.
