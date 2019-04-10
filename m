@@ -1,30 +1,32 @@
-From: arnd at arndb.de (Arnd Bergmann)
-Date: Wed, 10 Apr 2019 21:19:17 +0200
-Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending kernel
- easier
-In-Reply-To: <CAOesGMibHCuMPCYkc8V++Z2Kuf3YQf_OjYn18GvDgzTy6ubV=g@mail.gmail.com>
-References: <20190320163116.39275-1-joel@joelfernandes.org>
- <CAOesGMheoZda84OSz9spQ7p66wot5S_9aaqaKC=QYp+8utASXA@mail.gmail.com>
- <20190408203601.GF133872@google.com>
- <CAOesGMibHCuMPCYkc8V++Z2Kuf3YQf_OjYn18GvDgzTy6ubV=g@mail.gmail.com>
-Message-ID: <CAK8P3a30yY_1mPcUBxOYOkbFwoeCHbo5EHuWMN4fqKug9DiQDQ@mail.gmail.com>
+From: keescook at chromium.org (Kees Cook)
+Date: Wed, 10 Apr 2019 12:54:35 -0700
+Subject: secomp_bpf test hangs after
+ global.user_notification_sibling_pid_ns
+In-Reply-To: <eee08d39-7427-5c07-9efe-b5719b2232a4@kernel.org>
+References: <eee08d39-7427-5c07-9efe-b5719b2232a4@kernel.org>
+Message-ID: <CAGXu5jKOW_3YvABMZdPa0xAF4-tenQfymooynVssbt7keCv3SA@mail.gmail.com>
 
-On Wed, Apr 10, 2019 at 5:09 PM Olof Johansson <olof at lixom.net> wrote:
+On Tue, Apr 9, 2019 at 7:38 AM shuah <shuah at kernel.org> wrote:
 >
-> As far as format goes; there's clear precedent on cpio being used and
-> supported; we already have build time requirements on the userspace
-> tools with some options. Using tar would actually be a new dependency
-> even if it is a common tool to have installed. With a self-populating
-> FS, there's no new tool requirements on the runtime side either.
+> Hi Kees,
+>
+> secomp_bpf test hangs after global.user_notification_sibling_pid_ns
+> when a non-root user runs it on 5.1-rc4
+>
+> I thought you fixed the problem with this commit:
+>
+> commit 3d244c192afeee7dd4f5fb1b916ea4e47420d401
+> Author: Kees Cook <keescook at chromium.org>
+> Date:   Wed Jan 16 16:35:25 2019 -0800
+>
+>      selftests/seccomp: Abort without user notification support
 
-The decision between tar and cpio directly follows from whether the
-headers are uncompressed in kernel space or in user space:
+Weird! I'm looking at this now. I'm not sure what's changed yet, but
+I'll keep digging.
 
-- we use cpio for initramfs because unpacking cpio in C code is
-  fairly simple, while unpacking tar is not (see the wikipedia page on tar).
-  If we were to unpack it from the kernel, the initramfs code could be
-  trivially reused.
-- nobody sane uses cpio in user space, since tar is already present
-  almost everywhere, while cpio is rather obscure in comparison.
+Thanks for letting me know!
 
-        Arnd
+-Kees
+
+-- 
+Kees Cook
