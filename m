@@ -1,85 +1,129 @@
 From: daniel at iogearbox.net (Daniel Borkmann)
-Date: Thu, 11 Apr 2019 22:59:08 +0200
-Subject: [PATCH v3 bpf-next 0/4] L2 encap support for bpf_skb_adjust_room
-In-Reply-To: <CAF=yD-LxDeBehWTzZknjMNXnj5cmr1cqi00DCt1PCYTecy7KAw@mail.gmail.com>
+Date: Thu, 11 Apr 2019 23:08:28 +0200
+Subject: [PATCH v3 bpf-next 2/4] bpf: add layer 2 encap support to
+ bpf_skb_adjust_room
+In-Reply-To: <1554818803-4070-3-git-send-email-alan.maguire@oracle.com>
 References: <1554818803-4070-1-git-send-email-alan.maguire@oracle.com>
- <CAF=yD-LxDeBehWTzZknjMNXnj5cmr1cqi00DCt1PCYTecy7KAw@mail.gmail.com>
-Message-ID: <f644ca6d-f82d-c5a6-f4db-80988dfe7897@iogearbox.net>
+ <1554818803-4070-3-git-send-email-alan.maguire@oracle.com>
+Message-ID: <12f9cef4-f5ff-78a4-ec0f-42f737696735@iogearbox.net>
 
-On 04/09/2019 04:34 PM, Willem de Bruijn wrote:
-> On Tue, Apr 9, 2019 at 10:08 AM Alan Maguire <alan.maguire at oracle.com> wrote:
->>
->> Extend bpf_skb_adjust_room growth to mark inner MAC header so that
->> L2 encapsulation can be used for tc tunnels.
->>
->> Patch #1 extends the existing test_tc_tunnel to support UDP
->> encapsulation; later we want to be able to test MPLS over UDP and
->> MPLS over GRE encapsulation.
->>
->> Patch #2 adds the BPF_F_ADJ_ROOM_ENCAP_L2(len) macro, which
->> allows specification of inner mac length.  Other approaches were
->> explored prior to taking this approach.  Specifically, I tried
->> automatically computing the inner mac length on the basis of the
->> specified flags (so inner maclen for GRE/IPv4 encap is the len_diff
->> specified to bpf_skb_adjust_room minus GRE + IPv4 header length
->> for example).  Problem with this is that we don't know for sure
->> what form of GRE/UDP header we have; is it a full GRE header,
->> or is it a FOU UDP header or generic UDP encap header? My fear
->> here was we'd end up with an explosion of flags.  The other approach
->> tried was to support inner L2 header marking as a separate room
->> adjustment, i.e. adjust for L3/L4 encap, then call
->> bpf_skb_adjust_room for L2 encap.  This can be made to work but
->> because it imposed an order on operations, felt a bit clunky.
->>
->> Patch #3 syncs tools/ bpf.h.
->>
->> Patch #4 extends the tests again to support MPLSoverGRE,
->> MPLSoverUDP, and transparent ethernet bridging (TEB) where
->> the inner L2 header is an ethernet header.  Testing of BPF
->> encap against tunnels is done for cases where configuration
->> of such tunnels is possible (MPLSoverGRE[6], MPLSoverUDP,
->> gre[6]tap), and skipped otherwise.  Testing of BPF encap/decap
->> is always carried out.
->>
->> Changes since v2:
->>  - updated tools/testing/selftest/bpf/config with FOU/MPLS CONFIG
->>    variables (patches 1, 4)
->>  - reduced noise in patch 1 by avoiding unnecessary movement of code
->>  - eliminated inner_mac variable in bpf_skb_net_grow (patch 2)
->>
->> Changes since v1:
->>  - fixed formatting of commit references.
->>  - BPF_F_ADJ_ROOM_FIXED_GSO flag enabled on all variants (patch 1)
->>  - fixed fou6 options for UDP encap; checksum errors observed were
->>    due to the fact fou6 tunnel was not set up with correct ipproto
->>    options (41 -6).  0 checksums work fine (patch 1)
->>  - added definitions for mask and shift used in setting L2 length
->>    (patch 2)
->>  - allow udp encap with fixed GSO (patch 2)
->>  - changed "elen" to "l2_len" to be more descriptive (patch 4)
->>
->>
->> Alan Maguire (4):
->>   selftests_bpf: extend test_tc_tunnel for UDP encap
->>   bpf: add layer 2 encap support to bpf_skb_adjust_room
->>   bpf: sync bpf.h to tools/ for BPF_F_ADJ_ROOM_ENCAP_L2
->>   selftests_bpf: add L2 encap to test_tc_tunnel
->>
->>  include/uapi/linux/bpf.h                           |  10 +
->>  net/core/filter.c                                  |  12 +-
->>  tools/include/uapi/linux/bpf.h                     |  10 +
->>  tools/testing/selftests/bpf/config                 |   8 +
->>  tools/testing/selftests/bpf/progs/test_tc_tunnel.c | 321 +++++++++++++++++----
->>  tools/testing/selftests/bpf/test_tc_tunnel.sh      | 136 +++++++--
->>  6 files changed, 417 insertions(+), 80 deletions(-)
+On 04/09/2019 04:06 PM, Alan Maguire wrote:
+> commit 868d523535c2 ("bpf: add bpf_skb_adjust_room encap flags")
+> introduced support to bpf_skb_adjust_room for GSO-friendly GRE
+> and UDP encapsulation.
 > 
-> For the series:
+> For GSO to work for skbs, the inner headers (mac and network) need to
+> be marked.  For L3 encapsulation using bpf_skb_adjust_room, the mac
+> and network headers are identical.  Here we provide a way of specifying
+> the inner mac header length for cases where L2 encap is desired.  Such
+> an approach can support encapsulated ethernet headers, MPLS headers etc.
+> For example to convert from a packet of form [eth][ip][tcp] to
+> [eth][ip][udp][inner mac][ip][tcp], something like the following could
+> be done:
 > 
-> Acked-by: Willem de Bruijn <willemb at google.com>
+> 	headroom = sizeof(iph) + sizeof(struct udphdr) + inner_maclen;
 > 
-> Thanks Alan.
+> 	ret = bpf_skb_adjust_room(skb, headroom, BPF_ADJ_ROOM_MAC,
+> 				  BPF_F_ADJ_ROOM_ENCAP_L4_UDP |
+> 				  BPF_F_ADJ_ROOM_ENCAP_L3_IPV4 |
+> 				  BPF_F_ADJ_ROOM_ENCAP_L2(inner_maclen));
 > 
-> (quick response due to iterative review: checked out both v2 and v3
-> series from patchwork (a super useful feature!) and did a git diff)
+> Signed-off-by: Alan Maguire <alan.maguire at oracle.com>
+> ---
+>  include/uapi/linux/bpf.h | 10 ++++++++++
+>  net/core/filter.c        | 12 ++++++++----
+>  2 files changed, 18 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 8370245..912391c 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -1500,6 +1500,10 @@ struct bpf_stack_build_id {
+>   *		* **BPF_F_ADJ_ROOM_ENCAP_L4_UDP **:
+>   *		  Use with ENCAP_L3 flags to further specify the tunnel type.
+>   *
+> + *		* **BPF_F_ADJ_ROOM_ENCAP_L2(len) **:
+> + *		  Use with ENCAP_L3/L4 flags to further specify the tunnel
+> + *		  type; **len** is the length of the inner MAC header.
+> + *
+>   * 		A call to this helper is susceptible to change the underlaying
+>   * 		packet buffer. Therefore, at load time, all checks on pointers
+>   * 		previously done by the verifier are invalidated and must be
+> @@ -2641,10 +2645,16 @@ enum bpf_func_id {
+>  /* BPF_FUNC_skb_adjust_room flags. */
+>  #define BPF_F_ADJ_ROOM_FIXED_GSO	(1ULL << 0)
+>  
+> +#define	BPF_ADJ_ROOM_ENCAP_L2_MASK	0xff
+> +#define	BPF_ADJ_ROOM_ENCAP_L2_SHIFT	56
 
-Applied, thanks! Small follow-up request though, will comment in patch 2.
+Would appreciate a small whitespace cleanup in that tab after the define
+is replaced with a normal space like in the rest of the file.
+
+>  #define BPF_F_ADJ_ROOM_ENCAP_L3_IPV4	(1ULL << 1)
+>  #define BPF_F_ADJ_ROOM_ENCAP_L3_IPV6	(1ULL << 2)
+>  #define BPF_F_ADJ_ROOM_ENCAP_L4_GRE	(1ULL << 3)
+>  #define BPF_F_ADJ_ROOM_ENCAP_L4_UDP	(1ULL << 4)
+> +#define	BPF_F_ADJ_ROOM_ENCAP_L2(len)	(((__u64)len & \
+> +					  BPF_ADJ_ROOM_ENCAP_L2_MASK) \
+> +					 << BPF_ADJ_ROOM_ENCAP_L2_SHIFT)
+
+Ditto here.
+
+>  /* Mode for BPF_FUNC_skb_adjust_room helper. */
+>  enum bpf_adj_room_mode {
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 22eb2ed..a1654ef62 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -2969,11 +2969,14 @@ static u32 bpf_skb_net_base_len(const struct sk_buff *skb)
+>  #define BPF_F_ADJ_ROOM_MASK		(BPF_F_ADJ_ROOM_FIXED_GSO | \
+>  					 BPF_F_ADJ_ROOM_ENCAP_L3_MASK | \
+>  					 BPF_F_ADJ_ROOM_ENCAP_L4_GRE | \
+> -					 BPF_F_ADJ_ROOM_ENCAP_L4_UDP)
+> +					 BPF_F_ADJ_ROOM_ENCAP_L4_UDP | \
+> +					 BPF_F_ADJ_ROOM_ENCAP_L2( \
+> +					  BPF_ADJ_ROOM_ENCAP_L2_MASK))
+>  
+>  static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
+>  			    u64 flags)
+>  {
+
+One thing that it seems missing in this but also in Willem's earlier set
+is that we reject these flags in bpf_skb_net_shrink(). Both are called from
+bpf_skb_adjust_room(), so if we don't support decap yet we should reject
+such flags so we can extend in future. Could you or Willem send a follow-up?
+Thanks!
+
+> +	u8 inner_mac_len = flags >> BPF_ADJ_ROOM_ENCAP_L2_SHIFT;
+>  	bool encap = flags & BPF_F_ADJ_ROOM_ENCAP_L3_MASK;
+>  	u16 mac_len = 0, inner_net = 0, inner_trans = 0;
+>  	unsigned int gso_type = SKB_GSO_DODGY;
+> @@ -3008,6 +3011,8 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
+>  
+>  		mac_len = skb->network_header - skb->mac_header;
+>  		inner_net = skb->network_header;
+> +		if (inner_mac_len > len_diff)
+> +			return -EINVAL;
+>  		inner_trans = skb->transport_header;
+>  	}
+>  
+> @@ -3016,8 +3021,7 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
+>  		return ret;
+>  
+>  	if (encap) {
+> -		/* inner mac == inner_net on l3 encap */
+> -		skb->inner_mac_header = inner_net;
+> +		skb->inner_mac_header = inner_net - inner_mac_len;
+>  		skb->inner_network_header = inner_net;
+>  		skb->inner_transport_header = inner_trans;
+>  		skb_set_inner_protocol(skb, skb->protocol);
+> @@ -3031,7 +3035,7 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
+>  			gso_type |= SKB_GSO_GRE;
+>  		else if (flags & BPF_F_ADJ_ROOM_ENCAP_L3_IPV6)
+>  			gso_type |= SKB_GSO_IPXIP6;
+> -		else
+> +		else if (flags & BPF_F_ADJ_ROOM_ENCAP_L3_IPV4)
+>  			gso_type |= SKB_GSO_IPXIP4;
+>  
+>  		if (flags & BPF_F_ADJ_ROOM_ENCAP_L4_GRE ||
+> 
