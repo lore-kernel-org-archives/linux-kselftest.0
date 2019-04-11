@@ -1,68 +1,51 @@
-From: ci_notify@linaro.org (ci_notify@linaro.org)
-Date: Thu, 11 Apr 2019 08:00:15 +0000 (UTC)
-Subject: next-20190411 kselftest results
-Message-ID: <1393213976.11181.1554969616204.JavaMail.jenkins@a6c5c67cda76>
+From: yamada.masahiro@socionext.com (Masahiro Yamada)
+Date: Thu, 11 Apr 2019 23:17:35 +0900
+Subject: [PATCH v6 2/2] init/config: Do not select BUILD_BIN2C for IKCONFIG
+In-Reply-To: <20190408212855.233198-2-joel@joelfernandes.org>
+References: <20190408212855.233198-1-joel@joelfernandes.org>
+ <20190408212855.233198-2-joel@joelfernandes.org>
+Message-ID:
+ <CAK7LNATtZv9bgRn8g98=CGPL30YgRx+WVL6ihZBOgD_Vmerhvw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190411080015.uk5AXbvZLKnIH-AgUBYGK-eJyttErzTaiascLS8CA1A@z>
+Message-ID: <20190411141735.svZGW9CCnyVzE8r5W3Mkl9yFKwjozyaqoDYnE5G0RmU@z>
 
-Summary
-------------------------------------------------------------------------
-git repo: not informed
-git branch: not informed
-git commit: not informed
-git describe: not informed
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190411
-
-Regressions (compared to build next-20190410)
-------------------------------------------------------------------------
-No regressions                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190410)                                                                   
-------------------------------------------------------------------------                                               
-No fixes
-
-In total:
-------------------------------------------------------------------------
-Ran 0 total tests in the following environments and test suites.
-pass 0
-fail 0
-xfail 0
-skip 0
-
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
+On Tue, Apr 9, 2019 at 6:38 AM Joel Fernandes (Google)
+<joel@joelfernandes.org> wrote:
+>
+> Since commit 13610aa908dc ("kernel/configs: use .incbin directive to
+> embed config_data.gz"), IKCONFIG no longer uses BUILD_BIN2C so prevent
+> it from being selected in Kconfig.
+>
+> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
 
 
-Failures
-------------------------------------------------------------------------
+This patch is independent of 1/2,
+and trivial enough.
 
-i386:
-
-x15:
-
-x86:
-
-dragonboard-410c:
-
-hi6220-hikey:
-
-juno-r2:
+Reviewed-by: Masahiro Yamada <yamada.masahiro at socionext.com>
 
 
-Skips
-------------------------------------------------------------------------
-No skips
+> ---
+>  init/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/init/Kconfig b/init/Kconfig
+> index ea75bfbf7dfa..ffcb2f90543f 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -562,7 +562,6 @@ config BUILD_BIN2C
+>
+>  config IKCONFIG
+>         tristate "Kernel .config support"
+> -       select BUILD_BIN2C
+>         ---help---
+>           This option enables the complete Linux kernel ".config" file
+>           contents to be saved in the kernel. It provides documentation
+> --
+> 2.21.0.392.gf8f6787159e-goog
+>
 
 
 -- 
-Linaro LKFT
-https://lkft.linaro.org
+Best Regards
+Masahiro Yamada
