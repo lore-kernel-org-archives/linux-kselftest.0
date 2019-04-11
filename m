@@ -1,48 +1,56 @@
-From: yamada.masahiro at socionext.com (Masahiro Yamada)
-Date: Thu, 11 Apr 2019 23:17:35 +0900
-Subject: [PATCH v6 2/2] init/config: Do not select BUILD_BIN2C for IKCONFIG
-In-Reply-To: <20190408212855.233198-2-joel@joelfernandes.org>
-References: <20190408212855.233198-1-joel@joelfernandes.org>
- <20190408212855.233198-2-joel@joelfernandes.org>
-Message-ID: <CAK7LNATtZv9bgRn8g98=CGPL30YgRx+WVL6ihZBOgD_Vmerhvw@mail.gmail.com>
+From: joel at joelfernandes.org (Joel Fernandes)
+Date: Thu, 11 Apr 2019 12:30:37 -0400
+Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending
+ kernel easier
+In-Reply-To: <20190411031540.ehezr6kq7ouobpzx@ast-mbp.dhcp.thefacebook.com>
+References: <20190320163116.39275-1-joel@joelfernandes.org>
+ <CAOesGMheoZda84OSz9spQ7p66wot5S_9aaqaKC=QYp+8utASXA@mail.gmail.com>
+ <20190408203601.GF133872@google.com>
+ <CAOesGMibHCuMPCYkc8V++Z2Kuf3YQf_OjYn18GvDgzTy6ubV=g@mail.gmail.com>
+ <CAJWu+or0hWce9+7aEfTHoOR8cptRbzHYVL-bPdJWGZH20dbo7Q@mail.gmail.com>
+ <CAOesGMiuGK-Sbqo2z=1ab070JONav1LF82MRRLCdX-4+14_XZA@mail.gmail.com>
+ <20190411031540.ehezr6kq7ouobpzx@ast-mbp.dhcp.thefacebook.com>
+Message-ID: <20190411163037.GA5786@google.com>
 
-On Tue, Apr 9, 2019 at 6:38 AM Joel Fernandes (Google)
-<joel at joelfernandes.org> wrote:
->
-> Since commit 13610aa908dc ("kernel/configs: use .incbin directive to
-> embed config_data.gz"), IKCONFIG no longer uses BUILD_BIN2C so prevent
-> it from being selected in Kconfig.
->
-> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+On Wed, Apr 10, 2019 at 08:15:42PM -0700, Alexei Starovoitov wrote:
+> On Wed, Apr 10, 2019 at 09:34:49AM -0700, Olof Johansson wrote:
+> > On Wed, Apr 10, 2019 at 8:51 AM Joel Fernandes <joelaf at google.com> wrote:
+> > >
+> > > On Wed, Apr 10, 2019 at 11:07 AM Olof Johansson <olof at lixom.net> wrote:
+> > > [snip]
+> > > > > > Wouldn't it be more convenient to provide it in a standardized format
+> > > > > > such that you won't have to take an additional step, and always have
+> > > > > > This is that form IMO.
+> ...
+> > Compared to:
+> >  - Extract tarball
+> >  - Build and load
+> >  - Remove file tree from filesystem
+> 
+> I think there are too many assumptions in this thread in regard to what
+> is more convenient for user space.
+> I think bcc should try to avoid extracting tarball into file system.
+> For example libbcc can uncompress kheader.tar.xz into virtual file system
+> of clang front-end. It's more or less std::map<string, string>
+> with key=path, value=content of the file. Access to such in-memory
+> 'files' is obviously faster than doing open/read syscalls.
+> bcc already uses this approach for some bcc internal 'files' that
+> it passes to clang during compilation.
+> All of /proc/kheaders.tar.xz files can be passed the same way
+> without extracting them into real file system.
+> 
+> Joel, would be great if you can share corresponding bcc patch
+> that takes advantage of /proc/kheaders
 
+That sounds good to me. Others have tested this with BCC with a manual
+extraction and setting environment variable to point BCC to the extracted
+location, but I can work BCC patch that makes this automatic and share it (I
+was planning to do the "automatically make BCC do it" patch for the BCC
+project, but first wanted this in. But I agree with Alexei, its a good idea
+to do it now and share it). Masahiro had some nits in v6 that I need to
+address anyway ;-) And Olof grumbled a bit about the commit message which
+could be polished a bit more :-)
 
-This patch is independent of 1/2,
-and trivial enough.
+thanks!
 
-Reviewed-by: Masahiro Yamada <yamada.masahiro at socionext.com>
-
-
-> ---
->  init/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/init/Kconfig b/init/Kconfig
-> index ea75bfbf7dfa..ffcb2f90543f 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -562,7 +562,6 @@ config BUILD_BIN2C
->
->  config IKCONFIG
->         tristate "Kernel .config support"
-> -       select BUILD_BIN2C
->         ---help---
->           This option enables the complete Linux kernel ".config" file
->           contents to be saved in the kernel. It provides documentation
-> --
-> 2.21.0.392.gf8f6787159e-goog
->
-
-
--- 
-Best Regards
-Masahiro Yamada
+ - Joel
