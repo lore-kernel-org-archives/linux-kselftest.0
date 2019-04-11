@@ -1,43 +1,87 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Thu, 11 Apr 2019 16:20:06 -0400
-Subject: [PATCH RFC 1/2] Add polling support to pidfd
-In-Reply-To: <DA36DE02-73C2-4C9E-9761-27B3EBC6FED2@brauner.io>
-References: <20190411175043.31207-1-joel@joelfernandes.org>
- <20190411200059.GA75190@google.com>
- <DA36DE02-73C2-4C9E-9761-27B3EBC6FED2@brauner.io>
-Message-ID: <20190411202006.GA130334@google.com>
+From: daniel@iogearbox.net (Daniel Borkmann)
+Date: Thu, 11 Apr 2019 22:59:08 +0200
+Subject: [PATCH v3 bpf-next 0/4] L2 encap support for bpf_skb_adjust_room
+In-Reply-To: <CAF=yD-LxDeBehWTzZknjMNXnj5cmr1cqi00DCt1PCYTecy7KAw@mail.gmail.com>
+References: <1554818803-4070-1-git-send-email-alan.maguire@oracle.com>
+ <CAF=yD-LxDeBehWTzZknjMNXnj5cmr1cqi00DCt1PCYTecy7KAw@mail.gmail.com>
+Message-ID: <f644ca6d-f82d-c5a6-f4db-80988dfe7897@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190411202006.goLtrWFPD92-0T95IKCu7BuQ3S8KVOWCs9pRj5pMoTo@z>
+Message-ID: <20190411205908.497Jf0vM0hNG37OHhBwOVvJFnR6cr6yra0GhgGQEnmE@z>
 
-On Thu, Apr 11, 2019@10:02:32PM +0200, Christian Brauner wrote:
-> On April 11, 2019 10:00:59 PM GMT+02:00, Joel Fernandes <joel@joelfernandes.org> wrote:
-> >On Thu, Apr 11, 2019 at 01:50:42PM -0400, Joel Fernandes (Google)
-> >wrote:
-> >> pidfd are /proc/pid directory file descriptors referring to a task
-> >group
-> >> leader. Android low memory killer (LMK) needs pidfd polling support
-> >to
-> >> replace code that currently checks for existence of /proc/pid for
-> >> knowing a process that is signalled to be killed has died, which is
-> >both
-> >> racy and slow. The pidfd poll approach is race-free, and also allows
-> >the
-> >> LMK to do other things (such as by polling on other fds) while
-> >awaiting
-> >> the process being killed to die.
-> >
-> >It appears to me that the "pidfd" now will be an anon inode fd, and not
-> >based
-> >on /proc/, based on discussions with Linus. So I'll rework the patches
-> >accordingly. However that is relatively independent of this patch so
-> >this
-> >version can also be reviewed before I send out the reworked version.
+On 04/09/2019 04:34 PM, Willem de Bruijn wrote:
+> On Tue, Apr 9, 2019@10:08 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>>
+>> Extend bpf_skb_adjust_room growth to mark inner MAC header so that
+>> L2 encapsulation can be used for tc tunnels.
+>>
+>> Patch #1 extends the existing test_tc_tunnel to support UDP
+>> encapsulation; later we want to be able to test MPLS over UDP and
+>> MPLS over GRE encapsulation.
+>>
+>> Patch #2 adds the BPF_F_ADJ_ROOM_ENCAP_L2(len) macro, which
+>> allows specification of inner mac length.  Other approaches were
+>> explored prior to taking this approach.  Specifically, I tried
+>> automatically computing the inner mac length on the basis of the
+>> specified flags (so inner maclen for GRE/IPv4 encap is the len_diff
+>> specified to bpf_skb_adjust_room minus GRE + IPv4 header length
+>> for example).  Problem with this is that we don't know for sure
+>> what form of GRE/UDP header we have; is it a full GRE header,
+>> or is it a FOU UDP header or generic UDP encap header? My fear
+>> here was we'd end up with an explosion of flags.  The other approach
+>> tried was to support inner L2 header marking as a separate room
+>> adjustment, i.e. adjust for L3/L4 encap, then call
+>> bpf_skb_adjust_room for L2 encap.  This can be made to work but
+>> because it imposed an order on operations, felt a bit clunky.
+>>
+>> Patch #3 syncs tools/ bpf.h.
+>>
+>> Patch #4 extends the tests again to support MPLSoverGRE,
+>> MPLSoverUDP, and transparent ethernet bridging (TEB) where
+>> the inner L2 header is an ethernet header.  Testing of BPF
+>> encap against tunnels is done for cases where configuration
+>> of such tunnels is possible (MPLSoverGRE[6], MPLSoverUDP,
+>> gre[6]tap), and skipped otherwise.  Testing of BPF encap/decap
+>> is always carried out.
+>>
+>> Changes since v2:
+>>  - updated tools/testing/selftest/bpf/config with FOU/MPLS CONFIG
+>>    variables (patches 1, 4)
+>>  - reduced noise in patch 1 by avoiding unnecessary movement of code
+>>  - eliminated inner_mac variable in bpf_skb_net_grow (patch 2)
+>>
+>> Changes since v1:
+>>  - fixed formatting of commit references.
+>>  - BPF_F_ADJ_ROOM_FIXED_GSO flag enabled on all variants (patch 1)
+>>  - fixed fou6 options for UDP encap; checksum errors observed were
+>>    due to the fact fou6 tunnel was not set up with correct ipproto
+>>    options (41 -6).  0 checksums work fine (patch 1)
+>>  - added definitions for mask and shift used in setting L2 length
+>>    (patch 2)
+>>  - allow udp encap with fixed GSO (patch 2)
+>>  - changed "elen" to "l2_len" to be more descriptive (patch 4)
+>>
+>>
+>> Alan Maguire (4):
+>>   selftests_bpf: extend test_tc_tunnel for UDP encap
+>>   bpf: add layer 2 encap support to bpf_skb_adjust_room
+>>   bpf: sync bpf.h to tools/ for BPF_F_ADJ_ROOM_ENCAP_L2
+>>   selftests_bpf: add L2 encap to test_tc_tunnel
+>>
+>>  include/uapi/linux/bpf.h                           |  10 +
+>>  net/core/filter.c                                  |  12 +-
+>>  tools/include/uapi/linux/bpf.h                     |  10 +
+>>  tools/testing/selftests/bpf/config                 |   8 +
+>>  tools/testing/selftests/bpf/progs/test_tc_tunnel.c | 321 +++++++++++++++++----
+>>  tools/testing/selftests/bpf/test_tc_tunnel.sh      | 136 +++++++--
+>>  6 files changed, 417 insertions(+), 80 deletions(-)
 > 
-> Thank you very much, Joel.
-> I'm off this week and traveling but I'll try to give it a look asap.
+> For the series:
 > 
-> Christian
+> Acked-by: Willem de Bruijn <willemb at google.com>
+> 
+> Thanks Alan.
+> 
+> (quick response due to iterative review: checked out both v2 and v3
+> series from patchwork (a super useful feature!) and did a git diff)
 
-Sounds great to me, thanks a lot Christian.
-
- - Joel
+Applied, thanks! Small follow-up request though, will comment in patch 2.
