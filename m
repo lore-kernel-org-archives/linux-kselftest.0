@@ -1,41 +1,66 @@
-From: alexei.starovoitov at gmail.com (Alexei Starovoitov)
-Date: Wed, 10 Apr 2019 20:15:42 -0700
-Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending
- kernel easier
-In-Reply-To: <CAOesGMiuGK-Sbqo2z=1ab070JONav1LF82MRRLCdX-4+14_XZA@mail.gmail.com>
-References: <20190320163116.39275-1-joel@joelfernandes.org>
- <CAOesGMheoZda84OSz9spQ7p66wot5S_9aaqaKC=QYp+8utASXA@mail.gmail.com>
- <20190408203601.GF133872@google.com>
- <CAOesGMibHCuMPCYkc8V++Z2Kuf3YQf_OjYn18GvDgzTy6ubV=g@mail.gmail.com>
- <CAJWu+or0hWce9+7aEfTHoOR8cptRbzHYVL-bPdJWGZH20dbo7Q@mail.gmail.com>
- <CAOesGMiuGK-Sbqo2z=1ab070JONav1LF82MRRLCdX-4+14_XZA@mail.gmail.com>
-Message-ID: <20190411031540.ehezr6kq7ouobpzx@ast-mbp.dhcp.thefacebook.com>
+From: ci_notify at linaro.org (ci_notify at linaro.org)
+Date: Thu, 11 Apr 2019 08:00:15 +0000 (UTC)
+Subject: next-20190411 kselftest results
+Message-ID: <1393213976.11181.1554969616204.JavaMail.jenkins@a6c5c67cda76>
 
-On Wed, Apr 10, 2019 at 09:34:49AM -0700, Olof Johansson wrote:
-> On Wed, Apr 10, 2019 at 8:51 AM Joel Fernandes <joelaf at google.com> wrote:
-> >
-> > On Wed, Apr 10, 2019 at 11:07 AM Olof Johansson <olof at lixom.net> wrote:
-> > [snip]
-> > > > > Wouldn't it be more convenient to provide it in a standardized format
-> > > > > such that you won't have to take an additional step, and always have
-> > > > > This is that form IMO.
-...
-> Compared to:
->  - Extract tarball
->  - Build and load
->  - Remove file tree from filesystem
+Summary
+------------------------------------------------------------------------
+git repo: not informed
+git branch: not informed
+git commit: not informed
+git describe: not informed
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190411
 
-I think there are too many assumptions in this thread in regard to what
-is more convenient for user space.
-I think bcc should try to avoid extracting tarball into file system.
-For example libbcc can uncompress kheader.tar.xz into virtual file system
-of clang front-end. It's more or less std::map<string, string>
-with key=path, value=content of the file. Access to such in-memory
-'files' is obviously faster than doing open/read syscalls.
-bcc already uses this approach for some bcc internal 'files' that
-it passes to clang during compilation.
-All of /proc/kheaders.tar.xz files can be passed the same way
-without extracting them into real file system.
+Regressions (compared to build next-20190410)
+------------------------------------------------------------------------
+No regressions                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190410)                                                                   
+------------------------------------------------------------------------                                               
+No fixes
 
-Joel, would be great if you can share corresponding bcc patch
-that takes advantage of /proc/kheaders
+In total:
+------------------------------------------------------------------------
+Ran 0 total tests in the following environments and test suites.
+pass 0
+fail 0
+xfail 0
+skip 0
+
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- x15 - arm
+- x86_64
+
+Test Suites
+-----------
+
+
+Failures
+------------------------------------------------------------------------
+
+i386:
+
+x15:
+
+x86:
+
+dragonboard-410c:
+
+hi6220-hikey:
+
+juno-r2:
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
