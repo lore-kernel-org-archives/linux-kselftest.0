@@ -1,309 +1,209 @@
-From: joel@joelfernandes.org (Joel Fernandes (Google))
-Date: Thu, 11 Apr 2019 13:50:43 -0400
-Subject: [PATCH RFC 2/2] Add selftests for pidfd polling
+From: joel@joelfernandes.org (Joel Fernandes)
+Date: Thu, 11 Apr 2019 16:00:59 -0400
+Subject: [PATCH RFC 1/2] Add polling support to pidfd
 In-Reply-To: <20190411175043.31207-1-joel@joelfernandes.org>
 References: <20190411175043.31207-1-joel@joelfernandes.org>
-Message-ID: <20190411175043.31207-2-joel@joelfernandes.org>
+Message-ID: <20190411200059.GA75190@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190411175043.ZDMn8XajYytGPp0Xu-sc5L1ObiadffthhCWgJ0dWldI@z>
+Message-ID: <20190411200059.5Q1riR0ZHXDqc3d1qsHvSLxNvxBcdwqhJ81cvHblqWc@z>
 
-Other than verifying pidfd based polling, the tests make sure that
-wait semantics are preserved with the pidfd poll. Notably the 2 cases:
-1. If a thread group leader exits while threads still there, then no
-   pidfd poll notifcation should happen.
-2. If a non-thread group leader does an execve, then the thread group
-   leader is signaled to exit and is replaced with the execing thread
-   as the new leader, however the parent is not notified in this case.
+On Thu, Apr 11, 2019@01:50:42PM -0400, Joel Fernandes (Google) wrote:
+> pidfd are /proc/pid directory file descriptors referring to a task group
+> leader. Android low memory killer (LMK) needs pidfd polling support to
+> replace code that currently checks for existence of /proc/pid for
+> knowing a process that is signalled to be killed has died, which is both
+> racy and slow. The pidfd poll approach is race-free, and also allows the
+> LMK to do other things (such as by polling on other fds) while awaiting
+> the process being killed to die.
 
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
- tools/testing/selftests/pidfd/Makefile     |   2 +-
- tools/testing/selftests/pidfd/pidfd_test.c | 216 ++++++++++++++++++++-
- 2 files changed, 208 insertions(+), 10 deletions(-)
+It appears to me that the "pidfd" now will be an anon inode fd, and not based
+on /proc/, based on discussions with Linus. So I'll rework the patches
+accordingly. However that is relatively independent of this patch so this
+version can also be reviewed before I send out the reworked version.
 
-diff --git a/tools/testing/selftests/pidfd/Makefile b/tools/testing/selftests/pidfd/Makefile
-index deaf8073bc06..4b31c14f273c 100644
---- a/tools/testing/selftests/pidfd/Makefile
-+++ b/tools/testing/selftests/pidfd/Makefile
-@@ -1,4 +1,4 @@
--CFLAGS += -g -I../../../../usr/include/
-+CFLAGS += -g -I../../../../usr/include/ -lpthread
- 
- TEST_GEN_PROGS := pidfd_test
- 
-diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-index d59378a93782..4d5206280091 100644
---- a/tools/testing/selftests/pidfd/pidfd_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_test.c
-@@ -4,18 +4,26 @@
- #include <errno.h>
- #include <fcntl.h>
- #include <linux/types.h>
-+#include <pthread.h>
- #include <sched.h>
- #include <signal.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <syscall.h>
-+#include <sys/epoll.h>
-+#include <sys/mman.h>
- #include <sys/mount.h>
- #include <sys/wait.h>
-+#include <time.h>
- #include <unistd.h>
- 
- #include "../kselftest.h"
- 
-+#define CHILD_THREAD_MIN_WAIT 3 /* seconds */
-+#define MAX_EVENTS 5
-+#define __NR_pidfd_send_signal 424
-+
- static inline int sys_pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
- 					unsigned int flags)
- {
-@@ -30,6 +38,22 @@ static void set_signal_received_on_sigusr1(int sig)
- 		signal_received = 1;
- }
- 
-+static int open_pidfd(const char *test_name, pid_t pid)
-+{
-+	char buf[256];
-+	int pidfd;
-+
-+	snprintf(buf, sizeof(buf), "/proc/%d", pid);
-+	pidfd = open(buf, O_DIRECTORY | O_CLOEXEC);
-+
-+	if (pidfd < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to open process file descriptor\n",
-+			test_name);
-+
-+	return pidfd;
-+}
-+
- /*
-  * Straightforward test to see whether pidfd_send_signal() works is to send
-  * a signal to ourself.
-@@ -87,7 +111,6 @@ static int wait_for_pid(pid_t pid)
- static int test_pidfd_send_signal_exited_fail(void)
- {
- 	int pidfd, ret, saved_errno;
--	char buf[256];
- 	pid_t pid;
- 	const char *test_name = "pidfd_send_signal signal exited process";
- 
-@@ -99,17 +122,10 @@ static int test_pidfd_send_signal_exited_fail(void)
- 	if (pid == 0)
- 		_exit(EXIT_SUCCESS);
- 
--	snprintf(buf, sizeof(buf), "/proc/%d", pid);
--
--	pidfd = open(buf, O_DIRECTORY | O_CLOEXEC);
-+	pidfd = open_pidfd(test_name, pid);
- 
- 	(void)wait_for_pid(pid);
- 
--	if (pidfd < 0)
--		ksft_exit_fail_msg(
--			"%s test: Failed to open process file descriptor\n",
--			test_name);
--
- 	ret = sys_pidfd_send_signal(pidfd, 0, NULL, 0);
- 	saved_errno = errno;
- 	close(pidfd);
-@@ -368,10 +384,192 @@ static int test_pidfd_send_signal_syscall_support(void)
- 	return 0;
- }
- 
-+void *test_pidfd_poll_exec_thread(void *priv)
-+{
-+	char waittime[256];
-+
-+	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
-+			getpid(), syscall(SYS_gettid));
-+	ksft_print_msg("Child Thread: doing exec of sleep\n");
-+
-+	sprintf(waittime, "%d", CHILD_THREAD_MIN_WAIT);
-+	execl("/bin/sleep", "sleep", waittime, (char *)NULL);
-+
-+	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n",
-+			getpid(), syscall(SYS_gettid));
-+	return NULL;
-+}
-+
-+static int poll_pidfd(const char *test_name, int pidfd)
-+{
-+	int c;
-+	int epoll_fd = epoll_create1(0);
-+	struct epoll_event event, events[MAX_EVENTS];
-+
-+	if (epoll_fd == -1)
-+		ksft_exit_fail_msg("%s test: Failed to create epoll file descriptor\n",
-+				   test_name);
-+
-+	event.events = EPOLLIN;
-+	event.data.fd = pidfd;
-+
-+	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, pidfd, &event)) {
-+		ksft_print_msg("%s test: Failed to add epoll file descriptor: Skipping\n",
-+			       test_name);
-+		_exit(PIDFD_SKIP);
-+	}
-+
-+	c = epoll_wait(epoll_fd, events, MAX_EVENTS, 5000);
-+	if (c != 1 || !(events[0].events & EPOLLIN))
-+		ksft_exit_fail_msg("%s test: Unexpected epoll_wait result (c=%d, events=%x)\n",
-+				   test_name, c, events[0].events);
-+
-+	close(epoll_fd);
-+	return events[0].events;
-+
-+}
-+
-+int test_pidfd_poll_exec(int use_waitpid)
-+{
-+	int pid, pidfd;
-+	int status, ret;
-+	pthread_t t1;
-+	time_t prog_start = time(NULL);
-+	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
-+
-+	ksft_print_msg("Parent: pid: %d\n", getpid());
-+	pid = fork();
-+	if (pid == 0) {
-+		ksft_print_msg("Child: starting. pid %d tid %d\n", getpid(),
-+				syscall(SYS_gettid));
-+		pthread_create(&t1, NULL, test_pidfd_poll_exec_thread, NULL);
-+		/*
-+		 * Exec in the non-leader thread will destroy the leader immediately.
-+		 * If the wait in the parent returns too soon, the test fails.
-+		 */
-+		while (1)
-+			;
-+	}
-+
-+	ksft_print_msg("Parent: Waiting for Child (%d) to complete.\n", pid);
-+
-+	if (use_waitpid) {
-+		ret = waitpid(pid, &status, 0);
-+		if (ret == -1)
-+			ksft_print_msg("Parent: error\n");
-+
-+		if (ret == pid)
-+			ksft_print_msg("Parent: Child process waited for.\n");
-+	} else {
-+		pidfd = open_pidfd(test_name, pid);
-+		if (poll_pidfd(test_name, pidfd) & EPOLLERR)
-+			ksft_exit_fail_msg("%s test: Unexpected epoll error\n", test_name);
-+	}
-+
-+	time_t prog_time = time(NULL) - prog_start;
-+
-+	ksft_print_msg("Time waited for child: %lu\n", prog_time);
-+
-+	/* Check to make sure poll_pidfd returns error after reaping */
-+	if (!use_waitpid &&
-+	    (waitpid(pid, &status, 0) != pid || !(poll_pidfd(test_name, pidfd) & EPOLLERR))) {
-+		ksft_exit_fail_msg("%s test: poll_pidfd EPOLLERR check failed\n", test_name);
-+	}
-+	close(pidfd);
-+
-+	if (prog_time < CHILD_THREAD_MIN_WAIT || prog_time > CHILD_THREAD_MIN_WAIT + 2)
-+		ksft_exit_fail_msg("%s test: Failed\n", test_name);
-+	else
-+		ksft_test_result_pass("%s test: Passed\n", test_name);
-+}
-+
-+void *test_pidfd_poll_leader_exit_thread(void *priv)
-+{
-+	char waittime[256];
-+
-+	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
-+			getpid(), syscall(SYS_gettid));
-+	sleep(CHILD_THREAD_MIN_WAIT);
-+	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
-+	return NULL;
-+}
-+
-+static time_t *child_exit_secs;
-+int test_pidfd_poll_leader_exit(int use_waitpid)
-+{
-+	int pid, pidfd;
-+	int status, ret;
-+	pthread_t t1, t2;
-+	time_t prog_start = time(NULL);
-+	const char *test_name = "pidfd_poll check for premature notification on non-empty"
-+				"group leader exit";
-+
-+	child_exit_secs = mmap(NULL, sizeof *child_exit_secs, PROT_READ | PROT_WRITE,
-+			MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-+
-+	ksft_print_msg("Parent: pid: %d\n", getpid());
-+	pid = fork();
-+	if (pid == 0) {
-+		ksft_print_msg("Child: starting. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
-+		pthread_create(&t1, NULL, test_pidfd_poll_leader_exit_thread, NULL);
-+		pthread_create(&t2, NULL, test_pidfd_poll_leader_exit_thread, NULL);
-+
-+		/*
-+		 * glibc exit calls exit_group syscall, so explicity call exit only
-+		 * so that only the group leader exits, leaving the threads alone.
-+		 */
-+		*child_exit_secs = time(NULL);
-+		syscall(SYS_exit, 0);
-+	}
-+
-+	ksft_print_msg("Parent: Waiting for Child (%d) to complete.\n", pid);
-+
-+	if (use_waitpid) {
-+		ret = waitpid(pid, &status, 0);
-+		if (ret == -1)
-+			ksft_print_msg("Parent: error\n");
-+	} else {
-+		/*
-+		 * This sleep tests for the case where if the child exits, and is in
-+		 * EXIT_ZOMBIE, but the thread group leader is non-empty, then the poll
-+		 * doesn't prematurely return even though there are active threads
-+		 */
-+		sleep(1);
-+		pidfd = open_pidfd(test_name, pid);
-+		if (poll_pidfd(test_name, pidfd) & EPOLLERR)
-+			ksft_exit_fail_msg("%s test: Unexpected epoll error\n", test_name);
-+	}
-+
-+	if (ret == pid)
-+		ksft_print_msg("Parent: Child process waited for.\n");
-+
-+	time_t since_child_exit = time(NULL) - *child_exit_secs;
-+
-+	ksft_print_msg("Time since child exit: %lu\n", since_child_exit);
-+
-+	/* Check to make sure poll_pidfd returns error after reaping */
-+	if (!use_waitpid &&
-+	    (waitpid(pid, &status, 0) != pid ||
-+	    !(poll_pidfd(test_name, pidfd) & EPOLLERR))) {
-+		ksft_exit_fail_msg("%s test: poll_pidfd EPOLLERR check failed\n", test_name);
-+	}
-+	close(pidfd);
-+
-+	if (since_child_exit < CHILD_THREAD_MIN_WAIT ||
-+			since_child_exit > CHILD_THREAD_MIN_WAIT + 2)
-+		ksft_exit_fail_msg("%s test: Failed\n", test_name);
-+	else
-+		ksft_test_result_pass("%s test: Passed\n", test_name);
-+}
-+
- int main(int argc, char **argv)
- {
- 	ksft_print_header();
- 
-+	test_pidfd_poll_exec(0);
-+	test_pidfd_poll_exec(1);
-+	test_pidfd_poll_leader_exit(0);
-+	test_pidfd_poll_leader_exit(1);
- 	test_pidfd_send_signal_syscall_support();
- 	test_pidfd_send_signal_simple_success();
- 	test_pidfd_send_signal_exited_fail();
--- 
-2.21.0.392.gf8f6787159e-goog
+thanks,
+
+ - Joel
+
+> 
+> It prevents a situation where a PID is reused between when LMK sends a
+> kill signal and checks for existence of the PID, since the wrong PID is
+> now possibly checked for existence.
+> 
+> In this patch, we follow the same mechanism used uhen the parent of the
+> task group is to be notified, that is when the tasks waiting on a poll
+> of pidfd are also awakened.
+> 
+> We have decided to include the waitqueue in struct pid for the following
+> reasons:
+> 1. The wait queue has to survive for the lifetime of the poll. Including
+> it in task_struct would not be option in this case because the task can
+> be reaped and destroyed before the poll returns.
+> 
+> 2. By including the struct pid for the waitqueue means that during
+> de_exec, the thread doing de_thread() automatically gets the new
+> waitqueue/pid even though its task_struct is different.
+> 
+> Appropriate test cases are added in the second patch to provide coverage
+> of all the cases the patch is handling.
+> 
+> Andy had a similar patch [1] in the past which was a good reference
+> however this patch tries to handle different situations properly related
+> to thread group existence, and how/where it notifies. And also solves
+> other bugs (existence of taks_struct).  Daniel had a similar patch [2]
+> recently which this patch supercedes.
+> 
+> [1] https://lore.kernel.org/patchwork/patch/345098/
+> [2] https://lore.kernel.org/lkml/20181029175322.189042-1-dancol at google.com/
+> 
+> Cc: luto at amacapital.net
+> Cc: rostedt at goodmis.org
+> Cc: dancol at google.com
+> Cc: christian at brauner.io
+> Cc: jannh at google.com
+> Cc: surenb at google.com
+> Cc: torvalds at linux-foundation.org
+> Co-developed-by: Daniel Colascione <dancol at google.com>
+> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> 
+> ---
+>  fs/proc/base.c      | 39 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/pid.h |  3 +++
+>  kernel/exit.c       |  1 -
+>  kernel/pid.c        |  2 ++
+>  kernel/signal.c     | 14 ++++++++++++++
+>  5 files changed, 58 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/proc/base.c b/fs/proc/base.c
+> index 6a803a0b75df..879900082647 100644
+> --- a/fs/proc/base.c
+> +++ b/fs/proc/base.c
+> @@ -3069,8 +3069,47 @@ static int proc_tgid_base_readdir(struct file *file, struct dir_context *ctx)
+>  				   tgid_base_stuff, ARRAY_SIZE(tgid_base_stuff));
+>  }
+>  
+> +static unsigned int proc_tgid_base_poll(struct file *file, struct poll_table_struct *pts)
+> +{
+> +	int poll_flags = 0;
+> +	struct task_struct *task;
+> +	struct pid *pid;
+> +
+> +	task = get_proc_task(file->f_path.dentry->d_inode);
+> +
+> +	WARN_ON_ONCE(task && !thread_group_leader(task));
+> +
+> +	/*
+> +	 * tasklist_lock must be held because to avoid racing with
+> +	 * changes in exit_state and wake up. Basically to avoid:
+> +	 *
+> +	 * P0: read exit_state = 0
+> +	 * P1: write exit_state = EXIT_DEAD
+> +	 * P1: Do a wake up - wq is empty, so do nothing
+> +	 * P0: Queue for polling - wait forever.
+> +	 */
+> +	read_lock(&tasklist_lock);
+> +	if (!task)
+> +		poll_flags = POLLIN | POLLRDNORM | POLLERR;
+> +	else if (task->exit_state == EXIT_DEAD)
+> +		poll_flags = POLLIN | POLLRDNORM;
+> +	else if (task->exit_state == EXIT_ZOMBIE && thread_group_empty(task))
+> +		poll_flags = POLLIN | POLLRDNORM;
+> +
+> +	if (!poll_flags) {
+> +		pid = proc_pid(file->f_path.dentry->d_inode);
+> +		poll_wait(file, &pid->wait_pidfd, pts);
+> +	}
+> +	read_unlock(&tasklist_lock);
+> +
+> +	if (task)
+> +		put_task_struct(task);
+> +	return poll_flags;
+> +}
+> +
+>  static const struct file_operations proc_tgid_base_operations = {
+>  	.read		= generic_read_dir,
+> +	.poll		= proc_tgid_base_poll,
+>  	.iterate_shared	= proc_tgid_base_readdir,
+>  	.llseek		= generic_file_llseek,
+>  };
+> diff --git a/include/linux/pid.h b/include/linux/pid.h
+> index b6f4ba16065a..2e0dcbc6d14e 100644
+> --- a/include/linux/pid.h
+> +++ b/include/linux/pid.h
+> @@ -3,6 +3,7 @@
+>  #define _LINUX_PID_H
+>  
+>  #include <linux/rculist.h>
+> +#include <linux/wait.h>
+>  
+>  enum pid_type
+>  {
+> @@ -60,6 +61,8 @@ struct pid
+>  	unsigned int level;
+>  	/* lists of tasks that use this pid */
+>  	struct hlist_head tasks[PIDTYPE_MAX];
+> +	/* wait queue for pidfd pollers */
+> +	wait_queue_head_t wait_pidfd;
+>  	struct rcu_head rcu;
+>  	struct upid numbers[1];
+>  };
+> diff --git a/kernel/exit.c b/kernel/exit.c
+> index 2166c2d92ddc..c386ec52687d 100644
+> --- a/kernel/exit.c
+> +++ b/kernel/exit.c
+> @@ -181,7 +181,6 @@ static void delayed_put_task_struct(struct rcu_head *rhp)
+>  	put_task_struct(tsk);
+>  }
+>  
+> -
+>  void release_task(struct task_struct *p)
+>  {
+>  	struct task_struct *leader;
+> diff --git a/kernel/pid.c b/kernel/pid.c
+> index 20881598bdfa..5c90c239242f 100644
+> --- a/kernel/pid.c
+> +++ b/kernel/pid.c
+> @@ -214,6 +214,8 @@ struct pid *alloc_pid(struct pid_namespace *ns)
+>  	for (type = 0; type < PIDTYPE_MAX; ++type)
+>  		INIT_HLIST_HEAD(&pid->tasks[type]);
+>  
+> +	init_waitqueue_head(&pid->wait_pidfd);
+> +
+>  	upid = pid->numbers + ns->level;
+>  	spin_lock_irq(&pidmap_lock);
+>  	if (!(ns->pid_allocated & PIDNS_ADDING))
+> diff --git a/kernel/signal.c b/kernel/signal.c
+> index f98448cf2def..e3781703ef7e 100644
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -1800,6 +1800,17 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
+>  	return ret;
+>  }
+>  
+> +static void do_wakeup_pidfd_pollers(struct task_struct *task)
+> +{
+> +	struct pid *pid;
+> +
+> +	lockdep_assert_held(&tasklist_lock);
+> +
+> +	pid = get_task_pid(task, PIDTYPE_PID);
+> +	wake_up_all(&pid->wait_pidfd);
+> +	put_pid(pid);
+> +}
+> +
+>  /*
+>   * Let a parent know about the death of a child.
+>   * For a stopped/continued status change, use do_notify_parent_cldstop instead.
+> @@ -1823,6 +1834,9 @@ bool do_notify_parent(struct task_struct *tsk, int sig)
+>  	BUG_ON(!tsk->ptrace &&
+>  	       (tsk->group_leader != tsk || !thread_group_empty(tsk)));
+>  
+> +	/* Wake up all pidfd waiters */
+> +	do_wakeup_pidfd_pollers(tsk);
+> +
+>  	if (sig != SIGCHLD) {
+>  		/*
+>  		 * This is only possible if parent == real_parent.
+> -- 
+> 2.21.0.392.gf8f6787159e-goog
+> 
