@@ -1,253 +1,43 @@
-From: yamada.masahiro@socionext.com (Masahiro Yamada)
-Date: Thu, 11 Apr 2019 10:47:23 +0900
-Subject: [PATCH v6 1/2] Provide in-kernel headers to make extending kernel
- easier
-In-Reply-To: <20190408212855.233198-1-joel@joelfernandes.org>
-References: <20190408212855.233198-1-joel@joelfernandes.org>
-Message-ID:
- <CAK7LNAQgvhozubW9b2yqnxHAVE17VHHZiq6N4Py_TzFCHN0YUQ@mail.gmail.com>
+From: alexei.starovoitov@gmail.com (Alexei Starovoitov)
+Date: Wed, 10 Apr 2019 20:15:42 -0700
+Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending
+ kernel easier
+In-Reply-To: <CAOesGMiuGK-Sbqo2z=1ab070JONav1LF82MRRLCdX-4+14_XZA@mail.gmail.com>
+References: <20190320163116.39275-1-joel@joelfernandes.org>
+ <CAOesGMheoZda84OSz9spQ7p66wot5S_9aaqaKC=QYp+8utASXA@mail.gmail.com>
+ <20190408203601.GF133872@google.com>
+ <CAOesGMibHCuMPCYkc8V++Z2Kuf3YQf_OjYn18GvDgzTy6ubV=g@mail.gmail.com>
+ <CAJWu+or0hWce9+7aEfTHoOR8cptRbzHYVL-bPdJWGZH20dbo7Q@mail.gmail.com>
+ <CAOesGMiuGK-Sbqo2z=1ab070JONav1LF82MRRLCdX-4+14_XZA@mail.gmail.com>
+Message-ID: <20190411031540.ehezr6kq7ouobpzx@ast-mbp.dhcp.thefacebook.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190411014723.GmxeOJB52ccpexjom7R_8CAjzagKIDkWPHYoIK3-FbU@z>
+Message-ID: <20190411031542.DqRdFjqottcM4uppwcZzCWRrkCHdtEf9douDkyqbzvs@z>
 
-Hi Joel,
+On Wed, Apr 10, 2019@09:34:49AM -0700, Olof Johansson wrote:
+> On Wed, Apr 10, 2019@8:51 AM Joel Fernandes <joelaf@google.com> wrote:
+> >
+> > On Wed, Apr 10, 2019@11:07 AM Olof Johansson <olof@lixom.net> wrote:
+> > [snip]
+> > > > > Wouldn't it be more convenient to provide it in a standardized format
+> > > > > such that you won't have to take an additional step, and always have
+> > > > > This is that form IMO.
+...
+> Compared to:
+>  - Extract tarball
+>  - Build and load
+>  - Remove file tree from filesystem
 
-I have no objection to this patch.
-I checked though it once again,
-please let me point out a little more.
+I think there are too many assumptions in this thread in regard to what
+is more convenient for user space.
+I think bcc should try to avoid extracting tarball into file system.
+For example libbcc can uncompress kheader.tar.xz into virtual file system
+of clang front-end. It's more or less std::map<string, string>
+with key=path, value=content of the file. Access to such in-memory
+'files' is obviously faster than doing open/read syscalls.
+bcc already uses this approach for some bcc internal 'files' that
+it passes to clang during compilation.
+All of /proc/kheaders.tar.xz files can be passed the same way
+without extracting them into real file system.
 
-They are all nits.
-
-
-
-On Tue, Apr 9, 2019 at 6:37 AM Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
->
-> Introduce in-kernel headers which are made available as an archive
-> through proc (/proc/kheaders.tar.xz file). This archive makes it
-> possible to run eBPF and other tracing programs tracing programs that
-
-Just one "tracing programs" is enough.
-
-
-> need to extend the kernel for tracing purposes without any dependency on
-> the file system having headers.
->
-> On Android and embedded systems, it is common to switch kernels but not
-> have kernel headers available on the file system. Further once a
-> different kernel is booted, any headers stored on the file system will
-> no longer be useful. By storing the headers as a compressed archive
-> within the kernel, we can avoid these issues that have been a hindrance
-> for a long time.
->
-> The best way to use this feature is by building it in. Several users
-> have a need for this, when they switch debug kernels, they donot want to
-
-'donot' -> 'do not' ?
-
-
-> update the filesystem or worry about it where to store the headers on
-> it. However, the feature is also buildable as a module in case the user
-> desires it not being part of the kernel image. This makes it possible to
-> load and unload the headers from memory on demand. A tracing program, or
-> a kernel module builder can load the module, do its operations, and then
-> unload the module to save kernel memory. The total memory needed is 3.8MB.
->
-> By having the archive available at a fixed location independent of
-> filesystem dependencies and conventions, all debugging tools can
-> directly refer to the fixed location for the archive, without concerning
-> with where the headers on a typical filesystem which significantly
-> simplifies tooling that needs kernel headers.
->
-> The code to read the headers is based on /proc/config.gz code and uses
-> the same technique to embed the headers.
->
-> IKHD_ST and IKHD_ED markers as is to facilitate future patches that
-> would extract the headers from a kernel or module image.
->
-> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-
-[snip]
-
->
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 4592bf7997c0..ea75bfbf7dfa 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -580,6 +580,17 @@ config IKCONFIG_PROC
->           This option enables access to the kernel configuration file
->           through /proc/config.gz.
->
-> +config IKHEADERS_PROC
-> +       tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
-> +       depends on PROC_FS
-> +       help
-> +         This option enables access to the kernel header and other artifacts that
-
-This line is indented by a TAB, which is correct.
-
-
-> +          are generated during the build process. These can be used to build kernel
-> +          modules or by other in-kernel programs such as those generated by eBPF
-
-Now that you have dropped the ability to "build kernel modules",
-I'd like you to update this help message.
-
-> +          and systemtap tools. If you build the headers as a module, a module
-> +          called kheaders.ko is built which can be loaded on-demand to get access
-> +          to the headers.
-
-These lines are indented by 8-spaces instead of one TAB.
-Please use TAB-indentation consistently.
-
-
-[snip]
-
-
-> +rm -rf $cpio_dir
-> +mkdir $cpio_dir
-> +
-> +pushd $kroot > /dev/null
-> +for f in $src_file_list;
-> +       do find "$f" ! -name "*.cmd" ! -name ".*";
-> +done | cpio --quiet -pd $cpio_dir
-> +popd > /dev/null
-> +
-> +# The second CPIO can complain if files already exist which can
-> +# happen with out of tree builds. Just silence CPIO for now.
-> +for f in $obj_file_list;
-> +       do find "$f" ! -name "*.cmd" ! -name ".*";
-> +done | cpio --quiet -pd $cpio_dir >/dev/null 2>&1
-> +
-
-Could you add a simple comment about what the following code is doing?
-"Remove comments except SPDX" etc.
-
-
-> +find  $cpio_dir -type f -print0 |
-
-Please replace two spaces after 'find' with one.
-
-
-> +       xargs -0 -P8 -n1 perl -pi -e 'BEGIN {undef $/;}; s/\/\*((?!SPDX).)*?\*\///smg;'
-> +
-> +tar -Jcf $tarfile -C $cpio_dir/ . > /dev/null
-> +
-> +echo "$src_files_md5" > kernel/kheaders.md5
-> +echo "$obj_files_md5" >> kernel/kheaders.md5
-> +echo "$(md5sum $tarfile | cut -d ' ' -f1)" >> kernel/kheaders.md5
-> +
-> +rm -rf $cpio_dir
-> diff --git a/kernel/kheaders.c b/kernel/kheaders.c
-> new file mode 100644
-> index 000000000000..d072a958a8f1
-> --- /dev/null
-> +++ b/kernel/kheaders.c
-> @@ -0,0 +1,73 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * kernel/kheaders.c
-> + * Provide headers and artifacts needed to build kernel modules.
-
-Ditto. Could you update this comment ?
-
-
-> + * (Borrowed code from kernel/configs.c)
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/proc_fs.h>
-> +#include <linux/init.h>
-> +#include <linux/uaccess.h>
-> +
-> +/*
-> + * Define kernel_headers_data and kernel_headers_data_end, within which the the
-> + * compressed kernel headers are stpred. The file is first compressed with xz.
-> + */
-> +
-> +asm (
-> +"      .pushsection .rodata, \"a\"             \n"
-> +"      .global kernel_headers_data             \n"
-> +"kernel_headers_data:                          \n"
-> +"      .incbin \"kernel/kheaders_data.tar.xz\" \n"
-> +"      .global kernel_headers_data_end         \n"
-> +"kernel_headers_data_end:                      \n"
-> +"      .popsection                             \n"
-> +);
-
-You mentioned "IKHD_ST and IKHD_ED markers..." in the commit description,
-but I do not see them in the code.
-
-If you plan to work on a tool to extract the headers,
-I think it is OK to have the markers here.
-
-Anyway, please make the code and the commit-log consistent.
-
-
-> +
-> +extern char kernel_headers_data;
-> +extern char kernel_headers_data_end;
-> +
-> +static ssize_t
-> +ikheaders_read_current(struct file *file, char __user *buf,
-
-Could you stretch this line ?
-It will still fit in 80-cols.
-
-(This is a coding style error in kernel/configs.c)
-
-
-
-Last thing, when CONFIG_IKHEADERS_PROC=y,
-I always see:
-  GEN     kernel/kheaders_data.tar.xz
-
-which I think misleading because
-the script is just checking the md5sum.
-
-
-
-What I like to see is:
-  CHK     kernel/kheaders_data.tar.xz
-for checking md5sum.
-
-And,
-  GEN     kernel/kheaders_data.tar.xz
-for really (re-)generating the tarball.
-
-
-How about this code?
-
-index e3c581d8cde7..12399614c350 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -125,7 +125,7 @@ $(obj)/config_data.gz: $(KCONFIG_CONFIG) FORCE
-
- $(obj)/kheaders.o: $(obj)/kheaders_data.tar.xz
-
--quiet_cmd_genikh = GEN     $(obj)/kheaders_data.tar.xz
-+quiet_cmd_genikh = CHK     $(obj)/kheaders_data.tar.xz
- cmd_genikh = $(srctree)/kernel/gen_ikh_data.sh $@
- $(obj)/kheaders_data.tar.xz: FORCE
-        $(call cmd,genikh)
-diff --git a/kernel/gen_ikh_data.sh b/kernel/gen_ikh_data.sh
-index ef72c2740d01..613960e18691 100755
---- a/kernel/gen_ikh_data.sh
-+++ b/kernel/gen_ikh_data.sh
-@@ -57,6 +57,10 @@ if [ -f kernel/kheaders.md5 ] &&
-                exit
- fi
-
-+if [ "${quiet}" != "silent_" ]; then
-+       echo "  GEN     $tarfile"
-+fi
-+
- rm -rf $cpio_dir
- mkdir $cpio_dir
-
-
-Thanks.
-
--- 
-Best Regards
-Masahiro Yamada
+Joel, would be great if you can share corresponding bcc patch
+that takes advantage of /proc/kheaders
