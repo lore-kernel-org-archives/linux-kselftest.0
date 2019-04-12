@@ -1,66 +1,53 @@
-From: ci_notify at linaro.org (ci_notify at linaro.org)
-Date: Fri, 12 Apr 2019 09:00:16 +0000 (UTC)
-Subject: next-20190412 kselftest results
-Message-ID: <348698633.11408.1555059617256.JavaMail.jenkins@a6c5c67cda76>
+From: shuah at kernel.org (shuah)
+Date: Fri, 12 Apr 2019 07:26:47 -0600
+Subject: [PATCH] selftests: livepatch use TEST_PROGS for test shell scripts
+In-Reply-To: <alpine.LSU.2.21.1904120901490.773@pobox.suse.cz>
+References: <20190412011823.26884-1-shuah@kernel.org>
+ <alpine.LSU.2.21.1904120901490.773@pobox.suse.cz>
+Message-ID: <8967c9aa-7eb1-7e6d-a371-f29a2be24c84@kernel.org>
 
-Summary
-------------------------------------------------------------------------
-git repo: not informed
-git branch: not informed
-git commit: not informed
-git describe: not informed
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190412
+On 4/12/19 1:03 AM, Miroslav Benes wrote:
+> On Thu, 11 Apr 2019, Shuah Khan wrote:
+> 
+>> TEST_PROGS variable is for test shell scripts and common clean target
+>> in lib.mk doesn't touch them. TEST_GEN_PROGS are removed by it.
+>>
+>> Fix it to use TEST_PROGS for test shell scripts and TEST_PROGS_EXTENDED
+>> for common functions.sh.
+>>
+>> Signed-off-by: Shuah Khan <shuah at kernel.org>
+>> ---
+>>   tools/testing/selftests/livepatch/Makefile | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
+>> index af4aee79bebb..fd405402c3ff 100644
+>> --- a/tools/testing/selftests/livepatch/Makefile
+>> +++ b/tools/testing/selftests/livepatch/Makefile
+>> @@ -1,6 +1,7 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>>   
+>> -TEST_GEN_PROGS := \
+>> +TEST_PROGS_EXTENDED := functions.sh
+>> +TEST_PROGS := \
+>>   	test-livepatch.sh \
+>>   	test-callbacks.sh \
+>>   	test-shadow-vars.sh
+> 
+> Hi Shuah,
+> 
+> thanks for the patch. We have already something similar queued in our git
+> tree. See
+> https://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git/commit/?h=for-5.1/upstream-fixes&id=abfe3c4560684864f66641438fee3075de098e89
+> 
+> It is missing TEST_PROGS_EXTENDED though. Should we add it?
+> 
 
-Regressions (compared to build next-20190411)
-------------------------------------------------------------------------
-No regressions                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190411)                                                                   
-------------------------------------------------------------------------                                               
-No fixes
+Please do. What that does is when selftests are installed, functions.h
+gets installed as well so the the test can run from installed location.
 
-In total:
-------------------------------------------------------------------------
-Ran 0 total tests in the following environments and test suites.
-pass 0
-fail 0
-xfail 0
-skip 0
+Did I miss reviewing the original? I maintain the framework and try to
+catch these if patch gets sent to me.
 
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-
-
-Failures
-------------------------------------------------------------------------
-
-dragonboard-410c:
-
-x86:
-
-hi6220-hikey:
-
-i386:
-
-x15:
-
-juno-r2:
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+thanks,
+-- Shuah
