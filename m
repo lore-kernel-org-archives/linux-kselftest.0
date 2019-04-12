@@ -1,88 +1,36 @@
-From: shuah@kernel.org (shuah)
-Date: Fri, 12 Apr 2019 13:06:21 -0600
-Subject: [PATCH] selftests: livepatch use TEST_PROGS for test shell scripts
-In-Reply-To: <6f97800f-e78f-7d16-32b2-96ee5260321c@redhat.com>
-References: <20190412011823.26884-1-shuah@kernel.org>
- <alpine.LSU.2.21.1904120901490.773@pobox.suse.cz>
- <8967c9aa-7eb1-7e6d-a371-f29a2be24c84@kernel.org>
- <alpine.LSU.2.21.1904121535100.773@pobox.suse.cz>
- <ad936df6-ab14-6bff-322a-c9d34d23c1f5@kernel.org>
- <6f97800f-e78f-7d16-32b2-96ee5260321c@redhat.com>
-Message-ID: <1e07dae8-6699-6b72-1508-2b6b89d3d92d@kernel.org>
+From: tycho@tycho.ws (Tycho Andersen)
+Date: Fri, 12 Apr 2019 13:44:09 -0600
+Subject: [PATCH] selftests/seccomp: Handle namespace failures gracefully
+In-Reply-To: <8fca6205-4983-2ba1-c1eb-c80be2dc8769@kernel.org>
+References: <20190411235631.GA31624@beast> <20190412152543.GB25793@cisco>
+ <8fca6205-4983-2ba1-c1eb-c80be2dc8769@kernel.org>
+Message-ID: <20190412194409.GD25793@cisco>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190412190621.iOJJZzs44FF_-A3K3IeervEATLX2JpYez4htj1FjO4A@z>
+Message-ID: <20190412194409.Y5ECq7TP1bon3ZwrQ8cmcjSw4OkhIW9cr2fAKQqsO7o@z>
 
-On 4/12/19 12:51 PM, Joe Lawrence wrote:
-> On 4/12/19 1:05 PM, shuah wrote:
->> On 4/12/19 7:37 AM, Miroslav Benes wrote:
->>> On Fri, 12 Apr 2019, shuah wrote:
->>>
->>>> On 4/12/19 1:03 AM, Miroslav Benes wrote:
->>>>> On Thu, 11 Apr 2019, Shuah Khan wrote:
->>>>>
->>>>>> TEST_PROGS variable is for test shell scripts and common clean target
->>>>>> in lib.mk doesn't touch them. TEST_GEN_PROGS are removed by it.
->>>>>>
->>>>>> Fix it to use TEST_PROGS for test shell scripts and 
->>>>>> TEST_PROGS_EXTENDED
->>>>>> for common functions.sh.
->>>>>>
->>>>>> Signed-off-by: Shuah Khan <shuah at kernel.org>
->>>>>> ---
->>>>>>     tools/testing/selftests/livepatch/Makefile | 3 ++-
->>>>>>     1 file changed, 2 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/tools/testing/selftests/livepatch/Makefile
->>>>>> b/tools/testing/selftests/livepatch/Makefile
->>>>>> index af4aee79bebb..fd405402c3ff 100644
->>>>>> --- a/tools/testing/selftests/livepatch/Makefile
->>>>>> +++ b/tools/testing/selftests/livepatch/Makefile
->>>>>> @@ -1,6 +1,7 @@
->>>>>>     # SPDX-License-Identifier: GPL-2.0
->>>>>> -TEST_GEN_PROGS := \
->>>>>> +TEST_PROGS_EXTENDED := functions.sh
->>>>>> +TEST_PROGS := \
->>>>>>      test-livepatch.sh \
->>>>>>      test-callbacks.sh \
->>>>>>      test-shadow-vars.sh
->>>>>
->>>>> Hi Shuah,
->>>>>
->>>>> thanks for the patch. We have already something similar queued in 
->>>>> our git
->>>>> tree. See
->>>>> https://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git/commit/?h=for-5.1/upstream-fixes&id=abfe3c4560684864f66641438fee3075de098e89 
->>>>>
->>>>>
->>>>> It is missing TEST_PROGS_EXTENDED though. Should we add it?
->>>>>
->>>>
->>>> Please do. What that does is when selftests are installed, functions.h
->>>> gets installed as well so the the test can run from installed location.
->>>>
->>>> Did I miss reviewing the original? I maintain the framework and try to
->>>> catch these if patch gets sent to me.
->>>
->>> Unfortunately you did and it was our fault. You were not CCed, no one
->>> noticed and we were a bit trigger happy. Sorry about that. It should not
->>> have happened.
->>>
->>> Would this work for you?
->>
->> Looks good to me.
->>
+On Fri, Apr 12, 2019@11:07:11AM -0600, shuah wrote:
+> On 4/12/19 9:25 AM, Tycho Andersen wrote:
+> > On Thu, Apr 11, 2019@04:56:31PM -0700, Kees Cook wrote:
+> > > When running without USERNS or PIDNS the seccomp test would hang since
+> > > it was waiting forever for the child to trigger the user notification
+> > > since it seems the glibc() abort handler makes a call to getpid(),
+> > > which would trap again. This changes the getpid filter to getppid, and
+> > > makes sure ASSERTs execute to stop from spawning the listener.
+> > > 
+> > > Reported-by: Shuah Khan <shuah at kernel.org>
+> > > Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
+> > > Signed-off-by: Kees Cook <keescook at chromium.org>
+> > 
+> > Sorry for the delay, thanks for looking at this!
+> > 
+> > Reviewed-by: Tycho Andersen <tycho at tycho.ws>
+> > 
 > 
-> Hi Shuah,
-> 
-> Thanks for spotting this and apologies for missing your CC on my earlier 
-> patch post.  For future reference, do you prefer a direct CC, 
-> linux-kselftest, or both?
+> Thanks both. Should it go into stables. I will pull this and
+> add stable if that is appropriate.
 
-No worries. Happy to report the problem. Couldn't have missed it with
-all the deleted lines showing up whenever I ran diff on my changes. :)
+Yes, for 5.0+ that sounds good.
 
-Direct to or cc to me and cc linux-kselftest list is preferred Same as
-any other patch really, everybody getmaintainer.pl recommends.
+Thanks!
 
-thanks,
--- Shuah
+Tycho
