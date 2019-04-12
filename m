@@ -1,33 +1,97 @@
-From: lkml at metux.net (Enrico Weigelt, metux IT consult)
-Date: Fri, 12 Apr 2019 18:16:19 +0200
-Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending kernel
- easier
-In-Reply-To: <CAK8P3a30yY_1mPcUBxOYOkbFwoeCHbo5EHuWMN4fqKug9DiQDQ@mail.gmail.com>
-References: <20190320163116.39275-1-joel@joelfernandes.org>
- <CAOesGMheoZda84OSz9spQ7p66wot5S_9aaqaKC=QYp+8utASXA@mail.gmail.com>
- <20190408203601.GF133872@google.com>
- <CAOesGMibHCuMPCYkc8V++Z2Kuf3YQf_OjYn18GvDgzTy6ubV=g@mail.gmail.com>
- <CAK8P3a30yY_1mPcUBxOYOkbFwoeCHbo5EHuWMN4fqKug9DiQDQ@mail.gmail.com>
-Message-ID: <76db9a89-ae64-5c2b-6f56-3e2b860cbda2@metux.net>
+From: shuah at kernel.org (shuah)
+Date: Fri, 12 Apr 2019 11:05:55 -0600
+Subject: [PATCH] selftests: livepatch use TEST_PROGS for test shell scripts
+In-Reply-To: <alpine.LSU.2.21.1904121535100.773@pobox.suse.cz>
+References: <20190412011823.26884-1-shuah@kernel.org>
+ <alpine.LSU.2.21.1904120901490.773@pobox.suse.cz>
+ <8967c9aa-7eb1-7e6d-a371-f29a2be24c84@kernel.org>
+ <alpine.LSU.2.21.1904121535100.773@pobox.suse.cz>
+Message-ID: <ad936df6-ab14-6bff-322a-c9d34d23c1f5@kernel.org>
 
-On 10.04.19 21:19, Arnd Bergmann wrote:
+On 4/12/19 7:37 AM, Miroslav Benes wrote:
+> On Fri, 12 Apr 2019, shuah wrote:
+> 
+>> On 4/12/19 1:03 AM, Miroslav Benes wrote:
+>>> On Thu, 11 Apr 2019, Shuah Khan wrote:
+>>>
+>>>> TEST_PROGS variable is for test shell scripts and common clean target
+>>>> in lib.mk doesn't touch them. TEST_GEN_PROGS are removed by it.
+>>>>
+>>>> Fix it to use TEST_PROGS for test shell scripts and TEST_PROGS_EXTENDED
+>>>> for common functions.sh.
+>>>>
+>>>> Signed-off-by: Shuah Khan <shuah at kernel.org>
+>>>> ---
+>>>>    tools/testing/selftests/livepatch/Makefile | 3 ++-
+>>>>    1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/tools/testing/selftests/livepatch/Makefile
+>>>> b/tools/testing/selftests/livepatch/Makefile
+>>>> index af4aee79bebb..fd405402c3ff 100644
+>>>> --- a/tools/testing/selftests/livepatch/Makefile
+>>>> +++ b/tools/testing/selftests/livepatch/Makefile
+>>>> @@ -1,6 +1,7 @@
+>>>>    # SPDX-License-Identifier: GPL-2.0
+>>>>    
+>>>> -TEST_GEN_PROGS := \
+>>>> +TEST_PROGS_EXTENDED := functions.sh
+>>>> +TEST_PROGS := \
+>>>>     test-livepatch.sh \
+>>>>     test-callbacks.sh \
+>>>>     test-shadow-vars.sh
+>>>
+>>> Hi Shuah,
+>>>
+>>> thanks for the patch. We have already something similar queued in our git
+>>> tree. See
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git/commit/?h=for-5.1/upstream-fixes&id=abfe3c4560684864f66641438fee3075de098e89
+>>>
+>>> It is missing TEST_PROGS_EXTENDED though. Should we add it?
+>>>
+>>
+>> Please do. What that does is when selftests are installed, functions.h
+>> gets installed as well so the the test can run from installed location.
+>>
+>> Did I miss reviewing the original? I maintain the framework and try to
+>> catch these if patch gets sent to me.
+> 
+> Unfortunately you did and it was our fault. You were not CCed, no one
+> noticed and we were a bit trigger happy. Sorry about that. It should not
+> have happened.
+> 
+> Would this work for you?
 
-> - we use cpio for initramfs because unpacking cpio in C code is
->   fairly simple, while unpacking tar is not (see the wikipedia page on tar).
->   If we were to unpack it from the kernel, the initramfs code could be
->   trivially reused.
+Looks good to me.
 
-What about ar ? ;-)
+> 
+> -->8--
+> 
+>>From c158f5595286dba46f096cc7cc4bcef5ad8b6c16 Mon Sep 17 00:00:00 2001
+> From: Miroslav Benes <mbenes at suse.cz>
+> Date: Fri, 12 Apr 2019 15:31:42 +0200
+> Subject: [PATCH] selftests/livepatch: Add functions.sh to TEST_PROGS_EXTENDED
+> 
+> Add functions.sh to TEST_PROGS_EXTENDED so that it is installed along
+> with the rest of the selftests and they can be run.
+> 
+> Originally-by: Shuah Khan <shuah at kernel.org>
+> Signed-off-by: Miroslav Benes <mbenes at suse.cz>
+> ---
+>   tools/testing/selftests/livepatch/Makefile | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
+> index 114f43e2081a..fd405402c3ff 100644
+> --- a/tools/testing/selftests/livepatch/Makefile
+> +++ b/tools/testing/selftests/livepatch/Makefile
+> @@ -1,5 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   
+> +TEST_PROGS_EXTENDED := functions.sh
+>   TEST_PROGS := \
+>   	test-livepatch.sh \
+>   	test-callbacks.sh \
+> 
 
-> - nobody sane uses cpio in user space, since tar is already present
->   almost everywhere, while cpio is rather obscure in comparison.
-
-So, rpm doesn't count as "sane" ? :o
-
-
---mtx
-
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info at metux.net -- +49-151-27565287
+thanks,
+-- Shuah
