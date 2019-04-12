@@ -1,90 +1,89 @@
-From: mbenes at suse.cz (Miroslav Benes)
-Date: Fri, 12 Apr 2019 15:37:37 +0200 (CEST)
-Subject: [PATCH] selftests: livepatch use TEST_PROGS for test shell scripts
-In-Reply-To: <8967c9aa-7eb1-7e6d-a371-f29a2be24c84@kernel.org>
-References: <20190412011823.26884-1-shuah@kernel.org>
- <alpine.LSU.2.21.1904120901490.773@pobox.suse.cz>
- <8967c9aa-7eb1-7e6d-a371-f29a2be24c84@kernel.org>
-Message-ID: <alpine.LSU.2.21.1904121535100.773@pobox.suse.cz>
+From: kevin.brodsky at arm.com (Kevin Brodsky)
+Date: Fri, 12 Apr 2019 15:16:19 +0100
+Subject: [PATCH v2 2/4] arm64: Define Documentation/arm64/elf_at_flags.txt
+In-Reply-To: <20190403165031.GE34351@arrakis.emea.arm.com>
+References: <cover.1552679409.git.andreyknvl@google.com>
+ <20190318163533.26838-1-vincenzo.frascino@arm.com>
+ <20190318163533.26838-3-vincenzo.frascino@arm.com>
+ <859341c2-b352-e914-312a-d3de652495b6@arm.com>
+ <20190403165031.GE34351@arrakis.emea.arm.com>
+Message-ID: <d2292560-54cf-8dc3-da96-4ccdd72d090e@arm.com>
 
-On Fri, 12 Apr 2019, shuah wrote:
+On 03/04/2019 17:50, Catalin Marinas wrote:
+> On Fri, Mar 22, 2019 at 03:52:49PM +0000, Kevin Brodsky wrote:
+>> On 18/03/2019 16:35, Vincenzo Frascino wrote:
+>>> +2. Features exposed via AT_FLAGS
+>>> +--------------------------------
+>>> +
+>>> +bit[0]: ARM64_AT_FLAGS_SYSCALL_TBI
+>>> +
+>>> +    On arm64 the TCR_EL1.TBI0 bit has been always enabled on the arm64
+>>> +    kernel, hence the userspace (EL0) is allowed to set a non-zero value
+>>> +    in the top byte but the resulting pointers are not allowed at the
+>>> +    user-kernel syscall ABI boundary.
+>>> +    When bit[0] is set to 1 the kernel is advertising to the userspace
+>>> +    that a relaxed ABI is supported hence this type of pointers are now
+>>> +    allowed to be passed to the syscalls, when these pointers are in
+>>> +    memory ranges privately owned by a process and obtained by the
+>>> +    process in accordance with the definition of "valid tagged pointer"
+>>> +    in paragraph 3.
+>>> +    In these cases the tag is preserved as the pointer goes through the
+>>> +    kernel. Only when the kernel needs to check if a pointer is coming
+>>> +    from userspace an untag operation is required.
+>> I would leave this last sentence out, because:
+>> 1. It is an implementation detail that doesn't impact this user ABI.
+>> 2. It is not entirely accurate: untagging the pointer may be needed for
+>> various kinds of address lookup (like finding the corresponding VMA), at
+>> which point the kernel usually already knows it is a userspace pointer.
+> I fully agree, the above paragraph should not be part of the user ABI
+> document.
+>
+>>> +3. ARM64_AT_FLAGS_SYSCALL_TBI
+>>> +-----------------------------
+>>> +
+>>> +From the kernel syscall interface prospective, we define, for the purposes
+>>> +of this document, a "valid tagged pointer" as a pointer that either it has
+>>> +a zero value set in the top byte or it has a non-zero value, it is in memory
+>>> +ranges privately owned by a userspace process and it is obtained in one of
+>>> +the following ways:
+>>> +  - mmap() done by the process itself, where either:
+>>> +    * flags = MAP_PRIVATE | MAP_ANONYMOUS
+>>> +    * flags = MAP_PRIVATE and the file descriptor refers to a regular
+>>> +      file or "/dev/zero"
+>>> +  - a mapping below sbrk(0) done by the process itself
+>> I don't think that's very clear, this doesn't say how the mapping is
+>> obtained. Maybe "a mapping obtained by the process using brk() or sbrk()"?
+> I think what we mean here is anything in the "[heap]" section as per
+> /proc/*/maps (in the kernel this would be start_brk to brk).
+>
+>>> +  - any memory mapped by the kernel in the process's address space during
+>>> +    creation and following the restrictions presented above (i.e. data, bss,
+>>> +    stack).
+>> With the rules above, the code section is included as well. Replacing "i.e."
+>> with "e.g." would avoid having to list every single section (which is
+>> probably not a good idea anyway).
+> We could mention [stack] explicitly as that's documented in the
+> Documentation/filesystems/proc.txt and it's likely considered ABI
+> already.
+>
+> The code section is MAP_PRIVATE, and can be done by the dynamic loader
+> (user process), so it falls under the mmap() rules listed above. I guess
+> we could simply drop "done by the process itself" here and allow
+> MAP_PRIVATE|MAP_ANONYMOUS or MAP_PRIVATE of regular file. This would
+> cover the [heap] and [stack] and we won't have to debate the brk() case
+> at all.
 
-> On 4/12/19 1:03 AM, Miroslav Benes wrote:
-> > On Thu, 11 Apr 2019, Shuah Khan wrote:
-> > 
-> >> TEST_PROGS variable is for test shell scripts and common clean target
-> >> in lib.mk doesn't touch them. TEST_GEN_PROGS are removed by it.
-> >>
-> >> Fix it to use TEST_PROGS for test shell scripts and TEST_PROGS_EXTENDED
-> >> for common functions.sh.
-> >>
-> >> Signed-off-by: Shuah Khan <shuah at kernel.org>
-> >> ---
-> >>   tools/testing/selftests/livepatch/Makefile | 3 ++-
-> >>   1 file changed, 2 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/tools/testing/selftests/livepatch/Makefile
-> >> b/tools/testing/selftests/livepatch/Makefile
-> >> index af4aee79bebb..fd405402c3ff 100644
-> >> --- a/tools/testing/selftests/livepatch/Makefile
-> >> +++ b/tools/testing/selftests/livepatch/Makefile
-> >> @@ -1,6 +1,7 @@
-> >>   # SPDX-License-Identifier: GPL-2.0
-> >>   
-> >> -TEST_GEN_PROGS := \
-> >> +TEST_PROGS_EXTENDED := functions.sh
-> >> +TEST_PROGS := \
-> >>    test-livepatch.sh \
-> >>    test-callbacks.sh \
-> >>    test-shadow-vars.sh
-> > 
-> > Hi Shuah,
-> > 
-> > thanks for the patch. We have already something similar queued in our git
-> > tree. See
-> > https://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git/commit/?h=for-5.1/upstream-fixes&id=abfe3c4560684864f66641438fee3075de098e89
-> > 
-> > It is missing TEST_PROGS_EXTENDED though. Should we add it?
-> > 
-> 
-> Please do. What that does is when selftests are installed, functions.h
-> gets installed as well so the the test can run from installed location.
-> 
-> Did I miss reviewing the original? I maintain the framework and try to
-> catch these if patch gets sent to me.
+That's probably the best option. I initially used this wording because I was worried 
+that there could be cases where the kernel allocates "magic" memory for userspace 
+that is MAP_PRIVATE|MAP_ANONYMOUS, but in fact it's probably not the case (presumably 
+such mapping should always be done via install_special_mapping(), which is definitely 
+not MAP_PRIVATE).
 
-Unfortunately you did and it was our fault. You were not CCed, no one 
-noticed and we were a bit trigger happy. Sorry about that. It should not 
-have happened.
+> We probably mention somewhere (or we should in the tagged pointers doc)
+> that we don't support tagged PC.
 
-Would this work for you?
+I think that Documentation/arm64/tagged-pointers.txt already makes it reasonably 
+clear (anyway, with the architecture not supporting it, you can't expect much from 
+the kernel).
 
--->8--
-
->From c158f5595286dba46f096cc7cc4bcef5ad8b6c16 Mon Sep 17 00:00:00 2001
-From: Miroslav Benes <mbenes at suse.cz>
-Date: Fri, 12 Apr 2019 15:31:42 +0200
-Subject: [PATCH] selftests/livepatch: Add functions.sh to TEST_PROGS_EXTENDED
-
-Add functions.sh to TEST_PROGS_EXTENDED so that it is installed along
-with the rest of the selftests and they can be run.
-
-Originally-by: Shuah Khan <shuah at kernel.org>
-Signed-off-by: Miroslav Benes <mbenes at suse.cz>
----
- tools/testing/selftests/livepatch/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-index 114f43e2081a..fd405402c3ff 100644
---- a/tools/testing/selftests/livepatch/Makefile
-+++ b/tools/testing/selftests/livepatch/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+TEST_PROGS_EXTENDED := functions.sh
- TEST_PROGS := \
- 	test-livepatch.sh \
- 	test-callbacks.sh \
--- 
-2.21.0
+Kevin
