@@ -1,29 +1,24 @@
-From: shuah at kernel.org (shuah)
-Date: Fri, 12 Apr 2019 11:07:11 -0600
-Subject: [PATCH] selftests/seccomp: Handle namespace failures gracefully
-In-Reply-To: <20190412152543.GB25793@cisco>
-References: <20190411235631.GA31624@beast> <20190412152543.GB25793@cisco>
-Message-ID: <8fca6205-4983-2ba1-c1eb-c80be2dc8769@kernel.org>
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Fri, 12 Apr 2019 13:25:36 -0400
+Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending
+ kernel easier
+In-Reply-To: <76db9a89-ae64-5c2b-6f56-3e2b860cbda2@metux.net>
+References: <20190320163116.39275-1-joel@joelfernandes.org>
+ <CAOesGMheoZda84OSz9spQ7p66wot5S_9aaqaKC=QYp+8utASXA@mail.gmail.com>
+ <20190408203601.GF133872@google.com>
+ <CAOesGMibHCuMPCYkc8V++Z2Kuf3YQf_OjYn18GvDgzTy6ubV=g@mail.gmail.com>
+ <CAK8P3a30yY_1mPcUBxOYOkbFwoeCHbo5EHuWMN4fqKug9DiQDQ@mail.gmail.com>
+ <76db9a89-ae64-5c2b-6f56-3e2b860cbda2@metux.net>
+Message-ID: <20190412132536.1211a66c@gandalf.local.home>
 
-On 4/12/19 9:25 AM, Tycho Andersen wrote:
-> On Thu, Apr 11, 2019 at 04:56:31PM -0700, Kees Cook wrote:
->> When running without USERNS or PIDNS the seccomp test would hang since
->> it was waiting forever for the child to trigger the user notification
->> since it seems the glibc() abort handler makes a call to getpid(),
->> which would trap again. This changes the getpid filter to getppid, and
->> makes sure ASSERTs execute to stop from spawning the listener.
->>
->> Reported-by: Shuah Khan <shuah at kernel.org>
->> Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
->> Signed-off-by: Kees Cook <keescook at chromium.org>
-> 
-> Sorry for the delay, thanks for looking at this!
-> 
-> Reviewed-by: Tycho Andersen <tycho at tycho.ws>
+On Fri, 12 Apr 2019 18:16:19 +0200
+"Enrico Weigelt, metux IT consult" <lkml at metux.net> wrote:
+
+> So, rpm doesn't count as "sane" ? :o
 > 
 
-Thanks both. Should it go into stables. I will pull this and
-add stable if that is appropriate.
+As a Debian user... No ;-)
 
-thanks,
--- Shuah
+/me runs
+
+-- Steve
