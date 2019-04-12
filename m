@@ -1,34 +1,348 @@
-From: tycho at tycho.ws (Tycho Andersen)
-Date: Fri, 12 Apr 2019 13:44:09 -0600
-Subject: [PATCH] selftests/seccomp: Handle namespace failures gracefully
-In-Reply-To: <8fca6205-4983-2ba1-c1eb-c80be2dc8769@kernel.org>
-References: <20190411235631.GA31624@beast> <20190412152543.GB25793@cisco>
- <8fca6205-4983-2ba1-c1eb-c80be2dc8769@kernel.org>
-Message-ID: <20190412194409.GD25793@cisco>
+From: joel at joelfernandes.org (Joel Fernandes (Google))
+Date: Fri, 12 Apr 2019 15:51:24 -0400
+Subject: [PATCH v7 1/2] Provide in-kernel headers to make extending kernel
+ easier
+Message-ID: <20190412195125.3891-1-joel@joelfernandes.org>
 
-On Fri, Apr 12, 2019 at 11:07:11AM -0600, shuah wrote:
-> On 4/12/19 9:25 AM, Tycho Andersen wrote:
-> > On Thu, Apr 11, 2019 at 04:56:31PM -0700, Kees Cook wrote:
-> > > When running without USERNS or PIDNS the seccomp test would hang since
-> > > it was waiting forever for the child to trigger the user notification
-> > > since it seems the glibc() abort handler makes a call to getpid(),
-> > > which would trap again. This changes the getpid filter to getppid, and
-> > > makes sure ASSERTs execute to stop from spawning the listener.
-> > > 
-> > > Reported-by: Shuah Khan <shuah at kernel.org>
-> > > Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
-> > > Signed-off-by: Kees Cook <keescook at chromium.org>
-> > 
-> > Sorry for the delay, thanks for looking at this!
-> > 
-> > Reviewed-by: Tycho Andersen <tycho at tycho.ws>
-> > 
-> 
-> Thanks both. Should it go into stables. I will pull this and
-> add stable if that is appropriate.
+Introduce in-kernel headers which are made available as an archive
+through proc (/proc/kheaders.tar.xz file). This archive makes it
+possible to run eBPF and other tracing programs that need to extend the
+kernel for tracing purposes without any dependency on the file system
+having headers.
 
-Yes, for 5.0+ that sounds good.
+A github PR is sent for the corresponding BCC patch at:
+https://github.com/iovisor/bcc/pull/2312
 
-Thanks!
+On Android and embedded systems, it is common to switch kernels but not
+have kernel headers available on the file system. Further once a
+different kernel is booted, any headers stored on the file system will
+no longer be useful. This is an issue even well known to distros.
+By storing the headers as a compressed archive within the kernel, we can
+avoid these issues that have been a hindrance for a long time.
 
-Tycho
+The best way to use this feature is by building it in. Several users
+have a need for this, when they switch debug kernels, they do not want to
+update the filesystem or worry about it where to store the headers on
+it. However, the feature is also buildable as a module in case the user
+desires it not being part of the kernel image. This makes it possible to
+load and unload the headers from memory on demand. A tracing program can
+load the module, do its operations, and then unload the module to save
+kernel memory. The total memory needed is 3.3MB.
+
+By having the archive available at a fixed location independent of
+filesystem dependencies and conventions, all debugging tools can
+directly refer to the fixed location for the archive, without concerning
+with where the headers on a typical filesystem which significantly
+simplifies tooling that needs kernel headers.
+
+The code to read the headers is based on /proc/config.gz code and uses
+the same technique to embed the headers.
+
+Other approaches were discussed such as having an in-memory mountable
+filesystem, but that has drawbacks such as requiring an in-kernel xz
+decompressor which we don't have today, and requiring usage of 42 MB of
+kernel memory to host the decompressed headers at anytime. Also this
+approach is simpler than such approaches.
+
+Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+---
+
+    v6 -> v7:
+    - Minor nits from Masahiro Yamada are addressed.
+
+    v5 -> v6: (Masahiro Yamada suggestions mostly)
+    - Dropped support for module building.
+    - Rebuild archive if script changes.
+    - Move archive file list to script.
+    - Move build script to kernel directory.
+
+    v4 -> v5:
+    (v4 was Tested-by the following folks)
+        Tested-by: qais.yousef at arm.com
+        Tested-by: dietmar.eggemann at arm.com
+        Tested-by: linux at manojrajarao.com
+    (Thanks to Masahiro Yamada for several excellent suggestions)
+    - used incbin instead of bin2c (Masahiro did similar idea)
+    - added module.lds if ia64 otherwise ia64 may fail to build.
+    - added clean-files rule to Makefile
+    - removed strip-comments script and doing it inline
+    - added set -e to header generated to die on errorsr
+    - fixed a minor issue where find command was noisy.
+    - removed unneeded tar.xz rule from kernel/.gitignore
+    - added Tested-by tags from ARM folks.
+
+    Changes since v3:
+    - Blank tar was being generated because of a one line I
+      forgot to push. It is updated now.
+    - Added module.lds since arm64 needs it to build modules.
+
+    Changes since v2:
+    (Thanks to Masahiro Yamada for several excellent suggestions)
+    - Added support for out of tree builds.
+    - Added incremental build support bringing down build time of
+      incremental builds from 50 seconds to 5 seconds.
+    - Fixed various small nits / cleanups.
+    - clean ups to kheaders.c pointed by Alexey Dobriyan.
+    - Fixed MODULE_LICENSE in test module and kheaders.c
+    - Dropped Module.symvers from archive due to circular dependency.
+
+    Changes since v1:
+    - removed IKH_EXTRA variable, not needed (Masahiro Yamada)
+    - small fix ups to selftest
+       - added target to main Makefile etc
+       - added MODULE_LICENSE to test module
+       - made selftest more quiet
+
+    Changes since RFC:
+    Both changes bring size down to 3.8MB:
+    - use xz for compression
+    - strip comments except SPDX lines
+    - Call out the module name in Kconfig
+    - Also added selftests in second patch to ensure headers are always
+    working.
+
+Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+
+ init/Kconfig           | 10 +++++
+ kernel/.gitignore      |  1 +
+ kernel/Makefile        | 10 +++++
+ kernel/gen_ikh_data.sh | 89 ++++++++++++++++++++++++++++++++++++++++++
+ kernel/kheaders.c      | 74 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 184 insertions(+)
+ create mode 100755 kernel/gen_ikh_data.sh
+ create mode 100644 kernel/kheaders.c
+
+diff --git a/init/Kconfig b/init/Kconfig
+index 4592bf7997c0..47c0db6e63a5 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -580,6 +580,16 @@ config IKCONFIG_PROC
+ 	  This option enables access to the kernel configuration file
+ 	  through /proc/config.gz.
+ 
++config IKHEADERS_PROC
++	tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
++	depends on PROC_FS
++	help
++	  This option enables access to the kernel header and other artifacts that
++	  are generated during the build process. These can be used to build eBPF
++	  tracing programs, or similar programs.  If you build the headers as a
++	  module, a module called kheaders.ko is built which can be loaded on-demand
++	  to get access to the headers.
++
+ config LOG_BUF_SHIFT
+ 	int "Kernel log buffer size (16 => 64KB, 17 => 128KB)"
+ 	range 12 25
+diff --git a/kernel/.gitignore b/kernel/.gitignore
+index 6e699100872f..34d1e77ee9df 100644
+--- a/kernel/.gitignore
++++ b/kernel/.gitignore
+@@ -1,5 +1,6 @@
+ #
+ # Generated files
+ #
++kheaders.md5
+ timeconst.h
+ hz.bc
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 6c57e78817da..12399614c350 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -70,6 +70,7 @@ obj-$(CONFIG_UTS_NS) += utsname.o
+ obj-$(CONFIG_USER_NS) += user_namespace.o
+ obj-$(CONFIG_PID_NS) += pid_namespace.o
+ obj-$(CONFIG_IKCONFIG) += configs.o
++obj-$(CONFIG_IKHEADERS_PROC) += kheaders.o
+ obj-$(CONFIG_SMP) += stop_machine.o
+ obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
+ obj-$(CONFIG_AUDIT) += audit.o auditfilter.o
+@@ -121,3 +122,12 @@ $(obj)/configs.o: $(obj)/config_data.gz
+ targets += config_data.gz
+ $(obj)/config_data.gz: $(KCONFIG_CONFIG) FORCE
+ 	$(call if_changed,gzip)
++
++$(obj)/kheaders.o: $(obj)/kheaders_data.tar.xz
++
++quiet_cmd_genikh = CHK     $(obj)/kheaders_data.tar.xz
++cmd_genikh = $(srctree)/kernel/gen_ikh_data.sh $@
++$(obj)/kheaders_data.tar.xz: FORCE
++	$(call cmd,genikh)
++
++clean-files := kheaders_data.tar.xz kheaders.md5
+diff --git a/kernel/gen_ikh_data.sh b/kernel/gen_ikh_data.sh
+new file mode 100755
+index 000000000000..591a94f7b387
+--- /dev/null
++++ b/kernel/gen_ikh_data.sh
+@@ -0,0 +1,89 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++# This script generates an archive consisting of kernel headers
++# for CONFIG_IKHEADERS_PROC.
++set -e
++spath="$(dirname "$(readlink -f "$0")")"
++kroot="$spath/.."
++outdir="$(pwd)"
++tarfile=$1
++cpio_dir=$outdir/$tarfile.tmp
++
++# Script filename relative to the kernel source root
++# We add it to the archive because it is small and any changes
++# to this script will also cause a rebuild of the archive.
++sfile="$(realpath --relative-to $kroot "$(readlink -f "$0")")"
++
++src_file_list="
++include/
++arch/$SRCARCH/include/
++$sfile
++"
++
++obj_file_list="
++include/
++arch/$SRCARCH/include/
++"
++
++# Support incremental builds by skipping archive generation
++# if timestamps of files being archived are not changed.
++
++# This block is useful for debugging the incremental builds.
++# Uncomment it for debugging.
++# iter=1
++# if [ ! -f /tmp/iter ]; then echo 1 > /tmp/iter;
++# else; 	iter=$(($(cat /tmp/iter) + 1)); fi
++# find $src_file_list -type f | xargs ls -lR > /tmp/src-ls-$iter
++# find $obj_file_list -type f | xargs ls -lR > /tmp/obj-ls-$iter
++
++# include/generated/compile.h is ignored because it is touched even when none
++# of the source files changed. This causes pointless regeneration, so let us
++# ignore them for md5 calculation.
++pushd $kroot > /dev/null
++src_files_md5="$(find $src_file_list -type f                       |
++		grep -v "include/generated/compile.h"		   |
++		xargs ls -lR | md5sum | cut -d ' ' -f1)"
++popd > /dev/null
++obj_files_md5="$(find $obj_file_list -type f                       |
++		grep -v "include/generated/compile.h"		   |
++		xargs ls -lR | md5sum | cut -d ' ' -f1)"
++
++if [ -f $tarfile ]; then tarfile_md5="$(md5sum $tarfile | cut -d ' ' -f1)"; fi
++if [ -f kernel/kheaders.md5 ] &&
++	[ "$(cat kernel/kheaders.md5|head -1)" == "$src_files_md5" ] &&
++	[ "$(cat kernel/kheaders.md5|head -2|tail -1)" == "$obj_files_md5" ] &&
++	[ "$(cat kernel/kheaders.md5|tail -1)" == "$tarfile_md5" ]; then
++		exit
++fi
++
++if [ "${quiet}" != "silent_" ]; then
++       echo "  GEN     $tarfile"
++fi
++
++rm -rf $cpio_dir
++mkdir $cpio_dir
++
++pushd $kroot > /dev/null
++for f in $src_file_list;
++	do find "$f" ! -name "*.cmd" ! -name ".*";
++done | cpio --quiet -pd $cpio_dir
++popd > /dev/null
++
++# The second CPIO can complain if files already exist which can
++# happen with out of tree builds. Just silence CPIO for now.
++for f in $obj_file_list;
++	do find "$f" ! -name "*.cmd" ! -name ".*";
++done | cpio --quiet -pd $cpio_dir >/dev/null 2>&1
++
++# Remove comments except SDPX lines
++find $cpio_dir -type f -print0 |
++	xargs -0 -P8 -n1 perl -pi -e 'BEGIN {undef $/;}; s/\/\*((?!SPDX).)*?\*\///smg;'
++
++tar -Jcf $tarfile -C $cpio_dir/ . > /dev/null
++
++echo "$src_files_md5" > kernel/kheaders.md5
++echo "$obj_files_md5" >> kernel/kheaders.md5
++echo "$(md5sum $tarfile | cut -d ' ' -f1)" >> kernel/kheaders.md5
++
++rm -rf $cpio_dir
+diff --git a/kernel/kheaders.c b/kernel/kheaders.c
+new file mode 100644
+index 000000000000..19526294a4e8
+--- /dev/null
++++ b/kernel/kheaders.c
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Provide kernel headers useful to build tracing programs
++ * such as for running eBPF tracing tools.
++ *
++ * (Borrowed code from kernel/configs.c)
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/proc_fs.h>
++#include <linux/init.h>
++#include <linux/uaccess.h>
++
++/*
++ * Define kernel_headers_data and kernel_headers_data_end, within which the the
++ * compressed kernel headers are stpred. The file is first compressed with xz.
++ */
++
++asm (
++"	.pushsection .rodata, \"a\"		\n"
++"	.global kernel_headers_data		\n"
++"kernel_headers_data:				\n"
++"	.incbin \"kernel/kheaders_data.tar.xz\"	\n"
++"	.global kernel_headers_data_end		\n"
++"kernel_headers_data_end:			\n"
++"	.popsection				\n"
++);
++
++extern char kernel_headers_data;
++extern char kernel_headers_data_end;
++
++static ssize_t
++ikheaders_read_current(struct file *file, char __user *buf,
++		      size_t len, loff_t *offset)
++{
++	return simple_read_from_buffer(buf, len, offset,
++				       &kernel_headers_data,
++				       &kernel_headers_data_end -
++				       &kernel_headers_data);
++}
++
++static const struct file_operations ikheaders_file_ops = {
++	.read = ikheaders_read_current,
++	.llseek = default_llseek,
++};
++
++static int __init ikheaders_init(void)
++{
++	struct proc_dir_entry *entry;
++
++	/* create the current headers file */
++	entry = proc_create("kheaders.tar.xz", S_IRUGO, NULL,
++			    &ikheaders_file_ops);
++	if (!entry)
++		return -ENOMEM;
++
++	proc_set_size(entry,
++		      &kernel_headers_data_end -
++		      &kernel_headers_data);
++	return 0;
++}
++
++static void __exit ikheaders_cleanup(void)
++{
++	remove_proc_entry("kheaders.tar.xz", NULL);
++}
++
++module_init(ikheaders_init);
++module_exit(ikheaders_cleanup);
++
++MODULE_LICENSE("GPL v2");
++MODULE_AUTHOR("Joel Fernandes");
++MODULE_DESCRIPTION("Echo the kernel header artifacts used to build the kernel");
+-- 
+2.21.0.392.gf8f6787159e-goog
