@@ -1,248 +1,111 @@
-From: joel at joelfernandes.org (Joel Fernandes)
-Date: Fri, 12 Apr 2019 14:00:14 -0400
-Subject: [PATCH v6 1/2] Provide in-kernel headers to make extending
- kernel easier
-In-Reply-To: <CAK7LNAQgvhozubW9b2yqnxHAVE17VHHZiq6N4Py_TzFCHN0YUQ@mail.gmail.com>
-References: <20190408212855.233198-1-joel@joelfernandes.org>
- <CAK7LNAQgvhozubW9b2yqnxHAVE17VHHZiq6N4Py_TzFCHN0YUQ@mail.gmail.com>
-Message-ID: <20190412180014.GA175945@google.com>
+From: joe.lawrence at redhat.com (Joe Lawrence)
+Date: Fri, 12 Apr 2019 14:51:57 -0400
+Subject: [PATCH] selftests: livepatch use TEST_PROGS for test shell scripts
+In-Reply-To: <ad936df6-ab14-6bff-322a-c9d34d23c1f5@kernel.org>
+References: <20190412011823.26884-1-shuah@kernel.org>
+ <alpine.LSU.2.21.1904120901490.773@pobox.suse.cz>
+ <8967c9aa-7eb1-7e6d-a371-f29a2be24c84@kernel.org>
+ <alpine.LSU.2.21.1904121535100.773@pobox.suse.cz>
+ <ad936df6-ab14-6bff-322a-c9d34d23c1f5@kernel.org>
+Message-ID: <6f97800f-e78f-7d16-32b2-96ee5260321c@redhat.com>
 
-On Thu, Apr 11, 2019 at 10:47:23AM +0900, Masahiro Yamada wrote:
-> Hi Joel,
+On 4/12/19 1:05 PM, shuah wrote:
+> On 4/12/19 7:37 AM, Miroslav Benes wrote:
+>> On Fri, 12 Apr 2019, shuah wrote:
+>>
+>>> On 4/12/19 1:03 AM, Miroslav Benes wrote:
+>>>> On Thu, 11 Apr 2019, Shuah Khan wrote:
+>>>>
+>>>>> TEST_PROGS variable is for test shell scripts and common clean target
+>>>>> in lib.mk doesn't touch them. TEST_GEN_PROGS are removed by it.
+>>>>>
+>>>>> Fix it to use TEST_PROGS for test shell scripts and TEST_PROGS_EXTENDED
+>>>>> for common functions.sh.
+>>>>>
+>>>>> Signed-off-by: Shuah Khan <shuah at kernel.org>
+>>>>> ---
+>>>>>     tools/testing/selftests/livepatch/Makefile | 3 ++-
+>>>>>     1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/tools/testing/selftests/livepatch/Makefile
+>>>>> b/tools/testing/selftests/livepatch/Makefile
+>>>>> index af4aee79bebb..fd405402c3ff 100644
+>>>>> --- a/tools/testing/selftests/livepatch/Makefile
+>>>>> +++ b/tools/testing/selftests/livepatch/Makefile
+>>>>> @@ -1,6 +1,7 @@
+>>>>>     # SPDX-License-Identifier: GPL-2.0
+>>>>>     
+>>>>> -TEST_GEN_PROGS := \
+>>>>> +TEST_PROGS_EXTENDED := functions.sh
+>>>>> +TEST_PROGS := \
+>>>>>      test-livepatch.sh \
+>>>>>      test-callbacks.sh \
+>>>>>      test-shadow-vars.sh
+>>>>
+>>>> Hi Shuah,
+>>>>
+>>>> thanks for the patch. We have already something similar queued in our git
+>>>> tree. See
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git/commit/?h=for-5.1/upstream-fixes&id=abfe3c4560684864f66641438fee3075de098e89
+>>>>
+>>>> It is missing TEST_PROGS_EXTENDED though. Should we add it?
+>>>>
+>>>
+>>> Please do. What that does is when selftests are installed, functions.h
+>>> gets installed as well so the the test can run from installed location.
+>>>
+>>> Did I miss reviewing the original? I maintain the framework and try to
+>>> catch these if patch gets sent to me.
+>>
+>> Unfortunately you did and it was our fault. You were not CCed, no one
+>> noticed and we were a bit trigger happy. Sorry about that. It should not
+>> have happened.
+>>
+>> Would this work for you?
 > 
-> I have no objection to this patch.
-> I checked though it once again,
-> please let me point out a little more.
+> Looks good to me.
 > 
-> They are all nits.
-> 
-> 
-> 
-> On Tue, Apr 9, 2019 at 6:37 AM Joel Fernandes (Google)
-> <joel at joelfernandes.org> wrote:
-> >
-> > Introduce in-kernel headers which are made available as an archive
-> > through proc (/proc/kheaders.tar.xz file). This archive makes it
-> > possible to run eBPF and other tracing programs tracing programs that
-> 
-> Just one "tracing programs" is enough.
 
-fixed.
+Hi Shuah,
 
-> > need to extend the kernel for tracing purposes without any dependency on
-> > the file system having headers.
-> >
-> > On Android and embedded systems, it is common to switch kernels but not
-> > have kernel headers available on the file system. Further once a
-> > different kernel is booted, any headers stored on the file system will
-> > no longer be useful. By storing the headers as a compressed archive
-> > within the kernel, we can avoid these issues that have been a hindrance
-> > for a long time.
-> >
-> > The best way to use this feature is by building it in. Several users
-> > have a need for this, when they switch debug kernels, they donot want to
-> 
-> 'donot' -> 'do not' ?
+Thanks for spotting this and apologies for missing your CC on my earlier 
+patch post.  For future reference, do you prefer a direct CC, 
+linux-kselftest, or both?
 
-fixed
+And for Miroslav, you can add my ack if needed.
 
-[snip]
-> >
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index 4592bf7997c0..ea75bfbf7dfa 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -580,6 +580,17 @@ config IKCONFIG_PROC
-> >           This option enables access to the kernel configuration file
-> >           through /proc/config.gz.
-> >
-> > +config IKHEADERS_PROC
-> > +       tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
-> > +       depends on PROC_FS
-> > +       help
-> > +         This option enables access to the kernel header and other artifacts that
-> 
-> This line is indented by a TAB, which is correct.
-> 
-> 
-> > +          are generated during the build process. These can be used to build kernel
-> > +          modules or by other in-kernel programs such as those generated by eBPF
-> 
-> Now that you have dropped the ability to "build kernel modules",
-> I'd like you to update this help message.
+-- Joe
 
-Sorry, will fix.
-
-> > +          and systemtap tools. If you build the headers as a module, a module
-> > +          called kheaders.ko is built which can be loaded on-demand to get access
-> > +          to the headers.
+>>
+>> -->8--
+>>
+>> >From c158f5595286dba46f096cc7cc4bcef5ad8b6c16 Mon Sep 17 00:00:00 2001
+>> From: Miroslav Benes <mbenes at suse.cz>
+>> Date: Fri, 12 Apr 2019 15:31:42 +0200
+>> Subject: [PATCH] selftests/livepatch: Add functions.sh to TEST_PROGS_EXTENDED
+>>
+>> Add functions.sh to TEST_PROGS_EXTENDED so that it is installed along
+>> with the rest of the selftests and they can be run.
+>>
+>> Originally-by: Shuah Khan <shuah at kernel.org>
+>> Signed-off-by: Miroslav Benes <mbenes at suse.cz>
+>> ---
+>>    tools/testing/selftests/livepatch/Makefile | 1 +
+>>    1 file changed, 1 insertion(+)
+>>
+>> diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
+>> index 114f43e2081a..fd405402c3ff 100644
+>> --- a/tools/testing/selftests/livepatch/Makefile
+>> +++ b/tools/testing/selftests/livepatch/Makefile
+>> @@ -1,5 +1,6 @@
+>>    # SPDX-License-Identifier: GPL-2.0
+>>    
+>> +TEST_PROGS_EXTENDED := functions.sh
+>>    TEST_PROGS := \
+>>    	test-livepatch.sh \
+>>    	test-callbacks.sh \
+>>
 > 
-> These lines are indented by 8-spaces instead of one TAB.
-> Please use TAB-indentation consistently.
-> 
-> 
-> [snip]
-> 
-> 
-> > +rm -rf $cpio_dir
-> > +mkdir $cpio_dir
-> > +
-> > +pushd $kroot > /dev/null
-> > +for f in $src_file_list;
-> > +       do find "$f" ! -name "*.cmd" ! -name ".*";
-> > +done | cpio --quiet -pd $cpio_dir
-> > +popd > /dev/null
-> > +
-> > +# The second CPIO can complain if files already exist which can
-> > +# happen with out of tree builds. Just silence CPIO for now.
-> > +for f in $obj_file_list;
-> > +       do find "$f" ! -name "*.cmd" ! -name ".*";
-> > +done | cpio --quiet -pd $cpio_dir >/dev/null 2>&1
-> > +
-> 
-> Could you add a simple comment about what the following code is doing?
-> "Remove comments except SPDX" etc.
-
-Ok.
-
-> > +find  $cpio_dir -type f -print0 |
-> 
-> Please replace two spaces after 'find' with one.
-
-fixed
-
-> > +       xargs -0 -P8 -n1 perl -pi -e 'BEGIN {undef $/;}; s/\/\*((?!SPDX).)*?\*\///smg;'
-> > +
-> > +tar -Jcf $tarfile -C $cpio_dir/ . > /dev/null
-> > +
-> > +echo "$src_files_md5" > kernel/kheaders.md5
-> > +echo "$obj_files_md5" >> kernel/kheaders.md5
-> > +echo "$(md5sum $tarfile | cut -d ' ' -f1)" >> kernel/kheaders.md5
-> > +
-> > +rm -rf $cpio_dir
-> > diff --git a/kernel/kheaders.c b/kernel/kheaders.c
-> > new file mode 100644
-> > index 000000000000..d072a958a8f1
-> > --- /dev/null
-> > +++ b/kernel/kheaders.c
-> > @@ -0,0 +1,73 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * kernel/kheaders.c
-> > + * Provide headers and artifacts needed to build kernel modules.
-> 
-> Ditto. Could you update this comment ?
-
-fixed.
-
-> > + * (Borrowed code from kernel/configs.c)
-> > + */
-> > +
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/proc_fs.h>
-> > +#include <linux/init.h>
-> > +#include <linux/uaccess.h>
-> > +
-> > +/*
-> > + * Define kernel_headers_data and kernel_headers_data_end, within which the the
-> > + * compressed kernel headers are stpred. The file is first compressed with xz.
-> > + */
-> > +
-> > +asm (
-> > +"      .pushsection .rodata, \"a\"             \n"
-> > +"      .global kernel_headers_data             \n"
-> > +"kernel_headers_data:                          \n"
-> > +"      .incbin \"kernel/kheaders_data.tar.xz\" \n"
-> > +"      .global kernel_headers_data_end         \n"
-> > +"kernel_headers_data_end:                      \n"
-> > +"      .popsection                             \n"
-> > +);
-> 
-> You mentioned "IKHD_ST and IKHD_ED markers..." in the commit description,
-> but I do not see them in the code.
-
-fixed
-
-> If you plan to work on a tool to extract the headers,
-> I think it is OK to have the markers here.
-> 
-> Anyway, please make the code and the commit-log consistent.
-
-yes, will do. thanks
-
-> > +extern char kernel_headers_data;
-> > +extern char kernel_headers_data_end;
-> > +
-> > +static ssize_t
-> > +ikheaders_read_current(struct file *file, char __user *buf,
-> 
-> Could you stretch this line ?
-> It will still fit in 80-cols.
-> 
-> (This is a coding style error in kernel/configs.c)
-
-It takes 87 cols if I expand, so I'll leave it as is.
-
-> Last thing, when CONFIG_IKHEADERS_PROC=y,
-> I always see:
->   GEN     kernel/kheaders_data.tar.xz
-> 
-> which I think misleading because
-> the script is just checking the md5sum.
-> 
-> 
-> 
-> What I like to see is:
->   CHK     kernel/kheaders_data.tar.xz
-> for checking md5sum.
-> 
-> And,
->   GEN     kernel/kheaders_data.tar.xz
-> for really (re-)generating the tarball.
-> 
-> 
-> How about this code?
-
-Yes this is better, I changed it to that.
-
-Also looking forward to your tag on the v7 posting if it looks to you now.
-
-thanks a lot for the review!
-
- - Joel
-
-
-> index e3c581d8cde7..12399614c350 100644
-> --- a/kernel/Makefile
-> +++ b/kernel/Makefile
-> @@ -125,7 +125,7 @@ $(obj)/config_data.gz: $(KCONFIG_CONFIG) FORCE
-> 
->  $(obj)/kheaders.o: $(obj)/kheaders_data.tar.xz
-> 
-> -quiet_cmd_genikh = GEN     $(obj)/kheaders_data.tar.xz
-> +quiet_cmd_genikh = CHK     $(obj)/kheaders_data.tar.xz
->  cmd_genikh = $(srctree)/kernel/gen_ikh_data.sh $@
->  $(obj)/kheaders_data.tar.xz: FORCE
->         $(call cmd,genikh)
-> diff --git a/kernel/gen_ikh_data.sh b/kernel/gen_ikh_data.sh
-> index ef72c2740d01..613960e18691 100755
-> --- a/kernel/gen_ikh_data.sh
-> +++ b/kernel/gen_ikh_data.sh
-> @@ -57,6 +57,10 @@ if [ -f kernel/kheaders.md5 ] &&
->                 exit
->  fi
-> 
-> +if [ "${quiet}" != "silent_" ]; then
-> +       echo "  GEN     $tarfile"
-> +fi
-> +
->  rm -rf $cpio_dir
->  mkdir $cpio_dir
-> 
-> 
-> Thanks.
-> 
-> -- 
-> Best Regards
-> Masahiro Yamada
+> thanks,
+> -- Shuah
+>
