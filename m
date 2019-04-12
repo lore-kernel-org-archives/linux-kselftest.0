@@ -1,42 +1,33 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Thu, 11 Apr 2019 17:11:08 -0700
-Subject: [PATCH] selftests/harness: Add 30 second timeout per test
-Message-ID: <20190412001108.GA3576@beast>
+From: shuah@kernel.org (Shuah Khan)
+Date: Thu, 11 Apr 2019 19:18:23 -0600
+Subject: [PATCH] selftests: livepatch use TEST_PROGS for test shell scripts
+Message-ID: <20190412011823.26884-1-shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190412001108.U9l0blUU8BeFO7cNJOjAwUkdMNyWqsAlE_Fv7iEdHVM@z>
+Message-ID: <20190412011823.CQLmCTxlhYhPQGGhZVVujP_jtm5w6xV8fmif-Tz4juI@z>
 
-In order to keep tests from hanging forever, this adds an alarm signal
-to each test run. This assumes an individual test doesn't take longer
-than 30 seconds.
+TEST_PROGS variable is for test shell scripts and common clean target
+in lib.mk doesn't touch them. TEST_GEN_PROGS are removed by it.
 
-Signed-off-by: Kees Cook <keescook at chromium.org>
+Fix it to use TEST_PROGS for test shell scripts and TEST_PROGS_EXTENDED
+for common functions.sh.
+
+Signed-off-by: Shuah Khan <shuah at kernel.org>
 ---
- tools/testing/selftests/kselftest_harness.h | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/livepatch/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 2d90c98eeb67..941d9391377f 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -696,6 +696,7 @@ void __run_test(struct __test_metadata *t)
- 	t->passed = 1;
- 	t->trigger = 0;
- 	printf("[ RUN      ] %s\n", t->name);
-+	alarm(30);
- 	child_pid = fork();
- 	if (child_pid < 0) {
- 		printf("ERROR SPAWNING TEST CHILD\n");
-@@ -744,6 +745,7 @@ void __run_test(struct __test_metadata *t)
- 		}
- 	}
- 	printf("[     %4s ] %s\n", (t->passed ? "OK" : "FAIL"), t->name);
-+	alarm(0);
- }
+diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
+index af4aee79bebb..fd405402c3ff 100644
+--- a/tools/testing/selftests/livepatch/Makefile
++++ b/tools/testing/selftests/livepatch/Makefile
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
  
- static int test_harness_run(int __attribute__((unused)) argc,
+-TEST_GEN_PROGS := \
++TEST_PROGS_EXTENDED := functions.sh
++TEST_PROGS := \
+ 	test-livepatch.sh \
+ 	test-callbacks.sh \
+ 	test-shadow-vars.sh
 -- 
 2.17.1
-
-
--- 
-Kees Cook
