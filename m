@@ -1,71 +1,102 @@
-From: dancol at google.com (Daniel Colascione)
-Date: Fri, 12 Apr 2019 17:56:00 -0700
-Subject: [PATCH RFC 1/2] Add polling support to pidfd
-In-Reply-To: <CAKOZuetX4jMPDtDqAvGgSNo4BHf9BOnu79ufEiULfM5X5nDyyQ@mail.gmail.com>
-References: <20190411175043.31207-1-joel@joelfernandes.org>
- <CALCETrV7Hw50Bh=qQX86v_6euiGqX7eNboi50_7JmfQsyVR3_A@mail.gmail.com>
- <20190413000941.GA53420@google.com>
- <CAKOZuetX4jMPDtDqAvGgSNo4BHf9BOnu79ufEiULfM5X5nDyyQ@mail.gmail.com>
-Message-ID: <CAKOZuesgRPabwrx9pjf3p0S-7nsqeXoUVxeykOOmHokAL=5wqw@mail.gmail.com>
+From: yamada.masahiro at socionext.com (Masahiro Yamada)
+Date: Sat, 13 Apr 2019 10:30:10 +0900
+Subject: [PATCH v7 1/2] Provide in-kernel headers to make extending kernel
+ easier
+In-Reply-To: <20190412195125.3891-1-joel@joelfernandes.org>
+References: <20190412195125.3891-1-joel@joelfernandes.org>
+Message-ID: <CAK7LNAR=KN3gnJT5w1HgrZ5UyeiNZy_rn1Z1wWwgwy3eGF4RgQ@mail.gmail.com>
 
-[Resending due to accidental HTML. I need to take Joel's advice and
-switch to a real email client]
-
-On Fri, Apr 12, 2019 at 5:54 PM Daniel Colascione <dancol at google.com> wrote:
+On Sat, Apr 13, 2019 at 4:54 AM Joel Fernandes (Google)
+<joel at joelfernandes.org> wrote:
 >
-> On Fri, Apr 12, 2019 at 5:09 PM Joel Fernandes <joel at joelfernandes.org> wrote:
->>
->> Hi Andy!
->>
->> On Fri, Apr 12, 2019 at 02:32:53PM -0700, Andy Lutomirski wrote:
->> > On Thu, Apr 11, 2019 at 10:51 AM Joel Fernandes (Google)
->> > <joel at joelfernandes.org> wrote:
->> > >
->> > > pidfd are /proc/pid directory file descriptors referring to a task group
->> > > leader. Android low memory killer (LMK) needs pidfd polling support to
->> > > replace code that currently checks for existence of /proc/pid for
->> > > knowing a process that is signalled to be killed has died, which is both
->> > > racy and slow. The pidfd poll approach is race-free, and also allows the
->> > > LMK to do other things (such as by polling on other fds) while awaiting
->> > > the process being killed to die.
->> > >
->> > > It prevents a situation where a PID is reused between when LMK sends a
->> > > kill signal and checks for existence of the PID, since the wrong PID is
->> > > now possibly checked for existence.
->> > >
->> > > In this patch, we follow the same mechanism used uhen the parent of the
->> > > task group is to be notified, that is when the tasks waiting on a poll
->> > > of pidfd are also awakened.
->> > >
->> > > We have decided to include the waitqueue in struct pid for the following
->> > > reasons:
->> > > 1. The wait queue has to survive for the lifetime of the poll. Including
->> > > it in task_struct would not be option in this case because the task can
->> > > be reaped and destroyed before the poll returns.
->> >
->> > Are you sure?  I admit I'm not all that familiar with the innards of
->> > poll() on Linux, but I thought that the waitqueue only had to survive
->> > long enough to kick the polling thread and did *not* have to survive
->> > until poll() actually returned.
->>
->> I am not sure now. I thought epoll(2) was based on the wait_event APIs,
->> however more closely looking at the eventpoll code, it looks like there are 2
->> waitqueues involved, one that we pass and the other that is a part of the
->> eventpoll session itself, so you could be right about that. Daniel Colascione
->> may have some more thoughts about it since he brought up the possiblity of a
->> wq life-time issue. Daniel?   We were just playing it safe.
+> Introduce in-kernel headers which are made available as an archive
+> through proc (/proc/kheaders.tar.xz file). This archive makes it
+> possible to run eBPF and other tracing programs that need to extend the
+> kernel for tracing purposes without any dependency on the file system
+> having headers.
+>
+> A github PR is sent for the corresponding BCC patch at:
+> https://github.com/iovisor/bcc/pull/2312
+>
+> On Android and embedded systems, it is common to switch kernels but not
+> have kernel headers available on the file system. Further once a
+> different kernel is booted, any headers stored on the file system will
+> no longer be useful. This is an issue even well known to distros.
+> By storing the headers as a compressed archive within the kernel, we can
+> avoid these issues that have been a hindrance for a long time.
+>
+> The best way to use this feature is by building it in. Several users
+> have a need for this, when they switch debug kernels, they do not want to
+> update the filesystem or worry about it where to store the headers on
+> it. However, the feature is also buildable as a module in case the user
+> desires it not being part of the kernel image. This makes it possible to
+> load and unload the headers from memory on demand. A tracing program can
+> load the module, do its operations, and then unload the module to save
+> kernel memory. The total memory needed is 3.3MB.
+>
+> By having the archive available at a fixed location independent of
+> filesystem dependencies and conventions, all debugging tools can
+> directly refer to the fixed location for the archive, without concerning
+> with where the headers on a typical filesystem which significantly
+> simplifies tooling that needs kernel headers.
+>
+> The code to read the headers is based on /proc/config.gz code and uses
+> the same technique to embed the headers.
+>
+> Other approaches were discussed such as having an in-memory mountable
+> filesystem, but that has drawbacks such as requiring an in-kernel xz
+> decompressor which we don't have today, and requiring usage of 42 MB of
+> kernel memory to host the decompressed headers at anytime. Also this
+> approach is simpler than such approaches.
+>
+> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> ---
 
-I think you (Joel) and Andy are talking about different meanings of
-poll(). Joel is talking about the VFS method; Andy is talking about
-the system call. ISTM that the lifetime of wait queue we give to
-poll_wait needs to last through the poll. Normally the wait queue gets
-pinned by the struct file that we give to poll_wait (which takes a
-reference on the struct file), but the pidfd struct file doesn't pin
-the struct task, so we can't use a wait queue in struct task.
-(remove_wait_queue, which poll implementations call to undo wait queue
-additions, takes the wait queue head we pass to poll_wait, and we
-don't want to pass a dangling pointer to remove_wait_queue.) If the
-lifetime requirements for the queue aren't this strict, I don't see it
-documented anywhere. Besides: if we don't actually need to pin the
-waitqueue lifetime for the duration of the poll, why bother taking a
-reference on the polled struct file?
+
+I just noticed minor typos in comment lines (see below).
+
+Anyway, I have no more comment from the build system of view.
+So,
+
+Reviewed-by: Masahiro Yamada <yamada.masahiro at socionext.com>
+
+
+
+> diff --git a/kernel/kheaders.c b/kernel/kheaders.c
+> new file mode 100644
+> index 000000000000..19526294a4e8
+> --- /dev/null
+> +++ b/kernel/kheaders.c
+> @@ -0,0 +1,74 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Provide kernel headers useful to build tracing programs
+> + * such as for running eBPF tracing tools.
+> + *
+> + * (Borrowed code from kernel/configs.c)
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/proc_fs.h>
+> +#include <linux/init.h>
+> +#include <linux/uaccess.h>
+> +
+> +/*
+> + * Define kernel_headers_data and kernel_headers_data_end, within which the the
+> + * compressed kernel headers are stpred. The file is first compressed with xz.
+> + */
+
+
+"the the" -> "the"     ?
+"stpred"  -> "stored"  ?
+
+
+It is up to you if you want to send v8.
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
