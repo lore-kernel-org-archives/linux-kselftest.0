@@ -1,47 +1,42 @@
-From: jeffrin at rajagiritech.edu.in (Jeffrin Thalakkottoor)
-Date: Sat, 13 Apr 2019 18:11:45 +0530
-Subject: Fwd: [PATCH] selftests : netfilter: Wrote a error and exit code for a
- command which needed veth kernel module.
-In-Reply-To: <CAG=yYwnN37OoL1DSN8qPeKWhzVJOcUFtR-7Q9fVT5AULk5S54w@mail.gmail.com>
-References: <20190405163126.7278-1-jeffrin@rajagiritech.edu.in>
- <20190405164746.pfc6wxj4nrynjma4@breakpoint.cc>
- <CAG=yYwnN37OoL1DSN8qPeKWhzVJOcUFtR-7Q9fVT5AULk5S54w@mail.gmail.com>
-Message-ID: <CAG=yYwkCRsKTmPJ-7utdN4fVf+Y_C1gDp7PWJbbNOw0b+QvhbQ@mail.gmail.com>
+From: torvalds at linux-foundation.org (Linus Torvalds)
+Date: Sun, 14 Apr 2019 11:19:10 -0700
+Subject: [PATCH RFC 1/2] Add polling support to pidfd
+In-Reply-To: <CALCETrV7Hw50Bh=qQX86v_6euiGqX7eNboi50_7JmfQsyVR3_A@mail.gmail.com>
+References: <20190411175043.31207-1-joel@joelfernandes.org>
+ <CALCETrV7Hw50Bh=qQX86v_6euiGqX7eNboi50_7JmfQsyVR3_A@mail.gmail.com>
+Message-ID: <CAHk-=wiL0GZn+kOyxzaS0igMRs95sipcc9r0ZgU2rRf=CR+fpw@mail.gmail.com>
 
----------- Forwarded message ---------
-From: Jeffrin Thalakkottoor <jeffrin at rajagiritech.edu.in>
-Date: Sat, Apr 13, 2019 at 6:09 PM
-Subject: Re: [PATCH] selftests : netfilter: Wrote a error and exit
-code for a command which needed veth kernel module.
-To: Shuah Khan <shuah at kernel.org>
-Cc: Florian Westphal <fw at strlen.de>, <linu-kselftest at vger.kernel.org>,
-<pablo at netfilter.org>, lkml <linux-kernel at vger.kernel.org>
-
-
-Hello Shuah,
-
-did you get the mail related stuff below ?
-
-On Fri, Apr 5, 2019 at 10:17 PM Florian Westphal <fw at strlen.de> wrote:
+On Fri, Apr 12, 2019 at 2:33 PM Andy Lutomirski <luto at kernel.org> wrote:
 >
-> Jeffrin Jose T <jeffrin at rajagiritech.edu.in> wrote:
-> > A test for  the basic NAT functionality uses ip command which
-> > needs veth device.There is a condition where the kernel support
-> > for veth is not compiled into the kernel and the test script
-> > breaks.This patch contains code for reasonable error display
-> > and correct code exit.
->
-> Looks good to me, thanks for following up on this.
->
-> Acked-by: Florian Westphal <fw at strlen.de>
+> Are you sure?  I admit I'm not all that familiar with the innards of
+> poll() on Linux, but I thought that the waitqueue only had to survive
+> long enough to kick the polling thread and did *not* have to survive
+> until poll() actually returned.
 
+That is *not* true by default.
 
+You can do that, but you need to make sure that your wakeup function
+is one that removed itself from the wait queues. You can do that with
+DEFINE_WAIT(name), which uses autoremove_wake_function(), or by using
+your own auto-removing wakeup function together with
+DEFINE_WAIT_FUNC() or init_waitqueue_func_entry().
 
---
-software engineer
-rajagiri school of engineering and technology
+But the default wake function does not remove on wakeup, and you'll
+have to be around until poll() itself tears down all the tables.
 
+In particular, the normal "poll_wait()" will use __pollwait, which does:
 
--- 
-software engineer
-rajagiri school of engineering and technology
+        init_waitqueue_func_entry(&entry->wait, pollwake);
+
+and pollwake() (which is thus what gets called at wake time) will not
+remove anything from the wait queue.
+
+So no, by default your wait queue has to stay around for the duration
+of poll() (ie the duration of the file descriptor, since poll() gets a
+reference to it).
+
+You *can* play games with pollwait functions (and with wait functions
+in general), but by default you should consider the wait function to
+stay around.
+
+                 Linus
