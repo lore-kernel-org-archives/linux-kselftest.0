@@ -1,5 +1,5 @@
-From: joel at joelfernandes.org (Joel Fernandes)
-Date: Mon, 15 Apr 2019 10:05:31 -0400
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Mon, 15 Apr 2019 10:41:09 -0400
 Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending
  kernel easier
 In-Reply-To: <CAOesGMgiPB=7FE7tXXHes7WSLfByyPxirOStoH21NZqMwaUihQ@mail.gmail.com>
@@ -11,97 +11,34 @@ References: <20190320163116.39275-1-joel@joelfernandes.org>
  <CAOesGMiuGK-Sbqo2z=1ab070JONav1LF82MRRLCdX-4+14_XZA@mail.gmail.com>
  <20190411031540.ehezr6kq7ouobpzx@ast-mbp.dhcp.thefacebook.com>
  <CAOesGMgiPB=7FE7tXXHes7WSLfByyPxirOStoH21NZqMwaUihQ@mail.gmail.com>
-Message-ID: <20190415140531.GB205801@google.com>
+Message-ID: <20190415104109.64d914f3@gandalf.local.home>
 
-On Sun, Apr 14, 2019 at 12:38:34PM -0700, Olof Johansson wrote:
-> On Wed, Apr 10, 2019 at 8:15 PM Alexei Starovoitov
-> <alexei.starovoitov at gmail.com> wrote:
-> >
-> > On Wed, Apr 10, 2019 at 09:34:49AM -0700, Olof Johansson wrote:
-> > > On Wed, Apr 10, 2019 at 8:51 AM Joel Fernandes <joelaf at google.com> wrote:
-> > > >
-> > > > On Wed, Apr 10, 2019 at 11:07 AM Olof Johansson <olof at lixom.net> wrote:
-> > > > [snip]
-> > > > > > > Wouldn't it be more convenient to provide it in a standardized format
-> > > > > > > such that you won't have to take an additional step, and always have
-> > > > > > > This is that form IMO.
-> > ...
-> > > Compared to:
-> > >  - Extract tarball
-> > >  - Build and load
-> > >  - Remove file tree from filesystem
-> >
-> > I think there are too many assumptions in this thread in regard to what
-> > is more convenient for user space.
-> > I think bcc should try to avoid extracting tarball into file system.
-> > For example libbcc can uncompress kheader.tar.xz into virtual file system
-> > of clang front-end. It's more or less std::map<string, string>
-> > with key=path, value=content of the file. Access to such in-memory
-> > 'files' is obviously faster than doing open/read syscalls.
-> 
-> I think performance is a red herring, especially since you have to
-> uncompress it on every compiler invocation. With this you'd need to
-> read/touch/write _all_ header files, not just the one your current
-> compiler invocation will use.
-> 
-> In the grand scheme of things, open/mmap syscalls wouldn't necessarily
-> be slower.
+On Sun, 14 Apr 2019 12:38:34 -0700
+Olof Johansson <olof at lixom.net> wrote:
 
-Agreed.
-
-> > bcc already uses this approach for some bcc internal 'files' that
-> > it passes to clang during compilation.
-> > All of /proc/kheaders.tar.xz files can be passed the same way
-> > without extracting them into real file system.
-> 
-> This is now a circular argument. Joel was stating that the plain text
-> headers took up too much memory, but now it's preferred to create such
-> filesystem in userspace memory on *every compiler invocation*?
-> That's... not better. And definitely worse if you want to compile in
-> parallel.
-
-The BCC patch does not extract purely into memory, but uses temporary
-directory: https://github.com/iovisor/bcc/pull/2312
-I believe this is a good approach.
-
-> From my perspective, this is where we're at:
+> >From my perspective, this is where we're at:  
 > 
 > This patch seems to have been met with a lot of responses in the tone
 > of "this is not an appealing solution". Meanwhile, some of the
 > suggested alternative solutions have not worked out, and we are now at
 > a point where there's less interest in exploring alternatives and
 > arguments to merge as-is with only minor adjustments.
-> 
-> I understand the desire to solve this. It'd be really convenient to
-> have a way to runtime build against the same structure layouts that
-> the kernel was built with. But I haven't heard anyone say that they
 
-About structure layouts, I'm assuming you mean compiler generated debug info.
-That does not work for eBPF tools as was mentioned previously in these threads:
-https://lkml.org/lkml/2019/3/11/1358
-https://lkml.org/lkml/2019/3/11/1363
+Another consideration to make is difficulty of support. Having a
+tarball compressed headers may not be an appealing solution, but it
+isn't one that would be too much of an issue to support. Having a
+better interface would be difficult to get right, and if you get it
+wrong, you are now stuck with supporting something that may become a
+big pain to do so in the future.
 
-> *like* the solution proposed, and I haven't seen many of those
-> expressing concerns being converted to support it.
-
-IMHO there has been good number of people on both sides of the argument. If
-it were as strong of an opposition as you think, then I would have personally
-not wanted this merged tbh. We do want a solution that is clean and works, and
-I think this is a candidate.
-
-[snip]
 > I'd be a *lot* less hesitant if this went into debugfs or another
 > location than /proc, which is one of the most regression-sensitive
 > interfaces we have in the kernel.
+> 
 
-The solution should be regression-sensitive imho, we don't want the tracing
-tools to break, people use them. And their usability and robustness is
-important which prompted these patches. For some time we have been hosting
-downloadable headers for popular kernels (such as LTS versions) to workaround
-this issue, but this both a maintenance issue and non-scalable, and not
-robust (someone boots a custom kernel or we forget to update headers for a
-future LTS release and the tools break).
+I agree with this assessment. We shouldn't use config.gz as precedence
+for this solution. config.gz should have been in debugfs to begin with,
+but I don't believe debugfs was around when config.gz was introduced.
+(Don't have time to look into the history of the two).
 
-thanks,
-
- - Joel
+-- Steve
