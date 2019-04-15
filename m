@@ -1,8 +1,8 @@
 From: joel@joelfernandes.org (Joel Fernandes)
-Date: Mon, 15 Apr 2019 09:52:49 -0400
+Date: Mon, 15 Apr 2019 10:05:31 -0400
 Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending
  kernel easier
-In-Reply-To: <463a08cb-d1ac-b750-c699-8242c2c20fd2@metux.net>
+In-Reply-To: <CAOesGMgiPB=7FE7tXXHes7WSLfByyPxirOStoH21NZqMwaUihQ@mail.gmail.com>
 References: <20190320163116.39275-1-joel@joelfernandes.org>
  <CAOesGMheoZda84OSz9spQ7p66wot5S_9aaqaKC=QYp+8utASXA@mail.gmail.com>
  <20190408203601.GF133872@google.com>
@@ -11,52 +11,98 @@ References: <20190320163116.39275-1-joel@joelfernandes.org>
  <CAOesGMiuGK-Sbqo2z=1ab070JONav1LF82MRRLCdX-4+14_XZA@mail.gmail.com>
  <20190411031540.ehezr6kq7ouobpzx@ast-mbp.dhcp.thefacebook.com>
  <CAOesGMgiPB=7FE7tXXHes7WSLfByyPxirOStoH21NZqMwaUihQ@mail.gmail.com>
- <463a08cb-d1ac-b750-c699-8242c2c20fd2@metux.net>
-Message-ID: <20190415135249.GA205801@google.com>
+Message-ID: <20190415140531.GB205801@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190415135249.noMs65n0KiqylPmhHZsUY24DeLp-kpmjNo6lq0BzrZk@z>
+Message-ID: <20190415140531.CvSnKYbAhIRf3Jcjj32TqLDIPWnQHd7wYK0sk9OScGE@z>
 
-On Mon, Apr 15, 2019@11:41:18AM +0200, Enrico Weigelt, metux IT consult wrote:
-[snip]
-> > This patch seems to have been met with a lot of responses in the tone> of "this is not an appealing solution".
+On Sun, Apr 14, 2019@12:38:34PM -0700, Olof Johansson wrote:
+> On Wed, Apr 10, 2019 at 8:15 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Wed, Apr 10, 2019@09:34:49AM -0700, Olof Johansson wrote:
+> > > On Wed, Apr 10, 2019@8:51 AM Joel Fernandes <joelaf@google.com> wrote:
+> > > >
+> > > > On Wed, Apr 10, 2019@11:07 AM Olof Johansson <olof@lixom.net> wrote:
+> > > > [snip]
+> > > > > > > Wouldn't it be more convenient to provide it in a standardized format
+> > > > > > > such that you won't have to take an additional step, and always have
+> > > > > > > This is that form IMO.
+> > ...
+> > > Compared to:
+> > >  - Extract tarball
+> > >  - Build and load
+> > >  - Remove file tree from filesystem
+> >
+> > I think there are too many assumptions in this thread in regard to what
+> > is more convenient for user space.
+> > I think bcc should try to avoid extracting tarball into file system.
+> > For example libbcc can uncompress kheader.tar.xz into virtual file system
+> > of clang front-end. It's more or less std::map<string, string>
+> > with key=path, value=content of the file. Access to such in-memory
+> > 'files' is obviously faster than doing open/read syscalls.
 > 
-> Personally, having generic helpers for putting blobs into /proc files
-> (like config.gz) sound appealing. But I'm not sure whether doing that
-> w/ kernel headers this way is a good solution. Actually, I'm even not
-> sure whether raw kernel headers are at all are a good way. (can't we
-> use compiler-generated debug info ?)
+> I think performance is a red herring, especially since you have to
+> uncompress it on every compiler invocation. With this you'd need to
+> read/touch/write _all_ header files, not just the one your current
+> compiler invocation will use.
+> 
+> In the grand scheme of things, open/mmap syscalls wouldn't necessarily
+> be slower.
 
-We can't use compiler generated debug info for this.
+Agreed.
 
-As discussed previously here, eBPF tools need kernel headers, DWARF and
-compiler debug information wont help:
+> > bcc already uses this approach for some bcc internal 'files' that
+> > it passes to clang during compilation.
+> > All of /proc/kheaders.tar.xz files can be passed the same way
+> > without extracting them into real file system.
+> 
+> This is now a circular argument. Joel was stating that the plain text
+> headers took up too much memory, but now it's preferred to create such
+> filesystem in userspace memory on *every compiler invocation*?
+> That's... not better. And definitely worse if you want to compile in
+> parallel.
+
+The BCC patch does not extract purely into memory, but uses temporary
+directory: https://github.com/iovisor/bcc/pull/2312
+I believe this is a good approach.
+
+> From my perspective, this is where we're at:
+> 
+> This patch seems to have been met with a lot of responses in the tone
+> of "this is not an appealing solution". Meanwhile, some of the
+> suggested alternative solutions have not worked out, and we are now at
+> a point where there's less interest in exploring alternatives and
+> arguments to merge as-is with only minor adjustments.
+> 
+> I understand the desire to solve this. It'd be really convenient to
+> have a way to runtime build against the same structure layouts that
+> the kernel was built with. But I haven't heard anyone say that they
+
+About structure layouts, I'm assuming you mean compiler generated debug info.
+That does not work for eBPF tools as was mentioned previously in these threads:
 https://lkml.org/lkml/2019/3/11/1358
 https://lkml.org/lkml/2019/3/11/1363
 
-> > Usually what we do at times like this is that we say "Yeah, this is a> problem that should be solved, but this solution doesn't seem to be>
-> the right one and we would need to maintain it forever as part of the>
-> ABI. Let's wait until a better solution is found." With time,> sometimes
-> a better solution becomes obvious, or circumstances change> enough to
-> allow for some different approach, or someone has a new idea> from a
-> different perspective that solves the same problem.
-> ACK. For now, this is an Android-only debug tool, just needed there
-> because of it's unusual partitioning/deployment mechanisms - on usual
-> GNU/Linux distros, we just have the kheaders in the file system.
-> (and even on my small embedded devices, I either run the DUTs via NFS,
-> 9P2k, initrd, etc or just deploy kernel and headers into the filesystem)
-> 
-> As Android already is in it's own universe, why can't that stuff remain
-> incubated there, until we have more field experience w/ it and more time
-> to rethink the whole idea very carefully ?
+> *like* the solution proposed, and I haven't seen many of those
+> expressing concerns being converted to support it.
 
-Well, we follow mostly an upstream first process.
+IMHO there has been good number of people on both sides of the argument. If
+it were as strong of an opposition as you think, then I would have personally
+not wanted this merged tbh. We do want a solution that is clean and works, and
+I think this is a candidate.
 
-> The patch is pretty small, so it's trivial cherry-pick, in case somebody
-> outside Android universe wants to use it.
+[snip]
+> I'd be a *lot* less hesitant if this went into debugfs or another
+> location than /proc, which is one of the most regression-sensitive
+> interfaces we have in the kernel.
 
-It could break very easily if things upstream change in some way, and adds a
-lot of maintenance burden, besides I don't see a good reason it should not be
-upstreamed tbh.
+The solution should be regression-sensitive imho, we don't want the tracing
+tools to break, people use them. And their usability and robustness is
+important which prompted these patches. For some time we have been hosting
+downloadable headers for popular kernels (such as LTS versions) to workaround
+this issue, but this both a maintenance issue and non-scalable, and not
+robust (someone boots a custom kernel or we forget to update headers for a
+future LTS release and the tools break).
 
 thanks,
 
