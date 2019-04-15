@@ -1,66 +1,42 @@
-From: ci_notify at linaro.org (ci_notify at linaro.org)
-Date: Mon, 15 Apr 2019 10:00:18 +0000 (UTC)
-Subject: next-20190415 kselftest results
-Message-ID: <530916186.12025.1555322418804.JavaMail.jenkins@a6c5c67cda76>
+From: pmladek at suse.com (Petr Mladek)
+Date: Mon, 15 Apr 2019 14:42:55 +0200
+Subject: [PATCH] selftests: livepatch use TEST_PROGS for test shell scripts
+In-Reply-To: <alpine.LSU.2.21.1904121535100.773@pobox.suse.cz>
+References: <20190412011823.26884-1-shuah@kernel.org>
+ <alpine.LSU.2.21.1904120901490.773@pobox.suse.cz>
+ <8967c9aa-7eb1-7e6d-a371-f29a2be24c84@kernel.org>
+ <alpine.LSU.2.21.1904121535100.773@pobox.suse.cz>
+Message-ID: <20190415124255.hcraeeiu5xoziber@pathway.suse.cz>
 
-Summary
-------------------------------------------------------------------------
-git repo: not informed
-git branch: not informed
-git commit: not informed
-git describe: not informed
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190415
+On Fri 2019-04-12 15:37:37, Miroslav Benes wrote:
+> From: Miroslav Benes <mbenes at suse.cz>
+> Date: Fri, 12 Apr 2019 15:31:42 +0200
+> Subject: [PATCH] selftests/livepatch: Add functions.sh to TEST_PROGS_EXTENDED
+> 
+> Add functions.sh to TEST_PROGS_EXTENDED so that it is installed along
+> with the rest of the selftests and they can be run.
+> 
+> Originally-by: Shuah Khan <shuah at kernel.org>
+> Signed-off-by: Miroslav Benes <mbenes at suse.cz>
+> ---
+>  tools/testing/selftests/livepatch/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
+> index 114f43e2081a..fd405402c3ff 100644
+> --- a/tools/testing/selftests/livepatch/Makefile
+> +++ b/tools/testing/selftests/livepatch/Makefile
+> @@ -1,5 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> +TEST_PROGS_EXTENDED := functions.sh
+>  TEST_PROGS := \
+>  	test-livepatch.sh \
+>  	test-callbacks.sh \
+> -- 
+> 2.21.0
 
-Regressions (compared to build next-20190412)
-------------------------------------------------------------------------
-No regressions                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190412)                                                                   
-------------------------------------------------------------------------                                               
-No fixes
+The patch has been committed into the branch for-5.1/upstream-fixes.
 
-In total:
-------------------------------------------------------------------------
-Ran 0 total tests in the following environments and test suites.
-pass 0
-fail 0
-xfail 0
-skip 0
-
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-
-
-Failures
-------------------------------------------------------------------------
-
-i386:
-
-juno-r2:
-
-hi6220-hikey:
-
-x15:
-
-x86:
-
-dragonboard-410c:
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+Best Regards,
+Petr
