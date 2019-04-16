@@ -1,57 +1,33 @@
-From: will.deacon at arm.com (Will Deacon)
-Date: Tue, 16 Apr 2019 18:09:23 +0100
-Subject: [PATCH v2 1/5] arm64: Fix vDSO clock_getres()
-In-Reply-To: <20190416162432.GI28994@arrakis.emea.arm.com>
-References: <20190416161434.32691-1-vincenzo.frascino@arm.com>
- <20190416161434.32691-2-vincenzo.frascino@arm.com>
- <20190416162432.GI28994@arrakis.emea.arm.com>
-Message-ID: <20190416170923.GD7342@fuggles.cambridge.arm.com>
+From: joel at joelfernandes.org (Joel Fernandes)
+Date: Tue, 16 Apr 2019 13:22:38 -0400
+Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending kernel
+ easier
+In-Reply-To: <CAOesGMgGEZ8o-e2uAYLSGeO+RHcXAEzEoKcsjpveOLJZ5pX=4w@mail.gmail.com>
+References: <20190411031540.ehezr6kq7ouobpzx@ast-mbp.dhcp.thefacebook.com>
+ <CAOesGMgiPB=7FE7tXXHes7WSLfByyPxirOStoH21NZqMwaUihQ@mail.gmail.com>
+ <20190415104109.64d914f3@gandalf.local.home>
+ <CAGXu5j+KPVRcOJ3Ue9ZQF93GyaDhvCnFCvJ_C3WKCx2=SNdDyg@mail.gmail.com>
+ <20190416083306.5646a687@gandalf.local.home> <20190416124939.GB6027@kroah.com>
+ <20190416130440.GA7944@localhost>
+ <f8b15e31-1aab-ab2c-d44d-47325faab67d@opersys.com>
+ <20190416094509.1af6326b@gandalf.local.home>
+ <20190416142240.GA31920@kroah.com>
+ <20190416164642.krptlz32zusr4pgn@ast-mbp.dhcp.thefacebook.com>
+ <CAOesGMgGEZ8o-e2uAYLSGeO+RHcXAEzEoKcsjpveOLJZ5pX=4w@mail.gmail.com>
+Message-ID: <CAEXW_YS=C8FkC1h4ZQ6_jX8jY==Xe66c+q9cgM=Ci+N7SyNz6w@mail.gmail.com>
 
-On Tue, Apr 16, 2019 at 05:24:33PM +0100, Catalin Marinas wrote:
-> On Tue, Apr 16, 2019 at 05:14:30PM +0100, Vincenzo Frascino wrote:
-> > diff --git a/arch/arm64/kernel/vdso.c b/arch/arm64/kernel/vdso.c
-> > index 2d419006ad43..5f5759d51c33 100644
-> > --- a/arch/arm64/kernel/vdso.c
-> > +++ b/arch/arm64/kernel/vdso.c
-> > @@ -245,6 +245,8 @@ void update_vsyscall(struct timekeeper *tk)
-> >  		vdso_data->cs_shift		= tk->tkr_mono.shift;
-> >  	}
-> >  
-> > +	vdso_data->hrtimer_res		= hrtimer_resolution;
-> 
-> This should be a WRITE_ONCE(), just in case.
-> 
-> > +
-> >  	smp_wmb();
-> >  	++vdso_data->tb_seq_count;
-> >  }
-> > diff --git a/arch/arm64/kernel/vdso/gettimeofday.S b/arch/arm64/kernel/vdso/gettimeofday.S
-> > index c39872a7b03c..e2e9dfe9ba4a 100644
-> > --- a/arch/arm64/kernel/vdso/gettimeofday.S
-> > +++ b/arch/arm64/kernel/vdso/gettimeofday.S
-> > @@ -296,32 +296,32 @@ ENDPROC(__kernel_clock_gettime)
-> >  /* int __kernel_clock_getres(clockid_t clock_id, struct timespec *res); */
-> >  ENTRY(__kernel_clock_getres)
-> >  	.cfi_startproc
-> > +	adr	vdso_data, _vdso_data
-> >  	cmp	w0, #CLOCK_REALTIME
-> >  	ccmp	w0, #CLOCK_MONOTONIC, #0x4, ne
-> >  	ccmp	w0, #CLOCK_MONOTONIC_RAW, #0x4, ne
-> > -	b.ne	1f
-> > +	b.ne	2f
-> >  
-> > -	ldr	x2, 5f
-> > -	b	2f
-> > -1:
-> > +1:	/* Get hrtimer_res */
-> > +	ldr	x2, [vdso_data, #CLOCK_REALTIME_RES]
-> 
-> And here we need an "ldr w2, ..." since hrtimer_res is u32.
-> 
-> With the above (which Will can fix up):
-> 
-> Reviewed-by: Catalin Marinas <catalin.marinas at arm.com>
+On Tue, Apr 16, 2019 at 12:57 PM Olof Johansson <olof at lixom.net> wrote:
+[snip]
+> > Where kheaders.tar.xz is placed doesn't really matter.
+> > /proc or /sys/kernel makes no real difference.
+>
+> If done in a location that isn't a perpetual ABI commitment, a tarball
+> solution is something we can work with.
 
-Applied, with the above and a few extra cleanups.
+This is the part I don't get, Olof. It has to be an ABI commitment so
+that the tools always work. Why are we so interested in breaking
+userspace tools? We want a robust solution, not a fragile one.
 
-Will
+thanks,
+
+ - Joel
