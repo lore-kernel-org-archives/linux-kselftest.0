@@ -1,5 +1,5 @@
-From: joel at joelfernandes.org (Joel Fernandes)
-Date: Tue, 16 Apr 2019 10:21:16 -0400
+From: gregkh at linuxfoundation.org (Greg Kroah-Hartman)
+Date: Tue, 16 Apr 2019 16:22:40 +0200
 Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending
  kernel easier
 In-Reply-To: <20190416094509.1af6326b@gandalf.local.home>
@@ -12,7 +12,7 @@ References: <CAOesGMiuGK-Sbqo2z=1ab070JONav1LF82MRRLCdX-4+14_XZA@mail.gmail.com>
  <20190416124939.GB6027@kroah.com> <20190416130440.GA7944@localhost>
  <f8b15e31-1aab-ab2c-d44d-47325faab67d@opersys.com>
  <20190416094509.1af6326b@gandalf.local.home>
-Message-ID: <20190416142116.GA183794@google.com>
+Message-ID: <20190416142240.GA31920@kroah.com>
 
 On Tue, Apr 16, 2019 at 09:45:09AM -0400, Steven Rostedt wrote:
 > On Tue, 16 Apr 2019 09:32:37 -0400
@@ -51,11 +51,13 @@ On Tue, Apr 16, 2019 at 09:45:09AM -0400, Steven Rostedt wrote:
 > BTW, the name "tarballs" was kind of a joke. Probably should come up
 > with a better name. Although, I'm fine with tarballsfs ;-)
 
-:-)
-In theory, the headers could also be hosted in tracefs since the scope of the
-patch right now is to help tracing tools (BCC / eBPF). Although /sys/kernel
-might be better in case the scope is expanded to other things.
+No need to have this be a separate filesystem, we can use a binary sysfs
+file in /sys/kernel/ for this as the kernel is not doing any "parsing"
+of the data, it is just dumping it out to userspace.
+
+If I make /sys/kernel/config.gz be the same thing as /proc/config.gz
+will you fix up 'make localmodconfig' to use it?  :)
 
 thanks,
 
- - Joel
+greg k-h
