@@ -1,29 +1,66 @@
-From: keescook at chromium.org (Kees Cook)
-Date: Mon, 15 Apr 2019 22:50:10 -0500
-Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending kernel
- easier
-In-Reply-To: <20190415104109.64d914f3@gandalf.local.home>
-References: <20190320163116.39275-1-joel@joelfernandes.org>
- <CAOesGMheoZda84OSz9spQ7p66wot5S_9aaqaKC=QYp+8utASXA@mail.gmail.com>
- <20190408203601.GF133872@google.com>
- <CAOesGMibHCuMPCYkc8V++Z2Kuf3YQf_OjYn18GvDgzTy6ubV=g@mail.gmail.com>
- <CAJWu+or0hWce9+7aEfTHoOR8cptRbzHYVL-bPdJWGZH20dbo7Q@mail.gmail.com>
- <CAOesGMiuGK-Sbqo2z=1ab070JONav1LF82MRRLCdX-4+14_XZA@mail.gmail.com>
- <20190411031540.ehezr6kq7ouobpzx@ast-mbp.dhcp.thefacebook.com>
- <CAOesGMgiPB=7FE7tXXHes7WSLfByyPxirOStoH21NZqMwaUihQ@mail.gmail.com>
- <20190415104109.64d914f3@gandalf.local.home>
-Message-ID: <CAGXu5j+KPVRcOJ3Ue9ZQF93GyaDhvCnFCvJ_C3WKCx2=SNdDyg@mail.gmail.com>
+From: ci_notify at linaro.org (ci_notify at linaro.org)
+Date: Tue, 16 Apr 2019 08:00:17 +0000 (UTC)
+Subject: next-20190416 kselftest results
+Message-ID: <1796762746.12342.1555401617766.JavaMail.jenkins@a6c5c67cda76>
 
-On Mon, Apr 15, 2019 at 9:41 AM Steven Rostedt <rostedt at goodmis.org> wrote:
-> I agree with this assessment. We shouldn't use config.gz as precedence
-> for this solution. config.gz should have been in debugfs to begin with,
-> but I don't believe debugfs was around when config.gz was introduced.
-> (Don't have time to look into the history of the two).
+Summary
+------------------------------------------------------------------------
+git repo: not informed
+git branch: not informed
+git commit: not informed
+git describe: not informed
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190416
 
-I don't agree with this: /proc/config.gz is used by a lot of tools
-that do sanity-check of running systems. This isn't _debugging_...
-it's verifying correct kernel builds. It's a fancy version of checking
-/proc/version.
+Regressions (compared to build next-20190415)
+------------------------------------------------------------------------
+No regressions                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190415)                                                                   
+------------------------------------------------------------------------                                               
+No fixes
+
+In total:
+------------------------------------------------------------------------
+Ran 0 total tests in the following environments and test suites.
+pass 0
+fail 0
+xfail 0
+skip 0
+
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- x15 - arm
+- x86_64
+
+Test Suites
+-----------
+
+
+Failures
+------------------------------------------------------------------------
+
+x86:
+
+i386:
+
+dragonboard-410c:
+
+hi6220-hikey:
+
+juno-r2:
+
+x15:
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
 
 -- 
-Kees Cook
+Linaro LKFT
+https://lkft.linaro.org
