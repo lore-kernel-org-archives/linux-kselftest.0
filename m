@@ -1,46 +1,146 @@
 From: shuah@kernel.org (shuah)
-Date: Tue, 16 Apr 2019 14:05:40 -0600
-Subject: [PATCH] doc: kselftest: Fix KBUILD_OUTPUT usage instructions
-In-Reply-To: <20190416135923.4e9d32e4@lwn.net>
-References: <20190416142651.7048-1-shuah@kernel.org>
- <20190416092610.78b462de@lwn.net>
- <90615fb4-ff56-af72-f4ea-f3dbc3db26df@kernel.org>
- <20190416135923.4e9d32e4@lwn.net>
-Message-ID: <65a59c5a-f042-a77a-17ab-02e364b065a9@kernel.org>
+Date: Tue, 16 Apr 2019 17:11:14 -0600
+Subject: [PATCH 1/6] selftests: Extract single-test shell logic from lib.mk
+In-Reply-To: <20190409235556.3967-2-keescook@chromium.org>
+References: <20190409235556.3967-1-keescook@chromium.org>
+ <20190409235556.3967-2-keescook@chromium.org>
+Message-ID: <714c1bf0-63a5-9cec-ccd6-7f3abb020574@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190416200540.30_bgRHa2hQ1IGgXHbQxDcUxOkRmxzFcQtHypskKvZQ@z>
+Message-ID: <20190416231114.u3c25-bFdCSu7MoZfZZuG0MYbrFZcghwwPoi4BBjQTw@z>
 
-On 4/16/19 1:59 PM, Jonathan Corbet wrote:
-> On Tue, 16 Apr 2019 09:50:16 -0600
-> shuah <shuah@kernel.org> wrote:
-> 
->>>> +Build and run from KBUILD_OUTPUT directory (make KBUILD_OUTPUT=)::
->>>>    
->>>> -  $ make KBUILD_OUTPUT=/tmp/kselftest kselftest
->>>> +  $ export KBUILD_OUTPUT=/tmp/kselftest; make kselftest
->>>
->>> Is there a particular reason why this variable needs to be set in the
->>> environment rather than just in make?  More importantly, though, I don't
->>> think this would work if you run it from the KBUILD_OUTPUT directory.  What
->>> you're really doing is running with a separate output directory, right?
->>>    
->>
->> That is correct. I am matching the instructions in the main Makefile:
->>
->> # kbuild supports saving output files in a separate directory.
-> 
-> So my concern was right, then: this is not a way to "run from the
-> KBUILD_OUTPUT" directory; that seems certain to confuse people.  I'll
-> apply the patch so that the commands are right, but that could maybe use
-> some tweaking.
-> 
+Hi Kees,
 
-Yes. I can see it could confuse people.
+Thanks for the patch.
 
-I can tweak the wording to add that the working directory is the kernel
-source dir, and that the command should be run from root of the kernel
-source repo and send v2. The same changes probably need to be made for
-the O= case if that isn't clear.
+On 4/9/19 5:55 PM, Kees Cook wrote:
+> In order to improve the reusability of the kselftest test running logic,
+> this extracts the single-test logic from lib.mk into kselftest/runner.sh
+> which lib.mk can call directly. No changes in output.
+> 
+> As part of the change, this removes the unused "summary" Makefile variable
+> (and tests). However, future merging with the "emit_tests" target needs
+> to be able to redirect output, so a new "logfile" variable is introduced.
+
+Shouldn't the selftests/Makefile need update for "summary" removal??
+
+> 
+> Signed-off-by: Kees Cook <keescook at chromium.org>
+> ---
+>   tools/testing/selftests/.gitignore          |  1 -
+>   tools/testing/selftests/kselftest/runner.sh | 31 +++++++++++++++++++
+>   tools/testing/selftests/lib.mk              | 33 ++-------------------
+>   3 files changed, 34 insertions(+), 31 deletions(-)
+>   create mode 100644 tools/testing/selftests/kselftest/runner.sh
+> 
+> diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
+> index 91750352459d..8059ce834247 100644
+> --- a/tools/testing/selftests/.gitignore
+> +++ b/tools/testing/selftests/.gitignore
+> @@ -1,4 +1,3 @@
+> -kselftest
+>   gpiogpio-event-mon
+>   gpiogpio-hammer
+>   gpioinclude/
+
+Please don't include this .gitignore change here. These are generated
+in tools/gpio and this .gitignore isn't the right place for them.
+
+> diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+> new file mode 100644
+> index 000000000000..77d5510ac4c5
+> --- /dev/null
+> +++ b/tools/testing/selftests/kselftest/runner.sh
+> @@ -0,0 +1,31 @@
+> +#!/bin/sh
+> +#
+> +# Runs a set of tests in a given subdirectory.
+> +export skip_rc=4
+> +export logfile=/dev/stdout
+> +
+> +run_one()
+> +{
+> +	TEST="$1"
+> +	NUM="$2"
+> +
+> +	BASENAME_TEST=$(basename $TEST)
+> +
+> +	TEST_HDR_MSG="selftests: "`basename $PWD`:" $BASENAME_TEST"
+> +	echo "$TEST_HDR_MSG"
+> +	echo "========================================"
+> +	if [ ! -x "$TEST" ]; then
+> +		echo "$TEST_HDR_MSG: Warning: file $TEST is not executable, correct this."
+> +		echo "not ok 1..$test_num $TEST_HDR_MSG [FAIL]"
+> +	else
+> +		cd `dirname $TEST` > /dev/null
+> +		(./$BASENAME_TEST >> "$logfile" 2>&1 &&
+> +		echo "ok 1..$test_num $TEST_HDR_MSG [PASS]") ||
+> +		(if [ $? -eq $skip_rc ]; then	\
+> +			echo "not ok 1..$test_num $TEST_HDR_MSG [SKIP]"
+> +		else
+> +			echo "not ok 1..$test_num $TEST_HDR_MSG [FAIL]"
+> +		fi)
+> +		cd - >/dev/null
+> +	fi
+> +}
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 8b0f16409ed7..7da79fe0bb78 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -5,6 +5,7 @@ CC := $(CROSS_COMPILE)gcc
+>   ifeq (0,$(MAKELEVEL))
+>   OUTPUT := $(shell pwd)
+>   endif
+> +selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
+>   
+>   # The following are built by lib.mk common compile rules.
+>   # TEST_CUSTOM_PROGS should be used by tests that require
+> @@ -31,43 +32,15 @@ all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
+>   endif
+>   
+>   .ONESHELL:
+> -define RUN_TEST_PRINT_RESULT
+> -	TEST_HDR_MSG="selftests: "`basename $$PWD`:" $$BASENAME_TEST";	\
+> -	echo $$TEST_HDR_MSG;					\
+> -	echo "========================================";	\
+> -	if [ ! -x $$TEST ]; then	\
+> -		echo "$$TEST_HDR_MSG: Warning: file $$BASENAME_TEST is not executable, correct this.";\
+> -		echo "not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]"; \
+> -	else					\
+> -		cd `dirname $$TEST` > /dev/null; \
+> -		if [ "X$(summary)" != "X" ]; then	\
+> -			(./$$BASENAME_TEST > /tmp/$$BASENAME_TEST 2>&1 && \
+> -			echo "ok 1..$$test_num $$TEST_HDR_MSG [PASS]") || \
+> -			(if [ $$? -eq $$skip ]; then	\
+> -				echo "not ok 1..$$test_num $$TEST_HDR_MSG [SKIP]";				\
+> -			else echo "not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]";					\
+> -			fi;)			\
+> -		else				\
+> -			(./$$BASENAME_TEST &&	\
+> -			echo "ok 1..$$test_num $$TEST_HDR_MSG [PASS]") ||						\
+> -			(if [ $$? -eq $$skip ]; then \
+> -				echo "not ok 1..$$test_num $$TEST_HDR_MSG [SKIP]"; \
+> -			else echo "not ok 1..$$test_num $$TEST_HDR_MSG [FAIL]";				\
+> -			fi;)		\
+> -		fi;				\
+> -		cd - > /dev/null;		\
+> -	fi;
+> -endef
+> -
+>   define RUN_TESTS
+>   	@export KSFT_TAP_LEVEL=`echo 1`;		\
+>   	test_num=`echo 0`;				\
+> -	skip=`echo 4`;					\
+> +	. $(selfdir)/kselftest/runner.sh;		\
+>   	echo "TAP version 13";				\
+>   	for TEST in $(1); do				\
+>   		BASENAME_TEST=`basename $$TEST`;	\
+>   		test_num=`echo $$test_num+1 | bc`;	\
+> -		$(call RUN_TEST_PRINT_RESULT,$(TEST),$(BASENAME_TEST),$(test_num),$(skip))						\
+> +		run_one "$$BASENAME_TEST" "$$test_num";	\
+>   	done;
+>   endef
+>   
+> 
 
 thanks,
 -- Shuah
