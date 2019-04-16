@@ -1,53 +1,36 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Tue, 16 Apr 2019 17:24:33 +0100
-Subject: [PATCH v2 1/5] arm64: Fix vDSO clock_getres()
-In-Reply-To: <20190416161434.32691-2-vincenzo.frascino@arm.com>
-References: <20190416161434.32691-1-vincenzo.frascino@arm.com>
- <20190416161434.32691-2-vincenzo.frascino@arm.com>
-Message-ID: <20190416162432.GI28994@arrakis.emea.arm.com>
+From: olof@lixom.net (Olof Johansson)
+Date: Tue, 16 Apr 2019 09:42:51 -0700
+Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending kernel
+ easier
+In-Reply-To: <20190416104346.10cca21f@gandalf.local.home>
+References: <CAOesGMiuGK-Sbqo2z=1ab070JONav1LF82MRRLCdX-4+14_XZA@mail.gmail.com>
+ <20190411031540.ehezr6kq7ouobpzx@ast-mbp.dhcp.thefacebook.com>
+ <CAOesGMgiPB=7FE7tXXHes7WSLfByyPxirOStoH21NZqMwaUihQ@mail.gmail.com>
+ <20190415104109.64d914f3@gandalf.local.home>
+ <CAGXu5j+KPVRcOJ3Ue9ZQF93GyaDhvCnFCvJ_C3WKCx2=SNdDyg@mail.gmail.com>
+ <20190416083306.5646a687@gandalf.local.home> <20190416124939.GB6027@kroah.com>
+ <20190416130440.GA7944@localhost>
+ <f8b15e31-1aab-ab2c-d44d-47325faab67d@opersys.com>
+ <20190416094509.1af6326b@gandalf.local.home>
+ <20190416142240.GA31920@kroah.com>
+ <20190416104346.10cca21f@gandalf.local.home>
+Message-ID:
+ <CAOesGMjRPoy4JO24rNZHORpSN0Hg53ajHKZNM15YDCkDah=+6A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190416162433.h80oh_0CqU75owsBuwGA1QrEHaDMAGHy8JETmYN9XoI@z>
+Message-ID: <20190416164251.QiQL0ns71KI8tYFy1_VBSLp5sKBPj_JFnyz3EcFjmMk@z>
 
-On Tue, Apr 16, 2019@05:14:30PM +0100, Vincenzo Frascino wrote:
-> diff --git a/arch/arm64/kernel/vdso.c b/arch/arm64/kernel/vdso.c
-> index 2d419006ad43..5f5759d51c33 100644
-> --- a/arch/arm64/kernel/vdso.c
-> +++ b/arch/arm64/kernel/vdso.c
-> @@ -245,6 +245,8 @@ void update_vsyscall(struct timekeeper *tk)
->  		vdso_data->cs_shift		= tk->tkr_mono.shift;
->  	}
->  
-> +	vdso_data->hrtimer_res		= hrtimer_resolution;
+On Tue, Apr 16, 2019@7:43 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Tue, 16 Apr 2019 16:22:40 +0200
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+>
+> > If I make /sys/kernel/config.gz be the same thing as /proc/config.gz
+> > will you fix up 'make localmodconfig' to use it?  :)
+>
+> Sure.
 
-This should be a WRITE_ONCE(), just in case.
+Doing a link to the new location is probably best, just like
+/proc/device-tree is today.
 
-> +
->  	smp_wmb();
->  	++vdso_data->tb_seq_count;
->  }
-> diff --git a/arch/arm64/kernel/vdso/gettimeofday.S b/arch/arm64/kernel/vdso/gettimeofday.S
-> index c39872a7b03c..e2e9dfe9ba4a 100644
-> --- a/arch/arm64/kernel/vdso/gettimeofday.S
-> +++ b/arch/arm64/kernel/vdso/gettimeofday.S
-> @@ -296,32 +296,32 @@ ENDPROC(__kernel_clock_gettime)
->  /* int __kernel_clock_getres(clockid_t clock_id, struct timespec *res); */
->  ENTRY(__kernel_clock_getres)
->  	.cfi_startproc
-> +	adr	vdso_data, _vdso_data
->  	cmp	w0, #CLOCK_REALTIME
->  	ccmp	w0, #CLOCK_MONOTONIC, #0x4, ne
->  	ccmp	w0, #CLOCK_MONOTONIC_RAW, #0x4, ne
-> -	b.ne	1f
-> +	b.ne	2f
->  
-> -	ldr	x2, 5f
-> -	b	2f
-> -1:
-> +1:	/* Get hrtimer_res */
-> +	ldr	x2, [vdso_data, #CLOCK_REALTIME_RES]
 
-And here we need an "ldr w2, ..." since hrtimer_res is u32.
-
-With the above (which Will can fix up):
-
-Reviewed-by: Catalin Marinas <catalin.marinas at arm.com>
+-Olof
