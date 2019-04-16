@@ -1,8 +1,8 @@
-From: karim.yaghmour@opersys.com (Karim Yaghmour)
-Date: Tue, 16 Apr 2019 09:32:37 -0400
-Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending kernel
- easier
-In-Reply-To: <20190416130440.GA7944@localhost>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Tue, 16 Apr 2019 09:45:09 -0400
+Subject: [PATCH v5 1/3] Provide in-kernel headers to make extending
+ kernel easier
+In-Reply-To: <f8b15e31-1aab-ab2c-d44d-47325faab67d@opersys.com>
 References: <20190408203601.GF133872@google.com>
  <CAOesGMibHCuMPCYkc8V++Z2Kuf3YQf_OjYn18GvDgzTy6ubV=g@mail.gmail.com>
  <CAJWu+or0hWce9+7aEfTHoOR8cptRbzHYVL-bPdJWGZH20dbo7Q@mail.gmail.com>
@@ -13,60 +13,45 @@ References: <20190408203601.GF133872@google.com>
  <CAGXu5j+KPVRcOJ3Ue9ZQF93GyaDhvCnFCvJ_C3WKCx2=SNdDyg@mail.gmail.com>
  <20190416083306.5646a687@gandalf.local.home>
  <20190416124939.GB6027@kroah.com> <20190416130440.GA7944@localhost>
-Message-ID: <f8b15e31-1aab-ab2c-d44d-47325faab67d@opersys.com>
+ <f8b15e31-1aab-ab2c-d44d-47325faab67d@opersys.com>
+Message-ID: <20190416094509.1af6326b@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190416133237.I04AbJ-OzuA9yGrsGj-0AN3Y8HHO3e_Gruq57T_x8-s@z>
+Message-ID: <20190416134509.XKWW0X6Q03BbLiFWiBoaPwd4DtzbIbloT-_1h7g-j9M@z>
 
+On Tue, 16 Apr 2019 09:32:37 -0400
+Karim Yaghmour <karim.yaghmour@opersys.com> wrote:
 
-On 4/16/19 9:04 AM, Joel Fernandes wrote:
-> On Tue, Apr 16, 2019@02:49:39PM +0200, Greg Kroah-Hartman wrote:
->> On Tue, Apr 16, 2019@08:33:06AM -0400, Steven Rostedt wrote:
->>> On Mon, 15 Apr 2019 22:50:10 -0500
->>> Kees Cook <keescook@chromium.org> wrote:
->>>
->>>> On Mon, Apr 15, 2019@9:41 AM Steven Rostedt <rostedt@goodmis.org> wrote:
->>>>> I agree with this assessment. We shouldn't use config.gz as precedence
->>>>> for this solution. config.gz should have been in debugfs to begin with,
->>>>> but I don't believe debugfs was around when config.gz was introduced.
->>>>> (Don't have time to look into the history of the two).
->>>>
->>>> I don't agree with this: /proc/config.gz is used by a lot of tools
->>>> that do sanity-check of running systems. This isn't _debugging_...
->>>> it's verifying correct kernel builds. It's a fancy version of checking
->>>> /proc/version.
->>>>
->>>
->>> Then we should perhaps make a new file system call tarballs ;-)
->>>
->>>   /sys/kernel/tarballs/
->>>
->>> and place everything there. That way it removes it from /proc (which is
->>> the worse place for that) and also makes it something other than debug.
->>> That's what I did for tracefs.
->>
->> As horrible as that suggestion is, it does kind of make sense :)
->>
->> We can't put this in debugfs as that's only for debugging and systems
->> should never have that mounted for normal operations (users want to
->> build ebpf programs), and /proc really should be for processes but that
->> horse is long left the barn.
->>
->> But, I'm willing to consider putting this either in a system-fs-like
->> filesystem, or just in sysfs itself, we do have /sys/kernel/ to play
->> around in if the main objection is that we should not be cluttering up
->> /proc with stuff like this.
->>
+> >>> Then we should perhaps make a new file system call tarballs ;-)
+> >>>
+> >>>   /sys/kernel/tarballs/
+> >>>
+> >>> and place everything there. That way it removes it from /proc (which is
+> >>> the worse place for that) and also makes it something other than debug.
+> >>> That's what I did for tracefs.  
+> >>
+> >> As horrible as that suggestion is, it does kind of make sense :)
+> >>
+> >> We can't put this in debugfs as that's only for debugging and systems
+> >> should never have that mounted for normal operations (users want to
+> >> build ebpf programs), and /proc really should be for processes but that
+> >> horse is long left the barn.
+> >>
+> >> But, I'm willing to consider putting this either in a system-fs-like
+> >> filesystem, or just in sysfs itself, we do have /sys/kernel/ to play
+> >> around in if the main objection is that we should not be cluttering up
+> >> /proc with stuff like this.
+> >>  
+> > 
+> > I am ok with the suggestion of /sys/kernel for the archive. That also seems
+> > to fit well with the idea that the headers are kernel related and probably
+> > belong here more strictly speaking, than /proc.  
 > 
-> I am ok with the suggestion of /sys/kernel for the archive. That also seems
-> to fit well with the idea that the headers are kernel related and probably
-> belong here more strictly speaking, than /proc.
+> This makes sense. And if it alleviates concerns regarding extending 
+> /proc ABIs then might as well switch to this.
+> 
+> Olof, what do you think of this?
 
-This makes sense. And if it alleviates concerns regarding extending 
-/proc ABIs then might as well switch to this.
+BTW, the name "tarballs" was kind of a joke. Probably should come up
+with a better name. Although, I'm fine with tarballsfs ;-)
 
-Olof, what do you think of this?
-
--- 
-Karim Yaghmour
-CEO - Opersys inc. / www.opersys.com
-http://twitter.com/karimyaghmour
+-- Steve
