@@ -1,72 +1,68 @@
-From: shuah@kernel.org (shuah)
-Date: Tue, 16 Apr 2019 17:21:16 -0600
-Subject: [PATCH 1/6] selftests: Extract single-test shell logic from lib.mk
-In-Reply-To: <CAGXu5jJOG9Or_==aa0AMtv6n2=_MT_etLX7OCm22NpzT6d7W4g@mail.gmail.com>
-References: <20190409235556.3967-1-keescook@chromium.org>
- <20190409235556.3967-2-keescook@chromium.org>
- <714c1bf0-63a5-9cec-ccd6-7f3abb020574@kernel.org>
- <CAGXu5jJOG9Or_==aa0AMtv6n2=_MT_etLX7OCm22NpzT6d7W4g@mail.gmail.com>
-Message-ID: <6610ef83-b3e0-28b5-b976-5a5f68ca492d@kernel.org>
+From: ci_notify@linaro.org (ci_notify@linaro.org)
+Date: Wed, 17 Apr 2019 09:00:20 +0000 (UTC)
+Subject: next-20190417 kselftest results
+Message-ID: <762176356.12486.1555491621443.JavaMail.jenkins@a6c5c67cda76>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190416232116.fOdgT8f1YoB5rB6EAFPwGZuzhpLU8QOFmggs6CZya7g@z>
+Message-ID: <20190417090020.6y6cWIAutfvzrp4fUaLvwWmJkHl99iApyXy_3GiNlL8@z>
 
-On 4/16/19 5:16 PM, Kees Cook wrote:
-> On Tue, Apr 16, 2019@6:11 PM shuah <shuah@kernel.org> wrote:
->>
->> Hi Kees,
->>
->> Thanks for the patch.
->>
->> On 4/9/19 5:55 PM, Kees Cook wrote:
->>> In order to improve the reusability of the kselftest test running logic,
->>> this extracts the single-test logic from lib.mk into kselftest/runner.sh
->>> which lib.mk can call directly. No changes in output.
->>>
->>> As part of the change, this removes the unused "summary" Makefile variable
->>> (and tests). However, future merging with the "emit_tests" target needs
->>> to be able to redirect output, so a new "logfile" variable is introduced.
->>
->> Shouldn't the selftests/Makefile need update for "summary" removal??
->>
-> 
-> I didn't see anything using "summary" except as a --summary argument
-> to the run_kselftests.sh script. Maybe I missed it?
-> 
+Summary
+------------------------------------------------------------------------
+git repo: not informed
+git branch: not informed
+git commit: not informed
+git describe: not informed
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190417
 
-It is in the selftests/Makefile install target.
+Regressions (compared to build next-20190416)
+------------------------------------------------------------------------
+No regressions                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190416)                                                                   
+------------------------------------------------------------------------                                               
+No fixes
 
->>>
->>> Signed-off-by: Kees Cook <keescook at chromium.org>
->>> ---
->>>    tools/testing/selftests/.gitignore          |  1 -
->>>    tools/testing/selftests/kselftest/runner.sh | 31 +++++++++++++++++++
->>>    tools/testing/selftests/lib.mk              | 33 ++-------------------
->>>    3 files changed, 34 insertions(+), 31 deletions(-)
->>>    create mode 100644 tools/testing/selftests/kselftest/runner.sh
->>>
->>> diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
->>> index 91750352459d..8059ce834247 100644
->>> --- a/tools/testing/selftests/.gitignore
->>> +++ b/tools/testing/selftests/.gitignore
->>> @@ -1,4 +1,3 @@
->>> -kselftest
->>>    gpiogpio-event-mon
->>>    gpiogpio-hammer
->>>    gpioinclude/
->>
->> Please don't include this .gitignore change here. These are generated
->> in tools/gpio and this .gitignore isn't the right place for them.
-> 
-> This change is only removing the "kselftest" entry, for which the
-> target is long gone. Since I was adding a directory by that name, I
-> needed to remove it from the .gitignore file. I have nothing to do
-> with the gpio stuff. :)
-> 
+In total:
+------------------------------------------------------------------------
+Ran 0 total tests in the following environments and test suites.
+pass 0
+fail 0
+xfail 0
+skip 0
 
-Yeah my bad! :)
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- x15 - arm
+- x86_64
 
-> Thanks for looking this over!
-> 
+Test Suites
+-----------
 
-thanks,
--- Shuah
+
+Failures
+------------------------------------------------------------------------
+
+juno-r2:
+
+i386:
+
+x86:
+
+x15:
+
+dragonboard-410c:
+
+hi6220-hikey:
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
