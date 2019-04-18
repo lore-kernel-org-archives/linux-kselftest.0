@@ -1,70 +1,63 @@
-From: dancol at google.com (Daniel Colascione)
-Date: Thu, 18 Apr 2019 10:53:33 -0700
+From: bl0pbl33p at gmail.com (Jonathan Kowalski)
+Date: Thu, 18 Apr 2019 19:44:33 +0100
 Subject: [PATCH RFC 1/2] Add polling support to pidfd
-In-Reply-To: <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
+In-Reply-To: <20190416192051.GA184889@google.com>
 References: <20190411175043.31207-1-joel@joelfernandes.org>
  <20190416120430.GA15437@redhat.com> <20190416192051.GA184889@google.com>
- <20190417130940.GC32622@redhat.com>
- <CAG48ez2Q0t2-rZz8wmGeih=NigYL-CT3+E6NgiPT0AkOQAUPMQ@mail.gmail.com>
- <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
-Message-ID: <CAKOZues8mnjvUUopNoeXcDezXKscQLNAgCgodqUno_Z39kV7Dw@mail.gmail.com>
+Message-ID: <CAGLj2rELsr0PUgu41uZX_TKCpT-Q00X+cvgBhJ-U7RU3EBo5tA@mail.gmail.com>
 
-On Thu, Apr 18, 2019 at 10:26 AM Christian Brauner <christian at brauner.io> wrote:
+On Tue, Apr 16, 2019 at 8:21 PM Joel Fernandes <joel at joelfernandes.org> wrote:
 >
-> On April 18, 2019 7:23:38 PM GMT+02:00, Jann Horn <jannh at google.com> wrote:
-> >On Wed, Apr 17, 2019 at 3:09 PM Oleg Nesterov <oleg at redhat.com> wrote:
-> >> On 04/16, Joel Fernandes wrote:
-> >> > On Tue, Apr 16, 2019 at 02:04:31PM +0200, Oleg Nesterov wrote:
-> >> > >
-> >> > > Could you explain when it should return POLLIN? When the whole
-> >process exits?
-> >> >
-> >> > It returns POLLIN when the task is dead or doesn't exist anymore,
-> >or when it
-> >> > is in a zombie state and there's no other thread in the thread
-> >group.
-> >>
-> >> IOW, when the whole thread group exits, so it can't be used to
-> >monitor sub-threads.
-> >>
-> >> just in case... speaking of this patch it doesn't modify
-> >proc_tid_base_operations,
-> >> so you can't poll("/proc/sub-thread-tid") anyway, but iiuc you are
-> >going to use
-> >> the anonymous file returned by CLONE_PIDFD ?
+> On Tue, Apr 16, 2019 at 02:04:31PM +0200, Oleg Nesterov wrote:
+> > On 04/11, Joel Fernandes (Google) wrote:
+> > >
+> > > +static unsigned int proc_tgid_base_poll(struct file *file, struct poll_table_struct *pts)
+> > > +{
+> > > +   int poll_flags = 0;
+> > > +   struct task_struct *task;
+> > > +   struct pid *pid;
+> > > +
+> > > +   task = get_proc_task(file->f_path.dentry->d_inode);
+> > > +
+> > > +   WARN_ON_ONCE(task && !thread_group_leader(task));
+> > > +
+> > > +   /*
+> > > +    * tasklist_lock must be held because to avoid racing with
+> > > +    * changes in exit_state and wake up. Basically to avoid:
+> > > +    *
+> > > +    * P0: read exit_state = 0
+> > > +    * P1: write exit_state = EXIT_DEAD
+> > > +    * P1: Do a wake up - wq is empty, so do nothing
+> > > +    * P0: Queue for polling - wait forever.
+> > > +    */
+> > > +   read_lock(&tasklist_lock);
+> > > +   if (!task)
+> > > +           poll_flags = POLLIN | POLLRDNORM | POLLERR;
+> > > +   else if (task->exit_state == EXIT_DEAD)
+> > > +           poll_flags = POLLIN | POLLRDNORM;
+> > > +   else if (task->exit_state == EXIT_ZOMBIE && thread_group_empty(task))
+> > > +           poll_flags = POLLIN | POLLRDNORM;
+> > > +
+> > > +   if (!poll_flags) {
+> > > +           pid = proc_pid(file->f_path.dentry->d_inode);
+> > > +           poll_wait(file, &pid->wait_pidfd, pts);
+> > > +   }
 > >
-> >I don't think procfs works that way. /proc/sub-thread-tid has
-> >proc_tgid_base_operations despite not being a thread group leader.
-
-Huh. That seems very weird. Is that too late to change now? It feels like a bug.
-
-> >(Yes, that's kinda weird.) AFAICS the WARN_ON_ONCE() in this code can
-> >be hit trivially, and then the code will misbehave.
+> > can't understand...
 > >
-> >@Joel: I think you'll have to either rewrite this to explicitly bail
-> >out if you're dealing with a thread group leader
+> > Could you explain when it should return POLLIN? When the whole process exits?
+>
+> It returns POLLIN when the task is dead or doesn't exist anymore, or when it
+> is in a zombie state and there's no other thread in the thread group.
+>
 
-If you're _not_ dealing with a leader, right?
+Would using something other than POLLIN be an option (maybe POLLPRI)?
+The convention is to use it to indicate readability on the descriptor,
+and also possibly POLLHUP instead of POLLERR (the latter is less of a
+problem, but FreeBSD also does the same, so it'd help with some
+consistency for libraries wanting to use this, which aren't interested
+in other sub states).
 
-> , or make the code
-> >work for threads, too.
-> The latter case probably being preferred if this API is supposed to be useable for thread management in userspace.
-
-IMHO, focusing on the thread group case for now might be best. We can
-always support thread management in future work.
-
-Besides: I'm not sure that we need kernel support for thread
-monitoring. Can't libc provide a pollable FD for a thread internally?
-libc can always run code just before thread exit, and it can wake a
-signalfd at that point. Directly terminating individual threads
-without going through userland is something that breaks the process
-anyway: it's legal and normal to SIGKILL a process a whole, but if an
-individual thread terminates without going through libc, the process
-is likely going to be fatally broken anyway. (What if it's holding the
-heap lock?)
-
-I know that in some tools want to wait for termination of individual
-threads in an external monitored process, but couldn't these tools
-cooperate with libc to get these per-thread eventfds?
-
-Is there a use case I'm missing?
+>
+>  - Joel
+>
