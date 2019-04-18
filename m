@@ -1,100 +1,41 @@
-From: skhan@linuxfoundation.org (Shuah Khan)
-Date: Wed, 17 Apr 2019 17:34:03 -0600
-Subject: [PATCH v2] doc: kselftest: Fix KBUILD_OUTPUT usage instructions
-Message-ID: <20190417233403.29854-1-skhan@linuxfoundation.org>
+From: po-hsu.lin@canonical.com (Po-Hsu Lin)
+Date: Thu, 18 Apr 2019 19:57:25 +0800
+Subject: [PATCH] selftests/net: correct the return value for run_netsocktests
+Message-ID: <20190418115725.6833-1-po-hsu.lin@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190417233403.WZEmQAidg2SYqC0Gfsvr0SzyFmK8CJJgRCVKsSWckS8@z>
+Message-ID: <20190418115725.JyiOFY81SWhGkVY2a4lA1WpoXB-BvrtUVzpQApfKKjY@z>
 
-Fix KBUILD_OUTPUT usage instructions. The current documentation is
-incorrect. Update and fix outdated information about summary option.
-Add a reference to kselftest wiki for additional information on the
-framework and tips on writing new tests.
+The run_netsocktests will be marked as passed regardless the actual test
+result from the ./socket:
 
-Signed-off-by: Shuah Khan <skhan at linuxfoundation.org>
+    selftests: net: run_netsocktests
+    ========================================
+    --------------------
+    running socket test
+    --------------------
+    [FAIL]
+    ok 1..6 selftests: net: run_netsocktests [PASS]
+
+This is because the test script itself has been successfully executed.
+Fix this by exit 1 when the test failed.
+
+Signed-off-by: Po-Hsu Lin <po-hsu.lin at canonical.com>
 ---
-Changes since v1:
--- Fixed the confusing language about output directory
--- Updated outdated instructions on summary option.
--- Regenerated patch with current email address.
+ tools/testing/selftests/net/run_netsocktests | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Documentation/dev-tools/kselftest.rst | 42 ++++++++++++++++++---------
- 1 file changed, 29 insertions(+), 13 deletions(-)
-
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index c8c03388b9de..25604904fa6e 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -7,6 +7,11 @@ directory. These are intended to be small tests to exercise individual code
- paths in the kernel. Tests are intended to be run after building, installing
- and booting a kernel.
- 
-+You can find additional information on Kselftest framework, how to
-+write new tests using the framework on Kselftest wiki:
-+
-+https://kselftest.wiki.kernel.org/
-+
- On some systems, hot-plug tests could hang forever waiting for cpu and
- memory to be ready to be offlined. A special hot-plug target is created
- to run the full range of hot-plug tests. In default mode, hot-plug tests run
-@@ -35,17 +40,32 @@ To build and run the tests with a single command, use::
- 
- Note that some tests will require root privileges.
- 
--Build and run from user specific object directory (make O=dir)::
-+Kselftest supports saving output files in a separate directory and then
-+running tests. To locate output files in a separate directory two syntaxes
-+are supported. In both cases the working directory must be the root of the
-+kernel src. This is applicable to "Running a subset of selftests" section
-+below.
-+
-+To build, save output files in a separate directory with O= ::
- 
-   $ make O=/tmp/kselftest kselftest
- 
--Build and run KBUILD_OUTPUT directory (make KBUILD_OUTPUT=)::
-+To build, save output files in a separate directory with KBUILD_OUTPUT ::
-+
-+  $ export KBUILD_OUTPUT=/tmp/kselftest; make kselftest
- 
--  $ make KBUILD_OUTPUT=/tmp/kselftest kselftest
-+The O= assignment takes precedence over the KBUILD_OUTPUT environment
-+variable.
- 
--The above commands run the tests and print pass/fail summary to make it
--easier to understand the test results. Please find the detailed individual
--test results for each test in /tmp/testname file(s).
-+The above commands by default run the tests and print full pass/fail report.
-+Kselftest supports "summary" option to make it easier to understand the test
-+results. Please find the detailed individual test results for each test in
-+/tmp/testname file(s) when summary option is specified. This is applicable
-+to "Running a subset of selftests" section below.
-+
-+To run kselftest with summary option enabled ::
-+
-+  $ make summary=1 kselftest
- 
- Running a subset of selftests
- =============================
-@@ -61,17 +81,13 @@ You can specify multiple tests to build and run::
- 
-   $  make TARGETS="size timers" kselftest
- 
--Build and run from user specific object directory (make O=dir)::
-+To build, save output files in a separate directory with O= ::
- 
-   $ make O=/tmp/kselftest TARGETS="size timers" kselftest
- 
--Build and run KBUILD_OUTPUT directory (make KBUILD_OUTPUT=)::
+diff --git a/tools/testing/selftests/net/run_netsocktests b/tools/testing/selftests/net/run_netsocktests
+index b093f39c2..14e41fa 100755
+--- a/tools/testing/selftests/net/run_netsocktests
++++ b/tools/testing/selftests/net/run_netsocktests
+@@ -7,7 +7,7 @@ echo "--------------------"
+ ./socket
+ if [ $? -ne 0 ]; then
+ 	echo "[FAIL]"
++	exit 1
+ else
+ 	echo "[PASS]"
+ fi
 -
--  $ make KBUILD_OUTPUT=/tmp/kselftest TARGETS="size timers" kselftest
-+To build, save output files in a separate directory with KBUILD_OUTPUT ::
- 
--The above commands run the tests and print pass/fail summary to make it
--easier to understand the test results. Please find the detailed individual
--test results for each test in /tmp/testname file(s).
-+  $ export KBUILD_OUTPUT=/tmp/kselftest; make TARGETS="size timers" kselftest
- 
- See the top-level tools/testing/selftests/Makefile for the list of all
- possible targets.
 -- 
-2.17.1
+2.7.4
