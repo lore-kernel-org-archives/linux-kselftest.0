@@ -1,54 +1,33 @@
-From: joel at joelfernandes.org (Joel Fernandes)
-Date: Fri, 19 Apr 2019 15:05:38 -0400
-Subject: [PATCH RFC 1/2] Add polling support to pidfd
-In-Reply-To: <CAHk-=wi79KTxCYZgMZNapULR-ratPiZVt+fgh=DhgtYR_gYPAA@mail.gmail.com>
-References: <20190411175043.31207-1-joel@joelfernandes.org>
- <20190416120430.GA15437@redhat.com>
- <20190416192051.GA184889@google.com>
- <CAGLj2rELsr0PUgu41uZX_TKCpT-Q00X+cvgBhJ-U7RU3EBo5tA@mail.gmail.com>
- <CAKOZueu=5aNf+oDFBM56TbqZwKpB6q1y81V1cbL+k4DTyV53+A@mail.gmail.com>
- <CAHk-=wi79KTxCYZgMZNapULR-ratPiZVt+fgh=DhgtYR_gYPAA@mail.gmail.com>
-Message-ID: <20190419190538.GC251571@google.com>
+From: shuah at kernel.org (shuah)
+Date: Fri, 19 Apr 2019 13:10:43 -0600
+Subject: [PATCH] selftests/ipc: Fix msgque compiler warnings
+In-Reply-To: <20190408200141.uusxqlqly6tab6h7@linux-r8p5>
+References: <20190408171344.GA22803@beast>
+ <20190408200141.uusxqlqly6tab6h7@linux-r8p5>
+Message-ID: <a53346cd-9eec-7ca6-3a09-a5558a5c9aa8@kernel.org>
 
-On Thu, Apr 18, 2019 at 12:14:58PM -0700, Linus Torvalds wrote:
-> On Thu, Apr 18, 2019 at 11:58 AM Daniel Colascione <dancol at google.com> wrote:
-> >
-> > On Thu, Apr 18, 2019 at 11:44 AM Jonathan Kowalski <bl0pbl33p at gmail.com> wrote:
-> > >
-> > > Would using something other than POLLIN be an option (maybe POLLPRI)?
-> > > The convention is to use it to indicate readability on the descriptor,
-> > > and also possibly POLLHUP instead of POLLERR (the latter is less of a
-> > > problem, but FreeBSD also does the same, so it'd help with some
-> > > consistency for libraries wanting to use this, which aren't interested
-> > > in other sub states).
-> >
-> > Existing event loop libraries generally support checking only for
-> > readability and writability. Not setting POLLIN would make these FDs
-> > more difficult to use with existing event loop libraries. What
-> > advantage would compensate for this difficulty?
+On 4/8/19 2:01 PM, Davidlohr Bueso wrote:
+> On Mon, 08 Apr 2019, Kees Cook wrote:
 > 
-> Right.
+>> This fixes the various compiler warnings when building the msgque
+>> selftest. The primary change is using sys/msg.h instead of linux/msg.h
+>> directly to gain the API declarations.
+>>
+>> Fixes: 3a665531a3b7 ("selftests: IPC message queue copy feature test")
+>> Signed-off-by: Kees Cook <keescook at chromium.org>
 > 
-> Usually you'd set POLLIN in _addition_ to any other more specialized poll flag.
+> (Not really related to this patch)
 > 
-> For example, when a socket has shut down the read side, we do
+> Given that the selftest/ipc/ only consists of this test, I wonder if
+> the test should just be moved to ltp, where the ipc tests are a lot
+> more complete and robust -- and which I've been using for years for
+> basic testing code changes.
 > 
->         if (sk->sk_shutdown & RCV_SHUTDOWN)
->                 mask |= EPOLLRDHUP | EPOLLIN | EPOLLRDNORM;
-> 
-> because while it's true that EPOLLRDHUP is the most _specific_ poll
-> bit, it's _also_ true that a read shutdown means that the read() will
-> return immediately.
-> 
-> So generally a HUP condition should mean that POLLIN and POLLOUT also
-> get set. Not because there's any actual _data_ to be read, but simply
-> because the read will not block.
 
-Sounds great and I agree with Linus and Daniel. So I am guessing you are Ok
-with the current set of flags proposed this patch, so I will keep them intact
-in future patch postings. But please let me know if you want me to change
-something about the flags.
+Having this test in here helps us find regressions quickly. It does good
+and no harm keeping this test in here.
 
-thanks!
+I don't think it is a good idea to remove it all together.
 
- - Joel
+thanks,
+-- Shuah
