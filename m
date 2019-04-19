@@ -1,218 +1,63 @@
-From: shuah@kernel.org (shuah)
-Date: Fri, 19 Apr 2019 12:57:39 -0600
-Subject: [PATCH for 5.1 3/3] rseq/selftests: Adapt number of threads to
- the number of detected cpus
-In-Reply-To: <580328197.148.1555684824260.JavaMail.zimbra@efficios.com>
-References: <20190305194755.2602-1-mathieu.desnoyers@efficios.com>
- <20190305194755.2602-4-mathieu.desnoyers@efficios.com>
- <20190419103847.GA111210@gmail.com>
- <1444419838.71.1555677682502.JavaMail.zimbra@efficios.com>
- <1266612341.87.1555678507226.JavaMail.zimbra@efficios.com>
- <614774674.134.1555681346941.JavaMail.zimbra@efficios.com>
- <1863599735.141.1555681723685.JavaMail.zimbra@efficios.com>
- <6ba0796c-8a96-f797-265c-37bfb9b4bb71@kernel.org>
- <580328197.148.1555684824260.JavaMail.zimbra@efficios.com>
-Message-ID: <cfcbace7-363d-e45e-11da-8efb200783b7@kernel.org>
+From: joel@joelfernandes.org (Joel Fernandes)
+Date: Fri, 19 Apr 2019 15:02:47 -0400
+Subject: [PATCH RFC 1/2] Add polling support to pidfd
+In-Reply-To: <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
+References: <20190411175043.31207-1-joel@joelfernandes.org>
+ <20190416120430.GA15437@redhat.com>
+ <20190416192051.GA184889@google.com>
+ <20190417130940.GC32622@redhat.com>
+ <CAG48ez2Q0t2-rZz8wmGeih=NigYL-CT3+E6NgiPT0AkOQAUPMQ@mail.gmail.com>
+ <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
+Message-ID: <20190419190247.GB251571@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190419185739.tgcg97g72fY5xJRHuDT16RY-zivxxSt9eFZZJxlKgME@z>
+Message-ID: <20190419190247.RySsR6ccxqcJCK8AUcWzayAiJdi2z7qtGkA66D62SMc@z>
 
-On 4/19/19 8:40 AM, Mathieu Desnoyers wrote:
-> ----- On Apr 19, 2019,@10:17 AM, shuah shuah@kernel.org wrote:
+On Thu, Apr 18, 2019@07:26:44PM +0200, Christian Brauner wrote:
+> On April 18, 2019 7:23:38 PM GMT+02:00, Jann Horn <jannh@google.com> wrote:
+> >On Wed, Apr 17, 2019@3:09 PM Oleg Nesterov <oleg@redhat.com> wrote:
+> >> On 04/16, Joel Fernandes wrote:
+> >> > On Tue, Apr 16, 2019@02:04:31PM +0200, Oleg Nesterov wrote:
+> >> > >
+> >> > > Could you explain when it should return POLLIN? When the whole
+> >process exits?
+> >> >
+> >> > It returns POLLIN when the task is dead or doesn't exist anymore,
+> >or when it
+> >> > is in a zombie state and there's no other thread in the thread
+> >group.
+> >>
+> >> IOW, when the whole thread group exits, so it can't be used to
+> >monitor sub-threads.
+> >>
+> >> just in case... speaking of this patch it doesn't modify
+> >proc_tid_base_operations,
+> >> so you can't poll("/proc/sub-thread-tid") anyway, but iiuc you are
+> >going to use
+> >> the anonymous file returned by CLONE_PIDFD ?
+> >
+> >I don't think procfs works that way. /proc/sub-thread-tid has
+> >proc_tgid_base_operations despite not being a thread group leader.
+> >(Yes, that's kinda weird.) AFAICS the WARN_ON_ONCE() in this code can
+> >be hit trivially, and then the code will misbehave.
+> >
+> >@Joel: I think you'll have to either rewrite this to explicitly bail
+> >out if you're dealing with a thread group leader, or make the code
+> >work for threads, too.
 > 
->> On 4/19/19 7:48 AM, Mathieu Desnoyers wrote:
->>> ----- On Apr 19, 2019, at 9:42 AM, Mathieu Desnoyers
->>> mathieu.desnoyers@efficios.com wrote:
->>>
->>>> ----- On Apr 19, 2019, at 8:55 AM, Mathieu Desnoyers
->>>> mathieu.desnoyers@efficios.com wrote:
->>>>
->>>>> ----- On Apr 19, 2019, at 8:41 AM, Mathieu Desnoyers
->>>>> mathieu.desnoyers@efficios.com wrote:
->>>>>
->>>>>> ----- On Apr 19, 2019,@6:38 AM, Ingo Molnar mingo@kernel.org wrote:
->>>>>>
->>>>>>> * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
->>>>>>>
->>>>>>>> On smaller systems, running a test with 200 threads can take a long
->>>>>>>> time on machines with smaller number of CPUs.
->>>>>>>>
->>>>>>>> Detect the number of online cpus at test runtime, and multiply that
->>>>>>>> by 6 to have 6 rseq threads per cpu preempting each other.
->>>>>>>>
->>>>>>>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
->>>>>>>> Cc: Shuah Khan <shuah at kernel.org>
->>>>>>>> Cc: Thomas Gleixner <tglx at linutronix.de>
->>>>>>>> Cc: Joel Fernandes <joelaf at google.com>
->>>>>>>> Cc: Peter Zijlstra <peterz at infradead.org>
->>>>>>>> Cc: Catalin Marinas <catalin.marinas at arm.com>
->>>>>>>> Cc: Dave Watson <davejwatson at fb.com>
->>>>>>>> Cc: Will Deacon <will.deacon at arm.com>
->>>>>>>> Cc: Andi Kleen <andi at firstfloor.org>
->>>>>>>> Cc: linux-kselftest at vger.kernel.org
->>>>>>>> Cc: "H . Peter Anvin" <hpa at zytor.com>
->>>>>>>> Cc: Chris Lameter <cl at linux.com>
->>>>>>>> Cc: Russell King <linux at arm.linux.org.uk>
->>>>>>>> Cc: Michael Kerrisk <mtk.manpages at gmail.com>
->>>>>>>> Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
->>>>>>>> Cc: Paul Turner <pjt at google.com>
->>>>>>>> Cc: Boqun Feng <boqun.feng at gmail.com>
->>>>>>>> Cc: Josh Triplett <josh at joshtriplett.org>
->>>>>>>> Cc: Steven Rostedt <rostedt at goodmis.org>
->>>>>>>> Cc: Ben Maurer <bmaurer at fb.com>
->>>>>>>> Cc: Andy Lutomirski <luto at amacapital.net>
->>>>>>>> Cc: Andrew Morton <akpm at linux-foundation.org>
->>>>>>>> Cc: Linus Torvalds <torvalds at linux-foundation.org>
->>>>>>>> ---
->>>>>>>>    tools/testing/selftests/rseq/run_param_test.sh | 7 +++++--
->>>>>>>>    1 file changed, 5 insertions(+), 2 deletions(-)
->>>>>>>>
->>>>>>>> diff --git a/tools/testing/selftests/rseq/run_param_test.sh
->>>>>>>> b/tools/testing/selftests/rseq/run_param_test.sh
->>>>>>>> index 3acd6d75ff9f..e426304fd4a0 100755
->>>>>>>> --- a/tools/testing/selftests/rseq/run_param_test.sh
->>>>>>>> +++ b/tools/testing/selftests/rseq/run_param_test.sh
->>>>>>>> @@ -1,6 +1,8 @@
->>>>>>>>    #!/bin/bash
->>>>>>>>    # SPDX-License-Identifier: GPL-2.0+ or MIT
->>>>>>>>    
->>>>>>>> +NR_CPUS=`grep '^processor' /proc/cpuinfo | wc -l`
->>>>>>>> +
->>>>>>>>    EXTRA_ARGS=${@}
->>>>>>>>    
->>>>>>>>    OLDIFS="$IFS"
->>>>>>>> @@ -28,15 +30,16 @@ IFS="$OLDIFS"
->>>>>>>>    
->>>>>>>>    REPS=1000
->>>>>>>>    SLOW_REPS=100
->>>>>>>> +NR_THREADS=$((6*${NR_CPUS}))
->>>>>>>>    
->>>>>>>>    function do_tests()
->>>>>>>>    {
->>>>>>>>    	local i=0
->>>>>>>>    	while [ "$i" -lt "${#TEST_LIST[@]}" ]; do
->>>>>>>>    		echo "Running test ${TEST_NAME[$i]}"
->>>>>>>> -		./param_test ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
->>>>>>>> +		./param_test ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS}
->>>>>>>> || exit 1
->>>>>>>>    		echo "Running compare-twice test ${TEST_NAME[$i]}"
->>>>>>>> -		./param_test_compare_twice ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} ||
->>>>>>>> exit 1
->>>>>>>> +		./param_test_compare_twice ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@}
->>>>>>>> ${EXTRA_ARGS} || exit 1
->>>>>>>>    		let "i++"
->>>>>>>>    	done
->>>>>>>>    }
->>>>>>>
->>>>>>> BTW., when trying to build the rseq self-tests I get this build failure:
->>>>>>>
->>>>>>>    dagon:~/tip/tools/testing/selftests/rseq> make
->>>>>>>    gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ -shared
->>>>>>>    -fPIC rseq.c -lpthread -o
->>>>>>>    /home/mingo/tip/tools/testing/selftests/rseq/librseq.so
->>>>>>>    gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ basic_test.c
->>>>>>>    -lpthread -lrseq -o /home/mingo/tip/tools/testing/selftests/rseq/basic_test
->>>>>>>    gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./
->>>>>>>    basic_percpu_ops_test.c -lpthread -lrseq -o
->>>>>>>    /home/mingo/tip/tools/testing/selftests/rseq/basic_percpu_ops_test
->>>>>>>    /usr/bin/ld: /tmp/ccuHTWnZ.o: in function `rseq_cmpeqv_storev':
->>>>>>>    /home/mingo/tip/tools/testing/selftests/rseq/./rseq-x86.h:84: undefined
->>>>>>>    reference to `.L8'
->>>>>>>    /usr/bin/ld: /home/mingo/tip/tools/testing/selftests/rseq/./rseq-x86.h:84:
->>>>>>>    undefined reference to `.L49'
->>>>>>>    /usr/bin/ld: /tmp/ccuHTWnZ.o: in function `rseq_cmpnev_storeoffp_load':
->>>>>>>    /home/mingo/tip/tools/testing/selftests/rseq/./rseq-x86.h:141: undefined
->>>>>>>    reference to `.L57'
->>>>>>>    /usr/bin/ld: /tmp/ccuHTWnZ.o:(__rseq_failure+0x8): undefined reference to `.L8'
->>>>>>>    /usr/bin/ld: /tmp/ccuHTWnZ.o:(__rseq_failure+0x14): undefined reference to
->>>>>>>    `.L49'
->>>>>>>    /usr/bin/ld: /tmp/ccuHTWnZ.o:(__rseq_failure+0x20): undefined reference to
->>>>>>>    `.L55'
->>>>>>>    collect2: error: ld returned 1 exit status
->>>>>>>    make: *** [Makefile:22:
->>>>>>>    /home/mingo/tip/tools/testing/selftests/rseq/basic_percpu_ops_test] Error 1
->>>>>>>
->>>>>>> Is this a known problem, or do I miss something from my build environment
->>>>>>> perhaps? Vanilla 64-bit Ubuntu 18.10 (Cosmic).
->>>>>>
->>>>>> It works fine with gcc-7 (gcc version 7.3.0 (Ubuntu 7.3.0-16ubuntu3))
->>>>>> but indeed I get the same failure with gcc-8 (gcc version 8.0.1 20180414
->>>>>> (experimental) [trunk revision 259383] (Ubuntu 8-20180414-1ubuntu2)).
->>>>>>
->>>>>> Thanks for reporting! I will investigate.
->>>>>
->>>>> It looks like gcc-8 optimize away the target of asm goto labels when
->>>>> there are more than one of them on x86-64. I'll try to come up with
->>>>> a simpler reproducer.
->>>>
->>>> It appears to be related to gcc-8 mishandling combination of
->>>> asm goto and thread-local storage input operands on x86-64.
->>>> Here is a simple reproducer:
->>>>
->>>> __thread int var;
->>>>    
->>>> static int fct(void)
->>>> {
->>>>          asm goto (      "jmp %l[testlabel]\n\t"
->>>>                          : : [var] "m" (var) : : testlabel);
->>>>          return 0;
->>>> testlabel:
->>>
->>> FWIW, if I add an empty
->>>
->>>      asm volatile ("");
->>>
->>> here after the label, gcc-8 -O2 builds "something" which is
->>> a bogus assembler (an endless loop) :
->>>
->>> main:
->>> .LFB24:
->>>           .cfi_startproc
->>> .L2:
->>>           subq    $8, %rsp
->>>           .cfi_def_cfa_offset 16
->>> #APP
->>> # 6 "test-asm-goto.c" 1
->>>           jmp .L2
->>>
->>> # 0 "" 2
->>> #NO_APP
->>>           movl    %fs:var at tpoff, %edx
->>>           leaq    .LC0(%rip), %rsi
->>>           movl    $1, %edi
->>>           xorl    %eax, %eax
->>>           call    __printf_chk at PLT
->>>           xorl    %eax, %eax
->>>           addq    $8, %rsp
->>>           .cfi_def_cfa_offset 8
->>>           ret
->>>           .cfi_endproc
->>>
->>> Thoughts ?
->>>
->>
->> Didn't see problems when I tested it before applying it to
->> linux-kselftest next.
->>
->> I have gcc version 7.3.0 (Ubuntu 7.3.0-27ubuntu1~18.04)
-> 
-> It really appears to be an optimization bug in gcc-8. Considering that
-> bogus compilers are released in the wild, we can hardly justify using
-> the compiler feature that triggers the bogus behavior, even if it gets
-> fixed in the future.
-> 
-> I've prepared a patch that changes the way the __rseq_abi fields are
-> passed to the inline asm. I pass the address of the __rseq_abi TLS
-> as a register input operand rather than each individual field as "m"
-> operand.
-> 
-> I will submit it in a separate thread.
-> 
-> By the way, it affects both x86-32 (building with gcc-8 -m32) and x86-64.
-> 
+> The latter case probably being preferred if this API is supposed to be
+> useable for thread management in userspace.
 
-Should I drop this patch that is currently in linux-kseltest next? Just
-confirming if your new patch is supposed to be applied on top of this
-one or not?
+At the moment, we are not planning to use this for sub-thread management. I
+am reworking this patch to only work on clone(2) pidfds which makes the above
+discussion about /proc a bit unnecessary I think. Per the latest CLONE_PIDFD
+patches, CLONE_THREAD with pidfd is not supported.
 
-thanks,
--- Shuah
+Also we wanted to make the polling of pidfd quite close to the wait(2) family
+semantics which, as I understand correctly, is not something that works for
+sub-threads. In the future, we could bail in poll(2) or return an error, if
+clone(2) starts supporting thread pidfds, but at the moment I will like to
+keep the WARN_ON just in case. Please let me know if I missed something.
+
+thanks!
+
+ - Joel
