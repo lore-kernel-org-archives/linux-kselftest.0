@@ -1,27 +1,51 @@
-From: corbet@lwn.net (Jonathan Corbet)
-Date: Fri, 19 Apr 2019 12:44:37 -0600
-Subject: [PATCH v2] doc: kselftest: Fix KBUILD_OUTPUT usage instructions
-In-Reply-To: <20190417233403.29854-1-skhan@linuxfoundation.org>
-References: <20190417233403.29854-1-skhan@linuxfoundation.org>
-Message-ID: <20190419124437.628ec04c@lwn.net>
+From: oleg@redhat.com (Oleg Nesterov)
+Date: Fri, 19 Apr 2019 17:43:54 +0200
+Subject: [PATCH RFC 1/2] Add polling support to pidfd
+In-Reply-To: <CAG48ez2Q0t2-rZz8wmGeih=NigYL-CT3+E6NgiPT0AkOQAUPMQ@mail.gmail.com>
+References: <20190411175043.31207-1-joel@joelfernandes.org>
+ <20190416120430.GA15437@redhat.com>
+ <20190416192051.GA184889@google.com>
+ <20190417130940.GC32622@redhat.com>
+ <CAG48ez2Q0t2-rZz8wmGeih=NigYL-CT3+E6NgiPT0AkOQAUPMQ@mail.gmail.com>
+Message-ID: <20190419154354.GB12228@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190419184437.1VizKe09RLUDaN6kv3_ZwHzQEAoFNq9tv8sSgeEoZH8@z>
+Message-ID: <20190419154354.Sw3DuJvjFR2VMzHKujNXS5rvARq-_6Cg3e9BVt4_4Tc@z>
 
-On Wed, 17 Apr 2019 17:34:03 -0600
-Shuah Khan <skhan@linuxfoundation.org> wrote:
+On 04/18, Jann Horn wrote:
+>
+> On Wed, Apr 17, 2019@3:09 PM Oleg Nesterov <oleg@redhat.com> wrote:
+> > On 04/16, Joel Fernandes wrote:
+> > > On Tue, Apr 16, 2019@02:04:31PM +0200, Oleg Nesterov wrote:
+> > > >
+> > > > Could you explain when it should return POLLIN? When the whole process exits?
+> > >
+> > > It returns POLLIN when the task is dead or doesn't exist anymore, or when it
+> > > is in a zombie state and there's no other thread in the thread group.
+> >
+> > IOW, when the whole thread group exits, so it can't be used to monitor sub-threads.
+> >
+> > just in case... speaking of this patch it doesn't modify proc_tid_base_operations,
+> > so you can't poll("/proc/sub-thread-tid") anyway, but iiuc you are going to use
+> > the anonymous file returned by CLONE_PIDFD ?
+>
+> I don't think procfs works that way. /proc/sub-thread-tid has
+> proc_tgid_base_operations despite not being a thread group leader.
 
-> Fix KBUILD_OUTPUT usage instructions. The current documentation is
-> incorrect. Update and fix outdated information about summary option.
-> Add a reference to kselftest wiki for additional information on the
-> framework and tips on writing new tests.
-> 
-> Signed-off-by: Shuah Khan <skhan at linuxfoundation.org>
-> ---
-> Changes since v1:
-> -- Fixed the confusing language about output directory
-> -- Updated outdated instructions on summary option.
-> -- Regenerated patch with current email address.
+Yes, sorry, I meant /proc/pid/task/sub-thread-tid.
 
-I've applied this version, thanks.
+But poll("/proc/sub-thread-tid") won't work too, we can't rely on do_notify_parent()
+if the task is not a group leader.
 
-jon
+> (Yes, that's kinda weird.) AFAICS the WARN_ON_ONCE() in this code can
+> be hit trivially, and then the code will misbehave.
+
+Heh, I didn't even notice that WARN_ON_ONCE(task && !thread_group_leader(task)) ;)
+
+> @Joel: I think you'll have to either rewrite this to explicitly bail
+> out if you're dealing with a thread group leader, or make the code
+> work for threads, too.
+
+The last version of CLONE_PIDFD doesn't allow CLONE_THREAD, so we can forget
+about this problem for now.
+
+Oleg.
