@@ -1,62 +1,55 @@
 From: joel@joelfernandes.org (Joel Fernandes)
-Date: Fri, 19 Apr 2019 15:02:47 -0400
+Date: Fri, 19 Apr 2019 15:05:38 -0400
 Subject: [PATCH RFC 1/2] Add polling support to pidfd
-In-Reply-To: <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
+In-Reply-To: <CAHk-=wi79KTxCYZgMZNapULR-ratPiZVt+fgh=DhgtYR_gYPAA@mail.gmail.com>
 References: <20190411175043.31207-1-joel@joelfernandes.org>
  <20190416120430.GA15437@redhat.com>
  <20190416192051.GA184889@google.com>
- <20190417130940.GC32622@redhat.com>
- <CAG48ez2Q0t2-rZz8wmGeih=NigYL-CT3+E6NgiPT0AkOQAUPMQ@mail.gmail.com>
- <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
-Message-ID: <20190419190247.GB251571@google.com>
+ <CAGLj2rELsr0PUgu41uZX_TKCpT-Q00X+cvgBhJ-U7RU3EBo5tA@mail.gmail.com>
+ <CAKOZueu=5aNf+oDFBM56TbqZwKpB6q1y81V1cbL+k4DTyV53+A@mail.gmail.com>
+ <CAHk-=wi79KTxCYZgMZNapULR-ratPiZVt+fgh=DhgtYR_gYPAA@mail.gmail.com>
+Message-ID: <20190419190538.GC251571@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190419190247.RySsR6ccxqcJCK8AUcWzayAiJdi2z7qtGkA66D62SMc@z>
+Message-ID: <20190419190538.p-Uth0cDmqvvaz0rDkufqvO27Q5qf14SUXR3TWOBT3E@z>
 
-On Thu, Apr 18, 2019@07:26:44PM +0200, Christian Brauner wrote:
-> On April 18, 2019 7:23:38 PM GMT+02:00, Jann Horn <jannh@google.com> wrote:
-> >On Wed, Apr 17, 2019@3:09 PM Oleg Nesterov <oleg@redhat.com> wrote:
-> >> On 04/16, Joel Fernandes wrote:
-> >> > On Tue, Apr 16, 2019@02:04:31PM +0200, Oleg Nesterov wrote:
-> >> > >
-> >> > > Could you explain when it should return POLLIN? When the whole
-> >process exits?
-> >> >
-> >> > It returns POLLIN when the task is dead or doesn't exist anymore,
-> >or when it
-> >> > is in a zombie state and there's no other thread in the thread
-> >group.
-> >>
-> >> IOW, when the whole thread group exits, so it can't be used to
-> >monitor sub-threads.
-> >>
-> >> just in case... speaking of this patch it doesn't modify
-> >proc_tid_base_operations,
-> >> so you can't poll("/proc/sub-thread-tid") anyway, but iiuc you are
-> >going to use
-> >> the anonymous file returned by CLONE_PIDFD ?
+On Thu, Apr 18, 2019@12:14:58PM -0700, Linus Torvalds wrote:
+> On Thu, Apr 18, 2019@11:58 AM Daniel Colascione <dancol@google.com> wrote:
 > >
-> >I don't think procfs works that way. /proc/sub-thread-tid has
-> >proc_tgid_base_operations despite not being a thread group leader.
-> >(Yes, that's kinda weird.) AFAICS the WARN_ON_ONCE() in this code can
-> >be hit trivially, and then the code will misbehave.
+> > On Thu, Apr 18, 2019@11:44 AM Jonathan Kowalski <bl0pbl33p@gmail.com> wrote:
+> > >
+> > > Would using something other than POLLIN be an option (maybe POLLPRI)?
+> > > The convention is to use it to indicate readability on the descriptor,
+> > > and also possibly POLLHUP instead of POLLERR (the latter is less of a
+> > > problem, but FreeBSD also does the same, so it'd help with some
+> > > consistency for libraries wanting to use this, which aren't interested
+> > > in other sub states).
 > >
-> >@Joel: I think you'll have to either rewrite this to explicitly bail
-> >out if you're dealing with a thread group leader, or make the code
-> >work for threads, too.
+> > Existing event loop libraries generally support checking only for
+> > readability and writability. Not setting POLLIN would make these FDs
+> > more difficult to use with existing event loop libraries. What
+> > advantage would compensate for this difficulty?
 > 
-> The latter case probably being preferred if this API is supposed to be
-> useable for thread management in userspace.
+> Right.
+> 
+> Usually you'd set POLLIN in _addition_ to any other more specialized poll flag.
+> 
+> For example, when a socket has shut down the read side, we do
+> 
+>         if (sk->sk_shutdown & RCV_SHUTDOWN)
+>                 mask |= EPOLLRDHUP | EPOLLIN | EPOLLRDNORM;
+> 
+> because while it's true that EPOLLRDHUP is the most _specific_ poll
+> bit, it's _also_ true that a read shutdown means that the read() will
+> return immediately.
+> 
+> So generally a HUP condition should mean that POLLIN and POLLOUT also
+> get set. Not because there's any actual _data_ to be read, but simply
+> because the read will not block.
 
-At the moment, we are not planning to use this for sub-thread management. I
-am reworking this patch to only work on clone(2) pidfds which makes the above
-discussion about /proc a bit unnecessary I think. Per the latest CLONE_PIDFD
-patches, CLONE_THREAD with pidfd is not supported.
-
-Also we wanted to make the polling of pidfd quite close to the wait(2) family
-semantics which, as I understand correctly, is not something that works for
-sub-threads. In the future, we could bail in poll(2) or return an error, if
-clone(2) starts supporting thread pidfds, but at the moment I will like to
-keep the WARN_ON just in case. Please let me know if I missed something.
+Sounds great and I agree with Linus and Daniel. So I am guessing you are Ok
+with the current set of flags proposed this patch, so I will keep them intact
+in future patch postings. But please let me know if you want me to change
+something about the flags.
 
 thanks!
 
