@@ -1,114 +1,170 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Fri, 19 Apr 2019 22:57:11 +0200
-Subject: [PATCH RFC 1/2] Add polling support to pidfd
-In-Reply-To: <CAKOZueu3PzD_QgROXFRs8FvD=HTKJLsHDK9GrUdbFoMzx_7HEA@mail.gmail.com>
-References: <20190411175043.31207-1-joel@joelfernandes.org>
- <20190416120430.GA15437@redhat.com> <20190416192051.GA184889@google.com>
- <20190417130940.GC32622@redhat.com>
- <CAG48ez2Q0t2-rZz8wmGeih=NigYL-CT3+E6NgiPT0AkOQAUPMQ@mail.gmail.com>
- <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
- <20190419190247.GB251571@google.com>
- <20190419191858.iwcvqm6fihbkaata@brauner.io>
- <20190419194902.GE251571@google.com>
- <CAKOZueu3PzD_QgROXFRs8FvD=HTKJLsHDK9GrUdbFoMzx_7HEA@mail.gmail.com>
-Message-ID:
- <CAHrFyr4REuKFuARAXnhBC67TGzyDGmMONc7XjfUGvf+Qfm7EuQ@mail.gmail.com>
+From: skhan@linuxfoundation.org (Shuah Khan)
+Date: Fri, 19 Apr 2019 14:57:23 -0600
+Subject: [PATCH v2] selftests: fix headers_install circular dependency
+Message-ID: <20190419205723.3414-1-skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190419205711.RhNoj2beFIOhbXedsjSVjODcbgdyUjzXGaxQk6Vude8@z>
+Message-ID: <20190419205723.18p12ExRkcFhMaJEOCc4iGgVqWOirmcVdTz6VXEiIfA@z>
 
-On Fri, Apr 19, 2019@10:34 PM Daniel Colascione <dancol@google.com> wrote:
->
-> On Fri, Apr 19, 2019@12:49 PM Joel Fernandes <joel@joelfernandes.org> wrote:
-> >
-> > On Fri, Apr 19, 2019@09:18:59PM +0200, Christian Brauner wrote:
-> > > On Fri, Apr 19, 2019@03:02:47PM -0400, Joel Fernandes wrote:
-> > > > On Thu, Apr 18, 2019@07:26:44PM +0200, Christian Brauner wrote:
-> > > > > On April 18, 2019 7:23:38 PM GMT+02:00, Jann Horn <jannh@google.com> wrote:
-> > > > > >On Wed, Apr 17, 2019@3:09 PM Oleg Nesterov <oleg@redhat.com> wrote:
-> > > > > >> On 04/16, Joel Fernandes wrote:
-> > > > > >> > On Tue, Apr 16, 2019@02:04:31PM +0200, Oleg Nesterov wrote:
-> > > > > >> > >
-> > > > > >> > > Could you explain when it should return POLLIN? When the whole
-> > > > > >process exits?
-> > > > > >> >
-> > > > > >> > It returns POLLIN when the task is dead or doesn't exist anymore,
-> > > > > >or when it
-> > > > > >> > is in a zombie state and there's no other thread in the thread
-> > > > > >group.
-> > > > > >>
-> > > > > >> IOW, when the whole thread group exits, so it can't be used to
-> > > > > >monitor sub-threads.
-> > > > > >>
-> > > > > >> just in case... speaking of this patch it doesn't modify
-> > > > > >proc_tid_base_operations,
-> > > > > >> so you can't poll("/proc/sub-thread-tid") anyway, but iiuc you are
-> > > > > >going to use
-> > > > > >> the anonymous file returned by CLONE_PIDFD ?
-> > > > > >
-> > > > > >I don't think procfs works that way. /proc/sub-thread-tid has
-> > > > > >proc_tgid_base_operations despite not being a thread group leader.
-> > > > > >(Yes, that's kinda weird.) AFAICS the WARN_ON_ONCE() in this code can
-> > > > > >be hit trivially, and then the code will misbehave.
-> > > > > >
-> > > > > >@Joel: I think you'll have to either rewrite this to explicitly bail
-> > > > > >out if you're dealing with a thread group leader, or make the code
-> > > > > >work for threads, too.
-> > > > >
-> > > > > The latter case probably being preferred if this API is supposed to be
-> > > > > useable for thread management in userspace.
-> > > >
-> > > > At the moment, we are not planning to use this for sub-thread management. I
-> > > > am reworking this patch to only work on clone(2) pidfds which makes the above
-> > >
-> > > Indeed and agreed.
-> > >
-> > > > discussion about /proc a bit unnecessary I think. Per the latest CLONE_PIDFD
-> > > > patches, CLONE_THREAD with pidfd is not supported.
-> > >
-> > > Yes. We have no one asking for it right now and we can easily add this
-> > > later.
-> > >
-> > > Admittedly I haven't gotten around to reviewing the patches here yet
-> > > completely. But one thing about using POLLIN. FreeBSD is using POLLHUP
-> > > on process exit which I think is nice as well. How about returning
-> > > POLLIN | POLLHUP on process exit?
-> > > We already do things like this. For example, when you proxy between
-> > > ttys. If the process that you're reading data from has exited and closed
-> > > it's end you still can't usually simply exit because it might have still
-> > > buffered data that you want to read.  The way one can deal with this
-> > > from  userspace is that you can observe a (POLLHUP | POLLIN) event and
-> > > you keep on reading until you only observe a POLLHUP without a POLLIN
-> > > event at which point you know you have read
-> > > all data.
-> > > I like the semantics for pidfds as well as it would indicate:
-> > > - POLLHUP -> process has exited
-> > > - POLLIN  -> information can be read
-> >
-> > Actually I think a bit different about this, in my opinion the pidfd should
-> > always be readable (we would store the exit status somewhere in the future
-> > which would be readable, even after task_struct is dead). So I was thinking
-> > we always return EPOLLIN.  If process has not exited, then it blocks.
->
-> ITYM that a pidfd polls as readable *once a task exits* and stays
-> readable forever. Before a task exit, a poll on a pidfd should *not*
-> yield POLLIN and reading that pidfd should *not* complete immediately.
-> There's no way that, having observed POLLIN on a pidfd, you should
-> ever then *not* see POLLIN on that pidfd in the future --- it's a
-> one-way transition from not-ready-to-get-exit-status to
-> ready-to-get-exit-status.
+"make kselftest" fails with "Circular Makefile.o <- prepare dependency
+dropped." error, when lib.mk invokes "make headers_install".
 
-What do you consider interesting state transitions? A listener on a pidfd
-in epoll_wait() might be interested if the process execs for example.
-That's a very valid use-case for e.g. systemd.
-We can't use EPOLLIN for that too otherwise you'd need to to waitid(_WNOHANG)
-to check whether an exit status can be read which is not nice and then you
-multiplex different meanings on the same bit.
-I would prefer if the exit status can only be read from the parent which is
-clean and the least complicated semantics, i.e. Linus waitid() idea.
-EPOLLIN on a pidfd could very well mean that data can be read via
-a read() on the pidfd *other* than the exit status. The read could e.g.
-give you a lean struct that indicates the type of state transition: NOTIFY_EXIT,
-NOTIFY_EXEC, etc.. This way we are not bound to a specific poll event indicating
-a specific state.
-Though there's a case to be made that EPOLLHUP could indicate process exit
-and EPOLLIN a state change + read().
+Make level 0: Main make calls selftests run_tests target
+...
+Make level n: selftests lib.mk invokes main make's headers_install
+
+The secondary level make inherits builtin-rules which will use the rule
+to generate Makefile.o  and runs into "Circular Makefile.o <- prepare
+dependency dropped." error, and kselftest compile fails.
+
+Invoke headers_install target with --no-builtin-rules to avoid circular
+error.
+
+In addition, lib.mk installs headers in the default HDR_PATH, even when
+build relocation is requested with O= or export KBUILD_OUTPUT. Fix the
+problem by passing in INSTALL_HDR_PATH. The headers are installed under
+the specified output "dir/usr".
+
+Signed-off-by: Shuah Khan <skhan at linuxfoundation.org>
+---
+Changes since v1:
+lib.mk needs DEFAULT_GOAL to run all
+
+ tools/testing/selftests/Makefile | 52 +++++++++++++++++++++++++++-----
+ tools/testing/selftests/lib.mk   | 38 +++++++++++++++++++++--
+ 2 files changed, 80 insertions(+), 10 deletions(-)
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 971fc8428117..743cd374d07d 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -75,12 +75,15 @@ ifneq ($(KBUILD_SRC),)
+ override LDFLAGS =
+ endif
+ 
+-BUILD := $(O)
+-ifndef BUILD
+-  BUILD := $(KBUILD_OUTPUT)
+-endif
+-ifndef BUILD
+-  BUILD := $(shell pwd)
++ifneq ($(O),)
++	BUILD := $(O)
++else
++	ifneq ($(KBUILD_OUTPUT),)
++		BUILD := $(KBUILD_OUTPUT)
++	else
++		BUILD := $(shell pwd)
++		DEFAULT_INSTALL_HDR_PATH := 1
++	endif
+ endif
+ 
+ # KSFT_TAP_LEVEL is used from KSFT framework to prevent nested TAP header
+@@ -89,8 +92,41 @@ endif
+ # with system() call. Export it here to cover override RUN_TESTS defines.
+ export KSFT_TAP_LEVEL=`echo 1`
+ 
++# Prepare for headers install
++top_srcdir ?= ../../..
++include $(top_srcdir)/scripts/subarch.include
++ARCH           ?= $(SUBARCH)
++export KSFT_KHDR_INSTALL_DONE := 1
+ export BUILD
+-all:
++
++# set default goal to all, so make without a target runs all, even when
++# all isn't the first target in the file.
++.DEFAULT_GOAL := all
++
++# Install headers here once for all tests. KSFT_KHDR_INSTALL_DONE
++# is used to avoid running headers_install from lib.mk.
++# Invoke headers install with --no-builtin-rules to avoid circular
++# dependency in "make kselftest" case. In this case, second level
++# make inherits builtin-rules which will use the rule generate
++# Makefile.o and runs into
++# "Circular Makefile.o <- prepare dependency dropped."
++# and headers_install fails and test compile fails.
++#
++# O= KBUILD_OUTPUT cases don't run into this error, since main Makefile
++# invokes them as sub-makes and --no-builtin-rules is not necessary,
++# but doesn't cause any failures. Keep it simple and use the same
++# flags in both cases.
++# Local build cases: "make kselftest", "make -C" - headers are installed
++# in the default INSTALL_HDR_PATH usr/include.
++khdr:
++ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
++	make --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
++else
++	make --no-builtin-rules INSTALL_HDR_PATH=$$BUILD/usr \
++		ARCH=$(ARCH) -C $(top_srcdir) headers_install
++endif
++
++all: khdr
+ 	@for TARGET in $(TARGETS); do		\
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		mkdir $$BUILD_TARGET  -p;	\
+@@ -173,4 +209,4 @@ clean:
+ 		make OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
+ 	done;
+ 
+-.PHONY: all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean
++.PHONY: khdr all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 8b0f16409ed7..5979fdc4f36c 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -3,7 +3,16 @@
+ CC := $(CROSS_COMPILE)gcc
+ 
+ ifeq (0,$(MAKELEVEL))
+-OUTPUT := $(shell pwd)
++    ifneq ($(O),)
++	OUTPUT := $(O)
++    else
++	ifneq ($(KBUILD_OUTPUT),)
++		OUTPUT := $(KBUILD_OUTPUT)
++	else
++		OUTPUT := $(shell pwd)
++		DEFAULT_INSTALL_HDR_PATH := 1
++	endif
++    endif
+ endif
+ 
+ # The following are built by lib.mk common compile rules.
+@@ -21,9 +30,34 @@ top_srcdir ?= ../../../..
+ include $(top_srcdir)/scripts/subarch.include
+ ARCH		?= $(SUBARCH)
+ 
++# set default goal to all, so make without a target runs all, even when
++# all isn't the first target in the file.
++.DEFAULT_GOAL := all
++
++# Invoke headers install with --no-builtin-rules to avoid circular
++# dependency in "make kselftest" case. In this case, second level
++# make inherits builtin-rules which will use the rule generate
++# Makefile.o and runs into
++# "Circular Makefile.o <- prepare dependency dropped."
++# and headers_install fails and test compile fails.
++# O= KBUILD_OUTPUT cases don't run into this error, since main Makefile
++# invokes them as sub-makes and --no-builtin-rules is not necessary,
++# but doesn't cause any failures. Keep it simple and use the same
++# flags in both cases.
++# Note that the support to install headers from lib.mk is necessary
++# when test Makefile is run directly with "make -C".
++# When local build is done, headers are installed in the default
++# INSTALL_HDR_PATH usr/include.
+ .PHONY: khdr
+ khdr:
+-	make ARCH=$(ARCH) -C $(top_srcdir) headers_install
++ifndef KSFT_KHDR_INSTALL_DONE
++ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
++	make --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
++else
++	make --no-builtin-rules INSTALL_HDR_PATH=$$OUTPUT/usr \
++		ARCH=$(ARCH) -C $(top_srcdir) headers_install
++endif
++endif
+ 
+ all: khdr $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
+ else
+-- 
+2.17.1
