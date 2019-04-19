@@ -1,101 +1,106 @@
-From: mingo at kernel.org (Ingo Molnar)
-Date: Fri, 19 Apr 2019 12:38:47 +0200
-Subject: [PATCH for 5.1 3/3] rseq/selftests: Adapt number of threads to
- the number of detected cpus
-In-Reply-To: <20190305194755.2602-4-mathieu.desnoyers@efficios.com>
-References: <20190305194755.2602-1-mathieu.desnoyers@efficios.com>
- <20190305194755.2602-4-mathieu.desnoyers@efficios.com>
-Message-ID: <20190419103847.GA111210@gmail.com>
+From: dancol at google.com (Daniel Colascione)
+Date: Fri, 19 Apr 2019 13:34:22 -0700
+Subject: [PATCH RFC 1/2] Add polling support to pidfd
+In-Reply-To: <20190419194902.GE251571@google.com>
+References: <20190411175043.31207-1-joel@joelfernandes.org>
+ <20190416120430.GA15437@redhat.com> <20190416192051.GA184889@google.com>
+ <20190417130940.GC32622@redhat.com>
+ <CAG48ez2Q0t2-rZz8wmGeih=NigYL-CT3+E6NgiPT0AkOQAUPMQ@mail.gmail.com>
+ <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
+ <20190419190247.GB251571@google.com>
+ <20190419191858.iwcvqm6fihbkaata@brauner.io>
+ <20190419194902.GE251571@google.com>
+Message-ID: <CAKOZueu3PzD_QgROXFRs8FvD=HTKJLsHDK9GrUdbFoMzx_7HEA@mail.gmail.com>
 
+On Fri, Apr 19, 2019 at 12:49 PM Joel Fernandes <joel at joelfernandes.org> wrote:
+>
+> On Fri, Apr 19, 2019 at 09:18:59PM +0200, Christian Brauner wrote:
+> > On Fri, Apr 19, 2019 at 03:02:47PM -0400, Joel Fernandes wrote:
+> > > On Thu, Apr 18, 2019 at 07:26:44PM +0200, Christian Brauner wrote:
+> > > > On April 18, 2019 7:23:38 PM GMT+02:00, Jann Horn <jannh at google.com> wrote:
+> > > > >On Wed, Apr 17, 2019 at 3:09 PM Oleg Nesterov <oleg at redhat.com> wrote:
+> > > > >> On 04/16, Joel Fernandes wrote:
+> > > > >> > On Tue, Apr 16, 2019 at 02:04:31PM +0200, Oleg Nesterov wrote:
+> > > > >> > >
+> > > > >> > > Could you explain when it should return POLLIN? When the whole
+> > > > >process exits?
+> > > > >> >
+> > > > >> > It returns POLLIN when the task is dead or doesn't exist anymore,
+> > > > >or when it
+> > > > >> > is in a zombie state and there's no other thread in the thread
+> > > > >group.
+> > > > >>
+> > > > >> IOW, when the whole thread group exits, so it can't be used to
+> > > > >monitor sub-threads.
+> > > > >>
+> > > > >> just in case... speaking of this patch it doesn't modify
+> > > > >proc_tid_base_operations,
+> > > > >> so you can't poll("/proc/sub-thread-tid") anyway, but iiuc you are
+> > > > >going to use
+> > > > >> the anonymous file returned by CLONE_PIDFD ?
+> > > > >
+> > > > >I don't think procfs works that way. /proc/sub-thread-tid has
+> > > > >proc_tgid_base_operations despite not being a thread group leader.
+> > > > >(Yes, that's kinda weird.) AFAICS the WARN_ON_ONCE() in this code can
+> > > > >be hit trivially, and then the code will misbehave.
+> > > > >
+> > > > >@Joel: I think you'll have to either rewrite this to explicitly bail
+> > > > >out if you're dealing with a thread group leader, or make the code
+> > > > >work for threads, too.
+> > > >
+> > > > The latter case probably being preferred if this API is supposed to be
+> > > > useable for thread management in userspace.
+> > >
+> > > At the moment, we are not planning to use this for sub-thread management. I
+> > > am reworking this patch to only work on clone(2) pidfds which makes the above
+> >
+> > Indeed and agreed.
+> >
+> > > discussion about /proc a bit unnecessary I think. Per the latest CLONE_PIDFD
+> > > patches, CLONE_THREAD with pidfd is not supported.
+> >
+> > Yes. We have no one asking for it right now and we can easily add this
+> > later.
+> >
+> > Admittedly I haven't gotten around to reviewing the patches here yet
+> > completely. But one thing about using POLLIN. FreeBSD is using POLLHUP
+> > on process exit which I think is nice as well. How about returning
+> > POLLIN | POLLHUP on process exit?
+> > We already do things like this. For example, when you proxy between
+> > ttys. If the process that you're reading data from has exited and closed
+> > it's end you still can't usually simply exit because it might have still
+> > buffered data that you want to read.  The way one can deal with this
+> > from  userspace is that you can observe a (POLLHUP | POLLIN) event and
+> > you keep on reading until you only observe a POLLHUP without a POLLIN
+> > event at which point you know you have read
+> > all data.
+> > I like the semantics for pidfds as well as it would indicate:
+> > - POLLHUP -> process has exited
+> > - POLLIN  -> information can be read
+>
+> Actually I think a bit different about this, in my opinion the pidfd should
+> always be readable (we would store the exit status somewhere in the future
+> which would be readable, even after task_struct is dead). So I was thinking
+> we always return EPOLLIN.  If process has not exited, then it blocks.
 
-* Mathieu Desnoyers <mathieu.desnoyers at efficios.com> wrote:
+ITYM that a pidfd polls as readable *once a task exits* and stays
+readable forever. Before a task exit, a poll on a pidfd should *not*
+yield POLLIN and reading that pidfd should *not* complete immediately.
+There's no way that, having observed POLLIN on a pidfd, you should
+ever then *not* see POLLIN on that pidfd in the future --- it's a
+one-way transition from not-ready-to-get-exit-status to
+ready-to-get-exit-status.
 
-> On smaller systems, running a test with 200 threads can take a long
-> time on machines with smaller number of CPUs.
-> 
-> Detect the number of online cpus at test runtime, and multiply that
-> by 6 to have 6 rseq threads per cpu preempting each other.
-> 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
-> Cc: Shuah Khan <shuah at kernel.org>
-> Cc: Thomas Gleixner <tglx at linutronix.de>
-> Cc: Joel Fernandes <joelaf at google.com>
-> Cc: Peter Zijlstra <peterz at infradead.org>
-> Cc: Catalin Marinas <catalin.marinas at arm.com>
-> Cc: Dave Watson <davejwatson at fb.com>
-> Cc: Will Deacon <will.deacon at arm.com>
-> Cc: Andi Kleen <andi at firstfloor.org>
-> Cc: linux-kselftest at vger.kernel.org
-> Cc: "H . Peter Anvin" <hpa at zytor.com>
-> Cc: Chris Lameter <cl at linux.com>
-> Cc: Russell King <linux at arm.linux.org.uk>
-> Cc: Michael Kerrisk <mtk.manpages at gmail.com>
-> Cc: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
-> Cc: Paul Turner <pjt at google.com>
-> Cc: Boqun Feng <boqun.feng at gmail.com>
-> Cc: Josh Triplett <josh at joshtriplett.org>
-> Cc: Steven Rostedt <rostedt at goodmis.org>
-> Cc: Ben Maurer <bmaurer at fb.com>
-> Cc: Andy Lutomirski <luto at amacapital.net>
-> Cc: Andrew Morton <akpm at linux-foundation.org>
-> Cc: Linus Torvalds <torvalds at linux-foundation.org>
-> ---
->  tools/testing/selftests/rseq/run_param_test.sh | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/rseq/run_param_test.sh b/tools/testing/selftests/rseq/run_param_test.sh
-> index 3acd6d75ff9f..e426304fd4a0 100755
-> --- a/tools/testing/selftests/rseq/run_param_test.sh
-> +++ b/tools/testing/selftests/rseq/run_param_test.sh
-> @@ -1,6 +1,8 @@
->  #!/bin/bash
->  # SPDX-License-Identifier: GPL-2.0+ or MIT
->  
-> +NR_CPUS=`grep '^processor' /proc/cpuinfo | wc -l`
-> +
->  EXTRA_ARGS=${@}
->  
->  OLDIFS="$IFS"
-> @@ -28,15 +30,16 @@ IFS="$OLDIFS"
->  
->  REPS=1000
->  SLOW_REPS=100
-> +NR_THREADS=$((6*${NR_CPUS}))
->  
->  function do_tests()
->  {
->  	local i=0
->  	while [ "$i" -lt "${#TEST_LIST[@]}" ]; do
->  		echo "Running test ${TEST_NAME[$i]}"
-> -		./param_test ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
-> +		./param_test ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
->  		echo "Running compare-twice test ${TEST_NAME[$i]}"
-> -		./param_test_compare_twice ${TEST_LIST[$i]} -r ${REPS} ${@} ${EXTRA_ARGS} || exit 1
-> +		./param_test_compare_twice ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
->  		let "i++"
->  	done
->  }
+Besides, didn't Linux say that he wanted waitpid(2) to be the function
+for exit status on a pidfd, not read(2)? It doesn't really matter:
+POLLIN on a pidfd would just make "I, the kernel, say that waitpid on
+this FD won't block", whereas for something like socket, it would mean
+"I, the kernel, say read(2) on this FD won't block".
 
-BTW., when trying to build the rseq self-tests I get this build failure:
-
-  dagon:~/tip/tools/testing/selftests/rseq> make
-  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ -shared -fPIC rseq.c -lpthread -o /home/mingo/tip/tools/testing/selftests/rseq/librseq.so
-  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ basic_test.c -lpthread -lrseq -o /home/mingo/tip/tools/testing/selftests/rseq/basic_test
-  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ basic_percpu_ops_test.c -lpthread -lrseq -o /home/mingo/tip/tools/testing/selftests/rseq/basic_percpu_ops_test
-  /usr/bin/ld: /tmp/ccuHTWnZ.o: in function `rseq_cmpeqv_storev':
-  /home/mingo/tip/tools/testing/selftests/rseq/./rseq-x86.h:84: undefined reference to `.L8'
-  /usr/bin/ld: /home/mingo/tip/tools/testing/selftests/rseq/./rseq-x86.h:84: undefined reference to `.L49'
-  /usr/bin/ld: /tmp/ccuHTWnZ.o: in function `rseq_cmpnev_storeoffp_load':
-  /home/mingo/tip/tools/testing/selftests/rseq/./rseq-x86.h:141: undefined reference to `.L57'
-  /usr/bin/ld: /tmp/ccuHTWnZ.o:(__rseq_failure+0x8): undefined reference to `.L8'
-  /usr/bin/ld: /tmp/ccuHTWnZ.o:(__rseq_failure+0x14): undefined reference to `.L49'
-  /usr/bin/ld: /tmp/ccuHTWnZ.o:(__rseq_failure+0x20): undefined reference to `.L55'
-  collect2: error: ld returned 1 exit status
-  make: *** [Makefile:22: /home/mingo/tip/tools/testing/selftests/rseq/basic_percpu_ops_test] Error 1
-
-Is this a known problem, or do I miss something from my build environment 
-perhaps? Vanilla 64-bit Ubuntu 18.10 (Cosmic).
-
-Thanks,
-
-	Ingo
+I don't see the need for POLLHUP in pidfds at all. IMHO, we shouldn't
+include it. "Hangup" doesn't have an obvious meaning distinct from
+exit, and we might want the POLLHUP bit for something else in the
+future. What would a caller do with POLLHUP? If the answer is
+"something to do with ptrace", let's defer that to some future work,
+since ptrace has a ton of moving parts I don't want to consider right
+now.
