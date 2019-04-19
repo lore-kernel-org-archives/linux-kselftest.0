@@ -1,125 +1,63 @@
 From: po-hsu.lin at canonical.com (Po-Hsu Lin)
-Date: Fri, 19 Apr 2019 22:04:49 +0800
-Subject: [PATCHv3] selftests/efivarfs: clean up test files from test_create*()
-Message-ID: <20190419140449.31259-1-po-hsu.lin@canonical.com>
+Date: Fri, 19 Apr 2019 21:30:27 +0800
+Subject: [PATCHv2] selftests/efivarfs: clean up test files from
+ test_create*()
+In-Reply-To: <03bdc88d-07cd-08ca-7d2f-ba93069eb41b@kernel.org>
+References: <20190419131221.28297-1-po-hsu.lin@canonical.com>
+ <03bdc88d-07cd-08ca-7d2f-ba93069eb41b@kernel.org>
+Message-ID: <CAMy_GT83h6DtYYm6GMz=wXfpLpyqt3GqdEmw7Aj40kKq1NkQoA@mail.gmail.com>
 
-Test files created by test_create() and test_create_empty() tests will
-stay in the $efivarfs_mount directory until the system was rebooted.
+Hello,
 
-When the tester tries to run this efivarfs test again on the same
-system, the immutable characteristics in that directory will cause some
-"Operation not permitted" noises, and a false-positve test result as the
-file was created in previous run.
-    --------------------
-    running test_create
-    --------------------
-    ./efivarfs.sh: line 59: /sys/firmware/efi/efivars/test_create-210be57c-9849-4fc7-a635-e6382d1aec27: Operation not permitted
-      [PASS]
-    --------------------
-    running test_create_empty
-    --------------------
-    ./efivarfs.sh: line 78: /sys/firmware/efi/efivars/test_create_empty-210be57c-9849-4fc7-a635-e6382d1aec27: Operation not permitted
-     [PASS]
-    --------------------
+Commit f8a0590f fix some part of this issue.
+I will send out V3 base on this commit in linux-kselftest next branch.
 
-Create a file_cleanup() to remove those test files in the end of each
-test to solve this issue.
+Thank you.
 
-For the test_create_read, we can move the clean up task to the end of
-the test to ensure the system is clean.
 
-Also, use this function to replace the existing file removal code.
-
-Signed-off-by: Po-Hsu Lin <po-hsu.lin at canonical.com>
----
- tools/testing/selftests/efivarfs/efivarfs.sh | 32 +++++++++++-----------------
- 1 file changed, 13 insertions(+), 19 deletions(-)
-
-diff --git a/tools/testing/selftests/efivarfs/efivarfs.sh b/tools/testing/selftests/efivarfs/efivarfs.sh
-index d386610..a90f394 100755
---- a/tools/testing/selftests/efivarfs/efivarfs.sh
-+++ b/tools/testing/selftests/efivarfs/efivarfs.sh
-@@ -7,6 +7,12 @@ test_guid=210be57c-9849-4fc7-a635-e6382d1aec27
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
- 
-+file_cleanup()
-+{
-+	chattr -i $1
-+	rm -f $1
-+}
-+
- check_prereqs()
- {
- 	local msg="skip all tests:"
-@@ -58,8 +64,10 @@ test_create()
- 
- 	if [ $(stat -c %s $file) -ne 5 ]; then
- 		echo "$file has invalid size" >&2
-+		file_cleanup $file
- 		exit 1
- 	fi
-+	file_cleanup $file
- }
- 
- test_create_empty()
-@@ -72,16 +80,14 @@ test_create_empty()
- 		echo "$file can not be created without writing" >&2
- 		exit 1
- 	fi
-+	file_cleanup $file
- }
- 
- test_create_read()
- {
- 	local file=$efivarfs_mount/$FUNCNAME-$test_guid
--	if [ -f $file]; then
--		chattr -i $file
--		rm -rf $file
--	fi
- 	./create-read $file
-+	file_cleanup $file
- }
- 
- test_delete()
-@@ -96,11 +102,7 @@ test_delete()
- 		exit 1
- 	fi
- 
--	rm $file 2>/dev/null
--	if [ $? -ne 0 ]; then
--		chattr -i $file
--		rm $file
--	fi
-+	file_cleanup $file
- 
- 	if [ -e $file ]; then
- 		echo "$file couldn't be deleted" >&2
-@@ -154,11 +156,7 @@ test_valid_filenames()
- 			echo "$file could not be created" >&2
- 			ret=1
- 		else
--			rm $file 2>/dev/null
--			if [ $? -ne 0 ]; then
--				chattr -i $file
--				rm $file
--			fi
-+			file_cleanup $file
- 		fi
- 	done
- 
-@@ -191,11 +189,7 @@ test_invalid_filenames()
- 
- 		if [ -e $file ]; then
- 			echo "Creating $file should have failed" >&2
--			rm $file 2>/dev/null
--			if [ $? -ne 0 ]; then
--				chattr -i $file
--				rm $file
--			fi
-+			file_cleanup $file
- 			ret=1
- 		fi
- 	done
--- 
-2.7.4
+On Fri, Apr 19, 2019 at 9:20 PM shuah <shuah at kernel.org> wrote:
+>
+> On 4/19/19 7:12 AM, Po-Hsu Lin wrote:
+> > Test files created by test_create*() tests will stay in the
+> > $efivarfs_mount directory unless the system was rebooted.
+> >
+> > When the tester tries to run this efivarfs test again on the same
+> > system, the immutable characteristics in that directory will cause some
+> > "Operation not permitted" noises and a false-positve test result to the
+> > test_create_read() test.
+> >
+> >      --------------------
+> >      running test_create
+> >      --------------------
+> >      ./efivarfs.sh: line 59: /sys/firmware/efi/efivars/test_create-210be57c-9849-4fc7-a635-e6382d1aec27: Operation not permitted
+> >        [PASS]
+> >      --------------------
+> >      running test_create_empty
+> >      --------------------
+> >      ./efivarfs.sh: line 78: /sys/firmware/efi/efivars/test_create_empty-210be57c-9849-4fc7-a635-e6382d1aec27: Operation not permitted
+> >       [PASS]
+> >      --------------------
+> >      running test_create_read
+> >      --------------------
+> >      open(O_WRONLY): Operation not permitted
+> >       [FAIL]
+> >      --------------------
+> >
+> > Create a file_cleanup() to remove those test files in the end of each
+> > test to solve this issue.
+> >
+> > Also, use this function to replace the existing file removal code.
+> >
+> > Link: https://bugs.launchpad.net/bugs/1809704
+> >
+> > Signed-off-by: Po-Hsu Lin <po-hsu.lin at canonical.com>
+> > ---
+>
+> Thanks for the patch. There is another patch that does the same in
+> linux-kselftest next branch.
+>
+> Please check to see if that fixes the problem you are seeing.
+>
+> thanks,
+> -- Shuah
+>
