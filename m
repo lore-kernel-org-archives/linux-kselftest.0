@@ -1,9 +1,9 @@
 From: christian@brauner.io (Christian Brauner)
-Date: Fri, 19 Apr 2019 23:48:33 +0200
+Date: Fri, 19 Apr 2019 23:59:48 +0200
 Subject: [PATCH RFC 1/2] Add polling support to pidfd
-In-Reply-To: <CAKOZueuBTwyrLtpVQaoTAgjGSgeHY7392sKv5uAYdy4XKNHKHQ@mail.gmail.com>
-References: <20190411175043.31207-1-joel@joelfernandes.org>
- <20190416120430.GA15437@redhat.com> <20190416192051.GA184889@google.com>
+In-Reply-To: <20190419212002.GB44851@google.com>
+References: <20190416120430.GA15437@redhat.com>
+ <20190416192051.GA184889@google.com>
  <20190417130940.GC32622@redhat.com>
  <CAG48ez2Q0t2-rZz8wmGeih=NigYL-CT3+E6NgiPT0AkOQAUPMQ@mail.gmail.com>
  <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
@@ -12,16 +12,15 @@ References: <20190411175043.31207-1-joel@joelfernandes.org>
  <20190419194902.GE251571@google.com>
  <CAKOZueu3PzD_QgROXFRs8FvD=HTKJLsHDK9GrUdbFoMzx_7HEA@mail.gmail.com>
  <CAHrFyr4REuKFuARAXnhBC67TGzyDGmMONc7XjfUGvf+Qfm7EuQ@mail.gmail.com>
- <CAKOZueuBTwyrLtpVQaoTAgjGSgeHY7392sKv5uAYdy4XKNHKHQ@mail.gmail.com>
+ <20190419212002.GB44851@google.com>
 Message-ID:
- <CAHrFyr6f_CUP__818e1u6TaHd-XpWY6NOxri4yzzR6rNY5rk_w@mail.gmail.com>
+ <CAHrFyr6qqj-q9nSVuNhFL5WOcuQstAFvaDu2544OpeMe6jawQw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190419214833.BFiewetHPv7hURUyzlUYXztNfr_yLekAmeez6eMQ2Ms@z>
+Message-ID: <20190419215948.f-SKlcxc4N7XS0kvRIl46vcCALd0UZMJDcOqkR9z9uY@z>
 
-On Fri, Apr 19, 2019@11:21 PM Daniel Colascione <dancol@google.com> wrote:
+On Fri, Apr 19, 2019@11:20 PM Joel Fernandes <joel@joelfernandes.org> wrote:
 >
-> On Fri, Apr 19, 2019@1:57 PM Christian Brauner <christian@brauner.io> wrote:
-> >
+> On Fri, Apr 19, 2019@10:57:11PM +0200, Christian Brauner wrote:
 > > On Fri, Apr 19, 2019@10:34 PM Daniel Colascione <dancol@google.com> wrote:
 > > >
 > > > On Fri, Apr 19, 2019@12:49 PM Joel Fernandes <joel@joelfernandes.org> wrote:
@@ -106,72 +105,11 @@ On Fri, Apr 19, 2019@11:21 PM Daniel Colascione <dancol@google.com> wrote:
 > > What do you consider interesting state transitions? A listener on a pidfd
 > > in epoll_wait() might be interested if the process execs for example.
 > > That's a very valid use-case for e.g. systemd.
->
-> Sure, but systemd is specialized.
-
-So is Android and we're not designing an interface for Android but for
-all of userspace.
-I hope this is clear. Service managers are quite important and systemd
-is the largest one
-and they can make good use of this feature.
-
->
-> There are two broad classes of programs that care about process exit
-> status: 1) those that just want to do something and wait for it to
-> complete, and 2) programs that want to perform detailed monitoring of
-> processes and intervention in their state. #1 is overwhelmingly more
-> common. The basic pidfd feature should take care of case #1 only, as
-> wait*() in file descriptor form. I definitely don't think we should be
-> complicating the interface and making it more error-prone (see below)
-> for the sake of that rare program that cares about non-exit
-> notification conditions. You're proposing a complicated combination of
-> poll bit flags that most users (the ones who just wait to wait for
-> processes) don't care about and that risk making the facility hard to
-> use with existing event loops, which generally recognize readability
-> and writability as the only properties that are worth monitoring.
-
-That whole pargraph is about dismissing a range of valid use-cases based on
-assumptions such as "way more common" and
-even argues that service managers are special cases and therefore not
-really worth considering. I would like to be more open to other use cases.
-
->
 > > We can't use EPOLLIN for that too otherwise you'd need to to waitid(_WNOHANG)
 > > to check whether an exit status can be read which is not nice and then you
 > > multiplex different meanings on the same bit.
 > > I would prefer if the exit status can only be read from the parent which is
 > > clean and the least complicated semantics, i.e. Linus waitid() idea.
->
-> Exit status information should be *at least* as broadly available
-> through pidfds as it is through the last field of /proc/pid/stat
-> today, and probably more broadly. I've been saying for six months now
-> that we need to talk about *who* should have access to exit status
-> information. We haven't had that conversation yet. My preference is to
-
-> just make exit status information globally available, as FreeBSD seems
-> to do. I think it would be broadly useful for something like pkill to
-
->From the pdfork() FreeBSD manpage:
-"poll(2) and select(2) allow waiting for process state transitions;
-currently only POLLHUP is defined, and will be raised when the process dies.
-Process state transitions can also be monitored using kqueue(2) filter
-EVFILT_PROCDESC; currently only NOTE_EXIT is implemented."
-
-> wait for processes to exit and to retrieve their exit information.
->
-> Speaking of pkill: AIUI, in your current patch set, one can get a
-> pidfd *only* via clone. Joel indicated that he believes poll(2)
-> shouldn't be supported on procfs pidfds. Is that your thinking as
-> well? If that's the case, then we're in a state where non-parents
-
-Yes, it is.
-
-> can't wait for process exit, and providing this facility is an
-> important goal of the whole project.
-
-That's your goal.
-
->
 > > EPOLLIN on a pidfd could very well mean that data can be read via
 > > a read() on the pidfd *other* than the exit status. The read could e.g.
 > > give you a lean struct that indicates the type of state transition: NOTIFY_EXIT,
@@ -180,33 +118,35 @@ That's your goal.
 > > Though there's a case to be made that EPOLLHUP could indicate process exit
 > > and EPOLLIN a state change + read().
 >
-> And do you imagine making read() destructive? Does that read() then
-> reset the POLLIN state? You're essentially proposing that a pidfd
-> provide an "event stream" interface, delivering notifications packets
-> that indicate state changes like "process exited" or "process stopped"
-> or "process execed". While this sort of interface is powerful and has
-> some nice properties that tools like debuggers and daemon monitors
-> might want to use, I think it's too complicated and error prone for
-
-That's an assumption again.
-
-> the overwhelmingly common case of wanting to monitor process lifetime.
-
-Again where is this assumption backed up? systemd is a valid example where
-they care about this, various container managers are another one, and FreeBSD
-already does this.
-
-> I'd much rather pidfd provide a simple one-state-transition
-> level-triggered (not edge-triggered, as your suggestion implies)
-> facility. If we want to let sophisticated programs read a stream of
-> notification packets indicating changes in process state, we can
-> provide that as a separate interface in future work.
+> According to Linus, POLLHUP usually indicates that something is readable:
+> https://lkml.org/lkml/2019/4/18/1181
+> "So generally a HUP condition should mean that POLLIN and POLLOUT also
+> get set. Not because there's any actual _data_ to be read, but simply
+> because the read will not block."
 >
-> I like Linus' idea of just making waitid(2) (not waitpid(2), as I
-> mistakenly mentioned earlier) on a pidfd act *exactly* like a
-> waitid(2) on the corresponding process and making POLLIN just mean
-> "waitid will succeed". It's a nice simple model that's easy to reason
-> about and that makes it easy to port existing code to pidfds.
+> I feel the future state changes such as for NOTIFY_EXEC can easily be
+> implemented on top of this patch.
 >
-> I am very much against signaling additional information on basic
-> pidfds using non-POLLIN poll flags.
+> Just for the exit notification purposes, the states are:
+> if process has exit_state == 0, block.
+> if process is zombie/dead but not reaped, then return POLLIN
+> if process is reaped, then return POLLIN | POLLHUP
+
+Oleg was explicitly against EXIT_ZOMBIE/DEAD thing, no? He said so in a
+prior mail. Has this been addressed?
+
+>
+> for the exec notification case, that could be implemnted along with this with
+> something like:
+> if process has exit_state == 0, or has not exec'd since poll was called, block.
+> if process exec'd, then return POLLIN
+> if process is zombie/dead but not reaped, then return POLLIN
+> if process is reaped, then return POLLIN | POLLHUP
+>
+> Do you agree or did I miss something?
+
+I'm not sure why a combination of flags is nicer than having a simple
+read method that is more flexible but as the author you should send the
+patch how you would like it to be for review. :)
+
+Christian
