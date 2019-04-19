@@ -1,283 +1,118 @@
-From: mmullins@fb.com (Matt Mullins)
-Date: Fri, 19 Apr 2019 14:04:09 -0700
-Subject: [PATCH bpf-next v3 5/5] selftests: bpf: test writable buffers in raw
- tps
-In-Reply-To: <20190419210409.5021-1-mmullins@fb.com>
-References: <20190419210409.5021-1-mmullins@fb.com>
-Message-ID: <20190419210409.5021-6-mmullins@fb.com>
+From: joel@joelfernandes.org (Joel Fernandes)
+Date: Fri, 19 Apr 2019 17:13:19 -0400
+Subject: [PATCH RFC 1/2] Add polling support to pidfd
+In-Reply-To: <20190419200059.r2f7i7jtlsza4eun@brauner.io>
+References: <20190411175043.31207-1-joel@joelfernandes.org>
+ <20190416120430.GA15437@redhat.com>
+ <20190416192051.GA184889@google.com>
+ <20190417130940.GC32622@redhat.com>
+ <CAG48ez2Q0t2-rZz8wmGeih=NigYL-CT3+E6NgiPT0AkOQAUPMQ@mail.gmail.com>
+ <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
+ <20190419190247.GB251571@google.com>
+ <20190419191858.iwcvqm6fihbkaata@brauner.io>
+ <20190419194902.GE251571@google.com>
+ <20190419200059.r2f7i7jtlsza4eun@brauner.io>
+Message-ID: <20190419211319.GA44851@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190419210409.zKkvtGhBiLeo6obe3BVfr_PhOhAYQV6vvVE3WOGTDgE@z>
+Message-ID: <20190419211319.3fvd9Gq_hKkc4sKuz9LZtTu2cMjobD7dTFvl5okw9uE@z>
 
-This tests that:
-  * a BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE cannot be attached if it
-    uses either:
-    * a variable offset to the tracepoint buffer, or
-    * an offset beyond the size of the tracepoint buffer
-  * a tracer can modify the buffer provided when attached to a writable
-    tracepoint in bpf_prog_test_run
+On Fri, Apr 19, 2019@10:01:00PM +0200, Christian Brauner wrote:
+> On Fri, Apr 19, 2019@03:49:02PM -0400, Joel Fernandes wrote:
+> > On Fri, Apr 19, 2019@09:18:59PM +0200, Christian Brauner wrote:
+> > > On Fri, Apr 19, 2019@03:02:47PM -0400, Joel Fernandes wrote:
+> > > > On Thu, Apr 18, 2019@07:26:44PM +0200, Christian Brauner wrote:
+> > > > > On April 18, 2019 7:23:38 PM GMT+02:00, Jann Horn <jannh@google.com> wrote:
+> > > > > >On Wed, Apr 17, 2019@3:09 PM Oleg Nesterov <oleg@redhat.com> wrote:
+> > > > > >> On 04/16, Joel Fernandes wrote:
+> > > > > >> > On Tue, Apr 16, 2019@02:04:31PM +0200, Oleg Nesterov wrote:
+> > > > > >> > >
+> > > > > >> > > Could you explain when it should return POLLIN? When the whole
+> > > > > >process exits?
+> > > > > >> >
+> > > > > >> > It returns POLLIN when the task is dead or doesn't exist anymore,
+> > > > > >or when it
+> > > > > >> > is in a zombie state and there's no other thread in the thread
+> > > > > >group.
+> > > > > >>
+> > > > > >> IOW, when the whole thread group exits, so it can't be used to
+> > > > > >monitor sub-threads.
+> > > > > >>
+> > > > > >> just in case... speaking of this patch it doesn't modify
+> > > > > >proc_tid_base_operations,
+> > > > > >> so you can't poll("/proc/sub-thread-tid") anyway, but iiuc you are
+> > > > > >going to use
+> > > > > >> the anonymous file returned by CLONE_PIDFD ?
+> > > > > >
+> > > > > >I don't think procfs works that way. /proc/sub-thread-tid has
+> > > > > >proc_tgid_base_operations despite not being a thread group leader.
+> > > > > >(Yes, that's kinda weird.) AFAICS the WARN_ON_ONCE() in this code can
+> > > > > >be hit trivially, and then the code will misbehave.
+> > > > > >
+> > > > > >@Joel: I think you'll have to either rewrite this to explicitly bail
+> > > > > >out if you're dealing with a thread group leader, or make the code
+> > > > > >work for threads, too.
+> > > > > 
+> > > > > The latter case probably being preferred if this API is supposed to be
+> > > > > useable for thread management in userspace.
+> > > > 
+> > > > At the moment, we are not planning to use this for sub-thread management. I
+> > > > am reworking this patch to only work on clone(2) pidfds which makes the above
+> > > 
+> > > Indeed and agreed.
+> > > 
+> > > > discussion about /proc a bit unnecessary I think. Per the latest CLONE_PIDFD
+> > > > patches, CLONE_THREAD with pidfd is not supported.
+> > > 
+> > > Yes. We have no one asking for it right now and we can easily add this
+> > > later.
+> > > 
+> > > Admittedly I haven't gotten around to reviewing the patches here yet
+> > > completely. But one thing about using POLLIN. FreeBSD is using POLLHUP
+> > > on process exit which I think is nice as well. How about returning
+> > > POLLIN | POLLHUP on process exit?
+> > > We already do things like this. For example, when you proxy between
+> > > ttys. If the process that you're reading data from has exited and closed
+> > > it's end you still can't usually simply exit because it might have still
+> > > buffered data that you want to read.  The way one can deal with this
+> > > from  userspace is that you can observe a (POLLHUP | POLLIN) event and
+> > > you keep on reading until you only observe a POLLHUP without a POLLIN
+> > > event at which point you know you have read
+> > > all data.
+> > > I like the semantics for pidfds as well as it would indicate:
+> > > - POLLHUP -> process has exited
+> > > - POLLIN  -> information can be read
+> > 
+> > Actually I think a bit different about this, in my opinion the pidfd should
+> > always be readable (we would store the exit status somewhere in the future
+> > which would be readable, even after task_struct is dead). So I was thinking
+> 
+> So your idea is that you always get EPOLLIN when the process is alive,
+> i.e. epoll_wait() immediately returns for a pidfd that referes to a live
+> process if you specify EPOLLIN? E.g. if I specify EPOLLIN | EPOLLHUP
+> then epoll_wait() would constantly return. I would then need to check
+> for EPOLLHUP, see that it is not present and then go back into the
+> epoll_wait() loop and play the same game again?
+> What do you need this for?
 
-Signed-off-by: Matt Mullins <mmullins at fb.com>
----
- include/trace/events/bpf_test_run.h           | 50 ++++++++++++
- net/bpf/test_run.c                            |  4 +
- .../raw_tp_writable_reject_nbd_invalid.c      | 40 ++++++++++
- .../bpf/prog_tests/raw_tp_writable_test_run.c | 80 +++++++++++++++++++
- .../selftests/bpf/verifier/raw_tp_writable.c  | 34 ++++++++
- 5 files changed, 208 insertions(+)
- create mode 100644 include/trace/events/bpf_test_run.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_run.c
- create mode 100644 tools/testing/selftests/bpf/verifier/raw_tp_writable.c
+The approach of this patch is we would return EPOLLIN only once the process
+exits. Until then it blocks.
 
-diff --git a/include/trace/events/bpf_test_run.h b/include/trace/events/bpf_test_run.h
-new file mode 100644
-index 000000000000..abf466839ea4
---- /dev/null
-+++ b/include/trace/events/bpf_test_run.h
-@@ -0,0 +1,50 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM bpf_test_run
-+
-+#if !defined(_TRACE_NBD_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_BPF_TEST_RUN_H
-+
-+#include <linux/tracepoint.h>
-+
-+DECLARE_EVENT_CLASS(bpf_test_finish,
-+
-+	TP_PROTO(int *err),
-+
-+	TP_ARGS(err),
-+
-+	TP_STRUCT__entry(
-+		__field(int, err)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->err = *err;
-+	),
-+
-+	TP_printk("bpf_test_finish with err=%d", __entry->err)
-+);
-+
-+#ifdef DEFINE_EVENT_WRITABLE
-+#undef BPF_TEST_RUN_DEFINE_EVENT
-+#define BPF_TEST_RUN_DEFINE_EVENT(template, call, proto, args, size)	\
-+	DEFINE_EVENT_WRITABLE(template, call, PARAMS(proto),		\
-+			      PARAMS(args), size)
-+#else
-+#undef BPF_TEST_RUN_DEFINE_EVENT
-+#define BPF_TEST_RUN_DEFINE_EVENT(template, call, proto, args, size)	\
-+	DEFINE_EVENT(template, call, PARAMS(proto), PARAMS(args))
-+#endif
-+
-+BPF_TEST_RUN_DEFINE_EVENT(bpf_test_finish, bpf_test_finish,
-+
-+	TP_PROTO(int *err),
-+
-+	TP_ARGS(err),
-+
-+	sizeof(int)
-+);
-+
-+#endif
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index fab142b796ef..25e757102595 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -13,6 +13,9 @@
- #include <net/sock.h>
- #include <net/tcp.h>
- 
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/bpf_test_run.h>
-+
- static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
- 			u32 *retval, u32 *time)
- {
-@@ -100,6 +103,7 @@ static int bpf_test_finish(const union bpf_attr *kattr,
- 	if (err != -ENOSPC)
- 		err = 0;
- out:
-+	trace_bpf_test_finish(&err);
- 	return err;
- }
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-new file mode 100644
-index 000000000000..328d5c4b084b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <linux/nbd.h>
-+
-+void test_raw_tp_writable_reject_nbd_invalid(void)
-+{
-+	__u32 duration = 0;
-+	char error[4096];
-+	int bpf_fd = -1, tp_fd = -1;
-+
-+	const struct bpf_insn program[] = {
-+		/* r6 is our tp buffer */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_6, 128),
-+		BPF_EXIT_INSN(),
-+	};
-+
-+	struct bpf_load_program_attr load_attr = {
-+		.prog_type = BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
-+		.license = "GPL v2",
-+		.insns = program,
-+		.insns_cnt = sizeof(program) / sizeof(struct bpf_insn),
-+		.log_level = 2,
-+	};
-+
-+	bpf_fd = bpf_load_program_xattr(&load_attr, error, sizeof(error));
-+	if (CHECK(bpf_fd < 0, "bpf_raw_tracepoint_writable loaded",
-+		  "failed: %d errno %d\n", bpf_fd, errno))
-+		return;
-+
-+	tp_fd = bpf_raw_tracepoint_open("nbd_send_request", bpf_fd);
-+	if (CHECK(tp_fd >= 0, "bpf_raw_tracepoint_writable opened",
-+		  "erroneously succeeded\n"))
-+		goto out_bpffd;
-+
-+	close(tp_fd);
-+out_bpffd:
-+	close(bpf_fd);
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_run.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_run.c
-new file mode 100644
-index 000000000000..4145925f9cab
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_run.c
-@@ -0,0 +1,80 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <linux/nbd.h>
-+
-+void test_raw_tp_writable_test_run(void)
-+{
-+	__u32 duration = 0;
-+	char error[4096];
-+
-+	const struct bpf_insn trace_program[] = {
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
-+		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_6, 0),
-+		BPF_LD_IMM64(BPF_REG_0, 42),
-+		BPF_STX_MEM(BPF_W, BPF_REG_6, BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+
-+	struct bpf_load_program_attr load_attr = {
-+		.prog_type = BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
-+		.license = "GPL v2",
-+		.insns = trace_program,
-+		.insns_cnt = sizeof(trace_program) / sizeof(struct bpf_insn),
-+		.log_level = 2,
-+	};
-+
-+	int bpf_fd = bpf_load_program_xattr(&load_attr, error, sizeof(error));
-+	if (CHECK(bpf_fd < 0, "bpf_raw_tracepoint_writable loaded",
-+		  "failed: %d errno %d\n", bpf_fd, errno))
-+		return;
-+
-+	const struct bpf_insn skb_program[] = {
-+		BPF_LD_IMM64(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+
-+	struct bpf_load_program_attr skb_load_attr = {
-+		.prog_type = BPF_PROG_TYPE_SOCKET_FILTER,
-+		.license = "GPL v2",
-+		.insns = skb_program,
-+		.insns_cnt = sizeof(skb_program) / sizeof(struct bpf_insn),
-+	};
-+
-+	int filter_fd =
-+		bpf_load_program_xattr(&skb_load_attr, error, sizeof(error));
-+	if (CHECK(filter_fd < 0, "test_program_loaded", "failed: %d errno %d\n",
-+		  filter_fd, errno))
-+		goto out_bpffd;
-+
-+	int tp_fd = bpf_raw_tracepoint_open("bpf_test_finish", bpf_fd);
-+	if (CHECK(tp_fd < 0, "bpf_raw_tracepoint_writable opened",
-+		  "failed: %d errno %d\n", tp_fd, errno))
-+		goto out_filterfd;
-+
-+	char test_skb[128] = {
-+		0,
-+	};
-+
-+	__u32 prog_ret;
-+	int err = bpf_prog_test_run(filter_fd, 1, test_skb, sizeof(test_skb), 0,
-+				    0, &prog_ret, 0);
-+	CHECK(err != 42, "test_run",
-+	      "tracepoint did not modify return value\n");
-+	CHECK(prog_ret != 0, "test_run_ret",
-+	      "socket_filter did not return 0\n");
-+
-+	close(tp_fd);
-+
-+	err = bpf_prog_test_run(filter_fd, 1, test_skb, sizeof(test_skb), 0, 0,
-+				&prog_ret, 0);
-+	CHECK(err != 0, "test_run_notrace",
-+	      "test_run failed with %d errno %d\n", err, errno);
-+	CHECK(prog_ret != 0, "test_run_ret_notrace",
-+	      "socket_filter did not return 0\n");
-+
-+out_filterfd:
-+	close(filter_fd);
-+out_bpffd:
-+	close(bpf_fd);
-+}
-diff --git a/tools/testing/selftests/bpf/verifier/raw_tp_writable.c b/tools/testing/selftests/bpf/verifier/raw_tp_writable.c
-new file mode 100644
-index 000000000000..95b5d70a1dc1
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/raw_tp_writable.c
-@@ -0,0 +1,34 @@
-+{
-+	"raw_tracepoint_writable: reject variable offset",
-+	.insns = {
-+		/* r6 is our tp buffer */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
-+
-+		BPF_LD_MAP_FD(BPF_REG_1, 0),
-+		/* move the key (== 0) to r10-8 */
-+		BPF_MOV32_IMM(BPF_REG_0, 0),
-+		BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+		BPF_STX_MEM(BPF_DW, BPF_REG_2, BPF_REG_0, 0),
-+		/* lookup in the map */
-+		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
-+			     BPF_FUNC_map_lookup_elem),
-+
-+		/* exit clean if null */
-+		BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
-+		BPF_EXIT_INSN(),
-+
-+		/* shift the buffer pointer to a variable location */
-+		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_0, 0),
-+		BPF_ALU64_REG(BPF_ADD, BPF_REG_6, BPF_REG_0),
-+		/* clobber whatever's there */
-+		BPF_MOV64_IMM(BPF_REG_7, 4242),
-+		BPF_STX_MEM(BPF_DW, BPF_REG_6, BPF_REG_7, 0),
-+
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_hash_8b = { 1, },
-+	.prog_type = BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
-+	.errstr = "R6 invalid variable buffer offset: off=0, var_off=(0x0; 0xffffffff)",
-+},
--- 
-2.17.1
+> And if you have a valid reason to do this would it make sense to set
+> POLLPRI if the actual exit status can be read? This way one could at
+> least specify POLLPRI | POLLHUP without being constantly woken.
+> 
+> > we always return EPOLLIN.  If process has not exited, then it blocks.
+> > 
+> > However, we also are returning EPOLLERR in previous patch if the task_struct
+> > has been reaped (task == NULL). I could change that to EPOLLHUP.
+> 
+> That would be here, right?:
+> 
+> > +	if (!task)
+> > +		poll_flags = POLLIN | POLLRDNORM | POLLHUP;
+> 
+> That sounds better to me that EPOLLERR.
+
+I see. Ok I agree with you. It is not really an error, because even though
+the task_struct doesn't exist, the data such as exit status would still be
+readable so IMO POLLHUP is better.
