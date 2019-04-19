@@ -1,398 +1,115 @@
-From: ci_notify@linaro.org (ci_notify@linaro.org)
-Date: Fri, 19 Apr 2019 05:00:25 +0000 (UTC)
-Subject: next-20190418 kselftest results
-Message-ID: <1236590534.12789.1555650026031.JavaMail.jenkins@a6c5c67cda76>
+From: christian@brauner.io (Christian Brauner)
+Date: Fri, 19 Apr 2019 21:42:04 +0200
+Subject: [PATCH RFC 1/2] Add polling support to pidfd
+In-Reply-To: <20190419192233.d2n6al7hgoga6gts@brauner.io>
+References: <20190411175043.31207-1-joel@joelfernandes.org>
+ <20190416120430.GA15437@redhat.com>
+ <20190416192051.GA184889@google.com>
+ <20190417130940.GC32622@redhat.com>
+ <CAG48ez2Q0t2-rZz8wmGeih=NigYL-CT3+E6NgiPT0AkOQAUPMQ@mail.gmail.com>
+ <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
+ <20190419190247.GB251571@google.com>
+ <20190419191858.iwcvqm6fihbkaata@brauner.io>
+ <20190419192233.d2n6al7hgoga6gts@brauner.io>
+Message-ID: <20190419194203.am6ci63rpwsnchzg@brauner.io>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190419050025.Ia34LifWIqtUY_rwyWG9X7UHrTyV3rhaWRLbiuaorHo@z>
+Message-ID: <20190419194204.CHhxlDtsbWALMAEXQiBH5FSLzKxOwgC6XWTK4WHbKdM@z>
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.1.0-rc5
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: 3f018f4a019a1110527910bac52161e57107957c
-git describe: next-20190418
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190418
+On Fri, Apr 19, 2019@09:22:33PM +0200, Christian Brauner wrote:
+> On Fri, Apr 19, 2019@09:18:58PM +0200, Christian Brauner wrote:
+> > On Fri, Apr 19, 2019@03:02:47PM -0400, Joel Fernandes wrote:
+> > > On Thu, Apr 18, 2019@07:26:44PM +0200, Christian Brauner wrote:
+> > > > On April 18, 2019 7:23:38 PM GMT+02:00, Jann Horn <jannh@google.com> wrote:
+> > > > >On Wed, Apr 17, 2019@3:09 PM Oleg Nesterov <oleg@redhat.com> wrote:
+> > > > >> On 04/16, Joel Fernandes wrote:
+> > > > >> > On Tue, Apr 16, 2019@02:04:31PM +0200, Oleg Nesterov wrote:
+> > > > >> > >
+> > > > >> > > Could you explain when it should return POLLIN? When the whole
+> > > > >process exits?
+> > > > >> >
+> > > > >> > It returns POLLIN when the task is dead or doesn't exist anymore,
+> > > > >or when it
+> > > > >> > is in a zombie state and there's no other thread in the thread
+> > > > >group.
+> > > > >>
+> > > > >> IOW, when the whole thread group exits, so it can't be used to
+> > > > >monitor sub-threads.
+> > > > >>
+> > > > >> just in case... speaking of this patch it doesn't modify
+> > > > >proc_tid_base_operations,
+> > > > >> so you can't poll("/proc/sub-thread-tid") anyway, but iiuc you are
+> > > > >going to use
+> > > > >> the anonymous file returned by CLONE_PIDFD ?
+> > > > >
+> > > > >I don't think procfs works that way. /proc/sub-thread-tid has
+> > > > >proc_tgid_base_operations despite not being a thread group leader.
+> > > > >(Yes, that's kinda weird.) AFAICS the WARN_ON_ONCE() in this code can
+> > > > >be hit trivially, and then the code will misbehave.
+> > > > >
+> > > > >@Joel: I think you'll have to either rewrite this to explicitly bail
+> > > > >out if you're dealing with a thread group leader, or make the code
+> > > > >work for threads, too.
+> > > > 
+> > > > The latter case probably being preferred if this API is supposed to be
+> > > > useable for thread management in userspace.
+> > > 
+> > > At the moment, we are not planning to use this for sub-thread management. I
+> > > am reworking this patch to only work on clone(2) pidfds which makes the above
+> > 
+> > Indeed and agreed.
+> > 
+> > > discussion about /proc a bit unnecessary I think. Per the latest CLONE_PIDFD
+> > > patches, CLONE_THREAD with pidfd is not supported.
+> > 
+> > Yes. We have no one asking for it right now and we can easily add this
+> > later.
+> > 
+> > Admittedly I haven't gotten around to reviewing the patches here yet
+> > completely. But one thing about using POLLIN. FreeBSD is using POLLHUP
+> > on process exit which I think is nice as well. How about returning
+> > POLLIN | POLLHUP on process exit?
+> > We already do things like this. For example, when you proxy between
+> > ttys. If the process that you're reading data from has exited and closed
+> > it's end you still can't usually simply exit because it might have still
+> > buffered data that you want to read.  The way one can deal with this
+> > from  userspace is that you can observe a (POLLHUP | POLLIN) event and
+> > you keep on reading until you only observe a POLLHUP without a POLLIN
+> > event at which point you know you have read
+> > all data.
+> > I like the semantics for pidfds as well as it would indicate:
+> > - POLLHUP -> process has exited
+> 
+> or POLLRDHUP. The check you'd usually perform would probably be
+> if ((revents & (POLLIN | POLLPRI)) > 0) && ((revents & (POLLHUP | POLLRDHUP)) > 0)
+>         /* keep on trying to read */
+> 
+> I guess you have that set of flags already suggested in another mail?
 
-Regressions (compared to build next-20190417)
-------------------------------------------------------------------------
-No regressions                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190417)                                                                   
-------------------------------------------------------------------------                                               
-No fixes
+The code where this pattern is e.g. used is in drivers/tty/n_tty.c:
 
-In total:
-------------------------------------------------------------------------
-Ran 1240 total tests in the following environments and test suites.
-pass 756
-fail 313
-xfail 0
-skip 171
-
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-* kselftest
-* boot-lkft-kselftests-master-505
-* boot-lkft-kselftests-vsyscall-mode-native-master-505
-* boot-lkft-kselftests-vsyscall-mode-none-master-505
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
-
-
-Failures
-------------------------------------------------------------------------
-
-qemu_x86_64:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/livepatch_test-callbacks.sh
-* kselftest/livepatch_test-livepatch.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pstore_pstore_tests
-* kselftest/rtc_rtctest
-* kselftest/timestamping_txtimestamp.sh
-
-qemu_arm64:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/livepatch_test-callbacks.sh
-* kselftest/livepatch_test-livepatch.sh
-* kselftest/livepatch_test-shadow-vars.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pstore_pstore_tests
-* kselftest/rtc_rtctest
-* kselftest/timestamping_txtimestamp.sh
-
-x15:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/livepatch_test-callbacks.sh
-* kselftest/livepatch_test-livepatch.sh
-* kselftest/livepatch_test-shadow-vars.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_msg_zerocopy.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rtc_rtctest
-* kselftest/seccomp_seccomp_bpf
-* kselftest/timestamping_txtimestamp.sh
-
-dragonboard-410c:
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/livepatch_test-callbacks.sh
-* kselftest/livepatch_test-livepatch.sh
-* kselftest/livepatch_test-shadow-vars.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_msg_zerocopy.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rtc_rtctest
-* kselftest/seccomp_seccomp_bpf
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-
-juno-r2:
-
-hi6220-hikey:
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/livepatch_test-callbacks.sh
-* kselftest/livepatch_test-livepatch.sh
-* kselftest/livepatch_test-shadow-vars.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/timestamping_txtimestamp.sh
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/firmware_fw_run_tests.sh
-
-x86:
-* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-native/bpf_test_netcnt
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-native/bpf_test_sockmap
-* kselftest-vsyscall-mode-native/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-native/cgroup_test_core
-* kselftest-vsyscall-mode-native/dma-buf_udmabuf
-* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-native/lib_bitmap.sh
-* kselftest-vsyscall-mode-native/lib_prime_numbers.sh
-* kselftest-vsyscall-mode-native/lib_printf.sh
-* kselftest-vsyscall-mode-native/lib_strscpy.sh
-* kselftest-vsyscall-mode-native/livepatch_test-callbacks.sh
-* kselftest-vsyscall-mode-native/livepatch_test-livepatch.sh
-* kselftest-vsyscall-mode-native/livepatch_test-shadow-vars.sh
-* kselftest-vsyscall-mode-native/net_fib-onlink-tests.sh
-* kselftest-vsyscall-mode-native/net_ip_defrag.sh
-* kselftest-vsyscall-mode-native/net_pmtu.sh
-* kselftest-vsyscall-mode-native/net_psock_snd.sh
-* kselftest-vsyscall-mode-native/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-native/timestamping_txtimestamp.sh
-* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-none/bpf_test_netcnt
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-none/cgroup_test_core
-* kselftest-vsyscall-mode-none/dma-buf_udmabuf
-* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-none/lib_bitmap.sh
-* kselftest-vsyscall-mode-none/lib_prime_numbers.sh
-* kselftest-vsyscall-mode-none/lib_printf.sh
-* kselftest-vsyscall-mode-none/lib_strscpy.sh
-* kselftest-vsyscall-mode-none/livepatch_test-callbacks.sh
-* kselftest-vsyscall-mode-none/livepatch_test-livepatch.sh
-* kselftest-vsyscall-mode-none/livepatch_test-shadow-vars.sh
-* kselftest-vsyscall-mode-none/net_fib-onlink-tests.sh
-* kselftest-vsyscall-mode-none/net_ip_defrag.sh
-* kselftest-vsyscall-mode-none/net_pmtu.sh
-* kselftest-vsyscall-mode-none/net_psock_snd.sh
-* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-none/timestamping_txtimestamp.sh
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/livepatch_test-callbacks.sh
-* kselftest/livepatch_test-livepatch.sh
-* kselftest/livepatch_test-shadow-vars.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/timestamping_txtimestamp.sh
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+static __poll_t n_tty_poll(struct tty_struct *tty, struct file *file,
+                                                        poll_table *wait)
+{
+        __poll_t mask = 0;
+ 
+        poll_wait(file, &tty->read_wait, wait);
+        poll_wait(file, &tty->write_wait, wait);
+        if (input_available_p(tty, 1))
+                mask |= EPOLLIN | EPOLLRDNORM;
+        else {
+                tty_buffer_flush_work(tty->port);
+                if (input_available_p(tty, 1))
+                        mask |= EPOLLIN | EPOLLRDNORM;
+        }
+        if (tty->packet && tty->link->ctrl_status)
+                mask |= EPOLLPRI | EPOLLIN | EPOLLRDNORM;
+        if (test_bit(TTY_OTHER_CLOSED, &tty->flags))
+                mask |= EPOLLHUP;
+        if (tty_hung_up_p(file))
+                mask |= EPOLLHUP;
+        if (tty->ops->write && !tty_is_writelocked(tty) &&
+                        tty_chars_in_buffer(tty) < WAKEUP_CHARS &&
+                        tty_write_room(tty) > 0)
+                mask |= EPOLLOUT | EPOLLWRNORM;
+        return mask;
+}
