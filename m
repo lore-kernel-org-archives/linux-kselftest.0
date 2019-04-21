@@ -1,37 +1,26 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Sat, 20 Apr 2019 14:35:05 +0200
-Subject: [PATCH RFC 1/2] Add polling support to pidfd
-In-Reply-To: <20190420122614.GD17468@redhat.com>
-References: <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
- <20190419190247.GB251571@google.com>
- <20190419191858.iwcvqm6fihbkaata@brauner.io>
- <20190419194902.GE251571@google.com>
- <CAKOZueu3PzD_QgROXFRs8FvD=HTKJLsHDK9GrUdbFoMzx_7HEA@mail.gmail.com>
- <CAHrFyr4REuKFuARAXnhBC67TGzyDGmMONc7XjfUGvf+Qfm7EuQ@mail.gmail.com>
- <20190419212002.GB44851@google.com>
- <CAHrFyr6qqj-q9nSVuNhFL5WOcuQstAFvaDu2544OpeMe6jawQw@mail.gmail.com>
- <20190420115125.GC17468@redhat.com>
- <20190420122614.GD17468@redhat.com>
-Message-ID: <20190420123504.gohscgeahp45hjd3@brauner.io>
+From: davem@davemloft.net (David Miller)
+Date: Sat, 20 Apr 2019 20:29:20 -0700 (PDT)
+Subject: [PATCH] selftests/net: correct the return value for
+ run_afpackettests
+In-Reply-To: <20190419110113.21883-1-po-hsu.lin@canonical.com>
+References: <20190419110113.21883-1-po-hsu.lin@canonical.com>
+Message-ID: <20190420.202920.2293248605361106810.davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190420123505.6sefYVn9sDzmwDrVXeLvzie6VtTkZXnPJO8E-7fPm4E@z>
+Message-ID: <20190421032920.59r4A14FpJnCmxqVgnV2PnvdVhi95_WPJAHPNGDgOA4@z>
 
-On Sat, Apr 20, 2019@02:26:15PM +0200, Oleg Nesterov wrote:
-> On 04/20, Oleg Nesterov wrote:
-> >
-> > Note that we need
-> > thread_group_empty() only for the case when the task is traced,
+From: Po-Hsu Lin <po-hsu.lin@canonical.com>
+Date: Fri, 19 Apr 2019 19:01:13 +0800
+
+> The run_afpackettests will be marked as passed regardless the return
+> value of those sub-tests in the script:
+>     --------------------
+>     running psock_tpacket test
+>     --------------------
+>     [FAIL]
+>     selftests: run_afpackettests [PASS]
 > 
-> Damn, sorry for noise... of course this is not true, I tried to say that
-> notification won't come otherwise. Nevermind, lets discuss this when we
-> have a patch. I already got lost in this thread and I have no idea what
+> Fix this by changing the return value for each tests.
+> 
+> Signed-off-by: Po-Hsu Lin <po-hsu.lin at canonical.com>
 
-Agreed. The polling work is not targeted for the 5.2 merge window
-anyway so there's no need to rush this.
-
-> are you all talking about ;)
-
-Nothing patch-worthy comes without a solid portion of controversy and
-confusion at first. ;)
-
-Christian
+Applied, thanks.
