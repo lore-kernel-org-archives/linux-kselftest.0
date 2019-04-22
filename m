@@ -1,47 +1,44 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Mon, 22 Apr 2019 15:41:52 -0400
-Subject: [PATCH AUTOSEL 5.0 85/98] KVM: selftests: disable stack protector for
- all KVM tests
+Date: Mon, 22 Apr 2019 15:41:51 -0400
+Subject: [PATCH AUTOSEL 5.0 84/98] KVM: selftests: explicitly disable PIE for
+ tests
 In-Reply-To: <20190422194205.10404-1-sashal@kernel.org>
 References: <20190422194205.10404-1-sashal@kernel.org>
-Message-ID: <20190422194205.10404-85-sashal@kernel.org>
+Message-ID: <20190422194205.10404-84-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190422194152.17ll-6tMuFGUQJ1AbYQg4g-VVrxV9ZJe2FNTZtcpWnE@z>
+Message-ID: <20190422194151.dQb3CLllvEAMxlQ5azMSpLlK1NCQbKm9Oa_P2V3SEpg@z>
 
 From: Sean Christopherson <sean.j.christopherson@intel.com>
 
-[ Upstream commit ffac839d040619847217647434b2b02469926871 ]
+[ Upstream commit 0a3f29b5a77d6c27796d7a7adabafd199dc066d5 ]
 
-Since 4.8.3, gcc has enabled -fstack-protector by default.  This is
-problematic for the KVM selftests as they do not configure fs or gs
-segments (the stack canary is pulled from fs:0x28).  With the default
-behavior, gcc will insert a stack canary on any function that creates
-buffers of 8 bytes or more.  As a result, ucall() will hit a triple
-fault shutdown due to reading a bad fs segment when inserting its
-stack canary, i.e. every test fails with an unexpected SHUTDOWN.
+KVM selftests embed the guest "image" as a function in the test itself
+and extract the guest code at runtime by manually parsing the elf
+headers.  The parsing is very simple and doesn't supporting fancy things
+like position independent executables.  Recent versions of gcc enable
+pie by default, which results in triple fault shutdowns in the guest due
+to the virtual address in the headers not matching up with the virtual
+address retrieved from the function pointer.
 
-Fixes: 14c47b7530e2d ("kvm: selftests: introduce ucall")
 Signed-off-by: Sean Christopherson <sean.j.christopherson at intel.com>
 Signed-off-by: Paolo Bonzini <pbonzini at redhat.com>
 Signed-off-by: Sasha Levin (Microsoft) <sashal at kernel.org>
 ---
- tools/testing/selftests/kvm/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kvm/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 212b8f0032ae..cb4a992d6dd3 100644
+index f9a0e9938480..212b8f0032ae 100644
 --- a/tools/testing/selftests/kvm/Makefile
 +++ b/tools/testing/selftests/kvm/Makefile
-@@ -28,8 +28,8 @@ LIBKVM += $(LIBKVM_$(UNAME_M))
+@@ -28,7 +28,7 @@ LIBKVM += $(LIBKVM_$(UNAME_M))
  INSTALL_HDR_PATH = $(top_srcdir)/usr
  LINUX_HDR_PATH = $(INSTALL_HDR_PATH)/include/
  LINUX_TOOL_INCLUDE = $(top_srcdir)/tools/include
--CFLAGS += -O2 -g -std=gnu99 -no-pie -I$(LINUX_TOOL_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude -I$(<D) -Iinclude/$(UNAME_M) -I..
--LDFLAGS += -pthread
-+CFLAGS += -O2 -g -std=gnu99 -fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude -I$(<D) -Iinclude/$(UNAME_M) -I..
-+LDFLAGS += -pthread -no-pie
+-CFLAGS += -O2 -g -std=gnu99 -I$(LINUX_TOOL_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude -I$(<D) -Iinclude/$(UNAME_M) -I..
++CFLAGS += -O2 -g -std=gnu99 -no-pie -I$(LINUX_TOOL_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude -I$(<D) -Iinclude/$(UNAME_M) -I..
+ LDFLAGS += -pthread
  
  # After inclusion, $(OUTPUT) is defined and
- # $(TEST_GEN_PROGS) starts with $(OUTPUT)/
 -- 
 2.19.1
