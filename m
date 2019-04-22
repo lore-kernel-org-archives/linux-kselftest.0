@@ -1,112 +1,56 @@
 From: logang@deltatee.com (Logan Gunthorpe)
-Date: Mon, 22 Apr 2019 15:05:22 -0600
-Subject: [PATCH v4 04/10] NTB: Introduce functions to calculate multi-port
- resource index
+Date: Mon, 22 Apr 2019 15:05:20 -0600
+Subject: [PATCH v4 02/10] PCI/switchtec: Add module parameter to request more
+ interrupts
 In-Reply-To: <20190422210528.15289-1-logang@deltatee.com>
 References: <20190422210528.15289-1-logang@deltatee.com>
-Message-ID: <20190422210528.15289-5-logang@deltatee.com>
+Message-ID: <20190422210528.15289-3-logang@deltatee.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190422210522.PrgxaBUdr6Yh7RtzklAC3YHSMo4aVOBZltdCFqYzSqM@z>
+Message-ID: <20190422210520.s0YkN583OaGTwhIB5CSuoKCNFHQ2RQI9Va49RSKel8U@z>
 
-When using multi-ports each port uses resources (dbs, msgs, mws, etc)
-on every other port. Creating a mapping for these resources such that
-each port has a corresponding resource on every other port is a bit
-tricky.
+Seeing the we want to use more interrupts in the NTB MSI code
+we need to be able allocate more (sometimes virtual) interrupts
+in the switchtec driver. Therefore add a module parameter to
+request to allocate additional interrupts.
 
-Introduce the ntb_peer_resource_idx() function for this purpose.
-It returns the peer resource number that will correspond with the
-local peer index on the remote peer.
-
-Also, introduce ntb_peer_highest_mw_idx() which will use
-ntb_peer_resource_idx() but return the MW index starting with the
-highest index and working down.
+This puts virtually no limit on the number of MSI interrupts available
+to NTB clients.
 
 Signed-off-by: Logan Gunthorpe <logang at deltatee.com>
-Cc: Jon Mason <jdmason at kudzu.us>
-Cc: Dave Jiang <dave.jiang at intel.com>
-Cc: Allen Hubbe <allenbh at gmail.com>
+Cc: Bjorn Helgaas <bhelgaas at google.com>
 ---
- include/linux/ntb.h | 70 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
+ drivers/pci/switch/switchtec.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/ntb.h b/include/linux/ntb.h
-index 91cf492b16a0..66552830544b 100644
---- a/include/linux/ntb.h
-+++ b/include/linux/ntb.h
-@@ -1557,4 +1557,74 @@ static inline int ntb_peer_msg_write(struct ntb_dev *ntb, int pidx, int midx,
- 	return ntb->ops->peer_msg_write(ntb, pidx, midx, msg);
- }
+diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
+index e22766c79fe9..8b1db78197d9 100644
+--- a/drivers/pci/switch/switchtec.c
++++ b/drivers/pci/switch/switchtec.c
+@@ -30,6 +30,10 @@ module_param(use_dma_mrpc, bool, 0644);
+ MODULE_PARM_DESC(use_dma_mrpc,
+ 		 "Enable the use of the DMA MRPC feature");
  
-+/**
-+ * ntb_peer_resource_idx() - get a resource index for a given peer idx
-+ * @ntb:	NTB device context.
-+ * @pidx:	Peer port index.
-+ *
-+ * When constructing a graph of peers, each remote peer must use a different
-+ * resource index (mw, doorbell, etc) to communicate with each other
-+ * peer.
-+ *
-+ * In a two peer system, this function should always return 0 such that
-+ * resource 0 points to the remote peer on both ports.
-+ *
-+ * In a 5 peer system, this function will return the following matrix
-+ *
-+ * pidx \ port    0    1    2    3    4
-+ * 0              0    0    1    2    3
-+ * 1              0    1    1    2    3
-+ * 2              0    1    2    2    3
-+ * 3              0    1    2    3    3
-+ *
-+ * For example, if this function is used to program peer's memory
-+ * windows, port 0 will program MW 0 on all it's peers to point to itself.
-+ * port 1 will program MW 0 in port 0 to point to itself and MW 1 on all
-+ * other ports. etc.
-+ *
-+ * For the legacy two host case, ntb_port_number() and ntb_peer_port_number()
-+ * both return zero and therefore this function will always return zero.
-+ * So MW 0 on each host would be programmed to point to the other host.
-+ *
-+ * Return: the resource index to use for that peer.
-+ */
-+static inline int ntb_peer_resource_idx(struct ntb_dev *ntb, int pidx)
-+{
-+	int local_port, peer_port;
++static int nirqs = 32;
++module_param(nirqs, int, 0644);
++MODULE_PARM_DESC(nirqs, "number of interrupts to allocate (more may be useful for NTB applications)");
 +
-+	if (pidx >= ntb_peer_port_count(ntb))
-+		return -EINVAL;
+ static dev_t switchtec_devt;
+ static DEFINE_IDA(switchtec_minor_ida);
+ 
+@@ -1247,8 +1251,12 @@ static int switchtec_init_isr(struct switchtec_dev *stdev)
+ 	int dma_mrpc_irq;
+ 	int rc;
+ 
+-	nvecs = pci_alloc_irq_vectors(stdev->pdev, 1, 4,
+-				      PCI_IRQ_MSIX | PCI_IRQ_MSI);
++	if (nirqs < 4)
++		nirqs = 4;
 +
-+	local_port = ntb_logical_port_number(ntb);
-+	peer_port = ntb_peer_logical_port_number(ntb, pidx);
-+
-+	if (peer_port < local_port)
-+		return local_port - 1;
-+	else
-+		return local_port;
-+}
-+
-+/**
-+ * ntb_peer_highest_mw_idx() - get a memory window index for a given peer idx
-+ *	using the highest index memory windows first
-+ *
-+ * @ntb:	NTB device context.
-+ * @pidx:	Peer port index.
-+ *
-+ * Like ntb_peer_resource_idx(), except it returns indexes starting with
-+ * last memory window index.
-+ *
-+ * Return: the resource index to use for that peer.
-+ */
-+static inline int ntb_peer_highest_mw_idx(struct ntb_dev *ntb, int pidx)
-+{
-+	int ret;
-+
-+	ret = ntb_peer_resource_idx(ntb, pidx);
-+	if (ret < 0)
-+		return ret;
-+
-+	return ntb_mw_count(ntb, pidx) - ret - 1;
-+}
-+
- #endif
++	nvecs = pci_alloc_irq_vectors(stdev->pdev, 1, nirqs,
++				      PCI_IRQ_MSIX | PCI_IRQ_MSI |
++				      PCI_IRQ_VIRTUAL);
+ 	if (nvecs < 0)
+ 		return nvecs;
+ 
 -- 
 2.20.1
