@@ -1,42 +1,130 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Mon, 22 Apr 2019 15:41:51 -0400
-Subject: [PATCH AUTOSEL 5.0 84/98] KVM: selftests: explicitly disable PIE for
- tests
+Date: Mon, 22 Apr 2019 15:41:53 -0400
+Subject: [PATCH AUTOSEL 5.0 86/98] KVM: selftests: complete IO before
+ migrating guest state
 In-Reply-To: <20190422194205.10404-1-sashal@kernel.org>
 References: <20190422194205.10404-1-sashal@kernel.org>
-Message-ID: <20190422194205.10404-84-sashal@kernel.org>
+Message-ID: <20190422194205.10404-86-sashal@kernel.org>
 
 From: Sean Christopherson <sean.j.christopherson at intel.com>
 
-[ Upstream commit 0a3f29b5a77d6c27796d7a7adabafd199dc066d5 ]
+[ Upstream commit 0f73bbc851ed32d22bbd86be09e0365c460bcd2e ]
 
-KVM selftests embed the guest "image" as a function in the test itself
-and extract the guest code at runtime by manually parsing the elf
-headers.  The parsing is very simple and doesn't supporting fancy things
-like position independent executables.  Recent versions of gcc enable
-pie by default, which results in triple fault shutdowns in the guest due
-to the virtual address in the headers not matching up with the virtual
-address retrieved from the function pointer.
+Documentation/virtual/kvm/api.txt states:
 
+  NOTE: For KVM_EXIT_IO, KVM_EXIT_MMIO, KVM_EXIT_OSI, KVM_EXIT_PAPR and
+        KVM_EXIT_EPR the corresponding operations are complete (and guest
+        state is consistent) only after userspace has re-entered the
+        kernel with KVM_RUN.  The kernel side will first finish incomplete
+        operations and then check for pending signals.  Userspace can
+        re-enter the guest with an unmasked signal pending to complete
+        pending operations.
+
+Because guest state may be inconsistent, starting state migration after
+an IO exit without first completing IO may result in test failures, e.g.
+a proposed change to KVM's handling of %rip in its fast PIO handling[1]
+will cause the new VM, i.e. the post-migration VM, to have its %rip set
+to the IN instruction that triggered KVM_EXIT_IO, leading to a test
+assertion due to a stage mismatch.
+
+For simplicitly, require KVM_CAP_IMMEDIATE_EXIT to complete IO and skip
+the test if it's not available.  The addition of KVM_CAP_IMMEDIATE_EXIT
+predates the state selftest by more than a year.
+
+[1] https://patchwork.kernel.org/patch/10848545/
+
+Fixes: fa3899add1056 ("kvm: selftests: add basic test for state save and restore")
+Reported-by: Jim Mattson <jmattson at google.com>
 Signed-off-by: Sean Christopherson <sean.j.christopherson at intel.com>
 Signed-off-by: Paolo Bonzini <pbonzini at redhat.com>
 Signed-off-by: Sasha Levin (Microsoft) <sashal at kernel.org>
 ---
- tools/testing/selftests/kvm/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/kvm/include/kvm_util.h |  1 +
+ tools/testing/selftests/kvm/lib/kvm_util.c     | 16 ++++++++++++++++
+ .../testing/selftests/kvm/x86_64/state_test.c  | 18 ++++++++++++++++--
+ 3 files changed, 33 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index f9a0e9938480..212b8f0032ae 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -28,7 +28,7 @@ LIBKVM += $(LIBKVM_$(UNAME_M))
- INSTALL_HDR_PATH = $(top_srcdir)/usr
- LINUX_HDR_PATH = $(INSTALL_HDR_PATH)/include/
- LINUX_TOOL_INCLUDE = $(top_srcdir)/tools/include
--CFLAGS += -O2 -g -std=gnu99 -I$(LINUX_TOOL_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude -I$(<D) -Iinclude/$(UNAME_M) -I..
-+CFLAGS += -O2 -g -std=gnu99 -no-pie -I$(LINUX_TOOL_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude -I$(<D) -Iinclude/$(UNAME_M) -I..
- LDFLAGS += -pthread
+diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+index a84785b02557..07b71ad9734a 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util.h
++++ b/tools/testing/selftests/kvm/include/kvm_util.h
+@@ -102,6 +102,7 @@ vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva);
+ struct kvm_run *vcpu_state(struct kvm_vm *vm, uint32_t vcpuid);
+ void vcpu_run(struct kvm_vm *vm, uint32_t vcpuid);
+ int _vcpu_run(struct kvm_vm *vm, uint32_t vcpuid);
++void vcpu_run_complete_io(struct kvm_vm *vm, uint32_t vcpuid);
+ void vcpu_set_mp_state(struct kvm_vm *vm, uint32_t vcpuid,
+ 		       struct kvm_mp_state *mp_state);
+ void vcpu_regs_get(struct kvm_vm *vm, uint32_t vcpuid, struct kvm_regs *regs);
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index b52cfdefecbf..efa0aad8b3c6 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -1121,6 +1121,22 @@ int _vcpu_run(struct kvm_vm *vm, uint32_t vcpuid)
+ 	return rc;
+ }
  
- # After inclusion, $(OUTPUT) is defined and
++void vcpu_run_complete_io(struct kvm_vm *vm, uint32_t vcpuid)
++{
++	struct vcpu *vcpu = vcpu_find(vm, vcpuid);
++	int ret;
++
++	TEST_ASSERT(vcpu != NULL, "vcpu not found, vcpuid: %u", vcpuid);
++
++	vcpu->state->immediate_exit = 1;
++	ret = ioctl(vcpu->fd, KVM_RUN, NULL);
++	vcpu->state->immediate_exit = 0;
++
++	TEST_ASSERT(ret == -1 && errno == EINTR,
++		    "KVM_RUN IOCTL didn't exit immediately, rc: %i, errno: %i",
++		    ret, errno);
++}
++
+ /*
+  * VM VCPU Set MP State
+  *
+diff --git a/tools/testing/selftests/kvm/x86_64/state_test.c b/tools/testing/selftests/kvm/x86_64/state_test.c
+index 4b3f556265f1..30f75856cf39 100644
+--- a/tools/testing/selftests/kvm/x86_64/state_test.c
++++ b/tools/testing/selftests/kvm/x86_64/state_test.c
+@@ -134,6 +134,11 @@ int main(int argc, char *argv[])
+ 
+ 	struct kvm_cpuid_entry2 *entry = kvm_get_supported_cpuid_entry(1);
+ 
++	if (!kvm_check_cap(KVM_CAP_IMMEDIATE_EXIT)) {
++		fprintf(stderr, "immediate_exit not available, skipping test\n");
++		exit(KSFT_SKIP);
++	}
++
+ 	/* Create VM */
+ 	vm = vm_create_default(VCPU_ID, 0, guest_code);
+ 	vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
+@@ -156,8 +161,6 @@ int main(int argc, char *argv[])
+ 			    stage, run->exit_reason,
+ 			    exit_reason_str(run->exit_reason));
+ 
+-		memset(&regs1, 0, sizeof(regs1));
+-		vcpu_regs_get(vm, VCPU_ID, &regs1);
+ 		switch (get_ucall(vm, VCPU_ID, &uc)) {
+ 		case UCALL_ABORT:
+ 			TEST_ASSERT(false, "%s at %s:%d", (const char *)uc.args[0],
+@@ -176,6 +179,17 @@ int main(int argc, char *argv[])
+ 			    uc.args[1] == stage, "Unexpected register values vmexit #%lx, got %lx",
+ 			    stage, (ulong)uc.args[1]);
+ 
++		/*
++		 * When KVM exits to userspace with KVM_EXIT_IO, KVM guarantees
++		 * guest state is consistent only after userspace re-enters the
++		 * kernel with KVM_RUN.  Complete IO prior to migrating state
++		 * to a new VM.
++		 */
++		vcpu_run_complete_io(vm, VCPU_ID);
++
++		memset(&regs1, 0, sizeof(regs1));
++		vcpu_regs_get(vm, VCPU_ID, &regs1);
++
+ 		state = vcpu_save_state(vm, VCPU_ID);
+ 		kvm_vm_release(vm);
+ 
 -- 
 2.19.1
