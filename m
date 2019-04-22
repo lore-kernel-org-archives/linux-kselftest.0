@@ -1,130 +1,73 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Mon, 22 Apr 2019 15:41:53 -0400
-Subject: [PATCH AUTOSEL 5.0 86/98] KVM: selftests: complete IO before
- migrating guest state
+Date: Mon, 22 Apr 2019 15:41:50 -0400
+Subject: [PATCH AUTOSEL 5.0 83/98] KVM: selftests: assert on exit reason in
+ CR4/cpuid sync test
 In-Reply-To: <20190422194205.10404-1-sashal@kernel.org>
 References: <20190422194205.10404-1-sashal@kernel.org>
-Message-ID: <20190422194205.10404-86-sashal@kernel.org>
+Message-ID: <20190422194205.10404-83-sashal@kernel.org>
 
 From: Sean Christopherson <sean.j.christopherson at intel.com>
 
-[ Upstream commit 0f73bbc851ed32d22bbd86be09e0365c460bcd2e ]
+[ Upstream commit 8df98ae0ab2ead9a02228756eec26f8d7b17f499 ]
 
-Documentation/virtual/kvm/api.txt states:
+...so that the test doesn't end up in an infinite loop if it fails for
+whatever reason, e.g. SHUTDOWN due to gcc inserting stack canary code
+into ucall() and attempting to derefence a null segment.
 
-  NOTE: For KVM_EXIT_IO, KVM_EXIT_MMIO, KVM_EXIT_OSI, KVM_EXIT_PAPR and
-        KVM_EXIT_EPR the corresponding operations are complete (and guest
-        state is consistent) only after userspace has re-entered the
-        kernel with KVM_RUN.  The kernel side will first finish incomplete
-        operations and then check for pending signals.  Userspace can
-        re-enter the guest with an unmasked signal pending to complete
-        pending operations.
-
-Because guest state may be inconsistent, starting state migration after
-an IO exit without first completing IO may result in test failures, e.g.
-a proposed change to KVM's handling of %rip in its fast PIO handling[1]
-will cause the new VM, i.e. the post-migration VM, to have its %rip set
-to the IN instruction that triggered KVM_EXIT_IO, leading to a test
-assertion due to a stage mismatch.
-
-For simplicitly, require KVM_CAP_IMMEDIATE_EXIT to complete IO and skip
-the test if it's not available.  The addition of KVM_CAP_IMMEDIATE_EXIT
-predates the state selftest by more than a year.
-
-[1] https://patchwork.kernel.org/patch/10848545/
-
-Fixes: fa3899add1056 ("kvm: selftests: add basic test for state save and restore")
-Reported-by: Jim Mattson <jmattson at google.com>
+Fixes: ca359066889f7 ("kvm: selftests: add cr4_cpuid_sync_test")
+Cc: Wei Huang <wei at redhat.com>
 Signed-off-by: Sean Christopherson <sean.j.christopherson at intel.com>
 Signed-off-by: Paolo Bonzini <pbonzini at redhat.com>
 Signed-off-by: Sasha Levin (Microsoft) <sashal at kernel.org>
 ---
- tools/testing/selftests/kvm/include/kvm_util.h |  1 +
- tools/testing/selftests/kvm/lib/kvm_util.c     | 16 ++++++++++++++++
- .../testing/selftests/kvm/x86_64/state_test.c  | 18 ++++++++++++++++--
- 3 files changed, 33 insertions(+), 2 deletions(-)
+ .../kvm/x86_64/cr4_cpuid_sync_test.c          | 35 ++++++++++---------
+ 1 file changed, 19 insertions(+), 16 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index a84785b02557..07b71ad9734a 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -102,6 +102,7 @@ vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva);
- struct kvm_run *vcpu_state(struct kvm_vm *vm, uint32_t vcpuid);
- void vcpu_run(struct kvm_vm *vm, uint32_t vcpuid);
- int _vcpu_run(struct kvm_vm *vm, uint32_t vcpuid);
-+void vcpu_run_complete_io(struct kvm_vm *vm, uint32_t vcpuid);
- void vcpu_set_mp_state(struct kvm_vm *vm, uint32_t vcpuid,
- 		       struct kvm_mp_state *mp_state);
- void vcpu_regs_get(struct kvm_vm *vm, uint32_t vcpuid, struct kvm_regs *regs);
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index b52cfdefecbf..efa0aad8b3c6 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1121,6 +1121,22 @@ int _vcpu_run(struct kvm_vm *vm, uint32_t vcpuid)
- 	return rc;
- }
+diff --git a/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c b/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
+index d503a51fad30..7c2c4d4055a8 100644
+--- a/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
++++ b/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
+@@ -87,22 +87,25 @@ int main(int argc, char *argv[])
+ 	while (1) {
+ 		rc = _vcpu_run(vm, VCPU_ID);
  
-+void vcpu_run_complete_io(struct kvm_vm *vm, uint32_t vcpuid)
-+{
-+	struct vcpu *vcpu = vcpu_find(vm, vcpuid);
-+	int ret;
+-		if (run->exit_reason == KVM_EXIT_IO) {
+-			switch (get_ucall(vm, VCPU_ID, &uc)) {
+-			case UCALL_SYNC:
+-				/* emulate hypervisor clearing CR4.OSXSAVE */
+-				vcpu_sregs_get(vm, VCPU_ID, &sregs);
+-				sregs.cr4 &= ~X86_CR4_OSXSAVE;
+-				vcpu_sregs_set(vm, VCPU_ID, &sregs);
+-				break;
+-			case UCALL_ABORT:
+-				TEST_ASSERT(false, "Guest CR4 bit (OSXSAVE) unsynchronized with CPUID bit.");
+-				break;
+-			case UCALL_DONE:
+-				goto done;
+-			default:
+-				TEST_ASSERT(false, "Unknown ucall 0x%x.", uc.cmd);
+-			}
++		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
++			    "Unexpected exit reason: %u (%s),\n",
++			    run->exit_reason,
++			    exit_reason_str(run->exit_reason));
 +
-+	TEST_ASSERT(vcpu != NULL, "vcpu not found, vcpuid: %u", vcpuid);
-+
-+	vcpu->state->immediate_exit = 1;
-+	ret = ioctl(vcpu->fd, KVM_RUN, NULL);
-+	vcpu->state->immediate_exit = 0;
-+
-+	TEST_ASSERT(ret == -1 && errno == EINTR,
-+		    "KVM_RUN IOCTL didn't exit immediately, rc: %i, errno: %i",
-+		    ret, errno);
-+}
-+
- /*
-  * VM VCPU Set MP State
-  *
-diff --git a/tools/testing/selftests/kvm/x86_64/state_test.c b/tools/testing/selftests/kvm/x86_64/state_test.c
-index 4b3f556265f1..30f75856cf39 100644
---- a/tools/testing/selftests/kvm/x86_64/state_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/state_test.c
-@@ -134,6 +134,11 @@ int main(int argc, char *argv[])
- 
- 	struct kvm_cpuid_entry2 *entry = kvm_get_supported_cpuid_entry(1);
- 
-+	if (!kvm_check_cap(KVM_CAP_IMMEDIATE_EXIT)) {
-+		fprintf(stderr, "immediate_exit not available, skipping test\n");
-+		exit(KSFT_SKIP);
-+	}
-+
- 	/* Create VM */
- 	vm = vm_create_default(VCPU_ID, 0, guest_code);
- 	vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
-@@ -156,8 +161,6 @@ int main(int argc, char *argv[])
- 			    stage, run->exit_reason,
- 			    exit_reason_str(run->exit_reason));
- 
--		memset(&regs1, 0, sizeof(regs1));
--		vcpu_regs_get(vm, VCPU_ID, &regs1);
- 		switch (get_ucall(vm, VCPU_ID, &uc)) {
- 		case UCALL_ABORT:
- 			TEST_ASSERT(false, "%s at %s:%d", (const char *)uc.args[0],
-@@ -176,6 +179,17 @@ int main(int argc, char *argv[])
- 			    uc.args[1] == stage, "Unexpected register values vmexit #%lx, got %lx",
- 			    stage, (ulong)uc.args[1]);
- 
-+		/*
-+		 * When KVM exits to userspace with KVM_EXIT_IO, KVM guarantees
-+		 * guest state is consistent only after userspace re-enters the
-+		 * kernel with KVM_RUN.  Complete IO prior to migrating state
-+		 * to a new VM.
-+		 */
-+		vcpu_run_complete_io(vm, VCPU_ID);
-+
-+		memset(&regs1, 0, sizeof(regs1));
-+		vcpu_regs_get(vm, VCPU_ID, &regs1);
-+
- 		state = vcpu_save_state(vm, VCPU_ID);
- 		kvm_vm_release(vm);
++		switch (get_ucall(vm, VCPU_ID, &uc)) {
++		case UCALL_SYNC:
++			/* emulate hypervisor clearing CR4.OSXSAVE */
++			vcpu_sregs_get(vm, VCPU_ID, &sregs);
++			sregs.cr4 &= ~X86_CR4_OSXSAVE;
++			vcpu_sregs_set(vm, VCPU_ID, &sregs);
++			break;
++		case UCALL_ABORT:
++			TEST_ASSERT(false, "Guest CR4 bit (OSXSAVE) unsynchronized with CPUID bit.");
++			break;
++		case UCALL_DONE:
++			goto done;
++		default:
++			TEST_ASSERT(false, "Unknown ucall 0x%x.", uc.cmd);
+ 		}
+ 	}
  
 -- 
 2.19.1
