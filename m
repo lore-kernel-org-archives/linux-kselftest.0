@@ -1,110 +1,110 @@
 From: logang at deltatee.com (Logan Gunthorpe)
-Date: Mon, 22 Apr 2019 15:05:21 -0600
-Subject: [PATCH v4 03/10] NTB: Introduce helper functions to calculate logical
- port number
+Date: Mon, 22 Apr 2019 15:05:22 -0600
+Subject: [PATCH v4 04/10] NTB: Introduce functions to calculate multi-port
+ resource index
 In-Reply-To: <20190422210528.15289-1-logang@deltatee.com>
 References: <20190422210528.15289-1-logang@deltatee.com>
-Message-ID: <20190422210528.15289-4-logang@deltatee.com>
+Message-ID: <20190422210528.15289-5-logang@deltatee.com>
 
-This patch introduces the "Logical Port Number" which is similar to the
-"Port Number" in that it enumerates the ports in the system.
+When using multi-ports each port uses resources (dbs, msgs, mws, etc)
+on every other port. Creating a mapping for these resources such that
+each port has a corresponding resource on every other port is a bit
+tricky.
 
-The original (or Physical) "Port Number" can be any number used by the
-hardware to uniquely identify a port in the system. The "Logical Port
-Number" enumerates all ports in the system from 0 to the number of
-ports minus one.
+Introduce the ntb_peer_resource_idx() function for this purpose.
+It returns the peer resource number that will correspond with the
+local peer index on the remote peer.
 
-For example a system with 5 ports might have the following port numbers
-which would be enumerated thusly:
-
-Port Number:           1  2  5  7  116
-Logical Port Number:   0  1  2  3  4
-
-The logical port number is useful when calculating which resources
-to use for which peers. So we thus define two helper functions:
-ntb_logical_port_number() and ntb_peer_logical_port_number() which
-provide the "Logical Port Number" for the local port and any peer
-respectively.
+Also, introduce ntb_peer_highest_mw_idx() which will use
+ntb_peer_resource_idx() but return the MW index starting with the
+highest index and working down.
 
 Signed-off-by: Logan Gunthorpe <logang at deltatee.com>
 Cc: Jon Mason <jdmason at kudzu.us>
 Cc: Dave Jiang <dave.jiang at intel.com>
 Cc: Allen Hubbe <allenbh at gmail.com>
-Cc: Serge Semin <fancer.lancer at gmail.com>
 ---
- include/linux/ntb.h | 53 ++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 52 insertions(+), 1 deletion(-)
+ include/linux/ntb.h | 70 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
 diff --git a/include/linux/ntb.h b/include/linux/ntb.h
-index 56a92e3ae3ae..91cf492b16a0 100644
+index 91cf492b16a0..66552830544b 100644
 --- a/include/linux/ntb.h
 +++ b/include/linux/ntb.h
-@@ -616,7 +616,6 @@ static inline int ntb_port_number(struct ntb_dev *ntb)
- 
- 	return ntb->ops->port_number(ntb);
- }
--
- /**
-  * ntb_peer_port_count() - get the number of peer device ports
-  * @ntb:	NTB device context.
-@@ -653,6 +652,58 @@ static inline int ntb_peer_port_number(struct ntb_dev *ntb, int pidx)
- 	return ntb->ops->peer_port_number(ntb, pidx);
+@@ -1557,4 +1557,74 @@ static inline int ntb_peer_msg_write(struct ntb_dev *ntb, int pidx, int midx,
+ 	return ntb->ops->peer_msg_write(ntb, pidx, midx, msg);
  }
  
 +/**
-+ * ntb_logical_port_number() - get the logical port number of the local port
-+ * @ntb:	NTB device context.
-+ *
-+ * The Logical Port Number is defined to be a unique number for each
-+ * port starting from zero through to the number of ports minus one.
-+ * This is in contrast to the Port Number where each port can be assigned
-+ * any unique physical number by the hardware.
-+ *
-+ * The logical port number is useful for calculating the resource indexes
-+ * used by peers.
-+ *
-+ * Return: the logical port number or negative value indicating an error
-+ */
-+static inline int ntb_logical_port_number(struct ntb_dev *ntb)
-+{
-+	int lport = ntb_port_number(ntb);
-+	int pidx;
-+
-+	if (lport < 0)
-+		return lport;
-+
-+	for (pidx = 0; pidx < ntb_peer_port_count(ntb); pidx++)
-+		if (lport <= ntb_peer_port_number(ntb, pidx))
-+			return pidx;
-+
-+	return pidx;
-+}
-+
-+/**
-+ * ntb_peer_logical_port_number() - get the logical peer port by given index
++ * ntb_peer_resource_idx() - get a resource index for a given peer idx
 + * @ntb:	NTB device context.
 + * @pidx:	Peer port index.
 + *
-+ * The Logical Port Number is defined to be a unique number for each
-+ * port starting from zero through to the number of ports minus one.
-+ * This is in contrast to the Port Number where each port can be assigned
-+ * any unique physical number by the hardware.
++ * When constructing a graph of peers, each remote peer must use a different
++ * resource index (mw, doorbell, etc) to communicate with each other
++ * peer.
 + *
-+ * The logical port number is useful for calculating the resource indexes
-+ * used by peers.
++ * In a two peer system, this function should always return 0 such that
++ * resource 0 points to the remote peer on both ports.
 + *
-+ * Return: the peer's logical port number or negative value indicating an error
++ * In a 5 peer system, this function will return the following matrix
++ *
++ * pidx \ port    0    1    2    3    4
++ * 0              0    0    1    2    3
++ * 1              0    1    1    2    3
++ * 2              0    1    2    2    3
++ * 3              0    1    2    3    3
++ *
++ * For example, if this function is used to program peer's memory
++ * windows, port 0 will program MW 0 on all it's peers to point to itself.
++ * port 1 will program MW 0 in port 0 to point to itself and MW 1 on all
++ * other ports. etc.
++ *
++ * For the legacy two host case, ntb_port_number() and ntb_peer_port_number()
++ * both return zero and therefore this function will always return zero.
++ * So MW 0 on each host would be programmed to point to the other host.
++ *
++ * Return: the resource index to use for that peer.
 + */
-+static inline int ntb_peer_logical_port_number(struct ntb_dev *ntb, int pidx)
++static inline int ntb_peer_resource_idx(struct ntb_dev *ntb, int pidx)
 +{
-+	if (ntb_peer_port_number(ntb, pidx) < ntb_port_number(ntb))
-+		return pidx;
++	int local_port, peer_port;
++
++	if (pidx >= ntb_peer_port_count(ntb))
++		return -EINVAL;
++
++	local_port = ntb_logical_port_number(ntb);
++	peer_port = ntb_peer_logical_port_number(ntb, pidx);
++
++	if (peer_port < local_port)
++		return local_port - 1;
 +	else
-+		return pidx + 1;
++		return local_port;
 +}
 +
- /**
-  * ntb_peer_port_idx() - get the peer device port index by given port number
-  * @ntb:	NTB device context.
++/**
++ * ntb_peer_highest_mw_idx() - get a memory window index for a given peer idx
++ *	using the highest index memory windows first
++ *
++ * @ntb:	NTB device context.
++ * @pidx:	Peer port index.
++ *
++ * Like ntb_peer_resource_idx(), except it returns indexes starting with
++ * last memory window index.
++ *
++ * Return: the resource index to use for that peer.
++ */
++static inline int ntb_peer_highest_mw_idx(struct ntb_dev *ntb, int pidx)
++{
++	int ret;
++
++	ret = ntb_peer_resource_idx(ntb, pidx);
++	if (ret < 0)
++		return ret;
++
++	return ntb_mw_count(ntb, pidx) - ret - 1;
++}
++
+ #endif
 -- 
 2.20.1
