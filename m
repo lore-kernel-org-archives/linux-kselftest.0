@@ -1,257 +1,149 @@
-From: logang at deltatee.com (Logan Gunthorpe)
-Date: Mon, 22 Apr 2019 15:05:19 -0600
-Subject: [PATCH v4 01/10] PCI/MSI: Support allocating virtual MSI interrupts
-In-Reply-To: <20190422210528.15289-1-logang@deltatee.com>
-References: <20190422210528.15289-1-logang@deltatee.com>
-Message-ID: <20190422210528.15289-2-logang@deltatee.com>
+From: yhs at fb.com (Yonghong Song)
+Date: Mon, 22 Apr 2019 21:13:06 +0000
+Subject: [PATCH bpf-next v3 5/5] selftests: bpf: test writable buffers in
+ raw tps
+In-Reply-To: <7a40c2851cd6f708a11cd003a05ab79c8644b10d.camel@fb.com>
+References: <20190419210409.5021-1-mmullins@fb.com>
+ <20190419210409.5021-6-mmullins@fb.com>
+ <7f32dd3c-a1e1-2965-3a98-3fa9e54e8501@fb.com>
+ <7a40c2851cd6f708a11cd003a05ab79c8644b10d.camel@fb.com>
+Message-ID: <7a82ca1d-dc92-cd03-0dff-3329d8f11774@fb.com>
 
-For NTB devices, we want to be able to trigger MSI interrupts
-through a memory window. In these cases we may want to use
-more interrupts than the NTB PCI device has available in its MSI-X
-table.
 
-We allow for this by creating a new 'virtual' interrupt. These
-interrupts are allocated as usual but are not programmed into the
-MSI-X table (as there may not be space for them).
 
-The MSI address and data will then handled through an NTB MSI library
-introduced later in this series.
+On 4/22/19 12:27 PM, Matt Mullins wrote:
+> On Mon, 2019-04-22 at 18:32 +0000, Yonghong Song wrote:
+>>
+>> On 4/19/19 2:04 PM, Matt Mullins wrote:
+>>> This tests that:
+>>>     * a BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE cannot be attached if it
+>>>       uses either:
+>>>       * a variable offset to the tracepoint buffer, or
+>>>       * an offset beyond the size of the tracepoint buffer
+>>>     * a tracer can modify the buffer provided when attached to a writable
+>>>       tracepoint in bpf_prog_test_run
+>>>
+>>> Signed-off-by: Matt Mullins <mmullins at fb.com>
+>>> ---
+>>>    include/trace/events/bpf_test_run.h           | 50 ++++++++++++
+>>>    net/bpf/test_run.c                            |  4 +
+>>>    .../raw_tp_writable_reject_nbd_invalid.c      | 40 ++++++++++
+>>>    .../bpf/prog_tests/raw_tp_writable_test_run.c | 80 +++++++++++++++++++
+>>>    .../selftests/bpf/verifier/raw_tp_writable.c  | 34 ++++++++
+>>>    5 files changed, 208 insertions(+)
+>>>    create mode 100644 include/trace/events/bpf_test_run.h
+>>>    create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
+>>>    create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_run.c
+>>>    create mode 100644 tools/testing/selftests/bpf/verifier/raw_tp_writable.c
+>>>
+>>> diff --git a/include/trace/events/bpf_test_run.h b/include/trace/events/bpf_test_run.h
+>>> new file mode 100644
+>>> index 000000000000..abf466839ea4
+>>> --- /dev/null
+>>> +++ b/include/trace/events/bpf_test_run.h
+>>> @@ -0,0 +1,50 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>> +#undef TRACE_SYSTEM
+>>> +#define TRACE_SYSTEM bpf_test_run
+>>> +
+>>> +#if !defined(_TRACE_NBD_H) || defined(TRACE_HEADER_MULTI_READ)
+>>> +#define _TRACE_BPF_TEST_RUN_H
+>>> +
+>>> +#include <linux/tracepoint.h>
+>>> +
+>>> +DECLARE_EVENT_CLASS(bpf_test_finish,
+>>> +
+>>> +	TP_PROTO(int *err),
+>>> +
+>>> +	TP_ARGS(err),
+>>> +
+>>> +	TP_STRUCT__entry(
+>>> +		__field(int, err)
+>>> +	),
+>>> +
+>>> +	TP_fast_assign(
+>>> +		__entry->err = *err;
+>>> +	),
+>>> +
+>>> +	TP_printk("bpf_test_finish with err=%d", __entry->err)
+>>> +);
+>>> +
+>>> +#ifdef DEFINE_EVENT_WRITABLE
+>>> +#undef BPF_TEST_RUN_DEFINE_EVENT
+>>> +#define BPF_TEST_RUN_DEFINE_EVENT(template, call, proto, args, size)	\
+>>> +	DEFINE_EVENT_WRITABLE(template, call, PARAMS(proto),		\
+>>> +			      PARAMS(args), size)
+>>> +#else
+>>> +#undef BPF_TEST_RUN_DEFINE_EVENT
+>>> +#define BPF_TEST_RUN_DEFINE_EVENT(template, call, proto, args, size)	\
+>>> +	DEFINE_EVENT(template, call, PARAMS(proto), PARAMS(args))
+>>> +#endif
+>>> +
+>>> +BPF_TEST_RUN_DEFINE_EVENT(bpf_test_finish, bpf_test_finish,
+>>> +
+>>> +	TP_PROTO(int *err),
+>>> +
+>>> +	TP_ARGS(err),
+>>> +
+>>> +	sizeof(int)
+>>> +);
+>>> +
+>>> +#endif
+>>> +
+>>> +/* This part must be outside protection */
+>>> +#include <trace/define_trace.h>
+>>> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+>>> index fab142b796ef..25e757102595 100644
+>>> --- a/net/bpf/test_run.c
+>>> +++ b/net/bpf/test_run.c
+>>> @@ -13,6 +13,9 @@
+>>>    #include <net/sock.h>
+>>>    #include <net/tcp.h>
+>>>    
+>>> +#define CREATE_TRACE_POINTS
+>>> +#include <trace/events/bpf_test_run.h>
+>>> +
+>>>    static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
+>>>    			u32 *retval, u32 *time)
+>>>    {
+>>> @@ -100,6 +103,7 @@ static int bpf_test_finish(const union bpf_attr *kattr,
+>>>    	if (err != -ENOSPC)
+>>>    		err = 0;
+>>>    out:
+>>> +	trace_bpf_test_finish(&err);
+>>>    	return err;
+>>>    }
+>>>    
+>>> diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
+>>> new file mode 100644
+>>> index 000000000000..328d5c4b084b
+>>> --- /dev/null
+>>> +++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
+>>> @@ -0,0 +1,40 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +
+>>> +#include <test_progs.h>
+>>> +#include <linux/nbd.h>
+>>> +
+>>> +void test_raw_tp_writable_reject_nbd_invalid(void)
+>>> +{
+>>> +	__u32 duration = 0;
+>>> +	char error[4096];
+>>> +	int bpf_fd = -1, tp_fd = -1;
+>>> +
+>>> +	const struct bpf_insn program[] = {
+>>> +		/* r6 is our tp buffer */
+>>> +		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
+>>> +		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_6, 128),
+>>
+>> The number "128" is a little cryptic. Maybe you can use something like
+>> sizeof(struct nbd_request)?
+> 
+> That was explicitly chosen to be (far) larger than an nbd_request, as
+> this program should be rejected by the verifier.  If you really want, I
+> can do `sizeof(struct nbd_request) + some constant` and add a comment.
+> But the size of an nbd request should never change, as that's a network
+> protocol.
 
-Signed-off-by: Logan Gunthorpe <logang at deltatee.com>
-Acked-by: Bjorn Helgaas <bhelgaas at google.com>
----
- drivers/pci/msi.c   | 54 +++++++++++++++++++++++++++++++++++++--------
- include/linux/msi.h |  8 +++++++
- include/linux/pci.h |  9 ++++++++
- 3 files changed, 62 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/pci/msi.c b/drivers/pci/msi.c
-index 73986825d221..668bc16ef4d1 100644
---- a/drivers/pci/msi.c
-+++ b/drivers/pci/msi.c
-@@ -192,6 +192,9 @@ static void msi_mask_irq(struct msi_desc *desc, u32 mask, u32 flag)
- 
- static void __iomem *pci_msix_desc_addr(struct msi_desc *desc)
- {
-+	if (desc->msi_attrib.is_virtual)
-+		return NULL;
-+
- 	return desc->mask_base +
- 		desc->msi_attrib.entry_nr * PCI_MSIX_ENTRY_SIZE;
- }
-@@ -206,14 +209,19 @@ static void __iomem *pci_msix_desc_addr(struct msi_desc *desc)
- u32 __pci_msix_desc_mask_irq(struct msi_desc *desc, u32 flag)
- {
- 	u32 mask_bits = desc->masked;
-+	void __iomem *desc_addr;
- 
- 	if (pci_msi_ignore_mask)
- 		return 0;
-+	desc_addr = pci_msix_desc_addr(desc);
-+	if (!desc_addr)
-+		return 0;
- 
- 	mask_bits &= ~PCI_MSIX_ENTRY_CTRL_MASKBIT;
- 	if (flag)
- 		mask_bits |= PCI_MSIX_ENTRY_CTRL_MASKBIT;
--	writel(mask_bits, pci_msix_desc_addr(desc) + PCI_MSIX_ENTRY_VECTOR_CTRL);
-+
-+	writel(mask_bits, desc_addr + PCI_MSIX_ENTRY_VECTOR_CTRL);
- 
- 	return mask_bits;
- }
-@@ -273,6 +281,11 @@ void __pci_read_msi_msg(struct msi_desc *entry, struct msi_msg *msg)
- 	if (entry->msi_attrib.is_msix) {
- 		void __iomem *base = pci_msix_desc_addr(entry);
- 
-+		if (!base) {
-+			WARN_ON(1);
-+			return;
-+		}
-+
- 		msg->address_lo = readl(base + PCI_MSIX_ENTRY_LOWER_ADDR);
- 		msg->address_hi = readl(base + PCI_MSIX_ENTRY_UPPER_ADDR);
- 		msg->data = readl(base + PCI_MSIX_ENTRY_DATA);
-@@ -303,6 +316,9 @@ void __pci_write_msi_msg(struct msi_desc *entry, struct msi_msg *msg)
- 	} else if (entry->msi_attrib.is_msix) {
- 		void __iomem *base = pci_msix_desc_addr(entry);
- 
-+		if (!base)
-+			goto skip;
-+
- 		writel(msg->address_lo, base + PCI_MSIX_ENTRY_LOWER_ADDR);
- 		writel(msg->address_hi, base + PCI_MSIX_ENTRY_UPPER_ADDR);
- 		writel(msg->data, base + PCI_MSIX_ENTRY_DATA);
-@@ -327,7 +343,13 @@ void __pci_write_msi_msg(struct msi_desc *entry, struct msi_msg *msg)
- 					      msg->data);
- 		}
- 	}
-+
-+skip:
- 	entry->msg = *msg;
-+
-+	if (entry->write_msi_msg)
-+		entry->write_msi_msg(entry, entry->write_msi_msg_data);
-+
- }
- 
- void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg)
-@@ -550,6 +572,7 @@ msi_setup_entry(struct pci_dev *dev, int nvec, struct irq_affinity *affd)
- 
- 	entry->msi_attrib.is_msix	= 0;
- 	entry->msi_attrib.is_64		= !!(control & PCI_MSI_FLAGS_64BIT);
-+	entry->msi_attrib.is_virtual    = 0;
- 	entry->msi_attrib.entry_nr	= 0;
- 	entry->msi_attrib.maskbit	= !!(control & PCI_MSI_FLAGS_MASKBIT);
- 	entry->msi_attrib.default_irq	= dev->irq;	/* Save IOAPIC IRQ */
-@@ -674,6 +697,7 @@ static int msix_setup_entries(struct pci_dev *dev, void __iomem *base,
- 	struct irq_affinity_desc *curmsk, *masks = NULL;
- 	struct msi_desc *entry;
- 	int ret, i;
-+	int vec_count = pci_msix_vec_count(dev);
- 
- 	if (affd)
- 		masks = irq_create_affinity_masks(nvec, affd);
-@@ -696,6 +720,10 @@ static int msix_setup_entries(struct pci_dev *dev, void __iomem *base,
- 			entry->msi_attrib.entry_nr = entries[i].entry;
- 		else
- 			entry->msi_attrib.entry_nr = i;
-+
-+		entry->msi_attrib.is_virtual =
-+			entry->msi_attrib.entry_nr >= vec_count;
-+
- 		entry->msi_attrib.default_irq	= dev->irq;
- 		entry->mask_base		= base;
- 
-@@ -714,12 +742,19 @@ static void msix_program_entries(struct pci_dev *dev,
- {
- 	struct msi_desc *entry;
- 	int i = 0;
-+	void __iomem *desc_addr;
- 
- 	for_each_pci_msi_entry(entry, dev) {
- 		if (entries)
- 			entries[i++].vector = entry->irq;
--		entry->masked = readl(pci_msix_desc_addr(entry) +
--				PCI_MSIX_ENTRY_VECTOR_CTRL);
-+
-+		desc_addr = pci_msix_desc_addr(entry);
-+		if (desc_addr)
-+			entry->masked = readl(desc_addr +
-+					      PCI_MSIX_ENTRY_VECTOR_CTRL);
-+		else
-+			entry->masked = 0;
-+
- 		msix_mask_irq(entry, 1);
- 	}
- }
-@@ -932,7 +967,7 @@ int pci_msix_vec_count(struct pci_dev *dev)
- EXPORT_SYMBOL(pci_msix_vec_count);
- 
- static int __pci_enable_msix(struct pci_dev *dev, struct msix_entry *entries,
--			     int nvec, struct irq_affinity *affd)
-+			     int nvec, struct irq_affinity *affd, int flags)
- {
- 	int nr_entries;
- 	int i, j;
-@@ -943,7 +978,7 @@ static int __pci_enable_msix(struct pci_dev *dev, struct msix_entry *entries,
- 	nr_entries = pci_msix_vec_count(dev);
- 	if (nr_entries < 0)
- 		return nr_entries;
--	if (nvec > nr_entries)
-+	if (nvec > nr_entries && !(flags & PCI_IRQ_VIRTUAL))
- 		return nr_entries;
- 
- 	if (entries) {
-@@ -1079,7 +1114,8 @@ EXPORT_SYMBOL(pci_enable_msi);
- 
- static int __pci_enable_msix_range(struct pci_dev *dev,
- 				   struct msix_entry *entries, int minvec,
--				   int maxvec, struct irq_affinity *affd)
-+				   int maxvec, struct irq_affinity *affd,
-+				   int flags)
- {
- 	int rc, nvec = maxvec;
- 
-@@ -1096,7 +1132,7 @@ static int __pci_enable_msix_range(struct pci_dev *dev,
- 				return -ENOSPC;
- 		}
- 
--		rc = __pci_enable_msix(dev, entries, nvec, affd);
-+		rc = __pci_enable_msix(dev, entries, nvec, affd, flags);
- 		if (rc == 0)
- 			return nvec;
- 
-@@ -1127,7 +1163,7 @@ static int __pci_enable_msix_range(struct pci_dev *dev,
- int pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries,
- 		int minvec, int maxvec)
- {
--	return __pci_enable_msix_range(dev, entries, minvec, maxvec, NULL);
-+	return __pci_enable_msix_range(dev, entries, minvec, maxvec, NULL, 0);
- }
- EXPORT_SYMBOL(pci_enable_msix_range);
- 
-@@ -1167,7 +1203,7 @@ int pci_alloc_irq_vectors_affinity(struct pci_dev *dev, unsigned int min_vecs,
- 
- 	if (flags & PCI_IRQ_MSIX) {
- 		msix_vecs = __pci_enable_msix_range(dev, NULL, min_vecs,
--						    max_vecs, affd);
-+						    max_vecs, affd, flags);
- 		if (msix_vecs > 0)
- 			return msix_vecs;
- 	}
-diff --git a/include/linux/msi.h b/include/linux/msi.h
-index 7e9b81c3b50d..c278ae8760df 100644
---- a/include/linux/msi.h
-+++ b/include/linux/msi.h
-@@ -56,6 +56,10 @@ struct fsl_mc_msi_desc {
-  * @msg:	The last set MSI message cached for reuse
-  * @affinity:	Optional pointer to a cpu affinity mask for this descriptor
-  *
-+ * @write_msi_msg:	Callback that may be called when the MSI message
-+ *			address or data changes
-+ * @write_msi_msg_data:	Data parameter for the callback.
-+ *
-  * @masked:	[PCI MSI/X] Mask bits
-  * @is_msix:	[PCI MSI/X] True if MSI-X
-  * @multiple:	[PCI MSI/X] log2 num of messages allocated
-@@ -78,6 +82,9 @@ struct msi_desc {
- 	struct msi_msg			msg;
- 	struct irq_affinity_desc	*affinity;
- 
-+	void (*write_msi_msg)(struct msi_desc *entry, void *data);
-+	void *write_msi_msg_data;
-+
- 	union {
- 		/* PCI MSI/X specific data */
- 		struct {
-@@ -88,6 +95,7 @@ struct msi_desc {
- 				u8	multi_cap	: 3;
- 				u8	maskbit		: 1;
- 				u8	is_64		: 1;
-+				u8	is_virtual	: 1;
- 				u16	entry_nr;
- 				unsigned default_irq;
- 			} msi_attrib;
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 77448215ef5b..c482aaa8e970 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -1355,6 +1355,15 @@ int pci_set_vga_state(struct pci_dev *pdev, bool decode,
- #define PCI_IRQ_MSI		(1 << 1) /* Allow MSI interrupts */
- #define PCI_IRQ_MSIX		(1 << 2) /* Allow MSI-X interrupts */
- #define PCI_IRQ_AFFINITY	(1 << 3) /* Auto-assign affinity */
-+
-+/*
-+ * Virtual interrupts allow for more interrupts to be allocated
-+ * than the device has interrupts for. These are not programmed
-+ * into the device's MSI-X table and must be handled by some
-+ * other driver means.
-+ */
-+#define PCI_IRQ_VIRTUAL		(1 << 4)
-+
- #define PCI_IRQ_ALL_TYPES \
- 	(PCI_IRQ_LEGACY | PCI_IRQ_MSI | PCI_IRQ_MSIX)
- 
--- 
-2.20.1
+I think `sizeof(struct nbd_request) + some constant` is better than 
+number `128`.
