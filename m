@@ -1,151 +1,638 @@
-From: yhs@fb.com (Yonghong Song)
-Date: Mon, 22 Apr 2019 21:13:06 +0000
-Subject: [PATCH bpf-next v3 5/5] selftests: bpf: test writable buffers in
- raw tps
-In-Reply-To: <7a40c2851cd6f708a11cd003a05ab79c8644b10d.camel@fb.com>
-References: <20190419210409.5021-1-mmullins@fb.com>
- <20190419210409.5021-6-mmullins@fb.com>
- <7f32dd3c-a1e1-2965-3a98-3fa9e54e8501@fb.com>
- <7a40c2851cd6f708a11cd003a05ab79c8644b10d.camel@fb.com>
-Message-ID: <7a82ca1d-dc92-cd03-0dff-3329d8f11774@fb.com>
+From: ci_notify@linaro.org (ci_notify@linaro.org)
+Date: Tue, 23 Apr 2019 14:00:28 +0000 (UTC)
+Subject: next-20190423 kselftest results
+Message-ID: <204451286.14339.1556028029111.JavaMail.jenkins@a6c5c67cda76>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190422211306.4INmggWHcDr7b8pz9gxaHgngHofe1nec832mk_nQ0Vk@z>
+Message-ID: <20190423140028.9flKHOp3shKvs9W2g3Bbp6-M2Hk7AbcfDMC8whaCKUY@z>
+
+Summary
+------------------------------------------------------------------------
+kernel: 5.1.0-rc6
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: 76c938fcaa4b4a5d8f05fa907925d5043834964e
+git describe: next-20190423
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190423
+
+Regressions (compared to build next-20190418)
+------------------------------------------------------------------------
+hi6220-hikey - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * membarrier_membarrier_test                                                                                                         
+qemu_arm:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * membarrier_membarrier_test                                                                                                         
+                                                                                         
+    * net_run_netsocktests                                                                                                         
+                                                                                         
+    * net_tls                                                                                                         
+                                                                                         
+    * pidfd_pidfd_test                                                                                                         
+                                                                                         
+    * rseq_basic_percpu_ops_test                                                                                                         
+                                                                                         
+    * rseq_basic_test                                                                                                         
+                                                                                         
+    * rseq_param_test                                                                                                         
+                                                                                         
+    * rseq_param_test_benchmark                                                                                                         
+                                                                                         
+    * rseq_param_test_compare_twice                                                                                                         
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * membarrier_membarrier_test                                                                                                         
+                                                                                         
+    * net_msg_zerocopy.sh                                                                                                         
+                                                                                         
+    * net_run_netsocktests                                                                                                         
+                                                                                         
+    * net_tls                                                                                                         
+                                                                                         
+    * pidfd_pidfd_test                                                                                                         
+                                                                                         
+    * rseq_basic_percpu_ops_test                                                                                                         
+                                                                                         
+    * rseq_basic_test                                                                                                         
+                                                                                         
+    * rseq_param_test                                                                                                         
+                                                                                         
+    * rseq_param_test_benchmark                                                                                                         
+                                                                                         
+    * rseq_param_test_compare_twice                                                                                                         
+                                                                                         
+    * seccomp_seccomp_bpf                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * membarrier_membarrier_test                                                                                                         
+                                                                                         
+    * net_msg_zerocopy.sh                                                                                                         
+                                                                                         
+    * net_run_netsocktests                                                                                                         
+                                                                                         
+    * net_tls                                                                                                         
+                                                                                         
+    * pidfd_pidfd_test                                                                                                         
+                                                                                         
+    * rseq_basic_percpu_ops_test                                                                                                         
+                                                                                         
+    * rseq_basic_test                                                                                                         
+                                                                                         
+    * rseq_param_test                                                                                                         
+                                                                                         
+    * rseq_param_test_benchmark                                                                                                         
+                                                                                         
+    * rseq_param_test_compare_twice                                                                                                         
+                                                                                         
+    * rseq_run_param_test.sh                                                                                                         
+                                                                                         
+    * seccomp_seccomp_bpf                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sockmap                                                                                                         
+                                                                                         
+    * membarrier_membarrier_test                                                                                                         
+                                                                                         
+    * net_msg_zerocopy.sh                                                                                                         
+                                                                                         
+    * pidfd_pidfd_test                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * membarrier_membarrier_test                                                                                                         
+                                                                                         
+    * net_msg_zerocopy.sh                                                                                                         
+                                                                                         
+    * pidfd_pidfd_test                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * membarrier_membarrier_test                                                                                                         
+                                                                                         
+    * net_msg_zerocopy.sh                                                                                                         
+                                                                                         
+    * pidfd_pidfd_test                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sockmap                                                                                                         
+                                                                                         
+    * membarrier_membarrier_test                                                                                                         
+                                                                                         
+    * net_msg_zerocopy.sh                                                                                                         
+                                                                                         
+    * pidfd_pidfd_test                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * membarrier_membarrier_test                                                                                                         
+                                                                                         
+    * net_msg_zerocopy.sh                                                                                                         
+                                                                                         
+    * pidfd_pidfd_test                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * membarrier_membarrier_test                                                                                                         
+                                                                                         
+    * net_msg_zerocopy.sh                                                                                                         
+                                                                                         
+    * pidfd_pidfd_test                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sockmap                                                                                                         
+                                                                                         
+    * membarrier_membarrier_test                                                                                                         
+                                                                                         
+    * net_msg_zerocopy.sh                                                                                                         
+                                                                                         
+    * pidfd_pidfd_test                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * membarrier_membarrier_test                                                                                                         
+                                                                                         
+    * net_msg_zerocopy.sh                                                                                                         
+                                                                                         
+    * pidfd_pidfd_test                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * membarrier_membarrier_test                                                                                                         
+                                                                                         
+    * net_msg_zerocopy.sh                                                                                                         
+                                                                                         
+    * pidfd_pidfd_test                                                                                                         
+                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190418)                                                                   
+------------------------------------------------------------------------                                               
+i386:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sockmap                                                                                                         
+x86_64:                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
 
 
+In total:
+------------------------------------------------------------------------
+Ran 1176 total tests in the following environments and test suites.
+pass 682
+fail 392
+xfail 0
+skip 102
 
-On 4/22/19 12:27 PM, Matt Mullins wrote:
-> On Mon, 2019-04-22@18:32 +0000, Yonghong Song wrote:
->>
->> On 4/19/19 2:04 PM, Matt Mullins wrote:
->>> This tests that:
->>>     * a BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE cannot be attached if it
->>>       uses either:
->>>       * a variable offset to the tracepoint buffer, or
->>>       * an offset beyond the size of the tracepoint buffer
->>>     * a tracer can modify the buffer provided when attached to a writable
->>>       tracepoint in bpf_prog_test_run
->>>
->>> Signed-off-by: Matt Mullins <mmullins at fb.com>
->>> ---
->>>    include/trace/events/bpf_test_run.h           | 50 ++++++++++++
->>>    net/bpf/test_run.c                            |  4 +
->>>    .../raw_tp_writable_reject_nbd_invalid.c      | 40 ++++++++++
->>>    .../bpf/prog_tests/raw_tp_writable_test_run.c | 80 +++++++++++++++++++
->>>    .../selftests/bpf/verifier/raw_tp_writable.c  | 34 ++++++++
->>>    5 files changed, 208 insertions(+)
->>>    create mode 100644 include/trace/events/bpf_test_run.h
->>>    create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
->>>    create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_run.c
->>>    create mode 100644 tools/testing/selftests/bpf/verifier/raw_tp_writable.c
->>>
->>> diff --git a/include/trace/events/bpf_test_run.h b/include/trace/events/bpf_test_run.h
->>> new file mode 100644
->>> index 000000000000..abf466839ea4
->>> --- /dev/null
->>> +++ b/include/trace/events/bpf_test_run.h
->>> @@ -0,0 +1,50 @@
->>> +/* SPDX-License-Identifier: GPL-2.0 */
->>> +#undef TRACE_SYSTEM
->>> +#define TRACE_SYSTEM bpf_test_run
->>> +
->>> +#if !defined(_TRACE_NBD_H) || defined(TRACE_HEADER_MULTI_READ)
->>> +#define _TRACE_BPF_TEST_RUN_H
->>> +
->>> +#include <linux/tracepoint.h>
->>> +
->>> +DECLARE_EVENT_CLASS(bpf_test_finish,
->>> +
->>> +	TP_PROTO(int *err),
->>> +
->>> +	TP_ARGS(err),
->>> +
->>> +	TP_STRUCT__entry(
->>> +		__field(int, err)
->>> +	),
->>> +
->>> +	TP_fast_assign(
->>> +		__entry->err = *err;
->>> +	),
->>> +
->>> +	TP_printk("bpf_test_finish with err=%d", __entry->err)
->>> +);
->>> +
->>> +#ifdef DEFINE_EVENT_WRITABLE
->>> +#undef BPF_TEST_RUN_DEFINE_EVENT
->>> +#define BPF_TEST_RUN_DEFINE_EVENT(template, call, proto, args, size)	\
->>> +	DEFINE_EVENT_WRITABLE(template, call, PARAMS(proto),		\
->>> +			      PARAMS(args), size)
->>> +#else
->>> +#undef BPF_TEST_RUN_DEFINE_EVENT
->>> +#define BPF_TEST_RUN_DEFINE_EVENT(template, call, proto, args, size)	\
->>> +	DEFINE_EVENT(template, call, PARAMS(proto), PARAMS(args))
->>> +#endif
->>> +
->>> +BPF_TEST_RUN_DEFINE_EVENT(bpf_test_finish, bpf_test_finish,
->>> +
->>> +	TP_PROTO(int *err),
->>> +
->>> +	TP_ARGS(err),
->>> +
->>> +	sizeof(int)
->>> +);
->>> +
->>> +#endif
->>> +
->>> +/* This part must be outside protection */
->>> +#include <trace/define_trace.h>
->>> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
->>> index fab142b796ef..25e757102595 100644
->>> --- a/net/bpf/test_run.c
->>> +++ b/net/bpf/test_run.c
->>> @@ -13,6 +13,9 @@
->>>    #include <net/sock.h>
->>>    #include <net/tcp.h>
->>>    
->>> +#define CREATE_TRACE_POINTS
->>> +#include <trace/events/bpf_test_run.h>
->>> +
->>>    static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
->>>    			u32 *retval, u32 *time)
->>>    {
->>> @@ -100,6 +103,7 @@ static int bpf_test_finish(const union bpf_attr *kattr,
->>>    	if (err != -ENOSPC)
->>>    		err = 0;
->>>    out:
->>> +	trace_bpf_test_finish(&err);
->>>    	return err;
->>>    }
->>>    
->>> diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
->>> new file mode 100644
->>> index 000000000000..328d5c4b084b
->>> --- /dev/null
->>> +++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
->>> @@ -0,0 +1,40 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +
->>> +#include <test_progs.h>
->>> +#include <linux/nbd.h>
->>> +
->>> +void test_raw_tp_writable_reject_nbd_invalid(void)
->>> +{
->>> +	__u32 duration = 0;
->>> +	char error[4096];
->>> +	int bpf_fd = -1, tp_fd = -1;
->>> +
->>> +	const struct bpf_insn program[] = {
->>> +		/* r6 is our tp buffer */
->>> +		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
->>> +		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_6, 128),
->>
->> The number "128" is a little cryptic. Maybe you can use something like
->> sizeof(struct nbd_request)?
-> 
-> That was explicitly chosen to be (far) larger than an nbd_request, as
-> this program should be rejected by the verifier.  If you really want, I
-> can do `sizeof(struct nbd_request) + some constant` and add a comment.
-> But the size of an nbd request should never change, as that's a network
-> protocol.
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
 
-I think `sizeof(struct nbd_request) + some constant` is better than 
-number `128`.
+Test Suites
+-----------
+* boot-lkft-kselftests-master-506
+* kselftest
+* boot-lkft-kselftests-vsyscall-mode-native-master-506
+* boot-lkft-kselftests-vsyscall-mode-none-master-506
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
+
+
+Failures
+------------------------------------------------------------------------
+
+qemu_x86_64:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_tls
+* kselftest/net_xfrm_policy.sh
+* kselftest/pidfd_pidfd_test
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rseq_basic_test
+* kselftest/rseq_param_test
+* kselftest/rseq_param_test_benchmark
+* kselftest/rseq_param_test_compare_twice
+* kselftest/rseq_run_param_test.sh
+* kselftest/rtc_rtctest
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+* kselftest/x86_fsgsbase_64
+
+qemu_arm:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_run_netsocktests
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_tls
+* kselftest/pidfd_pidfd_test
+* kselftest/proc_proc-self-map-files-002
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rseq_basic_test
+* kselftest/rseq_param_test
+* kselftest/rseq_param_test_benchmark
+* kselftest/rseq_param_test_compare_twice
+* kselftest/rtc_rtctest
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+
+qemu_i386:
+* kselftest/bpf_test_progs
+
+x86:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pidfd_pidfd_test
+* kselftest/timestamping_txtimestamp.sh
+* kselftest-vsyscall-mode-none/binderfs_binderfs_test
+* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-none/bpf_test_netcnt
+* kselftest-vsyscall-mode-none/bpf_test_progs
+* kselftest-vsyscall-mode-none/bpf_test_sockmap
+* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
+* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-none/cgroup_test_core
+* kselftest-vsyscall-mode-none/dma-buf_udmabuf
+* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
+* kselftest-vsyscall-mode-none/kvm_clear_dirty_log_test
+* kselftest-vsyscall-mode-none/kvm_dirty_log_test
+* kselftest-vsyscall-mode-none/kvm_evmcs_test
+* kselftest-vsyscall-mode-none/kvm_hyperv_cpuid
+* kselftest-vsyscall-mode-none/kvm_platform_info_test
+* kselftest-vsyscall-mode-none/kvm_set_sregs_test
+* kselftest-vsyscall-mode-none/kvm_smm_test
+* kselftest-vsyscall-mode-none/kvm_state_test
+* kselftest-vsyscall-mode-none/kvm_sync_regs_test
+* kselftest-vsyscall-mode-none/kvm_vmx_tsc_adjust_test
+* kselftest-vsyscall-mode-none/lib_bitmap.sh
+* kselftest-vsyscall-mode-none/lib_prime_numbers.sh
+* kselftest-vsyscall-mode-none/lib_printf.sh
+* kselftest-vsyscall-mode-none/lib_strscpy.sh
+* kselftest-vsyscall-mode-none/livepatch_test-callbacks.sh
+* kselftest-vsyscall-mode-none/livepatch_test-livepatch.sh
+* kselftest-vsyscall-mode-none/livepatch_test-shadow-vars.sh
+* kselftest-vsyscall-mode-none/membarrier_membarrier_test
+* kselftest-vsyscall-mode-none/net_fib-onlink-tests.sh
+* kselftest-vsyscall-mode-none/net_ip_defrag.sh
+* kselftest-vsyscall-mode-none/net_msg_zerocopy.sh
+* kselftest-vsyscall-mode-none/net_pmtu.sh
+* kselftest-vsyscall-mode-none/net_psock_snd.sh
+* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
+* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
+* kselftest-vsyscall-mode-none/pidfd_pidfd_test
+* kselftest-vsyscall-mode-none/timestamping_txtimestamp.sh
+* kselftest-vsyscall-mode-native/binderfs_binderfs_test
+* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-native/bpf_test_netcnt
+* kselftest-vsyscall-mode-native/bpf_test_progs
+* kselftest-vsyscall-mode-native/bpf_test_sockmap
+* kselftest-vsyscall-mode-native/bpf_test_tc_edt.sh
+* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-native/cgroup_test_core
+* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
+* kselftest-vsyscall-mode-native/kvm_clear_dirty_log_test
+* kselftest-vsyscall-mode-native/kvm_cr4_cpuid_sync_test
+* kselftest-vsyscall-mode-native/kvm_dirty_log_test
+* kselftest-vsyscall-mode-native/kvm_evmcs_test
+* kselftest-vsyscall-mode-native/kvm_hyperv_cpuid
+* kselftest-vsyscall-mode-native/kvm_platform_info_test
+* kselftest-vsyscall-mode-native/kvm_set_sregs_test
+* kselftest-vsyscall-mode-native/kvm_smm_test
+* kselftest-vsyscall-mode-native/kvm_state_test
+* kselftest-vsyscall-mode-native/kvm_sync_regs_test
+* kselftest-vsyscall-mode-native/kvm_vmx_close_while_nested_test
+* kselftest-vsyscall-mode-native/kvm_vmx_tsc_adjust_test
+* kselftest-vsyscall-mode-native/lib_bitmap.sh
+* kselftest-vsyscall-mode-native/lib_prime_numbers.sh
+* kselftest-vsyscall-mode-native/lib_printf.sh
+* kselftest-vsyscall-mode-native/lib_strscpy.sh
+* kselftest-vsyscall-mode-native/livepatch_test-callbacks.sh
+* kselftest-vsyscall-mode-native/livepatch_test-livepatch.sh
+* kselftest-vsyscall-mode-native/livepatch_test-shadow-vars.sh
+* kselftest-vsyscall-mode-native/membarrier_membarrier_test
+* kselftest-vsyscall-mode-native/net_fib-onlink-tests.sh
+* kselftest-vsyscall-mode-native/net_ip_defrag.sh
+* kselftest-vsyscall-mode-native/net_msg_zerocopy.sh
+* kselftest-vsyscall-mode-native/net_pmtu.sh
+* kselftest-vsyscall-mode-native/net_psock_snd.sh
+* kselftest-vsyscall-mode-native/net_test_vxlan_under_vrf.sh
+* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
+* kselftest-vsyscall-mode-native/pidfd_pidfd_test
+* kselftest-vsyscall-mode-native/timestamping_txtimestamp.sh
+
+juno-r2:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+
+x15:
+* boot-lkft-kselftests-master-506/x15
+
+hi6220-hikey:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+
+qemu_arm64:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_tls
+* kselftest/pidfd_pidfd_test
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rseq_basic_test
+* kselftest/rseq_param_test
+* kselftest/rseq_param_test_benchmark
+* kselftest/rseq_param_test_compare_twice
+* kselftest/rtc_rtctest
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+
+dragonboard-410c:
+* boot-lkft-kselftests-master-506/dragonboard-410c
+
+i386:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
