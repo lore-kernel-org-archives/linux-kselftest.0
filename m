@@ -1,99 +1,125 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Wed, 24 Apr 2019 09:37:56 -0700
-Subject: [PATCH 2/2] seccomp: Make NEW_LISTENER and TSYNC flags exclusive
-In-Reply-To: <20190424163756.40001-1-keescook@chromium.org>
-References: <20190424163756.40001-1-keescook@chromium.org>
-Message-ID: <20190424163756.40001-3-keescook@chromium.org>
+From: mark.rutland@arm.com (Mark Rutland)
+Date: Wed, 24 Apr 2019 17:40:33 +0100
+Subject: [RFC PATCH for 5.2 08/10] rseq/selftests: aarch64 code
+ signature: handle big-endian environment
+In-Reply-To: <20190424152502.14246-9-mathieu.desnoyers@efficios.com>
+References: <20190424152502.14246-1-mathieu.desnoyers@efficios.com>
+ <20190424152502.14246-9-mathieu.desnoyers@efficios.com>
+Message-ID: <20190424164032.GD21101@lakrids.cambridge.arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190424163756.To2lVd1mipIsuRWcTvwNcZHw-fqhxEuUwxf6IvQ6hmw@z>
+Message-ID: <20190424164033.53MLtjXAZyK5z1UmninmVHjNKVWALVyJg0eeQ2ZVLT4@z>
 
-From: Tycho Andersen <tycho@tycho.ws>
+On Wed, Apr 24, 2019@11:25:00AM -0400, Mathieu Desnoyers wrote:
+> Handle compiling with -mbig-endian on aarch64, which generates binaries
+> with mixed code vs data endianness (little endian code, big endian
+> data).
+> 
+> Else mismatch between code endianness for the generated signatures and
+> data endianness for the RSEQ_SIG parameter passed to the rseq
+> registration will trigger application segmentation faults when the
+> kernel try to abort rseq critical sections.
+> 
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+> CC: Peter Zijlstra <peterz at infradead.org>
+> CC: Thomas Gleixner <tglx at linutronix.de>
+> CC: Joel Fernandes <joelaf at google.com>
+> CC: Catalin Marinas <catalin.marinas at arm.com>
+> CC: Dave Watson <davejwatson at fb.com>
+> CC: Will Deacon <will.deacon at arm.com>
+> CC: Shuah Khan <shuah at kernel.org>
+> CC: Andi Kleen <andi at firstfloor.org>
+> CC: linux-kselftest at vger.kernel.org
+> CC: "H . Peter Anvin" <hpa at zytor.com>
+> CC: Chris Lameter <cl at linux.com>
+> CC: Russell King <linux at arm.linux.org.uk>
+> CC: Michael Kerrisk <mtk.manpages at gmail.com>
+> CC: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
+> CC: Paul Turner <pjt at google.com>
+> CC: Boqun Feng <boqun.feng at gmail.com>
+> CC: Josh Triplett <josh at joshtriplett.org>
+> CC: Steven Rostedt <rostedt at goodmis.org>
+> CC: Ben Maurer <bmaurer at fb.com>
+> CC: linux-api at vger.kernel.org
+> CC: Andy Lutomirski <luto at amacapital.net>
+> CC: Andrew Morton <akpm at linux-foundation.org>
+> CC: Linus Torvalds <torvalds at linux-foundation.org>
+> ---
+>  tools/testing/selftests/rseq/rseq-arm64.h | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/rseq/rseq-arm64.h b/tools/testing/selftests/rseq/rseq-arm64.h
+> index b41a2a48e965..200dae9e4208 100644
+> --- a/tools/testing/selftests/rseq/rseq-arm64.h
+> +++ b/tools/testing/selftests/rseq/rseq-arm64.h
+> @@ -6,7 +6,20 @@
+>   * (C) Copyright 2018 - Will Deacon <will.deacon at arm.com>
+>   */
+>  
+> -#define RSEQ_SIG	0xd428bc00	/* BRK #0x45E0 */
+> +/*
+> + * aarch64 -mbig-endian generates mixed endianness code vs data:
+> + * little-endian code and big-endian data. Ensure the RSEQ_SIG signature
+> + * matches code endianness.
+> + */
+> +#define RSEQ_SIG_CODE	0xd428bc00	/* BRK #0x45E0.  */
+> +
+> +#ifdef __AARCH64EB__
+> +#define RSEQ_SIG_DATA	0x00bc28d4	/* BRK #0x45E0.  */
+> +#else
+> +#define RSEQ_SIG_DATA	RSEQ_SIG_CODE
+> +#endif
+> +
+> +#define RSEQ_SIG	RSEQ_SIG_DATA
+>  
+>  #define rseq_smp_mb()	__asm__ __volatile__ ("dmb ish" ::: "memory")
+>  #define rseq_smp_rmb()	__asm__ __volatile__ ("dmb ishld" ::: "memory")
+> @@ -121,7 +134,7 @@ do {										\
+>  
+>  #define RSEQ_ASM_DEFINE_ABORT(label, abort_label)				\
+>  	"	b	222f\n"							\
+> -	"	.inst 	"	__rseq_str(RSEQ_SIG) "\n"			\
+> +	"	.inst 	"	__rseq_str(RSEQ_SIG_CODE) "\n"			\
 
-As the comment notes, the return codes for TSYNC and NEW_LISTENER
-conflict, because they both return positive values, one in the case of
-success and one in the case of error. So, let's disallow both of these
-flags together.
+I don't think this is right; the .inst directive _should_ emit the value
+in the instruction stream endianness (i.e. LE, regardless of the data
+endianness).
 
-While this is technically a userspace break, all the users I know
-of are still waiting on me to land this feature in libseccomp, so I
-think it'll be safe. Also, at present my use case doesn't require
-TSYNC at all, so this isn't a big deal to disallow. If someone
-wanted to support this, a path forward would be to add a new flag like
-TSYNC_AND_LISTENER_YES_I_UNDERSTAND_THAT_TSYNC_WILL_JUST_RETURN_EAGAIN,
-but the use cases are so different I don't see it really happening.
+That's certainly the case with the kernel.org crosstool GCC:
 
-Finally, it's worth noting that this does actually fix a UAF issue: at the
-end of seccomp_set_mode_filter(), we have:
+[mark at lakrids:/mnt/data/tests/inst-test]% cat test.c                               
+void func(void)
+{
+        asm volatile(".inst 0xd4000001");
+}
+[mark at lakrids:/mnt/data/tests/inst-test]% usekorg 8.1.0 aarch64-linux-gcc -c test.c
+[mark at lakrids:/mnt/data/tests/inst-test]% usekorg 8.1.0 aarch64-linux-objdump -d test.o
 
-        if (flags & SECCOMP_FILTER_FLAG_NEW_LISTENER) {
-                if (ret < 0) {
-                        listener_f->private_data = NULL;
-                        fput(listener_f);
-                        put_unused_fd(listener);
-                } else {
-                        fd_install(listener, listener_f);
-                        ret = listener;
-                }
-        }
-out_free:
-        seccomp_filter_free(prepared);
+test.o:     file format elf64-littleaarch64
 
-But if ret > 0 because TSYNC raced, we'll install the listener fd and then
-free the filter out from underneath it, causing a UAF when the task closes
-it or dies. This patch also switches the condition to be simply if (ret),
-so that if someone does add the flag mentioned above, they won't have to
-remember to fix this too.
 
-Reported-by: syzbot+b562969adb2e04af3442 at syzkaller.appspotmail.com
-Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
-CC: stable at vger.kernel.org # v5.0+
-Signed-off-by: Tycho Andersen <tycho at tycho.ws>
-Signed-off-by: Kees Cook <keescook at chromium.org>
----
- kernel/seccomp.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+Disassembly of section .text:
 
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index df27e499956a..3582eeb59893 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -502,7 +502,10 @@ seccomp_prepare_user_filter(const char __user *user_filter)
-  *
-  * Caller must be holding current->sighand->siglock lock.
-  *
-- * Returns 0 on success, -ve on error.
-+ * Returns 0 on success, -ve on error, or
-+ *   - in TSYNC mode: the pid of a thread which was either not in the correct
-+ *     seccomp mode or did not have an ancestral seccomp filter
-+ *   - in NEW_LISTENER mode: the fd of the new listener
-  */
- static long seccomp_attach_filter(unsigned int flags,
- 				  struct seccomp_filter *filter)
-@@ -1258,6 +1261,16 @@ static long seccomp_set_mode_filter(unsigned int flags,
- 	if (flags & ~SECCOMP_FILTER_FLAG_MASK)
- 		return -EINVAL;
- 
-+	/*
-+	 * In the successful case, NEW_LISTENER returns the new listener fd.
-+	 * But in the failure case, TSYNC returns the thread that died. If you
-+	 * combine these two flags, there's no way to tell whether something
-+	 * succeeded or failed. So, let's disallow this combination.
-+	 */
-+	if ((flags & SECCOMP_FILTER_FLAG_TSYNC) &&
-+	    (flags & SECCOMP_FILTER_FLAG_NEW_LISTENER))
-+		return -EINVAL;
-+
- 	/* Prepare the new filter before holding any locks. */
- 	prepared = seccomp_prepare_user_filter(filter);
- 	if (IS_ERR(prepared))
-@@ -1304,7 +1317,7 @@ static long seccomp_set_mode_filter(unsigned int flags,
- 		mutex_unlock(&current->signal->cred_guard_mutex);
- out_put_fd:
- 	if (flags & SECCOMP_FILTER_FLAG_NEW_LISTENER) {
--		if (ret < 0) {
-+		if (ret) {
- 			listener_f->private_data = NULL;
- 			fput(listener_f);
- 			put_unused_fd(listener);
--- 
-2.17.1
+0000000000000000 <func>:
+   0:   d4000001        svc     #0x0
+   4:   d503201f        nop
+   8:   d65f03c0        ret
+[mark at lakrids:/mnt/data/tests/inst-test]% usekorg 8.1.0 aarch64-linux-gcc -mbig-endian -c test.c
+[mark at lakrids:/mnt/data/tests/inst-test]% usekorg 8.1.0 aarch64-linux-objdump -d test.o         
+
+test.o:     file format elf64-bigaarch64
+
+
+Disassembly of section .text:
+
+0000000000000000 <func>:
+   0:   d4000001        svc     #0x0
+   4:   d503201f        nop
+   8:   d65f03c0        ret
+
+
+
+Have you tested this? Is there some toolchain that doesn't get this
+right?
+
+Thanks,
+Mark.
