@@ -1,7 +1,7 @@
 From: lkml@metux.net (Enrico Weigelt, metux IT consult)
-Date: Wed, 24 Apr 2019 10:20:34 +0200
+Date: Wed, 24 Apr 2019 10:56:49 +0200
 Subject: [PATCH RFC 1/2] Add polling support to pidfd
-In-Reply-To: <CAKOZueuBTwyrLtpVQaoTAgjGSgeHY7392sKv5uAYdy4XKNHKHQ@mail.gmail.com>
+In-Reply-To: <CAHrFyr6f_CUP__818e1u6TaHd-XpWY6NOxri4yzzR6rNY5rk_w@mail.gmail.com>
 References: <20190411175043.31207-1-joel@joelfernandes.org>
  <20190416120430.GA15437@redhat.com> <20190416192051.GA184889@google.com>
  <20190417130940.GC32622@redhat.com>
@@ -13,46 +13,52 @@ References: <20190411175043.31207-1-joel@joelfernandes.org>
  <CAKOZueu3PzD_QgROXFRs8FvD=HTKJLsHDK9GrUdbFoMzx_7HEA@mail.gmail.com>
  <CAHrFyr4REuKFuARAXnhBC67TGzyDGmMONc7XjfUGvf+Qfm7EuQ@mail.gmail.com>
  <CAKOZueuBTwyrLtpVQaoTAgjGSgeHY7392sKv5uAYdy4XKNHKHQ@mail.gmail.com>
-Message-ID: <f631a11b-bdaa-1b07-dda5-028bf9efbd58@metux.net>
+ <CAHrFyr6f_CUP__818e1u6TaHd-XpWY6NOxri4yzzR6rNY5rk_w@mail.gmail.com>
+Message-ID: <1772079b-6e84-35e3-62b8-92034c29759d@metux.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190424082034.DvJY79vKd05iIVNiCWtuzoonvsv7wAdDe_QNs8k7-To@z>
+Message-ID: <20190424085649._YubHGiLyeaqMwrJuCi_PJUKkeI-bD2ehAzVCJpw7t8@z>
 
-On 19.04.19 23:21, Daniel Colascione wrote:
+On 19.04.19 23:48, Christian Brauner wrote:
 
->> EPOLLIN on a pidfd could very well mean that data can be read via
->> a read() on the pidfd *other* than the exit status. The read could e.g.
->> give you a lean struct that indicates the type of state transition: NOTIFY_EXIT,
->> NOTIFY_EXEC, etc.. This way we are not bound to a specific poll event indicating
->> a specific state.
->> Though there's a case to be made that EPOLLHUP could indicate process exit
->> and EPOLLIN a state change + read().
+> So is Android and we're not designing an interface for Android but for
+> all of userspace.
+> I hope this is clear. Service managers are quite important and systemd
+> is the largest one
+> and they can make good use of this feature.
+
+Maybe just talk about talking about service managers and not even
+mentioning systemd ;-)
+
+> That whole pargraph is about dismissing a range of valid use-cases based on
+> assumptions such as "way more common" and
+> even argues that service managers are special cases and therefore not
+> really worth considering. I would like to be more open to other use cases.
+
+ACK. Things like pidfd can make life for service managers a lot easier,
+and even allow whole new scenarios.
+
+For example, the monitoring part doesn't need to be the spawning
+process  anymore. The spawner could send the pidfd to the monitor,
+eg. via unix socket. If we had plan9-like srv filesystem (something
+I've got on my todo list) we could even make the pidfd's available in
+the fs and so replace the old pidfiles (pidfile now would be really a
+process handle instead of just a scratchpad for writing down the pid).
+
+>> Joel indicated that he believes poll(2)
+>> shouldn't be supported on procfs pidfds. Is that your thinking as
+>> well? If that's the case, then we're in a state where non-parents
 > 
-> And do you imagine making read() destructive? Does that read() then
-> reset the POLLIN state? You're essentially proposing that a pidfd
-> provide an "event stream" interface, delivering notifications packets
-> that indicate state changes like "process exited" or "process stopped"
-> or "process execed". While this sort of interface is powerful and has
-> some nice properties that tools like debuggers and daemon monitors
-> might want to use, I think it's too complicated and error prone for
-> the overwhelmingly common case of wanting to monitor process lifetime.
+> Yes, it is.
 
-I don't think it's so complicated. read() + comparing a few bits
-(eg. strncmp(), if the packets are strings) really isn't a big deal.
+Why so ?
 
-Actually, I proposed quite the same (before I read this mail).
-
-> I like Linus' idea of just making waitid(2) (not waitpid(2), as I
-> mistakenly mentioned earlier) on a pidfd act *exactly* like a
-> waitid(2) on the corresponding process and making POLLIN just mean
-> "waitid will succeed". It's a nice simple model that's easy to reason
-> about and that makes it easy to port existing code to pidfds.
-
-Okay, that's probably a good starting point. We could add more
-sophisticated monitoring later.
+IMHO, it would be much more useful, if another process can get the
+same process handle via procfs. This also would allow the scenario
+described above w/o srvfs: pidfiles could just be symlinks to the
+corresponding /proc files.
 
 
 --mtx
-
 
 -- 
 Enrico Weigelt, metux IT consult
