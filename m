@@ -1,7 +1,7 @@
 From: lkml at metux.net (Enrico Weigelt, metux IT consult)
-Date: Wed, 24 Apr 2019 11:11:18 +0200
+Date: Wed, 24 Apr 2019 11:17:15 +0200
 Subject: [PATCH RFC 1/2] Add polling support to pidfd
-In-Reply-To: <CAHrFyr6FntUgsCRw2b1B9+pjLQ2+pJMTULywRC1woNW4PvtyiQ@mail.gmail.com>
+In-Reply-To: <CAKOZuesw9JK6DLhFTxN74rH5PDqGn7qbCQT4aaP1qtahSoRZ8w@mail.gmail.com>
 References: <20190411175043.31207-1-joel@joelfernandes.org>
  <20190416120430.GA15437@redhat.com> <20190416192051.GA184889@google.com>
  <20190417130940.GC32622@redhat.com>
@@ -16,18 +16,19 @@ References: <20190411175043.31207-1-joel@joelfernandes.org>
  <CAHrFyr6f_CUP__818e1u6TaHd-XpWY6NOxri4yzzR6rNY5rk_w@mail.gmail.com>
  <CAKOZuetiqFx0qW9rdCVWsKQxwaYK2Vis8EXsDba6=F5dp=da6Q@mail.gmail.com>
  <CAHrFyr6FntUgsCRw2b1B9+pjLQ2+pJMTULywRC1woNW4PvtyiQ@mail.gmail.com>
-Message-ID: <c833c78b-445d-93d9-e59f-6bc62376c111@metux.net>
+ <CAKOZuesw9JK6DLhFTxN74rH5PDqGn7qbCQT4aaP1qtahSoRZ8w@mail.gmail.com>
+Message-ID: <322efe1d-4acd-8ca5-1a76-51b90819ef44@metux.net>
 
-On 20.04.19 01:02, Christian Brauner wrote:
+On 20.04.19 01:29, Daniel Colascione wrote:
 
-> I'm sorry, who has agreed that a non-parent should be able to wait for
-> process death?
-> I know you proposed that but has anyone ever substantially supported this?
+> The point I'm making, to be> very clear, is *NOT* that process monitoring is "not worth>
+considering", but that process monitoring is subtle and complicated>
+enough that it ought to be considered as a standalone project,>
+independent of pidfds proper and of the very simple and effective> pidfd
+system that Joel has proposed in his patch series.
 
-I actually support this.
-
-One practical usecase I have in mind for some upcoming projects is
-monitoring processes in a container from the outside.
+At that point I'm wondering: what pidfd is actually meant for,
+if not process monitoring ?
 
 
 --mtx
