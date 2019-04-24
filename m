@@ -1,75 +1,137 @@
 From: keescook at chromium.org (Kees Cook)
-Date: Wed, 24 Apr 2019 16:12:33 -0700
-Subject: [PATCH v2 4/8] selftests: Add plan line and fix result line syntax
+Date: Wed, 24 Apr 2019 16:12:32 -0700
+Subject: [PATCH v2 3/8] selftests: Extract logic for multiple test runs
 In-Reply-To: <20190424231237.14776-1-keescook@chromium.org>
 References: <20190424231237.14776-1-keescook@chromium.org>
-Message-ID: <20190424231237.14776-5-keescook@chromium.org>
+Message-ID: <20190424231237.14776-4-keescook@chromium.org>
 
-The TAP version 13 spec requires a "plan" line, which has been missing.
-Since we always know how many tests we're going to run, emit the count on
-the plan line. This also fixes the result lines to remove the "1.." prefix
-which is against spec, and to mark skips with the correct "# SKIP" suffix.
+This moves the logic for running multiple tests into a single "run_many"
+function of runner.sh. Both "run_tests" and "emit_tests" are modified to
+use it. Summary handling is now controlled by the "per_test_logging"
+shell flag.
 
 Signed-off-by: Kees Cook <keescook at chromium.org>
 ---
- tools/testing/selftests/kselftest.h         |  4 ++--
- tools/testing/selftests/kselftest/runner.sh | 10 ++++++----
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ tools/testing/selftests/Makefile            |  6 ++---
+ tools/testing/selftests/kselftest/runner.sh | 25 ++++++++++++++++++---
+ tools/testing/selftests/lib.mk              | 25 +++++++--------------
+ 3 files changed, 32 insertions(+), 24 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 47e1d995c182..9f4147a6fdbc 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -111,7 +111,7 @@ static inline void ksft_test_result_skip(const char *msg, ...)
- 	ksft_cnt.ksft_xskip++;
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index c5f9f736cdbd..4ac1d1c7ce5b 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -193,16 +193,14 @@ ifdef INSTALL_PATH
+ 	echo "  logfile=\$$BASE_DIR/output.log" >> $(ALL_SCRIPT)
+ 	echo "  cat /dev/null > \$$logfile" >> $(ALL_SCRIPT)
+ 	echo "fi" >> $(ALL_SCRIPT)
+-	echo "export KSFT_TAP_LEVEL=1" >> $(ALL_SCRIPT)
  
- 	va_start(args, msg);
--	printf("ok %d # skip ", ksft_test_num());
-+	printf("not ok %d # SKIP ", ksft_test_num());
- 	vprintf(msg, args);
- 	va_end(args);
- }
-@@ -172,7 +172,7 @@ static inline int ksft_exit_skip(const char *msg, ...)
- 		va_list args;
+ 	for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		echo "echo ; echo TAP version 13" >> $(ALL_SCRIPT);	\
+-		echo "echo Running tests in $$TARGET" >> $(ALL_SCRIPT); \
+-		echo "echo ========================================" >> $(ALL_SCRIPT); \
+ 		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
+ 		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
++		echo -n "run_many" >> $(ALL_SCRIPT); \
+ 		make -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
++		echo "" >> $(ALL_SCRIPT);	    \
+ 		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
+ 	done;
  
- 		va_start(args, msg);
--		printf("1..%d # Skipped: ", ksft_test_num());
-+		printf("not ok %d # SKIP ", ksft_test_num());
- 		vprintf(msg, args);
- 		va_end(args);
- 	} else {
 diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index f12b0a631273..e0621974e01e 100644
+index e1117d703887..f12b0a631273 100644
 --- a/tools/testing/selftests/kselftest/runner.sh
 +++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -20,15 +20,15 @@ run_one()
+@@ -2,17 +2,20 @@
+ # SPDX-License-Identifier: GPL-2.0
+ #
+ # Runs a set of tests in a given subdirectory.
++export KSFT_TAP_LEVEL=1
+ export skip_rc=4
+ export logfile=/dev/stdout
++export per_test_logging=
+ 
+ run_one()
+ {
+-	TEST="$1"
+-	NUM="$2"
++	DIR="$1"
++	TEST="$2"
++	NUM="$3"
+ 
+ 	BASENAME_TEST=$(basename $TEST)
+ 
+-	TEST_HDR_MSG="selftests: "`basename $PWD`:" $BASENAME_TEST"
++	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
+ 	echo "$TEST_HDR_MSG"
  	echo "========================================"
  	if [ ! -x "$TEST" ]; then
- 		echo "$TEST_HDR_MSG: Warning: file $TEST is not executable, correct this."
--		echo "not ok 1..$test_num $TEST_HDR_MSG [FAIL]"
-+		echo "not ok $test_num $TEST_HDR_MSG"
- 	else
- 		cd `dirname $TEST` > /dev/null
- 		(./$BASENAME_TEST >> "$logfile" 2>&1 &&
--		echo "ok 1..$test_num $TEST_HDR_MSG [PASS]") ||
-+		echo "ok $test_num $TEST_HDR_MSG") ||
- 		(if [ $? -eq $skip_rc ]; then	\
--			echo "not ok 1..$test_num $TEST_HDR_MSG [SKIP]"
-+			echo "not ok $test_num $TEST_HDR_MSG # SKIP"
- 		else
--			echo "not ok 1..$test_num $TEST_HDR_MSG [FAIL]"
-+			echo "not ok $test_num $TEST_HDR_MSG"
- 		fi)
+@@ -30,3 +33,19 @@ run_one()
  		cd - >/dev/null
  	fi
-@@ -39,6 +39,8 @@ run_many()
- 	echo "TAP version 13"
- 	DIR=$(basename "$PWD")
- 	test_num=0
-+	total=$(echo "$@" | wc -w)
-+	echo "1..$total"
- 	for TEST in "$@"; do
- 		BASENAME_TEST=$(basename $TEST)
- 		test_num=$(( test_num + 1 ))
+ }
++
++run_many()
++{
++	echo "TAP version 13"
++	DIR=$(basename "$PWD")
++	test_num=0
++	for TEST in "$@"; do
++		BASENAME_TEST=$(basename $TEST)
++		test_num=$(( test_num + 1 ))
++		if [ -n "$per_test_logging" ]; then
++			logfile="/tmp/$BASENAME_TEST"
++			cat /dev/null > "$logfile"
++		fi
++		run_one "$DIR" "$TEST" "$test_num"
++	done
++}
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 6b2d026a94ea..28b8ffedfdf1 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -67,19 +67,11 @@ endif
+ 
+ .ONESHELL:
+ define RUN_TESTS
+-	@export KSFT_TAP_LEVEL=`echo 1`;		\
+-	test_num=`echo 0`;				\
+-	. $(selfdir)/kselftest/runner.sh;		\
+-	echo "TAP version 13";				\
+-	for TEST in $(1); do				\
+-		BASENAME_TEST=`basename $$TEST`;	\
+-		test_num=`echo $$test_num+1 | bc`;	\
+-		if [ "X$(summary)" != "X" ]; then	\
+-		        logfile="/tmp/$$BASENAME_TEST";	\
+-			cat /dev/null > "$$logfile";	\
+-		fi;					\
+-		run_one "$$BASENAME_TEST" "$$test_num";	\
+-	done;
++	@. $(selfdir)/kselftest/runner.sh;	\
++	if [ "X$(summary)" != "X" ]; then       \
++		per_test_logging=1;		\
++	fi;                                     \
++	run_many $(1)
+ endef
+ 
+ run_tests: all
+@@ -117,12 +109,11 @@ else
+ endif
+ 
+ emit_tests:
+-	@test_num=`echo 0`;				\
+ 	for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
+ 		BASENAME_TEST=`basename $$TEST`;	\
+-		test_num=`echo $$test_num+1 | bc`;	\
+-		echo "run_one \"$$BASENAME_TEST\" \"$$test_num\"";	\
+-	done;
++		echo "	\\";				\
++		echo -n "	\"$$BASENAME_TEST\"";	\
++	done;						\
+ 
+ # define if isn't already. It is undefined in make O= case.
+ ifeq ($(RM),)
 -- 
 2.17.1
