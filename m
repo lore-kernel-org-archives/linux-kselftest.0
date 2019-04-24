@@ -1,78 +1,51 @@
-From: bigeasy at linutronix.de (Sebastian Andrzej Siewior)
-Date: Wed, 24 Apr 2019 09:34:46 +0200
-Subject: [PATCH] rcutorture: Tweak kvm options
-Message-ID: <20190424073446.8577-1-bigeasy@linutronix.de>
+From: lkml at metux.net (Enrico Weigelt, metux IT consult)
+Date: Wed, 24 Apr 2019 10:04:27 +0200
+Subject: [PATCH RFC 1/2] Add polling support to pidfd
+In-Reply-To: <CAKOZuetkF4zPm-oKMjnoJtvUi4iTnY-ORzPd-JpfpseMXY4yhw@mail.gmail.com>
+References: <20190416120430.GA15437@redhat.com>
+ <20190416192051.GA184889@google.com> <20190417130940.GC32622@redhat.com>
+ <CAG48ez2Q0t2-rZz8wmGeih=NigYL-CT3+E6NgiPT0AkOQAUPMQ@mail.gmail.com>
+ <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
+ <20190419190247.GB251571@google.com>
+ <20190419191858.iwcvqm6fihbkaata@brauner.io>
+ <20190419194902.GE251571@google.com>
+ <CAKOZueu3PzD_QgROXFRs8FvD=HTKJLsHDK9GrUdbFoMzx_7HEA@mail.gmail.com>
+ <CAHrFyr4REuKFuARAXnhBC67TGzyDGmMONc7XjfUGvf+Qfm7EuQ@mail.gmail.com>
+ <20190419212002.GB44851@google.com>
+ <CAKOZuetkF4zPm-oKMjnoJtvUi4iTnY-ORzPd-JpfpseMXY4yhw@mail.gmail.com>
+Message-ID: <34c493c3-993f-39f1-3afc-7f59d5113a30@metux.net>
 
-In one of my rcutorture tests the TSC clocksource got marked unstable
-due to a large difference in the TSC value. I'm not sure if the guest
-run for a long time with disabled interrupts or if the host was very
-busy and didn't schedule the guest for some time.
-I took a look on the qemu/KVM options and decided to update the options:
-- Use kvm{32|64} as CPU. We could probably use `host' (like ARM does)
-  for maximum available features but since we don't run any userland I'm
-  not sure if it makes any difference.
+On 19.04.19 23:24, Daniel Colascione wrote:
 
-- Drop the "noapic" option, enable TSC deadline timer. There is no
-  history why the APIC was disabled, I see no reason for it. The
-  deadline timer is probably "nicer".
+Hi folks,
 
-- Additional config options. It ensures that the kernel knowns that it
-  runs as a kvm guest and can use virt devices like the kvm-clock as
-  clocksource. The kvm-clock was the main motivation here.
+<big_snip>
 
-- I didn't add a random HW device. It would make the random device ready
-  earlier (not it doesn't complete the initialisation at all) but I
-  doubt that there is any need for this.
+I haven't followed the whole thread, so forgive me if I'm going to
+write something dumb here ... but: this all feels a bit complicated
+to me.
 
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
----
- tools/testing/selftests/rcutorture/bin/functions.sh | 13 ++++++++++++-
- .../selftests/rcutorture/configs/rcu/CFcommon       |  4 ++++
- 2 files changed, 16 insertions(+), 1 deletion(-)
+Why not just making the pidfd present a stream of events (which are
+encoded as text lines) ? It would behave just like any stream, eg.
+socket, chardev, ...
 
-diff --git a/tools/testing/selftests/rcutorture/bin/functions.sh b/tools/testing/selftests/rcutorture/bin/functions.sh
-index 6bcb8b5b2ff22..be3c5c73d7e79 100644
---- a/tools/testing/selftests/rcutorture/bin/functions.sh
-+++ b/tools/testing/selftests/rcutorture/bin/functions.sh
-@@ -172,7 +172,7 @@ identify_qemu_append () {
- 	local console=ttyS0
- 	case "$1" in
- 	qemu-system-x86_64|qemu-system-i386)
--		echo noapic selinux=0 initcall_debug debug
-+		echo selinux=0 initcall_debug debug
- 		;;
- 	qemu-system-aarch64)
- 		console=ttyAMA0
-@@ -191,8 +191,19 @@ identify_qemu_append () {
- # Output arguments for qemu arguments based on the TORTURE_QEMU_MAC
- # and TORTURE_QEMU_INTERACTIVE environment variables.
- identify_qemu_args () {
-+	local KVM_CPU=""
-+	case "$1" in
-+	qemu-system-x86_64)
-+		KVM_CPU=kvm64
-+		;;
-+	qemu-system-i386)
-+		KVM_CPU=kvm32
-+		;;
-+	esac
- 	case "$1" in
- 	qemu-system-x86_64|qemu-system-i386)
-+		echo -machine q35,accel=kvm
-+		echo -cpu ${KVM_CPU},x2apic=on,tsc-deadline=on,hypervisor=on,tsc_adjust=on
- 		;;
- 	qemu-system-aarch64)
- 		echo -machine virt,gic-version=host -cpu host
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-index d2d2a86139db1..322d5d40443cd 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-@@ -1,2 +1,6 @@
- CONFIG_RCU_TORTURE_TEST=y
- CONFIG_PRINTK_TIME=y
-+CONFIG_HYPERVISOR_GUEST=y
-+CONFIG_PARAVIRT=y
-+CONFIG_PARAVIRT_SPINLOCKS=y
-+CONFIG_KVM_GUEST=y
+An `cat` on a pidfd could look like this:
+
+<timestamp> EXIT <exitcode>
+<timestamp> EXEC <cmdline>
+<timestamp> SIGNAL <sigid>
+...
+
+IOW: just using POLLIN. Let the listener just read all events and
+decide which ones he's actually acting on.
+
+In the other direction we could write in commands, eg. for sending
+signals.
+
+
+--mtx
+
 -- 
-2.20.1
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info at metux.net -- +49-151-27565287
