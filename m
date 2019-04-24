@@ -1,41 +1,89 @@
-From: lkml@metux.net (Enrico Weigelt, metux IT consult)
-Date: Wed, 24 Apr 2019 11:17:15 +0200
-Subject: [PATCH RFC 1/2] Add polling support to pidfd
-In-Reply-To: <CAKOZuesw9JK6DLhFTxN74rH5PDqGn7qbCQT4aaP1qtahSoRZ8w@mail.gmail.com>
-References: <20190411175043.31207-1-joel@joelfernandes.org>
- <20190416120430.GA15437@redhat.com> <20190416192051.GA184889@google.com>
- <20190417130940.GC32622@redhat.com>
- <CAG48ez2Q0t2-rZz8wmGeih=NigYL-CT3+E6NgiPT0AkOQAUPMQ@mail.gmail.com>
- <CEB62F51-E8BF-4EFB-B438-8AF76633FF00@brauner.io>
- <20190419190247.GB251571@google.com>
- <20190419191858.iwcvqm6fihbkaata@brauner.io>
- <20190419194902.GE251571@google.com>
- <CAKOZueu3PzD_QgROXFRs8FvD=HTKJLsHDK9GrUdbFoMzx_7HEA@mail.gmail.com>
- <CAHrFyr4REuKFuARAXnhBC67TGzyDGmMONc7XjfUGvf+Qfm7EuQ@mail.gmail.com>
- <CAKOZueuBTwyrLtpVQaoTAgjGSgeHY7392sKv5uAYdy4XKNHKHQ@mail.gmail.com>
- <CAHrFyr6f_CUP__818e1u6TaHd-XpWY6NOxri4yzzR6rNY5rk_w@mail.gmail.com>
- <CAKOZuetiqFx0qW9rdCVWsKQxwaYK2Vis8EXsDba6=F5dp=da6Q@mail.gmail.com>
- <CAHrFyr6FntUgsCRw2b1B9+pjLQ2+pJMTULywRC1woNW4PvtyiQ@mail.gmail.com>
- <CAKOZuesw9JK6DLhFTxN74rH5PDqGn7qbCQT4aaP1qtahSoRZ8w@mail.gmail.com>
-Message-ID: <322efe1d-4acd-8ca5-1a76-51b90819ef44@metux.net>
+From: paulmck@linux.ibm.com (Paul E. McKenney)
+Date: Wed, 24 Apr 2019 03:38:09 -0700
+Subject: [PATCH] rcutorture: Tweak kvm options
+In-Reply-To: <20190424073446.8577-1-bigeasy@linutronix.de>
+References: <20190424073446.8577-1-bigeasy@linutronix.de>
+Message-ID: <20190424103809.GM3923@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190424091715.v3Schh1pERUGBelw0aNoF9bfJnNls92ObOIaoxHnSg4@z>
+Message-ID: <20190424103809.-m3vSwePp7LiCaIC5IEDA9nM7mwwwgc-eBXN1tpIFDQ@z>
 
-On 20.04.19 01:29, Daniel Colascione wrote:
+On Wed, Apr 24, 2019@09:34:46AM +0200, Sebastian Andrzej Siewior wrote:
+> In one of my rcutorture tests the TSC clocksource got marked unstable
+> due to a large difference in the TSC value. I'm not sure if the guest
+> run for a long time with disabled interrupts or if the host was very
+> busy and didn't schedule the guest for some time.
+> I took a look on the qemu/KVM options and decided to update the options:
+> - Use kvm{32|64} as CPU. We could probably use `host' (like ARM does)
+>   for maximum available features but since we don't run any userland I'm
+>   not sure if it makes any difference.
+> 
+> - Drop the "noapic" option, enable TSC deadline timer. There is no
+>   history why the APIC was disabled, I see no reason for it. The
+>   deadline timer is probably "nicer".
+> 
+> - Additional config options. It ensures that the kernel knowns that it
+>   runs as a kvm guest and can use virt devices like the kvm-clock as
+>   clocksource. The kvm-clock was the main motivation here.
+> 
+> - I didn't add a random HW device. It would make the random device ready
+>   earlier (not it doesn't complete the initialisation at all) but I
+>   doubt that there is any need for this.
+> 
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
 
-> The point I'm making, to be> very clear, is *NOT* that process monitoring is "not worth>
-considering", but that process monitoring is subtle and complicated>
-enough that it ought to be considered as a standalone project,>
-independent of pidfds proper and of the very simple and effective> pidfd
-system that Joel has proposed in his patch series.
+Thank you, Sebastian!  Queued for review and testing.
 
-At that point I'm wondering: what pidfd is actually meant for,
-if not process monitoring ?
+							Thanx, Paul
 
-
---mtx
-
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info at metux.net -- +49-151-27565287
+> ---
+>  tools/testing/selftests/rcutorture/bin/functions.sh | 13 ++++++++++++-
+>  .../selftests/rcutorture/configs/rcu/CFcommon       |  4 ++++
+>  2 files changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/rcutorture/bin/functions.sh b/tools/testing/selftests/rcutorture/bin/functions.sh
+> index 6bcb8b5b2ff22..be3c5c73d7e79 100644
+> --- a/tools/testing/selftests/rcutorture/bin/functions.sh
+> +++ b/tools/testing/selftests/rcutorture/bin/functions.sh
+> @@ -172,7 +172,7 @@ identify_qemu_append () {
+>  	local console=ttyS0
+>  	case "$1" in
+>  	qemu-system-x86_64|qemu-system-i386)
+> -		echo noapic selinux=0 initcall_debug debug
+> +		echo selinux=0 initcall_debug debug
+>  		;;
+>  	qemu-system-aarch64)
+>  		console=ttyAMA0
+> @@ -191,8 +191,19 @@ identify_qemu_append () {
+>  # Output arguments for qemu arguments based on the TORTURE_QEMU_MAC
+>  # and TORTURE_QEMU_INTERACTIVE environment variables.
+>  identify_qemu_args () {
+> +	local KVM_CPU=""
+> +	case "$1" in
+> +	qemu-system-x86_64)
+> +		KVM_CPU=kvm64
+> +		;;
+> +	qemu-system-i386)
+> +		KVM_CPU=kvm32
+> +		;;
+> +	esac
+>  	case "$1" in
+>  	qemu-system-x86_64|qemu-system-i386)
+> +		echo -machine q35,accel=kvm
+> +		echo -cpu ${KVM_CPU},x2apic=on,tsc-deadline=on,hypervisor=on,tsc_adjust=on
+>  		;;
+>  	qemu-system-aarch64)
+>  		echo -machine virt,gic-version=host -cpu host
+> diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
+> index d2d2a86139db1..322d5d40443cd 100644
+> --- a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
+> +++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
+> @@ -1,2 +1,6 @@
+>  CONFIG_RCU_TORTURE_TEST=y
+>  CONFIG_PRINTK_TIME=y
+> +CONFIG_HYPERVISOR_GUEST=y
+> +CONFIG_PARAVIRT=y
+> +CONFIG_PARAVIRT_SPINLOCKS=y
+> +CONFIG_KVM_GUEST=y
+> -- 
+> 2.20.1
+> 
