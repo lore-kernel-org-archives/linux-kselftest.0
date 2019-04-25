@@ -1,82 +1,25 @@
-From: brendanhiggins at google.com (Brendan Higgins)
-Date: Thu, 25 Apr 2019 14:39:15 -0700
-Subject: [PATCH v1 11/17] kunit: test: add test managed resource tests
-In-Reply-To: <20190424190019.wvljyeo3y7gd24p5@gabell>
-References: <20190404220652.19765-1-brendanhiggins@google.com>
- <20190404220652.19765-12-brendanhiggins@google.com>
- <20190424190019.wvljyeo3y7gd24p5@gabell>
-Message-ID: <CAFd5g45CaCFdQCxQqxgYfoQSGAF8RAV2YrOMs0oR4R-iCTZrig@mail.gmail.com>
+From: dancol at google.com (Daniel Colascione)
+Date: Thu, 25 Apr 2019 15:07:48 -0700
+Subject: [PATCH v1 2/2] Add selftests for pidfd polling
+In-Reply-To: <20190425212917.yotnir4uqgpnh764@brauner.io>
+References: <20190425190010.46489-1-joel@joelfernandes.org>
+ <20190425190010.46489-2-joel@joelfernandes.org>
+ <20190425212917.yotnir4uqgpnh764@brauner.io>
+Message-ID: <CAKOZueuPeqnWVCv8NnQNyStWBQLybkr2qqtfQ0MjzsfSQDymzg@mail.gmail.com>
 
-On Wed, Apr 24, 2019 at 12:00 PM Masayoshi Mizuma <msys.mizuma at gmail.com> wrote:
->
-> On Thu, Apr 04, 2019 at 03:06:46PM -0700, Brendan Higgins wrote:
-> > From: Avinash Kondareddy <akndr41 at gmail.com>
-> >
-> > Tests how tests interact with test managed resources in their lifetime.
-> >
-> > Signed-off-by: Avinash Kondareddy <akndr41 at gmail.com>
-> > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> > ---
-> >  kunit/test-test.c | 122 ++++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 122 insertions(+)
-> >
-> > diff --git a/kunit/test-test.c b/kunit/test-test.c
-> > index 4bd7a34d0a6cb..54add8ca418a0 100644
-> > --- a/kunit/test-test.c
-> > +++ b/kunit/test-test.c
-> > @@ -135,3 +135,125 @@ static struct kunit_module kunit_try_catch_test_module = {
-> >       .test_cases = kunit_try_catch_test_cases,
-> >  };
-> >  module_test(kunit_try_catch_test_module);
-> > +
-> > +/*
-> > + * Context for testing test managed resources
-> > + * is_resource_initialized is used to test arbitrary resources
-> > + */
-> > +struct kunit_test_resource_context {
-> > +     struct kunit test;
-> > +     bool is_resource_initialized;
-> > +};
-> > +
-> > +static int fake_resource_init(struct kunit_resource *res, void *context)
-> > +{
-> > +     struct kunit_test_resource_context *ctx = context;
-> > +
-> > +     res->allocation = &ctx->is_resource_initialized;
-> > +     ctx->is_resource_initialized = true;
-> > +     return 0;
-> > +}
-> > +
-> > +static void fake_resource_free(struct kunit_resource *res)
-> > +{
-> > +     bool *is_resource_initialized = res->allocation;
-> > +
-> > +     *is_resource_initialized = false;
-> > +}
-> > +
-> > +static void kunit_resource_test_init_resources(struct kunit *test)
-> > +{
-> > +     struct kunit_test_resource_context *ctx = test->priv;
-> > +
-> > +     kunit_init_test(&ctx->test, "testing_test_init_test");
-> > +
-> > +     KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
-> > +}
-> > +
-> > +static void kunit_resource_test_alloc_resource(struct kunit *test)
-> > +{
-> > +     struct kunit_test_resource_context *ctx = test->priv;
-> > +     struct kunit_resource *res;
-> > +     kunit_resource_free_t free = fake_resource_free;
-> > +
-> > +     res = kunit_alloc_resource(&ctx->test,
-> > +                                fake_resource_init,
-> > +                                fake_resource_free,
-> > +                                ctx);
-> > +
->
-> > +     KUNIT_ASSERT_NOT_ERR_OR_NULL(test, res);
->
->         KUNIT_EXPECT_NOT_ERR_OR_NULL(test, res);
+On Thu, Apr 25, 2019 at 2:29 PM Christian Brauner <christian at brauner.io> wrote:
+> This timing-based testing seems kinda odd to be honest. Can't we do
+> something better than this?
 
-See my reply to your email on the 14/17 patch.
+Agreed. Timing-based tests have a substantial risk of becoming flaky.
+We ought to be able to make these tests fully deterministic and not
+subject to breakage from odd scheduling outcomes. We don't have
+sleepable events for everything, granted, but sleep-waiting on a
+condition with exponential backoff is fine in test code. In general,
+if you start with a robust test, you can insert a sleep(100) anywhere
+and not break the logic. Violating this rule always causes pain sooner
+or later.
+
+Other thoughts: IMHO, using poll(2) instead of epoll would simplify
+the test code, and I think we can get away with calling
+pthread_exit(3) instead of SYS_exit.
