@@ -1,54 +1,98 @@
-From: paulmck at linux.ibm.com (Paul E. McKenney)
-Date: Thu, 25 Apr 2019 12:46:38 -0700
-Subject: [PATCH] rcutorture: Tweak kvm options
-In-Reply-To: <20190424183039.GA4494@linux.ibm.com>
-References: <20190424073446.8577-1-bigeasy@linutronix.de>
- <20190424103809.GM3923@linux.ibm.com>
- <20190424183039.GA4494@linux.ibm.com>
-Message-ID: <20190425194638.GA7238@linux.ibm.com>
+From: tycho at tycho.ws (Tycho Andersen)
+Date: Thu, 25 Apr 2019 14:00:35 -0600
+Subject: [PATCH v1 2/2] Add selftests for pidfd polling
+In-Reply-To: <20190425190010.46489-2-joel@joelfernandes.org>
+References: <20190425190010.46489-1-joel@joelfernandes.org>
+ <20190425190010.46489-2-joel@joelfernandes.org>
+Message-ID: <20190425200035.GC30500@cisco>
 
-On Wed, Apr 24, 2019 at 11:30:39AM -0700, Paul E. McKenney wrote:
-> On Wed, Apr 24, 2019 at 03:38:09AM -0700, Paul E. McKenney wrote:
-> > On Wed, Apr 24, 2019 at 09:34:46AM +0200, Sebastian Andrzej Siewior wrote:
-> > > In one of my rcutorture tests the TSC clocksource got marked unstable
-> > > due to a large difference in the TSC value. I'm not sure if the guest
-> > > run for a long time with disabled interrupts or if the host was very
-> > > busy and didn't schedule the guest for some time.
-> > > I took a look on the qemu/KVM options and decided to update the options:
-> > > - Use kvm{32|64} as CPU. We could probably use `host' (like ARM does)
-> > >   for maximum available features but since we don't run any userland I'm
-> > >   not sure if it makes any difference.
-> > > 
-> > > - Drop the "noapic" option, enable TSC deadline timer. There is no
-> > >   history why the APIC was disabled, I see no reason for it. The
-> > >   deadline timer is probably "nicer".
-> > > 
-> > > - Additional config options. It ensures that the kernel knowns that it
-> > >   runs as a kvm guest and can use virt devices like the kvm-clock as
-> > >   clocksource. The kvm-clock was the main motivation here.
-> > > 
-> > > - I didn't add a random HW device. It would make the random device ready
-> > >   earlier (not it doesn't complete the initialisation at all) but I
-> > >   doubt that there is any need for this.
-> > > 
-> > > Signed-off-by: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
-> > 
-> > Thank you, Sebastian!  Queued for review and testing.
-> 
-> And it doesn't like my (admittedly ancient) QEMU, complaining about not
-> knowing about "x2apic=on,tsc-deadline=on,hypervisor=on,tsc_adjust=on".
-> If I remove these, it works.  I will be upgrading soon (famous last
-> words), so what I am going to do is queue the following separate
-> not-for-upstream patch that makes it work on my setup.
+On Thu, Apr 25, 2019 at 03:00:10PM -0400, Joel Fernandes (Google) wrote:
+>
+> +void *test_pidfd_poll_exec_thread(void *priv)
 
-Also, the !SMP scenarios get this:
+I think everything in this file can be static, there's this one and
+3-4 below.
 
-:CONFIG_PARAVIRT_SPINLOCKS=y: improperly set
+> +int test_pidfd_poll_exec(int use_waitpid)
+> +{
+> +	int pid, pidfd = 0;
+> +	int status, ret;
+> +	pthread_t t1;
+> +	time_t prog_start = time(NULL);
+> +	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
+> +
+> +	ksft_print_msg("Parent: pid: %d\n", getpid());
+> +	pid = pidfd_clone(CLONE_PIDFD, &pidfd, child_poll_exec_test);
 
-Would it make sense to only set this on CONFIG_SMP=y runs?  The easy
-way to do this is to move it from CFcommon to the scenario files not
-having CONFIG_SMP=n.  Or would something else work better?
+If pidfd_clone() fails here, I think things will go haywire below.
 
-Or am I doing something wrong?
+> +	ksft_print_msg("Parent: Waiting for Child (%d) to complete.\n", pid);
+> +
+> +	if (use_waitpid) {
+> +		ret = waitpid(pid, &status, 0);
+> +		if (ret == -1)
+> +			ksft_print_msg("Parent: error\n");
+> +
+> +		if (ret == pid)
+> +			ksft_print_msg("Parent: Child process waited for.\n");
+> +	} else {
+> +		poll_pidfd(test_name, pidfd);
+> +	}
+> +
+> +	time_t prog_time = time(NULL) - prog_start;
+> +
+> +	ksft_print_msg("Time waited for child: %lu\n", prog_time);
+> +
+> +	close(pidfd);
+> +
+> +	if (prog_time < CHILD_THREAD_MIN_WAIT || prog_time > CHILD_THREAD_MIN_WAIT + 2)
+> +		ksft_exit_fail_msg("%s test: Failed\n", test_name);
+> +	else
+> +		ksft_test_result_pass("%s test: Passed\n", test_name);
+> +}
+> +
+> +void *test_pidfd_poll_leader_exit_thread(void *priv)
+> +{
+> +	char waittime[256];
+> +
+> +	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
+> +			getpid(), syscall(SYS_gettid));
+> +	sleep(CHILD_THREAD_MIN_WAIT);
+> +	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
+> +	return NULL;
+> +}
+> +
+> +static time_t *child_exit_secs;
+> +static int child_poll_leader_exit_test(void *args)
+> +{
+> +	pthread_t t1, t2;
+> +
+> +	ksft_print_msg("Child: starting. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
+> +	pthread_create(&t1, NULL, test_pidfd_poll_leader_exit_thread, NULL);
+> +	pthread_create(&t2, NULL, test_pidfd_poll_leader_exit_thread, NULL);
+> +
+> +	/*
+> +	 * glibc exit calls exit_group syscall, so explicity call exit only
+> +	 * so that only the group leader exits, leaving the threads alone.
+> +	 */
+> +	*child_exit_secs = time(NULL);
+> +	syscall(SYS_exit, 0);
+> +}
+> +
+> +int test_pidfd_poll_leader_exit(int use_waitpid)
+> +{
+> +	int pid, pidfd = 0;
+> +	int status, ret;
+> +	time_t prog_start = time(NULL);
+> +	const char *test_name = "pidfd_poll check for premature notification on non-empty"
+> +				"group leader exit";
+> +
+> +	child_exit_secs = mmap(NULL, sizeof *child_exit_secs, PROT_READ | PROT_WRITE,
+> +			MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+> +
+> +	ksft_print_msg("Parent: pid: %d\n", getpid());
+> +	pid = pidfd_clone(CLONE_PIDFD, &pidfd, child_poll_leader_exit_test);
 
-							Thanx, Paul
+Same problem here, I think.
+
+Tycho
