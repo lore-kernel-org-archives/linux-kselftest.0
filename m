@@ -1,98 +1,84 @@
-From: tycho at tycho.ws (Tycho Andersen)
-Date: Thu, 25 Apr 2019 14:00:35 -0600
-Subject: [PATCH v1 2/2] Add selftests for pidfd polling
-In-Reply-To: <20190425190010.46489-2-joel@joelfernandes.org>
-References: <20190425190010.46489-1-joel@joelfernandes.org>
- <20190425190010.46489-2-joel@joelfernandes.org>
-Message-ID: <20190425200035.GC30500@cisco>
+From: shuah at kernel.org (shuah)
+Date: Thu, 25 Apr 2019 14:39:37 -0600
+Subject: [PATCH v2 0/8] selftests: Move test output to diagnostic lines
+In-Reply-To: <CAGXu5jJChvx-_E8RMTi3ioUZGuQGViy6gcAMpmvYZzms=zc6dQ@mail.gmail.com>
+References: <20190424231237.14776-1-keescook@chromium.org>
+ <a3ca267e-8e1e-65da-77c8-c7010a39354b@kernel.org>
+ <CAGXu5jJChvx-_E8RMTi3ioUZGuQGViy6gcAMpmvYZzms=zc6dQ@mail.gmail.com>
+Message-ID: <1afe0a17-c539-6ef2-ecff-f4ade4a865e7@kernel.org>
 
-On Thu, Apr 25, 2019 at 03:00:10PM -0400, Joel Fernandes (Google) wrote:
->
-> +void *test_pidfd_poll_exec_thread(void *priv)
+On 4/25/19 11:05 AM, Kees Cook wrote:
+> On Thu, Apr 25, 2019 at 9:52 AM shuah <shuah at kernel.org> wrote:
+>>
+>> On 4/24/19 5:12 PM,  wrote:
+>>> This refactors the selftest Makefiles to extract the test running logic
+>>> to be reused between "run_tests" and "emit_tests", while also fixing
+>>> up the test output to be TAP version 13 compliant:
+>>> - added "plan" line
+>>> - fixed result line syntax
+>>> - moved all test output to be "# "-prefixed as TAP "diagnostic" lines
+>>>
+>>> The prefixing code includes a fallback mode for limited execution
+>>> environments.
+>>>
+>>> Additionally, the plan lines are fixed for all callers of kselftest.h.
+>>>
+>>> -Kees
+>>>
+>>
+>> Kees,
+>>
+>> Just about to apply these to a topic branch to do testing and ran into
+>> checkpatch errors:
+>>
+>>
+>> WARNING: line over 80 characters - a few
+> 
+> I only saw one, which is on a string which kernel coding style says to
+> leave unsplit:
+> 
+> WARNING: line over 80 characters
+> #55: FILE: tools/testing/selftests/kselftest/runner.sh:19:
+> +               echo "$TEST_HDR_MSG: Warning: file $TEST is not
+> executable, correct this."
+> 
+>> WARNING: Misplaced SPDX-License-Identifier tag - use line 1 instead
+>> #141: FILE: tools/testing/selftests/kselftest/runner.sh:2:
+> 
+> WARNING: Misplaced SPDX-License-Identifier tag - use line 1 instead
+> #37: FILE: tools/testing/selftests/kselftest/runner.sh:2:
+>   # SPDX-License-Identifier: GPL-2.0
+> 
+> This is a shell script. It can't be on line 1:
+> 
+> $ head -n3 tools/testing/selftests/kselftest/runner.sh
+> #!/bin/sh
+> # SPDX-License-Identifier: GPL-2.0
+> #
+> 
+> That looks like a bug in checkpatch not resetting the expected line or
+> something.
+> 
+>> Can fix them and resend - SPDX one is my main concern.
+> 
+> These appear to be false positives; I don't think I need to fix them?
+> Let me know what you think.
+> 
+>> The plan is to apply these to linux-kselftest ksft-tap-refactor topic
+>> first. I don't want to rush these until we do some testing.
+> 
+> Absolutely. :)
+> 
+> Thanks!
+> 
 
-I think everything in this file can be static, there's this one and
-3-4 below.
+Kees,
 
-> +int test_pidfd_poll_exec(int use_waitpid)
-> +{
-> +	int pid, pidfd = 0;
-> +	int status, ret;
-> +	pthread_t t1;
-> +	time_t prog_start = time(NULL);
-> +	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
-> +
-> +	ksft_print_msg("Parent: pid: %d\n", getpid());
-> +	pid = pidfd_clone(CLONE_PIDFD, &pidfd, child_poll_exec_test);
+Pushed all 8 patches to 
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
+ksft-tap-refactor topic branch
 
-If pidfd_clone() fails here, I think things will go haywire below.
+I will have time to test tomorrow.
 
-> +	ksft_print_msg("Parent: Waiting for Child (%d) to complete.\n", pid);
-> +
-> +	if (use_waitpid) {
-> +		ret = waitpid(pid, &status, 0);
-> +		if (ret == -1)
-> +			ksft_print_msg("Parent: error\n");
-> +
-> +		if (ret == pid)
-> +			ksft_print_msg("Parent: Child process waited for.\n");
-> +	} else {
-> +		poll_pidfd(test_name, pidfd);
-> +	}
-> +
-> +	time_t prog_time = time(NULL) - prog_start;
-> +
-> +	ksft_print_msg("Time waited for child: %lu\n", prog_time);
-> +
-> +	close(pidfd);
-> +
-> +	if (prog_time < CHILD_THREAD_MIN_WAIT || prog_time > CHILD_THREAD_MIN_WAIT + 2)
-> +		ksft_exit_fail_msg("%s test: Failed\n", test_name);
-> +	else
-> +		ksft_test_result_pass("%s test: Passed\n", test_name);
-> +}
-> +
-> +void *test_pidfd_poll_leader_exit_thread(void *priv)
-> +{
-> +	char waittime[256];
-> +
-> +	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
-> +			getpid(), syscall(SYS_gettid));
-> +	sleep(CHILD_THREAD_MIN_WAIT);
-> +	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
-> +	return NULL;
-> +}
-> +
-> +static time_t *child_exit_secs;
-> +static int child_poll_leader_exit_test(void *args)
-> +{
-> +	pthread_t t1, t2;
-> +
-> +	ksft_print_msg("Child: starting. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
-> +	pthread_create(&t1, NULL, test_pidfd_poll_leader_exit_thread, NULL);
-> +	pthread_create(&t2, NULL, test_pidfd_poll_leader_exit_thread, NULL);
-> +
-> +	/*
-> +	 * glibc exit calls exit_group syscall, so explicity call exit only
-> +	 * so that only the group leader exits, leaving the threads alone.
-> +	 */
-> +	*child_exit_secs = time(NULL);
-> +	syscall(SYS_exit, 0);
-> +}
-> +
-> +int test_pidfd_poll_leader_exit(int use_waitpid)
-> +{
-> +	int pid, pidfd = 0;
-> +	int status, ret;
-> +	time_t prog_start = time(NULL);
-> +	const char *test_name = "pidfd_poll check for premature notification on non-empty"
-> +				"group leader exit";
-> +
-> +	child_exit_secs = mmap(NULL, sizeof *child_exit_secs, PROT_READ | PROT_WRITE,
-> +			MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-> +
-> +	ksft_print_msg("Parent: pid: %d\n", getpid());
-> +	pid = pidfd_clone(CLONE_PIDFD, &pidfd, child_poll_leader_exit_test);
-
-Same problem here, I think.
-
-Tycho
+thanks,
+-- Shuah
