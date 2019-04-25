@@ -1,25 +1,56 @@
-From: jmorris@namei.org (James Morris)
-Date: Thu, 25 Apr 2019 15:30:41 +1000 (AEST)
-Subject: [PATCH 2/2] seccomp: Make NEW_LISTENER and TSYNC flags exclusive
-In-Reply-To: <20190424163756.40001-3-keescook@chromium.org>
-References: <20190424163756.40001-1-keescook@chromium.org>
- <20190424163756.40001-3-keescook@chromium.org>
-Message-ID: <alpine.LRH.2.21.1904251530200.26472@namei.org>
+From: shuah@kernel.org (shuah)
+Date: Thu, 25 Apr 2019 10:36:24 -0600
+Subject: [PATCH v2 7/8] selftests: Remove KSFT_TAP_LEVEL
+In-Reply-To: <20190424231237.14776-8-keescook@chromium.org>
+References: <20190424231237.14776-1-keescook@chromium.org>
+ <20190424231237.14776-8-keescook@chromium.org>
+Message-ID: <1ca5ee52-ab07-9142-2e45-44df1e94276e@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190425053041.3jGXMTCsEo2QEiz7MAmatasZVhvnmMlqmThSlJZhyUo@z>
+Message-ID: <20190425163624.DXZ8Vw1g4kawrR8-AltxI-c0YvvhDKYAmfGcFTSOJI8@z>
 
-On Wed, 24 Apr 2019, Kees Cook wrote:
-
-> Reported-by: syzbot+b562969adb2e04af3442 at syzkaller.appspotmail.com
-> Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
-> CC: stable at vger.kernel.org # v5.0+
-> Signed-off-by: Tycho Andersen <tycho at tycho.ws>
+On 4/24/19 5:12 PM, Kees Cook wrote:
+> Since sub-testing can now be detected by indentation level, this removes
+> KSFT_TAP_LEVEL so that subtests report their TAP header for later parsing.
+> 
 > Signed-off-by: Kees Cook <keescook at chromium.org>
+> ---
+>   tools/testing/selftests/Makefile            | 6 ------
+>   tools/testing/selftests/kselftest/runner.sh | 1 -
+>   2 files changed, 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 64699f59b95f..9f05448e5e4b 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -86,12 +86,6 @@ else
+>   	endif
+>   endif
+>   
+> -# KSFT_TAP_LEVEL is used from KSFT framework to prevent nested TAP header
+> -# printing from tests. Applicable to run_tests case where run_tests adds
+> -# TAP header prior running tests and when a test program invokes another
+> -# with system() call. Export it here to cover override RUN_TESTS defines.
+> -export KSFT_TAP_LEVEL=`echo 1`
+> -
+>   # Prepare for headers install
+>   top_srcdir ?= ../../..
+>   include $(top_srcdir)/scripts/subarch.include
+> diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+> index b9f74e5a2ee5..eff3ee303d0d 100644
+> --- a/tools/testing/selftests/kselftest/runner.sh
+> +++ b/tools/testing/selftests/kselftest/runner.sh
+> @@ -2,7 +2,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   #
+>   # Runs a set of tests in a given subdirectory.
+> -export KSFT_TAP_LEVEL=1
+>   export skip_rc=4
+>   export logfile=/dev/stdout
+>   export per_test_logging=
+> 
 
+Does this take into ksft_print_header() getenv logic to avoid printing
+TAP headers from tests when they fork? e.g timers tests do that a lot.
 
-Acked-by: James Morris <jamorris at linux.microsoft.com>
-
-
--- 
-James Morris
-<jmorris at namei.org>
+thanks,
+-- Shuah
