@@ -1,40 +1,32 @@
-From: shuah at kernel.org (shuah)
-Date: Thu, 25 Apr 2019 10:52:41 -0600
-Subject: [PATCH v2 0/8] selftests: Move test output to diagnostic lines
-In-Reply-To: <20190424231237.14776-1-keescook@chromium.org>
+From: keescook at chromium.org (Kees Cook)
+Date: Thu, 25 Apr 2019 09:56:44 -0700
+Subject: [PATCH v2 7/8] selftests: Remove KSFT_TAP_LEVEL
+In-Reply-To: <1ca5ee52-ab07-9142-2e45-44df1e94276e@kernel.org>
 References: <20190424231237.14776-1-keescook@chromium.org>
-Message-ID: <a3ca267e-8e1e-65da-77c8-c7010a39354b@kernel.org>
+ <20190424231237.14776-8-keescook@chromium.org>
+ <1ca5ee52-ab07-9142-2e45-44df1e94276e@kernel.org>
+Message-ID: <CAGXu5j+F1iSu5GDG_FCykABXkH_gXcF=zjwwyev1vTDCXRLoVg@mail.gmail.com>
 
-On 4/24/19 5:12 PM,  wrote:
-> This refactors the selftest Makefiles to extract the test running logic
-> to be reused between "run_tests" and "emit_tests", while also fixing
-> up the test output to be TAP version 13 compliant:
-> - added "plan" line
-> - fixed result line syntax
-> - moved all test output to be "# "-prefixed as TAP "diagnostic" lines
-> 
-> The prefixing code includes a fallback mode for limited execution
-> environments.
-> 
-> Additionally, the plan lines are fixed for all callers of kselftest.h.
-> 
-> -Kees
-> 
+On Thu, Apr 25, 2019 at 9:36 AM shuah <shuah at kernel.org> wrote:
+>
+> On 4/24/19 5:12 PM, Kees Cook wrote:
+> > Since sub-testing can now be detected by indentation level, this removes
+> > KSFT_TAP_LEVEL so that subtests report their TAP header for later parsing.
+>
+> Does this take into ksft_print_header() getenv logic to avoid printing
+> TAP headers from tests when they fork? e.g timers tests do that a lot.
 
-Kees,
+I didn't change the ksft_print_header() code, in case you want it back
+in the future. But nothing sets that variable any more in my series:
 
-Just about to apply these to a topic branch to do testing and ran into
-checkpatch errors:
+$ git grep KSFT_TAP_LEVEL
+tools/testing/selftests/kselftest.h:    if (!(getenv("KSFT_TAP_LEVEL")))
 
+I don't see the timers tests using print_header() at all, actually...
 
-WARNING: line over 80 characters - a few
-WARNING: Misplaced SPDX-License-Identifier tag - use line 1 instead
-#141: FILE: tools/testing/selftests/kselftest/runner.sh:2:
+$ cd tools/testing/kselftest/timers
+$ git grep print_header | wc -l
+0
 
-Can fix them and resend - SPDX one is my main concern.
-
-The plan is to apply these to linux-kselftest ksft-tap-refactor topic
-first. I don't want to rush these until we do some testing.
-
-thanks,
--- Shuah
+-- 
+Kees Cook
