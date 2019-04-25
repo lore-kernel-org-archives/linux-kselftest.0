@@ -1,86 +1,22 @@
 From: jmorris at namei.org (James Morris)
-Date: Thu, 25 Apr 2019 15:30:07 +1000 (AEST)
-Subject: [PATCH 1/2] selftests/seccomp: Prepare for exclusive seccomp flags
-In-Reply-To: <20190424163756.40001-2-keescook@chromium.org>
+Date: Thu, 25 Apr 2019 15:30:41 +1000 (AEST)
+Subject: [PATCH 2/2] seccomp: Make NEW_LISTENER and TSYNC flags exclusive
+In-Reply-To: <20190424163756.40001-3-keescook@chromium.org>
 References: <20190424163756.40001-1-keescook@chromium.org>
- <20190424163756.40001-2-keescook@chromium.org>
-Message-ID: <alpine.LRH.2.21.1904251530010.26472@namei.org>
+ <20190424163756.40001-3-keescook@chromium.org>
+Message-ID: <alpine.LRH.2.21.1904251530200.26472@namei.org>
 
 On Wed, 24 Apr 2019, Kees Cook wrote:
 
-> Some seccomp flags will become exclusive, so the selftest needs to
-> be adjusted to mask those out and test them individually for the "all
-> flags" tests.
-> 
-> Cc: stable at vger.kernel.org # v5.0+
+> Reported-by: syzbot+b562969adb2e04af3442 at syzkaller.appspotmail.com
+> Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
+> CC: stable at vger.kernel.org # v5.0+
+> Signed-off-by: Tycho Andersen <tycho at tycho.ws>
 > Signed-off-by: Kees Cook <keescook at chromium.org>
 
 
 Acked-by: James Morris <jamorris at linux.microsoft.com>
 
-> ---
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 34 ++++++++++++++-----
->  1 file changed, 25 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index f69d2ee29742..5019cdae5d0b 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -2166,11 +2166,14 @@ TEST(detect_seccomp_filter_flags)
->  				 SECCOMP_FILTER_FLAG_LOG,
->  				 SECCOMP_FILTER_FLAG_SPEC_ALLOW,
->  				 SECCOMP_FILTER_FLAG_NEW_LISTENER };
-> -	unsigned int flag, all_flags;
-> +	unsigned int exclusive[] = {
-> +				SECCOMP_FILTER_FLAG_TSYNC,
-> +				SECCOMP_FILTER_FLAG_NEW_LISTENER };
-> +	unsigned int flag, all_flags, exclusive_mask;
->  	int i;
->  	long ret;
->  
-> -	/* Test detection of known-good filter flags */
-> +	/* Test detection of individual known-good filter flags */
->  	for (i = 0, all_flags = 0; i < ARRAY_SIZE(flags); i++) {
->  		int bits = 0;
->  
-> @@ -2197,16 +2200,29 @@ TEST(detect_seccomp_filter_flags)
->  		all_flags |= flag;
->  	}
->  
-> -	/* Test detection of all known-good filter flags */
-> -	ret = seccomp(SECCOMP_SET_MODE_FILTER, all_flags, NULL);
-> -	EXPECT_EQ(-1, ret);
-> -	EXPECT_EQ(EFAULT, errno) {
-> -		TH_LOG("Failed to detect that all known-good filter flags (0x%X) are supported!",
-> -		       all_flags);
-> +	/*
-> +	 * Test detection of all known-good filter flags combined. But
-> +	 * for the exclusive flags we need to mask them out and try them
-> +	 * individually for the "all flags" testing.
-> +	 */
-> +	exclusive_mask = 0;
-> +	for (i = 0; i < ARRAY_SIZE(exclusive); i++)
-> +		exclusive_mask |= exclusive[i];
-> +	for (i = 0; i < ARRAY_SIZE(exclusive); i++) {
-> +		flag = all_flags & ~exclusive_mask;
-> +		flag |= exclusive[i];
-> +
-> +		ret = seccomp(SECCOMP_SET_MODE_FILTER, flag, NULL);
-> +		EXPECT_EQ(-1, ret);
-> +		EXPECT_EQ(EFAULT, errno) {
-> +			TH_LOG("Failed to detect that all known-good filter flags (0x%X) are supported!",
-> +			       flag);
-> +		}
->  	}
->  
-> -	/* Test detection of an unknown filter flag */
-> +	/* Test detection of an unknown filter flags, without exclusives. */
->  	flag = -1;
-> +	flag &= ~exclusive_mask;
->  	ret = seccomp(SECCOMP_SET_MODE_FILTER, flag, NULL);
->  	EXPECT_EQ(-1, ret);
->  	EXPECT_EQ(EINVAL, errno) {
-> 
 
 -- 
 James Morris
