@@ -1,266 +1,39 @@
-From: christian at brauner.io (Christian Brauner)
-Date: Fri, 26 Apr 2019 00:24:04 +0200
-Subject: [PATCH v1 1/2] Add polling support to pidfd
-In-Reply-To: <20190425190010.46489-1-joel@joelfernandes.org>
-References: <20190425190010.46489-1-joel@joelfernandes.org>
-Message-ID: <20190425222359.sqhboc4x4daznr6r@brauner.io>
+From: bigeasy at linutronix.de (Sebastian Andrzej Siewior)
+Date: Fri, 26 Apr 2019 12:54:14 +0200
+Subject: [PATCH] rcutorture: Tweak kvm options
+In-Reply-To: <20190425194638.GA7238@linux.ibm.com>
+References: <20190424073446.8577-1-bigeasy@linutronix.de>
+ <20190424103809.GM3923@linux.ibm.com>
+ <20190424183039.GA4494@linux.ibm.com>
+ <20190425194638.GA7238@linux.ibm.com>
+Message-ID: <20190426105413.rajcon4vyzov446c@linutronix.de>
 
-On Thu, Apr 25, 2019 at 03:00:09PM -0400, Joel Fernandes (Google) wrote:
-> pidfd are file descriptors referring to a process created with the
-> CLONE_PIDFD clone(2) flag. Android low memory killer (LMK) needs pidfd
-> polling support to replace code that currently checks for existence of
-> /proc/pid for knowing that a process that is signalled to be killed has
-> died, which is both racy and slow. The pidfd poll approach is race-free,
-> and also allows the LMK to do other things (such as by polling on other
-> fds) while awaiting the process being killed to die.
-
-Thanks for the patch!
-
-Ok, let me be a little bit anal.
-Please start the commit message with what this patch does and then add
-the justification why. You just say the "pidfd-poll" approach. You can
-probably assume that CLONE_PIDFD is available for this patch. So
-something like:
-
-"This patch makes pidfds pollable. Specifically, it allows listeners to
-be informed when the process the pidfd referes to exits. This patch only
-introduces the ability to poll thread-group leaders since pidfds
-currently can only reference those..."
-
-Then justify the use-case and then go into implementation details.
-That's usually how I would think about this:
-- Change the codebase to do X
-- Why do we need X
-- Are there any technical details worth mentioning in the commit message
-(- Are there any controversial points that people stumbled upon but that
-  have been settled sufficiently.)
-
-> pidfd are file descriptors referring to a process created with the
-> CLONE_PIDFD clone(2) flag. Android low memory killer (LMK) needs pidfd
-> polling support to replace code that currently checks for existence of
-> /proc/pid for knowing that a process that is signalled to be killed has
-> died, which is both racy and slow. The pidfd poll approach is race-free,
-> and also allows the LMK to do other things (such as by polling on other
-> fds) while awaiting the process being killed to die.
-
+On 2019-04-25 12:46:38 [-0700], Paul E. McKenney wrote:
+> > And it doesn't like my (admittedly ancient) QEMU, complaining about not
+> > knowing about "x2apic=on,tsc-deadline=on,hypervisor=on,tsc_adjust=on".
+> > If I remove these, it works.  I will be upgrading soon (famous last
+> > words), so what I am going to do is queue the following separate
+> > not-for-upstream patch that makes it work on my setup.
 > 
-> It prevents a situation where a PID is reused between when LMK sends a
-> kill signal and checks for existence of the PID, since the wrong PID is
-> now possibly checked for existence.
+> Also, the !SMP scenarios get this:
 > 
-> In this patch, we follow the same existing mechanism in the kernel used
-> when the parent of the task group is to be notified (do_notify_parent).
-> This is when the tasks waiting on a poll of pidfd are also awakened.
+> :CONFIG_PARAVIRT_SPINLOCKS=y: improperly set
+
+I ignored that (because there is a CHECK option to ensure that certain
+options are set).
+
+> Would it make sense to only set this on CONFIG_SMP=y runs?  The easy
+> way to do this is to move it from CFcommon to the scenario files not
+> having CONFIG_SMP=n.  Or would something else work better?
 > 
-> We have decided to include the waitqueue in struct pid for the following
-> reasons:
-> 1. The wait queue has to survive for the lifetime of the poll. Including
-> it in task_struct would not be option in this case because the task can
-> be reaped and destroyed before the poll returns.
-> 
-> 2. By including the struct pid for the waitqueue means that during
-> de_thread(), the new thread group leader automatically gets the new
-> waitqueue/pid even though its task_struct is different.
-> 
-> Appropriate test cases are added in the second patch to provide coverage
-> of all the cases the patch is handling.
-> 
-> Andy had a similar patch [1] in the past which was a good reference
-> however this patch tries to handle different situations properly related
-> to thread group existence, and how/where it notifies. And also solves
-> other bugs (waitqueue lifetime).  Daniel had a similar patch [2]
-> recently which this patch supercedes.
-> 
-> [1] https://lore.kernel.org/patchwork/patch/345098/
-> [2] https://lore.kernel.org/lkml/20181029175322.189042-1-dancol at google.com/
-> 
-> Cc: luto at amacapital.net
-> Cc: rostedt at goodmis.org
-> Cc: dancol at google.com
-> Cc: sspatil at google.com
-> Cc: christian at brauner.io
-> Cc: jannh at google.com
-> Cc: surenb at google.com
-> Cc: timmurray at google.com
-> Cc: Jonathan Kowalski <bl0pbl33p at gmail.com>
-> Cc: torvalds at linux-foundation.org
-> Cc: kernel-team at android.com
+> Or am I doing something wrong?
 
-These should all be in the form:
+You should also get that warning on ARM for instance since those
+PARAVIRT SPINLOCKS are only implemented on x86.
+I have no numbers to compare the performance with and without that
+option. So we could drop that option or you tell me where to look after
+a run with/without that option so I can tell if it is worth the effort.
 
-Cc: Firstname Lastname <email at address.com>
+> 							Thanx, Paul
 
-There are people missing from the Cc that really should be there...
-
-Even though he usually doesn't respond that often, please Cc Al on this.
-If he responds it's usually rather important.
-
-Oleg has reviewed your RFC patch quite substantially and given valuable
-feedback and has an opinion on this thing and is best acquainted with
-the exit code. So please add him to the Cc of the commit message in the
-appropriate form and also add him to the Cc of the thread.
-
-Probably also want linux-api for good measure since a lot of people are
-subscribed that would care about pollable pidfds. I'd also add Kees
-since he had some interest in this work and David (Howells).
-
-> Co-developed-by: Daniel Colascione <dancol at google.com>
-
-Every CDB needs to give a SOB as well.
-
-> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> 
-> ---
-> 
-> RFC -> v1:
-> * Based on CLONE_PIDFD patches: https://lwn.net/Articles/786244/
-> * Updated selftests.
-> * Renamed poll wake function to do_notify_pidfd.
-> * Removed depending on EXIT flags
-> * Removed POLLERR flag since semantics are controversial and
->   we don't have usecases for it right now (later we can add if there's
->   a need for it).
-> 
->  include/linux/pid.h |  3 +++
->  kernel/fork.c       | 33 +++++++++++++++++++++++++++++++++
->  kernel/pid.c        |  2 ++
->  kernel/signal.c     | 14 ++++++++++++++
->  4 files changed, 52 insertions(+)
-> 
-> diff --git a/include/linux/pid.h b/include/linux/pid.h
-> index 3c8ef5a199ca..1484db6ca8d1 100644
-> --- a/include/linux/pid.h
-> +++ b/include/linux/pid.h
-> @@ -3,6 +3,7 @@
->  #define _LINUX_PID_H
->  
->  #include <linux/rculist.h>
-> +#include <linux/wait.h>
->  
->  enum pid_type
->  {
-> @@ -60,6 +61,8 @@ struct pid
->  	unsigned int level;
->  	/* lists of tasks that use this pid */
->  	struct hlist_head tasks[PIDTYPE_MAX];
-> +	/* wait queue for pidfd notifications */
-> +	wait_queue_head_t wait_pidfd;
->  	struct rcu_head rcu;
->  	struct upid numbers[1];
->  };
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 5525837ed80e..fb3b614f6456 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -1685,8 +1685,41 @@ static void pidfd_show_fdinfo(struct seq_file *m, struct file *f)
->  }
->  #endif
->  
-> +static unsigned int pidfd_poll(struct file *file, struct poll_table_struct *pts)
-> +{
-> +	struct task_struct *task;
-> +	struct pid *pid;
-> +	int poll_flags = 0;
-> +
-> +	/*
-> +	 * tasklist_lock must be held because to avoid racing with
-> +	 * changes in exit_state and wake up. Basically to avoid:
-> +	 *
-> +	 * P0: read exit_state = 0
-> +	 * P1: write exit_state = EXIT_DEAD
-> +	 * P1: Do a wake up - wq is empty, so do nothing
-> +	 * P0: Queue for polling - wait forever.
-> +	 */
-> +	read_lock(&tasklist_lock);
-> +	pid = file->private_data;
-> +	task = pid_task(pid, PIDTYPE_PID);
-> +	WARN_ON_ONCE(task && !thread_group_leader(task));
-> +
-> +	if (!task || (task->exit_state && thread_group_empty(task)))
-> +		poll_flags = POLLIN | POLLRDNORM;
-
-So we block until the thread-group is empty? Hm, the thread-group leader
-remains in zombie state until all threads are gone. Should probably just
-be a short comment somewhere that callers are only informed about a
-whole thread-group exit and not about when the thread-group leader has
-actually exited.
-
-I would like the ability to extend this interface in the future to allow
-for actually reading data from the pidfd on EPOLLIN.
-POSIX specifies that POLLIN and POLLRDNORM are set even if the
-message to be read is zero. So one cheap way of doing this would
-probably be to do a 0 read/ioctl. That wouldn't hurt your very limited
-usecase and people could test whether the read returned non-0 data and
-if so they know this interface got extended. If we never extend it here
-it won't matter.
-
-> +
-> +	if (!poll_flags)
-> +		poll_wait(file, &pid->wait_pidfd, pts);
-> +
-> +	read_unlock(&tasklist_lock);
-> +
-> +	return poll_flags;
-> +}
-
-
-> +
-> +
->  const struct file_operations pidfd_fops = {
->  	.release = pidfd_release,
-> +	.poll = pidfd_poll,
->  #ifdef CONFIG_PROC_FS
->  	.show_fdinfo = pidfd_show_fdinfo,
->  #endif
-> diff --git a/kernel/pid.c b/kernel/pid.c
-> index 20881598bdfa..5c90c239242f 100644
-> --- a/kernel/pid.c
-> +++ b/kernel/pid.c
-> @@ -214,6 +214,8 @@ struct pid *alloc_pid(struct pid_namespace *ns)
->  	for (type = 0; type < PIDTYPE_MAX; ++type)
->  		INIT_HLIST_HEAD(&pid->tasks[type]);
->  
-> +	init_waitqueue_head(&pid->wait_pidfd);
-> +
->  	upid = pid->numbers + ns->level;
->  	spin_lock_irq(&pidmap_lock);
->  	if (!(ns->pid_allocated & PIDNS_ADDING))
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index 1581140f2d99..16e7718316e5 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -1800,6 +1800,17 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
->  	return ret;
->  }
->  
-> +static void do_notify_pidfd(struct task_struct *task)
-
-Maybe a short command that this helper can only be called when we know
-that task is a thread-group leader wouldn't hurt so there's no confusion
-later.
-
-> +{
-> +	struct pid *pid;
-> +
-> +	lockdep_assert_held(&tasklist_lock);
-> +
-> +	pid = get_task_pid(task, PIDTYPE_PID);
-> +	wake_up_all(&pid->wait_pidfd);
-> +	put_pid(pid);
-> +}
-> +
->  /*
->   * Let a parent know about the death of a child.
->   * For a stopped/continued status change, use do_notify_parent_cldstop instead.
-> @@ -1823,6 +1834,9 @@ bool do_notify_parent(struct task_struct *tsk, int sig)
->  	BUG_ON(!tsk->ptrace &&
->  	       (tsk->group_leader != tsk || !thread_group_empty(tsk)));
->  
-> +	/* Wake up all pidfd waiters */
-> +	do_notify_pidfd(tsk);
-> +
->  	if (sig != SIGCHLD) {
->  		/*
->  		 * This is only possible if parent == real_parent.
-> -- 
-> 2.21.0.593.g511ec345e18-goog
+Sebastian
