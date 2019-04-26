@@ -1,105 +1,59 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Fri, 26 Apr 2019 09:47:19 -0400
-Subject: [PATCH v1 2/2] Add selftests for pidfd polling
-In-Reply-To: <20190425200035.GC30500@cisco>
-References: <20190425190010.46489-1-joel@joelfernandes.org>
- <20190425190010.46489-2-joel@joelfernandes.org>
- <20190425200035.GC30500@cisco>
-Message-ID: <20190426134719.GB261279@google.com>
+From: paulmck@linux.ibm.com (Paul E. McKenney)
+Date: Fri, 26 Apr 2019 06:50:58 -0700
+Subject: [PATCH] rcutorture: Tweak kvm options
+In-Reply-To: <20190426105413.rajcon4vyzov446c@linutronix.de>
+References: <20190424073446.8577-1-bigeasy@linutronix.de>
+ <20190424103809.GM3923@linux.ibm.com>
+ <20190424183039.GA4494@linux.ibm.com>
+ <20190425194638.GA7238@linux.ibm.com>
+ <20190426105413.rajcon4vyzov446c@linutronix.de>
+Message-ID: <20190426135058.GD3923@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190426134719.XfxLXyYEmW3QdBkJrv-xY-dTOMdciA0NSX4ayfWv-Xo@z>
+Message-ID: <20190426135058.mKtwXOvZCyDO70UHHtOdXXPmyS3yGgb3Mv4E0ESWkak@z>
 
-On Thu, Apr 25, 2019@02:00:35PM -0600, Tycho Andersen wrote:
-> On Thu, Apr 25, 2019@03:00:10PM -0400, Joel Fernandes (Google) wrote:
-> >
-> > +void *test_pidfd_poll_exec_thread(void *priv)
+On Fri, Apr 26, 2019@12:54:14PM +0200, Sebastian Andrzej Siewior wrote:
+> On 2019-04-25 12:46:38 [-0700], Paul E. McKenney wrote:
+> > > And it doesn't like my (admittedly ancient) QEMU, complaining about not
+> > > knowing about "x2apic=on,tsc-deadline=on,hypervisor=on,tsc_adjust=on".
+> > > If I remove these, it works.  I will be upgrading soon (famous last
+> > > words), so what I am going to do is queue the following separate
+> > > not-for-upstream patch that makes it work on my setup.
+> > 
+> > Also, the !SMP scenarios get this:
+> > 
+> > :CONFIG_PARAVIRT_SPINLOCKS=y: improperly set
 > 
-> I think everything in this file can be static, there's this one and
-> 3-4 below.
-> 
-> > +int test_pidfd_poll_exec(int use_waitpid)
-> > +{
-> > +	int pid, pidfd = 0;
-> > +	int status, ret;
-> > +	pthread_t t1;
-> > +	time_t prog_start = time(NULL);
-> > +	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
-> > +
-> > +	ksft_print_msg("Parent: pid: %d\n", getpid());
-> > +	pid = pidfd_clone(CLONE_PIDFD, &pidfd, child_poll_exec_test);
-> 
-> If pidfd_clone() fails here, I think things will go haywire below.
-> 
-> > +	ksft_print_msg("Parent: Waiting for Child (%d) to complete.\n", pid);
-> > +
-> > +	if (use_waitpid) {
-> > +		ret = waitpid(pid, &status, 0);
-> > +		if (ret == -1)
-> > +			ksft_print_msg("Parent: error\n");
-> > +
-> > +		if (ret == pid)
-> > +			ksft_print_msg("Parent: Child process waited for.\n");
-> > +	} else {
-> > +		poll_pidfd(test_name, pidfd);
-> > +	}
-> > +
-> > +	time_t prog_time = time(NULL) - prog_start;
-> > +
-> > +	ksft_print_msg("Time waited for child: %lu\n", prog_time);
-> > +
-> > +	close(pidfd);
-> > +
-> > +	if (prog_time < CHILD_THREAD_MIN_WAIT || prog_time > CHILD_THREAD_MIN_WAIT + 2)
-> > +		ksft_exit_fail_msg("%s test: Failed\n", test_name);
-> > +	else
-> > +		ksft_test_result_pass("%s test: Passed\n", test_name);
-> > +}
-> > +
-> > +void *test_pidfd_poll_leader_exit_thread(void *priv)
-> > +{
-> > +	char waittime[256];
-> > +
-> > +	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
-> > +			getpid(), syscall(SYS_gettid));
-> > +	sleep(CHILD_THREAD_MIN_WAIT);
-> > +	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
-> > +	return NULL;
-> > +}
-> > +
-> > +static time_t *child_exit_secs;
-> > +static int child_poll_leader_exit_test(void *args)
-> > +{
-> > +	pthread_t t1, t2;
-> > +
-> > +	ksft_print_msg("Child: starting. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
-> > +	pthread_create(&t1, NULL, test_pidfd_poll_leader_exit_thread, NULL);
-> > +	pthread_create(&t2, NULL, test_pidfd_poll_leader_exit_thread, NULL);
-> > +
-> > +	/*
-> > +	 * glibc exit calls exit_group syscall, so explicity call exit only
-> > +	 * so that only the group leader exits, leaving the threads alone.
-> > +	 */
-> > +	*child_exit_secs = time(NULL);
-> > +	syscall(SYS_exit, 0);
-> > +}
-> > +
-> > +int test_pidfd_poll_leader_exit(int use_waitpid)
-> > +{
-> > +	int pid, pidfd = 0;
-> > +	int status, ret;
-> > +	time_t prog_start = time(NULL);
-> > +	const char *test_name = "pidfd_poll check for premature notification on non-empty"
-> > +				"group leader exit";
-> > +
-> > +	child_exit_secs = mmap(NULL, sizeof *child_exit_secs, PROT_READ | PROT_WRITE,
-> > +			MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-> > +
-> > +	ksft_print_msg("Parent: pid: %d\n", getpid());
-> > +	pid = pidfd_clone(CLONE_PIDFD, &pidfd, child_poll_leader_exit_test);
-> 
-> Same problem here, I think.
+> I ignored that (because there is a CHECK option to ensure that certain
+> options are set).
 
+True enough, but these things are a bit like compiler warnings in that
+it is good to have a clean run.
 
-All comments address and fixed in the next revision, thanks!
+> > Would it make sense to only set this on CONFIG_SMP=y runs?  The easy
+> > way to do this is to move it from CFcommon to the scenario files not
+> > having CONFIG_SMP=n.
 
- - Joel
+(Which is how I am currently running, I should have added.)
+
+> > having CONFIG_SMP=n.  Or would something else work better?
+> > 
+> > Or am I doing something wrong?
+> 
+> You should also get that warning on ARM for instance since those
+> PARAVIRT SPINLOCKS are only implemented on x86.
+
+OK, so we would want this to only be added for x86 runs.
+
+> I have no numbers to compare the performance with and without that
+> option. So we could drop that option or you tell me where to look after
+> a run with/without that option so I can tell if it is worth the effort.
+
+One place to look is in the summary output:
+
+TREE01 ------- 17540 GPs (58.4667/s) [rcu: g130629 f0x0 ]
+
+The "58.4667/s" is the number of grace periods per second.  I would be
+surprised if CONFIG_PARAVIRT_SPINLOCKS made a noticeable difference in
+grace-period rate (given the natural variation), but you never know.
+
+							Thanx, Paul
