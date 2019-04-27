@@ -1,63 +1,101 @@
 From: nstange at suse.de (Nicolai Stange)
-Date: Sat, 27 Apr 2019 12:06:35 +0200
-Subject: [PATCH 0/4] x86/ftrace: make ftrace_int3_handler() not to skip fops
- invocation
-Message-ID: <20190427100639.15074-1-nstange@suse.de>
+Date: Sat, 27 Apr 2019 12:06:39 +0200
+Subject: [PATCH 4/4] selftests/livepatch: add "ftrace a live patched function"
+ test
+In-Reply-To: <20190427100639.15074-1-nstange@suse.de>
+References: <20190427100639.15074-1-nstange@suse.de>
+Message-ID: <20190427100639.15074-5-nstange@suse.de>
 
-Hi,
+There had been an issue with interactions between tracing and live patching
+due to how x86' CONFIG_DYNAMIC_FTRACE used to handle the breakpoints at the
+updated instructions from its ftrace_int3_handler().
 
-this series is the result of the discussion to the RFC patch found at [1].
+More specifically, starting to trace a live patched function caused a short
+period in time where the live patching redirection became ineffective. In
+particular, the guarantees from the consistency model couldn't be held up
+in this situation.
 
-The goal is to make x86' ftrace_int3_handler() not to simply skip over
-the trapping instruction as this is problematic in the context of
-the live patching consistency model. For details, c.f. the commit message
-of [3/4] ("x86/ftrace: make ftrace_int3_handler() not to skip fops
-invocation").
+Implement a testcase for verifying that a function's live patch replacement
+is kept effective when enabling tracing on it.
 
-Everything is based on v5.1-rc6, please let me know in case you want me to
-rebase on somehing else.
+Reuse the existing 'test_klp_livepatch' live patch module which patches
+cmdline_proc_show(), the handler for /proc/cmdline.
 
-For x86_64, the live patching selftest added in [4/4] succeeds with this
-series applied and fails without it. On 32 bits I only compile-tested.
+Let the testcase in a loop
+- apply this live patch,
+- launch a background shell job enabling tracing on that function
+- while continuously verifying that the contents of /proc/cmdline still
+  match what would be expected when the live patch is applied.
 
-checkpatch reports warnings about
-- an overlong line in assembly -- I chose to ignore that
-- MAINTAINERS perhaps needing updates due to the new files
-  arch/x86/kernel/ftrace_int3_stubs.S and
-  tools/testing/selftests/livepatch/test-livepatch-vs-ftrace.sh.
-  As the existing arch/x86/kernel/ftrace_{32,64}.S haven't got an
-  explicit entry either, this one is probably Ok? The selftest
-  definitely is.
-
-Changes to the RFC patch:
-- s/trampoline/stub/ to avoid confusion with the ftrace_ops' trampolines,
-- use a fixed size stack kept in struct thread_info for passing the
-  (adjusted) ->ip values from ftrace_int3_handler() to the stubs,
-- provide one stub for each of the two possible jump targets and hardcode
-  those,
-- add the live patching selftest.
-
-Thanks,
-
-Nicolai
-
-Nicolai Stange (4):
-  x86/thread_info: introduce ->ftrace_int3_stack member
-  ftrace: drop 'static' qualifier from ftrace_ops_list_func()
-  x86/ftrace: make ftrace_int3_handler() not to skip fops invocation
-  selftests/livepatch: add "ftrace a live patched function" test
-
- arch/x86/include/asm/thread_info.h                 | 11 +++
- arch/x86/kernel/Makefile                           |  1 +
- arch/x86/kernel/asm-offsets.c                      |  8 +++
- arch/x86/kernel/ftrace.c                           | 79 +++++++++++++++++++---
- arch/x86/kernel/ftrace_int3_stubs.S                | 61 +++++++++++++++++
- kernel/trace/ftrace.c                              |  8 +--
+Signed-off-by: Nicolai Stange <nstange at suse.de>
+---
  tools/testing/selftests/livepatch/Makefile         |  3 +-
- .../livepatch/test-livepatch-vs-ftrace.sh          | 44 ++++++++++++
- 8 files changed, 199 insertions(+), 16 deletions(-)
- create mode 100644 arch/x86/kernel/ftrace_int3_stubs.S
+ .../livepatch/test-livepatch-vs-ftrace.sh          | 44 ++++++++++++++++++++++
+ 2 files changed, 46 insertions(+), 1 deletion(-)
  create mode 100755 tools/testing/selftests/livepatch/test-livepatch-vs-ftrace.sh
 
+diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
+index af4aee79bebb..bfa5353f6d17 100644
+--- a/tools/testing/selftests/livepatch/Makefile
++++ b/tools/testing/selftests/livepatch/Makefile
+@@ -3,6 +3,7 @@
+ TEST_GEN_PROGS := \
+ 	test-livepatch.sh \
+ 	test-callbacks.sh \
+-	test-shadow-vars.sh
++	test-shadow-vars.sh \
++	test-livepatch-vs-ftrace.sh
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/livepatch/test-livepatch-vs-ftrace.sh b/tools/testing/selftests/livepatch/test-livepatch-vs-ftrace.sh
+new file mode 100755
+index 000000000000..5c982ec56373
+--- /dev/null
++++ b/tools/testing/selftests/livepatch/test-livepatch-vs-ftrace.sh
+@@ -0,0 +1,44 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (C) 2019 SUSE Linux GmbH
++
++. $(dirname $0)/functions.sh
++
++set -e
++
++MOD_LIVEPATCH=test_klp_livepatch
++
++# TEST: ftrace a live patched function
++# - load a livepatch that modifies the output from /proc/cmdline
++# - install a function tracer at the live patched function
++# - verify that the function is still patched by reading /proc/cmdline
++# - unload the livepatch and make sure the patch was removed
++
++echo -n "TEST: ftrace a live patched function ... "
++dmesg -C
++
++for i in $(seq 1 3); do
++	load_lp $MOD_LIVEPATCH
++
++	( echo cmdline_proc_show > /sys/kernel/debug/tracing/set_ftrace_filter;
++	  echo function > /sys/kernel/debug/tracing/current_tracer ) &
++
++	for j in $(seq 1 200); do
++		if [[ "$(cat /proc/cmdline)" !=				\
++			"$MOD_LIVEPATCH: this has been live patched" ]] ; then
++			echo -e "FAIL\n\n"
++			die "livepatch kselftest(s) failed"
++		fi
++	done
++
++	wait %1
++
++	echo nop > /sys/kernel/debug/tracing/current_tracer
++	echo > /sys/kernel/debug/tracing/set_ftrace_filter
++
++	disable_lp $MOD_LIVEPATCH
++	unload_lp $MOD_LIVEPATCH
++done
++
++echo "ok"
++exit 0
 -- 
 2.13.7
