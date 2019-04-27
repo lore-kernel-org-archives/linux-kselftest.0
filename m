@@ -1,98 +1,65 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Fri, 26 Apr 2019 16:31:14 -0400
-Subject: [PATCH v1 2/2] Add selftests for pidfd polling
-In-Reply-To: <CAKOZuetFw9MnZCrXbcFTCFD9Jq8bZwzdcEi_OYHMMv2R_sgNNA@mail.gmail.com>
-References: <20190425190010.46489-1-joel@joelfernandes.org>
- <20190425190010.46489-2-joel@joelfernandes.org>
- <20190425212917.yotnir4uqgpnh764@brauner.io>
- <CAKOZueuPeqnWVCv8NnQNyStWBQLybkr2qqtfQ0MjzsfSQDymzg@mail.gmail.com>
- <20190426172602.GD261279@google.com>
- <CAKOZuetFw9MnZCrXbcFTCFD9Jq8bZwzdcEi_OYHMMv2R_sgNNA@mail.gmail.com>
-Message-ID: <20190426203114.GA185553@google.com>
+From: nstange@suse.de (Nicolai Stange)
+Date: Sat, 27 Apr 2019 12:06:35 +0200
+Subject: [PATCH 0/4] x86/ftrace: make ftrace_int3_handler() not to skip fops
+ invocation
+Message-ID: <20190427100639.15074-1-nstange@suse.de>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190426203114.ty8Az934zdxRP4m-thYAlFjRd0ll6wM8EWkEhbcC8RA@z>
+Message-ID: <20190427100635.sUtdwzOKk3kQY2MLqlx2vuHroW8DsC1WIONIjU6C5G4@z>
 
-On Fri, Apr 26, 2019@12:35:40PM -0700, Daniel Colascione wrote:
-> On Fri, Apr 26, 2019@10:26 AM Joel Fernandes <joel@joelfernandes.org> wrote:
-> > On Thu, Apr 25, 2019@03:07:48PM -0700, Daniel Colascione wrote:
-> > > On Thu, Apr 25, 2019@2:29 PM Christian Brauner <christian@brauner.io> wrote:
-> > > > This timing-based testing seems kinda odd to be honest. Can't we do
-> > > > something better than this?
-> > >
-> > > Agreed. Timing-based tests have a substantial risk of becoming flaky.
-> > > We ought to be able to make these tests fully deterministic and not
-> > > subject to breakage from odd scheduling outcomes. We don't have
-> > > sleepable events for everything, granted, but sleep-waiting on a
-> > > condition with exponential backoff is fine in test code. In general,
-> > > if you start with a robust test, you can insert a sleep(100) anywhere
-> > > and not break the logic. Violating this rule always causes pain sooner
-> > > or later.
-> >
-> > I prefer if you can be more specific about how to redesign the test. Please
-> > go through the code and make suggestions there. The tests have not been flaky
-> > in my experience.
-> 
-> You've been running them in an ideal environment.
+Hi,
 
-One would hope for a reliable test environment.
+this series is the result of the discussion to the RFC patch found at [1].
 
-> > In this case, we want to make sure that the poll unblocks at the right "time"
-> > that is when the non-leader thread exits, and not when the leader thread
-> > exits (test 1), or when the non-leader thread exits and not when the same
-> > non-leader previous did an execve (test 2).
-> 
-> Instead of sleeping, you want to wait for some condition. Right now,
-> in a bunch of places, the test does something like this:
-> 
-> do_something()
-> sleep(SOME_TIMEOUT)
-> check(some_condition())
+The goal is to make x86' ftrace_int3_handler() not to simply skip over
+the trapping instruction as this is problematic in the context of
+the live patching consistency model. For details, c.f. the commit message
+of [3/4] ("x86/ftrace: make ftrace_int3_handler() not to skip fops
+invocation").
 
-No. I don't have anything like "some_condition()". My some_condition() is
-just the difference in time.
+Everything is based on v5.1-rc6, please let me know in case you want me to
+rebase on somehing else.
 
-> 
-> You can replace each of these clauses with something like this:
-> 
-> do_something()
-> start_time = now()
-> while(!some_condition() && now() - start_time < LONG_TIMEOUT)
->   sleep(SHORT_DELAY)
-> check(some_condition())
-> 
-> This way, you're insensitive to timing, up to LONG_TIMEOUT (which can
-> be something like a minute). Yes, you can always write
-> sleep(LARGE_TIMEOUT) instead, but a good, robust value of LONG_TIMEOUT
-> (which should be tens of seconds) would make the test take far too
-> long to run in the happy case.
+For x86_64, the live patching selftest added in [4/4] succeeds with this
+series applied and fails without it. On 32 bits I only compile-tested.
 
-Yes, but try implementing some_condition()  :-). It is easy to talk in the
-abstract, I think it would be more productive if you can come up with an
-implementation/patchh of the test itself and send a patch for that. I know
-you wrote some pseudocode below, but it is a complex reimplementation that I
-don't think will make the test more robust. I mean reading /proc/pid stat?
-yuck :) You are welcome to send a patch though if you have a better
-implementation.
+checkpatch reports warnings about
+- an overlong line in assembly -- I chose to ignore that
+- MAINTAINERS perhaps needing updates due to the new files
+  arch/x86/kernel/ftrace_int3_stubs.S and
+  tools/testing/selftests/livepatch/test-livepatch-vs-ftrace.sh.
+  As the existing arch/x86/kernel/ftrace_{32,64}.S haven't got an
+  explicit entry either, this one is probably Ok? The selftest
+  definitely is.
 
-> Note that this code is fine:
-> 
-> check(!some_condition())
-> sleep(SOME_REASONABLE_TIMEOUT)
-> check(!some_condition())
-> 
-> It's okay to sleep for a little while and check that something did
-> *not* happen, but it's not okay for the test to *fail* due to
-> scheduling delays. The difference is that
+Changes to the RFC patch:
+- s/trampoline/stub/ to avoid confusion with the ftrace_ops' trampolines,
+- use a fixed size stack kept in struct thread_info for passing the
+  (adjusted) ->ip values from ftrace_int3_handler() to the stubs,
+- provide one stub for each of the two possible jump targets and hardcode
+  those,
+- add the live patching selftest.
 
-As I said, multi-second scheduling delay are really unacceptable anyway. I
-bet many kselftest may fail on a "bad" system like that way, that does not
-mean the test is flaky. If there are any reports in the future that the test
-fails or is flaky, I am happy to address them at that time. The tests work
-and catch bugs reliably as I have seen. We could also make the test task as
-RT if scheduling class is a concern.
+Thanks,
 
-I don't think its worth bikeshedding about hypothetical issues.
+Nicolai
 
-thanks,
+Nicolai Stange (4):
+  x86/thread_info: introduce ->ftrace_int3_stack member
+  ftrace: drop 'static' qualifier from ftrace_ops_list_func()
+  x86/ftrace: make ftrace_int3_handler() not to skip fops invocation
+  selftests/livepatch: add "ftrace a live patched function" test
 
- - Joel
+ arch/x86/include/asm/thread_info.h                 | 11 +++
+ arch/x86/kernel/Makefile                           |  1 +
+ arch/x86/kernel/asm-offsets.c                      |  8 +++
+ arch/x86/kernel/ftrace.c                           | 79 +++++++++++++++++++---
+ arch/x86/kernel/ftrace_int3_stubs.S                | 61 +++++++++++++++++
+ kernel/trace/ftrace.c                              |  8 +--
+ tools/testing/selftests/livepatch/Makefile         |  3 +-
+ .../livepatch/test-livepatch-vs-ftrace.sh          | 44 ++++++++++++
+ 8 files changed, 199 insertions(+), 16 deletions(-)
+ create mode 100644 arch/x86/kernel/ftrace_int3_stubs.S
+ create mode 100755 tools/testing/selftests/livepatch/test-livepatch-vs-ftrace.sh
+
+-- 
+2.13.7
