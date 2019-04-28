@@ -1,38 +1,43 @@
-From: luto@amacapital.net (Andy Lutomirski)
-Date: Sun, 28 Apr 2019 10:41:10 -0700
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Sun, 28 Apr 2019 13:51:43 -0400
 Subject: [PATCH 1/4] x86/thread_info: introduce ->ftrace_int3_stack member
-In-Reply-To: <20190427100639.15074-2-nstange@suse.de>
+In-Reply-To: <F6268634-96D3-4267-B739-6D375FAB26A8@amacapital.net>
 References: <20190427100639.15074-1-nstange@suse.de>
  <20190427100639.15074-2-nstange@suse.de>
-Message-ID: <F6268634-96D3-4267-B739-6D375FAB26A8@amacapital.net>
+ <F6268634-96D3-4267-B739-6D375FAB26A8@amacapital.net>
+Message-ID: <20190428135143.09d35bb6@oasis.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190428174110.vj9e5wf0m5_CVRs658OZUjNiM8s2HC8lh5lOzzkO4KE@z>
+Message-ID: <20190428175143.FDJbfbtv0_j1a3ywAKvQEAOIX5t8Oq4A3uRkgsG0sAQ@z>
+
+On Sun, 28 Apr 2019 10:41:10 -0700
+Andy Lutomirski <luto@amacapital.net> wrote:
 
 
-> On Apr 27, 2019,@3:06 AM, Nicolai Stange <nstange@suse.de> wrote:
+> > Note that at any given point
+> > in time, there can be at most four such call insn emulations pending:
+> > namely at most one per "process", "irq", "softirq" and "nmi" context.
+> >   
 > 
-> Before actually rewriting an insn, x86' DYNAMIC_FTRACE  implementation
-> places an int3 breakpoint on it. Currently, ftrace_int3_handler() simply
-> treats the insn in question as nop and advances %rip past it.
+> That’s quite an assumption. I think your list should also contain
+> exception, exceptions nested inside that exception, and machine
+> check, at the very least.  I’m also wondering why irq and softirq are
+> treated separately.
 
-How does this not crash all the time?
+4 has usually been the context count we choose. But I guess in theory,
+if we get exceptions then I could potentially be more.
 
-> An upcoming
-> patch will improve this by making the int3 trap handler emulate the call
-> insn. To this end, ftrace_int3_handler() will be made to change its iret
-> frame's ->ip to some stub which will then mimic the function call in the
-> original context.
+As for irq vs softirq, an interrupt can preempt a softirq. Interrupts
+are enabled while softirqs are running. When sofirqs run, softirqs are
+disabled to prevent nested softirqs. But interrupts are enabled again,
+and another interrupt may come in while a softirq is executing.
+
 > 
-> Somehow the trapping ->ip address will have to get communicated from
-> ftrace_int3_handler() to these stubs though.
+> All this makes me think that one of the other solutions we came up
+> with last time we discussed this might be better.
 
-Cute.  But this should get “ftrace” removed from the name, since it’s potentially more generally useful.  Josh wanted something like this for static_call.
++100
 
-> Note that at any given point
-> in time, there can be at most four such call insn emulations pending:
-> namely at most one per "process", "irq", "softirq" and "nmi" context.
-> 
+Perhaps adding another slot into pt_regs that gets used by int3 to
+store a slot to emulate a call on return?
 
-That’s quite an assumption. I think your list should also contain exception, exceptions nested inside that exception, and machine check, at the very least.  I’m also wondering why irq and softirq are treated separately.
-
-All this makes me think that one of the other solutions we came up with last time we discussed this might be better.
+-- Steve
