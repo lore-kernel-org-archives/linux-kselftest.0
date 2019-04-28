@@ -1,53 +1,76 @@
-From: gregkh at linuxfoundation.org (Greg KH)
-Date: Sat, 27 Apr 2019 15:38:44 +0200
-Subject: [PATCH v7 resend 1/2] Provide in-kernel headers to make
- extending kernel easier
-In-Reply-To: <20190426190430.172543-1-joel@joelfernandes.org>
-References: <20190426190430.172543-1-joel@joelfernandes.org>
-Message-ID: <20190427133844.GA29366@kroah.com>
+From: oleg at redhat.com (Oleg Nesterov)
+Date: Sun, 28 Apr 2019 18:24:06 +0200
+Subject: [PATCH v1 1/2] Add polling support to pidfd
+In-Reply-To: <20190425222359.sqhboc4x4daznr6r@brauner.io>
+References: <20190425190010.46489-1-joel@joelfernandes.org>
+ <20190425222359.sqhboc4x4daznr6r@brauner.io>
+Message-ID: <20190428162405.GA6757@redhat.com>
 
-On Fri, Apr 26, 2019 at 03:04:29PM -0400, Joel Fernandes (Google) wrote:
-> Introduce in-kernel headers which are made available as an archive
-> through proc (/proc/kheaders.tar.xz file). This archive makes it
-> possible to run eBPF and other tracing programs that need to extend the
-> kernel for tracing purposes without any dependency on the file system
-> having headers.
-> 
-> A github PR is sent for the corresponding BCC patch at:
-> https://github.com/iovisor/bcc/pull/2312
-> 
-> On Android and embedded systems, it is common to switch kernels but not
-> have kernel headers available on the file system. Further once a
-> different kernel is booted, any headers stored on the file system will
-> no longer be useful. This is an issue even well known to distros.
-> By storing the headers as a compressed archive within the kernel, we can
-> avoid these issues that have been a hindrance for a long time.
-> 
-> The best way to use this feature is by building it in. Several users
-> have a need for this, when they switch debug kernels, they do not want to
-> update the filesystem or worry about it where to store the headers on
-> it. However, the feature is also buildable as a module in case the user
-> desires it not being part of the kernel image. This makes it possible to
-> load and unload the headers from memory on demand. A tracing program can
-> load the module, do its operations, and then unload the module to save
-> kernel memory. The total memory needed is 3.3MB.
-> 
-> By having the archive available at a fixed location independent of
-> filesystem dependencies and conventions, all debugging tools can
-> directly refer to the fixed location for the archive, without concerning
-> with where the headers on a typical filesystem which significantly
-> simplifies tooling that needs kernel headers.
-> 
-> The code to read the headers is based on /proc/config.gz code and uses
-> the same technique to embed the headers.
-> 
-> Other approaches were discussed such as having an in-memory mountable
-> filesystem, but that has drawbacks such as requiring an in-kernel xz
-> decompressor which we don't have today, and requiring usage of 42 MB of
-> kernel memory to host the decompressed headers at anytime. Also this
-> approach is simpler than such approaches.
-> 
-> Reviewed-by: Masahiro Yamada <yamada.masahiro at socionext.com>
-> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+Thanks for cc'ing me...
 
-Reviewed-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+On 04/26, Christian Brauner wrote:
+>
+> On Thu, Apr 25, 2019 at 03:00:09PM -0400, Joel Fernandes (Google) wrote:
+> > +static unsigned int pidfd_poll(struct file *file, struct poll_table_struct *pts)
+> > +{
+> > +	struct task_struct *task;
+> > +	struct pid *pid;
+> > +	int poll_flags = 0;
+> > +
+> > +	/*
+> > +	 * tasklist_lock must be held because to avoid racing with
+> > +	 * changes in exit_state and wake up. Basically to avoid:
+> > +	 *
+> > +	 * P0: read exit_state = 0
+> > +	 * P1: write exit_state = EXIT_DEAD
+> > +	 * P1: Do a wake up - wq is empty, so do nothing
+> > +	 * P0: Queue for polling - wait forever.
+> > +	 */
+> > +	read_lock(&tasklist_lock);
+> > +	pid = file->private_data;
+> > +	task = pid_task(pid, PIDTYPE_PID);
+> > +	WARN_ON_ONCE(task && !thread_group_leader(task));
+> > +
+> > +	if (!task || (task->exit_state && thread_group_empty(task)))
+> > +		poll_flags = POLLIN | POLLRDNORM;
+
+Joel, I still can't understand why do we need tasklist... and I don't really
+understand the comment. The code looks as if you are trying to avoid poll_wait(),
+but this would be strange.
+
+OK, why can't pidfd_poll() do
+
+	poll_wait(file, &pid->wait_pidfd, pts);
+
+	rcu_read_lock();
+	task = pid_task(pid, PIDTYPE_PID);
+	if (!task || task->exit_state && thread_group_empty(task))
+		poll_flags = POLLIN | ...;
+	rcu_read_unlock();
+
+	return poll_flags;
+
+?
+
+> > +static void do_notify_pidfd(struct task_struct *task)
+>
+> Maybe a short command that this helper can only be called when we know
+> that task is a thread-group leader wouldn't hurt so there's no confusion
+> later.
+
+Not really. If the task is traced, do_notify_parent() (and thus do_notify_pidfd())
+can be called to notify the debugger even if the task is not a leader and/or if
+it is not the last thread. The latter means a spurious wakeup for pidfd_poll().
+
+> > +{
+> > +	struct pid *pid;
+> > +
+> > +	lockdep_assert_held(&tasklist_lock);
+> > +
+> > +	pid = get_task_pid(task, PIDTYPE_PID);
+> > +	wake_up_all(&pid->wait_pidfd);
+> > +	put_pid(pid);
+
+Why get/put?
+
+Oleg.
