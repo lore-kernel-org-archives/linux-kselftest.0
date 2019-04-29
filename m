@@ -1,60 +1,82 @@
-From: luto at amacapital.net (Andy Lutomirski)
-Date: Sun, 28 Apr 2019 16:27:21 -0700
-Subject: [PATCH 1/4] x86/thread_info: introduce ->ftrace_int3_stack member
-In-Reply-To: <87k1fdygcx.fsf@suse.de>
-References: <20190427100639.15074-1-nstange@suse.de>
- <20190427100639.15074-2-nstange@suse.de>
- <F6268634-96D3-4267-B739-6D375FAB26A8@amacapital.net>
- <20190428135143.09d35bb6@oasis.local.home> <87k1fdygcx.fsf@suse.de>
-Message-ID: <C55DED25-C60D-4731-9A6B-92BDA8771766@amacapital.net>
+From: bigeasy at linutronix.de (Sebastian Andrzej Siewior)
+Date: Mon, 29 Apr 2019 10:19:44 +0200
+Subject: [PATCH] rcutorture: Tweak kvm options
+In-Reply-To: <20190426135058.GD3923@linux.ibm.com>
+References: <20190424073446.8577-1-bigeasy@linutronix.de>
+ <20190424103809.GM3923@linux.ibm.com>
+ <20190424183039.GA4494@linux.ibm.com>
+ <20190425194638.GA7238@linux.ibm.com>
+ <20190426105413.rajcon4vyzov446c@linutronix.de>
+ <20190426135058.GD3923@linux.ibm.com>
+Message-ID: <20190429081943.gucbalncrrttxxcr@linutronix.de>
 
+On 2019-04-26 06:50:58 [-0700], Paul E. McKenney wrote:
+> One place to look is in the summary output:
+> 
+> TREE01 ------- 17540 GPs (58.4667/s) [rcu: g130629 f0x0 ]
+> 
+> The "58.4667/s" is the number of grace periods per second.  I would be
+> surprised if CONFIG_PARAVIRT_SPINLOCKS made a noticeable difference in
+> grace-period rate (given the natural variation), but you never know.
 
-> On Apr 28, 2019, at 2:22 PM, Nicolai Stange <nstange at suse.de> wrote:
-> 
-> Steven Rostedt <rostedt at goodmis.org> writes:
-> 
->> On Sun, 28 Apr 2019 10:41:10 -0700
->> Andy Lutomirski <luto at amacapital.net> wrote:
->> 
->> 
->>>> Note that at any given point
->>>> in time, there can be at most four such call insn emulations pending:
->>>> namely at most one per "process", "irq", "softirq" and "nmi" context.
->>>> 
->>> 
->>> That’s quite an assumption. I think your list should also contain
->>> exception, exceptions nested inside that exception, and machine
->>> check, at the very least.  I’m also wondering why irq and softirq are
->>> treated separately.
-> 
-> You're right, I missed the machine check case.
-> 
-> 
->> 4 has usually been the context count we choose. But I guess in theory,
->> if we get exceptions then I could potentially be more.
-> 
-> After having seen the static_call discussion, I'm in no way defending
-> this limited approach here, but out of curiosity: can the code between
-> the push onto the stack from ftrace_int3_handler() and the subsequent
-> pop from the stub actually trigger an (non-#MC) exception? There's an
-> iret inbetween, but that can fault only when returning to user space,
-> correct?
+I did four runs of the different parts of the patch:
+- 5.1-rc6
+- #1 + kvm64 CPU + some config options
+- #2 + tsc-deadline=on and so on (the whole line)
+- #3 + CONFIG_PARAVIRT_SPINLOCKS (now everything)
 
-IRET doesn’t do any fancy masking, so #DB, NMI and regular IRQs should all be possible.
+the test command was
+	tools/testing/selftests/rcutorture/bin/kvm.sh --cpus 112 --duration 60 --configs "16*TREE08" --memory 4G
 
-> 
-> 
->> As for irq vs softirq, an interrupt can preempt a softirq. Interrupts
->> are enabled while softirqs are running. When sofirqs run, softirqs are
->> disabled to prevent nested softirqs. But interrupts are enabled again,
->> and another interrupt may come in while a softirq is executing.
->> 
-> 
-> Thanks,
-> 
-> Nicolai
-> 
-> 
-> -- 
-> SUSE Linux GmbH, GF: Felix Imendörffer, Jane Smithard, Graham Norton,
-> HRB 21284 (AG Nürnberg)
+and the results:
+| HEAD is now at 085b7755808a... Linux 5.1-rc6
+| (28.5942 +27.4658 +28.0203 +27.2061 +28.0731 +26.9078 +27.8494 + 27.3392 +26.4339 +28.025 +27.4797 +27.6775 +28.0653 +28.0742 +27.9581 +28.6508)/ 16
+| 27.738775
+| 
+| HEAD is now at 36a12aa9761a... tune #1
+| (28.5761 +26.6514 +26.6989 +27.4375 +27.3442 +28.3228 +26.6353 +27.5461+28.5531 +27.7006 +27.8078 +27.9753 +27.4269 +28.0464 +27.6314 +27.8356) / 16
+| 27.6368375
+| 
+| HEAD is now at af5cd7196436... tune #2
+| (28.4867 +26.3675 +27.6364 +28.3344 +27.4153 +27.9306 +27.1703 +26.8461+27.3194 +28.5486 +27.8975 +27.4356 +28.12 +28.4397 +29.0186 +26.9328 )/ 16
+| 27.74371875
+| 
+| HEAD is now at 3701f64943f5... tune #3
+| (28.2431 +27.7831 +28.39 +28.2586 +27.7408 +27.9258 +26.6236 +26.7817+29.1178 +26.9564 +29.0525 +27.4258 +27.4931 +27.8928 +26.9308 +28.4833)/ 16
+| 27.8187
+
+This 28.… is the number of GP/s. Based on the results in looks like
+noise to me. Also I have no idea why you have more than twice as many
+GP/s as I do.
+Different box doing:
+	tools/testing/selftests/rcutorture/bin/kvm.sh --cpus 112 --duration 60 --configs "42*TREE01" --memory 4G
+and got this:
+
+| HEAD is now at 085b7755808aa... Linux 5.1-rc6
+| (15.2878 + 15.8664 + 15.6369 + 15.6714 + 15.3667 + 16.4706 + 15.7844 +
+| 16.2119 + 15.6108 + 15.84 + 16.0003 + 16.2886 + 15.8728 + 15.5347 +
+| 15.6753 + 15.6628 + 15.8628 + 15.8158 + 15.8419 + 16.0053 + 15.7878 +
+| 16.465 + 16.2267 + 16.6881 + 16.3186 + 16.1778 + 15.7069 + 16.0178 +
+| 15.7156 + 16.0083 + 15.7181 + 15.8961 + 15.5253 + 16.1569 + 15.7692 +
+| 16.2622 + 16.2931 + 15.9531 + 15.6697 + 15.4539 + 15.6478 + 15.8047) /
+| 42
+|	~15.89452142857142857143
+|
+| HEAD is now at 3701f64943f5a... tune #3
+| ; (15.8461 + 15.8653 + 16.0392 + 15.8906 + 15.7606 + 15.6169 + 16.1425 +
+| 15.9089 + 16.2169 + 16.1694 + 16.2122 + 15.6417 + 15.8022 + 16.1178 +
+| 15.1689 + 16.1303 + 16.0181 + 16.3797 + 16.0614 + 16.2839 + 15.4583 +
+| 15.9178 + 16.0589 + 16.3428 + 15.5486 + 16.0839 + 15.9931 + 15.8417 +
+| 16.0981 + 15.8075 + 15.9925 + 15.7311 + 15.9172 + 16.1164 + 15.6303 +
+| 15.9383 + 16.0714 + 16.2786 + 15.8394 + 15.9597 + 16.0175 + 15.3908) /
+| 42
+|	~15.93586904761904761905
+
+Noise.
+
+So from RCUtorture point of view there is no improvement right? In that
+case I would suggest to drop the problematic parts…
+
+> 							Thanx, Paul
+
+Sebastian
