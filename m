@@ -1,108 +1,57 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Mon, 29 Apr 2019 18:07:33 -0400
+From: sean.j.christopherson at intel.com (Sean Christopherson)
+Date: Mon, 29 Apr 2019 15:08:15 -0700
 Subject: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
  fops invocation
-In-Reply-To: <CAHk-=wjGquN7-kQCoa+LHCuiVTjefkk38qwaysd4wLLtoSZhpg@mail.gmail.com>
-References: <20190427100639.15074-1-nstange@suse.de>
- <20190427100639.15074-4-nstange@suse.de>
+In-Reply-To: <CAHk-=wjyyKDv-WZLXZbVD=V05p2X7eg74z2SpR4TQTxN9JLq4Q@mail.gmail.com>
+References: <20190427100639.15074-4-nstange@suse.de>
  <20190427102657.GF2623@hirez.programming.kicks-ass.net>
  <20190428133826.3e142cfd@oasis.local.home>
  <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
- <20190429145250.1a5da6ed@gandalf.local.home>
- <CAHk-=wjm93jLtVxTX4HZs6K4k1Wqh3ujjmapqaYtcibVk_YnzQ@mail.gmail.com>
- <20190429150724.6e501d27@gandalf.local.home>
- <CAHk-=wgbC-wiSrdDYAh1ORF4EKmecY+MkNsJBF=BWf4W1bXXgA@mail.gmail.com>
- <20190429163043.535f4272@gandalf.local.home>
- <CAHk-=wjGquN7-kQCoa+LHCuiVTjefkk38qwaysd4wLLtoSZhpg@mail.gmail.com>
-Message-ID: <20190429180733.3f25d8b9@gandalf.local.home>
+ <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
+ <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
+ <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
+ <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
+ <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
+ <CAHk-=wjyyKDv-WZLXZbVD=V05p2X7eg74z2SpR4TQTxN9JLq4Q@mail.gmail.com>
+Message-ID: <20190429220814.GF31379@linux.intel.com>
 
-On Mon, 29 Apr 2019 14:38:35 -0700
-Linus Torvalds <torvalds at linux-foundation.org> wrote:
-
-> On Mon, Apr 29, 2019 at 1:30 PM Steven Rostedt <rostedt at goodmis.org> wrote:
+On Mon, Apr 29, 2019 at 01:16:10PM -0700, Linus Torvalds wrote:
+> On Mon, Apr 29, 2019 at 12:02 PM Linus Torvalds
+> <torvalds at linux-foundation.org> wrote:
 > >
-> > The update from "call custom_trampoline" to "call iterator_trampoline"
-> > is where we have an issue.  
+> > If nmi were to break it, it would be a cpu bug. I'm pretty sure I've
+> > seen the "shadow stops even nmi" documented for some uarch, but as
+> > mentioned it's not necessarily the only way to guarantee the shadow.
 > 
-> So it has never worked. Just tell people that they have two chocies:
-
-The custom call to iterator translation never worked. One option is to
-always call the iterator, and just take the hit. There's another
-solution to to make permanent updates that would handle the live
-patching case, but not for the tracing case. It is more critical for
-live patching than tracing (missed traced function is not as critical
-as running buggy code unexpectedly). I could look to work on that
-instead.
-
+> In fact, the documentation is simply the official Intel instruction
+> docs for "STI":
 > 
->  - you do the careful rewriting, which takes more time
-
-Which would be the method I said making the call to call a special case.
-
+>     The IF flag and the STI and CLI instructions do not prohibit the
+>     generation of exceptions and NMI interrupts. NMI interrupts (and
+>     SMIs) may be blocked for one macroinstruction following an STI.
 > 
->  - you do it by rewriting as nop and then back, which is what
-> historically has been done, and that is fast and simple, because
-> there's no need to be careful.
-
-Except in the live kernel patching case where you just put back the
-buggy function.
-
+> note the "may be blocked". As mentioned, that's just one option for
+> not having NMI break the STI shadow guarantee, but it's clearly one
+> that Intel has done at times, and clearly even documents as having
+> done so.
 > 
-> Really. I find your complaints completely incomprehensible. You've
-> never rewritten call instructions atomically before, and now you
-> complain about it being slightly more expensive to do it when I give
-> you the code? Yes it damn well will be slightly more expensive. Deal
-> with it.
+> There is absolutely no question that the sti shadow is real, and that
+> people have depended on it for _decades_. It would be a horrible
+> errata if the shadow can just be made to go away by randomly getting
+> an NMI or SMI.
 
-I wasn't complaining about the expense of doing it that way. I was
-stating that it would take more time to get it right as it as it would
-require a different implementation for the call to call case.
+FWIW, Lakemont (Quark) doesn't block NMI/SMI in the STI shadow, but I'm
+not sure that counters the "horrible errata" statement ;-).  SMI+RSM saves
+and restores STI blocking in that case, but AFAICT NMI has no such
+protection and will effectively break the shadow on its IRET.
 
+All other (modern) Intel uArchs block NMI in the shadow and also enforce
+STI_BLOCKING==0 when injecting an NMI via VM-Enter, i.e. prevent a VMM
+from breaking the shadow so long as the VMM preserves the shadow info.
 
-> 
-> Btw, once again - I several months ago also gave a suggestion on how
-> it could be done batch-mode by having lots of those small stubs and
-> just generating them dynamically.
-> 
-> You never wrote that code *EITHER*. It's been *months*.
-
-Note, I wasn't the one writing the code back then either. I posted a
-proof of concept for a similar topic (trace events) for the purpose of
-bringing back the performance lost due to the retpolines (something
-like 8% hit). Josh took the initiative to do that work, but I don't
-remember ever getting to a consensus on a solution to that. Yes you had
-given us ideas, but I remember people (like Andy) having concerns with
-it. But because it was just an optimization change, and Josh had other
-things to work on, that work just stalled.
-
-But I just found out that the function tracing code has the same issue,
-but this can cause real problems with live kernel patching. This is why
-this patch set started.
-
-> 
-> So now I've written the non-batch-mode code for you, and you just
-> *complain* about it?
-
-Because this is a different story. The trace event code is updated one
-at a time (there's patches out there to do it in batch). But this is
-not trace events. This is function tracing which only does batching.
-
-
-> 
-> I'm done with this discussion. I'm totally fed up.
-> 
-
-Note, I wasn't writing this code anyway as I didn't have the time to. I
-was helping others who took the initiative to do this work. But I guess
-they didn't have time to move it forward either.
-
-For the live kernel patching case, I'll start working on the permanent
-changes, where once a function entry is changed, it can never be put
-back. Then we wont have an issue with the live kernel patching case,
-but only for tracing. But the worse thing there is you miss tracing
-functions while an update is being made.
-
-If Nicolai has time, perhaps he can try out the method you suggest and
-see if we can move this forward.
-
--- Steve
+KVM is generally ok with respect to STI blocking, but ancient versions
+didn't migrate STI blocking and there's currently a hole where
+single-stepping a guest (from host userspace) could drop STI_BLOCKING
+if a different VM-Exit occurs between the single-step #DB VM-Exit and the
+instruction in the shadow.  Though "don't do that" may be a reasonable
+answer in that case.
