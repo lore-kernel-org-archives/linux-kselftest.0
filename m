@@ -1,59 +1,74 @@
-From: ndesaulniers at google.com (Nick Desaulniers)
-Date: Mon, 29 Apr 2019 13:30:14 -0700
-Subject: [PATCH for 5.2 12/12] rseq/selftests: add -no-integrated-as for
- clang
-In-Reply-To: <712082435.384.1556569697998.JavaMail.zimbra@efficios.com>
-References: <20190429152803.7719-1-mathieu.desnoyers@efficios.com>
- <20190429152803.7719-13-mathieu.desnoyers@efficios.com>
- <CAKwvOdnbH0+ju5Ny-mB-Z4kC+ALyCJOU4Q8OCLHHjFAQzJqsXA@mail.gmail.com>
- <712082435.384.1556569697998.JavaMail.zimbra@efficios.com>
-Message-ID: <CAKwvOdk1bUgczvUr3OVttFZ4ArO6fSEz6_enPmu+GDDy1yTrTQ@mail.gmail.com>
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Mon, 29 Apr 2019 16:30:43 -0400
+Subject: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
+ fops invocation
+In-Reply-To: <CAHk-=wgbC-wiSrdDYAh1ORF4EKmecY+MkNsJBF=BWf4W1bXXgA@mail.gmail.com>
+References: <20190427100639.15074-1-nstange@suse.de>
+ <20190427100639.15074-4-nstange@suse.de>
+ <20190427102657.GF2623@hirez.programming.kicks-ass.net>
+ <20190428133826.3e142cfd@oasis.local.home>
+ <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
+ <20190429145250.1a5da6ed@gandalf.local.home>
+ <CAHk-=wjm93jLtVxTX4HZs6K4k1Wqh3ujjmapqaYtcibVk_YnzQ@mail.gmail.com>
+ <20190429150724.6e501d27@gandalf.local.home>
+ <CAHk-=wgbC-wiSrdDYAh1ORF4EKmecY+MkNsJBF=BWf4W1bXXgA@mail.gmail.com>
+Message-ID: <20190429163043.535f4272@gandalf.local.home>
 
-On Mon, Apr 29, 2019 at 1:28 PM Mathieu Desnoyers
-<mathieu.desnoyers at efficios.com> wrote:
->
-> ----- On Apr 29, 2019, at 1:03 PM, ndesaulniers ndesaulniers at google.com wrote:
->
-> > On Mon, Apr 29, 2019 at 8:29 AM Mathieu Desnoyers
-> > <mathieu.desnoyers at efficios.com> wrote:
-> >> diff --git a/tools/testing/selftests/rseq/Makefile
-> >> b/tools/testing/selftests/rseq/Makefile
-> >> index c30c52e1d0d2..d6469535630a 100644
-> >> --- a/tools/testing/selftests/rseq/Makefile
-> >> +++ b/tools/testing/selftests/rseq/Makefile
-> >> @@ -1,5 +1,11 @@
-> >>  # SPDX-License-Identifier: GPL-2.0+ OR MIT
-> >> -CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./
-> >> +
-> >> +ifneq ($(shell $(CC) --version 2>&1 | head -n 1 | grep clang),)
-> >> +CLANG_FLAGS += -no-integrated-as
-> >> +endif
-> >> +
-> >> +CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ \
-> >> +         $(CLANG_FLAGS)
+On Mon, 29 Apr 2019 13:06:17 -0700
+Linus Torvalds <torvalds at linux-foundation.org> wrote:
+
+> On Mon, Apr 29, 2019 at 12:07 PM Steven Rostedt <rostedt at goodmis.org> wrote:
 > >
-> > The top level Makefile exports $(CLANG_FLAGS), which should contain
-> > `-no-integrated-as`.  Is that available here?  If so, then you can
-> > just add `$(CLANG_FLAGS)`, no compiler check needed.
->
-> AFAIU, the makefiles under tools/testing/selftests all end up including
-> tools/testing/selftests/lib.mk, which states:
->
-> "# This mimics the top-level Makefile. We do it explicitly here so that this
->  # Makefile can operate with or without the kbuild infrastructure."
->
-> So I don't think it's using any of the definitions from the toplevel
-> Makefile.
->
-> > If not, maybe the test for CONFIG_CC_IS_CLANG is cleaner?
->
-> A quick test indicates that the toplevel CONFIG_* definitions are unavailable
-> from the kernel selftests makefiles.
+> > Are you suggesting that I rewrite the code to do it one function at a
+> > time? This has always been batch mode. This is not something new. The
+> > function tracer has been around longer than the text poke code.  
+> 
+> Only do the 'call' instructions one at a time. Why would you change
+> _existing_ code?
 
-Ok, in that case...
-Reviewed-by: Nick Desaulniers <ndesaulniers at google.com>
-Thanks again!
+The function tracing is a call instruction.
 
--- 
-Thanks,
-~Nick Desaulniers
+On boot:
+
+<function_X>:
+	nop
+	blah
+	blah
+
+After a callback to function tracing is called:
+
+<function_X>
+	call custom_trampoline
+	blah
+	blah
+
+
+If we have two functions to that function added:
+
+<function_X>
+	call iterator_trampoline
+	blah
+	blah
+
+The update from "call custom_trampoline" to "call iterator_trampoline"
+is where we have an issue.
+
+We could make this a special case where we do this one at a time, but
+currently the code is all the same looking at tables to determine to
+what to do. Which is one of three:
+
+ 1) change nop to call function
+ 2) change call function to nop
+ 3) update call function to another call function
+
+#3 is where we have an issue. But if we want this to be different, we
+would need to change the code significantly, and know that we are only
+updating calls to calls. Which would take a bit of accounting to see if
+that's the change that is being made.
+
+This thread started about that #3 operation causing a call to be missed
+because we turn it into a nop while we make the transition, where in
+reality it needs to be a call to one of the two functions in the
+transition.
+
+-- Steve
