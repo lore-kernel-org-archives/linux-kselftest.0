@@ -1,25 +1,35 @@
 From: torvalds at linux-foundation.org (Linus Torvalds)
-Date: Mon, 29 Apr 2019 13:06:17 -0700
+Date: Mon, 29 Apr 2019 13:07:33 -0700
 Subject: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
  fops invocation
-In-Reply-To: <20190429150724.6e501d27@gandalf.local.home>
+In-Reply-To: <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
 References: <20190427100639.15074-1-nstange@suse.de>
  <20190427100639.15074-4-nstange@suse.de>
  <20190427102657.GF2623@hirez.programming.kicks-ass.net>
  <20190428133826.3e142cfd@oasis.local.home>
  <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
- <20190429145250.1a5da6ed@gandalf.local.home>
- <CAHk-=wjm93jLtVxTX4HZs6K4k1Wqh3ujjmapqaYtcibVk_YnzQ@mail.gmail.com>
- <20190429150724.6e501d27@gandalf.local.home>
-Message-ID: <CAHk-=wgbC-wiSrdDYAh1ORF4EKmecY+MkNsJBF=BWf4W1bXXgA@mail.gmail.com>
+ <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
+ <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
+ <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
+ <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
+ <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
+ <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
+ <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
+Message-ID: <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
 
-On Mon, Apr 29, 2019 at 12:07 PM Steven Rostedt <rostedt at goodmis.org> wrote:
+On Mon, Apr 29, 2019 at 12:24 PM Andy Lutomirski <luto at kernel.org> wrote:
+> > Side note: we *already* depend on sti shadow working in other parts of the kernel, namely sti->iret.
 >
-> Are you suggesting that I rewrite the code to do it one function at a
-> time? This has always been batch mode. This is not something new. The
-> function tracer has been around longer than the text poke code.
+> Where?  STI; IRET would be nuts.
 
-Only do the 'call' instructions one at a time. Why would you change
-_existing_ code?
+Sorry, not 'sti;iret' but 'sti;sysexit'
 
-                 Linus
+> before commit 4214a16b02971c60960afd675d03544e109e0d75
+>     x86/asm/entry/64/compat: Use SYSRETL to return from compat mode SYSENTER
+>
+> we did sti; sysxit, but, when we discussed this, I don't recall anyone
+> speaking up in favor of the safely of the old code.
+
+We still have that sti sysexit in the 32-bit code.
+
+                     Linus
