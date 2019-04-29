@@ -1,49 +1,48 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Mon, 29 Apr 2019 15:07:24 -0400
+From: luto at kernel.org (Andy Lutomirski)
+Date: Mon, 29 Apr 2019 12:24:23 -0700
 Subject: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
  fops invocation
-In-Reply-To: <CAHk-=wjm93jLtVxTX4HZs6K4k1Wqh3ujjmapqaYtcibVk_YnzQ@mail.gmail.com>
+In-Reply-To: <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
 References: <20190427100639.15074-1-nstange@suse.de>
  <20190427100639.15074-4-nstange@suse.de>
  <20190427102657.GF2623@hirez.programming.kicks-ass.net>
  <20190428133826.3e142cfd@oasis.local.home>
  <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
- <20190429145250.1a5da6ed@gandalf.local.home>
- <CAHk-=wjm93jLtVxTX4HZs6K4k1Wqh3ujjmapqaYtcibVk_YnzQ@mail.gmail.com>
-Message-ID: <20190429150724.6e501d27@gandalf.local.home>
+ <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
+ <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
+ <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
+ <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
+ <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
+ <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
+Message-ID: <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
 
-On Mon, 29 Apr 2019 11:59:04 -0700
-Linus Torvalds <torvalds at linux-foundation.org> wrote:
+On Mon, Apr 29, 2019 at 12:13 PM Linus Torvalds
+<torvalds at linux-foundation.org> wrote:
+>
+>
+>
+> On Mon, Apr 29, 2019, 12:02 Linus Torvalds <torvalds at linux-foundation.org> wrote:
+>>
+>>
+>>
+>> If nmi were to break it, it would be a cpu bug.
+>
+>
+> Side note: we *already* depend on sti shadow working in other parts of the kernel, namely sti->iret.
+>
 
-> I really don't care. Just do what I suggested, and if you have numbers to
-> show problems, then maybe I'll care.
-> 
+Where?  STI; IRET would be nuts.
 
-Are you suggesting that I rewrite the code to do it one function at a
-time? This has always been batch mode. This is not something new. The
-function tracer has been around longer than the text poke code.
+Before:
 
-> Right now you're just making excuses for this. I described the solution
-> months ago, now I've written a patch, if that's not good enough then we can
-> just skip this all entirely.
-> 
-> Honestly, if you need to rewrite tens of thousands of calls, maybe you're
-> doing something wrong?
-> 
+commit 4214a16b02971c60960afd675d03544e109e0d75
+Author: Andy Lutomirski <luto at kernel.org>
+Date:   Thu Apr 2 17:12:12 2015 -0700
 
- # cd /sys/kernel/debug/tracing
- # cat available_filter_functions | wc -l
- 45856
- # cat enabled_functions | wc -l
- 0
- # echo function > current_tracer
- # cat enabled_functions | wc -l
- 45856
+    x86/asm/entry/64/compat: Use SYSRETL to return from compat mode SYSENTER
 
-There, I just enabled 45,856 function call sites in one shot!
+we did sti; sysxit, but, when we discussed this, I don't recall anyone
+speaking up in favor of the safely of the old code.
 
-How else do you want to update them? Every function in the kernel has a
-nop, that turns into a call to the ftrace_handler, if I add another
-user of that code, it will change each one as well.
-
--- Steve
+Not to mention that the crash we'll get if we get an NMI and a
+rescheduling interrupt in this path will be very, very hard to debug.
