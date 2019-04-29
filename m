@@ -1,23 +1,25 @@
 From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
-Date: Mon, 29 Apr 2019 11:28:03 -0400
-Subject: [PATCH for 5.2 12/12] rseq/selftests: add -no-integrated-as for clang
+Date: Mon, 29 Apr 2019 11:28:00 -0400
+Subject: [PATCH for 5.2 09/12] rseq/selftests: aarch64 code signature: handle
+ big-endian environment
 In-Reply-To: <20190429152803.7719-1-mathieu.desnoyers@efficios.com>
 References: <20190429152803.7719-1-mathieu.desnoyers@efficios.com>
-Message-ID: <20190429152803.7719-13-mathieu.desnoyers@efficios.com>
+Message-ID: <20190429152803.7719-10-mathieu.desnoyers@efficios.com>
 
-Ongoing work for asm goto support from clang requires the
--no-integrated-as compiler flag.
+Handle compiling with -mbig-endian on aarch64, which generates binaries
+with mixed code vs data endianness (little endian code, big endian
+data).
 
-This compiler flag is present in the toplevel kernel Makefile,
-but is not replicated for selftests. Add it specifically for
-the rseq selftest which requires asm goto.
+Else mismatch between code endianness for the generated signatures and
+data endianness for the RSEQ_SIG parameter passed to the rseq
+registration will trigger application segmentation faults when the
+kernel try to abort rseq critical sections.
 
-Link: https://reviews.llvm.org/D56571
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
-CC: Nick Desaulniers <ndesaulniers at google.com>
+Acked-by: Will Deacon <will.deacon at arm.com>
+CC: Peter Zijlstra <peterz at infradead.org>
 CC: Thomas Gleixner <tglx at linutronix.de>
 CC: Joel Fernandes <joelaf at google.com>
-CC: Peter Zijlstra <peterz at infradead.org>
 CC: Catalin Marinas <catalin.marinas at arm.com>
 CC: Dave Watson <davejwatson at fb.com>
 CC: Will Deacon <will.deacon at arm.com>
@@ -39,25 +41,43 @@ CC: Andy Lutomirski <luto at amacapital.net>
 CC: Andrew Morton <akpm at linux-foundation.org>
 CC: Linus Torvalds <torvalds at linux-foundation.org>
 ---
- tools/testing/selftests/rseq/Makefile | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ tools/testing/selftests/rseq/rseq-arm64.h | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
-index c30c52e1d0d2..d6469535630a 100644
---- a/tools/testing/selftests/rseq/Makefile
-+++ b/tools/testing/selftests/rseq/Makefile
-@@ -1,5 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0+ OR MIT
--CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./
-+
-+ifneq ($(shell $(CC) --version 2>&1 | head -n 1 | grep clang),)
-+CLANG_FLAGS += -no-integrated-as
-+endif
-+
-+CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ \
-+	  $(CLANG_FLAGS)
- LDLIBS += -lpthread
+diff --git a/tools/testing/selftests/rseq/rseq-arm64.h b/tools/testing/selftests/rseq/rseq-arm64.h
+index b41a2a48e965..200dae9e4208 100644
+--- a/tools/testing/selftests/rseq/rseq-arm64.h
++++ b/tools/testing/selftests/rseq/rseq-arm64.h
+@@ -6,7 +6,20 @@
+  * (C) Copyright 2018 - Will Deacon <will.deacon at arm.com>
+  */
  
- # Own dependencies because we only want to build against 1st prerequisite, but
+-#define RSEQ_SIG	0xd428bc00	/* BRK #0x45E0 */
++/*
++ * aarch64 -mbig-endian generates mixed endianness code vs data:
++ * little-endian code and big-endian data. Ensure the RSEQ_SIG signature
++ * matches code endianness.
++ */
++#define RSEQ_SIG_CODE	0xd428bc00	/* BRK #0x45E0.  */
++
++#ifdef __AARCH64EB__
++#define RSEQ_SIG_DATA	0x00bc28d4	/* BRK #0x45E0.  */
++#else
++#define RSEQ_SIG_DATA	RSEQ_SIG_CODE
++#endif
++
++#define RSEQ_SIG	RSEQ_SIG_DATA
+ 
+ #define rseq_smp_mb()	__asm__ __volatile__ ("dmb ish" ::: "memory")
+ #define rseq_smp_rmb()	__asm__ __volatile__ ("dmb ishld" ::: "memory")
+@@ -121,7 +134,7 @@ do {										\
+ 
+ #define RSEQ_ASM_DEFINE_ABORT(label, abort_label)				\
+ 	"	b	222f\n"							\
+-	"	.inst 	"	__rseq_str(RSEQ_SIG) "\n"			\
++	"	.inst 	"	__rseq_str(RSEQ_SIG_CODE) "\n"			\
+ 	__rseq_str(label) ":\n"							\
+ 	"	b	%l[" __rseq_str(abort_label) "]\n"			\
+ 	"222:\n"
 -- 
 2.11.0
