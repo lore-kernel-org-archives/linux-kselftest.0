@@ -1,53 +1,77 @@
-From: joel@joelfernandes.org (Joel Fernandes)
-Date: Mon, 29 Apr 2019 12:32:59 -0400
-Subject: [PATCH v1 1/2] Add polling support to pidfd
-In-Reply-To: <20190429142030.GA17715@redhat.com>
-References: <20190425190010.46489-1-joel@joelfernandes.org>
- <20190425222359.sqhboc4x4daznr6r@brauner.io>
- <20190428162405.GA6757@redhat.com>
- <20190429140245.GB233442@google.com>
- <20190429142030.GA17715@redhat.com>
-Message-ID: <20190429163259.GA201155@google.com>
+From: ndesaulniers@google.com (Nick Desaulniers)
+Date: Mon, 29 Apr 2019 10:03:13 -0700
+Subject: [PATCH for 5.2 12/12] rseq/selftests: add -no-integrated-as for
+ clang
+In-Reply-To: <20190429152803.7719-13-mathieu.desnoyers@efficios.com>
+References: <20190429152803.7719-1-mathieu.desnoyers@efficios.com>
+ <20190429152803.7719-13-mathieu.desnoyers@efficios.com>
+Message-ID:
+ <CAKwvOdnbH0+ju5Ny-mB-Z4kC+ALyCJOU4Q8OCLHHjFAQzJqsXA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190429163259.Mr-0F8MxZhPAuBCL9KNGWefui4_Dcaqrj6hrT43VT_k@z>
+Message-ID: <20190429170313.Hv1_rRh3eM68xsF4uk8785ydldscdbqC29n5ZYS-n1s@z>
 
-On Mon, Apr 29, 2019@04:20:30PM +0200, Oleg Nesterov wrote:
-> On 04/29, Joel Fernandes wrote:
-> >
-> > However, in your code above, it is avoided because we get:
-> >
-> > Task A (poller)		Task B (exiting task being polled)
-> > ------------            ----------------
-> > poll() called
-> > add_wait_queue()
-> > 			exit_state is set to non-zero
-> > read exit_state
-> > remove_wait_queue()
-> > 			wake_up_all()
-> 
-> just to clarify... No, sys_poll() path doesn't do remove_wait_queue() until
-> it returns to user mode, and that is why we can't race with set-exit_code +
-> wake_up().
+On Mon, Apr 29, 2019 at 8:29 AM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> Ongoing work for asm goto support from clang requires the
+> -no-integrated-as compiler flag.
+>
+> This compiler flag is present in the toplevel kernel Makefile,
+> but is not replicated for selftests. Add it specifically for
+> the rseq selftest which requires asm goto.
+>
+> Link: https://reviews.llvm.org/D56571
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+> CC: Nick Desaulniers <ndesaulniers at google.com>
+> CC: Thomas Gleixner <tglx at linutronix.de>
+> CC: Joel Fernandes <joelaf at google.com>
+> CC: Peter Zijlstra <peterz at infradead.org>
+> CC: Catalin Marinas <catalin.marinas at arm.com>
+> CC: Dave Watson <davejwatson at fb.com>
+> CC: Will Deacon <will.deacon at arm.com>
+> CC: Shuah Khan <shuah at kernel.org>
+> CC: Andi Kleen <andi at firstfloor.org>
+> CC: linux-kselftest at vger.kernel.org
+> CC: "H . Peter Anvin" <hpa at zytor.com>
+> CC: Chris Lameter <cl at linux.com>
+> CC: Russell King <linux at arm.linux.org.uk>
+> CC: Michael Kerrisk <mtk.manpages at gmail.com>
+> CC: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
+> CC: Paul Turner <pjt at google.com>
+> CC: Boqun Feng <boqun.feng at gmail.com>
+> CC: Josh Triplett <josh at joshtriplett.org>
+> CC: Steven Rostedt <rostedt at goodmis.org>
+> CC: Ben Maurer <bmaurer at fb.com>
+> CC: linux-api at vger.kernel.org
+> CC: Andy Lutomirski <luto at amacapital.net>
+> CC: Andrew Morton <akpm at linux-foundation.org>
+> CC: Linus Torvalds <torvalds at linux-foundation.org>
+> ---
+>  tools/testing/selftests/rseq/Makefile | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+> index c30c52e1d0d2..d6469535630a 100644
+> --- a/tools/testing/selftests/rseq/Makefile
+> +++ b/tools/testing/selftests/rseq/Makefile
+> @@ -1,5 +1,11 @@
+>  # SPDX-License-Identifier: GPL-2.0+ OR MIT
+> -CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./
+> +
+> +ifneq ($(shell $(CC) --version 2>&1 | head -n 1 | grep clang),)
+> +CLANG_FLAGS += -no-integrated-as
+> +endif
+> +
+> +CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ \
+> +         $(CLANG_FLAGS)
 
-I didn't follow what you mean, the removal from the waitqueue happens in
-free_poll_entry() called from poll_freewait() which happens from
-do_sys_poll() which is before the syscall returns to user mode. Could you
-explain more?
+The top level Makefile exports $(CLANG_FLAGS), which should contain
+`-no-integrated-as`.  Is that available here?  If so, then you can
+just add `$(CLANG_FLAGS)`, no compiler check needed.
 
-> pidfd_poll() can race with the exiting task, miss exit_code != 0, and return
-> zero. However, do_poll() won't block after that and pidfd_poll() will be called
-> again.
+If not, maybe the test for CONFIG_CC_IS_CLANG is cleaner?
 
-Here also I didn't follow what you mean. If exit_code is read as 0 in
-pidfd_poll(), then in do_poll() the count will be 0 and it will block in
-poll_schedule_timeout(). Right? But above you're saying it wont block.
-Also if you could show a timing diagram of this different race you're talking
-about, that will make things clear. It is a bit hard for me to picture
-otherwise.
-
-Also, I will use task_pid() for getting the pid from the task, as you suggest
-in the other thread.
-
-thanks,
-
-- Joel
+Thanks for the patch, and helping test asm goto in Clang!
+-- 
+Thanks,
+~Nick Desaulniers
