@@ -1,48 +1,51 @@
-From: luto@kernel.org (Andy Lutomirski)
-Date: Mon, 29 Apr 2019 11:56:54 -0700
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Mon, 29 Apr 2019 15:07:24 -0400
 Subject: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
  fops invocation
-In-Reply-To: <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
+In-Reply-To: <CAHk-=wjm93jLtVxTX4HZs6K4k1Wqh3ujjmapqaYtcibVk_YnzQ@mail.gmail.com>
 References: <20190427100639.15074-1-nstange@suse.de>
  <20190427100639.15074-4-nstange@suse.de>
  <20190427102657.GF2623@hirez.programming.kicks-ass.net>
  <20190428133826.3e142cfd@oasis.local.home>
  <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
- <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
- <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
- <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
-Message-ID:
- <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
+ <20190429145250.1a5da6ed@gandalf.local.home>
+ <CAHk-=wjm93jLtVxTX4HZs6K4k1Wqh3ujjmapqaYtcibVk_YnzQ@mail.gmail.com>
+Message-ID: <20190429150724.6e501d27@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190429185654.PqG_yVPr8RW7p_6qKywGIaw5BmoxLD60aqf7Gn-wR5A@z>
+Message-ID: <20190429190724.MZc--zRcFTWz1hmwv3NJERtVB-7KGFp0cWiYSaFoAYk@z>
 
-On Mon, Apr 29, 2019 at 11:53 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
->
->
-> On Mon, Apr 29, 2019, 11:42 Andy Lutomirski <luto@kernel.org> wrote:
->>
->>
->> I'm less than 100% convinced about this argument.  Sure, an NMI right
->> there won't cause a problem.  But an NMI followed by an interrupt will
->> kill us if preemption is on.  I can think of three solutions:
->
->
-> No, because either the sti shadow disables nmi too (that's the case on some CPUs at least) or the iret from nmi does.
->
-> Otherwise you could never trust the whole sti shadow thing - and it very much is part of the architecture.
->
+On Mon, 29 Apr 2019 11:59:04 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Is this documented somewhere?  And do you actually believe that this
-is true under KVM, Hyper-V, etc?  As I recall, Andrew Cooper dug in to
-the way that VMX dealt with this stuff and concluded that the SDM was
-blatantly wrong in many cases, which leads me to believe that Xen
-HVM/PVH is the *only* hypervisor that gets it right.
+> I really don't care. Just do what I suggested, and if you have numbers to
+> show problems, then maybe I'll care.
+> 
 
-Steven's point about batched updates is quite valid, though.  My
-personal favorite solution to this whole mess is to rework the whole
-thing so that the int3 handler simply returns and retries and to
-replace the sync_core() broadcast with an SMI broadcast.  I don't know
-whether this will actually work on real CPUs and on VMs and whether
-it's going to crash various BIOSes out there.
+Are you suggesting that I rewrite the code to do it one function at a
+time? This has always been batch mode. This is not something new. The
+function tracer has been around longer than the text poke code.
+
+> Right now you're just making excuses for this. I described the solution
+> months ago, now I've written a patch, if that's not good enough then we can
+> just skip this all entirely.
+> 
+> Honestly, if you need to rewrite tens of thousands of calls, maybe you're
+> doing something wrong?
+> 
+
+ # cd /sys/kernel/debug/tracing
+ # cat available_filter_functions | wc -l
+ 45856
+ # cat enabled_functions | wc -l
+ 0
+ # echo function > current_tracer
+ # cat enabled_functions | wc -l
+ 45856
+
+There, I just enabled 45,856 function call sites in one shot!
+
+How else do you want to update them? Every function in the kernel has a
+nop, that turns into a call to the ftrace_handler, if I add another
+user of that code, it will change each one as well.
+
+-- Steve
