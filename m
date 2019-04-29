@@ -1,97 +1,63 @@
-From: paulmck at linux.ibm.com (Paul E. McKenney)
-Date: Mon, 29 Apr 2019 08:06:00 -0700
-Subject: [PATCH] rcutorture: Tweak kvm options
-In-Reply-To: <20190429144924.GP3923@linux.ibm.com>
-References: <20190424073446.8577-1-bigeasy@linutronix.de>
- <20190424103809.GM3923@linux.ibm.com>
- <20190424183039.GA4494@linux.ibm.com>
- <20190425194638.GA7238@linux.ibm.com>
- <20190426105413.rajcon4vyzov446c@linutronix.de>
- <20190426135058.GD3923@linux.ibm.com>
- <20190429081943.gucbalncrrttxxcr@linutronix.de>
- <20190429144924.GP3923@linux.ibm.com>
-Message-ID: <20190429150600.GA14389@linux.ibm.com>
+From: mathieu.desnoyers at efficios.com (Mathieu Desnoyers)
+Date: Mon, 29 Apr 2019 11:28:03 -0400
+Subject: [PATCH for 5.2 12/12] rseq/selftests: add -no-integrated-as for clang
+In-Reply-To: <20190429152803.7719-1-mathieu.desnoyers@efficios.com>
+References: <20190429152803.7719-1-mathieu.desnoyers@efficios.com>
+Message-ID: <20190429152803.7719-13-mathieu.desnoyers@efficios.com>
 
-On Mon, Apr 29, 2019 at 07:49:24AM -0700, Paul E. McKenney wrote:
-> On Mon, Apr 29, 2019 at 10:19:44AM +0200, Sebastian Andrzej Siewior wrote:
-> > On 2019-04-26 06:50:58 [-0700], Paul E. McKenney wrote:
-> > > One place to look is in the summary output:
-> > > 
-> > > TREE01 ------- 17540 GPs (58.4667/s) [rcu: g130629 f0x0 ]
-> > > 
-> > > The "58.4667/s" is the number of grace periods per second.  I would be
-> > > surprised if CONFIG_PARAVIRT_SPINLOCKS made a noticeable difference in
-> > > grace-period rate (given the natural variation), but you never know.
-> > 
-> > I did four runs of the different parts of the patch:
-> > - 5.1-rc6
-> > - #1 + kvm64 CPU + some config options
-> > - #2 + tsc-deadline=on and so on (the whole line)
-> > - #3 + CONFIG_PARAVIRT_SPINLOCKS (now everything)
-> > 
-> > the test command was
-> > 	tools/testing/selftests/rcutorture/bin/kvm.sh --cpus 112 --duration 60 --configs "16*TREE08" --memory 4G
-> > 
-> > and the results:
-> > | HEAD is now at 085b7755808a... Linux 5.1-rc6
-> > | (28.5942 +27.4658 +28.0203 +27.2061 +28.0731 +26.9078 +27.8494 + 27.3392 +26.4339 +28.025 +27.4797 +27.6775 +28.0653 +28.0742 +27.9581 +28.6508)/ 16
-> > | 27.738775
-> > | 
-> > | HEAD is now at 36a12aa9761a... tune #1
-> > | (28.5761 +26.6514 +26.6989 +27.4375 +27.3442 +28.3228 +26.6353 +27.5461+28.5531 +27.7006 +27.8078 +27.9753 +27.4269 +28.0464 +27.6314 +27.8356) / 16
-> > | 27.6368375
-> > | 
-> > | HEAD is now at af5cd7196436... tune #2
-> > | (28.4867 +26.3675 +27.6364 +28.3344 +27.4153 +27.9306 +27.1703 +26.8461+27.3194 +28.5486 +27.8975 +27.4356 +28.12 +28.4397 +29.0186 +26.9328 )/ 16
-> > | 27.74371875
-> > | 
-> > | HEAD is now at 3701f64943f5... tune #3
-> > | (28.2431 +27.7831 +28.39 +28.2586 +27.7408 +27.9258 +26.6236 +26.7817+29.1178 +26.9564 +29.0525 +27.4258 +27.4931 +27.8928 +26.9308 +28.4833)/ 16
-> > | 27.8187
-> > 
-> > This 28.… is the number of GP/s. Based on the results in looks like
-> > noise to me. Also I have no idea why you have more than twice as many
-> > GP/s as I do.
-> 
-> My guess is that because you have more CPUs, the for_each_online_cpu()
-> loop takes longer on your system.
+Ongoing work for asm goto support from clang requires the
+-no-integrated-as compiler flag.
 
-OK, that is rather oversimplified, to say the least.  A better way to
-put this is that the probability of some CPU holding things up is larger
-the more CPUs you have.  RCU doe take explicit steps to slow down grace
-periods, but that doesn't start kicking in until 256 CPUs.
+This compiler flag is present in the toplevel kernel Makefile,
+but is not replicated for selftests. Add it specifically for
+the rseq selftest which requires asm goto.
 
-							Thanx, Paul
+Link: https://reviews.llvm.org/D56571
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers at efficios.com>
+CC: Nick Desaulniers <ndesaulniers at google.com>
+CC: Thomas Gleixner <tglx at linutronix.de>
+CC: Joel Fernandes <joelaf at google.com>
+CC: Peter Zijlstra <peterz at infradead.org>
+CC: Catalin Marinas <catalin.marinas at arm.com>
+CC: Dave Watson <davejwatson at fb.com>
+CC: Will Deacon <will.deacon at arm.com>
+CC: Shuah Khan <shuah at kernel.org>
+CC: Andi Kleen <andi at firstfloor.org>
+CC: linux-kselftest at vger.kernel.org
+CC: "H . Peter Anvin" <hpa at zytor.com>
+CC: Chris Lameter <cl at linux.com>
+CC: Russell King <linux at arm.linux.org.uk>
+CC: Michael Kerrisk <mtk.manpages at gmail.com>
+CC: "Paul E . McKenney" <paulmck at linux.vnet.ibm.com>
+CC: Paul Turner <pjt at google.com>
+CC: Boqun Feng <boqun.feng at gmail.com>
+CC: Josh Triplett <josh at joshtriplett.org>
+CC: Steven Rostedt <rostedt at goodmis.org>
+CC: Ben Maurer <bmaurer at fb.com>
+CC: linux-api at vger.kernel.org
+CC: Andy Lutomirski <luto at amacapital.net>
+CC: Andrew Morton <akpm at linux-foundation.org>
+CC: Linus Torvalds <torvalds at linux-foundation.org>
+---
+ tools/testing/selftests/rseq/Makefile | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-> > Different box doing:
-> > 	tools/testing/selftests/rcutorture/bin/kvm.sh --cpus 112 --duration 60 --configs "42*TREE01" --memory 4G
-> > and got this:
-> > 
-> > | HEAD is now at 085b7755808aa... Linux 5.1-rc6
-> > | (15.2878 + 15.8664 + 15.6369 + 15.6714 + 15.3667 + 16.4706 + 15.7844 +
-> > | 16.2119 + 15.6108 + 15.84 + 16.0003 + 16.2886 + 15.8728 + 15.5347 +
-> > | 15.6753 + 15.6628 + 15.8628 + 15.8158 + 15.8419 + 16.0053 + 15.7878 +
-> > | 16.465 + 16.2267 + 16.6881 + 16.3186 + 16.1778 + 15.7069 + 16.0178 +
-> > | 15.7156 + 16.0083 + 15.7181 + 15.8961 + 15.5253 + 16.1569 + 15.7692 +
-> > | 16.2622 + 16.2931 + 15.9531 + 15.6697 + 15.4539 + 15.6478 + 15.8047) /
-> > | 42
-> > |	~15.89452142857142857143
-> > |
-> > | HEAD is now at 3701f64943f5a... tune #3
-> > | ; (15.8461 + 15.8653 + 16.0392 + 15.8906 + 15.7606 + 15.6169 + 16.1425 +
-> > | 15.9089 + 16.2169 + 16.1694 + 16.2122 + 15.6417 + 15.8022 + 16.1178 +
-> > | 15.1689 + 16.1303 + 16.0181 + 16.3797 + 16.0614 + 16.2839 + 15.4583 +
-> > | 15.9178 + 16.0589 + 16.3428 + 15.5486 + 16.0839 + 15.9931 + 15.8417 +
-> > | 16.0981 + 15.8075 + 15.9925 + 15.7311 + 15.9172 + 16.1164 + 15.6303 +
-> > | 15.9383 + 16.0714 + 16.2786 + 15.8394 + 15.9597 + 16.0175 + 15.3908) /
-> > | 42
-> > |	~15.93586904761904761905
-> > 
-> > Noise.
-> > 
-> > So from RCUtorture point of view there is no improvement right? In that
-> > case I would suggest to drop the problematic parts…
-> 
-> Thank you for testing this!  I will adjust accordingly.
-> 
-> 							Thanx, Paul
+diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+index c30c52e1d0d2..d6469535630a 100644
+--- a/tools/testing/selftests/rseq/Makefile
++++ b/tools/testing/selftests/rseq/Makefile
+@@ -1,5 +1,11 @@
+ # SPDX-License-Identifier: GPL-2.0+ OR MIT
+-CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./
++
++ifneq ($(shell $(CC) --version 2>&1 | head -n 1 | grep clang),)
++CLANG_FLAGS += -no-integrated-as
++endif
++
++CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ \
++	  $(CLANG_FLAGS)
+ LDLIBS += -lpthread
+ 
+ # Own dependencies because we only want to build against 1st prerequisite, but
+-- 
+2.11.0
