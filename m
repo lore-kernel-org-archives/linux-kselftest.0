@@ -1,8 +1,8 @@
 From: torvalds@linux-foundation.org (Linus Torvalds)
-Date: Mon, 29 Apr 2019 13:07:33 -0700
+Date: Mon, 29 Apr 2019 13:16:10 -0700
 Subject: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
  fops invocation
-In-Reply-To: <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
+In-Reply-To: <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
 References: <20190427100639.15074-1-nstange@suse.de>
  <20190427100639.15074-4-nstange@suse.de>
  <20190427102657.GF2623@hirez.programming.kicks-ass.net>
@@ -13,26 +13,33 @@ References: <20190427100639.15074-1-nstange@suse.de>
  <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
  <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
  <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
- <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
- <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
 Message-ID:
- <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
+ <CAHk-=wjyyKDv-WZLXZbVD=V05p2X7eg74z2SpR4TQTxN9JLq4Q@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190429200733.sZZhCSqZNyvm2mM3ERGC3y6ue3RoIF3mLlx5RfIUifA@z>
+Message-ID: <20190429201610.DCWt_NR3ocYHUVW8sUuf2Cy-_wWyirkJ1GIAh8bsi1M@z>
 
-On Mon, Apr 29, 2019@12:24 PM Andy Lutomirski <luto@kernel.org> wrote:
-> > Side note: we *already* depend on sti shadow working in other parts of the kernel, namely sti->iret.
+On Mon, Apr 29, 2019 at 12:02 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Where?  STI; IRET would be nuts.
+> If nmi were to break it, it would be a cpu bug. I'm pretty sure I've
+> seen the "shadow stops even nmi" documented for some uarch, but as
+> mentioned it's not necessarily the only way to guarantee the shadow.
 
-Sorry, not 'sti;iret' but 'sti;sysexit'
+In fact, the documentation is simply the official Intel instruction
+docs for "STI":
 
-> before commit 4214a16b02971c60960afd675d03544e109e0d75
->     x86/asm/entry/64/compat: Use SYSRETL to return from compat mode SYSENTER
->
-> we did sti; sysxit, but, when we discussed this, I don't recall anyone
-> speaking up in favor of the safely of the old code.
+    The IF flag and the STI and CLI instructions do not prohibit the
+    generation of exceptions and NMI interrupts. NMI interrupts (and
+    SMIs) may be blocked for one macroinstruction following an STI.
 
-We still have that sti sysexit in the 32-bit code.
+note the "may be blocked". As mentioned, that's just one option for
+not having NMI break the STI shadow guarantee, but it's clearly one
+that Intel has done at times, and clearly even documents as having
+done so.
 
-                     Linus
+There is absolutely no question that the sti shadow is real, and that
+people have depended on it for _decades_. It would be a horrible
+errata if the shadow can just be made to go away by randomly getting
+an NMI or SMI.
+
+              Linus
