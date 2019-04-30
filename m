@@ -1,321 +1,73 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Tue, 30 Apr 2019 21:20:59 +0200
-Subject: [PATCH v2 2/2] Add selftests for pidfd polling
-In-Reply-To: <20190430162154.61314-2-joel@joelfernandes.org>
-References: <20190430162154.61314-1-joel@joelfernandes.org>
- <20190430162154.61314-2-joel@joelfernandes.org>
-Message-ID: <20190430192057.ocevexvebfq2we3d@brauner.io>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Tue, 30 Apr 2019 17:08:08 -0400
+Subject: [RFC][PATCH] ftrace/x86: Emulate call function while updating
+ in breakpoint handler
+In-Reply-To: <CAHk-=wjJ8D74+FDcXGL65Q9aB0cc7B4vr2s2rS6V4d4a3hU-1Q@mail.gmail.com>
+References: <20190428133826.3e142cfd@oasis.local.home>
+ <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
+ <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
+ <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
+ <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
+ <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
+ <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
+ <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
+ <20190430135602.GD2589@hirez.programming.kicks-ass.net>
+ <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
+ <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
+ <20190430130359.330e895b@gandalf.local.home>
+ <20190430132024.0f03f5b8@gandalf.local.home>
+ <20190430134913.4e29ce72@gandalf.local.home>
+ <CAHk-=wjJ8D74+FDcXGL65Q9aB0cc7B4vr2s2rS6V4d4a3hU-1Q@mail.gmail.com>
+Message-ID: <20190430170808.1053b3e2@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190430192059.qINCln6-7YodcaCpxbQdAIIpe50hjmqB-BQlFMjkbqo@z>
+Message-ID: <20190430210808.fpqIj3Tsd-Bjgbp8gtxUiwWKmTvxT0up80lzaK80LKs@z>
 
-On Tue, Apr 30, 2019@12:21:54PM -0400, Joel Fernandes (Google) wrote:
-> Other than verifying pidfd based polling, the tests make sure that
-> wait semantics are preserved with the pidfd poll. Notably the 2 cases:
-> 1. If a thread group leader exits while threads still there, then no
->    pidfd poll notifcation should happen.
-> 2. If a non-thread group leader does an execve, then the thread group
->    leader is signaled to exit and is replaced with the execing thread
->    as the new leader, however the parent is not notified in this case.
+On Tue, 30 Apr 2019 11:33:21 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
+> > +       "ftrace_emulate_call_update_irqoff:\n\t"
+> > +               "push %gs:ftrace_bp_call_return\n\t"
+> > +               "sti\n\t"
+> > +               "jmp *ftrace_update_func_call\n"  
 > 
-> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> ---
->  tools/testing/selftests/pidfd/Makefile     |   2 +-
->  tools/testing/selftests/pidfd/pidfd_test.c | 210 +++++++++++++++++++++
->  2 files changed, 211 insertions(+), 1 deletion(-)
+> .. and this should then use the "push push sti ret" model instead.
 > 
-> diff --git a/tools/testing/selftests/pidfd/Makefile b/tools/testing/selftests/pidfd/Makefile
-> index deaf8073bc06..4b31c14f273c 100644
-> --- a/tools/testing/selftests/pidfd/Makefile
-> +++ b/tools/testing/selftests/pidfd/Makefile
-> @@ -1,4 +1,4 @@
-> -CFLAGS += -g -I../../../../usr/include/
-> +CFLAGS += -g -I../../../../usr/include/ -lpthread
->  
->  TEST_GEN_PROGS := pidfd_test
->  
-> diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-> index d59378a93782..8b404ccbc4ff 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_test.c
-> @@ -4,18 +4,47 @@
->  #include <errno.h>
->  #include <fcntl.h>
->  #include <linux/types.h>
-> +#include <pthread.h>
->  #include <sched.h>
->  #include <signal.h>
->  #include <stdio.h>
->  #include <stdlib.h>
->  #include <string.h>
->  #include <syscall.h>
-> +#include <sys/epoll.h>
-> +#include <sys/mman.h>
->  #include <sys/mount.h>
->  #include <sys/wait.h>
-> +#include <time.h>
->  #include <unistd.h>
->  
->  #include "../kselftest.h"
->  
-> +#define str(s) _str(s)
-> +#define _str(s) #s
-> +#define CHILD_THREAD_MIN_WAIT 3 /* seconds */
-> +
-> +#define MAX_EVENTS 5
-> +#ifndef __NR_pidfd_send_signal
-> +#define __NR_pidfd_send_signal 424
-> +#endif
-> +
-> +#ifndef CLONE_PIDFD
-> +#define CLONE_PIDFD 0x00001000
-> +#endif
-> +
-> +static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
-> +{
-> +	size_t stack_size = 1024;
-> +	char *stack[1024] = { 0 };
-> +
-> +#ifdef __ia64__
-> +	return __clone2(fn, stack, stack_size, flags | SIGCHLD, NULL, pidfd);
-> +#else
-> +	return clone(fn, stack + stack_size, flags | SIGCHLD, NULL, pidfd);
-> +#endif
-> +}
-> +
->  static inline int sys_pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
->  					unsigned int flags)
->  {
-> @@ -368,10 +397,191 @@ static int test_pidfd_send_signal_syscall_support(void)
->  	return 0;
->  }
->  
-> +static void *test_pidfd_poll_exec_thread(void *priv)
-> +{
-> +	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
-> +			getpid(), syscall(SYS_gettid));
-> +	ksft_print_msg("Child Thread: doing exec of sleep\n");
-> +
-> +	execl("/bin/sleep", "sleep", str(CHILD_THREAD_MIN_WAIT), (char *)NULL);
-> +
-> +	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n",
-> +			getpid(), syscall(SYS_gettid));
-> +	return NULL;
-> +}
-> +
-> +static void poll_pidfd(const char *test_name, int pidfd)
-> +{
-> +	int c;
-> +	int epoll_fd = epoll_create1(EPOLL_CLOEXEC);
-> +	struct epoll_event event, events[MAX_EVENTS];
-> +
-> +	if (epoll_fd == -1)
-> +		ksft_exit_fail_msg("%s test: Failed to create epoll file descriptor "
-> +				   "(errno %d)\n",
-> +				   test_name, errno);
-> +
-> +	event.events = EPOLLIN;
-> +	event.data.fd = pidfd;
-> +
-> +	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, pidfd, &event)) {
-> +		ksft_exit_fail_msg("%s test: Failed to add epoll file descriptor "
-> +				   "(errno %d)\n",
-> +				   test_name, errno);
-> +	}
-> +
-> +	c = epoll_wait(epoll_fd, events, MAX_EVENTS, 5000);
-> +	if (c != 1 || !(events[0].events & EPOLLIN))
-> +		ksft_exit_fail_msg("%s test: Unexpected epoll_wait result (c=%d, events=%x) ",
-> +				   "(errno %d)\n",
-> +				   test_name, c, events[0].events, errno);
-> +
-> +	close(epoll_fd);
-> +	return;
+> Plus get updated for objtool complaints.
 
-nit: Function with void usually do not do an explicit return at the end. :)
+And unfortunately, this blows up on lockdep. Lockdep notices that the
+return from the breakpoint handler has interrupts enabled, and will not
+enable them in its shadow irqs disabled variable. But then we enabled
+them in the trampoline, without telling lockdep and we trigger
+something likes this:
 
-> +
-> +}
-> +
-> +static int child_poll_exec_test(void *args)
-> +{
-> +	pthread_t t1;
-> +
-> +	ksft_print_msg("Child (pidfd): starting. pid %d tid %d\n", getpid(),
-> +			syscall(SYS_gettid));
-> +	pthread_create(&t1, NULL, test_pidfd_poll_exec_thread, NULL);
-> +	/*
-> +	 * Exec in the non-leader thread will destroy the leader immediately.
-> +	 * If the wait in the parent returns too soon, the test fails.
-> +	 */
-> +	while (1)
-> +		sleep(1);
-> +}
-> +
-> +static int test_pidfd_poll_exec(int use_waitpid)
-
-Please make int use_waitpid a proper bool and make the function void as
-it's return value is never checked in main.
-
-(I know the other ones in the test file here do the same thing and I
-should switch them to void soon at some point.)
-
-> +{
-> +	int pid, pidfd = 0;
-> +	int status, ret;
-> +	pthread_t t1;
-> +	time_t prog_start = time(NULL);
-> +	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
-> +
-> +	ksft_print_msg("Parent: pid: %d\n", getpid());
-> +	pid = pidfd_clone(CLONE_PIDFD, &pidfd, child_poll_exec_test);
-> +	if (pid < 0)
-> +		ksft_exit_fail_msg("%s test: pidfd_clone failed (ret %d, errno %d)\n",
-> +				   test_name, pid, errno);
-> +
-> +	ksft_print_msg("Parent: Waiting for Child (%d) to complete.\n", pid);
-> +
-> +	if (use_waitpid) {
-> +		ret = waitpid(pid, &status, 0);
-> +		if (ret == -1)
-> +			ksft_print_msg("Parent: error\n");
-> +
-> +		if (ret == pid)
-> +			ksft_print_msg("Parent: Child process waited for.\n");
-> +	} else {
-> +		poll_pidfd(test_name, pidfd);
-> +	}
-> +
-> +	time_t prog_time = time(NULL) - prog_start;
-> +
-> +	ksft_print_msg("Time waited for child: %lu\n", prog_time);
-> +
-> +	close(pidfd);
-> +
-> +	if (prog_time < CHILD_THREAD_MIN_WAIT || prog_time > CHILD_THREAD_MIN_WAIT + 2)
-
-I'm sorry, can you please either briefly explain or comment where
-this +2 comes from? Why is that the cut-off?
-
-> +		ksft_exit_fail_msg("%s test: Failed\n", test_name);
-> +	else
-> +		ksft_test_result_pass("%s test: Passed\n", test_name);
-> +}
-> +
-> +static void *test_pidfd_poll_leader_exit_thread(void *priv)
-> +{
-> +	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
-> +			getpid(), syscall(SYS_gettid));
-> +	sleep(CHILD_THREAD_MIN_WAIT);
-> +	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
-> +	return NULL;
-> +}
-> +
-> +static time_t *child_exit_secs;
-> +static int child_poll_leader_exit_test(void *args)
-> +{
-> +	pthread_t t1, t2;
-> +
-> +	ksft_print_msg("Child: starting. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
-> +	pthread_create(&t1, NULL, test_pidfd_poll_leader_exit_thread, NULL);
-> +	pthread_create(&t2, NULL, test_pidfd_poll_leader_exit_thread, NULL);
-> +
-> +	/*
-> +	 * glibc exit calls exit_group syscall, so explicity call exit only
-> +	 * so that only the group leader exits, leaving the threads alone.
-> +	 */
-> +	*child_exit_secs = time(NULL);
-
-Why is child_exit_secs a pointer?
+------------[ cut here ]------------
+IRQs not enabled as expected
+WARNING: CPU: 2 PID: 0 at kernel/time/tick-sched.c:979 tick_nohz_idle_enter+0x44/0x8c
+Modules linked in:
+CPU: 2 PID: 0 Comm: swapper/2 Not tainted 5.1.0-rc3-test+ #123
+Hardware name: MSI MS-7823/CSM-H87M-G43 (MS-7823), BIOS V1.6 02/22/2014
+EIP: tick_nohz_idle_enter+0x44/0x8c
+Code: f0 05 00 00 00 75 26 83 b8 c4 05 00 00 00 75 1d 80 3d 5f 0f 43 c1 00 75 14 68 72 74 16 c1 c6 05 5f 0f 43 c1 01 e8 33 d7 f8 ff <0f> 0b 58 fa e8 4e 2c 04 00 bb e0 36 6b c1 64 03 1d 28 81 56 c1 8b
+EAX: 0000001c EBX: ee769f84 ECX: 00000000 EDX: 00000006
+ESI: 00000000 EDI: 00000002 EBP: ee769f50 ESP: ee769f48
+DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068 EFLAGS: 00210292
+CR0: 80050033 CR2: 00000000 CR3: 016c4000 CR4: 001406f0
+Call Trace:
+ do_idle+0x2a/0x1fc
+ cpu_startup_entry+0x1e/0x20
+ start_secondary+0x1d3/0x1ec
+ startup_32_smp+0x164/0x168
 
 
-> +	syscall(SYS_exit, 0);
-> +}
-> +
-> +static int test_pidfd_poll_leader_exit(int use_waitpid)
+I have to fool lockdep with the following:
 
-Should be void as it's return value isn't checked at all.
+		if (regs->flags & X86_EFLAGS_IF) {
+			regs->flags &= ~X86_EFLAGS_IF;
+			regs->ip = (unsigned long) ftrace_emulate_call_irqoff;
+			/* Tell lockdep here we are enabling interrupts */
+			trace_hardirqs_on();
+		} else {
+			regs->ip = (unsigned long) ftrace_emulate_call_irqon;
+		}
 
-(I know the other ones in the test file here do the same thing and I
-should switch them to void soon at some point.)
-
-> +{
-> +	int pid, pidfd = 0;
-> +	int status, ret;
-> +	time_t prog_start = time(NULL);
-> +	const char *test_name = "pidfd_poll check for premature notification on non-empty"
-> +				"group leader exit";
-> +
-> +	child_exit_secs = mmap(NULL, sizeof *child_exit_secs, PROT_READ | PROT_WRITE,
-> +			MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-> +
-> +	if (child_exit_secs == MAP_FAILED)
-> +		ksft_exit_fail_msg("%s test: mmap failed (errno %d)\n",
-> +				   test_name, errno);
-> +
-> +	ksft_print_msg("Parent: pid: %d\n", getpid());
-> +	pid = pidfd_clone(CLONE_PIDFD, &pidfd, child_poll_leader_exit_test);
-> +	if (pid < 0)
-> +		ksft_exit_fail_msg("%s test: pidfd_clone failed (ret %d, errno %d)\n",
-> +				   test_name, pid, errno);
-> +
-> +	ksft_print_msg("Parent: Waiting for Child (%d) to complete.\n", pid);
-> +
-> +	if (use_waitpid) {
-> +		ret = waitpid(pid, &status, 0);
-> +		if (ret == -1)
-> +			ksft_print_msg("Parent: error\n");
-> +	} else {
-> +		/*
-> +		 * This sleep tests for the case where if the child exits, and is in
-> +		 * EXIT_ZOMBIE, but the thread group leader is non-empty, then the poll
-> +		 * doesn't prematurely return even though there are active threads
-> +		 */
-> +		sleep(1);
-> +		poll_pidfd(test_name, pidfd);
-> +	}
-> +
-> +	if (ret == pid)
-> +		ksft_print_msg("Parent: Child process waited for.\n");
-> +
-> +	time_t since_child_exit = time(NULL) - *child_exit_secs;
-> +
-> +	ksft_print_msg("Time since child exit: %lu\n", since_child_exit);
-> +
-> +	close(pidfd);
-> +
-> +	if (since_child_exit < CHILD_THREAD_MIN_WAIT ||
-> +			since_child_exit > CHILD_THREAD_MIN_WAIT + 2)
-
-Same question as above.
-
-> +		ksft_exit_fail_msg("%s test: Failed\n", test_name);
-> +	else
-> +		ksft_test_result_pass("%s test: Passed\n", test_name);
-> +}
-> +
->  int main(int argc, char **argv)
->  {
->  	ksft_print_header();
->  
-> +	test_pidfd_poll_exec(0);
-
-test_pidfd_poll_exec(false);
-
-> +	test_pidfd_poll_exec(1);
-
-test_pidfd_poll_exec(true);
-
-> +	test_pidfd_poll_leader_exit(0);
-
-test_pidfd_poll_leader_exit(false);
-
-> +	test_pidfd_poll_leader_exit(1);
-
-test_pidfd_poll_leader_exit(true);
-
->  	test_pidfd_send_signal_syscall_support();
->  	test_pidfd_send_signal_simple_success();
->  	test_pidfd_send_signal_exited_fail();
-> -- 
-> 2.21.0.593.g511ec345e18-goog
-> 
+-- Steve
