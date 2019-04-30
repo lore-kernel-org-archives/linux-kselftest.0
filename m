@@ -1,65 +1,42 @@
 From: oleg at redhat.com (Oleg Nesterov)
-Date: Tue, 30 Apr 2019 13:53:33 +0200
+Date: Tue, 30 Apr 2019 14:07:59 +0200
 Subject: [PATCH v1 1/2] Add polling support to pidfd
-In-Reply-To: <20190429163259.GA201155@google.com>
+In-Reply-To: <20190430115332.GB23020@redhat.com>
 References: <20190425190010.46489-1-joel@joelfernandes.org>
  <20190425222359.sqhboc4x4daznr6r@brauner.io>
  <20190428162405.GA6757@redhat.com>
  <20190429140245.GB233442@google.com>
  <20190429142030.GA17715@redhat.com>
  <20190429163259.GA201155@google.com>
-Message-ID: <20190430115332.GB23020@redhat.com>
+ <20190430115332.GB23020@redhat.com>
+Message-ID: <20190430120759.GC23020@redhat.com>
 
-On 04/29, Joel Fernandes wrote:
+On 04/30, Oleg Nesterov wrote:
 >
-> On Mon, Apr 29, 2019 at 04:20:30PM +0200, Oleg Nesterov wrote:
-> > On 04/29, Joel Fernandes wrote:
-> > >
-> > > However, in your code above, it is avoided because we get:
-> > >
-> > > Task A (poller)		Task B (exiting task being polled)
-> > > ------------            ----------------
-> > > poll() called
-> > > add_wait_queue()
-> > > 			exit_state is set to non-zero
-> > > read exit_state
-> > > remove_wait_queue()
-> > > 			wake_up_all()
+> > > pidfd_poll() can race with the exiting task, miss exit_code != 0, and return
+> > > zero. However, do_poll() won't block after that and pidfd_poll() will be called
+> > > again.
 > >
-> > just to clarify... No, sys_poll() path doesn't do remove_wait_queue() until
-> > it returns to user mode, and that is why we can't race with set-exit_code +
-> > wake_up().
+> > Here also I didn't follow what you mean. If exit_code is read as 0 in
+> > pidfd_poll(), then in do_poll() the count will be 0 and it will block in
+> > poll_schedule_timeout(). Right?
 >
-> I didn't follow what you mean, the removal from the waitqueue happens in
-> free_poll_entry() called from poll_freewait() which happens from
-> do_sys_poll() which is before the syscall returns to user mode. Could you
-> explain more?
-
-Hmm. I do not really understand the question... Sure, do_sys_poll() does
-poll_freewait() before sysret or even before return from syscall, but why
-does this matter? This is the exit path, it frees the memory, does fput(),
-etc, f_op->poll() won't be call after that.
-
-> > pidfd_poll() can race with the exiting task, miss exit_code != 0, and return
-> > zero. However, do_poll() won't block after that and pidfd_poll() will be called
-> > again.
+> No. Please note the pwq->triggered check and please read __pollwake().
 >
-> Here also I didn't follow what you mean. If exit_code is read as 0 in
-> pidfd_poll(), then in do_poll() the count will be 0 and it will block in
-> poll_schedule_timeout(). Right?
+> But if you want to understand this you can forget about poll/select. It is
+> a bit complicated, in particular because it has to do set_current_state()
+> right  before schedule() and thus it plays games with pwq->triggered. But in
+> essence this doesn't differ too much from the plain wait_event-like code
+> (although you can also look at wait_woken/woken_wake_function).
+>
+> If remove_wait_queue() could happem before wake_up_all() (like in your pseudo-
+> code above), then pidfd_poll() or any other ->poll() method could miss _both_
+> the condition and wakeup. But sys_poll() doesn't do this, so it is fine to miss
+> the condition and rely on wake_up_all() which ensures we won't block and the
+> next iteration must see condition == T.
 
-No. Please note the pwq->triggered check and please read __pollwake().
-
-But if you want to understand this you can forget about poll/select. It is
-a bit complicated, in particular because it has to do set_current_state()
-right  before schedule() and thus it plays games with pwq->triggered. But in
-essence this doesn't differ too much from the plain wait_event-like code
-(although you can also look at wait_woken/woken_wake_function).
-
-If remove_wait_queue() could happem before wake_up_all() (like in your pseudo-
-code above), then pidfd_poll() or any other ->poll() method could miss _both_
-the condition and wakeup. But sys_poll() doesn't do this, so it is fine to miss
-the condition and rely on wake_up_all() which ensures we won't block and the
-next iteration must see condition == T.
+Oh, just in case... If it is not clear, of course I am talking about the case
+when wake_up_call() was already called when we check the condition. Otherwise
+everything is simple.
 
 Oleg.
