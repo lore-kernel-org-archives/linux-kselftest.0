@@ -1,42 +1,75 @@
 From: andreyknvl@google.com (Andrey Konovalov)
-Date: Tue, 30 Apr 2019 15:25:05 +0200
-Subject: [PATCH v14 09/17] fs, arm64: untag user pointers in copy_mount_options
+Date: Tue, 30 Apr 2019 15:25:07 +0200
+Subject: [PATCH v14 11/17] drm/amdgpu, arm64: untag user pointers
 In-Reply-To: <cover.1556630205.git.andreyknvl@google.com>
 References: <cover.1556630205.git.andreyknvl@google.com>
 Message-ID:
- <f7a89f69f95e471f161e4000d0e13f57364bc90d.1556630205.git.andreyknvl@google.com>
+ <2e827b5c484be14044933049fec180cd6acb054b.1556630205.git.andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190430132505.QF3TTVEKS-NCje4h0USztrm_fd93o11LWQkxWWET0Ig@z>
+Message-ID: <20190430132507.WvjASqgaT-HQCMuSADnPGwUtaNgj3VMRpHW21WPS61Y@z>
 
 This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-In copy_mount_options a user address is being subtracted from TASK_SIZE.
-If the address is lower than TASK_SIZE, the size is calculated to not
-allow the exact_copy_from_user() call to cross TASK_SIZE boundary.
-However if the address is tagged, then the size will be calculated
-incorrectly.
+amdgpu_ttm_tt_get_user_pages() uses provided user pointers for vma
+lookups, which can only by done with untagged pointers. This patch
+untag user pointers when they are being set in
+amdgpu_ttm_tt_set_userptr().
 
-Untag the address before subtracting.
+In amdgpu_gem_userptr_ioctl() and amdgpu_amdkfd_gpuvm.c/init_user_pages()
+an MMU notifier is set up with a (tagged) userspace pointer. The untagged
+address should be used so that MMU notifiers for the untagged address get
+correctly matched up with the right BO. This patch untag user pointers in
+amdgpu_gem_userptr_ioctl() for the GEM case and in
+amdgpu_amdkfd_gpuvm_alloc_memory_of_gpu() for the KFD case.
 
+Suggested-by: Kuehling, Felix <Felix.Kuehling at amd.com>
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- fs/namespace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c          | 2 ++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c          | 2 +-
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index c9cab307fa77..c27e5713bf04 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -2825,7 +2825,7 @@ void *copy_mount_options(const void __user * data)
- 	 * the remainder of the page.
- 	 */
- 	/* copy_from_user cannot cross TASK_SIZE ! */
--	size = TASK_SIZE - (unsigned long)data;
-+	size = TASK_SIZE - (unsigned long)untagged_addr(data);
- 	if (size > PAGE_SIZE)
- 		size = PAGE_SIZE;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+index 1921dec3df7a..20cac44ed449 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+@@ -1121,7 +1121,7 @@ int amdgpu_amdkfd_gpuvm_alloc_memory_of_gpu(
+ 		alloc_flags = 0;
+ 		if (!offset || !*offset)
+ 			return -EINVAL;
+-		user_addr = *offset;
++		user_addr = untagged_addr(*offset);
+ 	} else if (flags & ALLOC_MEM_FLAGS_DOORBELL) {
+ 		domain = AMDGPU_GEM_DOMAIN_GTT;
+ 		alloc_domain = AMDGPU_GEM_DOMAIN_CPU;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+index d21dd2f369da..985cb82b2aa6 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+@@ -286,6 +286,8 @@ int amdgpu_gem_userptr_ioctl(struct drm_device *dev, void *data,
+ 	uint32_t handle;
+ 	int r;
  
++	args->addr = untagged_addr(args->addr);
++
+ 	if (offset_in_page(args->addr | args->size))
+ 		return -EINVAL;
+ 
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+index 73e71e61dc99..1d30e97ac2c4 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+@@ -1248,7 +1248,7 @@ int amdgpu_ttm_tt_set_userptr(struct ttm_tt *ttm, uint64_t addr,
+ 	if (gtt == NULL)
+ 		return -EINVAL;
+ 
+-	gtt->userptr = addr;
++	gtt->userptr = untagged_addr(addr);
+ 	gtt->userflags = flags;
+ 
+ 	if (gtt->usertask)
 -- 
 2.21.0.593.g511ec345e18-goog
