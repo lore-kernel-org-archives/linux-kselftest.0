@@ -1,42 +1,70 @@
-From: oleg at redhat.com (Oleg Nesterov)
-Date: Tue, 30 Apr 2019 14:07:59 +0200
-Subject: [PATCH v1 1/2] Add polling support to pidfd
-In-Reply-To: <20190430115332.GB23020@redhat.com>
-References: <20190425190010.46489-1-joel@joelfernandes.org>
- <20190425222359.sqhboc4x4daznr6r@brauner.io>
- <20190428162405.GA6757@redhat.com>
- <20190429140245.GB233442@google.com>
- <20190429142030.GA17715@redhat.com>
- <20190429163259.GA201155@google.com>
- <20190430115332.GB23020@redhat.com>
-Message-ID: <20190430120759.GC23020@redhat.com>
+From: andreyknvl at google.com (Andrey Konovalov)
+Date: Tue, 30 Apr 2019 15:24:59 +0200
+Subject: [PATCH v14 03/17] lib, arm64: untag user pointers in strn*_user
+In-Reply-To: <cover.1556630205.git.andreyknvl@google.com>
+References: <cover.1556630205.git.andreyknvl@google.com>
+Message-ID: <6f38f610cc22dca9aef05d53a5a94b24763cc628.1556630205.git.andreyknvl@google.com>
 
-On 04/30, Oleg Nesterov wrote:
->
-> > > pidfd_poll() can race with the exiting task, miss exit_code != 0, and return
-> > > zero. However, do_poll() won't block after that and pidfd_poll() will be called
-> > > again.
-> >
-> > Here also I didn't follow what you mean. If exit_code is read as 0 in
-> > pidfd_poll(), then in do_poll() the count will be 0 and it will block in
-> > poll_schedule_timeout(). Right?
->
-> No. Please note the pwq->triggered check and please read __pollwake().
->
-> But if you want to understand this you can forget about poll/select. It is
-> a bit complicated, in particular because it has to do set_current_state()
-> right  before schedule() and thus it plays games with pwq->triggered. But in
-> essence this doesn't differ too much from the plain wait_event-like code
-> (although you can also look at wait_woken/woken_wake_function).
->
-> If remove_wait_queue() could happem before wake_up_all() (like in your pseudo-
-> code above), then pidfd_poll() or any other ->poll() method could miss _both_
-> the condition and wakeup. But sys_poll() doesn't do this, so it is fine to miss
-> the condition and rely on wake_up_all() which ensures we won't block and the
-> next iteration must see condition == T.
+This patch is a part of a series that extends arm64 kernel ABI to allow to
+pass tagged user pointers (with the top byte set to something else other
+than 0x00) as syscall arguments.
 
-Oh, just in case... If it is not clear, of course I am talking about the case
-when wake_up_call() was already called when we check the condition. Otherwise
-everything is simple.
+strncpy_from_user and strnlen_user accept user addresses as arguments, and
+do not go through the same path as copy_from_user and others, so here we
+need to handle the case of tagged user addresses separately.
 
-Oleg.
+Untag user pointers passed to these functions.
+
+Note, that this patch only temporarily untags the pointers to perform
+validity checks, but then uses them as is to perform user memory accesses.
+
+Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+---
+ lib/strncpy_from_user.c | 3 ++-
+ lib/strnlen_user.c      | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/lib/strncpy_from_user.c b/lib/strncpy_from_user.c
+index 58eacd41526c..6209bb9507c7 100644
+--- a/lib/strncpy_from_user.c
++++ b/lib/strncpy_from_user.c
+@@ -6,6 +6,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/kernel.h>
+ #include <linux/errno.h>
++#include <linux/mm.h>
+ 
+ #include <asm/byteorder.h>
+ #include <asm/word-at-a-time.h>
+@@ -107,7 +108,7 @@ long strncpy_from_user(char *dst, const char __user *src, long count)
+ 		return 0;
+ 
+ 	max_addr = user_addr_max();
+-	src_addr = (unsigned long)src;
++	src_addr = (unsigned long)untagged_addr(src);
+ 	if (likely(src_addr < max_addr)) {
+ 		unsigned long max = max_addr - src_addr;
+ 		long retval;
+diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
+index 1c1a1b0e38a5..8ca3d2ac32ec 100644
+--- a/lib/strnlen_user.c
++++ b/lib/strnlen_user.c
+@@ -2,6 +2,7 @@
+ #include <linux/kernel.h>
+ #include <linux/export.h>
+ #include <linux/uaccess.h>
++#include <linux/mm.h>
+ 
+ #include <asm/word-at-a-time.h>
+ 
+@@ -109,7 +110,7 @@ long strnlen_user(const char __user *str, long count)
+ 		return 0;
+ 
+ 	max_addr = user_addr_max();
+-	src_addr = (unsigned long)str;
++	src_addr = (unsigned long)untagged_addr(str);
+ 	if (likely(src_addr < max_addr)) {
+ 		unsigned long max = max_addr - src_addr;
+ 		long retval;
+-- 
+2.21.0.593.g511ec345e18-goog
