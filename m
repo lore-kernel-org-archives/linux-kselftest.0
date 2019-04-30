@@ -1,87 +1,59 @@
-From: Felix.Kuehling at amd.com (Kuehling, Felix)
-Date: Tue, 30 Apr 2019 18:03:12 +0000
-Subject: [PATCH v14 11/17] drm/amdgpu, arm64: untag user pointers
-In-Reply-To: <2e827b5c484be14044933049fec180cd6acb054b.1556630205.git.andreyknvl@google.com>
-References: <cover.1556630205.git.andreyknvl@google.com>
- <2e827b5c484be14044933049fec180cd6acb054b.1556630205.git.andreyknvl@google.com>
-Message-ID: <3108d33e-8e18-a73e-5e1a-f0db64f02ab3@amd.com>
+From: torvalds at linux-foundation.org (Linus Torvalds)
+Date: Tue, 30 Apr 2019 11:33:21 -0700
+Subject: [RFC][PATCH] ftrace/x86: Emulate call function while updating in
+ breakpoint handler
+In-Reply-To: <20190430134913.4e29ce72@gandalf.local.home>
+References: <20190428133826.3e142cfd@oasis.local.home>
+ <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
+ <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
+ <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
+ <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
+ <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
+ <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
+ <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
+ <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
+ <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
+ <20190430135602.GD2589@hirez.programming.kicks-ass.net>
+ <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
+ <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
+ <20190430130359.330e895b@gandalf.local.home>
+ <20190430132024.0f03f5b8@gandalf.local.home>
+ <20190430134913.4e29ce72@gandalf.local.home>
+Message-ID: <CAHk-=wjJ8D74+FDcXGL65Q9aB0cc7B4vr2s2rS6V4d4a3hU-1Q@mail.gmail.com>
 
-On 2019-04-30 9:25 a.m., Andrey Konovalov wrote:
-> [CAUTION: External Email]
+On Tue, Apr 30, 2019 at 10:49 AM Steven Rostedt <rostedt at goodmis.org> wrote:
 >
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
->
-> amdgpu_ttm_tt_get_user_pages() uses provided user pointers for vma
-> lookups, which can only by done with untagged pointers. This patch
-> untag user pointers when they are being set in
-> amdgpu_ttm_tt_set_userptr().
->
-> In amdgpu_gem_userptr_ioctl() and amdgpu_amdkfd_gpuvm.c/init_user_pages()
-> an MMU notifier is set up with a (tagged) userspace pointer. The untagged
-> address should be used so that MMU notifiers for the untagged address get
-> correctly matched up with the right BO. This patch untag user pointers in
-> amdgpu_gem_userptr_ioctl() for the GEM case and in
-> amdgpu_amdkfd_gpuvm_alloc_memory_of_gpu() for the KFD case.
->
-> Suggested-by: Kuehling, Felix <Felix.Kuehling at amd.com>
-> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
-> ---
->   drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 2 +-
->   drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c          | 2 ++
->   drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c          | 2 +-
->   3 files changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-> index 1921dec3df7a..20cac44ed449 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-> @@ -1121,7 +1121,7 @@ int amdgpu_amdkfd_gpuvm_alloc_memory_of_gpu(
->                  alloc_flags = 0;
->                  if (!offset || !*offset)
->                          return -EINVAL;
-> -               user_addr = *offset;
-> +               user_addr = untagged_addr(*offset);
->          } else if (flags & ALLOC_MEM_FLAGS_DOORBELL) {
->                  domain = AMDGPU_GEM_DOMAIN_GTT;
->                  alloc_domain = AMDGPU_GEM_DOMAIN_CPU;
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-> index d21dd2f369da..985cb82b2aa6 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-> @@ -286,6 +286,8 @@ int amdgpu_gem_userptr_ioctl(struct drm_device *dev, void *data,
->          uint32_t handle;
->          int r;
->
-> +       args->addr = untagged_addr(args->addr);
 > +
->          if (offset_in_page(args->addr | args->size))
->                  return -EINVAL;
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-> index 73e71e61dc99..1d30e97ac2c4 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-> @@ -1248,7 +1248,7 @@ int amdgpu_ttm_tt_set_userptr(struct ttm_tt *ttm, uint64_t addr,
->          if (gtt == NULL)
->                  return -EINVAL;
->
-> -       gtt->userptr = addr;
-> +       gtt->userptr = untagged_addr(addr);
+> +asm(
+> +       ".text\n"
+> +
+> +       /* Trampoline for function update with interrupts enabled */
+> +       ".global ftrace_emulate_call_irqoff\n"
+> +       ".type ftrace_emulate_call_irqoff, @function\n"
+> +       "ftrace_emulate_call_irqoff:\n\t"
+> +               "push %gs:ftrace_bp_call_return\n\t"
 
-Doing this here seems unnecessary. You already untagged the address in 
-both callers of this function. Untagging in the two callers ensures that 
-the userptr and MMU notifier are in sync, using the same untagged 
-address. Doing it again here is redundant.
+Well, as mentioned in my original suggestion, this won't work on
+32-bit, or on UP. They have different models for per-cpu data (32-bti
+uses %fs, and UP doesn't use a segment override at all).
 
-Regards,
-   Felix
+Maybe we just don't care about UP at all for this code, of course.
 
+And maybe we can make the decision to also make 32-bit just not use
+this either - so maybe the code is ok per se, just needs to make sure
+it never triggers for the cases that it's not written for..
 
->          gtt->userflags = flags;
->
->          if (gtt->usertask)
-> --
-> 2.21.0.593.g511ec345e18-goog
->
+> +       "ftrace_emulate_call_update_irqoff:\n\t"
+> +               "push %gs:ftrace_bp_call_return\n\t"
+> +               "sti\n\t"
+> +               "jmp *ftrace_update_func_call\n"
+
+.. and this should then use the "push push sti ret" model instead.
+
+Plus get updated for objtool complaints.
+
+Anyway, since Andy really likes the entry code change, can we have
+that patch in parallel and judge the difference that way? Iirc, that
+was x86-64 specific too.
+
+                           Linus
