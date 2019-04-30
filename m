@@ -1,37 +1,42 @@
 From: andreyknvl@google.com (Andrey Konovalov)
-Date: Tue, 30 Apr 2019 15:25:02 +0200
-Subject: [PATCH v14 06/17] mm: untag user pointers in do_pages_move
+Date: Tue, 30 Apr 2019 15:25:05 +0200
+Subject: [PATCH v14 09/17] fs, arm64: untag user pointers in copy_mount_options
 In-Reply-To: <cover.1556630205.git.andreyknvl@google.com>
 References: <cover.1556630205.git.andreyknvl@google.com>
 Message-ID:
- <80f7d6a2f68adb1c41ef5baf8973537380c681b0.1556630205.git.andreyknvl@google.com>
+ <f7a89f69f95e471f161e4000d0e13f57364bc90d.1556630205.git.andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190430132502.m9dGEiFEJJ0SW6wUGZ-TdbKcjRXdR6QuZd8-wEOLaho@z>
+Message-ID: <20190430132505.QF3TTVEKS-NCje4h0USztrm_fd93o11LWQkxWWET0Ig@z>
 
 This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-do_pages_move() is used in the implementation of the move_pages syscall.
+In copy_mount_options a user address is being subtracted from TASK_SIZE.
+If the address is lower than TASK_SIZE, the size is calculated to not
+allow the exact_copy_from_user() call to cross TASK_SIZE boundary.
+However if the address is tagged, then the size will be calculated
+incorrectly.
 
-Untag user pointers in this function.
+Untag the address before subtracting.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- mm/migrate.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/namespace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 663a5449367a..c014a07135f0 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -1617,6 +1617,7 @@ static int do_pages_move(struct mm_struct *mm, nodemask_t task_nodes,
- 		if (get_user(node, nodes + i))
- 			goto out_flush;
- 		addr = (unsigned long)p;
-+		addr = untagged_addr(addr);
+diff --git a/fs/namespace.c b/fs/namespace.c
+index c9cab307fa77..c27e5713bf04 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -2825,7 +2825,7 @@ void *copy_mount_options(const void __user * data)
+ 	 * the remainder of the page.
+ 	 */
+ 	/* copy_from_user cannot cross TASK_SIZE ! */
+-	size = TASK_SIZE - (unsigned long)data;
++	size = TASK_SIZE - (unsigned long)untagged_addr(data);
+ 	if (size > PAGE_SIZE)
+ 		size = PAGE_SIZE;
  
- 		err = -ENODEV;
- 		if (node < 0 || node >= MAX_NUMNODES)
 -- 
 2.21.0.593.g511ec345e18-goog
