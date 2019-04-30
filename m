@@ -1,68 +1,192 @@
-From: torvalds at linux-foundation.org (Linus Torvalds)
-Date: Tue, 30 Apr 2019 09:06:01 -0700
-Subject: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
- fops invocation
-In-Reply-To: <20190430135602.GD2589@hirez.programming.kicks-ass.net>
-References: <20190428133826.3e142cfd@oasis.local.home>
- <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
- <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
- <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
- <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
- <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
- <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
- <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
- <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
- <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
- <20190430135602.GD2589@hirez.programming.kicks-ass.net>
-Message-ID: <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
+From: joel at joelfernandes.org (Joel Fernandes (Google))
+Date: Tue, 30 Apr 2019 12:21:53 -0400
+Subject: [PATCH v2 1/2] Add polling support to pidfd
+Message-ID: <20190430162154.61314-1-joel@joelfernandes.org>
 
-On Tue, Apr 30, 2019 at 6:56 AM Peter Zijlstra <peterz at infradead.org> wrote:
->
-> On Mon, Apr 29, 2019 at 01:07:33PM -0700, Linus Torvalds wrote:
-> >
-> > We still have that sti sysexit in the 32-bit code.
->
-> We also have both: "STI; HLT" and "STI; MWAIT" where we rely on the STI
-> shadow.
+Android low memory killer (LMK) needs to know when a process dies once
+it is sent the kill signal. It does so by checking for the existence of
+/proc/pid which is both racy and slow. For example, if a PID is reused
+between when LMK sends a kill signal and checks for existence of the
+PID, since the wrong PID is now possibly checked for existence.
 
-I guess the good news is that in all cases we really only ever protect
-against a very unlikely race, and if the race happens it's not
-actually fatal.
+This patch adds polling support to pidfd. Using the polling support, LMK
+will be able to get notified when a process exists in race-free and fast
+way, and allows the LMK to do other things (such as by polling on other
+fds) while awaiting the process being killed to die.
 
-Yes, if we get an NMI and then an interrupt in between the "st;hlt" we
-might wait for the next interrupt and get a (potentially fairly
-horrible) latency issue. I guess that with maximal luck it might be a
-one-shot timer and not get re-armed, but it sounds very very very
-unlikely.
+For notification to polling processes, we follow the same existing
+mechanism in the kernel used when the parent of the task group is to be
+notified of a child's death (do_notify_parent).  This is precisely when
+the tasks waiting on a poll of pidfd are also awakened in this patch.
 
-Googling around, I actually find a patch from Avi Kivity from back in
-2010 for this exact issue, apparently because kvm got this case wrong
-and somebody hit it. The patch never made it upstream exactly because
-kvm could be fixed and people decided that most real hardware didn't
-have the issue in the first place.
+We have decided to include the waitqueue in struct pid for the following
+reasons:
+1. The wait queue has to survive for the lifetime of the poll. Including
+it in task_struct would not be option in this case because the task can
+be reaped and destroyed before the poll returns.
 
-In the discussion I found, Peter Anvin tried to get confirmation from
-AMD engineers about this too, but I don't see any resolution.
+2. By including the struct pid for the waitqueue means that during
+de_thread(), the new thread group leader automatically gets the new
+waitqueue/pid even though its task_struct is different.
 
-Realistically, I don't think you can hit the problem in practice. The
-only way to hit that incredibly small race of "one instruction, *both*
-NMI and interrupts" is to have a lot of interrupts going all at the
-same time, but that will also then solve the latency problem, so the
-very act of triggering it will also fix it.
+Appropriate test cases are added in the second patch to provide coverage
+of all the cases the patch is handling.
 
-I don't see any case where it's really bad. The "sti sysexit" race is
-similar, just about latency of user space signal reporting (and
-perhaps any pending TIF_WORK_xyz flags).
+Andy had a similar patch [1] in the past which was a good reference
+however this patch tries to handle different situations properly related
+to thread group existence, and how/where it notifies. And also solves
+other bugs (waitqueue lifetime).  Daniel had a similar patch [2]
+recently which this patch supercedes.
 
-So maybe we don't care deeply about the sti shadow. It's a potential
-latecy problem when broken, but not a huge issue. And for the
-instruction rewriting hack, moving to "push+sti+ret" also makes a lost
-sti shadow just a "possibly odd stack frame visibility" issue rather
-than anything deeply fatal.
+[1] https://lore.kernel.org/patchwork/patch/345098/
+[2] https://lore.kernel.org/lkml/20181029175322.189042-1-dancol at google.com/
 
-We can probably just write it off as "some old CPU's (and a smattering
-or very rare and not relevant new ones) have potential but unlikely
-latency issues because of a historical CPU mis-design - don't do perf
-on them".
+Cc: Andy Lutomirski <luto at amacapital.net>
+Cc: Steven Rostedt <rostedt at goodmis.org>
+Cc: Daniel Colascione <dancol at google.com>
+Cc: Christian Brauner <christian at brauner.io>
+Cc: Jann Horn <jannh at google.com>
+Cc: Tim Murray <timmurray at google.com>
+Cc: Jonathan Kowalski <bl0pbl33p at gmail.com>
+Cc: Linus Torvalds <torvalds at linux-foundation.org>
+Cc: Al Viro <viro at zeniv.linux.org.uk>
+Cc: Kees Cook <keescook at chromium.org>
+Cc: David Howells <dhowells at redhat.com>
+Cc: Oleg Nesterov <oleg at redhat.com>
+Cc: kernel-team at android.com
+(Oleg improved the code by showing how to avoid tasklist_lock)
+Suggested-by: Oleg Nesterov <oleg at redhat.com>
+Co-developed-by: Daniel Colascione <dancol at google.com>
+Signed-off-by: Daniel Colascione <dancol at google.com>
+Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
 
-                Linus
+---
+
+v1 -> v2:
+* Restructure poll code to avoid tasklist_lock (Oleg)
+* use task_pid instead of get_pid_task in notify_pidfd (Oleg)
+* Added comments to code, commit message nits (Christian)
+* Test case nits/improvements (Christian)
+
+RFC -> v1:
+* Based on CLONE_PIDFD patches: https://lwn.net/Articles/786244/
+* Updated selftests.
+* Renamed poll wake function to do_notify_pidfd.
+* Removed depending on EXIT flags
+* Removed POLLERR flag since semantics are controversial and
+  we don't have usecases for it right now (later we can add if there's
+  a need for it).
+
+ include/linux/pid.h |  3 +++
+ kernel/fork.c       | 29 +++++++++++++++++++++++++++++
+ kernel/pid.c        |  2 ++
+ kernel/signal.c     | 11 +++++++++++
+ 4 files changed, 45 insertions(+)
+
+diff --git a/include/linux/pid.h b/include/linux/pid.h
+index 3c8ef5a199ca..1484db6ca8d1 100644
+--- a/include/linux/pid.h
++++ b/include/linux/pid.h
+@@ -3,6 +3,7 @@
+ #define _LINUX_PID_H
+ 
+ #include <linux/rculist.h>
++#include <linux/wait.h>
+ 
+ enum pid_type
+ {
+@@ -60,6 +61,8 @@ struct pid
+ 	unsigned int level;
+ 	/* lists of tasks that use this pid */
+ 	struct hlist_head tasks[PIDTYPE_MAX];
++	/* wait queue for pidfd notifications */
++	wait_queue_head_t wait_pidfd;
+ 	struct rcu_head rcu;
+ 	struct upid numbers[1];
+ };
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 5525837ed80e..721f8c9d2921 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1685,8 +1685,37 @@ static void pidfd_show_fdinfo(struct seq_file *m, struct file *f)
+ }
+ #endif
+ 
++/*
++ * Poll support for process exit notification.
++ */
++static unsigned int pidfd_poll(struct file *file, struct poll_table_struct *pts)
++{
++	struct task_struct *task;
++	struct pid *pid = file->private_data;
++	int poll_flags = 0;
++
++	poll_wait(file, &pid->wait_pidfd, pts);
++
++	rcu_read_lock();
++	task = pid_task(pid, PIDTYPE_PID);
++	WARN_ON_ONCE(task && !thread_group_leader(task));
++
++	/*
++	 * Inform pollers only when the whole thread group exits, if thread
++	 * group leader exits before all other threads in the group, then
++	 * poll(2) should block, similar to the wait(2) family.
++	 */
++	if (!task || (task->exit_state && thread_group_empty(task)))
++		poll_flags = POLLIN | POLLRDNORM;
++	rcu_read_unlock();
++
++	return poll_flags;
++}
++
++
+ const struct file_operations pidfd_fops = {
+ 	.release = pidfd_release,
++	.poll = pidfd_poll,
+ #ifdef CONFIG_PROC_FS
+ 	.show_fdinfo = pidfd_show_fdinfo,
+ #endif
+diff --git a/kernel/pid.c b/kernel/pid.c
+index 20881598bdfa..5c90c239242f 100644
+--- a/kernel/pid.c
++++ b/kernel/pid.c
+@@ -214,6 +214,8 @@ struct pid *alloc_pid(struct pid_namespace *ns)
+ 	for (type = 0; type < PIDTYPE_MAX; ++type)
+ 		INIT_HLIST_HEAD(&pid->tasks[type]);
+ 
++	init_waitqueue_head(&pid->wait_pidfd);
++
+ 	upid = pid->numbers + ns->level;
+ 	spin_lock_irq(&pidmap_lock);
+ 	if (!(ns->pid_allocated & PIDNS_ADDING))
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 1581140f2d99..a17fff073c3d 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1800,6 +1800,14 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
+ 	return ret;
+ }
+ 
++static void do_notify_pidfd(struct task_struct *task)
++{
++	struct pid *pid;
++
++	pid = task_pid(task);
++	wake_up_all(&pid->wait_pidfd);
++}
++
+ /*
+  * Let a parent know about the death of a child.
+  * For a stopped/continued status change, use do_notify_parent_cldstop instead.
+@@ -1823,6 +1831,9 @@ bool do_notify_parent(struct task_struct *tsk, int sig)
+ 	BUG_ON(!tsk->ptrace &&
+ 	       (tsk->group_leader != tsk || !thread_group_empty(tsk)));
+ 
++	/* Wake up all pidfd waiters */
++	do_notify_pidfd(tsk);
++
+ 	if (sig != SIGCHLD) {
+ 		/*
+ 		 * This is only possible if parent == real_parent.
+-- 
+2.21.0.593.g511ec345e18-goog
