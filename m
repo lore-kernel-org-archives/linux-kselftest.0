@@ -1,47 +1,63 @@
-From: jikos at kernel.org (Jiri Kosina)
-Date: Tue, 30 Apr 2019 13:17:40 +0200 (CEST)
+From: peterz at infradead.org (Peter Zijlstra)
+Date: Tue, 30 Apr 2019 13:18:46 +0200
 Subject: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
  fops invocation
-In-Reply-To: <CAHk-=wjXHfVkrO6ftk9FGtAbpCsaEBa+tGrC8qjV6RUJHu+pCg@mail.gmail.com>
-References: <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
+In-Reply-To: <CAHk-=wjAQaowLHBrXs1M5K-Nr-eVQMt0K8oyCuWxKTvP9k=qqA@mail.gmail.com>
+References: <20190427100639.15074-1-nstange@suse.de>
+ <20190427100639.15074-4-nstange@suse.de>
+ <20190427102657.GF2623@hirez.programming.kicks-ass.net>
+ <20190428133826.3e142cfd@oasis.local.home>
+ <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
  <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
  <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
  <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
  <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
- <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
- <CAHk-=wjyyKDv-WZLXZbVD=V05p2X7eg74z2SpR4TQTxN9JLq4Q@mail.gmail.com>
- <20190429220814.GF31379@linux.intel.com>
- <CAHk-=whpq2=f2LdB-nc52Rd=iZkUH-N-r8OTqEfo+4UaJc7piA@mail.gmail.com>
- <20190430000846.GG31379@linux.intel.com>
- <20190430004504.GH31379@linux.intel.com>
- <CAHk-=wjXHfVkrO6ftk9FGtAbpCsaEBa+tGrC8qjV6RUJHu+pCg@mail.gmail.com>
-Message-ID: <nycvar.YFH.7.76.1904301312080.9803@cbobk.fhfr.pm>
+ <CAHk-=wjAQaowLHBrXs1M5K-Nr-eVQMt0K8oyCuWxKTvP9k=qqA@mail.gmail.com>
+Message-ID: <20190430111846.GS2623@hirez.programming.kicks-ass.net>
 
-On Mon, 29 Apr 2019, Linus Torvalds wrote:
-
-> > > It's 486 based, but either way I suspect the answer is "yes".  IIRC,
-> > > Knights Corner, a.k.a. Larrabee, also had funkiness around SMM and that
-> > > was based on P54C, though I'm struggling to recall exactly what the
-> > > Larrabee weirdness was.
+On Mon, Apr 29, 2019 at 03:06:30PM -0700, Linus Torvalds wrote:
+> On Mon, Apr 29, 2019 at 11:57 AM Andy Lutomirski <luto at kernel.org> wrote:
+> > >
+> > > Otherwise you could never trust the whole sti shadow thing - and it very much is part of the architecture.
 > >
-> > Aha!  Found an ancient comment that explicitly states P5 does not block
-> > NMI/SMI in the STI shadow, while P6 does block NMI/SMI.
+> > Is this documented somewhere?
 > 
-> Ok, so the STI shadow really wouldn't be reliable on those machines. Scary.
+> Btw, if you really don't trust the sti shadow despite it going all the
+> way back to the 8086, then you could instead make the irqoff code do
 > 
-> Of course, the good news is that hopefully nobody has them any more, and 
-> if they do, they presumably don't use fancy NMI profiling etc, so any 
-> actual NMI's are probably relegated purely to largely rare and 
-> effectively fatal errors anyway (ie memory parity errors).
+>         push %gs:bp_call_return
+>         push %gs:bp_call_target
+>         sti
+>         ret
 
-FWIW, if that thing has local apic (I have no idea, I've never seen Quark 
-myself), then NMIs are used to trigger all-cpu backtrace as well. Which 
-still can be done in situations where the kernel is then expected to 
-continue running undisrupted (softlockup, sysrq, hung task detector, ...).
+This variant cures the RETPOLINE complaint; due to there not actually
+being an indirect jump anymore. And it cures the sibling call complaint,
+but trades it for "return with modified stack frame".
 
-Nothing to really worry about in the particular case of this HW perhaps, 
-sure.
+Something like so is clean:
 
--- 
-Jiri Kosina
-SUSE Labs
++extern asmlinkage void emulate_call_irqon(void);
++extern asmlinkage void emulate_call_irqoff(void);
++
++asm(
++	".text\n"
++	".global emulate_call_irqoff\n"
++	".type emulate_call_irqoff, @function\n"
++	"emulate_call_irqoff:\n\t"
++		"push %gs:bp_call_return\n\t"
++		"push %gs:bp_call_target\n\t"
++		"sti\n\t"
++		"ret\n"
++	".size emulate_call_irqoff, .-emulate_call_irqoff\n"
++
++	".global emulate_call_irqon\n"
++	".type emulate_call_irqon, @function\n"
++	"emulate_call_irqon:\n\t"
++		"push %gs:bp_call_return\n\t"
++		"push %gs:bp_call_target\n\t"
++		"ret\n"
++	".size emulate_call_irqon, .-emulate_call_irqon\n"
++	".previous\n");
++
++STACK_FRAME_NON_STANDARD(emulate_call_irqoff);
++STACK_FRAME_NON_STANDARD(emulate_call_irqon);
