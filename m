@@ -1,65 +1,67 @@
-From: peterz@infradead.org (Peter Zijlstra)
-Date: Tue, 30 Apr 2019 13:18:46 +0200
-Subject: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
- fops invocation
-In-Reply-To: <CAHk-=wjAQaowLHBrXs1M5K-Nr-eVQMt0K8oyCuWxKTvP9k=qqA@mail.gmail.com>
-References: <20190427100639.15074-1-nstange@suse.de>
- <20190427100639.15074-4-nstange@suse.de>
- <20190427102657.GF2623@hirez.programming.kicks-ass.net>
- <20190428133826.3e142cfd@oasis.local.home>
- <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
- <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
- <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
- <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
- <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
- <CAHk-=wjAQaowLHBrXs1M5K-Nr-eVQMt0K8oyCuWxKTvP9k=qqA@mail.gmail.com>
-Message-ID: <20190430111846.GS2623@hirez.programming.kicks-ass.net>
+From: oleg@redhat.com (Oleg Nesterov)
+Date: Tue, 30 Apr 2019 13:53:33 +0200
+Subject: [PATCH v1 1/2] Add polling support to pidfd
+In-Reply-To: <20190429163259.GA201155@google.com>
+References: <20190425190010.46489-1-joel@joelfernandes.org>
+ <20190425222359.sqhboc4x4daznr6r@brauner.io>
+ <20190428162405.GA6757@redhat.com>
+ <20190429140245.GB233442@google.com>
+ <20190429142030.GA17715@redhat.com>
+ <20190429163259.GA201155@google.com>
+Message-ID: <20190430115332.GB23020@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190430111846.k6T61TakyZD2-ZdzV0o9-jU8O7gSZjv-AMPUgi5o8kE@z>
+Message-ID: <20190430115333.EJdFFpfkpVJYG1KzzXjud9cwjHTBJi2eTtmu7AmNDrg@z>
 
-On Mon, Apr 29, 2019@03:06:30PM -0700, Linus Torvalds wrote:
-> On Mon, Apr 29, 2019@11:57 AM Andy Lutomirski <luto@kernel.org> wrote:
+On 04/29, Joel Fernandes wrote:
+>
+> On Mon, Apr 29, 2019@04:20:30PM +0200, Oleg Nesterov wrote:
+> > On 04/29, Joel Fernandes wrote:
 > > >
-> > > Otherwise you could never trust the whole sti shadow thing - and it very much is part of the architecture.
+> > > However, in your code above, it is avoided because we get:
+> > >
+> > > Task A (poller)		Task B (exiting task being polled)
+> > > ------------            ----------------
+> > > poll() called
+> > > add_wait_queue()
+> > > 			exit_state is set to non-zero
+> > > read exit_state
+> > > remove_wait_queue()
+> > > 			wake_up_all()
 > >
-> > Is this documented somewhere?
-> 
-> Btw, if you really don't trust the sti shadow despite it going all the
-> way back to the 8086, then you could instead make the irqoff code do
-> 
->         push %gs:bp_call_return
->         push %gs:bp_call_target
->         sti
->         ret
+> > just to clarify... No, sys_poll() path doesn't do remove_wait_queue() until
+> > it returns to user mode, and that is why we can't race with set-exit_code +
+> > wake_up().
+>
+> I didn't follow what you mean, the removal from the waitqueue happens in
+> free_poll_entry() called from poll_freewait() which happens from
+> do_sys_poll() which is before the syscall returns to user mode. Could you
+> explain more?
 
-This variant cures the RETPOLINE complaint; due to there not actually
-being an indirect jump anymore. And it cures the sibling call complaint,
-but trades it for "return with modified stack frame".
+Hmm. I do not really understand the question... Sure, do_sys_poll() does
+poll_freewait() before sysret or even before return from syscall, but why
+does this matter? This is the exit path, it frees the memory, does fput(),
+etc, f_op->poll() won't be call after that.
 
-Something like so is clean:
+> > pidfd_poll() can race with the exiting task, miss exit_code != 0, and return
+> > zero. However, do_poll() won't block after that and pidfd_poll() will be called
+> > again.
+>
+> Here also I didn't follow what you mean. If exit_code is read as 0 in
+> pidfd_poll(), then in do_poll() the count will be 0 and it will block in
+> poll_schedule_timeout(). Right?
 
-+extern asmlinkage void emulate_call_irqon(void);
-+extern asmlinkage void emulate_call_irqoff(void);
-+
-+asm(
-+	".text\n"
-+	".global emulate_call_irqoff\n"
-+	".type emulate_call_irqoff, @function\n"
-+	"emulate_call_irqoff:\n\t"
-+		"push %gs:bp_call_return\n\t"
-+		"push %gs:bp_call_target\n\t"
-+		"sti\n\t"
-+		"ret\n"
-+	".size emulate_call_irqoff, .-emulate_call_irqoff\n"
-+
-+	".global emulate_call_irqon\n"
-+	".type emulate_call_irqon, @function\n"
-+	"emulate_call_irqon:\n\t"
-+		"push %gs:bp_call_return\n\t"
-+		"push %gs:bp_call_target\n\t"
-+		"ret\n"
-+	".size emulate_call_irqon, .-emulate_call_irqon\n"
-+	".previous\n");
-+
-+STACK_FRAME_NON_STANDARD(emulate_call_irqoff);
-+STACK_FRAME_NON_STANDARD(emulate_call_irqon);
+No. Please note the pwq->triggered check and please read __pollwake().
+
+But if you want to understand this you can forget about poll/select. It is
+a bit complicated, in particular because it has to do set_current_state()
+right  before schedule() and thus it plays games with pwq->triggered. But in
+essence this doesn't differ too much from the plain wait_event-like code
+(although you can also look at wait_woken/woken_wake_function).
+
+If remove_wait_queue() could happem before wake_up_all() (like in your pseudo-
+code above), then pidfd_poll() or any other ->poll() method could miss _both_
+the condition and wakeup. But sys_poll() doesn't do this, so it is fine to miss
+the condition and rely on wake_up_all() which ensures we won't block and the
+next iteration must see condition == T.
+
+Oleg.
