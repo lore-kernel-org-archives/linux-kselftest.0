@@ -1,8 +1,8 @@
-From: luto@kernel.org (Andy Lutomirski)
-Date: Tue, 30 Apr 2019 09:33:51 -0700
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Tue, 30 Apr 2019 13:03:59 -0400
 Subject: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
  fops invocation
-In-Reply-To: <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
+In-Reply-To: <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
 References: <20190428133826.3e142cfd@oasis.local.home>
  <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
  <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
@@ -15,79 +15,205 @@ References: <20190428133826.3e142cfd@oasis.local.home>
  <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
  <20190430135602.GD2589@hirez.programming.kicks-ass.net>
  <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
-Message-ID:
  <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
+Message-ID: <20190430130359.330e895b@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190430163351.MrA9Jm0MxRkZVVHHM1QmHfp-bFkkzopNx7tGSWrc9y8@z>
+Message-ID: <20190430170359.C-GUCgsQtlet1H7VmZ7D8CqkbQujbpEviu9ttccxBOE@z>
 
-On Tue, Apr 30, 2019 at 9:06 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, Apr 30, 2019@6:56 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
->
-> Realistically, I don't think you can hit the problem in practice. The
-> only way to hit that incredibly small race of "one instruction, *both*
-> NMI and interrupts" is to have a lot of interrupts going all at the
-> same time, but that will also then solve the latency problem, so the
-> very act of triggering it will also fix it.
->
-> I don't see any case where it's really bad. The "sti sysexit" race is
-> similar, just about latency of user space signal reporting (and
-> perhaps any pending TIF_WORK_xyz flags).
+On Tue, 30 Apr 2019 09:33:51 -0700
+Andy Lutomirski <luto@kernel.org> wrote:
 
-In the worst case, it actually kills the machine.  Last time I tracked
-a bug like this down, I think the issue was that we got preempted
-after the last TIF_ check, entered a VM, exited, context switched
-back, and switched to user mode without noticing that there was a
-ending KVM user return notifier.  This left us with bogus CPU state
-and the machine exploded.
 
-Linus, can I ask you to reconsider your opposition to Josh's other
-approach of just shifting the stack on int3 entry?  I agree that it's
-ugly, but the ugliness is easily manageable and fairly self-contained.
-We add a little bit of complication to the entry asm (but it's not
-like it's unprecedented -- the entry asm does all kinds of stack
-rearrangement due to IST and PTI crap already), and we add an
-int3_emulate_call(struct pt_regs *regs, unsigned long target) helper
-that has appropriate assertions that the stack is okay and emulates
-the call.  And that's it.
+> Linus, can I ask you to reconsider your opposition to Josh's other
+> approach of just shifting the stack on int3 entry?  I agree that it's
+> ugly, but the ugliness is easily manageable and fairly self-contained.
+> We add a little bit of complication to the entry asm (but it's not
+> like it's unprecedented -- the entry asm does all kinds of stack
+> rearrangement due to IST and PTI crap already), and we add an
+> int3_emulate_call(struct pt_regs *regs, unsigned long target) helper
+> that has appropriate assertions that the stack is okay and emulates
+> the call.  And that's it.
 
-In contrast, your approach involves multiple asm trampolines, hash
-tables, batching complications, and sti shadows.
+I also prefer Josh's stack shift solution, as I personally believe
+that's a cleaner solution. But I went ahead and implemented Linus's
+version to get it working for ftrace. Here's the code, and it survived
+some preliminary tests.
 
-As an additional argument, with the stack-shifting approach, it runs
-on *every int3 from kernel mode*.  This means that we can do something
-like this:
+There's three places that use the update code. One is the start of
+every function call (yes, I counted that as one, and that case is
+determined by: ftrace_location(ip)). The other is the trampoline itself
+has an update. That could also be converted to a text poke, but for now
+its here as it was written before text poke existed. The third place is
+actually a jump (to the function graph code). But that can be safely
+skipped if we are converting it, as it only goes from jump to nop, or
+nop to jump.
 
-static bool int3_emulate_call_okay(struct pt_regs *regs)
-{
-    unsigned long available_stack = regs->sp - (unsigned long);
-    return available_stack >= sizeof(long);
-}
+The trampolines reflect this. Also, as NMI code is traced by ftrace, I
+had to duplicate the trampolines for the nmi case (but only for the
+interrupts disabled case as NMIs don't have interrupts enabled).
 
-void do_int3(...) {
-{
-  WARN_ON_ONCE(!user_mode(regs) && !int3_emulate_call_okay(regs));
-  ...;
-}
+-- Steve
 
-static void int3_emulate_call(struct pt_regs *regs, unsigned long target)
-{
-  BUG_ON(user_mode(regs) || !int3_emulate_call_okey(regs));
-  regs->sp -= sizeof(unsigned long);
-  *(unsigned long *)regs->sp = target;
-  /* CET SHSTK fixup goes here */
-}
-
-Obviously the CET SHSTK fixup might be rather nasty, but I suspect
-it's a solvable problem.
-
-A major benefit of this is that the entry asm nastiness will get
-exercised all the time, and, if we screw it up, the warning will fire.
-This is the basic principle behind why the entry stuff *works* these
-days.  I've put a lot of effort into making sure that running kernels
-with CONFIG_DEBUG_ENTRY and running the selftests actually exercises
-the nasty cases.
-
---Andy
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index ef49517f6bb2..bf320bf791dd 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -17,6 +17,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/ftrace.h>
+ #include <linux/percpu.h>
++#include <linux/frame.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/init.h>
+@@ -232,6 +233,9 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
+ 
+ static unsigned long ftrace_update_func;
+ 
++/* Used within inline asm below */
++unsigned long ftrace_update_func_call;
++
+ static int update_ftrace_func(unsigned long ip, void *new)
+ {
+ 	unsigned char old[MCOUNT_INSN_SIZE];
+@@ -259,6 +263,8 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
+ 	unsigned char *new;
+ 	int ret;
+ 
++	ftrace_update_func_call = (unsigned long)func;
++
+ 	new = ftrace_call_replace(ip, (unsigned long)func);
+ 	ret = update_ftrace_func(ip, new);
+ 
+@@ -280,6 +286,70 @@ static nokprobe_inline int is_ftrace_caller(unsigned long ip)
+ 	return 0;
+ }
+ 
++extern asmlinkage void ftrace_emulate_call_irqon(void);
++extern asmlinkage void ftrace_emulate_call_irqoff(void);
++extern asmlinkage void ftrace_emulate_call_nmi(void);
++extern asmlinkage void ftrace_emulate_call_update_irqoff(void);
++extern asmlinkage void ftrace_emulate_call_update_irqon(void);
++extern asmlinkage void ftrace_emulate_call_update_nmi(void);
++
++static DEFINE_PER_CPU(void *, ftrace_bp_call_return);
++static DEFINE_PER_CPU(void *, ftrace_bp_call_nmi_return);
++
++asm(
++	".text\n"
++	".global ftrace_emulate_call_irqoff\n"
++	".type ftrace_emulate_call_irqoff, @function\n"
++	"ftrace_emulate_call_irqoff:\n\t"
++		"push %gs:ftrace_bp_call_return\n\t"
++		"sti\n\t"
++		"jmp ftrace_caller\n"
++	".size ftrace_emulate_call_irqoff, .-ftrace_emulate_call_irqoff\n"
++
++	".global ftrace_emulate_call_irqon\n"
++	".type ftrace_emulate_call_irqon, @function\n"
++	"ftrace_emulate_call_irqon:\n\t"
++		"push %gs:ftrace_bp_call_return\n\t"
++		"jmp ftrace_caller\n"
++	".size ftrace_emulate_call_irqon, .-ftrace_emulate_call_irqon\n"
++
++	".global ftrace_emulate_call_nmi\n"
++	".type ftrace_emulate_call_nmi, @function\n"
++	"ftrace_emulate_call_nmi:\n\t"
++		"push %gs:ftrace_bp_call_nmi_return\n\t"
++		"jmp ftrace_caller\n"
++	".size ftrace_emulate_call_nmi, .-ftrace_emulate_call_nmi\n"
++
++	".global ftrace_emulate_call_update_irqoff\n"
++	".type ftrace_emulate_call_update_irqoff, @function\n"
++	"ftrace_emulate_call_update_irqoff:\n\t"
++		"push %gs:ftrace_bp_call_return\n\t"
++		"sti\n\t"
++		"jmp *ftrace_update_func_call\n"
++	".size ftrace_emulate_call_update_irqoff, .-ftrace_emulate_call_update_irqoff\n"
++
++	".global ftrace_emulate_call_update_irqon\n"
++	".type ftrace_emulate_call_update_irqon, @function\n"
++	"ftrace_emulate_call_update_irqon:\n\t"
++		"push %gs:ftrace_bp_call_return\n\t"
++		"jmp *ftrace_update_func_call\n"
++	".size ftrace_emulate_call_update_irqon, .-ftrace_emulate_call_update_irqon\n"
++
++	".global ftrace_emulate_call_update_nmi\n"
++	".type ftrace_emulate_call_update_nmi, @function\n"
++	"ftrace_emulate_call_update_nmi:\n\t"
++		"push %gs:ftrace_bp_call_nmi_return\n\t"
++		"jmp *ftrace_update_func_call\n"
++	".size ftrace_emulate_call_update_nmi, .-ftrace_emulate_call_update_nmi\n"
++	".previous\n");
++
++STACK_FRAME_NON_STANDARD(ftrace_emulate_call_irqoff);
++STACK_FRAME_NON_STANDARD(ftrace_emulate_call_irqon);
++STACK_FRAME_NON_STANDARD(ftrace_emulate_call_nmi);
++STACK_FRAME_NON_STANDARD(ftrace_emulate_call_update_irqoff);
++STACK_FRAME_NON_STANDARD(ftrace_emulate_call_update_irqon);
++STACK_FRAME_NON_STANDARD(ftrace_emulate_call_update_nmi);
++
+ /*
+  * A breakpoint was added to the code address we are about to
+  * modify, and this is the handle that will just skip over it.
+@@ -295,10 +365,40 @@ int ftrace_int3_handler(struct pt_regs *regs)
+ 		return 0;
+ 
+ 	ip = regs->ip - 1;
+-	if (!ftrace_location(ip) && !is_ftrace_caller(ip))
++	if (ftrace_location(ip)) {
++		if (in_nmi()) {
++			this_cpu_write(ftrace_bp_call_nmi_return, (void *)ip + MCOUNT_INSN_SIZE);
++			regs->ip = (unsigned long) ftrace_emulate_call_nmi;
++			return 1;
++		}
++		this_cpu_write(ftrace_bp_call_return, (void *)ip + MCOUNT_INSN_SIZE);
++		if (regs->flags & X86_EFLAGS_IF) {
++			regs->flags &= ~X86_EFLAGS_IF;
++			regs->ip = (unsigned long) ftrace_emulate_call_irqoff;
++		} else {
++			regs->ip = (unsigned long) ftrace_emulate_call_irqon;
++		}
++	} else if (is_ftrace_caller(ip)) {
++		/* If it's a jump, just need to skip it */
++		if (!ftrace_update_func_call) {
++			regs->ip += MCOUNT_INSN_SIZE -1;
++			return 1;
++		}
++		if (in_nmi()) {
++			this_cpu_write(ftrace_bp_call_nmi_return, (void *)ip + MCOUNT_INSN_SIZE);
++			regs->ip = (unsigned long) ftrace_emulate_call_update_nmi;
++			return 1;
++		}
++		this_cpu_write(ftrace_bp_call_return, (void *)ip + MCOUNT_INSN_SIZE);
++		if (regs->flags & X86_EFLAGS_IF) {
++			regs->flags &= ~X86_EFLAGS_IF;
++			regs->ip = (unsigned long) ftrace_emulate_call_update_irqoff;
++		} else {
++			regs->ip = (unsigned long) ftrace_emulate_call_update_irqon;
++		}
++	} else {
+ 		return 0;
+-
+-	regs->ip += MCOUNT_INSN_SIZE - 1;
++	}
+ 
+ 	return 1;
+ }
+@@ -859,6 +959,8 @@ void arch_ftrace_update_trampoline(struct ftrace_ops *ops)
+ 
+ 	func = ftrace_ops_get_func(ops);
+ 
++	ftrace_update_func_call = (unsigned long)func;
++
+ 	/* Do a safe modify in case the trampoline is executing */
+ 	new = ftrace_call_replace(ip, (unsigned long)func);
+ 	ret = update_ftrace_func(ip, new);
+@@ -960,6 +1062,7 @@ static int ftrace_mod_jmp(unsigned long ip, void *func)
+ {
+ 	unsigned char *new;
+ 
++	ftrace_update_func_call = 0;
+ 	new = ftrace_jmp_replace(ip, (unsigned long)func);
+ 
+ 	return update_ftrace_func(ip, new);
