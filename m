@@ -1,42 +1,65 @@
-From: torvalds@linux-foundation.org (Linus Torvalds)
-Date: Mon, 29 Apr 2019 19:26:02 -0700
+From: nstange@suse.de (Nicolai Stange)
+Date: Tue, 30 Apr 2019 11:24:23 +0200
 Subject: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
  fops invocation
-In-Reply-To: <20190430004504.GH31379@linux.intel.com>
-References: <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
- <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
- <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
- <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
- <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
- <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
- <CAHk-=wjyyKDv-WZLXZbVD=V05p2X7eg74z2SpR4TQTxN9JLq4Q@mail.gmail.com>
- <20190429220814.GF31379@linux.intel.com>
- <CAHk-=whpq2=f2LdB-nc52Rd=iZkUH-N-r8OTqEfo+4UaJc7piA@mail.gmail.com>
- <20190430000846.GG31379@linux.intel.com>
- <20190430004504.GH31379@linux.intel.com>
-Message-ID:
- <CAHk-=wjXHfVkrO6ftk9FGtAbpCsaEBa+tGrC8qjV6RUJHu+pCg@mail.gmail.com>
+In-Reply-To: <20190429180733.3f25d8b9@gandalf.local.home> (Steven Rostedt's
+ message of "Mon, 29 Apr 2019 18:07:33 -0400")
+References: <20190427100639.15074-1-nstange@suse.de>
+ <20190427100639.15074-4-nstange@suse.de>
+ <20190427102657.GF2623@hirez.programming.kicks-ass.net>
+ <20190428133826.3e142cfd@oasis.local.home>
+ <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
+ <20190429145250.1a5da6ed@gandalf.local.home>
+ <CAHk-=wjm93jLtVxTX4HZs6K4k1Wqh3ujjmapqaYtcibVk_YnzQ@mail.gmail.com>
+ <20190429150724.6e501d27@gandalf.local.home>
+ <CAHk-=wgbC-wiSrdDYAh1ORF4EKmecY+MkNsJBF=BWf4W1bXXgA@mail.gmail.com>
+ <20190429163043.535f4272@gandalf.local.home>
+ <CAHk-=wjGquN7-kQCoa+LHCuiVTjefkk38qwaysd4wLLtoSZhpg@mail.gmail.com>
+ <20190429180733.3f25d8b9@gandalf.local.home>
+Message-ID: <87imuv977c.fsf@suse.de>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190430022602.Dbdoyjw2RskXCyI1nVkqdZicSongnMGcYv7ULuX4tLg@z>
+Message-ID: <20190430092423.qYVYYfsQ-1VhQSVc_7cyCgdHWCyWPM-qw0yN38EZiLw@z>
 
-On Mon, Apr 29, 2019 at 5:45 PM Sean Christopherson
-<sean.j.christopherson@intel.com> wrote:
+Steven Rostedt <rostedt at goodmis.org> writes:
+
+> On Mon, 29 Apr 2019 14:38:35 -0700
+> Linus Torvalds <torvalds@linux-foundation.org> wrote:
 >
-> On Mon, Apr 29, 2019@05:08:46PM -0700, Sean Christopherson wrote:
-> >
-> > It's 486 based, but either way I suspect the answer is "yes".  IIRC,
-> > Knights Corner, a.k.a. Larrabee, also had funkiness around SMM and that
-> > was based on P54C, though I'm struggling to recall exactly what the
-> > Larrabee weirdness was.
+>> On Mon, Apr 29, 2019@1:30 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>> >
+>> > The update from "call custom_trampoline" to "call iterator_trampoline"
+>> > is where we have an issue.  
+>> 
+>> So it has never worked. Just tell people that they have two chocies:
 >
-> Aha!  Found an ancient comment that explicitly states P5 does not block
-> NMI/SMI in the STI shadow, while P6 does block NMI/SMI.
+> The custom call to iterator translation never worked. One option is to
+> always call the iterator, and just take the hit. There's another
+> solution to to make permanent updates that would handle the live
+> patching case, but not for the tracing case. It is more critical for
+> live patching than tracing (missed traced function is not as critical
+> as running buggy code unexpectedly). I could look to work on that
+> instead.
 
-Ok, so the STI shadow really wouldn't be reliable on those machines. Scary.
+Making the live patching case permanent would disable tracing of live
+patched functions though?
 
-Of course, the good news is that hopefully nobody has them any more,
-and if they do, they presumably don't use fancy NMI profiling etc, so
-any actual NMI's are probably relegated purely to largely rare and
-effectively fatal errors anyway (ie memory parity errors).
+For unconditionally calling the iterator: I don't have numbers, but
+would expect that always searching through something like 50-70 live
+patching ftrace_ops from some hot path will be noticeable.
 
-                     Linus
+
+> If Nicolai has time, perhaps he can try out the method you suggest and
+> see if we can move this forward.
+
+You mean making ftrace handle call->call transitions one by one in
+non-batch mode, right? Sure, I can do that.
+
+Another question though: is there anything that prevents us from calling
+ftrace_ops_list_func() directly from ftrace_int3_handler()? We don't
+have parent_ip, but if that is used for reporting only, maybe setting it
+to some ftrace_is_in_int3_and_doesnt_now_the_parent() will work?
+Graph tracing entries would still be lost, but well...
+
+Thanks,
+
+Nicolai
