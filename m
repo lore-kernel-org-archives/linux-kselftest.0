@@ -1,36 +1,30 @@
 From: rostedt@goodmis.org (Steven Rostedt)
-Date: Wed, 01 May 2019 16:28:32 -0400
-Subject: [RFC][PATCH 2/2] ftrace/x86: Emulate call function while updating in
- breakpoint handler
+Date: Wed, 01 May 2019 16:28:31 -0400
+Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
 References: <20190501202830.347656894@goodmis.org>
-Message-ID: <20190501203152.561841784@goodmis.org>
+Message-ID: <20190501203152.397154664@goodmis.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190501202832.tbYnD-e7KHh2conAIqaOtgQluNaqQVee2sq_1Oy1lOc@z>
+Message-ID: <20190501202831.F8zRsmTMVq5yNkPMiXuG9DHxenqXNothu3_fyuBqa-c@z>
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-Nicolai Stange discovered[1] that if live kernel patching is enabled, and the
-function tracer started tracing the same function that was patched, the
-conversion of the fentry call site during the translation of going from
-calling the live kernel patch trampoline to the iterator trampoline, would
-have as slight window where it didn't call anything.
+In order to allow breakpoints to emulate call functions, they need to push
+the return address onto the stack. But because the breakpoint exception
+frame is added to the stack when the breakpoint is hit, there's no room to
+add the address onto the stack and return to the address of the emulated
+called funtion.
 
-As live kernel patching depends on ftrace to always call its code (to
-prevent the function being traced from being called, as it will redirect
-it). This small window would allow the old buggy function to be called, and
-this can cause undesirable results.
+To handle this, copy the exception frame on entry of the breakpoint handler
+and have leave a gap that can be used to add a return address to the stack
+frame and return from the breakpoint to the emulated called function,
+allowing for that called function to return back to the location after the
+breakpoint was placed.
 
-Nicolai submitted new patches[2] but these were controversial. As this is
-similar to the static call emulation issues that came up a while ago[3].
-But after some debate[4][5] adding a gap in the stack when entering the
-breakpoint handler allows for pushing the return address onto the stack to
-easily emulate a call.
+The helper functions were also added:
 
-[1] http://lkml.kernel.org/r/20180726104029.7736-1-nstange at suse.de
-[2] http://lkml.kernel.org/r/20190427100639.15074-1-nstange at suse.de
-[3] http://lkml.kernel.org/r/3cf04e113d71c9f8e4be95fb84a510f085aa4afa.1541711457.git.jpoimboe at redhat.com
-[4] http://lkml.kernel.org/r/CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A at mail.gmail.com
-[5] http://lkml.kernel.org/r/CAHk-=wjvQxY4DvPrJ6haPgAa6b906h=MwZXO6G8OtiTGe=N7_w at mail.gmail.com
+  int3_emulate_push(): to push the address onto the gap in the stack
+  int3_emulate_jmp(): changes the location of the regs->ip to return there.
+  int3_emulate_call(): push the return address and change regs->ip
 
 Cc: Andy Lutomirski <luto at kernel.org>
 Cc: Nicolai Stange <nstange at suse.de>
@@ -57,84 +51,103 @@ Cc: Joerg Roedel <jroedel at suse.de>
 Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest at vger.kernel.org>
 Cc: stable at vger.kernel.org
 Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
-Signed-off-by: *** Need SoB From Peter Zijlstra ***
+Signed-off-by: *** Need Peter Zijlstra's SoB here! ***
 Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
 ---
- arch/x86/kernel/ftrace.c | 25 ++++++++++++++++++++-----
- 1 file changed, 20 insertions(+), 5 deletions(-)
+ arch/x86/entry/entry_32.S            | 11 +++++++++++
+ arch/x86/entry/entry_64.S            | 14 ++++++++++++--
+ arch/x86/include/asm/text-patching.h | 20 ++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index ef49517f6bb2..fd152f5a937b 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -29,6 +29,7 @@
- #include <asm/kprobes.h>
- #include <asm/ftrace.h>
- #include <asm/nops.h>
-+#include <asm/text-patching.h>
+diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
+index d309f30cf7af..50bbf4035baf 100644
+--- a/arch/x86/entry/entry_32.S
++++ b/arch/x86/entry/entry_32.S
+@@ -1478,6 +1478,17 @@ ENTRY(int3)
+ 	ASM_CLAC
+ 	pushl	$-1				# mark this as an int
  
- #ifdef CONFIG_DYNAMIC_FTRACE
- 
-@@ -231,6 +232,7 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
- }
- 
- static unsigned long ftrace_update_func;
-+static unsigned long ftrace_update_func_call;
- 
- static int update_ftrace_func(unsigned long ip, void *new)
- {
-@@ -259,6 +261,8 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
- 	unsigned char *new;
- 	int ret;
- 
-+	ftrace_update_func_call = (unsigned long)func;
++#ifdef CONFIG_VM86
++	testl	$X86_EFLAGS_VM, PT_EFLAGS(%esp)
++	jnz	.Lfrom_usermode_no_gap
++#endif
++	testl	$SEGMENT_RPL_MASK, PT_CS(%esp)
++	jnz	.Lfrom_usermode_no_gap
++	.rept 6
++	pushl	5*4(%esp)
++	.endr
++.Lfrom_usermode_no_gap:
 +
- 	new = ftrace_call_replace(ip, (unsigned long)func);
- 	ret = update_ftrace_func(ip, new);
+ 	SAVE_ALL switch_stacks=1
+ 	ENCODE_FRAME_POINTER
+ 	TRACE_IRQS_OFF
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index 1f0efdb7b629..834ec1397dab 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -879,7 +879,7 @@ apicinterrupt IRQ_WORK_VECTOR			irq_work_interrupt		smp_irq_work_interrupt
+  * @paranoid == 2 is special: the stub will never switch stacks.  This is for
+  * #DF: if the thread stack is somehow unusable, we'll still get a useful OOPS.
+  */
+-.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1
++.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1 create_gap=0
+ ENTRY(\sym)
+ 	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
  
-@@ -294,13 +298,21 @@ int ftrace_int3_handler(struct pt_regs *regs)
- 	if (WARN_ON_ONCE(!regs))
- 		return 0;
+@@ -899,6 +899,16 @@ ENTRY(\sym)
+ 	jnz	.Lfrom_usermode_switch_stack_\@
+ 	.endif
  
--	ip = regs->ip - 1;
--	if (!ftrace_location(ip) && !is_ftrace_caller(ip))
--		return 0;
-+	ip = regs->ip - INT3_INSN_SIZE;
- 
--	regs->ip += MCOUNT_INSN_SIZE - 1;
-+	if (ftrace_location(ip)) {
-+		int3_emulate_call(regs, (unsigned long)ftrace_regs_caller);
-+		return 1;
-+	} else if (is_ftrace_caller(ip)) {
-+		if (!ftrace_update_func_call) {
-+			int3_emulate_jmp(regs, ip + CALL_INSN_SIZE);
-+			return 1;
-+		}
-+		int3_emulate_call(regs, ftrace_update_func_call);
-+		return 1;
-+	}
- 
--	return 1;
-+	return 0;
- }
- NOKPROBE_SYMBOL(ftrace_int3_handler);
- 
-@@ -859,6 +871,8 @@ void arch_ftrace_update_trampoline(struct ftrace_ops *ops)
- 
- 	func = ftrace_ops_get_func(ops);
- 
-+	ftrace_update_func_call = (unsigned long)func;
++	.if \create_gap == 1
++	testb	$3, CS-ORIG_RAX(%rsp)
++	jnz	.Lfrom_usermode_no_gap_\@
++	.rept 6
++	pushq	5*8(%rsp)
++	.endr
++	UNWIND_HINT_IRET_REGS offset=8
++.Lfrom_usermode_no_gap_\@:
++	.endif
 +
- 	/* Do a safe modify in case the trampoline is executing */
- 	new = ftrace_call_replace(ip, (unsigned long)func);
- 	ret = update_ftrace_func(ip, new);
-@@ -960,6 +974,7 @@ static int ftrace_mod_jmp(unsigned long ip, void *func)
- {
- 	unsigned char *new;
+ 	.if \paranoid
+ 	call	paranoid_entry
+ 	.else
+@@ -1130,7 +1140,7 @@ apicinterrupt3 HYPERV_STIMER0_VECTOR \
+ #endif /* CONFIG_HYPERV */
  
-+	ftrace_update_func_call = 0UL;
- 	new = ftrace_jmp_replace(ip, (unsigned long)func);
+ idtentry debug			do_debug		has_error_code=0	paranoid=1 shift_ist=DEBUG_STACK
+-idtentry int3			do_int3			has_error_code=0
++idtentry int3			do_int3			has_error_code=0	create_gap=1
+ idtentry stack_segment		do_stack_segment	has_error_code=1
  
- 	return update_ftrace_func(ip, new);
+ #ifdef CONFIG_XEN_PV
+diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
+index e85ff65c43c3..ba275b6292db 100644
+--- a/arch/x86/include/asm/text-patching.h
++++ b/arch/x86/include/asm/text-patching.h
+@@ -39,4 +39,24 @@ extern int poke_int3_handler(struct pt_regs *regs);
+ extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
+ extern int after_bootmem;
+ 
++static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
++{
++	regs->sp -= sizeof(unsigned long);
++	*(unsigned long *)regs->sp = val;
++}
++
++static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
++{
++	regs->ip = ip;
++}
++
++#define INT3_INSN_SIZE 1
++#define CALL_INSN_SIZE 5
++
++static inline void int3_emulate_call(struct pt_regs *regs, unsigned long func)
++{
++	int3_emulate_push(regs, regs->ip - INT3_INSN_SIZE + CALL_INSN_SIZE);
++	int3_emulate_jmp(regs, func);
++}
++
+ #endif /* _ASM_X86_TEXT_PATCHING_H */
 -- 
 2.20.1
