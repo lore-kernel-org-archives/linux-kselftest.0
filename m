@@ -1,48 +1,41 @@
 From: peterz@infradead.org (Peter Zijlstra)
-Date: Wed, 1 May 2019 21:13:24 +0200
-Subject: [RFC][PATCH] ftrace/x86: Emulate call function while updating in
- breakpoint handler
-In-Reply-To: <CAHk-=wjCoycqdVjvWkkFnVRQS9fHEzdmiAG4uUV8B04xv7ZVwA@mail.gmail.com>
-References: <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
- <20190430135602.GD2589@hirez.programming.kicks-ass.net>
- <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
- <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
- <20190430130359.330e895b@gandalf.local.home>
- <20190430132024.0f03f5b8@gandalf.local.home>
- <20190430134913.4e29ce72@gandalf.local.home>
- <CAHk-=wjJ8D74+FDcXGL65Q9aB0cc7B4vr2s2rS6V4d4a3hU-1Q@mail.gmail.com>
- <20190501131117.GW2623@hirez.programming.kicks-ass.net>
- <CAHk-=wjCoycqdVjvWkkFnVRQS9fHEzdmiAG4uUV8B04xv7ZVwA@mail.gmail.com>
-Message-ID: <20190501191324.GU7905@worktop.programming.kicks-ass.net>
+Date: Wed, 1 May 2019 21:17:16 +0200
+Subject: [RFC][PATCH v3] ftrace/x86_64: Emulate call function while
+ updating in breakpoint handler
+In-Reply-To: <CAHk-=wgMZJeMCW5MA25WFJZeYYWCOWr0nGaHhJ7kg+zsu5FY_A@mail.gmail.com>
+References: <20190501113238.0ab3f9dd@gandalf.local.home>
+ <CAHk-=wjvQxY4DvPrJ6haPgAa6b906h=MwZXO6G8OtiTGe=N7_w@mail.gmail.com>
+ <20190501145200.6c095d7f@oasis.local.home>
+ <CAHk-=wgMZJeMCW5MA25WFJZeYYWCOWr0nGaHhJ7kg+zsu5FY_A@mail.gmail.com>
+Message-ID: <20190501191716.GV7905@worktop.programming.kicks-ass.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190501191324.Hrm3I8AdbBw56fjYlDxcFbzOIJWvMEuecpaB61JlZa8@z>
+Message-ID: <20190501191716.Tcs-hUE4QEtbkTjHqvhdIrCHu0VKTHbBRNPA_lNXFSc@z>
 
-On Wed, May 01, 2019@12:03:52PM -0700, Linus Torvalds wrote:
-> On Wed, May 1, 2019@6:11 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Wed, May 01, 2019@11:59:05AM -0700, Linus Torvalds wrote:
+> On Wed, May 1, 2019@11:52 AM Steven Rostedt <rostedt@goodmis.org> wrote:
 > >
-> > Here goes, compile tested only...
+> > I got Peter's patch working. Here it is. What do you think?
 > 
-> Ugh, two different threads. This has the same bug (same source) as the
-> one Steven posted:
-
-This is what Steve started from; lets continue in the other thread.
-
-> > --- a/arch/x86/entry/entry_32.S
-> > +++ b/arch/x86/entry/entry_32.S
-> > @@ -1479,6 +1479,13 @@ ENTRY(int3)
-> >         ASM_CLAC
-> >         pushl   $-1                             # mark this as an int
-> >
-> > +       testl   $SEGMENT_RPL_MASK, PT_CS(%esp)
-> > +       jnz     .Lfrom_usermode_no_gap
-> > +       .rept 6
-> > +       pushl   5*4(%esp)
-> > +       .endr
-> > +.Lfrom_usermode_no_gap:
+> I can tell from just looking at it for five seconds that at least the
+> 32-bit case is buggy.
 > 
-> This will corrupt things horribly if you still use vm86 mode. Checking
-> CS RPL is simply not correct.
+> You can't look at CS(%rsp) without first also checking that you're not
+> coming from vm86 mode.
 
-I'll go fix; I never really understood that vm86 crud and I cobbled this
-32bit thing together based on the 64bit version (that Josh did a while
-ago).
+Something like so then?
+
+Index: linux-2.6/arch/x86/entry/entry_32.S
+===================================================================
+--- linux-2.6.orig/arch/x86/entry/entry_32.S
++++ linux-2.6/arch/x86/entry/entry_32.S
+@@ -1479,6 +1479,10 @@ ENTRY(int3)
+ 	ASM_CLAC
+ 	pushl	$-1				# mark this as an int
+
++#ifdef CONFIG_VM86
++	testl	$X86_EFLAGS_VM, PT_EFLAGS(%esp)
++	jnz	.Lfrom_usermode_no_gap
++#endif
+ 	testl	$SEGMENT_RPL_MASK, PT_CS(%esp)
+ 	jnz	.Lfrom_usermode_no_gap
+ 	.rept 6
