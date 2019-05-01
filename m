@@ -1,8 +1,8 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Tue, 30 Apr 2019 21:35:17 -0400
-Subject: [RFC][PATCH v2] ftrace/x86: Emulate call function while
- updating in breakpoint handler
-In-Reply-To: <20190430175334.423821c0@gandalf.local.home>
+From: torvalds@linux-foundation.org (Linus Torvalds)
+Date: Tue, 30 Apr 2019 18:58:08 -0700
+Subject: [RFC][PATCH v2] ftrace/x86: Emulate call function while updating
+ in breakpoint handler
+In-Reply-To: <20190430213517.7bcfaf8e@oasis.local.home>
 References: <20190428133826.3e142cfd@oasis.local.home>
  <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
  <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
@@ -18,68 +18,23 @@ References: <20190428133826.3e142cfd@oasis.local.home>
  <20190430132024.0f03f5b8@gandalf.local.home>
  <20190430134913.4e29ce72@gandalf.local.home>
  <20190430175334.423821c0@gandalf.local.home>
-Message-ID: <20190430213517.7bcfaf8e@oasis.local.home>
+ <20190430213517.7bcfaf8e@oasis.local.home>
+Message-ID:
+ <CAHk-=whpS92oz-FkzaVdTEXVMre1NQioiLfqyEYYkmrVoVvgzw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190501013517.u9c6DZQwv83J27e39rTpS1ANr9IhNhQBgRubeuo3Ex8@z>
+Message-ID: <20190501015808.xRFdLTzKh4bxe6Hyp6DkX0HJCsNVXjMFcOIniTYrNIs@z>
 
-On Tue, 30 Apr 2019 17:53:34 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Tue, Apr 30, 2019@6:35 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+>
+> Probably easier to move it from inline asm to ftrace_X.S and use the
+> lockdep TRACE_ON/OFF macros.
 
-> +	if (ftrace_location(ip)) {
-> +		/* A breakpoint at the beginning of the function was hit */
-> +		if (in_nmi()) {
-> +			/* NMIs have their own trampoline */
-> +			this_cpu_write(ftrace_bp_call_nmi_return, (void *)ip + MCOUNT_INSN_SIZE);
-> +			regs->ip = (unsigned long) ftrace_emulate_call_nmi;
-> +			return 1;
-> +		}
-> +		this_cpu_write(ftrace_bp_call_return, (void *)ip + MCOUNT_INSN_SIZE);
-> +		if (regs->flags & X86_EFLAGS_IF) {
-> +			regs->flags &= ~X86_EFLAGS_IF;
-> +			regs->ip = (unsigned long) ftrace_emulate_call_irqoff;
-> +			/* Tell lockdep here we are enabling interrupts */
-> +			trace_hardirqs_on();
+Yeah, that should clean up the percpu stuff too since we have helper
+macros for it for *.S files anyway.
 
-This isn't good enough. The return from interrupt does call lockdep
-saying interrupts are disabled. Need to add the lockdep tracking in the
-asm as well.
+I only did the asm() in C because it made the "look, something like
+this" patch simpler to test (and it made it easy to check the
+generated asm file). Not because it was a good idea ;)
 
-Probably easier to move it from inline asm to ftrace_X.S and use the
-lockdep TRACE_ON/OFF macros.
-
--- Steve
-
-
-
-
-> +		} else {
-> +			regs->ip = (unsigned long) ftrace_emulate_call_irqon;
-> +		}
-> +		return 1;
-> +	} else if (is_ftrace_caller(ip)) {
-> +		/* An ftrace trampoline is being updated */
-> +		if (!ftrace_update_func_call) {
-> +			/* If it's a jump, just need to skip it */
-> +			regs->ip += MCOUNT_INSN_SIZE -1;
-> +			return 1;
-> +		}
-> +		if (in_nmi()) {
-> +			/* NMIs have their own trampoline */
-> +			this_cpu_write(ftrace_bp_call_nmi_return, (void *)ip + MCOUNT_INSN_SIZE);
-> +			regs->ip = (unsigned long) ftrace_emulate_call_update_nmi;
-> +			return 1;
-> +		}
-> +		this_cpu_write(ftrace_bp_call_return, (void *)ip + MCOUNT_INSN_SIZE);
-> +		if (regs->flags & X86_EFLAGS_IF) {
-> +			regs->flags &= ~X86_EFLAGS_IF;
-> +			regs->ip = (unsigned long) ftrace_emulate_call_update_irqoff;
-> +			trace_hardirqs_on();
-> +		} else {
-> +			regs->ip = (unsigned long) ftrace_emulate_call_update_irqon;
-> +		}
-> +		return 1;
-> +	}
->  
-> -	return 1;
-> +	return 0;
->  }
+                 Linus
