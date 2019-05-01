@@ -1,28 +1,23 @@
-From: peterz at infradead.org (Peter Zijlstra)
-Date: Wed, 1 May 2019 21:41:32 +0200
-Subject: [RFC][PATCH] ftrace/x86: Emulate call function while updating in
- breakpoint handler
-In-Reply-To: <nycvar.YFH.7.76.1905012132100.9803@cbobk.fhfr.pm>
-References: <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
- <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
- <20190430130359.330e895b@gandalf.local.home>
- <20190430132024.0f03f5b8@gandalf.local.home>
- <20190430134913.4e29ce72@gandalf.local.home>
- <CAHk-=wjJ8D74+FDcXGL65Q9aB0cc7B4vr2s2rS6V4d4a3hU-1Q@mail.gmail.com>
- <20190501131117.GW2623@hirez.programming.kicks-ass.net>
- <CAHk-=wjCoycqdVjvWkkFnVRQS9fHEzdmiAG4uUV8B04xv7ZVwA@mail.gmail.com>
- <20190501151330.023cc620@gandalf.local.home>
- <nycvar.YFH.7.76.1905012132100.9803@cbobk.fhfr.pm>
-Message-ID: <20190501194132.GX7905@worktop.programming.kicks-ass.net>
+From: torvalds at linux-foundation.org (Linus Torvalds)
+Date: Wed, 1 May 2019 12:36:10 -0700
+Subject: [RFC][PATCH v3] ftrace/x86_64: Emulate call function while
+ updating in breakpoint handler
+In-Reply-To: <20190501191716.GV7905@worktop.programming.kicks-ass.net>
+References: <20190501113238.0ab3f9dd@gandalf.local.home>
+ <CAHk-=wjvQxY4DvPrJ6haPgAa6b906h=MwZXO6G8OtiTGe=N7_w@mail.gmail.com>
+ <20190501145200.6c095d7f@oasis.local.home>
+ <CAHk-=wgMZJeMCW5MA25WFJZeYYWCOWr0nGaHhJ7kg+zsu5FY_A@mail.gmail.com>
+ <20190501191716.GV7905@worktop.programming.kicks-ass.net>
+Message-ID: <CAHk-=whWOStbe8nAxuaovrmqsq_YW-rDFu1AkpgisaWMqdMibg@mail.gmail.com>
 
-On Wed, May 01, 2019 at 09:33:28PM +0200, Jiri Kosina wrote:
-> On Wed, 1 May 2019, Steven Rostedt wrote:
-> 
-> > I never tested the 32 bit version of this. And we could just not
-> > implement it (I don't think there's live kernel patching for it
-> > either).
-> 
-> That's correct, there is no livepatching on x86_32 (and no plans for 
-> it). CONFIG_LIVEPATCH is not available for 32bit builds at all.
+On Wed, May 1, 2019 at 12:17 PM Peter Zijlstra <peterz at infradead.org> wrote:
+>
+> Something like so then?
 
-We still want this for static_call(), even on 32bit.
+Yes, that looks correct.
+
+We have those X86_EFLAGS_VM tests pretty randomly scattered around,
+and I wish there was some cleaner model for this, but I also guess
+that there's no point in worrying about the 32-bit code much.
+
+                Linus
