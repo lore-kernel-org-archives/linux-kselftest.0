@@ -1,43 +1,42 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Wed, 1 May 2019 15:00:25 -0400
-Subject: [RFC][PATCH v3] ftrace/x86_64: Emulate call function while
- updating in breakpoint handler
-In-Reply-To: <20190501185726.GR7905@worktop.programming.kicks-ass.net>
-References: <20190501113238.0ab3f9dd@gandalf.local.home>
- <CAHk-=wjvQxY4DvPrJ6haPgAa6b906h=MwZXO6G8OtiTGe=N7_w@mail.gmail.com>
- <20190501185726.GR7905@worktop.programming.kicks-ass.net>
-Message-ID: <20190501150025.40169f1d@gandalf.local.home>
+From: torvalds at linux-foundation.org (Linus Torvalds)
+Date: Wed, 1 May 2019 12:03:52 -0700
+Subject: [RFC][PATCH] ftrace/x86: Emulate call function while updating in
+ breakpoint handler
+In-Reply-To: <20190501131117.GW2623@hirez.programming.kicks-ass.net>
+References: <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
+ <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
+ <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
+ <20190430135602.GD2589@hirez.programming.kicks-ass.net>
+ <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
+ <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
+ <20190430130359.330e895b@gandalf.local.home>
+ <20190430132024.0f03f5b8@gandalf.local.home>
+ <20190430134913.4e29ce72@gandalf.local.home>
+ <CAHk-=wjJ8D74+FDcXGL65Q9aB0cc7B4vr2s2rS6V4d4a3hU-1Q@mail.gmail.com>
+ <20190501131117.GW2623@hirez.programming.kicks-ass.net>
+Message-ID: <CAHk-=wjCoycqdVjvWkkFnVRQS9fHEzdmiAG4uUV8B04xv7ZVwA@mail.gmail.com>
 
-On Wed, 1 May 2019 20:57:26 +0200
-Peter Zijlstra <peterz at infradead.org> wrote:
+On Wed, May 1, 2019 at 6:11 AM Peter Zijlstra <peterz at infradead.org> wrote:
+>
+> Here goes, compile tested only...
 
-> On Wed, May 01, 2019 at 11:01:07AM -0700, Linus Torvalds wrote:
-> > This looks sane to me, although I'm surprised that we didn't already
-> > have an annotation for the nonstandard stack frame for asm files. That
-> > probably would be cleaner in a separate commit, but I guess it doesn't
-> > matter.
-> > 
-> > Anyway, I'm willing to consider the entry code version if it looks a
-> > _lot_ simpler than this (so I'd like to see them side-by-side), but
-> > it's not like this looks all that complicated to me either.  
-> 
-> So I posted one earlier today:
-> 
->   https://lkml.kernel.org/r/20190501131117.GW2623 at hirez.programming.kicks-ass.net
-> 
-> it's about a 1/3rd the number of lines and has 32bit support. It also
-> provides all the bits required to implement static_call().
+Ugh, two different threads. This has the same bug (same source) as the
+one Steven posted:
 
-That's the patch I started with.
+> --- a/arch/x86/entry/entry_32.S
+> +++ b/arch/x86/entry/entry_32.S
+> @@ -1479,6 +1479,13 @@ ENTRY(int3)
+>         ASM_CLAC
+>         pushl   $-1                             # mark this as an int
+>
+> +       testl   $SEGMENT_RPL_MASK, PT_CS(%esp)
+> +       jnz     .Lfrom_usermode_no_gap
+> +       .rept 6
+> +       pushl   5*4(%esp)
+> +       .endr
+> +.Lfrom_usermode_no_gap:
 
-> 
-> That is; I think I'm firmly in favour of the entry variant -- provided
-> it actually works of course.
+This will corrupt things horribly if you still use vm86 mode. Checking
+CS RPL is simply not correct.
 
-And it works. I ran it through tools/testing/selftests/ftrace/ftracetest
-and it passed as good as without that patch.
-
-I haven't ran it through my full test suite. I can do that and see how
-it makes out.
-
--- Steve
+                 Linus
