@@ -1,11 +1,9 @@
-From: torvalds at linux-foundation.org (Linus Torvalds)
-Date: Wed, 1 May 2019 12:03:52 -0700
+From: peterz at infradead.org (Peter Zijlstra)
+Date: Wed, 1 May 2019 21:03:48 +0200
 Subject: [RFC][PATCH] ftrace/x86: Emulate call function while updating in
  breakpoint handler
-In-Reply-To: <20190501131117.GW2623@hirez.programming.kicks-ass.net>
-References: <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
- <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
- <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
+In-Reply-To: <20190501145824.08aed43a@gandalf.local.home>
+References: <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
  <20190430135602.GD2589@hirez.programming.kicks-ass.net>
  <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
  <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
@@ -14,29 +12,47 @@ References: <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
  <20190430134913.4e29ce72@gandalf.local.home>
  <CAHk-=wjJ8D74+FDcXGL65Q9aB0cc7B4vr2s2rS6V4d4a3hU-1Q@mail.gmail.com>
  <20190501131117.GW2623@hirez.programming.kicks-ass.net>
-Message-ID: <CAHk-=wjCoycqdVjvWkkFnVRQS9fHEzdmiAG4uUV8B04xv7ZVwA@mail.gmail.com>
+ <20190501145824.08aed43a@gandalf.local.home>
+Message-ID: <20190501190348.GT7905@worktop.programming.kicks-ass.net>
 
-On Wed, May 1, 2019 at 6:11 AM Peter Zijlstra <peterz at infradead.org> wrote:
->
-> Here goes, compile tested only...
+On Wed, May 01, 2019 at 02:58:24PM -0400, Steven Rostedt wrote:
+> > +	if (ftrace_location(ip)) {
+> > +		int3_emulate_call(regs, ftrace_update_func_call);
+> 
+> Should be:
+> 
+> 		int3_emulate_call(regs, (unsigned long)ftrace_regs_caller);
 
-Ugh, two different threads. This has the same bug (same source) as the
-one Steven posted:
+Ah, I lost the plot a little there.
 
-> --- a/arch/x86/entry/entry_32.S
-> +++ b/arch/x86/entry/entry_32.S
-> @@ -1479,6 +1479,13 @@ ENTRY(int3)
->         ASM_CLAC
->         pushl   $-1                             # mark this as an int
->
-> +       testl   $SEGMENT_RPL_MASK, PT_CS(%esp)
-> +       jnz     .Lfrom_usermode_no_gap
-> +       .rept 6
-> +       pushl   5*4(%esp)
-> +       .endr
-> +.Lfrom_usermode_no_gap:
+> > +		return 1;
+> > +	} else if (is_ftrace_caller(ip)) {
+> > +		if (!ftrace_update_func_call) {
+> > +			int3_emulate_jmp(regs, regs->ip - INT3_INSN_SIZE + CALL_INSN_SIZE);
+> 
+> I see what you did here, but I think:
+> 
+> 			int3_emulate_jmp(regs, ip + CALL_INSN_SIZE);
+> 
+> looks better. But that said, we could in the beginning do:
+> 
+> 	ip = regs->ip - INT3_INSN_SIZE;
+> 
+> instead of
+> 
+> 	ip = regs->ip - 1;
+> 
+> I made these updates and posted them to Linus.
 
-This will corrupt things horribly if you still use vm86 mode. Checking
-CS RPL is simply not correct.
+I was actually considering:
 
-                 Linus
+static inline void int3_emulate_nop(struct pt_regs *regs, unsigned long size)
+{
+	int3_emulate_jmp(regs, regs->ip - INT3_INSN_SIZE + size);
+}
+
+And then the above becomes:
+
+	int3_emulate_nop(regs, CALL_INSN_SIZE);
+
+Hmm?
