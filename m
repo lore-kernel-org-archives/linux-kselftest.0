@@ -1,127 +1,85 @@
-From: shuah@kernel.org (Shuah Khan)
-Date: Fri, 29 Mar 2019 19:54:01 -0600
-Subject: [PATCH v14 6/6] selftests: media_dev_allocator api test
-In-Reply-To: <cover.1553909892.git.shuah@kernel.org>
-References: <cover.1553909892.git.shuah@kernel.org>
-Message-ID:
- <58769883bfbb8b959b12952d155de87fc01f6d99.1553909893.git.shuah@kernel.org>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Tue, 30 Apr 2019 21:35:17 -0400
+Subject: [RFC][PATCH v2] ftrace/x86: Emulate call function while
+ updating in breakpoint handler
+In-Reply-To: <20190430175334.423821c0@gandalf.local.home>
+References: <20190428133826.3e142cfd@oasis.local.home>
+ <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
+ <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
+ <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
+ <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
+ <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
+ <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
+ <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
+ <20190430135602.GD2589@hirez.programming.kicks-ass.net>
+ <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
+ <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
+ <20190430130359.330e895b@gandalf.local.home>
+ <20190430132024.0f03f5b8@gandalf.local.home>
+ <20190430134913.4e29ce72@gandalf.local.home>
+ <20190430175334.423821c0@gandalf.local.home>
+Message-ID: <20190430213517.7bcfaf8e@oasis.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190330015401.q1Sjw_8FxDhptd1rW8uGc7CzneT4uv4mrLq49cnMvpg@z>
+Message-ID: <20190501013517.u9c6DZQwv83J27e39rTpS1ANr9IhNhQBgRubeuo3Ex8@z>
 
-Add a new test for Media Device Allocator API.
+On Tue, 30 Apr 2019 17:53:34 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Media Device Allocator API to allows multiple drivers share a media device.
-This API solves a very common use-case for media devices where one physical
-device (an USB stick) provides both audio and video. When such media device
-exposes a standard USB Audio class, a proprietary Video class, two or more
-independent drivers will share a single physical USB bridge. In such cases,
-it is necessary to coordinate access to the shared resource.
+> +	if (ftrace_location(ip)) {
+> +		/* A breakpoint at the beginning of the function was hit */
+> +		if (in_nmi()) {
+> +			/* NMIs have their own trampoline */
+> +			this_cpu_write(ftrace_bp_call_nmi_return, (void *)ip + MCOUNT_INSN_SIZE);
+> +			regs->ip = (unsigned long) ftrace_emulate_call_nmi;
+> +			return 1;
+> +		}
+> +		this_cpu_write(ftrace_bp_call_return, (void *)ip + MCOUNT_INSN_SIZE);
+> +		if (regs->flags & X86_EFLAGS_IF) {
+> +			regs->flags &= ~X86_EFLAGS_IF;
+> +			regs->ip = (unsigned long) ftrace_emulate_call_irqoff;
+> +			/* Tell lockdep here we are enabling interrupts */
+> +			trace_hardirqs_on();
 
-Using this API, drivers can allocate a media device with the shared struct
-device as the key. Once the media device is allocated by a driver, other
-drivers can get a reference to it. The media device is released when all
-the references are released.
+This isn't good enough. The return from interrupt does call lockdep
+saying interrupts are disabled. Need to add the lockdep tracking in the
+asm as well.
 
-This test does a series of unbind/bind tests to make sure media device
-is released correctly when it is no longer is use and when the last
-driver releases the reference.
+Probably easier to move it from inline asm to ftrace_X.S and use the
+lockdep TRACE_ON/OFF macros.
 
-Signed-off-by: Shuah Khan <shuah at kernel.org>
----
- .../media_tests/media_dev_allocator.sh        | 85 +++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100755 tools/testing/selftests/media_tests/media_dev_allocator.sh
+-- Steve
 
-diff --git a/tools/testing/selftests/media_tests/media_dev_allocator.sh b/tools/testing/selftests/media_tests/media_dev_allocator.sh
-new file mode 100755
-index 000000000000..ffe00c59a483
---- /dev/null
-+++ b/tools/testing/selftests/media_tests/media_dev_allocator.sh
-@@ -0,0 +1,85 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Media Device Allocator API test script
-+# Copyright (c) 2019 Shuah Khan <shuah at kernel.org>
-+
-+echo "Media Device Allocator testing: unbind and bind"
-+echo "media driver $1 audio driver $2"
-+
-+MDRIVER=/sys/bus/usb/drivers/$1
-+cd $MDRIVER
-+MDEV=$(ls -d *\-*)
-+
-+ADRIVER=/sys/bus/usb/drivers/$2
-+cd $ADRIVER
-+ADEV=$(ls -d *\-*.1)
-+
-+echo "=================================="
-+echo "Test unbind both devices - start"
-+echo "Running unbind of $MDEV from $MDRIVER"
-+echo $MDEV > $MDRIVER/unbind;
-+
-+echo "Media device should still be present!"
-+ls -l /dev/media*
-+
-+echo "sound driver is at: $ADRIVER"
-+echo "Device is: $ADEV"
-+
-+echo "Running unbind of $ADEV from $ADRIVER"
-+echo $ADEV > $ADRIVER/unbind;
-+
-+echo "Media device should have been deleted!"
-+ls -l /dev/media*
-+echo "Test unbind both devices - end"
-+
-+echo "=================================="
-+
-+echo "Test bind both devices - start"
-+echo "Running bind of $MDEV from $MDRIVER"
-+echo $MDEV > $MDRIVER/bind;
-+
-+echo "Media device should be present!"
-+ls -l /dev/media*
-+
-+echo "Running bind of $ADEV from $ADRIVER"
-+echo $ADEV > $ADRIVER/bind;
-+
-+echo "Media device should be there!"
-+ls -l /dev/media*
-+
-+echo "Test bind both devices - end"
-+
-+echo "=================================="
-+
-+echo "Test unbind $MDEV - bind $MDEV - unbind $ADEV - bind $ADEV start"
-+
-+echo "Running unbind of $MDEV from $MDRIVER"
-+echo $MDEV > $MDRIVER/unbind;
-+
-+echo "Media device should be there!"
-+ls -l /dev/media*
-+
-+sleep 1
-+
-+echo "Running bind of $MDEV from $MDRIVER"
-+echo $MDEV > $MDRIVER/bind;
-+
-+echo "Media device should be there!"
-+ls -l /dev/media*
-+
-+echo "Running unbind of $ADEV from $ADRIVER"
-+echo $ADEV > $ADRIVER/unbind;
-+
-+echo "Media device should be there!"
-+ls -l /dev/media*
-+
-+sleep 1
-+
-+echo "Running bind of $ADEV from $ADRIVER"
-+echo $ADEV > $ADRIVER/bind;
-+
-+echo "Media device should be there!"
-+ls -l /dev/media*
-+
-+echo "Test unbind $MDEV - bind $MDEV - unbind $ADEV - bind $ADEV end"
-+echo "=================================="
--- 
-2.17.1
+
+
+
+> +		} else {
+> +			regs->ip = (unsigned long) ftrace_emulate_call_irqon;
+> +		}
+> +		return 1;
+> +	} else if (is_ftrace_caller(ip)) {
+> +		/* An ftrace trampoline is being updated */
+> +		if (!ftrace_update_func_call) {
+> +			/* If it's a jump, just need to skip it */
+> +			regs->ip += MCOUNT_INSN_SIZE -1;
+> +			return 1;
+> +		}
+> +		if (in_nmi()) {
+> +			/* NMIs have their own trampoline */
+> +			this_cpu_write(ftrace_bp_call_nmi_return, (void *)ip + MCOUNT_INSN_SIZE);
+> +			regs->ip = (unsigned long) ftrace_emulate_call_update_nmi;
+> +			return 1;
+> +		}
+> +		this_cpu_write(ftrace_bp_call_return, (void *)ip + MCOUNT_INSN_SIZE);
+> +		if (regs->flags & X86_EFLAGS_IF) {
+> +			regs->flags &= ~X86_EFLAGS_IF;
+> +			regs->ip = (unsigned long) ftrace_emulate_call_update_irqoff;
+> +			trace_hardirqs_on();
+> +		} else {
+> +			regs->ip = (unsigned long) ftrace_emulate_call_update_irqon;
+> +		}
+> +		return 1;
+> +	}
+>  
+> -	return 1;
+> +	return 0;
+>  }
