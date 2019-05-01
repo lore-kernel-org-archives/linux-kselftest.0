@@ -1,153 +1,406 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Wed, 01 May 2019 16:28:31 -0400
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-References: <20190501202830.347656894@goodmis.org>
-Message-ID: <20190501203152.397154664@goodmis.org>
+From: brendanhiggins@google.com (Brendan Higgins)
+Date: Wed,  1 May 2019 16:01:10 -0700
+Subject: [PATCH v2 01/17] kunit: test: add KUnit test runner core
+In-Reply-To: <20190501230126.229218-1-brendanhiggins@google.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+Message-ID: <20190501230126.229218-2-brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190501202831.F8zRsmTMVq5yNkPMiXuG9DHxenqXNothu3_fyuBqa-c@z>
+Message-ID: <20190501230110.GMH-RdGol899WFW5oOUETCkkaHrjP2Q0skMOvLVYvnk@z>
 
-From: Peter Zijlstra <peterz@infradead.org>
+Add core facilities for defining unit tests; this provides a common way
+to define test cases, functions that execute code which is under test
+and determine whether the code under test behaves as expected; this also
+provides a way to group together related test cases in test suites (here
+we call them test_modules).
 
-In order to allow breakpoints to emulate call functions, they need to push
-the return address onto the stack. But because the breakpoint exception
-frame is added to the stack when the breakpoint is hit, there's no room to
-add the address onto the stack and return to the address of the emulated
-called funtion.
+Just define test cases and how to execute them for now; setting
+expectations on code will be defined later.
 
-To handle this, copy the exception frame on entry of the breakpoint handler
-and have leave a gap that can be used to add a return address to the stack
-frame and return from the breakpoint to the emulated called function,
-allowing for that called function to return back to the location after the
-breakpoint was placed.
-
-The helper functions were also added:
-
-  int3_emulate_push(): to push the address onto the gap in the stack
-  int3_emulate_jmp(): changes the location of the regs->ip to return there.
-  int3_emulate_call(): push the return address and change regs->ip
-
-Cc: Andy Lutomirski <luto at kernel.org>
-Cc: Nicolai Stange <nstange at suse.de>
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: Ingo Molnar <mingo at redhat.com>
-Cc: Borislav Petkov <bp at alien8.de>
-Cc: "H. Peter Anvin" <hpa at zytor.com>
-Cc: the arch/x86 maintainers <x86 at kernel.org>
-Cc: Josh Poimboeuf <jpoimboe at redhat.com>
-Cc: Jiri Kosina <jikos at kernel.org>
-Cc: Miroslav Benes <mbenes at suse.cz>
-Cc: Petr Mladek <pmladek at suse.com>
-Cc: Joe Lawrence <joe.lawrence at redhat.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Konrad Rzeszutek Wilk <konrad.wilk at oracle.com>
-Cc: Tim Chen <tim.c.chen at linux.intel.com>
-Cc: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
-Cc: Mimi Zohar <zohar at linux.ibm.com>
-Cc: Juergen Gross <jgross at suse.com>
-Cc: Nick Desaulniers <ndesaulniers at google.com>
-Cc: Nayna Jain <nayna at linux.ibm.com>
-Cc: Masahiro Yamada <yamada.masahiro at socionext.com>
-Cc: Joerg Roedel <jroedel at suse.de>
-Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest at vger.kernel.org>
-Cc: stable at vger.kernel.org
-Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
-Signed-off-by: *** Need Peter Zijlstra's SoB here! ***
-Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
 ---
- arch/x86/entry/entry_32.S            | 11 +++++++++++
- arch/x86/entry/entry_64.S            | 14 ++++++++++++--
- arch/x86/include/asm/text-patching.h | 20 ++++++++++++++++++++
- 3 files changed, 43 insertions(+), 2 deletions(-)
+ include/kunit/test.h | 165 ++++++++++++++++++++++++++++++++++++++++++
+ kunit/Kconfig        |  16 +++++
+ kunit/Makefile       |   1 +
+ kunit/test.c         | 168 +++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 350 insertions(+)
+ create mode 100644 include/kunit/test.h
+ create mode 100644 kunit/Kconfig
+ create mode 100644 kunit/Makefile
+ create mode 100644 kunit/test.c
 
-diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-index d309f30cf7af..50bbf4035baf 100644
---- a/arch/x86/entry/entry_32.S
-+++ b/arch/x86/entry/entry_32.S
-@@ -1478,6 +1478,17 @@ ENTRY(int3)
- 	ASM_CLAC
- 	pushl	$-1				# mark this as an int
- 
-+#ifdef CONFIG_VM86
-+	testl	$X86_EFLAGS_VM, PT_EFLAGS(%esp)
-+	jnz	.Lfrom_usermode_no_gap
-+#endif
-+	testl	$SEGMENT_RPL_MASK, PT_CS(%esp)
-+	jnz	.Lfrom_usermode_no_gap
-+	.rept 6
-+	pushl	5*4(%esp)
-+	.endr
-+.Lfrom_usermode_no_gap:
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+new file mode 100644
+index 0000000000000..23c2ebedd6dd9
+--- /dev/null
++++ b/include/kunit/test.h
+@@ -0,0 +1,165 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Base unit test (KUnit) API.
++ *
++ * Copyright (C) 2019, Google LLC.
++ * Author: Brendan Higgins <brendanhiggins at google.com>
++ */
 +
- 	SAVE_ALL switch_stacks=1
- 	ENCODE_FRAME_POINTER
- 	TRACE_IRQS_OFF
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index 1f0efdb7b629..834ec1397dab 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -879,7 +879,7 @@ apicinterrupt IRQ_WORK_VECTOR			irq_work_interrupt		smp_irq_work_interrupt
-  * @paranoid == 2 is special: the stub will never switch stacks.  This is for
-  * #DF: if the thread stack is somehow unusable, we'll still get a useful OOPS.
-  */
--.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1
-+.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1 create_gap=0
- ENTRY(\sym)
- 	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
- 
-@@ -899,6 +899,16 @@ ENTRY(\sym)
- 	jnz	.Lfrom_usermode_switch_stack_\@
- 	.endif
- 
-+	.if \create_gap == 1
-+	testb	$3, CS-ORIG_RAX(%rsp)
-+	jnz	.Lfrom_usermode_no_gap_\@
-+	.rept 6
-+	pushq	5*8(%rsp)
-+	.endr
-+	UNWIND_HINT_IRET_REGS offset=8
-+.Lfrom_usermode_no_gap_\@:
-+	.endif
++#ifndef _KUNIT_TEST_H
++#define _KUNIT_TEST_H
 +
- 	.if \paranoid
- 	call	paranoid_entry
- 	.else
-@@ -1130,7 +1140,7 @@ apicinterrupt3 HYPERV_STIMER0_VECTOR \
- #endif /* CONFIG_HYPERV */
- 
- idtentry debug			do_debug		has_error_code=0	paranoid=1 shift_ist=DEBUG_STACK
--idtentry int3			do_int3			has_error_code=0
-+idtentry int3			do_int3			has_error_code=0	create_gap=1
- idtentry stack_segment		do_stack_segment	has_error_code=1
- 
- #ifdef CONFIG_XEN_PV
-diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-index e85ff65c43c3..ba275b6292db 100644
---- a/arch/x86/include/asm/text-patching.h
-+++ b/arch/x86/include/asm/text-patching.h
-@@ -39,4 +39,24 @@ extern int poke_int3_handler(struct pt_regs *regs);
- extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
- extern int after_bootmem;
- 
-+static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
++#include <linux/types.h>
++#include <linux/slab.h>
++
++struct kunit;
++
++/**
++ * struct kunit_case - represents an individual test case.
++ * @run_case: the function representing the actual test case.
++ * @name: the name of the test case.
++ *
++ * A test case is a function with the signature, ``void (*)(struct kunit *)``
++ * that makes expectations (see KUNIT_EXPECT_TRUE()) about code under test. Each
++ * test case is associated with a &struct kunit_module and will be run after the
++ * module's init function and followed by the module's exit function.
++ *
++ * A test case should be static and should only be created with the KUNIT_CASE()
++ * macro; additionally, every array of test cases should be terminated with an
++ * empty test case.
++ *
++ * Example:
++ *
++ * .. code-block:: c
++ *
++ *	void add_test_basic(struct kunit *test)
++ *	{
++ *		KUNIT_EXPECT_EQ(test, 1, add(1, 0));
++ *		KUNIT_EXPECT_EQ(test, 2, add(1, 1));
++ *		KUNIT_EXPECT_EQ(test, 0, add(-1, 1));
++ *		KUNIT_EXPECT_EQ(test, INT_MAX, add(0, INT_MAX));
++ *		KUNIT_EXPECT_EQ(test, -1, add(INT_MAX, INT_MIN));
++ *	}
++ *
++ *	static struct kunit_case example_test_cases[] = {
++ *		KUNIT_CASE(add_test_basic),
++ *		{},
++ *	};
++ *
++ */
++struct kunit_case {
++	void (*run_case)(struct kunit *test);
++	const char name[256];
++
++	/* private: internal use only. */
++	bool success;
++};
++
++/**
++ * KUNIT_CASE - A helper for creating a &struct kunit_case
++ * @test_name: a reference to a test case function.
++ *
++ * Takes a symbol for a function representing a test case and creates a
++ * &struct kunit_case object from it. See the documentation for
++ * &struct kunit_case for an example on how to use it.
++ */
++#define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
++
++/**
++ * struct kunit_module - describes a related collection of &struct kunit_case s.
++ * @name: the name of the test. Purely informational.
++ * @init: called before every test case.
++ * @exit: called after every test case.
++ * @test_cases: a null terminated array of test cases.
++ *
++ * A kunit_module is a collection of related &struct kunit_case s, such that
++ * @init is called before every test case and @exit is called after every test
++ * case, similar to the notion of a *test fixture* or a *test class* in other
++ * unit testing frameworks like JUnit or Googletest.
++ *
++ * Every &struct kunit_case must be associated with a kunit_module for KUnit to
++ * run it.
++ */
++struct kunit_module {
++	const char name[256];
++	int (*init)(struct kunit *test);
++	void (*exit)(struct kunit *test);
++	struct kunit_case *test_cases;
++};
++
++/**
++ * struct kunit - represents a running instance of a test.
++ * @priv: for user to store arbitrary data. Commonly used to pass data created
++ * in the init function (see &struct kunit_module).
++ *
++ * Used to store information about the current context under which the test is
++ * running. Most of this data is private and should only be accessed indirectly
++ * via public functions; the one exception is @priv which can be used by the
++ * test writer to store arbitrary data.
++ */
++struct kunit {
++	void *priv;
++
++	/* private: internal use only. */
++	const char *name; /* Read only after initialization! */
++	spinlock_t lock; /* Gaurds all mutable test state. */
++	bool success; /* Protected by lock. */
++	void (*vprintk)(const struct kunit *test,
++			const char *level,
++			struct va_format *vaf);
++};
++
++int kunit_init_test(struct kunit *test, const char *name);
++
++int kunit_run_tests(struct kunit_module *module);
++
++/**
++ * module_test() - used to register a &struct kunit_module with KUnit.
++ * @module: a statically allocated &struct kunit_module.
++ *
++ * Registers @module with the test framework. See &struct kunit_module for more
++ * information.
++ */
++#define module_test(module) \
++		static int module_kunit_init##module(void) \
++		{ \
++			return kunit_run_tests(&module); \
++		} \
++		late_initcall(module_kunit_init##module)
++
++void __printf(3, 4) kunit_printk(const char *level,
++				 const struct kunit *test,
++				 const char *fmt, ...);
++
++/**
++ * kunit_info() - Prints an INFO level message associated with the current test.
++ * @test: The test context object.
++ * @fmt: A printk() style format string.
++ *
++ * Prints an info level message associated with the test module being run. Takes
++ * a variable number of format parameters just like printk().
++ */
++#define kunit_info(test, fmt, ...) \
++		kunit_printk(KERN_INFO, test, fmt, ##__VA_ARGS__)
++
++/**
++ * kunit_warn() - Prints a WARN level message associated with the current test.
++ * @test: The test context object.
++ * @fmt: A printk() style format string.
++ *
++ * See kunit_info().
++ */
++#define kunit_warn(test, fmt, ...) \
++		kunit_printk(KERN_WARNING, test, fmt, ##__VA_ARGS__)
++
++/**
++ * kunit_err() - Prints an ERROR level message associated with the current test.
++ * @test: The test context object.
++ * @fmt: A printk() style format string.
++ *
++ * See kunit_info().
++ */
++#define kunit_err(test, fmt, ...) \
++		kunit_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
++
++#endif /* _KUNIT_TEST_H */
+diff --git a/kunit/Kconfig b/kunit/Kconfig
+new file mode 100644
+index 0000000000000..64480092b2c24
+--- /dev/null
++++ b/kunit/Kconfig
+@@ -0,0 +1,16 @@
++#
++# KUnit base configuration
++#
++
++menu "KUnit support"
++
++config KUNIT
++	bool "Enable support for unit tests (KUnit)"
++	help
++	  Enables support for kernel unit tests (KUnit), a lightweight unit
++	  testing and mocking framework for the Linux kernel. These tests are
++	  able to be run locally on a developer's workstation without a VM or
++	  special hardware. For more information, please see
++	  Documentation/kunit/
++
++endmenu
+diff --git a/kunit/Makefile b/kunit/Makefile
+new file mode 100644
+index 0000000000000..5efdc4dea2c08
+--- /dev/null
++++ b/kunit/Makefile
+@@ -0,0 +1 @@
++obj-$(CONFIG_KUNIT) +=			test.o
+diff --git a/kunit/test.c b/kunit/test.c
+new file mode 100644
+index 0000000000000..5bf97e2935579
+--- /dev/null
++++ b/kunit/test.c
+@@ -0,0 +1,168 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Base unit test (KUnit) API.
++ *
++ * Copyright (C) 2019, Google LLC.
++ * Author: Brendan Higgins <brendanhiggins at google.com>
++ */
++
++#include <linux/sched.h>
++#include <linux/sched/debug.h>
++#include <os.h>
++#include <kunit/test.h>
++
++static bool kunit_get_success(struct kunit *test)
 +{
-+	regs->sp -= sizeof(unsigned long);
-+	*(unsigned long *)regs->sp = val;
++	unsigned long flags;
++	bool success;
++
++	spin_lock_irqsave(&test->lock, flags);
++	success = test->success;
++	spin_unlock_irqrestore(&test->lock, flags);
++
++	return success;
 +}
 +
-+static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
++static void kunit_set_success(struct kunit *test, bool success)
 +{
-+	regs->ip = ip;
++	unsigned long flags;
++
++	spin_lock_irqsave(&test->lock, flags);
++	test->success = success;
++	spin_unlock_irqrestore(&test->lock, flags);
 +}
 +
-+#define INT3_INSN_SIZE 1
-+#define CALL_INSN_SIZE 5
-+
-+static inline void int3_emulate_call(struct pt_regs *regs, unsigned long func)
++static int kunit_vprintk_emit(const struct kunit *test,
++			      int level,
++			      const char *fmt,
++			      va_list args)
 +{
-+	int3_emulate_push(regs, regs->ip - INT3_INSN_SIZE + CALL_INSN_SIZE);
-+	int3_emulate_jmp(regs, func);
++	return vprintk_emit(0, level, NULL, 0, fmt, args);
 +}
 +
- #endif /* _ASM_X86_TEXT_PATCHING_H */
++static int kunit_printk_emit(const struct kunit *test,
++			     int level,
++			     const char *fmt, ...)
++{
++	va_list args;
++	int ret;
++
++	va_start(args, fmt);
++	ret = kunit_vprintk_emit(test, level, fmt, args);
++	va_end(args);
++
++	return ret;
++}
++
++static void kunit_vprintk(const struct kunit *test,
++			  const char *level,
++			  struct va_format *vaf)
++{
++	kunit_printk_emit(test,
++			  level[1] - '0',
++			  "kunit %s: %pV", test->name, vaf);
++}
++
++int kunit_init_test(struct kunit *test, const char *name)
++{
++	spin_lock_init(&test->lock);
++	test->name = name;
++	test->vprintk = kunit_vprintk;
++
++	return 0;
++}
++
++/*
++ * Initializes and runs test case. Does not clean up or do post validations.
++ */
++static void kunit_run_case_internal(struct kunit *test,
++				    struct kunit_module *module,
++				    struct kunit_case *test_case)
++{
++	int ret;
++
++	if (module->init) {
++		ret = module->init(test);
++		if (ret) {
++			kunit_err(test, "failed to initialize: %d\n", ret);
++			kunit_set_success(test, false);
++			return;
++		}
++	}
++
++	test_case->run_case(test);
++}
++
++/*
++ * Performs post validations and cleanup after a test case was run.
++ * XXX: Should ONLY BE CALLED AFTER kunit_run_case_internal!
++ */
++static void kunit_run_case_cleanup(struct kunit *test,
++				   struct kunit_module *module,
++				   struct kunit_case *test_case)
++{
++	if (module->exit)
++		module->exit(test);
++}
++
++/*
++ * Performs all logic to run a test case.
++ */
++static bool kunit_run_case(struct kunit *test,
++			   struct kunit_module *module,
++			   struct kunit_case *test_case)
++{
++	kunit_set_success(test, true);
++
++	kunit_run_case_internal(test, module, test_case);
++	kunit_run_case_cleanup(test, module, test_case);
++
++	return kunit_get_success(test);
++}
++
++int kunit_run_tests(struct kunit_module *module)
++{
++	bool all_passed = true, success;
++	struct kunit_case *test_case;
++	struct kunit test;
++	int ret;
++
++	ret = kunit_init_test(&test, module->name);
++	if (ret)
++		return ret;
++
++	for (test_case = module->test_cases; test_case->run_case; test_case++) {
++		success = kunit_run_case(&test, module, test_case);
++		if (!success)
++			all_passed = false;
++
++		kunit_info(&test,
++			  "%s %s\n",
++			  test_case->name,
++			  success ? "passed" : "failed");
++	}
++
++	if (all_passed)
++		kunit_info(&test, "all tests passed\n");
++	else
++		kunit_info(&test, "one or more tests failed\n");
++
++	return 0;
++}
++
++void kunit_printk(const char *level,
++		  const struct kunit *test,
++		  const char *fmt, ...)
++{
++	struct va_format vaf;
++	va_list args;
++
++	va_start(args, fmt);
++
++	vaf.fmt = fmt;
++	vaf.va = &args;
++
++	test->vprintk(test, level, &vaf);
++
++	va_end(args);
++}
 -- 
-2.20.1
+2.21.0.593.g511ec345e18-goog
