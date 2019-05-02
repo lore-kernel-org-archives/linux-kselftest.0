@@ -1,26 +1,26 @@
-From: luto at amacapital.net (Andy Lutomirski)
-Date: Thu, 2 May 2019 13:25:56 -0700
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <nycvar.YFH.7.76.1905022101060.10635@cbobk.fhfr.pm>
-References: <20190501202830.347656894@goodmis.org>
- <20190501203152.397154664@goodmis.org>
- <20190501232412.1196ef18@oasis.local.home>
- <20190502162133.GX2623@hirez.programming.kicks-ass.net>
- <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
- <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
- <nycvar.YFH.7.76.1905022101060.10635@cbobk.fhfr.pm>
-Message-ID: <D87B1B37-C06B-4C81-BF82-994B03DE2BFF@amacapital.net>
+From: brendanhiggins at google.com (Brendan Higgins)
+Date: Thu, 2 May 2019 13:25:54 -0700
+Subject: [PATCH v2 04/17] kunit: test: add kunit_stream a std::stream like
+ logger
+In-Reply-To: <20190502110008.GC12416@kroah.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-5-brendanhiggins@google.com>
+ <20190502110008.GC12416@kroah.com>
+Message-ID: <CAFd5g47ssM7RQZxQsUJ86UigcF-Uz+Kwv2yvKN_gZK-TtW89bA@mail.gmail.com>
 
+On Thu, May 2, 2019 at 4:00 AM Greg KH <gregkh at linuxfoundation.org> wrote:
+>
+> On Wed, May 01, 2019 at 04:01:13PM -0700, Brendan Higgins wrote:
+> > A lot of the expectation and assertion infrastructure prints out fairly
+> > complicated test failure messages, so add a C++ style log library for
+> > for logging test results.
+>
+> Ideally we would always use a standard logging format, like the
+> kselftest tests all are aiming to do.  That way the output can be easily
+> parsed by tools to see if the tests succeed/fail easily.
+>
+> Any chance of having this logging framework enforcing that format as
+> well?
 
-
-> On May 2, 2019, at 12:28 PM, Jiri Kosina <jikos at kernel.org> wrote:
-> 
->> On Thu, 2 May 2019, Linus Torvalds wrote:
->> 
->> I forget: is #BP _only_ for the "int3" instruction? 
-> 
-> Hmm, according to 17.3.2 in vol 3 of SDM (and table 6-1 there), that 
-> indeed seems to be the case, so we should be fine.
-
-I’m reasonably confident that the absurd MOV SS; INT3 sequence results in #BP from user mode and then #DB inside that (as opposed to vice versa), so this should be okay.
+I agree with your comment on the later patch that we should handle
+this at the wrapper script layer (KUnit tool).
