@@ -1,34 +1,42 @@
-From: shuah@kernel.org (shuah)
-Date: Thu, 2 May 2019 08:04:14 -0600
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <20190502105053.GA12416@kroah.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190502105053.GA12416@kroah.com>
-Message-ID: <76e84d54-6b7e-8cc1-492b-43822fc43ac4@kernel.org>
+From: christian@brauner.io (Christian Brauner)
+Date: Thu, 2 May 2019 17:13:21 +0200
+Subject: [PATCH v2 1/2] Add polling support to pidfd
+In-Reply-To: <20190501151312.GA30235@redhat.com>
+References: <20190430162154.61314-1-joel@joelfernandes.org>
+ <20190501151312.GA30235@redhat.com>
+Message-ID: <20190502151320.cvc6uc3b4bmww23k@brauner.io>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190502140414.1QlrowaKacjWDqC_VxZXB3nSWkWD6OVo7b5pacwp4Ww@z>
+Message-ID: <20190502151321.6qQMRHmWcZ825AbHxxrzm49dNfW5jP0cWVWO5Nw32X0@z>
 
-On 5/2/19 4:50 AM, Greg KH wrote:
-> On Wed, May 01, 2019@04:01:09PM -0700, Brendan Higgins wrote:
->> ## TLDR
->>
->> I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
->> 5.2.
+On Wed, May 01, 2019@05:13:12PM +0200, Oleg Nesterov wrote:
+> On 04/30, Joel Fernandes (Google) wrote:
+> >
+> > +static unsigned int pidfd_poll(struct file *file, struct poll_table_struct *pts)
+> > +{
+> > +	struct task_struct *task;
+> > +	struct pid *pid = file->private_data;
+> > +	int poll_flags = 0;
+> > +
+> > +	poll_wait(file, &pid->wait_pidfd, pts);
+> > +
+> > +	rcu_read_lock();
+> > +	task = pid_task(pid, PIDTYPE_PID);
+> > +	WARN_ON_ONCE(task && !thread_group_leader(task));
+>                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
 > 
-> That might be rushing it, normally trees are already closed now for
-> 5.2-rc1 if 5.1-final comes out this Sunday.
+> Ah, this is not right, we can race with de_thread() which changes the leader,
+> in particular it does leader->exit_signal = -1 to indicate that this thread is
+> no longer a group leader, but pid_task() can return the old leader.
 > 
->> Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
->> we would merge through your tree when the time came? Am I remembering
->> correctly?
+> We are going to check thread_group_empty() below, it won't be true in this case,
+> so this race should not make any harm.
 > 
-> No objection from me.
+> Just remove this WARN_ON(). We can't use has_group_leader_pid(), it can return
+> false if pid_task() returns the new leader.
 > 
+> Otherwise I see no problems.
 
-Yes. I can take these through kselftest tree when the time comes.
-Agree with Greg that 5.2 might be rushing it. 5.3 would be a good
-target.
+I'll remove the WARN_ON() check when applying this. Can I get your
+Acked/Review, Oleg?
 
-thanks,
--- Shuah
+Christian
