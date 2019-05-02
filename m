@@ -1,43 +1,71 @@
-From: brendanhiggins at google.com (Brendan Higgins)
-Date: Thu, 2 May 2019 11:07:57 -0700
-Subject: [PATCH v2 12/17] kunit: tool: add Python wrappers for running
- KUnit tests
-In-Reply-To: <20190502110220.GD12416@kroah.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-13-brendanhiggins@google.com>
- <20190502110220.GD12416@kroah.com>
-Message-ID: <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
+From: torvalds at linux-foundation.org (Linus Torvalds)
+Date: Thu, 2 May 2019 11:02:40 -0700
+Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+In-Reply-To: <20190502162133.GX2623@hirez.programming.kicks-ass.net>
+References: <20190501202830.347656894@goodmis.org>
+ <20190501203152.397154664@goodmis.org>
+ <20190501232412.1196ef18@oasis.local.home>
+ <20190502162133.GX2623@hirez.programming.kicks-ass.net>
+Message-ID: <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
 
-On Thu, May 2, 2019 at 4:02 AM Greg KH <gregkh at linuxfoundation.org> wrote:
+On Thu, May 2, 2019 at 9:21 AM Peter Zijlstra <peterz at infradead.org> wrote:
 >
-> On Wed, May 01, 2019 at 04:01:21PM -0700, Brendan Higgins wrote:
-> > From: Felix Guo <felixguoxiuping at gmail.com>
-> >
-> > The ultimate goal is to create minimal isolated test binaries; in the
-> > meantime we are using UML to provide the infrastructure to run tests, so
-> > define an abstract way to configure and run tests that allow us to
-> > change the context in which tests are built without affecting the user.
-> > This also makes pretty and dynamic error reporting, and a lot of other
-> > nice features easier.
-> >
-> > kunit_config.py:
-> >   - parse .config and Kconfig files.
-> >
-> > kunit_kernel.py: provides helper functions to:
-> >   - configure the kernel using kunitconfig.
-> >   - build the kernel with the appropriate configuration.
-> >   - provide function to invoke the kernel and stream the output back.
-> >
-> > Signed-off-by: Felix Guo <felixguoxiuping at gmail.com>
-> > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
->
-> Ah, here's probably my answer to my previous logging format question,
-> right?  What's the chance that these wrappers output stuff in a standard
-> format that test-framework-tools can already parse?  :)
+> TL;DR, on x86_32 kernel->kernel IRET frames are only 3 entries and do
+> not include ESP/SS, so not only wasn't regs->sp setup, if you changed it
+> it wouldn't be effective and corrupt random stack state.
 
-It should be pretty easy to do. I had some patches that pack up the
-results into a serialized format for a presubmit service; it should be
-pretty straightforward to take the same logic and just change the
-output format.
+Indeed, the 32-bit case for same-RPL exceptions/iret is entirely
+different, and I'd forgotten about that.
 
-Cheers
+And honestly, this makes the 32-bit case much worse. Now the entry
+stack modifications of int3 suddenly affect not just the entry, but
+every exit too.
+
+This is _exactly_ the kind of subtle kernel entry/exit code I wanted
+us to avoid.
+
+And while your code looks kind of ok, it's subtly buggy. This sequence:
+
++       pushl   %eax
++       movl    %esp, %eax
++
++       movl    4*4(%eax), %esp         # restore (modified) regs->sp
++
++       /* rebuild IRET frame */
++       pushl   3*4(%eax)               # flags
++       pushl   2*4(%eax)               # cs
++       pushl   1*4(%eax)               # ip
++
++       andl    $0x0000ffff, 4(%esp)    # clear high CS bits
++
++       movl    (%eax), %eax            # restore eax
+
+looks very wrong to me. When you do that "restore (modified)
+regs->sp", isn't that now resetting %esp to the point where %eax now
+points below the stack? So if we get an NMI in this sequence, that
+will overwrite the parts you are trying to copy from?
+
+Am I missing something? doesn't it need to be done something like
+
+  pushl %eax
+  pushl %ecx
+  movl 20(%esp),%eax   # possibly modified regs->sp
+  movl 16(%esp),%ecx   # flags
+  movl %ecx,-4(%eax)
+  movl 12(%esp),%ecx   # cs
+  movl %ecx,-8(%eax)
+  movl 8(%esp),%ecx   # ip
+  movl %ecx, -12(%eax)
+  movl 4(%esp),%ecx   # eax
+  movl %ecx, -16(%eax)
+  popl %ecx
+  lea -16(%eax),%esp
+  popl %eax
+
+(NOTE NOTE NOTE I might have gotten the offsets and the direction of
+the moves *completely* wrong, this is not a serious patch, it's meant
+as a "something like this" thing!!)
+
+But now I confused myself, and maybe I'm wrong.
+
+                   Linus
