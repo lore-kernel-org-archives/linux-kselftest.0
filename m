@@ -1,56 +1,36 @@
 From: frowand.list at gmail.com (Frank Rowand)
-Date: Thu, 2 May 2019 14:16:23 -0700
-Subject: [PATCH v2 12/17] kunit: tool: add Python wrappers for running
- KUnit tests
-In-Reply-To: <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
+Date: Thu, 2 May 2019 14:18:53 -0700
+Subject: [PATCH v2 04/17] kunit: test: add kunit_stream a std::stream like
+ logger
+In-Reply-To: <CAFd5g47ssM7RQZxQsUJ86UigcF-Uz+Kwv2yvKN_gZK-TtW89bA@mail.gmail.com>
 References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-13-brendanhiggins@google.com>
- <20190502110220.GD12416@kroah.com>
- <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
-Message-ID: <a49c5088-a821-210c-66de-f422536f5b01@gmail.com>
+ <20190501230126.229218-5-brendanhiggins@google.com>
+ <20190502110008.GC12416@kroah.com>
+ <CAFd5g47ssM7RQZxQsUJ86UigcF-Uz+Kwv2yvKN_gZK-TtW89bA@mail.gmail.com>
+Message-ID: <6fcf1218-a026-fd7b-236f-ea95f6312e1d@gmail.com>
 
-On 5/2/19 11:07 AM, Brendan Higgins wrote:
-> On Thu, May 2, 2019 at 4:02 AM Greg KH <gregkh at linuxfoundation.org> wrote:
+On 5/2/19 1:25 PM, Brendan Higgins wrote:
+> On Thu, May 2, 2019 at 4:00 AM Greg KH <gregkh at linuxfoundation.org> wrote:
 >>
->> On Wed, May 01, 2019 at 04:01:21PM -0700, Brendan Higgins wrote:
->>> From: Felix Guo <felixguoxiuping at gmail.com>
->>>
->>> The ultimate goal is to create minimal isolated test binaries; in the
->>> meantime we are using UML to provide the infrastructure to run tests, so
->>> define an abstract way to configure and run tests that allow us to
->>> change the context in which tests are built without affecting the user.
->>> This also makes pretty and dynamic error reporting, and a lot of other
->>> nice features easier.
->>>
->>> kunit_config.py:
->>>   - parse .config and Kconfig files.
->>>
->>> kunit_kernel.py: provides helper functions to:
->>>   - configure the kernel using kunitconfig.
->>>   - build the kernel with the appropriate configuration.
->>>   - provide function to invoke the kernel and stream the output back.
->>>
->>> Signed-off-by: Felix Guo <felixguoxiuping at gmail.com>
->>> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+>> On Wed, May 01, 2019 at 04:01:13PM -0700, Brendan Higgins wrote:
+>>> A lot of the expectation and assertion infrastructure prints out fairly
+>>> complicated test failure messages, so add a C++ style log library for
+>>> for logging test results.
 >>
->> Ah, here's probably my answer to my previous logging format question,
->> right?  What's the chance that these wrappers output stuff in a standard
->> format that test-framework-tools can already parse?  :)
+>> Ideally we would always use a standard logging format, like the
+>> kselftest tests all are aiming to do.  That way the output can be easily
+>> parsed by tools to see if the tests succeed/fail easily.
+>>
+>> Any chance of having this logging framework enforcing that format as
+>> well?
 > 
-> It should be pretty easy to do. I had some patches that pack up the
-> results into a serialized format for a presubmit service; it should be
-> pretty straightforward to take the same logic and just change the
-> output format.
+> I agree with your comment on the later patch that we should handle
+> this at the wrapper script layer (KUnit tool).
 
-When examining and trying out the previous versions of the patch I found
-the wrappers useful to provide information about how to control and use
-the tests, but I had no interest in using the scripts as they do not
-fit in with my personal environment and workflow.
+This discussion is a little confusing, because it is spread across two
+patches.
 
-In the previous versions of the patch, these helper scripts are optional,
-which is good for my use case.  If the helper scripts are required to
-get the data into the proper format then the scripts are not quite so
-optional, they become the expected environment.  I think the proper
-format should exist without the helper scripts.
+I do not agree that this should be handled in the wrapper script, as
+noted in my reply to patch 12, so not repeating it here.
 
 -Frank
