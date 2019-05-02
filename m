@@ -1,39 +1,38 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Thu, 2 May 2019 21:35:10 +0200
-Subject: [PATCH v2 1/2] Add polling support to pidfd
-In-Reply-To: <20190502191437.GA103213@google.com>
-References: <20190430162154.61314-1-joel@joelfernandes.org>
- <20190501151312.GA30235@redhat.com>
- <20190502151320.cvc6uc3b4bmww23k@brauner.io>
- <20190502160247.GD7323@redhat.com>
- <20190502191437.GA103213@google.com>
-Message-ID: <20190502193509.poponmy3j67xjxth@brauner.io>
+From: skhan@linuxfoundation.org (Shuah Khan)
+Date: Thu,  2 May 2019 13:47:40 -0600
+Subject: [PATCH] selftests: add sleep between detach and usbip list -l
+Message-ID: <20190502194740.15344-1-skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190502193510.CKF3sY3l6S0BK1JXEUZJNgu13uudjfF9AlBcfNnjYQc@z>
+Message-ID: <20190502194740.YVqXsRkew9lvPZ_UfQVa1hvbMn9BdAeBzH5rLefblIo@z>
 
-On Thu, May 02, 2019@03:14:37PM -0400, Joel Fernandes wrote:
-> On Thu, May 02, 2019@06:02:48PM +0200, Oleg Nesterov wrote:
-> > On 05/02, Christian Brauner wrote:
-> > >
-> > > On Wed, May 01, 2019@05:13:12PM +0200, Oleg Nesterov wrote:
-> > > >
-> > > > Otherwise I see no problems.
-> > >
-> > > I'll remove the WARN_ON() check when applying this. Can I get your
-> > > Acked/Review, Oleg?
-> 
-> Oh, ok. Good point about the de_thread race. Agreed with you.
-> 
-> > Yes, feel free to add
-> > 
-> > 	Reviewed-by: Oleg Nesterov <oleg at redhat.com>
-> > 
-> > Hmm. Somehow I didn't read the changelog before, I just noticed
-> > Suggested-by: Oleg Nesterov <oleg at redhat.com>
-> > Please remove ;) Thanks Joel, I appreciate it, but it is not my idea.
-> 
-> Ok no problem. You have been very helpful so thank you for that!
+Add a sleep between detach and check for exportable devices to avoid
+the following segfault from libc-2.27.so
 
-Yep, big thank you, Oleg! :)
+[ 6268.136108] usbip[5565]: segfault at 0 ip 00007f2a947bddfd sp 00007ffd1a8705e8 error 4 in libc-2.27.so[7f2a94703000+1e7000]
 
-Christian
+Signed-off-by: Shuah Khan <skhan at linuxfoundation.org>
+---
+ tools/testing/selftests/drivers/usb/usbip/usbip_test.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
+index 128f0ab24307..beacf24a8df7 100755
+--- a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
++++ b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
+@@ -171,10 +171,14 @@ echo "Detach invalid port tests - expect invalid port error message";
+ src/usbip detach -p 100;
+ echo "=============================================================="
+ 
++# let detach complete. Avoid segfaults from libc-2.27.so
++sleep 3;
++
+ echo "Expect to see export-able devices";
+ src/usbip list -l;
+ echo "=============================================================="
+ 
++
+ echo "Remove usbip_host module";
+ rmmod usbip_host;
+ 
+-- 
+2.17.1
