@@ -1,63 +1,28 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Wed, 1 May 2019 23:24:12 -0400
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190501203152.397154664@goodmis.org>
-References: <20190501202830.347656894@goodmis.org>
- <20190501203152.397154664@goodmis.org>
-Message-ID: <20190501232412.1196ef18@oasis.local.home>
+From: gregkh at linuxfoundation.org (Greg KH)
+Date: Thu, 2 May 2019 12:50:53 +0200
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20190501230126.229218-1-brendanhiggins@google.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+Message-ID: <20190502105053.GA12416@kroah.com>
 
-On Wed, 01 May 2019 16:28:31 -0400
-Steven Rostedt <rostedt at goodmis.org> wrote:
+On Wed, May 01, 2019 at 04:01:09PM -0700, Brendan Higgins wrote:
+> ## TLDR
+> 
+> I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
+> 5.2.
 
-> diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-> index d309f30cf7af..50bbf4035baf 100644
-> --- a/arch/x86/entry/entry_32.S
-> +++ b/arch/x86/entry/entry_32.S
-> @@ -1478,6 +1478,17 @@ ENTRY(int3)
->  	ASM_CLAC
->  	pushl	$-1				# mark this as an int
->  
-> +#ifdef CONFIG_VM86
-> +	testl	$X86_EFLAGS_VM, PT_EFLAGS(%esp)
-> +	jnz	.Lfrom_usermode_no_gap
-> +#endif
-> +	testl	$SEGMENT_RPL_MASK, PT_CS(%esp)
-> +	jnz	.Lfrom_usermode_no_gap
-> +	.rept 6
-> +	pushl	5*4(%esp)
-> +	.endr
-> +.Lfrom_usermode_no_gap:
-> +
->  	SAVE_ALL switch_stacks=1
->  	ENCODE_FRAME_POINTER
->  	TRACE_IRQS_OFF
+That might be rushing it, normally trees are already closed now for
+5.2-rc1 if 5.1-final comes out this Sunday.
 
-This failed to work on 32 bit at all (crashed and burned badly - triple
-fault!). Looking at it I found one issue. This code is done before the
-regs are saved, and PT_EFLAGS(%esp) and PT_CS(%esp) expect %esp to
-contain them. I applied this patch against this but it didn't totally
-fix the problems. It still constantly crashes (although, with this
-update I can put in some printks to get some ideas). I haven't spent
-too much time on it, but it looks like there's an issue with the
-entry-stack that int3 switches to. I'm not sure its handling the copy
-well.
+> Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
+> we would merge through your tree when the time came? Am I remembering
+> correctly?
 
--- Steve
+No objection from me.
 
-diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-index 50bbf4035baf..4f427285e421 100644
---- a/arch/x86/entry/entry_32.S
-+++ b/arch/x86/entry/entry_32.S
-@@ -1479,10 +1479,10 @@ ENTRY(int3)
- 	pushl	$-1				# mark this as an int
- 
- #ifdef CONFIG_VM86
--	testl	$X86_EFLAGS_VM, PT_EFLAGS(%esp)
-+	testl	$X86_EFLAGS_VM, PT_EFLAGS-PT_ORIG_EAX(%esp)
- 	jnz	.Lfrom_usermode_no_gap
- #endif
--	testl	$SEGMENT_RPL_MASK, PT_CS(%esp)
-+	testl	$SEGMENT_RPL_MASK, PT_CS-PT_ORIG_EAX(%esp)
- 	jnz	.Lfrom_usermode_no_gap
- 	.rept 6
- 	pushl	5*4(%esp)
+Let me go review the latest round of patches now.
+
+thanks,
+
+greg k-h
