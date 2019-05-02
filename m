@@ -1,63 +1,31 @@
-From: brendanhiggins@google.com (Brendan Higgins)
-Date: Thu, 2 May 2019 13:30:12 -0700
-Subject: [PATCH v2 07/17] kunit: test: add initial tests
-In-Reply-To: <20190502105849.GB12416@kroah.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-8-brendanhiggins@google.com>
- <20190502105849.GB12416@kroah.com>
-Message-ID:
- <CAFd5g44os8xEMMiROkmX_KM4-9yL=+y6kw4-JApxhdzJV5pwkg@mail.gmail.com>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Thu, 2 May 2019 16:48:19 -0400
+Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+In-Reply-To: <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
+References: <20190501202830.347656894@goodmis.org>
+ <20190501203152.397154664@goodmis.org>
+ <20190501232412.1196ef18@oasis.local.home>
+ <20190502162133.GX2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
+Message-ID: <20190502164819.24a818a1@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190502203012.78P_u0KL-90RsmF3CumDM_hZYhAcE_1fmzhfw4hHh6E@z>
+Message-ID: <20190502204819.4LmRQsp4zf4NSf5HKLJGxhVFyPfdpJy87cbj-MN746E@z>
 
-On Thu, May 2, 2019@3:58 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Wed, May 01, 2019@04:01:16PM -0700, Brendan Higgins wrote:
-> > Add a test for string stream along with a simpler example.
-> >
-> > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> > ---
-> >  kunit/Kconfig              | 12 ++++++
-> >  kunit/Makefile             |  4 ++
-> >  kunit/example-test.c       | 88 ++++++++++++++++++++++++++++++++++++++
-> >  kunit/string-stream-test.c | 61 ++++++++++++++++++++++++++
-> >  4 files changed, 165 insertions(+)
-> >  create mode 100644 kunit/example-test.c
-> >  create mode 100644 kunit/string-stream-test.c
-> >
-> > diff --git a/kunit/Kconfig b/kunit/Kconfig
-> > index 64480092b2c24..5cb500355c873 100644
-> > --- a/kunit/Kconfig
-> > +++ b/kunit/Kconfig
-> > @@ -13,4 +13,16 @@ config KUNIT
-> >         special hardware. For more information, please see
-> >         Documentation/kunit/
-> >
-> > +config KUNIT_TEST
-> > +     bool "KUnit test for KUnit"
-> > +     depends on KUNIT
-> > +     help
-> > +       Enables KUnit test to test KUnit.
-> > +
-> > +config KUNIT_EXAMPLE_TEST
-> > +     bool "Example test for KUnit"
-> > +     depends on KUNIT
-> > +     help
-> > +       Enables example KUnit test to demo features of KUnit.
->
-> Can't these tests be module?
+On Thu, 2 May 2019 11:02:40 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-At this time, no. KUnit doesn't support loading tests as kernel
-modules; it is something we could add in in the future, but I would
-rather not open that can of worms right now. There are some other
-things I would like to do that would probably be easier to do before
-adding support for tests as loadable modules.
+> Indeed, the 32-bit case for same-RPL exceptions/iret is entirely
+> different, and I'd forgotten about that.
+> 
+> And honestly, this makes the 32-bit case much worse. Now the entry
+> stack modifications of int3 suddenly affect not just the entry, but
+> every exit too.
+> 
+> This is _exactly_ the kind of subtle kernel entry/exit code I wanted
+> us to avoid.
 
->
-> Or am I mis-reading the previous logic?
->
-> Anyway, just a question, nothing objecting to this as-is for now.
+I just want to point out that I never got the trampoline version
+working on i386. I didn't have the time to debug why it would crash
+when stressed.
 
-Cool
-
-Cheers!
+-- Steve
