@@ -1,51 +1,56 @@
-From: torvalds at linux-foundation.org (Linus Torvalds)
-Date: Thu, 2 May 2019 13:49:29 -0700
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
-References: <20190501202830.347656894@goodmis.org>
- <20190501203152.397154664@goodmis.org>
- <20190501232412.1196ef18@oasis.local.home>
- <20190502162133.GX2623@hirez.programming.kicks-ass.net>
- <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
- <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
- <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
-Message-ID: <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg@mail.gmail.com>
+From: frowand.list at gmail.com (Frank Rowand)
+Date: Thu, 2 May 2019 14:16:23 -0700
+Subject: [PATCH v2 12/17] kunit: tool: add Python wrappers for running
+ KUnit tests
+In-Reply-To: <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-13-brendanhiggins@google.com>
+ <20190502110220.GD12416@kroah.com>
+ <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
+Message-ID: <a49c5088-a821-210c-66de-f422536f5b01@gmail.com>
 
-On Thu, May 2, 2019 at 1:22 PM Peter Zijlstra <peterz at infradead.org> wrote:
->
-> Something like so; it boots; but I could've made some horrible mistake
-> (again).
+On 5/2/19 11:07 AM, Brendan Higgins wrote:
+> On Thu, May 2, 2019 at 4:02 AM Greg KH <gregkh at linuxfoundation.org> wrote:
+>>
+>> On Wed, May 01, 2019 at 04:01:21PM -0700, Brendan Higgins wrote:
+>>> From: Felix Guo <felixguoxiuping at gmail.com>
+>>>
+>>> The ultimate goal is to create minimal isolated test binaries; in the
+>>> meantime we are using UML to provide the infrastructure to run tests, so
+>>> define an abstract way to configure and run tests that allow us to
+>>> change the context in which tests are built without affecting the user.
+>>> This also makes pretty and dynamic error reporting, and a lot of other
+>>> nice features easier.
+>>>
+>>> kunit_config.py:
+>>>   - parse .config and Kconfig files.
+>>>
+>>> kunit_kernel.py: provides helper functions to:
+>>>   - configure the kernel using kunitconfig.
+>>>   - build the kernel with the appropriate configuration.
+>>>   - provide function to invoke the kernel and stream the output back.
+>>>
+>>> Signed-off-by: Felix Guo <felixguoxiuping at gmail.com>
+>>> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+>>
+>> Ah, here's probably my answer to my previous logging format question,
+>> right?  What's the chance that these wrappers output stuff in a standard
+>> format that test-framework-tools can already parse?  :)
+> 
+> It should be pretty easy to do. I had some patches that pack up the
+> results into a serialized format for a presubmit service; it should be
+> pretty straightforward to take the same logic and just change the
+> output format.
 
-This actually looks much better to me.
+When examining and trying out the previous versions of the patch I found
+the wrappers useful to provide information about how to control and use
+the tests, but I had no interest in using the scripts as they do not
+fit in with my personal environment and workflow.
 
-Maybe it's more lines (I didn't check), but it's a lot simpler in that
-now the magic of the int3 stack doesn't get exposed to anything else.
+In the previous versions of the patch, these helper scripts are optional,
+which is good for my use case.  If the helper scripts are required to
+get the data into the proper format then the scripts are not quite so
+optional, they become the expected environment.  I think the proper
+format should exist without the helper scripts.
 
-We *could* also make this kernel-mode-only do_int3() be a special
-function, and do something like
-
-        # args: pt_regs pointer (no error code for int3)
-        movl %esp,%eax
-        # allocate a bit of extra room on the stack, so that
-'kernel_int3' can move the pt_regs
-        subl $8,%esp
-        call kernel_int3
-        movl %eax,%esp
-
-and not do any stack switching magic in the asm code AT ALL. We'd do
-
-    struct pt_regs *kernel_int3(struct pt_regs *regs)
-    {
-        ..
-        return regs;
-    }
-
-and now you the rule for call emulation ends up being that you need to
-"memmove()" the ptregs up and down properly, and return the new
-pt_regs pointer.
-
-Hmm? That would simplify the asm code further, but some people might
-find it objectionable?
-
-                  Linus
+-Frank
