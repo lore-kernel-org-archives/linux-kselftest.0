@@ -1,36 +1,28 @@
-From: frowand.list at gmail.com (Frank Rowand)
-Date: Thu, 2 May 2019 14:18:53 -0700
-Subject: [PATCH v2 04/17] kunit: test: add kunit_stream a std::stream like
- logger
-In-Reply-To: <CAFd5g47ssM7RQZxQsUJ86UigcF-Uz+Kwv2yvKN_gZK-TtW89bA@mail.gmail.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-5-brendanhiggins@google.com>
- <20190502110008.GC12416@kroah.com>
- <CAFd5g47ssM7RQZxQsUJ86UigcF-Uz+Kwv2yvKN_gZK-TtW89bA@mail.gmail.com>
-Message-ID: <6fcf1218-a026-fd7b-236f-ea95f6312e1d@gmail.com>
+From: peterz at infradead.org (Peter Zijlstra)
+Date: Thu, 2 May 2019 23:32:39 +0200
+Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+In-Reply-To: <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg@mail.gmail.com>
+References: <20190501202830.347656894@goodmis.org>
+ <20190501203152.397154664@goodmis.org>
+ <20190501232412.1196ef18@oasis.local.home>
+ <20190502162133.GX2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
+ <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+ <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg@mail.gmail.com>
+Message-ID: <20190502213239.GA2623@hirez.programming.kicks-ass.net>
 
-On 5/2/19 1:25 PM, Brendan Higgins wrote:
-> On Thu, May 2, 2019 at 4:00 AM Greg KH <gregkh at linuxfoundation.org> wrote:
->>
->> On Wed, May 01, 2019 at 04:01:13PM -0700, Brendan Higgins wrote:
->>> A lot of the expectation and assertion infrastructure prints out fairly
->>> complicated test failure messages, so add a C++ style log library for
->>> for logging test results.
->>
->> Ideally we would always use a standard logging format, like the
->> kselftest tests all are aiming to do.  That way the output can be easily
->> parsed by tools to see if the tests succeed/fail easily.
->>
->> Any chance of having this logging framework enforcing that format as
->> well?
-> 
-> I agree with your comment on the later patch that we should handle
-> this at the wrapper script layer (KUnit tool).
+On Thu, May 02, 2019 at 01:49:29PM -0700, Linus Torvalds wrote:
 
-This discussion is a little confusing, because it is spread across two
-patches.
+> We *could* also make this kernel-mode-only do_int3() be a special
+> function, and do something like
 
-I do not agree that this should be handled in the wrapper script, as
-noted in my reply to patch 12, so not repeating it here.
+I think I prefer the variant we have now. The int3_emulate_*() things
+work uniformly and as expected on 32 and 64 bit (it would even work for
+userspace if it weren't for SMAP).
 
--Frank
+So while the 32bit kernel entry is 'special' all the INT3 handlers can
+uniformly prod at pt_regs in a natural way and have it work.
+
+Making it special -- just for 32bit, seems like the wrong thing to me.
