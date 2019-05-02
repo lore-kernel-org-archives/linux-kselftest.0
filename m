@@ -1,46 +1,36 @@
 From: gregkh@linuxfoundation.org (Greg KH)
-Date: Thu, 2 May 2019 13:03:47 +0200
-Subject: [PATCH v2 16/17] kernel/sysctl-test: Add null pointer test for
- sysctl.c:proc_dointvec()
-In-Reply-To: <20190501230126.229218-17-brendanhiggins@google.com>
+Date: Thu, 2 May 2019 13:05:13 +0200
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20190502105053.GA12416@kroah.com>
 References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-17-brendanhiggins@google.com>
-Message-ID: <20190502110347.GE12416@kroah.com>
+ <20190502105053.GA12416@kroah.com>
+Message-ID: <20190502110513.GF12416@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190502110347.6-GxOnBPYADBjkBsHCehIoRvO7R-ZnnqQDM7gE0Ceis@z>
+Message-ID: <20190502110513.WIQLa9-oL_7NNnhfK-QKjQYrf0GNcMxGS1RB16dhbOk@z>
 
-On Wed, May 01, 2019@04:01:25PM -0700, Brendan Higgins wrote:
-> From: Iurii Zaikin <yzaikin at google.com>
+On Thu, May 02, 2019@12:50:53PM +0200, Greg KH wrote:
+> On Wed, May 01, 2019@04:01:09PM -0700, Brendan Higgins wrote:
+> > ## TLDR
+> > 
+> > I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
+> > 5.2.
 > 
-> KUnit tests for initialized data behavior of proc_dointvec that is
-> explicitly checked in the code. Includes basic parsing tests including
-> int min/max overflow.
+> That might be rushing it, normally trees are already closed now for
+> 5.2-rc1 if 5.1-final comes out this Sunday.
 > 
-> Signed-off-by: Iurii Zaikin <yzaikin at google.com>
-> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> ---
->  kernel/Makefile      |   2 +
->  kernel/sysctl-test.c | 292 +++++++++++++++++++++++++++++++++++++++++++
->  lib/Kconfig.debug    |   6 +
->  3 files changed, 300 insertions(+)
->  create mode 100644 kernel/sysctl-test.c
+> > Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
+> > we would merge through your tree when the time came? Am I remembering
+> > correctly?
 > 
-> diff --git a/kernel/Makefile b/kernel/Makefile
-> index 6c57e78817dad..c81a8976b6a4b 100644
-> --- a/kernel/Makefile
-> +++ b/kernel/Makefile
-> @@ -112,6 +112,8 @@ obj-$(CONFIG_HAS_IOMEM) += iomem.o
->  obj-$(CONFIG_ZONE_DEVICE) += memremap.o
->  obj-$(CONFIG_RSEQ) += rseq.o
->  
-> +obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
+> No objection from me.
+> 
+> Let me go review the latest round of patches now.
 
-You are going to have to have a "standard" naming scheme for test
-modules, are you going to recommend "foo-test" over "test-foo"?  If so,
-that's fine, we should just be consistant and document it somewhere.
+Overall, looks good to me, and provides a framework we can build on.
+I'm a bit annoyed at the reliance on uml at the moment, but we can work
+on that in the future :)
 
-Personally, I'd prefer "test-foo", but that's just me, naming is hard...
+Thanks for sticking with this, now the real work begins...
 
-thanks,
-
-greg k-h
+Reviewed-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
