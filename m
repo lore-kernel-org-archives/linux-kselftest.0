@@ -1,75 +1,54 @@
-From: brendanhiggins at google.com (Brendan Higgins)
-Date: Thu, 2 May 2019 11:45:43 -0700
-Subject: [PATCH v2 16/17] kernel/sysctl-test: Add null pointer test for
- sysctl.c:proc_dointvec()
-In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF9770A3A0@USCULXMSG01.am.sony.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-17-brendanhiggins@google.com>
- <20190502110347.GE12416@kroah.com>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770A3A0@USCULXMSG01.am.sony.com>
-Message-ID: <CAFd5g471Wawu6g14p0AO3aY8VPBKLA0mjHSdfR1qStFGzp3iGQ@mail.gmail.com>
+From: torvalds at linux-foundation.org (Linus Torvalds)
+Date: Thu, 2 May 2019 11:43:37 -0700
+Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+In-Reply-To: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+References: <20190501202830.347656894@goodmis.org>
+ <20190501203152.397154664@goodmis.org>
+ <20190501232412.1196ef18@oasis.local.home>
+ <20190502162133.GX2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
+ <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+Message-ID: <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
 
-On Thu, May 2, 2019 at 11:15 AM <Tim.Bird at sony.com> wrote:
+On Thu, May 2, 2019 at 11:18 AM Peter Zijlstra <peterz at infradead.org> wrote:
 >
->
->
-> > -----Original Message-----
-> > From: Greg KH
-> >
-> > On Wed, May 01, 2019 at 04:01:25PM -0700, Brendan Higgins wrote:
-> > > From: Iurii Zaikin <yzaikin at google.com>
-> > >
-> > > KUnit tests for initialized data behavior of proc_dointvec that is
-> > > explicitly checked in the code. Includes basic parsing tests including
-> > > int min/max overflow.
-> > >
-> > > Signed-off-by: Iurii Zaikin <yzaikin at google.com>
-> > > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> > > ---
-> > >  kernel/Makefile      |   2 +
-> > >  kernel/sysctl-test.c | 292
-> > +++++++++++++++++++++++++++++++++++++++++++
-> > >  lib/Kconfig.debug    |   6 +
-> > >  3 files changed, 300 insertions(+)
-> > >  create mode 100644 kernel/sysctl-test.c
-> > >
-> > > diff --git a/kernel/Makefile b/kernel/Makefile
-> > > index 6c57e78817dad..c81a8976b6a4b 100644
-> > > --- a/kernel/Makefile
-> > > +++ b/kernel/Makefile
-> > > @@ -112,6 +112,8 @@ obj-$(CONFIG_HAS_IOMEM) += iomem.o
-> > >  obj-$(CONFIG_ZONE_DEVICE) += memremap.o
-> > >  obj-$(CONFIG_RSEQ) += rseq.o
-> > >
-> > > +obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
-> >
-> > You are going to have to have a "standard" naming scheme for test
-> > modules, are you going to recommend "foo-test" over "test-foo"?  If so,
-> > that's fine, we should just be consistant and document it somewhere.
-> >
-> > Personally, I'd prefer "test-foo", but that's just me, naming is hard...
->
-> My preference would be "test-foo" as well.  Just my 2 cents.
+> We could fix this by not using the common exit path on int3; not sure we
+> want to go there, but that is an option.
 
-I definitely agree we should be consistent. My personal bias
-(unsurprisingly) is "foo-test," but this is just because that is the
-convention I am used to in other projects I have worked on.
+I don't think it's an option in general, because *some* int3
+invocations will need all the usual error return.
 
-On an unbiased note, we are currently almost evenly split between the
-two conventions with *slight* preference for "foo-test": I ran the two
-following grep commands on v5.1-rc7:
+But I guess we could make "int3 from kernel space" special.
 
-grep -Hrn --exclude-dir="build" -e "config [a-zA-Z_0-9]\+_TEST$" | wc -l
-grep -Hrn --exclude-dir="build" -e "config TEST_[a-zA-Z_0-9]\+" | wc -l
+I'm not sure how much that would help, but it might be worth looking into.
 
-"foo-test" has 36 occurrences.
-"test-foo" has 33 occurrences.
+> ARGH; I knew it was too pretty :/ Yes, something like what you suggest
+> will be needed, I'll go look at that once my brain recovers a bit from
+> staring at entry code all day.
 
-The things I am more concerned about is how this would affect file
-naming. If we have a unit test for foo.c, I think foo_test.c is more
-consistent with our namespacing conventions. The other thing, is if we
-already have a Kconfig symbol called FOO_TEST (or TEST_FOO) what
-should we name the KUnit test in this case? FOO_UNIT_TEST?
-FOO_KUNIT_TEST, like I did above?
+Looks like it works based on your other email.
 
-Cheers
+What would it look like with the "int3-from-kernel is special" modification?
+
+Because *if* we can make the "kernel int3" entirely special, that
+would make the "Eww factor" much less of this whole thing.
+
+I forget: is #BP _only_ for the "int3" instruction? I know we have
+really nasty cases with #DB (int1) because of "pending exceptions
+happen on the first instruction in kernel space", and that makes it
+really really nasty to handle with all the stack switch and %cr3
+handling etc.
+
+But if "int3 from kernel space" _only_ happens on actual "int3"
+instructions, then we really could just special-case that case. We'd
+know that %cr3 has been switched, we'd know that we don't need to do
+fsgs switching, we'd know we already have a good stack and percpu data
+etc set up.
+
+So then special casing #BP would actually allow us to have a simple
+and straightforward kernel-int3-only sequence?
+
+And then having that odd stack setup special case would be *much* more
+palatable to me.
+
+               Linus
