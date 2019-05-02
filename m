@@ -1,54 +1,35 @@
-From: torvalds at linux-foundation.org (Linus Torvalds)
-Date: Thu, 2 May 2019 11:43:37 -0700
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
-References: <20190501202830.347656894@goodmis.org>
- <20190501203152.397154664@goodmis.org>
- <20190501232412.1196ef18@oasis.local.home>
- <20190502162133.GX2623@hirez.programming.kicks-ass.net>
- <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
- <20190502181811.GY2623@hirez.programming.kicks-ass.net>
-Message-ID: <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+From: joel at joelfernandes.org (Joel Fernandes)
+Date: Thu, 2 May 2019 15:14:37 -0400
+Subject: [PATCH v2 1/2] Add polling support to pidfd
+In-Reply-To: <20190502160247.GD7323@redhat.com>
+References: <20190430162154.61314-1-joel@joelfernandes.org>
+ <20190501151312.GA30235@redhat.com>
+ <20190502151320.cvc6uc3b4bmww23k@brauner.io>
+ <20190502160247.GD7323@redhat.com>
+Message-ID: <20190502191437.GA103213@google.com>
 
-On Thu, May 2, 2019 at 11:18 AM Peter Zijlstra <peterz at infradead.org> wrote:
->
-> We could fix this by not using the common exit path on int3; not sure we
-> want to go there, but that is an option.
+On Thu, May 02, 2019 at 06:02:48PM +0200, Oleg Nesterov wrote:
+> On 05/02, Christian Brauner wrote:
+> >
+> > On Wed, May 01, 2019 at 05:13:12PM +0200, Oleg Nesterov wrote:
+> > >
+> > > Otherwise I see no problems.
+> >
+> > I'll remove the WARN_ON() check when applying this. Can I get your
+> > Acked/Review, Oleg?
 
-I don't think it's an option in general, because *some* int3
-invocations will need all the usual error return.
+Oh, ok. Good point about the de_thread race. Agreed with you.
 
-But I guess we could make "int3 from kernel space" special.
+> Yes, feel free to add
+> 
+> 	Reviewed-by: Oleg Nesterov <oleg at redhat.com>
+> 
+> Hmm. Somehow I didn't read the changelog before, I just noticed
+> Suggested-by: Oleg Nesterov <oleg at redhat.com>
+> Please remove ;) Thanks Joel, I appreciate it, but it is not my idea.
 
-I'm not sure how much that would help, but it might be worth looking into.
+Ok no problem. You have been very helpful so thank you for that!
 
-> ARGH; I knew it was too pretty :/ Yes, something like what you suggest
-> will be needed, I'll go look at that once my brain recovers a bit from
-> staring at entry code all day.
+Also thanks Christian for removing the warning and adding Oleg's Reviewed-by.
 
-Looks like it works based on your other email.
-
-What would it look like with the "int3-from-kernel is special" modification?
-
-Because *if* we can make the "kernel int3" entirely special, that
-would make the "Eww factor" much less of this whole thing.
-
-I forget: is #BP _only_ for the "int3" instruction? I know we have
-really nasty cases with #DB (int1) because of "pending exceptions
-happen on the first instruction in kernel space", and that makes it
-really really nasty to handle with all the stack switch and %cr3
-handling etc.
-
-But if "int3 from kernel space" _only_ happens on actual "int3"
-instructions, then we really could just special-case that case. We'd
-know that %cr3 has been switched, we'd know that we don't need to do
-fsgs switching, we'd know we already have a good stack and percpu data
-etc set up.
-
-So then special casing #BP would actually allow us to have a simple
-and straightforward kernel-int3-only sequence?
-
-And then having that odd stack setup special case would be *much* more
-palatable to me.
-
-               Linus
+ - Joel
