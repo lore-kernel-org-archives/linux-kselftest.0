@@ -1,150 +1,75 @@
-From: paulmck at linux.ibm.com (Paul E. McKenney)
-Date: Thu, 2 May 2019 11:41:16 -0700
-Subject: [PATCH] rcutorture: Tweak kvm options
-In-Reply-To: <20190429150600.GA14389@linux.ibm.com>
-References: <20190424073446.8577-1-bigeasy@linutronix.de>
- <20190424103809.GM3923@linux.ibm.com>
- <20190424183039.GA4494@linux.ibm.com>
- <20190425194638.GA7238@linux.ibm.com>
- <20190426105413.rajcon4vyzov446c@linutronix.de>
- <20190426135058.GD3923@linux.ibm.com>
- <20190429081943.gucbalncrrttxxcr@linutronix.de>
- <20190429144924.GP3923@linux.ibm.com>
- <20190429150600.GA14389@linux.ibm.com>
-Message-ID: <20190502184116.GA8811@linux.ibm.com>
+From: brendanhiggins at google.com (Brendan Higgins)
+Date: Thu, 2 May 2019 11:45:43 -0700
+Subject: [PATCH v2 16/17] kernel/sysctl-test: Add null pointer test for
+ sysctl.c:proc_dointvec()
+In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF9770A3A0@USCULXMSG01.am.sony.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-17-brendanhiggins@google.com>
+ <20190502110347.GE12416@kroah.com>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770A3A0@USCULXMSG01.am.sony.com>
+Message-ID: <CAFd5g471Wawu6g14p0AO3aY8VPBKLA0mjHSdfR1qStFGzp3iGQ@mail.gmail.com>
 
-On Mon, Apr 29, 2019 at 08:06:00AM -0700, Paul E. McKenney wrote:
-> On Mon, Apr 29, 2019 at 07:49:24AM -0700, Paul E. McKenney wrote:
-> > On Mon, Apr 29, 2019 at 10:19:44AM +0200, Sebastian Andrzej Siewior wrote:
-> > > On 2019-04-26 06:50:58 [-0700], Paul E. McKenney wrote:
-> > > > One place to look is in the summary output:
-> > > > 
-> > > > TREE01 ------- 17540 GPs (58.4667/s) [rcu: g130629 f0x0 ]
-> > > > 
-> > > > The "58.4667/s" is the number of grace periods per second.  I would be
-> > > > surprised if CONFIG_PARAVIRT_SPINLOCKS made a noticeable difference in
-> > > > grace-period rate (given the natural variation), but you never know.
-> > > 
-> > > I did four runs of the different parts of the patch:
-> > > - 5.1-rc6
-> > > - #1 + kvm64 CPU + some config options
-> > > - #2 + tsc-deadline=on and so on (the whole line)
-> > > - #3 + CONFIG_PARAVIRT_SPINLOCKS (now everything)
-> > > 
-> > > the test command was
-> > > 	tools/testing/selftests/rcutorture/bin/kvm.sh --cpus 112 --duration 60 --configs "16*TREE08" --memory 4G
-> > > 
-> > > and the results:
-> > > | HEAD is now at 085b7755808a... Linux 5.1-rc6
-> > > | (28.5942 +27.4658 +28.0203 +27.2061 +28.0731 +26.9078 +27.8494 + 27.3392 +26.4339 +28.025 +27.4797 +27.6775 +28.0653 +28.0742 +27.9581 +28.6508)/ 16
-> > > | 27.738775
-> > > | 
-> > > | HEAD is now at 36a12aa9761a... tune #1
-> > > | (28.5761 +26.6514 +26.6989 +27.4375 +27.3442 +28.3228 +26.6353 +27.5461+28.5531 +27.7006 +27.8078 +27.9753 +27.4269 +28.0464 +27.6314 +27.8356) / 16
-> > > | 27.6368375
-> > > | 
-> > > | HEAD is now at af5cd7196436... tune #2
-> > > | (28.4867 +26.3675 +27.6364 +28.3344 +27.4153 +27.9306 +27.1703 +26.8461+27.3194 +28.5486 +27.8975 +27.4356 +28.12 +28.4397 +29.0186 +26.9328 )/ 16
-> > > | 27.74371875
-> > > | 
-> > > | HEAD is now at 3701f64943f5... tune #3
-> > > | (28.2431 +27.7831 +28.39 +28.2586 +27.7408 +27.9258 +26.6236 +26.7817+29.1178 +26.9564 +29.0525 +27.4258 +27.4931 +27.8928 +26.9308 +28.4833)/ 16
-> > > | 27.8187
-> > > 
-> > > This 28.… is the number of GP/s. Based on the results in looks like
-> > > noise to me. Also I have no idea why you have more than twice as many
-> > > GP/s as I do.
-> > 
-> > My guess is that because you have more CPUs, the for_each_online_cpu()
-> > loop takes longer on your system.
-> 
-> OK, that is rather oversimplified, to say the least.  A better way to
-> put this is that the probability of some CPU holding things up is larger
-> the more CPUs you have.  RCU doe take explicit steps to slow down grace
-> periods, but that doesn't start kicking in until 256 CPUs.
+On Thu, May 2, 2019 at 11:15 AM <Tim.Bird at sony.com> wrote:
+>
+>
+>
+> > -----Original Message-----
+> > From: Greg KH
+> >
+> > On Wed, May 01, 2019 at 04:01:25PM -0700, Brendan Higgins wrote:
+> > > From: Iurii Zaikin <yzaikin at google.com>
+> > >
+> > > KUnit tests for initialized data behavior of proc_dointvec that is
+> > > explicitly checked in the code. Includes basic parsing tests including
+> > > int min/max overflow.
+> > >
+> > > Signed-off-by: Iurii Zaikin <yzaikin at google.com>
+> > > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+> > > ---
+> > >  kernel/Makefile      |   2 +
+> > >  kernel/sysctl-test.c | 292
+> > +++++++++++++++++++++++++++++++++++++++++++
+> > >  lib/Kconfig.debug    |   6 +
+> > >  3 files changed, 300 insertions(+)
+> > >  create mode 100644 kernel/sysctl-test.c
+> > >
+> > > diff --git a/kernel/Makefile b/kernel/Makefile
+> > > index 6c57e78817dad..c81a8976b6a4b 100644
+> > > --- a/kernel/Makefile
+> > > +++ b/kernel/Makefile
+> > > @@ -112,6 +112,8 @@ obj-$(CONFIG_HAS_IOMEM) += iomem.o
+> > >  obj-$(CONFIG_ZONE_DEVICE) += memremap.o
+> > >  obj-$(CONFIG_RSEQ) += rseq.o
+> > >
+> > > +obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
+> >
+> > You are going to have to have a "standard" naming scheme for test
+> > modules, are you going to recommend "foo-test" over "test-foo"?  If so,
+> > that's fine, we should just be consistant and document it somewhere.
+> >
+> > Personally, I'd prefer "test-foo", but that's just me, naming is hard...
+>
+> My preference would be "test-foo" as well.  Just my 2 cents.
 
-And I ended up with the following variant of your patch.  If I don't
-hear otherwise from you, I will assume that you are OK with it.  So if
-something bothers you about it, please don't suffer in silence!
+I definitely agree we should be consistent. My personal bias
+(unsurprisingly) is "foo-test," but this is just because that is the
+convention I am used to in other projects I have worked on.
 
-							Thanx, Paul
+On an unbiased note, we are currently almost evenly split between the
+two conventions with *slight* preference for "foo-test": I ran the two
+following grep commands on v5.1-rc7:
 
-------------------------------------------------------------------------
+grep -Hrn --exclude-dir="build" -e "config [a-zA-Z_0-9]\+_TEST$" | wc -l
+grep -Hrn --exclude-dir="build" -e "config TEST_[a-zA-Z_0-9]\+" | wc -l
 
-commit 4a04229cf73ac9bc1ae15357beb32a0b37be1480
-Author: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
-Date:   Wed Apr 24 09:34:46 2019 +0200
+"foo-test" has 36 occurrences.
+"test-foo" has 33 occurrences.
 
-    rcutorture: Tweak kvm options
-    
-    In one of my rcutorture tests the TSC clocksource got marked unstable
-    due to a large difference in the TSC value. I'm not sure if the guest
-    run for a long time with disabled interrupts or if the host was very
-    busy and didn't schedule the guest for some time.
-    
-    I took a look on the qemu/KVM options and decided to update the options:
-    
-    - Use kvm{32|64} as CPU. We could probably use `host' (like ARM does)
-      for maximum available features but since we don't run any userland I'm
-      not sure if it makes any difference.
-    
-    - Drop the "noapic" option. There is no history why the APIC was disabled,
-      I see no reason for it.  Once old qemu versions fade away, we can add
-      "x2apic=on,tsc-deadline=on,hypervisor=on,tsc_adjust=on".
-    
-    - Additional config options. It ensures that the kernel knowns that it
-      runs as a kvm guest and can use virt devices like the kvm-clock as
-      clocksource. The kvm-clock was the main motivation here.
-    
-    - I didn't add a random HW device. It would make the random device ready
-      earlier (not it doesn't complete the initialisation at all) but I
-      doubt that there is any need for this.
-    
-    Signed-off-by: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
-    [ paulmck: The world is not quite ready for CONFIG_PARAVIRT_SPINLOCKS=y
-      and x2apic, so they are omitted for the time being. ]
-    Signed-off-by: Paul E. McKenney <paulmck at linux.ibm.com>
+The things I am more concerned about is how this would affect file
+naming. If we have a unit test for foo.c, I think foo_test.c is more
+consistent with our namespacing conventions. The other thing, is if we
+already have a Kconfig symbol called FOO_TEST (or TEST_FOO) what
+should we name the KUnit test in this case? FOO_UNIT_TEST?
+FOO_KUNIT_TEST, like I did above?
 
-diff --git a/tools/testing/selftests/rcutorture/bin/functions.sh b/tools/testing/selftests/rcutorture/bin/functions.sh
-index 6bcb8b5b2ff2..c3a49fb4d6f6 100644
---- a/tools/testing/selftests/rcutorture/bin/functions.sh
-+++ b/tools/testing/selftests/rcutorture/bin/functions.sh
-@@ -172,7 +172,7 @@ identify_qemu_append () {
- 	local console=ttyS0
- 	case "$1" in
- 	qemu-system-x86_64|qemu-system-i386)
--		echo noapic selinux=0 initcall_debug debug
-+		echo selinux=0 initcall_debug debug
- 		;;
- 	qemu-system-aarch64)
- 		console=ttyAMA0
-@@ -191,8 +191,19 @@ identify_qemu_append () {
- # Output arguments for qemu arguments based on the TORTURE_QEMU_MAC
- # and TORTURE_QEMU_INTERACTIVE environment variables.
- identify_qemu_args () {
-+	local KVM_CPU=""
-+	case "$1" in
-+	qemu-system-x86_64)
-+		KVM_CPU=kvm64
-+		;;
-+	qemu-system-i386)
-+		KVM_CPU=kvm32
-+		;;
-+	esac
- 	case "$1" in
- 	qemu-system-x86_64|qemu-system-i386)
-+		echo -machine q35,accel=kvm
-+		echo -cpu ${KVM_CPU}
- 		;;
- 	qemu-system-aarch64)
- 		echo -machine virt,gic-version=host -cpu host
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-index d2d2a86139db..e19a444a0684 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-@@ -1,2 +1,5 @@
- CONFIG_RCU_TORTURE_TEST=y
- CONFIG_PRINTK_TIME=y
-+CONFIG_HYPERVISOR_GUEST=y
-+CONFIG_PARAVIRT=y
-+CONFIG_KVM_GUEST=y
+Cheers
