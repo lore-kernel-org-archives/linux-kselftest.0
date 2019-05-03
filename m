@@ -1,328 +1,287 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Thu, 2 May 2019 21:51:44 -0400
-Subject: [RFC][PATCH 1/2 v2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190502195052.0af473cf@gandalf.local.home>
-References: <20190501202830.347656894@goodmis.org>
- <20190501203152.397154664@goodmis.org>
- <20190501232412.1196ef18@oasis.local.home>
- <20190502162133.GX2623@hirez.programming.kicks-ass.net>
- <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
- <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
- <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
- <20190502185225.0cdfc8bc@gandalf.local.home>
- <20190502193129.664c5b2e@gandalf.local.home>
- <20190502195052.0af473cf@gandalf.local.home>
-Message-ID: <20190502215144.3853a5be@oasis.local.home>
+From: ci_notify@linaro.org (ci_notify@linaro.org)
+Date: Fri, 3 May 2019 02:00:26 +0000 (UTC)
+Subject: next-20190502 kselftest results
+Message-ID: <1847077412.16901.1556848826838.JavaMail.jenkins@a6c5c67cda76>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190503015144.fcS4ZENbuwgiNd0K709AD_P4EkbuImC_Am_iHoqb7rI@z>
+Message-ID: <20190503020026.YrhtmDC0lhIGUO1dd9jiiXRIua_KGk_F7hWNPET9-yM@z>
+
+Summary
+------------------------------------------------------------------------
+kernel: 5.1.0-rc7
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: e8b243ea3b19b6f3b9fffca232a2c7b000964d6b
+git describe: next-20190502
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190502
+
+Regressions (compared to build next-20190501)
+------------------------------------------------------------------------
+qemu_arm:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_maps                                                                                                         
+qemu_i386:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_tcpbpf_user                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * net_fib_rule_tests.sh                                                                                                         
+x15 - arm:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_maps                                                                                                         
+                                                                                         
+    * cgroup_test_freezer                                                                                                         
+                                                                                         
+    * net_fib_rule_tests.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * net_fib_rule_tests.sh                                                                                                         
+                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190501)                                                                   
+------------------------------------------------------------------------                                               
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * net_fib-onlink-tests.sh                                                                                                         
 
 
-[ This version of the patch passed all my tests! ]
+In total:
+------------------------------------------------------------------------
+Ran 555 total tests in the following environments and test suites.
+pass 337
+fail 179
+xfail 0
+skip 39
 
-From: Peter Zijlstra <peterz@infradead.org>
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
 
-In order to allow breakpoints to emulate call functions, they need to push
-the return address onto the stack. But because the breakpoint exception
-frame is added to the stack when the breakpoint is hit, there's no room to
-add the address onto the stack and return to the address of the emulated
-called funtion.
+Test Suites
+-----------
+* boot-lkft-kselftests-master-512
+* kselftest
+* boot-lkft-kselftests-vsyscall-mode-native-master-512
+* boot-lkft-kselftests-vsyscall-mode-none-master-512
+* kselftest-vsyscall-mode-none
 
-To handle this, copy the exception frame on entry of the breakpoint handler
-and have leave a gap that can be used to add a return address to the stack
-frame and return from the breakpoint to the emulated called function,
-allowing for that called function to return back to the location after the
-breakpoint was placed.
 
-The helper functions were also added:
+Failures
+------------------------------------------------------------------------
 
-  int3_emulate_push(): to push the address onto the gap in the stack
-  int3_emulate_jmp(): changes the location of the regs->ip to return there.
-  int3_emulate_call(): push the return address and change regs->ip
+dragonboard-410c:
 
-Cc: Andy Lutomirski <luto at kernel.org>
-Cc: Nicolai Stange <nstange at suse.de>
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: Ingo Molnar <mingo at redhat.com>
-Cc: Borislav Petkov <bp at alien8.de>
-Cc: "H. Peter Anvin" <hpa at zytor.com>
-Cc: the arch/x86 maintainers <x86 at kernel.org>
-Cc: Josh Poimboeuf <jpoimboe at redhat.com>
-Cc: Jiri Kosina <jikos at kernel.org>
-Cc: Miroslav Benes <mbenes at suse.cz>
-Cc: Petr Mladek <pmladek at suse.com>
-Cc: Joe Lawrence <joe.lawrence at redhat.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Konrad Rzeszutek Wilk <konrad.wilk at oracle.com>
-Cc: Tim Chen <tim.c.chen at linux.intel.com>
-Cc: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
-Cc: Mimi Zohar <zohar at linux.ibm.com>
-Cc: Juergen Gross <jgross at suse.com>
-Cc: Nick Desaulniers <ndesaulniers at google.com>
-Cc: Nayna Jain <nayna at linux.ibm.com>
-Cc: Masahiro Yamada <yamada.masahiro at socionext.com>
-Cc: Joerg Roedel <jroedel at suse.de>
-Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest at vger.kernel.org>
-Cc: stable at vger.kernel.org
-Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
-Signed-off-by: *** Need Peter Zijlstra's SoB here! ***
-Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
----
+hi6220-hikey:
 
-Changes since v1:
+juno-r2:
 
- - Updated the 32bit code with Peter's latest changes
- - Added int3 stack check in kernel_stack_pointer()
+qemu_i386:
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_tcpbpf_user
 
- arch/x86/entry/entry_32.S            | 117 +++++++++++++++++++++++----
- arch/x86/entry/entry_64.S            |  14 +++-
- arch/x86/include/asm/text-patching.h |  20 +++++
- arch/x86/kernel/ptrace.c             |   6 +-
- 4 files changed, 139 insertions(+), 18 deletions(-)
+qemu_x86_64:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_rule_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_tls
+* kselftest/net_xfrm_policy.sh
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rseq_basic_test
+* kselftest/rseq_param_test
+* kselftest/rseq_param_test_benchmark
+* kselftest/rseq_param_test_compare_twice
+* kselftest/rseq_run_param_test.sh
+* kselftest/rtc_rtctest
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/vm_run_vmtests
+* kselftest/x86_fsgsbase_64
 
-diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-index d309f30cf7af..2885acd691ac 100644
---- a/arch/x86/entry/entry_32.S
-+++ b/arch/x86/entry/entry_32.S
-@@ -67,9 +67,20 @@
- # define preempt_stop(clobbers)	DISABLE_INTERRUPTS(clobbers); TRACE_IRQS_OFF
- #else
- # define preempt_stop(clobbers)
--# define resume_kernel		restore_all_kernel
- #endif
- 
-+.macro RETINT_PREEMPT
-+#ifdef CONFIG_PREEMPT
-+	DISABLE_INTERRUPTS(CLBR_ANY)
-+	cmpl	$0, PER_CPU_VAR(__preempt_count)
-+	jnz	.Lend_\@
-+	testl	$X86_EFLAGS_IF, PT_EFLAGS(%esp)	# interrupts off (exception path) ?
-+	jz	.Lend_\@
-+	call	preempt_schedule_irq
-+.Lend_\@:
-+#endif
-+.endm
-+
- .macro TRACE_IRQS_IRET
- #ifdef CONFIG_TRACE_IRQFLAGS
- 	testl	$X86_EFLAGS_IF, PT_EFLAGS(%esp)     # interrupts off?
-@@ -753,7 +764,7 @@ ret_from_intr:
- 	andl	$SEGMENT_RPL_MASK, %eax
- #endif
- 	cmpl	$USER_RPL, %eax
--	jb	resume_kernel			# not returning to v8086 or userspace
-+	jb	restore_all_kernel		# not returning to v8086 or userspace
- 
- ENTRY(resume_userspace)
- 	DISABLE_INTERRUPTS(CLBR_ANY)
-@@ -763,19 +774,6 @@ ENTRY(resume_userspace)
- 	jmp	restore_all
- END(ret_from_exception)
- 
--#ifdef CONFIG_PREEMPT
--ENTRY(resume_kernel)
--	DISABLE_INTERRUPTS(CLBR_ANY)
--.Lneed_resched:
--	cmpl	$0, PER_CPU_VAR(__preempt_count)
--	jnz	restore_all_kernel
--	testl	$X86_EFLAGS_IF, PT_EFLAGS(%esp)	# interrupts off (exception path) ?
--	jz	restore_all_kernel
--	call	preempt_schedule_irq
--	jmp	.Lneed_resched
--END(resume_kernel)
--#endif
--
- GLOBAL(__begin_SYSENTER_singlestep_region)
- /*
-  * All code from here through __end_SYSENTER_singlestep_region is subject
-@@ -1026,6 +1024,7 @@ restore_all:
- 	INTERRUPT_RETURN
- 
- restore_all_kernel:
-+	RETINT_PREEMPT
- 	TRACE_IRQS_IRET
- 	PARANOID_EXIT_TO_KERNEL_MODE
- 	BUG_IF_WRONG_CR3
-@@ -1476,6 +1475,94 @@ END(nmi)
- 
- ENTRY(int3)
- 	ASM_CLAC
-+
-+#ifdef CONFIG_VM86
-+	testl	$X86_EFLAGS_VM, 8(%esp)
-+	jnz	.Lfrom_usermode_no_gap
-+#endif
-+	testl	$SEGMENT_RPL_MASK, 4(%esp)
-+	jnz	.Lfrom_usermode_no_gap
-+
-+	/*
-+	 * Here from kernel mode; so the (exception) stack looks like:
-+	 *
-+	 * 12(esp) - <previous context>
-+	 *  8(esp) - flags
-+	 *  4(esp) - cs
-+	 *  0(esp) - ip
-+	 *
-+	 * Lets build a 5 entry IRET frame after that, such that struct pt_regs
-+	 * is complete and in particular regs->sp is correct. This gives us
-+	 * the original 3 enties as gap:
-+	 *
-+	 * 32(esp) - <previous context>
-+	 * 28(esp) - orig_flags / gap
-+	 * 24(esp) - orig_cs	/ gap
-+	 * 20(esp) - orig_ip	/ gap
-+	 * 16(esp) - ss
-+	 * 12(esp) - sp
-+	 *  8(esp) - flags
-+	 *  4(esp) - cs
-+	 *  0(esp) - ip
-+	 */
-+	pushl	%ss	  # ss
-+	pushl	%esp      # sp (points at ss)
-+	pushl	4*4(%esp) # flags
-+	pushl	4*4(%esp) # cs
-+	pushl	4*4(%esp) # ip
-+
-+	add	$16, 12(%esp) # point sp back at the previous context
-+
-+	pushl	$-1				# orig_eax; mark as interrupt
-+
-+	SAVE_ALL
-+	ENCODE_FRAME_POINTER
-+	TRACE_IRQS_OFF
-+	xorl	%edx, %edx			# zero error code
-+	movl	%esp, %eax			# pt_regs pointer
-+	call	do_int3
-+
-+	RETINT_PREEMPT
-+	TRACE_IRQS_IRET
-+	/*
-+	 * If we really never INT3 from entry code, it looks like
-+	 * we can skip this one.
-+	PARANOID_EXIT_TO_KERNEL_MODE
-+	 */
-+	BUG_IF_WRONG_CR3
-+	RESTORE_REGS 4				# consume orig_eax
-+
-+	/*
-+	 * Reconstruct the 3 entry IRET frame right after the (modified)
-+	 * regs->sp without lowering %esp in between, such that an NMI in the
-+	 * middle doesn't scribble our stack.
-+	 */
-+
-+	pushl	%eax
-+	pushl	%ecx
-+	movl	5*4(%esp), %eax		# (modified) regs->sp
-+
-+	movl	4*4(%esp), %ecx		# flags
-+	movl	%ecx, -4(%eax)
-+
-+	movl	3*4(%esp), %ecx		# cs
-+	andl	$0x0000ffff, %ecx
-+	movl	%ecx, -8(%eax)
-+
-+	movl	2*4(%esp), %ecx		# ip
-+	movl	%ecx, -12(%eax)
-+
-+	movl	1*4(%esp), %ecx		# eax
-+	movl	%ecx, -16(%eax)
-+
-+	popl	%ecx
-+	lea	-16(%eax), %esp
-+	popl	%eax
-+
-+	jmp	.Lirq_return
-+
-+.Lfrom_usermode_no_gap:
-+
- 	pushl	$-1				# mark this as an int
- 
- 	SAVE_ALL switch_stacks=1
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index 1f0efdb7b629..834ec1397dab 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -879,7 +879,7 @@ apicinterrupt IRQ_WORK_VECTOR			irq_work_interrupt		smp_irq_work_interrupt
-  * @paranoid == 2 is special: the stub will never switch stacks.  This is for
-  * #DF: if the thread stack is somehow unusable, we'll still get a useful OOPS.
-  */
--.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1
-+.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1 create_gap=0
- ENTRY(\sym)
- 	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
- 
-@@ -899,6 +899,16 @@ ENTRY(\sym)
- 	jnz	.Lfrom_usermode_switch_stack_\@
- 	.endif
- 
-+	.if \create_gap == 1
-+	testb	$3, CS-ORIG_RAX(%rsp)
-+	jnz	.Lfrom_usermode_no_gap_\@
-+	.rept 6
-+	pushq	5*8(%rsp)
-+	.endr
-+	UNWIND_HINT_IRET_REGS offset=8
-+.Lfrom_usermode_no_gap_\@:
-+	.endif
-+
- 	.if \paranoid
- 	call	paranoid_entry
- 	.else
-@@ -1130,7 +1140,7 @@ apicinterrupt3 HYPERV_STIMER0_VECTOR \
- #endif /* CONFIG_HYPERV */
- 
- idtentry debug			do_debug		has_error_code=0	paranoid=1 shift_ist=DEBUG_STACK
--idtentry int3			do_int3			has_error_code=0
-+idtentry int3			do_int3			has_error_code=0	create_gap=1
- idtentry stack_segment		do_stack_segment	has_error_code=1
- 
- #ifdef CONFIG_XEN_PV
-diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-index e85ff65c43c3..ba275b6292db 100644
---- a/arch/x86/include/asm/text-patching.h
-+++ b/arch/x86/include/asm/text-patching.h
-@@ -39,4 +39,24 @@ extern int poke_int3_handler(struct pt_regs *regs);
- extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
- extern int after_bootmem;
- 
-+static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
-+{
-+	regs->sp -= sizeof(unsigned long);
-+	*(unsigned long *)regs->sp = val;
-+}
-+
-+static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
-+{
-+	regs->ip = ip;
-+}
-+
-+#define INT3_INSN_SIZE 1
-+#define CALL_INSN_SIZE 5
-+
-+static inline void int3_emulate_call(struct pt_regs *regs, unsigned long func)
-+{
-+	int3_emulate_push(regs, regs->ip - INT3_INSN_SIZE + CALL_INSN_SIZE);
-+	int3_emulate_jmp(regs, func);
-+}
-+
- #endif /* _ASM_X86_TEXT_PATCHING_H */
-diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
-index 4b8ee05dd6ad..600ead178bf4 100644
---- a/arch/x86/kernel/ptrace.c
-+++ b/arch/x86/kernel/ptrace.c
-@@ -171,8 +171,12 @@ unsigned long kernel_stack_pointer(struct pt_regs *regs)
- 	unsigned long sp = (unsigned long)&regs->sp;
- 	u32 *prev_esp;
- 
--	if (context == (sp & ~(THREAD_SIZE - 1)))
-+	if (context == (sp & ~(THREAD_SIZE - 1))) {
-+		/* int3 code adds a gap */
-+		if (sp == regs->sp - 5*4)
-+			return regs->sp;
- 		return sp;
-+	}
- 
- 	prev_esp = (u32 *)(context);
- 	if (*prev_esp)
+x15:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/cgroup_test_core
+* kselftest/cgroup_test_freezer
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_rule_tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_run_netsocktests
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_tls
+* kselftest/pidfd_pidfd_test
+* kselftest/proc_proc-self-map-files-002
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rseq_basic_test
+* kselftest/rseq_param_test
+* kselftest/rseq_param_test_benchmark
+* kselftest/rseq_param_test_compare_twice
+* kselftest/rtc_rtctest
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+
+qemu_arm:
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_verifier
+
+i386:
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+
+x86:
+* kselftest-vsyscall-mode-none/binderfs_binderfs_test
+* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-none/bpf_test_netcnt
+* kselftest-vsyscall-mode-none/bpf_test_progs
+* kselftest-vsyscall-mode-none/bpf_test_sock_fields
+* kselftest-vsyscall-mode-none/bpf_test_sockmap
+* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
+* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-none/cgroup_test_core
+* kselftest-vsyscall-mode-none/dma-buf_udmabuf
+* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
+* kselftest-vsyscall-mode-none/kvm_clear_dirty_log_test
+* kselftest-vsyscall-mode-none/kvm_cr4_cpuid_sync_test
+* kselftest-vsyscall-mode-none/kvm_dirty_log_test
+* kselftest-vsyscall-mode-none/kvm_evmcs_test
+* kselftest-vsyscall-mode-none/kvm_platform_info_test
+* kselftest-vsyscall-mode-none/kvm_set_sregs_test
+* kselftest-vsyscall-mode-none/kvm_smm_test
+* kselftest-vsyscall-mode-none/kvm_state_test
+* kselftest-vsyscall-mode-none/kvm_sync_regs_test
+* kselftest-vsyscall-mode-none/kvm_vmx_close_while_nested_test
+* kselftest-vsyscall-mode-none/lib_bitmap.sh
+* kselftest-vsyscall-mode-none/lib_prime_numbers.sh
+* kselftest-vsyscall-mode-none/lib_printf.sh
+* kselftest-vsyscall-mode-none/lib_strscpy.sh
+* kselftest-vsyscall-mode-none/livepatch_test-callbacks.sh
+* kselftest-vsyscall-mode-none/livepatch_test-livepatch.sh
+* kselftest-vsyscall-mode-none/livepatch_test-shadow-vars.sh
+* kselftest-vsyscall-mode-none/membarrier_membarrier_test
+* kselftest-vsyscall-mode-none/net_fib_rule_tests.sh
+* kselftest-vsyscall-mode-none/net_ip_defrag.sh
+* kselftest-vsyscall-mode-none/net_msg_zerocopy.sh
+* kselftest-vsyscall-mode-none/net_pmtu.sh
+* kselftest-vsyscall-mode-none/net_psock_snd.sh
+* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
+* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
+* kselftest-vsyscall-mode-none/pidfd_pidfd_test
+* kselftest-vsyscall-mode-none/pstore_pstore_tests
+* kselftest-vsyscall-mode-none/rseq_basic_percpu_ops_test
+* kselftest-vsyscall-mode-none/rseq_basic_test
+* kselftest-vsyscall-mode-none/rseq_param_test
+* kselftest-vsyscall-mode-none/rseq_param_test_benchmark
+* kselftest-vsyscall-mode-none/rseq_param_test_compare_twice
+* kselftest-vsyscall-mode-none/rseq_run_param_test.sh
+* kselftest-vsyscall-mode-none/seccomp_seccomp_bpf
+* kselftest-vsyscall-mode-none/timestamping_txtimestamp.sh
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
 -- 
-2.20.1
+Linaro LKFT
+https://lkft.linaro.org
