@@ -1,44 +1,35 @@
-From: shuah@kernel.org (shuah)
-Date: Fri, 3 May 2019 08:38:21 -0600
-Subject: [PATCH v2 15/17] MAINTAINERS: add entry for KUnit the unit
- testing framework
-In-Reply-To: <20190501230126.229218-16-brendanhiggins@google.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-16-brendanhiggins@google.com>
-Message-ID: <68f88e1c-d40f-9dad-7296-ab2b2303c575@kernel.org>
+From: joel@joelfernandes.org (Joel Fernandes)
+Date: Fri, 3 May 2019 11:08:25 -0400
+Subject: [PATCH v7 resend 1/2] Provide in-kernel headers to make
+ extending kernel easier
+In-Reply-To: <20190503103315.0149ca71@gandalf.local.home>
+References: <20190426190430.172543-1-joel@joelfernandes.org>
+ <20190427133844.GA29366@kroah.com>
+ <20190429132602.GA165075@google.com>
+ <20190429135455.GA2412@kroah.com>
+ <CAK7LNARkGLQ_P4LSuC69QN8XPN47W5ujkDE3EauLrwnBgygsSA@mail.gmail.com>
+ <20190429142425.GB29007@kroah.com>
+ <20190503103315.0149ca71@gandalf.local.home>
+Message-ID: <20190503150825.GC253329@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190503143821.EvVesiQltMRh1po7O-Ds37I-LnGl8AgplhRyL_-AaCM@z>
+Message-ID: <20190503150825.BpjkN8jNCG7juX9zr850UC51SSfWDRxYFnPIx4Urwko@z>
 
-On 5/1/19 5:01 PM, Brendan Higgins wrote:
-> Add myself as maintainer of KUnit, the Linux kernel's unit testing
-> framework.
+On Fri, May 03, 2019@10:33:15AM -0400, Steven Rostedt wrote:
+> On Mon, 29 Apr 2019 16:24:25 +0200
+> Greg KH <gregkh@linuxfoundation.org> wrote:
 > 
-> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> ---
->   MAINTAINERS | 10 ++++++++++
->   1 file changed, 10 insertions(+)
+> > Hah, ok, I'll be glad to queue this up in my tree.  I'll take it now,
+> > and if people who really object to this being in /proc/ and want it in
+> > /sys/, we can add a follow-on patch before 5.2-final is out to move the
+> > file to that location.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5c38f21aee787..c78ae95c56b80 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -8448,6 +8448,16 @@ S:	Maintained
->   F:	tools/testing/selftests/
->   F:	Documentation/dev-tools/kselftest*
->   
-> +KERNEL UNIT TESTING FRAMEWORK (KUnit)
-> +M:	Brendan Higgins <brendanhiggins at google.com>
-> +L:	kunit-dev at googlegroups.com
-> +W:	https://google.github.io/kunit-docs/third_party/kernel/docs/
-> +S:	Maintained
-> +F:	Documentation/kunit/
-> +F:	include/kunit/
-> +F:	kunit/
-> +F:	tools/testing/kunit/
-> +
+> I really don't think putting it in /proc now is a good idea. Let's put
+> it in /sys now. If we don't do it now and it gets into a main release,
+> then that will become the permanent location for it.
 
-Please add kselftest mailing list to this entry, based on our
-conversation on taking these patches through kselftest tree.
+I will send a patch to move it into /sys/kernel on top of this. Hope everyone
+else is also Ok with that as the location.
 
 thanks,
--- Shuah
+
+ - Joel
