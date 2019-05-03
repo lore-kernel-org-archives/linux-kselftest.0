@@ -1,334 +1,328 @@
-From: shuah@kernel.org (shuah)
-Date: Thu, 2 May 2019 19:50:14 -0600
-Subject: [PATCH v2 04/17] kunit: test: add kunit_stream a std::stream like
- logger
-In-Reply-To: <20190501230126.229218-5-brendanhiggins@google.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-5-brendanhiggins@google.com>
-Message-ID: <ead23600-eecd-cf74-bdd1-94a6964e29b2@kernel.org>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Thu, 2 May 2019 21:51:44 -0400
+Subject: [RFC][PATCH 1/2 v2] x86: Allow breakpoints to emulate call functions
+In-Reply-To: <20190502195052.0af473cf@gandalf.local.home>
+References: <20190501202830.347656894@goodmis.org>
+ <20190501203152.397154664@goodmis.org>
+ <20190501232412.1196ef18@oasis.local.home>
+ <20190502162133.GX2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
+ <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+ <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+ <20190502185225.0cdfc8bc@gandalf.local.home>
+ <20190502193129.664c5b2e@gandalf.local.home>
+ <20190502195052.0af473cf@gandalf.local.home>
+Message-ID: <20190502215144.3853a5be@oasis.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190503015014.RVtr9_Qib563YhWicwcV-EzCAbu7xNeDZlArQ87_W8o@z>
+Message-ID: <20190503015144.fcS4ZENbuwgiNd0K709AD_P4EkbuImC_Am_iHoqb7rI@z>
 
-On 5/1/19 5:01 PM, Brendan Higgins wrote:
-> A lot of the expectation and assertion infrastructure prints out fairly
-> complicated test failure messages, so add a C++ style log library for
-> for logging test results.
-> 
-> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> ---
->   include/kunit/kunit-stream.h |  85 ++++++++++++++++++++
->   include/kunit/test.h         |   2 +
->   kunit/Makefile               |   3 +-
->   kunit/kunit-stream.c         | 149 +++++++++++++++++++++++++++++++++++
->   kunit/test.c                 |   8 ++
->   5 files changed, 246 insertions(+), 1 deletion(-)
->   create mode 100644 include/kunit/kunit-stream.h
->   create mode 100644 kunit/kunit-stream.c
-> 
-> diff --git a/include/kunit/kunit-stream.h b/include/kunit/kunit-stream.h
-> new file mode 100644
-> index 0000000000000..d457a54fe0100
-> --- /dev/null
-> +++ b/include/kunit/kunit-stream.h
-> @@ -0,0 +1,85 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * C++ stream style string formatter and printer used in KUnit for outputting
-> + * KUnit messages.
-> + *
-> + * Copyright (C) 2019, Google LLC.
-> + * Author: Brendan Higgins <brendanhiggins at google.com>
-> + */
-> +
-> +#ifndef _KUNIT_KUNIT_STREAM_H
-> +#define _KUNIT_KUNIT_STREAM_H
-> +
-> +#include <linux/types.h>
-> +#include <kunit/string-stream.h>
-> +
-> +struct kunit;
-> +
-> +/**
-> + * struct kunit_stream - a std::stream style string builder.
-> + *
-> + * A std::stream style string builder. Allows messages to be built up and
-> + * printed all at once.
-> + */
-> +struct kunit_stream {
-> +	/* private: internal use only. */
-> +	struct kunit *test;
-> +	spinlock_t lock; /* Guards level. */
-> +	const char *level;
-> +	struct string_stream *internal_stream;
-> +};
-> +
-> +/**
-> + * kunit_new_stream() - constructs a new &struct kunit_stream.
-> + * @test: The test context object.
-> + *
-> + * Constructs a new test managed &struct kunit_stream.
-> + */
-> +struct kunit_stream *kunit_new_stream(struct kunit *test);
-> +
-> +/**
-> + * kunit_stream_set_level(): sets the level that string should be printed at.
-> + * @this: the stream being operated on.
-> + * @level: the print level the stream is set to output to.
-> + *
-> + * Sets the print level at which the stream outputs.
-> + */
-> +void kunit_stream_set_level(struct kunit_stream *this, const char *level);
-> +
-> +/**
-> + * kunit_stream_add(): adds the formatted input to the internal buffer.
-> + * @this: the stream being operated on.
-> + * @fmt: printf style format string to append to stream.
-> + *
-> + * Appends the formatted string, @fmt, to the internal buffer.
-> + */
-> +void __printf(2, 3) kunit_stream_add(struct kunit_stream *this,
-> +				     const char *fmt, ...);
-> +
-> +/**
-> + * kunit_stream_append(): appends the contents of @other to @this.
-> + * @this: the stream to which @other is appended.
-> + * @other: the stream whose contents are appended to @this.
-> + *
-> + * Appends the contents of @other to @this.
-> + */
-> +void kunit_stream_append(struct kunit_stream *this, struct kunit_stream *other);
-> +
-> +/**
-> + * kunit_stream_commit(): prints out the internal buffer to the user.
-> + * @this: the stream being operated on.
-> + *
-> + * Outputs the contents of the internal buffer as a kunit_printk formatted
-> + * output.
-> + */
-> +void kunit_stream_commit(struct kunit_stream *this);
-> +
-> +/**
-> + * kunit_stream_clear(): clears the internal buffer.
-> + * @this: the stream being operated on.
-> + *
-> + * Clears the contents of the internal buffer.
-> + */
-> +void kunit_stream_clear(struct kunit_stream *this);
-> +
-> +#endif /* _KUNIT_KUNIT_STREAM_H */
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 819edd8db4e81..4668e8a635954 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -11,6 +11,7 @@
->   
->   #include <linux/types.h>
->   #include <linux/slab.h>
-> +#include <kunit/kunit-stream.h>
->   
->   struct kunit_resource;
->   
-> @@ -171,6 +172,7 @@ struct kunit {
->   	void (*vprintk)(const struct kunit *test,
->   			const char *level,
->   			struct va_format *vaf);
-> +	void (*fail)(struct kunit *test, struct kunit_stream *stream);
->   };
->   
->   int kunit_init_test(struct kunit *test, const char *name);
-> diff --git a/kunit/Makefile b/kunit/Makefile
-> index 275b565a0e81f..6ddc622ee6b1c 100644
-> --- a/kunit/Makefile
-> +++ b/kunit/Makefile
-> @@ -1,2 +1,3 @@
->   obj-$(CONFIG_KUNIT) +=			test.o \
-> -					string-stream.o
-> +					string-stream.o \
-> +					kunit-stream.o
-> diff --git a/kunit/kunit-stream.c b/kunit/kunit-stream.c
-> new file mode 100644
-> index 0000000000000..93c14eec03844
-> --- /dev/null
-> +++ b/kunit/kunit-stream.c
-> @@ -0,0 +1,149 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * C++ stream style string formatter and printer used in KUnit for outputting
-> + * KUnit messages.
-> + *
-> + * Copyright (C) 2019, Google LLC.
-> + * Author: Brendan Higgins <brendanhiggins at google.com>
-> + */
-> +
-> +#include <kunit/test.h>
-> +#include <kunit/kunit-stream.h>
-> +#include <kunit/string-stream.h>
-> +
-> +const char *kunit_stream_get_level(struct kunit_stream *this)
-> +{
-> +	unsigned long flags;
-> +	const char *level;
-> +
-> +	spin_lock_irqsave(&this->lock, flags);
-> +	level = this->level;
-> +	spin_unlock_irqrestore(&this->lock, flags);
-> +
-> +	return level;
-> +}
-> +
-> +void kunit_stream_set_level(struct kunit_stream *this, const char *level)
-> +{
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&this->lock, flags);
-> +	this->level = level;
-> +	spin_unlock_irqrestore(&this->lock, flags);
-> +}
-> +
-> +void kunit_stream_add(struct kunit_stream *this, const char *fmt, ...)
-> +{
-> +	va_list args;
-> +	struct string_stream *stream = this->internal_stream;
-> +
-> +	va_start(args, fmt);
-> +
-> +	if (string_stream_vadd(stream, fmt, args) < 0)
-> +		kunit_err(this->test, "Failed to allocate fragment: %s\n", fmt);
-> +
-> +	va_end(args);
-> +}
-> +
-> +void kunit_stream_append(struct kunit_stream *this,
-> +				struct kunit_stream *other)
-> +{
-> +	struct string_stream *other_stream = other->internal_stream;
-> +	const char *other_content;
-> +
-> +	other_content = string_stream_get_string(other_stream);
-> +
-> +	if (!other_content) {
-> +		kunit_err(this->test,
-> +			  "Failed to get string from second argument for appending.\n");
-> +		return;
-> +	}
-> +
-> +	kunit_stream_add(this, other_content);
-> +}
-> +
-> +void kunit_stream_clear(struct kunit_stream *this)
-> +{
-> +	string_stream_clear(this->internal_stream);
-> +}
-> +
-> +void kunit_stream_commit(struct kunit_stream *this)
-> +{
-> +	struct string_stream *stream = this->internal_stream;
-> +	struct string_stream_fragment *fragment;
-> +	const char *level;
-> +	char *buf;
-> +
-> +	level = kunit_stream_get_level(this);
-> +	if (!level) {
-> +		kunit_err(this->test,
-> +			  "Stream was committed without a specified log level.\n");
-> +		level = KERN_ERR;
-> +		kunit_stream_set_level(this, level);
-> +	}
-> +
-> +	buf = string_stream_get_string(stream);
-> +	if (!buf) {
-> +		kunit_err(this->test,
-> +			 "Could not allocate buffer, dumping stream:\n");
-> +		list_for_each_entry(fragment, &stream->fragments, node) {
-> +			kunit_err(this->test, fragment->fragment);
-> +		}
-> +		kunit_err(this->test, "\n");
-> +		goto cleanup;
-> +	}
-> +
-> +	kunit_printk(level, this->test, buf);
-> +	kfree(buf);
-> +
-> +cleanup:
-> +	kunit_stream_clear(this);
-> +}
-> +
-> +static int kunit_stream_init(struct kunit_resource *res, void *context)
-> +{
-> +	struct kunit *test = context;
-> +	struct kunit_stream *stream;
-> +
-> +	stream = kzalloc(sizeof(*stream), GFP_KERNEL);
-> +	if (!stream)
-> +		return -ENOMEM;
-> +	res->allocation = stream;
-> +	stream->test = test;
-> +	spin_lock_init(&stream->lock);
-> +	stream->internal_stream = new_string_stream();
-> +
-> +	if (!stream->internal_stream)
-> +		return -ENOMEM;
 
-What happens to stream? Don't you want to free that?
+[ This version of the patch passed all my tests! ]
 
-> +
-> +	return 0;
-> +}
-> +
-> +static void kunit_stream_free(struct kunit_resource *res)
-> +{
-> +	struct kunit_stream *stream = res->allocation;
-> +
-> +	if (!string_stream_is_empty(stream->internal_stream)) {
-> +		kunit_err(stream->test,
-> +			 "End of test case reached with uncommitted stream entries.\n");
-> +		kunit_stream_commit(stream);
-> +	}
-> +
-> +	destroy_string_stream(stream->internal_stream);
-> +	kfree(stream);
-> +}
-> +
-> +struct kunit_stream *kunit_new_stream(struct kunit *test)
-> +{
-> +	struct kunit_resource *res;
-> +
-> +	res = kunit_alloc_resource(test,
-> +				   kunit_stream_init,
-> +				   kunit_stream_free,
-> +				   test);
-> +
-> +	if (res)
-> +		return res->allocation;
-> +	else
-> +		return NULL;
-> +}
-> diff --git a/kunit/test.c b/kunit/test.c
-> index 541f9adb1608c..f7575b127e2df 100644
-> --- a/kunit/test.c
-> +++ b/kunit/test.c
-> @@ -63,12 +63,20 @@ static void kunit_vprintk(const struct kunit *test,
->   			  "kunit %s: %pV", test->name, vaf);
->   }
->   
-> +static void kunit_fail(struct kunit *test, struct kunit_stream *stream)
-> +{
-> +	kunit_set_success(test, false);
-> +	kunit_stream_set_level(stream, KERN_ERR);
-> +	kunit_stream_commit(stream);
-> +}
-> +
->   int kunit_init_test(struct kunit *test, const char *name)
->   {
->   	spin_lock_init(&test->lock);
->   	INIT_LIST_HEAD(&test->resources);
->   	test->name = name;
->   	test->vprintk = kunit_vprintk;
-> +	test->fail = kunit_fail;
->   
->   	return 0;
->   }
-> 
+From: Peter Zijlstra <peterz@infradead.org>
 
-thanks,
--- Shuah
+In order to allow breakpoints to emulate call functions, they need to push
+the return address onto the stack. But because the breakpoint exception
+frame is added to the stack when the breakpoint is hit, there's no room to
+add the address onto the stack and return to the address of the emulated
+called funtion.
+
+To handle this, copy the exception frame on entry of the breakpoint handler
+and have leave a gap that can be used to add a return address to the stack
+frame and return from the breakpoint to the emulated called function,
+allowing for that called function to return back to the location after the
+breakpoint was placed.
+
+The helper functions were also added:
+
+  int3_emulate_push(): to push the address onto the gap in the stack
+  int3_emulate_jmp(): changes the location of the regs->ip to return there.
+  int3_emulate_call(): push the return address and change regs->ip
+
+Cc: Andy Lutomirski <luto at kernel.org>
+Cc: Nicolai Stange <nstange at suse.de>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Ingo Molnar <mingo at redhat.com>
+Cc: Borislav Petkov <bp at alien8.de>
+Cc: "H. Peter Anvin" <hpa at zytor.com>
+Cc: the arch/x86 maintainers <x86 at kernel.org>
+Cc: Josh Poimboeuf <jpoimboe at redhat.com>
+Cc: Jiri Kosina <jikos at kernel.org>
+Cc: Miroslav Benes <mbenes at suse.cz>
+Cc: Petr Mladek <pmladek at suse.com>
+Cc: Joe Lawrence <joe.lawrence at redhat.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Konrad Rzeszutek Wilk <konrad.wilk at oracle.com>
+Cc: Tim Chen <tim.c.chen at linux.intel.com>
+Cc: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
+Cc: Mimi Zohar <zohar at linux.ibm.com>
+Cc: Juergen Gross <jgross at suse.com>
+Cc: Nick Desaulniers <ndesaulniers at google.com>
+Cc: Nayna Jain <nayna at linux.ibm.com>
+Cc: Masahiro Yamada <yamada.masahiro at socionext.com>
+Cc: Joerg Roedel <jroedel at suse.de>
+Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest at vger.kernel.org>
+Cc: stable at vger.kernel.org
+Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
+Signed-off-by: *** Need Peter Zijlstra's SoB here! ***
+Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+---
+
+Changes since v1:
+
+ - Updated the 32bit code with Peter's latest changes
+ - Added int3 stack check in kernel_stack_pointer()
+
+ arch/x86/entry/entry_32.S            | 117 +++++++++++++++++++++++----
+ arch/x86/entry/entry_64.S            |  14 +++-
+ arch/x86/include/asm/text-patching.h |  20 +++++
+ arch/x86/kernel/ptrace.c             |   6 +-
+ 4 files changed, 139 insertions(+), 18 deletions(-)
+
+diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
+index d309f30cf7af..2885acd691ac 100644
+--- a/arch/x86/entry/entry_32.S
++++ b/arch/x86/entry/entry_32.S
+@@ -67,9 +67,20 @@
+ # define preempt_stop(clobbers)	DISABLE_INTERRUPTS(clobbers); TRACE_IRQS_OFF
+ #else
+ # define preempt_stop(clobbers)
+-# define resume_kernel		restore_all_kernel
+ #endif
+ 
++.macro RETINT_PREEMPT
++#ifdef CONFIG_PREEMPT
++	DISABLE_INTERRUPTS(CLBR_ANY)
++	cmpl	$0, PER_CPU_VAR(__preempt_count)
++	jnz	.Lend_\@
++	testl	$X86_EFLAGS_IF, PT_EFLAGS(%esp)	# interrupts off (exception path) ?
++	jz	.Lend_\@
++	call	preempt_schedule_irq
++.Lend_\@:
++#endif
++.endm
++
+ .macro TRACE_IRQS_IRET
+ #ifdef CONFIG_TRACE_IRQFLAGS
+ 	testl	$X86_EFLAGS_IF, PT_EFLAGS(%esp)     # interrupts off?
+@@ -753,7 +764,7 @@ ret_from_intr:
+ 	andl	$SEGMENT_RPL_MASK, %eax
+ #endif
+ 	cmpl	$USER_RPL, %eax
+-	jb	resume_kernel			# not returning to v8086 or userspace
++	jb	restore_all_kernel		# not returning to v8086 or userspace
+ 
+ ENTRY(resume_userspace)
+ 	DISABLE_INTERRUPTS(CLBR_ANY)
+@@ -763,19 +774,6 @@ ENTRY(resume_userspace)
+ 	jmp	restore_all
+ END(ret_from_exception)
+ 
+-#ifdef CONFIG_PREEMPT
+-ENTRY(resume_kernel)
+-	DISABLE_INTERRUPTS(CLBR_ANY)
+-.Lneed_resched:
+-	cmpl	$0, PER_CPU_VAR(__preempt_count)
+-	jnz	restore_all_kernel
+-	testl	$X86_EFLAGS_IF, PT_EFLAGS(%esp)	# interrupts off (exception path) ?
+-	jz	restore_all_kernel
+-	call	preempt_schedule_irq
+-	jmp	.Lneed_resched
+-END(resume_kernel)
+-#endif
+-
+ GLOBAL(__begin_SYSENTER_singlestep_region)
+ /*
+  * All code from here through __end_SYSENTER_singlestep_region is subject
+@@ -1026,6 +1024,7 @@ restore_all:
+ 	INTERRUPT_RETURN
+ 
+ restore_all_kernel:
++	RETINT_PREEMPT
+ 	TRACE_IRQS_IRET
+ 	PARANOID_EXIT_TO_KERNEL_MODE
+ 	BUG_IF_WRONG_CR3
+@@ -1476,6 +1475,94 @@ END(nmi)
+ 
+ ENTRY(int3)
+ 	ASM_CLAC
++
++#ifdef CONFIG_VM86
++	testl	$X86_EFLAGS_VM, 8(%esp)
++	jnz	.Lfrom_usermode_no_gap
++#endif
++	testl	$SEGMENT_RPL_MASK, 4(%esp)
++	jnz	.Lfrom_usermode_no_gap
++
++	/*
++	 * Here from kernel mode; so the (exception) stack looks like:
++	 *
++	 * 12(esp) - <previous context>
++	 *  8(esp) - flags
++	 *  4(esp) - cs
++	 *  0(esp) - ip
++	 *
++	 * Lets build a 5 entry IRET frame after that, such that struct pt_regs
++	 * is complete and in particular regs->sp is correct. This gives us
++	 * the original 3 enties as gap:
++	 *
++	 * 32(esp) - <previous context>
++	 * 28(esp) - orig_flags / gap
++	 * 24(esp) - orig_cs	/ gap
++	 * 20(esp) - orig_ip	/ gap
++	 * 16(esp) - ss
++	 * 12(esp) - sp
++	 *  8(esp) - flags
++	 *  4(esp) - cs
++	 *  0(esp) - ip
++	 */
++	pushl	%ss	  # ss
++	pushl	%esp      # sp (points at ss)
++	pushl	4*4(%esp) # flags
++	pushl	4*4(%esp) # cs
++	pushl	4*4(%esp) # ip
++
++	add	$16, 12(%esp) # point sp back at the previous context
++
++	pushl	$-1				# orig_eax; mark as interrupt
++
++	SAVE_ALL
++	ENCODE_FRAME_POINTER
++	TRACE_IRQS_OFF
++	xorl	%edx, %edx			# zero error code
++	movl	%esp, %eax			# pt_regs pointer
++	call	do_int3
++
++	RETINT_PREEMPT
++	TRACE_IRQS_IRET
++	/*
++	 * If we really never INT3 from entry code, it looks like
++	 * we can skip this one.
++	PARANOID_EXIT_TO_KERNEL_MODE
++	 */
++	BUG_IF_WRONG_CR3
++	RESTORE_REGS 4				# consume orig_eax
++
++	/*
++	 * Reconstruct the 3 entry IRET frame right after the (modified)
++	 * regs->sp without lowering %esp in between, such that an NMI in the
++	 * middle doesn't scribble our stack.
++	 */
++
++	pushl	%eax
++	pushl	%ecx
++	movl	5*4(%esp), %eax		# (modified) regs->sp
++
++	movl	4*4(%esp), %ecx		# flags
++	movl	%ecx, -4(%eax)
++
++	movl	3*4(%esp), %ecx		# cs
++	andl	$0x0000ffff, %ecx
++	movl	%ecx, -8(%eax)
++
++	movl	2*4(%esp), %ecx		# ip
++	movl	%ecx, -12(%eax)
++
++	movl	1*4(%esp), %ecx		# eax
++	movl	%ecx, -16(%eax)
++
++	popl	%ecx
++	lea	-16(%eax), %esp
++	popl	%eax
++
++	jmp	.Lirq_return
++
++.Lfrom_usermode_no_gap:
++
+ 	pushl	$-1				# mark this as an int
+ 
+ 	SAVE_ALL switch_stacks=1
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index 1f0efdb7b629..834ec1397dab 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -879,7 +879,7 @@ apicinterrupt IRQ_WORK_VECTOR			irq_work_interrupt		smp_irq_work_interrupt
+  * @paranoid == 2 is special: the stub will never switch stacks.  This is for
+  * #DF: if the thread stack is somehow unusable, we'll still get a useful OOPS.
+  */
+-.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1
++.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1 create_gap=0
+ ENTRY(\sym)
+ 	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
+ 
+@@ -899,6 +899,16 @@ ENTRY(\sym)
+ 	jnz	.Lfrom_usermode_switch_stack_\@
+ 	.endif
+ 
++	.if \create_gap == 1
++	testb	$3, CS-ORIG_RAX(%rsp)
++	jnz	.Lfrom_usermode_no_gap_\@
++	.rept 6
++	pushq	5*8(%rsp)
++	.endr
++	UNWIND_HINT_IRET_REGS offset=8
++.Lfrom_usermode_no_gap_\@:
++	.endif
++
+ 	.if \paranoid
+ 	call	paranoid_entry
+ 	.else
+@@ -1130,7 +1140,7 @@ apicinterrupt3 HYPERV_STIMER0_VECTOR \
+ #endif /* CONFIG_HYPERV */
+ 
+ idtentry debug			do_debug		has_error_code=0	paranoid=1 shift_ist=DEBUG_STACK
+-idtentry int3			do_int3			has_error_code=0
++idtentry int3			do_int3			has_error_code=0	create_gap=1
+ idtentry stack_segment		do_stack_segment	has_error_code=1
+ 
+ #ifdef CONFIG_XEN_PV
+diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
+index e85ff65c43c3..ba275b6292db 100644
+--- a/arch/x86/include/asm/text-patching.h
++++ b/arch/x86/include/asm/text-patching.h
+@@ -39,4 +39,24 @@ extern int poke_int3_handler(struct pt_regs *regs);
+ extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
+ extern int after_bootmem;
+ 
++static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
++{
++	regs->sp -= sizeof(unsigned long);
++	*(unsigned long *)regs->sp = val;
++}
++
++static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
++{
++	regs->ip = ip;
++}
++
++#define INT3_INSN_SIZE 1
++#define CALL_INSN_SIZE 5
++
++static inline void int3_emulate_call(struct pt_regs *regs, unsigned long func)
++{
++	int3_emulate_push(regs, regs->ip - INT3_INSN_SIZE + CALL_INSN_SIZE);
++	int3_emulate_jmp(regs, func);
++}
++
+ #endif /* _ASM_X86_TEXT_PATCHING_H */
+diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
+index 4b8ee05dd6ad..600ead178bf4 100644
+--- a/arch/x86/kernel/ptrace.c
++++ b/arch/x86/kernel/ptrace.c
+@@ -171,8 +171,12 @@ unsigned long kernel_stack_pointer(struct pt_regs *regs)
+ 	unsigned long sp = (unsigned long)&regs->sp;
+ 	u32 *prev_esp;
+ 
+-	if (context == (sp & ~(THREAD_SIZE - 1)))
++	if (context == (sp & ~(THREAD_SIZE - 1))) {
++		/* int3 code adds a gap */
++		if (sp == regs->sp - 5*4)
++			return regs->sp;
+ 		return sp;
++	}
+ 
+ 	prev_esp = (u32 *)(context);
+ 	if (*prev_esp)
+-- 
+2.20.1
