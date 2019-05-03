@@ -1,42 +1,44 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Fri, 3 May 2019 12:49:06 -0400
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <CALCETrUcEH8kswYGNkoupVVP+3hEsTA4BWTfLk-RY_RfkDsHGw@mail.gmail.com>
-References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
- <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
- <20190502185225.0cdfc8bc@gandalf.local.home>
- <20190502193129.664c5b2e@gandalf.local.home>
- <20190502195052.0af473cf@gandalf.local.home>
- <20190503092959.GB2623@hirez.programming.kicks-ass.net>
- <20190503092247.20cc1ff0@gandalf.local.home>
- <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
- <20190503123126.3a2801be@gandalf.local.home>
- <20190503163527.GI2606@hirez.programming.kicks-ass.net>
- <CALCETrUcEH8kswYGNkoupVVP+3hEsTA4BWTfLk-RY_RfkDsHGw@mail.gmail.com>
-Message-ID: <20190503124906.576c21f7@gandalf.local.home>
+From: catalin.marinas@arm.com (Catalin Marinas)
+Date: Fri, 3 May 2019 17:51:13 +0100
+Subject: [PATCH v14 08/17] mm, arm64: untag user pointers in
+ get_vaddr_frames
+In-Reply-To: <8e20df035de677029b3f970744ba2d35e2df1db3.1556630205.git.andreyknvl@google.com>
+References: <cover.1556630205.git.andreyknvl@google.com>
+ <8e20df035de677029b3f970744ba2d35e2df1db3.1556630205.git.andreyknvl@google.com>
+Message-ID: <20190503165113.GJ55449@arrakis.emea.arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190503164906.8_eEZQ9V7Ra4VGvM31VbliFB-ooDdJZKg7JQo3iPcd8@z>
+Message-ID: <20190503165113._HzpRvFLWvCXSys5BRZVOistmqYvbmHovCGK7BH782o@z>
 
-On Fri, 3 May 2019 09:44:35 -0700
-Andy Lutomirski <luto@kernel.org> wrote:
-
-> On Fri, May 3, 2019@9:35 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Fri, May 03, 2019 at 12:31:26PM -0400, Steven Rostedt wrote:  
-> > > I guess the real question is, what's the performance impact of doing
-> > > that?  
-> >
-> > Is there anyone that considers i386 a performance platform?  
+On Tue, Apr 30, 2019@03:25:04PM +0200, Andrey Konovalov wrote:
+> This patch is a part of a series that extends arm64 kernel ABI to allow to
+> pass tagged user pointers (with the top byte set to something else other
+> than 0x00) as syscall arguments.
 > 
-> Not me.  As far as I'm concerned, I will basically always gladly trade
-> several cycles for simplicity on 32-bit.
->
+> get_vaddr_frames uses provided user pointers for vma lookups, which can
+> only by done with untagged pointers. Instead of locating and changing
+> all callers of this function, perform untagging in it.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+> ---
+>  mm/frame_vector.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/mm/frame_vector.c b/mm/frame_vector.c
+> index c64dca6e27c2..c431ca81dad5 100644
+> --- a/mm/frame_vector.c
+> +++ b/mm/frame_vector.c
+> @@ -46,6 +46,8 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+>  	if (WARN_ON_ONCE(nr_frames > vec->nr_allocated))
+>  		nr_frames = vec->nr_allocated;
+>  
+> +	start = untagged_addr(start);
+> +
+>  	down_read(&mm->mmap_sem);
+>  	locked = 1;
+>  	vma = find_vma_intersection(mm, start, start + 1);
 
-So should I wait for a new PATCH 1 from Peter to implement it this way?
-I'd like to get this into the next merge window (although, I am marking
-it for stable since it fixes a bug for live kernel patching).
+Is this some buffer that the user may have malloc'ed? I got lost when
+trying to track down the provenience of this buffer.
 
-Linus, what's your thoughts?
-
--- Steve
+-- 
+Catalin
