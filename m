@@ -1,125 +1,133 @@
-From: peterz at infradead.org (Peter Zijlstra)
-Date: Fri, 3 May 2019 12:22:47 +0200
-Subject: [RFC][PATCH 1.5/2] x86: Add int3_emulate_call() selftest
-In-Reply-To: <20190501202830.347656894@goodmis.org>
-References: <20190501202830.347656894@goodmis.org>
-Message-ID: <20190503102247.GC2623@hirez.programming.kicks-ass.net>
+From: logang at deltatee.com (Logan Gunthorpe)
+Date: Fri, 3 May 2019 06:33:02 -0600
+Subject: [PATCH v2 08/17] kunit: test: add support for test abort
+In-Reply-To: <CAFd5g47hxAd=+72xbPJbWPdZCXRXmtLpsGhUh=zc7MSwfcaGJQ@mail.gmail.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-9-brendanhiggins@google.com>
+ <0a605543-477a-1854-eb35-6e586606889b@deltatee.com>
+ <CAFd5g47hxAd=+72xbPJbWPdZCXRXmtLpsGhUh=zc7MSwfcaGJQ@mail.gmail.com>
+Message-ID: <b2379db6-634a-001e-6f67-37427d8a2666@deltatee.com>
 
 
-Given that the entry_*.S changes for this functionality are somewhat
-tricky, make sure the paths are tested every boot, instead of on the
-rare occasion when we trip an INT3 while rewriting text.
 
-Getting the INT3 frame setup even slightly wrong will make this come
-unstuck something spectacular.
+On 2019-05-03 12:48 a.m., Brendan Higgins wrote:
+> On Thu, May 2, 2019 at 8:15 PM Logan Gunthorpe <logang at deltatee.com> wrote:
+>> On 2019-05-01 5:01 p.m., Brendan Higgins wrote:
+>>> +/*
+>>> + * struct kunit_try_catch - provides a generic way to run code which might fail.
+>>> + * @context: used to pass user data to the try and catch functions.
+>>> + *
+>>> + * kunit_try_catch provides a generic, architecture independent way to execute
+>>> + * an arbitrary function of type kunit_try_catch_func_t which may bail out by
+>>> + * calling kunit_try_catch_throw(). If kunit_try_catch_throw() is called, @try
+>>> + * is stopped at the site of invocation and @catch is catch is called.
+>>
+>> I found some of the C++ comparisons in this series a bit distasteful but
+>> wasn't going to say anything until I saw the try catch.... But looking
+>> into the implementation it's just a thread that can exit early which
+>> seems fine to me. Just a poor choice of name I guess...
+> 
+> Guilty as charged (I have a long history with C++, sorry). Would you
+> prefer I changed the name? I just figured that try-catch is a commonly
+> understood pattern that describes exactly what I am doing.
 
-Requested-by: Andy Lutomirski <luto at kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
----
- arch/x86/kernel/alternative.c | 81 ++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 77 insertions(+), 4 deletions(-)
+It is a commonly understood pattern, but I don't think it's what the
+code is doing. Try-catch cleans up an entire stack and allows each level
+of the stack to apply local cleanup. This implementation simply exits a
+thread and has none of that complexity. To me, it seems like an odd
+abstraction here as it's really just a test runner that can exit early
+(though I haven't seen the follow-up UML implementation).
 
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 4db9c0d29bc1..2b853c2ab894 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -613,11 +613,83 @@ extern struct paravirt_patch_site __start_parainstructions[],
- 	__stop_parainstructions[];
- #endif	/* CONFIG_PARAVIRT */
- 
-+/*
-+ * Self-test for the INT3 based CALL emulation code.
-+ *
-+ * This exercises int3_emulate_call() to make sure INT3 pt_regs are set up
-+ * properly and that there is a stack gap between the INT3 frame and the
-+ * previous context. Without this gap doing a virtual PUSH on the interrupted
-+ * stack would corrupt the INT3 IRET frame.
-+ *
-+ * See entry_{32,64}.S for more details.
-+ */
-+static void __init int3_magic(unsigned int *ptr)
-+{
-+	*ptr = 1;
-+}
-+
-+extern __initdata unsigned long int3_selftest_ip; /* defined in asm below */
-+
-+static int __init
-+int3_exception_notify(struct notifier_block *self, unsigned long val, void *data)
-+{
-+	struct die_args *args = data;
-+	struct pt_regs *regs = args->regs;
-+
-+	if (!regs || user_mode(regs))
-+		return NOTIFY_DONE;
-+
-+	if (val != DIE_INT3)
-+		return NOTIFY_DONE;
-+
-+	if (regs->ip - INT3_INSN_SIZE != int3_selftest_ip)
-+		return NOTIFY_DONE;
-+
-+	int3_emulate_call(regs, (unsigned long)&int3_magic);
-+	return NOTIFY_STOP;
-+}
-+
-+static void __init int3_selftest(void)
-+{
-+	static __initdata struct notifier_block int3_exception_nb = {
-+		.notifier_call	= int3_exception_notify,
-+		.priority	= INT_MAX-1, /* last */
-+	};
-+	unsigned int val = 0;
-+
-+	BUG_ON(register_die_notifier(&int3_exception_nb));
-+
-+	/*
-+	 * Basically: int3_magic(&val); but really complicated :-)
-+	 *
-+	 * Stick the address of the INT3 instruction into int3_selftest_ip,
-+	 * then trigger the INT3, padded with NOPs to match a CALL instruction
-+	 * length.
-+	 */
-+	asm volatile ("1: int3; nop; nop; nop; nop\n\t"
-+		      ".pushsection .init.data,\"aw\"\n\t"
-+		      ".align " __ASM_SEL(4, 8) "\n\t"
-+		      ".type int3_selftest_ip, @object\n\t"
-+		      ".size int3_selftest_ip, " __ASM_SEL(4, 8) "\n\t"
-+		      "int3_selftest_ip:\n\t"
-+		      __ASM_SEL(.long, .quad) " 1b\n\t"
-+		      ".popsection\n\t"
-+		      : : __ASM_SEL_RAW(a, D) (&val) : "memory");
-+
-+	BUG_ON(val != 1);
-+
-+	unregister_die_notifier(&int3_exception_nb);
-+}
-+
- void __init alternative_instructions(void)
- {
--	/* The patching is not fully atomic, so try to avoid local interruptions
--	   that might execute the to be patched code.
--	   Other CPUs are not running. */
-+	int3_selftest();
-+
-+	/*
-+	 * The patching is not fully atomic, so try to avoid local
-+	 * interruptions that might execute the to be patched code.
-+	 * Other CPUs are not running.
-+	 */
- 	stop_nmi();
- 
- 	/*
-@@ -642,10 +714,11 @@ void __init alternative_instructions(void)
- 					    _text, _etext);
- 	}
- 
--	if (!uniproc_patched || num_possible_cpus() == 1)
-+	if (!uniproc_patched || num_possible_cpus() == 1) {
- 		free_init_pages("SMP alternatives",
- 				(unsigned long)__smp_locks,
- 				(unsigned long)__smp_locks_end);
-+	}
- #endif
- 
- 	apply_paravirt(__parainstructions, __parainstructions_end);
+I would prefer to see this cleaned up such that the abstraction matches
+more what's going on but I don't feel that strongly about it so I'll
+leave it up to you to figure out what's best unless other reviewers have
+stronger opinions.
+
+>>
+>> [snip]
+>>
+>>> +static void __noreturn kunit_abort(struct kunit *test)
+>>> +{
+>>> +     kunit_set_death_test(test, true);
+>>> +
+>>> +     kunit_try_catch_throw(&test->try_catch);
+>>> +
+>>> +     /*
+>>> +      * Throw could not abort from test.
+>>> +      *
+>>> +      * XXX: we should never reach this line! As kunit_try_catch_throw is
+>>> +      * marked __noreturn.
+>>> +      */
+>>> +     WARN_ONCE(true, "Throw could not abort from test!\n");
+>>> +}
+>>> +
+>>>  int kunit_init_test(struct kunit *test, const char *name)
+>>>  {
+>>>       spin_lock_init(&test->lock);
+>>> @@ -77,6 +103,7 @@ int kunit_init_test(struct kunit *test, const char *name)
+>>>       test->name = name;
+>>>       test->vprintk = kunit_vprintk;
+>>>       test->fail = kunit_fail;
+>>> +     test->abort = kunit_abort;
+>>
+>> There are a number of these function pointers which seem to be pointless
+>> to me as you only ever set them to one function. Just call the function
+>> directly. As it is, it is an unnecessary indirection for someone reading
+>> the code. If and when you have multiple implementations of the function
+>> then add the pointer. Don't assume you're going to need it later on and
+>> add all this maintenance burden if you never use it..
+> 
+> Ah, yes, Frank (and probably others) previously asked me to remove
+> unnecessary method pointers; I removed all the totally unused ones. As
+> for these, I don't use them in this patchset, but I use them in my
+> patchsets that will follow up this one. These in particular are
+> present so that they can be mocked out for testing.
+
+Adding indirection and function pointers solely for the purpose of
+mocking out while testing doesn't sit well with me and I don't think it
+should be a pattern that's encouraged. Adding extra complexity like this
+to a design to make it unit-testable doesn't seem like something that
+makes sense in kernel code. Especially given that indirect calls are
+more expensive in the age of spectre.
+
+Also, mocking these particular functions seems like it's an artifact of
+how you've designed the try/catch abstraction. If the abstraction was
+more around an abort-able test runner then it doesn't make sense to need
+to mock out the abort/fail functions as you will be testing overly
+generic features of something that don't seem necessary to the
+implementation.
+
+>>
+>> [snip]
+>>
+>>> +void kunit_generic_try_catch_init(struct kunit_try_catch *try_catch)
+>>> +{
+>>> +     try_catch->run = kunit_generic_run_try_catch;
+>>> +     try_catch->throw = kunit_generic_throw;
+>>> +}
+>>
+>> Same here. There's only one implementation of try_catch and I can't
+>> really see any sensible justification for another implementation. Even
+>> if there is, add the indirection when the second implementation is
+>> added. This isn't C++ and we don't need to make everything a "method".
+> 
+> These methods are for a UML specific implementation in a follow up
+> patchset, which is needed for some features like crash recovery, death
+> tests, and removes dependence on kthreads.
+> 
+> I know this probably sounds like premature complexity. Arguably it is
+> in hindsight, but I wrote those features before I pulled out these
+> interfaces (they were actually both originally in this patchset, but I
+> dropped them to make this patchset easier to review). I can remove
+> these methods and add them back in when I actually use them in the
+> follow up patchsets if you prefer.
+
+Yes, remove them now and add them back when you use them in follow-up
+patches. If reviewers find problems with the follow-up patches or have a
+better suggestion on how to do what ever it is you are doing, then you
+just have this unnecessary code and there's wasted developer time and
+review bandwidth that will need to be spent cleaning it up.
+
+Thanks,
+
+Logan
