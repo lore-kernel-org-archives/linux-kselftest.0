@@ -1,48 +1,238 @@
-From: luto at amacapital.net (Andy Lutomirski)
-Date: Fri, 3 May 2019 15:55:12 -0700
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <CAHk-=wiA-WbrFrDs-kOfJZMXy4zMo9-SZfk=7B-GfmBJ866naw@mail.gmail.com>
-References: <20190501202830.347656894@goodmis.org>
- <20190501203152.397154664@goodmis.org>
- <20190501232412.1196ef18@oasis.local.home>
- <20190502162133.GX2623@hirez.programming.kicks-ass.net>
- <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
- <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
- <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
- <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg@mail.gmail.com>
- <20190503152405.2d741af8@gandalf.local.home>
- <CAHk-=wiA-WbrFrDs-kOfJZMXy4zMo9-SZfk=7B-GfmBJ866naw@mail.gmail.com>
-Message-ID: <2962A4E4-3B9F-4195-9C6D-9932809D98F9@amacapital.net>
+From: brendanhiggins at google.com (Brendan Higgins)
+Date: Fri, 3 May 2019 16:14:49 -0700
+Subject: [PATCH v2 12/17] kunit: tool: add Python wrappers for running
+ KUnit tests
+In-Reply-To: <052fa196-4ea9-8384-79b7-fe6bacc0ee82@gmail.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-13-brendanhiggins@google.com>
+ <20190502110220.GD12416@kroah.com>
+ <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
+ <a49c5088-a821-210c-66de-f422536f5b01@gmail.com>
+ <CAFd5g44iWRchQKdJYtjRtPY6e-6e0eXpKXXsx5Ooi6sWE474KA@mail.gmail.com>
+ <1a5f3c44-9fa9-d423-66bf-45255a90c468@gmail.com>
+ <CAFd5g45RYm+zfdJXnyp2KZZH5ojfOzy++aq+4zBeE5VDu6WgEw@mail.gmail.com>
+ <052fa196-4ea9-8384-79b7-fe6bacc0ee82@gmail.com>
+Message-ID: <CAFd5g47aY-CL+d7DfiyTidY4aAVY+eg1TM1UJ4nYqKSfHOi-0w@mail.gmail.com>
 
+> On 5/2/19 10:36 PM, Brendan Higgins wrote:
+> > On Thu, May 2, 2019 at 6:45 PM Frank Rowand <frowand.list at gmail.com> wrote:
+> >>
+> >> On 5/2/19 4:45 PM, Brendan Higgins wrote:
+> >>> On Thu, May 2, 2019 at 2:16 PM Frank Rowand <frowand.list at gmail.com> wrote:
+> >>>>
+> >>>> On 5/2/19 11:07 AM, Brendan Higgins wrote:
+> >>>>> On Thu, May 2, 2019 at 4:02 AM Greg KH <gregkh at linuxfoundation.org> wrote:
+> >>>>>>
+> >>>>>> On Wed, May 01, 2019 at 04:01:21PM -0700, Brendan Higgins wrote:
+> >>>>>>> From: Felix Guo <felixguoxiuping at gmail.com>
+> >>>>>>>
+> >>>>>>> The ultimate goal is to create minimal isolated test binaries; in the
+> >>>>>>> meantime we are using UML to provide the infrastructure to run tests, so
+> >>>>>>> define an abstract way to configure and run tests that allow us to
+> >>>>>>> change the context in which tests are built without affecting the user.
+> >>>>>>> This also makes pretty and dynamic error reporting, and a lot of other
+> >>>>>>> nice features easier.
+> >>>>>>>
+> >>>>>>> kunit_config.py:
+> >>>>>>>   - parse .config and Kconfig files.
+> >>>>>>>
+> >>>>>>> kunit_kernel.py: provides helper functions to:
+> >>>>>>>   - configure the kernel using kunitconfig.
+> >>>>>>>   - build the kernel with the appropriate configuration.
+> >>>>>>>   - provide function to invoke the kernel and stream the output back.
+> >>>>>>>
+> >>>>>>> Signed-off-by: Felix Guo <felixguoxiuping at gmail.com>
+> >>>>>>> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+> >>>>>>
+> >>>>>> Ah, here's probably my answer to my previous logging format question,
+> >>>>>> right?  What's the chance that these wrappers output stuff in a standard
+> >>>>>> format that test-framework-tools can already parse?  :)
+> >>>
+> >>> To be clear, the test-framework-tools format we are talking about is
+> >>> TAP13[1], correct?
+> >>
+> >> I'm not sure what the test community prefers for a format.  I'll let them
+> >> jump in and debate that question.
+> >>
+> >>
+> >>>
+> >>> My understanding is that is what kselftest is being converted to use.
+> >>>
+> >>>>>
+> >>>>> It should be pretty easy to do. I had some patches that pack up the
+> >>>>> results into a serialized format for a presubmit service; it should be
+> >>>>> pretty straightforward to take the same logic and just change the
+> >>>>> output format.
+> >>>>
+> >>>> When examining and trying out the previous versions of the patch I found
+> >>>> the wrappers useful to provide information about how to control and use
+> >>>> the tests, but I had no interest in using the scripts as they do not
+> >>>> fit in with my personal environment and workflow.
+> >>>>
+> >>>> In the previous versions of the patch, these helper scripts are optional,
+> >>>> which is good for my use case.  If the helper scripts are required to
+> >>>
+> >>> They are still optional.
+> >>>
+> >>>> get the data into the proper format then the scripts are not quite so
+> >>>> optional, they become the expected environment.  I think the proper
+> >>>> format should exist without the helper scripts.
+> >>>
+> >>> That's a good point. A couple things,
+> >>>
+> >>> First off, supporting TAP13, either in the kernel or the wrapper
+> >>> script is not hard, but I don't think that is the real issue that you
+> >>> raise.
+> >>>
+> >>> If your only concern is that you will always be able to have human
+> >>> readable KUnit results printed to the kernel log, that is a guarantee
+> >>> I feel comfortable making. Beyond that, I think it is going to take a
+> >>> long while before I would feel comfortable guaranteeing anything about
+> >>> how will KUnit work, what kind of data it will want to expose, and how
+> >>> it will be organized. I think the wrapper script provides a nice
+> >>> facade that I can maintain, can mediate between the implementation
+> >>> details and the user, and can mediate between the implementation
+> >>> details and other pieces of software that might want to consume
+> >>> results.
+> >>>
+> >>> [1] https://testanything.org/tap-version-13-specification.html
+> >>
+> >> My concern is based on a focus on my little part of the world
+> >> (which in _previous_ versions of the patch series was the devicetree
+> >> unittest.c tests being converted to use the kunit infrastructure).
+> >> If I step back and think of the entire kernel globally I may end
+> >> up with a different conclusion - but I'm going to remain myopic
+> >> for this email.
+> >>
+> >> I want the test results to be usable by me and my fellow
+> >> developers.  I prefer that the test results be easily accessible
+> >> (current printk() implementation means that kunit messages are
+> >> just as accessible as the current unittest.c printk() output).
+> >> If the printk() output needs to be filtered through a script
+> >> to generate the actual test results then that is sub-optimal
+> >> to me.  It is one more step added to my workflow.  And
+> >> potentially with an embedded target a major pain to get a
+> >> data file (the kernel log file) transferred from a target
+> >> to my development host.
+> >
+> > That's fair. If that is indeed your only concern, then I don't think
+> > the wrapper script will ever be an issue for you. You will always be
+> > able to execute a given test the old fashioned/manual way, and the
+> > wrapper script only summarizes results, it does not change the
+> > contents.
+> >
+> >>
+> >> I want a reported test failure to be easy to trace back to the
+> >> point in the source where the failure is reported.  With printk()
+> >> the search is a simple grep for the failure message.  If the
+> >> failure message has been processed by a script, and then the
+> >> failure reported to me in an email, then I may have to look
+> >> at the script to reverse engineer how the original failure
+> >> message was transformed into the message that was reported
+> >> to me in the email.  Then I search for the point in the
+> >> source where the failure is reported.  So a basic task has
+> >> just become more difficult and time consuming.
+> >
+> > That seems to be a valid concern. I would reiterate that you shouldn't
+> > be concerned by any processing done by the wrapper script itself, but
+> > the reality is that depending on what happens with automated
+> > testing/presubmit/CI other people might end up parsing and
+> > transforming test results - it might happen, it might not.
+>
+> You seem to be missing my point.
+>
+> Greg asked that the output be in a standard format.
+>
+> You replied that the standard format could be created by the wrapper script.
 
+I thought Greg originally meant that that is how it could be done when
+he first commented on this patch, so I was agreeing and elaborating.
+Nevertheless, it seems you and Greg are now in agreement on this
+point, so I won't argue it further.
 
-> On May 3, 2019, at 2:46 PM, Linus Torvalds <torvalds at linux-foundation.org> wrote:
-> 
->> On Fri, May 3, 2019 at 12:24 PM Steven Rostedt <rostedt at goodmis.org> wrote:
->> 
->> The problem with this approach is that it would require doing the same
->> for x86_64, as the int3 C code is the same for both. And that may be a
->> bit more difficult on the x86_64 side because it's all done with a
->> simple flag in the idtentry macro to add the gap.
-> 
-> That argument is weakened by the fact that we have to do _other_
-> things differently on 32-bit and 64-bit anyway.
-> 
-> So we might as well have a "on 32-bit, the call emulation needs to
-> move the pt_regs to make space" special case in the call emulation
-> code. It's very easy to explain why.
-> 
-> And then we'd limit the special case to where it matters (with a big
-> comment about what's going on), rather than adding random special case
-> handling to random _other_ places.
+>
+> Now you say that "it might happen, it might not".  In other words the output
+> may or may not end up in the standard format.
 
-If we do this, it should IMO look like this:
+Sorry, that was in reference to your concern about getting an email in
+a different format than what the tool that you use generates. It
+wasn't a statement about what I was or wasn't going to do in regards
+to supporting a standard format.
 
-struct pt_regs *change_kernel_stack_pointer(struct pt_regs *, unsigned long new_sp);
+>
+> As Greg points out in comments to patch 12:
+>
+>   "The core of kunit should also log the messages in this format as well,
+>   and not rely on the helper scripts as Frank points out, not everyone
+>   will use/want them.  Might as well make it easy for everyone to always
+>   do the right thing and not force it to always be added in later."
+>
+> I am requesting that the original message be in the standard format.  Of
+> course anyone is free to transform the messages in later processing, no
+> big deal.
 
-And that helper should be used on both variants.
+My mistake, I thought that was a concern of yours.
 
-But I think this will end up worse than the version where the entry code fixes it up.  This is because, if the C code moves pt_regs, then we need some way to pass the new pointer back to the asm.  We will also have a much harder time with runtime sanity checks.  In the model where the C code merely updates regs->sp, it’s very easy to compare sp and &regs to check for overlap, but it’s much harder to tell whether memmoveing it is going to overwrite something important.  And we have to worry about whether there’s some other code that assumes that pt_regs stays put.
+In any case, it sounds like you and Greg are in agreement on the core
+libraries generating the output in TAP13, so I won't argue that point
+further.
 
-So my intuition is that the pure asm fixup will result is more maintainable code.
+## Analysis of using TAP13
+
+One of my earlier concerns was that TAP13 is a bit over constrained
+for what I would like to output from the KUnit core. It only allows
+data to be output as either:
+ - test number
+ - ok/not ok with single line description
+ - directive
+ - diagnostics
+ - YAML block
+
+The test number must become before a set of ok/not ok lines, and does
+not contain any additional information. One annoying thing about this
+is it doesn't provide any kind of nesting or grouping.
+
+There is one ok/not ok line per test and it may have a short
+description of the test immediately after 'ok' or 'not ok'; this is
+problematic because it wants the first thing you say about a test to
+be after you know whether it passes or not.
+
+Directives are just a way to specify skipped tests and TODOs.
+
+Diagnostics seem useful, it looks like you can put whatever
+information in them and print them out at anytime. It looks like a lot
+of kselftests emit a lot of data this way.
+
+The YAML block seems to be the way that they prefer users to emit data
+beyond number of tests run and whether a test passed or failed. I
+could express most things I want to express in terms of YAML, but it
+is not the nicest format for displaying a lot of data like
+expectations, missed function calls, and other things which have a
+natural concise representation. Nevertheless, YAML readability is
+mostly a problem who won't be using the wrapper scripts. My biggest
+problem with the YAML block is that you can only have one, and TAP
+specifies that it must come after the corresponding ok/not ok line,
+which again has the issue that you have to hold on to a lot of
+diagnostic data longer than you ideally would. Another downside is
+that I now have to write a YAML serializer for the kernel.
+
+## Here is what I propose for this patchset:
+
+ - Print out test number range at the beginning of each test suite.
+ - Print out log lines as soon as they happen as diagnostics.
+ - Print out the lines that state whether a test passes or fails as a
+ok/not ok line.
+
+This would be technically conforming with TAP13 and is consistent with
+what some kselftests have done.
+
+## To be done in a future patchset:
+
+Add a YAML serializer and print out some logs containing structured
+data (like expectation failures, unexpected function calls, etc) in
+YAML blocks.
+
+Does this sound reasonable? I will go ahead and start working on this,
+but feel free to give me feedback on the overall idea in the meantime.
+
+Cheers
