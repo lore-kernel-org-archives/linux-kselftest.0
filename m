@@ -1,78 +1,58 @@
 From: brendanhiggins@google.com (Brendan Higgins)
-Date: Thu, 2 May 2019 21:37:26 -0700
-Subject: [PATCH v2 03/17] kunit: test: add string_stream a std::stream
- like string builder
-In-Reply-To: <1befe456-d981-d726-44f9-ebe3702ee51d@kernel.org>
+Date: Thu, 2 May 2019 22:18:22 -0700
+Subject: [PATCH v2 07/17] kunit: test: add initial tests
+In-Reply-To: <d4934565-9b41-880e-3bbe-984224b50fac@kernel.org>
 References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-4-brendanhiggins@google.com>
- <1befe456-d981-d726-44f9-ebe3702ee51d@kernel.org>
+ <20190501230126.229218-8-brendanhiggins@google.com>
+ <d4934565-9b41-880e-3bbe-984224b50fac@kernel.org>
 Message-ID:
- <CAFd5g46Ok5rtXUyeHdyoujsdYPq4qwaZwdu3CxY50Gq_iq7B6A@mail.gmail.com>
+ <CAFd5g44ex8B71K78V7-kRqcRw18Jou_c0KFtTR7wBpArw+P+MQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190503043726.lC4qn94TiaHqpIEckvkQ4h7HOKcJgJPiINChVa3nbjM@z>
+Message-ID: <20190503051822.5pNfHRPM8HFmbWD1ZP72sSNKrL6wV9BW5DCd-kTeNdY@z>
 
-On Thu, May 2, 2019@6:26 PM shuah <shuah@kernel.org> wrote:
+On Thu, May 2, 2019@6:27 PM shuah <shuah@kernel.org> wrote:
 >
 > On 5/1/19 5:01 PM, Brendan Higgins wrote:
-< snip >
-> > diff --git a/kunit/Makefile b/kunit/Makefile
-> > index 5efdc4dea2c08..275b565a0e81f 100644
-> > --- a/kunit/Makefile
-> > +++ b/kunit/Makefile
-> > @@ -1 +1,2 @@
-> > -obj-$(CONFIG_KUNIT) +=                       test.o
-> > +obj-$(CONFIG_KUNIT) +=                       test.o \
-> > +                                     string-stream.o
-> > diff --git a/kunit/string-stream.c b/kunit/string-stream.c
-> > new file mode 100644
-> > index 0000000000000..7018194ecf2fa
-> > --- /dev/null
-> > +++ b/kunit/string-stream.c
-> > @@ -0,0 +1,144 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * C++ stream style string builder used in KUnit for building messages.
-> > + *
-> > + * Copyright (C) 2019, Google LLC.
-> > + * Author: Brendan Higgins <brendanhiggins at google.com>
-> > + */
+> > Add a test for string stream along with a simpler example.
+> >
+> > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+> > ---
+> >   kunit/Kconfig              | 12 ++++++
+> >   kunit/Makefile             |  4 ++
+> >   kunit/example-test.c       | 88 ++++++++++++++++++++++++++++++++++++++
+> >   kunit/string-stream-test.c | 61 ++++++++++++++++++++++++++
+> >   4 files changed, 165 insertions(+)
+> >   create mode 100644 kunit/example-test.c
+> >   create mode 100644 kunit/string-stream-test.c
+> >
+> > diff --git a/kunit/Kconfig b/kunit/Kconfig
+> > index 64480092b2c24..5cb500355c873 100644
+> > --- a/kunit/Kconfig
+> > +++ b/kunit/Kconfig
+> > @@ -13,4 +13,16 @@ config KUNIT
+> >         special hardware. For more information, please see
+> >         Documentation/kunit/
+> >
+> > +config KUNIT_TEST
+> > +     bool "KUnit test for KUnit"
+> > +     depends on KUNIT
+> > +     help
+> > +       Enables KUnit test to test KUnit.
 > > +
-> > +#include <linux/list.h>
-> > +#include <linux/slab.h>
-> > +#include <kunit/string-stream.h>
-> > +
-> > +int string_stream_vadd(struct string_stream *this,
-> > +                    const char *fmt,
-> > +                    va_list args)
-> > +{
-> > +     struct string_stream_fragment *fragment;
 >
-> Since there is field with the same name, please use a different
-> name. Using the same name for the struct which contains a field
-> of the same name get very confusing and will hard to maintain
-> the code.
+> Please add a bit more information on what this config option
+> does. Why should user care to enable it?
 >
-> > +     int len;
-> > +     va_list args_for_counting;
-> > +     unsigned long flags;
+> > +config KUNIT_EXAMPLE_TEST
+> > +     bool "Example test for KUnit"
+> > +     depends on KUNIT
+> > +     help
+> > +       Enables example KUnit test to demo features of KUnit.
 > > +
-> > +     /* Make a copy because `vsnprintf` could change it */
-> > +     va_copy(args_for_counting, args);
-> > +
-> > +     /* Need space for null byte. */
-> > +     len = vsnprintf(NULL, 0, fmt, args_for_counting) + 1;
-> > +
-> > +     va_end(args_for_counting);
-> > +
-> > +     fragment = kmalloc(sizeof(*fragment), GFP_KERNEL);
-> > +     if (!fragment)
-> > +             return -ENOMEM;
-> > +
-> > +     fragment->fragment = kmalloc(len, GFP_KERNEL);
 >
-> This is confusing. See above comment.
+> Same here.
 
-Good point. Will fix in the next revision.
+Sounds reasonable. Will fix in the next revision.
 
 < snip >
 
