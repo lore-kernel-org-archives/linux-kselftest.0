@@ -1,76 +1,86 @@
-From: luto@amacapital.net (Andy Lutomirski)
-Date: Fri, 3 May 2019 16:32:15 -0700
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <CAHk-=wjZDhwStWvioV7totCnZfp74bqH0y1UJxkmFfdLg48wDA@mail.gmail.com>
-References: <20190501202830.347656894@goodmis.org>
- <20190501203152.397154664@goodmis.org>
- <20190501232412.1196ef18@oasis.local.home>
- <20190502162133.GX2623@hirez.programming.kicks-ass.net>
- <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
- <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
- <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
- <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg@mail.gmail.com>
- <20190503152405.2d741af8@gandalf.local.home>
- <CAHk-=wiA-WbrFrDs-kOfJZMXy4zMo9-SZfk=7B-GfmBJ866naw@mail.gmail.com>
- <2962A4E4-3B9F-4195-9C6D-9932809D98F9@amacapital.net>
- <CAHk-=wjZDhwStWvioV7totCnZfp74bqH0y1UJxkmFfdLg48wDA@mail.gmail.com>
-Message-ID: <93546F2D-0DF6-4E6A-98B0-BA49491C00CC@amacapital.net>
+From: brendanhiggins@google.com (Brendan Higgins)
+Date: Fri, 3 May 2019 16:41:10 -0700
+Subject: [PATCH v2 16/17] kernel/sysctl-test: Add null pointer test for
+ sysctl.c:proc_dointvec()
+In-Reply-To: <20190503064241.GC20723@kroah.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-17-brendanhiggins@google.com>
+ <20190502110347.GE12416@kroah.com>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770A3A0@USCULXMSG01.am.sony.com>
+ <CAFd5g471Wawu6g14p0AO3aY8VPBKLA0mjHSdfR1qStFGzp3iGQ@mail.gmail.com>
+ <20190503064241.GC20723@kroah.com>
+Message-ID:
+ <CAFd5g44NrKM9WQCF1xW-BWpFNsC05UAS9jt1-S+vNRuBDZVsHQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190503233215.-1QrYJ3AR72RymM1-uK66fH3vs703cOizFhTAZYyDwM@z>
+Message-ID: <20190503234110.BYC0od6-QahHqO5aHLsMgvYi5avkjqcWZeTBRX3H54s@z>
 
+> On Thu, May 02, 2019@11:45:43AM -0700, Brendan Higgins wrote:
+> > On Thu, May 2, 2019@11:15 AM <Tim.Bird@sony.com> wrote:
+> > >
+> > >
+> > >
+> > > > -----Original Message-----
+> > > > From: Greg KH
+> > > >
+> > > > On Wed, May 01, 2019@04:01:25PM -0700, Brendan Higgins wrote:
+> > > > > From: Iurii Zaikin <yzaikin at google.com>
+> > > > >
+> > > > > KUnit tests for initialized data behavior of proc_dointvec that is
+> > > > > explicitly checked in the code. Includes basic parsing tests including
+> > > > > int min/max overflow.
+> > > > >
+> > > > > Signed-off-by: Iurii Zaikin <yzaikin at google.com>
+> > > > > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+> > > > > ---
+> > > > >  kernel/Makefile      |   2 +
+> > > > >  kernel/sysctl-test.c | 292
+> > > > +++++++++++++++++++++++++++++++++++++++++++
+> > > > >  lib/Kconfig.debug    |   6 +
+> > > > >  3 files changed, 300 insertions(+)
+> > > > >  create mode 100644 kernel/sysctl-test.c
+> > > > >
+> > > > > diff --git a/kernel/Makefile b/kernel/Makefile
+> > > > > index 6c57e78817dad..c81a8976b6a4b 100644
+> > > > > --- a/kernel/Makefile
+> > > > > +++ b/kernel/Makefile
+> > > > > @@ -112,6 +112,8 @@ obj-$(CONFIG_HAS_IOMEM) += iomem.o
+> > > > >  obj-$(CONFIG_ZONE_DEVICE) += memremap.o
+> > > > >  obj-$(CONFIG_RSEQ) += rseq.o
+> > > > >
+> > > > > +obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
+> > > >
+> > > > You are going to have to have a "standard" naming scheme for test
+> > > > modules, are you going to recommend "foo-test" over "test-foo"?  If so,
+> > > > that's fine, we should just be consistant and document it somewhere.
+> > > >
+> > > > Personally, I'd prefer "test-foo", but that's just me, naming is hard...
+> > >
+> > > My preference would be "test-foo" as well.  Just my 2 cents.
+> >
+> > I definitely agree we should be consistent. My personal bias
+> > (unsurprisingly) is "foo-test," but this is just because that is the
+> > convention I am used to in other projects I have worked on.
+> >
+> > On an unbiased note, we are currently almost evenly split between the
+> > two conventions with *slight* preference for "foo-test": I ran the two
+> > following grep commands on v5.1-rc7:
+> >
+> > grep -Hrn --exclude-dir="build" -e "config [a-zA-Z_0-9]\+_TEST$" | wc -l
+> > grep -Hrn --exclude-dir="build" -e "config TEST_[a-zA-Z_0-9]\+" | wc -l
+> >
+> > "foo-test" has 36 occurrences.
+> > "test-foo" has 33 occurrences.
+> >
+> > The things I am more concerned about is how this would affect file
+> > naming. If we have a unit test for foo.c, I think foo_test.c is more
+> > consistent with our namespacing conventions. The other thing, is if we
+> > already have a Kconfig symbol called FOO_TEST (or TEST_FOO) what
+> > should we name the KUnit test in this case? FOO_UNIT_TEST?
+> > FOO_KUNIT_TEST, like I did above?
+>
+> Ok, I can live with "foo-test", as you are right, in a directory listing
+> and config option, it makes more sense to add it as a suffix.
 
-
-> On May 3, 2019,@4:16 PM, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> 
->> On Fri, May 3, 2019@3:55 PM Andy Lutomirski <luto@amacapital.net> wrote:
->> 
->> But I think this will end up worse than the version where the entry code fixes it up.  This is because, if the C code moves pt_regs, then we need some way to pass the new pointer back to the asm.
-> 
-> What? I already posted that code. Let me quote it again:
-> 
-> Message-ID: <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg at mail.gmail.com>
-> 
->        # args: pt_regs pointer (no error code for int3)
->        movl %esp,%eax
->        # allocate a bit of extra room on the stack, so that
->        # 'kernel_int3' can move the pt_regs
->        subl $8,%esp
->        call kernel_int3
->        movl %eax,%esp
-> 
-> It's that easy (this is with the assumption that we've already applied
-> the "standalone simple int3" case, but I think the above might work
-> even with the current code model, just the "call do_int3" needs to
-> have the kernel/not-kernel distinction and do the above for the kernel
-> case)
-> 
-> That's *MUCH* easier than your code to move entries around on the
-> stack just as you return, and has the advantage of not changing any
-> C-visible layout.
-> 
-> The C interface looks like this
-> 
->    /* Note: on x86-32, we can move 'regs' around for push/pop emulation */
->    struct pt_regs *kernel_int3(struct pt_regs *regs)
->    {
->        ..
->        .. need to pass regs to emulation functions
->        .. and call emulation needs to return it
->        ..
->        return regs;
->    }
-> 
-> and I just posted as a response to Stephen the *trivial* do_int3()
-> wrapper (so that x86-64 doesn't need to care), and the *trivial* code
-> to actually emulate a call instruction.
-> 
-> And when I say "trivial", I obviously mean "totally untested and
-> probably buggy", but it sure seems *simple*.,
-> 
-> Notice? Simple and minimal changes to entry code that only affect
-> int3, and nothing else.
-> 
->  
-
-I can get on board with this.
+Cool, so just for future reference, if we already have a Kconfig
+symbol called FOO_TEST (or TEST_FOO) what should we name the KUnit
+test in this case? FOO_UNIT_TEST? FOO_KUNIT_TEST, like I did above?
