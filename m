@@ -1,53 +1,58 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Thu, 2 May 2019 19:50:52 -0400
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190502193129.664c5b2e@gandalf.local.home>
-References: <20190501202830.347656894@goodmis.org>
- <20190501203152.397154664@goodmis.org>
- <20190501232412.1196ef18@oasis.local.home>
- <20190502162133.GX2623@hirez.programming.kicks-ass.net>
- <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
- <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
- <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
- <20190502185225.0cdfc8bc@gandalf.local.home>
- <20190502193129.664c5b2e@gandalf.local.home>
-Message-ID: <20190502195052.0af473cf@gandalf.local.home>
+From: brendanhiggins at google.com (Brendan Higgins)
+Date: Thu, 2 May 2019 17:41:08 -0700
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20190502110513.GF12416@kroah.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190502105053.GA12416@kroah.com> <20190502110513.GF12416@kroah.com>
+Message-ID: <CAFd5g46RyQ+jaV3bDejBaeca4Yv3G9ppT5JxdKqZw6PSbiSDYw@mail.gmail.com>
 
-On Thu, 2 May 2019 19:31:29 -0400
-Steven Rostedt <rostedt at goodmis.org> wrote:
-
-> Digging a little further, I pinpointed it out to being kretprobes. The
-> problem I believe is the use of kernel_stack_pointer() which does some
-> magic on x86_32. kretprobes uses this to hijack the return address of
-> the function (much like the function graph tracer does). I do have code
-> that would allow kretprobes to use the function graph tracer instead,
-> but that's still in progress (almost done!). But still, we should not
-> have this break the use of kernel_stack_pointer() either.
-> 
-> Adding some printks in that code, it looks to be returning "&regs->sp"
-> which I think we changed.
+On Thu, May 2, 2019 at 4:05 AM Greg KH <gregkh at linuxfoundation.org> wrote:
 >
+> On Thu, May 02, 2019 at 12:50:53PM +0200, Greg KH wrote:
+> > On Wed, May 01, 2019 at 04:01:09PM -0700, Brendan Higgins wrote:
+> > > ## TLDR
+> > >
+> > > I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
+> > > 5.2.
+> >
+> > That might be rushing it, normally trees are already closed now for
+> > 5.2-rc1 if 5.1-final comes out this Sunday.
+> >
+> > > Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
+> > > we would merge through your tree when the time came? Am I remembering
+> > > correctly?
+> >
+> > No objection from me.
+> >
+> > Let me go review the latest round of patches now.
+>
+> Overall, looks good to me, and provides a framework we can build on.
+> I'm a bit annoyed at the reliance on uml at the moment, but we can work
+> on that in the future :)
 
-This appears to fix it!
+Eh, I mostly fixed that.
 
--- Steve
+I removed the KUnit framework's reliance on UML i.e. the actual tests
+now run on any architecture.
 
-diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
-index 4b8ee05dd6ad..600ead178bf4 100644
---- a/arch/x86/kernel/ptrace.c
-+++ b/arch/x86/kernel/ptrace.c
-@@ -171,8 +171,12 @@ unsigned long kernel_stack_pointer(struct pt_regs *regs)
- 	unsigned long sp = (unsigned long)&regs->sp;
- 	u32 *prev_esp;
- 
--	if (context == (sp & ~(THREAD_SIZE - 1)))
-+	if (context == (sp & ~(THREAD_SIZE - 1))) {
-+		/* int3 code adds a gap */
-+		if (sp == regs->sp - 5*4)
-+			return regs->sp;
- 		return sp;
-+	}
- 
- 	prev_esp = (u32 *)(context);
- 	if (*prev_esp)
+The only UML dependent bit is the KUnit wrapper scripts, which could
+be made to work to support other architectures pretty trivially. The
+only limitation here is that it would be dependent on the actual
+workflow you are using.
+
+In anycase, if you are comfortable reading the results in the kernel
+logs, then there is no dependence on UML. (I should probably provide
+some documentation on that...)
+
+>
+> Thanks for sticking with this, now the real work begins...
+
+I don't doubt it.
+
+>
+> Reviewed-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+
+Does this cover all the patches in this set?
+
+Thanks!
