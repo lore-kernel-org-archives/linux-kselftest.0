@@ -1,42 +1,54 @@
 From: catalin.marinas at arm.com (Catalin Marinas)
-Date: Fri, 3 May 2019 17:51:13 +0100
-Subject: [PATCH v14 08/17] mm, arm64: untag user pointers in
- get_vaddr_frames
-In-Reply-To: <8e20df035de677029b3f970744ba2d35e2df1db3.1556630205.git.andreyknvl@google.com>
+Date: Fri, 3 May 2019 17:56:46 +0100
+Subject: [PATCH v14 10/17] fs, arm64: untag user pointers in
+ fs/userfaultfd.c
+In-Reply-To: <7d3b28689d47c0fa1b80628f248dbf78548da25f.1556630205.git.andreyknvl@google.com>
 References: <cover.1556630205.git.andreyknvl@google.com>
- <8e20df035de677029b3f970744ba2d35e2df1db3.1556630205.git.andreyknvl@google.com>
-Message-ID: <20190503165113.GJ55449@arrakis.emea.arm.com>
+ <7d3b28689d47c0fa1b80628f248dbf78548da25f.1556630205.git.andreyknvl@google.com>
+Message-ID: <20190503165646.GK55449@arrakis.emea.arm.com>
 
-On Tue, Apr 30, 2019 at 03:25:04PM +0200, Andrey Konovalov wrote:
+On Tue, Apr 30, 2019 at 03:25:06PM +0200, Andrey Konovalov wrote:
 > This patch is a part of a series that extends arm64 kernel ABI to allow to
 > pass tagged user pointers (with the top byte set to something else other
 > than 0x00) as syscall arguments.
 > 
-> get_vaddr_frames uses provided user pointers for vma lookups, which can
-> only by done with untagged pointers. Instead of locating and changing
-> all callers of this function, perform untagging in it.
+> userfaultfd_register() and userfaultfd_unregister() use provided user
+> pointers for vma lookups, which can only by done with untagged pointers.
+> 
+> Untag user pointers in these functions.
 > 
 > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 > ---
->  mm/frame_vector.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  fs/userfaultfd.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> diff --git a/mm/frame_vector.c b/mm/frame_vector.c
-> index c64dca6e27c2..c431ca81dad5 100644
-> --- a/mm/frame_vector.c
-> +++ b/mm/frame_vector.c
-> @@ -46,6 +46,8 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
->  	if (WARN_ON_ONCE(nr_frames > vec->nr_allocated))
->  		nr_frames = vec->nr_allocated;
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index f5de1e726356..fdee0db0e847 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -1325,6 +1325,9 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>  		goto out;
+>  	}
 >  
-> +	start = untagged_addr(start);
+> +	uffdio_register.range.start =
+> +		untagged_addr(uffdio_register.range.start);
 > +
->  	down_read(&mm->mmap_sem);
->  	locked = 1;
->  	vma = find_vma_intersection(mm, start, start + 1);
+>  	ret = validate_range(mm, uffdio_register.range.start,
+>  			     uffdio_register.range.len);
+>  	if (ret)
+> @@ -1514,6 +1517,8 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+>  	if (copy_from_user(&uffdio_unregister, buf, sizeof(uffdio_unregister)))
+>  		goto out;
+>  
+> +	uffdio_unregister.start = untagged_addr(uffdio_unregister.start);
+> +
+>  	ret = validate_range(mm, uffdio_unregister.start,
+>  			     uffdio_unregister.len);
+>  	if (ret)
 
-Is this some buffer that the user may have malloc'ed? I got lost when
-trying to track down the provenience of this buffer.
+Wouldn't it be easier to do this in validate_range()? There are a few
+more calls in this file, though I didn't check whether a tagged address
+would cause issues.
 
 -- 
 Catalin
