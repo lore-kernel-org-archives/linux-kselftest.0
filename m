@@ -1,93 +1,32 @@
-From: joel at joelfernandes.org (Joel Fernandes (Google))
-Date: Fri,  3 May 2019 14:24:59 -0400
-Subject: [PATCH] kheaders: Move from proc to sysfs
-Message-ID: <20190503182459.159121-1-joel@joelfernandes.org>
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Fri, 3 May 2019 14:46:33 -0400
+Subject: [RFC][PATCH 1.5/2] x86: Add int3_emulate_call() selftest
+In-Reply-To: <20190503102247.GC2623@hirez.programming.kicks-ass.net>
+References: <20190501202830.347656894@goodmis.org>
+ <20190503102247.GC2623@hirez.programming.kicks-ass.net>
+Message-ID: <20190503144633.750ca9a5@gandalf.local.home>
 
-The kheaders archive consisting of the kernel headers used for compiling
-bpf programs is in /proc. However there is concern that moving it here
-will make it permanent. Let us move it to /sys/kernel as discussed [1].
+On Fri, 3 May 2019 12:22:47 +0200
+Peter Zijlstra <peterz at infradead.org> wrote:
 
-[1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
+> Given that the entry_*.S changes for this functionality are somewhat
+> tricky, make sure the paths are tested every boot, instead of on the
+> rare occasion when we trip an INT3 while rewriting text.
+> 
+> Getting the INT3 frame setup even slightly wrong will make this come
+> unstuck something spectacular.
+> 
+> Requested-by: Andy Lutomirski <luto at kernel.org>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
+> ---
+>  arch/x86/kernel/alternative.c | 81 ++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 77 insertions(+), 4 deletions(-)
 
-Suggested-by: Steven Rostedt <rostedt at goodmis.org>
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
-This patch applies on top of the previous patch that was applied to the
-driver tree:
-https://lore.kernel.org/patchwork/patch/1067310/
+I'll add this to my queue, as I tested this on x86_32 and 64. I also
+put in a printk("HERE in int3_magic\n") to make sure it really did get
+there (although, the BUG_ON should be good enough).
 
- kernel/kheaders.c | 40 ++++++++++++++++------------------------
- 1 file changed, 16 insertions(+), 24 deletions(-)
+The printk will be removed from the official commit. It was just for my
+peace of mind.
 
-diff --git a/kernel/kheaders.c b/kernel/kheaders.c
-index 70ae6052920d..6a16f8f6898d 100644
---- a/kernel/kheaders.c
-+++ b/kernel/kheaders.c
-@@ -8,9 +8,8 @@
- 
- #include <linux/kernel.h>
- #include <linux/module.h>
--#include <linux/proc_fs.h>
-+#include <linux/kobject.h>
- #include <linux/init.h>
--#include <linux/uaccess.h>
- 
- /*
-  * Define kernel_headers_data and kernel_headers_data_end, within which the
-@@ -31,39 +30,32 @@ extern char kernel_headers_data;
- extern char kernel_headers_data_end;
- 
- static ssize_t
--ikheaders_read_current(struct file *file, char __user *buf,
--		      size_t len, loff_t *offset)
-+ikheaders_read(struct file *file,  struct kobject *kobj,
-+	       struct bin_attribute *bin_attr,
-+	       char *buf, loff_t off, size_t len)
- {
--	return simple_read_from_buffer(buf, len, offset,
--				       &kernel_headers_data,
--				       &kernel_headers_data_end -
--				       &kernel_headers_data);
-+	memcpy(buf, &kernel_headers_data + off, len);
-+	return len;
- }
- 
--static const struct file_operations ikheaders_file_ops = {
--	.read = ikheaders_read_current,
--	.llseek = default_llseek,
-+static struct bin_attribute kheaders_attr __ro_after_init = {
-+	.attr = {
-+		.name = "kheaders.tar.xz",
-+		.mode = S_IRUGO,
-+	},
-+	.read = &ikheaders_read,
- };
- 
- static int __init ikheaders_init(void)
- {
--	struct proc_dir_entry *entry;
--
--	/* create the current headers file */
--	entry = proc_create("kheaders.tar.xz", S_IRUGO, NULL,
--			    &ikheaders_file_ops);
--	if (!entry)
--		return -ENOMEM;
--
--	proc_set_size(entry,
--		      &kernel_headers_data_end -
--		      &kernel_headers_data);
--	return 0;
-+	kheaders_attr.size = (&kernel_headers_data_end -
-+			      &kernel_headers_data);
-+	return sysfs_create_bin_file(kernel_kobj, &kheaders_attr);
- }
- 
- static void __exit ikheaders_cleanup(void)
- {
--	remove_proc_entry("kheaders.tar.xz", NULL);
-+	sysfs_remove_bin_file(kernel_kobj, &kheaders_attr);
- }
- 
- module_init(ikheaders_init);
--- 
-2.21.0.1020.gf2820cf01a-goog
+-- Steve
