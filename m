@@ -1,5 +1,5 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Fri, 3 May 2019 18:49:19 -0400
+From: luto@amacapital.net (Andy Lutomirski)
+Date: Fri, 3 May 2019 15:55:12 -0700
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
 In-Reply-To: <CAHk-=wiA-WbrFrDs-kOfJZMXy4zMo9-SZfk=7B-GfmBJ866naw@mail.gmail.com>
 References: <20190501202830.347656894@goodmis.org>
@@ -13,19 +13,20 @@ References: <20190501202830.347656894@goodmis.org>
  <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg@mail.gmail.com>
  <20190503152405.2d741af8@gandalf.local.home>
  <CAHk-=wiA-WbrFrDs-kOfJZMXy4zMo9-SZfk=7B-GfmBJ866naw@mail.gmail.com>
-Message-ID: <20190503184919.2b7ef242@gandalf.local.home>
+Message-ID: <2962A4E4-3B9F-4195-9C6D-9932809D98F9@amacapital.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190503224919.98oBV2ifPYMhWVWZiRS_TEMCtUuTA5IXBBXaBoIkEIo@z>
+Message-ID: <20190503225512.o0_bnzAgi0HUg4_QxVpsOI2WZxOxDSulOSJ6jdlppOY@z>
 
-On Fri, 3 May 2019 14:46:11 -0700
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-> On Fri, May 3, 2019@12:24 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> >
-> > The problem with this approach is that it would require doing the same
-> > for x86_64, as the int3 C code is the same for both. And that may be a
-> > bit more difficult on the x86_64 side because it's all done with a
-> > simple flag in the idtentry macro to add the gap.  
+
+> On May 3, 2019,@2:46 PM, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> 
+>> On Fri, May 3, 2019@12:24 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>> 
+>> The problem with this approach is that it would require doing the same
+>> for x86_64, as the int3 C code is the same for both. And that may be a
+>> bit more difficult on the x86_64 side because it's all done with a
+>> simple flag in the idtentry macro to add the gap.
 > 
 > That argument is weakened by the fact that we have to do _other_
 > things differently on 32-bit and 64-bit anyway.
@@ -33,150 +34,17 @@ Linus Torvalds <torvalds@linux-foundation.org> wrote:
 > So we might as well have a "on 32-bit, the call emulation needs to
 > move the pt_regs to make space" special case in the call emulation
 > code. It's very easy to explain why.
-
-So if I understand correctly what you are implying, is to have the int3
-code be different for 32 bit and 64 bit? This would require handling
-text_poke, ftrace and kprobes differently for the two. Or perhaps we
-can build hacks on top.
-
 > 
 > And then we'd limit the special case to where it matters (with a big
 > comment about what's going on), rather than adding random special case
 > handling to random _other_ places.
-> 
-> Having to add s magic special case to "kernel_stack_pointer() is
-> certainly not obvious. Neither is adding magic special cases to system
-> call exit paths etc.
 
-Honestly, this sounds more of an argument for doing the buffered space
-for all exceptions on 32 bit, because it removes one of the special
-cases. If we were to move the frame and give it a full frame like
-x86_64, then we can remove kernel_stack_pointer() altogether. I've hated
-that function for some time, as I tripped over it in the past too, and
-it keeps coming up. It's sad that regs->sp is unreliable as is.
+If we do this, it should IMO look like this:
 
-> 
-> This has been why I've been arguing against the entry code changes.
-> Exactly because they tend to have these kind of odd cascading effects.
-> The entry code is fragile not just because it's a complex hardware
-> interface, but also because we know about those complex hardware
-> interfaces in random other places.
+struct pt_regs *change_kernel_stack_pointer(struct pt_regs *, unsigned long new_sp);
 
-IMO, getting rid of the kernel_stack_pointer() function is a positive
-side effect of these changes.
+And that helper should be used on both variants.
 
-> 
-> I'd much rather have the code that does special things be in one
-> place, and be the place that *needs* to do the special thing. If we
-> copy the pt_regs around when we do the "call" emulation, it's *really*
-> easy to explain *exactly* what we're doing and why in *exactly* that
-> one context where we are doing it. And it won't affect anything else,
-> and our existing code that looks at pt_regs will work both before and
-> after.
-> 
-> Would it need a #ifdef CONFIG_X86_32 around it because it's not needed
-> on x86-64? Sure. But that #ifdef would be right there, and the comment
-> that explains why the pt_regs need to be moved would also make it very
-> obvious why it is only needed for x86-32.
-> 
-> There's a lot of advantages to keeping your problems localized,
-> instead of letting your random hacks escape and become problems for
-> other, entirely unrelated, code.
+But I think this will end up worse than the version where the entry code fixes it up.  This is because, if the C code moves pt_regs, then we need some way to pass the new pointer back to the asm.  We will also have a much harder time with runtime sanity checks.  In the model where the C code merely updates regs->sp, it’s very easy to compare sp and &regs to check for overlap, but it’s much harder to tell whether memmoveing it is going to overwrite something important.  And we have to worry about whether there’s some other code that assumes that pt_regs stays put.
 
-But is it localize? It would definitely affect do_int3().
-
-You are saying that we have a do_int3() for user space int3, and
-do_kernel_int3() for kernel space. That would need to be done in asm
-for both, because having x86_64 call do_int3() for kernel and
-user would be interesting. Looking at the do_int3() code, I'm not sure
-how to safely separate kernel and user int3 handlers if 64bit doesn't
-call do_kernel_int3() directly. It may end up looking something like
-this:
-
-dotraplinkage void notrace do_int3(struct pt_regs *regs, long error_code)
-{
-#ifdef CONFIG_X86_64
-	do_kernel_int3(&regs);
-#endif
-	/*
-	 * Use ist_enter despite the fact that we don't use an IST stack.
-	 * We can be called from a kprobe in non-CONTEXT_KERNEL kernel
-	 * mode or even during context tracking state changes.
-	 *
-	 * This means that we can't schedule.  That's okay.
-	 */
-	ist_enter(regs);
-	RCU_LOCKDEP_WARN(!rcu_is_watching(), "entry code didn't wake RCU");
-
-#ifdef CONFIG_X86_64
-#ifdef CONFIG_KGDB_LOW_LEVEL_TRAP
-	if (kgdb_ll_trap(DIE_INT3, "int3", regs, error_code, X86_TRAP_BP,
-				SIGTRAP) == NOTIFY_STOP)
-		goto exit;
-#endif /* CONFIG_KGDB_LOW_LEVEL_TRAP */
-
-#ifdef CONFIG_KPROBES
-	if (kprobe_int3_handler(&regs))
-		goto exit;
-#endif
-#endif
-
-	if (notify_die(DIE_INT3, "int3", regs, error_code, X86_TRAP_BP,
-			SIGTRAP) == NOTIFY_STOP)
-		goto exit;
-
-	cond_local_irq_enable(regs);
-	do_trap(X86_TRAP_BP, SIGTRAP, "int3", regs, error_code, 0, NULL);
-	cond_local_irq_disable(regs);
-
-exit:
-	ist_exit(regs);
-}
-
-dotraplinkage void notrace do_kernel_int3(struct pt_regs **regs)
-{
-#ifdef CONFIG_DYNAMIC_FTRACE
-	/*
-	 * ftrace must be first, everything else may cause a recursive crash.
-	 * See note by declaration of modifying_ftrace_code in ftrace.c
-	 */
-	if (unlikely(atomic_read(&modifying_ftrace_code)) &&
-	    ftrace_int3_handler(regs))
-		return;
-#endif
-	if (poke_int3_handler(regs))
-		return;
-
-#ifdef CONFIG_X86_64
-	return;
-#endif
-
-	/*
-	 * Use ist_enter despite the fact that we don't use an IST stack.
-	 * We can be called from a kprobe in non-CONTEXT_KERNEL kernel
-	 * mode or even during context tracking state changes.
-	 *
-	 * This means that we can't schedule.  That's okay.
-	 */
-	ist_enter(*regs);
-	RCU_LOCKDEP_WARN(!rcu_is_watching(), "entry code didn't wake RCU");
-
-#ifdef CONFIG_KGDB_LOW_LEVEL_TRAP
-	if (kgdb_ll_trap(DIE_INT3, "int3", *regs, error_code, X86_TRAP_BP,
-				SIGTRAP) == NOTIFY_STOP)
-		goto exit;
-#endif /* CONFIG_KGDB_LOW_LEVEL_TRAP */
-
-#ifdef CONFIG_KPROBES
-	if (kprobe_int3_handler(regs))
-		goto exit;
-#endif
-
-	notify_die(DIE_INT3, "int3", *regs, error_code, X86_TRAP_BP,
-			SIGTRAP);
-	ist_exit(*regs);
-}
-
-Or maybe I misunderstood what you envision :-/
-
--- Steve
+So my intuition is that the pure asm fixup will result is more maintainable code.
