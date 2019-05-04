@@ -1,40 +1,90 @@
-From: gregkh at linuxfoundation.org (Greg Kroah-Hartman)
-Date: Sat, 4 May 2019 10:11:55 +0200
-Subject: [PATCH] kheaders: Move from proc to sysfs
-In-Reply-To: <CAADnVQKh6yVgYR_cZ56MSQ2WxfBjFYaQxbEH=xaeM0FjxAeaZg@mail.gmail.com>
-References: <20190503182459.159121-1-joel@joelfernandes.org>
- <CAK7LNATRTqh_OJcQaWfcYYYqyZ-c0u1prD17LDYwDh18z2V31Q@mail.gmail.com>
- <CAK7LNASkR7cauvcLprgrTKNv-iY4yjS278FPGJ-UEYTBrANKYw@mail.gmail.com>
- <20190504005920.GA261146@google.com>
- <CAADnVQKh6yVgYR_cZ56MSQ2WxfBjFYaQxbEH=xaeM0FjxAeaZg@mail.gmail.com>
-Message-ID: <20190504081155.GA13298@kroah.com>
+From: gregkh at linuxfoundation.org (Greg KH)
+Date: Sat, 4 May 2019 12:40:12 +0200
+Subject: [PATCH v2 16/17] kernel/sysctl-test: Add null pointer test for
+ sysctl.c:proc_dointvec()
+In-Reply-To: <CAFd5g44NrKM9WQCF1xW-BWpFNsC05UAS9jt1-S+vNRuBDZVsHQ@mail.gmail.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-17-brendanhiggins@google.com>
+ <20190502110347.GE12416@kroah.com>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770A3A0@USCULXMSG01.am.sony.com>
+ <CAFd5g471Wawu6g14p0AO3aY8VPBKLA0mjHSdfR1qStFGzp3iGQ@mail.gmail.com>
+ <20190503064241.GC20723@kroah.com>
+ <CAFd5g44NrKM9WQCF1xW-BWpFNsC05UAS9jt1-S+vNRuBDZVsHQ@mail.gmail.com>
+Message-ID: <20190504104012.GA1478@kroah.com>
 
-On Sat, May 04, 2019 at 12:46:21AM -0700, Alexei Starovoitov wrote:
-> On Fri, May 3, 2019 at 5:59 PM Joel Fernandes <joel at joelfernandes.org> wrote:
-> >
-> > On Sat, May 04, 2019 at 09:21:41AM +0900, Masahiro Yamada wrote:
-> > > On Sat, May 4, 2019 at 9:18 AM Masahiro Yamada
-> > > <yamada.masahiro at socionext.com> wrote:
+On Fri, May 03, 2019 at 04:41:10PM -0700, Brendan Higgins wrote:
+> > On Thu, May 02, 2019 at 11:45:43AM -0700, Brendan Higgins wrote:
+> > > On Thu, May 2, 2019 at 11:15 AM <Tim.Bird at sony.com> wrote:
 > > > >
-> > > > On Sat, May 4, 2019 at 3:27 AM Joel Fernandes (Google)
-> > > > <joel at joelfernandes.org> wrote:
+> > > >
+> > > >
+> > > > > -----Original Message-----
+> > > > > From: Greg KH
 > > > > >
-> > > > > The kheaders archive consisting of the kernel headers used for compiling
-> > > > > bpf programs is in /proc. However there is concern that moving it here
-> > > > > will make it permanent. Let us move it to /sys/kernel as discussed [1].
+> > > > > On Wed, May 01, 2019 at 04:01:25PM -0700, Brendan Higgins wrote:
+> > > > > > From: Iurii Zaikin <yzaikin at google.com>
+> > > > > >
+> > > > > > KUnit tests for initialized data behavior of proc_dointvec that is
+> > > > > > explicitly checked in the code. Includes basic parsing tests including
+> > > > > > int min/max overflow.
+> > > > > >
+> > > > > > Signed-off-by: Iurii Zaikin <yzaikin at google.com>
+> > > > > > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+> > > > > > ---
+> > > > > >  kernel/Makefile      |   2 +
+> > > > > >  kernel/sysctl-test.c | 292
+> > > > > +++++++++++++++++++++++++++++++++++++++++++
+> > > > > >  lib/Kconfig.debug    |   6 +
+> > > > > >  3 files changed, 300 insertions(+)
+> > > > > >  create mode 100644 kernel/sysctl-test.c
+> > > > > >
+> > > > > > diff --git a/kernel/Makefile b/kernel/Makefile
+> > > > > > index 6c57e78817dad..c81a8976b6a4b 100644
+> > > > > > --- a/kernel/Makefile
+> > > > > > +++ b/kernel/Makefile
+> > > > > > @@ -112,6 +112,8 @@ obj-$(CONFIG_HAS_IOMEM) += iomem.o
+> > > > > >  obj-$(CONFIG_ZONE_DEVICE) += memremap.o
+> > > > > >  obj-$(CONFIG_RSEQ) += rseq.o
+> > > > > >
+> > > > > > +obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
 > > > > >
-> > > > > [1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
+> > > > > You are going to have to have a "standard" naming scheme for test
+> > > > > modules, are you going to recommend "foo-test" over "test-foo"?  If so,
+> > > > > that's fine, we should just be consistant and document it somewhere.
 > > > > >
-> > > > > Suggested-by: Steven Rostedt <rostedt at goodmis.org>
-> > > > > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> > > > > ---
-> > > > > This patch applies on top of the previous patch that was applied to the
-> > > > > driver tree:
-> > > > > https://lore.kernel.org/patchwork/patch/1067310/
+> > > > > Personally, I'd prefer "test-foo", but that's just me, naming is hard...
+> > > >
+> > > > My preference would be "test-foo" as well.  Just my 2 cents.
+> > >
+> > > I definitely agree we should be consistent. My personal bias
+> > > (unsurprisingly) is "foo-test," but this is just because that is the
+> > > convention I am used to in other projects I have worked on.
+> > >
+> > > On an unbiased note, we are currently almost evenly split between the
+> > > two conventions with *slight* preference for "foo-test": I ran the two
+> > > following grep commands on v5.1-rc7:
+> > >
+> > > grep -Hrn --exclude-dir="build" -e "config [a-zA-Z_0-9]\+_TEST$" | wc -l
+> > > grep -Hrn --exclude-dir="build" -e "config TEST_[a-zA-Z_0-9]\+" | wc -l
+> > >
+> > > "foo-test" has 36 occurrences.
+> > > "test-foo" has 33 occurrences.
+> > >
+> > > The things I am more concerned about is how this would affect file
+> > > naming. If we have a unit test for foo.c, I think foo_test.c is more
+> > > consistent with our namespacing conventions. The other thing, is if we
+> > > already have a Kconfig symbol called FOO_TEST (or TEST_FOO) what
+> > > should we name the KUnit test in this case? FOO_UNIT_TEST?
+> > > FOO_KUNIT_TEST, like I did above?
+> >
+> > Ok, I can live with "foo-test", as you are right, in a directory listing
+> > and config option, it makes more sense to add it as a suffix.
 > 
-> I think it would be cleaner to take it out, squash and reapply.
+> Cool, so just for future reference, if we already have a Kconfig
+> symbol called FOO_TEST (or TEST_FOO) what should we name the KUnit
+> test in this case? FOO_UNIT_TEST? FOO_KUNIT_TEST, like I did above?
 
-It is in a un-rebasable-tree already, sorry.  A patch on top is fine.
+FOO_KUNIT_TEST is fine, I doubt that's going to come up very often.
 
 thanks,
 
