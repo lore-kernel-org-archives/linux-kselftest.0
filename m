@@ -1,5 +1,5 @@
 From: torvalds@linux-foundation.org (Linus Torvalds)
-Date: Sat, 4 May 2019 13:28:00 -0700
+Date: Sat, 4 May 2019 13:36:11 -0700
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
 In-Reply-To: <2BF1AE4B-8105-49F0-8B6A-AA3B11FD66FD@amacapital.net>
 References: <20190501202830.347656894@goodmis.org>
@@ -20,29 +20,19 @@ References: <20190501202830.347656894@goodmis.org>
  <CAHk-=wjGNx8xcwg=7nE_0-nLQ_d4UALHvJ8O+TurbA25n8MyNg@mail.gmail.com>
  <2BF1AE4B-8105-49F0-8B6A-AA3B11FD66FD@amacapital.net>
 Message-ID:
- <CAHk-=wiwc8NDahj455iBWmYyvDDS+sN1TObFsxxS51gNbtZ9iw@mail.gmail.com>
+ <CAHk-=wgEDAFUKRR=iELwUCk1kpoACk4eOfyyQhnYb78H9AEaSw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190504202800.qU2D2F6mXUAFoqTK102Ia2s-tDNY91Lnc3GeMcFtZy8@z>
+Message-ID: <20190504203611.vK1nkl_l5kyMgw0fpWBeZJ-ivNJYQTOkfytulxi5Ojc@z>
 
 On Sat, May 4, 2019@1:12 PM Andy Lutomirski <luto@amacapital.net> wrote:
 >
 > As an aside, is it even *possible* to get #BP from v8086 mode?  On a quick SDM read, the INT3 instruction causes #GP if VM=1 and IOPL<3.  And, if we allow vm86() to have IOPL=3, we should just remove that ability. It’s nuts.
 
-We've definitely historically allowed IOPL=3 with the whole "iopl()"
-system call. And yes, afaik it works together with the vm86 system
-call too. I think we copy the unsafe bits from the original eflags, so
-if you do iopl(3) followed by vm86(), you will be running in vm86 mode
-with iopl 3.
+Oh, and I think you mis-read the SDM.
 
-> (We should maybe consider a config option for iopl() that defaults off. We’ve supported ioperm() for a long, long time.)
+Yes, iopl matters for "int X" (cd xx) instruction in vm86 mode.
 
-It's entirely possible that nobody uses iopl() and we should make it a
-config option that defaults to off.
+But no, iopl does *not* matter for the special "int3/into/int1"
+(cc/ce/f1) instructions, I think.
 
-But we've already done that with the VM86 support entirely, and I'm
-not sure modern distros even enable it.
-
-And obviously vm86 mode isn't available at all with a 64-bit kernel,
-so this is all slowly becoming more or less moot.
-
-                  Linus
+              Linus
