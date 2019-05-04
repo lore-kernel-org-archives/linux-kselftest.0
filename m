@@ -1,7 +1,7 @@
-From: luto at amacapital.net (Andy Lutomirski)
-Date: Sat, 4 May 2019 13:12:09 -0700
+From: torvalds at linux-foundation.org (Linus Torvalds)
+Date: Sat, 4 May 2019 13:28:00 -0700
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <CAHk-=wjGNx8xcwg=7nE_0-nLQ_d4UALHvJ8O+TurbA25n8MyNg@mail.gmail.com>
+In-Reply-To: <2BF1AE4B-8105-49F0-8B6A-AA3B11FD66FD@amacapital.net>
 References: <20190501202830.347656894@goodmis.org>
  <20190501203152.397154664@goodmis.org>
  <20190501232412.1196ef18@oasis.local.home>
@@ -18,38 +18,28 @@ References: <20190501202830.347656894@goodmis.org>
  <20190504001756.17fad840@oasis.local.home>
  <CAHk-=wiuSFbv_rELND-BLWcP0GSZ0yF=xOAEcf61GE3bU9d=yg@mail.gmail.com>
  <CAHk-=wjGNx8xcwg=7nE_0-nLQ_d4UALHvJ8O+TurbA25n8MyNg@mail.gmail.com>
-Message-ID: <2BF1AE4B-8105-49F0-8B6A-AA3B11FD66FD@amacapital.net>
+ <2BF1AE4B-8105-49F0-8B6A-AA3B11FD66FD@amacapital.net>
+Message-ID: <CAHk-=wiwc8NDahj455iBWmYyvDDS+sN1TObFsxxS51gNbtZ9iw@mail.gmail.com>
 
+On Sat, May 4, 2019 at 1:12 PM Andy Lutomirski <luto at amacapital.net> wrote:
+>
+> As an aside, is it even *possible* to get #BP from v8086 mode?  On a quick SDM read, the INT3 instruction causes #GP if VM=1 and IOPL<3.  And, if we allow vm86() to have IOPL=3, we should just remove that ability. It’s nuts.
 
+We've definitely historically allowed IOPL=3 with the whole "iopl()"
+system call. And yes, afaik it works together with the vm86 system
+call too. I think we copy the unsafe bits from the original eflags, so
+if you do iopl(3) followed by vm86(), you will be running in vm86 mode
+with iopl 3.
 
-> On May 4, 2019, at 11:59 AM, Linus Torvalds <torvalds at linux-foundation.org> wrote:
-> 
-> On Fri, May 3, 2019 at 10:08 PM Linus Torvalds
-> <torvalds at linux-foundation.org> wrote:
->> 
->> I'll look at it tomorrow, but I think this actually makes unnecessary changes.
->> 
->> In particular, I think we could keep the existing entry code almost unchanged with this whole approach.
-> 
-> So here's what I *think* should work. Note that I also removed your
-> test-case code, because it really didn't have a chance in hell of
-> working. Doing that
-> 
->        int3_emulate_call(regs, (unsigned long)&int3_magic);
-> 
-> inside of int3_exception_notify() could not possibly be valid, since
-> int3_emulate_call() returns the new pt_regs that need to be used, and
-> throwing it away is clearly wrong.
-> 
-> So you can't use a register_die_notifier() to try to intercept the
-> 'int3' error and then do it manually, it needs to be done by the
-> ftrace_int3_handler() code that actually returns the new regs, and
-> where do_kernel_int3() will then return it to the low-level handler.
+> (We should maybe consider a config option for iopl() that defaults off. We’ve supported ioperm() for a long, long time.)
 
-I hate register_die_notifier(), so I consider this a plus. I’ve occasionally considered removing the ability for the notifiers to skip normal processing, because, as it stands, figuring out what actually happens in the trap handlers is almost impossible.
+It's entirely possible that nobody uses iopl() and we should make it a
+config option that defaults to off.
 
-It generally looks sane to me.
+But we've already done that with the VM86 support entirely, and I'm
+not sure modern distros even enable it.
 
-As an aside, is it even *possible* to get #BP from v8086 mode?  On a quick SDM read, the INT3 instruction causes #GP if VM=1 and IOPL<3.  And, if we allow vm86() to have IOPL=3, we should just remove that ability. It’s nuts.
+And obviously vm86 mode isn't available at all with a 64-bit kernel,
+so this is all slowly becoming more or less moot.
 
-(We should maybe consider a config option for iopl() that defaults off. We’ve supported ioperm() for a long, long time.)
+                  Linus
