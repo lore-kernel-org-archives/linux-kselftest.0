@@ -1,83 +1,113 @@
-From: brendanhiggins at google.com (Brendan Higgins)
-Date: Fri, 3 May 2019 16:41:10 -0700
-Subject: [PATCH v2 16/17] kernel/sysctl-test: Add null pointer test for
- sysctl.c:proc_dointvec()
-In-Reply-To: <20190503064241.GC20723@kroah.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-17-brendanhiggins@google.com>
- <20190502110347.GE12416@kroah.com>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770A3A0@USCULXMSG01.am.sony.com>
- <CAFd5g471Wawu6g14p0AO3aY8VPBKLA0mjHSdfR1qStFGzp3iGQ@mail.gmail.com>
- <20190503064241.GC20723@kroah.com>
-Message-ID: <CAFd5g44NrKM9WQCF1xW-BWpFNsC05UAS9jt1-S+vNRuBDZVsHQ@mail.gmail.com>
+From: yamada.masahiro at socionext.com (Masahiro Yamada)
+Date: Sat, 4 May 2019 09:18:06 +0900
+Subject: [PATCH] kheaders: Move from proc to sysfs
+In-Reply-To: <20190503182459.159121-1-joel@joelfernandes.org>
+References: <20190503182459.159121-1-joel@joelfernandes.org>
+Message-ID: <CAK7LNATRTqh_OJcQaWfcYYYqyZ-c0u1prD17LDYwDh18z2V31Q@mail.gmail.com>
 
-> On Thu, May 02, 2019 at 11:45:43AM -0700, Brendan Higgins wrote:
-> > On Thu, May 2, 2019 at 11:15 AM <Tim.Bird at sony.com> wrote:
-> > >
-> > >
-> > >
-> > > > -----Original Message-----
-> > > > From: Greg KH
-> > > >
-> > > > On Wed, May 01, 2019 at 04:01:25PM -0700, Brendan Higgins wrote:
-> > > > > From: Iurii Zaikin <yzaikin at google.com>
-> > > > >
-> > > > > KUnit tests for initialized data behavior of proc_dointvec that is
-> > > > > explicitly checked in the code. Includes basic parsing tests including
-> > > > > int min/max overflow.
-> > > > >
-> > > > > Signed-off-by: Iurii Zaikin <yzaikin at google.com>
-> > > > > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> > > > > ---
-> > > > >  kernel/Makefile      |   2 +
-> > > > >  kernel/sysctl-test.c | 292
-> > > > +++++++++++++++++++++++++++++++++++++++++++
-> > > > >  lib/Kconfig.debug    |   6 +
-> > > > >  3 files changed, 300 insertions(+)
-> > > > >  create mode 100644 kernel/sysctl-test.c
-> > > > >
-> > > > > diff --git a/kernel/Makefile b/kernel/Makefile
-> > > > > index 6c57e78817dad..c81a8976b6a4b 100644
-> > > > > --- a/kernel/Makefile
-> > > > > +++ b/kernel/Makefile
-> > > > > @@ -112,6 +112,8 @@ obj-$(CONFIG_HAS_IOMEM) += iomem.o
-> > > > >  obj-$(CONFIG_ZONE_DEVICE) += memremap.o
-> > > > >  obj-$(CONFIG_RSEQ) += rseq.o
-> > > > >
-> > > > > +obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
-> > > >
-> > > > You are going to have to have a "standard" naming scheme for test
-> > > > modules, are you going to recommend "foo-test" over "test-foo"?  If so,
-> > > > that's fine, we should just be consistant and document it somewhere.
-> > > >
-> > > > Personally, I'd prefer "test-foo", but that's just me, naming is hard...
-> > >
-> > > My preference would be "test-foo" as well.  Just my 2 cents.
-> >
-> > I definitely agree we should be consistent. My personal bias
-> > (unsurprisingly) is "foo-test," but this is just because that is the
-> > convention I am used to in other projects I have worked on.
-> >
-> > On an unbiased note, we are currently almost evenly split between the
-> > two conventions with *slight* preference for "foo-test": I ran the two
-> > following grep commands on v5.1-rc7:
-> >
-> > grep -Hrn --exclude-dir="build" -e "config [a-zA-Z_0-9]\+_TEST$" | wc -l
-> > grep -Hrn --exclude-dir="build" -e "config TEST_[a-zA-Z_0-9]\+" | wc -l
-> >
-> > "foo-test" has 36 occurrences.
-> > "test-foo" has 33 occurrences.
-> >
-> > The things I am more concerned about is how this would affect file
-> > naming. If we have a unit test for foo.c, I think foo_test.c is more
-> > consistent with our namespacing conventions. The other thing, is if we
-> > already have a Kconfig symbol called FOO_TEST (or TEST_FOO) what
-> > should we name the KUnit test in this case? FOO_UNIT_TEST?
-> > FOO_KUNIT_TEST, like I did above?
+On Sat, May 4, 2019 at 3:27 AM Joel Fernandes (Google)
+<joel at joelfernandes.org> wrote:
 >
-> Ok, I can live with "foo-test", as you are right, in a directory listing
-> and config option, it makes more sense to add it as a suffix.
+> The kheaders archive consisting of the kernel headers used for compiling
+> bpf programs is in /proc. However there is concern that moving it here
+> will make it permanent. Let us move it to /sys/kernel as discussed [1].
+>
+> [1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
+>
+> Suggested-by: Steven Rostedt <rostedt at goodmis.org>
+> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+> ---
+> This patch applies on top of the previous patch that was applied to the
+> driver tree:
+> https://lore.kernel.org/patchwork/patch/1067310/
+>
+>  kernel/kheaders.c | 40 ++++++++++++++++------------------------
 
-Cool, so just for future reference, if we already have a Kconfig
-symbol called FOO_TEST (or TEST_FOO) what should we name the KUnit
-test in this case? FOO_UNIT_TEST? FOO_KUNIT_TEST, like I did above?
+
+Please rename CONFIG_IKHEADERS_PROC.
+
+Thanks.
+
+
+
+
+>  1 file changed, 16 insertions(+), 24 deletions(-)
+>
+> diff --git a/kernel/kheaders.c b/kernel/kheaders.c
+> index 70ae6052920d..6a16f8f6898d 100644
+> --- a/kernel/kheaders.c
+> +++ b/kernel/kheaders.c
+> @@ -8,9 +8,8 @@
+>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> -#include <linux/proc_fs.h>
+> +#include <linux/kobject.h>
+>  #include <linux/init.h>
+> -#include <linux/uaccess.h>
+>
+>  /*
+>   * Define kernel_headers_data and kernel_headers_data_end, within which the
+> @@ -31,39 +30,32 @@ extern char kernel_headers_data;
+>  extern char kernel_headers_data_end;
+>
+>  static ssize_t
+> -ikheaders_read_current(struct file *file, char __user *buf,
+> -                     size_t len, loff_t *offset)
+> +ikheaders_read(struct file *file,  struct kobject *kobj,
+> +              struct bin_attribute *bin_attr,
+> +              char *buf, loff_t off, size_t len)
+>  {
+> -       return simple_read_from_buffer(buf, len, offset,
+> -                                      &kernel_headers_data,
+> -                                      &kernel_headers_data_end -
+> -                                      &kernel_headers_data);
+> +       memcpy(buf, &kernel_headers_data + off, len);
+> +       return len;
+>  }
+>
+> -static const struct file_operations ikheaders_file_ops = {
+> -       .read = ikheaders_read_current,
+> -       .llseek = default_llseek,
+> +static struct bin_attribute kheaders_attr __ro_after_init = {
+> +       .attr = {
+> +               .name = "kheaders.tar.xz",
+> +               .mode = S_IRUGO,
+> +       },
+> +       .read = &ikheaders_read,
+>  };
+>
+>  static int __init ikheaders_init(void)
+>  {
+> -       struct proc_dir_entry *entry;
+> -
+> -       /* create the current headers file */
+> -       entry = proc_create("kheaders.tar.xz", S_IRUGO, NULL,
+> -                           &ikheaders_file_ops);
+> -       if (!entry)
+> -               return -ENOMEM;
+> -
+> -       proc_set_size(entry,
+> -                     &kernel_headers_data_end -
+> -                     &kernel_headers_data);
+> -       return 0;
+> +       kheaders_attr.size = (&kernel_headers_data_end -
+> +                             &kernel_headers_data);
+> +       return sysfs_create_bin_file(kernel_kobj, &kheaders_attr);
+>  }
+>
+>  static void __exit ikheaders_cleanup(void)
+>  {
+> -       remove_proc_entry("kheaders.tar.xz", NULL);
+> +       sysfs_remove_bin_file(kernel_kobj, &kheaders_attr);
+>  }
+>
+>  module_init(ikheaders_init);
+> --
+> 2.21.0.1020.gf2820cf01a-goog
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
