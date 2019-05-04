@@ -1,59 +1,164 @@
-From: gregkh at linuxfoundation.org (Greg KH)
-Date: Sat, 4 May 2019 12:42:51 +0200
-Subject: [PATCH v2 12/17] kunit: tool: add Python wrappers for running
- KUnit tests
-In-Reply-To: <CAFd5g47aY-CL+d7DfiyTidY4aAVY+eg1TM1UJ4nYqKSfHOi-0w@mail.gmail.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-13-brendanhiggins@google.com>
- <20190502110220.GD12416@kroah.com>
- <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
- <a49c5088-a821-210c-66de-f422536f5b01@gmail.com>
- <CAFd5g44iWRchQKdJYtjRtPY6e-6e0eXpKXXsx5Ooi6sWE474KA@mail.gmail.com>
- <1a5f3c44-9fa9-d423-66bf-45255a90c468@gmail.com>
- <CAFd5g45RYm+zfdJXnyp2KZZH5ojfOzy++aq+4zBeE5VDu6WgEw@mail.gmail.com>
- <052fa196-4ea9-8384-79b7-fe6bacc0ee82@gmail.com>
- <CAFd5g47aY-CL+d7DfiyTidY4aAVY+eg1TM1UJ4nYqKSfHOi-0w@mail.gmail.com>
-Message-ID: <20190504104251.GB1478@kroah.com>
+From: joel at joelfernandes.org (Joel Fernandes (Google))
+Date: Sat,  4 May 2019 08:12:13 -0400
+Subject: [PATCH v2] kheaders: Move from proc to sysfs
+Message-ID: <20190504121213.183203-1-joel@joelfernandes.org>
 
-On Fri, May 03, 2019 at 04:14:49PM -0700, Brendan Higgins wrote:
-> In any case, it sounds like you and Greg are in agreement on the core
-> libraries generating the output in TAP13, so I won't argue that point
-> further.
+The kheaders archive consisting of the kernel headers used for compiling
+bpf programs is in /proc. However there is concern that moving it here
+will make it permanent. Let us move it to /sys/kernel as discussed [1].
 
-Great!
+[1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
 
-> ## Analysis of using TAP13
-> 
-> One of my earlier concerns was that TAP13 is a bit over constrained
-> for what I would like to output from the KUnit core. It only allows
-> data to be output as either:
->  - test number
->  - ok/not ok with single line description
->  - directive
->  - diagnostics
->  - YAML block
-> 
-> The test number must become before a set of ok/not ok lines, and does
-> not contain any additional information. One annoying thing about this
-> is it doesn't provide any kind of nesting or grouping.
+Suggested-by: Steven Rostedt <rostedt at goodmis.org>
+Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+---
+This patch applies on top of the previous patch that was applied to the
+driver tree:
+https://lore.kernel.org/patchwork/patch/1067310/
 
-It should handle nesting just fine, I think we do that already today.
+v1->v2: Fixed some kconfig nits (Masami).
 
-> There is one ok/not ok line per test and it may have a short
-> description of the test immediately after 'ok' or 'not ok'; this is
-> problematic because it wants the first thing you say about a test to
-> be after you know whether it passes or not.
+ init/Kconfig                                | 16 ++++-----
+ kernel/Makefile                             |  4 +--
+ kernel/{gen_ikh_data.sh => gen_kheaders.sh} |  2 +-
+ kernel/kheaders.c                           | 40 +++++++++------------
+ 4 files changed, 26 insertions(+), 36 deletions(-)
+ rename kernel/{gen_ikh_data.sh => gen_kheaders.sh} (98%)
 
-Take a look at the output of our current tests, I think you might find
-it to be a bit more flexible than you think.
-
-Also, this isn't our standard, we picked it because we needed a standard
-that the tools of today already understand.  It might have issues and
-other problems, but we are not in the business of writing test output
-parsing tools, and we don't want to force everyone out there to write
-custom parsers.  We want them to be able to use the tools they already
-have so they can test the kernel, and to do so as easily as possible.
-
-thanks,
-
-greg k-h
+diff --git a/init/Kconfig b/init/Kconfig
+index 26a364a95b57..c3661991b089 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -579,15 +579,13 @@ config IKCONFIG_PROC
+ 	  This option enables access to the kernel configuration file
+ 	  through /proc/config.gz.
+ 
+-config IKHEADERS_PROC
+-	tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
+-	depends on PROC_FS
+-	help
+-	  This option enables access to the kernel header and other artifacts that
+-	  are generated during the build process. These can be used to build eBPF
+-	  tracing programs, or similar programs.  If you build the headers as a
+-	  module, a module called kheaders.ko is built which can be loaded on-demand
+-	  to get access to the headers.
++config IKHEADERS
++	tristate "Enable kernel headers through /sys/kernel/kheaders.tar.xz"
++	help
++	  This option enables access to the in-kernel headers that are generated during
++	  the build process. These can be used to build eBPF tracing programs,
++	  or similar programs.  If you build the headers as a module, a module called
++	  kheaders.ko is built which can be loaded on-demand to get access to headers.
+ 
+ config LOG_BUF_SHIFT
+ 	int "Kernel log buffer size (16 => 64KB, 17 => 128KB)"
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 12399614c350..b32a558fae2f 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -70,7 +70,7 @@ obj-$(CONFIG_UTS_NS) += utsname.o
+ obj-$(CONFIG_USER_NS) += user_namespace.o
+ obj-$(CONFIG_PID_NS) += pid_namespace.o
+ obj-$(CONFIG_IKCONFIG) += configs.o
+-obj-$(CONFIG_IKHEADERS_PROC) += kheaders.o
++obj-$(CONFIG_IKHEADERS) += kheaders.o
+ obj-$(CONFIG_SMP) += stop_machine.o
+ obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
+ obj-$(CONFIG_AUDIT) += audit.o auditfilter.o
+@@ -126,7 +126,7 @@ $(obj)/config_data.gz: $(KCONFIG_CONFIG) FORCE
+ $(obj)/kheaders.o: $(obj)/kheaders_data.tar.xz
+ 
+ quiet_cmd_genikh = CHK     $(obj)/kheaders_data.tar.xz
+-cmd_genikh = $(srctree)/kernel/gen_ikh_data.sh $@
++cmd_genikh = $(srctree)/kernel/gen_kheaders.sh $@
+ $(obj)/kheaders_data.tar.xz: FORCE
+ 	$(call cmd,genikh)
+ 
+diff --git a/kernel/gen_ikh_data.sh b/kernel/gen_kheaders.sh
+similarity index 98%
+rename from kernel/gen_ikh_data.sh
+rename to kernel/gen_kheaders.sh
+index 591a94f7b387..581b83534587 100755
+--- a/kernel/gen_ikh_data.sh
++++ b/kernel/gen_kheaders.sh
+@@ -2,7 +2,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ # This script generates an archive consisting of kernel headers
+-# for CONFIG_IKHEADERS_PROC.
++# for CONFIG_IKHEADERS.
+ set -e
+ spath="$(dirname "$(readlink -f "$0")")"
+ kroot="$spath/.."
+diff --git a/kernel/kheaders.c b/kernel/kheaders.c
+index 70ae6052920d..6a16f8f6898d 100644
+--- a/kernel/kheaders.c
++++ b/kernel/kheaders.c
+@@ -8,9 +8,8 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/proc_fs.h>
++#include <linux/kobject.h>
+ #include <linux/init.h>
+-#include <linux/uaccess.h>
+ 
+ /*
+  * Define kernel_headers_data and kernel_headers_data_end, within which the
+@@ -31,39 +30,32 @@ extern char kernel_headers_data;
+ extern char kernel_headers_data_end;
+ 
+ static ssize_t
+-ikheaders_read_current(struct file *file, char __user *buf,
+-		      size_t len, loff_t *offset)
++ikheaders_read(struct file *file,  struct kobject *kobj,
++	       struct bin_attribute *bin_attr,
++	       char *buf, loff_t off, size_t len)
+ {
+-	return simple_read_from_buffer(buf, len, offset,
+-				       &kernel_headers_data,
+-				       &kernel_headers_data_end -
+-				       &kernel_headers_data);
++	memcpy(buf, &kernel_headers_data + off, len);
++	return len;
+ }
+ 
+-static const struct file_operations ikheaders_file_ops = {
+-	.read = ikheaders_read_current,
+-	.llseek = default_llseek,
++static struct bin_attribute kheaders_attr __ro_after_init = {
++	.attr = {
++		.name = "kheaders.tar.xz",
++		.mode = S_IRUGO,
++	},
++	.read = &ikheaders_read,
+ };
+ 
+ static int __init ikheaders_init(void)
+ {
+-	struct proc_dir_entry *entry;
+-
+-	/* create the current headers file */
+-	entry = proc_create("kheaders.tar.xz", S_IRUGO, NULL,
+-			    &ikheaders_file_ops);
+-	if (!entry)
+-		return -ENOMEM;
+-
+-	proc_set_size(entry,
+-		      &kernel_headers_data_end -
+-		      &kernel_headers_data);
+-	return 0;
++	kheaders_attr.size = (&kernel_headers_data_end -
++			      &kernel_headers_data);
++	return sysfs_create_bin_file(kernel_kobj, &kheaders_attr);
+ }
+ 
+ static void __exit ikheaders_cleanup(void)
+ {
+-	remove_proc_entry("kheaders.tar.xz", NULL);
++	sysfs_remove_bin_file(kernel_kobj, &kheaders_attr);
+ }
+ 
+ module_init(ikheaders_init);
+-- 
+2.21.0.1020.gf2820cf01a-goog
