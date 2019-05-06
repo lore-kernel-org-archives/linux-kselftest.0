@@ -1,53 +1,65 @@
-From: skhan at linuxfoundation.org (Shuah Khan)
-Date: Mon, 6 May 2019 09:18:00 -0600
-Subject: [PATCH] selftests: add sleep between detach and usbip list -l
-In-Reply-To: <20190506151540.GA12755@kroah.com>
-References: <20190502194740.15344-1-skhan@linuxfoundation.org>
- <20190505091356.GB25646@kroah.com>
- <ed0a3115-ee5a-97b6-b69c-073c9595d734@linuxfoundation.org>
- <20190506151540.GA12755@kroah.com>
-Message-ID: <b1bf8113-75a1-40dc-daf9-4411c3e87cfe@linuxfoundation.org>
+From: andreyknvl at google.com (Andrey Konovalov)
+Date: Mon, 6 May 2019 18:21:56 +0200
+Subject: [PATCH v14 13/17] IB/mlx4,
+ arm64: untag user pointers in mlx4_get_umem_mr
+In-Reply-To: <20190503170310.GL55449@arrakis.emea.arm.com>
+References: <cover.1556630205.git.andreyknvl@google.com>
+ <05c0c078b8b5984af4cc3b105a58c711dcd83342.1556630205.git.andreyknvl@google.com>
+ <20190503170310.GL55449@arrakis.emea.arm.com>
+Message-ID: <CAAeHK+weVYv4Tgj8DXv0ZTFZzGEpLYsn-3wxxmQN+ZW88MXbMw@mail.gmail.com>
 
-On 5/6/19 9:15 AM, Greg KH wrote:
-> On Mon, May 06, 2019 at 08:47:15AM -0600, Shuah Khan wrote:
->> On 5/5/19 3:13 AM, Greg KH wrote:
->>> On Thu, May 02, 2019 at 01:47:40PM -0600, Shuah Khan wrote:
->>>> Add a sleep between detach and check for exportable devices to avoid
->>>> the following segfault from libc-2.27.so
->>>>
->>>> [ 6268.136108] usbip[5565]: segfault at 0 ip 00007f2a947bddfd sp 00007ffd1a8705e8 error 4 in libc-2.27.so[7f2a94703000+1e7000]
->>>>
->>>> Signed-off-by: Shuah Khan <skhan at linuxfoundation.org>
->>>> ---
->>>>    tools/testing/selftests/drivers/usb/usbip/usbip_test.sh | 4 ++++
->>>>    1 file changed, 4 insertions(+)
->>>>
->>>> diff --git a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
->>>> index 128f0ab24307..beacf24a8df7 100755
->>>> --- a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
->>>> +++ b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
->>>> @@ -171,10 +171,14 @@ echo "Detach invalid port tests - expect invalid port error message";
->>>>    src/usbip detach -p 100;
->>>>    echo "=============================================================="
->>>> +# let detach complete. Avoid segfaults from libc-2.27.so
->>>> +sleep 3;
->>>
->>> That feels very "arbitrary", why do we "know" it will take at most 3
->>> seconds?  I guess there's not much else we can do here except maybe
->>> somehow watch sysfs until the device is really gone?
->>>
->>
->> Yeah. Number 3 is somewhat arbitrary. It helps the host process the
->> detach request from the client and update the sysfs. Detach returns
->> as soon as client side is done, and the test is running the next
->> command on the host side. If I were run these commands manually, it
->> gives enough settling time. I am looking for a quick way to allow
->> settling time in this automated test.
-> 
-> Ok, you might want to document that you know it's a random number :)
-> 
+On Fri, May 3, 2019 at 7:03 PM Catalin Marinas <catalin.marinas at arm.com> wrote:
+>
+> On Tue, Apr 30, 2019 at 03:25:09PM +0200, Andrey Konovalov wrote:
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > mlx4_get_umem_mr() uses provided user pointers for vma lookups, which can
+> > only by done with untagged pointers.
+> >
+> > Untag user pointers in this function.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+> > Reviewed-by: Leon Romanovsky <leonro at mellanox.com>
+> > ---
+> >  drivers/infiniband/hw/mlx4/mr.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/infiniband/hw/mlx4/mr.c b/drivers/infiniband/hw/mlx4/mr.c
+> > index 395379a480cb..9a35ed2c6a6f 100644
+> > --- a/drivers/infiniband/hw/mlx4/mr.c
+> > +++ b/drivers/infiniband/hw/mlx4/mr.c
+> > @@ -378,6 +378,7 @@ static struct ib_umem *mlx4_get_umem_mr(struct ib_udata *udata, u64 start,
+> >        * again
+> >        */
+> >       if (!ib_access_writable(access_flags)) {
+> > +             unsigned long untagged_start = untagged_addr(start);
+> >               struct vm_area_struct *vma;
+> >
+> >               down_read(&current->mm->mmap_sem);
+> > @@ -386,9 +387,9 @@ static struct ib_umem *mlx4_get_umem_mr(struct ib_udata *udata, u64 start,
+> >                * cover the memory, but for now it requires a single vma to
+> >                * entirely cover the MR to support RO mappings.
+> >                */
+> > -             vma = find_vma(current->mm, start);
+> > -             if (vma && vma->vm_end >= start + length &&
+> > -                 vma->vm_start <= start) {
+> > +             vma = find_vma(current->mm, untagged_start);
+> > +             if (vma && vma->vm_end >= untagged_start + length &&
+> > +                 vma->vm_start <= untagged_start) {
+> >                       if (vma->vm_flags & VM_WRITE)
+> >                               access_flags |= IB_ACCESS_LOCAL_WRITE;
+> >               } else {
+>
+> Discussion ongoing on the previous version of the patch but I'm more
+> inclined to do this in ib_uverbs_(re)reg_mr() on cmd.start.
 
-Okay. Will do. I will send v2. :)
+OK, I want to publish v15 sooner to fix the issue with emails
+addresses, so I'll implement this approach there for now.
 
-thanks,
--- Shuah
+
+
+>
+> --
+> Catalin
