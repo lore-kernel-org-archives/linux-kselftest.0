@@ -1,53 +1,194 @@
-From: brendanhiggins@google.com (Brendan Higgins)
-Date: Mon, 6 May 2019 14:42:53 -0700
-Subject: [PATCH v2 12/17] kunit: tool: add Python wrappers for running
- KUnit tests
-In-Reply-To: <CAGXu5jJpp2HyEWMtAde+VUt=9ni3HRu69NM4rUQJu4kBrnx9Kw@mail.gmail.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-13-brendanhiggins@google.com>
- <20190502110220.GD12416@kroah.com>
- <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
- <a49c5088-a821-210c-66de-f422536f5b01@gmail.com>
- <CAFd5g44iWRchQKdJYtjRtPY6e-6e0eXpKXXsx5Ooi6sWE474KA@mail.gmail.com>
- <1a5f3c44-9fa9-d423-66bf-45255a90c468@gmail.com>
- <CAFd5g45RYm+zfdJXnyp2KZZH5ojfOzy++aq+4zBeE5VDu6WgEw@mail.gmail.com>
- <052fa196-4ea9-8384-79b7-fe6bacc0ee82@gmail.com>
- <CAFd5g47aY-CL+d7DfiyTidY4aAVY+eg1TM1UJ4nYqKSfHOi-0w@mail.gmail.com>
- <63f63c7c-6185-5e64-b338-6a5e7fb9e27c@gmail.com>
- <CAGXu5jJpp2HyEWMtAde+VUt=9ni3HRu69NM4rUQJu4kBrnx9Kw@mail.gmail.com>
-Message-ID:
- <CAFd5g47d-e31NecDEbMud0rUH55EbhcS0wJpjB1PZZaX5Udqmw@mail.gmail.com>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Mon, 6 May 2019 17:45:11 -0400
+Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+In-Reply-To: <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
+References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+ <20190502185225.0cdfc8bc@gandalf.local.home>
+ <20190502193129.664c5b2e@gandalf.local.home>
+ <20190502195052.0af473cf@gandalf.local.home>
+ <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+ <20190503092247.20cc1ff0@gandalf.local.home>
+ <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
+ <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
+ <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+ <20190506095631.6f71ad7c@gandalf.local.home>
+ <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
+ <20190506130643.62c35eeb@gandalf.local.home>
+ <CAHk-=whesas+GDtHZks62wqXWXe4d_g3XJ359GX81qj=Fgs6qQ@mail.gmail.com>
+ <20190506145745.17c59596@gandalf.local.home>
+ <CAHk-=witfFBW2O5v6g--FmqnAFsMkKNLosTFfWyaoJ7euQF8kQ@mail.gmail.com>
+ <20190506162915.380993f9@gandalf.local.home>
+ <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
+Message-ID: <20190506174511.2f8b696b@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190506214253.NlKTIzOiiP4ajuG8KbJxPrqJSGJ1M8vJ2wHHX8Elhvo@z>
+Message-ID: <20190506214511.HBk4H6Tneps3gKz7c1-RVpLmBu0Ev9I_zU8jxuAL0Sk@z>
 
-> On Sun, May 5, 2019@5:19 PM Frank Rowand <frowand.list@gmail.com> wrote:
-> > You can see the full version 14 document in the submitter's repo:
+On Mon, 6 May 2019 13:42:12 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
+> On Mon, May 6, 2019@1:29 PM Steven Rostedt <rostedt@goodmis.org> wrote:
 > >
-> >   $ git clone https://github.com/isaacs/testanything.github.io.git
-> >   $ cd testanything.github.io
-> >   $ git checkout tap14
-> >   $ ls tap-version-14-specification.md
+> > Because that call to ftrace_stub is also dynamic.  
+> 
+> You're missing the point.
+> 
+> We are rewriting a single "cal" instruction to point to something.
+> 
+> The "int3" emulation should call THE SAME THING.
+> 
+> Right now it doesn't.
+
+To do that we would need to rewrite the logic to update each of those
+40,000 calls one at a time, or group them together to what gets
+changed. As each function can call a different trampoline. One of the
+custom trampolines associated with a ftrace_ops, or the list one when a
+function has more than one ftrace_ops attached to it.
+
+The ftrace code does this in batches:
+
+ 1) Add int3 to all functions being affected (could be 40,000 of
+    them) (sync the cores)
+
+ (Now all those functions are going through the int3 handler)
+
+ 2) Modify the address of those call sites (sync the cores)
+
+ (Still going through the int3 handlers)
+
+ 3) Remove the int3
+
+Now each of those functions are calling something, and they may not all
+be the same thing they are calling.
+
+> 
+> > Part of the code will change it to call the function needed directly.
 > >
-> > My understanding is the the version 14 specification is not trying to
-> > add new features, but instead capture what is already implemented in
-> > the wild.
->
-> Oh! I didn't know about the work on TAP 14. I'll go read through this.
->
-> > > ## Here is what I propose for this patchset:
-> > >
-> > >  - Print out test number range at the beginning of each test suite.
-> > >  - Print out log lines as soon as they happen as diagnostics.
-> > >  - Print out the lines that state whether a test passes or fails as a
-> > > ok/not ok line.
-> > >
-> > > This would be technically conforming with TAP13 and is consistent with
-> > > what some kselftests have done.
->
-> This is what I fixed kselftest to actually do (it wasn't doing correct
-> TAP13), and Shuah is testing the series now:
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=ksft-tap-refactor
+> > struct ftrace_ops my_ops {
+> >         .func = my_handler
+> > };
+> >
+> >         register_ftrace_function(&my_ops);
+> >
+> > Will change "call ftrace_stub" into "call my_handler"  
+> 
+> But that's not what you're actually *doing*.
+> 
+> Instead, you're now _emulating_ calling ftrace_regs_caller, which will
+> call that ftrace_stub, which in turn will try to update the call site.
 
-Oh, cool! I guess this is an okay approach then.
+The call site gets updated before the loop gets called (at least it
+should, I have to go and look at the code, but I'm 99% that it does).
+There should not be a breakpoint on the call to ftrace_stub when we add
+breakpoints to the functions that call the ftrace_regs_caller.
 
-Thanks!
+> 
+> But that's insane. It's insane because
+> 
+>  - it's not even what your call rewriting is doing Why aren't you just
+> doing the emulation using the *SAME* target that you're rewriting the
+> actual call instruction with?
+> 
+>  - even if ftrace_regs_caller ends up being that same function, you'd
+> be better off just passing the "struct pt_regs" that you *ALREADY
+> HAVE* directly to ftrace_stub in the int3 handler, rather than create
+> *another* pt_regs stack
+
+Are you saying to call the ftrace_ops handlers from int3 directly?
+
+
+> 
+> See? In that second case, why don't you just use "int3_emulate_call()"
+> to do the reguired 'struct pt_regs' updates, and then call
+> ftrace_stub() *with* that fixed-up pt_regs thing?
+> 
+> In other words, I think you should always do "int3_emulate_call()"
+> with the *exact* same address that the instruction you are rewriting
+> is using. There's no "three different cases". The only possible cases
+> are "am I rewriting a jump" or "am I rewriting a call".
+> 
+> There is no "am I rewriting a call to one address, and then emulating
+> it with a call to another address" case that makes sense.
+> 
+> What *can* make sense is "Oh, I'm emulating a call, but I know that
+> call will be rewritten, so let me emulate the call and then
+> short-circuit the emulation immediately".
+> 
+> But that is not what the ftrace code is doing. The ftrace code is
+> doing something odd and insane.
+> 
+> And no, your "explanation" makes no sense. Because it doesn't actually
+> touch on the fundamental insanity.
+
+Also, talking with Peter about the ftrace_32.S version of
+ftrace_regs_caller, makes Peter's patch sound even better.
+
+The "ftrace_regs_caller" was created to allow kprobes to use the
+function tracer when a probe was added to the start of a function
+(which is a common occurrence). That is, kprobes uses int3 to inject a
+handler pretty much anywhere in the code. kprobes can even be used for
+dynamic trace events.
+
+Now we found that if we use function tracing, it's faster to do the
+call then to take the int3 hit. So kprobes knows of ftrace, and will
+register a callback if it happens to be placed on a fentry call site.
+
+Thus, Masami asked me to create a way to have ftrace be able to
+simulate an int3. As kprobe handlers can do pretty much anything (bpf
+uses them), I had to make that call from ftrace look like a real int3
+just happened.
+
+As ftrace_caller, is optimized for fast function tracing, I needed to
+make another trampoline for the slower "emulate int3" operation, and
+that was the birth of ftrace_regs_caller. For x86_64, it was really
+straight forward and I had that done rather quickly. For i386, it was
+much more difficult, and that was because of not having regs->sp on the
+stack. I had to play this game to be able to pass in a pt_regs that
+would be the same regardless if it was called by ftrace or an int3.
+
+The problem was the call to ftrace_regs_caller would place the return
+code on the stack, but I had to move it, because the kprobes handlers,
+expected &regs->sp to point to the location of the stack just before
+the call was hit!  This means, regs->flags was were the return code
+was.
+
+When we enter ftrace_regs_caller from the function being traced, the
+top of the stack has the return code. But then we needed to do this:
+
+	pushl	$__KERNEL_CS
+	pushl	4(%esp)				/* Save the return ip */
+	pushl	$0				/* Load 0 into orig_ax */
+	pushl	%gs
+	pushl	%fs
+	pushl	%es
+	pushl	%ds
+	pushl	%eax
+
+The above push regs->cs, regs->ip (the return code), then regs->gs...
+to regs->ax, where now I finally have saved a scratch register to use.
+
+
+	/* Get flags and place them into the return ip slot */
+	pushf
+	popl	%eax
+	movl	%eax, 8*4(%esp)
+
+I would then save flags into %eax and move it to where the return
+address was placed by the call to this trampoline.
+
+At the end, I had to undo this song and dance as well:
+
+	/* restore flags */
+	push	14*4(%esp)
+	popf
+
+	/* Move return ip back to its original location */
+	movl	12*4(%esp), %eax
+	movl	%eax, 14*4(%esp)
+
+
+If we go with Peter's patch, I can make this code much more sane, and
+not have to worry about having &regs->sp be at the top of the stack. I
+could simply, just push everything in the order of pt_regs and call the
+handler.
+
+-- Steve
