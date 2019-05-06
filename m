@@ -1,53 +1,41 @@
-From: keescook@google.com (Kees Cook)
-Date: Mon, 6 May 2019 10:43:55 -0700
-Subject: [PATCH v2 12/17] kunit: tool: add Python wrappers for running
- KUnit tests
-In-Reply-To: <63f63c7c-6185-5e64-b338-6a5e7fb9e27c@gmail.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-13-brendanhiggins@google.com>
- <20190502110220.GD12416@kroah.com>
- <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
- <a49c5088-a821-210c-66de-f422536f5b01@gmail.com>
- <CAFd5g44iWRchQKdJYtjRtPY6e-6e0eXpKXXsx5Ooi6sWE474KA@mail.gmail.com>
- <1a5f3c44-9fa9-d423-66bf-45255a90c468@gmail.com>
- <CAFd5g45RYm+zfdJXnyp2KZZH5ojfOzy++aq+4zBeE5VDu6WgEw@mail.gmail.com>
- <052fa196-4ea9-8384-79b7-fe6bacc0ee82@gmail.com>
- <CAFd5g47aY-CL+d7DfiyTidY4aAVY+eg1TM1UJ4nYqKSfHOi-0w@mail.gmail.com>
- <63f63c7c-6185-5e64-b338-6a5e7fb9e27c@gmail.com>
+From: torvalds@linux-foundation.org (Linus Torvalds)
+Date: Mon, 6 May 2019 11:06:51 -0700
+Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+In-Reply-To: <20190506130643.62c35eeb@gandalf.local.home>
+References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+ <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+ <20190502185225.0cdfc8bc@gandalf.local.home>
+ <20190502193129.664c5b2e@gandalf.local.home>
+ <20190502195052.0af473cf@gandalf.local.home>
+ <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+ <20190503092247.20cc1ff0@gandalf.local.home>
+ <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
+ <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
+ <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+ <20190506095631.6f71ad7c@gandalf.local.home>
+ <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
+ <20190506130643.62c35eeb@gandalf.local.home>
 Message-ID:
- <CAGXu5jJpp2HyEWMtAde+VUt=9ni3HRu69NM4rUQJu4kBrnx9Kw@mail.gmail.com>
+ <CAHk-=whesas+GDtHZks62wqXWXe4d_g3XJ359GX81qj=Fgs6qQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190506174355.5MayLn720WQXp2eRZu8yuvHLoS_f9naFuDrEAwT47V0@z>
+Message-ID: <20190506180651.DygSK0KNaLrj4EQct9YTRMaxu5bTj3OsSmZa8h8uQJU@z>
 
-On Sun, May 5, 2019@5:19 PM Frank Rowand <frowand.list@gmail.com> wrote:
-> You can see the full version 14 document in the submitter's repo:
+On Mon, May 6, 2019@10:06 AM Steven Rostedt <rostedt@goodmis.org> wrote:
 >
->   $ git clone https://github.com/isaacs/testanything.github.io.git
->   $ cd testanything.github.io
->   $ git checkout tap14
->   $ ls tap-version-14-specification.md
+> Can you try booting with:
+> [ snip snip ]
 >
-> My understanding is the the version 14 specification is not trying to
-> add new features, but instead capture what is already implemented in
-> the wild.
+> And see if it boots?
 
-Oh! I didn't know about the work on TAP 14. I'll go read through this.
+No it doesn't.
 
-> > ## Here is what I propose for this patchset:
-> >
-> >  - Print out test number range at the beginning of each test suite.
-> >  - Print out log lines as soon as they happen as diagnostics.
-> >  - Print out the lines that state whether a test passes or fails as a
-> > ok/not ok line.
-> >
-> > This would be technically conforming with TAP13 and is consistent with
-> > what some kselftests have done.
+Dang, I tried to figure out what's up, but now I really have to start
+handling all the puill requests..
 
-This is what I fixed kselftest to actually do (it wasn't doing correct
-TAP13), and Shuah is testing the series now:
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=ksft-tap-refactor
+I thought it might be an int3 that happens on the entry stack, but I
+don't think that should ever happen. Either it's a user-mode int3, or
+we're in the kernel and have switched stacks. So I still don't see why
+my patch doesn't work, but now I have no time to debug it.
 
-I'll go read TAP 14 now...
-
--- 
-Kees Cook
+                   Linus
