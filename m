@@ -1,51 +1,53 @@
-From: andreyknvl at google.com (Andrey Konovalov)
-Date: Mon, 6 May 2019 15:53:01 +0200
-Subject: [PATCH v14 08/17] mm,
- arm64: untag user pointers in get_vaddr_frames
-In-Reply-To: <20190503165113.GJ55449@arrakis.emea.arm.com>
-References: <cover.1556630205.git.andreyknvl@google.com>
- <8e20df035de677029b3f970744ba2d35e2df1db3.1556630205.git.andreyknvl@google.com>
- <20190503165113.GJ55449@arrakis.emea.arm.com>
-Message-ID: <CAAeHK+wCyCa-5=bPNwfivP6sEODOXKE1bPjcjc2y_T4rN+-6gA@mail.gmail.com>
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Mon, 6 May 2019 09:56:31 -0400
+Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+In-Reply-To: <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+ <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+ <20190502185225.0cdfc8bc@gandalf.local.home>
+ <20190502193129.664c5b2e@gandalf.local.home>
+ <20190502195052.0af473cf@gandalf.local.home>
+ <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+ <20190503092247.20cc1ff0@gandalf.local.home>
+ <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
+ <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
+ <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+Message-ID: <20190506095631.6f71ad7c@gandalf.local.home>
 
-On Fri, May 3, 2019 at 6:51 PM Catalin Marinas <catalin.marinas at arm.com> wrote:
->
-> On Tue, Apr 30, 2019 at 03:25:04PM +0200, Andrey Konovalov wrote:
-> > This patch is a part of a series that extends arm64 kernel ABI to allow to
-> > pass tagged user pointers (with the top byte set to something else other
-> > than 0x00) as syscall arguments.
-> >
-> > get_vaddr_frames uses provided user pointers for vma lookups, which can
-> > only by done with untagged pointers. Instead of locating and changing
-> > all callers of this function, perform untagging in it.
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
-> > ---
-> >  mm/frame_vector.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/mm/frame_vector.c b/mm/frame_vector.c
-> > index c64dca6e27c2..c431ca81dad5 100644
-> > --- a/mm/frame_vector.c
-> > +++ b/mm/frame_vector.c
-> > @@ -46,6 +46,8 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
-> >       if (WARN_ON_ONCE(nr_frames > vec->nr_allocated))
-> >               nr_frames = vec->nr_allocated;
-> >
-> > +     start = untagged_addr(start);
-> > +
-> >       down_read(&mm->mmap_sem);
-> >       locked = 1;
-> >       vma = find_vma_intersection(mm, start, start + 1);
->
-> Is this some buffer that the user may have malloc'ed? I got lost when
-> trying to track down the provenience of this buffer.
+On Mon, 6 May 2019 10:19:51 +0200
+Peter Zijlstra <peterz at infradead.org> wrote:
 
-The caller that I found when I was looking at this:
+> On Fri, May 03, 2019 at 11:57:22AM -0700, Linus Torvalds wrote:
+> > On Fri, May 3, 2019 at 9:21 AM Andy Lutomirski <luto at amacapital.net> wrote:  
+> > >
+> > > So here’s a somewhat nutty suggestion: how about we tweak the 32-bit
+> > > entry code to emulate the sane 64-bit frame, not just for int3 but
+> > > always?  
+> > 
+> > What would the code actually end up looking like? I don't necessarily
+> > object, since that kernel_stack_pointer() thing certainly looks
+> > horrible, but honestly, my suggestion to just pass in the 'struct
+> > pt_regs' and let the call emulation fix it up would have also worked,
+> > and avoided that bug (and who knows what else might be hiding).
+> > 
+> > I really think that you're now hitting all the special case magic
+> > low-level crap that I wanted to avoid.  
+> 
+> This did actually boot on first try; so there must be something horribly
+> wrong...
+> 
+> Now, I know you like that other approach; but I figured I should at
+> least show you what this one looks like. Maybe I've been staring at
+> entry_32.S too much, but I really don't dislike this.
 
-drivers/gpu/drm/exynos/exynos_drm_g2d.c:482
-exynos_g2d_set_cmdlist_ioctl()->g2d_map_cmdlist_gem()->g2d_userptr_get_dma_addr()->get_vaddr_frames()
+I can test this too. I was hoping to get this in by this merge window.
+I spent 3 hours yesterday trying to get Linus's version working on
+i386 with no success. Not sure how much time Linus will have to look at
+this, as he just opened the merge window.
 
->
-> --
-> Catalin
+Again, I think Peter's solution here is the more elegant one. But as
+long as we get *a* solution, I'll be happy. And my time to work on it
+has pretty much already been depleted.
+
+-- Steve
