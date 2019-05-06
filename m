@@ -1,48 +1,44 @@
-From: skhan@linuxfoundation.org (Shuah Khan)
-Date: Mon, 6 May 2019 08:47:15 -0600
-Subject: [PATCH] selftests: add sleep between detach and usbip list -l
-In-Reply-To: <20190505091356.GB25646@kroah.com>
-References: <20190502194740.15344-1-skhan@linuxfoundation.org>
- <20190505091356.GB25646@kroah.com>
-Message-ID: <ed0a3115-ee5a-97b6-b69c-073c9595d734@linuxfoundation.org>
+From: jpoimboe@redhat.com (Josh Poimboeuf)
+Date: Mon, 6 May 2019 10:14:28 -0500
+Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+In-Reply-To: <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
+References: <20190501202830.347656894@goodmis.org>
+ <20190501203152.397154664@goodmis.org>
+ <20190501232412.1196ef18@oasis.local.home>
+ <20190502162133.GX2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
+Message-ID: <20190506151428.r6fhirmoz5nrmiu5@treble>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190506144715.2lSoMMtwm76YIq1FuWTO4PeI0eXbv4S5vcJQ_h8g9po@z>
+Message-ID: <20190506151428.st8BuxdxO67woWiQkjirZQsHSW_-kZykrRAdOj-omXM@z>
 
-On 5/5/19 3:13 AM, Greg KH wrote:
-> On Thu, May 02, 2019@01:47:40PM -0600, Shuah Khan wrote:
->> Add a sleep between detach and check for exportable devices to avoid
->> the following segfault from libc-2.27.so
->>
->> [ 6268.136108] usbip[5565]: segfault at 0 ip 00007f2a947bddfd sp 00007ffd1a8705e8 error 4 in libc-2.27.so[7f2a94703000+1e7000]
->>
->> Signed-off-by: Shuah Khan <skhan at linuxfoundation.org>
->> ---
->>   tools/testing/selftests/drivers/usb/usbip/usbip_test.sh | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
->> index 128f0ab24307..beacf24a8df7 100755
->> --- a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
->> +++ b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
->> @@ -171,10 +171,14 @@ echo "Detach invalid port tests - expect invalid port error message";
->>   src/usbip detach -p 100;
->>   echo "=============================================================="
->>   
->> +# let detach complete. Avoid segfaults from libc-2.27.so
->> +sleep 3;
+On Thu, May 02, 2019@11:02:40AM -0700, Linus Torvalds wrote:
+> On Thu, May 2, 2019@9:21 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > TL;DR, on x86_32 kernel->kernel IRET frames are only 3 entries and do
+> > not include ESP/SS, so not only wasn't regs->sp setup, if you changed it
+> > it wouldn't be effective and corrupt random stack state.
 > 
-> That feels very "arbitrary", why do we "know" it will take at most 3
-> seconds?  I guess there's not much else we can do here except maybe
-> somehow watch sysfs until the device is really gone?
+> Indeed, the 32-bit case for same-RPL exceptions/iret is entirely
+> different, and I'd forgotten about that.
 > 
+> And honestly, this makes the 32-bit case much worse. Now the entry
+> stack modifications of int3 suddenly affect not just the entry, but
+> every exit too.
+> 
+> This is _exactly_ the kind of subtle kernel entry/exit code I wanted
+> us to avoid.
 
-Yeah. Number 3 is somewhat arbitrary. It helps the host process the
-detach request from the client and update the sysfs. Detach returns
-as soon as client side is done, and the test is running the next
-command on the host side. If I were run these commands manually, it
-gives enough settling time. I am looking for a quick way to allow
-settling time in this automated test.
+I actually love this patch (absent the bugs).  This is already something
+that has been sorely needed for years.
 
+The "struct pt_regs is incomplete on x86-32" thing is a monstrosity
+which has long been a source of confusion and bugs.  Sure, this patch
+adds some complexity to the entry code, but on the other hand it
+actually makes it possible to use pt_regs sanely: regs->sp is no longer
+uninitialized.  So a class of (very non-obvious) bugs is eliminated.
 
-thanks,
--- Shuah
+I don't think it would make sense to make this change for int3 only,
+because the benefits are global.
+
+-- 
+Josh
