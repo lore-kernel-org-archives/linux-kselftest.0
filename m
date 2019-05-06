@@ -1,7 +1,7 @@
 From: torvalds at linux-foundation.org (Linus Torvalds)
-Date: Mon, 6 May 2019 15:06:57 -0700
+Date: Mon, 6 May 2019 15:31:57 -0700
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190506174511.2f8b696b@gandalf.local.home>
+In-Reply-To: <CAHk-=wj3R_s0RTJOmTBNaUPhu4fz2shNBUr4M6Ej65UYSNCs-g@mail.gmail.com>
 References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <20190502185225.0cdfc8bc@gandalf.local.home>
  <20190502193129.664c5b2e@gandalf.local.home>
@@ -20,65 +20,116 @@ References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <20190506162915.380993f9@gandalf.local.home>
  <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
  <20190506174511.2f8b696b@gandalf.local.home>
-Message-ID: <CAHk-=wj3R_s0RTJOmTBNaUPhu4fz2shNBUr4M6Ej65UYSNCs-g@mail.gmail.com>
+ <CAHk-=wj3R_s0RTJOmTBNaUPhu4fz2shNBUr4M6Ej65UYSNCs-g@mail.gmail.com>
+Message-ID: <CAHk-=wje38dbYFGNw0y==zd7Zo_4s2WOQjWaBDyr24RCdK2EPQ@mail.gmail.com>
 
-On Mon, May 6, 2019 at 2:45 PM Steven Rostedt <rostedt at goodmis.org> wrote:
+On Mon, May 6, 2019 at 3:06 PM Linus Torvalds
+<torvalds at linux-foundation.org> wrote:
 >
-> To do that we would need to rewrite the logic to update each of those
-> 40,000 calls one at a time, or group them together to what gets
-> changed.
+> Why are you emulating something different than what you are rewriting?
 
-Stephen, YOU ARE NOT LISTENING.
+Side note: I'm also finding another bug on the ftrace side, which is a
+simple race condition.
 
-You are already fixing the value of the call in the instruction as
-part of the instruction rewriting.
+In particular, the logic with 'modifying_ftrace_code' is fundamentally racy.
 
-When you do things like this:
+What can happen is that on one CPU we rewrite one instruction:
 
-        unsigned long ip = (unsigned long)(&ftrace_call);
-        unsigned char *new;
-        int ret;
+        ftrace_update_func = ip;
+        /* Make sure the breakpoints see the ftrace_update_func update */
+        smp_wmb();
 
-        new = ftrace_call_replace(ip, (unsigned long)func);
-        ret = update_ftrace_func(ip, new);
+        /* See comment above by declaration of modifying_ftrace_code */
+        atomic_inc(&modifying_ftrace_code);
 
-you have already decided to rewrite the instruction with one single
-fixed call target: "func".
+        ret = ftrace_modify_code(ip, old, new);
 
-I'm just saying that you should ALWAYS use the same call target in the
-int3 emulation.
+        atomic_dec(&modifying_ftrace_code);
 
-Instead, you hardcode something else than what you are AT THE SAME
-TIME rewriting the instruction with.
+   but then another CPU hits the 'int3' while the modification is
+going on, and takes the fault.
 
-See what I'm saying?
+The fault handler does that
 
-You already save off the "ip" of the instruction you modify in
-update_ftrace_func(). I'm just saying that you should *also* save off
-the actual target of the call, and use *THAT*.
+        if (unlikely(atomic_read(&modifying_ftrace_code))..
 
-So that the int3 emulation and the instruction rewriting *match*.
+and sees that "yes, it's in the middle of modifying the ftrace code",
+and calls ftrace_int3_handler().  All good and "obviously correct" so
+far, no?
 
-What you do now makes no sense. You're modifing the code with one
-thing (the "func" argument in update_ftrace_func), so if your
-modification completed, that's what you'll actually *run*. But you're
-then _emulating_ doing somethiing completely different, not using
-"func" at all there.
+HOWEVER. It's actually buggy. Because in the meantime, the CPU that
+was rewriting instructions has finished, and decrements the
+modifying_ftrace_code, which doesn't hurt us (because we already saw
+that the int3 was due to the modification.
 
-So let me say one more time: how can it *possibly* make sense to
-emulate something else than you are changing the instruction to read?
+BUT! There are two different races here:
 
-Are you finally understanding what craziness I'm talking about?
+ (a) maybe the fault handling was slow, and we saw the 'int3' and took
+the fault, but the modifying CPU had already finished, so that
+atomic_read(&modifying_ftrace_code) didn't actually trigger at all.
 
-Stop with the "there could be thousands of targets" arguyment. The
-"call" instruction THAT YOU ARE REWRITING has exactly one target.
-There aren't 40,000 of them. x86 does not have that kind of "call"
-instruction that randomly calls 40k different functions. You are
-replacing FIVE BYTES of memory, and the emulation you do should
-emulate those FIVE BYTES.
+ (b) maybe the int3-faulting CPU *did* see the proper value of
+modifying_ftrace_code, but the modifying CPU went on and started
+*another* modification, and has changed ftrace_update_func in the
+meantime, so now the int3 handling is looking at the wrong values!
 
-See?
+In the case of (a), we'll die with an oops due to the inexplicable
+'int3' we hit. And in the case of (b) we'll be fixing up using the
+wrong address.
 
-Why are you emulating something different than what you are rewriting?
+Things like this is why I'm wondering how much of the problems are due
+to the entry code, and how much of it is due to simply races and
+timing differences?
 
-                    Linus
+Again, I don't actually know the ftrace code, and maybe I'm missing
+something, but this really looks like _another_ fundamental bug.
+
+The way to handle that modifying_ftrace_code thing is most likely by
+using a sequence counter. For example, one way to actually do some
+thing like this might be
+
+        ftrace_update_func = ip;
+        ftrace_update_target = func;
+        smp_wmb();
+        atomic_inc(&modifying_ftrace_head);
+
+        ret = ftrace_modify_code(ip, old, new);
+
+        atomic_inc(&modifying_ftrace_tail);
+        smp_wmb();
+
+and now the int3 code could do something like
+
+        int head, tail;
+
+        head = atomic_read(&modifying_ftrace_head);
+        smp_rmb();
+        tail = atomic_read(&modifying_ftrace_tail);
+
+        /* Are we still in the process of modification? */
+        if (unlikely(head != tail+1))
+                return 0;
+
+        ip = ftrace_update_func;
+        func = ftrace_update_target;
+        smp_rmb();
+        /* Need to re-check that the above two values are consistent
+and we didn't exit */
+        if (atomic_read(&modifying_ftrace_tail) != tail)
+                return 0;
+
+        *pregs int3_emulate_call(regs, ip, func);
+        return 1;
+
+although it probably really would be better to use a seqcount instead
+of writing it out like the above.
+
+NOTE! The above only fixes the (b) race. The (a) race is probably best
+handled by actually checking if the 'int3' instruction is still there
+before dying.
+
+Again, maybe there's something I'm missing, but having looked at that
+patch now what feels like a million times, I'm finding more worrisome
+things in the ftrace code than in the kernel entry code..
+
+                 Linus
