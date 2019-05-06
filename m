@@ -1,39 +1,180 @@
-From: torvalds at linux-foundation.org (Linus Torvalds)
-Date: Mon, 6 May 2019 09:19:35 -0700
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
-References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
- <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
- <20190502185225.0cdfc8bc@gandalf.local.home>
- <20190502193129.664c5b2e@gandalf.local.home>
- <20190502195052.0af473cf@gandalf.local.home>
- <20190503092959.GB2623@hirez.programming.kicks-ass.net>
- <20190503092247.20cc1ff0@gandalf.local.home>
- <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
- <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
- <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
- <20190506095631.6f71ad7c@gandalf.local.home>
- <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
-Message-ID: <CAHk-=wjs8hhEdLUb=rD1tZC-JzBHALpi0hQSNf=esw96Gnta6A@mail.gmail.com>
+From: andreyknvl at google.com (Andrey Konovalov)
+Date: Mon,  6 May 2019 18:30:51 +0200
+Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
+ syscalls
+In-Reply-To: <cover.1557160186.git.andreyknvl@google.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+Message-ID: <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
 
-On Mon, May 6, 2019 at 9:17 AM Linus Torvalds
-<torvalds at linux-foundation.org> wrote:
->
-> So what is it that doesn't actually work? I've looked at the patch
-> even more, and I can't for the life of me see how it wouldn't work.
+This patch is a part of a series that extends arm64 kernel ABI to allow to
+pass tagged user pointers (with the top byte set to something else other
+than 0x00) as syscall arguments.
 
-And I do still react to PeterZ's
+This patch allows tagged pointers to be passed to the following memory
+syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
+mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
+remap_file_pages, shmat and shmdt.
 
- arch/x86/entry/entry_32.S            | 150 +++++++++++++++++++++++++++++------
+This is done by untagging pointers passed to these syscalls in the
+prologues of their handlers.
 
-vs
+Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+---
+ arch/arm64/kernel/sys.c | 128 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 127 insertions(+), 1 deletion(-)
 
- arch/x86/entry/entry_32.S            |  7 ++++++-
-
-for mine. And PeterZ's  apparently still had bugs.
-
-Yes, mine can have bugs too, but I really *have* done some basic
-testing, and with 6 lines of code, I think they are more localized.
-
-                Linus
+diff --git a/arch/arm64/kernel/sys.c b/arch/arm64/kernel/sys.c
+index b44065fb1616..933bb9f3d6ec 100644
+--- a/arch/arm64/kernel/sys.c
++++ b/arch/arm64/kernel/sys.c
+@@ -35,10 +35,33 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
+ {
+ 	if (offset_in_page(off) != 0)
+ 		return -EINVAL;
+-
++	addr = untagged_addr(addr);
+ 	return ksys_mmap_pgoff(addr, len, prot, flags, fd, off >> PAGE_SHIFT);
+ }
+ 
++SYSCALL_DEFINE6(arm64_mmap_pgoff, unsigned long, addr, unsigned long, len,
++		unsigned long, prot, unsigned long, flags,
++		unsigned long, fd, unsigned long, pgoff)
++{
++	addr = untagged_addr(addr);
++	return ksys_mmap_pgoff(addr, len, prot, flags, fd, pgoff);
++}
++
++SYSCALL_DEFINE5(arm64_mremap, unsigned long, addr, unsigned long, old_len,
++		unsigned long, new_len, unsigned long, flags,
++		unsigned long, new_addr)
++{
++	addr = untagged_addr(addr);
++	new_addr = untagged_addr(new_addr);
++	return ksys_mremap(addr, old_len, new_len, flags, new_addr);
++}
++
++SYSCALL_DEFINE2(arm64_munmap, unsigned long, addr, size_t, len)
++{
++	addr = untagged_addr(addr);
++	return ksys_munmap(addr, len);
++}
++
+ SYSCALL_DEFINE1(arm64_personality, unsigned int, personality)
+ {
+ 	if (personality(personality) == PER_LINUX32 &&
+@@ -47,10 +70,113 @@ SYSCALL_DEFINE1(arm64_personality, unsigned int, personality)
+ 	return ksys_personality(personality);
+ }
+ 
++SYSCALL_DEFINE1(arm64_brk, unsigned long, brk)
++{
++	brk = untagged_addr(brk);
++	return ksys_brk(brk);
++}
++
++SYSCALL_DEFINE5(arm64_get_mempolicy, int __user *, policy,
++		unsigned long __user *, nmask, unsigned long, maxnode,
++		unsigned long, addr, unsigned long, flags)
++{
++	addr = untagged_addr(addr);
++	return ksys_get_mempolicy(policy, nmask, maxnode, addr, flags);
++}
++
++SYSCALL_DEFINE3(arm64_madvise, unsigned long, start,
++		size_t, len_in, int, behavior)
++{
++	start = untagged_addr(start);
++	return ksys_madvise(start, len_in, behavior);
++}
++
++SYSCALL_DEFINE6(arm64_mbind, unsigned long, start, unsigned long, len,
++		unsigned long, mode, const unsigned long __user *, nmask,
++		unsigned long, maxnode, unsigned int, flags)
++{
++	start = untagged_addr(start);
++	return ksys_mbind(start, len, mode, nmask, maxnode, flags);
++}
++
++SYSCALL_DEFINE2(arm64_mlock, unsigned long, start, size_t, len)
++{
++	start = untagged_addr(start);
++	return ksys_mlock(start, len, VM_LOCKED);
++}
++
++SYSCALL_DEFINE2(arm64_mlock2, unsigned long, start, size_t, len)
++{
++	start = untagged_addr(start);
++	return ksys_mlock(start, len, VM_LOCKED);
++}
++
++SYSCALL_DEFINE2(arm64_munlock, unsigned long, start, size_t, len)
++{
++	start = untagged_addr(start);
++	return ksys_munlock(start, len);
++}
++
++SYSCALL_DEFINE3(arm64_mprotect, unsigned long, start, size_t, len,
++		unsigned long, prot)
++{
++	start = untagged_addr(start);
++	return ksys_mprotect_pkey(start, len, prot, -1);
++}
++
++SYSCALL_DEFINE3(arm64_msync, unsigned long, start, size_t, len, int, flags)
++{
++	start = untagged_addr(start);
++	return ksys_msync(start, len, flags);
++}
++
++SYSCALL_DEFINE3(arm64_mincore, unsigned long, start, size_t, len,
++		unsigned char __user *, vec)
++{
++	start = untagged_addr(start);
++	return ksys_mincore(start, len, vec);
++}
++
++SYSCALL_DEFINE5(arm64_remap_file_pages, unsigned long, start,
++		unsigned long, size, unsigned long, prot,
++		unsigned long, pgoff, unsigned long, flags)
++{
++	start = untagged_addr(start);
++	return ksys_remap_file_pages(start, size, prot, pgoff, flags);
++}
++
++SYSCALL_DEFINE3(arm64_shmat, int, shmid, char __user *, shmaddr, int, shmflg)
++{
++	shmaddr = untagged_addr(shmaddr);
++	return ksys_shmat(shmid, shmaddr, shmflg);
++}
++
++SYSCALL_DEFINE1(arm64_shmdt, char __user *, shmaddr)
++{
++	shmaddr = untagged_addr(shmaddr);
++	return ksys_shmdt(shmaddr);
++}
++
+ /*
+  * Wrappers to pass the pt_regs argument.
+  */
+ #define sys_personality		sys_arm64_personality
++#define sys_mmap_pgoff		sys_arm64_mmap_pgoff
++#define sys_mremap		sys_arm64_mremap
++#define sys_munmap		sys_arm64_munmap
++#define sys_brk			sys_arm64_brk
++#define sys_get_mempolicy	sys_arm64_get_mempolicy
++#define sys_madvise		sys_arm64_madvise
++#define sys_mbind		sys_arm64_mbind
++#define sys_mlock		sys_arm64_mlock
++#define sys_mlock2		sys_arm64_mlock2
++#define sys_munlock		sys_arm64_munlock
++#define sys_mprotect		sys_arm64_mprotect
++#define sys_msync		sys_arm64_msync
++#define sys_mincore		sys_arm64_mincore
++#define sys_remap_file_pages	sys_arm64_remap_file_pages
++#define sys_shmat		sys_arm64_shmat
++#define sys_shmdt		sys_arm64_shmdt
+ 
+ asmlinkage long sys_ni_syscall(const struct pt_regs *);
+ #define __arm64_sys_ni_syscall	sys_ni_syscall
+-- 
+2.21.0.1020.gf2820cf01a-goog
