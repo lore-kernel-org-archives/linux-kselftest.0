@@ -1,7 +1,7 @@
 From: torvalds@linux-foundation.org (Linus Torvalds)
-Date: Mon, 6 May 2019 09:17:19 -0700
+Date: Mon, 6 May 2019 09:19:35 -0700
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190506095631.6f71ad7c@gandalf.local.home>
+In-Reply-To: <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
 References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
  <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
@@ -14,55 +14,29 @@ References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
  <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
  <20190506095631.6f71ad7c@gandalf.local.home>
-Message-ID:
  <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
+Message-ID:
+ <CAHk-=wjs8hhEdLUb=rD1tZC-JzBHALpi0hQSNf=esw96Gnta6A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190506161719.GD9nup7H08GzekyMNT2_BVO8TZV04uA-Gg7w5rbFZ4I@z>
+Message-ID: <20190506161935.ZBK6B0DI4EFRHvSomiXhjJLDHjMUcUxBZmFwNucntKM@z>
 
-On Mon, May 6, 2019@6:56 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Mon, May 6, 2019 at 9:17 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> I can test this too. I was hoping to get this in by this merge window.
-> I spent 3 hours yesterday trying to get Linus's version working on
-> i386 with no success. Not sure how much time Linus will have to look at
-> this, as he just opened the merge window.
+> So what is it that doesn't actually work? I've looked at the patch
+> even more, and I can't for the life of me see how it wouldn't work.
 
-I acvtually just tested it in qemu, and it worked fine.
+And I do still react to PeterZ's
 
-Ok, so my test was admittedly really simple and stupid, in that al I did was
+ arch/x86/entry/entry_32.S            | 150 +++++++++++++++++++++++++++++------
 
-        printk("Before int3\n");
-        asm("int3; nop; nop; nop; nop" : : :"ax","dx","cx");
-        printk("After int3\n");
+vs
 
-and then I hacked up do_kernel_int3() to just unconditionally do
+ arch/x86/entry/entry_32.S            |  7 ++++++-
 
-        return int3_emulate_call(regs, (unsigned long)test_int3);
+for mine. And PeterZ's  apparently still had bugs.
 
-with a stupid test-function:
+Yes, mine can have bugs too, but I really *have* done some basic
+testing, and with 6 lines of code, I think they are more localized.
 
-    void test_int3(void)
-    {
-        printk("In int3 handler");
-    }
-
-instead fo anything fancy.
-
-But it did exactly the expected thing, and resulted in
-
-    Before int3
-    In int3 handler
-    After int3
-
-on the screen.
-
-So what is it that doesn't actually work? I've looked at the patch
-even more, and I can't for the life of me see how it wouldn't work.
-
-Of course, I didn't test any of the actual ftrace parts, since I
-short-circuited them intentionally with the above test function hack.
-I have no idea what the semantics for those
-ftrace_location(ip)/is_ftrace_caller(ip) cases are supposed to be, I
-only tested that yes, the infrastructure clearly emulates a call
-instruction.
-
-               Linus
+                Linus
