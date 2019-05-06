@@ -1,63 +1,78 @@
-From: andreyknvl@google.com (Andrey Konovalov)
-Date: Mon, 6 May 2019 16:15:20 +0200
-Subject: [PATCH v14 10/17] fs,
- arm64: untag user pointers in fs/userfaultfd.c
-In-Reply-To: <20190503165646.GK55449@arrakis.emea.arm.com>
-References: <cover.1556630205.git.andreyknvl@google.com>
- <7d3b28689d47c0fa1b80628f248dbf78548da25f.1556630205.git.andreyknvl@google.com>
- <20190503165646.GK55449@arrakis.emea.arm.com>
-Message-ID:
- <CAAeHK+yya4OR7GfSJPc59+trq3fS9Qh_1WK2hB1aoHdR0C_t8Q@mail.gmail.com>
+From: peterz@infradead.org (Peter Zijlstra)
+Date: Mon, 6 May 2019 16:22:54 +0200
+Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+In-Reply-To: <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+References: <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+ <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+ <20190502185225.0cdfc8bc@gandalf.local.home>
+ <20190502193129.664c5b2e@gandalf.local.home>
+ <20190502195052.0af473cf@gandalf.local.home>
+ <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+ <20190503092247.20cc1ff0@gandalf.local.home>
+ <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
+ <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
+ <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+Message-ID: <20190506142254.GG2650@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190506141520.Roivd_tg46Yjq1Q9muLHPHmCCD0RQhwyNFgokEbOYic@z>
+Message-ID: <20190506142254.o1tVYOhqMfAdp_Mq1jtiXqrymioPoH1kpdsPymNydWM@z>
 
-On Fri, May 3, 2019@6:56 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Tue, Apr 30, 2019@03:25:06PM +0200, Andrey Konovalov wrote:
-> > This patch is a part of a series that extends arm64 kernel ABI to allow to
-> > pass tagged user pointers (with the top byte set to something else other
-> > than 0x00) as syscall arguments.
-> >
-> > userfaultfd_register() and userfaultfd_unregister() use provided user
-> > pointers for vma lookups, which can only by done with untagged pointers.
-> >
-> > Untag user pointers in these functions.
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
-> > ---
-> >  fs/userfaultfd.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> > index f5de1e726356..fdee0db0e847 100644
-> > --- a/fs/userfaultfd.c
-> > +++ b/fs/userfaultfd.c
-> > @@ -1325,6 +1325,9 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
-> >               goto out;
-> >       }
-> >
-> > +     uffdio_register.range.start =
-> > +             untagged_addr(uffdio_register.range.start);
-> > +
-> >       ret = validate_range(mm, uffdio_register.range.start,
-> >                            uffdio_register.range.len);
-> >       if (ret)
-> > @@ -1514,6 +1517,8 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
-> >       if (copy_from_user(&uffdio_unregister, buf, sizeof(uffdio_unregister)))
-> >               goto out;
-> >
-> > +     uffdio_unregister.start = untagged_addr(uffdio_unregister.start);
-> > +
-> >       ret = validate_range(mm, uffdio_unregister.start,
-> >                            uffdio_unregister.len);
-> >       if (ret)
->
-> Wouldn't it be easier to do this in validate_range()? There are a few
-> more calls in this file, though I didn't check whether a tagged address
-> would cause issues.
+On Mon, May 06, 2019@10:19:51AM +0200, Peter Zijlstra wrote:
+> +.Lfrom_usermode_no_fixup_\@:
+> +.endm
+> +
+> +.macro IRET_FRAME
+> +
+> +	/* orig_eax is already POP'ed when we're here */
+> +
+> +	testl $CS_FROM_KERNEL, 1*4(%esp)
+> +	jz .Lfinished_frame_\@
+> +
+> +	pushl %eax
+> +
 
-Yes, I think it makes more sense, will do in v15, thanks!
+>From there..
 
->
-> --
-> Catalin
+> +	lea 10*4(%esp), %eax	# address of <previous context>
+> +	cmpl %eax, 4*4(%esp)	# if ->sp is unmodified
+> +	jnz .Lmodified_sp_do_fixup_\@
+> +
+> +	/*
+> +	 * Fast path; regs->sp wasn't modified, reuse the original IRET frame.
+> +	 */
+> +	pop %eax
+> +	add $6*4, %esp
+> +	jmp .Lfinished_frame_\@;
+> +
+> +.Lmodified_sp_do_fixup_\@:
+
+... until here, needs to go, it is buggy. While a clever idea, it looses
+updates to regs->ip and ->flags.
+
+> +
+> +	/*
+> +	 * Reconstruct the 3 entry IRET frame right after the (modified)
+> +	 * regs->sp without lowering %esp in between, such that an NMI in the
+> +	 * middle doesn't scribble our stack.
+> +	 */
+> +	pushl	%ecx
+> +	movl	5*4(%esp), %eax		# (modified) regs->sp
+> +
+> +	movl	4*4(%esp), %ecx		# flags
+> +	movl	%ecx, -4(%eax)
+> +
+> +	movl	3*4(%esp), %ecx		# cs
+> +	andl	$0x0000ffff, %ecx
+> +	movl	%ecx, -8(%eax)
+> +
+> +	movl	2*4(%esp), %ecx		# ip
+> +	movl	%ecx, -12(%eax)
+> +
+> +	movl	1*4(%esp), %ecx		# eax
+> +	movl	%ecx, -16(%eax)
+> +
+> +	popl	%ecx
+> +	lea	-16(%eax), %esp
+> +	popl	%eax
+> +
+> +.Lfinished_frame_\@:
+> +.endm
