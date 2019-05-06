@@ -1,76 +1,46 @@
-From: peterz at infradead.org (Peter Zijlstra)
-Date: Mon, 6 May 2019 16:22:54 +0200
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
-References: <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
- <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
- <20190502185225.0cdfc8bc@gandalf.local.home>
- <20190502193129.664c5b2e@gandalf.local.home>
- <20190502195052.0af473cf@gandalf.local.home>
- <20190503092959.GB2623@hirez.programming.kicks-ass.net>
- <20190503092247.20cc1ff0@gandalf.local.home>
- <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
- <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
- <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
-Message-ID: <20190506142254.GG2650@hirez.programming.kicks-ass.net>
+From: skhan at linuxfoundation.org (Shuah Khan)
+Date: Mon, 6 May 2019 08:47:15 -0600
+Subject: [PATCH] selftests: add sleep between detach and usbip list -l
+In-Reply-To: <20190505091356.GB25646@kroah.com>
+References: <20190502194740.15344-1-skhan@linuxfoundation.org>
+ <20190505091356.GB25646@kroah.com>
+Message-ID: <ed0a3115-ee5a-97b6-b69c-073c9595d734@linuxfoundation.org>
 
-On Mon, May 06, 2019 at 10:19:51AM +0200, Peter Zijlstra wrote:
-> +.Lfrom_usermode_no_fixup_\@:
-> +.endm
-> +
-> +.macro IRET_FRAME
-> +
-> +	/* orig_eax is already POP'ed when we're here */
-> +
-> +	testl $CS_FROM_KERNEL, 1*4(%esp)
-> +	jz .Lfinished_frame_\@
-> +
-> +	pushl %eax
-> +
+On 5/5/19 3:13 AM, Greg KH wrote:
+> On Thu, May 02, 2019 at 01:47:40PM -0600, Shuah Khan wrote:
+>> Add a sleep between detach and check for exportable devices to avoid
+>> the following segfault from libc-2.27.so
+>>
+>> [ 6268.136108] usbip[5565]: segfault at 0 ip 00007f2a947bddfd sp 00007ffd1a8705e8 error 4 in libc-2.27.so[7f2a94703000+1e7000]
+>>
+>> Signed-off-by: Shuah Khan <skhan at linuxfoundation.org>
+>> ---
+>>   tools/testing/selftests/drivers/usb/usbip/usbip_test.sh | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
+>> index 128f0ab24307..beacf24a8df7 100755
+>> --- a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
+>> +++ b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
+>> @@ -171,10 +171,14 @@ echo "Detach invalid port tests - expect invalid port error message";
+>>   src/usbip detach -p 100;
+>>   echo "=============================================================="
+>>   
+>> +# let detach complete. Avoid segfaults from libc-2.27.so
+>> +sleep 3;
+> 
+> That feels very "arbitrary", why do we "know" it will take at most 3
+> seconds?  I guess there's not much else we can do here except maybe
+> somehow watch sysfs until the device is really gone?
+> 
 
->From there..
+Yeah. Number 3 is somewhat arbitrary. It helps the host process the
+detach request from the client and update the sysfs. Detach returns
+as soon as client side is done, and the test is running the next
+command on the host side. If I were run these commands manually, it
+gives enough settling time. I am looking for a quick way to allow
+settling time in this automated test.
 
-> +	lea 10*4(%esp), %eax	# address of <previous context>
-> +	cmpl %eax, 4*4(%esp)	# if ->sp is unmodified
-> +	jnz .Lmodified_sp_do_fixup_\@
-> +
-> +	/*
-> +	 * Fast path; regs->sp wasn't modified, reuse the original IRET frame.
-> +	 */
-> +	pop %eax
-> +	add $6*4, %esp
-> +	jmp .Lfinished_frame_\@;
-> +
-> +.Lmodified_sp_do_fixup_\@:
 
-... until here, needs to go, it is buggy. While a clever idea, it looses
-updates to regs->ip and ->flags.
-
-> +
-> +	/*
-> +	 * Reconstruct the 3 entry IRET frame right after the (modified)
-> +	 * regs->sp without lowering %esp in between, such that an NMI in the
-> +	 * middle doesn't scribble our stack.
-> +	 */
-> +	pushl	%ecx
-> +	movl	5*4(%esp), %eax		# (modified) regs->sp
-> +
-> +	movl	4*4(%esp), %ecx		# flags
-> +	movl	%ecx, -4(%eax)
-> +
-> +	movl	3*4(%esp), %ecx		# cs
-> +	andl	$0x0000ffff, %ecx
-> +	movl	%ecx, -8(%eax)
-> +
-> +	movl	2*4(%esp), %ecx		# ip
-> +	movl	%ecx, -12(%eax)
-> +
-> +	movl	1*4(%esp), %ecx		# eax
-> +	movl	%ecx, -16(%eax)
-> +
-> +	popl	%ecx
-> +	lea	-16(%eax), %esp
-> +	popl	%eax
-> +
-> +.Lfinished_frame_\@:
-> +.endm
+thanks,
+-- Shuah
