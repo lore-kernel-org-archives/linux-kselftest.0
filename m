@@ -1,68 +1,68 @@
-From: andreyknvl@google.com (Andrey Konovalov)
-Date: Mon, 6 May 2019 18:21:56 +0200
-Subject: [PATCH v14 13/17] IB/mlx4,
- arm64: untag user pointers in mlx4_get_umem_mr
-In-Reply-To: <20190503170310.GL55449@arrakis.emea.arm.com>
-References: <cover.1556630205.git.andreyknvl@google.com>
- <05c0c078b8b5984af4cc3b105a58c711dcd83342.1556630205.git.andreyknvl@google.com>
- <20190503170310.GL55449@arrakis.emea.arm.com>
+From: torvalds@linux-foundation.org (Linus Torvalds)
+Date: Mon, 6 May 2019 09:17:19 -0700
+Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+In-Reply-To: <20190506095631.6f71ad7c@gandalf.local.home>
+References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+ <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+ <20190502185225.0cdfc8bc@gandalf.local.home>
+ <20190502193129.664c5b2e@gandalf.local.home>
+ <20190502195052.0af473cf@gandalf.local.home>
+ <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+ <20190503092247.20cc1ff0@gandalf.local.home>
+ <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
+ <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
+ <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+ <20190506095631.6f71ad7c@gandalf.local.home>
 Message-ID:
- <CAAeHK+weVYv4Tgj8DXv0ZTFZzGEpLYsn-3wxxmQN+ZW88MXbMw@mail.gmail.com>
+ <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190506162156.TqEuSg75lSGYLFW5lJ2FQIycETWBoL6Ik5Xxjm53amw@z>
+Message-ID: <20190506161719.GD9nup7H08GzekyMNT2_BVO8TZV04uA-Gg7w5rbFZ4I@z>
 
-On Fri, May 3, 2019@7:03 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+On Mon, May 6, 2019@6:56 AM Steven Rostedt <rostedt@goodmis.org> wrote:
 >
-> On Tue, Apr 30, 2019@03:25:09PM +0200, Andrey Konovalov wrote:
-> > This patch is a part of a series that extends arm64 kernel ABI to allow to
-> > pass tagged user pointers (with the top byte set to something else other
-> > than 0x00) as syscall arguments.
-> >
-> > mlx4_get_umem_mr() uses provided user pointers for vma lookups, which can
-> > only by done with untagged pointers.
-> >
-> > Untag user pointers in this function.
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
-> > Reviewed-by: Leon Romanovsky <leonro at mellanox.com>
-> > ---
-> >  drivers/infiniband/hw/mlx4/mr.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/infiniband/hw/mlx4/mr.c b/drivers/infiniband/hw/mlx4/mr.c
-> > index 395379a480cb..9a35ed2c6a6f 100644
-> > --- a/drivers/infiniband/hw/mlx4/mr.c
-> > +++ b/drivers/infiniband/hw/mlx4/mr.c
-> > @@ -378,6 +378,7 @@ static struct ib_umem *mlx4_get_umem_mr(struct ib_udata *udata, u64 start,
-> >        * again
-> >        */
-> >       if (!ib_access_writable(access_flags)) {
-> > +             unsigned long untagged_start = untagged_addr(start);
-> >               struct vm_area_struct *vma;
-> >
-> >               down_read(&current->mm->mmap_sem);
-> > @@ -386,9 +387,9 @@ static struct ib_umem *mlx4_get_umem_mr(struct ib_udata *udata, u64 start,
-> >                * cover the memory, but for now it requires a single vma to
-> >                * entirely cover the MR to support RO mappings.
-> >                */
-> > -             vma = find_vma(current->mm, start);
-> > -             if (vma && vma->vm_end >= start + length &&
-> > -                 vma->vm_start <= start) {
-> > +             vma = find_vma(current->mm, untagged_start);
-> > +             if (vma && vma->vm_end >= untagged_start + length &&
-> > +                 vma->vm_start <= untagged_start) {
-> >                       if (vma->vm_flags & VM_WRITE)
-> >                               access_flags |= IB_ACCESS_LOCAL_WRITE;
-> >               } else {
->
-> Discussion ongoing on the previous version of the patch but I'm more
-> inclined to do this in ib_uverbs_(re)reg_mr() on cmd.start.
+> I can test this too. I was hoping to get this in by this merge window.
+> I spent 3 hours yesterday trying to get Linus's version working on
+> i386 with no success. Not sure how much time Linus will have to look at
+> this, as he just opened the merge window.
 
-OK, I want to publish v15 sooner to fix the issue with emails
-addresses, so I'll implement this approach there for now.
+I acvtually just tested it in qemu, and it worked fine.
 
+Ok, so my test was admittedly really simple and stupid, in that al I did was
 
+        printk("Before int3\n");
+        asm("int3; nop; nop; nop; nop" : : :"ax","dx","cx");
+        printk("After int3\n");
 
->
-> --
-> Catalin
+and then I hacked up do_kernel_int3() to just unconditionally do
+
+        return int3_emulate_call(regs, (unsigned long)test_int3);
+
+with a stupid test-function:
+
+    void test_int3(void)
+    {
+        printk("In int3 handler");
+    }
+
+instead fo anything fancy.
+
+But it did exactly the expected thing, and resulted in
+
+    Before int3
+    In int3 handler
+    After int3
+
+on the screen.
+
+So what is it that doesn't actually work? I've looked at the patch
+even more, and I can't for the life of me see how it wouldn't work.
+
+Of course, I didn't test any of the actual ftrace parts, since I
+short-circuited them intentionally with the above test function hack.
+I have no idea what the semantics for those
+ftrace_location(ip)/is_ftrace_caller(ip) cases are supposed to be, I
+only tested that yes, the infrastructure clearly emulates a call
+instruction.
+
+               Linus
