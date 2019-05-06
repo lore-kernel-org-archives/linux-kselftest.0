@@ -1,7 +1,7 @@
 From: torvalds at linux-foundation.org (Linus Torvalds)
-Date: Mon, 6 May 2019 13:44:52 -0700
+Date: Mon, 6 May 2019 13:42:12 -0700
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
+In-Reply-To: <20190506162915.380993f9@gandalf.local.home>
 References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
  <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
@@ -20,22 +20,66 @@ References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <20190506145745.17c59596@gandalf.local.home>
  <CAHk-=witfFBW2O5v6g--FmqnAFsMkKNLosTFfWyaoJ7euQF8kQ@mail.gmail.com>
  <20190506162915.380993f9@gandalf.local.home>
- <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
-Message-ID: <CAHk-=wgsi+FQN6bnued8K4KQ2fF53k0JW4TUY+q0XOJyiULXmw@mail.gmail.com>
+Message-ID: <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
 
-On Mon, May 6, 2019 at 1:42 PM Linus Torvalds
-<torvalds at linux-foundation.org> wrote:
+On Mon, May 6, 2019 at 1:29 PM Steven Rostedt <rostedt at goodmis.org> wrote:
 >
-> What *can* make sense is "Oh, I'm emulating a call, but I know that
-> call will be rewritten, so let me emulate the call and then
-> short-circuit the emulation immediately".
+> Because that call to ftrace_stub is also dynamic.
 
-That made no sense. The end should have been "and then short-circuit
-the _rewriting_ immediately" of course.
+You're missing the point.
 
-The "emulate a call" is just to make the "struct pt_regs" state look
-like it would have after the call. The "short circuit the rewriting"
-part is the thing that then rewrites the actual instruction based on
-that pt_regs state.
+We are rewriting a single "cal" instruction to point to something.
 
-                 Linus
+The "int3" emulation should call THE SAME THING.
+
+Right now it doesn't.
+
+> Part of the code will change it to call the function needed directly.
+>
+> struct ftrace_ops my_ops {
+>         .func = my_handler
+> };
+>
+>         register_ftrace_function(&my_ops);
+>
+> Will change "call ftrace_stub" into "call my_handler"
+
+But that's not what you're actually *doing*.
+
+Instead, you're now _emulating_ calling ftrace_regs_caller, which will
+call that ftrace_stub, which in turn will try to update the call site.
+
+But that's insane. It's insane because
+
+ - it's not even what your call rewriting is doing Why aren't you just
+doing the emulation using the *SAME* target that you're rewriting the
+actual call instruction with?
+
+ - even if ftrace_regs_caller ends up being that same function, you'd
+be better off just passing the "struct pt_regs" that you *ALREADY
+HAVE* directly to ftrace_stub in the int3 handler, rather than create
+*another* pt_regs stack
+
+See? In that second case, why don't you just use "int3_emulate_call()"
+to do the reguired 'struct pt_regs' updates, and then call
+ftrace_stub() *with* that fixed-up pt_regs thing?
+
+In other words, I think you should always do "int3_emulate_call()"
+with the *exact* same address that the instruction you are rewriting
+is using. There's no "three different cases". The only possible cases
+are "am I rewriting a jump" or "am I rewriting a call".
+
+There is no "am I rewriting a call to one address, and then emulating
+it with a call to another address" case that makes sense.
+
+What *can* make sense is "Oh, I'm emulating a call, but I know that
+call will be rewritten, so let me emulate the call and then
+short-circuit the emulation immediately".
+
+But that is not what the ftrace code is doing. The ftrace code is
+doing something odd and insane.
+
+And no, your "explanation" makes no sense. Because it doesn't actually
+touch on the fundamental insanity.
+
+            Linus
