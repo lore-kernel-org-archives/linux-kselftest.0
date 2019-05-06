@@ -1,46 +1,93 @@
-From: brendanhiggins at google.com (Brendan Higgins)
-Date: Mon, 6 May 2019 02:18:01 -0700
-Subject: [PATCH v2 15/17] MAINTAINERS: add entry for KUnit the unit
- testing framework
-In-Reply-To: <68f88e1c-d40f-9dad-7296-ab2b2303c575@kernel.org>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-16-brendanhiggins@google.com>
- <68f88e1c-d40f-9dad-7296-ab2b2303c575@kernel.org>
-Message-ID: <CAFd5g456XwQV2+iy=0K7AwBc5wbQDRL2DAJgMEsJBLtFdZ5erQ@mail.gmail.com>
+From: andreyknvl at google.com (Andrey Konovalov)
+Date: Mon, 6 May 2019 15:50:25 +0200
+Subject: [PATCH v14 11/17] drm/amdgpu, arm64: untag user pointers
+In-Reply-To: <3108d33e-8e18-a73e-5e1a-f0db64f02ab3@amd.com>
+References: <cover.1556630205.git.andreyknvl@google.com>
+ <2e827b5c484be14044933049fec180cd6acb054b.1556630205.git.andreyknvl@google.com>
+ <3108d33e-8e18-a73e-5e1a-f0db64f02ab3@amd.com>
+Message-ID: <CAAeHK+zDScw-aYpQFVG=JKartDqCF+ZWnq3-6PuaYgMiBphcJA@mail.gmail.com>
 
-On Fri, May 3, 2019 at 7:38 AM shuah <shuah at kernel.org> wrote:
+On Tue, Apr 30, 2019 at 8:03 PM Kuehling, Felix <Felix.Kuehling at amd.com> wrote:
 >
-> On 5/1/19 5:01 PM, Brendan Higgins wrote:
-> > Add myself as maintainer of KUnit, the Linux kernel's unit testing
-> > framework.
+> On 2019-04-30 9:25 a.m., Andrey Konovalov wrote:
+> > [CAUTION: External Email]
 > >
-> > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > amdgpu_ttm_tt_get_user_pages() uses provided user pointers for vma
+> > lookups, which can only by done with untagged pointers. This patch
+> > untag user pointers when they are being set in
+> > amdgpu_ttm_tt_set_userptr().
+> >
+> > In amdgpu_gem_userptr_ioctl() and amdgpu_amdkfd_gpuvm.c/init_user_pages()
+> > an MMU notifier is set up with a (tagged) userspace pointer. The untagged
+> > address should be used so that MMU notifiers for the untagged address get
+> > correctly matched up with the right BO. This patch untag user pointers in
+> > amdgpu_gem_userptr_ioctl() for the GEM case and in
+> > amdgpu_amdkfd_gpuvm_alloc_memory_of_gpu() for the KFD case.
+> >
+> > Suggested-by: Kuehling, Felix <Felix.Kuehling at amd.com>
+> > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 > > ---
-> >   MAINTAINERS | 10 ++++++++++
-> >   1 file changed, 10 insertions(+)
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 2 +-
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c          | 2 ++
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c          | 2 +-
+> >   3 files changed, 4 insertions(+), 2 deletions(-)
 > >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 5c38f21aee787..c78ae95c56b80 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -8448,6 +8448,16 @@ S:     Maintained
-> >   F:  tools/testing/selftests/
-> >   F:  Documentation/dev-tools/kselftest*
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+> > index 1921dec3df7a..20cac44ed449 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+> > @@ -1121,7 +1121,7 @@ int amdgpu_amdkfd_gpuvm_alloc_memory_of_gpu(
+> >                  alloc_flags = 0;
+> >                  if (!offset || !*offset)
+> >                          return -EINVAL;
+> > -               user_addr = *offset;
+> > +               user_addr = untagged_addr(*offset);
+> >          } else if (flags & ALLOC_MEM_FLAGS_DOORBELL) {
+> >                  domain = AMDGPU_GEM_DOMAIN_GTT;
+> >                  alloc_domain = AMDGPU_GEM_DOMAIN_CPU;
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+> > index d21dd2f369da..985cb82b2aa6 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+> > @@ -286,6 +286,8 @@ int amdgpu_gem_userptr_ioctl(struct drm_device *dev, void *data,
+> >          uint32_t handle;
+> >          int r;
 > >
-> > +KERNEL UNIT TESTING FRAMEWORK (KUnit)
-> > +M:   Brendan Higgins <brendanhiggins at google.com>
-> > +L:   kunit-dev at googlegroups.com
-> > +W:   https://google.github.io/kunit-docs/third_party/kernel/docs/
-> > +S:   Maintained
-> > +F:   Documentation/kunit/
-> > +F:   include/kunit/
-> > +F:   kunit/
-> > +F:   tools/testing/kunit/
+> > +       args->addr = untagged_addr(args->addr);
 > > +
+> >          if (offset_in_page(args->addr | args->size))
+> >                  return -EINVAL;
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> > index 73e71e61dc99..1d30e97ac2c4 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> > @@ -1248,7 +1248,7 @@ int amdgpu_ttm_tt_set_userptr(struct ttm_tt *ttm, uint64_t addr,
+> >          if (gtt == NULL)
+> >                  return -EINVAL;
+> >
+> > -       gtt->userptr = addr;
+> > +       gtt->userptr = untagged_addr(addr);
 >
-> Please add kselftest mailing list to this entry, based on our
-> conversation on taking these patches through kselftest tree.
+> Doing this here seems unnecessary. You already untagged the address in
+> both callers of this function. Untagging in the two callers ensures that
+> the userptr and MMU notifier are in sync, using the same untagged
+> address. Doing it again here is redundant.
 
-Will do.
+ Will fix in v15, thanks!
 
-Thanks!
+>
+> Regards,
+>    Felix
+>
+>
+> >          gtt->userflags = flags;
+> >
+> >          if (gtt->usertask)
+> > --
+> > 2.21.0.593.g511ec345e18-goog
+> >
