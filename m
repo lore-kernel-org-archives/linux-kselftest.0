@@ -1,7 +1,7 @@
-From: torvalds@linux-foundation.org (Linus Torvalds)
-Date: Mon, 6 May 2019 11:06:51 -0700
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Mon, 6 May 2019 14:57:45 -0400
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190506130643.62c35eeb@gandalf.local.home>
+In-Reply-To: <CAHk-=whesas+GDtHZks62wqXWXe4d_g3XJ359GX81qj=Fgs6qQ@mail.gmail.com>
 References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
  <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
@@ -16,26 +16,32 @@ References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <20190506095631.6f71ad7c@gandalf.local.home>
  <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
  <20190506130643.62c35eeb@gandalf.local.home>
-Message-ID:
  <CAHk-=whesas+GDtHZks62wqXWXe4d_g3XJ359GX81qj=Fgs6qQ@mail.gmail.com>
+Message-ID: <20190506145745.17c59596@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190506180651.DygSK0KNaLrj4EQct9YTRMaxu5bTj3OsSmZa8h8uQJU@z>
+Message-ID: <20190506185745.l3FoCSjfaV4kJpuCFqYDa6BMkzjGWwFynt9l0D72ey0@z>
 
-On Mon, May 6, 2019@10:06 AM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> Can you try booting with:
-> [ snip snip ]
->
-> And see if it boots?
+On Mon, 6 May 2019 11:06:51 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-No it doesn't.
+> On Mon, May 6, 2019@10:06 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > Can you try booting with:
+> > [ snip snip ]
+> >
+> > And see if it boots?  
+> 
+> No it doesn't.
+> 
+> Dang, I tried to figure out what's up, but now I really have to start
+> handling all the puill requests..
+> 
+> I thought it might be an int3 that happens on the entry stack, but I
+> don't think that should ever happen. Either it's a user-mode int3, or
+> we're in the kernel and have switched stacks. So I still don't see why
+> my patch doesn't work, but now I have no time to debug it.
+> 
 
-Dang, I tried to figure out what's up, but now I really have to start
-handling all the puill requests..
+You should have waited another week to open that merge window ;-)
 
-I thought it might be an int3 that happens on the entry stack, but I
-don't think that should ever happen. Either it's a user-mode int3, or
-we're in the kernel and have switched stacks. So I still don't see why
-my patch doesn't work, but now I have no time to debug it.
-
-                   Linus
+-- Steve
