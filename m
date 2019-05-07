@@ -1,12 +1,12 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Tue,  7 May 2019 01:41:18 -0400
-Subject: [PATCH AUTOSEL 4.9 21/25] selftests/net: correct the return value for
- run_netsocktests
-In-Reply-To: <20190507054123.32514-1-sashal@kernel.org>
-References: <20190507054123.32514-1-sashal@kernel.org>
-Message-ID: <20190507054123.32514-21-sashal@kernel.org>
+Date: Tue,  7 May 2019 01:37:18 -0400
+Subject: [PATCH AUTOSEL 4.14 29/95] selftests/net: correct the return value
+ for run_netsocktests
+In-Reply-To: <20190507053826.31622-1-sashal@kernel.org>
+References: <20190507053826.31622-1-sashal@kernel.org>
+Message-ID: <20190507053826.31622-29-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507054118.B6jxEFl8uE8kJSqHBVKWTxJZGK__LFLhLxj48qfY7_U@z>
+Message-ID: <20190507053718.UXAp7ntF-myLaL5uBZVQqyZd1gIAPK-Ef6PlEBLr8TQ@z>
 
 From: Po-Hsu Lin <po-hsu.lin@canonical.com>
 
@@ -34,10 +34,10 @@ Signed-off-by: Sasha Levin <sashal at kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/net/run_netsocktests b/tools/testing/selftests/net/run_netsocktests
-index 16058bbea7a8..c195b4478662 100755
+index b093f39c298c..14e41faf2c57 100755
 --- a/tools/testing/selftests/net/run_netsocktests
 +++ b/tools/testing/selftests/net/run_netsocktests
-@@ -6,7 +6,7 @@ echo "--------------------"
+@@ -7,7 +7,7 @@ echo "--------------------"
  ./socket
  if [ $? -ne 0 ]; then
  	echo "[FAIL]"
