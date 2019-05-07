@@ -1,48 +1,103 @@
-From: masami.hiramatsu@gmail.com (Masami Hiramatsu)
-Date: Wed, 8 May 2019 02:22:26 +0900
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190507085417.381d96d0@gandalf.local.home>
-References: <20190502193129.664c5b2e@gandalf.local.home>
- <20190502195052.0af473cf@gandalf.local.home>
- <20190503092959.GB2623@hirez.programming.kicks-ass.net>
- <20190503092247.20cc1ff0@gandalf.local.home>
- <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
- <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
- <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
- <20190507085753.GO2606@hirez.programming.kicks-ass.net>
- <20190507092731.GH2650@hirez.programming.kicks-ass.net>
- <20190507082716.73cd5a01@gandalf.local.home>
- <20190507124131.GO2623@hirez.programming.kicks-ass.net>
- <20190507085417.381d96d0@gandalf.local.home>
-Message-ID:
- <CADyE4xHw_eikPhgsVuOwpi34vF22_i0MhVaQac0bVvKZ6hLqdw@mail.gmail.com>
+From: tytso@mit.edu (Theodore Ts'o)
+Date: Tue, 7 May 2019 13:22:56 -0400
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20190507080119.GB28121@kroah.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
+ <20190507080119.GB28121@kroah.com>
+Message-ID: <20190507172256.GB5900@mit.edu>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507172226.B-VavBM3Nfkj4qRWK-L0vIpM_F8lCIi66hf0XEMdc0Y@z>
+Message-ID: <20190507172256.KZrOK9nd6FvaJjaVW5fkMOKIznZoVhiumXNvGmqMzj0@z>
 
-2019年5月7日(火) 21:54 Steven Rostedt <rostedt at goodmis.org>:
->
-> On Tue, 7 May 2019 14:41:31 +0200
-> Peter Zijlstra <peterz@infradead.org> wrote:
->
-> > > Kprobes sets the FTRACE_OPS_FL_IPMODIFY flag, thus
-> > > they can never be put at the same location that is being live patched.
-> >
-> > OK, so do we want to allow kprobes that also modify regs->sp ? Because
-> > then we need to change these trampolines a bit.
-> >
-> > I'd prefer not to allow kprobes this.
->
-> I believe no kprobe changes sp, because it would have had the same
-> issues we are trying to solve now. And even though we are changing
-> things to allow it, it's not a regression to keep kprobes from doing it.
+On Tue, May 07, 2019@10:01:19AM +0200, Greg KH wrote:
+> > My understanding is that the intent of KUnit is to avoid booting a kernel on
+> > real hardware or in a virtual machine.  That seems to be a matter of semantics
+> > to me because isn't invoking a UML Linux just running the Linux kernel in
+> > a different form of virtualization?
+> > 
+> > So I do not understand why KUnit is an improvement over kselftest.
+> > 
+> > It seems to me that KUnit is just another piece of infrastructure that I
+> > am going to have to be familiar with as a kernel developer.  More overhead,
+> > more information to stuff into my tiny little brain.
+> > 
+> > I would guess that some developers will focus on just one of the two test
+> > environments (and some will focus on both), splitting the development
+> > resources instead of pooling them on a common infrastructure.
+> > 
+> > What am I missing?
+> 
+> kselftest provides no in-kernel framework for testing kernel code
+> specifically.  That should be what kunit provides, an "easy" way to
+> write in-kernel tests for things.
+> 
+> Brendan, did I get it right?
 
-No, kprobes doesn't allow to change sp. At this moment we can't change
-"&regs->sp" since it is just a value :)
-kprobes user (e.g. function fault-injection) will change regs->ip,
-that is why kprobes sets IPMODIFY flag.
+Yes, that's basically right.  You don't *have* to use KUnit.  It's
+supposed to be a simple way to run a large number of small tests that
+for specific small components in a system.
 
-Thank you,
+For example, I currently use xfstests using KVM and GCE to test all of
+ext4.  These tests require using multiple 5 GB and 20GB virtual disks,
+and it works by mounting ext4 file systems and exercising ext4 through
+the system call interfaces, using userspace tools such as fsstress,
+fsx, fio, etc.  It requires time overhead to start the VM, create and
+allocate virtual disks, etc.  For example, to run a single 3 seconds
+xfstest (generic/001), it requires full 10 seconds to run it via
+kvm-xfstests.
 
--- 
-Masami Hiramatsu
-mailto:masami.hiramatsu at gmail.com
+KUnit is something else; it's specifically intended to allow you to
+create lightweight tests quickly and easily, and by reducing the
+effort needed to write and run unit tests, hopefully we'll have a lot
+more of them and thus improve kernel quality.
+
+As an example, I have a volunteer working on developing KUinit tests
+for ext4.  We're going to start by testing the ext4 extent status
+tree.  The source code is at fs/ext4/extent_status.c; it's
+approximately 1800 LOC.  The Kunit tests for the extent status tree
+will exercise all of the corner cases for the various extent status
+tree functions --- e.g., ext4_es_insert_delayed_block(),
+ext4_es_remove_extent(), ext4_es_cache_extent(), etc.  And it will do
+this in isolation without our needing to create a test file system or
+using a test block device.
+
+Next we'll test the ext4 block allocator, again in isolation.  To test
+the block allocator we will have to write "mock functions" which
+simulate reading allocation bitmaps from disk.  Again, this will allow
+the test writer to explicitly construct corner cases and validate that
+the block allocator works as expected without having to reverese
+engineer file system data structures which will force a particular
+code path to be executed.
+
+So this is why it's largely irrelevant to me that KUinit uses UML.  In
+fact, it's a feature.  We're not testing device drivers, or the
+scheduler, or anything else architecture-specific.  UML is not about
+virtualization.  What it's about in this context is allowing us to
+start running test code as quickly as possible.  Booting KVM takes
+about 3-4 seconds, and this includes initializing virtio_scsi and
+other device drivers.  If by using UML we can hold the amount of
+unnecessary kernel subsystem initialization down to the absolute
+minimum, and if it means that we can communicating to the test
+framework via a userspace "printf" from UML/KUnit code, as opposed to
+via a virtual serial port to KVM's virtual console, it all makes for
+lighter weight testing.
+
+Why did I go looking for a volunteer to write KUnit tests for ext4?
+Well, I have a plan to make some changes in restructing how ext4's
+write path works, in order to support things like copy-on-write, a
+more efficient delayed allocation system, etc.  This will require
+making changes to the extent status tree, and by having unit tests for
+the extent status tree, we'll be able to detect any bugs that we might
+accidentally introduce in the es tree far more quickly than if we
+didn't have those tests available.  Google has long found that having
+these sorts of unit tests is a real win for developer velocity for any
+non-trivial code module (or C++ class), even when you take into
+account the time it takes to create the unit tests.
+
+					- Ted
+
+P.S.  Many thanks to Brendan for finding such a volunteer for me; the
+person in question is a SRE from Switzerland who is interested in
+getting involved with kernel testing, and this is going to be their
+20% project.  :-)
