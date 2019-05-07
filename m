@@ -1,7 +1,7 @@
-From: David.Laight at ACULAB.COM (David Laight)
-Date: Tue, 7 May 2019 14:50:26 +0000
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Tue, 7 May 2019 10:57:24 -0400
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190507091403.556daba7@gandalf.local.home>
+In-Reply-To: <b4a24fbe906a438798870c5112cde8b2@AcuMS.aculab.com>
 References: <20190502185225.0cdfc8bc@gandalf.local.home>
  <20190502193129.664c5b2e@gandalf.local.home>
  <20190502195052.0af473cf@gandalf.local.home>
@@ -15,84 +15,77 @@ References: <20190502185225.0cdfc8bc@gandalf.local.home>
  <20190507113050.GR2606@hirez.programming.kicks-ass.net>
  <f55e3c951aee4b5686201aaf282cc62b@AcuMS.aculab.com>
  <20190507091403.556daba7@gandalf.local.home>
-Message-ID: <b4a24fbe906a438798870c5112cde8b2@AcuMS.aculab.com>
+ <b4a24fbe906a438798870c5112cde8b2@AcuMS.aculab.com>
+Message-ID: <20190507105724.02abe6f6@gandalf.local.home>
 
-From: Steven Rostedt
-> Sent: 07 May 2019 14:14
-> On Tue, 7 May 2019 12:57:15 +0000
-> David Laight <David.Laight at ACULAB.COM> wrote:
+On Tue, 7 May 2019 14:50:26 +0000
+David Laight <David.Laight at ACULAB.COM> wrote:
+
+> From: Steven Rostedt
+> > Sent: 07 May 2019 14:14
+> > On Tue, 7 May 2019 12:57:15 +0000
+> > David Laight <David.Laight at ACULAB.COM> wrote:
+
+> The 'user' (ie the kernel code that needs to emulate the call) doesn't
+> write the data to the stack, just to some per-cpu location.
+> (Actually it could be on the stack at the other end of pt-regs.)
+> So you get to the 'register restore and iret' code with the stack unaltered.
+> It is then a SMOP to replace the %flags saved by the int3 with the %ip
+> saved by the int3, the %ip with the address of the function to call,
+> restore the flags (push and popf) and issue a ret.f to remove the %ip and %cs.
+
+How would you handle NMIs doing the same thing? Yes, the NMI handlers
+have breakpoints that will need to emulated calls as well.
+
 > 
-> > > Only the INT3 thing needs 'the gap', but the far bigger change here is
-> > > that kernel frames now have a complete pt_regs set and all sorts of
-> > > horrible crap can go away.
-> >
-> > I'm not doubting that generating the 'five register' interrupt stack frame
-> > for faults in kernel space makes life simpler just suggesting that the
-> > 'emulated call' can be done by emulating the 'iret' rather than generating
-> > a gap in the stack.
+> (Actually you need to add 4 to the callers %ip address to allow for the
+> difference between the size of int3 (hopefully 0xcc, not 0xcd 0x3).)
 > 
-> But how would the user put something on the stack? I don't see how
-> emulating an iret helps here. Can you write some pseudo code to explain
-> what you mean. I also believe the gap is only added for kernel->kernel
-> entries.
-
-The 'user' (ie the kernel code that needs to emulate the call) doesn't
-write the data to the stack, just to some per-cpu location.
-(Actually it could be on the stack at the other end of pt-regs.)
-So you get to the 'register restore and iret' code with the stack unaltered.
-It is then a SMOP to replace the %flags saved by the int3 with the %ip
-saved by the int3, the %ip with the address of the function to call,
-restore the flags (push and popf) and issue a ret.f to remove the %ip and %cs.
-
-(Actually you need to add 4 to the callers %ip address to allow for the
-difference between the size of int3 (hopefully 0xcc, not 0xcd 0x3).)
-
-> > > For 32bit 'the gap' happens naturally when building a 5 entry frame. Yes
-> > > it is possible to build a 5 entry frame on top of the old 3 entry one,
-> > > but why bother...
-> >
-> > Presumably there is 'horrid' code to generate the gap in 64bit mode?
-> > (less horrid than 32bit, but still horrid?)
-> > Or does it copy the entire pt_regs into a local stack frame and use
-> > that for the iret?
+> > > > For 32bit 'the gap' happens naturally when building a 5 entry frame. Yes
+> > > > it is possible to build a 5 entry frame on top of the old 3 entry one,
+> > > > but why bother...  
+> > >
+> > > Presumably there is 'horrid' code to generate the gap in 64bit mode?
+> > > (less horrid than 32bit, but still horrid?)
+> > > Or does it copy the entire pt_regs into a local stack frame and use
+> > > that for the iret?  
+> > 
+> > On x86_64, the gap is only done for int3 and nothing else, thus it is
+> > much less horrid. That's because x86_64 has a sane pt_regs storage for
+> > all exceptions.  
 > 
-> On x86_64, the gap is only done for int3 and nothing else, thus it is
-> much less horrid. That's because x86_64 has a sane pt_regs storage for
-> all exceptions.
+> Well, in particular, it always loads %sp as part of the iret.
+> So you can create a gap and the cpu will remove it for you.
+> 
+> In 64bit mode you could overwrite the %ss with the return address
+> to the caller restore %eax and %flags, push the function address
+> and use ret.n to jump to the function subtracting the right amount
+> from %esp.
+> 
+> Actually that means you can do the following in both modes:
+> 	if not emulated_call_address then pop %ax; iret else
+> 	# assume kernel<->kernel return
+> 	push emulated_call_address;
+> 	push flags_saved_by_int3
+> 	load %ax, return_address_from_iret
+> 	add %ax,#4
+> 	store %ax, first_stack_location_written_by_int3
+> 	load %ax, value_saved_by_int3_entry
+> 	popf
+> 	ret.n
+> 
+> The ret.n discards everything from the %ax to the required return address.
+> So 'n' is the size of the int3 frame, so 12 for i386 and 40 for amd64.
+> 
+> If the register restore (done just before this code) finished with
+> 'add %sp, sizeof *pt_regs' then the emulated_call_address can be
+> loaded in %ax from the other end of pt_regs.
+> 
+> This all reminds me of fixing up the in-kernel faults that happen
+> when loading the user segment registers during 'return to user'
+> fault in kernel space.
 
-Well, in particular, it always loads %sp as part of the iret.
-So you can create a gap and the cpu will remove it for you.
+This all sounds much more complex and fragile than the proposed
+solution. Why would we do this over what is being proposed?
 
-In 64bit mode you could overwrite the %ss with the return address
-to the caller restore %eax and %flags, push the function address
-and use ret.n to jump to the function subtracting the right amount
-from %esp.
-
-Actually that means you can do the following in both modes:
-	if not emulated_call_address then pop %ax; iret else
-	# assume kernel<->kernel return
-	push emulated_call_address;
-	push flags_saved_by_int3
-	load %ax, return_address_from_iret
-	add %ax,#4
-	store %ax, first_stack_location_written_by_int3
-	load %ax, value_saved_by_int3_entry
-	popf
-	ret.n
-
-The ret.n discards everything from the %ax to the required return address.
-So 'n' is the size of the int3 frame, so 12 for i386 and 40 for amd64.
-
-If the register restore (done just before this code) finished with
-'add %sp, sizeof *pt_regs' then the emulated_call_address can be
-loaded in %ax from the other end of pt_regs.
-
-This all reminds me of fixing up the in-kernel faults that happen
-when loading the user segment registers during 'return to user'
-fault in kernel space.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+-- Steve
