@@ -1,8 +1,9 @@
-From: peterz@infradead.org (Peter Zijlstra)
-Date: Tue, 7 May 2019 13:30:50 +0200
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Tue, 7 May 2019 08:27:16 -0400
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <b34aa38bdfe84263bc20b60761bf6005@AcuMS.aculab.com>
-References: <20190502185225.0cdfc8bc@gandalf.local.home>
+In-Reply-To: <20190507092731.GH2650@hirez.programming.kicks-ass.net>
+References: <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+ <20190502185225.0cdfc8bc@gandalf.local.home>
  <20190502193129.664c5b2e@gandalf.local.home>
  <20190502195052.0af473cf@gandalf.local.home>
  <20190503092959.GB2623@hirez.programming.kicks-ass.net>
@@ -11,33 +12,22 @@ References: <20190502185225.0cdfc8bc@gandalf.local.home>
  <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
  <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
  <20190507085753.GO2606@hirez.programming.kicks-ass.net>
- <b34aa38bdfe84263bc20b60761bf6005@AcuMS.aculab.com>
-Message-ID: <20190507113050.GR2606@hirez.programming.kicks-ass.net>
+ <20190507092731.GH2650@hirez.programming.kicks-ass.net>
+Message-ID: <20190507082716.73cd5a01@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507113050.J_9TFgt39p_tqmbzjGFJfeqN3ly25ATzms-VwuO54PM@z>
+Message-ID: <20190507122716.ng4e5PrXxrSxiq-w1bpGGkoW-1RxrvTkuNBQtYSx6mM@z>
 
-On Tue, May 07, 2019@09:18:51AM +0000, David Laight wrote:
-> From: Peter Zijlstra
-> > Sent: 07 May 2019 09:58
-> ...
-> > +	/*
-> > +	 * When we're here from kernel mode; the (exception) stack looks like:
-> > +	 *
-> > +	 * 4*4(%esp) - <previous context>
-> > +	 * 3*4(%esp) - flags
-> > +	 * 2*4(%esp) - cs
-> > +	 * 1*4(%esp) - ip
-> > +	 * 0*4(%esp) - orig_eax
+On Tue, 7 May 2019 11:27:31 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
+
+> FWIW, both these trampolines assume a kprobe will not
+> int3_emulate_{push/call}(), for both bitnesses.
 > 
-> Am I right in thinking that this is the only 'INT3' stack frame that
-> needs to be 'fiddled' with?
-> And that the 'emulate a call instruction' has verified that is the case??
-> So the %cs is always the kernel %cs.
+> But then; I'm thinking kprobes should be inspection only and not modify
+> things. So that might just be good enough.
 
-Only the INT3 thing needs 'the gap', but the far bigger change here is
-that kernel frames now have a complete pt_regs set and all sorts of
-horrible crap can go away.
+I believe there are kprobe calls that do modify things. Note, they can
+modify regs->ip. Kprobes sets the FTRACE_OPS_FL_IPMODIFY flag, thus
+they can never be put at the same location that is being live patched.
 
-For 32bit 'the gap' happens naturally when building a 5 entry frame. Yes
-it is possible to build a 5 entry frame on top of the old 3 entry one,
-but why bother...
+-- Steve
