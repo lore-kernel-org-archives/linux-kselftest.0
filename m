@@ -1,337 +1,179 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Tue,  7 May 2019 01:35:14 -0400
-Subject: [PATCH AUTOSEL 4.19 43/81] selftests: netfilter: check icmp pkttoobig
- errors are set as related
+Date: Tue,  7 May 2019 01:34:54 -0400
+Subject: [PATCH AUTOSEL 4.19 23/81] selftests: fib_tests: Fix 'Command line is
+ not complete' errors
 In-Reply-To: <20190507053554.30848-1-sashal@kernel.org>
 References: <20190507053554.30848-1-sashal@kernel.org>
-Message-ID: <20190507053554.30848-43-sashal@kernel.org>
+Message-ID: <20190507053554.30848-23-sashal@kernel.org>
 
-From: Florian Westphal <fw at strlen.de>
+From: David Ahern <dsahern at gmail.com>
 
-[ Upstream commit becf2319f320cae43e20cf179cc51a355a0deb5f ]
+[ Upstream commit a5f622984a623df9a84cf43f6b098d8dd76fbe05 ]
 
-When an icmp error such as pkttoobig is received, conntrack checks
-if the "inner" header (header of packet that did not fit link mtu)
-is matches an existing connection, and, if so, sets that packet as
-being related to the conntrack entry it found.
+A couple of tests are verifying a route has been removed. The helper
+expects the prefix as the first part of the expected output. When
+checking that a route has been deleted the prefix is empty leading
+to an invalid ip command:
 
-It was recently reported that this "related" setting also works
-if the inner header is from another, different connection (i.e.,
-artificial/forged icmp error).
+  $ ip ro ls match
+  Command line is not complete. Try option "help"
 
-Add a test, followup patch will add additional "inner dst matches
-outer dst in reverse direction" check before setting related state.
+Fix by moving the comparison of expected output and output to a new
+function that is used by both check_route and check_route6. Use the
+new helper for the 2 checks on route removal.
 
-Link: https://www.synacktiv.com/posts/systems/icmp-reachable.html
-Signed-off-by: Florian Westphal <fw at strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo at netfilter.org>
+Also, remove the reset of 'set -x' in route_setup which overrides the
+user managed setting.
+
+Fixes: d69faad76584c ("selftests: fib_tests: Add prefix route tests with metric")
+Signed-off-by: David Ahern <dsahern at gmail.com>
+Signed-off-by: David S. Miller <davem at davemloft.net>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/netfilter/Makefile    |   2 +-
- .../netfilter/conntrack_icmp_related.sh       | 283 ++++++++++++++++++
- 2 files changed, 284 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/netfilter/conntrack_icmp_related.sh
+ tools/testing/selftests/net/fib_tests.sh | 94 ++++++++++--------------
+ 1 file changed, 40 insertions(+), 54 deletions(-)
 
-diff --git a/tools/testing/selftests/netfilter/Makefile b/tools/testing/selftests/netfilter/Makefile
-index c9ff2b47bd1c..a37cb1192c6a 100644
---- a/tools/testing/selftests/netfilter/Makefile
-+++ b/tools/testing/selftests/netfilter/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for netfilter selftests
+diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+index a4ccde0e473b..2f190aa8fc5f 100755
+--- a/tools/testing/selftests/net/fib_tests.sh
++++ b/tools/testing/selftests/net/fib_tests.sh
+@@ -602,6 +602,39 @@ run_cmd()
+ 	return $rc
+ }
  
--TEST_PROGS := nft_trans_stress.sh nft_nat.sh
-+TEST_PROGS := nft_trans_stress.sh nft_nat.sh conntrack_icmp_related.sh
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/netfilter/conntrack_icmp_related.sh b/tools/testing/selftests/netfilter/conntrack_icmp_related.sh
-new file mode 100755
-index 000000000000..b48e1833bc89
---- /dev/null
-+++ b/tools/testing/selftests/netfilter/conntrack_icmp_related.sh
-@@ -0,0 +1,283 @@
-+#!/bin/bash
-+#
-+# check that ICMP df-needed/pkttoobig icmp are set are set as related
-+# state
-+#
-+# Setup is:
-+#
-+# nsclient1 -> nsrouter1 -> nsrouter2 -> nsclient2
-+# MTU 1500, except for nsrouter2 <-> nsclient2 link (1280).
-+# ping nsclient2 from nsclient1, checking that conntrack did set RELATED
-+# 'fragmentation needed' icmp packet.
-+#
-+# In addition, nsrouter1 will perform IP masquerading, i.e. also
-+# check the icmp errors are propagated to the correct host as per
-+# nat of "established" icmp-echo "connection".
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+ret=0
-+
-+nft --version > /dev/null 2>&1
-+if [ $? -ne 0 ];then
-+	echo "SKIP: Could not run test without nft tool"
-+	exit $ksft_skip
-+fi
-+
-+ip -Version > /dev/null 2>&1
-+if [ $? -ne 0 ];then
-+	echo "SKIP: Could not run test without ip tool"
-+	exit $ksft_skip
-+fi
-+
-+cleanup() {
-+	for i in 1 2;do ip netns del nsclient$i;done
-+	for i in 1 2;do ip netns del nsrouter$i;done
-+}
-+
-+ipv4() {
-+    echo -n 192.168.$1.2
-+}
-+
-+ipv6 () {
-+    echo -n dead:$1::2
-+}
-+
-+check_counter()
++check_expected()
 +{
-+	ns=$1
-+	name=$2
-+	expect=$3
-+	local lret=0
++	local out="$1"
++	local expected="$2"
++	local rc=0
 +
-+	cnt=$(ip netns exec $ns nft list counter inet filter "$name" | grep -q "$expect")
-+	if [ $? -ne 0 ]; then
-+		echo "ERROR: counter $name in $ns has unexpected value (expected $expect)" 1>&2
-+		ip netns exec $ns nft list counter inet filter "$name" 1>&2
-+		lret=1
-+	fi
++	[ "${out}" = "${expected}" ] && return 0
 +
-+	return $lret
-+}
-+
-+check_unknown()
-+{
-+	expect="packets 0 bytes 0"
-+	for n in nsclient1 nsclient2 nsrouter1 nsrouter2; do
-+		check_counter $n "unknown" "$expect"
-+		if [ $? -ne 0 ] ;then
-+			return 1
++	if [ -z "${out}" ]; then
++		if [ "$VERBOSE" = "1" ]; then
++			printf "\nNo route entry found\n"
++			printf "Expected:\n"
++			printf "    ${expected}\n"
 +		fi
-+	done
-+
-+	return 0
-+}
-+
-+for n in nsclient1 nsclient2 nsrouter1 nsrouter2; do
-+  ip netns add $n
-+  ip -net $n link set lo up
-+done
-+
-+DEV=veth0
-+ip link add $DEV netns nsclient1 type veth peer name eth1 netns nsrouter1
-+DEV=veth0
-+ip link add $DEV netns nsclient2 type veth peer name eth1 netns nsrouter2
-+
-+DEV=veth0
-+ip link add $DEV netns nsrouter1 type veth peer name eth2 netns nsrouter2
-+
-+DEV=veth0
-+for i in 1 2; do
-+    ip -net nsclient$i link set $DEV up
-+    ip -net nsclient$i addr add $(ipv4 $i)/24 dev $DEV
-+    ip -net nsclient$i addr add $(ipv6 $i)/64 dev $DEV
-+done
-+
-+ip -net nsrouter1 link set eth1 up
-+ip -net nsrouter1 link set veth0 up
-+
-+ip -net nsrouter2 link set eth1 up
-+ip -net nsrouter2 link set eth2 up
-+
-+ip -net nsclient1 route add default via 192.168.1.1
-+ip -net nsclient1 -6 route add default via dead:1::1
-+
-+ip -net nsclient2 route add default via 192.168.2.1
-+ip -net nsclient2 route add default via dead:2::1
-+
-+i=3
-+ip -net nsrouter1 addr add 192.168.1.1/24 dev eth1
-+ip -net nsrouter1 addr add 192.168.3.1/24 dev veth0
-+ip -net nsrouter1 addr add dead:1::1/64 dev eth1
-+ip -net nsrouter1 addr add dead:3::1/64 dev veth0
-+ip -net nsrouter1 route add default via 192.168.3.10
-+ip -net nsrouter1 -6 route add default via dead:3::10
-+
-+ip -net nsrouter2 addr add 192.168.2.1/24 dev eth1
-+ip -net nsrouter2 addr add 192.168.3.10/24 dev eth2
-+ip -net nsrouter2 addr add dead:2::1/64 dev eth1
-+ip -net nsrouter2 addr add dead:3::10/64 dev eth2
-+ip -net nsrouter2 route add default via 192.168.3.1
-+ip -net nsrouter2 route add default via dead:3::1
-+
-+sleep 2
-+for i in 4 6; do
-+	ip netns exec nsrouter1 sysctl -q net.ipv$i.conf.all.forwarding=1
-+	ip netns exec nsrouter2 sysctl -q net.ipv$i.conf.all.forwarding=1
-+done
-+
-+for netns in nsrouter1 nsrouter2; do
-+ip netns exec $netns nft -f - <<EOF
-+table inet filter {
-+	counter unknown { }
-+	counter related { }
-+	chain forward {
-+		type filter hook forward priority 0; policy accept;
-+		meta l4proto icmpv6 icmpv6 type "packet-too-big" ct state "related" counter name "related" accept
-+		meta l4proto icmp icmp type "destination-unreachable" ct state "related" counter name "related" accept
-+		meta l4proto { icmp, icmpv6 } ct state new,established accept
-+		counter name "unknown" drop
-+	}
-+}
-+EOF
-+done
-+
-+ip netns exec nsclient1 nft -f - <<EOF
-+table inet filter {
-+	counter unknown { }
-+	counter related { }
-+	chain input {
-+		type filter hook input priority 0; policy accept;
-+		meta l4proto { icmp, icmpv6 } ct state established,untracked accept
-+
-+		meta l4proto { icmp, icmpv6 } ct state "related" counter name "related" accept
-+		counter name "unknown" drop
-+	}
-+}
-+EOF
-+
-+ip netns exec nsclient2 nft -f - <<EOF
-+table inet filter {
-+	counter unknown { }
-+	counter new { }
-+	counter established { }
-+
-+	chain input {
-+		type filter hook input priority 0; policy accept;
-+		meta l4proto { icmp, icmpv6 } ct state established,untracked accept
-+
-+		meta l4proto { icmp, icmpv6 } ct state "new" counter name "new" accept
-+		meta l4proto { icmp, icmpv6 } ct state "established" counter name "established" accept
-+		counter name "unknown" drop
-+	}
-+	chain output {
-+		type filter hook output priority 0; policy accept;
-+		meta l4proto { icmp, icmpv6 } ct state established,untracked accept
-+
-+		meta l4proto { icmp, icmpv6 } ct state "new" counter name "new"
-+		meta l4proto { icmp, icmpv6 } ct state "established" counter name "established"
-+		counter name "unknown" drop
-+	}
-+}
-+EOF
-+
-+
-+# make sure NAT core rewrites adress of icmp error if nat is used according to
-+# conntrack nat information (icmp error will be directed at nsrouter1 address,
-+# but it needs to be routed to nsclient1 address).
-+ip netns exec nsrouter1 nft -f - <<EOF
-+table ip nat {
-+	chain postrouting {
-+		type nat hook postrouting priority 0; policy accept;
-+		ip protocol icmp oifname "veth0" counter masquerade
-+	}
-+}
-+table ip6 nat {
-+	chain postrouting {
-+		type nat hook postrouting priority 0; policy accept;
-+		ip6 nexthdr icmpv6 oifname "veth0" counter masquerade
-+	}
-+}
-+EOF
-+
-+ip netns exec nsrouter2 ip link set eth1  mtu 1280
-+ip netns exec nsclient2 ip link set veth0 mtu 1280
-+sleep 1
-+
-+ip netns exec nsclient1 ping -c 1 -s 1000 -q -M do 192.168.2.2 >/dev/null
-+if [ $? -ne 0 ]; then
-+	echo "ERROR: netns ip routing/connectivity broken" 1>&2
-+	cleanup
-+	exit 1
-+fi
-+ip netns exec nsclient1 ping6 -q -c 1 -s 1000 dead:2::2 >/dev/null
-+if [ $? -ne 0 ]; then
-+	echo "ERROR: netns ipv6 routing/connectivity broken" 1>&2
-+	cleanup
-+	exit 1
-+fi
-+
-+check_unknown
-+if [ $? -ne 0 ]; then
-+	ret=1
-+fi
-+
-+expect="packets 0 bytes 0"
-+for netns in nsrouter1 nsrouter2 nsclient1;do
-+	check_counter "$netns" "related" "$expect"
-+	if [ $? -ne 0 ]; then
-+		ret=1
++		return 1
 +	fi
-+done
 +
-+expect="packets 2 bytes 2076"
-+check_counter nsclient2 "new" "$expect"
-+if [ $? -ne 0 ]; then
-+	ret=1
-+fi
-+
-+ip netns exec nsclient1 ping -q -c 1 -s 1300 -M do 192.168.2.2 > /dev/null
-+if [ $? -eq 0 ]; then
-+	echo "ERROR: ping should have failed with PMTU too big error" 1>&2
-+	ret=1
-+fi
-+
-+# nsrouter2 should have generated the icmp error, so
-+# related counter should be 0 (its in forward).
-+expect="packets 0 bytes 0"
-+check_counter "nsrouter2" "related" "$expect"
-+if [ $? -ne 0 ]; then
-+	ret=1
-+fi
-+
-+# but nsrouter1 should have seen it, same for nsclient1.
-+expect="packets 1 bytes 576"
-+for netns in nsrouter1 nsclient1;do
-+	check_counter "$netns" "related" "$expect"
-+	if [ $? -ne 0 ]; then
-+		ret=1
++	# tricky way to convert output to 1-line without ip's
++	# messy '\'; this drops all extra white space
++	out=$(echo ${out})
++	if [ "${out}" != "${expected}" ]; then
++		rc=1
++		if [ "${VERBOSE}" = "1" ]; then
++			printf "    Unexpected route entry. Have:\n"
++			printf "        ${out}\n"
++			printf "    Expected:\n"
++			printf "        ${expected}\n\n"
++		fi
 +	fi
-+done
 +
-+ip netns exec nsclient1 ping6 -c 1 -s 1300 dead:2::2 > /dev/null
-+if [ $? -eq 0 ]; then
-+	echo "ERROR: ping6 should have failed with PMTU too big error" 1>&2
-+	ret=1
-+fi
++	return $rc
++}
 +
-+expect="packets 2 bytes 1856"
-+for netns in nsrouter1 nsclient1;do
-+	check_counter "$netns" "related" "$expect"
-+	if [ $? -ne 0 ]; then
-+		ret=1
-+	fi
-+done
-+
-+if [ $ret -eq 0 ];then
-+	echo "PASS: icmp mtu error had RELATED state"
-+else
-+	echo "ERROR: icmp error RELATED state test has failed"
-+fi
-+
-+cleanup
-+exit $ret
+ # add route for a prefix, flushing any existing routes first
+ # expected to be the first step of a test
+ add_route6()
+@@ -646,31 +679,7 @@ check_route6()
+ 	local rc=0
+ 
+ 	out=$($IP -6 ro ls match ${pfx} | sed -e 's/ pref medium//')
+-	[ "${out}" = "${expected}" ] && return 0
+-
+-	if [ -z "${out}" ]; then
+-		if [ "$VERBOSE" = "1" ]; then
+-			printf "\nNo route entry found\n"
+-			printf "Expected:\n"
+-			printf "    ${expected}\n"
+-		fi
+-		return 1
+-	fi
+-
+-	# tricky way to convert output to 1-line without ip's
+-	# messy '\'; this drops all extra white space
+-	out=$(echo ${out})
+-	if [ "${out}" != "${expected}" ]; then
+-		rc=1
+-		if [ "${VERBOSE}" = "1" ]; then
+-			printf "    Unexpected route entry. Have:\n"
+-			printf "        ${out}\n"
+-			printf "    Expected:\n"
+-			printf "        ${expected}\n\n"
+-		fi
+-	fi
+-
+-	return $rc
++	check_expected "${out}" "${expected}"
+ }
+ 
+ route_cleanup()
+@@ -714,7 +723,7 @@ route_setup()
+ 	$IP addr add 172.16.103.2/24 dev veth4
+ 	$IP addr add 172.16.104.1/24 dev dummy1
+ 
+-	set +ex
++	set +e
+ }
+ 
+ # assumption is that basic add of a single path route works
+@@ -949,7 +958,8 @@ ipv6_addr_metric_test()
+ 	run_cmd "$IP li set dev dummy2 down"
+ 	rc=$?
+ 	if [ $rc -eq 0 ]; then
+-		check_route6 ""
++		out=$($IP -6 ro ls match 2001:db8:104::/64)
++		check_expected "${out}" ""
+ 		rc=$?
+ 	fi
+ 	log_test $rc 0 "Prefix route removed on link down"
+@@ -1009,34 +1019,9 @@ check_route()
+ 	local pfx="172.16.104.0/24"
+ 	local expected="$1"
+ 	local out
+-	local rc=0
+ 
+ 	out=$($IP ro ls match ${pfx})
+-	[ "${out}" = "${expected}" ] && return 0
+-
+-	if [ -z "${out}" ]; then
+-		if [ "$VERBOSE" = "1" ]; then
+-			printf "\nNo route entry found\n"
+-			printf "Expected:\n"
+-			printf "    ${expected}\n"
+-		fi
+-		return 1
+-	fi
+-
+-	# tricky way to convert output to 1-line without ip's
+-	# messy '\'; this drops all extra white space
+-	out=$(echo ${out})
+-	if [ "${out}" != "${expected}" ]; then
+-		rc=1
+-		if [ "${VERBOSE}" = "1" ]; then
+-			printf "    Unexpected route entry. Have:\n"
+-			printf "        ${out}\n"
+-			printf "    Expected:\n"
+-			printf "        ${expected}\n\n"
+-		fi
+-	fi
+-
+-	return $rc
++	check_expected "${out}" "${expected}"
+ }
+ 
+ # assumption is that basic add of a single path route works
+@@ -1301,7 +1286,8 @@ ipv4_addr_metric_test()
+ 	run_cmd "$IP li set dev dummy2 down"
+ 	rc=$?
+ 	if [ $rc -eq 0 ]; then
+-		check_route ""
++		out=$($IP ro ls match 172.16.104.0/24)
++		check_expected "${out}" ""
+ 		rc=$?
+ 	fi
+ 	log_test $rc 0 "Prefix route removed on link down"
 -- 
 2.20.1
