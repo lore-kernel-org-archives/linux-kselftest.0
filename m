@@ -1,45 +1,41 @@
 From: peterz at infradead.org (Peter Zijlstra)
-Date: Tue, 7 May 2019 11:51:03 +0200
+Date: Tue, 7 May 2019 13:30:50 +0200
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
-References: <20190506145745.17c59596@gandalf.local.home>
- <CAHk-=witfFBW2O5v6g--FmqnAFsMkKNLosTFfWyaoJ7euQF8kQ@mail.gmail.com>
- <20190506162915.380993f9@gandalf.local.home>
- <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
- <20190506174511.2f8b696b@gandalf.local.home>
- <CAHk-=wj3R_s0RTJOmTBNaUPhu4fz2shNBUr4M6Ej65UYSNCs-g@mail.gmail.com>
- <20190506210416.2489a659@oasis.local.home>
- <CAHk-=whZwqzbu-=1r_j_cXfd=ta1q7RFCuneqBZfQQhS_P-BmQ@mail.gmail.com>
- <20190506215353.14a8ef78@oasis.local.home>
- <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
-Message-ID: <20190507095103.GP2606@hirez.programming.kicks-ass.net>
+In-Reply-To: <b34aa38bdfe84263bc20b60761bf6005@AcuMS.aculab.com>
+References: <20190502185225.0cdfc8bc@gandalf.local.home>
+ <20190502193129.664c5b2e@gandalf.local.home>
+ <20190502195052.0af473cf@gandalf.local.home>
+ <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+ <20190503092247.20cc1ff0@gandalf.local.home>
+ <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
+ <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
+ <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+ <20190507085753.GO2606@hirez.programming.kicks-ass.net>
+ <b34aa38bdfe84263bc20b60761bf6005@AcuMS.aculab.com>
+Message-ID: <20190507113050.GR2606@hirez.programming.kicks-ass.net>
 
-On Mon, May 06, 2019 at 07:22:06PM -0700, Linus Torvalds wrote:
-> We do *not* have very strict guarantees for D$-vs-I$ coherency on x86,
-> but we *do* have very strict guarantees for D$-vs-D$ coherency. And so
-> we could use the D$ coherency to give us atomicity guarantees for
-> loading and storing the instruction offset for instruction emulation,
-> in ways we can *not* use the D$-to-I$ guarantees and just executing it
-> directly.
+On Tue, May 07, 2019 at 09:18:51AM +0000, David Laight wrote:
+> From: Peter Zijlstra
+> > Sent: 07 May 2019 09:58
+> ...
+> > +	/*
+> > +	 * When we're here from kernel mode; the (exception) stack looks like:
+> > +	 *
+> > +	 * 4*4(%esp) - <previous context>
+> > +	 * 3*4(%esp) - flags
+> > +	 * 2*4(%esp) - cs
+> > +	 * 1*4(%esp) - ip
+> > +	 * 0*4(%esp) - orig_eax
 > 
-> So while we still need those nasty IPI's to guarantee the D$-vs-I$
-> coherency in the "big picture" model and to get the serialization with
-> the actual 'int3' exception right, we *could* just do all the other
-> parts of the instruction emulation using the D$ coherency.
-> 
-> So we could do the actual "call offset" write with a single atomic
-> 4-byte locked cycle (just use "xchg" to write - it's always locked).
-> And similarly we could do the call offset *read* with a single locked
-> cycle (cmpxchg with a 0 value, for example). It would be atomic even
-> if it crosses a cacheline boundary.
+> Am I right in thinking that this is the only 'INT3' stack frame that
+> needs to be 'fiddled' with?
+> And that the 'emulate a call instruction' has verified that is the case??
+> So the %cs is always the kernel %cs.
 
-Very 'soon', x86 will start to #AC if you do unaligned LOCK prefixed
-instructions. The problem is that while aligned LOCK instructions can do
-the atomicity with the coherency protocol, unaligned (esp, line or page
-boundary crossing ones) needs that bus-lock thing the SDM talks about.
+Only the INT3 thing needs 'the gap', but the far bigger change here is
+that kernel frames now have a complete pt_regs set and all sorts of
+horrible crap can go away.
 
-For giggles, write yourself a while(1) loop that XCHGs across a
-page-boundary and see what it does to the rest of the system.
-
-So _please_, do not rely on unaligned atomic ops. We really want them to
-do the way of the Dodo.
+For 32bit 'the gap' happens naturally when building a 5 entry frame. Yes
+it is possible to build a 5 entry frame on top of the old 3 entry one,
+but why bother...
