@@ -1,51 +1,42 @@
-From: Felix.Kuehling@amd.com (Kuehling, Felix)
-Date: Tue, 7 May 2019 16:44:02 +0000
-Subject: [PATCH v15 12/17] drm/radeon, arm64: untag user pointers in
- radeon_gem_userptr_ioctl
-In-Reply-To: <03fe9d923db75cf72678f3ce103838e67390751a.1557160186.git.andreyknvl@google.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <03fe9d923db75cf72678f3ce103838e67390751a.1557160186.git.andreyknvl@google.com>
-Message-ID: <7568118b-ad57-156c-464f-54fb3f90a783@amd.com>
+From: gregkh@linuxfoundation.org (Greg KH)
+Date: Tue, 7 May 2019 18:57:18 +0200
+Subject: [PATCH v2] kheaders: Move from proc to sysfs
+In-Reply-To: <20190507163824.GC89248@google.com>
+References: <20190504121213.183203-1-joel@joelfernandes.org>
+ <20190504122158.GA23535@kroah.com>
+ <20190504123650.GA229151@google.com>
+ <20190505091030.GA25646@kroah.com>
+ <20190505132623.GA3076@localhost>
+ <20190505163145.45f77e44@oasis.local.home>
+ <20190507163824.GC89248@google.com>
+Message-ID: <20190507165718.GA1241@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507164402.GQBmlBVI2ZYblAusW8yuFDO3465_dms6wNSNOxXWBuE@z>
+Message-ID: <20190507165718.biTk6k-iwU4QrPUtrsbVWrkT4x_HxPorLBffKxNeGog@z>
 
-On 2019-05-06 12:30 p.m., Andrey Konovalov wrote:
-> [CAUTION: External Email]
->
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
->
-> In radeon_gem_userptr_ioctl() an MMU notifier is set up with a (tagged)
-> userspace pointer. The untagged address should be used so that MMU
-> notifiers for the untagged address get correctly matched up with the right
-> BO. This funcation also calls radeon_ttm_tt_pin_userptr(), which uses
-> provided user pointers for vma lookups, which can only by done with
-> untagged pointers.
->
-> This patch untags user pointers in radeon_gem_userptr_ioctl().
->
-> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
-Acked-by: Felix Kuehling <Felix.Kuehling at amd.com>
+On Tue, May 07, 2019@12:38:24PM -0400, Joel Fernandes wrote:
+> On Sun, May 05, 2019@04:31:45PM -0400, Steven Rostedt wrote:
+> > On Sun, 5 May 2019 13:26:23 +0000
+> > Joel Fernandes <joel@joelfernandes.org> wrote:
+> > 
+> > > On Sun, May 05, 2019@11:10:30AM +0200, Greg KH wrote:
+> > > > On Sat, May 04, 2019 at 08:36:50AM -0400, Joel Fernandes wrote:  
+> > > > > > But, you should change S_IRUGO to the correct octal number, checkpatch
+> > > > > > should have barfed on this change.  
+> > > > > 
+> > > > > fixed, below is the updated patch inline, thanks!  
+> > > > 
+> > > > Please resend as a "real" submission, doing so in this format is a bit
+> > > > more difficult to apply.  
+> > > 
+> > > git am --scissors can do it, but no problem I will send as a formal
+> > > submission. Thanks a lot.
+> > >
+> > 
+> > True, but a lot of us depend on scripts to pull in patches from our
+> > INBOX. Which is why we like them to stay with the standard format.
+> 
+> Thanks makes sense. So Greg, I submitted this properly, does it look good to
+> you now? Steven, I would appreciate any Acks/Reviews on the patch as well:
+> https://lore.kernel.org/patchwork/patch/1070199/
 
-
-> ---
->   drivers/gpu/drm/radeon/radeon_gem.c | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
-> index 44617dec8183..90eb78fb5eb2 100644
-> --- a/drivers/gpu/drm/radeon/radeon_gem.c
-> +++ b/drivers/gpu/drm/radeon/radeon_gem.c
-> @@ -291,6 +291,8 @@ int radeon_gem_userptr_ioctl(struct drm_device *dev, void *data,
->          uint32_t handle;
->          int r;
->
-> +       args->addr = untagged_addr(args->addr);
-> +
->          if (offset_in_page(args->addr | args->size))
->                  return -EINVAL;
->
-> --
-> 2.21.0.1020.gf2820cf01a-goog
->
+Looks good to me, should get to it in a few days...
