@@ -1,10 +1,8 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Mon, 6 May 2019 21:04:16 -0400
+From: torvalds at linux-foundation.org (Linus Torvalds)
+Date: Mon, 6 May 2019 18:06:12 -0700
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <CAHk-=wj3R_s0RTJOmTBNaUPhu4fz2shNBUr4M6Ej65UYSNCs-g@mail.gmail.com>
+In-Reply-To: <20190506201014.484e7b65@oasis.local.home>
 References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <20190502195052.0af473cf@gandalf.local.home>
- <20190503092959.GB2623@hirez.programming.kicks-ass.net>
  <20190503092247.20cc1ff0@gandalf.local.home>
  <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
  <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
@@ -19,138 +17,61 @@ References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
  <20190506174511.2f8b696b@gandalf.local.home>
  <CAHk-=wj3R_s0RTJOmTBNaUPhu4fz2shNBUr4M6Ej65UYSNCs-g@mail.gmail.com>
-Message-ID: <20190506210416.2489a659@oasis.local.home>
+ <CAHk-=wje38dbYFGNw0y==zd7Zo_4s2WOQjWaBDyr24RCdK2EPQ@mail.gmail.com>
+ <20190506201014.484e7b65@oasis.local.home>
+Message-ID: <CAHk-=whVLnVHhjU4=sdBSpP9eviqwv00xvtCDamdQkhDRA_EmQ@mail.gmail.com>
 
-On Mon, 6 May 2019 15:06:57 -0700
-Linus Torvalds <torvalds at linux-foundation.org> wrote:
+On Mon, May 6, 2019 at 5:10 PM Steven Rostedt <rostedt at goodmis.org> wrote:
+>
+> But the CPU that was rewriting instructions does a run_sync() after
+> removing the int3:
+>
+> static void run_sync(void)
+> {
+>         int enable_irqs;
+>
+>         /* No need to sync if there's only one CPU */
+>         if (num_online_cpus() == 1)
+>                 return;
+>
+>         enable_irqs = irqs_disabled();
+>
+>         /* We may be called with interrupts disabled (on bootup). */
+>         if (enable_irqs)
+>                 local_irq_enable();
+>         on_each_cpu(do_sync_core, NULL, 1);
+>         if (enable_irqs)
+>                 local_irq_disable();
+> }
+>
+> Which sends an IPI to all CPUs to make sure they no longer see the int3.
 
-> On Mon, May 6, 2019 at 2:45 PM Steven Rostedt <rostedt at goodmis.org> wrote:
-> >
-> > To do that we would need to rewrite the logic to update each of those
-> > 40,000 calls one at a time, or group them together to what gets
-> > changed.  
-> 
-> Stephen, YOU ARE NOT LISTENING.
+Duh. I have been looking back and forth in that file, and I was mixing
+ftrace_modify_code_direct() (which only does a local sync) with
+ftrace_modify_code() (which does run_sync()). The dangers of moving
+around by searching for function names.
 
- (note, it's Steven ;-)
+That file is a maze of several functions that are very similarly named
+and do slightly different things.
 
-I'm listening, I'm just trying to understand.
+But yes, I was looking at the "direct" sequence.
 
-> 
-> You are already fixing the value of the call in the instruction as
-> part of the instruction rewriting.
-> 
-> When you do things like this:
-> 
->         unsigned long ip = (unsigned long)(&ftrace_call);
->         unsigned char *new;
->         int ret;
-> 
->         new = ftrace_call_replace(ip, (unsigned long)func);
->         ret = update_ftrace_func(ip, new);
-> 
-> you have already decided to rewrite the instruction with one single
-> fixed call target: "func".
-> 
-> I'm just saying that you should ALWAYS use the same call target in the
-> int3 emulation.
-> 
-> Instead, you hardcode something else than what you are AT THE SAME
-> TIME rewriting the instruction with.
-> 
-> See what I'm saying?
+> I think you are missing the run_sync() which is the heavy hammer to
+> make sure all CPUs are in sync. And this is done at each stage:
+>
+>         add int3
+>         run_sync();
+>         update call cite outside of int3
+>         run_sync()
+>         remove int3
+>         run_sync()
+>
+> HPA said that the last run_sync() isn't needed, but I kept it because I
+> wanted to make sure. Looks like your analysis shows that it is needed.
 
-Yes, but that's not the code I'm worried about.
+Absolutely. I think we could get rid of it, but yes, to then avoid the
+race we'd need to be a lot more clever.
 
-ftrace_replace_code() is, which does:
+Yeah, with the three run_sunc() things, the races I thought it had can't happen.
 
-	for_ftrace_rec_iter(iter) {
-		rec = ftrace_rec_iter_record(iter);
-
-		ret = add_breakpoints(rec, enable);
-		if (ret)
-			goto remove_breakpoints;
-		count++;
-	}
-
-	run_sync();
-
-
-And there's two more iterator loops that will do the modification of
-the call site, and then the third loop will remove the breakpoint.
-
-That iterator does something special for each individual record. All
-40,000 of them.
-
-That add_breakpoint() does:
-
-static int add_breakpoints(struct dyn_ftrace *rec, int enable)
-{
-	unsigned long ftrace_addr;
-	int ret;
-
-	ftrace_addr = ftrace_get_addr_curr(rec);
-
-	ret = ftrace_test_record(rec, enable);
-
-	switch (ret) {
-	case FTRACE_UPDATE_IGNORE:
-		return 0;
-
-	case FTRACE_UPDATE_MAKE_CALL:
-		/* converting nop to call */
-		return add_brk_on_nop(rec);
-
-	case FTRACE_UPDATE_MODIFY_CALL:
-	case FTRACE_UPDATE_MAKE_NOP:
-		/* converting a call to a nop */
-		return add_brk_on_call(rec, ftrace_addr);
-	}
-	return 0;
-}
-
-And to get what the target is, we call ftrace_get_addr_curr(), which
-will return a function based on the flags in the record. Which can be
-anything from a call to a customized trampoline, to either
-ftrace_caller, or to ftrace_regs_caller, or it can turn the record into
-a nop.
-
-This is what I'm talking about. We are adding thousands of int3s
-through out the kernel, and we have a single handler to handle each one
-of them.
-
-The reason I picked ftrace_regs_caller() is because that one does
-anything that any of the callers can do (albeit slower). If it does
-not, then ftrace will be broken, because it handles the case that all
-types of trampolines are attached to a single function, and that code
-had better do the exact same thing for each of those trampolines as if
-the trampolines were called directly, because the handlers that those
-trampolines call, shouldn't care who else is using that function.
-
-Note, the only exception to that rule, is that we only allow one
-function attached to the function to modify the return address (and the
-record has a flag for that). If a record already modifies the ip
-address on return, the registering of another ftrace_ops that modifies
-the ip address will fail to register.
-
-
-> 
-> Stop with the "there could be thousands of targets" arguyment. The
-> "call" instruction THAT YOU ARE REWRITING has exactly one target.
-> There aren't 40,000 of them. x86 does not have that kind of "call"
-> instruction that randomly calls 40k different functions. You are
-> replacing FIVE BYTES of memory, and the emulation you do should
-> emulate those FIVE BYTES.
-> 
-> See?
-> 
-> Why are you emulating something different than what you are rewriting?
-
-I'm not having one call site call 40,000 different functions. You are
-right about that. But I have 40,000 different call sites that could be
-calling different functions and all of them are being processed by a
-single int3 handler.
-
-That's my point.
-
--- Steve
+             Linus
