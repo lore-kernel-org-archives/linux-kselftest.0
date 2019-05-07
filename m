@@ -1,34 +1,31 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Tue, 7 May 2019 17:24:18 -0400
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190507172159.5t3bm3mjkwagvite@treble>
-References: <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
- <20190506225819.11756974@oasis.local.home>
- <CAHk-=wh4FCNBLe8OyDZt2Tr+k9JhhTsg3H8R4b55peKcf0b6eQ@mail.gmail.com>
- <20190506232158.13c9123b@oasis.local.home>
- <CAHk-=wi4vPg4pu6RvxQrUuBL4Vgwd2G2iaEJVVumny+cBOWMZw@mail.gmail.com>
- <CAHk-=wg2_okyU8mpkGCUrudgfg8YmNetSD8=scNbOkN+imqZdQ@mail.gmail.com>
- <20190507111227.1d4268d7@gandalf.local.home>
- <CAHk-=wjYdj+vvV8uUA8eaUSxOhu=xuQxdo-dtM927j0-3hSkEw@mail.gmail.com>
- <20190507163440.GV2606@hirez.programming.kicks-ass.net>
- <CAHk-=wiuue37opWK5QaQ9f6twqDZuSratdP-1bK6kD9-Az5WnA@mail.gmail.com>
- <20190507172159.5t3bm3mjkwagvite@treble>
-Message-ID: <20190507172418.67ef6fc3@gandalf.local.home>
+From: alakesh.haloi at gmail.com (Alakesh Haloi)
+Date: Tue, 7 May 2019 23:12:24 +0000
+Subject: [PATCH] selftests/bpf: Fix compile warning in bpf selftest
+Message-ID: <20190507231224.GA3787@ip-172-31-29-54.us-west-2.compute.internal>
 
-On Tue, 7 May 2019 12:21:59 -0500
-Josh Poimboeuf <jpoimboe at redhat.com> wrote:
+This fixes the following compile time warning
 
-> regs->sp is *undefined* on x86-32.  We're damning our future selves to
-> have to always remember to use that darn kernel_stack_pointer() helper
-> for eternity just because of x86-32.
+flow_dissector_load.c: In function ‘detach_program’:
+flow_dissector_load.c:55:19: warning: format not a string literal and no format arguments [-Wformat-security]
+   error(1, errno, command);
+                   ^~~~~~~
+Signed-off-by: Alakesh Haloi <alakesh.haloi at gmail.com>
+---
+ tools/testing/selftests/bpf/flow_dissector_load.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-And there's been several times I forget that regs->sp can not be read
-directly. Especially most of my bug reports are for x86_64 these days.
-But when I had that seldom x86_32 one, and go debugging, I would print
-out "regs->sp" and then the system would crash. And I spend some time
-wondering why?
-
-It's been a bane of mine for some time.
-
-
--- Steve
+diff --git a/tools/testing/selftests/bpf/flow_dissector_load.c b/tools/testing/selftests/bpf/flow_dissector_load.c
+index 77cafa66d048..7136ab9ffa73 100644
+--- a/tools/testing/selftests/bpf/flow_dissector_load.c
++++ b/tools/testing/selftests/bpf/flow_dissector_load.c
+@@ -52,7 +52,7 @@ static void detach_program(void)
+ 	sprintf(command, "rm -r %s", cfg_pin_path);
+ 	ret = system(command);
+ 	if (ret)
+-		error(1, errno, command);
++		error(1, errno, "%s", command);
+ }
+ 
+ static void parse_opts(int argc, char **argv)
+-- 
+2.17.1
