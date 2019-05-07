@@ -1,52 +1,64 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Wed, 8 May 2019 02:15:51 +0900
+From: torvalds at linux-foundation.org (Linus Torvalds)
+Date: Tue, 7 May 2019 10:08:50 -0700
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190507231340.92b1b0665d1110f90929d878@kernel.org>
-References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <20190502195052.0af473cf@gandalf.local.home>
- <20190503092959.GB2623@hirez.programming.kicks-ass.net>
- <20190503092247.20cc1ff0@gandalf.local.home>
- <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
- <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
- <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
- <20190506095631.6f71ad7c@gandalf.local.home>
- <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
- <20190506130643.62c35eeb@gandalf.local.home>
- <CAHk-=whesas+GDtHZks62wqXWXe4d_g3XJ359GX81qj=Fgs6qQ@mail.gmail.com>
- <20190506145745.17c59596@gandalf.local.home>
- <CAHk-=witfFBW2O5v6g--FmqnAFsMkKNLosTFfWyaoJ7euQF8kQ@mail.gmail.com>
- <20190506162915.380993f9@gandalf.local.home>
- <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
- <20190506174511.2f8b696b@gandalf.local.home>
- <20190507231340.92b1b0665d1110f90929d878@kernel.org>
-Message-ID: <20190508021551.ca791c725cbddc2db541273f@kernel.org>
+In-Reply-To: <20190507163440.GV2606@hirez.programming.kicks-ass.net>
+References: <CAHk-=whZwqzbu-=1r_j_cXfd=ta1q7RFCuneqBZfQQhS_P-BmQ@mail.gmail.com>
+ <20190506215353.14a8ef78@oasis.local.home>
+ <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
+ <20190506225819.11756974@oasis.local.home>
+ <CAHk-=wh4FCNBLe8OyDZt2Tr+k9JhhTsg3H8R4b55peKcf0b6eQ@mail.gmail.com>
+ <20190506232158.13c9123b@oasis.local.home>
+ <CAHk-=wi4vPg4pu6RvxQrUuBL4Vgwd2G2iaEJVVumny+cBOWMZw@mail.gmail.com>
+ <CAHk-=wg2_okyU8mpkGCUrudgfg8YmNetSD8=scNbOkN+imqZdQ@mail.gmail.com>
+ <20190507111227.1d4268d7@gandalf.local.home>
+ <CAHk-=wjYdj+vvV8uUA8eaUSxOhu=xuQxdo-dtM927j0-3hSkEw@mail.gmail.com>
+ <20190507163440.GV2606@hirez.programming.kicks-ass.net>
+Message-ID: <CAHk-=wiuue37opWK5QaQ9f6twqDZuSratdP-1bK6kD9-Az5WnA@mail.gmail.com>
 
-On Tue, 7 May 2019 23:13:40 +0900
-Masami Hiramatsu <mhiramat at kernel.org> wrote:
+On Tue, May 7, 2019 at 9:34 AM Peter Zijlstra <peterz at infradead.org> wrote:
+>
+> Would you consider my approach later on, under the guise of unification?
 
-> On Mon, 6 May 2019 17:45:11 -0400
-> Steven Rostedt <rostedt at goodmis.org> wrote:
-> 
-> > If we go with Peter's patch, I can make this code much more sane, and
-> > not have to worry about having &regs->sp be at the top of the stack. I
-> > could simply, just push everything in the order of pt_regs and call the
-> > handler.
-> 
-> Hi Steve, I need to catch up with the origin of this series, but it seems
-> also good to optprobe which is doing similar trick on pt_regs. If we can
-> assume that int3 pt_regs can have a gap, optprobe can also make a gap, and
-> it can be also used for storing destination address.
+WHY?
 
-Sorry, I misunderstood. I see the issue ( https://lkml.org/lkml/2019/5/1/497 )
-and solutions on the thread. If we really need to fix this trace-livepatch
-combination issue, it may be good to backport to stable trees.
->From this viewpoint, Linus's suggestion (no pt_reg changes on x86-32) seems
-to have a point.
+The *only* advantage of your patch is that trivial "look up kernel stack" macro.
 
-BTW, even though I think Peter's patch (unifying pt_regs behavior) will also
-be good for us for more general reason (not only for fixing actual issue).
+Seriously. There's absolutely nothing else.
 
-Thank you,
+Is that macro ugly? Yes. But it's directly explainable by just
+pointing to the architecture documentation.
 
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+It's a one-liner hack.
+
+And for that, you want to complicate the x86-32 entry and exit code?
+
+Do we have different emulation for "push" on 32-bit and 64-bit? Yes.
+But again, that's just how the hardware works. This is not some
+"generic hw-independent code". This is literally emulating
+instructions that care about instruction encoding and bit size
+details, where there are certainly _similarities_ (and in the case of
+'call', they look bit-identical), but it's also not like "same code"
+is a big argument. That's why we have a helper function, to hide the
+details.
+
+I point to my diffstat once again. It's smaller, and I argue that it
+is actually conceptually *simpler* to simply say "this is how the
+architecture works".
+
+And yes, I realize that I may be biased by the fact that I simply know
+i386 so well, so to me it simply makes more sense to just work with
+what the hardware gives us. The i386 exception model with the kernel
+stack nesting is a *hell* of a lot simpler than the x86-64 one. The
+fact is, x86-64 messed things up, and swapgs and friends are an
+abomination against God.
+
+So the whole "let's clean up x86-32 to look like x86-64, which got
+things right" is to me a completely bogus argument. x86-64 got the
+"yes, push ss/sp unconditionally" part right, but got a lot of other
+things horribly wrong. So this is all just one small detail that
+differs, across two architectures that are similar but have very
+different warts.
+
+But that diffstat is still hard, cold, unbiased data.
+
+                    Linus
