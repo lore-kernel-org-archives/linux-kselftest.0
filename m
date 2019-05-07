@@ -1,183 +1,34 @@
-From: sashal at kernel.org (Sasha Levin)
-Date: Tue,  7 May 2019 01:31:20 -0400
-Subject: [PATCH AUTOSEL 5.0 26/99] selftests: fib_tests: Fix 'Command line is
- not complete' errors
-In-Reply-To: <20190507053235.29900-1-sashal@kernel.org>
-References: <20190507053235.29900-1-sashal@kernel.org>
-Message-ID: <20190507053235.29900-26-sashal@kernel.org>
+From: leon at kernel.org (Leon Romanovsky)
+Date: Tue, 7 May 2019 09:33:37 +0300
+Subject: [PATCH v15 13/17] IB, arm64: untag user pointers in
+ ib_uverbs_(re)reg_mr()
+In-Reply-To: <20190506195020.GD6201@ziepe.ca>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <66d044ab9445dcf36a96205a109458ac23f38b73.1557160186.git.andreyknvl@google.com>
+ <20190506195020.GD6201@ziepe.ca>
+Message-ID: <20190507063337.GP6938@mtr-leonro.mtl.com>
 
-From: David Ahern <dsahern at gmail.com>
+On Mon, May 06, 2019 at 04:50:20PM -0300, Jason Gunthorpe wrote:
+> On Mon, May 06, 2019 at 06:30:59PM +0200, Andrey Konovalov wrote:
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > ib_uverbs_(re)reg_mr() use provided user pointers for vma lookups (through
+> > e.g. mlx4_get_umem_mr()), which can only by done with untagged pointers.
+> >
+> > Untag user pointers in these functions.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+> > ---
+> >  drivers/infiniband/core/uverbs_cmd.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+>
+> I think this is OK.. We should really get it tested though.. Leon?
 
-[ Upstream commit a5f622984a623df9a84cf43f6b098d8dd76fbe05 ]
+It can be done after v5.2-rc1.
 
-A couple of tests are verifying a route has been removed. The helper
-expects the prefix as the first part of the expected output. When
-checking that a route has been deleted the prefix is empty leading
-to an invalid ip command:
+Thanks
 
-  $ ip ro ls match
-  Command line is not complete. Try option "help"
-
-Fix by moving the comparison of expected output and output to a new
-function that is used by both check_route and check_route6. Use the
-new helper for the 2 checks on route removal.
-
-Also, remove the reset of 'set -x' in route_setup which overrides the
-user managed setting.
-
-Fixes: d69faad76584c ("selftests: fib_tests: Add prefix route tests with metric")
-Signed-off-by: David Ahern <dsahern at gmail.com>
-Signed-off-by: David S. Miller <davem at davemloft.net>
-Signed-off-by: Sasha Levin <sashal at kernel.org>
----
- tools/testing/selftests/net/fib_tests.sh | 94 ++++++++++--------------
- 1 file changed, 40 insertions(+), 54 deletions(-)
-
-diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-index 1080ff55a788..0d2a5f4f1e63 100755
---- a/tools/testing/selftests/net/fib_tests.sh
-+++ b/tools/testing/selftests/net/fib_tests.sh
-@@ -605,6 +605,39 @@ run_cmd()
- 	return $rc
- }
- 
-+check_expected()
-+{
-+	local out="$1"
-+	local expected="$2"
-+	local rc=0
-+
-+	[ "${out}" = "${expected}" ] && return 0
-+
-+	if [ -z "${out}" ]; then
-+		if [ "$VERBOSE" = "1" ]; then
-+			printf "\nNo route entry found\n"
-+			printf "Expected:\n"
-+			printf "    ${expected}\n"
-+		fi
-+		return 1
-+	fi
-+
-+	# tricky way to convert output to 1-line without ip's
-+	# messy '\'; this drops all extra white space
-+	out=$(echo ${out})
-+	if [ "${out}" != "${expected}" ]; then
-+		rc=1
-+		if [ "${VERBOSE}" = "1" ]; then
-+			printf "    Unexpected route entry. Have:\n"
-+			printf "        ${out}\n"
-+			printf "    Expected:\n"
-+			printf "        ${expected}\n\n"
-+		fi
-+	fi
-+
-+	return $rc
-+}
-+
- # add route for a prefix, flushing any existing routes first
- # expected to be the first step of a test
- add_route6()
-@@ -652,31 +685,7 @@ check_route6()
- 	pfx=$1
- 
- 	out=$($IP -6 ro ls match ${pfx} | sed -e 's/ pref medium//')
--	[ "${out}" = "${expected}" ] && return 0
--
--	if [ -z "${out}" ]; then
--		if [ "$VERBOSE" = "1" ]; then
--			printf "\nNo route entry found\n"
--			printf "Expected:\n"
--			printf "    ${expected}\n"
--		fi
--		return 1
--	fi
--
--	# tricky way to convert output to 1-line without ip's
--	# messy '\'; this drops all extra white space
--	out=$(echo ${out})
--	if [ "${out}" != "${expected}" ]; then
--		rc=1
--		if [ "${VERBOSE}" = "1" ]; then
--			printf "    Unexpected route entry. Have:\n"
--			printf "        ${out}\n"
--			printf "    Expected:\n"
--			printf "        ${expected}\n\n"
--		fi
--	fi
--
--	return $rc
-+	check_expected "${out}" "${expected}"
- }
- 
- route_cleanup()
-@@ -725,7 +734,7 @@ route_setup()
- 	ip -netns ns2 addr add 172.16.103.2/24 dev veth4
- 	ip -netns ns2 addr add 172.16.104.1/24 dev dummy1
- 
--	set +ex
-+	set +e
- }
- 
- # assumption is that basic add of a single path route works
-@@ -960,7 +969,8 @@ ipv6_addr_metric_test()
- 	run_cmd "$IP li set dev dummy2 down"
- 	rc=$?
- 	if [ $rc -eq 0 ]; then
--		check_route6 ""
-+		out=$($IP -6 ro ls match 2001:db8:104::/64)
-+		check_expected "${out}" ""
- 		rc=$?
- 	fi
- 	log_test $rc 0 "Prefix route removed on link down"
-@@ -1091,38 +1101,13 @@ check_route()
- 	local pfx
- 	local expected="$1"
- 	local out
--	local rc=0
- 
- 	set -- $expected
- 	pfx=$1
- 	[ "${pfx}" = "unreachable" ] && pfx=$2
- 
- 	out=$($IP ro ls match ${pfx})
--	[ "${out}" = "${expected}" ] && return 0
--
--	if [ -z "${out}" ]; then
--		if [ "$VERBOSE" = "1" ]; then
--			printf "\nNo route entry found\n"
--			printf "Expected:\n"
--			printf "    ${expected}\n"
--		fi
--		return 1
--	fi
--
--	# tricky way to convert output to 1-line without ip's
--	# messy '\'; this drops all extra white space
--	out=$(echo ${out})
--	if [ "${out}" != "${expected}" ]; then
--		rc=1
--		if [ "${VERBOSE}" = "1" ]; then
--			printf "    Unexpected route entry. Have:\n"
--			printf "        ${out}\n"
--			printf "    Expected:\n"
--			printf "        ${expected}\n\n"
--		fi
--	fi
--
--	return $rc
-+	check_expected "${out}" "${expected}"
- }
- 
- # assumption is that basic add of a single path route works
-@@ -1387,7 +1372,8 @@ ipv4_addr_metric_test()
- 	run_cmd "$IP li set dev dummy2 down"
- 	rc=$?
- 	if [ $rc -eq 0 ]; then
--		check_route ""
-+		out=$($IP ro ls match 172.16.104.0/24)
-+		check_expected "${out}" ""
- 		rc=$?
- 	fi
- 	log_test $rc 0 "Prefix route removed on link down"
--- 
-2.20.1
+>
+> Jason
