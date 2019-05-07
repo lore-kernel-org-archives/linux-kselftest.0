@@ -1,206 +1,105 @@
-From: Tim.Bird at sony.com (Tim.Bird at sony.com)
-Date: Tue, 7 May 2019 19:13:14 +0000
-Subject: [PATCH v2 12/17] kunit: tool: add Python wrappers for running
- KUnit tests
-In-Reply-To: <CAFd5g46=ZU58uJ=Qhs3soBzJjzJKJFY0_uzZ7fe1CxPfJioNOA@mail.gmail.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-13-brendanhiggins@google.com>
- <20190502110220.GD12416@kroah.com>
- <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
- <a49c5088-a821-210c-66de-f422536f5b01@gmail.com>
- <CAFd5g44iWRchQKdJYtjRtPY6e-6e0eXpKXXsx5Ooi6sWE474KA@mail.gmail.com>
- <1a5f3c44-9fa9-d423-66bf-45255a90c468@gmail.com>
- <CAFd5g45RYm+zfdJXnyp2KZZH5ojfOzy++aq+4zBeE5VDu6WgEw@mail.gmail.com>
- <052fa196-4ea9-8384-79b7-fe6bacc0ee82@gmail.com>
- <CAFd5g47aY-CL+d7DfiyTidY4aAVY+eg1TM1UJ4nYqKSfHOi-0w@mail.gmail.com>
- <63f63c7c-6185-5e64-b338-6a5e7fb9e27c@gmail.com>
- <CAFd5g46=ZU58uJ=Qhs3soBzJjzJKJFY0_uzZ7fe1CxPfJioNOA@mail.gmail.com>
-Message-ID: <ECADFF3FD767C149AD96A924E7EA6EAF9770AE37@USCULXMSG01.am.sony.com>
+From: jpoimboe at redhat.com (Josh Poimboeuf)
+Date: Tue, 7 May 2019 14:14:12 -0500
+Subject: [RFC][PATCH 2/3] x86_64: Allow breakpoints to emulate call
+ functions
+In-Reply-To: <20190507150153.7a5d376d@gandalf.local.home>
+References: <20190507174227.673261270@goodmis.org>
+ <20190507174400.219947724@goodmis.org>
+ <20190507175342.fskdj2qidpao65qi@treble>
+ <20190507150153.7a5d376d@gandalf.local.home>
+Message-ID: <20190507191412.n4uhoyfwagagyfwi@treble>
 
-Here is a bit of inline commentary on the TAP13/TAP14 discussion.
+On Tue, May 07, 2019 at 03:01:53PM -0400, Steven Rostedt wrote:
+> How's this?
+> 
+> -- Steve
+> 
+> From d29dc2e9e0275c9857932b80cebc01551b669efb Mon Sep 17 00:00:00 2001
+> From: Peter Zijlstra <peterz at infradead.org>
+> Date: Wed, 1 May 2019 15:11:17 +0200
+> Subject: [PATCH] x86_64: Allow breakpoints to emulate call functions
+> 
+> In order to allow breakpoints to emulate call functions, they need to push
+> the return address onto the stack. But because the breakpoint exception
+> frame is added to the stack when the breakpoint is hit, there's no room to
+> add the address onto the stack and return to the address of the emulated
+> called funtion.
 
-> -----Original Message-----
-> From: Brendan Higgins 
-> 
-> > On 5/3/19 4:14 PM, Brendan Higgins wrote:
-> > >> On 5/2/19 10:36 PM, Brendan Higgins wrote:
-> > > In any case, it sounds like you and Greg are in agreement on the core
-> > > libraries generating the output in TAP13, so I won't argue that point
-> > > further.
-> > >
-> > > ## Analysis of using TAP13
-> >
-> > I have never looked at TAP version 13 in any depth at all, so do not consider
-> > me to be any sort of expert.
-> >
-> > My entire TAP knowledge is based on:
-> >
-> >   https://testanything.org/tap-version-13-specification.html
-> >
-> > and the pull request to create the TAP version 14 specification:
-> >
-> >    https://github.com/TestAnything/testanything.github.io/pull/36/files
-> >
-> > You can see the full version 14 document in the submitter's repo:
-> >
-> >   $ git clone https://github.com/isaacs/testanything.github.io.git
-> >   $ cd testanything.github.io
-> >   $ git checkout tap14
-> >   $ ls tap-version-14-specification.md
-> >
-> > My understanding is the the version 14 specification is not trying to
-> > add new features, but instead capture what is already implemented in
-> > the wild.
-> >
-> >
-> > > One of my earlier concerns was that TAP13 is a bit over constrained
-> > > for what I would like to output from the KUnit core. It only allows
-> > > data to be output as either:
-> > >  - test number
-> > >  - ok/not ok with single line description
-> > >  - directive
-> > >  - diagnostics
-> > >  - YAML block
-> > >
-> > > The test number must become before a set of ok/not ok lines, and does
-> > > not contain any additional information. One annoying thing about this
-> > > is it doesn't provide any kind of nesting or grouping.
-> >
-> > Greg's response mentions ktest (?) already does nesting.
-> 
-> I think we are talking about kselftest.
-> 
-> > Version 14 allows nesting through subtests.  I have not looked at what
-> > ktest does, so I do not know if it uses subtest, or something else.
-> 
-> Oh nice! That is new in version 14. I can use that.
+The 2nd sentence can probably be removed since it's technically no
+longer true, thanks to the previous patch.
 
-We have run into the problem of subtests (or nested tests, both using
-TAP13) in Fuego.  I recall that this issue came up in kselftest, and I believe
-we discussed a solution, but I don't recall what it was.
+> This helper functions are added:
 
-Can someone remind me what kselftest does to handle nested tests
-(in terms of TAP13 output)?
+"These"
 
 > 
-> > > There is one ok/not ok line per test and it may have a short
-> > > description of the test immediately after 'ok' or 'not ok'; this is
-> > > problematic because it wants the first thing you say about a test to
-> > > be after you know whether it passes or not.
-> >
-> > I think you could output a diagnostic line that says a test is starting.
-> > This is important to me because printk() errors and warnings that are
-> > related to a test can be output by a subsystem other than the subsystem
-> > that I am testing.  If there is no marker at the start of the test
-> > then there is no way to attribute the printk()s to the test.
+>   int3_emulate_jmp(): changes the location of the regs->ip to return there.
 > 
-> I agree.
-
-This is a significant problem.  In Fuego we output each line with a test id prefix,
-which goes against the spec, but helps solve this.  Test output should be
-kept separate from system output, but if I understand correctly, there are no
-channels in prinkt to use to keep different data streams separate.
-
-How does kselftest deal with this now?
-
+>  (The next two are only for x86_64)
+>   int3_emulate_push(): to push the address onto the gap in the stack
+>   int3_emulate_call(): push the return address and change regs->ip
 > 
-> Technically conforms with the spec, and kselftest does that, but is
-> also not part of the spec. Well, it *is* specified if you use
-> subtests. I think the right approach is to make each
-> "kunit_module/test suite" a test, and all the test cases will be
-> subtests.
+> Cc: Andy Lutomirski <luto at kernel.org>
+> Cc: Nicolai Stange <nstange at suse.de>
+> Cc: Thomas Gleixner <tglx at linutronix.de>
+> Cc: Ingo Molnar <mingo at redhat.com>
+> Cc: Borislav Petkov <bp at alien8.de>
+> Cc: "H. Peter Anvin" <hpa at zytor.com>
+> Cc: the arch/x86 maintainers <x86 at kernel.org>
+> Cc: Josh Poimboeuf <jpoimboe at redhat.com>
+> Cc: Jiri Kosina <jikos at kernel.org>
+> Cc: Miroslav Benes <mbenes at suse.cz>
+> Cc: Petr Mladek <pmladek at suse.com>
+> Cc: Joe Lawrence <joe.lawrence at redhat.com>
+> Cc: Shuah Khan <shuah at kernel.org>
+> Cc: Konrad Rzeszutek Wilk <konrad.wilk at oracle.com>
+> Cc: Tim Chen <tim.c.chen at linux.intel.com>
+> Cc: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
+> Cc: Mimi Zohar <zohar at linux.ibm.com>
+> Cc: Juergen Gross <jgross at suse.com>
+> Cc: Nick Desaulniers <ndesaulniers at google.com>
+> Cc: Nayna Jain <nayna at linux.ibm.com>
+> Cc: Masahiro Yamada <yamada.masahiro at socionext.com>
+> Cc: Joerg Roedel <jroedel at suse.de>
+> Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest at vger.kernel.org>
+> Cc: stable at vger.kernel.org
+> Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
+> Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
+> [ Modified to only work for x86_64 and added comment to int3_emulate_push() ]
+> Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+> ---
+>  arch/x86/include/asm/text-patching.h | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
 > 
-> > > Directives are just a way to specify skipped tests and TODOs.
-> > >
-> > > Diagnostics seem useful, it looks like you can put whatever
-> > > information in them and print them out at anytime. It looks like a lot
-> > > of kselftests emit a lot of data this way.
-> > >
-> > > The YAML block seems to be the way that they prefer users to emit data
-> > > beyond number of tests run and whether a test passed or failed. I
-> > > could express most things I want to express in terms of YAML, but it
-> > > is not the nicest format for displaying a lot of data like
-> > > expectations, missed function calls, and other things which have a
-> > > natural concise representation. Nevertheless, YAML readability is
-> > > mostly a problem who won't be using the wrapper scripts.
-> >
-> > The examples in specification V13 and V14 look very simple and very
-> > readable to me.  (And I am not a fan of YAML.)
-> >
-> >
-> > > My biggest
-> > > problem with the YAML block is that you can only have one, and TAP
-> > > specifies that it must come after the corresponding ok/not ok line,
-> > > which again has the issue that you have to hold on to a lot of
-> > > diagnostic data longer than you ideally would. Another downside is
-> > > that I now have to write a YAML serializer for the kernel.
-> >
-> > If a test generates diagnostic data, then I would expect that to be
-> > the direct result of a test failure.  So the test can output the
-> > "not ok" line, then immediately output the YAML block.  I do not
-> > see a need for stashing YAML output ahead of time.
-> >
-> > If diagnostic data is generated before the test can determine
-> > success or failure, then it can be output as diagnostic data
-> > instead of stashing it for later.
-> 
-> Cool, that's what I am thinking I am going to do - I just wanted to
-> make sure people were okay with this approach. I mean, I think that is
-> what kselftest does.
+> diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
+> index e85ff65c43c3..05861cc08787 100644
+> --- a/arch/x86/include/asm/text-patching.h
+> +++ b/arch/x86/include/asm/text-patching.h
+> @@ -39,4 +39,32 @@ extern int poke_int3_handler(struct pt_regs *regs);
+>  extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
+>  extern int after_bootmem;
+>  
+> +static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
+> +{
+> +	regs->ip = ip;
+> +}
+> +
+> +#define INT3_INSN_SIZE 1
+> +#define CALL_INSN_SIZE 5
+> +
+> +#ifdef CONFIG_X86_64
+> +static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
+> +{
+> +	/*
+> +	 * The int3 handler in entry_64.S adds a gap between the
+> +	 * stack where the break point happened, and the saving of
+> +	 * pt_regs. We can extend the original stack because of
+> +	 * this gap. See the idtentry macro's create_gap option.
+> +	 */
+> +	regs->sp -= sizeof(unsigned long);
+> +	*(unsigned long *)regs->sp = val;
 
-IMHO the diagnostic data does not have to be in YAML.  That's only
-if there's a well-known schema for the diagnostic data, to make the
-data machine-readable.   TAP13 specifically avoided defining such a
-schema.  I need to look at TAP14 and see if they have defined something.
-(Thanks for bringing that to my attention.)
+Looks good.
 
-The important part, since there are no start and end delimiters for each
-testcase, is to structure output (including from unrelated sub-systems
-affected by the test) to either occur all before or all after the test line.
-Otherwise it's impossible to sensibly parse the diagnostic data and associate it
-with a test.  (That is, the TAP lines become the delimiters between each testcase's
-output and data).  This is a pretty big weakness of TAP13.  Since the TAP line
-has the test result, it usually means that the subsystem output for the test
-is emitted *before* the TAP line.  It's preferable, in order to keep the
-data together, that the diagnostic data also be emitted before the TAP
-line.
-
-> 
-> We can hold off on the YAML stuff for now then.
-> 
-> > > ## Here is what I propose for this patchset:
-> > >
-> > >  - Print out test number range at the beginning of each test suite.
-> > >  - Print out log lines as soon as they happen as diagnostics.
-> > >  - Print out the lines that state whether a test passes or fails as a
-> > > ok/not ok line.
-> > >
-> > > This would be technically conforming with TAP13 and is consistent with
-> > > what some kselftests have done.
-> > >
-> > > ## To be done in a future patchset:
-> > >
-> > > Add a YAML serializer and print out some logs containing structured
-> > > data (like expectation failures, unexpected function calls, etc) in
-> > > YAML blocks.
-> >
-> > YAML serializer sounds like not needed complexity.
-I agree, for now.
-
-I think if we start to see some patterns for some data that many tests
-output, we might want (as a kernel community) to define a YAML
-schema for the kselftest output.  But I think that's biting off too much
-right now.  IMHO we would want any YAML schema we define to
-cover more than just unit tests, so the job of defining that would be
-pretty big.
-
-This would be a good discussion to have at a testing micro-conference
-or summit. :-)
-
-> >
-> > >
-> > > Does this sound reasonable? I will go ahead and start working on this,
-> > > but feel free to give me feedback on the overall idea in the meantime.
-
-Sounds good.  Thanks for working on this.
- -- Tim
+-- 
+Josh
