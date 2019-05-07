@@ -1,64 +1,107 @@
-From: torvalds@linux-foundation.org (Linus Torvalds)
-Date: Mon, 6 May 2019 20:05:24 -0700
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190506225819.11756974@oasis.local.home>
-References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
- <20190506095631.6f71ad7c@gandalf.local.home>
- <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
- <20190506130643.62c35eeb@gandalf.local.home>
- <CAHk-=whesas+GDtHZks62wqXWXe4d_g3XJ359GX81qj=Fgs6qQ@mail.gmail.com>
- <20190506145745.17c59596@gandalf.local.home>
- <CAHk-=witfFBW2O5v6g--FmqnAFsMkKNLosTFfWyaoJ7euQF8kQ@mail.gmail.com>
- <20190506162915.380993f9@gandalf.local.home>
- <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
- <20190506174511.2f8b696b@gandalf.local.home>
- <CAHk-=wj3R_s0RTJOmTBNaUPhu4fz2shNBUr4M6Ej65UYSNCs-g@mail.gmail.com>
- <20190506210416.2489a659@oasis.local.home>
- <CAHk-=whZwqzbu-=1r_j_cXfd=ta1q7RFCuneqBZfQQhS_P-BmQ@mail.gmail.com>
- <20190506215353.14a8ef78@oasis.local.home>
- <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
- <20190506225819.11756974@oasis.local.home>
-Message-ID:
- <CAHk-=wh4FCNBLe8OyDZt2Tr+k9JhhTsg3H8R4b55peKcf0b6eQ@mail.gmail.com>
+From: frowand.list@gmail.com (Frank Rowand)
+Date: Mon, 6 May 2019 20:14:12 -0700
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20190501230126.229218-1-brendanhiggins@google.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+Message-ID: <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507030524.IxMJJj0E8xTvINyCEU3I_SxYvtaAjPOT4n2NXMd-P8s@z>
+Message-ID: <20190507031412.5zjrutskQ73_XpPpcWI6VbmgT4Ry_UU_D8befxSwv7Q@z>
 
-On Mon, May 6, 2019@7:58 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> > Notice? We'd not even have to look up any values.  We'd literally just
-> > do something like
-> >
-> >         int offset = locked_atomic_read(ip+1);
-> >         return int3_emulate_call(ip, ip+5+offset);
-> >
-> > and it would be *atomic* with respect to whatever other user that
-> > updates the instruction, as long as they update the offset with a
-> > "xchg" instruction.
->
-> Honestly, I'm not really sure what you are trying to do here.
->
-> Are you talking about making the update to the code in the int3
-> handler?
+On 5/1/19 4:01 PM, Brendan Higgins wrote:
+> ## TLDR
+> 
+> I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
+> 5.2.
+> 
+> Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
+> we would merge through your tree when the time came? Am I remembering
+> correctly?
+> 
+> ## Background
+> 
+> This patch set proposes KUnit, a lightweight unit testing and mocking
+> framework for the Linux kernel.
+> 
+> Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+> it does not require installing the kernel on a test machine or in a VM
+> and does not require tests to be written in userspace running on a host
+> kernel. Additionally, KUnit is fast: From invocation to completion KUnit
+> can run several dozen tests in under a second. Currently, the entire
+> KUnit test suite for KUnit runs in under a second from the initial
+> invocation (build time excluded).
+> 
+> KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+> Googletest/Googlemock for C++. KUnit provides facilities for defining
+> unit test cases, grouping related test cases into test suites, providing
+> common infrastructure for running tests, mocking, spying, and much more.
 
-No. The above would be pretty much the entirely of the the ftrace_int3_handler.
+As a result of the emails replying to this patch thread, I am now
+starting to look at kselftest.  My level of understanding is based
+on some slide presentations, an LWN article, https://kselftest.wiki.kernel.org/
+and a _tiny_ bit of looking at kselftest code.
 
-It would emulate the call that has had its first byte overwritten by
-'int3'. Without doing any lookups of what it was supposed to change
-the call to, because it simply depends on what the rewriting code is
-doing on another CPU (or on the same CPU - it wouldn't care).
+tl;dr; I don't really understand kselftest yet.
 
-So no need to look up anything, not at int3 time, and not at return
-time. It would just emulate the instruction atomically, with no state,
-and no need to look up what the 'ip' instruction is at the time.
 
-It could literally just use a single flag: "is ftrace updating call
-instructions". Add another flag for the "I'm nop'ing out call
-instructions" so that it knows to emulate a jump-over instead. That's
-it.
+(1) why KUnit exists
 
-Because all the actual *values* would be entirely be determined by the
-actual rewriting that is going on independently of the 'int3'
-exception.
+> ## What's so special about unit testing?
+> 
+> A unit test is supposed to test a single unit of code in isolation,
+> hence the name. There should be no dependencies outside the control of
+> the test; this means no external dependencies, which makes tests orders
+> of magnitudes faster. Likewise, since there are no external dependencies,
+> there are no hoops to jump through to run the tests. Additionally, this
+> makes unit tests deterministic: a failing unit test always indicates a
+> problem. Finally, because unit tests necessarily have finer granularity,
+> they are able to test all code paths easily solving the classic problem
+> of difficulty in exercising error handling code.
 
-                   Linus
+(2) KUnit is not meant to replace kselftest
+
+> ## Is KUnit trying to replace other testing frameworks for the kernel?
+> 
+> No. Most existing tests for the Linux kernel are end-to-end tests, which
+> have their place. A well tested system has lots of unit tests, a
+> reasonable number of integration tests, and some end-to-end tests. KUnit
+> is just trying to address the unit test space which is currently not
+> being addressed.
+
+My understanding is that the intent of KUnit is to avoid booting a kernel on
+real hardware or in a virtual machine.  That seems to be a matter of semantics
+to me because isn't invoking a UML Linux just running the Linux kernel in
+a different form of virtualization?
+
+So I do not understand why KUnit is an improvement over kselftest.
+
+It seems to me that KUnit is just another piece of infrastructure that I
+am going to have to be familiar with as a kernel developer.  More overhead,
+more information to stuff into my tiny little brain.
+
+I would guess that some developers will focus on just one of the two test
+environments (and some will focus on both), splitting the development
+resources instead of pooling them on a common infrastructure.
+
+What am I missing?
+
+-Frank
+
+
+> 
+> ## More information on KUnit
+> 
+> There is a bunch of documentation near the end of this patch set that
+> describes how to use KUnit and best practices for writing unit tests.
+> For convenience I am hosting the compiled docs here:
+> https://google.github.io/kunit-docs/third_party/kernel/docs/
+> Additionally for convenience, I have applied these patches to a branch:
+> https://kunit.googlesource.com/linux/+/kunit/rfc/v5.1-rc7/v1
+> The repo may be cloned with:
+> git clone https://kunit.googlesource.com/linux
+> This patchset is on the kunit/rfc/v5.1-rc7/v1 branch.
+> 
+> ## Changes Since Last Version
+> 
+> None. I just rebased the last patchset on v5.1-rc7.
+> 
