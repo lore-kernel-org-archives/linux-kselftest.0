@@ -1,5 +1,5 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Tue, 7 May 2019 11:25:13 -0400
+From: torvalds@linux-foundation.org (Linus Torvalds)
+Date: Tue, 7 May 2019 08:31:14 -0700
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
 In-Reply-To: <20190507111227.1d4268d7@gandalf.local.home>
 References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
@@ -19,25 +19,41 @@ References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <CAHk-=wi4vPg4pu6RvxQrUuBL4Vgwd2G2iaEJVVumny+cBOWMZw@mail.gmail.com>
  <CAHk-=wg2_okyU8mpkGCUrudgfg8YmNetSD8=scNbOkN+imqZdQ@mail.gmail.com>
  <20190507111227.1d4268d7@gandalf.local.home>
-Message-ID: <20190507112513.11297412@gandalf.local.home>
+Message-ID:
+ <CAHk-=wjYdj+vvV8uUA8eaUSxOhu=xuQxdo-dtM927j0-3hSkEw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507152513.apRXZqjIivydX-N5xOgLczOi6XHz60Lc42Z9yM7zgQ4@z>
+Message-ID: <20190507153114.FqHCXNV3GnAVp0gUo4yDDV6PWQV_LZ7zQ-ZpKppqIiA@z>
 
-On Tue, 7 May 2019 11:12:27 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Tue, May 7, 2019@8:12 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>>
+> Yes, band-aids are usually simpler than a proper fix.
 
-> I don't look at Peter's patch and think "this is the solution for int3
-> emulate calls". I see Peter's patch as "Thanks God, we are finally
-> getting rid of the cause of all theses work around hacks all over the
-> place! and oh by the way, we can easily implement int3 call emulation
-> because of it".
+What? No/.
 
-Note, if you really are adamant on your solution, I can write them up,
-test them, and get them out for this merge window. I really want a
-solution for the int3 emulate calls, as there is a real bug here that
-they fix.
+My fix is the *proper* fix.
 
-But I will say, I still prefer Peter's solution. Maybe in the future we
-can revisit it again.
+PeterZ's is the bandaid.
 
--- Steve
+>             We have 28 years
+> of hacks built on hacks. There's a lot of hacks in the C code to handle
+> the differences between the crappy way x86_32 does pt_regs and the
+> proper way x86_64 does them.
+
+You're confusing "reality": with "your dream world". They are different.
+
+The reality is that the i386 kernel stack is just how things work. End of story.
+
+The reality is that changing something fundamental like the kernel
+stack at this point for an architecture that will not change in the
+future is silly.
+
+The reality is that Peter's patch is much bigger than mine, because it
+needed a lot of other changes *because* it did that change.
+
+> To implement your way, we need to change how the int3 handler works.
+> It will be the only exception handler having to return regs, otherwise
+> it will crash.
+
+What? That's what the patch *does*. It's trivial.  It is done.
+
+                  Linus
