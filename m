@@ -1,10 +1,8 @@
-From: torvalds at linux-foundation.org (Linus Torvalds)
-Date: Tue, 7 May 2019 08:31:14 -0700
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Tue, 7 May 2019 11:45:37 -0400
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190507111227.1d4268d7@gandalf.local.home>
+In-Reply-To: <CAHk-=wjYdj+vvV8uUA8eaUSxOhu=xuQxdo-dtM927j0-3hSkEw@mail.gmail.com>
 References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <20190506145745.17c59596@gandalf.local.home>
- <CAHk-=witfFBW2O5v6g--FmqnAFsMkKNLosTFfWyaoJ7euQF8kQ@mail.gmail.com>
  <20190506162915.380993f9@gandalf.local.home>
  <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
  <20190506174511.2f8b696b@gandalf.local.home>
@@ -19,38 +17,29 @@ References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <CAHk-=wi4vPg4pu6RvxQrUuBL4Vgwd2G2iaEJVVumny+cBOWMZw@mail.gmail.com>
  <CAHk-=wg2_okyU8mpkGCUrudgfg8YmNetSD8=scNbOkN+imqZdQ@mail.gmail.com>
  <20190507111227.1d4268d7@gandalf.local.home>
-Message-ID: <CAHk-=wjYdj+vvV8uUA8eaUSxOhu=xuQxdo-dtM927j0-3hSkEw@mail.gmail.com>
+ <CAHk-=wjYdj+vvV8uUA8eaUSxOhu=xuQxdo-dtM927j0-3hSkEw@mail.gmail.com>
+Message-ID: <20190507114537.48a863fa@gandalf.local.home>
 
-On Tue, May 7, 2019 at 8:12 AM Steven Rostedt <rostedt at goodmis.org> wrote:
->>
-> Yes, band-aids are usually simpler than a proper fix.
+On Tue, 7 May 2019 08:31:14 -0700
+Linus Torvalds <torvalds at linux-foundation.org> wrote:
 
-What? No/.
+> The reality is that changing something fundamental like the kernel
+> stack at this point for an architecture that will not change in the
+> future is silly.
 
-My fix is the *proper* fix.
+x86_32 will no longer have updates, but will x86_64? And we will
+constantly be adding more work around hacks to handle the difference of
+the pt_regs in the future. I see Peter's patch easing that future pain.
 
-PeterZ's is the bandaid.
+> 
+> The reality is that Peter's patch is much bigger than mine, because it
+> needed a lot of other changes *because* it did that change.
 
->             We have 28 years
-> of hacks built on hacks. There's a lot of hacks in the C code to handle
-> the differences between the crappy way x86_32 does pt_regs and the
-> proper way x86_64 does them.
+It was much bigger because it removed a lot of the work around hacks.
 
-You're confusing "reality": with "your dream world". They are different.
+But you are the "benevolent dictator", and I don't see me changing your
+mind.
 
-The reality is that the i386 kernel stack is just how things work. End of story.
+I'll go and implement it the way you like.
 
-The reality is that changing something fundamental like the kernel
-stack at this point for an architecture that will not change in the
-future is silly.
-
-The reality is that Peter's patch is much bigger than mine, because it
-needed a lot of other changes *because* it did that change.
-
-> To implement your way, we need to change how the int3 handler works.
-> It will be the only exception handler having to return regs, otherwise
-> it will crash.
-
-What? That's what the patch *does*. It's trivial.  It is done.
-
-                  Linus
+-- Steve
