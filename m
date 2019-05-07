@@ -1,179 +1,67 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Tue,  7 May 2019 01:34:54 -0400
-Subject: [PATCH AUTOSEL 4.19 23/81] selftests: fib_tests: Fix 'Command line is
- not complete' errors
-In-Reply-To: <20190507053554.30848-1-sashal@kernel.org>
-References: <20190507053554.30848-1-sashal@kernel.org>
-Message-ID: <20190507053554.30848-23-sashal@kernel.org>
+Date: Tue,  7 May 2019 01:32:07 -0400
+Subject: [PATCH AUTOSEL 5.0 73/99] selftests/net: correct the return value for
+ run_afpackettests
+In-Reply-To: <20190507053235.29900-1-sashal@kernel.org>
+References: <20190507053235.29900-1-sashal@kernel.org>
+Message-ID: <20190507053235.29900-73-sashal@kernel.org>
 
-From: David Ahern <dsahern at gmail.com>
+From: Po-Hsu Lin <po-hsu.lin at canonical.com>
 
-[ Upstream commit a5f622984a623df9a84cf43f6b098d8dd76fbe05 ]
+[ Upstream commit 8c03557c3f25271e62e39154af66ebdd1b59c9ca ]
 
-A couple of tests are verifying a route has been removed. The helper
-expects the prefix as the first part of the expected output. When
-checking that a route has been deleted the prefix is empty leading
-to an invalid ip command:
+The run_afpackettests will be marked as passed regardless the return
+value of those sub-tests in the script:
+    --------------------
+    running psock_tpacket test
+    --------------------
+    [FAIL]
+    selftests: run_afpackettests [PASS]
 
-  $ ip ro ls match
-  Command line is not complete. Try option "help"
+Fix this by changing the return value for each tests.
 
-Fix by moving the comparison of expected output and output to a new
-function that is used by both check_route and check_route6. Use the
-new helper for the 2 checks on route removal.
-
-Also, remove the reset of 'set -x' in route_setup which overrides the
-user managed setting.
-
-Fixes: d69faad76584c ("selftests: fib_tests: Add prefix route tests with metric")
-Signed-off-by: David Ahern <dsahern at gmail.com>
+Signed-off-by: Po-Hsu Lin <po-hsu.lin at canonical.com>
 Signed-off-by: David S. Miller <davem at davemloft.net>
 Signed-off-by: Sasha Levin <sashal at kernel.org>
 ---
- tools/testing/selftests/net/fib_tests.sh | 94 ++++++++++--------------
- 1 file changed, 40 insertions(+), 54 deletions(-)
+ tools/testing/selftests/net/run_afpackettests | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-index a4ccde0e473b..2f190aa8fc5f 100755
---- a/tools/testing/selftests/net/fib_tests.sh
-+++ b/tools/testing/selftests/net/fib_tests.sh
-@@ -602,6 +602,39 @@ run_cmd()
- 	return $rc
- }
+diff --git a/tools/testing/selftests/net/run_afpackettests b/tools/testing/selftests/net/run_afpackettests
+index 2dc95fda7ef7..ea5938ec009a 100755
+--- a/tools/testing/selftests/net/run_afpackettests
++++ b/tools/testing/selftests/net/run_afpackettests
+@@ -6,12 +6,14 @@ if [ $(id -u) != 0 ]; then
+ 	exit 0
+ fi
  
-+check_expected()
-+{
-+	local out="$1"
-+	local expected="$2"
-+	local rc=0
-+
-+	[ "${out}" = "${expected}" ] && return 0
-+
-+	if [ -z "${out}" ]; then
-+		if [ "$VERBOSE" = "1" ]; then
-+			printf "\nNo route entry found\n"
-+			printf "Expected:\n"
-+			printf "    ${expected}\n"
-+		fi
-+		return 1
-+	fi
-+
-+	# tricky way to convert output to 1-line without ip's
-+	# messy '\'; this drops all extra white space
-+	out=$(echo ${out})
-+	if [ "${out}" != "${expected}" ]; then
-+		rc=1
-+		if [ "${VERBOSE}" = "1" ]; then
-+			printf "    Unexpected route entry. Have:\n"
-+			printf "        ${out}\n"
-+			printf "    Expected:\n"
-+			printf "        ${expected}\n\n"
-+		fi
-+	fi
-+
-+	return $rc
-+}
-+
- # add route for a prefix, flushing any existing routes first
- # expected to be the first step of a test
- add_route6()
-@@ -646,31 +679,7 @@ check_route6()
- 	local rc=0
- 
- 	out=$($IP -6 ro ls match ${pfx} | sed -e 's/ pref medium//')
--	[ "${out}" = "${expected}" ] && return 0
--
--	if [ -z "${out}" ]; then
--		if [ "$VERBOSE" = "1" ]; then
--			printf "\nNo route entry found\n"
--			printf "Expected:\n"
--			printf "    ${expected}\n"
--		fi
--		return 1
--	fi
--
--	# tricky way to convert output to 1-line without ip's
--	# messy '\'; this drops all extra white space
--	out=$(echo ${out})
--	if [ "${out}" != "${expected}" ]; then
--		rc=1
--		if [ "${VERBOSE}" = "1" ]; then
--			printf "    Unexpected route entry. Have:\n"
--			printf "        ${out}\n"
--			printf "    Expected:\n"
--			printf "        ${expected}\n\n"
--		fi
--	fi
--
--	return $rc
-+	check_expected "${out}" "${expected}"
- }
- 
- route_cleanup()
-@@ -714,7 +723,7 @@ route_setup()
- 	$IP addr add 172.16.103.2/24 dev veth4
- 	$IP addr add 172.16.104.1/24 dev dummy1
- 
--	set +ex
-+	set +e
- }
- 
- # assumption is that basic add of a single path route works
-@@ -949,7 +958,8 @@ ipv6_addr_metric_test()
- 	run_cmd "$IP li set dev dummy2 down"
- 	rc=$?
- 	if [ $rc -eq 0 ]; then
--		check_route6 ""
-+		out=$($IP -6 ro ls match 2001:db8:104::/64)
-+		check_expected "${out}" ""
- 		rc=$?
- 	fi
- 	log_test $rc 0 "Prefix route removed on link down"
-@@ -1009,34 +1019,9 @@ check_route()
- 	local pfx="172.16.104.0/24"
- 	local expected="$1"
- 	local out
--	local rc=0
- 
- 	out=$($IP ro ls match ${pfx})
--	[ "${out}" = "${expected}" ] && return 0
--
--	if [ -z "${out}" ]; then
--		if [ "$VERBOSE" = "1" ]; then
--			printf "\nNo route entry found\n"
--			printf "Expected:\n"
--			printf "    ${expected}\n"
--		fi
--		return 1
--	fi
--
--	# tricky way to convert output to 1-line without ip's
--	# messy '\'; this drops all extra white space
--	out=$(echo ${out})
--	if [ "${out}" != "${expected}" ]; then
--		rc=1
--		if [ "${VERBOSE}" = "1" ]; then
--			printf "    Unexpected route entry. Have:\n"
--			printf "        ${out}\n"
--			printf "    Expected:\n"
--			printf "        ${expected}\n\n"
--		fi
--	fi
--
--	return $rc
-+	check_expected "${out}" "${expected}"
- }
- 
- # assumption is that basic add of a single path route works
-@@ -1301,7 +1286,8 @@ ipv4_addr_metric_test()
- 	run_cmd "$IP li set dev dummy2 down"
- 	rc=$?
- 	if [ $rc -eq 0 ]; then
--		check_route ""
-+		out=$($IP ro ls match 172.16.104.0/24)
-+		check_expected "${out}" ""
- 		rc=$?
- 	fi
- 	log_test $rc 0 "Prefix route removed on link down"
++ret=0
+ echo "--------------------"
+ echo "running psock_fanout test"
+ echo "--------------------"
+ ./in_netns.sh ./psock_fanout
+ if [ $? -ne 0 ]; then
+ 	echo "[FAIL]"
++	ret=1
+ else
+ 	echo "[PASS]"
+ fi
+@@ -22,6 +24,7 @@ echo "--------------------"
+ ./in_netns.sh ./psock_tpacket
+ if [ $? -ne 0 ]; then
+ 	echo "[FAIL]"
++	ret=1
+ else
+ 	echo "[PASS]"
+ fi
+@@ -32,6 +35,8 @@ echo "--------------------"
+ ./in_netns.sh ./txring_overwrite
+ if [ $? -ne 0 ]; then
+ 	echo "[FAIL]"
++	ret=1
+ else
+ 	echo "[PASS]"
+ fi
++exit $ret
 -- 
 2.20.1
