@@ -1,91 +1,49 @@
-From: David.Laight@ACULAB.COM (David Laight)
-Date: Tue, 7 May 2019 15:46:50 +0000
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Tue, 7 May 2019 12:25:10 -0400
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190507105724.02abe6f6@gandalf.local.home>
-References: <20190502185225.0cdfc8bc@gandalf.local.home>
- <20190502193129.664c5b2e@gandalf.local.home>
- <20190502195052.0af473cf@gandalf.local.home>
- <20190503092959.GB2623@hirez.programming.kicks-ass.net>
- <20190503092247.20cc1ff0@gandalf.local.home>
- <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
- <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
- <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
- <20190507085753.GO2606@hirez.programming.kicks-ass.net>
- <b34aa38bdfe84263bc20b60761bf6005@AcuMS.aculab.com>
- <20190507113050.GR2606@hirez.programming.kicks-ass.net>
- <f55e3c951aee4b5686201aaf282cc62b@AcuMS.aculab.com>
- <20190507091403.556daba7@gandalf.local.home>
- <b4a24fbe906a438798870c5112cde8b2@AcuMS.aculab.com>
- <20190507105724.02abe6f6@gandalf.local.home>
-Message-ID: <9820e70016e0454e89e70d8f7dd90259@AcuMS.aculab.com>
+In-Reply-To: <20190507112513.11297412@gandalf.local.home>
+References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+ <CAHk-=witfFBW2O5v6g--FmqnAFsMkKNLosTFfWyaoJ7euQF8kQ@mail.gmail.com>
+ <20190506162915.380993f9@gandalf.local.home>
+ <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
+ <20190506174511.2f8b696b@gandalf.local.home>
+ <CAHk-=wj3R_s0RTJOmTBNaUPhu4fz2shNBUr4M6Ej65UYSNCs-g@mail.gmail.com>
+ <20190506210416.2489a659@oasis.local.home>
+ <CAHk-=whZwqzbu-=1r_j_cXfd=ta1q7RFCuneqBZfQQhS_P-BmQ@mail.gmail.com>
+ <20190506215353.14a8ef78@oasis.local.home>
+ <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
+ <20190506225819.11756974@oasis.local.home>
+ <CAHk-=wh4FCNBLe8OyDZt2Tr+k9JhhTsg3H8R4b55peKcf0b6eQ@mail.gmail.com>
+ <20190506232158.13c9123b@oasis.local.home>
+ <CAHk-=wi4vPg4pu6RvxQrUuBL4Vgwd2G2iaEJVVumny+cBOWMZw@mail.gmail.com>
+ <CAHk-=wg2_okyU8mpkGCUrudgfg8YmNetSD8=scNbOkN+imqZdQ@mail.gmail.com>
+ <20190507111227.1d4268d7@gandalf.local.home>
+ <20190507112513.11297412@gandalf.local.home>
+Message-ID: <20190507122510.0dd37cc8@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507154650.XO2fkwE-kPLn_gpVrGdKkcn1HjRRpdUh_Q5pJubxzVY@z>
+Message-ID: <20190507162510.QBPIbdYirjWvWTXpM_oUxNM4xfS2oAC47KGQsgIe1sQ@z>
 
-From: Steven Rostedt
-> Sent: 07 May 2019 15:57
-> On Tue, 7 May 2019 14:50:26 +0000
-> David Laight <David.Laight@ACULAB.COM> wrote:
-> 
-> > From: Steven Rostedt
-> > > Sent: 07 May 2019 14:14
-> > > On Tue, 7 May 2019 12:57:15 +0000
-> > > David Laight <David.Laight@ACULAB.COM> wrote:
-> 
-> > The 'user' (ie the kernel code that needs to emulate the call) doesn't
-> > write the data to the stack, just to some per-cpu location.
-> > (Actually it could be on the stack at the other end of pt-regs.)
-> > So you get to the 'register restore and iret' code with the stack unaltered.
-> > It is then a SMOP to replace the %flags saved by the int3 with the %ip
-> > saved by the int3, the %ip with the address of the function to call,
-> > restore the flags (push and popf) and issue a ret.f to remove the %ip and %cs.
-> 
-> How would you handle NMIs doing the same thing? Yes, the NMI handlers
-> have breakpoints that will need to emulated calls as well.
+On Tue, 7 May 2019 11:25:13 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-That means you'd have to use a field in the on-stack pt_regs for the
-'address to call' rather than a per-cpu variable.
-Then it would all nest.
+> Note, if you really are adamant on your solution, I can write them up,
+> test them, and get them out for this merge window. I really want a
+> solution for the int3 emulate calls, as there is a real bug here that
+> they fix.
 
-...
-> > Actually that means you can do the following in both modes:
-> > 	if not emulated_call_address then pop %ax; iret else
-> > 	# assume kernel<->kernel return
-> > 	push emulated_call_address;
-> > 	push flags_saved_by_int3
-> > 	load %ax, return_address_from_iret
-> > 	add %ax,#4
-> > 	store %ax, first_stack_location_written_by_int3
-> > 	load %ax, value_saved_by_int3_entry
-> > 	popf
-> > 	ret.n
-> >
-> > The ret.n discards everything from the %ax to the required return address.
-> > So 'n' is the size of the int3 frame, so 12 for i386 and 40 for amd64.
-> >
-> > If the register restore (done just before this code) finished with
-> > 'add %sp, sizeof *pt_regs' then the emulated_call_address can be
-> > loaded in %ax from the other end of pt_regs.
-...
-> 
-> This all sounds much more complex and fragile than the proposed
-> solution. Why would we do this over what is being proposed?
+Thinking about this more, as my real motivation for getting this in
+(for this merge window), is to fix the live kernel patching bug. We
+only need to implement int3 call emulation for x86_64. We don't need to
+implement it for 32bit. The ftrace code can continue to just make it a
+nop. Live kernel patching does not support x86_32, and the only issue
+that happens on 32bit when we do a nop when converting a call to call,
+is that we might lose a trace. But that's been the case since this
+started, and not a critical issue. But with live kernel patching,
+losing a trace could crash the machine.
 
-It is all complex and fragile however you do it.
+As I need to mark all this for stable, I'm going to look into just
+implementing this for x86_64. Then we can continue the debate about
+how to do this for x86_32 if we care about loss traces. But we don't
+need to commit to anything yet.
 
-I see a problem with converting the 3 register trap frame to a 5 register
-one is that the entry code and exit code both have to know whether
-it is necessary or was done.
-
-AFAICT it is actually quite hard to tell from the stack which form it is.
-Although the %sp value might tell you because %ss:%sp might only be
-pushed when a stack switch happens so the kernel %sp will be a known
-value (for the switched to stack).
-
-The advantage of converting the frame is that, as pointed out earlier it
-does let you have a pt_regs that always contains %ss:%sp.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+-- Steve
