@@ -1,96 +1,62 @@
 From: jpoimboe at redhat.com (Josh Poimboeuf)
-Date: Tue, 7 May 2019 12:53:42 -0500
-Subject: [RFC][PATCH 2/3] x86_64: Allow breakpoints to emulate call
- functions
-In-Reply-To: <20190507174400.219947724@goodmis.org>
+Date: Tue, 7 May 2019 12:56:55 -0500
+Subject: [RFC][PATCH 1/3] x86_64: Add gap to int3 to allow for call
+ emulation
+In-Reply-To: <20190507174400.064350937@goodmis.org>
 References: <20190507174227.673261270@goodmis.org>
- <20190507174400.219947724@goodmis.org>
-Message-ID: <20190507175342.fskdj2qidpao65qi@treble>
+ <20190507174400.064350937@goodmis.org>
+Message-ID: <20190507175655.u3kcvedpfao4rchj@treble>
 
-On Tue, May 07, 2019 at 01:42:29PM -0400, Steven Rostedt wrote:
-> From: Peter Zijlstra <peterz at infradead.org>
+On Tue, May 07, 2019 at 01:42:28PM -0400, Steven Rostedt wrote:
+> From: Josh Poimboeuf <jpoimboe at redhat.com>
 > 
-> In order to allow breakpoints to emulate call functions, they need to push
-> the return address onto the stack. But because the breakpoint exception
-> frame is added to the stack when the breakpoint is hit, there's no room to
-> add the address onto the stack and return to the address of the emulated
-> called funtion.
+> To allow an int3 handler to emulate a call instruction, it must be able to
+> push a return address onto the stack. Add a gap to the stack to allow the
+> int3 handler to push the return address and change the return from int3 to
+> jump straight to the emulated called function target.
 > 
-> To handle this, copy the exception frame on entry of the breakpoint handler
-> and have leave a gap that can be used to add a return address to the stack
-> frame and return from the breakpoint to the emulated called function,
-> allowing for that called function to return back to the location after the
-> breakpoint was placed.
-
-This part is done by patch 1.
-
+> Link: http://lkml.kernel.org/r/20181130183917.hxmti5josgq4clti at treble
+> Link: http://lkml.kernel.org/r/20190502162133.GX2623 at hirez.programming.kicks-ass.net
 > 
-> The helper functions were also added:
-
-No longer "also" :-)
-
->   int3_emulate_push(): to push the address onto the gap in the stack
->   int3_emulate_jmp(): changes the location of the regs->ip to return there.
->   int3_emulate_call(): push the return address and change regs->ip
+> [
+>   Note, this is needed to allow Live Kernel Patching to not miss calling a
+>   patched function when tracing is enabled. -- Steven Rostedt
+> ]
 > 
-> Cc: Andy Lutomirski <luto at kernel.org>
-> Cc: Nicolai Stange <nstange at suse.de>
-> Cc: Thomas Gleixner <tglx at linutronix.de>
-> Cc: Ingo Molnar <mingo at redhat.com>
-> Cc: Borislav Petkov <bp at alien8.de>
-> Cc: "H. Peter Anvin" <hpa at zytor.com>
-> Cc: the arch/x86 maintainers <x86 at kernel.org>
-> Cc: Josh Poimboeuf <jpoimboe at redhat.com>
-> Cc: Jiri Kosina <jikos at kernel.org>
-> Cc: Miroslav Benes <mbenes at suse.cz>
-> Cc: Petr Mladek <pmladek at suse.com>
-> Cc: Joe Lawrence <joe.lawrence at redhat.com>
-> Cc: Shuah Khan <shuah at kernel.org>
-> Cc: Konrad Rzeszutek Wilk <konrad.wilk at oracle.com>
-> Cc: Tim Chen <tim.c.chen at linux.intel.com>
-> Cc: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
-> Cc: Mimi Zohar <zohar at linux.ibm.com>
-> Cc: Juergen Gross <jgross at suse.com>
-> Cc: Nick Desaulniers <ndesaulniers at google.com>
-> Cc: Nayna Jain <nayna at linux.ibm.com>
-> Cc: Masahiro Yamada <yamada.masahiro at socionext.com>
-> Cc: Joerg Roedel <jroedel at suse.de>
-> Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest at vger.kernel.org>
 > Cc: stable at vger.kernel.org
 > Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
-> Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
-> [ Modified to only work for x86_64 ]
+> Signed-off-by: Josh Poimboeuf <jpoimboe at redhat.com>
 > Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
 > ---
->  arch/x86/include/asm/text-patching.h | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
+>  arch/x86/entry/entry_64.S | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-> index e85ff65c43c3..455bf9f88233 100644
-> --- a/arch/x86/include/asm/text-patching.h
-> +++ b/arch/x86/include/asm/text-patching.h
-> @@ -39,4 +39,26 @@ extern int poke_int3_handler(struct pt_regs *regs);
->  extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
->  extern int after_bootmem;
+> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+> index 1f0efdb7b629..00df6b135ab1 100644
+> --- a/arch/x86/entry/entry_64.S
+> +++ b/arch/x86/entry/entry_64.S
+> @@ -879,7 +879,7 @@ apicinterrupt IRQ_WORK_VECTOR			irq_work_interrupt		smp_irq_work_interrupt
+>   * @paranoid == 2 is special: the stub will never switch stacks.  This is for
+>   * #DF: if the thread stack is somehow unusable, we'll still get a useful OOPS.
+>   */
+> -.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1
+> +.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1 create_gap=0
+>  ENTRY(\sym)
+>  	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
 >  
-> +static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
-> +{
-> +	regs->ip = ip;
-> +}
-> +
-> +#define INT3_INSN_SIZE 1
-> +#define CALL_INSN_SIZE 5
-> +
-> +#ifdef CONFIG_X86_64
-> +static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
-> +{
-> +	regs->sp -= sizeof(unsigned long);
-> +	*(unsigned long *)regs->sp = val;
-> +}
+> @@ -899,6 +899,20 @@ ENTRY(\sym)
+>  	jnz	.Lfrom_usermode_switch_stack_\@
+>  	.endif
+>  
+> +	.if \create_gap == 1
+> +	/*
+> +	 * If coming from kernel space, create a 6-word gap to allow the static
+> +	 * call #BP handler to emulate a call instruction.
 
-How this works isn't really obvious.  A comment is probably warranted to
-explain the fact that the int3 entry code reserved some space on the
-stack.
+Might as well refer to it as the int3 handler, since that's what the
+rest of the code calls it.  Also, no static calls yet :-)  So:
+
+s/static call #BP handler/int3 handler/
 
 -- 
 Josh
