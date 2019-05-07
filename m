@@ -1,7 +1,7 @@
-From: gregkh at linuxfoundation.org (Greg KH)
-Date: Tue, 7 May 2019 18:57:18 +0200
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Tue, 7 May 2019 13:03:33 -0400
 Subject: [PATCH v2] kheaders: Move from proc to sysfs
-In-Reply-To: <20190507163824.GC89248@google.com>
+In-Reply-To: <20190507165718.GA1241@kroah.com>
 References: <20190504121213.183203-1-joel@joelfernandes.org>
  <20190504122158.GA23535@kroah.com>
  <20190504123650.GA229151@google.com>
@@ -9,32 +9,23 @@ References: <20190504121213.183203-1-joel@joelfernandes.org>
  <20190505132623.GA3076@localhost>
  <20190505163145.45f77e44@oasis.local.home>
  <20190507163824.GC89248@google.com>
-Message-ID: <20190507165718.GA1241@kroah.com>
+ <20190507165718.GA1241@kroah.com>
+Message-ID: <20190507130333.58c95268@gandalf.local.home>
 
-On Tue, May 07, 2019 at 12:38:24PM -0400, Joel Fernandes wrote:
-> On Sun, May 05, 2019 at 04:31:45PM -0400, Steven Rostedt wrote:
-> > On Sun, 5 May 2019 13:26:23 +0000
-> > Joel Fernandes <joel at joelfernandes.org> wrote:
-> > 
-> > > On Sun, May 05, 2019 at 11:10:30AM +0200, Greg KH wrote:
-> > > > On Sat, May 04, 2019 at 08:36:50AM -0400, Joel Fernandes wrote:  
-> > > > > > But, you should change S_IRUGO to the correct octal number, checkpatch
-> > > > > > should have barfed on this change.  
-> > > > > 
-> > > > > fixed, below is the updated patch inline, thanks!  
-> > > > 
-> > > > Please resend as a "real" submission, doing so in this format is a bit
-> > > > more difficult to apply.  
-> > > 
-> > > git am --scissors can do it, but no problem I will send as a formal
-> > > submission. Thanks a lot.
-> > >
-> > 
-> > True, but a lot of us depend on scripts to pull in patches from our
-> > INBOX. Which is why we like them to stay with the standard format.
+On Tue, 7 May 2019 18:57:18 +0200
+Greg KH <gregkh at linuxfoundation.org> wrote:
+
+> > Thanks makes sense. So Greg, I submitted this properly, does it look good to
+> > you now? Steven, I would appreciate any Acks/Reviews on the patch as well:
+> > https://lore.kernel.org/patchwork/patch/1070199/  
 > 
-> Thanks makes sense. So Greg, I submitted this properly, does it look good to
-> you now? Steven, I would appreciate any Acks/Reviews on the patch as well:
-> https://lore.kernel.org/patchwork/patch/1070199/
+> Looks good to me, should get to it in a few days...
 
-Looks good to me, should get to it in a few days...
+Me too. Feel free to add
+
+Acked-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+
+But as for reviewing, I see nothing wrong with it, but I doubt I'll
+find something that Greg missed in this code.
+
+-- Steve
