@@ -1,76 +1,93 @@
 From: rostedt@goodmis.org (Steven Rostedt)
-Date: Tue, 07 May 2019 13:42:28 -0400
-Subject: [RFC][PATCH 1/3] x86_64: Add gap to int3 to allow for call emulation
+Date: Tue, 07 May 2019 13:42:29 -0400
+Subject: [RFC][PATCH 2/3] x86_64: Allow breakpoints to emulate call functions
 References: <20190507174227.673261270@goodmis.org>
-Message-ID: <20190507174400.064350937@goodmis.org>
+Message-ID: <20190507174400.219947724@goodmis.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507174228.zoXWWXa-DwWOR4YpXhwaltQH1zfuPm9W1O-1olW3R0Q@z>
+Message-ID: <20190507174229.9GEFyLbxfBd9zLX-qUifRZHfPoKsB_P2Y053lV1na6c@z>
 
-From: Josh Poimboeuf <jpoimboe@redhat.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-To allow an int3 handler to emulate a call instruction, it must be able to
-push a return address onto the stack. Add a gap to the stack to allow the
-int3 handler to push the return address and change the return from int3 to
-jump straight to the emulated called function target.
+In order to allow breakpoints to emulate call functions, they need to push
+the return address onto the stack. But because the breakpoint exception
+frame is added to the stack when the breakpoint is hit, there's no room to
+add the address onto the stack and return to the address of the emulated
+called funtion.
 
-Link: http://lkml.kernel.org/r/20181130183917.hxmti5josgq4clti at treble
-Link: http://lkml.kernel.org/r/20190502162133.GX2623 at hirez.programming.kicks-ass.net
+To handle this, copy the exception frame on entry of the breakpoint handler
+and have leave a gap that can be used to add a return address to the stack
+frame and return from the breakpoint to the emulated called function,
+allowing for that called function to return back to the location after the
+breakpoint was placed.
 
-[
-  Note, this is needed to allow Live Kernel Patching to not miss calling a
-  patched function when tracing is enabled. -- Steven Rostedt
-]
+The helper functions were also added:
 
+  int3_emulate_push(): to push the address onto the gap in the stack
+  int3_emulate_jmp(): changes the location of the regs->ip to return there.
+  int3_emulate_call(): push the return address and change regs->ip
+
+Cc: Andy Lutomirski <luto at kernel.org>
+Cc: Nicolai Stange <nstange at suse.de>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Ingo Molnar <mingo at redhat.com>
+Cc: Borislav Petkov <bp at alien8.de>
+Cc: "H. Peter Anvin" <hpa at zytor.com>
+Cc: the arch/x86 maintainers <x86 at kernel.org>
+Cc: Josh Poimboeuf <jpoimboe at redhat.com>
+Cc: Jiri Kosina <jikos at kernel.org>
+Cc: Miroslav Benes <mbenes at suse.cz>
+Cc: Petr Mladek <pmladek at suse.com>
+Cc: Joe Lawrence <joe.lawrence at redhat.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Konrad Rzeszutek Wilk <konrad.wilk at oracle.com>
+Cc: Tim Chen <tim.c.chen at linux.intel.com>
+Cc: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
+Cc: Mimi Zohar <zohar at linux.ibm.com>
+Cc: Juergen Gross <jgross at suse.com>
+Cc: Nick Desaulniers <ndesaulniers at google.com>
+Cc: Nayna Jain <nayna at linux.ibm.com>
+Cc: Masahiro Yamada <yamada.masahiro at socionext.com>
+Cc: Joerg Roedel <jroedel at suse.de>
+Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest at vger.kernel.org>
 Cc: stable at vger.kernel.org
 Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
-Signed-off-by: Josh Poimboeuf <jpoimboe at redhat.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
+[ Modified to only work for x86_64 ]
 Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
 ---
- arch/x86/entry/entry_64.S | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/text-patching.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index 1f0efdb7b629..00df6b135ab1 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -879,7 +879,7 @@ apicinterrupt IRQ_WORK_VECTOR			irq_work_interrupt		smp_irq_work_interrupt
-  * @paranoid == 2 is special: the stub will never switch stacks.  This is for
-  * #DF: if the thread stack is somehow unusable, we'll still get a useful OOPS.
-  */
--.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1
-+.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1 create_gap=0
- ENTRY(\sym)
- 	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
+diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
+index e85ff65c43c3..455bf9f88233 100644
+--- a/arch/x86/include/asm/text-patching.h
++++ b/arch/x86/include/asm/text-patching.h
+@@ -39,4 +39,26 @@ extern int poke_int3_handler(struct pt_regs *regs);
+ extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
+ extern int after_bootmem;
  
-@@ -899,6 +899,20 @@ ENTRY(\sym)
- 	jnz	.Lfrom_usermode_switch_stack_\@
- 	.endif
- 
-+	.if \create_gap == 1
-+	/*
-+	 * If coming from kernel space, create a 6-word gap to allow the static
-+	 * call #BP handler to emulate a call instruction.
-+	 */
-+	testb	$3, CS-ORIG_RAX(%rsp)
-+	jnz	.Lfrom_usermode_no_gap_\@
-+	.rept	6
-+	pushq	5*8(%rsp)
-+	.endr
-+	UNWIND_HINT_IRET_REGS offset=8
-+.Lfrom_usermode_no_gap_\@:
-+	.endif
++static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
++{
++	regs->ip = ip;
++}
 +
- 	.if \paranoid
- 	call	paranoid_entry
- 	.else
-@@ -1130,7 +1144,7 @@ apicinterrupt3 HYPERV_STIMER0_VECTOR \
- #endif /* CONFIG_HYPERV */
- 
- idtentry debug			do_debug		has_error_code=0	paranoid=1 shift_ist=DEBUG_STACK
--idtentry int3			do_int3			has_error_code=0
-+idtentry int3			do_int3			has_error_code=0	create_gap=1
- idtentry stack_segment		do_stack_segment	has_error_code=1
- 
- #ifdef CONFIG_XEN_PV
++#define INT3_INSN_SIZE 1
++#define CALL_INSN_SIZE 5
++
++#ifdef CONFIG_X86_64
++static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
++{
++	regs->sp -= sizeof(unsigned long);
++	*(unsigned long *)regs->sp = val;
++}
++
++static inline void int3_emulate_call(struct pt_regs *regs, unsigned long func)
++{
++	int3_emulate_push(regs, regs->ip - INT3_INSN_SIZE + CALL_INSN_SIZE);
++	int3_emulate_jmp(regs, func);
++}
++#endif
++
+ #endif /* _ASM_X86_TEXT_PATCHING_H */
 -- 
 2.20.1
