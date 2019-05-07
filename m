@@ -1,9 +1,8 @@
-From: David.Laight@ACULAB.COM (David Laight)
-Date: Tue, 7 May 2019 09:18:51 +0000
+From: peterz@infradead.org (Peter Zijlstra)
+Date: Tue, 7 May 2019 11:27:31 +0200
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
 In-Reply-To: <20190507085753.GO2606@hirez.programming.kicks-ass.net>
-References: <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
- <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+References: <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
  <20190502185225.0cdfc8bc@gandalf.local.home>
  <20190502193129.664c5b2e@gandalf.local.home>
  <20190502195052.0af473cf@gandalf.local.home>
@@ -13,44 +12,95 @@ References: <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
  <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
  <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
  <20190507085753.GO2606@hirez.programming.kicks-ass.net>
-Message-ID: <b34aa38bdfe84263bc20b60761bf6005@AcuMS.aculab.com>
+Message-ID: <20190507092731.GH2650@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507091851.AgNpatVGXVBh15YIaVMK1-pHFADOU2GiXLW-BkguXZ0@z>
+Message-ID: <20190507092731.2JGs2-sk5DQML_6_1wn_8zTZcWKMuqHka_radPsjrRw@z>
 
-From: Peter Zijlstra
-> Sent: 07 May 2019 09:58
-...
-> +	/*
-> +	 * When we're here from kernel mode; the (exception) stack looks like:
-> +	 *
-> +	 * 4*4(%esp) - <previous context>
-> +	 * 3*4(%esp) - flags
-> +	 * 2*4(%esp) - cs
-> +	 * 1*4(%esp) - ip
-> +	 * 0*4(%esp) - orig_eax
+On Tue, May 07, 2019@10:57:53AM +0200, Peter Zijlstra wrote:
+> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+> index 9e4fa2484d10..28d8ba3b9add 100644
+> --- a/arch/x86/kernel/kprobes/core.c
+> +++ b/arch/x86/kernel/kprobes/core.c
+> @@ -731,29 +731,27 @@ asm(
+>  	".global kretprobe_trampoline\n"
+>  	".type kretprobe_trampoline, @function\n"
+>  	"kretprobe_trampoline:\n"
+> -#ifdef CONFIG_X86_64
+>  	/* We don't bother saving the ss register */
+> +#ifdef CONFIG_X86_64
+>  	"	pushq %rsp\n"
+>  	"	pushfq\n"
+>  	SAVE_REGS_STRING
+>  	"	movq %rsp, %rdi\n"
+>  	"	call trampoline_handler\n"
+>  	/* Replace saved sp with true return address. */
+> -	"	movq %rax, 152(%rsp)\n"
+> +	"	movq %rax, 19*8(%rsp)\n"
+>  	RESTORE_REGS_STRING
+>  	"	popfq\n"
+>  #else
+> -	"	pushf\n"
+> +	"	pushl %esp\n"
+> +	"	pushfl\n"
+>  	SAVE_REGS_STRING
+>  	"	movl %esp, %eax\n"
+>  	"	call trampoline_handler\n"
+> -	/* Move flags to cs */
+> -	"	movl 56(%esp), %edx\n"
+> -	"	movl %edx, 52(%esp)\n"
+> -	/* Replace saved flags with true return address. */
+> -	"	movl %eax, 56(%esp)\n"
+> +	/* Replace saved sp with true return address. */
+> +	"	movl %eax, 15*4(%esp)\n"
+>  	RESTORE_REGS_STRING
+> -	"	popf\n"
+> +	"	popfl\n"
+>  #endif
+>  	"	ret\n"
+>  	".size kretprobe_trampoline, .-kretprobe_trampoline\n"
 
-Am I right in thinking that this is the only 'INT3' stack frame that
-needs to be 'fiddled' with?
-And that the 'emulate a call instruction' has verified that is the case??
-So the %cs is always the kernel %cs.
+> diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
+> index f14262952015..c1010207d036 100644
+> --- a/arch/x86/kernel/kprobes/opt.c
+> +++ b/arch/x86/kernel/kprobes/opt.c
+> @@ -115,14 +115,15 @@ asm (
+>  			"optprobe_template_call:\n"
+>  			ASM_NOP5
+>  			/* Move flags to rsp */
+> -			"	movq 144(%rsp), %rdx\n"
+> -			"	movq %rdx, 152(%rsp)\n"
+> +			"	movq 18*8(%rsp), %rdx\n"
+> +			"	movq %rdx, 19*8(%rsp)\n"
+>  			RESTORE_REGS_STRING
+>  			/* Skip flags entry */
+>  			"	addq $8, %rsp\n"
+>  			"	popfq\n"
+>  #else /* CONFIG_X86_32 */
+> -			"	pushf\n"
+> +			"	pushl %esp\n"
+> +			"	pushfl\n"
+>  			SAVE_REGS_STRING
+>  			"	movl %esp, %edx\n"
+>  			".global optprobe_template_val\n"
+> @@ -131,9 +132,13 @@ asm (
+>  			".global optprobe_template_call\n"
+>  			"optprobe_template_call:\n"
+>  			ASM_NOP5
+> +			/* Move flags into esp */
+> +			"	movl 14*4(%esp), %edx\n"
+> +			"	movl %edx, 15*4(%esp)\n"
+>  			RESTORE_REGS_STRING
+> -			"	addl $4, %esp\n"	/* skip cs */
+> -			"	popf\n"
+> +			/* Skip flags entry */
+> +			"	addl $4, %esp\n"
+> +			"	popfl\n"
+>  #endif
+>  			".global optprobe_template_end\n"
+>  			"optprobe_template_end:\n"
 
-If the 'call target' address is saved in a per-cpu location it ought
-to be possible to get the code that returns from the INT3 with the
-call target address (or zero) in %ax.
-If non-zero, instead of 'pop %ax; iret' execute:
-	xchg %eax, 4(%esp)   - swap function address and callers ip
-	push 12(%esp)        - old flags
-	mov  14(%esp),%eax   - callers address over flags
-	popf                 - enables interrupts (etc)
-	pop  %eax
-	retf                 - Jump to called function and remove %cs
+FWIW, both these trampolines assume a kprobe will not
+int3_emulate_{push/call}(), for both bitnesses.
 
-Nothing else needs to be moved.
-
-	David
-
-	
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+But then; I'm thinking kprobes should be inspection only and not modify
+things. So that might just be good enough.
