@@ -1,8 +1,9 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Mon, 6 May 2019 21:34:20 -0400
+From: torvalds@linux-foundation.org (Linus Torvalds)
+Date: Mon, 6 May 2019 18:34:59 -0700
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
 In-Reply-To: <20190506210416.2489a659@oasis.local.home>
 References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+ <20190502195052.0af473cf@gandalf.local.home>
  <20190503092959.GB2623@hirez.programming.kicks-ass.net>
  <20190503092247.20cc1ff0@gandalf.local.home>
  <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
@@ -19,45 +20,25 @@ References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <20190506174511.2f8b696b@gandalf.local.home>
  <CAHk-=wj3R_s0RTJOmTBNaUPhu4fz2shNBUr4M6Ej65UYSNCs-g@mail.gmail.com>
  <20190506210416.2489a659@oasis.local.home>
-Message-ID: <20190506213420.62357f23@oasis.local.home>
+Message-ID:
+ <CAHk-=whZwqzbu-=1r_j_cXfd=ta1q7RFCuneqBZfQQhS_P-BmQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507013420.G8zPMo6D-r9NvEILHTe4tHdL0E_lB4tUddk2MHGM414@z>
+Message-ID: <20190507013459.YZFOaYMRHX8i3o5Og5YRetTN0gBx0_phIlOL2Of-xRQ@z>
 
-On Mon, 6 May 2019 21:04:16 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Mon, May 6, 2019@6:04 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> That iterator does something special for each individual record. All
+> 40,000 of them.
 
-> static int add_breakpoints(struct dyn_ftrace *rec, int enable)
-> {
-> 	unsigned long ftrace_addr;
-> 	int ret;
-> 
-> 	ftrace_addr = ftrace_get_addr_curr(rec);
-> 
-> 	ret = ftrace_test_record(rec, enable);
-> 
-> 	switch (ret) {
-> 	case FTRACE_UPDATE_IGNORE:
-> 		return 0;
-> 
-> 	case FTRACE_UPDATE_MAKE_CALL:
-> 		/* converting nop to call */
-> 		return add_brk_on_nop(rec);
-> 
-> 	case FTRACE_UPDATE_MODIFY_CALL:
+.. yes, but the 'int3' only happens for *one* of them at a time.
 
-The FTRACE_UPDATE_MODIFY_CALL is the case where we switch from calling
-one trampoline to calling another. As you can plainly see from this
-switch statement, we treat it the same as converting to a nop. That's
-the bug we are trying to fix. It shouldn't be treated as a nop. It
-should be treated as a call to the old or new function. Either is fine,
-but it must be one or the other, not a nop.
+Why would it bother with the other 39,999 calls?
 
--- Steve
+You could easily just look up the record at the int3 time, and just
+use the record. Exactly the same way you use the one-at-a-time ones.
 
+Instead, you emulate a fake call to a function that *wouldn't* get
+called, which now does the lookup there. That's the part I don't get.
+Why are you emulating something else than what you'd be rewriting?
 
-> 	case FTRACE_UPDATE_MAKE_NOP:
-> 		/* converting a call to a nop */
-> 		return add_brk_on_call(rec, ftrace_addr);
-> 	}
-> 	return 0;
-> }
+             Linus
