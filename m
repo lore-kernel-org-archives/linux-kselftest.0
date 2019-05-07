@@ -1,7 +1,7 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Mon, 6 May 2019 23:21:58 -0400
+From: torvalds at linux-foundation.org (Linus Torvalds)
+Date: Mon, 6 May 2019 20:28:53 -0700
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <CAHk-=wh4FCNBLe8OyDZt2Tr+k9JhhTsg3H8R4b55peKcf0b6eQ@mail.gmail.com>
+In-Reply-To: <20190506232158.13c9123b@oasis.local.home>
 References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <20190506095631.6f71ad7c@gandalf.local.home>
  <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
@@ -19,45 +19,23 @@ References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
  <20190506225819.11756974@oasis.local.home>
  <CAHk-=wh4FCNBLe8OyDZt2Tr+k9JhhTsg3H8R4b55peKcf0b6eQ@mail.gmail.com>
-Message-ID: <20190506232158.13c9123b@oasis.local.home>
+ <20190506232158.13c9123b@oasis.local.home>
+Message-ID: <CAHk-=wi4vPg4pu6RvxQrUuBL4Vgwd2G2iaEJVVumny+cBOWMZw@mail.gmail.com>
 
-On Mon, 6 May 2019 20:05:24 -0700
-Linus Torvalds <torvalds at linux-foundation.org> wrote:
+On Mon, May 6, 2019 at 8:22 PM Steven Rostedt <rostedt at goodmis.org> wrote:
+>
+> But still, we need to emulate the call, which requires pushing the
+> return code back onto the stack. I believe that part is the part we are
+> struggling with.
 
+Yes. But I was looking at the ftrace parts because I didn't see the
+bug in the low-level x86 side, so...
 
-> It would emulate the call that has had its first byte overwritten by
-> 'int3'. Without doing any lookups of what it was supposed to change
-> the call to, because it simply depends on what the rewriting code is
-> doing on another CPU (or on the same CPU - it wouldn't care).
+The x86 int3 faulting code itself looks so *trivially* simple, and it
+does work for the trivial test-case too. Which was what made me go
+"Hmm, maybe there's timing or something".
 
-OK, so this is just about what to have it call.
+But it could obviously also be that the trivial test-case is just too
+trivial, and doesn't involve nmi etc etc.
 
-> 
-> So no need to look up anything, not at int3 time, and not at return
-> time. It would just emulate the instruction atomically, with no state,
-> and no need to look up what the 'ip' instruction is at the time.
-> 
-> It could literally just use a single flag: "is ftrace updating call
-> instructions". Add another flag for the "I'm nop'ing out call
-> instructions" so that it knows to emulate a jump-over instead. That's
-> it.
-
-Well we have that, and we have to look up the record regardless to know
-if this was a ftrace int3 or not (the ftrace_location(ip) does that).
-And the record has a counter to # of attached callers. Zero being to
-turn it into a nop.
-
-Note, if we are going from nop to call or call to nop, it would need to
-read the offset to see if it is a nop (don't want to call with the nop
-offset)
-
-> 
-> Because all the actual *values* would be entirely be determined by the
-> actual rewriting that is going on independently of the 'int3'
-> exception.
-
-But still, we need to emulate the call, which requires pushing the
-return code back onto the stack. I believe that part is the part we are
-struggling with.
-
--- Steve
+               Linus
