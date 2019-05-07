@@ -1,12 +1,12 @@
 From: sashal@kernel.org (Sasha Levin)
-Date: Tue,  7 May 2019 01:42:15 -0400
-Subject: [PATCH AUTOSEL 4.4 13/14] selftests/net: correct the return value for
+Date: Tue,  7 May 2019 01:41:18 -0400
+Subject: [PATCH AUTOSEL 4.9 21/25] selftests/net: correct the return value for
  run_netsocktests
-In-Reply-To: <20190507054218.340-1-sashal@kernel.org>
-References: <20190507054218.340-1-sashal@kernel.org>
-Message-ID: <20190507054218.340-13-sashal@kernel.org>
+In-Reply-To: <20190507054123.32514-1-sashal@kernel.org>
+References: <20190507054123.32514-1-sashal@kernel.org>
+Message-ID: <20190507054123.32514-21-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507054215.6HMcwcuC16Su8db-8KtyYU0mq5AOrOxgIGhp5lu9pzg@z>
+Message-ID: <20190507054118.B6jxEFl8uE8kJSqHBVKWTxJZGK__LFLhLxj48qfY7_U@z>
 
 From: Po-Hsu Lin <po-hsu.lin@canonical.com>
 
