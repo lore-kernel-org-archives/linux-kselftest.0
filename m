@@ -1,75 +1,116 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Tue, 7 May 2019 11:12:27 -0400
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <CAHk-=wg2_okyU8mpkGCUrudgfg8YmNetSD8=scNbOkN+imqZdQ@mail.gmail.com>
-References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <20190506145745.17c59596@gandalf.local.home>
- <CAHk-=witfFBW2O5v6g--FmqnAFsMkKNLosTFfWyaoJ7euQF8kQ@mail.gmail.com>
- <20190506162915.380993f9@gandalf.local.home>
- <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
- <20190506174511.2f8b696b@gandalf.local.home>
- <CAHk-=wj3R_s0RTJOmTBNaUPhu4fz2shNBUr4M6Ej65UYSNCs-g@mail.gmail.com>
- <20190506210416.2489a659@oasis.local.home>
- <CAHk-=whZwqzbu-=1r_j_cXfd=ta1q7RFCuneqBZfQQhS_P-BmQ@mail.gmail.com>
- <20190506215353.14a8ef78@oasis.local.home>
- <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
- <20190506225819.11756974@oasis.local.home>
- <CAHk-=wh4FCNBLe8OyDZt2Tr+k9JhhTsg3H8R4b55peKcf0b6eQ@mail.gmail.com>
- <20190506232158.13c9123b@oasis.local.home>
- <CAHk-=wi4vPg4pu6RvxQrUuBL4Vgwd2G2iaEJVVumny+cBOWMZw@mail.gmail.com>
- <CAHk-=wg2_okyU8mpkGCUrudgfg8YmNetSD8=scNbOkN+imqZdQ@mail.gmail.com>
-Message-ID: <20190507111227.1d4268d7@gandalf.local.home>
+From: shuah@kernel.org (shuah)
+Date: Tue, 7 May 2019 09:23:31 -0600
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20190507080119.GB28121@kroah.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
+ <20190507080119.GB28121@kroah.com>
+Message-ID: <1b1efa91-0523-21a9-e541-fdc3612bd117@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507151227.-L5mL_ihZ56kUbZlkNFqQoFfzfDH33NQ2uYqZmH48CQ@z>
+Message-ID: <20190507152331.ghE-6tZHvzr84ha0EpuSYikZbWZ0_9ncmEMb6ztZLzQ@z>
 
-On Tue, 7 May 2019 07:54:53 -0700
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On 5/7/19 2:01 AM, Greg KH wrote:
+> On Mon, May 06, 2019@08:14:12PM -0700, Frank Rowand wrote:
+>> On 5/1/19 4:01 PM, Brendan Higgins wrote:
+>>> ## TLDR
+>>>
+>>> I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
+>>> 5.2.
+>>>
+>>> Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
+>>> we would merge through your tree when the time came? Am I remembering
+>>> correctly?
+>>>
+>>> ## Background
+>>>
+>>> This patch set proposes KUnit, a lightweight unit testing and mocking
+>>> framework for the Linux kernel.
+>>>
+>>> Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+>>> it does not require installing the kernel on a test machine or in a VM
+>>> and does not require tests to be written in userspace running on a host
+>>> kernel. Additionally, KUnit is fast: From invocation to completion KUnit
+>>> can run several dozen tests in under a second. Currently, the entire
+>>> KUnit test suite for KUnit runs in under a second from the initial
+>>> invocation (build time excluded).
+>>>
+>>> KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+>>> Googletest/Googlemock for C++. KUnit provides facilities for defining
+>>> unit test cases, grouping related test cases into test suites, providing
+>>> common infrastructure for running tests, mocking, spying, and much more.
+>>
+>> As a result of the emails replying to this patch thread, I am now
+>> starting to look at kselftest.  My level of understanding is based
+>> on some slide presentations, an LWN article, https://kselftest.wiki.kernel.org/
+>> and a _tiny_ bit of looking at kselftest code.
+>>
+>> tl;dr; I don't really understand kselftest yet.
+>>
+>>
+>> (1) why KUnit exists
+>>
+>>> ## What's so special about unit testing?
+>>>
+>>> A unit test is supposed to test a single unit of code in isolation,
+>>> hence the name. There should be no dependencies outside the control of
+>>> the test; this means no external dependencies, which makes tests orders
+>>> of magnitudes faster. Likewise, since there are no external dependencies,
+>>> there are no hoops to jump through to run the tests. Additionally, this
+>>> makes unit tests deterministic: a failing unit test always indicates a
+>>> problem. Finally, because unit tests necessarily have finer granularity,
+>>> they are able to test all code paths easily solving the classic problem
+>>> of difficulty in exercising error handling code.
+>>
+>> (2) KUnit is not meant to replace kselftest
+>>
+>>> ## Is KUnit trying to replace other testing frameworks for the kernel?
+>>>
+>>> No. Most existing tests for the Linux kernel are end-to-end tests, which
+>>> have their place. A well tested system has lots of unit tests, a
+>>> reasonable number of integration tests, and some end-to-end tests. KUnit
+>>> is just trying to address the unit test space which is currently not
+>>> being addressed.
+>>
+>> My understanding is that the intent of KUnit is to avoid booting a kernel on
+>> real hardware or in a virtual machine.  That seems to be a matter of semantics
+>> to me because isn't invoking a UML Linux just running the Linux kernel in
+>> a different form of virtualization?
+>>
+>> So I do not understand why KUnit is an improvement over kselftest.
 
-> And honestly, I absolutely despise PeterZ's patch. The notion that we
-> should suddenly say that "oh, the i386 kernel stack is odd" after 28
-> years of having that standard i386 stack is just crazy. And this:
+They are in two different categories. Kselftest falls into black box
+regression test suite which is a collection of user-space tests with a
+few kernel test modules back-ending the tests in some cases.
+
+Kselftest can be used by both kernel developers and users and provides
+a good way to regression test releases in test rings.
+
+KUnit is a white box category and is a better fit as unit test framework
+for development and provides a in-kernel testing. I wouldn't view them
+one replacing the other. They just provide coverage for different areas
+of testing.
+
+I wouldn't view KUnit as something that would be easily run in test 
+rings for example.
+
+Brendan, does that sound about right?
+
+>>
+>> It seems to me that KUnit is just another piece of infrastructure that I
+>> am going to have to be familiar with as a kernel developer.  More overhead,
+>> more information to stuff into my tiny little brain.
+>>
+>> I would guess that some developers will focus on just one of the two test
+>> environments (and some will focus on both), splitting the development
+>> resources instead of pooling them on a common infrastructure.
+
+>> What am I missing?
 > 
->  arch/x86/entry/entry_32.S            | 136 ++++++++++++++++++++++++++++-------
-> ...
->  12 files changed, 323 insertions(+), 140 deletions(-)
+> kselftest provides no in-kernel framework for testing kernel code
+> specifically.  That should be what kunit provides, an "easy" way to
+> write in-kernel tests for things.
 > 
-> 
-> vs this:
-> 
->  arch/x86/entry/entry_32.S            |  7 +++-
-> ...
->  6 files changed, 120 insertions(+), 13 deletions(-)
-> 
-> is still pretty damn conclusive. Not to mention that the simple
-> approach had a truly mindbogglingly simple solution with no actual
-> subtle changes anywhere else.
-> 
-> So I still claim that we should do my patch. Because it is SIMPLE.
-> It's straightforward, and I can explain every single line in it. Even
-> if I spent *way* too long until I realized that the "trivial"
-> memmove() wasn't so trivial.
-
-Yes, band-aids are usually simpler than a proper fix. We have 28 years
-of hacks built on hacks. There's a lot of hacks in the C code to handle
-the differences between the crappy way x86_32 does pt_regs and the
-proper way x86_64 does them.
-
-If the goal was just to add another band-aid to this, we now have one
-more subtle work around caused by two different methods being handled
-by a single code base.
-
-I don't look at Peter's patch and think "this is the solution for int3
-emulate calls". I see Peter's patch as "Thanks God, we are finally
-getting rid of the cause of all theses work around hacks all over the
-place! and oh by the way, we can easily implement int3 call emulation
-because of it".
-
-To implement your way, we need to change how the int3 handler works.
-It will be the only exception handler having to return regs, otherwise
-it will crash.
-
-Sure, it's an easily solution for the one off change of emulating
-calls, but it's just another complex work around that nobody is going
-to understand in 5 years.
-
--- Steve
+> Brendan, did I get it right?
+thanks,
+-- Shuah
