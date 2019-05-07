@@ -1,45 +1,153 @@
-From: peterz@infradead.org (Peter Zijlstra)
-Date: Tue, 7 May 2019 19:38:29 +0200
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <CAHk-=wiuue37opWK5QaQ9f6twqDZuSratdP-1bK6kD9-Az5WnA@mail.gmail.com>
-References: <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
- <20190506225819.11756974@oasis.local.home>
- <CAHk-=wh4FCNBLe8OyDZt2Tr+k9JhhTsg3H8R4b55peKcf0b6eQ@mail.gmail.com>
- <20190506232158.13c9123b@oasis.local.home>
- <CAHk-=wi4vPg4pu6RvxQrUuBL4Vgwd2G2iaEJVVumny+cBOWMZw@mail.gmail.com>
- <CAHk-=wg2_okyU8mpkGCUrudgfg8YmNetSD8=scNbOkN+imqZdQ@mail.gmail.com>
- <20190507111227.1d4268d7@gandalf.local.home>
- <CAHk-=wjYdj+vvV8uUA8eaUSxOhu=xuQxdo-dtM927j0-3hSkEw@mail.gmail.com>
- <20190507163440.GV2606@hirez.programming.kicks-ass.net>
- <CAHk-=wiuue37opWK5QaQ9f6twqDZuSratdP-1bK6kD9-Az5WnA@mail.gmail.com>
-Message-ID: <20190507173829.GY2606@hirez.programming.kicks-ass.net>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Tue, 07 May 2019 13:42:30 -0400
+Subject: [RFC][PATCH 3/3] ftrace/x86_64: Emulate call function while updating
+ in breakpoint handler
+References: <20190507174227.673261270@goodmis.org>
+Message-ID: <20190507174400.377280827@goodmis.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507173829.DfS3LM8ESO5xjPXHV0H1krbt5Cgf3F_W2oYst5vnUzQ@z>
+Message-ID: <20190507174230.xE6NCCPKMwJ429BtnF-4V22YIJJWyz9jT5_UFLm9oiY@z>
 
-On Tue, May 07, 2019@10:08:50AM -0700, Linus Torvalds wrote:
-> On Tue, May 7, 2019@9:34 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > Would you consider my approach later on, under the guise of unification?
-> 
-> WHY?
-> 
-> The *only* advantage of your patch is that trivial "look up kernel stack" macro.
-> 
-> Seriously. There's absolutely nothing else.
+From: Peter Zijlstra <peterz@infradead.org>
 
-The ftrace_regs_caller, the kprobe tramplines, the unwinder, they all
-have 'funny' bits because pt_regs isn't 'right'.
+Nicolai Stange discovered[1] that if live kernel patching is enabled, and the
+function tracer started tracing the same function that was patched, the
+conversion of the fentry call site during the translation of going from
+calling the live kernel patch trampoline to the iterator trampoline, would
+have as slight window where it didn't call anything.
 
-> So the whole "let's clean up x86-32 to look like x86-64, which got
-> things right" is to me a completely bogus argument. x86-64 got the
-> "yes, push ss/sp unconditionally" part right, but got a lot of other
-> things horribly wrong. So this is all just one small detail that
-> differs, across two architectures that are similar but have very
-> different warts.
+As live kernel patching depends on ftrace to always call its code (to
+prevent the function being traced from being called, as it will redirect
+it). This small window would allow the old buggy function to be called, and
+this can cause undesirable results.
 
-It's a detail that leaks into the C code. Yes SWAPGS is horrible crap,
-but C code doesn't much care. The partial pt_regs thing otoh comes up a
-fair number of times.
+Nicolai submitted new patches[2] but these were controversial. As this is
+similar to the static call emulation issues that came up a while ago[3].
+But after some debate[4][5] adding a gap in the stack when entering the
+breakpoint handler allows for pushing the return address onto the stack to
+easily emulate a call.
 
-Anyway; I think we're at the point where we'll have to agree to
-disagree (or maybe slightly past it).
+[1] http://lkml.kernel.org/r/20180726104029.7736-1-nstange at suse.de
+[2] http://lkml.kernel.org/r/20190427100639.15074-1-nstange at suse.de
+[3] http://lkml.kernel.org/r/3cf04e113d71c9f8e4be95fb84a510f085aa4afa.1541711457.git.jpoimboe at redhat.com
+[4] http://lkml.kernel.org/r/CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A at mail.gmail.com
+[5] http://lkml.kernel.org/r/CAHk-=wjvQxY4DvPrJ6haPgAa6b906h=MwZXO6G8OtiTGe=N7_w at mail.gmail.com
+
+[
+  Live kernel patching is not implemented on x86_32, thus the emulate
+  calls are only for x86_64.
+]
+
+Cc: Andy Lutomirski <luto at kernel.org>
+Cc: Nicolai Stange <nstange at suse.de>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Ingo Molnar <mingo at redhat.com>
+Cc: Borislav Petkov <bp at alien8.de>
+Cc: "H. Peter Anvin" <hpa at zytor.com>
+Cc: the arch/x86 maintainers <x86 at kernel.org>
+Cc: Josh Poimboeuf <jpoimboe at redhat.com>
+Cc: Jiri Kosina <jikos at kernel.org>
+Cc: Miroslav Benes <mbenes at suse.cz>
+Cc: Petr Mladek <pmladek at suse.com>
+Cc: Joe Lawrence <joe.lawrence at redhat.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Konrad Rzeszutek Wilk <konrad.wilk at oracle.com>
+Cc: Tim Chen <tim.c.chen at linux.intel.com>
+Cc: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
+Cc: Mimi Zohar <zohar at linux.ibm.com>
+Cc: Juergen Gross <jgross at suse.com>
+Cc: Nick Desaulniers <ndesaulniers at google.com>
+Cc: Nayna Jain <nayna at linux.ibm.com>
+Cc: Masahiro Yamada <yamada.masahiro at socionext.com>
+Cc: Joerg Roedel <jroedel at suse.de>
+Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest at vger.kernel.org>
+Cc: stable at vger.kernel.org
+Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
+Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
+[ Changed to only implement emulated calls for x86_64 ]
+Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+---
+ arch/x86/kernel/ftrace.c | 32 +++++++++++++++++++++++++++-----
+ 1 file changed, 27 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index ef49517f6bb2..bd553b3af22e 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -29,6 +29,7 @@
+ #include <asm/kprobes.h>
+ #include <asm/ftrace.h>
+ #include <asm/nops.h>
++#include <asm/text-patching.h>
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ 
+@@ -231,6 +232,7 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
+ }
+ 
+ static unsigned long ftrace_update_func;
++static unsigned long ftrace_update_func_call;
+ 
+ static int update_ftrace_func(unsigned long ip, void *new)
+ {
+@@ -259,6 +261,8 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
+ 	unsigned char *new;
+ 	int ret;
+ 
++	ftrace_update_func_call = (unsigned long)func;
++
+ 	new = ftrace_call_replace(ip, (unsigned long)func);
+ 	ret = update_ftrace_func(ip, new);
+ 
+@@ -294,13 +298,28 @@ int ftrace_int3_handler(struct pt_regs *regs)
+ 	if (WARN_ON_ONCE(!regs))
+ 		return 0;
+ 
+-	ip = regs->ip - 1;
+-	if (!ftrace_location(ip) && !is_ftrace_caller(ip))
+-		return 0;
++	ip = regs->ip - INT3_INSN_SIZE;
+ 
+-	regs->ip += MCOUNT_INSN_SIZE - 1;
++#ifdef CONFIG_X86_64
++	if (ftrace_location(ip)) {
++		int3_emulate_call(regs, (unsigned long)ftrace_regs_caller);
++		return 1;
++	} else if (is_ftrace_caller(ip)) {
++		if (!ftrace_update_func_call) {
++			int3_emulate_jmp(regs, ip + CALL_INSN_SIZE);
++			return 1;
++		}
++		int3_emulate_call(regs, ftrace_update_func_call);
++		return 1;
++	}
++#else
++	if (ftrace_location(ip) || is_ftrace_caller(ip)) {
++		int3_emulate_jmp(regs, ip + CALL_INSN_SIZE);
++		return 1;
++	}
++#endif
+ 
+-	return 1;
++	return 0;
+ }
+ NOKPROBE_SYMBOL(ftrace_int3_handler);
+ 
+@@ -859,6 +878,8 @@ void arch_ftrace_update_trampoline(struct ftrace_ops *ops)
+ 
+ 	func = ftrace_ops_get_func(ops);
+ 
++	ftrace_update_func_call = (unsigned long)func;
++
+ 	/* Do a safe modify in case the trampoline is executing */
+ 	new = ftrace_call_replace(ip, (unsigned long)func);
+ 	ret = update_ftrace_func(ip, new);
+@@ -960,6 +981,7 @@ static int ftrace_mod_jmp(unsigned long ip, void *func)
+ {
+ 	unsigned char *new;
+ 
++	ftrace_update_func_call = 0UL;
+ 	new = ftrace_jmp_replace(ip, (unsigned long)func);
+ 
+ 	return update_ftrace_func(ip, new);
+-- 
+2.20.1
