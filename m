@@ -1,93 +1,42 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Tue, 7 May 2019 10:57:24 -0400
+From: torvalds@linux-foundation.org (Linus Torvalds)
+Date: Tue, 7 May 2019 07:57:22 -0700
 Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <b4a24fbe906a438798870c5112cde8b2@AcuMS.aculab.com>
-References: <20190502185225.0cdfc8bc@gandalf.local.home>
- <20190502193129.664c5b2e@gandalf.local.home>
- <20190502195052.0af473cf@gandalf.local.home>
- <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+In-Reply-To: <48BDF7B6-252B-4D29-9116-844363010BC0@amacapital.net>
+References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
  <20190503092247.20cc1ff0@gandalf.local.home>
  <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
  <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
  <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
- <20190507085753.GO2606@hirez.programming.kicks-ass.net>
- <b34aa38bdfe84263bc20b60761bf6005@AcuMS.aculab.com>
- <20190507113050.GR2606@hirez.programming.kicks-ass.net>
- <f55e3c951aee4b5686201aaf282cc62b@AcuMS.aculab.com>
- <20190507091403.556daba7@gandalf.local.home>
- <b4a24fbe906a438798870c5112cde8b2@AcuMS.aculab.com>
-Message-ID: <20190507105724.02abe6f6@gandalf.local.home>
+ <20190506095631.6f71ad7c@gandalf.local.home>
+ <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
+ <20190506130643.62c35eeb@gandalf.local.home>
+ <CAHk-=whesas+GDtHZks62wqXWXe4d_g3XJ359GX81qj=Fgs6qQ@mail.gmail.com>
+ <20190506145745.17c59596@gandalf.local.home>
+ <CAHk-=witfFBW2O5v6g--FmqnAFsMkKNLosTFfWyaoJ7euQF8kQ@mail.gmail.com>
+ <20190506162915.380993f9@gandalf.local.home>
+ <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
+ <20190506174511.2f8b696b@gandalf.local.home>
+ <CAHk-=wj3R_s0RTJOmTBNaUPhu4fz2shNBUr4M6Ej65UYSNCs-g@mail.gmail.com>
+ <20190506210416.2489a659@oasis.local.home>
+ <CAHk-=whZwqzbu-=1r_j_cXfd=ta1q7RFCuneqBZfQQhS_P-BmQ@mail.gmail.com>
+ <20190506215353.14a8ef78@oasis.local.home>
+ <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
+ <48BDF7B6-252B-4D29-9116-844363010BC0@amacapital.net>
+Message-ID:
+ <CAHk-=wjMFRZ7bX4NFc1+=Sy5NDHh=8rAvK-JBqB+HySM1W-Nbg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190507145724.yv7eIzE0bzc3MIDS7F0VcXRBe9pE9obahge307s1lWw@z>
+Message-ID: <20190507145722.gr725gcWIdJ223peJh8ImcGdl4mWnGNKEVH12YutCjU@z>
 
-On Tue, 7 May 2019 14:50:26 +0000
-David Laight <David.Laight@ACULAB.COM> wrote:
+On Tue, May 7, 2019@7:48 AM Andy Lutomirski <luto@amacapital.net> wrote:
+>
+> IOW I think your trick only works if the old and new states are CALL, but we don’t know that until we’ve looked up the record, at which point we can just use the result of the lookup.
 
-> From: Steven Rostedt
-> > Sent: 07 May 2019 14:14
-> > On Tue, 7 May 2019 12:57:15 +0000
-> > David Laight <David.Laight@ACULAB.COM> wrote:
+It would indeed only work for call instructions. I was thinking we'd
+know that because we only ever batch up call instructions, though.
 
-> The 'user' (ie the kernel code that needs to emulate the call) doesn't
-> write the data to the stack, just to some per-cpu location.
-> (Actually it could be on the stack at the other end of pt-regs.)
-> So you get to the 'register restore and iret' code with the stack unaltered.
-> It is then a SMOP to replace the %flags saved by the int3 with the %ip
-> saved by the int3, the %ip with the address of the function to call,
-> restore the flags (push and popf) and issue a ret.f to remove the %ip and %cs.
+But it doesn't matter. I was looking at the ftrace code because I
+thought there was some subtle timing bug or race or similar. But it
+turned out my "memmove()" was the problem. See the patch I just sent
+out.
 
-How would you handle NMIs doing the same thing? Yes, the NMI handlers
-have breakpoints that will need to emulated calls as well.
-
-> 
-> (Actually you need to add 4 to the callers %ip address to allow for the
-> difference between the size of int3 (hopefully 0xcc, not 0xcd 0x3).)
-> 
-> > > > For 32bit 'the gap' happens naturally when building a 5 entry frame. Yes
-> > > > it is possible to build a 5 entry frame on top of the old 3 entry one,
-> > > > but why bother...  
-> > >
-> > > Presumably there is 'horrid' code to generate the gap in 64bit mode?
-> > > (less horrid than 32bit, but still horrid?)
-> > > Or does it copy the entire pt_regs into a local stack frame and use
-> > > that for the iret?  
-> > 
-> > On x86_64, the gap is only done for int3 and nothing else, thus it is
-> > much less horrid. That's because x86_64 has a sane pt_regs storage for
-> > all exceptions.  
-> 
-> Well, in particular, it always loads %sp as part of the iret.
-> So you can create a gap and the cpu will remove it for you.
-> 
-> In 64bit mode you could overwrite the %ss with the return address
-> to the caller restore %eax and %flags, push the function address
-> and use ret.n to jump to the function subtracting the right amount
-> from %esp.
-> 
-> Actually that means you can do the following in both modes:
-> 	if not emulated_call_address then pop %ax; iret else
-> 	# assume kernel<->kernel return
-> 	push emulated_call_address;
-> 	push flags_saved_by_int3
-> 	load %ax, return_address_from_iret
-> 	add %ax,#4
-> 	store %ax, first_stack_location_written_by_int3
-> 	load %ax, value_saved_by_int3_entry
-> 	popf
-> 	ret.n
-> 
-> The ret.n discards everything from the %ax to the required return address.
-> So 'n' is the size of the int3 frame, so 12 for i386 and 40 for amd64.
-> 
-> If the register restore (done just before this code) finished with
-> 'add %sp, sizeof *pt_regs' then the emulated_call_address can be
-> loaded in %ax from the other end of pt_regs.
-> 
-> This all reminds me of fixing up the in-kernel faults that happen
-> when loading the user segment registers during 'return to user'
-> fault in kernel space.
-
-This all sounds much more complex and fragile than the proposed
-solution. Why would we do this over what is being proposed?
-
--- Steve
+               Linus
