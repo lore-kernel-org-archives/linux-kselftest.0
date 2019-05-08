@@ -1,43 +1,69 @@
-From: peterz@infradead.org (Peter Zijlstra)
-Date: Wed, 08 May 2019 09:49:04 +0200
-Subject: [PATCH 3/4] x86/ftrace: Add pt_regs frame annotations
-References: <20190508074901.982470324@infradead.org>
-Message-ID: <20190508080612.776845854@infradead.org>
+From: ci_notify@linaro.org (ci_notify@linaro.org)
+Date: Wed, 8 May 2019 09:00:39 +0000 (UTC)
+Subject: next-20190508 kselftest results
+Message-ID: <1723788338.17782.1557306040400.JavaMail.jenkins@a6c5c67cda76>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190508074904.zJ8leEz8ZDitjojpbQZXrChn_xCFlbU1hVDR9DtGRAQ@z>
+Message-ID: <20190508090039.2Ju5WIIANc4m3dHDQI2rq-8DyXMgqbU6nOaSsOrxuqw@z>
 
-When CONFIG_FRAME_POINTER, we should mark pt_regs frames.
+Summary
+------------------------------------------------------------------------
+kernel: 5.1.0
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: unknown
+git describe: next-20190508
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190508
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
----
- arch/x86/kernel/ftrace_32.S |    6 ++++++
- arch/x86/kernel/ftrace_64.S |    3 +++
- 2 files changed, 9 insertions(+)
+Regressions (compared to build next-20190507)
+------------------------------------------------------------------------
+No regressions                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190507)                                                                   
+------------------------------------------------------------------------                                               
+No fixes
 
---- a/arch/x86/kernel/ftrace_32.S
-+++ b/arch/x86/kernel/ftrace_32.S
-@@ -138,6 +138,12 @@ ENTRY(ftrace_regs_caller)
- #else
- 	movl	0x4(%ebp), %edx			/* Load parent ip (2nd parameter) */
- #endif
-+
-+#ifdef CONFIG_FRAME_POINTER
-+	movl	%esp, %ebp
-+	andl	$0x7fffffff, %ebp
-+#endif
-+
- 	movl	function_trace_op, %ecx		/* Save ftrace_pos in 3rd parameter */
- 	pushl	%esp				/* Save pt_regs as 4th parameter */
- 
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -222,6 +222,9 @@ GLOBAL(ftrace_regs_caller_op_ptr)
- 	leaq MCOUNT_REG_SIZE+8*2(%rsp), %rcx
- 	movq %rcx, RSP(%rsp)
- 
-+#ifdef CONFIG_FRAME_POINTER
-+	leaq 1(%rsp), %rbp
-+#endif
- 	/* regs go into 4th parameter */
- 	leaq (%rsp), %rcx
- 
+In total:
+------------------------------------------------------------------------
+Ran 0 total tests in the following environments and test suites.
+pass 0
+fail 0
+xfail 0
+skip 0
+
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- x15 - arm
+- x86_64
+
+Test Suites
+-----------
+
+
+Failures
+------------------------------------------------------------------------
+
+i386:
+
+x86:
+
+x15:
+
+dragonboard-410c:
+
+juno-r2:
+
+hi6220-hikey:
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
