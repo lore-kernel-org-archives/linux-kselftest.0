@@ -1,41 +1,52 @@
-From: nstange at suse.de (Nicolai Stange)
-Date: Wed, 08 May 2019 11:41:19 +0200
-Subject: [PATCH 0/3] x86_64/ftrace: Emulate calls from int3 when patching
- functions
-In-Reply-To: <20190508015559.767152678@goodmis.org> (Steven Rostedt's message
- of "Tue, 07 May 2019 21:55:59 -0400")
-References: <20190508015559.767152678@goodmis.org>
-Message-ID: <87lfzhwaf4.fsf@suse.de>
+From: jpoimboe at redhat.com (Josh Poimboeuf)
+Date: Wed, 8 May 2019 06:54:16 -0500
+Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
+In-Reply-To: <20190508080612.721269814@infradead.org>
+References: <20190508074901.982470324@infradead.org>
+ <20190508080612.721269814@infradead.org>
+Message-ID: <20190508115416.nblx7c2kocidpytm@treble>
 
-Steven Rostedt <rostedt at goodmis.org> writes:
+On Wed, May 08, 2019 at 09:49:03AM +0200, Peter Zijlstra wrote:
+> The kprobe trampolines have a FRAME_POINTER annotation that makes no
+> sense. It marks the frame in the middle of pt_regs, at the place of
+> saving BP.
+> 
+> Change it to mark the pt_regs frame as per the ENCODE_FRAME_POINTER
+> from the respective entry_*.S.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
+> ---
+>  arch/x86/kernel/kprobes/common.h |   32 +++++++++++++++++++++++---------
+>  1 file changed, 23 insertions(+), 9 deletions(-)
+> 
+> --- a/arch/x86/kernel/kprobes/common.h
+> +++ b/arch/x86/kernel/kprobes/common.h
+> @@ -6,14 +6,15 @@
+>  
+>  #include <asm/asm.h>
+>  
+> +#ifdef CONFIG_X86_64
+> +
+>  #ifdef CONFIG_FRAME_POINTER
+> -# define SAVE_RBP_STRING "	push %" _ASM_BP "\n" \
+> -			 "	mov  %" _ASM_SP ", %" _ASM_BP "\n"
+> +#define ENCODE_FRAME_POINTER			\
+> +	"	leaq 1(%rsp), %rbp\n"
+>  #else
+> -# define SAVE_RBP_STRING "	push %" _ASM_BP "\n"
+> +#define ENCODE_FRAME_POINTER
+>  #endif
 
-> [
->   This is the non-RFC version.
->
->   It went through and passed all my tests. If there's no objections
->   I'm going to include this in my pull request. I still have patches
->   in my INBOX that may still be included, so I need to run those through
->   my tests as well, so a pull request wont be immediate.
-> ]
+> +#ifdef CONFIG_FRAME_POINTER
+> +#define ENCODE_FRAME_POINTER			\
+> +	"	movl %esp, %ebp\n"		\
+> +	"	andl $0x7fffffff, %ebp\n"
+> +#else
+> +#define ENCODE_FRAME_POINTER
+> +#endif
 
-<snip />
-
-> Josh Poimboeuf (1):
->       x86_64: Add gap to int3 to allow for call emulation
->
-> Peter Zijlstra (2):
->       x86_64: Allow breakpoints to emulate call instructions
->       ftrace/x86_64: Emulate call function while updating in breakpoint handler
-
-Reviewed-and-tested-by: Nicolai Stange <nstange at suse.de>
-
-for the whole series. Many, many thanks to everybody involved!
-
-I'll resend that live patching selftest once this fix here has been
-merged.
-
-Nicolai
+We should put these macros in a header file somewhere (including
+stringified versions).
 
 -- 
-SUSE Linux GmbH, GF: Felix Imendörffer, Mary Higgins, Sri Rasiah, HRB
-21284 (AG Nürnberg)
+Josh
