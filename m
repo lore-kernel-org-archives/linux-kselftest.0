@@ -1,65 +1,49 @@
-From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Wed, 8 May 2019 13:30:22 +0900
-Subject: [PATCH 0/3] x86_64/ftrace: Emulate calls from int3 when
- patching functions
-In-Reply-To: <20190508015559.767152678@goodmis.org>
-References: <20190508015559.767152678@goodmis.org>
-Message-ID: <20190508133022.78cd9c9b8fcb7838fc0280d0@kernel.org>
+From: torvalds@linux-foundation.org (Linus Torvalds)
+Date: Tue, 7 May 2019 21:50:52 -0700
+Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+In-Reply-To: <20190507172418.67ef6fc3@gandalf.local.home>
+References: <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
+ <20190506225819.11756974@oasis.local.home>
+ <CAHk-=wh4FCNBLe8OyDZt2Tr+k9JhhTsg3H8R4b55peKcf0b6eQ@mail.gmail.com>
+ <20190506232158.13c9123b@oasis.local.home>
+ <CAHk-=wi4vPg4pu6RvxQrUuBL4Vgwd2G2iaEJVVumny+cBOWMZw@mail.gmail.com>
+ <CAHk-=wg2_okyU8mpkGCUrudgfg8YmNetSD8=scNbOkN+imqZdQ@mail.gmail.com>
+ <20190507111227.1d4268d7@gandalf.local.home>
+ <CAHk-=wjYdj+vvV8uUA8eaUSxOhu=xuQxdo-dtM927j0-3hSkEw@mail.gmail.com>
+ <20190507163440.GV2606@hirez.programming.kicks-ass.net>
+ <CAHk-=wiuue37opWK5QaQ9f6twqDZuSratdP-1bK6kD9-Az5WnA@mail.gmail.com>
+ <20190507172159.5t3bm3mjkwagvite@treble>
+ <20190507172418.67ef6fc3@gandalf.local.home>
+Message-ID:
+ <CAHk-=wg5_fwx_-ybD9TLQE4rAUqtYzO2CAmpciWTkDn3dtKMOw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190508043022.ig9OK17o9tS7cXlru6_q6lP0m3eITNzxDrmec91DsNE@z>
+Message-ID: <20190508045052.vG-NUIKYYcc4_SwhOKj1tqdFt2jbX4gJudfhTXxfQqA@z>
 
-On Tue, 07 May 2019 21:55:59 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Tue, May 7, 2019@2:24 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> And there's been several times I forget that regs->sp can not be read
+> directly. Especially most of my bug reports are for x86_64 these days.
+> But when I had that seldom x86_32 one, and go debugging, I would print
+> out "regs->sp" and then the system would crash. And I spend some time
+> wondering why?
+>
+> It's been a bane of mine for some time.
 
-> 
-> [
->   This is the non-RFC version.
-> 
->   It went through and passed all my tests. If there's no objections
->   I'm going to include this in my pull request. I still have patches
->   in my INBOX that may still be included, so I need to run those through
->   my tests as well, so a pull request wont be immediate.
-> ]
-> 
-> Nicolai Stange discovered that Live Kernel Patching can have unforseen
-> consequences if tracing is enabled when there are functions that are
-> patched. The reason being, is that Live Kernel patching is built on top
-> of ftrace, which will have the patched functions call the live kernel
-> trampoline directly, and that trampoline will modify the regs->ip address
-> to return to the patched function.
-> 
-> But in the transition between changing the call to the customized
-> trampoline, the tracing code is needed to have its handler called
-> an well, so the function fentry location must be changed from calling
-> the live kernel patching trampoline, to the ftrace_reg_caller trampoline
-> which will iterate through all the registered ftrace handlers for
-> that function.
-> 
-> During this transition, a break point is added to do the live code
-> modifications. But if that break point is hit, it just skips calling
-> any handler, and makes the call site act as a nop. For tracing, the
-> worse that can happen is that you miss a function being traced, but
-> for live kernel patching the affects are more severe, as the old buggy
-> function is now called.
-> 
-> To solve this, an int3_emulate_call() is created for x86_64 to allow
-> ftrace on x86_64 to emulate the call to ftrace_regs_caller() which will
-> make sure all the registered handlers to that function are still called.
-> And this keeps live kernel patching happy!
+Guys, I have basically a one-liner patch for your hangups.
 
-Out of curiosity, would you have any idea to re-use these function for
-other use-case? Maybe kprobes can reuse it, but very limited use-case.
+It's called "rename 'sp' to 'user_sp' on x86-32".
 
-> To mimimize the changes, and to avoid controversial patches, this
-> only changes x86_64. Due to the way x86_32 implements the regs->sp
-> the complexity of emulating calls on that platform is too much for
-> stable patches, and live kernel patching does not support x86_32 anyway.
+Then we make the 'sp' field on x86-64 be a union, so that you can call
+it user_sp or sp as you wish.
 
-This series looks good to me.
+Yeah, it's really more than one line, because obviously the users will
+need chaning, but honestly, that would be a _real_ cleanup. Make the
+register match what it actually is.
 
-Reviewed-by: Masami Hiramatsu <mhiramat at kernel.org>
+And it doesn't mess up the stack frame, and it doesn't change the
+entry code. It just reminds people that the entry is the USER stack
+pointer.
 
-Thanks!
+Problem solved.
 
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+               Linus
