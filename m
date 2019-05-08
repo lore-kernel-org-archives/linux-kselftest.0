@@ -1,74 +1,63 @@
-From: yamada.masahiro at socionext.com (Masahiro Yamada)
-Date: Wed, 8 May 2019 12:43:34 +0900
-Subject: [PATCH v3] kheaders: Move from proc to sysfs
-In-Reply-To: <20190506013456.86061-1-joel@joelfernandes.org>
-References: <20190506013456.86061-1-joel@joelfernandes.org>
-Message-ID: <CAK7LNAQesyT-vspoGKdgRqycZfhtJm5Upx2T6ij-yB5i4Nx5nw@mail.gmail.com>
+From: mhiramat at kernel.org (Masami Hiramatsu)
+Date: Wed, 8 May 2019 13:30:22 +0900
+Subject: [PATCH 0/3] x86_64/ftrace: Emulate calls from int3 when
+ patching functions
+In-Reply-To: <20190508015559.767152678@goodmis.org>
+References: <20190508015559.767152678@goodmis.org>
+Message-ID: <20190508133022.78cd9c9b8fcb7838fc0280d0@kernel.org>
 
-On Mon, May 6, 2019 at 10:37 AM Joel Fernandes (Google)
-<joel at joelfernandes.org> wrote:
->
-> The kheaders archive consisting of the kernel headers used for compiling
-> bpf programs is in /proc. However there is concern that moving it here
-> will make it permanent. Let us move it to /sys/kernel as discussed [1].
->
-> [1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
->
-> Suggested-by: Steven Rostedt <rostedt at goodmis.org>
-> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> ---
-> This patch applies on top of the previous patch that was applied to the
-> driver tree:
-> https://lore.kernel.org/patchwork/patch/1067310/
->
-> v2->v3: Fixed sysfs file mode nit (Greg).
-> v1->v2: Fixed some kconfig nits.
->
->  init/Kconfig                                | 16 ++++-----
->  kernel/Makefile                             |  4 +--
->  kernel/{gen_ikh_data.sh => gen_kheaders.sh} |  2 +-
->  kernel/kheaders.c                           | 40 +++++++++------------
->  4 files changed, 26 insertions(+), 36 deletions(-)
->  rename kernel/{gen_ikh_data.sh => gen_kheaders.sh} (98%)
->
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 26a364a95b57..c3661991b089 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -579,15 +579,13 @@ config IKCONFIG_PROC
->           This option enables access to the kernel configuration file
->           through /proc/config.gz.
->
-> -config IKHEADERS_PROC
-> -       tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
-> -       depends on PROC_FS
-> -       help
-> -         This option enables access to the kernel header and other artifacts that
-> -         are generated during the build process. These can be used to build eBPF
-> -         tracing programs, or similar programs.  If you build the headers as a
-> -         module, a module called kheaders.ko is built which can be loaded on-demand
-> -         to get access to the headers.
-> +config IKHEADERS
-> +       tristate "Enable kernel headers through /sys/kernel/kheaders.tar.xz"
+On Tue, 07 May 2019 21:55:59 -0400
+Steven Rostedt <rostedt at goodmis.org> wrote:
 
+> 
+> [
+>   This is the non-RFC version.
+> 
+>   It went through and passed all my tests. If there's no objections
+>   I'm going to include this in my pull request. I still have patches
+>   in my INBOX that may still be included, so I need to run those through
+>   my tests as well, so a pull request wont be immediate.
+> ]
+> 
+> Nicolai Stange discovered that Live Kernel Patching can have unforseen
+> consequences if tracing is enabled when there are functions that are
+> patched. The reason being, is that Live Kernel patching is built on top
+> of ftrace, which will have the patched functions call the live kernel
+> trampoline directly, and that trampoline will modify the regs->ip address
+> to return to the patched function.
+> 
+> But in the transition between changing the call to the customized
+> trampoline, the tracing code is needed to have its handler called
+> an well, so the function fentry location must be changed from calling
+> the live kernel patching trampoline, to the ftrace_reg_caller trampoline
+> which will iterate through all the registered ftrace handlers for
+> that function.
+> 
+> During this transition, a break point is added to do the live code
+> modifications. But if that break point is hit, it just skips calling
+> any handler, and makes the call site act as a nop. For tracing, the
+> worse that can happen is that you miss a function being traced, but
+> for live kernel patching the affects are more severe, as the old buggy
+> function is now called.
+> 
+> To solve this, an int3_emulate_call() is created for x86_64 to allow
+> ftrace on x86_64 to emulate the call to ftrace_regs_caller() which will
+> make sure all the registered handlers to that function are still called.
+> And this keeps live kernel patching happy!
 
-I suggested "depends on SYSFS" twice, both in v1 and v2.
+Out of curiosity, would you have any idea to re-use these function for
+other use-case? Maybe kprobes can reuse it, but very limited use-case.
 
-https://lore.kernel.org/patchwork/patch/1069806/#1266147
-https://lore.kernel.org/patchwork/patch/1070005/#1266279
+> To mimimize the changes, and to avoid controversial patches, this
+> only changes x86_64. Due to the way x86_32 implements the regs->sp
+> the complexity of emulating calls on that platform is too much for
+> stable patches, and live kernel patching does not support x86_32 anyway.
 
+This series looks good to me.
 
+Reviewed-by: Masami Hiramatsu <mhiramat at kernel.org>
 
-> +       help
-> +         This option enables access to the in-kernel headers that are generated during
-> +         the build process. These can be used to build eBPF tracing programs,
-> +         or similar programs.  If you build the headers as a module, a module called
-> +         kheaders.ko is built which can be loaded on-demand to get access to headers.
->
->  config LOG_BUF_SHIFT
->         int "Kernel log buffer size (16 => 64KB, 17 => 128KB)"
-
+Thanks!
 
 -- 
-Best Regards
-Masahiro Yamada
+Masami Hiramatsu <mhiramat at kernel.org>
