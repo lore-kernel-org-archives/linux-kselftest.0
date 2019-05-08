@@ -1,57 +1,40 @@
-From: skhan@linuxfoundation.org (Shuah Khan)
-Date: Wed,  8 May 2019 10:26:16 -0600
-Subject: [PATCH] selftests: fix install target to use default install path
-Message-ID: <20190508162616.9393-1-skhan@linuxfoundation.org>
+From: jpoimboe@redhat.com (Josh Poimboeuf)
+Date: Wed, 8 May 2019 13:48:48 -0500
+Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
+In-Reply-To: <20190508153907.GM2589@hirez.programming.kicks-ass.net>
+References: <20190508074901.982470324@infradead.org>
+ <20190508080612.721269814@infradead.org>
+ <20190508115416.nblx7c2kocidpytm@treble>
+ <20190508120416.GL2589@hirez.programming.kicks-ass.net>
+ <20190508124248.u5ukpbhnh4wpiccq@treble>
+ <20190508153907.GM2589@hirez.programming.kicks-ass.net>
+Message-ID: <20190508184848.qerg3flv3ej3xsev@treble>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190508162616.WNKab8cjkASwM15fZr5pGCN4eyGTVKvVqyQjgHmtMH0@z>
+Message-ID: <20190508184848.zhQQkcVw8GDtZwkCayIiw8M2tBEsRG8J42vvV_FUvME@z>
 
-Install target fails when INSTALL_PATH is undefined. Fix install target
-to use "output_dir/install as the default install location. "output_dir"
-is either the root of selftests directory under kernel source tree or
-output directory specified by O= or KBUILD_OUTPUT.
+On Wed, May 08, 2019@05:39:07PM +0200, Peter Zijlstra wrote:
+> On Wed, May 08, 2019@07:42:48AM -0500, Josh Poimboeuf wrote:
+> > On Wed, May 08, 2019@02:04:16PM +0200, Peter Zijlstra wrote:
+> 
+> > > Do the x86_64 variants also want some ORC annotation?
+> > 
+> > Maybe so.  Though it looks like regs->ip isn't saved.  The saved
+> > registers might need to be tweaked.  I'll need to look into it.
+> 
+> What all these sites do (and maybe we should look at unifying them
+> somehow) is turn a CALL frame (aka RET-IP) into an exception frame (aka
+> pt_regs).
+> 
+> So regs->ip will be the return address (which is fixed up to be the CALL
+> address in the handler).
 
-e.g:
-make -C tools/testing/selftests install
-<installs under tools/testing/selftests/install>
+But from what I can tell, trampoline_handler() hard-codes regs->ip to
+point to kretprobe_trampoline(), and the original return address is
+placed in regs->sp.
 
-make O=/tmp/kselftest -C tools/testing/selftests install
-<installs under /tmp/kselftest/install>
+Masami, is there a reason why regs->ip doesn't have the original return
+address and regs->sp doesn't have the original SP?  I think that would
+help the unwinder understand things.
 
-export KBUILD_OUTPUT=/tmp/kselftest
-make -C tools/testing/selftests install
-<installs under /tmp/kselftest/install>
-
-In addition, add "all" target as dependency to "install" to build and
-install using a single command.
-
-Signed-off-by: Shuah Khan <skhan at linuxfoundation.org>
----
- tools/testing/selftests/Makefile | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 9f05448e5e4b..c71a63b923d4 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -163,11 +163,17 @@ clean_hotplug:
- run_pstore_crash:
- 	make -C pstore run_crash
- 
--INSTALL_PATH ?= install
-+# Use $BUILD as the default install root. $BUILD points to the
-+# right output location for the following cases:
-+# 1. output_dir=kernel_src
-+# 2. a separate output directory is specified using O= KBUILD_OUTPUT
-+# 3. a separate output directory is specified using KBUILD_OUTPUT
-+#
-+INSTALL_PATH ?= $(BUILD)/install
- INSTALL_PATH := $(abspath $(INSTALL_PATH))
- ALL_SCRIPT := $(INSTALL_PATH)/run_kselftest.sh
- 
--install:
-+install: all
- ifdef INSTALL_PATH
- 	@# Ask all targets to install their files
- 	mkdir -p $(INSTALL_PATH)/kselftest
 -- 
-2.17.1
+Josh
