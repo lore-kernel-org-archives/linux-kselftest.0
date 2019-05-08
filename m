@@ -1,52 +1,57 @@
-From: jpoimboe@redhat.com (Josh Poimboeuf)
-Date: Wed, 8 May 2019 06:57:59 -0500
-Subject: [RFC][PATCH 4/4] x86_32: Provide consistent pt_regs
-In-Reply-To: <20190508080612.832694080@infradead.org>
+From: peterz@infradead.org (Peter Zijlstra)
+Date: Wed, 8 May 2019 14:04:16 +0200
+Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
+In-Reply-To: <20190508115416.nblx7c2kocidpytm@treble>
 References: <20190508074901.982470324@infradead.org>
- <20190508080612.832694080@infradead.org>
-Message-ID: <20190508115759.yvxjgsqriez4z22l@treble>
+ <20190508080612.721269814@infradead.org>
+ <20190508115416.nblx7c2kocidpytm@treble>
+Message-ID: <20190508120416.GL2589@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190508115759.MxIblg_zVtszr30UfcR0LkpdITG7q3dc1ss_SXXLAcg@z>
+Message-ID: <20190508120416.0J0tdOkmmqpOXaTwQvjcnrkUZ8-e7Xb_FFhOjf4mLjo@z>
 
-On Wed, May 08, 2019@09:49:05AM +0200, Peter Zijlstra wrote:
-> Currently pt_regs on x86_32 has an oddity in that kernel regs
-> (!user_mode(regs)) are short two entries (esp/ss). This means that any
-> code trying to use them (typically: regs->sp) needs to jump through
-> some unfortunate hoops.
+On Wed, May 08, 2019@06:54:16AM -0500, Josh Poimboeuf wrote:
+> On Wed, May 08, 2019@09:49:03AM +0200, Peter Zijlstra wrote:
+> > The kprobe trampolines have a FRAME_POINTER annotation that makes no
+> > sense. It marks the frame in the middle of pt_regs, at the place of
+> > saving BP.
+> > 
+> > Change it to mark the pt_regs frame as per the ENCODE_FRAME_POINTER
+> > from the respective entry_*.S.
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
+> > ---
+> >  arch/x86/kernel/kprobes/common.h |   32 +++++++++++++++++++++++---------
+> >  1 file changed, 23 insertions(+), 9 deletions(-)
+> > 
+> > --- a/arch/x86/kernel/kprobes/common.h
+> > +++ b/arch/x86/kernel/kprobes/common.h
+> > @@ -6,14 +6,15 @@
+> >  
+> >  #include <asm/asm.h>
+> >  
+> > +#ifdef CONFIG_X86_64
+> > +
+> >  #ifdef CONFIG_FRAME_POINTER
+> > -# define SAVE_RBP_STRING "	push %" _ASM_BP "\n" \
+> > -			 "	mov  %" _ASM_SP ", %" _ASM_BP "\n"
+> > +#define ENCODE_FRAME_POINTER			\
+> > +	"	leaq 1(%rsp), %rbp\n"
+> >  #else
+> > -# define SAVE_RBP_STRING "	push %" _ASM_BP "\n"
+> > +#define ENCODE_FRAME_POINTER
+> >  #endif
 > 
-> Change the entry code to fix this up and create a full pt_regs frame.
+> > +#ifdef CONFIG_FRAME_POINTER
+> > +#define ENCODE_FRAME_POINTER			\
+> > +	"	movl %esp, %ebp\n"		\
+> > +	"	andl $0x7fffffff, %ebp\n"
+> > +#else
+> > +#define ENCODE_FRAME_POINTER
+> > +#endif
 > 
-> This then simplifies:
-> 
->   - ftrace
->   - kprobes
->   - stack unwinder
->   - ptrace
->   - kdump
->   - kgdb
-> 
-> Hated-by: Linus Torvalds <torvalds at linux-foundation.org>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
-> ---
->  arch/x86/entry/entry_32.S         |  105 ++++++++++++++++++++++++++++++++++----
->  arch/x86/include/asm/kexec.h      |   17 ------
->  arch/x86/include/asm/ptrace.h     |   17 ------
->  arch/x86/include/asm/stacktrace.h |    2 
->  arch/x86/kernel/crash.c           |    8 --
->  arch/x86/kernel/ftrace_32.S       |   81 ++++++++++++++++-------------
->  arch/x86/kernel/kgdb.c            |    8 --
->  arch/x86/kernel/kprobes/common.h  |    4 -
->  arch/x86/kernel/kprobes/core.c    |   29 ++++------
->  arch/x86/kernel/kprobes/opt.c     |   20 ++++---
->  arch/x86/kernel/process_32.c      |   16 +----
->  arch/x86/kernel/ptrace.c          |   29 ----------
->  arch/x86/kernel/time.c            |    3 -
->  arch/x86/kernel/unwind_frame.c    |   32 +----------
->  arch/x86/kernel/unwind_orc.c      |    2 
->  15 files changed, 181 insertions(+), 192 deletions(-)
+> We should put these macros in a header file somewhere (including
+> stringified versions).
 
-Very nice diffstat.  This moves all the pain to the 32-bit entry code
-where it belongs.
+Probably a good idea. I'll frob them into asm/frame.h.
 
--- 
-Josh
+Do the x86_64 variants also want some ORC annotation?
