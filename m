@@ -1,76 +1,35 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Thu, 9 May 2019 10:20:30 +0900
-Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-In-Reply-To: <20190508184848.qerg3flv3ej3xsev@treble>
-References: <20190508074901.982470324@infradead.org>
- <20190508080612.721269814@infradead.org>
- <20190508115416.nblx7c2kocidpytm@treble>
- <20190508120416.GL2589@hirez.programming.kicks-ass.net>
- <20190508124248.u5ukpbhnh4wpiccq@treble>
- <20190508153907.GM2589@hirez.programming.kicks-ass.net>
- <20190508184848.qerg3flv3ej3xsev@treble>
-Message-ID: <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Wed, 8 May 2019 12:06:14 -0400
+Subject: [PATCH 0/3] x86_64/ftrace: Emulate calls from int3 when
+ patching functions
+In-Reply-To: <20190508133022.78cd9c9b8fcb7838fc0280d0@kernel.org>
+References: <20190508015559.767152678@goodmis.org>
+ <20190508133022.78cd9c9b8fcb7838fc0280d0@kernel.org>
+Message-ID: <20190508120614.037779be@gandalf.local.home>
 
-Hi Josh,
+On Wed, 8 May 2019 13:30:22 +0900
+Masami Hiramatsu <mhiramat at kernel.org> wrote:
 
-On Wed, 8 May 2019 13:48:48 -0500
-Josh Poimboeuf <jpoimboe at redhat.com> wrote:
-
-> On Wed, May 08, 2019 at 05:39:07PM +0200, Peter Zijlstra wrote:
-> > On Wed, May 08, 2019 at 07:42:48AM -0500, Josh Poimboeuf wrote:
-> > > On Wed, May 08, 2019 at 02:04:16PM +0200, Peter Zijlstra wrote:
-> > 
-> > > > Do the x86_64 variants also want some ORC annotation?
-> > > 
-> > > Maybe so.  Though it looks like regs->ip isn't saved.  The saved
-> > > registers might need to be tweaked.  I'll need to look into it.
-> > 
-> > What all these sites do (and maybe we should look at unifying them
-> > somehow) is turn a CALL frame (aka RET-IP) into an exception frame (aka
-> > pt_regs).
-> > 
-> > So regs->ip will be the return address (which is fixed up to be the CALL
-> > address in the handler).
+> > To solve this, an int3_emulate_call() is created for x86_64 to allow
+> > ftrace on x86_64 to emulate the call to ftrace_regs_caller() which will
+> > make sure all the registered handlers to that function are still called.
+> > And this keeps live kernel patching happy!  
 > 
-> But from what I can tell, trampoline_handler() hard-codes regs->ip to
-> point to kretprobe_trampoline(), and the original return address is
-> placed in regs->sp.
+> Out of curiosity, would you have any idea to re-use these function for
+> other use-case? Maybe kprobes can reuse it, but very limited use-case.
+
+Yes, but only for x86_64.
+
 > 
-> Masami, is there a reason why regs->ip doesn't have the original return
-> address and regs->sp doesn't have the original SP?  I think that would
-> help the unwinder understand things.
+> > To mimimize the changes, and to avoid controversial patches, this
+> > only changes x86_64. Due to the way x86_32 implements the regs->sp
+> > the complexity of emulating calls on that platform is too much for
+> > stable patches, and live kernel patching does not support x86_32 anyway.  
+> 
+> This series looks good to me.
+> 
+> Reviewed-by: Masami Hiramatsu <mhiramat at kernel.org>
 
-Yes, for regs->ip, there is a histrical reason. Since previously, we had
-an int3 at trampoline, so the user (kretprobe) handler expects that
-regs->ip is trampoline address and ri->ret_addr is original return address.
-It is better to check the other archs, but I think it is possible to
-change the regs->ip to original return address, since no one cares such
-"fixed address". :)
+Thanks Masami!
 
-For the regs->sp, there are 2 reasons.
-
-For x86-64, it's just for over-optimizing (reduce stack usage).
-I think we can make a gap for putting return address, something like
-
-	"kretprobe_trampoline:\n"
-#ifdef CONFIG_X86_64
-	"	pushq %rsp\n"	/* Make a gap for return address */
-	"	pushq 0(%rsp)\n"	/* Copy original stack pointer */
-	"	pushfq\n"
-	SAVE_REGS_STRING
-	"	movq %rsp, %rdi\n"
-	"	call trampoline_handler\n"
-	/* Push the true return address to the bottom */
-	"	movq %rax, 20*8(%rsp)\n"
-	RESTORE_REGS_STRING
-	"	popfq\n"
-	"	addq $8, %rsp\n"	/* Skip original stack pointer */
-
-For i386 (x86-32), there is no other way to keep &regs->sp as
-the original stack pointer. It has to be changed with this series,
-maybe as same as x86-64.
-
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+-- Steve
