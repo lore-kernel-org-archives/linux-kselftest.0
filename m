@@ -1,94 +1,76 @@
 From: rostedt@goodmis.org (Steven Rostedt)
-Date: Tue, 07 May 2019 21:56:01 -0400
-Subject: [PATCH 2/3] x86_64: Allow breakpoints to emulate call instructions
+Date: Tue, 07 May 2019 21:56:00 -0400
+Subject: [PATCH 1/3] x86_64: Add gap to int3 to allow for call emulation
 References: <20190508015559.767152678@goodmis.org>
-Message-ID: <20190508020000.595360124@goodmis.org>
+Message-ID: <20190508020000.433743991@goodmis.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190508015601.qM9Xvfw4g5VwGynNEE8L6KnlPb_ZXd26zhI_BKpXPR8@z>
+Message-ID: <20190508015600.9Mv6NBYRSRKAfXCUiuMNU4psGr7GX2Tn4JEql_AjevQ@z>
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Josh Poimboeuf <jpoimboe@redhat.com>
 
-In order to allow breakpoints to emulate call instructions, they need to push
-the return address onto the stack. The x86_64 int3 handler adds a small gap
-to allow the stack to grow some. Use this gap to add the return address to
-be able to emulate a call instruction at the breakpoint location.
+To allow an int3 handler to emulate a call instruction, it must be able to
+push a return address onto the stack. Add a gap to the stack to allow the
+int3 handler to push the return address and change the return from int3 to
+jump straight to the emulated called function target.
 
-These helper functions are added:
+Link: http://lkml.kernel.org/r/20181130183917.hxmti5josgq4clti at treble
+Link: http://lkml.kernel.org/r/20190502162133.GX2623 at hirez.programming.kicks-ass.net
 
-  int3_emulate_jmp(): changes the location of the regs->ip to return there.
+[
+  Note, this is needed to allow Live Kernel Patching to not miss calling a
+  patched function when tracing is enabled. -- Steven Rostedt
+]
 
- (The next two are only for x86_64)
-  int3_emulate_push(): to push the address onto the gap in the stack
-  int3_emulate_call(): push the return address and change regs->ip
-
-Cc: Andy Lutomirski <luto at kernel.org>
-Cc: Nicolai Stange <nstange at suse.de>
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: Ingo Molnar <mingo at redhat.com>
-Cc: Borislav Petkov <bp at alien8.de>
-Cc: "H. Peter Anvin" <hpa at zytor.com>
-Cc: the arch/x86 maintainers <x86 at kernel.org>
-Cc: Josh Poimboeuf <jpoimboe at redhat.com>
-Cc: Jiri Kosina <jikos at kernel.org>
-Cc: Miroslav Benes <mbenes at suse.cz>
-Cc: Petr Mladek <pmladek at suse.com>
-Cc: Joe Lawrence <joe.lawrence at redhat.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Konrad Rzeszutek Wilk <konrad.wilk at oracle.com>
-Cc: Tim Chen <tim.c.chen at linux.intel.com>
-Cc: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
-Cc: Mimi Zohar <zohar at linux.ibm.com>
-Cc: Juergen Gross <jgross at suse.com>
-Cc: Nick Desaulniers <ndesaulniers at google.com>
-Cc: Nayna Jain <nayna at linux.ibm.com>
-Cc: Masahiro Yamada <yamada.masahiro at socionext.com>
-Cc: Joerg Roedel <jroedel at suse.de>
-Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest at vger.kernel.org>
 Cc: stable at vger.kernel.org
 Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
-Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
-[ Modified to only work for x86_64 and added comment to int3_emulate_push() ]
+Signed-off-by: Josh Poimboeuf <jpoimboe at redhat.com>
 Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
 ---
- arch/x86/include/asm/text-patching.h | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ arch/x86/entry/entry_64.S | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-index e85ff65c43c3..05861cc08787 100644
---- a/arch/x86/include/asm/text-patching.h
-+++ b/arch/x86/include/asm/text-patching.h
-@@ -39,4 +39,32 @@ extern int poke_int3_handler(struct pt_regs *regs);
- extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
- extern int after_bootmem;
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index 1f0efdb7b629..27fcc6fbdd52 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -879,7 +879,7 @@ apicinterrupt IRQ_WORK_VECTOR			irq_work_interrupt		smp_irq_work_interrupt
+  * @paranoid == 2 is special: the stub will never switch stacks.  This is for
+  * #DF: if the thread stack is somehow unusable, we'll still get a useful OOPS.
+  */
+-.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1
++.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1 create_gap=0
+ ENTRY(\sym)
+ 	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
  
-+static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
-+{
-+	regs->ip = ip;
-+}
-+
-+#define INT3_INSN_SIZE 1
-+#define CALL_INSN_SIZE 5
-+
-+#ifdef CONFIG_X86_64
-+static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
-+{
+@@ -899,6 +899,20 @@ ENTRY(\sym)
+ 	jnz	.Lfrom_usermode_switch_stack_\@
+ 	.endif
+ 
++	.if \create_gap == 1
 +	/*
-+	 * The int3 handler in entry_64.S adds a gap between the
-+	 * stack where the break point happened, and the saving of
-+	 * pt_regs. We can extend the original stack because of
-+	 * this gap. See the idtentry macro's create_gap option.
++	 * If coming from kernel space, create a 6-word gap to allow the
++	 * int3 handler to emulate a call instruction.
 +	 */
-+	regs->sp -= sizeof(unsigned long);
-+	*(unsigned long *)regs->sp = val;
-+}
++	testb	$3, CS-ORIG_RAX(%rsp)
++	jnz	.Lfrom_usermode_no_gap_\@
++	.rept	6
++	pushq	5*8(%rsp)
++	.endr
++	UNWIND_HINT_IRET_REGS offset=8
++.Lfrom_usermode_no_gap_\@:
++	.endif
 +
-+static inline void int3_emulate_call(struct pt_regs *regs, unsigned long func)
-+{
-+	int3_emulate_push(regs, regs->ip - INT3_INSN_SIZE + CALL_INSN_SIZE);
-+	int3_emulate_jmp(regs, func);
-+}
-+#endif
-+
- #endif /* _ASM_X86_TEXT_PATCHING_H */
+ 	.if \paranoid
+ 	call	paranoid_entry
+ 	.else
+@@ -1130,7 +1144,7 @@ apicinterrupt3 HYPERV_STIMER0_VECTOR \
+ #endif /* CONFIG_HYPERV */
+ 
+ idtentry debug			do_debug		has_error_code=0	paranoid=1 shift_ist=DEBUG_STACK
+-idtentry int3			do_int3			has_error_code=0
++idtentry int3			do_int3			has_error_code=0	create_gap=1
+ idtentry stack_segment		do_stack_segment	has_error_code=1
+ 
+ #ifdef CONFIG_XEN_PV
 -- 
 2.20.1
