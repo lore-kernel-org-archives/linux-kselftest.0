@@ -1,137 +1,62 @@
-From: daniel at ffwll.ch (Daniel Vetter)
-Date: Fri, 10 May 2019 10:12:13 +0200
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <a1b88d5add15d43de0468c32d9a2427629337abb.camel@oracle.com>
-References: <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
- <20190509015856.GB7031@mit.edu>
- <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu>
- <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
- <20190509214233.GA20877@mit.edu>
- <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
- <20190509233043.GC20877@mit.edu>
- <8914afef-1e66-e6e3-f891-5855768d3018@deltatee.com>
- <6d6e91ec-33d3-830b-4895-4d7a20ba7d45@gmail.com>
- <a1b88d5add15d43de0468c32d9a2427629337abb.camel@oracle.com>
-Message-ID: <CAKMK7uFd1xUx8u3xWLwifVSq4OEnMO4S-m0hESe68UzONXnMFg@mail.gmail.com>
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Wed, 8 May 2019 12:37:48 -0400
+Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+In-Reply-To: <CAHk-=wg5_fwx_-ybD9TLQE4rAUqtYzO2CAmpciWTkDn3dtKMOw@mail.gmail.com>
+References: <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
+ <20190506225819.11756974@oasis.local.home>
+ <CAHk-=wh4FCNBLe8OyDZt2Tr+k9JhhTsg3H8R4b55peKcf0b6eQ@mail.gmail.com>
+ <20190506232158.13c9123b@oasis.local.home>
+ <CAHk-=wi4vPg4pu6RvxQrUuBL4Vgwd2G2iaEJVVumny+cBOWMZw@mail.gmail.com>
+ <CAHk-=wg2_okyU8mpkGCUrudgfg8YmNetSD8=scNbOkN+imqZdQ@mail.gmail.com>
+ <20190507111227.1d4268d7@gandalf.local.home>
+ <CAHk-=wjYdj+vvV8uUA8eaUSxOhu=xuQxdo-dtM927j0-3hSkEw@mail.gmail.com>
+ <20190507163440.GV2606@hirez.programming.kicks-ass.net>
+ <CAHk-=wiuue37opWK5QaQ9f6twqDZuSratdP-1bK6kD9-Az5WnA@mail.gmail.com>
+ <20190507172159.5t3bm3mjkwagvite@treble>
+ <20190507172418.67ef6fc3@gandalf.local.home>
+ <CAHk-=wg5_fwx_-ybD9TLQE4rAUqtYzO2CAmpciWTkDn3dtKMOw@mail.gmail.com>
+Message-ID: <20190508123748.1737b8b5@gandalf.local.home>
 
-On Fri, May 10, 2019 at 7:49 AM Knut Omang <knut.omang at oracle.com> wrote:
->
-> On Thu, 2019-05-09 at 22:18 -0700, Frank Rowand wrote:
-> > On 5/9/19 4:40 PM, Logan Gunthorpe wrote:
-> > >
-> > >
-> > > On 2019-05-09 5:30 p.m., Theodore Ts'o wrote:
-> > >> On Thu, May 09, 2019 at 04:20:05PM -0600, Logan Gunthorpe wrote:
-> > >>>
-> > >>> The second item, arguably, does have significant overlap with kselftest.
-> > >>> Whether you are running short tests in a light weight UML environment or
-> > >>> higher level tests in an heavier VM the two could be using the same
-> > >>> framework for writing or defining in-kernel tests. It *may* also be valuable
-> > >>> for some people to be able to run all the UML tests in the heavy VM
-> > >>> environment along side other higher level tests.
-> > >>>
-> > >>> Looking at the selftests tree in the repo, we already have similar items to
-> > >>> what Kunit is adding as I described in point (2) above. kselftest_harness.h
-> > >>> contains macros like EXPECT_* and ASSERT_* with very similar intentions to
-> > >>> the new KUNIT_EXECPT_* and KUNIT_ASSERT_* macros.
-> > >>>
-> > >>> However, the number of users of this harness appears to be quite small. Most
-> > >>> of the code in the selftests tree seems to be a random mismash of scripts
-> > >>> and userspace code so it's not hard to see it as something completely
-> > >>> different from the new Kunit:
-> > >>>
-> > >>> $ git grep --files-with-matches kselftest_harness.h *
-> > >>
-> > >> To the extent that we can unify how tests are written, I agree that
-> > >> this would be a good thing.  However, you should note that
-> > >> kselftest_harness.h is currently assums that it will be included in
-> > >> userspace programs.  This is most obviously seen if you look closely
-> > >> at the functions defined in the header files which makes calls to
-> > >> fork(), abort() and fprintf().
-> > >
-> > > Ah, yes. I obviously did not dig deep enough. Using kunit for
-> > > in-kernel tests and kselftest_harness for userspace tests seems like
-> > > a sensible line to draw to me. Trying to unify kernel and userspace
-> > > here sounds like it could be difficult so it's probably not worth
-> > > forcing the issue unless someone wants to do some really fancy work
-> > > to get it done.
-> > >
-> > > Based on some of the other commenters, I was under the impression
-> > > that kselftests had in-kernel tests but I'm not sure where or if they
-> > > exist.
-> >
-> > YES, kselftest has in-kernel tests.  (Excuse the shouting...)
-> >
-> > Here is a likely list of them in the kernel source tree:
-> >
-> > $ grep module_init lib/test_*.c
-> > lib/test_bitfield.c:module_init(test_bitfields)
-> > lib/test_bitmap.c:module_init(test_bitmap_init);
-> > lib/test_bpf.c:module_init(test_bpf_init);
-> > lib/test_debug_virtual.c:module_init(test_debug_virtual_init);
-> > lib/test_firmware.c:module_init(test_firmware_init);
-> > lib/test_hash.c:module_init(test_hash_init);  /* Does everything */
-> > lib/test_hexdump.c:module_init(test_hexdump_init);
-> > lib/test_ida.c:module_init(ida_checks);
-> > lib/test_kasan.c:module_init(kmalloc_tests_init);
-> > lib/test_list_sort.c:module_init(list_sort_test);
-> > lib/test_memcat_p.c:module_init(test_memcat_p_init);
-> > lib/test_module.c:static int __init test_module_init(void)
-> > lib/test_module.c:module_init(test_module_init);
-> > lib/test_objagg.c:module_init(test_objagg_init);
-> > lib/test_overflow.c:static int __init test_module_init(void)
-> > lib/test_overflow.c:module_init(test_module_init);
-> > lib/test_parman.c:module_init(test_parman_init);
-> > lib/test_printf.c:module_init(test_printf_init);
-> > lib/test_rhashtable.c:module_init(test_rht_init);
-> > lib/test_siphash.c:module_init(siphash_test_init);
-> > lib/test_sort.c:module_init(test_sort_init);
-> > lib/test_stackinit.c:module_init(test_stackinit_init);
-> > lib/test_static_key_base.c:module_init(test_static_key_base_init);
-> > lib/test_static_keys.c:module_init(test_static_key_init);
-> > lib/test_string.c:module_init(string_selftest_init);
-> > lib/test_ubsan.c:module_init(test_ubsan_init);
-> > lib/test_user_copy.c:module_init(test_user_copy_init);
-> > lib/test_uuid.c:module_init(test_uuid_init);
-> > lib/test_vmalloc.c:module_init(vmalloc_test_init)
-> > lib/test_xarray.c:module_init(xarray_checks);
-> >
-> >
-> > > If they do exists, it seems like it would make sense to
-> > > convert those to kunit and have Kunit tests run-able in a VM or
-> > > baremetal instance.
-> >
-> > They already run in a VM.
-> >
-> > They already run on bare metal.
-> >
-> > They already run in UML.
-> >
-> > This is not to say that KUnit does not make sense.  But I'm still trying
-> > to get a better description of the KUnit features (and there are
-> > some).
->
-> FYI, I have a master student who looks at converting some of these to KTF, such as for
-> instance the XArray tests, which lended themselves quite good to a semi-automated
-> conversion.
->
-> The result is also a somewhat more compact code as well as the flexibility
-> provided by the Googletest executor and the KTF frameworks, such as running selected
-> tests, output formatting, debugging features etc.
+On Tue, 7 May 2019 21:50:52 -0700
+Linus Torvalds <torvalds at linux-foundation.org> wrote:
 
-So is KTF already in upstream? Or is the plan to unify the KTF and
-Kunit in-kernel test harnesses? Because there's tons of these
-in-kernel unit tests already, and every merge we get more (Frank's
-list didn't even look into drivers or anywhere else, e.g. it's missing
-the locking self tests I worked on in the past), and a more structured
-approach would really be good.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-+41 (0) 79 365 57 48 - http://blog.ffwll.ch
+> > It's been a bane of mine for some time.  
+> 
+> Guys, I have basically a one-liner patch for your hangups.
+> 
+> It's called "rename 'sp' to 'user_sp' on x86-32".
+> 
+> Then we make the 'sp' field on x86-64 be a union, so that you can call
+> it user_sp or sp as you wish.
+> 
+> Yeah, it's really more than one line, because obviously the users will
+> need chaning, but honestly, that would be a _real_ cleanup. Make the
+> register match what it actually is.
+
+But is it? Sure, it will be a reminder that it's different for x86-32,
+but that still doesn't take away the fact that pt_regs on x86_32 is an
+anomaly! Where else do we have part of a data structure that can't be
+read because it can possibly fault? If regs is a valid pointer, one
+would think that simply reading regs->sp (or regs->user_sp) would be no
+more dangerous than reading regs->ip.
+
+The difference between entry_32.S from entry_64.S causes it to spill
+into C code, making the x86_64 code more difficult to deal with. Sure,
+10 to 15 years ago, all your arguments would make sense. But today, who
+uses x86_32?  Perhaps you may use it in a VM, but I asked a few
+developers when was the last time they used one, they told me 5 to 7
+years ago. I only boot x86_32 to test to make sure I didn't break it.
+
+Yes, your diffstat is really nice to the changes to entry_32.S, but at
+what cost? To make the x86_64 code more complex? That whole returning
+the regs in the int3 handler makes no sense on x86_64, but yet we would
+need to do it to handle x86_32. Why burden the architecture of today
+and tomorrow with the architecture of yesterday? x86_32 is becoming
+more obsolete by the day. It baffles me why we wouldn't want to contain
+its complexity in a single file then to spread it out like wildfire
+across the generic x86 code.
+
+The &regs->sp hack is just one more rung in the complex learning curve
+ladder of becoming a Linux kernel developer.
+
+-- Steve
