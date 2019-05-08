@@ -1,231 +1,96 @@
-From: Tim.Bird at sony.com (Tim.Bird at sony.com)
-Date: Thu, 9 May 2019 17:00:08 +0000
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <20190509133551.GD29703@mit.edu>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
- <20190507080119.GB28121@kroah.com>
- <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
- <20190509015856.GB7031@mit.edu>
- <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu>
- <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu>
-Message-ID: <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Wed, 08 May 2019 16:24:29 -0400
+Subject: [for-next][PATCH 02/13] x86_64: Allow breakpoints to emulate call
+ instructions
+References: <20190508202427.252736423@goodmis.org>
+Message-ID: <20190508202452.072839447@goodmis.org>
 
-> -----Original Message-----
-> From: Theodore Ts'o 
-> 
-> On Thu, May 09, 2019 at 01:52:15PM +0200, Knut Omang wrote:
-> > 1) Tests that exercises typically algorithmic or intricate, complex
-> >    code with relatively few outside dependencies, or where the
-> dependencies
-> >    are considered worth mocking, such as the basics of container data
-> >    structures or page table code. If I get you right, Ted, the tests
-> >    you refer to in this thread are such tests. I believe covering this space
-> >    is the goal Brendan has in mind for KUnit.
-> 
-> Yes, that's correct.  I'd also add that one of the key differences is
-> that it sounds like Frank and you are coming from the perspective of
-> testing *device drivers* where in general there aren't a lot of
-> complex code which is hardware independent.
+From: Peter Zijlstra <peterz at infradead.org>
 
-Ummm.  Not to speak for Frank, but he's representing the device tree
-layer, which I'd argue sits exactly at the intersection of testing device drivers
-AND lots of complex code which is hardware independent.  So maybe his
-case is special.
+In order to allow breakpoints to emulate call instructions, they need to push
+the return address onto the stack. The x86_64 int3 handler adds a small gap
+to allow the stack to grow some. Use this gap to add the return address to
+be able to emulate a call instruction at the breakpoint location.
 
-> After all, the vast
-> majority of device drivers are primarily interface code to hardware,
-> with as much as possible abstracted away to common code.  (Take, for
-> example, the model of the SCSI layer; or all of the kobject code.)
-> 
-> > 2) Tests that exercises interaction between a module under test and other
-> >    parts of the kernel, such as testing intricacies of the interaction of
-> >    a driver or file system with the rest of the kernel, and with hardware,
-> >    whether that is real hardware or a model/emulation.
-> >    Using your testing needs as example again, Ted, from my shallow
-> understanding,
-> >    you have such needs within the context of xfstests
-> (https://github.com/tytso/xfstests)
-> 
-> Well, upstream is for xfstests is git://git.kernel.org/pub/scm/fs/xfs/xfstests-
-> dev.git
-> 
-> The test framework where I can run 20 hours worth of xfstests
-> (multiple file system features enabled, multiple mount options, etc.)
-> in 3 hours of wall clock time using multiple cloud VM is something
-> called gce-xfstests.
-> 
-> I also have kvm-xfstests, which optimizes low test latency, where I
-> want to run a one or a small number of tests with a minimum of
-> overhead --- gce startup and shutdown is around 2 minutes, where as
-> kvm startup and shutdown is about 7 seconds.  As far as I'm concerned,
-> 7 seconds is still too slow, but that's the best I've been able to do
-> given all of the other things I want a test framework to do, including
-> archiving test results, parsing the test results so it's easy to
-> interpret, etc.  Both kvm-xfstests and gce-xfstests are located at:
-> 
-> 	git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
-> 
-> So if Frank's primary argument is "too many frameworks", it's already
-> too late.  The block layer has blktests has a seprate framework,
-> called blktests --- and yeah, it's a bit painful to launch or learn
-> how to set things up.
-> 
-> That's why I added support to run blktests using gce-xfstests and
-> kvm-xfstests, so that "gce-xfstests --blktests" or "kvm-xfstests
-> --xfstests" will pluck a kernel from your build tree, and launch at
-> test appliance VM using that kernel and run the block layer tests.
-> 
-> The point is we *already* have multiple test frameworks, which are
-> optimized for testing different parts of the kernel.  And if you plan
-> to do a lot of work in these parts of the kernel, you're going to have
-> to learn how to use some other test framework other than kselftest.
-> Sorry, that's just the way it goes.
-> 
-> Of course, I'll accept trivial patches that haven't been tested using
-> xfstests --- but that's because I can trivially run the smoke test for
-> you.  Of course, if I get a lot of patches from a contributor which
-> cause test regressions, I'll treat them much like someone who
-> contribute patches which fail to build.  I'll apply pressure to the
-> contributor to actually build test, or run a ten minute kvm-xfstests
-> smoke test.  Part of the reason why I feel comfortable to do this is
-> it's really easy to run the smoke test.  There are pre-compiled test
-> appliances, and a lot of documentation:
-> 
-> https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-
-> quickstart.md
-> 
-> This is why I have close to zero sympathy to Frank's complaint that
-> extra test frameworks are a bad thing.  To me, that's whining.  I've
-> done a huge amount of work to meet contributors more than half-way.
-> The insistence that "There Must Be One", ala the Highlander movie, is
-> IMHO so wrong that it's not even close.  Is it really that hard to do
-> a "git pull", download a test appliance, set up a config file to tell
-> kvm-xfstests where to find your build tree, and then run "kvm-xfstests
-> --smoke" or "gce-xfstests --smoke"?  Cry me a river.
+These helper functions are added:
 
-Handling these types of things that are not "really that hard to do" is
-exactly what meta-frameworks like KCI, Fuego, and LKFT are for.
-For a core developer in a sub-system, having them learn a particular
-specialized framework is OK.  However, for someone doing integration
-testing of the kernel (not a core developer
-in a particular subsystem), having lots of different frameworks turns
-into death by a thousand cuts.  But we're working to fix that.
-(Which reminds me that I have an outstanding action item to add an xfstest
-test definition to Fuego. :-) )
+  int3_emulate_jmp(): changes the location of the regs->ip to return there.
 
-> 
-> There are already multiple test frameworks, and if you expect to do a
-> lot of work in a particular subsystem, you'll be expected to use the
-> Maintainer's choice of tests.  Deal with it.  We do this so we can
-> scale to the number of contributors we have in our subsystem.
+ (The next two are only for x86_64)
+  int3_emulate_push(): to push the address onto the gap in the stack
+  int3_emulate_call(): push the return address and change regs->ip
 
-This seems to me to be exactly backwards.  You scale your contributors
-by making it easier for them, which means adopting something already
-well-know or established - not by being different.
+Cc: Andy Lutomirski <luto at kernel.org>
+Cc: Nicolai Stange <nstange at suse.de>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Ingo Molnar <mingo at redhat.com>
+Cc: Borislav Petkov <bp at alien8.de>
+Cc: "H. Peter Anvin" <hpa at zytor.com>
+Cc: the arch/x86 maintainers <x86 at kernel.org>
+Cc: Josh Poimboeuf <jpoimboe at redhat.com>
+Cc: Jiri Kosina <jikos at kernel.org>
+Cc: Miroslav Benes <mbenes at suse.cz>
+Cc: Petr Mladek <pmladek at suse.com>
+Cc: Joe Lawrence <joe.lawrence at redhat.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Konrad Rzeszutek Wilk <konrad.wilk at oracle.com>
+Cc: Tim Chen <tim.c.chen at linux.intel.com>
+Cc: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
+Cc: Mimi Zohar <zohar at linux.ibm.com>
+Cc: Juergen Gross <jgross at suse.com>
+Cc: Nick Desaulniers <ndesaulniers at google.com>
+Cc: Nayna Jain <nayna at linux.ibm.com>
+Cc: Masahiro Yamada <yamada.masahiro at socionext.com>
+Cc: Joerg Roedel <jroedel at suse.de>
+Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest at vger.kernel.org>
+Cc: stable at vger.kernel.org
+Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
+Tested-by: Nicolai Stange <nstange at suse.de>
+Reviewed-by: Nicolai Stange <nstange at suse.de>
+Reviewed-by: Masami Hiramatsu <mhiramat at kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
+[ Modified to only work for x86_64 and added comment to int3_emulate_push() ]
+Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+---
+ arch/x86/include/asm/text-patching.h | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-I understand your vise grip metaphor, and agree with you.  In my opinion
-kselftest and kunit are optimized for different things, and are different tools
-in the Linux kernel testing toolbox.  But if you start having too many tools, or
-the tools are too specialized, there are less people familiar with them and
-ready to use them to help contribute.
-
-> 
-> > To 1) I agree with Frank in that the problem with using UML is that you still
-> have to
-> > relate to the complexity of a kernel run time system, while what you really
-> want for these
-> > types of tests is just to compile a couple of kernel source files in a normal
-> user land
-> > context, to allow the use of Valgrind and other user space tools on the
-> code.
-> 
-> "Just compiling a couple of kernel source files in a normal user land"
-> is much harder than you think.  It requires writing vast numbers of
-> mocking functions --- for a file system I would have to simulate the
-> block device layer, large portions of the VFS layer, the scheduler and
-> the locking layer if I want to test locking bugs, etc., etc.  In
-> practice, UML itself is serving as mocking layer, by its mere
-> existence.  So when Frank says that KUnit doesn't provide any mocking
-> functions, I don't at all agree.  Using KUnit and UML makes testing
-> internal interfaces *far* simpler, especially if the comparison is
-> "just compile some kernel source files as part of a userspace test
-> program".
-
-I had one thing I wanted to ask about here.  You said previously that
-you plan to use KUnit to test a complicated but hardware independent
-part of the filesystem code.  If you test only via UML, will that give you
-coverage for non-x86 platforms? More specifically, will you get coverage
-for 32-bit, for big-endian as well as little-endian, for weird architectures?
-It seems like the software for these complicated sections of code is
-subject to regressions due to toolchain issues as much as from coding errors.
-That's why I was initially turned off when I  heard that KUnit only planned
-to support UML and not cross-compilation.
-
-I'm not sure what the status is of UML for all the weird embedded processors
-that get only cross-compiled and not natively-compiled, but there are multiple
-reasons why UML is less commonly used in the embedded space.
+diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
+index e85ff65c43c3..05861cc08787 100644
+--- a/arch/x86/include/asm/text-patching.h
++++ b/arch/x86/include/asm/text-patching.h
+@@ -39,4 +39,32 @@ extern int poke_int3_handler(struct pt_regs *regs);
+ extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
+ extern int after_bootmem;
  
-> Perhaps your and Frank's experience is different --- perhaps that can
-> be explained by your past experience and interest in testing device
-> drivers as opposed to file systems.
-> 
-> The other thing I'd add is that at least for me, a really important
-> consideration is how quickly we can run tests.  I consider
-> minimization of developer friction (e.g., all you need to do is
-> running "make ; kvm-xfstests --smoke" to run tests), and maximizing
-> developer velocity to be high priority goals.  Developer velocity is
-> how quickly can you run the tests; ideally, less than 5-10 seconds.
-> 
-> And that's the other reason why I consider unit tests to be a
-> complement to integration tests.  "gce-xfstests --smoke" takes 10-15
-> minutes.  If I can have unit tests which takes 5-15 seconds for a
-> smoke test of the specific part of ext4 that I am modifying (and often
-> with much better coverage than integration tests from userspace),
-> that's at really big deal.  I can do this for e2fsprogs; but if I have
-> to launch a VM, the VM overhead pretty much eats all or most of that
-> time budget right there.
-> 
-> From looking at your documentation of KTF, you are targetting the use
-> case of continuous testing.  That's a different testing scenario than
-> what I'm describing; with continuous testing, overhead measured in
-> minutes or even tens of minutes is not a big deal.  But if you are
-> trying to do real-time testing as part of your development process ---
-> *real* Test Driven Development, then test latency is a really big
-> deal.
-> 
-> I'll grant that for people who are working on device drivers where
-> architecture dependencies are a big deal, building for an architecture
-> where you can run in a virtual environment or using test hardware is
-> going to be a better way to go.  And Brendan has said he's willing to
-> look at adapting KUnit so it can be built for use in a virtual
-> environment to accomodate your requirements.
-
-This might solve my cross-compile needs, so that's good.
-
-> 
-> As far as I'm concerned, however, I would *not* be interested in KTF
-> unless you could demonstrate to me that launching at test VM, somehow
-> getting the kernel modules copied into the VM, and running the tests
-> as kernel modules, has zero overhead compared to using UML.
-> 
-> Ultimately, I'm a pragmatist.  If KTF serves your needs best, good for
-> you.  If other approaches are better for other parts of the kernel,
-> let's not try to impose a strict "There Must Be Only One" religion.
-> That's already not true today, and for good reason.  There are many
-> different kinds of kernel code, and many different types of test
-> philosophies.  Trying to force all kernel testing into a single
-> Procrustean Bed is simply not productive.
-
-Had to look up "Procrustean Bed" - great phrase.  :-)
-
-I'm not of the opinion that there must only be one test framework
-in the kernel. But we should avoid unnecessary multiplication. Every
-person is going to have a different idea for where the line of necessity
-is drawn.  My own opinion is that what KUnit is adding is different enough
-from kselftest, that it's a valuable addition.  
-
- -- Tim
++static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
++{
++	regs->ip = ip;
++}
++
++#define INT3_INSN_SIZE 1
++#define CALL_INSN_SIZE 5
++
++#ifdef CONFIG_X86_64
++static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
++{
++	/*
++	 * The int3 handler in entry_64.S adds a gap between the
++	 * stack where the break point happened, and the saving of
++	 * pt_regs. We can extend the original stack because of
++	 * this gap. See the idtentry macro's create_gap option.
++	 */
++	regs->sp -= sizeof(unsigned long);
++	*(unsigned long *)regs->sp = val;
++}
++
++static inline void int3_emulate_call(struct pt_regs *regs, unsigned long func)
++{
++	int3_emulate_push(regs, regs->ip - INT3_INSN_SIZE + CALL_INSN_SIZE);
++	int3_emulate_jmp(regs, func);
++}
++#endif
++
+ #endif /* _ASM_X86_TEXT_PATCHING_H */
+-- 
+2.20.1
