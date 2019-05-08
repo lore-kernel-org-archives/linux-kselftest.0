@@ -1,46 +1,73 @@
-From: torvalds at linux-foundation.org (Linus Torvalds)
-Date: Tue, 7 May 2019 21:50:52 -0700
-Subject: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-In-Reply-To: <20190507172418.67ef6fc3@gandalf.local.home>
-References: <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
- <20190506225819.11756974@oasis.local.home>
- <CAHk-=wh4FCNBLe8OyDZt2Tr+k9JhhTsg3H8R4b55peKcf0b6eQ@mail.gmail.com>
- <20190506232158.13c9123b@oasis.local.home>
- <CAHk-=wi4vPg4pu6RvxQrUuBL4Vgwd2G2iaEJVVumny+cBOWMZw@mail.gmail.com>
- <CAHk-=wg2_okyU8mpkGCUrudgfg8YmNetSD8=scNbOkN+imqZdQ@mail.gmail.com>
- <20190507111227.1d4268d7@gandalf.local.home>
- <CAHk-=wjYdj+vvV8uUA8eaUSxOhu=xuQxdo-dtM927j0-3hSkEw@mail.gmail.com>
- <20190507163440.GV2606@hirez.programming.kicks-ass.net>
- <CAHk-=wiuue37opWK5QaQ9f6twqDZuSratdP-1bK6kD9-Az5WnA@mail.gmail.com>
- <20190507172159.5t3bm3mjkwagvite@treble>
- <20190507172418.67ef6fc3@gandalf.local.home>
-Message-ID: <CAHk-=wg5_fwx_-ybD9TLQE4rAUqtYzO2CAmpciWTkDn3dtKMOw@mail.gmail.com>
+From: peterz at infradead.org (Peter Zijlstra)
+Date: Wed, 08 May 2019 09:49:02 +0200
+Subject: [PATCH 1/4] x86/entry/32: Clean up return from interrupt preemption
+ path
+References: <20190508074901.982470324@infradead.org>
+Message-ID: <20190508080612.665396175@infradead.org>
 
-On Tue, May 7, 2019 at 2:24 PM Steven Rostedt <rostedt at goodmis.org> wrote:
->
-> And there's been several times I forget that regs->sp can not be read
-> directly. Especially most of my bug reports are for x86_64 these days.
-> But when I had that seldom x86_32 one, and go debugging, I would print
-> out "regs->sp" and then the system would crash. And I spend some time
-> wondering why?
->
-> It's been a bane of mine for some time.
+The code flow around the return from interrupt preemption point seems
+needlesly complicated.
 
-Guys, I have basically a one-liner patch for your hangups.
+There is only one site jumping to resume_kernel, and none (outside of
+resume_kernel) jumping to restore_all_kernel. Inline resume_kernel
+in restore_all_kernel and avoid the CONFIG_PREEMPT dependent label.
 
-It's called "rename 'sp' to 'user_sp' on x86-32".
+Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
+---
+ arch/x86/entry/entry_32.S |   24 ++++++++++--------------
+ 1 file changed, 10 insertions(+), 14 deletions(-)
 
-Then we make the 'sp' field on x86-64 be a union, so that you can call
-it user_sp or sp as you wish.
-
-Yeah, it's really more than one line, because obviously the users will
-need chaning, but honestly, that would be a _real_ cleanup. Make the
-register match what it actually is.
-
-And it doesn't mess up the stack frame, and it doesn't change the
-entry code. It just reminds people that the entry is the USER stack
-pointer.
-
-Problem solved.
-
-               Linus
+--- a/arch/x86/entry/entry_32.S
++++ b/arch/x86/entry/entry_32.S
+@@ -67,7 +67,6 @@
+ # define preempt_stop(clobbers)	DISABLE_INTERRUPTS(clobbers); TRACE_IRQS_OFF
+ #else
+ # define preempt_stop(clobbers)
+-# define resume_kernel		restore_all_kernel
+ #endif
+ 
+ .macro TRACE_IRQS_IRET
+@@ -755,7 +754,7 @@ END(ret_from_fork)
+ 	andl	$SEGMENT_RPL_MASK, %eax
+ #endif
+ 	cmpl	$USER_RPL, %eax
+-	jb	resume_kernel			# not returning to v8086 or userspace
++	jb	restore_all_kernel		# not returning to v8086 or userspace
+ 
+ ENTRY(resume_userspace)
+ 	DISABLE_INTERRUPTS(CLBR_ANY)
+@@ -765,18 +764,6 @@ ENTRY(resume_userspace)
+ 	jmp	restore_all
+ END(ret_from_exception)
+ 
+-#ifdef CONFIG_PREEMPT
+-ENTRY(resume_kernel)
+-	DISABLE_INTERRUPTS(CLBR_ANY)
+-	cmpl	$0, PER_CPU_VAR(__preempt_count)
+-	jnz	restore_all_kernel
+-	testl	$X86_EFLAGS_IF, PT_EFLAGS(%esp)	# interrupts off (exception path) ?
+-	jz	restore_all_kernel
+-	call	preempt_schedule_irq
+-	jmp	restore_all_kernel
+-END(resume_kernel)
+-#endif
+-
+ GLOBAL(__begin_SYSENTER_singlestep_region)
+ /*
+  * All code from here through __end_SYSENTER_singlestep_region is subject
+@@ -1027,6 +1014,15 @@ ENTRY(entry_INT80_32)
+ 	INTERRUPT_RETURN
+ 
+ restore_all_kernel:
++#ifdef CONFIG_PREEMPT
++	DISABLE_INTERRUPTS(CLBR_ANY)
++	cmpl	$0, PER_CPU_VAR(__preempt_count)
++	jnz	.Lno_preempt
++	testl	$X86_EFLAGS_IF, PT_EFLAGS(%esp)	# interrupts off (exception path) ?
++	jz	.Lno_preempt
++	call	preempt_schedule_irq
++.Lno_preempt:
++#endif
+ 	TRACE_IRQS_IRET
+ 	PARANOID_EXIT_TO_KERNEL_MODE
+ 	BUG_IF_WRONG_CR3
