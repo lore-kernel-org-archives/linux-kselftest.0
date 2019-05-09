@@ -1,49 +1,32 @@
-From: yamada.masahiro@socionext.com (Masahiro Yamada)
-Date: Sun, 12 May 2019 21:23:50 +0900
-Subject: Build-time tests?
-In-Reply-To: <20190508191341.GA17963@redhat.com>
-References: <20190508191341.GA17963@redhat.com>
-Message-ID:
- <CAK7LNASJr8CSWo-yE-YBq085Y=k+x8X-gQopJLRkxTueP4LGmw@mail.gmail.com>
+From: tytso@mit.edu (Theodore Ts'o)
+Date: Wed, 8 May 2019 23:20:17 -0400
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
+ <20190507080119.GB28121@kroah.com>
+ <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
+ <20190509015856.GB7031@mit.edu>
+ <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+Message-ID: <20190509032017.GA29703@mit.edu>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190512122350.u0npAQxbMVZD3Cy0KcqV_xwHZsfdyn5Dgjki_GJSfa0@z>
+Message-ID: <20190509032017.pco9lYj_sqmxDkSDi0ShmtE57adnhqCHwM4JMBr8uZA@z>
 
-On Thu, May 9, 2019@4:30 AM Joe Lawrence <joe.lawrence@redhat.com> wrote:
->
-> Hello kbuild, kselftest,
->
-> I've been working on a patchset which adds an additional build script to
-> the toolchain when compiling livepatches.  There are a few kernel
-> section features in which this script does not yet support, but can
-> detect and abort when it encounters.  To test this detection, I've
-> written a small set of kernel modules that require such sections.
->
-> A few questions:
->
-> Is build-testing out of scope for kernel selftests?  For expediency,
-> it was really easy to spin out new lib/livepatch kernel modules.
->
-> Does kbuild support the notion of expected failure?  In this case, the
-> build script returns a non-zero error and the build stops.
+On Wed, May 08, 2019@07:13:59PM -0700, Frank Rowand wrote:
+> > If you want to use vice grips as a hammer, screwdriver, monkey wrench,
+> > etc.  there's nothing stopping you from doing that.  But it's not fair
+> > to object to other people who might want to use better tools.
+> > 
+> > The reality is that we have a lot of testing tools.  It's not just
+> > kselftests.  There is xfstests for file system code, blktests for
+> > block layer tests, etc.   We use the right tool for the right job.
+> 
+> More specious arguments.
 
+Well, *I* don't think they are specious; so I think we're going to
+have to agree to disagree.
 
-If I understood correctly, your are asking about kselftest,
-maintained by Shuah Khan.
+Cheers,
 
-(Unfortunately), makefiles under tools/ adopted completely
-different build system, and it is out of scope of kbuild.
-
-
-> Am I trying to fit a square peg in a round hole?  I could easily keep
-> these build tests in a private branch, but could they exist in a
-> different format somewhere else in the tree?
->
-> Suggestions welcome,
->
-> -- Joe
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+						- Ted
