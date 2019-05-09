@@ -1,57 +1,46 @@
-From: peterz@infradead.org (Peter Zijlstra)
-Date: Wed, 8 May 2019 14:04:16 +0200
-Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-In-Reply-To: <20190508115416.nblx7c2kocidpytm@treble>
-References: <20190508074901.982470324@infradead.org>
- <20190508080612.721269814@infradead.org>
- <20190508115416.nblx7c2kocidpytm@treble>
-Message-ID: <20190508120416.GL2589@hirez.programming.kicks-ass.net>
+From: tytso@mit.edu (Theodore Ts'o)
+Date: Wed, 8 May 2019 21:44:07 -0400
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <4d963cdc-1cbb-35a3-292c-552f865ed1f7@gmail.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
+ <20190507080119.GB28121@kroah.com> <20190507172256.GB5900@mit.edu>
+ <4d963cdc-1cbb-35a3-292c-552f865ed1f7@gmail.com>
+Message-ID: <20190509014407.GA7031@mit.edu>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190508120416.0J0tdOkmmqpOXaTwQvjcnrkUZ8-e7Xb_FFhOjf4mLjo@z>
+Message-ID: <20190509014407._iJCho8Dl4kdkRj2MCxJcK4x3I15pByEF6fbq8P96Jk@z>
 
-On Wed, May 08, 2019@06:54:16AM -0500, Josh Poimboeuf wrote:
-> On Wed, May 08, 2019@09:49:03AM +0200, Peter Zijlstra wrote:
-> > The kprobe trampolines have a FRAME_POINTER annotation that makes no
-> > sense. It marks the frame in the middle of pt_regs, at the place of
-> > saving BP.
-> > 
-> > Change it to mark the pt_regs frame as per the ENCODE_FRAME_POINTER
-> > from the respective entry_*.S.
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
-> > ---
-> >  arch/x86/kernel/kprobes/common.h |   32 +++++++++++++++++++++++---------
-> >  1 file changed, 23 insertions(+), 9 deletions(-)
-> > 
-> > --- a/arch/x86/kernel/kprobes/common.h
-> > +++ b/arch/x86/kernel/kprobes/common.h
-> > @@ -6,14 +6,15 @@
-> >  
-> >  #include <asm/asm.h>
-> >  
-> > +#ifdef CONFIG_X86_64
-> > +
-> >  #ifdef CONFIG_FRAME_POINTER
-> > -# define SAVE_RBP_STRING "	push %" _ASM_BP "\n" \
-> > -			 "	mov  %" _ASM_SP ", %" _ASM_BP "\n"
-> > +#define ENCODE_FRAME_POINTER			\
-> > +	"	leaq 1(%rsp), %rbp\n"
-> >  #else
-> > -# define SAVE_RBP_STRING "	push %" _ASM_BP "\n"
-> > +#define ENCODE_FRAME_POINTER
-> >  #endif
+On Wed, May 08, 2019@05:58:49PM -0700, Frank Rowand wrote:
 > 
-> > +#ifdef CONFIG_FRAME_POINTER
-> > +#define ENCODE_FRAME_POINTER			\
-> > +	"	movl %esp, %ebp\n"		\
-> > +	"	andl $0x7fffffff, %ebp\n"
-> > +#else
-> > +#define ENCODE_FRAME_POINTER
-> > +#endif
+> If KUnit is added to the kernel, and a subsystem that I am submitting
+> code for has chosen to use KUnit instead of kselftest, then yes, I do
+> *have* to use KUnit if my submission needs to contain a test for the
+> code unless I want to convince the maintainer that somehow my case
+> is special and I prefer to use kselftest instead of KUnittest.
+
+That's going to be between you and the maintainer.  Today, if you want
+to submit a substantive change to xfs or ext4, you're going to be
+asked to create test for that new feature using xfstests.  It doesn't
+matter that xfstests isn't in the kernel --- if that's what is
+required by the maintainer.
+
+> > supposed to be a simple way to run a large number of small tests that
+> > for specific small components in a system.
 > 
-> We should put these macros in a header file somewhere (including
-> stringified versions).
+> kselftest also supports running a subset of tests.  That subset of tests
+> can also be a large number of small tests.  There is nothing inherent
+> in KUnit vs kselftest in this regard, as far as I am aware.
 
-Probably a good idea. I'll frob them into asm/frame.h.
+The big difference is that kselftests are driven by a C program that
+runs in userspace.  Take a look at tools/testing/selftests/filesystem/dnotify_test.c
+it has a main(int argc, char *argv) function.
 
-Do the x86_64 variants also want some ORC annotation?
+In contrast, KUnit are fragments of C code which run in the kernel;
+not in userspace.  This allows us to test internal functions inside
+complex file system (such as the block allocator in ext4) directly.
+This makes it *fundamentally* different from kselftest.
+
+Cheers,
+
+						- Ted
