@@ -1,71 +1,123 @@
-From: joel at joelfernandes.org (Joel Fernandes)
-Date: Thu, 9 May 2019 18:47:43 -0400
-Subject: [PATCH v3] kheaders: Move from proc to sysfs
-In-Reply-To: <CAK7LNAQesyT-vspoGKdgRqycZfhtJm5Upx2T6ij-yB5i4Nx5nw@mail.gmail.com>
-References: <20190506013456.86061-1-joel@joelfernandes.org>
- <CAK7LNAQesyT-vspoGKdgRqycZfhtJm5Upx2T6ij-yB5i4Nx5nw@mail.gmail.com>
-Message-ID: <20190509224743.GA29215@google.com>
+From: frowand.list at gmail.com (Frank Rowand)
+Date: Wed, 8 May 2019 17:43:35 -0700
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20190507080119.GB28121@kroah.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
+ <20190507080119.GB28121@kroah.com>
+Message-ID: <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
 
-On Wed, May 08, 2019 at 12:43:34PM +0900, Masahiro Yamada wrote:
-> On Mon, May 6, 2019 at 10:37 AM Joel Fernandes (Google)
-> <joel at joelfernandes.org> wrote:
-> >
-> > The kheaders archive consisting of the kernel headers used for compiling
-> > bpf programs is in /proc. However there is concern that moving it here
-> > will make it permanent. Let us move it to /sys/kernel as discussed [1].
-> >
-> > [1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
-> >
-> > Suggested-by: Steven Rostedt <rostedt at goodmis.org>
-> > Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
-> > ---
-> > This patch applies on top of the previous patch that was applied to the
-> > driver tree:
-> > https://lore.kernel.org/patchwork/patch/1067310/
-> >
-> > v2->v3: Fixed sysfs file mode nit (Greg).
-> > v1->v2: Fixed some kconfig nits.
-> >
-> >  init/Kconfig                                | 16 ++++-----
-> >  kernel/Makefile                             |  4 +--
-> >  kernel/{gen_ikh_data.sh => gen_kheaders.sh} |  2 +-
-> >  kernel/kheaders.c                           | 40 +++++++++------------
-> >  4 files changed, 26 insertions(+), 36 deletions(-)
-> >  rename kernel/{gen_ikh_data.sh => gen_kheaders.sh} (98%)
-> >
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index 26a364a95b57..c3661991b089 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -579,15 +579,13 @@ config IKCONFIG_PROC
-> >           This option enables access to the kernel configuration file
-> >           through /proc/config.gz.
-> >
-> > -config IKHEADERS_PROC
-> > -       tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
-> > -       depends on PROC_FS
-> > -       help
-> > -         This option enables access to the kernel header and other artifacts that
-> > -         are generated during the build process. These can be used to build eBPF
-> > -         tracing programs, or similar programs.  If you build the headers as a
-> > -         module, a module called kheaders.ko is built which can be loaded on-demand
-> > -         to get access to the headers.
-> > +config IKHEADERS
-> > +       tristate "Enable kernel headers through /sys/kernel/kheaders.tar.xz"
+On 5/7/19 1:01 AM, Greg KH wrote:
+> On Mon, May 06, 2019 at 08:14:12PM -0700, Frank Rowand wrote:
+>> On 5/1/19 4:01 PM, Brendan Higgins wrote:
+>>> ## TLDR
+>>>
+>>> I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
+>>> 5.2.
+>>>
+>>> Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
+>>> we would merge through your tree when the time came? Am I remembering
+>>> correctly?
+>>>
+>>> ## Background
+>>>
+>>> This patch set proposes KUnit, a lightweight unit testing and mocking
+>>> framework for the Linux kernel.
+>>>
+>>> Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+>>> it does not require installing the kernel on a test machine or in a VM
+>>> and does not require tests to be written in userspace running on a host
+>>> kernel. Additionally, KUnit is fast: From invocation to completion KUnit
+>>> can run several dozen tests in under a second. Currently, the entire
+>>> KUnit test suite for KUnit runs in under a second from the initial
+>>> invocation (build time excluded).
+>>>
+>>> KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+>>> Googletest/Googlemock for C++. KUnit provides facilities for defining
+>>> unit test cases, grouping related test cases into test suites, providing
+>>> common infrastructure for running tests, mocking, spying, and much more.
+>>
+>> As a result of the emails replying to this patch thread, I am now
+>> starting to look at kselftest.  My level of understanding is based
+>> on some slide presentations, an LWN article, https://kselftest.wiki.kernel.org/
+>> and a _tiny_ bit of looking at kselftest code.
+>>
+>> tl;dr; I don't really understand kselftest yet.
+>>
+>>
+>> (1) why KUnit exists
+>>
+>>> ## What's so special about unit testing?
+>>>
+>>> A unit test is supposed to test a single unit of code in isolation,
+>>> hence the name. There should be no dependencies outside the control of
+>>> the test; this means no external dependencies, which makes tests orders
+>>> of magnitudes faster. Likewise, since there are no external dependencies,
+>>> there are no hoops to jump through to run the tests. Additionally, this
+>>> makes unit tests deterministic: a failing unit test always indicates a
+>>> problem. Finally, because unit tests necessarily have finer granularity,
+>>> they are able to test all code paths easily solving the classic problem
+>>> of difficulty in exercising error handling code.
+>>
+>> (2) KUnit is not meant to replace kselftest
+>>
+>>> ## Is KUnit trying to replace other testing frameworks for the kernel?
+>>>
+>>> No. Most existing tests for the Linux kernel are end-to-end tests, which
+>>> have their place. A well tested system has lots of unit tests, a
+>>> reasonable number of integration tests, and some end-to-end tests. KUnit
+>>> is just trying to address the unit test space which is currently not
+>>> being addressed.
+>>
+>> My understanding is that the intent of KUnit is to avoid booting a kernel on
+>> real hardware or in a virtual machine.  That seems to be a matter of semantics
+>> to me because isn't invoking a UML Linux just running the Linux kernel in
+>> a different form of virtualization?
+>>
+>> So I do not understand why KUnit is an improvement over kselftest.
+>>
+>> It seems to me that KUnit is just another piece of infrastructure that I
+>> am going to have to be familiar with as a kernel developer.  More overhead,
+>> more information to stuff into my tiny little brain.
+>>
+>> I would guess that some developers will focus on just one of the two test
+>> environments (and some will focus on both), splitting the development
+>> resources instead of pooling them on a common infrastructure.
+>>
+>> What am I missing?
 > 
+> kselftest provides no in-kernel framework for testing kernel code
+> specifically.  That should be what kunit provides, an "easy" way to
+> write in-kernel tests for things.
+
+kselftest provides a mechanism for in-kernel tests via modules.  For
+example, see:
+
+  tools/testing/selftests/vm/run_vmtests invokes:
+    tools/testing/selftests/vm/test_vmalloc.sh
+      loads module:
+        test_vmalloc
+        (which is built from lib/test_vmalloc.c if CONFIG_TEST_VMALLOC)
+
+A very quick and dirty search (likely to miss some tests) finds modules:
+
+  test_bitmap
+  test_bpf
+  test_firmware
+  test_printf
+  test_static_key_base
+  test_static_keys
+  test_user_copy
+  test_vmalloc
+
+-Frank
+
 > 
-> I suggested "depends on SYSFS" twice, both in v1 and v2.
+> Brendan, did I get it right?
 > 
-> https://lore.kernel.org/patchwork/patch/1069806/#1266147
-> https://lore.kernel.org/patchwork/patch/1070005/#1266279
-
-Sorry about missing that. I have made a note of this, and can address it in a
-later patch. There is a more pressing issue with allmodconfig regression
-times so I will look into that first. Also a vacation is taking up some of my
-time.
-
-Needless to say I will get to it soon and the point has been duly noted!
-
-thanks,
-
- - Joel
+> thanks,
+> 
+> greg k-h
+> .
+> 
