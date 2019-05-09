@@ -1,73 +1,62 @@
-From: tytso@mit.edu (Theodore Ts'o)
-Date: Fri, 10 May 2019 06:43:38 -0400
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <78e4d46e-6212-9871-51d6-dd2126f39d45@gmail.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
- <20190507080119.GB28121@kroah.com>
- <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
- <20190509015856.GB7031@mit.edu>
- <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <78e4d46e-6212-9871-51d6-dd2126f39d45@gmail.com>
-Message-ID: <20190510104338.GB6889@mit.edu>
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Thu, 9 May 2019 13:43:16 -0400
+Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
+In-Reply-To: <81170F0B-A2BB-4CD6-A1B5-5E7E0DDBC282@amacapital.net>
+References: <20190508074901.982470324@infradead.org>
+ <20190508080612.721269814@infradead.org>
+ <20190508115416.nblx7c2kocidpytm@treble>
+ <20190508120416.GL2589@hirez.programming.kicks-ass.net>
+ <20190508124248.u5ukpbhnh4wpiccq@treble>
+ <20190508153907.GM2589@hirez.programming.kicks-ass.net>
+ <20190508184848.qerg3flv3ej3xsev@treble>
+ <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
+ <20190509081431.GO2589@hirez.programming.kicks-ass.net>
+ <81170F0B-A2BB-4CD6-A1B5-5E7E0DDBC282@amacapital.net>
+Message-ID: <20190509174316.pzuakeu657g3fnlm@home.goodmis.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190510104338.PfimmRx5Ymoh2KdcX5A0vMmR8gp6KNMq7YFgv5NzHyQ@z>
+Message-ID: <20190509174316.Ybd9o5JFngepXywuG5CYuIzBxBGBvecuJ_P3Dsafd78@z>
 
-On Thu, May 09, 2019@10:11:01PM -0700, Frank Rowand wrote:
-> >> You *can* run in-kernel test using modules; but there is no framework
-> >> for the in-kernel code found in the test modules, which means each of
-> >> the in-kernel code has to create their own in-kernel test
-> >> infrastructure.
+On Thu, May 09, 2019@09:20:06AM -0700, Andy Lutomirski wrote:
+> > +END(call_to_exception_trampoline)
+> > --- a/arch/x86/kernel/kprobes/core.c
+> > +++ b/arch/x86/kernel/kprobes/core.c
+> > @@ -731,29 +731,8 @@ asm(
+> >    ".global kretprobe_trampoline\n"
+> >    ".type kretprobe_trampoline, @function\n"
+> >    "kretprobe_trampoline:\n"
+> > -    /* We don't bother saving the ss register */
+> > -#ifdef CONFIG_X86_64
+> > -    "    pushq %rsp\n"
+> > -    "    pushfq\n"
+> > -    SAVE_REGS_STRING
+> > -    "    movq %rsp, %rdi\n"
+> > -    "    call trampoline_handler\n"
+> > -    /* Replace saved sp with true return address. */
+> > -    "    movq %rax, 19*8(%rsp)\n"
+> > -    RESTORE_REGS_STRING
+> > -    "    popfq\n"
+> > -#else
+> > -    "    pushl %esp\n"
+> > -    "    pushfl\n"
+> > -    SAVE_REGS_STRING
+> > -    "    movl %esp, %eax\n"
+> > -    "    call trampoline_handler\n"
+> > -    /* Replace saved sp with true return address. */
+> > -    "    movl %eax, 15*4(%esp)\n"
+> > -    RESTORE_REGS_STRING
+> > -    "    popfl\n"
+> > -#endif
+> > -    "    ret\n"
+> > +    "push trampoline_handler\n"
+> > +    "jmp call_to_exception_trampoline\n"
+> >    ".size kretprobe_trampoline, .-kretprobe_trampoline\n"
+> > );
 > 
-> The kselftest in-kernel tests follow a common pattern.  As such, there
-> is a framework.
-
-So we may have different definitions of "framework".  In my book, code
-reuse by "cut and paste" does not make a framework.  Could they be
-rewritten to *use* a framework, whether it be KTF or KUnit?  Sure!
-But they are not using a framework *today*.
-
-> This next two paragraphs you ignored entirely in your reply:
 > 
-> > Why create an entire new subsystem (KUnit) when you can add a header
-> > file (and .c code as appropriate) that outputs the proper TAP formatted
-> > results from kselftest kernel test modules?
+> Potentially minor nit: you’re doing popfl, but you’re not doing TRACE_IRQ_whatever.  This makes me think that you should either add the tracing (ugh!) or you should maybe just skip the popfl.
 
-And you keep ignoring my main observation, which is that spinning up a
-VM, letting systemd start, mounting a root file system, etc., is all
-unnecessary overhead which takes time.  This is important to me,
-because developer velocity is extremely important if you are doing
-test driven development.
 
-Yes, you can manually unload a module, recompile the module, somehow
-get the module back into the VM (perhaps by using virtio-9p), and then
-reloading the module with the in-kernel test code, and the restart the
-test.  BUT: (a) even if it is faster, it requires a lot of manual
-steps, and would be very hard to automate, and (b) if the test code
-ever OOPS or triggers a lockdep warning, you will need to restart the
-VM, and so this involves all of the VM restart overhead, plus trying
-to automate determining when you actually do need to restart the VM
-versus unloading and reloading the module.   It's clunky.
+Note, kprobes (and ftrace for that matter) are not saving flags for
+interrupts, but because it must not modify the sign, zero and carry flags.
 
-Being able to do the equivalent of "make && make check" is a really
-big deal.  And "make check" needs to go fast.
-
-You keep ignore this point, perhaps because you don't care about this
-issue?  Which is fine, and why we may just need to agree to disagree.
-
-Cheers,
-
-						- Ted
-
-P.S.  Running scripts is Turing-equivalent, so it's self-evident that
-*anything* you can do with other test frameworks you can somehow do in
-kselftests.  That argument doesn't impress me, and why I do consider
-it quite flippant.  (Heck, /bin/vi is Turing equivalent so we could
-use vi to as a kernel test framework.  Or we could use emacs.  Let's
-not.  :-)
-
-The question is whether it is the most best and most efficient way to
-do that testing.  And developer velocity is a really big part of my
-evaluation function when judging whether or a test framework is fit
-for that purpose.
+-- Steve
