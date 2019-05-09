@@ -1,36 +1,107 @@
-From: tytso@mit.edu (Theodore Ts'o)
-Date: Fri, 10 May 2019 00:47:43 -0400
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <8914afef-1e66-e6e3-f891-5855768d3018@deltatee.com>
-References: <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu>
- <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
- <20190509214233.GA20877@mit.edu>
- <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
- <20190509233043.GC20877@mit.edu>
- <8914afef-1e66-e6e3-f891-5855768d3018@deltatee.com>
-Message-ID: <20190510044743.GA6889@mit.edu>
+From: peterz@infradead.org (Peter Zijlstra)
+Date: Thu, 9 May 2019 19:18:40 +0200
+Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
+In-Reply-To: <81170F0B-A2BB-4CD6-A1B5-5E7E0DDBC282@amacapital.net>
+References: <20190508074901.982470324@infradead.org>
+ <20190508080612.721269814@infradead.org>
+ <20190508115416.nblx7c2kocidpytm@treble>
+ <20190508120416.GL2589@hirez.programming.kicks-ass.net>
+ <20190508124248.u5ukpbhnh4wpiccq@treble>
+ <20190508153907.GM2589@hirez.programming.kicks-ass.net>
+ <20190508184848.qerg3flv3ej3xsev@treble>
+ <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
+ <20190509081431.GO2589@hirez.programming.kicks-ass.net>
+ <81170F0B-A2BB-4CD6-A1B5-5E7E0DDBC282@amacapital.net>
+Message-ID: <20190509171840.GZ2623@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190510044743.om4cQepB6PxHMAyIDkPkR0hLDIpvLQFvKpYoZ7vcTL0@z>
+Message-ID: <20190509171840.V10aAN0wUAWNa_LsdQIZKP9B1Emkpa8utfx9OVFMzjE@z>
 
-On Thu, May 09, 2019@05:40:48PM -0600, Logan Gunthorpe wrote:
-> 
-> Based on some of the other commenters, I was under the impression that
-> kselftests had in-kernel tests but I'm not sure where or if they exist. If
-> they do exists, it seems like it would make sense to convert those to kunit
-> and have Kunit tests run-able in a VM or baremetal instance.
+On Thu, May 09, 2019@09:20:06AM -0700, Andy Lutomirski wrote:
+> > +ENTRY(call_to_exception_trampoline)
+> > +    /*
+> > +     * On entry the stack looks like:
+> > +     *
+> > +     *   2*4(%esp) <previous context>
+> > +     *   1*4(%esp) RET-IP
+> > +     *   0*4(%esp) func
+> > +     *
+> > +     * transform this into:
+> > +     *
+> > +     *  19*4(%esp) <previous context>
+> > +     *  18*4(%esp) gap / RET-IP
+> > +     *  17*4(%esp) gap / func
+> > +     *  16*4(%esp) ss
+> > +     *  15*4(%esp) sp / <previous context>
+> > +     *  14*4(%esp) flags
+> > +     *  13*4(%esp) cs
+> > +     *  12*4(%esp) ip / RET-IP
+> > +     *  11*4(%esp) orig_eax
+> > +     *  10*4(%esp) gs
+> > +     *   9*4(%esp) fs
+> > +     *   8*4(%esp) es
+> > +     *   7*4(%esp) ds
+> > +     *   6*4(%esp) eax
+> > +     *   5*4(%esp) ebp
+> > +     *   4*4(%esp) edi
+> > +     *   3*4(%esp) esi
+> > +     *   2*4(%esp) edx
+> > +     *   1*4(%esp) ecx
+> > +     *   0*4(%esp) ebx
+> > +     */
+> > +    pushl    %ss
+> > +    pushl    %esp        # points at ss
+> > +    addl    $3*4, (%esp)    #   point it at <previous context>
+> > +    pushfl
+> > +    pushl    %cs
+> > +    pushl    5*4(%esp)    # RET-IP
+> > +    subl    5, (%esp)    #   point at CALL instruction
+> > +    pushl    $-1
+> > +    pushl    %gs
+> > +    pushl    %fs
+> > +    pushl    %es
+> > +    pushl    %ds
+> > +    pushl    %eax
+> > +    pushl    %ebp
+> > +    pushl    %edi
+> > +    pushl    %esi
+> > +    pushl    %edx
+> > +    pushl    %ecx
+> > +    pushl    %ebx
+> > +
+> > +    ENCODE_FRAME_POINTER
+> > +
+> > +    movl    %esp, %eax    # 1st argument: pt_regs
+> > +
+> > +    movl    17*4(%esp), %ebx    # func
+> > +    CALL_NOSPEC %ebx
+> > +
+> > +    movl    PT_OLDESP(%esp), %eax
+> > +
+> > +    movl    PT_EIP(%esp), %ecx
+> > +    movl    %ecx, -1*4(%eax)
+> > +
+> > +    movl    PT_EFLAGS(%esp), %ecx
+> > +    movl    %ecx, -2*4(%eax)
+> > +
+> > +    movl    PT_EAX(%esp), %ecx
+> > +    movl    %ecx, -3*4(%eax)
+> > +
+> > +    popl    %ebx
+> > +    popl    %ecx
+> > +    popl    %edx
+> > +    popl    %esi
+> > +    popl    %edi
+> > +    popl    %ebp
+> > +
+> > +    lea    -3*4(%eax), %esp
+> > +    popl    %eax
+> > +    popfl
+> > +    ret
+> > +END(call_to_exception_trampoline)
 
-There are kselftests tests which are shell scripts which load a
-module, and the module runs the in-kernel code.  However, I didn't see
-much infrastructure for the in-kernel test code; the one or two test
-modules called from kselftests looked pretty ad hoc to me.
+> Potentially minor nit: you’re doing popfl, but you’re not doing
+> TRACE_IRQ_whatever.  This makes me think that you should either add
+> the tracing (ugh!) or you should maybe just skip the popfl.
 
-That's why I used the "vise grips" analogy.  You can use a pair of
-vise grips like a monkey wrench; but it's not really a monkey wrench,
-and might not be the best tool to loosen or tighten nuts and bolts.
-
-       	   	     	       	   - Ted
+Yeah, so we really should not change flags I suppose. If this lives I'll
+remove the popfl.
