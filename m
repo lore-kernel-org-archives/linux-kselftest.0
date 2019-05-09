@@ -1,7 +1,7 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Thu, 9 May 2019 13:43:16 -0400
+From: jpoimboe@redhat.com (Josh Poimboeuf)
+Date: Thu, 9 May 2019 09:00:01 -0500
 Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-In-Reply-To: <81170F0B-A2BB-4CD6-A1B5-5E7E0DDBC282@amacapital.net>
+In-Reply-To: <20190509081431.GO2589@hirez.programming.kicks-ass.net>
 References: <20190508074901.982470324@infradead.org>
  <20190508080612.721269814@infradead.org>
  <20190508115416.nblx7c2kocidpytm@treble>
@@ -11,52 +11,48 @@ References: <20190508074901.982470324@infradead.org>
  <20190508184848.qerg3flv3ej3xsev@treble>
  <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
  <20190509081431.GO2589@hirez.programming.kicks-ass.net>
- <81170F0B-A2BB-4CD6-A1B5-5E7E0DDBC282@amacapital.net>
-Message-ID: <20190509174316.pzuakeu657g3fnlm@home.goodmis.org>
+Message-ID: <20190509140001.fvwzlnhai6ddqjmt@treble>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190509174316.Ybd9o5JFngepXywuG5CYuIzBxBGBvecuJ_P3Dsafd78@z>
+Message-ID: <20190509140001.xSmddJDE5umbQt1ahBITIBe7Bi6K7W_LharZSMTKv98@z>
 
-On Thu, May 09, 2019@09:20:06AM -0700, Andy Lutomirski wrote:
-> > +END(call_to_exception_trampoline)
-> > --- a/arch/x86/kernel/kprobes/core.c
-> > +++ b/arch/x86/kernel/kprobes/core.c
-> > @@ -731,29 +731,8 @@ asm(
-> >    ".global kretprobe_trampoline\n"
-> >    ".type kretprobe_trampoline, @function\n"
-> >    "kretprobe_trampoline:\n"
-> > -    /* We don't bother saving the ss register */
-> > -#ifdef CONFIG_X86_64
-> > -    "    pushq %rsp\n"
-> > -    "    pushfq\n"
-> > -    SAVE_REGS_STRING
-> > -    "    movq %rsp, %rdi\n"
-> > -    "    call trampoline_handler\n"
-> > -    /* Replace saved sp with true return address. */
-> > -    "    movq %rax, 19*8(%rsp)\n"
-> > -    RESTORE_REGS_STRING
-> > -    "    popfq\n"
-> > -#else
-> > -    "    pushl %esp\n"
-> > -    "    pushfl\n"
-> > -    SAVE_REGS_STRING
-> > -    "    movl %esp, %eax\n"
-> > -    "    call trampoline_handler\n"
-> > -    /* Replace saved sp with true return address. */
-> > -    "    movl %eax, 15*4(%esp)\n"
-> > -    RESTORE_REGS_STRING
-> > -    "    popfl\n"
-> > -#endif
-> > -    "    ret\n"
-> > +    "push trampoline_handler\n"
-> > +    "jmp call_to_exception_trampoline\n"
-> >    ".size kretprobe_trampoline, .-kretprobe_trampoline\n"
-> > );
+On Thu, May 09, 2019@10:14:31AM +0200, Peter Zijlstra wrote:
+> But what I'd love to do is something like the belwo patch, and make all
+> the trampolines (very much including ftrace) use that. Such that we then
+> only have 1 copy of this magic (well, 2 because x86_64 also needs an
+> implementation of this of course).
 > 
+> Changing ftrace over to this would be a little more work but it can
+> easily chain things a little to get its original context back:
 > 
-> Potentially minor nit: you’re doing popfl, but you’re not doing TRACE_IRQ_whatever.  This makes me think that you should either add the tracing (ugh!) or you should maybe just skip the popfl.
+> ENTRY(ftrace_regs_caller)
+> GLOBAL(ftrace_regs_func)
+> 	push ftrace_stub
+> 	push ftrace_regs_handler
+> 	jmp call_to_exception_trampoline
+> END(ftrace_regs_caller)
+> 
+> typedef void (*ftrace_func_t)(unsigned long, unsigned long, struct ftrace_op *, struct pt_regs *);
+> 
+> struct ftrace_regs_stack {
+> 	ftrace_func_t func;
+> 	unsigned long parent_ip;
+> };
+> 
+> void ftrace_regs_handler(struct pr_regs *regs)
+> {
+> 	struct ftrace_regs_stack *st = (void *)regs->sp;
+> 	ftrace_func_t func = st->func;
+> 
+> 	regs->sp += sizeof(long); /* pop func */
+> 
+> 	func(regs->ip, st->parent_ip, function_trace_op, regs);
+> }
+> 
+> Hmm? I didn't look into the function_graph thing, but I imagine it can
+> be added without too much pain.
 
+I like this patch a lot, assuming it can be made to work for the
+different users.
 
-Note, kprobes (and ftrace for that matter) are not saving flags for
-interrupts, but because it must not modify the sign, zero and carry flags.
-
--- Steve
+-- 
+Josh
