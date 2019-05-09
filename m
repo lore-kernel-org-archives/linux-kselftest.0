@@ -1,50 +1,76 @@
-From: yamada.masahiro at socionext.com (Masahiro Yamada)
-Date: Fri, 10 May 2019 19:30:24 +0900
-Subject: [PATCH v2 06/17] kbuild: enable building KUnit
-In-Reply-To: <CAFd5g47BNZ0gRz4SXb37XjyXF_LyNZrSmoqDbzaaCUrTg3O7Yg@mail.gmail.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-7-brendanhiggins@google.com>
- <CAK7LNAQ+SRMn8UFjW1dZv_TrL0qjD2v2S=rXgtUpiA-urr1DDA@mail.gmail.com>
- <CAFd5g47BNZ0gRz4SXb37XjyXF_LyNZrSmoqDbzaaCUrTg3O7Yg@mail.gmail.com>
-Message-ID: <CAK7LNAR3DW5UxtsTNtW6mtQic8cukJwJ18=KitC2HX+jO5eo4g@mail.gmail.com>
+From: mhiramat at kernel.org (Masami Hiramatsu)
+Date: Thu, 9 May 2019 10:20:30 +0900
+Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
+In-Reply-To: <20190508184848.qerg3flv3ej3xsev@treble>
+References: <20190508074901.982470324@infradead.org>
+ <20190508080612.721269814@infradead.org>
+ <20190508115416.nblx7c2kocidpytm@treble>
+ <20190508120416.GL2589@hirez.programming.kicks-ass.net>
+ <20190508124248.u5ukpbhnh4wpiccq@treble>
+ <20190508153907.GM2589@hirez.programming.kicks-ass.net>
+ <20190508184848.qerg3flv3ej3xsev@treble>
+Message-ID: <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
 
-On Fri, May 10, 2019 at 7:27 PM Brendan Higgins
-<brendanhiggins at google.com> wrote:
->
-> > On Thu, May 2, 2019 at 8:03 AM Brendan Higgins
-> > <brendanhiggins at google.com> wrote:
-> > >
-> > > Add KUnit to root Kconfig and Makefile allowing it to actually be built.
-> > >
-> > > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> >
-> > You need to make sure
-> > to not break git-bisect'abililty.
-> >
-> >
-> > With this commit, I see build error.
-> >
-> >   CC      kunit/test.o
-> > kunit/test.c:11:10: fatal error: os.h: No such file or directory
-> >  #include <os.h>
-> >           ^~~~~~
-> > compilation terminated.
-> > make[1]: *** [scripts/Makefile.build;279: kunit/test.o] Error 1
-> > make: *** [Makefile;1763: kunit/] Error 2
->
-> Nice catch! That header shouldn't even be in there.
->
-> Sorry about that. I will have it fixed in the next revision.
+Hi Josh,
 
+On Wed, 8 May 2019 13:48:48 -0500
+Josh Poimboeuf <jpoimboe at redhat.com> wrote:
 
-BTW, I applied whole of this series
-to my kernel.org repository.
+> On Wed, May 08, 2019 at 05:39:07PM +0200, Peter Zijlstra wrote:
+> > On Wed, May 08, 2019 at 07:42:48AM -0500, Josh Poimboeuf wrote:
+> > > On Wed, May 08, 2019 at 02:04:16PM +0200, Peter Zijlstra wrote:
+> > 
+> > > > Do the x86_64 variants also want some ORC annotation?
+> > > 
+> > > Maybe so.  Though it looks like regs->ip isn't saved.  The saved
+> > > registers might need to be tweaked.  I'll need to look into it.
+> > 
+> > What all these sites do (and maybe we should look at unifying them
+> > somehow) is turn a CALL frame (aka RET-IP) into an exception frame (aka
+> > pt_regs).
+> > 
+> > So regs->ip will be the return address (which is fixed up to be the CALL
+> > address in the handler).
+> 
+> But from what I can tell, trampoline_handler() hard-codes regs->ip to
+> point to kretprobe_trampoline(), and the original return address is
+> placed in regs->sp.
+> 
+> Masami, is there a reason why regs->ip doesn't have the original return
+> address and regs->sp doesn't have the original SP?  I think that would
+> help the unwinder understand things.
 
-0day bot started to report issues.
-I hope several reports reached you,
-and they are useful to fix your code.
+Yes, for regs->ip, there is a histrical reason. Since previously, we had
+an int3 at trampoline, so the user (kretprobe) handler expects that
+regs->ip is trampoline address and ri->ret_addr is original return address.
+It is better to check the other archs, but I think it is possible to
+change the regs->ip to original return address, since no one cares such
+"fixed address". :)
 
+For the regs->sp, there are 2 reasons.
+
+For x86-64, it's just for over-optimizing (reduce stack usage).
+I think we can make a gap for putting return address, something like
+
+	"kretprobe_trampoline:\n"
+#ifdef CONFIG_X86_64
+	"	pushq %rsp\n"	/* Make a gap for return address */
+	"	pushq 0(%rsp)\n"	/* Copy original stack pointer */
+	"	pushfq\n"
+	SAVE_REGS_STRING
+	"	movq %rsp, %rdi\n"
+	"	call trampoline_handler\n"
+	/* Push the true return address to the bottom */
+	"	movq %rax, 20*8(%rsp)\n"
+	RESTORE_REGS_STRING
+	"	popfq\n"
+	"	addq $8, %rsp\n"	/* Skip original stack pointer */
+
+For i386 (x86-32), there is no other way to keep &regs->sp as
+the original stack pointer. It has to be changed with this series,
+maybe as same as x86-64.
+
+Thank you,
 
 -- 
-Best Regards
-Masahiro Yamada
+Masami Hiramatsu <mhiramat at kernel.org>
