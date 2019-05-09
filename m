@@ -1,202 +1,314 @@
-From: ldv@altlinux.org (Dmitry V. Levin)
-Date: Fri, 10 May 2019 18:26:40 +0300
-Subject: [PATCH v11 0/7] ptrace: add PTRACE_GET_SYSCALL_INFO request
-Message-ID: <20190510152640.GA28529@altlinux.org>
+From: mhiramat@kernel.org (Masami Hiramatsu)
+Date: Thu, 9 May 2019 23:01:06 +0900
+Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
+In-Reply-To: <20190509081431.GO2589@hirez.programming.kicks-ass.net>
+References: <20190508074901.982470324@infradead.org>
+ <20190508080612.721269814@infradead.org>
+ <20190508115416.nblx7c2kocidpytm@treble>
+ <20190508120416.GL2589@hirez.programming.kicks-ass.net>
+ <20190508124248.u5ukpbhnh4wpiccq@treble>
+ <20190508153907.GM2589@hirez.programming.kicks-ass.net>
+ <20190508184848.qerg3flv3ej3xsev@treble>
+ <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
+ <20190509081431.GO2589@hirez.programming.kicks-ass.net>
+Message-ID: <20190509230106.3551b08553440d125e437f66@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190510152640.5-HNAdQKzyE68sThuNkjlsMcsu2YVESeimzHzaUZS0Y@z>
+Message-ID: <20190509140106.iwFA0qydc6_ZX3Tx_53AbJlITQazwQ34ekKW9N6jWyk@z>
 
-[Andrew, could you take this patchset into your tree, please?
+On Thu, 9 May 2019 10:14:31 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-Besides the patch for hexagon, all patches in this series have
-Acked-by or Reviewed-by tags already.
+> On Thu, May 09, 2019@10:20:30AM +0900, Masami Hiramatsu wrote:
+> > Hi Josh,
+> > 
+> > On Wed, 8 May 2019 13:48:48 -0500
+> > Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+> > 
+> > > On Wed, May 08, 2019@05:39:07PM +0200, Peter Zijlstra wrote:
+> > > > On Wed, May 08, 2019@07:42:48AM -0500, Josh Poimboeuf wrote:
+> > > > > On Wed, May 08, 2019@02:04:16PM +0200, Peter Zijlstra wrote:
+> > > > 
+> > > > > > Do the x86_64 variants also want some ORC annotation?
+> > > > > 
+> > > > > Maybe so.  Though it looks like regs->ip isn't saved.  The saved
+> > > > > registers might need to be tweaked.  I'll need to look into it.
+> > > > 
+> > > > What all these sites do (and maybe we should look at unifying them
+> > > > somehow) is turn a CALL frame (aka RET-IP) into an exception frame (aka
+> > > > pt_regs).
+> > > > 
+> > > > So regs->ip will be the return address (which is fixed up to be the CALL
+> > > > address in the handler).
+> > > 
+> > > But from what I can tell, trampoline_handler() hard-codes regs->ip to
+> > > point to kretprobe_trampoline(), and the original return address is
+> > > placed in regs->sp.
+> > > 
+> > > Masami, is there a reason why regs->ip doesn't have the original return
+> > > address and regs->sp doesn't have the original SP?  I think that would
+> > > help the unwinder understand things.
+> > 
+> > Yes, for regs->ip, there is a histrical reason. Since previously, we had
+> > an int3 at trampoline, so the user (kretprobe) handler expects that
+> > regs->ip is trampoline address and ri->ret_addr is original return address.
+> > It is better to check the other archs, but I think it is possible to
+> > change the regs->ip to original return address, since no one cares such
+> > "fixed address". :)
+> > 
+> > For the regs->sp, there are 2 reasons.
+> > 
+> > For x86-64, it's just for over-optimizing (reduce stack usage).
+> > I think we can make a gap for putting return address, something like
+> > 
+> > 	"kretprobe_trampoline:\n"
+> > #ifdef CONFIG_X86_64
+> > 	"	pushq %rsp\n"	/* Make a gap for return address */
+> > 	"	pushq 0(%rsp)\n"	/* Copy original stack pointer */
+> > 	"	pushfq\n"
+> > 	SAVE_REGS_STRING
+> > 	"	movq %rsp, %rdi\n"
+> > 	"	call trampoline_handler\n"
+> > 	/* Push the true return address to the bottom */
+> > 	"	movq %rax, 20*8(%rsp)\n"
+> > 	RESTORE_REGS_STRING
+> > 	"	popfq\n"
+> > 	"	addq $8, %rsp\n"	/* Skip original stack pointer */
+> > 
+> > For i386 (x86-32), there is no other way to keep &regs->sp as
+> > the original stack pointer. It has to be changed with this series,
+> > maybe as same as x86-64.
+> 
+> Right; I already fixed that in my patch changing i386's pt_regs.
 
-I have been waiting and pinging the hexagon maintainer since November
-without any visible effect.  The last Acked-by from the hexagon maintainer
-in linux.git was in October and the last Signed-off-by was in July.  Since
-that time not a single change affecting hexagon was able to attract
-attention of the hexagon maintainer, so I don't think it's worth waiting
-any longer.]
+I see it, and it is good to me. :)
 
-PTRACE_GET_SYSCALL_INFO is a generic ptrace API that lets ptracer obtain
-details of the syscall the tracee is blocked in.
+> But what I'd love to do is something like the belwo patch, and make all
+> the trampolines (very much including ftrace) use that. Such that we then
+> only have 1 copy of this magic (well, 2 because x86_64 also needs an
+> implementation of this of course).
 
-There are two reasons for a special syscall-related ptrace request.
+OK, but I will make kretprobe integrated with func-graph tracer,
+since it is inefficient that we have 2 different hidden return stack...
 
-Firstly, with the current ptrace API there are cases when ptracer cannot
-retrieve necessary information about syscalls.  Some examples include:
-* The notorious int-0x80-from-64-bit-task issue.  See [1] for details.
-In short, if a 64-bit task performs a syscall through int 0x80, its tracer
-has no reliable means to find out that the syscall was, in fact,
-a compat syscall, and misidentifies it.
-* Syscall-enter-stop and syscall-exit-stop look the same for the tracer.
-Common practice is to keep track of the sequence of ptrace-stops in order
-not to mix the two syscall-stops up.  But it is not as simple as it looks;
-for example, strace had a (just recently fixed) long-standing bug where
-attaching strace to a tracee that is performing the execve system call
-led to the tracer identifying the following syscall-exit-stop as
-syscall-enter-stop, which messed up all the state tracking.
-* Since the introduction of commit 84d77d3f06e7e8dea057d10e8ec77ad71f721be3
-("ptrace: Don't allow accessing an undumpable mm"), both PTRACE_PEEKDATA
-and process_vm_readv become unavailable when the process dumpable flag
-is cleared.  On such architectures as ia64 this results in all syscall
-arguments being unavailable for the tracer.
+Anyway,
 
-Secondly, ptracers also have to support a lot of arch-specific code for
-obtaining information about the tracee.  For some architectures, this
-requires a ptrace(PTRACE_PEEKUSER, ...) invocation for every syscall
-argument and return value.
+> Changing ftrace over to this would be a little more work but it can
+> easily chain things a little to get its original context back:
+> 
+> ENTRY(ftrace_regs_caller)
+> GLOBAL(ftrace_regs_func)
+> 	push ftrace_stub
+> 	push ftrace_regs_handler
+> 	jmp call_to_exception_trampoline
+> END(ftrace_regs_caller)
+> 
+> typedef void (*ftrace_func_t)(unsigned long, unsigned long, struct ftrace_op *, struct pt_regs *);
+> 
+> struct ftrace_regs_stack {
+> 	ftrace_func_t func;
+> 	unsigned long parent_ip;
+> };
+> 
+> void ftrace_regs_handler(struct pr_regs *regs)
+> {
+> 	struct ftrace_regs_stack *st = (void *)regs->sp;
+> 	ftrace_func_t func = st->func;
+> 
+> 	regs->sp += sizeof(long); /* pop func */
 
-PTRACE_GET_SYSCALL_INFO returns the following structure:
+Sorry, why pop here? 
 
-struct ptrace_syscall_info {
-	__u8 op;	/* PTRACE_SYSCALL_INFO_* */
-	__u32 arch __attribute__((__aligned__(sizeof(__u32))));
-	__u64 instruction_pointer;
-	__u64 stack_pointer;
-	union {
-		struct {
-			__u64 nr;
-			__u64 args[6];
-		} entry;
-		struct {
-			__s64 rval;
-			__u8 is_error;
-		} exit;
-		struct {
-			__u64 nr;
-			__u64 args[6];
-			__u32 ret_data;
-		} seccomp;
-	};
-};
+> 
+> 	func(regs->ip, st->parent_ip, function_trace_op, regs);
+> }
+> 
+> Hmm? I didn't look into the function_graph thing, but I imagine it can
+> be added without too much pain.
 
-The structure was chosen according to [2], except for the following
-changes:
-* seccomp substructure was added as a superset of entry substructure;
-* the type of nr field was changed from int to __u64 because syscall
-numbers are, as a practical matter, 64 bits;
-* stack_pointer field was added along with instruction_pointer field
-since it is readily available and can save the tracer from extra
-PTRACE_GETREGS/PTRACE_GETREGSET calls;
-* arch is always initialized to aid with tracing system calls
-* such as execve();
-* instruction_pointer and stack_pointer are always initialized
-so they could be easily obtained for non-syscall stops;
-* a boolean is_error field was added along with rval field, this way
-the tracer can more reliably distinguish a return value
-from an error value.
+Yes, that should be good for function_graph trampoline too.
+We use very similar technic.
 
-strace has been ported to PTRACE_GET_SYSCALL_INFO.
-Starting with release 4.26, strace uses PTRACE_GET_SYSCALL_INFO API
-as the preferred mechanism of obtaining syscall information.
+> 
+> ---
+> --- a/arch/x86/entry/entry_32.S
+> +++ b/arch/x86/entry/entry_32.S
+> @@ -1576,3 +1576,100 @@ ENTRY(rewind_stack_do_exit)
+>  	call	do_exit
+>  1:	jmp 1b
+>  END(rewind_stack_do_exit)
+> +
+> +/*
+> + * Transforms a CALL frame into an exception frame; IOW it pretends the CALL we
+> + * just did was in fact scribbled with an INT3.
+> + *
+> + * Use this trampoline like:
+> + *
+> + *   PUSH $func
+> + *   JMP call_to_exception_trampoline
+> + *
+> + * $func will see regs->ip point at the CALL instruction and must therefore
+> + * modify regs->ip in order to make progress (just like a normal INT3 scribbled
+> + * CALL).
+> + *
+> + * NOTE: we do not restore any of the segment registers.
+> + */
+> +ENTRY(call_to_exception_trampoline)
+> +	/*
+> +	 * On entry the stack looks like:
+> +	 *
+> +	 *   2*4(%esp) <previous context>
+> +	 *   1*4(%esp) RET-IP
+> +	 *   0*4(%esp) func
+> +	 *
+> +	 * transform this into:
+> +	 *
+> +	 *  19*4(%esp) <previous context>
+> +	 *  18*4(%esp) gap / RET-IP
+> +	 *  17*4(%esp) gap / func
+> +	 *  16*4(%esp) ss
+> +	 *  15*415*4(%esp) sp / <previous context>
 
-[1] https://lore.kernel.org/lkml/CA+55aFzcSVmdDj9Lh_gdbz1OzHyEm6ZrGPBDAJnywm2LF_eVyg at mail.gmail.com/
-[2] https://lore.kernel.org/lkml/CAObL_7GM0n80N7J_DFw_eQyfLyzq+sf4y2AvsCCV88Tb3AwEHA at mail.gmail.com/
+isn't this "&<previous context>" ?
 
----
+> +	 *  14*4(%esp) flags
+> +	 *  13*4(%esp) cs
+> +	 *  12*4(%esp) ip / RET-IP
+> +	 *  11*4(%esp) orig_eax
+> +	 *  10*4(%esp) gs
+> +	 *   9*4(%esp) fs
+> +	 *   8*4(%esp) es
+> +	 *   7*4(%esp) ds
+> +	 *   6*4(%esp) eax
+> +	 *   5*4(%esp) ebp
+> +	 *   4*4(%esp) edi
+> +	 *   3*4(%esp) esi
+> +	 *   2*4(%esp) edx
+> +	 *   1*4(%esp) ecx
+> +	 *   0*4(%esp) ebx
+> +	 */
+> +	pushl	%ss
+> +	pushl	%esp		# points at ss
+> +	addl	$3*4, (%esp)	#   point it at <previous context>
+> +	pushfl
+> +	pushl	%cs
+> +	pushl	5*4(%esp)	# RET-IP
+> +	subl	5, (%esp)	#   point at CALL instruction
+> +	pushl	$-1
+> +	pushl	%gs
+> +	pushl	%fs
+> +	pushl	%es
+> +	pushl	%ds
+> +	pushl	%eax
+> +	pushl	%ebp
+> +	pushl	%edi
+> +	pushl	%esi
+> +	pushl	%edx
+> +	pushl	%ecx
+> +	pushl	%ebx
+> +
+> +	ENCODE_FRAME_POINTER
+> +
+> +	movl	%esp, %eax	# 1st argument: pt_regs
+> +
+> +	movl	17*4(%esp), %ebx	# func
+> +	CALL_NOSPEC %ebx
+> +
+> +	movl	PT_OLDESP(%esp), %eax
 
-Notes:
-    v11:
-    * Added more Acked-by.
-    * Rebased back to mainline as the prerequisite syscall_get_arch patchset
-      has already been merged via audit tree.
+Is PT_OLDESP(%esp) "<previous context>" or "&<previous contex>"?
 
-    v10:
-    * Added more Acked-by.
+> +
+> +	movl	PT_EIP(%esp), %ecx
+> +	movl	%ecx, -1*4(%eax)
 
-    v9:
-    * Rebased to linux-next again due to syscall_get_arguments() signature change.
+Ah, OK, so $func must set the true return address to regs->ip
+instead of returning it.
 
-    v8:
-    * Moved syscall_get_arch() specific patches to a separate patchset
-      which is now merged into audit/next tree.
-    * Rebased to linux-next.
-    * Moved ptrace_get_syscall_info code under #ifdef CONFIG_HAVE_ARCH_TRACEHOOK,
-      narrowing down the set of architectures supported by this implementation
-      back to those 19 that enable CONFIG_HAVE_ARCH_TRACEHOOK because
-      I failed to get all syscall_get_*(), instruction_pointer(),
-      and user_stack_pointer() functions implemented on some niche
-      architectures.  This leaves the following architectures out:
-      alpha, h8300, m68k, microblaze, and unicore32.
+> +
+> +	movl	PT_EFLAGS(%esp), %ecx
+> +	movl	%ecx, -2*4(%eax)
+> +
+> +	movl	PT_EAX(%esp), %ecx
+> +	movl	%ecx, -3*4(%eax)
 
-    v7:
-    * Rebased to v5.0-rc1.
-    * 5 arch-specific preparatory patches out of 25 have been merged
-      into v5.0-rc1 via arch trees.
+So, at this point, the stack becomes
 
-    v6:
-    * Added syscall_get_arguments and syscall_set_arguments wrappers
-      to asm-generic/syscall.h, requested by Geert.
-    * Changed PTRACE_GET_SYSCALL_INFO return code: do not take trailing paddings
-      into account, use the end of the last field of the structure being written.
-    * Changed struct ptrace_syscall_info:
-      * remove .frame_pointer field, is is not needed and not portable;
-      * make .arch field explicitly aligned, remove no longer needed
-        padding before .arch field;
-      * remove trailing pads, they are no longer needed.
+ 18*4(%esp) RET-IP
+ 17*4(%esp) eflags
+ 16*4(%esp) eax
 
-    v5:
-    * Merged separate series and patches into the single series.
-    * Changed PTRACE_EVENTMSG_SYSCALL_{ENTRY,EXIT} values as requested by Oleg.
-    * Changed struct ptrace_syscall_info: generalized instruction_pointer,
-      stack_pointer, and frame_pointer fields by moving them from
-      ptrace_syscall_info.{entry,seccomp} substructures to ptrace_syscall_info
-      and initializing them for all stops.
-    * Added PTRACE_SYSCALL_INFO_NONE, set it when not in a syscall stop,
-      so e.g. "strace -i" could use PTRACE_SYSCALL_INFO_SECCOMP to obtain
-      instruction_pointer when the tracee is in a signal stop.
-    * Patched all remaining architectures to provide all necessary
-      syscall_get_* functions.
-    * Made available for all architectures: do not conditionalize on
-      CONFIG_HAVE_ARCH_TRACEHOOK since all syscall_get_* functions
-      are implemented on all architectures.
-    * Added a test for PTRACE_GET_SYSCALL_INFO to selftests/ptrace.
+Correct?
 
-    v4:
-    * Revisited PTRACE_EVENT_SECCOMP support:
-      do not introduce task_struct.ptrace_event, use child->last_siginfo->si_code instead.
-    * Implemented PTRACE_SYSCALL_INFO_SECCOMP and ptrace_syscall_info.seccomp
-      support along with PTRACE_SYSCALL_INFO_{ENTRY,EXIT} and
-      ptrace_syscall_info.{entry,exit}.
+> +
+> +	popl	%ebx
+> +	popl	%ecx
+> +	popl	%edx
+> +	popl	%esi
+> +	popl	%edi
+> +	popl	%ebp
+> +
+> +	lea	-3*4(%eax), %esp
+> +	popl	%eax
+> +	popfl
+> +	ret
+> +END(call_to_exception_trampoline)
+> --- a/arch/x86/kernel/kprobes/core.c
+> +++ b/arch/x86/kernel/kprobes/core.c
+> @@ -731,29 +731,8 @@ asm(
+>  	".global kretprobe_trampoline\n"
+>  	".type kretprobe_trampoline, @function\n"
+>  	"kretprobe_trampoline:\n"
+> -	/* We don't bother saving the ss register */
+> -#ifdef CONFIG_X86_64
+> -	"	pushq %rsp\n"
+> -	"	pushfq\n"
+> -	SAVE_REGS_STRING
+> -	"	movq %rsp, %rdi\n"
+> -	"	call trampoline_handler\n"
+> -	/* Replace saved sp with true return address. */
+> -	"	movq %rax, 19*8(%rsp)\n"
+> -	RESTORE_REGS_STRING
+> -	"	popfq\n"
+> -#else
+> -	"	pushl %esp\n"
+> -	"	pushfl\n"
+> -	SAVE_REGS_STRING
+> -	"	movl %esp, %eax\n"
+> -	"	call trampoline_handler\n"
+> -	/* Replace saved sp with true return address. */
+> -	"	movl %eax, 15*4(%esp)\n"
+> -	RESTORE_REGS_STRING
+> -	"	popfl\n"
+> -#endif
+> -	"	ret\n"
 
-    v3:
-    * Changed struct ptrace_syscall_info.
-    * Added PTRACE_EVENT_SECCOMP support by adding ptrace_event to task_struct.
-    * Added proper defines for ptrace_syscall_info.op values.
-    * Renamed PT_SYSCALL_IS_ENTERING and PT_SYSCALL_IS_EXITING to
-      PTRACE_EVENTMSG_SYSCALL_ENTRY and PTRACE_EVENTMSG_SYSCALL_EXIT
-      and moved them to uapi.
+Here, we need a gap for storing ret-ip, because kretprobe_trampoline is
+the address which is returned from the target function. We have no 
+"ret-ip" here at this point. So something like
 
-    v2:
-    * Stopped using task->ptrace.
-    * Replaced entry_info.is_compat with entry_info.arch, used syscall_get_arch().
-    * Used addr argument of sys_ptrace to get expected size of the struct;
-      return full size of the struct.
++	"push $0\n"	/* This is a gap, will be filled with real return address*/
 
-Dmitry V. Levin (6):
-  nds32: fix asm/syscall.h # acked
-  hexagon: define syscall_get_error() and syscall_get_return_value() # waiting for ack since November
-  mips: define syscall_get_error() # acked
-  parisc: define syscall_get_error() # acked
-  powerpc: define syscall_get_error() # acked
-  selftests/ptrace: add a test case for PTRACE_GET_SYSCALL_INFO # acked
+> +	"push trampoline_handler\n"
+> +	"jmp call_to_exception_trampoline\n"
+>  	".size kretprobe_trampoline, .-kretprobe_trampoline\n"
+>  );
+>  NOKPROBE_SYMBOL(kretprobe_trampoline);
+> @@ -791,12 +770,7 @@ static __used void *trampoline_handler(s
+>  
+>  	INIT_HLIST_HEAD(&empty_rp);
+>  	kretprobe_hash_lock(current, &head, &flags);
+> -	/* fixup registers */
+> -	regs->cs = __KERNEL_CS;
+> -#ifdef CONFIG_X86_32
+> -	regs->cs |= get_kernel_rpl();
+> -	regs->gs = 0;
+> -#endif
+> +
+>  	/* We use pt_regs->sp for return address holder. */
+>  	frame_pointer = &regs->sp;
+>  	regs->ip = trampoline_address;
 
-Elvira Khabirova (1):
-  ptrace: add PTRACE_GET_SYSCALL_INFO request # reviewed
-
- arch/hexagon/include/asm/syscall.h            |  14 +
- arch/mips/include/asm/syscall.h               |   6 +
- arch/nds32/include/asm/syscall.h              |  27 +-
- arch/parisc/include/asm/syscall.h             |   7 +
- arch/powerpc/include/asm/syscall.h            |  10 +
- include/linux/tracehook.h                     |   9 +-
- include/uapi/linux/ptrace.h                   |  35 +++
- kernel/ptrace.c                               | 101 ++++++-
- tools/testing/selftests/ptrace/.gitignore     |   1 +
- tools/testing/selftests/ptrace/Makefile       |   2 +-
- .../selftests/ptrace/get_syscall_info.c       | 271 ++++++++++++++++++
- 11 files changed, 468 insertions(+), 15 deletions(-)
- create mode 100644 tools/testing/selftests/ptrace/get_syscall_info.c
+Thank you,
 
 -- 
-ldv
+Masami Hiramatsu <mhiramat at kernel.org>
