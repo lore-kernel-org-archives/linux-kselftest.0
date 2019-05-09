@@ -1,96 +1,127 @@
-From: logang at deltatee.com (Logan Gunthorpe)
-Date: Thu, 9 May 2019 16:20:05 -0600
+From: frowand.list at gmail.com (Frank Rowand)
+Date: Wed, 8 May 2019 18:01:00 -0700
 Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
  testing framework
-In-Reply-To: <20190509214233.GA20877@mit.edu>
-References: <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
+In-Reply-To: <1b1efa91-0523-21a9-e541-fdc3612bd117@kernel.org>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
  <20190507080119.GB28121@kroah.com>
- <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
- <20190509015856.GB7031@mit.edu>
- <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu>
- <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
- <20190509214233.GA20877@mit.edu>
-Message-ID: <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
+ <1b1efa91-0523-21a9-e541-fdc3612bd117@kernel.org>
+Message-ID: <911e44bb-9bb1-e603-a260-fac63760fff6@gmail.com>
 
-
-
-On 2019-05-09 3:42 p.m., Theodore Ts'o wrote:
-> On Thu, May 09, 2019 at 11:12:12AM -0700, Frank Rowand wrote:
->>
->>     "My understanding is that the intent of KUnit is to avoid booting a kernel on
->>     real hardware or in a virtual machine.  That seems to be a matter of semantics
->>     to me because isn't invoking a UML Linux just running the Linux kernel in
->>     a different form of virtualization?
->>
->>     So I do not understand why KUnit is an improvement over kselftest.
->>
->>     ...
->>
->>     What am I missing?"
+On 5/7/19 8:23 AM, shuah wrote:
+> On 5/7/19 2:01 AM, Greg KH wrote:
+>> On Mon, May 06, 2019 at 08:14:12PM -0700, Frank Rowand wrote:
+>>> On 5/1/19 4:01 PM, Brendan Higgins wrote:
+>>>> ## TLDR
+>>>>
+>>>> I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
+>>>> 5.2.
+>>>>
+>>>> Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
+>>>> we would merge through your tree when the time came? Am I remembering
+>>>> correctly?
+>>>>
+>>>> ## Background
+>>>>
+>>>> This patch set proposes KUnit, a lightweight unit testing and mocking
+>>>> framework for the Linux kernel.
+>>>>
+>>>> Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+>>>> it does not require installing the kernel on a test machine or in a VM
+>>>> and does not require tests to be written in userspace running on a host
+>>>> kernel. Additionally, KUnit is fast: From invocation to completion KUnit
+>>>> can run several dozen tests in under a second. Currently, the entire
+>>>> KUnit test suite for KUnit runs in under a second from the initial
+>>>> invocation (build time excluded).
+>>>>
+>>>> KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+>>>> Googletest/Googlemock for C++. KUnit provides facilities for defining
+>>>> unit test cases, grouping related test cases into test suites, providing
+>>>> common infrastructure for running tests, mocking, spying, and much more.
+>>>
+>>> As a result of the emails replying to this patch thread, I am now
+>>> starting to look at kselftest.  My level of understanding is based
+>>> on some slide presentations, an LWN article, https://kselftest.wiki.kernel.org/
+>>> and a _tiny_ bit of looking at kselftest code.
+>>>
+>>> tl;dr; I don't really understand kselftest yet.
+>>>
+>>>
+>>> (1) why KUnit exists
+>>>
+>>>> ## What's so special about unit testing?
+>>>>
+>>>> A unit test is supposed to test a single unit of code in isolation,
+>>>> hence the name. There should be no dependencies outside the control of
+>>>> the test; this means no external dependencies, which makes tests orders
+>>>> of magnitudes faster. Likewise, since there are no external dependencies,
+>>>> there are no hoops to jump through to run the tests. Additionally, this
+>>>> makes unit tests deterministic: a failing unit test always indicates a
+>>>> problem. Finally, because unit tests necessarily have finer granularity,
+>>>> they are able to test all code paths easily solving the classic problem
+>>>> of difficulty in exercising error handling code.
+>>>
+>>> (2) KUnit is not meant to replace kselftest
+>>>
+>>>> ## Is KUnit trying to replace other testing frameworks for the kernel?
+>>>>
+>>>> No. Most existing tests for the Linux kernel are end-to-end tests, which
+>>>> have their place. A well tested system has lots of unit tests, a
+>>>> reasonable number of integration tests, and some end-to-end tests. KUnit
+>>>> is just trying to address the unit test space which is currently not
+>>>> being addressed.
+>>>
+>>> My understanding is that the intent of KUnit is to avoid booting a kernel on
+>>> real hardware or in a virtual machine.  That seems to be a matter of semantics
+>>> to me because isn't invoking a UML Linux just running the Linux kernel in
+>>> a different form of virtualization?
+>>>
+>>> So I do not understand why KUnit is an improvement over kselftest.
 > 
-> One major difference: kselftest requires a userspace environment; it
-> starts systemd, requires a root file system from which you can load
-> modules, etc.  Kunit doesn't require a root file system; doesn't
-> require that you start systemd; doesn't allow you to run arbitrary
-> perl, python, bash, etc. scripts.  As such, it's much lighter weight
-> than kselftest, and will have much less overhead before you can start
-> running tests.  So it's not really the same kind of virtualization.
+> They are in two different categories. Kselftest falls into black box
+> regression test suite which is a collection of user-space tests with a
+> few kernel test modules back-ending the tests in some cases.
+> 
+> Kselftest can be used by both kernel developers and users and provides
+> a good way to regression test releases in test rings.
+> 
+> KUnit is a white box category and is a better fit as unit test framework
+> for development and provides a in-kernel testing. I wouldn't view them
+> one replacing the other. They just provide coverage for different areas
+> of testing.
 
-I largely agree with everything Ted has said in this thread, but I 
-wonder if we are conflating two different ideas that is causing an 
-impasse. From what I see, Kunit actually provides two different things:
+I don't see what about kselftest or KUnit is inherently black box or
+white box.  I would expect both frameworks to be used for either type
+of testing.
 
-1) An execution environment that can be run very quickly in userspace on 
-tests in the kernel source. This speeds up the tests and gives a lot of 
-benefit to developers using those tests because they can get feedback on 
-their code changes a *lot* quicker.
 
-2) A framework to write unit tests that provides a lot of the same 
-facilities as other common unit testing frameworks from userspace (ie. a 
-runner that runs a list of tests and a bunch of helpers such as 
-KUNIT_EXPECT_* to simplify test passes and failures).
+> I wouldn't view KUnit as something that would be easily run in test rings for example.
 
-The first item from Kunit is novel and I see absolutely no overlap with 
-anything kselftest does. It's also the valuable thing I'd like to see 
-merged and grow.
+I don't see why not.
 
-The second item, arguably, does have significant overlap with kselftest. 
-Whether you are running short tests in a light weight UML environment or 
-higher level tests in an heavier VM the two could be using the same 
-framework for writing or defining in-kernel tests. It *may* also be 
-valuable for some people to be able to run all the UML tests in the 
-heavy VM environment along side other higher level tests.
+-Frank
 
-Looking at the selftests tree in the repo, we already have similar items 
-to what Kunit is adding as I described in point (2) above. 
-kselftest_harness.h contains macros like EXPECT_* and ASSERT_* with very 
-similar intentions to the new KUNIT_EXECPT_* and KUNIT_ASSERT_* macros.
-
-However, the number of users of this harness appears to be quite small. 
-Most of the code in the selftests tree seems to be a random mismash of 
-scripts and userspace code so it's not hard to see it as something 
-completely different from the new Kunit:
-
-$ git grep --files-with-matches kselftest_harness.h *
-Documentation/dev-tools/kselftest.rst
-MAINTAINERS
-tools/testing/selftests/kselftest_harness.h
-tools/testing/selftests/net/tls.c
-tools/testing/selftests/rtc/rtctest.c
-tools/testing/selftests/seccomp/Makefile
-tools/testing/selftests/seccomp/seccomp_bpf.c
-tools/testing/selftests/uevent/Makefile
-tools/testing/selftests/uevent/uevent_filtering.c
-
-Thus, I can personally see a lot of value in integrating the kunit test 
-framework with this kselftest harness. There's only a small number of 
-users of the kselftest harness today, so one way or another it seems 
-like getting this integrated early would be a good idea. Letting Kunit 
-and Kselftests progress independently for a few years will only make 
-this worse and may become something we end up regretting.
-
-Logan
+> 
+> Brendan, does that sound about right?
+> 
+>>>
+>>> It seems to me that KUnit is just another piece of infrastructure that I
+>>> am going to have to be familiar with as a kernel developer.  More overhead,
+>>> more information to stuff into my tiny little brain.
+>>>
+>>> I would guess that some developers will focus on just one of the two test
+>>> environments (and some will focus on both), splitting the development
+>>> resources instead of pooling them on a common infrastructure.
+> 
+>>> What am I missing?
+>>
+>> kselftest provides no in-kernel framework for testing kernel code
+>> specifically.  That should be what kunit provides, an "easy" way to
+>> write in-kernel tests for things.
+>>
+>> Brendan, did I get it right?
+> thanks,
+> -- Shuah
+> .
+> 
