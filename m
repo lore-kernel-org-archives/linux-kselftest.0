@@ -1,56 +1,67 @@
-From: jpoimboe at redhat.com (Josh Poimboeuf)
-Date: Thu, 9 May 2019 09:00:01 -0500
-Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-In-Reply-To: <20190509081431.GO2589@hirez.programming.kicks-ass.net>
-References: <20190508074901.982470324@infradead.org>
- <20190508080612.721269814@infradead.org>
- <20190508115416.nblx7c2kocidpytm@treble>
- <20190508120416.GL2589@hirez.programming.kicks-ass.net>
- <20190508124248.u5ukpbhnh4wpiccq@treble>
- <20190508153907.GM2589@hirez.programming.kicks-ass.net>
- <20190508184848.qerg3flv3ej3xsev@treble>
- <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
- <20190509081431.GO2589@hirez.programming.kicks-ass.net>
-Message-ID: <20190509140001.fvwzlnhai6ddqjmt@treble>
+From: frowand.list at gmail.com (Frank Rowand)
+Date: Wed, 8 May 2019 19:13:59 -0700
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20190509015856.GB7031@mit.edu>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
+ <20190507080119.GB28121@kroah.com>
+ <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
+ <20190509015856.GB7031@mit.edu>
+Message-ID: <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
 
-On Thu, May 09, 2019 at 10:14:31AM +0200, Peter Zijlstra wrote:
-> But what I'd love to do is something like the belwo patch, and make all
-> the trampolines (very much including ftrace) use that. Such that we then
-> only have 1 copy of this magic (well, 2 because x86_64 also needs an
-> implementation of this of course).
+On 5/8/19 6:58 PM, Theodore Ts'o wrote:
+> On Wed, May 08, 2019 at 05:43:35PM -0700, Frank Rowand wrote:
+>> kselftest provides a mechanism for in-kernel tests via modules.  For
+>> example, see:
+>>
+>>   tools/testing/selftests/vm/run_vmtests invokes:
+>>     tools/testing/selftests/vm/test_vmalloc.sh
+>>       loads module:
+>>         test_vmalloc
+>>         (which is built from lib/test_vmalloc.c if CONFIG_TEST_VMALLOC)
 > 
-> Changing ftrace over to this would be a little more work but it can
-> easily chain things a little to get its original context back:
-> 
-> ENTRY(ftrace_regs_caller)
-> GLOBAL(ftrace_regs_func)
-> 	push ftrace_stub
-> 	push ftrace_regs_handler
-> 	jmp call_to_exception_trampoline
-> END(ftrace_regs_caller)
-> 
-> typedef void (*ftrace_func_t)(unsigned long, unsigned long, struct ftrace_op *, struct pt_regs *);
-> 
-> struct ftrace_regs_stack {
-> 	ftrace_func_t func;
-> 	unsigned long parent_ip;
-> };
-> 
-> void ftrace_regs_handler(struct pr_regs *regs)
-> {
-> 	struct ftrace_regs_stack *st = (void *)regs->sp;
-> 	ftrace_func_t func = st->func;
-> 
-> 	regs->sp += sizeof(long); /* pop func */
-> 
-> 	func(regs->ip, st->parent_ip, function_trace_op, regs);
-> }
-> 
-> Hmm? I didn't look into the function_graph thing, but I imagine it can
-> be added without too much pain.
+> The majority of the kselftests are implemented as userspace programs.
 
-I like this patch a lot, assuming it can be made to work for the
-different users.
+Non-argument.
 
--- 
-Josh
+
+> You *can* run in-kernel test using modules; but there is no framework
+> for the in-kernel code found in the test modules, which means each of
+> the in-kernel code has to create their own in-kernel test
+> infrastructure.
+
+Why create an entire new subsystem (KUnit) when you can add a header
+file (and .c code as appropriate) that outputs the proper TAP formatted
+results from kselftest kernel test modules?
+
+There are already a multitude of in kernel test modules used by
+kselftest.  It would be good if they all used a common TAP compliant
+mechanism to report results.
+
+ 
+> That's much like saying you can use vice grips to turn a nut or
+> bolt-head.  You *can*, but it might be that using a monkey wrench
+> would be a much better tool that is much easier.
+> 
+> What would you say to a wood worker objecting that a toolbox should
+> contain a monkey wrench because he already knows how to use vise
+> grips, and his tiny brain shouldn't be forced to learn how to use a
+> wrench when he knows how to use a vise grip, which is a perfectly good
+> tool?
+> 
+> If you want to use vice grips as a hammer, screwdriver, monkey wrench,
+> etc.  there's nothing stopping you from doing that.  But it's not fair
+> to object to other people who might want to use better tools.
+> 
+> The reality is that we have a lot of testing tools.  It's not just
+> kselftests.  There is xfstests for file system code, blktests for
+> block layer tests, etc.   We use the right tool for the right job.
+
+More specious arguments.
+
+-Frank
+
+> 
+> 						- Ted
+> 
