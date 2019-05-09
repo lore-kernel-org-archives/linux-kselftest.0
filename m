@@ -1,52 +1,63 @@
-From: skhan@linuxfoundation.org (Shuah Khan)
-Date: Fri, 10 May 2019 20:52:49 -0600
-Subject: [PATCH] selftests: fix bpf build/test workflow regression when
- KBUILD_OUTPUT is set
-Message-ID: <20190511025249.32678-1-skhan@linuxfoundation.org>
+From: logang@deltatee.com (Logan Gunthorpe)
+Date: Thu, 9 May 2019 17:40:48 -0600
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20190509233043.GC20877@mit.edu>
+References: <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
+ <20190509015856.GB7031@mit.edu>
+ <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+ <20190509032017.GA29703@mit.edu>
+ <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
+ <20190509133551.GD29703@mit.edu>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
+ <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
+ <20190509214233.GA20877@mit.edu>
+ <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
+ <20190509233043.GC20877@mit.edu>
+Message-ID: <8914afef-1e66-e6e3-f891-5855768d3018@deltatee.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190511025249.AVH4SRqowp5q_prxaGwClAy9dV56VmZFcKQfC9-Ayjk@z>
+Message-ID: <20190509234048.0iKR3Zn9k7CQkOcqltuSDdcdibLJUKSXKOyb7DKZvmo@z>
 
-commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
-broke bpf build/test workflow. When KBUILD_OUTPUT is set, bpf objects end
-up in KBUILD_OUTPUT build directory instead of in ../selftests/bpf.
 
-The following bpf workflow breaks when it can't find the test_verifier:
 
-cd tools/testing/selftests/bpf; make; ./test_verifier;
+On 2019-05-09 5:30 p.m., Theodore Ts'o wrote:
+> On Thu, May 09, 2019@04:20:05PM -0600, Logan Gunthorpe wrote:
+>>
+>> The second item, arguably, does have significant overlap with kselftest.
+>> Whether you are running short tests in a light weight UML environment or
+>> higher level tests in an heavier VM the two could be using the same
+>> framework for writing or defining in-kernel tests. It *may* also be valuable
+>> for some people to be able to run all the UML tests in the heavy VM
+>> environment along side other higher level tests.
+>>
+>> Looking at the selftests tree in the repo, we already have similar items to
+>> what Kunit is adding as I described in point (2) above. kselftest_harness.h
+>> contains macros like EXPECT_* and ASSERT_* with very similar intentions to
+>> the new KUNIT_EXECPT_* and KUNIT_ASSERT_* macros.
+>>
+>> However, the number of users of this harness appears to be quite small. Most
+>> of the code in the selftests tree seems to be a random mismash of scripts
+>> and userspace code so it's not hard to see it as something completely
+>> different from the new Kunit:
+>>
+>> $ git grep --files-with-matches kselftest_harness.h *
+> 
+> To the extent that we can unify how tests are written, I agree that
+> this would be a good thing.  However, you should note that
+> kselftest_harness.h is currently assums that it will be included in
+> userspace programs.  This is most obviously seen if you look closely
+> at the functions defined in the header files which makes calls to
+> fork(), abort() and fprintf().
 
-Fix it to set OUTPUT only when it is undefined in lib.mk. It didn't need
-to be set in the first place.
+Ah, yes. I obviously did not dig deep enough. Using kunit for in-kernel 
+tests and kselftest_harness for userspace tests seems like a sensible 
+line to draw to me. Trying to unify kernel and userspace here sounds 
+like it could be difficult so it's probably not worth forcing the issue 
+unless someone wants to do some really fancy work to get it done.
 
-Fixes: commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
+Based on some of the other commenters, I was under the impression that 
+kselftests had in-kernel tests but I'm not sure where or if they exist. 
+If they do exists, it seems like it would make sense to convert those to 
+kunit and have Kunit tests run-able in a VM or baremetal instance.
 
-Reported-by: Alexei Starovoitov <alexei.starovoitov at gmail.com>
-Signed-off-by: Shuah Khan <skhan at linuxfoundation.org>
----
- tools/testing/selftests/lib.mk | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 098dd0065fb1..077337195783 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -3,15 +3,9 @@
- CC := $(CROSS_COMPILE)gcc
- 
- ifeq (0,$(MAKELEVEL))
--    ifneq ($(O),)
--	OUTPUT := $(O)
--    else
--	ifneq ($(KBUILD_OUTPUT),)
--		OUTPUT := $(KBUILD_OUTPUT)
--	else
--		OUTPUT := $(shell pwd)
--		DEFAULT_INSTALL_HDR_PATH := 1
--	endif
-+    ifeq ($(OUTPUT),)
-+	OUTPUT := $(shell pwd)
-+	DEFAULT_INSTALL_HDR_PATH := 1
-     endif
- endif
- selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
--- 
-2.17.1
+Logan
