@@ -1,29 +1,47 @@
-From: alexei.starovoitov at gmail.com (Alexei Starovoitov)
-Date: Fri, 10 May 2019 21:37:31 -0700
-Subject: [PATCH] selftests: fix bpf build/test workflow regression when
- KBUILD_OUTPUT is set
-In-Reply-To: <20190511025249.32678-1-skhan@linuxfoundation.org>
-References: <20190511025249.32678-1-skhan@linuxfoundation.org>
-Message-ID: <20190511043729.3o4enh35lrmne3kd@ast-mbp>
+From: tytso at mit.edu (Theodore Ts'o)
+Date: Wed, 8 May 2019 21:58:56 -0400
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
+ <20190507080119.GB28121@kroah.com>
+ <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
+Message-ID: <20190509015856.GB7031@mit.edu>
 
-On Fri, May 10, 2019 at 08:52:49PM -0600, Shuah Khan wrote:
-> commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
-> broke bpf build/test workflow. When KBUILD_OUTPUT is set, bpf objects end
-> up in KBUILD_OUTPUT build directory instead of in ../selftests/bpf.
+On Wed, May 08, 2019 at 05:43:35PM -0700, Frank Rowand wrote:
+> kselftest provides a mechanism for in-kernel tests via modules.  For
+> example, see:
 > 
-> The following bpf workflow breaks when it can't find the test_verifier:
-> 
-> cd tools/testing/selftests/bpf; make; ./test_verifier;
-> 
-> Fix it to set OUTPUT only when it is undefined in lib.mk. It didn't need
-> to be set in the first place.
-> 
-> Fixes: commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
-> 
-> Reported-by: Alexei Starovoitov <alexei.starovoitov at gmail.com>
-> Signed-off-by: Shuah Khan <skhan at linuxfoundation.org>
+>   tools/testing/selftests/vm/run_vmtests invokes:
+>     tools/testing/selftests/vm/test_vmalloc.sh
+>       loads module:
+>         test_vmalloc
+>         (which is built from lib/test_vmalloc.c if CONFIG_TEST_VMALLOC)
 
-'git am' couldn't apply this patch because "sha1 information is lacking",
-but the patch itself looks good.
-Acked-by: Alexei Starovoitov <ast at kernel.org>
-Thanks for the quick fix.
+The majority of the kselftests are implemented as userspace programs.
+
+You *can* run in-kernel test using modules; but there is no framework
+for the in-kernel code found in the test modules, which means each of
+the in-kernel code has to create their own in-kernel test
+infrastructure.  
+
+That's much like saying you can use vice grips to turn a nut or
+bolt-head.  You *can*, but it might be that using a monkey wrench
+would be a much better tool that is much easier.
+
+What would you say to a wood worker objecting that a toolbox should
+contain a monkey wrench because he already knows how to use vise
+grips, and his tiny brain shouldn't be forced to learn how to use a
+wrench when he knows how to use a vise grip, which is a perfectly good
+tool?
+
+If you want to use vice grips as a hammer, screwdriver, monkey wrench,
+etc.  there's nothing stopping you from doing that.  But it's not fair
+to object to other people who might want to use better tools.
+
+The reality is that we have a lot of testing tools.  It's not just
+kselftests.  There is xfstests for file system code, blktests for
+block layer tests, etc.   We use the right tool for the right job.
+
+						- Ted
