@@ -1,66 +1,121 @@
-From: mhiramat at kernel.org (Masami Hiramatsu)
-Date: Sat, 11 May 2019 09:52:54 +0900
-Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-In-Reply-To: <20190510123131.GU2589@hirez.programming.kicks-ass.net>
-References: <20190508115416.nblx7c2kocidpytm@treble>
- <20190508120416.GL2589@hirez.programming.kicks-ass.net>
- <20190508124248.u5ukpbhnh4wpiccq@treble>
- <20190508153907.GM2589@hirez.programming.kicks-ass.net>
- <20190508184848.qerg3flv3ej3xsev@treble>
- <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
- <20190509081431.GO2589@hirez.programming.kicks-ass.net>
- <20190509230106.3551b08553440d125e437f66@kernel.org>
- <20190509171416.GY2623@hirez.programming.kicks-ass.net>
- <20190510135831.c4ad309c68fc254f819194fc@kernel.org>
- <20190510123131.GU2589@hirez.programming.kicks-ass.net>
-Message-ID: <20190511095254.21d41a8db0d66669d51144cc@kernel.org>
+From: frowand.list at gmail.com (Frank Rowand)
+Date: Thu, 9 May 2019 11:12:12 -0700
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
+ <20190507080119.GB28121@kroah.com>
+ <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
+ <20190509015856.GB7031@mit.edu>
+ <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+ <20190509032017.GA29703@mit.edu>
+ <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
+ <20190509133551.GD29703@mit.edu>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
+Message-ID: <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
 
-On Fri, 10 May 2019 14:31:31 +0200
-Peter Zijlstra <peterz at infradead.org> wrote:
+On 5/9/19 10:00 AM, Tim.Bird at sony.com wrote:
+>> -----Original Message-----
+>> From: Theodore Ts'o 
+>>
 
-> On Fri, May 10, 2019 at 01:58:31PM +0900, Masami Hiramatsu wrote:
-> > On Thu, 9 May 2019 19:14:16 +0200
-> > Peter Zijlstra <peterz at infradead.org> wrote:
+< massive snip >
+
+I'll reply in more detail to some other earlier messages in this thread
+later.
+
+This reply is an attempt to return to the intent of my original reply to
+patch 0 of this series.
+
+
+>> Ultimately, I'm a pragmatist.  If KTF serves your needs best, good for
+>> you.  If other approaches are better for other parts of the kernel,
+>> let's not try to impose a strict "There Must Be Only One" religion.
+>> That's already not true today, and for good reason.  There are many
+>> different kinds of kernel code, and many different types of test
+>> philosophies.  Trying to force all kernel testing into a single
+>> Procrustean Bed is simply not productive.
 > 
-> > > Ideally also the optimized kprobe trampoline, but I've not managed to
-> > > fully comprehend that one.
-> > 
-> > As you pointed in other reply, save/restore can be a macro, but
-> > each trampoline code is slightly different. Optprobe template has
-> > below parts
-> > 
-> > (jumped from probed address)
-> > [store regs]
-> > [setup function arguments (pt_regs and probed address)]
-> > [handler call]
-> > [restore regs]
-> > [execute copied instruction]
+> Had to look up "Procrustean Bed" - great phrase.  :-)
 > 
->  instruction_s_ ?
-
-Yes.
-
+> I'm not of the opinion that there must only be one test framework
+> in the kernel. But we should avoid unnecessary multiplication. Every
+> person is going to have a different idea for where the line of necessity
+> is drawn.  My own opinion is that what KUnit is adding is different enough
+> from kselftest, that it's a valuable addition.  
 > 
-> The JMP to this trampoline is likely 5 bytes and could have clobbered
-> multiple instructions, we'd then have to place them all here, and
-> 
-> > [jump back to probed address]
-> 
-> jump to after whatever instructions were clobbered by the JMP.
+>  -- Tim
 
-Right!
+My first reply to patch 0 was in the context of knowing next to nothing
+about kselftest.  My level of understanding was essentially from slideware.
+(As the thread progressed, I dug a little deeper into kselftest, so now have
+a slightly better, though still fairly surface understanding of kselftest).
 
-> > Note that there is a limitation that if it is optiomized probe, user
-> > handler can not change regs->ip. (we can not use "ret" after executed
-> > a copied instruction, which must run on same stack)
-> 
-> Changing regs->ip in this case is going to be massively dodgy indeed :-)
-> But so would changing much else; changing stack layout would also be
-> somewhat tricky.
+Maybe I did not explain myself clearly enough in that reply.  I will try
+again here.
 
-Yes, so the stack must be same after [restore regs].
+Patch 0 provided a one paragraph explanation of why KUnit exists, titled
 
-Thank you,
+   "## What's so special about unit testing?"
 
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+Patch 0 also provided a statement that it is not meant to replace
+kselftest, in a paragraph titled
+
+   "## Is KUnit trying to replace other testing frameworks for the kernel?"
+
+I stated:
+
+   "My understanding is that the intent of KUnit is to avoid booting a kernel on
+   real hardware or in a virtual machine.  That seems to be a matter of semantics
+   to me because isn't invoking a UML Linux just running the Linux kernel in
+   a different form of virtualization?
+
+   So I do not understand why KUnit is an improvement over kselftest.
+
+   ...
+
+   What am I missing?"
+
+
+I was looking for a fuller, better explanation than was given in patch 0
+of how KUnit provides something that is different than what kselftest
+provides for creating unit tests for kernel code.
+
+New question "(2)":
+
+(2) If KUnit provides something unique, then the obvious follow on
+question would be: does it make sense to (a) integrate that feature into
+kselftest, (b) integrate the current kselftest in kernel test functionality
+into KUnit and convert the in kernel test portion of kselftest to use
+KUnit, or (c) KUnit and kselftest are so different that they need to
+remain separate features.
+
+*****  Please do not reply to this email with a discussion of "(2)".
+*****  Such a discussion is premature if there is not an answer
+*****  to my first question.
+
+Observation (3), rephrased:
+
+(3) I also brought up the issue that if option (c) was the answer to
+question "(2)" (instead of either option (a) or option (b)) then this
+is extra overhead for any developer or maintainer involved in different
+subsystems that use the different frameworks.  I intended this as one
+possible motivation for why my first question mattered.
+
+Ted grabbed hold of this issue and basically ignored what I intended
+to be my core question.  Nobody else has answered my core question,
+though Knut's first reply did manage to get somewhere near the
+intent of my core question.
+
+*****  Please do not reply to this email with a discussion of "(3)".
+*****  Such a discussion is premature if there is not an answer
+*****  to my first question.
+*****
+*****  Also that discussion is already occurring in this thread,
+*****  feel free to discuss it there if you want, even though I
+*****  feel such discussion is premature.
+
+I still do not have an answer to my original question.
+
+-Frank
