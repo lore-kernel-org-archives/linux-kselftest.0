@@ -1,40 +1,42 @@
-From: joel at joelfernandes.org (Joel Fernandes)
-Date: Sat, 11 May 2019 12:17:14 -0400
-Subject: [PATCH 3/3] kheaders: Make it depend on sysfs
-In-Reply-To: <20190511060203.GA18650@kroah.com>
-References: <20190510210243.152808-1-joel@joelfernandes.org>
- <20190510210243.152808-4-joel@joelfernandes.org>
- <CAK7LNATeJqmE29M=Y1Vexg8nnRdr3qUDkq1BejN7t2_106PgVg@mail.gmail.com>
- <20190511060203.GA18650@kroah.com>
-Message-ID: <20190511161714.GA179270@google.com>
+From: peterz at infradead.org (Peter Zijlstra)
+Date: Thu, 9 May 2019 20:26:22 +0200
+Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
+In-Reply-To: <20190509173741.pfvecznqdndihxzg@home.goodmis.org>
+References: <20190508074901.982470324@infradead.org>
+ <20190508080612.721269814@infradead.org>
+ <20190508115416.nblx7c2kocidpytm@treble>
+ <20190508120416.GL2589@hirez.programming.kicks-ass.net>
+ <20190508124248.u5ukpbhnh4wpiccq@treble>
+ <20190508153907.GM2589@hirez.programming.kicks-ass.net>
+ <20190508184848.qerg3flv3ej3xsev@treble>
+ <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
+ <20190509081431.GO2589@hirez.programming.kicks-ass.net>
+ <20190509173741.pfvecznqdndihxzg@home.goodmis.org>
+Message-ID: <20190509182622.GB2623@hirez.programming.kicks-ass.net>
 
-On Sat, May 11, 2019 at 08:02:03AM +0200, Greg Kroah-Hartman wrote:
-> On Sat, May 11, 2019 at 09:52:04AM +0900, Masahiro Yamada wrote:
-> > On Sat, May 11, 2019 at 6:05 AM Joel Fernandes (Google)
-> > <joel at joelfernandes.org> wrote:
-> > >
-> > > The kheaders archive is exposed through SYSFS in /sys/kernel/. Make it
-> > > depend on SYSFS as it makes no sense to enable this feature without it.
+On Thu, May 09, 2019 at 01:37:42PM -0400, Steven Rostedt wrote:
+> On Thu, May 09, 2019 at 10:14:31AM +0200, Peter Zijlstra wrote:
 > > 
+> > Right; I already fixed that in my patch changing i386's pt_regs.
 > > 
-> > And, it also makes no sense to break the feature by 1/3,
-> > then fix it by 3/3.
+> > But what I'd love to do is something like the belwo patch, and make all
+> > the trampolines (very much including ftrace) use that. Such that we then
+> > only have 1 copy of this magic (well, 2 because x86_64 also needs an
+> > implementation of this of course).
 > > 
+> > Changing ftrace over to this would be a little more work but it can
+> > easily chain things a little to get its original context back:
 > > 
-> > Why don't you squash this?
+> > ENTRY(ftrace_regs_caller)
+> > GLOBAL(ftrace_regs_func)
+> > 	push ftrace_stub
+> > 	push ftrace_regs_handler
 > 
-> I agree, this belongs in patch 1/3.
+> Note, ftrace_stub is dynamically modified to remove any indirect calls.
 
-Fine with me. The reason I split it this way is I already had posted 1/3
-recently for the driver tree [1], and I did not want to confuse Greg since he
-was in the process of picking it up [2].
+Yeah, I realized that a few hours after I send this out; as you might
+have seen by the IRC chatter on this.
 
-Anyway, I can resend the series soon with 1/3 and 3/3 squashed unless anyone
-applying this is Ok with squashing it in their trees. thanks!
-
-[1] https://lore.kernel.org/patchwork/patch/1070005/
-[2] https://lore.kernel.org/patchwork/patch/1070005/#1267273
-
-thanks,
-
- - Joel
+Still, maybe we can wrap the thing in a .macro and reuse things that
+way. Because I really hate there are at least 3 (x2 for x86_64) copies
+of this around.
