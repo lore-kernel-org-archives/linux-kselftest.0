@@ -1,105 +1,129 @@
-From: peterz at infradead.org (Peter Zijlstra)
-Date: Thu, 9 May 2019 19:18:40 +0200
-Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-In-Reply-To: <81170F0B-A2BB-4CD6-A1B5-5E7E0DDBC282@amacapital.net>
-References: <20190508074901.982470324@infradead.org>
- <20190508080612.721269814@infradead.org>
- <20190508115416.nblx7c2kocidpytm@treble>
- <20190508120416.GL2589@hirez.programming.kicks-ass.net>
- <20190508124248.u5ukpbhnh4wpiccq@treble>
- <20190508153907.GM2589@hirez.programming.kicks-ass.net>
- <20190508184848.qerg3flv3ej3xsev@treble>
- <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
- <20190509081431.GO2589@hirez.programming.kicks-ass.net>
- <81170F0B-A2BB-4CD6-A1B5-5E7E0DDBC282@amacapital.net>
-Message-ID: <20190509171840.GZ2623@hirez.programming.kicks-ass.net>
+From: brendanhiggins at google.com (Brendan Higgins)
+Date: Fri, 10 May 2019 03:25:06 -0700
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <CAK7LNARzaeZ+ZNbDSii2cpFkk4bUqOu3keNq4qX0LhftuK8+MQ@mail.gmail.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <CAK7LNARzaeZ+ZNbDSii2cpFkk4bUqOu3keNq4qX0LhftuK8+MQ@mail.gmail.com>
+Message-ID: <CAFd5g47iaxW5Nk+sELxgasnbpNX7O6kwUTT7gMWoN3gA=_we6Q@mail.gmail.com>
 
-On Thu, May 09, 2019 at 09:20:06AM -0700, Andy Lutomirski wrote:
-> > +ENTRY(call_to_exception_trampoline)
-> > +    /*
-> > +     * On entry the stack looks like:
-> > +     *
-> > +     *   2*4(%esp) <previous context>
-> > +     *   1*4(%esp) RET-IP
-> > +     *   0*4(%esp) func
-> > +     *
-> > +     * transform this into:
-> > +     *
-> > +     *  19*4(%esp) <previous context>
-> > +     *  18*4(%esp) gap / RET-IP
-> > +     *  17*4(%esp) gap / func
-> > +     *  16*4(%esp) ss
-> > +     *  15*4(%esp) sp / <previous context>
-> > +     *  14*4(%esp) flags
-> > +     *  13*4(%esp) cs
-> > +     *  12*4(%esp) ip / RET-IP
-> > +     *  11*4(%esp) orig_eax
-> > +     *  10*4(%esp) gs
-> > +     *   9*4(%esp) fs
-> > +     *   8*4(%esp) es
-> > +     *   7*4(%esp) ds
-> > +     *   6*4(%esp) eax
-> > +     *   5*4(%esp) ebp
-> > +     *   4*4(%esp) edi
-> > +     *   3*4(%esp) esi
-> > +     *   2*4(%esp) edx
-> > +     *   1*4(%esp) ecx
-> > +     *   0*4(%esp) ebx
-> > +     */
-> > +    pushl    %ss
-> > +    pushl    %esp        # points at ss
-> > +    addl    $3*4, (%esp)    #   point it at <previous context>
-> > +    pushfl
-> > +    pushl    %cs
-> > +    pushl    5*4(%esp)    # RET-IP
-> > +    subl    5, (%esp)    #   point at CALL instruction
-> > +    pushl    $-1
-> > +    pushl    %gs
-> > +    pushl    %fs
-> > +    pushl    %es
-> > +    pushl    %ds
-> > +    pushl    %eax
-> > +    pushl    %ebp
-> > +    pushl    %edi
-> > +    pushl    %esi
-> > +    pushl    %edx
-> > +    pushl    %ecx
-> > +    pushl    %ebx
-> > +
-> > +    ENCODE_FRAME_POINTER
-> > +
-> > +    movl    %esp, %eax    # 1st argument: pt_regs
-> > +
-> > +    movl    17*4(%esp), %ebx    # func
-> > +    CALL_NOSPEC %ebx
-> > +
-> > +    movl    PT_OLDESP(%esp), %eax
-> > +
-> > +    movl    PT_EIP(%esp), %ecx
-> > +    movl    %ecx, -1*4(%eax)
-> > +
-> > +    movl    PT_EFLAGS(%esp), %ecx
-> > +    movl    %ecx, -2*4(%eax)
-> > +
-> > +    movl    PT_EAX(%esp), %ecx
-> > +    movl    %ecx, -3*4(%eax)
-> > +
-> > +    popl    %ebx
-> > +    popl    %ecx
-> > +    popl    %edx
-> > +    popl    %esi
-> > +    popl    %edi
-> > +    popl    %ebp
-> > +
-> > +    lea    -3*4(%eax), %esp
-> > +    popl    %eax
-> > +    popfl
-> > +    ret
-> > +END(call_to_exception_trampoline)
+> On Thu, May 2, 2019 at 8:02 AM Brendan Higgins
+> <brendanhiggins at google.com> wrote:
+> >
+> > ## TLDR
+> >
+> > I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
+> > 5.2.
+> >
+> > Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
+> > we would merge through your tree when the time came? Am I remembering
+> > correctly?
+> >
+> > ## Background
+> >
+> > This patch set proposes KUnit, a lightweight unit testing and mocking
+> > framework for the Linux kernel.
+> >
+> > Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+> > it does not require installing the kernel on a test machine or in a VM
+> > and does not require tests to be written in userspace running on a host
+> > kernel. Additionally, KUnit is fast: From invocation to completion KUnit
+> > can run several dozen tests in under a second. Currently, the entire
+> > KUnit test suite for KUnit runs in under a second from the initial
+> > invocation (build time excluded).
+> >
+> > KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+> > Googletest/Googlemock for C++. KUnit provides facilities for defining
+> > unit test cases, grouping related test cases into test suites, providing
+> > common infrastructure for running tests, mocking, spying, and much more.
+> >
+> > ## What's so special about unit testing?
+> >
+> > A unit test is supposed to test a single unit of code in isolation,
+> > hence the name. There should be no dependencies outside the control of
+> > the test; this means no external dependencies, which makes tests orders
+> > of magnitudes faster. Likewise, since there are no external dependencies,
+> > there are no hoops to jump through to run the tests. Additionally, this
+> > makes unit tests deterministic: a failing unit test always indicates a
+> > problem. Finally, because unit tests necessarily have finer granularity,
+> > they are able to test all code paths easily solving the classic problem
+> > of difficulty in exercising error handling code.
+> >
+> > ## Is KUnit trying to replace other testing frameworks for the kernel?
+> >
+> > No. Most existing tests for the Linux kernel are end-to-end tests, which
+> > have their place. A well tested system has lots of unit tests, a
+> > reasonable number of integration tests, and some end-to-end tests. KUnit
+> > is just trying to address the unit test space which is currently not
+> > being addressed.
+> >
+> > ## More information on KUnit
+> >
+> > There is a bunch of documentation near the end of this patch set that
+> > describes how to use KUnit and best practices for writing unit tests.
+> > For convenience I am hosting the compiled docs here:
+> > https://google.github.io/kunit-docs/third_party/kernel/docs/
+> > Additionally for convenience, I have applied these patches to a branch:
+> > https://kunit.googlesource.com/linux/+/kunit/rfc/v5.1-rc7/v1
+> > The repo may be cloned with:
+> > git clone https://kunit.googlesource.com/linux
+> > This patchset is on the kunit/rfc/v5.1-rc7/v1 branch.
+> >
+> > ## Changes Since Last Version
+> >
+> > None. I just rebased the last patchset on v5.1-rc7.
+> >
+> > --
+> > 2.21.0.593.g511ec345e18-goog
+> >
+>
+> The following is the log of 'git am' of this series.
+> I see several 'new blank line at EOF' warnings.
+>
+>
+>
+> masahiro at pug:~/workspace/bsp/linux$ git am ~/Downloads/*.patch
+> Applying: kunit: test: add KUnit test runner core
+> Applying: kunit: test: add test resource management API
+> Applying: kunit: test: add string_stream a std::stream like string builder
+> .git/rebase-apply/patch:223: new blank line at EOF.
+> +
+> warning: 1 line adds whitespace errors.
+> Applying: kunit: test: add kunit_stream a std::stream like logger
+> Applying: kunit: test: add the concept of expectations
+> .git/rebase-apply/patch:475: new blank line at EOF.
+> +
+> warning: 1 line adds whitespace errors.
+> Applying: kbuild: enable building KUnit
+> Applying: kunit: test: add initial tests
+> .git/rebase-apply/patch:203: new blank line at EOF.
+> +
+> warning: 1 line adds whitespace errors.
+> Applying: kunit: test: add support for test abort
+> .git/rebase-apply/patch:453: new blank line at EOF.
+> +
+> warning: 1 line adds whitespace errors.
+> Applying: kunit: test: add tests for kunit test abort
+> Applying: kunit: test: add the concept of assertions
+> .git/rebase-apply/patch:518: new blank line at EOF.
+> +
+> warning: 1 line adds whitespace errors.
+> Applying: kunit: test: add test managed resource tests
+> Applying: kunit: tool: add Python wrappers for running KUnit tests
+> .git/rebase-apply/patch:457: new blank line at EOF.
+> +
+> warning: 1 line adds whitespace errors.
+> Applying: kunit: defconfig: add defconfigs for building KUnit tests
+> Applying: Documentation: kunit: add documentation for KUnit
+> .git/rebase-apply/patch:71: new blank line at EOF.
+> +
+> .git/rebase-apply/patch:209: new blank line at EOF.
+> +
+> .git/rebase-apply/patch:848: new blank line at EOF.
+> +
+> warning: 3 lines add whitespace errors.
+> Applying: MAINTAINERS: add entry for KUnit the unit testing framework
+> Applying: kernel/sysctl-test: Add null pointer test for sysctl.c:proc_dointvec()
+> Applying: MAINTAINERS: add proc sysctl KUnit test to PROC SYSCTL section
 
-> Potentially minor nit: you’re doing popfl, but you’re not doing
-> TRACE_IRQ_whatever.  This makes me think that you should either add
-> the tracing (ugh!) or you should maybe just skip the popfl.
-
-Yeah, so we really should not change flags I suppose. If this lives I'll
-remove the popfl.
+Sorry about this! I will have it fixed on the next revision.
