@@ -1,53 +1,69 @@
-From: tytso at mit.edu (Theodore Ts'o)
-Date: Thu, 9 May 2019 19:30:43 -0400
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
-References: <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
- <20190509015856.GB7031@mit.edu>
- <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu>
- <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
- <20190509214233.GA20877@mit.edu>
- <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
-Message-ID: <20190509233043.GC20877@mit.edu>
+From: joel at joelfernandes.org (Joel Fernandes (Google))
+Date: Fri, 10 May 2019 17:02:42 -0400
+Subject: [PATCH 2/3] kheaders: Do not regenerate archive if config is not
+ changed
+In-Reply-To: <20190510210243.152808-1-joel@joelfernandes.org>
+References: <20190510210243.152808-1-joel@joelfernandes.org>
+Message-ID: <20190510210243.152808-3-joel@joelfernandes.org>
 
-On Thu, May 09, 2019 at 04:20:05PM -0600, Logan Gunthorpe wrote:
-> 
-> The second item, arguably, does have significant overlap with kselftest.
-> Whether you are running short tests in a light weight UML environment or
-> higher level tests in an heavier VM the two could be using the same
-> framework for writing or defining in-kernel tests. It *may* also be valuable
-> for some people to be able to run all the UML tests in the heavy VM
-> environment along side other higher level tests.
-> 
-> Looking at the selftests tree in the repo, we already have similar items to
-> what Kunit is adding as I described in point (2) above. kselftest_harness.h
-> contains macros like EXPECT_* and ASSERT_* with very similar intentions to
-> the new KUNIT_EXECPT_* and KUNIT_ASSERT_* macros.
-> 
-> However, the number of users of this harness appears to be quite small. Most
-> of the code in the selftests tree seems to be a random mismash of scripts
-> and userspace code so it's not hard to see it as something completely
-> different from the new Kunit:
-> 
-> $ git grep --files-with-matches kselftest_harness.h *
+Linus reported an issue that doing an allmodconfig was causing the
+kheaders archive to be regenerated even though the config is the same.
+This patch fixes the issue by ignoring the config-related header files
+for "knowing when to regenerate based on timestamps".  Instead, if the
+CONFIG_X_Y option really changes, then we there are the
+include/config/X/Y.h which will already tells us "if a config really
+changed". So we don't really need these files for regeneration detection
+anyway, and ignoring them fixes Linus's issue.
 
-To the extent that we can unify how tests are written, I agree that
-this would be a good thing.  However, you should note that
-kselftest_harness.h is currently assums that it will be included in
-userspace programs.  This is most obviously seen if you look closely
-at the functions defined in the header files which makes calls to
-fork(), abort() and fprintf().
+Reported-by: Linus Torvalds <torvalds at linux-foundation.org>
+Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+---
+ kernel/gen_kheaders.sh | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-So Kunit can't reuse kselftest_harness.h unmodified.  And whether or
-not the actual implementation of the header file can be reused or
-refactored, making the unit tests use the same or similar syntax would
-be a good thing.
-
-Cheers,
-
-						- Ted
+diff --git a/kernel/gen_kheaders.sh b/kernel/gen_kheaders.sh
+index 581b83534587..9a34e1d9bd7f 100755
+--- a/kernel/gen_kheaders.sh
++++ b/kernel/gen_kheaders.sh
+@@ -31,9 +31,8 @@ arch/$SRCARCH/include/
+ 
+ # This block is useful for debugging the incremental builds.
+ # Uncomment it for debugging.
+-# iter=1
+-# if [ ! -f /tmp/iter ]; then echo 1 > /tmp/iter;
+-# else; 	iter=$(($(cat /tmp/iter) + 1)); fi
++# if [ ! -f /tmp/iter ]; then iter=1; echo 1 > /tmp/iter;
++# else iter=$(($(cat /tmp/iter) + 1)); echo $iter > /tmp/iter; fi
+ # find $src_file_list -type f | xargs ls -lR > /tmp/src-ls-$iter
+ # find $obj_file_list -type f | xargs ls -lR > /tmp/obj-ls-$iter
+ 
+@@ -43,10 +42,18 @@ arch/$SRCARCH/include/
+ pushd $kroot > /dev/null
+ src_files_md5="$(find $src_file_list -type f                       |
+ 		grep -v "include/generated/compile.h"		   |
++		grep -v "include/generated/autoconf.h"		   |
++		grep -v "include/config/auto.conf"		   |
++		grep -v "include/config/auto.conf.cmd"		   |
++		grep -v "include/config/tristate.conf"		   |
+ 		xargs ls -lR | md5sum | cut -d ' ' -f1)"
+ popd > /dev/null
+ obj_files_md5="$(find $obj_file_list -type f                       |
+ 		grep -v "include/generated/compile.h"		   |
++		grep -v "include/generated/autoconf.h"		   |
++		grep -v "include/config/auto.conf"                 |
++		grep -v "include/config/auto.conf.cmd"		   |
++		grep -v "include/config/tristate.conf"		   |
+ 		xargs ls -lR | md5sum | cut -d ' ' -f1)"
+ 
+ if [ -f $tarfile ]; then tarfile_md5="$(md5sum $tarfile | cut -d ' ' -f1)"; fi
+@@ -82,7 +89,7 @@ find $cpio_dir -type f -print0 |
+ 
+ tar -Jcf $tarfile -C $cpio_dir/ . > /dev/null
+ 
+-echo "$src_files_md5" > kernel/kheaders.md5
++echo "$src_files_md5" >  kernel/kheaders.md5
+ echo "$obj_files_md5" >> kernel/kheaders.md5
+ echo "$(md5sum $tarfile | cut -d ' ' -f1)" >> kernel/kheaders.md5
+ 
+-- 
+2.21.0.1020.gf2820cf01a-goog
