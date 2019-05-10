@@ -1,258 +1,31 @@
-From: luto@amacapital.net (Andy Lutomirski)
-Date: Thu, 9 May 2019 09:20:06 -0700
+From: rostedt@goodmis.org (Steven Rostedt)
+Date: Fri, 10 May 2019 10:54:00 -0400
 Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-In-Reply-To: <20190509081431.GO2589@hirez.programming.kicks-ass.net>
-References: <20190508074901.982470324@infradead.org>
- <20190508080612.721269814@infradead.org>
- <20190508115416.nblx7c2kocidpytm@treble>
+In-Reply-To: <20190510121720.GT2589@hirez.programming.kicks-ass.net>
+References: <20190508115416.nblx7c2kocidpytm@treble>
  <20190508120416.GL2589@hirez.programming.kicks-ass.net>
  <20190508124248.u5ukpbhnh4wpiccq@treble>
  <20190508153907.GM2589@hirez.programming.kicks-ass.net>
  <20190508184848.qerg3flv3ej3xsev@treble>
  <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
  <20190509081431.GO2589@hirez.programming.kicks-ass.net>
-Message-ID: <81170F0B-A2BB-4CD6-A1B5-5E7E0DDBC282@amacapital.net>
+ <81170F0B-A2BB-4CD6-A1B5-5E7E0DDBC282@amacapital.net>
+ <20190509174316.pzuakeu657g3fnlm@home.goodmis.org>
+ <20190510122103.5a7bc5416b7af96b27d4fab4@kernel.org>
+ <20190510121720.GT2589@hirez.programming.kicks-ass.net>
+Message-ID: <20190510105400.0d267e9f@gandalf.local.home>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190509162006.1eLjbWBlBTeQjkJ2UlX_6TjTP0dvohBlNwXz-7uE9FM@z>
+Message-ID: <20190510145400.s1yN3qbzzfE3tgJ4Vm39_Ajcl_QQjdwt-EKuLFk3924@z>
 
+On Fri, 10 May 2019 14:17:20 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
+> But both ftrace and retprobes are at C function call boundaries.
+> Preserving flags doesn't make sense.
 
-> On May 9, 2019,@1:14 AM, Peter Zijlstra <peterz@infradead.org> wrote:
-> 
->> On Thu, May 09, 2019@10:20:30AM +0900, Masami Hiramatsu wrote:
->> Hi Josh,
->> 
->> On Wed, 8 May 2019 13:48:48 -0500
->> Josh Poimboeuf <jpoimboe@redhat.com> wrote:
->> 
->>>> On Wed, May 08, 2019@05:39:07PM +0200, Peter Zijlstra wrote:
->>>>> On Wed, May 08, 2019@07:42:48AM -0500, Josh Poimboeuf wrote:
->>>>> On Wed, May 08, 2019@02:04:16PM +0200, Peter Zijlstra wrote:
->>>> 
->>>>>> Do the x86_64 variants also want some ORC annotation?
->>>>> 
->>>>> Maybe so.  Though it looks like regs->ip isn't saved.  The saved
->>>>> registers might need to be tweaked.  I'll need to look into it.
->>>> 
->>>> What all these sites do (and maybe we should look at unifying them
->>>> somehow) is turn a CALL frame (aka RET-IP) into an exception frame (aka
->>>> pt_regs).
->>>> 
->>>> So regs->ip will be the return address (which is fixed up to be the CALL
->>>> address in the handler).
->>> 
->>> But from what I can tell, trampoline_handler() hard-codes regs->ip to
->>> point to kretprobe_trampoline(), and the original return address is
->>> placed in regs->sp.
->>> 
->>> Masami, is there a reason why regs->ip doesn't have the original return
->>> address and regs->sp doesn't have the original SP?  I think that would
->>> help the unwinder understand things.
->> 
->> Yes, for regs->ip, there is a histrical reason. Since previously, we had
->> an int3 at trampoline, so the user (kretprobe) handler expects that
->> regs->ip is trampoline address and ri->ret_addr is original return address.
->> It is better to check the other archs, but I think it is possible to
->> change the regs->ip to original return address, since no one cares such
->> "fixed address". :)
->> 
->> For the regs->sp, there are 2 reasons.
->> 
->> For x86-64, it's just for over-optimizing (reduce stack usage).
->> I think we can make a gap for putting return address, something like
->> 
->>    "kretprobe_trampoline:\n"
->> #ifdef CONFIG_X86_64
->>    "    pushq %rsp\n"    /* Make a gap for return address */
->>    "    pushq 0(%rsp)\n"    /* Copy original stack pointer */
->>    "    pushfq\n"
->>    SAVE_REGS_STRING
->>    "    movq %rsp, %rdi\n"
->>    "    call trampoline_handler\n"
->>    /* Push the true return address to the bottom */
->>    "    movq %rax, 20*8(%rsp)\n"
->>    RESTORE_REGS_STRING
->>    "    popfq\n"
->>    "    addq $8, %rsp\n"    /* Skip original stack pointer */
->> 
->> For i386 (x86-32), there is no other way to keep &regs->sp as
->> the original stack pointer. It has to be changed with this series,
->> maybe as same as x86-64.
-> 
-> Right; I already fixed that in my patch changing i386's pt_regs.
-> 
-> But what I'd love to do is something like the belwo patch, and make all
-> the trampolines (very much including ftrace) use that. Such that we then
-> only have 1 copy of this magic (well, 2 because x86_64 also needs an
-> implementation of this of course).
-> 
-> Changing ftrace over to this would be a little more work but it can
-> easily chain things a little to get its original context back:
-> 
-> ENTRY(ftrace_regs_caller)
-> GLOBAL(ftrace_regs_func)
->    push ftrace_stub
->    push ftrace_regs_handler
->    jmp call_to_exception_trampoline
-> END(ftrace_regs_caller)
-> 
-> typedef void (*ftrace_func_t)(unsigned long, unsigned long, struct ftrace_op *, struct pt_regs *);
-> 
-> struct ftrace_regs_stack {
->    ftrace_func_t func;
->    unsigned long parent_ip;
-> };
-> 
-> void ftrace_regs_handler(struct pr_regs *regs)
-> {
->    struct ftrace_regs_stack *st = (void *)regs->sp;
->    ftrace_func_t func = st->func;
-> 
->    regs->sp += sizeof(long); /* pop func */
-> 
->    func(regs->ip, st->parent_ip, function_trace_op, regs);
-> }
-> 
-> Hmm? I didn't look into the function_graph thing, but I imagine it can
-> be added without too much pain.
-> 
-> ---
-> --- a/arch/x86/entry/entry_32.S
-> +++ b/arch/x86/entry/entry_32.S
-> @@ -1576,3 +1576,100 @@ ENTRY(rewind_stack_do_exit)
->    call    do_exit
-> 1:    jmp 1b
-> END(rewind_stack_do_exit)
-> +
-> +/*
-> + * Transforms a CALL frame into an exception frame; IOW it pretends the CALL we
-> + * just did was in fact scribbled with an INT3.
-> + *
-> + * Use this trampoline like:
-> + *
-> + *   PUSH $func
-> + *   JMP call_to_exception_trampoline
-> + *
-> + * $func will see regs->ip point at the CALL instruction and must therefore
-> + * modify regs->ip in order to make progress (just like a normal INT3 scribbled
-> + * CALL).
-> + *
-> + * NOTE: we do not restore any of the segment registers.
-> + */
-> +ENTRY(call_to_exception_trampoline)
-> +    /*
-> +     * On entry the stack looks like:
-> +     *
-> +     *   2*4(%esp) <previous context>
-> +     *   1*4(%esp) RET-IP
-> +     *   0*4(%esp) func
-> +     *
-> +     * transform this into:
-> +     *
-> +     *  19*4(%esp) <previous context>
-> +     *  18*4(%esp) gap / RET-IP
-> +     *  17*4(%esp) gap / func
-> +     *  16*4(%esp) ss
-> +     *  15*4(%esp) sp / <previous context>
-> +     *  14*4(%esp) flags
-> +     *  13*4(%esp) cs
-> +     *  12*4(%esp) ip / RET-IP
-> +     *  11*4(%esp) orig_eax
-> +     *  10*4(%esp) gs
-> +     *   9*4(%esp) fs
-> +     *   8*4(%esp) es
-> +     *   7*4(%esp) ds
-> +     *   6*4(%esp) eax
-> +     *   5*4(%esp) ebp
-> +     *   4*4(%esp) edi
-> +     *   3*4(%esp) esi
-> +     *   2*4(%esp) edx
-> +     *   1*4(%esp) ecx
-> +     *   0*4(%esp) ebx
-> +     */
-> +    pushl    %ss
-> +    pushl    %esp        # points at ss
-> +    addl    $3*4, (%esp)    #   point it at <previous context>
-> +    pushfl
-> +    pushl    %cs
-> +    pushl    5*4(%esp)    # RET-IP
-> +    subl    5, (%esp)    #   point at CALL instruction
-> +    pushl    $-1
-> +    pushl    %gs
-> +    pushl    %fs
-> +    pushl    %es
-> +    pushl    %ds
-> +    pushl    %eax
-> +    pushl    %ebp
-> +    pushl    %edi
-> +    pushl    %esi
-> +    pushl    %edx
-> +    pushl    %ecx
-> +    pushl    %ebx
-> +
-> +    ENCODE_FRAME_POINTER
-> +
-> +    movl    %esp, %eax    # 1st argument: pt_regs
-> +
-> +    movl    17*4(%esp), %ebx    # func
-> +    CALL_NOSPEC %ebx
-> +
-> +    movl    PT_OLDESP(%esp), %eax
-> +
-> +    movl    PT_EIP(%esp), %ecx
-> +    movl    %ecx, -1*4(%eax)
-> +
-> +    movl    PT_EFLAGS(%esp), %ecx
-> +    movl    %ecx, -2*4(%eax)
-> +
-> +    movl    PT_EAX(%esp), %ecx
-> +    movl    %ecx, -3*4(%eax)
-> +
-> +    popl    %ebx
-> +    popl    %ecx
-> +    popl    %edx
-> +    popl    %esi
-> +    popl    %edi
-> +    popl    %ebp
-> +
-> +    lea    -3*4(%eax), %esp
-> +    popl    %eax
-> +    popfl
-> +    ret
-> +END(call_to_exception_trampoline)
-> --- a/arch/x86/kernel/kprobes/core.c
-> +++ b/arch/x86/kernel/kprobes/core.c
-> @@ -731,29 +731,8 @@ asm(
->    ".global kretprobe_trampoline\n"
->    ".type kretprobe_trampoline, @function\n"
->    "kretprobe_trampoline:\n"
-> -    /* We don't bother saving the ss register */
-> -#ifdef CONFIG_X86_64
-> -    "    pushq %rsp\n"
-> -    "    pushfq\n"
-> -    SAVE_REGS_STRING
-> -    "    movq %rsp, %rdi\n"
-> -    "    call trampoline_handler\n"
-> -    /* Replace saved sp with true return address. */
-> -    "    movq %rax, 19*8(%rsp)\n"
-> -    RESTORE_REGS_STRING
-> -    "    popfq\n"
-> -#else
-> -    "    pushl %esp\n"
-> -    "    pushfl\n"
-> -    SAVE_REGS_STRING
-> -    "    movl %esp, %eax\n"
-> -    "    call trampoline_handler\n"
-> -    /* Replace saved sp with true return address. */
-> -    "    movl %eax, 15*4(%esp)\n"
-> -    RESTORE_REGS_STRING
-> -    "    popfl\n"
-> -#endif
-> -    "    ret\n"
-> +    "push trampoline_handler\n"
-> +    "jmp call_to_exception_trampoline\n"
->    ".size kretprobe_trampoline, .-kretprobe_trampoline\n"
-> );
+I agree, but I did it just because of my OCD and being complete in
+"emulating an int3" for ftrace_regs_caller ;-)
 
+Yeah, we can remove the popfl from the ftrace trampoline.
 
-Potentially minor nit: you’re doing popfl, but you’re not doing TRACE_IRQ_whatever.  This makes me think that you should either add the tracing (ugh!) or you should maybe just skip the popfl.
+-- Steve
