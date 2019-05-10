@@ -1,110 +1,166 @@
-From: brendanhiggins at google.com (Brendan Higgins)
-Date: Wed, 8 May 2019 12:17:59 -0700
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <20190507172256.GB5900@mit.edu>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
- <20190507080119.GB28121@kroah.com> <20190507172256.GB5900@mit.edu>
-Message-ID: <CAFd5g47vQQeSHLX_cvWSVzva9YgsXz9DNqPv8Z=nw=-kAcmr3Q@mail.gmail.com>
+From: joel at joelfernandes.org (Joel Fernandes (Google))
+Date: Fri, 10 May 2019 17:02:41 -0400
+Subject: [PATCH 1/3] kheaders: Move from proc to sysfs
+In-Reply-To: <20190510210243.152808-1-joel@joelfernandes.org>
+References: <20190510210243.152808-1-joel@joelfernandes.org>
+Message-ID: <20190510210243.152808-2-joel@joelfernandes.org>
 
-> On Tue, May 07, 2019 at 10:01:19AM +0200, Greg KH wrote:
-> > > My understanding is that the intent of KUnit is to avoid booting a kernel on
-> > > real hardware or in a virtual machine.  That seems to be a matter of semantics
-> > > to me because isn't invoking a UML Linux just running the Linux kernel in
-> > > a different form of virtualization?
-> > >
-> > > So I do not understand why KUnit is an improvement over kselftest.
-> > >
-> > > It seems to me that KUnit is just another piece of infrastructure that I
-> > > am going to have to be familiar with as a kernel developer.  More overhead,
-> > > more information to stuff into my tiny little brain.
-> > >
-> > > I would guess that some developers will focus on just one of the two test
-> > > environments (and some will focus on both), splitting the development
-> > > resources instead of pooling them on a common infrastructure.
-> > >
-> > > What am I missing?
-> >
-> > kselftest provides no in-kernel framework for testing kernel code
-> > specifically.  That should be what kunit provides, an "easy" way to
-> > write in-kernel tests for things.
-> >
-> > Brendan, did I get it right?
->
-> Yes, that's basically right.  You don't *have* to use KUnit.  It's
-> supposed to be a simple way to run a large number of small tests that
-> for specific small components in a system.
->
-> For example, I currently use xfstests using KVM and GCE to test all of
-> ext4.  These tests require using multiple 5 GB and 20GB virtual disks,
-> and it works by mounting ext4 file systems and exercising ext4 through
-> the system call interfaces, using userspace tools such as fsstress,
-> fsx, fio, etc.  It requires time overhead to start the VM, create and
-> allocate virtual disks, etc.  For example, to run a single 3 seconds
-> xfstest (generic/001), it requires full 10 seconds to run it via
-> kvm-xfstests.
->
-> KUnit is something else; it's specifically intended to allow you to
-> create lightweight tests quickly and easily, and by reducing the
-> effort needed to write and run unit tests, hopefully we'll have a lot
-> more of them and thus improve kernel quality.
->
-> As an example, I have a volunteer working on developing KUinit tests
-> for ext4.  We're going to start by testing the ext4 extent status
-> tree.  The source code is at fs/ext4/extent_status.c; it's
-> approximately 1800 LOC.  The Kunit tests for the extent status tree
-> will exercise all of the corner cases for the various extent status
-> tree functions --- e.g., ext4_es_insert_delayed_block(),
-> ext4_es_remove_extent(), ext4_es_cache_extent(), etc.  And it will do
-> this in isolation without our needing to create a test file system or
-> using a test block device.
->
-> Next we'll test the ext4 block allocator, again in isolation.  To test
-> the block allocator we will have to write "mock functions" which
-> simulate reading allocation bitmaps from disk.  Again, this will allow
-> the test writer to explicitly construct corner cases and validate that
-> the block allocator works as expected without having to reverese
-> engineer file system data structures which will force a particular
-> code path to be executed.
->
-> So this is why it's largely irrelevant to me that KUinit uses UML.  In
-> fact, it's a feature.  We're not testing device drivers, or the
-> scheduler, or anything else architecture-specific.  UML is not about
-> virtualization.  What it's about in this context is allowing us to
-> start running test code as quickly as possible.  Booting KVM takes
-> about 3-4 seconds, and this includes initializing virtio_scsi and
-> other device drivers.  If by using UML we can hold the amount of
-> unnecessary kernel subsystem initialization down to the absolute
-> minimum, and if it means that we can communicating to the test
-> framework via a userspace "printf" from UML/KUnit code, as opposed to
-> via a virtual serial port to KVM's virtual console, it all makes for
-> lighter weight testing.
->
-> Why did I go looking for a volunteer to write KUnit tests for ext4?
-> Well, I have a plan to make some changes in restructing how ext4's
-> write path works, in order to support things like copy-on-write, a
-> more efficient delayed allocation system, etc.  This will require
-> making changes to the extent status tree, and by having unit tests for
-> the extent status tree, we'll be able to detect any bugs that we might
-> accidentally introduce in the es tree far more quickly than if we
-> didn't have those tests available.  Google has long found that having
-> these sorts of unit tests is a real win for developer velocity for any
-> non-trivial code module (or C++ class), even when you take into
-> account the time it takes to create the unit tests.
->
->                                         - Ted
->
-> P.S.  Many thanks to Brendan for finding such a volunteer for me; the
-> person in question is a SRE from Switzerland who is interested in
-> getting involved with kernel testing, and this is going to be their
-> 20% project.  :-)
+The kheaders archive consisting of the kernel headers used for compiling
+bpf programs is in /proc. However there is concern that moving it here
+will make it permanent. Let us move it to /sys/kernel as discussed [1].
 
-Thanks Ted, I really appreciate it!
+[1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
 
-Since Ted provided such an awesome detailed response, I don't think I
-really need to go into any detail; nevertheless, I think that Greg and
-Shuah have the right idea; in particular, Shuah provides a good
-summary.
+Suggested-by: Steven Rostedt <rostedt at goodmis.org>
+Acked-by: Steven Rostedt <rostedt at goodmis.org>
+Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+---
 
-Thanks everyone!
+Changes to this patch since initial posting:
+Fixed sysfs file mode nit (Greg).
+Fixed some kconfig nits (Masami).
+
+ init/Kconfig                                | 16 ++++-----
+ kernel/Makefile                             |  4 +--
+ kernel/{gen_ikh_data.sh => gen_kheaders.sh} |  2 +-
+ kernel/kheaders.c                           | 40 +++++++++------------
+ 4 files changed, 26 insertions(+), 36 deletions(-)
+ rename kernel/{gen_ikh_data.sh => gen_kheaders.sh} (98%)
+
+diff --git a/init/Kconfig b/init/Kconfig
+index 82b84e5ee30d..ce08adf0f637 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -579,15 +579,13 @@ config IKCONFIG_PROC
+ 	  This option enables access to the kernel configuration file
+ 	  through /proc/config.gz.
+ 
+-config IKHEADERS_PROC
+-	tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
+-	depends on PROC_FS
+-	help
+-	  This option enables access to the kernel header and other artifacts that
+-	  are generated during the build process. These can be used to build eBPF
+-	  tracing programs, or similar programs.  If you build the headers as a
+-	  module, a module called kheaders.ko is built which can be loaded on-demand
+-	  to get access to the headers.
++config IKHEADERS
++	tristate "Enable kernel headers through /sys/kernel/kheaders.tar.xz"
++	help
++	  This option enables access to the in-kernel headers that are generated during
++	  the build process. These can be used to build eBPF tracing programs,
++	  or similar programs.  If you build the headers as a module, a module called
++	  kheaders.ko is built which can be loaded on-demand to get access to headers.
+ 
+ config LOG_BUF_SHIFT
+ 	int "Kernel log buffer size (16 => 64KB, 17 => 128KB)"
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 298437bb2c6a..60e3057c780e 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -71,7 +71,7 @@ obj-$(CONFIG_UTS_NS) += utsname.o
+ obj-$(CONFIG_USER_NS) += user_namespace.o
+ obj-$(CONFIG_PID_NS) += pid_namespace.o
+ obj-$(CONFIG_IKCONFIG) += configs.o
+-obj-$(CONFIG_IKHEADERS_PROC) += kheaders.o
++obj-$(CONFIG_IKHEADERS) += kheaders.o
+ obj-$(CONFIG_SMP) += stop_machine.o
+ obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
+ obj-$(CONFIG_AUDIT) += audit.o auditfilter.o
+@@ -127,7 +127,7 @@ $(obj)/config_data.gz: $(KCONFIG_CONFIG) FORCE
+ $(obj)/kheaders.o: $(obj)/kheaders_data.tar.xz
+ 
+ quiet_cmd_genikh = CHK     $(obj)/kheaders_data.tar.xz
+-cmd_genikh = $(srctree)/kernel/gen_ikh_data.sh $@
++cmd_genikh = $(srctree)/kernel/gen_kheaders.sh $@
+ $(obj)/kheaders_data.tar.xz: FORCE
+ 	$(call cmd,genikh)
+ 
+diff --git a/kernel/gen_ikh_data.sh b/kernel/gen_kheaders.sh
+similarity index 98%
+rename from kernel/gen_ikh_data.sh
+rename to kernel/gen_kheaders.sh
+index 591a94f7b387..581b83534587 100755
+--- a/kernel/gen_ikh_data.sh
++++ b/kernel/gen_kheaders.sh
+@@ -2,7 +2,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ # This script generates an archive consisting of kernel headers
+-# for CONFIG_IKHEADERS_PROC.
++# for CONFIG_IKHEADERS.
+ set -e
+ spath="$(dirname "$(readlink -f "$0")")"
+ kroot="$spath/.."
+diff --git a/kernel/kheaders.c b/kernel/kheaders.c
+index 70ae6052920d..8f69772af77b 100644
+--- a/kernel/kheaders.c
++++ b/kernel/kheaders.c
+@@ -8,9 +8,8 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/proc_fs.h>
++#include <linux/kobject.h>
+ #include <linux/init.h>
+-#include <linux/uaccess.h>
+ 
+ /*
+  * Define kernel_headers_data and kernel_headers_data_end, within which the
+@@ -31,39 +30,32 @@ extern char kernel_headers_data;
+ extern char kernel_headers_data_end;
+ 
+ static ssize_t
+-ikheaders_read_current(struct file *file, char __user *buf,
+-		      size_t len, loff_t *offset)
++ikheaders_read(struct file *file,  struct kobject *kobj,
++	       struct bin_attribute *bin_attr,
++	       char *buf, loff_t off, size_t len)
+ {
+-	return simple_read_from_buffer(buf, len, offset,
+-				       &kernel_headers_data,
+-				       &kernel_headers_data_end -
+-				       &kernel_headers_data);
++	memcpy(buf, &kernel_headers_data + off, len);
++	return len;
+ }
+ 
+-static const struct file_operations ikheaders_file_ops = {
+-	.read = ikheaders_read_current,
+-	.llseek = default_llseek,
++static struct bin_attribute kheaders_attr __ro_after_init = {
++	.attr = {
++		.name = "kheaders.tar.xz",
++		.mode = 0444,
++	},
++	.read = &ikheaders_read,
+ };
+ 
+ static int __init ikheaders_init(void)
+ {
+-	struct proc_dir_entry *entry;
+-
+-	/* create the current headers file */
+-	entry = proc_create("kheaders.tar.xz", S_IRUGO, NULL,
+-			    &ikheaders_file_ops);
+-	if (!entry)
+-		return -ENOMEM;
+-
+-	proc_set_size(entry,
+-		      &kernel_headers_data_end -
+-		      &kernel_headers_data);
+-	return 0;
++	kheaders_attr.size = (&kernel_headers_data_end -
++			      &kernel_headers_data);
++	return sysfs_create_bin_file(kernel_kobj, &kheaders_attr);
+ }
+ 
+ static void __exit ikheaders_cleanup(void)
+ {
+-	remove_proc_entry("kheaders.tar.xz", NULL);
++	sysfs_remove_bin_file(kernel_kobj, &kheaders_attr);
+ }
+ 
+ module_init(ikheaders_init);
+-- 
+2.21.0.1020.gf2820cf01a-goog
