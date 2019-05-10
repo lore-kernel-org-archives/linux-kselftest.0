@@ -1,40 +1,81 @@
-From: jpoimboe@redhat.com (Josh Poimboeuf)
-Date: Wed, 8 May 2019 13:48:48 -0500
+From: peterz@infradead.org (Peter Zijlstra)
+Date: Fri, 10 May 2019 14:40:54 +0200
 Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-In-Reply-To: <20190508153907.GM2589@hirez.programming.kicks-ass.net>
-References: <20190508074901.982470324@infradead.org>
- <20190508080612.721269814@infradead.org>
- <20190508115416.nblx7c2kocidpytm@treble>
+In-Reply-To: <20190510135831.c4ad309c68fc254f819194fc@kernel.org>
+References: <20190508115416.nblx7c2kocidpytm@treble>
  <20190508120416.GL2589@hirez.programming.kicks-ass.net>
  <20190508124248.u5ukpbhnh4wpiccq@treble>
  <20190508153907.GM2589@hirez.programming.kicks-ass.net>
-Message-ID: <20190508184848.qerg3flv3ej3xsev@treble>
+ <20190508184848.qerg3flv3ej3xsev@treble>
+ <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
+ <20190509081431.GO2589@hirez.programming.kicks-ass.net>
+ <20190509230106.3551b08553440d125e437f66@kernel.org>
+ <20190509171416.GY2623@hirez.programming.kicks-ass.net>
+ <20190510135831.c4ad309c68fc254f819194fc@kernel.org>
+Message-ID: <20190510124054.GV2589@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190508184848.zhQQkcVw8GDtZwkCayIiw8M2tBEsRG8J42vvV_FUvME@z>
+Message-ID: <20190510124054.LalyzPoXwULPQPM84fbXq9idsH65geBHLrnVes2WOBI@z>
 
-On Wed, May 08, 2019@05:39:07PM +0200, Peter Zijlstra wrote:
-> On Wed, May 08, 2019@07:42:48AM -0500, Josh Poimboeuf wrote:
-> > On Wed, May 08, 2019@02:04:16PM +0200, Peter Zijlstra wrote:
-> 
-> > > Do the x86_64 variants also want some ORC annotation?
+On Fri, May 10, 2019@01:58:31PM +0900, Masami Hiramatsu wrote:
+> On Thu, 9 May 2019 19:14:16 +0200
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> > > > --- a/arch/x86/kernel/kprobes/core.c
+> > > > +++ b/arch/x86/kernel/kprobes/core.c
+> > > > @@ -731,29 +731,8 @@ asm(
+> > > >  	".global kretprobe_trampoline\n"
+> > > >  	".type kretprobe_trampoline, @function\n"
+> > > >  	"kretprobe_trampoline:\n"
+
+> > > Here, we need a gap for storing ret-ip, because kretprobe_trampoline is
+> > > the address which is returned from the target function. We have no 
+> > > "ret-ip" here at this point. So something like
+> > > 
+> > > +	"push $0\n"	/* This is a gap, will be filled with real return address*/
 > > 
-> > Maybe so.  Though it looks like regs->ip isn't saved.  The saved
-> > registers might need to be tweaked.  I'll need to look into it.
+> > The trampoline already provides a gap, trampoline_handler() will need to
+> > use int3_emulate_push() if it wants to inject something on the return
+> > stack.
 > 
-> What all these sites do (and maybe we should look at unifying them
-> somehow) is turn a CALL frame (aka RET-IP) into an exception frame (aka
-> pt_regs).
+> I guess you mean the int3 case. This trampoline is used as a return destination.
+
+> When the target function is called, kretprobe interrupts the first instruction,
+> and replace the return address with this trampoline. When a "ret" instruction
+> is done, it returns to this trampoline. Thus the stack frame start with
+> previous context here. As you described above,
+
+I would prefer to change that to inject an extra return address, instead
+of replacing it. With the new exception stuff we can actually do that.
+
+So on entry we then go from:
+
+	<previous context>
+	RET-IP
+
+to
+
+	<previous context>
+	RET-IP
+	return-trampoline
+
+So when the function returns, it falls into the trampoline instead.
+
+> > > > +	 * On entry the stack looks like:
+> > > > +	 *
+> > > > +	 *   2*4(%esp) <previous context>
+> > > > +	 *   1*4(%esp) RET-IP
+> > > > +	 *   0*4(%esp) func
 > 
-> So regs->ip will be the return address (which is fixed up to be the CALL
-> address in the handler).
+> From this trampoline call, the stack looks like:
+> 
+> 	 *   1*4(%esp) <previous context>
+> 	 *   0*4(%esp) func
+> 
+> So we need one more push.
 
-But from what I can tell, trampoline_handler() hard-codes regs->ip to
-point to kretprobe_trampoline(), and the original return address is
-placed in regs->sp.
+And then the stack looks just right at this point.
 
-Masami, is there a reason why regs->ip doesn't have the original return
-address and regs->sp doesn't have the original SP?  I think that would
-help the unwinder understand things.
-
--- 
-Josh
+> > > > +	"push trampoline_handler\n"
+> > > > +	"jmp call_to_exception_trampoline\n"
+> > > >  	".size kretprobe_trampoline, .-kretprobe_trampoline\n"
+> > > >  );
+> > > >  NOKPROBE_SYMBOL(kretprobe_trampoline);
