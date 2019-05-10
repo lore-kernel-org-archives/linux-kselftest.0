@@ -1,132 +1,75 @@
-From: brendanhiggins@google.com (Brendan Higgins)
-Date: Fri, 10 May 2019 03:25:06 -0700
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <CAK7LNARzaeZ+ZNbDSii2cpFkk4bUqOu3keNq4qX0LhftuK8+MQ@mail.gmail.com>
+From: yamada.masahiro@socionext.com (Masahiro Yamada)
+Date: Fri, 10 May 2019 12:03:57 +0900
+Subject: [PATCH v2 06/17] kbuild: enable building KUnit
+In-Reply-To: <20190501230126.229218-7-brendanhiggins@google.com>
 References: <20190501230126.229218-1-brendanhiggins@google.com>
- <CAK7LNARzaeZ+ZNbDSii2cpFkk4bUqOu3keNq4qX0LhftuK8+MQ@mail.gmail.com>
+ <20190501230126.229218-7-brendanhiggins@google.com>
 Message-ID:
- <CAFd5g47iaxW5Nk+sELxgasnbpNX7O6kwUTT7gMWoN3gA=_we6Q@mail.gmail.com>
+ <CAK7LNAQ+SRMn8UFjW1dZv_TrL0qjD2v2S=rXgtUpiA-urr1DDA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190510102506.22NPamebwlXYVEMrKw7G1t8DEcHCY_ACjCBHyidkHHA@z>
+Message-ID: <20190510030357.SkIA-uwna1xJAL8RsPJ00ogJE_HQxTlrwSOWfetHcpQ@z>
 
-> On Thu, May 2, 2019 at 8:02 AM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> >
-> > ## TLDR
-> >
-> > I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
-> > 5.2.
-> >
-> > Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
-> > we would merge through your tree when the time came? Am I remembering
-> > correctly?
-> >
-> > ## Background
-> >
-> > This patch set proposes KUnit, a lightweight unit testing and mocking
-> > framework for the Linux kernel.
-> >
-> > Unlike Autotest and kselftest, KUnit is a true unit testing framework;
-> > it does not require installing the kernel on a test machine or in a VM
-> > and does not require tests to be written in userspace running on a host
-> > kernel. Additionally, KUnit is fast: From invocation to completion KUnit
-> > can run several dozen tests in under a second. Currently, the entire
-> > KUnit test suite for KUnit runs in under a second from the initial
-> > invocation (build time excluded).
-> >
-> > KUnit is heavily inspired by JUnit, Python's unittest.mock, and
-> > Googletest/Googlemock for C++. KUnit provides facilities for defining
-> > unit test cases, grouping related test cases into test suites, providing
-> > common infrastructure for running tests, mocking, spying, and much more.
-> >
-> > ## What's so special about unit testing?
-> >
-> > A unit test is supposed to test a single unit of code in isolation,
-> > hence the name. There should be no dependencies outside the control of
-> > the test; this means no external dependencies, which makes tests orders
-> > of magnitudes faster. Likewise, since there are no external dependencies,
-> > there are no hoops to jump through to run the tests. Additionally, this
-> > makes unit tests deterministic: a failing unit test always indicates a
-> > problem. Finally, because unit tests necessarily have finer granularity,
-> > they are able to test all code paths easily solving the classic problem
-> > of difficulty in exercising error handling code.
-> >
-> > ## Is KUnit trying to replace other testing frameworks for the kernel?
-> >
-> > No. Most existing tests for the Linux kernel are end-to-end tests, which
-> > have their place. A well tested system has lots of unit tests, a
-> > reasonable number of integration tests, and some end-to-end tests. KUnit
-> > is just trying to address the unit test space which is currently not
-> > being addressed.
-> >
-> > ## More information on KUnit
-> >
-> > There is a bunch of documentation near the end of this patch set that
-> > describes how to use KUnit and best practices for writing unit tests.
-> > For convenience I am hosting the compiled docs here:
-> > https://google.github.io/kunit-docs/third_party/kernel/docs/
-> > Additionally for convenience, I have applied these patches to a branch:
-> > https://kunit.googlesource.com/linux/+/kunit/rfc/v5.1-rc7/v1
-> > The repo may be cloned with:
-> > git clone https://kunit.googlesource.com/linux
-> > This patchset is on the kunit/rfc/v5.1-rc7/v1 branch.
-> >
-> > ## Changes Since Last Version
-> >
-> > None. I just rebased the last patchset on v5.1-rc7.
-> >
-> > --
-> > 2.21.0.593.g511ec345e18-goog
-> >
+On Thu, May 2, 2019 at 8:03 AM Brendan Higgins
+<brendanhiggins@google.com> wrote:
 >
-> The following is the log of 'git am' of this series.
-> I see several 'new blank line at EOF' warnings.
+> Add KUnit to root Kconfig and Makefile allowing it to actually be built.
 >
->
->
-> masahiro at pug:~/workspace/bsp/linux$ git am ~/Downloads/*.patch
-> Applying: kunit: test: add KUnit test runner core
-> Applying: kunit: test: add test resource management API
-> Applying: kunit: test: add string_stream a std::stream like string builder
-> .git/rebase-apply/patch:223: new blank line at EOF.
-> +
-> warning: 1 line adds whitespace errors.
-> Applying: kunit: test: add kunit_stream a std::stream like logger
-> Applying: kunit: test: add the concept of expectations
-> .git/rebase-apply/patch:475: new blank line at EOF.
-> +
-> warning: 1 line adds whitespace errors.
-> Applying: kbuild: enable building KUnit
-> Applying: kunit: test: add initial tests
-> .git/rebase-apply/patch:203: new blank line at EOF.
-> +
-> warning: 1 line adds whitespace errors.
-> Applying: kunit: test: add support for test abort
-> .git/rebase-apply/patch:453: new blank line at EOF.
-> +
-> warning: 1 line adds whitespace errors.
-> Applying: kunit: test: add tests for kunit test abort
-> Applying: kunit: test: add the concept of assertions
-> .git/rebase-apply/patch:518: new blank line at EOF.
-> +
-> warning: 1 line adds whitespace errors.
-> Applying: kunit: test: add test managed resource tests
-> Applying: kunit: tool: add Python wrappers for running KUnit tests
-> .git/rebase-apply/patch:457: new blank line at EOF.
-> +
-> warning: 1 line adds whitespace errors.
-> Applying: kunit: defconfig: add defconfigs for building KUnit tests
-> Applying: Documentation: kunit: add documentation for KUnit
-> .git/rebase-apply/patch:71: new blank line at EOF.
-> +
-> .git/rebase-apply/patch:209: new blank line at EOF.
-> +
-> .git/rebase-apply/patch:848: new blank line at EOF.
-> +
-> warning: 3 lines add whitespace errors.
-> Applying: MAINTAINERS: add entry for KUnit the unit testing framework
-> Applying: kernel/sysctl-test: Add null pointer test for sysctl.c:proc_dointvec()
-> Applying: MAINTAINERS: add proc sysctl KUnit test to PROC SYSCTL section
+> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
 
-Sorry about this! I will have it fixed on the next revision.
+You need to make sure
+to not break git-bisect'abililty.
+
+
+With this commit, I see build error.
+
+  CC      kunit/test.o
+kunit/test.c:11:10: fatal error: os.h: No such file or directory
+ #include <os.h>
+          ^~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.build;279: kunit/test.o] Error 1
+make: *** [Makefile;1763: kunit/] Error 2
+
+
+
+
+
+
+
+
+> ---
+>  Kconfig  | 2 ++
+>  Makefile | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/Kconfig b/Kconfig
+> index 48a80beab6853..10428501edb78 100644
+> --- a/Kconfig
+> +++ b/Kconfig
+> @@ -30,3 +30,5 @@ source "crypto/Kconfig"
+>  source "lib/Kconfig"
+>
+>  source "lib/Kconfig.debug"
+> +
+> +source "kunit/Kconfig"
+> diff --git a/Makefile b/Makefile
+> index 2b99679148dc7..77368f498d84c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -969,7 +969,7 @@ endif
+>  PHONY += prepare0
+>
+>  ifeq ($(KBUILD_EXTMOD),)
+> -core-y         += kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/
+> +core-y         += kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/ kunit/
+>
+>  vmlinux-dirs   := $(patsubst %/,%,$(filter %/, $(init-y) $(init-m) \
+>                      $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
+> --
+> 2.21.0.593.g511ec345e18-goog
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada
