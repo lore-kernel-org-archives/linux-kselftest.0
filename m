@@ -1,96 +1,50 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Wed, 08 May 2019 16:24:29 -0400
-Subject: [for-next][PATCH 02/13] x86_64: Allow breakpoints to emulate call
- instructions
-References: <20190508202427.252736423@goodmis.org>
-Message-ID: <20190508202452.072839447@goodmis.org>
+From: peterz at infradead.org (Peter Zijlstra)
+Date: Fri, 10 May 2019 14:31:31 +0200
+Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
+In-Reply-To: <20190510135831.c4ad309c68fc254f819194fc@kernel.org>
+References: <20190508115416.nblx7c2kocidpytm@treble>
+ <20190508120416.GL2589@hirez.programming.kicks-ass.net>
+ <20190508124248.u5ukpbhnh4wpiccq@treble>
+ <20190508153907.GM2589@hirez.programming.kicks-ass.net>
+ <20190508184848.qerg3flv3ej3xsev@treble>
+ <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
+ <20190509081431.GO2589@hirez.programming.kicks-ass.net>
+ <20190509230106.3551b08553440d125e437f66@kernel.org>
+ <20190509171416.GY2623@hirez.programming.kicks-ass.net>
+ <20190510135831.c4ad309c68fc254f819194fc@kernel.org>
+Message-ID: <20190510123131.GU2589@hirez.programming.kicks-ass.net>
 
-From: Peter Zijlstra <peterz at infradead.org>
+On Fri, May 10, 2019 at 01:58:31PM +0900, Masami Hiramatsu wrote:
+> On Thu, 9 May 2019 19:14:16 +0200
+> Peter Zijlstra <peterz at infradead.org> wrote:
 
-In order to allow breakpoints to emulate call instructions, they need to push
-the return address onto the stack. The x86_64 int3 handler adds a small gap
-to allow the stack to grow some. Use this gap to add the return address to
-be able to emulate a call instruction at the breakpoint location.
+> > Ideally also the optimized kprobe trampoline, but I've not managed to
+> > fully comprehend that one.
+> 
+> As you pointed in other reply, save/restore can be a macro, but
+> each trampoline code is slightly different. Optprobe template has
+> below parts
+> 
+> (jumped from probed address)
+> [store regs]
+> [setup function arguments (pt_regs and probed address)]
+> [handler call]
+> [restore regs]
+> [execute copied instruction]
 
-These helper functions are added:
+ instruction_s_ ?
 
-  int3_emulate_jmp(): changes the location of the regs->ip to return there.
+The JMP to this trampoline is likely 5 bytes and could have clobbered
+multiple instructions, we'd then have to place them all here, and
 
- (The next two are only for x86_64)
-  int3_emulate_push(): to push the address onto the gap in the stack
-  int3_emulate_call(): push the return address and change regs->ip
+> [jump back to probed address]
 
-Cc: Andy Lutomirski <luto at kernel.org>
-Cc: Nicolai Stange <nstange at suse.de>
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: Ingo Molnar <mingo at redhat.com>
-Cc: Borislav Petkov <bp at alien8.de>
-Cc: "H. Peter Anvin" <hpa at zytor.com>
-Cc: the arch/x86 maintainers <x86 at kernel.org>
-Cc: Josh Poimboeuf <jpoimboe at redhat.com>
-Cc: Jiri Kosina <jikos at kernel.org>
-Cc: Miroslav Benes <mbenes at suse.cz>
-Cc: Petr Mladek <pmladek at suse.com>
-Cc: Joe Lawrence <joe.lawrence at redhat.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Konrad Rzeszutek Wilk <konrad.wilk at oracle.com>
-Cc: Tim Chen <tim.c.chen at linux.intel.com>
-Cc: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
-Cc: Mimi Zohar <zohar at linux.ibm.com>
-Cc: Juergen Gross <jgross at suse.com>
-Cc: Nick Desaulniers <ndesaulniers at google.com>
-Cc: Nayna Jain <nayna at linux.ibm.com>
-Cc: Masahiro Yamada <yamada.masahiro at socionext.com>
-Cc: Joerg Roedel <jroedel at suse.de>
-Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest at vger.kernel.org>
-Cc: stable at vger.kernel.org
-Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
-Tested-by: Nicolai Stange <nstange at suse.de>
-Reviewed-by: Nicolai Stange <nstange at suse.de>
-Reviewed-by: Masami Hiramatsu <mhiramat at kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
-[ Modified to only work for x86_64 and added comment to int3_emulate_push() ]
-Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
----
- arch/x86/include/asm/text-patching.h | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+jump to after whatever instructions were clobbered by the JMP.
 
-diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-index e85ff65c43c3..05861cc08787 100644
---- a/arch/x86/include/asm/text-patching.h
-+++ b/arch/x86/include/asm/text-patching.h
-@@ -39,4 +39,32 @@ extern int poke_int3_handler(struct pt_regs *regs);
- extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
- extern int after_bootmem;
- 
-+static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
-+{
-+	regs->ip = ip;
-+}
-+
-+#define INT3_INSN_SIZE 1
-+#define CALL_INSN_SIZE 5
-+
-+#ifdef CONFIG_X86_64
-+static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
-+{
-+	/*
-+	 * The int3 handler in entry_64.S adds a gap between the
-+	 * stack where the break point happened, and the saving of
-+	 * pt_regs. We can extend the original stack because of
-+	 * this gap. See the idtentry macro's create_gap option.
-+	 */
-+	regs->sp -= sizeof(unsigned long);
-+	*(unsigned long *)regs->sp = val;
-+}
-+
-+static inline void int3_emulate_call(struct pt_regs *regs, unsigned long func)
-+{
-+	int3_emulate_push(regs, regs->ip - INT3_INSN_SIZE + CALL_INSN_SIZE);
-+	int3_emulate_jmp(regs, func);
-+}
-+#endif
-+
- #endif /* _ASM_X86_TEXT_PATCHING_H */
--- 
-2.20.1
+> Note that there is a limitation that if it is optiomized probe, user
+> handler can not change regs->ip. (we can not use "ret" after executed
+> a copied instruction, which must run on same stack)
+
+Changing regs->ip in this case is going to be massively dodgy indeed :-)
+But so would changing much else; changing stack layout would also be
+somewhat tricky.
