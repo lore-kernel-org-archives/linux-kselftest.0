@@ -1,314 +1,176 @@
-From: mhiramat@kernel.org (Masami Hiramatsu)
-Date: Thu, 9 May 2019 23:01:06 +0900
-Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-In-Reply-To: <20190509081431.GO2589@hirez.programming.kicks-ass.net>
-References: <20190508074901.982470324@infradead.org>
- <20190508080612.721269814@infradead.org>
- <20190508115416.nblx7c2kocidpytm@treble>
- <20190508120416.GL2589@hirez.programming.kicks-ass.net>
- <20190508124248.u5ukpbhnh4wpiccq@treble>
- <20190508153907.GM2589@hirez.programming.kicks-ass.net>
- <20190508184848.qerg3flv3ej3xsev@treble>
- <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
- <20190509081431.GO2589@hirez.programming.kicks-ass.net>
-Message-ID: <20190509230106.3551b08553440d125e437f66@kernel.org>
+From: knut.omang@oracle.com (Knut Omang)
+Date: Fri, 10 May 2019 14:12:38 +0200
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <CAFd5g47Fvafwgh15JNfxSBRf5qqG2z+V+XGAB2cJtNnHFTiFfQ@mail.gmail.com>
+References: <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
+ <20190509015856.GB7031@mit.edu>
+ <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+ <20190509032017.GA29703@mit.edu>
+ <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
+ <20190509133551.GD29703@mit.edu>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
+ <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
+ <20190509214233.GA20877@mit.edu>
+ <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
+ <20190509233043.GC20877@mit.edu>
+ <8914afef-1e66-e6e3-f891-5855768d3018@deltatee.com>
+ <6d6e91ec-33d3-830b-4895-4d7a20ba7d45@gmail.com>
+ <a1b88d5add15d43de0468c32d9a2427629337abb.camel@oracle.com>
+ <CAKMK7uFd1xUx8u3xWLwifVSq4OEnMO4S-m0hESe68UzONXnMFg@mail.gmail.com>
+ <CAFd5g47Fvafwgh15JNfxSBRf5qqG2z+V+XGAB2cJtNnHFTiFfQ@mail.gmail.com>
+Message-ID: <1781164863be8d21a7e1890ae6dfee9be101d0a0.camel@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190509140106.iwFA0qydc6_ZX3Tx_53AbJlITQazwQ34ekKW9N6jWyk@z>
+Message-ID: <20190510121238.z2UFl4fJe8WAvs-_-3KyGXo9JgStAEgQpqEe9pZEMEE@z>
 
-On Thu, 9 May 2019 10:14:31 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
-
-> On Thu, May 09, 2019@10:20:30AM +0900, Masami Hiramatsu wrote:
-> > Hi Josh,
-> > 
-> > On Wed, 8 May 2019 13:48:48 -0500
-> > Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> > 
-> > > On Wed, May 08, 2019@05:39:07PM +0200, Peter Zijlstra wrote:
-> > > > On Wed, May 08, 2019@07:42:48AM -0500, Josh Poimboeuf wrote:
-> > > > > On Wed, May 08, 2019@02:04:16PM +0200, Peter Zijlstra wrote:
-> > > > 
-> > > > > > Do the x86_64 variants also want some ORC annotation?
-> > > > > 
-> > > > > Maybe so.  Though it looks like regs->ip isn't saved.  The saved
-> > > > > registers might need to be tweaked.  I'll need to look into it.
-> > > > 
-> > > > What all these sites do (and maybe we should look at unifying them
-> > > > somehow) is turn a CALL frame (aka RET-IP) into an exception frame (aka
-> > > > pt_regs).
-> > > > 
-> > > > So regs->ip will be the return address (which is fixed up to be the CALL
-> > > > address in the handler).
-> > > 
-> > > But from what I can tell, trampoline_handler() hard-codes regs->ip to
-> > > point to kretprobe_trampoline(), and the original return address is
-> > > placed in regs->sp.
-> > > 
-> > > Masami, is there a reason why regs->ip doesn't have the original return
-> > > address and regs->sp doesn't have the original SP?  I think that would
-> > > help the unwinder understand things.
-> > 
-> > Yes, for regs->ip, there is a histrical reason. Since previously, we had
-> > an int3 at trampoline, so the user (kretprobe) handler expects that
-> > regs->ip is trampoline address and ri->ret_addr is original return address.
-> > It is better to check the other archs, but I think it is possible to
-> > change the regs->ip to original return address, since no one cares such
-> > "fixed address". :)
-> > 
-> > For the regs->sp, there are 2 reasons.
-> > 
-> > For x86-64, it's just for over-optimizing (reduce stack usage).
-> > I think we can make a gap for putting return address, something like
-> > 
-> > 	"kretprobe_trampoline:\n"
-> > #ifdef CONFIG_X86_64
-> > 	"	pushq %rsp\n"	/* Make a gap for return address */
-> > 	"	pushq 0(%rsp)\n"	/* Copy original stack pointer */
-> > 	"	pushfq\n"
-> > 	SAVE_REGS_STRING
-> > 	"	movq %rsp, %rdi\n"
-> > 	"	call trampoline_handler\n"
-> > 	/* Push the true return address to the bottom */
-> > 	"	movq %rax, 20*8(%rsp)\n"
-> > 	RESTORE_REGS_STRING
-> > 	"	popfq\n"
-> > 	"	addq $8, %rsp\n"	/* Skip original stack pointer */
-> > 
-> > For i386 (x86-32), there is no other way to keep &regs->sp as
-> > the original stack pointer. It has to be changed with this series,
-> > maybe as same as x86-64.
+On Fri, 2019-05-10@03:23 -0700, Brendan Higgins wrote:
+> > On Fri, May 10, 2019@7:49 AM Knut Omang <knut.omang@oracle.com> wrote:
+> > >
+> > > On Thu, 2019-05-09@22:18 -0700, Frank Rowand wrote:
+> > > > On 5/9/19 4:40 PM, Logan Gunthorpe wrote:
+> > > > >
+> > > > >
+> > > > > On 2019-05-09 5:30 p.m., Theodore Ts'o wrote:
+> > > > >> On Thu, May 09, 2019@04:20:05PM -0600, Logan Gunthorpe wrote:
+> > > > >>>
+> > > > >>> The second item, arguably, does have significant overlap with kselftest.
+> > > > >>> Whether you are running short tests in a light weight UML environment or
+> > > > >>> higher level tests in an heavier VM the two could be using the same
+> > > > >>> framework for writing or defining in-kernel tests. It *may* also be valuable
+> > > > >>> for some people to be able to run all the UML tests in the heavy VM
+> > > > >>> environment along side other higher level tests.
+> > > > >>>
+> > > > >>> Looking at the selftests tree in the repo, we already have similar items to
+> > > > >>> what Kunit is adding as I described in point (2) above. kselftest_harness.h
+> > > > >>> contains macros like EXPECT_* and ASSERT_* with very similar intentions to
+> > > > >>> the new KUNIT_EXECPT_* and KUNIT_ASSERT_* macros.
+> > > > >>>
+> > > > >>> However, the number of users of this harness appears to be quite small. Most
+> > > > >>> of the code in the selftests tree seems to be a random mismash of scripts
+> > > > >>> and userspace code so it's not hard to see it as something completely
+> > > > >>> different from the new Kunit:
+> > > > >>>
+> > > > >>> $ git grep --files-with-matches kselftest_harness.h *
+> > > > >>
+> > > > >> To the extent that we can unify how tests are written, I agree that
+> > > > >> this would be a good thing.  However, you should note that
+> > > > >> kselftest_harness.h is currently assums that it will be included in
+> > > > >> userspace programs.  This is most obviously seen if you look closely
+> > > > >> at the functions defined in the header files which makes calls to
+> > > > >> fork(), abort() and fprintf().
+> > > > >
+> > > > > Ah, yes. I obviously did not dig deep enough. Using kunit for
+> > > > > in-kernel tests and kselftest_harness for userspace tests seems like
+> > > > > a sensible line to draw to me. Trying to unify kernel and userspace
+> > > > > here sounds like it could be difficult so it's probably not worth
+> > > > > forcing the issue unless someone wants to do some really fancy work
+> > > > > to get it done.
+> > > > >
+> > > > > Based on some of the other commenters, I was under the impression
+> > > > > that kselftests had in-kernel tests but I'm not sure where or if they
+> > > > > exist.
+> > > >
+> > > > YES, kselftest has in-kernel tests.  (Excuse the shouting...)
+> > > >
+> > > > Here is a likely list of them in the kernel source tree:
+> > > >
+> > > > $ grep module_init lib/test_*.c
+> > > > lib/test_bitfield.c:module_init(test_bitfields)
+> > > > lib/test_bitmap.c:module_init(test_bitmap_init);
+> > > > lib/test_bpf.c:module_init(test_bpf_init);
+> > > > lib/test_debug_virtual.c:module_init(test_debug_virtual_init);
+> > > > lib/test_firmware.c:module_init(test_firmware_init);
+> > > > lib/test_hash.c:module_init(test_hash_init);  /* Does everything */
+> > > > lib/test_hexdump.c:module_init(test_hexdump_init);
+> > > > lib/test_ida.c:module_init(ida_checks);
+> > > > lib/test_kasan.c:module_init(kmalloc_tests_init);
+> > > > lib/test_list_sort.c:module_init(list_sort_test);
+> > > > lib/test_memcat_p.c:module_init(test_memcat_p_init);
+> > > > lib/test_module.c:static int __init test_module_init(void)
+> > > > lib/test_module.c:module_init(test_module_init);
+> > > > lib/test_objagg.c:module_init(test_objagg_init);
+> > > > lib/test_overflow.c:static int __init test_module_init(void)
+> > > > lib/test_overflow.c:module_init(test_module_init);
+> > > > lib/test_parman.c:module_init(test_parman_init);
+> > > > lib/test_printf.c:module_init(test_printf_init);
+> > > > lib/test_rhashtable.c:module_init(test_rht_init);
+> > > > lib/test_siphash.c:module_init(siphash_test_init);
+> > > > lib/test_sort.c:module_init(test_sort_init);
+> > > > lib/test_stackinit.c:module_init(test_stackinit_init);
+> > > > lib/test_static_key_base.c:module_init(test_static_key_base_init);
+> > > > lib/test_static_keys.c:module_init(test_static_key_init);
+> > > > lib/test_string.c:module_init(string_selftest_init);
+> > > > lib/test_ubsan.c:module_init(test_ubsan_init);
+> > > > lib/test_user_copy.c:module_init(test_user_copy_init);
+> > > > lib/test_uuid.c:module_init(test_uuid_init);
+> > > > lib/test_vmalloc.c:module_init(vmalloc_test_init)
+> > > > lib/test_xarray.c:module_init(xarray_checks);
+> > > >
+> > > >
+> > > > > If they do exists, it seems like it would make sense to
+> > > > > convert those to kunit and have Kunit tests run-able in a VM or
+> > > > > baremetal instance.
+> > > >
+> > > > They already run in a VM.
+> > > >
+> > > > They already run on bare metal.
+> > > >
+> > > > They already run in UML.
+> > > >
+> > > > This is not to say that KUnit does not make sense.  But I'm still trying
+> > > > to get a better description of the KUnit features (and there are
+> > > > some).
+> > >
+> > > FYI, I have a master student who looks at converting some of these to KTF, such as
+> for
+> > > instance the XArray tests, which lended themselves quite good to a semi-automated
+> > > conversion.
+> > >
+> > > The result is also a somewhat more compact code as well as the flexibility
+> > > provided by the Googletest executor and the KTF frameworks, such as running selected
+> > > tests, output formatting, debugging features etc.
+> >
+> > So is KTF already in upstream? Or is the plan to unify the KTF and
 > 
-> Right; I already fixed that in my patch changing i386's pt_regs.
+> I am not certain about KTF's upstream plans, but I assume that Knut
+> would have CC'ed me on the thread if he had started working on it.
 
-I see it, and it is good to me. :)
+You are on the Github watcher list for KTF?
+Quite a few of the commits there are preparatory for a forthcoming kernel patch set.
+I'll of course CC: you on the patch set when we send it to the list.
 
-> But what I'd love to do is something like the belwo patch, and make all
-> the trampolines (very much including ftrace) use that. Such that we then
-> only have 1 copy of this magic (well, 2 because x86_64 also needs an
-> implementation of this of course).
-
-OK, but I will make kretprobe integrated with func-graph tracer,
-since it is inefficient that we have 2 different hidden return stack...
-
-Anyway,
-
-> Changing ftrace over to this would be a little more work but it can
-> easily chain things a little to get its original context back:
+> > Kunit in-kernel test harnesses? Because there's tons of these
 > 
-> ENTRY(ftrace_regs_caller)
-> GLOBAL(ftrace_regs_func)
-> 	push ftrace_stub
-> 	push ftrace_regs_handler
-> 	jmp call_to_exception_trampoline
-> END(ftrace_regs_caller)
+> No, no plan. Knut and I talked about this a good while ago and it
+> seemed that we had pretty fundamentally different approaches both in
+> terms of implementation and end goal. Combining them seemed pretty
+> infeasible, at least from a technical perspective. Anyway, I am sure
+> Knut would like to give him perspective on the matter and I don't want
+> to say too much without first giving him a chance to chime in on the
+> matter.
+
+I need more time to study KUnit details to say, but from a 10k feet perspective:
+I think at least there's a potential for some API unification, in using the same macro
+names. How about removing the KUNIT_ prefix to the test macros ;-) ? 
+That would make the names shorter, saving typing when writing tests, and storage ;-) 
+and also make the names more similar to KTF's, and those of user land unit test
+frameworks? Also it will make it possible to have functions compiling both with KTF and
+KUnit, facilitating moving code between the two.
+
+Also the string stream facilities of KUnit looks interesting to share.
+But as said, more work needed on my side to be sure about this..
+
+Knut
+
+> Nevertheless, I hope you don't see resolving this as a condition for
+> accepting this patchset. I had several rounds of RFC on KUnit, and no
+> one had previously brought this up.
 > 
-> typedef void (*ftrace_func_t)(unsigned long, unsigned long, struct ftrace_op *, struct pt_regs *);
+> > in-kernel unit tests already, and every merge we get more (Frank's
+> > list didn't even look into drivers or anywhere else, e.g. it's missing
+> > the locking self tests I worked on in the past), and a more structured
+> > approach would really be good.
 > 
-> struct ftrace_regs_stack {
-> 	ftrace_func_t func;
-> 	unsigned long parent_ip;
-> };
+> Well, that's what I am trying to do. I hope you like it!
 > 
-> void ftrace_regs_handler(struct pr_regs *regs)
-> {
-> 	struct ftrace_regs_stack *st = (void *)regs->sp;
-> 	ftrace_func_t func = st->func;
-> 
-> 	regs->sp += sizeof(long); /* pop func */
-
-Sorry, why pop here? 
-
-> 
-> 	func(regs->ip, st->parent_ip, function_trace_op, regs);
-> }
-> 
-> Hmm? I didn't look into the function_graph thing, but I imagine it can
-> be added without too much pain.
-
-Yes, that should be good for function_graph trampoline too.
-We use very similar technic.
-
-> 
-> ---
-> --- a/arch/x86/entry/entry_32.S
-> +++ b/arch/x86/entry/entry_32.S
-> @@ -1576,3 +1576,100 @@ ENTRY(rewind_stack_do_exit)
->  	call	do_exit
->  1:	jmp 1b
->  END(rewind_stack_do_exit)
-> +
-> +/*
-> + * Transforms a CALL frame into an exception frame; IOW it pretends the CALL we
-> + * just did was in fact scribbled with an INT3.
-> + *
-> + * Use this trampoline like:
-> + *
-> + *   PUSH $func
-> + *   JMP call_to_exception_trampoline
-> + *
-> + * $func will see regs->ip point at the CALL instruction and must therefore
-> + * modify regs->ip in order to make progress (just like a normal INT3 scribbled
-> + * CALL).
-> + *
-> + * NOTE: we do not restore any of the segment registers.
-> + */
-> +ENTRY(call_to_exception_trampoline)
-> +	/*
-> +	 * On entry the stack looks like:
-> +	 *
-> +	 *   2*4(%esp) <previous context>
-> +	 *   1*4(%esp) RET-IP
-> +	 *   0*4(%esp) func
-> +	 *
-> +	 * transform this into:
-> +	 *
-> +	 *  19*4(%esp) <previous context>
-> +	 *  18*4(%esp) gap / RET-IP
-> +	 *  17*4(%esp) gap / func
-> +	 *  16*4(%esp) ss
-> +	 *  15*415*4(%esp) sp / <previous context>
-
-isn't this "&<previous context>" ?
-
-> +	 *  14*4(%esp) flags
-> +	 *  13*4(%esp) cs
-> +	 *  12*4(%esp) ip / RET-IP
-> +	 *  11*4(%esp) orig_eax
-> +	 *  10*4(%esp) gs
-> +	 *   9*4(%esp) fs
-> +	 *   8*4(%esp) es
-> +	 *   7*4(%esp) ds
-> +	 *   6*4(%esp) eax
-> +	 *   5*4(%esp) ebp
-> +	 *   4*4(%esp) edi
-> +	 *   3*4(%esp) esi
-> +	 *   2*4(%esp) edx
-> +	 *   1*4(%esp) ecx
-> +	 *   0*4(%esp) ebx
-> +	 */
-> +	pushl	%ss
-> +	pushl	%esp		# points at ss
-> +	addl	$3*4, (%esp)	#   point it at <previous context>
-> +	pushfl
-> +	pushl	%cs
-> +	pushl	5*4(%esp)	# RET-IP
-> +	subl	5, (%esp)	#   point at CALL instruction
-> +	pushl	$-1
-> +	pushl	%gs
-> +	pushl	%fs
-> +	pushl	%es
-> +	pushl	%ds
-> +	pushl	%eax
-> +	pushl	%ebp
-> +	pushl	%edi
-> +	pushl	%esi
-> +	pushl	%edx
-> +	pushl	%ecx
-> +	pushl	%ebx
-> +
-> +	ENCODE_FRAME_POINTER
-> +
-> +	movl	%esp, %eax	# 1st argument: pt_regs
-> +
-> +	movl	17*4(%esp), %ebx	# func
-> +	CALL_NOSPEC %ebx
-> +
-> +	movl	PT_OLDESP(%esp), %eax
-
-Is PT_OLDESP(%esp) "<previous context>" or "&<previous contex>"?
-
-> +
-> +	movl	PT_EIP(%esp), %ecx
-> +	movl	%ecx, -1*4(%eax)
-
-Ah, OK, so $func must set the true return address to regs->ip
-instead of returning it.
-
-> +
-> +	movl	PT_EFLAGS(%esp), %ecx
-> +	movl	%ecx, -2*4(%eax)
-> +
-> +	movl	PT_EAX(%esp), %ecx
-> +	movl	%ecx, -3*4(%eax)
-
-So, at this point, the stack becomes
-
- 18*4(%esp) RET-IP
- 17*4(%esp) eflags
- 16*4(%esp) eax
-
-Correct?
-
-> +
-> +	popl	%ebx
-> +	popl	%ecx
-> +	popl	%edx
-> +	popl	%esi
-> +	popl	%edi
-> +	popl	%ebp
-> +
-> +	lea	-3*4(%eax), %esp
-> +	popl	%eax
-> +	popfl
-> +	ret
-> +END(call_to_exception_trampoline)
-> --- a/arch/x86/kernel/kprobes/core.c
-> +++ b/arch/x86/kernel/kprobes/core.c
-> @@ -731,29 +731,8 @@ asm(
->  	".global kretprobe_trampoline\n"
->  	".type kretprobe_trampoline, @function\n"
->  	"kretprobe_trampoline:\n"
-> -	/* We don't bother saving the ss register */
-> -#ifdef CONFIG_X86_64
-> -	"	pushq %rsp\n"
-> -	"	pushfq\n"
-> -	SAVE_REGS_STRING
-> -	"	movq %rsp, %rdi\n"
-> -	"	call trampoline_handler\n"
-> -	/* Replace saved sp with true return address. */
-> -	"	movq %rax, 19*8(%rsp)\n"
-> -	RESTORE_REGS_STRING
-> -	"	popfq\n"
-> -#else
-> -	"	pushl %esp\n"
-> -	"	pushfl\n"
-> -	SAVE_REGS_STRING
-> -	"	movl %esp, %eax\n"
-> -	"	call trampoline_handler\n"
-> -	/* Replace saved sp with true return address. */
-> -	"	movl %eax, 15*4(%esp)\n"
-> -	RESTORE_REGS_STRING
-> -	"	popfl\n"
-> -#endif
-> -	"	ret\n"
-
-Here, we need a gap for storing ret-ip, because kretprobe_trampoline is
-the address which is returned from the target function. We have no 
-"ret-ip" here at this point. So something like
-
-+	"push $0\n"	/* This is a gap, will be filled with real return address*/
-
-> +	"push trampoline_handler\n"
-> +	"jmp call_to_exception_trampoline\n"
->  	".size kretprobe_trampoline, .-kretprobe_trampoline\n"
->  );
->  NOKPROBE_SYMBOL(kretprobe_trampoline);
-> @@ -791,12 +770,7 @@ static __used void *trampoline_handler(s
->  
->  	INIT_HLIST_HEAD(&empty_rp);
->  	kretprobe_hash_lock(current, &head, &flags);
-> -	/* fixup registers */
-> -	regs->cs = __KERNEL_CS;
-> -#ifdef CONFIG_X86_32
-> -	regs->cs |= get_kernel_rpl();
-> -	regs->gs = 0;
-> -#endif
-> +
->  	/* We use pt_regs->sp for return address holder. */
->  	frame_pointer = &regs->sp;
->  	regs->ip = trampoline_address;
-
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat at kernel.org>
+> Cheers!
