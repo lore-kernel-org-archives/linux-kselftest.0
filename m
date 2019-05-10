@@ -1,33 +1,32 @@
-From: rostedt@goodmis.org (Steven Rostedt)
-Date: Thu, 9 May 2019 14:36:29 -0400
-Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-In-Reply-To: <20190509182622.GB2623@hirez.programming.kicks-ass.net>
-References: <20190508074901.982470324@infradead.org>
- <20190508080612.721269814@infradead.org>
- <20190508115416.nblx7c2kocidpytm@treble>
- <20190508120416.GL2589@hirez.programming.kicks-ass.net>
- <20190508124248.u5ukpbhnh4wpiccq@treble>
- <20190508153907.GM2589@hirez.programming.kicks-ass.net>
- <20190508184848.qerg3flv3ej3xsev@treble>
- <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
- <20190509081431.GO2589@hirez.programming.kicks-ass.net>
- <20190509173741.pfvecznqdndihxzg@home.goodmis.org>
- <20190509182622.GB2623@hirez.programming.kicks-ass.net>
-Message-ID: <20190509143629.5c104011@gandalf.local.home>
+From: joel@joelfernandes.org (Joel Fernandes (Google))
+Date: Fri, 10 May 2019 17:02:43 -0400
+Subject: [PATCH 3/3] kheaders: Make it depend on sysfs
+In-Reply-To: <20190510210243.152808-1-joel@joelfernandes.org>
+References: <20190510210243.152808-1-joel@joelfernandes.org>
+Message-ID: <20190510210243.152808-4-joel@joelfernandes.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190509183629.nc0TwKTCEA0qfbu7VVxD8afpJK3w4KNFrKgg1k6ZRCw@z>
+Message-ID: <20190510210243.RBG1PYRrYqrAFf5S7-nXv1QQj2x-dYPu_EyWDMW8caM@z>
 
-On Thu, 9 May 2019 20:26:22 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+The kheaders archive is exposed through SYSFS in /sys/kernel/. Make it
+depend on SYSFS as it makes no sense to enable this feature without it.
 
-> Still, maybe we can wrap the thing in a .macro and reuse things that
-> way. Because I really hate there are at least 3 (x2 for x86_64) copies
-> of this around.
+Suggested-by: Masahiro Yamada <yamada.masahiro at socionext.com>
+Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+---
+ init/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-I'm good with something like this. Have a single place that does the
-pt_regs saving would be great. Then I could separate ftrace_regs_caller
-from ftrace_caller, and simplify them both, as I would only need to
-make sure frame pointers still work for ftrace_caller, and
-ftrace_regs_caller would depend on the macro to make sure it works.
-
--- Steve
+diff --git a/init/Kconfig b/init/Kconfig
+index ce08adf0f637..f27138a8cf28 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -581,6 +581,7 @@ config IKCONFIG_PROC
+ 
+ config IKHEADERS
+ 	tristate "Enable kernel headers through /sys/kernel/kheaders.tar.xz"
++	depends on SYSFS
+ 	help
+ 	  This option enables access to the in-kernel headers that are generated during
+ 	  the build process. These can be used to build eBPF tracing programs,
+-- 
+2.21.0.1020.gf2820cf01a-goog
