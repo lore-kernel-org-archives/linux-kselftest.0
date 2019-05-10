@@ -1,38 +1,36 @@
-From: tytso@mit.edu (Theodore Ts'o)
-Date: Sat, 11 May 2019 13:33:44 -0400
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <80c72e64-2665-bd51-f78c-97f50f9a53ba@gmail.com>
-References: <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
- <20190509015856.GB7031@mit.edu>
- <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu>
- <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
- <20190509214233.GA20877@mit.edu>
- <80c72e64-2665-bd51-f78c-97f50f9a53ba@gmail.com>
-Message-ID: <20190511173344.GA8507@mit.edu>
+From: brendanhiggins@google.com (Brendan Higgins)
+Date: Fri, 10 May 2019 03:27:33 -0700
+Subject: [PATCH v2 06/17] kbuild: enable building KUnit
+In-Reply-To: <CAK7LNAQ+SRMn8UFjW1dZv_TrL0qjD2v2S=rXgtUpiA-urr1DDA@mail.gmail.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-7-brendanhiggins@google.com>
+ <CAK7LNAQ+SRMn8UFjW1dZv_TrL0qjD2v2S=rXgtUpiA-urr1DDA@mail.gmail.com>
+Message-ID:
+ <CAFd5g47BNZ0gRz4SXb37XjyXF_LyNZrSmoqDbzaaCUrTg3O7Yg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190511173344.dXR0v7-VI0Xcni0REWedvgwbXfmKRZaeMFsa6OhpkSg@z>
+Message-ID: <20190510102733.WHhjmuyY2PAJUYEdOIN1Bo_JONJBwox0nCZ3YXBssGM@z>
 
-On Fri, May 10, 2019@02:12:40PM -0700, Frank Rowand wrote:
-> However, the reply is incorrect.  Kselftest in-kernel tests (which
-> is the context here) can be configured as built in instead of as
-> a module, and built in a UML kernel.  The UML kernel can boot,
-> running the in-kernel tests before UML attempts to invoke the
-> init process.
+> On Thu, May 2, 2019 at 8:03 AM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
+> >
+> > Add KUnit to root Kconfig and Makefile allowing it to actually be built.
+> >
+> > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+>
+> You need to make sure
+> to not break git-bisect'abililty.
+>
+>
+> With this commit, I see build error.
+>
+>   CC      kunit/test.o
+> kunit/test.c:11:10: fatal error: os.h: No such file or directory
+>  #include <os.h>
+>           ^~~~~~
+> compilation terminated.
+> make[1]: *** [scripts/Makefile.build;279: kunit/test.o] Error 1
+> make: *** [Makefile;1763: kunit/] Error 2
 
-Um, Citation needed?
+Nice catch! That header shouldn't even be in there.
 
-I don't see any evidence for this in the kselftest documentation, nor
-do I see any evidence of this in the kselftest Makefiles.
-
-There exists test modules in the kernel that run before the init
-scripts run --- but that's not strictly speaking part of kselftests,
-and do not have any kind of infrastructure.  As noted, the
-kselftests_harness header file fundamentally assumes that you are
-running test code in userspace.
-
-				- Ted
+Sorry about that. I will have it fixed in the next revision.
