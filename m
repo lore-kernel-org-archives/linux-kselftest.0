@@ -1,38 +1,52 @@
-From: skunberg.kelsey at gmail.com (Kelsey Skunberg)
-Date: Sat, 11 May 2019 22:44:34 -0600
-Subject: [PATCH v2] selftests: kvm: Add files generated when compiled to
- .gitignore
-In-Reply-To: <5d60e7126803e9a11b51618e65966ba047eff7df>
-References: <5d60e7126803e9a11b51618e65966ba047eff7df>
-Message-ID: <20190512044434.32627-1-skunberg.kelsey@gmail.com>
+From: brendanhiggins at google.com (Brendan Higgins)
+Date: Fri, 10 May 2019 03:33:52 -0700
+Subject: [PATCH v2 06/17] kbuild: enable building KUnit
+In-Reply-To: <CAK7LNAR3DW5UxtsTNtW6mtQic8cukJwJ18=KitC2HX+jO5eo4g@mail.gmail.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-7-brendanhiggins@google.com>
+ <CAK7LNAQ+SRMn8UFjW1dZv_TrL0qjD2v2S=rXgtUpiA-urr1DDA@mail.gmail.com>
+ <CAFd5g47BNZ0gRz4SXb37XjyXF_LyNZrSmoqDbzaaCUrTg3O7Yg@mail.gmail.com>
+ <CAK7LNAR3DW5UxtsTNtW6mtQic8cukJwJ18=KitC2HX+jO5eo4g@mail.gmail.com>
+Message-ID: <CAFd5g46dE78f3bx33Sv-CPNx9i8VV=v0Ezwytp8eiQU1MzWbbQ@mail.gmail.com>
 
-The following files are generated in /selftests/kvm/ after compiling and
-should be added to /selftests/kvm/.gitignore:
+> On Fri, May 10, 2019 at 7:27 PM Brendan Higgins
+> <brendanhiggins at google.com> wrote:
+> >
+> > > On Thu, May 2, 2019 at 8:03 AM Brendan Higgins
+> > > <brendanhiggins at google.com> wrote:
+> > > >
+> > > > Add KUnit to root Kconfig and Makefile allowing it to actually be built.
+> > > >
+> > > > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+> > >
+> > > You need to make sure
+> > > to not break git-bisect'abililty.
+> > >
+> > >
+> > > With this commit, I see build error.
+> > >
+> > >   CC      kunit/test.o
+> > > kunit/test.c:11:10: fatal error: os.h: No such file or directory
+> > >  #include <os.h>
+> > >           ^~~~~~
+> > > compilation terminated.
+> > > make[1]: *** [scripts/Makefile.build;279: kunit/test.o] Error 1
+> > > make: *** [Makefile;1763: kunit/] Error 2
+> >
+> > Nice catch! That header shouldn't even be in there.
+> >
+> > Sorry about that. I will have it fixed in the next revision.
+>
+>
+> BTW, I applied whole of this series
+> to my kernel.org repository.
+>
+> 0day bot started to report issues.
+> I hope several reports reached you,
+> and they are useful to fix your code.
 
-        - /x86_64/hyperv_cpuid
-	- /x86_64/smm_test
-	- /clear_dirty_log_test
+Yep, I have received several. They are very helpful.
 
-Signed-off-by: Kelsey Skunberg <skunberg.kelsey at gmail.com>
----
-Changes since v1:
-        - Included /clear_dirty_log_test to .gitignore
-        - Updated commit log to reflect file added
+I greatly appreciate it.
 
- tools/testing/selftests/kvm/.gitignore | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 2689d1ea6d7a..391a19231618 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -6,4 +6,7 @@
- /x86_64/vmx_close_while_nested_test
- /x86_64/vmx_tsc_adjust_test
- /x86_64/state_test
-+/x86_64/hyperv_cpuid
-+/x86_64/smm_test
-+/clear_dirty_log_test
- /dirty_log_test
---
-2.20.1
+Thanks!
