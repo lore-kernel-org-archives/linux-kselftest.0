@@ -1,335 +1,168 @@
-From: ldv@altlinux.org (Dmitry V. Levin)
-Date: Fri, 10 May 2019 18:28:52 +0300
-Subject: [PATCH v11 7/7] selftests/ptrace: add a test case for
- PTRACE_GET_SYSCALL_INFO
-In-Reply-To: <20190510152640.GA28529@altlinux.org>
-References: <20190510152640.GA28529@altlinux.org>
-Message-ID: <20190510152852.GG28558@altlinux.org>
+From: frowand.list@gmail.com (Frank Rowand)
+Date: Fri, 10 May 2019 14:59:26 -0700
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <CAFd5g47Fvafwgh15JNfxSBRf5qqG2z+V+XGAB2cJtNnHFTiFfQ@mail.gmail.com>
+References: <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
+ <20190509015856.GB7031@mit.edu>
+ <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+ <20190509032017.GA29703@mit.edu>
+ <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
+ <20190509133551.GD29703@mit.edu>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
+ <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
+ <20190509214233.GA20877@mit.edu>
+ <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
+ <20190509233043.GC20877@mit.edu>
+ <8914afef-1e66-e6e3-f891-5855768d3018@deltatee.com>
+ <6d6e91ec-33d3-830b-4895-4d7a20ba7d45@gmail.com>
+ <a1b88d5add15d43de0468c32d9a2427629337abb.camel@oracle.com>
+ <CAKMK7uFd1xUx8u3xWLwifVSq4OEnMO4S-m0hESe68UzONXnMFg@mail.gmail.com>
+ <CAFd5g47Fvafwgh15JNfxSBRf5qqG2z+V+XGAB2cJtNnHFTiFfQ@mail.gmail.com>
+Message-ID: <8abaf5f2-dd33-98d0-7b34-b57de7fe7c8b@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190510152852.te4x72L9ZCi0-RqRi0LFi8PBfEWNx665kUBnQNVgfaE@z>
+Message-ID: <20190510215926.Jwhx9cYcJou4AbsHigWRNyIx26eMtvWgSr2kizIuZDA@z>
 
-Check whether PTRACE_GET_SYSCALL_INFO semantics implemented in the kernel
-matches userspace expectations.
+On 5/10/19 3:23 AM, Brendan Higgins wrote:
+>> On Fri, May 10, 2019@7:49 AM Knut Omang <knut.omang@oracle.com> wrote:
+>>>
+>>> On Thu, 2019-05-09@22:18 -0700, Frank Rowand wrote:
+>>>> On 5/9/19 4:40 PM, Logan Gunthorpe wrote:
+>>>>>
+>>>>>
+>>>>> On 2019-05-09 5:30 p.m., Theodore Ts'o wrote:
+>>>>>> On Thu, May 09, 2019@04:20:05PM -0600, Logan Gunthorpe wrote:
+>>>>>>>
+>>>>>>> The second item, arguably, does have significant overlap with kselftest.
+>>>>>>> Whether you are running short tests in a light weight UML environment or
+>>>>>>> higher level tests in an heavier VM the two could be using the same
+>>>>>>> framework for writing or defining in-kernel tests. It *may* also be valuable
+>>>>>>> for some people to be able to run all the UML tests in the heavy VM
+>>>>>>> environment along side other higher level tests.
+>>>>>>>
+>>>>>>> Looking at the selftests tree in the repo, we already have similar items to
+>>>>>>> what Kunit is adding as I described in point (2) above. kselftest_harness.h
+>>>>>>> contains macros like EXPECT_* and ASSERT_* with very similar intentions to
+>>>>>>> the new KUNIT_EXECPT_* and KUNIT_ASSERT_* macros.
+>>>>>>>
+>>>>>>> However, the number of users of this harness appears to be quite small. Most
+>>>>>>> of the code in the selftests tree seems to be a random mismash of scripts
+>>>>>>> and userspace code so it's not hard to see it as something completely
+>>>>>>> different from the new Kunit:
+>>>>>>>
+>>>>>>> $ git grep --files-with-matches kselftest_harness.h *
+>>>>>>
+>>>>>> To the extent that we can unify how tests are written, I agree that
+>>>>>> this would be a good thing.  However, you should note that
+>>>>>> kselftest_harness.h is currently assums that it will be included in
+>>>>>> userspace programs.  This is most obviously seen if you look closely
+>>>>>> at the functions defined in the header files which makes calls to
+>>>>>> fork(), abort() and fprintf().
+>>>>>
+>>>>> Ah, yes. I obviously did not dig deep enough. Using kunit for
+>>>>> in-kernel tests and kselftest_harness for userspace tests seems like
+>>>>> a sensible line to draw to me. Trying to unify kernel and userspace
+>>>>> here sounds like it could be difficult so it's probably not worth
+>>>>> forcing the issue unless someone wants to do some really fancy work
+>>>>> to get it done.
+>>>>>
+>>>>> Based on some of the other commenters, I was under the impression
+>>>>> that kselftests had in-kernel tests but I'm not sure where or if they
+>>>>> exist.
+>>>>
+>>>> YES, kselftest has in-kernel tests.  (Excuse the shouting...)
+>>>>
+>>>> Here is a likely list of them in the kernel source tree:
+>>>>
+>>>> $ grep module_init lib/test_*.c
+>>>> lib/test_bitfield.c:module_init(test_bitfields)
+>>>> lib/test_bitmap.c:module_init(test_bitmap_init);
+>>>> lib/test_bpf.c:module_init(test_bpf_init);
+>>>> lib/test_debug_virtual.c:module_init(test_debug_virtual_init);
+>>>> lib/test_firmware.c:module_init(test_firmware_init);
+>>>> lib/test_hash.c:module_init(test_hash_init);  /* Does everything */
+>>>> lib/test_hexdump.c:module_init(test_hexdump_init);
+>>>> lib/test_ida.c:module_init(ida_checks);
+>>>> lib/test_kasan.c:module_init(kmalloc_tests_init);
+>>>> lib/test_list_sort.c:module_init(list_sort_test);
+>>>> lib/test_memcat_p.c:module_init(test_memcat_p_init);
+>>>> lib/test_module.c:static int __init test_module_init(void)
+>>>> lib/test_module.c:module_init(test_module_init);
+>>>> lib/test_objagg.c:module_init(test_objagg_init);
+>>>> lib/test_overflow.c:static int __init test_module_init(void)
+>>>> lib/test_overflow.c:module_init(test_module_init);
+>>>> lib/test_parman.c:module_init(test_parman_init);
+>>>> lib/test_printf.c:module_init(test_printf_init);
+>>>> lib/test_rhashtable.c:module_init(test_rht_init);
+>>>> lib/test_siphash.c:module_init(siphash_test_init);
+>>>> lib/test_sort.c:module_init(test_sort_init);
+>>>> lib/test_stackinit.c:module_init(test_stackinit_init);
+>>>> lib/test_static_key_base.c:module_init(test_static_key_base_init);
+>>>> lib/test_static_keys.c:module_init(test_static_key_init);
+>>>> lib/test_string.c:module_init(string_selftest_init);
+>>>> lib/test_ubsan.c:module_init(test_ubsan_init);
+>>>> lib/test_user_copy.c:module_init(test_user_copy_init);
+>>>> lib/test_uuid.c:module_init(test_uuid_init);
+>>>> lib/test_vmalloc.c:module_init(vmalloc_test_init)
+>>>> lib/test_xarray.c:module_init(xarray_checks);
+>>>>
+>>>>
+>>>>> If they do exists, it seems like it would make sense to
+>>>>> convert those to kunit and have Kunit tests run-able in a VM or
+>>>>> baremetal instance.
+>>>>
+>>>> They already run in a VM.
+>>>>
+>>>> They already run on bare metal.
+>>>>
+>>>> They already run in UML.
+>>>>
+>>>> This is not to say that KUnit does not make sense.  But I'm still trying
+>>>> to get a better description of the KUnit features (and there are
+>>>> some).
+>>>
+>>> FYI, I have a master student who looks at converting some of these to KTF, such as for
+>>> instance the XArray tests, which lended themselves quite good to a semi-automated
+>>> conversion.
+>>>
+>>> The result is also a somewhat more compact code as well as the flexibility
+>>> provided by the Googletest executor and the KTF frameworks, such as running selected
+>>> tests, output formatting, debugging features etc.
+>>
+>> So is KTF already in upstream? Or is the plan to unify the KTF and
+> 
+> I am not certain about KTF's upstream plans, but I assume that Knut
+> would have CC'ed me on the thread if he had started working on it.
+> 
+>> Kunit in-kernel test harnesses? Because there's tons of these
+> 
+> No, no plan. Knut and I talked about this a good while ago and it
+> seemed that we had pretty fundamentally different approaches both in
+> terms of implementation and end goal. Combining them seemed pretty
+> infeasible, at least from a technical perspective. Anyway, I am sure
+> Knut would like to give him perspective on the matter and I don't want
+> to say too much without first giving him a chance to chime in on the
+> matter.
+> 
+> Nevertheless, I hope you don't see resolving this as a condition for
+> accepting this patchset. I had several rounds of RFC on KUnit, and no
+> one had previously brought this up.
 
-Acked-by: Shuah Khan <shuah at kernel.org>
-Cc: Oleg Nesterov <oleg at redhat.com>
-Cc: Andy Lutomirski <luto at kernel.org>
-Cc: Elvira Khabirova <lineprinter at altlinux.org>
-Cc: Eugene Syromyatnikov <esyr at redhat.com>
-Cc: linux-kselftest at vger.kernel.org
-Signed-off-by: Dmitry V. Levin <ldv at altlinux.org>
----
+I seem to recall a request in reply to the KUnit RFC email threads to
+work together.
 
-Notes:
-    v11: unchanged
-    v10: changed GPL-2.0-or-later to GPL-2.0+,
-         added Acked-by from https://lore.kernel.org/lkml/f2f015da-35d4-7207-cd57-e6589cd9d2c4 at kernel.org/
-    v9: unchanged
-    v8: unchanged
-    v7: unchanged
-    v6: made PTRACE_GET_SYSCALL_INFO return value checks strict
-    v5: initial revision
+However whether that impacts acceptance of this patch set is up to
+the maintainer and how she wants to resolve the potential collision
+of KUnit and KTF (if there is indeed any sort of collision).
 
- tools/testing/selftests/ptrace/.gitignore     |   1 +
- tools/testing/selftests/ptrace/Makefile       |   2 +-
- .../selftests/ptrace/get_syscall_info.c       | 271 ++++++++++++++++++
- 3 files changed, 273 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/ptrace/get_syscall_info.c
 
-diff --git a/tools/testing/selftests/ptrace/.gitignore b/tools/testing/selftests/ptrace/.gitignore
-index b3e59d41fd82..cfcc49a7def7 100644
---- a/tools/testing/selftests/ptrace/.gitignore
-+++ b/tools/testing/selftests/ptrace/.gitignore
-@@ -1 +1,2 @@
-+get_syscall_info
- peeksiginfo
-diff --git a/tools/testing/selftests/ptrace/Makefile b/tools/testing/selftests/ptrace/Makefile
-index 8a2bc5562179..4bc550b6b845 100644
---- a/tools/testing/selftests/ptrace/Makefile
-+++ b/tools/testing/selftests/ptrace/Makefile
-@@ -1,5 +1,5 @@
- CFLAGS += -iquote../../../../include/uapi -Wall
- 
--TEST_GEN_PROGS := peeksiginfo
-+TEST_GEN_PROGS := get_syscall_info peeksiginfo
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/ptrace/get_syscall_info.c b/tools/testing/selftests/ptrace/get_syscall_info.c
-new file mode 100644
-index 000000000000..d1961c3ee72e
---- /dev/null
-+++ b/tools/testing/selftests/ptrace/get_syscall_info.c
-@@ -0,0 +1,271 @@
-+/* SPDX-License-Identifier: GPL-2.0+
-+ *
-+ * Copyright (c) 2018 Dmitry V. Levin <ldv at altlinux.org>
-+ * All rights reserved.
-+ *
-+ * Check whether PTRACE_GET_SYSCALL_INFO semantics implemented in the kernel
-+ * matches userspace expectations.
-+ */
-+
-+#include "../kselftest_harness.h"
-+#include <err.h>
-+#include <signal.h>
-+#include <asm/unistd.h>
-+#include "linux/ptrace.h"
-+
-+static int
-+kill_tracee(pid_t pid)
-+{
-+	if (!pid)
-+		return 0;
-+
-+	int saved_errno = errno;
-+
-+	int rc = kill(pid, SIGKILL);
-+
-+	errno = saved_errno;
-+	return rc;
-+}
-+
-+static long
-+sys_ptrace(int request, pid_t pid, unsigned long addr, unsigned long data)
-+{
-+	return syscall(__NR_ptrace, request, pid, addr, data);
-+}
-+
-+#define LOG_KILL_TRACEE(fmt, ...)				\
-+	do {							\
-+		kill_tracee(pid);				\
-+		TH_LOG("wait #%d: " fmt,			\
-+		       ptrace_stop, ##__VA_ARGS__);		\
-+	} while (0)
-+
-+TEST(get_syscall_info)
-+{
-+	static const unsigned long args[][7] = {
-+		/* a sequence of architecture-agnostic syscalls */
-+		{
-+			__NR_chdir,
-+			(unsigned long) "",
-+			0xbad1fed1,
-+			0xbad2fed2,
-+			0xbad3fed3,
-+			0xbad4fed4,
-+			0xbad5fed5
-+		},
-+		{
-+			__NR_gettid,
-+			0xcaf0bea0,
-+			0xcaf1bea1,
-+			0xcaf2bea2,
-+			0xcaf3bea3,
-+			0xcaf4bea4,
-+			0xcaf5bea5
-+		},
-+		{
-+			__NR_exit_group,
-+			0,
-+			0xfac1c0d1,
-+			0xfac2c0d2,
-+			0xfac3c0d3,
-+			0xfac4c0d4,
-+			0xfac5c0d5
-+		}
-+	};
-+	const unsigned long *exp_args;
-+
-+	pid_t pid = fork();
-+
-+	ASSERT_LE(0, pid) {
-+		TH_LOG("fork: %m");
-+	}
-+
-+	if (pid == 0) {
-+		/* get the pid before PTRACE_TRACEME */
-+		pid = getpid();
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_TRACEME, 0, 0, 0)) {
-+			TH_LOG("PTRACE_TRACEME: %m");
-+		}
-+		ASSERT_EQ(0, kill(pid, SIGSTOP)) {
-+			/* cannot happen */
-+			TH_LOG("kill SIGSTOP: %m");
-+		}
-+		for (unsigned int i = 0; i < ARRAY_SIZE(args); ++i) {
-+			syscall(args[i][0],
-+				args[i][1], args[i][2], args[i][3],
-+				args[i][4], args[i][5], args[i][6]);
-+		}
-+		/* unreachable */
-+		_exit(1);
-+	}
-+
-+	const struct {
-+		unsigned int is_error;
-+		int rval;
-+	} *exp_param, exit_param[] = {
-+		{ 1, -ENOENT },	/* chdir */
-+		{ 0, pid }	/* gettid */
-+	};
-+
-+	unsigned int ptrace_stop;
-+
-+	for (ptrace_stop = 0; ; ++ptrace_stop) {
-+		struct ptrace_syscall_info info = {
-+			.op = 0xff	/* invalid PTRACE_SYSCALL_INFO_* op */
-+		};
-+		const size_t size = sizeof(info);
-+		const int expected_none_size =
-+			(void *) &info.entry - (void *) &info;
-+		const int expected_entry_size =
-+			(void *) &info.entry.args[6] - (void *) &info;
-+		const int expected_exit_size =
-+			(void *) (&info.exit.is_error + 1) -
-+			(void *) &info;
-+		int status;
-+		long rc;
-+
-+		ASSERT_EQ(pid, wait(&status)) {
-+			/* cannot happen */
-+			LOG_KILL_TRACEE("wait: %m");
-+		}
-+		if (WIFEXITED(status)) {
-+			pid = 0;	/* the tracee is no more */
-+			ASSERT_EQ(0, WEXITSTATUS(status));
-+			break;
-+		}
-+		ASSERT_FALSE(WIFSIGNALED(status)) {
-+			pid = 0;	/* the tracee is no more */
-+			LOG_KILL_TRACEE("unexpected signal %u",
-+					WTERMSIG(status));
-+		}
-+		ASSERT_TRUE(WIFSTOPPED(status)) {
-+			/* cannot happen */
-+			LOG_KILL_TRACEE("unexpected wait status %#x", status);
-+		}
-+
-+		switch (WSTOPSIG(status)) {
-+		case SIGSTOP:
-+			ASSERT_EQ(0, ptrace_stop) {
-+				LOG_KILL_TRACEE("unexpected signal stop");
-+			}
-+			ASSERT_EQ(0, sys_ptrace(PTRACE_SETOPTIONS, pid, 0,
-+						PTRACE_O_TRACESYSGOOD)) {
-+				LOG_KILL_TRACEE("PTRACE_SETOPTIONS: %m");
-+			}
-+			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
-+						      pid, size,
-+						      (unsigned long) &info))) {
-+				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
-+			}
-+			ASSERT_EQ(expected_none_size, rc) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_EQ(PTRACE_SYSCALL_INFO_NONE, info.op) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_TRUE(info.arch) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_TRUE(info.instruction_pointer) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_TRUE(info.stack_pointer) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			break;
-+
-+		case SIGTRAP | 0x80:
-+			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
-+						      pid, size,
-+						      (unsigned long) &info))) {
-+				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
-+			}
-+			switch (ptrace_stop) {
-+			case 1: /* entering chdir */
-+			case 3: /* entering gettid */
-+			case 5: /* entering exit_group */
-+				exp_args = args[ptrace_stop / 2];
-+				ASSERT_EQ(expected_entry_size, rc) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(PTRACE_SYSCALL_INFO_ENTRY, info.op) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.arch) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.instruction_pointer) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.stack_pointer) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[0], info.entry.nr) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[1], info.entry.args[0]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[2], info.entry.args[1]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[3], info.entry.args[2]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[4], info.entry.args[3]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[5], info.entry.args[4]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[6], info.entry.args[5]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				break;
-+			case 2: /* exiting chdir */
-+			case 4: /* exiting gettid */
-+				exp_param = &exit_param[ptrace_stop / 2 - 1];
-+				ASSERT_EQ(expected_exit_size, rc) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(PTRACE_SYSCALL_INFO_EXIT, info.op) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.arch) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.instruction_pointer) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.stack_pointer) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(exp_param->is_error,
-+					  info.exit.is_error) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(exp_param->rval, info.exit.rval) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				break;
-+			default:
-+				LOG_KILL_TRACEE("unexpected syscall stop");
-+				abort();
-+			}
-+			break;
-+
-+		default:
-+			LOG_KILL_TRACEE("unexpected stop signal %#x",
-+					WSTOPSIG(status));
-+			abort();
-+		}
-+
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_SYSCALL, pid, 0, 0)) {
-+			LOG_KILL_TRACEE("PTRACE_SYSCALL: %m");
-+		}
-+	}
-+
-+	ASSERT_EQ(ARRAY_SIZE(args) * 2, ptrace_stop);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-ldv
+>> in-kernel unit tests already, and every merge we get more (Frank's
+>> list didn't even look into drivers or anywhere else, e.g. it's missing
+>> the locking self tests I worked on in the past), and a more structured
+>> approach would really be good.
+> 
+> Well, that's what I am trying to do. I hope you like it!
+> 
+> Cheers!
+> .
+> 
