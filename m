@@ -1,166 +1,34 @@
-From: joel at joelfernandes.org (Joel Fernandes (Google))
-Date: Fri, 10 May 2019 17:02:41 -0400
-Subject: [PATCH 1/3] kheaders: Move from proc to sysfs
-In-Reply-To: <20190510210243.152808-1-joel@joelfernandes.org>
-References: <20190510210243.152808-1-joel@joelfernandes.org>
-Message-ID: <20190510210243.152808-2-joel@joelfernandes.org>
+From: tytso at mit.edu (Theodore Ts'o)
+Date: Fri, 10 May 2019 00:47:43 -0400
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <8914afef-1e66-e6e3-f891-5855768d3018@deltatee.com>
+References: <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+ <20190509032017.GA29703@mit.edu>
+ <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
+ <20190509133551.GD29703@mit.edu>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
+ <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
+ <20190509214233.GA20877@mit.edu>
+ <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
+ <20190509233043.GC20877@mit.edu>
+ <8914afef-1e66-e6e3-f891-5855768d3018@deltatee.com>
+Message-ID: <20190510044743.GA6889@mit.edu>
 
-The kheaders archive consisting of the kernel headers used for compiling
-bpf programs is in /proc. However there is concern that moving it here
-will make it permanent. Let us move it to /sys/kernel as discussed [1].
+On Thu, May 09, 2019 at 05:40:48PM -0600, Logan Gunthorpe wrote:
+> 
+> Based on some of the other commenters, I was under the impression that
+> kselftests had in-kernel tests but I'm not sure where or if they exist. If
+> they do exists, it seems like it would make sense to convert those to kunit
+> and have Kunit tests run-able in a VM or baremetal instance.
 
-[1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
+There are kselftests tests which are shell scripts which load a
+module, and the module runs the in-kernel code.  However, I didn't see
+much infrastructure for the in-kernel test code; the one or two test
+modules called from kselftests looked pretty ad hoc to me.
 
-Suggested-by: Steven Rostedt <rostedt at goodmis.org>
-Acked-by: Steven Rostedt <rostedt at goodmis.org>
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
+That's why I used the "vise grips" analogy.  You can use a pair of
+vise grips like a monkey wrench; but it's not really a monkey wrench,
+and might not be the best tool to loosen or tighten nuts and bolts.
 
-Changes to this patch since initial posting:
-Fixed sysfs file mode nit (Greg).
-Fixed some kconfig nits (Masami).
-
- init/Kconfig                                | 16 ++++-----
- kernel/Makefile                             |  4 +--
- kernel/{gen_ikh_data.sh => gen_kheaders.sh} |  2 +-
- kernel/kheaders.c                           | 40 +++++++++------------
- 4 files changed, 26 insertions(+), 36 deletions(-)
- rename kernel/{gen_ikh_data.sh => gen_kheaders.sh} (98%)
-
-diff --git a/init/Kconfig b/init/Kconfig
-index 82b84e5ee30d..ce08adf0f637 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -579,15 +579,13 @@ config IKCONFIG_PROC
- 	  This option enables access to the kernel configuration file
- 	  through /proc/config.gz.
- 
--config IKHEADERS_PROC
--	tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
--	depends on PROC_FS
--	help
--	  This option enables access to the kernel header and other artifacts that
--	  are generated during the build process. These can be used to build eBPF
--	  tracing programs, or similar programs.  If you build the headers as a
--	  module, a module called kheaders.ko is built which can be loaded on-demand
--	  to get access to the headers.
-+config IKHEADERS
-+	tristate "Enable kernel headers through /sys/kernel/kheaders.tar.xz"
-+	help
-+	  This option enables access to the in-kernel headers that are generated during
-+	  the build process. These can be used to build eBPF tracing programs,
-+	  or similar programs.  If you build the headers as a module, a module called
-+	  kheaders.ko is built which can be loaded on-demand to get access to headers.
- 
- config LOG_BUF_SHIFT
- 	int "Kernel log buffer size (16 => 64KB, 17 => 128KB)"
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 298437bb2c6a..60e3057c780e 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -71,7 +71,7 @@ obj-$(CONFIG_UTS_NS) += utsname.o
- obj-$(CONFIG_USER_NS) += user_namespace.o
- obj-$(CONFIG_PID_NS) += pid_namespace.o
- obj-$(CONFIG_IKCONFIG) += configs.o
--obj-$(CONFIG_IKHEADERS_PROC) += kheaders.o
-+obj-$(CONFIG_IKHEADERS) += kheaders.o
- obj-$(CONFIG_SMP) += stop_machine.o
- obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
- obj-$(CONFIG_AUDIT) += audit.o auditfilter.o
-@@ -127,7 +127,7 @@ $(obj)/config_data.gz: $(KCONFIG_CONFIG) FORCE
- $(obj)/kheaders.o: $(obj)/kheaders_data.tar.xz
- 
- quiet_cmd_genikh = CHK     $(obj)/kheaders_data.tar.xz
--cmd_genikh = $(srctree)/kernel/gen_ikh_data.sh $@
-+cmd_genikh = $(srctree)/kernel/gen_kheaders.sh $@
- $(obj)/kheaders_data.tar.xz: FORCE
- 	$(call cmd,genikh)
- 
-diff --git a/kernel/gen_ikh_data.sh b/kernel/gen_kheaders.sh
-similarity index 98%
-rename from kernel/gen_ikh_data.sh
-rename to kernel/gen_kheaders.sh
-index 591a94f7b387..581b83534587 100755
---- a/kernel/gen_ikh_data.sh
-+++ b/kernel/gen_kheaders.sh
-@@ -2,7 +2,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- # This script generates an archive consisting of kernel headers
--# for CONFIG_IKHEADERS_PROC.
-+# for CONFIG_IKHEADERS.
- set -e
- spath="$(dirname "$(readlink -f "$0")")"
- kroot="$spath/.."
-diff --git a/kernel/kheaders.c b/kernel/kheaders.c
-index 70ae6052920d..8f69772af77b 100644
---- a/kernel/kheaders.c
-+++ b/kernel/kheaders.c
-@@ -8,9 +8,8 @@
- 
- #include <linux/kernel.h>
- #include <linux/module.h>
--#include <linux/proc_fs.h>
-+#include <linux/kobject.h>
- #include <linux/init.h>
--#include <linux/uaccess.h>
- 
- /*
-  * Define kernel_headers_data and kernel_headers_data_end, within which the
-@@ -31,39 +30,32 @@ extern char kernel_headers_data;
- extern char kernel_headers_data_end;
- 
- static ssize_t
--ikheaders_read_current(struct file *file, char __user *buf,
--		      size_t len, loff_t *offset)
-+ikheaders_read(struct file *file,  struct kobject *kobj,
-+	       struct bin_attribute *bin_attr,
-+	       char *buf, loff_t off, size_t len)
- {
--	return simple_read_from_buffer(buf, len, offset,
--				       &kernel_headers_data,
--				       &kernel_headers_data_end -
--				       &kernel_headers_data);
-+	memcpy(buf, &kernel_headers_data + off, len);
-+	return len;
- }
- 
--static const struct file_operations ikheaders_file_ops = {
--	.read = ikheaders_read_current,
--	.llseek = default_llseek,
-+static struct bin_attribute kheaders_attr __ro_after_init = {
-+	.attr = {
-+		.name = "kheaders.tar.xz",
-+		.mode = 0444,
-+	},
-+	.read = &ikheaders_read,
- };
- 
- static int __init ikheaders_init(void)
- {
--	struct proc_dir_entry *entry;
--
--	/* create the current headers file */
--	entry = proc_create("kheaders.tar.xz", S_IRUGO, NULL,
--			    &ikheaders_file_ops);
--	if (!entry)
--		return -ENOMEM;
--
--	proc_set_size(entry,
--		      &kernel_headers_data_end -
--		      &kernel_headers_data);
--	return 0;
-+	kheaders_attr.size = (&kernel_headers_data_end -
-+			      &kernel_headers_data);
-+	return sysfs_create_bin_file(kernel_kobj, &kheaders_attr);
- }
- 
- static void __exit ikheaders_cleanup(void)
- {
--	remove_proc_entry("kheaders.tar.xz", NULL);
-+	sysfs_remove_bin_file(kernel_kobj, &kheaders_attr);
- }
- 
- module_init(ikheaders_init);
--- 
-2.21.0.1020.gf2820cf01a-goog
+       	   	     	       	   - Ted
