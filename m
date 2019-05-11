@@ -1,142 +1,260 @@
-From: frowand.list@gmail.com (Frank Rowand)
-Date: Thu, 9 May 2019 22:11:01 -0700
+From: knut.omang@oracle.com (Knut Omang)
+Date: Sat, 11 May 2019 08:17:47 +0200
 Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
  testing framework
-In-Reply-To: <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
- <20190507080119.GB28121@kroah.com>
- <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
+In-Reply-To: <ccec4818-1b9d-2554-e0e4-433eba659c8e@gmail.com>
+References: <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
  <20190509015856.GB7031@mit.edu>
  <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
-Message-ID: <78e4d46e-6212-9871-51d6-dd2126f39d45@gmail.com>
+ <20190509032017.GA29703@mit.edu>
+ <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
+ <20190509133551.GD29703@mit.edu>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
+ <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
+ <20190509214233.GA20877@mit.edu>
+ <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
+ <20190509233043.GC20877@mit.edu>
+ <8914afef-1e66-e6e3-f891-5855768d3018@deltatee.com>
+ <6d6e91ec-33d3-830b-4895-4d7a20ba7d45@gmail.com>
+ <a1b88d5add15d43de0468c32d9a2427629337abb.camel@oracle.com>
+ <CAKMK7uFd1xUx8u3xWLwifVSq4OEnMO4S-m0hESe68UzONXnMFg@mail.gmail.com>
+ <CAFd5g47Fvafwgh15JNfxSBRf5qqG2z+V+XGAB2cJtNnHFTiFfQ@mail.gmail.com>
+ <1781164863be8d21a7e1890ae6dfee9be101d0a0.camel@oracle.com>
+ <CAFd5g46fn4nB-nd27-qj8BoC2h-dTCa=WMGoFNhgXDXY0xOdeg@mail.gmail.com>
+ <ccec4818-1b9d-2554-e0e4-433eba659c8e@gmail.com>
+Message-ID: <b3dd7e40149184f5823b66764a20dee3c9905ed1.camel@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190510051101.ljAqBD8R4yrChlw9k6wurUPAFH9p8MuDbaSEuqWVhw0@z>
+Message-ID: <20190511061747.Pl3WoAjQwsuz7fr18k-M4OoxdW66oAe8O85_AqCgLcs@z>
 
-Hi Ted,
-
-I'll try answering this again.
-
-The first time I was a little flippant in part of my answer because I
-thought your comments somewhat flippant.  This time I'll provide a
-more complete answer.
-
-
-On 5/8/19 7:13 PM, Frank Rowand wrote:
-> On 5/8/19 6:58 PM, Theodore Ts'o wrote:
->> On Wed, May 08, 2019@05:43:35PM -0700, Frank Rowand wrote:
-
-*****  begin context from Greg KH that you snipped  *****
-
-On 5/7/19 1:01 AM, Greg KH wrote:
-
-<< note that I have snipped my original question above this point >>
-
->
-> kselftest provides no in-kernel framework for testing kernel code
-> specifically.  That should be what kunit provides, an "easy" way to
-> write in-kernel tests for things.
-
-*****  end   context from Greg KH that you snipped  *****
-
->>> kselftest provides a mechanism for in-kernel tests via modules.  For
->>> example, see:
->>>
->>>   tools/testing/selftests/vm/run_vmtests invokes:
->>>     tools/testing/selftests/vm/test_vmalloc.sh
->>>       loads module:
->>>         test_vmalloc
->>>         (which is built from lib/test_vmalloc.c if CONFIG_TEST_VMALLOC)
->>
->> The majority of the kselftests are implemented as userspace programs.
-
-My flippant answer:
-
-> Non-argument.
-
-This time:
-
-My reply to Greg was pointing out that in-kernel tests do exist in
-kselftest.
-
-Your comment that the majority of kselftests are implemented as userspace
-programs has no bearing on whether kselftest support in-kernel tests.
-It does not counter the fact the kselftest supports in-kernel tests.
-
-
->> You *can* run in-kernel test using modules; but there is no framework
->> for the in-kernel code found in the test modules, which means each of
->> the in-kernel code has to create their own in-kernel test
->> infrastructure.
-
-The kselftest in-kernel tests follow a common pattern.  As such, there
-is a framework.
-
-This next two paragraphs you ignored entirely in your reply:
-
-> Why create an entire new subsystem (KUnit) when you can add a header
-> file (and .c code as appropriate) that outputs the proper TAP formatted
-> results from kselftest kernel test modules?
+On Fri, 2019-05-10@15:18 -0700, Frank Rowand wrote:
+> On 5/10/19 1:54 PM, Brendan Higgins wrote:
+> > On Fri, May 10, 2019@5:13 AM Knut Omang <knut.omang@oracle.com> wrote:
+> >> On Fri, 2019-05-10@03:23 -0700, Brendan Higgins wrote:
+> >>>> On Fri, May 10, 2019@7:49 AM Knut Omang <knut.omang@oracle.com> wrote:
+> >>>>>
+> >>>>> On Thu, 2019-05-09@22:18 -0700, Frank Rowand wrote:
+> >>>>>> On 5/9/19 4:40 PM, Logan Gunthorpe wrote:
+> >>>>>>>
+> >>>>>>>
+> >>>>>>> On 2019-05-09 5:30 p.m., Theodore Ts'o wrote:
+> >>>>>>>> On Thu, May 09, 2019@04:20:05PM -0600, Logan Gunthorpe wrote:
+> >>>>>>>>>
+> >>>>>>>>> The second item, arguably, does have significant overlap with kselftest.
+> >>>>>>>>> Whether you are running short tests in a light weight UML environment or
+> >>>>>>>>> higher level tests in an heavier VM the two could be using the same
+> >>>>>>>>> framework for writing or defining in-kernel tests. It *may* also be valuable
+> >>>>>>>>> for some people to be able to run all the UML tests in the heavy VM
+> >>>>>>>>> environment along side other higher level tests.
+> >>>>>>>>>
+> >>>>>>>>> Looking at the selftests tree in the repo, we already have similar items to
+> >>>>>>>>> what Kunit is adding as I described in point (2) above. kselftest_harness.h
+> >>>>>>>>> contains macros like EXPECT_* and ASSERT_* with very similar intentions to
+> >>>>>>>>> the new KUNIT_EXECPT_* and KUNIT_ASSERT_* macros.
+> >>>>>>>>>
+> >>>>>>>>> However, the number of users of this harness appears to be quite small. Most
+> >>>>>>>>> of the code in the selftests tree seems to be a random mismash of scripts
+> >>>>>>>>> and userspace code so it's not hard to see it as something completely
+> >>>>>>>>> different from the new Kunit:
+> >>>>>>>>>
+> >>>>>>>>> $ git grep --files-with-matches kselftest_harness.h *
+> >>>>>>>>
+> >>>>>>>> To the extent that we can unify how tests are written, I agree that
+> >>>>>>>> this would be a good thing.  However, you should note that
+> >>>>>>>> kselftest_harness.h is currently assums that it will be included in
+> >>>>>>>> userspace programs.  This is most obviously seen if you look closely
+> >>>>>>>> at the functions defined in the header files which makes calls to
+> >>>>>>>> fork(), abort() and fprintf().
+> >>>>>>>
+> >>>>>>> Ah, yes. I obviously did not dig deep enough. Using kunit for
+> >>>>>>> in-kernel tests and kselftest_harness for userspace tests seems like
+> >>>>>>> a sensible line to draw to me. Trying to unify kernel and userspace
+> >>>>>>> here sounds like it could be difficult so it's probably not worth
+> >>>>>>> forcing the issue unless someone wants to do some really fancy work
+> >>>>>>> to get it done.
+> >>>>>>>
+> >>>>>>> Based on some of the other commenters, I was under the impression
+> >>>>>>> that kselftests had in-kernel tests but I'm not sure where or if they
+> >>>>>>> exist.
+> >>>>>>
+> >>>>>> YES, kselftest has in-kernel tests.  (Excuse the shouting...)
+> >>>>>>
+> >>>>>> Here is a likely list of them in the kernel source tree:
+> >>>>>>
+> >>>>>> $ grep module_init lib/test_*.c
+> >>>>>> lib/test_bitfield.c:module_init(test_bitfields)
+> >>>>>> lib/test_bitmap.c:module_init(test_bitmap_init);
+> >>>>>> lib/test_bpf.c:module_init(test_bpf_init);
+> >>>>>> lib/test_debug_virtual.c:module_init(test_debug_virtual_init);
+> >>>>>> lib/test_firmware.c:module_init(test_firmware_init);
+> >>>>>> lib/test_hash.c:module_init(test_hash_init);  /* Does everything */
+> >>>>>> lib/test_hexdump.c:module_init(test_hexdump_init);
+> >>>>>> lib/test_ida.c:module_init(ida_checks);
+> >>>>>> lib/test_kasan.c:module_init(kmalloc_tests_init);
+> >>>>>> lib/test_list_sort.c:module_init(list_sort_test);
+> >>>>>> lib/test_memcat_p.c:module_init(test_memcat_p_init);
+> >>>>>> lib/test_module.c:static int __init test_module_init(void)
+> >>>>>> lib/test_module.c:module_init(test_module_init);
+> >>>>>> lib/test_objagg.c:module_init(test_objagg_init);
+> >>>>>> lib/test_overflow.c:static int __init test_module_init(void)
+> >>>>>> lib/test_overflow.c:module_init(test_module_init);
+> >>>>>> lib/test_parman.c:module_init(test_parman_init);
+> >>>>>> lib/test_printf.c:module_init(test_printf_init);
+> >>>>>> lib/test_rhashtable.c:module_init(test_rht_init);
+> >>>>>> lib/test_siphash.c:module_init(siphash_test_init);
+> >>>>>> lib/test_sort.c:module_init(test_sort_init);
+> >>>>>> lib/test_stackinit.c:module_init(test_stackinit_init);
+> >>>>>> lib/test_static_key_base.c:module_init(test_static_key_base_init);
+> >>>>>> lib/test_static_keys.c:module_init(test_static_key_init);
+> >>>>>> lib/test_string.c:module_init(string_selftest_init);
+> >>>>>> lib/test_ubsan.c:module_init(test_ubsan_init);
+> >>>>>> lib/test_user_copy.c:module_init(test_user_copy_init);
+> >>>>>> lib/test_uuid.c:module_init(test_uuid_init);
+> >>>>>> lib/test_vmalloc.c:module_init(vmalloc_test_init)
+> >>>>>> lib/test_xarray.c:module_init(xarray_checks);
+> >>>>>>
+> >>>>>>
+> >>>>>>> If they do exists, it seems like it would make sense to
+> >>>>>>> convert those to kunit and have Kunit tests run-able in a VM or
+> >>>>>>> baremetal instance.
+> >>>>>>
+> >>>>>> They already run in a VM.
+> >>>>>>
+> >>>>>> They already run on bare metal.
+> >>>>>>
+> >>>>>> They already run in UML.
+> >>>>>>
+> >>>>>> This is not to say that KUnit does not make sense.  But I'm still trying
+> >>>>>> to get a better description of the KUnit features (and there are
+> >>>>>> some).
+> >>>>>
+> >>>>> FYI, I have a master student who looks at converting some of these to KTF, such as
+> >>> for
+> >>>>> instance the XArray tests, which lended themselves quite good to a semi-automated
+> >>>>> conversion.
+> >>>>>
+> >>>>> The result is also a somewhat more compact code as well as the flexibility
+> >>>>> provided by the Googletest executor and the KTF frameworks, such as running
+> selected
+> >>>>> tests, output formatting, debugging features etc.
+> >>>>
+> >>>> So is KTF already in upstream? Or is the plan to unify the KTF and
+> >>>
+> >>> I am not certain about KTF's upstream plans, but I assume that Knut
+> >>> would have CC'ed me on the thread if he had started working on it.
+> >>
+> >> You are on the Github watcher list for KTF?
+> > 
+> > Yep! I have been since LPC in 2017.
+> > 
+> >> Quite a few of the commits there are preparatory for a forthcoming kernel patch set.
+> >> I'll of course CC: you on the patch set when we send it to the list.
+> > 
+> > Awesome! I appreciate it.
+> > 
+> >>
+> >>>> Kunit in-kernel test harnesses? Because there's tons of these
+> >>>
+> >>> No, no plan. Knut and I talked about this a good while ago and it
+> >>> seemed that we had pretty fundamentally different approaches both in
+> >>> terms of implementation and end goal. Combining them seemed pretty
+> >>> infeasible, at least from a technical perspective. Anyway, I am sure
+> >>> Knut would like to give him perspective on the matter and I don't want
+> >>> to say too much without first giving him a chance to chime in on the
+> >>> matter.
+> >>
+> >> I need more time to study KUnit details to say, but from a 10k feet perspective:
+> >> I think at least there's a potential for some API unification, in using the same
+> macro
+> >> names. How about removing the KUNIT_ prefix to the test macros ;-) ?
+> > 
+> > Heh, heh. That's actually the way I had it in the earliest versions of
+> > KUnit! But that was pretty much the very first thing everyone
+> > complained about. I think I went from no prefix (like you are
+> > suggesting) to TEST_* before the first version of the RFC at the
+> > request of several people I was kicking the idea around with, and then
+> > I think I was asked to go from TEST_* to KUNIT_* in the very first
+> > revision of the RFC.
+> > 
+> > In short, I am sympathetic to your suggestion, but I think that is
+> > non-negotiable at this point. The community has a clear policy in
+> > place on the matter, and at this point I would really prefer not to
+> > change all the symbol names again.
 > 
-> There are already a multitude of in kernel test modules used by
-> kselftest.  It would be good if they all used a common TAP compliant
-> mechanism to report results.
+> This would not be the first time that a patch submitter has been
+> told "do B instead of A" for version 1, then told "do C instead of
+> B" for version 2, then told "do A instead of C" for the final version.
+> 
+> It sucks, but it happens.
 
+Sorry, I must have overlooked the B instead of A instance - otherwise 
+I would have objected against it - in addition to the recognizability 
+and portability issue I think it is important that these primitives are
+not unnecessary long since they will be written a *lot* of times if things go 
+our way.
 
- 
->> That's much like saying you can use vice grips to turn a nut or
->> bolt-head.  You *can*, but it might be that using a monkey wrench
->> would be a much better tool that is much easier.
->>
->> What would you say to a wood worker objecting that a toolbox should
->> contain a monkey wrench because he already knows how to use vise
->> grips, and his tiny brain shouldn't be forced to learn how to use a
->> wrench when he knows how to use a vise grip, which is a perfectly good
->> tool?
->>
->> If you want to use vice grips as a hammer, screwdriver, monkey wrench,
->> etc.  there's nothing stopping you from doing that.  But it's not fair
->> to object to other people who might want to use better tools.
->>
->> The reality is that we have a lot of testing tools.  It's not just
->> kselftests.  There is xfstests for file system code, blktests for
->> block layer tests, etc.   We use the right tool for the right job.
+And the reason for using unique names elsewhere is to be able to co-exist with
+other components with the same needs. In the case of tests, I believe they are 
+in a different category, they are not supposed to be part of production kernels,
+and we want them to be used all over, that should warrant having the ASSERT_ and EXPECT_
+prefixes "reserved" for the purpose, so I would urge some pragmatism here!
 
-My flippant answer:
-
-> More specious arguments.
-
-This time:
-
-I took your answer as a straw man, and had no desire to spend time
-countering a straw man.
-
-I am not proposing using a vice grips (to use your analogy).  I
-am saying that maybe the monkey wrench already exists.
-
-My point of this whole thread has been to try to get the submitter
-to provide a better, more complete explanation of how and why KUnit 
-is a better tool.
-
-I have not yet objected to the number (and differences among) the
-many sub-system tests.  I am questioning whether there is a need
-for another _test framework_ for in-kernel testing.  If there is
-something important that KUnit provides that does not exist in
-existing frameworks then the next question would be to ask how
-to implement that important thing (improve the existing
-framework, replace the existing framework, or have two
-frameworks).  I still think it is premature to ask this
-question until we first know the answer to what unique features
-KUnit adds (and apparently until we know what the existing
-framework provides).
-
--Frank
-
+> As an aside, can you point to where the "clear policy in place" is
+> documented, and what the policy is?
 > 
 > -Frank
 > 
->>
->> 						- Ted
->>
 > 
-> 
+> >> That would make the names shorter, saving typing when writing tests, and storage ;-)
+> >> and also make the names more similar to KTF's, and those of user land unit test
+> > 
+> > You mean the Googletest/Googlemock expectations/assertions?
+> > 
+> > It's a great library (with not so great a name), but unfortunately it
+> > is written in C++, which I think pretty much counts it out here.
+
+Using a similar syntax is a good thing, since it makes it easier for people
+who write tests in user land frameworks to contribute to the kernel tests.
+And if, lets say, someone later comes up with a way to run the KUnit tests in "real" 
+user land within Googletest ;-) then less editing would be needed..
+
+> >> frameworks? Also it will make it possible to have functions compiling both with KTF
+> and
+> >> KUnit, facilitating moving code between the two.
+> > 
+> > I think that would be cool, but again, I don't think this will be
+> > possible with Googletest/Googlemock.
+
+I was thinking of moves between KUnit tests and KTF tests, kernel code only.
+Some test functions may easily be usable both in a "pure" mocking environment
+and in an integrated setting with hardware/driver/userspace dependencies.
+
+> >>
+> >> Also the string stream facilities of KUnit looks interesting to share.
+> > 
+> > I am glad you think so!
+> > 
+> > If your biggest concern on my side is test macro names (which I think
+> > is a no-go as I mentioned above), I think we should be in pretty good
+> > shape once you are ready to move forward. Besides, I have a lot more
+> > KUnit patches coming after this: landing this patchset is just the
+> > beginning. So how about we keep moving forward on this patchset?
+
+I think the importance of a well thought through 
+test API definition is not to be underestimated 
+- the sooner we can unify and establish a common base, the better, 
+I think.
+
+My other concern is, as mentioned earlier, whether UML is really that 
+different from just running in a VM wrt debugging support, and that 
+there exists a better approach based on automatically generating 
+an environment where the test code and the source under test 
+can be compiled in a normal user land program. But it seems 
+there are enough clients of the UML approach to justify it 
+as a lightweight entry. We want to make it easy and inexcusable 
+not to test the code, having a low bar of entry is certainly good. 
+Other than that, I really would need to spend some more time with 
+the details on KUnit to verify my so far fairly 
+shallow observations!
+
+Thanks,
+Knut
