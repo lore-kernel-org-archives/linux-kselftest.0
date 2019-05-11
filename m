@@ -1,82 +1,40 @@
-From: frowand.list at gmail.com (Frank Rowand)
-Date: Fri, 10 May 2019 15:13:40 -0700
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <3faa022b-0b70-0375-aa6d-12ea83a2671f@deltatee.com>
-References: <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
- <20190509015856.GB7031@mit.edu>
- <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu>
- <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
- <20190509214233.GA20877@mit.edu>
- <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
- <20190509233043.GC20877@mit.edu>
- <8914afef-1e66-e6e3-f891-5855768d3018@deltatee.com>
- <6d6e91ec-33d3-830b-4895-4d7a20ba7d45@gmail.com>
- <3faa022b-0b70-0375-aa6d-12ea83a2671f@deltatee.com>
-Message-ID: <d148a554-2a71-a5a4-4bb2-d84d2c483277@gmail.com>
+From: joel at joelfernandes.org (Joel Fernandes)
+Date: Sat, 11 May 2019 12:17:14 -0400
+Subject: [PATCH 3/3] kheaders: Make it depend on sysfs
+In-Reply-To: <20190511060203.GA18650@kroah.com>
+References: <20190510210243.152808-1-joel@joelfernandes.org>
+ <20190510210243.152808-4-joel@joelfernandes.org>
+ <CAK7LNATeJqmE29M=Y1Vexg8nnRdr3qUDkq1BejN7t2_106PgVg@mail.gmail.com>
+ <20190511060203.GA18650@kroah.com>
+Message-ID: <20190511161714.GA179270@google.com>
 
-On 5/10/19 9:17 AM, Logan Gunthorpe wrote:
+On Sat, May 11, 2019 at 08:02:03AM +0200, Greg Kroah-Hartman wrote:
+> On Sat, May 11, 2019 at 09:52:04AM +0900, Masahiro Yamada wrote:
+> > On Sat, May 11, 2019 at 6:05 AM Joel Fernandes (Google)
+> > <joel at joelfernandes.org> wrote:
+> > >
+> > > The kheaders archive is exposed through SYSFS in /sys/kernel/. Make it
+> > > depend on SYSFS as it makes no sense to enable this feature without it.
+> > 
+> > 
+> > And, it also makes no sense to break the feature by 1/3,
+> > then fix it by 3/3.
+> > 
+> > 
+> > Why don't you squash this?
 > 
-> 
-> On 2019-05-09 11:18 p.m., Frank Rowand wrote:
-> 
->> YES, kselftest has in-kernel tests.  (Excuse the shouting...)
-> 
-> Cool. From my cursory look, in my opinion, these would be greatly
-> improved by converting them to the framework Brendan is proposing for Kunit.
-> 
->>> If they do exists, it seems like it would make sense to
->>> convert those to kunit and have Kunit tests run-able in a VM or
->>> baremetal instance.
->>
->> They already run in a VM.
->>
->> They already run on bare metal.
->>
->> They already run in UML.
-> 
-> Simply being able to run in UML is not the only thing here. Kunit
-> provides the infrastructure to quickly build, run and report results for
-> all the tests from userspace without needing to worry about the details
-> of building and running a UML kernel, then parsing dmesg to figure out
-> what tests were run or not.
+> I agree, this belongs in patch 1/3.
 
-Yes.  But that is not the only environment that KUnit must support to be
-of use to me for devicetree unittests (this is not new, Brendan is quite
-aware of my needs and is not ignoring them).
+Fine with me. The reason I split it this way is I already had posted 1/3
+recently for the driver tree [1], and I did not want to confuse Greg since he
+was in the process of picking it up [2].
 
+Anyway, I can resend the series soon with 1/3 and 3/3 squashed unless anyone
+applying this is Ok with squashing it in their trees. thanks!
 
->> This is not to say that KUnit does not make sense.  But I'm still trying
->> to get a better description of the KUnit features (and there are
->> some).
-> 
-> So read the patches, or the documentation[1] or the LWN article[2]. It's
-> pretty well described in a lot of places -- that's one of the big
-> advantages of it. In contrast, few people seems to have any concept of
-> what kselftests are or where they are or how to run them (I was
-> surprised to find the in-kernel tests in the lib tree).
-> 
-> Logan
-> 
-> [1] https://google.github.io/kunit-docs/third_party/kernel/docs/
-> [2] https://lwn.net/Articles/780985/
+[1] https://lore.kernel.org/patchwork/patch/1070005/
+[2] https://lore.kernel.org/patchwork/patch/1070005/#1267273
 
-I have been following the RFC versions.  I have installed the RFC patches
-and run them to the extent that they worked (devicetree unittests were
-a guinea pig for test conversion in the RFC series, but the converted
-tests did not work).  I read portions of the code while trying to
-understand the unittests conversion.  I made review comments based on
-the portion of the code that I did read.  I have read the documentation
-(very nice btw, as I have said before, but should be expanded).
+thanks,
 
-My comment is that the description to submit the patch series should
-be fuller -- KUnit potentially has a lot of nice attributes, and I
-still think I have only scratched the surface.  The average reviewer
-may have even less in-depth knowledge than I do.  And as I have
-commented before, I keep diving into areas that I had no previous
-experience with (such as kselftest) to be able to properly judge this
-patch series.
+ - Joel
