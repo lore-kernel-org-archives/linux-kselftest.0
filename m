@@ -1,30 +1,64 @@
-From: tytso at mit.edu (Theodore Ts'o)
-Date: Wed, 8 May 2019 23:20:17 -0400
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
- <20190507080119.GB28121@kroah.com>
- <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
- <20190509015856.GB7031@mit.edu>
- <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
-Message-ID: <20190509032017.GA29703@mit.edu>
+From: keescook at chromium.org (Kees Cook)
+Date: Sat, 11 May 2019 07:51:32 -0700
+Subject: next-20190510 kselftest results
+In-Reply-To: <359070592.29.1557569697898.JavaMail.jenkins@db10df53eddc>
+References: <359070592.29.1557569697898.JavaMail.jenkins@db10df53eddc>
+Message-ID: <201905110746.D6C85E86F6@keescook>
 
-On Wed, May 08, 2019 at 07:13:59PM -0700, Frank Rowand wrote:
-> > If you want to use vice grips as a hammer, screwdriver, monkey wrench,
-> > etc.  there's nothing stopping you from doing that.  But it's not fair
-> > to object to other people who might want to use better tools.
-> > 
-> > The reality is that we have a lot of testing tools.  It's not just
-> > kselftests.  There is xfstests for file system code, blktests for
-> > block layer tests, etc.   We use the right tool for the right job.
+On Sat, May 11, 2019 at 10:14:57AM +0000, ci_notify at linaro.org wrote:
+> Summary
+> ------------------------------------------------------------------------
+> kernel: 5.1.0
+> git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> git branch: master
+> git commit: a802303934b3bd4df6e2fc8bf2e4ebced1c37556
+> git describe: next-20190510
+> Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190510
 > 
-> More specious arguments.
+> Regressions (compared to build next-20190509)
+> ------------------------------------------------------------------------
+> No regressions                                                                                                          
+>                                                                                                                        
+> Fixes (compared to build next-20190509)                                                                   
+> ------------------------------------------------------------------------                                               
+> No fixes
+> 
+> In total:
+> ------------------------------------------------------------------------
+> Ran 12 total tests in the following environments and test suites.
+> pass 11
+> fail 1
+> xfail 0
+> skip 0
+> 
+> Environments
+> --------------
+> - dragonboard-410c - arm64
+> - hi6220-hikey - arm64
+> - i386
+> - juno-r2 - arm64
+> - qemu_arm
+> - qemu_arm64
+> - qemu_i386
+> - qemu_x86_64
+> - x15 - arm
+> - x86_64
+> 
+> Test Suites
+> -----------
+> * boot-lkft-kselftests-master-519
 
-Well, *I* don't think they are specious; so I think we're going to
-have to agree to disagree.
+What counts as a "pass" for this? I looked at the x86_64 log, and there are lots of kselftest failures, but the dashboard counts it as a "pass"?
 
-Cheers,
+$ wget https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190510/testrun/716064/log
+$ grep '^ok ' log | wc -l
+60
+$ grep '^not ok' log | grep -iv '# SKIP' | wc -l
+30
+$ grep -i '^not ok.*# SKIP' log | wc -l
+18
 
-						- Ted
+60 pass, 30 fail, 18 skip
+
+-- 
+Kees Cook
