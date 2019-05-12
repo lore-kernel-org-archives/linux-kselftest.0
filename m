@@ -1,79 +1,46 @@
-From: peterz at infradead.org (Peter Zijlstra)
-Date: Fri, 10 May 2019 14:40:54 +0200
-Subject: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-In-Reply-To: <20190510135831.c4ad309c68fc254f819194fc@kernel.org>
-References: <20190508115416.nblx7c2kocidpytm@treble>
- <20190508120416.GL2589@hirez.programming.kicks-ass.net>
- <20190508124248.u5ukpbhnh4wpiccq@treble>
- <20190508153907.GM2589@hirez.programming.kicks-ass.net>
- <20190508184848.qerg3flv3ej3xsev@treble>
- <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
- <20190509081431.GO2589@hirez.programming.kicks-ass.net>
- <20190509230106.3551b08553440d125e437f66@kernel.org>
- <20190509171416.GY2623@hirez.programming.kicks-ass.net>
- <20190510135831.c4ad309c68fc254f819194fc@kernel.org>
-Message-ID: <20190510124054.GV2589@hirez.programming.kicks-ass.net>
+From: yamada.masahiro at socionext.com (Masahiro Yamada)
+Date: Sun, 12 May 2019 21:23:50 +0900
+Subject: Build-time tests?
+In-Reply-To: <20190508191341.GA17963@redhat.com>
+References: <20190508191341.GA17963@redhat.com>
+Message-ID: <CAK7LNASJr8CSWo-yE-YBq085Y=k+x8X-gQopJLRkxTueP4LGmw@mail.gmail.com>
 
-On Fri, May 10, 2019 at 01:58:31PM +0900, Masami Hiramatsu wrote:
-> On Thu, 9 May 2019 19:14:16 +0200
-> Peter Zijlstra <peterz at infradead.org> wrote:
-> > > > --- a/arch/x86/kernel/kprobes/core.c
-> > > > +++ b/arch/x86/kernel/kprobes/core.c
-> > > > @@ -731,29 +731,8 @@ asm(
-> > > >  	".global kretprobe_trampoline\n"
-> > > >  	".type kretprobe_trampoline, @function\n"
-> > > >  	"kretprobe_trampoline:\n"
+On Thu, May 9, 2019 at 4:30 AM Joe Lawrence <joe.lawrence at redhat.com> wrote:
+>
+> Hello kbuild, kselftest,
+>
+> I've been working on a patchset which adds an additional build script to
+> the toolchain when compiling livepatches.  There are a few kernel
+> section features in which this script does not yet support, but can
+> detect and abort when it encounters.  To test this detection, I've
+> written a small set of kernel modules that require such sections.
+>
+> A few questions:
+>
+> Is build-testing out of scope for kernel selftests?  For expediency,
+> it was really easy to spin out new lib/livepatch kernel modules.
+>
+> Does kbuild support the notion of expected failure?  In this case, the
+> build script returns a non-zero error and the build stops.
 
-> > > Here, we need a gap for storing ret-ip, because kretprobe_trampoline is
-> > > the address which is returned from the target function. We have no 
-> > > "ret-ip" here at this point. So something like
-> > > 
-> > > +	"push $0\n"	/* This is a gap, will be filled with real return address*/
-> > 
-> > The trampoline already provides a gap, trampoline_handler() will need to
-> > use int3_emulate_push() if it wants to inject something on the return
-> > stack.
-> 
-> I guess you mean the int3 case. This trampoline is used as a return destination.
 
-> When the target function is called, kretprobe interrupts the first instruction,
-> and replace the return address with this trampoline. When a "ret" instruction
-> is done, it returns to this trampoline. Thus the stack frame start with
-> previous context here. As you described above,
+If I understood correctly, your are asking about kselftest,
+maintained by Shuah Khan.
 
-I would prefer to change that to inject an extra return address, instead
-of replacing it. With the new exception stuff we can actually do that.
+(Unfortunately), makefiles under tools/ adopted completely
+different build system, and it is out of scope of kbuild.
 
-So on entry we then go from:
 
-	<previous context>
-	RET-IP
+> Am I trying to fit a square peg in a round hole?  I could easily keep
+> these build tests in a private branch, but could they exist in a
+> different format somewhere else in the tree?
+>
+> Suggestions welcome,
+>
+> -- Joe
 
-to
 
-	<previous context>
-	RET-IP
-	return-trampoline
 
-So when the function returns, it falls into the trampoline instead.
-
-> > > > +	 * On entry the stack looks like:
-> > > > +	 *
-> > > > +	 *   2*4(%esp) <previous context>
-> > > > +	 *   1*4(%esp) RET-IP
-> > > > +	 *   0*4(%esp) func
-> 
-> From this trampoline call, the stack looks like:
-> 
-> 	 *   1*4(%esp) <previous context>
-> 	 *   0*4(%esp) func
-> 
-> So we need one more push.
-
-And then the stack looks just right at this point.
-
-> > > > +	"push trampoline_handler\n"
-> > > > +	"jmp call_to_exception_trampoline\n"
-> > > >  	".size kretprobe_trampoline, .-kretprobe_trampoline\n"
-> > > >  );
-> > > >  NOKPROBE_SYMBOL(kretprobe_trampoline);
+-- 
+Best Regards
+Masahiro Yamada
