@@ -1,28 +1,33 @@
 From: skunberg.kelsey@gmail.com (Kelsey Skunberg)
-Date: Sat, 11 May 2019 23:04:52 -0600
-Subject: [PATCH] selftests: drivers: Create .gitignore to include
- /dma-buf/udmabuf
-Message-ID: <20190512050452.4720-1-skunberg.kelsey@gmail.com>
+Date: Sat, 11 May 2019 21:50:09 -0600
+Subject: [PATCH] selftests: bpf: Add files generated when compiled to
+ .gitignore
+Message-ID: <20190512035009.25451-1-skunberg.kelsey@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190512050452.rxPuDfazy7fCI8tMA4iN6TRi6pqDBdtO7-I6R5_g1ek@z>
+Message-ID: <20190512035009.VwwQLeTkTeAL_BgYeXst3QWSOP6-5MPv6WyZa1IXiCw@z>
 
-Create /selftests/drivers/.gitignore which holds the following file name
-created after compiling:
+The following files are generated when /selftests/bpf/ is compiled and
+should be added to .gitignore:
 
-	- /dma-buf/udmabuf
+	- libbpf.pc
+	- libbpf.so.0
+	- libbpf.so.0.0.3
 
 Signed-off-by: Kelsey Skunberg <skunberg.kelsey at gmail.com>
 ---
- tools/testing/selftests/drivers/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
- create mode 100644 tools/testing/selftests/drivers/.gitignore
+ tools/testing/selftests/bpf/.gitignore | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/drivers/.gitignore b/tools/testing/selftests/drivers/.gitignore
-new file mode 100644
-index 000000000000..f6aebcc27b76
---- /dev/null
-+++ b/tools/testing/selftests/drivers/.gitignore
-@@ -0,0 +1 @@
-+/dma-buf/udmabuf
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index 41e8a689aa77..ceb11f98fe4f 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -32,3 +32,6 @@ test_tcpnotify_user
+ test_libbpf
+ test_tcp_check_syncookie_user
+ alu32
++libbpf.pc
++libbpf.so.0
++libbpf.so.0.0.3
 --
 2.20.1
