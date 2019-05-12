@@ -1,66 +1,49 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Sat, 11 May 2019 07:51:32 -0700
-Subject: next-20190510 kselftest results
-In-Reply-To: <359070592.29.1557569697898.JavaMail.jenkins@db10df53eddc>
-References: <359070592.29.1557569697898.JavaMail.jenkins@db10df53eddc>
-Message-ID: <201905110746.D6C85E86F6@keescook>
+From: skunberg.kelsey@gmail.com (Kelsey Skunberg)
+Date: Sun, 12 May 2019 01:34:29 -0600
+Subject: [PATCH] selftests: bpf: Add files generated when compiled to
+ .gitignore
+In-Reply-To: <20190512062907.GL1247@mini-arch>
+References: <20190512035009.25451-1-skunberg.kelsey@gmail.com>
+ <20190512062907.GL1247@mini-arch>
+Message-ID: <20190512073427.GA10811@asus>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190511145132.ieCf_zu7E53NgZx5OoGO4fMBQU5oW10HPpcLk4Ek8L0@z>
+Message-ID: <20190512073429.7p_t7gOhZsDMo6QLE5D39GlaVZSTu1nx390XHDR0wxQ@z>
 
-On Sat, May 11, 2019@10:14:57AM +0000, ci_notify@linaro.org wrote:
-> Summary
-> ------------------------------------------------------------------------
-> kernel: 5.1.0
-> git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> git branch: master
-> git commit: a802303934b3bd4df6e2fc8bf2e4ebced1c37556
-> git describe: next-20190510
-> Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190510
+On Sat, May 11, 2019@11:29:07PM -0700, Stanislav Fomichev wrote:
+> On 05/11, Kelsey Skunberg wrote:
+> > The following files are generated when /selftests/bpf/ is compiled and
+> > should be added to .gitignore:
+> > 
+> > 	- libbpf.pc
+> > 	- libbpf.so.0
+> > 	- libbpf.so.0.0.3
+> > 
+> > Signed-off-by: Kelsey Skunberg <skunberg.kelsey at gmail.com>
+> > ---
+> >  tools/testing/selftests/bpf/.gitignore | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+> > index 41e8a689aa77..ceb11f98fe4f 100644
+> > --- a/tools/testing/selftests/bpf/.gitignore
+> > +++ b/tools/testing/selftests/bpf/.gitignore
+> > @@ -32,3 +32,6 @@ test_tcpnotify_user
+> >  test_libbpf
+> >  test_tcp_check_syncookie_user
+> >  alu32
+> > +libbpf.pc
 > 
-> Regressions (compared to build next-20190509)
-> ------------------------------------------------------------------------
-> No regressions                                                                                                          
->                                                                                                                        
-> Fixes (compared to build next-20190509)                                                                   
-> ------------------------------------------------------------------------                                               
-> No fixes
-> 
-> In total:
-> ------------------------------------------------------------------------
-> Ran 12 total tests in the following environments and test suites.
-> pass 11
-> fail 1
-> xfail 0
-> skip 0
-> 
-> Environments
-> --------------
-> - dragonboard-410c - arm64
-> - hi6220-hikey - arm64
-> - i386
-> - juno-r2 - arm64
-> - qemu_arm
-> - qemu_arm64
-> - qemu_i386
-> - qemu_x86_64
-> - x15 - arm
-> - x86_64
-> 
-> Test Suites
-> -----------
-> * boot-lkft-kselftests-master-519
+> [..]
+> > +libbpf.so.0
+> > +libbpf.so.0.0.3
+> How about libbpf.so.* so we don't have to update it on every release?
+>
 
-What counts as a "pass" for this? I looked at the x86_64 log, and there are lots of kselftest failures, but the dashboard counts it as a "pass"?
+That seems logical. Updated in v2. I appreciate the feedback!
 
-$ wget https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190510/testrun/716064/log
-$ grep '^ok ' log | wc -l
-60
-$ grep '^not ok' log | grep -iv '# SKIP' | wc -l
-30
-$ grep -i '^not ok.*# SKIP' log | wc -l
-18
+Cheers,
+Kelsey
 
-60 pass, 30 fail, 18 skip
-
--- 
-Kees Cook
+> > --
+> > 2.20.1
+> > 
