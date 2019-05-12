@@ -1,28 +1,25 @@
-From: joe.lawrence at redhat.com (Joe Lawrence)
-Date: Wed, 8 May 2019 15:30:22 -0400
-Subject: Build-time tests?
-Message-ID: <20190508191341.GA17963@redhat.com>
+From: skunberg.kelsey at gmail.com (Kelsey Skunberg)
+Date: Sat, 11 May 2019 22:57:11 -0600
+Subject: [PATCH] selftests: pidfd: Create .gitignore to include pidfd_test
+Message-ID: <20190512045711.4507-1-skunberg.kelsey@gmail.com>
 
-Hello kbuild, kselftest,
+Create /selftests/pidfd/.gitignore which holds the following file name
+created after compiling:
 
-I've been working on a patchset which adds an additional build script to
-the toolchain when compiling livepatches.  There are a few kernel
-section features in which this script does not yet support, but can
-detect and abort when it encounters.  To test this detection, I've
-written a small set of kernel modules that require such sections.
+	- pidfd_test
 
-A few questions: 
+Signed-off-by: Kelsey Skunberg <skunberg.kelsey at gmail.com>
+---
+ tools/testing/selftests/pidfd/.gitignore | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 tools/testing/selftests/pidfd/.gitignore
 
-Is build-testing out of scope for kernel selftests?  For expediency,
-it was really easy to spin out new lib/livepatch kernel modules.
-
-Does kbuild support the notion of expected failure?  In this case, the
-build script returns a non-zero error and the build stops.
-
-Am I trying to fit a square peg in a round hole?  I could easily keep
-these build tests in a private branch, but could they exist in a
-different format somewhere else in the tree?
-
-Suggestions welcome,
-
--- Joe
+diff --git a/tools/testing/selftests/pidfd/.gitignore b/tools/testing/selftests/pidfd/.gitignore
+new file mode 100644
+index 000000000000..822a1e63d045
+--- /dev/null
++++ b/tools/testing/selftests/pidfd/.gitignore
+@@ -0,0 +1 @@
++pidfd_test
+--
+2.20.1
