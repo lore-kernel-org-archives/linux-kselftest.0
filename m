@@ -1,61 +1,48 @@
-From: logang@deltatee.com (Logan Gunthorpe)
-Date: Fri, 10 May 2019 10:17:56 -0600
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <6d6e91ec-33d3-830b-4895-4d7a20ba7d45@gmail.com>
-References: <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
- <20190509015856.GB7031@mit.edu>
- <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu>
- <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
- <20190509214233.GA20877@mit.edu>
- <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
- <20190509233043.GC20877@mit.edu>
- <8914afef-1e66-e6e3-f891-5855768d3018@deltatee.com>
- <6d6e91ec-33d3-830b-4895-4d7a20ba7d45@gmail.com>
-Message-ID: <3faa022b-0b70-0375-aa6d-12ea83a2671f@deltatee.com>
+From: sean.j.christopherson@intel.com (Sean Christopherson)
+Date: Mon, 13 May 2019 07:03:05 -0700
+Subject: [PATCH v2] selftests: kvm: Add files generated when compiled to
+ .gitignore
+In-Reply-To: <20190512044434.32627-1-skunberg.kelsey@gmail.com>
+References: <5d60e7126803e9a11b51618e65966ba047eff7df>
+ <20190512044434.32627-1-skunberg.kelsey@gmail.com>
+Message-ID: <20190513140305.GA28561@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190510161756.sY9RgK-tUIiBgn8ryt1VeuiVeMCxdmJiLIS0gl2pEvo@z>
+Message-ID: <20190513140305.M4hh2Y_ccKxqLVJWz5ZiOewytgpQuWFaRSKrFHAQIZQ@z>
 
-
-
-On 2019-05-09 11:18 p.m., Frank Rowand wrote:
-
-> YES, kselftest has in-kernel tests.  (Excuse the shouting...)
-
-Cool. From my cursory look, in my opinion, these would be greatly
-improved by converting them to the framework Brendan is proposing for Kunit.
-
->> If they do exists, it seems like it would make sense to
->> convert those to kunit and have Kunit tests run-able in a VM or
->> baremetal instance.
+On Sat, May 11, 2019@10:44:34PM -0600, Kelsey Skunberg wrote:
+> The following files are generated in /selftests/kvm/ after compiling and
+> should be added to /selftests/kvm/.gitignore:
 > 
-> They already run in a VM.
+>         - /x86_64/hyperv_cpuid
+> 	- /x86_64/smm_test
+> 	- /clear_dirty_log_test
 > 
-> They already run on bare metal.
+> Signed-off-by: Kelsey Skunberg <skunberg.kelsey at gmail.com>
+> ---
+
+An equivalent patch has already been queued.
+
+https://patchwork.kernel.org/patch/10931115/
+
+> Changes since v1:
+>         - Included /clear_dirty_log_test to .gitignore
+>         - Updated commit log to reflect file added
 > 
-> They already run in UML.
-
-Simply being able to run in UML is not the only thing here. Kunit
-provides the infrastructure to quickly build, run and report results for
-all the tests from userspace without needing to worry about the details
-of building and running a UML kernel, then parsing dmesg to figure out
-what tests were run or not.
-
-> This is not to say that KUnit does not make sense.  But I'm still trying
-> to get a better description of the KUnit features (and there are
-> some).
-
-So read the patches, or the documentation[1] or the LWN article[2]. It's
-pretty well described in a lot of places -- that's one of the big
-advantages of it. In contrast, few people seems to have any concept of
-what kselftests are or where they are or how to run them (I was
-surprised to find the in-kernel tests in the lib tree).
-
-Logan
-
-[1] https://google.github.io/kunit-docs/third_party/kernel/docs/
-[2] https://lwn.net/Articles/780985/
+>  tools/testing/selftests/kvm/.gitignore | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+> index 2689d1ea6d7a..391a19231618 100644
+> --- a/tools/testing/selftests/kvm/.gitignore
+> +++ b/tools/testing/selftests/kvm/.gitignore
+> @@ -6,4 +6,7 @@
+>  /x86_64/vmx_close_while_nested_test
+>  /x86_64/vmx_tsc_adjust_test
+>  /x86_64/state_test
+> +/x86_64/hyperv_cpuid
+> +/x86_64/smm_test
+> +/clear_dirty_log_test
+>  /dirty_log_test
+> --
+> 2.20.1
+> 
