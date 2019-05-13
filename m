@@ -1,75 +1,53 @@
-From: yamada.masahiro@socionext.com (Masahiro Yamada)
-Date: Fri, 10 May 2019 12:03:57 +0900
-Subject: [PATCH v2 06/17] kbuild: enable building KUnit
-In-Reply-To: <20190501230126.229218-7-brendanhiggins@google.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-7-brendanhiggins@google.com>
-Message-ID:
- <CAK7LNAQ+SRMn8UFjW1dZv_TrL0qjD2v2S=rXgtUpiA-urr1DDA@mail.gmail.com>
+From: daniel@ffwll.ch (Daniel Vetter)
+Date: Mon, 13 May 2019 16:44:51 +0200
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20190511173344.GA8507@mit.edu>
+References: <20190509015856.GB7031@mit.edu>
+ <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+ <20190509032017.GA29703@mit.edu>
+ <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
+ <20190509133551.GD29703@mit.edu>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
+ <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
+ <20190509214233.GA20877@mit.edu>
+ <80c72e64-2665-bd51-f78c-97f50f9a53ba@gmail.com>
+ <20190511173344.GA8507@mit.edu>
+Message-ID: <20190513144451.GQ17751@phenom.ffwll.local>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190510030357.SkIA-uwna1xJAL8RsPJ00ogJE_HQxTlrwSOWfetHcpQ@z>
+Message-ID: <20190513144451.2UMph4GBI8XWDAbKC-enBpSznTYnRpteiZdb5bu3vHk@z>
 
-On Thu, May 2, 2019 at 8:03 AM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> Add KUnit to root Kconfig and Makefile allowing it to actually be built.
->
-> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+On Sat, May 11, 2019@01:33:44PM -0400, Theodore Ts'o wrote:
+> On Fri, May 10, 2019@02:12:40PM -0700, Frank Rowand wrote:
+> > However, the reply is incorrect.  Kselftest in-kernel tests (which
+> > is the context here) can be configured as built in instead of as
+> > a module, and built in a UML kernel.  The UML kernel can boot,
+> > running the in-kernel tests before UML attempts to invoke the
+> > init process.
+> 
+> Um, Citation needed?
+> 
+> I don't see any evidence for this in the kselftest documentation, nor
+> do I see any evidence of this in the kselftest Makefiles.
+> 
+> There exists test modules in the kernel that run before the init
+> scripts run --- but that's not strictly speaking part of kselftests,
+> and do not have any kind of infrastructure.  As noted, the
+> kselftests_harness header file fundamentally assumes that you are
+> running test code in userspace.
 
-You need to make sure
-to not break git-bisect'abililty.
+Yeah I really like the "no userspace required at all" design of kunit,
+while still collecting results in a well-defined way (unless the current
+self-test that just run when you load the module, with maybe some
+kselftest ad-hoc wrapper around to collect the results).
 
-
-With this commit, I see build error.
-
-  CC      kunit/test.o
-kunit/test.c:11:10: fatal error: os.h: No such file or directory
- #include <os.h>
-          ^~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.build;279: kunit/test.o] Error 1
-make: *** [Makefile;1763: kunit/] Error 2
-
-
-
-
-
-
-
-
-> ---
->  Kconfig  | 2 ++
->  Makefile | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/Kconfig b/Kconfig
-> index 48a80beab6853..10428501edb78 100644
-> --- a/Kconfig
-> +++ b/Kconfig
-> @@ -30,3 +30,5 @@ source "crypto/Kconfig"
->  source "lib/Kconfig"
->
->  source "lib/Kconfig.debug"
-> +
-> +source "kunit/Kconfig"
-> diff --git a/Makefile b/Makefile
-> index 2b99679148dc7..77368f498d84c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -969,7 +969,7 @@ endif
->  PHONY += prepare0
->
->  ifeq ($(KBUILD_EXTMOD),)
-> -core-y         += kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/
-> +core-y         += kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/ kunit/
->
->  vmlinux-dirs   := $(patsubst %/,%,$(filter %/, $(init-y) $(init-m) \
->                      $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
-> --
-> 2.21.0.593.g511ec345e18-goog
->
-
-
+What I want to do long-term is to run these kernel unit tests as part of
+the build-testing, most likely in gitlab (sooner or later, for drm.git
+only ofc). So that people get their pull requests (and patch series, we
+have some ideas to tie this into patchwork) automatically tested for this
+super basic stuff.
+-Daniel
 -- 
-Best Regards
-Masahiro Yamada
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
