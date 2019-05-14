@@ -1,25 +1,20 @@
 From: skhan at linuxfoundation.org (Shuah Khan)
-Date: Tue, 14 May 2019 17:26:25 -0600
-Subject: [PATCH] selftests: pidfd: Create .gitignore to include pidfd_test
-In-Reply-To: <20190512045711.4507-1-skunberg.kelsey@gmail.com>
-References: <20190512045711.4507-1-skunberg.kelsey@gmail.com>
-Message-ID: <f0f3c65d-2b1f-3633-ee18-7d49d18eb7a5@linuxfoundation.org>
+Date: Tue, 14 May 2019 17:28:05 -0600
+Subject: [PATCH] selftests: drivers: Create .gitignore to include
+ /dma-buf/udmabuf
+In-Reply-To: <20190512050452.4720-1-skunberg.kelsey@gmail.com>
+References: <20190512050452.4720-1-skunberg.kelsey@gmail.com>
+Message-ID: <12ba7acd-6181-7925-5231-35b9dae4971f@linuxfoundation.org>
 
-Hi Kelsey,
-
-On 5/11/19 10:57 PM, Kelsey Skunberg wrote:
-> Create /selftests/pidfd/.gitignore which holds the following file name
+On 5/11/19 11:04 PM, Kelsey Skunberg wrote:
+> Create /selftests/drivers/.gitignore which holds the following file name
 > created after compiling:
+> 
 
-This patch generates the following checkpatch warning.
+Thanks for the patch.
 
-WARNING: use relative pathname instead of absolute in changelog text
-#85:
-Create /selftests/drivers/.gitignore which holds the following file name
-
-
-I fixed it and applied the patch. Please make sure to run checkpatch
-before sending patches in the future.
+Ran into the same relative path WARN from checkpatch for the commit
+log. Fixed it and applied.
 
 thanks,
 -- Shuah
