@@ -1,31 +1,43 @@
-From: peterz at infradead.org (Peter Zijlstra)
-Date: Tue, 14 May 2019 10:46:55 +0200
-Subject: [PATCH v3 08/18] objtool: add kunit_try_catch_throw to the
- noreturn list
-In-Reply-To: <20190514081223.GA230665@google.com>
-References: <20190514054251.186196-1-brendanhiggins@google.com>
- <20190514054251.186196-9-brendanhiggins@google.com>
- <20190514065643.GC2589@hirez.programming.kicks-ass.net>
- <20190514081223.GA230665@google.com>
-Message-ID: <20190514084655.GK2589@hirez.programming.kicks-ass.net>
+From: dan.carpenter at oracle.com (Dan Carpenter)
+Date: Tue, 14 May 2019 13:34:51 +0300
+Subject: [PATCH] KVM: selftests: Fix a condition in test_hv_cpuid()
+Message-ID: <20190514103451.GA1694@mwanda>
 
-On Tue, May 14, 2019 at 01:12:23AM -0700, Brendan Higgins wrote:
-> On Tue, May 14, 2019 at 08:56:43AM +0200, Peter Zijlstra wrote:
-> > On Mon, May 13, 2019 at 10:42:42PM -0700, Brendan Higgins wrote:
-> > > This fixes the following warning seen on GCC 7.3:
-> > >   kunit/test-test.o: warning: objtool: kunit_test_unsuccessful_try() falls through to next function kunit_test_catch()
-> > > 
-> > 
-> > What is that file and function; no kernel tree near me seems to have
-> > that.
-> 
-> Oh, sorry about that. The function is added in the following patch,
-> "[PATCH v3 09/18] kunit: test: add support for test abort"[1].
-> 
-> My apologies if this patch is supposed to come after it in sequence, but
-> I assumed it should come before otherwise objtool would complain about
-> the symbol when it is introduced.
+The code is trying to check that all the padding is zeroed out and it
+does this:
 
-Or send me all patches such that I have context, or have a sane
-Changelog that gives me context. Just don't give me one patch with a
-crappy changelog.
+    entry->padding[0] == entry->padding[1] == entry->padding[2] == 0
+
+Assume everything is zeroed correctly, then the first comparison is
+true, the next comparison is false and false is equal to zero so the
+overall condition is true.  This bug doesn't affect run time very
+badly, but the code should instead just check that all three paddings
+are zero individually.
+
+Also the error message was copy and pasted from an earlier error and it
+wasn't correct.
+
+Fixes: 7edcb7343327 ("KVM: selftests: Add hyperv_cpuid test")
+Signed-off-by: Dan Carpenter <dan.carpenter at oracle.com>
+---
+ tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c b/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
+index 9a21e912097c..63b9fc3fdfbe 100644
+--- a/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
++++ b/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
+@@ -58,9 +58,8 @@ static void test_hv_cpuid(struct kvm_cpuid2 *hv_cpuid_entries,
+ 		TEST_ASSERT(entry->flags == 0,
+ 			    ".flags field should be zero");
+ 
+-		TEST_ASSERT(entry->padding[0] == entry->padding[1]
+-			    == entry->padding[2] == 0,
+-			    ".index field should be zero");
++		TEST_ASSERT(!entry->padding[0] && !entry->padding[1] &&
++			    !entry->padding[2], "padding should be zero");
+ 
+ 		/*
+ 		 * If needed for debug:
+-- 
+2.20.1
