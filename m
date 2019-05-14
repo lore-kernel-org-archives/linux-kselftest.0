@@ -1,47 +1,34 @@
-From: corbet@lwn.net (Jonathan Corbet)
-Date: Tue, 14 May 2019 07:34:22 -0600
-Subject: [PATCH v3 15/18] Documentation: kunit: add documentation for KUnit
-In-Reply-To: <20190514054251.186196-16-brendanhiggins@google.com>
-References: <20190514054251.186196-1-brendanhiggins@google.com>
- <20190514054251.186196-16-brendanhiggins@google.com>
-Message-ID: <20190514073422.4287267c@lwn.net>
+From: christian@brauner.io (Christian Brauner)
+Date: Tue, 14 May 2019 17:16:42 +0200
+Subject: [PATCH v2 1/2] Add polling support to pidfd
+In-Reply-To: <20190502160247.GD7323@redhat.com>
+References: <20190430162154.61314-1-joel@joelfernandes.org>
+ <20190501151312.GA30235@redhat.com>
+ <20190502151320.cvc6uc3b4bmww23k@brauner.io>
+ <20190502160247.GD7323@redhat.com>
+Message-ID: <20190514151605.7aadxh6owlk42bwr@brauner.io>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190514133422.gmj2NYVSOUNU-X3uiIO6NGOxIblJYXtWCaglM-gCaDI@z>
+Message-ID: <20190514151642.-aqbhyHuQL7nQMIcukcqv7pYYfNIDsknz2bxeHTAtIc@z>
 
-On Mon, 13 May 2019 22:42:49 -0700
-Brendan Higgins <brendanhiggins@google.com> wrote:
-
-> Add documentation for KUnit, the Linux kernel unit testing framework.
-> - Add intro and usage guide for KUnit
-> - Add API reference
+On Thu, May 02, 2019@06:02:48PM +0200, Oleg Nesterov wrote:
+> On 05/02, Christian Brauner wrote:
+> >
+> > On Wed, May 01, 2019@05:13:12PM +0200, Oleg Nesterov wrote:
+> > >
+> > > Otherwise I see no problems.
+> >
+> > I'll remove the WARN_ON() check when applying this. Can I get your
+> > Acked/Review, Oleg?
 > 
-> Signed-off-by: Felix Guo <felixguoxiuping at gmail.com>
-> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> Reviewed-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
-> Reviewed-by: Logan Gunthorpe <logang at deltatee.com>
-> ---
-> Changes Since Last Revision:
->  - Addressed reference to incorrect number of sections, as per Randy's
->    comment.
->  - Make section underlines same length as the section title, as per
->    Randy's comments.
-> ---
->  Documentation/index.rst           |   1 +
->  Documentation/kunit/api/index.rst |  16 +
->  Documentation/kunit/api/test.rst  |  14 +
->  Documentation/kunit/faq.rst       |  62 ++++
->  Documentation/kunit/index.rst     |  79 ++++
->  Documentation/kunit/start.rst     | 180 ++++++++++
->  Documentation/kunit/usage.rst     | 575 ++++++++++++++++++++++++++++++
+> Yes, feel free to add
+> 
+> 	Reviewed-by: Oleg Nesterov <oleg at redhat.com>
 
-Certainly it's great to see all this documentation coming with this
-feature!
+Applied to 
 
-Naturally, though, I have one request: I'd rather not see this at the top
-level, which is more than crowded enough as it is.  Can this material
-please go into the development tools book, alongside the kselftest
-documentation?
+https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/log/?h=for-next
 
-Thanks,
+and targeted for the 5.3 merge window.
 
-jon
+Thank you all!
+Christian
