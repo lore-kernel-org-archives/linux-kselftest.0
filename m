@@ -1,43 +1,105 @@
-From: dan.carpenter at oracle.com (Dan Carpenter)
-Date: Tue, 14 May 2019 13:34:51 +0300
-Subject: [PATCH] KVM: selftests: Fix a condition in test_hv_cpuid()
-Message-ID: <20190514103451.GA1694@mwanda>
+From: daniel at ffwll.ch (Daniel Vetter)
+Date: Tue, 14 May 2019 14:05:05 +0200
+Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+In-Reply-To: <20190514060433.GA181462@google.com>
+References: <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+ <20190509032017.GA29703@mit.edu>
+ <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
+ <20190509133551.GD29703@mit.edu>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
+ <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
+ <20190509214233.GA20877@mit.edu>
+ <80c72e64-2665-bd51-f78c-97f50f9a53ba@gmail.com>
+ <20190511173344.GA8507@mit.edu>
+ <20190513144451.GQ17751@phenom.ffwll.local>
+ <20190514060433.GA181462@google.com>
+Message-ID: <CAKMK7uHqtSF_sazJTbFL+xmQJRk4iwukCKZHoDHhsKkLXk=ECQ@mail.gmail.com>
 
-The code is trying to check that all the padding is zeroed out and it
-does this:
+On Tue, May 14, 2019 at 8:04 AM Brendan Higgins
+<brendanhiggins at google.com> wrote:
+>
+> On Mon, May 13, 2019 at 04:44:51PM +0200, Daniel Vetter wrote:
+> > On Sat, May 11, 2019 at 01:33:44PM -0400, Theodore Ts'o wrote:
+> > > On Fri, May 10, 2019 at 02:12:40PM -0700, Frank Rowand wrote:
+> > > > However, the reply is incorrect.  Kselftest in-kernel tests (which
+> > > > is the context here) can be configured as built in instead of as
+> > > > a module, and built in a UML kernel.  The UML kernel can boot,
+> > > > running the in-kernel tests before UML attempts to invoke the
+> > > > init process.
+> > >
+> > > Um, Citation needed?
+> > >
+> > > I don't see any evidence for this in the kselftest documentation, nor
+> > > do I see any evidence of this in the kselftest Makefiles.
+> > >
+> > > There exists test modules in the kernel that run before the init
+> > > scripts run --- but that's not strictly speaking part of kselftests,
+> > > and do not have any kind of infrastructure.  As noted, the
+> > > kselftests_harness header file fundamentally assumes that you are
+> > > running test code in userspace.
+> >
+> > Yeah I really like the "no userspace required at all" design of kunit,
+> > while still collecting results in a well-defined way (unless the current
+> > self-test that just run when you load the module, with maybe some
+> > kselftest ad-hoc wrapper around to collect the results).
+> >
+> > What I want to do long-term is to run these kernel unit tests as part of
+> > the build-testing, most likely in gitlab (sooner or later, for drm.git
+>
+> Totally! This is part of the reason I have been insisting on a minimum
+> of UML compatibility for all unit tests. If you can suffiently constrain
+> the environment that is required for tests to run in, it makes it much
+> easier not only for a human to run your tests, but it also makes it a
+> lot easier for an automated service to be able to run your tests.
+>
+> I actually have a prototype presubmit already working on my
+> "stable/non-upstream" branch. You can checkout what presubmit results
+> look like here[1][2].
 
-    entry->padding[0] == entry->padding[1] == entry->padding[2] == 0
+ug gerrit :-)
 
-Assume everything is zeroed correctly, then the first comparison is
-true, the next comparison is false and false is equal to zero so the
-overall condition is true.  This bug doesn't affect run time very
-badly, but the code should instead just check that all three paddings
-are zero individually.
+> > only ofc). So that people get their pull requests (and patch series, we
+> > have some ideas to tie this into patchwork) automatically tested for this
+>
+> Might that be Snowpatch[3]? I talked to Russell, the creator of Snowpatch,
+> and he seemed pretty open to collaboration.
+>
+> Before I heard about Snowpatch, I had an intern write a translation
+> layer that made Prow (the presubmit service that I used in the prototype
+> above) work with LKML[4].
 
-Also the error message was copy and pasted from an earlier error and it
-wasn't correct.
+There's about 3-4 forks/clones of patchwork. snowpatch is one, we have
+a different one on freedesktop.org. It's a bit a mess :-/
 
-Fixes: 7edcb7343327 ("KVM: selftests: Add hyperv_cpuid test")
-Signed-off-by: Dan Carpenter <dan.carpenter at oracle.com>
----
- tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+> I am not married to either approach, but I think between the two of
+> them, most of the initial legwork has been done to make presubmit on
+> LKML a reality.
 
-diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c b/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
-index 9a21e912097c..63b9fc3fdfbe 100644
---- a/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
-+++ b/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
-@@ -58,9 +58,8 @@ static void test_hv_cpuid(struct kvm_cpuid2 *hv_cpuid_entries,
- 		TEST_ASSERT(entry->flags == 0,
- 			    ".flags field should be zero");
- 
--		TEST_ASSERT(entry->padding[0] == entry->padding[1]
--			    == entry->padding[2] == 0,
--			    ".index field should be zero");
-+		TEST_ASSERT(!entry->padding[0] && !entry->padding[1] &&
-+			    !entry->padding[2], "padding should be zero");
- 
- 		/*
- 		 * If needed for debug:
+We do have presubmit CI working already with our freedesktop.org
+patchwork. The missing glue is just tying that into gitlab CI somehow
+(since we want to unify build testing more and make it easier for
+contributors to adjust things).
+-Daniel
+
+> > super basic stuff.
+>
+> I am really excited to hear back on what you think!
+>
+> Cheers!
+>
+> [1] https://kunit-review.googlesource.com/c/linux/+/1509/10#message-7bfa40efb132e15c8388755c273837559911425c
+> [2] https://kunit-review.googlesource.com/c/linux/+/1509/10#message-a6784496eafff442ac98fb068bf1a0f36ee73509
+> [3] https://developer.ibm.com/open/projects/snowpatch/
+> [4] https://kunit.googlesource.com/prow-lkml/
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel at lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+
+
+
 -- 
-2.20.1
+Daniel Vetter
+Software Engineer, Intel Corporation
++41 (0) 79 365 57 48 - http://blog.ffwll.ch
