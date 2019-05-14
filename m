@@ -1,44 +1,33 @@
 From: brendanhiggins@google.com (Brendan Higgins)
-Date: Tue, 14 May 2019 15:17:09 -0700
-Subject: [PATCH v4 16/18] MAINTAINERS: add entry for KUnit the unit testing
- framework
+Date: Tue, 14 May 2019 15:17:11 -0700
+Subject: [PATCH v4 18/18] MAINTAINERS: add proc sysctl KUnit test to PROC
+ SYSCTL section
 In-Reply-To: <20190514221711.248228-1-brendanhiggins@google.com>
 References: <20190514221711.248228-1-brendanhiggins@google.com>
-Message-ID: <20190514221711.248228-17-brendanhiggins@google.com>
+Message-ID: <20190514221711.248228-19-brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190514221709.wUXxvh7Bt5Yiubr99t-Ja-d8-mvpAVGy-FmPNE3zPGU@z>
+Message-ID: <20190514221711.srQKnJ9JwZ1FDzTz2qco5NmLQEdePk17os_rYgAMhU4@z>
 
-Add myself as maintainer of KUnit, the Linux kernel's unit testing
-framework.
+Add entry for the new proc sysctl KUnit test to the PROC SYSCTL section.
 
 Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
 Reviewed-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
 Reviewed-by: Logan Gunthorpe <logang at deltatee.com>
 ---
- MAINTAINERS | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 2c2fce72e694f..8a91887c8d541 100644
+index 8a91887c8d541..2e539647589fd 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -8448,6 +8448,17 @@ S:	Maintained
- F:	tools/testing/selftests/
- F:	Documentation/dev-tools/kselftest*
+@@ -12526,6 +12526,7 @@ S:	Maintained
+ F:	fs/proc/proc_sysctl.c
+ F:	include/linux/sysctl.h
+ F:	kernel/sysctl.c
++F:	kernel/sysctl-test.c
+ F:	tools/testing/selftests/sysctl/
  
-+KERNEL UNIT TESTING FRAMEWORK (KUnit)
-+M:	Brendan Higgins <brendanhiggins at google.com>
-+L:	linux-kselftest at vger.kernel.org
-+L:	kunit-dev at googlegroups.com
-+W:	https://google.github.io/kunit-docs/third_party/kernel/docs/
-+S:	Maintained
-+F:	Documentation/kunit/
-+F:	include/kunit/
-+F:	kunit/
-+F:	tools/testing/kunit/
-+
- KERNEL USERMODE HELPER
- M:	Luis Chamberlain <mcgrof at kernel.org>
- L:	linux-kernel at vger.kernel.org
+ PS3 NETWORK SUPPORT
 -- 
 2.21.0.1020.gf2820cf01a-goog
