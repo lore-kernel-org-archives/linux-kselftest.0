@@ -1,28 +1,23 @@
 From: christian@brauner.io (Christian Brauner)
-Date: Tue, 14 May 2019 17:16:42 +0200
-Subject: [PATCH v2 1/2] Add polling support to pidfd
-In-Reply-To: <20190502160247.GD7323@redhat.com>
+Date: Tue, 14 May 2019 17:17:08 +0200
+Subject: [PATCH v2 2/2] Add selftests for pidfd polling
+In-Reply-To: <20190430162154.61314-2-joel@joelfernandes.org>
 References: <20190430162154.61314-1-joel@joelfernandes.org>
- <20190501151312.GA30235@redhat.com>
- <20190502151320.cvc6uc3b4bmww23k@brauner.io>
- <20190502160247.GD7323@redhat.com>
-Message-ID: <20190514151605.7aadxh6owlk42bwr@brauner.io>
+ <20190430162154.61314-2-joel@joelfernandes.org>
+Message-ID: <20190514151706.fu7ehba6hsxnvfaf@brauner.io>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190514151642.-aqbhyHuQL7nQMIcukcqv7pYYfNIDsknz2bxeHTAtIc@z>
+Message-ID: <20190514151708.EdL8aDnZJftPWvJXAHsVH4y6kGv6O7SYHZb2iOF0SLE@z>
 
-On Thu, May 02, 2019@06:02:48PM +0200, Oleg Nesterov wrote:
-> On 05/02, Christian Brauner wrote:
-> >
-> > On Wed, May 01, 2019@05:13:12PM +0200, Oleg Nesterov wrote:
-> > >
-> > > Otherwise I see no problems.
-> >
-> > I'll remove the WARN_ON() check when applying this. Can I get your
-> > Acked/Review, Oleg?
+On Tue, Apr 30, 2019@12:21:54PM -0400, Joel Fernandes (Google) wrote:
+> Other than verifying pidfd based polling, the tests make sure that
+> wait semantics are preserved with the pidfd poll. Notably the 2 cases:
+> 1. If a thread group leader exits while threads still there, then no
+>    pidfd poll notifcation should happen.
+> 2. If a non-thread group leader does an execve, then the thread group
+>    leader is signaled to exit and is replaced with the execing thread
+>    as the new leader, however the parent is not notified in this case.
 > 
-> Yes, feel free to add
-> 
-> 	Reviewed-by: Oleg Nesterov <oleg at redhat.com>
+> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
 
 Applied to 
 
