@@ -1,39 +1,28 @@
-From: brendanhiggins@google.com (Brendan Higgins)
-Date: Tue, 14 May 2019 11:12:33 -0700
-Subject: [PATCH v3 08/18] objtool: add kunit_try_catch_throw to the
- noreturn list
-In-Reply-To: <20190514084655.GK2589@hirez.programming.kicks-ass.net>
+From: corbet@lwn.net (Jonathan Corbet)
+Date: Tue, 14 May 2019 12:16:23 -0600
+Subject: [PATCH v3 15/18] Documentation: kunit: add documentation for KUnit
+In-Reply-To: <20190514180810.GA109557@google.com>
 References: <20190514054251.186196-1-brendanhiggins@google.com>
- <20190514054251.186196-9-brendanhiggins@google.com>
- <20190514065643.GC2589@hirez.programming.kicks-ass.net>
- <20190514081223.GA230665@google.com>
- <20190514084655.GK2589@hirez.programming.kicks-ass.net>
-Message-ID: <20190514181233.GB109557@google.com>
+ <20190514054251.186196-16-brendanhiggins@google.com>
+ <20190514073422.4287267c@lwn.net>
+ <20190514180810.GA109557@google.com>
+Message-ID: <20190514121623.0314bf07@lwn.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190514181233.VZOU4qMlVkndFSBaoMhtLSrz5SMZzTKCnfVrnx1H-7M@z>
+Message-ID: <20190514181623.k5pTjXuWZQuYnYuMmSr9RqsgsGuydGDNsBc19x63DQ4@z>
 
-On Tue, May 14, 2019@10:46:55AM +0200, Peter Zijlstra wrote:
-> On Tue, May 14, 2019@01:12:23AM -0700, Brendan Higgins wrote:
-> > On Tue, May 14, 2019@08:56:43AM +0200, Peter Zijlstra wrote:
-> > > On Mon, May 13, 2019@10:42:42PM -0700, Brendan Higgins wrote:
-> > > > This fixes the following warning seen on GCC 7.3:
-> > > >   kunit/test-test.o: warning: objtool: kunit_test_unsuccessful_try() falls through to next function kunit_test_catch()
-> > > > 
-> > > 
-> > > What is that file and function; no kernel tree near me seems to have
-> > > that.
-> > 
-> > Oh, sorry about that. The function is added in the following patch,
-> > "[PATCH v3 09/18] kunit: test: add support for test abort"[1].
-> > 
-> > My apologies if this patch is supposed to come after it in sequence, but
-> > I assumed it should come before otherwise objtool would complain about
-> > the symbol when it is introduced.
+On Tue, 14 May 2019 11:08:10 -0700
+Brendan Higgins <brendanhiggins@google.com> wrote:
+
+> > Naturally, though, I have one request: I'd rather not see this at the top
+> > level, which is more than crowded enough as it is.  Can this material
+> > please go into the development tools book, alongside the kselftest
+> > documentation?  
 > 
-> Or send me all patches such that I have context, or have a sane
-> Changelog that gives me context. Just don't give me one patch with a
-> crappy changelog.
+> Oh yeah, that seems like the obvious home for this in hindsight. Sorry
+> about that. Will fix in next revision!
 
-I will provide more context in the next revision.
+No need to apologize - I have to say the same thing to everybody :)
 
-Sorry about that!
+Thanks,
+
+jon
