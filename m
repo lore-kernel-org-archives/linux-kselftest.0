@@ -1,29 +1,87 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Tue, 14 May 2019 17:17:08 +0200
-Subject: [PATCH v2 2/2] Add selftests for pidfd polling
-In-Reply-To: <20190430162154.61314-2-joel@joelfernandes.org>
-References: <20190430162154.61314-1-joel@joelfernandes.org>
- <20190430162154.61314-2-joel@joelfernandes.org>
-Message-ID: <20190514151706.fu7ehba6hsxnvfaf@brauner.io>
+From: anders.roxell@linaro.org (Anders Roxell)
+Date: Tue, 14 May 2019 17:28:45 +0200
+Subject: next-20190510 kselftest results
+In-Reply-To: <201905110746.D6C85E86F6@keescook>
+References: <359070592.29.1557569697898.JavaMail.jenkins@db10df53eddc>
+ <201905110746.D6C85E86F6@keescook>
+Message-ID:
+ <CADYN=9+nwM4Kw-PWHHDpQ5hpf=N5N8Ewy=h7Y2RTyO5Kwak88A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190514151708.EdL8aDnZJftPWvJXAHsVH4y6kGv6O7SYHZb2iOF0SLE@z>
+Message-ID: <20190514152845.Z6ihh4hjEREhKe0ypu2pix5CEtQyBIlLtlMaujvCbmI@z>
 
-On Tue, Apr 30, 2019@12:21:54PM -0400, Joel Fernandes (Google) wrote:
-> Other than verifying pidfd based polling, the tests make sure that
-> wait semantics are preserved with the pidfd poll. Notably the 2 cases:
-> 1. If a thread group leader exits while threads still there, then no
->    pidfd poll notifcation should happen.
-> 2. If a non-thread group leader does an execve, then the thread group
->    leader is signaled to exit and is replaced with the execing thread
->    as the new leader, however the parent is not notified in this case.
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
+On Sat, 11 May 2019@16:51, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Sat, May 11, 2019@10:14:57AM +0000, ci_notify@linaro.org wrote:
+> > Summary
+> > ------------------------------------------------------------------------
+> > kernel: 5.1.0
+> > git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> > git branch: master
+> > git commit: a802303934b3bd4df6e2fc8bf2e4ebced1c37556
+> > git describe: next-20190510
+> > Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190510
+> >
+> > Regressions (compared to build next-20190509)
+> > ------------------------------------------------------------------------
+> > No regressions
+> >
+> > Fixes (compared to build next-20190509)
+> > ------------------------------------------------------------------------
+> > No fixes
+> >
+> > In total:
+> > ------------------------------------------------------------------------
+> > Ran 12 total tests in the following environments and test suites.
+> > pass 11
+> > fail 1
+> > xfail 0
+> > skip 0
+> >
+> > Environments
+> > --------------
+> > - dragonboard-410c - arm64
+> > - hi6220-hikey - arm64
+> > - i386
+> > - juno-r2 - arm64
+> > - qemu_arm
+> > - qemu_arm64
+> > - qemu_i386
+> > - qemu_x86_64
+> > - x15 - arm
+> > - x86_64
+> >
+> > Test Suites
+> > -----------
+> > * boot-lkft-kselftests-master-519
+>
+> What counts as a "pass" for this? I looked at the x86_64 log, and there are lots of kselftest failures, but the dashboard counts it as a "pass"?
 
-Applied to 
+The boot is passed when the auto-login-action in suite 'lava' is passed [1].
 
-https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/log/?h=for-next
+There's is two issues:
+1. We had a way that changed the run_kselftest.sh file in order to
+skip tests that hanged (that results in no test output from the run)
+various boards. Since the new change to kselftest, the patch to
+run_kselftest.sh got added that breaks our way to skip the tests and
+kernel hangs.
+2. The way we parse the output doesn't match the new output format.
 
-and targeted for the 5.3 merge window.
+We will turn off the "next-* kselftest restults" until we have
+resolved this issue.
 
-Thank you all!
-Christian
+Cheers,
+Anders
+
+>
+> $ wget https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190510/testrun/716064/log
+> $ grep '^ok ' log | wc -l
+> 60
+> $ grep '^not ok' log | grep -iv '# SKIP' | wc -l
+> 30
+> $ grep -i '^not ok.*# SKIP' log | wc -l
+> 18
+>
+> 60 pass, 30 fail, 18 skip
+>
+
+[1] https://lkft.validation.linaro.org/results/testcase/141157606
