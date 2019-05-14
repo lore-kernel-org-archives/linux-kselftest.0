@@ -1,42 +1,48 @@
-From: keescook at chromium.org (Kees Cook)
-Date: Tue, 14 May 2019 08:46:14 -0700
-Subject: next-20190510 kselftest results
-In-Reply-To: <CADYN=9+nwM4Kw-PWHHDpQ5hpf=N5N8Ewy=h7Y2RTyO5Kwak88A@mail.gmail.com>
-References: <359070592.29.1557569697898.JavaMail.jenkins@db10df53eddc>
- <201905110746.D6C85E86F6@keescook>
- <CADYN=9+nwM4Kw-PWHHDpQ5hpf=N5N8Ewy=h7Y2RTyO5Kwak88A@mail.gmail.com>
-Message-ID: <201905140843.B972AA13B6@keescook>
+From: brendanhiggins at google.com (Brendan Higgins)
+Date: Tue, 14 May 2019 11:08:10 -0700
+Subject: [PATCH v3 15/18] Documentation: kunit: add documentation for KUnit
+In-Reply-To: <20190514073422.4287267c@lwn.net>
+References: <20190514054251.186196-1-brendanhiggins@google.com>
+ <20190514054251.186196-16-brendanhiggins@google.com>
+ <20190514073422.4287267c@lwn.net>
+Message-ID: <20190514180810.GA109557@google.com>
 
-On Tue, May 14, 2019 at 05:28:45PM +0200, Anders Roxell wrote:
-> On Sat, 11 May 2019 at 16:51, Kees Cook <keescook at chromium.org> wrote:
-> > > Test Suites
-> > > -----------
-> > > * boot-lkft-kselftests-master-519
-> >
-> > What counts as a "pass" for this? I looked at the x86_64 log, and there are lots of kselftest failures, but the dashboard counts it as a "pass"?
+On Tue, May 14, 2019 at 07:34:22AM -0600, Jonathan Corbet wrote:
+> On Mon, 13 May 2019 22:42:49 -0700
+> Brendan Higgins <brendanhiggins at google.com> wrote:
 > 
-> The boot is passed when the auto-login-action in suite 'lava' is passed [1].
+> > Add documentation for KUnit, the Linux kernel unit testing framework.
+> > - Add intro and usage guide for KUnit
+> > - Add API reference
+> > 
+> > Signed-off-by: Felix Guo <felixguoxiuping at gmail.com>
+> > Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
+> > Reviewed-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+> > Reviewed-by: Logan Gunthorpe <logang at deltatee.com>
+> > ---
+> > Changes Since Last Revision:
+> >  - Addressed reference to incorrect number of sections, as per Randy's
+> >    comment.
+> >  - Make section underlines same length as the section title, as per
+> >    Randy's comments.
+> > ---
+> >  Documentation/index.rst           |   1 +
+> >  Documentation/kunit/api/index.rst |  16 +
+> >  Documentation/kunit/api/test.rst  |  14 +
+> >  Documentation/kunit/faq.rst       |  62 ++++
+> >  Documentation/kunit/index.rst     |  79 ++++
+> >  Documentation/kunit/start.rst     | 180 ++++++++++
+> >  Documentation/kunit/usage.rst     | 575 ++++++++++++++++++++++++++++++
 > 
-> There's is two issues:
-> 1. We had a way that changed the run_kselftest.sh file in order to
-> skip tests that hanged (that results in no test output from the run)
-> various boards. Since the new change to kselftest, the patch to
-> run_kselftest.sh got added that breaks our way to skip the tests and
-> kernel hangs.
-
-There's a fix in -next that adds an "alarm" check now so no tests should ever hang for more than 30 seconds now:
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?id=a745f7af3cbd04b9c9c9e803429e1c20775b538d
-
-> 2. The way we parse the output doesn't match the new output format.
+> Certainly it's great to see all this documentation coming with this
+> feature!
 > 
-> We will turn off the "next-* kselftest restults" until we have
-> resolved this issue.
+> Naturally, though, I have one request: I'd rather not see this at the top
+> level, which is more than crowded enough as it is.  Can this material
+> please go into the development tools book, alongside the kselftest
+> documentation?
 
-I'd prefer to keep the tests running -- they're still valuable logs to
-have. I was just curious about the specific reporting. As long as the
-issue is known, that's fine. No need to disable it entirely. :)
+Oh yeah, that seems like the obvious home for this in hindsight. Sorry
+about that. Will fix in next revision!
 
--Kees
-
--- 
-Kees Cook
+Thanks!
