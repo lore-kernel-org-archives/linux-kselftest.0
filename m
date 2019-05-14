@@ -1,57 +1,109 @@
-From: anders.roxell@linaro.org (Anders Roxell)
-Date: Tue, 14 May 2019 23:49:37 +0200
-Subject: next-20190510 kselftest results
-In-Reply-To: <201905140843.B972AA13B6@keescook>
-References: <359070592.29.1557569697898.JavaMail.jenkins@db10df53eddc>
- <201905110746.D6C85E86F6@keescook>
- <CADYN=9+nwM4Kw-PWHHDpQ5hpf=N5N8Ewy=h7Y2RTyO5Kwak88A@mail.gmail.com>
- <201905140843.B972AA13B6@keescook>
-Message-ID:
- <CADYN=9KaDW8vYC7FancbcRcDc4pfMozXqoGQGB3V=RxgQZBK4w@mail.gmail.com>
+From: brendanhiggins@google.com (Brendan Higgins)
+Date: Tue, 14 May 2019 15:16:53 -0700
+Subject: [PATCH v4 00/18] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+Message-ID: <20190514221711.248228-1-brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190514214937.fdX_mBvgzSxER3apFwmWNW-B9IU9vvCRkrcXIbp9viw@z>
+Message-ID: <20190514221653.FqHqqqyNWEKuUGU6RQFeDgHUBFwFG43PM5o-xLqQOXg@z>
 
-On Tue, 14 May 2019@17:46, Kees Cook <keescook@chromium.org> wrote:
->
-> On Tue, May 14, 2019@05:28:45PM +0200, Anders Roxell wrote:
-> > On Sat, 11 May 2019@16:51, Kees Cook <keescook@chromium.org> wrote:
-> > > > Test Suites
-> > > > -----------
-> > > > * boot-lkft-kselftests-master-519
-> > >
-> > > What counts as a "pass" for this? I looked at the x86_64 log, and there are lots of kselftest failures, but the dashboard counts it as a "pass"?
-> >
-> > The boot is passed when the auto-login-action in suite 'lava' is passed [1].
-> >
-> > There's is two issues:
-> > 1. We had a way that changed the run_kselftest.sh file in order to
-> > skip tests that hanged (that results in no test output from the run)
-> > various boards. Since the new change to kselftest, the patch to
-> > run_kselftest.sh got added that breaks our way to skip the tests and
-> > kernel hangs.
+## TLDR
 
-aha, right that's awesome.
-So its only scripts that we have to skip now then.
+A quick follow up to yesterday's revision. I got some feedback that I
+wanted to incorporate before anyone else read the update. For this
+reason, I will leave a TLDR of the biggest changes since v2.
 
->
-> There's a fix in -next that adds an "alarm" check now so no tests should ever hang for more than 30 seconds now:
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?id=a745f7af3cbd04b9c9c9e803429e1c20775b538d
->
-> > 2. The way we parse the output doesn't match the new output format.
-> >
-> > We will turn off the "next-* kselftest restults" until we have
-> > resolved this issue.
->
-> I'd prefer to keep the tests running -- they're still valuable logs to
-> have. I was just curious about the specific reporting. As long as the
-> issue is known, that's fine. No need to disable it entirely. :)
+Biggest things to look out for (since v2):
 
-We will still run the tests on next, the plan is just to stop sending
-reports until we have the parsing fixed.
+- KUnit core now outputs results in TAP14.
+- Heavily reworked tools/testing/kunit/kunit.py
+  - Changed how parsing works.
+  - Added testing.
+  - Greg, Logan, you might want to re-review this.
+- Added documentation on how to use KUnit on non-UML kernels. You can
+  see the docs rendered here[1].
 
-Cheers,
-Anders
+There is still some discussion going on on the [PATCH v2 00/17] thread,
+but I wanted to get some of these updates out before they got too stale
+(and too difficult for me to keep track of). I hope no one minds.
 
->
-> --
-> Kees Cook
+## Background
+
+This patch set proposes KUnit, a lightweight unit testing and mocking
+framework for the Linux kernel.
+
+Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+it does not require installing the kernel on a test machine or in a VM
+(however, KUnit still allows you to run tests on test machines or in VMs
+if you want) and does not require tests to be written in userspace
+running on a host kernel. Additionally, KUnit is fast: From invocation
+to completion KUnit can run several dozen tests in under a second.
+Currently, the entire KUnit test suite for KUnit runs in under a second
+from the initial invocation (build time excluded).
+
+KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+Googletest/Googlemock for C++. KUnit provides facilities for defining
+unit test cases, grouping related test cases into test suites, providing
+common infrastructure for running tests, mocking, spying, and much more.
+
+## What's so special about unit testing?
+
+A unit test is supposed to test a single unit of code in isolation,
+hence the name. There should be no dependencies outside the control of
+the test; this means no external dependencies, which makes tests orders
+of magnitudes faster. Likewise, since there are no external dependencies,
+there are no hoops to jump through to run the tests. Additionally, this
+makes unit tests deterministic: a failing unit test always indicates a
+problem. Finally, because unit tests necessarily have finer granularity,
+they are able to test all code paths easily solving the classic problem
+of difficulty in exercising error handling code.
+
+## Is KUnit trying to replace other testing frameworks for the kernel?
+
+No. Most existing tests for the Linux kernel are end-to-end tests, which
+have their place. A well tested system has lots of unit tests, a
+reasonable number of integration tests, and some end-to-end tests. KUnit
+is just trying to address the unit test space which is currently not
+being addressed.
+
+## More information on KUnit
+
+There is a bunch of documentation near the end of this patch set that
+describes how to use KUnit and best practices for writing unit tests.
+For convenience I am hosting the compiled docs here[2].
+
+Additionally for convenience, I have applied these patches to a
+branch[3].
+The repo may be cloned with:
+git clone https://kunit.googlesource.com/linux
+This patchset is on the kunit/rfc/v5.1/v4 branch.
+
+## Changes Since Last Version
+
+As I mentioned above, there are a significant number of updates since
+v2:
+- Converted KUnit core to print test results in TAP14 format as
+  suggested by Greg and Frank.
+- Heavily reworked tools/testing/kunit/kunit.py
+  - Changed how parsing works.
+  - Added testing.
+- Added documentation on how to use KUnit on non-UML kernels. You can
+  see the docs rendered here[1].
+- Added a new set of EXPECTs and ASSERTs for pointer comparison.
+- Removed more function indirection as suggested by Logan.
+- Added a new patch that adds `kunit_try_catch_throw` to objtool's
+  noreturn list.
+- Fixed a number of minorish issues pointed out by Shuah, Masahiro, and
+  kbuild bot.
+
+Nevertheless, there are only a couple of minor updates since v3:
+- Added more context to the changelog on the objtool patch, as per
+  Peter's request.
+- Moved all KUnit documentation under the Documentation/dev-tools/
+  directory as per Jonathan's suggestion.
+
+[1] https://google.github.io/kunit-docs/third_party/kernel/docs/usage.html#kunit-on-non-uml-architectures
+[2] https://google.github.io/kunit-docs/third_party/kernel/docs/
+[3] https://kunit.googlesource.com/linux/+/kunit/rfc/v5.1/v4
+
+-- 
+2.21.0.1020.gf2820cf01a-goog
