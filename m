@@ -1,37 +1,46 @@
-From: cyphar at cyphar.com (Aleksa Sarai)
-Date: Thu, 16 May 2019 00:51:05 +1000
+From: oleg at redhat.com (Oleg Nesterov)
+Date: Wed, 15 May 2019 17:19:13 +0200
 Subject: [PATCH 1/2] pid: add pidfd_open()
-In-Reply-To: <20190515141634.lrc5ynllcmjr64mn@brauner.io>
+In-Reply-To: <20190515144927.f2yxyi6w6lhn3xx7@brauner.io>
 References: <20190515100400.3450-1-christian@brauner.io>
- <4c5ae46657e1931a832def5645db61eb0bf1accd.camel@opteya.com>
- <20190515141634.lrc5ynllcmjr64mn@brauner.io>
-Message-ID: <20190515145105.t7u6v5wxsq2tnbwj@yavin>
+ <20190515143857.GB18892@redhat.com>
+ <20190515144927.f2yxyi6w6lhn3xx7@brauner.io>
+Message-ID: <20190515151912.GE18892@redhat.com>
 
-On 2019-05-15, Christian Brauner <christian at brauner.io> wrote:
-> On Wed, May 15, 2019 at 04:00:20PM +0200, Yann Droneaud wrote:
-> > Would it be possible to create file descriptor with "restricted"
-> > operation ?
-> > 
-> > - O_RDONLY: waiting for process completion allowed (for example)
-> > - O_WRONLY: sending process signal allowed
-> 
-> Yes, something like this is likely going to be possible in the future.
-> We had discussion around this. But mapping this to O_RDONLY and O_WRONLY
-> is not the right model. It makes more sense to have specialized flags
-> that restrict actions.
+On 05/15, Christian Brauner wrote:
+>
+> On Wed, May 15, 2019 at 04:38:58PM +0200, Oleg Nesterov wrote:
+> >
+> > it seems that you can do a single check
+> >
+> > 	tsk = pid_task(p, PIDTYPE_TGID);
+> > 	if (!tsk)
+> > 		ret = -ESRCH;
+> >
+> > this even looks more correct if we race with exec changing the leader.
+>
+> The logic here being that you can only reach the thread_group leader
+> from struct pid if PIDTYPE_PID == PIDTYPE_TGID for this struct pid?
 
-Not to mention that the O_* flags have silly values which we shouldn't
-replicate in new syscalls IMHO.
+Not exactly... it is not that PIDTYPE_PID == PIDTYPE_TGID for this pid,
+struct pid has no "type" or something like this.
 
--- 
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190516/42a4c65b/attachment-0001.sig>
+The logic is that pid->tasks[PIDTYPE_XXX] is the list of task which use
+this pid as "XXX" type.
+
+For example, clone(CLONE_THREAD) creates a pid which has a single non-
+empty list, pid->tasks[PIDTYPE_PID]. This pid can't be used as TGID or
+SID.
+
+So if pid_task(PIDTYPE_TGID) returns non-NULL we know that this pid was
+used for a group-leader, see copy_process() which does
+
+	if (thread_group_leader(p))
+		attach_pid(p, PIDTYPE_TGID);
+
+
+If we race with exec which changes the leader pid_task(TGID) can return
+the old leader. We do not care, but this means that we should not check
+thread_group_leader().
+
+Oleg.
