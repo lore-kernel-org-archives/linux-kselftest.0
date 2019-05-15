@@ -1,56 +1,51 @@
 From: jakub.kicinski@netronome.com (Jakub Kicinski)
-Date: Wed, 15 May 2019 14:45:37 -0700
-Subject: [PATCH bpf v1 2/3] selftests/bpf: Print a message when tester
- could not run a program
-In-Reply-To: <20190515134731.12611-3-krzesimir@kinvolk.io>
+Date: Wed, 15 May 2019 14:50:37 -0700
+Subject: [PATCH bpf v1 3/3] selftests/bpf: Avoid a clobbering of errno
+In-Reply-To: <20190515134731.12611-4-krzesimir@kinvolk.io>
 References: <20190515134731.12611-1-krzesimir@kinvolk.io>
- <20190515134731.12611-3-krzesimir@kinvolk.io>
-Message-ID: <20190515144537.57f559e7@cakuba.netronome.com>
+ <20190515134731.12611-4-krzesimir@kinvolk.io>
+Message-ID: <20190515145037.6918f626@cakuba.netronome.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190515214537.TXZAhAlJCHk_EshnG-jBKe2ZzcbpIgFFxWobirZ0Z8A@z>
+Message-ID: <20190515215037.RwNxL5RPFfyEeFlcyapUqV-7twpHuCX2V8_XEAw6WLI@z>
 
-On Wed, 15 May 2019 15:47:27 +0200, Krzesimir Nowak wrote:
-> This prints a message when the error is about program type being not
-> supported by the test runner or because of permissions problem. This
-> is to see if the program we expected to run was actually executed.
+On Wed, 15 May 2019 15:47:28 +0200, Krzesimir Nowak wrote:
+> Save errno right after bpf_prog_test_run returns, so we later check
+> the error code actually set by bpf_prog_test_run, not by some libcap
+> function.
 > 
-> The messages are open-coded because strerror(ENOTSUPP) returns
-> "Unknown error 524".
-> 
+> Cc: Jakub Kicinski <jakub.kicinski at netronome.com>
+> Fixes: 5a8d5209ac022 ("selftests: bpf: add trivial JSET tests")
+
+This commit (of mine) just moved this code into a helper, the bug is
+older:
+
+Fixes: 832c6f2c29ec ("bpf: test make sure to run unpriv test cases in test_verifier")
+
 > Signed-off-by: Krzesimir Nowak <krzesimir at kinvolk.io>
 > ---
->  tools/testing/selftests/bpf/test_verifier.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
+>  tools/testing/selftests/bpf/test_verifier.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
 > diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-> index ccd896b98cac..bf0da03f593b 100644
+> index bf0da03f593b..514e17246396 100644
 > --- a/tools/testing/selftests/bpf/test_verifier.c
 > +++ b/tools/testing/selftests/bpf/test_verifier.c
-> @@ -825,11 +825,20 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
+> @@ -818,15 +818,17 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
+>  	__u32 size_tmp = sizeof(tmp);
+>  	uint32_t retval;
+>  	int err;
+> +	int saved_errno;
+>  
+>  	if (unpriv)
+>  		set_admin(true);
+>  	err = bpf_prog_test_run(fd_prog, 1, data, size_data,
 >  				tmp, &size_tmp, &retval, NULL);
+> +	saved_errno = errno;
 >  	if (unpriv)
 >  		set_admin(false);
-> -	if (err && errno != 524/*ENOTSUPP*/ && errno != EPERM) {
-> -		printf("Unexpected bpf_prog_test_run error ");
-> -		return err;
-> +	if (err) {
-> +		switch (errno) {
-> +		case 524/*ENOTSUPP*/:
-> +			printf("Did not run the program (not supported) ");
-> +			return 0;
-> +		case EPERM:
-> +			printf("Did not run the program (no permission) ");
-> +			return 0;
-
-Perhaps use strerror(errno)?
-
-> +		default:
-> +			printf("Unexpected bpf_prog_test_run error ");
-> +			return err;
-> +		}
->  	}
-> -	if (!err && retval != expected_val &&
-> +	if (retval != expected_val &&
->  	    expected_val != POINTER_VALUE) {
->  		printf("FAIL retval %d != %d ", retval, expected_val);
->  		return 1;
+>  	if (err) {
+> -		switch (errno) {
+> +		switch (saved_errno) {
+>  		case 524/*ENOTSUPP*/:
+>  			printf("Did not run the program (not supported) ");
+>  			return 0;
