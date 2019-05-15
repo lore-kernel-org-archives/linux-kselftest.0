@@ -1,53 +1,41 @@
-From: geert@linux-m68k.org (Geert Uytterhoeven)
-Date: Wed, 15 May 2019 14:29:14 +0200
-Subject: [PATCH 1/2] pid: add pidfd_open()
-In-Reply-To: <20190515100400.3450-1-christian@brauner.io>
-References: <20190515100400.3450-1-christian@brauner.io>
-Message-ID:
- <CAMuHMdUKJOP2H4cVy0Na5hjn2-HUbfvE_zbctS4L9d-h9Oru4Q@mail.gmail.com>
+From: corbet@lwn.net (Jonathan Corbet)
+Date: Wed, 15 May 2019 07:45:46 -0600
+Subject: [PATCH v3 15/18] Documentation: kunit: add documentation for KUnit
+In-Reply-To: <20190514231902.GA12893@google.com>
+References: <20190514054251.186196-1-brendanhiggins@google.com>
+ <20190514054251.186196-16-brendanhiggins@google.com>
+ <20190514073422.4287267c@lwn.net>
+ <20190514180810.GA109557@google.com>
+ <20190514121623.0314bf07@lwn.net>
+ <20190514231902.GA12893@google.com>
+Message-ID: <20190515074546.07700142@lwn.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190515122914.SrUpCOJXXiuVu1OhfW_XtifCF1sIckRaNRqiVWsZh2I@z>
+Message-ID: <20190515134546.VAQv0Q4WVoYFbktM52w2nizn1K7J1tX18k4mJs0R79Q@z>
 
-On Wed, May 15, 2019@12:04 PM Christian Brauner <christian@brauner.io> wrote:
-> This adds the pidfd_open() syscall. It allows a caller to retrieve pollable
-> pidfds for a process which did not get created via CLONE_PIDFD, i.e. for a
-> process that is created via traditional fork()/clone() calls that is only
-> referenced by a PID:
->
-> int pidfd = pidfd_open(1234, 0);
-> ret = pidfd_send_signal(pidfd, SIGSTOP, NULL, 0);
->
-> With the introduction of pidfds through CLONE_PIDFD it is possible to
-> created pidfds at process creation time.
-> However, a lot of processes get created with traditional PID-based calls
-> such as fork() or clone() (without CLONE_PIDFD). For these processes a
-> caller can currently not create a pollable pidfd. This is a huge problem
-> for Android's low memory killer (LMK) and service managers such as systemd.
-> Both are examples of tools that want to make use of pidfds to get reliable
-> notification of process exit for non-parents (pidfd polling) and race-free
-> signal sending (pidfd_send_signal()). They intend to switch to this API for
-> process supervision/management as soon as possible. Having no way to get
-> pollable pidfds from PID-only processes is one of the biggest blockers for
-> them in adopting this api. With pidfd_open() making it possible to retrieve
-> pidfd for PID-based processes we enable them to adopt this api.
->
-> In line with Arnd's recent changes to consolidate syscall numbers across
-> architectures, I have added the pidfd_open() syscall to all architectures
-> at the same time.
->
-> Signed-off-by: Christian Brauner <christian at brauner.io>
+On Tue, 14 May 2019 16:19:02 -0700
+Brendan Higgins <brendanhiggins@google.com> wrote:
 
->  arch/m68k/kernel/syscalls/syscall.tbl       |  1 +
+> Hmmm...probably premature to bring this up, but Documentation/dev-tools/
+> is kind of thrown together.
 
-Acked-by: Geert Uytterhoeven <geert at linux-m68k.org>
+Wait a minute, man... *I* created that directory, are you impugning my
+work? :)
 
-Gr{oetje,eeting}s,
+But yes, "kind of thrown together" is a good description of much of
+Documentation/.  A number of people have been working for years to make
+that better, with some success, but there is a long way to go yet.  The
+dev-tools directory is an improvement over having that stuff scattered all
+over the place — at least it's actually thrown together — but it's not the
+end point.
 
-                        Geert
+> It would be nice to provide a coherent overview, maybe provide some
+> basic grouping as well.
+> 
+> It would be nice if there was kind of a gentle introduction to the
+> tools, which ones you should be looking at, when, why, etc.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert at linux-m68k.org
+Total agreement.  All we need is somebody to write it!  :)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+
+jon
