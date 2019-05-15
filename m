@@ -1,69 +1,54 @@
-From: joel at joelfernandes.org (Joel Fernandes (Google))
-Date: Wed, 15 May 2019 17:35:52 -0400
-Subject: [PATCH v4 2/2] kheaders: Do not regenerate archive if config is not
- changed
-In-Reply-To: <20190515213552.203737-1-joel@joelfernandes.org>
-References: <20190515213552.203737-1-joel@joelfernandes.org>
-Message-ID: <20190515213552.203737-3-joel@joelfernandes.org>
+From: jakub.kicinski at netronome.com (Jakub Kicinski)
+Date: Wed, 15 May 2019 14:45:37 -0700
+Subject: [PATCH bpf v1 2/3] selftests/bpf: Print a message when tester
+ could not run a program
+In-Reply-To: <20190515134731.12611-3-krzesimir@kinvolk.io>
+References: <20190515134731.12611-1-krzesimir@kinvolk.io>
+ <20190515134731.12611-3-krzesimir@kinvolk.io>
+Message-ID: <20190515144537.57f559e7@cakuba.netronome.com>
 
-Linus reported an issue that doing an allmodconfig was causing the
-kheaders archive to be regenerated even though the config is the same.
-This patch fixes the issue by ignoring the config-related header files
-for "knowing when to regenerate based on timestamps".  Instead, if the
-CONFIG_X_Y option really changes, then we there are the
-include/config/X/Y.h which will already tells us "if a config really
-changed". So we don't really need these files for regeneration detection
-anyway, and ignoring them fixes Linus's issue.
+On Wed, 15 May 2019 15:47:27 +0200, Krzesimir Nowak wrote:
+> This prints a message when the error is about program type being not
+> supported by the test runner or because of permissions problem. This
+> is to see if the program we expected to run was actually executed.
+> 
+> The messages are open-coded because strerror(ENOTSUPP) returns
+> "Unknown error 524".
+> 
+> Signed-off-by: Krzesimir Nowak <krzesimir at kinvolk.io>
+> ---
+>  tools/testing/selftests/bpf/test_verifier.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+> index ccd896b98cac..bf0da03f593b 100644
+> --- a/tools/testing/selftests/bpf/test_verifier.c
+> +++ b/tools/testing/selftests/bpf/test_verifier.c
+> @@ -825,11 +825,20 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
+>  				tmp, &size_tmp, &retval, NULL);
+>  	if (unpriv)
+>  		set_admin(false);
+> -	if (err && errno != 524/*ENOTSUPP*/ && errno != EPERM) {
+> -		printf("Unexpected bpf_prog_test_run error ");
+> -		return err;
+> +	if (err) {
+> +		switch (errno) {
+> +		case 524/*ENOTSUPP*/:
+> +			printf("Did not run the program (not supported) ");
+> +			return 0;
+> +		case EPERM:
+> +			printf("Did not run the program (no permission) ");
+> +			return 0;
 
-Reported-by: Linus Torvalds <torvalds at linux-foundation.org>
-Signed-off-by: Joel Fernandes (Google) <joel at joelfernandes.org>
----
- kernel/gen_kheaders.sh | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+Perhaps use strerror(errno)?
 
-diff --git a/kernel/gen_kheaders.sh b/kernel/gen_kheaders.sh
-index 581b83534587..9a34e1d9bd7f 100755
---- a/kernel/gen_kheaders.sh
-+++ b/kernel/gen_kheaders.sh
-@@ -31,9 +31,8 @@ arch/$SRCARCH/include/
- 
- # This block is useful for debugging the incremental builds.
- # Uncomment it for debugging.
--# iter=1
--# if [ ! -f /tmp/iter ]; then echo 1 > /tmp/iter;
--# else; 	iter=$(($(cat /tmp/iter) + 1)); fi
-+# if [ ! -f /tmp/iter ]; then iter=1; echo 1 > /tmp/iter;
-+# else iter=$(($(cat /tmp/iter) + 1)); echo $iter > /tmp/iter; fi
- # find $src_file_list -type f | xargs ls -lR > /tmp/src-ls-$iter
- # find $obj_file_list -type f | xargs ls -lR > /tmp/obj-ls-$iter
- 
-@@ -43,10 +42,18 @@ arch/$SRCARCH/include/
- pushd $kroot > /dev/null
- src_files_md5="$(find $src_file_list -type f                       |
- 		grep -v "include/generated/compile.h"		   |
-+		grep -v "include/generated/autoconf.h"		   |
-+		grep -v "include/config/auto.conf"		   |
-+		grep -v "include/config/auto.conf.cmd"		   |
-+		grep -v "include/config/tristate.conf"		   |
- 		xargs ls -lR | md5sum | cut -d ' ' -f1)"
- popd > /dev/null
- obj_files_md5="$(find $obj_file_list -type f                       |
- 		grep -v "include/generated/compile.h"		   |
-+		grep -v "include/generated/autoconf.h"		   |
-+		grep -v "include/config/auto.conf"                 |
-+		grep -v "include/config/auto.conf.cmd"		   |
-+		grep -v "include/config/tristate.conf"		   |
- 		xargs ls -lR | md5sum | cut -d ' ' -f1)"
- 
- if [ -f $tarfile ]; then tarfile_md5="$(md5sum $tarfile | cut -d ' ' -f1)"; fi
-@@ -82,7 +89,7 @@ find $cpio_dir -type f -print0 |
- 
- tar -Jcf $tarfile -C $cpio_dir/ . > /dev/null
- 
--echo "$src_files_md5" > kernel/kheaders.md5
-+echo "$src_files_md5" >  kernel/kheaders.md5
- echo "$obj_files_md5" >> kernel/kheaders.md5
- echo "$(md5sum $tarfile | cut -d ' ' -f1)" >> kernel/kheaders.md5
- 
--- 
-2.21.0.1020.gf2820cf01a-goog
+> +		default:
+> +			printf("Unexpected bpf_prog_test_run error ");
+> +			return err;
+> +		}
+>  	}
+> -	if (!err && retval != expected_val &&
+> +	if (retval != expected_val &&
+>  	    expected_val != POINTER_VALUE) {
+>  		printf("FAIL retval %d != %d ", retval, expected_val);
+>  		return 1;
