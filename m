@@ -1,156 +1,58 @@
-From: daniel@ffwll.ch (Daniel Vetter)
-Date: Wed, 15 May 2019 09:41:41 +0200
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <20190514183618.GC109557@google.com>
-References: <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
- <20190509214233.GA20877@mit.edu>
- <80c72e64-2665-bd51-f78c-97f50f9a53ba@gmail.com>
- <20190511173344.GA8507@mit.edu>
- <20190513144451.GQ17751@phenom.ffwll.local>
- <20190514060433.GA181462@google.com>
- <CAKMK7uHqtSF_sazJTbFL+xmQJRk4iwukCKZHoDHhsKkLXk=ECQ@mail.gmail.com>
- <20190514183618.GC109557@google.com>
-Message-ID: <20190515074141.GY17751@phenom.ffwll.local>
+From: alex.shi@linux.alibaba.com (Alex Shi)
+Date: Wed, 15 May 2019 17:07:02 +0800
+Subject: [PATCH 1/3] kselftest/cgroup: fix unexcepted testing failure on
+ test_memcontrol
+Message-ID: <20190515090704.56929-1-alex.shi@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190515074141.KD0rJEpI9oIrjSsSmIeIVuURlItdBscqjEqHzsK8g4I@z>
+Message-ID: <20190515090702.OV51Q6xUQ8tVWnGe1Tkwiyak_IFZC9GEXRLu4xRPKLQ@z>
 
-On Tue, May 14, 2019@11:36:18AM -0700, Brendan Higgins wrote:
-> On Tue, May 14, 2019@02:05:05PM +0200, Daniel Vetter wrote:
-> > On Tue, May 14, 2019 at 8:04 AM Brendan Higgins
-> > <brendanhiggins@google.com> wrote:
-> > >
-> > > On Mon, May 13, 2019@04:44:51PM +0200, Daniel Vetter wrote:
-> > > > On Sat, May 11, 2019@01:33:44PM -0400, Theodore Ts'o wrote:
-> > > > > On Fri, May 10, 2019@02:12:40PM -0700, Frank Rowand wrote:
-> > > > > > However, the reply is incorrect.  Kselftest in-kernel tests (which
-> > > > > > is the context here) can be configured as built in instead of as
-> > > > > > a module, and built in a UML kernel.  The UML kernel can boot,
-> > > > > > running the in-kernel tests before UML attempts to invoke the
-> > > > > > init process.
-> > > > >
-> > > > > Um, Citation needed?
-> > > > >
-> > > > > I don't see any evidence for this in the kselftest documentation, nor
-> > > > > do I see any evidence of this in the kselftest Makefiles.
-> > > > >
-> > > > > There exists test modules in the kernel that run before the init
-> > > > > scripts run --- but that's not strictly speaking part of kselftests,
-> > > > > and do not have any kind of infrastructure.  As noted, the
-> > > > > kselftests_harness header file fundamentally assumes that you are
-> > > > > running test code in userspace.
-> > > >
-> > > > Yeah I really like the "no userspace required at all" design of kunit,
-> > > > while still collecting results in a well-defined way (unless the current
-> > > > self-test that just run when you load the module, with maybe some
-> > > > kselftest ad-hoc wrapper around to collect the results).
-> > > >
-> > > > What I want to do long-term is to run these kernel unit tests as part of
-> > > > the build-testing, most likely in gitlab (sooner or later, for drm.git
-> > >
-> > > Totally! This is part of the reason I have been insisting on a minimum
-> > > of UML compatibility for all unit tests. If you can suffiently constrain
-> > > the environment that is required for tests to run in, it makes it much
-> > > easier not only for a human to run your tests, but it also makes it a
-> > > lot easier for an automated service to be able to run your tests.
-> > >
-> > > I actually have a prototype presubmit already working on my
-> > > "stable/non-upstream" branch. You can checkout what presubmit results
-> > > look like here[1][2].
-> > 
-> > ug gerrit :-)
-> 
-> Yeah, yeah, I know, but it is a lot easier for me to get a project set
-> up here using Gerrit, when we already use that for a lot of other
-> projects.
-> 
-> Also, Gerrit has gotten a lot better over the last two years or so. Two
-> years ago, I wouldn't touch it with a ten foot pole. It's not so bad
-> anymore, at least if you are used to using a web UI to review code.
+The cgroup testing relys on the root cgroup's subtree_control setting,
+If the 'memory' controller isn't set, all test cases will be failed
+as following:
 
-I was somewhat joking, I'm just not used to gerrit ... And seems to indeed
-be a lot more polished than last time I looked at it seriously.
+$ sudo ./test_memcontrol
+not ok 1 test_memcg_subtree_control
+not ok 2 test_memcg_current
+ok 3 # skip test_memcg_min
+not ok 4 test_memcg_low
+not ok 5 test_memcg_high
+not ok 6 test_memcg_max
+not ok 7 test_memcg_oom_events
+ok 8 # skip test_memcg_swap_max
+not ok 9 test_memcg_sock
+not ok 10 test_memcg_oom_group_leaf_events
+not ok 11 test_memcg_oom_group_parent_events
+not ok 12 test_memcg_oom_group_score_events
 
-> > > > only ofc). So that people get their pull requests (and patch series, we
-> > > > have some ideas to tie this into patchwork) automatically tested for this
-> > >
-> > > Might that be Snowpatch[3]? I talked to Russell, the creator of Snowpatch,
-> > > and he seemed pretty open to collaboration.
-> > >
-> > > Before I heard about Snowpatch, I had an intern write a translation
-> > > layer that made Prow (the presubmit service that I used in the prototype
-> > > above) work with LKML[4].
-> > 
-> > There's about 3-4 forks/clones of patchwork. snowpatch is one, we have
-> > a different one on freedesktop.org. It's a bit a mess :-/
-> 
-> Oh, I didn't realize that. I found your patchwork instance here[5], but
-> do you have a place where I can see the changes you have added to
-> support presubmit?
+To correct this unexcepted failure, this patch write the 'memory' to
+subtree_control of root to get a right result.
 
-Ok here's a few links. Aside from the usual patch view we've also added a
-series view:
+Signed-off-by: Alex Shi <alex.shi at linux.alibaba.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Roman Gushchin <guro at fb.com>
+Cc: Tejun Heo <tj at kernel.org>
+Cc: Mike Rapoport <rppt at linux.vnet.ibm.com>
+Cc: Jay Kamat <jgkamat at fb.com>
+Cc: linux-kselftest at vger.kernel.org
+Cc: linux-kernel at vger.kernel.org
+---
+ tools/testing/selftests/cgroup/test_memcontrol.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-https://patchwork.freedesktop.org/project/intel-gfx/series/?ordering=-last_updated
-
-This ties the patches + cover letter together, and it even (tries to at
-least) track revisions. Here's an example which is currently at revision
-9:
-
-https://patchwork.freedesktop.org/series/57232/
-
-Below the patch list for each revision we also have the test result list.
-If you click on the grey bar it'll expand with the summary from CI, the
-"See full logs" is link to the full results from our CI. This is driven
-with some REST api from our jenkins.
-
-Patchwork also sends out mails for these results.
-
-Source is on gitlab: https://gitlab.freedesktop.org/patchwork-fdo
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 6f339882a6ca..73612d604a2a 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -1205,6 +1205,10 @@ int main(int argc, char **argv)
+ 	if (cg_read_strstr(root, "cgroup.controllers", "memory"))
+ 		ksft_exit_skip("memory controller isn't available\n");
  
-> > > I am not married to either approach, but I think between the two of
-> > > them, most of the initial legwork has been done to make presubmit on
-> > > LKML a reality.
-> > 
-> > We do have presubmit CI working already with our freedesktop.org
-> > patchwork. The missing glue is just tying that into gitlab CI somehow
-> > (since we want to unify build testing more and make it easier for
-> > contributors to adjust things).
-> 
-> I checked out a couple of your projects on your patchwork instance: AMD
-> X.Org drivers, DRI devel, and Wayland. I saw the tab you added for
-> tests, but none of them actually had any test results. Can you point me
-> at one that does?
-
-Atm we use the CI stuff only on intel-gfx, with the our gpu CI farm, see
-links above.
-
-Cheers, Daniel
-
-> 
-> Cheers!
-> 
-> [5] https://patchwork.freedesktop.org/
-> 
-> > > > super basic stuff.
-> > >
-> > > I am really excited to hear back on what you think!
-> > >
-> > > Cheers!
-> > >
-> > > [1] https://kunit-review.googlesource.com/c/linux/+/1509/10#message-7bfa40efb132e15c8388755c273837559911425c
-> > > [2] https://kunit-review.googlesource.com/c/linux/+/1509/10#message-a6784496eafff442ac98fb068bf1a0f36ee73509
-> > > [3] https://developer.ibm.com/open/projects/snowpatch/
-> > > [4] https://kunit.googlesource.com/prow-lkml/
-> > > _______________________________________________
-> > > dri-devel mailing list
-> > > dri-devel at lists.freedesktop.org
-> > > https://lists.freedesktop.org/mailman/listinfo/dri-devel
-> 
-
++	if (cg_read_strstr(root, "cgroup.subtree_control", "memory"))
++	    if (cg_write(root, "cgroup.subtree_control", "+memory"))
++		ksft_exit_skip("Failed to set root memory controller\n");
++
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+ 		switch (tests[i].fn(root)) {
+ 		case KSFT_PASS:
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.19.1.856.g8858448bb
