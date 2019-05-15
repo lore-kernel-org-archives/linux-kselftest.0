@@ -1,39 +1,37 @@
-From: corbet at lwn.net (Jonathan Corbet)
-Date: Wed, 15 May 2019 07:45:46 -0600
-Subject: [PATCH v3 15/18] Documentation: kunit: add documentation for KUnit
-In-Reply-To: <20190514231902.GA12893@google.com>
-References: <20190514054251.186196-1-brendanhiggins@google.com>
- <20190514054251.186196-16-brendanhiggins@google.com>
- <20190514073422.4287267c@lwn.net>
- <20190514180810.GA109557@google.com>
- <20190514121623.0314bf07@lwn.net>
- <20190514231902.GA12893@google.com>
-Message-ID: <20190515074546.07700142@lwn.net>
+From: krzesimir at kinvolk.io (Krzesimir Nowak)
+Date: Wed, 15 May 2019 15:47:25 +0200
+Subject: [PATCH bpf v1 0/3] Test the 32bit narrow reads
+Message-ID: <20190515134731.12611-1-krzesimir@kinvolk.io>
 
-On Tue, 14 May 2019 16:19:02 -0700
-Brendan Higgins <brendanhiggins at google.com> wrote:
+These patches try to test the fix made in commit e2f7fc0ac695 ("bpf:
+fix undefined behavior in narrow load handling"). The problem existed
+in the generated BPF bytecode that was doing a 32bit narrow read of a
+64bit field, so to test it the code would need to be executed.
+Currently the only such field exists in BPF_PROG_TYPE_PERF_EVENT,
+which is not supported by bpf_prog_test_run().
 
-> Hmmm...probably premature to bring this up, but Documentation/dev-tools/
-> is kind of thrown together.
+First commit adds the test, but since I can't run it, I'm not sure if
+it is even valid (because endianness, for example). Second commit adds
+a message to test_verifier when it couldn't run the program because of
+lack permissions or program type being not supported. Third commit
+fixes a possible problem with errno.
 
-Wait a minute, man... *I* created that directory, are you impugning my
-work? :)
+With these patches, I get the following output on my test:
 
-But yes, "kind of thrown together" is a good description of much of
-Documentation/.  A number of people have been working for years to make
-that better, with some success, but there is a long way to go yet.  The
-dev-tools directory is an improvement over having that stuff scattered all
-over the place — at least it's actually thrown together — but it's not the
-end point.
+/kernel/tools/testing/selftests/bpf$ sudo ./test_verifier 920 920
+#920/p 32bit loads of a 64bit field (both least and most significant words) Did not run the program (not supported) OK
+Summary: 1 PASSED, 0 SKIPPED, 0 FAILED
 
-> It would be nice to provide a coherent overview, maybe provide some
-> basic grouping as well.
-> 
-> It would be nice if there was kind of a gentle introduction to the
-> tools, which ones you should be looking at, when, why, etc.
+So it looks like I need to pick a different approach.
 
-Total agreement.  All we need is somebody to write it!  :)
+Krzesimir Nowak (3):
+  selftests/bpf: Test correctness of narrow 32bit read on 64bit field
+  selftests/bpf: Print a message when tester could not run a program
+  selftests/bpf: Avoid a clobbering of errno
 
-Thanks,
+ tools/testing/selftests/bpf/test_verifier.c   | 19 +++++++++++++++----
+ .../testing/selftests/bpf/verifier/var_off.c  | 15 +++++++++++++++
+ 2 files changed, 30 insertions(+), 4 deletions(-)
 
-jon
+-- 
+2.20.1
