@@ -1,40 +1,44 @@
-From: oleg at redhat.com (Oleg Nesterov)
-Date: Wed, 15 May 2019 17:35:15 +0200
+From: christian at brauner.io (Christian Brauner)
+Date: Wed, 15 May 2019 17:40:15 +0200
 Subject: [PATCH 1/2] pid: add pidfd_open()
-In-Reply-To: <20190515143857.GB18892@redhat.com>
+In-Reply-To: <20190515153515.GA20783@redhat.com>
 References: <20190515100400.3450-1-christian@brauner.io>
  <20190515143857.GB18892@redhat.com>
-Message-ID: <20190515153515.GA20783@redhat.com>
+ <20190515153515.GA20783@redhat.com>
+Message-ID: <20190515154014.4jaxuw4fcgbusnbt@brauner.io>
 
-On 05/15, Oleg Nesterov wrote:
->
-> On 05/15, Christian Brauner wrote:
+On Wed, May 15, 2019 at 05:35:15PM +0200, Oleg Nesterov wrote:
+> On 05/15, Oleg Nesterov wrote:
 > >
-> > +SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
-> > +{
-> > +	int fd, ret;
-> > +	struct pid *p;
-> > +	struct task_struct *tsk;
-> > +
-> > +	if (flags)
-> > +		return -EINVAL;
-> > +
-> > +	if (pid <= 0)
-> > +		return -EINVAL;
-> > +
-> > +	p = find_get_pid(pid);
-> > +	if (!p)
-> > +		return -ESRCH;
-> > +
-> > +	rcu_read_lock();
-> > +	tsk = pid_task(p, PIDTYPE_PID);
->
-> You do not need find_get_pid() before rcu_lock and put_pid() at the end.
-> You can just do find_vpid() under rcu_read_lock().
+> > On 05/15, Christian Brauner wrote:
+> > >
+> > > +SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
+> > > +{
+> > > +	int fd, ret;
+> > > +	struct pid *p;
+> > > +	struct task_struct *tsk;
+> > > +
+> > > +	if (flags)
+> > > +		return -EINVAL;
+> > > +
+> > > +	if (pid <= 0)
+> > > +		return -EINVAL;
+> > > +
+> > > +	p = find_get_pid(pid);
+> > > +	if (!p)
+> > > +		return -ESRCH;
+> > > +
+> > > +	rcu_read_lock();
+> > > +	tsk = pid_task(p, PIDTYPE_PID);
+> >
+> > You do not need find_get_pid() before rcu_lock and put_pid() at the end.
+> > You can just do find_vpid() under rcu_read_lock().
+> 
+> Ah, sorry. Somehow I forgot you need to call pidfd_create(pid), you can't
+> do this under rcu_read_lock().
+> 
+> So I was wrong, you can't avoid get/put_pid.
 
-Ah, sorry. Somehow I forgot you need to call pidfd_create(pid), you can't
-do this under rcu_read_lock().
+Yeah, I haven't made any changes yet.
 
-So I was wrong, you can't avoid get/put_pid.
-
-Oleg.
+Christian
