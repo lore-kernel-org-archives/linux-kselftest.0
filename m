@@ -1,63 +1,82 @@
-From: thuth at redhat.com (Thomas Huth)
-Date: Thu, 16 May 2019 13:59:50 +0200
+From: david at redhat.com (David Hildenbrand)
+Date: Thu, 16 May 2019 14:08:03 +0200
 Subject: [RFC PATCH 2/4] KVM: selftests: Align memory region addresses to
  1M on s390x
-In-Reply-To: <d9c383ef-6f4b-4f51-b627-7565a67005d3@redhat.com>
+In-Reply-To: <395e1b02-09b7-9420-33e1-a3abb36282f0@redhat.com>
 References: <20190516111253.4494-1-thuth@redhat.com>
  <20190516111253.4494-3-thuth@redhat.com>
  <d9c383ef-6f4b-4f51-b627-7565a67005d3@redhat.com>
-Message-ID: <395e1b02-09b7-9420-33e1-a3abb36282f0@redhat.com>
+ <395e1b02-09b7-9420-33e1-a3abb36282f0@redhat.com>
+Message-ID: <d6f7e093-0b8d-c121-ffe5-9f54bc2a1119@redhat.com>
 
-On 16/05/2019 13.30, David Hildenbrand wrote:
-> On 16.05.19 13:12, Thomas Huth wrote:
->> On s390x, there is a constraint that memory regions have to be aligned
->> to 1M (or running the VM will fail). Introduce a new "alignment" variable
->> in the vm_userspace_mem_region_add() function which now can be used for
->> both, huge page and s390x alignment requirements.
+On 16.05.19 13:59, Thomas Huth wrote:
+> On 16/05/2019 13.30, David Hildenbrand wrote:
+>> On 16.05.19 13:12, Thomas Huth wrote:
+>>> On s390x, there is a constraint that memory regions have to be aligned
+>>> to 1M (or running the VM will fail). Introduce a new "alignment" variable
+>>> in the vm_userspace_mem_region_add() function which now can be used for
+>>> both, huge page and s390x alignment requirements.
+>>>
+>>> Signed-off-by: Thomas Huth <thuth at redhat.com>
+>>> ---
+>>>  tools/testing/selftests/kvm/lib/kvm_util.c | 21 +++++++++++++++++-----
+>>>  1 file changed, 16 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+>>> index 8d63ccb93e10..64a0da6efe3d 100644
+>>> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+>>> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+>>> @@ -559,6 +559,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>>>  	unsigned long pmem_size = 0;
+>>>  	struct userspace_mem_region *region;
+>>>  	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
+>>> +	size_t alignment;
+>>>  
+>>>  	TEST_ASSERT((guest_paddr % vm->page_size) == 0, "Guest physical "
+>>>  		"address not on a page boundary.\n"
+>>> @@ -608,9 +609,20 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>>>  	TEST_ASSERT(region != NULL, "Insufficient Memory");
+>>>  	region->mmap_size = npages * vm->page_size;
+>>>  
+>>> -	/* Enough memory to align up to a huge page. */
+>>> +#ifdef __s390x__
+>>> +	/* On s390x, the host address must be aligned to 1M (due to PGSTEs) */
+>>> +	alignment = 0x100000;
 >>
->> Signed-off-by: Thomas Huth <thuth at redhat.com>
->> ---
->>  tools/testing/selftests/kvm/lib/kvm_util.c | 21 +++++++++++++++++-----
->>  1 file changed, 16 insertions(+), 5 deletions(-)
+>> This corresponds to huge_page_size, maybe you can exploit this fact here.
 >>
->> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
->> index 8d63ccb93e10..64a0da6efe3d 100644
->> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
->> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
->> @@ -559,6 +559,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->>  	unsigned long pmem_size = 0;
->>  	struct userspace_mem_region *region;
->>  	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
->> +	size_t alignment;
->>  
->>  	TEST_ASSERT((guest_paddr % vm->page_size) == 0, "Guest physical "
->>  		"address not on a page boundary.\n"
->> @@ -608,9 +609,20 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->>  	TEST_ASSERT(region != NULL, "Insufficient Memory");
->>  	region->mmap_size = npages * vm->page_size;
->>  
->> -	/* Enough memory to align up to a huge page. */
->> +#ifdef __s390x__
->> +	/* On s390x, the host address must be aligned to 1M (due to PGSTEs) */
->> +	alignment = 0x100000;
+>> Something like
+>>
+>> alignment = 1;
+>>
+>> /* On s390x, the host address must always be aligned to the THP size */
+>> #ifndef __s390x__
+>> if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
+>> #endif
+>> 	alignment = huge_page_size;
+>>
+>> Maybe in a nicer fashion. Not sure.
 > 
-> This corresponds to huge_page_size, maybe you can exploit this fact here.
-> 
-> Something like
-> 
-> alignment = 1;
-> 
-> /* On s390x, the host address must always be aligned to the THP size */
-> #ifndef __s390x__
-> if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
-> #endif
-> 	alignment = huge_page_size;
-> 
-> Maybe in a nicer fashion. Not sure.
+> Hmm, but if I've got your explanation on IRC right, it's rather a
+> coincidence that the huge page size matches the alignment requirements
+> for KVM memslots, isn't it? So I think the code would look rather
+> confusing if I'd try to shorten it this way...?
 
-Hmm, but if I've got your explanation on IRC right, it's rather a
-coincidence that the huge page size matches the alignment requirements
-for KVM memslots, isn't it? So I think the code would look rather
-confusing if I'd try to shorten it this way...?
+Well, it's not really a coincidence. We have to share page tables
+between the gmap and the user space process. One huge page corresponds
+to the pages covered by a page table. So the page table "size" dictates
+the alignment of both things.
 
- Thomas
+But this is just nit picking here, do it the way you prefer, just wanted
+to point it out :)
+
+> 
+>  Thomas
+> 
+
+
+-- 
+
+Thanks,
+
+David / dhildenb
