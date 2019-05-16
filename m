@@ -1,80 +1,212 @@
-From: jakub.kicinski@netronome.com (Jakub Kicinski)
-Date: Thu, 16 May 2019 09:54:26 -0700
-Subject: [PATCH bpf v1 2/3] selftests/bpf: Print a message when tester
- could not run a program
-In-Reply-To: <CAGGp+cEFxzbH-8vnSAK3sZkM-u3WN4HGnkYvhFwBp85yVtD7Xg@mail.gmail.com>
-References: <20190515134731.12611-1-krzesimir@kinvolk.io>
- <20190515134731.12611-3-krzesimir@kinvolk.io>
- <20190515144537.57f559e7@cakuba.netronome.com>
- <CAGGp+cGN+YYVjJee5ba84HstSrHGurBvwmKmzNsFRvb344Df3A@mail.gmail.com>
- <20190516085035.3cdb0ae6@cakuba.netronome.com>
- <CAGGp+cEFxzbH-8vnSAK3sZkM-u3WN4HGnkYvhFwBp85yVtD7Xg@mail.gmail.com>
-Message-ID: <20190516095426.2e0d838f@cakuba.netronome.com>
+From: mrostecki@opensuse.org (Michal Rostecki)
+Date: Thu, 16 May 2019 19:01:53 +0200
+Subject: [PATCH bpf-next v2 2/2] samples: bpf: Do not define bpf_printk macro
+In-Reply-To: <20190516170152.24542-1-mrostecki@opensuse.org>
+References: <20190516170152.24542-1-mrostecki@opensuse.org>
+Message-ID: <20190516170152.24542-3-mrostecki@opensuse.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190516165426.J0JhFPVAUE8xh4ZLdk9nAH-bhbLxPymenQhDNzwTbek@z>
+Message-ID: <20190516170153.i6MZg9pNrbHOrZSkzKT46m__NIOlwEfAX3rfIbJuErM@z>
 
-On Thu, 16 May 2019 18:21:32 +0200, Krzesimir Nowak wrote:
-> On Thu, May 16, 2019@5:51 PM Jakub Kicinski wrote:
-> > On Thu, 16 May 2019 11:29:39 +0200, Krzesimir Nowak wrote:  
-> > > > > diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-> > > > > index ccd896b98cac..bf0da03f593b 100644
-> > > > > --- a/tools/testing/selftests/bpf/test_verifier.c
-> > > > > +++ b/tools/testing/selftests/bpf/test_verifier.c
-> > > > > @@ -825,11 +825,20 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
-> > > > >                               tmp, &size_tmp, &retval, NULL);
-> > > > >       if (unpriv)
-> > > > >               set_admin(false);
-> > > > > -     if (err && errno != 524/*ENOTSUPP*/ && errno != EPERM) {
-> > > > > -             printf("Unexpected bpf_prog_test_run error ");
-> > > > > -             return err;
-> > > > > +     if (err) {
-> > > > > +             switch (errno) {
-> > > > > +             case 524/*ENOTSUPP*/:
-> > > > > +                     printf("Did not run the program (not supported) ");
-> > > > > +                     return 0;
-> > > > > +             case EPERM:
-> > > > > +                     printf("Did not run the program (no permission) ");
-> > > > > +                     return 0;  
-> > > >
-> > > > Perhaps use strerror(errno)?  
-> > >
-> > > As I said in the commit message, I open-coded those messages because
-> > > strerror for ENOTSUPP returns "Unknown error 524".  
-> >
-> > Ah, sorry, missed that.  I wonder if that's something worth addressing
-> > in libc, since the BPF subsystem uses ENOTSUPP a lot.  
-> 
-> The "not supported" errno situation seems to be a mess. There is an
-> ENOTSUP define in libc. ENOTSUP is usually defined to be EOPNOTSUPP
-> (taken from kernel), which in turn seems to have a different value
-> (95) than kernel's ENOTSUPP (524). Adding ENOTSUPP (with two Ps) to
-> libc would only add to the confusion. So it's kind of meh and I guess
-> people just moved on with workarounds.
+The bpf_printk macro was moved to bpf_helpers.h which is included in all
+example programs.
 
-Yes, ENOTSUP is never used in the kernel, but it's a mess.
+Signed-off-by: Michal Rostecki <mrostecki at opensuse.org>
+---
+ samples/bpf/hbm_kern.h             | 11 ++---------
+ samples/bpf/tcp_basertt_kern.c     |  7 -------
+ samples/bpf/tcp_bufs_kern.c        |  7 -------
+ samples/bpf/tcp_clamp_kern.c       |  7 -------
+ samples/bpf/tcp_cong_kern.c        |  7 -------
+ samples/bpf/tcp_iw_kern.c          |  7 -------
+ samples/bpf/tcp_rwnd_kern.c        |  7 -------
+ samples/bpf/tcp_synrto_kern.c      |  7 -------
+ samples/bpf/tcp_tos_reflect_kern.c |  7 -------
+ samples/bpf/xdp_sample_pkts_kern.c |  7 -------
+ 10 files changed, 2 insertions(+), 72 deletions(-)
 
-This commit a while ago said ENOTSUPP is from NFS:
-
-commit 423b3aecf29085a52530d4f9167c56a84b081042
-Author: Or Gerlitz <ogerlitz at mellanox.com>
-Date:   Thu Feb 23 12:02:41 2017 +0200
-
-    net/mlx4: Change ENOTSUPP to EOPNOTSUPP
-    
-    As ENOTSUPP is specific to NFS, change the return error value to
-    EOPNOTSUPP in various places in the mlx4 driver.
-    
-    Signed-off-by: Or Gerlitz <ogerlitz at mellanox.com>
-    Suggested-by: Yotam Gigi <yotamg at mellanox.com>
-    Reviewed-by: Matan Barak <matanb at mellanox.com>
-    Signed-off-by: Tariq Toukan <tariqt at mellanox.com>
-    Signed-off-by: David S. Miller <davem at davemloft.net>
-
-But it's spreading throughout the kernel like a wildfire, I counted 1364
-in my tree :/  Some are in tools/, but still.  My understanding was that
-system calls should never return values above 512, but I'm probably
-wrong about that.
-
-Given the popularity, and the fact its an ABI at this point, we
-probably have no choice but to add it to libc, but to be clear IMO it's
-not a blocker for your patches.
+diff --git a/samples/bpf/hbm_kern.h b/samples/bpf/hbm_kern.h
+index c5635d924193..41384be233b9 100644
+--- a/samples/bpf/hbm_kern.h
++++ b/samples/bpf/hbm_kern.h
+@@ -30,15 +30,8 @@
+ #define ALLOW_PKT	1
+ #define TCP_ECN_OK	1
+ 
+-#define HBM_DEBUG 0  // Set to 1 to enable debugging
+-#if HBM_DEBUG
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	char ____fmt[] = fmt;					\
+-	bpf_trace_printk(____fmt, sizeof(____fmt),		\
+-			 ##__VA_ARGS__);			\
+-})
+-#else
++#ifndef HBM_DEBUG  // Define HBM_DEBUG to enable debugging
++#undef bpf_printk
+ #define bpf_printk(fmt, ...)
+ #endif
+ 
+diff --git a/samples/bpf/tcp_basertt_kern.c b/samples/bpf/tcp_basertt_kern.c
+index 6ef1625e8b2c..9dba48c2b920 100644
+--- a/samples/bpf/tcp_basertt_kern.c
++++ b/samples/bpf/tcp_basertt_kern.c
+@@ -21,13 +21,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_basertt(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_bufs_kern.c b/samples/bpf/tcp_bufs_kern.c
+index e03e204739fa..af8486f33771 100644
+--- a/samples/bpf/tcp_bufs_kern.c
++++ b/samples/bpf/tcp_bufs_kern.c
+@@ -22,13 +22,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_bufs(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_clamp_kern.c b/samples/bpf/tcp_clamp_kern.c
+index a0dc2d254aca..26c0fd091f3c 100644
+--- a/samples/bpf/tcp_clamp_kern.c
++++ b/samples/bpf/tcp_clamp_kern.c
+@@ -22,13 +22,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_clamp(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_cong_kern.c b/samples/bpf/tcp_cong_kern.c
+index 4fd3ca979a06..6d4dc4c7dd1e 100644
+--- a/samples/bpf/tcp_cong_kern.c
++++ b/samples/bpf/tcp_cong_kern.c
+@@ -21,13 +21,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_cong(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_iw_kern.c b/samples/bpf/tcp_iw_kern.c
+index 9b139ec69560..da61d53378b3 100644
+--- a/samples/bpf/tcp_iw_kern.c
++++ b/samples/bpf/tcp_iw_kern.c
+@@ -22,13 +22,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_iw(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_rwnd_kern.c b/samples/bpf/tcp_rwnd_kern.c
+index cc71ee96e044..d011e38b80d2 100644
+--- a/samples/bpf/tcp_rwnd_kern.c
++++ b/samples/bpf/tcp_rwnd_kern.c
+@@ -21,13 +21,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_rwnd(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_synrto_kern.c b/samples/bpf/tcp_synrto_kern.c
+index ca87ed34f896..720d1950322d 100644
+--- a/samples/bpf/tcp_synrto_kern.c
++++ b/samples/bpf/tcp_synrto_kern.c
+@@ -21,13 +21,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_synrto(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_tos_reflect_kern.c b/samples/bpf/tcp_tos_reflect_kern.c
+index de788be6f862..369faca70a15 100644
+--- a/samples/bpf/tcp_tos_reflect_kern.c
++++ b/samples/bpf/tcp_tos_reflect_kern.c
+@@ -20,13 +20,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_basertt(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/xdp_sample_pkts_kern.c b/samples/bpf/xdp_sample_pkts_kern.c
+index f7ca8b850978..6c7c7e0aaeda 100644
+--- a/samples/bpf/xdp_sample_pkts_kern.c
++++ b/samples/bpf/xdp_sample_pkts_kern.c
+@@ -7,13 +7,6 @@
+ #define SAMPLE_SIZE 64ul
+ #define MAX_CPUS 128
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ struct bpf_map_def SEC("maps") my_map = {
+ 	.type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
+ 	.key_size = sizeof(int),
+-- 
+2.21.0
