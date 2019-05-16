@@ -1,44 +1,57 @@
-From: cyphar@cyphar.com (Aleksa Sarai)
-Date: Fri, 17 May 2019 00:53:41 +1000
-Subject: [PATCH 1/2] pid: add pidfd_open()
-In-Reply-To: <20190516130813.i66ujfzftbgpqhnh@brauner.io>
-References: <20190515100400.3450-1-christian@brauner.io>
- <CAKOZuesPF+ftwqsNDMBy1LpwJgWTNuQm9-E=C90sSTBYEEsDww@mail.gmail.com>
- <20190516130813.i66ujfzftbgpqhnh@brauner.io>
-Message-ID: <20190516145341.xx7bpyakezvpqujj@yavin>
+From: geert@linux-m68k.org (Geert Uytterhoeven)
+Date: Thu, 16 May 2019 16:56:08 +0200
+Subject: [PATCH v1 1/2] pid: add pidfd_open()
+In-Reply-To: <20190516135944.7205-1-christian@brauner.io>
+References: <20190516135944.7205-1-christian@brauner.io>
+Message-ID:
+ <CAMuHMdVbUJ0+28Lc2wHPah8UUk8Ou9m81KzLvhrcMsJzz2bX2A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190516145341.d4jH35zsUWk--MGEPjEXOniy-bc_OKzlVcFkfAVM-WY@z>
+Message-ID: <20190516145608.U3PPqsJIP_QvbLRYSCycQh1NWhnuxyU5VQBro0APe1c@z>
 
-On 2019-05-16, Christian Brauner <christian@brauner.io> wrote:
-> On Wed, May 15, 2019@10:45:06AM -0700, Daniel Colascione wrote:
-> > On Wed, May 15, 2019@3:04 AM Christian Brauner <christian@brauner.io> wrote:
-> > > +       if (pid <= 0)
-> > > +               return -EINVAL;
-> > 
-> > WDYT of defining pid == 0 to mean "open myself"?
-> 
-> I'm torn. It be a nice shortcut of course but pid being 0 is usually an
-> indicator for child processes. So unless the getpid() before
-> pidfd_open() is an issue I'd say let's leave it as is. If you really
-> want the shortcut might -1 be better?
+Hi Christian, David,
 
-I'd suggest not using negative numbers, and instead reserving them for
-PIDTYPE_TGID if we ever want to have that in the future. IMHO, doing
+On Thu, May 16, 2019@4:00 PM Christian Brauner <christian@brauner.io> wrote:
+> This adds the pidfd_open() syscall. It allows a caller to retrieve pollable
+> pidfds for a process which did not get created via CLONE_PIDFD, i.e. for a
+> process that is created via traditional fork()/clone() calls that is only
+> referenced by a PID:
+>
+> int pidfd = pidfd_open(1234, 0);
+> ret = pidfd_send_signal(pidfd, SIGSTOP, NULL, 0);
+>
+> With the introduction of pidfds through CLONE_PIDFD it is possible to
+> created pidfds at process creation time.
+> However, a lot of processes get created with traditional PID-based calls
+> such as fork() or clone() (without CLONE_PIDFD). For these processes a
+> caller can currently not create a pollable pidfd. This is a huge problem
+> for Android's low memory killer (LMK) and service managers such as systemd.
+> Both are examples of tools that want to make use of pidfds to get reliable
+> notification of process exit for non-parents (pidfd polling) and race-free
+> signal sending (pidfd_send_signal()). They intend to switch to this API for
+> process supervision/management as soon as possible. Having no way to get
+> pollable pidfds from PID-only processes is one of the biggest blockers for
+> them in adopting this api. With pidfd_open() making it possible to retrieve
+> pidfd for PID-based processes we enable them to adopt this api.
+>
+> In line with Arnd's recent changes to consolidate syscall numbers across
+> architectures, I have added the pidfd_open() syscall to all architectures
+> at the same time.
 
-  pfd = pidfd_open(getpid(), 0);
+> +428    common  pidfd_open                      sys_pidfd_open
 
-is not the end of the world.
+This number conflicts with "[PATCH 4/4] uapi: Wire up the mount API
+syscalls on non-x86 arches", which is requested to be included before
+rc1.
 
+Note that none of this is part of linux-next.
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190517/67e00609/attachment.sig>
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert at linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
