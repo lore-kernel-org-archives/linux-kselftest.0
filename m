@@ -1,154 +1,38 @@
-From: mrostecki@opensuse.org (Michal Rostecki)
-Date: Thu, 16 May 2019 19:01:52 +0200
-Subject: [PATCH bpf-next v2 1/2] selftests: bpf: Move bpf_printk to
- bpf_helpers.h
-In-Reply-To: <20190516170152.24542-1-mrostecki@opensuse.org>
-References: <20190516170152.24542-1-mrostecki@opensuse.org>
-Message-ID: <20190516170152.24542-2-mrostecki@opensuse.org>
+From: alexei.starovoitov@gmail.com (Alexei Starovoitov)
+Date: Thu, 16 May 2019 11:36:24 -0700
+Subject: [PATCH] selftests: fix bpf build/test workflow regression when
+ KBUILD_OUTPUT is set
+In-Reply-To: <20190511043729.3o4enh35lrmne3kd@ast-mbp>
+References: <20190511025249.32678-1-skhan@linuxfoundation.org>
+ <20190511043729.3o4enh35lrmne3kd@ast-mbp>
+Message-ID:
+ <CAADnVQK2eyFdEULS6z-M1R77d-AKe5sACKCHxHShJFOqhqy0rw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190516170152.1Fu-S4weHL6rhXhXU1whwgAVXd82vQO6AKZijsGpkrg@z>
+Message-ID: <20190516183624.8eqCLMKWSbgS1dMwNhueNiMGtR7tEmWfG5RafX2N5yk@z>
 
-bpf_printk is a macro which is commonly used to print out debug messages
-in BPF programs and it was copied in many selftests and samples. Since
-all of them include bpf_helpers.h, this change moves the macro there.
+On Fri, May 10, 2019 at 9:37 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, May 10, 2019@08:52:49PM -0600, Shuah Khan wrote:
+> > commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
+> > broke bpf build/test workflow. When KBUILD_OUTPUT is set, bpf objects end
+> > up in KBUILD_OUTPUT build directory instead of in ../selftests/bpf.
+> >
+> > The following bpf workflow breaks when it can't find the test_verifier:
+> >
+> > cd tools/testing/selftests/bpf; make; ./test_verifier;
+> >
+> > Fix it to set OUTPUT only when it is undefined in lib.mk. It didn't need
+> > to be set in the first place.
+> >
+> > Fixes: commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
+> >
+> > Reported-by: Alexei Starovoitov <alexei.starovoitov at gmail.com>
+> > Signed-off-by: Shuah Khan <skhan at linuxfoundation.org>
+>
+> 'git am' couldn't apply this patch because "sha1 information is lacking",
+> but the patch itself looks good.
+> Acked-by: Alexei Starovoitov <ast at kernel.org>
+> Thanks for the quick fix.
 
-Signed-off-by: Michal Rostecki <mrostecki at opensuse.org>
----
- tools/testing/selftests/bpf/bpf_helpers.h                | 8 ++++++++
- tools/testing/selftests/bpf/progs/sockmap_parse_prog.c   | 7 -------
- tools/testing/selftests/bpf/progs/sockmap_tcp_msg_prog.c | 7 -------
- tools/testing/selftests/bpf/progs/sockmap_verdict_prog.c | 7 -------
- tools/testing/selftests/bpf/progs/test_lwt_seg6local.c   | 7 -------
- tools/testing/selftests/bpf/progs/test_xdp_noinline.c    | 7 -------
- tools/testing/selftests/bpf/test_sockmap_kern.h          | 7 -------
- 7 files changed, 8 insertions(+), 42 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
-index 6e80b66d7fb1..f1c23fc05bce 100644
---- a/tools/testing/selftests/bpf/bpf_helpers.h
-+++ b/tools/testing/selftests/bpf/bpf_helpers.h
-@@ -8,6 +8,14 @@
-  */
- #define SEC(NAME) __attribute__((section(NAME), used))
- 
-+/* helper macro to print out debug messages */
-+#define bpf_printk(fmt, ...)				\
-+({							\
-+	char ____fmt[] = fmt;				\
-+	bpf_trace_printk(____fmt, sizeof(____fmt),	\
-+			 ##__VA_ARGS__);		\
-+})
-+
- /* helper functions called from eBPF programs written in C */
- static void *(*bpf_map_lookup_elem)(void *map, const void *key) =
- 	(void *) BPF_FUNC_map_lookup_elem;
-diff --git a/tools/testing/selftests/bpf/progs/sockmap_parse_prog.c b/tools/testing/selftests/bpf/progs/sockmap_parse_prog.c
-index 0f92858f6226..ed3e4a551c57 100644
---- a/tools/testing/selftests/bpf/progs/sockmap_parse_prog.c
-+++ b/tools/testing/selftests/bpf/progs/sockmap_parse_prog.c
-@@ -5,13 +5,6 @@
- 
- int _version SEC("version") = 1;
- 
--#define bpf_printk(fmt, ...)					\
--({								\
--	       char ____fmt[] = fmt;				\
--	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
--				##__VA_ARGS__);			\
--})
--
- SEC("sk_skb1")
- int bpf_prog1(struct __sk_buff *skb)
- {
-diff --git a/tools/testing/selftests/bpf/progs/sockmap_tcp_msg_prog.c b/tools/testing/selftests/bpf/progs/sockmap_tcp_msg_prog.c
-index 12a7b5c82ed6..65fbfdb6cd3a 100644
---- a/tools/testing/selftests/bpf/progs/sockmap_tcp_msg_prog.c
-+++ b/tools/testing/selftests/bpf/progs/sockmap_tcp_msg_prog.c
-@@ -5,13 +5,6 @@
- 
- int _version SEC("version") = 1;
- 
--#define bpf_printk(fmt, ...)					\
--({								\
--	       char ____fmt[] = fmt;				\
--	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
--				##__VA_ARGS__);			\
--})
--
- SEC("sk_msg1")
- int bpf_prog1(struct sk_msg_md *msg)
- {
-diff --git a/tools/testing/selftests/bpf/progs/sockmap_verdict_prog.c b/tools/testing/selftests/bpf/progs/sockmap_verdict_prog.c
-index 2ce7634a4012..bdc22be46f2e 100644
---- a/tools/testing/selftests/bpf/progs/sockmap_verdict_prog.c
-+++ b/tools/testing/selftests/bpf/progs/sockmap_verdict_prog.c
-@@ -5,13 +5,6 @@
- 
- int _version SEC("version") = 1;
- 
--#define bpf_printk(fmt, ...)					\
--({								\
--	       char ____fmt[] = fmt;				\
--	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
--				##__VA_ARGS__);			\
--})
--
- struct bpf_map_def SEC("maps") sock_map_rx = {
- 	.type = BPF_MAP_TYPE_SOCKMAP,
- 	.key_size = sizeof(int),
-diff --git a/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c b/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c
-index 0575751bc1bc..7c7cb3177463 100644
---- a/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c
-+++ b/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c
-@@ -6,13 +6,6 @@
- #include "bpf_helpers.h"
- #include "bpf_endian.h"
- 
--#define bpf_printk(fmt, ...)				\
--({							\
--	char ____fmt[] = fmt;				\
--	bpf_trace_printk(____fmt, sizeof(____fmt),	\
--			##__VA_ARGS__);			\
--})
--
- /* Packet parsing state machine helpers. */
- #define cursor_advance(_cursor, _len) \
- 	({ void *_tmp = _cursor; _cursor += _len; _tmp; })
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-index 5e4aac74f9d0..4fe6aaad22a4 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-@@ -15,13 +15,6 @@
- #include <linux/udp.h>
- #include "bpf_helpers.h"
- 
--#define bpf_printk(fmt, ...)				\
--({							\
--	char ____fmt[] = fmt;				\
--	bpf_trace_printk(____fmt, sizeof(____fmt),	\
--			##__VA_ARGS__);			\
--})
--
- static __u32 rol32(__u32 word, unsigned int shift)
- {
- 	return (word << shift) | (word >> ((-shift) & 31));
-diff --git a/tools/testing/selftests/bpf/test_sockmap_kern.h b/tools/testing/selftests/bpf/test_sockmap_kern.h
-index e7639f66a941..4e7d3da21357 100644
---- a/tools/testing/selftests/bpf/test_sockmap_kern.h
-+++ b/tools/testing/selftests/bpf/test_sockmap_kern.h
-@@ -28,13 +28,6 @@
-  * are established and verdicts are decided.
-  */
- 
--#define bpf_printk(fmt, ...)					\
--({								\
--	       char ____fmt[] = fmt;				\
--	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
--				##__VA_ARGS__);			\
--})
--
- struct bpf_map_def SEC("maps") sock_map = {
- 	.type = TEST_MAP_TYPE,
- 	.key_size = sizeof(int),
--- 
-2.21.0
+Ping! What is the status of the fix?
