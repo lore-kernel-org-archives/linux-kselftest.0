@@ -1,101 +1,63 @@
-From: sashal at kernel.org (Sasha Levin)
-Date: Thu, 16 May 2019 07:39:25 -0400
-Subject: [PATCH AUTOSEL 5.0 28/34] KVM: fix KVM_CLEAR_DIRTY_LOG for memory
- slots of unaligned size
-In-Reply-To: <20190516113932.8348-1-sashal@kernel.org>
-References: <20190516113932.8348-1-sashal@kernel.org>
-Message-ID: <20190516113932.8348-28-sashal@kernel.org>
+From: thuth at redhat.com (Thomas Huth)
+Date: Thu, 16 May 2019 13:59:50 +0200
+Subject: [RFC PATCH 2/4] KVM: selftests: Align memory region addresses to
+ 1M on s390x
+In-Reply-To: <d9c383ef-6f4b-4f51-b627-7565a67005d3@redhat.com>
+References: <20190516111253.4494-1-thuth@redhat.com>
+ <20190516111253.4494-3-thuth@redhat.com>
+ <d9c383ef-6f4b-4f51-b627-7565a67005d3@redhat.com>
+Message-ID: <395e1b02-09b7-9420-33e1-a3abb36282f0@redhat.com>
 
-From: Paolo Bonzini <pbonzini at redhat.com>
+On 16/05/2019 13.30, David Hildenbrand wrote:
+> On 16.05.19 13:12, Thomas Huth wrote:
+>> On s390x, there is a constraint that memory regions have to be aligned
+>> to 1M (or running the VM will fail). Introduce a new "alignment" variable
+>> in the vm_userspace_mem_region_add() function which now can be used for
+>> both, huge page and s390x alignment requirements.
+>>
+>> Signed-off-by: Thomas Huth <thuth at redhat.com>
+>> ---
+>>  tools/testing/selftests/kvm/lib/kvm_util.c | 21 +++++++++++++++++-----
+>>  1 file changed, 16 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+>> index 8d63ccb93e10..64a0da6efe3d 100644
+>> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+>> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+>> @@ -559,6 +559,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>>  	unsigned long pmem_size = 0;
+>>  	struct userspace_mem_region *region;
+>>  	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
+>> +	size_t alignment;
+>>  
+>>  	TEST_ASSERT((guest_paddr % vm->page_size) == 0, "Guest physical "
+>>  		"address not on a page boundary.\n"
+>> @@ -608,9 +609,20 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>>  	TEST_ASSERT(region != NULL, "Insufficient Memory");
+>>  	region->mmap_size = npages * vm->page_size;
+>>  
+>> -	/* Enough memory to align up to a huge page. */
+>> +#ifdef __s390x__
+>> +	/* On s390x, the host address must be aligned to 1M (due to PGSTEs) */
+>> +	alignment = 0x100000;
+> 
+> This corresponds to huge_page_size, maybe you can exploit this fact here.
+> 
+> Something like
+> 
+> alignment = 1;
+> 
+> /* On s390x, the host address must always be aligned to the THP size */
+> #ifndef __s390x__
+> if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
+> #endif
+> 	alignment = huge_page_size;
+> 
+> Maybe in a nicer fashion. Not sure.
 
-[ Upstream commit 76d58e0f07ec203bbdfcaabd9a9fc10a5a3ed5ea ]
+Hmm, but if I've got your explanation on IRC right, it's rather a
+coincidence that the huge page size matches the alignment requirements
+for KVM memslots, isn't it? So I think the code would look rather
+confusing if I'd try to shorten it this way...?
 
-If a memory slot's size is not a multiple of 64 pages (256K), then
-the KVM_CLEAR_DIRTY_LOG API is unusable: clearing the final 64 pages
-either requires the requested page range to go beyond memslot->npages,
-or requires log->num_pages to be unaligned, and kvm_clear_dirty_log_protect
-requires log->num_pages to be both in range and aligned.
-
-To allow this case, allow log->num_pages not to be a multiple of 64 if
-it ends exactly on the last page of the slot.
-
-Reported-by: Peter Xu <peterx at redhat.com>
-Fixes: 98938aa8edd6 ("KVM: validate userspace input in kvm_clear_dirty_log_protect()", 2019-01-02)
-Signed-off-by: Paolo Bonzini <pbonzini at redhat.com>
-Signed-off-by: Sasha Levin <sashal at kernel.org>
----
- Documentation/virtual/kvm/api.txt            | 5 +++--
- tools/testing/selftests/kvm/dirty_log_test.c | 9 ++++++---
- virt/kvm/kvm_main.c                          | 7 ++++---
- 3 files changed, 13 insertions(+), 8 deletions(-)
-
-diff --git a/Documentation/virtual/kvm/api.txt b/Documentation/virtual/kvm/api.txt
-index ba8927c0d45c4..a1b8e6d92298c 100644
---- a/Documentation/virtual/kvm/api.txt
-+++ b/Documentation/virtual/kvm/api.txt
-@@ -3790,8 +3790,9 @@ The ioctl clears the dirty status of pages in a memory slot, according to
- the bitmap that is passed in struct kvm_clear_dirty_log's dirty_bitmap
- field.  Bit 0 of the bitmap corresponds to page "first_page" in the
- memory slot, and num_pages is the size in bits of the input bitmap.
--Both first_page and num_pages must be a multiple of 64.  For each bit
--that is set in the input bitmap, the corresponding page is marked "clean"
-+first_page must be a multiple of 64; num_pages must also be a multiple of
-+64 unless first_page + num_pages is the size of the memory slot.  For each
-+bit that is set in the input bitmap, the corresponding page is marked "clean"
- in KVM's dirty bitmap, and dirty tracking is re-enabled for that page
- (for example via write-protection, or by clearing the dirty bit in
- a page table entry).
-diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
-index 4715cfba20dce..93f99c6b7d79e 100644
---- a/tools/testing/selftests/kvm/dirty_log_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_test.c
-@@ -288,8 +288,11 @@ static void run_test(enum vm_guest_mode mode, unsigned long iterations,
- #endif
- 	max_gfn = (1ul << (guest_pa_bits - guest_page_shift)) - 1;
- 	guest_page_size = (1ul << guest_page_shift);
--	/* 1G of guest page sized pages */
--	guest_num_pages = (1ul << (30 - guest_page_shift));
-+	/*
-+	 * A little more than 1G of guest page sized pages.  Cover the
-+	 * case where the size is not aligned to 64 pages.
-+	 */
-+	guest_num_pages = (1ul << (30 - guest_page_shift)) + 3;
- 	host_page_size = getpagesize();
- 	host_num_pages = (guest_num_pages * guest_page_size) / host_page_size +
- 			 !!((guest_num_pages * guest_page_size) % host_page_size);
-@@ -359,7 +362,7 @@ static void run_test(enum vm_guest_mode mode, unsigned long iterations,
- 		kvm_vm_get_dirty_log(vm, TEST_MEM_SLOT_INDEX, bmap);
- #ifdef USE_CLEAR_DIRTY_LOG
- 		kvm_vm_clear_dirty_log(vm, TEST_MEM_SLOT_INDEX, bmap, 0,
--				       DIV_ROUND_UP(host_num_pages, 64) * 64);
-+				       host_num_pages);
- #endif
- 		vm_dirty_log_verify(bmap);
- 		iteration++;
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index b4f2d892a1d36..c9b102e65a3a7 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -1241,7 +1241,7 @@ int kvm_clear_dirty_log_protect(struct kvm *kvm,
- 	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_USER_MEM_SLOTS)
- 		return -EINVAL;
- 
--	if ((log->first_page & 63) || (log->num_pages & 63))
-+	if (log->first_page & 63)
- 		return -EINVAL;
- 
- 	slots = __kvm_memslots(kvm, as_id);
-@@ -1254,8 +1254,9 @@ int kvm_clear_dirty_log_protect(struct kvm *kvm,
- 	n = kvm_dirty_bitmap_bytes(memslot);
- 
- 	if (log->first_page > memslot->npages ||
--	    log->num_pages > memslot->npages - log->first_page)
--			return -EINVAL;
-+	    log->num_pages > memslot->npages - log->first_page ||
-+	    (log->num_pages < memslot->npages - log->first_page && (log->num_pages & 63)))
-+	    return -EINVAL;
- 
- 	*flush = false;
- 	dirty_bitmap_buffer = kvm_second_dirty_bitmap(memslot);
--- 
-2.20.1
+ Thomas
