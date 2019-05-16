@@ -1,65 +1,38 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Thu, 16 May 2019 16:58:19 +0200
+From: oleg@redhat.com (Oleg Nesterov)
+Date: Thu, 16 May 2019 17:06:12 +0200
 Subject: [PATCH v1 1/2] pid: add pidfd_open()
-In-Reply-To: <CAMuHMdVbUJ0+28Lc2wHPah8UUk8Ou9m81KzLvhrcMsJzz2bX2A@mail.gmail.com>
+In-Reply-To: <20190516145607.j43xyj26k6l5vmbd@yavin>
 References: <20190516135944.7205-1-christian@brauner.io>
- <CAMuHMdVbUJ0+28Lc2wHPah8UUk8Ou9m81KzLvhrcMsJzz2bX2A@mail.gmail.com>
-Message-ID: <20190516145819.ofqkv6ozfpumhhuk@brauner.io>
+ <20190516142659.GB22564@redhat.com>
+ <20190516145607.j43xyj26k6l5vmbd@yavin>
+Message-ID: <20190516150611.GC22564@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190516145819.L5oiwdv0DEAek-PwIHVvBCk1-Z5Wi6JHyfpxrmtEdqk@z>
+Message-ID: <20190516150612.-w6BlUSqxNoTNFAASO3fziVO6vCdVCtc4_gpGUzj-N0@z>
 
-On Thu, May 16, 2019@04:56:08PM +0200, Geert Uytterhoeven wrote:
-> Hi Christian, David,
-> 
-> On Thu, May 16, 2019@4:00 PM Christian Brauner <christian@brauner.io> wrote:
-> > This adds the pidfd_open() syscall. It allows a caller to retrieve pollable
-> > pidfds for a process which did not get created via CLONE_PIDFD, i.e. for a
-> > process that is created via traditional fork()/clone() calls that is only
-> > referenced by a PID:
+On 05/17, Aleksa Sarai wrote:
+>
+> On 2019-05-16, Oleg Nesterov <oleg@redhat.com> wrote:
+> > On 05/16, Christian Brauner wrote:
+> > >
+> > > With the introduction of pidfds through CLONE_PIDFD it is possible to
+> > > created pidfds at process creation time.
 > >
-> > int pidfd = pidfd_open(1234, 0);
-> > ret = pidfd_send_signal(pidfd, SIGSTOP, NULL, 0);
+> > Now I am wondering why do we need CLONE_PIDFD, you can just do
 > >
-> > With the introduction of pidfds through CLONE_PIDFD it is possible to
-> > created pidfds at process creation time.
-> > However, a lot of processes get created with traditional PID-based calls
-> > such as fork() or clone() (without CLONE_PIDFD). For these processes a
-> > caller can currently not create a pollable pidfd. This is a huge problem
-> > for Android's low memory killer (LMK) and service managers such as systemd.
-> > Both are examples of tools that want to make use of pidfds to get reliable
-> > notification of process exit for non-parents (pidfd polling) and race-free
-> > signal sending (pidfd_send_signal()). They intend to switch to this API for
-> > process supervision/management as soon as possible. Having no way to get
-> > pollable pidfds from PID-only processes is one of the biggest blockers for
-> > them in adopting this api. With pidfd_open() making it possible to retrieve
-> > pidfd for PID-based processes we enable them to adopt this api.
-> >
-> > In line with Arnd's recent changes to consolidate syscall numbers across
-> > architectures, I have added the pidfd_open() syscall to all architectures
-> > at the same time.
-> 
-> > +428    common  pidfd_open                      sys_pidfd_open
-> 
-> This number conflicts with "[PATCH 4/4] uapi: Wire up the mount API
-> syscalls on non-x86 arches", which is requested to be included before
-> rc1.
+> > 	pid = fork();
+> > 	pidfd_open(pid);
+>
+> While the race window would be exceptionally short, there is the
+> possibility that the child will die
 
-Yep, already spotted this thanks to Arnd! Will change the syscall
-numbers.
+Yes,
 
-Thanks!
-Christian
+> and their pid will be recycled
+> before you do pidfd_open().
 
-> 
-> Note that none of this is part of linux-next.
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> -- 
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert at linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+No.
+
+Unless the caller's sub-thread does wait() before pidfd_open(), of course.
+Or unless you do signal(SIGCHILD, SIG_IGN).
+
+Oleg.
