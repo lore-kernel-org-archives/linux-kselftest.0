@@ -1,51 +1,36 @@
-From: jakub.kicinski@netronome.com (Jakub Kicinski)
-Date: Wed, 15 May 2019 14:50:37 -0700
-Subject: [PATCH bpf v1 3/3] selftests/bpf: Avoid a clobbering of errno
-In-Reply-To: <20190515134731.12611-4-krzesimir@kinvolk.io>
-References: <20190515134731.12611-1-krzesimir@kinvolk.io>
- <20190515134731.12611-4-krzesimir@kinvolk.io>
-Message-ID: <20190515145037.6918f626@cakuba.netronome.com>
+From: skunberg.kelsey@gmail.com (Kelsey Skunberg)
+Date: Thu, 16 May 2019 01:43:41 -0600
+Subject: [PATCH] selftests: pidfd: Create .gitignore to include pidfd_test
+In-Reply-To: <f0f3c65d-2b1f-3633-ee18-7d49d18eb7a5@linuxfoundation.org>
+References: <20190512045711.4507-1-skunberg.kelsey@gmail.com>
+ <f0f3c65d-2b1f-3633-ee18-7d49d18eb7a5@linuxfoundation.org>
+Message-ID: <20190516074340.GA12505@asus>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190515215037.RwNxL5RPFfyEeFlcyapUqV-7twpHuCX2V8_XEAw6WLI@z>
+Message-ID: <20190516074341.KmyBJyKNF-Dj5fRWKIB5KcSmJLWVV4UJJUnkm0C4fcw@z>
 
-On Wed, 15 May 2019 15:47:28 +0200, Krzesimir Nowak wrote:
-> Save errno right after bpf_prog_test_run returns, so we later check
-> the error code actually set by bpf_prog_test_run, not by some libcap
-> function.
+On Tue, May 14, 2019@05:26:25PM -0600, Shuah Khan wrote:
+> Hi Kelsey,
 > 
-> Cc: Jakub Kicinski <jakub.kicinski at netronome.com>
-> Fixes: 5a8d5209ac022 ("selftests: bpf: add trivial JSET tests")
-
-This commit (of mine) just moved this code into a helper, the bug is
-older:
-
-Fixes: 832c6f2c29ec ("bpf: test make sure to run unpriv test cases in test_verifier")
-
-> Signed-off-by: Krzesimir Nowak <krzesimir at kinvolk.io>
-> ---
->  tools/testing/selftests/bpf/test_verifier.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> On 5/11/19 10:57 PM, Kelsey Skunberg wrote:
+> > Create /selftests/pidfd/.gitignore which holds the following file name
+> > created after compiling:
 > 
-> diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-> index bf0da03f593b..514e17246396 100644
-> --- a/tools/testing/selftests/bpf/test_verifier.c
-> +++ b/tools/testing/selftests/bpf/test_verifier.c
-> @@ -818,15 +818,17 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
->  	__u32 size_tmp = sizeof(tmp);
->  	uint32_t retval;
->  	int err;
-> +	int saved_errno;
->  
->  	if (unpriv)
->  		set_admin(true);
->  	err = bpf_prog_test_run(fd_prog, 1, data, size_data,
->  				tmp, &size_tmp, &retval, NULL);
-> +	saved_errno = errno;
->  	if (unpriv)
->  		set_admin(false);
->  	if (err) {
-> -		switch (errno) {
-> +		switch (saved_errno) {
->  		case 524/*ENOTSUPP*/:
->  			printf("Did not run the program (not supported) ");
->  			return 0;
+> This patch generates the following checkpatch warning.
+> 
+> WARNING: use relative pathname instead of absolute in changelog text
+> #85:
+> Create /selftests/drivers/.gitignore which holds the following file name
+> 
+> 
+> I fixed it and applied the patch. Please make sure to run checkpatch
+> before sending patches in the future.
+> 
+> thanks,
+> -- Shuah
+
+Thank you for catching and fixing this! I'll make sure to remember to
+run checkpatch in the future.
+
+Thanks again!
+
+-Kelsey
