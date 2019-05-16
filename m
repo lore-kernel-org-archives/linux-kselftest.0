@@ -1,54 +1,35 @@
-From: geert at linux-m68k.org (Geert Uytterhoeven)
-Date: Thu, 16 May 2019 16:56:08 +0200
+From: cyphar at cyphar.com (Aleksa Sarai)
+Date: Fri, 17 May 2019 00:56:07 +1000
 Subject: [PATCH v1 1/2] pid: add pidfd_open()
-In-Reply-To: <20190516135944.7205-1-christian@brauner.io>
+In-Reply-To: <20190516142659.GB22564@redhat.com>
 References: <20190516135944.7205-1-christian@brauner.io>
-Message-ID: <CAMuHMdVbUJ0+28Lc2wHPah8UUk8Ou9m81KzLvhrcMsJzz2bX2A@mail.gmail.com>
+ <20190516142659.GB22564@redhat.com>
+Message-ID: <20190516145607.j43xyj26k6l5vmbd@yavin>
 
-Hi Christian, David,
+On 2019-05-16, Oleg Nesterov <oleg at redhat.com> wrote:
+> On 05/16, Christian Brauner wrote:
+> >
+> > With the introduction of pidfds through CLONE_PIDFD it is possible to
+> > created pidfds at process creation time.
+> 
+> Now I am wondering why do we need CLONE_PIDFD, you can just do
+> 
+> 	pid = fork();
+> 	pidfd_open(pid);
 
-On Thu, May 16, 2019 at 4:00 PM Christian Brauner <christian at brauner.io> wrote:
-> This adds the pidfd_open() syscall. It allows a caller to retrieve pollable
-> pidfds for a process which did not get created via CLONE_PIDFD, i.e. for a
-> process that is created via traditional fork()/clone() calls that is only
-> referenced by a PID:
->
-> int pidfd = pidfd_open(1234, 0);
-> ret = pidfd_send_signal(pidfd, SIGSTOP, NULL, 0);
->
-> With the introduction of pidfds through CLONE_PIDFD it is possible to
-> created pidfds at process creation time.
-> However, a lot of processes get created with traditional PID-based calls
-> such as fork() or clone() (without CLONE_PIDFD). For these processes a
-> caller can currently not create a pollable pidfd. This is a huge problem
-> for Android's low memory killer (LMK) and service managers such as systemd.
-> Both are examples of tools that want to make use of pidfds to get reliable
-> notification of process exit for non-parents (pidfd polling) and race-free
-> signal sending (pidfd_send_signal()). They intend to switch to this API for
-> process supervision/management as soon as possible. Having no way to get
-> pollable pidfds from PID-only processes is one of the biggest blockers for
-> them in adopting this api. With pidfd_open() making it possible to retrieve
-> pidfd for PID-based processes we enable them to adopt this api.
->
-> In line with Arnd's recent changes to consolidate syscall numbers across
-> architectures, I have added the pidfd_open() syscall to all architectures
-> at the same time.
-
-> +428    common  pidfd_open                      sys_pidfd_open
-
-This number conflicts with "[PATCH 4/4] uapi: Wire up the mount API
-syscalls on non-x86 arches", which is requested to be included before
-rc1.
-
-Note that none of this is part of linux-next.
-
-Gr{oetje,eeting}s,
-
-                        Geert
+While the race window would be exceptionally short, there is the
+possibility that the child will die and their pid will be recycled
+before you do pidfd_open(). CLONE_PIDFD removes the race completely.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert at linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190517/3962dbf0/attachment.sig>
