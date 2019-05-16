@@ -1,61 +1,41 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Thu, 16 May 2019 17:29:16 +0200
-Subject: [PATCH v1 1/2] pid: add pidfd_open()
-In-Reply-To: <20190516152252.GD22564@redhat.com>
-References: <20190516135944.7205-1-christian@brauner.io>
- <20190516142659.GB22564@redhat.com>
- <20190516145607.j43xyj26k6l5vmbd@yavin>
- <20190516150611.GC22564@redhat.com>
- <20190516151202.hrawrx7hxllmz2di@yavin>
- <20190516152252.GD22564@redhat.com>
-Message-ID: <20190516152915.3t2wofeu3xsyhfbd@brauner.io>
+From: jakub.kicinski@netronome.com (Jakub Kicinski)
+Date: Thu, 16 May 2019 08:50:35 -0700
+Subject: [PATCH bpf v1 2/3] selftests/bpf: Print a message when tester
+ could not run a program
+In-Reply-To: <CAGGp+cGN+YYVjJee5ba84HstSrHGurBvwmKmzNsFRvb344Df3A@mail.gmail.com>
+References: <20190515134731.12611-1-krzesimir@kinvolk.io>
+ <20190515134731.12611-3-krzesimir@kinvolk.io>
+ <20190515144537.57f559e7@cakuba.netronome.com>
+ <CAGGp+cGN+YYVjJee5ba84HstSrHGurBvwmKmzNsFRvb344Df3A@mail.gmail.com>
+Message-ID: <20190516085035.3cdb0ae6@cakuba.netronome.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190516152916.KJ-iw_5-T8CB9JkMftDCxIyYeHzjgv1b8ZI6T_qD6sU@z>
+Message-ID: <20190516155035.J2dOzt8LI0jmqkO_hCUr3Rur7st3HJtmWtSpAg_Rh24@z>
 
-On Thu, May 16, 2019@05:22:53PM +0200, Oleg Nesterov wrote:
-> On 05/17, Aleksa Sarai wrote:
+On Thu, 16 May 2019 11:29:39 +0200, Krzesimir Nowak wrote:
+> > > diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+> > > index ccd896b98cac..bf0da03f593b 100644
+> > > --- a/tools/testing/selftests/bpf/test_verifier.c
+> > > +++ b/tools/testing/selftests/bpf/test_verifier.c
+> > > @@ -825,11 +825,20 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
+> > >                               tmp, &size_tmp, &retval, NULL);
+> > >       if (unpriv)
+> > >               set_admin(false);
+> > > -     if (err && errno != 524/*ENOTSUPP*/ && errno != EPERM) {
+> > > -             printf("Unexpected bpf_prog_test_run error ");
+> > > -             return err;
+> > > +     if (err) {
+> > > +             switch (errno) {
+> > > +             case 524/*ENOTSUPP*/:
+> > > +                     printf("Did not run the program (not supported) ");
+> > > +                     return 0;
+> > > +             case EPERM:
+> > > +                     printf("Did not run the program (no permission) ");
+> > > +                     return 0;  
 > >
-> > On 2019-05-16, Oleg Nesterov <oleg@redhat.com> wrote:
-> > > On 05/17, Aleksa Sarai wrote:
-> > > > On 2019-05-16, Oleg Nesterov <oleg@redhat.com> wrote:
-> > > > > On 05/16, Christian Brauner wrote:
-> > > > > > With the introduction of pidfds through CLONE_PIDFD it is possible to
-> > > > > > created pidfds at process creation time.
-> > > > >
-> > > > > Now I am wondering why do we need CLONE_PIDFD, you can just do
-> > > > >
-> > > > > 	pid = fork();
-> > > > > 	pidfd_open(pid);
-> > > >
-> > > > While the race window would be exceptionally short, there is the
-> > > > possibility that the child will die
-> > >
-> > > Yes,
-> > >
-> > > > and their pid will be recycled
-> > > > before you do pidfd_open().
-> > >
-> > > No.
-> > >
-> > > Unless the caller's sub-thread does wait() before pidfd_open(), of course.
-> > > Or unless you do signal(SIGCHILD, SIG_IGN).
-> >
-> > What about CLONE_PARENT?
+> > Perhaps use strerror(errno)?  
 > 
-> I should have mentioned CLONE_PARENT ;)
-> 
-> Of course in this case the child can be reaped before pidfd_open(). But how often
-> do you or other people use clone(CLONE_PARENT) ? not to mention you can trivially
-> eliminate/detect this race if you really need this.
-> 
-> Don't get me wrong, I am not trying to say that CLONE_PIDFD is a bad idea.
-> 
-> But to me pidfd_open() is much more useful. Say, as a perl programmer I can easily
-> use pidfd_open(), but not CLONE_PIDFD.
+> As I said in the commit message, I open-coded those messages because
+> strerror for ENOTSUPP returns "Unknown error 524".
 
-Right, but for a libc, service- or container manager CLONE_PIDFD is much
-nicer when spawning processes quickly. :) I think both are very good to
-have.
-
-Thanks, Oleg. As always super helpful reviews. :)
-Christian
+Ah, sorry, missed that.  I wonder if that's something worth addressing
+in libc, since the BPF subsystem uses ENOTSUPP a lot.
