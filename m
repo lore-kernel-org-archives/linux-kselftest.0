@@ -1,68 +1,208 @@
-From: krzesimir@kinvolk.io (Krzesimir Nowak)
-Date: Thu, 16 May 2019 11:31:04 +0200
-Subject: [PATCH bpf v1 3/3] selftests/bpf: Avoid a clobbering of errno
-In-Reply-To: <20190515145037.6918f626@cakuba.netronome.com>
-References: <20190515134731.12611-1-krzesimir@kinvolk.io>
- <20190515134731.12611-4-krzesimir@kinvolk.io>
- <20190515145037.6918f626@cakuba.netronome.com>
-Message-ID:
- <CAGGp+cHqJZFfYt9VUAuQ7SpCZZ9ijoreKVBumc+wnGfw7pAXTA@mail.gmail.com>
+From: thuth@redhat.com (Thomas Huth)
+Date: Thu, 16 May 2019 13:12:53 +0200
+Subject: [RFC PATCH 4/4] KVM: selftests: Add the sync_regs test for s390x
+In-Reply-To: <20190516111253.4494-1-thuth@redhat.com>
+References: <20190516111253.4494-1-thuth@redhat.com>
+Message-ID: <20190516111253.4494-5-thuth@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190516093104.42aJA1M8HJFOOfJk0ggGABvz3OlNwbZSPKr4mux7BgU@z>
+Message-ID: <20190516111253.6SxyS0e4DG_P3l4uojuymEU3wu4EFPRQnrGwEoiV4dc@z>
 
-On Wed, May 15, 2019 at 11:51 PM Jakub Kicinski
-<jakub.kicinski@netronome.com> wrote:
->
-> On Wed, 15 May 2019 15:47:28 +0200, Krzesimir Nowak wrote:
-> > Save errno right after bpf_prog_test_run returns, so we later check
-> > the error code actually set by bpf_prog_test_run, not by some libcap
-> > function.
-> >
-> > Cc: Jakub Kicinski <jakub.kicinski at netronome.com>
-> > Fixes: 5a8d5209ac022 ("selftests: bpf: add trivial JSET tests")
->
-> This commit (of mine) just moved this code into a helper, the bug is
-> older:
->
-> Fixes: 832c6f2c29ec ("bpf: test make sure to run unpriv test cases in test_verifier")
+The test is an adaption of the same test for x86. Note that there
+are some differences in the way how s390x deals with the kvm_valid_regs
+in struct kvm_run, so some of the tests had to be removed. Also this
+test is not using the ucall() interface on s390x yet (which would need
+some work to be usable on s390x), so it simply drops out of the VM with
+a diag 0x501 breakpoint instead.
 
-Oops, ok. Will fix it. Thanks.
+Signed-off-by: Thomas Huth <thuth at redhat.com>
+---
+ MAINTAINERS                                   |   1 +
+ tools/testing/selftests/kvm/Makefile          |   2 +
+ .../selftests/kvm/s390x/sync_regs_test.c      | 151 ++++++++++++++++++
+ 3 files changed, 154 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/s390x/sync_regs_test.c
 
->
-> > Signed-off-by: Krzesimir Nowak <krzesimir at kinvolk.io>
-> > ---
-> >  tools/testing/selftests/bpf/test_verifier.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-> > index bf0da03f593b..514e17246396 100644
-> > --- a/tools/testing/selftests/bpf/test_verifier.c
-> > +++ b/tools/testing/selftests/bpf/test_verifier.c
-> > @@ -818,15 +818,17 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
-> >       __u32 size_tmp = sizeof(tmp);
-> >       uint32_t retval;
-> >       int err;
-> > +     int saved_errno;
-> >
-> >       if (unpriv)
-> >               set_admin(true);
-> >       err = bpf_prog_test_run(fd_prog, 1, data, size_data,
-> >                               tmp, &size_tmp, &retval, NULL);
-> > +     saved_errno = errno;
-> >       if (unpriv)
-> >               set_admin(false);
-> >       if (err) {
-> > -             switch (errno) {
-> > +             switch (saved_errno) {
-> >               case 524/*ENOTSUPP*/:
-> >                       printf("Did not run the program (not supported) ");
-> >                       return 0;
->
-
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 514d1f88ee26..68f76ee9e821 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8645,6 +8645,7 @@ F:	arch/s390/include/asm/gmap.h
+ F:	arch/s390/include/asm/kvm*
+ F:	arch/s390/kvm/
+ F:	arch/s390/mm/gmap.c
++F:	tools/testing/selftests/kvm/s390x/
+ F:	tools/testing/selftests/kvm/*/s390x/
+ 
+ KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 690422c78fb2..128b3551dfd0 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -27,6 +27,8 @@ TEST_GEN_PROGS_x86_64 += clear_dirty_log_test
+ TEST_GEN_PROGS_aarch64 += dirty_log_test
+ TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
+ 
++TEST_GEN_PROGS_s390x += s390x/sync_regs_test
++
+ TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
+ LIBKVM += $(LIBKVM_$(UNAME_M))
+ 
+diff --git a/tools/testing/selftests/kvm/s390x/sync_regs_test.c b/tools/testing/selftests/kvm/s390x/sync_regs_test.c
+new file mode 100644
+index 000000000000..e85ff0d69548
+--- /dev/null
++++ b/tools/testing/selftests/kvm/s390x/sync_regs_test.c
+@@ -0,0 +1,151 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Test for s390x KVM_CAP_SYNC_REGS
++ *
++ * Based on the same test for x86:
++ * Copyright (C) 2018, Google LLC.
++ *
++ * Adaptions for s390x:
++ * Copyright (C) 2019, Red Hat, Inc.
++ *
++ * Test expected behavior of the KVM_CAP_SYNC_REGS functionality.
++ */
++
++#define _GNU_SOURCE /* for program_invocation_short_name */
++#include <fcntl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/ioctl.h>
++
++#include "test_util.h"
++#include "kvm_util.h"
++
++#define VCPU_ID 5
++
++static void guest_code(void)
++{
++	for (;;) {
++		asm volatile ("diag 0,0,0x501");
++		asm volatile ("ahi 11,1");
++	}
++}
++
++#define REG_COMPARE(reg) \
++	TEST_ASSERT(left->reg == right->reg, \
++		    "Register " #reg \
++		    " values did not match: 0x%llx, 0x%llx\n", \
++		    left->reg, right->reg)
++
++static void compare_regs(struct kvm_regs *left, struct kvm_sync_regs *right)
++{
++	int i;
++
++	for (i = 0; i < 16; i++)
++		REG_COMPARE(gprs[i]);
++}
++
++static void compare_sregs(struct kvm_sregs *left, struct kvm_sync_regs *right)
++{
++	int i;
++
++	for (i = 0; i < 16; i++)
++		REG_COMPARE(acrs[i]);
++
++	for (i = 0; i < 16; i++)
++		REG_COMPARE(crs[i]);
++}
++
++#undef REG_COMPARE
++
++#define TEST_SYNC_FIELDS   (KVM_SYNC_GPRS|KVM_SYNC_ACRS|KVM_SYNC_CRS)
++#define INVALID_SYNC_FIELD 0x80000000
++
++int main(int argc, char *argv[])
++{
++	struct kvm_vm *vm;
++	struct kvm_run *run;
++	struct kvm_regs regs;
++	struct kvm_sregs sregs;
++	int rv, cap;
++
++	/* Tell stdout not to buffer its content */
++	setbuf(stdout, NULL);
++
++	cap = kvm_check_cap(KVM_CAP_SYNC_REGS);
++	if (!cap) {
++		fprintf(stderr, "CAP_SYNC_REGS not supported, skipping test\n");
++		exit(KSFT_SKIP);
++	}
++
++	/* Create VM */
++	vm = vm_create_default(VCPU_ID, 0, guest_code);
++
++	run = vcpu_state(vm, VCPU_ID);
++
++	/* Request and verify all valid register sets. */
++	run->kvm_valid_regs = TEST_SYNC_FIELDS;
++	rv = _vcpu_run(vm, VCPU_ID);
++	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
++	TEST_ASSERT(run->exit_reason == KVM_EXIT_S390_SIEIC,
++		    "Unexpected exit reason: %u (%s)\n",
++		    run->exit_reason,
++		    exit_reason_str(run->exit_reason));
++	TEST_ASSERT(run->s390_sieic.icptcode == 4 &&
++		    (run->s390_sieic.ipa >> 8) == 0x83 &&
++		    (run->s390_sieic.ipb >> 16) == 0x501,
++		    "Unexpected interception code: ic=%u, ipa=0x%x, ipb=0x%x\n",
++		    run->s390_sieic.icptcode, run->s390_sieic.ipa,
++		    run->s390_sieic.ipb);
++
++	vcpu_regs_get(vm, VCPU_ID, &regs);
++	compare_regs(&regs, &run->s.regs);
++
++	vcpu_sregs_get(vm, VCPU_ID, &sregs);
++	compare_sregs(&sregs, &run->s.regs);
++
++	/* Set and verify various register values */
++	run->s.regs.gprs[11] = 0xBAD1DEA;
++	run->s.regs.acrs[0] = 1 << 11;
++
++	run->kvm_valid_regs = TEST_SYNC_FIELDS;
++	run->kvm_dirty_regs = KVM_SYNC_GPRS | KVM_SYNC_ACRS;
++	rv = _vcpu_run(vm, VCPU_ID);
++	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
++	TEST_ASSERT(run->exit_reason == KVM_EXIT_S390_SIEIC,
++		    "Unexpected exit reason: %u (%s)\n",
++		    run->exit_reason,
++		    exit_reason_str(run->exit_reason));
++	TEST_ASSERT(run->s.regs.gprs[11] == 0xBAD1DEA + 1,
++		    "r11 sync regs value incorrect 0x%llx.",
++		    run->s.regs.gprs[11]);
++	TEST_ASSERT(run->s.regs.acrs[0]  == 1 << 11,
++		    "acr0 sync regs value incorrect 0x%llx.",
++		    run->s.regs.acrs[0]);
++
++	vcpu_regs_get(vm, VCPU_ID, &regs);
++	compare_regs(&regs, &run->s.regs);
++
++	vcpu_sregs_get(vm, VCPU_ID, &sregs);
++	compare_sregs(&sregs, &run->s.regs);
++
++	/* Clear kvm_dirty_regs bits, verify new s.regs values are
++	 * overwritten with existing guest values.
++	 */
++	run->kvm_valid_regs = TEST_SYNC_FIELDS;
++	run->kvm_dirty_regs = 0;
++	run->s.regs.gprs[11] = 0xDEADBEEF;
++	rv = _vcpu_run(vm, VCPU_ID);
++	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
++	TEST_ASSERT(run->exit_reason == KVM_EXIT_S390_SIEIC,
++		    "Unexpected exit reason: %u (%s)\n",
++		    run->exit_reason,
++		    exit_reason_str(run->exit_reason));
++	TEST_ASSERT(run->s.regs.gprs[11] != 0xDEADBEEF,
++		    "r11 sync regs value incorrect 0x%llx.",
++		    run->s.regs.gprs[11]);
++
++	kvm_vm_free(vm);
++
++	return 0;
++}
 -- 
-Kinvolk GmbH | Adalbertstr.6a, 10999 Berlin | tel: +491755589364
-Geschäftsführer/Directors: Alban Crequy, Chris Kühl, Iago López Galeiras
-Registergericht/Court of registration: Amtsgericht Charlottenburg
-Registernummer/Registration number: HRB 171414 B
-Ust-ID-Nummer/VAT ID number: DE302207000
+2.21.0
