@@ -1,72 +1,42 @@
-From: oleg at redhat.com (Oleg Nesterov)
-Date: Thu, 16 May 2019 16:27:00 +0200
-Subject: [PATCH v1 1/2] pid: add pidfd_open()
-In-Reply-To: <20190516135944.7205-1-christian@brauner.io>
-References: <20190516135944.7205-1-christian@brauner.io>
-Message-ID: <20190516142659.GB22564@redhat.com>
+From: cyphar at cyphar.com (Aleksa Sarai)
+Date: Fri, 17 May 2019 00:53:41 +1000
+Subject: [PATCH 1/2] pid: add pidfd_open()
+In-Reply-To: <20190516130813.i66ujfzftbgpqhnh@brauner.io>
+References: <20190515100400.3450-1-christian@brauner.io>
+ <CAKOZuesPF+ftwqsNDMBy1LpwJgWTNuQm9-E=C90sSTBYEEsDww@mail.gmail.com>
+ <20190516130813.i66ujfzftbgpqhnh@brauner.io>
+Message-ID: <20190516145341.xx7bpyakezvpqujj@yavin>
 
-On 05/16, Christian Brauner wrote:
->
-> With the introduction of pidfds through CLONE_PIDFD it is possible to
-> created pidfds at process creation time.
+On 2019-05-16, Christian Brauner <christian at brauner.io> wrote:
+> On Wed, May 15, 2019 at 10:45:06AM -0700, Daniel Colascione wrote:
+> > On Wed, May 15, 2019 at 3:04 AM Christian Brauner <christian at brauner.io> wrote:
+> > > +       if (pid <= 0)
+> > > +               return -EINVAL;
+> > 
+> > WDYT of defining pid == 0 to mean "open myself"?
+> 
+> I'm torn. It be a nice shortcut of course but pid being 0 is usually an
+> indicator for child processes. So unless the getpid() before
+> pidfd_open() is an issue I'd say let's leave it as is. If you really
+> want the shortcut might -1 be better?
 
-Now I am wondering why do we need CLONE_PIDFD, you can just do
+I'd suggest not using negative numbers, and instead reserving them for
+PIDTYPE_TGID if we ever want to have that in the future. IMHO, doing
 
-	pid = fork();
-	pidfd_open(pid);
+  pfd = pidfd_open(getpid(), 0);
 
-> +SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
-> +{
-> +	int fd, ret;
-> +	struct pid *p;
-> +	struct task_struct *tsk;
-> +
-> +	if (flags)
-> +		return -EINVAL;
-> +
-> +	if (pid <= 0)
-> +		return -EINVAL;
-> +
-> +	p = find_get_pid(pid);
-> +	if (!p)
-> +		return -ESRCH;
-> +
-> +	ret = 0;
-> +	rcu_read_lock();
-> +	/*
-> +	 * If this returns non-NULL the pid was used as a thread-group
-> +	 * leader. Note, we race with exec here: If it changes the
-> +	 * thread-group leader we might return the old leader.
-> +	 */
-> +	tsk = pid_task(p, PIDTYPE_TGID);
-> +	if (!tsk)
-> +		ret = -ESRCH;
-> +	rcu_read_unlock();
-> +
-> +	fd = ret ?: pidfd_create(p);
-> +	put_pid(p);
-> +	return fd;
-> +}
+is not the end of the world.
 
-Looks correct, feel free to add Reviewed-by: Oleg Nesterov <oleg at redhat.com>
 
-But why do we need task_struct *tsk?
-
-	rcu_read_lock();
-	if (!pid_task(PIDTYPE_TGID))
-		ret = -ESRCH;
-	rcu_read_unlock();
-
-and in fact we do not even need rcu_read_lock(), we could do
-
-	// shut up rcu_dereference_check()
-	rcu_lock_acquire(&rcu_lock_map);
-	if (!pid_task(PIDTYPE_TGID))
-		ret = -ESRCH;
-	rcu_lock_release(&rcu_lock_map);
-
-Well... I won't insist, but the comment about the race with exec looks a bit
-confusing to me. It is true, but we do not care at all, we are not going to
-use the task_struct returned by pid_task().
-
-Oleg.
+-- 
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190517/67e00609/attachment.sig>
