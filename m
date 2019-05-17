@@ -1,28 +1,207 @@
 From: sboyd at kernel.org (Stephen Boyd)
-Date: Fri, 17 May 2019 10:42:59 -0700
-Subject: [PATCH v4 03/18] kunit: test: add string_stream a std::stream
- like string builder
-In-Reply-To: <20190514221711.248228-4-brendanhiggins@google.com>
+Date: Fri, 17 May 2019 10:58:41 -0700
+Subject: [PATCH v4 04/18] kunit: test: add kunit_stream a std::stream like
+ logger
+In-Reply-To: <20190514221711.248228-5-brendanhiggins@google.com>
 References: <20190514221711.248228-1-brendanhiggins@google.com>
- <20190514221711.248228-4-brendanhiggins@google.com>
-Message-ID: <20190517174300.7949F20848@mail.kernel.org>
+ <20190514221711.248228-5-brendanhiggins@google.com>
+Message-ID: <20190517175841.F3396216FD@mail.kernel.org>
 
-Quoting Brendan Higgins (2019-05-14 15:16:56)
-> A number of test features need to do pretty complicated string printing
-> where it may not be possible to rely on a single preallocated string
-> with parameters.
-> 
-> So provide a library for constructing the string as you go similar to
-> C++'s std::string.
-> 
-> Signed-off-by: Brendan Higgins <brendanhiggins at google.com>
-> Reviewed-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
-> Reviewed-by: Logan Gunthorpe <logang at deltatee.com>
+Quoting Brendan Higgins (2019-05-14 15:16:57)
+> diff --git a/kunit/kunit-stream.c b/kunit/kunit-stream.c
+> new file mode 100644
+> index 0000000000000..1884f1b550888
+> --- /dev/null
+> +++ b/kunit/kunit-stream.c
+> @@ -0,0 +1,152 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * C++ stream style string formatter and printer used in KUnit for outputting
+> + * KUnit messages.
+> + *
+> + * Copyright (C) 2019, Google LLC.
+> + * Author: Brendan Higgins <brendanhiggins at google.com>
+> + */
+> +
+> +#include <kunit/test.h>
+> +#include <kunit/kunit-stream.h>
+> +#include <kunit/string-stream.h>
+> +
+> +static const char *kunit_stream_get_level(struct kunit_stream *this)
+> +{
+> +       unsigned long flags;
+> +       const char *level;
+> +
+> +       spin_lock_irqsave(&this->lock, flags);
+> +       level = this->level;
+> +       spin_unlock_irqrestore(&this->lock, flags);
+> +
+> +       return level;
 
-Is there any reason why we can't use the seqfile API for this? These
-both share a similar goal, formatting strings into a buffer to be read
-later. Maybe some new APIs would be needed to extract the buffer
-differently, but I hope we could share the code.
+Please remove this whole function and inline it to the one call-site.
 
-If it can't be used, can you please add the reasoning to the commit text
-here?
+> +}
+> +
+> +void kunit_stream_set_level(struct kunit_stream *this, const char *level)
+> +{
+> +       unsigned long flags;
+> +
+> +       spin_lock_irqsave(&this->lock, flags);
+> +       this->level = level;
+> +       spin_unlock_irqrestore(&this->lock, flags);
+
+I don't get the locking here. What are we protecting against? Are tests
+running in parallel using the same kunit_stream? If so, why is the level
+changeable in one call and then adding strings is done in a different
+function call? It would make sense to combine the level setting and
+string adding so that it's one atomic operation if it's truly a parallel
+operation, or remove the locking entirely.
+
+> +}
+> +
+> +void kunit_stream_add(struct kunit_stream *this, const char *fmt, ...)
+> +{
+> +       va_list args;
+> +       struct string_stream *stream = this->internal_stream;
+> +
+> +       va_start(args, fmt);
+> +
+> +       if (string_stream_vadd(stream, fmt, args) < 0)
+> +               kunit_err(this->test, "Failed to allocate fragment: %s\n", fmt);
+> +
+> +       va_end(args);
+> +}
+> +
+> +void kunit_stream_append(struct kunit_stream *this,
+> +                               struct kunit_stream *other)
+> +{
+> +       struct string_stream *other_stream = other->internal_stream;
+> +       const char *other_content;
+> +
+> +       other_content = string_stream_get_string(other_stream);
+> +
+> +       if (!other_content) {
+> +               kunit_err(this->test,
+> +                         "Failed to get string from second argument for appending.\n");
+> +               return;
+> +       }
+> +
+> +       kunit_stream_add(this, other_content);
+> +}
+> +
+> +void kunit_stream_clear(struct kunit_stream *this)
+> +{
+> +       string_stream_clear(this->internal_stream);
+> +}
+> +
+> +void kunit_stream_commit(struct kunit_stream *this)
+
+Should this be rather called kunit_stream_flush()?
+
+> +{
+> +       struct string_stream *stream = this->internal_stream;
+> +       struct string_stream_fragment *fragment;
+> +       const char *level;
+> +       char *buf;
+> +
+> +       level = kunit_stream_get_level(this);
+> +       if (!level) {
+> +               kunit_err(this->test,
+> +                         "Stream was committed without a specified log level.\n");
+
+Drop the full-stop?
+
+> +               level = KERN_ERR;
+> +               kunit_stream_set_level(this, level);
+> +       }
+> +
+> +       buf = string_stream_get_string(stream);
+> +       if (!buf) {
+> +               kunit_err(this->test,
+
+Can you grow a local variable for 'this->test'? It's used many times.
+
+Also, 'this' is not very kernel idiomatic. We usually name variables by
+their type instead of 'this' which is a keyword in other languages.
+Perhaps it could be named 'kstream'?
+
+> +                        "Could not allocate buffer, dumping stream:\n");
+> +               list_for_each_entry(fragment, &stream->fragments, node) {
+> +                       kunit_err(this->test, fragment->fragment);
+> +               }
+> +               kunit_err(this->test, "\n");
+> +               goto cleanup;
+> +       }
+> +
+> +       kunit_printk(level, this->test, buf);
+> +       kfree(buf);
+> +
+> +cleanup:
+> +       kunit_stream_clear(this);
+> +}
+> +
+> +static int kunit_stream_init(struct kunit_resource *res, void *context)
+> +{
+> +       struct kunit *test = context;
+> +       struct kunit_stream *stream;
+> +
+> +       stream = kzalloc(sizeof(*stream), GFP_KERNEL);
+
+Of course, here it's called 'stream', so maybe it should be 'kstream'
+here too.
+
+> +       if (!stream)
+> +               return -ENOMEM;
+> +
+> +       res->allocation = stream;
+> +       stream->test = test;
+> +       spin_lock_init(&stream->lock);
+> +       stream->internal_stream = new_string_stream();
+
+Can new_string_stream() be renamed to alloc_string_stream()? Sorry, I
+just see so much C++ isms in here it's hard to read from the kernel
+developer perspective.
+
+> +
+> +       if (!stream->internal_stream) {
+
+Nitpick: Please join this to the "allocation" event above instead of
+keeping it separated.
+
+> +               kfree(stream);
+> +               return -ENOMEM;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static void kunit_stream_free(struct kunit_resource *res)
+> +{
+> +       struct kunit_stream *stream = res->allocation;
+> +
+> +       if (!string_stream_is_empty(stream->internal_stream)) {
+> +               kunit_err(stream->test,
+> +                        "End of test case reached with uncommitted stream entries.\n");
+> +               kunit_stream_commit(stream);
+> +       }
+> +
+> +       destroy_string_stream(stream->internal_stream);
+> +       kfree(stream);
+> +}
+> +
+> +struct kunit_stream *kunit_new_stream(struct kunit *test)
+> +{
+> +       struct kunit_resource *res;
+> +
+> +       res = kunit_alloc_resource(test,
+> +                                  kunit_stream_init,
+> +                                  kunit_stream_free,
+> +                                  test);
+> +
+> +       if (res)
+> +               return res->allocation;
+> +       else
+> +               return NULL;
+
+Don't have if (...) return ...; else return ..., just return instead of
+else.
