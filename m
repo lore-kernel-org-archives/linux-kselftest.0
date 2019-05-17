@@ -1,101 +1,71 @@
-From: shuah at kernel.org (shuah)
-Date: Fri, 17 May 2019 07:56:53 -0600
-Subject: [PATCH v3] selftests/x86: Support Atom for syscall_arg_fault test
-In-Reply-To: <D6542591582C6645851595B3517A02963F16F195@shsmsx102.ccr.corp.intel.com>
-References: <1555657855-31855-1-git-send-email-bo.tong@intel.com>
- <263afb6f-48dc-fbe7-5b13-13ce3f322ecc@kernel.org>
- <D6542591582C6645851595B3517A02963F16F195@shsmsx102.ccr.corp.intel.com>
-Message-ID: <9e3e4e85-d1d8-a72f-d820-96f4fad9f23b@kernel.org>
+From: catalin.marinas at arm.com (Catalin Marinas)
+Date: Fri, 17 May 2019 15:49:31 +0100
+Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+In-Reply-To: <cover.1557160186.git.andreyknvl@google.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+Message-ID: <20190517144931.GA56186@arrakis.emea.arm.com>
 
-Hi Bo,
+Hi Andrey,
 
-On 5/17/19 1:02 AM, Tong, Bo wrote:
-> Is this patch going to be merged? Or still any blocking issue there?
-> 
-> Thanks,
-> Bo
-> 
-> -----Original Message-----
-> From: shuah [mailto:shuah at kernel.org]
-> Sent: Friday, April 19, 2019 10:05 PM
-> To: Tong, Bo <bo.tong at intel.com>; luto at kernel.org; x86 at kernel.org
-> Cc: linux-kselftest at vger.kernel.org; linux-kernel at vger.kernel.org; skhan at linuxfoundation.org; shuah at kernel.org
-> Subject: Re: [PATCH v3] selftests/x86: Support Atom for syscall_arg_fault test
-> 
-> On 4/19/19 1:10 AM, Tong Bo wrote:
->> Atom-based CPUs trigger stack fault when invoke 32-bit SYSENTER
->> instruction with invalid register values. So we also need SIGBUS handling in this case.
->>
->> Following is assembly when the fault exception happens.
->>
->> (gdb) disassemble $eip
->> Dump of assembler code for function __kernel_vsyscall:
->>      0xf7fd8fe0 <+0>:     push   %ecx
->>      0xf7fd8fe1 <+1>:     push   %edx
->>      0xf7fd8fe2 <+2>:     push   %ebp
->>      0xf7fd8fe3 <+3>:     mov    %esp,%ebp
->>      0xf7fd8fe5 <+5>:     sysenter
->>      0xf7fd8fe7 <+7>:     int    $0x80
->> => 0xf7fd8fe9 <+9>:     pop    %ebp
->>      0xf7fd8fea <+10>:    pop    %edx
->>      0xf7fd8feb <+11>:    pop    %ecx
->>      0xf7fd8fec <+12>:    ret
->> End of assembler dump.
->>
->> According to Intel SDM, this could also be a Stack Segment Fault(#SS,
->> 12), except a normal Page Fault(#PF, 14). Especially, in section 6.9
->> of Vol.3A, both stack and page faults are within the 10th(lowest
->> priority) class, and as it said, "exceptions within each class are
->> implementation-dependent and may vary from processor to processor".
->> It's expected for processors like Intel Atom to trigger stack
->> fault(SIGBUS), while we get page fault(SIGSEGV) from common Core processors.
->>
->> Signed-off-by: Tong Bo <bo.tong at intel.com>
->> Acked-by: Andy Lutomirski <luto at kernel.org>
->> ---
->>    tools/testing/selftests/x86/syscall_arg_fault.c | 10 ++++++++--
->>    1 file changed, 8 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/testing/selftests/x86/syscall_arg_fault.c
->> b/tools/testing/selftests/x86/syscall_arg_fault.c
->> index 7db4fc9..d2548401 100644
->> --- a/tools/testing/selftests/x86/syscall_arg_fault.c
->> +++ b/tools/testing/selftests/x86/syscall_arg_fault.c
->> @@ -43,7 +43,7 @@ static sigjmp_buf jmpbuf;
->>    
->>    static volatile sig_atomic_t n_errs;
->>    
->> -static void sigsegv(int sig, siginfo_t *info, void *ctx_void)
->> +static void sigsegv_or_sigbus(int sig, siginfo_t *info, void
->> +*ctx_void)
->>    {
->>    	ucontext_t *ctx = (ucontext_t*)ctx_void;
->>    
->> @@ -73,7 +73,13 @@ int main()
->>    	if (sigaltstack(&stack, NULL) != 0)
->>    		err(1, "sigaltstack");
->>    
->> -	sethandler(SIGSEGV, sigsegv, SA_ONSTACK);
->> +	sethandler(SIGSEGV, sigsegv_or_sigbus, SA_ONSTACK);
->> +	/*
->> +	 * The actual exception can vary.  On Atom CPUs, we get #SS
->> +	 * instead of #PF when the vDSO fails to access the stack when
->> +	 * ESP is too close to 2^32, and #SS causes SIGBUS.
->> +	 */
->> +	sethandler(SIGBUS, sigsegv_or_sigbus, SA_ONSTACK);
->>    	sethandler(SIGILL, sigill, SA_ONSTACK);
->>    
->>    	/*
->>
-> 
-> In case there is a dependency on x86 tree, here is my Ack
-> 
-> Acked-by: Shuah Khan <skhan at linuxfoundation.org>
-> 
+On Mon, May 06, 2019 at 06:30:46PM +0200, Andrey Konovalov wrote:
+> One of the alternative approaches to untagging that was considered is to
+> completely strip the pointer tag as the pointer enters the kernel with
+> some kind of a syscall wrapper, but that won't work with the countless
+> number of different ioctl calls. With this approach we would need a custom
+> wrapper for each ioctl variation, which doesn't seem practical.
 
-Looks like it got left behind in the confusion of which tree.
+The more I look at this problem, the less convinced I am that we can
+solve it in a way that results in a stable ABI covering ioctls(). While
+for the Android kernel codebase it could be simpler as you don't upgrade
+the kernel version every 2.5 months, for the mainline kernel this
+doesn't scale. Any run-time checks are relatively limited in terms of
+drivers covered. Better static checking would be nice as a long term
+solution but we didn't get anywhere with the discussion last year.
 
-I will apply this to my tree.
+IMO (RFC for now), I see two ways forward:
 
-thanks,
--- Shuah
+1. Make this a user space problem and do not allow tagged pointers into
+   the syscall ABI. A libc wrapper would have to convert structures,
+   parameters before passing them into the kernel. Note that we can
+   still support the hardware MTE in the kernel by enabling tagged
+   memory ranges, saving/restoring tags etc. but not allowing tagged
+   addresses at the syscall boundary.
+
+2. Similar shim to the above libc wrapper but inside the kernel
+   (arch/arm64 only; most pointer arguments could be covered with an
+   __SC_CAST similar to the s390 one). There are two differences from
+   what we've discussed in the past:
+
+   a) this is an opt-in by the user which would have to explicitly call
+      prctl(). If it returns -ENOTSUPP etc., the user won't be allowed
+      to pass tagged pointers to the kernel. This would probably be the
+      responsibility of the C lib to make sure it doesn't tag heap
+      allocations. If the user did not opt-in, the syscalls are routed
+      through the normal path (no untagging address shim).
+
+   b) ioctl() and other blacklisted syscalls (prctl) will not accept
+      tagged pointers (to be documented in Vicenzo's ABI patches).
+
+It doesn't solve the problems we are trying to address but 2.a saves us
+from blindly relaxing the ABI without knowing how to easily assess new
+code being merged (over 500K lines between kernel versions). Existing
+applications (who don't opt-in) won't inadvertently start using the new
+ABI which could risk becoming de-facto ABI that we need to support on
+the long run.
+
+Option 1 wouldn't solve the ioctl() problem either and while it makes
+things simpler for the kernel, I am aware that it's slightly more
+complicated in user space (but I really don't mind if you prefer option
+1 ;)).
+
+The tagged pointers (whether hwasan or MTE) should ideally be a
+transparent feature for the application writer but I don't think we can
+solve it entirely and make it seamless for the multitude of ioctls().
+I'd say you only opt in to such feature if you know what you are doing
+and the user code takes care of specific cases like ioctl(), hence the
+prctl() proposal even for the hwasan.
+
+Comments welcomed.
+
+-- 
+Catalin
