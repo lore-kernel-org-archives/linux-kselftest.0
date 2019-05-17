@@ -1,61 +1,62 @@
 From: sboyd at kernel.org (Stephen Boyd)
-Date: Thu, 16 May 2019 17:35:21 -0700
-Subject: [PATCH v4 01/18] kunit: test: add KUnit test runner core
-In-Reply-To: <20190514221711.248228-2-brendanhiggins@google.com>
+Date: Thu, 16 May 2019 17:38:46 -0700
+Subject: [PATCH v4 02/18] kunit: test: add test resource management API
+In-Reply-To: <20190514221711.248228-3-brendanhiggins@google.com>
 References: <20190514221711.248228-1-brendanhiggins@google.com>
- <20190514221711.248228-2-brendanhiggins@google.com>
-Message-ID: <20190517003522.A48A7206BF@mail.kernel.org>
+ <20190514221711.248228-3-brendanhiggins@google.com>
+Message-ID: <20190517003847.0962F2082E@mail.kernel.org>
 
-Quoting Brendan Higgins (2019-05-14 15:16:54)
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> new file mode 100644
-> index 0000000000000..e682ea0e1f9a5
-> --- /dev/null
-> +++ b/include/kunit/test.h
-> @@ -0,0 +1,162 @@
-[..]
-> +/**
-> + * struct kunit - represents a running instance of a test.
-> + * @priv: for user to store arbitrary data. Commonly used to pass data created
-> + * in the init function (see &struct kunit_module).
-> + *
-> + * Used to store information about the current context under which the test is
-> + * running. Most of this data is private and should only be accessed indirectly
-> + * via public functions; the one exception is @priv which can be used by the
-> + * test writer to store arbitrary data.
-> + */
-> +struct kunit {
-> +       void *priv;
-> +
-> +       /* private: internal use only. */
-> +       const char *name; /* Read only after initialization! */
-> +       spinlock_t lock; /* Gaurds all mutable test state. */
-> +       bool success; /* Protected by lock. */
-
-Is this all the spinlock protects? Doesn't seem useful if it's just
-protecting access to the variable being set or not because code that
-reads it will have a stale view of the value.
-
+Quoting Brendan Higgins (2019-05-14 15:16:55)
 > diff --git a/kunit/test.c b/kunit/test.c
-> new file mode 100644
-> index 0000000000000..86f65ba2bcf92
-> --- /dev/null
+> index 86f65ba2bcf92..a15e6f8c41582 100644
+> --- a/kunit/test.c
 > +++ b/kunit/test.c
-> @@ -0,0 +1,229 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Base unit test (KUnit) API.
-> + *
-> + * Copyright (C) 2019, Google LLC.
-> + * Author: Brendan Higgins <brendanhiggins at google.com>
-> + */
+[..]
 > +
-> +#include <linux/sched.h>
-> +#include <linux/sched/debug.h>
-> +#include <kunit/test.h>
+> +void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
+> +{
+> +       struct kunit_kmalloc_params params;
+> +       struct kunit_resource *res;
 > +
-[...]
+> +       params.size = size;
+> +       params.gfp = gfp;
 > +
-> +size_t kunit_module_counter = 1;
+> +       res = kunit_alloc_resource(test,
+> +                                  kunit_kmalloc_init,
+> +                                  kunit_kmalloc_free,
+> +                                  &params);
+> +
+> +       if (res)
+> +               return res->allocation;
+> +       else
+> +               return NULL;
 
-static?
+Can be written as
+
+	if (res)
+		return ....
+	return 
+
+and some static analysis tools prefer this.
+
+> +}
+> +
+> +void kunit_cleanup(struct kunit *test)
+> +{
+> +       struct kunit_resource *resource, *resource_safe;
+> +       unsigned long flags;
+> +
+> +       spin_lock_irqsave(&test->lock, flags);
+
+Ah ok, test->lock is protecting everything now? Does it need to be a
+spinlock, or can it be a mutex?
+
+> +       list_for_each_entry_safe(resource,
+> +                                resource_safe,
+> +                                &test->resources,
+> +                                node) {
+> +               kunit_free_resource(test, resource);
+> +       }
+> +       spin_unlock_irqrestore(&test->lock, flags);
+> +}
+> +
