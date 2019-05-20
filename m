@@ -1,345 +1,157 @@
 From: cyphar at cyphar.com (Aleksa Sarai)
-Date: Mon, 20 May 2019 23:32:56 +1000
-Subject: [PATCH RFC v8 01/10] namei: obey trailing magic-link DAC permissions
+Date: Mon, 20 May 2019 23:32:58 +1000
+Subject: [PATCH RFC v8 03/10] open: O_EMPTYPATH: procfs-less file descriptor
+ re-opening
 In-Reply-To: <20190520133305.11925-1-cyphar@cyphar.com>
 References: <20190520133305.11925-1-cyphar@cyphar.com>
-Message-ID: <20190520133305.11925-2-cyphar@cyphar.com>
+Message-ID: <20190520133305.11925-4-cyphar@cyphar.com>
 
-The ability for userspace to "re-open" file descriptors through
-/proc/self/fd has been a very useful tool for all sorts of usecases
-(container runtimes are one common example). However, the current
-interface for doing this has resulted in some pretty subtle security
-holes. Userspace can re-open a file descriptor with more permissions
-than the original, which can result in cases such as /proc/$pid/exe
-being re-opened O_RDWR at a later date even though (by definition)
-/proc/$pid/exe cannot be opened for writing. When combined with O_PATH
-the results can get even more confusing.
+Userspace has made use of /proc/self/fd very liberally to allow for
+descriptors to be re-opened. There are a wide variety of uses for this
+feature, but it has always required constructing a pathname and could
+not be done without procfs mounted. The obvious solution for this is to
+extend openat(2) to have an AT_EMPTY_PATH-equivalent -- O_EMPTYPATH.
 
-We cannot block this outright. Aside from userspace already depending on
-it, it's a useful feature which can actually increase the security of
-userspace. For instance, LXC keeps an O_PATH of the container's
-/dev/pts/ptmx that gets re-opened to create new ptys and then uses
-TIOCGPTPEER to get the slave end. This allows for pty allocation without
-resolving paths inside an (untrusted) container's rootfs. There isn't a
-trivial way of doing this that is as straight-forward and safe as O_PATH
-re-opening.
+Now that descriptor re-opening has been made safe through the new
+magic-link resolution restrictions, we can replicate these restrictions
+for O_EMPTYPATH. In particular, we only allow "upgrading" the file
+descriptor if the corresponding FMODE_PATH_* bit is set (or the
+FMODE_{READ,WRITE} cases for non-O_PATH file descriptors).
 
-Instead we have to restrict it in such a way that it doesn't break
-(good) users but does block potential attackers. The solution applied in
-this patch is to restrict *re-opening* (not resolution through)
-magic-links by requiring that mode of the link be obeyed. Normal
-symlinks have modes of a+rwx but magic-links have other modes. These
-magic-link modes were historically ignored during path resolution, but
-they've now been re-purposed for more useful ends.
+When doing openat(O_EMPTYPATH|O_PATH), O_PATH takes precedence and
+O_EMPTYPATH is ignored. Very few users ever have a need to O_PATH
+re-open an existing file descriptor, and so accommodating them at the
+expense of further complicating O_PATH makes little sense. Ultimately,
+if users ask for this we can always add RESOLVE_EMPTY_PATH to
+resolveat(2) in the future.
 
-It is also necessary to define semantics for the mode of an O_PATH
-descriptor, since re-opening a magic-link through an O_PATH needs to be
-just as restricted as the corresponding magic-link otherwise the above
-protection can be bypassed. There are two distinct cases:
-
- 1. The target is a regular file (not a magic-link). Userspace depends
-    on being able to re-open the O_PATH of a regular file, so we must
-    define the mode to be a+rwx.
-
- 2. The target is a magic-link. In this case, we simply copy the mode of
-    the magic-link. This results in an O_PATH of a magic-link
-    effectively acting as a no-op in terms of how much re-opening
-    privileges a process has.
-
-CAP_DAC_OVERRIDE can be used to override all of these restrictions, but
-we only permit &init_userns's capabilities to affect these semantics.
-The reason for this is that there isn't a clear way to track what
-user_ns is the original owner of a given O_PATH chain -- thus an
-unprivileged user could create a new userns and O_PATH the file
-descriptor, owning it. All signs would indicate that the user really
-does have CAP_DAC_OVERRIDE over the new descriptor and the protection
-would be bypassed. We thus opt for the more conservative approach.
-
-One final exception is given, which is that non-O_PATH file descriptors
-are given re-open rights equivalent to the permissions available at
-open-time. This allows for O_RDONLY file descriptors to be re-opened
-O_RDWR as long as the user had MAY_WRITE access at the time of opening
-the O_RDONLY descriptor. This is necessary to avoid breaking userspace
-(some of the kernel's own selftests depended on this "feature").
-
-Co-developed-by: Andy Lutomirski <luto at kernel.org>
-Co-developed-by: Christian Brauner <christian at brauner.io>
 Signed-off-by: Aleksa Sarai <cyphar at cyphar.com>
 ---
- fs/internal.h         |   1 +
- fs/namei.c            | 117 ++++++++++++++++++++++++++++++++++++++++--
- fs/open.c             |   3 +-
- fs/proc/fd.c          |  16 ++++--
- include/linux/fs.h    |   4 ++
- include/linux/types.h |   2 +-
- 6 files changed, 132 insertions(+), 11 deletions(-)
+ fs/fcntl.c                       |  2 +-
+ fs/namei.c                       | 27 +++++++++++++++++++++++++++
+ fs/open.c                        |  7 ++++++-
+ include/linux/fcntl.h            |  2 +-
+ include/uapi/asm-generic/fcntl.h |  5 +++++
+ 5 files changed, 40 insertions(+), 3 deletions(-)
 
-diff --git a/fs/internal.h b/fs/internal.h
-index bfd9bbbe369b..60d8a079a331 100644
---- a/fs/internal.h
-+++ b/fs/internal.h
-@@ -123,6 +123,7 @@ struct open_flags {
- 	int acc_mode;
- 	int intent;
- 	int lookup_flags;
-+	fmode_t opath_mask;
- };
- extern struct file *do_filp_open(int dfd, struct filename *pathname,
- 		const struct open_flags *op);
+diff --git a/fs/fcntl.c b/fs/fcntl.c
+index 083185174c6d..6c85c4d0c006 100644
+--- a/fs/fcntl.c
++++ b/fs/fcntl.c
+@@ -1031,7 +1031,7 @@ static int __init fcntl_init(void)
+ 	 * Exceptions: O_NONBLOCK is a two bit define on parisc; O_NDELAY
+ 	 * is defined as O_NONBLOCK on some platforms and not on others.
+ 	 */
+-	BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=
++	BUILD_BUG_ON(22 - 1 /* for O_RDONLY being 0 */ !=
+ 		HWEIGHT32(
+ 			(VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) |
+ 			__FMODE_EXEC | __FMODE_NONOTIFY));
 diff --git a/fs/namei.c b/fs/namei.c
-index 5ebd64b21970..5ff61624b8f0 100644
+index 5ff61624b8f0..46c5302eea4a 100644
 --- a/fs/namei.c
 +++ b/fs/namei.c
-@@ -506,6 +506,8 @@ struct nameidata {
- 	struct inode	*link_inode;
- 	unsigned	root_seq;
- 	int		dfd;
-+	fmode_t 	opath_mask;
-+	int		acc_mode; /* op.acc_mode */
- } __randomize_layout;
- 
- static void set_nameidata(struct nameidata *p, int dfd, struct filename *name)
-@@ -514,7 +516,14 @@ static void set_nameidata(struct nameidata *p, int dfd, struct filename *name)
- 	p->stack = p->internal;
- 	p->dfd = dfd;
- 	p->name = name;
--	p->total_link_count = old ? old->total_link_count : 0;
-+	p->total_link_count = 0;
-+	p->acc_mode = 0;
-+	p->opath_mask = FMODE_PATH_READ | FMODE_PATH_WRITE;
-+	if (old) {
-+		p->total_link_count = old->total_link_count;
-+		p->acc_mode = old->acc_mode;
-+		p->opath_mask = old->opath_mask;
-+	}
- 	p->saved = old;
- 	current->nameidata = p;
- }
-@@ -1042,8 +1051,40 @@ static int may_create_in_sticky(struct dentry * const dir,
- 	return 0;
+@@ -3599,6 +3599,31 @@ static int do_o_path(struct nameidata *nd, unsigned flags, struct file *file)
+ 	return error;
  }
  
-+/**
-+ * may_reopen_magiclink - Check permissions for opening a trailing magic-link
-+ * @opath_mask: the O_PATH mask of the magiclink
-+ * @acc_mode: ACC_MODE which the user is attempting
-+ *
-+ * We block magic-link re-opening if the @opath_mask is more strict than the
-+ * @acc_mode being requested, unless the user is capable(CAP_DAC_OVERRIDE).
-+ *
-+ * Returns 0 if successful, -ve on error.
-+ */
-+static int may_open_magiclink(fmode_t opath_mask, int acc_mode)
++static int do_o_emptypath(struct nameidata *nd, struct file *newfile)
 +{
-+	/*
-+	 * We only allow for init_userns to be able to override magic-links.
-+	 * This is done to avoid cases where an unprivileger userns could take
-+	 * an O_PATH of the fd, resulting in it being very unclear whether
-+	 * CAP_DAC_OVERRIDE should work on the new O_PATH fd (given that it
-+	 * pipes through to the underlying file).
-+	 */
-+	if (capable(CAP_DAC_OVERRIDE))
-+		return 0;
++	int error;
++	struct fd f;
 +
-+	if ((acc_mode & MAY_READ) &&
-+	    !(opath_mask & (FMODE_READ | FMODE_PATH_READ)))
-+		return -EACCES;
-+	if ((acc_mode & MAY_WRITE) &&
-+	    !(opath_mask & (FMODE_WRITE | FMODE_PATH_WRITE)))
-+		return -EACCES;
++	/* We don't support AT_FDCWD since O_PATH cannot be set here. */
++	f = fdget_raw(nd->dfd);
++	if (!f.file)
++		return -EBADF;
 +
-+	return 0;
++	/* Update opath_mask as though we went through trailing_symlink(). */
++	if (!(f.file->f_mode & (FMODE_READ | FMODE_PATH_READ)))
++		nd->opath_mask &= ~FMODE_PATH_READ;
++	if (!(f.file->f_mode & (FMODE_WRITE | FMODE_PATH_WRITE)))
++		nd->opath_mask &= ~FMODE_PATH_WRITE;
++
++	/* Obey the same restrictions as magic-links. */
++	error = may_open_magiclink(f.file->f_mode, nd->acc_mode);
++	if (!error)
++		error = vfs_open(&f.file->f_path, newfile);
++
++	fdput(f);
++	return error;
 +}
 +
- static __always_inline
--const char *get_link(struct nameidata *nd)
-+const char *get_link(struct nameidata *nd, bool trailing)
+ static struct file *path_openat(struct nameidata *nd,
+ 			const struct open_flags *op, unsigned flags)
  {
- 	struct saved *last = nd->stack + nd->depth - 1;
- 	struct dentry *dentry = last->link.dentry;
-@@ -1081,6 +1122,50 @@ const char *get_link(struct nameidata *nd)
- 		} else {
- 			res = get(dentry, inode, &last->done);
- 		}
-+		/* If we just jumped it was because of a magic-link. */
-+		if (unlikely(nd->flags & LOOKUP_JUMPED)) {
-+			/*
-+			 * For trailing_symlink we check whether the symlink's
-+			 * mode allows us to do what we want through acc_mode.
-+			 * In addition, we need to stash away what the link
-+			 * mode is in case we are about to O_PATH this
-+			 * magic-link.
-+			 *
-+			 * This is only done for magic-links, as a security
-+			 * measure to prevent users from being able to re-open
-+			 * files with additional permissions or similar tricks
-+			 * through procfs. This is not strictly POSIX-friendly,
-+			 * but technically neither are magic-links.
-+			 */
-+			if (trailing) {
-+				fmode_t opath_mask = 0;
-+				int mode = inode->i_mode;
-+
-+				/*
-+				 * Bare-bones acl_permission_check shift so
-+				 * that opath_mask can be adjusted using creds.
-+				 */
-+				if (uid_eq(current_fsuid(), inode->i_uid))
-+					mode >>= 6;
-+				else if (in_group_p(inode->i_gid))
-+					mode >>= 3;
-+
-+				/* Figure out the O_PATH mask. */
-+				if (mode & MAY_READ)
-+					opath_mask |= FMODE_PATH_READ;
-+				if (mode & MAY_WRITE)
-+					opath_mask |= FMODE_PATH_WRITE;
-+
-+				/*
-+				 * Is the new opath_mask more restrictive than
-+				 * the acc_mode being requested?
-+				 */
-+				error = may_open_magiclink(opath_mask, nd->acc_mode);
-+				if (error)
-+					return ERR_PTR(error);
-+				nd->opath_mask &= opath_mask;
-+			}
-+		}
- 		if (IS_ERR_OR_NULL(res))
- 			return res;
- 	}
-@@ -2142,7 +2227,7 @@ static int link_path_walk(const char *name, struct nameidata *nd)
- 			return err;
+@@ -3614,6 +3639,8 @@ static struct file *path_openat(struct nameidata *nd,
  
- 		if (err) {
--			const char *s = get_link(nd);
-+			const char *s = get_link(nd, false);
- 
- 			if (IS_ERR(s))
- 				return PTR_ERR(s);
-@@ -2258,7 +2343,7 @@ static const char *trailing_symlink(struct nameidata *nd)
- 		return ERR_PTR(error);
- 	nd->flags |= LOOKUP_PARENT;
- 	nd->stack[0].name = NULL;
--	s = get_link(nd);
-+	s = get_link(nd, true);
- 	return s ? s : "";
- }
- 
-@@ -3508,6 +3593,7 @@ static int do_o_path(struct nameidata *nd, unsigned flags, struct file *file)
- 	if (!error) {
- 		audit_inode(nd->name, path.dentry, 0);
- 		error = vfs_open(&path, file);
-+		file->f_mode |= nd->opath_mask;
- 		path_put(&path);
- 	}
- 	return error;
-@@ -3519,6 +3605,9 @@ static struct file *path_openat(struct nameidata *nd,
- 	struct file *file;
- 	int error;
- 
-+	nd->acc_mode = op->acc_mode;
-+	nd->opath_mask = op->opath_mask;
-+
- 	file = alloc_empty_file(op->open_flag, current_cred());
- 	if (IS_ERR(file))
- 		return file;
-@@ -3537,6 +3626,26 @@ static struct file *path_openat(struct nameidata *nd,
- 		terminate_walk(nd);
- 	}
- 	if (likely(!error)) {
-+		/*
-+		 * In order to allow for re-opening of a read-only fds as
-+		 * read-write (something that some userspace tools depend on,
-+		 * including some kernel selftests), we give additional
-+		 * permissions based on what permissions are available at
-+		 * open-time. This must be scoped to opath_mask to avoid
-+		 * obvious O_PATH attacks.
-+		 */
-+		if (likely(!(file->f_mode & FMODE_PATH))) {
-+			fmode_t add_perms = 0;
-+
-+			if (!(nd->acc_mode & MAY_READ) &&
-+			    !inode_permission(file->f_inode, MAY_READ))
-+				add_perms |= FMODE_PATH_READ;
-+			if (!(nd->acc_mode & MAY_WRITE) &&
-+			    !inode_permission(file->f_inode, MAY_WRITE))
-+				add_perms |= FMODE_PATH_WRITE;
-+
-+			file->f_mode |= add_perms & nd->opath_mask;
-+		}
- 		if (likely(file->f_mode & FMODE_OPENED))
- 			return file;
- 		WARN_ON(1);
+ 	if (unlikely(file->f_flags & __O_TMPFILE)) {
+ 		error = do_tmpfile(nd, flags, op, file);
++	} else if (unlikely(file->f_flags & O_EMPTYPATH)) {
++		error = do_o_emptypath(nd, file);
+ 	} else if (unlikely(file->f_flags & O_PATH)) {
+ 		error = do_o_path(nd, flags, file);
+ 	} else {
 diff --git a/fs/open.c b/fs/open.c
-index a00350018a47..c1d4f343e85f 100644
+index c1d4f343e85f..a6ccfea899b9 100644
 --- a/fs/open.c
 +++ b/fs/open.c
-@@ -981,8 +981,9 @@ static inline int build_open_flags(int flags, umode_t mode, struct open_flags *o
- 		acc_mode |= MAY_APPEND;
+@@ -995,6 +995,8 @@ static inline int build_open_flags(int flags, umode_t mode, struct open_flags *o
+ 		lookup_flags |= LOOKUP_DIRECTORY;
+ 	if (!(flags & O_NOFOLLOW))
+ 		lookup_flags |= LOOKUP_FOLLOW;
++	if (flags & O_EMPTYPATH)
++		lookup_flags |= LOOKUP_EMPTY;
+ 	op->lookup_flags = lookup_flags;
+ 	return 0;
+ }
+@@ -1056,14 +1058,17 @@ long do_sys_open(int dfd, const char __user *filename, int flags, umode_t mode)
+ {
+ 	struct open_flags op;
+ 	int fd = build_open_flags(flags, mode, &op);
++	int empty = 0;
+ 	struct filename *tmp;
  
- 	op->acc_mode = acc_mode;
--
- 	op->intent = flags & O_PATH ? 0 : LOOKUP_OPEN;
-+	/* For O_PATH backwards-compatibility we default to an all-set mask. */
-+	op->opath_mask = FMODE_PATH_READ | FMODE_PATH_WRITE;
+ 	if (fd)
+ 		return fd;
  
- 	if (flags & O_CREAT) {
- 		op->intent |= LOOKUP_CREATE;
-diff --git a/fs/proc/fd.c b/fs/proc/fd.c
-index 81882a13212d..8c0ccf2b703b 100644
---- a/fs/proc/fd.c
-+++ b/fs/proc/fd.c
-@@ -104,11 +104,17 @@ static void tid_fd_update_inode(struct task_struct *task, struct inode *inode,
- 	task_dump_owner(task, 0, &inode->i_uid, &inode->i_gid);
+-	tmp = getname(filename);
++	tmp = getname_flags(filename, op.lookup_flags, &empty);
+ 	if (IS_ERR(tmp))
+ 		return PTR_ERR(tmp);
++	if (!empty)
++		op.open_flag &= ~O_EMPTYPATH;
  
- 	if (S_ISLNK(inode->i_mode)) {
--		unsigned i_mode = S_IFLNK;
--		if (f_mode & FMODE_READ)
--			i_mode |= S_IRUSR | S_IXUSR;
--		if (f_mode & FMODE_WRITE)
--			i_mode |= S_IWUSR | S_IXUSR;
-+		unsigned i_mode = S_IFLNK | S_IXUGO;
-+		/*
-+		 * Construct the mode bits based on the open-mode. Note that
-+		 * giving o+rwx permissions here is not a problem since all
-+		 * /proc/self/fd magic-link resolution is gated with
-+		 * ptrace_may_access().
-+		 */
-+		if (f_mode & (FMODE_READ | FMODE_PATH_READ))
-+			i_mode |= S_IRUGO;
-+		if (f_mode & (FMODE_WRITE | FMODE_PATH_WRITE))
-+			i_mode |= S_IWUGO;
- 		inode->i_mode = i_mode;
- 	}
- 	security_task_to_inode(task, inode);
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index fe94c48481a6..0b2af61411cb 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -173,6 +173,10 @@ typedef int (dio_iodone_t)(struct kiocb *iocb, loff_t offset,
- /* File does not contribute to nr_files count */
- #define FMODE_NOACCOUNT		((__force fmode_t)0x20000000)
+ 	fd = get_unused_fd_flags(flags);
+ 	if (fd >= 0) {
+diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
+index d019df946cb2..2868ae6c8fc1 100644
+--- a/include/linux/fcntl.h
++++ b/include/linux/fcntl.h
+@@ -9,7 +9,7 @@
+ 	(O_RDONLY | O_WRONLY | O_RDWR | O_CREAT | O_EXCL | O_NOCTTY | O_TRUNC | \
+ 	 O_APPEND | O_NDELAY | O_NONBLOCK | O_NDELAY | __O_SYNC | O_DSYNC | \
+ 	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
+-	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
++	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE | O_EMPTYPATH)
  
-+/* File is an O_PATH descriptor which can be upgraded to (read, write). */
-+#define FMODE_PATH_READ		((__force fmode_t)0x40000000)
-+#define FMODE_PATH_WRITE	((__force fmode_t)0x80000000)
+ #ifndef force_o_largefile
+ #define force_o_largefile() (!IS_ENABLED(CONFIG_ARCH_32BIT_OFF_T))
+diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+index 9dc0bf0c5a6e..307f7c414a51 100644
+--- a/include/uapi/asm-generic/fcntl.h
++++ b/include/uapi/asm-generic/fcntl.h
+@@ -89,6 +89,11 @@
+ #define __O_TMPFILE	020000000
+ #endif
+ 
++#ifndef O_EMPTYPATH
++#define O_EMPTYPATH 040000000
++#endif
 +
- /*
-  * Flag for rw_copy_check_uvector and compat_rw_copy_check_uvector
-  * that indicates that they should check the contents of the iovec are
-diff --git a/include/linux/types.h b/include/linux/types.h
-index cc0dbbe551d5..45aaf711885c 100644
---- a/include/linux/types.h
-+++ b/include/linux/types.h
-@@ -157,7 +157,7 @@ typedef u32 dma_addr_t;
- 
- typedef unsigned int __bitwise gfp_t;
- typedef unsigned int __bitwise slab_flags_t;
--typedef unsigned int __bitwise fmode_t;
-+typedef unsigned long __bitwise fmode_t;
- 
- #ifdef CONFIG_PHYS_ADDR_T_64BIT
- typedef u64 phys_addr_t;
++
+ /* a horrid kludge trying to make sure that this will fail on old kernels */
+ #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+ #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
 -- 
 2.21.0
