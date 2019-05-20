@@ -1,28 +1,64 @@
-From: alex.shi at linux.alibaba.com (Alex Shi)
-Date: Mon, 20 May 2019 11:14:44 +0800
-Subject: [PATCH 1/3] kselftest/cgroup: fix unexcepted testing failure on
- test_memcontrol
-In-Reply-To: <20190517172930.GA5525@tower.DHCP.thefacebook.com>
-References: <20190515090704.56929-1-alex.shi@linux.alibaba.com>
- <20190517172930.GA5525@tower.DHCP.thefacebook.com>
-Message-ID: <b2cb203e-e073-b077-94aa-6b6f432b8003@linux.alibaba.com>
+From: borntraeger at de.ibm.com (Christian Borntraeger)
+Date: Mon, 20 May 2019 09:12:42 +0200
+Subject: [RFC PATCH 1/4] KVM: selftests: Guard struct kvm_vcpu_events with
+ __KVM_HAVE_VCPU_EVENTS
+In-Reply-To: <20190516111253.4494-2-thuth@redhat.com>
+References: <20190516111253.4494-1-thuth@redhat.com>
+ <20190516111253.4494-2-thuth@redhat.com>
+Message-ID: <e8a57340-6f8d-90b8-ad73-c39c19f5c9a4@de.ibm.com>
 
 
-> Hi Alex!
+On 16.05.19 13:12, Thomas Huth wrote:
+> The struct kvm_vcpu_events code is only available on certain architectures
+> (arm, arm64 and x86). To be able to compile kvm_util.c also for other
+> architectures, we've got to fence the code with __KVM_HAVE_VCPU_EVENTS.
 > 
-> Sorry for the late reply, somehow I missed your e-mails.
-> 
-> The patchset looks good to me, except a typo in subjects/commit logs:
-> you probably meant "unexpected failures".
-> 
-> Please, fix and feel free to use:
-> Reviewed-by: Roman Gushchin <guro at fb.com>
-> for the series.
-> 
+> Signed-off-by: Thomas Huth <thuth at redhat.com>
+Acked-by: Christian Borntraeger <borntraeger at de.ibm.com>
 
-Thanks Roman!
+According to the MAINTAINERS patches, you want me to pick these patches. Correct?
 
-BTW, do you know other test cases for cgroup2 function or performance?
 
-Thanks
-Alex
+> ---
+>  tools/testing/selftests/kvm/include/kvm_util.h | 2 ++
+>  tools/testing/selftests/kvm/lib/kvm_util.c     | 2 ++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index 07b71ad9734a..1e46ab205038 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -114,10 +114,12 @@ void vcpu_sregs_set(struct kvm_vm *vm, uint32_t vcpuid,
+>  		    struct kvm_sregs *sregs);
+>  int _vcpu_sregs_set(struct kvm_vm *vm, uint32_t vcpuid,
+>  		    struct kvm_sregs *sregs);
+> +#ifdef __KVM_HAVE_VCPU_EVENTS
+>  void vcpu_events_get(struct kvm_vm *vm, uint32_t vcpuid,
+>  		     struct kvm_vcpu_events *events);
+>  void vcpu_events_set(struct kvm_vm *vm, uint32_t vcpuid,
+>  		     struct kvm_vcpu_events *events);
+> +#endif
+>  
+>  const char *exit_reason_str(unsigned int exit_reason);
+>  
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 4ca96b228e46..8d63ccb93e10 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -1224,6 +1224,7 @@ void vcpu_regs_set(struct kvm_vm *vm, uint32_t vcpuid, struct kvm_regs *regs)
+>  		ret, errno);
+>  }
+>  
+> +#ifdef __KVM_HAVE_VCPU_EVENTS
+>  void vcpu_events_get(struct kvm_vm *vm, uint32_t vcpuid,
+>  		     struct kvm_vcpu_events *events)
+>  {
+> @@ -1249,6 +1250,7 @@ void vcpu_events_set(struct kvm_vm *vm, uint32_t vcpuid,
+>  	TEST_ASSERT(ret == 0, "KVM_SET_VCPU_EVENTS, failed, rc: %i errno: %i",
+>  		ret, errno);
+>  }
+> +#endif
+>  
+>  /*
+>   * VM VCPU System Regs Get
+> 
