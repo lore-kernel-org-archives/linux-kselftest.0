@@ -1,29 +1,22 @@
 From: pbonzini@redhat.com (Paolo Bonzini)
-Date: Mon, 20 May 2019 13:19:40 +0200
-Subject: [RFC PATCH 4/4] KVM: selftests: Add the sync_regs test for s390x
-In-Reply-To: <20190516111253.4494-5-thuth@redhat.com>
+Date: Mon, 20 May 2019 13:20:03 +0200
+Subject: [RFC PATCH 0/4] KVM selftests for s390x
+In-Reply-To: <20190516111253.4494-1-thuth@redhat.com>
 References: <20190516111253.4494-1-thuth@redhat.com>
- <20190516111253.4494-5-thuth@redhat.com>
-Message-ID: <3e462f1d-c9c0-ac26-ed59-182fbbf60340@redhat.com>
+Message-ID: <b412e591-3983-ebef-510b-43f9b7be4147@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190520111940.QS6uujBov-7ZkNiixVau8i913e6acQZy1Mz-AM_RO9U@z>
+Message-ID: <20190520112003.x7PebC2k3VJc9bHkmdEdsE3SwmYTw3ev-xEmtdSqBTg@z>
 
 On 16/05/19 13:12, Thomas Huth wrote:
-> +#define VCPU_ID 5
-> +
-> +static void guest_code(void)
-> +{
-> +	for (;;) {
-> +		asm volatile ("diag 0,0,0x501");
-> +		asm volatile ("ahi 11,1");
-> +	}
+> This patch series enables the KVM selftests for s390x. As a first
+> test, the sync_regs from x86 has been adapted to s390x.
+> 
+> Please note that the ucall() interface is not used yet - since
+> s390x neither has PIO nor MMIO, this needs some more work first
+> before it becomes usable (we likely should use a DIAG hypercall
+> here, which is what the sync_reg test is currently using, too...).
 
-I'd like this to use something like
-
-	register u32 stage = 0 asm("11");
-	...
-	stage++
-
-instead (yes, it should be fixed in x86 too).
+No objections at all, though it would be like to have ucall plumbed in
+from the beginning.
 
 Paolo
