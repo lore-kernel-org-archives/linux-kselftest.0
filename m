@@ -1,31 +1,38 @@
 From: pbonzini@redhat.com (Paolo Bonzini)
-Date: Mon, 20 May 2019 12:00:44 +0200
+Date: Mon, 20 May 2019 12:03:08 +0200
 Subject: [PATCH v2] KVM: selftests: Compile code with warnings enabled
-In-Reply-To: <1834df0f-b377-2231-0e5c-c5acd3298973@redhat.com>
+In-Reply-To: <20190517090445.4502-1-thuth@redhat.com>
 References: <20190517090445.4502-1-thuth@redhat.com>
- <20190517093000.GO16681@xz-x1> <8736ldquyw.fsf@vitty.brq.redhat.com>
- <1834df0f-b377-2231-0e5c-c5acd3298973@redhat.com>
-Message-ID: <505274ec-e73f-f362-8130-5f70673bfc80@redhat.com>
+Message-ID: <f998da41-c75d-0afa-02cd-e2e5d8f0f546@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190520100044.E9Y0YCy0TsQSn33KvJyWZQHn7h4qCU6KjbSZycg4EEM@z>
+Message-ID: <20190520100308.c-fkHvWPZazhmPuysVUwMrcDzTL5gafaMmYH-jmicQw@z>
 
-On 17/05/19 12:07, Thomas Huth wrote:
+On 17/05/19 11:04, Thomas Huth wrote:
+> So far the KVM selftests are compiled without any compiler warnings
+> enabled. That's quite bad, since we miss a lot of possible bugs this
+> way. Let's enable at least "-Wall" and some other useful warning flags
+> now, and fix at least the trivial problems in the code (like unused
+> variables).
 > 
-> lib/ucall.c: In function ‘get_ucall’:
-> lib/ucall.c:145:3: warning: dereferencing type-punned pointer will break
-> strict-aliasing rules [-Wstrict-aliasing]
->    gva = *(vm_vaddr_t *)run->mmio.data;
+> Signed-off-by: Thomas Huth <thuth at redhat.com>
+> ---
+>  v2:
+>  - Rebased to kvm/queue
+>  - Fix warnings in state_test.c and evmcs_test.c, too
 > 
-> x86_64/vmx_set_nested_state_test.c: In function
-> ‘set_revision_id_for_vmcs12’:
-> x86_64/vmx_set_nested_state_test.c:78:2: warning: dereferencing
-> type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
->   *(u32 *)(state->data) = vmcs12_revision;
-> 
-> ... how do we want to handle such spots in the kvm selftest code?
-> Compile with -fno-strict-aliasing? Or fix it with type-punning through
-> unions?
+>  tools/testing/selftests/kvm/Makefile                       | 4 +++-
+>  tools/testing/selftests/kvm/dirty_log_test.c               | 6 +++++-
+>  tools/testing/selftests/kvm/lib/kvm_util.c                 | 3 ---
+>  tools/testing/selftests/kvm/lib/x86_64/processor.c         | 4 +---
+>  tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c   | 1 +
+>  tools/testing/selftests/kvm/x86_64/evmcs_test.c            | 7 +------
+>  tools/testing/selftests/kvm/x86_64/platform_info_test.c    | 1 -
+>  tools/testing/selftests/kvm/x86_64/smm_test.c              | 3 +--
+>  tools/testing/selftests/kvm/x86_64/state_test.c            | 7 +------
+>  .../selftests/kvm/x86_64/vmx_close_while_nested_test.c     | 5 +----
+>  tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c   | 5 ++---
+>  11 files changed, 16 insertions(+), 30 deletions(-)
 
-I would use memcpy.  I'll send a patch shortly.
+Queued, with a squashed fix to kvm_get_supported_hv_cpuid.
 
 Paolo
