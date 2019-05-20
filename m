@@ -1,51 +1,31 @@
 From: pbonzini@redhat.com (Paolo Bonzini)
-Date: Mon, 20 May 2019 11:58:30 +0200
-Subject: [PATCH] KVM: selftests: Fix a condition in test_hv_cpuid()
-In-Reply-To: <20190514103451.GA1694@mwanda>
-References: <20190514103451.GA1694@mwanda>
-Message-ID: <4bb7a5d3-887f-8487-e8f3-70770312517a@redhat.com>
+Date: Mon, 20 May 2019 12:00:44 +0200
+Subject: [PATCH v2] KVM: selftests: Compile code with warnings enabled
+In-Reply-To: <1834df0f-b377-2231-0e5c-c5acd3298973@redhat.com>
+References: <20190517090445.4502-1-thuth@redhat.com>
+ <20190517093000.GO16681@xz-x1> <8736ldquyw.fsf@vitty.brq.redhat.com>
+ <1834df0f-b377-2231-0e5c-c5acd3298973@redhat.com>
+Message-ID: <505274ec-e73f-f362-8130-5f70673bfc80@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190520095830.KFs6F8NNTaLhFFWMH-wnBuU6_vL5pMlAjcuz17zEzzM@z>
+Message-ID: <20190520100044.E9Y0YCy0TsQSn33KvJyWZQHn7h4qCU6KjbSZycg4EEM@z>
 
-On 14/05/19 12:34, Dan Carpenter wrote:
-> The code is trying to check that all the padding is zeroed out and it
-> does this:
+On 17/05/19 12:07, Thomas Huth wrote:
 > 
->     entry->padding[0] == entry->padding[1] == entry->padding[2] == 0
+> lib/ucall.c: In function ‘get_ucall’:
+> lib/ucall.c:145:3: warning: dereferencing type-punned pointer will break
+> strict-aliasing rules [-Wstrict-aliasing]
+>    gva = *(vm_vaddr_t *)run->mmio.data;
 > 
-> Assume everything is zeroed correctly, then the first comparison is
-> true, the next comparison is false and false is equal to zero so the
-> overall condition is true.  This bug doesn't affect run time very
-> badly, but the code should instead just check that all three paddings
-> are zero individually.
+> x86_64/vmx_set_nested_state_test.c: In function
+> ‘set_revision_id_for_vmcs12’:
+> x86_64/vmx_set_nested_state_test.c:78:2: warning: dereferencing
+> type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
+>   *(u32 *)(state->data) = vmcs12_revision;
 > 
-> Also the error message was copy and pasted from an earlier error and it
-> wasn't correct.
-> 
-> Fixes: 7edcb7343327 ("KVM: selftests: Add hyperv_cpuid test")
-> Signed-off-by: Dan Carpenter <dan.carpenter at oracle.com>
-> ---
->  tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c b/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
-> index 9a21e912097c..63b9fc3fdfbe 100644
-> --- a/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
-> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
-> @@ -58,9 +58,8 @@ static void test_hv_cpuid(struct kvm_cpuid2 *hv_cpuid_entries,
->  		TEST_ASSERT(entry->flags == 0,
->  			    ".flags field should be zero");
->  
-> -		TEST_ASSERT(entry->padding[0] == entry->padding[1]
-> -			    == entry->padding[2] == 0,
-> -			    ".index field should be zero");
-> +		TEST_ASSERT(!entry->padding[0] && !entry->padding[1] &&
-> +			    !entry->padding[2], "padding should be zero");
->  
->  		/*
->  		 * If needed for debug:
-> 
+> ... how do we want to handle such spots in the kvm selftest code?
+> Compile with -fno-strict-aliasing? Or fix it with type-punning through
+> unions?
 
-Queued, thanks.
+I would use memcpy.  I'll send a patch shortly.
 
 Paolo
