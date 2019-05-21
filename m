@@ -1,32 +1,34 @@
-From: willy@infradead.org (Matthew Wilcox)
-Date: Tue, 21 May 2019 12:59:28 -0700
+From: torvalds@linux-foundation.org (Linus Torvalds)
+Date: Tue, 21 May 2019 13:23:13 -0700
 Subject: [PATCH 1/2] open: add close_range()
-In-Reply-To: <20190521192009.GK17978@ZenIV.linux.org.uk>
+In-Reply-To: <20190521164141.rbehqnghiej3gfua@brauner.io>
 References: <20190521150006.GJ17978@ZenIV.linux.org.uk>
  <20190521113448.20654-1-christian@brauner.io>
  <28114.1558456227@warthog.procyon.org.uk>
- <20190521192009.GK17978@ZenIV.linux.org.uk>
-Message-ID: <20190521195928.GB6738@bombadil.infradead.org>
+ <20190521164141.rbehqnghiej3gfua@brauner.io>
+Message-ID:
+ <CAHk-=wgtHm4t71oKbykE=awiVv2H2wCy8yH0L_FsyhHQ5OSO+Q@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190521195928.17wfEzI_i6_C80lUR2JBDrqC80IC-aO2ULre8_hzxDI@z>
+Message-ID: <20190521202313.yKNeHH-yQRfeSrEJZ_QYEo-jJwI7nGnAbkoqsWdgHQU@z>
 
-On Tue, May 21, 2019@08:20:09PM +0100, Al Viro wrote:
-> On Tue, May 21, 2019@05:30:27PM +0100, David Howells wrote:
-> 
-> > If we can live with close_from(int first) rather than close_range(), then this
-> > can perhaps be done a lot more efficiently by:
-> > 
-> > 	new = alloc_fdtable(first);
-> > 	spin_lock(&files->file_lock);
-> > 	old = files_fdtable(files);
-> > 	copy_fds(new, old, 0, first - 1);
-> > 	rcu_assign_pointer(files->fdt, new);
-> > 	spin_unlock(&files->file_lock);
-> > 	clear_fds(old, 0, first - 1);
-> > 	close_fdt_from(old, first);
-> > 	kfree_rcu(old);
-> 
-> I really hate to think how that would interact with POSIX locks...
+On Tue, May 21, 2019@9:41 AM Christian Brauner <christian@brauner.io> wrote:
+>
+> Yeah, you mentioned this before. I do like being able to specify an
+> upper bound to have the ability to place fds strategically after said
+> upper bound.
 
-POSIX locks store current->files in fl_owner; David's resizing the
-underlying files->fdt, just like growing from 64 to 256 fds.
+I suspect that's the case.
+
+And if somebody really wants to just close everything and uses a large
+upper bound, we can - if we really want to - just compare the upper
+bound to the file table size, and do an optimized case for that. We do
+that upper bound comparison anyway to limit the size of the walk, so
+*if* it's a big deal, that case could then do the whole "shrink
+fdtable" case too.
+
+But I don't believe it's worth optimizing for unless somebody really
+has a load where that is shown to be a big deal.   Just do the silly
+and simple loop, and add a cond_resched() in the loop, like
+close_files() does for the "we have a _lot_ of files open" case.
+
+                   Linus
