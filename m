@@ -1,34 +1,25 @@
-From: jgg at ziepe.ca (Jason Gunthorpe)
-Date: Tue, 21 May 2019 15:48:56 -0300
-Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-In-Reply-To: <20190517144931.GA56186@arrakis.emea.arm.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <20190517144931.GA56186@arrakis.emea.arm.com>
-Message-ID: <20190521184856.GC2922@ziepe.ca>
+From: viro at zeniv.linux.org.uk (Al Viro)
+Date: Tue, 21 May 2019 20:20:09 +0100
+Subject: [PATCH 1/2] open: add close_range()
+In-Reply-To: <28114.1558456227@warthog.procyon.org.uk>
+References: <20190521150006.GJ17978@ZenIV.linux.org.uk>
+ <20190521113448.20654-1-christian@brauner.io>
+ <28114.1558456227@warthog.procyon.org.uk>
+Message-ID: <20190521192009.GK17978@ZenIV.linux.org.uk>
 
-On Fri, May 17, 2019 at 03:49:31PM +0100, Catalin Marinas wrote:
+On Tue, May 21, 2019 at 05:30:27PM +0100, David Howells wrote:
 
-> The tagged pointers (whether hwasan or MTE) should ideally be a
-> transparent feature for the application writer but I don't think we can
-> solve it entirely and make it seamless for the multitude of ioctls().
-> I'd say you only opt in to such feature if you know what you are doing
-> and the user code takes care of specific cases like ioctl(), hence the
-> prctl() proposal even for the hwasan.
+> If we can live with close_from(int first) rather than close_range(), then this
+> can perhaps be done a lot more efficiently by:
+> 
+> 	new = alloc_fdtable(first);
+> 	spin_lock(&files->file_lock);
+> 	old = files_fdtable(files);
+> 	copy_fds(new, old, 0, first - 1);
+> 	rcu_assign_pointer(files->fdt, new);
+> 	spin_unlock(&files->file_lock);
+> 	clear_fds(old, 0, first - 1);
+> 	close_fdt_from(old, first);
+> 	kfree_rcu(old);
 
-I'm not sure such a dire view is warrented.. 
-
-The ioctl situation is not so bad, other than a few special cases,
-most drivers just take a 'void __user *' and pass it as an argument to
-some function that accepts a 'void __user *'. sparse et al verify
-this. 
-
-As long as the core functions do the right thing the drivers will be
-OK.
-
-The only place things get dicy is if someone casts to unsigned long
-(ie for vma work) but I think that reflects that our driver facing
-APIs for VMAs are compatible with static analysis (ie I have no
-earthly idea why get_user_pages() accepts an unsigned long), not that
-this is too hard.
-
-Jason
+I really hate to think how that would interact with POSIX locks...
