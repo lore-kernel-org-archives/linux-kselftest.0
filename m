@@ -1,42 +1,16 @@
-From: shuah at kernel.org (shuah)
-Date: Tue, 21 May 2019 11:33:51 -0600
-Subject: [PATCH v2 5/5] kselftest: Extend vDSO selftest to clock_getres
-In-Reply-To: <252b011e-974a-2f3b-2cc3-0892d1c4a3c0@kernel.org>
-References: <20190416161434.32691-1-vincenzo.frascino@arm.com>
- <20190416161434.32691-6-vincenzo.frascino@arm.com>
- <f07e07b0-4e53-96c8-ebe2-a0f5528fa329@arm.com>
- <252b011e-974a-2f3b-2cc3-0892d1c4a3c0@kernel.org>
-Message-ID: <759f59b2-2cb3-130b-fb30-89e3fb92af33@kernel.org>
+From: pablo at netfilter.org (Pablo Neira Ayuso)
+Date: Tue, 21 May 2019 20:11:25 +0200
+Subject: [PATCH v2] selftests: netfilter: missing error check when
+ setting up veth interface
+In-Reply-To: <20190515064405.3981-1-jeffrin@rajagiritech.edu.in>
+References: <20190515064405.3981-1-jeffrin@rajagiritech.edu.in>
+Message-ID: <20190521181125.anqj32v3gcwjxs3z@salvia>
 
-On 5/21/19 10:24 AM, shuah wrote:
-> On 5/21/19 10:11 AM, Vincenzo Frascino wrote:
->> Hi Shuah,
->>
->> I did not see this patch in 5.2-rc1 and I was wondering if there is 
->> anything I
->> can do to help with upstraming it.
->>
-> 
-> Thanks for the ping.
-> 
-> Sorry about this. I saw that this part of a series and thought it
-> depends on other patches and should go through another tree.
-> 
-> Totally missed that Will suggested that I take it though selftests.
-> 
-> My bad. I will get this in - I hope there are no dependencies with other
-> trees.
-> 
-> thanks,
-> -- Shuah
-> 
-> 
+On Wed, May 15, 2019 at 12:14:04PM +0530, Jeffrin Jose T wrote:
+> A test for  the basic NAT functionality uses ip command which
+> needs veth device.There is a condition where the kernel support
+> for veth is not compiled into the kernel and the test script
+> breaks.This patch contains code for reasonable error display
+> and correct code exit.
 
-Can you take a look at the macro in this patch. It has checkpatch
-warn:
-
-WARNING: Macros with flow control statements should be avoided
-
-
-thanks,
--- Shuah
+Applied, thanks.
