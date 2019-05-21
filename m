@@ -1,28 +1,55 @@
-From: shuah at kernel.org (shuah)
-Date: Tue, 21 May 2019 10:24:20 -0600
-Subject: [PATCH v2 5/5] kselftest: Extend vDSO selftest to clock_getres
-In-Reply-To: <f07e07b0-4e53-96c8-ebe2-a0f5528fa329@arm.com>
-References: <20190416161434.32691-1-vincenzo.frascino@arm.com>
- <20190416161434.32691-6-vincenzo.frascino@arm.com>
- <f07e07b0-4e53-96c8-ebe2-a0f5528fa329@arm.com>
-Message-ID: <252b011e-974a-2f3b-2cc3-0892d1c4a3c0@kernel.org>
+From: dhowells at redhat.com (David Howells)
+Date: Tue, 21 May 2019 17:30:27 +0100
+Subject: [PATCH 1/2] open: add close_range()
+In-Reply-To: <20190521150006.GJ17978@ZenIV.linux.org.uk>
+References: <20190521150006.GJ17978@ZenIV.linux.org.uk>
+ <20190521113448.20654-1-christian@brauner.io>
+Message-ID: <28114.1558456227@warthog.procyon.org.uk>
 
-On 5/21/19 10:11 AM, Vincenzo Frascino wrote:
-> Hi Shuah,
+Al Viro <viro at zeniv.linux.org.uk> wrote:
+
+> Umm...  That's going to be very painful if you dup2() something to MAX_INT and
+> then run that; roughly 2G iterations of bouncing ->file_lock up and down,
+> without anything that would yield CPU in process.
 > 
-> I did not see this patch in 5.2-rc1 and I was wondering if there is anything I
-> can do to help with upstraming it.
+> If anything, I would suggest something like
 > 
+> 	fd = *start_fd;
+> 	grab the lock
+>         fdt = files_fdtable(files);
+> more:
+> 	look for the next eviction candidate in ->open_fds, starting at fd
+> 	if there's none up to max_fd
+> 		drop the lock
+> 		return NULL
+> 	*start_fd = fd + 1;
+> 	if the fscker is really opened and not just reserved
+> 		rcu_assign_pointer(fdt->fd[fd], NULL);
+> 		__put_unused_fd(files, fd);
+> 		drop the lock
+> 		return the file we'd got
+> 	if (unlikely(need_resched()))
+> 		drop lock
+> 		cond_resched();
+> 		grab lock
+> 		fdt = files_fdtable(files);
+> 	goto more;
+> 
+> with the main loop being basically
+> 	while ((file = pick_next(files, &start_fd, max_fd)) != NULL)
+> 		filp_close(file, files);
 
-Thanks for the ping.
+If we can live with close_from(int first) rather than close_range(), then this
+can perhaps be done a lot more efficiently by:
 
-Sorry about this. I saw that this part of a series and thought it
-depends on other patches and should go through another tree.
+	new = alloc_fdtable(first);
+	spin_lock(&files->file_lock);
+	old = files_fdtable(files);
+	copy_fds(new, old, 0, first - 1);
+	rcu_assign_pointer(files->fdt, new);
+	spin_unlock(&files->file_lock);
+	clear_fds(old, 0, first - 1);
+	close_fdt_from(old, first);
+	kfree_rcu(old);
 
-Totally missed that Will suggested that I take it though selftests.
-
-My bad. I will get this in - I hope there are no dependencies with other
-trees.
-
-thanks,
--- Shuah
+David
