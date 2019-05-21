@@ -1,43 +1,64 @@
-From: shuah@kernel.org (shuah)
-Date: Tue, 21 May 2019 08:12:43 -0600
-Subject: [PATCH 1/2] selftests: Remove forced unbuffering for test running
-In-Reply-To: <s5hlfz0757d.wl-tiwai@suse.de>
-References: <20190520223749.13476-1-keescook@chromium.org>
- <20190520223749.13476-2-keescook@chromium.org> <s5hlfz0757d.wl-tiwai@suse.de>
-Message-ID: <e6a41345-7c98-751a-80bd-34d96e6de001@kernel.org>
+From: christian@brauner.io (Christian Brauner)
+Date: Tue, 21 May 2019 16:32:22 +0200
+Subject: [PATCH v3 1/2] pid: add pidfd_open()
+In-Reply-To: <20190520155630.21684-1-christian@brauner.io>
+References: <20190520155630.21684-1-christian@brauner.io>
+Message-ID: <20190521143220.crb2zyvdov3fl4g7@brauner.io>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190521141243.e2lNMLrda2FS8QoXrTpVYwzRMhMCdmM_NQPJModho9g@z>
+Message-ID: <20190521143222.7WOvdtYBUOjSZmyFRJhOJoJFGdWklyQrNWVaRkl1Uxo@z>
 
-On 5/20/19 11:21 PM, Takashi Iwai wrote:
-> On Tue, 21 May 2019 00:37:48 +0200,
-> Kees Cook wrote:
->>
->> As it turns out, the "stdbuf" command will actually force all
->> subprocesses into unbuffered output, and some implementations of "echo"
->> turn into single-character writes, which utterly wrecks writes to /sys
->> and /proc files.
->>
->> Instead, drop the "stdbuf" usage, and for any tests that want explicit
->> flushing between newlines, they'll have to add "fflush(stdout);" as
->> needed.
->>
->> Reported-by: Takashi Iwai <tiwai at suse.de>
->> Fixes: 5c069b6dedef ("selftests: Move test output to diagnostic lines")
->> Signed-off-by: Kees Cook <keescook at chromium.org>
+On Mon, May 20, 2019@05:56:29PM +0200, Christian Brauner wrote:
+> This adds the pidfd_open() syscall. It allows a caller to retrieve pollable
+> pidfds for a process which did not get created via CLONE_PIDFD, i.e. for a
+> process that is created via traditional fork()/clone() calls that is only
+> referenced by a PID:
 > 
-> Tested-by: Takashi Iwai <tiwai at suse.de>
+> int pidfd = pidfd_open(1234, 0);
+> ret = pidfd_send_signal(pidfd, SIGSTOP, NULL, 0);
 > 
-> BTW, this might be specific to shell invocation.  As in the original
-> discussion thread, it starts working when I replace "echo" with
-> "/usr/bin/echo".
+> With the introduction of pidfds through CLONE_PIDFD it is possible to
+> created pidfds at process creation time.
+> However, a lot of processes get created with traditional PID-based calls
+> such as fork() or clone() (without CLONE_PIDFD). For these processes a
+> caller can currently not create a pollable pidfd. This is a problem for
+> Android's low memory killer (LMK) and service managers such as systemd.
+> Both are examples of tools that want to make use of pidfds to get reliable
+> notification of process exit for non-parents (pidfd polling) and race-free
+> signal sending (pidfd_send_signal()). They intend to switch to this API for
+> process supervision/management as soon as possible. Having no way to get
+> pollable pidfds from PID-only processes is one of the biggest blockers for
+> them in adopting this api. With pidfd_open() making it possible to retrieve
+> pidfds for PID-based processes we enable them to adopt this api.
 > 
-> Still it's not easy to control in a script itself, so dropping the
-> unbuffered mode is certainly safer, yes.
+> In line with Arnd's recent changes to consolidate syscall numbers across
+> architectures, I have added the pidfd_open() syscall to all architectures
+> at the same time.
 > 
-> Thanks!
+> Signed-off-by: Christian Brauner <christian at brauner.io>
+> Reviewed-by: Oleg Nesterov <oleg at redhat.com>
 
-Thank you both.
+This now also carries a Reviewed-by from David.
 
-I will get this in for next rc.
+> Acked-by: Arnd Bergmann <arnd at arndb.de>
+> Cc: "Eric W. Biederman" <ebiederm at xmission.com>
+> Cc: Kees Cook <keescook at chromium.org>
+> Cc: Joel Fernandes (Google) <joel at joelfernandes.org>
+> Cc: Thomas Gleixner <tglx at linutronix.de>
+> Cc: Jann Horn <jannh at google.com>
+> Cc: David Howells <dhowells at redhat.com>
+> Cc: Andy Lutomirsky <luto at kernel.org>
+> Cc: Andrew Morton <akpm at linux-foundation.org>
+> Cc: Aleksa Sarai <cyphar at cyphar.com>
+> Cc: Linus Torvalds <torvalds at linux-foundation.org>
+> Cc: Al Viro <viro at zeniv.linux.org.uk>
+> Cc: linux-api at vger.kernel.org
 
--- Shuah
+I've moved pidfd_open() into my for-next branch together with Joel's
+pidfd polling changes. Everything is based on v5.2-rc1.
+
+The chosen syscall number for now is 434. David is going to send out
+another pile of mount api related syscalls. I'll coordinate with him
+accordingly prior to the 5.3 merge window.
+
+Thanks!
+Christian
