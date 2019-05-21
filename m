@@ -1,58 +1,43 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Tue, 21 May 2019 15:23:23 +0200
-Subject: [PATCH 1/2] open: add close_range()
-In-Reply-To: <87h89o9cng.fsf@oldenburg2.str.redhat.com>
-References: <20190521113448.20654-1-christian@brauner.io>
- <87tvdoau12.fsf@oldenburg2.str.redhat.com>
- <20190521130438.q3u4wvve7p6md6cm@brauner.io>
- <87h89o9cng.fsf@oldenburg2.str.redhat.com>
-Message-ID: <20190521132252.y5wt7d7o4bdjns4e@brauner.io>
+From: shuah@kernel.org (shuah)
+Date: Tue, 21 May 2019 08:12:43 -0600
+Subject: [PATCH 1/2] selftests: Remove forced unbuffering for test running
+In-Reply-To: <s5hlfz0757d.wl-tiwai@suse.de>
+References: <20190520223749.13476-1-keescook@chromium.org>
+ <20190520223749.13476-2-keescook@chromium.org> <s5hlfz0757d.wl-tiwai@suse.de>
+Message-ID: <e6a41345-7c98-751a-80bd-34d96e6de001@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190521132323.GhH49TPlTwXn6TTf6pkS7eSKVyZgg-3x7UyrlqBwa4M@z>
+Message-ID: <20190521141243.e2lNMLrda2FS8QoXrTpVYwzRMhMCdmM_NQPJModho9g@z>
 
-On Tue, May 21, 2019@03:10:11PM +0200, Florian Weimer wrote:
-> * Christian Brauner:
+On 5/20/19 11:21 PM, Takashi Iwai wrote:
+> On Tue, 21 May 2019 00:37:48 +0200,
+> Kees Cook wrote:
+>>
+>> As it turns out, the "stdbuf" command will actually force all
+>> subprocesses into unbuffered output, and some implementations of "echo"
+>> turn into single-character writes, which utterly wrecks writes to /sys
+>> and /proc files.
+>>
+>> Instead, drop the "stdbuf" usage, and for any tests that want explicit
+>> flushing between newlines, they'll have to add "fflush(stdout);" as
+>> needed.
+>>
+>> Reported-by: Takashi Iwai <tiwai at suse.de>
+>> Fixes: 5c069b6dedef ("selftests: Move test output to diagnostic lines")
+>> Signed-off-by: Kees Cook <keescook at chromium.org>
 > 
-> >> Solaris has an fdwalk function:
-> >> 
-> >>   <https://docs.oracle.com/cd/E88353_01/html/E37843/closefrom-3c.html>
-> >> 
-> >> So a different way to implement this would expose a nextfd system call
-> >
-> > Meh. If nextfd() then I would like it to be able to:
-> > - get the nextfd(fd) >= fd
-> > - get highest open fd e.g. nextfd(-1)
+> Tested-by: Takashi Iwai <tiwai at suse.de>
 > 
-> The highest open descriptor isn't istering for fdwalk because nextfd
-> would just fail.
+> BTW, this might be specific to shell invocation.  As in the original
+> discussion thread, it starts working when I replace "echo" with
+> "/usr/bin/echo".
+> 
+> Still it's not easy to control in a script itself, so dropping the
+> unbuffered mode is certainly safer, yes.
+> 
+> Thanks!
 
-Sure. I was thinking about other usecases. For example, sometimes in
-userspace you want to do the following:
-save_fd = dup(fd, <well-known-number-at-the-end-of-the-range);
-close_range(3, (save_fd - 1));
+Thank you both.
 
-Which brings me to another point. So even if we don't do close_range() I
-would like libc to maybe give us something like close_range() for such
-scenarios.
+I will get this in for next rc.
 
-> 
-> > But then I wonder if nextfd() needs to be a syscall and isn't just
-> > either:
-> > fcntl(fd, F_GET_NEXT)?
-> > or
-> > prctl(PR_GET_NEXT)?
-> 
-> I think the fcntl route is a bit iffy because you might need it to get
-> the *first* valid descriptor.
-> 
-> >> to userspace, so that we can use that to implement both fdwalk and
-> >> closefrom.  But maybe fdwalk is just too obscure, given the existence of
-> >> /proc.
-> >
-> > Yeah we probably don't need fdwalk.
-> 
-> Agreed.  Just wanted to bring it up for completeness.  I certainly don't
-> want to derail the implementation of close_range.
-> 
-> Thanks,
-> Florian
+-- Shuah
