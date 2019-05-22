@@ -1,204 +1,118 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Wed, 22 May 2019 17:52:59 +0200
-Subject: [PATCH v1 2/2] tests: add close_range() tests
-In-Reply-To: <20190522155259.11174-1-christian@brauner.io>
-References: <20190522155259.11174-1-christian@brauner.io>
-Message-ID: <20190522155259.11174-2-christian@brauner.io>
+From: catalin.marinas@arm.com (Catalin Marinas)
+Date: Wed, 22 May 2019 17:35:27 +0100
+Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+In-Reply-To: <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
+ <20190521182932.sm4vxweuwo5ermyd@mbp>
+ <201905211633.6C0BF0C2@keescook>
+ <20190522101110.m2stmpaj7seezveq@mbp>
+ <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
+Message-ID: <20190522163527.rnnc6t4tll7tk5zw@mbp>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190522155259.cUyDzYTffxI4TcWho3n1W0ZY3fOXFJVP7ksnoQQYlOY@z>
+Message-ID: <20190522163527.uXfZuXEFUeDcUB-WEWOkun99PQ8JxubwoMSagPJOxz8@z>
 
-This adds basic tests for the new close_range() syscall.
-- test that no invalid flags can be passed
-- test that a range of file descriptors is correctly closed
-- test that a range of file descriptors is correctly closed if there there
-  are already closed file descriptors in the range
-- test that max_fd is correctly capped to the current fdtable maximum
+On Wed, May 22, 2019@08:30:21AM -0700, enh wrote:
+> On Wed, May 22, 2019@3:11 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > On Tue, May 21, 2019@05:04:39PM -0700, Kees Cook wrote:
+> > > I just want to make sure I fully understand your concern about this
+> > > being an ABI break, and I work best with examples. The closest situation
+> > > I can see would be:
+> > >
+> > > - some program has no idea about MTE
+> >
+> > Apart from some libraries like libc (and maybe those that handle
+> > specific device ioctls), I think most programs should have no idea about
+> > MTE. I wouldn't expect programmers to have to change their app just
+> > because we have a new feature that colours heap allocations.
+> 
+> obviously i'm biased as a libc maintainer, but...
+> 
+> i don't think it helps to move this to libc --- now you just have an
+> extra dependency where to have a guaranteed working system you need to
+> update your kernel and libc together. (or at least update your libc to
+> understand new ioctls etc _before_ you can update your kernel.)
 
-Signed-off-by: Christian Brauner <christian at brauner.io>
-Cc: Arnd Bergmann <arnd at arndb.de>
-Cc: Jann Horn <jannh at google.com>
-Cc: David Howells <dhowells at redhat.com>
-Cc: Dmitry V. Levin <ldv at altlinux.org>
-Cc: Oleg Nesterov <oleg at redhat.com>
-Cc: Linus Torvalds <torvalds at linux-foundation.org>
-Cc: Florian Weimer <fweimer at redhat.com>
-Cc: linux-api at vger.kernel.org
----
-v1: unchanged
----
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/core/.gitignore       |   1 +
- tools/testing/selftests/core/Makefile         |   6 +
- .../testing/selftests/core/close_range_test.c | 128 ++++++++++++++++++
- 4 files changed, 136 insertions(+)
- create mode 100644 tools/testing/selftests/core/.gitignore
- create mode 100644 tools/testing/selftests/core/Makefile
- create mode 100644 tools/testing/selftests/core/close_range_test.c
+That's not what I meant (or I misunderstood you). If we have a relaxed
+ABI in the kernel and a libc that returns tagged pointers on malloc() I
+wouldn't expect the programmer to do anything different in the
+application code like explicit untagging. Basically the program would
+continue to run unmodified irrespective of whether you use an old libc
+without tagged pointers or a new one which tags heap allocations.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 9781ca79794a..06e57fabbff9 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -4,6 +4,7 @@ TARGETS += bpf
- TARGETS += breakpoints
- TARGETS += capabilities
- TARGETS += cgroup
-+TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += drivers/dma-buf
-diff --git a/tools/testing/selftests/core/.gitignore b/tools/testing/selftests/core/.gitignore
-new file mode 100644
-index 000000000000..6e6712ce5817
---- /dev/null
-+++ b/tools/testing/selftests/core/.gitignore
-@@ -0,0 +1 @@
-+close_range_test
-diff --git a/tools/testing/selftests/core/Makefile b/tools/testing/selftests/core/Makefile
-new file mode 100644
-index 000000000000..de3ae68aa345
---- /dev/null
-+++ b/tools/testing/selftests/core/Makefile
-@@ -0,0 +1,6 @@
-+CFLAGS += -g -I../../../../usr/include/ -I../../../../include
-+
-+TEST_GEN_PROGS := close_range_test
-+
-+include ../lib.mk
-+
-diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
-new file mode 100644
-index 000000000000..ab10cd205ab9
---- /dev/null
-+++ b/tools/testing/selftests/core/close_range_test.c
-@@ -0,0 +1,128 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/kernel.h>
-+#include <limits.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <syscall.h>
-+#include <unistd.h>
-+
-+#include "../kselftest.h"
-+
-+static inline int sys_close_range(unsigned int fd, unsigned int max_fd,
-+				  unsigned int flags)
-+{
-+	return syscall(__NR_close_range, fd, max_fd, flags);
-+}
-+
-+#ifndef ARRAY_SIZE
-+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
-+#endif
-+
-+int main(int argc, char **argv)
-+{
-+	const char *test_name = "close_range";
-+	int i, ret;
-+	int open_fds[100];
-+	int fd_max, fd_mid, fd_min;
-+
-+	ksft_set_plan(7);
-+
-+	for (i = 0; i < ARRAY_SIZE(open_fds); i++) {
-+		int fd;
-+
-+		fd = open("/dev/null", O_RDONLY | O_CLOEXEC);
-+		if (fd < 0) {
-+			if (errno == ENOENT)
-+				ksft_exit_skip(
-+					"%s test: skipping test since /dev/null does not exist\n",
-+					test_name);
-+
-+			ksft_exit_fail_msg(
-+				"%s test: %s - failed to open /dev/null\n",
-+				strerror(errno), test_name);
-+		}
-+
-+		open_fds[i] = fd;
-+	}
-+
-+	fd_min = open_fds[0];
-+	fd_max = open_fds[99];
-+
-+	ret = sys_close_range(fd_min, fd_max, 1);
-+	if (!ret)
-+		ksft_exit_fail_msg(
-+			"%s test: managed to pass invalid flag value\n",
-+			test_name);
-+	ksft_test_result_pass("do not allow invalid flag values for close_range()\n");
-+
-+	fd_mid = open_fds[50];
-+	ret = sys_close_range(fd_min, fd_mid, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close range of file descriptors from 4 to 50\n",
-+			test_name);
-+	ksft_test_result_pass("close_range() from %d to %d\n", fd_min, fd_mid);
-+
-+	for (i = 0; i <= 50; i++) {
-+		ret = fcntl(open_fds[i], F_GETFL);
-+		if (ret >= 0)
-+			ksft_exit_fail_msg(
-+				"%s test: Failed to close range of file descriptors from 4 to 50\n",
-+				test_name);
-+	}
-+	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_min, fd_mid);
-+
-+	/* create a couple of gaps */
-+	close(57);
-+	close(78);
-+	close(81);
-+	close(82);
-+	close(84);
-+	close(90);
-+
-+	fd_mid = open_fds[51];
-+	/* Choose slightly lower limit and leave some fds for a later test */
-+	fd_max = open_fds[92];
-+	ret = sys_close_range(fd_mid, fd_max, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+			test_name);
-+	ksft_test_result_pass("close_range() from %d to %d\n", fd_mid, fd_max);
-+
-+	for (i = 51; i <= 92; i++) {
-+		ret = fcntl(open_fds[i], F_GETFL);
-+		if (ret >= 0)
-+			ksft_exit_fail_msg(
-+				"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+				test_name);
-+	}
-+	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_mid, fd_max);
-+
-+	fd_mid = open_fds[93];
-+	fd_max = open_fds[99];
-+	/* test that the kernel caps and still closes all fds */
-+	ret = sys_close_range(fd_mid, UINT_MAX, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+			test_name);
-+	ksft_test_result_pass("close_range() from %d to %d\n", fd_mid, fd_max);
-+
-+	for (i = 93; i < 100; i++) {
-+		ret = fcntl(open_fds[i], F_GETFL);
-+		if (ret >= 0)
-+			ksft_exit_fail_msg(
-+				"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+				test_name);
-+	}
-+	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_mid, fd_max);
-+
-+	return ksft_exit_pass();
-+}
+What I do expect is that the libc checks for the presence of the relaxed
+ABI, currently proposed as an AT_FLAGS bit (for MTE we'd have a
+HWCAP_MTE), and only tag the malloc() pointers if the kernel supports
+the relaxed ABI. As you said, you shouldn't expect that the C library
+and kernel are upgraded together, so they should be able to work in any
+new/old version combination.
+
+> > > The trouble I see with this is that it is largely theoretical and
+> > > requires part of userspace to collude to start using a new CPU feature
+> > > that tickles a bug in the kernel. As I understand the golden rule,
+> > > this is a bug in the kernel (a missed ioctl() or such) to be fixed,
+> > > not a global breaking of some userspace behavior.
+> >
+> > Yes, we should follow the rule that it's a kernel bug but it doesn't
+> > help the user that a newly installed kernel causes user space to no
+> > longer reach a prompt. Hence the proposal of an opt-in via personality
+> > (for MTE we would need an explicit opt-in by the user anyway since the
+> > top byte is no longer ignored but checked against the allocation tag).
+> 
+> but realistically would this actually get used in this way? or would
+> any given system either be MTE or non-MTE. in which case a kernel
+> configuration option would seem to make more sense. (because either
+> way, the hypothetical user basically needs to recompile the kernel to
+> get back on their feet. or all of userspace.)
+
+The two hard requirements I have for supporting any new hardware feature
+in Linux are (1) a single kernel image binary continues to run on old
+hardware while making use of the new feature if available and (2) old
+user space continues to run on new hardware while new user space can
+take advantage of the new feature.
+
+The distro user space usually has a hard requirement that it continues
+to run on (certain) old hardware. We can't enforce this in the kernel
+but we offer the option to user space developers of checking feature
+availability through HWCAP bits.
+
+The Android story may be different as you have more control about which
+kernel configurations are deployed on specific SoCs. I'm looking more
+from a Linux distro angle where you just get an off-the-shelf OS image
+and install it on your hardware, either taking advantage of new features
+or just not using them if the software was not updated. Or, if updated
+software is installed on old hardware, it would just run.
+
+For MTE, we just can't enable it by default since there are applications
+who use the top byte of a pointer and expect it to be ignored rather
+than failing with a mismatched tag. Just think of a hwasan compiled
+binary where TBI is expected to work and you try to run it with MTE
+turned on.
+
+I would also expect the C library or dynamic loader to check for the
+presence of a HWCAP_MTE bit before starting to tag memory allocations,
+otherwise it would get SIGILL on the first MTE instruction it tries to
+execute.
+
+> i'm not sure i see this new way for a kernel update to break my system
+> and need to be fixed forward/rolled back as any different from any of
+> the existing ways in which this can happen :-) as an end-user i have
+> to rely on whoever's sending me software updates to test adequately
+> enough that they find the problems. as an end user, there isn't any
+> difference between "my phone rebooted when i tried to take a photo
+> because of a kernel/driver leak", say, and "my phone rebooted when i
+> tried to take a photo because of missing untagging of a pointer passed
+> via ioctl".
+> 
+> i suspect you and i have very different people in mind when we say "user" :-)
+
+Indeed, I think we have different users in mind. I didn't mean the end
+user who doesn't really care which C library version it's running on
+their phone but rather advanced users (not necessarily kernel
+developers) that prefer to build their own kernels with every release.
+We could extend this to kernel developers who don't have time to track
+down why a new kernel triggers lots of SIGSEGVs during boot.
+
 -- 
-2.21.0
+Catalin
