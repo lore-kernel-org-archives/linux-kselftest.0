@@ -1,69 +1,30 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Wed, 22 May 2019 15:16:12 +0100
-Subject: [PATCH v15 17/17] selftests, arm64: add a selftest for passing
- tagged pointers to kernel
-In-Reply-To: <e31d9364eb0c2eba8ce246a558422e811d82d21b.1557160186.git.andreyknvl@google.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <e31d9364eb0c2eba8ce246a558422e811d82d21b.1557160186.git.andreyknvl@google.com>
-Message-ID: <20190522141612.GA28122@arrakis.emea.arm.com>
+From: jeffrin@rajagiritech.edu.in (Jeffrin Thalakkottoor)
+Date: Wed, 22 May 2019 19:59:53 +0530
+Subject: [PATCH v2] selftests: netfilter: missing error check when setting
+ up veth interface
+In-Reply-To: <20190521181125.anqj32v3gcwjxs3z@salvia>
+References: <20190515064405.3981-1-jeffrin@rajagiritech.edu.in>
+ <20190521181125.anqj32v3gcwjxs3z@salvia>
+Message-ID:
+ <CAG=yYwkAUzGZWdVpcjRScARyOyO9KaTCL_7LUxaav5os+6rsEA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190522141612.p9Rb9qJgapiMpVTTZhGvNpsqcKEHBmCqjHSavnWExN0@z>
+Message-ID: <20190522142953.wOqgug_osze6EAYDmDpp3pLcses8eVDUvOdPjTI2ZfU@z>
 
-On Mon, May 06, 2019@06:31:03PM +0200, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
-> 
-> This patch adds a simple test, that calls the uname syscall with a
-> tagged user pointer as an argument. Without the kernel accepting tagged
-> user pointers the test fails with EFAULT.
+Thanks to all !
 
-That's probably sufficient for a simple example. Something we could add
-to Documentation maybe is a small library that can be LD_PRELOAD'ed so
-that you can run a lot more tests like LTP.
+On Tue, May 21, 2019@11:41 PM Pablo Neira Ayuso <pablo@netfilter.org> wrote:
+>
+> On Wed, May 15, 2019@12:14:04PM +0530, Jeffrin Jose T wrote:
+> > A test for  the basic NAT functionality uses ip command which
+> > needs veth device.There is a condition where the kernel support
+> > for veth is not compiled into the kernel and the test script
+> > breaks.This patch contains code for reasonable error display
+> > and correct code exit.
+>
+> Applied, thanks.
 
-We could add this to selftests but I think it's too glibc specific.
 
---------------------8<------------------------------------
-#include <stdlib.h>
 
-#define TAG_SHIFT	(56)
-#define TAG_MASK	(0xffUL << TAG_SHIFT)
-
-void *__libc_malloc(size_t size);
-void __libc_free(void *ptr);
-void *__libc_realloc(void *ptr, size_t size);
-void *__libc_calloc(size_t nmemb, size_t size);
-
-static void *tag_ptr(void *ptr)
-{
-	unsigned long tag = rand() & 0xff;
-	if (!ptr)
-		return ptr;
-	return (void *)((unsigned long)ptr | (tag << TAG_SHIFT));
-}
-
-static void *untag_ptr(void *ptr)
-{
-	return (void *)((unsigned long)ptr & ~TAG_MASK);
-}
-
-void *malloc(size_t size)
-{
-	return tag_ptr(__libc_malloc(size));
-}
-
-void free(void *ptr)
-{
-	__libc_free(untag_ptr(ptr));
-}
-
-void *realloc(void *ptr, size_t size)
-{
-	return tag_ptr(__libc_realloc(untag_ptr(ptr), size));
-}
-
-void *calloc(size_t nmemb, size_t size)
-{
-	return tag_ptr(__libc_calloc(nmemb, size));
-}
+-- 
+software engineer
+rajagiri school of engineering and technology
