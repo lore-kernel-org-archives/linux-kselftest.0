@@ -1,236 +1,216 @@
-From: vincenzo.frascino@arm.com (Vincenzo Frascino)
-Date: Wed, 22 May 2019 16:03:30 +0100
-Subject: [PATCH v3 3/3] kselftest: Extend vDSO selftest to clock_getres
-In-Reply-To: <3a6d9b99-0026-6743-9e73-4880f3cd6b1c@c-s.fr>
-References: <20190522110722.28094-1-vincenzo.frascino@arm.com>
- <20190522110722.28094-4-vincenzo.frascino@arm.com>
- <3a6d9b99-0026-6743-9e73-4880f3cd6b1c@c-s.fr>
-Message-ID: <c0b5b233-9b06-1627-6b72-773ac4b5d69e@arm.com>
+From: enh@google.com (enh)
+Date: Wed, 22 May 2019 08:30:21 -0700
+Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+In-Reply-To: <20190522101110.m2stmpaj7seezveq@mbp>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
+ <20190521182932.sm4vxweuwo5ermyd@mbp> <201905211633.6C0BF0C2@keescook>
+ <20190522101110.m2stmpaj7seezveq@mbp>
+Message-ID:
+ <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190522150330.Av_4BJMxS3KXBXwrM4SUW4T5FuqzG2G5-DeHhMzWGyg@z>
+Message-ID: <20190522153021.CUNEwFiL9mi2g-xmp6KP7uj9hEq6NQ_GaBpfOscf-xc@z>
 
-Hi Christophe,
+On Wed, May 22, 2019@3:11 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> Hi Kees,
+>
+> Thanks for joining the thread ;).
+>
+> On Tue, May 21, 2019@05:04:39PM -0700, Kees Cook wrote:
+> > On Tue, May 21, 2019@07:29:33PM +0100, Catalin Marinas wrote:
+> > > On Mon, May 20, 2019@04:53:07PM -0700, Evgenii Stepanov wrote:
+> > > > On Fri, May 17, 2019@7:49 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > > > IMO (RFC for now), I see two ways forward:
+> > > > > [...]
+> > > > > 2. Similar shim to the above libc wrapper but inside the kernel
+> > > > >    (arch/arm64 only; most pointer arguments could be covered with an
+> > > > >    __SC_CAST similar to the s390 one). There are two differences from
+> > > > >    what we've discussed in the past:
+> > > > >
+> > > > >    a) this is an opt-in by the user which would have to explicitly call
+> > > > >       prctl(). If it returns -ENOTSUPP etc., the user won't be allowed
+> > > > >       to pass tagged pointers to the kernel. This would probably be the
+> > > > >       responsibility of the C lib to make sure it doesn't tag heap
+> > > > >       allocations. If the user did not opt-in, the syscalls are routed
+> > > > >       through the normal path (no untagging address shim).
+> > > > >
+> > > > >    b) ioctl() and other blacklisted syscalls (prctl) will not accept
+> > > > >       tagged pointers (to be documented in Vicenzo's ABI patches).
+> > > >
+> > > > The way I see it, a patch that breaks handling of tagged pointers is
+> > > > not that different from, say, a patch that adds a wild pointer
+> > > > dereference. Both are bugs; the difference is that (a) the former
+> > > > breaks a relatively uncommon target and (b) it's arguably an easier
+> > > > mistake to make. If MTE adoption goes well, (a) will not be the case
+> > > > for long.
+> > >
+> > > It's also the fact such patch would go unnoticed for a long time until
+> > > someone exercises that code path. And when they do, the user would be
+> > > pretty much in the dark trying to figure what what went wrong, why a
+> > > SIGSEGV or -EFAULT happened. What's worse, we can't even say we fixed
+> > > all the places where it matters in the current kernel codebase (ignoring
+> > > future patches).
+> >
+> > So, looking forward a bit, this isn't going to be an ARM-specific issue
+> > for long.
+>
+> I do hope so.
+>
+> > In fact, I think we shouldn't have arm-specific syscall wrappers
+> > in this series: I think untagged_addr() should likely be added at the
+> > top-level and have it be a no-op for other architectures.
+>
+> That's what the current patchset does, so we have this as a starting
+> point. Kostya raised another potential issue with the syscall wrappers:
+> with MTE the kernel will be forced to enable the match-all (wildcard)
+> pointers for user space accesses since copy_from_user() would only get a
+> 0 tag. So it has wider implications than just uaccess routines not
+> checking the colour.
+>
+> > So given this becoming a kernel-wide multi-architecture issue (under
+> > the assumption that x86, RISC-V, and others will gain similar TBI or
+> > MTE things), we should solve it in a way that we can re-use.
+>
+> Can we do any better to aid the untagged_addr() placement (e.g. better
+> type annotations, better static analysis)? We have to distinguish
+> between user pointers that may be dereferenced by the kernel (I think
+> almost fully covered with this patchset) and user addresses represented
+> as ulong that may:
+>
+> a) be converted to a user pointer and dereferenced; I think that's the
+>    case for many overloaded ulong/u64 arguments
+>
+> b) used for address space management, rbtree look-ups etc. where the tag
+>    is no longer relevant and it even gets in the way
+>
+> We tried last year to identify void __user * casts to unsigned long
+> using sparse on the assumption that pointers can be tagged while ulong
+> is about address space management and needs to lose such tag. I think we
+> could have pushed this further. For example, get_user_pages() takes an
+> unsigned long but it is perfectly capable of untagging the address
+> itself. Shall we change its first argument to void __user * (together
+> with all its callers)?
+>
+> find_vma(), OTOH, could untag the address but it doesn't help since
+> vm_start/end don't have such information (that's more about the content
+> or type that the user decided) and the callers check against it.
+>
+> Are there any other places where this matters? These patches tracked
+> down find_vma() as some heuristics but we may need better static
+> analysis to identify other cases.
+>
+> > We need something that is going to work everywhere. And it needs to be
+> > supported by the kernel for the simple reason that the kernel needs to
+> > do MTE checks during copy_from_user(): having that information stripped
+> > means we lose any userspace-assigned MTE protections if they get handled
+> > by the kernel, which is a total non-starter, IMO.
+>
+> Such feedback is welcomed ;).
+>
+> > As an aside: I think Sparc ADI support in Linux actually side-stepped
+> > this[1] (i.e. chose "solution 1"): "All addresses passed to kernel must
+> > be non-ADI tagged addresses." (And sadly, "Kernel does not enable ADI
+> > for kernel code.") I think this was a mistake we should not repeat for
+> > arm64 (we do seem to be at least in agreement about this, I think).
+> >
+> > [1] https://lore.kernel.org/patchwork/patch/654481/
+>
+> I tried to drag the SPARC guys into this discussion but without much
+> success.
+>
+> > > > This is a bit of a chicken-and-egg problem. In a world where memory
+> > > > allocators on one or several popular platforms generate pointers with
+> > > > non-zero tags, any such breakage will be caught in testing.
+> > > > Unfortunately to reach that state we need the kernel to start
+> > > > accepting tagged pointers first, and then hold on for a couple of
+> > > > years until userspace catches up.
+> > >
+> > > Would the kernel also catch up with providing a stable ABI? Because we
+> > > have two moving targets.
+> > >
+> > > On one hand, you have Android or some Linux distro that stick to a
+> > > stable kernel version for some time, so they have better chance of
+> > > clearing most of the problems. On the other hand, we have mainline
+> > > kernel that gets over 500K lines every release. As maintainer, I can't
+> > > rely on my testing alone as this is on a limited number of platforms. So
+> > > my concern is that every kernel release has a significant chance of
+> > > breaking the ABI, unless we have a better way of identifying potential
+> > > issues.
+> >
+> > I just want to make sure I fully understand your concern about this
+> > being an ABI break, and I work best with examples. The closest situation
+> > I can see would be:
+> >
+> > - some program has no idea about MTE
+>
+> Apart from some libraries like libc (and maybe those that handle
+> specific device ioctls), I think most programs should have no idea about
+> MTE. I wouldn't expect programmers to have to change their app just
+> because we have a new feature that colours heap allocations.
 
-thank you for your review.
+obviously i'm biased as a libc maintainer, but...
 
-On 22/05/2019 12:50, Christophe Leroy wrote:
-> 
-> 
-> Le 22/05/2019 à 13:07, Vincenzo Frascino a écrit :
->> The current version of the multiarch vDSO selftest verifies only
->> gettimeofday.
->>
->> Extend the vDSO selftest to clock_getres, to verify that the
->> syscall and the vDSO library function return the same information.
->>
->> The extension has been used to verify the hrtimer_resoltion fix.
->>
->> Cc: Shuah Khan <shuah at kernel.org>
->> Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
->> ---
->>
->> Note: This patch is independent from the others in this series, hence it
->> can be merged singularly by the kselftest maintainers.
->>
->>   tools/testing/selftests/vDSO/Makefile         |   2 +
->>   .../selftests/vDSO/vdso_clock_getres.c        | 137 ++++++++++++++++++
->>   2 files changed, 139 insertions(+)
->>   create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
->>
->> diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
->> index 9e03d61f52fd..d5c5bfdf1ac1 100644
->> --- a/tools/testing/selftests/vDSO/Makefile
->> +++ b/tools/testing/selftests/vDSO/Makefile
->> @@ -5,6 +5,7 @@ uname_M := $(shell uname -m 2>/dev/null || echo not)
->>   ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
->>   
->>   TEST_GEN_PROGS := $(OUTPUT)/vdso_test
->> +TEST_GEN_PROGS += $(OUTPUT)/vdso_clock_getres
->>   ifeq ($(ARCH),x86)
->>   TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
->>   endif
->> @@ -18,6 +19,7 @@ endif
->>   
->>   all: $(TEST_GEN_PROGS)
->>   $(OUTPUT)/vdso_test: parse_vdso.c vdso_test.c
->> +$(OUTPUT)/vdso_clock_getres: vdso_clock_getres.c
->>   $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
->>   	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
->>   		vdso_standalone_test_x86.c parse_vdso.c \
->> diff --git a/tools/testing/selftests/vDSO/vdso_clock_getres.c b/tools/testing/selftests/vDSO/vdso_clock_getres.c
->> new file mode 100644
->> index 000000000000..341a9bc34ffc
->> --- /dev/null
->> +++ b/tools/testing/selftests/vDSO/vdso_clock_getres.c
->> @@ -0,0 +1,137 @@
->> +// SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
->> +/*
->> + * vdso_clock_getres.c: Sample code to test clock_getres.
->> + * Copyright (c) 2019 Arm Ltd.
->> + *
->> + * Compile with:
->> + * gcc -std=gnu99 vdso_clock_getres.c
->> + *
->> + * Tested on ARM, ARM64, MIPS32, x86 (32-bit and 64-bit),
->> + * Power (32-bit and 64-bit), S390x (32-bit and 64-bit).
->> + * Might work on other architectures.
->> + */
->> +
->> +#define _GNU_SOURCE
->> +#include <elf.h>
->> +#include <err.h>
->> +#include <fcntl.h>
->> +#include <stdint.h>
->> +#include <stdio.h>
->> +#include <stdlib.h>
->> +#include <time.h>
->> +#include <sys/auxv.h>
->> +#include <sys/mman.h>
->> +#include <sys/time.h>
->> +#include <unistd.h>
->> +#include <sys/syscall.h>
->> +
->> +#include "../kselftest.h"
->> +
->> +static long syscall_clock_getres(clockid_t _clkid, struct timespec *_ts)
->> +{
->> +	long ret;
->> +
->> +	ret = syscall(SYS_clock_getres, _clkid, _ts);
->> +
->> +	return ret;
->> +}
->> +
->> +const char *vdso_clock_name[12] = {
->> +	"CLOCK_REALTIME",
->> +	"CLOCK_MONOTONIC",
->> +	"CLOCK_PROCESS_CPUTIME_ID",
->> +	"CLOCK_THREAD_CPUTIME_ID",
->> +	"CLOCK_MONOTONIC_RAW",
->> +	"CLOCK_REALTIME_COARSE",
->> +	"CLOCK_MONOTONIC_COARSE",
->> +	"CLOCK_BOOTTIME",
->> +	"CLOCK_REALTIME_ALARM",
->> +	"CLOCK_BOOTTIME_ALARM",
->> +	"CLOCK_SGI_CYCLE",
->> +	"CLOCK_TAI",
->> +};
->> +
->> +/*
->> + * This function calls clock_getres in vdso and by system call
->> + * with different values for clock_id.
->> + *
->> + * Example of output:
->> + *
->> + * clock_id: CLOCK_REALTIME [PASS]
->> + * clock_id: CLOCK_BOOTTIME [PASS]
->> + * clock_id: CLOCK_TAI [PASS]
->> + * clock_id: CLOCK_REALTIME_COARSE [PASS]
->> + * clock_id: CLOCK_MONOTONIC [PASS]
->> + * clock_id: CLOCK_MONOTONIC_RAW [PASS]
->> + * clock_id: CLOCK_MONOTONIC_COARSE [PASS]
->> + */
->> +static inline int vdso_test_clock(unsigned int clock_id)
->> +{
->> +	struct timespec x, y;
->> +
->> +	printf("clock_id: %s", vdso_clock_name[clock_id]);
->> +	clock_getres(clock_id, &x);
->> +	syscall_clock_getres(clock_id, &y);
->> +
->> +	if ((x.tv_sec != y.tv_sec) || (x.tv_sec != y.tv_sec)) {
->> +		printf(" [FAIL]\n");
->> +		return KSFT_FAIL;
->> +	}
->> +
->> +	printf(" [PASS]\n");
->> +	return 0;
->> +}
->> +
->> +int main(int argc, char **argv)
->> +{
->> +	int ret;
->> +
->> +#if _POSIX_TIMERS > 0
->> +
->> +#ifdef CLOCK_REALTIME
-> 
-> Why do you need that #ifdef and all the ones below ?
-> 
-> CLOCK_REALTIME (and others) is defined in include/uapi/linux/time.h, so 
-> it should be there when you build the test, shouldn't it ?
-> 
+i don't think it helps to move this to libc --- now you just have an
+extra dependency where to have a guaranteed working system you need to
+update your kernel and libc together. (or at least update your libc to
+understand new ioctls etc _before_ you can update your kernel.)
 
-In implementing this test I tried to follow what the man page for
-clock_gettime(2) defines in terms of availability of the timers. Since I do not
-know how old are the userspace headers, I think it is a good idea checking that
-the clocks are defined before trying to use them.
+> > - malloc() starts returning MTE-tagged addresses
+> > - program doesn't break from that change
+> > - program uses some syscall that is missing untagged_addr() and fails
+> > - kernel has now broken userspace that used to work
+>
+> That's one aspect though probably more of a case of plugging in a new
+> device (graphics card, network etc.) and the ioctl to the new device
+> doesn't work.
+>
+> The other is that, assuming we reach a point where the kernel entirely
+> supports this relaxed ABI, can we guarantee that it won't break in the
+> future. Let's say some subsequent kernel change (some refactoring)
+> misses out an untagged_addr(). This renders a previously TBI/MTE-capable
+> syscall unusable. Can we rely only on testing?
+>
+> > The trouble I see with this is that it is largely theoretical and
+> > requires part of userspace to collude to start using a new CPU feature
+> > that tickles a bug in the kernel. As I understand the golden rule,
+> > this is a bug in the kernel (a missed ioctl() or such) to be fixed,
+> > not a global breaking of some userspace behavior.
+>
+> Yes, we should follow the rule that it's a kernel bug but it doesn't
+> help the user that a newly installed kernel causes user space to no
+> longer reach a prompt. Hence the proposal of an opt-in via personality
+> (for MTE we would need an explicit opt-in by the user anyway since the
+> top byte is no longer ignored but checked against the allocation tag).
 
->> +	ret = vdso_test_clock(CLOCK_REALTIME);
->> +	if (ret)
->> +		goto out;
-> 
-> Why that goto ? Nothing is done at out, so a 'return ret' would be 
-> better I think.
-> 
+but realistically would this actually get used in this way? or would
+any given system either be MTE or non-MTE. in which case a kernel
+configuration option would seem to make more sense. (because either
+way, the hypothetical user basically needs to recompile the kernel to
+get back on their feet. or all of userspace.)
 
-Agree, thanks for pointing this out. Will fix in v4.
+i'm not sure i see this new way for a kernel update to break my system
+and need to be fixed forward/rolled back as any different from any of
+the existing ways in which this can happen :-) as an end-user i have
+to rely on whoever's sending me software updates to test adequately
+enough that they find the problems. as an end user, there isn't any
+difference between "my phone rebooted when i tried to take a photo
+because of a kernel/driver leak", say, and "my phone rebooted when i
+tried to take a photo because of missing untagging of a pointer passed
+via ioctl".
 
-> And do we really want to stop at first failure ? Wouldn't it be better 
-> to run all the tests regardless ?
-> 
+i suspect you and i have very different people in mind when we say "user" :-)
 
-The test is supposed to fail if one of the sub-tests fails, hence once the first
-fails doesn't seem convenient to run the others, because we already know the
-result.
-
-> Christophe
-> 
->> +#endif
->> +
->> +#ifdef CLOCK_BOOTTIME
->> +	ret = vdso_test_clock(CLOCK_BOOTTIME);
->> +	if (ret)
->> +		goto out;
->> +#endif
->> +
->> +#ifdef CLOCK_TAI
->> +	ret = vdso_test_clock(CLOCK_TAI);
->> +	if (ret)
->> +		goto out;
->> +#endif
->> +
->> +#ifdef CLOCK_REALTIME_COARSE
->> +	ret = vdso_test_clock(CLOCK_REALTIME_COARSE);
->> +	if (ret)
->> +		goto out;
->> +#endif
->> +
->> +#ifdef CLOCK_MONOTONIC
->> +	ret = vdso_test_clock(CLOCK_MONOTONIC);
->> +	if (ret)
->> +		goto out;
->> +#endif
->> +
->> +#ifdef CLOCK_MONOTONIC_RAW
->> +	ret = vdso_test_clock(CLOCK_MONOTONIC_RAW);
->> +	if (ret)
->> +		goto out;
->> +#endif
->> +
->> +#ifdef CLOCK_MONOTONIC_COARSE
->> +	ret = vdso_test_clock(CLOCK_MONOTONIC_COARSE);
->> +	if (ret)
->> +		goto out;
->> +#endif
->> +
->> +#endif
->> +
->> +out:
->> +	return ret;
->> +}
->>
-
--- 
-Regards,
-Vincenzo
+> > I feel like I'm missing something about this being seen as an ABI
+> > break. The kernel already fails on userspace addresses that have high
+> > bits set -- are there things that _depend_ on this failure to operate?
+>
+> It's about providing a relaxed ABI which allows non-zero top byte and
+> breaking it later inadvertently without having something better in place
+> to analyse the kernel changes.
+>
+> Thanks.
+>
+> --
+> Catalin
