@@ -1,31 +1,49 @@
-From: luto@kernel.org (Andy Lutomirski)
-Date: Wed, 22 May 2019 10:01:17 -0700
-Subject: [PATCH RFC v8 01/10] namei: obey trailing magic-link DAC
- permissions
-In-Reply-To: <20190520133305.11925-2-cyphar@cyphar.com>
-References: <20190520133305.11925-1-cyphar@cyphar.com>
- <20190520133305.11925-2-cyphar@cyphar.com>
-Message-ID:
- <CALCETrVCwe49q5mu=f6jTYNSgosQSjjY5chukMPo6eZtQGqo5g@mail.gmail.com>
+From: sashal@kernel.org (Sasha Levin)
+Date: Wed, 22 May 2019 15:22:35 -0400
+Subject: [PATCH AUTOSEL 4.19 009/244] selftests/bpf: set RLIMIT_MEMLOCK
+ properly for test_libbpf_open.c
+In-Reply-To: <20190522192630.24917-1-sashal@kernel.org>
+References: <20190522192630.24917-1-sashal@kernel.org>
+Message-ID: <20190522192630.24917-9-sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190522170117.OcmoxIJJZbdnXe6aL2LCKjO-2EllwZGz9eXkLI_mN1c@z>
+Message-ID: <20190522192235.4Gh5glR6aBDhO6hH8S0VwOaT0Gi81AYP4c9ALuRosBs@z>
 
-On Mon, May 20, 2019@6:34 AM Aleksa Sarai <cyphar@cyphar.com> wrote:
-> One final exception is given, which is that non-O_PATH file descriptors
-> are given re-open rights equivalent to the permissions available at
-> open-time. This allows for O_RDONLY file descriptors to be re-opened
-> O_RDWR as long as the user had MAY_WRITE access at the time of opening
-> the O_RDONLY descriptor. This is necessary to avoid breaking userspace
-> (some of the kernel's own selftests depended on this "feature").
+From: Yonghong Song <yhs@fb.com>
 
-Can you clarify this exception a bit?  I'd like to make sure it's not
-such a huge exception that it invalidates the whole point of the
-patch.  If you open a file for execute, by actually exec()ing it or by
-using something like the proposed O_MAYEXEC, and you have
-inode_permission to write, do you still end up with FMODE_PATH_WRITE?
-The code looks like it does, and this seems like it might be a
-mistake.  Is there any way for user code to read out these new file
-mode bits?
+[ Upstream commit 6cea33701eb024bc6c920ab83940ee22afd29139 ]
 
-What are actual examples of uses for this exception?  Breaking
-selftests is not, in and of itself, a huge problem.
+Test test_libbpf.sh failed on my development server with failure
+  -bash-4.4$ sudo ./test_libbpf.sh
+  [0] libbpf: Error in bpf_object__probe_name():Operation not permitted(1).
+      Couldn't load basic 'r0 = 0' BPF program.
+  test_libbpf: failed at file test_l4lb.o
+  selftests: test_libbpf [FAILED]
+  -bash-4.4$
+
+The reason is because my machine has 64KB locked memory by default which
+is not enough for this program to get locked memory.
+Similar to other bpf selftests, let us increase RLIMIT_MEMLOCK
+to infinity, which fixed the issue.
+
+Signed-off-by: Yonghong Song <yhs at fb.com>
+Signed-off-by: Alexei Starovoitov <ast at kernel.org>
+Signed-off-by: Sasha Levin <sashal at kernel.org>
+---
+ tools/testing/selftests/bpf/test_libbpf_open.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/test_libbpf_open.c b/tools/testing/selftests/bpf/test_libbpf_open.c
+index 8fcd1c076add0..cbd55f5f8d598 100644
+--- a/tools/testing/selftests/bpf/test_libbpf_open.c
++++ b/tools/testing/selftests/bpf/test_libbpf_open.c
+@@ -11,6 +11,8 @@ static const char *__doc__ =
+ #include <bpf/libbpf.h>
+ #include <getopt.h>
+ 
++#include "bpf_rlimit.h"
++
+ static const struct option long_options[] = {
+ 	{"help",	no_argument,		NULL, 'h' },
+ 	{"debug",	no_argument,		NULL, 'D' },
+-- 
+2.20.1
