@@ -1,45 +1,36 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Wed, 22 May 2019 10:12:11 +0200
-Subject: [PATCH 1/2] open: add close_range()
-In-Reply-To: <CAHk-=wgtHm4t71oKbykE=awiVv2H2wCy8yH0L_FsyhHQ5OSO+Q@mail.gmail.com>
-References: <20190521150006.GJ17978@ZenIV.linux.org.uk>
- <20190521113448.20654-1-christian@brauner.io>
- <28114.1558456227@warthog.procyon.org.uk>
- <20190521164141.rbehqnghiej3gfua@brauner.io>
- <CAHk-=wgtHm4t71oKbykE=awiVv2H2wCy8yH0L_FsyhHQ5OSO+Q@mail.gmail.com>
-Message-ID:
- <CAHrFyr4NV_5Z7TRSXTaurd4KCTLiHqKb47dN=bdY46HiL9ZY3Q@mail.gmail.com>
+From: drjones@redhat.com (Andrew Jones)
+Date: Wed, 22 May 2019 10:44:09 +0200
+Subject: [RFC PATCH 0/4] KVM selftests for s390x
+In-Reply-To: <4d94124e-00f6-aa65-3a4a-bd8910480329@redhat.com>
+References: <20190516111253.4494-1-thuth@redhat.com>
+ <b412e591-3983-ebef-510b-43f9b7be4147@redhat.com>
+ <9423ba89-b10e-5e6e-3cc8-8088f3088233@redhat.com>
+ <4d94124e-00f6-aa65-3a4a-bd8910480329@redhat.com>
+Message-ID: <20190522084409.qz5hs7lqj65qg6x5@kamzik.brq.redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190522081211.urfsH7Od9OuXnL6dUXs7BcSsmMVp2_hkVsjTCSmTIHU@z>
+Message-ID: <20190522084409.IcrsLkyI2SfDD-8uLiUdxdBNRkFYFXXSpl1ungrezfw@z>
 
-On Tue, May 21, 2019 at 10:23 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, May 21, 2019@9:41 AM Christian Brauner <christian@brauner.io> wrote:
-> >
-> > Yeah, you mentioned this before. I do like being able to specify an
-> > upper bound to have the ability to place fds strategically after said
-> > upper bound.
->
-> I suspect that's the case.
->
-> And if somebody really wants to just close everything and uses a large
-> upper bound, we can - if we really want to - just compare the upper
-> bound to the file table size, and do an optimized case for that. We do
-> that upper bound comparison anyway to limit the size of the walk, so
-> *if* it's a big deal, that case could then do the whole "shrink
-> fdtable" case too.
+On Mon, May 20, 2019@01:43:06PM +0200, Paolo Bonzini wrote:
+> On 20/05/19 13:30, Thomas Huth wrote:
+> >> No objections at all, though it would be like to have ucall plumbed in
+> >> from the beginning.
+> > I'm still looking at the ucall interface ... what I don't quite get yet
+> > is the question why the ucall_type there is selectable during runtime?
+> > 
+> > Are there plans to have test that could either use UCALL_PIO or
+> > UCALL_MMIO? If not, what about moving ucall_init() and ucall() to
+> > architecture specific code in tools/testing/selftests/kvm/lib/aarch64/
+> > and tools/testing/selftests/kvm/lib/x86_64 instead, and to remove the
+> > ucall_type stuff again (so that x86 is hard-wired to PIO and aarch64
+> > is hard-wired to MMIO)? ... then I could add a DIAG-based ucall
+> > on s390x more easily, I think.
+> 
+> Yes, that would work.  I think Andrew wanted the flexibility to use MMIO
+> on x86, but it's not really necessary to have it.
 
-Makes sense.
+If the flexibility isn't necessary, then I agree that it'll be nicer to
+put the ucall_init() in arch setup code, avoiding the need to remember
+it in each unit test.
 
->
-> But I don't believe it's worth optimizing for unless somebody really
-> has a load where that is shown to be a big deal.   Just do the silly
-> and simple loop, and add a cond_resched() in the loop, like
-> close_files() does for the "we have a _lot_ of files open" case.
-
-Ok. I will resend a v1 later with the cond_resched() logic you and Al
-suggested added.
-
-Thanks!
-Christian
+Thanks,
+drew
