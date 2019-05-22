@@ -1,29 +1,75 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Wed, 22 May 2019 11:56:10 +0100
-Subject: [PATCH v15 04/17] mm: add ksys_ wrappers to memory syscalls
-In-Reply-To: <55496bc72542ec14c4c8de23a4df235644013911.1557160186.git.andreyknvl@google.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <55496bc72542ec14c4c8de23a4df235644013911.1557160186.git.andreyknvl@google.com>
-Message-ID: <20190522105609.jpmaiq3adyh6apx2@mbp>
+From: vincenzo.frascino@arm.com (Vincenzo Frascino)
+Date: Wed, 22 May 2019 12:07:19 +0100
+Subject: [PATCH v3 0/3] Fix vDSO clock_getres()
+Message-ID: <20190522110722.28094-1-vincenzo.frascino@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190522105610.WXpCznetCAkc25OZ-ap4bP28zkcYX0pk2E6CVXpBGyI@z>
+Message-ID: <20190522110719.2NA6PQ-l3F4JwboAjHEVkOK767kQsTpdZhv4qk9UJng@z>
 
-On Mon, May 06, 2019@06:30:50PM +0200, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
-> 
-> This patch adds ksys_ wrappers to the following memory syscalls:
-> 
-> brk, get_mempolicy (renamed kernel_get_mempolicy -> ksys_get_mempolicy),
-> madvise, mbind (renamed kernel_mbind -> ksys_mbind), mincore,
-> mlock (renamed do_mlock -> ksys_mlock), mlock2, mmap_pgoff,
-> mprotect (renamed do_mprotect_pkey -> ksys_mprotect_pkey), mremap, msync,
-> munlock, munmap, remap_file_pages, shmat, shmdt.
-> 
-> The next patch in this series will add a custom implementation for these
-> syscalls that makes them accept tagged pointers on arm64.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+clock_getres in the vDSO library has to preserve the same behaviour
+of posix_get_hrtimer_res().
 
-Reviewed-by: Catalin Marinas <catalin.marinas at arm.com>
+In particular, posix_get_hrtimer_res() does:
+    sec = 0;
+    ns = hrtimer_resolution;
+and hrtimer_resolution depends on the enablement of the high
+resolution timers that can happen either at compile or at run time.
+
+A possible fix is to change the vdso implementation of clock_getres,
+keeping a copy of hrtimer_resolution in vdso data and using that
+directly [1].
+
+This patchset implements the proposed fix for arm64, powerpc, s390,
+nds32 and adds a test to verify that the syscall and the vdso library
+implementation of clock_getres return the same values.
+
+Even if these patches are unified by the same topic, there is no
+dependency between them, hence they can be merged singularly by each
+arch maintainer.
+
+Note: arm64 and nds32 respective fixes have been merged in 5.2-rc1,
+hence they have been removed from this series.
+
+[1] https://marc.info/?l=linux-arm-kernel&m=155110381930196&w=2
+
+Changes:
+--------
+v3:
+  - Rebased on 5.2-rc1.
+  - Addressed review comments.
+v2:
+  - Rebased on 5.1-rc5.
+  - Addressed review comments.
+
+Cc: Christophe Leroy <christophe.leroy at c-s.fr>
+Cc: Benjamin Herrenschmidt <benh at kernel.crashing.org>
+Cc: Paul Mackerras <paulus at samba.org>
+Cc: Michael Ellerman <mpe at ellerman.id.au>
+Cc: Martin Schwidefsky <schwidefsky at de.ibm.com>
+Cc: Heiko Carstens <heiko.carstens at de.ibm.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Arnd Bergmann <arnd at arndb.de>
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
+
+Vincenzo Frascino (3):
+  powerpc: Fix vDSO clock_getres()
+  s390: Fix vDSO clock_getres()
+  kselftest: Extend vDSO selftest to clock_getres
+
+ arch/powerpc/include/asm/vdso_datapage.h      |   2 +
+ arch/powerpc/kernel/asm-offsets.c             |   2 +-
+ arch/powerpc/kernel/time.c                    |   1 +
+ arch/powerpc/kernel/vdso32/gettimeofday.S     |   7 +-
+ arch/powerpc/kernel/vdso64/gettimeofday.S     |   7 +-
+ arch/s390/include/asm/vdso.h                  |   1 +
+ arch/s390/kernel/asm-offsets.c                |   2 +-
+ arch/s390/kernel/time.c                       |   1 +
+ arch/s390/kernel/vdso32/clock_getres.S        |  12 +-
+ arch/s390/kernel/vdso64/clock_getres.S        |  10 +-
+ tools/testing/selftests/vDSO/Makefile         |   2 +
+ .../selftests/vDSO/vdso_clock_getres.c        | 137 ++++++++++++++++++
+ 12 files changed, 168 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
+
+-- 
+2.21.0
