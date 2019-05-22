@@ -1,182 +1,88 @@
-From: brendanhiggins@google.com (Brendan Higgins)
-Date: Wed, 22 May 2019 14:38:48 -0700
-Subject: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-In-Reply-To: <20190515074141.GY17751@phenom.ffwll.local>
-References: <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
- <20190509214233.GA20877@mit.edu>
- <80c72e64-2665-bd51-f78c-97f50f9a53ba@gmail.com>
- <20190511173344.GA8507@mit.edu>
- <20190513144451.GQ17751@phenom.ffwll.local>
- <20190514060433.GA181462@google.com>
- <CAKMK7uHqtSF_sazJTbFL+xmQJRk4iwukCKZHoDHhsKkLXk=ECQ@mail.gmail.com>
- <20190514183618.GC109557@google.com>
- <20190515074141.GY17751@phenom.ffwll.local>
+From: eugenis@google.com (Evgenii Stepanov)
+Date: Wed, 22 May 2019 16:03:36 -0700
+Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+In-Reply-To: <201905221316.865581CF@keescook>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
+ <20190521182932.sm4vxweuwo5ermyd@mbp> <201905211633.6C0BF0C2@keescook>
+ <20190522101110.m2stmpaj7seezveq@mbp>
+ <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
+ <20190522163527.rnnc6t4tll7tk5zw@mbp> <201905221316.865581CF@keescook>
 Message-ID:
- <CAFd5g476Hc+6jL5sV=VJamXCbqGebwHqqN9N9RppQYMCoo052Q@mail.gmail.com>
+ <CAFKCwrjOjdJAbcABp3qxwyYy+hgfyQirvmqGkDSJVJe5pSz0Uw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190522213848.Dz33v_7vyQaMLAYHb1mxBEzj5rPntw2S5NnrgX2j0aE@z>
+Message-ID: <20190522230336.bfyuH2bAPYv7rrWYM6HSS_UPNZ2R8wWbZ_4nKu9IbX4@z>
 
-+Bjorn Helgaas
-
-On Wed, May 15, 2019@12:41 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+On Wed, May 22, 2019@1:47 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> On Tue, May 14, 2019@11:36:18AM -0700, Brendan Higgins wrote:
-> > On Tue, May 14, 2019@02:05:05PM +0200, Daniel Vetter wrote:
-> > > On Tue, May 14, 2019 at 8:04 AM Brendan Higgins
-> > > <brendanhiggins@google.com> wrote:
-> > > >
-> > > > On Mon, May 13, 2019@04:44:51PM +0200, Daniel Vetter wrote:
-> > > > > On Sat, May 11, 2019@01:33:44PM -0400, Theodore Ts'o wrote:
-> > > > > > On Fri, May 10, 2019@02:12:40PM -0700, Frank Rowand wrote:
-> > > > > > > However, the reply is incorrect.  Kselftest in-kernel tests (which
-> > > > > > > is the context here) can be configured as built in instead of as
-> > > > > > > a module, and built in a UML kernel.  The UML kernel can boot,
-> > > > > > > running the in-kernel tests before UML attempts to invoke the
-> > > > > > > init process.
-> > > > > >
-> > > > > > Um, Citation needed?
-> > > > > >
-> > > > > > I don't see any evidence for this in the kselftest documentation, nor
-> > > > > > do I see any evidence of this in the kselftest Makefiles.
-> > > > > >
-> > > > > > There exists test modules in the kernel that run before the init
-> > > > > > scripts run --- but that's not strictly speaking part of kselftests,
-> > > > > > and do not have any kind of infrastructure.  As noted, the
-> > > > > > kselftests_harness header file fundamentally assumes that you are
-> > > > > > running test code in userspace.
-> > > > >
-> > > > > Yeah I really like the "no userspace required at all" design of kunit,
-> > > > > while still collecting results in a well-defined way (unless the current
-> > > > > self-test that just run when you load the module, with maybe some
-> > > > > kselftest ad-hoc wrapper around to collect the results).
-> > > > >
-> > > > > What I want to do long-term is to run these kernel unit tests as part of
-> > > > > the build-testing, most likely in gitlab (sooner or later, for drm.git
-> > > >
-> > > > Totally! This is part of the reason I have been insisting on a minimum
-> > > > of UML compatibility for all unit tests. If you can suffiently constrain
-> > > > the environment that is required for tests to run in, it makes it much
-> > > > easier not only for a human to run your tests, but it also makes it a
-> > > > lot easier for an automated service to be able to run your tests.
-> > > >
-> > > > I actually have a prototype presubmit already working on my
-> > > > "stable/non-upstream" branch. You can checkout what presubmit results
-> > > > look like here[1][2].
-> > >
-> > > ug gerrit :-)
-> >
-> > Yeah, yeah, I know, but it is a lot easier for me to get a project set
-> > up here using Gerrit, when we already use that for a lot of other
-> > projects.
-> >
-> > Also, Gerrit has gotten a lot better over the last two years or so. Two
-> > years ago, I wouldn't touch it with a ten foot pole. It's not so bad
-> > anymore, at least if you are used to using a web UI to review code.
+> On Wed, May 22, 2019@05:35:27PM +0100, Catalin Marinas wrote:
+> > The two hard requirements I have for supporting any new hardware feature
+> > in Linux are (1) a single kernel image binary continues to run on old
+> > hardware while making use of the new feature if available and (2) old
+> > user space continues to run on new hardware while new user space can
+> > take advantage of the new feature.
 >
-> I was somewhat joking, I'm just not used to gerrit ... And seems to indeed
-> be a lot more polished than last time I looked at it seriously.
-
-I mean, it is still not perfect, but I think it has finally gotten to
-the point where I prefer it over reviewing by email for high context
-patches where you don't expect a lot of deep discussion.
-
-Still not great for patches where you want to have a lot of discussion.
-
-> > > > > only ofc). So that people get their pull requests (and patch series, we
-> > > > > have some ideas to tie this into patchwork) automatically tested for this
-> > > >
-> > > > Might that be Snowpatch[3]? I talked to Russell, the creator of Snowpatch,
-> > > > and he seemed pretty open to collaboration.
-> > > >
-> > > > Before I heard about Snowpatch, I had an intern write a translation
-> > > > layer that made Prow (the presubmit service that I used in the prototype
-> > > > above) work with LKML[4].
-> > >
-> > > There's about 3-4 forks/clones of patchwork. snowpatch is one, we have
-> > > a different one on freedesktop.org. It's a bit a mess :-/
-
-I think Snowpatch is an ozlabs project; at least the maintainer works at IBM.
-
-Patchwork originally was a ozlabs project, right?
-
-Has any discussion taken place trying to consolidate some of the forks?
-
-Presubmit clearly seems like a feature that a number of people want.
-
-> > Oh, I didn't realize that. I found your patchwork instance here[5], but
-> > do you have a place where I can see the changes you have added to
-> > support presubmit?
+> Agreed! And I think the series meets these requirements, yes?
 >
-> Ok here's a few links. Aside from the usual patch view we've also added a
-> series view:
+> > For MTE, we just can't enable it by default since there are applications
+> > who use the top byte of a pointer and expect it to be ignored rather
+> > than failing with a mismatched tag. Just think of a hwasan compiled
+> > binary where TBI is expected to work and you try to run it with MTE
+> > turned on.
 >
-> https://patchwork.freedesktop.org/project/intel-gfx/series/?ordering=-last_updated
+> Ah! Okay, here's the use-case I wasn't thinking of: the concern is TBI
+> conflicting with MTE. And anything that starts using TBI suddenly can't
+> run in the future because it's being interpreted as MTE bits? (Is that
+> the ABI concern? I feel like we got into the weeds about ioctl()s and
+> one-off bugs...)
 >
-> This ties the patches + cover letter together, and it even (tries to at
-> least) track revisions. Here's an example which is currently at revision
-> 9:
+> So there needs to be some way to let the kernel know which of three
+> things it should be doing:
+> 1- leaving userspace addresses as-is (present)
+> 2- wiping the top bits before using (this series)
+> 3- wiping the top bits for most things, but retaining them for MTE as
+>    needed (the future)
 >
-> https://patchwork.freedesktop.org/series/57232/
-
-Oooh, nice! That looks awesome! Looks like you have a number of presubmits too.
-
-> Below the patch list for each revision we also have the test result list.
-> If you click on the grey bar it'll expand with the summary from CI, the
-> "See full logs" is link to the full results from our CI. This is driven
-> with some REST api from our jenkins.
+> I expect MTE to be the "default" in the future. Once a system's libc has
+> grown support for it, everything will be trying to use MTE. TBI will be
+> the special case (but TBI is effectively a prerequisite).
 >
-> Patchwork also sends out mails for these results.
-
-Nice! There are obviously a lot of other bots on various kernel
-mailing lists. Do you think people would object to sending presubmit
-results to the mailing lists by default?
-
-> Source is on gitlab: https://gitlab.freedesktop.org/patchwork-fdo
-
-Err, looks like you forked from the ozlab's repo a good while ago.
-
-Still, this all looks great!
-
-> > > > I am not married to either approach, but I think between the two of
-> > > > them, most of the initial legwork has been done to make presubmit on
-> > > > LKML a reality.
-> > >
-> > > We do have presubmit CI working already with our freedesktop.org
-> > > patchwork. The missing glue is just tying that into gitlab CI somehow
-> > > (since we want to unify build testing more and make it easier for
-> > > contributors to adjust things).
-> >
-> > I checked out a couple of your projects on your patchwork instance: AMD
-> > X.Org drivers, DRI devel, and Wayland. I saw the tab you added for
-> > tests, but none of them actually had any test results. Can you point me
-> > at one that does?
+> AFAICT, the only difference I see between 2 and 3 will be the tag handling
+> in usercopy (all other places will continue to ignore the top bits). Is
+> that accurate?
 >
-> Atm we use the CI stuff only on intel-gfx, with the our gpu CI farm, see
-> links above.
+> Is "1" a per-process state we want to keep? (I assume not, but rather it
+> is available via no TBI/MTE CONFIG or a boot-time option, if at all?)
 >
-> Cheers, Daniel
+> To choose between "2" and "3", it seems we need a per-process flag to
+> opt into TBI (and out of MTE). For userspace, how would a future binary
+> choose TBI over MTE? If it's a library issue, we can't use an ELF bit,
+> since the choice may be "late" after ELF load (this implies the need
+> for a prctl().) If it's binary-only ("built with HWKASan") then an ELF
+> bit seems sufficient. And without the marking, I'd expect the kernel to
+> enforce MTE when there are high bits.
 >
-> >
-> > Cheers!
-> >
-> > [5] https://patchwork.freedesktop.org/
-> >
-> > > > > super basic stuff.
-> > > >
-> > > > I am really excited to hear back on what you think!
-> > > >
-> > > > Cheers!
-> > > >
-> > > > [1] https://kunit-review.googlesource.com/c/linux/+/1509/10#message-7bfa40efb132e15c8388755c273837559911425c
-> > > > [2] https://kunit-review.googlesource.com/c/linux/+/1509/10#message-a6784496eafff442ac98fb068bf1a0f36ee73509
-> > > > [3] https://developer.ibm.com/open/projects/snowpatch/
-> > > > [4] https://kunit.googlesource.com/prow-lkml/
-> > > > _______________________________________________
-> > > > dri-devel mailing list
-> > > > dri-devel at lists.freedesktop.org
-> > > > https://lists.freedesktop.org/mailman/listinfo/dri-devel
+> > I would also expect the C library or dynamic loader to check for the
+> > presence of a HWCAP_MTE bit before starting to tag memory allocations,
+> > otherwise it would get SIGILL on the first MTE instruction it tries to
+> > execute.
+>
+> I've got the same question as Elliot: aren't MTE instructions just NOP
+> to older CPUs? I.e. if the CPU (or kernel) don't support it, it just
+> gets entirely ignored: checking is only needed to satisfy curiosity
+> or behavioral expectations.
 
-Cheers!
+MTE instructions are not NOP. Most of them have side effects (changing
+register values, zeroing memory).
+This only matters for stack tagging, though. Heap tagging is a runtime
+decision in the allocator.
+
+If an image needs to run on old hardware, it will have to do heap tagging only.
+
+> To me, the conflict seems to be using TBI in the face of expecting MTE to
+> be the default state of the future. (But the internal changes needed
+> for TBI -- this series -- is a prereq for MTE.)
+>
+> --
+> Kees Cook
