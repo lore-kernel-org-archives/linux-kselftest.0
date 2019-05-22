@@ -1,25 +1,72 @@
-From: catalin.marinas at arm.com (Catalin Marinas)
-Date: Wed, 22 May 2019 13:09:07 +0100
-Subject: [PATCH v15 09/17] fs, arm64: untag user pointers in
- copy_mount_options
-In-Reply-To: <ac2ca3454b1ae8856ea2e29a1316fea50a30c788.1557160186.git.andreyknvl@google.com>
+From: Dave.Martin at arm.com (Dave Martin)
+Date: Wed, 22 May 2019 14:49:28 +0100
+Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+In-Reply-To: <20190521184856.GC2922@ziepe.ca>
 References: <cover.1557160186.git.andreyknvl@google.com>
- <ac2ca3454b1ae8856ea2e29a1316fea50a30c788.1557160186.git.andreyknvl@google.com>
-Message-ID: <20190522120907.tf3tb3h5oxhfokgw@mbp>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <20190521184856.GC2922@ziepe.ca>
+Message-ID: <20190522134925.GV28398@e103592.cambridge.arm.com>
 
-On Mon, May 06, 2019 at 06:30:55PM +0200, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
+On Tue, May 21, 2019 at 03:48:56PM -0300, Jason Gunthorpe wrote:
+> On Fri, May 17, 2019 at 03:49:31PM +0100, Catalin Marinas wrote:
 > 
-> In copy_mount_options a user address is being subtracted from TASK_SIZE.
-> If the address is lower than TASK_SIZE, the size is calculated to not
-> allow the exact_copy_from_user() call to cross TASK_SIZE boundary.
-> However if the address is tagged, then the size will be calculated
-> incorrectly.
+> > The tagged pointers (whether hwasan or MTE) should ideally be a
+> > transparent feature for the application writer but I don't think we can
+> > solve it entirely and make it seamless for the multitude of ioctls().
+> > I'd say you only opt in to such feature if you know what you are doing
+> > and the user code takes care of specific cases like ioctl(), hence the
+> > prctl() proposal even for the hwasan.
 > 
-> Untag the address before subtracting.
+> I'm not sure such a dire view is warrented.. 
 > 
-> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+> The ioctl situation is not so bad, other than a few special cases,
+> most drivers just take a 'void __user *' and pass it as an argument to
+> some function that accepts a 'void __user *'. sparse et al verify
+> this. 
+> 
+> As long as the core functions do the right thing the drivers will be
+> OK.
+> 
+> The only place things get dicy is if someone casts to unsigned long
+> (ie for vma work) but I think that reflects that our driver facing
+> APIs for VMAs are compatible with static analysis (ie I have no
+> earthly idea why get_user_pages() accepts an unsigned long), not that
+> this is too hard.
 
-Reviewed-by: Catalin Marinas <catalin.marinas at arm.com>
+If multiple people will care about this, perhaps we should try to
+annotate types more explicitly in SYSCALL_DEFINEx() and ABI data
+structures.
+
+For example, we could have a couple of mutually exclusive modifiers
+
+T __object *
+T __vaddr * (or U __vaddr)
+
+In the first case the pointer points to an object (in the C sense)
+that the call may dereference but not use for any other purpose.
+
+In the latter case the pointer (or other type) is a virtual address
+that the call does not dereference but my do other things with.
+
+Also
+
+U __really(T)
+
+to tell static analysers the real type of pointers smuggled through
+UAPI disguised as other types (*cough* KVM, etc.)
+
+We could gradually make sparse more strict about the presence of
+annotations and allowed conversions, add get/put_user() variants
+that demand explicit annotation, etc.
+
+find_vma() wouldn't work with a __object pointer, for example.  A
+get_user_pages_for_dereference() might be needed for __object pointers
+(embodying a promise from the caller that only the object will be
+dereferenced within the mapped pages).
+
+Thoughts?
+
+This kind of thing would need widespread buy-in in order to be viable.
+
+Cheers
+---Dave
