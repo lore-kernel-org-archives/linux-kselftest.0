@@ -1,10 +1,10 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Wed, 22 May 2019 15:22:35 -0400
-Subject: [PATCH AUTOSEL 4.19 009/244] selftests/bpf: set RLIMIT_MEMLOCK
+Date: Wed, 22 May 2019 15:18:32 -0400
+Subject: [PATCH AUTOSEL 5.0 011/317] selftests/bpf: set RLIMIT_MEMLOCK
  properly for test_libbpf_open.c
-In-Reply-To: <20190522192630.24917-1-sashal@kernel.org>
-References: <20190522192630.24917-1-sashal@kernel.org>
-Message-ID: <20190522192630.24917-9-sashal@kernel.org>
+In-Reply-To: <20190522192338.23715-1-sashal@kernel.org>
+References: <20190522192338.23715-1-sashal@kernel.org>
+Message-ID: <20190522192338.23715-11-sashal@kernel.org>
 
 From: Yonghong Song <yhs at fb.com>
 
