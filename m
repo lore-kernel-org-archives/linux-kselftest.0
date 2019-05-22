@@ -1,177 +1,210 @@
-From: catalin.marinas at arm.com (Catalin Marinas)
-Date: Wed, 22 May 2019 12:49:10 +0100
-Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
- syscalls
-In-Reply-To: <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
-Message-ID: <20190522114910.emlckebwzv2qz42i@mbp>
+From: christophe.leroy at c-s.fr (Christophe Leroy)
+Date: Wed, 22 May 2019 13:50:17 +0200
+Subject: [PATCH v3 3/3] kselftest: Extend vDSO selftest to clock_getres
+In-Reply-To: <20190522110722.28094-4-vincenzo.frascino@arm.com>
+References: <20190522110722.28094-1-vincenzo.frascino@arm.com>
+ <20190522110722.28094-4-vincenzo.frascino@arm.com>
+Message-ID: <3a6d9b99-0026-6743-9e73-4880f3cd6b1c@c-s.fr>
 
-On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
+
+
+Le 22/05/2019 à 13:07, Vincenzo Frascino a écrit :
+> The current version of the multiarch vDSO selftest verifies only
+> gettimeofday.
 > 
-> This patch allows tagged pointers to be passed to the following memory
-> syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
-> mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
-> remap_file_pages, shmat and shmdt.
+> Extend the vDSO selftest to clock_getres, to verify that the
+> syscall and the vDSO library function return the same information.
 > 
-> This is done by untagging pointers passed to these syscalls in the
-> prologues of their handlers.
-
-I'll go through them one by one to see if we can tighten the expected
-ABI while having the MTE in mind.
-
-> diff --git a/arch/arm64/kernel/sys.c b/arch/arm64/kernel/sys.c
-> index b44065fb1616..933bb9f3d6ec 100644
-> --- a/arch/arm64/kernel/sys.c
-> +++ b/arch/arm64/kernel/sys.c
-> @@ -35,10 +35,33 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
->  {
->  	if (offset_in_page(off) != 0)
->  		return -EINVAL;
-> -
-> +	addr = untagged_addr(addr);
->  	return ksys_mmap_pgoff(addr, len, prot, flags, fd, off >> PAGE_SHIFT);
->  }
-
-If user passes a tagged pointer to mmap() and the address is honoured
-(or MAP_FIXED is given), what is the expected return pointer? Does it
-need to be tagged with the value from the hint?
-
-With MTE, we may want to use this as a request for the default colour of
-the mapped pages (still under discussion).
-
-> +SYSCALL_DEFINE6(arm64_mmap_pgoff, unsigned long, addr, unsigned long, len,
-> +		unsigned long, prot, unsigned long, flags,
-> +		unsigned long, fd, unsigned long, pgoff)
+> The extension has been used to verify the hrtimer_resoltion fix.
+> 
+> Cc: Shuah Khan <shuah at kernel.org>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
+> ---
+> 
+> Note: This patch is independent from the others in this series, hence it
+> can be merged singularly by the kselftest maintainers.
+> 
+>   tools/testing/selftests/vDSO/Makefile         |   2 +
+>   .../selftests/vDSO/vdso_clock_getres.c        | 137 ++++++++++++++++++
+>   2 files changed, 139 insertions(+)
+>   create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
+> 
+> diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+> index 9e03d61f52fd..d5c5bfdf1ac1 100644
+> --- a/tools/testing/selftests/vDSO/Makefile
+> +++ b/tools/testing/selftests/vDSO/Makefile
+> @@ -5,6 +5,7 @@ uname_M := $(shell uname -m 2>/dev/null || echo not)
+>   ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+>   
+>   TEST_GEN_PROGS := $(OUTPUT)/vdso_test
+> +TEST_GEN_PROGS += $(OUTPUT)/vdso_clock_getres
+>   ifeq ($(ARCH),x86)
+>   TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
+>   endif
+> @@ -18,6 +19,7 @@ endif
+>   
+>   all: $(TEST_GEN_PROGS)
+>   $(OUTPUT)/vdso_test: parse_vdso.c vdso_test.c
+> +$(OUTPUT)/vdso_clock_getres: vdso_clock_getres.c
+>   $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
+>   	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
+>   		vdso_standalone_test_x86.c parse_vdso.c \
+> diff --git a/tools/testing/selftests/vDSO/vdso_clock_getres.c b/tools/testing/selftests/vDSO/vdso_clock_getres.c
+> new file mode 100644
+> index 000000000000..341a9bc34ffc
+> --- /dev/null
+> +++ b/tools/testing/selftests/vDSO/vdso_clock_getres.c
+> @@ -0,0 +1,137 @@
+> +// SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
+> +/*
+> + * vdso_clock_getres.c: Sample code to test clock_getres.
+> + * Copyright (c) 2019 Arm Ltd.
+> + *
+> + * Compile with:
+> + * gcc -std=gnu99 vdso_clock_getres.c
+> + *
+> + * Tested on ARM, ARM64, MIPS32, x86 (32-bit and 64-bit),
+> + * Power (32-bit and 64-bit), S390x (32-bit and 64-bit).
+> + * Might work on other architectures.
+> + */
+> +
+> +#define _GNU_SOURCE
+> +#include <elf.h>
+> +#include <err.h>
+> +#include <fcntl.h>
+> +#include <stdint.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <time.h>
+> +#include <sys/auxv.h>
+> +#include <sys/mman.h>
+> +#include <sys/time.h>
+> +#include <unistd.h>
+> +#include <sys/syscall.h>
+> +
+> +#include "../kselftest.h"
+> +
+> +static long syscall_clock_getres(clockid_t _clkid, struct timespec *_ts)
 > +{
-> +	addr = untagged_addr(addr);
-> +	return ksys_mmap_pgoff(addr, len, prot, flags, fd, pgoff);
-> +}
-
-We don't have __NR_mmap_pgoff on arm64.
-
-> +SYSCALL_DEFINE5(arm64_mremap, unsigned long, addr, unsigned long, old_len,
-> +		unsigned long, new_len, unsigned long, flags,
-> +		unsigned long, new_addr)
-> +{
-> +	addr = untagged_addr(addr);
-> +	new_addr = untagged_addr(new_addr);
-> +	return ksys_mremap(addr, old_len, new_len, flags, new_addr);
-> +}
-
-Similar comment as for mmap(), do we want the tag from new_addr to be
-preserved? In addition, should we check that the two tags are identical
-or mremap() should become a way to repaint a memory region?
-
-> +SYSCALL_DEFINE2(arm64_munmap, unsigned long, addr, size_t, len)
-> +{
-> +	addr = untagged_addr(addr);
-> +	return ksys_munmap(addr, len);
-> +}
-
-This looks fine.
-
-> +SYSCALL_DEFINE1(arm64_brk, unsigned long, brk)
-> +{
-> +	brk = untagged_addr(brk);
-> +	return ksys_brk(brk);
-> +}
-
-I wonder whether brk() should simply not accept tags, and should not
-return them (similar to the prctl(PR_SET_MM) discussion). We could
-document this in the ABI requirements.
-
-> +SYSCALL_DEFINE5(arm64_get_mempolicy, int __user *, policy,
-> +		unsigned long __user *, nmask, unsigned long, maxnode,
-> +		unsigned long, addr, unsigned long, flags)
-> +{
-> +	addr = untagged_addr(addr);
-> +	return ksys_get_mempolicy(policy, nmask, maxnode, addr, flags);
+> +	long ret;
+> +
+> +	ret = syscall(SYS_clock_getres, _clkid, _ts);
+> +
+> +	return ret;
 > +}
 > +
-> +SYSCALL_DEFINE3(arm64_madvise, unsigned long, start,
-> +		size_t, len_in, int, behavior)
+> +const char *vdso_clock_name[12] = {
+> +	"CLOCK_REALTIME",
+> +	"CLOCK_MONOTONIC",
+> +	"CLOCK_PROCESS_CPUTIME_ID",
+> +	"CLOCK_THREAD_CPUTIME_ID",
+> +	"CLOCK_MONOTONIC_RAW",
+> +	"CLOCK_REALTIME_COARSE",
+> +	"CLOCK_MONOTONIC_COARSE",
+> +	"CLOCK_BOOTTIME",
+> +	"CLOCK_REALTIME_ALARM",
+> +	"CLOCK_BOOTTIME_ALARM",
+> +	"CLOCK_SGI_CYCLE",
+> +	"CLOCK_TAI",
+> +};
+> +
+> +/*
+> + * This function calls clock_getres in vdso and by system call
+> + * with different values for clock_id.
+> + *
+> + * Example of output:
+> + *
+> + * clock_id: CLOCK_REALTIME [PASS]
+> + * clock_id: CLOCK_BOOTTIME [PASS]
+> + * clock_id: CLOCK_TAI [PASS]
+> + * clock_id: CLOCK_REALTIME_COARSE [PASS]
+> + * clock_id: CLOCK_MONOTONIC [PASS]
+> + * clock_id: CLOCK_MONOTONIC_RAW [PASS]
+> + * clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+> + */
+> +static inline int vdso_test_clock(unsigned int clock_id)
 > +{
-> +	start = untagged_addr(start);
-> +	return ksys_madvise(start, len_in, behavior);
+> +	struct timespec x, y;
+> +
+> +	printf("clock_id: %s", vdso_clock_name[clock_id]);
+> +	clock_getres(clock_id, &x);
+> +	syscall_clock_getres(clock_id, &y);
+> +
+> +	if ((x.tv_sec != y.tv_sec) || (x.tv_sec != y.tv_sec)) {
+> +		printf(" [FAIL]\n");
+> +		return KSFT_FAIL;
+> +	}
+> +
+> +	printf(" [PASS]\n");
+> +	return 0;
 > +}
 > +
-> +SYSCALL_DEFINE6(arm64_mbind, unsigned long, start, unsigned long, len,
-> +		unsigned long, mode, const unsigned long __user *, nmask,
-> +		unsigned long, maxnode, unsigned int, flags)
+> +int main(int argc, char **argv)
 > +{
-> +	start = untagged_addr(start);
-> +	return ksys_mbind(start, len, mode, nmask, maxnode, flags);
-> +}
+> +	int ret;
 > +
-> +SYSCALL_DEFINE2(arm64_mlock, unsigned long, start, size_t, len)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_mlock(start, len, VM_LOCKED);
-> +}
+> +#if _POSIX_TIMERS > 0
 > +
-> +SYSCALL_DEFINE2(arm64_mlock2, unsigned long, start, size_t, len)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_mlock(start, len, VM_LOCKED);
-> +}
-> +
-> +SYSCALL_DEFINE2(arm64_munlock, unsigned long, start, size_t, len)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_munlock(start, len);
-> +}
-> +
-> +SYSCALL_DEFINE3(arm64_mprotect, unsigned long, start, size_t, len,
-> +		unsigned long, prot)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_mprotect_pkey(start, len, prot, -1);
-> +}
-> +
-> +SYSCALL_DEFINE3(arm64_msync, unsigned long, start, size_t, len, int, flags)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_msync(start, len, flags);
-> +}
-> +
-> +SYSCALL_DEFINE3(arm64_mincore, unsigned long, start, size_t, len,
-> +		unsigned char __user *, vec)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_mincore(start, len, vec);
-> +}
+> +#ifdef CLOCK_REALTIME
 
-These look fine.
+Why do you need that #ifdef and all the ones below ?
 
-> +SYSCALL_DEFINE5(arm64_remap_file_pages, unsigned long, start,
-> +		unsigned long, size, unsigned long, prot,
-> +		unsigned long, pgoff, unsigned long, flags)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_remap_file_pages(start, size, prot, pgoff, flags);
-> +}
+CLOCK_REALTIME (and others) is defined in include/uapi/linux/time.h, so 
+it should be there when you build the test, shouldn't it ?
 
-While this has been deprecated for some time, I presume user space still
-invokes it?
+> +	ret = vdso_test_clock(CLOCK_REALTIME);
+> +	if (ret)
+> +		goto out;
 
-> +SYSCALL_DEFINE3(arm64_shmat, int, shmid, char __user *, shmaddr, int, shmflg)
-> +{
-> +	shmaddr = untagged_addr(shmaddr);
-> +	return ksys_shmat(shmid, shmaddr, shmflg);
-> +}
+Why that goto ? Nothing is done at out, so a 'return ret' would be 
+better I think.
+
+And do we really want to stop at first failure ? Wouldn't it be better 
+to run all the tests regardless ?
+
+Christophe
+
+> +#endif
 > +
-> +SYSCALL_DEFINE1(arm64_shmdt, char __user *, shmaddr)
-> +{
-> +	shmaddr = untagged_addr(shmaddr);
-> +	return ksys_shmdt(shmaddr);
+> +#ifdef CLOCK_BOOTTIME
+> +	ret = vdso_test_clock(CLOCK_BOOTTIME);
+> +	if (ret)
+> +		goto out;
+> +#endif
+> +
+> +#ifdef CLOCK_TAI
+> +	ret = vdso_test_clock(CLOCK_TAI);
+> +	if (ret)
+> +		goto out;
+> +#endif
+> +
+> +#ifdef CLOCK_REALTIME_COARSE
+> +	ret = vdso_test_clock(CLOCK_REALTIME_COARSE);
+> +	if (ret)
+> +		goto out;
+> +#endif
+> +
+> +#ifdef CLOCK_MONOTONIC
+> +	ret = vdso_test_clock(CLOCK_MONOTONIC);
+> +	if (ret)
+> +		goto out;
+> +#endif
+> +
+> +#ifdef CLOCK_MONOTONIC_RAW
+> +	ret = vdso_test_clock(CLOCK_MONOTONIC_RAW);
+> +	if (ret)
+> +		goto out;
+> +#endif
+> +
+> +#ifdef CLOCK_MONOTONIC_COARSE
+> +	ret = vdso_test_clock(CLOCK_MONOTONIC_COARSE);
+> +	if (ret)
+> +		goto out;
+> +#endif
+> +
+> +#endif
+> +
+> +out:
+> +	return ret;
 > +}
-
-Do we actually want to allow shared tagged memory? Who's going to tag
-it? If not, we can document it as not supported.
-
--- 
-Catalin
+> 
