@@ -1,116 +1,101 @@
-From: catalin.marinas at arm.com (Catalin Marinas)
-Date: Wed, 22 May 2019 17:35:27 +0100
-Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-In-Reply-To: <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp>
- <201905211633.6C0BF0C2@keescook>
- <20190522101110.m2stmpaj7seezveq@mbp>
- <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
-Message-ID: <20190522163527.rnnc6t4tll7tk5zw@mbp>
+From: oleg at redhat.com (Oleg Nesterov)
+Date: Wed, 22 May 2019 18:57:37 +0200
+Subject: [PATCH v1 1/2] open: add close_range()
+In-Reply-To: <20190522155259.11174-1-christian@brauner.io>
+References: <20190522155259.11174-1-christian@brauner.io>
+Message-ID: <20190522165737.GC4915@redhat.com>
 
-On Wed, May 22, 2019 at 08:30:21AM -0700, enh wrote:
-> On Wed, May 22, 2019 at 3:11 AM Catalin Marinas <catalin.marinas at arm.com> wrote:
-> > On Tue, May 21, 2019 at 05:04:39PM -0700, Kees Cook wrote:
-> > > I just want to make sure I fully understand your concern about this
-> > > being an ABI break, and I work best with examples. The closest situation
-> > > I can see would be:
-> > >
-> > > - some program has no idea about MTE
-> >
-> > Apart from some libraries like libc (and maybe those that handle
-> > specific device ioctls), I think most programs should have no idea about
-> > MTE. I wouldn't expect programmers to have to change their app just
-> > because we have a new feature that colours heap allocations.
-> 
-> obviously i'm biased as a libc maintainer, but...
-> 
-> i don't think it helps to move this to libc --- now you just have an
-> extra dependency where to have a guaranteed working system you need to
-> update your kernel and libc together. (or at least update your libc to
-> understand new ioctls etc _before_ you can update your kernel.)
+On 05/22, Christian Brauner wrote:
+>
+> +static struct file *pick_file(struct files_struct *files, unsigned fd)
+>  {
+> -	struct file *file;
+> +	struct file *file = NULL;
+>  	struct fdtable *fdt;
+>  
+>  	spin_lock(&files->file_lock);
+> @@ -632,15 +629,65 @@ int __close_fd(struct files_struct *files, unsigned fd)
+>  		goto out_unlock;
+>  	rcu_assign_pointer(fdt->fd[fd], NULL);
+>  	__put_unused_fd(files, fd);
+> -	spin_unlock(&files->file_lock);
+> -	return filp_close(file, files);
+>  
+>  out_unlock:
+>  	spin_unlock(&files->file_lock);
+> -	return -EBADF;
+> +	return file;
 
-That's not what I meant (or I misunderstood you). If we have a relaxed
-ABI in the kernel and a libc that returns tagged pointers on malloc() I
-wouldn't expect the programmer to do anything different in the
-application code like explicit untagging. Basically the program would
-continue to run unmodified irrespective of whether you use an old libc
-without tagged pointers or a new one which tags heap allocations.
+...
 
-What I do expect is that the libc checks for the presence of the relaxed
-ABI, currently proposed as an AT_FLAGS bit (for MTE we'd have a
-HWCAP_MTE), and only tag the malloc() pointers if the kernel supports
-the relaxed ABI. As you said, you shouldn't expect that the C library
-and kernel are upgraded together, so they should be able to work in any
-new/old version combination.
+> +int __close_range(struct files_struct *files, unsigned fd, unsigned max_fd)
+> +{
+> +	unsigned int cur_max;
+> +
+> +	if (fd > max_fd)
+> +		return -EINVAL;
+> +
+> +	rcu_read_lock();
+> +	cur_max = files_fdtable(files)->max_fds;
+> +	rcu_read_unlock();
+> +
+> +	/* cap to last valid index into fdtable */
+> +	if (max_fd >= cur_max)
+> +		max_fd = cur_max - 1;
+> +
+> +	while (fd <= max_fd) {
+> +		struct file *file;
+> +
+> +		file = pick_file(files, fd++);
 
-> > > The trouble I see with this is that it is largely theoretical and
-> > > requires part of userspace to collude to start using a new CPU feature
-> > > that tickles a bug in the kernel. As I understand the golden rule,
-> > > this is a bug in the kernel (a missed ioctl() or such) to be fixed,
-> > > not a global breaking of some userspace behavior.
-> >
-> > Yes, we should follow the rule that it's a kernel bug but it doesn't
-> > help the user that a newly installed kernel causes user space to no
-> > longer reach a prompt. Hence the proposal of an opt-in via personality
-> > (for MTE we would need an explicit opt-in by the user anyway since the
-> > top byte is no longer ignored but checked against the allocation tag).
-> 
-> but realistically would this actually get used in this way? or would
-> any given system either be MTE or non-MTE. in which case a kernel
-> configuration option would seem to make more sense. (because either
-> way, the hypothetical user basically needs to recompile the kernel to
-> get back on their feet. or all of userspace.)
+Well, how about something like
 
-The two hard requirements I have for supporting any new hardware feature
-in Linux are (1) a single kernel image binary continues to run on old
-hardware while making use of the new feature if available and (2) old
-user space continues to run on new hardware while new user space can
-take advantage of the new feature.
+	static unsigned int find_next_opened_fd(struct fdtable *fdt, unsigned start)
+	{
+		unsigned int maxfd = fdt->max_fds;
+		unsigned int maxbit = maxfd / BITS_PER_LONG;
+		unsigned int bitbit = start / BITS_PER_LONG;
 
-The distro user space usually has a hard requirement that it continues
-to run on (certain) old hardware. We can't enforce this in the kernel
-but we offer the option to user space developers of checking feature
-availability through HWCAP bits.
+		bitbit = find_next_bit(fdt->full_fds_bits, maxbit, bitbit) * BITS_PER_LONG;
+		if (bitbit > maxfd)
+			return maxfd;
+		if (bitbit > start)
+			start = bitbit;
+		return find_next_bit(fdt->open_fds, maxfd, start);
+	}
 
-The Android story may be different as you have more control about which
-kernel configurations are deployed on specific SoCs. I'm looking more
-from a Linux distro angle where you just get an off-the-shelf OS image
-and install it on your hardware, either taking advantage of new features
-or just not using them if the software was not updated. Or, if updated
-software is installed on old hardware, it would just run.
+	unsigned close_next_fd(struct files_struct *files, unsigned start, unsigned maxfd)
+	{
+		unsigned fd;
+		struct file *file;
+		struct fdtable *fdt;
+	
+		spin_lock(&files->file_lock);
+		fdt = files_fdtable(files);
+		fd = find_next_opened_fd(fdt, start);
+		if (fd >= fdt->max_fds || fd > maxfd) {
+			fd = -1;
+			goto out;
+		}
 
-For MTE, we just can't enable it by default since there are applications
-who use the top byte of a pointer and expect it to be ignored rather
-than failing with a mismatched tag. Just think of a hwasan compiled
-binary where TBI is expected to work and you try to run it with MTE
-turned on.
+		file = fdt->fd[fd];
+		rcu_assign_pointer(fdt->fd[fd], NULL);
+		__put_unused_fd(files, fd);
+	out:
+		spin_unlock(&files->file_lock);
 
-I would also expect the C library or dynamic loader to check for the
-presence of a HWCAP_MTE bit before starting to tag memory allocations,
-otherwise it would get SIGILL on the first MTE instruction it tries to
-execute.
+		if (fd == -1u)
+			return fd;
 
-> i'm not sure i see this new way for a kernel update to break my system
-> and need to be fixed forward/rolled back as any different from any of
-> the existing ways in which this can happen :-) as an end-user i have
-> to rely on whoever's sending me software updates to test adequately
-> enough that they find the problems. as an end user, there isn't any
-> difference between "my phone rebooted when i tried to take a photo
-> because of a kernel/driver leak", say, and "my phone rebooted when i
-> tried to take a photo because of missing untagging of a pointer passed
-> via ioctl".
-> 
-> i suspect you and i have very different people in mind when we say "user" :-)
+		filp_close(file, files);
+		return fd + 1;
+	}
 
-Indeed, I think we have different users in mind. I didn't mean the end
-user who doesn't really care which C library version it's running on
-their phone but rather advanced users (not necessarily kernel
-developers) that prefer to build their own kernels with every release.
-We could extend this to kernel developers who don't have time to track
-down why a new kernel triggers lots of SIGSEGVs during boot.
+?
 
--- 
-Catalin
+Then close_range() can do
+
+	while (fd < max_fd)
+		fd = close_next_fd(fd, maxfd);
+
+Oleg.
