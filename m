@@ -1,135 +1,31 @@
-From: enh@google.com (enh)
-Date: Wed, 22 May 2019 09:58:22 -0700
-Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-In-Reply-To: <20190522163527.rnnc6t4tll7tk5zw@mbp>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp> <201905211633.6C0BF0C2@keescook>
- <20190522101110.m2stmpaj7seezveq@mbp>
- <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
- <20190522163527.rnnc6t4tll7tk5zw@mbp>
+From: luto@kernel.org (Andy Lutomirski)
+Date: Wed, 22 May 2019 10:01:17 -0700
+Subject: [PATCH RFC v8 01/10] namei: obey trailing magic-link DAC
+ permissions
+In-Reply-To: <20190520133305.11925-2-cyphar@cyphar.com>
+References: <20190520133305.11925-1-cyphar@cyphar.com>
+ <20190520133305.11925-2-cyphar@cyphar.com>
 Message-ID:
- <CAJgzZooc+wXBBXenm62n2zR8TVrv-y1pXMmHSdxeaNYhFLSzBA@mail.gmail.com>
+ <CALCETrVCwe49q5mu=f6jTYNSgosQSjjY5chukMPo6eZtQGqo5g@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190522165822.6DTcOQH2I4z5We5-vZ-mFYZtZRFXqJjURBKxC9Ef6xg@z>
+Message-ID: <20190522170117.OcmoxIJJZbdnXe6aL2LCKjO-2EllwZGz9eXkLI_mN1c@z>
 
-On Wed, May 22, 2019@9:35 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Wed, May 22, 2019@08:30:21AM -0700, enh wrote:
-> > On Wed, May 22, 2019@3:11 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > > On Tue, May 21, 2019@05:04:39PM -0700, Kees Cook wrote:
-> > > > I just want to make sure I fully understand your concern about this
-> > > > being an ABI break, and I work best with examples. The closest situation
-> > > > I can see would be:
-> > > >
-> > > > - some program has no idea about MTE
-> > >
-> > > Apart from some libraries like libc (and maybe those that handle
-> > > specific device ioctls), I think most programs should have no idea about
-> > > MTE. I wouldn't expect programmers to have to change their app just
-> > > because we have a new feature that colours heap allocations.
-> >
-> > obviously i'm biased as a libc maintainer, but...
-> >
-> > i don't think it helps to move this to libc --- now you just have an
-> > extra dependency where to have a guaranteed working system you need to
-> > update your kernel and libc together. (or at least update your libc to
-> > understand new ioctls etc _before_ you can update your kernel.)
->
-> That's not what I meant (or I misunderstood you). If we have a relaxed
-> ABI in the kernel and a libc that returns tagged pointers on malloc() I
-> wouldn't expect the programmer to do anything different in the
-> application code like explicit untagging. Basically the program would
-> continue to run unmodified irrespective of whether you use an old libc
-> without tagged pointers or a new one which tags heap allocations.
->
-> What I do expect is that the libc checks for the presence of the relaxed
-> ABI, currently proposed as an AT_FLAGS bit (for MTE we'd have a
-> HWCAP_MTE), and only tag the malloc() pointers if the kernel supports
-> the relaxed ABI. As you said, you shouldn't expect that the C library
-> and kernel are upgraded together, so they should be able to work in any
-> new/old version combination.
+On Mon, May 20, 2019@6:34 AM Aleksa Sarai <cyphar@cyphar.com> wrote:
+> One final exception is given, which is that non-O_PATH file descriptors
+> are given re-open rights equivalent to the permissions available at
+> open-time. This allows for O_RDONLY file descriptors to be re-opened
+> O_RDWR as long as the user had MAY_WRITE access at the time of opening
+> the O_RDONLY descriptor. This is necessary to avoid breaking userspace
+> (some of the kernel's own selftests depended on this "feature").
 
-yes, that part makes sense. i do think we'd use the AT_FLAGS bit, for
-exactly this.
+Can you clarify this exception a bit?  I'd like to make sure it's not
+such a huge exception that it invalidates the whole point of the
+patch.  If you open a file for execute, by actually exec()ing it or by
+using something like the proposed O_MAYEXEC, and you have
+inode_permission to write, do you still end up with FMODE_PATH_WRITE?
+The code looks like it does, and this seems like it might be a
+mistake.  Is there any way for user code to read out these new file
+mode bits?
 
-i was questioning the argument about the ioctl issues, and saying that
-from my perspective, untagging bugs are not really any different than
-any other kind of kernel bug.
-
-> > > > The trouble I see with this is that it is largely theoretical and
-> > > > requires part of userspace to collude to start using a new CPU feature
-> > > > that tickles a bug in the kernel. As I understand the golden rule,
-> > > > this is a bug in the kernel (a missed ioctl() or such) to be fixed,
-> > > > not a global breaking of some userspace behavior.
-> > >
-> > > Yes, we should follow the rule that it's a kernel bug but it doesn't
-> > > help the user that a newly installed kernel causes user space to no
-> > > longer reach a prompt. Hence the proposal of an opt-in via personality
-> > > (for MTE we would need an explicit opt-in by the user anyway since the
-> > > top byte is no longer ignored but checked against the allocation tag).
-> >
-> > but realistically would this actually get used in this way? or would
-> > any given system either be MTE or non-MTE. in which case a kernel
-> > configuration option would seem to make more sense. (because either
-> > way, the hypothetical user basically needs to recompile the kernel to
-> > get back on their feet. or all of userspace.)
->
-> The two hard requirements I have for supporting any new hardware feature
-> in Linux are (1) a single kernel image binary continues to run on old
-> hardware while making use of the new feature if available and (2) old
-> user space continues to run on new hardware while new user space can
-> take advantage of the new feature.
->
-> The distro user space usually has a hard requirement that it continues
-> to run on (certain) old hardware. We can't enforce this in the kernel
-> but we offer the option to user space developers of checking feature
-> availability through HWCAP bits.
->
-> The Android story may be different as you have more control about which
-> kernel configurations are deployed on specific SoCs. I'm looking more
-> from a Linux distro angle where you just get an off-the-shelf OS image
-> and install it on your hardware, either taking advantage of new features
-> or just not using them if the software was not updated. Or, if updated
-> software is installed on old hardware, it would just run.
->
-> For MTE, we just can't enable it by default since there are applications
-> who use the top byte of a pointer and expect it to be ignored rather
-> than failing with a mismatched tag. Just think of a hwasan compiled
-> binary where TBI is expected to work and you try to run it with MTE
-> turned on.
->
-> I would also expect the C library or dynamic loader to check for the
-> presence of a HWCAP_MTE bit before starting to tag memory allocations,
-> otherwise it would get SIGILL on the first MTE instruction it tries to
-> execute.
-
-(a bit off-topic, but i thought the MTE instructions were encoded in
-the no-op space, to avoid this?)
-
-> > i'm not sure i see this new way for a kernel update to break my system
-> > and need to be fixed forward/rolled back as any different from any of
-> > the existing ways in which this can happen :-) as an end-user i have
-> > to rely on whoever's sending me software updates to test adequately
-> > enough that they find the problems. as an end user, there isn't any
-> > difference between "my phone rebooted when i tried to take a photo
-> > because of a kernel/driver leak", say, and "my phone rebooted when i
-> > tried to take a photo because of missing untagging of a pointer passed
-> > via ioctl".
-> >
-> > i suspect you and i have very different people in mind when we say "user" :-)
->
-> Indeed, I think we have different users in mind. I didn't mean the end
-> user who doesn't really care which C library version it's running on
-> their phone but rather advanced users (not necessarily kernel
-> developers) that prefer to build their own kernels with every release.
-> We could extend this to kernel developers who don't have time to track
-> down why a new kernel triggers lots of SIGSEGVs during boot.
-
-i still don't see how this isn't just a regular testing/CI issue, the
-same as any other kind of kernel bug. it's already the case that i can
-get a bad kernel...
-
-> --
-> Catalin
+What are actual examples of uses for this exception?  Breaking
+selftests is not, in and of itself, a huge problem.
