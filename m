@@ -1,77 +1,189 @@
-From: keescook at chromium.org (Kees Cook)
-Date: Wed, 22 May 2019 13:47:36 -0700
-Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-In-Reply-To: <20190522163527.rnnc6t4tll7tk5zw@mbp>
+From: eugenis at google.com (Evgenii Stepanov)
+Date: Wed, 22 May 2019 14:16:57 -0700
+Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
+ syscalls
+In-Reply-To: <20190522114910.emlckebwzv2qz42i@mbp>
 References: <cover.1557160186.git.andreyknvl@google.com>
- <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp>
- <201905211633.6C0BF0C2@keescook>
- <20190522101110.m2stmpaj7seezveq@mbp>
- <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
- <20190522163527.rnnc6t4tll7tk5zw@mbp>
-Message-ID: <201905221316.865581CF@keescook>
+ <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+ <20190522114910.emlckebwzv2qz42i@mbp>
+Message-ID: <CAFKCwrjyP+x0JJy=qpBFsp4pub3He6UkvU0qnf1UOKt6W1LPRQ@mail.gmail.com>
 
-On Wed, May 22, 2019 at 05:35:27PM +0100, Catalin Marinas wrote:
-> The two hard requirements I have for supporting any new hardware feature
-> in Linux are (1) a single kernel image binary continues to run on old
-> hardware while making use of the new feature if available and (2) old
-> user space continues to run on new hardware while new user space can
-> take advantage of the new feature.
+On Wed, May 22, 2019 at 4:49 AM Catalin Marinas <catalin.marinas at arm.com> wrote:
+>
+> On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > This patch allows tagged pointers to be passed to the following memory
+> > syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
+> > mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
+> > remap_file_pages, shmat and shmdt.
+> >
+> > This is done by untagging pointers passed to these syscalls in the
+> > prologues of their handlers.
+>
+> I'll go through them one by one to see if we can tighten the expected
+> ABI while having the MTE in mind.
+>
+> > diff --git a/arch/arm64/kernel/sys.c b/arch/arm64/kernel/sys.c
+> > index b44065fb1616..933bb9f3d6ec 100644
+> > --- a/arch/arm64/kernel/sys.c
+> > +++ b/arch/arm64/kernel/sys.c
+> > @@ -35,10 +35,33 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
+> >  {
+> >       if (offset_in_page(off) != 0)
+> >               return -EINVAL;
+> > -
+> > +     addr = untagged_addr(addr);
+> >       return ksys_mmap_pgoff(addr, len, prot, flags, fd, off >> PAGE_SHIFT);
+> >  }
+>
+> If user passes a tagged pointer to mmap() and the address is honoured
+> (or MAP_FIXED is given), what is the expected return pointer? Does it
+> need to be tagged with the value from the hint?
 
-Agreed! And I think the series meets these requirements, yes?
+For HWASan the most convenient would be to use the tag from the hint.
+But since in the TBI (not MTE) mode the kernel has no idea what
+meaning userspace assigns to pointer tags, perhaps it should not try
+to guess, and should return raw (zero-tagged) address instead.
 
-> For MTE, we just can't enable it by default since there are applications
-> who use the top byte of a pointer and expect it to be ignored rather
-> than failing with a mismatched tag. Just think of a hwasan compiled
-> binary where TBI is expected to work and you try to run it with MTE
-> turned on.
+> With MTE, we may want to use this as a request for the default colour of
+> the mapped pages (still under discussion).
 
-Ah! Okay, here's the use-case I wasn't thinking of: the concern is TBI
-conflicting with MTE. And anything that starts using TBI suddenly can't
-run in the future because it's being interpreted as MTE bits? (Is that
-the ABI concern? I feel like we got into the weeds about ioctl()s and
-one-off bugs...)
+I like this - and in that case it would make sense to return the
+pointer that can be immediately dereferenced without crashing the
+process, i.e. with the matching tag.
 
-So there needs to be some way to let the kernel know which of three
-things it should be doing:
-1- leaving userspace addresses as-is (present)
-2- wiping the top bits before using (this series)
-3- wiping the top bits for most things, but retaining them for MTE as
-   needed (the future)
-
-I expect MTE to be the "default" in the future. Once a system's libc has
-grown support for it, everything will be trying to use MTE. TBI will be
-the special case (but TBI is effectively a prerequisite).
-
-AFAICT, the only difference I see between 2 and 3 will be the tag handling
-in usercopy (all other places will continue to ignore the top bits). Is
-that accurate?
-
-Is "1" a per-process state we want to keep? (I assume not, but rather it
-is available via no TBI/MTE CONFIG or a boot-time option, if at all?)
-
-To choose between "2" and "3", it seems we need a per-process flag to
-opt into TBI (and out of MTE). For userspace, how would a future binary
-choose TBI over MTE? If it's a library issue, we can't use an ELF bit,
-since the choice may be "late" after ELF load (this implies the need
-for a prctl().) If it's binary-only ("built with HWKASan") then an ELF
-bit seems sufficient. And without the marking, I'd expect the kernel to
-enforce MTE when there are high bits.
-
-> I would also expect the C library or dynamic loader to check for the
-> presence of a HWCAP_MTE bit before starting to tag memory allocations,
-> otherwise it would get SIGILL on the first MTE instruction it tries to
-> execute.
-
-I've got the same question as Elliot: aren't MTE instructions just NOP
-to older CPUs? I.e. if the CPU (or kernel) don't support it, it just
-gets entirely ignored: checking is only needed to satisfy curiosity
-or behavioral expectations.
-
-To me, the conflict seems to be using TBI in the face of expecting MTE to
-be the default state of the future. (But the internal changes needed
-for TBI -- this series -- is a prereq for MTE.)
-
--- 
-Kees Cook
+> > +SYSCALL_DEFINE6(arm64_mmap_pgoff, unsigned long, addr, unsigned long, len,
+> > +             unsigned long, prot, unsigned long, flags,
+> > +             unsigned long, fd, unsigned long, pgoff)
+> > +{
+> > +     addr = untagged_addr(addr);
+> > +     return ksys_mmap_pgoff(addr, len, prot, flags, fd, pgoff);
+> > +}
+>
+> We don't have __NR_mmap_pgoff on arm64.
+>
+> > +SYSCALL_DEFINE5(arm64_mremap, unsigned long, addr, unsigned long, old_len,
+> > +             unsigned long, new_len, unsigned long, flags,
+> > +             unsigned long, new_addr)
+> > +{
+> > +     addr = untagged_addr(addr);
+> > +     new_addr = untagged_addr(new_addr);
+> > +     return ksys_mremap(addr, old_len, new_len, flags, new_addr);
+> > +}
+>
+> Similar comment as for mmap(), do we want the tag from new_addr to be
+> preserved? In addition, should we check that the two tags are identical
+> or mremap() should become a way to repaint a memory region?
+>
+> > +SYSCALL_DEFINE2(arm64_munmap, unsigned long, addr, size_t, len)
+> > +{
+> > +     addr = untagged_addr(addr);
+> > +     return ksys_munmap(addr, len);
+> > +}
+>
+> This looks fine.
+>
+> > +SYSCALL_DEFINE1(arm64_brk, unsigned long, brk)
+> > +{
+> > +     brk = untagged_addr(brk);
+> > +     return ksys_brk(brk);
+> > +}
+>
+> I wonder whether brk() should simply not accept tags, and should not
+> return them (similar to the prctl(PR_SET_MM) discussion). We could
+> document this in the ABI requirements.
+>
+> > +SYSCALL_DEFINE5(arm64_get_mempolicy, int __user *, policy,
+> > +             unsigned long __user *, nmask, unsigned long, maxnode,
+> > +             unsigned long, addr, unsigned long, flags)
+> > +{
+> > +     addr = untagged_addr(addr);
+> > +     return ksys_get_mempolicy(policy, nmask, maxnode, addr, flags);
+> > +}
+> > +
+> > +SYSCALL_DEFINE3(arm64_madvise, unsigned long, start,
+> > +             size_t, len_in, int, behavior)
+> > +{
+> > +     start = untagged_addr(start);
+> > +     return ksys_madvise(start, len_in, behavior);
+> > +}
+> > +
+> > +SYSCALL_DEFINE6(arm64_mbind, unsigned long, start, unsigned long, len,
+> > +             unsigned long, mode, const unsigned long __user *, nmask,
+> > +             unsigned long, maxnode, unsigned int, flags)
+> > +{
+> > +     start = untagged_addr(start);
+> > +     return ksys_mbind(start, len, mode, nmask, maxnode, flags);
+> > +}
+> > +
+> > +SYSCALL_DEFINE2(arm64_mlock, unsigned long, start, size_t, len)
+> > +{
+> > +     start = untagged_addr(start);
+> > +     return ksys_mlock(start, len, VM_LOCKED);
+> > +}
+> > +
+> > +SYSCALL_DEFINE2(arm64_mlock2, unsigned long, start, size_t, len)
+> > +{
+> > +     start = untagged_addr(start);
+> > +     return ksys_mlock(start, len, VM_LOCKED);
+> > +}
+> > +
+> > +SYSCALL_DEFINE2(arm64_munlock, unsigned long, start, size_t, len)
+> > +{
+> > +     start = untagged_addr(start);
+> > +     return ksys_munlock(start, len);
+> > +}
+> > +
+> > +SYSCALL_DEFINE3(arm64_mprotect, unsigned long, start, size_t, len,
+> > +             unsigned long, prot)
+> > +{
+> > +     start = untagged_addr(start);
+> > +     return ksys_mprotect_pkey(start, len, prot, -1);
+> > +}
+> > +
+> > +SYSCALL_DEFINE3(arm64_msync, unsigned long, start, size_t, len, int, flags)
+> > +{
+> > +     start = untagged_addr(start);
+> > +     return ksys_msync(start, len, flags);
+> > +}
+> > +
+> > +SYSCALL_DEFINE3(arm64_mincore, unsigned long, start, size_t, len,
+> > +             unsigned char __user *, vec)
+> > +{
+> > +     start = untagged_addr(start);
+> > +     return ksys_mincore(start, len, vec);
+> > +}
+>
+> These look fine.
+>
+> > +SYSCALL_DEFINE5(arm64_remap_file_pages, unsigned long, start,
+> > +             unsigned long, size, unsigned long, prot,
+> > +             unsigned long, pgoff, unsigned long, flags)
+> > +{
+> > +     start = untagged_addr(start);
+> > +     return ksys_remap_file_pages(start, size, prot, pgoff, flags);
+> > +}
+>
+> While this has been deprecated for some time, I presume user space still
+> invokes it?
+>
+> > +SYSCALL_DEFINE3(arm64_shmat, int, shmid, char __user *, shmaddr, int, shmflg)
+> > +{
+> > +     shmaddr = untagged_addr(shmaddr);
+> > +     return ksys_shmat(shmid, shmaddr, shmflg);
+> > +}
+> > +
+> > +SYSCALL_DEFINE1(arm64_shmdt, char __user *, shmaddr)
+> > +{
+> > +     shmaddr = untagged_addr(shmaddr);
+> > +     return ksys_shmdt(shmaddr);
+> > +}
+>
+> Do we actually want to allow shared tagged memory? Who's going to tag
+> it? If not, we can document it as not supported.
+>
+> --
+> Catalin
