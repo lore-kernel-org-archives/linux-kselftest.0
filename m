@@ -1,36 +1,56 @@
-From: drjones@redhat.com (Andrew Jones)
-Date: Wed, 22 May 2019 10:44:09 +0200
-Subject: [RFC PATCH 0/4] KVM selftests for s390x
-In-Reply-To: <4d94124e-00f6-aa65-3a4a-bd8910480329@redhat.com>
-References: <20190516111253.4494-1-thuth@redhat.com>
- <b412e591-3983-ebef-510b-43f9b7be4147@redhat.com>
- <9423ba89-b10e-5e6e-3cc8-8088f3088233@redhat.com>
- <4d94124e-00f6-aa65-3a4a-bd8910480329@redhat.com>
-Message-ID: <20190522084409.qz5hs7lqj65qg6x5@kamzik.brq.redhat.com>
+From: vincenzo.frascino@arm.com (Vincenzo Frascino)
+Date: Wed, 22 May 2019 10:28:17 +0100
+Subject: [PATCH v2 5/5] kselftest: Extend vDSO selftest to clock_getres
+In-Reply-To: <759f59b2-2cb3-130b-fb30-89e3fb92af33@kernel.org>
+References: <20190416161434.32691-1-vincenzo.frascino@arm.com>
+ <20190416161434.32691-6-vincenzo.frascino@arm.com>
+ <f07e07b0-4e53-96c8-ebe2-a0f5528fa329@arm.com>
+ <252b011e-974a-2f3b-2cc3-0892d1c4a3c0@kernel.org>
+ <759f59b2-2cb3-130b-fb30-89e3fb92af33@kernel.org>
+Message-ID: <33d0f306-cc39-306b-3349-21fe69ec07d0@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190522084409.IcrsLkyI2SfDD-8uLiUdxdBNRkFYFXXSpl1ungrezfw@z>
+Message-ID: <20190522092817.8KK8PjPYiYWsKhF_jsiWHTG5BPqn0woDgZB4pe_otVE@z>
 
-On Mon, May 20, 2019@01:43:06PM +0200, Paolo Bonzini wrote:
-> On 20/05/19 13:30, Thomas Huth wrote:
-> >> No objections at all, though it would be like to have ucall plumbed in
-> >> from the beginning.
-> > I'm still looking at the ucall interface ... what I don't quite get yet
-> > is the question why the ucall_type there is selectable during runtime?
-> > 
-> > Are there plans to have test that could either use UCALL_PIO or
-> > UCALL_MMIO? If not, what about moving ucall_init() and ucall() to
-> > architecture specific code in tools/testing/selftests/kvm/lib/aarch64/
-> > and tools/testing/selftests/kvm/lib/x86_64 instead, and to remove the
-> > ucall_type stuff again (so that x86 is hard-wired to PIO and aarch64
-> > is hard-wired to MMIO)? ... then I could add a DIAG-based ucall
-> > on s390x more easily, I think.
+Hi Shuah,
+
+On 21/05/2019 18:33, shuah wrote:
+> On 5/21/19 10:24 AM, shuah wrote:
+>> On 5/21/19 10:11 AM, Vincenzo Frascino wrote:
+>>> Hi Shuah,
+>>>
+>>> I did not see this patch in 5.2-rc1 and I was wondering if there is 
+>>> anything I
+>>> can do to help with upstraming it.
+>>>
+>>
+>> Thanks for the ping.
+>>
+>> Sorry about this. I saw that this part of a series and thought it
+>> depends on other patches and should go through another tree.
+>>
+>> Totally missed that Will suggested that I take it though selftests.
+>>
+>> My bad. I will get this in - I hope there are no dependencies with other
+>> trees.
+>>
+>> thanks,
+>> -- Shuah
+>>
+>>
 > 
-> Yes, that would work.  I think Andrew wanted the flexibility to use MMIO
-> on x86, but it's not really necessary to have it.
+> Can you take a look at the macro in this patch. It has checkpatch
+> warn:
+> 
+> WARNING: Macros with flow control statements should be avoided
+> 
+> 
 
-If the flexibility isn't necessary, then I agree that it'll be nicer to
-put the ucall_init() in arch setup code, avoiding the need to remember
-it in each unit test.
+Ok, I will fix this in v3.
 
-Thanks,
-drew
+> thanks,
+> -- Shuah
+> 
+
+-- 
+Regards,
+Vincenzo
