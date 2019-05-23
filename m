@@ -1,42 +1,55 @@
-From: drjones at redhat.com (Andrew Jones)
-Date: Thu, 23 May 2019 11:11:33 +0200
-Subject: [PATCH v2] KVM: selftests: Compile code with warnings enabled
-In-Reply-To: <f998da41-c75d-0afa-02cd-e2e5d8f0f546@redhat.com>
-References: <20190517090445.4502-1-thuth@redhat.com>
- <f998da41-c75d-0afa-02cd-e2e5d8f0f546@redhat.com>
-Message-ID: <20190523091133.wemwsmz6xslsz3va@kamzik.brq.redhat.com>
+From: thuth at redhat.com (Thomas Huth)
+Date: Thu, 23 May 2019 11:31:14 +0200
+Subject: [PATCH] KVM: selftests: Wrap vcpu_nested_state_get/set functions with
+ x86 guard
+Message-ID: <20190523093114.18182-1-thuth@redhat.com>
 
-On Mon, May 20, 2019 at 12:03:08PM +0200, Paolo Bonzini wrote:
-> On 17/05/19 11:04, Thomas Huth wrote:
-> > So far the KVM selftests are compiled without any compiler warnings
-> > enabled. That's quite bad, since we miss a lot of possible bugs this
-> > way. Let's enable at least "-Wall" and some other useful warning flags
-> > now, and fix at least the trivial problems in the code (like unused
-> > variables).
-> > 
-> > Signed-off-by: Thomas Huth <thuth at redhat.com>
-> > ---
-> >  v2:
-> >  - Rebased to kvm/queue
-> >  - Fix warnings in state_test.c and evmcs_test.c, too
-> > 
-> >  tools/testing/selftests/kvm/Makefile                       | 4 +++-
-> >  tools/testing/selftests/kvm/dirty_log_test.c               | 6 +++++-
-> >  tools/testing/selftests/kvm/lib/kvm_util.c                 | 3 ---
-> >  tools/testing/selftests/kvm/lib/x86_64/processor.c         | 4 +---
-> >  tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c   | 1 +
-> >  tools/testing/selftests/kvm/x86_64/evmcs_test.c            | 7 +------
-> >  tools/testing/selftests/kvm/x86_64/platform_info_test.c    | 1 -
-> >  tools/testing/selftests/kvm/x86_64/smm_test.c              | 3 +--
-> >  tools/testing/selftests/kvm/x86_64/state_test.c            | 7 +------
-> >  .../selftests/kvm/x86_64/vmx_close_while_nested_test.c     | 5 +----
-> >  tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c   | 5 ++---
-> >  11 files changed, 16 insertions(+), 30 deletions(-)
-> 
-> Queued, with a squashed fix to kvm_get_supported_hv_cpuid.
->
+struct kvm_nested_state is only available on x86 so far. To be able
+to compile the code on other architectures as well, we need to wrap
+the related code with #ifdefs.
 
-I've done the fixups needed to keep aarch64 compiling and will send
-the patch shortly.
+Signed-off-by: Thomas Huth <thuth at redhat.com>
+---
+ tools/testing/selftests/kvm/include/kvm_util.h | 2 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c     | 2 ++
+ 2 files changed, 4 insertions(+)
 
-drew 
+diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+index 8c6b9619797d..a5a4b28f14d8 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util.h
++++ b/tools/testing/selftests/kvm/include/kvm_util.h
+@@ -118,10 +118,12 @@ void vcpu_events_get(struct kvm_vm *vm, uint32_t vcpuid,
+ 		     struct kvm_vcpu_events *events);
+ void vcpu_events_set(struct kvm_vm *vm, uint32_t vcpuid,
+ 		     struct kvm_vcpu_events *events);
++#ifdef __x86_64__
+ void vcpu_nested_state_get(struct kvm_vm *vm, uint32_t vcpuid,
+ 			   struct kvm_nested_state *state);
+ int vcpu_nested_state_set(struct kvm_vm *vm, uint32_t vcpuid,
+ 			  struct kvm_nested_state *state, bool ignore_error);
++#endif
+ 
+ const char *exit_reason_str(unsigned int exit_reason);
+ 
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index cf62de377310..633b22df46a4 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -1248,6 +1248,7 @@ void vcpu_events_set(struct kvm_vm *vm, uint32_t vcpuid,
+ 		ret, errno);
+ }
+ 
++#ifdef __x86_64__
+ void vcpu_nested_state_get(struct kvm_vm *vm, uint32_t vcpuid,
+ 			   struct kvm_nested_state *state)
+ {
+@@ -1279,6 +1280,7 @@ int vcpu_nested_state_set(struct kvm_vm *vm, uint32_t vcpuid,
+ 
+ 	return ret;
+ }
++#endif
+ 
+ /*
+  * VM VCPU System Regs Get
+-- 
+2.21.0
