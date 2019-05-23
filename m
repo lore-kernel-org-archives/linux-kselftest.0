@@ -1,93 +1,55 @@
 From: keescook at chromium.org (Kees Cook)
-Date: Thu, 23 May 2019 15:49:37 -0700
-Subject: [PATCH 1/2] selftests/harness: Allow test to configure timeout
-In-Reply-To: <20190523224223.11054-2-alexandre.belloni@bootlin.com>
+Date: Thu, 23 May 2019 15:50:02 -0700
+Subject: [PATCH 2/2] selftests: rtc: rtctest: specify timeouts
+In-Reply-To: <20190523224223.11054-3-alexandre.belloni@bootlin.com>
 References: <20190523224223.11054-1-alexandre.belloni@bootlin.com>
- <20190523224223.11054-2-alexandre.belloni@bootlin.com>
-Message-ID: <201905231549.0952C6CE@keescook>
+ <20190523224223.11054-3-alexandre.belloni@bootlin.com>
+Message-ID: <201905231549.C19B7A21@keescook>
 
-On Fri, May 24, 2019 at 12:42:22AM +0200, Alexandre Belloni wrote:
-> Commit a745f7af3cbd ("selftests/harness: Add 30 second timeout per test")
-> adds an hardcoded 30s timeout to all tests. Unfortunately, rtctest has two
-> tests taking up to 60s. Allow for individual tests to define their own
-> timeout.
+On Fri, May 24, 2019 at 12:42:23AM +0200, Alexandre Belloni wrote:
+> uie_read is a commonly failing test that will block forever on buggy rtc
+> drivers. Shorten its timeout so it fails earlier. Also increase the timeout
+> for the two alarm test on a minute boundary.
 > 
 > Signed-off-by: Alexandre Belloni <alexandre.belloni at bootlin.com>
-
-Ah yes. Very nice; thanks!
 
 Reviewed-by: Kees Cook <keescook at chromium.org>
 
 > ---
->  tools/testing/selftests/kselftest_harness.h | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
+>  tools/testing/selftests/rtc/rtctest.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> index 941d9391377f..2067c6b0e8a1 100644
-> --- a/tools/testing/selftests/kselftest_harness.h
-> +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -62,6 +62,7 @@
->  #include <sys/wait.h>
->  #include <unistd.h>
+> diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+> index b2065536d407..66af608fb4c6 100644
+> --- a/tools/testing/selftests/rtc/rtctest.c
+> +++ b/tools/testing/selftests/rtc/rtctest.c
+> @@ -49,7 +49,7 @@ TEST_F(rtc, date_read) {
+>  	       rtc_tm.tm_hour, rtc_tm.tm_min, rtc_tm.tm_sec);
+>  }
 >  
-> +#define TEST_TIMEOUT_DEFAULT 30
+> -TEST_F(rtc, uie_read) {
+> +TEST_F_TIMEOUT(rtc, uie_read, NUM_UIE + 2) {
+>  	int i, rc, irq = 0;
+>  	unsigned long data;
 >  
->  /* Utilities exposed to the test definitions */
->  #ifndef TH_LOG_STREAM
-> @@ -169,7 +170,8 @@
->  	static void test_name(struct __test_metadata *_metadata); \
->  	static struct __test_metadata _##test_name##_object = \
->  		{ .name = "global." #test_name, \
-> -		  .fn = &test_name, .termsig = _signal }; \
-> +		  .fn = &test_name, .termsig = _signal, \
-> +		  .timeout = TEST_TIMEOUT_DEFAULT, }; \
->  	static void __attribute__((constructor)) _register_##test_name(void) \
->  	{ \
->  		__register_test(&_##test_name##_object); \
-> @@ -280,12 +282,15 @@
->   */
->  /* TODO(wad) register fixtures on dedicated test lists. */
->  #define TEST_F(fixture_name, test_name) \
-> -	__TEST_F_IMPL(fixture_name, test_name, -1)
-> +	__TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEOUT_DEFAULT)
+> @@ -211,7 +211,7 @@ TEST_F(rtc, alarm_wkalm_set) {
+>  	ASSERT_EQ(new, secs);
+>  }
 >  
->  #define TEST_F_SIGNAL(fixture_name, test_name, signal) \
-> -	__TEST_F_IMPL(fixture_name, test_name, signal)
-> +	__TEST_F_IMPL(fixture_name, test_name, signal, TEST_TIMEOUT_DEFAULT)
+> -TEST_F(rtc, alarm_alm_set_minute) {
+> +TEST_F_TIMEOUT(rtc, alarm_alm_set_minute, 65) {
+>  	struct timeval tv = { .tv_sec = 62 };
+>  	unsigned long data;
+>  	struct rtc_time tm;
+> @@ -264,7 +264,7 @@ TEST_F(rtc, alarm_alm_set_minute) {
+>  	ASSERT_EQ(new, secs);
+>  }
 >  
-> -#define __TEST_F_IMPL(fixture_name, test_name, signal) \
-> +#define TEST_F_TIMEOUT(fixture_name, test_name, timeout) \
-> +	__TEST_F_IMPL(fixture_name, test_name, -1, timeout)
-> +
-> +#define __TEST_F_IMPL(fixture_name, test_name, signal, tmout) \
->  	static void fixture_name##_##test_name( \
->  		struct __test_metadata *_metadata, \
->  		FIXTURE_DATA(fixture_name) *self); \
-> @@ -307,6 +312,7 @@
->  		.name = #fixture_name "." #test_name, \
->  		.fn = &wrapper_##fixture_name##_##test_name, \
->  		.termsig = signal, \
-> +		.timeout = tmout, \
->  	 }; \
->  	static void __attribute__((constructor)) \
->  			_register_##fixture_name##_##test_name(void) \
-> @@ -632,6 +638,7 @@ struct __test_metadata {
->  	int termsig;
->  	int passed;
->  	int trigger; /* extra handler after the evaluation */
-> +	int timeout;
->  	__u8 step;
->  	bool no_print; /* manual trigger when TH_LOG_STREAM is not available */
->  	struct __test_metadata *prev, *next;
-> @@ -696,7 +703,7 @@ void __run_test(struct __test_metadata *t)
->  	t->passed = 1;
->  	t->trigger = 0;
->  	printf("[ RUN      ] %s\n", t->name);
-> -	alarm(30);
-> +	alarm(t->timeout);
->  	child_pid = fork();
->  	if (child_pid < 0) {
->  		printf("ERROR SPAWNING TEST CHILD\n");
+> -TEST_F(rtc, alarm_wkalm_set_minute) {
+> +TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
+>  	struct timeval tv = { .tv_sec = 62 };
+>  	struct rtc_wkalrm alarm = { 0 };
+>  	struct rtc_time tm;
 > -- 
 > 2.21.0
 > 
