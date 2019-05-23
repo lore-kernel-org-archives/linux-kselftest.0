@@ -1,112 +1,56 @@
 From: logang@deltatee.com (Logan Gunthorpe)
-Date: Thu, 23 May 2019 16:30:53 -0600
-Subject: [PATCH v5 03/10] NTB: Introduce helper functions to calculate logical
- port number
+Date: Thu, 23 May 2019 16:30:52 -0600
+Subject: [PATCH v5 02/10] PCI/switchtec: Add module parameter to request more
+ interrupts
 In-Reply-To: <20190523223100.5526-1-logang@deltatee.com>
 References: <20190523223100.5526-1-logang@deltatee.com>
-Message-ID: <20190523223100.5526-4-logang@deltatee.com>
+Message-ID: <20190523223100.5526-3-logang@deltatee.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523223053.NtEcbjMw_HbKjrC463-g3ckVwTj4vnbQ8HGSRdhZPjI@z>
+Message-ID: <20190523223052.vuzXoIYPfK1X-oV5Xg3GvRMMurLzZzil7Kxh8VVsFAI@z>
 
-This patch introduces the "Logical Port Number" which is similar to the
-"Port Number" in that it enumerates the ports in the system.
+Seeing the we want to use more interrupts in the NTB MSI code
+we need to be able allocate more (sometimes virtual) interrupts
+in the switchtec driver. Therefore add a module parameter to
+request to allocate additional interrupts.
 
-The original (or Physical) "Port Number" can be any number used by the
-hardware to uniquely identify a port in the system. The "Logical Port
-Number" enumerates all ports in the system from 0 to the number of
-ports minus one.
-
-For example a system with 5 ports might have the following port numbers
-which would be enumerated thusly:
-
-Port Number:           1  2  5  7  116
-Logical Port Number:   0  1  2  3  4
-
-The logical port number is useful when calculating which resources
-to use for which peers. So we thus define two helper functions:
-ntb_logical_port_number() and ntb_peer_logical_port_number() which
-provide the "Logical Port Number" for the local port and any peer
-respectively.
+This puts virtually no limit on the number of MSI interrupts available
+to NTB clients.
 
 Signed-off-by: Logan Gunthorpe <logang at deltatee.com>
-Cc: Jon Mason <jdmason at kudzu.us>
-Cc: Dave Jiang <dave.jiang at intel.com>
-Cc: Allen Hubbe <allenbh at gmail.com>
-Cc: Serge Semin <fancer.lancer at gmail.com>
+Cc: Bjorn Helgaas <bhelgaas at google.com>
 ---
- include/linux/ntb.h | 53 ++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 52 insertions(+), 1 deletion(-)
+ drivers/pci/switch/switchtec.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/ntb.h b/include/linux/ntb.h
-index 56a92e3ae3ae..91cf492b16a0 100644
---- a/include/linux/ntb.h
-+++ b/include/linux/ntb.h
-@@ -616,7 +616,6 @@ static inline int ntb_port_number(struct ntb_dev *ntb)
+diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
+index e22766c79fe9..8b1db78197d9 100644
+--- a/drivers/pci/switch/switchtec.c
++++ b/drivers/pci/switch/switchtec.c
+@@ -30,6 +30,10 @@ module_param(use_dma_mrpc, bool, 0644);
+ MODULE_PARM_DESC(use_dma_mrpc,
+ 		 "Enable the use of the DMA MRPC feature");
  
- 	return ntb->ops->port_number(ntb);
- }
--
- /**
-  * ntb_peer_port_count() - get the number of peer device ports
-  * @ntb:	NTB device context.
-@@ -653,6 +652,58 @@ static inline int ntb_peer_port_number(struct ntb_dev *ntb, int pidx)
- 	return ntb->ops->peer_port_number(ntb, pidx);
- }
++static int nirqs = 32;
++module_param(nirqs, int, 0644);
++MODULE_PARM_DESC(nirqs, "number of interrupts to allocate (more may be useful for NTB applications)");
++
+ static dev_t switchtec_devt;
+ static DEFINE_IDA(switchtec_minor_ida);
  
-+/**
-+ * ntb_logical_port_number() - get the logical port number of the local port
-+ * @ntb:	NTB device context.
-+ *
-+ * The Logical Port Number is defined to be a unique number for each
-+ * port starting from zero through to the number of ports minus one.
-+ * This is in contrast to the Port Number where each port can be assigned
-+ * any unique physical number by the hardware.
-+ *
-+ * The logical port number is useful for calculating the resource indexes
-+ * used by peers.
-+ *
-+ * Return: the logical port number or negative value indicating an error
-+ */
-+static inline int ntb_logical_port_number(struct ntb_dev *ntb)
-+{
-+	int lport = ntb_port_number(ntb);
-+	int pidx;
+@@ -1247,8 +1251,12 @@ static int switchtec_init_isr(struct switchtec_dev *stdev)
+ 	int dma_mrpc_irq;
+ 	int rc;
+ 
+-	nvecs = pci_alloc_irq_vectors(stdev->pdev, 1, 4,
+-				      PCI_IRQ_MSIX | PCI_IRQ_MSI);
++	if (nirqs < 4)
++		nirqs = 4;
 +
-+	if (lport < 0)
-+		return lport;
-+
-+	for (pidx = 0; pidx < ntb_peer_port_count(ntb); pidx++)
-+		if (lport <= ntb_peer_port_number(ntb, pidx))
-+			return pidx;
-+
-+	return pidx;
-+}
-+
-+/**
-+ * ntb_peer_logical_port_number() - get the logical peer port by given index
-+ * @ntb:	NTB device context.
-+ * @pidx:	Peer port index.
-+ *
-+ * The Logical Port Number is defined to be a unique number for each
-+ * port starting from zero through to the number of ports minus one.
-+ * This is in contrast to the Port Number where each port can be assigned
-+ * any unique physical number by the hardware.
-+ *
-+ * The logical port number is useful for calculating the resource indexes
-+ * used by peers.
-+ *
-+ * Return: the peer's logical port number or negative value indicating an error
-+ */
-+static inline int ntb_peer_logical_port_number(struct ntb_dev *ntb, int pidx)
-+{
-+	if (ntb_peer_port_number(ntb, pidx) < ntb_port_number(ntb))
-+		return pidx;
-+	else
-+		return pidx + 1;
-+}
-+
- /**
-  * ntb_peer_port_idx() - get the peer device port index by given port number
-  * @ntb:	NTB device context.
++	nvecs = pci_alloc_irq_vectors(stdev->pdev, 1, nirqs,
++				      PCI_IRQ_MSIX | PCI_IRQ_MSI |
++				      PCI_IRQ_VIRTUAL);
+ 	if (nvecs < 0)
+ 		return nvecs;
+ 
 -- 
 2.20.1
