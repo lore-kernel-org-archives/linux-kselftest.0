@@ -1,63 +1,53 @@
-From: willemdebruijn.kernel at gmail.com (Willem de Bruijn)
-Date: Thu, 23 May 2019 17:39:36 -0400
-Subject: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
-In-Reply-To: <20190523210651.80902-2-fklassen@appneta.com>
-References: <20190523210651.80902-1-fklassen@appneta.com>
- <20190523210651.80902-2-fklassen@appneta.com>
-Message-ID: <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
+From: khalid.aziz at oracle.com (Khalid Aziz)
+Date: Thu, 23 May 2019 15:42:33 -0600
+Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+In-Reply-To: <20190523201105.oifkksus4rzcwqt4@mbp>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
+ <20190521182932.sm4vxweuwo5ermyd@mbp> <201905211633.6C0BF0C2@keescook>
+ <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
+ <20190523201105.oifkksus4rzcwqt4@mbp>
+Message-ID: <047e3b90-d73e-0ca8-869c-d03b7580e644@oracle.com>
 
-On Thu, May 23, 2019 at 5:09 PM Fred Klassen <fklassen at appneta.com> wrote:
->
-> Fixes an issue where TX Timestamps are not arriving on the error queue
-> when UDP_SEGMENT CMSG type is combined with CMSG type SO_TIMESTAMPING.
-> This can be illustrated with an updated updgso_bench_tx program which
-> includes the '-T' option to test for this condition.
->
->     ./udpgso_bench_tx -4ucTPv -S 1472 -l2 -D 172.16.120.18
->     poll timeout
->     udp tx:      0 MB/s        1 calls/s      1 msg/s
->
-> The "poll timeout" message above indicates that TX timestamp never
-> arrived.
->
-> It also appears that other TX CMSG types cause similar issues, for
-> example trying to set SOL_IP/IP_TOS.
->
->     ./udpgso_bench_tx -4ucPv -S 1472 -q 182 -l2 -D 172.16.120.18
->     poll timeout
->     udp tx:      0 MB/s        1 calls/s      1 msg/s
->
-> This patch preserves tx_flags for the first UDP GSO segment. This
-> mirrors the stack's behaviour for IPv4 fragments.
->
-> Fixes: ee80d1ebe5ba ("udp: add udp gso")
-> Signed-off-by: Fred Klassen <fklassen at appneta.com>
-> ---
->  net/ipv4/udp_offload.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
-> index 065334b41d57..33de347695ae 100644
-> --- a/net/ipv4/udp_offload.c
-> +++ b/net/ipv4/udp_offload.c
-> @@ -228,6 +228,10 @@ struct sk_buff *__udp_gso_segment(struct sk_buff *gso_skb,
->         seg = segs;
->         uh = udp_hdr(seg);
->
-> +       /* preserve TX timestamp and zero-copy info for first segment */
-> +       skb_shinfo(seg)->tskey = skb_shinfo(gso_skb)->tskey;
-> +       skb_shinfo(seg)->tx_flags = skb_shinfo(gso_skb)->tx_flags;
-> +
+On 5/23/19 2:11 PM, Catalin Marinas wrote:
+> Hi Khalid,
+> 
+> On Thu, May 23, 2019 at 11:51:40AM -0600, Khalid Aziz wrote:
+>> On 5/21/19 6:04 PM, Kees Cook wrote:
+>>> As an aside: I think Sparc ADI support in Linux actually side-stepped
+>>> this[1] (i.e. chose "solution 1"): "All addresses passed to kernel must
+>>> be non-ADI tagged addresses." (And sadly, "Kernel does not enable ADI
+>>> for kernel code.") I think this was a mistake we should not repeat for
+>>> arm64 (we do seem to be at least in agreement about this, I think).
+>>>
+>>> [1] https://lore.kernel.org/patchwork/patch/654481/
+>>
+>> That is a very early version of the sparc ADI patch. Support for tagged
+>> addresses in syscalls was added in later versions and is in the patch
+>> that is in the kernel.
+> 
+> I tried to figure out but I'm not familiar with the sparc port. How did
+> you solve the tagged address going into various syscall implementations
+> in the kernel (e.g. sys_write)? Is the tag removed on kernel entry or it
+> ends up deeper in the core code?
 
-Thanks for the report.
+Tag is not removed from the user addresses. Kernel passes tagged
+addresses to copy_from_user and copy_to_user. MMU checks the tag
+embedded in the address when kernel accesses userspace addresses. This
+maintains the ADI integrity even when userspace attempts to access any
+userspace addresses through system calls.
 
-Zerocopy notification reference count is managed in skb_segment. That
-should work.
+On sparc, access_ok() is defined as:
 
-Support for timestamping with the new GSO feature is indeed an
-oversight. The solution is similar to how TCP associates the timestamp
-with the right segment in tcp_gso_tstamp.
+#define access_ok(addr, size) __access_ok((unsigned long)(addr), size)
+#define __access_ok(addr, size) (__user_ok((addr) & get_fs().seg, (size)))
+#define __user_ok(addr, size) ({ (void)(size); (addr) < STACK_TOP; })
 
-Only, I think we want to transfer the timestamp request to the last
-datagram, not the first. For send timestamp, the final byte leaving
-the host is usually more interesting.
+STACK_TOP for M7 processor (which is the first sparc processor to
+support ADI) is 0xfff8000000000000UL. Tagged addresses pass the
+access_ok() check fine. Any tag mismatches that happen during kernel
+access to userspace addresses are handled by do_mcd_err().
+
+--
+Khalid
