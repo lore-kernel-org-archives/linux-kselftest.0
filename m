@@ -1,13 +1,13 @@
 From: gregkh@linuxfoundation.org (gregkh@linuxfoundation.org)
-Date: Thu, 23 May 2019 11:50:18 +0200
+Date: Thu, 23 May 2019 11:50:22 +0200
 Subject: FAILED: patch "[PATCH] x86_64: Allow breakpoints to emulate call
- instructions" failed to apply to 4.9-stable tree
-Message-ID: <15586050184156@kroah.com>
+ instructions" failed to apply to 4.4-stable tree
+Message-ID: <1558605022149172@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523095018.TkWny6pQhWplfECq-qYkRS_Cx98YqJV4ysAnFkc7kJ4@z>
+Message-ID: <20190523095022.O0LehdgT77k0uVIgJl__UdjTI71H7K1a22w1LMJE9I4@z>
 
 
-The patch below does not apply to the 4.9-stable tree.
+The patch below does not apply to the 4.4-stable tree.
 If someone wants it applied there, or to any other stable or longterm
 tree, then please email the backport, including the original git commit
 id to <stable at vger.kernel.org>.
