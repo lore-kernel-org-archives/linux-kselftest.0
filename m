@@ -1,47 +1,42 @@
-From: alexandre.belloni@bootlin.com (Alexandre Belloni)
-Date: Fri, 24 May 2019 00:52:19 +0200
-Subject: about selftests/rtc test related stuff
-In-Reply-To: <CAG=yYwmrE30nROqn63oAkXN9BCqfmo4T7+QPN-H3mSGG9dLU4A@mail.gmail.com>
-References: <CAG=yYwk+g28_dnOcN--w-PLbGtA2oM5tq14W4X5bBjdurnF2iA@mail.gmail.com>
- <20190523174739.GY3274@piout.net>
- <CAG=yYwmrE30nROqn63oAkXN9BCqfmo4T7+QPN-H3mSGG9dLU4A@mail.gmail.com>
-Message-ID: <20190523225219.GZ3274@piout.net>
+From: shuah@kernel.org (shuah)
+Date: Thu, 23 May 2019 16:57:14 -0600
+Subject: [PATCH 0/2] kselftest: fix rtctest timeout
+In-Reply-To: <20190523224223.11054-1-alexandre.belloni@bootlin.com>
+References: <20190523224223.11054-1-alexandre.belloni@bootlin.com>
+Message-ID: <9c94c2b7-153d-ef75-c474-9bae49d6a039@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523225219.GaiFKrZ0wIn2IgQHmWSgvd7hRDQ1aaDEc3zesAyehyw@z>
+Message-ID: <20190523225714.a5NAwdyou6IiPXX1Y__VO-3Sr8ozkINZw4ug9C92vRc@z>
 
-On 24/05/2019 02:36:42+0530, Jeffrin Thalakkottoor wrote:
-> On Thu, May 23, 2019 at 11:17 PM Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
-> > Your user probably doesn't have access to the rtc device file.
-> anyway thanks related
-> Following is the result with sudo....
-> ------------------------x--------------------------------------x----------------------------
-> $sudo ./rtctest
-> [sudo] password for jeffrin:
-> [==========] Running 7 tests from 2 test cases.
-> [ RUN      ] rtc.date_read
-> rtctest.c:49:rtc.date_read:Current RTC date/time is 23/05/2019 20:49:49.
-> [       OK ] rtc.date_read
-> [ RUN      ] rtc.uie_read
-> [       OK ] rtc.uie_read
-> [ RUN      ] rtc.uie_select
-> [       OK ] rtc.uie_select
-> [ RUN      ] rtc.alarm_alm_set
-> rtctest.c:137:rtc.alarm_alm_set:Alarm time now set to 20:49:58.
-> rtctest.c:156:rtc.alarm_alm_set:data: 1a0
-> [       OK ] rtc.alarm_alm_set
-> [ RUN      ] rtc.alarm_wkalm_set
-> rtctest.c:195:rtc.alarm_wkalm_set:Alarm time now set to 23/05/2019 20:50:01.
-> [       OK ] rtc.alarm_wkalm_set
-> [ RUN      ] rtc.alarm_alm_set_minute
-> rtctest.c:239:rtc.alarm_alm_set_minute:Alarm time now set to 20:51:00.
-> Alarm clock
-> $rtctest.c:258:rtc.alarm_alm_set_minute:data: 1a0
+On 5/23/19 4:42 PM, Alexandre Belloni wrote:
+> Hi,
+> 
+> Commit a745f7af3cbd ("selftests/harness: Add 30 second timeout per
+> test") wrongly assumed that no individual test would run for more than
+> 30 seconds and this silently broke rtctest.
+> 
+> Please consider the following patches as fixes for v5.2 to avoid having
+> any non working release.
+> 
+> Thanks,
+> 
+> Alexandre Belloni (2):
+>    selftests/harness: Allow test to configure timeout
+>    selftests: rtc: rtctest: specify timeouts
+> 
+>   tools/testing/selftests/kselftest_harness.h | 17 ++++++++++++-----
+>   tools/testing/selftests/rtc/rtctest.c       |  6 +++---
+>   2 files changed, 15 insertions(+), 8 deletions(-)
 > 
 
-I just sent a fix for that timeout issue.
+Thanks for fixing them quickly.
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I will pull these in. I have one more fix from Kees already queued
+up.
+
+Jeffrin! Would you like to test these to see if they work for you
+and send Tested-by tag.
+
+I don't see 1/2 in my Inbox. I have Kees's reply to it. Odd.
+
+thanks,
+-- Shuah
