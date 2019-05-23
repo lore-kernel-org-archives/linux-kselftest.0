@@ -1,82 +1,41 @@
-From: Dave.Martin at arm.com (Dave Martin)
-Date: Thu, 23 May 2019 11:42:57 +0100
-Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-In-Reply-To: <20190523002052.GF15389@ziepe.ca>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <20190517144931.GA56186@arrakis.emea.arm.com>
- <20190521184856.GC2922@ziepe.ca>
- <20190522134925.GV28398@e103592.cambridge.arm.com>
- <20190523002052.GF15389@ziepe.ca>
-Message-ID: <20190523104256.GX28398@e103592.cambridge.arm.com>
+From: drjones at redhat.com (Andrew Jones)
+Date: Thu, 23 May 2019 12:56:23 +0200
+Subject: [RFC PATCH 4/4] KVM: selftests: Add the sync_regs test for s390x
+In-Reply-To: <20190516111253.4494-5-thuth@redhat.com>
+References: <20190516111253.4494-1-thuth@redhat.com>
+ <20190516111253.4494-5-thuth@redhat.com>
+Message-ID: <20190523105623.3zlnbleniovobwzk@kamzik.brq.redhat.com>
 
-On Wed, May 22, 2019 at 09:20:52PM -0300, Jason Gunthorpe wrote:
-> On Wed, May 22, 2019 at 02:49:28PM +0100, Dave Martin wrote:
-> > On Tue, May 21, 2019 at 03:48:56PM -0300, Jason Gunthorpe wrote:
-> > > On Fri, May 17, 2019 at 03:49:31PM +0100, Catalin Marinas wrote:
-> > > 
-> > > > The tagged pointers (whether hwasan or MTE) should ideally be a
-> > > > transparent feature for the application writer but I don't think we can
-> > > > solve it entirely and make it seamless for the multitude of ioctls().
-> > > > I'd say you only opt in to such feature if you know what you are doing
-> > > > and the user code takes care of specific cases like ioctl(), hence the
-> > > > prctl() proposal even for the hwasan.
-> > > 
-> > > I'm not sure such a dire view is warrented.. 
-> > > 
-> > > The ioctl situation is not so bad, other than a few special cases,
-> > > most drivers just take a 'void __user *' and pass it as an argument to
-> > > some function that accepts a 'void __user *'. sparse et al verify
-> > > this. 
-> > > 
-> > > As long as the core functions do the right thing the drivers will be
-> > > OK.
-> > > 
-> > > The only place things get dicy is if someone casts to unsigned long
-> > > (ie for vma work) but I think that reflects that our driver facing
-> > > APIs for VMAs are compatible with static analysis (ie I have no
-> > > earthly idea why get_user_pages() accepts an unsigned long), not that
-> > > this is too hard.
-> > 
-> > If multiple people will care about this, perhaps we should try to
-> > annotate types more explicitly in SYSCALL_DEFINEx() and ABI data
-> > structures.
-> > 
-> > For example, we could have a couple of mutually exclusive modifiers
-> > 
-> > T __object *
-> > T __vaddr * (or U __vaddr)
-> > 
-> > In the first case the pointer points to an object (in the C sense)
-> > that the call may dereference but not use for any other purpose.
+On Thu, May 16, 2019 at 01:12:53PM +0200, Thomas Huth wrote:
+> The test is an adaption of the same test for x86. Note that there
+> are some differences in the way how s390x deals with the kvm_valid_regs
+> in struct kvm_run, so some of the tests had to be removed. Also this
+> test is not using the ucall() interface on s390x yet (which would need
+> some work to be usable on s390x), so it simply drops out of the VM with
+> a diag 0x501 breakpoint instead.
 > 
-> How would you use these two differently?
+> Signed-off-by: Thomas Huth <thuth at redhat.com>
+> ---
+>  MAINTAINERS                                   |   1 +
+>  tools/testing/selftests/kvm/Makefile          |   2 +
+>  .../selftests/kvm/s390x/sync_regs_test.c      | 151 ++++++++++++++++++
+>  3 files changed, 154 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/s390x/sync_regs_test.c
 > 
-> So far the kernel has worked that __user should tag any pointer that
-> is from userspace and then you can't do anything with it until you
-> transform it into a kernel something
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 514d1f88ee26..68f76ee9e821 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -8645,6 +8645,7 @@ F:	arch/s390/include/asm/gmap.h
+>  F:	arch/s390/include/asm/kvm*
+>  F:	arch/s390/kvm/
+>  F:	arch/s390/mm/gmap.c
+> +F:	tools/testing/selftests/kvm/s390x/
+>  F:	tools/testing/selftests/kvm/*/s390x/
 
-Ultimately it would be good to disallow casting __object pointers execpt
-to compatible __object pointer types, and to make get_user etc. demand
-__object.
+Do we need these lines added? We have tools/testing/selftests/kvm/ in the
+common KVM section already. If we do want to specify them specifically,
+then I guess we need x86 and arm MAINTAINERS updates as well.
 
-__vaddr pointers / addresses would be freely castable, but not to
-__object and so would not be dereferenceable even indirectly.
-
-Or that's the general idea.  Figuring out a sane set of rules that we
-could actually check / enforce would require a bit of work.
-
-(Whether the __vaddr base type is a pointer or an integer type is
-probably moot, due to the restrictions we would place on the use of
-these anyway.)
-
-> > to tell static analysers the real type of pointers smuggled through
-> > UAPI disguised as other types (*cough* KVM, etc.)
-> 
-> Yes, that would help alot, we often have to pass pointers through a
-> u64 in the uAPI, and there is no static checker support to make sure
-> they are run through the u64_to_user_ptr() helper.
-
-Agreed.
-
-Cheers
----Dave
+Thanks,
+drew
