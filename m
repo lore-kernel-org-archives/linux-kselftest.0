@@ -1,159 +1,172 @@
-From: vincenzo.frascino@arm.com (Vincenzo Frascino)
-Date: Thu, 23 May 2019 12:21:15 +0100
-Subject: [PATCH v4 2/3] s390: Fix vDSO clock_getres()
-In-Reply-To: <20190523112116.19233-1-vincenzo.frascino@arm.com>
-References: <20190523112116.19233-1-vincenzo.frascino@arm.com>
-Message-ID: <20190523112116.19233-3-vincenzo.frascino@arm.com>
+From: christian@brauner.io (Christian Brauner)
+Date: Thu, 23 May 2019 13:51:20 +0200
+Subject: [PATCH v1 1/2] open: add close_range()
+In-Reply-To: <20190522165737.GC4915@redhat.com>
+References: <20190522155259.11174-1-christian@brauner.io>
+ <20190522165737.GC4915@redhat.com>
+Message-ID: <20190523115118.pmscbd6kaqy37dym@brauner.io>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523112115.Yqh_GnzLCR8Sm9RLf8O8gglOSO0W3isAD112E0QCiP0@z>
+Message-ID: <20190523115120.wnOfjOxN5VCOA4Im5A2gioTKC5tmEmuNuFHO_ahT1KQ@z>
 
-clock_getres in the vDSO library has to preserve the same behaviour
-of posix_get_hrtimer_res().
+On Wed, May 22, 2019@06:57:37PM +0200, Oleg Nesterov wrote:
+> On 05/22, Christian Brauner wrote:
+> >
+> > +static struct file *pick_file(struct files_struct *files, unsigned fd)
+> >  {
+> > -	struct file *file;
+> > +	struct file *file = NULL;
+> >  	struct fdtable *fdt;
+> >  
+> >  	spin_lock(&files->file_lock);
+> > @@ -632,15 +629,65 @@ int __close_fd(struct files_struct *files, unsigned fd)
+> >  		goto out_unlock;
+> >  	rcu_assign_pointer(fdt->fd[fd], NULL);
+> >  	__put_unused_fd(files, fd);
+> > -	spin_unlock(&files->file_lock);
+> > -	return filp_close(file, files);
+> >  
+> >  out_unlock:
+> >  	spin_unlock(&files->file_lock);
+> > -	return -EBADF;
+> > +	return file;
+> 
+> ...
+> 
+> > +int __close_range(struct files_struct *files, unsigned fd, unsigned max_fd)
+> > +{
+> > +	unsigned int cur_max;
+> > +
+> > +	if (fd > max_fd)
+> > +		return -EINVAL;
+> > +
+> > +	rcu_read_lock();
+> > +	cur_max = files_fdtable(files)->max_fds;
+> > +	rcu_read_unlock();
+> > +
+> > +	/* cap to last valid index into fdtable */
+> > +	if (max_fd >= cur_max)
+> > +		max_fd = cur_max - 1;
+> > +
+> > +	while (fd <= max_fd) {
+> > +		struct file *file;
+> > +
+> > +		file = pick_file(files, fd++);
+> 
+> Well, how about something like
+> 
+> 	static unsigned int find_next_opened_fd(struct fdtable *fdt, unsigned start)
+> 	{
+> 		unsigned int maxfd = fdt->max_fds;
+> 		unsigned int maxbit = maxfd / BITS_PER_LONG;
+> 		unsigned int bitbit = start / BITS_PER_LONG;
+> 
+> 		bitbit = find_next_bit(fdt->full_fds_bits, maxbit, bitbit) * BITS_PER_LONG;
+> 		if (bitbit > maxfd)
+> 			return maxfd;
+> 		if (bitbit > start)
+> 			start = bitbit;
+> 		return find_next_bit(fdt->open_fds, maxfd, start);
+> 	}
 
-In particular, posix_get_hrtimer_res() does:
-    sec = 0;
-    ns = hrtimer_resolution;
-and hrtimer_resolution depends on the enablement of the high
-resolution timers that can happen either at compile or at run time.
+> 
+> 	unsigned close_next_fd(struct files_struct *files, unsigned start, unsigned maxfd)
+> 	{
+> 		unsigned fd;
+> 		struct file *file;
+> 		struct fdtable *fdt;
+> 	
+> 		spin_lock(&files->file_lock);
+> 		fdt = files_fdtable(files);
+> 		fd = find_next_opened_fd(fdt, start);
+> 		if (fd >= fdt->max_fds || fd > maxfd) {
+> 			fd = -1;
+> 			goto out;
+> 		}
+> 
+> 		file = fdt->fd[fd];
+> 		rcu_assign_pointer(fdt->fd[fd], NULL);
+> 		__put_unused_fd(files, fd);
+> 	out:
+> 		spin_unlock(&files->file_lock);
+> 
+> 		if (fd == -1u)
+> 			return fd;
+> 
+> 		filp_close(file, files);
+> 		return fd + 1;
+> 	}
 
-Fix the s390 vdso implementation of clock_getres keeping a copy of
-hrtimer_resolution in vdso data and using that directly.
+Thanks, Oleg!
 
-Cc: Martin Schwidefsky <schwidefsky at de.ibm.com>
-Cc: Heiko Carstens <heiko.carstens at de.ibm.com>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
-Acked-by: Martin Schwidefsky <schwidefsky at de.ibm.com>
----
+I kept it dumb and was about to reply that your solution introduces more
+code when it seemed we wanted to keep this very simple for now.
+But then I saw that find_next_opened_fd() already exists as
+find_next_fd(). So it's actually not bad compared to what I sent in v1.
+So - with some small tweaks (need to test it and all now) - how do we
+feel about?:
 
-Note: This patch is independent from the others in this series, hence it
-can be merged singularly by the s390 maintainers.
+/**
+ * __close_next_open_fd() - Close the nearest open fd.
+ *
+ * @curfd: lowest file descriptor to consider
+ * @maxfd: highest file descriptor to consider
+ *
+ * This function will close the nearest open fd, i.e. it will either
+ * close @curfd if it is open or the closest open file descriptor
+ * c greater than @curfd that
+ * is smaller or equal to maxfd.
+ * If the function found a file descriptor to close it will return 0 and
+ * place the file descriptor it closed in @curfd. If it did not find a
+ * file descriptor to close it will return -EBADF.
+ */
+static int __close_next_open_fd(struct files_struct *files, unsigned *curfd, unsigned maxfd)
+{
+        struct file *file = NULL;
+	unsigned fd;
+	struct fdtable *fdt;
 
- arch/s390/include/asm/vdso.h           |  1 +
- arch/s390/kernel/asm-offsets.c         |  2 +-
- arch/s390/kernel/time.c                |  1 +
- arch/s390/kernel/vdso32/clock_getres.S | 12 +++++++-----
- arch/s390/kernel/vdso64/clock_getres.S | 10 +++++-----
- 5 files changed, 15 insertions(+), 11 deletions(-)
+	spin_lock(&files->file_lock);
+	fdt = files_fdtable(files);
+	fd = find_next_fd(fdt, *curfd);
+	if (fd >= fdt->max_fds || fd > maxfd)
+		goto out_unlock;
 
-diff --git a/arch/s390/include/asm/vdso.h b/arch/s390/include/asm/vdso.h
-index 169d7604eb80..f3ba84fa9bd1 100644
---- a/arch/s390/include/asm/vdso.h
-+++ b/arch/s390/include/asm/vdso.h
-@@ -36,6 +36,7 @@ struct vdso_data {
- 	__u32 tk_shift;			/* Shift used for xtime_nsec	0x60 */
- 	__u32 ts_dir;			/* TOD steering direction	0x64 */
- 	__u64 ts_end;			/* TOD steering end		0x68 */
-+	__u32 hrtimer_res;		/* hrtimer resolution		0x70 */
- };
- 
- struct vdso_per_cpu_data {
-diff --git a/arch/s390/kernel/asm-offsets.c b/arch/s390/kernel/asm-offsets.c
-index 41ac4ad21311..4a229a60b24a 100644
---- a/arch/s390/kernel/asm-offsets.c
-+++ b/arch/s390/kernel/asm-offsets.c
-@@ -76,6 +76,7 @@ int main(void)
- 	OFFSET(__VDSO_TK_SHIFT, vdso_data, tk_shift);
- 	OFFSET(__VDSO_TS_DIR, vdso_data, ts_dir);
- 	OFFSET(__VDSO_TS_END, vdso_data, ts_end);
-+	OFFSET(__VDSO_CLOCK_REALTIME_RES, vdso_data, hrtimer_res);
- 	OFFSET(__VDSO_ECTG_BASE, vdso_per_cpu_data, ectg_timer_base);
- 	OFFSET(__VDSO_ECTG_USER, vdso_per_cpu_data, ectg_user_time);
- 	OFFSET(__VDSO_CPU_NR, vdso_per_cpu_data, cpu_nr);
-@@ -87,7 +88,6 @@ int main(void)
- 	DEFINE(__CLOCK_REALTIME_COARSE, CLOCK_REALTIME_COARSE);
- 	DEFINE(__CLOCK_MONOTONIC_COARSE, CLOCK_MONOTONIC_COARSE);
- 	DEFINE(__CLOCK_THREAD_CPUTIME_ID, CLOCK_THREAD_CPUTIME_ID);
--	DEFINE(__CLOCK_REALTIME_RES, MONOTONIC_RES_NSEC);
- 	DEFINE(__CLOCK_COARSE_RES, LOW_RES_NSEC);
- 	BLANK();
- 	/* idle data offsets */
-diff --git a/arch/s390/kernel/time.c b/arch/s390/kernel/time.c
-index e8766beee5ad..8ea9db599d38 100644
---- a/arch/s390/kernel/time.c
-+++ b/arch/s390/kernel/time.c
-@@ -310,6 +310,7 @@ void update_vsyscall(struct timekeeper *tk)
- 
- 	vdso_data->tk_mult = tk->tkr_mono.mult;
- 	vdso_data->tk_shift = tk->tkr_mono.shift;
-+	vdso_data->hrtimer_res = hrtimer_resolution;
- 	smp_wmb();
- 	++vdso_data->tb_update_count;
- }
-diff --git a/arch/s390/kernel/vdso32/clock_getres.S b/arch/s390/kernel/vdso32/clock_getres.S
-index eaf9cf1417f6..fecd7684c645 100644
---- a/arch/s390/kernel/vdso32/clock_getres.S
-+++ b/arch/s390/kernel/vdso32/clock_getres.S
-@@ -18,20 +18,22 @@
- __kernel_clock_getres:
- 	CFI_STARTPROC
- 	basr	%r1,0
--	la	%r1,4f-.(%r1)
-+10:	al	%r1,4f-10b(%r1)
-+	l	%r0,__VDSO_CLOCK_REALTIME_RES(%r1)
- 	chi	%r2,__CLOCK_REALTIME
- 	je	0f
- 	chi	%r2,__CLOCK_MONOTONIC
- 	je	0f
--	la	%r1,5f-4f(%r1)
-+	basr	%r1,0
-+	la	%r1,5f-.(%r1)
-+	l	%r0,0(%r1)
- 	chi	%r2,__CLOCK_REALTIME_COARSE
- 	je	0f
- 	chi	%r2,__CLOCK_MONOTONIC_COARSE
- 	jne	3f
- 0:	ltr	%r3,%r3
- 	jz	2f				/* res == NULL */
--1:	l	%r0,0(%r1)
--	xc	0(4,%r3),0(%r3)			/* set tp->tv_sec to zero */
-+1:	xc	0(4,%r3),0(%r3)			/* set tp->tv_sec to zero */
- 	st	%r0,4(%r3)			/* store tp->tv_usec */
- 2:	lhi	%r2,0
- 	br	%r14
-@@ -39,6 +41,6 @@ __kernel_clock_getres:
- 	svc	0
- 	br	%r14
- 	CFI_ENDPROC
--4:	.long	__CLOCK_REALTIME_RES
-+4:	.long	_vdso_data - 10b
- 5:	.long	__CLOCK_COARSE_RES
- 	.size	__kernel_clock_getres,.-__kernel_clock_getres
-diff --git a/arch/s390/kernel/vdso64/clock_getres.S b/arch/s390/kernel/vdso64/clock_getres.S
-index 081435398e0a..022b58c980db 100644
---- a/arch/s390/kernel/vdso64/clock_getres.S
-+++ b/arch/s390/kernel/vdso64/clock_getres.S
-@@ -17,12 +17,14 @@
- 	.type  __kernel_clock_getres, at function
- __kernel_clock_getres:
- 	CFI_STARTPROC
--	larl	%r1,4f
-+	larl	%r1,3f
-+	lg	%r0,0(%r1)
- 	cghi	%r2,__CLOCK_REALTIME_COARSE
- 	je	0f
- 	cghi	%r2,__CLOCK_MONOTONIC_COARSE
- 	je	0f
--	larl	%r1,3f
-+	larl	%r1,_vdso_data
-+	l	%r0,__VDSO_CLOCK_REALTIME_RES(%r1)
- 	cghi	%r2,__CLOCK_REALTIME
- 	je	0f
- 	cghi	%r2,__CLOCK_MONOTONIC
-@@ -36,7 +38,6 @@ __kernel_clock_getres:
- 	jz	2f
- 0:	ltgr	%r3,%r3
- 	jz	1f				/* res == NULL */
--	lg	%r0,0(%r1)
- 	xc	0(8,%r3),0(%r3)			/* set tp->tv_sec to zero */
- 	stg	%r0,8(%r3)			/* store tp->tv_usec */
- 1:	lghi	%r2,0
-@@ -45,6 +46,5 @@ __kernel_clock_getres:
- 	svc	0
- 	br	%r14
- 	CFI_ENDPROC
--3:	.quad	__CLOCK_REALTIME_RES
--4:	.quad	__CLOCK_COARSE_RES
-+3:	.quad	__CLOCK_COARSE_RES
- 	.size	__kernel_clock_getres,.-__kernel_clock_getres
--- 
-2.21.0
+	file = fdt->fd[fd];
+	rcu_assign_pointer(fdt->fd[fd], NULL);
+	__put_unused_fd(files, fd);
+
+out_unlock:
+	spin_unlock(&files->file_lock);
+
+	if (!file)
+		return -EBADF;
+
+	*curfd = fd;
+	filp_close(file, files);
+	return 0;
+}
+
+int __close_range(struct files_struct *files, unsigned fd, unsigned max_fd)
+{
+	if (fd > max_fd)
+		return -EINVAL;
+
+	while (fd <= max_fd) {
+		if (__close_next_fd(files, &fd, maxfd))
+			break;
+
+		cond_resched();
+		fd++;
+	}
+
+	return 0;
+}
+
+SYSCALL_DEFINE3(close_range, unsigned int, fd, unsigned int, max_fd,
+		unsigned int, flags)
+{
+	if (flags)
+		return -EINVAL;
+
+	return __close_range(current->files, fd, max_fd);
+}
