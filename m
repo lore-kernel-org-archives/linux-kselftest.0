@@ -1,50 +1,77 @@
-From: thuth@redhat.com (Thomas Huth)
-Date: Thu, 23 May 2019 13:19:58 +0200
-Subject: [RFC PATCH 4/4] KVM: selftests: Add the sync_regs test for s390x
-In-Reply-To: <20190523105623.3zlnbleniovobwzk@kamzik.brq.redhat.com>
-References: <20190516111253.4494-1-thuth@redhat.com>
- <20190516111253.4494-5-thuth@redhat.com>
- <20190523105623.3zlnbleniovobwzk@kamzik.brq.redhat.com>
-Message-ID: <6fbe22d3-b9a9-48c5-8227-743841332ae0@redhat.com>
+From: vincenzo.frascino@arm.com (Vincenzo Frascino)
+Date: Thu, 23 May 2019 12:21:13 +0100
+Subject: [PATCH v4 0/3] Fix vDSO clock_getres()
+Message-ID: <20190523112116.19233-1-vincenzo.frascino@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523111958.eAbA16p8_j7JAyQ69NPcaNVyrcWfFqZMkpVPX25Bm_U@z>
+Message-ID: <20190523112113.b9vklnTomwWhSMFg5ntyqkIsuuiEYhOWjbaBVPxtXsg@z>
 
-On 23/05/2019 12.56, Andrew Jones wrote:
-> On Thu, May 16, 2019@01:12:53PM +0200, Thomas Huth wrote:
->> The test is an adaption of the same test for x86. Note that there
->> are some differences in the way how s390x deals with the kvm_valid_regs
->> in struct kvm_run, so some of the tests had to be removed. Also this
->> test is not using the ucall() interface on s390x yet (which would need
->> some work to be usable on s390x), so it simply drops out of the VM with
->> a diag 0x501 breakpoint instead.
->>
->> Signed-off-by: Thomas Huth <thuth at redhat.com>
->> ---
->>  MAINTAINERS                                   |   1 +
->>  tools/testing/selftests/kvm/Makefile          |   2 +
->>  .../selftests/kvm/s390x/sync_regs_test.c      | 151 ++++++++++++++++++
->>  3 files changed, 154 insertions(+)
->>  create mode 100644 tools/testing/selftests/kvm/s390x/sync_regs_test.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 514d1f88ee26..68f76ee9e821 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -8645,6 +8645,7 @@ F:	arch/s390/include/asm/gmap.h
->>  F:	arch/s390/include/asm/kvm*
->>  F:	arch/s390/kvm/
->>  F:	arch/s390/mm/gmap.c
->> +F:	tools/testing/selftests/kvm/s390x/
->>  F:	tools/testing/selftests/kvm/*/s390x/
-> 
-> Do we need these lines added? We have tools/testing/selftests/kvm/ in the
-> common KVM section already. If we do want to specify them specifically,
-> then I guess we need x86 and arm MAINTAINERS updates as well.
+clock_getres in the vDSO library has to preserve the same behaviour
+of posix_get_hrtimer_res().
 
-I think they are helpful in the sense that the s390x maintainers get
-CC:-ed on related patches as well, and if I've got Christian right, he's
-interested in getting informed here. For Arm related patches, I guess
-you should ask the Arm maintainers first. For x86, it does not really
-matter, since the maintainers are the same.
+In particular, posix_get_hrtimer_res() does:
+    sec = 0;
+    ns = hrtimer_resolution;
+and hrtimer_resolution depends on the enablement of the high
+resolution timers that can happen either at compile or at run time.
 
- Thomas
+A possible fix is to change the vdso implementation of clock_getres,
+keeping a copy of hrtimer_resolution in vdso data and using that
+directly [1].
+
+This patchset implements the proposed fix for arm64, powerpc, s390,
+nds32 and adds a test to verify that the syscall and the vdso library
+implementation of clock_getres return the same values.
+
+Even if these patches are unified by the same topic, there is no
+dependency between them, hence they can be merged singularly by each
+arch maintainer.
+
+Note: arm64 and nds32 respective fixes have been merged in 5.2-rc1,
+hence they have been removed from this series.
+
+[1] https://marc.info/?l=linux-arm-kernel&m=155110381930196&w=2
+
+Changes:
+--------
+v4:
+  - Address review comments.
+v3:
+  - Rebased on 5.2-rc1.
+  - Address review comments.
+v2:
+  - Rebased on 5.1-rc5.
+  - Addressed review comments.
+
+Cc: Christophe Leroy <christophe.leroy at c-s.fr>
+Cc: Benjamin Herrenschmidt <benh at kernel.crashing.org>
+Cc: Paul Mackerras <paulus at samba.org>
+Cc: Michael Ellerman <mpe at ellerman.id.au>
+Cc: Martin Schwidefsky <schwidefsky at de.ibm.com>
+Cc: Heiko Carstens <heiko.carstens at de.ibm.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Arnd Bergmann <arnd at arndb.de>
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
+
+Vincenzo Frascino (3):
+  powerpc: Fix vDSO clock_getres()
+  s390: Fix vDSO clock_getres()
+  kselftest: Extend vDSO selftest to clock_getres
+
+ arch/powerpc/include/asm/vdso_datapage.h      |   2 +
+ arch/powerpc/kernel/asm-offsets.c             |   2 +-
+ arch/powerpc/kernel/time.c                    |   1 +
+ arch/powerpc/kernel/vdso32/gettimeofday.S     |   7 +-
+ arch/powerpc/kernel/vdso64/gettimeofday.S     |   7 +-
+ arch/s390/include/asm/vdso.h                  |   1 +
+ arch/s390/kernel/asm-offsets.c                |   2 +-
+ arch/s390/kernel/time.c                       |   1 +
+ arch/s390/kernel/vdso32/clock_getres.S        |  12 +-
+ arch/s390/kernel/vdso64/clock_getres.S        |  10 +-
+ tools/testing/selftests/vDSO/Makefile         |   2 +
+ .../selftests/vDSO/vdso_clock_getres.c        | 124 ++++++++++++++++++
+ 12 files changed, 155 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
+
+-- 
+2.21.0
