@@ -1,60 +1,47 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Thu, 23 May 2019 15:50:02 -0700
-Subject: [PATCH 2/2] selftests: rtc: rtctest: specify timeouts
-In-Reply-To: <20190523224223.11054-3-alexandre.belloni@bootlin.com>
-References: <20190523224223.11054-1-alexandre.belloni@bootlin.com>
- <20190523224223.11054-3-alexandre.belloni@bootlin.com>
-Message-ID: <201905231549.C19B7A21@keescook>
+From: alexandre.belloni@bootlin.com (Alexandre Belloni)
+Date: Fri, 24 May 2019 00:52:19 +0200
+Subject: about selftests/rtc test related stuff
+In-Reply-To: <CAG=yYwmrE30nROqn63oAkXN9BCqfmo4T7+QPN-H3mSGG9dLU4A@mail.gmail.com>
+References: <CAG=yYwk+g28_dnOcN--w-PLbGtA2oM5tq14W4X5bBjdurnF2iA@mail.gmail.com>
+ <20190523174739.GY3274@piout.net>
+ <CAG=yYwmrE30nROqn63oAkXN9BCqfmo4T7+QPN-H3mSGG9dLU4A@mail.gmail.com>
+Message-ID: <20190523225219.GZ3274@piout.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523225002.ZtJ7MmtLqG_S09Gh-UOdUZujcYGiLsQ6fAG6gDOqXmw@z>
+Message-ID: <20190523225219.GaiFKrZ0wIn2IgQHmWSgvd7hRDQ1aaDEc3zesAyehyw@z>
 
-On Fri, May 24, 2019@12:42:23AM +0200, Alexandre Belloni wrote:
-> uie_read is a commonly failing test that will block forever on buggy rtc
-> drivers. Shorten its timeout so it fails earlier. Also increase the timeout
-> for the two alarm test on a minute boundary.
+On 24/05/2019 02:36:42+0530, Jeffrin Thalakkottoor wrote:
+> On Thu, May 23, 2019 at 11:17 PM Alexandre Belloni
+> <alexandre.belloni@bootlin.com> wrote:
+> > Your user probably doesn't have access to the rtc device file.
+> anyway thanks related
+> Following is the result with sudo....
+> ------------------------x--------------------------------------x----------------------------
+> $sudo ./rtctest
+> [sudo] password for jeffrin:
+> [==========] Running 7 tests from 2 test cases.
+> [ RUN      ] rtc.date_read
+> rtctest.c:49:rtc.date_read:Current RTC date/time is 23/05/2019 20:49:49.
+> [       OK ] rtc.date_read
+> [ RUN      ] rtc.uie_read
+> [       OK ] rtc.uie_read
+> [ RUN      ] rtc.uie_select
+> [       OK ] rtc.uie_select
+> [ RUN      ] rtc.alarm_alm_set
+> rtctest.c:137:rtc.alarm_alm_set:Alarm time now set to 20:49:58.
+> rtctest.c:156:rtc.alarm_alm_set:data: 1a0
+> [       OK ] rtc.alarm_alm_set
+> [ RUN      ] rtc.alarm_wkalm_set
+> rtctest.c:195:rtc.alarm_wkalm_set:Alarm time now set to 23/05/2019 20:50:01.
+> [       OK ] rtc.alarm_wkalm_set
+> [ RUN      ] rtc.alarm_alm_set_minute
+> rtctest.c:239:rtc.alarm_alm_set_minute:Alarm time now set to 20:51:00.
+> Alarm clock
+> $rtctest.c:258:rtc.alarm_alm_set_minute:data: 1a0
 > 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni at bootlin.com>
 
-Reviewed-by: Kees Cook <keescook at chromium.org>
-
-> ---
->  tools/testing/selftests/rtc/rtctest.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-> index b2065536d407..66af608fb4c6 100644
-> --- a/tools/testing/selftests/rtc/rtctest.c
-> +++ b/tools/testing/selftests/rtc/rtctest.c
-> @@ -49,7 +49,7 @@ TEST_F(rtc, date_read) {
->  	       rtc_tm.tm_hour, rtc_tm.tm_min, rtc_tm.tm_sec);
->  }
->  
-> -TEST_F(rtc, uie_read) {
-> +TEST_F_TIMEOUT(rtc, uie_read, NUM_UIE + 2) {
->  	int i, rc, irq = 0;
->  	unsigned long data;
->  
-> @@ -211,7 +211,7 @@ TEST_F(rtc, alarm_wkalm_set) {
->  	ASSERT_EQ(new, secs);
->  }
->  
-> -TEST_F(rtc, alarm_alm_set_minute) {
-> +TEST_F_TIMEOUT(rtc, alarm_alm_set_minute, 65) {
->  	struct timeval tv = { .tv_sec = 62 };
->  	unsigned long data;
->  	struct rtc_time tm;
-> @@ -264,7 +264,7 @@ TEST_F(rtc, alarm_alm_set_minute) {
->  	ASSERT_EQ(new, secs);
->  }
->  
-> -TEST_F(rtc, alarm_wkalm_set_minute) {
-> +TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
->  	struct timeval tv = { .tv_sec = 62 };
->  	struct rtc_wkalrm alarm = { 0 };
->  	struct rtc_time tm;
-> -- 
-> 2.21.0
-> 
+I just sent a fix for that timeout issue.
 
 -- 
-Kees Cook
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
