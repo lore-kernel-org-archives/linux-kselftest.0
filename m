@@ -1,43 +1,68 @@
-From: yhs at fb.com (Yonghong Song)
-Date: Thu, 23 May 2019 16:51:20 +0000
-Subject: [PATCH bpf-next v2 RESEND 0/2] Move bpf_printk to bpf_helpers.h
-In-Reply-To: <20190523125355.18437-1-mrostecki@opensuse.org>
-References: <20190523125355.18437-1-mrostecki@opensuse.org>
-Message-ID: <4642ca96-22ab-ad61-a6a1-1d2ef7239cb8@fb.com>
+From: drjones at redhat.com (Andrew Jones)
+Date: Thu, 23 May 2019 19:20:04 +0200
+Subject: [PATCH 4/9] KVM: selftests: Introduce a VM_MODE_DEFAULT macro
+ for the default bits
+In-Reply-To: <20190523164309.13345-5-thuth@redhat.com>
+References: <20190523164309.13345-1-thuth@redhat.com>
+ <20190523164309.13345-5-thuth@redhat.com>
+Message-ID: <20190523172004.yeo5wtugofoh5mid@kamzik.brq.redhat.com>
 
-
-
-On 5/23/19 5:53 AM, Michal Rostecki wrote:
-> This series of patches move the commonly used bpf_printk macro to
-> bpf_helpers.h which is already included in all BPF programs which
-> defined that macro on their own.
+On Thu, May 23, 2019 at 06:43:04PM +0200, Thomas Huth wrote:
+> This will be required later for tests like the kvm_create_max_vcpus
+> test that do not use the vm_create_default() function.
 > 
-> v1->v2:
-> - If HBM_DEBUG is not defined in hbm sample, undefine bpf_printk and set
->    an empty macro for it.
+> Signed-off-by: Thomas Huth <thuth at redhat.com>
+> ---
+>  tools/testing/selftests/kvm/include/kvm_util.h      | 6 ++++++
+>  tools/testing/selftests/kvm/lib/aarch64/processor.c | 2 +-
+>  tools/testing/selftests/kvm/lib/x86_64/processor.c  | 2 +-
+>  3 files changed, 8 insertions(+), 2 deletions(-)
 > 
-> Michal Rostecki (2):
->    selftests: bpf: Move bpf_printk to bpf_helpers.h
->    samples: bpf: Do not define bpf_printk macro
-> 
->   samples/bpf/hbm_kern.h                                | 11 ++---------
->   samples/bpf/tcp_basertt_kern.c                        |  7 -------
->   samples/bpf/tcp_bufs_kern.c                           |  7 -------
->   samples/bpf/tcp_clamp_kern.c                          |  7 -------
->   samples/bpf/tcp_cong_kern.c                           |  7 -------
->   samples/bpf/tcp_iw_kern.c                             |  7 -------
->   samples/bpf/tcp_rwnd_kern.c                           |  7 -------
->   samples/bpf/tcp_synrto_kern.c                         |  7 -------
->   samples/bpf/tcp_tos_reflect_kern.c                    |  7 -------
->   samples/bpf/xdp_sample_pkts_kern.c                    |  7 -------
->   tools/testing/selftests/bpf/bpf_helpers.h             |  8 ++++++++
->   .../testing/selftests/bpf/progs/sockmap_parse_prog.c  |  7 -------
->   .../selftests/bpf/progs/sockmap_tcp_msg_prog.c        |  7 -------
->   .../selftests/bpf/progs/sockmap_verdict_prog.c        |  7 -------
->   .../testing/selftests/bpf/progs/test_lwt_seg6local.c  |  7 -------
->   tools/testing/selftests/bpf/progs/test_xdp_noinline.c |  7 -------
->   tools/testing/selftests/bpf/test_sockmap_kern.h       |  7 -------
->   17 files changed, 10 insertions(+), 114 deletions(-)
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index b8bf961074fe..b6eb6471e6b2 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -43,6 +43,12 @@ enum vm_guest_mode {
+>  	NUM_VM_MODES,
+>  };
+>  
+> +#ifdef __aarch64__
+> +#define VM_MODE_DEFAULT VM_MODE_P40V48_4K
+> +#else
+> +#define VM_MODE_DEFAULT VM_MODE_P52V48_4K
+> +#endif
+> +
+>  #define vm_guest_mode_string(m) vm_guest_mode_string[m]
+>  extern const char * const vm_guest_mode_string[];
+>  
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> index fa6cd340137c..596ccaf09cb6 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> @@ -226,7 +226,7 @@ struct kvm_vm *vm_create_default(uint32_t vcpuid, uint64_t extra_mem_pages,
+>  	uint64_t extra_pg_pages = (extra_mem_pages / ptrs_per_4k_pte) * 2;
+>  	struct kvm_vm *vm;
+>  
+> -	vm = vm_create(VM_MODE_P40V48_4K, DEFAULT_GUEST_PHY_PAGES + extra_pg_pages, O_RDWR);
+> +	vm = vm_create(VM_MODE_DEFAULT, DEFAULT_GUEST_PHY_PAGES + extra_pg_pages, O_RDWR);
+>  
+>  	kvm_vm_elf_load(vm, program_invocation_name, 0, 0);
+>  	vm_vcpu_add_default(vm, vcpuid, guest_code);
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index dc7fae9fa424..bb38bbcefac5 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -823,7 +823,7 @@ struct kvm_vm *vm_create_default(uint32_t vcpuid, uint64_t extra_mem_pages,
+>  	uint64_t extra_pg_pages = extra_mem_pages / 512 * 2;
+>  
+>  	/* Create VM */
+> -	vm = vm_create(VM_MODE_P52V48_4K,
+> +	vm = vm_create(VM_MODE_DEFAULT,
+>  		       DEFAULT_GUEST_PHY_PAGES + extra_pg_pages,
+>  		       O_RDWR);
+>  
+> -- 
+> 2.21.0
+>
 
-Ack for the whole series.
-Acked-by: Yonghong Song <yhs at fb.com>
+Reviewed-by: Andrew Jones <drjones at redhat.com>
