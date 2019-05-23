@@ -1,77 +1,181 @@
 From: vincenzo.frascino@arm.com (Vincenzo Frascino)
-Date: Thu, 23 May 2019 12:21:13 +0100
-Subject: [PATCH v4 0/3] Fix vDSO clock_getres()
-Message-ID: <20190523112116.19233-1-vincenzo.frascino@arm.com>
+Date: Thu, 23 May 2019 12:21:16 +0100
+Subject: [PATCH v4 3/3] kselftest: Extend vDSO selftest to clock_getres
+In-Reply-To: <20190523112116.19233-1-vincenzo.frascino@arm.com>
+References: <20190523112116.19233-1-vincenzo.frascino@arm.com>
+Message-ID: <20190523112116.19233-4-vincenzo.frascino@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523112113.b9vklnTomwWhSMFg5ntyqkIsuuiEYhOWjbaBVPxtXsg@z>
+Message-ID: <20190523112116.tsV91Y1nbQQBumbPmMJ4kvPMOYUETEME-bvyP0EynTA@z>
 
-clock_getres in the vDSO library has to preserve the same behaviour
-of posix_get_hrtimer_res().
+The current version of the multiarch vDSO selftest verifies only
+gettimeofday.
 
-In particular, posix_get_hrtimer_res() does:
-    sec = 0;
-    ns = hrtimer_resolution;
-and hrtimer_resolution depends on the enablement of the high
-resolution timers that can happen either at compile or at run time.
+Extend the vDSO selftest to clock_getres, to verify that the
+syscall and the vDSO library function return the same information.
 
-A possible fix is to change the vdso implementation of clock_getres,
-keeping a copy of hrtimer_resolution in vdso data and using that
-directly [1].
+The extension has been used to verify the hrtimer_resoltion fix.
 
-This patchset implements the proposed fix for arm64, powerpc, s390,
-nds32 and adds a test to verify that the syscall and the vdso library
-implementation of clock_getres return the same values.
-
-Even if these patches are unified by the same topic, there is no
-dependency between them, hence they can be merged singularly by each
-arch maintainer.
-
-Note: arm64 and nds32 respective fixes have been merged in 5.2-rc1,
-hence they have been removed from this series.
-
-[1] https://marc.info/?l=linux-arm-kernel&m=155110381930196&w=2
-
-Changes:
---------
-v4:
-  - Address review comments.
-v3:
-  - Rebased on 5.2-rc1.
-  - Address review comments.
-v2:
-  - Rebased on 5.1-rc5.
-  - Addressed review comments.
-
-Cc: Christophe Leroy <christophe.leroy at c-s.fr>
-Cc: Benjamin Herrenschmidt <benh at kernel.crashing.org>
-Cc: Paul Mackerras <paulus at samba.org>
-Cc: Michael Ellerman <mpe at ellerman.id.au>
-Cc: Martin Schwidefsky <schwidefsky at de.ibm.com>
-Cc: Heiko Carstens <heiko.carstens at de.ibm.com>
 Cc: Shuah Khan <shuah at kernel.org>
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: Arnd Bergmann <arnd at arndb.de>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
+---
 
-Vincenzo Frascino (3):
-  powerpc: Fix vDSO clock_getres()
-  s390: Fix vDSO clock_getres()
-  kselftest: Extend vDSO selftest to clock_getres
+Note: This patch is independent from the others in this series, hence it
+can be merged singularly by the kselftest maintainers.
 
- arch/powerpc/include/asm/vdso_datapage.h      |   2 +
- arch/powerpc/kernel/asm-offsets.c             |   2 +-
- arch/powerpc/kernel/time.c                    |   1 +
- arch/powerpc/kernel/vdso32/gettimeofday.S     |   7 +-
- arch/powerpc/kernel/vdso64/gettimeofday.S     |   7 +-
- arch/s390/include/asm/vdso.h                  |   1 +
- arch/s390/kernel/asm-offsets.c                |   2 +-
- arch/s390/kernel/time.c                       |   1 +
- arch/s390/kernel/vdso32/clock_getres.S        |  12 +-
- arch/s390/kernel/vdso64/clock_getres.S        |  10 +-
  tools/testing/selftests/vDSO/Makefile         |   2 +
  .../selftests/vDSO/vdso_clock_getres.c        | 124 ++++++++++++++++++
- 12 files changed, 155 insertions(+), 16 deletions(-)
+ 2 files changed, 126 insertions(+)
  create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
 
+diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+index 9e03d61f52fd..d5c5bfdf1ac1 100644
+--- a/tools/testing/selftests/vDSO/Makefile
++++ b/tools/testing/selftests/vDSO/Makefile
+@@ -5,6 +5,7 @@ uname_M := $(shell uname -m 2>/dev/null || echo not)
+ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+ 
+ TEST_GEN_PROGS := $(OUTPUT)/vdso_test
++TEST_GEN_PROGS += $(OUTPUT)/vdso_clock_getres
+ ifeq ($(ARCH),x86)
+ TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
+ endif
+@@ -18,6 +19,7 @@ endif
+ 
+ all: $(TEST_GEN_PROGS)
+ $(OUTPUT)/vdso_test: parse_vdso.c vdso_test.c
++$(OUTPUT)/vdso_clock_getres: vdso_clock_getres.c
+ $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
+ 	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
+ 		vdso_standalone_test_x86.c parse_vdso.c \
+diff --git a/tools/testing/selftests/vDSO/vdso_clock_getres.c b/tools/testing/selftests/vDSO/vdso_clock_getres.c
+new file mode 100644
+index 000000000000..b62d8d4f7c38
+--- /dev/null
++++ b/tools/testing/selftests/vDSO/vdso_clock_getres.c
+@@ -0,0 +1,124 @@
++// SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
++/*
++ * vdso_clock_getres.c: Sample code to test clock_getres.
++ * Copyright (c) 2019 Arm Ltd.
++ *
++ * Compile with:
++ * gcc -std=gnu99 vdso_clock_getres.c
++ *
++ * Tested on ARM, ARM64, MIPS32, x86 (32-bit and 64-bit),
++ * Power (32-bit and 64-bit), S390x (32-bit and 64-bit).
++ * Might work on other architectures.
++ */
++
++#define _GNU_SOURCE
++#include <elf.h>
++#include <err.h>
++#include <fcntl.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <time.h>
++#include <sys/auxv.h>
++#include <sys/mman.h>
++#include <sys/time.h>
++#include <unistd.h>
++#include <sys/syscall.h>
++
++#include "../kselftest.h"
++
++static long syscall_clock_getres(clockid_t _clkid, struct timespec *_ts)
++{
++	long ret;
++
++	ret = syscall(SYS_clock_getres, _clkid, _ts);
++
++	return ret;
++}
++
++const char *vdso_clock_name[12] = {
++	"CLOCK_REALTIME",
++	"CLOCK_MONOTONIC",
++	"CLOCK_PROCESS_CPUTIME_ID",
++	"CLOCK_THREAD_CPUTIME_ID",
++	"CLOCK_MONOTONIC_RAW",
++	"CLOCK_REALTIME_COARSE",
++	"CLOCK_MONOTONIC_COARSE",
++	"CLOCK_BOOTTIME",
++	"CLOCK_REALTIME_ALARM",
++	"CLOCK_BOOTTIME_ALARM",
++	"CLOCK_SGI_CYCLE",
++	"CLOCK_TAI",
++};
++
++/*
++ * This function calls clock_getres in vdso and by system call
++ * with different values for clock_id.
++ *
++ * Example of output:
++ *
++ * clock_id: CLOCK_REALTIME [PASS]
++ * clock_id: CLOCK_BOOTTIME [PASS]
++ * clock_id: CLOCK_TAI [PASS]
++ * clock_id: CLOCK_REALTIME_COARSE [PASS]
++ * clock_id: CLOCK_MONOTONIC [PASS]
++ * clock_id: CLOCK_MONOTONIC_RAW [PASS]
++ * clock_id: CLOCK_MONOTONIC_COARSE [PASS]
++ */
++static inline int vdso_test_clock(unsigned int clock_id)
++{
++	struct timespec x, y;
++
++	printf("clock_id: %s", vdso_clock_name[clock_id]);
++	clock_getres(clock_id, &x);
++	syscall_clock_getres(clock_id, &y);
++
++	if ((x.tv_sec != y.tv_sec) || (x.tv_sec != y.tv_sec)) {
++		printf(" [FAIL]\n");
++		return KSFT_FAIL;
++	}
++
++	printf(" [PASS]\n");
++	return KSFT_PASS;
++}
++
++int main(int argc, char **argv)
++{
++	int ret;
++
++#if _POSIX_TIMERS > 0
++
++#ifdef CLOCK_REALTIME
++	ret = vdso_test_clock(CLOCK_REALTIME);
++#endif
++
++#ifdef CLOCK_BOOTTIME
++	ret += vdso_test_clock(CLOCK_BOOTTIME);
++#endif
++
++#ifdef CLOCK_TAI
++	ret += vdso_test_clock(CLOCK_TAI);
++#endif
++
++#ifdef CLOCK_REALTIME_COARSE
++	ret += vdso_test_clock(CLOCK_REALTIME_COARSE);
++#endif
++
++#ifdef CLOCK_MONOTONIC
++	ret += vdso_test_clock(CLOCK_MONOTONIC);
++#endif
++
++#ifdef CLOCK_MONOTONIC_RAW
++	ret += vdso_test_clock(CLOCK_MONOTONIC_RAW);
++#endif
++
++#ifdef CLOCK_MONOTONIC_COARSE
++	ret += vdso_test_clock(CLOCK_MONOTONIC_COARSE);
++#endif
++
++#endif
++	if (ret > 0)
++		return KSFT_FAIL;
++
++	return KSFT_PASS;
++}
 -- 
 2.21.0
