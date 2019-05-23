@@ -1,63 +1,97 @@
-From: drjones at redhat.com (Andrew Jones)
-Date: Thu, 23 May 2019 19:57:53 +0200
-Subject: [PATCH 2/9] KVM: selftests: Guard struct kvm_vcpu_events with
- __KVM_HAVE_VCPU_EVENTS
-In-Reply-To: <20190523164309.13345-3-thuth@redhat.com>
-References: <20190523164309.13345-1-thuth@redhat.com>
- <20190523164309.13345-3-thuth@redhat.com>
-Message-ID: <20190523175753.fpfapsh2hg3pjpqe@kamzik.brq.redhat.com>
+From: gregkh at linuxfoundation.org (Greg Kroah-Hartman)
+Date: Thu, 23 May 2019 21:06:36 +0200
+Subject: [PATCH 5.1 074/122] x86_64: Allow breakpoints to emulate call
+ instructions
+In-Reply-To: <20190523181705.091418060@linuxfoundation.org>
+References: <20190523181705.091418060@linuxfoundation.org>
+Message-ID: <20190523181714.548131991@linuxfoundation.org>
 
-On Thu, May 23, 2019 at 06:43:02PM +0200, Thomas Huth wrote:
-> The struct kvm_vcpu_events code is only available on certain architectures
-> (arm, arm64 and x86). To be able to compile kvm_util.c also for other
-> architectures, we have to fence the code with __KVM_HAVE_VCPU_EVENTS.
-> 
-> Reviewed-by: David Hildenbrand <david at redhat.com>
-> Signed-off-by: Thomas Huth <thuth at redhat.com>
-> ---
->  tools/testing/selftests/kvm/include/kvm_util.h | 2 ++
->  tools/testing/selftests/kvm/lib/kvm_util.c     | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> index a5a4b28f14d8..b8bf961074fe 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> @@ -114,10 +114,12 @@ void vcpu_sregs_set(struct kvm_vm *vm, uint32_t vcpuid,
->  		    struct kvm_sregs *sregs);
->  int _vcpu_sregs_set(struct kvm_vm *vm, uint32_t vcpuid,
->  		    struct kvm_sregs *sregs);
-> +#ifdef __KVM_HAVE_VCPU_EVENTS
->  void vcpu_events_get(struct kvm_vm *vm, uint32_t vcpuid,
->  		     struct kvm_vcpu_events *events);
->  void vcpu_events_set(struct kvm_vm *vm, uint32_t vcpuid,
->  		     struct kvm_vcpu_events *events);
-> +#endif
->  #ifdef __x86_64__
->  void vcpu_nested_state_get(struct kvm_vm *vm, uint32_t vcpuid,
->  			   struct kvm_nested_state *state);
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index ba1359ac504f..08edb8436c47 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -1224,6 +1224,7 @@ void vcpu_regs_set(struct kvm_vm *vm, uint32_t vcpuid, struct kvm_regs *regs)
->  		ret, errno);
->  }
->  
-> +#ifdef __KVM_HAVE_VCPU_EVENTS
->  void vcpu_events_get(struct kvm_vm *vm, uint32_t vcpuid,
->  		     struct kvm_vcpu_events *events)
->  {
-> @@ -1249,6 +1250,7 @@ void vcpu_events_set(struct kvm_vm *vm, uint32_t vcpuid,
->  	TEST_ASSERT(ret == 0, "KVM_SET_VCPU_EVENTS, failed, rc: %i errno: %i",
->  		ret, errno);
->  }
-> +#endif
->  
->  #ifdef __x86_64__
->  void vcpu_nested_state_get(struct kvm_vm *vm, uint32_t vcpuid,
-> -- 
-> 2.21.0
->
+From: Peter Zijlstra <peterz at infradead.org>
 
-Reviewed-by: Andrew Jones <drjones at redhat.com>
+commit 4b33dadf37666c0860b88f9e52a16d07bf6d0b03 upstream.
+
+In order to allow breakpoints to emulate call instructions, they need to push
+the return address onto the stack. The x86_64 int3 handler adds a small gap
+to allow the stack to grow some. Use this gap to add the return address to
+be able to emulate a call instruction at the breakpoint location.
+
+These helper functions are added:
+
+  int3_emulate_jmp(): changes the location of the regs->ip to return there.
+
+ (The next two are only for x86_64)
+  int3_emulate_push(): to push the address onto the gap in the stack
+  int3_emulate_call(): push the return address and change regs->ip
+
+Cc: Andy Lutomirski <luto at kernel.org>
+Cc: Nicolai Stange <nstange at suse.de>
+Cc: Thomas Gleixner <tglx at linutronix.de>
+Cc: Ingo Molnar <mingo at redhat.com>
+Cc: Borislav Petkov <bp at alien8.de>
+Cc: "H. Peter Anvin" <hpa at zytor.com>
+Cc: the arch/x86 maintainers <x86 at kernel.org>
+Cc: Josh Poimboeuf <jpoimboe at redhat.com>
+Cc: Jiri Kosina <jikos at kernel.org>
+Cc: Miroslav Benes <mbenes at suse.cz>
+Cc: Petr Mladek <pmladek at suse.com>
+Cc: Joe Lawrence <joe.lawrence at redhat.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Konrad Rzeszutek Wilk <konrad.wilk at oracle.com>
+Cc: Tim Chen <tim.c.chen at linux.intel.com>
+Cc: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
+Cc: Mimi Zohar <zohar at linux.ibm.com>
+Cc: Juergen Gross <jgross at suse.com>
+Cc: Nick Desaulniers <ndesaulniers at google.com>
+Cc: Nayna Jain <nayna at linux.ibm.com>
+Cc: Masahiro Yamada <yamada.masahiro at socionext.com>
+Cc: Joerg Roedel <jroedel at suse.de>
+Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest at vger.kernel.org>
+Cc: stable at vger.kernel.org
+Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
+Tested-by: Nicolai Stange <nstange at suse.de>
+Reviewed-by: Nicolai Stange <nstange at suse.de>
+Reviewed-by: Masami Hiramatsu <mhiramat at kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
+[ Modified to only work for x86_64 and added comment to int3_emulate_push() ]
+Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
+
+---
+ arch/x86/include/asm/text-patching.h |   28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+--- a/arch/x86/include/asm/text-patching.h
++++ b/arch/x86/include/asm/text-patching.h
+@@ -39,4 +39,32 @@ extern int poke_int3_handler(struct pt_r
+ extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
+ extern int after_bootmem;
+ 
++static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
++{
++	regs->ip = ip;
++}
++
++#define INT3_INSN_SIZE 1
++#define CALL_INSN_SIZE 5
++
++#ifdef CONFIG_X86_64
++static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
++{
++	/*
++	 * The int3 handler in entry_64.S adds a gap between the
++	 * stack where the break point happened, and the saving of
++	 * pt_regs. We can extend the original stack because of
++	 * this gap. See the idtentry macro's create_gap option.
++	 */
++	regs->sp -= sizeof(unsigned long);
++	*(unsigned long *)regs->sp = val;
++}
++
++static inline void int3_emulate_call(struct pt_regs *regs, unsigned long func)
++{
++	int3_emulate_push(regs, regs->ip - INT3_INSN_SIZE + CALL_INSN_SIZE);
++	int3_emulate_jmp(regs, func);
++}
++#endif
++
+ #endif /* _ASM_X86_TEXT_PATCHING_H */
