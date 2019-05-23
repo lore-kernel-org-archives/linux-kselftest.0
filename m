@@ -1,57 +1,210 @@
-From: daniel@iogearbox.net (Daniel Borkmann)
-Date: Thu, 23 May 2019 18:02:51 +0200
-Subject: [PATCH bpf v1 1/3] selftests/bpf: Test correctness of narrow
- 32bit read on 64bit field
-In-Reply-To: <20190515134731.12611-2-krzesimir@kinvolk.io>
-References: <20190515134731.12611-1-krzesimir@kinvolk.io>
- <20190515134731.12611-2-krzesimir@kinvolk.io>
-Message-ID: <c28c3cea-a8e0-fbd8-6113-bbb4cece0178@iogearbox.net>
+From: khlebnikov@yandex-team.ru (Konstantin Khlebnikov)
+Date: Thu, 23 May 2019 19:22:17 +0300
+Subject: [PATCH v1 1/2] open: add close_range()
+In-Reply-To: <20190522155259.11174-1-christian@brauner.io>
+References: <20190522155259.11174-1-christian@brauner.io>
+Message-ID: <67e4458a-9cc4-d1aa-608c-73ebe9e2f7a3@yandex-team.ru>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523160251.AeM_16zWGfMUbANRV13VPPuOJtu0Qb3s_QXdjVHtXnQ@z>
+Message-ID: <20190523162217.2PGpWHyeAMhDwuK4cuXijm-65fvvefN8e9-TLhNeiI0@z>
 
-On 05/15/2019 03:47 PM, Krzesimir Nowak wrote:
-> Test the correctness of the 32bit narrow reads by reading both halves
-> of the 64 bit field and doing a binary or on them to see if we get the
-> original value.
-> 
-> This isn't really tested - the program is not being run, because
-> BPF_PROG_TYPE_PERF_EVENT is not supported by bpf_test_run_prog.
+On 22.05.2019 18:52, Christian Brauner wrote:> This adds the close_range() syscall. It allows to efficiently close a range
+ > of file descriptors up to all file descriptors of a calling task.
+ >
+ > The syscall came up in a recent discussion around the new mount API and
+ > making new file descriptor types cloexec by default. During this
+ > discussion, Al suggested the close_range() syscall (cf. [1]). Note, a
+ > syscall in this manner has been requested by various people over time.
+ >
+ > First, it helps to close all file descriptors of an exec()ing task. This
+ > can be done safely via (quoting Al's example from [1] verbatim):
+ >
+ >          /* that exec is sensitive */
+ >          unshare(CLONE_FILES);
+ >          /* we don't want anything past stderr here */
+ >          close_range(3, ~0U);
+ >          execve(....);
+ >
+ > The code snippet above is one way of working around the problem that file
+ > descriptors are not cloexec by default. This is aggravated by the fact that
+ > we can't just switch them over without massively regressing userspace. For
+ > a whole class of programs having an in-kernel method of closing all file
+ > descriptors is very helpful (e.g. demons, service managers, programming
+ > language standard libraries, container managers etc.).
+ > (Please note, unshare(CLONE_FILES) should only be needed if the calling
+ >   task is multi-threaded and shares the file descriptor table with another
+ >   thread in which case two threads could race with one thread allocating
+ >   file descriptors and the other one closing them via close_range(). For the
+ >   general case close_range() before the execve() is sufficient.)
+ >
+ > Second, it allows userspace to avoid implementing closing all file
+ > descriptors by parsing through /proc/<pid>/fd/* and calling close() on each
+ > file descriptor. From looking at various large(ish) userspace code bases
+ > this or similar patterns are very common in:
+ > - service managers (cf. [4])
+ > - libcs (cf. [6])
+ > - container runtimes (cf. [5])
+ > - programming language runtimes/standard libraries
+ >    - Python (cf. [2])
+ >    - Rust (cf. [7], [8])
+ > As Dmitry pointed out there's even a long-standing glibc bug about missing
+ > kernel support for this task (cf. [3]).
+ > In addition, the syscall will also work for tasks that do not have procfs
+ > mounted and on kernels that do not have procfs support compiled in. In such
+ > situations the only way to make sure that all file descriptors are closed
+ > is to call close() on each file descriptor up to UINT_MAX or RLIMIT_NOFILE,
+ > OPEN_MAX trickery (cf. comment [8] on Rust).
+ >
+ > The performance is striking. For good measure, comparing the following
+ > simple close_all_fds() userspace implementation that is essentially just
+ > glibc's version in [6]:
+ >
+ > static int close_all_fds(void)
+ > {
+ >          int dir_fd;
+ >          DIR *dir;
+ >          struct dirent *direntp;
+ >
+ >          dir = opendir("/proc/self/fd");
+ >          if (!dir)
+ >                  return -1;
+ >          dir_fd = dirfd(dir);
+ >          while ((direntp = readdir(dir))) {
+ >                  int fd;
+ >                  if (strcmp(direntp->d_name, ".") == 0)
+ >                          continue;
+ >                  if (strcmp(direntp->d_name, "..") == 0)
+ >                          continue;
+ >                  fd = atoi(direntp->d_name);
+ >                  if (fd == dir_fd || fd == 0 || fd == 1 || fd == 2)
+ >                          continue;
+ >                  close(fd);
+ >          }
+ >          closedir(dir);
+ >          return 0;
+ > }
+ >
+ > to close_range() yields:
+ > 1. closing 4 open files:
+ >     - close_all_fds(): ~280 us
+ >     - close_range():    ~24 us
+ >
+ > 2. closing 1000 open files:
+ >     - close_all_fds(): ~5000 us
+ >     - close_range():   ~800 us
+ >
+ > close_range() is designed to allow for some flexibility. Specifically, it
+ > does not simply always close all open file descriptors of a task. Instead,
+ > callers can specify an upper bound.
+ > This is e.g. useful for scenarios where specific file descriptors are
+ > created with well-known numbers that are supposed to be excluded from
+ > getting closed.
+ > For extra paranoia close_range() comes with a flags argument. This can e.g.
+ > be used to implement extension. Once can imagine userspace wanting to stop
+ > at the first error instead of ignoring errors under certain circumstances.
 
-One option could be to add actual support for BPF_PROG_TYPE_PERF_EVENT to
-test_verifier where the program gets actually triggered, and the result
-stored in a map value that the test case reads out for checking the result
-against the expected one. Recently added something similar for LRU maps in
-the test suite, that shouldn't be too complex.
+ > There might be other valid ideas in the future. In any case, a flag
+ > argument doesn't hurt and keeps us on the safe side.
 
-Thanks,
-Daniel
+Here is another strange but real-live scenario: crash handler for dumping core.
 
-> Signed-off-by: Krzesimir Nowak <krzesimir at kinvolk.io>
-> ---
->  tools/testing/selftests/bpf/verifier/var_off.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/verifier/var_off.c b/tools/testing/selftests/bpf/verifier/var_off.c
-> index 8504ac937809..2668819dcc85 100644
-> --- a/tools/testing/selftests/bpf/verifier/var_off.c
-> +++ b/tools/testing/selftests/bpf/verifier/var_off.c
-> @@ -246,3 +246,18 @@
->  	.result = ACCEPT,
->  	.prog_type = BPF_PROG_TYPE_LWT_IN,
->  },
-> +{
-> +	"32bit loads of a 64bit field (both least and most significant words)",
-> +	.insns = {
-> +	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_perf_event_data, sample_period)),
-> +	BPF_LDX_MEM(BPF_W, BPF_REG_5, BPF_REG_1, offsetof(struct bpf_perf_event_data, sample_period) + 4),
-> +	BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, offsetof(struct bpf_perf_event_data, sample_period)),
-> +	BPF_ALU64_IMM(BPF_LSH, BPF_REG_4, 32),
-> +	BPF_ALU64_REG(BPF_OR, BPF_REG_4, BPF_REG_5),
-> +	BPF_ALU64_REG(BPF_XOR, BPF_REG_4, BPF_REG_6),
-> +	BPF_MOV64_REG(BPF_REG_0, BPF_REG_4),
-> +	BPF_EXIT_INSN(),
-> +	},
-> +	.result = ACCEPT,
-> +	.prog_type = BPF_PROG_TYPE_PERF_EVENT,
-> +},
-> 
+If applications has network connections it would be better to close them all,
+otherwise clients will wait until end of dumping process or timeout.
+Also closing normal files might be a good idea for releasing locks.
+
+But simple closing might race with other threads - closed fd will be reused
+while some code still thinks it refers to original file.
+
+Our solution closes files without freeing fd: it opens /dev/null and
+replaces all opened descriptors using dup2.
+
+So, special flag for close_range() could close files without clearing bitmap.
+Effect should be the same - fd wouldn't be reused.
+
+Actually two flags for two phases: closing files and releasing fd.
+
+ >
+ >  From an implementation side this is kept rather dumb. It saw some input
+ > from David and Jann but all nonsense is obviously my own!
+ > - Errors to close file descriptors are currently ignored. (Could be changed
+ >    by setting a flag in the future if needed.)
+ > - __close_range() is a rather simplistic wrapper around __close_fd().
+ >    My reasoning behind this is based on the nature of how __close_fd() needs
+ >    to release an fd. But maybe I misunderstood specifics:
+ >    We take the files_lock and rcu-dereference the fdtable of the calling
+ >    task, we find the entry in the fdtable, get the file and need to release
+ >    files_lock before calling filp_close().
+ >    In the meantime the fdtable might have been altered so we can't just
+ >    retake the spinlock and keep the old rcu-reference of the fdtable
+ >    around. Instead we need to grab a fresh reference to the fdtable.
+ >    If my reasoning is correct then there's really no point in fancyfying
+ >    __close_range(): We just need to rcu-dereference the fdtable of the
+ >    calling task once to cap the max_fd value correctly and then go on
+ >    calling __close_fd() in a loop.
+ >
+ > /* References */
+ > [1]: https://lore.kernel.org/lkml/20190516165021.GD17978 at ZenIV.linux.org.uk/
+ > [2]: https://github.com/python/cpython/blob/9e4f2f3a6b8ee995c365e86d976937c141d867f8/Modules/_posixsubprocess.c#L220
+ > [3]: https://sourceware.org/bugzilla/show_bug.cgi?id=10353#c7
+ > [4]: https://github.com/systemd/systemd/blob/5238e9575906297608ff802a27e2ff9effa3b338/src/basic/fd-util.c#L217
+ > [5]: https://github.com/lxc/lxc/blob/ddf4b77e11a4d08f09b7b9cd13e593f8c047edc5/src/lxc/start.c#L236
+ > [6]: 
+https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/grantpt.c;h=2030e07fa6e652aac32c775b8c6e005844c3c4eb;hb=HEAD#l17
+ >       Note that this is an internal implementation that is not exported.
+ >       Currently, libc seems to not provide an exported version of this
+ >       because of missing kernel support to do this.
+ > [7]: https://github.com/rust-lang/rust/issues/12148
+ > [8]: https://github.com/rust-lang/rust/blob/5f47c0613ed4eb46fca3633c1297364c09e5e451/src/libstd/sys/unix/process2.rs#L303-L308
+ >       Rust's solution is slightly different but is equally unperformant.
+ >       Rust calls getdtablesize() which is a glibc library function that
+ >       simply returns the current RLIMIT_NOFILE or OPEN_MAX values. Rust then
+ >       goes on to call close() on each fd. That's obviously overkill for most
+ >       tasks. Rarely, tasks - especially non-demons - hit RLIMIT_NOFILE or
+ >       OPEN_MAX.
+ >       Let's be nice and assume an unprivileged user with RLIMIT_NOFILE set
+ >       to 1024. Even in this case, there's a very high chance that in the
+ >       common case Rust is calling the close() syscall 1021 times pointlessly
+ >       if the task just has 0, 1, and 2 open.
+ >
+ > Suggested-by: Al Viro <viro at zeniv.linux.org.uk>
+ > Signed-off-by: Christian Brauner <christian at brauner.io>
+ > Cc: Arnd Bergmann <arnd at arndb.de>
+ > Cc: Jann Horn <jannh at google.com>
+ > Cc: David Howells <dhowells at redhat.com>
+ > Cc: Dmitry V. Levin <ldv at altlinux.org>
+ > Cc: Oleg Nesterov <oleg at redhat.com>
+ > Cc: Linus Torvalds <torvalds at linux-foundation.org>
+ > Cc: Florian Weimer <fweimer at redhat.com>
+ > Cc: linux-api at vger.kernel.org
+ > ---
+ > v1:
+ > - Linus Torvalds <torvalds at linux-foundation.org>:
+ >    - add cond_resched() to yield cpu when closing a lot of file descriptors
+ > - Al Viro <viro at zeniv.linux.org.uk>:
+ >    - add cond_resched() to yield cpu when closing a lot of file descriptors
+ > ---
+ >   arch/alpha/kernel/syscalls/syscall.tbl      |  1 +
+ >   arch/arm/tools/syscall.tbl                  |  1 +
+ >   arch/arm64/include/asm/unistd32.h           |  2 +
+ >   arch/ia64/kernel/syscalls/syscall.tbl       |  1 +
+ >   arch/m68k/kernel/syscalls/syscall.tbl       |  1 +
+ >   arch/microblaze/kernel/syscalls/syscall.tbl |  1 +
+ >   arch/mips/kernel/syscalls/syscall_n32.tbl   |  1 +
+ >   arch/mips/kernel/syscalls/syscall_n64.tbl   |  1 +
+ >   arch/mips/kernel/syscalls/syscall_o32.tbl   |  1 +
+ >   arch/parisc/kernel/syscalls/syscall.tbl     |  1 +
+ >   arch/powerpc/kernel/syscalls/syscall.tbl    |  1 +
+ >   arch/s390/kernel/syscalls/syscall.tbl       |  1 +
+ >   arch/sh/kernel/syscalls/syscall.tbl         |  1 +
+ >   arch/sparc/kernel/syscalls/syscall.tbl      |  1 +
+ >   arch/x86/entry/syscalls/syscall_32.tbl      |  1 +
+ >   arch/x86/entry/syscalls/syscall_64.tbl      |  1 +
+ >   arch/xtensa/kernel/syscalls/syscall.tbl     |  1 +
+ >   fs/file.c                                   | 63 ++++++++++++++++++---
+ >   fs/open.c                                   | 20 +++++++
+ >   include/linux/fdtable.h                     |  2 +
+ >   include/linux/syscalls.h                    |  2 +
+ >   include/uapi/asm-generic/unistd.h           |  4 +-
+ >   22 files changed, 100 insertions(+), 9 deletions(-)
+ >
+
+It would be better to split arch/ wiring into separate patch for better readability.
