@@ -1,12 +1,12 @@
 From: gregkh@linuxfoundation.org (Greg Kroah-Hartman)
-Date: Thu, 23 May 2019 21:06:37 +0200
-Subject: [PATCH 5.1 075/122] ftrace/x86_64: Emulate call function while
+Date: Thu, 23 May 2019 21:05:54 +0200
+Subject: [PATCH 5.0 066/139] ftrace/x86_64: Emulate call function while
  updating in breakpoint handler
-In-Reply-To: <20190523181705.091418060@linuxfoundation.org>
-References: <20190523181705.091418060@linuxfoundation.org>
-Message-ID: <20190523181714.674517884@linuxfoundation.org>
+In-Reply-To: <20190523181720.120897565@linuxfoundation.org>
+References: <20190523181720.120897565@linuxfoundation.org>
+Message-ID: <20190523181729.392695463@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523190637.vme9qnVkgfKiBgIHXwkFyjTHeeYwDryA4FNKnekVGek@z>
+Message-ID: <20190523190554.bDGc8o9u2A_m0ycrtwpYZR87KwIpgQI9tkR9jEVORJ8@z>
 
 From: Peter Zijlstra <peterz@infradead.org>
 
@@ -136,9 +136,9 @@ Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
 -	return 1;
 +	return 0;
  }
- NOKPROBE_SYMBOL(ftrace_int3_handler);
  
-@@ -859,6 +878,8 @@ void arch_ftrace_update_trampoline(struc
+ static int ftrace_write(unsigned long ip, const char *val, int size)
+@@ -858,6 +877,8 @@ void arch_ftrace_update_trampoline(struc
  
  	func = ftrace_ops_get_func(ops);
  
@@ -147,7 +147,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
  	/* Do a safe modify in case the trampoline is executing */
  	new = ftrace_call_replace(ip, (unsigned long)func);
  	ret = update_ftrace_func(ip, new);
-@@ -960,6 +981,7 @@ static int ftrace_mod_jmp(unsigned long
+@@ -959,6 +980,7 @@ static int ftrace_mod_jmp(unsigned long
  {
  	unsigned char *new;
  
