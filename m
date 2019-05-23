@@ -1,28 +1,20 @@
 From: oleg at redhat.com (Oleg Nesterov)
-Date: Thu, 23 May 2019 18:20:05 +0200
-Subject: [PATCH v2 1/2] open: add close_range()
-In-Reply-To: <20190523154747.15162-2-christian@brauner.io>
-References: <20190523154747.15162-1-christian@brauner.io>
- <20190523154747.15162-2-christian@brauner.io>
-Message-ID: <20190523162004.GC23070@redhat.com>
+Date: Thu, 23 May 2019 18:21:04 +0200
+Subject: [PATCH v1 1/2] open: add close_range()
+In-Reply-To: <20190523142826.omb7vgygudifmveq@brauner.io>
+References: <20190522155259.11174-1-christian@brauner.io>
+ <20190522165737.GC4915@redhat.com>
+ <20190523115118.pmscbd6kaqy37dym@brauner.io>
+ <20190523141447.34s3kc3fuwmoeq7n@brauner.io>
+ <20190523142826.omb7vgygudifmveq@brauner.io>
+Message-ID: <20190523162104.GD23070@redhat.com>
 
 On 05/23, Christian Brauner wrote:
 >
-> +int __close_range(struct files_struct *files, unsigned fd, unsigned max_fd)
-> +{
-> +	unsigned int cur_max;
-> +
-> +	if (fd > max_fd)
-> +		return -EINVAL;
-> +
-> +	rcu_read_lock();
-> +	cur_max = files_fdtable(files)->max_fds;
-> +	rcu_read_unlock();
-> +
-> +	/* cap to last valid index into fdtable */
-> +	max_fd = max(max_fd, (cur_max - 1));
-                 ^^^
+> So given that we would really need another find_next_open_fd() I think
+> sticking to the simple cond_resched() version I sent before is better
+> for now until we see real-world performance issues.
 
-Hmm. min() ?
+OK, agreed.
 
 Oleg.
