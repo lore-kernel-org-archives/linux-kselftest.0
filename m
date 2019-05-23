@@ -1,99 +1,39 @@
-From: gregkh@linuxfoundation.org (Greg Kroah-Hartman)
-Date: Thu, 23 May 2019 21:05:51 +0200
-Subject: [PATCH 4.14 33/77] x86_64: Allow breakpoints to emulate call
- instructions
-In-Reply-To: <20190523181719.982121681@linuxfoundation.org>
-References: <20190523181719.982121681@linuxfoundation.org>
-Message-ID: <20190523181724.795243206@linuxfoundation.org>
+From: catalin.marinas@arm.com (Catalin Marinas)
+Date: Thu, 23 May 2019 21:11:05 +0100
+Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+In-Reply-To: <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
+ <20190521182932.sm4vxweuwo5ermyd@mbp>
+ <201905211633.6C0BF0C2@keescook>
+ <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
+Message-ID: <20190523201105.oifkksus4rzcwqt4@mbp>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523190551.sKekG3SmqaAeSr_x-XuTmRKqaf2XTd-cJB_X2oCRfwA@z>
+Message-ID: <20190523201105.eLdVGS0Lwvwvu0Z7dxZnTBt8ph-mzA-VvS6GMmuLuQo@z>
 
-From: Peter Zijlstra <peterz@infradead.org>
+Hi Khalid,
 
-commit 4b33dadf37666c0860b88f9e52a16d07bf6d0b03 upstream.
+On Thu, May 23, 2019@11:51:40AM -0600, Khalid Aziz wrote:
+> On 5/21/19 6:04 PM, Kees Cook wrote:
+> > As an aside: I think Sparc ADI support in Linux actually side-stepped
+> > this[1] (i.e. chose "solution 1"): "All addresses passed to kernel must
+> > be non-ADI tagged addresses." (And sadly, "Kernel does not enable ADI
+> > for kernel code.") I think this was a mistake we should not repeat for
+> > arm64 (we do seem to be at least in agreement about this, I think).
+> > 
+> > [1] https://lore.kernel.org/patchwork/patch/654481/
+> 
+> That is a very early version of the sparc ADI patch. Support for tagged
+> addresses in syscalls was added in later versions and is in the patch
+> that is in the kernel.
 
-In order to allow breakpoints to emulate call instructions, they need to push
-the return address onto the stack. The x86_64 int3 handler adds a small gap
-to allow the stack to grow some. Use this gap to add the return address to
-be able to emulate a call instruction at the breakpoint location.
+I tried to figure out but I'm not familiar with the sparc port. How did
+you solve the tagged address going into various syscall implementations
+in the kernel (e.g. sys_write)? Is the tag removed on kernel entry or it
+ends up deeper in the core code?
 
-These helper functions are added:
+Thanks.
 
-  int3_emulate_jmp(): changes the location of the regs->ip to return there.
-
- (The next two are only for x86_64)
-  int3_emulate_push(): to push the address onto the gap in the stack
-  int3_emulate_call(): push the return address and change regs->ip
-
-Cc: Andy Lutomirski <luto at kernel.org>
-Cc: Nicolai Stange <nstange at suse.de>
-Cc: Thomas Gleixner <tglx at linutronix.de>
-Cc: Ingo Molnar <mingo at redhat.com>
-Cc: Borislav Petkov <bp at alien8.de>
-Cc: "H. Peter Anvin" <hpa at zytor.com>
-Cc: the arch/x86 maintainers <x86 at kernel.org>
-Cc: Josh Poimboeuf <jpoimboe at redhat.com>
-Cc: Jiri Kosina <jikos at kernel.org>
-Cc: Miroslav Benes <mbenes at suse.cz>
-Cc: Petr Mladek <pmladek at suse.com>
-Cc: Joe Lawrence <joe.lawrence at redhat.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Konrad Rzeszutek Wilk <konrad.wilk at oracle.com>
-Cc: Tim Chen <tim.c.chen at linux.intel.com>
-Cc: Sebastian Andrzej Siewior <bigeasy at linutronix.de>
-Cc: Mimi Zohar <zohar at linux.ibm.com>
-Cc: Juergen Gross <jgross at suse.com>
-Cc: Nick Desaulniers <ndesaulniers at google.com>
-Cc: Nayna Jain <nayna at linux.ibm.com>
-Cc: Masahiro Yamada <yamada.masahiro at socionext.com>
-Cc: Joerg Roedel <jroedel at suse.de>
-Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest at vger.kernel.org>
-Cc: stable at vger.kernel.org
-Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
-Tested-by: Nicolai Stange <nstange at suse.de>
-Reviewed-by: Nicolai Stange <nstange at suse.de>
-Reviewed-by: Masami Hiramatsu <mhiramat at kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz at infradead.org>
-[ Modified to only work for x86_64 and added comment to int3_emulate_push() ]
-Signed-off-by: Steven Rostedt (VMware) <rostedt at goodmis.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh at linuxfoundation.org>
-
----
- arch/x86/include/asm/text-patching.h |   28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
---- a/arch/x86/include/asm/text-patching.h
-+++ b/arch/x86/include/asm/text-patching.h
-@@ -38,4 +38,32 @@ extern void *text_poke(void *addr, const
- extern int poke_int3_handler(struct pt_regs *regs);
- extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
- 
-+static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
-+{
-+	regs->ip = ip;
-+}
-+
-+#define INT3_INSN_SIZE 1
-+#define CALL_INSN_SIZE 5
-+
-+#ifdef CONFIG_X86_64
-+static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
-+{
-+	/*
-+	 * The int3 handler in entry_64.S adds a gap between the
-+	 * stack where the break point happened, and the saving of
-+	 * pt_regs. We can extend the original stack because of
-+	 * this gap. See the idtentry macro's create_gap option.
-+	 */
-+	regs->sp -= sizeof(unsigned long);
-+	*(unsigned long *)regs->sp = val;
-+}
-+
-+static inline void int3_emulate_call(struct pt_regs *regs, unsigned long func)
-+{
-+	int3_emulate_push(regs, regs->ip - INT3_INSN_SIZE + CALL_INSN_SIZE);
-+	int3_emulate_jmp(regs, func);
-+}
-+#endif
-+
- #endif /* _ASM_X86_TEXT_PATCHING_H */
+-- 
+Catalin
