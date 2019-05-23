@@ -1,65 +1,67 @@
-From: thuth@redhat.com (Thomas Huth)
-Date: Thu, 23 May 2019 18:43:00 +0200
-Subject: [PATCH v1 0/9] KVM selftests for s390x
-Message-ID: <20190523164309.13345-1-thuth@redhat.com>
+From: catalin.marinas@arm.com (Catalin Marinas)
+Date: Thu, 23 May 2019 17:57:09 +0100
+Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+In-Reply-To: <20190523104256.GX28398@e103592.cambridge.arm.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <20190521184856.GC2922@ziepe.ca>
+ <20190522134925.GV28398@e103592.cambridge.arm.com>
+ <20190523002052.GF15389@ziepe.ca>
+ <20190523104256.GX28398@e103592.cambridge.arm.com>
+Message-ID: <20190523165708.q6ru7xg45aqfjzpr@mbp>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523164300.VwHVIRy-fYxCysR_LyVchviem2SEWIB3CzVY9WQDvFg@z>
+Message-ID: <20190523165709.GF50m0vVUKfzicfzp5CYRKZZRybnBuxbIMnd6idSkhs@z>
 
-This patch series enables the KVM selftests for s390x. As a first
-test, the sync_regs from x86 has been adapted to s390x, and after
-a fix for KVM_CAP_MAX_VCPU_ID on s390x, the kvm_create_max_vcpus
-is now enabled here, too.
+On Thu, May 23, 2019@11:42:57AM +0100, Dave P Martin wrote:
+> On Wed, May 22, 2019@09:20:52PM -0300, Jason Gunthorpe wrote:
+> > On Wed, May 22, 2019@02:49:28PM +0100, Dave Martin wrote:
+> > > If multiple people will care about this, perhaps we should try to
+> > > annotate types more explicitly in SYSCALL_DEFINEx() and ABI data
+> > > structures.
+> > > 
+> > > For example, we could have a couple of mutually exclusive modifiers
+> > > 
+> > > T __object *
+> > > T __vaddr * (or U __vaddr)
+> > > 
+> > > In the first case the pointer points to an object (in the C sense)
+> > > that the call may dereference but not use for any other purpose.
+> > 
+> > How would you use these two differently?
+> > 
+> > So far the kernel has worked that __user should tag any pointer that
+> > is from userspace and then you can't do anything with it until you
+> > transform it into a kernel something
+> 
+> Ultimately it would be good to disallow casting __object pointers execpt
+> to compatible __object pointer types, and to make get_user etc. demand
+> __object.
+> 
+> __vaddr pointers / addresses would be freely castable, but not to
+> __object and so would not be dereferenceable even indirectly.
 
-Please note that the ucall() interface is not used yet - since
-s390x neither has PIO nor MMIO, this needs some more work first
-before it becomes usable (we likely should use a DIAG hypercall
-here, which is what the sync_reg test is currently using, too...
-I started working on that topic, but did not finish that work
-yet, so I decided to not include it yet).
+I think it gets too complicated and there are ambiguous cases that we
+may not be able to distinguish. For example copy_from_user() may be used
+to copy a user data structure into the kernel, hence __object would
+work, while the same function may be used to copy opaque data to a file,
+so __vaddr may be a better option (unless I misunderstood your
+proposal).
 
-RFC -> v1:
- - Rebase, needed to add the first patch for vcpu_nested_state_get/set
- - Added patch to introduce VM_MODE_DEFAULT macro
- - Improved/cleaned up the code in processor.c
- - Added patch to fix KVM_CAP_MAX_VCPU_ID on s390x
- - Added patch to enable the kvm_create_max_vcpus on s390x and aarch64
+We currently have T __user * and I think it's a good starting point. The
+prior attempt [1] was shut down because it was just hiding the cast
+using __force. We'd need to work through those cases again and rather
+start changing the function prototypes to avoid unnecessary casting in
+the callers (e.g. get_user_pages(void __user *) or come up with a new
+type) while changing the explicit casting to a macro where it needs to
+be obvious that we are converting a user pointer, potentially typed
+(tagged), to an untyped address range. We may need a user_ptr_to_ulong()
+macro or similar (it seems that we have a u64_to_user_ptr, wasn't aware
+of it).
 
-Andrew Jones (1):
-  kvm: selftests: aarch64: fix default vm mode
+It may actually not be far from what you suggested but I'd keep the
+current T __user * to denote possible dereference.
 
-Thomas Huth (8):
-  KVM: selftests: Wrap vcpu_nested_state_get/set functions with x86
-    guard
-  KVM: selftests: Guard struct kvm_vcpu_events with
-    __KVM_HAVE_VCPU_EVENTS
-  KVM: selftests: Introduce a VM_MODE_DEFAULT macro for the default bits
-  KVM: selftests: Align memory region addresses to 1M on s390x
-  KVM: selftests: Add processor code for s390x
-  KVM: selftests: Add the sync_regs test for s390x
-  KVM: s390: Do not report unusabled IDs via KVM_CAP_MAX_VCPU_ID
-  KVM: selftests: Move kvm_create_max_vcpus test to generic code
-
- MAINTAINERS                                   |   2 +
- arch/mips/kvm/mips.c                          |   3 +
- arch/powerpc/kvm/powerpc.c                    |   3 +
- arch/s390/kvm/kvm-s390.c                      |   1 +
- arch/x86/kvm/x86.c                            |   3 +
- tools/testing/selftests/kvm/Makefile          |   7 +-
- .../testing/selftests/kvm/include/kvm_util.h  |  10 +
- .../selftests/kvm/include/s390x/processor.h   |  22 ++
- .../kvm/{x86_64 => }/kvm_create_max_vcpus.c   |   3 +-
- .../selftests/kvm/lib/aarch64/processor.c     |   2 +-
- tools/testing/selftests/kvm/lib/kvm_util.c    |  25 +-
- .../selftests/kvm/lib/s390x/processor.c       | 286 ++++++++++++++++++
- .../selftests/kvm/lib/x86_64/processor.c      |   2 +-
- .../selftests/kvm/s390x/sync_regs_test.c      | 151 +++++++++
- virt/kvm/arm/arm.c                            |   3 +
- virt/kvm/kvm_main.c                           |   2 -
- 16 files changed, 514 insertions(+), 11 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/include/s390x/processor.h
- rename tools/testing/selftests/kvm/{x86_64 => }/kvm_create_max_vcpus.c (93%)
- create mode 100644 tools/testing/selftests/kvm/lib/s390x/processor.c
- create mode 100644 tools/testing/selftests/kvm/s390x/sync_regs_test.c
+[1] https://lore.kernel.org/lkml/5d54526e5ff2e5ad63d0dfdd9ab17cf359afa4f2.1535629099.git.andreyknvl at google.com/
 
 -- 
-2.21.0
+Catalin
