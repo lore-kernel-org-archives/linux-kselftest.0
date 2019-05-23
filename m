@@ -1,13 +1,13 @@
 From: gregkh@linuxfoundation.org (gregkh@linuxfoundation.org)
-Date: Thu, 23 May 2019 11:51:59 +0200
+Date: Thu, 23 May 2019 11:51:55 +0200
 Subject: FAILED: patch "[PATCH] ftrace/x86_64: Emulate call function while
- updating in" failed to apply to 4.4-stable tree
-Message-ID: <1558605119211209@kroah.com>
+ updating in" failed to apply to 4.9-stable tree
+Message-ID: <1558605115220151@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523095159.PPcMxhLa93_dx-ksrlw74HcCpYvkIi0z8eKrI_sFQkQ@z>
+Message-ID: <20190523095155.w2JDUSgMeJscDJW7dd2vGhEIaq5m3iK5MdN0QRnFuCQ@z>
 
 
-The patch below does not apply to the 4.4-stable tree.
+The patch below does not apply to the 4.9-stable tree.
 If someone wants it applied there, or to any other stable or longterm
 tree, then please email the backport, including the original git commit
 id to <stable at vger.kernel.org>.
