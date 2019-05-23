@@ -1,92 +1,63 @@
-From: enh at google.com (enh)
-Date: Wed, 22 May 2019 16:09:31 -0700
+From: jgg at ziepe.ca (Jason Gunthorpe)
+Date: Wed, 22 May 2019 21:20:52 -0300
 Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-In-Reply-To: <CAFKCwrjOjdJAbcABp3qxwyYy+hgfyQirvmqGkDSJVJe5pSz0Uw@mail.gmail.com>
+In-Reply-To: <20190522134925.GV28398@e103592.cambridge.arm.com>
 References: <cover.1557160186.git.andreyknvl@google.com>
  <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp> <201905211633.6C0BF0C2@keescook>
- <20190522101110.m2stmpaj7seezveq@mbp>
- <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
- <20190522163527.rnnc6t4tll7tk5zw@mbp> <201905221316.865581CF@keescook>
- <CAFKCwrjOjdJAbcABp3qxwyYy+hgfyQirvmqGkDSJVJe5pSz0Uw@mail.gmail.com>
-Message-ID: <CAJgzZorUPzrXu0ysDdKwnqdvgWZJ9tqRjF-9_5CU_UV+c0bRCA@mail.gmail.com>
+ <20190521184856.GC2922@ziepe.ca>
+ <20190522134925.GV28398@e103592.cambridge.arm.com>
+Message-ID: <20190523002052.GF15389@ziepe.ca>
 
-On Wed, May 22, 2019 at 4:03 PM Evgenii Stepanov <eugenis at google.com> wrote:
->
-> On Wed, May 22, 2019 at 1:47 PM Kees Cook <keescook at chromium.org> wrote:
-> >
-> > On Wed, May 22, 2019 at 05:35:27PM +0100, Catalin Marinas wrote:
-> > > The two hard requirements I have for supporting any new hardware feature
-> > > in Linux are (1) a single kernel image binary continues to run on old
-> > > hardware while making use of the new feature if available and (2) old
-> > > user space continues to run on new hardware while new user space can
-> > > take advantage of the new feature.
-> >
-> > Agreed! And I think the series meets these requirements, yes?
-> >
-> > > For MTE, we just can't enable it by default since there are applications
-> > > who use the top byte of a pointer and expect it to be ignored rather
-> > > than failing with a mismatched tag. Just think of a hwasan compiled
-> > > binary where TBI is expected to work and you try to run it with MTE
-> > > turned on.
-> >
-> > Ah! Okay, here's the use-case I wasn't thinking of: the concern is TBI
-> > conflicting with MTE. And anything that starts using TBI suddenly can't
-> > run in the future because it's being interpreted as MTE bits? (Is that
-> > the ABI concern? I feel like we got into the weeds about ioctl()s and
-> > one-off bugs...)
-> >
-> > So there needs to be some way to let the kernel know which of three
-> > things it should be doing:
-> > 1- leaving userspace addresses as-is (present)
-> > 2- wiping the top bits before using (this series)
-> > 3- wiping the top bits for most things, but retaining them for MTE as
-> >    needed (the future)
-> >
-> > I expect MTE to be the "default" in the future. Once a system's libc has
-> > grown support for it, everything will be trying to use MTE. TBI will be
-> > the special case (but TBI is effectively a prerequisite).
-> >
-> > AFAICT, the only difference I see between 2 and 3 will be the tag handling
-> > in usercopy (all other places will continue to ignore the top bits). Is
-> > that accurate?
-> >
-> > Is "1" a per-process state we want to keep? (I assume not, but rather it
-> > is available via no TBI/MTE CONFIG or a boot-time option, if at all?)
-> >
-> > To choose between "2" and "3", it seems we need a per-process flag to
-> > opt into TBI (and out of MTE). For userspace, how would a future binary
-> > choose TBI over MTE? If it's a library issue, we can't use an ELF bit,
-> > since the choice may be "late" after ELF load (this implies the need
-> > for a prctl().) If it's binary-only ("built with HWKASan") then an ELF
-> > bit seems sufficient. And without the marking, I'd expect the kernel to
-> > enforce MTE when there are high bits.
-> >
-> > > I would also expect the C library or dynamic loader to check for the
-> > > presence of a HWCAP_MTE bit before starting to tag memory allocations,
-> > > otherwise it would get SIGILL on the first MTE instruction it tries to
-> > > execute.
-> >
-> > I've got the same question as Elliot: aren't MTE instructions just NOP
-> > to older CPUs? I.e. if the CPU (or kernel) don't support it, it just
-> > gets entirely ignored: checking is only needed to satisfy curiosity
-> > or behavioral expectations.
->
-> MTE instructions are not NOP. Most of them have side effects (changing
-> register values, zeroing memory).
+On Wed, May 22, 2019 at 02:49:28PM +0100, Dave Martin wrote:
+> On Tue, May 21, 2019 at 03:48:56PM -0300, Jason Gunthorpe wrote:
+> > On Fri, May 17, 2019 at 03:49:31PM +0100, Catalin Marinas wrote:
+> > 
+> > > The tagged pointers (whether hwasan or MTE) should ideally be a
+> > > transparent feature for the application writer but I don't think we can
+> > > solve it entirely and make it seamless for the multitude of ioctls().
+> > > I'd say you only opt in to such feature if you know what you are doing
+> > > and the user code takes care of specific cases like ioctl(), hence the
+> > > prctl() proposal even for the hwasan.
+> > 
+> > I'm not sure such a dire view is warrented.. 
+> > 
+> > The ioctl situation is not so bad, other than a few special cases,
+> > most drivers just take a 'void __user *' and pass it as an argument to
+> > some function that accepts a 'void __user *'. sparse et al verify
+> > this. 
+> > 
+> > As long as the core functions do the right thing the drivers will be
+> > OK.
+> > 
+> > The only place things get dicy is if someone casts to unsigned long
+> > (ie for vma work) but I think that reflects that our driver facing
+> > APIs for VMAs are compatible with static analysis (ie I have no
+> > earthly idea why get_user_pages() accepts an unsigned long), not that
+> > this is too hard.
+> 
+> If multiple people will care about this, perhaps we should try to
+> annotate types more explicitly in SYSCALL_DEFINEx() and ABI data
+> structures.
+> 
+> For example, we could have a couple of mutually exclusive modifiers
+> 
+> T __object *
+> T __vaddr * (or U __vaddr)
+> 
+> In the first case the pointer points to an object (in the C sense)
+> that the call may dereference but not use for any other purpose.
 
-no, i meant "they're encoded in a space that was previously no-ops, so
-running on MTE code on old hardware doesn't cause SIGILL".
+How would you use these two differently?
 
-> This only matters for stack tagging, though. Heap tagging is a runtime
-> decision in the allocator.
->
-> If an image needs to run on old hardware, it will have to do heap tagging only.
->
-> > To me, the conflict seems to be using TBI in the face of expecting MTE to
-> > be the default state of the future. (But the internal changes needed
-> > for TBI -- this series -- is a prereq for MTE.)
-> >
-> > --
-> > Kees Cook
+So far the kernel has worked that __user should tag any pointer that
+is from userspace and then you can't do anything with it until you
+transform it into a kernel something
+
+> to tell static analysers the real type of pointers smuggled through
+> UAPI disguised as other types (*cough* KVM, etc.)
+
+Yes, that would help alot, we often have to pass pointers through a
+u64 in the uAPI, and there is no static checker support to make sure
+they are run through the u64_to_user_ptr() helper.
+
+Jason
