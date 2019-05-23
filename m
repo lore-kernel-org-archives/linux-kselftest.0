@@ -1,56 +1,28 @@
-From: logang@deltatee.com (Logan Gunthorpe)
-Date: Thu, 23 May 2019 16:30:52 -0600
-Subject: [PATCH v5 02/10] PCI/switchtec: Add module parameter to request more
- interrupts
-In-Reply-To: <20190523223100.5526-1-logang@deltatee.com>
-References: <20190523223100.5526-1-logang@deltatee.com>
-Message-ID: <20190523223100.5526-3-logang@deltatee.com>
+From: alexandre.belloni@bootlin.com (Alexandre Belloni)
+Date: Fri, 24 May 2019 00:42:21 +0200
+Subject: [PATCH 0/2] kselftest: fix rtctest timeout
+Message-ID: <20190523224223.11054-1-alexandre.belloni@bootlin.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523223052.vuzXoIYPfK1X-oV5Xg3GvRMMurLzZzil7Kxh8VVsFAI@z>
+Message-ID: <20190523224221.02xC5npI5pMxvMl-17F2B7-IVZSNkJJnOXDvRbrcl5I@z>
 
-Seeing the we want to use more interrupts in the NTB MSI code
-we need to be able allocate more (sometimes virtual) interrupts
-in the switchtec driver. Therefore add a module parameter to
-request to allocate additional interrupts.
+Hi,
 
-This puts virtually no limit on the number of MSI interrupts available
-to NTB clients.
+Commit a745f7af3cbd ("selftests/harness: Add 30 second timeout per
+test") wrongly assumed that no individual test would run for more than
+30 seconds and this silently broke rtctest.
 
-Signed-off-by: Logan Gunthorpe <logang at deltatee.com>
-Cc: Bjorn Helgaas <bhelgaas at google.com>
----
- drivers/pci/switch/switchtec.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+Please consider the following patches as fixes for v5.2 to avoid having
+any non working release.
 
-diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
-index e22766c79fe9..8b1db78197d9 100644
---- a/drivers/pci/switch/switchtec.c
-+++ b/drivers/pci/switch/switchtec.c
-@@ -30,6 +30,10 @@ module_param(use_dma_mrpc, bool, 0644);
- MODULE_PARM_DESC(use_dma_mrpc,
- 		 "Enable the use of the DMA MRPC feature");
- 
-+static int nirqs = 32;
-+module_param(nirqs, int, 0644);
-+MODULE_PARM_DESC(nirqs, "number of interrupts to allocate (more may be useful for NTB applications)");
-+
- static dev_t switchtec_devt;
- static DEFINE_IDA(switchtec_minor_ida);
- 
-@@ -1247,8 +1251,12 @@ static int switchtec_init_isr(struct switchtec_dev *stdev)
- 	int dma_mrpc_irq;
- 	int rc;
- 
--	nvecs = pci_alloc_irq_vectors(stdev->pdev, 1, 4,
--				      PCI_IRQ_MSIX | PCI_IRQ_MSI);
-+	if (nirqs < 4)
-+		nirqs = 4;
-+
-+	nvecs = pci_alloc_irq_vectors(stdev->pdev, 1, nirqs,
-+				      PCI_IRQ_MSIX | PCI_IRQ_MSI |
-+				      PCI_IRQ_VIRTUAL);
- 	if (nvecs < 0)
- 		return nvecs;
- 
+Thanks,
+
+Alexandre Belloni (2):
+  selftests/harness: Allow test to configure timeout
+  selftests: rtc: rtctest: specify timeouts
+
+ tools/testing/selftests/kselftest_harness.h | 17 ++++++++++++-----
+ tools/testing/selftests/rtc/rtctest.c       |  6 +++---
+ 2 files changed, 15 insertions(+), 8 deletions(-)
+
 -- 
-2.20.1
+2.21.0
