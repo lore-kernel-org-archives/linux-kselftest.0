@@ -1,7 +1,7 @@
 From: catalin.marinas at arm.com (Catalin Marinas)
-Date: Thu, 23 May 2019 16:08:14 +0100
+Date: Thu, 23 May 2019 16:21:19 +0100
 Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-In-Reply-To: <201905221157.A9BAB1F296@keescook>
+In-Reply-To: <CAJgzZooc+wXBBXenm62n2zR8TVrv-y1pXMmHSdxeaNYhFLSzBA@mail.gmail.com>
 References: <cover.1557160186.git.andreyknvl@google.com>
  <20190517144931.GA56186@arrakis.emea.arm.com>
  <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
@@ -9,23 +9,26 @@ References: <cover.1557160186.git.andreyknvl@google.com>
  <201905211633.6C0BF0C2@keescook>
  <20190522101110.m2stmpaj7seezveq@mbp>
  <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
- <201905221157.A9BAB1F296@keescook>
-Message-ID: <20190523150813.x4btg5zxa4gl5o4q@mbp>
+ <20190522163527.rnnc6t4tll7tk5zw@mbp>
+ <CAJgzZooc+wXBBXenm62n2zR8TVrv-y1pXMmHSdxeaNYhFLSzBA@mail.gmail.com>
+Message-ID: <20190523152118.t22z37mpqfwjjtkw@mbp>
 
-On Wed, May 22, 2019 at 12:21:27PM -0700, Kees Cook wrote:
-> If a process wants to not tag, that's also up to the allocator where
-> it can decide not to ask the kernel, and just not tag. Nothing breaks in
-> userspace if a process is NOT tagging and untagged_addr() exists or is
-> missing. This, I think, is the core way this doesn't trip over the
-> golden rule: an old system image will run fine (because it's not
-> tagging). A *new* system may encounter bugs with tagging because it's a
-> new feature: this is The Way Of Things. But we don't break old userspace
-> because old userspace isn't using tags.
+On Wed, May 22, 2019 at 09:58:22AM -0700, enh wrote:
+> i was questioning the argument about the ioctl issues, and saying that
+> from my perspective, untagging bugs are not really any different than
+> any other kind of kernel bug.
 
-With this series and hwasan binaries, at some point in the future they
-will be considered "old userspace" and they do use pointer tags which
-expect to be ignored by both the hardware and the kernel. MTE breaks
-this assumption.
+Once this series gets in, they are indeed just kernel bugs. What I want
+is an easier way to identify them, ideally before they trigger in the
+field.
+
+> i still don't see how this isn't just a regular testing/CI issue, the
+> same as any other kind of kernel bug. it's already the case that i can
+> get a bad kernel...
+
+The testing would have a smaller code coverage in terms of drivers,
+filesystems than something like a static checker (though one does not
+exclude the other).
 
 -- 
 Catalin
