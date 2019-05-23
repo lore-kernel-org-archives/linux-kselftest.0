@@ -1,69 +1,117 @@
 From: thuth@redhat.com (Thomas Huth)
-Date: Thu, 23 May 2019 18:43:05 +0200
-Subject: [PATCH 5/9] KVM: selftests: Align memory region addresses to 1M on
- s390x
+Date: Thu, 23 May 2019 18:43:08 +0200
+Subject: [PATCH 8/9] KVM: s390: Do not report unusabled IDs via
+ KVM_CAP_MAX_VCPU_ID
 In-Reply-To: <20190523164309.13345-1-thuth@redhat.com>
 References: <20190523164309.13345-1-thuth@redhat.com>
-Message-ID: <20190523164309.13345-6-thuth@redhat.com>
+Message-ID: <20190523164309.13345-9-thuth@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190523164305.W14pXUMiX1s_NGz_w8mcPHJqJq9Dau2UqT2-1mo0_wg@z>
+Message-ID: <20190523164308.gErpKVW6Jp502xyLFKEYIP2x53Dq97B4XmxCDg0H3Ik@z>
 
-On s390x, there is a constraint that memory regions have to be aligned
-to 1M (or running the VM will fail). Introduce a new "alignment" variable
-in the vm_userspace_mem_region_add() function which now can be used for
-both, huge page and s390x alignment requirements.
+KVM_CAP_MAX_VCPU_ID is currently always reporting KVM_MAX_VCPU_ID on all
+architectures. However, on s390x, the amount of usable CPUs is determined
+during runtime - it is depending on the features of the machine the code
+is running on. Since we are using the vcpu_id as an index into the SCA
+structures that are defined by the hardware (see e.g. the sca_add_vcpu()
+function), it is not only the amount of CPUs that is limited by the hard-
+ware, but also the range of IDs that we can use.
+Thus KVM_CAP_MAX_VCPU_ID must be determined during runtime on s390x, too.
+So the handling of KVM_CAP_MAX_VCPU_ID has to be moved from the common
+code into the architecture specific code, and on s390x we have to return
+the same value here as for KVM_CAP_MAX_VCPUS.
+This problem has been discovered with the kvm_create_max_vcpus selftest.
+With this change applied, the selftest now passes on s390x, too.
 
 Signed-off-by: Thomas Huth <thuth at redhat.com>
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+ arch/mips/kvm/mips.c       | 3 +++
+ arch/powerpc/kvm/powerpc.c | 3 +++
+ arch/s390/kvm/kvm-s390.c   | 1 +
+ arch/x86/kvm/x86.c         | 3 +++
+ virt/kvm/arm/arm.c         | 3 +++
+ virt/kvm/kvm_main.c        | 2 --
+ 6 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 08edb8436c47..656df9d5cd4d 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -559,6 +559,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 	unsigned long pmem_size = 0;
- 	struct userspace_mem_region *region;
- 	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
-+	size_t alignment;
- 
- 	TEST_ASSERT((guest_paddr % vm->page_size) == 0, "Guest physical "
- 		"address not on a page boundary.\n"
-@@ -608,9 +609,20 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 	TEST_ASSERT(region != NULL, "Insufficient Memory");
- 	region->mmap_size = npages * vm->page_size;
- 
--	/* Enough memory to align up to a huge page. */
-+#ifdef __s390x__
-+	/* On s390x, the host address must be aligned to 1M (due to PGSTEs) */
-+	alignment = 0x100000;
-+#else
-+	alignment = 1;
-+#endif
-+
- 	if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
--		region->mmap_size += huge_page_size;
-+		alignment = huge_page_size;
-+
-+	/* Add enough memory to align up if necessary */
-+	if (alignment > 1)
-+		region->mmap_size += alignment;
-+
- 	region->mmap_start = mmap(NULL, region->mmap_size,
- 				  PROT_READ | PROT_WRITE,
- 				  MAP_PRIVATE | MAP_ANONYMOUS
-@@ -620,9 +632,8 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 		    "test_malloc failed, mmap_start: %p errno: %i",
- 		    region->mmap_start, errno);
- 
--	/* Align THP allocation up to start of a huge page. */
--	region->host_mem = align(region->mmap_start,
--				 src_type == VM_MEM_SRC_ANONYMOUS_THP ?  huge_page_size : 1);
-+	/* Align host address */
-+	region->host_mem = align(region->mmap_start, alignment);
- 
- 	/* As needed perform madvise */
- 	if (src_type == VM_MEM_SRC_ANONYMOUS || src_type == VM_MEM_SRC_ANONYMOUS_THP) {
+diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+index 6d0517ac18e5..0369f26ab96d 100644
+--- a/arch/mips/kvm/mips.c
++++ b/arch/mips/kvm/mips.c
+@@ -1122,6 +1122,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_MAX_VCPUS:
+ 		r = KVM_MAX_VCPUS;
+ 		break;
++	case KVM_CAP_MAX_VCPU_ID:
++		r = KVM_MAX_VCPU_ID;
++		break;
+ 	case KVM_CAP_MIPS_FPU:
+ 		/* We don't handle systems with inconsistent cpu_has_fpu */
+ 		r = !!raw_cpu_has_fpu;
+diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+index 3393b166817a..aa3a678711be 100644
+--- a/arch/powerpc/kvm/powerpc.c
++++ b/arch/powerpc/kvm/powerpc.c
+@@ -657,6 +657,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_MAX_VCPUS:
+ 		r = KVM_MAX_VCPUS;
+ 		break;
++	case KVM_CAP_MAX_VCPU_ID:
++		r = KVM_MAX_VCPU_ID;
++		break;
+ #ifdef CONFIG_PPC_BOOK3S_64
+ 	case KVM_CAP_PPC_GET_SMMU_INFO:
+ 		r = 1;
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index 8d6d75db8de6..871d2e99b156 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -539,6 +539,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 		break;
+ 	case KVM_CAP_NR_VCPUS:
+ 	case KVM_CAP_MAX_VCPUS:
++	case KVM_CAP_MAX_VCPU_ID:
+ 		r = KVM_S390_BSCA_CPU_SLOTS;
+ 		if (!kvm_s390_use_sca_entries())
+ 			r = KVM_MAX_VCPUS;
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 536b78c4af6e..09a07d6a154e 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3122,6 +3122,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_MAX_VCPUS:
+ 		r = KVM_MAX_VCPUS;
+ 		break;
++	case KVM_CAP_MAX_VCPU_ID:
++		r = KVM_MAX_VCPU_ID;
++		break;
+ 	case KVM_CAP_PV_MMU:	/* obsolete */
+ 		r = 0;
+ 		break;
+diff --git a/virt/kvm/arm/arm.c b/virt/kvm/arm/arm.c
+index 90cedebaeb94..7eeebe5e9da2 100644
+--- a/virt/kvm/arm/arm.c
++++ b/virt/kvm/arm/arm.c
+@@ -224,6 +224,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_MAX_VCPUS:
+ 		r = KVM_MAX_VCPUS;
+ 		break;
++	case KVM_CAP_MAX_VCPU_ID:
++		r = KVM_MAX_VCPU_ID;
++		break;
+ 	case KVM_CAP_MSI_DEVID:
+ 		if (!kvm)
+ 			r = -EINVAL;
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index f0d13d9d125d..c09259dd6286 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -3146,8 +3146,6 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+ 	case KVM_CAP_MULTI_ADDRESS_SPACE:
+ 		return KVM_ADDRESS_SPACE_NUM;
+ #endif
+-	case KVM_CAP_MAX_VCPU_ID:
+-		return KVM_MAX_VCPU_ID;
+ 	case KVM_CAP_NR_MEMSLOTS:
+ 		return KVM_USER_MEM_SLOTS;
+ 	default:
 -- 
 2.21.0
