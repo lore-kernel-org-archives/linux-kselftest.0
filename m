@@ -1,48 +1,75 @@
-From: alexei.starovoitov at gmail.com (Alexei Starovoitov)
-Date: Fri, 24 May 2019 13:49:26 -0700
-Subject: [PATCH bpf-next v2 RESEND 0/2] Move bpf_printk to bpf_helpers.h
-In-Reply-To: <4642ca96-22ab-ad61-a6a1-1d2ef7239cb8@fb.com>
-References: <20190523125355.18437-1-mrostecki@opensuse.org>
- <4642ca96-22ab-ad61-a6a1-1d2ef7239cb8@fb.com>
-Message-ID: <CAADnVQKYiv2ZMTLcJ6ZAoSA8u7+GZe+o-00qidefuNPa7KsbbA@mail.gmail.com>
+From: skhan at linuxfoundation.org (Shuah Khan)
+Date: Fri, 24 May 2019 15:19:29 -0600
+Subject: [GIT PULL] Kselftest fixes update for Linux 5.2-rc2
+Message-ID: <46b8fc51-ac8f-c03d-443e-4bd265cd4527@linuxfoundation.org>
 
-On Thu, May 23, 2019 at 9:52 AM Yonghong Song <yhs at fb.com> wrote:
->
->
->
-> On 5/23/19 5:53 AM, Michal Rostecki wrote:
-> > This series of patches move the commonly used bpf_printk macro to
-> > bpf_helpers.h which is already included in all BPF programs which
-> > defined that macro on their own.
-> >
-> > v1->v2:
-> > - If HBM_DEBUG is not defined in hbm sample, undefine bpf_printk and set
-> >    an empty macro for it.
-> >
-> > Michal Rostecki (2):
-> >    selftests: bpf: Move bpf_printk to bpf_helpers.h
-> >    samples: bpf: Do not define bpf_printk macro
-> >
-> >   samples/bpf/hbm_kern.h                                | 11 ++---------
-> >   samples/bpf/tcp_basertt_kern.c                        |  7 -------
-> >   samples/bpf/tcp_bufs_kern.c                           |  7 -------
-> >   samples/bpf/tcp_clamp_kern.c                          |  7 -------
-> >   samples/bpf/tcp_cong_kern.c                           |  7 -------
-> >   samples/bpf/tcp_iw_kern.c                             |  7 -------
-> >   samples/bpf/tcp_rwnd_kern.c                           |  7 -------
-> >   samples/bpf/tcp_synrto_kern.c                         |  7 -------
-> >   samples/bpf/tcp_tos_reflect_kern.c                    |  7 -------
-> >   samples/bpf/xdp_sample_pkts_kern.c                    |  7 -------
-> >   tools/testing/selftests/bpf/bpf_helpers.h             |  8 ++++++++
-> >   .../testing/selftests/bpf/progs/sockmap_parse_prog.c  |  7 -------
-> >   .../selftests/bpf/progs/sockmap_tcp_msg_prog.c        |  7 -------
-> >   .../selftests/bpf/progs/sockmap_verdict_prog.c        |  7 -------
-> >   .../testing/selftests/bpf/progs/test_lwt_seg6local.c  |  7 -------
-> >   tools/testing/selftests/bpf/progs/test_xdp_noinline.c |  7 -------
-> >   tools/testing/selftests/bpf/test_sockmap_kern.h       |  7 -------
-> >   17 files changed, 10 insertions(+), 114 deletions(-)
->
-> Ack for the whole series.
-> Acked-by: Yonghong Song <yhs at fb.com>
+Hi Linus,
 
-Applied. Thanks
+Please pull the following Kselftest fixes update for Linux 5.2-rc2.
+
+This Kselftest fixes update for Linux 5.2-rc2 consists of:
+
+- 2 fixes to regressions introduced in kselftest Makefile test run
+   output refactoring work from Kees Cook.
+- Adding Atom support to syscall_arg_fault test from Tong Bo.
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+
+----------------------------------------------------------------
+The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
+
+   Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
+tags/linux-kselftest-5.2-rc2
+
+for you to fetch changes up to fe48319243a626c860fd666ca032daacc2ba84a5:
+
+   selftests/timers: Add missing fflush(stdout) calls (2019-05-21 
+09:24:31 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-5.2-rc2
+
+This Kselftest fixes update for Linux 5.2-rc2 consists of:
+
+- 2 fixes to regressions introduced in kselftest Makefile test run output
+   refactoring work from Kees Cook.
+- Adding Atom support to syscall_arg_fault test from Tong Bo.
+
+----------------------------------------------------------------
+Kees Cook (2):
+       selftests: Remove forced unbuffering for test running
+       selftests/timers: Add missing fflush(stdout) calls
+
+Tong Bo (1):
+       selftests/x86: Support Atom for syscall_arg_fault test
+
+  tools/testing/selftests/kselftest/runner.sh     | 12 +-----------
+  tools/testing/selftests/timers/adjtick.c        |  1 +
+  tools/testing/selftests/timers/leapcrash.c      |  1 +
+  tools/testing/selftests/timers/mqueue-lat.c     |  1 +
+  tools/testing/selftests/timers/nanosleep.c      |  1 +
+  tools/testing/selftests/timers/nsleep-lat.c     |  1 +
+  tools/testing/selftests/timers/raw_skew.c       |  1 +
+  tools/testing/selftests/timers/set-tai.c        |  1 +
+  tools/testing/selftests/timers/set-tz.c         |  2 ++
+  tools/testing/selftests/timers/threadtest.c     |  1 +
+  tools/testing/selftests/timers/valid-adjtimex.c |  2 ++
+  tools/testing/selftests/x86/syscall_arg_fault.c | 10 ++++++++--
+  12 files changed, 21 insertions(+), 13 deletions(-)
+
+----------------------------------------------------------------
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux-kselftest-5.2-rc2.diff
+Type: text/x-patch
+Size: 6968 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190524/c8021b7c/attachment.bin>
