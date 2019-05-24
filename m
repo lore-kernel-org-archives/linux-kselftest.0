@@ -1,43 +1,39 @@
-From: borntraeger at de.ibm.com (Christian Borntraeger)
-Date: Fri, 24 May 2019 10:37:39 +0200
-Subject: [PATCH 3/9] kvm: selftests: aarch64: fix default vm mode
-In-Reply-To: <20190523164309.13345-4-thuth@redhat.com>
+From: cohuck at redhat.com (Cornelia Huck)
+Date: Fri, 24 May 2019 11:13:23 +0200
+Subject: [PATCH 8/9] KVM: s390: Do not report unusabled IDs via
+ KVM_CAP_MAX_VCPU_ID
+In-Reply-To: <20190523164309.13345-9-thuth@redhat.com>
 References: <20190523164309.13345-1-thuth@redhat.com>
- <20190523164309.13345-4-thuth@redhat.com>
-Message-ID: <b6fb1542-5679-c52d-6fd1-f4d4f1a2d36b@de.ibm.com>
+ <20190523164309.13345-9-thuth@redhat.com>
+Message-ID: <20190524111323.656afbff.cohuck@redhat.com>
 
+On Thu, 23 May 2019 18:43:08 +0200
+Thomas Huth <thuth at redhat.com> wrote:
 
+In the subject: s/unusabled/unusable/
 
-On 23.05.19 18:43, Thomas Huth wrote:
-> From: Andrew Jones <drjones at redhat.com>
+> KVM_CAP_MAX_VCPU_ID is currently always reporting KVM_MAX_VCPU_ID on all
+> architectures. However, on s390x, the amount of usable CPUs is determined
+> during runtime - it is depending on the features of the machine the code
+> is running on. Since we are using the vcpu_id as an index into the SCA
+> structures that are defined by the hardware (see e.g. the sca_add_vcpu()
+> function), it is not only the amount of CPUs that is limited by the hard-
+> ware, but also the range of IDs that we can use.
+> Thus KVM_CAP_MAX_VCPU_ID must be determined during runtime on s390x, too.
+> So the handling of KVM_CAP_MAX_VCPU_ID has to be moved from the common
+> code into the architecture specific code, and on s390x we have to return
+> the same value here as for KVM_CAP_MAX_VCPUS.
+> This problem has been discovered with the kvm_create_max_vcpus selftest.
+> With this change applied, the selftest now passes on s390x, too.
 > 
-> VM_MODE_P52V48_4K is not a valid mode for AArch64. Replace its
-> use in vm_create_default() with a mode that works and represents
-> a good AArch64 default. (We didn't ever see a problem with this
-> because we don't have any unit tests using vm_create_default(),
-> but it's good to get it fixed in advance.)
-> 
-> Reported-by: Thomas Huth <thuth at redhat.com>
-> Signed-off-by: Andrew Jones <drjones at redhat.com>
-
-I will add Thomas Signed-off-by here as well.
-
-
+> Signed-off-by: Thomas Huth <thuth at redhat.com>
 > ---
->  tools/testing/selftests/kvm/lib/aarch64/processor.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
-> index e8c42506a09d..fa6cd340137c 100644
-> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
-> @@ -226,7 +226,7 @@ struct kvm_vm *vm_create_default(uint32_t vcpuid, uint64_t extra_mem_pages,
->  	uint64_t extra_pg_pages = (extra_mem_pages / ptrs_per_4k_pte) * 2;
->  	struct kvm_vm *vm;
->  
-> -	vm = vm_create(VM_MODE_P52V48_4K, DEFAULT_GUEST_PHY_PAGES + extra_pg_pages, O_RDWR);
-> +	vm = vm_create(VM_MODE_P40V48_4K, DEFAULT_GUEST_PHY_PAGES + extra_pg_pages, O_RDWR);
->  
->  	kvm_vm_elf_load(vm, program_invocation_name, 0, 0);
->  	vm_vcpu_add_default(vm, vcpuid, guest_code);
-> 
+>  arch/mips/kvm/mips.c       | 3 +++
+>  arch/powerpc/kvm/powerpc.c | 3 +++
+>  arch/s390/kvm/kvm-s390.c   | 1 +
+>  arch/x86/kvm/x86.c         | 3 +++
+>  virt/kvm/arm/arm.c         | 3 +++
+>  virt/kvm/kvm_main.c        | 2 --
+>  6 files changed, 13 insertions(+), 2 deletions(-)
+
+Reviewed-by: Cornelia Huck <cohuck at redhat.com>
