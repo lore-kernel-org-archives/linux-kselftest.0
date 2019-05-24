@@ -1,66 +1,23 @@
-From: rostedt at goodmis.org (Steven Rostedt)
-Date: Thu, 23 May 2019 22:31:14 -0400
+From: shuah at kernel.org (shuah)
+Date: Thu, 23 May 2019 21:02:18 -0600
 Subject: [PATCH selftests 0/2] Add checkbashisms meta-testcase
-In-Reply-To: <20190323192746.59739e5e9ea0445791ac14ed@kernel.org>
+In-Reply-To: <20190523223114.4feb6239@oasis.local.home>
 References: <155079878723.5157.12433171255092403676.stgit@devbox>
  <20190323192746.59739e5e9ea0445791ac14ed@kernel.org>
-Message-ID: <20190523223114.4feb6239@oasis.local.home>
+ <20190523223114.4feb6239@oasis.local.home>
+Message-ID: <f125dc4c-0099-d2e2-b295-26a4619d1ee5@kernel.org>
 
-
-Shuah,
-
-Want to take this or would you want me to?
-
--- Steve
-
-
-On Sat, 23 Mar 2019 19:27:46 +0900
-Masami Hiramatsu <mhiramat at kernel.org> wrote:
-
-> Hi Shuah,
+On 5/23/19 8:31 PM, Steven Rostedt wrote:
 > 
-> Could you pick this to your tree? I think this can prevent further
-> simillar errors before release...
+> Shuah,
 > 
-> Thank you,
+> Want to take this or would you want me to?
 > 
-> On Fri, 22 Feb 2019 10:26:27 +0900
-> Masami Hiramatsu <mhiramat at kernel.org> wrote:
-> 
-> > Hi,
-> > 
-> > Here are patches for making sure the ftracetest testcases
-> > are checkbashisms clean.
-> > 
-> > This actually needs a patch from Juerg, "selftests/ftrace:
-> > Make the coloring POSIX compliant" to complete the work.
-> > 
-> > http://lkml.kernel.org/r/20190220161333.28109-1-juergh at canonical.com
-> > (Note that this is still under development)
-> > 
-> > So as Juerg pointed, recently ftracetest becomes not POSIX
-> > compliant, and such kind of issues happened repeatedly.
-> > To avoid those anymore, I decided to introduce a testcase
-> > which runs checkbasisms on ftracetest and its testcases.
-> > I think this can help us to find out whether it was
-> > written in a way out of POSIX.
-> > 
-> > Thank you,
-> > 
-> > ---
-> > 
-> > Masami Hiramatsu (2):
-> >       selftests/ftrace: Make a script checkbashisms clean
-> >       selftests/ftrace: Add checkbashisms meta-testcase
-> > 
-> > 
-> >  tools/testing/selftests/ftrace/ftracetest          |    1 +
-> >  .../ftrace/test.d/kprobe/kprobe_ftrace.tc          |    2 +-
-> >  .../selftests/ftrace/test.d/selftest/bashisms.tc   |   21 ++++++++++++++++++++
-> >  3 files changed, 23 insertions(+), 1 deletion(-)
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc
-> > 
-> > --
-> > Masami Hiramatsu (Linaro) <mhiramat at kernel.org>  
+> -- Steve
 > 
 > 
+
+I can take them through my tree.
+
+thanks,
+-- Shuah
