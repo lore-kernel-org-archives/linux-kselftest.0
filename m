@@ -1,45 +1,73 @@
-From: david@redhat.com (David Hildenbrand)
-Date: Fri, 24 May 2019 21:07:23 +0200
-Subject: [PATCH] KVM: selftests: enable pgste option for the linker on s390
-In-Reply-To: <20190524103301.87017-1-borntraeger@de.ibm.com>
-References: <20190523164309.13345-1-thuth@redhat.com>
- <20190524103301.87017-1-borntraeger@de.ibm.com>
-Message-ID: <be868d7d-0d18-6827-6f8a-3ef473db183d@redhat.com>
+From: pbonzini@redhat.com (Paolo Bonzini)
+Date: Fri, 24 May 2019 21:21:55 +0200
+Subject: [PATCH] KVM: s390: fix memory slot handling for
+ KVM_SET_USER_MEMORY_REGION
+In-Reply-To: <20190524140623.104033-1-borntraeger@de.ibm.com>
+References: <20190524140623.104033-1-borntraeger@de.ibm.com>
+Message-ID: <89ad11b6-b044-5669-a9a3-398da002182f@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524190723.6SVXVwwraawNkJEvYCJyIzO3YmYiAVe3ssF01DfYwWg@z>
+Message-ID: <20190524192155.35ZD_LPIfidh1YI0NrSYTxoo7zqbWYkC7R02kOkEmkM@z>
 
-On 24.05.19 12:33, Christian Borntraeger wrote:
-> To avoid testcase failures we need to enable the pgstes. This can be
-> done with /proc/sys/vm/allocate_pgste or with a linker option that
-> creates an  S390_PGSTE program header.
+On 24/05/19 16:06, Christian Borntraeger wrote:
+> kselftests exposed a problem in the s390 handling for memory slots.
+> Right now we only do proper memory slot handling for creation of new
+> memory slots. Neither MOVE, nor DELETION are handled properly. Let us
+> implement those.
 > 
 > Signed-off-by: Christian Borntraeger <borntraeger at de.ibm.com>
 > ---
->  tools/testing/selftests/kvm/Makefile | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  arch/s390/kvm/kvm-s390.c | 35 +++++++++++++++++++++--------------
+>  1 file changed, 21 insertions(+), 14 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index aef5bd1166cf..4aac14c1919f 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -44,7 +44,10 @@ CFLAGS += -O2 -g -std=gnu99 -fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE
->  no-pie-option := $(call try-run, echo 'int main() { return 0; }' | \
->          $(CC) -Werror $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 871d2e99b156..6ec0685ab2c7 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -4525,21 +4525,28 @@ void kvm_arch_commit_memory_region(struct kvm *kvm,
+>  				const struct kvm_memory_slot *new,
+>  				enum kvm_mr_change change)
+>  {
+> -	int rc;
+> +	int rc = 0;
 >  
-> -LDFLAGS += -pthread $(no-pie-option)
-> +# On s390, build the testcases KVM-enabled
-> +pgste-option := $(call cc-ldoption, -Wl$(comma)--s390-pgste)
-> +
-> +LDFLAGS += -pthread $(no-pie-option) $(pgste-option)
->  
->  # After inclusion, $(OUTPUT) is defined and
->  # $(TEST_GEN_PROGS) starts with $(OUTPUT)/
+> -	/* If the basics of the memslot do not change, we do not want
+> -	 * to update the gmap. Every update causes several unnecessary
+> -	 * segment translation exceptions. This is usually handled just
+> -	 * fine by the normal fault handler + gmap, but it will also
+> -	 * cause faults on the prefix page of running guest CPUs.
+> -	 */
+> -	if (old->userspace_addr == mem->userspace_addr &&
+> -	    old->base_gfn * PAGE_SIZE == mem->guest_phys_addr &&
+> -	    old->npages * PAGE_SIZE == mem->memory_size)
+> -		return;
+> -
+> -	rc = gmap_map_segment(kvm->arch.gmap, mem->userspace_addr,
+> -		mem->guest_phys_addr, mem->memory_size);
+> +	switch (change) {
+> +	case KVM_MR_DELETE:
+> +		rc = gmap_unmap_segment(kvm->arch.gmap, old->base_gfn * PAGE_SIZE,
+> +					old->npages * PAGE_SIZE);
+> +		break;
+> +	case KVM_MR_MOVE:
+> +		rc = gmap_unmap_segment(kvm->arch.gmap, old->base_gfn * PAGE_SIZE,
+> +					old->npages * PAGE_SIZE);
+> +		if (rc)
+> +			break;
+> +		/* FALLTHROUGH */
+> +	case KVM_MR_CREATE:
+> +		rc = gmap_map_segment(kvm->arch.gmap, mem->userspace_addr,
+> +				      mem->guest_phys_addr, mem->memory_size);
+> +		break;
+> +	case KVM_MR_FLAGS_ONLY:
+> +		break;
+> +	default:
+> +		WARN(1, "Unknown KVM MR CHANGE: %d\n", change);
+> +	}
+>  	if (rc)
+>  		pr_warn("failed to commit memory region\n");
+>  	return;
 > 
 
-Reviewed-by: David Hildenbrand <david at redhat.com>
+Queued for 5.2-rc2, thanks.
 
--- 
-
-Thanks,
-
-David / dhildenb
+Paolo
