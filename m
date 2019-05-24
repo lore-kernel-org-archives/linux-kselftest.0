@@ -1,35 +1,41 @@
-From: alakesh.haloi@gmail.com (Alakesh Haloi)
-Date: Fri, 24 May 2019 01:42:11 +0000
-Subject: [PATCH] selftests: add missing include linux/sockios
-Message-ID:
- <20190524014211.GA78399@ip-172-31-44-144.us-west-2.compute.internal>
+From: fklassen@appneta.com (Fred Klassen)
+Date: Thu, 23 May 2019 19:10:05 -0700
+Subject: [PATCH net 2/4] net/udpgso_bench_tx: options to exercise TX CMSG
+In-Reply-To: <CAF=yD-JBf6k7VLa6FQowuD5xDFbq5cB4ScTi7kb1hieQFDKnbg@mail.gmail.com>
+References: <20190523210651.80902-1-fklassen@appneta.com>
+ <20190523210651.80902-3-fklassen@appneta.com>
+ <CAF=yD-JBf6k7VLa6FQowuD5xDFbq5cB4ScTi7kb1hieQFDKnbg@mail.gmail.com>
+Message-ID: <5061E2A7-EF7A-4C3C-9819-34AA8DE2CD0F@appneta.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524014211.TOYMikrNDjnsjq7fel3uHJvHY4SSz1v68K63bktcoso@z>
+Message-ID: <20190524021005.BBpkbK-_enxRG1oTatjRxV8gH3Gbc1Ie7FAdMmfwrmU@z>
 
-Including <linux/sockios.h> fixes the following compiler warning
+> 
+> To ensure that we do not regress, when adding options, please consider
+> (just a general suggestion, not a strong request for this patch set)
+> updating the kselftest to run a variant of the test with the new code
+> coverage. In this case, make the code pass/fail instead of only user
+> interpretable and add variants to udpgso.sh.
 
-timestamping.c: In function ‘printpacket’:
-timestamping.c:261:19: error: ‘SIOCGSTAMP’ undeclared (first use in this function); did you mean ‘SIOCGSTAMPNS’?
-   if (ioctl(sock, SIOCGSTAMP, &tv))
-                   ^~~~~~~~~~
-                   SIOCGSTAMPNS
+I had a look at how kselftest works, and I absolutely want to see this
+work with these changes. I’ll investigate and implement in v2 patch.
 
-Signed-off-by: Alakesh Haloi <alakesh.haloi at gmail.com>
----
- tools/testing/selftests/networking/timestamping/timestamping.c | 1 +
- 1 file changed, 1 insertion(+)
+I will most likely do a 5 second test. This seems to be sufficient to get
+meaningful results
 
-diff --git a/tools/testing/selftests/networking/timestamping/timestamping.c b/tools/testing/selftests/networking/timestamping/timestamping.c
-index 5cdfd743447b..62f03bcc9432 100644
---- a/tools/testing/selftests/networking/timestamping/timestamping.c
-+++ b/tools/testing/selftests/networking/timestamping/timestamping.c
-@@ -44,6 +44,7 @@
- #include <asm/types.h>
- #include <linux/net_tstamp.h>
- #include <linux/errqueue.h>
-+#include <linux/sockios.h>
- 
- #ifndef SO_TIMESTAMPING
- # define SO_TIMESTAMPING         37
--- 
-2.17.1
+> can use more precise CMSG_SPACE based on worst case expectations, like
+> in udp_sendmmsg
+> 
+>> +       char buf[1500];
+> 
+> no need for payload
+> 
+>> +static void flush_errqueue(int fd)
+>> +{
+>> +       if (cfg_poll) {
+>> +               struct pollfd fds = { 0 };
+>> +               int ret;
+>> +
+>> +               fds.fd = fd;
+>> +               fds.events = POLLERR;
+> 
+> no need to pass POLLERR, it is always returned in revents.
