@@ -1,21 +1,70 @@
 From: thuth@redhat.com (Thomas Huth)
-Date: Fri, 24 May 2019 20:16:46 +0200
-Subject: [PATCH] KVM: selftests: enable pgste option for the linker on s390
-In-Reply-To: <20190524103301.87017-1-borntraeger@de.ibm.com>
+Date: Fri, 24 May 2019 20:17:43 +0200
+Subject: [PATCH 5/9] KVM: selftests: Align memory region addresses to 1M
+ on s390x
+In-Reply-To: <7919d65e-d814-9e68-4df0-d12f43f0b984@de.ibm.com>
 References: <20190523164309.13345-1-thuth@redhat.com>
- <20190524103301.87017-1-borntraeger@de.ibm.com>
-Message-ID: <798bd397-d44f-0076-3f87-ea0214ceb614@redhat.com>
+ <20190523164309.13345-6-thuth@redhat.com>
+ <20190523174028.3giefzff3l5eclki@kamzik.brq.redhat.com>
+ <7919d65e-d814-9e68-4df0-d12f43f0b984@de.ibm.com>
+Message-ID: <54f10713-002b-515c-e40f-5e64996b8f6f@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524181646.JeQctRz9tTHq2ih3Nd7i0gxIrXdIg8uCi5G-hP3qkCg@z>
+Message-ID: <20190524181743.uBc6csMYns74i9xYxoCZk60-pCA30c6vX_0bQsurkYc@z>
 
-On 24/05/2019 12.33, Christian Borntraeger wrote:
-> To avoid testcase failures we need to enable the pgstes. This can be
-> done with /proc/sys/vm/allocate_pgste or with a linker option that
-> creates an  S390_PGSTE program header.
+On 24/05/2019 10.29, Christian Borntraeger wrote:
+> 
+> 
+> On 23.05.19 19:40, Andrew Jones wrote:
+>> On Thu, May 23, 2019@06:43:05PM +0200, Thomas Huth wrote:
+>>> On s390x, there is a constraint that memory regions have to be aligned
+>>> to 1M (or running the VM will fail). Introduce a new "alignment" variable
+>>> in the vm_userspace_mem_region_add() function which now can be used for
+>>> both, huge page and s390x alignment requirements.
+>>>
+>>> Signed-off-by: Thomas Huth <thuth at redhat.com>
+>>> ---
+>>>  tools/testing/selftests/kvm/lib/kvm_util.c | 21 ++++++++++++++++-----
+>>>  1 file changed, 16 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+>>> index 08edb8436c47..656df9d5cd4d 100644
+>>> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+>>> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+>>> @@ -559,6 +559,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>>>  	unsigned long pmem_size = 0;
+>>>  	struct userspace_mem_region *region;
+>>>  	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
+>>> +	size_t alignment;
+>>>  
+>>>  	TEST_ASSERT((guest_paddr % vm->page_size) == 0, "Guest physical "
+>>>  		"address not on a page boundary.\n"
+>>> @@ -608,9 +609,20 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>>>  	TEST_ASSERT(region != NULL, "Insufficient Memory");
+>>>  	region->mmap_size = npages * vm->page_size;
+>>>  
+>>> -	/* Enough memory to align up to a huge page. */
+>>> +#ifdef __s390x__
+>>> +	/* On s390x, the host address must be aligned to 1M (due to PGSTEs) */
+>>> +	alignment = 0x100000;
+>>> +#else
+>>> +	alignment = 1;
+>>> +#endif
+>>> +
+>>>  	if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
+>>> -		region->mmap_size += huge_page_size;
+>>> +		alignment = huge_page_size;
+>>
+>> I guess s390x won't ever support VM_MEM_SRC_ANONYMOUS_THP? If it does,
+>> then we need 'alignment = max(huge_page_size, alignment)'. Actually
+>> that might be a nice way to write this anyway for future-proofing.
+> 
+> I can do 
+> -		alignment = huge_page_size;
+> +		alignment = max(huge_page_size, alignment);
+> 
+> when applying.
 
-Oh, right, I initially enabled it on my LPAR via "sysctl
-vm.allocate_pgste=1" when I started working on the selftests and then
-completely forgot about this... The linker option is certainly the
-better way to do this, thanks for the patch!
+Yes, please, that's certainly cleaner this way.
 
-Reviewed-by: Thomas Huth <thuth at redhat.com>
+ Thanks,
+  Thomas
