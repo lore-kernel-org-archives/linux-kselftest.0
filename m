@@ -1,73 +1,63 @@
 From: pbonzini@redhat.com (Paolo Bonzini)
-Date: Fri, 24 May 2019 21:21:55 +0200
-Subject: [PATCH] KVM: s390: fix memory slot handling for
- KVM_SET_USER_MEMORY_REGION
-In-Reply-To: <20190524140623.104033-1-borntraeger@de.ibm.com>
-References: <20190524140623.104033-1-borntraeger@de.ibm.com>
-Message-ID: <89ad11b6-b044-5669-a9a3-398da002182f@redhat.com>
+Date: Fri, 24 May 2019 21:24:24 +0200
+Subject: [PATCH] KVM: selftests: Wrap vcpu_nested_state_get/set functions
+ with x86 guard
+In-Reply-To: <20190523093114.18182-1-thuth@redhat.com>
+References: <20190523093114.18182-1-thuth@redhat.com>
+Message-ID: <1cb9f031-3483-b721-2e74-b12664b705ec@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524192155.35ZD_LPIfidh1YI0NrSYTxoo7zqbWYkC7R02kOkEmkM@z>
+Message-ID: <20190524192424.7HhlgXL5wGXD62PVoKKWYBfHyvTlrVLYEuiEv2km-Zk@z>
 
-On 24/05/19 16:06, Christian Borntraeger wrote:
-> kselftests exposed a problem in the s390 handling for memory slots.
-> Right now we only do proper memory slot handling for creation of new
-> memory slots. Neither MOVE, nor DELETION are handled properly. Let us
-> implement those.
+On 23/05/19 11:31, Thomas Huth wrote:
+> struct kvm_nested_state is only available on x86 so far. To be able
+> to compile the code on other architectures as well, we need to wrap
+> the related code with #ifdefs.
 > 
-> Signed-off-by: Christian Borntraeger <borntraeger at de.ibm.com>
+> Signed-off-by: Thomas Huth <thuth at redhat.com>
 > ---
->  arch/s390/kvm/kvm-s390.c | 35 +++++++++++++++++++++--------------
->  1 file changed, 21 insertions(+), 14 deletions(-)
+>  tools/testing/selftests/kvm/include/kvm_util.h | 2 ++
+>  tools/testing/selftests/kvm/lib/kvm_util.c     | 2 ++
+>  2 files changed, 4 insertions(+)
 > 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 871d2e99b156..6ec0685ab2c7 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -4525,21 +4525,28 @@ void kvm_arch_commit_memory_region(struct kvm *kvm,
->  				const struct kvm_memory_slot *new,
->  				enum kvm_mr_change change)
->  {
-> -	int rc;
-> +	int rc = 0;
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index 8c6b9619797d..a5a4b28f14d8 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -118,10 +118,12 @@ void vcpu_events_get(struct kvm_vm *vm, uint32_t vcpuid,
+>  		     struct kvm_vcpu_events *events);
+>  void vcpu_events_set(struct kvm_vm *vm, uint32_t vcpuid,
+>  		     struct kvm_vcpu_events *events);
+> +#ifdef __x86_64__
+>  void vcpu_nested_state_get(struct kvm_vm *vm, uint32_t vcpuid,
+>  			   struct kvm_nested_state *state);
+>  int vcpu_nested_state_set(struct kvm_vm *vm, uint32_t vcpuid,
+>  			  struct kvm_nested_state *state, bool ignore_error);
+> +#endif
 >  
-> -	/* If the basics of the memslot do not change, we do not want
-> -	 * to update the gmap. Every update causes several unnecessary
-> -	 * segment translation exceptions. This is usually handled just
-> -	 * fine by the normal fault handler + gmap, but it will also
-> -	 * cause faults on the prefix page of running guest CPUs.
-> -	 */
-> -	if (old->userspace_addr == mem->userspace_addr &&
-> -	    old->base_gfn * PAGE_SIZE == mem->guest_phys_addr &&
-> -	    old->npages * PAGE_SIZE == mem->memory_size)
-> -		return;
-> -
-> -	rc = gmap_map_segment(kvm->arch.gmap, mem->userspace_addr,
-> -		mem->guest_phys_addr, mem->memory_size);
-> +	switch (change) {
-> +	case KVM_MR_DELETE:
-> +		rc = gmap_unmap_segment(kvm->arch.gmap, old->base_gfn * PAGE_SIZE,
-> +					old->npages * PAGE_SIZE);
-> +		break;
-> +	case KVM_MR_MOVE:
-> +		rc = gmap_unmap_segment(kvm->arch.gmap, old->base_gfn * PAGE_SIZE,
-> +					old->npages * PAGE_SIZE);
-> +		if (rc)
-> +			break;
-> +		/* FALLTHROUGH */
-> +	case KVM_MR_CREATE:
-> +		rc = gmap_map_segment(kvm->arch.gmap, mem->userspace_addr,
-> +				      mem->guest_phys_addr, mem->memory_size);
-> +		break;
-> +	case KVM_MR_FLAGS_ONLY:
-> +		break;
-> +	default:
-> +		WARN(1, "Unknown KVM MR CHANGE: %d\n", change);
-> +	}
->  	if (rc)
->  		pr_warn("failed to commit memory region\n");
->  	return;
+>  const char *exit_reason_str(unsigned int exit_reason);
+>  
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index cf62de377310..633b22df46a4 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -1248,6 +1248,7 @@ void vcpu_events_set(struct kvm_vm *vm, uint32_t vcpuid,
+>  		ret, errno);
+>  }
+>  
+> +#ifdef __x86_64__
+>  void vcpu_nested_state_get(struct kvm_vm *vm, uint32_t vcpuid,
+>  			   struct kvm_nested_state *state)
+>  {
+> @@ -1279,6 +1280,7 @@ int vcpu_nested_state_set(struct kvm_vm *vm, uint32_t vcpuid,
+>  
+>  	return ret;
+>  }
+> +#endif
+>  
+>  /*
+>   * VM VCPU System Regs Get
 > 
 
-Queued for 5.2-rc2, thanks.
+Queued, thanks.
 
 Paolo
