@@ -1,32 +1,32 @@
-From: fklassen at appneta.com (Fred Klassen)
-Date: Thu, 23 May 2019 18:38:44 -0700
-Subject: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
-In-Reply-To: <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
-References: <20190523210651.80902-1-fklassen@appneta.com>
- <20190523210651.80902-2-fklassen@appneta.com>
- <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
-Message-ID: <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com>
+From: alakesh.haloi at gmail.com (Alakesh Haloi)
+Date: Fri, 24 May 2019 01:42:11 +0000
+Subject: [PATCH] selftests: add missing include linux/sockios
+Message-ID: <20190524014211.GA78399@ip-172-31-44-144.us-west-2.compute.internal>
 
-> Thanks for the report.
-> 
-> Zerocopy notification reference count is managed in skb_segment. That
-> should work.
-> 
-> Support for timestamping with the new GSO feature is indeed an
-> oversight. The solution is similar to how TCP associates the timestamp
-> with the right segment in tcp_gso_tstamp.
-> 
-> Only, I think we want to transfer the timestamp request to the last
-> datagram, not the first. For send timestamp, the final byte leaving
-> the host is usually more interesting.
+Including <linux/sockios.h> fixes the following compiler warning
 
-TX Timestamping the last packet of a datagram is something that would
-work poorly for our application. We need to measure the time it takes
-for the first bit that is sent until the first bit of the last packet is received.
-Timestaming the last packet of a burst seems somewhat random to me
-and would not be useful. Essentially we would be timestamping a 
-random byte in a UDP GSO buffer.
+timestamping.c: In function ‘printpacket’:
+timestamping.c:261:19: error: ‘SIOCGSTAMP’ undeclared (first use in this function); did you mean ‘SIOCGSTAMPNS’?
+   if (ioctl(sock, SIOCGSTAMP, &tv))
+                   ^~~~~~~~~~
+                   SIOCGSTAMPNS
 
-I believe there is a precedence for timestamping the first packet. With
-IPv4 packets, the first packet is timestamped and the remaining fragments
-are not.
+Signed-off-by: Alakesh Haloi <alakesh.haloi at gmail.com>
+---
+ tools/testing/selftests/networking/timestamping/timestamping.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/networking/timestamping/timestamping.c b/tools/testing/selftests/networking/timestamping/timestamping.c
+index 5cdfd743447b..62f03bcc9432 100644
+--- a/tools/testing/selftests/networking/timestamping/timestamping.c
++++ b/tools/testing/selftests/networking/timestamping/timestamping.c
+@@ -44,6 +44,7 @@
+ #include <asm/types.h>
+ #include <linux/net_tstamp.h>
+ #include <linux/errqueue.h>
++#include <linux/sockios.h>
+ 
+ #ifndef SO_TIMESTAMPING
+ # define SO_TIMESTAMPING         37
+-- 
+2.17.1
