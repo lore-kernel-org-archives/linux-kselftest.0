@@ -1,37 +1,25 @@
-From: willemdebruijn.kernel at gmail.com (Willem de Bruijn)
-Date: Fri, 24 May 2019 01:02:20 -0400
-Subject: [PATCH net 4/4] net/udpgso_bench_tx: audit error queue
-In-Reply-To: <D68C643B-C6A4-4EC5-8E4F-368BDE03760B@appneta.com>
-References: <20190523210651.80902-1-fklassen@appneta.com>
- <20190523210651.80902-5-fklassen@appneta.com>
- <CAF=yD-KBNLr5KY-YQ1KMmZGCpYNefSJKaJkZNOwd8nRiedpQtA@mail.gmail.com>
- <D68C643B-C6A4-4EC5-8E4F-368BDE03760B@appneta.com>
-Message-ID: <CAF=yD-JGxrAbv0Cxcn1O20mXY28J1PnpWsHRqcRPO97advm10A@mail.gmail.com>
+From: arnd at arndb.de (Arnd Bergmann)
+Date: Fri, 24 May 2019 09:43:53 +0200
+Subject: [PATCH v1 1/2] open: add close_range()
+In-Reply-To: <20190523163345.q5ynd2ytk7nxcvqf@brauner.io>
+References: <20190522155259.11174-1-christian@brauner.io>
+ <67e4458a-9cc4-d1aa-608c-73ebe9e2f7a3@yandex-team.ru>
+ <20190523163345.q5ynd2ytk7nxcvqf@brauner.io>
+Message-ID: <CAK8P3a26uvqmExJZsezhB+cp2ADM0Ai9jVUKWOFM6kg848bCKg@mail.gmail.com>
 
-On Thu, May 23, 2019 at 9:27 PM Fred Klassen <fklassen at appneta.com> wrote:
->
-> Willem, this is only my 2nd patch, and my last one was a one liner.
-> I’ll try to work through this, but let me know if I am doing a rookie
-> mistake (learning curve and all).
-
-Not at all. The fix makes perfect sense.
-
-The test patches 2 and 4 are not fixes, so are better suited to to
-net-next. Perhaps the changes to the test can also be more concise,
-just the minimal changes needed to demonstrate the bug and fix.
-
-> >>                        tss = (struct my_scm_timestamping *)CMSG_DATA(cmsg);
-> >> -                       fprintf(stderr, "tx timestamp = %lu.%09lu\n",
-> >> -                               tss->ts[i].tv_sec, tss->ts[i].tv_nsec);
-> >> +                       if (tss->ts[i].tv_sec == 0)
-> >> +                               stat_tx_ts_errors++;
-> >> +                       if (cfg_verbose)
-> >> +                               fprintf(stderr, "tx timestamp = %lu.%09lu\n",
-> >> +                                       tss->ts[i].tv_sec, tss->ts[i].tv_nsec);
+On Thu, May 23, 2019 at 6:33 PM Christian Brauner <christian at brauner.io> wrote:
+> On Thu, May 23, 2019 at 07:22:17PM +0300, Konstantin Khlebnikov wrote:
+> > On 22.05.2019 18:52, Christian Brauner wrote:> This adds the close_range() syscall. It allows to efficiently close a range
+> > >   22 files changed, 100 insertions(+), 9 deletions(-)
+> > >
 > >
-> > changes unrelated to this feature?
+> > It would be better to split arch/ wiring into separate patch for better readability.
 >
-> I’ll remove. Do you think that I should pull out any messages related
-> to “cfg_verbose”?
+> Ok. You mean only do x86 - seems to be the standard - and then move the
+> others into a separate patch? Doesn't seem worth to have a patch
+> per-arch, I'd think.
 
-This change did not seem relevant to the main feature of the patch.
+I think I would prefer the first patch to just add the call without wiring it up
+anywhere, and a second patch do add it on all architectures including x86.
+
+     Arnd
