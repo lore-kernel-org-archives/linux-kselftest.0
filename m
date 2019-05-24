@@ -1,19 +1,15 @@
-From: cohuck@redhat.com (Cornelia Huck)
-Date: Fri, 24 May 2019 11:13:23 +0200
+From: david@redhat.com (David Hildenbrand)
+Date: Fri, 24 May 2019 11:16:19 +0200
 Subject: [PATCH 8/9] KVM: s390: Do not report unusabled IDs via
  KVM_CAP_MAX_VCPU_ID
 In-Reply-To: <20190523164309.13345-9-thuth@redhat.com>
 References: <20190523164309.13345-1-thuth@redhat.com>
  <20190523164309.13345-9-thuth@redhat.com>
-Message-ID: <20190524111323.656afbff.cohuck@redhat.com>
+Message-ID: <9c406f3f-cad1-e9da-f212-0892ec3a26cd@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524091323.S-hc_T0_4e3ft0EdjSbd3TCoU968MN3l76_x3LvUt_w@z>
+Message-ID: <20190524091619.PPjPHyLbqmfEtYCCs1vN6AZqqhogmAuVrjKKvNhGxzY@z>
 
-On Thu, 23 May 2019 18:43:08 +0200
-Thomas Huth <thuth@redhat.com> wrote:
-
-In the subject: s/unusabled/unusable/
-
+On 23.05.19 18:43, Thomas Huth wrote:
 > KVM_CAP_MAX_VCPU_ID is currently always reporting KVM_MAX_VCPU_ID on all
 > architectures. However, on s390x, the amount of usable CPUs is determined
 > during runtime - it is depending on the features of the machine the code
@@ -37,5 +33,94 @@ In the subject: s/unusabled/unusable/
 >  virt/kvm/arm/arm.c         | 3 +++
 >  virt/kvm/kvm_main.c        | 2 --
 >  6 files changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index 6d0517ac18e5..0369f26ab96d 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -1122,6 +1122,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	case KVM_CAP_MAX_VCPUS:
+>  		r = KVM_MAX_VCPUS;
+>  		break;
+> +	case KVM_CAP_MAX_VCPU_ID:
+> +		r = KVM_MAX_VCPU_ID;
+> +		break;
+>  	case KVM_CAP_MIPS_FPU:
+>  		/* We don't handle systems with inconsistent cpu_has_fpu */
+>  		r = !!raw_cpu_has_fpu;
+> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+> index 3393b166817a..aa3a678711be 100644
+> --- a/arch/powerpc/kvm/powerpc.c
+> +++ b/arch/powerpc/kvm/powerpc.c
+> @@ -657,6 +657,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	case KVM_CAP_MAX_VCPUS:
+>  		r = KVM_MAX_VCPUS;
+>  		break;
+> +	case KVM_CAP_MAX_VCPU_ID:
+> +		r = KVM_MAX_VCPU_ID;
+> +		break;
+>  #ifdef CONFIG_PPC_BOOK3S_64
+>  	case KVM_CAP_PPC_GET_SMMU_INFO:
+>  		r = 1;
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 8d6d75db8de6..871d2e99b156 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -539,6 +539,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  		break;
+>  	case KVM_CAP_NR_VCPUS:
+>  	case KVM_CAP_MAX_VCPUS:
+> +	case KVM_CAP_MAX_VCPU_ID:
+>  		r = KVM_S390_BSCA_CPU_SLOTS;
+>  		if (!kvm_s390_use_sca_entries())
+>  			r = KVM_MAX_VCPUS;
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 536b78c4af6e..09a07d6a154e 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -3122,6 +3122,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	case KVM_CAP_MAX_VCPUS:
+>  		r = KVM_MAX_VCPUS;
+>  		break;
+> +	case KVM_CAP_MAX_VCPU_ID:
+> +		r = KVM_MAX_VCPU_ID;
+> +		break;
+>  	case KVM_CAP_PV_MMU:	/* obsolete */
+>  		r = 0;
+>  		break;
+> diff --git a/virt/kvm/arm/arm.c b/virt/kvm/arm/arm.c
+> index 90cedebaeb94..7eeebe5e9da2 100644
+> --- a/virt/kvm/arm/arm.c
+> +++ b/virt/kvm/arm/arm.c
+> @@ -224,6 +224,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	case KVM_CAP_MAX_VCPUS:
+>  		r = KVM_MAX_VCPUS;
+>  		break;
+> +	case KVM_CAP_MAX_VCPU_ID:
+> +		r = KVM_MAX_VCPU_ID;
+> +		break;
+>  	case KVM_CAP_MSI_DEVID:
+>  		if (!kvm)
+>  			r = -EINVAL;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index f0d13d9d125d..c09259dd6286 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -3146,8 +3146,6 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+>  	case KVM_CAP_MULTI_ADDRESS_SPACE:
+>  		return KVM_ADDRESS_SPACE_NUM;
+>  #endif
+> -	case KVM_CAP_MAX_VCPU_ID:
+> -		return KVM_MAX_VCPU_ID;
+>  	case KVM_CAP_NR_MEMSLOTS:
+>  		return KVM_USER_MEM_SLOTS;
+>  	default:
+> 
 
-Reviewed-by: Cornelia Huck <cohuck at redhat.com>
+Reviewed-by: David Hildenbrand <david at redhat.com>
+
+-- 
+
+Thanks,
+
+David / dhildenb
