@@ -1,35 +1,36 @@
 From: alakesh.haloi@gmail.com (Alakesh Haloi)
-Date: Fri, 24 May 2019 00:30:38 +0000
-Subject: [PATCH] selftests: bpf: fix compiler warning
+Date: Fri, 24 May 2019 01:20:41 +0000
+Subject: [PATCH] selftests: kselftest: fix function return type
 Message-ID:
- <20190524003038.GA69487@ip-172-31-44-144.us-west-2.compute.internal>
+ <20190524012041.GA75353@ip-172-31-44-144.us-west-2.compute.internal>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524003038.CZvIx8nS9B3TDoES8mXBZYjA6WphAoQ9QXdnCqtcRtw@z>
+Message-ID: <20190524012041.FKXE4G9VZ2IIplbSaVC9_JzRA_Otm8WcZ_DkDeXVEbs@z>
 
-Add missing header file following compiler warning
+ksft_test_num function returns sum of unsigned ints and hence should
+return unsigned int. This fixes the following compiler warning
 
-prog_tests/flow_dissector.c: In function ‘tx_tap’:
-prog_tests/flow_dissector.c:175:9: warning: implicit declaration of function ‘writev’; did you mean ‘write’? [-Wimplicit-function-declaration]
-  return writev(fd, iov, ARRAY_SIZE(iov));
-         ^~~~~~
-         write
-
+In file included from sync_test.c:37:0:
+../kselftest.h: In function ‘ksft_print_cnts’:
+../kselftest.h:73:16: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  if (ksft_plan != ksft_test_num())
+                ^~
 Signed-off-by: Alakesh Haloi <alakesh.haloi at gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/kselftest.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-index fbd1d88a6095..c938283ac232 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-@@ -3,6 +3,7 @@
- #include <error.h>
- #include <linux/if.h>
- #include <linux/if_tun.h>
-+#include <sys/uio.h>
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index ec15c4f6af55..5a98c80e079e 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -35,7 +35,7 @@ struct ksft_count {
+ static struct ksft_count ksft_cnt;
+ static unsigned int ksft_plan;
  
- #define CHECK_FLOW_KEYS(desc, got, expected)				\
- 	CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) != 0,		\
+-static inline int ksft_test_num(void)
++static inline unsigned int ksft_test_num(void)
+ {
+ 	return ksft_cnt.ksft_pass + ksft_cnt.ksft_fail +
+ 		ksft_cnt.ksft_xfail + ksft_cnt.ksft_xpass +
 -- 
 2.17.1
