@@ -1,99 +1,51 @@
-From: willemdebruijn.kernel@gmail.com (Willem de Bruijn)
-Date: Fri, 24 May 2019 15:29:29 -0400
-Subject: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
-In-Reply-To: <AFC1ECC8-BFAC-4718-B0C9-97CC4BD1F397@appneta.com>
-References: <20190523210651.80902-1-fklassen@appneta.com>
- <20190523210651.80902-2-fklassen@appneta.com>
- <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
- <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com>
- <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
- <AFC1ECC8-BFAC-4718-B0C9-97CC4BD1F397@appneta.com>
+From: alexei.starovoitov@gmail.com (Alexei Starovoitov)
+Date: Fri, 24 May 2019 13:49:26 -0700
+Subject: [PATCH bpf-next v2 RESEND 0/2] Move bpf_printk to bpf_helpers.h
+In-Reply-To: <4642ca96-22ab-ad61-a6a1-1d2ef7239cb8@fb.com>
+References: <20190523125355.18437-1-mrostecki@opensuse.org>
+ <4642ca96-22ab-ad61-a6a1-1d2ef7239cb8@fb.com>
 Message-ID:
- <CAF=yD-Le-eTadOi7PL8WFEQCG=yLqb5gvKiks+s5Akeq8TenBQ@mail.gmail.com>
+ <CAADnVQKYiv2ZMTLcJ6ZAoSA8u7+GZe+o-00qidefuNPa7KsbbA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524192929.uSv5-QLpqTQ0naCSbsLf5ZG0F-VLl-Adtcr_JjZdGBI@z>
+Message-ID: <20190524204926.tiIkRw3AXGeaeV196bcM6SPAmEGGPhZEb_0LdUyw9Ck@z>
 
-On Fri, May 24, 2019@12:34 PM Fred Klassen <fklassen@appneta.com> wrote:
+On Thu, May 23, 2019@9:52 AM Yonghong Song <yhs@fb.com> wrote:
 >
-> > Interesting. TCP timestamping takes the opposite choice and does
-> > timestamp the last byte in the sendmsg request.
+>
+>
+> On 5/23/19 5:53 AM, Michal Rostecki wrote:
+> > This series of patches move the commonly used bpf_printk macro to
+> > bpf_helpers.h which is already included in all BPF programs which
+> > defined that macro on their own.
 > >
->
-> I have a difficult time with the philosophy of TX timestamping the last
-> segment. The actual timestamp occurs just before the last segment
-> is sent. This is neither the start  nor the end of a GSO packet, which
-> to me seems somewhat arbitrary. It is even more arbitrary when using
-> software TX tiimestamping. These are timestamps represent the
-> time that the packet is queued onto the NIC’s buffer, not actual
-> time leaving the wire.
-
-It is the last moment that a timestamp can be generated for the last
-byte, I don't see how that is "neither the start nor the end of a GSO
-packet".
-
-> Queuing to a ring buffer is usually much faster
-> than wire rates. Therefore, say the timestamp of the last 1500 byte
-> segment of a 64K GSO packet may in reality be representing a time
-> about half way through the burst.
->
-> Since the timestamp of a TX packet occurs just before any data is sent,
-> I have found it most valuable to timestamp just before the first byte of
-> the packet or burst. Conversely, I find it most valuable to get an RX
-> timestamp  after the last byte arrives.
->
-> > It sounds like it depends on the workload. Perhaps this then needs to
-> > be configurable with an SOF_.. flag.
+> > v1->v2:
+> > - If HBM_DEBUG is not defined in hbm sample, undefine bpf_printk and set
+> >    an empty macro for it.
 > >
+> > Michal Rostecki (2):
+> >    selftests: bpf: Move bpf_printk to bpf_helpers.h
+> >    samples: bpf: Do not define bpf_printk macro
+> >
+> >   samples/bpf/hbm_kern.h                                | 11 ++---------
+> >   samples/bpf/tcp_basertt_kern.c                        |  7 -------
+> >   samples/bpf/tcp_bufs_kern.c                           |  7 -------
+> >   samples/bpf/tcp_clamp_kern.c                          |  7 -------
+> >   samples/bpf/tcp_cong_kern.c                           |  7 -------
+> >   samples/bpf/tcp_iw_kern.c                             |  7 -------
+> >   samples/bpf/tcp_rwnd_kern.c                           |  7 -------
+> >   samples/bpf/tcp_synrto_kern.c                         |  7 -------
+> >   samples/bpf/tcp_tos_reflect_kern.c                    |  7 -------
+> >   samples/bpf/xdp_sample_pkts_kern.c                    |  7 -------
+> >   tools/testing/selftests/bpf/bpf_helpers.h             |  8 ++++++++
+> >   .../testing/selftests/bpf/progs/sockmap_parse_prog.c  |  7 -------
+> >   .../selftests/bpf/progs/sockmap_tcp_msg_prog.c        |  7 -------
+> >   .../selftests/bpf/progs/sockmap_verdict_prog.c        |  7 -------
+> >   .../testing/selftests/bpf/progs/test_lwt_seg6local.c  |  7 -------
+> >   tools/testing/selftests/bpf/progs/test_xdp_noinline.c |  7 -------
+> >   tools/testing/selftests/bpf/test_sockmap_kern.h       |  7 -------
+> >   17 files changed, 10 insertions(+), 114 deletions(-)
 >
-> It would be interesting if a practical case can be made for timestamping
-> the last segment. In my mind, I don’t see how that would be valuable.
+> Ack for the whole series.
+> Acked-by: Yonghong Song <yhs at fb.com>
 
-It depends whether you are interested in measuring network latency or
-host transmit path latency.
-
-For the latter, knowing the time from the start of the sendmsg call to
-the moment the last byte hits the wire is most relevant. Or in absence
-of (well defined) hardware support, the last byte being queued to the
-device is the next best thing.
-
-It would make sense for this software implementation to follow
-established hardware behavior. But as far as I know, the exact time a
-hardware timestamp is taken is not consistent across devices, either.
-
-For fine grained timestamped data, perhaps GSO is simply not a good
-mechanism. That said, it still has to queue a timestamp if requested.
-
-> > Another option would be to return a timestamp for every segment. But
-> > they would all return the same tskey. And it causes different behavior
-> > with and without hardware offload.
->
-> When it comes to RX packets, getting per-packet (or per segment)
-> timestamps is invaluable. They represent actual wire times. However
-> my previous research into TX timestamping has led me to conclude
-> that there is no practical value when timestamping every packet of
-> a back-to-back burst.
->
-> When using software TX timestamping, The inter-packet timestamps
-> are typically much faster than line rate. Whereas you may be sending
-> on a GigE link, you may measure 20Gbps. At higher rates, I have found
-> that the overhead of per-packet software timestamping can produce
-> gaps in packets.
->
-> When using hardware timestamping, I think you will find that nearly all
-> adapters only allow one timestamp at a time. Therefore only one
-> packet in a burst would get timestamped.
-
-Can you elaborate? When the host queues N packets all with hardware
-timestamps requested, all N completions will have a timestamp? Or is
-that not guaranteed?
-
-> There are exceptions, for
-> example I am playing with a 100G Mellanox adapter that has
-> per-packet TX timestamping. However, I suspect that when I am
-> done testing, all I will see is timestamps that are representing wire
-> rate (e.g. 123nsec per 1500 byte packet).
->
-> Beyond testing the accuracy of a NIC’s timestamping capabilities, I
-> see very little value in doing per-segment timestamping.
-
-Ack. Great detailed argument, thanks.
+Applied. Thanks
