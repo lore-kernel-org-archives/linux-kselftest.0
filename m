@@ -1,227 +1,162 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Fri, 24 May 2019 13:10:47 +0200
-Subject: [PATCH v3 3/3] tests: add close_range() tests
-In-Reply-To: <20190524111047.6892-1-christian@brauner.io>
-References: <20190524111047.6892-1-christian@brauner.io>
-Message-ID: <20190524111047.6892-4-christian@brauner.io>
+From: catalin.marinas@arm.com (Catalin Marinas)
+Date: Fri, 24 May 2019 12:20:20 +0100
+Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+In-Reply-To: <201905231327.77CA8D0A36@keescook>
+References: <20190521182932.sm4vxweuwo5ermyd@mbp>
+ <201905211633.6C0BF0C2@keescook>
+ <20190522101110.m2stmpaj7seezveq@mbp>
+ <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
+ <20190522163527.rnnc6t4tll7tk5zw@mbp>
+ <201905221316.865581CF@keescook>
+ <20190523144449.waam2mkyzhjpqpur@mbp>
+ <201905230917.DEE7A75EF0@keescook>
+ <20190523174345.6sv3kcipkvlwfmox@mbp>
+ <201905231327.77CA8D0A36@keescook>
+Message-ID: <20190524112020.xcio5jrx6kzmrdnz@mbp>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524111047.IYIGyVKV-qedB0P2iW7b7K0gdniZwXv5tUd_qPvvSao@z>
+Message-ID: <20190524112020.BzOCCCaR8cneDFcFJFdbFXMy_q3D1ZURR8CalVPIVao@z>
 
-This adds basic tests for the new close_range() syscall.
-- test that no invalid flags can be passed
-- test that a range of file descriptors is correctly closed
-- test that a range of file descriptors is correctly closed if there there
-  are already closed file descriptors in the range
-- test that max_fd is correctly capped to the current fdtable maximum
+On Thu, May 23, 2019@02:31:16PM -0700, Kees Cook wrote:
+> On Thu, May 23, 2019@06:43:46PM +0100, Catalin Marinas wrote:
+> > On Thu, May 23, 2019@09:38:19AM -0700, Kees Cook wrote:
+> > > What about testing tools that intentionally insert high bits for syscalls
+> > > and are _expecting_ them to fail? It seems the TBI series will break them?
+> > > In that case, do we need to opt into TBI as well?
+> > 
+> > If there are such tools, then we may need a per-process control. It's
+> > basically an ABI change.
+> 
+> syzkaller already attempts to randomly inject non-canonical and
+> 0xFFFF....FFFF addresses for user pointers in syscalls in an effort to
+> find bugs like CVE-2017-5123 where waitid() via unchecked put_user() was
+> able to write directly to kernel memory[1].
+> 
+> It seems that using TBI by default and not allowing a switch back to
+> "normal" ABI without a reboot actually means that userspace cannot inject
+> kernel pointers into syscalls any more, since they'll get universally
+> stripped now. Is my understanding correct, here? i.e. exploiting
+> CVE-2017-5123 would be impossible under TBI?
 
-Signed-off-by: Christian Brauner <christian at brauner.io>
-Cc: Arnd Bergmann <arnd at arndb.de>
-Cc: Jann Horn <jannh at google.com>
-Cc: David Howells <dhowells at redhat.com>
-Cc: Dmitry V. Levin <ldv at altlinux.org>
-Cc: Oleg Nesterov <oleg at redhat.com>
-Cc: Linus Torvalds <torvalds at linux-foundation.org>
-Cc: Florian Weimer <fweimer at redhat.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: linux-api at vger.kernel.org
-Cc: linux-kselftest at vger.kernel.org
----
-v1: unchanged
-v2:
-- Christian Brauner <christian at brauner.io>:
-  - verify that close_range() correctly closes a single file descriptor
-v3:
-- Christian Brauner <christian at brauner.io>:
-  - add missing Cc for Shuah
-  - add missing Cc for linux-kselftest
----
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/core/.gitignore       |   1 +
- tools/testing/selftests/core/Makefile         |   6 +
- .../testing/selftests/core/close_range_test.c | 142 ++++++++++++++++++
- 4 files changed, 150 insertions(+)
- create mode 100644 tools/testing/selftests/core/.gitignore
- create mode 100644 tools/testing/selftests/core/Makefile
- create mode 100644 tools/testing/selftests/core/close_range_test.c
+Unless the kernel is also using TBI (khwasan), in which case masking out
+the top byte wouldn't help. Anyway, as per this discussion, we want the
+tagged pointer to remain intact all the way to put_user(), so nothing
+gets masked out. I don't think this would have helped with the waitid()
+bug.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 9781ca79794a..06e57fabbff9 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -4,6 +4,7 @@ TARGETS += bpf
- TARGETS += breakpoints
- TARGETS += capabilities
- TARGETS += cgroup
-+TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += drivers/dma-buf
-diff --git a/tools/testing/selftests/core/.gitignore b/tools/testing/selftests/core/.gitignore
-new file mode 100644
-index 000000000000..6e6712ce5817
---- /dev/null
-+++ b/tools/testing/selftests/core/.gitignore
-@@ -0,0 +1 @@
-+close_range_test
-diff --git a/tools/testing/selftests/core/Makefile b/tools/testing/selftests/core/Makefile
-new file mode 100644
-index 000000000000..de3ae68aa345
---- /dev/null
-+++ b/tools/testing/selftests/core/Makefile
-@@ -0,0 +1,6 @@
-+CFLAGS += -g -I../../../../usr/include/ -I../../../../include
-+
-+TEST_GEN_PROGS := close_range_test
-+
-+include ../lib.mk
-+
-diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
-new file mode 100644
-index 000000000000..d6e6079d3d53
---- /dev/null
-+++ b/tools/testing/selftests/core/close_range_test.c
-@@ -0,0 +1,142 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/kernel.h>
-+#include <limits.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <syscall.h>
-+#include <unistd.h>
-+
-+#include "../kselftest.h"
-+
-+static inline int sys_close_range(unsigned int fd, unsigned int max_fd,
-+				  unsigned int flags)
-+{
-+	return syscall(__NR_close_range, fd, max_fd, flags);
-+}
-+
-+#ifndef ARRAY_SIZE
-+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
-+#endif
-+
-+int main(int argc, char **argv)
-+{
-+	const char *test_name = "close_range";
-+	int i, ret;
-+	int open_fds[101];
-+	int fd_max, fd_mid, fd_min;
-+
-+	ksft_set_plan(9);
-+
-+	for (i = 0; i < ARRAY_SIZE(open_fds); i++) {
-+		int fd;
-+
-+		fd = open("/dev/null", O_RDONLY | O_CLOEXEC);
-+		if (fd < 0) {
-+			if (errno == ENOENT)
-+				ksft_exit_skip(
-+					"%s test: skipping test since /dev/null does not exist\n",
-+					test_name);
-+
-+			ksft_exit_fail_msg(
-+				"%s test: %s - failed to open /dev/null\n",
-+				strerror(errno), test_name);
-+		}
-+
-+		open_fds[i] = fd;
-+	}
-+
-+	fd_min = open_fds[0];
-+	fd_max = open_fds[99];
-+
-+	ret = sys_close_range(fd_min, fd_max, 1);
-+	if (!ret)
-+		ksft_exit_fail_msg(
-+			"%s test: managed to pass invalid flag value\n",
-+			test_name);
-+	ksft_test_result_pass("do not allow invalid flag values for close_range()\n");
-+
-+	fd_mid = open_fds[50];
-+	ret = sys_close_range(fd_min, fd_mid, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close range of file descriptors from %d to %d\n",
-+			test_name, fd_min, fd_mid);
-+	ksft_test_result_pass("close_range() from %d to %d\n", fd_min, fd_mid);
-+
-+	for (i = 0; i <= 50; i++) {
-+		ret = fcntl(open_fds[i], F_GETFL);
-+		if (ret >= 0)
-+			ksft_exit_fail_msg(
-+				"%s test: Failed to close range of file descriptors from %d to %d\n",
-+				test_name, fd_min, fd_mid);
-+	}
-+	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_min, fd_mid);
-+
-+	/* create a couple of gaps */
-+	close(57);
-+	close(78);
-+	close(81);
-+	close(82);
-+	close(84);
-+	close(90);
-+
-+	fd_mid = open_fds[51];
-+	/* Choose slightly lower limit and leave some fds for a later test */
-+	fd_max = open_fds[92];
-+	ret = sys_close_range(fd_mid, fd_max, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+			test_name);
-+	ksft_test_result_pass("close_range() from %d to %d\n", fd_mid, fd_max);
-+
-+	for (i = 51; i <= 92; i++) {
-+		ret = fcntl(open_fds[i], F_GETFL);
-+		if (ret >= 0)
-+			ksft_exit_fail_msg(
-+				"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+				test_name);
-+	}
-+	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_mid, fd_max);
-+
-+	fd_mid = open_fds[93];
-+	fd_max = open_fds[99];
-+	/* test that the kernel caps and still closes all fds */
-+	ret = sys_close_range(fd_mid, UINT_MAX, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+			test_name);
-+	ksft_test_result_pass("close_range() from %d to %d\n", fd_mid, fd_max);
-+
-+	for (i = 93; i < 100; i++) {
-+		ret = fcntl(open_fds[i], F_GETFL);
-+		if (ret >= 0)
-+			ksft_exit_fail_msg(
-+				"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+				test_name);
-+	}
-+	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_mid, fd_max);
-+
-+	ret = sys_close_range(open_fds[100], open_fds[100], 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close single file descriptor\n",
-+			test_name);
-+	ksft_test_result_pass("close_range() closed single file descriptor\n");
-+
-+	ret = fcntl(open_fds[100], F_GETFL);
-+	if (ret >= 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close single file descriptor\n",
-+			test_name);
-+	ksft_test_result_pass("fcntl() verify closed single file descriptor\n");
-+
-+	return ksft_exit_pass();
-+}
+> If so, then I think we should commit to the TBI ABI and have a boot
+> flag to disable it, but NOT have a process flag, as that would allow
+> attackers to bypass the masking. The only flag should be "TBI or MTE".
+> 
+> If so, can I get top byte masking for other architectures too? Like,
+> just to strip high bits off userspace addresses? ;)
+
+But you didn't like my option 2 shim proposal which strips the tag on
+kernel entry because it lowers the value of MTE ;).
+
+> (Oh, in looking I see this is implemented with sign-extension... why
+> not just a mask? So it'll either be valid userspace address or forced
+> into the non-canonical range?)
+
+The TTBR0/1 selection on memory accesses is done based on bit 63 if TBI
+is disabled and bit 55 when enabled. Sign-extension allows us to use the
+same macro for both user and kernel tagged pointers. With MTE tag 0
+would be match-all for TTBR0 and 0xff for TTBR1 (so that we don't modify
+the virtual address space of the kernel; I need to check the latest spec
+to be sure). Note that the VA space for both user and kernel is limited
+to 52-bit architecturally so, on access, bits 55..52 must be the same, 0
+or 1, otherwise you get a fault.
+
+Since the syzkaller tests would also need to set bits 55-52 (actually 48
+for kernel addresses, we haven't merged the 52-bit kernel VA patches
+yet) to hit a valid kernel address, I don't think ignoring the top byte
+makes much difference to the expected failure scenario.
+
+> > > Alright, the tl;dr appears to be:
+> > > - you want more assurances that we can find __user stripping in the
+> > >   kernel more easily. (But this seems like a parallel problem.)
+> > 
+> > Yes, and that we found all (most) cases now. The reason I don't see it
+> > as a parallel problem is that, as maintainer, I promise an ABI to user
+> > and I'd rather stick to it. I don't want, for example, ncurses to stop
+> > working because of some ioctl() rejecting tagged pointers.
+> 
+> But this is what I don't understand: it would need to be ncurses _using
+> TBI_, that would stop working (having started to work before, but then
+> regress due to a newly added one-off bug). Regular ncurses will be fine
+> because it's not using TBI. So The Golden Rule isn't violated,
+
+Once we introduced TBI and the libc starts tagging heap allocations,
+this becomes the new "regular" user space behaviour (i.e. using TBI). So
+a new bug would break the golden rule. It could also be an old bug that
+went unnoticed (i.e. you changed the graphics card and its driver gets
+confused by tagged pointers coming from user-space).
+
+> and by definition, it's a specific regression caused by some bug
+> (since TBI would have had to have worked _before_ in the situation to
+> be considered a regression now). Which describes the normal path for
+> kernel development... add feature, find corner cases where it doesn't
+> work, fix them, encounter new regressions, fix those, repeat forever.
+> 
+> > If it's just the occasional one-off bug I'm fine to deal with it. But
+> > no-one convinced me yet that this is the case.
+> 
+> You believe there still to be some systemic cases that haven't been
+> found yet? And even if so -- isn't it better to work on that
+> incrementally?
+
+I want some way to systematically identify potential issues (sparse?).
+Since problems are most likely in drivers, I don't have all devices to
+check and not all users have the knowledge to track down why something
+failed.
+
+I think we can do this incrementally as long the TBI ABI is not the
+default. Even better if we made it per process.
+
+> > As for the generic driver code (filesystems or other subsystems),
+> > without some clear direction for developers, together with static
+> > checking/sparse, on how user pointers are cast to longs (one example),
+> > it would become my responsibility to identify and fix them up with any
+> > kernel release. This series is not providing such guidance, just adding
+> > untagged_addr() in some places that we think matter.
+> 
+> What about adding a nice bit of .rst documentation that describes the
+> situation and shows how to use untagged_addr(). This is the kind of
+> kernel-wide change that "everyone" needs to know about, and shouldn't
+> be the arch maintainer's sole responsibility to fix.
+
+This works (if people read it) but we also need to be more prescriptive
+in how casting is done and how we differentiate between a pointer for
+dereference (T __user *) and address space management (usually unsigned
+long). On top of that, we'd get sparse to check for such conversions and
+maybe even checkpatch for some low-hanging fruit.
+
+> > > - we might need to opt in to TBI with a prctl()
+> > 
+> > Yes, although still up for discussion.
+> 
+> I think I've talked myself out of it. I say boot param only! :)
+
+I hope I talked you in again ;). I don't see TBI as improving kernel
+security.
+
+> So what do you say to these next steps:
+> 
+> - change untagged_addr() to use a static branch that is controlled with
+>   a boot parameter.
+
+access_ok() as well.
+
+> - add, say, Documentation/core-api/user-addresses.rst to describe
+>   proper care and handling of user space pointers with untagged_addr(),
+>   with examples based on all the cases seen so far in this series.
+
+We have u64_to_user_ptr(). What about the reverse? And maybe changing
+get_user_pages() to take void __user *.
+
+> - continue work to improve static analysis.
+
+Andrew Murray in the ARM kernel team started revisiting the old sparse
+threads, let's see how it goes.
+
 -- 
-2.21.0
+Catalin
