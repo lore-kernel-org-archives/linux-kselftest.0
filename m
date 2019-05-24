@@ -1,86 +1,74 @@
-From: cyphar at cyphar.com (Aleksa Sarai)
-Date: Fri, 24 May 2019 13:11:09 +1000
-Subject: [PATCH RFC v8 01/10] namei: obey trailing magic-link DAC
- permissions
-In-Reply-To: <20190523020009.mi25uziu2b3whf4l@yavin>
-References: <20190520133305.11925-1-cyphar@cyphar.com>
- <20190520133305.11925-2-cyphar@cyphar.com>
- <CALCETrVCwe49q5mu=f6jTYNSgosQSjjY5chukMPo6eZtQGqo5g@mail.gmail.com>
- <20190523020009.mi25uziu2b3whf4l@yavin>
-Message-ID: <20190524031109.v24r6typyug2rlto@yavin>
+From: eugenis at google.com (Evgenii Stepanov)
+Date: Thu, 23 May 2019 21:23:13 -0700
+Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
+ syscalls
+In-Reply-To: <20190523090427.GA44383@arrakis.emea.arm.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+ <20190522114910.emlckebwzv2qz42i@mbp>
+ <CAFKCwrjyP+x0JJy=qpBFsp4pub3He6UkvU0qnf1UOKt6W1LPRQ@mail.gmail.com>
+ <20190523090427.GA44383@arrakis.emea.arm.com>
+Message-ID: <CAFKCwrgk0+yR48Z5nhuZG5f7g==vRb4u+CS-4FS0mM7Eriavgw@mail.gmail.com>
 
-On 2019-05-23, Aleksa Sarai <cyphar at cyphar.com> wrote:
-> On 2019-05-22, Andy Lutomirski <luto at kernel.org> wrote:
-> > What are actual examples of uses for this exception?  Breaking
-> > selftests is not, in and of itself, a huge problem.
-> 
-> Not as far as I know. All of the re-opening users I know of do re-opens
-> of O_PATH or are re-opening with the same (or fewer) privileges. I also
-> ran this for a few days on my laptop without this exception, and didn't
-> have any visible issues.
+On Thu, May 23, 2019 at 2:04 AM Catalin Marinas <catalin.marinas at arm.com> wrote:
+>
+> On Wed, May 22, 2019 at 02:16:57PM -0700, Evgenii Stepanov wrote:
+> > On Wed, May 22, 2019 at 4:49 AM Catalin Marinas <catalin.marinas at arm.com> wrote:
+> > > On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
+> > > > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > > > pass tagged user pointers (with the top byte set to something else other
+> > > > than 0x00) as syscall arguments.
+> > > >
+> > > > This patch allows tagged pointers to be passed to the following memory
+> > > > syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
+> > > > mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
+> > > > remap_file_pages, shmat and shmdt.
+> > > >
+> > > > This is done by untagging pointers passed to these syscalls in the
+> > > > prologues of their handlers.
+> > >
+> > > I'll go through them one by one to see if we can tighten the expected
+> > > ABI while having the MTE in mind.
+> > >
+> > > > diff --git a/arch/arm64/kernel/sys.c b/arch/arm64/kernel/sys.c
+> > > > index b44065fb1616..933bb9f3d6ec 100644
+> > > > --- a/arch/arm64/kernel/sys.c
+> > > > +++ b/arch/arm64/kernel/sys.c
+> > > > @@ -35,10 +35,33 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
+> > > >  {
+> > > >       if (offset_in_page(off) != 0)
+> > > >               return -EINVAL;
+> > > > -
+> > > > +     addr = untagged_addr(addr);
+> > > >       return ksys_mmap_pgoff(addr, len, prot, flags, fd, off >> PAGE_SHIFT);
+> > > >  }
+> > >
+> > > If user passes a tagged pointer to mmap() and the address is honoured
+> > > (or MAP_FIXED is given), what is the expected return pointer? Does it
+> > > need to be tagged with the value from the hint?
+> >
+> > For HWASan the most convenient would be to use the tag from the hint.
+> > But since in the TBI (not MTE) mode the kernel has no idea what
+> > meaning userspace assigns to pointer tags, perhaps it should not try
+> > to guess, and should return raw (zero-tagged) address instead.
+>
+> Then, just to relax the ABI for hwasan, shall we simply disallow tagged
+> pointers on mmap() arguments? We can leave them in for
+> mremap(old_address), madvise().
 
-I have modified the patch to WARN_ON(may_open_magiclink() == -EACCES).
+I think this would be fine. We should allow tagged in pointers in
+mprotect though.
 
-So far (in the past day on my openSUSE machines) I have only seen two
-programs which have hit this case: kbd[1]'s "loadkeys" and "kbd_mode"
-binaries. In addition to there not being any user-visible errors -- they
-actually handle permission errors gracefully!
-
-  static int
-  open_a_console(const char *fnam)
-  {
-  	int fd;
-
-  	/*
-  	 * For ioctl purposes we only need some fd and permissions
-  	 * do not matter. But setfont:activatemap() does a write.
-  	 */
-  	fd = open(fnam, O_RDWR);
-  	if (fd < 0)
-  		fd = open(fnam, O_WRONLY);
-  	if (fd < 0)
-  		fd = open(fnam, O_RDONLY);
-  	if (fd < 0)
-  		return -1;
-  	return fd;
-  }
-
-The above gets called with "/proc/self/fd/0" as an argument (as well as
-other console candidates like "/dev/console"). And setfont:activatemap()
-actually does handle read-only fds:
-
-  static void
-  send_escseq(int fd, const char *seq, int n)
-  {
-  	if (write(fd, seq, n) != n) /* maybe fd is read-only */
-  		printf("%s", seq);
-  }
-
-  void activatemap(int fd)
-  {
-  	send_escseq(fd, "\033(K", 3);
-  }
-
-So, thus far, not only have I not seen anything go wrong -- the only
-program which actually hits this case handles the error gracefully.
-Obviously we got lucky here, but the lack of any users of this
-mis-feature leads me to have some hope that we can block it without
-anyone noticing.
-
-But I emphatically do not want to break userspace here (except for
-attackers, obviously).
-
-[1]: http://git.altlinux.org/people/legion/packages/kbd.git
-
--- 
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190524/29603a4f/attachment.sig>
+> > > With MTE, we may want to use this as a request for the default colour of
+> > > the mapped pages (still under discussion).
+> >
+> > I like this - and in that case it would make sense to return the
+> > pointer that can be immediately dereferenced without crashing the
+> > process, i.e. with the matching tag.
+>
+> This came up from the Android investigation work where large memory
+> allocations (using mmap) could be more efficiently pre-tagged by the
+> kernel on page fault. Not sure about the implementation details yet.
+>
+> --
+> Catalin
