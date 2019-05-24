@@ -1,33 +1,89 @@
-From: christian@brauner.io (Christian Brauner)
-Date: Fri, 24 May 2019 11:57:04 +0200
-Subject: [PATCH v1 1/2] open: add close_range()
-In-Reply-To: <CAK8P3a26uvqmExJZsezhB+cp2ADM0Ai9jVUKWOFM6kg848bCKg@mail.gmail.com>
-References: <20190522155259.11174-1-christian@brauner.io>
- <67e4458a-9cc4-d1aa-608c-73ebe9e2f7a3@yandex-team.ru>
- <20190523163345.q5ynd2ytk7nxcvqf@brauner.io>
- <CAK8P3a26uvqmExJZsezhB+cp2ADM0Ai9jVUKWOFM6kg848bCKg@mail.gmail.com>
-Message-ID: <20190524095701.b7ioi5gg573vmajh@brauner.io>
+From: catalin.marinas@arm.com (Catalin Marinas)
+Date: Fri, 24 May 2019 11:11:40 +0100
+Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+In-Reply-To: <ffe58af3-7c70-d559-69f6-1f6ebcb0fec6@oracle.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
+ <20190521182932.sm4vxweuwo5ermyd@mbp>
+ <201905211633.6C0BF0C2@keescook>
+ <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
+ <20190523201105.oifkksus4rzcwqt4@mbp>
+ <ffe58af3-7c70-d559-69f6-1f6ebcb0fec6@oracle.com>
+Message-ID: <20190524101139.36yre4af22bkvatx@mbp>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524095704.xnMFeHmZIEQTKuTgVCV0jX9Wlpeldl0rObHexLngzPk@z>
+Message-ID: <20190524101140.p7ieFw_Fp76JE-HN3K_L90KY5sMb_K9R9BnMS45PicA@z>
 
-On Fri, May 24, 2019@09:43:53AM +0200, Arnd Bergmann wrote:
-> On Thu, May 23, 2019@6:33 PM Christian Brauner <christian@brauner.io> wrote:
-> > On Thu, May 23, 2019@07:22:17PM +0300, Konstantin Khlebnikov wrote:
-> > > On 22.05.2019 18:52, Christian Brauner wrote:> This adds the close_range() syscall. It allows to efficiently close a range
-> > > >   22 files changed, 100 insertions(+), 9 deletions(-)
-> > > >
-> > >
-> > > It would be better to split arch/ wiring into separate patch for better readability.
-> >
-> > Ok. You mean only do x86 - seems to be the standard - and then move the
-> > others into a separate patch? Doesn't seem worth to have a patch
-> > per-arch, I'd think.
+On Thu, May 23, 2019@03:49:05PM -0600, Khalid Aziz wrote:
+> On 5/23/19 2:11 PM, Catalin Marinas wrote:
+> > On Thu, May 23, 2019@11:51:40AM -0600, Khalid Aziz wrote:
+> >> On 5/21/19 6:04 PM, Kees Cook wrote:
+> >>> As an aside: I think Sparc ADI support in Linux actually side-stepped
+> >>> this[1] (i.e. chose "solution 1"): "All addresses passed to kernel must
+> >>> be non-ADI tagged addresses." (And sadly, "Kernel does not enable ADI
+> >>> for kernel code.") I think this was a mistake we should not repeat for
+> >>> arm64 (we do seem to be at least in agreement about this, I think).
+> >>>
+> >>> [1] https://lore.kernel.org/patchwork/patch/654481/
+> >>
+> >> That is a very early version of the sparc ADI patch. Support for tagged
+> >> addresses in syscalls was added in later versions and is in the patch
+> >> that is in the kernel.
+> > 
+> > I tried to figure out but I'm not familiar with the sparc port. How did
+> > you solve the tagged address going into various syscall implementations
+> > in the kernel (e.g. sys_write)? Is the tag removed on kernel entry or it
+> > ends up deeper in the core code?
 > 
-> I think I would prefer the first patch to just add the call without wiring it up
-> anywhere, and a second patch do add it on all architectures including x86.
+> Another spot I should point out in ADI patch - Tags are not stored in
+> VMAs and IOMMU does not support ADI tags on M7. ADI tags are stripped
+> before userspace addresses are passed to IOMMU in the following snippet
+> from the patch:
+> 
+> diff --git a/arch/sparc/mm/gup.c b/arch/sparc/mm/gup.c
+> index 5335ba3c850e..357b6047653a 100644
+> --- a/arch/sparc/mm/gup.c
+> +++ b/arch/sparc/mm/gup.c
+> @@ -201,6 +202,24 @@ int __get_user_pages_fast(unsigned long start, int
+> nr_pages
+> , int write,
+>         pgd_t *pgdp;
+>         int nr = 0;
+> 
+> +#ifdef CONFIG_SPARC64
+> +       if (adi_capable()) {
+> +               long addr = start;
+> +
+> +               /* If userspace has passed a versioned address, kernel
+> +                * will not find it in the VMAs since it does not store
+> +                * the version tags in the list of VMAs. Storing version
+> +                * tags in list of VMAs is impractical since they can be
+> +                * changed any time from userspace without dropping into
+> +                * kernel. Any address search in VMAs will be done with
+> +                * non-versioned addresses. Ensure the ADI version bits
+> +                * are dropped here by sign extending the last bit before
+> +                * ADI bits. IOMMU does not implement version tags.
+> +                */
+> +               addr = (addr << (long)adi_nbits()) >> (long)adi_nbits();
+> +               start = addr;
+> +       }
+> +#endif
+>         start &= PAGE_MASK;
+>         addr = start;
+>         len = (unsigned long) nr_pages << PAGE_SHIFT;
 
-I've split this into two patches and also bumped arm64
-__NR_compat_syscalls that I've missed before as you mentioned!
+Thanks Khalid. I missed that sparc does not enable HAVE_GENERIC_GUP, so
+you fix this case here. If we add the generic untagged_addr() macro in
+the generic code, I think sparc can start making use of it rather than
+open-coding the shifts.
 
-Thanks!
-Christian
+There are a few other other places where tags can leak and the core code
+would get confused (for example, madvise()). I presume your user space
+doesn't exercise them. On arm64 we plan to just allow the C library to
+tag any new memory allocation, so those core code paths would need to be
+covered.
+
+And similarly, devices, IOMMU, any DMA would ignore tags.
+
+-- 
+Catalin
