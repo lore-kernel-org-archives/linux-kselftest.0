@@ -1,45 +1,73 @@
-From: borntraeger at de.ibm.com (Christian Borntraeger)
-Date: Fri, 24 May 2019 14:56:37 +0200
-Subject: [PATCH v1 0/9] KVM selftests for s390x
-In-Reply-To: <e2f1f36b-51b6-30f3-cee5-950b72b6fa67@redhat.com>
-References: <20190523164309.13345-1-thuth@redhat.com>
- <0ad63449-c329-f38d-b879-6e427e6a8656@de.ibm.com>
- <e6f953be-00af-756e-4c0a-649294efbd91@de.ibm.com>
- <411d4ad9-b43e-d3ae-1b66-65888c894caa@de.ibm.com>
- <e2f1f36b-51b6-30f3-cee5-950b72b6fa67@redhat.com>
-Message-ID: <f25b27c1-f682-b3f3-1fa8-492a2ef189eb@de.ibm.com>
+From: mchehab+samsung at kernel.org (Mauro Carvalho Chehab)
+Date: Fri, 24 May 2019 10:13:45 -0300
+Subject: [PATCH v15 14/17] media/v4l2-core, arm64: untag user pointers
+ in videobuf_dma_contig_user_get
+In-Reply-To: <b7999d13af54eb3ed8d7b0192397c7cde3df0b28.1557160186.git.andreyknvl@google.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <b7999d13af54eb3ed8d7b0192397c7cde3df0b28.1557160186.git.andreyknvl@google.com>
+Message-ID: <20190524101345.67c425fa@coco.lan>
 
+Em Mon,  6 May 2019 18:31:00 +0200
+Andrey Konovalov <andreyknvl at google.com> escreveu:
 
-
-On 24.05.19 14:36, David Hildenbrand wrote:
-> On 24.05.19 14:29, Christian Borntraeger wrote:
->>
->>
->> On 24.05.19 14:17, Christian Borntraeger wrote:
->>>
->>>
->>> On 24.05.19 13:11, Christian Borntraeger wrote:
->>>> I do get
->>>>
->>>> [10400.440298] kvm-s390: failed to commit memory region
->>>> [10400.508723] kvm-s390: failed to commit memory region
->>>>
->>>> when running the tests. Will have a look.
->>>
->>> It comes from kvm_vm_free. This calls KVM_SET_USER_MEMORY_REGION with size 0,
->>> which the s390 code does not like.
->>>
->>
->> The doc says about  KVM_SET_USER_MEMORY_REGION:
->>
->> This ioctl allows the user to create or modify a guest physical memory
->> slot.  When changing an existing slot, it may be moved in the guest
->> physical memory space, or its flags may be modified.  --> It may not be
->> resized. <----
+> This patch is a part of a series that extends arm64 kernel ABI to allow to
+> pass tagged user pointers (with the top byte set to something else other
+> than 0x00) as syscall arguments.
 > 
-> Size 0 is deleting, not resizing AFAIK.
+> videobuf_dma_contig_user_get() uses provided user pointers for vma
+> lookups, which can only by done with untagged pointers.
+> 
+> Untag the pointers in this function.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 
-Right this seems to translate to KVM_MR_DELETE, which the s390 code does not handle (we
-will simply deliver a page fault as we share the last page table level). 
-I will have a look at implementing KVM_MR_DELETE and KVM_MR_MOVE. In fact, we should
-have a testcase for that as well.
+Acked-by: Mauro Carvalho Chehab <mchehab+samsung at kernel.org>
+
+> ---
+>  drivers/media/v4l2-core/videobuf-dma-contig.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/media/v4l2-core/videobuf-dma-contig.c
+> index e1bf50df4c70..8a1ddd146b17 100644
+> --- a/drivers/media/v4l2-core/videobuf-dma-contig.c
+> +++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
+> @@ -160,6 +160,7 @@ static void videobuf_dma_contig_user_put(struct videobuf_dma_contig_memory *mem)
+>  static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
+>  					struct videobuf_buffer *vb)
+>  {
+> +	unsigned long untagged_baddr = untagged_addr(vb->baddr);
+>  	struct mm_struct *mm = current->mm;
+>  	struct vm_area_struct *vma;
+>  	unsigned long prev_pfn, this_pfn;
+> @@ -167,22 +168,22 @@ static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
+>  	unsigned int offset;
+>  	int ret;
+>  
+> -	offset = vb->baddr & ~PAGE_MASK;
+> +	offset = untagged_baddr & ~PAGE_MASK;
+>  	mem->size = PAGE_ALIGN(vb->size + offset);
+>  	ret = -EINVAL;
+>  
+>  	down_read(&mm->mmap_sem);
+>  
+> -	vma = find_vma(mm, vb->baddr);
+> +	vma = find_vma(mm, untagged_baddr);
+>  	if (!vma)
+>  		goto out_up;
+>  
+> -	if ((vb->baddr + mem->size) > vma->vm_end)
+> +	if ((untagged_baddr + mem->size) > vma->vm_end)
+>  		goto out_up;
+>  
+>  	pages_done = 0;
+>  	prev_pfn = 0; /* kill warning */
+> -	user_address = vb->baddr;
+> +	user_address = untagged_baddr;
+>  
+>  	while (pages_done < (mem->size >> PAGE_SHIFT)) {
+>  		ret = follow_pfn(vma, user_address, &this_pfn);
+
+
+
+Thanks,
+Mauro
