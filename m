@@ -1,74 +1,22 @@
-From: fklassen@appneta.com (Fred Klassen)
-Date: Fri, 24 May 2019 15:01:24 -0700
-Subject: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
-In-Reply-To: <CAF=yD-Le-eTadOi7PL8WFEQCG=yLqb5gvKiks+s5Akeq8TenBQ@mail.gmail.com>
-References: <20190523210651.80902-1-fklassen@appneta.com>
- <20190523210651.80902-2-fklassen@appneta.com>
- <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
- <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com>
- <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
- <AFC1ECC8-BFAC-4718-B0C9-97CC4BD1F397@appneta.com>
- <CAF=yD-Le-eTadOi7PL8WFEQCG=yLqb5gvKiks+s5Akeq8TenBQ@mail.gmail.com>
-Message-ID: <90E3853F-107D-45BA-93DC-D0BE8AC6FCBB@appneta.com>
+From: pr-tracker-bot@kernel.org (pr-tracker-bot@kernel.org)
+Date: Fri, 24 May 2019 23:15:17 +0000
+Subject: [GIT PULL] Kselftest fixes update for Linux 5.2-rc2
+In-Reply-To: <46b8fc51-ac8f-c03d-443e-4bd265cd4527@linuxfoundation.org>
+References: <46b8fc51-ac8f-c03d-443e-4bd265cd4527@linuxfoundation.org>
+Message-ID:
+ <155873971735.4676.15830422826307745956.pr-tracker-bot@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524220124.pQUXDZaP9wvCLaNSlCyJucNGxJ7SGA1uBA6LewIBZ3Y@z>
+Message-ID: <20190524231517.CeG0IkO8NKtn6MdupO2PFDOYtjGawcAffH5aDdKhKiI@z>
 
+The pull request you sent on Fri, 24 May 2019 15:19:29 -0600:
 
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.2-rc2
 
-> On May 24, 2019,@12:29 PM, Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
-> 
-> It is the last moment that a timestamp can be generated for the last
-> byte, I don't see how that is "neither the start nor the end of a GSO
-> packet”.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7f8b40e3dbcd7dbeabe6be8f157376ef0b890e06
 
-My misunderstanding. I thought TCP did last segment timestamping, not
-last byte. In that case, your statements make sense.
+Thank you!
 
->> It would be interesting if a practical case can be made for timestamping
->> the last segment. In my mind, I don’t see how that would be valuable.
-> 
-> It depends whether you are interested in measuring network latency or
-> host transmit path latency.
-> 
-> For the latter, knowing the time from the start of the sendmsg call to
-> the moment the last byte hits the wire is most relevant. Or in absence
-> of (well defined) hardware support, the last byte being queued to the
-> device is the next best thing.
-> 
-> It would make sense for this software implementation to follow
-> established hardware behavior. But as far as I know, the exact time a
-> hardware timestamp is taken is not consistent across devices, either.
-> 
-> For fine grained timestamped data, perhaps GSO is simply not a good
-> mechanism. That said, it still has to queue a timestamp if requested.
-
-I see your point. Makes sense to me.
-
->> When using hardware timestamping, I think you will find that nearly all
->> adapters only allow one timestamp at a time. Therefore only one
->> packet in a burst would get timestamped.
-> 
-> Can you elaborate? When the host queues N packets all with hardware
-> timestamps requested, all N completions will have a timestamp? Or is
-> that not guaranteed?
-> 
-
-It is not guaranteed. The best example is in ixgbe_main.c and search for
-‘SKBTX_HW_TSTAMP’.  If there is a PTP TX timestamp in progress,
-‘__IXGBE_PTP_TX_IN_PROGRESS’ is set and no other timestamps
-are possible. The flag is cleared after transmit softirq, and only then
-can another TX timestamp be taken.  
-
->> There are exceptions, for
->> example I am playing with a 100G Mellanox adapter that has
->> per-packet TX timestamping. However, I suspect that when I am
->> done testing, all I will see is timestamps that are representing wire
->> rate (e.g. 123nsec per 1500 byte packet).
->> 
->> Beyond testing the accuracy of a NIC’s timestamping capabilities, I
->> see very little value in doing per-segment timestamping.
-> 
-> Ack. Great detailed argument, thanks.
-
-Thanks. I’m a timestamping nerd and have learned lots with this 
-discussion.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
