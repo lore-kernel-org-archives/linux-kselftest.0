@@ -1,126 +1,66 @@
-From: andrew.murray@arm.com (Andrew Murray)
-Date: Fri, 24 May 2019 16:41:44 +0100
-Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
- syscalls
-In-Reply-To: <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
-Message-ID: <20190524154143.GG8268@e119886-lin.cambridge.arm.com>
+From: fklassen@appneta.com (Fred Klassen)
+Date: Fri, 24 May 2019 09:34:54 -0700
+Subject: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
+In-Reply-To: <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
+References: <20190523210651.80902-1-fklassen@appneta.com>
+ <20190523210651.80902-2-fklassen@appneta.com>
+ <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
+ <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com>
+ <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
+Message-ID: <AFC1ECC8-BFAC-4718-B0C9-97CC4BD1F397@appneta.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524154144.6u6UvWGrxvw7IfTwv8zOU25r-MQd4anoFufuTjTYnWU@z>
+Message-ID: <20190524163454.EeZU4iEDZhYtibBCiIn6RxvZcz1CAB_GemvXimk-x2c@z>
 
-On Mon, May 06, 2019@06:30:51PM +0200, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
+> Interesting. TCP timestamping takes the opposite choice and does
+> timestamp the last byte in the sendmsg request.
 > 
-> This patch allows tagged pointers to be passed to the following memory
-> syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
-> mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
-> remap_file_pages, shmat and shmdt.
+
+I have a difficult time with the philosophy of TX timestamping the last
+segment. The actual timestamp occurs just before the last segment
+is sent. This is neither the start  nor the end of a GSO packet, which
+to me seems somewhat arbitrary. It is even more arbitrary when using
+software TX tiimestamping. These are timestamps represent the
+time that the packet is queued onto the NIC’s buffer, not actual
+time leaving the wire. Queuing to a ring buffer is usually much faster
+than wire rates. Therefore, say the timestamp of the last 1500 byte 
+segment of a 64K GSO packet may in reality be representing a time
+about half way through the burst.
+
+Since the timestamp of a TX packet occurs just before any data is sent,
+I have found it most valuable to timestamp just before the first byte of 
+the packet or burst. Conversely, I find it most valuable to get an RX
+timestamp  after the last byte arrives.
+
+> It sounds like it depends on the workload. Perhaps this then needs to
+> be configurable with an SOF_.. flag.
 > 
-> This is done by untagging pointers passed to these syscalls in the
-> prologues of their handlers.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
-> ---
 
+It would be interesting if a practical case can be made for timestamping
+the last segment. In my mind, I don’t see how that would be valuable.
 
-> +SYSCALL_DEFINE2(arm64_mlock, unsigned long, start, size_t, len)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_mlock(start, len, VM_LOCKED);
-> +}
-> +
-> +SYSCALL_DEFINE2(arm64_mlock2, unsigned long, start, size_t, len)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_mlock(start, len, VM_LOCKED);
-> +}
+> Another option would be to return a timestamp for every segment. But
+> they would all return the same tskey. And it causes different behavior
+> with and without hardware offload.
 
-I think this may be a copy/paste error...
+When it comes to RX packets, getting per-packet (or per segment)
+timestamps is invaluable. They represent actual wire times. However
+my previous research into TX timestamping has led me to conclude
+that there is no practical value when timestamping every packet of 
+a back-to-back burst.
 
-Shouldn't mlock2 have a third 'flags' argument to distinguish is from mlock?
+When using software TX timestamping, The inter-packet timestamps
+are typically much faster than line rate. Whereas you may be sending
+on a GigE link, you may measure 20Gbps. At higher rates, I have found
+that the overhead of per-packet software timestamping can produce
+gaps in packets.
 
-Thanks,
+When using hardware timestamping, I think you will find that nearly all
+adapters only allow one timestamp at a time. Therefore only one
+packet in a burst would get timestamped. There are exceptions, for
+example I am playing with a 100G Mellanox adapter that has
+per-packet TX timestamping. However, I suspect that when I am
+done testing, all I will see is timestamps that are representing wire
+rate (e.g. 123nsec per 1500 byte packet).
 
-Andrew Murray
-
-> +
-> +SYSCALL_DEFINE2(arm64_munlock, unsigned long, start, size_t, len)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_munlock(start, len);
-> +}
-> +
-> +SYSCALL_DEFINE3(arm64_mprotect, unsigned long, start, size_t, len,
-> +		unsigned long, prot)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_mprotect_pkey(start, len, prot, -1);
-> +}
-> +
-> +SYSCALL_DEFINE3(arm64_msync, unsigned long, start, size_t, len, int, flags)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_msync(start, len, flags);
-> +}
-> +
-> +SYSCALL_DEFINE3(arm64_mincore, unsigned long, start, size_t, len,
-> +		unsigned char __user *, vec)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_mincore(start, len, vec);
-> +}
-> +
-> +SYSCALL_DEFINE5(arm64_remap_file_pages, unsigned long, start,
-> +		unsigned long, size, unsigned long, prot,
-> +		unsigned long, pgoff, unsigned long, flags)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_remap_file_pages(start, size, prot, pgoff, flags);
-> +}
-> +
-> +SYSCALL_DEFINE3(arm64_shmat, int, shmid, char __user *, shmaddr, int, shmflg)
-> +{
-> +	shmaddr = untagged_addr(shmaddr);
-> +	return ksys_shmat(shmid, shmaddr, shmflg);
-> +}
-> +
-> +SYSCALL_DEFINE1(arm64_shmdt, char __user *, shmaddr)
-> +{
-> +	shmaddr = untagged_addr(shmaddr);
-> +	return ksys_shmdt(shmaddr);
-> +}
-> +
->  /*
->   * Wrappers to pass the pt_regs argument.
->   */
->  #define sys_personality		sys_arm64_personality
-> +#define sys_mmap_pgoff		sys_arm64_mmap_pgoff
-> +#define sys_mremap		sys_arm64_mremap
-> +#define sys_munmap		sys_arm64_munmap
-> +#define sys_brk			sys_arm64_brk
-> +#define sys_get_mempolicy	sys_arm64_get_mempolicy
-> +#define sys_madvise		sys_arm64_madvise
-> +#define sys_mbind		sys_arm64_mbind
-> +#define sys_mlock		sys_arm64_mlock
-> +#define sys_mlock2		sys_arm64_mlock2
-> +#define sys_munlock		sys_arm64_munlock
-> +#define sys_mprotect		sys_arm64_mprotect
-> +#define sys_msync		sys_arm64_msync
-> +#define sys_mincore		sys_arm64_mincore
-> +#define sys_remap_file_pages	sys_arm64_remap_file_pages
-> +#define sys_shmat		sys_arm64_shmat
-> +#define sys_shmdt		sys_arm64_shmdt
->  
->  asmlinkage long sys_ni_syscall(const struct pt_regs *);
->  #define __arm64_sys_ni_syscall	sys_ni_syscall
-> -- 
-> 2.21.0.1020.gf2820cf01a-goog
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel at lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Beyond testing the accuracy of a NIC’s timestamping capabilities, I
+see very little value in doing per-segment timestamping.
