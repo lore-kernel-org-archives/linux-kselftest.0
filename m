@@ -1,101 +1,124 @@
-From: khalid.aziz at oracle.com (Khalid Aziz)
-Date: Fri, 24 May 2019 08:25:42 -0600
-Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-In-Reply-To: <20190524101139.36yre4af22bkvatx@mbp>
+From: andrew.murray at arm.com (Andrew Murray)
+Date: Fri, 24 May 2019 16:41:44 +0100
+Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
+ syscalls
+In-Reply-To: <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
 References: <cover.1557160186.git.andreyknvl@google.com>
- <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp> <201905211633.6C0BF0C2@keescook>
- <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
- <20190523201105.oifkksus4rzcwqt4@mbp>
- <ffe58af3-7c70-d559-69f6-1f6ebcb0fec6@oracle.com>
- <20190524101139.36yre4af22bkvatx@mbp>
-Message-ID: <c6dd53d8-142b-3d8d-6a40-d21c5ee9d272@oracle.com>
+ <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+Message-ID: <20190524154143.GG8268@e119886-lin.cambridge.arm.com>
 
-On 5/24/19 4:11 AM, Catalin Marinas wrote:
-> On Thu, May 23, 2019 at 03:49:05PM -0600, Khalid Aziz wrote:
->> On 5/23/19 2:11 PM, Catalin Marinas wrote:
->>> On Thu, May 23, 2019 at 11:51:40AM -0600, Khalid Aziz wrote:
->>>> On 5/21/19 6:04 PM, Kees Cook wrote:
->>>>> As an aside: I think Sparc ADI support in Linux actually side-stepped
->>>>> this[1] (i.e. chose "solution 1"): "All addresses passed to kernel must
->>>>> be non-ADI tagged addresses." (And sadly, "Kernel does not enable ADI
->>>>> for kernel code.") I think this was a mistake we should not repeat for
->>>>> arm64 (we do seem to be at least in agreement about this, I think).
->>>>>
->>>>> [1] https://lore.kernel.org/patchwork/patch/654481/
->>>>
->>>> That is a very early version of the sparc ADI patch. Support for tagged
->>>> addresses in syscalls was added in later versions and is in the patch
->>>> that is in the kernel.
->>>
->>> I tried to figure out but I'm not familiar with the sparc port. How did
->>> you solve the tagged address going into various syscall implementations
->>> in the kernel (e.g. sys_write)? Is the tag removed on kernel entry or it
->>> ends up deeper in the core code?
->>
->> Another spot I should point out in ADI patch - Tags are not stored in
->> VMAs and IOMMU does not support ADI tags on M7. ADI tags are stripped
->> before userspace addresses are passed to IOMMU in the following snippet
->> from the patch:
->>
->> diff --git a/arch/sparc/mm/gup.c b/arch/sparc/mm/gup.c
->> index 5335ba3c850e..357b6047653a 100644
->> --- a/arch/sparc/mm/gup.c
->> +++ b/arch/sparc/mm/gup.c
->> @@ -201,6 +202,24 @@ int __get_user_pages_fast(unsigned long start, int
->> nr_pages
->> , int write,
->>         pgd_t *pgdp;
->>         int nr = 0;
->>
->> +#ifdef CONFIG_SPARC64
->> +       if (adi_capable()) {
->> +               long addr = start;
->> +
->> +               /* If userspace has passed a versioned address, kernel
->> +                * will not find it in the VMAs since it does not store
->> +                * the version tags in the list of VMAs. Storing version
->> +                * tags in list of VMAs is impractical since they can be
->> +                * changed any time from userspace without dropping into
->> +                * kernel. Any address search in VMAs will be done with
->> +                * non-versioned addresses. Ensure the ADI version bits
->> +                * are dropped here by sign extending the last bit before
->> +                * ADI bits. IOMMU does not implement version tags.
->> +                */
->> +               addr = (addr << (long)adi_nbits()) >> (long)adi_nbits();
->> +               start = addr;
->> +       }
->> +#endif
->>         start &= PAGE_MASK;
->>         addr = start;
->>         len = (unsigned long) nr_pages << PAGE_SHIFT;
+On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
+> This patch is a part of a series that extends arm64 kernel ABI to allow to
+> pass tagged user pointers (with the top byte set to something else other
+> than 0x00) as syscall arguments.
 > 
-> Thanks Khalid. I missed that sparc does not enable HAVE_GENERIC_GUP, so
-> you fix this case here. If we add the generic untagged_addr() macro in
-> the generic code, I think sparc can start making use of it rather than
-> open-coding the shifts.
-
-Hi Catalin,
-
-Yes, that will be good. Right now addresses are untagged in sparc code
-in only two spots but that will expand as we expand use of tags.
-Scalabale solution is definitely better.
-
+> This patch allows tagged pointers to be passed to the following memory
+> syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
+> mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
+> remap_file_pages, shmat and shmdt.
 > 
-> There are a few other other places where tags can leak and the core code
-> would get confused (for example, madvise()). I presume your user space
-> doesn't exercise them. On arm64 we plan to just allow the C library to
-> tag any new memory allocation, so those core code paths would need to be
-> covered.
+> This is done by untagging pointers passed to these syscalls in the
+> prologues of their handlers.
 > 
-> And similarly, devices, IOMMU, any DMA would ignore tags.
+> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+> ---
+
+
+> +SYSCALL_DEFINE2(arm64_mlock, unsigned long, start, size_t, len)
+> +{
+> +	start = untagged_addr(start);
+> +	return ksys_mlock(start, len, VM_LOCKED);
+> +}
+> +
+> +SYSCALL_DEFINE2(arm64_mlock2, unsigned long, start, size_t, len)
+> +{
+> +	start = untagged_addr(start);
+> +	return ksys_mlock(start, len, VM_LOCKED);
+> +}
+
+I think this may be a copy/paste error...
+
+Shouldn't mlock2 have a third 'flags' argument to distinguish is from mlock?
+
+Thanks,
+
+Andrew Murray
+
+> +
+> +SYSCALL_DEFINE2(arm64_munlock, unsigned long, start, size_t, len)
+> +{
+> +	start = untagged_addr(start);
+> +	return ksys_munlock(start, len);
+> +}
+> +
+> +SYSCALL_DEFINE3(arm64_mprotect, unsigned long, start, size_t, len,
+> +		unsigned long, prot)
+> +{
+> +	start = untagged_addr(start);
+> +	return ksys_mprotect_pkey(start, len, prot, -1);
+> +}
+> +
+> +SYSCALL_DEFINE3(arm64_msync, unsigned long, start, size_t, len, int, flags)
+> +{
+> +	start = untagged_addr(start);
+> +	return ksys_msync(start, len, flags);
+> +}
+> +
+> +SYSCALL_DEFINE3(arm64_mincore, unsigned long, start, size_t, len,
+> +		unsigned char __user *, vec)
+> +{
+> +	start = untagged_addr(start);
+> +	return ksys_mincore(start, len, vec);
+> +}
+> +
+> +SYSCALL_DEFINE5(arm64_remap_file_pages, unsigned long, start,
+> +		unsigned long, size, unsigned long, prot,
+> +		unsigned long, pgoff, unsigned long, flags)
+> +{
+> +	start = untagged_addr(start);
+> +	return ksys_remap_file_pages(start, size, prot, pgoff, flags);
+> +}
+> +
+> +SYSCALL_DEFINE3(arm64_shmat, int, shmid, char __user *, shmaddr, int, shmflg)
+> +{
+> +	shmaddr = untagged_addr(shmaddr);
+> +	return ksys_shmat(shmid, shmaddr, shmflg);
+> +}
+> +
+> +SYSCALL_DEFINE1(arm64_shmdt, char __user *, shmaddr)
+> +{
+> +	shmaddr = untagged_addr(shmaddr);
+> +	return ksys_shmdt(shmaddr);
+> +}
+> +
+>  /*
+>   * Wrappers to pass the pt_regs argument.
+>   */
+>  #define sys_personality		sys_arm64_personality
+> +#define sys_mmap_pgoff		sys_arm64_mmap_pgoff
+> +#define sys_mremap		sys_arm64_mremap
+> +#define sys_munmap		sys_arm64_munmap
+> +#define sys_brk			sys_arm64_brk
+> +#define sys_get_mempolicy	sys_arm64_get_mempolicy
+> +#define sys_madvise		sys_arm64_madvise
+> +#define sys_mbind		sys_arm64_mbind
+> +#define sys_mlock		sys_arm64_mlock
+> +#define sys_mlock2		sys_arm64_mlock2
+> +#define sys_munlock		sys_arm64_munlock
+> +#define sys_mprotect		sys_arm64_mprotect
+> +#define sys_msync		sys_arm64_msync
+> +#define sys_mincore		sys_arm64_mincore
+> +#define sys_remap_file_pages	sys_arm64_remap_file_pages
+> +#define sys_shmat		sys_arm64_shmat
+> +#define sys_shmdt		sys_arm64_shmdt
+>  
+>  asmlinkage long sys_ni_syscall(const struct pt_regs *);
+>  #define __arm64_sys_ni_syscall	sys_ni_syscall
+> -- 
+> 2.21.0.1020.gf2820cf01a-goog
 > 
-
-Right. You are doing lot more with tags than sparc code intended to do.
-I had looked into implementing just malloc(), mmap() and possibly
-shmat() in library that automatically tags pointers. Expanding tags to
-any pointers in C library will require covering lot more paths in kernel.
-
---
-Khalid
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel at lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
