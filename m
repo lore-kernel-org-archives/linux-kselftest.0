@@ -1,73 +1,227 @@
-From: borntraeger@de.ibm.com (Christian Borntraeger)
-Date: Fri, 24 May 2019 13:11:02 +0200
-Subject: [PATCH v1 0/9] KVM selftests for s390x
-In-Reply-To: <20190523164309.13345-1-thuth@redhat.com>
-References: <20190523164309.13345-1-thuth@redhat.com>
-Message-ID: <0ad63449-c329-f38d-b879-6e427e6a8656@de.ibm.com>
+From: christian@brauner.io (Christian Brauner)
+Date: Fri, 24 May 2019 13:10:47 +0200
+Subject: [PATCH v3 3/3] tests: add close_range() tests
+In-Reply-To: <20190524111047.6892-1-christian@brauner.io>
+References: <20190524111047.6892-1-christian@brauner.io>
+Message-ID: <20190524111047.6892-4-christian@brauner.io>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524111102.QXBDWq-XGpsDP_o-TtRYyg132vkpCegwH6Dlt5BacD4@z>
+Message-ID: <20190524111047.IYIGyVKV-qedB0P2iW7b7K0gdniZwXv5tUd_qPvvSao@z>
 
-I do get
+This adds basic tests for the new close_range() syscall.
+- test that no invalid flags can be passed
+- test that a range of file descriptors is correctly closed
+- test that a range of file descriptors is correctly closed if there there
+  are already closed file descriptors in the range
+- test that max_fd is correctly capped to the current fdtable maximum
 
-[10400.440298] kvm-s390: failed to commit memory region
-[10400.508723] kvm-s390: failed to commit memory region
+Signed-off-by: Christian Brauner <christian at brauner.io>
+Cc: Arnd Bergmann <arnd at arndb.de>
+Cc: Jann Horn <jannh at google.com>
+Cc: David Howells <dhowells at redhat.com>
+Cc: Dmitry V. Levin <ldv at altlinux.org>
+Cc: Oleg Nesterov <oleg at redhat.com>
+Cc: Linus Torvalds <torvalds at linux-foundation.org>
+Cc: Florian Weimer <fweimer at redhat.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: linux-api at vger.kernel.org
+Cc: linux-kselftest at vger.kernel.org
+---
+v1: unchanged
+v2:
+- Christian Brauner <christian at brauner.io>:
+  - verify that close_range() correctly closes a single file descriptor
+v3:
+- Christian Brauner <christian at brauner.io>:
+  - add missing Cc for Shuah
+  - add missing Cc for linux-kselftest
+---
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/core/.gitignore       |   1 +
+ tools/testing/selftests/core/Makefile         |   6 +
+ .../testing/selftests/core/close_range_test.c | 142 ++++++++++++++++++
+ 4 files changed, 150 insertions(+)
+ create mode 100644 tools/testing/selftests/core/.gitignore
+ create mode 100644 tools/testing/selftests/core/Makefile
+ create mode 100644 tools/testing/selftests/core/close_range_test.c
 
-when running the tests. Will have a look.
-
-On 23.05.19 18:43, Thomas Huth wrote:
-> This patch series enables the KVM selftests for s390x. As a first
-> test, the sync_regs from x86 has been adapted to s390x, and after
-> a fix for KVM_CAP_MAX_VCPU_ID on s390x, the kvm_create_max_vcpus
-> is now enabled here, too.
-> 
-> Please note that the ucall() interface is not used yet - since
-> s390x neither has PIO nor MMIO, this needs some more work first
-> before it becomes usable (we likely should use a DIAG hypercall
-> here, which is what the sync_reg test is currently using, too...
-> I started working on that topic, but did not finish that work
-> yet, so I decided to not include it yet).
-> 
-> RFC -> v1:
->  - Rebase, needed to add the first patch for vcpu_nested_state_get/set
->  - Added patch to introduce VM_MODE_DEFAULT macro
->  - Improved/cleaned up the code in processor.c
->  - Added patch to fix KVM_CAP_MAX_VCPU_ID on s390x
->  - Added patch to enable the kvm_create_max_vcpus on s390x and aarch64
-> 
-> Andrew Jones (1):
->   kvm: selftests: aarch64: fix default vm mode
-> 
-> Thomas Huth (8):
->   KVM: selftests: Wrap vcpu_nested_state_get/set functions with x86
->     guard
->   KVM: selftests: Guard struct kvm_vcpu_events with
->     __KVM_HAVE_VCPU_EVENTS
->   KVM: selftests: Introduce a VM_MODE_DEFAULT macro for the default bits
->   KVM: selftests: Align memory region addresses to 1M on s390x
->   KVM: selftests: Add processor code for s390x
->   KVM: selftests: Add the sync_regs test for s390x
->   KVM: s390: Do not report unusabled IDs via KVM_CAP_MAX_VCPU_ID
->   KVM: selftests: Move kvm_create_max_vcpus test to generic code
-> 
->  MAINTAINERS                                   |   2 +
->  arch/mips/kvm/mips.c                          |   3 +
->  arch/powerpc/kvm/powerpc.c                    |   3 +
->  arch/s390/kvm/kvm-s390.c                      |   1 +
->  arch/x86/kvm/x86.c                            |   3 +
->  tools/testing/selftests/kvm/Makefile          |   7 +-
->  .../testing/selftests/kvm/include/kvm_util.h  |  10 +
->  .../selftests/kvm/include/s390x/processor.h   |  22 ++
->  .../kvm/{x86_64 => }/kvm_create_max_vcpus.c   |   3 +-
->  .../selftests/kvm/lib/aarch64/processor.c     |   2 +-
->  tools/testing/selftests/kvm/lib/kvm_util.c    |  25 +-
->  .../selftests/kvm/lib/s390x/processor.c       | 286 ++++++++++++++++++
->  .../selftests/kvm/lib/x86_64/processor.c      |   2 +-
->  .../selftests/kvm/s390x/sync_regs_test.c      | 151 +++++++++
->  virt/kvm/arm/arm.c                            |   3 +
->  virt/kvm/kvm_main.c                           |   2 -
->  16 files changed, 514 insertions(+), 11 deletions(-)
->  create mode 100644 tools/testing/selftests/kvm/include/s390x/processor.h
->  rename tools/testing/selftests/kvm/{x86_64 => }/kvm_create_max_vcpus.c (93%)
->  create mode 100644 tools/testing/selftests/kvm/lib/s390x/processor.c
->  create mode 100644 tools/testing/selftests/kvm/s390x/sync_regs_test.c
-> 
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 9781ca79794a..06e57fabbff9 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -4,6 +4,7 @@ TARGETS += bpf
+ TARGETS += breakpoints
+ TARGETS += capabilities
+ TARGETS += cgroup
++TARGETS += core
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
+ TARGETS += drivers/dma-buf
+diff --git a/tools/testing/selftests/core/.gitignore b/tools/testing/selftests/core/.gitignore
+new file mode 100644
+index 000000000000..6e6712ce5817
+--- /dev/null
++++ b/tools/testing/selftests/core/.gitignore
+@@ -0,0 +1 @@
++close_range_test
+diff --git a/tools/testing/selftests/core/Makefile b/tools/testing/selftests/core/Makefile
+new file mode 100644
+index 000000000000..de3ae68aa345
+--- /dev/null
++++ b/tools/testing/selftests/core/Makefile
+@@ -0,0 +1,6 @@
++CFLAGS += -g -I../../../../usr/include/ -I../../../../include
++
++TEST_GEN_PROGS := close_range_test
++
++include ../lib.mk
++
+diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
+new file mode 100644
+index 000000000000..d6e6079d3d53
+--- /dev/null
++++ b/tools/testing/selftests/core/close_range_test.c
+@@ -0,0 +1,142 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <linux/kernel.h>
++#include <limits.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <syscall.h>
++#include <unistd.h>
++
++#include "../kselftest.h"
++
++static inline int sys_close_range(unsigned int fd, unsigned int max_fd,
++				  unsigned int flags)
++{
++	return syscall(__NR_close_range, fd, max_fd, flags);
++}
++
++#ifndef ARRAY_SIZE
++#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
++#endif
++
++int main(int argc, char **argv)
++{
++	const char *test_name = "close_range";
++	int i, ret;
++	int open_fds[101];
++	int fd_max, fd_mid, fd_min;
++
++	ksft_set_plan(9);
++
++	for (i = 0; i < ARRAY_SIZE(open_fds); i++) {
++		int fd;
++
++		fd = open("/dev/null", O_RDONLY | O_CLOEXEC);
++		if (fd < 0) {
++			if (errno == ENOENT)
++				ksft_exit_skip(
++					"%s test: skipping test since /dev/null does not exist\n",
++					test_name);
++
++			ksft_exit_fail_msg(
++				"%s test: %s - failed to open /dev/null\n",
++				strerror(errno), test_name);
++		}
++
++		open_fds[i] = fd;
++	}
++
++	fd_min = open_fds[0];
++	fd_max = open_fds[99];
++
++	ret = sys_close_range(fd_min, fd_max, 1);
++	if (!ret)
++		ksft_exit_fail_msg(
++			"%s test: managed to pass invalid flag value\n",
++			test_name);
++	ksft_test_result_pass("do not allow invalid flag values for close_range()\n");
++
++	fd_mid = open_fds[50];
++	ret = sys_close_range(fd_min, fd_mid, 0);
++	if (ret < 0)
++		ksft_exit_fail_msg(
++			"%s test: Failed to close range of file descriptors from %d to %d\n",
++			test_name, fd_min, fd_mid);
++	ksft_test_result_pass("close_range() from %d to %d\n", fd_min, fd_mid);
++
++	for (i = 0; i <= 50; i++) {
++		ret = fcntl(open_fds[i], F_GETFL);
++		if (ret >= 0)
++			ksft_exit_fail_msg(
++				"%s test: Failed to close range of file descriptors from %d to %d\n",
++				test_name, fd_min, fd_mid);
++	}
++	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_min, fd_mid);
++
++	/* create a couple of gaps */
++	close(57);
++	close(78);
++	close(81);
++	close(82);
++	close(84);
++	close(90);
++
++	fd_mid = open_fds[51];
++	/* Choose slightly lower limit and leave some fds for a later test */
++	fd_max = open_fds[92];
++	ret = sys_close_range(fd_mid, fd_max, 0);
++	if (ret < 0)
++		ksft_exit_fail_msg(
++			"%s test: Failed to close range of file descriptors from 51 to 100\n",
++			test_name);
++	ksft_test_result_pass("close_range() from %d to %d\n", fd_mid, fd_max);
++
++	for (i = 51; i <= 92; i++) {
++		ret = fcntl(open_fds[i], F_GETFL);
++		if (ret >= 0)
++			ksft_exit_fail_msg(
++				"%s test: Failed to close range of file descriptors from 51 to 100\n",
++				test_name);
++	}
++	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_mid, fd_max);
++
++	fd_mid = open_fds[93];
++	fd_max = open_fds[99];
++	/* test that the kernel caps and still closes all fds */
++	ret = sys_close_range(fd_mid, UINT_MAX, 0);
++	if (ret < 0)
++		ksft_exit_fail_msg(
++			"%s test: Failed to close range of file descriptors from 51 to 100\n",
++			test_name);
++	ksft_test_result_pass("close_range() from %d to %d\n", fd_mid, fd_max);
++
++	for (i = 93; i < 100; i++) {
++		ret = fcntl(open_fds[i], F_GETFL);
++		if (ret >= 0)
++			ksft_exit_fail_msg(
++				"%s test: Failed to close range of file descriptors from 51 to 100\n",
++				test_name);
++	}
++	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_mid, fd_max);
++
++	ret = sys_close_range(open_fds[100], open_fds[100], 0);
++	if (ret < 0)
++		ksft_exit_fail_msg(
++			"%s test: Failed to close single file descriptor\n",
++			test_name);
++	ksft_test_result_pass("close_range() closed single file descriptor\n");
++
++	ret = fcntl(open_fds[100], F_GETFL);
++	if (ret >= 0)
++		ksft_exit_fail_msg(
++			"%s test: Failed to close single file descriptor\n",
++			test_name);
++	ksft_test_result_pass("fcntl() verify closed single file descriptor\n");
++
++	return ksft_exit_pass();
++}
+-- 
+2.21.0
