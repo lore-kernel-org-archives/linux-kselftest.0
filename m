@@ -1,68 +1,69 @@
-From: thuth at redhat.com (Thomas Huth)
-Date: Fri, 24 May 2019 20:17:43 +0200
-Subject: [PATCH 5/9] KVM: selftests: Align memory region addresses to 1M
- on s390x
-In-Reply-To: <7919d65e-d814-9e68-4df0-d12f43f0b984@de.ibm.com>
+From: borntraeger at de.ibm.com (Christian Borntraeger)
+Date: Fri, 24 May 2019 20:33:41 +0200
+Subject: [PATCH v1 0/9] KVM selftests for s390x
+In-Reply-To: <20190523164309.13345-1-thuth@redhat.com>
 References: <20190523164309.13345-1-thuth@redhat.com>
- <20190523164309.13345-6-thuth@redhat.com>
- <20190523174028.3giefzff3l5eclki@kamzik.brq.redhat.com>
- <7919d65e-d814-9e68-4df0-d12f43f0b984@de.ibm.com>
-Message-ID: <54f10713-002b-515c-e40f-5e64996b8f6f@redhat.com>
+Message-ID: <41d6b365-7e8f-f028-cc5b-c3896d73db83@de.ibm.com>
 
-On 24/05/2019 10.29, Christian Borntraeger wrote:
-> 
-> 
-> On 23.05.19 19:40, Andrew Jones wrote:
->> On Thu, May 23, 2019 at 06:43:05PM +0200, Thomas Huth wrote:
->>> On s390x, there is a constraint that memory regions have to be aligned
->>> to 1M (or running the VM will fail). Introduce a new "alignment" variable
->>> in the vm_userspace_mem_region_add() function which now can be used for
->>> both, huge page and s390x alignment requirements.
->>>
->>> Signed-off-by: Thomas Huth <thuth at redhat.com>
->>> ---
->>>  tools/testing/selftests/kvm/lib/kvm_util.c | 21 ++++++++++++++++-----
->>>  1 file changed, 16 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
->>> index 08edb8436c47..656df9d5cd4d 100644
->>> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
->>> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
->>> @@ -559,6 +559,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->>>  	unsigned long pmem_size = 0;
->>>  	struct userspace_mem_region *region;
->>>  	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
->>> +	size_t alignment;
->>>  
->>>  	TEST_ASSERT((guest_paddr % vm->page_size) == 0, "Guest physical "
->>>  		"address not on a page boundary.\n"
->>> @@ -608,9 +609,20 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->>>  	TEST_ASSERT(region != NULL, "Insufficient Memory");
->>>  	region->mmap_size = npages * vm->page_size;
->>>  
->>> -	/* Enough memory to align up to a huge page. */
->>> +#ifdef __s390x__
->>> +	/* On s390x, the host address must be aligned to 1M (due to PGSTEs) */
->>> +	alignment = 0x100000;
->>> +#else
->>> +	alignment = 1;
->>> +#endif
->>> +
->>>  	if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
->>> -		region->mmap_size += huge_page_size;
->>> +		alignment = huge_page_size;
->>
->> I guess s390x won't ever support VM_MEM_SRC_ANONYMOUS_THP? If it does,
->> then we need 'alignment = max(huge_page_size, alignment)'. Actually
->> that might be a nice way to write this anyway for future-proofing.
-> 
-> I can do 
-> -		alignment = huge_page_size;
-> +		alignment = max(huge_page_size, alignment);
-> 
-> when applying.
+I have now queued every patch in the kselftest branch on kvms390 at kernel.org.
+I will push out for next as soon as I have some ack/nacks on the
+"KVM: s390: fix memory slot handling for KVM_SET_USER_MEMORY_REGION"
+patch.
 
-Yes, please, that's certainly cleaner this way.
-
- Thanks,
-  Thomas
+On 23.05.19 18:43, Thomas Huth wrote:
+> This patch series enables the KVM selftests for s390x. As a first
+> test, the sync_regs from x86 has been adapted to s390x, and after
+> a fix for KVM_CAP_MAX_VCPU_ID on s390x, the kvm_create_max_vcpus
+> is now enabled here, too.
+> 
+> Please note that the ucall() interface is not used yet - since
+> s390x neither has PIO nor MMIO, this needs some more work first
+> before it becomes usable (we likely should use a DIAG hypercall
+> here, which is what the sync_reg test is currently using, too...
+> I started working on that topic, but did not finish that work
+> yet, so I decided to not include it yet).
+> 
+> RFC -> v1:
+>  - Rebase, needed to add the first patch for vcpu_nested_state_get/set
+>  - Added patch to introduce VM_MODE_DEFAULT macro
+>  - Improved/cleaned up the code in processor.c
+>  - Added patch to fix KVM_CAP_MAX_VCPU_ID on s390x
+>  - Added patch to enable the kvm_create_max_vcpus on s390x and aarch64
+> 
+> Andrew Jones (1):
+>   kvm: selftests: aarch64: fix default vm mode
+> 
+> Thomas Huth (8):
+>   KVM: selftests: Wrap vcpu_nested_state_get/set functions with x86
+>     guard
+>   KVM: selftests: Guard struct kvm_vcpu_events with
+>     __KVM_HAVE_VCPU_EVENTS
+>   KVM: selftests: Introduce a VM_MODE_DEFAULT macro for the default bits
+>   KVM: selftests: Align memory region addresses to 1M on s390x
+>   KVM: selftests: Add processor code for s390x
+>   KVM: selftests: Add the sync_regs test for s390x
+>   KVM: s390: Do not report unusabled IDs via KVM_CAP_MAX_VCPU_ID
+>   KVM: selftests: Move kvm_create_max_vcpus test to generic code
+> 
+>  MAINTAINERS                                   |   2 +
+>  arch/mips/kvm/mips.c                          |   3 +
+>  arch/powerpc/kvm/powerpc.c                    |   3 +
+>  arch/s390/kvm/kvm-s390.c                      |   1 +
+>  arch/x86/kvm/x86.c                            |   3 +
+>  tools/testing/selftests/kvm/Makefile          |   7 +-
+>  .../testing/selftests/kvm/include/kvm_util.h  |  10 +
+>  .../selftests/kvm/include/s390x/processor.h   |  22 ++
+>  .../kvm/{x86_64 => }/kvm_create_max_vcpus.c   |   3 +-
+>  .../selftests/kvm/lib/aarch64/processor.c     |   2 +-
+>  tools/testing/selftests/kvm/lib/kvm_util.c    |  25 +-
+>  .../selftests/kvm/lib/s390x/processor.c       | 286 ++++++++++++++++++
+>  .../selftests/kvm/lib/x86_64/processor.c      |   2 +-
+>  .../selftests/kvm/s390x/sync_regs_test.c      | 151 +++++++++
+>  virt/kvm/arm/arm.c                            |   3 +
+>  virt/kvm/kvm_main.c                           |   2 -
+>  16 files changed, 514 insertions(+), 11 deletions(-)
+>  create mode 100644 tools/testing/selftests/kvm/include/s390x/processor.h
+>  rename tools/testing/selftests/kvm/{x86_64 => }/kvm_create_max_vcpus.c (93%)
+>  create mode 100644 tools/testing/selftests/kvm/lib/s390x/processor.c
+>  create mode 100644 tools/testing/selftests/kvm/s390x/sync_regs_test.c
+> 
