@@ -1,74 +1,45 @@
-From: eugenis at google.com (Evgenii Stepanov)
-Date: Thu, 23 May 2019 21:23:13 -0700
-Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
- syscalls
-In-Reply-To: <20190523090427.GA44383@arrakis.emea.arm.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
- <20190522114910.emlckebwzv2qz42i@mbp>
- <CAFKCwrjyP+x0JJy=qpBFsp4pub3He6UkvU0qnf1UOKt6W1LPRQ@mail.gmail.com>
- <20190523090427.GA44383@arrakis.emea.arm.com>
-Message-ID: <CAFKCwrgk0+yR48Z5nhuZG5f7g==vRb4u+CS-4FS0mM7Eriavgw@mail.gmail.com>
+From: willemdebruijn.kernel at gmail.com (Willem de Bruijn)
+Date: Fri, 24 May 2019 00:53:37 -0400
+Subject: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
+In-Reply-To: <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com>
+References: <20190523210651.80902-1-fklassen@appneta.com>
+ <20190523210651.80902-2-fklassen@appneta.com>
+ <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
+ <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com>
+Message-ID: <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
 
-On Thu, May 23, 2019 at 2:04 AM Catalin Marinas <catalin.marinas at arm.com> wrote:
+On Thu, May 23, 2019 at 9:38 PM Fred Klassen <fklassen at appneta.com> wrote:
 >
-> On Wed, May 22, 2019 at 02:16:57PM -0700, Evgenii Stepanov wrote:
-> > On Wed, May 22, 2019 at 4:49 AM Catalin Marinas <catalin.marinas at arm.com> wrote:
-> > > On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
-> > > > This patch is a part of a series that extends arm64 kernel ABI to allow to
-> > > > pass tagged user pointers (with the top byte set to something else other
-> > > > than 0x00) as syscall arguments.
-> > > >
-> > > > This patch allows tagged pointers to be passed to the following memory
-> > > > syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
-> > > > mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
-> > > > remap_file_pages, shmat and shmdt.
-> > > >
-> > > > This is done by untagging pointers passed to these syscalls in the
-> > > > prologues of their handlers.
-> > >
-> > > I'll go through them one by one to see if we can tighten the expected
-> > > ABI while having the MTE in mind.
-> > >
-> > > > diff --git a/arch/arm64/kernel/sys.c b/arch/arm64/kernel/sys.c
-> > > > index b44065fb1616..933bb9f3d6ec 100644
-> > > > --- a/arch/arm64/kernel/sys.c
-> > > > +++ b/arch/arm64/kernel/sys.c
-> > > > @@ -35,10 +35,33 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
-> > > >  {
-> > > >       if (offset_in_page(off) != 0)
-> > > >               return -EINVAL;
-> > > > -
-> > > > +     addr = untagged_addr(addr);
-> > > >       return ksys_mmap_pgoff(addr, len, prot, flags, fd, off >> PAGE_SHIFT);
-> > > >  }
-> > >
-> > > If user passes a tagged pointer to mmap() and the address is honoured
-> > > (or MAP_FIXED is given), what is the expected return pointer? Does it
-> > > need to be tagged with the value from the hint?
+> > Thanks for the report.
 > >
-> > For HWASan the most convenient would be to use the tag from the hint.
-> > But since in the TBI (not MTE) mode the kernel has no idea what
-> > meaning userspace assigns to pointer tags, perhaps it should not try
-> > to guess, and should return raw (zero-tagged) address instead.
->
-> Then, just to relax the ABI for hwasan, shall we simply disallow tagged
-> pointers on mmap() arguments? We can leave them in for
-> mremap(old_address), madvise().
-
-I think this would be fine. We should allow tagged in pointers in
-mprotect though.
-
-> > > With MTE, we may want to use this as a request for the default colour of
-> > > the mapped pages (still under discussion).
+> > Zerocopy notification reference count is managed in skb_segment. That
+> > should work.
 > >
-> > I like this - and in that case it would make sense to return the
-> > pointer that can be immediately dereferenced without crashing the
-> > process, i.e. with the matching tag.
+> > Support for timestamping with the new GSO feature is indeed an
+> > oversight. The solution is similar to how TCP associates the timestamp
+> > with the right segment in tcp_gso_tstamp.
+> >
+> > Only, I think we want to transfer the timestamp request to the last
+> > datagram, not the first. For send timestamp, the final byte leaving
+> > the host is usually more interesting.
 >
-> This came up from the Android investigation work where large memory
-> allocations (using mmap) could be more efficiently pre-tagged by the
-> kernel on page fault. Not sure about the implementation details yet.
+> TX Timestamping the last packet of a datagram is something that would
+> work poorly for our application. We need to measure the time it takes
+> for the first bit that is sent until the first bit of the last packet is received.
+> Timestaming the last packet of a burst seems somewhat random to me
+> and would not be useful. Essentially we would be timestamping a
+> random byte in a UDP GSO buffer.
 >
-> --
-> Catalin
+> I believe there is a precedence for timestamping the first packet. With
+> IPv4 packets, the first packet is timestamped and the remaining fragments
+> are not.
+
+Interesting. TCP timestamping takes the opposite choice and does
+timestamp the last byte in the sendmsg request.
+
+It sounds like it depends on the workload. Perhaps this then needs to
+be configurable with an SOF_.. flag.
+
+Another option would be to return a timestamp for every segment. But
+they would all return the same tskey. And it causes different behavior
+with and without hardware offload.
