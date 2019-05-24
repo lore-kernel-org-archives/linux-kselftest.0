@@ -1,65 +1,97 @@
-From: borntraeger at de.ibm.com (Christian Borntraeger)
-Date: Fri, 24 May 2019 16:06:23 +0200
-Subject: [PATCH] KVM: s390: fix memory slot handling for
- KVM_SET_USER_MEMORY_REGION
-Message-ID: <20190524140623.104033-1-borntraeger@de.ibm.com>
+From: Dave.Martin at arm.com (Dave Martin)
+Date: Fri, 24 May 2019 15:23:54 +0100
+Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+In-Reply-To: <20190523165708.q6ru7xg45aqfjzpr@mbp>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <20190521184856.GC2922@ziepe.ca>
+ <20190522134925.GV28398@e103592.cambridge.arm.com>
+ <20190523002052.GF15389@ziepe.ca>
+ <20190523104256.GX28398@e103592.cambridge.arm.com>
+ <20190523165708.q6ru7xg45aqfjzpr@mbp>
+Message-ID: <20190524142352.GY28398@e103592.cambridge.arm.com>
 
-kselftests exposed a problem in the s390 handling for memory slots.
-Right now we only do proper memory slot handling for creation of new
-memory slots. Neither MOVE, nor DELETION are handled properly. Let us
-implement those.
+On Thu, May 23, 2019 at 05:57:09PM +0100, Catalin Marinas wrote:
+> On Thu, May 23, 2019 at 11:42:57AM +0100, Dave P Martin wrote:
+> > On Wed, May 22, 2019 at 09:20:52PM -0300, Jason Gunthorpe wrote:
+> > > On Wed, May 22, 2019 at 02:49:28PM +0100, Dave Martin wrote:
+> > > > If multiple people will care about this, perhaps we should try to
+> > > > annotate types more explicitly in SYSCALL_DEFINEx() and ABI data
+> > > > structures.
+> > > > 
+> > > > For example, we could have a couple of mutually exclusive modifiers
+> > > > 
+> > > > T __object *
+> > > > T __vaddr * (or U __vaddr)
+> > > > 
+> > > > In the first case the pointer points to an object (in the C sense)
+> > > > that the call may dereference but not use for any other purpose.
+> > > 
+> > > How would you use these two differently?
+> > > 
+> > > So far the kernel has worked that __user should tag any pointer that
+> > > is from userspace and then you can't do anything with it until you
+> > > transform it into a kernel something
+> > 
+> > Ultimately it would be good to disallow casting __object pointers execpt
+> > to compatible __object pointer types, and to make get_user etc. demand
+> > __object.
+> > 
+> > __vaddr pointers / addresses would be freely castable, but not to
+> > __object and so would not be dereferenceable even indirectly.
+> 
+> I think it gets too complicated and there are ambiguous cases that we
+> may not be able to distinguish. For example copy_from_user() may be used
+> to copy a user data structure into the kernel, hence __object would
+> work, while the same function may be used to copy opaque data to a file,
+> so __vaddr may be a better option (unless I misunderstood your
+> proposal).
 
-Signed-off-by: Christian Borntraeger <borntraeger at de.ibm.com>
----
- arch/s390/kvm/kvm-s390.c | 35 +++++++++++++++++++++--------------
- 1 file changed, 21 insertions(+), 14 deletions(-)
+Can you illustrate?  I'm not sure of your point here.
 
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 871d2e99b156..6ec0685ab2c7 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -4525,21 +4525,28 @@ void kvm_arch_commit_memory_region(struct kvm *kvm,
- 				const struct kvm_memory_slot *new,
- 				enum kvm_mr_change change)
- {
--	int rc;
-+	int rc = 0;
- 
--	/* If the basics of the memslot do not change, we do not want
--	 * to update the gmap. Every update causes several unnecessary
--	 * segment translation exceptions. This is usually handled just
--	 * fine by the normal fault handler + gmap, but it will also
--	 * cause faults on the prefix page of running guest CPUs.
--	 */
--	if (old->userspace_addr == mem->userspace_addr &&
--	    old->base_gfn * PAGE_SIZE == mem->guest_phys_addr &&
--	    old->npages * PAGE_SIZE == mem->memory_size)
--		return;
--
--	rc = gmap_map_segment(kvm->arch.gmap, mem->userspace_addr,
--		mem->guest_phys_addr, mem->memory_size);
-+	switch (change) {
-+	case KVM_MR_DELETE:
-+		rc = gmap_unmap_segment(kvm->arch.gmap, old->base_gfn * PAGE_SIZE,
-+					old->npages * PAGE_SIZE);
-+		break;
-+	case KVM_MR_MOVE:
-+		rc = gmap_unmap_segment(kvm->arch.gmap, old->base_gfn * PAGE_SIZE,
-+					old->npages * PAGE_SIZE);
-+		if (rc)
-+			break;
-+		/* FALLTHROUGH */
-+	case KVM_MR_CREATE:
-+		rc = gmap_map_segment(kvm->arch.gmap, mem->userspace_addr,
-+				      mem->guest_phys_addr, mem->memory_size);
-+		break;
-+	case KVM_MR_FLAGS_ONLY:
-+		break;
-+	default:
-+		WARN(1, "Unknown KVM MR CHANGE: %d\n", change);
-+	}
- 	if (rc)
- 		pr_warn("failed to commit memory region\n");
- 	return;
--- 
-2.21.0
+> We currently have T __user * and I think it's a good starting point. The
+> prior attempt [1] was shut down because it was just hiding the cast
+> using __force. We'd need to work through those cases again and rather
+> start changing the function prototypes to avoid unnecessary casting in
+> the callers (e.g. get_user_pages(void __user *) or come up with a new
+> type) while changing the explicit casting to a macro where it needs to
+> be obvious that we are converting a user pointer, potentially typed
+> (tagged), to an untyped address range. We may need a user_ptr_to_ulong()
+> macro or similar (it seems that we have a u64_to_user_ptr, wasn't aware
+> of it).
+> 
+> It may actually not be far from what you suggested but I'd keep the
+> current T __user * to denote possible dereference.
+
+This may not have been clear, but __object and __vaddr would be
+orthogonal to __user.  Since __object and __vaddr strictly constrain
+what can be done with an lvalue, they could be cast on, but not be
+cast off without __force.
+
+Syscall arguments and pointer in ioctl structs etc. would typically
+be annotated as __object __user * or __vaddr __user *.  Plain old
+__user * would work as before, but would be more permissive and give
+static analysers less information to go on.
+
+Conversion or use or __object or __vaddr pointers would require specific
+APIs in the kernel, so that we can be clear about the semantics.
+
+Doing things this way would allow migration to annotation of most or all
+ABI pointers with __object or __vaddr over time, but we wouldn't have to
+do it all in one go.  Problem cases (which won't be the majority) could
+continue to be plain __user.
+
+
+This does not magically solve the challenges of MTE, but might provide
+tools that are useful to help avoid bitrot and regressions over time.
+
+I agree though that there might be a fair number of of cases that don't
+conveniently fall under __object or __vaddr semantics.  It's hard to
+know without trying it.
+
+_Most_ syscall arguments seem to be fairly obviously one or another
+though, and this approach has some possibility of scaling to ioctls
+and other odd interfaces.
+
+Cheers
+---Dave
