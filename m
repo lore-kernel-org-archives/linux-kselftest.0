@@ -1,68 +1,71 @@
-From: christian at brauner.io (Christian Brauner)
-Date: Fri, 24 May 2019 12:54:00 +0200
-Subject: [PATCH v3 1/2] pid: add pidfd_open()
-In-Reply-To: <20190521143220.crb2zyvdov3fl4g7@brauner.io>
-References: <20190520155630.21684-1-christian@brauner.io>
- <20190521143220.crb2zyvdov3fl4g7@brauner.io>
-Message-ID: <20190524105358.dfnelxhxodkvwbcn@brauner.io>
+From: borntraeger at de.ibm.com (Christian Borntraeger)
+Date: Fri, 24 May 2019 13:11:02 +0200
+Subject: [PATCH v1 0/9] KVM selftests for s390x
+In-Reply-To: <20190523164309.13345-1-thuth@redhat.com>
+References: <20190523164309.13345-1-thuth@redhat.com>
+Message-ID: <0ad63449-c329-f38d-b879-6e427e6a8656@de.ibm.com>
 
-On Tue, May 21, 2019 at 04:32:20PM +0200, Christian Brauner wrote:
-> On Mon, May 20, 2019 at 05:56:29PM +0200, Christian Brauner wrote:
-> > This adds the pidfd_open() syscall. It allows a caller to retrieve pollable
-> > pidfds for a process which did not get created via CLONE_PIDFD, i.e. for a
-> > process that is created via traditional fork()/clone() calls that is only
-> > referenced by a PID:
-> > 
-> > int pidfd = pidfd_open(1234, 0);
-> > ret = pidfd_send_signal(pidfd, SIGSTOP, NULL, 0);
-> > 
-> > With the introduction of pidfds through CLONE_PIDFD it is possible to
-> > created pidfds at process creation time.
-> > However, a lot of processes get created with traditional PID-based calls
-> > such as fork() or clone() (without CLONE_PIDFD). For these processes a
-> > caller can currently not create a pollable pidfd. This is a problem for
-> > Android's low memory killer (LMK) and service managers such as systemd.
-> > Both are examples of tools that want to make use of pidfds to get reliable
-> > notification of process exit for non-parents (pidfd polling) and race-free
-> > signal sending (pidfd_send_signal()). They intend to switch to this API for
-> > process supervision/management as soon as possible. Having no way to get
-> > pollable pidfds from PID-only processes is one of the biggest blockers for
-> > them in adopting this api. With pidfd_open() making it possible to retrieve
-> > pidfds for PID-based processes we enable them to adopt this api.
-> > 
-> > In line with Arnd's recent changes to consolidate syscall numbers across
-> > architectures, I have added the pidfd_open() syscall to all architectures
-> > at the same time.
-> > 
-> > Signed-off-by: Christian Brauner <christian at brauner.io>
-> > Reviewed-by: Oleg Nesterov <oleg at redhat.com>
-> 
-> This now also carries a Reviewed-by from David.
-> 
-> > Acked-by: Arnd Bergmann <arnd at arndb.de>
-> > Cc: "Eric W. Biederman" <ebiederm at xmission.com>
-> > Cc: Kees Cook <keescook at chromium.org>
-> > Cc: Joel Fernandes (Google) <joel at joelfernandes.org>
-> > Cc: Thomas Gleixner <tglx at linutronix.de>
-> > Cc: Jann Horn <jannh at google.com>
-> > Cc: David Howells <dhowells at redhat.com>
-> > Cc: Andy Lutomirsky <luto at kernel.org>
-> > Cc: Andrew Morton <akpm at linux-foundation.org>
-> > Cc: Aleksa Sarai <cyphar at cyphar.com>
-> > Cc: Linus Torvalds <torvalds at linux-foundation.org>
-> > Cc: Al Viro <viro at zeniv.linux.org.uk>
-> > Cc: linux-api at vger.kernel.org
-> 
-> I've moved pidfd_open() into my for-next branch together with Joel's
-> pidfd polling changes. Everything is based on v5.2-rc1.
-> 
-> The chosen syscall number for now is 434. David is going to send out
-> another pile of mount api related syscalls. I'll coordinate with him
-> accordingly prior to the 5.3 merge window.
+I do get
 
-After talking to Arnd, I split the syscall addition and the per-arch
-wiring-up of pidfd_open() into two patches. There are no functional
-changes and everything is still sitting in for-next.
+[10400.440298] kvm-s390: failed to commit memory region
+[10400.508723] kvm-s390: failed to commit memory region
 
-Thanks!
-Christian
+when running the tests. Will have a look.
+
+On 23.05.19 18:43, Thomas Huth wrote:
+> This patch series enables the KVM selftests for s390x. As a first
+> test, the sync_regs from x86 has been adapted to s390x, and after
+> a fix for KVM_CAP_MAX_VCPU_ID on s390x, the kvm_create_max_vcpus
+> is now enabled here, too.
+> 
+> Please note that the ucall() interface is not used yet - since
+> s390x neither has PIO nor MMIO, this needs some more work first
+> before it becomes usable (we likely should use a DIAG hypercall
+> here, which is what the sync_reg test is currently using, too...
+> I started working on that topic, but did not finish that work
+> yet, so I decided to not include it yet).
+> 
+> RFC -> v1:
+>  - Rebase, needed to add the first patch for vcpu_nested_state_get/set
+>  - Added patch to introduce VM_MODE_DEFAULT macro
+>  - Improved/cleaned up the code in processor.c
+>  - Added patch to fix KVM_CAP_MAX_VCPU_ID on s390x
+>  - Added patch to enable the kvm_create_max_vcpus on s390x and aarch64
+> 
+> Andrew Jones (1):
+>   kvm: selftests: aarch64: fix default vm mode
+> 
+> Thomas Huth (8):
+>   KVM: selftests: Wrap vcpu_nested_state_get/set functions with x86
+>     guard
+>   KVM: selftests: Guard struct kvm_vcpu_events with
+>     __KVM_HAVE_VCPU_EVENTS
+>   KVM: selftests: Introduce a VM_MODE_DEFAULT macro for the default bits
+>   KVM: selftests: Align memory region addresses to 1M on s390x
+>   KVM: selftests: Add processor code for s390x
+>   KVM: selftests: Add the sync_regs test for s390x
+>   KVM: s390: Do not report unusabled IDs via KVM_CAP_MAX_VCPU_ID
+>   KVM: selftests: Move kvm_create_max_vcpus test to generic code
+> 
+>  MAINTAINERS                                   |   2 +
+>  arch/mips/kvm/mips.c                          |   3 +
+>  arch/powerpc/kvm/powerpc.c                    |   3 +
+>  arch/s390/kvm/kvm-s390.c                      |   1 +
+>  arch/x86/kvm/x86.c                            |   3 +
+>  tools/testing/selftests/kvm/Makefile          |   7 +-
+>  .../testing/selftests/kvm/include/kvm_util.h  |  10 +
+>  .../selftests/kvm/include/s390x/processor.h   |  22 ++
+>  .../kvm/{x86_64 => }/kvm_create_max_vcpus.c   |   3 +-
+>  .../selftests/kvm/lib/aarch64/processor.c     |   2 +-
+>  tools/testing/selftests/kvm/lib/kvm_util.c    |  25 +-
+>  .../selftests/kvm/lib/s390x/processor.c       | 286 ++++++++++++++++++
+>  .../selftests/kvm/lib/x86_64/processor.c      |   2 +-
+>  .../selftests/kvm/s390x/sync_regs_test.c      | 151 +++++++++
+>  virt/kvm/arm/arm.c                            |   3 +
+>  virt/kvm/kvm_main.c                           |   2 -
+>  16 files changed, 514 insertions(+), 11 deletions(-)
+>  create mode 100644 tools/testing/selftests/kvm/include/s390x/processor.h
+>  rename tools/testing/selftests/kvm/{x86_64 => }/kvm_create_max_vcpus.c (93%)
+>  create mode 100644 tools/testing/selftests/kvm/lib/s390x/processor.c
+>  create mode 100644 tools/testing/selftests/kvm/s390x/sync_regs_test.c
+> 
