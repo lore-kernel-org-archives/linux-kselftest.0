@@ -1,39 +1,66 @@
-From: fklassen at appneta.com (Fred Klassen)
-Date: Thu, 23 May 2019 19:10:05 -0700
-Subject: [PATCH net 2/4] net/udpgso_bench_tx: options to exercise TX CMSG
-In-Reply-To: <CAF=yD-JBf6k7VLa6FQowuD5xDFbq5cB4ScTi7kb1hieQFDKnbg@mail.gmail.com>
-References: <20190523210651.80902-1-fklassen@appneta.com>
- <20190523210651.80902-3-fklassen@appneta.com>
- <CAF=yD-JBf6k7VLa6FQowuD5xDFbq5cB4ScTi7kb1hieQFDKnbg@mail.gmail.com>
-Message-ID: <5061E2A7-EF7A-4C3C-9819-34AA8DE2CD0F@appneta.com>
+From: rostedt at goodmis.org (Steven Rostedt)
+Date: Thu, 23 May 2019 22:31:14 -0400
+Subject: [PATCH selftests 0/2] Add checkbashisms meta-testcase
+In-Reply-To: <20190323192746.59739e5e9ea0445791ac14ed@kernel.org>
+References: <155079878723.5157.12433171255092403676.stgit@devbox>
+ <20190323192746.59739e5e9ea0445791ac14ed@kernel.org>
+Message-ID: <20190523223114.4feb6239@oasis.local.home>
 
-> 
-> To ensure that we do not regress, when adding options, please consider
-> (just a general suggestion, not a strong request for this patch set)
-> updating the kselftest to run a variant of the test with the new code
-> coverage. In this case, make the code pass/fail instead of only user
-> interpretable and add variants to udpgso.sh.
 
-I had a look at how kselftest works, and I absolutely want to see this
-work with these changes. I’ll investigate and implement in v2 patch.
+Shuah,
 
-I will most likely do a 5 second test. This seems to be sufficient to get
-meaningful results
+Want to take this or would you want me to?
 
-> can use more precise CMSG_SPACE based on worst case expectations, like
-> in udp_sendmmsg
+-- Steve
+
+
+On Sat, 23 Mar 2019 19:27:46 +0900
+Masami Hiramatsu <mhiramat at kernel.org> wrote:
+
+> Hi Shuah,
 > 
->> +       char buf[1500];
+> Could you pick this to your tree? I think this can prevent further
+> simillar errors before release...
 > 
-> no need for payload
+> Thank you,
 > 
->> +static void flush_errqueue(int fd)
->> +{
->> +       if (cfg_poll) {
->> +               struct pollfd fds = { 0 };
->> +               int ret;
->> +
->> +               fds.fd = fd;
->> +               fds.events = POLLERR;
+> On Fri, 22 Feb 2019 10:26:27 +0900
+> Masami Hiramatsu <mhiramat at kernel.org> wrote:
 > 
-> no need to pass POLLERR, it is always returned in revents.
+> > Hi,
+> > 
+> > Here are patches for making sure the ftracetest testcases
+> > are checkbashisms clean.
+> > 
+> > This actually needs a patch from Juerg, "selftests/ftrace:
+> > Make the coloring POSIX compliant" to complete the work.
+> > 
+> > http://lkml.kernel.org/r/20190220161333.28109-1-juergh at canonical.com
+> > (Note that this is still under development)
+> > 
+> > So as Juerg pointed, recently ftracetest becomes not POSIX
+> > compliant, and such kind of issues happened repeatedly.
+> > To avoid those anymore, I decided to introduce a testcase
+> > which runs checkbasisms on ftracetest and its testcases.
+> > I think this can help us to find out whether it was
+> > written in a way out of POSIX.
+> > 
+> > Thank you,
+> > 
+> > ---
+> > 
+> > Masami Hiramatsu (2):
+> >       selftests/ftrace: Make a script checkbashisms clean
+> >       selftests/ftrace: Add checkbashisms meta-testcase
+> > 
+> > 
+> >  tools/testing/selftests/ftrace/ftracetest          |    1 +
+> >  .../ftrace/test.d/kprobe/kprobe_ftrace.tc          |    2 +-
+> >  .../selftests/ftrace/test.d/selftest/bashisms.tc   |   21 ++++++++++++++++++++
+> >  3 files changed, 23 insertions(+), 1 deletion(-)
+> >  create mode 100644 tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc
+> > 
+> > --
+> > Masami Hiramatsu (Linaro) <mhiramat at kernel.org>  
+> 
+> 
