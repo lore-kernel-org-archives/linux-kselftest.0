@@ -1,29 +1,21 @@
-From: alexandre.belloni@bootlin.com (Alexandre Belloni)
-Date: Fri, 24 May 2019 19:04:42 +0200
-Subject: about selftests/rtc test related stuff
-In-Reply-To: <CAG=yYwkhy5wTRywr5QUmGVQOED3EGQC8jFSCSj---TJfoyEhpw@mail.gmail.com>
-References: <CAG=yYwk+g28_dnOcN--w-PLbGtA2oM5tq14W4X5bBjdurnF2iA@mail.gmail.com>
- <20190523174739.GY3274@piout.net>
- <CAG=yYwmrE30nROqn63oAkXN9BCqfmo4T7+QPN-H3mSGG9dLU4A@mail.gmail.com>
- <20190523225219.GZ3274@piout.net>
- <CAG=yYwkhy5wTRywr5QUmGVQOED3EGQC8jFSCSj---TJfoyEhpw@mail.gmail.com>
-Message-ID: <20190524170442.GE3274@piout.net>
+From: thuth@redhat.com (Thomas Huth)
+Date: Fri, 24 May 2019 20:16:46 +0200
+Subject: [PATCH] KVM: selftests: enable pgste option for the linker on s390
+In-Reply-To: <20190524103301.87017-1-borntraeger@de.ibm.com>
+References: <20190523164309.13345-1-thuth@redhat.com>
+ <20190524103301.87017-1-borntraeger@de.ibm.com>
+Message-ID: <798bd397-d44f-0076-3f87-ea0214ceb614@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524170442.ch7j7ECKKMOQFJCEryo1skKel_0Qz5H9tGBDXBSuRFE@z>
+Message-ID: <20190524181646.JeQctRz9tTHq2ih3Nd7i0gxIrXdIg8uCi5G-hP3qkCg@z>
 
-On 24/05/2019 19:23:57+0530, Jeffrin Thalakkottoor wrote:
-> On Fri, May 24, 2019 at 4:22 AM Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
-> > I just sent a fix for that timeout issue.
-> 
-> anyway thanks related to that
-> shall i  send a selftest fix that bail out in the test program  if the
-> user does not have root privileges ?
-> 
+On 24/05/2019 12.33, Christian Borntraeger wrote:
+> To avoid testcase failures we need to enable the pgstes. This can be
+> done with /proc/sys/vm/allocate_pgste or with a linker option that
+> creates an  S390_PGSTE program header.
 
-No, it bails out just fine.
+Oh, right, I initially enabled it on my LPAR via "sysctl
+vm.allocate_pgste=1" when I started working on the selftests and then
+completely forgot about this... The linker option is certainly the
+better way to do this, thanks for the patch!
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Reviewed-by: Thomas Huth <thuth at redhat.com>
