@@ -1,19 +1,20 @@
 From: fklassen at appneta.com (Fred Klassen)
-Date: Sat, 25 May 2019 13:46:07 -0700
+Date: Sat, 25 May 2019 13:47:47 -0700
 Subject: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
-In-Reply-To: <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
+In-Reply-To: <CAF=yD-+4g-HjmCnDWaVfdsyruePXqYeUDJgnffz9ro+rgNGv1g@mail.gmail.com>
 References: <20190523210651.80902-1-fklassen@appneta.com>
  <20190523210651.80902-2-fklassen@appneta.com>
- <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
-Message-ID: <7FB4B2F6-A7F3-4565-8D53-CF0E5A3EEFA4@appneta.com>
+ <CAF=yD-+4g-HjmCnDWaVfdsyruePXqYeUDJgnffz9ro+rgNGv1g@mail.gmail.com>
+Message-ID: <4B6F9771-011B-4BEC-8454-4D324856DDF6@appneta.com>
 
 
 
-> On May 23, 2019, at 2:39 PM, Willem de Bruijn <willemdebruijn.kernel at gmail.com> wrote:
-> Zerocopy notification reference count is managed in skb_segment. That
-> should work.
+> On May 23, 2019, at 2:59 PM, Willem de Bruijn <willemdebruijn.kernel at gmail.com> wrote:what exactly is the issue with IP_TOS?
 > 
+> If I understand correctly, the issue here is that the new 'P' option
+> that polls on the error queue times out. This is unrelated to
+> specifying TOS bits? Without zerocopy or timestamps, no message is
+> expected on the error queue.
 
-I’m trying to understand the context of reference counting in skb_segment. I assume that
-there is an opportunity to optimize the count of outstanding zerocopy buffers, but I 
-can’t see it. Please clarify.
+Please disregard last message. I think I was chasing a non-issue with
+TOS bits. I will remove all references to TOS.
