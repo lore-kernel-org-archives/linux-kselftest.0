@@ -1,22 +1,35 @@
-From: pr-tracker-bot@kernel.org (pr-tracker-bot@kernel.org)
-Date: Fri, 24 May 2019 23:15:17 +0000
-Subject: [GIT PULL] Kselftest fixes update for Linux 5.2-rc2
-In-Reply-To: <46b8fc51-ac8f-c03d-443e-4bd265cd4527@linuxfoundation.org>
-References: <46b8fc51-ac8f-c03d-443e-4bd265cd4527@linuxfoundation.org>
-Message-ID:
- <155873971735.4676.15830422826307745956.pr-tracker-bot@kernel.org>
+From: shuah@kernel.org (shuah)
+Date: Fri, 24 May 2019 18:06:39 -0600
+Subject: [PATCH v2 1/3] kselftest/cgroup: fix unexpected testing failure
+ on test_memcontrol
+In-Reply-To: <0c6b76b8-e20c-33f0-21da-64a5d5da30a9@kernel.org>
+References: <20190520030140.203605-1-alex.shi@linux.alibaba.com>
+ <20190520030140.203605-2-alex.shi@linux.alibaba.com>
+ <20190524214035.GG374014@devbig004.ftw2.facebook.com>
+ <0c6b76b8-e20c-33f0-21da-64a5d5da30a9@kernel.org>
+Message-ID: <ea5514c1-80a1-3c41-de1c-43582b6f1a49@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190524231517.CeG0IkO8NKtn6MdupO2PFDOYtjGawcAffH5aDdKhKiI@z>
+Message-ID: <20190525000639.UVzGQAqAov-JwUXxEjkWTfNrrJGlyx6h_FzlgGQHNLY@z>
 
-The pull request you sent on Fri, 24 May 2019 15:19:29 -0600:
+On 5/24/19 3:44 PM, shuah wrote:
+> On 5/24/19 3:40 PM, Tejun Heo wrote:
+>> Hello,
+>>
+>> All three patches look good to me.  Please feel free to add my
+>> acked-by.  Shuah, should I route these through cgroup tree or would
+>> the kselftest tree be a better fit?
+>>
+>> Thanks.
+>>
+> 
+> 
+> Tejun, I can take them through kselftest tree.
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.2-rc2
+Alex,
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7f8b40e3dbcd7dbeabe6be8f157376ef0b890e06
+patches 1/3 and 2/3 failed checkpatch. Could you please the warns
+and send v3. Go ahead and send all v3 for all 3 patches
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+thanks,
+-- Shuah
