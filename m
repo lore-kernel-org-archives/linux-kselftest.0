@@ -1,33 +1,31 @@
-From: shuah at kernel.org (shuah)
-Date: Fri, 24 May 2019 18:06:39 -0600
-Subject: [PATCH v2 1/3] kselftest/cgroup: fix unexpected testing failure
- on test_memcontrol
-In-Reply-To: <0c6b76b8-e20c-33f0-21da-64a5d5da30a9@kernel.org>
-References: <20190520030140.203605-1-alex.shi@linux.alibaba.com>
- <20190520030140.203605-2-alex.shi@linux.alibaba.com>
- <20190524214035.GG374014@devbig004.ftw2.facebook.com>
- <0c6b76b8-e20c-33f0-21da-64a5d5da30a9@kernel.org>
-Message-ID: <ea5514c1-80a1-3c41-de1c-43582b6f1a49@kernel.org>
+From: catalin.marinas at arm.com (Catalin Marinas)
+Date: Sat, 25 May 2019 10:57:55 +0100
+Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
+ syscalls
+In-Reply-To: <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+Message-ID: <20190525095753.caehqipafdc5m3yp@mbp>
 
-On 5/24/19 3:44 PM, shuah wrote:
-> On 5/24/19 3:40 PM, Tejun Heo wrote:
->> Hello,
->>
->> All three patches look good to me.  Please feel free to add my
->> acked-by.  Shuah, should I route these through cgroup tree or would
->> the kselftest tree be a better fit?
->>
->> Thanks.
->>
-> 
-> 
-> Tejun, I can take them through kselftest tree.
-> 
+On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
+> +SYSCALL_DEFINE5(arm64_get_mempolicy, int __user *, policy,
+> +		unsigned long __user *, nmask, unsigned long, maxnode,
+> +		unsigned long, addr, unsigned long, flags)
+> +{
+> +	addr = untagged_addr(addr);
+> +	return ksys_get_mempolicy(policy, nmask, maxnode, addr, flags);
+> +}
+[...]
+> +SYSCALL_DEFINE6(arm64_mbind, unsigned long, start, unsigned long, len,
+> +		unsigned long, mode, const unsigned long __user *, nmask,
+> +		unsigned long, maxnode, unsigned int, flags)
+> +{
+> +	start = untagged_addr(start);
+> +	return ksys_mbind(start, len, mode, nmask, maxnode, flags);
+> +}
 
-Alex,
+The kernel fails to build with CONFIG_NUMA disabled because the above
+are in mm/mempolicy.c which is no longer compiled in.
 
-patches 1/3 and 2/3 failed checkpatch. Could you please the warns
-and send v3. Go ahead and send all v3 for all 3 patches
-
-thanks,
--- Shuah
+-- 
+Catalin
