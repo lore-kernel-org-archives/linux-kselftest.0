@@ -1,20 +1,18 @@
 From: fklassen at appneta.com (Fred Klassen)
-Date: Sat, 25 May 2019 13:47:47 -0700
-Subject: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
-In-Reply-To: <CAF=yD-+4g-HjmCnDWaVfdsyruePXqYeUDJgnffz9ro+rgNGv1g@mail.gmail.com>
-References: <20190523210651.80902-1-fklassen@appneta.com>
- <20190523210651.80902-2-fklassen@appneta.com>
- <CAF=yD-+4g-HjmCnDWaVfdsyruePXqYeUDJgnffz9ro+rgNGv1g@mail.gmail.com>
-Message-ID: <4B6F9771-011B-4BEC-8454-4D324856DDF6@appneta.com>
+Date: Sun, 26 May 2019 08:33:56 -0700
+Subject: [PATCH net v2 0/1] Allow TX timestamp with UDP GSO
+Message-ID: <20190526153357.82293-1-fklassen@appneta.com>
 
+Fixes an issue where TX Timestamps are not arriving on the error queue
+when UDP_SEGMENT CMSG type is combined with CMSG type SO_TIMESTAMPING.
 
+This is version 2 which moves the tests to net-next.
 
-> On May 23, 2019, at 2:59 PM, Willem de Bruijn <willemdebruijn.kernel at gmail.com> wrote:what exactly is the issue with IP_TOS?
-> 
-> If I understand correctly, the issue here is that the new 'P' option
-> that polls on the error queue times out. This is unrelated to
-> specifying TOS bits? Without zerocopy or timestamps, no message is
-> expected on the error queue.
+Fred Klassen (1):
+  net/udp_gso: Allow TX timestamp with UDP GSO
 
-Please disregard last message. I think I was chasing a non-issue with
-TOS bits. I will remove all references to TOS.
+ net/ipv4/udp_offload.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+-- 
+2.11.0
