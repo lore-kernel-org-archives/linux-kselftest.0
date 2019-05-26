@@ -1,54 +1,57 @@
-From: fklassen@appneta.com (Fred Klassen)
-Date: Sun, 26 May 2019 08:33:57 -0700
-Subject: [PATCH net v2 1/1] net/udp_gso: Allow TX timestamp with UDP GSO
-In-Reply-To: <20190526153357.82293-1-fklassen@appneta.com>
-References: <20190526153357.82293-1-fklassen@appneta.com>
-Message-ID: <20190526153357.82293-2-fklassen@appneta.com>
+From: nsz@port70.net (Szabolcs Nagy)
+Date: Sun, 26 May 2019 22:20:42 +0200
+Subject: [PATCH v2 1/2] open: add close_range()
+In-Reply-To: <20190523154747.15162-2-christian@brauner.io>
+References: <20190523154747.15162-1-christian@brauner.io>
+ <20190523154747.15162-2-christian@brauner.io>
+Message-ID: <20190526202041.GO16415@port70.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190526153357.OVO0UZmZAeBJ4f0YuER7OrNYx91hC4PhguQb08ZmGPU@z>
+Message-ID: <20190526202042.aTdsFf4EYRZmvBYqWYMNKDz1Q9kXbO3gy1dbthP4WzM@z>
 
-Fixes an issue where TX Timestamps are not arriving on the error queue
-when UDP_SEGMENT CMSG type is combined with CMSG type SO_TIMESTAMPING.
-This can be illustrated with an updated updgso_bench_tx program which
-includes the '-T' option to test for this condition.
+* Christian Brauner <christian at brauner.io> [2019-05-23 17:47:46 +0200]:
+> This adds the close_range() syscall. It allows to efficiently close a range
+> of file descriptors up to all file descriptors of a calling task.
+> 
+> The syscall came up in a recent discussion around the new mount API and
+> making new file descriptor types cloexec by default. During this
+> discussion, Al suggested the close_range() syscall (cf. [1]). Note, a
+> syscall in this manner has been requested by various people over time.
+> 
+> First, it helps to close all file descriptors of an exec()ing task. This
+> can be done safely via (quoting Al's example from [1] verbatim):
+> 
+>         /* that exec is sensitive */
+>         unshare(CLONE_FILES);
+>         /* we don't want anything past stderr here */
+>         close_range(3, ~0U);
+>         execve(....);
 
-    ./udpgso_bench_tx -4ucTPv -S 1472 -l2 -D 172.16.120.18
-    poll timeout
-    udp tx:      0 MB/s        1 calls/s      1 msg/s
+this does not work in a hosted c implementation unless the libc
+guarantees not to use libc internal fds (e.g. in execve).
+(the libc cannot easily abstract fds, so the syscall abi layer
+fd semantics is necessarily visible to user code.)
 
-The "poll timeout" message above indicates that TX timestamp never
-arrived.
+i think this is a new constraint for userspace runtimes.
+(not entirely unreasonable though)
 
-It also appears that other TX CMSG types cause similar issues, for
-example trying to set SOL_IP/IP_TOS.
+> The code snippet above is one way of working around the problem that file
+> descriptors are not cloexec by default. This is aggravated by the fact that
+> we can't just switch them over without massively regressing userspace. For
+> a whole class of programs having an in-kernel method of closing all file
+> descriptors is very helpful (e.g. demons, service managers, programming
+> language standard libraries, container managers etc.).
 
-    ./udpgso_bench_tx -4ucPv -S 1472 -q 182 -l2 -D 172.16.120.18
-    poll timeout
-    udp tx:      0 MB/s        1 calls/s      1 msg/s
+was cloexec_range(a,b) considered?
 
-This patch preserves tx_flags for the first UDP GSO segment. This
-mirrors the stack's behaviour for IPv4 fragments.
+> (Please note, unshare(CLONE_FILES) should only be needed if the calling
+>  task is multi-threaded and shares the file descriptor table with another
+>  thread in which case two threads could race with one thread allocating
+>  file descriptors and the other one closing them via close_range(). For the
+>  general case close_range() before the execve() is sufficient.)
 
-Fixes: ee80d1ebe5ba ("udp: add udp gso")
-Signed-off-by: Fred Klassen <fklassen at appneta.com>
----
- net/ipv4/udp_offload.c | 4 ++++
- 1 file changed, 4 insertions(+)
+assuming there is no unblocked signal handler that may open fds.
 
-diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
-index 065334b41d57..33de347695ae 100644
---- a/net/ipv4/udp_offload.c
-+++ b/net/ipv4/udp_offload.c
-@@ -228,6 +228,10 @@ struct sk_buff *__udp_gso_segment(struct sk_buff *gso_skb,
- 	seg = segs;
- 	uh = udp_hdr(seg);
- 
-+	/* preserve TX timestamp and zero-copy info for first segment */
-+	skb_shinfo(seg)->tskey = skb_shinfo(gso_skb)->tskey;
-+	skb_shinfo(seg)->tx_flags = skb_shinfo(gso_skb)->tx_flags;
-+
- 	/* compute checksum adjustment based on old length versus new */
- 	newlen = htons(sizeof(*uh) + mss);
- 	check = csum16_add(csum16_sub(uh->check, uh->len), newlen);
--- 
-2.11.0
+a syscall that tramples on fds not owned by the caller is ugly
+(not generally safe to use and may break things if it gets used),
+i don't have a better solution for fd leaks or missing cloexec,
+but i think it needs more analysis how it can be used.
