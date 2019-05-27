@@ -1,46 +1,24 @@
 From: alex.shi at linux.alibaba.com (Alex Shi)
-Date: Mon, 27 May 2019 14:28:07 +0800
-Subject: [PATCH v3 3/3] kselftest/cgroup: fix incorrect test_core skip
-In-Reply-To: <20190527062807.93404-1-alex.shi@linux.alibaba.com>
-References: <20190527062807.93404-1-alex.shi@linux.alibaba.com>
-Message-ID: <20190527062807.93404-3-alex.shi@linux.alibaba.com>
+Date: Mon, 27 May 2019 14:30:33 +0800
+Subject: [PATCH v2 1/3] kselftest/cgroup: fix unexpected testing failure
+ on test_memcontrol
+In-Reply-To: <ea5514c1-80a1-3c41-de1c-43582b6f1a49@kernel.org>
+References: <20190520030140.203605-1-alex.shi@linux.alibaba.com>
+ <20190520030140.203605-2-alex.shi@linux.alibaba.com>
+ <20190524214035.GG374014@devbig004.ftw2.facebook.com>
+ <0c6b76b8-e20c-33f0-21da-64a5d5da30a9@kernel.org>
+ <ea5514c1-80a1-3c41-de1c-43582b6f1a49@kernel.org>
+Message-ID: <3db110a3-0662-24ae-ef0a-cde3deee99ea@linux.alibaba.com>
 
-The test_core will skip the
-test_cgcore_no_internal_process_constraint_on_threads test case if the
-'cpu' controller missing in root's subtree_control. In fact we need to
-set the 'cpu' in subtree_control, to make the testing meaningful.
 
-./test_core
-...
-ok 4 # skip test_cgcore_no_internal_process_constraint_on_threads
-...
 
-Signed-off-by: Alex Shi <alex.shi at linux.alibaba.com>
-Cc: Shuah Khan <shuah at kernel.org>
-Cc: Tejun Heo <tj at kernel.org>
-Cc: Roman Gushchin <guro at fb.com>
-Cc: Claudio Zumbo <claudioz at fb.com>
-Cc: Claudio <claudiozumbo at gmail.com>
-Cc: linux-kselftest at vger.kernel.org
-Cc: linux-kernel at vger.kernel.org
-Reviewed-by: Roman Gushchin <guro at fb.com>
-Acked-by: Tejun Heo <tj at kernel.org>
----
- tools/testing/selftests/cgroup/test_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2019/5/25 8:06 上午, shuah wrote:
+> Alex,
+> 
+> patches 1/3 and 2/3 failed checkpatch. Could you please the warns
+> and send v3. Go ahead and send all v3 for all 3 patches
 
-diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-index d78f1c5366d3..79053a4f4783 100644
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -198,7 +198,7 @@ static int test_cgcore_no_internal_process_constraint_on_threads(const char *roo
- 	char *parent = NULL, *child = NULL;
- 
- 	if (cg_read_strstr(root, "cgroup.controllers", "cpu") ||
--	    cg_read_strstr(root, "cgroup.subtree_control", "cpu")) {
-+	    cg_write(root, "cgroup.subtree_control", "+cpu")) {
- 		ret = KSFT_SKIP;
- 		goto cleanup;
- 	}
--- 
-2.19.1.856.g8858448bb
+fixed and rent. 
+
+Thanks a lot! 
+Alex 
