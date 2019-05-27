@@ -1,25 +1,57 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Mon, 27 May 2019 10:42:48 +0100
-Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
- syscalls
-In-Reply-To: <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
-Message-ID: <20190527094247.GA45660@MBP.local>
+From: borntraeger@de.ibm.com (Christian Borntraeger)
+Date: Mon, 27 May 2019 13:44:31 +0200
+Subject: [PATCH] KVM: selftests: enable pgste option for the linker on s390
+In-Reply-To: <20190524103301.87017-1-borntraeger@de.ibm.com>
+References: <20190523164309.13345-1-thuth@redhat.com>
+ <20190524103301.87017-1-borntraeger@de.ibm.com>
+Message-ID: <ea4a142b-7361-7a6c-bfe9-8a06de278df7@de.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190527094248.9q9nO87CzpAHmqnP4bfVd9O-Y0RRxSxsY2h1ygS6CEc@z>
+Message-ID: <20190527114431.SLZGCRzQ0GmytqcGjC3LJqGFKTY_KSZdQC6rdDFVWQg@z>
 
-On Mon, May 06, 2019@06:30:51PM +0200, Andrey Konovalov wrote:
-> +SYSCALL_DEFINE2(arm64_mlock2, unsigned long, start, size_t, len)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_mlock(start, len, VM_LOCKED);
-> +}
+On 24.05.19 12:33, Christian Borntraeger wrote:
+> To avoid testcase failures we need to enable the pgstes. This can be
+> done with /proc/sys/vm/allocate_pgste or with a linker option that
+> creates an  S390_PGSTE program header.
+> 
+> Signed-off-by: Christian Borntraeger <borntraeger at de.ibm.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index aef5bd1166cf..4aac14c1919f 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -44,7 +44,10 @@ CFLAGS += -O2 -g -std=gnu99 -fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE
+>  no-pie-option := $(call try-run, echo 'int main() { return 0; }' | \
+>          $(CC) -Werror $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
+>  
+> -LDFLAGS += -pthread $(no-pie-option)
+> +# On s390, build the testcases KVM-enabled
+> +pgste-option := $(call cc-ldoption, -Wl$(comma)--s390-pgste)
+> +
+> +LDFLAGS += -pthread $(no-pie-option) $(pgste-option)
+>  
+>  # After inclusion, $(OUTPUT) is defined and
+>  # $(TEST_GEN_PROGS) starts with $(OUTPUT)/
+> 
 
-Copy/paste error: sys_mlock2() has 3 arguments and should call
-ksys_mlock2().
+After commit commit 055efab3120bae7ab1ed841317774f3c953f6e1b (kbuild: drop support for cc-ldoption)
+I had to change that in the following way.
 
-Still tracking down an LTP failure on test mlock01.
+    
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 2a73b58fd9e0..a798ea54a434 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -48,7 +48,7 @@ no-pie-option := $(call try-run, echo 'int main() { return 0; }' | \
+         $(CC) -Werror $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
+ 
+ # On s390, build the testcases KVM-enabled
+-pgste-option := $(call cc-ldoption, -Wl$(comma)--s390-pgste)
++pgste-option := $(call cc-option,-Wl$(comma)--s390-pgste)
+ 
+ LDFLAGS += -pthread $(no-pie-option) $(pgste-option)
+ 
 
--- 
-Catalin
+With that pushed out to kvms390/next.
