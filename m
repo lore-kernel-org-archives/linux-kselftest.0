@@ -1,55 +1,31 @@
-From: borntraeger at de.ibm.com (Christian Borntraeger)
-Date: Mon, 27 May 2019 13:44:31 +0200
-Subject: [PATCH] KVM: selftests: enable pgste option for the linker on s390
-In-Reply-To: <20190524103301.87017-1-borntraeger@de.ibm.com>
-References: <20190523164309.13345-1-thuth@redhat.com>
- <20190524103301.87017-1-borntraeger@de.ibm.com>
-Message-ID: <ea4a142b-7361-7a6c-bfe9-8a06de278df7@de.ibm.com>
+From: catalin.marinas at arm.com (Catalin Marinas)
+Date: Mon, 27 May 2019 15:37:20 +0100
+Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
+ syscalls
+In-Reply-To: <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+Message-ID: <20190527143719.GA59948@MBP.local>
 
-On 24.05.19 12:33, Christian Borntraeger wrote:
-> To avoid testcase failures we need to enable the pgstes. This can be
-> done with /proc/sys/vm/allocate_pgste or with a linker option that
-> creates an  S390_PGSTE program header.
+On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
+> This patch is a part of a series that extends arm64 kernel ABI to allow to
+> pass tagged user pointers (with the top byte set to something else other
+> than 0x00) as syscall arguments.
 > 
-> Signed-off-by: Christian Borntraeger <borntraeger at de.ibm.com>
-> ---
->  tools/testing/selftests/kvm/Makefile | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> This patch allows tagged pointers to be passed to the following memory
+> syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
+> mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
+> remap_file_pages, shmat and shmdt.
 > 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index aef5bd1166cf..4aac14c1919f 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -44,7 +44,10 @@ CFLAGS += -O2 -g -std=gnu99 -fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE
->  no-pie-option := $(call try-run, echo 'int main() { return 0; }' | \
->          $(CC) -Werror $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
->  
-> -LDFLAGS += -pthread $(no-pie-option)
-> +# On s390, build the testcases KVM-enabled
-> +pgste-option := $(call cc-ldoption, -Wl$(comma)--s390-pgste)
-> +
-> +LDFLAGS += -pthread $(no-pie-option) $(pgste-option)
->  
->  # After inclusion, $(OUTPUT) is defined and
->  # $(TEST_GEN_PROGS) starts with $(OUTPUT)/
+> This is done by untagging pointers passed to these syscalls in the
+> prologues of their handlers.
 > 
+> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 
-After commit commit 055efab3120bae7ab1ed841317774f3c953f6e1b (kbuild: drop support for cc-ldoption)
-I had to change that in the following way.
+Actually, I don't think any of these wrappers get called (have you
+tested this patch?). Following commit 4378a7d4be30 ("arm64: implement
+syscall wrappers"), I think we have other macro names for overriding the
+sys_* ones.
 
-    
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 2a73b58fd9e0..a798ea54a434 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -48,7 +48,7 @@ no-pie-option := $(call try-run, echo 'int main() { return 0; }' | \
-         $(CC) -Werror $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
- 
- # On s390, build the testcases KVM-enabled
--pgste-option := $(call cc-ldoption, -Wl$(comma)--s390-pgste)
-+pgste-option := $(call cc-option,-Wl$(comma)--s390-pgste)
- 
- LDFLAGS += -pthread $(no-pie-option) $(pgste-option)
- 
-
-With that pushed out to kvms390/next.
+-- 
+Catalin
