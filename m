@@ -1,22 +1,25 @@
-From: rafael@kernel.org (Rafael J. Wysocki)
-Date: Mon, 27 May 2019 10:43:39 +0200
-Subject: [PATCH 10/10] docs: fix broken documentation links
-In-Reply-To: <4fd1182b4a41feb2447c7ccde4d7f0a6b3c92686.1558362030.git.mchehab+samsung@kernel.org>
-References: <cover.1558362030.git.mchehab+samsung@kernel.org>
- <4fd1182b4a41feb2447c7ccde4d7f0a6b3c92686.1558362030.git.mchehab+samsung@kernel.org>
-Message-ID:
- <CAJZ5v0iiSo=yoyZTt6ddf5fBRGy1wSvzmA-ZaHH33nivkSp22Q@mail.gmail.com>
+From: catalin.marinas@arm.com (Catalin Marinas)
+Date: Mon, 27 May 2019 10:42:48 +0100
+Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
+ syscalls
+In-Reply-To: <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+Message-ID: <20190527094247.GA45660@MBP.local>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190527084339.Cv1n0aGtzsFjVAVL3pbhZiVtQlvTHhIYLKIHIaWL6TI@z>
+Message-ID: <20190527094248.9q9nO87CzpAHmqnP4bfVd9O-Y0RRxSxsY2h1ygS6CEc@z>
 
-On Mon, May 20, 2019 at 4:48 PM Mauro Carvalho Chehab
-<mchehab+samsung@kernel.org> wrote:
->
-> Mostly due to x86 and acpi conversion, several documentation
-> links are still pointing to the old file. Fix them.
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung at kernel.org>
+On Mon, May 06, 2019@06:30:51PM +0200, Andrey Konovalov wrote:
+> +SYSCALL_DEFINE2(arm64_mlock2, unsigned long, start, size_t, len)
+> +{
+> +	start = untagged_addr(start);
+> +	return ksys_mlock(start, len, VM_LOCKED);
+> +}
 
-For the ACPI part:
+Copy/paste error: sys_mlock2() has 3 arguments and should call
+ksys_mlock2().
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki at intel.com>
+Still tracking down an LTP failure on test mlock01.
+
+-- 
+Catalin
