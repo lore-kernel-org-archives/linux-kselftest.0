@@ -1,131 +1,76 @@
 From: willemdebruijn.kernel at gmail.com (Willem de Bruijn)
-Date: Sun, 26 May 2019 20:30:56 -0500
-Subject: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
-In-Reply-To: <4032C02B-EA43-4540-8283-8466CDD0B8D2@appneta.com>
-References: <20190523210651.80902-1-fklassen@appneta.com>
- <20190523210651.80902-2-fklassen@appneta.com>
- <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
- <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com>
- <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
- <AFC1ECC8-BFAC-4718-B0C9-97CC4BD1F397@appneta.com>
- <CAF=yD-Le-eTadOi7PL8WFEQCG=yLqb5gvKiks+s5Akeq8TenBQ@mail.gmail.com>
- <90E3853F-107D-45BA-93DC-D0BE8AC6FCBB@appneta.com>
- <CA+FuTScNr9Srsn9QFBSj=oT4TnMh1QuOZ2h40g=joNjSwccqMg@mail.gmail.com>
- <4032C02B-EA43-4540-8283-8466CDD0B8D2@appneta.com>
-Message-ID: <CAF=yD-KTJGYY-yf=+zwa8SyrCNAfZjqjomJ=B=yFcs+juDeShA@mail.gmail.com>
+Date: Sun, 26 May 2019 20:39:36 -0500
+Subject: [PATCH net v2 1/1] net/udp_gso: Allow TX timestamp with UDP GSO
+In-Reply-To: <20190526153357.82293-2-fklassen@appneta.com>
+References: <20190526153357.82293-1-fklassen@appneta.com>
+ <20190526153357.82293-2-fklassen@appneta.com>
+Message-ID: <CAF=yD-KyJC0ErdyNRtiw5VPhQY+i__sDG5oh0LzWJ4RMYe1zCQ@mail.gmail.com>
 
-On Sat, May 25, 2019 at 1:47 PM Fred Klassen <fklassen at appneta.com> wrote:
+On Sun, May 26, 2019 at 10:37 AM Fred Klassen <fklassen at appneta.com> wrote:
 >
+> Fixes an issue where TX Timestamps are not arriving on the error queue
+> when UDP_SEGMENT CMSG type is combined with CMSG type SO_TIMESTAMPING.
+> This can be illustrated with an updated updgso_bench_tx program which
+> includes the '-T' option to test for this condition.
 >
+>     ./udpgso_bench_tx -4ucTPv -S 1472 -l2 -D 172.16.120.18
+>     poll timeout
+>     udp tx:      0 MB/s        1 calls/s      1 msg/s
 >
-> > On May 25, 2019, at 8:20 AM, Willem de Bruijn <willemdebruijn.kernel at gmail.com> wrote:
-> >
-> > On Fri, May 24, 2019 at 6:01 PM Fred Klassen <fklassen at appneta.com> wrote:
-> >>
-> >>
-> >>
-> >>> On May 24, 2019, at 12:29 PM, Willem de Bruijn <willemdebruijn.kernel at gmail.com> wrote:
-> >>>
-> >>> It is the last moment that a timestamp can be generated for the last
-> >>> byte, I don't see how that is "neither the start nor the end of a GSO
-> >>> packet”.
-> >>
-> >> My misunderstanding. I thought TCP did last segment timestamping, not
-> >> last byte. In that case, your statements make sense.
-> >>
-> >>>> It would be interesting if a practical case can be made for timestamping
-> >>>> the last segment. In my mind, I don’t see how that would be valuable.
-> >>>
-> >>> It depends whether you are interested in measuring network latency or
-> >>> host transmit path latency.
-> >>>
-> >>> For the latter, knowing the time from the start of the sendmsg call to
-> >>> the moment the last byte hits the wire is most relevant. Or in absence
-> >>> of (well defined) hardware support, the last byte being queued to the
-> >>> device is the next best thing.
-> >
-> > Sounds to me like both cases have a legitimate use case, and we want
-> > to support both.
-> >
-> > Implementation constraints are that storage for this timestamp
-> > information is scarce and we cannot add new cold cacheline accesses in
-> > the datapath.
-> >
-> > The simplest approach would be to unconditionally timestamp both the
-> > first and last segment. With the same ID. Not terribly elegant. But it
-> > works.
-> >
-> > If conditional, tx_flags has only one bit left. I think we can harvest
-> > some, as not all defined bits are in use at the same stages in the
-> > datapath, but that is not a trivial change. Some might also better be
-> > set in the skb, instead of skb_shinfo. Which would also avoids
-> > touching that cacheline. We could possibly repurpose bits from u32
-> > tskey.
-> >
-> > All that can come later. Initially, unless we can come up with
-> > something more elegant, I would suggest that UDP follows the rule
-> > established by TCP and timestamps the last byte. And we add an
-> > explicit SOF_TIMESTAMPING_OPT_FIRSTBYTE that is initially only
-> > supported for UDP, sets a new SKBTX_TX_FB_TSTAMP bit in
-> > __sock_tx_timestamp and is interpreted in __udp_gso_segment.
-> >
+> The "poll timeout" message above indicates that TX timestamp never
+> arrived.
 >
-> I don’t see how to practically TX timestamp the last byte of any packet
-> (UDP GSO or otherwise). The best we could do is timestamp the last
-> segment,  or rather the time that the last segment is queued. Let me
-> attempt to explain.
->
-> First let’s look at software TX timestamps which are for are generated
-> by skb_tx_timestamp() in nearly every network driver’s xmit routine. It
-> states:
->
-> —————————— cut ————————————
->  * Ethernet MAC Drivers should call this function in their hard_xmit()
->  * function immediately before giving the sk_buff to the MAC hardware.
-> —————————— cut ————————————
->
-> That means that the sk_buff will get timestamped just before rather
-> than just after it is sent. To truly capture the timestamp of the last
-> byte, this routine routine would have to be called a second time, right
-> after sending to MAC hardware. Then the user program would have
-> sort out the 2 timestamps. My guess is that this isn’t something that
-> NIC vendors would be willing to implement in their drivers.
->
-> So, the best we can do is timestamp is just before the last segment.
-> Suppose UDP GSO sends 3000 bytes to a 1500 byte MTU adapter.
-> If we set SKBTX_HW_TSTAMP flag on the last segment, the timestamp
-> occurs half way through the burst. But it may not be exactly half way
-> because the segments may get queued much faster than wire rate.
-> Therefore the time between segment 1 and segment 2 may be much
-> much smaller than their spacing on the wire. I would not find this
-> useful.
+> It also appears that other TX CMSG types cause similar issues, for
+> example trying to set SOL_IP/IP_TOS.
 
-For measuring host queueing latency, a timestamp at the existing
-skb_tx_timestamp() for the last segment is perfectly informative.
+If correct we need to find the root cause. Without that, this is not
+very informative. And likely the fix is not related, as that does not
+involve tx_flags or tskey.
 
-> I propose that we stick with the method used for IP fragments, which
-> is timestamping just before the first byte is sent.
+What exact behavior do you observe: tx timestamp notifications go
+missing when enabling IP_TOS?
 
-I understand that this addresses your workload. It simply ignores the
-other identified earlier in this thread.
-
-> Put another way, I
-> propose that we start the clock in an automobile race just before the
-> front of the first car crosses the start line rather than when the front
-> of the last car crosses the start line.
 >
-> TX timestamping in hardware has even more limitations. For the most
-> part, we can only do one timestamp per packet or burst.  If we requested
-> a timestamp of only the last segment of a packet, we would have work
-> backwards to calculate the start time of the packet, but that would
-> only be be a best guess. For extremely time sensitive applications
-> (such as the one we develop), this would not be practical.
+>     ./udpgso_bench_tx -4ucPv -S 1472 -q 182 -l2 -D 172.16.120.18
+>     poll timeout
+>     udp tx:      0 MB/s        1 calls/s      1 msg/s
+>
+> This patch preserves tx_flags for the first UDP GSO segment. This
+> mirrors the stack's behaviour for IPv4 fragments.
 
-Note that for any particularly sensitive measurements, a segment can
-always be sent separately.
+But deviates from the established behavior of other transport protocol TCP.
 
-> We could still consider setting a flag that would allow the timestamping
-> the last segment rather than the first. However since we cannot
-> truly measure the timestamp of the last byte, I would question the value
-> in doing so.
+I think it's a bit premature to resubmit as is while still discussing
+the original patch.
+
+>
+> Fixes: ee80d1ebe5ba ("udp: add udp gso")
+> Signed-off-by: Fred Klassen <fklassen at appneta.com>
+> ---
+>  net/ipv4/udp_offload.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
+> index 065334b41d57..33de347695ae 100644
+> --- a/net/ipv4/udp_offload.c
+> +++ b/net/ipv4/udp_offload.c
+> @@ -228,6 +228,10 @@ struct sk_buff *__udp_gso_segment(struct sk_buff *gso_skb,
+>         seg = segs;
+>         uh = udp_hdr(seg);
+>
+> +       /* preserve TX timestamp and zero-copy info for first segment */
+
+As pointed out in v1, zerocopy flags are handled by protocol
+independent skb_segment. It calls skb_zerocopy_clone.
+
+
+
+> +       skb_shinfo(seg)->tskey = skb_shinfo(gso_skb)->tskey;
+> +       skb_shinfo(seg)->tx_flags = skb_shinfo(gso_skb)->tx_flags;
+> +
+>         /* compute checksum adjustment based on old length versus new */
+>         newlen = htons(sizeof(*uh) + mss);
+>         check = csum16_add(csum16_sub(uh->check, uh->len), newlen);
+> --
+> 2.11.0
 >
