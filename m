@@ -1,57 +1,134 @@
-From: nsz@port70.net (Szabolcs Nagy)
-Date: Sun, 26 May 2019 22:20:42 +0200
-Subject: [PATCH v2 1/2] open: add close_range()
-In-Reply-To: <20190523154747.15162-2-christian@brauner.io>
-References: <20190523154747.15162-1-christian@brauner.io>
- <20190523154747.15162-2-christian@brauner.io>
-Message-ID: <20190526202041.GO16415@port70.net>
+From: willemdebruijn.kernel@gmail.com (Willem de Bruijn)
+Date: Sun, 26 May 2019 20:30:56 -0500
+Subject: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
+In-Reply-To: <4032C02B-EA43-4540-8283-8466CDD0B8D2@appneta.com>
+References: <20190523210651.80902-1-fklassen@appneta.com>
+ <20190523210651.80902-2-fklassen@appneta.com>
+ <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
+ <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com>
+ <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
+ <AFC1ECC8-BFAC-4718-B0C9-97CC4BD1F397@appneta.com>
+ <CAF=yD-Le-eTadOi7PL8WFEQCG=yLqb5gvKiks+s5Akeq8TenBQ@mail.gmail.com>
+ <90E3853F-107D-45BA-93DC-D0BE8AC6FCBB@appneta.com>
+ <CA+FuTScNr9Srsn9QFBSj=oT4TnMh1QuOZ2h40g=joNjSwccqMg@mail.gmail.com>
+ <4032C02B-EA43-4540-8283-8466CDD0B8D2@appneta.com>
+Message-ID:
+ <CAF=yD-KTJGYY-yf=+zwa8SyrCNAfZjqjomJ=B=yFcs+juDeShA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190526202042.aTdsFf4EYRZmvBYqWYMNKDz1Q9kXbO3gy1dbthP4WzM@z>
+Message-ID: <20190527013056.EI2yuToXO7OnuvpRBwyHd6ck1dL6S_QB8UtvmSpjJXs@z>
 
-* Christian Brauner <christian at brauner.io> [2019-05-23 17:47:46 +0200]:
-> This adds the close_range() syscall. It allows to efficiently close a range
-> of file descriptors up to all file descriptors of a calling task.
-> 
-> The syscall came up in a recent discussion around the new mount API and
-> making new file descriptor types cloexec by default. During this
-> discussion, Al suggested the close_range() syscall (cf. [1]). Note, a
-> syscall in this manner has been requested by various people over time.
-> 
-> First, it helps to close all file descriptors of an exec()ing task. This
-> can be done safely via (quoting Al's example from [1] verbatim):
-> 
->         /* that exec is sensitive */
->         unshare(CLONE_FILES);
->         /* we don't want anything past stderr here */
->         close_range(3, ~0U);
->         execve(....);
+On Sat, May 25, 2019@1:47 PM Fred Klassen <fklassen@appneta.com> wrote:
+>
+>
+>
+> > On May 25, 2019,@8:20 AM, Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
+> >
+> > On Fri, May 24, 2019@6:01 PM Fred Klassen <fklassen@appneta.com> wrote:
+> >>
+> >>
+> >>
+> >>> On May 24, 2019,@12:29 PM, Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
+> >>>
+> >>> It is the last moment that a timestamp can be generated for the last
+> >>> byte, I don't see how that is "neither the start nor the end of a GSO
+> >>> packet”.
+> >>
+> >> My misunderstanding. I thought TCP did last segment timestamping, not
+> >> last byte. In that case, your statements make sense.
+> >>
+> >>>> It would be interesting if a practical case can be made for timestamping
+> >>>> the last segment. In my mind, I don’t see how that would be valuable.
+> >>>
+> >>> It depends whether you are interested in measuring network latency or
+> >>> host transmit path latency.
+> >>>
+> >>> For the latter, knowing the time from the start of the sendmsg call to
+> >>> the moment the last byte hits the wire is most relevant. Or in absence
+> >>> of (well defined) hardware support, the last byte being queued to the
+> >>> device is the next best thing.
+> >
+> > Sounds to me like both cases have a legitimate use case, and we want
+> > to support both.
+> >
+> > Implementation constraints are that storage for this timestamp
+> > information is scarce and we cannot add new cold cacheline accesses in
+> > the datapath.
+> >
+> > The simplest approach would be to unconditionally timestamp both the
+> > first and last segment. With the same ID. Not terribly elegant. But it
+> > works.
+> >
+> > If conditional, tx_flags has only one bit left. I think we can harvest
+> > some, as not all defined bits are in use at the same stages in the
+> > datapath, but that is not a trivial change. Some might also better be
+> > set in the skb, instead of skb_shinfo. Which would also avoids
+> > touching that cacheline. We could possibly repurpose bits from u32
+> > tskey.
+> >
+> > All that can come later. Initially, unless we can come up with
+> > something more elegant, I would suggest that UDP follows the rule
+> > established by TCP and timestamps the last byte. And we add an
+> > explicit SOF_TIMESTAMPING_OPT_FIRSTBYTE that is initially only
+> > supported for UDP, sets a new SKBTX_TX_FB_TSTAMP bit in
+> > __sock_tx_timestamp and is interpreted in __udp_gso_segment.
+> >
+>
+> I don’t see how to practically TX timestamp the last byte of any packet
+> (UDP GSO or otherwise). The best we could do is timestamp the last
+> segment,  or rather the time that the last segment is queued. Let me
+> attempt to explain.
+>
+> First let’s look at software TX timestamps which are for are generated
+> by skb_tx_timestamp() in nearly every network driver’s xmit routine. It
+> states:
+>
+> —————————— cut ————————————
+>  * Ethernet MAC Drivers should call this function in their hard_xmit()
+>  * function immediately before giving the sk_buff to the MAC hardware.
+> —————————— cut ————————————
+>
+> That means that the sk_buff will get timestamped just before rather
+> than just after it is sent. To truly capture the timestamp of the last
+> byte, this routine routine would have to be called a second time, right
+> after sending to MAC hardware. Then the user program would have
+> sort out the 2 timestamps. My guess is that this isn’t something that
+> NIC vendors would be willing to implement in their drivers.
+>
+> So, the best we can do is timestamp is just before the last segment.
+> Suppose UDP GSO sends 3000 bytes to a 1500 byte MTU adapter.
+> If we set SKBTX_HW_TSTAMP flag on the last segment, the timestamp
+> occurs half way through the burst. But it may not be exactly half way
+> because the segments may get queued much faster than wire rate.
+> Therefore the time between segment 1 and segment 2 may be much
+> much smaller than their spacing on the wire. I would not find this
+> useful.
 
-this does not work in a hosted c implementation unless the libc
-guarantees not to use libc internal fds (e.g. in execve).
-(the libc cannot easily abstract fds, so the syscall abi layer
-fd semantics is necessarily visible to user code.)
+For measuring host queueing latency, a timestamp at the existing
+skb_tx_timestamp() for the last segment is perfectly informative.
 
-i think this is a new constraint for userspace runtimes.
-(not entirely unreasonable though)
+> I propose that we stick with the method used for IP fragments, which
+> is timestamping just before the first byte is sent.
 
-> The code snippet above is one way of working around the problem that file
-> descriptors are not cloexec by default. This is aggravated by the fact that
-> we can't just switch them over without massively regressing userspace. For
-> a whole class of programs having an in-kernel method of closing all file
-> descriptors is very helpful (e.g. demons, service managers, programming
-> language standard libraries, container managers etc.).
+I understand that this addresses your workload. It simply ignores the
+other identified earlier in this thread.
 
-was cloexec_range(a,b) considered?
+> Put another way, I
+> propose that we start the clock in an automobile race just before the
+> front of the first car crosses the start line rather than when the front
+> of the last car crosses the start line.
+>
+> TX timestamping in hardware has even more limitations. For the most
+> part, we can only do one timestamp per packet or burst.  If we requested
+> a timestamp of only the last segment of a packet, we would have work
+> backwards to calculate the start time of the packet, but that would
+> only be be a best guess. For extremely time sensitive applications
+> (such as the one we develop), this would not be practical.
 
-> (Please note, unshare(CLONE_FILES) should only be needed if the calling
->  task is multi-threaded and shares the file descriptor table with another
->  thread in which case two threads could race with one thread allocating
->  file descriptors and the other one closing them via close_range(). For the
->  general case close_range() before the execve() is sufficient.)
+Note that for any particularly sensitive measurements, a segment can
+always be sent separately.
 
-assuming there is no unblocked signal handler that may open fds.
-
-a syscall that tramples on fds not owned by the caller is ugly
-(not generally safe to use and may break things if it gets used),
-i don't have a better solution for fd leaks or missing cloexec,
-but i think it needs more analysis how it can be used.
+> We could still consider setting a flag that would allow the timestamping
+> the last segment rather than the first. However since we cannot
+> truly measure the timestamp of the last byte, I would question the value
+> in doing so.
+>
