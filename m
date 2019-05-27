@@ -1,124 +1,55 @@
-From: willemdebruijn.kernel@gmail.com (Willem de Bruijn)
-Date: Sun, 26 May 2019 21:09:03 -0500
-Subject: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
-In-Reply-To: <CAF=yD-KTJGYY-yf=+zwa8SyrCNAfZjqjomJ=B=yFcs+juDeShA@mail.gmail.com>
-References: <20190523210651.80902-1-fklassen@appneta.com>
- <20190523210651.80902-2-fklassen@appneta.com>
- <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
- <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com>
- <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
- <AFC1ECC8-BFAC-4718-B0C9-97CC4BD1F397@appneta.com>
- <CAF=yD-Le-eTadOi7PL8WFEQCG=yLqb5gvKiks+s5Akeq8TenBQ@mail.gmail.com>
- <90E3853F-107D-45BA-93DC-D0BE8AC6FCBB@appneta.com>
- <CA+FuTScNr9Srsn9QFBSj=oT4TnMh1QuOZ2h40g=joNjSwccqMg@mail.gmail.com>
- <4032C02B-EA43-4540-8283-8466CDD0B8D2@appneta.com>
- <CAF=yD-KTJGYY-yf=+zwa8SyrCNAfZjqjomJ=B=yFcs+juDeShA@mail.gmail.com>
-Message-ID:
- <CAF=yD-+h2qJP0M5XQrcFVfyn3TP7Jd0UJ1zFf0kbUeC9uKKNxQ@mail.gmail.com>
+From: alex.shi@linux.alibaba.com (Alex Shi)
+Date: Mon, 27 May 2019 14:28:06 +0800
+Subject: [PATCH v3 2/3] kselftest/cgroup: fix unexpected testing failure on
+ test_core
+In-Reply-To: <20190527062807.93404-1-alex.shi@linux.alibaba.com>
+References: <20190527062807.93404-1-alex.shi@linux.alibaba.com>
+Message-ID: <20190527062807.93404-2-alex.shi@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190527020903.DL2FvfOGXXKUrOIfQz99rs792OmnPW9-wuZtu7h-nfY@z>
+Message-ID: <20190527062806.WRH8W_ds_YCK5ytB6ZtYCfF70V1eZ4nf6kRpcmy_PBs@z>
 
-On Sun, May 26, 2019 at 8:30 PM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
->
-> On Sat, May 25, 2019@1:47 PM Fred Klassen <fklassen@appneta.com> wrote:
-> >
-> >
-> >
-> > > On May 25, 2019,@8:20 AM, Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
-> > >
-> > > On Fri, May 24, 2019@6:01 PM Fred Klassen <fklassen@appneta.com> wrote:
-> > >>
-> > >>
-> > >>
-> > >>> On May 24, 2019,@12:29 PM, Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
-> > >>>
-> > >>> It is the last moment that a timestamp can be generated for the last
-> > >>> byte, I don't see how that is "neither the start nor the end of a GSO
-> > >>> packet”.
-> > >>
-> > >> My misunderstanding. I thought TCP did last segment timestamping, not
-> > >> last byte. In that case, your statements make sense.
-> > >>
-> > >>>> It would be interesting if a practical case can be made for timestamping
-> > >>>> the last segment. In my mind, I don’t see how that would be valuable.
-> > >>>
-> > >>> It depends whether you are interested in measuring network latency or
-> > >>> host transmit path latency.
-> > >>>
-> > >>> For the latter, knowing the time from the start of the sendmsg call to
-> > >>> the moment the last byte hits the wire is most relevant. Or in absence
-> > >>> of (well defined) hardware support, the last byte being queued to the
-> > >>> device is the next best thing.
-> > >
-> > > Sounds to me like both cases have a legitimate use case, and we want
-> > > to support both.
-> > >
-> > > Implementation constraints are that storage for this timestamp
-> > > information is scarce and we cannot add new cold cacheline accesses in
-> > > the datapath.
-> > >
-> > > The simplest approach would be to unconditionally timestamp both the
-> > > first and last segment. With the same ID. Not terribly elegant. But it
-> > > works.
-> > >
-> > > If conditional, tx_flags has only one bit left. I think we can harvest
-> > > some, as not all defined bits are in use at the same stages in the
-> > > datapath, but that is not a trivial change. Some might also better be
-> > > set in the skb, instead of skb_shinfo. Which would also avoids
-> > > touching that cacheline. We could possibly repurpose bits from u32
-> > > tskey.
-> > >
-> > > All that can come later. Initially, unless we can come up with
-> > > something more elegant, I would suggest that UDP follows the rule
-> > > established by TCP and timestamps the last byte. And we add an
-> > > explicit SOF_TIMESTAMPING_OPT_FIRSTBYTE that is initially only
-> > > supported for UDP, sets a new SKBTX_TX_FB_TSTAMP bit in
-> > > __sock_tx_timestamp and is interpreted in __udp_gso_segment.
-> > >
-> >
-> > I don’t see how to practically TX timestamp the last byte of any packet
-> > (UDP GSO or otherwise). The best we could do is timestamp the last
-> > segment,  or rather the time that the last segment is queued. Let me
-> > attempt to explain.
-> >
-> > First let’s look at software TX timestamps which are for are generated
-> > by skb_tx_timestamp() in nearly every network driver’s xmit routine. It
-> > states:
-> >
-> > —————————— cut ————————————
-> >  * Ethernet MAC Drivers should call this function in their hard_xmit()
-> >  * function immediately before giving the sk_buff to the MAC hardware.
-> > —————————— cut ————————————
-> >
-> > That means that the sk_buff will get timestamped just before rather
-> > than just after it is sent. To truly capture the timestamp of the last
-> > byte, this routine routine would have to be called a second time, right
-> > after sending to MAC hardware. Then the user program would have
-> > sort out the 2 timestamps. My guess is that this isn’t something that
-> > NIC vendors would be willing to implement in their drivers.
-> >
-> > So, the best we can do is timestamp is just before the last segment.
-> > Suppose UDP GSO sends 3000 bytes to a 1500 byte MTU adapter.
-> > If we set SKBTX_HW_TSTAMP flag on the last segment, the timestamp
-> > occurs half way through the burst. But it may not be exactly half way
-> > because the segments may get queued much faster than wire rate.
-> > Therefore the time between segment 1 and segment 2 may be much
-> > much smaller than their spacing on the wire. I would not find this
-> > useful.
->
-> For measuring host queueing latency, a timestamp at the existing
-> skb_tx_timestamp() for the last segment is perfectly informative.
+The cgroup testing relys on the root cgroup's subtree_control setting,
+If the 'memory' controller isn't set, some test cases will be failed
+as following:
 
-In most cases all segments will be sent in a single xmit_more train.
-In which case the device doorbell is rung when the last segment is
-queued.
+$sudo  ./test_core
+not ok 1 test_cgcore_internal_process_constraint
+ok 2 test_cgcore_top_down_constraint_enable
+not ok 3 test_cgcore_top_down_constraint_disable
+...
 
-A device may also pause in the middle of a train, causing the rest of
-the list to be requeued and resent after a tx completion frees up
-descriptors and wakes the device. This seems like a relevant exception
-to be able to measure.
+To correct this unexpected failure, this patch write the 'memory' to
+subtree_control of root to get a right result.
 
-That said, I am not opposed to the first segment, if we have to make a
-binary choice for a default. Either option has cons. See more specific
-revision requests in the v2 patch.
+Signed-off-by: Alex Shi <alex.shi at linux.alibaba.com>
+Cc: Shuah Khan <shuah at kernel.org>
+Cc: Tejun Heo <tj at kernel.org>
+Cc: Roman Gushchin <guro at fb.com>
+Cc: Claudio Zumbo <claudioz at fb.com>
+Cc: Claudio <claudiozumbo at gmail.com>
+Cc: linux-kselftest at vger.kernel.org
+Cc: linux-kernel at vger.kernel.org
+Reviewed-by: Roman Gushchin <guro at fb.com>
+Acked-by: Tejun Heo <tj at kernel.org>
+---
+ tools/testing/selftests/cgroup/test_core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+index be59f9c34ea2..d78f1c5366d3 100644
+--- a/tools/testing/selftests/cgroup/test_core.c
++++ b/tools/testing/selftests/cgroup/test_core.c
+@@ -376,6 +376,11 @@ int main(int argc, char *argv[])
+ 
+ 	if (cg_find_unified_root(root, sizeof(root)))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
++
++	if (cg_read_strstr(root, "cgroup.subtree_control", "memory"))
++		if (cg_write(root, "cgroup.subtree_control", "+memory"))
++			ksft_exit_skip("Failed to set memory controller\n");
++
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+ 		switch (tests[i].fn(root)) {
+ 		case KSFT_PASS:
+-- 
+2.19.1.856.g8858448bb
