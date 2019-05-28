@@ -1,58 +1,121 @@
 From: fklassen at appneta.com (Fred Klassen)
-Date: Tue, 28 May 2019 11:44:15 -0700
-Subject: [PATCH net-next v3 1/1] net/udp_gso: Allow TX timestamp with UDP GSO
-In-Reply-To: <20190528184415.16020-1-fklassen@appneta.com>
-References: <20190528184415.16020-1-fklassen@appneta.com>
-Message-ID: <20190528184415.16020-2-fklassen@appneta.com>
+Date: Tue, 28 May 2019 11:47:08 -0700
+Subject: [PATCH net-next v2 3/3] net/udpgso_bench.sh test fails on error
+In-Reply-To: <20190528184708.16516-1-fklassen@appneta.com>
+References: <20190528184708.16516-1-fklassen@appneta.com>
+Message-ID: <20190528184708.16516-4-fklassen@appneta.com>
 
-Fixes an issue where TX Timestamps are not arriving on the error queue
-when UDP_SEGMENT CMSG type is combined with CMSG type SO_TIMESTAMPING.
-This can be illustrated with an updated updgso_bench_tx program which
-includes the '-T' option to test for this condition.
+Ensure that failure on any individual test results in an overall
+failure of the test script.
 
-    ./udpgso_bench_tx -4ucTPv -S 1472 -l2 -D 172.16.120.18
-    poll timeout
-    udp tx:      0 MB/s        1 calls/s      1 msg/s
-
-The "poll timeout" message above indicates that TX timestamp never
-arrived.
-
-It also appears that other TX CMSG types cause similar issues, for
-example trying to set SOL_IP/IP_TOS.
-
-    ./udpgso_bench_tx -4ucPv -S 1472 -q 182 -l2 -D 172.16.120.18
-    poll timeout
-    udp tx:      0 MB/s        1 calls/s      1 msg/s
-
-This patch preserves tx_flags for the first UDP GSO segment.
-
-v2: Remove tests as noted by Willem de Bruijn <willemb at google.com>
-    Moving tests from net to net-next
-
-v3: Update only relevant tx_flag bits as per
-    Willem de Bruijn <willemb at google.com>
-
-Fixes: ee80d1ebe5ba ("udp: add udp gso")
 Signed-off-by: Fred Klassen <fklassen at appneta.com>
 ---
- net/ipv4/udp_offload.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/net/udpgso_bench.sh | 33 +++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
-index 065334b41d57..de8ecba42d55 100644
---- a/net/ipv4/udp_offload.c
-+++ b/net/ipv4/udp_offload.c
-@@ -228,6 +228,11 @@ struct sk_buff *__udp_gso_segment(struct sk_buff *gso_skb,
- 	seg = segs;
- 	uh = udp_hdr(seg);
+diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
+index 89c7de97b832..3a8543b14d3f 100755
+--- a/tools/testing/selftests/net/udpgso_bench.sh
++++ b/tools/testing/selftests/net/udpgso_bench.sh
+@@ -3,6 +3,10 @@
+ #
+ # Run a series of udpgso benchmarks
  
-+	/* preserve TX timestamp and zero-copy info for first segment */
-+	skb_shinfo(seg)->tskey = skb_shinfo(gso_skb)->tskey;
-+	skb_shinfo(seg)->tx_flags |=
-+			(skb_shinfo(gso_skb)->tx_flags & SKBTX_ANY_TSTAMP);
++GREEN='\033[0;92m'
++RED='\033[0;31m'
++NC='\033[0m' # No Color
 +
- 	/* compute checksum adjustment based on old length versus new */
- 	newlen = htons(sizeof(*uh) + mss);
- 	check = csum16_add(csum16_sub(uh->check, uh->len), newlen);
+ wake_children() {
+ 	local -r jobs="$(jobs -p)"
+ 
+@@ -29,59 +33,88 @@ run_in_netns() {
+ 
+ run_udp() {
+ 	local -r args=$@
++	local errors=0
+ 
+ 	echo "udp"
+ 	run_in_netns ${args}
++	errors=$(( $errors + $? ))
+ 
+ 	echo "udp gso"
+ 	run_in_netns ${args} -S 0
++	errors=$(( $errors + $? ))
+ 
+ 	echo "udp gso zerocopy"
+ 	run_in_netns ${args} -S 0 -z
++	errors=$(( $errors + $? ))
+ 
+ 	echo "udp gso timestamp"
+ 	run_in_netns ${args} -S 0 -T
++	errors=$(( $errors + $? ))
+ 
+ 	echo "udp gso zerocopy audit"
+ 	run_in_netns ${args} -S 0 -z -a
++	errors=$(( $errors + $? ))
+ 
+ 	echo "udp gso timestamp audit"
+ 	run_in_netns ${args} -S 0 -T -a
++	errors=$(( $errors + $? ))
+ 
+ 	echo "udp gso zerocopy timestamp audit"
+ 	run_in_netns ${args} -S 0 -T -z -a
++	errors=$(( $errors + $? ))
++
++	return $errors
+ }
+ 
+ run_tcp() {
+ 	local -r args=$@
++	local errors=0
+ 
+ 	echo "tcp"
+ 	run_in_netns ${args} -t
++	errors=$(( $errors + $? ))
+ 
+ 	echo "tcp zerocopy"
+ 	run_in_netns ${args} -t -z
++	errors=$(( $errors + $? ))
+ 
+ 	# excluding for now because test fails intermittently
+ 	#echo "tcp zerocopy audit"
+ 	#run_in_netns ${args} -t -z -P -a
++	#errors=$(( $errors + $? ))
++
++	return $errors
+ }
+ 
+ run_all() {
+ 	local -r core_args="-l 3"
+ 	local -r ipv4_args="${core_args} -4 -D 127.0.0.1"
+ 	local -r ipv6_args="${core_args} -6 -D ::1"
++	local errors=0
+ 
+ 	echo "ipv4"
+ 	run_tcp "${ipv4_args}"
++	errors=$(( $errors + $? ))
+ 	run_udp "${ipv4_args}"
++	errors=$(( $errors + $? ))
+ 
+ 	echo "ipv6"
+ 	run_tcp "${ipv4_args}"
++	errors=$(( $errors + $? ))
+ 	run_udp "${ipv6_args}"
++	errors=$(( $errors + $? ))
++
++	return $errors
+ }
+ 
+ if [[ $# -eq 0 ]]; then
+ 	run_all
++	if [ $? -ne 0 ]; then
++		echo -e "$(basename $0): ${RED}FAIL${NC}"
++		exit 1
++	fi
++
++	echo -e "$(basename $0): ${GREEN}PASS${NC}"
+ elif [[ $1 == "__subprocess" ]]; then
+ 	shift
+ 	run_one $@
 -- 
 2.11.0
