@@ -1,123 +1,90 @@
-From: borntraeger@de.ibm.com (Christian Borntraeger)
-Date: Tue, 28 May 2019 13:00:30 +0200
-Subject: [PATCH 8/9] KVM: s390: Do not report unusabled IDs via
- KVM_CAP_MAX_VCPU_ID
-In-Reply-To: <20190523164309.13345-9-thuth@redhat.com>
-References: <20190523164309.13345-1-thuth@redhat.com>
- <20190523164309.13345-9-thuth@redhat.com>
-Message-ID: <1deb73ac-9589-89cb-9a9b-f9957584733e@de.ibm.com>
+From: vincenzo.frascino@arm.com (Vincenzo Frascino)
+Date: Tue, 28 May 2019 12:57:24 +0100
+Subject: [PATCH v4 3/3] kselftest: Extend vDSO selftest to clock_getres
+In-Reply-To: <87lfyrp0d2.fsf@concordia.ellerman.id.au>
+References: <20190523112116.19233-1-vincenzo.frascino@arm.com>
+ <20190523112116.19233-4-vincenzo.frascino@arm.com>
+ <87lfyrp0d2.fsf@concordia.ellerman.id.au>
+Message-ID: <afb7395f-43e9-c304-2db2-349e6727b687@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190528110030.Mz5US67vehozA-0ZZcV7kGyGPk4qTXTNsHuH3E-h4wE@z>
+Message-ID: <20190528115724.DO_YF07-SW3-uDHx4V0QDuew2tWpyZM3OcxiD_4WmW4@z>
 
-Paolo, Radim,
+Hi Michael,
 
-would you consider this patch (or the full series) as 5.2 material or 5.3 material?
+thank you for your reply.
 
-
-On 23.05.19 18:43, Thomas Huth wrote:
-> KVM_CAP_MAX_VCPU_ID is currently always reporting KVM_MAX_VCPU_ID on all
-> architectures. However, on s390x, the amount of usable CPUs is determined
-> during runtime - it is depending on the features of the machine the code
-> is running on. Since we are using the vcpu_id as an index into the SCA
-> structures that are defined by the hardware (see e.g. the sca_add_vcpu()
-> function), it is not only the amount of CPUs that is limited by the hard-
-> ware, but also the range of IDs that we can use.
-> Thus KVM_CAP_MAX_VCPU_ID must be determined during runtime on s390x, too.
-> So the handling of KVM_CAP_MAX_VCPU_ID has to be moved from the common
-> code into the architecture specific code, and on s390x we have to return
-> the same value here as for KVM_CAP_MAX_VCPUS.
-> This problem has been discovered with the kvm_create_max_vcpus selftest.
-> With this change applied, the selftest now passes on s390x, too.
+On 28/05/2019 07:19, Michael Ellerman wrote:
+> Vincenzo Frascino <vincenzo.frascino at arm.com> writes:
 > 
-> Signed-off-by: Thomas Huth <thuth at redhat.com>
-> ---
->  arch/mips/kvm/mips.c       | 3 +++
->  arch/powerpc/kvm/powerpc.c | 3 +++
->  arch/s390/kvm/kvm-s390.c   | 1 +
->  arch/x86/kvm/x86.c         | 3 +++
->  virt/kvm/arm/arm.c         | 3 +++
->  virt/kvm/kvm_main.c        | 2 --
->  6 files changed, 13 insertions(+), 2 deletions(-)
+>> The current version of the multiarch vDSO selftest verifies only
+>> gettimeofday.
+>>
+>> Extend the vDSO selftest to clock_getres, to verify that the
+>> syscall and the vDSO library function return the same information.
+>>
+>> The extension has been used to verify the hrtimer_resoltion fix.
 > 
-> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> index 6d0517ac18e5..0369f26ab96d 100644
-> --- a/arch/mips/kvm/mips.c
-> +++ b/arch/mips/kvm/mips.c
-> @@ -1122,6 +1122,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	case KVM_CAP_MAX_VCPUS:
->  		r = KVM_MAX_VCPUS;
->  		break;
-> +	case KVM_CAP_MAX_VCPU_ID:
-> +		r = KVM_MAX_VCPU_ID;
-> +		break;
->  	case KVM_CAP_MIPS_FPU:
->  		/* We don't handle systems with inconsistent cpu_has_fpu */
->  		r = !!raw_cpu_has_fpu;
-> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-> index 3393b166817a..aa3a678711be 100644
-> --- a/arch/powerpc/kvm/powerpc.c
-> +++ b/arch/powerpc/kvm/powerpc.c
-> @@ -657,6 +657,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	case KVM_CAP_MAX_VCPUS:
->  		r = KVM_MAX_VCPUS;
->  		break;
-> +	case KVM_CAP_MAX_VCPU_ID:
-> +		r = KVM_MAX_VCPU_ID;
-> +		break;
->  #ifdef CONFIG_PPC_BOOK3S_64
->  	case KVM_CAP_PPC_GET_SMMU_INFO:
->  		r = 1;
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 8d6d75db8de6..871d2e99b156 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -539,6 +539,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  		break;
->  	case KVM_CAP_NR_VCPUS:
->  	case KVM_CAP_MAX_VCPUS:
-> +	case KVM_CAP_MAX_VCPU_ID:
->  		r = KVM_S390_BSCA_CPU_SLOTS;
->  		if (!kvm_s390_use_sca_entries())
->  			r = KVM_MAX_VCPUS;
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 536b78c4af6e..09a07d6a154e 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3122,6 +3122,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	case KVM_CAP_MAX_VCPUS:
->  		r = KVM_MAX_VCPUS;
->  		break;
-> +	case KVM_CAP_MAX_VCPU_ID:
-> +		r = KVM_MAX_VCPU_ID;
-> +		break;
->  	case KVM_CAP_PV_MMU:	/* obsolete */
->  		r = 0;
->  		break;
-> diff --git a/virt/kvm/arm/arm.c b/virt/kvm/arm/arm.c
-> index 90cedebaeb94..7eeebe5e9da2 100644
-> --- a/virt/kvm/arm/arm.c
-> +++ b/virt/kvm/arm/arm.c
-> @@ -224,6 +224,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	case KVM_CAP_MAX_VCPUS:
->  		r = KVM_MAX_VCPUS;
->  		break;
-> +	case KVM_CAP_MAX_VCPU_ID:
-> +		r = KVM_MAX_VCPU_ID;
-> +		break;
->  	case KVM_CAP_MSI_DEVID:
->  		if (!kvm)
->  			r = -EINVAL;
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index f0d13d9d125d..c09259dd6286 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -3146,8 +3146,6 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
->  	case KVM_CAP_MULTI_ADDRESS_SPACE:
->  		return KVM_ADDRESS_SPACE_NUM;
->  #endif
-> -	case KVM_CAP_MAX_VCPU_ID:
-> -		return KVM_MAX_VCPU_ID;
->  	case KVM_CAP_NR_MEMSLOTS:
->  		return KVM_USER_MEM_SLOTS;
->  	default:
+> This is passing for me even without patch 1 applied, shouldn't it fail
+> without the fix? What am I missing?
 > 
+
+This is correct, because during the refactoring process I missed an "n" :)
+
+if·((x.tv_sec·!=·y.tv_sec)·||·(x.tv_sec·!=·y.tv_sec))
+
+Should be:
+
+if·((x.tv_sec·!=·y.tv_sec)·||·(x.tv_nsec·!=·y.tv_nsec))
+
+My mistake, I am going to fix the test and re-post v5 of this set.
+
+Without my patch if you pass "highres=off" to the kernel (as a command line
+parameter) it leads to a broken implementation of clock_getres since the value
+of CLOCK_REALTIME_RES does not change at runtime.
+
+Expected result (with highres=off):
+
+# uname -r
+5.2.0-rc2
+# ./vdso_clock_getres
+clock_id: CLOCK_REALTIME [FAIL]
+clock_id: CLOCK_BOOTTIME [PASS]
+clock_id: CLOCK_TAI [PASS]
+clock_id: CLOCK_REALTIME_COARSE [PASS]
+clock_id: CLOCK_MONOTONIC [FAIL]
+clock_id: CLOCK_MONOTONIC_RAW [PASS]
+clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+
+The reason of this behavior is that the only clocks supported by getres on
+powerpc are CLOCK_REALTIME and CLOCK_MONOTONIC, the rest on the clocks use
+always syscalls.
+
+> # uname -r
+> 5.2.0-rc2-gcc-8.2.0
+> 
+> # ./vdso_clock_getres
+> clock_id: CLOCK_REALTIME [PASS]
+> clock_id: CLOCK_BOOTTIME [PASS]
+> clock_id: CLOCK_TAI [PASS]
+> clock_id: CLOCK_REALTIME_COARSE [PASS]
+> clock_id: CLOCK_MONOTONIC [PASS]
+> clock_id: CLOCK_MONOTONIC_RAW [PASS]
+> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+> 
+> cheers
+> 
+>> Cc: Shuah Khan <shuah at kernel.org>
+>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
+>> ---
+>>
+>> Note: This patch is independent from the others in this series, hence it
+>> can be merged singularly by the kselftest maintainers.
+>>
+>>  tools/testing/selftests/vDSO/Makefile         |   2 +
+>>  .../selftests/vDSO/vdso_clock_getres.c        | 124 ++++++++++++++++++
+>>  2 files changed, 126 insertions(+)
+>>  create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
+
+-- 
+Regards,
+Vincenzo
