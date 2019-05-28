@@ -1,21 +1,94 @@
-From: peterx at redhat.com (Peter Xu)
-Date: Tue, 28 May 2019 10:17:16 +0800
-Subject: [PATCH] userfaultfd: selftest: fix compiler warning
-In-Reply-To: <20190527151859.GA3217@ip-172-31-44-144.us-west-2.compute.internal>
-References: <20190527151859.GA3217@ip-172-31-44-144.us-west-2.compute.internal>
-Message-ID: <20190528021716.GC22519@xz-x1>
+From: mpe at ellerman.id.au (Michael Ellerman)
+Date: Tue, 28 May 2019 12:33:41 +1000
+Subject: [PATCH v2 2/2] tests: add close_range() tests
+In-Reply-To: <20190523154747.15162-3-christian@brauner.io>
+References: <20190523154747.15162-1-christian@brauner.io>
+ <20190523154747.15162-3-christian@brauner.io>
+Message-ID: <8736kzqpdm.fsf@concordia.ellerman.id.au>
 
-On Mon, May 27, 2019 at 03:18:59PM +0000, Alakesh Haloi wrote:
-> Fixes following compiler warning
-> 
-> userfaultfd.c: In function ‘usage’:
-> userfaultfd.c:126:2: warning: format not a string literal and no format
-> 	arguments [-Wformat-security]
->   fprintf(stderr, examples);
-> 
-> Signed-off-by: Alakesh Haloi <alakesh.haloi at gmail.com>
+Christian Brauner <christian at brauner.io> writes:
+> This adds basic tests for the new close_range() syscall.
+> - test that no invalid flags can be passed
+> - test that a range of file descriptors is correctly closed
+> - test that a range of file descriptors is correctly closed if there there
+>   are already closed file descriptors in the range
+> - test that max_fd is correctly capped to the current fdtable maximum
+>
+> Signed-off-by: Christian Brauner <christian at brauner.io>
+> Cc: Arnd Bergmann <arnd at arndb.de>
+> Cc: Jann Horn <jannh at google.com>
+> Cc: David Howells <dhowells at redhat.com>
+> Cc: Dmitry V. Levin <ldv at altlinux.org>
+> Cc: Oleg Nesterov <oleg at redhat.com>
+> Cc: Linus Torvalds <torvalds at linux-foundation.org>
+> Cc: Florian Weimer <fweimer at redhat.com>
+> Cc: linux-api at vger.kernel.org
+> ---
+> v1: unchanged
+> v2:
+> - Christian Brauner <christian at brauner.io>:
+>   - verify that close_range() correctly closes a single file descriptor
+> ---
+>  tools/testing/selftests/Makefile              |   1 +
+>  tools/testing/selftests/core/.gitignore       |   1 +
+>  tools/testing/selftests/core/Makefile         |   6 +
+>  .../testing/selftests/core/close_range_test.c | 142 ++++++++++++++++++
+>  4 files changed, 150 insertions(+)
+>  create mode 100644 tools/testing/selftests/core/.gitignore
+>  create mode 100644 tools/testing/selftests/core/Makefile
+>  create mode 100644 tools/testing/selftests/core/close_range_test.c
+>
+> diff --git a/tools/testing/selftests/core/.gitignore b/tools/testing/selftests/core/.gitignore
+> new file mode 100644
+> index 000000000000..6e6712ce5817
+> --- /dev/null
+> +++ b/tools/testing/selftests/core/.gitignore
+> @@ -0,0 +1 @@
+> +close_range_test
+> diff --git a/tools/testing/selftests/core/Makefile b/tools/testing/selftests/core/Makefile
+> new file mode 100644
+> index 000000000000..de3ae68aa345
+> --- /dev/null
+> +++ b/tools/testing/selftests/core/Makefile
+> @@ -0,0 +1,6 @@
+> +CFLAGS += -g -I../../../../usr/include/ -I../../../../include
 
-Reviewed-by: Peter Xu <peterx at redhat.com>
+Your second -I pulls the unexported kernel headers in, userspace
+programs shouldn't include unexported kernel headers.
 
--- 
-Peter Xu
+It breaks the build on powerpc with eg:
+
+  powerpc64le-linux-gnu-gcc -g -I../../../../usr/include/ -I../../../../include    close_range_test.c  -o /output/kselftest/core/close_range_test
+  In file included from /usr/powerpc64le-linux-gnu/include/bits/fcntl-linux.h:346,
+                   from /usr/powerpc64le-linux-gnu/include/bits/fcntl.h:62,
+                   from /usr/powerpc64le-linux-gnu/include/fcntl.h:35,
+                   from close_range_test.c:5:
+  ../../../../include/linux/falloc.h:13:2: error: unknown type name '__s16'
+    __s16  l_type;
+    ^~~~~
+
+
+Did you do that on purpose or just copy it from one of the other
+Makefiles? :)
+
+If you're just wanting to get the syscall number when the headers
+haven't been exported, I think the best solution is to do eg:
+
+diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
+index d6e6079d3d53..34c6f02f25de 100644
+--- a/tools/testing/selftests/core/close_range_test.c
++++ b/tools/testing/selftests/core/close_range_test.c
+@@ -14,6 +14,10 @@
+
+ #include "../kselftest.h"
+
++#ifndef __NR_close_range
++#define __NR_close_range       435
++#endif
++
+ static inline int sys_close_range(unsigned int fd, unsigned int max_fd,
+                                  unsigned int flags)
+ {
+
+
+cheers
