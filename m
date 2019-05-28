@@ -1,20 +1,33 @@
-From: fklassen at appneta.com (Fred Klassen)
-Date: Tue, 28 May 2019 11:47:05 -0700
-Subject: [PATCH net-next v2 0/3] UDP GSO audit tests
-Message-ID: <20190528184708.16516-1-fklassen@appneta.com>
+From: alakesh.haloi at gmail.com (Alakesh Haloi)
+Date: Tue, 28 May 2019 19:02:18 +0000
+Subject: [PATCH bpf v2] selftests: bpf: fix compiler warning
+Message-ID: <20190528190218.GA6950@ip-172-31-44-144.us-west-2.compute.internal>
 
-Updates to UDP GSO selftests ot optionally stress test CMSG
-subsytem, and report the reliability and performance of both
-TX Timestamping and ZEROCOPY messages.
+Add missing header file following compiler warning
 
-Fred Klassen (3):
-  net/udpgso_bench_tx: options to exercise TX CMSG
-  net/udpgso_bench.sh add UDP GSO audit tests
-  net/udpgso_bench.sh test fails on error
+prog_tests/flow_dissector.c: In function ‘tx_tap’:
+prog_tests/flow_dissector.c:175:9: warning: implicit declaration of function ‘writev’; did you mean ‘write’? [-Wimplicit-function-declaration]
+  return writev(fd, iov, ARRAY_SIZE(iov));
+         ^~~~~~
+         write
 
- tools/testing/selftests/net/udpgso_bench.sh   |  51 +++-
- tools/testing/selftests/net/udpgso_bench_tx.c | 324 ++++++++++++++++++++++++--
- 2 files changed, 357 insertions(+), 18 deletions(-)
+Fixes: 0905beec9f52 ("selftests/bpf: run flow dissector tests in skb-less mode")
+Signed-off-by: Alakesh Haloi <alakesh.haloi at gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+index fbd1d88a6095..c938283ac232 100644
+--- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
++++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+@@ -3,6 +3,7 @@
+ #include <error.h>
+ #include <linux/if.h>
+ #include <linux/if_tun.h>
++#include <sys/uio.h>
+ 
+ #define CHECK_FLOW_KEYS(desc, got, expected)				\
+ 	CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) != 0,		\
 -- 
-2.11.0
+2.17.1
