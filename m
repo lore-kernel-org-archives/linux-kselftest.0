@@ -1,11 +1,11 @@
 From: willemdebruijn.kernel at gmail.com (Willem de Bruijn)
-Date: Tue, 28 May 2019 17:35:35 -0400
+Date: Tue, 28 May 2019 17:36:58 -0400
 Subject: [PATCH net-next v2 1/3] net/udpgso_bench_tx: options to exercise
  TX CMSG
 In-Reply-To: <20190528184708.16516-2-fklassen@appneta.com>
 References: <20190528184708.16516-1-fklassen@appneta.com>
  <20190528184708.16516-2-fklassen@appneta.com>
-Message-ID: <CAF=yD-KcA5NZ2_tp3zaxW5sbf75a17DLX+VR9hyZo7MTcYAxiw@mail.gmail.com>
+Message-ID: <CAF=yD-+r9rqRg5vpO1EEVKDjROe_hZhLCQSQxZCBgro9V28+2g@mail.gmail.com>
 
 On Tue, May 28, 2019 at 3:24 PM Fred Klassen <fklassen at appneta.com> wrote:
 >
@@ -35,7 +35,7 @@ On Tue, May 28, 2019 at 3:24 PM Fred Klassen <fklassen at appneta.com> wrote:
 > Signed-off-by: Fred Klassen <fklassen at appneta.com>
 > ---
 
-> -static void flush_zerocopy(int fd)
+
 > +static void flush_cmsg(struct cmsghdr *cmsg)
 >  {
 > -       struct msghdr msg = {0};        /* flush */
@@ -46,9 +46,6 @@ On Tue, May 28, 2019 at 3:24 PM Fred Klassen <fklassen at appneta.com> wrote:
 > +
 > +                       i = (cfg_tx_ts == SOF_TIMESTAMPING_TX_HARDWARE) ? 2 : 0;
 > +                       struct scm_timestamping *tss;
-
-Please don't mix declarations and code.
-
 > +
 > +                       tss = (struct scm_timestamping *)CMSG_DATA(cmsg);
 > +                       if (tss->ts[i].tv_sec == 0)
@@ -57,8 +54,6 @@ Please don't mix declarations and code.
 > +                       error(1, 0,
 > +                             "unknown SOL_SOCKET cmsg type=%u level=%u\n",
 > +                             cmsg->cmsg_type, cmsg->cmsg_level);
-
-Technically, no need to repeat cmsg_level
 > +               }
 > +               break;
 > +       case SOL_IP:
@@ -89,18 +84,12 @@ Technically, no need to repeat cmsg_level
 > +
 > +                               if (hi == lo - 1) {
 > +                                       // TX was aborted
-
-where does this come from?
-
 > +                                       stat_zcopy_errors++;
 > +                                       if (cfg_verbose)
 > +                                               fprintf(stderr,
 > +                                                       "Zerocopy TX aborted: lo=%u hi=%u\n",
 > +                                                       lo, hi);
 > +                               } else if (hi == lo) {
-
-technically, no need to special case
-
 > +                                       // single ID acknowledged
 > +                                       stat_zcopies++;
 > +                               } else {
@@ -108,10 +97,32 @@ technically, no need to special case
 > +                                       stat_zcopies += hi - lo + 1;
 > +                               }
 > +                               break;
+> +                       }
+> +                       case SO_EE_ORIGIN_LOCAL:
+> +                               if (cfg_verbose)
+> +                                       fprintf(stderr,
+> +                                               "received packet with local origin: %u\n",
+> +                                               err->ee_origin);
+> +                               break;
+> +                       default:
+> +                               error(0, 1,
 
-> +static void set_tx_timestamping(int fd)
-> +{
-> +       int val = SOF_TIMESTAMPING_OPT_CMSG | SOF_TIMESTAMPING_OPT_ID;
+here and two following, error(1, 0, ..);
 
-Could consider adding SOF_TIMESTAMPING_OPT_TSONLY to not have to deal
-with a data buffer on recv from errqueue.
+> +                                     "received packet with origin: %u",
+> +                                     err->ee_origin);
+> +                       }
+> +
+> +                       break;
+> +               }
+> +               default:
+> +                       error(0, 1, "unknown IP msg type=%u level=%u\n",
+> +                             cmsg->cmsg_type, cmsg->cmsg_level);
+> +                       break;
+> +               }
+> +               break;
+> +       default:
+> +               error(0, 1, "unknown cmsg type=%u level=%u\n",
+> +                     cmsg->cmsg_type, cmsg->cmsg_level);
+> +       }
+> +}
