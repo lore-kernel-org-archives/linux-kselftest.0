@@ -1,54 +1,50 @@
-From: catalin.marinas at arm.com (Catalin Marinas)
-Date: Tue, 28 May 2019 17:34:00 +0100
-Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
- syscalls
-In-Reply-To: <20190528155644.GD28398@e103592.cambridge.arm.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
- <20190527143719.GA59948@MBP.local>
- <20190528145411.GA709@e119886-lin.cambridge.arm.com>
- <20190528154057.GD32006@arrakis.emea.arm.com>
- <20190528155644.GD28398@e103592.cambridge.arm.com>
-Message-ID: <20190528163400.GE32006@arrakis.emea.arm.com>
+From: liu.song.a23 at gmail.com (Song Liu)
+Date: Tue, 28 May 2019 09:45:14 -0700
+Subject: [PATCH] selftests: bpf: fix compiler warning
+In-Reply-To: <20190524003038.GA69487@ip-172-31-44-144.us-west-2.compute.internal>
+References: <20190524003038.GA69487@ip-172-31-44-144.us-west-2.compute.internal>
+Message-ID: <CAPhsuW7H=w_UMyu5Q5p5+MGogkQ7+7X7sS=vJTiR=+JJy0KuTg@mail.gmail.com>
 
-On Tue, May 28, 2019 at 04:56:45PM +0100, Dave P Martin wrote:
-> On Tue, May 28, 2019 at 04:40:58PM +0100, Catalin Marinas wrote:
-> 
-> [...]
-> 
-> > My thoughts on allowing tags (quick look):
-> >
-> > brk - no
-> 
-> [...]
-> 
-> > mlock, mlock2, munlock - yes
-> > mmap - no (we may change this with MTE but not for TBI)
-> 
-> [...]
-> 
-> > mprotect - yes
-> 
-> I haven't following this discussion closely... what's the rationale for
-> the inconsistencies here (feel free to refer me back to the discussion
-> if it's elsewhere).
+On Thu, May 23, 2019 at 5:31 PM Alakesh Haloi <alakesh.haloi at gmail.com> wrote:
+>
+> Add missing header file following compiler warning
+>
+> prog_tests/flow_dissector.c: In function ‘tx_tap’:
+> prog_tests/flow_dissector.c:175:9: warning: implicit declaration of function ‘writev’; did you mean ‘write’? [-Wimplicit-function-declaration]
+>   return writev(fd, iov, ARRAY_SIZE(iov));
+>          ^~~~~~
+>          write
+>
+> Signed-off-by: Alakesh Haloi <alakesh.haloi at gmail.com>
 
-_My_ rationale (feel free to disagree) is that mmap() by default would
-not return a tagged address (ignoring MTE for now). If it gets passed a
-tagged address or a "tagged NULL" (for lack of a better name) we don't
-have clear semantics of whether the returned address should be tagged in
-this ABI relaxation. I'd rather reserve this specific behaviour if we
-overload the non-zero tag meaning of mmap() for MTE. Similar reasoning
-for mremap(), at least on the new_address argument (not entirely sure
-about old_address).
+The patch looks good. Please add a "Fixes" tag, so the fix
+can be back ported properly.
 
-munmap() should probably follow the mmap() rules.
+Also, please specify which tree the patch should be applied
+with [PATCH bpf] or [PATCH bpf-next].
 
-As for brk(), I don't see why the user would need to pass a tagged
-address, we can't associate any meaning to this tag.
+Thanks,
+Song
 
-For the rest, since it's likely such addresses would have been tagged by
-malloc() in user space, we should allow tagged pointers.
 
--- 
-Catalin
+
+
+> ---
+>  tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> index fbd1d88a6095..c938283ac232 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> @@ -3,6 +3,7 @@
+>  #include <error.h>
+>  #include <linux/if.h>
+>  #include <linux/if_tun.h>
+> +#include <sys/uio.h>
+>
+>  #define CHECK_FLOW_KEYS(desc, got, expected)                           \
+>         CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) != 0,           \
+> --
+> 2.17.1
+>
