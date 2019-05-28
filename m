@@ -1,12 +1,12 @@
 From: mpe@ellerman.id.au (Michael Ellerman)
-Date: Tue, 28 May 2019 12:33:41 +1000
-Subject: [PATCH v2 2/2] tests: add close_range() tests
-In-Reply-To: <20190523154747.15162-3-christian@brauner.io>
-References: <20190523154747.15162-1-christian@brauner.io>
- <20190523154747.15162-3-christian@brauner.io>
-Message-ID: <8736kzqpdm.fsf@concordia.ellerman.id.au>
+Date: Tue, 28 May 2019 13:22:10 +1000
+Subject: [PATCH v3 3/3] tests: add close_range() tests
+In-Reply-To: <20190524111047.6892-4-christian@brauner.io>
+References: <20190524111047.6892-1-christian@brauner.io>
+ <20190524111047.6892-4-christian@brauner.io>
+Message-ID: <87zhn7p8kd.fsf@concordia.ellerman.id.au>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190528023341.QXcrwy-XacgYtaafpBkaKbmxUNrULPLEi3TwPYtHaHU@z>
+Message-ID: <20190528032210.1YOh9PONerDhVfTNHLBppzncRF0hG7SF6TSGGMHeUw0@z>
 
 Christian Brauner <christian at brauner.io> writes:
 > This adds basic tests for the new close_range() syscall.
@@ -24,73 +24,21 @@ Christian Brauner <christian at brauner.io> writes:
 > Cc: Oleg Nesterov <oleg at redhat.com>
 > Cc: Linus Torvalds <torvalds at linux-foundation.org>
 > Cc: Florian Weimer <fweimer at redhat.com>
+> Cc: Shuah Khan <shuah at kernel.org>
 > Cc: linux-api at vger.kernel.org
+> Cc: linux-kselftest at vger.kernel.org
 > ---
 > v1: unchanged
 > v2:
 > - Christian Brauner <christian at brauner.io>:
 >   - verify that close_range() correctly closes a single file descriptor
-> ---
->  tools/testing/selftests/Makefile              |   1 +
->  tools/testing/selftests/core/.gitignore       |   1 +
->  tools/testing/selftests/core/Makefile         |   6 +
->  .../testing/selftests/core/close_range_test.c | 142 ++++++++++++++++++
->  4 files changed, 150 insertions(+)
->  create mode 100644 tools/testing/selftests/core/.gitignore
->  create mode 100644 tools/testing/selftests/core/Makefile
->  create mode 100644 tools/testing/selftests/core/close_range_test.c
->
-> diff --git a/tools/testing/selftests/core/.gitignore b/tools/testing/selftests/core/.gitignore
-> new file mode 100644
-> index 000000000000..6e6712ce5817
-> --- /dev/null
-> +++ b/tools/testing/selftests/core/.gitignore
-> @@ -0,0 +1 @@
-> +close_range_test
-> diff --git a/tools/testing/selftests/core/Makefile b/tools/testing/selftests/core/Makefile
-> new file mode 100644
-> index 000000000000..de3ae68aa345
-> --- /dev/null
-> +++ b/tools/testing/selftests/core/Makefile
-> @@ -0,0 +1,6 @@
-> +CFLAGS += -g -I../../../../usr/include/ -I../../../../include
+> v3:
+> - Christian Brauner <christian at brauner.io>:
+>   - add missing Cc for Shuah
+>   - add missing Cc for linux-kselftest
 
-Your second -I pulls the unexported kernel headers in, userspace
-programs shouldn't include unexported kernel headers.
+Sorry I replied to v2, but I think my comments still apply:
 
-It breaks the build on powerpc with eg:
-
-  powerpc64le-linux-gnu-gcc -g -I../../../../usr/include/ -I../../../../include    close_range_test.c  -o /output/kselftest/core/close_range_test
-  In file included from /usr/powerpc64le-linux-gnu/include/bits/fcntl-linux.h:346,
-                   from /usr/powerpc64le-linux-gnu/include/bits/fcntl.h:62,
-                   from /usr/powerpc64le-linux-gnu/include/fcntl.h:35,
-                   from close_range_test.c:5:
-  ../../../../include/linux/falloc.h:13:2: error: unknown type name '__s16'
-    __s16  l_type;
-    ^~~~~
-
-
-Did you do that on purpose or just copy it from one of the other
-Makefiles? :)
-
-If you're just wanting to get the syscall number when the headers
-haven't been exported, I think the best solution is to do eg:
-
-diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
-index d6e6079d3d53..34c6f02f25de 100644
---- a/tools/testing/selftests/core/close_range_test.c
-+++ b/tools/testing/selftests/core/close_range_test.c
-@@ -14,6 +14,10 @@
-
- #include "../kselftest.h"
-
-+#ifndef __NR_close_range
-+#define __NR_close_range       435
-+#endif
-+
- static inline int sys_close_range(unsigned int fd, unsigned int max_fd,
-                                  unsigned int flags)
- {
-
+https://lore.kernel.org/lkml/8736kzqpdm.fsf at concordia.ellerman.id.au/
 
 cheers
