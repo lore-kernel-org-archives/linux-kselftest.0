@@ -1,43 +1,46 @@
-From: rppt at linux.ibm.com (Mike Rapoport)
-Date: Tue, 28 May 2019 08:33:55 +0300
-Subject: [PATCH] userfaultfd: selftest: fix compiler warning
-In-Reply-To: <20190527151859.GA3217@ip-172-31-44-144.us-west-2.compute.internal>
-References: <20190527151859.GA3217@ip-172-31-44-144.us-west-2.compute.internal>
-Message-ID: <20190528053355.GB5055@rapoport-lnx>
+From: mpe at ellerman.id.au (Michael Ellerman)
+Date: Tue, 28 May 2019 16:19:21 +1000
+Subject: [PATCH v4 3/3] kselftest: Extend vDSO selftest to clock_getres
+In-Reply-To: <20190523112116.19233-4-vincenzo.frascino@arm.com>
+References: <20190523112116.19233-1-vincenzo.frascino@arm.com>
+ <20190523112116.19233-4-vincenzo.frascino@arm.com>
+Message-ID: <87lfyrp0d2.fsf@concordia.ellerman.id.au>
 
-On Mon, May 27, 2019 at 03:18:59PM +0000, Alakesh Haloi wrote:
-> Fixes following compiler warning
-> 
-> userfaultfd.c: In function ‘usage’:
-> userfaultfd.c:126:2: warning: format not a string literal and no format
-> 	arguments [-Wformat-security]
->   fprintf(stderr, examples);
-> 
-> Signed-off-by: Alakesh Haloi <alakesh.haloi at gmail.com>
+Vincenzo Frascino <vincenzo.frascino at arm.com> writes:
 
-Reviewed-by: Mike Rapoport <rppt at linux.ibm.com>
+> The current version of the multiarch vDSO selftest verifies only
+> gettimeofday.
+>
+> Extend the vDSO selftest to clock_getres, to verify that the
+> syscall and the vDSO library function return the same information.
+>
+> The extension has been used to verify the hrtimer_resoltion fix.
 
+This is passing for me even without patch 1 applied, shouldn't it fail
+without the fix? What am I missing?
+
+# uname -r
+5.2.0-rc2-gcc-8.2.0
+
+# ./vdso_clock_getres
+clock_id: CLOCK_REALTIME [PASS]
+clock_id: CLOCK_BOOTTIME [PASS]
+clock_id: CLOCK_TAI [PASS]
+clock_id: CLOCK_REALTIME_COARSE [PASS]
+clock_id: CLOCK_MONOTONIC [PASS]
+clock_id: CLOCK_MONOTONIC_RAW [PASS]
+clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+
+cheers
+
+> Cc: Shuah Khan <shuah at kernel.org>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
 > ---
->  tools/testing/selftests/vm/userfaultfd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-> index 5d1db824f73a..b3e6497b080c 100644
-> --- a/tools/testing/selftests/vm/userfaultfd.c
-> +++ b/tools/testing/selftests/vm/userfaultfd.c
-> @@ -123,7 +123,7 @@ static void usage(void)
->  	fprintf(stderr, "Supported <test type>: anon, hugetlb, "
->  		"hugetlb_shared, shmem\n\n");
->  	fprintf(stderr, "Examples:\n\n");
-> -	fprintf(stderr, examples);
-> +	fprintf(stderr, "%s", examples);
->  	exit(1);
->  }
-> 
-> -- 
-> 2.17.1
-> 
-
--- 
-Sincerely yours,
-Mike.
+>
+> Note: This patch is independent from the others in this series, hence it
+> can be merged singularly by the kselftest maintainers.
+>
+>  tools/testing/selftests/vDSO/Makefile         |   2 +
+>  .../selftests/vDSO/vdso_clock_getres.c        | 124 ++++++++++++++++++
+>  2 files changed, 126 insertions(+)
+>  create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
