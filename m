@@ -1,56 +1,35 @@
-From: borntraeger@de.ibm.com (Christian Borntraeger)
-Date: Tue, 28 May 2019 15:48:57 +0200
-Subject: [PATCH 8/9] KVM: s390: Do not report unusabled IDs via
- KVM_CAP_MAX_VCPU_ID
-In-Reply-To: <20190528145344.42fe6bc5.cohuck@redhat.com>
-References: <20190523164309.13345-1-thuth@redhat.com>
- <20190523164309.13345-9-thuth@redhat.com>
- <1deb73ac-9589-89cb-9a9b-f9957584733e@de.ibm.com>
- <20190528145344.42fe6bc5.cohuck@redhat.com>
-Message-ID: <dc8ad44b-3019-bdb2-7991-2ab9a0f1b149@de.ibm.com>
+From: andreyknvl@google.com (Andrey Konovalov)
+Date: Tue, 28 May 2019 16:14:45 +0200
+Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+In-Reply-To: <c6dd53d8-142b-3d8d-6a40-d21c5ee9d272@oracle.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
+ <20190521182932.sm4vxweuwo5ermyd@mbp> <201905211633.6C0BF0C2@keescook>
+ <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
+ <20190523201105.oifkksus4rzcwqt4@mbp>
+ <ffe58af3-7c70-d559-69f6-1f6ebcb0fec6@oracle.com>
+ <20190524101139.36yre4af22bkvatx@mbp>
+ <c6dd53d8-142b-3d8d-6a40-d21c5ee9d272@oracle.com>
+Message-ID:
+ <CAAeHK+yAUsZWhp6xPAbWewX5Nbw+-G3svUyPmhXu5MVeEDKYvA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190528134857.SW_D5er6tYGYBSJwaYPhwhXZXe9ZN6-JrQOW1e2lyQQ@z>
+Message-ID: <20190528141445.GNWL6JxfEuBMgDBNHE2stSORohdxQ8CQMr-VIJOVK9o@z>
 
+Thanks for a lot of valuable input! I've read through all the replies
+and got somewhat lost. What are the changes I need to do to this
+series?
 
+1. Should I move untagging for memory syscalls back to the generic
+code so other arches would make use of it as well, or should I keep
+the arm64 specific memory syscalls wrappers and address the comments
+on that patch?
 
-On 28.05.19 14:53, Cornelia Huck wrote:
-> On Tue, 28 May 2019 13:00:30 +0200
-> Christian Borntraeger <borntraeger@de.ibm.com> wrote:
-> 
->> Paolo, Radim,
->>
->> would you consider this patch (or the full series) as 5.2 material or 5.3 material?
-> 
-> FWIW, I'd consider this patch 5.2 material, as we're currently relaying
-> wrong values to userspace.
+2. Should I make untagging opt-in and controlled by a command line argument?
 
-Agreed. I will add cc stable and queue for master. What is our opinion about kselftest?
-Are we merging testtools changes also only during the merge window?
-> 
->>
->>
->> On 23.05.19 18:43, Thomas Huth wrote:
->>> KVM_CAP_MAX_VCPU_ID is currently always reporting KVM_MAX_VCPU_ID on all
->>> architectures. However, on s390x, the amount of usable CPUs is determined
->>> during runtime - it is depending on the features of the machine the code
->>> is running on. Since we are using the vcpu_id as an index into the SCA
->>> structures that are defined by the hardware (see e.g. the sca_add_vcpu()
->>> function), it is not only the amount of CPUs that is limited by the hard-
->>> ware, but also the range of IDs that we can use.
->>> Thus KVM_CAP_MAX_VCPU_ID must be determined during runtime on s390x, too.
->>> So the handling of KVM_CAP_MAX_VCPU_ID has to be moved from the common
->>> code into the architecture specific code, and on s390x we have to return
->>> the same value here as for KVM_CAP_MAX_VCPUS.
->>> This problem has been discovered with the kvm_create_max_vcpus selftest.
->>> With this change applied, the selftest now passes on s390x, too.
->>>
->>> Signed-off-by: Thomas Huth <thuth at redhat.com>
->>> ---
->>>  arch/mips/kvm/mips.c       | 3 +++
->>>  arch/powerpc/kvm/powerpc.c | 3 +++
->>>  arch/s390/kvm/kvm-s390.c   | 1 +
->>>  arch/x86/kvm/x86.c         | 3 +++
->>>  virt/kvm/arm/arm.c         | 3 +++
->>>  virt/kvm/kvm_main.c        | 2 --
->>>  6 files changed, 13 insertions(+), 2 deletions(-)
-> 
+3. Should I "add Documentation/core-api/user-addresses.rst to describe
+proper care and handling of user space pointers with untagged_addr(),
+with examples based on all the cases seen so far in this series"?
+Which examples specifically should it cover?
+
+Is there something else?
