@@ -1,45 +1,46 @@
-From: willemdebruijn.kernel@gmail.com (Willem de Bruijn)
-Date: Tue, 28 May 2019 16:09:07 -0400
-Subject: [PATCH net-next v2 2/3] net/udpgso_bench.sh add UDP GSO audit
- tests
-In-Reply-To: <20190528184708.16516-3-fklassen@appneta.com>
-References: <20190528184708.16516-1-fklassen@appneta.com>
- <20190528184708.16516-3-fklassen@appneta.com>
+From: liu.song.a23@gmail.com (Song Liu)
+Date: Tue, 28 May 2019 13:57:44 -0700
+Subject: [PATCH bpf v2] selftests: bpf: fix compiler warning
+In-Reply-To: <20190528190218.GA6950@ip-172-31-44-144.us-west-2.compute.internal>
+References: <20190528190218.GA6950@ip-172-31-44-144.us-west-2.compute.internal>
 Message-ID:
- <CAF=yD-KozDxhwf1Arkbz5X_dYfZ5M40xr9hcxKGDRmeg1BOE=Q@mail.gmail.com>
+ <CAPhsuW5uVgqVEfpJsCNmQKYgmAksJ+jVTkU7QG2Fz8ofg6Puxg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190528200907.ru6ieLK1A9r-J0N7PM6PAfuRsuTYJIEo4VNI4uNB-MA@z>
+Message-ID: <20190528205744.dQHNDADDnII-DylCjhYU9fbLT7mMFX0MHQjdQ-zS-oo@z>
 
-On Tue, May 28, 2019@3:24 PM Fred Klassen <fklassen@appneta.com> wrote:
+On Tue, May 28, 2019@12:35 PM Alakesh Haloi <alakesh.haloi@gmail.com> wrote:
 >
-> Audit tests count the total number of messages sent and compares
-> with total number of CMSG received on error queue. Example:
+> Add missing header file following compiler warning
 >
->     udp gso zerocopy timestamp audit
->     udp rx:   1599 MB/s  1166414 calls/s
->     udp tx:   1615 MB/s    27395 calls/s  27395 msg/s
->     udp rx:   1634 MB/s  1192261 calls/s
->     udp tx:   1633 MB/s    27699 calls/s  27699 msg/s
->     udp rx:   1633 MB/s  1191358 calls/s
->     udp tx:   1631 MB/s    27678 calls/s  27678 msg/s
->     Summary over 4.000 seconds...
->     sum udp tx:   1665 MB/s      82772 calls (27590/s)      82772 msgs (27590/s)
->     Tx Timestamps:               82772 received                 0 errors
->     Zerocopy acks:               82772 received                 0 errors
+> prog_tests/flow_dissector.c: In function ‘tx_tap’:
+> prog_tests/flow_dissector.c:175:9: warning: implicit declaration of function ‘writev’; did you mean ‘write’? [-Wimplicit-function-declaration]
+>   return writev(fd, iov, ARRAY_SIZE(iov));
+>          ^~~~~~
+>          write
 >
-> Errors are thrown if CMSG count does not equal send count,
-> example:
->
->     Summary over 4.000 seconds...
->     sum tcp tx:   7451 MB/s     493706 calls (123426/s)     493706 msgs (123426/s)
->     ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    493706 expected    493704 received
->
-> Also reduce individual test time from 4 to 3 seconds so that
-> overall test time does not increase significantly.
->
-> Signed-off-by: Fred Klassen <fklassen at appneta.com>
+> Fixes: 0905beec9f52 ("selftests/bpf: run flow dissector tests in skb-less mode")
+> Signed-off-by: Alakesh Haloi <alakesh.haloi at gmail.com>
 
-Acked-by: Willem de Bruijn <willemb at google.com>
+Acked-by: Song Liu <songliubraving at fb.com>
 
-If respinning the series, please add a comment about adding -P to the
-tcp zerocopy test.
+Thanks for the fix!
+
+> ---
+>  tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> index fbd1d88a6095..c938283ac232 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> @@ -3,6 +3,7 @@
+>  #include <error.h>
+>  #include <linux/if.h>
+>  #include <linux/if_tun.h>
+> +#include <sys/uio.h>
+>
+>  #define CHECK_FLOW_KEYS(desc, got, expected)                           \
+>         CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) != 0,           \
+> --
+> 2.17.1
+>
