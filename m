@@ -1,77 +1,54 @@
-From: catalin.marinas at arm.com (Catalin Marinas)
-Date: Tue, 28 May 2019 14:05:18 +0100
-Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
- syscalls
-In-Reply-To: <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
-Message-ID: <20190528130518.GB32006@arrakis.emea.arm.com>
+From: borntraeger at de.ibm.com (Christian Borntraeger)
+Date: Tue, 28 May 2019 15:48:57 +0200
+Subject: [PATCH 8/9] KVM: s390: Do not report unusabled IDs via
+ KVM_CAP_MAX_VCPU_ID
+In-Reply-To: <20190528145344.42fe6bc5.cohuck@redhat.com>
+References: <20190523164309.13345-1-thuth@redhat.com>
+ <20190523164309.13345-9-thuth@redhat.com>
+ <1deb73ac-9589-89cb-9a9b-f9957584733e@de.ibm.com>
+ <20190528145344.42fe6bc5.cohuck@redhat.com>
+Message-ID: <dc8ad44b-3019-bdb2-7991-2ab9a0f1b149@de.ibm.com>
 
-On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
->  /*
->   * Wrappers to pass the pt_regs argument.
->   */
->  #define sys_personality		sys_arm64_personality
-> +#define sys_mmap_pgoff		sys_arm64_mmap_pgoff
-> +#define sys_mremap		sys_arm64_mremap
-> +#define sys_munmap		sys_arm64_munmap
-> +#define sys_brk			sys_arm64_brk
-> +#define sys_get_mempolicy	sys_arm64_get_mempolicy
-> +#define sys_madvise		sys_arm64_madvise
-> +#define sys_mbind		sys_arm64_mbind
-> +#define sys_mlock		sys_arm64_mlock
-> +#define sys_mlock2		sys_arm64_mlock2
-> +#define sys_munlock		sys_arm64_munlock
-> +#define sys_mprotect		sys_arm64_mprotect
-> +#define sys_msync		sys_arm64_msync
-> +#define sys_mincore		sys_arm64_mincore
-> +#define sys_remap_file_pages	sys_arm64_remap_file_pages
-> +#define sys_shmat		sys_arm64_shmat
-> +#define sys_shmdt		sys_arm64_shmdt
 
-This hunk should be (I sent a separate patch for sys_personality):
 
-@@ -160,23 +163,23 @@ SYSCALL_DEFINE1(arm64_shmdt, char __user *, shmaddr)
- /*
-  * Wrappers to pass the pt_regs argument.
-  */
--#define sys_personality		sys_arm64_personality
--#define sys_mmap_pgoff		sys_arm64_mmap_pgoff
--#define sys_mremap		sys_arm64_mremap
--#define sys_munmap		sys_arm64_munmap
--#define sys_brk			sys_arm64_brk
--#define sys_get_mempolicy	sys_arm64_get_mempolicy
--#define sys_madvise		sys_arm64_madvise
--#define sys_mbind		sys_arm64_mbind
--#define sys_mlock		sys_arm64_mlock
--#define sys_mlock2		sys_arm64_mlock2
--#define sys_munlock		sys_arm64_munlock
--#define sys_mprotect		sys_arm64_mprotect
--#define sys_msync		sys_arm64_msync
--#define sys_mincore		sys_arm64_mincore
--#define sys_remap_file_pages	sys_arm64_remap_file_pages
--#define sys_shmat		sys_arm64_shmat
--#define sys_shmdt		sys_arm64_shmdt
-+#define __arm64_sys_personality		__arm64_sys_arm64_personality
-+#define __arm64_sys_mmap_pgoff		__arm64_sys_arm64_mmap_pgoff
-+#define __arm64_sys_mremap		__arm64_sys_arm64_mremap
-+#define __arm64_sys_munmap		__arm64_sys_arm64_munmap
-+#define __arm64_sys_brk			__arm64_sys_arm64_brk
-+#define __arm64_sys_get_mempolicy	__arm64_sys_arm64_get_mempolicy
-+#define __arm64_sys_madvise		__arm64_sys_arm64_madvise
-+#define __arm64_sys_mbind		__arm64_sys_arm64_mbind
-+#define __arm64_sys_mlock		__arm64_sys_arm64_mlock
-+#define __arm64_sys_mlock2		__arm64_sys_arm64_mlock2
-+#define __arm64_sys_munlock		__arm64_sys_arm64_munlock
-+#define __arm64_sys_mprotect		__arm64_sys_arm64_mprotect
-+#define __arm64_sys_msync		__arm64_sys_arm64_msync
-+#define __arm64_sys_mincore		__arm64_sys_arm64_mincore
-+#define __arm64_sys_remap_file_pages	__arm64_sys_arm64_remap_file_pages
-+#define __arm64_sys_shmat		__arm64_sys_arm64_shmat
-+#define __arm64_sys_shmdt		__arm64_sys_arm64_shmdt
- 
- asmlinkage long sys_ni_syscall(const struct pt_regs *);
- #define __arm64_sys_ni_syscall	sys_ni_syscall
+On 28.05.19 14:53, Cornelia Huck wrote:
+> On Tue, 28 May 2019 13:00:30 +0200
+> Christian Borntraeger <borntraeger at de.ibm.com> wrote:
+> 
+>> Paolo, Radim,
+>>
+>> would you consider this patch (or the full series) as 5.2 material or 5.3 material?
+> 
+> FWIW, I'd consider this patch 5.2 material, as we're currently relaying
+> wrong values to userspace.
 
--- 
-Catalin
+Agreed. I will add cc stable and queue for master. What is our opinion about kselftest?
+Are we merging testtools changes also only during the merge window?
+> 
+>>
+>>
+>> On 23.05.19 18:43, Thomas Huth wrote:
+>>> KVM_CAP_MAX_VCPU_ID is currently always reporting KVM_MAX_VCPU_ID on all
+>>> architectures. However, on s390x, the amount of usable CPUs is determined
+>>> during runtime - it is depending on the features of the machine the code
+>>> is running on. Since we are using the vcpu_id as an index into the SCA
+>>> structures that are defined by the hardware (see e.g. the sca_add_vcpu()
+>>> function), it is not only the amount of CPUs that is limited by the hard-
+>>> ware, but also the range of IDs that we can use.
+>>> Thus KVM_CAP_MAX_VCPU_ID must be determined during runtime on s390x, too.
+>>> So the handling of KVM_CAP_MAX_VCPU_ID has to be moved from the common
+>>> code into the architecture specific code, and on s390x we have to return
+>>> the same value here as for KVM_CAP_MAX_VCPUS.
+>>> This problem has been discovered with the kvm_create_max_vcpus selftest.
+>>> With this change applied, the selftest now passes on s390x, too.
+>>>
+>>> Signed-off-by: Thomas Huth <thuth at redhat.com>
+>>> ---
+>>>  arch/mips/kvm/mips.c       | 3 +++
+>>>  arch/powerpc/kvm/powerpc.c | 3 +++
+>>>  arch/s390/kvm/kvm-s390.c   | 1 +
+>>>  arch/x86/kvm/x86.c         | 3 +++
+>>>  virt/kvm/arm/arm.c         | 3 +++
+>>>  virt/kvm/kvm_main.c        | 2 --
+>>>  6 files changed, 13 insertions(+), 2 deletions(-)
+> 
