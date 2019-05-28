@@ -1,35 +1,54 @@
-From: Dave.Martin at arm.com (Dave Martin)
-Date: Tue, 28 May 2019 16:56:45 +0100
+From: catalin.marinas at arm.com (Catalin Marinas)
+Date: Tue, 28 May 2019 17:34:00 +0100
 Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
  syscalls
-In-Reply-To: <20190528154057.GD32006@arrakis.emea.arm.com>
+In-Reply-To: <20190528155644.GD28398@e103592.cambridge.arm.com>
 References: <cover.1557160186.git.andreyknvl@google.com>
  <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
  <20190527143719.GA59948@MBP.local>
  <20190528145411.GA709@e119886-lin.cambridge.arm.com>
  <20190528154057.GD32006@arrakis.emea.arm.com>
-Message-ID: <20190528155644.GD28398@e103592.cambridge.arm.com>
+ <20190528155644.GD28398@e103592.cambridge.arm.com>
+Message-ID: <20190528163400.GE32006@arrakis.emea.arm.com>
 
-On Tue, May 28, 2019 at 04:40:58PM +0100, Catalin Marinas wrote:
+On Tue, May 28, 2019 at 04:56:45PM +0100, Dave P Martin wrote:
+> On Tue, May 28, 2019 at 04:40:58PM +0100, Catalin Marinas wrote:
+> 
+> [...]
+> 
+> > My thoughts on allowing tags (quick look):
+> >
+> > brk - no
+> 
+> [...]
+> 
+> > mlock, mlock2, munlock - yes
+> > mmap - no (we may change this with MTE but not for TBI)
+> 
+> [...]
+> 
+> > mprotect - yes
+> 
+> I haven't following this discussion closely... what's the rationale for
+> the inconsistencies here (feel free to refer me back to the discussion
+> if it's elsewhere).
 
-[...]
+_My_ rationale (feel free to disagree) is that mmap() by default would
+not return a tagged address (ignoring MTE for now). If it gets passed a
+tagged address or a "tagged NULL" (for lack of a better name) we don't
+have clear semantics of whether the returned address should be tagged in
+this ABI relaxation. I'd rather reserve this specific behaviour if we
+overload the non-zero tag meaning of mmap() for MTE. Similar reasoning
+for mremap(), at least on the new_address argument (not entirely sure
+about old_address).
 
-> My thoughts on allowing tags (quick look):
->
-> brk - no
+munmap() should probably follow the mmap() rules.
 
-[...]
+As for brk(), I don't see why the user would need to pass a tagged
+address, we can't associate any meaning to this tag.
 
-> mlock, mlock2, munlock - yes
-> mmap - no (we may change this with MTE but not for TBI)
+For the rest, since it's likely such addresses would have been tagged by
+malloc() in user space, we should allow tagged pointers.
 
-[...]
-
-> mprotect - yes
-
-I haven't following this discussion closely... what's the rationale for
-the inconsistencies here (feel free to refer me back to the discussion
-if it's elsewhere).
-
-Cheers
----Dave
+-- 
+Catalin
