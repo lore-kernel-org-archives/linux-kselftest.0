@@ -1,29 +1,44 @@
-From: willemdebruijn.kernel at gmail.com (Willem de Bruijn)
-Date: Tue, 28 May 2019 13:11:24 -0400
-Subject: [PATCH net 4/4] net/udpgso_bench_tx: audit error queue
-In-Reply-To: <CAF=yD-KcX-zCgZFVVVMU7JFy+gJwRpUoViA_mWdM4QtHNr685g@mail.gmail.com>
-References: <20190523210651.80902-1-fklassen@appneta.com>
- <20190523210651.80902-5-fklassen@appneta.com>
- <CAF=yD-KBNLr5KY-YQ1KMmZGCpYNefSJKaJkZNOwd8nRiedpQtA@mail.gmail.com>
- <879E5DA6-3A4F-4CE1-9DA5-480EE30109DE@appneta.com>
- <CAF=yD-LQT7=4vvMwMa96_SFuUd5GywMoae7hGi9n6rQeuhhxuQ@mail.gmail.com>
- <5BB184F2-6C20-416B-B2AF-A678400CFE3E@appneta.com>
- <CAF=yD-+6CRyqL6Fq5y2zpw5nnDitYC7G1c2JAVHZTjyw68DYJg@mail.gmail.com>
- <903DEC70-845B-4C4B-911D-2F203C191C27@appneta.com>
- <CAF=yD-Le0XKCfyDBvHmBRVqkwn1D6ZoG=12gss5T62VcN5+1_w@mail.gmail.com>
- <9811659B-6D5A-4C4F-9CF8-735E9CA6DE4E@appneta.com>
- <CAF=yD-KcX-zCgZFVVVMU7JFy+gJwRpUoViA_mWdM4QtHNr685g@mail.gmail.com>
-Message-ID: <CAF=yD-J2eNn4xNu37ekXfDGMtzQjOPVrWJ+EaLqdJmFcrnk8pA@mail.gmail.com>
+From: urezki at gmail.com (Uladzislau Rezki)
+Date: Tue, 28 May 2019 20:02:56 +0200
+Subject: [PATCH] selftests: vm: install test_vmalloc.sh for run_vmtests
+In-Reply-To: <20190528121809.29389-1-naresh.kamboju@linaro.org>
+References: <20190528121809.29389-1-naresh.kamboju@linaro.org>
+Message-ID: <20190528180256.vwp23xoz7fow6huu@pc636>
 
- > Now that I know the issue is only in TCP, I can speculate that all bytes are
-> > being reported, but done with fewer messages. It may warrant some
-> > investigation in case there is some kind of bug.
->
-> This would definitely still be a bug and should not happen. We have
-> quite a bit of experience with TCP zerocopy and I have not run into
-> this in practice, so I do think that it is somehow a test artifact.
+On Tue, May 28, 2019 at 01:18:09PM +0100, Naresh Kamboju wrote:
+> Add test_vmalloc.sh to TEST_FILES to make sure it gets installed for
+> run_vmtests.
+> 
+> Fixed below error:
+> ./run_vmtests: line 217: ./test_vmalloc.sh: No such file or directory
+> 
+> Tested with: make TARGETS=vm install INSTALL_PATH=$PWD/x
+> 
+> Signed-off-by: Naresh Kamboju <naresh.kamboju at linaro.org>
+> ---
+>  tools/testing/selftests/vm/Makefile | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index e13eb6cc8901..05306c58ff9f 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -25,6 +25,8 @@ TEST_GEN_FILES += virtual_address_range
+>  
+>  TEST_PROGS := run_vmtests
+>  
+> +TEST_FILES := test_vmalloc.sh
+> +
+>  KSFT_KHDR_INSTALL := 1
+>  include ../lib.mk
+>  
+> -- 
+> 2.17.1
+> 
+I missed that point during integrating with selftests.
+Anyway the patch looks good to me.
 
-To be clear, I'm not saying that it is an artifact of your extensions.
-It's quite likely that the zerocopy benchmark was a bit flaky in that
-regard all along. No need to spend further time on that for this
-patchset.
+Thank you for fixing it!
+
+--
+Vlad Rezki
