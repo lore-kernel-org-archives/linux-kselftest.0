@@ -1,32 +1,54 @@
-From: andreyknvl at google.com (Andrey Konovalov)
-Date: Tue, 28 May 2019 16:14:45 +0200
-Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-In-Reply-To: <c6dd53d8-142b-3d8d-6a40-d21c5ee9d272@oracle.com>
+From: andrew.murray at arm.com (Andrew Murray)
+Date: Tue, 28 May 2019 15:54:11 +0100
+Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
+ syscalls
+In-Reply-To: <20190527143719.GA59948@MBP.local>
 References: <cover.1557160186.git.andreyknvl@google.com>
- <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp> <201905211633.6C0BF0C2@keescook>
- <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
- <20190523201105.oifkksus4rzcwqt4@mbp>
- <ffe58af3-7c70-d559-69f6-1f6ebcb0fec6@oracle.com>
- <20190524101139.36yre4af22bkvatx@mbp>
- <c6dd53d8-142b-3d8d-6a40-d21c5ee9d272@oracle.com>
-Message-ID: <CAAeHK+yAUsZWhp6xPAbWewX5Nbw+-G3svUyPmhXu5MVeEDKYvA@mail.gmail.com>
+ <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+ <20190527143719.GA59948@MBP.local>
+Message-ID: <20190528145411.GA709@e119886-lin.cambridge.arm.com>
 
-Thanks for a lot of valuable input! I've read through all the replies
-and got somewhat lost. What are the changes I need to do to this
-series?
+On Mon, May 27, 2019 at 03:37:20PM +0100, Catalin Marinas wrote:
+> On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> > 
+> > This patch allows tagged pointers to be passed to the following memory
+> > syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
+> > mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
+> > remap_file_pages, shmat and shmdt.
+> > 
+> > This is done by untagging pointers passed to these syscalls in the
+> > prologues of their handlers.
+> > 
+> > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+> 
+> Actually, I don't think any of these wrappers get called (have you
+> tested this patch?). Following commit 4378a7d4be30 ("arm64: implement
+> syscall wrappers"), I think we have other macro names for overriding the
+> sys_* ones.
 
-1. Should I move untagging for memory syscalls back to the generic
-code so other arches would make use of it as well, or should I keep
-the arm64 specific memory syscalls wrappers and address the comments
-on that patch?
+What is the value in adding these wrappers?
 
-2. Should I make untagging opt-in and controlled by a command line argument?
+The untagged_addr macro is defined for all in linux/mm.h and these patches
+already use untagged_addr in generic code. Thus adding a few more
+untagged_addr in the generic syscall handlers (which turn to a nop for most)
+is surely better than adding wrappers?
 
-3. Should I "add Documentation/core-api/user-addresses.rst to describe
-proper care and handling of user space pointers with untagged_addr(),
-with examples based on all the cases seen so far in this series"?
-Which examples specifically should it cover?
+Even if other architectures implement untagged_addr in the future it would
+be more consistent if they untagged in the same places and thus not adding
+these wrappers enforces that.
 
-Is there something else?
+Thanks,
+
+Andrew Murray
+
+> 
+> -- 
+> Catalin
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel at lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
