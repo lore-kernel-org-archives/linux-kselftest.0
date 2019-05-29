@@ -1,41 +1,65 @@
-From: catalin.marinas at arm.com (Catalin Marinas)
-Date: Wed, 29 May 2019 13:12:25 +0100
-Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-In-Reply-To: <20190529061126.GA18124@infradead.org>
-References: <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp>
- <201905211633.6C0BF0C2@keescook>
- <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
- <20190523201105.oifkksus4rzcwqt4@mbp>
- <ffe58af3-7c70-d559-69f6-1f6ebcb0fec6@oracle.com>
- <20190524101139.36yre4af22bkvatx@mbp>
- <c6dd53d8-142b-3d8d-6a40-d21c5ee9d272@oracle.com>
- <CAAeHK+yAUsZWhp6xPAbWewX5Nbw+-G3svUyPmhXu5MVeEDKYvA@mail.gmail.com>
- <20190529061126.GA18124@infradead.org>
-Message-ID: <20190529121225.q2zjgurxqnohvmkg@mbp>
+From: Dave.Martin at arm.com (Dave Martin)
+Date: Wed, 29 May 2019 13:42:25 +0100
+Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
+ syscalls
+In-Reply-To: <20190528163400.GE32006@arrakis.emea.arm.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+ <20190527143719.GA59948@MBP.local>
+ <20190528145411.GA709@e119886-lin.cambridge.arm.com>
+ <20190528154057.GD32006@arrakis.emea.arm.com>
+ <20190528155644.GD28398@e103592.cambridge.arm.com>
+ <20190528163400.GE32006@arrakis.emea.arm.com>
+Message-ID: <20190529124224.GE28398@e103592.cambridge.arm.com>
 
-On Tue, May 28, 2019 at 11:11:26PM -0700, Christoph Hellwig wrote:
-> On Tue, May 28, 2019 at 04:14:45PM +0200, Andrey Konovalov wrote:
-> > Thanks for a lot of valuable input! I've read through all the replies
-> > and got somewhat lost. What are the changes I need to do to this
-> > series?
+On Tue, May 28, 2019 at 05:34:00PM +0100, Catalin Marinas wrote:
+> On Tue, May 28, 2019 at 04:56:45PM +0100, Dave P Martin wrote:
+> > On Tue, May 28, 2019 at 04:40:58PM +0100, Catalin Marinas wrote:
 > > 
-> > 1. Should I move untagging for memory syscalls back to the generic
-> > code so other arches would make use of it as well, or should I keep
-> > the arm64 specific memory syscalls wrappers and address the comments
-> > on that patch?
+> > [...]
+> > 
+> > > My thoughts on allowing tags (quick look):
+> > >
+> > > brk - no
+> > 
+> > [...]
+> > 
+> > > mlock, mlock2, munlock - yes
+> > > mmap - no (we may change this with MTE but not for TBI)
+> > 
+> > [...]
+> > 
+> > > mprotect - yes
+> > 
+> > I haven't following this discussion closely... what's the rationale for
+> > the inconsistencies here (feel free to refer me back to the discussion
+> > if it's elsewhere).
 > 
-> It absolutely needs to move to common code.  Having arch code leads
-> to pointless (often unintentional) semantic difference between
-> architectures, and lots of boilerplate code.
+> _My_ rationale (feel free to disagree) is that mmap() by default would
+> not return a tagged address (ignoring MTE for now). If it gets passed a
+> tagged address or a "tagged NULL" (for lack of a better name) we don't
+> have clear semantics of whether the returned address should be tagged in
+> this ABI relaxation. I'd rather reserve this specific behaviour if we
+> overload the non-zero tag meaning of mmap() for MTE. Similar reasoning
+> for mremap(), at least on the new_address argument (not entirely sure
+> about old_address).
+> 
+> munmap() should probably follow the mmap() rules.
+> 
+> As for brk(), I don't see why the user would need to pass a tagged
+> address, we can't associate any meaning to this tag.
+> 
+> For the rest, since it's likely such addresses would have been tagged by
+> malloc() in user space, we should allow tagged pointers.
 
-That's fine by me as long as we agree on the semantics (which shouldn't
-be hard; Khalid already following up). We should probably also move the
-proposed ABI document [1] into a common place (or part of since we'll
-have arm64-specifics like prctl() calls to explicitly opt in to memory
-tagging).
+Those arguments seem reasonable.  We should try to capture this
+somewhere when documenting the ABI.
 
-[1] https://lore.kernel.org/lkml/20190318163533.26838-1-vincenzo.frascino at arm.com/T/#u
+To be clear, I'm not sure that we should guarantee anywhere that a
+tagged pointer is rejected: rather the behaviour should probably be
+left unspecified.  Then we can tidy it up incrementally.
 
--- 
-Catalin
+(The behaviour is unspecified today, in any case.)
+
+Cheers
+---Dave
