@@ -1,77 +1,22 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Wed, 29 May 2019 14:23:42 +0100
-Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
- syscalls
-In-Reply-To: <20190529124224.GE28398@e103592.cambridge.arm.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
- <20190527143719.GA59948@MBP.local>
- <20190528145411.GA709@e119886-lin.cambridge.arm.com>
- <20190528154057.GD32006@arrakis.emea.arm.com>
- <20190528155644.GD28398@e103592.cambridge.arm.com>
- <20190528163400.GE32006@arrakis.emea.arm.com>
- <20190529124224.GE28398@e103592.cambridge.arm.com>
-Message-ID: <20190529132341.27t3knoxpb7t7y3g@mbp>
+From: daniel@iogearbox.net (Daniel Borkmann)
+Date: Wed, 29 May 2019 16:07:18 +0200
+Subject: [PATCH bpf v2] selftests: bpf: fix compiler warning
+In-Reply-To: <20190528190218.GA6950@ip-172-31-44-144.us-west-2.compute.internal>
+References: <20190528190218.GA6950@ip-172-31-44-144.us-west-2.compute.internal>
+Message-ID: <f78082c5-6fd9-611d-0da3-969f076a97f8@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190529132342.xNKDYAveTA91hFg4_ghCx8h2w7QPFYe624M9DlG61rQ@z>
+Message-ID: <20190529140718.77Hs4OZrPXOBtS0sgeScphuET4ropEecvipXaKQANYE@z>
 
-On Wed, May 29, 2019@01:42:25PM +0100, Dave P Martin wrote:
-> On Tue, May 28, 2019@05:34:00PM +0100, Catalin Marinas wrote:
-> > On Tue, May 28, 2019@04:56:45PM +0100, Dave P Martin wrote:
-> > > On Tue, May 28, 2019@04:40:58PM +0100, Catalin Marinas wrote:
-> > > 
-> > > [...]
-> > > 
-> > > > My thoughts on allowing tags (quick look):
-> > > >
-> > > > brk - no
-> > > 
-> > > [...]
-> > > 
-> > > > mlock, mlock2, munlock - yes
-> > > > mmap - no (we may change this with MTE but not for TBI)
-> > > 
-> > > [...]
-> > > 
-> > > > mprotect - yes
-> > > 
-> > > I haven't following this discussion closely... what's the rationale for
-> > > the inconsistencies here (feel free to refer me back to the discussion
-> > > if it's elsewhere).
-> > 
-> > _My_ rationale (feel free to disagree) is that mmap() by default would
-> > not return a tagged address (ignoring MTE for now). If it gets passed a
-> > tagged address or a "tagged NULL" (for lack of a better name) we don't
-> > have clear semantics of whether the returned address should be tagged in
-> > this ABI relaxation. I'd rather reserve this specific behaviour if we
-> > overload the non-zero tag meaning of mmap() for MTE. Similar reasoning
-> > for mremap(), at least on the new_address argument (not entirely sure
-> > about old_address).
-> > 
-> > munmap() should probably follow the mmap() rules.
-> > 
-> > As for brk(), I don't see why the user would need to pass a tagged
-> > address, we can't associate any meaning to this tag.
-> > 
-> > For the rest, since it's likely such addresses would have been tagged by
-> > malloc() in user space, we should allow tagged pointers.
+On 05/28/2019 09:02 PM, Alakesh Haloi wrote:
+> Add missing header file following compiler warning
 > 
-> Those arguments seem reasonable.  We should try to capture this
-> somewhere when documenting the ABI.
+> prog_tests/flow_dissector.c: In function ‘tx_tap’:
+> prog_tests/flow_dissector.c:175:9: warning: implicit declaration of function ‘writev’; did you mean ‘write’? [-Wimplicit-function-declaration]
+>   return writev(fd, iov, ARRAY_SIZE(iov));
+>          ^~~~~~
+>          write
 > 
-> To be clear, I'm not sure that we should guarantee anywhere that a
-> tagged pointer is rejected: rather the behaviour should probably be
-> left unspecified.  Then we can tidy it up incrementally.
-> 
-> (The behaviour is unspecified today, in any case.)
+> Fixes: 0905beec9f52 ("selftests/bpf: run flow dissector tests in skb-less mode")
+> Signed-off-by: Alakesh Haloi <alakesh.haloi at gmail.com>
 
-What is specified (or rather de-facto ABI) today is that passing a user
-address above TASK_SIZE (e.g. non-zero top byte) would fail in most
-cases. If we relax this with the TBI we may end up with some de-facto
-ABI before we actually get MTE hardware. Tightening it afterwards may be
-slightly more problematic, although MTE needs to be an explicit opt-in.
-
-IOW, I wouldn't want to unnecessarily relax the ABI if we don't need to.
-
--- 
-Catalin
+Applied, thanks!
