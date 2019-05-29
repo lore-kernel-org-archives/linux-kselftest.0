@@ -1,78 +1,84 @@
-From: skhan@linuxfoundation.org (Shuah Khan)
-Date: Wed, 29 May 2019 09:04:42 -0600
-Subject: [GIT PULL] Kselftest fixes update for Linux 5.2-rc3
-Message-ID: <966d12fc-d32e-c72c-7996-34b8250388dc@linuxfoundation.org>
+From: luto@amacapital.net (Andy Lutomirski)
+Date: Wed, 29 May 2019 08:10:00 -0700
+Subject: [PATCH RFC v8 01/10] namei: obey trailing magic-link DAC
+ permissions
+In-Reply-To: <20190524031109.v24r6typyug2rlto@yavin>
+References: <20190520133305.11925-1-cyphar@cyphar.com>
+ <20190520133305.11925-2-cyphar@cyphar.com>
+ <CALCETrVCwe49q5mu=f6jTYNSgosQSjjY5chukMPo6eZtQGqo5g@mail.gmail.com>
+ <20190523020009.mi25uziu2b3whf4l@yavin>
+ <20190524031109.v24r6typyug2rlto@yavin>
+Message-ID: <9712F80E-1016-4DB7-996D-B423E07A1C1F@amacapital.net>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190529150442.9Xn1CaQpIZ7WK_HNF7luh0mp5GVpw8hVcKjOowv-ues@z>
+Message-ID: <20190529151000.uxno2RS-tQKcr0IqceTDnnE0FY4-WDyhrT-z-ymjCOU@z>
 
-Hi Linus,
 
-Please pull the following Kselftest fixes update for Linux 5.2-rc3.
 
-This Kselftest update for Linux 5.2-rc3 consists of
+> On May 23, 2019,@8:11 PM, Aleksa Sarai <cyphar@cyphar.com> wrote:
+> 
+>> On 2019-05-23, Aleksa Sarai <cyphar@cyphar.com> wrote:
+>>> On 2019-05-22, Andy Lutomirski <luto@kernel.org> wrote:
+>>> What are actual examples of uses for this exception?  Breaking
+>>> selftests is not, in and of itself, a huge problem.
+>> 
+>> Not as far as I know. All of the re-opening users I know of do re-opens
+>> of O_PATH or are re-opening with the same (or fewer) privileges. I also
+>> ran this for a few days on my laptop without this exception, and didn't
+>> have any visible issues.
+> 
+> I have modified the patch to WARN_ON(may_open_magiclink() == -EACCES).
+> 
+> So far (in the past day on my openSUSE machines) I have only seen two
+> programs which have hit this case: kbd[1]'s "loadkeys" and "kbd_mode"
+> binaries. In addition to there not being any user-visible errors -- they
+> actually handle permission errors gracefully!
+> 
+>  static int
+>  open_a_console(const char *fnam)
+>  {
+>      int fd;
+> 
+>      /*
+>       * For ioctl purposes we only need some fd and permissions
+>       * do not matter. But setfont:activatemap() does a write.
+>       */
+>      fd = open(fnam, O_RDWR);
+>      if (fd < 0)
+>          fd = open(fnam, O_WRONLY);
+>      if (fd < 0)
+>          fd = open(fnam, O_RDONLY);
+>      if (fd < 0)
+>          return -1;
+>      return fd;
+>  }
+> 
+> The above gets called with "/proc/self/fd/0" as an argument (as well as
+> other console candidates like "/dev/console"). And setfont:activatemap()
+> actually does handle read-only fds:
+> 
+>  static void
+>  send_escseq(int fd, const char *seq, int n)
+>  {
+>      if (write(fd, seq, n) != n) /* maybe fd is read-only */
+>          printf("%s", seq);
+>  }
+> 
+>  void activatemap(int fd)
+>  {
+>      send_escseq(fd, "\033(K", 3);
+>  }
+> 
+> So, thus far, not only have I not seen anything go wrong -- the only
+> program which actually hits this case handles the error gracefully.
+> Obviously we got lucky here, but the lack of any users of this
+> mis-feature leads me to have some hope that we can block it without
+> anyone noticing.
+> 
+> But I emphatically do not want to break userspace here (except for
+> attackers, obviously).
 
-- Alexandre Belloni's fixes to rtc regressions introduced in kselftest
-   Makefile test run output refactoring work from Kees Cook.
+Hmm. This will break any script that does echo foo >/dev/stdin too.
 
-- ftrace test checkbashisms fixes from Masami Hiramatsu
+Just to throw an idea out there, what if the open were allowed if the file mode is sufficient or if the magic link target is openable with the correct mode without magic?  In other words, first check as in your code but without the exception and, if that check fails, then walk the same path that d_path would return and see if it would work as a normal open?  Of course, that second attempt would need to disable magic links to avoid recursing.  I’m not sure I love this idea...
 
-As a note, it is an usual and expected outcome to see a few regressions
-when Kselftest run-time scripts are enhanced. No surprises there.
-
-I am glad we are finding these problems early on in the rc cycle.
-
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
-
-   Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
-tags/linux-kselftest-5.2-rc3
-
-for you to fetch changes up to eff82a263b5cfa3427fd9dbfedd96da94fdc9f19:
-
-   selftests: rtc: rtctest: specify timeouts (2019-05-24 13:39:58 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-5.2-rc3
-
-This Kselftest update for Linux 5.2-rc3 consists of
-
-- Alexandre Belloni's fixes to rtc regressions introduced in kselftest
-   Makefile test run output refactoring work from Kees Cook.
-
-- ftrace test checkbashisms fixes from Masami Hiramatsu
-
-----------------------------------------------------------------
-Alexandre Belloni (2):
-       selftests/harness: Allow test to configure timeout
-       selftests: rtc: rtctest: specify timeouts
-
-Masami Hiramatsu (2):
-       selftests/ftrace: Make a script checkbashisms clean
-       selftests/ftrace: Add checkbashisms meta-testcase
-
-  tools/testing/selftests/ftrace/ftracetest           |  1 +
-  .../selftests/ftrace/test.d/kprobe/kprobe_ftrace.tc |  2 +-
-  .../selftests/ftrace/test.d/selftest/bashisms.tc    | 21 
-+++++++++++++++++++++
-  tools/testing/selftests/kselftest_harness.h         | 17 ++++++++++++-----
-  tools/testing/selftests/rtc/rtctest.c               |  6 +++---
-  5 files changed, 38 insertions(+), 9 deletions(-)
-  create mode 100644 
-tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc
-----------------------------------------------------------------
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: linux-kselftest-5.2-rc3.diff
-Type: text/x-patch
-Size: 5340 bytes
-Desc: not available
-URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190529/97dede7b/attachment.bin>
+Otherwise, I imagine we can live with the exception, especially if the new open API turns it off by default.
