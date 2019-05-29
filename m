@@ -1,49 +1,78 @@
-From: khalid.aziz@oracle.com (Khalid Aziz)
-Date: Wed, 29 May 2019 08:49:09 -0600
-Subject: [PATCH v15 01/17] uaccess: add untagged_addr definition for
- other arches
-In-Reply-To: <67ae3bd92e590d42af22ef2de0ad37b730a13837.1557160186.git.andreyknvl@google.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <67ae3bd92e590d42af22ef2de0ad37b730a13837.1557160186.git.andreyknvl@google.com>
-Message-ID: <3ade20696cc772772f5362fea02ede81c4a0fad3.camel@oracle.com>
+From: skhan@linuxfoundation.org (Shuah Khan)
+Date: Wed, 29 May 2019 09:04:42 -0600
+Subject: [GIT PULL] Kselftest fixes update for Linux 5.2-rc3
+Message-ID: <966d12fc-d32e-c72c-7996-34b8250388dc@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190529144909.rhivOA4J4OQx1bqavLugR1JP2RSUnOun5owvpBKYi14@z>
+Message-ID: <20190529150442.9Xn1CaQpIZ7WK_HNF7luh0mp5GVpw8hVcKjOowv-ues@z>
 
-On Mon, 2019-05-06@18:30 +0200, Andrey Konovalov wrote:
-> To allow arm64 syscalls to accept tagged pointers from userspace, we
-> must
-> untag them when they are passed to the kernel. Since untagging is
-> done in
-> generic parts of the kernel, the untagged_addr macro needs to be
-> defined
-> for all architectures.
-> 
-> Define it as a noop for architectures other than arm64.
-> 
-> Acked-by: Catalin Marinas <catalin.marinas at arm.com>
-> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
-> ---
->  include/linux/mm.h | 4 ++++
->  1 file changed, 4 insertions(+)
+Hi Linus,
 
-As discussed in the other thread Chris started, there is a generic need
-to untag addresses in kernel and this patch gets us ready for that.
+Please pull the following Kselftest fixes update for Linux 5.2-rc3.
 
-Reviewed-by: Khalid Aziz <khalid.aziz at oracle.com>
+This Kselftest update for Linux 5.2-rc3 consists of
 
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 6b10c21630f5..44041df804a6 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -99,6 +99,10 @@ extern int mmap_rnd_compat_bits __read_mostly;
->  #include <asm/pgtable.h>
->  #include <asm/processor.h>
->  
-> +#ifndef untagged_addr
-> +#define untagged_addr(addr) (addr)
-> +#endif
-> +
->  #ifndef __pa_symbol
->  #define __pa_symbol(x)  __pa(RELOC_HIDE((unsigned long)(x), 0))
->  #endif
+- Alexandre Belloni's fixes to rtc regressions introduced in kselftest
+   Makefile test run output refactoring work from Kees Cook.
+
+- ftrace test checkbashisms fixes from Masami Hiramatsu
+
+As a note, it is an usual and expected outcome to see a few regressions
+when Kselftest run-time scripts are enhanced. No surprises there.
+
+I am glad we are finding these problems early on in the rc cycle.
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
+
+   Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
+tags/linux-kselftest-5.2-rc3
+
+for you to fetch changes up to eff82a263b5cfa3427fd9dbfedd96da94fdc9f19:
+
+   selftests: rtc: rtctest: specify timeouts (2019-05-24 13:39:58 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-5.2-rc3
+
+This Kselftest update for Linux 5.2-rc3 consists of
+
+- Alexandre Belloni's fixes to rtc regressions introduced in kselftest
+   Makefile test run output refactoring work from Kees Cook.
+
+- ftrace test checkbashisms fixes from Masami Hiramatsu
+
+----------------------------------------------------------------
+Alexandre Belloni (2):
+       selftests/harness: Allow test to configure timeout
+       selftests: rtc: rtctest: specify timeouts
+
+Masami Hiramatsu (2):
+       selftests/ftrace: Make a script checkbashisms clean
+       selftests/ftrace: Add checkbashisms meta-testcase
+
+  tools/testing/selftests/ftrace/ftracetest           |  1 +
+  .../selftests/ftrace/test.d/kprobe/kprobe_ftrace.tc |  2 +-
+  .../selftests/ftrace/test.d/selftest/bashisms.tc    | 21 
++++++++++++++++++++++
+  tools/testing/selftests/kselftest_harness.h         | 17 ++++++++++++-----
+  tools/testing/selftests/rtc/rtctest.c               |  6 +++---
+  5 files changed, 38 insertions(+), 9 deletions(-)
+  create mode 100644 
+tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc
+----------------------------------------------------------------
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux-kselftest-5.2-rc3.diff
+Type: text/x-patch
+Size: 5340 bytes
+Desc: not available
+URL: <http://lists.linaro.org/pipermail/linux-kselftest-mirror/attachments/20190529/97dede7b/attachment.bin>
