@@ -1,84 +1,89 @@
-From: luto@amacapital.net (Andy Lutomirski)
-Date: Wed, 29 May 2019 08:10:00 -0700
-Subject: [PATCH RFC v8 01/10] namei: obey trailing magic-link DAC
- permissions
-In-Reply-To: <20190524031109.v24r6typyug2rlto@yavin>
-References: <20190520133305.11925-1-cyphar@cyphar.com>
- <20190520133305.11925-2-cyphar@cyphar.com>
- <CALCETrVCwe49q5mu=f6jTYNSgosQSjjY5chukMPo6eZtQGqo5g@mail.gmail.com>
- <20190523020009.mi25uziu2b3whf4l@yavin>
- <20190524031109.v24r6typyug2rlto@yavin>
-Message-ID: <9712F80E-1016-4DB7-996D-B423E07A1C1F@amacapital.net>
+From: Dave.Martin@arm.com (Dave Martin)
+Date: Wed, 29 May 2019 16:18:40 +0100
+Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
+ syscalls
+In-Reply-To: <20190529132341.27t3knoxpb7t7y3g@mbp>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+ <20190527143719.GA59948@MBP.local>
+ <20190528145411.GA709@e119886-lin.cambridge.arm.com>
+ <20190528154057.GD32006@arrakis.emea.arm.com>
+ <20190528155644.GD28398@e103592.cambridge.arm.com>
+ <20190528163400.GE32006@arrakis.emea.arm.com>
+ <20190529124224.GE28398@e103592.cambridge.arm.com>
+ <20190529132341.27t3knoxpb7t7y3g@mbp>
+Message-ID: <20190529151839.GF28398@e103592.cambridge.arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190529151000.uxno2RS-tQKcr0IqceTDnnE0FY4-WDyhrT-z-ymjCOU@z>
+Message-ID: <20190529151840.Ea-Gk3kQajtBx7SZeJ87ZifNEnYiO8U-AcppFgoYR0Y@z>
 
+On Wed, May 29, 2019@02:23:42PM +0100, Catalin Marinas wrote:
+> On Wed, May 29, 2019@01:42:25PM +0100, Dave P Martin wrote:
+> > On Tue, May 28, 2019@05:34:00PM +0100, Catalin Marinas wrote:
+> > > On Tue, May 28, 2019@04:56:45PM +0100, Dave P Martin wrote:
+> > > > On Tue, May 28, 2019@04:40:58PM +0100, Catalin Marinas wrote:
+> > > > 
+> > > > [...]
+> > > > 
+> > > > > My thoughts on allowing tags (quick look):
+> > > > >
+> > > > > brk - no
+> > > > 
+> > > > [...]
+> > > > 
+> > > > > mlock, mlock2, munlock - yes
+> > > > > mmap - no (we may change this with MTE but not for TBI)
+> > > > 
+> > > > [...]
+> > > > 
+> > > > > mprotect - yes
+> > > > 
+> > > > I haven't following this discussion closely... what's the rationale for
+> > > > the inconsistencies here (feel free to refer me back to the discussion
+> > > > if it's elsewhere).
+> > > 
+> > > _My_ rationale (feel free to disagree) is that mmap() by default would
+> > > not return a tagged address (ignoring MTE for now). If it gets passed a
+> > > tagged address or a "tagged NULL" (for lack of a better name) we don't
+> > > have clear semantics of whether the returned address should be tagged in
+> > > this ABI relaxation. I'd rather reserve this specific behaviour if we
+> > > overload the non-zero tag meaning of mmap() for MTE. Similar reasoning
+> > > for mremap(), at least on the new_address argument (not entirely sure
+> > > about old_address).
+> > > 
+> > > munmap() should probably follow the mmap() rules.
+> > > 
+> > > As for brk(), I don't see why the user would need to pass a tagged
+> > > address, we can't associate any meaning to this tag.
+> > > 
+> > > For the rest, since it's likely such addresses would have been tagged by
+> > > malloc() in user space, we should allow tagged pointers.
+> > 
+> > Those arguments seem reasonable.  We should try to capture this
+> > somewhere when documenting the ABI.
+> > 
+> > To be clear, I'm not sure that we should guarantee anywhere that a
+> > tagged pointer is rejected: rather the behaviour should probably be
+> > left unspecified.  Then we can tidy it up incrementally.
+> > 
+> > (The behaviour is unspecified today, in any case.)
+> 
+> What is specified (or rather de-facto ABI) today is that passing a user
+> address above TASK_SIZE (e.g. non-zero top byte) would fail in most
+> cases. If we relax this with the TBI we may end up with some de-facto
 
+I may be being too picky, but "would fail in most cases" sounds like
+"unspecified" ?
 
-> On May 23, 2019,@8:11 PM, Aleksa Sarai <cyphar@cyphar.com> wrote:
+> ABI before we actually get MTE hardware. Tightening it afterwards may be
+> slightly more problematic, although MTE needs to be an explicit opt-in.
 > 
->> On 2019-05-23, Aleksa Sarai <cyphar@cyphar.com> wrote:
->>> On 2019-05-22, Andy Lutomirski <luto@kernel.org> wrote:
->>> What are actual examples of uses for this exception?  Breaking
->>> selftests is not, in and of itself, a huge problem.
->> 
->> Not as far as I know. All of the re-opening users I know of do re-opens
->> of O_PATH or are re-opening with the same (or fewer) privileges. I also
->> ran this for a few days on my laptop without this exception, and didn't
->> have any visible issues.
-> 
-> I have modified the patch to WARN_ON(may_open_magiclink() == -EACCES).
-> 
-> So far (in the past day on my openSUSE machines) I have only seen two
-> programs which have hit this case: kbd[1]'s "loadkeys" and "kbd_mode"
-> binaries. In addition to there not being any user-visible errors -- they
-> actually handle permission errors gracefully!
-> 
->  static int
->  open_a_console(const char *fnam)
->  {
->      int fd;
-> 
->      /*
->       * For ioctl purposes we only need some fd and permissions
->       * do not matter. But setfont:activatemap() does a write.
->       */
->      fd = open(fnam, O_RDWR);
->      if (fd < 0)
->          fd = open(fnam, O_WRONLY);
->      if (fd < 0)
->          fd = open(fnam, O_RDONLY);
->      if (fd < 0)
->          return -1;
->      return fd;
->  }
-> 
-> The above gets called with "/proc/self/fd/0" as an argument (as well as
-> other console candidates like "/dev/console"). And setfont:activatemap()
-> actually does handle read-only fds:
-> 
->  static void
->  send_escseq(int fd, const char *seq, int n)
->  {
->      if (write(fd, seq, n) != n) /* maybe fd is read-only */
->          printf("%s", seq);
->  }
-> 
->  void activatemap(int fd)
->  {
->      send_escseq(fd, "\033(K", 3);
->  }
-> 
-> So, thus far, not only have I not seen anything go wrong -- the only
-> program which actually hits this case handles the error gracefully.
-> Obviously we got lucky here, but the lack of any users of this
-> mis-feature leads me to have some hope that we can block it without
-> anyone noticing.
-> 
-> But I emphatically do not want to break userspace here (except for
-> attackers, obviously).
+> IOW, I wouldn't want to unnecessarily relax the ABI if we don't need to.
 
-Hmm. This will break any script that does echo foo >/dev/stdin too.
+So long we don't block foreseeable future developments unnecessarily
+either -- I agree there's a balance to be struck.
 
-Just to throw an idea out there, what if the open were allowed if the file mode is sufficient or if the magic link target is openable with the correct mode without magic?  In other words, first check as in your code but without the exception and, if that check fails, then walk the same path that d_path would return and see if it would work as a normal open?  Of course, that second attempt would need to disable magic links to avoid recursing.  I’m not sure I love this idea...
+I guess this can be reviewed when we have nailed down the details a bit
+further.
 
-Otherwise, I imagine we can live with the exception, especially if the new open API turns it off by default.
+Cheers
+---Dave
