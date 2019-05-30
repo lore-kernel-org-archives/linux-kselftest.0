@@ -1,47 +1,66 @@
-From: catalin.marinas at arm.com (Catalin Marinas)
-Date: Thu, 30 May 2019 18:15:40 +0100
-Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-In-Reply-To: <CAAeHK+yAUsZWhp6xPAbWewX5Nbw+-G3svUyPmhXu5MVeEDKYvA@mail.gmail.com>
-References: <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp>
- <201905211633.6C0BF0C2@keescook>
- <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
- <20190523201105.oifkksus4rzcwqt4@mbp>
- <ffe58af3-7c70-d559-69f6-1f6ebcb0fec6@oracle.com>
- <20190524101139.36yre4af22bkvatx@mbp>
- <c6dd53d8-142b-3d8d-6a40-d21c5ee9d272@oracle.com>
- <CAAeHK+yAUsZWhp6xPAbWewX5Nbw+-G3svUyPmhXu5MVeEDKYvA@mail.gmail.com>
-Message-ID: <20190530171540.GD35418@arrakis.emea.arm.com>
+From: dan.rue at linaro.org (Dan Rue)
+Date: Thu, 30 May 2019 14:00:41 -0500
+Subject: [PATCH] kbuild: teach kselftest-merge to find nested config files
+In-Reply-To: <20190520175641.GA14339@kroah.com>
+References: <20190520151614.19188-1-dan.rue@linaro.org>
+ <20190520175641.GA14339@kroah.com>
+Message-ID: <20190530190041.m6535ihflbgr2q3m@xps.therub.org>
 
-On Tue, May 28, 2019 at 04:14:45PM +0200, Andrey Konovalov wrote:
-> Thanks for a lot of valuable input! I've read through all the replies
-> and got somewhat lost. What are the changes I need to do to this
-> series?
+On Mon, May 20, 2019 at 07:56:41PM +0200, Greg KH wrote:
+> On Mon, May 20, 2019 at 10:16:14AM -0500, Dan Rue wrote:
+> > Current implementation of kselftest-merge only finds config files that
+> > are one level deep using `$(srctree)/tools/testing/selftests/*/config`.
+> > 
+> > Often, config files are added in nested directories, and do not get
+> > picked up by kselftest-merge.
+> > 
+> > Use `find` to catch all config files under
+> > `$(srctree)/tools/testing/selftests` instead.
+> > 
+> > Signed-off-by: Dan Rue <dan.rue at linaro.org>
+> > ---
+> >  Makefile | 5 ++---
+> >  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> 1. Should I move untagging for memory syscalls back to the generic
-> code so other arches would make use of it as well, or should I keep
-> the arm64 specific memory syscalls wrappers and address the comments
-> on that patch?
+> To be more specific here, the binderfs test is not catching the config
+> entry, so it would be nice to get this into the stable trees as well :)
+> 
+> > diff --git a/Makefile b/Makefile
+> > index a45f84a7e811..e99e7f9484af 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -1228,9 +1228,8 @@ kselftest-clean:
+> >  PHONY += kselftest-merge
+> >  kselftest-merge:
+> >  	$(if $(wildcard $(objtree)/.config),, $(error No .config exists, config your kernel first!))
+> > -	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/kconfig/merge_config.sh \
+> > -		-m $(objtree)/.config \
+> > -		$(srctree)/tools/testing/selftests/*/config
+> > +	$(Q)find $(srctree)/tools/testing/selftests -name config | \
+> > +		xargs $(srctree)/scripts/kconfig/merge_config.sh -m $(objtree)/.config
+> >  	+$(Q)$(MAKE) -f $(srctree)/Makefile olddefconfig
+> >  
+> >  # ---------------------------------------------------------------------------
+> 
+> is find run with $(Q)?  It isn't with other instances in the Makefile.
 
-Keep them generic again but make sure we get agreement with Khalid on
-the actual ABI implications for sparc.
+I'm not entirely sure all the ways that $(Q) is used (it looks like it
+just gets set to @), but if i run 'KBUILD_VERBOSE=1 make
+kselftest-merge' I do see the find command printed before running:
 
-> 2. Should I make untagging opt-in and controlled by a command line argument?
+    find ./tools/testing/selftests -name config | \
+          xargs ./scripts/kconfig/merge_config.sh -m ./.config
 
-Opt-in, yes, but per task rather than kernel command line option.
-prctl() is a possibility of opting in.
+I noticed find used inconsistently (sometimes with @, sometimes with
+$(Q), sometimes with neither), so I picked the usage that seemed most
+correct to me.
 
-> 3. Should I "add Documentation/core-api/user-addresses.rst to describe
-> proper care and handling of user space pointers with untagged_addr(),
-> with examples based on all the cases seen so far in this series"?
-> Which examples specifically should it cover?
+Dan
 
-I think we can leave 3 for now as not too urgent. What I'd like is for
-Vincenzo's TBI user ABI document to go into a more common place since we
-can expand it to cover both sparc and arm64. We'd need an arm64-specific
-doc as well for things like prctl() and later MTE that sparc may support
-differently.
+> 
+> thanks,
+> 
+> greg k-h
 
 -- 
-Catalin
+Linaro - Kernel Validation
