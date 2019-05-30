@@ -1,289 +1,98 @@
 From: vincenzo.frascino at arm.com (Vincenzo Frascino)
-Date: Thu, 30 May 2019 15:15:23 +0100
-Subject: [PATCH v6 11/19] arm64: Refactor vDSO code
+Date: Thu, 30 May 2019 15:15:27 +0100
+Subject: [PATCH v6 15/19] arm64: Add vDSO compat support
 In-Reply-To: <20190530141531.43462-1-vincenzo.frascino@arm.com>
 References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
-Message-ID: <20190530141531.43462-12-vincenzo.frascino@arm.com>
+Message-ID: <20190530141531.43462-16-vincenzo.frascino@arm.com>
 
-Most of the code for initializing the vDSOs in arm64 and compat will
-be in common, hence a refactor of the current code is required to avoid
-duplication and simplify maintainability.
-
-Refactor vdso.c to simplify the implementation of arm64 vDSO compat
-(which will be pushed with a future patch).
+Add vDSO compat support to the arm64 building system.
 
 Cc: Catalin Marinas <catalin.marinas at arm.com>
 Cc: Will Deacon <will.deacon at arm.com>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
 ---
- arch/arm64/kernel/vdso.c | 215 ++++++++++++++++++++++++++-------------
- 1 file changed, 144 insertions(+), 71 deletions(-)
+ arch/arm64/Kconfig         |  1 +
+ arch/arm64/Makefile        | 23 +++++++++++++++++++++--
+ arch/arm64/kernel/Makefile |  6 +++++-
+ 3 files changed, 27 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/kernel/vdso.c b/arch/arm64/kernel/vdso.c
-index 23c38303a52a..aa1fb25a9fe4 100644
---- a/arch/arm64/kernel/vdso.c
-+++ b/arch/arm64/kernel/vdso.c
-@@ -40,7 +40,31 @@
- #include <asm/vdso.h>
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 952c9f8cf3b8..3e1d4f8347f4 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -108,6 +108,7 @@ config ARM64
+ 	select GENERIC_STRNLEN_USER
+ 	select GENERIC_TIME_VSYSCALL
+ 	select GENERIC_GETTIMEOFDAY
++	select GENERIC_COMPAT_VDSO if !CPU_BIG_ENDIAN
+ 	select HANDLE_DOMAIN_IRQ
+ 	select HARDIRQS_SW_RESEND
+ 	select HAVE_PCI
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index b025304bde46..4db50d4b2476 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -49,9 +49,25 @@ $(warning Detected assembler with broken .inst; disassembly will be unreliable)
+   endif
+ endif
  
- extern char vdso_start[], vdso_end[];
--static unsigned long vdso_pages __ro_after_init;
+-KBUILD_CFLAGS	+= -mgeneral-regs-only $(lseinstr) $(brokengasinst)
++ifeq ($(CONFIG_GENERIC_COMPAT_VDSO), y)
++  CROSS_COMPILE_COMPAT ?= $(CONFIG_CROSS_COMPILE_COMPAT_VDSO:"%"=%)
 +
-+/* vdso_lookup arch_index */
-+enum arch_vdso_type {
-+	ARM64_VDSO = 0,
-+};
-+#define VDSO_TYPES		(ARM64_VDSO + 1)
++  ifeq ($(CONFIG_CC_IS_CLANG), y)
++    $(warning CROSS_COMPILE_COMPAT is clang, the compat vDSO will not be built)
++  else ifeq ($(CROSS_COMPILE_COMPAT),)
++    $(warning CROSS_COMPILE_COMPAT not defined or empty, the compat vDSO will not be built)
++  else ifeq ($(shell which $(CROSS_COMPILE_COMPAT)gcc 2> /dev/null),)
++    $(error $(CROSS_COMPILE_COMPAT)gcc not found, check CROSS_COMPILE_COMPAT)
++  else
++    export CROSS_COMPILE_COMPAT
++    export CONFIG_COMPAT_VDSO := y
++    compat_vdso := -DCONFIG_COMPAT_VDSO=1
++  endif
++endif
 +
-+struct __vdso_abi {
-+	const char *name;
-+	const char *vdso_code_start;
-+	const char *vdso_code_end;
-+	unsigned long vdso_pages;
-+	/* Data Mapping */
-+	struct vm_special_mapping *dm;
-+	/* Code Mapping */
-+	struct vm_special_mapping *cm;
-+};
-+
-+static struct __vdso_abi vdso_lookup[VDSO_TYPES] __ro_after_init = {
-+	{
-+		.name = "vdso",
-+		.vdso_code_start = vdso_start,
-+		.vdso_code_end = vdso_end,
-+	},
-+};
++KBUILD_CFLAGS	+= -mgeneral-regs-only $(lseinstr) $(brokengasinst) $(compat_vdso)
+ KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
+-KBUILD_AFLAGS	+= $(lseinstr) $(brokengasinst)
++KBUILD_AFLAGS	+= $(lseinstr) $(brokengasinst) $(compat_vdso)
  
- /*
-  * The vDSO data page.
-@@ -51,10 +75,110 @@ static union {
- } vdso_data_store __page_aligned_data;
- struct vdso_data *vdso_data = vdso_data_store.data;
+ KBUILD_CFLAGS	+= $(call cc-option,-mabi=lp64)
+ KBUILD_AFLAGS	+= $(call cc-option,-mabi=lp64)
+@@ -163,6 +179,9 @@ ifeq ($(KBUILD_EXTMOD),)
+ prepare: vdso_prepare
+ vdso_prepare: prepare0
+ 	$(Q)$(MAKE) $(build)=arch/arm64/kernel/vdso include/generated/vdso-offsets.h
++	$(if $(CONFIG_COMPAT_VDSO),$(Q)$(MAKE) \
++		$(build)=arch/arm64/kernel/vdso32  \
++		include/generated/vdso32-offsets.h)
+ endif
  
-+static int __vdso_remap(enum arch_vdso_type arch_index,
-+			const struct vm_special_mapping *sm,
-+			struct vm_area_struct *new_vma)
-+{
-+	unsigned long new_size = new_vma->vm_end - new_vma->vm_start;
-+	unsigned long vdso_size = vdso_lookup[arch_index].vdso_code_end -
-+				  vdso_lookup[arch_index].vdso_code_start;
-+
-+	if (vdso_size != new_size)
-+		return -EINVAL;
-+
-+	current->mm->context.vdso = (void *)new_vma->vm_start;
-+
-+	return 0;
-+}
-+
-+static int __vdso_init(enum arch_vdso_type arch_index)
-+{
-+	int i;
-+	struct page **vdso_pagelist;
-+	unsigned long pfn;
-+
-+	if (memcmp(vdso_lookup[arch_index].vdso_code_start, "\177ELF", 4)) {
-+		pr_err("vDSO is not a valid ELF object!\n");
-+		return -EINVAL;
-+	}
-+
-+	vdso_lookup[arch_index].vdso_pages = (
-+			vdso_lookup[arch_index].vdso_code_end -
-+			vdso_lookup[arch_index].vdso_code_start) >>
-+			PAGE_SHIFT;
-+
-+	/* Allocate the vDSO pagelist, plus a page for the data. */
-+	vdso_pagelist = kcalloc(vdso_lookup[arch_index].vdso_pages + 1,
-+				sizeof(struct page *),
-+				GFP_KERNEL);
-+	if (vdso_pagelist == NULL)
-+		return -ENOMEM;
-+
-+	/* Grab the vDSO data page. */
-+	vdso_pagelist[0] = phys_to_page(__pa_symbol(vdso_data));
-+
-+
-+	/* Grab the vDSO code pages. */
-+	pfn = sym_to_pfn(vdso_lookup[arch_index].vdso_code_start);
-+
-+	for (i = 0; i < vdso_lookup[arch_index].vdso_pages; i++)
-+		vdso_pagelist[i + 1] = pfn_to_page(pfn + i);
-+
-+	vdso_lookup[arch_index].dm->pages = &vdso_pagelist[0];
-+	vdso_lookup[arch_index].cm->pages = &vdso_pagelist[1];
-+
-+	return 0;
-+}
-+
-+static int __setup_additional_pages(enum arch_vdso_type arch_index,
-+				    struct mm_struct *mm,
-+				    struct linux_binprm *bprm,
-+				    int uses_interp)
-+{
-+	unsigned long vdso_base, vdso_text_len, vdso_mapping_len;
-+	void *ret;
-+
-+	vdso_text_len = vdso_lookup[arch_index].vdso_pages << PAGE_SHIFT;
-+	/* Be sure to map the data page */
-+	vdso_mapping_len = vdso_text_len + PAGE_SIZE;
-+
-+	vdso_base = get_unmapped_area(NULL, 0, vdso_mapping_len, 0, 0);
-+	if (IS_ERR_VALUE(vdso_base)) {
-+		ret = ERR_PTR(vdso_base);
-+		goto up_fail;
-+	}
-+
-+	ret = _install_special_mapping(mm, vdso_base, PAGE_SIZE,
-+				       VM_READ|VM_MAYREAD,
-+				       vdso_lookup[arch_index].dm);
-+	if (IS_ERR(ret))
-+		goto up_fail;
-+
-+	vdso_base += PAGE_SIZE;
-+	mm->context.vdso = (void *)vdso_base;
-+	ret = _install_special_mapping(mm, vdso_base, vdso_text_len,
-+				       VM_READ|VM_EXEC|
-+				       VM_MAYREAD|VM_MAYWRITE|VM_MAYEXEC,
-+				       vdso_lookup[arch_index].cm);
-+	if (IS_ERR(ret))
-+		goto up_fail;
-+
-+	return 0;
-+
-+up_fail:
-+	mm->context.vdso = NULL;
-+	return PTR_ERR(ret);
-+}
-+
- #ifdef CONFIG_COMPAT
- /*
-  * Create and map the vectors page for AArch32 tasks.
-  */
-+/*
-+ * aarch32_vdso_pages:
-+ * 0 - kuser helpers
-+ * 1 - sigreturn code
-+ */
- #define C_VECTORS	0
- #define C_SIGPAGE	1
- #define C_PAGES		(C_SIGPAGE + 1)
-@@ -183,18 +307,18 @@ int aarch32_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- static int vdso_mremap(const struct vm_special_mapping *sm,
- 		struct vm_area_struct *new_vma)
- {
--	unsigned long new_size = new_vma->vm_end - new_vma->vm_start;
--	unsigned long vdso_size = vdso_end - vdso_start;
--
--	if (vdso_size != new_size)
--		return -EINVAL;
--
--	current->mm->context.vdso = (void *)new_vma->vm_start;
--
--	return 0;
-+	return __vdso_remap(ARM64_VDSO, sm, new_vma);
- }
+ define archhelp
+diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
+index 9e7dcb2c31c7..478491f07b4f 100644
+--- a/arch/arm64/kernel/Makefile
++++ b/arch/arm64/kernel/Makefile
+@@ -28,7 +28,10 @@ $(obj)/%.stub.o: $(obj)/%.o FORCE
+ 	$(call if_changed,objcopy)
  
--static struct vm_special_mapping vdso_spec[2] __ro_after_init = {
-+/*
-+ * aarch64_vdso_pages:
-+ * 0 - vvar
-+ * 1 - vdso
-+ */
-+#define A_VVAR		0
-+#define A_VDSO		1
-+#define A_PAGES		(A_VDSO + 1)
-+static struct vm_special_mapping vdso_spec[A_PAGES] __ro_after_init = {
- 	{
- 		.name	= "[vvar]",
- 	},
-@@ -206,37 +330,10 @@ static struct vm_special_mapping vdso_spec[2] __ro_after_init = {
+ obj-$(CONFIG_COMPAT)			+= sys32.o signal32.o			\
+-					   sigreturn32.o sys_compat.o
++					   sys_compat.o
++ifneq ($(CONFIG_COMPAT_VDSO), y)
++obj-$(CONFIG_COMPAT)			+= sigreturn32.o
++endif
+ obj-$(CONFIG_KUSER_HELPERS)		+= kuser32.o
+ obj-$(CONFIG_FUNCTION_TRACER)		+= ftrace.o entry-ftrace.o
+ obj-$(CONFIG_MODULES)			+= module.o
+@@ -62,6 +65,7 @@ obj-$(CONFIG_ARM64_SSBD)		+= ssbd.o
+ obj-$(CONFIG_ARM64_PTR_AUTH)		+= pointer_auth.o
  
- static int __init vdso_init(void)
- {
--	int i;
--	struct page **vdso_pagelist;
--	unsigned long pfn;
--
--	if (memcmp(vdso_start, "\177ELF", 4)) {
--		pr_err("vDSO is not a valid ELF object!\n");
--		return -EINVAL;
--	}
--
--	vdso_pages = (vdso_end - vdso_start) >> PAGE_SHIFT;
--
--	/* Allocate the vDSO pagelist, plus a page for the data. */
--	vdso_pagelist = kcalloc(vdso_pages + 1, sizeof(struct page *),
--				GFP_KERNEL);
--	if (vdso_pagelist == NULL)
--		return -ENOMEM;
--
--	/* Grab the vDSO data page. */
--	vdso_pagelist[0] = phys_to_page(__pa_symbol(vdso_data));
--
-+	vdso_lookup[ARM64_VDSO].dm = &vdso_spec[A_VVAR];
-+	vdso_lookup[ARM64_VDSO].cm = &vdso_spec[A_VDSO];
+ obj-y					+= vdso/ probes/
++obj-$(CONFIG_COMPAT_VDSO)		+= vdso32/
+ head-y					:= head.o
+ extra-y					+= $(head-y) vmlinux.lds
  
--	/* Grab the vDSO code pages. */
--	pfn = sym_to_pfn(vdso_start);
--
--	for (i = 0; i < vdso_pages; i++)
--		vdso_pagelist[i + 1] = pfn_to_page(pfn + i);
--
--	vdso_spec[0].pages = &vdso_pagelist[0];
--	vdso_spec[1].pages = &vdso_pagelist[1];
--
--	return 0;
-+	return __vdso_init(ARM64_VDSO);
- }
- arch_initcall(vdso_init);
- 
-@@ -244,41 +341,17 @@ int arch_setup_additional_pages(struct linux_binprm *bprm,
- 				int uses_interp)
- {
- 	struct mm_struct *mm = current->mm;
--	unsigned long vdso_base, vdso_text_len, vdso_mapping_len;
--	void *ret;
--
--	vdso_text_len = vdso_pages << PAGE_SHIFT;
--	/* Be sure to map the data page */
--	vdso_mapping_len = vdso_text_len + PAGE_SIZE;
-+	int ret;
- 
- 	if (down_write_killable(&mm->mmap_sem))
- 		return -EINTR;
--	vdso_base = get_unmapped_area(NULL, 0, vdso_mapping_len, 0, 0);
--	if (IS_ERR_VALUE(vdso_base)) {
--		ret = ERR_PTR(vdso_base);
--		goto up_fail;
--	}
--	ret = _install_special_mapping(mm, vdso_base, PAGE_SIZE,
--				       VM_READ|VM_MAYREAD,
--				       &vdso_spec[0]);
--	if (IS_ERR(ret))
--		goto up_fail;
--
--	vdso_base += PAGE_SIZE;
--	mm->context.vdso = (void *)vdso_base;
--	ret = _install_special_mapping(mm, vdso_base, vdso_text_len,
--				       VM_READ|VM_EXEC|
--				       VM_MAYREAD|VM_MAYWRITE|VM_MAYEXEC,
--				       &vdso_spec[1]);
--	if (IS_ERR(ret))
--		goto up_fail;
- 
-+	ret = __setup_additional_pages(ARM64_VDSO,
-+				       mm,
-+				       bprm,
-+				       uses_interp);
- 
- 	up_write(&mm->mmap_sem);
--	return 0;
- 
--up_fail:
--	mm->context.vdso = NULL;
--	up_write(&mm->mmap_sem);
--	return PTR_ERR(ret);
-+	return ret;
- }
 -- 
 2.21.0
