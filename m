@@ -1,109 +1,61 @@
-From: khalid.aziz@oracle.com (Khalid Aziz)
-Date: Thu, 30 May 2019 10:05:55 -0600
-Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
- syscalls
-In-Reply-To: <20190530151105.GA35418@arrakis.emea.arm.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
- <20190527143719.GA59948@MBP.local>
- <20190528145411.GA709@e119886-lin.cambridge.arm.com>
- <20190528154057.GD32006@arrakis.emea.arm.com>
- <11193998209cc6ff34e7d704f081206b8787b174.camel@oracle.com>
- <20190529142008.5quqv3wskmpwdfbu@mbp>
- <b2753e81-7b57-481f-0095-3c6fecb1a74c@oracle.com>
- <20190530151105.GA35418@arrakis.emea.arm.com>
-Message-ID: <f79336b5-46b4-39c0-b754-23366207e32d@oracle.com>
+From: fklassen@appneta.com (Fred Klassen)
+Date: Thu, 30 May 2019 09:11:11 -0700
+Subject: [PATCH net-next v3 1/1] net/udp_gso: Allow TX timestamp with UDP
+ GSO
+In-Reply-To: <CAF=yD-JvNFdWCBJ6w1_XWSHu1CDiG_QimrUT8ZCxw=U+OVvBMA@mail.gmail.com>
+References: <20190528184415.16020-1-fklassen@appneta.com>
+ <20190528184415.16020-2-fklassen@appneta.com>
+ <CAF=yD-JvNFdWCBJ6w1_XWSHu1CDiG_QimrUT8ZCxw=U+OVvBMA@mail.gmail.com>
+Message-ID: <8A1636C9-7476-43B2-BAE0-B03675B3920E@appneta.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190530160555.7TJDW6szbBJLpit3MXqfpywKWI3apGxQOk5GK5fpqMI@z>
+Message-ID: <20190530161111.PWtIC7fGsGkMZvz0J8WTh5qUa-imzsPHb-tH1P_F1n0@z>
 
-On 5/30/19 9:11 AM, Catalin Marinas wrote:
-> On Wed, May 29, 2019@01:16:37PM -0600, Khalid Aziz wrote:
->> mmap() can return the same tagged address but I am uneasy about kernel
->> pre-coloring the pages. Database can mmap 100's of GB of memory. That is
->> lot of work being offloaded to the kernel to pre-color the page even if
->> done in batches as pages are faulted in.
+
+
+> On May 28, 2019,@2:44 PM, Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
+>> It also appears that other TX CMSG types cause similar issues, for
+>> example trying to set SOL_IP/IP_TOS.
 > 
-> For anonymous mmap() for example, the kernel would have to zero the
-> faulted in pages anyway. We can handle the colouring at the same time in
-> clear_user_page() (as I said below, we have to clear the colour anyway
-> from previous uses, so it's simply extending this to support something
-> other than tag/colour 0 by default with no additional overhead).
+> See previous comment in v2
+> 
+> http://patchwork.ozlabs.org/patch/1105564/
 > 
 
-On sparc M7, clear_user_page() ends up in M7clear_user_page defined in
-arch/sparc/lib/M7memset.S. M7 code use Block Init Store (BIS) to clear
-the page. BIS on M7 clears the memory tags as well and no separate
-instructions are needed to clear the tags. As a result when kernel
-clears a page before returning it to user, the page is not only zeroed
-out, its tags are also cleared to 0.
+Sorry, missed those updates. I am still relying too much on my emails.
+Will fix for next version, and will scrub through messages on patchwork.
 
->>> Since we already need such loop in the kernel, we might as well allow
->>> user space to require a certain colour. This comes in handy for large
->>> malloc() and another advantage is that the C library won't be stuck
->>> trying to paint the whole range (think GB).
->>
->> If kernel is going to pre-color all pages in a vma, we will need to
->> store the default tag in the vma. It will add more time to page fault
->> handling code. On sparc M7, kernel will need to execute additional 128
->> stxa instructions to set the tags on a normal page.
-> 
-> As I said, since the user can retrieve an old colour using ldxa, the
-> kernel should perform this operation anyway on any newly allocated page
-> (unless you clear the existing colour on page freeing).>
+> FYI, no need for a cover letter for a single patch. Also, I think the
+> cc list can be more concise. Mainly netdev.
 
-Tags are not cleared on sparc on freeing. They get cleared when the page
-is allocated again.
+Fixed.
 
->>>> We can try to store tags for an entire region in vma but that is
->>>> expensive, plus on sparc tags are set in userspace with no
->>>> participation from kernel and now we need a way for userspace to
->>>> communicate the tags to kernel.
->>>
->>> We can't support finer granularity through the mmap() syscall and, as
->>> you said, the vma is not the right thing to store the individual tags.
->>> With the above extension to mmap(), we'd have to store a colour per vma
->>> and prevent merging if different colours (we could as well use the
->>> pkeys mechanism we already have in the kernel but use a colour per vma
->>> instead of a key).
->>
->> Since tags can change on any part of mmap region on sparc at any time
->> without kernel being involved, I am not sure I see much reason for
->> kernel to enforce any tag related restrictions.
-> 
-> It's not enforcing a tag, more like the default colour for a faulted in
-> page. Anyway, if sparc is going with default 0/untagged, that's fine as
-> well. We may add this mmap() option to arm64 only.
-> 
->>>> From sparc point of view, making kernel responsible for assigning tags
->>>> to a page on page fault is full of pitfalls.
->>>
->>> This could be just some arm64-specific but if you plan to deploy it more
->>> generically for sparc (at the C library level), you may find this
->>> useful.
->>
->> Common semantics from app developer point of view will be very useful to
->> maintain. If arm64 says mmap with MAP_FIXED and a tagged address will
->> return a pre-colored page, I would rather have it be the same on any
->> architecture. Is there a use case that justifies kernel doing this extra
->> work?
-> 
-> So if a database program is doing an anonymous mmap(PROT_TBI) of 100GB,
-> IIUC for sparc the faulted-in pages will have random colours (on 64-byte
-> granularity). Ignoring the information leak from prior uses of such
-> pages, it would be the responsibility of the db program to issue the
-> stxa. On arm64, since we also want to do this via malloc(), any large
-> allocation would require all pages to be faulted in so that malloc() can
-> set the write colour before being handed over to the user. That's what
-> we want to avoid and the user is free to repaint the memory as it likes.
+> Same as above. This is not about zerocopy.
 > 
 
-On sparc, any newly allocated page is cleared along with any old tags on
-it. Since clearing tag happens automatically when page is cleared on
-sparc, clear_user_page() will need to execute additional stxa
-instructions to set a new tag. It is doable. In a way it is done already
-if page is being pre-colored with tag 0 always ;) Where would the
-pre-defined tag be stored - as part of address stored in vm_start or a
-new field in vm_area_struct?
+Will fix next patchset.
 
---
-Khalid
+
+> Asked elsewhere, but best answered here: given that xmit_more delays
+> delivery to the NIC until the last segment in a train, is the first
+> segment in your opinion still the best to attach the timestamp request
+> to?
+> 
+> To reiterate, we do not want to need a follow-up patch to disable
+> xmit_more when timestamps are requested.
+> 
+
+I think it would be worthwhile. I was playing with this patch …
+
++               /* software TX timeststamps are sent immediately */
++               if (tsflags & SKBTX_SW_TSTAMP)
++                       seg->xmit_more = 0;
+
+… which attempts to address this issue. I believe that the patch
+should be applied for software timestamps only. However when
+I applied in net-next I got the following compile error, which suggests
+there is more investigation needed, and therefore requires a separate
+patch.
+
+net/ipv4/udp_offload.c: In function ‘__udp_gso_segment’:
+net/ipv4/udp_offload.c:251:7: error: ‘struct sk_buff’ has no member named ‘xmit_more’
+    seg->xmit_more = 0;
