@@ -1,59 +1,53 @@
-From: fklassen at appneta.com (Fred Klassen)
-Date: Thu, 30 May 2019 09:11:11 -0700
-Subject: [PATCH net-next v3 1/1] net/udp_gso: Allow TX timestamp with UDP
- GSO
-In-Reply-To: <CAF=yD-JvNFdWCBJ6w1_XWSHu1CDiG_QimrUT8ZCxw=U+OVvBMA@mail.gmail.com>
-References: <20190528184415.16020-1-fklassen@appneta.com>
- <20190528184415.16020-2-fklassen@appneta.com>
- <CAF=yD-JvNFdWCBJ6w1_XWSHu1CDiG_QimrUT8ZCxw=U+OVvBMA@mail.gmail.com>
-Message-ID: <8A1636C9-7476-43B2-BAE0-B03675B3920E@appneta.com>
+From: catalin.marinas at arm.com (Catalin Marinas)
+Date: Thu, 30 May 2019 17:57:18 +0100
+Subject: [PATCH v15 05/17] arms64: untag user pointers passed to memory
+ syscalls
+In-Reply-To: <f79336b5-46b4-39c0-b754-23366207e32d@oracle.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+ <20190527143719.GA59948@MBP.local>
+ <20190528145411.GA709@e119886-lin.cambridge.arm.com>
+ <20190528154057.GD32006@arrakis.emea.arm.com>
+ <11193998209cc6ff34e7d704f081206b8787b174.camel@oracle.com>
+ <20190529142008.5quqv3wskmpwdfbu@mbp>
+ <b2753e81-7b57-481f-0095-3c6fecb1a74c@oracle.com>
+ <20190530151105.GA35418@arrakis.emea.arm.com>
+ <f79336b5-46b4-39c0-b754-23366207e32d@oracle.com>
+Message-ID: <20190530165717.GC35418@arrakis.emea.arm.com>
 
-
-
-> On May 28, 2019, at 2:44 PM, Willem de Bruijn <willemdebruijn.kernel at gmail.com> wrote:
->> It also appears that other TX CMSG types cause similar issues, for
->> example trying to set SOL_IP/IP_TOS.
+On Thu, May 30, 2019 at 10:05:55AM -0600, Khalid Aziz wrote:
+> On 5/30/19 9:11 AM, Catalin Marinas wrote:
+> > So if a database program is doing an anonymous mmap(PROT_TBI) of 100GB,
+> > IIUC for sparc the faulted-in pages will have random colours (on 64-byte
+> > granularity). Ignoring the information leak from prior uses of such
+> > pages, it would be the responsibility of the db program to issue the
+> > stxa. On arm64, since we also want to do this via malloc(), any large
+> > allocation would require all pages to be faulted in so that malloc() can
+> > set the write colour before being handed over to the user. That's what
+> > we want to avoid and the user is free to repaint the memory as it likes.
 > 
-> See previous comment in v2
-> 
-> http://patchwork.ozlabs.org/patch/1105564/
-> 
+> On sparc, any newly allocated page is cleared along with any old tags on
+> it. Since clearing tag happens automatically when page is cleared on
+> sparc, clear_user_page() will need to execute additional stxa
+> instructions to set a new tag. It is doable. In a way it is done already
+> if page is being pre-colored with tag 0 always ;)
 
-Sorry, missed those updates. I am still relying too much on my emails.
-Will fix for next version, and will scrub through messages on patchwork.
+Ah, good to know. On arm64 we'd have to use different instructions,
+although the same loop.
 
-> FYI, no need for a cover letter for a single patch. Also, I think the
-> cc list can be more concise. Mainly netdev.
+> Where would the pre-defined tag be stored - as part of address stored
+> in vm_start or a new field in vm_area_struct?
 
-Fixed.
+I think we can discuss the details when we post the actual MTE patches.
+In our internal hack we overloaded the VM_HIGH_ARCH_* flags and selected
+CONFIG_ARCH_USES_HIGH_VMA_FLAGS (used for pkeys on x86).
 
-> Same as above. This is not about zerocopy.
-> 
+For the time being, I'd rather restrict tagged addresses passed to
+mmap() until we agreed that they have any meaning. If we allowed them
+now but get ignored (though probably no-one would be doing this), I feel
+it's slightly harder to change the semantics afterwards.
 
-Will fix next patchset.
+Thanks.
 
-
-> Asked elsewhere, but best answered here: given that xmit_more delays
-> delivery to the NIC until the last segment in a train, is the first
-> segment in your opinion still the best to attach the timestamp request
-> to?
-> 
-> To reiterate, we do not want to need a follow-up patch to disable
-> xmit_more when timestamps are requested.
-> 
-
-I think it would be worthwhile. I was playing with this patch …
-
-+               /* software TX timeststamps are sent immediately */
-+               if (tsflags & SKBTX_SW_TSTAMP)
-+                       seg->xmit_more = 0;
-
-… which attempts to address this issue. I believe that the patch
-should be applied for software timestamps only. However when
-I applied in net-next I got the following compile error, which suggests
-there is more investigation needed, and therefore requires a separate
-patch.
-
-net/ipv4/udp_offload.c: In function ‘__udp_gso_segment’:
-net/ipv4/udp_offload.c:251:7: error: ‘struct sk_buff’ has no member named ‘xmit_more’
-    seg->xmit_more = 0;
+-- 
+Catalin
