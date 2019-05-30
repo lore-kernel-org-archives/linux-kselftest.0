@@ -1,66 +1,57 @@
-From: dan.rue at linaro.org (Dan Rue)
-Date: Thu, 30 May 2019 14:00:41 -0500
-Subject: [PATCH] kbuild: teach kselftest-merge to find nested config files
-In-Reply-To: <20190520175641.GA14339@kroah.com>
-References: <20190520151614.19188-1-dan.rue@linaro.org>
- <20190520175641.GA14339@kroah.com>
-Message-ID: <20190530190041.m6535ihflbgr2q3m@xps.therub.org>
+From: willemdebruijn.kernel at gmail.com (Willem de Bruijn)
+Date: Thu, 30 May 2019 15:17:20 -0400
+Subject: [PATCH net-next v3 1/1] net/udp_gso: Allow TX timestamp with UDP
+ GSO
+In-Reply-To: <8A1636C9-7476-43B2-BAE0-B03675B3920E@appneta.com>
+References: <20190528184415.16020-1-fklassen@appneta.com>
+ <20190528184415.16020-2-fklassen@appneta.com>
+ <CAF=yD-JvNFdWCBJ6w1_XWSHu1CDiG_QimrUT8ZCxw=U+OVvBMA@mail.gmail.com>
+ <8A1636C9-7476-43B2-BAE0-B03675B3920E@appneta.com>
+Message-ID: <CAF=yD-JW1ZA-LA6iJ0X83UMJxmNLh7VfmUK7B=7LbYMY--wO6w@mail.gmail.com>
 
-On Mon, May 20, 2019 at 07:56:41PM +0200, Greg KH wrote:
-> On Mon, May 20, 2019 at 10:16:14AM -0500, Dan Rue wrote:
-> > Current implementation of kselftest-merge only finds config files that
-> > are one level deep using `$(srctree)/tools/testing/selftests/*/config`.
-> > 
-> > Often, config files are added in nested directories, and do not get
-> > picked up by kselftest-merge.
-> > 
-> > Use `find` to catch all config files under
-> > `$(srctree)/tools/testing/selftests` instead.
-> > 
-> > Signed-off-by: Dan Rue <dan.rue at linaro.org>
-> > ---
-> >  Makefile | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> To be more specific here, the binderfs test is not catching the config
-> entry, so it would be nice to get this into the stable trees as well :)
-> 
-> > diff --git a/Makefile b/Makefile
-> > index a45f84a7e811..e99e7f9484af 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1228,9 +1228,8 @@ kselftest-clean:
-> >  PHONY += kselftest-merge
-> >  kselftest-merge:
-> >  	$(if $(wildcard $(objtree)/.config),, $(error No .config exists, config your kernel first!))
-> > -	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/kconfig/merge_config.sh \
-> > -		-m $(objtree)/.config \
-> > -		$(srctree)/tools/testing/selftests/*/config
-> > +	$(Q)find $(srctree)/tools/testing/selftests -name config | \
-> > +		xargs $(srctree)/scripts/kconfig/merge_config.sh -m $(objtree)/.config
-> >  	+$(Q)$(MAKE) -f $(srctree)/Makefile olddefconfig
-> >  
-> >  # ---------------------------------------------------------------------------
-> 
-> is find run with $(Q)?  It isn't with other instances in the Makefile.
+> > Asked elsewhere, but best answered here: given that xmit_more delays
+> > delivery to the NIC until the last segment in a train, is the first
+> > segment in your opinion still the best to attach the timestamp request
+> > to?
+> >
+> > To reiterate, we do not want to need a follow-up patch to disable
+> > xmit_more when timestamps are requested.
+> >
+>
+> I think it would be worthwhile. I was playing with this patch …
+>
+> +               /* software TX timeststamps are sent immediately */
+> +               if (tsflags & SKBTX_SW_TSTAMP)
+> +                       seg->xmit_more = 0;
+>
+> … which attempts to address this issue. I believe that the patch
+> should be applied for software timestamps only.
 
-I'm not entirely sure all the ways that $(Q) is used (it looks like it
-just gets set to @), but if i run 'KBUILD_VERBOSE=1 make
-kselftest-merge' I do see the find command printed before running:
+Disagree, sorry.
 
-    find ./tools/testing/selftests -name config | \
-          xargs ./scripts/kconfig/merge_config.sh -m ./.config
+Timestamped packets should take the same path as non-timestamped, so
+that sampled timestamps are representative of the overall workload.
 
-I noticed find used inconsistently (sometimes with @, sometimes with
-$(Q), sometimes with neither), so I picked the usage that seemed most
-correct to me.
+Moreover, due to how xmit_more works, applying the timestamp request
+to the last segment will give you exactly the behavior that you are
+looking for (bar requeue events): a timestamp before the NIC starts
+working on any byte in the request. And that approach will be useful
+for measuring host latency as well, unlike timestamping the first
+segment.
 
-Dan
+Timestamping the first, then arguing that it is not useful as is and
+requires more changes is the wrong path imho.
 
-> 
-> thanks,
-> 
-> greg k-h
+Perhaps it is easiest to just not split off a segment from the GSO
+train when timestamp that independently. That works today.
 
--- 
-Linaro - Kernel Validation
+> However when
+> I applied in net-next I got the following compile error, which suggests
+> there is more investigation needed, and therefore requires a separate
+> patch.
+>
+> net/ipv4/udp_offload.c: In function ‘__udp_gso_segment’:
+> net/ipv4/udp_offload.c:251:7: error: ‘struct sk_buff’ has no member named ‘xmit_more’
+>     seg->xmit_more = 0;
+
+Yes, this has been moved to a percpu variable.
