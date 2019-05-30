@@ -1,40 +1,37 @@
 From: vincenzo.frascino at arm.com (Vincenzo Frascino)
-Date: Thu, 30 May 2019 15:15:18 +0100
-Subject: [PATCH v6 06/19] arm64: compat: Add missing syscall numbers
+Date: Thu, 30 May 2019 15:15:21 +0100
+Subject: [PATCH v6 09/19] lib: vdso: Add compat support
 In-Reply-To: <20190530141531.43462-1-vincenzo.frascino@arm.com>
 References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
-Message-ID: <20190530141531.43462-7-vincenzo.frascino@arm.com>
+Message-ID: <20190530141531.43462-10-vincenzo.frascino@arm.com>
 
-vDSO requires gettimeofday and clock_gettime syscalls to implement the
-fallback mechanism.
+Some 64 bit architectures have support for 32 bit applications that
+require a separate version of the vDSOs.
 
-Add the missing syscall numbers to unistd.h for arm64.
+Add support to the generic code for compat fallback functions.
 
 Cc: Catalin Marinas <catalin.marinas at arm.com>
 Cc: Will Deacon <will.deacon at arm.com>
-Cc: Arnd Bergmann <arnd at arndb.de>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
 ---
- arch/arm64/include/asm/unistd.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ lib/vdso/gettimeofday.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
-index 70e6882853c0..81cc05acccc9 100644
---- a/arch/arm64/include/asm/unistd.h
-+++ b/arch/arm64/include/asm/unistd.h
-@@ -33,8 +33,13 @@
- #define __NR_compat_exit		1
- #define __NR_compat_read		3
- #define __NR_compat_write		4
-+#define __NR_compat_gettimeofday	78
- #define __NR_compat_sigreturn		119
- #define __NR_compat_rt_sigreturn	173
-+#define __NR_compat_clock_getres	247
-+#define __NR_compat_clock_gettime	263
-+#define __NR_compat_clock_gettime64	403
-+#define __NR_compat_clock_getres_time64	406
+diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+index a226675731f4..44b9c6a0cb95 100644
+--- a/lib/vdso/gettimeofday.c
++++ b/lib/vdso/gettimeofday.c
+@@ -21,7 +21,11 @@
+  * - clock_gettime_fallback(): fallback for clock_gettime.
+  * - clock_getres_fallback(): fallback for clock_getres.
+  */
++#ifdef ENABLE_COMPAT_VDSO
++#include <asm/vdso/compat_gettimeofday.h>
++#else
+ #include <asm/vdso/gettimeofday.h>
++#endif /* ENABLE_COMPAT_VDSO */
  
- /*
-  * The following SVCs are ARM private.
+ static notrace int do_hres(const struct vdso_data *vd,
+ 			   clockid_t clk,
 -- 
 2.21.0
