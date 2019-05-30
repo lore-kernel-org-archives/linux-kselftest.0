@@ -1,100 +1,317 @@
 From: vincenzo.frascino@arm.com (Vincenzo Frascino)
-Date: Thu, 30 May 2019 15:15:27 +0100
-Subject: [PATCH v6 15/19] arm64: Add vDSO compat support
+Date: Thu, 30 May 2019 15:15:31 +0100
+Subject: [PATCH v6 19/19] kselftest: Extend vDSO selftest
 In-Reply-To: <20190530141531.43462-1-vincenzo.frascino@arm.com>
 References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
-Message-ID: <20190530141531.43462-16-vincenzo.frascino@arm.com>
+Message-ID: <20190530141531.43462-20-vincenzo.frascino@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190530141527._09q2C0kRFdjQmUX3w65bh_1p2KSdPaRjzN5ObGK0iA@z>
+Message-ID: <20190530141531.2AKVz-rLcb8iE4zbMTs-J-QM6UrA0US9yKoV_IUZrbY@z>
 
-Add vDSO compat support to the arm64 building system.
+The current version of the multiarch vDSO selftest verifies only
+gettimeofday.
 
-Cc: Catalin Marinas <catalin.marinas at arm.com>
-Cc: Will Deacon <will.deacon at arm.com>
+Extend the vDSO selftest to the other library functions:
+ - time
+ - clock_getres
+ - clock_gettime
+
+The extension has been used to verify the unified vdso library on the
+supported architectures.
+
+Cc: Shuah Khan <shuah at kernel.org>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
 ---
- arch/arm64/Kconfig         |  1 +
- arch/arm64/Makefile        | 23 +++++++++++++++++++++--
- arch/arm64/kernel/Makefile |  6 +++++-
- 3 files changed, 27 insertions(+), 3 deletions(-)
+ tools/testing/selftests/vDSO/Makefile         |   2 +
+ tools/testing/selftests/vDSO/vdso_full_test.c | 261 ++++++++++++++++++
+ 2 files changed, 263 insertions(+)
+ create mode 100644 tools/testing/selftests/vDSO/vdso_full_test.c
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 952c9f8cf3b8..3e1d4f8347f4 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -108,6 +108,7 @@ config ARM64
- 	select GENERIC_STRNLEN_USER
- 	select GENERIC_TIME_VSYSCALL
- 	select GENERIC_GETTIMEOFDAY
-+	select GENERIC_COMPAT_VDSO if !CPU_BIG_ENDIAN
- 	select HANDLE_DOMAIN_IRQ
- 	select HARDIRQS_SW_RESEND
- 	select HAVE_PCI
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index b025304bde46..4db50d4b2476 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -49,9 +49,25 @@ $(warning Detected assembler with broken .inst; disassembly will be unreliable)
-   endif
+diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+index 9e03d61f52fd..68e9b4a1cdcf 100644
+--- a/tools/testing/selftests/vDSO/Makefile
++++ b/tools/testing/selftests/vDSO/Makefile
+@@ -5,6 +5,7 @@ uname_M := $(shell uname -m 2>/dev/null || echo not)
+ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+ 
+ TEST_GEN_PROGS := $(OUTPUT)/vdso_test
++TEST_GEN_PROGS += $(OUTPUT)/vdso_full_test
+ ifeq ($(ARCH),x86)
+ TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
  endif
+@@ -18,6 +19,7 @@ endif
  
--KBUILD_CFLAGS	+= -mgeneral-regs-only $(lseinstr) $(brokengasinst)
-+ifeq ($(CONFIG_GENERIC_COMPAT_VDSO), y)
-+  CROSS_COMPILE_COMPAT ?= $(CONFIG_CROSS_COMPILE_COMPAT_VDSO:"%"=%)
+ all: $(TEST_GEN_PROGS)
+ $(OUTPUT)/vdso_test: parse_vdso.c vdso_test.c
++$(OUTPUT)/vdso_full_test: parse_vdso.c vdso_full_test.c
+ $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
+ 	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
+ 		vdso_standalone_test_x86.c parse_vdso.c \
+diff --git a/tools/testing/selftests/vDSO/vdso_full_test.c b/tools/testing/selftests/vDSO/vdso_full_test.c
+new file mode 100644
+index 000000000000..62001d3d241b
+--- /dev/null
++++ b/tools/testing/selftests/vDSO/vdso_full_test.c
+@@ -0,0 +1,261 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * vdso_full_test.c: Sample code to test all the timers.
++ * Copyright (c) 2019 Arm Ltd.
++ *
++ * Compile with:
++ * gcc -std=gnu99 vdso_full_test.c parse_vdso.c
++ *
++ * Tested on ARM, ARM64, MIPS32 and x86 (32-bit and 64-bit).
++ * Might work on other architectures.
++ */
 +
-+  ifeq ($(CONFIG_CC_IS_CLANG), y)
-+    $(warning CROSS_COMPILE_COMPAT is clang, the compat vDSO will not be built)
-+  else ifeq ($(CROSS_COMPILE_COMPAT),)
-+    $(warning CROSS_COMPILE_COMPAT not defined or empty, the compat vDSO will not be built)
-+  else ifeq ($(shell which $(CROSS_COMPILE_COMPAT)gcc 2> /dev/null),)
-+    $(error $(CROSS_COMPILE_COMPAT)gcc not found, check CROSS_COMPILE_COMPAT)
-+  else
-+    export CROSS_COMPILE_COMPAT
-+    export CONFIG_COMPAT_VDSO := y
-+    compat_vdso := -DCONFIG_COMPAT_VDSO=1
-+  endif
-+endif
++#include <stdint.h>
++#include <elf.h>
++#include <stdio.h>
++#include <time.h>
++#include <sys/auxv.h>
++#include <sys/time.h>
++#define _GNU_SOURCE
++#include <unistd.h>
++#include <sys/syscall.h>
 +
-+KBUILD_CFLAGS	+= -mgeneral-regs-only $(lseinstr) $(brokengasinst) $(compat_vdso)
- KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
--KBUILD_AFLAGS	+= $(lseinstr) $(brokengasinst)
-+KBUILD_AFLAGS	+= $(lseinstr) $(brokengasinst) $(compat_vdso)
- 
- KBUILD_CFLAGS	+= $(call cc-option,-mabi=lp64)
- KBUILD_AFLAGS	+= $(call cc-option,-mabi=lp64)
-@@ -163,6 +179,9 @@ ifeq ($(KBUILD_EXTMOD),)
- prepare: vdso_prepare
- vdso_prepare: prepare0
- 	$(Q)$(MAKE) $(build)=arch/arm64/kernel/vdso include/generated/vdso-offsets.h
-+	$(if $(CONFIG_COMPAT_VDSO),$(Q)$(MAKE) \
-+		$(build)=arch/arm64/kernel/vdso32  \
-+		include/generated/vdso32-offsets.h)
- endif
- 
- define archhelp
-diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
-index 9e7dcb2c31c7..478491f07b4f 100644
---- a/arch/arm64/kernel/Makefile
-+++ b/arch/arm64/kernel/Makefile
-@@ -28,7 +28,10 @@ $(obj)/%.stub.o: $(obj)/%.o FORCE
- 	$(call if_changed,objcopy)
- 
- obj-$(CONFIG_COMPAT)			+= sys32.o signal32.o			\
--					   sigreturn32.o sys_compat.o
-+					   sys_compat.o
-+ifneq ($(CONFIG_COMPAT_VDSO), y)
-+obj-$(CONFIG_COMPAT)			+= sigreturn32.o
-+endif
- obj-$(CONFIG_KUSER_HELPERS)		+= kuser32.o
- obj-$(CONFIG_FUNCTION_TRACER)		+= ftrace.o entry-ftrace.o
- obj-$(CONFIG_MODULES)			+= module.o
-@@ -62,6 +65,7 @@ obj-$(CONFIG_ARM64_SSBD)		+= ssbd.o
- obj-$(CONFIG_ARM64_PTR_AUTH)		+= pointer_auth.o
- 
- obj-y					+= vdso/ probes/
-+obj-$(CONFIG_COMPAT_VDSO)		+= vdso32/
- head-y					:= head.o
- extra-y					+= $(head-y) vmlinux.lds
- 
++#include "../kselftest.h"
++
++extern void *vdso_sym(const char *version, const char *name);
++extern void vdso_init_from_sysinfo_ehdr(uintptr_t base);
++extern void vdso_init_from_auxv(void *auxv);
++
++/*
++ * ARM64's vDSO exports its vDSO implementation with different names and
++ * a different version from other architectures, so we need to handle it
++ * as a special case.
++ */
++#if defined(__aarch64__)
++const char *version = "LINUX_2.6.39";
++const char *name[4] = {
++	"__kernel_gettimeofday",
++	"__kernel_clock_gettime",
++	"__kernel_time",
++	"__kernel_clock_getres",
++};
++#else
++/* Tested on x86, arm, mips */
++const char *version = "LINUX_2.6";
++const char *name[4] = {
++	"__vdso_gettimeofday",
++	"__vdso_clock_gettime",
++	"__vdso_time",
++	"__vdso_clock_getres",
++};
++#endif
++
++typedef long (*vdso_gettimeofday_t)(struct timeval *tv, struct timezone *tz);
++typedef long (*vdso_clock_gettime_t)(clockid_t clk_id, struct timespec *ts);
++typedef long (*vdso_clock_getres_t)(clockid_t clk_id, struct timespec *ts);
++typedef time_t (*vdso_time_t)(time_t *t);
++
++static int vdso_test_gettimeofday(void)
++{
++	/* Find gettimeofday. */
++	vdso_gettimeofday_t vdso_gettimeofday =
++		(vdso_gettimeofday_t)vdso_sym(version, name[0]);
++
++	if (!vdso_gettimeofday) {
++		printf("Could not find %s\n", name[0]);
++		return KSFT_SKIP;
++	}
++
++	struct timeval tv;
++	long ret = vdso_gettimeofday(&tv, 0);
++
++	if (ret == 0) {
++		printf("The time is %lld.%06lld\n",
++		       (long long)tv.tv_sec, (long long)tv.tv_usec);
++	} else {
++		printf("%s failed\n", name[0]);
++		return KSFT_FAIL;
++	}
++
++	return KSFT_PASS;
++}
++
++static int vdso_test_clock_gettime(clockid_t clk_id)
++{
++	/* Find clock_gettime. */
++	vdso_clock_gettime_t vdso_clock_gettime =
++		(vdso_clock_gettime_t)vdso_sym(version, name[1]);
++
++	if (!vdso_clock_gettime) {
++		printf("Could not find %s\n", name[1]);
++		return KSFT_SKIP;
++	}
++
++	struct timespec ts;
++	long ret = vdso_clock_gettime(clk_id, &ts);
++
++	if (ret == 0) {
++		printf("The time is %lld.%06lld\n",
++		       (long long)ts.tv_sec, (long long)ts.tv_nsec);
++	} else {
++		printf("%s failed\n", name[1]);
++		return KSFT_FAIL;
++	}
++
++	return KSFT_PASS;
++}
++
++static int vdso_test_time(void)
++{
++	/* Find time. */
++	vdso_time_t vdso_time =
++		(vdso_time_t)vdso_sym(version, name[2]);
++
++	if (!vdso_time) {
++		printf("Could not find %s\n", name[2]);
++		return KSFT_SKIP;
++	}
++
++	long ret = vdso_time(NULL);
++
++	if (ret > 0) {
++		printf("The time in hours since January 1, 1970 is %lld\n",
++				(long long)(ret / 3600));
++	} else {
++		printf("%s failed\n", name[2]);
++		return KSFT_FAIL;
++	}
++
++	return KSFT_PASS;
++}
++
++static int vdso_test_clock_getres(clockid_t clk_id)
++{
++	/* Find clock_getres. */
++	vdso_clock_getres_t vdso_clock_getres =
++		(vdso_clock_getres_t)vdso_sym(version, name[3]);
++
++	if (!vdso_clock_getres) {
++		printf("Could not find %s\n", name[3]);
++		return KSFT_SKIP;
++	}
++
++	struct timespec ts, sys_ts;
++	long ret = vdso_clock_getres(clk_id, &ts);
++
++	if (ret == 0) {
++		printf("The resolution is %lld %lld\n",
++		       (long long)ts.tv_sec, (long long)ts.tv_nsec);
++	} else {
++		printf("%s failed\n", name[3]);
++		return KSFT_FAIL;
++	}
++
++	ret = syscall(SYS_clock_getres, clk_id, &sys_ts);
++
++	if ((sys_ts.tv_sec != ts.tv_sec) || (sys_ts.tv_nsec != ts.tv_nsec)) {
++		printf("%s failed\n", name[3]);
++		return KSFT_FAIL;
++	}
++
++	return KSFT_PASS;
++}
++
++const char *vdso_clock_name[12] = {
++	"CLOCK_REALTIME",
++	"CLOCK_MONOTONIC",
++	"CLOCK_PROCESS_CPUTIME_ID",
++	"CLOCK_THREAD_CPUTIME_ID",
++	"CLOCK_MONOTONIC_RAW",
++	"CLOCK_REALTIME_COARSE",
++	"CLOCK_MONOTONIC_COARSE",
++	"CLOCK_BOOTTIME",
++	"CLOCK_REALTIME_ALARM",
++	"CLOCK_BOOTTIME_ALARM",
++	"CLOCK_SGI_CYCLE",
++	"CLOCK_TAI",
++};
++
++/*
++ * This function calls vdso_test_clock_gettime and vdso_test_clock_getres
++ * with different values for clock_id.
++ */
++static inline int vdso_test_clock(clockid_t clock_id)
++{
++	int ret0, ret1;
++
++	ret0 = vdso_test_clock_gettime(clock_id);
++	/* A skipped test is considered passed */
++	if (ret0 == KSFT_SKIP)
++		ret0 = KSFT_PASS;
++
++	ret1 = vdso_test_clock_getres(clock_id);
++	/* A skipped test is considered passed */
++	if (ret1 == KSFT_SKIP)
++		ret1 = KSFT_PASS;
++
++	ret0 += ret1;
++
++	printf("clock_id: %s", vdso_clock_name[clock_id]);
++
++	if (ret0 > 0)
++		printf(" [FAIL]\n");
++	else
++		printf(" [PASS]\n");
++
++	return ret0;
++}
++
++int main(int argc, char **argv)
++{
++	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
++	int ret;
++
++	if (!sysinfo_ehdr) {
++		printf("AT_SYSINFO_EHDR is not present!\n");
++		return KSFT_SKIP;
++	}
++
++	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
++
++	ret = vdso_test_gettimeofday();
++
++#if _POSIX_TIMERS > 0
++
++#ifdef CLOCK_REALTIME
++	ret += vdso_test_clock(CLOCK_REALTIME);
++#endif
++
++#ifdef CLOCK_BOOTTIME
++	ret += vdso_test_clock(CLOCK_BOOTTIME);
++#endif
++
++#ifdef CLOCK_TAI
++	ret += vdso_test_clock(CLOCK_TAI);
++#endif
++
++#ifdef CLOCK_REALTIME_COARSE
++	ret += vdso_test_clock(CLOCK_REALTIME_COARSE);
++#endif
++
++#ifdef CLOCK_MONOTONIC
++	ret += vdso_test_clock(CLOCK_MONOTONIC);
++#endif
++
++#ifdef CLOCK_MONOTONIC_RAW
++	ret += vdso_test_clock(CLOCK_MONOTONIC_RAW);
++#endif
++
++#ifdef CLOCK_MONOTONIC_COARSE
++	ret += vdso_test_clock(CLOCK_MONOTONIC_COARSE);
++#endif
++
++#endif
++
++	ret += vdso_test_time();
++
++	if (ret > 0)
++		return KSFT_FAIL;
++
++	return KSFT_PASS;
++}
 -- 
 2.21.0
