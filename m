@@ -1,146 +1,48 @@
 From: vincenzo.frascino@arm.com (Vincenzo Frascino)
-Date: Thu, 30 May 2019 15:15:19 +0100
-Subject: [PATCH v6 07/19] arm64: compat: Expose signal related structures
+Date: Thu, 30 May 2019 15:15:17 +0100
+Subject: [PATCH v6 05/19] arm64: Build vDSO with -ffixed-x18
 In-Reply-To: <20190530141531.43462-1-vincenzo.frascino@arm.com>
 References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
-Message-ID: <20190530141531.43462-8-vincenzo.frascino@arm.com>
+Message-ID: <20190530141531.43462-6-vincenzo.frascino@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190530141519.FMWxgSH7HCU4T6ESTmxxtKiCjmh_6aJsII3Ds54dc5s@z>
+Message-ID: <20190530141517.XpVzIfkGINspx7pAdkBPGiVGxVV8iCX3gMRnru3R0o0@z>
 
-The compat signal data structures are required as part of the compat
-vDSO implementation in order to provide the unwinding information for
-the sigreturn trampolines.
+From: Peter Collingbourne <pcc@google.com>
 
-Expose the mentioned data structures as part of signal32.h.
+The vDSO needs to be build with x18 reserved in order to accommodate
+userspace platform ABIs built on top of Linux that use the register
+to carry inter-procedural state, as provided for by the AAPCS.
+An example of such a platform ABI is the one that will be used by an
+upcoming version of Android.
 
-Cc: Catalin Marinas <catalin.marinas at arm.com>
-Cc: Will Deacon <will.deacon at arm.com>
+Although this change is currently a no-op due to the fact that the vDSO
+is currently implemented in pure assembly on arm64, it is necessary
+in order to prepare for another change [1] that will add C code to
+the vDSO.
+
+[1] https://patchwork.kernel.org/patch/10044501/
+
+Signed-off-by: Peter Collingbourne <pcc at google.com>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
+Cc: Mark Salyzyn <salyzyn at google.com>
+Cc: Will Deacon <will.deacon at arm.com>
+Cc: linux-arm-kernel at lists.infradead.org
 ---
- arch/arm64/include/asm/signal32.h | 46 +++++++++++++++++++++++++++++++
- arch/arm64/kernel/signal32.c      | 46 -------------------------------
- 2 files changed, 46 insertions(+), 46 deletions(-)
+ arch/arm64/kernel/vdso/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/signal32.h b/arch/arm64/include/asm/signal32.h
-index 58e288aaf0ba..1f05268f4c6d 100644
---- a/arch/arm64/include/asm/signal32.h
-+++ b/arch/arm64/include/asm/signal32.h
-@@ -20,6 +20,52 @@
- #ifdef CONFIG_COMPAT
- #include <linux/compat.h>
+diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+index 00bcfd2672cf..d98230f70caf 100644
+--- a/arch/arm64/kernel/vdso/Makefile
++++ b/arch/arm64/kernel/vdso/Makefile
+@@ -20,7 +20,7 @@ obj-vdso := $(addprefix $(obj)/, $(obj-vdso))
+ ldflags-y := -shared -nostdlib -soname=linux-vdso.so.1 --hash-style=sysv \
+ 		--build-id -n -T
  
-+struct compat_sigcontext {
-+	/* We always set these two fields to 0 */
-+	compat_ulong_t			trap_no;
-+	compat_ulong_t			error_code;
-+
-+	compat_ulong_t			oldmask;
-+	compat_ulong_t			arm_r0;
-+	compat_ulong_t			arm_r1;
-+	compat_ulong_t			arm_r2;
-+	compat_ulong_t			arm_r3;
-+	compat_ulong_t			arm_r4;
-+	compat_ulong_t			arm_r5;
-+	compat_ulong_t			arm_r6;
-+	compat_ulong_t			arm_r7;
-+	compat_ulong_t			arm_r8;
-+	compat_ulong_t			arm_r9;
-+	compat_ulong_t			arm_r10;
-+	compat_ulong_t			arm_fp;
-+	compat_ulong_t			arm_ip;
-+	compat_ulong_t			arm_sp;
-+	compat_ulong_t			arm_lr;
-+	compat_ulong_t			arm_pc;
-+	compat_ulong_t			arm_cpsr;
-+	compat_ulong_t			fault_address;
-+};
-+
-+struct compat_ucontext {
-+	compat_ulong_t			uc_flags;
-+	compat_uptr_t			uc_link;
-+	compat_stack_t			uc_stack;
-+	struct compat_sigcontext	uc_mcontext;
-+	compat_sigset_t			uc_sigmask;
-+	int 				__unused[32 - (sizeof(compat_sigset_t) / sizeof(int))];
-+	compat_ulong_t			uc_regspace[128] __attribute__((__aligned__(8)));
-+};
-+
-+struct compat_sigframe {
-+	struct compat_ucontext	uc;
-+	compat_ulong_t		retcode[2];
-+};
-+
-+struct compat_rt_sigframe {
-+	struct compat_siginfo info;
-+	struct compat_sigframe sig;
-+};
-+
- int compat_setup_frame(int usig, struct ksignal *ksig, sigset_t *set,
- 		       struct pt_regs *regs);
- int compat_setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
-diff --git a/arch/arm64/kernel/signal32.c b/arch/arm64/kernel/signal32.c
-index caea6e25db2a..74e06d8c7c2b 100644
---- a/arch/arm64/kernel/signal32.c
-+++ b/arch/arm64/kernel/signal32.c
-@@ -30,42 +30,6 @@
- #include <linux/uaccess.h>
- #include <asm/unistd.h>
+-ccflags-y := -fno-common -fno-builtin -fno-stack-protector
++ccflags-y := -fno-common -fno-builtin -fno-stack-protector -ffixed-x18
+ ccflags-y += -DDISABLE_BRANCH_PROFILING
  
--struct compat_sigcontext {
--	/* We always set these two fields to 0 */
--	compat_ulong_t			trap_no;
--	compat_ulong_t			error_code;
--
--	compat_ulong_t			oldmask;
--	compat_ulong_t			arm_r0;
--	compat_ulong_t			arm_r1;
--	compat_ulong_t			arm_r2;
--	compat_ulong_t			arm_r3;
--	compat_ulong_t			arm_r4;
--	compat_ulong_t			arm_r5;
--	compat_ulong_t			arm_r6;
--	compat_ulong_t			arm_r7;
--	compat_ulong_t			arm_r8;
--	compat_ulong_t			arm_r9;
--	compat_ulong_t			arm_r10;
--	compat_ulong_t			arm_fp;
--	compat_ulong_t			arm_ip;
--	compat_ulong_t			arm_sp;
--	compat_ulong_t			arm_lr;
--	compat_ulong_t			arm_pc;
--	compat_ulong_t			arm_cpsr;
--	compat_ulong_t			fault_address;
--};
--
--struct compat_ucontext {
--	compat_ulong_t			uc_flags;
--	compat_uptr_t			uc_link;
--	compat_stack_t			uc_stack;
--	struct compat_sigcontext	uc_mcontext;
--	compat_sigset_t			uc_sigmask;
--	int		__unused[32 - (sizeof (compat_sigset_t) / sizeof (int))];
--	compat_ulong_t	uc_regspace[128] __attribute__((__aligned__(8)));
--};
--
- struct compat_vfp_sigframe {
- 	compat_ulong_t	magic;
- 	compat_ulong_t	size;
-@@ -92,16 +56,6 @@ struct compat_aux_sigframe {
- 	unsigned long			end_magic;
- } __attribute__((__aligned__(8)));
- 
--struct compat_sigframe {
--	struct compat_ucontext	uc;
--	compat_ulong_t		retcode[2];
--};
--
--struct compat_rt_sigframe {
--	struct compat_siginfo info;
--	struct compat_sigframe sig;
--};
--
- #define _BLOCKABLE (~(sigmask(SIGKILL) | sigmask(SIGSTOP)))
- 
- static inline int put_sigset_t(compat_sigset_t __user *uset, sigset_t *set)
+ VDSO_LDFLAGS := -Bsymbolic
 -- 
 2.21.0
