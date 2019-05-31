@@ -1,66 +1,73 @@
-From: arnd at arndb.de (Arnd Bergmann)
-Date: Fri, 31 May 2019 10:53:39 +0200
-Subject: [PATCH v6 19/19] kselftest: Extend vDSO selftest
-In-Reply-To: <20190530141531.43462-20-vincenzo.frascino@arm.com>
-References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
- <20190530141531.43462-20-vincenzo.frascino@arm.com>
-Message-ID: <CAK8P3a3Z=wWQDu4aqV73J5PR2jNb3GzyWzYGT3dUp-F81H8mzQ@mail.gmail.com>
+From: andreyknvl at google.com (Andrey Konovalov)
+Date: Fri, 31 May 2019 16:21:48 +0200
+Subject: [PATCH v15 17/17] selftests, arm64: add a selftest for passing
+ tagged pointers to kernel
+In-Reply-To: <20190522141612.GA28122@arrakis.emea.arm.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <e31d9364eb0c2eba8ce246a558422e811d82d21b.1557160186.git.andreyknvl@google.com>
+ <20190522141612.GA28122@arrakis.emea.arm.com>
+Message-ID: <CAAeHK+wUerHQOV2PuaTwTxcCucZHZodLwg48228SB+ymxEqT2A@mail.gmail.com>
 
-On Thu, May 30, 2019 at 4:16 PM Vincenzo Frascino
-<vincenzo.frascino at arm.com> wrote:
+On Wed, May 22, 2019 at 4:16 PM Catalin Marinas <catalin.marinas at arm.com> wrote:
+>
+> On Mon, May 06, 2019 at 06:31:03PM +0200, Andrey Konovalov wrote:
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > This patch adds a simple test, that calls the uname syscall with a
+> > tagged user pointer as an argument. Without the kernel accepting tagged
+> > user pointers the test fails with EFAULT.
+>
+> That's probably sufficient for a simple example. Something we could add
+> to Documentation maybe is a small library that can be LD_PRELOAD'ed so
+> that you can run a lot more tests like LTP.
 
-> +/*
-> + * ARM64's vDSO exports its vDSO implementation with different names and
-> + * a different version from other architectures, so we need to handle it
-> + * as a special case.
-> + */
-> +#if defined(__aarch64__)
-> +const char *version = "LINUX_2.6.39";
-> +const char *name[4] = {
-> +       "__kernel_gettimeofday",
-> +       "__kernel_clock_gettime",
-> +       "__kernel_time",
-> +       "__kernel_clock_getres",
-> +};
-> +#else
-> +/* Tested on x86, arm, mips */
-> +const char *version = "LINUX_2.6";
-> +const char *name[4] = {
-> +       "__vdso_gettimeofday",
-> +       "__vdso_clock_gettime",
-> +       "__vdso_time",
-> +       "__vdso_clock_getres",
-> +};
-> +#endif
+Should I add this into this series, or should this go into Vincenzo's patchset?
 
-I see the __kernel_* name used on arm64, powerpc and s390, whiel the __vdso_*
-name is used on arm, mips, nds32, riscv, sparc, and x86.
-
-Also the versions have more variants:
-
-$ git ls-files arch | grep vdso | xargs grep
-'\(LINUX_[2345]\|VDSO_VERSION_STRING\)'
-arch/arm/vdso/vdso.lds.S:    LINUX_2.6 {
-arch/arm64/kernel/vdso/vdso.lds.S:    LINUX_2.6.39 {
-arch/mips/vdso/vdso.lds.S:    LINUX_2.6 {
-arch/nds32/kernel/vdso/vdso.lds.S:    LINUX_4 {
-arch/powerpc/include/asm/vdso.h:#define VDSO_VERSION_STRING    LINUX_2.6.15
-arch/powerpc/kernel/vdso32/vdso32.lds.S:    VDSO_VERSION_STRING {
-arch/powerpc/kernel/vdso64/vdso64.lds.S:    VDSO_VERSION_STRING {
-arch/riscv/kernel/vdso/vdso.lds.S:    LINUX_4.15 {
-arch/s390/include/asm/vdso.h:#define VDSO_VERSION_STRING    LINUX_2.6.29
-arch/s390/kernel/vdso32/vdso32.lds.S:    VDSO_VERSION_STRING {
-arch/s390/kernel/vdso64/vdso64.lds.S:    VDSO_VERSION_STRING {
-arch/sparc/vdso/vdso.lds.S:    LINUX_2.6 {
-arch/sparc/vdso/vdso32/vdso32.lds.S:    LINUX_2.6 {
-arch/x86/entry/vdso/vdso.lds.S:    LINUX_2.6 {
-arch/x86/entry/vdso/vdso32/vdso32.lds.S:    LINUX_2.6 {
-arch/x86/entry/vdso/vdso32/vdso32.lds.S:    LINUX_2.5 {
-arch/x86/entry/vdso/vdsox32.lds.S:    LINUX_2.6 {
-arch/x86/um/vdso/vdso.lds.S:    LINUX_2.6 {
-
-Maybe change the test case to just try all combinations of the
-above (and __vdso_clock_gettime64 as well) and stop checking
-the architecture?
-
-       Arnd
+>
+> We could add this to selftests but I think it's too glibc specific.
+>
+> --------------------8<------------------------------------
+> #include <stdlib.h>
+>
+> #define TAG_SHIFT       (56)
+> #define TAG_MASK        (0xffUL << TAG_SHIFT)
+>
+> void *__libc_malloc(size_t size);
+> void __libc_free(void *ptr);
+> void *__libc_realloc(void *ptr, size_t size);
+> void *__libc_calloc(size_t nmemb, size_t size);
+>
+> static void *tag_ptr(void *ptr)
+> {
+>         unsigned long tag = rand() & 0xff;
+>         if (!ptr)
+>                 return ptr;
+>         return (void *)((unsigned long)ptr | (tag << TAG_SHIFT));
+> }
+>
+> static void *untag_ptr(void *ptr)
+> {
+>         return (void *)((unsigned long)ptr & ~TAG_MASK);
+> }
+>
+> void *malloc(size_t size)
+> {
+>         return tag_ptr(__libc_malloc(size));
+> }
+>
+> void free(void *ptr)
+> {
+>         __libc_free(untag_ptr(ptr));
+> }
+>
+> void *realloc(void *ptr, size_t size)
+> {
+>         return tag_ptr(__libc_realloc(untag_ptr(ptr), size));
+> }
+>
+> void *calloc(size_t nmemb, size_t size)
+> {
+>         return tag_ptr(__libc_calloc(nmemb, size));
+> }
