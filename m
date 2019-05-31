@@ -1,20 +1,58 @@
 From: arnd at arndb.de (Arnd Bergmann)
-Date: Fri, 31 May 2019 10:19:41 +0200
-Subject: [PATCH v6 02/19] kernel: Define gettimeofday vdso common code
-In-Reply-To: <20190530141531.43462-3-vincenzo.frascino@arm.com>
+Date: Fri, 31 May 2019 10:32:22 +0200
+Subject: [PATCH v6 16/19] arm: Add support for generic vDSO
+In-Reply-To: <20190530141531.43462-17-vincenzo.frascino@arm.com>
 References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
- <20190530141531.43462-3-vincenzo.frascino@arm.com>
-Message-ID: <CAK8P3a3Sr+MNbGQiMYt3RrE6SaYFPO-rXNoNvtOC7=qKE1kuYQ@mail.gmail.com>
+ <20190530141531.43462-17-vincenzo.frascino@arm.com>
+Message-ID: <CAK8P3a0gKJX0fAdizNoO3r-UzAoN0Nf=gkMmw++wuryjHy3-8w@mail.gmail.com>
 
-On Thu, May 30, 2019 at 4:15 PM Vincenzo Frascino
+On Thu, May 30, 2019 at 4:16 PM Vincenzo Frascino
 <vincenzo.frascino at arm.com> wrote:
-
+> diff --git a/arch/arm/include/asm/vdso/gettimeofday.h b/arch/arm/include/asm/vdso/gettimeofday.h
+> new file mode 100644
+> index 000000000000..eeeb319840ba
+> --- /dev/null
+> +++ b/arch/arm/include/asm/vdso/gettimeofday.h
+> @@ -0,0 +1,96 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2018 ARM Limited
+> + */
+> +#ifndef __ASM_VDSO_GETTIMEOFDAY_H
+> +#define __ASM_VDSO_GETTIMEOFDAY_H
 > +
-> +static __always_inline notrace void vdso_write_end(struct vdso_data *vd)
-> +{
+> +#ifndef __ASSEMBLY__
+> +
+> +#include <asm/barrier.h>
+> +#include <asm/cp15.h>
+> +#include <asm/unistd.h>
+> +#include <uapi/linux/time.h>
+> +
+> +#ifndef CONFIG_AEABI
+> +#error This code depends on AEABI system call conventions
+> +#endif
 
-Rather than marking every single function in here as "notrace",I think it
-would be more robust to remove the '-pg' flag in the CFLAGS used for
-compiling the vdso files.
+Instead of an #error here, I would use a Kconfig conditional and make it
 
-       Arnd
+'select HAVE_GENERIC_VDSO if AEABI'
+
+> diff --git a/arch/arm/vdso/vdso.lds.S b/arch/arm/vdso/vdso.lds.S
+> index 89ca89f12d23..05581140fd12 100644
+> --- a/arch/arm/vdso/vdso.lds.S
+> +++ b/arch/arm/vdso/vdso.lds.S
+> @@ -82,6 +82,8 @@ VERSION
+>         global:
+>                 __vdso_clock_gettime;
+>                 __vdso_gettimeofday;
+> +               __vdso_clock_getres;
+> +               __vdso_clock_gettime64;
+>         local: *;
+>         };
+
+Why are you adding __vdso_clock_getres here? I would probably
+leave the addition of the new entry point(s) for a separate patch
+at the end, adding __vdso_clock_gettime64 to all 32-bit ABIs
+at once, since while that part is a trivial change, it's also user
+visible and deserves its own changelog text.
+
+     Arnd
