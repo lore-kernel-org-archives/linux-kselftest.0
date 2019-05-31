@@ -1,36 +1,66 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Fri, 31 May 2019 17:22:06 +0100
-Subject: [PATCH v15 17/17] selftests, arm64: add a selftest for passing
- tagged pointers to kernel
-In-Reply-To: <CAAeHK+wUerHQOV2PuaTwTxcCucZHZodLwg48228SB+ymxEqT2A@mail.gmail.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <e31d9364eb0c2eba8ce246a558422e811d82d21b.1557160186.git.andreyknvl@google.com>
- <20190522141612.GA28122@arrakis.emea.arm.com>
- <CAAeHK+wUerHQOV2PuaTwTxcCucZHZodLwg48228SB+ymxEqT2A@mail.gmail.com>
-Message-ID: <20190531162206.GB3568@arrakis.emea.arm.com>
+From: andreyknvl@google.com (Andrey Konovalov)
+Date: Fri, 31 May 2019 18:24:06 +0200
+Subject: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+In-Reply-To: <20190531161954.GA3568@arrakis.emea.arm.com>
+References: <20190521182932.sm4vxweuwo5ermyd@mbp>
+ <201905211633.6C0BF0C2@keescook>
+ <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
+ <20190523201105.oifkksus4rzcwqt4@mbp>
+ <ffe58af3-7c70-d559-69f6-1f6ebcb0fec6@oracle.com>
+ <20190524101139.36yre4af22bkvatx@mbp>
+ <c6dd53d8-142b-3d8d-6a40-d21c5ee9d272@oracle.com>
+ <CAAeHK+yAUsZWhp6xPAbWewX5Nbw+-G3svUyPmhXu5MVeEDKYvA@mail.gmail.com>
+ <20190530171540.GD35418@arrakis.emea.arm.com>
+ <CAAeHK+y34+SNz3Vf+_378bOxrPaj_3GaLCeC2Y2rHAczuaSz1A@mail.gmail.com>
+ <20190531161954.GA3568@arrakis.emea.arm.com>
+Message-ID:
+ <CAAeHK+zRDD7ZPPUA9cpwHOdgTRrJLWAby8Wg9oPgmhqMpHwvFw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190531162206.fhxfl8I7MVjTEKkgOE4spdutTteD82WS7z1MxLOCyVU@z>
+Message-ID: <20190531162406.zCWG8VSRWTaAANrZrpgrxe0eV0ipriv-1foMTpf774c@z>
 
-On Fri, May 31, 2019@04:21:48PM +0200, Andrey Konovalov wrote:
-> On Wed, May 22, 2019@4:16 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > On Mon, May 06, 2019@06:31:03PM +0200, Andrey Konovalov wrote:
-> > > This patch is a part of a series that extends arm64 kernel ABI to allow to
-> > > pass tagged user pointers (with the top byte set to something else other
-> > > than 0x00) as syscall arguments.
+On Fri, May 31, 2019@6:20 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> On Fri, May 31, 2019@04:29:10PM +0200, Andrey Konovalov wrote:
+> > On Thu, May 30, 2019@7:15 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > On Tue, May 28, 2019@04:14:45PM +0200, Andrey Konovalov wrote:
+> > > > Thanks for a lot of valuable input! I've read through all the replies
+> > > > and got somewhat lost. What are the changes I need to do to this
+> > > > series?
+> > > >
+> > > > 1. Should I move untagging for memory syscalls back to the generic
+> > > > code so other arches would make use of it as well, or should I keep
+> > > > the arm64 specific memory syscalls wrappers and address the comments
+> > > > on that patch?
 > > >
-> > > This patch adds a simple test, that calls the uname syscall with a
-> > > tagged user pointer as an argument. Without the kernel accepting tagged
-> > > user pointers the test fails with EFAULT.
+> > > Keep them generic again but make sure we get agreement with Khalid on
+> > > the actual ABI implications for sparc.
 > >
-> > That's probably sufficient for a simple example. Something we could add
-> > to Documentation maybe is a small library that can be LD_PRELOAD'ed so
-> > that you can run a lot more tests like LTP.
-> 
-> Should I add this into this series, or should this go into Vincenzo's patchset?
+> > OK, will do. I find it hard to understand what the ABI implications
+> > are. I'll post the next version without untagging in brk, mmap,
+> > munmap, mremap (for new_address), mmap_pgoff, remap_file_pages, shmat
+> > and shmdt.
+>
+> It's more about not relaxing the ABI to accept non-zero top-byte unless
+> we have a use-case for it. For mmap() etc., I don't think that's needed
+> but if you think otherwise, please raise it.
+>
+> > > > 2. Should I make untagging opt-in and controlled by a command line argument?
+> > >
+> > > Opt-in, yes, but per task rather than kernel command line option.
+> > > prctl() is a possibility of opting in.
+> >
+> > OK. Should I store a flag somewhere in task_struct? Should it be
+> > inheritable on clone?
+>
+> A TIF flag would do but I'd say leave it out for now (default opted in)
+> until we figure out the best way to do this (can be a patch on top of
+> this series).
 
-If you can tweak the selftest Makefile to build a library and force it
-with LD_PRELOAD, you can keep it with this patch. It would be easier to
-extend to other syscall tests, signal handling etc.
+You mean leave the whole opt-in/prctl part out? So the only change
+would be to move untagging for memory syscalls into generic code?
 
--- 
-Catalin
+>
+> Thanks.
+>
+> --
+> Catalin
