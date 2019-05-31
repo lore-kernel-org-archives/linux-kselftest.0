@@ -1,61 +1,43 @@
 From: arnd@arndb.de (Arnd Bergmann)
-Date: Fri, 31 May 2019 10:32:22 +0200
-Subject: [PATCH v6 16/19] arm: Add support for generic vDSO
-In-Reply-To: <20190530141531.43462-17-vincenzo.frascino@arm.com>
+Date: Fri, 31 May 2019 10:34:59 +0200
+Subject: [PATCH v6 17/19] mips: Add support for generic vDSO
+In-Reply-To: <20190530141531.43462-18-vincenzo.frascino@arm.com>
 References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
- <20190530141531.43462-17-vincenzo.frascino@arm.com>
+ <20190530141531.43462-18-vincenzo.frascino@arm.com>
 Message-ID:
- <CAK8P3a0gKJX0fAdizNoO3r-UzAoN0Nf=gkMmw++wuryjHy3-8w@mail.gmail.com>
+ <CAK8P3a29QXCP8nw7po06GeYEGvJ_y2GxjAvswFk3=Y6YCjbdDg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190531083222.-XRFBZBsUE9syXLgY5jobZI9KE1oEy2MTmSSFCQTTdo@z>
+Message-ID: <20190531083459.AGvE18vy0ul560ADpZGVYREbZNFLvZ278NSF2iqTYE4@z>
 
 On Thu, May 30, 2019 at 4:16 PM Vincenzo Frascino
 <vincenzo.frascino@arm.com> wrote:
-> diff --git a/arch/arm/include/asm/vdso/gettimeofday.h b/arch/arm/include/asm/vdso/gettimeofday.h
-> new file mode 100644
-> index 000000000000..eeeb319840ba
-> --- /dev/null
-> +++ b/arch/arm/include/asm/vdso/gettimeofday.h
-> @@ -0,0 +1,96 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2018 ARM Limited
-> + */
-> +#ifndef __ASM_VDSO_GETTIMEOFDAY_H
-> +#define __ASM_VDSO_GETTIMEOFDAY_H
-> +
-> +#ifndef __ASSEMBLY__
-> +
-> +#include <asm/barrier.h>
-> +#include <asm/cp15.h>
-> +#include <asm/unistd.h>
-> +#include <uapi/linux/time.h>
-> +
-> +#ifndef CONFIG_AEABI
-> +#error This code depends on AEABI system call conventions
-> +#endif
 
-Instead of an #error here, I would use a Kconfig conditional and make it
-
-'select HAVE_GENERIC_VDSO if AEABI'
-
-> diff --git a/arch/arm/vdso/vdso.lds.S b/arch/arm/vdso/vdso.lds.S
-> index 89ca89f12d23..05581140fd12 100644
-> --- a/arch/arm/vdso/vdso.lds.S
-> +++ b/arch/arm/vdso/vdso.lds.S
-> @@ -82,6 +82,8 @@ VERSION
+> --- a/arch/mips/vdso/vdso.lds.S
+> +++ b/arch/mips/vdso/vdso.lds.S
+> @@ -99,6 +99,10 @@ VERSION
 >         global:
 >                 __vdso_clock_gettime;
 >                 __vdso_gettimeofday;
 > +               __vdso_clock_getres;
+> +#if _MIPS_SIM != _MIPS_SIM_ABI64
 > +               __vdso_clock_gettime64;
+> +#endif
+>  #endif
 >         local: *;
 >         };
 
-Why are you adding __vdso_clock_getres here? I would probably
-leave the addition of the new entry point(s) for a separate patch
-at the end, adding __vdso_clock_gettime64 to all 32-bit ABIs
-at once, since while that part is a trivial change, it's also user
-visible and deserves its own changelog text.
+Same comment as for the corresponding arm change: I'd leave the ABI
+changes to a separate patch, and probably not add __vdso_clock_getres
+at all.
 
-     Arnd
+Also, you seem to have a typo here:
+
+> +notrace int __vdso_clock_gettime_time64(clockid_t clock,
+> +                                struct __kernel_timespec *ts)
+> +{
+> +       return __cvdso_clock_gettime(clock, ts);
+> +}
+
+This should be __vdso_clock_gettime64, not __vdso_clock_gettime_time64 I think.
+
+       Arnd
