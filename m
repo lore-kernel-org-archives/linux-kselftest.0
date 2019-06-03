@@ -1,40 +1,49 @@
 From: andreyknvl@google.com (Andrey Konovalov)
-Date: Mon,  3 Jun 2019 18:55:17 +0200
-Subject: [PATCH v16 15/16] vfio/type1,
- arm64: untag user pointers in vaddr_get_pfn
+Date: Mon,  3 Jun 2019 18:55:14 +0200
+Subject: [PATCH v16 12/16] IB,
+ arm64: untag user pointers in ib_uverbs_(re)reg_mr()
 In-Reply-To: <cover.1559580831.git.andreyknvl@google.com>
 References: <cover.1559580831.git.andreyknvl@google.com>
 Message-ID:
- <c529e1eeea7700beff197c4456da6a882ce2efb7.1559580831.git.andreyknvl@google.com>
+ <c829f93b19ad6af1b13be8935ce29baa8e58518f.1559580831.git.andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190603165517.wVPvH-_yjW5aCpRvL5MSxZVo_kU_jgoFEdt930jH028@z>
+Message-ID: <20190603165514.nIyIGzuRugPaUAQu8MmEO9otBCMi6dSI6XRkpYeC5Nw@z>
 
 This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-vaddr_get_pfn() uses provided user pointers for vma lookups, which can
-only by done with untagged pointers.
+ib_uverbs_(re)reg_mr() use provided user pointers for vma lookups (through
+e.g. mlx4_get_umem_mr()), which can only by done with untagged pointers.
 
-Untag user pointers in this function.
+Untag user pointers in these functions.
 
 Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 ---
- drivers/vfio/vfio_iommu_type1.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/infiniband/core/uverbs_cmd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-index 3ddc375e7063..528e39a1c2dd 100644
---- a/drivers/vfio/vfio_iommu_type1.c
-+++ b/drivers/vfio/vfio_iommu_type1.c
-@@ -384,6 +384,8 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned long vaddr,
+diff --git a/drivers/infiniband/core/uverbs_cmd.c b/drivers/infiniband/core/uverbs_cmd.c
+index 5a3a1780ceea..f88ee733e617 100644
+--- a/drivers/infiniband/core/uverbs_cmd.c
++++ b/drivers/infiniband/core/uverbs_cmd.c
+@@ -709,6 +709,8 @@ static int ib_uverbs_reg_mr(struct uverbs_attr_bundle *attrs)
+ 	if (ret)
+ 		return ret;
  
- 	down_read(&mm->mmap_sem);
- 
-+	vaddr = untagged_addr(vaddr);
++	cmd.start = untagged_addr(cmd.start);
 +
- 	vma = find_vma_intersection(mm, vaddr, vaddr + 1);
+ 	if ((cmd.start & ~PAGE_MASK) != (cmd.hca_va & ~PAGE_MASK))
+ 		return -EINVAL;
  
- 	if (vma && vma->vm_flags & VM_PFNMAP) {
+@@ -791,6 +793,8 @@ static int ib_uverbs_rereg_mr(struct uverbs_attr_bundle *attrs)
+ 	if (ret)
+ 		return ret;
+ 
++	cmd.start = untagged_addr(cmd.start);
++
+ 	if (cmd.flags & ~IB_MR_REREG_SUPPORTED || !cmd.flags)
+ 		return -EINVAL;
+ 
 -- 
 2.22.0.rc1.311.g5d7573a151-goog
