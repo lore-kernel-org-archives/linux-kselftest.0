@@ -1,52 +1,102 @@
-From: andreyknvl at google.com (Andrey Konovalov)
-Date: Tue, 4 Jun 2019 13:45:24 +0200
-Subject: [PATCH v16 01/16] uaccess: add untagged_addr definition for other
- arches
-In-Reply-To: <7a687a26-fc3e-2caa-1d6a-464f1f7e684c@oracle.com>
-References: <cover.1559580831.git.andreyknvl@google.com>
- <097bc300a5c6554ca6fd1886421bb2e0adb03420.1559580831.git.andreyknvl@google.com>
- <8ff5b0ff-849a-1e0b-18da-ccb5be85dd2b@oracle.com>
- <CAAeHK+xX2538e674Pz25unkdFPCO_SH0pFwFu=8+DS7RzfYnLQ@mail.gmail.com>
- <f6711d31-e52c-473a-d7ad-b2d63131d7a5@oracle.com>
- <20190603172916.GA5390@infradead.org>
- <7a687a26-fc3e-2caa-1d6a-464f1f7e684c@oracle.com>
-Message-ID: <CAAeHK+wccK1upfOWxNbZBR0BUWT23VFUFEqRTEp3H+8hXN8yzw@mail.gmail.com>
+From: vincenzo.frascino at arm.com (Vincenzo Frascino)
+Date: Tue, 4 Jun 2019 13:04:58 +0100
+Subject: [PATCH v6 00/19] Unify vDSOs across more architectures
+In-Reply-To: <CAK8P3a11DE0sXteZoaP_N=mDhx3tXitGKddn1ogtFqJBYO-SCA@mail.gmail.com>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <CAK8P3a11DE0sXteZoaP_N=mDhx3tXitGKddn1ogtFqJBYO-SCA@mail.gmail.com>
+Message-ID: <d96667d5-e43b-d33a-fbd0-5acfb4904316@arm.com>
 
-On Mon, Jun 3, 2019 at 8:17 PM Khalid Aziz <khalid.aziz at oracle.com> wrote:
->
-> On 6/3/19 11:29 AM, Christoph Hellwig wrote:
-> > On Mon, Jun 03, 2019 at 11:24:35AM -0600, Khalid Aziz wrote:
-> >> On 6/3/19 11:06 AM, Andrey Konovalov wrote:
-> >>> On Mon, Jun 3, 2019 at 7:04 PM Khalid Aziz <khalid.aziz at oracle.com> wrote:
-> >>>> Andrey,
-> >>>>
-> >>>> This patch has now become part of the other patch series Chris Hellwig
-> >>>> has sent out -
-> >>>> <https://lore.kernel.org/lkml/20190601074959.14036-1-hch at lst.de/>. Can
-> >>>> you coordinate with that patch series?
-> >>>
-> >>> Hi!
-> >>>
-> >>> Yes, I've seen it. How should I coordinate? Rebase this series on top
-> >>> of that one?
-> >>
-> >> That would be one way to do it. Better yet, separate this patch from
-> >> both patch series, make it standalone and then rebase the two patch
-> >> series on top of it.
-> >
-> > I think easiest would be to just ask Linus if he could make an exception
-> > and include this trivial prep patch in 5.2-rc.
-> >
->
-> Andrey,
->
-> Would you mind updating the commit log to make it not arm64 specific and
-> sending this patch out by itself. We can then ask Linus if he can
-> include just this patch in the next rc.
+Hi Arnd,
 
-Sure! Just sent it out.
+thank you for your review.
 
->
-> Thanks,
-> Khalid
->
+On 31/05/2019 09:46, Arnd Bergmann wrote:
+> On Thu, May 30, 2019 at 4:15 PM Vincenzo Frascino
+> <vincenzo.frascino at arm.com> wrote:
+>>
+>> vDSO (virtual dynamic shared object) is a mechanism that the Linux
+>> kernel provides as an alternative to system calls to reduce where
+>> possible the costs in terms of cycles.
+>> This is possible because certain syscalls like gettimeofday() do
+>> not write any data and return one or more values that are stored
+>> in the kernel, which makes relatively safe calling them directly
+>> as a library function.
+> 
+> Hi Vincento,
+> 
+> I've very happy with how this turned out overall, and as far as I can
+> tell you have addressed all my previous comments. I had another
+> look through the series and only noticed a few very minor issues.
+> 
+
+Thanks! I agree with what you pointed out in the single patches, I will wait for
+Thomas to review them as well and then will address all the comments in v7.
+
+...
+
+> 
+> One open question I touched in my review is whether we want to
+> have a vdso version of clock_getres() in all architectures or not.
+> I'd prefer to leave it out because there is very little advantage to
+> it over the system call (the results don't change at runtime and
+> can easily be cached by libc if performance ever matters), and
+> it takes up a small amount of memory for the implementation.
+> 
+
+I thought about it and I ended up with what proposed in this patchset mainly for
+symmetry across all the architectures since in the end they use the same common
+code.
+
+It seems also that there is some performance impact (i.e.):
+
+clock-getres-monotonic:    libc(system call): 296 nsec/call
+clock-getres-monotonic:    libc(vdso): 5 nsec/call
+
+
+I agree with you though when you say that caching it in the libc is a
+possibility to overcome the performance impact.
+
+> We shouldn't just need it for consistency because all callers
+> would require implementing a fallback to the system call
+> anyway, to deal with old kernels.
+> 
+
+A way to address this issue would be to use versioning, which seems supported in
+the vdso library (i.e. arch/x86/entry/vdso/vdso32/vdso32.lds.S).
+
+For example for x86 (vdso32) we would have something like:
+
+VERSION
+{
+	LINUX_5.3 (being optimistic here :) ) {
+	global:
+                __vdso_clock_getres;
+                __vdso_clock_gettime64;
+        };
+        LINUX_2.6 {
+        global:
+                __vdso_clock_gettime;
+                __vdso_gettimeofday;
+                __vdso_time;
+        };
+
+        LINUX_2.5 {
+        global:
+                __kernel_vsyscall;
+                __kernel_sigreturn;
+                __kernel_rt_sigreturn;
+        local: *;
+        };
+}
+
+What do you think? Would this be a viable solution?
+
+> If anyone comes up with a good reason why it should be added
+> after all, let me know and I'll stop mentioning it.
+> 
+>       Arnd
+> 
+
+-- 
+Regards,
+Vincenzo
