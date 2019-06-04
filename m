@@ -1,83 +1,97 @@
-From: andreyknvl at google.com (Andrey Konovalov)
-Date: Tue, 4 Jun 2019 15:09:26 +0200
-Subject: [PATCH v16 12/16] IB,
- arm64: untag user pointers in ib_uverbs_(re)reg_mr()
-In-Reply-To: <20190604130207.GD15385@ziepe.ca>
-References: <cover.1559580831.git.andreyknvl@google.com>
- <c829f93b19ad6af1b13be8935ce29baa8e58518f.1559580831.git.andreyknvl@google.com>
- <20190603174619.GC11474@ziepe.ca>
- <CAAeHK+xy-dx4dLDLLj9dRzRNSVG9H5nDPPnjpYF38qKZNNCh_g@mail.gmail.com>
- <20190604122714.GA15385@ziepe.ca>
- <CAAeHK+xyqwuJyviGhvU7L1wPZQF7Mf9g2vgKSsYmML3fV6NrXg@mail.gmail.com>
- <20190604130207.GD15385@ziepe.ca>
-Message-ID: <CAAeHK+xBxDB-OBuzPDcNaTHCNJqu6djHwqoVGSYpxG33w-YR9g@mail.gmail.com>
+From: christophe.leroy at c-s.fr (Christophe Leroy)
+Date: Tue, 4 Jun 2019 15:16:16 +0200
+Subject: [PATCH v4 3/3] kselftest: Extend vDSO selftest to clock_getres
+In-Reply-To: <afb7395f-43e9-c304-2db2-349e6727b687@arm.com>
+References: <20190523112116.19233-1-vincenzo.frascino@arm.com>
+ <20190523112116.19233-4-vincenzo.frascino@arm.com>
+ <87lfyrp0d2.fsf@concordia.ellerman.id.au>
+ <afb7395f-43e9-c304-2db2-349e6727b687@arm.com>
+Message-ID: <5c99721a-ce6b-10a0-99f2-6c37c1da4542@c-s.fr>
 
-On Tue, Jun 4, 2019 at 3:02 PM Jason Gunthorpe <jgg at ziepe.ca> wrote:
->
-> On Tue, Jun 04, 2019 at 02:45:32PM +0200, Andrey Konovalov wrote:
-> > On Tue, Jun 4, 2019 at 2:27 PM Jason Gunthorpe <jgg at ziepe.ca> wrote:
-> > >
-> > > On Tue, Jun 04, 2019 at 02:18:19PM +0200, Andrey Konovalov wrote:
-> > > > On Mon, Jun 3, 2019 at 7:46 PM Jason Gunthorpe <jgg at ziepe.ca> wrote:
-> > > > >
-> > > > > On Mon, Jun 03, 2019 at 06:55:14PM +0200, Andrey Konovalov wrote:
-> > > > > > This patch is a part of a series that extends arm64 kernel ABI to allow to
-> > > > > > pass tagged user pointers (with the top byte set to something else other
-> > > > > > than 0x00) as syscall arguments.
-> > > > > >
-> > > > > > ib_uverbs_(re)reg_mr() use provided user pointers for vma lookups (through
-> > > > > > e.g. mlx4_get_umem_mr()), which can only by done with untagged pointers.
-> > > > > >
-> > > > > > Untag user pointers in these functions.
-> > > > > >
-> > > > > > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
-> > > > > >  drivers/infiniband/core/uverbs_cmd.c | 4 ++++
-> > > > > >  1 file changed, 4 insertions(+)
-> > > > > >
-> > > > > > diff --git a/drivers/infiniband/core/uverbs_cmd.c b/drivers/infiniband/core/uverbs_cmd.c
-> > > > > > index 5a3a1780ceea..f88ee733e617 100644
-> > > > > > +++ b/drivers/infiniband/core/uverbs_cmd.c
-> > > > > > @@ -709,6 +709,8 @@ static int ib_uverbs_reg_mr(struct uverbs_attr_bundle *attrs)
-> > > > > >       if (ret)
-> > > > > >               return ret;
-> > > > > >
-> > > > > > +     cmd.start = untagged_addr(cmd.start);
-> > > > > > +
-> > > > > >       if ((cmd.start & ~PAGE_MASK) != (cmd.hca_va & ~PAGE_MASK))
-> > > > > >               return -EINVAL;
-> > > > >
-> > > > > I feel like we shouldn't thave to do this here, surely the cmd.start
-> > > > > should flow unmodified to get_user_pages, and gup should untag it?
-> > > > >
-> > > > > ie, this sort of direction for the IB code (this would be a giant
-> > > > > patch, so I didn't have time to write it all, but I think it is much
-> > > > > saner):
-> > > >
-> > > > Hi Jason,
-> > > >
-> > > > ib_uverbs_reg_mr() passes cmd.start to mlx4_get_umem_mr(), which calls
-> > > > find_vma(), which only accepts untagged addresses. Could you explain
-> > > > how your patch helps?
-> > >
-> > > That mlx4 is just a 'weird duck', it is not the normal flow, and I
-> > > don't think the core code should be making special consideration for
-> > > it.
-> >
-> > How do you think we should do untagging (or something else) to deal
-> > with this 'weird duck' case?
->
-> mlx4 should handle it around the call to find_vma like other patches
-> do, ideally as part of the cast from a void __user * to the unsigned
-> long that find_vma needs
+Hi Vincenzo
 
-So essentially what we had a few versions ago
-(https://lkml.org/lkml/2019/4/30/785) plus changing unsigned longs to
-__user * across all IB code? I think the second part is something
-that's not related to this series and needs to be done separately. I
-can move untagging back to mlx4_get_umem_mr() though.
+Le 28/05/2019 à 13:57, Vincenzo Frascino a écrit :
+> Hi Michael,
+> 
+> thank you for your reply.
+> 
+> On 28/05/2019 07:19, Michael Ellerman wrote:
+>> Vincenzo Frascino <vincenzo.frascino at arm.com> writes:
+>>
+>>> The current version of the multiarch vDSO selftest verifies only
+>>> gettimeofday.
+>>>
+>>> Extend the vDSO selftest to clock_getres, to verify that the
+>>> syscall and the vDSO library function return the same information.
+>>>
+>>> The extension has been used to verify the hrtimer_resoltion fix.
+>>
+>> This is passing for me even without patch 1 applied, shouldn't it fail
+>> without the fix? What am I missing?
+>>
+> 
+> This is correct, because during the refactoring process I missed an "n" :)
+> 
+> if·((x.tv_sec·!=·y.tv_sec)·||·(x.tv_sec·!=·y.tv_sec))
+> 
+> Should be:
+> 
+> if·((x.tv_sec·!=·y.tv_sec)·||·(x.tv_nsec·!=·y.tv_nsec))
+> 
+> My mistake, I am going to fix the test and re-post v5 of this set.
+> 
+> Without my patch if you pass "highres=off" to the kernel (as a command line
+> parameter) it leads to a broken implementation of clock_getres since the value
+> of CLOCK_REALTIME_RES does not change at runtime.
+> 
+> Expected result (with highres=off):
+> 
+> # uname -r
+> 5.2.0-rc2
+> # ./vdso_clock_getres
+> clock_id: CLOCK_REALTIME [FAIL]
+> clock_id: CLOCK_BOOTTIME [PASS]
+> clock_id: CLOCK_TAI [PASS]
+> clock_id: CLOCK_REALTIME_COARSE [PASS]
+> clock_id: CLOCK_MONOTONIC [FAIL]
+> clock_id: CLOCK_MONOTONIC_RAW [PASS]
+> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+> 
+> The reason of this behavior is that the only clocks supported by getres on
+> powerpc are CLOCK_REALTIME and CLOCK_MONOTONIC, the rest on the clocks use
+> always syscalls.
 
-Catalin, you've initially asked to to move untagging out of
-mlx4_get_umem_mr(), do you have any comments on this?
+vdso64 is supposed to implement CLOCK_{REALTIME/MONOTONIC}_COARSE, so I 
+guess it should fail for them too ?
 
->
-> Jason
+Or is your test done on vdso32 ?
+
+Christophe
+
+> 
+>> # uname -r
+>> 5.2.0-rc2-gcc-8.2.0
+>>
+>> # ./vdso_clock_getres
+>> clock_id: CLOCK_REALTIME [PASS]
+>> clock_id: CLOCK_BOOTTIME [PASS]
+>> clock_id: CLOCK_TAI [PASS]
+>> clock_id: CLOCK_REALTIME_COARSE [PASS]
+>> clock_id: CLOCK_MONOTONIC [PASS]
+>> clock_id: CLOCK_MONOTONIC_RAW [PASS]
+>> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+>>
+>> cheers
+>>
+>>> Cc: Shuah Khan <shuah at kernel.org>
+>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino at arm.com>
+>>> ---
+>>>
+>>> Note: This patch is independent from the others in this series, hence it
+>>> can be merged singularly by the kselftest maintainers.
+>>>
+>>>   tools/testing/selftests/vDSO/Makefile         |   2 +
+>>>   .../selftests/vDSO/vdso_clock_getres.c        | 124 ++++++++++++++++++
+>>>   2 files changed, 126 insertions(+)
+>>>   create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
+> 
