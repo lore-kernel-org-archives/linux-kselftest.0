@@ -1,21 +1,54 @@
-From: pr-tracker-bot@kernel.org (pr-tracker-bot@kernel.org)
-Date: Wed, 05 Jun 2019 21:05:11 +0000
-Subject: [GIT PULL] Kselftest fixes update for Linux 5.2-rc4
-In-Reply-To: <c5b4091c-b6bc-0eea-7f64-5334c80be8ed@linuxfoundation.org>
-References: <c5b4091c-b6bc-0eea-7f64-5334c80be8ed@linuxfoundation.org>
-Message-ID: <155976871161.18999.637200453870389630.pr-tracker-bot@kernel.org>
+From: skhan@linuxfoundation.org (Shuah Khan)
+Date: Wed,  5 Jun 2019 15:37:04 -0600
+Subject: [PATCH] selftests: vm: Fix test build failure when built by itself
+Message-ID: <20190605213704.22902-1-skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190605210511.q9MEtP9iXsfeQD_76wQ35UZl-VDxmdPSVepuIPpa01Y@z>
+Message-ID: <20190605213704._HmvUfEApASC5mCRcvEYjDPnTPN9ft7nsSNE4S2Fur8@z>
 
-The pull request you sent on Wed, 5 Jun 2019 10:53:07 -0600:
+vm test build fails when test is built by itself using
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.2-rc4
+make -C tools/testing/selftests/vm
+or
+cd tools/testing/selftests/vm; make
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/156c05917e0920ef5643eb54c0ea71aae5d60c3d
+When the test is built invoking its Makefile directly, it defines
+OUTPUT which conflicts with lib.mk's logic to install headers.
 
-Thank you!
+make --no-builtin-rules INSTALL_HDR_PATH=$OUTPUT/usr \
+        ARCH=x86 -C ../../../.. headers_install
+make[1]: Entering directory '/mnt/data/lkml/linux_5.2'
+  REMOVE  shmparam.h
+rm: cannot remove '/usr/include/asm-generic/shmparam.h': Permission denied
+scripts/Makefile.headersinst:96: recipe for target '/usr/include/asm-generic/.install' failed
+make[3]: *** [/usr/include/asm-generic/.install] Error 1
+scripts/Makefile.headersinst:32: recipe for target 'asm-generic' failed
+make[2]: *** [asm-generic] Error 2
+Makefile:1199: recipe for target 'headers_install' failed
+make[1]: *** [headers_install] Error 2
+make[1]: Leaving directory '/mnt/data/lkml/linux_5.2'
+../lib.mk:52: recipe for target 'khdr' failed
+make: *** [khdr] Error 2
 
+Fixes: 8ce72dc32578 ("selftests: fix headers_install circular dependency")
+Signed-off-by: Shuah Khan <skhan at linuxfoundation.org>
+---
+ tools/testing/selftests/vm/Makefile | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 05306c58ff9f..9534dc2bc929 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -1,10 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for vm selftests
+ 
+-ifndef OUTPUT
+-  OUTPUT := $(shell pwd)
+-endif
+-
+ CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS)
+ LDLIBS = -lrt
+ TEST_GEN_FILES = compaction_test
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.17.1
