@@ -1,94 +1,58 @@
-From: mchehab+samsung at kernel.org (Mauro Carvalho Chehab)
-Date: Fri,  7 Jun 2019 15:54:31 -0300
-Subject: [PATCH v3 15/20] docs: move protection-keys.rst to the core-api book
-In-Reply-To: <ff457774d46d96e8fe56b45409aba39d87a8672a.1559933665.git.mchehab+samsung@kernel.org>
-References: <ff457774d46d96e8fe56b45409aba39d87a8672a.1559933665.git.mchehab+samsung@kernel.org>
-Message-ID: <4948a096397bb86cebf489b8ac4f623797257fe7.1559933665.git.mchehab+samsung@kernel.org>
+From: sboyd at kernel.org (Stephen Boyd)
+Date: Fri, 07 Jun 2019 12:00:47 -0700
+Subject: [PATCH v4 17/18] kernel/sysctl-test: Add null pointer test for
+ sysctl.c:proc_dointvec()
+In-Reply-To: <CAAXuY3p4qhKVsSpQ44_kQeGDMfg7OuFLgFyxhcFWS3yf-5A_7g@mail.gmail.com>
+References: <20190514221711.248228-1-brendanhiggins@google.com>
+ <20190514221711.248228-18-brendanhiggins@google.com>
+ <20190517182254.548EA20815@mail.kernel.org>
+ <CAAXuY3p4qhKVsSpQ44_kQeGDMfg7OuFLgFyxhcFWS3yf-5A_7g@mail.gmail.com>
+Message-ID: <20190607190047.C3E7A20868@mail.kernel.org>
 
-This document is used by multiple architectures:
+Quoting Iurii Zaikin (2019-06-05 18:29:42)
+> On Fri, May 17, 2019 at 11:22 AM Stephen Boyd <sboyd at kernel.org> wrote:
+> >
+> > Quoting Brendan Higgins (2019-05-14 15:17:10)
+> > > diff --git a/kernel/sysctl-test.c b/kernel/sysctl-test.c
+> > > new file mode 100644
+> > > index 0000000000000..fe0f2bae66085
+> > > --- /dev/null
+> > > +++ b/kernel/sysctl-test.c
+> > > +
+> > > +
+> > > +static void sysctl_test_dointvec_happy_single_negative(struct kunit *test)
+> > > +{
+> > > +       struct ctl_table table = {
+> > > +               .procname = "foo",
+> > > +               .data           = &test_data.int_0001,
+> > > +               .maxlen         = sizeof(int),
+> > > +               .mode           = 0644,
+> > > +               .proc_handler   = proc_dointvec,
+> > > +               .extra1         = &i_zero,
+> > > +               .extra2         = &i_one_hundred,
+> > > +       };
+> > > +       char input[] = "-9";
+> > > +       size_t len = sizeof(input) - 1;
+> > > +       loff_t pos = 0;
+> > > +
+> > > +       table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
+> > > +       KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, input, &len, &pos));
+> > > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
+> > > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, pos);
+> > > +       KUNIT_EXPECT_EQ(test, -9, *(int *)table.data);
+> >
+> > Is the casting necessary? Or can the macro do a type coercion of the
+> > second parameter based on the first type?
+>  Data field is defined as void* so I believe casting is necessary to
+> dereference it as a pointer to an array of ints. I don't think the
+> macro should do any type coercion that == operator wouldn't do.
+>  I did change the cast to make it more clear that it's a pointer to an
+> array of ints being dereferenced.
 
-	$ echo $(git grep -l  pkey_mprotect arch|cut -d'/' -f 2|sort|uniq)
-	alpha arm arm64 ia64 m68k microblaze mips parisc powerpc s390 sh sparc x86 xtensa
-
-So, let's move it to the core book and adjust the links to it
-accordingly.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung at kernel.org>
----
- Documentation/core-api/index.rst                    | 1 +
- Documentation/{x86 => core-api}/protection-keys.rst | 0
- Documentation/x86/index.rst                         | 1 -
- arch/powerpc/Kconfig                                | 2 +-
- arch/x86/Kconfig                                    | 2 +-
- tools/testing/selftests/x86/protection_keys.c       | 2 +-
- 6 files changed, 4 insertions(+), 4 deletions(-)
- rename Documentation/{x86 => core-api}/protection-keys.rst (100%)
-
-diff --git a/Documentation/core-api/index.rst b/Documentation/core-api/index.rst
-index ee1bb8983a88..2466a4c51031 100644
---- a/Documentation/core-api/index.rst
-+++ b/Documentation/core-api/index.rst
-@@ -34,6 +34,7 @@ Core utilities
-    timekeeping
-    boot-time-mm
-    memory-hotplug
-+   protection-keys
- 
- 
- Interfaces for kernel debugging
-diff --git a/Documentation/x86/protection-keys.rst b/Documentation/core-api/protection-keys.rst
-similarity index 100%
-rename from Documentation/x86/protection-keys.rst
-rename to Documentation/core-api/protection-keys.rst
-diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
-index ae36fc5fc649..f2de1b2d3ac7 100644
---- a/Documentation/x86/index.rst
-+++ b/Documentation/x86/index.rst
-@@ -19,7 +19,6 @@ x86-specific Documentation
-    tlb
-    mtrr
-    pat
--   protection-keys
-    intel_mpx
-    amd-memory-encryption
-    pti
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 8c1c636308c8..3b795a0cab62 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -898,7 +898,7 @@ config PPC_MEM_KEYS
- 	  page-based protections, but without requiring modification of the
- 	  page tables when an application changes protection domains.
- 
--	  For details, see Documentation/vm/protection-keys.rst
-+	  For details, see Documentation/core-api/protection-keys.rst
- 
- 	  If unsure, say y.
- 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 2bbbd4d1ba31..d87d53fcd261 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1911,7 +1911,7 @@ config X86_INTEL_MEMORY_PROTECTION_KEYS
- 	  page-based protections, but without requiring modification of the
- 	  page tables when an application changes protection domains.
- 
--	  For details, see Documentation/x86/protection-keys.txt
-+	  For details, see Documentation/core-api/protection-keys.rst
- 
- 	  If unsure, say y.
- 
-diff --git a/tools/testing/selftests/x86/protection_keys.c b/tools/testing/selftests/x86/protection_keys.c
-index 5d546dcdbc80..480995bceefa 100644
---- a/tools/testing/selftests/x86/protection_keys.c
-+++ b/tools/testing/selftests/x86/protection_keys.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Tests x86 Memory Protection Keys (see Documentation/x86/protection-keys.txt)
-+ * Tests x86 Memory Protection Keys (see Documentation/core-api/protection-keys.rst)
-  *
-  * There are examples in here of:
-  *  * how to set protection keys on memory
--- 
-2.21.0
+Ok, I still wonder if we should make KUNIT_EXPECT_EQ check the types on
+both sides and cause a build warning/error if the types aren't the same.
+This would be similar to our min/max macros that complain about
+mismatched types in the comparisons. Then if a test developer needs to
+convert one type or the other they could do so with a
+KUNIT_EXPECT_EQ_T() macro that lists the types to coerce both sides to
+explicitly.
