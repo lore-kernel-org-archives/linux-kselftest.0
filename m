@@ -1,24 +1,26 @@
 From: keescook@chromium.org (Kees Cook)
-Date: Fri, 7 Jun 2019 20:58:05 -0700
-Subject: [PATCH v16 15/16] vfio/type1, arm64: untag user pointers in
- vaddr_get_pfn
-In-Reply-To: <c529e1eeea7700beff197c4456da6a882ce2efb7.1559580831.git.andreyknvl@google.com>
+Date: Fri, 7 Jun 2019 20:59:18 -0700
+Subject: [PATCH v16 06/16] mm, arm64: untag user pointers in mm/gup.c
+In-Reply-To: <e1f6d268135f683fd70c2af27e75f694d7ffaf48.1559580831.git.andreyknvl@google.com>
 References: <cover.1559580831.git.andreyknvl@google.com>
- <c529e1eeea7700beff197c4456da6a882ce2efb7.1559580831.git.andreyknvl@google.com>
-Message-ID: <201906072058.BB57EFA@keescook>
+ <e1f6d268135f683fd70c2af27e75f694d7ffaf48.1559580831.git.andreyknvl@google.com>
+Message-ID: <201906072059.7D80BA0@keescook>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190608035805.ocXKm-Ln5iVqdq1fuzZxuxgyb7FHQCIn4nXHRs-vgxs@z>
+Message-ID: <20190608035918.crZs2rQcJqLimIk4MpewvFwfSTk4SQrUBAUZf-6OAPA@z>
 
-On Mon, Jun 03, 2019@06:55:17PM +0200, Andrey Konovalov wrote:
+On Mon, Jun 03, 2019@06:55:08PM +0200, Andrey Konovalov wrote:
 > This patch is a part of a series that extends arm64 kernel ABI to allow to
 > pass tagged user pointers (with the top byte set to something else other
 > than 0x00) as syscall arguments.
 > 
-> vaddr_get_pfn() uses provided user pointers for vma lookups, which can
-> only by done with untagged pointers.
+> mm/gup.c provides a kernel interface that accepts user addresses and
+> manipulates user pages directly (for example get_user_pages, that is used
+> by the futex syscall). Since a user can provided tagged addresses, we need
+> to handle this case.
 > 
-> Untag user pointers in this function.
+> Add untagging to gup.c functions that use user addresses for vma lookups.
 > 
+> Reviewed-by: Catalin Marinas <catalin.marinas at arm.com>
 > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 
 Reviewed-by: Kees Cook <keescook at chromium.org>
@@ -26,22 +28,31 @@ Reviewed-by: Kees Cook <keescook at chromium.org>
 -Kees
 
 > ---
->  drivers/vfio/vfio_iommu_type1.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  mm/gup.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-> index 3ddc375e7063..528e39a1c2dd 100644
-> --- a/drivers/vfio/vfio_iommu_type1.c
-> +++ b/drivers/vfio/vfio_iommu_type1.c
-> @@ -384,6 +384,8 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned long vaddr,
+> diff --git a/mm/gup.c b/mm/gup.c
+> index ddde097cf9e4..c37df3d455a2 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -802,6 +802,8 @@ static long __get_user_pages(struct task_struct *tsk, struct mm_struct *mm,
+>  	if (!nr_pages)
+>  		return 0;
 >  
->  	down_read(&mm->mmap_sem);
->  
-> +	vaddr = untagged_addr(vaddr);
+> +	start = untagged_addr(start);
 > +
->  	vma = find_vma_intersection(mm, vaddr, vaddr + 1);
+>  	VM_BUG_ON(!!pages != !!(gup_flags & FOLL_GET));
 >  
->  	if (vma && vma->vm_flags & VM_PFNMAP) {
+>  	/*
+> @@ -964,6 +966,8 @@ int fixup_user_fault(struct task_struct *tsk, struct mm_struct *mm,
+>  	struct vm_area_struct *vma;
+>  	vm_fault_t ret, major = 0;
+>  
+> +	address = untagged_addr(address);
+> +
+>  	if (unlocked)
+>  		fault_flags |= FAULT_FLAG_ALLOW_RETRY;
+>  
 > -- 
 > 2.22.0.rc1.311.g5d7573a151-goog
 > 
