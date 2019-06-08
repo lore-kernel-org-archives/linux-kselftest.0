@@ -1,10 +1,10 @@
 From: sashal at kernel.org (Sasha Levin)
-Date: Sat,  8 Jun 2019 07:46:16 -0400
-Subject: [PATCH AUTOSEL 4.14 05/31] selftests: netfilter: missing error check
+Date: Sat,  8 Jun 2019 07:38:53 -0400
+Subject: [PATCH AUTOSEL 5.1 14/70] selftests: netfilter: missing error check
  when setting up veth interface
-In-Reply-To: <20190608114646.9415-1-sashal@kernel.org>
-References: <20190608114646.9415-1-sashal@kernel.org>
-Message-ID: <20190608114646.9415-5-sashal@kernel.org>
+In-Reply-To: <20190608113950.8033-1-sashal@kernel.org>
+References: <20190608113950.8033-1-sashal@kernel.org>
+Message-ID: <20190608113950.8033-14-sashal@kernel.org>
 
 From: Jeffrin Jose T <jeffrin at rajagiritech.edu.in>
 
@@ -24,7 +24,7 @@ Signed-off-by: Sasha Levin <sashal at kernel.org>
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/netfilter/nft_nat.sh b/tools/testing/selftests/netfilter/nft_nat.sh
-index 8ec76681605c..f25f72a75cf3 100755
+index 3194007cf8d1..a59c5fd4e987 100755
 --- a/tools/testing/selftests/netfilter/nft_nat.sh
 +++ b/tools/testing/selftests/netfilter/nft_nat.sh
 @@ -23,7 +23,11 @@ ip netns add ns0
