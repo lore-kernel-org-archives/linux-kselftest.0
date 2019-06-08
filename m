@@ -1,23 +1,25 @@
 From: keescook@chromium.org (Kees Cook)
-Date: Fri, 7 Jun 2019 20:51:48 -0700
-Subject: [PATCH v16 05/16] arm64: untag user pointers passed to memory
- syscalls
-In-Reply-To: <045a94326401693e015bf80c444a4d946a5c68ed.1559580831.git.andreyknvl@google.com>
+Date: Fri, 7 Jun 2019 20:52:45 -0700
+Subject: [PATCH v16 13/16] media/v4l2-core, arm64: untag user pointers in
+ videobuf_dma_contig_user_get
+In-Reply-To: <31821f3538ddacb7e57e0248e86a3d28f9789d2f.1559580831.git.andreyknvl@google.com>
 References: <cover.1559580831.git.andreyknvl@google.com>
- <045a94326401693e015bf80c444a4d946a5c68ed.1559580831.git.andreyknvl@google.com>
-Message-ID: <201906072051.7B66635BE@keescook>
+ <31821f3538ddacb7e57e0248e86a3d28f9789d2f.1559580831.git.andreyknvl@google.com>
+Message-ID: <201906072052.077135B@keescook>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190608035148.ekCSxM7AkeueEIFkyo7A47ohEPTxVNxhoc2g9U1I4Vc@z>
+Message-ID: <20190608035245.Y8bdX7HyvHsIENzjjM51r37L3Y87zoSL8O777h3fR98@z>
 
-On Mon, Jun 03, 2019@06:55:07PM +0200, Andrey Konovalov wrote:
+On Mon, Jun 03, 2019@06:55:15PM +0200, Andrey Konovalov wrote:
 > This patch is a part of a series that extends arm64 kernel ABI to allow to
 > pass tagged user pointers (with the top byte set to something else other
 > than 0x00) as syscall arguments.
 > 
-> This patch allows tagged pointers to be passed to the following memory
-> syscalls: get_mempolicy, madvise, mbind, mincore, mlock, mlock2, mprotect,
-> mremap, msync, munlock.
+> videobuf_dma_contig_user_get() uses provided user pointers for vma
+> lookups, which can only by done with untagged pointers.
 > 
+> Untag the pointers in this function.
+> 
+> Acked-by: Mauro Carvalho Chehab <mchehab+samsung at kernel.org>
 > Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 
 Reviewed-by: Kees Cook <keescook at chromium.org>
@@ -25,123 +27,48 @@ Reviewed-by: Kees Cook <keescook at chromium.org>
 -Kees
 
 > ---
->  mm/madvise.c   | 2 ++
->  mm/mempolicy.c | 3 +++
->  mm/mincore.c   | 2 ++
->  mm/mlock.c     | 4 ++++
->  mm/mprotect.c  | 2 ++
->  mm/mremap.c    | 2 ++
->  mm/msync.c     | 2 ++
->  7 files changed, 17 insertions(+)
+>  drivers/media/v4l2-core/videobuf-dma-contig.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 > 
-> diff --git a/mm/madvise.c b/mm/madvise.c
-> index 628022e674a7..39b82f8a698f 100644
-> --- a/mm/madvise.c
-> +++ b/mm/madvise.c
-> @@ -810,6 +810,8 @@ SYSCALL_DEFINE3(madvise, unsigned long, start, size_t, len_in, int, behavior)
->  	size_t len;
->  	struct blk_plug plug;
->  
-> +	start = untagged_addr(start);
-> +
->  	if (!madvise_behavior_valid(behavior))
->  		return error;
->  
-> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> index 01600d80ae01..78e0a88b2680 100644
-> --- a/mm/mempolicy.c
-> +++ b/mm/mempolicy.c
-> @@ -1360,6 +1360,7 @@ static long kernel_mbind(unsigned long start, unsigned long len,
->  	int err;
->  	unsigned short mode_flags;
->  
-> +	start = untagged_addr(start);
->  	mode_flags = mode & MPOL_MODE_FLAGS;
->  	mode &= ~MPOL_MODE_FLAGS;
->  	if (mode >= MPOL_MAX)
-> @@ -1517,6 +1518,8 @@ static int kernel_get_mempolicy(int __user *policy,
->  	int uninitialized_var(pval);
->  	nodemask_t nodes;
->  
-> +	addr = untagged_addr(addr);
-> +
->  	if (nmask != NULL && maxnode < nr_node_ids)
->  		return -EINVAL;
->  
-> diff --git a/mm/mincore.c b/mm/mincore.c
-> index c3f058bd0faf..64c322ed845c 100644
-> --- a/mm/mincore.c
-> +++ b/mm/mincore.c
-> @@ -249,6 +249,8 @@ SYSCALL_DEFINE3(mincore, unsigned long, start, size_t, len,
->  	unsigned long pages;
->  	unsigned char *tmp;
->  
-> +	start = untagged_addr(start);
-> +
->  	/* Check the start address: needs to be page-aligned.. */
->  	if (start & ~PAGE_MASK)
->  		return -EINVAL;
-> diff --git a/mm/mlock.c b/mm/mlock.c
-> index 080f3b36415b..e82609eaa428 100644
-> --- a/mm/mlock.c
-> +++ b/mm/mlock.c
-> @@ -674,6 +674,8 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
->  	unsigned long lock_limit;
->  	int error = -ENOMEM;
->  
-> +	start = untagged_addr(start);
-> +
->  	if (!can_do_mlock())
->  		return -EPERM;
->  
-> @@ -735,6 +737,8 @@ SYSCALL_DEFINE2(munlock, unsigned long, start, size_t, len)
+> diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/media/v4l2-core/videobuf-dma-contig.c
+> index e1bf50df4c70..8a1ddd146b17 100644
+> --- a/drivers/media/v4l2-core/videobuf-dma-contig.c
+> +++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
+> @@ -160,6 +160,7 @@ static void videobuf_dma_contig_user_put(struct videobuf_dma_contig_memory *mem)
+>  static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
+>  					struct videobuf_buffer *vb)
 >  {
+> +	unsigned long untagged_baddr = untagged_addr(vb->baddr);
+>  	struct mm_struct *mm = current->mm;
+>  	struct vm_area_struct *vma;
+>  	unsigned long prev_pfn, this_pfn;
+> @@ -167,22 +168,22 @@ static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
+>  	unsigned int offset;
 >  	int ret;
 >  
-> +	start = untagged_addr(start);
-> +
->  	len = PAGE_ALIGN(len + (offset_in_page(start)));
->  	start &= PAGE_MASK;
+> -	offset = vb->baddr & ~PAGE_MASK;
+> +	offset = untagged_baddr & ~PAGE_MASK;
+>  	mem->size = PAGE_ALIGN(vb->size + offset);
+>  	ret = -EINVAL;
 >  
-> diff --git a/mm/mprotect.c b/mm/mprotect.c
-> index bf38dfbbb4b4..19f981b733bc 100644
-> --- a/mm/mprotect.c
-> +++ b/mm/mprotect.c
-> @@ -465,6 +465,8 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
->  	const bool rier = (current->personality & READ_IMPLIES_EXEC) &&
->  				(prot & PROT_READ);
+>  	down_read(&mm->mmap_sem);
 >  
-> +	start = untagged_addr(start);
-> +
->  	prot &= ~(PROT_GROWSDOWN|PROT_GROWSUP);
->  	if (grows == (PROT_GROWSDOWN|PROT_GROWSUP)) /* can't be both */
->  		return -EINVAL;
-> diff --git a/mm/mremap.c b/mm/mremap.c
-> index fc241d23cd97..1d98281f7204 100644
-> --- a/mm/mremap.c
-> +++ b/mm/mremap.c
-> @@ -606,6 +606,8 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
->  	LIST_HEAD(uf_unmap_early);
->  	LIST_HEAD(uf_unmap);
+> -	vma = find_vma(mm, vb->baddr);
+> +	vma = find_vma(mm, untagged_baddr);
+>  	if (!vma)
+>  		goto out_up;
 >  
-> +	addr = untagged_addr(addr);
-> +
->  	if (flags & ~(MREMAP_FIXED | MREMAP_MAYMOVE))
->  		return ret;
+> -	if ((vb->baddr + mem->size) > vma->vm_end)
+> +	if ((untagged_baddr + mem->size) > vma->vm_end)
+>  		goto out_up;
 >  
-> diff --git a/mm/msync.c b/mm/msync.c
-> index ef30a429623a..c3bd3e75f687 100644
-> --- a/mm/msync.c
-> +++ b/mm/msync.c
-> @@ -37,6 +37,8 @@ SYSCALL_DEFINE3(msync, unsigned long, start, size_t, len, int, flags)
->  	int unmapped_error = 0;
->  	int error = -EINVAL;
+>  	pages_done = 0;
+>  	prev_pfn = 0; /* kill warning */
+> -	user_address = vb->baddr;
+> +	user_address = untagged_baddr;
 >  
-> +	start = untagged_addr(start);
-> +
->  	if (flags & ~(MS_ASYNC | MS_INVALIDATE | MS_SYNC))
->  		goto out;
->  	if (offset_in_page(start))
+>  	while (pages_done < (mem->size >> PAGE_SHIFT)) {
+>  		ret = follow_pfn(vma, user_address, &this_pfn);
 > -- 
 > 2.22.0.rc1.311.g5d7573a151-goog
 > 
