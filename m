@@ -2,147 +2,101 @@ Return-Path: <SRS0=C+tc=UH=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B80B2C28CC5
-	for <linux-kselftest@archiver.kernel.org>; Sat,  8 Jun 2019 04:05:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08E76C28CC5
+	for <linux-kselftest@archiver.kernel.org>; Sat,  8 Jun 2019 11:46:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8C392208C0
-	for <linux-kselftest@archiver.kernel.org>; Sat,  8 Jun 2019 04:05:05 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FihBxmn2"
+	by mail.kernel.org (Postfix) with ESMTP id CCC58214AF
+	for <linux-kselftest@archiver.kernel.org>; Sat,  8 Jun 2019 11:46:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1559994366;
+	bh=C+6URup4x6WWyXK1GXWSoHnLonUHCD8kJjjmj9A+3h4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=SNGoCJwMXFMB47IrSBVt9x4+VjoDN5XHfMOHqRKnFBVHEcR6ehsuHHy8RcrecyBqZ
+	 sUVVP487cRC8Zndqbyv9H2xQdI5EbuNuemllEQMMSlwLnHA7gdV4uxCPZPLkuryv9R
+	 8nphf/4S8fKOdJAbrDGTGdmF2xGi80W6Dsqt/dCo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726006AbfFHEFF (ORCPT
+        id S1728093AbfFHLnE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 8 Jun 2019 00:05:05 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:37398 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725379AbfFHEFF (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 8 Jun 2019 00:05:05 -0400
-Received: by mail-pg1-f195.google.com with SMTP id 20so2155022pgr.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jun 2019 21:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7MRDr4KJ8a0CcLFRNA6a6rBwJKdO40+h9uyHwhos1XY=;
-        b=FihBxmn2dVJ6Rw2WItUxtjZpswcNWCrx4UusJNMmjDUeSXGlPeke41oTHXObrS9v9s
-         auz9bPPxx2drUDHwQFTWyjmSfE251zoGthyYFhJV5WSoJ0SYpqwBy7GNBhwklPOXO6Qg
-         gWZEmprLR6lDNUGcv9V07ySSkX/PEr3KR97+4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7MRDr4KJ8a0CcLFRNA6a6rBwJKdO40+h9uyHwhos1XY=;
-        b=jIVuI9b2O1R9hOgkPtptADEGpwgT86/WGZLyydTIr4fgjOYf/tbqMkEwwd2QGAFeHS
-         4jyAgxDb6wBZNOybEZ638NQMEeIXhlZfMsa4yXe2psHcMvFIaZeiRTP2TXi+/fRMgOCC
-         lPeMaK7IoQhQ7fu6C6Vb0Ch43Rj1xiy8YxpauOu42Dlf+NwUqJpVn7n6oqwMkJWB0en5
-         ASFVIc/sFxDTy59Py2K0yNZXeHHn5qRpnO1nqbVf8n7JemFwY+0ghJpNR7bZ9vH+vevh
-         EBwaFGx/+VTZ8iPj9SpVmg/JTTwukXwtOmIO4/Uz+EKpgdamoqi8YunNVhZQq1KlwVRz
-         eh8Q==
-X-Gm-Message-State: APjAAAXxmdLS5yqpRiEP7AfXuTkqqsL0Pob3ag0DPr0Rv4agvRlw4OuV
-        8EN5fzXGGwpLKLeZwuSroBCNZQ==
-X-Google-Smtp-Source: APXvYqwInYsY/wUHZ9P1C1XrBfyqppKEaGOwIlzHhH7Qkl6+K82Iixjx8HiJ+/il/stbMYBMbkFxfA==
-X-Received: by 2002:a63:4045:: with SMTP id n66mr5882121pga.386.1559966704443;
-        Fri, 07 Jun 2019 21:05:04 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z14sm3301959pgs.79.2019.06.07.21.05.03
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 07 Jun 2019 21:05:03 -0700 (PDT)
-Date:   Fri, 7 Jun 2019 21:05:02 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v16 14/16] tee, arm64: untag user pointers in
- tee_shm_register
-Message-ID: <201906072104.B6A89D8CB@keescook>
-References: <cover.1559580831.git.andreyknvl@google.com>
- <dc3f3092abbc0d48e51b2e2a2ca8f4c4f69fa0f4.1559580831.git.andreyknvl@google.com>
+        Sat, 8 Jun 2019 07:43:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60290 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727947AbfFHLnD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 8 Jun 2019 07:43:03 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ED4E3214AF;
+        Sat,  8 Jun 2019 11:43:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559994182;
+        bh=C+6URup4x6WWyXK1GXWSoHnLonUHCD8kJjjmj9A+3h4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=leZLAEMBteJyAmFJBPS/tDSvlBmSmIzgsVQD2Ih/nFRbVtK340uVatx2yrPGAzUUl
+         Th65OF3LOFaoYhzvG1wK3KNUotiqs5/+h1EZXgDY7/lV1w4u17Us77Aqr1n4lBdDDg
+         3sPUlai2XK9faZjc4mjHqy7MGNeY11IgAS+c+UNw=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jeffrin Jose T <jeffrin@rajagiritech.edu.in>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 07/49] selftests: netfilter: missing error check when setting up veth interface
+Date:   Sat,  8 Jun 2019 07:41:48 -0400
+Message-Id: <20190608114232.8731-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190608114232.8731-1-sashal@kernel.org>
+References: <20190608114232.8731-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Disposition: inline
-In-Reply-To: <dc3f3092abbc0d48e51b2e2a2ca8f4c4f69fa0f4.1559580831.git.andreyknvl@google.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
-Message-ID: <20190608040502.PcNrUiMnKAp6puRsK8pdT2zWa4bXMXGHOxKXy-bN0do@z>
+Content-Type: text/plain; charset="UTF-8"
+Message-ID: <20190608114148.aSj5hSchoYaUXOM8cC8143gaF3Nq-3bzvwdLiBquqhA@z>
 
-On Mon, Jun 03, 2019 at 06:55:16PM +0200, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
-> 
-> tee_shm_register()->optee_shm_unregister()->check_mem_type() uses provided
-> user pointers for vma lookups (via __check_mem_type()), which can only by
-> done with untagged pointers.
-> 
-> Untag user pointers in this function.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+From: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
 
-"tee: shm: untag user pointers in tee_shm_register"
+[ Upstream commit 82ce6eb1dd13fd12e449b2ee2c2ec051e6f52c43 ]
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+A test for the basic NAT functionality uses ip command which needs veth
+device. There is a condition where the kernel support for veth is not
+compiled into the kernel and the test script breaks. This patch contains
+code for reasonable error display and correct code exit.
 
--Kees
+Signed-off-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+Acked-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/netfilter/nft_nat.sh | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> ---
->  drivers/tee/tee_shm.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-> index 49fd7312e2aa..96945f4cefb8 100644
-> --- a/drivers/tee/tee_shm.c
-> +++ b/drivers/tee/tee_shm.c
-> @@ -263,6 +263,7 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
->  	shm->teedev = teedev;
->  	shm->ctx = ctx;
->  	shm->id = -1;
-> +	addr = untagged_addr(addr);
->  	start = rounddown(addr, PAGE_SIZE);
->  	shm->offset = addr - start;
->  	shm->size = length;
-> -- 
-> 2.22.0.rc1.311.g5d7573a151-goog
-> 
-
+diff --git a/tools/testing/selftests/netfilter/nft_nat.sh b/tools/testing/selftests/netfilter/nft_nat.sh
+index 8ec76681605c..f25f72a75cf3 100755
+--- a/tools/testing/selftests/netfilter/nft_nat.sh
++++ b/tools/testing/selftests/netfilter/nft_nat.sh
+@@ -23,7 +23,11 @@ ip netns add ns0
+ ip netns add ns1
+ ip netns add ns2
+ 
+-ip link add veth0 netns ns0 type veth peer name eth0 netns ns1
++ip link add veth0 netns ns0 type veth peer name eth0 netns ns1 > /dev/null 2>&1
++if [ $? -ne 0 ];then
++    echo "SKIP: No virtual ethernet pair device support in kernel"
++    exit $ksft_skip
++fi
+ ip link add veth1 netns ns0 type veth peer name eth0 netns ns2
+ 
+ ip -net ns0 link set lo up
 -- 
-Kees Cook
+2.20.1
+
