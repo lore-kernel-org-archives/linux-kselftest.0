@@ -6,26 +6,26 @@ X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96193C31E74
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Jun 2019 14:28:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B911C31E74
+	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Jun 2019 14:29:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 78BF32089E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Jun 2019 14:28:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E43620859
+	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Jun 2019 14:29:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389742AbfFJO2g (ORCPT
+        id S2390840AbfFJO3p (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 10 Jun 2019 10:28:36 -0400
-Received: from foss.arm.com ([217.140.110.172]:44010 "EHLO foss.arm.com"
+        Mon, 10 Jun 2019 10:29:45 -0400
+Received: from foss.arm.com ([217.140.110.172]:44068 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388936AbfFJO2g (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Jun 2019 10:28:36 -0400
+        id S2389928AbfFJO3p (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 10 Jun 2019 10:29:45 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6C8A344;
-        Mon, 10 Jun 2019 07:28:35 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5041F346;
+        Mon, 10 Jun 2019 07:29:44 -0700 (PDT)
 Received: from c02tf0j2hf1t.cambridge.arm.com (c02tf0j2hf1t.cambridge.arm.com [10.1.32.192])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AF14A3F73C;
-        Mon, 10 Jun 2019 07:28:27 -0700 (PDT)
-Date:   Mon, 10 Jun 2019 15:28:25 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 22B503F73C;
+        Mon, 10 Jun 2019 07:29:36 -0700 (PDT)
+Date:   Mon, 10 Jun 2019 15:29:34 +0100
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Andrey Konovalov <andreyknvl@google.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
@@ -62,39 +62,31 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         Robin Murphy <robin.murphy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v16 05/16] arm64: untag user pointers passed to memory
- syscalls
-Message-ID: <20190610142824.GB10165@c02tf0j2hf1t.cambridge.arm.com>
+Subject: Re: [PATCH v16 07/16] mm, arm64: untag user pointers in
+ get_vaddr_frames
+Message-ID: <20190610142933.GC10165@c02tf0j2hf1t.cambridge.arm.com>
 References: <cover.1559580831.git.andreyknvl@google.com>
- <045a94326401693e015bf80c444a4d946a5c68ed.1559580831.git.andreyknvl@google.com>
+ <da1d0e0f6d69c15a12987379e372182f416cbc02.1559580831.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Disposition: inline
-In-Reply-To: <045a94326401693e015bf80c444a4d946a5c68ed.1559580831.git.andreyknvl@google.com>
+In-Reply-To: <da1d0e0f6d69c15a12987379e372182f416cbc02.1559580831.git.andreyknvl@google.com>
 User-Agent: Mutt/1.11.2 (2019-01-07)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
-Message-ID: <20190610142825.XZjkFNwQYvRfIHDyS6LehI1U5PRR7YbD0wcuN89ByIY@z>
+Message-ID: <20190610142934.j_r_BcSOaqg5DZbgDtfuQNY2DZIYvqb7Fy9p7nVh-6s@z>
 
-On Mon, Jun 03, 2019 at 06:55:07PM +0200, Andrey Konovalov wrote:
+On Mon, Jun 03, 2019 at 06:55:09PM +0200, Andrey Konovalov wrote:
 > This patch is a part of a series that extends arm64 kernel ABI to allow to
 > pass tagged user pointers (with the top byte set to something else other
 > than 0x00) as syscall arguments.
 > 
-> This patch allows tagged pointers to be passed to the following memory
-> syscalls: get_mempolicy, madvise, mbind, mincore, mlock, mlock2, mprotect,
-> mremap, msync, munlock.
+> get_vaddr_frames uses provided user pointers for vma lookups, which can
+> only by done with untagged pointers. Instead of locating and changing
+> all callers of this function, perform untagging in it.
 > 
 > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-I would add in the commit log (and possibly in the code with a comment)
-that mremap() and mmap() do not currently accept tagged hint addresses.
-Architectures may interpret the hint tag as a background colour for the
-corresponding vma. With this:
-
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-
--- 
-Catalin
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
