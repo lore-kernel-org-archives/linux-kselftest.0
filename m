@@ -1,23 +1,47 @@
-From: catalin.marinas@arm.com (Catalin Marinas)
-Date: Mon, 10 Jun 2019 15:29:34 +0100
-Subject: [PATCH v16 07/16] mm, arm64: untag user pointers in
- get_vaddr_frames
-In-Reply-To: <da1d0e0f6d69c15a12987379e372182f416cbc02.1559580831.git.andreyknvl@google.com>
-References: <cover.1559580831.git.andreyknvl@google.com>
- <da1d0e0f6d69c15a12987379e372182f416cbc02.1559580831.git.andreyknvl@google.com>
-Message-ID: <20190610142933.GC10165@c02tf0j2hf1t.cambridge.arm.com>
+From: huw@codeweavers.com (Huw Davies)
+Date: Mon, 10 Jun 2019 18:47:46 +0100
+Subject: [PATCH v6 01/19] kernel: Standardize vdso_datapage
+In-Reply-To: <bb5253b2-623c-c927-27a2-1d3a2990d20f@arm.com>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <20190530141531.43462-2-vincenzo.frascino@arm.com>
+ <CAK8P3a3EnvkLND2RJdZtEY64PhK5g0sbbuytQro=f0cPur2g9g@mail.gmail.com>
+ <bb5253b2-623c-c927-27a2-1d3a2990d20f@arm.com>
+Message-ID: <20190610174746.GA13224@merlot.physics.ox.ac.uk>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190610142934.FV7gsc3ZezA_16uEO2eT7MeIyOFs3bi7C5BfDQvXs5w@z>
+Message-ID: <20190610174746.CaTeJU0LXxFgXeqLJLCTOw7Ui1vLWzVYh4benVENBIU@z>
 
-On Mon, Jun 03, 2019@06:55:09PM +0200, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
+On Tue, Jun 04, 2019@01:05:40PM +0100, Vincenzo Frascino wrote:
+> On 31/05/2019 09:16, Arnd Bergmann wrote:
+> > On Thu, May 30, 2019 at 4:15 PM Vincenzo Frascino
+> > <vincenzo.frascino@arm.com> wrote:
+> > 
+> >> + * vdso_data will be accessed by 64 bit and compat code at the same time
+> >> + * so we should be careful before modifying this structure.
+> >> + */
+> >> +struct vdso_data {
+> >> +       u32                     seq;
+> >> +
+> >> +       s32                     clock_mode;
+> >> +       u64                     cycle_last;
+> >> +       u64                     mask;
+> >> +       u32                     mult;
+> >> +       u32                     shift;
+> >> +
+> >> +       struct vdso_timestamp   basetime[VDSO_BASES];
+> >> +
+> >> +       s32                     tz_minuteswest;
+> >> +       s32                     tz_dsttime;
+> >> +       u32                     hrtimer_res;
+> >> +};
+> > 
+> > The structure contains four padding bytes at the end, which is
+> > something we try to avoid, at least if this ends up being used as
+> > an ABI. Maybe add "u32 __unused" at the end?
+> > 
 > 
-> get_vaddr_frames uses provided user pointers for vma lookups, which can
-> only by done with untagged pointers. Instead of locating and changing
-> all callers of this function, perform untagging in it.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
+> Agreed, I will fix this in v7.
 
-Acked-by: Catalin Marinas <catalin.marinas at arm.com>
+Note that this is also necessary to ensure that CLOCK_MONOTONIC_RAW
+works in the 32-bit vDSO on x86_64 kernels.
+
+Huw.
