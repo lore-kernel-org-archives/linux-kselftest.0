@@ -1,57 +1,41 @@
-From: keescook@chromium.org (Kees Cook)
-Date: Mon, 10 Jun 2019 13:36:04 -0700
-Subject: [PATCH v16 02/16] arm64: untag user pointers in access_ok and
- __uaccess_mask_ptr
-In-Reply-To: <20190610185329.xhjawzfy4uddrkrj@mbp>
+From: shuah@kernel.org (shuah)
+Date: Mon, 10 Jun 2019 16:08:10 -0600
+Subject: [PATCH v16 16/16] selftests, arm64: add a selftest for passing
+ tagged pointers to kernel
+In-Reply-To: <201906072055.7DFED7B@keescook>
 References: <cover.1559580831.git.andreyknvl@google.com>
- <4327b260fb17c4776a1e3c844f388e4948cfb747.1559580831.git.andreyknvl@google.com>
- <20190610175326.GC25803@arrakis.emea.arm.com>
- <201906101106.3CA50745E3@keescook>
- <20190610185329.xhjawzfy4uddrkrj@mbp>
-Message-ID: <201906101335.DF80D631@keescook>
+ <9e1b5998a28f82b16076fc85ab4f88af5381cf74.1559580831.git.andreyknvl@google.com>
+ <201906072055.7DFED7B@keescook>
+Message-ID: <2bc277f8-e67e-30e0-5824-8184c2b03237@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190610203604.daJoaGFMNQkW64zhSKdAoAnUDZNSKtYK8NMMWPI-6gE@z>
+Message-ID: <20190610220810.5KIs2xVyhh9KfbirIkw569b1hTYP78c_EPWYh8pWWq0@z>
 
-On Mon, Jun 10, 2019@07:53:30PM +0100, Catalin Marinas wrote:
-> On Mon, Jun 10, 2019@11:07:03AM -0700, Kees Cook wrote:
-> > On Mon, Jun 10, 2019@06:53:27PM +0100, Catalin Marinas wrote:
-> > > diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-> > > index 3767fb21a5b8..fd191c5b92aa 100644
-> > > --- a/arch/arm64/kernel/process.c
-> > > +++ b/arch/arm64/kernel/process.c
-> > > @@ -552,3 +552,18 @@ void arch_setup_new_exec(void)
-> > >  
-> > >  	ptrauth_thread_init_user(current);
-> > >  }
-> > > +
-> > > +/*
-> > > + * Enable the relaxed ABI allowing tagged user addresses into the kernel.
-> > > + */
-> > > +int untagged_uaddr_set_mode(unsigned long arg)
-> > > +{
-> > > +	if (is_compat_task())
-> > > +		return -ENOTSUPP;
-> > > +	if (arg)
-> > > +		return -EINVAL;
-> > > +
-> > > +	set_thread_flag(TIF_UNTAGGED_UADDR);
-> > > +
-> > > +	return 0;
-> > > +}
-> > 
-> > I think this should be paired with a flag clearing in copy_thread(),
-> > yes? (i.e. each binary needs to opt in)
+On 6/7/19 9:56 PM, Kees Cook wrote:
+> On Mon, Jun 03, 2019@06:55:18PM +0200, Andrey Konovalov wrote:
+>> This patch is a part of a series that extends arm64 kernel ABI to allow to
+>> pass tagged user pointers (with the top byte set to something else other
+>> than 0x00) as syscall arguments.
+>>
+>> This patch adds a simple test, that calls the uname syscall with a
+>> tagged user pointer as an argument. Without the kernel accepting tagged
+>> user pointers the test fails with EFAULT.
+>>
+>> Signed-off-by: Andrey Konovalov <andreyknvl at google.com>
 > 
-> It indeed needs clearing though not in copy_thread() as that's used on
-> clone/fork but rather in flush_thread(), called on the execve() path.
+> I'm adding Shuah to CC in case she has some suggestions about the new
+> selftest.
 
-Ah! Yes, thanks.
+Thanks Kees.
 
-> And a note to myself: I think PR_UNTAGGED_ADDR (not UADDR) looks better
-> in a uapi header, the user doesn't differentiate between uaddr and
-> kaddr.
+> 
+> Reviewed-by: Kees Cook <keescook at chromium.org>
+> 
+> -Kees
+> 
 
-Good point. I would agree. :)
+Looks good to me.
 
--- 
-Kees Cook
+Acked-by: Shuah Khan <skhan at linuxfoundation.org>
+
+thanks,
+-- Shuah
