@@ -1,103 +1,87 @@
-Return-Path: <SRS0=yQ4H=UI=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=INK0=UJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 847D3C28EBD
-	for <linux-kselftest@archiver.kernel.org>; Sun,  9 Jun 2019 09:19:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 159E8C282DD
+	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Jun 2019 09:34:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5DBEC20868
-	for <linux-kselftest@archiver.kernel.org>; Sun,  9 Jun 2019 09:19:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DDF52207E0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Jun 2019 09:34:52 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="M7VomCI5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727946AbfFIJTn (ORCPT
+        id S2388347AbfFJJew (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 9 Jun 2019 05:19:43 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:46659 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727864AbfFIJTm (ORCPT
+        Mon, 10 Jun 2019 05:34:52 -0400
+Received: from mail.codeweavers.com ([50.203.203.244]:57636 "EHLO
+        mail.codeweavers.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388033AbfFJJew (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 9 Jun 2019 05:19:42 -0400
-Received: by mail-lf1-f65.google.com with SMTP id z15so1892132lfh.13;
-        Sun, 09 Jun 2019 02:19:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tm1kUkU8K0xP+6qbFcyeQd6hDSnbqz5Xinvig3WgCVk=;
-        b=tgmF/+F8MayA//Guy9XStbdA6BocwtPRn5ozoX8XchLUePohMIpuYrxOUaxST54EQl
-         6nqCBmmXX0iUzBFsf0j/NPwOEgo42RcY8cOPuwfXzWsbV3xXxgyOPQNiJYrdk+/ZlFBl
-         OLi3ImGC7QD5B0xANqAX606a1VNMeqTok4ENK9Sj17HgZibK/wvr/oIuMd3/sQWF5FgS
-         dSEUskRgqXbFboQ9fC9a9z+cMX7PlCsaSQNzM5FnivT9hmaz9gXTTvzwSGyOBgbvw07M
-         OsVzZpJcJr7+1knhoK0c/xuG26CavyeqcdIHy+YNCK4qkac9HolfFUdVIz3hNyNfM54C
-         WXdg==
-X-Gm-Message-State: APjAAAU77NaJf99SeYyMoD7EKt3zF55NQyYZzCee0kYyVQ+xIkHz/KSa
-        F6mMFGkCxZvx19chKsVFFc/YUX8rNGQfI7ATU4k=
-X-Google-Smtp-Source: APXvYqxnnYV8kl5R90oD40qadn5h+TZeP7RkBZTi+rdt/dFdy/gyUH8r8MQ2aYrIT1EQJA6MQAqc14471W+iVtoVwcY=
-X-Received: by 2002:ac2:546a:: with SMTP id e10mr31848175lfn.75.1560071980695;
- Sun, 09 Jun 2019 02:19:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <ff457774d46d96e8fe56b45409aba39d87a8672a.1559933665.git.mchehab+samsung@kernel.org>
- <4948a096397bb86cebf489b8ac4f623797257fe7.1559933665.git.mchehab+samsung@kernel.org>
-In-Reply-To: <4948a096397bb86cebf489b8ac4f623797257fe7.1559933665.git.mchehab+samsung@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 9 Jun 2019 11:19:28 +0200
-Message-ID:
- <CAMuHMdVnBP-CJ5S0+D_H4RedkHV5m8m8wGXy-PRzaFk0JWdW8Q@mail.gmail.com>
-Subject: Re: [PATCH v3 15/20] docs: move protection-keys.rst to the core-api book
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Mon, 10 Jun 2019 05:34:52 -0400
+X-Greylist: delayed 408 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 Jun 2019 05:34:51 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=codeweavers.com; s=6377696661; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=4eGiVW2ASr/2wXgAHa/3aGTNnoVXeHPUusW8fdgt++Q=; b=M7VomCI51CoH28I3NAFr0m+ff
+        rqBNddxfExXVFgwF3C5nLKikZV5mg+sHwE4Tfp//Q5KIcwLttOgWe4j5FZLf0gRBoD4HBCUpWzeqB
+        82VIznHDYb1TwtgXrLgjo6TNRmmHxh/dk6u5BF3NIhDBpENDuClzKGnPwIuaqNH5DM8Ao=;
+Received: from merlot.physics.ox.ac.uk ([163.1.241.98] helo=merlot)
+        by mail.codeweavers.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <huw@codeweavers.com>)
+        id 1haGi6-0003ej-Mm; Mon, 10 Jun 2019 04:35:27 -0500
+Received: from daviesh by merlot with local (Exim 4.90_1)
+        (envelope-from <huw@codeweavers.com>)
+        id 1haGhT-0003A6-MO; Mon, 10 Jun 2019 10:34:47 +0100
+Date:   Mon, 10 Jun 2019 10:34:47 +0100
+From:   Huw Davies <huw@codeweavers.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
         Shuah Khan <shuah@kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v6 03/19] kernel: Unify update_vsyscall implementation
+Message-ID: <20190610093447.GC11076@merlot.physics.ox.ac.uk>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <20190530141531.43462-4-vincenzo.frascino@arm.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
+Content-Disposition: inline
+In-Reply-To: <20190530141531.43462-4-vincenzo.frascino@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
-Message-ID: <20190609091928.kddkqmfG_nWhcN_DoRmsFlE3v38T3UFES1yoK4L8jHA@z>
+Message-ID: <20190610093447.bQeI7JiF5yPLQ1ZOw2VDzCSTItSGy_2V0ju_zKgZcEg@z>
 
-Hi Mauro,
+On Thu, May 30, 2019 at 03:15:15PM +0100, Vincenzo Frascino wrote:
+> With the definition of the unified vDSO library the implementations of
+> update_vsyscall and update_vsyscall_tz became quite similar across
+> architectures.
+> 
+> Define a unified implementation of this two functions in kernel/vdso and
 
-On Fri, Jun 7, 2019 at 9:38 PM Mauro Carvalho Chehab
-<mchehab+samsung@kernel.org> wrote:
-> This document is used by multiple architectures:
+... of these two functions ...
 
-Indeed it is...
-
->
->         $ echo $(git grep -l  pkey_mprotect arch|cut -d'/' -f 2|sort|uniq)
->         alpha arm arm64 ia64 m68k microblaze mips parisc powerpc s390 sh sparc x86 xtensa
-
-... but not because we now have a unified space for new syscall numbers ;-)
-
-$ git grep -w ARCH_HAS_PKEYS -- "*Kconf*"
-arch/powerpc/Kconfig:   select ARCH_HAS_PKEYS
-arch/x86/Kconfig:       select ARCH_HAS_PKEYS
-mm/Kconfig:config ARCH_HAS_PKEYS
-
-I.e. limited to x86 and powerpc.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> provide the bindings that can be implemented by every architecture that
+> takes advantage of the unified vDSO library.
