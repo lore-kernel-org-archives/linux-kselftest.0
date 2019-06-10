@@ -2,91 +2,114 @@ Return-Path: <SRS0=INK0=UJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B911C31E74
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Jun 2019 14:29:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1E04C31E43
+	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Jun 2019 17:48:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2E43620859
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Jun 2019 14:29:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF4FF20862
+	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Jun 2019 17:48:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="ddQy0EE+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390840AbfFJO3p (ORCPT
+        id S2388635AbfFJRr6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 10 Jun 2019 10:29:45 -0400
-Received: from foss.arm.com ([217.140.110.172]:44068 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389928AbfFJO3p (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Jun 2019 10:29:45 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5041F346;
-        Mon, 10 Jun 2019 07:29:44 -0700 (PDT)
-Received: from c02tf0j2hf1t.cambridge.arm.com (c02tf0j2hf1t.cambridge.arm.com [10.1.32.192])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 22B503F73C;
-        Mon, 10 Jun 2019 07:29:36 -0700 (PDT)
-Date:   Mon, 10 Jun 2019 15:29:34 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Mon, 10 Jun 2019 13:47:58 -0400
+Received: from mail.codeweavers.com ([50.203.203.244]:59114 "EHLO
+        mail.codeweavers.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387643AbfFJRr5 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 10 Jun 2019 13:47:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=codeweavers.com; s=6377696661; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=B+NQK0qQzwriFdGQRKl3qnBuYxHERXIyxTc267JOpl0=; b=ddQy0EE+r/As82BHbGL2enMiF
+        +xSkrfjkaTQ0AJxemttV6by74YhcQ50DLiLC1sA3I03bUdF2mNxbHrY1p4ORkTzfe/rv/xfMgzol2
+        SI2MK+71N2dyNCMb6kZwrM5MZdJ8KNTla+ziNnIZzH+w52ZzB0PpDi3xi3X39ShZeK5/E=;
+Received: from merlot.physics.ox.ac.uk ([163.1.241.98] helo=merlot)
+        by mail.codeweavers.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <huw@codeweavers.com>)
+        id 1haOPC-0004C2-Gt; Mon, 10 Jun 2019 12:48:27 -0500
+Received: from daviesh by merlot with local (Exim 4.90_1)
+        (envelope-from <huw@codeweavers.com>)
+        id 1haOOY-0003Rh-VS; Mon, 10 Jun 2019 18:47:47 +0100
+Date:   Mon, 10 Jun 2019 18:47:46 +0100
+From:   Huw Davies <huw@codeweavers.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v16 07/16] mm, arm64: untag user pointers in
- get_vaddr_frames
-Message-ID: <20190610142933.GC10165@c02tf0j2hf1t.cambridge.arm.com>
-References: <cover.1559580831.git.andreyknvl@google.com>
- <da1d0e0f6d69c15a12987379e372182f416cbc02.1559580831.git.andreyknvl@google.com>
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v6 01/19] kernel: Standardize vdso_datapage
+Message-ID: <20190610174746.GA13224@merlot.physics.ox.ac.uk>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <20190530141531.43462-2-vincenzo.frascino@arm.com>
+ <CAK8P3a3EnvkLND2RJdZtEY64PhK5g0sbbuytQro=f0cPur2g9g@mail.gmail.com>
+ <bb5253b2-623c-c927-27a2-1d3a2990d20f@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Disposition: inline
-In-Reply-To: <da1d0e0f6d69c15a12987379e372182f416cbc02.1559580831.git.andreyknvl@google.com>
-User-Agent: Mutt/1.11.2 (2019-01-07)
+In-Reply-To: <bb5253b2-623c-c927-27a2-1d3a2990d20f@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
-Message-ID: <20190610142934.j_r_BcSOaqg5DZbgDtfuQNY2DZIYvqb7Fy9p7nVh-6s@z>
+Message-ID: <20190610174746.1hrFXAm-lwY3eo7hgcXR3fhNwlCZPMTWWGCbol-tTK0@z>
 
-On Mon, Jun 03, 2019 at 06:55:09PM +0200, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
+On Tue, Jun 04, 2019 at 01:05:40PM +0100, Vincenzo Frascino wrote:
+> On 31/05/2019 09:16, Arnd Bergmann wrote:
+> > On Thu, May 30, 2019 at 4:15 PM Vincenzo Frascino
+> > <vincenzo.frascino@arm.com> wrote:
+> > 
+> >> + * vdso_data will be accessed by 64 bit and compat code at the same time
+> >> + * so we should be careful before modifying this structure.
+> >> + */
+> >> +struct vdso_data {
+> >> +       u32                     seq;
+> >> +
+> >> +       s32                     clock_mode;
+> >> +       u64                     cycle_last;
+> >> +       u64                     mask;
+> >> +       u32                     mult;
+> >> +       u32                     shift;
+> >> +
+> >> +       struct vdso_timestamp   basetime[VDSO_BASES];
+> >> +
+> >> +       s32                     tz_minuteswest;
+> >> +       s32                     tz_dsttime;
+> >> +       u32                     hrtimer_res;
+> >> +};
+> > 
+> > The structure contains four padding bytes at the end, which is
+> > something we try to avoid, at least if this ends up being used as
+> > an ABI. Maybe add "u32 __unused" at the end?
+> > 
 > 
-> get_vaddr_frames uses provided user pointers for vma lookups, which can
-> only by done with untagged pointers. Instead of locating and changing
-> all callers of this function, perform untagging in it.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> Agreed, I will fix this in v7.
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Note that this is also necessary to ensure that CLOCK_MONOTONIC_RAW
+works in the 32-bit vDSO on x86_64 kernels.
+
+Huw.
