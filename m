@@ -2,106 +2,240 @@ Return-Path: <SRS0=fKEE=UK=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3606DC43218
-	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Jun 2019 10:30:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E9D8C4360E
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Jun 2019 12:20:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0824D20820
-	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Jun 2019 10:30:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LZMHerGy"
+	by mail.kernel.org (Postfix) with ESMTP id 813912146E
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Jun 2019 12:20:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727919AbfFKKay (ORCPT
+        id S2388426AbfFKMUK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 11 Jun 2019 06:30:54 -0400
-Received: from mail-it1-f169.google.com ([209.85.166.169]:55354 "EHLO
-        mail-it1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727390AbfFKKay (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jun 2019 06:30:54 -0400
-Received: by mail-it1-f169.google.com with SMTP id i21so3977654ita.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2019 03:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=wqV28W+k6Y5J5PTchHnXNKYR2DeyBwGb+Z0TkQBdK9s=;
-        b=LZMHerGyaHA0BlQ6Jf192bW/drTNszGg94TvCqBxKon2JPwB/AaoHvI/QK1xT+XAnC
-         u2Rgt2IvpsPV7MRR0wwcI5PdFGqAsXjWcNulaxMLaam1BNZ2whA/RTMdGaFEvrYzlxgc
-         fAkPgFPwsibaahkXo1tZ9ybNvqKAzkxo2lbbcRVKupntns53irArcHS6q/dRLWBzGZ+b
-         LZlUeTRio1M66aJN7BTv97WS0M72iAPUyiXnSFdiZs5d1i0k/VfhOZD19Ym7b3ltnbnb
-         M0xYVGOBDvmj0Sc46rhHuAIg2Q39IoNXoNLwa2nhSDwZz/jDCMJA0IGSJPaMjhOiSz0w
-         iDnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=wqV28W+k6Y5J5PTchHnXNKYR2DeyBwGb+Z0TkQBdK9s=;
-        b=NRVmHaHxRv7ZSknHB10mR+hIrt0Uw13SXctSEO0vc4GA9P+2U8OfOargQxzz2uLe6r
-         EpMQAZylVgyQbCCQFbxHEoKZrpfTaxAH/GHDiK7yJFjoUxEOa+ZFMeGP6em30GLTdOsC
-         sYVV5Oy+xcwa/Q5glXKcd+c4hiq1i3TxqqxnxDnijq1/xvx/UVScwcOxnlxk8votC+3P
-         dn+ekAt/xHCpgf5seX9u5kpxwcl25jzQ7B1SN76Jpru96IBOHqxFoQZDCSQkK+Iwe14p
-         hVLU/7fbpUVker575iI8GpR9O0uFZUoavmgeKobbN3mXx+0hYRnW87ETBEQBZJXaYN4y
-         YeeA==
-X-Gm-Message-State: APjAAAXGYkH/+5gPYtgVU/0Rs7nawZnMma90LBsskfUgBl8phx+zMpoX
-        rn5tatM/aJS5M6zK08IycLxbuCEDxVMT5VgIbUfuSjBBBhCDXQ==
-X-Google-Smtp-Source: APXvYqwTYaT/b1M8OeYDnu3M+eRa/gbDYp8Tedn6sawAce128+14dURmtFKRap/ib2SSl70fK3VLagoG/AW1qY0ZJ0A=
-X-Received: by 2002:a24:1d01:: with SMTP id 1mr12078524itj.83.1560249053408;
- Tue, 11 Jun 2019 03:30:53 -0700 (PDT)
-MIME-Version: 1.0
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 11 Jun 2019 12:30:42 +0200
-Message-ID: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
-Subject: kselftest build broken?
-To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 11 Jun 2019 08:20:10 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46170 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728859AbfFKMUF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 11 Jun 2019 08:20:05 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 537CBB024;
+        Tue, 11 Jun 2019 12:20:03 +0000 (UTC)
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 2/2] selftests: firmware: Add compressed firmware tests
+Date:   Tue, 11 Jun 2019 14:19:56 +0200
+Message-Id: <20190611121956.27460-3-tiwai@suse.de>
+X-Mailer: git-send-email 2.16.4
+In-Reply-To: <20190611121956.27460-1-tiwai@suse.de>
+References: <20190611121956.27460-1-tiwai@suse.de>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+This patch adds the test cases for checking compressed firmware load.
+Two more cases are added to fw_filesystem.sh:
+- Both a plain file and an xz file are present, and load the former
+- Only an xz file is present, and load without '.xz' suffix
 
-I've tried to build kselftests for several years now, but I always
-find the build broken. Which makes me wonder if the instructions are
-broken or something. I follow the instructions in
-Documentation/dev-tools/kselftest.rst and start with "make -C
-tools/testing/selftests". Here is the errors I get on the upstream
-commit 16d72dd4891fecc1e1bf7ca193bb7d5b9804c038:
+The tests are enabled only when CONFIG_FW_LOADER_COMPRESS is enabled
+and xz program is installed.
 
-error: unable to create target: 'No available targets are compatible
-with triple "bpf"'
-1 error generated.
-Makefile:259: recipe for target 'elfdep' failed
-Makefile:156: recipe for target 'all' failed
-Makefile:106: recipe for target
-'/linux/tools/testing/selftests/bpf/libbpf.a' failed
-test_execve.c:4:10: fatal error: cap-ng.h: No such file or directory
-../lib.mk:138: recipe for target
-'/linux/tools/testing/selftests/capabilities/test_execve' failed
-gpio-mockup-chardev.c:20:10: fatal error: libmount.h: No such file or directory
-<builtin>: recipe for target 'gpio-mockup-chardev' failed
-fuse_mnt.c:17:10: fatal error: fuse.h: No such file or directory
-../lib.mk:138: recipe for target
-'/linux/tools/testing/selftests/memfd/fuse_mnt' failed
-collect2: error: ld returned 1 exit status
-../lib.mk:138: recipe for target
-'/linux/tools/testing/selftests/mqueue/mq_open_tests' failed
-reuseport_bpf_numa.c:24:10: fatal error: numa.h: No such file or directory
-../lib.mk:138: recipe for target
-'/linux/tools/testing/selftests/net/reuseport_bpf_numa' failed
-mlock-random-test.c:8:10: fatal error: sys/capability.h: No such file
-or directory
-../lib.mk:138: recipe for target
-'/linux/tools/testing/selftests/vm/mlock-random-test' failed
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
+ tools/testing/selftests/firmware/fw_filesystem.sh | 73 +++++++++++++++++++----
+ tools/testing/selftests/firmware/fw_lib.sh        |  7 +++
+ tools/testing/selftests/firmware/fw_run_tests.sh  |  1 +
+ 3 files changed, 71 insertions(+), 10 deletions(-)
 
-Here is full log:
+diff --git a/tools/testing/selftests/firmware/fw_filesystem.sh b/tools/testing/selftests/firmware/fw_filesystem.sh
+index a4320c4b44dc..f901076aa2ea 100755
+--- a/tools/testing/selftests/firmware/fw_filesystem.sh
++++ b/tools/testing/selftests/firmware/fw_filesystem.sh
+@@ -153,13 +153,18 @@ config_set_read_fw_idx()
+ 
+ read_firmwares()
+ {
++	if [ "$1" = "xzonly" ]; then
++		fwfile="${FW}-orig"
++	else
++		fwfile="$FW"
++	fi
+ 	for i in $(seq 0 3); do
+ 		config_set_read_fw_idx $i
+ 		# Verify the contents are what we expect.
+ 		# -Z required for now -- check for yourself, md5sum
+ 		# on $FW and DIR/read_firmware will yield the same. Even
+ 		# cmp agrees, so something is off.
+-		if ! diff -q -Z "$FW" $DIR/read_firmware 2>/dev/null ; then
++		if ! diff -q -Z "$fwfile" $DIR/read_firmware 2>/dev/null ; then
+ 			echo "request #$i: firmware was not loaded" >&2
+ 			exit 1
+ 		fi
+@@ -246,17 +251,17 @@ test_request_firmware_nowait_custom_nofile()
+ 
+ test_batched_request_firmware()
+ {
+-	echo -n "Batched request_firmware() try #$1: "
++	echo -n "Batched request_firmware() $2 try #$1: "
+ 	config_reset
+ 	config_trigger_sync
+-	read_firmwares
++	read_firmwares $2
+ 	release_all_firmware
+ 	echo "OK"
+ }
+ 
+ test_batched_request_firmware_direct()
+ {
+-	echo -n "Batched request_firmware_direct() try #$1: "
++	echo -n "Batched request_firmware_direct() $2 try #$1: "
+ 	config_reset
+ 	config_set_sync_direct
+ 	config_trigger_sync
+@@ -266,7 +271,7 @@ test_batched_request_firmware_direct()
+ 
+ test_request_firmware_nowait_uevent()
+ {
+-	echo -n "Batched request_firmware_nowait(uevent=true) try #$1: "
++	echo -n "Batched request_firmware_nowait(uevent=true) $2 try #$1: "
+ 	config_reset
+ 	config_trigger_async
+ 	release_all_firmware
+@@ -275,11 +280,16 @@ test_request_firmware_nowait_uevent()
+ 
+ test_request_firmware_nowait_custom()
+ {
+-	echo -n "Batched request_firmware_nowait(uevent=false) try #$1: "
++	echo -n "Batched request_firmware_nowait(uevent=false) $2 try #$1: "
+ 	config_reset
+ 	config_unset_uevent
+ 	RANDOM_FILE_PATH=$(setup_random_file)
+ 	RANDOM_FILE="$(basename $RANDOM_FILE_PATH)"
++	if [ "$2" = "both" ]; then
++		xz -9 -C crc32 -k $RANDOM_FILE_PATH
++	elif [ "$2" = "xzonly" ]; then
++		xz -9 -C crc32 $RANDOM_FILE_PATH
++	fi
+ 	config_set_name $RANDOM_FILE
+ 	config_trigger_async
+ 	release_all_firmware
+@@ -294,19 +304,19 @@ test_config_present
+ echo
+ echo "Testing with the file present..."
+ for i in $(seq 1 5); do
+-	test_batched_request_firmware $i
++	test_batched_request_firmware $i normal
+ done
+ 
+ for i in $(seq 1 5); do
+-	test_batched_request_firmware_direct $i
++	test_batched_request_firmware_direct $i normal
+ done
+ 
+ for i in $(seq 1 5); do
+-	test_request_firmware_nowait_uevent $i
++	test_request_firmware_nowait_uevent $i normal
+ done
+ 
+ for i in $(seq 1 5); do
+-	test_request_firmware_nowait_custom $i
++	test_request_firmware_nowait_custom $i normal
+ done
+ 
+ # Test for file not found, errors are expected, the failure would be
+@@ -329,4 +339,47 @@ for i in $(seq 1 5); do
+ 	test_request_firmware_nowait_custom_nofile $i
+ done
+ 
++test "$HAS_FW_LOADER_COMPRESS" != "yes" && exit 0
++
++# test with both files present
++xz -9 -C crc32 -k $FW
++config_set_name $NAME
++echo
++echo "Testing with both plain and xz files present..."
++for i in $(seq 1 5); do
++	test_batched_request_firmware $i both
++done
++
++for i in $(seq 1 5); do
++	test_batched_request_firmware_direct $i both
++done
++
++for i in $(seq 1 5); do
++	test_request_firmware_nowait_uevent $i both
++done
++
++for i in $(seq 1 5); do
++	test_request_firmware_nowait_custom $i both
++done
++
++# test with only xz file present
++mv "$FW" "${FW}-orig"
++echo
++echo "Testing with only xz file present..."
++for i in $(seq 1 5); do
++	test_batched_request_firmware $i xzonly
++done
++
++for i in $(seq 1 5); do
++	test_batched_request_firmware_direct $i xzonly
++done
++
++for i in $(seq 1 5); do
++	test_request_firmware_nowait_uevent $i xzonly
++done
++
++for i in $(seq 1 5); do
++	test_request_firmware_nowait_custom $i xzonly
++done
++
+ exit 0
+diff --git a/tools/testing/selftests/firmware/fw_lib.sh b/tools/testing/selftests/firmware/fw_lib.sh
+index 1cbb12e284a6..f236cc295450 100755
+--- a/tools/testing/selftests/firmware/fw_lib.sh
++++ b/tools/testing/selftests/firmware/fw_lib.sh
+@@ -50,6 +50,7 @@ check_setup()
+ {
+ 	HAS_FW_LOADER_USER_HELPER="$(kconfig_has CONFIG_FW_LOADER_USER_HELPER=y)"
+ 	HAS_FW_LOADER_USER_HELPER_FALLBACK="$(kconfig_has CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y)"
++	HAS_FW_LOADER_COMPRESS="$(kconfig_has CONFIG_FW_LOADER_COMPRESS=y)"
+ 	PROC_FW_IGNORE_SYSFS_FALLBACK="0"
+ 	PROC_FW_FORCE_SYSFS_FALLBACK="0"
+ 
+@@ -84,6 +85,12 @@ check_setup()
+ 	fi
+ 
+ 	OLD_FWPATH="$(cat /sys/module/firmware_class/parameters/path)"
++
++	if [ "$HAS_FW_LOADER_COMPRESS" = "yes" ]; then
++		if ! which xz 2> /dev/null > /dev/null; then
++			HAS_FW_LOADER_COMPRESS=""
++		fi
++	fi
+ }
+ 
+ verify_reqs()
+diff --git a/tools/testing/selftests/firmware/fw_run_tests.sh b/tools/testing/selftests/firmware/fw_run_tests.sh
+index cffdd4eb0a57..8e14d555c197 100755
+--- a/tools/testing/selftests/firmware/fw_run_tests.sh
++++ b/tools/testing/selftests/firmware/fw_run_tests.sh
+@@ -11,6 +11,7 @@ source $TEST_DIR/fw_lib.sh
+ 
+ export HAS_FW_LOADER_USER_HELPER=""
+ export HAS_FW_LOADER_USER_HELPER_FALLBACK=""
++export HAS_FW_LOADER_COMPRESS=""
+ 
+ run_tests()
+ {
+-- 
+2.16.4
 
-https://gist.githubusercontent.com/dvyukov/47430636e160f297b657df5ba2efa82b/raw/7babc4db228b88f341a376c15e8bc9c4c3b02160/gistfile1.txt
-
-I have libelf-dev installed. Do I need to install something else? Or
-run some other command?
-
-Thanks
