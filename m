@@ -2,165 +2,185 @@ Return-Path: <SRS0=O6t+=UL=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E7B2C31E46
-	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 11:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23725C31E46
+	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 11:52:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 47ED82082C
-	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 11:45:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iMRCrqRs"
+	by mail.kernel.org (Postfix) with ESMTP id F339C20896
+	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 11:52:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409049AbfFLLnl (ORCPT
+        id S2388875AbfFLLw4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 12 Jun 2019 07:43:41 -0400
-Received: from mail-qk1-f201.google.com ([209.85.222.201]:36371 "EHLO
-        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728150AbfFLLnl (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jun 2019 07:43:41 -0400
-Received: by mail-qk1-f201.google.com with SMTP id b7so13571917qkk.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2019 04:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=pF1pY6g9sgHe6SSJdZReBxN/hHHz/1mBqQ4jLohhQOE=;
-        b=iMRCrqRsfaLBvoWwOfr75mSJ/VPfvlbAFbDtrOANqSuL+z1aGCJpTI0vsQBJ49zvkV
-         9E9fBJ+sa0296EIJ5umEi+BHGLGKU1WldUfLsc5lzjtqovn6xo5wnnj4Lmb0O9PgfLXm
-         rcwLyJjNEekU9EtCutlVconxtA95VHk5TlDWuAVOA+JWDgv52TV4yWWRYEX7ZgqRnURM
-         Eul1F8JBswSLtsZ6lUMRapd1H2weXhkqX5JahODOopa1MhAlxblNV2Op319cxPCbAAUf
-         9L64VhEstL8JTyQhso+M/6lNjrHhHWa2qS+F7je7+fvMkiPQ8oGbPBPAqN2Cie9HgxaI
-         uOrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=pF1pY6g9sgHe6SSJdZReBxN/hHHz/1mBqQ4jLohhQOE=;
-        b=anqbRmU5mm64BIAQ0kpk45Gsk+/xpGBuiwNNf2aMYVUKb999b22Dl07RhcIhJaZAgu
-         NRHRTE0bNHVNsHHCRExZ3R1V7UL3wmXNbxY5vLBsXfTn0GBW+TBTAFQY0xOvPooJ9CiM
-         CveW/QxJoPQeCePcPaXUb9CHjOA+agjJYmNlQXzkOaz6yAOHUmCUjCOwNhPBKN5ue2b8
-         qodWmrq+V+vSpXoBNGuMMMlwoM27j5FlWZKEJzwCY+ZjqfzUa8I43lxUO971MAWJDQzt
-         lFrHOZNptvbh+em6QtLWF/csiTbDcGRSM+NQxT2/SfzvaJQ9IG8KO4mF3iIlahnsBj92
-         DnPg==
-X-Gm-Message-State: APjAAAUxttmgUbCtNl+ICbyjUzxU01wBaHD2cf/SIjfSp1fA9rjd0x0V
-        kouabk+zKs3t5Wd0iZ5KvgVvAqLhNO6M1bKa
-X-Google-Smtp-Source: APXvYqwDKTUvtDmA6SMmQkKz65W969SZufp61k02G9fCL+2/fp67qf94d2M1YkNH+hXtOrCQMRSpsi3TuTa5t/Fk
-X-Received: by 2002:a37:6b42:: with SMTP id g63mr50597391qkc.80.1560339819968;
- Wed, 12 Jun 2019 04:43:39 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 13:43:18 +0200
-In-Reply-To: <cover.1560339705.git.andreyknvl@google.com>
-Message-Id: <9ed583c1a3acf014987e3aef12249506c1c69146.1560339705.git.andreyknvl@google.com>
-Mime-Version: 1.0
-References: <cover.1560339705.git.andreyknvl@google.com>
-X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
-Subject: [PATCH v17 01/15] arm64: untag user pointers in access_ok and __uaccess_mask_ptr
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Wed, 12 Jun 2019 07:52:56 -0400
+Received: from foss.arm.com ([217.140.110.172]:51610 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387878AbfFLLw4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 12 Jun 2019 07:52:56 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78BEC28;
+        Wed, 12 Jun 2019 04:52:55 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E9883F246;
+        Wed, 12 Jun 2019 04:54:33 -0700 (PDT)
+Subject: Re: [PATCH v16 02/16] arm64: untag user pointers in access_ok and
+ __uaccess_mask_ptr
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Will Deacon <will.deacon@arm.com>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        linux-kselftest@vger.kernel.org,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        linux-media@vger.kernel.org, Kevin Brodsky <kevin.brodsky@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Kostya Serebryany <kcc@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        linux-kernel@vger.kernel.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        enh <enh@google.com>, Robin Murphy <robin.murphy@arm.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+References: <cover.1559580831.git.andreyknvl@google.com>
+ <4327b260fb17c4776a1e3c844f388e4948cfb747.1559580831.git.andreyknvl@google.com>
+ <20190610175326.GC25803@arrakis.emea.arm.com>
+ <20190611145720.GA63588@arrakis.emea.arm.com>
+ <d3dc2b1f-e8c9-c60d-f648-0bc9b08f20e4@arm.com>
+ <20190612093158.GG10165@c02tf0j2hf1t.cambridge.arm.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <c760f34a-1b99-17bb-8cc8-ea8b0d63fe90@arm.com>
+Date:   Wed, 12 Jun 2019 12:52:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <20190612093158.GG10165@c02tf0j2hf1t.cambridge.arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch is a part of a series that extends arm64 kernel ABI to allow to
-pass tagged user pointers (with the top byte set to something else other
-than 0x00) as syscall arguments.
+Hi Catalin,
 
-copy_from_user (and a few other similar functions) are used to copy data
-from user memory into the kernel memory or vice versa. Since a user can
-provided a tagged pointer to one of the syscalls that use copy_from_user,
-we need to correctly handle such pointers.
+On 12/06/2019 10:32, Catalin Marinas wrote:
+> Hi Vincenzo,
+> 
+> On Tue, Jun 11, 2019 at 06:09:10PM +0100, Vincenzo Frascino wrote:
+>>> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+>>> index 3767fb21a5b8..69d0be1fc708 100644
+>>> --- a/arch/arm64/kernel/process.c
+>>> +++ b/arch/arm64/kernel/process.c
+>>> @@ -30,6 +30,7 @@
+>>>  #include <linux/kernel.h>
+>>>  #include <linux/mm.h>
+>>>  #include <linux/stddef.h>
+>>> +#include <linux/sysctl.h>
+>>>  #include <linux/unistd.h>
+>>>  #include <linux/user.h>
+>>>  #include <linux/delay.h>
+>>> @@ -323,6 +324,7 @@ void flush_thread(void)
+>>>  	fpsimd_flush_thread();
+>>>  	tls_thread_flush();
+>>>  	flush_ptrace_hw_breakpoint(current);
+>>> +	clear_thread_flag(TIF_TAGGED_ADDR);
+>>
+>> Nit: in line we the other functions in thread_flush we could have something like
+>> "tagged_addr_thread_flush", maybe inlined.
+> 
+> The other functions do a lot more than clearing a TIF flag, so they
+> deserved their own place. We could do this when adding MTE support. I
+> think we also need to check what other TIF flags we may inadvertently
+> pass on execve(), maybe have a mask clearing.
+> 
 
-Do this by untagging user pointers in access_ok and in __uaccess_mask_ptr,
-before performing access validity checks.
+Agreed. All the comments I provided are meant to simplify the addition of MTE
+support.
 
-Note, that this patch only temporarily untags the pointers to perform the
-checks, but then passes them as is into the kernel internals.
+>>> diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
+>>> index 094bb03b9cc2..2e927b3e9d6c 100644
+>>> --- a/include/uapi/linux/prctl.h
+>>> +++ b/include/uapi/linux/prctl.h
+>>> @@ -229,4 +229,9 @@ struct prctl_mm_map {
+>>>  # define PR_PAC_APDBKEY			(1UL << 3)
+>>>  # define PR_PAC_APGAKEY			(1UL << 4)
+>>>  
+>>> +/* Tagged user address controls for arm64 */
+>>> +#define PR_SET_TAGGED_ADDR_CTRL		55
+>>> +#define PR_GET_TAGGED_ADDR_CTRL		56
+>>> +# define PR_TAGGED_ADDR_ENABLE		(1UL << 0)
+>>> +
+>>>  #endif /* _LINUX_PRCTL_H */
+>>> diff --git a/kernel/sys.c b/kernel/sys.c
+>>> index 2969304c29fe..ec48396b4943 100644
+>>> --- a/kernel/sys.c
+>>> +++ b/kernel/sys.c
+>>> @@ -124,6 +124,12 @@
+>>>  #ifndef PAC_RESET_KEYS
+>>>  # define PAC_RESET_KEYS(a, b)	(-EINVAL)
+>>>  #endif
+>>> +#ifndef SET_TAGGED_ADDR_CTRL
+>>> +# define SET_TAGGED_ADDR_CTRL(a)	(-EINVAL)
+>>> +#endif
+>>> +#ifndef GET_TAGGED_ADDR_CTRL
+>>> +# define GET_TAGGED_ADDR_CTRL()		(-EINVAL)
+>>> +#endif
+>>>  
+>>>  /*
+>>>   * this is where the system-wide overflow UID and GID are defined, for
+>>> @@ -2492,6 +2498,16 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+>>>  			return -EINVAL;
+>>>  		error = PAC_RESET_KEYS(me, arg2);
+>>>  		break;
+>>> +	case PR_SET_TAGGED_ADDR_CTRL:
+>>> +		if (arg3 || arg4 || arg5)
+>>> +			return -EINVAL;
+>>> +		error = SET_TAGGED_ADDR_CTRL(arg2);
+>>> +		break;
+>>> +	case PR_GET_TAGGED_ADDR_CTRL:
+>>> +		if (arg2 || arg3 || arg4 || arg5)
+>>> +			return -EINVAL;
+>>> +		error = GET_TAGGED_ADDR_CTRL();
+>>> +		break;
+>>
+>> Why do we need two prctl here? We could have only one and use arg2 as set/get
+>> and arg3 as a parameter. What do you think?
+> 
+> This follows the other PR_* options, e.g. PR_SET_VL/GET_VL,
+> PR_*_FP_MODE. We will use other bits in arg2, for example to set the
+> precise vs imprecise MTE trapping.
+> 
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- arch/arm64/include/asm/uaccess.h | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+Indeed. I was not questioning the pre-existing interface definition, but trying
+more to reduce the changes to the ABI to the minimum since:
+ - prctl does not mandate how to use the arg[2-5]
+ - prctl interface is flexible enough for the problem to be solved with only one
+   PR_ command.
 
-diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-index e5d5f31c6d36..df729afca0ba 100644
---- a/arch/arm64/include/asm/uaccess.h
-+++ b/arch/arm64/include/asm/uaccess.h
-@@ -73,6 +73,8 @@ static inline unsigned long __range_ok(const void __user *addr, unsigned long si
- {
- 	unsigned long ret, limit = current_thread_info()->addr_limit;
- 
-+	addr = untagged_addr(addr);
-+
- 	__chk_user_ptr(addr);
- 	asm volatile(
- 	// A + B <= C + 1 for all A,B,C, in four easy steps:
-@@ -226,7 +228,8 @@ static inline void uaccess_enable_not_uao(void)
- 
- /*
-  * Sanitise a uaccess pointer such that it becomes NULL if above the
-- * current addr_limit.
-+ * current addr_limit. In case the pointer is tagged (has the top byte set),
-+ * untag the pointer before checking.
-  */
- #define uaccess_mask_ptr(ptr) (__typeof__(ptr))__uaccess_mask_ptr(ptr)
- static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
-@@ -234,10 +237,11 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
- 	void __user *safe_ptr;
- 
- 	asm volatile(
--	"	bics	xzr, %1, %2\n"
-+	"	bics	xzr, %3, %2\n"
- 	"	csel	%0, %1, xzr, eq\n"
- 	: "=&r" (safe_ptr)
--	: "r" (ptr), "r" (current_thread_info()->addr_limit)
-+	: "r" (ptr), "r" (current_thread_info()->addr_limit),
-+	  "r" (untagged_addr(ptr))
- 	: "cc");
- 
- 	csdb();
+I agree on reusing the interface for MTE for the purposes you specified.
+
 -- 
-2.22.0.rc2.383.gf4fbbf30c2-goog
-
+Regards,
+Vincenzo
