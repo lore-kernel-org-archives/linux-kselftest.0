@@ -7,58 +7,58 @@ X-Spam-Status: No, score=-16.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 778EBC31E46
-	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 11:45:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B148C31E48
+	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 11:45:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3EB362082C
-	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 11:45:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2526D20866
+	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 11:45:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jG6r3qKX"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wWQdCeaE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438515AbfFLLpS (ORCPT
+        id S2436531AbfFLLno (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 12 Jun 2019 07:45:18 -0400
-Received: from mail-yw1-f74.google.com ([209.85.161.74]:52208 "EHLO
-        mail-yw1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438383AbfFLLnu (ORCPT
+        Wed, 12 Jun 2019 07:43:44 -0400
+Received: from mail-oi1-f202.google.com ([209.85.167.202]:44923 "EHLO
+        mail-oi1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2409096AbfFLLnn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jun 2019 07:43:50 -0400
-Received: by mail-yw1-f74.google.com with SMTP id k10so16996418ywb.18
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2019 04:43:50 -0700 (PDT)
+        Wed, 12 Jun 2019 07:43:43 -0400
+Received: by mail-oi1-f202.google.com with SMTP id b124so5324701oii.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2019 04:43:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=9yc1Yq7FenUh0AO3dUlc6AUSMFMskh2/7LbKPot9xGI=;
-        b=jG6r3qKXi5/zKGkjzMFvbQ4XcPl+/QmcSKvFp3utSJtxAUleazRXkJRGwBNNuJ7i7E
-         W7vyyFyjCHej12ys6727AQE+zBEoRn7fuGQ0zPXkT7W8rJNSD33sWm4M+L2uLQ9Yr38G
-         Tk/yJfeEOxvIPA7bqvovIzoag6j0IkNGtc29ARK/7GdZnbkyHKT1QM3wgM9+VOErwGhl
-         DOZEsTVUoN8+b79rOajf7KnGDkH2u/eCR/G6bd5zo2eRqtSAit8bn6BlCrH2lRN5NzMd
-         //lJnKytaH0FthsUWMOhqc1e/AQcdKwVvubR2bol5kkiAS3ABJ/10iV11C/N1mocmKiy
-         lcUQ==
+        bh=UjHW3gvZNVNgT5aLmmsHnPxo+B7J7BC6tuQvc/RhPNk=;
+        b=wWQdCeaEB2u6K2FokoVH57TiuY9+YM+iloWJZ9olfqp0zjmIdmC5f6DPCzUKmsxGdy
+         S65EVOJIDT5V4zwCQfqNTJzphOcFWfUmY+gXBOeFncv77kXLYdKYGCkdMxc+OyweaWX0
+         0fKTo4iZRRAvEu0L5K9N5O0E1jscX+Pk92PzQ1PknQ2YOc6xMrIj1RN7n/IEUROoLRHK
+         DSyTNlm/Sr+vicrs5WJhiUx/1nLhQ5Q4ACjS55YPvH7eOOqFTP/CfYXsftMzptdGowR3
+         ikQ6jhRMQBxQ3FPli1xBTZa23yNKdUvKN2sR5HTTLiPeqs1dY61XYlyLOGrjNBMaj6hd
+         3iow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=9yc1Yq7FenUh0AO3dUlc6AUSMFMskh2/7LbKPot9xGI=;
-        b=KRkR8dmEu8f58xn6EeFZn1+njk3AeyH4tmXfsYTTKbW7SoTdozNFBuV2b88ljc64mh
-         ECgt6aLyyesRket39kl3DZdnBmfUGFSdYQtRLl+2IdSnfCDU7lc53okIErcjcDoGakXG
-         QR3rvFkBYRS085vdWnz3xZvrT9mKWLdQ+z0pJovZ8oELCXbzoYGAWE+Bm/DVkZsq+wNw
-         YaEOrg9BILsEFpC6nzrwqT11Zf7jMzeZ64V3kx9bk51Q+VLNrEC76vyYp7RtJuoTa31X
-         rRK7lIe5iS1hZtp+r1N3yJbYaQ+Lp2kztEZ5gV8Qf+MOe3njXLKx8E58j8p3mQila3zk
-         YT+A==
-X-Gm-Message-State: APjAAAVK6E7AWE3gduqEzFqNDDo4oTisuHDORGoa9ZdR1LHA+oV5RXj4
-        p+Q9ZNBbxy+d3tPPafwjRUflTflTXFam3js4
-X-Google-Smtp-Source: APXvYqzWkT0P+p3RG6pP2xT18iDm8BLgmUWrizOHYeFPCBqdgbB+Dc65X4gpAkgZlAg9PVOXah90gk97CBM2CYKI
-X-Received: by 2002:a81:2545:: with SMTP id l66mr16760176ywl.489.1560339829646;
- Wed, 12 Jun 2019 04:43:49 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 13:43:21 +0200
+        bh=UjHW3gvZNVNgT5aLmmsHnPxo+B7J7BC6tuQvc/RhPNk=;
+        b=IefYMZmQSrDrjmbwEfM85s2hHOZFi72XPf+YV6188Lo3cN8h1q3Uo5QpJgu+N/8iQt
+         vJOPlWTQRIbL23egb99RiHW5Q1n8Z5NqBTOHxW6x+6qNI7NKv/5NWIbDaTnSsexH6dry
+         XzDR87WxaDI2kTGrGSwsTf/TcU3mOjlaoOHIOLJQc29ystMeIMel/AG6n+d+euP50elb
+         VpKIBq1z0GnmJ5FIOnRnOfmprd0ma8AHtBiIhOSgfZ0GzAzLI5zHVUi/7R8rrWPpqQBR
+         zZkEMa/Ze2hsh1CAggwcbZk5bLZ+pu0JZtfVP5PVaC3q5St62ilDnQpJKwaHik0sQvFJ
+         BsqA==
+X-Gm-Message-State: APjAAAV6ucL+A4PHeXgO4CyS7mKMkGc+xWf2zO97bXYTyyCpmmm0EDYq
+        s7F17IRtQbkXcjYn9jo8VdHYV390CFFVkWce
+X-Google-Smtp-Source: APXvYqwN3f56c3YdzV4vuBZtnTaXMq2rkbV7EZJhl+9vuDir+VdtrZMmSzDSSPuiOLJaxWwDb81r7VAwTgFT1eUN
+X-Received: by 2002:a9d:764d:: with SMTP id o13mr6499138otl.298.1560339823090;
+ Wed, 12 Jun 2019 04:43:43 -0700 (PDT)
+Date:   Wed, 12 Jun 2019 13:43:19 +0200
 In-Reply-To: <cover.1560339705.git.andreyknvl@google.com>
-Message-Id: <f9b50767d639b7116aa986dc67f158131b8d4169.1560339705.git.andreyknvl@google.com>
+Message-Id: <a76c014f9b12a082d31ef1459907cabdab78491e.1560339705.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1560339705.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
-Subject: [PATCH v17 04/15] mm, arm64: untag user pointers passed to memory syscalls
+Subject: [PATCH v17 02/15] lib, arm64: untag user pointers in strn*_user
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -106,154 +106,66 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-This patch allows tagged pointers to be passed to the following memory
-syscalls: get_mempolicy, madvise, mbind, mincore, mlock, mlock2, mprotect,
-mremap, msync, munlock, move_pages.
+strncpy_from_user and strnlen_user accept user addresses as arguments, and
+do not go through the same path as copy_from_user and others, so here we
+need to handle the case of tagged user addresses separately.
 
-The mmap and mremap syscalls do not currently accept tagged addresses.
-Architectures may interpret the tag as a background colour for the
-corresponding vma.
+Untag user pointers passed to these functions.
 
+Note, that this patch only temporarily untags the pointers to perform
+validity checks, but then uses them as is to perform user memory accesses.
+
+Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
+Acked-by: Kees Cook <keescook@chromium.org>
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/madvise.c   | 2 ++
- mm/mempolicy.c | 3 +++
- mm/migrate.c   | 2 +-
- mm/mincore.c   | 2 ++
- mm/mlock.c     | 4 ++++
- mm/mprotect.c  | 2 ++
- mm/mremap.c    | 7 +++++++
- mm/msync.c     | 2 ++
- 8 files changed, 23 insertions(+), 1 deletion(-)
+ lib/strncpy_from_user.c | 3 ++-
+ lib/strnlen_user.c      | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/mm/madvise.c b/mm/madvise.c
-index 628022e674a7..39b82f8a698f 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -810,6 +810,8 @@ SYSCALL_DEFINE3(madvise, unsigned long, start, size_t, len_in, int, behavior)
- 	size_t len;
- 	struct blk_plug plug;
+diff --git a/lib/strncpy_from_user.c b/lib/strncpy_from_user.c
+index 023ba9f3b99f..dccb95af6003 100644
+--- a/lib/strncpy_from_user.c
++++ b/lib/strncpy_from_user.c
+@@ -6,6 +6,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/kernel.h>
+ #include <linux/errno.h>
++#include <linux/mm.h>
  
-+	start = untagged_addr(start);
-+
- 	if (!madvise_behavior_valid(behavior))
- 		return error;
+ #include <asm/byteorder.h>
+ #include <asm/word-at-a-time.h>
+@@ -108,7 +109,7 @@ long strncpy_from_user(char *dst, const char __user *src, long count)
+ 		return 0;
  
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index 01600d80ae01..78e0a88b2680 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -1360,6 +1360,7 @@ static long kernel_mbind(unsigned long start, unsigned long len,
- 	int err;
- 	unsigned short mode_flags;
+ 	max_addr = user_addr_max();
+-	src_addr = (unsigned long)src;
++	src_addr = (unsigned long)untagged_addr(src);
+ 	if (likely(src_addr < max_addr)) {
+ 		unsigned long max = max_addr - src_addr;
+ 		long retval;
+diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
+index 7f2db3fe311f..28ff554a1be8 100644
+--- a/lib/strnlen_user.c
++++ b/lib/strnlen_user.c
+@@ -2,6 +2,7 @@
+ #include <linux/kernel.h>
+ #include <linux/export.h>
+ #include <linux/uaccess.h>
++#include <linux/mm.h>
  
-+	start = untagged_addr(start);
- 	mode_flags = mode & MPOL_MODE_FLAGS;
- 	mode &= ~MPOL_MODE_FLAGS;
- 	if (mode >= MPOL_MAX)
-@@ -1517,6 +1518,8 @@ static int kernel_get_mempolicy(int __user *policy,
- 	int uninitialized_var(pval);
- 	nodemask_t nodes;
+ #include <asm/word-at-a-time.h>
  
-+	addr = untagged_addr(addr);
-+
- 	if (nmask != NULL && maxnode < nr_node_ids)
- 		return -EINVAL;
+@@ -109,7 +110,7 @@ long strnlen_user(const char __user *str, long count)
+ 		return 0;
  
-diff --git a/mm/migrate.c b/mm/migrate.c
-index f2ecc2855a12..d22c45cf36b2 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -1616,7 +1616,7 @@ static int do_pages_move(struct mm_struct *mm, nodemask_t task_nodes,
- 			goto out_flush;
- 		if (get_user(node, nodes + i))
- 			goto out_flush;
--		addr = (unsigned long)p;
-+		addr = (unsigned long)untagged_addr(p);
- 
- 		err = -ENODEV;
- 		if (node < 0 || node >= MAX_NUMNODES)
-diff --git a/mm/mincore.c b/mm/mincore.c
-index c3f058bd0faf..64c322ed845c 100644
---- a/mm/mincore.c
-+++ b/mm/mincore.c
-@@ -249,6 +249,8 @@ SYSCALL_DEFINE3(mincore, unsigned long, start, size_t, len,
- 	unsigned long pages;
- 	unsigned char *tmp;
- 
-+	start = untagged_addr(start);
-+
- 	/* Check the start address: needs to be page-aligned.. */
- 	if (start & ~PAGE_MASK)
- 		return -EINVAL;
-diff --git a/mm/mlock.c b/mm/mlock.c
-index 080f3b36415b..e82609eaa428 100644
---- a/mm/mlock.c
-+++ b/mm/mlock.c
-@@ -674,6 +674,8 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
- 	unsigned long lock_limit;
- 	int error = -ENOMEM;
- 
-+	start = untagged_addr(start);
-+
- 	if (!can_do_mlock())
- 		return -EPERM;
- 
-@@ -735,6 +737,8 @@ SYSCALL_DEFINE2(munlock, unsigned long, start, size_t, len)
- {
- 	int ret;
- 
-+	start = untagged_addr(start);
-+
- 	len = PAGE_ALIGN(len + (offset_in_page(start)));
- 	start &= PAGE_MASK;
- 
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index bf38dfbbb4b4..19f981b733bc 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -465,6 +465,8 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
- 	const bool rier = (current->personality & READ_IMPLIES_EXEC) &&
- 				(prot & PROT_READ);
- 
-+	start = untagged_addr(start);
-+
- 	prot &= ~(PROT_GROWSDOWN|PROT_GROWSUP);
- 	if (grows == (PROT_GROWSDOWN|PROT_GROWSUP)) /* can't be both */
- 		return -EINVAL;
-diff --git a/mm/mremap.c b/mm/mremap.c
-index fc241d23cd97..64c9a3b8be0a 100644
---- a/mm/mremap.c
-+++ b/mm/mremap.c
-@@ -606,6 +606,13 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
- 	LIST_HEAD(uf_unmap_early);
- 	LIST_HEAD(uf_unmap);
- 
-+	/*
-+	 * Architectures may interpret the tag passed to mmap as a background
-+	 * colour for the corresponding vma. For mremap we don't allow tagged
-+	 * new_addr to preserve similar behaviour to mmap.
-+	 */
-+	addr = untagged_addr(addr);
-+
- 	if (flags & ~(MREMAP_FIXED | MREMAP_MAYMOVE))
- 		return ret;
- 
-diff --git a/mm/msync.c b/mm/msync.c
-index ef30a429623a..c3bd3e75f687 100644
---- a/mm/msync.c
-+++ b/mm/msync.c
-@@ -37,6 +37,8 @@ SYSCALL_DEFINE3(msync, unsigned long, start, size_t, len, int, flags)
- 	int unmapped_error = 0;
- 	int error = -EINVAL;
- 
-+	start = untagged_addr(start);
-+
- 	if (flags & ~(MS_ASYNC | MS_INVALIDATE | MS_SYNC))
- 		goto out;
- 	if (offset_in_page(start))
+ 	max_addr = user_addr_max();
+-	src_addr = (unsigned long)str;
++	src_addr = (unsigned long)untagged_addr(str);
+ 	if (likely(src_addr < max_addr)) {
+ 		unsigned long max = max_addr - src_addr;
+ 		long retval;
 -- 
 2.22.0.rc2.383.gf4fbbf30c2-goog
 
