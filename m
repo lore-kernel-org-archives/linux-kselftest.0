@@ -2,192 +2,148 @@ Return-Path: <SRS0=O6t+=UL=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5329FC31E49
-	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 14:21:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1A9FC31E46
+	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 14:27:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3705220866
-	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 14:21:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A65FB2173C
+	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 14:27:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409286AbfFLOV2 (ORCPT
+        id S2439716AbfFLO1T (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 12 Jun 2019 10:21:28 -0400
-Received: from foss.arm.com ([217.140.110.172]:53922 "EHLO foss.arm.com"
+        Wed, 12 Jun 2019 10:27:19 -0400
+Received: from foss.arm.com ([217.140.110.172]:54060 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409269AbfFLOV2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jun 2019 10:21:28 -0400
+        id S2439675AbfFLO1F (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 12 Jun 2019 10:27:05 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C827337;
-        Wed, 12 Jun 2019 07:21:27 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 184D13F557;
-        Wed, 12 Jun 2019 07:21:25 -0700 (PDT)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1BAA2B;
+        Wed, 12 Jun 2019 07:27:04 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3DCE73F557;
+        Wed, 12 Jun 2019 07:26:59 -0700 (PDT)
+Subject: Re: [PATCH v17 01/15] arm64: untag user pointers in access_ok and
+ __uaccess_mask_ptr
+To:     Andrey Konovalov <andreyknvl@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH v4 1/2] arm64: Define Documentation/arm64/tagged-address-abi.txt
-Date:   Wed, 12 Jun 2019 15:21:10 +0100
-Message-Id: <20190612142111.28161-2-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190612142111.28161-1-vincenzo.frascino@arm.com>
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
 References: <cover.1560339705.git.andreyknvl@google.com>
- <20190612142111.28161-1-vincenzo.frascino@arm.com>
+ <9ed583c1a3acf014987e3aef12249506c1c69146.1560339705.git.andreyknvl@google.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <52e93b24-3302-e890-5799-6502042ea5c9@arm.com>
+Date:   Wed, 12 Jun 2019 15:26:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <9ed583c1a3acf014987e3aef12249506c1c69146.1560339705.git.andreyknvl@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On arm64 the TCR_EL1.TBI0 bit has been always enabled hence
-the userspace (EL0) is allowed to set a non-zero value in the
-top byte but the resulting pointers are not allowed at the
-user-kernel syscall ABI boundary.
+On 12/06/2019 12:43, Andrey Konovalov wrote:
+> This patch is a part of a series that extends arm64 kernel ABI to allow to
+> pass tagged user pointers (with the top byte set to something else other
+> than 0x00) as syscall arguments.
+> 
+> copy_from_user (and a few other similar functions) are used to copy data
+> from user memory into the kernel memory or vice versa. Since a user can
+> provided a tagged pointer to one of the syscalls that use copy_from_user,
+> we need to correctly handle such pointers.
+> 
+> Do this by untagging user pointers in access_ok and in __uaccess_mask_ptr,
+> before performing access validity checks.
+> 
+> Note, that this patch only temporarily untags the pointers to perform the
+> checks, but then passes them as is into the kernel internals.
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-With the relaxed ABI proposed through this document, it is now possible
-to pass tagged pointers to the syscalls, when these pointers are in
-memory ranges obtained by an anonymous (MAP_ANONYMOUS) mmap().
+Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
-This change in the ABI requires a mechanism to requires the userspace
-to opt-in to such an option.
+> ---
+>  arch/arm64/include/asm/uaccess.h | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+> index e5d5f31c6d36..df729afca0ba 100644
+> --- a/arch/arm64/include/asm/uaccess.h
+> +++ b/arch/arm64/include/asm/uaccess.h
+> @@ -73,6 +73,8 @@ static inline unsigned long __range_ok(const void __user *addr, unsigned long si
+>  {
+>  	unsigned long ret, limit = current_thread_info()->addr_limit;
+>  
+> +	addr = untagged_addr(addr);
+> +
+>  	__chk_user_ptr(addr);
+>  	asm volatile(
+>  	// A + B <= C + 1 for all A,B,C, in four easy steps:
+> @@ -226,7 +228,8 @@ static inline void uaccess_enable_not_uao(void)
+>  
+>  /*
+>   * Sanitise a uaccess pointer such that it becomes NULL if above the
+> - * current addr_limit.
+> + * current addr_limit. In case the pointer is tagged (has the top byte set),
+> + * untag the pointer before checking.
+>   */
+>  #define uaccess_mask_ptr(ptr) (__typeof__(ptr))__uaccess_mask_ptr(ptr)
+>  static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
+> @@ -234,10 +237,11 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
+>  	void __user *safe_ptr;
+>  
+>  	asm volatile(
+> -	"	bics	xzr, %1, %2\n"
+> +	"	bics	xzr, %3, %2\n"
+>  	"	csel	%0, %1, xzr, eq\n"
+>  	: "=&r" (safe_ptr)
+> -	: "r" (ptr), "r" (current_thread_info()->addr_limit)
+> +	: "r" (ptr), "r" (current_thread_info()->addr_limit),
+> +	  "r" (untagged_addr(ptr))
+>  	: "cc");
+>  
+>  	csdb();
+> 
 
-Specify and document the way in which sysctl and prctl() can be used
-in combination to allow the userspace to opt-in this feature.
-
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will.deacon@arm.com>
-CC: Andrey Konovalov <andreyknvl@google.com>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
----
- Documentation/arm64/tagged-address-abi.txt | 111 +++++++++++++++++++++
- 1 file changed, 111 insertions(+)
- create mode 100644 Documentation/arm64/tagged-address-abi.txt
-
-diff --git a/Documentation/arm64/tagged-address-abi.txt b/Documentation/arm64/tagged-address-abi.txt
-new file mode 100644
-index 000000000000..96e149e2c55c
---- /dev/null
-+++ b/Documentation/arm64/tagged-address-abi.txt
-@@ -0,0 +1,111 @@
-+ARM64 TAGGED ADDRESS ABI
-+========================
-+
-+This document describes the usage and semantics of the Tagged Address
-+ABI on arm64.
-+
-+1. Introduction
-+---------------
-+
-+On arm64 the TCR_EL1.TBI0 bit has been always enabled on the arm64 kernel,
-+hence the userspace (EL0) is allowed to set a non-zero value in the top
-+byte but the resulting pointers are not allowed at the user-kernel syscall
-+ABI boundary.
-+
-+This document describes a relaxation of the ABI with which it is possible
-+to pass tagged tagged pointers to the syscalls, when these pointers are in
-+memory ranges obtained as described in paragraph 2.
-+
-+Since it is not desirable to relax the ABI to allow tagged user addresses
-+into the kernel indiscriminately, arm64 provides a new sysctl interface
-+(/proc/sys/abi/tagged_addr) that is used to prevent the applications from
-+enabling the relaxed ABI and a new prctl() interface that can be used to
-+enable or disable the relaxed ABI.
-+
-+The sysctl is meant also for testing purposes in order to provide a simple
-+way for the userspace to verify the return error checking of the prctl()
-+command without having to reconfigure the kernel.
-+
-+The ABI properties are inherited by threads of the same application and
-+fork()'ed children but cleared when a new process is spawn (execve()).
-+
-+2. ARM64 Tagged Address ABI
-+---------------------------
-+
-+From the kernel syscall interface prospective, we define, for the purposes
-+of this document, a "valid tagged pointer" as a pointer that either it has
-+a zero value set in the top byte or it has a non-zero value, it is in memory
-+ranges privately owned by a userspace process and it is obtained in one of
-+the following ways:
-+  - mmap() done by the process itself, where either:
-+    * flags = MAP_PRIVATE | MAP_ANONYMOUS
-+    * flags = MAP_PRIVATE and the file descriptor refers to a regular
-+      file or "/dev/zero"
-+  - a mapping below sbrk(0) done by the process itself
-+  - any memory mapped by the kernel in the process's address space during
-+    creation and following the restrictions presented above (i.e. data, bss,
-+    stack).
-+
-+The ARM64 Tagged Address ABI is an opt-in feature, and an application can
-+control it using the following prctl()s:
-+  - PR_SET_TAGGED_ADDR_CTRL: can be used to enable the Tagged Address ABI.
-+  - PR_GET_TAGGED_ADDR_CTRL: can be used to check the status of the Tagged
-+                             Address ABI.
-+
-+As a consequence of invoking PR_SET_TAGGED_ADDR_CTRL prctl() by an applications,
-+the ABI guarantees the following behaviours:
-+
-+  - Every current or newly introduced syscall can accept any valid tagged
-+    pointers.
-+
-+  - If a non valid tagged pointer is passed to a syscall then the behaviour
-+    is undefined.
-+
-+  - Every valid tagged pointer is expected to work as an untagged one.
-+
-+  - The kernel preserves any valid tagged pointers and returns them to the
-+    userspace unchanged in all the cases except the ones documented in the
-+    "Preserving tags" paragraph of tagged-pointers.txt.
-+
-+A definition of the meaning of tagged pointers on arm64 can be found in:
-+Documentation/arm64/tagged-pointers.txt.
-+
-+3. ARM64 Tagged Address ABI Exceptions
-+--------------------------------------
-+
-+The behaviours described in paragraph 2, with particular reference to the
-+acceptance by the syscalls of any valid tagged pointer are not applicable
-+to the following cases:
-+  - mmap() addr parameter.
-+  - mremap() new_address parameter.
-+  - prctl_set_mm() struct prctl_map fields.
-+  - prctl_set_mm_map() struct prctl_map fields.
-+
-+4. Example of correct usage
-+---------------------------
-+
-+void main(void)
-+{
-+	static int tbi_enabled = 0;
-+	unsigned long tag = 0;
-+
-+	char *ptr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE,
-+			 MAP_ANONYMOUS, -1, 0);
-+
-+	if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE,
-+		  0, 0, 0) == 0)
-+		tbi_enabled = 1;
-+
-+	if (!ptr)
-+		return -1;
-+
-+	if (tbi_enabled)
-+		tag = rand() & 0xff;
-+
-+	ptr = (char *)((unsigned long)ptr | (tag << TAG_SHIFT));
-+
-+	*ptr = 'a';
-+
-+	...
-+}
-+
 -- 
-2.21.0
-
+Regards,
+Vincenzo
