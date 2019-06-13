@@ -2,144 +2,126 @@ Return-Path: <SRS0=2zA2=UM=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FROM_EXCESS_BASE64,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28ECFC31E45
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:04:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFDE2C31E45
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:06:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 027D721744
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:04:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FB0GEVRI"
+	by mail.kernel.org (Postfix) with ESMTP id B2982207E0
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:06:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1560438371;
+	bh=7OQwG+702F83sAlyNtbM+xJYZmjcRDOB9gr9GLwbm/c=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=05X1uOb+AOdGHlGPxcBVcqv5w19KmNOmmx8l8Gt10I7D0KqCQm4tTCWx+PQVnF/t6
+	 MnlJu1uLfAJxX9aaN7dzs1mTlizJ+AdG7gBgG2KOaUpLnVZio88WAODRcNzVDRE3st
+	 GSaaHGd5605XH+V1nE7J1Iz+B3q8RzaWT0qLOxzw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732468AbfFMPEv (ORCPT
+        id S1732428AbfFMPGK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Jun 2019 11:04:51 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:45101 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732691AbfFMPEu (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jun 2019 11:04:50 -0400
-Received: by mail-lf1-f65.google.com with SMTP id u10so15336620lfm.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2019 08:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lM5eV6H9krpQM793Z93walf0ECkvm+NtnWXHC21XgcY=;
-        b=FB0GEVRIf3TSf13XTG8UuZfrxNyqcUkwuwzACXx5vXWJLzQbbRZJRSraOaawV6hWAk
-         PrvPCzQwD69fuYgREIvWfwD5blUYsv33M/gcO15LkJ/lqFcHw9moqgdowV+jqotXnEfn
-         /tT4evYxWgTEJAwmah3jHTv7lSPseKFUhVVwLTzvq2JG6m5luv20zZruhEGljSE9IllH
-         MZeshq7wJyDxiNLSBc4OPA+Slgz8wHTZZwlcvqEQAs6f1F0Vm06Dmt0gah0KeX9kt975
-         adqmm20Zh7jCKKx6KONjW8MYNyiIsUmRzSMuvIqWblkLUB2pc22NRdJHTivh+WGEIePo
-         eE4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lM5eV6H9krpQM793Z93walf0ECkvm+NtnWXHC21XgcY=;
-        b=AYHJswhdIj9svc1jxZ+Qf442pf0ori7rHMFXDIL4hGLZu+5xudDa2sURLejDkebSjp
-         CHcDaII7QvpkLi6cyqIJoJM4HHBQ00rxUIn0UrmBW17tQ4ywhwl44X0aRgYCuqGgYlVm
-         IoZrCQ/8sxMwLqQM0SmvzmpuA2OBj2erFgjVTck2n6W78iaQ3w3G9bjUylu/GKHSmulF
-         vuNTbKC5ghYjKA+tktyEBjesU1Y9YyiRLFKtV5KE+0xK0bCxEA+U+5trbPIa9Zk8lPYM
-         nk23PLai57SOeOm430B6z48kHplrRv2etb5W+raPepd0e75IV0A/fw05yhXEkJO5Bdwa
-         3aPQ==
-X-Gm-Message-State: APjAAAUyvWhza7AQBYoBSlL3oOU/l0RMlyO+4C1+sdw6PQITllYtdi2o
-        sUiZ+GwO3X19741XfdDEK5GDiji8VmIBPuQwFvMzMA==
-X-Google-Smtp-Source: APXvYqybQbDcn72zwd1ASfQqXYh2p+e3c167nAPxg3H8OBumH6+DA/96vYJpatM4+a6rhY0KvvTM0B1yUq8B9CSFZNs=
-X-Received: by 2002:a19:750b:: with SMTP id y11mr7601809lfe.16.1560437894098;
- Thu, 13 Jun 2019 07:58:14 -0700 (PDT)
-MIME-Version: 1.0
+        Thu, 13 Jun 2019 11:06:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43144 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732422AbfFMOKW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 13 Jun 2019 10:10:22 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6256A2082C;
+        Thu, 13 Jun 2019 14:10:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560435020;
+        bh=7OQwG+702F83sAlyNtbM+xJYZmjcRDOB9gr9GLwbm/c=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=fy827eMPNUMVo1nmLnXJA6nqyasdum9lUWVDJRjDXrYqe7HHkDyvSp0qpAXeq9iGs
+         qwXrr3QI4wouB6/NX8mAR6f8dLdDEwwYJ2Kww5cZLXNaW5kf3RcknFoqNYwELrplon
+         ch0MUmzKkKOmEuUmSWfqdEl0z2XnxEGEz56vDWTM=
+Subject: Re: kselftest build broken?
+To:     =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, shuah <shuah@kernel.org>
 References: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
- <54bc80f8-71aa-1c04-5908-01923247832e@kernel.org> <CACT4Y+YUBw=t3CkbLeKLFAeAbzVZXoG09HARR+nsOTW4gkdLOw@mail.gmail.com>
- <6d5e0484-4dbc-d122-1ae4-9cce44c2d668@kernel.org> <CACT4Y+aE841JzvEVFmAevgmBO0eOssz0MFydWiuoAp18nr=_DA@mail.gmail.com>
+ <54bc80f8-71aa-1c04-5908-01923247832e@kernel.org>
+ <CACT4Y+YUBw=t3CkbLeKLFAeAbzVZXoG09HARR+nsOTW4gkdLOw@mail.gmail.com>
+ <6d5e0484-4dbc-d122-1ae4-9cce44c2d668@kernel.org>
+ <CACT4Y+aE841JzvEVFmAevgmBO0eOssz0MFydWiuoAp18nr=_DA@mail.gmail.com>
  <CACT4Y+abfa9xVg+3S_tgpOA3cZ2bexe51d0FEZyBCGn0M-6DiA@mail.gmail.com>
  <CACT4Y+aiDUV4_JrvKct98mKvPwEQXSZFXae3qweSmotpzCAGTw@mail.gmail.com>
  <CACT4Y+a8zK7st7LUTkD=AaUBZGsn5hqLt5NXHHvJ0dg1Jds6Nw@mail.gmail.com>
  <CACT4Y+YKf3BFi-9J7Ag0yPtEWYrsPZXY1qUw21yRkNYu51wBWg@mail.gmail.com>
  <CACT4Y+bfz2F-p4xODb_=rU0+F-FJCC66MJW7q9DXd0UHoUfgwg@mail.gmail.com>
- <1e2cc74d-a6c2-0a73-ede5-c72df28e96b2@kernel.org> <CACT4Y+a203xykAHckhtMQ7ov-wNJ-YeuMg=o7qk=H9TQ756jcg@mail.gmail.com>
- <37e5e069-076d-9833-9eab-51c507fbbe2f@kernel.org> <CAEUSe791S6ODPZq4gcfbY=5kZ98ss2qNm0ks-oo0XLwFjsO=ag@mail.gmail.com>
- <CACT4Y+Z9073CozbR800E7p9EdVsfGJ471i0_pF4GftQkY7S90Q@mail.gmail.com>
-In-Reply-To: <CACT4Y+Z9073CozbR800E7p9EdVsfGJ471i0_pF4GftQkY7S90Q@mail.gmail.com>
-From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Date:   Thu, 13 Jun 2019 09:58:02 -0500
-Message-ID: <CAEUSe7_VSPceBnaK39Mc0jkkqM356MTOO8pnS1T9aP_1J1wnkQ@mail.gmail.com>
-Subject: Re: kselftest build broken?
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     shuah <shuah@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <1e2cc74d-a6c2-0a73-ede5-c72df28e96b2@kernel.org>
+ <CACT4Y+a203xykAHckhtMQ7ov-wNJ-YeuMg=o7qk=H9TQ756jcg@mail.gmail.com>
+ <37e5e069-076d-9833-9eab-51c507fbbe2f@kernel.org>
+ <CAEUSe791S6ODPZq4gcfbY=5kZ98ss2qNm0ks-oo0XLwFjsO=ag@mail.gmail.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <f0f9f016-6c1f-447b-1713-7e582aedf74c@kernel.org>
+Date:   Thu, 13 Jun 2019 08:10:06 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <CAEUSe791S6ODPZq4gcfbY=5kZ98ss2qNm0ks-oo0XLwFjsO=ag@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello!
+On 6/12/19 3:12 PM, Daniel Díaz wrote:
+> Hello!
+> 
+> On Wed, 12 Jun 2019 at 14:32, shuah <shuah@kernel.org> wrote:
+>> On 6/12/19 12:29 PM, Dmitry Vyukov wrote:
+> [...]
+>>> 1. You suggested to install a bunch of packages. That helped to some
+>>> degree. Is there a way to figure out what packages one needs to
+>>> install to build the tests other than asking you?
+>>
+>> I have to go through discovery at times when new tests get added. I
+>> consider this a part of being a open source developer figuring out
+>> dependencies for compiling and running. I don't have a magic answer
+>> for you and there is no way to make sure all dependencies will be
+>> documented.
+> 
+> This is something we, as users of Kselftests, would very much like to
+> see improved. We also go by trial-and-error finding out what is
+> missing, but keeping up with the new tests or subsystems is often
+> difficult and tend to remain broken (in usage) for some time, until we
+> have the resources to look into that and fix it. The config fragments
+> is an excellent example of how the test developers and the framework
+> complement each other to make things work. Even documenting
+> dependencies would go a long way, as a starting point, but I do
+> believe that the test writers should do that and not the users go
+> figure out what all is needed to run their tests.
+> 
+> Maybe a precheck() on the tests in order to ensure that the needed
+> binaries are around?
+> 
 
-On Thu, 13 Jun 2019 at 09:22, Dmitry Vyukov <dvyukov@google.com> wrote:
-> On Wed, Jun 12, 2019 at 11:13 PM Daniel D=C3=ADaz <daniel.diaz@linaro.org=
-> wrote:
-> > Maybe a precheck() on the tests in order to ensure that the needed
-> > binaries are around?
->
-> Hi Daniel,
-> The Automated Testing effort:
-> https://elinux.org/Automated_Testing
-> is working on a standard for test metadata description which will
-> capture required configs, hardware, runtime-dependencies, etc. I am
-> not sure what's the current progress, though.
+Right. Take a look at x86 test Makefile - it handles that. Tests can
+handle these in their Makefile - not at run-time.
 
-We just had the monthly call one hour ago. You should join our next
-call! Details are in the Wiki link you shared.
+I will be happy to take patches similar to the checks x86 does. These
+shouldn't fail the kselftest build and print out dependencies.
 
+This way users can go install them.
 
-> Documenting or doing a precheck is a useful first step. But ultimately
-> this needs to be in machine-readable meta-data. So that it's possible
-> to, say, enable as much tests as possible on a CI, rather then simply
-> skip tests. A skipped test is better then a falsely failed test, but
-> it still does not give any test coverage.
+> For what it's worth, this is the list of run-time dependencies package
+> for OpenEmbedded: bash bc ethtool fuse-utils iproute2 iproute2-tc
+> iputils-ping iputils-ping6 ncurses perl sudo python3-argparse
+> python3-datetime python3-json python3-pprint python3-subprocess
+> util-linux-uuidgen cpupower glibc-utils. We are probably missing a
+> few.
+> 
 
-I agree. We discussed some of this in an impromptu microsummit at
-Linaro Connect BKK19 a few months back, i.e. a way to encapsulate
-tests and tests' definitions. Tim Bird is leading that effort; the
-minutes of today's call will be sent to the mailing list, so keep an
-eye on his update!
+Sure see above.
 
-
-> > [...] we, as part of LKFT [1], run Kselftests with
-> > Linux 4.4, 4.9, 4.14, 4.19, 5.1, Linus' mainline, and linux-next, on
-> > arm, aarch64, x86, and x86-64, *very* often: Our test counter recently
-> > exceeded 5 million!
-
-I was wrong by an order of magnitude: It's currently at 51.7 million tests.
-
-> > We do not build our kernels with KASAN, though, so our test runs don't
-> > exhibit that bug.
->
-> But you are aware of KASAN, right? Do you have any plans to use it?
-
-Not at the moment. We are redesigning our entire build and test
-infrastructure, and this is something that we are considering for our
-next iteration.
-
-> If you are interested I can go into more details as we do lots of this
-> on syzbot. Besides catching more bugs there is also an interesting
-> possibility of systematically testing all error paths.
-
-Definitely join us on the Automated Testing monthly call; next one is
-July 11th. There are efforts on several fronts on testing the kernel,
-and we all are eager to contribute to improving the kernel test
-infrastructure.
-
-Greetings!
-
-Daniel D=C3=ADaz
-daniel.diaz@linaro.org
+thanks,
+-- Shuah
