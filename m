@@ -2,37 +2,36 @@ Return-Path: <SRS0=2zA2=UM=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79A4AC31E49
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E91AC31E4A
 	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:30:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 53C902082C
+	by mail.kernel.org (Postfix) with ESMTP id 2849D206BB
 	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:30:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728797AbfFMPae (ORCPT
+        id S1728766AbfFMPae (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Thu, 13 Jun 2019 11:30:34 -0400
-Received: from foss.arm.com ([217.140.110.172]:38164 "EHLO foss.arm.com"
+Received: from foss.arm.com ([217.140.110.172]:38158 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728766AbfFMLOl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jun 2019 07:14:41 -0400
+        id S1728764AbfFMLOi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 13 Jun 2019 07:14:38 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0DE99367;
-        Thu, 13 Jun 2019 04:14:41 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B28ED3EF;
+        Thu, 13 Jun 2019 04:14:37 -0700 (PDT)
 Received: from e120937-lin.cambridge.arm.com (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 93DF03F694;
-        Thu, 13 Jun 2019 04:16:23 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 43A9A3F694;
+        Thu, 13 Jun 2019 04:16:20 -0700 (PDT)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, shuah@kernel.org
 Cc:     dave.martin@arm.com, andreyknvl@google.com
-Subject: [PATCH 10/13] kselftest: arm64: fake_sigreturn_bad_magic
-Date:   Thu, 13 Jun 2019 12:13:32 +0100
-Message-Id: <20190613111335.7645-11-cristian.marussi@arm.com>
+Subject: [PATCH 09/13] kselftest: arm64: fake_sigreturn_misaligned
+Date:   Thu, 13 Jun 2019 12:13:31 +0100
+Message-Id: <20190613111335.7645-10-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190613111335.7645-1-cristian.marussi@arm.com>
 References: <20190613111335.7645-1-cristian.marussi@arm.com>
@@ -41,73 +40,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Added a simple fake_sigreturn testcase which builds a ucontext_t
-with a bad magic header and place it onto the stack.
+Added a simple fake_sigreturn testcase which builds a good
+ucontext_t and tries to place it onto the stack in a misaligned way.
 Expects a SIGSEGV on test PASS.
 
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
  .../arm64/signal/testcases/.gitignore         |  1 +
- .../testcases/fake_sigreturn_bad_magic.c      | 42 +++++++++++++++++++
- 2 files changed, 43 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c
+ .../testcases/fake_sigreturn_misaligned.c     | 30 +++++++++++++++++++
+ 2 files changed, 31 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned.c
 
 diff --git a/tools/testing/selftests/arm64/signal/testcases/.gitignore b/tools/testing/selftests/arm64/signal/testcases/.gitignore
-index 3e6b26be6727..c353b7bd899d 100644
+index c2972c3f33ca..3e6b26be6727 100644
 --- a/tools/testing/selftests/arm64/signal/testcases/.gitignore
 +++ b/tools/testing/selftests/arm64/signal/testcases/.gitignore
-@@ -7,3 +7,4 @@ mangle_pstate_invalid_mode_el2
+@@ -6,3 +6,4 @@ mangle_pstate_invalid_mode_el1
+ mangle_pstate_invalid_mode_el2
  mangle_pstate_invalid_mode_el3
  mangle_pstate_ssbs_regs
- fake_sigreturn_misaligned
-+fake_sigreturn_bad_magic
-diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c
++fake_sigreturn_misaligned
+diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned.c
 new file mode 100644
-index 000000000000..de81ea10393f
+index 000000000000..d551858dd9dd
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c
-@@ -0,0 +1,42 @@
++++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned.c
+@@ -0,0 +1,30 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/* Copyright (C) 2019 ARM Limited */
 +
-+#include <asm/sigcontext.h>
 +#include <ucontext.h>
-+#include <stdio.h>
 +
 +#include "test_signals_utils.h"
 +#include "testcases.h"
 +
 +struct a_sigframe sf;
 +
-+static int fake_sigreturn_bad_magic_run(struct tdescr *td,
-+					siginfo_t *si, ucontext_t *uc)
++static int fake_sigreturn_misaligned_run(struct tdescr *td,
++				         siginfo_t *si, ucontext_t *uc)
 +{
-+	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
-+
 +	/* just to fill the ucontext_t with something real */
 +	if (!get_current_context(td, &sf.uc))
 +		return 1;
 +
-+	/* find the terminator, preserving existig headers */
-+	head = get_terminator(head, GET_SF_RESV_SIZE(sf), NULL);
-+	if (head) {
-+		head->magic = 0xdeadbeef;
-+		head->size = 128;
-+		write_terminator(GET_RESV_NEXT_HEAD(head));
-+
-+		ASSERT_BAD_CONTEXT(&sf.uc);
-+		fake_sigreturn(&sf, sizeof(sf), 16);
-+	}
++	/* Forcing sigframe on misaligned (=!16) SP */
++	fake_sigreturn(&sf, sizeof(sf), 8);
 +
 +	return 1;
 +}
 +
 +struct tdescr tde = {
-+		.name = "FAKE_SIGRETURN_BAD_MAGIC",
-+		.descr = "Triggers a fake sigreturn with a sigframe including a bad non-existent magic",
++		.name = "FAKE_SIGRETURN_MISALIGNED_SP",
++		.descr = "Triggers a fake sigreturn with a misaligned sigframe on SP",
 +		.sig_ok = SIGSEGV,
 +		.timeout = 3,
-+		.run = fake_sigreturn_bad_magic_run,
++		.run = fake_sigreturn_misaligned_run,
 +};
 -- 
 2.17.1
