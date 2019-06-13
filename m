@@ -2,151 +2,109 @@ Return-Path: <SRS0=2zA2=UM=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D80A7C31E45
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 16:38:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C04E4C31E49
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 16:40:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A5B97215EA
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 16:38:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9997C20644
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 16:40:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CxtDkJLF"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="kADCSkyi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727192AbfFMQiH (ORCPT
+        id S2392600AbfFMQkO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Jun 2019 12:38:07 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:42084 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392677AbfFMQhw (ORCPT
+        Thu, 13 Jun 2019 12:40:14 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:50248 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730582AbfFMHAy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jun 2019 12:37:52 -0400
-Received: by mail-io1-f66.google.com with SMTP id u19so18334930ior.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2019 09:37:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Ia+UkKgK3wIMJUQg36mIwLiCXpVYOtzZdI1K2jTMm+U=;
-        b=CxtDkJLFtbujeuZkbhiK8NEOpPiO+LjAcw45ZjY6JHPbVzp1q6g9FEeJCvMQY5npsG
-         9+T6I/T+YAjF8A7lfJ39/IazuRfTc/0j5/FkWUkHqAWAmwzIHZn/E+XlSgrozOmra0a3
-         tQZqICcjpkNJthdQgmPujPT7misD/UaBNAB3db272JFepD5SkDo+GxajMZx7E8alHh6w
-         Qq7RywpHJtSjGLdKZgZFhR3Tmt+YscoyLBROO7M5Bbng/8V4Frpv0M64JR37TxvwGqjk
-         RvA+D9CWOIvru1+7VB/8q0rJoUV4oTMpToKpYM+ASk6ivQ6xnujZFny/hXLQ9c/XzE3O
-         tDeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Ia+UkKgK3wIMJUQg36mIwLiCXpVYOtzZdI1K2jTMm+U=;
-        b=B4+MrMsH9PnVIuGpmg785lI5gqC1kXawPOI3NzClUx5JlIKt3GVD+3+jyWcjGffCCN
-         mTwzUIWy1kZng+Qq7cfcmuQsZW6Govma1r2GKR1eXHw+4NqxjhL6LYQxqDcgA5XPxthI
-         0bOK5oiNTXZBVoMmcp0cJyhf1U70tcZzLLtiJtG8uvOihrxmdhruJJsGM3oBtQFVGsHV
-         ncARj5CTEFxAuBYzn0eelsD6CqtsZtu2vAnfhCxByrGhVyAAqVcpzD0kmncNIn9NEBXC
-         KKFzUenljTe+14H3a5QPIj5OnhqqSN9VIglYLfNH2roipjDNHvoJJX5R517R147hd8Y5
-         MONg==
-X-Gm-Message-State: APjAAAXtM1tI8xHa7WXnLR2q/d4PESK2BFQUAxOYVHAWGCqHcWpmO/Qg
-        pNsKdxTNSRK7+A4jtKNza6XWYlkwQbEMjpt/E1wHt5XU9zI=
-X-Google-Smtp-Source: APXvYqz+Ukohsrl6mAoFjTo3YW6iM0rQ6d/ZkMzj33WO7IO7YwegRkY4TxBCZ7hrywBGSf8f7bKXe5FONWzZfriuyp8=
-X-Received: by 2002:a02:a90a:: with SMTP id n10mr46425709jam.61.1560443870686;
- Thu, 13 Jun 2019 09:37:50 -0700 (PDT)
+        Thu, 13 Jun 2019 03:00:54 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5D6xHRu024210;
+        Thu, 13 Jun 2019 07:00:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2018-07-02;
+ bh=HWozqqcp/Blla7YkQ0XS6n2TRrp0GniU7ZKMsnbPK8A=;
+ b=kADCSkyizcWvoL+XnNHHj7MkMAp0bHVJrX0tiAJI3Pv6/l3KEpYxWmiSJr32D5qWbhVQ
+ f5VIqjC2A4A60o63syLAqF8i42QYwvwrRC2KorK5MLfV21yTSipyAcqPHXRgPF58Eb7a
+ 0UNEByz5cpMC5/0gMurnHYBqxr/UJra/DuNGiZ4eFRDH/YQuu38kGztRwaycIwaJw45O
+ zImic6Ooyxj1pQYi1yIaBIdRcy1TD19bGOcIxL4ErkCniPuDMaaLJFhQ/tAUq2dSiSDf
+ ixkO/UVAnr1Y6Dvz4S20LOoKXx9KS4AJsTYKPjQ2uHeFd9N6g5w6mk8HxL1xliES4p9f NQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2t05nqyj5v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Jun 2019 07:00:32 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5D6xMcJ012723;
+        Thu, 13 Jun 2019 07:00:31 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 2t024vbrar-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Jun 2019 07:00:31 +0000
+Received: from abhmp0022.oracle.com (abhmp0022.oracle.com [141.146.116.28])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5D70UbZ012610;
+        Thu, 13 Jun 2019 07:00:30 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 13 Jun 2019 00:00:29 -0700
+Date:   Thu, 13 Jun 2019 10:00:21 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Shuah Khan <shuah@kernel.org>, Roman Gushchin <guro@fb.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] selftests/bpf: signedness bug in enable_all_controllers()
+Message-ID: <20190613070021.GG16334@mwanda>
 MIME-Version: 1.0
-References: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
- <54bc80f8-71aa-1c04-5908-01923247832e@kernel.org> <CACT4Y+YUBw=t3CkbLeKLFAeAbzVZXoG09HARR+nsOTW4gkdLOw@mail.gmail.com>
- <6d5e0484-4dbc-d122-1ae4-9cce44c2d668@kernel.org> <CACT4Y+aE841JzvEVFmAevgmBO0eOssz0MFydWiuoAp18nr=_DA@mail.gmail.com>
- <CACT4Y+abfa9xVg+3S_tgpOA3cZ2bexe51d0FEZyBCGn0M-6DiA@mail.gmail.com>
- <CACT4Y+aiDUV4_JrvKct98mKvPwEQXSZFXae3qweSmotpzCAGTw@mail.gmail.com>
- <CACT4Y+a8zK7st7LUTkD=AaUBZGsn5hqLt5NXHHvJ0dg1Jds6Nw@mail.gmail.com>
- <CACT4Y+YKf3BFi-9J7Ag0yPtEWYrsPZXY1qUw21yRkNYu51wBWg@mail.gmail.com>
- <CACT4Y+bfz2F-p4xODb_=rU0+F-FJCC66MJW7q9DXd0UHoUfgwg@mail.gmail.com>
- <1e2cc74d-a6c2-0a73-ede5-c72df28e96b2@kernel.org> <CACT4Y+a203xykAHckhtMQ7ov-wNJ-YeuMg=o7qk=H9TQ756jcg@mail.gmail.com>
- <37e5e069-076d-9833-9eab-51c507fbbe2f@kernel.org> <CAEUSe791S6ODPZq4gcfbY=5kZ98ss2qNm0ks-oo0XLwFjsO=ag@mail.gmail.com>
- <CACT4Y+Z9073CozbR800E7p9EdVsfGJ471i0_pF4GftQkY7S90Q@mail.gmail.com> <CAEUSe7_VSPceBnaK39Mc0jkkqM356MTOO8pnS1T9aP_1J1wnkQ@mail.gmail.com>
-In-Reply-To: <CAEUSe7_VSPceBnaK39Mc0jkkqM356MTOO8pnS1T9aP_1J1wnkQ@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 13 Jun 2019 18:37:39 +0200
-Message-ID: <CACT4Y+ZwbiiHSj+HKKoiagR5XF1j1LzvzGZCfzj5JYvuqHT0CQ@mail.gmail.com>
-Subject: Re: kselftest build broken?
-To:     =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Cc:     shuah <shuah@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9286 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906130056
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9286 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906130056
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 4:58 PM Daniel D=C3=ADaz <daniel.diaz@linaro.org> w=
-rote:
->
-> Hello!
->
-> On Thu, 13 Jun 2019 at 09:22, Dmitry Vyukov <dvyukov@google.com> wrote:
-> > On Wed, Jun 12, 2019 at 11:13 PM Daniel D=C3=ADaz <daniel.diaz@linaro.o=
-rg> wrote:
-> > > Maybe a precheck() on the tests in order to ensure that the needed
-> > > binaries are around?
-> >
-> > Hi Daniel,
-> > The Automated Testing effort:
-> > https://elinux.org/Automated_Testing
-> > is working on a standard for test metadata description which will
-> > capture required configs, hardware, runtime-dependencies, etc. I am
-> > not sure what's the current progress, though.
->
-> We just had the monthly call one hour ago. You should join our next
-> call! Details are in the Wiki link you shared.
->
->
-> > Documenting or doing a precheck is a useful first step. But ultimately
-> > this needs to be in machine-readable meta-data. So that it's possible
-> > to, say, enable as much tests as possible on a CI, rather then simply
-> > skip tests. A skipped test is better then a falsely failed test, but
-> > it still does not give any test coverage.
->
-> I agree. We discussed some of this in an impromptu microsummit at
-> Linaro Connect BKK19 a few months back, i.e. a way to encapsulate
-> tests and tests' definitions. Tim Bird is leading that effort; the
-> minutes of today's call will be sent to the mailing list, so keep an
-> eye on his update!
->
->
-> > > [...] we, as part of LKFT [1], run Kselftests with
-> > > Linux 4.4, 4.9, 4.14, 4.19, 5.1, Linus' mainline, and linux-next, on
-> > > arm, aarch64, x86, and x86-64, *very* often: Our test counter recentl=
-y
-> > > exceeded 5 million!
->
-> I was wrong by an order of magnitude: It's currently at 51.7 million test=
-s.
+The "len" variable needs to be signed for the error handling to work
+properly.
 
-w00t!
+Fixes: 596092ef8bea ("selftests/bpf: enable all available cgroup v2 controllers")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ tools/testing/selftests/bpf/cgroup_helpers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > > We do not build our kernels with KASAN, though, so our test runs don'=
-t
-> > > exhibit that bug.
-> >
-> > But you are aware of KASAN, right? Do you have any plans to use it?
->
-> Not at the moment. We are redesigning our entire build and test
-> infrastructure, and this is something that we are considering for our
-> next iteration.
->
-> > If you are interested I can go into more details as we do lots of this
-> > on syzbot. Besides catching more bugs there is also an interesting
-> > possibility of systematically testing all error paths.
->
-> Definitely join us on the Automated Testing monthly call; next one is
-> July 11th. There are efforts on several fronts on testing the kernel,
-> and we all are eager to contribute to improving the kernel test
-> infrastructure.
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index 0d89f0396be4..e95c33e333a4 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -47,7 +47,7 @@ int enable_all_controllers(char *cgroup_path)
+ 	char buf[PATH_MAX];
+ 	char *c, *c2;
+ 	int fd, cfd;
+-	size_t len;
++	ssize_t len;
+ 
+ 	snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
+ 	fd = open(path, O_RDONLY);
+-- 
+2.20.1
 
-
-Thanks, I will try to join the August one. Jul 11 I will be on a conference=
-.
