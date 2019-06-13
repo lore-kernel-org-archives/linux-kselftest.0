@@ -2,160 +2,215 @@ Return-Path: <SRS0=2zA2=UM=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01938C31E45
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4608AC31E45
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:51:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D568720851
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:48:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1EE9A208CA
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:51:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726658AbfFMPsX (ORCPT
+        id S2389899AbfFMPv5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Jun 2019 11:48:23 -0400
-Received: from foss.arm.com ([217.140.110.172]:36862 "EHLO foss.arm.com"
+        Thu, 13 Jun 2019 11:51:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:43860 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731740AbfFMJVH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jun 2019 05:21:07 -0400
+        id S2389743AbfFMPv4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 13 Jun 2019 11:51:56 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E080367;
-        Thu, 13 Jun 2019 02:21:06 -0700 (PDT)
-Received: from C02TF0J2HF1T.local (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 999743F694;
-        Thu, 13 Jun 2019 02:21:02 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 10:20:59 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Cc:     Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        nd <nd@arm.com>, Will Deacon <Will.Deacon@arm.com>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6CF03EF;
+        Thu, 13 Jun 2019 08:51:55 -0700 (PDT)
+Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 827973F246;
+        Thu, 13 Jun 2019 08:51:54 -0700 (PDT)
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
         Andrey Konovalov <andreyknvl@google.com>,
         Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v4 1/2] arm64: Define
- Documentation/arm64/tagged-address-abi.txt
-Message-ID: <20190613092054.GO28951@C02TF0J2HF1T.local>
+Subject: [PATCH v5 1/2] arm64: Define Documentation/arm64/tagged-address-abi.txt
+Date:   Thu, 13 Jun 2019 16:51:36 +0100
+Message-Id: <20190613155137.47675-2-vincenzo.frascino@arm.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190613155137.47675-1-vincenzo.frascino@arm.com>
 References: <cover.1560339705.git.andreyknvl@google.com>
- <20190612142111.28161-1-vincenzo.frascino@arm.com>
- <20190612142111.28161-2-vincenzo.frascino@arm.com>
- <a90da586-8ff6-4bed-d940-9306d517a18c@arm.com>
+ <20190613155137.47675-1-vincenzo.frascino@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a90da586-8ff6-4bed-d940-9306d517a18c@arm.com>
-User-Agent: Mutt/1.11.2 (2019-01-07)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Szabolcs,
+On arm64 the TCR_EL1.TBI0 bit has been always enabled hence
+the userspace (EL0) is allowed to set a non-zero value in the
+top byte but the resulting pointers are not allowed at the
+user-kernel syscall ABI boundary.
 
-On Wed, Jun 12, 2019 at 05:30:34PM +0100, Szabolcs Nagy wrote:
-> On 12/06/2019 15:21, Vincenzo Frascino wrote:
-> > +2. ARM64 Tagged Address ABI
-> > +---------------------------
-> > +
-> > +From the kernel syscall interface prospective, we define, for the purposes
->                                      ^^^^^^^^^^^
-> perspective
-> 
-> > +of this document, a "valid tagged pointer" as a pointer that either it has
-> > +a zero value set in the top byte or it has a non-zero value, it is in memory
-> > +ranges privately owned by a userspace process and it is obtained in one of
-> > +the following ways:
-> > +  - mmap() done by the process itself, where either:
-> > +    * flags = MAP_PRIVATE | MAP_ANONYMOUS
-> > +    * flags = MAP_PRIVATE and the file descriptor refers to a regular
-> > +      file or "/dev/zero"
-> 
-> this does not make it clear if MAP_FIXED or other flags are valid
-> (there are many map flags i don't know, but at least fixed should work
-> and stack/growsdown. i'd expect anything that's not incompatible with
-> private|anon to work).
+With the relaxed ABI proposed through this document, it is now possible
+to pass tagged pointers to the syscalls, when these pointers are in
+memory ranges obtained by an anonymous (MAP_ANONYMOUS) mmap().
 
-Just to clarify, this document tries to define the memory ranges from
-where tagged addresses can be passed into the kernel in the context
-of TBI only (not MTE); that is for hwasan support. FIXED or GROWSDOWN
-should not affect this.
+This change in the ABI requires a mechanism to requires the userspace
+to opt-in to such an option.
 
-> > +  - a mapping below sbrk(0) done by the process itself
-> 
-> doesn't the mmap rule cover this?
+Specify and document the way in which sysctl and prctl() can be used
+in combination to allow the userspace to opt-in this feature.
 
-IIUC it doesn't cover it as that's memory mapped by the kernel
-automatically on access vs a pointer returned by mmap(). The statement
-above talks about how the address is obtained by the user.
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will.deacon@arm.com>
+CC: Andrey Konovalov <andreyknvl@google.com>
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+---
+ Documentation/arm64/tagged-address-abi.txt | 134 +++++++++++++++++++++
+ 1 file changed, 134 insertions(+)
+ create mode 100644 Documentation/arm64/tagged-address-abi.txt
 
-> > +  - any memory mapped by the kernel in the process's address space during
-> > +    creation and following the restrictions presented above (i.e. data, bss,
-> > +    stack).
-> 
-> OK.
-> 
-> Can a null pointer have a tag?
-> (in case NULL is valid to pass to a syscall)
-
-Good point. I don't think it can. We may change this for MTE where we
-give a hint tag but no hint address, however, this document only covers
-TBI for now.
-
-> > +The ARM64 Tagged Address ABI is an opt-in feature, and an application can
-> > +control it using the following prctl()s:
-> > +  - PR_SET_TAGGED_ADDR_CTRL: can be used to enable the Tagged Address ABI.
-> > +  - PR_GET_TAGGED_ADDR_CTRL: can be used to check the status of the Tagged
-> > +                             Address ABI.
-> > +
-> > +As a consequence of invoking PR_SET_TAGGED_ADDR_CTRL prctl() by an applications,
-> > +the ABI guarantees the following behaviours:
-> > +
-> > +  - Every current or newly introduced syscall can accept any valid tagged
-> > +    pointers.
-> > +
-> > +  - If a non valid tagged pointer is passed to a syscall then the behaviour
-> > +    is undefined.
-> > +
-> > +  - Every valid tagged pointer is expected to work as an untagged one.
-> > +
-> > +  - The kernel preserves any valid tagged pointers and returns them to the
-> > +    userspace unchanged in all the cases except the ones documented in the
-> > +    "Preserving tags" paragraph of tagged-pointers.txt.
-> 
-> OK.
-> 
-> i guess pointers of another process are not "valid tagged pointers"
-> for the current one, so e.g. in ptrace the ptracer has to clear the
-> tags before PEEK etc.
-
-Another good point. Are there any pros/cons here or use-cases? When we
-add MTE support, should we handle this differently?
-
-> > +A definition of the meaning of tagged pointers on arm64 can be found in:
-> > +Documentation/arm64/tagged-pointers.txt.
-> > +
-> > +3. ARM64 Tagged Address ABI Exceptions
-> > +--------------------------------------
-> > +
-> > +The behaviours described in paragraph 2, with particular reference to the
-> > +acceptance by the syscalls of any valid tagged pointer are not applicable
-> > +to the following cases:
-> > +  - mmap() addr parameter.
-> > +  - mremap() new_address parameter.
-> > +  - prctl_set_mm() struct prctl_map fields.
-> > +  - prctl_set_mm_map() struct prctl_map fields.
-> 
-> i don't understand the exception: does it mean that passing a tagged
-> address to these syscalls is undefined?
-
-I'd say it's as undefined as it is right now without these patches. We
-may be able to explain this better in the document.
-
+diff --git a/Documentation/arm64/tagged-address-abi.txt b/Documentation/arm64/tagged-address-abi.txt
+new file mode 100644
+index 000000000000..0ae900d4bb2d
+--- /dev/null
++++ b/Documentation/arm64/tagged-address-abi.txt
+@@ -0,0 +1,134 @@
++ARM64 TAGGED ADDRESS ABI
++========================
++
++This document describes the usage and semantics of the Tagged Address
++ABI on arm64.
++
++1. Introduction
++---------------
++
++On arm64 the TCR_EL1.TBI0 bit has been always enabled on the kernel, hence
++the userspace (EL0) is entitled to perform a user memory access through a
++64-bit pointer with a non-zero top byte but the resulting pointers are not
++allowed at the user-kernel syscall ABI boundary.
++
++This document describes a relaxation of the ABI that makes it possible to
++to pass tagged pointers to the syscalls, when these pointers are in memory
++ranges obtained as described in section 2.
++
++Since it is not desirable to relax the ABI to allow tagged user addresses
++into the kernel indiscriminately, arm64 provides a new sysctl interface
++(/proc/sys/abi/tagged_addr) that is used to prevent the applications from
++enabling the relaxed ABI and a new prctl() interface that can be used to
++enable or disable the relaxed ABI.
++A detailed description of the newly introduced mechanisms will be provided
++in section 2.
++
++2. ARM64 Tagged Address ABI
++---------------------------
++
++From the kernel syscall interface perspective, we define, for the purposes
++of this document, a "valid tagged pointer" as a pointer that either has a
++zero value set in the top byte or has a non-zero value, it is in memory
++ranges privately owned by a userspace process and it is obtained in one of
++the following ways:
++  - mmap() done by the process itself, where either:
++    * flags have MAP_PRIVATE and MAP_ANONYMOUS
++    * flags have MAP_PRIVATE and the file descriptor refers to a regular
++      file or "/dev/zero"
++  - brk() system call done by the process itself (i.e. the heap area between
++    the initial location of the program break at process creation and its
++    current location).
++  - any memory mapped by the kernel in the process's address space during
++    creation and following the restrictions presented above (i.e. data, bss,
++    stack).
++
++The ARM64 Tagged Address ABI is an opt-in feature, and an application can
++control it using the following:
++ - /proc/sys/abi/tagged_addr: a new sysctl interface that can be used to
++        prevent the applications from enabling the relaxed ABI.
++        The sysctl is meant also for testing purposes in order to provide a
++        simple way for the userspace to verify the return error checking of
++        the prctl() commands without having to reconfigure the kernel.
++        The sysctl supports the following configuration options:
++         - 0: Disable ARM64 Tagged Address ABI for all the applications.
++         - 1 (Default): Enable ARM64 Tagged Address ABI for all the
++                        applications.
++        If the ARM64 Tagged Address ABI is disabled at a certain point in
++        time, all the applications that were using tagging before this event
++        occurs, will continue to use tagging.
++
++ - prctl()s:
++  - PR_SET_TAGGED_ADDR_CTRL: can be used to enable or disable the Tagged
++        Address ABI.
++        The (unsigned int) arg2 argument is a bit mask describing the
++        control mode used:
++          - PR_TAGGED_ADDR_ENABLE: Enable ARM64 Tagged Address ABI.
++        The arguments arg3, arg4, and arg5 are ignored.
++
++  - PR_GET_TAGGED_ADDR_CTRL: can be used to check the status of the Tagged
++        Address ABI.
++        The arguments arg2, arg3, arg4, and arg5 are ignored.
++
++The ABI properties set by the mechanisms described above are inherited by threads
++of the same application and fork()'ed children but cleared by execve().
++
++As a consequence of invoking PR_SET_TAGGED_ADDR_CTRL prctl() by an applications,
++the ABI guarantees the following behaviours:
++
++  - Every current or newly introduced syscall can accept any valid tagged
++    pointers.
++
++  - If a non valid tagged pointer is passed to a syscall then the behaviour
++    is undefined.
++
++  - Every valid tagged pointer is expected to work as an untagged one.
++
++  - The kernel preserves any valid tagged pointers and returns them to the
++    userspace unchanged (i.e. on syscall return) in all the cases except the
++    ones documented in the "Preserving tags" section of tagged-pointers.txt.
++
++A definition of the meaning of tagged pointers on arm64 can be found in:
++Documentation/arm64/tagged-pointers.txt.
++
++3. ARM64 Tagged Address ABI Exceptions
++--------------------------------------
++
++The behaviours described in section 2, with particular reference to the
++acceptance by the syscalls of any valid tagged pointer are not applicable
++to the following cases:
++  - mmap() addr parameter.
++  - mremap() new_address parameter.
++  - prctl_set_mm() struct prctl_map fields.
++  - prctl_set_mm_map() struct prctl_map fields.
++
++Any attempt to use non-zero tagged pointers will lead to undefined behaviour.
++
++4. Example of correct usage
++---------------------------
++
++void main(void)
++{
++	static int tbi_enabled = 0;
++	unsigned long tag = 0;
++
++	char *ptr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE,
++			 MAP_ANONYMOUS, -1, 0);
++
++	if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE,
++		  0, 0, 0) == 0)
++		tbi_enabled = 1;
++
++	if (ptr == (void *)-1) /* MAP_FAILED */
++		return -1;
++
++	if (tbi_enabled)
++		tag = rand() & 0xff;
++
++	ptr = (char *)((unsigned long)ptr | (tag << TAG_SHIFT));
++
++	*ptr = 'a';
++
++	...
++}
++
 -- 
-Catalin
+2.21.0
+
