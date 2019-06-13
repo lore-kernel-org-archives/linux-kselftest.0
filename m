@@ -2,172 +2,154 @@ Return-Path: <SRS0=2zA2=UM=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC62CC31E45
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:27:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22D4EC31E45
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:27:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8FB8E20B7C
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:27:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0586F206BB
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:27:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727608AbfFMP0x (ORCPT
+        id S1727804AbfFMP1O (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Jun 2019 11:26:53 -0400
-Received: from foss.arm.com ([217.140.110.172]:42552 "EHLO foss.arm.com"
+        Thu, 13 Jun 2019 11:27:14 -0400
+Received: from foss.arm.com ([217.140.110.172]:38718 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727351AbfFMP0u (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jun 2019 11:26:50 -0400
+        id S1729038AbfFMLhj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 13 Jun 2019 07:37:39 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A46BD3EF;
-        Thu, 13 Jun 2019 08:26:49 -0700 (PDT)
-Received: from C02TF0J2HF1T.local (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3FA233F718;
-        Thu, 13 Jun 2019 08:26:36 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 16:26:32 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC6DC367;
+        Thu, 13 Jun 2019 04:37:35 -0700 (PDT)
+Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B2D923F694;
+        Thu, 13 Jun 2019 04:39:17 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 12:37:32 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
         Will Deacon <will.deacon@arm.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        enh <enh@google.com>, Robin Murphy <robin.murphy@arm.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Subject: Re: [PATCH v17 03/15] arm64: Introduce prctl() options to control
- the tagged user addresses ABI
-Message-ID: <20190613152632.GT28951@C02TF0J2HF1T.local>
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 1/2] arm64: Define
+ Documentation/arm64/tagged-address-abi.txt
+Message-ID: <20190613113731.GY28398@e103592.cambridge.arm.com>
 References: <cover.1560339705.git.andreyknvl@google.com>
- <a7a2933bea5fe57e504891b7eec7e9432e5e1c1a.1560339705.git.andreyknvl@google.com>
- <20190613110235.GW28398@e103592.cambridge.arm.com>
+ <20190612142111.28161-1-vincenzo.frascino@arm.com>
+ <20190612142111.28161-2-vincenzo.frascino@arm.com>
+ <20190612153538.GL28951@C02TF0J2HF1T.local>
+ <141c740a-94c2-2243-b6d1-b44ffee43791@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190613110235.GW28398@e103592.cambridge.arm.com>
-User-Agent: Mutt/1.11.2 (2019-01-07)
+In-Reply-To: <141c740a-94c2-2243-b6d1-b44ffee43791@arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Dave,
-
-On Thu, Jun 13, 2019 at 12:02:35PM +0100, Dave P Martin wrote:
-> On Wed, Jun 12, 2019 at 01:43:20PM +0200, Andrey Konovalov wrote:
-> > +/*
-> > + * Global sysctl to disable the tagged user addresses support. This control
-> > + * only prevents the tagged address ABI enabling via prctl() and does not
-> > + * disable it for tasks that already opted in to the relaxed ABI.
-> > + */
-> > +static int zero;
-> > +static int one = 1;
+On Thu, Jun 13, 2019 at 11:15:34AM +0100, Vincenzo Frascino wrote:
+> Hi Catalin,
 > 
-> !!!
+> On 12/06/2019 16:35, Catalin Marinas wrote:
+> > Hi Vincenzo,
+> > 
+> > Some minor comments below but it looks fine to me overall. Cc'ing
+> > Szabolcs as well since I'd like a view from the libc people.
+> > 
 > 
-> And these can't even be const without a cast.  Yuk.
+> Thanks for this, I saw Szabolcs comments.
 > 
-> (Not your fault though, but it would be nice to have a proc_dobool() to
-> avoid this.)
+> > On Wed, Jun 12, 2019 at 03:21:10PM +0100, Vincenzo Frascino wrote:
+> >> diff --git a/Documentation/arm64/tagged-address-abi.txt b/Documentation/arm64/tagged-address-abi.txt
+> >> new file mode 100644
+> >> index 000000000000..96e149e2c55c
+> >> --- /dev/null
+> >> +++ b/Documentation/arm64/tagged-address-abi.txt
 
-I had the same reaction. Maybe for another patch sanitising this pattern
-across the kernel.
+[...]
 
-> > --- a/include/uapi/linux/prctl.h
-> > +++ b/include/uapi/linux/prctl.h
-> > @@ -229,4 +229,9 @@ struct prctl_mm_map {
-> >  # define PR_PAC_APDBKEY			(1UL << 3)
-> >  # define PR_PAC_APGAKEY			(1UL << 4)
-> >  
-> > +/* Tagged user address controls for arm64 */
-> > +#define PR_SET_TAGGED_ADDR_CTRL		55
-> > +#define PR_GET_TAGGED_ADDR_CTRL		56
-> > +# define PR_TAGGED_ADDR_ENABLE		(1UL << 0)
-> > +
+> >> +Since it is not desirable to relax the ABI to allow tagged user addresses
+> >> +into the kernel indiscriminately, arm64 provides a new sysctl interface
+> >> +(/proc/sys/abi/tagged_addr) that is used to prevent the applications from
+> >> +enabling the relaxed ABI and a new prctl() interface that can be used to
+> >> +enable or disable the relaxed ABI.
+> >> +
+> >> +The sysctl is meant also for testing purposes in order to provide a simple
+> >> +way for the userspace to verify the return error checking of the prctl()
+> >> +command without having to reconfigure the kernel.
+> >> +
+> >> +The ABI properties are inherited by threads of the same application and
+> >> +fork()'ed children but cleared when a new process is spawn (execve()).
+> > 
+> > "spawned".
+
+I'd just say "cleared by execve()."
+
+"Spawn" suggests (v)fork+exec to me (at least, what's what "spawn" means on
+certain other OSes).
+
+> > 
+> > I guess you could drop these three paragraphs here and mention the
+> > inheritance properties when introducing the prctl() below. You can also
+> > mention the global sysctl switch after the prctl() was introduced.
+> > 
 > 
-> Do we expect this prctl to be applicable to other arches, or is it
-> strictly arm64-specific?
-
-I kept it generic, at least the tagged address part. The MTE bits later
-on would be arm64-specific.
-
-> > @@ -2492,6 +2498,16 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
-> >  			return -EINVAL;
-> >  		error = PAC_RESET_KEYS(me, arg2);
-> >  		break;
-> > +	case PR_SET_TAGGED_ADDR_CTRL:
-> > +		if (arg3 || arg4 || arg5)
+> I will move the last two (rewording them) to the _section_ 2, but I would still
+> prefer the Introduction to give an overview of the solution as well.
 > 
-> <bikeshed>
+> >> +
+> >> +2. ARM64 Tagged Address ABI
+> >> +---------------------------
+> >> +
+> >> +From the kernel syscall interface prospective, we define, for the purposes
+> >> +of this document, a "valid tagged pointer" as a pointer that either it has
+> > 
+> > "either has" (no 'it') sounds slightly better but I'm not a native
+> > English speaker either.
+> > 
+> >> +a zero value set in the top byte or it has a non-zero value, it is in memory
+> >> +ranges privately owned by a userspace process and it is obtained in one of
+> >> +the following ways:
+> >> +  - mmap() done by the process itself, where either:
+> >> +    * flags = MAP_PRIVATE | MAP_ANONYMOUS
+> >> +    * flags = MAP_PRIVATE and the file descriptor refers to a regular
+> >> +      file or "/dev/zero"
+> >> +  - a mapping below sbrk(0) done by the process itself
+> >> +  - any memory mapped by the kernel in the process's address space during
+> >> +    creation and following the restrictions presented above (i.e. data, bss,
+> >> +    stack).
+> >> +
+> >> +The ARM64 Tagged Address ABI is an opt-in feature, and an application can
+> >> +control it using the following prctl()s:
+> >> +  - PR_SET_TAGGED_ADDR_CTRL: can be used to enable the Tagged Address ABI.
+> > 
+> > enable or disable (not sure we need the latter but it doesn't heart).
+> > 
+> > I'd add the arg2 description here as well.
+> > 
 > 
-> How do you anticipate these arguments being used in the future?
-
-I don't expect them to be used at all. But since I'm not sure, I'd force
-them as zero for now rather than ignored. The GET is supposed to return
-the SET arg2, hence I'd rather not used the other arguments.
-
-> For the SVE prctls I took the view that "get" could only ever mean one
-> thing, and "put" already had a flags argument with spare bits for future
-> expansion anyway, so forcing the extra arguments to zero would be
-> unnecessary.
+> Good point I missed this.
 > 
-> Opinions seem to differ on whether requiring surplus arguments to be 0
-> is beneficial for hygiene, but the glibc prototype for prctl() is
-> 
-> 	int prctl (int __option, ...);
-> 
-> so it seemed annoying to have to pass extra arguments to it just for the
-> sake of it.  IMHO this also makes the code at the call site less
-> readable, since it's not immediately apparent that all those 0s are
-> meaningless.
+> >> +  - PR_GET_TAGGED_ADDR_CTRL: can be used to check the status of the Tagged
+> >> +                             Address ABI.
 
-It's fine by me to ignore the other arguments. I just followed the
-pattern of some existing prctl options. I don't have a strong opinion
-either way.
+For both prctls, you should also document the zeroed arguments up to
+arg5 (unless we get rid of the enforcement and just ignore them).
 
-> > +			return -EINVAL;
-> > +		error = SET_TAGGED_ADDR_CTRL(arg2);
-> > +		break;
-> > +	case PR_GET_TAGGED_ADDR_CTRL:
-> > +		if (arg2 || arg3 || arg4 || arg5)
-> > +			return -EINVAL;
-> > +		error = GET_TAGGED_ADDR_CTRL();
-> 
-> Having a "get" prctl is probably a good idea, but is there a clear
-> usecase for it?
 
-Not sure, maybe some other library (e.g. a JIT compiler) would like to
-check whether tagged addresses have been enabled during application
-start and decide to generate tagged pointers for itself. It seemed
-pretty harmless, unless we add more complex things to the prctl() that
-cannot be returned in one request).
+Is there a canonical way to detect whether this whole API/ABI is
+available?  (i.e., try to call this prctl / check for an HWCAP bit,
+etc.)
 
--- 
-Catalin
+[...]
+
+Cheers
+---Dave
