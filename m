@@ -1,57 +1,57 @@
-Return-Path: <SRS0=O6t+=UL=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=2zA2=UM=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FROM_EXCESS_BASE64,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 380CCC31E46
-	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 21:13:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 483ACC31E45
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:03:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0517F215EA
-	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jun 2019 21:13:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 127AC21743
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 15:03:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uiU8FLwX"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VQPB+MhV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727233AbfFLVNL (ORCPT
+        id S1732660AbfFMPDj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 12 Jun 2019 17:13:11 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:38881 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726599AbfFLVNL (ORCPT
+        Thu, 13 Jun 2019 11:03:39 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:44982 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732490AbfFMOWL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jun 2019 17:13:11 -0400
-Received: by mail-lf1-f65.google.com with SMTP id b11so13314647lfa.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2019 14:13:10 -0700 (PDT)
+        Thu, 13 Jun 2019 10:22:11 -0400
+Received: by mail-io1-f65.google.com with SMTP id s7so17267819iob.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2019 07:22:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=m3eluTPYVzNblYkcubvASnbKZ3oggUy7wSqozoUB0t0=;
-        b=uiU8FLwX3434tPqbqESOwPl9NuP+gqm+wnw6eDhDuk+k0a2P7CQHJRbeV76BH+SKLv
-         6PB6WNcNSWsDgTh4UC+Syhn9I5g3e/HR2HJ28ktJY3R3+QjE8OCHFHnbW6vG8BElFgos
-         o8GpujBqHaKPizaobeqzHr6EyfQ3KLJnZrXvvZl4Dq3fvG1O5gZMcy2zSd03oiQkT2si
-         eX91RiZESr/P6IO9Ug2th0J36zhE5y7X8hRhYBRyFNvxB4g6F0hOmYOY1j0O/1A2E3Mu
-         4HOmXxeFyc5u6hED/DlOdmXqZNehn+MJVgJ3vGGqnBHUXnAmit71Y43gWZd140cJ9zjz
-         7LKg==
+        bh=/6tVQ+is7XdZ8UmXuk2u235Fl9adNPwKXggxX3ltlhk=;
+        b=VQPB+MhVTUhnxGBpEvgFNe1duyFktVYueee+URxw75EnzoLphWSwfbD1pNTc4jw6fC
+         QQ4YHg2MEuexIXdYGGVm0dNU7QqPoX2BbUTYmmLFHRPFvggWcgOwGuOayivLMg46OUzF
+         IYLXWvCZd3t/rMAhJM9HbbPp9FboWwlKXMZODtH3XwjwZKo8qaL+e3rLFtWptcdKYfLt
+         LjKflel7lHAHNgHnLJVOQBPULj1jpDxmgC82+JA7TgSs5yWGdJVTv/kQqxPBDuhEEY44
+         PLRGZ5QKDP9gHiaE7cvJ1oQtF8uGzw/cOkyGX8Gc4Zqh/ji6IpE6lLe8uo0kp7hE+Z6P
+         Vowg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=m3eluTPYVzNblYkcubvASnbKZ3oggUy7wSqozoUB0t0=;
-        b=POmLbh+2iuuopa/n0GlX4jiJ/DYnD+ZjIjCoE8b85hoxXaaNL+P+N00AOhGxdILE6X
-         Ta2qLFKldajucLcPuhZXEEIASwiF9XSf9cv7CtyrO0quqiyN3aV/tt8zaEE0Z0kGnJlh
-         u4GUeRHGpvKIQBCgukCQp9HPpP9qyGdtotVQX+cBuy83x2LgkgOsmBDVwDaTRqxAOg0+
-         ksPUmQ+t7Lu8y5RDdpIJf5uhQhU36/seEoJSgOLDbu4IbLhO9+IgIMv9Oherfi3SnsXl
-         jd+nLsvU/3WAQw/TBTihZYenFNgad46mcCYW/0nLj9doSZ2E26b4qtcjOc2CPnL6o5OV
-         yVDg==
-X-Gm-Message-State: APjAAAVDSGn2TtTVeWNWwvmSJ4djyyfsLs2MndlGm0G41sFwNs0c98wf
-        XhPQ3TS/wiaC05Fn2gujsh6gCekT6a6nb97SpVPjMQ==
-X-Google-Smtp-Source: APXvYqzTrjmhY6lEWtZGwixM0wlOHO4foS0lmd7703KBefIWSCGeUDHYpg9PsXJmLSTseaFbs8lbQI14uUlhAIfUeDQ=
-X-Received: by 2002:a19:6519:: with SMTP id z25mr42025244lfb.73.1560373989492;
- Wed, 12 Jun 2019 14:13:09 -0700 (PDT)
+        bh=/6tVQ+is7XdZ8UmXuk2u235Fl9adNPwKXggxX3ltlhk=;
+        b=M5BlMdm68JnO5T3YQhFITV5rS2Vrycn3Qro5R4EN3MM2u+wJwG0g2IwiMbnoaFhKfX
+         B+o/VkoETZkdKShjmQ/1E9MHXp/+0u2aNlqg21rJ2MujiSjTPeOzLmEfXVzAKZyAxDk5
+         GpIED3L/2H7BHoVJD35n4vM45h6hHtnmunRGrs1UmvoewYgDp+Q2VMYIidd7bbD/XLKb
+         nqJ8EAYaUsgb0iM1qmbZhAUYLUX28sX55R27mHN4TR4kg8eWGHNB1vyQZgfnJR4IpSAP
+         aZs8rhsMUNoGnjO0LXvcGIt7JMsbA0Q3u0lY5ib20Yn6fZJtK7Sm2MTOsXNARCsmqmug
+         DVXg==
+X-Gm-Message-State: APjAAAXoz5gx/mP2jAWomdteHccJjlk0QyglMt22Ac8CEOkrLhpmRYsc
+        7ZxGPx+ztBiiMxyblsJZSPSdNavM0gX4QxeGo9sDlw==
+X-Google-Smtp-Source: APXvYqxsEFci4AzWqCxcjvjy19yTBHmDJJz++hgwgluaa6q1KVHenXIwlJgADGGAMbKjLH+KEldB73kASoW55rk8c6s=
+X-Received: by 2002:a02:22c6:: with SMTP id o189mr46076430jao.35.1560435730121;
+ Thu, 13 Jun 2019 07:22:10 -0700 (PDT)
 MIME-Version: 1.0
 References: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
  <54bc80f8-71aa-1c04-5908-01923247832e@kernel.org> <CACT4Y+YUBw=t3CkbLeKLFAeAbzVZXoG09HARR+nsOTW4gkdLOw@mail.gmail.com>
@@ -62,14 +62,14 @@ References: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
  <CACT4Y+YKf3BFi-9J7Ag0yPtEWYrsPZXY1qUw21yRkNYu51wBWg@mail.gmail.com>
  <CACT4Y+bfz2F-p4xODb_=rU0+F-FJCC66MJW7q9DXd0UHoUfgwg@mail.gmail.com>
  <1e2cc74d-a6c2-0a73-ede5-c72df28e96b2@kernel.org> <CACT4Y+a203xykAHckhtMQ7ov-wNJ-YeuMg=o7qk=H9TQ756jcg@mail.gmail.com>
- <37e5e069-076d-9833-9eab-51c507fbbe2f@kernel.org>
-In-Reply-To: <37e5e069-076d-9833-9eab-51c507fbbe2f@kernel.org>
-From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Date:   Wed, 12 Jun 2019 16:12:58 -0500
-Message-ID: <CAEUSe791S6ODPZq4gcfbY=5kZ98ss2qNm0ks-oo0XLwFjsO=ag@mail.gmail.com>
+ <37e5e069-076d-9833-9eab-51c507fbbe2f@kernel.org> <CAEUSe791S6ODPZq4gcfbY=5kZ98ss2qNm0ks-oo0XLwFjsO=ag@mail.gmail.com>
+In-Reply-To: <CAEUSe791S6ODPZq4gcfbY=5kZ98ss2qNm0ks-oo0XLwFjsO=ag@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 13 Jun 2019 16:21:58 +0200
+Message-ID: <CACT4Y+Z9073CozbR800E7p9EdVsfGJ471i0_pF4GftQkY7S90Q@mail.gmail.com>
 Subject: Re: kselftest build broken?
-To:     shuah <shuah@kernel.org>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
+To:     =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Cc:     shuah <shuah@kernel.org>,
         Naresh Kamboju <naresh.kamboju@linaro.org>,
         Anders Roxell <anders.roxell@linaro.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
@@ -81,75 +81,105 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello!
-
-On Wed, 12 Jun 2019 at 14:32, shuah <shuah@kernel.org> wrote:
-> On 6/12/19 12:29 PM, Dmitry Vyukov wrote:
-[...]
-> > 1. You suggested to install a bunch of packages. That helped to some
-> > degree. Is there a way to figure out what packages one needs to
-> > install to build the tests other than asking you?
+On Wed, Jun 12, 2019 at 11:13 PM Daniel D=C3=ADaz <daniel.diaz@linaro.org> =
+wrote:
 >
-> I have to go through discovery at times when new tests get added. I
-> consider this a part of being a open source developer figuring out
-> dependencies for compiling and running. I don't have a magic answer
-> for you and there is no way to make sure all dependencies will be
-> documented.
-
-This is something we, as users of Kselftests, would very much like to
-see improved. We also go by trial-and-error finding out what is
-missing, but keeping up with the new tests or subsystems is often
-difficult and tend to remain broken (in usage) for some time, until we
-have the resources to look into that and fix it. The config fragments
-is an excellent example of how the test developers and the framework
-complement each other to make things work. Even documenting
-dependencies would go a long way, as a starting point, but I do
-believe that the test writers should do that and not the users go
-figure out what all is needed to run their tests.
-
-Maybe a precheck() on the tests in order to ensure that the needed
-binaries are around?
-
-For what it's worth, this is the list of run-time dependencies package
-for OpenEmbedded: bash bc ethtool fuse-utils iproute2 iproute2-tc
-iputils-ping iputils-ping6 ncurses perl sudo python3-argparse
-python3-datetime python3-json python3-pprint python3-subprocess
-util-linux-uuidgen cpupower glibc-utils. We are probably missing a
-few.
-
-[...]
-> > 10. Do you know if anybody is running kselftests? Running as in
-> > running continuously, noticing new failures, reporting these failures,
-> > keeping them green, etc.
-> > I am asking because one of the tests triggers a use-after-free and I
-> > checked it was the same 3+ months ago. And I have some vague memories
-> > of trying to run kselftests 3 or so years ago, and there was a bunch
-> > of use-after-free's as well.
+> Hello!
 >
-> Yes Linaro test rings run them and kernel developers do. I am cc'ing
-> Naresh and Anders to help with tips on how they run tests in their
-> environment. They have several test systems that they install tests
-> and run tests routine on all stable releases.
+> On Wed, 12 Jun 2019 at 14:32, shuah <shuah@kernel.org> wrote:
+> > On 6/12/19 12:29 PM, Dmitry Vyukov wrote:
+> [...]
+> > > 1. You suggested to install a bunch of packages. That helped to some
+> > > degree. Is there a way to figure out what packages one needs to
+> > > install to build the tests other than asking you?
+> >
+> > I have to go through discovery at times when new tests get added. I
+> > consider this a part of being a open source developer figuring out
+> > dependencies for compiling and running. I don't have a magic answer
+> > for you and there is no way to make sure all dependencies will be
+> > documented.
 >
-> Naresh and Anders! Can you share your process for running kselftest
-> in Linaro test farm. Thanks in advance.
+> This is something we, as users of Kselftests, would very much like to
+> see improved. We also go by trial-and-error finding out what is
+> missing, but keeping up with the new tests or subsystems is often
+> difficult and tend to remain broken (in usage) for some time, until we
+> have the resources to look into that and fix it. The config fragments
+> is an excellent example of how the test developers and the framework
+> complement each other to make things work. Even documenting
+> dependencies would go a long way, as a starting point, but I do
+> believe that the test writers should do that and not the users go
+> figure out what all is needed to run their tests.
+>
+> Maybe a precheck() on the tests in order to ensure that the needed
+> binaries are around?
 
-They're both in time zones where it's better to be sleeping at the
-moment, so I'll let them chime in with more info tomorrow (their
-time). I can share that we, as part of LKFT [1], run Kselftests with
-Linux 4.4, 4.9, 4.14, 4.19, 5.1, Linus' mainline, and linux-next, on
-arm, aarch64, x86, and x86-64, *very* often: Our test counter recently
-exceeded 5 million! You can see today's mainline results of Kselftests
-[2] and all tests therein.
+Hi Daniel,
 
-We do not build our kernels with KASAN, though, so our test runs don't
-exhibit that bug.
+The Automated Testing effort:
+https://elinux.org/Automated_Testing
+is working on a standard for test metadata description which will
+capture required configs, hardware, runtime-dependencies, etc. I am
+not sure what's the current progress, though.
 
-Greetings!
+Documenting or doing a precheck is a useful first step. But ultimately
+this needs to be in machine-readable meta-data. So that it's possible
+to, say, enable as much tests as possible on a CI, rather then simply
+skip tests. A skipped test is better then a falsely failed test, but
+it still does not give any test coverage.
 
-Daniel D=C3=ADaz
-daniel.diaz@linaro.org
 
-[1] https://lkft.linaro.org/
-[2] https://qa-reports.linaro.org/lkft/linux-mainline-oe/build/v5.2-rc4-20-=
-gaa7235483a83/#!?details=3D175
+
+> For what it's worth, this is the list of run-time dependencies package
+> for OpenEmbedded: bash bc ethtool fuse-utils iproute2 iproute2-tc
+> iputils-ping iputils-ping6 ncurses perl sudo python3-argparse
+> python3-datetime python3-json python3-pprint python3-subprocess
+> util-linux-uuidgen cpupower glibc-utils. We are probably missing a
+> few.
+
+Something like this would save me (and thousands of other people) some time=
+.
+
+
+
+> [...]
+> > > 10. Do you know if anybody is running kselftests? Running as in
+> > > running continuously, noticing new failures, reporting these failures=
+,
+> > > keeping them green, etc.
+> > > I am asking because one of the tests triggers a use-after-free and I
+> > > checked it was the same 3+ months ago. And I have some vague memories
+> > > of trying to run kselftests 3 or so years ago, and there was a bunch
+> > > of use-after-free's as well.
+> >
+> > Yes Linaro test rings run them and kernel developers do. I am cc'ing
+> > Naresh and Anders to help with tips on how they run tests in their
+> > environment. They have several test systems that they install tests
+> > and run tests routine on all stable releases.
+> >
+> > Naresh and Anders! Can you share your process for running kselftest
+> > in Linaro test farm. Thanks in advance.
+>
+> They're both in time zones where it's better to be sleeping at the
+> moment, so I'll let them chime in with more info tomorrow (their
+> time). I can share that we, as part of LKFT [1], run Kselftests with
+> Linux 4.4, 4.9, 4.14, 4.19, 5.1, Linus' mainline, and linux-next, on
+> arm, aarch64, x86, and x86-64, *very* often: Our test counter recently
+> exceeded 5 million! You can see today's mainline results of Kselftests
+> [2] and all tests therein.
+>
+> We do not build our kernels with KASAN, though, so our test runs don't
+> exhibit that bug.
+
+But you are aware of KASAN, right? Do you have any plans to use it?
+Dynamic tools significantly improve runtime testing efficiency.
+Otherwise a test may expose all of use-after-free, out-of-bounds
+write, information leak, potential deadlock, memory leak, etc and
+still be considered "everything is fine". Some of these bug may even
+be as bad as a remote code execution. I would expect that catching
+these would be a reasonable price for running tests somewhat less
+often :)
+Each of these tools require a one-off investment for deployment, but
+then gives you constant benefit on each run.
+If you are interested I can go into more details as we do lots of this
+on syzbot. Besides catching more bugs there is also an interesting
+possibility of systematically testing all error paths.
