@@ -2,107 +2,202 @@ Return-Path: <SRS0=2zA2=UM=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB052C31E4A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 16:59:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7172BC31E45
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 23:17:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 936F62183E
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 16:59:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B4162173C
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jun 2019 23:17:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SurKhAYJ"
+	dkim=pass (1024-bit key) header.d=appneta.com header.i=@appneta.com header.b="DZrBSJdr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730244AbfFMQ7G (ORCPT
+        id S1726238AbfFMXRV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Jun 2019 12:59:06 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:41899 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727639AbfFMQ7G (ORCPT
+        Thu, 13 Jun 2019 19:17:21 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:37578 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726293AbfFMXRV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jun 2019 12:59:06 -0400
-Received: by mail-qk1-f193.google.com with SMTP id c11so13200920qkk.8;
-        Thu, 13 Jun 2019 09:59:05 -0700 (PDT)
+        Thu, 13 Jun 2019 19:17:21 -0400
+Received: by mail-pg1-f194.google.com with SMTP id 20so372440pgr.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2019 16:17:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=11OleX27xVveG0LvW8hhS+mOJv2guc7A/BC2mPPxyvA=;
-        b=SurKhAYJRBJsFlMemN2kRJ6bXLy/QXFfseNapj78YrX3aHam6qtgP1hZZjIISPV2bE
-         G7he95bIpytx3uucms6/j1bkIkz+j/rgUnQS+LFSuGoEO5i32gcranmFDcFRPLCpo6Ct
-         Mq+uwM/slJvEhZ6d7K5HTpL/HFTTiBhONMT/FE/LNswyNIFDWUzkEnp7GtZ1cEh8YiC1
-         ZT5vYlxczI/4ylayRQWESpJCAEcvJ9o3UTGzyj9oAd1kK2J78jtfB6Jn8HPmaaAM3uRN
-         NAqtU1gZaw1ObiwUgVDpSHRGBStlsHgh5fp8Y9wG6NChoLD3qlifr0uec+ja1EeNWx8p
-         6z9w==
+        d=appneta.com; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=CbjQfCCZwiSsYH4YiMUo/AKyv6rSmzSkQV067FGZEME=;
+        b=DZrBSJdrvWPc/Y/e/dn9oz+sWV2pwbNiU3XcW6SB8lhZQB5EyD/kWau5sv67w00nd+
+         ZLDPoUMMNI87xh39oPLSNJb5yvnDfY8rifqHlej7mRggdsVtY7HjLdj5X0KxheMtOISo
+         qMjrTkLBhb4EJFkX9bTqccoPFOt+83sM/KxYo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=11OleX27xVveG0LvW8hhS+mOJv2guc7A/BC2mPPxyvA=;
-        b=YSlzNoOyPDE39EPXHT5oF3MZzQAMNHcRP2XK4A+rLKrLVW+Na7KvK4JfQkZ6uFGJo5
-         A6eaejaaVs4/2Ns5NZBX88mDkBho/oUpinS14kWyOf0nRxHnai5ZjdmNuCeXN3oN0wSB
-         esdlZi2Y+qBLZCDAytOz91jXFtJAZEB7MA5WY7Ay560dR+EfqU1Q5QOoLJvrx5WBrUWp
-         ysB2NBNq8f0VHiTa7bc8IF3n7NIumow7jn/zyoisD0eYEyQDPhDt6S9/uFRWGT/7l7Oa
-         Gabkhc9HFS6q1kAL7WvHuFVKJUM5TTmXXzT5zLJfKhHTgcP7BZlRG+w+rytz872/gbS4
-         rwuA==
-X-Gm-Message-State: APjAAAXnvz4jxthV40j26ShUceu4LcZXL5r4exdGE8X4f4C+ZbjrsZft
-        Yb8HJ6dSbIl/13VLbgbeCOpsEQvN7pw0MLQV36g=
-X-Google-Smtp-Source: APXvYqydEhoSJBurY1SYbVgwzcyCtxVDPuMxRgTpW+wjNbPpqMDmeECXzdzYcRHH2jfwhtdgtHCfz6vfv62PbxmKdM0=
-X-Received: by 2002:ae9:eb53:: with SMTP id b80mr43330382qkg.172.1560445144990;
- Thu, 13 Jun 2019 09:59:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190613070021.GG16334@mwanda>
-In-Reply-To: <20190613070021.GG16334@mwanda>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 13 Jun 2019 09:58:53 -0700
-Message-ID: <CAEf4BzZn4hHobOBiQmSPQhKTrsi7MC=R-7OjWTMyFC03ehrjgg@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: signedness bug in enable_all_controllers()
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Roman Gushchin <guro@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        linux-kselftest@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=CbjQfCCZwiSsYH4YiMUo/AKyv6rSmzSkQV067FGZEME=;
+        b=eWSHnLnTHtBqe9hk7ACO86IoXejBCIO4CsTuzycAmGCB23XErH4eoBztM9NEjuRUyN
+         qH0MkRTUq5CxH4bF44tlMsj4WoV3evFXF0YQKi+9tA+hAbc0FN/7Z0aDsleh5QHi/6eB
+         SMjSLICl2u/mBGw9jfXoxlCpsV1HWPIdvbLjc3FQqGUykHxtg2QNIgeR3I5lIstuN8a0
+         asO7o8VJeZau4IF1vBerKCzZnr73jxzdQXcipdoThMUmBJt98zb7pcUoEk2EMPc64yIY
+         t1Qc1GQsw1KOB1pC/+GY/bBv73PKfle/f7hTet4//WrW3m6z4QCBRyslF3gtFTRhK7a2
+         9WYQ==
+X-Gm-Message-State: APjAAAVHZvpiSIzzXOWaY6GKqdu1CbdvxZYOj5gz6ukmkY2B9AHjFvO/
+        qogi89VIjMWQiFte7QUXyD9EWiff+Bk=
+X-Google-Smtp-Source: APXvYqxcWU2EXfT8Cp45fldnGEUzcDKojfFhGQbZQ+q0cQB8HtayFQNW/2oDwAPvehUKFi6m5msE3A==
+X-Received: by 2002:a17:90a:d3c3:: with SMTP id d3mr8084484pjw.17.1560467839151;
+        Thu, 13 Jun 2019 16:17:19 -0700 (PDT)
+Received: from jltm109.jaalam.net (vancouver-a.appneta.com. [209.139.228.33])
+        by smtp.gmail.com with ESMTPSA id r15sm732562pfc.162.2019.06.13.16.17.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 13 Jun 2019 16:17:17 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH net-next v2 1/3] net/udpgso_bench_tx: options to exercise
+ TX CMSG
+From:   Fred Klassen <fklassen@appneta.com>
+In-Reply-To: <CAF=yD-KcA5NZ2_tp3zaxW5sbf75a17DLX+VR9hyZo7MTcYAxiw@mail.gmail.com>
+Date:   Thu, 13 Jun 2019 16:17:16 -0700
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <361B0BB3-0351-4F97-9BAD-9E37DCCFAE2F@appneta.com>
+References: <20190528184708.16516-1-fklassen@appneta.com>
+ <20190528184708.16516-2-fklassen@appneta.com>
+ <CAF=yD-KcA5NZ2_tp3zaxW5sbf75a17DLX+VR9hyZo7MTcYAxiw@mail.gmail.com>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 9:40 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> The "len" variable needs to be signed for the error handling to work
-> properly.
->
-> Fixes: 596092ef8bea ("selftests/bpf: enable all available cgroup v2 controllers")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
+> On May 28, 2019, at 2:35 PM, Willem de Bruijn =
+<willemdebruijn.kernel@gmail.com> wrote:
+>> -static void flush_zerocopy(int fd)
+>> +static void flush_cmsg(struct cmsghdr *cmsg)
+>> {
+>> -       struct msghdr msg =3D {0};        /* flush */
+>> +       switch (cmsg->cmsg_level) {
+>> +       case SOL_SOCKET:
+>> +               if (cmsg->cmsg_type =3D=3D SO_TIMESTAMPING) {
+>> +                       int i;
+>> +
+>> +                       i =3D (cfg_tx_ts =3D=3D =
+SOF_TIMESTAMPING_TX_HARDWARE) ? 2 : 0;
+>> +                       struct scm_timestamping *tss;
+>=20
+> Please don't mix declarations and code
 
-Thanks for the fix!
+Fixing this as well as other declarations for v3.
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
+>> +
+>> +                       tss =3D (struct scm_timestamping =
+*)CMSG_DATA(cmsg);
+>> +                       if (tss->ts[i].tv_sec =3D=3D 0)
+>> +                               stat_tx_ts_errors++;
+>> +               } else {
+>> +                       error(1, 0,
+>> +                             "unknown SOL_SOCKET cmsg type=3D%u =
+level=3D%u\n",
+>> +                             cmsg->cmsg_type, cmsg->cmsg_level);
+>=20
+> Technically, no need to repeat cmsg_level
 
->  tools/testing/selftests/bpf/cgroup_helpers.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-> index 0d89f0396be4..e95c33e333a4 100644
-> --- a/tools/testing/selftests/bpf/cgroup_helpers.c
-> +++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-> @@ -47,7 +47,7 @@ int enable_all_controllers(char *cgroup_path)
->         char buf[PATH_MAX];
->         char *c, *c2;
->         int fd, cfd;
-> -       size_t len;
-> +       ssize_t len;
->
->         snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
->         fd = open(path, O_RDONLY);
-> --
-> 2.20.1
->
+
+Will fix all 3 similar messages
+
+>> +               }
+>> +               break;
+>> +       case SOL_IP:
+>> +       case SOL_IPV6:
+>> +               switch (cmsg->cmsg_type) {
+>> +               case IP_RECVERR:
+>> +               case IPV6_RECVERR:
+>> +               {
+>> +                       struct sock_extended_err *err;
+>> +
+>> +                       err =3D (struct sock_extended_err =
+*)CMSG_DATA(cmsg);
+>> +                       switch (err->ee_origin) {
+>> +                       case SO_EE_ORIGIN_TIMESTAMPING:
+>> +                               // Got a TX timestamp from error =
+queue
+>> +                               stat_tx_ts++;
+>> +                               break;
+>> +                       case SO_EE_ORIGIN_ICMP:
+>> +                       case SO_EE_ORIGIN_ICMP6:
+>> +                               if (cfg_verbose)
+>> +                                       fprintf(stderr,
+>> +                                               "received ICMP error: =
+type=3D%u, code=3D%u\n",
+>> +                                               err->ee_type, =
+err->ee_code);
+>> +                               break;
+>> +                       case SO_EE_ORIGIN_ZEROCOPY:
+>> +                       {
+>> +                               __u32 lo =3D err->ee_info;
+>> +                               __u32 hi =3D err->ee_data;
+>> +
+>> +                               if (hi =3D=3D lo - 1) {
+>> +                                       // TX was aborted
+>=20
+> where does this come from?
+
+This check can be removed. In sock_zerocopy_callback() this
+check was intended to cover the condition where len =3D=3D 0,
+however it appears that it is impossible.
+
+	/* if !len, there was only 1 call, and it was aborted
+	 * so do not queue a completion notification
+	 */
+
+	if (!uarg->len || sock_flag(sk, SOCK_DEAD))
+		goto release;
+
+	len =3D uarg->len;
+	lo =3D uarg->id;
+	hi =3D uarg->id + len - 1;
+
+
+>=20
+>> +                                       stat_zcopy_errors++;
+>> +                                       if (cfg_verbose)
+>> +                                               fprintf(stderr,
+>> +                                                       "Zerocopy TX =
+aborted: lo=3D%u hi=3D%u\n",
+>> +                                                       lo, hi);
+>> +                               } else if (hi =3D=3D lo) {
+>=20
+> technically, no need to special case
+>=20
+
+Removed
+
+>> +                                       // single ID acknowledged
+>> +                                       stat_zcopies++;
+>> +                               } else {
+>> +                                       // range of IDs acknowledged
+>> +                                       stat_zcopies +=3D hi - lo + =
+1;
+>> +                               }
+>> +                               break;
+>=20
+>> +static void set_tx_timestamping(int fd)
+>> +{
+>> +       int val =3D SOF_TIMESTAMPING_OPT_CMSG | =
+SOF_TIMESTAMPING_OPT_ID;
+>=20
+> Could consider adding SOF_TIMESTAMPING_OPT_TSONLY to not have to deal
+> with a data buffer on recv from errqueue.
+
+Will add and modify code appropriately for v3.
+
