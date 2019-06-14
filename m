@@ -2,97 +2,100 @@ Return-Path: <SRS0=A1nb=UN=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A20CC31E4C
-	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Jun 2019 13:07:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDF16C31E4E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Jun 2019 20:29:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3F4BF21537
-	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Jun 2019 13:07:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B44721852
+	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Jun 2019 20:29:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1560544158;
+	bh=0gs+mJ6GRnFjxn0TGwgB/OBpyxDh7oPRNYR3bdnWLmc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=GSurFDCK+Z8pvVzbaBtvGrEA4D61dug7s/l+qRu0nsbvf3qdmjT3a2CKah53LOmkA
+	 XJ2r5t6SWwcPPvxehjiC1iVXV7cwGqhOmLzIINImGbbiQOflhKzFnfENhWnGZp5YiP
+	 pJDCKbDkqsxRMEDyakw4gmfXFXGv1T8Faey+EUmY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726874AbfFNNHa (ORCPT
+        id S1726917AbfFNU3S (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 14 Jun 2019 09:07:30 -0400
-Received: from Galois.linutronix.de ([146.0.238.70]:37904 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727789AbfFNNHa (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jun 2019 09:07:30 -0400
-Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hblvS-0004Pz-5b; Fri, 14 Jun 2019 15:07:26 +0200
-Date:   Fri, 14 Jun 2019 15:07:25 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Huw Davies <huw@codeweavers.com>
-Subject: Re: [PATCH v6 03/19] kernel: Unify update_vsyscall implementation
-In-Reply-To: <9371eabc-ed74-3db8-794c-44c37ada2163@arm.com>
-Message-ID: <alpine.DEB.2.21.1906141506500.1722@nanos.tec.linutronix.de>
-References: <20190530141531.43462-1-vincenzo.frascino@arm.com> <20190530141531.43462-4-vincenzo.frascino@arm.com> <alpine.DEB.2.21.1906141307430.1722@nanos.tec.linutronix.de> <a69e48a2-575d-255c-2653-d3e99b7ba760@arm.com> <alpine.DEB.2.21.1906141416100.1722@nanos.tec.linutronix.de>
- <9371eabc-ed74-3db8-794c-44c37ada2163@arm.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Fri, 14 Jun 2019 16:29:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51262 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726900AbfFNU3R (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 14 Jun 2019 16:29:17 -0400
+Received: from sasha-vm.mshome.net (unknown [131.107.159.134])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5C3022184D;
+        Fri, 14 Jun 2019 20:29:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560544157;
+        bh=0gs+mJ6GRnFjxn0TGwgB/OBpyxDh7oPRNYR3bdnWLmc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BBinhT4HPwkGF8BEkym5FLve9VrPJz7QMh6hHGMmbiEiWdW1bTCXRbZ0W6WIiIBwZ
+         qcO9TYsPRoenriP80mFAr7kJ1PVAAVvXsGZsuHqmo6bmNkbdE1clRXYN528Wpb64/2
+         Qmw50+awBvxb1Si5UEieLSXT7fwyp8sL4m0sALag=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Alakesh Haloi <alakesh.haloi@gmail.com>,
+        Peter Xu <peterx@redhat.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.1 31/59] userfaultfd: selftest: fix compiler warning
+Date:   Fri, 14 Jun 2019 16:28:15 -0400
+Message-Id: <20190614202843.26941-31-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190614202843.26941-1-sashal@kernel.org>
+References: <20190614202843.26941-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 14 Jun 2019, Vincenzo Frascino wrote:
-> On 6/14/19 1:19 PM, Thomas Gleixner wrote:
-> > On Fri, 14 Jun 2019, Vincenzo Frascino wrote:
-> >> On 6/14/19 12:10 PM, Thomas Gleixner wrote:
-> >>> On Thu, 30 May 2019, Vincenzo Frascino wrote:
-> >>>> +
-> >>>> +	if (__arch_use_vsyscall(vdata)) {
-> >>>> +		vdata[CS_HRES_COARSE].cycle_last	=
-> >>>> +						tk->tkr_mono.cycle_last;
-> >>>> +		vdata[CS_HRES_COARSE].mask		=
-> >>>> +						tk->tkr_mono.mask;
-> >>>> +		vdata[CS_HRES_COARSE].mult		=
-> >>>> +						tk->tkr_mono.mult;
-> >>>
-> >>> These line breaks make it really hard to read. Can you fold in the patch
-> >>> below please?
-> >>>
-> >>
-> >> Thanks for this. I will do it in v7.
-> > 
-> > Talking about v7. I'd like to get this into 5.3. That means you'd have to
-> > rebase it on
-> > 
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-next
-> > 
-> > to avoid the hyperv conflict. I'll sort this out with the hyperv folks how
-> > I can get these bits as a base for a tip branch which holds all the vdso
-> > pieces.
-> >
-> 
-> Ok, I will rebase and test the patches against the hyperv-next branch. Could you
-> please let me know when all the bits are sorted?
+From: Alakesh Haloi <alakesh.haloi@gmail.com>
 
-Don't worry. Just post it against that branch and I'll sort out the
-logistics independently.
+[ Upstream commit 98a13a8d253999cf25eb16d901c35fbd2a8455c4 ]
 
-Thanks,
+Fixes following compiler warning
 
-	tglx
+userfaultfd.c: In function ‘usage’:
+userfaultfd.c:126:2: warning: format not a string literal and no format
+	arguments [-Wformat-security]
+  fprintf(stderr, examples);
+
+Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
+Reviewed-by: Peter Xu <peterx@redhat.com>
+Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/vm/userfaultfd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index 5d1db824f73a..b3e6497b080c 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -123,7 +123,7 @@ static void usage(void)
+ 	fprintf(stderr, "Supported <test type>: anon, hugetlb, "
+ 		"hugetlb_shared, shmem\n\n");
+ 	fprintf(stderr, "Examples:\n\n");
+-	fprintf(stderr, examples);
++	fprintf(stderr, "%s", examples);
+ 	exit(1);
+ }
+ 
+-- 
+2.20.1
+
