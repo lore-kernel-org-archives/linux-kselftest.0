@@ -2,123 +2,104 @@ Return-Path: <SRS0=A1nb=UN=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCF6FC46477
-	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Jun 2019 20:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9620C31E4D
+	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Jun 2019 21:17:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 94C4921852
-	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Jun 2019 20:37:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 801682184C
+	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Jun 2019 21:17:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1560544640;
-	bh=fBomxnnpTQhou0FHVuASFGMxuW+Dxcx9mP4d2DjZGAc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=DPUV8Ajs9Mp6phNagN4Kt0zyNX3n87FsARlzbC/HJf3IqoOKmae1x9V6R7+00u1GQ
-	 5i0fQ7JOjsJ0xtV6bg2MafYpF/wFeslYHXmaL9FhuCiFQBCyieVZGR3xmMHDFVIZtP
-	 FfoAtOzPIErYgt4LLGtCzXLk6mbhFCRWVRttfYp0=
+	s=default; t=1560547035;
+	bh=3qZBnSeXO8K4oYa3/N25KQYrBFfoH3IDbPh/Ayhnk1s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=hT2n9QMxEao+AjjjfEEwbMEjE9uhTr/K2zqEFXVgbevz2+dxMda9cwC1QN1p2oN38
+	 35gGZA4SNSxyTV7YVUpByW0h1VGO2T42OJKemNWZh0dNWijML3Lpuab7Vts3w1RGmA
+	 rJBSYCx6IDda/VFvl5SQdrApflmfuKxvydz2HQKA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727015AbfFNU3h (ORCPT
+        id S1726353AbfFNVRL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 14 Jun 2019 16:29:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51024 "EHLO mail.kernel.org"
+        Fri, 14 Jun 2019 17:17:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60176 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726792AbfFNU3I (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jun 2019 16:29:08 -0400
-Received: from sasha-vm.mshome.net (unknown [131.107.159.134])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726349AbfFNVRL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 14 Jun 2019 17:17:11 -0400
+Received: from localhost (unknown [131.107.159.134])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C1390217F9;
-        Fri, 14 Jun 2019 20:29:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7CEBA2184B;
+        Fri, 14 Jun 2019 21:17:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560544147;
-        bh=fBomxnnpTQhou0FHVuASFGMxuW+Dxcx9mP4d2DjZGAc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=spyPYdM0af+Stnh/IP9R0F5n/3pTdXld2VEvXFrwpit1HUJZW0mIS8cpdWSz1bdmo
-         Zq8khSqpGzjCFtwm3+BOgTlO+0nNM0GFuI4W67jKOyz/M1GUzxOxY+Pc4fvTVVALZH
-         lBWfCXQ8pKb6LLmo0usQV4HreveioAnL6Z0iHWPE=
+        s=default; t=1560547030;
+        bh=3qZBnSeXO8K4oYa3/N25KQYrBFfoH3IDbPh/Ayhnk1s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wSQKJ/fpvZ2VNMj+Ci4k6VkUSRmnCwxH0B3QSi4pAXHaafCyjkLk5Ay1FlTE8nu4t
+         G9JhtzPQKgDEUCIAmnZTe5zgfu4bvGevKrkwx5eb89dokUpJIBwpcuH1xlDk/nCpvt
+         xMI4C4u1OBkryDfNx63vmnnkfSFUTeuK+DAqJlh4=
+Date:   Fri, 14 Jun 2019 17:17:10 -0400
 From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alex Shi <alex.shi@linux.alibaba.com>,
-        Shuah Khan <shuah@kernel.org>, Roman Gushchin <guro@fb.com>,
-        Tejun Heo <tj@kernel.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jay Kamat <jgkamat@fb.com>, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.1 28/59] kselftest/cgroup: fix unexpected testing failure on test_memcontrol
-Date:   Fri, 14 Jun 2019 16:28:12 -0400
-Message-Id: <20190614202843.26941-28-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190614202843.26941-1-sashal@kernel.org>
-References: <20190614202843.26941-1-sashal@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Michael Kelley <mikelley@microsoft.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>
+Subject: Re: [PATCH v6 18/19] x86: Add support for generic vDSO
+Message-ID: <20190614211710.GQ1513@sasha-vm>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <20190530141531.43462-19-vincenzo.frascino@arm.com>
+ <BYAPR21MB1221D54FCEC97509EEF7395CD7180@BYAPR21MB1221.namprd21.prod.outlook.com>
+ <alpine.DEB.2.21.1906141313150.1722@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.1906141313150.1722@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Alex Shi <alex.shi@linux.alibaba.com>
+On Fri, Jun 14, 2019 at 01:15:23PM +0200, Thomas Gleixner wrote:
+>On Thu, 30 May 2019, Michael Kelley wrote:
+>> Vincenzo -- these changes for Hyper-V are a subset of a larger patch set
+>> I have that moves all of the Hyper-V clock/timer code into a separate
+>> clocksource driver in drivers/clocksource, with an include file in
+>> includes/clocksource.  That new include file should be able to work
+>> instead of your new mshyperv-tsc.h.  It also has the benefit of being
+>> ISA neutral, so it will work with my in-progress patch set to support
+>> Linux on Hyper-V on ARM64.  See https://lkml.org/lkml/2019/5/27/231
+>> for the new clocksource driver patch set.
+>
+>Grrr. That's queued in hyperv-next for whatever reasons.
 
-[ Upstream commit f6131f28057d4fd8922599339e701a2504e0f23d ]
+I queue up our future pull requests there to give them some soaking in
+-next.
 
-The cgroup testing relies on the root cgroup's subtree_control setting,
-If the 'memory' controller isn't set, all test cases will be failed
-as following:
+>Sasha, can you please provide me the branch to pull from so I can have a
+>common base for all the various changes floating around?
 
-$ sudo ./test_memcontrol
-not ok 1 test_memcg_subtree_control
-not ok 2 test_memcg_current
-ok 3 # skip test_memcg_min
-not ok 4 test_memcg_low
-not ok 5 test_memcg_high
-not ok 6 test_memcg_max
-not ok 7 test_memcg_oom_events
-ok 8 # skip test_memcg_swap_max
-not ok 9 test_memcg_sock
-not ok 10 test_memcg_oom_group_leaf_events
-not ok 11 test_memcg_oom_group_parent_events
-not ok 12 test_memcg_oom_group_score_events
+I'll send you a unified pull request for these changes.
 
-To correct this unexpected failure, this patch write the 'memory' to
-subtree_control of root to get a right result.
-
-Signed-off-by: Alex Shi <alex.shi@linux.alibaba.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Roman Gushchin <guro@fb.com>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
-Cc: Jay Kamat <jgkamat@fb.com>
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Reviewed-by: Roman Gushchin <guro@fb.com>
-Acked-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/cgroup/test_memcontrol.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 6f339882a6ca..c19a97dd02d4 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -1205,6 +1205,10 @@ int main(int argc, char **argv)
- 	if (cg_read_strstr(root, "cgroup.controllers", "memory"))
- 		ksft_exit_skip("memory controller isn't available\n");
- 
-+	if (cg_read_strstr(root, "cgroup.subtree_control", "memory"))
-+		if (cg_write(root, "cgroup.subtree_control", "+memory"))
-+			ksft_exit_skip("Failed to set memory controller\n");
-+
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
- 		switch (tests[i].fn(root)) {
- 		case KSFT_PASS:
--- 
-2.20.1
-
+--
+Thanks,
+Sasha
