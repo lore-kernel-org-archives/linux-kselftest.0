@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8574BC31E4B
-	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Jun 2019 20:35:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05939C31E4E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Jun 2019 20:35:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5CFCA2184C
-	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Jun 2019 20:35:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C79712084D
+	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Jun 2019 20:35:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1560544507;
-	bh=71CBmJBELF6Up+VwLkK6W7S5mNrL7k+xdUVn+a4juUc=;
+	s=default; t=1560544514;
+	bh=eAsMLk2fEpyKxTf8PkrwhRvO+6PMw7w9PlfyCtWB2fM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ssr66wPp8/z4Lc4etiZfI63U3sofTz1nH9RgwJPac6uc6C4k0cx9+QPHHsN4PE5Pz
-	 TDBXgxIaeLYF6mseEhTxIjx2i9xhItvSFVQghQSWw46sj2x7/g7VEr6hKiSIoNSUXw
-	 cUnUolClQlpaXmoHZwysOzBFqEFyDcNOfLf14oyk=
+	b=cedupqRdkCWurVZNLfbMaOueAd2rpFJruu3ph6GIeZstQLZ7CbtwB6r+6+OsGHy5I
+	 1ds36cgqj4W9s+ZHlbU8LYScvEycX3wo7UjsQZ841ZWTAlnJfj+lC1QVzI71QeU2Eq
+	 0dgYxecNFzLIuLjZ5kGnAgxxqjuYbEFVF5ivMT2o=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726338AbfFNUaM (ORCPT
+        id S1726344AbfFNUaL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 14 Jun 2019 16:30:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52736 "EHLO mail.kernel.org"
+        Fri, 14 Jun 2019 16:30:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52860 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727350AbfFNUaF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jun 2019 16:30:05 -0400
+        id S1726603AbfFNUaK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 14 Jun 2019 16:30:10 -0400
 Received: from sasha-vm.mshome.net (unknown [131.107.159.134])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1CCF12184C;
-        Fri, 14 Jun 2019 20:30:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 78C222184C;
+        Fri, 14 Jun 2019 20:30:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560544205;
-        bh=71CBmJBELF6Up+VwLkK6W7S5mNrL7k+xdUVn+a4juUc=;
+        s=default; t=1560544209;
+        bh=eAsMLk2fEpyKxTf8PkrwhRvO+6PMw7w9PlfyCtWB2fM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZjmJm1VBdsMg5zQ+y8KaiWZZkM8kmVS2pK3qQtWIw+n1KT491oXskYoxLTzXk5QPR
-         iKI9ePJTydAkmo9bxKDkMQ2duTQZpEElX+03MeeeBu1JjgAyxGYsiT0ShnfQryPESC
-         gwLgMknouTSANPyLyT94txsaRPyQdZNTBo8P7y6Y=
+        b=ODyTBqJnaKiGm8GGFSYT056OYVQNHB/m7Zm1VqRHKMH436DE29FuWu5UEsABEGy/k
+         JaADTETq8heUvw+rG38NEVLFfYWsUD4hVMmPeegyw6AvUF3kzte+bFupi0ajnvy5VZ
+         FQxQLtjaG0/GNH49gAKBI8Umsie6QwY+TUWawyBY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alex Shi <alex.shi@linux.alibaba.com>,
@@ -48,9 +48,9 @@ Cc:     Alex Shi <alex.shi@linux.alibaba.com>,
         linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.19 18/39] kselftest/cgroup: fix unexpected testing failure on test_core
-Date:   Fri, 14 Jun 2019 16:29:23 -0400
-Message-Id: <20190614202946.27385-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 19/39] kselftest/cgroup: fix incorrect test_core skip
+Date:   Fri, 14 Jun 2019 16:29:24 -0400
+Message-Id: <20190614202946.27385-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190614202946.27385-1-sashal@kernel.org>
 References: <20190614202946.27385-1-sashal@kernel.org>
@@ -65,20 +65,17 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Alex Shi <alex.shi@linux.alibaba.com>
 
-[ Upstream commit 00e38a5d753d7788852f81703db804a60a84c26e ]
+[ Upstream commit f97f3f8839eb9de5843066d80819884f7722c8c5 ]
 
-The cgroup testing relys on the root cgroup's subtree_control setting,
-If the 'memory' controller isn't set, some test cases will be failed
-as following:
+The test_core will skip the
+test_cgcore_no_internal_process_constraint_on_threads test case if the
+'cpu' controller missing in root's subtree_control. In fact we need to
+set the 'cpu' in subtree_control, to make the testing meaningful.
 
-$sudo  ./test_core
-not ok 1 test_cgcore_internal_process_constraint
-ok 2 test_cgcore_top_down_constraint_enable
-not ok 3 test_cgcore_top_down_constraint_disable
+./test_core
 ...
-
-To correct this unexpected failure, this patch write the 'memory' to
-subtree_control of root to get a right result.
+ok 4 # skip test_cgcore_no_internal_process_constraint_on_threads
+...
 
 Signed-off-by: Alex Shi <alex.shi@linux.alibaba.com>
 Cc: Shuah Khan <shuah@kernel.org>
@@ -93,25 +90,22 @@ Acked-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/cgroup/test_core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/cgroup/test_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-index be59f9c34ea2..d78f1c5366d3 100644
+index d78f1c5366d3..79053a4f4783 100644
 --- a/tools/testing/selftests/cgroup/test_core.c
 +++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -376,6 +376,11 @@ int main(int argc, char *argv[])
+@@ -198,7 +198,7 @@ static int test_cgcore_no_internal_process_constraint_on_threads(const char *roo
+ 	char *parent = NULL, *child = NULL;
  
- 	if (cg_find_unified_root(root, sizeof(root)))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
-+
-+	if (cg_read_strstr(root, "cgroup.subtree_control", "memory"))
-+		if (cg_write(root, "cgroup.subtree_control", "+memory"))
-+			ksft_exit_skip("Failed to set memory controller\n");
-+
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
- 		switch (tests[i].fn(root)) {
- 		case KSFT_PASS:
+ 	if (cg_read_strstr(root, "cgroup.controllers", "cpu") ||
+-	    cg_read_strstr(root, "cgroup.subtree_control", "cpu")) {
++	    cg_write(root, "cgroup.subtree_control", "+cpu")) {
+ 		ret = KSFT_SKIP;
+ 		goto cleanup;
+ 	}
 -- 
 2.20.1
 
