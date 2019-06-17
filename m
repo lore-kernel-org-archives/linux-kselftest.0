@@ -2,66 +2,32 @@ Return-Path: <SRS0=0pd1=UQ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FE7CC31E5B
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 16:57:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 797DDC31E5B
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 17:18:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 74C6920652
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 16:57:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HM9XZcRH"
+	by mail.kernel.org (Postfix) with ESMTP id 54E4620657
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 17:18:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728452AbfFQQ5u (ORCPT
+        id S1726091AbfFQRSW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 17 Jun 2019 12:57:50 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:33110 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727936AbfFQQ5t (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jun 2019 12:57:49 -0400
-Received: by mail-vs1-f65.google.com with SMTP id m8so6598727vsj.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2019 09:57:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=retltkRYeaxJ6adF3YGzOCqdGSJ+TnMcYlKByHm/5DU=;
-        b=HM9XZcRH7jNoUwKtDn/wkkMYYyg9wr6zjYQcvYAYvWF5M1tzrgs41DdFiwwTgvt1O5
-         KjOS0GHXaKxXHbuqb3yaHFY6s5m+GgG8jbRV5AKURRu+BUwOFgp4r3kAue00v9koQG1w
-         A3M5l+cF/ibNvE8yJCY4E6+A4Wcv9UTKgrtukbJgSFBngoBXKyC/nUsbJSqEshzxgU7v
-         OjkzG8cTM1db0z9+CHPRCzJf6yJOwQUirXZIKRWYCQ5D1XOdgX6CDWUq7ZrKtG2PzpGN
-         +3DiSEl9lQXDncbHpzuwreL+mokGyGGK7aL+x6DR/HBeGpJarIMjtc91XuMaEVI3t0qt
-         MUIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=retltkRYeaxJ6adF3YGzOCqdGSJ+TnMcYlKByHm/5DU=;
-        b=cuXuT1Ka796YTyKcOCGgogINaG3Kh3AfUpLKO4Fwvd5N0KM2o6J7ZKVWdK6A33GvGR
-         Ix3fwI0Q9mt8V9GYNXwfDh7Y/NU/wgoQ0zK818228dCf31FpZgT7z5dO9bqqKthrUd26
-         pLP04olclyQ/ZfWihGQYIykzNoM2MGXDP69EBNKfdze/Ksx7HwProukOGBG5ikplRryV
-         0btzMZQ4qaDkkClblySkljwyd1a0c1ZkrXpuPTBxcraADr5JC8n81OjAN7sCjyDkJThz
-         JHzn92F6AMCCH1nEQhZig0m8zfZaCIB51wHEdjNzEI3Dn9TLKW2LbxafqYPZt9/VIzex
-         Y0dQ==
-X-Gm-Message-State: APjAAAX0h7Qe/Ewgpj6s8a1C2KS9cqQk7q72BYS9mq5tqGJM/pLTy2bs
-        gNWl5XjKNwJ2pwnG+UrMVJAoG8NPtyS4aVNPVViTxw==
-X-Google-Smtp-Source: APXvYqzrhGSVJ7DV/F7d51q9N5ZE/3Gdj+PUpdVhrLQtXpA774FgTPlA9JMz0E4zBMsomoYTx9It+Pl+lwBwRCw5EpI=
-X-Received: by 2002:a67:de99:: with SMTP id r25mr60881073vsk.215.1560790668543;
- Mon, 17 Jun 2019 09:57:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1560339705.git.andreyknvl@google.com> <a7a2933bea5fe57e504891b7eec7e9432e5e1c1a.1560339705.git.andreyknvl@google.com>
- <20190617135636.GC1367@arrakis.emea.arm.com>
-In-Reply-To: <20190617135636.GC1367@arrakis.emea.arm.com>
-From:   Evgenii Stepanov <eugenis@google.com>
-Date:   Mon, 17 Jun 2019 09:57:36 -0700
-Message-ID: <CAFKCwrjJ+0ijNKa3ioOP7xa91QmZU0NhkO=tNC-Q_ThC69vTug@mail.gmail.com>
-Subject: Re: [PATCH v17 03/15] arm64: Introduce prctl() options to control the
- tagged user addresses ABI
-To:     Catalin Marinas <catalin.marinas@arm.com>
+        Mon, 17 Jun 2019 13:18:22 -0400
+Received: from foss.arm.com ([217.140.110.172]:57064 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726005AbfFQRSV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 17 Jun 2019 13:18:21 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A9B7128;
+        Mon, 17 Jun 2019 10:18:20 -0700 (PDT)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 08B543F246;
+        Mon, 17 Jun 2019 10:18:15 -0700 (PDT)
+Date:   Mon, 17 Jun 2019 18:18:13 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Evgenii Stepanov <eugenis@google.com>
 Cc:     Andrey Konovalov <andreyknvl@google.com>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Memory Management List <linux-mm@kvack.org>,
@@ -99,36 +65,57 @@ Cc:     Andrey Konovalov <andreyknvl@google.com>,
         Robin Murphy <robin.murphy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v17 03/15] arm64: Introduce prctl() options to control
+ the tagged user addresses ABI
+Message-ID: <20190617171813.GC34565@arrakis.emea.arm.com>
+References: <cover.1560339705.git.andreyknvl@google.com>
+ <a7a2933bea5fe57e504891b7eec7e9432e5e1c1a.1560339705.git.andreyknvl@google.com>
+ <20190617135636.GC1367@arrakis.emea.arm.com>
+ <CAFKCwrjJ+0ijNKa3ioOP7xa91QmZU0NhkO=tNC-Q_ThC69vTug@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFKCwrjJ+0ijNKa3ioOP7xa91QmZU0NhkO=tNC-Q_ThC69vTug@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 6:56 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Wed, Jun 12, 2019 at 01:43:20PM +0200, Andrey Konovalov wrote:
-> > From: Catalin Marinas <catalin.marinas@arm.com>
+On Mon, Jun 17, 2019 at 09:57:36AM -0700, Evgenii Stepanov wrote:
+> On Mon, Jun 17, 2019 at 6:56 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > On Wed, Jun 12, 2019 at 01:43:20PM +0200, Andrey Konovalov wrote:
+> > > From: Catalin Marinas <catalin.marinas@arm.com>
+> > >
+> > > It is not desirable to relax the ABI to allow tagged user addresses into
+> > > the kernel indiscriminately. This patch introduces a prctl() interface
+> > > for enabling or disabling the tagged ABI with a global sysctl control
+> > > for preventing applications from enabling the relaxed ABI (meant for
+> > > testing user-space prctl() return error checking without reconfiguring
+> > > the kernel). The ABI properties are inherited by threads of the same
+> > > application and fork()'ed children but cleared on execve().
+> > >
+> > > The PR_SET_TAGGED_ADDR_CTRL will be expanded in the future to handle
+> > > MTE-specific settings like imprecise vs precise exceptions.
+> > >
+> > > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 > >
-> > It is not desirable to relax the ABI to allow tagged user addresses into
-> > the kernel indiscriminately. This patch introduces a prctl() interface
-> > for enabling or disabling the tagged ABI with a global sysctl control
-> > for preventing applications from enabling the relaxed ABI (meant for
-> > testing user-space prctl() return error checking without reconfiguring
-> > the kernel). The ABI properties are inherited by threads of the same
-> > application and fork()'ed children but cleared on execve().
-> >
-> > The PR_SET_TAGGED_ADDR_CTRL will be expanded in the future to handle
-> > MTE-specific settings like imprecise vs precise exceptions.
-> >
-> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
->
-> A question for the user-space folk: if an application opts in to this
-> ABI, would you want the sigcontext.fault_address and/or siginfo.si_addr
-> to contain the tag? We currently clear it early in the arm64 entry.S but
-> we could find a way to pass it down if needed.
+> > A question for the user-space folk: if an application opts in to this
+> > ABI, would you want the sigcontext.fault_address and/or siginfo.si_addr
+> > to contain the tag? We currently clear it early in the arm64 entry.S but
+> > we could find a way to pass it down if needed.
+> 
+> For HWASan this would not be useful because we instrument memory
+> accesses with explicit checks anyway. For MTE, on the other hand, it
+> would be very convenient to know the fault address tag without
+> disassembling the code.
 
-For HWASan this would not be useful because we instrument memory
-accesses with explicit checks anyway. For MTE, on the other hand, it
-would be very convenient to know the fault address tag without
-disassembling the code.
+I could as this differently: does anything break if, once the user
+opts in to TBI, fault_address and/or si_addr have non-zero top byte?
+
+Alternatively, we could present the original FAR_EL1 register as a
+separate field as we do with ESR_EL1, independently of whether the user
+opted in to TBI or not.
+
+-- 
+Catalin
