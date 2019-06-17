@@ -2,60 +2,64 @@ Return-Path: <SRS0=0pd1=UQ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BE94C31E44
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 08:26:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6A7BC31E54
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 08:26:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D794321E71
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 08:26:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E5B622353
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 08:26:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F28MpQer"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uqINFloR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727597AbfFQI02 (ORCPT
+        id S1727678AbfFQI0s (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 17 Jun 2019 04:26:28 -0400
-Received: from mail-vk1-f202.google.com ([209.85.221.202]:53914 "EHLO
-        mail-vk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727485AbfFQI02 (ORCPT
+        Mon, 17 Jun 2019 04:26:48 -0400
+Received: from mail-qt1-f201.google.com ([209.85.160.201]:45949 "EHLO
+        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727664AbfFQI0r (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jun 2019 04:26:28 -0400
-Received: by mail-vk1-f202.google.com with SMTP id b13so4478788vkf.20
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2019 01:26:27 -0700 (PDT)
+        Mon, 17 Jun 2019 04:26:47 -0400
+Received: by mail-qt1-f201.google.com with SMTP id k8so8570354qtb.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2019 01:26:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=zNrbPgNoeDBUYkvT6WCexqCkglYQYBNMsP2F15bRgzw=;
-        b=F28MpQerLXJBLIWRmLuUF47CK1rSBKHh7j1mspgJvxgCYybn8PwQ2icrUPzaqHKgGS
-         mIu6S0C5yyN6Zp7XldkF4xD6ADXRhtF07Z6XHvYu+FHZ9BpcPtjJxLCah/daYKhStBrL
-         e/azebcPGRR+yjxTyj/+CmfyBaWB+WOK/5hBX1ABlx6ES4eRURKdAl7TuCUbbrUa+sjf
-         9OQaMEJ7JNvJccGJ6qWVmFF6O+lhb+vAocDwkUu3q6gqVcuoz5bWd98JWAnSkbeD9kFd
-         w/O94T1vg1eotXi2ejHuC1Kdzez1DiJfvULK/QbuJ+i3Z9G8uOEi+IwB+QVFDgZbeEoQ
-         +qdA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=upKJS7mvDrOGdiR22YXOIMfT67Z7sYkgnOz7jdyIx/M=;
+        b=uqINFloRHQ2K581xNH7a9nPKCRCRUPS98r4jMuKoChYHg//G+tbmShkygusTVklc99
+         JeBXfGf7/ushhngLyS8wr8Vw8WE/zJ4yol0wn8iKaCHK+Fmb66J1RNxBAhD7tuMWlMSY
+         HPOLZ2Icw4klAi3rMu1GmovCjypxUvt/fYPcb/PhfGYEV7D9/nFapF6U5GmkPEHtgi1t
+         qb0iW5FnZ6Qp0lLW+DjAJcCFTy/q98vCy1BjDV3VCHHvm5Q27T5AMS7xMcyK8xTUkNyW
+         /q+A9OdotlOyBCWgpPNnceCfXWnUXJ4yXGP6YIZot55IUMklFGnB0c2lqW+Bl74n+OO4
+         C67w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=zNrbPgNoeDBUYkvT6WCexqCkglYQYBNMsP2F15bRgzw=;
-        b=D/67J+xmyxDK5ifxUtpye00qKrq1QTV3hviuIMPm2v+hq0M0HrwG/RVsw5sEXOwKzj
-         nCrnDZ89x2OiWhj7G3cBVD5A/R4wOLzIU3h7Wsbyjwp0MGGIhv3qHL+DyZP50uXG7gFf
-         W2TwXqlCJwhK72eaPA//ub/1zhVI3rzWfAImWdc6oA55v9DONAPLgXeU6+K0BOGlgoDp
-         Wt6TM8ovDTv/l0Tgewn1a8MAUjrsdekMcvba6vGT/h7rogXtjotdzgfhpg1SwPQ3DVbw
-         4JnwLJT8mzutEzkmh6POvgYMMJ7kkzzkcqErQQLl916ke8yYpcuXmSwnDkJnKEWQxEpd
-         Mv9Q==
-X-Gm-Message-State: APjAAAUbv+dc3ntNeXvTTG6LwdHk4h1Iu4+1yVHDLNwPtleQE8XcozEW
-        mdJLTjYIRjvH63QoWTp1YGYv5QDeDmjOyysQgQQrCQ==
-X-Google-Smtp-Source: APXvYqyXlDV32pvvOQl7kYiQYbcmB9/A0bZjtVL0WweMM4MzW8RHZHRv/iYANe9ZkFTYpBh8wMtYLyjkF5jTpySuFxTL7Q==
-X-Received: by 2002:a67:c419:: with SMTP id c25mr46425824vsk.136.1560759986427;
- Mon, 17 Jun 2019 01:26:26 -0700 (PDT)
-Date:   Mon, 17 Jun 2019 01:25:55 -0700
-Message-Id: <20190617082613.109131-1-brendanhiggins@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=upKJS7mvDrOGdiR22YXOIMfT67Z7sYkgnOz7jdyIx/M=;
+        b=d095QR+TBu3aFgmyk8K5mJTZANhpeqrgv1hQoVRF45sQAmjKHWNZzrfdBvNXcT5yHM
+         /zSTX+QrSbbv7+5a/NW9tH7hUVPKxGDkrxqDpbHlHh6C2vyNXkitk5tCQmlNdgCP/20A
+         M6IKUuXv2JxAcRdvHJIIWSX0tol/pV0PZsDzYq7IkOhnJv3bXr9zj9Ma1QQzbqcorMfs
+         WJ2ODBQ2uW4XBzFKWUzOQHE7nWbnTi5oszyI6aQa3exUTS78N/ZzJN37GEyH3PEy1mkR
+         LFgplNN6xUbn3l3lFjDsT1egLs5K6IkMRAIrV5AUHCoPUGycncjYQ4TxqQjhZC00ZXHX
+         9/Qw==
+X-Gm-Message-State: APjAAAUCEwr8ej594sjRoF3VQu7UE0bEbAW3v5FXJZgyypE0M6jx3V2y
+        tWhUgAuqUTe2makNGIa9nOQek+tEs12HKjglA6O9TA==
+X-Google-Smtp-Source: APXvYqxm7GfOlmyVpvf8c8yC3VBJMqZYOx7sytpKz66+pBhLTFnc8+3jzfFPYB5t8Yq4SHG3IaZq6yuY0M9EoadEmzaMaQ==
+X-Received: by 2002:a0c:d40d:: with SMTP id t13mr20296372qvh.175.1560760005243;
+ Mon, 17 Jun 2019 01:26:45 -0700 (PDT)
+Date:   Mon, 17 Jun 2019 01:25:57 -0700
+In-Reply-To: <20190617082613.109131-1-brendanhiggins@google.com>
+Message-Id: <20190617082613.109131-3-brendanhiggins@google.com>
 Mime-Version: 1.0
+References: <20190617082613.109131-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH v5 00/18] kunit: introduce KUnit, the Linux kernel unit
- testing framework
+Subject: [PATCH v5 02/18] kunit: test: add test resource management API
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
         jpoimboe@redhat.com, keescook@google.com,
@@ -80,157 +84,282 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## TL;DR
+Create a common API for test managed resources like memory and test
+objects. A lot of times a test will want to set up infrastructure to be
+used in test cases; this could be anything from just wanting to allocate
+some memory to setting up a driver stack; this defines facilities for
+creating "test resources" which are managed by the test infrastructure
+and are automatically cleaned up at the conclusion of the test.
 
-A not so quick follow-up to Stephen's suggestions on PATCH v4. Nothing
-that really changes any functionality or usage with the minor exception
-of a couple public functions that Stephen asked me to rename.
-Nevertheless, a good deal of clean up and fixes. See changes below.
+Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+---
+Changes Since Last Revision:
+ - Found and fixed bug in resource deallocation logic. Bug was
+   discovered as a result of making a change suggested by Stephen Boyd.
+   This does not substantially change how any of the code works
+   conceptually.
+---
+ include/kunit/test.h | 110 +++++++++++++++++++++++++++++++++++++++++++
+ kunit/test.c         |  95 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 205 insertions(+)
 
-As for our current status, right now we got Reviewed-bys on all patches
-except:
-
-- [PATCH v5 08/18] objtool: add kunit_try_catch_throw to the noreturn
-  list
-
-However, it would probably be good to get reviews/acks from the
-subsystem maintainers on:
-
-- [PATCH v5 06/18] kbuild: enable building KUnit
-- [PATCH v5 08/18] objtool: add kunit_try_catch_throw to the noreturn
-  list
-- [PATCH v5 15/18] Documentation: kunit: add documentation for KUnit
-- [PATCH v5 17/18] kernel/sysctl-test: Add null pointer test for
-  sysctl.c:proc_dointvec()
-- [PATCH v5 18/18] MAINTAINERS: add proc sysctl KUnit test to PROC
-  SYSCTL section
-
-Other than that, I think we should be good to go.
-
-One last thing, I updated the background to include my thoughts on KUnit
-vs. in kernel testing with kselftest in the background sections as
-suggested by Frank in the discussion on PATCH v2.
-
-## Background
-
-This patch set proposes KUnit, a lightweight unit testing and mocking
-framework for the Linux kernel.
-
-Unlike Autotest and kselftest, KUnit is a true unit testing framework;
-it does not require installing the kernel on a test machine or in a VM
-(however, KUnit still allows you to run tests on test machines or in VMs
-if you want[1]) and does not require tests to be written in userspace
-running on a host kernel. Additionally, KUnit is fast: From invocation
-to completion KUnit can run several dozen tests in under a second.
-Currently, the entire KUnit test suite for KUnit runs in under a second
-from the initial invocation (build time excluded).
-
-KUnit is heavily inspired by JUnit, Python's unittest.mock, and
-Googletest/Googlemock for C++. KUnit provides facilities for defining
-unit test cases, grouping related test cases into test suites, providing
-common infrastructure for running tests, mocking, spying, and much more.
-
-### But wait! Doesn't kselftest support in kernel testing?!
-
-In a previous version of this patchset Frank pointed out that kselftest
-already supports writing a test that resides in the kernel using the
-test module feature[2]. LWN did a really great summary on this
-discussion here[3].
-
-Kselftest has a feature that allows a test module to be loaded into a
-kernel using the kselftest framework; this does allow someone to write
-tests against kernel code not directly exposed to userland; however, it
-does not provide much of a framework around how to structure the tests.
-The kselftest test module feature just provides a header which has a
-standardized way of reporting test failures, and then provides
-infrastructure to load and run the tests using the kselftest test
-harness.
-
-The kselftest test module does not seem to be opinionated at all in
-regards to how tests are structured, how they check for failures, how
-tests are organized. Even in the method it provides for reporting
-failures is pretty simple; it doesn't have any more advanced failure
-reporting or logging features. Given what's there, I think it is fair to
-say that it is not actually a framework, but a feature that makes it
-possible for someone to do some checks in kernel space.
-
-Furthermore, kselftest test module has very few users. I checked for all
-the tests that use it using the following grep command:
-
-grep -Hrn -e 'kselftest_module\.h'
-
-and only got three results: lib/test_strscpy.c, lib/test_printf.c, and
-lib/test_bitmap.c.
-
-So despite kselftest test module's existence, there really is no feature
-overlap between kselftest and KUnit, save one: that you can use either
-to write an in-kernel test, but this is a very small feature in
-comparison to everything that KUnit allows you to do. KUnit is a full
-x-unit style unit testing framework, whereas kselftest looks a lot more
-like an end-to-end/functional testing framework, with a feature that
-makes it possible to write in-kernel tests.
-
-### What's so special about unit testing?
-
-A unit test is supposed to test a single unit of code in isolation,
-hence the name. There should be no dependencies outside the control of
-the test; this means no external dependencies, which makes tests orders
-of magnitudes faster. Likewise, since there are no external dependencies,
-there are no hoops to jump through to run the tests. Additionally, this
-makes unit tests deterministic: a failing unit test always indicates a
-problem. Finally, because unit tests necessarily have finer granularity,
-they are able to test all code paths easily solving the classic problem
-of difficulty in exercising error handling code.
-
-### Is KUnit trying to replace other testing frameworks for the kernel?
-
-No. Most existing tests for the Linux kernel are end-to-end tests, which
-have their place. A well tested system has lots of unit tests, a
-reasonable number of integration tests, and some end-to-end tests. KUnit
-is just trying to address the unit test space which is currently not
-being addressed.
-
-### More information on KUnit
-
-There is a bunch of documentation near the end of this patch set that
-describes how to use KUnit and best practices for writing unit tests.
-For convenience I am hosting the compiled docs here[4].
-
-Additionally for convenience, I have applied these patches to a
-branch[5]. The repo may be cloned with:
-git clone https://kunit.googlesource.com/linux
-This patchset is on the kunit/rfc/v5.2-rc4/v5 branch.
-
-## Changes Since Last Version
-
-Aside from a couple public function renames, there isn't really anything
-in here that changes any functionality.
-
-- Went through and fixed a couple of anti-patterns suggested by Stephen
-  Boyd. Things like:
-  - Dropping an else clause at the end of a function.
-  - Dropping the comma on the closing sentinel, `{}`, of a list.
-- Inlines a bunch of functions in the test case running logic in patch
-  01/18 to make it more readable as suggested by Stephen Boyd
-- Found and fixed bug in resource deallocation logic in patch 02/18. Bug
-  was discovered as a result of making a change suggested by Stephen
-  Boyd. This does not substantially change how any of the code works
-  conceptually.
-- Renamed new_string_stream() to alloc_string_stream() as suggested by
-  Stephen Boyd.
-- Made string-stream a KUnit managed object - based on a suggestion made
-  by Stephen Boyd.
-- Renamed kunit_new_stream() to alloc_kunit_stream() as suggested by
-  Stephen Boyd.
-- Removed the ability to set log level after allocating a kunit_stream,
-  as suggested by Stephen Boyd.
-
-[1] https://google.github.io/kunit-docs/third_party/kernel/docs/usage.html#kunit-on-non-uml-architectures
-[2] https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html#test-module
-[3] https://lwn.net/Articles/790235/
-[4] https://google.github.io/kunit-docs/third_party/kernel/docs/
-[5] https://kunit.googlesource.com/linux/+/kunit/rfc/v5.2-rc4/v5
-
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 8476b3d371cb9..27bd95b6b5523 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -10,6 +10,70 @@
+ #define _KUNIT_TEST_H
+ 
+ #include <linux/types.h>
++#include <linux/slab.h>
++
++struct kunit_resource;
++
++typedef int (*kunit_resource_init_t)(struct kunit_resource *, void *);
++typedef void (*kunit_resource_free_t)(struct kunit_resource *);
++
++/**
++ * struct kunit_resource - represents a *test managed resource*
++ * @allocation: for the user to store arbitrary data.
++ * @free: a user supplied function to free the resource. Populated by
++ * kunit_alloc_resource().
++ *
++ * Represents a *test managed resource*, a resource which will automatically be
++ * cleaned up at the end of a test case.
++ *
++ * Example:
++ *
++ * .. code-block:: c
++ *
++ *	struct kunit_kmalloc_params {
++ *		size_t size;
++ *		gfp_t gfp;
++ *	};
++ *
++ *	static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
++ *	{
++ *		struct kunit_kmalloc_params *params = context;
++ *		res->allocation = kmalloc(params->size, params->gfp);
++ *
++ *		if (!res->allocation)
++ *			return -ENOMEM;
++ *
++ *		return 0;
++ *	}
++ *
++ *	static void kunit_kmalloc_free(struct kunit_resource *res)
++ *	{
++ *		kfree(res->allocation);
++ *	}
++ *
++ *	void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
++ *	{
++ *		struct kunit_kmalloc_params params;
++ *		struct kunit_resource *res;
++ *
++ *		params.size = size;
++ *		params.gfp = gfp;
++ *
++ *		res = kunit_alloc_resource(test, kunit_kmalloc_init,
++ *			kunit_kmalloc_free, &params);
++ *		if (res)
++ *			return res->allocation;
++ *
++ *		return NULL;
++ *	}
++ */
++struct kunit_resource {
++	void *allocation;
++	kunit_resource_free_t free;
++
++	/* private: internal use only. */
++	struct list_head node;
++};
+ 
+ struct kunit;
+ 
+@@ -103,6 +167,7 @@ struct kunit {
+ 	const char *name; /* Read only after initialization! */
+ 	spinlock_t lock; /* Gaurds all mutable test state. */
+ 	bool success; /* Protected by lock. */
++	struct list_head resources; /* Protected by lock. */
+ };
+ 
+ void kunit_init_test(struct kunit *test, const char *name);
+@@ -123,6 +188,51 @@ int kunit_run_tests(struct kunit_module *module);
+ 		} \
+ 		late_initcall(module_kunit_init##module)
+ 
++/**
++ * kunit_alloc_resource() - Allocates a *test managed resource*.
++ * @test: The test context object.
++ * @init: a user supplied function to initialize the resource.
++ * @free: a user supplied function to free the resource.
++ * @context: for the user to pass in arbitrary data to the init function.
++ *
++ * Allocates a *test managed resource*, a resource which will automatically be
++ * cleaned up at the end of a test case. See &struct kunit_resource for an
++ * example.
++ */
++struct kunit_resource *kunit_alloc_resource(struct kunit *test,
++					    kunit_resource_init_t init,
++					    kunit_resource_free_t free,
++					    void *context);
++
++void kunit_free_resource(struct kunit *test, struct kunit_resource *res);
++
++/**
++ * kunit_kmalloc() - Like kmalloc() except the allocation is *test managed*.
++ * @test: The test context object.
++ * @size: The size in bytes of the desired memory.
++ * @gfp: flags passed to underlying kmalloc().
++ *
++ * Just like `kmalloc(...)`, except the allocation is managed by the test case
++ * and is automatically cleaned up after the test case concludes. See &struct
++ * kunit_resource for more information.
++ */
++void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp);
++
++/**
++ * kunit_kzalloc() - Just like kunit_kmalloc(), but zeroes the allocation.
++ * @test: The test context object.
++ * @size: The size in bytes of the desired memory.
++ * @gfp: flags passed to underlying kmalloc().
++ *
++ * See kzalloc() and kunit_kmalloc() for more information.
++ */
++static inline void *kunit_kzalloc(struct kunit *test, size_t size, gfp_t gfp)
++{
++	return kunit_kmalloc(test, size, gfp | __GFP_ZERO);
++}
++
++void kunit_cleanup(struct kunit *test);
++
+ void __printf(3, 4) kunit_printk(const char *level,
+ 				 const struct kunit *test,
+ 				 const char *fmt, ...);
+diff --git a/kunit/test.c b/kunit/test.c
+index d05d254f1521f..53838f5394303 100644
+--- a/kunit/test.c
++++ b/kunit/test.c
+@@ -142,6 +142,7 @@ static void kunit_print_test_case_ok_not_ok(struct kunit_case *test_case,
+ void kunit_init_test(struct kunit *test, const char *name)
+ {
+ 	spin_lock_init(&test->lock);
++	INIT_LIST_HEAD(&test->resources);
+ 	test->name = name;
+ 	test->success = true;
+ }
+@@ -172,6 +173,8 @@ static void kunit_run_case(struct kunit_module *module,
+ 	if (module->exit)
+ 		module->exit(&test);
+ 
++	kunit_cleanup(&test);
++
+ 	test_case->success = kunit_get_success(&test);
+ }
+ 
+@@ -192,6 +195,98 @@ int kunit_run_tests(struct kunit_module *module)
+ 	return 0;
+ }
+ 
++struct kunit_resource *kunit_alloc_resource(struct kunit *test,
++					    kunit_resource_init_t init,
++					    kunit_resource_free_t free,
++					    void *context)
++{
++	struct kunit_resource *res;
++	unsigned long flags;
++	int ret;
++
++	res = kzalloc(sizeof(*res), GFP_KERNEL);
++	if (!res)
++		return NULL;
++
++	ret = init(res, context);
++	if (ret)
++		return NULL;
++
++	res->free = free;
++	spin_lock_irqsave(&test->lock, flags);
++	list_add_tail(&res->node, &test->resources);
++	spin_unlock_irqrestore(&test->lock, flags);
++
++	return res;
++}
++
++void kunit_free_resource(struct kunit *test, struct kunit_resource *res)
++{
++	res->free(res);
++	list_del(&res->node);
++	kfree(res);
++}
++
++struct kunit_kmalloc_params {
++	size_t size;
++	gfp_t gfp;
++};
++
++static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
++{
++	struct kunit_kmalloc_params *params = context;
++
++	res->allocation = kmalloc(params->size, params->gfp);
++	if (!res->allocation)
++		return -ENOMEM;
++
++	return 0;
++}
++
++static void kunit_kmalloc_free(struct kunit_resource *res)
++{
++	kfree(res->allocation);
++}
++
++void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
++{
++	struct kunit_kmalloc_params params;
++	struct kunit_resource *res;
++
++	params.size = size;
++	params.gfp = gfp;
++
++	res = kunit_alloc_resource(test,
++				   kunit_kmalloc_init,
++				   kunit_kmalloc_free,
++				   &params);
++
++	if (res)
++		return res->allocation;
++
++	return NULL;
++}
++
++void kunit_cleanup(struct kunit *test)
++{
++	struct kunit_resource *resource, *resource_safe;
++	unsigned long flags;
++
++	spin_lock_irqsave(&test->lock, flags);
++	/*
++	 * test->resources is a stack - each allocation must be freed in the
++	 * reverse order from which it was added since one resource may depend
++	 * on another for its entire lifetime.
++	 */
++	list_for_each_entry_safe_reverse(resource,
++					 resource_safe,
++					 &test->resources,
++					 node) {
++		kunit_free_resource(test, resource);
++	}
++	spin_unlock_irqrestore(&test->lock, flags);
++}
++
+ void kunit_printk(const char *level,
+ 		  const struct kunit *test,
+ 		  const char *fmt, ...)
 -- 
 2.22.0.410.gd8fdbe21b5-goog
 
