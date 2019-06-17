@@ -8,59 +8,58 @@ X-Spam-Status: No, score=-16.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 109A9C31E54
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 08:28:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7554C31E53
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 08:28:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D3BF2223B9
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 08:28:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 688B62238C
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 08:28:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="epdmDpOr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pxQFw+R+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727772AbfFQI2n (ORCPT
+        id S1727766AbfFQI2q (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 17 Jun 2019 04:28:43 -0400
-Received: from mail-ot1-f73.google.com ([209.85.210.73]:36989 "EHLO
-        mail-ot1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727691AbfFQI0v (ORCPT
+        Mon, 17 Jun 2019 04:28:46 -0400
+Received: from mail-pl1-f202.google.com ([209.85.214.202]:47629 "EHLO
+        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727323AbfFQI0m (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jun 2019 04:26:51 -0400
-Received: by mail-ot1-f73.google.com with SMTP id d62so4603792otb.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2019 01:26:50 -0700 (PDT)
+        Mon, 17 Jun 2019 04:26:42 -0400
+Received: by mail-pl1-f202.google.com with SMTP id 59so5584622plb.14
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2019 01:26:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=gZ+9xC5KPPhv369oCZ1vxt4+jN+Anpbdk6WP0wSiLWo=;
-        b=epdmDpOr2t1eNHyC3/MYITA8hScEY7QYuY4ZFPlm5uuZWlGMPtMox1mtfCn2AwFhDe
-         GIY/3wif/tyaEbw0lsVTxUTEWyGOM+6nmz8t2m8Stni7C+TyAZQ0Qs9wP41O8r6M+WEk
-         s1OhP7f49nBF8IqYZYqW6PqKKvUMsgGMZ123JlVT0LKucnHEjwsfAeysqZBzi5JpxLlP
-         iz9nl07MsqJwVU1SzO1vlJCPGrhRk05NoSiTDrJsoD7hYZgORuurCiMzBFmpa4oykzDN
-         vjNpUcsjfy9horEsseCfcB3B9rpxaBXdmoul1zJNAVEfIItMB1oJGnYjI5jC9XJckKPQ
-         JzoQ==
+        bh=c8lNi0PVX+vhUoM2pApH4POTzfRz8BC1BIATthHFevw=;
+        b=pxQFw+R+2w7LHRo9fMVDWFvDf6rYji02kvB5++2Rk/Ih7CGQrhRPI/Dw30uflXJXgu
+         ne1GpieQWsR96E/ZHJtLBYVKvvqT+WylDFesjIwoWu+cYgy5uDqMIpQ2jEKfHaWo/koO
+         tnJaHQuUn2xcTBL58TUYjJgxcMOAehtMuBni9tYFSokj3CUB+XnNEQ3uUR+kva2wNW+C
+         ssSK5cM6byo8qkn042m6lId3YzMpCsL43DqBYasQYCn04GF1RS76DFmgfcK80fC0Fcrg
+         CIoJqTwArbYo7EwCwu+8MX5ZL4M1lZq5NLjzXgWe0/O5nzzRMfCNqyjBV6krja9GP6s1
+         gWLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=gZ+9xC5KPPhv369oCZ1vxt4+jN+Anpbdk6WP0wSiLWo=;
-        b=gBtTU2w/x2AAXxAGsjmsUPeUGCcSs1Hz9AlvqyUDZYdDxfbd3StxXPVUhmfW4LcHau
-         96X7LW1XhnRci1/WrmWijU/UjuEhdTz0X8+mfKSslKlFrKbp4nhrMVpTOdhgCSaNO6uz
-         PJrK08gxSPlPuK/ibyGoKM1LQIuZunNjAFNGYuG8agiqVI05E6R9EdJpZtZKrzR9DJ1l
-         HOhClU8l9SNWbZpL8V+RpwKJlDAjVIgFdolbFZBuWkruW4pfznrhmvBb72ZSz1RHSZEq
-         li8XrFkCNiCJSnBwP4g9bvfTOHT5wagSrzvD1DShVAro7pqfcbi8zvmcQi6GPy2bQ9iF
-         MVqQ==
-X-Gm-Message-State: APjAAAUCi9FC9VmknjllDFBhiVRVveJSZjW4us/jko6f3G8EyE1xXH2b
-        G639j0xffoN4pe9PXRMFa/mWf4qG3ISmOO9RcDIX9g==
-X-Google-Smtp-Source: APXvYqyMn6qZKBhsMqKJ2JMa3ygLrdqQlx2RNuES7sUG5Tsk066321j5G+NbiQ1zQmpd+d8jWGh9EF5uXNDvbrZIeQgXNg==
-X-Received: by 2002:a9d:2ac4:: with SMTP id e62mr53413718otb.173.1560760010079;
- Mon, 17 Jun 2019 01:26:50 -0700 (PDT)
-Date:   Mon, 17 Jun 2019 01:25:58 -0700
+        bh=c8lNi0PVX+vhUoM2pApH4POTzfRz8BC1BIATthHFevw=;
+        b=pubqRvTx6F1TB6aBbIKUE5Kt5SsE34Ocet+gTVsL4ZRvwDu0Z3gPA6GkfLSChaFYAZ
+         UxOe4UNPzzdrCj6XUn3waxi8BXr9V78GdXm/Y9NUsXhXUG3pzHZ5EStEHzp2U51FG0Vv
+         AIWaLwUk3XwowjUC0ZMn65u0WugOiLIboxItBv6B7assS62YLUmc06vUcgA435o+jW9K
+         H7vCdYnQ5LvilQv5nU01M7gjEqoK/hvXJMOkkDFuVd+AI62wSTn7fMWl7USOI5WwZ0GX
+         tXDc7ZTqsvLDB5lNpg38tunFusltttxuvpOj/QaK6rhn+mprwNFDJ2KKJLjiC0MR3/Mp
+         m8AQ==
+X-Gm-Message-State: APjAAAXLBaP0DYbgbHIGbGsXAemw2/RAVyHUL67G0Ybd18CER6zBXx7o
+        C1KnN0DMv2S/6ZZC3ZQDjjtcIpMvKIQyrnQ8VCTcJw==
+X-Google-Smtp-Source: APXvYqzS76Li/e62Ov81F4Ql7E4pNFquk02WLzEZKfWBTbT9jVHGocBenqy78Ve+RiglHzVj5YqtN2uSo5XhTqbsvQsp9A==
+X-Received: by 2002:a65:41c6:: with SMTP id b6mr47059108pgq.399.1560760000905;
+ Mon, 17 Jun 2019 01:26:40 -0700 (PDT)
+Date:   Mon, 17 Jun 2019 01:25:56 -0700
 In-Reply-To: <20190617082613.109131-1-brendanhiggins@google.com>
-Message-Id: <20190617082613.109131-4-brendanhiggins@google.com>
+Message-Id: <20190617082613.109131-2-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20190617082613.109131-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH v5 03/18] kunit: test: add string_stream a std::stream like
- string builder
+Subject: [PATCH v5 01/18] kunit: test: add KUnit test runner core
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
         jpoimboe@redhat.com, keescook@google.com,
@@ -85,247 +84,446 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A number of test features need to do pretty complicated string printing
-where it may not be possible to rely on a single preallocated string
-with parameters.
+Add core facilities for defining unit tests; this provides a common way
+to define test cases, functions that execute code which is under test
+and determine whether the code under test behaves as expected; this also
+provides a way to group together related test cases in test suites (here
+we call them test_modules).
 
-So provide a library for constructing the string as you go similar to
-C++'s std::string.
+Just define test cases and how to execute them for now; setting
+expectations on code will be defined later.
 
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
 ---
 Changes Since Last Revision:
- - Renamed new_string_stream() to alloc_string_stream() as suggested by
-   Stephen Boyd.
- - Made string-stream a KUnit managed object - based on a suggestion
-   made by Stephen Boyd.
- - Made a number of other small changes like renaming parameters as
-   suggested by Stephen Boyd.
+ - Mostly minor fixes suggested by Stephen Boyd
+ - Biggest change inlines a bunch of functions in the test case running
+   logic to make it more readable as suggested by Stephen Boyd
 ---
- include/kunit/string-stream.h |  49 ++++++++++++
- kunit/Makefile                |   3 +-
- kunit/string-stream.c         | 147 ++++++++++++++++++++++++++++++++++
- 3 files changed, 198 insertions(+), 1 deletion(-)
- create mode 100644 include/kunit/string-stream.h
- create mode 100644 kunit/string-stream.c
+ include/kunit/test.h | 161 +++++++++++++++++++++++++++++++++
+ kunit/Kconfig        |  17 ++++
+ kunit/Makefile       |   1 +
+ kunit/test.c         | 210 +++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 389 insertions(+)
+ create mode 100644 include/kunit/test.h
+ create mode 100644 kunit/Kconfig
+ create mode 100644 kunit/Makefile
+ create mode 100644 kunit/test.c
 
-diff --git a/include/kunit/string-stream.h b/include/kunit/string-stream.h
+diff --git a/include/kunit/test.h b/include/kunit/test.h
 new file mode 100644
-index 0000000000000..0552a05781afe
+index 0000000000000..8476b3d371cb9
 --- /dev/null
-+++ b/include/kunit/string-stream.h
-@@ -0,0 +1,49 @@
++++ b/include/kunit/test.h
+@@ -0,0 +1,161 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * C++ stream style string builder used in KUnit for building messages.
++ * Base unit test (KUnit) API.
 + *
 + * Copyright (C) 2019, Google LLC.
 + * Author: Brendan Higgins <brendanhiggins@google.com>
 + */
 +
-+#ifndef _KUNIT_STRING_STREAM_H
-+#define _KUNIT_STRING_STREAM_H
++#ifndef _KUNIT_TEST_H
++#define _KUNIT_TEST_H
 +
 +#include <linux/types.h>
-+#include <linux/spinlock.h>
-+#include <linux/kref.h>
-+#include <stdarg.h>
-+
-+struct string_stream_fragment {
-+	struct list_head node;
-+	char *fragment;
-+};
-+
-+struct string_stream {
-+	size_t length;
-+	struct list_head fragments;
-+	/* length and fragments are protected by this lock */
-+	spinlock_t lock;
-+};
 +
 +struct kunit;
 +
-+struct string_stream *alloc_string_stream(struct kunit *test);
++/**
++ * struct kunit_case - represents an individual test case.
++ * @run_case: the function representing the actual test case.
++ * @name: the name of the test case.
++ *
++ * A test case is a function with the signature, ``void (*)(struct kunit *)``
++ * that makes expectations (see KUNIT_EXPECT_TRUE()) about code under test. Each
++ * test case is associated with a &struct kunit_module and will be run after the
++ * module's init function and followed by the module's exit function.
++ *
++ * A test case should be static and should only be created with the KUNIT_CASE()
++ * macro; additionally, every array of test cases should be terminated with an
++ * empty test case.
++ *
++ * Example:
++ *
++ * .. code-block:: c
++ *
++ *	void add_test_basic(struct kunit *test)
++ *	{
++ *		KUNIT_EXPECT_EQ(test, 1, add(1, 0));
++ *		KUNIT_EXPECT_EQ(test, 2, add(1, 1));
++ *		KUNIT_EXPECT_EQ(test, 0, add(-1, 1));
++ *		KUNIT_EXPECT_EQ(test, INT_MAX, add(0, INT_MAX));
++ *		KUNIT_EXPECT_EQ(test, -1, add(INT_MAX, INT_MIN));
++ *	}
++ *
++ *	static struct kunit_case example_test_cases[] = {
++ *		KUNIT_CASE(add_test_basic),
++ *		{}
++ *	};
++ *
++ */
++struct kunit_case {
++	void (*run_case)(struct kunit *test);
++	const char *name;
 +
-+void string_stream_get(struct string_stream *stream);
++	/* private: internal use only. */
++	bool success;
++};
 +
-+int string_stream_put(struct string_stream *stream);
++/**
++ * KUNIT_CASE - A helper for creating a &struct kunit_case
++ * @test_name: a reference to a test case function.
++ *
++ * Takes a symbol for a function representing a test case and creates a
++ * &struct kunit_case object from it. See the documentation for
++ * &struct kunit_case for an example on how to use it.
++ */
++#define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
 +
-+int string_stream_add(struct string_stream *stream, const char *fmt, ...);
++/**
++ * struct kunit_module - describes a related collection of &struct kunit_case s.
++ * @name: the name of the test. Purely informational.
++ * @init: called before every test case.
++ * @exit: called after every test case.
++ * @test_cases: a null terminated array of test cases.
++ *
++ * A kunit_module is a collection of related &struct kunit_case s, such that
++ * @init is called before every test case and @exit is called after every test
++ * case, similar to the notion of a *test fixture* or a *test class* in other
++ * unit testing frameworks like JUnit or Googletest.
++ *
++ * Every &struct kunit_case must be associated with a kunit_module for KUnit to
++ * run it.
++ */
++struct kunit_module {
++	const char name[256];
++	int (*init)(struct kunit *test);
++	void (*exit)(struct kunit *test);
++	struct kunit_case *test_cases;
++};
 +
-+int string_stream_vadd(struct string_stream *stream,
-+		       const char *fmt,
-+		       va_list args);
++/**
++ * struct kunit - represents a running instance of a test.
++ * @priv: for user to store arbitrary data. Commonly used to pass data created
++ * in the init function (see &struct kunit_module).
++ *
++ * Used to store information about the current context under which the test is
++ * running. Most of this data is private and should only be accessed indirectly
++ * via public functions; the one exception is @priv which can be used by the
++ * test writer to store arbitrary data.
++ */
++struct kunit {
++	void *priv;
 +
-+char *string_stream_get_string(struct string_stream *stream);
++	/* private: internal use only. */
++	const char *name; /* Read only after initialization! */
++	spinlock_t lock; /* Gaurds all mutable test state. */
++	bool success; /* Protected by lock. */
++};
 +
-+void string_stream_clear(struct string_stream *stream);
++void kunit_init_test(struct kunit *test, const char *name);
 +
-+bool string_stream_is_empty(struct string_stream *stream);
++int kunit_run_tests(struct kunit_module *module);
 +
-+#endif /* _KUNIT_STRING_STREAM_H */
-diff --git a/kunit/Makefile b/kunit/Makefile
-index 5efdc4dea2c08..275b565a0e81f 100644
---- a/kunit/Makefile
-+++ b/kunit/Makefile
-@@ -1 +1,2 @@
--obj-$(CONFIG_KUNIT) +=			test.o
-+obj-$(CONFIG_KUNIT) +=			test.o \
-+					string-stream.o
-diff --git a/kunit/string-stream.c b/kunit/string-stream.c
++/**
++ * module_test() - used to register a &struct kunit_module with KUnit.
++ * @module: a statically allocated &struct kunit_module.
++ *
++ * Registers @module with the test framework. See &struct kunit_module for more
++ * information.
++ */
++#define module_test(module) \
++		static int module_kunit_init##module(void) \
++		{ \
++			return kunit_run_tests(&module); \
++		} \
++		late_initcall(module_kunit_init##module)
++
++void __printf(3, 4) kunit_printk(const char *level,
++				 const struct kunit *test,
++				 const char *fmt, ...);
++
++/**
++ * kunit_info() - Prints an INFO level message associated with the current test.
++ * @test: The test context object.
++ * @fmt: A printk() style format string.
++ *
++ * Prints an info level message associated with the test module being run. Takes
++ * a variable number of format parameters just like printk().
++ */
++#define kunit_info(test, fmt, ...) \
++		kunit_printk(KERN_INFO, test, fmt, ##__VA_ARGS__)
++
++/**
++ * kunit_warn() - Prints a WARN level message associated with the current test.
++ * @test: The test context object.
++ * @fmt: A printk() style format string.
++ *
++ * Prints a warning level message.
++ */
++#define kunit_warn(test, fmt, ...) \
++		kunit_printk(KERN_WARNING, test, fmt, ##__VA_ARGS__)
++
++/**
++ * kunit_err() - Prints an ERROR level message associated with the current test.
++ * @test: The test context object.
++ * @fmt: A printk() style format string.
++ *
++ * Prints an error level message.
++ */
++#define kunit_err(test, fmt, ...) \
++		kunit_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
++
++#endif /* _KUNIT_TEST_H */
+diff --git a/kunit/Kconfig b/kunit/Kconfig
 new file mode 100644
-index 0000000000000..0463a92dad74b
+index 0000000000000..330ae83527c23
 --- /dev/null
-+++ b/kunit/string-stream.c
-@@ -0,0 +1,147 @@
++++ b/kunit/Kconfig
+@@ -0,0 +1,17 @@
++#
++# KUnit base configuration
++#
++
++menu "KUnit support"
++
++config KUNIT
++	bool "Enable support for unit tests (KUnit)"
++	help
++	  Enables support for kernel unit tests (KUnit), a lightweight unit
++	  testing and mocking framework for the Linux kernel. These tests are
++	  able to be run locally on a developer's workstation without a VM or
++	  special hardware when using UML. Can also be used on most other
++	  architectures. For more information, please see
++	  Documentation/dev-tools/kunit/.
++
++endmenu
+diff --git a/kunit/Makefile b/kunit/Makefile
+new file mode 100644
+index 0000000000000..5efdc4dea2c08
+--- /dev/null
++++ b/kunit/Makefile
+@@ -0,0 +1 @@
++obj-$(CONFIG_KUNIT) +=			test.o
+diff --git a/kunit/test.c b/kunit/test.c
+new file mode 100644
+index 0000000000000..d05d254f1521f
+--- /dev/null
++++ b/kunit/test.c
+@@ -0,0 +1,210 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * C++ stream style string builder used in KUnit for building messages.
++ * Base unit test (KUnit) API.
 + *
 + * Copyright (C) 2019, Google LLC.
 + * Author: Brendan Higgins <brendanhiggins@google.com>
 + */
 +
-+#include <linux/list.h>
-+#include <linux/slab.h>
-+#include <kunit/string-stream.h>
++#include <linux/sched/debug.h>
 +#include <kunit/test.h>
 +
-+int string_stream_vadd(struct string_stream *stream,
-+		       const char *fmt,
-+		       va_list args)
++static bool kunit_get_success(struct kunit *test)
 +{
-+	struct string_stream_fragment *frag_container;
-+	int len;
-+	va_list args_for_counting;
 +	unsigned long flags;
++	bool success;
 +
-+	/* Make a copy because `vsnprintf` could change it */
-+	va_copy(args_for_counting, args);
++	spin_lock_irqsave(&test->lock, flags);
++	success = test->success;
++	spin_unlock_irqrestore(&test->lock, flags);
 +
-+	/* Need space for null byte. */
-+	len = vsnprintf(NULL, 0, fmt, args_for_counting) + 1;
-+
-+	va_end(args_for_counting);
-+
-+	frag_container = kmalloc(sizeof(*frag_container), GFP_KERNEL);
-+	if (!frag_container)
-+		return -ENOMEM;
-+
-+	frag_container->fragment = kmalloc(len, GFP_KERNEL);
-+	if (!frag_container->fragment) {
-+		kfree(frag_container);
-+		return -ENOMEM;
-+	}
-+
-+	len = vsnprintf(frag_container->fragment, len, fmt, args);
-+	spin_lock_irqsave(&stream->lock, flags);
-+	stream->length += len;
-+	list_add_tail(&frag_container->node, &stream->fragments);
-+	spin_unlock_irqrestore(&stream->lock, flags);
-+
-+	return 0;
++	return success;
 +}
 +
-+int string_stream_add(struct string_stream *stream, const char *fmt, ...)
++static void kunit_set_success(struct kunit *test, bool success)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&test->lock, flags);
++	test->success = success;
++	spin_unlock_irqrestore(&test->lock, flags);
++}
++
++static int kunit_vprintk_emit(int level, const char *fmt, va_list args)
++{
++	return vprintk_emit(0, level, NULL, 0, fmt, args);
++}
++
++static int kunit_printk_emit(int level, const char *fmt, ...)
 +{
 +	va_list args;
-+	int result;
++	int ret;
 +
 +	va_start(args, fmt);
-+	result = string_stream_vadd(stream, fmt, args);
++	ret = kunit_vprintk_emit(level, fmt, args);
 +	va_end(args);
 +
-+	return result;
++	return ret;
 +}
 +
-+void string_stream_clear(struct string_stream *stream)
++static void kunit_vprintk(const struct kunit *test,
++			  const char *level,
++			  struct va_format *vaf)
 +{
-+	struct string_stream_fragment *frag_container, *frag_container_safe;
-+	unsigned long flags;
++	kunit_printk_emit(level[1] - '0', "\t# %s: %pV", test->name, vaf);
++}
 +
-+	spin_lock_irqsave(&stream->lock, flags);
-+	list_for_each_entry_safe(frag_container,
-+				 frag_container_safe,
-+				 &stream->fragments,
-+				 node) {
-+		list_del(&frag_container->node);
-+		kfree(frag_container->fragment);
-+		kfree(frag_container);
++static bool kunit_has_printed_tap_version;
++
++static void kunit_print_tap_version(void)
++{
++	if (!kunit_has_printed_tap_version) {
++		kunit_printk_emit(LOGLEVEL_INFO, "TAP version 14\n");
++		kunit_has_printed_tap_version = true;
 +	}
-+	stream->length = 0;
-+	spin_unlock_irqrestore(&stream->lock, flags);
 +}
 +
-+char *string_stream_get_string(struct string_stream *stream)
++static size_t kunit_test_cases_len(struct kunit_case *test_cases)
 +{
-+	struct string_stream_fragment *frag_container;
-+	size_t buf_len = stream->length + 1; /* +1 for null byte. */
-+	char *buf;
-+	unsigned long flags;
++	struct kunit_case *test_case;
++	size_t len = 0;
 +
-+	buf = kzalloc(buf_len, GFP_KERNEL);
-+	if (!buf)
-+		return NULL;
++	for (test_case = test_cases; test_case->run_case; test_case++)
++		len++;
 +
-+	spin_lock_irqsave(&stream->lock, flags);
-+	list_for_each_entry(frag_container, &stream->fragments, node)
-+		strlcat(buf, frag_container->fragment, buf_len);
-+	spin_unlock_irqrestore(&stream->lock, flags);
-+
-+	return buf;
++	return len;
 +}
 +
-+bool string_stream_is_empty(struct string_stream *stream)
++static void kunit_print_subtest_start(struct kunit_module *module)
 +{
-+	bool is_empty;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&stream->lock, flags);
-+	is_empty = list_empty(&stream->fragments);
-+	spin_unlock_irqrestore(&stream->lock, flags);
-+
-+	return is_empty;
++	kunit_print_tap_version();
++	kunit_printk_emit(LOGLEVEL_INFO, "\t# Subtest: %s\n", module->name);
++	kunit_printk_emit(LOGLEVEL_INFO,
++			  "\t1..%zd\n",
++			  kunit_test_cases_len(module->test_cases));
 +}
 +
-+static int string_stream_init(struct kunit_resource *res, void *context)
++static void kunit_print_ok_not_ok(bool should_indent,
++				  bool is_ok,
++				  size_t test_number,
++				  const char *description)
 +{
-+	struct string_stream *stream;
++	const char *indent, *ok_not_ok;
 +
-+	stream = kzalloc(sizeof(*stream), GFP_KERNEL);
-+	if (!stream)
-+		return -ENOMEM;
++	if (should_indent)
++		indent = "\t";
++	else
++		indent = "";
 +
-+	res->allocation = stream;
-+	INIT_LIST_HEAD(&stream->fragments);
-+	spin_lock_init(&stream->lock);
++	if (is_ok)
++		ok_not_ok = "ok";
++	else
++		ok_not_ok = "not ok";
++
++	kunit_printk_emit(LOGLEVEL_INFO,
++			  "%s%s %zd - %s\n",
++			  indent, ok_not_ok, test_number, description);
++}
++
++static bool kunit_module_has_succeeded(struct kunit_module *module)
++{
++	const struct kunit_case *test_case;
++	bool success = true;
++
++	for (test_case = module->test_cases; test_case->run_case; test_case++)
++		if (!test_case->success) {
++			success = false;
++			break;
++		}
++
++	return success;
++}
++
++static size_t kunit_module_counter = 1;
++
++static void kunit_print_subtest_end(struct kunit_module *module)
++{
++	kunit_print_ok_not_ok(false,
++			      kunit_module_has_succeeded(module),
++			      kunit_module_counter++,
++			      module->name);
++}
++
++static void kunit_print_test_case_ok_not_ok(struct kunit_case *test_case,
++					    size_t test_number)
++{
++	kunit_print_ok_not_ok(true,
++			      test_case->success,
++			      test_number,
++			      test_case->name);
++}
++
++void kunit_init_test(struct kunit *test, const char *name)
++{
++	spin_lock_init(&test->lock);
++	test->name = name;
++	test->success = true;
++}
++
++/*
++ * Performs all logic to run a test case.
++ */
++static void kunit_run_case(struct kunit_module *module,
++			   struct kunit_case *test_case)
++{
++	struct kunit test;
++	int ret = 0;
++
++	kunit_init_test(&test, test_case->name);
++
++	if (module->init) {
++		ret = module->init(&test);
++		if (ret) {
++			kunit_err(&test, "failed to initialize: %d\n", ret);
++			kunit_set_success(&test, false);
++			return;
++		}
++	}
++
++	if (!ret)
++		test_case->run_case(&test);
++
++	if (module->exit)
++		module->exit(&test);
++
++	test_case->success = kunit_get_success(&test);
++}
++
++int kunit_run_tests(struct kunit_module *module)
++{
++	struct kunit_case *test_case;
++	size_t test_case_count = 1;
++
++	kunit_print_subtest_start(module);
++
++	for (test_case = module->test_cases; test_case->run_case; test_case++) {
++		kunit_run_case(module, test_case);
++		kunit_print_test_case_ok_not_ok(test_case, test_case_count++);
++	}
++
++	kunit_print_subtest_end(module);
 +
 +	return 0;
 +}
 +
-+static void string_stream_free(struct kunit_resource *res)
++void kunit_printk(const char *level,
++		  const struct kunit *test,
++		  const char *fmt, ...)
 +{
-+	struct string_stream *stream = res->allocation;
++	struct va_format vaf;
++	va_list args;
 +
-+	string_stream_clear(stream);
-+	kfree(stream);
-+}
++	va_start(args, fmt);
 +
-+struct string_stream *alloc_string_stream(struct kunit *test)
-+{
-+	struct kunit_resource *res;
++	vaf.fmt = fmt;
++	vaf.va = &args;
 +
-+	res = kunit_alloc_resource(test,
-+				   string_stream_init,
-+				   string_stream_free,
-+				   NULL);
++	kunit_vprintk(test, level, &vaf);
 +
-+	if (!res)
-+		return NULL;
-+
-+	return res->allocation;
++	va_end(args);
 +}
 -- 
 2.22.0.410.gd8fdbe21b5-goog
