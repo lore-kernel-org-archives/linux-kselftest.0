@@ -2,145 +2,79 @@ Return-Path: <SRS0=0pd1=UQ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E966C31E5B
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 19:09:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74699C31E5B
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 20:26:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3E57C208C0
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 19:09:15 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=appneta.com header.i=@appneta.com header.b="V1gsP4U1"
+	by mail.kernel.org (Postfix) with ESMTP id 2DFEC2089E
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jun 2019 20:26:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1560803206;
+	bh=3B+EgTk23Q2ngx/vipiVpBWzn1Ue5rkX3mfBnqFcHzA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=ALGwOzzbhNk3ICF1zFPm5FhdOmAF+9M7SG6tjjyFvCyFxKjrF3EBPIRmE+SPcAy3P
+	 BZDVp6aYLjeYSrl7Nmg5Ok9UEsIW8xTrRWzC0lln9m68xQEHHgc8GvASD6YIv+gMEb
+	 h4sgVr2K9gpeRjZKW7bQMvTI3FniXxRlf1wklCmQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728795AbfFQTJC (ORCPT
+        id S1727120AbfFQU0q (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 17 Jun 2019 15:09:02 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:38891 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726568AbfFQTJC (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jun 2019 15:09:02 -0400
-Received: by mail-pl1-f196.google.com with SMTP id f97so4511774plb.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2019 12:09:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=appneta.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=/ipYsalW++aWX/HtsH6Myu+O36LYB3AuGav4jjmdKhY=;
-        b=V1gsP4U1ZAvYgIIX44tfu3K0svmBKLPfM8YWqLcWaE8CnIsyUHIsR38kFIdk/TwU82
-         Q16qvIEGDpah4VJbFGCNMerl5Z9Iu7ZqP1X7FsxhvHB1bGhGKa7Nu7CA69KTmAFtT/H/
-         S3IV+V1GZ2ThsoT5MUWxm4aJQ7U9mdL5HYQHo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=/ipYsalW++aWX/HtsH6Myu+O36LYB3AuGav4jjmdKhY=;
-        b=BzW80oTGLLvH0Nxaws3y9hi5sNCtdmwrNaSgU2cz+tnyThVzOBhDlEjjUQE7nqcf1r
-         3U3g50dhDTqJCjxtEAS5rpqZurIzjYOKsPJ9ruv6nagUadKQtniyp1jFq36rxNZjkw9G
-         9R5zdpIWRzvOkFjh/D6xnPZUasaILi8/s2YhsLQE3SOkXPUbJThzIF9w51K30oYOEB+y
-         MNTg4nGwUQanqFGWyOUBvE5+hZlBa32duLnJktwKRYMFkpmB60nikd5rRscSEmEmuL2A
-         Qeb1D3Vmh21MqPdiF7aa6pbkyByt7p8gQV+DMrpcYGN0EQj0mmriOBTCd6ACZwrAxKDW
-         swmA==
-X-Gm-Message-State: APjAAAWTLeb91pjMm7CkNdboCd8pIWM+H3W5NBWswCnnPmVgVNFM/6/M
-        h1aJU43UWengu7B8g6FmUG9xJg==
-X-Google-Smtp-Source: APXvYqzJkonvB6Ms1+/AeevQyjb7W+PF3loXMUqCBYgZ3saSHHea2O1KZwF9JCGV4PWV/NkUok3Z/w==
-X-Received: by 2002:a17:902:b18f:: with SMTP id s15mr112568173plr.44.1560798541612;
-        Mon, 17 Jun 2019 12:09:01 -0700 (PDT)
-Received: from linux-net-fred.jaalam.net ([2001:4958:15a0:24:5054:ff:fecb:7a95])
-        by smtp.googlemail.com with ESMTPSA id p43sm111063pjp.4.2019.06.17.12.09.00
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 17 Jun 2019 12:09:00 -0700 (PDT)
-From:   Fred Klassen <fklassen@appneta.com>
-To:     "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>
-Cc:     Fred Klassen <fklassen@appneta.com>
-Subject: [PATCH net-next v3 2/3] net/udpgso_bench.sh add UDP GSO audit tests
-Date:   Mon, 17 Jun 2019 12:08:36 -0700
-Message-Id: <20190617190837.13186-3-fklassen@appneta.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190617190837.13186-1-fklassen@appneta.com>
-References: <20190617190837.13186-1-fklassen@appneta.com>
+        Mon, 17 Jun 2019 16:26:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51034 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726614AbfFQU0p (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 17 Jun 2019 16:26:45 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8AA4D20861;
+        Mon, 17 Jun 2019 20:26:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560803205;
+        bh=3B+EgTk23Q2ngx/vipiVpBWzn1Ue5rkX3mfBnqFcHzA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FihulygP6bSANnpsQUei6O2S5RBxyzy7oDcg5GTU3CsNpq5iMg5Dhs89KwGd4NuIJ
+         87bXjwSaFZWvTAUElPQJ8x4+ggn78tvIKjrssLWqb2ZBwYGF6OTEkdbyyZWNmwIT3l
+         fCUQc5L2gKyWXMGIuNB0KQCY4DzHQ76ToUn7XdfU=
+Date:   Mon, 17 Jun 2019 22:26:42 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     avagin@gmail.com, linux- stable <stable@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: Re: stable-rc: ptrace: peeksiginfo failed on 4.19, 4.14, 4.9 and 4.4
+Message-ID: <20190617202642.GA8067@kroah.com>
+References: <CA+G9fYsFL5AH6dkdN2Qd6UP=wdiXRDR_ioQFPSCq=uUBcmtHXw@mail.gmail.com>
+ <87lfy0pd63.fsf@xmission.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87lfy0pd63.fsf@xmission.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Audit tests count the total number of messages sent and compares
-with total number of CMSG received on error queue. Example:
+On Mon, Jun 17, 2019 at 08:13:56AM -0500, Eric W. Biederman wrote:
+> Naresh Kamboju <naresh.kamboju@linaro.org> writes:
+> 
+> > selftests: ptrace: peeksiginfo failed on x86_64, i386, arm64 and arm.
+> > FAILED on stable rc branches 4.19, 4.14, 4.9 and 4.4.
+> > PASS on mainline, next and 5.1 stable rc branch.
+> 
+> Greg.
+> 
+> Looking in my email it appears 4.19, 4.14, 4.9, and 4.4 patches are
+> missing the "found=1" line from the original change.   This explains
+> the test failure.
 
-    udp gso zerocopy timestamp audit
-    udp rx:   1599 MB/s  1166414 calls/s
-    udp tx:   1615 MB/s    27395 calls/s  27395 msg/s
-    udp rx:   1634 MB/s  1192261 calls/s
-    udp tx:   1633 MB/s    27699 calls/s  27699 msg/s
-    udp rx:   1633 MB/s  1191358 calls/s
-    udp tx:   1631 MB/s    27678 calls/s  27678 msg/s
-    Summary over 4.000 seconds...
-    sum udp tx:   1665 MB/s      82772 calls (27590/s)      82772 msgs (27590/s)
-    Tx Timestamps:               82772 received                 0 errors
-    Zerocopy acks:               82772 received
+Ugh, that was due to me doing the backport by hand, sorry about that.
+Sasha, thanks for fixing this.
 
-Errors are thrown if CMSG count does not equal send count,
-example:
-
-    Summary over 4.000 seconds...
-    sum tcp tx:   7451 MB/s     493706 calls (123426/s)     493706 msgs (123426/s)
-    ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    493706 expected    493704 received
-
-Also reduce individual test time from 4 to 3 seconds so that
-overall test time does not increase significantly.
-
-v3: Enhancements as per Willem de Bruijn <willemb@google.com>
-    - document -P option for TCP audit
-
-Signed-off-by: Fred Klassen <fklassen@appneta.com>
----
- tools/testing/selftests/net/udpgso_bench.sh | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
-index 5670a9ffd8eb..d4d831dfd44d 100755
---- a/tools/testing/selftests/net/udpgso_bench.sh
-+++ b/tools/testing/selftests/net/udpgso_bench.sh
-@@ -38,6 +38,18 @@ run_udp() {
- 
- 	echo "udp gso zerocopy"
- 	run_in_netns ${args} -S 0 -z
-+
-+	echo "udp gso timestamp"
-+	run_in_netns ${args} -S 0 -T
-+
-+	echo "udp gso zerocopy audit"
-+	run_in_netns ${args} -S 0 -z -a
-+
-+	echo "udp gso timestamp audit"
-+	run_in_netns ${args} -S 0 -T -a
-+
-+	echo "udp gso zerocopy timestamp audit"
-+	run_in_netns ${args} -S 0 -T -z -a
- }
- 
- run_tcp() {
-@@ -48,10 +60,15 @@ run_tcp() {
- 
- 	echo "tcp zerocopy"
- 	run_in_netns ${args} -t -z
-+
-+	# excluding for now because test fails intermittently
-+	# add -P option to include poll() to reduce possibility of lost messages
-+	#echo "tcp zerocopy audit"
-+	#run_in_netns ${args} -t -z -P -a
- }
- 
- run_all() {
--	local -r core_args="-l 4"
-+	local -r core_args="-l 3"
- 	local -r ipv4_args="${core_args} -4 -D 127.0.0.1"
- 	local -r ipv6_args="${core_args} -6 -D ::1"
- 
--- 
-2.11.0
-
+greg k-h
