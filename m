@@ -2,84 +2,172 @@ Return-Path: <SRS0=jG0R=UW=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD13BC43613
-	for <linux-kselftest@archiver.kernel.org>; Sun, 23 Jun 2019 15:52:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0361EC48BE9
+	for <linux-kselftest@archiver.kernel.org>; Sun, 23 Jun 2019 19:09:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9984A20645
-	for <linux-kselftest@archiver.kernel.org>; Sun, 23 Jun 2019 15:52:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D165C2073F
+	for <linux-kselftest@archiver.kernel.org>; Sun, 23 Jun 2019 19:09:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1561316979;
+	bh=mlvFSvzkR+cCMmE9uWWqrJrJQDHurcL5lzCZSBcXqeM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=djeXjWs1b72F+b6iJxOSCuLqlQihcmgeVusQfvMpurI/vAlAvS3XPEcu1Nd1M6qg5
+	 /UVMgwRii8+7/eJuT7Ij/LSU5CoOPmmqKMcdhC9saxPHzxIsZwHKCx/p4C2xf9Ldjr
+	 3qBK3hlc+qPxpyEaC3izndpRSdq5RQs1iqeo8SOw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726663AbfFWPwc (ORCPT
+        id S1726293AbfFWTJh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 23 Jun 2019 11:52:32 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46170 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726399AbfFWPwc (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 23 Jun 2019 11:52:32 -0400
-Received: by mail-pl1-f193.google.com with SMTP id e5so5447049pls.13;
-        Sun, 23 Jun 2019 08:52:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O30R5IepqsX9VW9UMy1gWcvt3pvWZfQRhZyo7WcC+Ws=;
-        b=L/tTFSSpw07xcJb+VfO58wQcJubYvfTwZQ3kqJ4W+P4HQAIXJGK7mDohuVq9qGwC/l
-         2oL5Z0AyOIQ3JEix0PYgyyMkh/GNxhtwHgzjqTJTg3Fxynj2eWtwgaXhM3tCP6/ToA+w
-         FLai+Hj+TtG2NtY0CKlGmRR97JZxreyW7OfHCWGndwycR00LSwLG9j0EL6aTdYzN4aa6
-         xGLHgQR3z/mZF6DTQ0jvjA/HRJkHeEULxth1mMC5lQitUpP1yjW4uC+xPASW6vHxoo08
-         f/d4A66EjslRpIxnwRlN3zMFJUM2GFDjSzGMJALQOWkvjA4ZzUvudEUV8c9Q5rwVXkQn
-         Eujg==
-X-Gm-Message-State: APjAAAWOfqhhf+6bNaZWgv+AhZUOcb2o4SGpsdnUSUjyvr8jUyHrJEL/
-        pHY/aabPhxyCAyxYEutkWF4=
-X-Google-Smtp-Source: APXvYqzEheaakgyT/FA8+Ar1pHqTgDrpSpjY4hSyiy1ogM+X7fv6dTZShWXl3KwQf017ytTZjCQBvw==
-X-Received: by 2002:a17:902:9a91:: with SMTP id w17mr46166834plp.126.1561305152092;
-        Sun, 23 Jun 2019 08:52:32 -0700 (PDT)
-Received: from localhost.localdomain (broadband-188-32-48-208.ip.moscow.rt.ru. [188.32.48.208])
-        by smtp.googlemail.com with ESMTPSA id c18sm9167081pfc.180.2019.06.23.08.52.26
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 23 Jun 2019 08:52:31 -0700 (PDT)
-From:   Denis Efremov <efremov@linux.com>
-To:     Simon Guo <wei.guo.simon@gmail.com>
-Cc:     Denis Efremov <efremov@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/powerpc: ppc_asm.h: typo in the header guard
-Date:   Sun, 23 Jun 2019 18:52:00 +0300
-Message-Id: <20190623155200.2147-1-efremov@linux.com>
-X-Mailer: git-send-email 2.21.0
+        Sun, 23 Jun 2019 15:09:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55144 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726119AbfFWTJg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 23 Jun 2019 15:09:36 -0400
+Received: from localhost (unknown [107.242.116.126])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3E2BD20656;
+        Sun, 23 Jun 2019 19:09:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561316975;
+        bh=mlvFSvzkR+cCMmE9uWWqrJrJQDHurcL5lzCZSBcXqeM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WIlojUbYbhbPxgmncsctvio3d5Mn73rmmLk0d4dqSMx5J9aWVK+Ch0Ktgq95tupOF
+         i/eIm1MdKNrRPM0pwIU0Hj6wp7UJ/S2I6lj8po0jYtHxFAVuuZjhJZzLWxBsbcQRlO
+         iRp5ngtuuFHBff8VqAdtHzZ2JfD+gVpQNfhvhlGw=
+Date:   Sun, 23 Jun 2019 15:09:29 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Michael Kelley <mikelley@microsoft.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>, linux-hyperv@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH v6 18/19] x86: Add support for generic vDSO
+Message-ID: <20190623190929.GL2226@sasha-vm>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <20190530141531.43462-19-vincenzo.frascino@arm.com>
+ <BYAPR21MB1221D54FCEC97509EEF7395CD7180@BYAPR21MB1221.namprd21.prod.outlook.com>
+ <alpine.DEB.2.21.1906141313150.1722@nanos.tec.linutronix.de>
+ <20190614211710.GQ1513@sasha-vm>
+ <alpine.DEB.2.21.1906221542270.5503@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.1906221542270.5503@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The guard macro __PPC_ASM_H in the header ppc_asm.h
-doesn't match the #ifndef macro _PPC_ASM_H. The patch
-makes them the same.
+On Sat, Jun 22, 2019 at 04:46:28PM +0200, Thomas Gleixner wrote:
+>On Fri, 14 Jun 2019, Sasha Levin wrote:
+>> On Fri, Jun 14, 2019 at 01:15:23PM +0200, Thomas Gleixner wrote:
+>> > On Thu, 30 May 2019, Michael Kelley wrote:
+>> > > Vincenzo -- these changes for Hyper-V are a subset of a larger patch set
+>> > > I have that moves all of the Hyper-V clock/timer code into a separate
+>> > > clocksource driver in drivers/clocksource, with an include file in
+>> > > includes/clocksource.  That new include file should be able to work
+>> > > instead of your new mshyperv-tsc.h.  It also has the benefit of being
+>> > > ISA neutral, so it will work with my in-progress patch set to support
+>> > > Linux on Hyper-V on ARM64.  See https://lkml.org/lkml/2019/5/27/231
+>> > > for the new clocksource driver patch set.
+>> >
+>> > Grrr. That's queued in hyperv-next for whatever reasons.
+>>
+>> I queue up our future pull requests there to give them some soaking in
+>> -next.
+>
+>What? You queue completely unreviewed stuff which touches two other
+>subsystems to let it soak in next?
 
-Signed-off-by: Denis Efremov <efremov@linux.com>
----
- tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It was out on LKML for 2+ weeks before I've pulled it in. As it mostly
+touches hyperv bits I felt comfortable to give it time in -next (but not
+actually to try and merge it until it gets a few acks).
 
-diff --git a/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h b/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h
-index d2c0a911f55e..2b488b78c4f2 100644
---- a/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h
-+++ b/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- #ifndef _PPC_ASM_H
--#define __PPC_ASM_H
-+#define _PPC_ASM_H
- #include <ppc-asm.h>
- 
- #ifndef r1
--- 
-2.21.0
+>> > Sasha, can you please provide me the branch to pull from so I can have a
+>> > common base for all the various changes floating around?
+>>
+>> I'll send you a unified pull request for these changes.
+>
+>Which has not materialized yet.
 
+Appologies about this. I ended up with way more travel than I would have
+liked (writing this from an airport). I've reset our hyperv-next branch
+to remove these 3 commits until we figure this out.
+
+>TBH, I'm pretty grumpy about those clocksource changes. Here is the
+>diffstat:
+>
+> MAINTAINERS                          |    2
+> arch/x86/entry/vdso/vclock_gettime.c |    1
+> arch/x86/entry/vdso/vma.c            |    2
+> arch/x86/hyperv/hv_init.c            |   91 ---------
+> arch/x86/include/asm/hyperv-tlfs.h   |    6
+> arch/x86/include/asm/mshyperv.h      |   81 +-------
+> arch/x86/kernel/cpu/mshyperv.c       |    2
+> arch/x86/kvm/x86.c                   |    1
+> drivers/clocksource/Makefile         |    1
+> drivers/clocksource/hyperv_timer.c   |  322 +++++++++++++++++++++++++++++++++++
+> drivers/hv/Kconfig                   |    3
+> drivers/hv/hv.c                      |  156 ----------------
+> drivers/hv/hv_util.c                 |    1
+> drivers/hv/hyperv_vmbus.h            |    3
+> drivers/hv/vmbus_drv.c               |   42 ++--
+> include/clocksource/hyperv_timer.h   |  105 +++++++++++
+>
+>While the world and some more people have been CC'ed on those patches,
+>neither the clocksource nor the x86 maintainer have been.
+>
+>When I gave Vincenzo the advise to base his code on that hyper-v branch, I
+>expected that I find the related patches in my mail backlog. No, they have
+>not been there because I was not on CC.
+>
+>Folks, please stop chosing Cc lists as you like. We have well established
+>rules for that. And please stop queueing random unreviewed patches in
+>next. Next is not a playground for not ready and unreviewed stuff. No, the
+>hyper-v inbreed Reviewed-by is not sufficient for anything x86 and
+>clocksource related.
+
+I'm sorry for this, you were supposed to be Cc'ed on these patches and I
+see that you were not.
+
+>After chasing and looking at those patches, which have horrible subject
+>lines and changelogs btw, I was not able to judge quickly whether that
+>stuff is self contained or not. So no, I fixed up the fallout and rebased
+>Vincenzos VDSO stuff on mainline w/o those hyperv changes simply because if
+>they are not self contained they will break bisection badly.
+>
+>I'm going to push out the VDSO series later today. That will nicely break
+>in combination with the hyper-next branch. Stephen, please drop that and do
+>not try to handle the fallout. That stuff needs to go through the proper
+>channels or at least be acked/reviewed by the relevant maintainers. So the
+>hyper-v folks can rebase themself and post it proper.
+
+Okay, thank you. We'll rebase and resend.
+
+--
+Thanks,
+Sasha
