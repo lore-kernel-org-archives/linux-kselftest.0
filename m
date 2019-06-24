@@ -2,63 +2,63 @@ Return-Path: <SRS0=iRKg=UX=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8566C48BE9
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jun 2019 14:33:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37F66C43613
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jun 2019 14:34:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A0DEA213F2
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jun 2019 14:33:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C32B2133F
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jun 2019 14:34:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R52F0Fd2"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ql48XStL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729675AbfFXOds (ORCPT
+        id S1729899AbfFXOd4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jun 2019 10:33:48 -0400
-Received: from mail-vk1-f202.google.com ([209.85.221.202]:45230 "EHLO
+        Mon, 24 Jun 2019 10:33:56 -0400
+Received: from mail-vk1-f202.google.com ([209.85.221.202]:42248 "EHLO
         mail-vk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729688AbfFXOdp (ORCPT
+        with ESMTP id S1728172AbfFXOdv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jun 2019 10:33:45 -0400
-Received: by mail-vk1-f202.google.com with SMTP id z6so6440084vkd.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2019 07:33:45 -0700 (PDT)
+        Mon, 24 Jun 2019 10:33:51 -0400
+Received: by mail-vk1-f202.google.com with SMTP id y198so6468615vky.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2019 07:33:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=v2NimiCS5k+CASkvLG6PtbLfdsWbdfRiVRoN94NNZxk=;
-        b=R52F0Fd2shfIFR4q0bGdXx41jOC2qnPJSQkzVjeQeg54HgHR1/LLyouZcbT5pvU9ph
-         IHRux4iRMn4iYjvIDENfWOq45LSEDCPbYqCOQOQrImK8uyieit/JhMM59l/PH48sLiy7
-         OI6R5A3fMrdUIOLYn31VebhgCxKDAeunCFpurDmVgRp0CrVsEJYad0EcCQYYY+TsPx7Q
-         wTuXqrZzi+DWvrwVhM13ZxkTrFcZ7WmDz7dFzgsP/AanzslvHIEdFMM6FuW5iowuC8jA
-         iMOcgKpuXLtNG/lXst1VUVtGfDLMhPKtSnYwCtLyaY9LkXb2nkdEdjD68Dx6hEKz0c54
-         IyJQ==
+        bh=/YALAWfXM1Ec4B1lOAT/D+NA+cyFiVncn64tZ/r98OM=;
+        b=Ql48XStLri/shxEZnh2m2bPKZuWW0LbLVZb7Ke39XzoW6tnlHJqvY/w3tAOiQXd+HY
+         +m0w0vy4Nc92IOCtwaAefDtVWKaMPae0qEokqCFh/15Etg3mPj9l+0y/QojMsq+32GDL
+         FCc4x1guuctj7Dh9w2rpqoJJMnqXSJhRdYAnuBaH1m5ApCPzHjNZOJsEgqVYOMqcq1IK
+         z4bmcgqikB0YNciNmYj3+oZnFq+Z3IRAKc7+MbjrKJ0m2yo/N7qQZlR4Wduu+I3SYaAM
+         An3oELmPbKJBGAW9gnsznPT0Ku3QQIngN9+ygpAFQEEHuUfYflrAf46HUzwiWP0xvwhX
+         EWWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=v2NimiCS5k+CASkvLG6PtbLfdsWbdfRiVRoN94NNZxk=;
-        b=V4b16E0AA5ywjl6Uj59N2dmvJ0P6KdJVkIOMmfpDP0ugi7h07MdDGr2V/HcpWReHnx
-         TYq10m1C0hXUMwFVe4DLtpbDwJeBrdOcOWUoAQTdrnIchx6WZW0cQwV2rQEcN9evW1qx
-         lJtM7VEwLJGnIdyVbOAlCKeRK38F5hTnxO5XvPe5Azlb8kZpWKUDsztgTj1nMqEMG/Qi
-         qgCbxcK6lXA+hZfBI2ecmcuM9HtIpnYBPScch/xt7G1Mu+vE90mBs0BvVsngd2EicoaD
-         +BLwqhmooEgrEjSzd84KfE9dPWgAYAp7DftWqe0G5C8V+I9f5r63rZowXop1Kvr1pMhm
-         goVQ==
-X-Gm-Message-State: APjAAAUKptV3ZsvH9ZH/Q2y1TFkmXAv6pD9znbmgCKtWO50BG9pohLnT
-        KJYW3X/DcmXwkn9YhUIVv31r+staee0nhMcV
-X-Google-Smtp-Source: APXvYqzc7XeUiJjoodFNDUni2Tg0W5zegM0Bn90vNeBUMt6R6CtCKJP3h/iCRJwisxZh4IB/OpGm7X901/iCtFh1
-X-Received: by 2002:a1f:ccc4:: with SMTP id c187mr4785454vkg.56.1561386824379;
- Mon, 24 Jun 2019 07:33:44 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 16:32:57 +0200
+        bh=/YALAWfXM1Ec4B1lOAT/D+NA+cyFiVncn64tZ/r98OM=;
+        b=fx2JnPkf9L4pO1x4a0zMtJs8Fi3nHBrY8vYLQCPVELzG6r5T0wd/d7m9lIeENgaCQP
+         CkQciql9urHsL+4rh4rMX3WL9+DY5YmzqBDxgqR6JUGXcQdPU00bUrosbhddUV1ust4r
+         uWQf5mc9UF9Aa+vADKutanNQexXsOY7GrrF819C7EUkWQPm2/Lat2M9xkUFBFmczUt3D
+         fPtPTNZgN5Y/Ha2RNwo8aokayNDME21tj7YQf+/gws4koNGc5tL7Bw1COtglUI/9Jmqn
+         Nzhu8mngKxVyFnpAnnE2YdeTZiEP+t/ByZ31IBNCBK0H9Mr4r/YAlyGgBBax464OmOEq
+         ay0g==
+X-Gm-Message-State: APjAAAUz3UuyXNUssZ3WiVVPyojTSmXsouHHxwoBhu9Ri/NpKIBkLK+b
+        vBLwO2MQCZVpTzNHEFSfVfg3vd7N71/htbfd
+X-Google-Smtp-Source: APXvYqzcPL+MfuI0G9Nd/HSZW5720Hxob5Qe3sb32I8/yavc0Ub0kNUbvXmDnUxRuwL2tRyo+O0TaelZxw+BF2mv
+X-Received: by 2002:a1f:7dc2:: with SMTP id y185mr1688822vkc.51.1561386830607;
+ Mon, 24 Jun 2019 07:33:50 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 16:32:59 +0200
 In-Reply-To: <cover.1561386715.git.andreyknvl@google.com>
-Message-Id: <f28f0374a8ed0985d045ce1959855c1e35dc138a.1561386715.git.andreyknvl@google.com>
+Message-Id: <125994bfab8f29da8f58c8fcd0d94ef4bf55b3ea.1561386715.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1561386715.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH v18 12/15] media/v4l2-core: untag user pointers in videobuf_dma_contig_user_get
+Subject: [PATCH v18 14/15] vfio/type1: untag user pointers in vaddr_get_pfn
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -96,7 +96,7 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
         Andrey Konovalov <andreyknvl@google.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+        Eric Auger <eric.auger@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
@@ -107,58 +107,33 @@ This patch is a part of a series that extends kernel ABI to allow to pass
 tagged user pointers (with the top byte set to something else other than
 0x00) as syscall arguments.
 
-videobuf_dma_contig_user_get() uses provided user pointers for vma
-lookups, which can only by done with untagged pointers.
+vaddr_get_pfn() uses provided user pointers for vma lookups, which can
+only by done with untagged pointers.
 
-Untag the pointers in this function.
+Untag user pointers in this function.
 
-Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
+Reviewed-by: Eric Auger <eric.auger@redhat.com>
+Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
-Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- drivers/media/v4l2-core/videobuf-dma-contig.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/vfio/vfio_iommu_type1.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/media/v4l2-core/videobuf-dma-contig.c
-index 0491122b03c4..ec554eff29b9 100644
---- a/drivers/media/v4l2-core/videobuf-dma-contig.c
-+++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
-@@ -157,6 +157,7 @@ static void videobuf_dma_contig_user_put(struct videobuf_dma_contig_memory *mem)
- static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
- 					struct videobuf_buffer *vb)
- {
-+	unsigned long untagged_baddr = untagged_addr(vb->baddr);
- 	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma;
- 	unsigned long prev_pfn, this_pfn;
-@@ -164,22 +165,22 @@ static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
- 	unsigned int offset;
- 	int ret;
- 
--	offset = vb->baddr & ~PAGE_MASK;
-+	offset = untagged_baddr & ~PAGE_MASK;
- 	mem->size = PAGE_ALIGN(vb->size + offset);
- 	ret = -EINVAL;
+diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+index add34adfadc7..7b8283e33d10 100644
+--- a/drivers/vfio/vfio_iommu_type1.c
++++ b/drivers/vfio/vfio_iommu_type1.c
+@@ -381,6 +381,8 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned long vaddr,
  
  	down_read(&mm->mmap_sem);
  
--	vma = find_vma(mm, vb->baddr);
-+	vma = find_vma(mm, untagged_baddr);
- 	if (!vma)
- 		goto out_up;
++	vaddr = untagged_addr(vaddr);
++
+ 	vma = find_vma_intersection(mm, vaddr, vaddr + 1);
  
--	if ((vb->baddr + mem->size) > vma->vm_end)
-+	if ((untagged_baddr + mem->size) > vma->vm_end)
- 		goto out_up;
- 
- 	pages_done = 0;
- 	prev_pfn = 0; /* kill warning */
--	user_address = vb->baddr;
-+	user_address = untagged_baddr;
- 
- 	while (pages_done < (mem->size >> PAGE_SHIFT)) {
- 		ret = follow_pfn(vma, user_address, &this_pfn);
+ 	if (vma && vma->vm_flags & VM_PFNMAP) {
 -- 
 2.22.0.410.gd8fdbe21b5-goog
 
