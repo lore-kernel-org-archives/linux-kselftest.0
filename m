@@ -2,117 +2,103 @@ Return-Path: <SRS0=iRKg=UX=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BCFFC48BE8
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jun 2019 10:18:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6EC0C48BE9
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jun 2019 12:51:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 14AA4208E4
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jun 2019 10:18:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561371539;
-	bh=STDA67ny//z8ON3EELw205CswwM8s+oAnWBfK72PmZI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=EmMqeCCzL+IekYJ57T2GrEtXJWoWxuNUGkdvwEWcEPThPxi7Blf2Loxa58orBmr86
-	 CnUEeL4MLoMo97Lfp4f3IPrC4sUexk6YV8Cmowx1QIBAFrNjqHnl5llDtnSkmd/M66
-	 IAiQOyOim/m84uJ5aJF4QHK6SHMHMbNca1Em5R8U=
+	by mail.kernel.org (Postfix) with ESMTP id A7E58213F2
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jun 2019 12:51:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727722AbfFXKPj (ORCPT
+        id S1728378AbfFXMvC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jun 2019 06:15:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52896 "EHLO mail.kernel.org"
+        Mon, 24 Jun 2019 08:51:02 -0400
+Received: from foss.arm.com ([217.140.110.172]:49274 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729706AbfFXKPh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jun 2019 06:15:37 -0400
-Received: from localhost (f4.8f.5177.ip4.static.sl-reverse.com [119.81.143.244])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ED80F205C9;
-        Mon, 24 Jun 2019 10:15:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561371336;
-        bh=STDA67ny//z8ON3EELw205CswwM8s+oAnWBfK72PmZI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sz5FWTi//gGeX5nudyUDhjg+6Uoo/I+wulrHXrlh6eB8bxDlgIrGFZUrPMJDMa5Nk
-         eET+YJRhPt3V8rE3hJzuSE2EUt+QaVHuiPhCb4l6QiPeh2E5QnQuc1OnSD2UeB355Y
-         8NTnD4nGdWj5ghFQtJkUUbpjA03Yvu5NyhZ5NS3Q=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alex Shi <alex.shi@linux.alibaba.com>,
-        Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Roman Gushchin <guro@fb.com>, Claudio Zumbo <claudioz@fb.com>,
-        Claudio <claudiozumbo@gmail.com>,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.1 058/121] kselftest/cgroup: fix unexpected testing failure on test_core
-Date:   Mon, 24 Jun 2019 17:56:30 +0800
-Message-Id: <20190624092323.670943186@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190624092320.652599624@linuxfoundation.org>
-References: <20190624092320.652599624@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1727965AbfFXMvC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 24 Jun 2019 08:51:02 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F20E7344;
+        Mon, 24 Jun 2019 05:51:00 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7EDFB3F718;
+        Mon, 24 Jun 2019 05:50:58 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 13:50:55 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     <linux-arch@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>,
+        Shijith Thotton <sthotton@marvell.com>
+Subject: Re: [PATCH v7 00/25] Unify vDSOs across more architectures
+Message-ID: <20190624135055.7020fc2a@donnerap.cambridge.arm.com>
+In-Reply-To: <20190621095252.32307-1-vincenzo.frascino@arm.com>
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
+Organization: ARM
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[ Upstream commit 00e38a5d753d7788852f81703db804a60a84c26e ]
+On Fri, 21 Jun 2019 10:52:27 +0100
+Vincenzo Frascino <vincenzo.frascino@arm.com> wrote:
 
-The cgroup testing relys on the root cgroup's subtree_control setting,
-If the 'memory' controller isn't set, some test cases will be failed
-as following:
+Hi,
 
-$sudo  ./test_core
-not ok 1 test_cgcore_internal_process_constraint
-ok 2 test_cgcore_top_down_constraint_enable
-not ok 3 test_cgcore_top_down_constraint_disable
-...
+> vDSO (virtual dynamic shared object) is a mechanism that the Linux
+> kernel provides as an alternative to system calls to reduce where
+> possible the costs in terms of cycles.
+[ ... ]
 
-To correct this unexpected failure, this patch write the 'memory' to
-subtree_control of root to get a right result.
+Some numbers for the ARM(32) part:
 
-Signed-off-by: Alex Shi <alex.shi@linux.alibaba.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Roman Gushchin <guro@fb.com>
-Cc: Claudio Zumbo <claudioz@fb.com>
-Cc: Claudio <claudiozumbo@gmail.com>
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Reviewed-by: Roman Gushchin <guro@fb.com>
-Acked-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/cgroup/test_core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+I booted my trusted old Calxeda Midway server (Cortex A-15 cores) and ran
+the vdsotest benchmark on it. The results are:
+(vdso: times, in nsec/call; n/t: "not tested" (=not implemented))
+call				5.2-rc3	5.2-rc3-vdso
+clock-gettime-monotonic:        147     142
+clock-getres-monotonic:         n/t     34
+clock-gettime-monotonic-coarse: 90      96
+clock-getres-monotonic-coarse:  n/t     36
+clock-gettime-monotonic-raw:    431     142
+clock-getres-monotonic-raw:     n/t     35
+clock-gettime-tai:              598     150
+clock-getres-tai:               n/t     34
+clock-gettime-boottime:         592     142
+clock-getres-boottime:          n/t     34
+clock-gettime-realtime:         149     142
+clock-getres-realtime:          n/t     34
+clock-gettime-realtime-coarse:  86      96
+clock-getres-realtime-coarse:   n/t     36
+getcpu:                         n/t     n/t
+gettimeofday:                   133     110
 
-diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-index be59f9c34ea2..d78f1c5366d3 100644
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -376,6 +376,11 @@ int main(int argc, char *argv[])
- 
- 	if (cg_find_unified_root(root, sizeof(root)))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
-+
-+	if (cg_read_strstr(root, "cgroup.subtree_control", "memory"))
-+		if (cg_write(root, "cgroup.subtree_control", "+memory"))
-+			ksft_exit_skip("Failed to set memory controller\n");
-+
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
- 		switch (tests[i].fn(root)) {
- 		case KSFT_PASS:
--- 
-2.20.1
+So there are some minor improvements, two minor regressions, some
+significant improvements (factor 3-4), and some dramatic improvements
+(where we actually gained VDSO support).
+Overall a pretty impressive outcome for an "Odd fixes" architecture,
+especially as it should reduce the future maintenance burden.
 
-
-
+Cheers,
+Andre.
