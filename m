@@ -2,88 +2,117 @@ Return-Path: <SRS0=iRKg=UX=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77BC3C48BE3
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jun 2019 07:42:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D51BC48BE9
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jun 2019 10:04:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 50AB92089F
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jun 2019 07:42:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5491E205ED
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jun 2019 10:04:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1561370697;
+	bh=STDA67ny//z8ON3EELw205CswwM8s+oAnWBfK72PmZI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=KJ/w5HOmXJm866cCEfsMRiDphVto3Nf8RPxK1v3SIwyI3fhRpw3oZWgFtpbgxHuBT
+	 PwjooacXftEQiUad/EkrtU1RCKpyQZ1GNXFI4W8aTi352ohkPVpqOgXINFuyjheACA
+	 3pR1HzaQVZQZXwxzO7o3yqq8XrnRpBAW4h4Ui4II=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727787AbfFXHm1 (ORCPT
+        id S1729418AbfFXKEt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jun 2019 03:42:27 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:35147 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726795AbfFXHm1 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jun 2019 03:42:27 -0400
-Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hfJcL-0001F8-3S; Mon, 24 Jun 2019 09:42:21 +0200
-Date:   Mon, 24 Jun 2019 09:42:19 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Andy Lutomirski <luto@kernel.org>
-cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Huw Davies <huw@codeweavers.com>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Dmitry Safonov <dima@arista.com>,
-        Andrei Vagin <avagin@openvz.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Kelley <mikelley@microsoft.com>,
+        Mon, 24 Jun 2019 06:04:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36488 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729778AbfFXKEp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 24 Jun 2019 06:04:45 -0400
+Received: from localhost (f4.8f.5177.ip4.static.sl-reverse.com [119.81.143.244])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 285E2208E3;
+        Mon, 24 Jun 2019 10:04:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561370684;
+        bh=STDA67ny//z8ON3EELw205CswwM8s+oAnWBfK72PmZI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TSTfacn+bt7femopyuuxJ7YqYDTx+0cH9r5b+NF4RvBBcVPwX5NoBhYsA3zaC0d2R
+         muB3YPT1gw4tXD/TTVD+Zw1+GdnWUJ1oUnKYgQ62XWxamqL2qI+n9HLdsYV+nS+Q1S
+         XrvB7cOO6OJATffdVjHlu9moiDPONEwWftgfTYNk=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Alex Shi <alex.shi@linux.alibaba.com>,
+        Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Roman Gushchin <guro@fb.com>, Claudio Zumbo <claudioz@fb.com>,
+        Claudio <claudiozumbo@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH v7 00/25] Unify vDSOs across more architectures
-In-Reply-To: <CALCETrV-suRS5=JqDjbouXciN_OPsguERjux7fQVFOKGmdrspA@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.1906240935430.32342@nanos.tec.linutronix.de>
-References: <20190621095252.32307-1-vincenzo.frascino@arm.com> <alpine.DEB.2.21.1906240142000.32342@nanos.tec.linutronix.de> <CALCETrV-suRS5=JqDjbouXciN_OPsguERjux7fQVFOKGmdrspA@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+Subject: [PATCH 4.19 46/90] kselftest/cgroup: fix unexpected testing failure on test_core
+Date:   Mon, 24 Jun 2019 17:56:36 +0800
+Message-Id: <20190624092317.273524505@linuxfoundation.org>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190624092313.788773607@linuxfoundation.org>
+References: <20190624092313.788773607@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 23 Jun 2019, Andy Lutomirski wrote:
+[ Upstream commit 00e38a5d753d7788852f81703db804a60a84c26e ]
 
-> On Sun, Jun 23, 2019 at 5:34 PM Thomas Gleixner <tglx@linutronix.de> wrote:
-> > +GENERIC VDSO LIBRARY:
-> > +M:     Andy Lutomirksy <luto@kernel.org>
-> 
-> Lutomirski, perhaps?
+The cgroup testing relys on the root cgroup's subtree_control setting,
+If the 'memory' controller isn't set, some test cases will be failed
+as following:
 
-Ooops. Where did I copy that from?
+$sudo  ./test_core
+not ok 1 test_cgcore_internal_process_constraint
+ok 2 test_cgcore_top_down_constraint_enable
+not ok 3 test_cgcore_top_down_constraint_disable
+...
 
-> Although I do appreciate the opportunity to say "not me!" :)
+To correct this unexpected failure, this patch write the 'memory' to
+subtree_control of root to get a right result.
 
-You just gave me the perfect exit plan. I'll change my surname to Gleyxner
-and head off to the goat farm :)
+Signed-off-by: Alex Shi <alex.shi@linux.alibaba.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Roman Gushchin <guro@fb.com>
+Cc: Claudio Zumbo <claudioz@fb.com>
+Cc: Claudio <claudiozumbo@gmail.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Reviewed-by: Roman Gushchin <guro@fb.com>
+Acked-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/cgroup/test_core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thanks,
+diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+index be59f9c34ea2..d78f1c5366d3 100644
+--- a/tools/testing/selftests/cgroup/test_core.c
++++ b/tools/testing/selftests/cgroup/test_core.c
+@@ -376,6 +376,11 @@ int main(int argc, char *argv[])
+ 
+ 	if (cg_find_unified_root(root, sizeof(root)))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
++
++	if (cg_read_strstr(root, "cgroup.subtree_control", "memory"))
++		if (cg_write(root, "cgroup.subtree_control", "+memory"))
++			ksft_exit_skip("Failed to set memory controller\n");
++
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+ 		switch (tests[i].fn(root)) {
+ 		case KSFT_PASS:
+-- 
+2.20.1
 
-	tglx
+
+
