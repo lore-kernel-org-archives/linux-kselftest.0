@@ -2,60 +2,70 @@ Return-Path: <SRS0=U7Os=U6=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4992DC0650E
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Jul 2019 12:24:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BD65C0650E
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Jul 2019 13:04:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 261EC20881
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Jul 2019 12:24:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE8F8214AE
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Jul 2019 13:04:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727938AbfGAMYG (ORCPT
+        id S1727256AbfGANEf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 1 Jul 2019 08:24:06 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:40312 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727814AbfGAMYF (ORCPT
+        Mon, 1 Jul 2019 09:04:35 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:46786 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726329AbfGANEf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Jul 2019 08:24:05 -0400
-Received: from bigeasy by Galois.linutronix.de with local (Exim 4.80)
-        (envelope-from <bigeasy@linutronix.de>)
-        id 1hhvLi-00052n-Lp; Mon, 01 Jul 2019 14:23:58 +0200
-Date:   Mon, 1 Jul 2019 14:23:58 +0200
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>, kernel-team@android.com,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kselftest@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>, rcu@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RFC 3/3] Revert "rcutorture: Tweak kvm options"
-Message-ID: <20190701122358.nzebpuunp6o5jxhx@linutronix.de>
-References: <20190701040415.219001-1-joel@joelfernandes.org>
- <20190701040415.219001-3-joel@joelfernandes.org>
+        Mon, 1 Jul 2019 09:04:35 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
+        (Exim 4.76)
+        (envelope-from <colin.king@canonical.com>)
+        id 1hhvyx-0001Zp-LY; Mon, 01 Jul 2019 13:04:31 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Shuah Khan <shuah@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] selftests/x86: fix spelling mistake "FAILT" -> "FAIL"
+Date:   Mon,  1 Jul 2019 14:04:31 +0100
+Message-Id: <20190701130431.13391-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190701040415.219001-3-joel@joelfernandes.org>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2019-07-01 00:04:15 [-0400], Joel Fernandes (Google) wrote:
-> This reverts commit a6fda6dab93c2c06ef4b8cb4b9258df6674d2438 which
-> causes kvm.sh to not run on my machines. The qemu-system-x86_64 command
-> runs but does nothing.
+From: Colin Ian King <colin.king@canonical.com>
 
-Nope. I would like to know *why* you need 'noapic' to work. Is it a
-brand new or old qemu-system-x86_64?
+There is an spelling mistake in an a test error message. Fix it.
 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ tools/testing/selftests/x86/test_vsyscall.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sebastian
+diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/selftests/x86/test_vsyscall.c
+index 4602326b8f5b..a4f4d4cf22c3 100644
+--- a/tools/testing/selftests/x86/test_vsyscall.c
++++ b/tools/testing/selftests/x86/test_vsyscall.c
+@@ -451,7 +451,7 @@ static int test_vsys_x(void)
+ 		printf("[OK]\tExecuting the vsyscall page failed: #PF(0x%lx)\n",
+ 		       segv_err);
+ 	} else {
+-		printf("[FAILT]\tExecution failed with the wrong error: #PF(0x%lx)\n",
++		printf("[FAIL]\tExecution failed with the wrong error: #PF(0x%lx)\n",
+ 		       segv_err);
+ 		return 1;
+ 	}
+-- 
+2.20.1
+
