@@ -2,61 +2,44 @@ Return-Path: <SRS0=Mhvf=U7=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CA27C46478
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Jul 2019 14:28:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAD97C06510
+	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Jul 2019 15:39:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CD4BF2184C
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Jul 2019 14:22:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1562077339;
-	bh=7VY9/9lkdfiiEBbUd+s+IdckOZ37wLIuB/BIMGhoNKo=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=mVg4fonoLhMSJ1yGICRyMIggKRo2p5gvi+Wd6/iQvKg9FZ7nWXTpLyhsvjeJFZWLm
-	 4b9CrkOOr0jnIUXjHgEnWdfhNCDW30rXYhARcjHQ6SOq+mQoDqTwowcskbYKe/IvoM
-	 XEX92DQtGc/JsQgGG9V4kPLurcbI+6YC6vl4/qfg=
+	by mail.kernel.org (Postfix) with ESMTP id AD25F20663
+	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Jul 2019 15:39:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727119AbfGBOWT (ORCPT
+        id S1726105AbfGBPjr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 2 Jul 2019 10:22:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56834 "EHLO mail.kernel.org"
+        Tue, 2 Jul 2019 11:39:47 -0400
+Received: from foss.arm.com ([217.140.110.172]:52066 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726803AbfGBOWT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Jul 2019 10:22:19 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A1AA02184B;
-        Tue,  2 Jul 2019 14:22:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562077338;
-        bh=7VY9/9lkdfiiEBbUd+s+IdckOZ37wLIuB/BIMGhoNKo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=YBrYqtiOlFZT+FoNFhrTO6JXJGZ22xJFKK4arhAdCW8/cfS5GSGgmhoMwzuHnPhjR
-         7Hdb2rGKlfDM8EedaCC7shHBn+mot+hv32amP1/wA4IDZsDymPyhU32lUKWXgDwnvM
-         ZKQSEOP3BzCUq/NQhooBuYhdYaNoshZfSYJbTZPc=
-Subject: Re: [PATCH][next] selftests/x86: fix spelling mistake "FAILT" ->
- "FAIL"
-To:     Andy Lutomirski <luto@kernel.org>,
-        Colin King <colin.king@canonical.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, shuah <shuah@kernel.org>
-References: <20190701130431.13391-1-colin.king@canonical.com>
- <CALCETrVo0rJVxsYvo=abDfFCZHBuCiB0coSBXoDeP_emSZgESg@mail.gmail.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <6e5a9bed-4f7f-4851-0421-2b440ff1f584@kernel.org>
-Date:   Tue, 2 Jul 2019 08:22:17 -0600
+        id S1726046AbfGBPjr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Jul 2019 11:39:47 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 65E4B28;
+        Tue,  2 Jul 2019 08:39:46 -0700 (PDT)
+Received: from [10.1.26.178] (unknown [10.1.26.178])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A97B63F246;
+        Tue,  2 Jul 2019 08:39:45 -0700 (PDT)
+Subject: Re: [PATCH 03/13] kselftest: arm64: mangle_sp_misaligned
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
+        andreyknvl@google.com
+References: <20190613111335.7645-1-cristian.marussi@arm.com>
+ <20190613111335.7645-4-cristian.marussi@arm.com>
+ <20190621103518.GK2790@e103592.cambridge.arm.com>
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Message-ID: <68cc7940-4ee0-b06c-7bd3-b1fbfbc9e142@arm.com>
+Date:   Tue, 2 Jul 2019 16:39:44 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.1
 MIME-Version: 1.0
-In-Reply-To: <CALCETrVo0rJVxsYvo=abDfFCZHBuCiB0coSBXoDeP_emSZgESg@mail.gmail.com>
+In-Reply-To: <20190621103518.GK2790@e103592.cambridge.arm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -65,40 +48,97 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/1/19 11:48 AM, Andy Lutomirski wrote:
-> On Mon, Jul 1, 2019 at 6:04 AM Colin King <colin.king@canonical.com> wrote:
+Hi
+
+On 6/21/19 11:35 AM, Dave Martin wrote:
+> On Thu, Jun 13, 2019 at 12:13:25PM +0100, Cristian Marussi wrote:
+>> Added a simple mangle testcase which messes with the ucontext_t
+>> from within the sig_handler, trying to badly modify and misalign the SP.
+>> Expects SIGBUS on test PASS.
 >>
->> From: Colin Ian King <colin.king@canonical.com>
->>
->> There is an spelling mistake in an a test error message. Fix it.
->>
->> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+>> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 >> ---
->>   tools/testing/selftests/x86/test_vsyscall.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>   .../arm64/signal/testcases/.gitignore         |  1 +
+>>   .../signal/testcases/mangle_sp_misaligned.c   | 24 +++++++++++++++++++
+>>   2 files changed, 25 insertions(+)
+>>   create mode 100644 tools/testing/selftests/arm64/signal/testcases/.gitignore
+>>   create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_sp_misaligned.c
 >>
->> diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/selftests/x86/test_vsyscall.c
->> index 4602326b8f5b..a4f4d4cf22c3 100644
->> --- a/tools/testing/selftests/x86/test_vsyscall.c
->> +++ b/tools/testing/selftests/x86/test_vsyscall.c
->> @@ -451,7 +451,7 @@ static int test_vsys_x(void)
->>                  printf("[OK]\tExecuting the vsyscall page failed: #PF(0x%lx)\n",
->>                         segv_err);
->>          } else {
->> -               printf("[FAILT]\tExecution failed with the wrong error: #PF(0x%lx)\n",
->> +               printf("[FAIL]\tExecution failed with the wrong error: #PF(0x%lx)\n",
->>                         segv_err);
->>                  return 1;
->>          }
->> --
->> 2.20.1
->>
+>> diff --git a/tools/testing/selftests/arm64/signal/testcases/.gitignore b/tools/testing/selftests/arm64/signal/testcases/.gitignore
+>> new file mode 100644
+>> index 000000000000..7f7414d241f2
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/arm64/signal/testcases/.gitignore
+>> @@ -0,0 +1 @@
+>> +mangle_sp_misaligned
+>> diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_sp_misaligned.c b/tools/testing/selftests/arm64/signal/testcases/mangle_sp_misaligned.c
+>> new file mode 100644
+>> index 000000000000..41bd27312e54
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/arm64/signal/testcases/mangle_sp_misaligned.c
+>> @@ -0,0 +1,24 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/* Copyright (C) 2019 ARM Limited */
+>> +
+>> +#include "test_signals_utils.h"
+>> +#include "testcases.h"
+>> +
+>> +static int mangle_misaligned_sp_run(struct tdescr *td, siginfo_t *si,
+>> +				    ucontext_t *uc)
+>> +{
+>> +	ASSERT_GOOD_CONTEXT(uc);
+>> +
+>> +	uc->uc_mcontext.sp += 3;
 > 
-> Acked-by: Andy Lutomirski <luto@kernel.org>
+> What are we testing here?
+> 
+> It is archietcturally permitted (if unusual) to have a misaligned sp in
+> userspace.
+> 
+> So are we just getting a SIGBUS after the sigreturn, when the thread
+> tries to dereference sp?  If so, we aren't really testing anything about
+> sigreturn here -- I don't see any check in the kernel when restoring sp
+> in sigreturn.
+> 
+> Even if there were no SIGBUS, the thread stack is now corrupt (due to
+> wrong sp), so the interrupted code is unlikely to continue running
+> successfully.
+> 
+> Am I missing something?
 > 
 
-Thanks Andy!
+The initial (flawed) attempt was to test the check in arm64 rt_sigreturn 
+kernel code:
 
-I will queue this up for 5.3
+if (regs->sp & 15)
+	goto badframe;
 
--- Shuah
+BUT in fact such initial check happens at the start of rt_sigreturn 
+syscall well before the regs are restored from the uc context in the 
+sigframe which I mangled
+
+i.e.
+restore_sigframe() -->> __get_user_error(regs->sp...)
+
+==>> uc.uc_mcontext.sp --> regs->sp
+
+happens AFTER the above regs->sp alignment check.
+
+So the check is performed on the effective SP value at the time of 
+kernel entry of sigreturn NOT on the uc.uc_mcontext.sp MANGLED value, so 
+this is not really a sigreturn related test at this point. (and hence 
+the SIGBUS instead of the SEGV).
+
+So an option could be as you proposed in another similarly flawed test 
+to mangle uc.uc_mcontext.sp to point to something unreasonable and in 
+Kernel space (at least virtually)
+
+I'll give it a try.
+
+Cristian
+
+> [...]
+> 
+> Cheers
+> ---Dave
+> 
