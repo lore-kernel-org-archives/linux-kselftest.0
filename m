@@ -2,152 +2,148 @@ Return-Path: <SRS0=Mhvf=U7=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25457C06510
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Jul 2019 15:51:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D64BDC06510
+	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Jul 2019 17:53:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 053A120989
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Jul 2019 15:51:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B557021852
+	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Jul 2019 17:53:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="roBJOIwX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbfGBPvl (ORCPT
+        id S1726686AbfGBRxD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 2 Jul 2019 11:51:41 -0400
-Received: from foss.arm.com ([217.140.110.172]:52416 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725922AbfGBPvl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Jul 2019 11:51:41 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29B3A28;
-        Tue,  2 Jul 2019 08:51:41 -0700 (PDT)
-Received: from [10.1.26.178] (unknown [10.1.26.178])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 330173F246;
-        Tue,  2 Jul 2019 08:51:40 -0700 (PDT)
-Subject: Re: [PATCH 08/13] kselftest: arm64: mangle_pstate_ssbs_regs
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
-        andreyknvl@google.com
-References: <20190613111335.7645-1-cristian.marussi@arm.com>
- <20190613111335.7645-9-cristian.marussi@arm.com>
- <20190621103554.GP2790@e103592.cambridge.arm.com>
-From:   Cristian Marussi <cristian.marussi@arm.com>
-Message-ID: <b4365458-2034-2f06-4235-a101f17d4751@arm.com>
-Date:   Tue, 2 Jul 2019 16:51:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        Tue, 2 Jul 2019 13:53:03 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:41884 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726621AbfGBRxD (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Jul 2019 13:53:03 -0400
+Received: by mail-pf1-f196.google.com with SMTP id m30so8615032pff.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jul 2019 10:53:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cUzLBUlR97uqGXzOFylb6nkkxBtyYZ1OhN+qvdTrCD0=;
+        b=roBJOIwXGuFOf1wltfxmsClcFxlkrjzp9+21T7P87pZ44BH/GjP/X/NuZ8mK2FoMzO
+         XotmCr6d6KsdJATAIIUbq5Oy4zR4Azgkp4HhOE4XiupuZAs2/ZBggUQTxGqGQNrNXKUR
+         RK1F2iELvIHqPezIMEexxn9HQjKb0Q7OjYsSgJwmHDUbD4xwBf6WQFlfeS4XFqE89Pff
+         n78AWxKci0ljIJl3H7X5khQxePoPu8jM9jZ95VMb0Zsz46NlIICQ2qPhYIcCIBC8U20Z
+         P1PLSOLwoWTdUhh3getWGZNkHFehqyZ7w/vmIfDcbd6OQGJv5O6KIgY9x4cjlJKaYt87
+         yyiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cUzLBUlR97uqGXzOFylb6nkkxBtyYZ1OhN+qvdTrCD0=;
+        b=hjOlHnBSqMQlXDVXelqVGrJDBFFL7j/RXM/UfQ/BcUYc7K0+I3lZg2Zrfqw2k3vIOh
+         quAU2kaXAplnfxsKb7cqe759dgXrRzZaCrPe/UpBfb7Mt6kLEWhEb5VXJsHJke3iZoyB
+         6sViFIXZrb1AfUkc//iXToVvWQtuqGpfjXb4ycsquci0u1/rYLQqnzXh5mMCr8+RYDTh
+         GeOlOvFaa1woW3nXiqYXXt7g49N7oIEXu+4Wal6cqMvGA83LpkTdDtlffIYUHdCYsXCQ
+         qFGIGA/+UxsVjzQ4IetPAHXDNqyI0Th88an3qgfVPN3UqaKMYT+dYq6c3eFYN0Lf+GXn
+         JwKg==
+X-Gm-Message-State: APjAAAUOoIHC6iE1kwdcnSLz4sRqT/9gICo5n3NlLY1gsiSiyw9oRLSL
+        5cWZkYxABlCBASFRN09SJcrH2/KULasA5rLT+ayAaQ==
+X-Google-Smtp-Source: APXvYqw1QIOarVsPwN3Ymzn8KxtORstMAVkiFcCA6YNhVqWiDT/WJraRMIndv08KnJT+5qaDY4tAvp9OnwXy65WsZqM=
+X-Received: by 2002:a63:205f:: with SMTP id r31mr23471478pgm.159.1562089981635;
+ Tue, 02 Jul 2019 10:53:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190621103554.GP2790@e103592.cambridge.arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190617082613.109131-1-brendanhiggins@google.com>
+ <20190617082613.109131-8-brendanhiggins@google.com> <20190625232249.GS19023@42.do-not-panic.com>
+ <CAFd5g46mnd=a0OqFCx0hOHX+DxW+5yA2LXH5Q0gEg8yUZK=4FA@mail.gmail.com>
+In-Reply-To: <CAFd5g46mnd=a0OqFCx0hOHX+DxW+5yA2LXH5Q0gEg8yUZK=4FA@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 2 Jul 2019 10:52:50 -0700
+Message-ID: <CAFd5g46=7OQDREdLDTiMgVWq-Xj2zfOw8cRhPJEihSbO89MDyA@mail.gmail.com>
+Subject: Re: [PATCH v5 07/18] kunit: test: add initial tests
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        shuah <shuah@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi
-
-On 6/21/19 11:35 AM, Dave Martin wrote:
-> On Thu, Jun 13, 2019 at 12:13:30PM +0100, Cristian Marussi wrote:
->> Added a simple mangle testcase which messes with the ucontext_t
->> from within the sig_handler, trying to toggle PSTATE SSBS bit.
->> Expect SIGILL if SSBS feature unsupported or that the value set in
->> PSTATE.SSBS is preserved on test PASS.
->>
->> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
->> ---
->>   .../arm64/signal/testcases/.gitignore         |  1 +
->>   .../testcases/mangle_pstate_ssbs_regs.c       | 41 +++++++++++++++++++
->>   2 files changed, 42 insertions(+)
->>   create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c
->>
->> diff --git a/tools/testing/selftests/arm64/signal/testcases/.gitignore b/tools/testing/selftests/arm64/signal/testcases/.gitignore
->> index e7a1d998b650..c2972c3f33ca 100644
->> --- a/tools/testing/selftests/arm64/signal/testcases/.gitignore
->> +++ b/tools/testing/selftests/arm64/signal/testcases/.gitignore
->> @@ -5,3 +5,4 @@ mangle_pstate_invalid_state_toggle
->>   mangle_pstate_invalid_mode_el1
->>   mangle_pstate_invalid_mode_el2
->>   mangle_pstate_invalid_mode_el3
->> +mangle_pstate_ssbs_regs
->> diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c
->> new file mode 100644
->> index 000000000000..d997ebf742d9
->> --- /dev/null
->> +++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c
->> @@ -0,0 +1,41 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/* Copyright (C) 2019 ARM Limited */
->> +
->> +#include "test_signals_utils.h"
->> +#include "testcases.h"
->> +
->> +static int mangle_invalid_pstate_ssbs_run(struct tdescr *td,
->> +					  siginfo_t *si, ucontext_t *uc)
->> +{
->> +	ASSERT_GOOD_CONTEXT(uc);
->> +
->> +	/* toggle bit value */
->> +	uc->uc_mcontext.pstate ^= PSR_SSBS_BIT;
->> +	/* Save after mangling...it should be preserved */
->> +	td->saved_uc = *uc;
->> +
->> +	return 1;
->> +}
->> +
->> +static int pstate_ssbs_bit_checks(struct tdescr *td)
->> +{
->> +	uint64_t val = 0;
->> +
->> +	get_regval(MRS_SSBS_SYSREG, val);
->> +	/* pass when preserved */
->> +	td->pass = (!!(val & MRS_SSBS_BIT) ==
->> +		    !!(td->saved_uc.uc_mcontext.pstate & PSR_SSBS_BIT));
-> 
-> Nit: there's a redundant level of ! here, and the outer () are unnecessary:
-> 
-> 	(!!a == !!b) -> !a == !b
+On Wed, Jun 26, 2019 at 12:53 AM Brendan Higgins
+<brendanhiggins@google.com> wrote:
 >
+> On Tue, Jun 25, 2019 at 4:22 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Mon, Jun 17, 2019 at 01:26:02AM -0700, Brendan Higgins wrote:
+> > > diff --git a/kunit/example-test.c b/kunit/example-test.c
+> > > new file mode 100644
+> > > index 0000000000000..f44b8ece488bb
+> > > --- /dev/null
+> > > +++ b/kunit/example-test.c
+> >
+> > <-- snip -->
+> >
+> > > +/*
+> > > + * This defines a suite or grouping of tests.
+> > > + *
+> > > + * Test cases are defined as belonging to the suite by adding them to
+> > > + * `kunit_cases`.
+> > > + *
+> > > + * Often it is desirable to run some function which will set up things which
+> > > + * will be used by every test; this is accomplished with an `init` function
+> > > + * which runs before each test case is invoked. Similarly, an `exit` function
+> > > + * may be specified which runs after every test case and can be used to for
+> > > + * cleanup. For clarity, running tests in a test module would behave as follows:
+> > > + *
+> >
+> > To be clear this is not the kernel module init, but rather the kunit
+> > module init. I think using kmodule would make this clearer to a reader.
+>
+> Seems reasonable. Will fix in next revision.
+>
+> > > + * module.init(test);
+> > > + * module.test_case[0](test);
+> > > + * module.exit(test);
+> > > + * module.init(test);
+> > > + * module.test_case[1](test);
+> > > + * module.exit(test);
+> > > + * ...;
+> > > + */
 
-This was me badly convinced (not sure where I got this) that the bitpos 
-of PSR_SSBS_BIT in pstate was different from the bitpos as reported in 
-the output of MRS SSBS, so I was trying to normalize the comparison to 1 
-== 1 or 0 == 0
-
-...but in fact bitpos is the same between PSTATE and MSR SSBS so it can 
-be compared directly.
-
-
-
-> [...]
-> 
-> Can we trigger a second signal after the first returns, to grab the
-> updated ucontext and check SSBS in there directly?
-> 
-> Checking that the updated value is _also_ visible via MRS remains
-> useful though, so we should keep that.
-> 
-
-I have added an informational message that reports the PSTATE and the 
-status of SSBS as grabbed from uc via an induced SIGUSR2.
-Test outcome is anyway  determined on MRS SSBS result.
-
-If HWCAP_SSBS is available the feature is considered available and so 
-MRS SSBS MUST work.
-If instead feature is NOT supported as stated in HWCAP_SSBS the test is 
-anyway run but the MRS SSBS is expected to cause a SIGILL (COULD not 
-SHOULD...since HW_CAP could be reporting wrong caps and so MRS SSBS will 
-still work)
-
-Moreover I fixed a small glitch: I was toggling the SSBS bit in uc 
-PSTATE, BUT this make no sense...toggling to zero there's NO way I can 
-check if Kernel preserve it to zero...so now I'm setting to 1 and then 
-check if it has been preserved by Kernel
-
-Cristian
-> Cheers
-> ---Dave
-> 
+Do you think it might be clearer yet to rename `struct kunit_module
+*module;` to `struct kunit_suite *suite;`?
