@@ -2,134 +2,166 @@ Return-Path: <SRS0=EU8z=VA=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=DATE_IN_PAST_03_06,
+	DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A752C5B57D
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 01:18:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DEC7C5B57D
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 01:39:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E7F392064A
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 01:18:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1562116699;
-	bh=jgEb1b30euRG5UhMxm9wUOKRlQBuytXTtWrKG046N4M=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=OPe95VG3Mq5zd4jjOsZbxtHLsMNs4kETgNcPkwgb6AKuDdJDY/n1DcDEnOausQxDO
-	 mBhVe3hCfACSmBs3yj/1sDAerF8Bcly+Ww5gwbM7xNT2T2kt8l7YltHyb2W69XvJK0
-	 t7S8slMnjlrEeeIlgPuXrRP9PdlTycNW5qGjDsqY=
+	by mail.kernel.org (Postfix) with ESMTP id 03D7720673
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 01:39:40 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="POQmgBOa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727190AbfGCBSO (ORCPT
+        id S1726963AbfGCBjk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 2 Jul 2019 21:18:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59110 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727398AbfGCBSG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Jul 2019 21:18:06 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A97D02190F;
-        Tue,  2 Jul 2019 22:48:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562107688;
-        bh=jgEb1b30euRG5UhMxm9wUOKRlQBuytXTtWrKG046N4M=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=swV5j0FD7SXKbbH9o0nqIzNjH0j2QMqF1OQL1ZJj89P4Z3qK9Esni6llI366SN5Se
-         SNoV4p4FkH94Bxa5I2sAVxJagoytmnzCie5kUcmQzIIRh/SfoajFtaFticWSdWZKln
-         lI7X3t6Lydi4eU9yJeQnJ8R9UIyiWeyyFlHFiasY=
-Subject: Re: [PATCH][next] selftests/x86: fix spelling mistake "FAILT" ->
- "FAIL"
-To:     Colin Ian King <colin.king@canonical.com>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, shuah <shuah@kernel.org>
-References: <20190701130431.13391-1-colin.king@canonical.com>
- <CALCETrVo0rJVxsYvo=abDfFCZHBuCiB0coSBXoDeP_emSZgESg@mail.gmail.com>
- <6e5a9bed-4f7f-4851-0421-2b440ff1f584@kernel.org>
- <9ba791d5-0d67-9834-90e9-e1dca307d386@kernel.org>
- <0031e09b-e309-3976-09b1-dc8d10365aee@canonical.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <aec8c4b5-a82a-74c0-f60f-869786e4a2fa@kernel.org>
-Date:   Tue, 2 Jul 2019 16:48:06 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        Tue, 2 Jul 2019 21:39:40 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:43036 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726329AbfGCBjk (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Jul 2019 21:39:40 -0400
+Received: by mail-oi1-f196.google.com with SMTP id w79so646589oif.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jul 2019 18:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FUA9iG25CmIH4MahZvHYUlC3QW6l7WDczQJ9a6ioMLY=;
+        b=POQmgBOadRPayXo9Fd+ZXV6uH8TQK55zqk1MmI2iyDjPQuE4BVwjuhe9k5HwRxPxFF
+         QNrZV2C2MOyW3no2nxSlnryuZE+jS7R99MLxn27yMHpXBhjo/PVOl5cjLDjvEpQve0BR
+         p+H02z5QHigVh1/dmkHT9Tm6XDXZ9kV/R+OB8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FUA9iG25CmIH4MahZvHYUlC3QW6l7WDczQJ9a6ioMLY=;
+        b=t7jToJGVTVn7TIltwmdAPic6PZTHr1k7DbfjusR7HEEOFFXI9MQFPIu4f3oNBFfHYW
+         mxuYxcufQFXdDcj7Thm5HIZEMYMEHiPDZG64iDoZOPFtR4Uy5llfpaaLVfng7C1xaLym
+         X7ESUwy4HxGAxme/AR9SjWAUtSJa/pzIbmK7nlyM6LqGTW64gPCnCkiFYQQyfq9MEgLw
+         ewzZkglw3ZuxsKE19Qc8sCeHzQ+KGX9l6te/Sqp05Vapi5K/51TZy2HpKP2cA/rlQR+a
+         l//oDSr337LWk+mXAJNTemjFYNsEB+Up7kUY9O9FKSm4O0/1TvGirDUqhEK/4DCWcOXs
+         wCqQ==
+X-Gm-Message-State: APjAAAVxouBVFqfK0Ixoqesp1SyNaLshO/pw6nqHIofh8MZkDQ0mE2Yo
+        h/7UgKynJLlA+dgyk+LxTVnUU2CvlUk=
+X-Google-Smtp-Source: APXvYqxEO0SQAfPRdHXgWGt25UD9Hdx0nrlm5DNCZqVSYLbgGPtkci7ooH6NOC+nmhe8H7B8/MSvUw==
+X-Received: by 2002:a63:c0e:: with SMTP id b14mr32619599pgl.4.1562102158371;
+        Tue, 02 Jul 2019 14:15:58 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t24sm6937pfh.113.2019.07.02.14.15.56
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 02 Jul 2019 14:15:56 -0700 (PDT)
+Date:   Tue, 2 Jul 2019 10:23:05 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/kselftest/runner.sh: Add 30 second timeout per
+ test
+Message-ID: <201907021012.5C8D05A878@keescook>
+References: <20190612164146.25280-1-anders.roxell@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <0031e09b-e309-3976-09b1-dc8d10365aee@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190612164146.25280-1-anders.roxell@linaro.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/2/19 4:42 PM, Colin Ian King wrote:
-> On 02/07/2019 20:25, shuah wrote:
->> On 7/2/19 8:22 AM, shuah wrote:
->>> On 7/1/19 11:48 AM, Andy Lutomirski wrote:
->>>> On Mon, Jul 1, 2019 at 6:04 AM Colin King <colin.king@canonical.com>
->>>> wrote:
->>>>>
->>>>> From: Colin Ian King <colin.king@canonical.com>
->>>>>
->>>>> There is an spelling mistake in an a test error message. Fix it.
->>>>>
->>>>> Signed-off-by: Colin Ian King <colin.king@canonical.com>
->>>>> ---
->>>>>    tools/testing/selftests/x86/test_vsyscall.c | 2 +-
->>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/tools/testing/selftests/x86/test_vsyscall.c
->>>>> b/tools/testing/selftests/x86/test_vsyscall.c
->>>>> index 4602326b8f5b..a4f4d4cf22c3 100644
->>>>> --- a/tools/testing/selftests/x86/test_vsyscall.c
->>>>> +++ b/tools/testing/selftests/x86/test_vsyscall.c
->>>>> @@ -451,7 +451,7 @@ static int test_vsys_x(void)
->>>>>                   printf("[OK]\tExecuting the vsyscall page failed:
->>>>> #PF(0x%lx)\n",
->>>>>                          segv_err);
->>>>>           } else {
->>>>> -               printf("[FAILT]\tExecution failed with the wrong
->>>>> error: #PF(0x%lx)\n",
->>>>> +               printf("[FAIL]\tExecution failed with the wrong
->>>>> error: #PF(0x%lx)\n",
->>>>>                          segv_err);
->>>>>                   return 1;
->>>>>           }
->>>>> -- 
->>>>> 2.20.1
->>>>>
->>>>
->>>> Acked-by: Andy Lutomirski <luto@kernel.org>
->>>>
->>>
->>> Thanks Andy!
->>>
->>> I will queue this up for 5.3
->>>
->>> -- Shuah
->>>
->>
->> Hi Colin,
->>
->> Checkpatch warning on this. Probably failed on the original patch.
->> Could you please fix the checkpatch warn, and send v2.
+On Wed, Jun 12, 2019 at 06:41:46PM +0200, Anders Roxell wrote:
+> Commit a745f7af3cbd ("selftests/harness: Add 30 second timeout per
+> test") solves that binary tests doesn't hang forever. However, scripts
+> can still hang forever, this adds an timeout to each test script run. This
+> assumes that an individual test doesn't take longer than 30 seconds.
 > 
-> If I split the line, I get another checkpatch warning:
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> ---
+>  tools/testing/selftests/kselftest/runner.sh | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> "WARNING: quoted string split across lines"
-> 
-> Either way checkpatch emits a warning. The convention is to not break
-> literal strings, and the line is only a few chars over the 80 char
-> boundary, so the V1 of the patch is the way it should be IMHO.
+> diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+> index 00c9020bdda8..cff7d2d83648 100644
+> --- a/tools/testing/selftests/kselftest/runner.sh
+> +++ b/tools/testing/selftests/kselftest/runner.sh
+> @@ -5,6 +5,7 @@
+>  export skip_rc=4
+>  export logfile=/dev/stdout
+>  export per_test_logging=
+> +export TEST_TIMEOUT_DEFAULT=30
+
+I would name this "kselftest_timeout" to avoid namespace collisions and
+to drop the "default" name, since while setting it here is a default,
+when used by other parts of the test environment, we'll be changing it
+to non-default, so it's weird to have "default" in the name.
+
+>  
+>  # There isn't a shell-agnostic way to find the path of a sourced file,
+>  # so we must rely on BASE_DIR being set to find other tools.
+> @@ -24,6 +25,14 @@ tap_prefix()
+>  	fi
+>  }
+>  
+> +tap_timeout()
+> +{
+> +	if [ -x /usr/bin/timeout ] && [ -x "$BASENAME_TEST" ] \
+
+The -x test on BASENAME_TEST is already done earlier in run_one(). Also,
+this needs to be "$1" (the argument to tap_timeout).
+
+> +		&& file $BASENAME_TEST |grep -q "shell script"; then
+
+"file" seems pretty heavy here. How about "head -c2":
+
+		&& [ '#!' = "$(head -c2 "$1")" ]
+
+> +		echo -n "timeout $TEST_TIMEOUT_DEFAULT"
+
+And this needs to actually _run_ it, not echo anything.
+
+> +	fi
+> +}
+
+I would expect tap_timeout() to be:
+
+tap_timeout()
+{
+	# If we have the "timeout" tool and the test is a script,
+	# set our timeout.
+	if [ -x /usr/bin/timeout ] &&
+	   [ '#!' = "$(head -c2 "$1")" ] ; then
+		/usr/bin/timeout "$kselftest_timeout" "$1"
+	else
+		"$1"
+	fi
+}
+
+Another thought: should kselftest be changed so that this is the ONLY
+timeout mechanism? i.e. remove the binary timeout code I originally
+added, and just use this instead? Then we don't have to distinguish
+between script and non-script, etc.
+
+-Kees
+
+> +
+>  run_one()
+>  {
+>  	DIR="$1"
+> @@ -44,7 +53,7 @@ run_one()
+>  		echo "not ok $test_num $TEST_HDR_MSG"
+>  	else
+>  		cd `dirname $TEST` > /dev/null
+> -		(((((./$BASENAME_TEST 2>&1; echo $? >&3) |
+> +		((((( tap_timeout ./$BASENAME_TEST 2>&1; echo $? >&3) |
+>  			tap_prefix >&4) 3>&1) |
+>  			(read xs; exit $xs)) 4>>"$logfile" &&
+>  		echo "ok $test_num $TEST_HDR_MSG") ||
+> -- 
+> 2.11.0
 > 
 
-As such this existed before your patch. I will apply v1.
-
-thanks,
--- Shuah
+-- 
+Kees Cook
