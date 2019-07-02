@@ -2,203 +2,134 @@ Return-Path: <SRS0=EU8z=VA=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B377FC5B57D
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 01:07:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A752C5B57D
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 01:18:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 910552089C
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 01:07:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7F392064A
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 01:18:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1562116699;
+	bh=jgEb1b30euRG5UhMxm9wUOKRlQBuytXTtWrKG046N4M=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=OPe95VG3Mq5zd4jjOsZbxtHLsMNs4kETgNcPkwgb6AKuDdJDY/n1DcDEnOausQxDO
+	 mBhVe3hCfACSmBs3yj/1sDAerF8Bcly+Ww5gwbM7xNT2T2kt8l7YltHyb2W69XvJK0
+	 t7S8slMnjlrEeeIlgPuXrRP9PdlTycNW5qGjDsqY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726430AbfGCBHe (ORCPT
+        id S1727190AbfGCBSO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 2 Jul 2019 21:07:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53454 "EHLO mail.kernel.org"
+        Tue, 2 Jul 2019 21:18:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59110 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726150AbfGCBHe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Jul 2019 21:07:34 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727398AbfGCBSG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Jul 2019 21:18:06 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2AA5C20673;
-        Wed,  3 Jul 2019 01:07:32 +0000 (UTC)
-Date:   Tue, 2 Jul 2019 21:07:30 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     shuah <shuah@kernel.org>, Po-Hsu Lin <po-hsu.lin@canonical.com>,
-        mingo@redhat.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/ftrace: skip ftrace test if FTRACE was not
- enabled
-Message-ID: <20190702210730.2c041882@gandalf.local.home>
-In-Reply-To: <20190703091147.064029248fed5066ea5e5d2b@kernel.org>
-References: <20190702062358.7330-1-po-hsu.lin@canonical.com>
-        <4a44dd22-be88-ce5b-5c9b-6a3759b6c2eb@kernel.org>
-        <20190703091147.064029248fed5066ea5e5d2b@kernel.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        by mail.kernel.org (Postfix) with ESMTPSA id A97D02190F;
+        Tue,  2 Jul 2019 22:48:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562107688;
+        bh=jgEb1b30euRG5UhMxm9wUOKRlQBuytXTtWrKG046N4M=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=swV5j0FD7SXKbbH9o0nqIzNjH0j2QMqF1OQL1ZJj89P4Z3qK9Esni6llI366SN5Se
+         SNoV4p4FkH94Bxa5I2sAVxJagoytmnzCie5kUcmQzIIRh/SfoajFtaFticWSdWZKln
+         lI7X3t6Lydi4eU9yJeQnJ8R9UIyiWeyyFlHFiasY=
+Subject: Re: [PATCH][next] selftests/x86: fix spelling mistake "FAILT" ->
+ "FAIL"
+To:     Colin Ian King <colin.king@canonical.com>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, shuah <shuah@kernel.org>
+References: <20190701130431.13391-1-colin.king@canonical.com>
+ <CALCETrVo0rJVxsYvo=abDfFCZHBuCiB0coSBXoDeP_emSZgESg@mail.gmail.com>
+ <6e5a9bed-4f7f-4851-0421-2b440ff1f584@kernel.org>
+ <9ba791d5-0d67-9834-90e9-e1dca307d386@kernel.org>
+ <0031e09b-e309-3976-09b1-dc8d10365aee@canonical.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <aec8c4b5-a82a-74c0-f60f-869786e4a2fa@kernel.org>
+Date:   Tue, 2 Jul 2019 16:48:06 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <0031e09b-e309-3976-09b1-dc8d10365aee@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 3 Jul 2019 09:11:47 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
-
-> Hi Po-Hsu Lin,
+On 7/2/19 4:42 PM, Colin Ian King wrote:
+> On 02/07/2019 20:25, shuah wrote:
+>> On 7/2/19 8:22 AM, shuah wrote:
+>>> On 7/1/19 11:48 AM, Andy Lutomirski wrote:
+>>>> On Mon, Jul 1, 2019 at 6:04 AM Colin King <colin.king@canonical.com>
+>>>> wrote:
+>>>>>
+>>>>> From: Colin Ian King <colin.king@canonical.com>
+>>>>>
+>>>>> There is an spelling mistake in an a test error message. Fix it.
+>>>>>
+>>>>> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+>>>>> ---
+>>>>>    tools/testing/selftests/x86/test_vsyscall.c | 2 +-
+>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/tools/testing/selftests/x86/test_vsyscall.c
+>>>>> b/tools/testing/selftests/x86/test_vsyscall.c
+>>>>> index 4602326b8f5b..a4f4d4cf22c3 100644
+>>>>> --- a/tools/testing/selftests/x86/test_vsyscall.c
+>>>>> +++ b/tools/testing/selftests/x86/test_vsyscall.c
+>>>>> @@ -451,7 +451,7 @@ static int test_vsys_x(void)
+>>>>>                   printf("[OK]\tExecuting the vsyscall page failed:
+>>>>> #PF(0x%lx)\n",
+>>>>>                          segv_err);
+>>>>>           } else {
+>>>>> -               printf("[FAILT]\tExecution failed with the wrong
+>>>>> error: #PF(0x%lx)\n",
+>>>>> +               printf("[FAIL]\tExecution failed with the wrong
+>>>>> error: #PF(0x%lx)\n",
+>>>>>                          segv_err);
+>>>>>                   return 1;
+>>>>>           }
+>>>>> -- 
+>>>>> 2.20.1
+>>>>>
+>>>>
+>>>> Acked-by: Andy Lutomirski <luto@kernel.org>
+>>>>
+>>>
+>>> Thanks Andy!
+>>>
+>>> I will queue this up for 5.3
+>>>
+>>> -- Shuah
+>>>
+>>
+>> Hi Colin,
+>>
+>> Checkpatch warning on this. Probably failed on the original patch.
+>> Could you please fix the checkpatch warn, and send v2.
 > 
-> On Tue, 2 Jul 2019 13:22:26 -0600
-> shuah <shuah@kernel.org> wrote:
+> If I split the line, I get another checkpatch warning:
 > 
-> > Hi Po-Hsu Lin,
-> > 
-> > On 7/2/19 12:23 AM, Po-Hsu Lin wrote:  
-> > > The ftrace test will need to have CONFIG_FTRACE enabled to make the
-> > > ftrace directory available.
-> > > 
-> > > Add an additional check to skip this test if the CONFIG_FTRACE was not
-> > > enabled.  
+> "WARNING: quoted string split across lines"
 > 
-> Sorry, NAK for config check.
-
-Agreed, as  my test boxes do not hold the source code of the kernel
-they are running.
-
-> 
-> > > 
-> > > This will be helpful to avoid a false-positive test result when testing
-> > > it directly with the following commad against a kernel that does not
-> > > have CONFIG_FTRACE enabled:  
-> 
-> Would you know tools/testing/selftests/ftrace/config (and other config files
-> in each tests) ?
-> 
-> Since each selftest depends specific configurations, those configs are
-> written in config file, and tester must enable it using 
-> "scripts/kconfig/merge_config.sh".
-> 
-> We can not check the kernel config in some cases, e.g. distro kernel,
-> cross-build kernel, remote build kernel etc. Also, the .config file
-> can be a config file for another kernel build.
-> 
-> So please take care of your kernel configuration. If you find any test
-> failed even if you enable configs in config file under that test, please
-> report it, since that is a bug.
-> 
-> 
-> Thank you,
-> 
-> > >      make -C tools/testing/selftests TARGETS=ftrace run_tests
-> > > 
-> > > The test result on an Ubuntu KVM kernel will be changed from:
-> > >      selftests: ftrace: ftracetest
-> > >      ========================================
-> > >      Error: No ftrace directory found
-> > >      not ok 1..1 selftests: ftrace: ftracetest [FAIL]
-> > > To:  
-> > 
-> > Thanks for the patch.
-> > 
-> > Check patch fails with the above To:
-> > 
-> > WARNING: Use a single space after To:
-> > #107:
-> > To:
-> > 
-> > ERROR: Unrecognized email address: ''
-> > #107:
-> > To:
-> > 
-> > total: 1 errors, 1 warnings, 23 lines checked
-> > 
-> > 
-> > Please fix and send v2.
-> >   
-> > >      selftests: ftrace: ftracetest
-> > >      ========================================
-> > >      CONFIG_FTRACE was not enabled, test skipped.
-> > >      not ok 1..1 selftests: ftrace: ftracetest [SKIP]
-> > > 
-> > > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
-> > > ---
-> > >   tools/testing/selftests/ftrace/ftracetest | 11 ++++++++++-
-> > >   1 file changed, 10 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> > > index 6d5e9e8..6c8322e 100755
-> > > --- a/tools/testing/selftests/ftrace/ftracetest
-> > > +++ b/tools/testing/selftests/ftrace/ftracetest
-> > > @@ -7,6 +7,9 @@
-> > >   #  Written by Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
-> > >   #  
-> > 
-> > Hmm. You havem't cc'ed Masami on this. Adding Masami.
-> > 
-> > I would think Masami should be on the Signed-off-by as well,
-> > since he is the author.
-> >   
-> > >   
-> > > +# Kselftest framework requirement - SKIP code is 4.
-> > > +ksft_skip=4
-> > > +
-> > >   usage() { # errno [message]
-> > >   [ ! -z "$2" ] && echo $2
-> > >   echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
-> > > @@ -139,7 +142,13 @@ parse_opts $*
-> > >   
-> > >   # Verify parameters
-> > >   if [ -z "$TRACING_DIR" -o ! -d "$TRACING_DIR" ]; then
-
-I'm thinking if we didn't find the TRACING_DIR (-z "$TRACING_DIR"
-returns true), then we exit with the skip. I don't believe we should be
-testing ftrace if tracefs isn't even loaded. Or something like:
-
-	err_ret=1
-	err_skip=4
-
-	errexit() {
-	  echo "Error: $1" 1>&2
-	  exit $err_ret
-	}
-
-	[..]
-
-	if [ -z "$TRACING_DIR" ]; then
-	  save_err=$err_ret
-	  err_ret=$err_skip
-	  mount -t tracefs nodev /sys/kernel/tracing ||
-	    errexit "kernel does not have tracefs"
-	  err_ret=$save_err
-	  TRACING_DIR="/sys/kernel/tracing"
-	fi
-	if [ ! -d "$TRACING_DIR" ]; then
-	  errexit "tracefs is not a directory?"
-	fi
-
-Would something like that work?
-
--- Steve
-
-
-> > > -  errexit "No ftrace directory found"
-> > > +  ftrace_enabled=`grep "^CONFIG_FTRACE=y" /lib/modules/$(uname -r)/build/.config`
-> > > +  if [ -z "$ftrace_enabled" ]; then
-> > > +    echo "CONFIG_FTRACE was not enabled, test skipped."
-> > > +    exit $ksft_skip
-> > > +  else
-> > > +    errexit "No ftrace directory found"
-> > > +  fi
-> > >   fi
-> > >   
-> > >   # Preparing logs
-> > >   
-> > 
-> > thanks,
-> > -- Shuah  
-> 
+> Either way checkpatch emits a warning. The convention is to not break
+> literal strings, and the line is only a few chars over the 80 char
+> boundary, so the V1 of the patch is the way it should be IMHO.
 > 
 
+As such this existed before your patch. I will apply v1.
+
+thanks,
+-- Shuah
