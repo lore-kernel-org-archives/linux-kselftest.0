@@ -7,32 +7,32 @@ X-Spam-Status: No, score=-10.0 required=3.0
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B84FBC06511
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA758C06514
 	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 16:36:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 92AF1218A0
+	by mail.kernel.org (Postfix) with ESMTP id BDFC7218A0
 	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 16:36:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726989AbfGCQgV (ORCPT
+        id S1726823AbfGCQgV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Wed, 3 Jul 2019 12:36:21 -0400
-Received: from foss.arm.com ([217.140.110.172]:52450 "EHLO foss.arm.com"
+Received: from foss.arm.com ([217.140.110.172]:52470 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726823AbfGCQgU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Jul 2019 12:36:20 -0400
+        id S1727119AbfGCQgV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 3 Jul 2019 12:36:21 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88061150C;
-        Wed,  3 Jul 2019 09:36:18 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8730114FF;
+        Wed,  3 Jul 2019 09:36:20 -0700 (PDT)
 Received: from e120937-lin.cambridge.arm.com (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B93683F718;
-        Wed,  3 Jul 2019 09:36:17 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BA0743F718;
+        Wed,  3 Jul 2019 09:36:19 -0700 (PDT)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, shuah@kernel.org
 Cc:     dave.martin@arm.com, andreyknvl@google.com
-Subject: [PATCH v2 05/10] kselftest: arm64: mangle_pstate_ssbs_regs
-Date:   Wed,  3 Jul 2019 17:35:27 +0100
-Message-Id: <20190703163532.7485-6-cristian.marussi@arm.com>
+Subject: [PATCH v2 07/10] kselftest: arm64: fake_sigreturn_bad_size_for_magic0
+Date:   Wed,  3 Jul 2019 17:35:29 +0100
+Message-Id: <20190703163532.7485-8-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190703163532.7485-1-cristian.marussi@arm.com>
 References: <20190703163532.7485-1-cristian.marussi@arm.com>
@@ -41,189 +41,32 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Added a simple mangle testcase which messes with the ucontext_t
-from within the sig_handler, trying to toggle PSTATE SSBS bit.
-Expect SIGILL if SSBS feature unsupported or that the value set in
-PSTATE.SSBS is preserved on test PASS.
-This commit also introduces a new common utility function:
-get_current_context() which can be used to grab a ucontext without
-the help of libc, and detect if such ucontext has been actively used
-to jump back into it.
+Added a simple fake_sigreturn testcase which builds a ucontext_t
+with a badly sized magic0 header and place it onto the stack.
+Expects a SIGSEGV on test PASS.
 
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
- .../selftests/arm64/signal/test_signals.h     |  4 +
- .../arm64/signal/test_signals_utils.c         | 91 +++++++++++++++++++
- .../arm64/signal/test_signals_utils.h         |  2 +
  .../arm64/signal/testcases/.gitignore         |  1 +
- .../testcases/mangle_pstate_ssbs_regs.c       | 56 ++++++++++++
- 5 files changed, 154 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c
+ .../fake_sigreturn_bad_size_for_magic0.c      | 57 +++++++++++++++++++
+ 2 files changed, 58 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size_for_magic0.c
 
-diff --git a/tools/testing/selftests/arm64/signal/test_signals.h b/tools/testing/selftests/arm64/signal/test_signals.h
-index 85db3ac44b32..37bed0590226 100644
---- a/tools/testing/selftests/arm64/signal/test_signals.h
-+++ b/tools/testing/selftests/arm64/signal/test_signals.h
-@@ -116,6 +116,10 @@ struct tdescr {
- 	/* optional sa_flags for the installed handler */
- 	int		sa_flags;
- 	ucontext_t	saved_uc;
-+	/* used by get_current_ctx() */
-+	size_t		live_sz;
-+	ucontext_t	*live_uc;
-+	volatile bool	live_uc_valid;
- 
- 	/* a setup function to be called before test starts */
- 	int (*setup)(struct tdescr *td);
-diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
-index 203deac4aa8a..ac438fd123f1 100644
---- a/tools/testing/selftests/arm64/signal/test_signals_utils.c
-+++ b/tools/testing/selftests/arm64/signal/test_signals_utils.c
-@@ -17,6 +17,8 @@
- 
- extern struct tdescr *current;
- 
-+static int sig_copyctx = SIGUSR2;
-+
- static char *feats_store[FMAX_END] = {
- 	"SSBS",
- 	"PAN",
-@@ -37,6 +39,85 @@ static inline char *feats_to_string(unsigned long feats)
- 	return feats_string;
- }
- 
-+/*
-+ * Obtaining a valid and full-blown ucontext_t from userspace is tricky:
-+ * libc getcontext does() not save all the regs and messes with some of
-+ * them (pstate value in particular is not reliable).
-+ * Here we use a service signal to grab the ucontext_t from inside a
-+ * dedicated signal handler, since there, it is populated by Kernel
-+ * itself in setup_sigframe(). The grabbed context is then stored and
-+ * made available in td->live_uc.
-+ *
-+ * Anyway this function really serves a dual purpose:
-+ *
-+ * 1. grab a valid sigcontext into td->live_uc for result analysis: in
-+ * such case it returns 1.
-+ *
-+ * 2. detect if somehow a previously grabbed live_uc context has been
-+ * used actively with a sigreturn: in such a case the execution would have
-+ * magically resumed in the middle of the function itself (seen_already==1):
-+ * in such a case return 0, since in fact we have not just simply grabbed
-+ * the context.
-+ *
-+ * This latter case is useful to detect when a fake_sigreturn test-case has
-+ * unexpectedly survived without hittig a SEGV.
-+ */
-+bool get_current_context(struct tdescr *td, ucontext_t *dest_uc)
-+{
-+	static volatile sig_atomic_t seen_already;
-+
-+	if (!td || !dest_uc) {
-+		fprintf(stdout, "Signal-based Context dumping NOT available\n");
-+		return 0;
-+	}
-+
-+	/* it's a genuine invokation..reinit */
-+	seen_already = 0;
-+	td->live_uc_valid = 0;
-+	td->live_sz = sizeof(*dest_uc);
-+	memset(dest_uc, 0x00, td->live_sz);
-+	td->live_uc = dest_uc;
-+	/*
-+	 * Grab ucontext_t triggering a signal...
-+	 * ASM equivalent of raise(sig_copyctx);
-+	 *
-+	 * Note that:
-+	 * - live_uc_valid is declared volatile in struct tdescr
-+	 *   since it will be changed inside the sig_copyctx handler.
-+	 * - the kill() syscall invocation returns only after any possible
-+	 *   registered sig_handler for the invoked signal has returned,
-+	 *   so that live_uc_valid flag is surely up to date when this
-+	 *   function return it.
-+	 * - the additional 'memory' clobber is there to avoid possible
-+	 *   compiler's assumption on the content pointed by dest_uc, which
-+	 *   is changed inside the handler, but not referenced here anyway.
-+	 */
-+	asm volatile ("mov x8, %0\n\t"
-+		      "svc #0\n\t"
-+		      "mov x1, %1\n\t"
-+		      "mov x8, %2\n\t"
-+		      "svc #0"
-+		      :
-+		      : "i" (__NR_getpid),
-+		        "r" (sig_copyctx),
-+			"i" (__NR_kill)
-+		      : "x1","x8","x0","memory");
-+	/*
-+	 * If we get here with seen_already==1 it implies the td->live_uc
-+	 * context has been used to get back here....this probably means
-+	 * a test has failed to cause a SEGV...anyway the live_uc has not
-+	 * just been acquired...so return 0
-+	 */
-+	if (seen_already) {
-+		fprintf(stdout,
-+			"Successful sigreturn detected: live_uc is stale !\n");
-+		return 0;
-+	}
-+	seen_already = 1;
-+
-+	return td->live_uc_valid;
-+}
-+
- static void unblock_signal(int signum)
- {
- 	sigset_t sset;
-@@ -91,6 +172,12 @@ static void default_handler(int signum, siginfo_t *si, void *uc)
- 		 * to terminate immediately exiting straight away
- 		 */
- 		default_result(current, 1);
-+	} else if (signum == sig_copyctx && current->live_uc) {
-+		memcpy(current->live_uc, uc, current->live_sz);
-+		ASSERT_GOOD_CONTEXT(current->live_uc);
-+		current->live_uc_valid = 1;
-+		SAFE_WRITE(2,
-+			   "GOOD CONTEXT grabbed from sig_copyctx handler\n");
- 	} else {
- 		if (signum == current->sig_unsupp && !are_feats_ok(current)) {
- 			SAFE_WRITE(2, "-- RX SIG_UNSUPP on unsupported feature...OK\n");
-@@ -193,6 +280,10 @@ static int test_init(struct tdescr *td)
- 			!feats_ok ? "NOT " : "");
- 	}
- 
-+	if (td->sig_trig == sig_copyctx)
-+		sig_copyctx = SIGUSR1;
-+	unblock_signal(sig_copyctx);
-+
- 	td->initialized = 1;
- 	return 1;
- }
-diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-index 7d80a478bad9..b37167c98ccd 100644
---- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
-+++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-@@ -25,4 +25,6 @@ int test_setup(struct tdescr *td);
- void test_cleanup(struct tdescr *td);
- int test_run(struct tdescr *td);
- void test_result(struct tdescr *td);
-+
-+bool get_current_context(struct tdescr *td, ucontext_t *dest_uc);
- #endif
 diff --git a/tools/testing/selftests/arm64/signal/testcases/.gitignore b/tools/testing/selftests/arm64/signal/testcases/.gitignore
-index 226bb179b673..a48a118b1a1a 100644
+index 0ea6fdc3765c..cf2a73599818 100644
 --- a/tools/testing/selftests/arm64/signal/testcases/.gitignore
 +++ b/tools/testing/selftests/arm64/signal/testcases/.gitignore
-@@ -3,3 +3,4 @@ mangle_pstate_invalid_daif_bits
- mangle_pstate_invalid_mode_el1
- mangle_pstate_invalid_mode_el2
+@@ -5,3 +5,4 @@ mangle_pstate_invalid_mode_el2
  mangle_pstate_invalid_mode_el3
-+mangle_pstate_ssbs_regs
-diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c
+ mangle_pstate_ssbs_regs
+ fake_sigreturn_bad_magic
++fake_sigreturn_bad_size_for_magic0
+diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size_for_magic0.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size_for_magic0.c
 new file mode 100644
-index 000000000000..a399d9aa40d5
+index 000000000000..2f53c4740c85
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c
-@@ -0,0 +1,56 @@
++++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size_for_magic0.c
+@@ -0,0 +1,57 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/* Copyright (C) 2019 ARM Limited */
 +
@@ -233,52 +76,53 @@ index 000000000000..a399d9aa40d5
 +#include "test_signals_utils.h"
 +#include "testcases.h"
 +
-+static int mangle_invalid_pstate_ssbs_run(struct tdescr *td,
-+					  siginfo_t *si, ucontext_t *uc)
-+{
-+	ASSERT_GOOD_CONTEXT(uc);
++struct fake_sigframe sf;
 +
-+	/* set bit value */
-+	uc->uc_mcontext.pstate |= PSR_SSBS_BIT;
-+	fprintf(stderr, "SSBS set to 1 -- PSTATE: 0x%016lX\n",
-+		uc->uc_mcontext.pstate);
-+	/* Save after mangling...it should be preserved */
-+	td->saved_uc = *uc;
++#define MIN_SZ_ALIGN	16
++
++static int fake_sigreturn_bad_size_for_magic0_run(struct tdescr *td,
++						  siginfo_t *si, ucontext_t *uc)
++{
++	size_t resv_sz, offset;
++	struct _aarch64_ctx *shead = GET_SF_RESV_HEAD(sf), *head;
++
++	/* just to fill the ucontext_t with something real */
++	if (!get_current_context(td, &sf.uc))
++		return 1;
++
++	resv_sz = GET_SF_RESV_SIZE(sf);
++	/*
++	 * find the terminator, preserving existing headers
++	 * and verify amount of spare room in __reserved area.
++	 */
++	head = get_terminator(shead, resv_sz, &offset);
++	/*
++	 * try stripping extra_context header when low on space:
++	 * we need at least HDR_SZ + 16 space for the bad sized terminator.
++	 */
++	if (head && resv_sz - offset < HDR_SZ + MIN_SZ_ALIGN) {
++		fprintf(stderr, "Low on space:%zd. Discarding extra_context.\n",
++			resv_sz - offset);
++		head = get_header(shead, EXTRA_MAGIC, resv_sz, &offset);
++	}
++	/* just give up and timeout if still not enough space */
++	if (head && resv_sz - offset >= HDR_SZ + MIN_SZ_ALIGN) {
++		head->magic = 0;
++		head->size = MIN_SZ_ALIGN;
++
++		ASSERT_BAD_CONTEXT(&sf.uc);
++		fake_sigreturn(&sf, sizeof(sf), 16);
++	}
 +
 +	return 1;
 +}
 +
-+static void pstate_ssbs_bit_checks(struct tdescr *td)
-+{
-+	uint64_t val = 0;
-+	ucontext_t uc;
-+
-+	/* This check reports some result even if MRS SSBS unsupported */
-+	if (get_current_context(td, &uc))
-+		fprintf(stderr,
-+			"INFO: live_uc - got PSTATE: 0x%016lX -> SSBS %s\n",
-+			uc.uc_mcontext.pstate,
-+			(td->saved_uc.uc_mcontext.pstate & PSR_SSBS_BIT) ==
-+			(uc.uc_mcontext.pstate & PSR_SSBS_BIT) ?
-+			"PRESERVED" : "CLEARED");
-+
-+	fprintf(stderr, "Checking with MRS SSBS...\n");
-+	get_regval(S3_MRS_SSBS_SYSREG, val);
-+	fprintf(stderr, "INFO: MRS SSBS - got: 0x%016lX\n", val);
-+	/* pass when preserved */
-+	td->pass = (val & PSR_SSBS_BIT) ==
-+		   (td->saved_uc.uc_mcontext.pstate & PSR_SSBS_BIT);
-+}
-+
 +struct tdescr tde = {
-+		.sanity_disabled = true,
-+		.name = "MANGLE_PSTATE_SSBS_REGS",
-+		.descr = "Mangling uc_mcontext changing SSBS.(PRESERVE)",
-+		.feats_required = FEAT_SSBS,
-+		.sig_trig = SIGUSR1,
-+		.sig_unsupp = SIGILL,
-+		.run = mangle_invalid_pstate_ssbs_run,
-+		.check_result = pstate_ssbs_bit_checks,
++		.name = "FAKE_SIGRETURN_BAD_SIZE_FOR_MAGIC0",
++		.descr = "Triggers a fake sigreturn with a sigframe including a bad non-zero size magic0",
++		.sig_ok = SIGSEGV,
++		.timeout = 3,
++		.run = fake_sigreturn_bad_size_for_magic0_run,
 +};
 -- 
 2.17.1
