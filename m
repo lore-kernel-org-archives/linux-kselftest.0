@@ -2,166 +2,208 @@ Return-Path: <SRS0=EU8z=VA=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=DATE_IN_PAST_03_06,
-	DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DEC7C5B57D
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 01:39:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D0ECC5B57D
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 02:22:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 03D7720673
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 01:39:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="POQmgBOa"
+	by mail.kernel.org (Postfix) with ESMTP id 02A7D20673
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 02:22:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1562120566;
+	bh=hMnvu1y7oW+9dgMx3Cngv884gTKh0B/1QjIVC72xhNg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=KzftiC4+rjMlnRQhe/FeHmyWFzIL7+rG1m6iVoCpQqiy7nNJ3C1ZQTfk9nEDDSOC9
+	 +KGT2yPSJMNdvU3UbW8ZBpyuV1sC7FYR/njeQbO4+Owt4Dd5uBROatMxnAdjmRDzM+
+	 fClP+bN1D5bIWJ9G6FPzdphq3N+3e0mlIj1lrZpg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726963AbfGCBjk (ORCPT
+        id S1727584AbfGCCPc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 2 Jul 2019 21:39:40 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:43036 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726329AbfGCBjk (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Jul 2019 21:39:40 -0400
-Received: by mail-oi1-f196.google.com with SMTP id w79so646589oif.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jul 2019 18:39:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FUA9iG25CmIH4MahZvHYUlC3QW6l7WDczQJ9a6ioMLY=;
-        b=POQmgBOadRPayXo9Fd+ZXV6uH8TQK55zqk1MmI2iyDjPQuE4BVwjuhe9k5HwRxPxFF
-         QNrZV2C2MOyW3no2nxSlnryuZE+jS7R99MLxn27yMHpXBhjo/PVOl5cjLDjvEpQve0BR
-         p+H02z5QHigVh1/dmkHT9Tm6XDXZ9kV/R+OB8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FUA9iG25CmIH4MahZvHYUlC3QW6l7WDczQJ9a6ioMLY=;
-        b=t7jToJGVTVn7TIltwmdAPic6PZTHr1k7DbfjusR7HEEOFFXI9MQFPIu4f3oNBFfHYW
-         mxuYxcufQFXdDcj7Thm5HIZEMYMEHiPDZG64iDoZOPFtR4Uy5llfpaaLVfng7C1xaLym
-         X7ESUwy4HxGAxme/AR9SjWAUtSJa/pzIbmK7nlyM6LqGTW64gPCnCkiFYQQyfq9MEgLw
-         ewzZkglw3ZuxsKE19Qc8sCeHzQ+KGX9l6te/Sqp05Vapi5K/51TZy2HpKP2cA/rlQR+a
-         l//oDSr337LWk+mXAJNTemjFYNsEB+Up7kUY9O9FKSm4O0/1TvGirDUqhEK/4DCWcOXs
-         wCqQ==
-X-Gm-Message-State: APjAAAVxouBVFqfK0Ixoqesp1SyNaLshO/pw6nqHIofh8MZkDQ0mE2Yo
-        h/7UgKynJLlA+dgyk+LxTVnUU2CvlUk=
-X-Google-Smtp-Source: APXvYqxEO0SQAfPRdHXgWGt25UD9Hdx0nrlm5DNCZqVSYLbgGPtkci7ooH6NOC+nmhe8H7B8/MSvUw==
-X-Received: by 2002:a63:c0e:: with SMTP id b14mr32619599pgl.4.1562102158371;
-        Tue, 02 Jul 2019 14:15:58 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t24sm6937pfh.113.2019.07.02.14.15.56
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 02 Jul 2019 14:15:56 -0700 (PDT)
-Date:   Tue, 2 Jul 2019 10:23:05 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/kselftest/runner.sh: Add 30 second timeout per
- test
-Message-ID: <201907021012.5C8D05A878@keescook>
-References: <20190612164146.25280-1-anders.roxell@linaro.org>
+        Tue, 2 Jul 2019 22:15:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53842 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727543AbfGCCPc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Jul 2019 22:15:32 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2872421873;
+        Wed,  3 Jul 2019 02:15:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562120130;
+        bh=hMnvu1y7oW+9dgMx3Cngv884gTKh0B/1QjIVC72xhNg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mszR6nHilkLbLT7UsTWdy2Kk/iEcK+TEEuFv1uTpGC7X2ehJUb245iO/1648kAnjR
+         GkbkwN8IRgIXqy3XVSJJA7CBq0tSijV80hgH7xvWLTYdmqClnBA7WpoEUdm7j6PHmK
+         dyRDYVOa/rLK/KRAFKdTX1G9xjSi+6J7Y66PxRWc=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.1 09/39] selftests/powerpc: Add test of fork with mapping above 512TB
+Date:   Tue,  2 Jul 2019 22:14:44 -0400
+Message-Id: <20190703021514.17727-9-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190703021514.17727-1-sashal@kernel.org>
+References: <20190703021514.17727-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190612164146.25280-1-anders.roxell@linaro.org>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 12, 2019 at 06:41:46PM +0200, Anders Roxell wrote:
-> Commit a745f7af3cbd ("selftests/harness: Add 30 second timeout per
-> test") solves that binary tests doesn't hang forever. However, scripts
-> can still hang forever, this adds an timeout to each test script run. This
-> assumes that an individual test doesn't take longer than 30 seconds.
-> 
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> ---
->  tools/testing/selftests/kselftest/runner.sh | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-> index 00c9020bdda8..cff7d2d83648 100644
-> --- a/tools/testing/selftests/kselftest/runner.sh
-> +++ b/tools/testing/selftests/kselftest/runner.sh
-> @@ -5,6 +5,7 @@
->  export skip_rc=4
->  export logfile=/dev/stdout
->  export per_test_logging=
-> +export TEST_TIMEOUT_DEFAULT=30
+From: Michael Ellerman <mpe@ellerman.id.au>
 
-I would name this "kselftest_timeout" to avoid namespace collisions and
-to drop the "default" name, since while setting it here is a default,
-when used by other parts of the test environment, we'll be changing it
-to non-default, so it's weird to have "default" in the name.
+[ Upstream commit 16391bfc862342f285195013b73c1394fab28b97 ]
 
->  
->  # There isn't a shell-agnostic way to find the path of a sourced file,
->  # so we must rely on BASE_DIR being set to find other tools.
-> @@ -24,6 +25,14 @@ tap_prefix()
->  	fi
->  }
->  
-> +tap_timeout()
-> +{
-> +	if [ -x /usr/bin/timeout ] && [ -x "$BASENAME_TEST" ] \
+This tests that when a process with a mapping above 512TB forks we
+correctly separate the parent and child address spaces. This exercises
+the bug in the context id handling fixed in the previous commit.
 
-The -x test on BASENAME_TEST is already done earlier in run_one(). Also,
-this needs to be "$1" (the argument to tap_timeout).
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/powerpc/mm/.gitignore |  3 +-
+ tools/testing/selftests/powerpc/mm/Makefile   |  4 +-
+ .../powerpc/mm/large_vm_fork_separation.c     | 87 +++++++++++++++++++
+ 3 files changed, 92 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/powerpc/mm/large_vm_fork_separation.c
 
-> +		&& file $BASENAME_TEST |grep -q "shell script"; then
-
-"file" seems pretty heavy here. How about "head -c2":
-
-		&& [ '#!' = "$(head -c2 "$1")" ]
-
-> +		echo -n "timeout $TEST_TIMEOUT_DEFAULT"
-
-And this needs to actually _run_ it, not echo anything.
-
-> +	fi
-> +}
-
-I would expect tap_timeout() to be:
-
-tap_timeout()
-{
-	# If we have the "timeout" tool and the test is a script,
-	# set our timeout.
-	if [ -x /usr/bin/timeout ] &&
-	   [ '#!' = "$(head -c2 "$1")" ] ; then
-		/usr/bin/timeout "$kselftest_timeout" "$1"
-	else
-		"$1"
-	fi
-}
-
-Another thought: should kselftest be changed so that this is the ONLY
-timeout mechanism? i.e. remove the binary timeout code I originally
-added, and just use this instead? Then we don't have to distinguish
-between script and non-script, etc.
-
--Kees
-
-> +
->  run_one()
->  {
->  	DIR="$1"
-> @@ -44,7 +53,7 @@ run_one()
->  		echo "not ok $test_num $TEST_HDR_MSG"
->  	else
->  		cd `dirname $TEST` > /dev/null
-> -		(((((./$BASENAME_TEST 2>&1; echo $? >&3) |
-> +		((((( tap_timeout ./$BASENAME_TEST 2>&1; echo $? >&3) |
->  			tap_prefix >&4) 3>&1) |
->  			(read xs; exit $xs)) 4>>"$logfile" &&
->  		echo "ok $test_num $TEST_HDR_MSG") ||
-> -- 
-> 2.11.0
-> 
-
+diff --git a/tools/testing/selftests/powerpc/mm/.gitignore b/tools/testing/selftests/powerpc/mm/.gitignore
+index ba919308fe30..d503b8764a8e 100644
+--- a/tools/testing/selftests/powerpc/mm/.gitignore
++++ b/tools/testing/selftests/powerpc/mm/.gitignore
+@@ -3,4 +3,5 @@ subpage_prot
+ tempfile
+ prot_sao
+ segv_errors
+-wild_bctr
+\ No newline at end of file
++wild_bctr
++large_vm_fork_separation
+\ No newline at end of file
+diff --git a/tools/testing/selftests/powerpc/mm/Makefile b/tools/testing/selftests/powerpc/mm/Makefile
+index 43d68420e363..f1fbc15800c4 100644
+--- a/tools/testing/selftests/powerpc/mm/Makefile
++++ b/tools/testing/selftests/powerpc/mm/Makefile
+@@ -2,7 +2,8 @@
+ noarg:
+ 	$(MAKE) -C ../
+ 
+-TEST_GEN_PROGS := hugetlb_vs_thp_test subpage_prot prot_sao segv_errors wild_bctr
++TEST_GEN_PROGS := hugetlb_vs_thp_test subpage_prot prot_sao segv_errors wild_bctr \
++		  large_vm_fork_separation
+ TEST_GEN_FILES := tempfile
+ 
+ top_srcdir = ../../../../..
+@@ -13,6 +14,7 @@ $(TEST_GEN_PROGS): ../harness.c
+ $(OUTPUT)/prot_sao: ../utils.c
+ 
+ $(OUTPUT)/wild_bctr: CFLAGS += -m64
++$(OUTPUT)/large_vm_fork_separation: CFLAGS += -m64
+ 
+ $(OUTPUT)/tempfile:
+ 	dd if=/dev/zero of=$@ bs=64k count=1
+diff --git a/tools/testing/selftests/powerpc/mm/large_vm_fork_separation.c b/tools/testing/selftests/powerpc/mm/large_vm_fork_separation.c
+new file mode 100644
+index 000000000000..2363a7f3ab0d
+--- /dev/null
++++ b/tools/testing/selftests/powerpc/mm/large_vm_fork_separation.c
+@@ -0,0 +1,87 @@
++// SPDX-License-Identifier: GPL-2.0+
++//
++// Copyright 2019, Michael Ellerman, IBM Corp.
++//
++// Test that allocating memory beyond the memory limit and then forking is
++// handled correctly, ie. the child is able to access the mappings beyond the
++// memory limit and the child's writes are not visible to the parent.
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/mman.h>
++#include <sys/types.h>
++#include <sys/wait.h>
++#include <unistd.h>
++
++#include "utils.h"
++
++
++#ifndef MAP_FIXED_NOREPLACE
++#define MAP_FIXED_NOREPLACE	MAP_FIXED	// "Should be safe" above 512TB
++#endif
++
++
++static int test(void)
++{
++	int p2c[2], c2p[2], rc, status, c, *p;
++	unsigned long page_size;
++	pid_t pid;
++
++	page_size = sysconf(_SC_PAGESIZE);
++	SKIP_IF(page_size != 65536);
++
++	// Create a mapping at 512TB to allocate an extended_id
++	p = mmap((void *)(512ul << 40), page_size, PROT_READ | PROT_WRITE,
++		MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED_NOREPLACE, -1, 0);
++	if (p == MAP_FAILED) {
++		perror("mmap");
++		printf("Error: couldn't mmap(), confirm kernel has 4TB support?\n");
++		return 1;
++	}
++
++	printf("parent writing %p = 1\n", p);
++	*p = 1;
++
++	FAIL_IF(pipe(p2c) == -1 || pipe(c2p) == -1);
++
++	pid = fork();
++	if (pid == 0) {
++		FAIL_IF(read(p2c[0], &c, 1) != 1);
++
++		pid = getpid();
++		printf("child writing  %p = %d\n", p, pid);
++		*p = pid;
++
++		FAIL_IF(write(c2p[1], &c, 1) != 1);
++		FAIL_IF(read(p2c[0], &c, 1) != 1);
++		exit(0);
++	}
++
++	c = 0;
++	FAIL_IF(write(p2c[1], &c, 1) != 1);
++	FAIL_IF(read(c2p[0], &c, 1) != 1);
++
++	// Prevent compiler optimisation
++	barrier();
++
++	rc = 0;
++	printf("parent reading %p = %d\n", p, *p);
++	if (*p != 1) {
++		printf("Error: BUG! parent saw child's write! *p = %d\n", *p);
++		rc = 1;
++	}
++
++	FAIL_IF(write(p2c[1], &c, 1) != 1);
++	FAIL_IF(waitpid(pid, &status, 0) == -1);
++	FAIL_IF(!WIFEXITED(status) || WEXITSTATUS(status));
++
++	if (rc == 0)
++		printf("success: test completed OK\n");
++
++	return rc;
++}
++
++int main(void)
++{
++	return test_harness(test, "large_vm_fork_separation");
++}
 -- 
-Kees Cook
+2.20.1
+
