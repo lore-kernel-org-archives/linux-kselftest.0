@@ -4,35 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.0 required=3.0
 	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75A8FC0650E
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 16:36:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41819C06513
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 16:36:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 550FA218A0
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 16:36:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 15F97218A0
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 16:36:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727118AbfGCQgT (ORCPT
+        id S1727121AbfGCQgU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 3 Jul 2019 12:36:19 -0400
+        Wed, 3 Jul 2019 12:36:20 -0400
 Received: from foss.arm.com ([217.140.110.172]:52436 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726989AbfGCQgS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Jul 2019 12:36:18 -0400
+        id S1726989AbfGCQgU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 3 Jul 2019 12:36:20 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85D3C1500;
-        Wed,  3 Jul 2019 09:36:17 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 869BD360;
+        Wed,  3 Jul 2019 09:36:19 -0700 (PDT)
 Received: from e120937-lin.cambridge.arm.com (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B900D3F718;
-        Wed,  3 Jul 2019 09:36:16 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B9A033F718;
+        Wed,  3 Jul 2019 09:36:18 -0700 (PDT)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, shuah@kernel.org
 Cc:     dave.martin@arm.com, andreyknvl@google.com
-Subject: [PATCH v2 04/10] kselftest: arm64: mangle_pstate_invalid_mode_el
-Date:   Wed,  3 Jul 2019 17:35:26 +0100
-Message-Id: <20190703163532.7485-5-cristian.marussi@arm.com>
+Subject: [PATCH v2 06/10] kselftest: arm64: fake_sigreturn_bad_magic
+Date:   Wed,  3 Jul 2019 17:35:28 +0100
+Message-Id: <20190703163532.7485-7-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190703163532.7485-1-cristian.marussi@arm.com>
 References: <20190703163532.7485-1-cristian.marussi@arm.com>
@@ -41,136 +41,193 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Added 3 simple mangle testcases that mess with the ucontext_t
-from within the sig_handler, trying to toggle PSTATE mode bits to
-trick the system into switching to EL1/EL2/EL3.
-Expects SIGSEGV on test PASS.
+Added a simple fake_sigreturn testcase which builds a ucontext_t
+with a bad magic header and place it onto the stack.
+Expects a SIGSEGV on test PASS.
+This commit also introduces a common utility assembly function to
+invoke a sigreturn using a fake provided sigframe.
 
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
- .../arm64/signal/testcases/.gitignore         |  3 ++
- .../mangle_pstate_invalid_mode_el1.c          | 29 +++++++++++++++++++
- .../mangle_pstate_invalid_mode_el2.c          | 29 +++++++++++++++++++
- .../mangle_pstate_invalid_mode_el3.c          | 29 +++++++++++++++++++
- 4 files changed, 90 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el1.c
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el2.c
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el3.c
+ tools/testing/selftests/arm64/signal/Makefile |  2 +-
+ .../testing/selftests/arm64/signal/signals.S  | 64 +++++++++++++++++++
+ .../arm64/signal/test_signals_utils.h         |  1 +
+ .../arm64/signal/testcases/.gitignore         |  1 +
+ .../testcases/fake_sigreturn_bad_magic.c      | 63 ++++++++++++++++++
+ 5 files changed, 130 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/signal/signals.S
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c
 
+diff --git a/tools/testing/selftests/arm64/signal/Makefile b/tools/testing/selftests/arm64/signal/Makefile
+index 5ec92a4dba48..fbef7986f8c8 100644
+--- a/tools/testing/selftests/arm64/signal/Makefile
++++ b/tools/testing/selftests/arm64/signal/Makefile
+@@ -78,7 +78,7 @@ endif
+ # Common test-unit targets to build common-layout test-cases executables
+ # Needs secondary expansion to properly include the testcase c-file in pre-reqs
+ .SECONDEXPANSION:
+-$(PROGS): test_signals.c test_signals_utils.c testcases/testcases.c $$@.c test_signals.h test_signals_utils.h testcases/testcases.h
++$(PROGS): test_signals.c test_signals_utils.c testcases/testcases.c signals.S $$@.c test_signals.h test_signals_utils.h testcases/testcases.h
+ 	@if [ ! -d $(khdr_dir) ]; then \
+ 		echo -n "\n!!! WARNING: $(khdr_dir) NOT FOUND."; \
+ 		echo "===>  Are you sure Kernel Headers have been installed properly ?\n"; \
+diff --git a/tools/testing/selftests/arm64/signal/signals.S b/tools/testing/selftests/arm64/signal/signals.S
+new file mode 100644
+index 000000000000..6262b877400b
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/signals.S
+@@ -0,0 +1,64 @@
++/*
++ * SPDX-License-Identifier: GPL-2.0
++ * Copyright (C) 2019 ARM Limited
++ */
++
++#include <asm/unistd.h>
++
++.section        ".rodata", "a"
++call_fmt:
++	.asciz "Calling sigreturn with fake sigframe sized:%zd at calculated SP @%08lX\n"
++
++.text
++
++.globl fake_sigreturn
++
++/*	fake_sigreturn	x0:&sigframe,  x1:sigframe_size,  x2:alignment_SP */
++fake_sigreturn:
++	mov x20, x0
++	mov x21, x1
++	mov x22, x2
++	mov x23, sp
++
++	/* create space on the stack for fake sigframe..."x22"-aligned */
++	mov x0, #0
++	add x0, x21, x22
++	sub x22, x22, #1
++	bic x0, x0, x22
++	sub x23, x23, x0
++
++	ldr x0, =call_fmt
++	mov x1, x21
++	mov x2, x23
++	bl printf
++
++	mov sp, x23
++
++	/* now fill it with the provided content... */
++	mov x0, sp
++	mov x1, x20
++	mov x2, x21
++	bl memcpy
++
++	/*
++	 * Here saving a last minute SP to current->token acts as a marker:
++	 * if we got here, we are successfully faking a sigreturn; in other
++	 * words we are sure no bad fatal signal has been raised till now
++	 * for unrelated reasons, so we should consider the possibl observed
++	 * fatal signal like SEGV coming from Kernel restore_sigframe() and
++	 * triggered as expected from our test-case.
++	 * For simplicity this assumes that current field 'token' is laid out
++	 * as first in struct tdescr
++	 */
++	ldr x0, current
++	str x23, [x0]
++	/* SP is already pointing back to the just built fake sigframe here */
++	mov x8, #__NR_rt_sigreturn
++	svc #0
++
++	/*
++	 * Above sigreturn should not return...looping here leads to a timeout
++	 * and ensure proper and clean test failure, instead of jumping around
++	 * on a potentially corrupted stack.
++	 */
++	b .
+diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
+index b37167c98ccd..cdf3018aa1aa 100644
+--- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
++++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
+@@ -27,4 +27,5 @@ int test_run(struct tdescr *td);
+ void test_result(struct tdescr *td);
+ 
+ bool get_current_context(struct tdescr *td, ucontext_t *dest_uc);
++int fake_sigreturn(void *sigframe, size_t sz, int alignment);
+ #endif
 diff --git a/tools/testing/selftests/arm64/signal/testcases/.gitignore b/tools/testing/selftests/arm64/signal/testcases/.gitignore
-index 8a0a29f0cc2a..226bb179b673 100644
+index a48a118b1a1a..0ea6fdc3765c 100644
 --- a/tools/testing/selftests/arm64/signal/testcases/.gitignore
 +++ b/tools/testing/selftests/arm64/signal/testcases/.gitignore
-@@ -1,2 +1,5 @@
- mangle_pstate_invalid_compat_toggle
- mangle_pstate_invalid_daif_bits
-+mangle_pstate_invalid_mode_el1
-+mangle_pstate_invalid_mode_el2
-+mangle_pstate_invalid_mode_el3
-diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el1.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el1.c
+@@ -4,3 +4,4 @@ mangle_pstate_invalid_mode_el1
+ mangle_pstate_invalid_mode_el2
+ mangle_pstate_invalid_mode_el3
+ mangle_pstate_ssbs_regs
++fake_sigreturn_bad_magic
+diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c
 new file mode 100644
-index 000000000000..07aed7624383
+index 000000000000..b4c063e02a7a
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el1.c
-@@ -0,0 +1,29 @@
++++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c
+@@ -0,0 +1,63 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/* Copyright (C) 2019 ARM Limited */
++
++#include <stdio.h>
++#include <ucontext.h>
 +
 +#include "test_signals_utils.h"
 +#include "testcases.h"
 +
-+static int mangle_invalid_pstate_run(struct tdescr *td, siginfo_t *si,
-+				     ucontext_t *uc)
-+{
-+	ASSERT_GOOD_CONTEXT(uc);
++struct fake_sigframe sf;
 +
++static int fake_sigreturn_bad_magic_run(struct tdescr *td,
++					siginfo_t *si, ucontext_t *uc)
++{
++	size_t resv_sz, offset;
++	struct _aarch64_ctx *shead = GET_SF_RESV_HEAD(sf), *head;
++
++	/* just to fill the ucontext_t with something real */
++	if (!get_current_context(td, &sf.uc))
++		return 1;
++
++	resv_sz = GET_SF_RESV_SIZE(sf);
 +	/*
-+	 * This config should trigger a SIGSEGV by Kernel
-+	 * when checking valid_user_regs()
++	 * find the terminator, preserving existing headers
++	 * and verify amount of spare room in __reserved area.
 +	 */
-+	uc->uc_mcontext.pstate &= ~PSR_MODE_MASK;
-+	uc->uc_mcontext.pstate |= PSR_MODE_EL1t;
++	head = get_terminator(shead, resv_sz, &offset);
++	/*
++	 * try stripping extra_context header when low on space:
++	 * we need at least 2*HDR_SZ space ... one for the KSFT_BAD_MAGIC
++	 * and the other for the usual terminator.
++	 */
++	if (head && resv_sz - offset < HDR_SZ * 2) {
++		fprintf(stderr, "Low on space:%zd. Discarding extra_context.\n",
++			resv_sz - offset);
++		head = get_header(shead, EXTRA_MAGIC, resv_sz, &offset);
++	}
++	/* just give up and timeout if still not enough space */
++	if (head && resv_sz - offset >= HDR_SZ) {
++		fprintf(stderr, "Mangling template header. Spare space:%zd\n",
++			resv_sz - offset);
++		/*
++		 * use a well known NON existent bad magic...something
++		 * we should pretty sure won't be ever defined in Kernel
++		 */
++		head->magic = KSFT_BAD_MAGIC;
++		head->size = HDR_SZ;
++		write_terminator_record(GET_RESV_NEXT_HEAD(head));
++
++		ASSERT_BAD_CONTEXT(&sf.uc);
++		fake_sigreturn(&sf, sizeof(sf), 16);
++	}
 +
 +	return 1;
 +}
 +
 +struct tdescr tde = {
-+		.sanity_disabled = true,
-+		.name = "MANGLE_PSTATE_INVALID_MODE_EL1t",
-+		.descr = "Mangling uc_mcontext with INVALID MODE EL1t",
-+		.sig_trig = SIGUSR1,
++		.name = "FAKE_SIGRETURN_BAD_MAGIC",
++		.descr = "Triggers a fake sigreturn with a sigframe including a bad non-existent magic",
 +		.sig_ok = SIGSEGV,
-+		.run = mangle_invalid_pstate_run,
-+};
-diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el2.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el2.c
-new file mode 100644
-index 000000000000..0fe7f69efb33
---- /dev/null
-+++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el2.c
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2019 ARM Limited */
-+
-+#include "test_signals_utils.h"
-+#include "testcases.h"
-+
-+static int mangle_invalid_pstate_run(struct tdescr *td, siginfo_t *si,
-+				     ucontext_t *uc)
-+{
-+	ASSERT_GOOD_CONTEXT(uc);
-+
-+	/*
-+	 * This config should trigger a SIGSEGV by Kernel
-+	 * when checking valid_user_regs()
-+	 */
-+	uc->uc_mcontext.pstate &= ~PSR_MODE_MASK;
-+	uc->uc_mcontext.pstate |= PSR_MODE_EL2t;
-+
-+	return 1;
-+}
-+
-+struct tdescr tde = {
-+		.sanity_disabled = true,
-+		.name = "MANGLE_PSTATE_INVALID_MODE_EL2t",
-+		.descr = "Mangling uc_mcontext with INVALID MODE EL2t",
-+		.sig_trig = SIGUSR1,
-+		.sig_ok = SIGSEGV,
-+		.run = mangle_invalid_pstate_run,
-+};
-diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el3.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el3.c
-new file mode 100644
-index 000000000000..61131dd6ca0c
---- /dev/null
-+++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el3.c
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2019 ARM Limited */
-+
-+#include "test_signals_utils.h"
-+#include "testcases.h"
-+
-+static int mangle_invalid_pstate_run(struct tdescr *td, siginfo_t *si,
-+				     ucontext_t *uc)
-+{
-+	ASSERT_GOOD_CONTEXT(uc);
-+
-+	/*
-+	 * This config should trigger a SIGSEGV by Kernel
-+	 * when checking valid_user_regs()
-+	 */
-+	uc->uc_mcontext.pstate &= ~PSR_MODE_MASK;
-+	uc->uc_mcontext.pstate |= PSR_MODE_EL3t;
-+
-+	return 1;
-+}
-+
-+struct tdescr tde = {
-+		.sanity_disabled = true,
-+		.name = "MANGLE_PSTATE_INVALID_MODE_EL3t",
-+		.descr = "Mangling uc_mcontext with INVALID MODE EL3t",
-+		.sig_trig = SIGUSR1,
-+		.sig_ok = SIGSEGV,
-+		.run = mangle_invalid_pstate_run,
++		.timeout = 3,
++		.run = fake_sigreturn_bad_magic_run,
 +};
 -- 
 2.17.1
