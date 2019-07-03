@@ -2,156 +2,203 @@ Return-Path: <SRS0=EU8z=VA=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C8FFC5B57D
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 00:58:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B377FC5B57D
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 01:07:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D46B920828
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 00:58:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1562115501;
-	bh=2bbugPbDF5cGeZm4Qp00ViLiAZvE31dYvQi7W3tJP48=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=YyD7CdBkEW+WeTRDMh7hMfDS+vaB8NknREnaFv8TDIiXv3YtZ7XNC1zsz/qG/8m6T
-	 JoFPBtnhDZC48LYALWVH+Dys73pUFowDem2N5w3/JEAQmL7q62zx4MNWwbm3auvhnd
-	 ht6fXjvrtY1jgOnY4DQ2e1BFf1rGFYMvkxZ0aBbg=
+	by mail.kernel.org (Postfix) with ESMTP id 910552089C
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jul 2019 01:07:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727451AbfGCA6V (ORCPT
+        id S1726430AbfGCBHe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 2 Jul 2019 20:58:21 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:39114 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727074AbfGCA6V (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Jul 2019 20:58:21 -0400
-Received: by mail-oi1-f194.google.com with SMTP id m202so599484oig.6;
-        Tue, 02 Jul 2019 17:58:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DtQmDM1bjxYXcqNKxDIhe3kpTPPYxiOv+5lbfQfOZdE=;
-        b=rdNe1uBrDpAhqLxbcDYjpTEaSwGuI+OGS7FawePaNtE4XaFxFX9LZRkySKagywu96E
-         5elS2OlM2+9SQgOMAHfPsD14tq/9GPSsyXTBQ3v1vpiNeL6mut71AVMzDUmgoKvcaFjG
-         ZkG0TM63qOs8T6VRpCXd6HLvZitCUOj8H6AqM607XGa9sNMZxcj5Tj3Dgs6HVZi8+ESR
-         xkOnd3jnmRURIOnkuqQO34Ubry6C0J+SGZG6KYYpQEfIBOlBi11jTR0PdknRRl+Zli6X
-         R2bK6l6wqZo8BNKUpi7f8TOuuWmeQSAPLRaOIjTworkSmjVLbbO8vJl2DBuaJCC4r6ZZ
-         FONQ==
-X-Gm-Message-State: APjAAAUu5rtSqVJRCWOmfmBKZQ6UUYSPd1ThQtxFvCoFJrs/jqDCbwzs
-        OVV69Bmzj+Eqt4CMigJrY+ILGKuHCGs=
-X-Google-Smtp-Source: APXvYqxgfIVc55JlioUk1yKtSLmO9ntomZUFE6/lH8QIzZr758B9lCLwgU+mAmopE2kMlm4WWSK35A==
-X-Received: by 2002:a63:f342:: with SMTP id t2mr30570356pgj.83.1562101035558;
-        Tue, 02 Jul 2019 13:57:15 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id d26sm16963231pfn.29.2019.07.02.13.57.13
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 02 Jul 2019 13:57:13 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id DC91A40251; Tue,  2 Jul 2019 20:57:12 +0000 (UTC)
-Date:   Tue, 2 Jul 2019 20:57:12 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        shuah <shuah@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Subject: Re: [PATCH v5 07/18] kunit: test: add initial tests
-Message-ID: <20190702205712.GS19023@42.do-not-panic.com>
-References: <20190617082613.109131-1-brendanhiggins@google.com>
- <20190617082613.109131-8-brendanhiggins@google.com>
- <20190625232249.GS19023@42.do-not-panic.com>
- <CAFd5g46mnd=a0OqFCx0hOHX+DxW+5yA2LXH5Q0gEg8yUZK=4FA@mail.gmail.com>
- <CAFd5g46=7OQDREdLDTiMgVWq-Xj2zfOw8cRhPJEihSbO89MDyA@mail.gmail.com>
+        Tue, 2 Jul 2019 21:07:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53454 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726150AbfGCBHe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Jul 2019 21:07:34 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2AA5C20673;
+        Wed,  3 Jul 2019 01:07:32 +0000 (UTC)
+Date:   Tue, 2 Jul 2019 21:07:30 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     shuah <shuah@kernel.org>, Po-Hsu Lin <po-hsu.lin@canonical.com>,
+        mingo@redhat.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/ftrace: skip ftrace test if FTRACE was not
+ enabled
+Message-ID: <20190702210730.2c041882@gandalf.local.home>
+In-Reply-To: <20190703091147.064029248fed5066ea5e5d2b@kernel.org>
+References: <20190702062358.7330-1-po-hsu.lin@canonical.com>
+        <4a44dd22-be88-ce5b-5c9b-6a3759b6c2eb@kernel.org>
+        <20190703091147.064029248fed5066ea5e5d2b@kernel.org>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFd5g46=7OQDREdLDTiMgVWq-Xj2zfOw8cRhPJEihSbO89MDyA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 02, 2019 at 10:52:50AM -0700, Brendan Higgins wrote:
-> On Wed, Jun 26, 2019 at 12:53 AM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> >
-> > On Tue, Jun 25, 2019 at 4:22 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > >
-> > > On Mon, Jun 17, 2019 at 01:26:02AM -0700, Brendan Higgins wrote:
-> > > > diff --git a/kunit/example-test.c b/kunit/example-test.c
-> > > > new file mode 100644
-> > > > index 0000000000000..f44b8ece488bb
-> > > > --- /dev/null
-> > > > +++ b/kunit/example-test.c
-> > >
-> > > <-- snip -->
-> > >
-> > > > +/*
-> > > > + * This defines a suite or grouping of tests.
-> > > > + *
-> > > > + * Test cases are defined as belonging to the suite by adding them to
-> > > > + * `kunit_cases`.
-> > > > + *
-> > > > + * Often it is desirable to run some function which will set up things which
-> > > > + * will be used by every test; this is accomplished with an `init` function
-> > > > + * which runs before each test case is invoked. Similarly, an `exit` function
-> > > > + * may be specified which runs after every test case and can be used to for
-> > > > + * cleanup. For clarity, running tests in a test module would behave as follows:
-> > > > + *
-> > >
-> > > To be clear this is not the kernel module init, but rather the kunit
-> > > module init. I think using kmodule would make this clearer to a reader.
-> >
-> > Seems reasonable. Will fix in next revision.
-> >
-> > > > + * module.init(test);
-> > > > + * module.test_case[0](test);
-> > > > + * module.exit(test);
-> > > > + * module.init(test);
-> > > > + * module.test_case[1](test);
-> > > > + * module.exit(test);
-> > > > + * ...;
-> > > > + */
+On Wed, 3 Jul 2019 09:11:47 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
+
+> Hi Po-Hsu Lin,
 > 
-> Do you think it might be clearer yet to rename `struct kunit_module
-> *module;` to `struct kunit_suite *suite;`?
+> On Tue, 2 Jul 2019 13:22:26 -0600
+> shuah <shuah@kernel.org> wrote:
+> 
+> > Hi Po-Hsu Lin,
+> > 
+> > On 7/2/19 12:23 AM, Po-Hsu Lin wrote:  
+> > > The ftrace test will need to have CONFIG_FTRACE enabled to make the
+> > > ftrace directory available.
+> > > 
+> > > Add an additional check to skip this test if the CONFIG_FTRACE was not
+> > > enabled.  
+> 
+> Sorry, NAK for config check.
 
-Yes. Definitely. Or struct kunit_test. Up to you.
+Agreed, as  my test boxes do not hold the source code of the kernel
+they are running.
 
-  Luis
+> 
+> > > 
+> > > This will be helpful to avoid a false-positive test result when testing
+> > > it directly with the following commad against a kernel that does not
+> > > have CONFIG_FTRACE enabled:  
+> 
+> Would you know tools/testing/selftests/ftrace/config (and other config files
+> in each tests) ?
+> 
+> Since each selftest depends specific configurations, those configs are
+> written in config file, and tester must enable it using 
+> "scripts/kconfig/merge_config.sh".
+> 
+> We can not check the kernel config in some cases, e.g. distro kernel,
+> cross-build kernel, remote build kernel etc. Also, the .config file
+> can be a config file for another kernel build.
+> 
+> So please take care of your kernel configuration. If you find any test
+> failed even if you enable configs in config file under that test, please
+> report it, since that is a bug.
+> 
+> 
+> Thank you,
+> 
+> > >      make -C tools/testing/selftests TARGETS=ftrace run_tests
+> > > 
+> > > The test result on an Ubuntu KVM kernel will be changed from:
+> > >      selftests: ftrace: ftracetest
+> > >      ========================================
+> > >      Error: No ftrace directory found
+> > >      not ok 1..1 selftests: ftrace: ftracetest [FAIL]
+> > > To:  
+> > 
+> > Thanks for the patch.
+> > 
+> > Check patch fails with the above To:
+> > 
+> > WARNING: Use a single space after To:
+> > #107:
+> > To:
+> > 
+> > ERROR: Unrecognized email address: ''
+> > #107:
+> > To:
+> > 
+> > total: 1 errors, 1 warnings, 23 lines checked
+> > 
+> > 
+> > Please fix and send v2.
+> >   
+> > >      selftests: ftrace: ftracetest
+> > >      ========================================
+> > >      CONFIG_FTRACE was not enabled, test skipped.
+> > >      not ok 1..1 selftests: ftrace: ftracetest [SKIP]
+> > > 
+> > > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+> > > ---
+> > >   tools/testing/selftests/ftrace/ftracetest | 11 ++++++++++-
+> > >   1 file changed, 10 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+> > > index 6d5e9e8..6c8322e 100755
+> > > --- a/tools/testing/selftests/ftrace/ftracetest
+> > > +++ b/tools/testing/selftests/ftrace/ftracetest
+> > > @@ -7,6 +7,9 @@
+> > >   #  Written by Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
+> > >   #  
+> > 
+> > Hmm. You havem't cc'ed Masami on this. Adding Masami.
+> > 
+> > I would think Masami should be on the Signed-off-by as well,
+> > since he is the author.
+> >   
+> > >   
+> > > +# Kselftest framework requirement - SKIP code is 4.
+> > > +ksft_skip=4
+> > > +
+> > >   usage() { # errno [message]
+> > >   [ ! -z "$2" ] && echo $2
+> > >   echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
+> > > @@ -139,7 +142,13 @@ parse_opts $*
+> > >   
+> > >   # Verify parameters
+> > >   if [ -z "$TRACING_DIR" -o ! -d "$TRACING_DIR" ]; then
+
+I'm thinking if we didn't find the TRACING_DIR (-z "$TRACING_DIR"
+returns true), then we exit with the skip. I don't believe we should be
+testing ftrace if tracefs isn't even loaded. Or something like:
+
+	err_ret=1
+	err_skip=4
+
+	errexit() {
+	  echo "Error: $1" 1>&2
+	  exit $err_ret
+	}
+
+	[..]
+
+	if [ -z "$TRACING_DIR" ]; then
+	  save_err=$err_ret
+	  err_ret=$err_skip
+	  mount -t tracefs nodev /sys/kernel/tracing ||
+	    errexit "kernel does not have tracefs"
+	  err_ret=$save_err
+	  TRACING_DIR="/sys/kernel/tracing"
+	fi
+	if [ ! -d "$TRACING_DIR" ]; then
+	  errexit "tracefs is not a directory?"
+	fi
+
+Would something like that work?
+
+-- Steve
+
+
+> > > -  errexit "No ftrace directory found"
+> > > +  ftrace_enabled=`grep "^CONFIG_FTRACE=y" /lib/modules/$(uname -r)/build/.config`
+> > > +  if [ -z "$ftrace_enabled" ]; then
+> > > +    echo "CONFIG_FTRACE was not enabled, test skipped."
+> > > +    exit $ksft_skip
+> > > +  else
+> > > +    errexit "No ftrace directory found"
+> > > +  fi
+> > >   fi
+> > >   
+> > >   # Preparing logs
+> > >   
+> > 
+> > thanks,
+> > -- Shuah  
+> 
+> 
+
