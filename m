@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B66BC46499
-	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Jul 2019 20:46:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06EF5C46499
+	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Jul 2019 20:48:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 330D4216FD
-	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Jul 2019 20:46:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D23F82184C
+	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Jul 2019 20:48:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1562359562;
-	bh=oAiALuxJspRsWP6V+83E4hobjwlRqF6YTuLRBtR+Lvo=;
+	s=default; t=1562359693;
+	bh=AWMWbpTxCOW9mzzWQpXl9pcjKxJ1xDKBKWvokVU2YjI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=SB92dAgaqc8/Q7MPFfpgWYwgnrm/vGOihUxbbU1twNbx832df4rcSlf922tK6g3Dz
-	 MBy3MuAxcIvXAq9gUIwAdMjB3UeJooRFXGlSdeiBEn9UNL0ePEtmt87Yb8gKDhV3zR
-	 gQ5i+3mkyNUII4vxKnPJMI8lI4TcbxLN5Qpyjv2s=
+	b=RNapgGPJzO+B71ewrJ5g5bjHlOhs+qErRrv9S1fjrTbuY8KPjCQwr9HJQrCXJJ+y5
+	 kG6zPmF6nOHxU4JMOZiVr0CF278zYjzc9cehDhcQ6WFoetlueGiiMnUanJTtIRvfKi
+	 SkkxWRTP2fcQI5zVODRx+KjHybzQbmbIHwx6phB8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728208AbfGEUp7 (ORCPT
+        id S1728316AbfGEUsN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 5 Jul 2019 16:45:59 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:33856 "EHLO
+        Fri, 5 Jul 2019 16:48:13 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:33691 "EHLO
         mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726411AbfGEUp7 (ORCPT
+        with ESMTP id S1728000AbfGEUsN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Jul 2019 16:45:59 -0400
-Received: by mail-pf1-f195.google.com with SMTP id b13so159904pfo.1;
-        Fri, 05 Jul 2019 13:45:58 -0700 (PDT)
+        Fri, 5 Jul 2019 16:48:13 -0400
+Received: by mail-pf1-f195.google.com with SMTP id x15so4783636pfq.0;
+        Fri, 05 Jul 2019 13:48:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=x4GIgI5QbQFYYHeADDS48yN0XwXbMzJsu3FTa+FaXcs=;
-        b=EEgnxdKVae5dLG3AvMagDH2whhQVFatQ1XfuuTEMJqXFdaO81LmDCsFAcpbXRXazur
-         7Nz9FFgtVruBbgzIgpctdysszanug/y2zd/g5vOxp3UN+b6QKLuEAYYr2U3JiMbYE+DV
-         TYlt2ztyXic2xsBnJVD83P/XZQo2NetHL8/uhaDiBNHPtYiESiTw+b6I3FZrDDVO/4Gi
-         s4miR5mx4pbg+DGbK4q1+Hu4TSPEsjdGWRNuEhBK0rES5AnCWosP+Rr1i/ZJ7X9el03m
-         Cib0JPx+zM0ZuGItBypJtpnoG8yFnSPKYyW5LRbSWzKq89pTwdaJ2IomEBW100+5C+x/
-         m2bg==
-X-Gm-Message-State: APjAAAVyVdJhG2B2iMb3yH27o0FgAHWKKO7VK9eklZHNNXdqVokPkBOc
-        HNMWDyL99aBK7LL88X7Biyw=
-X-Google-Smtp-Source: APXvYqzeFsCVF2ZvnbfqZHx8vhkEXe3aUADAaqpXImPQcsaBURcoZTbfCuqJiBja1aAbbmI4GIuc+A==
-X-Received: by 2002:a63:e018:: with SMTP id e24mr7383945pgh.361.1562359558392;
-        Fri, 05 Jul 2019 13:45:58 -0700 (PDT)
+        bh=AcnoVRibB2N6fZ+Yp6hO160ET8GdPKrkYOq4kfDG3/o=;
+        b=U+A52T7uN8wFdktHUnLIZDXucd2tGsN+Yc1acydhtUhVA6g71/vXY/zPVbtz/wofy6
+         +ewZk9kdrIen3fy6pacm+NXGg2uHjV6z1/Lpnc0GcZh+GwF/SMbT/6aP35WXTuFrq8Ei
+         z6ND45p35bhuF4Rxhgt8Hiju2HSTHvzM5JdPcL30yPK/LZCjk4tu+61hk3aktBFBhiD0
+         qMx1nibJWaDtPMH7ZlvdJkhJnGkLxRjgHw1ZAQ+JC/js3djI3Itp+zCfbgv9gR5ntp0P
+         hWUT4tc05R44rTuyqFSfupf4MET8jzDwHPVRsbTBPNN1pVWfGdvj7XJASs84XG0UVx2W
+         PmaA==
+X-Gm-Message-State: APjAAAV2yao8D8E3u+kh2jmLTgrklxXu7dAmUETPhKApTXU0B05iM6Pq
+        eGP9pQU9sEZD3UeHXjcnZSY=
+X-Google-Smtp-Source: APXvYqzYFkN68Owkq9koxWESGSYcLlSN0sO/MqwSKxCi7MUUXmOztl1dSndkrgfsbD0HEg9i6sStdg==
+X-Received: by 2002:a63:6986:: with SMTP id e128mr7831367pgc.220.1562359692276;
+        Fri, 05 Jul 2019 13:48:12 -0700 (PDT)
 Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id s66sm13955192pgs.39.2019.07.05.13.45.56
+        by smtp.gmail.com with ESMTPSA id p7sm13219309pfp.131.2019.07.05.13.48.10
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 05 Jul 2019 13:45:57 -0700 (PDT)
+        Fri, 05 Jul 2019 13:48:11 -0700 (PDT)
 Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 9151F40190; Fri,  5 Jul 2019 20:45:56 +0000 (UTC)
-Date:   Fri, 5 Jul 2019 20:45:56 +0000
+        id 568B940190; Fri,  5 Jul 2019 20:48:10 +0000 (UTC)
+Date:   Fri, 5 Jul 2019 20:48:10 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Brendan Higgins <brendanhiggins@google.com>
 Cc:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
@@ -70,35 +70,33 @@ Cc:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
         julia.lawall@lip6.fr, khilman@baylibre.com, knut.omang@oracle.com,
         logang@deltatee.com, mpe@ellerman.id.au, pmladek@suse.com,
         rdunlap@infradead.org, richard@nod.at, rientjes@google.com,
-        rostedt@goodmis.org, wfg@linux.intel.com,
-        Iurii Zaikin <yzaikin@google.com>
-Subject: Re: [PATCH v6 17/18] kernel/sysctl-test: Add null pointer test for
- sysctl.c:proc_dointvec()
-Message-ID: <20190705204556.GD19023@42.do-not-panic.com>
+        rostedt@goodmis.org, wfg@linux.intel.com
+Subject: Re: [PATCH v6 18/18] MAINTAINERS: add proc sysctl KUnit test to PROC
+ SYSCTL section
+Message-ID: <20190705204810.GE19023@42.do-not-panic.com>
 References: <20190704003615.204860-1-brendanhiggins@google.com>
- <20190704003615.204860-18-brendanhiggins@google.com>
+ <20190704003615.204860-19-brendanhiggins@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190704003615.204860-18-brendanhiggins@google.com>
+In-Reply-To: <20190704003615.204860-19-brendanhiggins@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 03, 2019 at 05:36:14PM -0700, Brendan Higgins wrote:
-> From: Iurii Zaikin <yzaikin@google.com>
+On Wed, Jul 03, 2019 at 05:36:15PM -0700, Brendan Higgins wrote:
+> Add entry for the new proc sysctl KUnit test to the PROC SYSCTL section.
 > 
-> KUnit tests for initialized data behavior of proc_dointvec that is
-> explicitly checked in the code. Includes basic parsing tests including
-> int min/max overflow.
-> 
-> Signed-off-by: Iurii Zaikin <yzaikin@google.com>
 > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+> Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+Come to think of it, I'd welcome Iurii to be added as a maintainer,
+with the hope Iurii would be up to review only the kunit changes. Of
+course if Iurii would be up to also help review future proc changes,
+even better. 3 pair of eyeballs is better than 2 pairs.
 
   Luis
