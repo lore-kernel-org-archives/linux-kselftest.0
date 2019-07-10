@@ -2,46 +2,90 @@ Return-Path: <SRS0=PsF/=VH=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86B5AC74A23
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 14:01:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81E57C74A21
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 14:16:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 641AF2087F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 14:01:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 53B3D208E4
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 14:16:12 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="GwgIjykL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727595AbfGJOBm (ORCPT
+        id S1727925AbfGJOQL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 10 Jul 2019 10:01:42 -0400
-Received: from foss.arm.com ([217.140.110.172]:33976 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727528AbfGJOBl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Jul 2019 10:01:41 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0582E2B;
-        Wed, 10 Jul 2019 07:01:41 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3835E3F71F;
-        Wed, 10 Jul 2019 07:01:38 -0700 (PDT)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will.deacon@arm.com, arnd@arndb.de,
-        linux@armlinux.org.uk, ralf@linux-mips.org, paul.burton@mips.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de, salyzyn@android.com,
-        pcc@google.com, shuah@kernel.org, 0x7f454c46@gmail.com,
-        linux@rasmusvillemoes.dk, huw@codeweavers.com,
-        sthotton@marvell.com, andre.przywara@arm.com, luto@kernel.org,
-        john.stultz@linaro.org
-Subject: [PATCH v2] arm64: vdso: Fix ABI regression in compat vdso
-Date:   Wed, 10 Jul 2019 15:01:19 +0100
-Message-Id: <20190710140119.23417-1-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190621095252.32307-11-vincenzo.frascino@arm.com>
-References: <20190621095252.32307-11-vincenzo.frascino@arm.com>
+        Wed, 10 Jul 2019 10:16:11 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40070 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727913AbfGJOQJ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 10 Jul 2019 10:16:09 -0400
+Received: by mail-pf1-f195.google.com with SMTP id p184so1174751pfp.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2019 07:16:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qaZWTPLSZP/SuE1pr+x4mGiPN4X4stJUVD9vrV0URR8=;
+        b=GwgIjykLh5eqei88bOMpZHwO9qvLmQGem/1teyQxrRIg3YrPgEf4AC8HboS8y7PhCl
+         sy7rYfBqLYAeSY65gUJlTPXjcgqU4IhpXMXWiHRkx7xCL6pL55RQehoZUGCSFc9yfrSt
+         fHOMiuneC4CLBcIHhOEHHaXtAta0bdXQkhlFM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qaZWTPLSZP/SuE1pr+x4mGiPN4X4stJUVD9vrV0URR8=;
+        b=LhvIOffaYoj8g8hGKKrmjqZKQ/rcoWfOcP9FHkNnhLE+w2u4Vkicy+pSvrWQng6ULX
+         c1rpzc722T/5HZof1g/yDupkgojYnNyWCciQZorUebSToQPxcrgBI5A/W4F2QNUFrEnb
+         FzO6RG+SxVGm3yHBS/ptiTVPAQ3c5JrH3qmiQFBlU4fiIUYyfd6RCZEkxlDVyHerDpFD
+         5OEsDUchc8DI6QEuWHlCzGnhrgwxf8eF4JuCO7hyE+6svA8f1KN2yzYXE5X2dmAIPMW4
+         ZrEZdCwEM4ZFZgGBTiCD/fbj2kIeET+O20OblrW7DdFamBkf9/ZRBl844D9hoouEgkxV
+         W61Q==
+X-Gm-Message-State: APjAAAUAYO1aeGXtRf/Uf0RXAMCQfCtUm5vYGlYg0OByUW4Q7wISRssv
+        T/WNPa1fItvsSw1kLIPjbdg=
+X-Google-Smtp-Source: APXvYqzQgccO1TM8KZRW5WDsyupbUc+d49Jul12Ceh/xECkPSx2c0EUIk9dUXzEvGjVaaXChliSSdA==
+X-Received: by 2002:a17:90a:bb94:: with SMTP id v20mr7412797pjr.88.1562768168516;
+        Wed, 10 Jul 2019 07:16:08 -0700 (PDT)
+Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id l124sm2589249pgl.54.2019.07.10.07.16.04
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 10 Jul 2019 07:16:07 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Adrian Ratiu <adrian.ratiu@collabora.com>,
+        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+        Brendan Gregg <brendan.d.gregg@gmail.com>, connoro@google.com,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        duyuchao <yuchao.du@unisoc.com>, Ingo Molnar <mingo@redhat.com>,
+        jeffv@google.com, Karim Yaghmour <karim.yaghmour@opersys.com>,
+        kernel-team@android.com, linux-kselftest@vger.kernel.org,
+        Manali Shukla <manalishukla14@gmail.com>,
+        Manjo Raja Rao <linux@manojrajarao.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matt Mullins <mmullins@fb.com>,
+        Michal Gregorczyk <michalgr@fb.com>,
+        Michal Gregorczyk <michalgr@live.com>,
+        Mohammad Husain <russoue@gmail.com>, namhyung@google.com,
+        namhyung@kernel.org, netdev@vger.kernel.org,
+        paul.chaignon@gmail.com, primiano@google.com,
+        Qais Yousef <qais.yousef@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Srinivas Ramana <sramana@codeaurora.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tamir Carmeli <carmeli.tamir@gmail.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: [PATCH RFC 3/4] lib/bpf: Add support for ftrace event attach and detach
+Date:   Wed, 10 Jul 2019 10:15:47 -0400
+Message-Id: <20190710141548.132193-4-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
+In-Reply-To: <20190710141548.132193-1-joel@joelfernandes.org>
+References: <20190710141548.132193-1-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -49,34 +93,119 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Prior to the introduction of Unified vDSO support and compat layer for
-vDSO on arm64, AT_SYSINFO_EHDR was not defined for compat tasks.
-In the current implementation, AT_SYSINFO_EHDR is defined even if the
-compat vdso layer is not built and this causes a regression in the
-expected behavior of the ABI.
+Add the needed library support in this commit.
 
-Restore the ABI behavior making sure that AT_SYSINFO_EHDR for compat
-tasks is defined only when CONFIG_COMPAT_VDSO is enabled.
-
-Reported-by: John Stultz <john.stultz@linaro.org>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- arch/arm64/include/asm/elf.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/lib/bpf/bpf.c      | 53 ++++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/bpf.h      |  4 +++
+ tools/lib/bpf/libbpf.map |  2 ++
+ 3 files changed, 59 insertions(+)
 
-diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
-index 3c7037c6ba9b..b618017205a3 100644
---- a/arch/arm64/include/asm/elf.h
-+++ b/arch/arm64/include/asm/elf.h
-@@ -202,7 +202,7 @@ typedef compat_elf_greg_t		compat_elf_gregset_t[COMPAT_ELF_NGREG];
- ({									\
- 	set_thread_flag(TIF_32BIT);					\
-  })
--#ifdef CONFIG_GENERIC_COMPAT_VDSO
-+#ifdef CONFIG_COMPAT_VDSO
- #define COMPAT_ARCH_DLINFO						\
- do {									\
- 	/*								\
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index c4a48086dc9a..28c5a7d00d14 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -24,6 +24,9 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <memory.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
+ #include <unistd.h>
+ #include <asm/unistd.h>
+ #include <linux/bpf.h>
+@@ -57,6 +60,8 @@
+ #define min(x, y) ((x) < (y) ? (x) : (y))
+ #endif
+ 
++#define TRACEFS "/sys/kernel/debug/tracing"
++
+ static inline __u64 ptr_to_u64(const void *ptr)
+ {
+ 	return (__u64) (unsigned long) ptr;
+@@ -658,6 +663,54 @@ int bpf_raw_tracepoint_open(const char *name, int prog_fd)
+ 	return sys_bpf(BPF_RAW_TRACEPOINT_OPEN, &attr, sizeof(attr));
+ }
+ 
++int bpf_raw_tracepoint_ftrace_attach(const char *subsys, const char *name,
++				     int prog_fd)
++{
++	char buf[256];
++	int len, ret, tfd;
++
++	sprintf(buf, "%s/events/%s/%s/bpf", TRACEFS, subsys, name);
++	tfd = open(buf, O_WRONLY);
++	if (tfd < 0)
++		return tfd;
++
++	sprintf(buf, "attach:%d", prog_fd);
++	len = strlen(buf);
++	ret = write(tfd, buf, len);
++
++	if (ret < 0)
++		goto err;
++	if (ret != len)
++		ret = -1;
++err:
++	close(tfd);
++	return ret;
++}
++
++int bpf_raw_tracepoint_ftrace_detach(const char *subsys, const char *name,
++				     int prog_fd)
++{
++	char buf[256];
++	int len, ret, tfd;
++
++	sprintf(buf, "%s/events/%s/%s/bpf", TRACEFS, subsys, name);
++	tfd = open(buf, O_WRONLY);
++	if (tfd < 0)
++		return tfd;
++
++	sprintf(buf, "detach:%d", prog_fd);
++	len = strlen(buf);
++	ret = write(tfd, buf, len);
++
++	if (ret < 0)
++		goto err;
++	if (ret != len)
++		ret = -1;
++err:
++	close(tfd);
++	return ret;
++}
++
+ int bpf_load_btf(void *btf, __u32 btf_size, char *log_buf, __u32 log_buf_size,
+ 		 bool do_log)
+ {
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 9593fec75652..5b9c44658037 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -163,6 +163,10 @@ LIBBPF_API int bpf_prog_query(int target_fd, enum bpf_attach_type type,
+ 			      __u32 query_flags, __u32 *attach_flags,
+ 			      __u32 *prog_ids, __u32 *prog_cnt);
+ LIBBPF_API int bpf_raw_tracepoint_open(const char *name, int prog_fd);
++LIBBPF_API int bpf_raw_tracepoint_ftrace_attach(const char *subsys,
++						const char *name, int prog_fd);
++LIBBPF_API int bpf_raw_tracepoint_ftrace_detach(const char *subsys,
++						const char *name, int prog_fd);
+ LIBBPF_API int bpf_load_btf(void *btf, __u32 btf_size, char *log_buf,
+ 			    __u32 log_buf_size, bool do_log);
+ LIBBPF_API int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf,
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 673001787cba..fca377b688c2 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -163,4 +163,6 @@ LIBBPF_0.0.3 {
+ 		bpf_map__is_internal;
+ 		bpf_map_freeze;
+ 		btf__finalize_data;
++		bpf_raw_tracepoint_ftrace_attach;
++		bpf_raw_tracepoint_ftrace_detach;
+ } LIBBPF_0.0.2;
 -- 
-2.22.0
+2.22.0.410.gd8fdbe21b5-goog
 
