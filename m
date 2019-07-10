@@ -2,118 +2,187 @@ Return-Path: <SRS0=PsF/=VH=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-14.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B34F8C73C75
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 07:17:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C511C73C75
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 07:19:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 88D8D20693
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 07:17:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0AF5820844
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 07:19:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rXtTc/GO"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l6WF16GV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727149AbfGJHQi (ORCPT
+        id S1726281AbfGJHTU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 10 Jul 2019 03:16:38 -0400
-Received: from mail-qk1-f201.google.com ([209.85.222.201]:38992 "EHLO
-        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726200AbfGJHQi (ORCPT
+        Wed, 10 Jul 2019 03:19:20 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:42431 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbfGJHTT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Jul 2019 03:16:38 -0400
-Received: by mail-qk1-f201.google.com with SMTP id x1so1196535qkn.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2019 00:16:37 -0700 (PDT)
+        Wed, 10 Jul 2019 03:19:19 -0400
+Received: by mail-pg1-f195.google.com with SMTP id t132so771681pgb.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2019 00:19:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=i+cHtqqH4D1BH2a9iTheu+r071sQgiMbeMpUxd8ISoM=;
-        b=rXtTc/GOsRHQaJA6Ws9m+pPNjzj+5rLwHJOomjY2PFfSoikcebfEh5U/5Io+IpJ2JJ
-         sM4s5p4wN84uuPK2wawFNwAGeY9GYiSz3gKcm4jFzMNbWra728QlSnFcIoeT+m1EAIpQ
-         QYGB2VP1qrToWeK1FH7eNgzJf3m412kAZCT3ZN31EcDBjPTkvFUL4JSVf1OOOQLhkPxP
-         qhKxwtWnOPYc2lStgRZSCL7PBZzLS8fq+h81Z2b/9gBDtF2PmASidrMput/8CQSYTF8q
-         QhARbBGrlb61/UdpbwVrR2rxDIQXadxthWMUWtQilvHubiBfryuBwCriKQkCnPf+VzpZ
-         Hp0A==
+        bh=jfz7M1UfeMHHXZWoXYgXDdb2h4DdykfBMsEUwpNEPMQ=;
+        b=l6WF16GVYe5eCc/5x8O8KdIpdGxyu4cFn2VT370ERVLkliFZoRrSfvp79LhBQiNSIN
+         Fc3VEBYfnK22TfTFupWFCOy7wIIOmCBSmWzp151VVHjXiu08YEAd1cUyMwfMhn+dU/bF
+         UHlZhZc0wk0wQTnNlXcS52uWXZ0GmfQuDPOS9e4OHx48QXa6/or/tZHQSVGwKXE40j8J
+         tydITPKv4HnEgptGj8+2KN4wvn2CgD7bTL5YD2VkAUKcTMoyzgx29qn2jFdugUlBv9P8
+         +GIsXjY1xdI2IPhRGGizyMRas0HBWbQ4T3n7MZP9ykXTcG22rpDfaxe6v7izwrk4jBVj
+         l8OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=i+cHtqqH4D1BH2a9iTheu+r071sQgiMbeMpUxd8ISoM=;
-        b=jD30g1CJlIO/6AaEB+u5DsODJIQOoQfVzp35PenbL77WZ/YzmY1OPipuFj+HyVDK7Q
-         uT53i7bEk1Z66EF1A1vZ8OIUM8ChJNFIdSUXRcndJhYFQX2SWBof4TlB5BEvaWMB1seH
-         5pP69bx/atXoK+l2OZ7/mPbqcjuX/0nr5Ez7C+M+LSwVn0TGRnAI2vc4aeoKSAKF0BwL
-         ql3A2H3yg72yKuRfaNAOnL2uWA6hm+ZCLigCJVzxS2dju28GMgORoJSDu2Mij+M51/oy
-         J/ZhuTMi7eSjI6OhfPvW/m/zp+bNA1LgM4OGyFsToFa5q6ktxZ8yEIZQpdo8dmoH1o8c
-         +toQ==
-X-Gm-Message-State: APjAAAXWQSX9Q/nUkbfqREVBo1V3WG/M+Y7vR/QPbngB4vTOEQiGVRAI
-        xTxpZdMCg240VI/6wTq168roCVlRmUc2CzM3cZYQ6g==
-X-Google-Smtp-Source: APXvYqzYNxURl6tjKPLLeSDRwuA+Ulct62WFYCncfJUl0k0d7oT8xpOt/Y76tt3BkIrOVTj039P4TCLZz7hT/KHUodnwGg==
-X-Received: by 2002:a0c:f20e:: with SMTP id h14mr19332341qvk.246.1562742996789;
- Wed, 10 Jul 2019 00:16:36 -0700 (PDT)
-Date:   Wed, 10 Jul 2019 00:14:58 -0700
-In-Reply-To: <20190710071508.173491-1-brendanhiggins@google.com>
-Message-Id: <20190710071508.173491-9-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20190710071508.173491-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH v8 08/18] objtool: add kunit_try_catch_throw to the noreturn list
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jfz7M1UfeMHHXZWoXYgXDdb2h4DdykfBMsEUwpNEPMQ=;
+        b=NKlbTY6vqzjNwAeeSzmer0O3NbX5Hv9cJxY/fFFKrz0viurE7yKWVVu+4LQQtFDnS+
+         sswnjrlqG49wdQMxfOzL0MeuE57e0OreAWcgbMOCMl0jM/AJLSTXFxioaKIJ6vmVHwY2
+         nxLnncQ+MimghzuMsVq8dEc0dyPukzNsz299PUDGtWvEvKI99DcUgbRJRbvfv94Lcuqs
+         mdelH/uaE4JBNq+CuNDKw5TuUXsr6SGsOfLD3eScgmwSjaZfIry0YL/aJkDvBBLlx+uW
+         OF+MZpqofPmcAXmvnyRc1uuyk0mQtyMliw3+c0us/6poOb7Ycxup+TXyIGqvMe/cACbM
+         8RvA==
+X-Gm-Message-State: APjAAAUNfVYHZ1hI2Ra60HTOLPM/GT27c1ocqG3SnovD7k8L3IVjKPl6
+        1ARsDO4z1MyWg4kMMdLPqLsItfoRLauiXfAlY6JBzg==
+X-Google-Smtp-Source: APXvYqxygjuZUTtP3o1i+spSO/ODX76iUOPUnBSEPfKtnKohaqyGP7q59QAPXICI+tZgCfUcyvNAo+y5G+f5zV4sog8=
+X-Received: by 2002:a17:90a:ab0d:: with SMTP id m13mr4975325pjq.84.1562743158492;
+ Wed, 10 Jul 2019 00:19:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190709063023.251446-1-brendanhiggins@google.com>
+ <20190709063023.251446-7-brendanhiggins@google.com> <CAK7LNATx30AhZ51xozde=nO06-8UzuC0M9nfZXrqkyfmEFdu5w@mail.gmail.com>
+In-Reply-To: <CAK7LNATx30AhZ51xozde=nO06-8UzuC0M9nfZXrqkyfmEFdu5w@mail.gmail.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        jpoimboe@redhat.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
-        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
-        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
-        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>,
-        kbuild test robot <lkp@intel.com>
+Date:   Wed, 10 Jul 2019 00:19:06 -0700
+Message-ID: <CAFd5g479H3pS9preU6-oCnN5adwBPDe4zQkiFPatKPbxpT5r6w@mail.gmail.com>
+Subject: Re: [PATCH v7 06/18] kbuild: enable building KUnit
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        "Cc: Shuah Khan" <shuah@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, DTML <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        Tim Bird <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
+        Michal Marek <michal.lkml@markovi.net>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix the following warning seen on GCC 7.3:
-  kunit/test-test.o: warning: objtool: kunit_test_unsuccessful_try() falls through to next function kunit_test_catch()
+On Tue, Jul 9, 2019 at 9:00 PM Masahiro Yamada
+<yamada.masahiro@socionext.com> wrote:
+>
+> On Tue, Jul 9, 2019 at 3:34 PM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
+> >
+> > KUnit is a new unit testing framework for the kernel and when used is
+> > built into the kernel as a part of it. Add KUnit to the root Kconfig and
+> > Makefile to allow it to be actually built.
+> >
+> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> > Cc: Michal Marek <michal.lkml@markovi.net>
+> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+> > ---
+> >  Kconfig  | 2 ++
+> >  Makefile | 2 +-
+> >  2 files changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Kconfig b/Kconfig
+> > index 48a80beab6853..10428501edb78 100644
+> > --- a/Kconfig
+> > +++ b/Kconfig
+> > @@ -30,3 +30,5 @@ source "crypto/Kconfig"
+> >  source "lib/Kconfig"
+> >
+> >  source "lib/Kconfig.debug"
+> > +
+> > +source "kunit/Kconfig"
+> > diff --git a/Makefile b/Makefile
+> > index 3e4868a6498b2..60cf4f0813e0d 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -991,7 +991,7 @@ endif
+> >  PHONY += prepare0
+> >
+> >  ifeq ($(KBUILD_EXTMOD),)
+> > -core-y         += kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/
+> > +core-y         += kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/ kunit/
+> >
+> >  vmlinux-dirs   := $(patsubst %/,%,$(filter %/, $(init-y) $(init-m) \
+> >                      $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
+> > --
+> > 2.22.0.410.gd8fdbe21b5-goog
+>
+>
+> This is so trivial, and do not need to get ack from me.
 
-kunit_try_catch_throw is a function added in the following patch in this
-series; it allows KUnit, a unit testing framework for the kernel, to
-bail out of a broken test. As a consequence, it is a new __noreturn
-function that objtool thinks is broken (as seen above). So fix this
-warning by adding kunit_try_catch_throw to objtool's noreturn list.
+Oh, sorry about that.
 
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://www.spinics.net/lists/linux-kbuild/msg21708.html
-Cc: Peter Zijlstra <peterz@infradead.org>
----
- tools/objtool/check.c | 1 +
- 1 file changed, 1 insertion(+)
+> Just a nit.
+>
+>
+> When CONFIG_KUNIT is disable, is there any point in descending into kunit/ ?
+>
+> core-$(CONFIG_KUNIT) += kunit/
+>
+> ... might be useful to skip kunit/ entirely.
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 172f991957269..98db5fe85c797 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -134,6 +134,7 @@ static int __dead_end_function(struct objtool_file *file, struct symbol *func,
- 		"usercopy_abort",
- 		"machine_real_restart",
- 		"rewind_stack_do_exit",
-+		"kunit_try_catch_throw",
- 	};
- 
- 	if (func->bind == STB_WEAK)
--- 
-2.22.0.410.gd8fdbe21b5-goog
+Makes sense. I just sent out a new change that does this.
 
+Thanks!
+
+> If you look at the top-level Makefile, some entries are doing this:
+>
+>
+> init-y          := init/
+> drivers-y       := drivers/ sound/
+> drivers-$(CONFIG_SAMPLES) += samples/
+> drivers-$(CONFIG_KERNEL_HEADER_TEST) += include/
+> net-y           := net/
+> libs-y          := lib/
+> core-y          := usr/
+>
+>
+>
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
