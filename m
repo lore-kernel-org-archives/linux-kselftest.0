@@ -2,144 +2,110 @@ Return-Path: <SRS0=PsF/=VH=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 326D4C74A23
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 14:16:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CAE1C74A2E
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 15:44:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 080922087F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 14:16:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4558C2086D
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 15:44:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="ik/txIOz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DY67Qqzg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727546AbfGJOP6 (ORCPT
+        id S1728021AbfGJPo5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 10 Jul 2019 10:15:58 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:41525 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727231AbfGJOP5 (ORCPT
+        Wed, 10 Jul 2019 11:44:57 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:52369 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727779AbfGJPo4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Jul 2019 10:15:57 -0400
-Received: by mail-pf1-f193.google.com with SMTP id m30so1174417pff.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2019 07:15:57 -0700 (PDT)
+        Wed, 10 Jul 2019 11:44:56 -0400
+Received: by mail-wm1-f68.google.com with SMTP id s3so2812976wms.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2019 08:44:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8u/8oBvwls3TmHDIAgdRr1iO5w1leafBhE5nzfgIbNY=;
-        b=ik/txIOzI2+TUrsUL2ZoXzZa7twvPZdk3u9E2bYRIL99Lvfh0YdEPjD/zeLFzop8nI
-         dz+tENQ7uf96nUYOS7DKtU7tYereh/giq76H0nt6EdsZLxNVhJac+smvmQ0qoLhDSLkO
-         gydAI8tKn+4b+GYSIRTIbLPCYVtIOwL6NJwNY=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NtOOR2nEu//DGOMUejq+6mfdm7EgmWFyTPqFW/hZNEg=;
+        b=DY67Qqzg8l5sGMLitlWOUm/qzQ2NhqQ9Db12bmwsYd4wnB6rushO8O/ab2p8CxPx0A
+         1WsSAHX8Z84rQ/xQUHoU5CmUje5IAYvZH0mYD1OhVkH3AeegsnCBhCoeCACxKoyZxe5H
+         9S7xCeV+scTCi+NWNYdfV6JzV/ALBwtiFqdGKbxIkeguyVuk/obU+WoexQo4hGkjO6+6
+         0Fr1hgGDjgjCLdlv+LcmtrtSGqrW9oQfc3X48T193n2XMAqFhMRVRETjEynSPHk/tvxT
+         aMv2O4k4gFAhmL/ivOMGxt1DGbmppZeL0jGqtM2tnK9tLwU4MpDB8m1LL1YSAbWx5231
+         EnEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8u/8oBvwls3TmHDIAgdRr1iO5w1leafBhE5nzfgIbNY=;
-        b=doG93mfTxMzAMzW8ViNKjGv+KwWPyjpJiD6Z1AEZvIi8ICICa+JFQnvZF1hBwL5Ol0
-         hTkszXw8E7jiCtcEYB9IuYVcKlQBnTcHHdzih/G+zaYgDB+1hGco1+Lgeg4KmwrwBoBL
-         e6x3DLdyZv+qB6ISueAtNhL5kUQcGzo9aFty920ACozOxQMUw7T6nZm/JIige3mXrphq
-         xhVa4ycn2P8QVJt8FegGKszoY+NvEbRl8e0xIp2frNXcAFGzKNf1ENxGiZ84UeRxm23S
-         d6AwPHO/D4M5hB/8LSSLY89uGB3gvvN/gu9aajKFuzrIwZhOqeSlzpFldJHBj/fTQQFK
-         yxcA==
-X-Gm-Message-State: APjAAAUhYkBZeIhLAYv2G5RGjYQLW35SJKf2WsaYataUSD6WL5WtZtYL
-        xYfTv4KxakQ/WnKkspORhi0l4w==
-X-Google-Smtp-Source: APXvYqwWrgLgXgQwACA2VuP7IqF8CPk7WQxKdd5MI3KP8MV596Wrwf2m53X+vAoh9by7zbDtkvjKkg==
-X-Received: by 2002:a63:4b02:: with SMTP id y2mr26565686pga.135.1562768156934;
-        Wed, 10 Jul 2019 07:15:56 -0700 (PDT)
-Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id l124sm2589249pgl.54.2019.07.10.07.15.53
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 10 Jul 2019 07:15:56 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
-        Brendan Gregg <brendan.d.gregg@gmail.com>, connoro@google.com,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        duyuchao <yuchao.du@unisoc.com>, Ingo Molnar <mingo@redhat.com>,
-        jeffv@google.com, Karim Yaghmour <karim.yaghmour@opersys.com>,
-        kernel-team@android.com, linux-kselftest@vger.kernel.org,
-        Manali Shukla <manalishukla14@gmail.com>,
-        Manjo Raja Rao <linux@manojrajarao.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matt Mullins <mmullins@fb.com>,
-        Michal Gregorczyk <michalgr@fb.com>,
-        Michal Gregorczyk <michalgr@live.com>,
-        Mohammad Husain <russoue@gmail.com>, namhyung@google.com,
-        namhyung@kernel.org, netdev@vger.kernel.org,
-        paul.chaignon@gmail.com, primiano@google.com,
-        Qais Yousef <qais.yousef@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Srinivas Ramana <sramana@codeaurora.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tamir Carmeli <carmeli.tamir@gmail.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: [PATCH RFC 0/4] Add support to directly attach BPF program to ftrace
-Date:   Wed, 10 Jul 2019 10:15:44 -0400
-Message-Id: <20190710141548.132193-1-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NtOOR2nEu//DGOMUejq+6mfdm7EgmWFyTPqFW/hZNEg=;
+        b=CooMh+OHG/soQOH6DcH4B3tBDR3yxfEiLX7NWnZyTgvNL2CzfrpZ53kEIl/mV24WRs
+         pQkN7lO0IO8tB/dk1my5zyW2B0tUv2TRQ9ZpWZyoLBmEUFReXXwMEdQwq5cGBTLyD18S
+         sVNnDI6Va7hXqVK6eL7xDu/fA5K4sJD76/ownnCWRMpd2UHeVMKubSLrz8c/apWsSqmA
+         8trGLnVl8siSKP0ll8JPD0gy8jnLX+pePavIl6VknXs8oLPOBeBSX5xznTsBXKsbiKsy
+         lJX+n8EfJWqgqoir+kg3rbDsVE0CC9vMoaNOtZ0wTSS4d+fP5zCnfXXjoKJSe/eSCzby
+         UJkQ==
+X-Gm-Message-State: APjAAAUroXPOnKUD7RSjMNksl3o8R7mRSw6kp51dxtM17jz2woHktfJH
+        vklMwYheWNP10pihFSxl+JpNIwPW1ZxyzsFGhKMtoQ==
+X-Google-Smtp-Source: APXvYqxWuFYdRc3oezY5CyAazr9+mnSggdhSKTQQUlfs/r4ufXqeKNR1JiskvJeNZu0AbFrkKC6ypVSymVpP5xMNcCk=
+X-Received: by 2002:a1c:d10c:: with SMTP id i12mr5991172wmg.152.1562773494692;
+ Wed, 10 Jul 2019 08:44:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190621095252.32307-11-vincenzo.frascino@arm.com> <20190710140119.23417-1-vincenzo.frascino@arm.com>
+In-Reply-To: <20190710140119.23417-1-vincenzo.frascino@arm.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 10 Jul 2019 08:44:43 -0700
+Message-ID: <CALAqxLVnf_hyxxmx72F360PbJUTZowuD3wJx0nJ=dCTyW+w-Tw@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: vdso: Fix ABI regression in compat vdso
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andy Lutomirski <luto@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
-These patches make it possible to attach BPF programs directly to tracepoints
-using ftrace (/sys/kernel/debug/tracing) without needing the process doing the
-attach to be alive. This has the following benefits:
+On Wed, Jul 10, 2019 at 7:01 AM Vincenzo Frascino
+<vincenzo.frascino@arm.com> wrote:
+>
+> Prior to the introduction of Unified vDSO support and compat layer for
+> vDSO on arm64, AT_SYSINFO_EHDR was not defined for compat tasks.
+> In the current implementation, AT_SYSINFO_EHDR is defined even if the
+> compat vdso layer is not built and this causes a regression in the
+> expected behavior of the ABI.
+>
+> Restore the ABI behavior making sure that AT_SYSINFO_EHDR for compat
+> tasks is defined only when CONFIG_COMPAT_VDSO is enabled.
+>
+> Reported-by: John Stultz <john.stultz@linaro.org>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
-1. Simplified Security: In Android, we have finer-grained security controls to
-specific ftrace trace events using SELinux labels. We control precisely who is
-allowed to enable an ftrace event already. By adding a node to ftrace for
-attaching BPF programs, we can use the same mechanism to further control who is
-allowed to attach to a trace event.
+This seems to solve it for me!
+Thanks so much for the quick turnaround on a fix. I really appreciate it!
 
-2. Process lifetime: In Android we are adding usecases where a tracing program
-needs to be attached all the time to a tracepoint, for the full life time of
-the system. Such as to gather statistics where there no need for a detach for
-the full system lifetime. With perf or bpf(2)'s BPF_RAW_TRACEPOINT_OPEN, this
-means keeping a process alive all the time.  However, in Android our BPF loader
-currently (for hardeneded security) involves just starting a process at boot
-time, doing the BPF program loading, and then pinning them to /sys/fs/bpf.  We
-don't keep this process alive all the time. It is more suitable to do a
-one-shot attach of the program using ftrace and not need to have a process
-alive all the time anymore for this. Such process also needs elevated
-privileges since tracepoint program loading currently requires CAP_SYS_ADMIN
-anyway so by design Android's bpfloader runs once at init and exits.
+Tested-by: John Stultz <john.stultz@linaro.org>
 
-This series add a new bpf file to /sys/kernel/debug/tracing/events/X/Y/bpf
-The following commands can be written into it:
-attach:<fd>     Attaches BPF prog fd to tracepoint
-detach:<fd>     Detaches BPF prog fd to tracepoint
-
-Reading the bpf file will show all the attached programs to the tracepoint.
-
-Joel Fernandes (Google) (4):
-Move bpf_raw_tracepoint functionality into bpf_trace.c
-trace/bpf: Add support for attach/detach of ftrace events to BPF
-lib/bpf: Add support for ftrace event attach and detach
-selftests/bpf: Add test for ftrace-based BPF attach/detach
-
-include/linux/bpf_trace.h                     |  16 ++
-include/linux/trace_events.h                  |   1 +
-kernel/bpf/syscall.c                          |  69 +-----
-kernel/trace/bpf_trace.c                      | 225 ++++++++++++++++++
-kernel/trace/trace.h                          |   1 +
-kernel/trace/trace_events.c                   |   8 +
-tools/lib/bpf/bpf.c                           |  53 +++++
-tools/lib/bpf/bpf.h                           |   4 +
-tools/lib/bpf/libbpf.map                      |   2 +
-.../raw_tp_writable_test_ftrace_run.c         |  89 +++++++
-10 files changed, 410 insertions(+), 58 deletions(-)
-create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c
-
---
-2.22.0.410.gd8fdbe21b5-goog
-
+thanks
+-john
