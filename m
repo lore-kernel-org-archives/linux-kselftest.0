@@ -2,105 +2,136 @@ Return-Path: <SRS0=PsF/=VH=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BB37C73C63
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 02:31:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34264C73C69
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 04:03:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D6A420844
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 02:31:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07D5620665
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 04:03:10 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K1qh7Hcw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726684AbfGJCbg (ORCPT
+        id S1726112AbfGJEDJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 9 Jul 2019 22:31:36 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:55040 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725832AbfGJCbg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Jul 2019 22:31:36 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 4796E5AFE9;
-        Wed, 10 Jul 2019 02:31:34 +0000 (UTC)
-Received: from treble (ovpn-112-43.rdu2.redhat.com [10.10.112.43])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A90BE5F9D8;
-        Wed, 10 Jul 2019 02:31:25 +0000 (UTC)
-Date:   Tue, 9 Jul 2019 21:31:23 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        keescook@google.com, kieran.bingham@ideasonboard.com,
-        mcgrof@kernel.org, peterz@infradead.org, robh@kernel.org,
-        sboyd@kernel.org, shuah@kernel.org, tytso@mit.edu,
-        yamada.masahiro@socionext.com, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
-        Tim.Bird@sony.com, amir73il@gmail.com, dan.carpenter@oracle.com,
-        daniel@ffwll.ch, jdike@addtoit.com, joel@jms.id.au,
-        julia.lawall@lip6.fr, khilman@baylibre.com, knut.omang@oracle.com,
-        logang@deltatee.com, mpe@ellerman.id.au, pmladek@suse.com,
-        rdunlap@infradead.org, richard@nod.at, rientjes@google.com,
-        rostedt@goodmis.org, wfg@linux.intel.com,
-        kbuild test robot <lkp@intel.com>
-Subject: Re: [PATCH v7 08/18] objtool: add kunit_try_catch_throw to the
- noreturn list
-Message-ID: <20190710023123.ifnt5osimvzoe5hf@treble>
-References: <20190709063023.251446-1-brendanhiggins@google.com>
- <20190709063023.251446-9-brendanhiggins@google.com>
+        Wed, 10 Jul 2019 00:03:09 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:38053 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725791AbfGJEDJ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 10 Jul 2019 00:03:09 -0400
+Received: by mail-wr1-f68.google.com with SMTP id g17so933351wrr.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jul 2019 21:03:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E/+8WA5YVt9o68tf7IxaP2AKZIs3izvlH0APT6Mt07Q=;
+        b=K1qh7HcwzDZLVDAhRFo1UMOBKQLz3oQjDqRwz2jFT38WMwz/Hl+vBRVpz6PZ8eyy3Y
+         dTAmu29NVGAwAZMWL0pe9v9Be598VLNvCEXNI4Hmi9hk8iVCmDpiCn3DzAX+ya48+l5E
+         agWdvXAgbkGVdffOYWAEPWEA5Tt1dpEYgqARMkGUm9CBA9Z7CDJCzkt8K2r4smVHL7vu
+         IxMt0gyE+LkrWBBgHX7+Dm2eM7WrA3nvP7LdaYR5P8bZpqvhbzthPdfj/epTNYwzA56p
+         AOfetMta9CkyUC4Q9MJQDe4yMoicmVktguXRf/xx872evRk4ahBKSIB/SR+PNbG029Rw
+         4ZUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E/+8WA5YVt9o68tf7IxaP2AKZIs3izvlH0APT6Mt07Q=;
+        b=VHki5sYcQ8lHc1FbbKTVucx2Sqp2nBVq/TySMJy2W+27qpN7T3dnQY02PxCr7wA6IZ
+         EMRFjRsJ2ugzAJtGfquhrxEHU3rC7KoufzwF8n85+C6E1CJc1htQG24J7zA0yfyXAXoo
+         rlcsGENuFTR2msrGlrhtcGSYfg+iIW9u4C4BTkajR5qoEhHxA28mACgZsYms9bAh8utI
+         UPvKt2qiwuY/DLxRk4zxSqh7ioXhZ8a8QCi0BWSPYhFIpaYOmpMQcZ1f/mteprm8qJfT
+         Ze9heVuPxlD9AH31avs0kR+HawaTmULtPPqW7PLOFpQC6TKL6aSbl+C0eqH2K3KxAgMx
+         PWfg==
+X-Gm-Message-State: APjAAAU36rC2TKxlZgf7c8x07l/9tum0F5YWhC02gXYp2UYE6SsAYUrj
+        EYQcAC827CwpocGoK+Z2+gi0izyjF5lYg4VUj62nJA==
+X-Google-Smtp-Source: APXvYqzPOdmo7LUjjtBVy+Eam/jLKZXcN/T+ttk0oWQFmX0MgxeRc22swD1KsBEGZUN6nDxG/pwDPT36kLteJxt49zQ=
+X-Received: by 2002:a05:6000:145:: with SMTP id r5mr9063316wrx.208.1562731387533;
+ Tue, 09 Jul 2019 21:03:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190709063023.251446-9-brendanhiggins@google.com>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Wed, 10 Jul 2019 02:31:35 +0000 (UTC)
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com> <20190621095252.32307-11-vincenzo.frascino@arm.com>
+In-Reply-To: <20190621095252.32307-11-vincenzo.frascino@arm.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Tue, 9 Jul 2019 21:02:54 -0700
+Message-ID: <CALAqxLXxE5B+vVLj7NcW8S05nhDQ+XSKVn=_MNDci667JDFEhA@mail.gmail.com>
+Subject: Re: [PATCH v7 10/25] arm64: compat: Add vDSO
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huw Davies <huw@codeweavers.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Peter Collingbourne <pcc@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 08, 2019 at 11:30:13PM -0700, Brendan Higgins wrote:
-> Fix the following warning seen on GCC 7.3:
->   kunit/test-test.o: warning: objtool: kunit_test_unsuccessful_try() falls through to next function kunit_test_catch()
-> 
-> kunit_try_catch_throw is a function added in the following patch in this
-> series; it allows KUnit, a unit testing framework for the kernel, to
-> bail out of a broken test. As a consequence, it is a new __noreturn
-> function that objtool thinks is broken (as seen above). So fix this
-> warning by adding kunit_try_catch_throw to objtool's noreturn list.
-> 
-> Reported-by: kbuild test robot <lkp@intel.com>
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> Link: https://www.spinics.net/lists/linux-kbuild/msg21708.html
-> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> ---
->  tools/objtool/check.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> index 172f991957269..98db5fe85c797 100644
-> --- a/tools/objtool/check.c
-> +++ b/tools/objtool/check.c
-> @@ -134,6 +134,7 @@ static int __dead_end_function(struct objtool_file *file, struct symbol *func,
->  		"usercopy_abort",
->  		"machine_real_restart",
->  		"rewind_stack_do_exit",
-> +		"kunit_try_catch_throw",
->  	};
->  
->  	if (func->bind == STB_WEAK)
-> -- 
-> 2.22.0.410.gd8fdbe21b5-goog
-> 
+On Fri, Jun 21, 2019 at 3:18 AM Vincenzo Frascino
+<vincenzo.frascino@arm.com> wrote:
+>
+> Provide the arm64 compat (AArch32) vDSO in kernel/vdso32 in a similar
+> way to what happens in kernel/vdso.
+>
+> The compat vDSO leverages on an adaptation of the arm architecture code
+> with few changes:
+>  - Use of lib/vdso for gettimeofday
+>  - Implementation of syscall based fallback
+>  - Introduction of clock_getres for the compat library
+>  - Implementation of trampolines
+>  - Implementation of elf note
+>
+> To build the compat vDSO a 32 bit compiler is required and needs to be
+> specified via CONFIG_CROSS_COMPILE_COMPAT_VDSO.
+>
 
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Hey Vincenzo!
+  Congrats on getting this work merged, I know its been a long effort
+over a number of years!
 
--- 
-Josh
+Though unfortunately, it seems the arm64 vdso code that just landed is
+breaking AOSP for me.
+
+I see a lot of the following errors:
+01-01 01:22:14.097   755   755 F libc    : Fatal signal 11 (SIGSEGV),
+code 1 (SEGV_MAPERR), fault addr 0x3cf2c96c in tid 755 (cameraserver),
+pid 755 (cameraserver)
+01-01 01:22:14.112   759   759 F libc    : Fatal signal 11 (SIGSEGV),
+code 1 (SEGV_MAPERR), fault addr 0x3cf2c96c in tid 759
+(android.hardwar), pid 759 (android.hardwar)
+01-01 01:22:14.120   756   756 F libc    : Fatal signal 11 (SIGSEGV),
+code 1 (SEGV_MAPERR), fault addr 0x3cf2c96c in tid 756 (drmserver),
+pid 756 (drmserver)
+
+Which go away if I revert the vdso merge that went in via tip/timers.
+
+I tried to bisect things down a bit, but as some later fixes are
+required (at one point, date was returning the start epoch and never
+increasing), this hasn't worked too well. But I'm guessing since I
+see: "CROSS_COMPILE_COMPAT not defined or empty, the compat vDSO will
+not be built", and the system is half working, I'm guessing this is an
+issue with just the 32bit code failing.  While I can try to sort out
+the proper CROSS_COMPILE_COMPAT in my build environment, I assume
+userland shouldn't be crashing if that value isn't set.
+
+Any chance this issue has already been raised?
+
+thanks
+-john
