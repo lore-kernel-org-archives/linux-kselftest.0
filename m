@@ -2,174 +2,95 @@ Return-Path: <SRS0=PsF/=VH=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2279CC73C68
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 04:13:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B048C73C6D
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 06:12:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9E6AE20645
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 04:13:05 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="Zcv8Y/m8"
+	by mail.kernel.org (Postfix) with ESMTP id 049B120665
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 06:12:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbfGJENF (ORCPT
+        id S1726250AbfGJGM3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 10 Jul 2019 00:13:05 -0400
-Received: from condef-07.nifty.com ([202.248.20.72]:43623 "EHLO
-        condef-07.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725844AbfGJENE (ORCPT
+        Wed, 10 Jul 2019 02:12:29 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:46788 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725839AbfGJGM3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Jul 2019 00:13:04 -0400
-X-Greylist: delayed 534 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Jul 2019 00:13:02 EDT
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-07.nifty.com with ESMTP id x6A40P7N029415
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2019 13:00:25 +0900
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id x6A407t3006697;
-        Wed, 10 Jul 2019 13:00:08 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com x6A407t3006697
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1562731208;
-        bh=KknRHaSkhBMpTs1BmzD59wJGTvSH88jZgscNwiE3MlQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Zcv8Y/m8P8X292YdVCGzvjt8eh3zKthkL/tKU8hgl0+kZFK/TCidt2YnUJeXwRY2C
-         53gnnvfR1V5a/tZ3oft3dU87Wv/na0I6Cs7CUbLYQQ/tTgfsks7h1YrnLQlPvFedYE
-         CUXVrkPfqD5VgYstJJ7CydXBopsxsIxYrwFsxgwx6d60uk5NaU0HmmUFrWcRa0Ma+X
-         JP4vrMHlCl+oWvWoNYTtWzS8BRJaI99Vvewq8PDOryzMVp2NXYrBOU+OgPSCXtaQVR
-         iBpoKf4mR5G2BIwMVbOsyg7IXjsTJdhgiZepcEUeuFghjpTnMBJ19Lf/0+rRb7AENC
-         me1vWrlscZvww==
-X-Nifty-SrcIP: [209.85.217.43]
-Received: by mail-vs1-f43.google.com with SMTP id m8so625105vsj.0;
-        Tue, 09 Jul 2019 21:00:08 -0700 (PDT)
-X-Gm-Message-State: APjAAAUOzUg7dewpDpaEaEwdms+J+YjUAAAn+8Q5wRx/H0vBF2T/33CF
-        O4/8l42f2KO7ypeZySrTpPfE7/o10ZbDtcOBLrA=
-X-Google-Smtp-Source: APXvYqzEJesQV2n3K1HZLU8Wx1IHWCC1QIw58D6BP7vlVU/X0PRT9+zSoni+Ubl8ut/dwkZUzYEjYnFrduUZ0sj9y38=
-X-Received: by 2002:a67:f495:: with SMTP id o21mr16708917vsn.54.1562731207027;
- Tue, 09 Jul 2019 21:00:07 -0700 (PDT)
+        Wed, 10 Jul 2019 02:12:29 -0400
+Received: from pd9ef1cb8.dip0.t-ipconnect.de ([217.239.28.184] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1hl5q2-0004k5-M0; Wed, 10 Jul 2019 08:12:22 +0200
+Date:   Wed, 10 Jul 2019 08:12:21 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     John Stultz <john.stultz@linaro.org>
+cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huw Davies <huw@codeweavers.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Peter Collingbourne <pcc@google.com>
+Subject: Re: [PATCH v7 10/25] arm64: compat: Add vDSO
+In-Reply-To: <CALAqxLXxE5B+vVLj7NcW8S05nhDQ+XSKVn=_MNDci667JDFEhA@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.1907100811170.1758@nanos.tec.linutronix.de>
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com> <20190621095252.32307-11-vincenzo.frascino@arm.com> <CALAqxLXxE5B+vVLj7NcW8S05nhDQ+XSKVn=_MNDci667JDFEhA@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-References: <20190709063023.251446-1-brendanhiggins@google.com> <20190709063023.251446-7-brendanhiggins@google.com>
-In-Reply-To: <20190709063023.251446-7-brendanhiggins@google.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Wed, 10 Jul 2019 12:59:30 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATx30AhZ51xozde=nO06-8UzuC0M9nfZXrqkyfmEFdu5w@mail.gmail.com>
-Message-ID: <CAK7LNATx30AhZ51xozde=nO06-8UzuC0M9nfZXrqkyfmEFdu5w@mail.gmail.com>
-Subject: Re: [PATCH v7 06/18] kbuild: enable building KUnit
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        "Cc: Shuah Khan" <shuah@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, DTML <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        Tim Bird <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 9, 2019 at 3:34 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> KUnit is a new unit testing framework for the kernel and when used is
-> built into the kernel as a part of it. Add KUnit to the root Kconfig and
-> Makefile to allow it to be actually built.
->
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Cc: Michal Marek <michal.lkml@markovi.net>
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-> ---
->  Kconfig  | 2 ++
->  Makefile | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/Kconfig b/Kconfig
-> index 48a80beab6853..10428501edb78 100644
-> --- a/Kconfig
-> +++ b/Kconfig
-> @@ -30,3 +30,5 @@ source "crypto/Kconfig"
->  source "lib/Kconfig"
->
->  source "lib/Kconfig.debug"
-> +
-> +source "kunit/Kconfig"
-> diff --git a/Makefile b/Makefile
-> index 3e4868a6498b2..60cf4f0813e0d 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -991,7 +991,7 @@ endif
->  PHONY += prepare0
->
->  ifeq ($(KBUILD_EXTMOD),)
-> -core-y         += kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/
-> +core-y         += kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/ kunit/
->
->  vmlinux-dirs   := $(patsubst %/,%,$(filter %/, $(init-y) $(init-m) \
->                      $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
-> --
-> 2.22.0.410.gd8fdbe21b5-goog
+On Tue, 9 Jul 2019, John Stultz wrote:
+> Though unfortunately, it seems the arm64 vdso code that just landed is
+> breaking AOSP for me.
+> 
+> I see a lot of the following errors:
+> 01-01 01:22:14.097   755   755 F libc    : Fatal signal 11 (SIGSEGV),
+> code 1 (SEGV_MAPERR), fault addr 0x3cf2c96c in tid 755 (cameraserver),
+> pid 755 (cameraserver)
+> 01-01 01:22:14.112   759   759 F libc    : Fatal signal 11 (SIGSEGV),
+> code 1 (SEGV_MAPERR), fault addr 0x3cf2c96c in tid 759
+> (android.hardwar), pid 759 (android.hardwar)
+> 01-01 01:22:14.120   756   756 F libc    : Fatal signal 11 (SIGSEGV),
+> code 1 (SEGV_MAPERR), fault addr 0x3cf2c96c in tid 756 (drmserver),
+> pid 756 (drmserver)
+> 
+> Which go away if I revert the vdso merge that went in via tip/timers.
+> 
+> I tried to bisect things down a bit, but as some later fixes are
+> required (at one point, date was returning the start epoch and never
+> increasing), this hasn't worked too well. But I'm guessing since I
+> see: "CROSS_COMPILE_COMPAT not defined or empty, the compat vDSO will
+> not be built", and the system is half working, I'm guessing this is an
+> issue with just the 32bit code failing.  While I can try to sort out
+> the proper CROSS_COMPILE_COMPAT in my build environment, I assume
+> userland shouldn't be crashing if that value isn't set.
 
+The obvious question is whether the VDSO is mapped to the 32bit process in
+that case. It shouldn't...
 
-This is so trivial, and do not need to get ack from me.
+Thanks,
 
-Just a nit.
-
-
-When CONFIG_KUNIT is disable, is there any point in descending into kunit/ ?
-
-core-$(CONFIG_KUNIT) += kunit/
-
-... might be useful to skip kunit/ entirely.
-
-If you look at the top-level Makefile, some entries are doing this:
-
-
-init-y          := init/
-drivers-y       := drivers/ sound/
-drivers-$(CONFIG_SAMPLES) += samples/
-drivers-$(CONFIG_KERNEL_HEADER_TEST) += include/
-net-y           := net/
-libs-y          := lib/
-core-y          := usr/
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+	tglx
