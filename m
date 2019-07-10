@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94D65C74A21
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 14:16:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7158C74A23
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 14:16:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6AD9A2064B
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 14:16:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FAB92064B
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jul 2019 14:16:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="puPKxWZQ"
+	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="yNmqZE9y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727938AbfGJOQT (ORCPT
+        id S1727899AbfGJOQI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 10 Jul 2019 10:16:19 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:32853 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727932AbfGJOQN (ORCPT
+        Wed, 10 Jul 2019 10:16:08 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:36343 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727840AbfGJOQF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Jul 2019 10:16:13 -0400
-Received: by mail-pf1-f196.google.com with SMTP id g2so1189844pfq.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2019 07:16:12 -0700 (PDT)
+        Wed, 10 Jul 2019 10:16:05 -0400
+Received: by mail-pg1-f196.google.com with SMTP id l21so1339810pgm.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2019 07:16:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Yg+Fia+4TffgvjfVtZaMrwTvAUof2HACdCWfE9Adz90=;
-        b=puPKxWZQb+LZdgernOXSGHoCjjFfNqhgNCQgR3EAJVuYHTxPi0MWhE1gMoTZzoxDtL
-         JPgeBqpXoNCnj35nK/tB1FCJMvJg2YoHOxNlJ0Vchnf+Zhz2VlASaorgKKmUkgTvSIJf
-         8FW/bsoH46dLIF8XeGGCXT64TEZRMHpQZe0+E=
+        bh=AmgXE8R5A1l8PFdEQCWW828K08NV6IQfuZCkIZHdV04=;
+        b=yNmqZE9y/HCyaXknSDANClLo8m1KbCwJuyzu12fI2stRfDmpaP04RVzd7Iz+0WF0Xi
+         r7069QIm19EswUkCqRmJuwKjqrNnb6OnfgKq5Sm5wqUkzCV3GXW4sA1HEmA9tVgnUITC
+         FaT6jVRZdgMDq6D42Mq1aLAJYZLDgqcNsBy+E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Yg+Fia+4TffgvjfVtZaMrwTvAUof2HACdCWfE9Adz90=;
-        b=Rc7Gdng1AtZHZQWn91n1t+zKzWRgVZce0OjfOLPDqeBPNPfALQTvmHbZtjjE3di8RI
-         yPSil7du6hW8FS7L45FalBMyNrPdjBc35xRk/hJF4mmy8NIkJ+yYNLQoVjiuiaqhcWin
-         oO8jRj9pPEhyNwnIR9wnSiY1GMeC4kur/28AaT4qUcGPmq3LxPA+UKoabx13xEHMIR3+
-         xo7bcLB2gQvVb08bI9wyDyk/8P+Uj4nSrs401kdVLIQN495gSEzi/ypAAwhwPzso9rk3
-         FjLdewhHHd941UgDLFW0YwOf3E/avC51AmAefGrjHHh5AxBZq+1QggAWolkYFR8litu2
-         uSHQ==
-X-Gm-Message-State: APjAAAUJUQ+uftoCJhrs3TvQbXOwwAC/HW9So2QM5L49T0XRsVsaDnfL
-        /5IWs+SYLQAWSvyotfVVSdU=
-X-Google-Smtp-Source: APXvYqxireE36SRG7vQaha91GKI62TdGTjOZ+qzVeiQZzoJfKbV6cQyUm55T8TcIjbBj3K5Tt9zuKQ==
-X-Received: by 2002:a17:90a:290b:: with SMTP id g11mr7342173pjd.122.1562768172230;
-        Wed, 10 Jul 2019 07:16:12 -0700 (PDT)
+        bh=AmgXE8R5A1l8PFdEQCWW828K08NV6IQfuZCkIZHdV04=;
+        b=nDfWQUsvICVCgX6Hl0D7ABnb98B6m9s5tagThKdkdvR2VKo2B7xzw2afKFrqB5jKTJ
+         H6GXPqCyLFytjWQu57KiSyqa7wuFKs+cznB/c8BxIzmP5sTa8n4CB5hAhFp2Qz7MMK/G
+         bxB5w6DaPceT3lsBJOOPorUCk4NcMdrXhneRBrsCK+zTgR0RRQDHdCC7jdpROHpuZGpC
+         CTKSkUivdpScJasxN7C2xlrqi0o/andKFCM7eM0Z1zhtLnFtGE5F2msdS3v83R2X3Iuv
+         Xo1Qi4ArDGgmQV1XEW0+3SPgYHe38f9nV6fWoxtfZ4MqV6B/lqNJARmyJTBwpDfUVgsd
+         c58A==
+X-Gm-Message-State: APjAAAUSzJsX8s7emBOslICQUE2RJpWii7YAg0kmk8085FZpNj5Y0yQZ
+        ILEGxRrUlvvRZPOKwK/qLbsNjg==
+X-Google-Smtp-Source: APXvYqzPoycqb2n3e29kQYZVL3KTErAQGB2rsrgdO0LYMSG9rIGtHDYdJHz7JfaDzIgu3l0p7Zh0zA==
+X-Received: by 2002:a65:404d:: with SMTP id h13mr36664076pgp.71.1562768164742;
+        Wed, 10 Jul 2019 07:16:04 -0700 (PDT)
 Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id l124sm2589249pgl.54.2019.07.10.07.16.08
+        by smtp.gmail.com with ESMTPSA id l124sm2589249pgl.54.2019.07.10.07.16.00
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 10 Jul 2019 07:16:11 -0700 (PDT)
+        Wed, 10 Jul 2019 07:16:04 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
@@ -80,9 +80,9 @@ Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Tamir Carmeli <carmeli.tamir@gmail.com>,
         Yonghong Song <yhs@fb.com>
-Subject: [PATCH RFC 4/4] selftests/bpf: Add test for ftrace-based BPF attach/detach
-Date:   Wed, 10 Jul 2019 10:15:48 -0400
-Message-Id: <20190710141548.132193-5-joel@joelfernandes.org>
+Subject: [PATCH RFC 2/4] trace/bpf: Add support for attach/detach of ftrace events to BPF
+Date:   Wed, 10 Jul 2019 10:15:46 -0400
+Message-Id: <20190710141548.132193-3-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
 In-Reply-To: <20190710141548.132193-1-joel@joelfernandes.org>
 References: <20190710141548.132193-1-joel@joelfernandes.org>
@@ -93,110 +93,268 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Here we add support for testing the attach and detach of a BPF program
-to a tracepoint through tracefs.
+Add a new bpf file to each trace event. The following commands can be
+written into it:
+attach:<fd>	Attaches BPF prog fd to tracepoint
+detach:<fd>	Detaches BPF prog fd to tracepoint
+
+Reading the bpf file will show all the attached programs to the
+tracepoint.
 
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- .../raw_tp_writable_test_ftrace_run.c         | 89 +++++++++++++++++++
- 1 file changed, 89 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c
+ include/linux/bpf_trace.h    |   6 ++
+ include/linux/trace_events.h |   1 +
+ kernel/trace/bpf_trace.c     | 169 +++++++++++++++++++++++++++++++++++
+ kernel/trace/trace.h         |   1 +
+ kernel/trace/trace_events.c  |   9 +-
+ 5 files changed, 184 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c
-new file mode 100644
-index 000000000000..7b42e3a69b71
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/include/linux/bpf_trace.h b/include/linux/bpf_trace.h
+index 4a593827fd87..1fe73501809c 100644
+--- a/include/linux/bpf_trace.h
++++ b/include/linux/bpf_trace.h
+@@ -9,6 +9,12 @@
+ struct bpf_raw_tracepoint {
+ 	struct bpf_raw_event_map *btp;
+ 	struct bpf_prog *prog;
++	/*
++	 * Multiple programs can be attached to a tracepoint,
++	 * All of these are linked to each other and can be reached
++	 * from the event's bpf_attach file in tracefs.
++	 */
++	struct list_head event_attached;
+ };
+ 
+ struct bpf_raw_tracepoint *bpf_raw_tracepoint_open(char *tp_name, int prog_fd);
+diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+index 8a62731673f7..525f2ac44aa3 100644
+--- a/include/linux/trace_events.h
++++ b/include/linux/trace_events.h
+@@ -371,6 +371,7 @@ struct trace_event_file {
+ 	struct trace_array		*tr;
+ 	struct trace_subsystem_dir	*system;
+ 	struct list_head		triggers;
++	struct list_head		bpf_attached;
+ 
+ 	/*
+ 	 * 32 bit flags:
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index c4b543bc617f..28621ad88c12 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1469,3 +1469,172 @@ struct bpf_raw_tracepoint *bpf_raw_tracepoint_open(char *tp_name, int prog_fd)
+ 	bpf_put_raw_tracepoint(btp);
+ 	return ERR_PTR(err);
+ }
 +
-+#include <test_progs.h>
-+#include <linux/nbd.h>
++enum event_bpf_cmd { BPF_ATTACH, BPF_DETACH };
++#define BPF_CMD_BUF_LEN 32
 +
-+void test_raw_tp_writable_test_ftrace_run(void)
++static ssize_t
++event_bpf_attach_write(struct file *filp, const char __user *ubuf,
++		    size_t cnt, loff_t *ppos)
 +{
-+	__u32 duration = 0;
-+	char error[4096];
-+	int ret;
++	int err, prog_fd, cmd_num, len;
++	struct trace_event_call *call;
++	struct trace_event_file *file;
++	struct bpf_raw_tracepoint *raw_tp, *next;
++	char buf[BPF_CMD_BUF_LEN], *end, *tok;
++	enum event_bpf_cmd cmd;
++	struct bpf_prog *prog;
++	bool prog_put = true;
 +
-+	const struct bpf_insn trace_program[] = {
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
-+		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_6, 0),
-+		BPF_MOV64_IMM(BPF_REG_0, 42),
-+		BPF_STX_MEM(BPF_W, BPF_REG_6, BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
++	len = min((int)cnt, BPF_CMD_BUF_LEN - 1);
 +
-+	struct bpf_load_program_attr load_attr = {
-+		.prog_type = BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
-+		.license = "GPL v2",
-+		.insns = trace_program,
-+		.insns_cnt = sizeof(trace_program) / sizeof(struct bpf_insn),
-+		.log_level = 2,
-+	};
++	err = copy_from_user(buf, ubuf, len);
++	if (err)
++		return err;
++	buf[len] = 0;
 +
-+	int bpf_fd = bpf_load_program_xattr(&load_attr, error, sizeof(error));
++	/* Parse 2 arguments of format: <cmd>:<fd> */
++	end = &buf[0];
++	cmd_num = 1;
++	while (cmd_num < 3) {
++		tok = strsep(&end, ":");
++		if (!tok)
++			return -EINVAL;
 +
-+	if (CHECK(bpf_fd < 0, "bpf_raw_tracepoint_writable loaded",
-+		  "failed: %d errno %d\n", bpf_fd, errno))
-+		return;
++		switch (cmd_num) {
++		case 1:
++			if (!strncmp(tok, "attach", 6))
++				cmd = BPF_ATTACH;
++			else if (!strncmp(tok, "detach", 6))
++				cmd = BPF_DETACH;
++			else
++				return -EINVAL;
++			break;
++		case 2:
++			err = kstrtoint(tok, 10, &prog_fd);
++			if (err)
++				return err;
++			break;
++		}
++		cmd_num++;
++	}
++	if (cmd_num != 3)
++		return -EINVAL;
 +
-+	const struct bpf_insn skb_program[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
++	file = event_file_data(filp);
++	/* Command is to attach fd to tracepoint */
++	if (cmd == BPF_ATTACH) {
++		mutex_lock(&event_mutex);
++		call = file->event_call;
 +
-+	struct bpf_load_program_attr skb_load_attr = {
-+		.prog_type = BPF_PROG_TYPE_SOCKET_FILTER,
-+		.license = "GPL v2",
-+		.insns = skb_program,
-+		.insns_cnt = sizeof(skb_program) / sizeof(struct bpf_insn),
-+	};
++		raw_tp = bpf_raw_tracepoint_open((char *)call->tp->name,
++						 prog_fd);
++		if (IS_ERR(raw_tp)) {
++			mutex_unlock(&event_mutex);
++			return PTR_ERR(raw_tp);
++		}
 +
-+	int filter_fd =
-+		bpf_load_program_xattr(&skb_load_attr, error, sizeof(error));
-+	if (CHECK(filter_fd < 0, "test_program_loaded", "failed: %d errno %d\n",
-+		  filter_fd, errno))
-+		goto out_bpffd;
++		list_add(&raw_tp->event_attached, &file->bpf_attached);
++		mutex_unlock(&event_mutex);
++		*ppos += cnt;
++		return cnt;
++	}
 +
-+	ret = bpf_raw_tracepoint_ftrace_attach("bpf_test_run",
-+					       "bpf_test_finish",
-+					       bpf_fd);
-+	if (CHECK(ret < 0, "bpf_raw_tracepoint_ftrace_attach",
-+		  "failed: %d errno %d\n", ret, errno))
-+		goto out_filterfd;
++	/* Command is to detach fd from tracepoint */
++	prog = bpf_prog_get(prog_fd);
++	if (IS_ERR(prog))
++		return PTR_ERR(prog);
 +
-+	char test_skb[128] = {
-+		0,
-+	};
++	mutex_lock(&event_mutex);
++	list_for_each_entry_safe(raw_tp, next, &file->bpf_attached,
++				 event_attached) {
++		if (raw_tp->prog == prog) {
++			list_del(&raw_tp->event_attached);
++			bpf_raw_tracepoint_close(raw_tp);
++			prog_put = false;
++			break;
++		}
++	}
++	mutex_unlock(&event_mutex);
 +
-+	__u32 prog_ret;
-+	int err = bpf_prog_test_run(filter_fd, 1, test_skb, sizeof(test_skb), 0,
-+				    0, &prog_ret, 0);
-+	CHECK(err != 42, "test_run",
-+	      "tracepoint did not modify return value\n");
-+	CHECK(prog_ret != 0, "test_run_ret",
-+	      "socket_filter did not return 0\n");
-+
-+	ret = bpf_raw_tracepoint_ftrace_detach("bpf_test_run",
-+					       "bpf_test_finish",
-+					       bpf_fd);
-+	if (CHECK(ret < 0, "bpf_raw_tracepoint_ftrace_detach",
-+		  "failed: %d errno %d\n", ret, errno))
-+		goto out_filterfd;
-+
-+	err = bpf_prog_test_run(filter_fd, 1, test_skb, sizeof(test_skb), 0, 0,
-+				&prog_ret, 0);
-+	CHECK(err != 0, "test_run_notrace",
-+	      "test_run failed with %d errno %d\n", err, errno);
-+	CHECK(prog_ret != 0, "test_run_ret_notrace",
-+	      "socket_filter did not return 0\n");
-+
-+out_filterfd:
-+	close(filter_fd);
-+out_bpffd:
-+	close(bpf_fd);
++	if (prog_put)
++		bpf_prog_put(prog);
++	*ppos += cnt;
++	return cnt;
 +}
++
++static void *event_bpf_attach_next(struct seq_file *m, void *t, loff_t *pos)
++{
++	struct trace_event_file *file = event_file_data(m->private);
++
++	return seq_list_next(t, &file->bpf_attached, pos);
++}
++
++static void *event_bpf_attach_start(struct seq_file *m, loff_t *pos)
++{
++	struct trace_event_file *event_file;
++
++	/* ->stop() is called even if ->start() fails */
++	mutex_lock(&event_mutex);
++	event_file = event_file_data(m->private);
++	if (unlikely(!event_file))
++		return ERR_PTR(-ENODEV);
++
++	if (list_empty(&event_file->bpf_attached))
++		return NULL;
++
++	return seq_list_start(&event_file->bpf_attached, *pos);
++}
++
++static void event_bpf_attach_stop(struct seq_file *m, void *t)
++{
++	mutex_unlock(&event_mutex);
++}
++
++static int event_bpf_attach_show(struct seq_file *m, void *v)
++{
++	struct bpf_raw_tracepoint *raw_tp;
++
++	raw_tp = list_entry(v, struct bpf_raw_tracepoint, event_attached);
++	seq_printf(m, "prog id: %u\n", raw_tp->prog->aux->id);
++	return 0;
++}
++
++static const struct seq_operations event_bpf_attach_seq_ops = {
++	.start = event_bpf_attach_start,
++	.next = event_bpf_attach_next,
++	.stop = event_bpf_attach_stop,
++	.show = event_bpf_attach_show,
++};
++
++static int event_bpf_attach_open(struct inode *inode, struct file *file)
++{
++	int ret = 0;
++
++	mutex_lock(&event_mutex);
++
++	if (unlikely(!event_file_data(file))) {
++		mutex_unlock(&event_mutex);
++		return -ENODEV;
++	}
++
++	if (file->f_mode & FMODE_READ) {
++		ret = seq_open(file, &event_bpf_attach_seq_ops);
++		if (!ret) {
++			struct seq_file *m = file->private_data;
++
++			m->private = file;
++		}
++	}
++
++	mutex_unlock(&event_mutex);
++
++	return ret;
++}
++
++const struct file_operations event_bpf_attach_fops = {
++	.open = event_bpf_attach_open,
++	.read = seq_read,
++	.write = event_bpf_attach_write,
++	.llseek = default_llseek,
++};
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index 005f08629b8b..e33828d24eb2 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -1582,6 +1582,7 @@ extern struct list_head ftrace_events;
+ 
+ extern const struct file_operations event_trigger_fops;
+ extern const struct file_operations event_hist_fops;
++extern const struct file_operations event_bpf_attach_fops;
+ 
+ #ifdef CONFIG_HIST_TRIGGERS
+ extern int register_trigger_hist_cmd(void);
+diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
+index 67851fb66b6b..79420d5efaef 100644
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -2018,8 +2018,10 @@ event_create_dir(struct dentry *parent, struct trace_event_file *file)
+ 		trace_create_file("trigger", 0644, file->dir, file,
+ 				  &event_trigger_fops);
+ 
+-		trace_create_file("bpf_attach", 0644, file->dir, file,
+-				  &bpf_attach_trigger_fops);
++#ifdef CONFIG_BPF_EVENTS
++		trace_create_file("bpf", 0644, file->dir, file,
++				  &event_bpf_attach_fops);
++#endif
+ 	}
+ 
+ #ifdef CONFIG_HIST_TRIGGERS
+@@ -2267,6 +2269,9 @@ trace_create_new_event(struct trace_event_call *call,
+ 	atomic_set(&file->sm_ref, 0);
+ 	atomic_set(&file->tm_ref, 0);
+ 	INIT_LIST_HEAD(&file->triggers);
++#ifdef CONFIG_BPF_EVENTS
++	INIT_LIST_HEAD(&file->bpf_attached);
++#endif
+ 	list_add(&file->list, &tr->events);
+ 
+ 	return file;
 -- 
 2.22.0.410.gd8fdbe21b5-goog
 
