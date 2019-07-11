@@ -2,112 +2,103 @@ Return-Path: <SRS0=5DWm=VI=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC209C74A4B
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jul 2019 09:40:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21B87C74A4B
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jul 2019 09:45:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 84C3720872
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jul 2019 09:40:59 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d6BNv87z"
+	by mail.kernel.org (Postfix) with ESMTP id E605D21670
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jul 2019 09:45:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1562838315;
+	bh=fCmvtSnN5KcuFoyLXltopennSHZGXM/xZ3ZSn2MCAkc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=FdgNMwo1amgERAcGRnpUbg+10M/R/YA5Zt5bNi0Bu+MCmJAX3ywXjaF4ki04dg6pT
+	 b7AXay/Es4hxpmwXUah4Xwv232nu65hdDOHn8gslJi+g+4035GR4v9wLKonzcXu1eB
+	 KxrK8iCYwhqw2fTwts8smV9+0UVu+CvZ5dJEBTBo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728328AbfGKJkl (ORCPT
+        id S1728314AbfGKJpO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 11 Jul 2019 05:40:41 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:42729 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726088AbfGKJkl (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Jul 2019 05:40:41 -0400
-Received: by mail-wr1-f65.google.com with SMTP id j8so1425513wrj.9;
-        Thu, 11 Jul 2019 02:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=l4bEEAxzGIGnFBD/3jElNFp34ehWwPy0iGMb60Ja/qM=;
-        b=d6BNv87zRY3i+XzLaswys7tRTYW7MoMR2OhrioCn/iReboXP8KFai0xrXVUf2Ao/3Y
-         80UN6DRbT8LL4l8/yUTFBC/8P4nkDIaPdZMboVQWJ/oarvJwi2M5UYINOHiVAoAzYNn3
-         Z3TmDSX2ytLvcAizZIwS9th3odZVwv3uhB4BiYnCfZZE5k48KqvUAG9v2njrSrYXpybl
-         kHzpsr1fDxeXHIe9Oz+pDW0jOPwBqqM4dhhFFDBxA6CGNpeRS+iPeo1Wdr+SSZR4AzOQ
-         wJ1RaI1YB7UJB+yvESI5nkkPkOid+zc76ux5hubnI/6D4FmFzwdvgOFw5cvU7Ys60NI/
-         3eHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=l4bEEAxzGIGnFBD/3jElNFp34ehWwPy0iGMb60Ja/qM=;
-        b=tMG5FfY2KEWZvmDJC+fJkyYnhQ8z3n9KFI9iE2+1bamRHhJS1Ie/wodBxgiyziX3M2
-         GAVZQ5tv2mVympuxW/aeU6UaB6/2WzXqg3uMhWZuiXi6s2C0et+HPTLokUviCJQt9fsP
-         nyINpQqmFIdjfchzHCq6+Njt5FWbRPR+ZAZ71ZhlZj3uglj9K+8nf7LWn+7EVhnnjMK2
-         6iOul4i7Vlru4K8ReSdSqXS4Iqk5KJkxGtvG7EK9rilwsh2qCmBFREtMvovlSZzZ4UQR
-         /H87fLG+BjYQwCM0yZ09ioOJUkkTk16GVLY6dpoGmZAwsCqpoWp/bDUfwZJTZBLNIiMC
-         Hl+Q==
-X-Gm-Message-State: APjAAAVHZfw2uGetNOQtZil0fejl2fz2T2grKegM0XEz82riUe3BTfww
-        BHLvg5NoRxY8P34jdIrv1mo=
-X-Google-Smtp-Source: APXvYqxC7+cVWxZdR3+Vy3RrmNxvDsFaJdw6K3b3W7bdZl6srTlThCnxeHt/iJSFU1gBnow4qbNMNg==
-X-Received: by 2002:adf:ec0f:: with SMTP id x15mr4032230wrn.165.1562838038725;
-        Thu, 11 Jul 2019 02:40:38 -0700 (PDT)
-Received: from gmail.com (net-5-95-187-49.cust.vodafonedsl.it. [5.95.187.49])
-        by smtp.gmail.com with ESMTPSA id v124sm5087104wmf.23.2019.07.11.02.40.37
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Jul 2019 02:40:38 -0700 (PDT)
-From:   Paolo Pisati <p.pisati@gmail.com>
-To:     --to=Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jiong Wang <jiong.wang@netronome.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] [RESEND] Fold checksum at the end of bpf_csum_diff and fix
-Date:   Thu, 11 Jul 2019 11:40:35 +0200
-Message-Id: <1562838037-1884-1-git-send-email-p.pisati@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <20190710231439.GD32439@tassilo.jf.intel.com>
-References: <20190710231439.GD32439@tassilo.jf.intel.com>
+        Thu, 11 Jul 2019 05:45:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50488 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726088AbfGKJpO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 11 Jul 2019 05:45:14 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4C7E420872;
+        Thu, 11 Jul 2019 09:45:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562838313;
+        bh=fCmvtSnN5KcuFoyLXltopennSHZGXM/xZ3ZSn2MCAkc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=msKHFoq1k7Hqwov4CLkE1ZEAbs1wTC7Q18jlnlcjXlM0AkkuxcfbcStOXB9miXgCJ
+         5d74po+3Nlt9RbYtxyX8i5luTtfSyihwcZXy/t819iQWVpHaNBqUftSeNtf76ElQVI
+         lQbiMqDAOvUJBQ5kwOGGbgW3h/xX3YrpNVoA5jqU=
+Date:   Thu, 11 Jul 2019 10:45:06 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        andre.przywara@arm.com, arnd@arndb.de, huw@codeweavers.com,
+        catalin.marinas@arm.com, daniel.lezcano@linaro.org,
+        will.deacon@arm.com, linux@armlinux.org.uk, ralf@linux-mips.org,
+        salyzyn@android.com, luto@kernel.org, paul.burton@mips.com,
+        john.stultz@linaro.org, 0x7f454c46@gmail.com,
+        linux@rasmusvillemoes.dk, tglx@linutronix.de, sthotton@marvell.com,
+        pcc@google.com
+Subject: Re: [PATCH v2] arm64: vdso: Fix ABI regression in compat vdso
+Message-ID: <20190711094505.rwy6t6wu2cvmvwr6@willie-the-truck>
+References: <20190621095252.32307-11-vincenzo.frascino@arm.com>
+ <20190710140119.23417-1-vincenzo.frascino@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190710140119.23417-1-vincenzo.frascino@arm.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Paolo Pisati <paolo.pisati@canonical.com>
+On Wed, Jul 10, 2019 at 03:01:19PM +0100, Vincenzo Frascino wrote:
+> Prior to the introduction of Unified vDSO support and compat layer for
+> vDSO on arm64, AT_SYSINFO_EHDR was not defined for compat tasks.
+> In the current implementation, AT_SYSINFO_EHDR is defined even if the
+> compat vdso layer is not built and this causes a regression in the
+> expected behavior of the ABI.
+> 
+> Restore the ABI behavior making sure that AT_SYSINFO_EHDR for compat
+> tasks is defined only when CONFIG_COMPAT_VDSO is enabled.
+> 
+> Reported-by: John Stultz <john.stultz@linaro.org>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> ---
+>  arch/arm64/include/asm/elf.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
+> index 3c7037c6ba9b..b618017205a3 100644
+> --- a/arch/arm64/include/asm/elf.h
+> +++ b/arch/arm64/include/asm/elf.h
+> @@ -202,7 +202,7 @@ typedef compat_elf_greg_t		compat_elf_gregset_t[COMPAT_ELF_NGREG];
+>  ({									\
+>  	set_thread_flag(TIF_32BIT);					\
+>   })
+> -#ifdef CONFIG_GENERIC_COMPAT_VDSO
+> +#ifdef CONFIG_COMPAT_VDSO
+>  #define COMPAT_ARCH_DLINFO						\
+>  do {									\
+>  	/*								\
 
-After applying patch 0001, all checksum implementations i could test (x86-64, arm64 and
-arm), now agree on the return value.
+Acked-by: Will Deacon <will@kernel.org>
 
-Patch 0002 fix the expected return value for test #13: i did the calculation manually,
-and it correspond.
+I can take this at -rc1 via arm64 unless tglx plans to send it during the
+rest of the merge window. Please let me know.
 
-Unfortunately, after applying patch 0001, other test cases now fail in
-test_verifier:
-
-$ sudo ./tools/testing/selftests/bpf/test_verifier
-...
-#417/p helper access to variable memory: size = 0 allowed on NULL (ARG_PTR_TO_MEM_OR_NULL) FAIL retval 65535 != 0 
-#419/p helper access to variable memory: size = 0 allowed on != NULL stack pointer (ARG_PTR_TO_MEM_OR_NULL) FAIL retval 65535 != 0 
-#423/p helper access to variable memory: size possible = 0 allowed on != NULL packet pointer (ARG_PTR_TO_MEM_OR_NULL) FAIL retval 65535 != 0 
-...
-Summary: 1500 PASSED, 0 SKIPPED, 3 FAILED
-
-And there are probably other fallouts in other selftests - someone familiar
-should take a look before applying these patches.
-
-Paolo Pisati (2):
-  bpf: bpf_csum_diff: fold the checksum before returning the
-    value
-  bpf, selftest: fix checksum value for test #13
-
- net/core/filter.c                                   | 2 +-
- tools/testing/selftests/bpf/verifier/array_access.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
--- 
-2.17.1
-
+Will
