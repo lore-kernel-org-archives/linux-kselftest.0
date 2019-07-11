@@ -5,60 +5,59 @@ X-Spam-Level:
 X-Spam-Status: No, score=-6.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 272B6C74A4B
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jul 2019 09:32:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB5EFC74A52
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jul 2019 09:40:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F3D0B208E4
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jul 2019 09:32:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8195A21537
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jul 2019 09:40:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jsS6iEzO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p68Tx2IN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728313AbfGKJb7 (ORCPT
+        id S1726088AbfGKJkn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 11 Jul 2019 05:31:59 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:37801 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727595AbfGKJb6 (ORCPT
+        Thu, 11 Jul 2019 05:40:43 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43477 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728325AbfGKJkm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Jul 2019 05:31:58 -0400
-Received: by mail-wm1-f66.google.com with SMTP id f17so4975587wme.2;
-        Thu, 11 Jul 2019 02:31:57 -0700 (PDT)
+        Thu, 11 Jul 2019 05:40:42 -0400
+Received: by mail-wr1-f65.google.com with SMTP id p13so5494125wru.10;
+        Thu, 11 Jul 2019 02:40:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
         bh=1LhwbybOGre7jhb9MoBzIWHJmyAAMUo2nsbdJ6LEPDI=;
-        b=jsS6iEzOtytBoOqSAZ5cOraY7/ePo0CkCqLcB/EWr/cfw1pzSS+7ubDAGGZ/xbdxWf
-         XYVAKpylTAqSDxl7yOA+TVAwOh2HawvpiJ9MlPmJuQbpCj4GLR5dt4Azjiro58A91oGF
-         lfUXEGJA51Gx0dGK7TG7sbo4VAr2hq+CrIOmA8Ps4JlWrBY6sike0VZ1oNGWtfl1Qi1E
-         hcl4D0gmfLQO7PxOW72X1JmaF4IAIM3KSTGQ/rjUy7Eyh6w7yDv//RyWLjtVcrh5DC2R
-         hQQ5NMJI8KeDogbPLXGqJC2WK+mvLt20F6k1nVGfVhwK+JTYUhFJkLPdkBp55f1XK1x9
-         41jw==
+        b=p68Tx2INzL2LCfeAo+Ah/ECT1Y6fkuWczzZAZNiwWbKsPklZ5GEJoJRDU6gdjypsNy
+         LEh5h6d9ROyQShNx+m6H6EdoVtd2pvuIcN5umVsD64YZCK2i2Cqhv019NfwCNfbLnthp
+         E5azYG7Ud02+C7621L0dy+0w0NB/evjMkruljxfbkEXIzDJqBFw/Ib0oiJDYhCMXucXe
+         k5//NzhzdH7MmPhSiQ0s1GeLXlWCtD1isO7ahU6WVgGWBHjDC6+ZUoj7MQhNpeUtFgpU
+         xF9dQ2bMP3mgOEi6mpjJyeeTcAzRxzUItIx6ESzpZCm6dTdULB6RPjJ4Z4VBD0LmhCJ1
+         X8ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
         bh=1LhwbybOGre7jhb9MoBzIWHJmyAAMUo2nsbdJ6LEPDI=;
-        b=hRzAp6cTwLSxLQWzLsJunKKEwpzi7yIODrTR5gLEsj7SXpQcdsfV5RWWYyNPkyTtks
-         OiM19R2TtjGqCRmyo1qNKuuJUe8otq30YDn3qBP8c6OU6vtUWlNiayMNr3sWOCjC0OLE
-         ph/WnL/JyKn0G8m+mLHYhfsoWsviK2gaoHcszBXDaz+H9tf2RlD3HT2LgO37XkcA3Dpg
-         LhZmb0Ju45yI71lgnok1JcHiYqZJwaH1C/4g2Ch6UvMpF9RYEoAtsFLD2akr3kVJEge8
-         q90DlUA27rcipR6eTWo53Ljv5L6SzigHGOqf37VkHnJEOJ5v/tW9n3K1PlLc/OHTfTEy
-         udaw==
-X-Gm-Message-State: APjAAAWWe7ccSIXQDRW8TRCv2Ew3hayEZNGIqgUMLKW58f8eQaYBZvl8
-        GKw8OJgrrf0t+sLDmpvXHk0=
-X-Google-Smtp-Source: APXvYqyf1KBCXWmcs4e9KK6grFxCC8E+4DCtk19VvviFmeqXyjCavihr8fWs6O3L/pEGYK8ii+HVZw==
-X-Received: by 2002:a1c:305:: with SMTP id 5mr3306664wmd.101.1562837516292;
-        Thu, 11 Jul 2019 02:31:56 -0700 (PDT)
+        b=ZHZzXGNw3hz6zl76rHF1ts1ucSxqjkwSdEWJ9aVux0rFoYCUdoEUUAlUQSlbXdXiek
+         TXHOUCnY7qk+BJAV72Mb53pBVLJX6mIgqqiN5lBW+1bmW4oT3qW0G8PI47B0vwkPvJuG
+         65vkIluNwDGh4aTmrLjWjRl2s62WAome7eZdrAaP3i/kR7uVEyGwg8B1VQfT/8IjPdWg
+         Q2qAmAm1YynLmc5ZY5ZwGGxIpROAFH/sKNlsgVPULQ7Ilm5a+gt2Wz+jcZNfDn0VIACD
+         H8iffJzCHH2AmXsnTn1FcPh8Qwj1y7gGpcEopmYbWZIlDMLEDVnqd1iv3oz5t7ag8g9X
+         77CQ==
+X-Gm-Message-State: APjAAAWmKDBF6YMHdKdh+71ctUg6AL8ym9lxj3UaLu+6h3yxhOUtUjdQ
+        AJ6tm8bqaechNaXS1LSbitU=
+X-Google-Smtp-Source: APXvYqyV/tQeJFgCQZnuwWh2X7e5VUP2qfLJEzcAR283FEg7rszD4Y2qfxkGMupe+sfEy1sNjigoPw==
+X-Received: by 2002:adf:efd2:: with SMTP id i18mr3932710wrp.145.1562838039741;
+        Thu, 11 Jul 2019 02:40:39 -0700 (PDT)
 Received: from gmail.com (net-5-95-187-49.cust.vodafonedsl.it. [5.95.187.49])
-        by smtp.gmail.com with ESMTPSA id y6sm4997438wmd.16.2019.07.11.02.31.55
+        by smtp.gmail.com with ESMTPSA id j10sm5005385wrw.96.2019.07.11.02.40.39
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Jul 2019 02:31:55 -0700 (PDT)
+        Thu, 11 Jul 2019 02:40:39 -0700 (PDT)
 From:   Paolo Pisati <p.pisati@gmail.com>
-To:     --in-reply-to= <20190710231439.GD32439@tassilo.jf.intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+To:     --to=Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
@@ -69,11 +68,12 @@ To:     --in-reply-to= <20190710231439.GD32439@tassilo.jf.intel.com>,
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: [PATCH 1/2] bpf: bpf_csum_diff: fold the checksum before returning the value
-Date:   Thu, 11 Jul 2019 11:31:52 +0200
-Message-Id: <1562837513-745-2-git-send-email-p.pisati@gmail.com>
+Date:   Thu, 11 Jul 2019 11:40:36 +0200
+Message-Id: <1562838037-1884-2-git-send-email-p.pisati@gmail.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1562837513-745-1-git-send-email-p.pisati@gmail.com>
-References: <1562837513-745-1-git-send-email-p.pisati@gmail.com>
+In-Reply-To: <1562838037-1884-1-git-send-email-p.pisati@gmail.com>
+References: <20190710231439.GD32439@tassilo.jf.intel.com>
+ <1562838037-1884-1-git-send-email-p.pisati@gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
