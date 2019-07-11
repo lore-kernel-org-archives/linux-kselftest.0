@@ -2,60 +2,59 @@ Return-Path: <SRS0=5DWm=VI=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D61FC74A51
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jul 2019 09:40:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC209C74A4B
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jul 2019 09:40:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 03B8020872
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jul 2019 09:40:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84C3720872
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jul 2019 09:40:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tTnECAgQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d6BNv87z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728304AbfGKJkt (ORCPT
+        id S1728328AbfGKJkl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 11 Jul 2019 05:40:49 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:35258 "EHLO
+        Thu, 11 Jul 2019 05:40:41 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:42729 "EHLO
         mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728354AbfGKJkn (ORCPT
+        with ESMTP id S1726088AbfGKJkl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Jul 2019 05:40:43 -0400
-Received: by mail-wr1-f65.google.com with SMTP id y4so5540980wrm.2;
-        Thu, 11 Jul 2019 02:40:41 -0700 (PDT)
+        Thu, 11 Jul 2019 05:40:41 -0400
+Received: by mail-wr1-f65.google.com with SMTP id j8so1425513wrj.9;
+        Thu, 11 Jul 2019 02:40:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=XCX9jE72PgkcoZQV6rWjyFaKhpvGYfcrX9M8ab1CPrw=;
-        b=tTnECAgQENTRAvFolzVMqQNAdRuuxyLIyO6WnwNCZtbl+6ZtEcBnIX9+BmrieYKt0K
-         ruIexHnyZNoen+DLPZDU1/k8ZbGwLWSiw5AYk/hFDoEYbUhlKti0+fnOwa5lTtRI+UH7
-         7xOqP5rO9g+eeYOIRxNGsgobWuaJDCBZw75r5HKaYFW4sijjGQZC1u/MMis9O0HjR1N6
-         BX8gYw/BsczC2hruBtbVBrsJ8bhLHDskAAqQ4S5QZuPwZnfrtyVj4MvBugcysLV0cO7S
-         WpE5dLEal/9OjBdOcFi1RLySx29lVIORPeTBWspYjza4r1V8gkhdWgGuc9Z9LJtgZB9G
-         zF3Q==
+        bh=l4bEEAxzGIGnFBD/3jElNFp34ehWwPy0iGMb60Ja/qM=;
+        b=d6BNv87zRY3i+XzLaswys7tRTYW7MoMR2OhrioCn/iReboXP8KFai0xrXVUf2Ao/3Y
+         80UN6DRbT8LL4l8/yUTFBC/8P4nkDIaPdZMboVQWJ/oarvJwi2M5UYINOHiVAoAzYNn3
+         Z3TmDSX2ytLvcAizZIwS9th3odZVwv3uhB4BiYnCfZZE5k48KqvUAG9v2njrSrYXpybl
+         kHzpsr1fDxeXHIe9Oz+pDW0jOPwBqqM4dhhFFDBxA6CGNpeRS+iPeo1Wdr+SSZR4AzOQ
+         wJ1RaI1YB7UJB+yvESI5nkkPkOid+zc76ux5hubnI/6D4FmFzwdvgOFw5cvU7Ys60NI/
+         3eHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=XCX9jE72PgkcoZQV6rWjyFaKhpvGYfcrX9M8ab1CPrw=;
-        b=HGcx844vXWb0QHbOZWjaXmENPPaDmPMpUB+lkL2nmOhr1uCKPaHwWmZ/1z6cmtLVL8
-         kuTEmlK0ql5irVjSm+pvjadxLWWa55sl3CZyRHyUYJTJQYPQO2KSHa5eZDYSyhQN5qjX
-         eDjVBMBnPBsbxRpyk3T616skzo206E6jPvDWhYhQvgA3xy2l34HIo5lindYJ18QvCUuk
-         57CkRriVQ+3TvqDYF/WEAVy2F+2Qlz3LxtcvwsBqVMlIavkO7OGBn0KneT0qPb3vQuZA
-         oMHjR9+iQAdpdO+gQM5qvrw/Nkv+VFiKpj7+E76/MnSPMm2sAMahLQmhC0Tp6eWX3Se5
-         NdsA==
-X-Gm-Message-State: APjAAAU274vc9KhrOfdiDiS1G9VcegQyiYcQmSmLwaRJ83yYxxQUEdRG
-        a1CIk+HdG0dnHeV99B0O0QY=
-X-Google-Smtp-Source: APXvYqxf5RE+8jpE6XU2p2NQvJdttw5dquomhM5T/35Dwg7JJMJHsZKUgzddC7X0DKbJsdQmhngvlA==
-X-Received: by 2002:adf:e841:: with SMTP id d1mr4073489wrn.204.1562838041120;
-        Thu, 11 Jul 2019 02:40:41 -0700 (PDT)
+        bh=l4bEEAxzGIGnFBD/3jElNFp34ehWwPy0iGMb60Ja/qM=;
+        b=tMG5FfY2KEWZvmDJC+fJkyYnhQ8z3n9KFI9iE2+1bamRHhJS1Ie/wodBxgiyziX3M2
+         GAVZQ5tv2mVympuxW/aeU6UaB6/2WzXqg3uMhWZuiXi6s2C0et+HPTLokUviCJQt9fsP
+         nyINpQqmFIdjfchzHCq6+Njt5FWbRPR+ZAZ71ZhlZj3uglj9K+8nf7LWn+7EVhnnjMK2
+         6iOul4i7Vlru4K8ReSdSqXS4Iqk5KJkxGtvG7EK9rilwsh2qCmBFREtMvovlSZzZ4UQR
+         /H87fLG+BjYQwCM0yZ09ioOJUkkTk16GVLY6dpoGmZAwsCqpoWp/bDUfwZJTZBLNIiMC
+         Hl+Q==
+X-Gm-Message-State: APjAAAVHZfw2uGetNOQtZil0fejl2fz2T2grKegM0XEz82riUe3BTfww
+        BHLvg5NoRxY8P34jdIrv1mo=
+X-Google-Smtp-Source: APXvYqxC7+cVWxZdR3+Vy3RrmNxvDsFaJdw6K3b3W7bdZl6srTlThCnxeHt/iJSFU1gBnow4qbNMNg==
+X-Received: by 2002:adf:ec0f:: with SMTP id x15mr4032230wrn.165.1562838038725;
+        Thu, 11 Jul 2019 02:40:38 -0700 (PDT)
 Received: from gmail.com (net-5-95-187-49.cust.vodafonedsl.it. [5.95.187.49])
-        by smtp.gmail.com with ESMTPSA id r5sm5075433wmh.35.2019.07.11.02.40.40
+        by smtp.gmail.com with ESMTPSA id v124sm5087104wmf.23.2019.07.11.02.40.37
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Jul 2019 02:40:40 -0700 (PDT)
+        Thu, 11 Jul 2019 02:40:38 -0700 (PDT)
 From:   Paolo Pisati <p.pisati@gmail.com>
 To:     --to=Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -67,13 +66,12 @@ To:     --to=Alexei Starovoitov <ast@kernel.org>,
         Jiong Wang <jiong.wang@netronome.com>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] bpf, selftest: fix checksum value for test #13
-Date:   Thu, 11 Jul 2019 11:40:37 +0200
-Message-Id: <1562838037-1884-3-git-send-email-p.pisati@gmail.com>
+Subject: [PATCH 0/2] [RESEND] Fold checksum at the end of bpf_csum_diff and fix
+Date:   Thu, 11 Jul 2019 11:40:35 +0200
+Message-Id: <1562838037-1884-1-git-send-email-p.pisati@gmail.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1562838037-1884-1-git-send-email-p.pisati@gmail.com>
+In-Reply-To: <20190710231439.GD32439@tassilo.jf.intel.com>
 References: <20190710231439.GD32439@tassilo.jf.intel.com>
- <1562838037-1884-1-git-send-email-p.pisati@gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -81,24 +79,35 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Paolo Pisati <paolo.pisati@canonical.com>
 
-Signed-off-by: Paolo Pisati <paolo.pisati@canonical.com>
----
- tools/testing/selftests/bpf/verifier/array_access.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+After applying patch 0001, all checksum implementations i could test (x86-64, arm64 and
+arm), now agree on the return value.
 
-diff --git a/tools/testing/selftests/bpf/verifier/array_access.c b/tools/testing/selftests/bpf/verifier/array_access.c
-index bcb83196e459..4698f560d756 100644
---- a/tools/testing/selftests/bpf/verifier/array_access.c
-+++ b/tools/testing/selftests/bpf/verifier/array_access.c
-@@ -255,7 +255,7 @@
- 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
- 	.fixup_map_array_ro = { 3 },
- 	.result = ACCEPT,
--	.retval = -29,
-+	.retval = 28,
- },
- {
- 	"invalid write map access into a read-only array 1",
+Patch 0002 fix the expected return value for test #13: i did the calculation manually,
+and it correspond.
+
+Unfortunately, after applying patch 0001, other test cases now fail in
+test_verifier:
+
+$ sudo ./tools/testing/selftests/bpf/test_verifier
+...
+#417/p helper access to variable memory: size = 0 allowed on NULL (ARG_PTR_TO_MEM_OR_NULL) FAIL retval 65535 != 0 
+#419/p helper access to variable memory: size = 0 allowed on != NULL stack pointer (ARG_PTR_TO_MEM_OR_NULL) FAIL retval 65535 != 0 
+#423/p helper access to variable memory: size possible = 0 allowed on != NULL packet pointer (ARG_PTR_TO_MEM_OR_NULL) FAIL retval 65535 != 0 
+...
+Summary: 1500 PASSED, 0 SKIPPED, 3 FAILED
+
+And there are probably other fallouts in other selftests - someone familiar
+should take a look before applying these patches.
+
+Paolo Pisati (2):
+  bpf: bpf_csum_diff: fold the checksum before returning the
+    value
+  bpf, selftest: fix checksum value for test #13
+
+ net/core/filter.c                                   | 2 +-
+ tools/testing/selftests/bpf/verifier/array_access.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
 -- 
 2.17.1
 
