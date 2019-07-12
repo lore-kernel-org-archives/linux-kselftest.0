@@ -8,59 +8,58 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 339FEC742A5
-	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Jul 2019 08:18:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1583C742A5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Jul 2019 08:18:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F310E21019
-	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Jul 2019 08:18:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C4E2321019
+	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Jul 2019 08:18:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mw+DxFWg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fHwJnLlL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbfGLISD (ORCPT
+        id S1726505AbfGLISK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 12 Jul 2019 04:18:03 -0400
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:46958 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726512AbfGLISA (ORCPT
+        Fri, 12 Jul 2019 04:18:10 -0400
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:51054 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726686AbfGLISJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Jul 2019 04:18:00 -0400
-Received: by mail-pf1-f201.google.com with SMTP id g21so5106771pfb.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2019 01:17:59 -0700 (PDT)
+        Fri, 12 Jul 2019 04:18:09 -0400
+Received: by mail-pg1-f202.google.com with SMTP id q9so5270236pgv.17
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2019 01:18:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=ef4x4rIYEjXAUsOwLGAl/ehMOJtbGdS1NNHHbtE3RYE=;
-        b=Mw+DxFWgn2UniqboD1dRk6XjrDA3CHg3CHvx2mNvLra2gQLu6QxY3y6pCopNHSs+ZI
-         Fi6NVxXoyccnGQ2T8yqPe9AiI78R/1PYyk0qSe6/XbpQmCK0bhO0+Ev+r1kvK7vrqk9F
-         xSACVEbdZ2rcZiwZrpePWi2Dwevi7UHr6Mz/uERvlmSs31g3bXbv4EQq5QHANa6Xwz/A
-         +dv+94sF6y7SjsOqwXqnckQWe6Em5K4eJ05Kficb9BHx8Xw7CE1AMXcEWpJm4MkIqzhW
-         Jajh91IUVPDk12yXVZdJEYz4B1YMPRBy84Il1rDvmuJ6w1ypkVLGhWymq7lErBOPWTBW
-         3BeQ==
+        bh=tRWxB/VAAV03ErbuMUlwG4nfr04i5uXxvmyjeK/eYMw=;
+        b=fHwJnLlLISoqqvDLfyGk8Vw3/9WOMxJ7OvlFCg60FTmh8rrkGX1XqrgWqeHGbkOsY9
+         +9oig5zdjDaOqX38pwXJ11qc7zDS9xm51tLG8d25Pjl1qnpFQ00DiM7DgsXnHCHhAf4u
+         nWPLyei0fJyAgxO/X1UeAkr7Vthrx42va4uBivgP+bj8Y81BwkUY+zTsBlN4qLRnMdWU
+         WEsrFUyDNb2QC4wmy18R655kwuWcHYQFH6bB1A4/qso+3SZixPG89crgQSo4SlPakdWA
+         lNMkNruO9RTX0Na3yK694/C+DuZRUD9DprT3tYjpbz8Q1UNMfW9LI+przQMH/Z0msupI
+         vhQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=ef4x4rIYEjXAUsOwLGAl/ehMOJtbGdS1NNHHbtE3RYE=;
-        b=ZPDBoRd0f4gRJl1DucXp/AMVoQx89+BRp/wKyt1cM0M3jEzJp17CTEywbSInVRA5Q1
-         2VgoELGkMWQAjh6psanBlchjCuYn8E3ftl/GYQ4pnlkhrkSLcevQcuAxenvbwxnABUHP
-         aAUJITe5YIcaH1glRi/fP/DHKeSJiqnLE5GN2lm8TF+DMEjLjNUm2LGHbb8kT4xTLoEf
-         KJJI20s2hcOplvq1goBzqd1fALgKoKVGvnvpANLGrFEpy7xqd3+hPtiyhwtNQrNwuBZ2
-         dTi33eHK/m82ZBGMCnv+TtsonYZJC8wy2Fq5svEdpY4/cxFMGDP+bz5JL0fqI63JtU92
-         BQOQ==
-X-Gm-Message-State: APjAAAVia86jtvvoi5oF0V7BTF/qGCK4vmhGgxbI39N3LgAydfyArAn0
-        Zes4SBuzgGYpataDWuHVTNrbvsRU/OJ3ROTw4KMf9A==
-X-Google-Smtp-Source: APXvYqzxaHrKpKSoTWmzAv9z5eUt7sRrrclIdIKIFKt9RhqLLf0Ka/qHg4gpiM5vj/2Rg1hpmUS+vzQFYgio8gyX/AikfQ==
-X-Received: by 2002:a65:508c:: with SMTP id r12mr8647535pgp.1.1562919478365;
- Fri, 12 Jul 2019 01:17:58 -0700 (PDT)
-Date:   Fri, 12 Jul 2019 01:17:29 -0700
+        bh=tRWxB/VAAV03ErbuMUlwG4nfr04i5uXxvmyjeK/eYMw=;
+        b=s+3FBxCB8eG3VooOpHHqmDfBImS+KHZqtbyCQDpIvUyEXJZSSJE5sV3znhWNaCvm4c
+         Y8evH28Mw+n5jK4tCpSgKtIlCJZcKO+U8yOsFZhTLRofz1RU6dlVivnMDmsOyl/gz3XD
+         hoQyQSXsagCVlIi2oXYTWamd53jDeTResqtCC7mkMkH++mVD9YKn2rfvRd1yudJqOtCA
+         tpXoZRR23gZy+MFYGrlPwcfYy9UlJ9UfJZBaRSvLIZo7SbYe5NvlL8OeFaNBLGJuHDbj
+         YYzecoPZu6glxw+lG2ONmBmcziWW4RaXIaAqUYiyfpc5OOLYNffF4l75rML3OlJh39CE
+         iGQg==
+X-Gm-Message-State: APjAAAWn2VjL5CXZ9jQ2+su4NwgvvVbT/p/eatUlTSQl2DcF5e6vG/Xo
+        FiKjhphUYUrzab5Ciw3XWu6S01kWcdCJ/ILRRDZiWQ==
+X-Google-Smtp-Source: APXvYqzSxxZhDV/VHuvjEAx+PSSV2CXvVreQjca+MxOlfBW78VEVBMXf9ELB10VRLpFN34tmpwg5o+RRVIJafuHGXJT+dA==
+X-Received: by 2002:a63:755e:: with SMTP id f30mr9386006pgn.246.1562919487340;
+ Fri, 12 Jul 2019 01:18:07 -0700 (PDT)
+Date:   Fri, 12 Jul 2019 01:17:32 -0700
 In-Reply-To: <20190712081744.87097-1-brendanhiggins@google.com>
-Message-Id: <20190712081744.87097-4-brendanhiggins@google.com>
+Message-Id: <20190712081744.87097-7-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20190712081744.87097-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH v9 03/18] kunit: test: add string_stream a std::stream like
- string builder
+Subject: [PATCH v9 06/18] kbuild: enable building KUnit
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
         jpoimboe@redhat.com, keescook@google.com,
@@ -78,247 +77,51 @@ Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
         mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
         richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>
+        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>,
+        Michal Marek <michal.lkml@markovi.net>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A number of test features need to do pretty complicated string printing
-where it may not be possible to rely on a single preallocated string
-with parameters.
-
-So provide a library for constructing the string as you go similar to
-C++'s std::string.
+KUnit is a new unit testing framework for the kernel and when used is
+built into the kernel as a part of it. Add KUnit to the root Kconfig and
+Makefile to allow it to be actually built.
 
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+Acked-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc: Michal Marek <michal.lkml@markovi.net>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
 ---
- include/kunit/string-stream.h |  49 ++++++++++++
- kunit/Makefile                |   3 +-
- kunit/string-stream.c         | 147 ++++++++++++++++++++++++++++++++++
- 3 files changed, 198 insertions(+), 1 deletion(-)
- create mode 100644 include/kunit/string-stream.h
- create mode 100644 kunit/string-stream.c
+ Kconfig  | 2 ++
+ Makefile | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/include/kunit/string-stream.h b/include/kunit/string-stream.h
-new file mode 100644
-index 0000000000000..0552a05781afe
---- /dev/null
-+++ b/include/kunit/string-stream.h
-@@ -0,0 +1,49 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * C++ stream style string builder used in KUnit for building messages.
-+ *
-+ * Copyright (C) 2019, Google LLC.
-+ * Author: Brendan Higgins <brendanhiggins@google.com>
-+ */
+diff --git a/Kconfig b/Kconfig
+index 48a80beab6853..10428501edb78 100644
+--- a/Kconfig
++++ b/Kconfig
+@@ -30,3 +30,5 @@ source "crypto/Kconfig"
+ source "lib/Kconfig"
+ 
+ source "lib/Kconfig.debug"
 +
-+#ifndef _KUNIT_STRING_STREAM_H
-+#define _KUNIT_STRING_STREAM_H
++source "kunit/Kconfig"
+diff --git a/Makefile b/Makefile
+index 3e4868a6498b2..0ce1a8a2b6fec 100644
+--- a/Makefile
++++ b/Makefile
+@@ -993,6 +993,8 @@ PHONY += prepare0
+ ifeq ($(KBUILD_EXTMOD),)
+ core-y		+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/
+ 
++core-$(CONFIG_KUNIT) += kunit/
 +
-+#include <linux/types.h>
-+#include <linux/spinlock.h>
-+#include <linux/kref.h>
-+#include <stdarg.h>
-+
-+struct string_stream_fragment {
-+	struct list_head node;
-+	char *fragment;
-+};
-+
-+struct string_stream {
-+	size_t length;
-+	struct list_head fragments;
-+	/* length and fragments are protected by this lock */
-+	spinlock_t lock;
-+};
-+
-+struct kunit;
-+
-+struct string_stream *alloc_string_stream(struct kunit *test);
-+
-+void string_stream_get(struct string_stream *stream);
-+
-+int string_stream_put(struct string_stream *stream);
-+
-+int string_stream_add(struct string_stream *stream, const char *fmt, ...);
-+
-+int string_stream_vadd(struct string_stream *stream,
-+		       const char *fmt,
-+		       va_list args);
-+
-+char *string_stream_get_string(struct string_stream *stream);
-+
-+void string_stream_clear(struct string_stream *stream);
-+
-+bool string_stream_is_empty(struct string_stream *stream);
-+
-+#endif /* _KUNIT_STRING_STREAM_H */
-diff --git a/kunit/Makefile b/kunit/Makefile
-index 5efdc4dea2c08..275b565a0e81f 100644
---- a/kunit/Makefile
-+++ b/kunit/Makefile
-@@ -1 +1,2 @@
--obj-$(CONFIG_KUNIT) +=			test.o
-+obj-$(CONFIG_KUNIT) +=			test.o \
-+					string-stream.o
-diff --git a/kunit/string-stream.c b/kunit/string-stream.c
-new file mode 100644
-index 0000000000000..0463a92dad74b
---- /dev/null
-+++ b/kunit/string-stream.c
-@@ -0,0 +1,147 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * C++ stream style string builder used in KUnit for building messages.
-+ *
-+ * Copyright (C) 2019, Google LLC.
-+ * Author: Brendan Higgins <brendanhiggins@google.com>
-+ */
-+
-+#include <linux/list.h>
-+#include <linux/slab.h>
-+#include <kunit/string-stream.h>
-+#include <kunit/test.h>
-+
-+int string_stream_vadd(struct string_stream *stream,
-+		       const char *fmt,
-+		       va_list args)
-+{
-+	struct string_stream_fragment *frag_container;
-+	int len;
-+	va_list args_for_counting;
-+	unsigned long flags;
-+
-+	/* Make a copy because `vsnprintf` could change it */
-+	va_copy(args_for_counting, args);
-+
-+	/* Need space for null byte. */
-+	len = vsnprintf(NULL, 0, fmt, args_for_counting) + 1;
-+
-+	va_end(args_for_counting);
-+
-+	frag_container = kmalloc(sizeof(*frag_container), GFP_KERNEL);
-+	if (!frag_container)
-+		return -ENOMEM;
-+
-+	frag_container->fragment = kmalloc(len, GFP_KERNEL);
-+	if (!frag_container->fragment) {
-+		kfree(frag_container);
-+		return -ENOMEM;
-+	}
-+
-+	len = vsnprintf(frag_container->fragment, len, fmt, args);
-+	spin_lock_irqsave(&stream->lock, flags);
-+	stream->length += len;
-+	list_add_tail(&frag_container->node, &stream->fragments);
-+	spin_unlock_irqrestore(&stream->lock, flags);
-+
-+	return 0;
-+}
-+
-+int string_stream_add(struct string_stream *stream, const char *fmt, ...)
-+{
-+	va_list args;
-+	int result;
-+
-+	va_start(args, fmt);
-+	result = string_stream_vadd(stream, fmt, args);
-+	va_end(args);
-+
-+	return result;
-+}
-+
-+void string_stream_clear(struct string_stream *stream)
-+{
-+	struct string_stream_fragment *frag_container, *frag_container_safe;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&stream->lock, flags);
-+	list_for_each_entry_safe(frag_container,
-+				 frag_container_safe,
-+				 &stream->fragments,
-+				 node) {
-+		list_del(&frag_container->node);
-+		kfree(frag_container->fragment);
-+		kfree(frag_container);
-+	}
-+	stream->length = 0;
-+	spin_unlock_irqrestore(&stream->lock, flags);
-+}
-+
-+char *string_stream_get_string(struct string_stream *stream)
-+{
-+	struct string_stream_fragment *frag_container;
-+	size_t buf_len = stream->length + 1; /* +1 for null byte. */
-+	char *buf;
-+	unsigned long flags;
-+
-+	buf = kzalloc(buf_len, GFP_KERNEL);
-+	if (!buf)
-+		return NULL;
-+
-+	spin_lock_irqsave(&stream->lock, flags);
-+	list_for_each_entry(frag_container, &stream->fragments, node)
-+		strlcat(buf, frag_container->fragment, buf_len);
-+	spin_unlock_irqrestore(&stream->lock, flags);
-+
-+	return buf;
-+}
-+
-+bool string_stream_is_empty(struct string_stream *stream)
-+{
-+	bool is_empty;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&stream->lock, flags);
-+	is_empty = list_empty(&stream->fragments);
-+	spin_unlock_irqrestore(&stream->lock, flags);
-+
-+	return is_empty;
-+}
-+
-+static int string_stream_init(struct kunit_resource *res, void *context)
-+{
-+	struct string_stream *stream;
-+
-+	stream = kzalloc(sizeof(*stream), GFP_KERNEL);
-+	if (!stream)
-+		return -ENOMEM;
-+
-+	res->allocation = stream;
-+	INIT_LIST_HEAD(&stream->fragments);
-+	spin_lock_init(&stream->lock);
-+
-+	return 0;
-+}
-+
-+static void string_stream_free(struct kunit_resource *res)
-+{
-+	struct string_stream *stream = res->allocation;
-+
-+	string_stream_clear(stream);
-+	kfree(stream);
-+}
-+
-+struct string_stream *alloc_string_stream(struct kunit *test)
-+{
-+	struct kunit_resource *res;
-+
-+	res = kunit_alloc_resource(test,
-+				   string_stream_init,
-+				   string_stream_free,
-+				   NULL);
-+
-+	if (!res)
-+		return NULL;
-+
-+	return res->allocation;
-+}
+ vmlinux-dirs	:= $(patsubst %/,%,$(filter %/, $(init-y) $(init-m) \
+ 		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
+ 		     $(net-y) $(net-m) $(libs-y) $(libs-m) $(virt-y)))
 -- 
 2.22.0.410.gd8fdbe21b5-goog
 
