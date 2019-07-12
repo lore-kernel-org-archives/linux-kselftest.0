@@ -2,160 +2,160 @@ Return-Path: <SRS0=scZ4=VJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A245C742A8
-	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Jul 2019 08:19:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97D60C742B4
+	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Jul 2019 10:58:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 701C920863
-	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Jul 2019 08:19:44 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JtlStr7s"
+	by mail.kernel.org (Postfix) with ESMTP id 70F2F2084B
+	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Jul 2019 10:58:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725877AbfGLIRw (ORCPT
+        id S1726967AbfGLK6N (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 12 Jul 2019 04:17:52 -0400
-Received: from mail-pg1-f202.google.com ([209.85.215.202]:55744 "EHLO
-        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726073AbfGLIRv (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Jul 2019 04:17:51 -0400
-Received: by mail-pg1-f202.google.com with SMTP id b10so5261103pgb.22
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2019 01:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=UvKno1DQ1En2T0BAydqL8aKwWtOHxHpLOB0ZXuFETLs=;
-        b=JtlStr7snNzmz5ulMB5eP37s7rbgIx50z+AVGP2t2WlEdfRbEZO8W2XTT3bE3WZnLv
-         keBpChTguji20fGG9MZtiJLfIGuGAQMR0xBWsqfAPNv7xBwu2S4omSfLGIwdCobd9HG0
-         xEIx+MC/l52zarabPfgQ095HslgbhlLi4Z2VOa7yRbXGn1OMnhIjlbG9wufHRgT48Rw8
-         N31KLcKdJR3xIPKj8X7rcKFfr9bJzXFefGvAJSqFErU5ciZBVgJrNxh12tyuyphu+Fd0
-         ntbZjblO4lofJT/rrUQvPdmmolFfkVV45QPFi2V3CSuuX8nBjrc2V4ynCPPNIkIg5MTd
-         4B0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=UvKno1DQ1En2T0BAydqL8aKwWtOHxHpLOB0ZXuFETLs=;
-        b=tn9VwJDcsAaWC4XRPvO1rxzXzdygDAduPSgjplMPLZOqs1JuOxyJQ2k1v7RCMw9qJW
-         19KOTK+v9taTxyHkpDFryWoln+kBxvHt/TO/436hGQAXAajfrc0daHXmnKYqD3mgARQw
-         TPZJS1GMg6wClZ+QwoWOS5tG4+NSAQDsSM+ShKiYOLWFDnWXfAsLjS/V9vM9z3x3ASlW
-         7DmF1GOlAIuENNf6Axls6GWyVqFhbI04uzdazA8C1z+vX/Wrf5pgnfl03wVUCUsO3Gxy
-         r0n4mYPoDEX6v4rIFfZ8zWQIh96+cDaZDe0rC3VnvLNQ1Zi72LrjZDEjV8wC3A3LlBxQ
-         98fw==
-X-Gm-Message-State: APjAAAUG+2i05tHYGDhV17uo683fOvQmbmgdARYNfYvKg10keXP19sqt
-        KQyZi9aj3GQcnxWczZTbQzkn5/RQS+0qDFrYWLA/4A==
-X-Google-Smtp-Source: APXvYqwxVjSSyLsmH5X5K9D5aFhrhgELvG+6tDMdeYJeUGZ3SfBpCQBrCaJmP5g1KYNhq+xNRut9+ZtuWUgQ3Ro3jfxY+Q==
-X-Received: by 2002:a65:5348:: with SMTP id w8mr9232476pgr.176.1562919470178;
- Fri, 12 Jul 2019 01:17:50 -0700 (PDT)
-Date:   Fri, 12 Jul 2019 01:17:26 -0700
-Message-Id: <20190712081744.87097-1-brendanhiggins@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH v9 00/18] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        jpoimboe@redhat.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Fri, 12 Jul 2019 06:58:13 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:42972 "EHLO mx1.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726050AbfGLK6N (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 12 Jul 2019 06:58:13 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx1.mailbox.org (Postfix) with ESMTPS id 648AF5427E;
+        Fri, 12 Jul 2019 12:58:07 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
+        with ESMTP id la_RnxBryad0; Fri, 12 Jul 2019 12:57:56 +0200 (CEST)
+Date:   Fri, 12 Jul 2019 20:57:45 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <christian@brauner.io>,
+        David Drysdale <drysdale@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
-        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
-        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
-        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Iurii Zaikin <yzaikin@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v9 05/10] namei: O_BENEATH-style path resolution flags
+Message-ID: <20190712105745.nruaftgeat6irhzr@yavin>
+References: <20190706145737.5299-1-cyphar@cyphar.com>
+ <20190706145737.5299-6-cyphar@cyphar.com>
+ <20190712043341.GI17978@ZenIV.linux.org.uk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="f3oogwkmh2sysq6o"
+Content-Disposition: inline
+In-Reply-To: <20190712043341.GI17978@ZenIV.linux.org.uk>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## TL;DR
 
-This new patch set only contains a very minor change to address a sparse
-warning in the PROC SYSCTL KUnit test. Otherwise this patchset is
-identical to the previous.
+--f3oogwkmh2sysq6o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As I mentioned in the previous patchset, all patches now have acks and
-reviews.
+On 2019-07-12, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> On Sun, Jul 07, 2019 at 12:57:32AM +1000, Aleksa Sarai wrote:
+> > @@ -1442,8 +1464,11 @@ static int follow_dotdot_rcu(struct nameidata *n=
+d)
+> >  	struct inode *inode =3D nd->inode;
+> > =20
+> >  	while (1) {
+> > -		if (path_equal(&nd->path, &nd->root))
+> > +		if (path_equal(&nd->path, &nd->root)) {
+> > +			if (unlikely(nd->flags & LOOKUP_BENEATH))
+> > +				return -EXDEV;
+>=20
+> > @@ -1468,6 +1493,8 @@ static int follow_dotdot_rcu(struct nameidata *nd)
+> >  				return -ECHILD;
+> >  			if (&mparent->mnt =3D=3D nd->path.mnt)
+> >  				break;
+> > +			if (unlikely(nd->flags & LOOKUP_XDEV))
+> > +				return -EXDEV;
+> >  			/* we know that mountpoint was pinned */
+> >  			nd->path.dentry =3D mountpoint;
+> >  			nd->path.mnt =3D &mparent->mnt;
+> > @@ -1482,6 +1509,8 @@ static int follow_dotdot_rcu(struct nameidata *nd)
+> >  			return -ECHILD;
+> >  		if (!mounted)
+> >  			break;
+> > +		if (unlikely(nd->flags & LOOKUP_XDEV))
+> > +			return -EXDEV;
+>=20
+> Are you sure these failure exits in follow_dotdot_rcu() won't give
+> suprious hard errors?
 
-## Background
+I could switch to -ECHILD for the *_rcu() checks if you'd prefer that.
+Though, I'd have (probably naively) thought that you'd have already
+gotten -ECHILD from the seqlock checks if there was a race during ".."
+handling.
 
-This patch set proposes KUnit, a lightweight unit testing and mocking
-framework for the Linux kernel.
+> > +	if (unlikely(nd->flags & LOOKUP_BENEATH)) {
+> > +		error =3D dirfd_path_init(nd);
+> > +		if (unlikely(error))
+> > +			return ERR_PTR(error);
+> > +		nd->root =3D nd->path;
+> > +		if (!(nd->flags & LOOKUP_RCU))
+> > +			path_get(&nd->root);
+> > +	}
+> >  	if (*s =3D=3D '/') {
+> >  		if (likely(!nd->root.mnt))
+> >  			set_root(nd);
+> > @@ -2350,9 +2400,11 @@ static const char *path_init(struct nameidata *n=
+d, unsigned flags)
+> >  			s =3D ERR_PTR(error);
+> >  		return s;
+> >  	}
+> > -	error =3D dirfd_path_init(nd);
+> > -	if (unlikely(error))
+> > -		return ERR_PTR(error);
+> > +	if (likely(!nd->path.mnt)) {
+>=20
+> Is that a weird way of saying "if we hadn't already called dirfd_path_ini=
+t()"?
 
-Unlike Autotest and kselftest, KUnit is a true unit testing framework;
-it does not require installing the kernel on a test machine or in a VM
-(however, KUnit still allows you to run tests on test machines or in VMs
-if you want[1]) and does not require tests to be written in userspace
-running on a host kernel. Additionally, KUnit is fast: From invocation
-to completion KUnit can run several dozen tests in about a second.
-Currently, the entire KUnit test suite for KUnit runs in under a second
-from the initial invocation (build time excluded).
+Yes. I did it to be more consistent with the other "have we got the
+root" checks elsewhere. Is there another way you'd prefer I do it?
 
-KUnit is heavily inspired by JUnit, Python's unittest.mock, and
-Googletest/Googlemock for C++. KUnit provides facilities for defining
-unit test cases, grouping related test cases into test suites, providing
-common infrastructure for running tests, mocking, spying, and much more.
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
 
-### What's so special about unit testing?
+--f3oogwkmh2sysq6o
+Content-Type: application/pgp-signature; name="signature.asc"
 
-A unit test is supposed to test a single unit of code in isolation,
-hence the name. There should be no dependencies outside the control of
-the test; this means no external dependencies, which makes tests orders
-of magnitudes faster. Likewise, since there are no external dependencies,
-there are no hoops to jump through to run the tests. Additionally, this
-makes unit tests deterministic: a failing unit test always indicates a
-problem. Finally, because unit tests necessarily have finer granularity,
-they are able to test all code paths easily solving the classic problem
-of difficulty in exercising error handling code.
+-----BEGIN PGP SIGNATURE-----
 
-### Is KUnit trying to replace other testing frameworks for the kernel?
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXShnpgAKCRCdlLljIbnQ
+EgLTAP4nuVmi0292tyCAkB4Di0UUtazb2EsZPgKq9s2vRoyuFAD/UKONDBSK3VN9
+06Id1xrmV0JIYJSqOIdF2oJIncJ8ZwI=
+=5hbR
+-----END PGP SIGNATURE-----
 
-No. Most existing tests for the Linux kernel are end-to-end tests, which
-have their place. A well tested system has lots of unit tests, a
-reasonable number of integration tests, and some end-to-end tests. KUnit
-is just trying to address the unit test space which is currently not
-being addressed.
-
-### More information on KUnit
-
-There is a bunch of documentation near the end of this patch set that
-describes how to use KUnit and best practices for writing unit tests.
-For convenience I am hosting the compiled docs here[2].
-
-Additionally for convenience, I have applied these patches to a
-branch[3]. The repo may be cloned with:
-git clone https://kunit.googlesource.com/linux
-This patchset is on the kunit/rfc/v5.2/v9 branch.
-
-## Changes Since Last Version
-
-Like I said in the TL;DR, there is only one minor change since the
-previous revision. That change only affects patch 17/18; it addresses a
-sparse warning in the PROC SYSCTL unit test.
-
-Thanks to Masahiro for applying previous patches to a branch in his
-kbuild tree and running sparse and other static analysis tools against
-my patches.
-
-[1] https://google.github.io/kunit-docs/third_party/kernel/docs/usage.html#kunit-on-non-uml-architectures
-[2] https://google.github.io/kunit-docs/third_party/kernel/docs/
-[3] https://kunit.googlesource.com/linux/+/kunit/rfc/v5.2/v9
-
--- 
-2.22.0.410.gd8fdbe21b5-goog
-
+--f3oogwkmh2sysq6o--
