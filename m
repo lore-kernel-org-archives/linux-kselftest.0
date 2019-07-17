@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E894FC7618F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jul 2019 01:56:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A14CC7618F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jul 2019 01:56:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 95333217F4
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jul 2019 01:56:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8C5321841
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jul 2019 01:56:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L5X6WDBN"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LMe12Ecx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727047AbfGQB4I (ORCPT
+        id S1727413AbfGQB4T (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 16 Jul 2019 21:56:08 -0400
-Received: from mail-yb1-f202.google.com ([209.85.219.202]:37783 "EHLO
-        mail-yb1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727148AbfGQB4I (ORCPT
+        Tue, 16 Jul 2019 21:56:19 -0400
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:37508 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727616AbfGQB4T (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Jul 2019 21:56:08 -0400
-Received: by mail-yb1-f202.google.com with SMTP id b22so18449163yba.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2019 18:56:07 -0700 (PDT)
+        Tue, 16 Jul 2019 21:56:19 -0400
+Received: by mail-pf1-f202.google.com with SMTP id x18so13488563pfj.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2019 18:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=rXjnRaBVRpZdecCHg0/QEfyUk4ZcJw3rWna10bMhLQM=;
-        b=L5X6WDBNMvs/rKMUL/R4U+rPmHl1vybmceKksEPLuoT3pcTKSFQKfDBbVeWRU5+LzB
-         ul4e2wxsiJEH5PZNjRpTv0Tkr3GBtgMxXz8OyyyP8nAhWYWEMaa21R0KwvCbvhYrE+fu
-         Dh+pybFPRe0aLdQVBom7M2zIPUWFI84nvB+fK8zH/Lon1dMCDWofA6GVk3w0sYOtsteQ
-         Ibm2aE4sdSg6Mrurpb+d4zqLpJAuUuFawoBXdgzCc4LXb/E3r1Z+pRUEG9WmlxctOIOS
-         rRBSllSEuEC4EHFwUIX97Y7QgG0++N6Xs8+MnoNlZt06l2eWLhnu0Aop0jIR4q5llE9A
-         qTsA==
+        bh=NIFvD901awVQBCEfC0yRS5VEkI7IkYyL4xY5bR/tYcU=;
+        b=LMe12Ecx8afd2zOcalFKw4AkqXY0UIm93CjDUfu8wakWCkq3Jx6XyVg+l21NYT6psR
+         iz2Vb1q0G6xbKD6PPoZtoW4iiEkKCTDJh/oVIl9eto+y5IyPGt6m7o1l9w8vRiI9YtJd
+         GKVikUJTggOg/cUJu+RMKnB/tP+YVR7eqP82qS4hEgauT6RadOevlLnYRmMgn4Bq48cc
+         W2g2aTJqe0t5KoIAGCmjwiSm9s/x8TukL8KGTeE2a4Z1z7O2v57VBQHixxPhIXvas7PH
+         01D0aecBbvanqvshLW0FpGSCneQX/oOd9eMVNRbBdczstk8wxmlRLcHMX41SBBo0HhPa
+         mLDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=rXjnRaBVRpZdecCHg0/QEfyUk4ZcJw3rWna10bMhLQM=;
-        b=J2rTtElEZrLIqTXbIfLcdTvJfvHFB/7KescjXYyh0KcApEVkFImIbtrY+Ow4gIPDDp
-         qgqhR1ZI8WyXEjEgcoSTB/M0LJwR5B8xYqiKK+Gn1GERnhI4zcM6NY8PzZvOuaOOdyS9
-         ItN1B2pfjpBwrulilZZ8BCqLKpFstQZLTRKWv9I04iAIfku1Cx9F/ysSSdYMSSfUGeVl
-         BYYNoZNOzW50rbdZvppImyAVllcEm5VO+hUDTHaeEjO0kCJQlRSIKmZAIlEHggyJv6lY
-         ckY/15IEGxp48nlT2LIsuvmypWGoX+OTY5zBZqwf1GhPu+HOhbFeqAxgm+T93XPalTlV
-         rQrg==
-X-Gm-Message-State: APjAAAUoHnC01w4Flr2qUy78W4A207vhVvWIISe8ju1iYzjsnK9qN8Ox
-        1WhmBEhpYuFbh+/JoBBhKqZmwAtxvILSEnSFPzpSdA==
-X-Google-Smtp-Source: APXvYqwOkIGO1sUD2pIOycYffhfJaQ0ehdxMOF+CR/WLJkWy2ixKMmVthtXWyCbbgK8/mA75c/BQDEhn61C+GB5e7UgOIg==
-X-Received: by 2002:a81:a453:: with SMTP id b80mr21499441ywh.485.1563328566777;
- Tue, 16 Jul 2019 18:56:06 -0700 (PDT)
-Date:   Tue, 16 Jul 2019 18:55:30 -0700
+        bh=NIFvD901awVQBCEfC0yRS5VEkI7IkYyL4xY5bR/tYcU=;
+        b=p+G5cP7qnfiE7yN0TUdtN9oTbeOiqeubzP0eK2YmvL5wnCEEV8s2Zu6D0RR6IBe6Cv
+         yKt96WckNwsAhjxsvsb1PCdrFZumJfH83odYHC5qd4gSLlxs7isR8jpFNFVm7VSHaBjH
+         0TqL53a14t0LKqS/OM9c8T8OzcHgYNwUKRO39wg4Fly6x0zVkqCrZBzmgGZ1BIYr3Yz0
+         jV2LIk6VN8z3wYMDIdawWofbylflgztm0nElzUof7Pp4Huuh1KTclR/DZ1U1l2rEnBQT
+         Reig7ZfiILm8lc5RMPhBha/fRJXKP9GWlEhhsFiDjMuJCuBFzAdNZEklaxVYIwuq2jFC
+         6Q1g==
+X-Gm-Message-State: APjAAAVbXmfeztP1tD1z7rKcAOyEmEcNYGz2ydTB9Ck5Vy8Edo3uX/CA
+        OPOjGzlNsR3WdSGuDIM9NAQ94cXUEgUMoZbSfdeayg==
+X-Google-Smtp-Source: APXvYqxWrimz5UKY5nVHHBGbicNfCiwz2CMyZy6X3SbC+My2kDTjL8bXPjCXmBE9hnGfTgnInkFoLnAGx1qXzjwgMtXRIw==
+X-Received: by 2002:a63:d301:: with SMTP id b1mr30393050pgg.379.1563328577517;
+ Tue, 16 Jul 2019 18:56:17 -0700 (PDT)
+Date:   Tue, 16 Jul 2019 18:55:34 -0700
 In-Reply-To: <20190717015543.152251-1-brendanhiggins@google.com>
-Message-Id: <20190717015543.152251-6-brendanhiggins@google.com>
+Message-Id: <20190717015543.152251-10-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20190717015543.152251-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.22.0.510.g264f2c817a-goog
-Subject: [PATCH v11 05/18] kunit: test: add the concept of expectations
+Subject: [PATCH v11 09/18] kunit: test: add support for test abort
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
         jpoimboe@redhat.com, keescook@google.com,
@@ -84,632 +84,500 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add support for expectations, which allow properties to be specified and
-then verified in tests.
+Add support for aborting/bailing out of test cases, which is needed for
+implementing assertions.
+
+An assertion is like an expectation, but bails out of the test case
+early if the assertion is not met. The idea with assertions is that you
+use them to state all the preconditions for your test. Logically
+speaking, these are the premises of the test case, so if a premise isn't
+true, there is no point in continuing the test case because there are no
+conclusions that can be drawn without the premises. Whereas, the
+expectation is the thing you are trying to prove.
 
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
 ---
- include/kunit/test.h | 526 +++++++++++++++++++++++++++++++++++++++++++
- kunit/test.c         |  66 ++++++
- 2 files changed, 592 insertions(+)
+ include/kunit/test.h      |  16 ++++
+ include/kunit/try-catch.h |  69 +++++++++++++++
+ kunit/Makefile            |   3 +-
+ kunit/test.c              | 176 ++++++++++++++++++++++++++++++++++----
+ kunit/try-catch.c         |  95 ++++++++++++++++++++
+ 5 files changed, 343 insertions(+), 16 deletions(-)
+ create mode 100644 include/kunit/try-catch.h
+ create mode 100644 kunit/try-catch.c
 
 diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 4b6e7d91afd34..6ae585478730a 100644
+index 6ae585478730a..1daa4510bb960 100644
 --- a/include/kunit/test.h
 +++ b/include/kunit/test.h
-@@ -9,6 +9,7 @@
- #ifndef _KUNIT_TEST_H
- #define _KUNIT_TEST_H
- 
-+#include <linux/kernel.h>
+@@ -13,6 +13,7 @@
  #include <linux/types.h>
  #include <linux/slab.h>
  #include <kunit/kunit-stream.h>
-@@ -322,4 +323,529 @@ void __printf(3, 4) kunit_printk(const char *level,
- #define kunit_err(test, fmt, ...) \
- 		kunit_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
++#include <kunit/try-catch.h>
  
+ struct kunit_resource;
+ 
+@@ -167,6 +168,7 @@ struct kunit {
+ 
+ 	/* private: internal use only. */
+ 	const char *name; /* Read only after initialization! */
++	struct kunit_try_catch try_catch;
+ 	/*
+ 	 * success starts as true, and may only be set to false during a test
+ 	 * case; thus, it is safe to update this across multiple threads using
+@@ -176,6 +178,11 @@ struct kunit {
+ 	 */
+ 	bool success; /* Read only after test_case finishes! */
+ 	spinlock_t lock; /* Gaurds all mutable test state. */
++	/*
++	 * death_test may be both set and unset from multiple threads in a test
++	 * case.
++	 */
++	bool death_test; /* Protected by lock. */
+ 	/*
+ 	 * Because resources is a list that may be updated multiple times (with
+ 	 * new resources) from any thread associated with a test case, we must
+@@ -184,10 +191,19 @@ struct kunit {
+ 	struct list_head resources; /* Protected by lock. */
+ };
+ 
++static inline void kunit_set_death_test(struct kunit *test, bool death_test)
++{
++	spin_lock(&test->lock);
++	test->death_test = death_test;
++	spin_unlock(&test->lock);
++}
++
+ void kunit_init_test(struct kunit *test, const char *name);
+ 
+ void kunit_fail(struct kunit *test, struct kunit_stream *stream);
+ 
++void kunit_abort(struct kunit *test);
++
+ int kunit_run_tests(struct kunit_suite *suite);
+ 
+ /**
+diff --git a/include/kunit/try-catch.h b/include/kunit/try-catch.h
+new file mode 100644
+index 0000000000000..8a414a9af0b64
+--- /dev/null
++++ b/include/kunit/try-catch.h
+@@ -0,0 +1,69 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * Generates a compile-time warning in case of comparing incompatible types.
-+ */
-+#define __kunit_typecheck(lhs, rhs) \
-+	((void) __typecheck(lhs, rhs))
-+
-+static inline struct kunit_stream *kunit_expect_start(struct kunit *test,
-+						      const char *file,
-+						      const char *line)
-+{
-+	struct kunit_stream *stream = alloc_kunit_stream(test, KERN_ERR,
-+							 GFP_KERNEL);
-+
-+	kunit_stream_add(stream, "EXPECTATION FAILED at %s:%s\n\t", file, line);
-+
-+	return stream;
-+}
-+
-+static inline void kunit_expect_end(struct kunit *test,
-+				    bool success,
-+				    struct kunit_stream *stream)
-+{
-+	if (!success)
-+		kunit_fail(test, stream);
-+	else
-+		kunit_stream_clear(stream);
-+}
-+
-+#define KUNIT_EXPECT_START(test) \
-+		kunit_expect_start(test, __FILE__, __stringify(__LINE__))
-+
-+#define KUNIT_EXPECT_END(test, success, stream) \
-+		kunit_expect_end(test, success, stream)
-+
-+#define KUNIT_EXPECT_MSG(test, success, message, fmt, ...) do {		       \
-+	struct kunit_stream *__stream = KUNIT_EXPECT_START(test);	       \
-+									       \
-+	kunit_stream_add(__stream, message);				       \
-+	kunit_stream_add(__stream, fmt, ##__VA_ARGS__);			       \
-+	KUNIT_EXPECT_END(test, success, __stream);			       \
-+} while (0)
-+
-+#define KUNIT_EXPECT(test, success, message) do {			       \
-+	struct kunit_stream *__stream = KUNIT_EXPECT_START(test);	       \
-+									       \
-+	kunit_stream_add(__stream, message);				       \
-+	KUNIT_EXPECT_END(test, success, __stream);			       \
-+} while (0)
-+
-+/**
-+ * KUNIT_SUCCEED() - A no-op expectation. Only exists for code clarity.
-+ * @test: The test context object.
++ * An API to allow a function, that may fail, to be executed, and recover in a
++ * controlled manner.
 + *
-+ * The opposite of KUNIT_FAIL(), it is an expectation that cannot fail. In other
-+ * words, it does nothing and only exists for code clarity. See
-+ * KUNIT_EXPECT_TRUE() for more information.
++ * Copyright (C) 2019, Google LLC.
++ * Author: Brendan Higgins <brendanhiggins@google.com>
 + */
-+#define KUNIT_SUCCEED(test) do {} while (0)
 +
-+/**
-+ * KUNIT_FAIL() - Always causes a test to fail when evaluated.
-+ * @test: The test context object.
-+ * @fmt: an informational message to be printed when the assertion is made.
-+ * @...: string format arguments.
++#ifndef _KUNIT_TRY_CATCH_H
++#define _KUNIT_TRY_CATCH_H
++
++#include <linux/types.h>
++
++typedef void (*kunit_try_catch_func_t)(void *);
++
++struct kunit;
++
++/*
++ * struct kunit_try_catch - provides a generic way to run code which might fail.
++ * @context: used to pass user data to the try and catch functions.
 + *
-+ * The opposite of KUNIT_SUCCEED(), it is an expectation that always fails. In
-+ * other words, it always results in a failed expectation, and consequently
-+ * always causes the test case to fail when evaluated. See KUNIT_EXPECT_TRUE()
-+ * for more information.
-+ */
-+#define KUNIT_FAIL(test, fmt, ...) do {					       \
-+	struct kunit_stream *__stream = KUNIT_EXPECT_START(test);	       \
-+									       \
-+	kunit_stream_add(__stream, fmt, ##__VA_ARGS__);			       \
-+	KUNIT_EXPECT_END(test, false, __stream);			       \
-+} while (0)
-+
-+/**
-+ * KUNIT_EXPECT_TRUE() - Causes a test failure when the expression is not true.
-+ * @test: The test context object.
-+ * @condition: an arbitrary boolean expression. The test fails when this does
-+ * not evaluate to true.
++ * kunit_try_catch provides a generic, architecture independent way to execute
++ * an arbitrary function of type kunit_try_catch_func_t which may bail out by
++ * calling kunit_try_catch_throw(). If kunit_try_catch_throw() is called, @try
++ * is stopped at the site of invocation and @catch is catch is called.
 + *
-+ * This and expectations of the form `KUNIT_EXPECT_*` will cause the test case
-+ * to fail when the specified condition is not met; however, it will not prevent
-+ * the test case from continuing to run; this is otherwise known as an
-+ * *expectation failure*.
-+ */
-+#define KUNIT_EXPECT_TRUE(test, condition)				       \
-+		KUNIT_EXPECT(test, (condition),				       \
-+		       "Expected " #condition " is true, but is false\n")
-+
-+#define KUNIT_EXPECT_TRUE_MSG(test, condition, fmt, ...)		       \
-+		KUNIT_EXPECT_MSG(test, (condition),			       \
-+				"Expected " #condition " is true, but is false\n",\
-+				fmt, ##__VA_ARGS__)
-+
-+/**
-+ * KUNIT_EXPECT_FALSE() - Makes a test failure when the expression is not false.
-+ * @test: The test context object.
-+ * @condition: an arbitrary boolean expression. The test fails when this does
-+ * not evaluate to false.
++ * struct kunit_try_catch provides a generic interface for the functionality
++ * needed to implement kunit->abort() which in turn is needed for implementing
++ * assertions. Assertions allow stating a precondition for a test simplifying
++ * how test cases are written and presented.
 + *
-+ * Sets an expectation that @condition evaluates to false. See
-+ * KUNIT_EXPECT_TRUE() for more information.
++ * Assertions are like expectations, except they abort (call
++ * kunit_try_catch_throw()) when the specified condition is not met. This is
++ * useful when you look at a test case as a logical statement about some piece
++ * of code, where assertions are the premises for the test case, and the
++ * conclusion is a set of predicates, rather expectations, that must all be
++ * true. If your premises are violated, it does not makes sense to continue.
 + */
-+#define KUNIT_EXPECT_FALSE(test, condition)				       \
-+		KUNIT_EXPECT(test, !(condition),			       \
-+		       "Expected " #condition " is false, but is true\n")
++struct kunit_try_catch {
++	/* private: internal use only. */
++	struct kunit *test;
++	struct completion *try_completion;
++	int try_result;
++	kunit_try_catch_func_t try;
++	kunit_try_catch_func_t catch;
++	void *context;
++};
 +
-+#define KUNIT_EXPECT_FALSE_MSG(test, condition, fmt, ...)		       \
-+		KUNIT_EXPECT_MSG(test, !(condition),			       \
-+				"Expected " #condition " is false, but is true\n",\
-+				fmt, ##__VA_ARGS__)
++void kunit_try_catch_init(struct kunit_try_catch *try_catch,
++			  struct kunit *test,
++			  kunit_try_catch_func_t try,
++			  kunit_try_catch_func_t catch);
 +
-+void kunit_expect_binary_msg(struct kunit *test,
-+			     long long left, const char *left_name,
-+			     long long right, const char *right_name,
-+			     bool compare_result,
-+			     const char *compare_name,
-+			     const char *file,
-+			     const char *line,
-+			     const char *fmt, ...);
++void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context);
 +
-+static inline void kunit_expect_binary(struct kunit *test,
-+				       long long left, const char *left_name,
-+				       long long right, const char *right_name,
-+				       bool compare_result,
-+				       const char *compare_name,
-+				       const char *file,
-+				       const char *line)
++void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch);
++
++static inline int kunit_try_catch_get_result(struct kunit_try_catch *try_catch)
 +{
-+	kunit_expect_binary_msg(test,
-+				left, left_name,
-+				right, right_name,
-+				compare_result,
-+				compare_name,
-+				file,
-+				line,
-+				NULL);
-+}
-+
-+void kunit_expect_ptr_binary_msg(struct kunit *test,
-+				 void *left, const char *left_name,
-+				 void *right, const char *right_name,
-+				 bool compare_result,
-+				 const char *compare_name,
-+				 const char *file,
-+				 const char *line,
-+				 const char *fmt, ...);
-+
-+static inline void kunit_expect_ptr_binary(struct kunit *test,
-+					   void *left, const char *left_name,
-+					   void *right, const char *right_name,
-+					   bool compare_result,
-+					   const char *compare_name,
-+					   const char *file,
-+					   const char *line)
-+{
-+	kunit_expect_ptr_binary_msg(test,
-+				    left, left_name,
-+				    right, right_name,
-+				    compare_result,
-+				    compare_name,
-+				    file,
-+				    line,
-+				    NULL);
++	return try_catch->try_result;
 +}
 +
 +/*
-+ * A factory macro for defining the expectations for the basic comparisons
-+ * defined for the built in types.
-+ *
-+ * Unfortunately, there is no common type that all types can be promoted to for
-+ * which all the binary operators behave the same way as for the actual types
-+ * (for example, there is no type that long long and unsigned long long can
-+ * both be cast to where the comparison result is preserved for all values). So
-+ * the best we can do is do the comparison in the original types and then coerce
-+ * everything to long long for printing; this way, the comparison behaves
-+ * correctly and the printed out value usually makes sense without
-+ * interpretation, but can always be interpretted to figure out the actual
-+ * value.
++ * Exposed for testing only.
 + */
-+#define KUNIT_EXPECT_BINARY(test, left, condition, right) do {		       \
-+	typeof(left) __left = (left);					       \
-+	typeof(right) __right = (right);				       \
-+	__kunit_typecheck(__left, __right);				       \
-+	kunit_expect_binary(test,					       \
-+			    (long long) __left, #left,			       \
-+			    (long long) __right, #right,		       \
-+			    __left condition __right, #condition,	       \
-+			    __FILE__, __stringify(__LINE__));		       \
-+} while (0)
++void kunit_generic_try_catch_init(struct kunit_try_catch *try_catch);
 +
-+#define KUNIT_EXPECT_BINARY_MSG(test, left, condition, right, fmt, ...) do {   \
-+	typeof(left) __left = (left);					       \
-+	typeof(right) __right = (right);				       \
-+	__kunit_typecheck(__left, __right);				       \
-+	kunit_expect_binary_msg(test,					       \
-+				(long long) __left, #left,		       \
-+				(long long) __right, #right,		       \
-+				__left condition __right, #condition,	       \
-+				__FILE__, __stringify(__LINE__),	       \
-+				fmt, ##__VA_ARGS__);			       \
-+} while (0)
-+
-+/*
-+ * Just like KUNIT_EXPECT_BINARY, but for comparing pointer types.
-+ */
-+#define KUNIT_EXPECT_PTR_BINARY(test, left, condition, right) do {	       \
-+	typeof(left) __left = (left);					       \
-+	typeof(right) __right = (right);				       \
-+	__kunit_typecheck(__left, __right);				       \
-+	kunit_expect_ptr_binary(test,					       \
-+			    (void *) __left, #left,			       \
-+			    (void *) __right, #right,			       \
-+			    __left condition __right, #condition,	       \
-+			    __FILE__, __stringify(__LINE__));		       \
-+} while (0)
-+
-+#define KUNIT_EXPECT_PTR_BINARY_MSG(test, left, condition, right, fmt, ...)    \
-+do {									       \
-+	typeof(left) __left = (left);					       \
-+	typeof(right) __right = (right);				       \
-+	__kunit_typecheck(__left, __right);				       \
-+	kunit_expect_ptr_binary_msg(test,				       \
-+				    (void *) __left, #left,		       \
-+				    (void *) __right, #right,		       \
-+				    __left condition __right, #condition,      \
-+				    __FILE__, __stringify(__LINE__),	       \
-+				    fmt, ##__VA_ARGS__);		       \
-+} while (0)
-+
-+/**
-+ * KUNIT_EXPECT_EQ() - Sets an expectation that @left and @right are equal.
-+ * @test: The test context object.
-+ * @left: an arbitrary expression that evaluates to a primitive C type.
-+ * @right: an arbitrary expression that evaluates to a primitive C type.
-+ *
-+ * Sets an expectation that the values that @left and @right evaluate to are
-+ * equal. This is semantically equivalent to
-+ * KUNIT_EXPECT_TRUE(@test, (@left) == (@right)). See KUNIT_EXPECT_TRUE() for
-+ * more information.
-+ */
-+#define KUNIT_EXPECT_EQ(test, left, right) \
-+		KUNIT_EXPECT_BINARY(test, left, ==, right)
-+
-+#define KUNIT_EXPECT_EQ_MSG(test, left, right, fmt, ...)		       \
-+		KUNIT_EXPECT_BINARY_MSG(test,				       \
-+					left,				       \
-+					==,				       \
-+					right,				       \
-+					fmt,				       \
-+					##__VA_ARGS__)
-+
-+/**
-+ * KUNIT_EXPECT_PTR_EQ() - Expects that pointers @left and @right are equal.
-+ * @test: The test context object.
-+ * @left: an arbitrary expression that evaluates to a pointer.
-+ * @right: an arbitrary expression that evaluates to a pointer.
-+ *
-+ * Sets an expectation that the values that @left and @right evaluate to are
-+ * equal. This is semantically equivalent to
-+ * KUNIT_EXPECT_TRUE(@test, (@left) == (@right)). See KUNIT_EXPECT_TRUE() for
-+ * more information.
-+ */
-+#define KUNIT_EXPECT_PTR_EQ(test, left, right) \
-+		KUNIT_EXPECT_PTR_BINARY(test, left, ==, right)
-+
-+#define KUNIT_EXPECT_PTR_EQ_MSG(test, left, right, fmt, ...)		       \
-+		KUNIT_EXPECT_PTR_BINARY_MSG(test,			       \
-+					    left,			       \
-+					    ==,				       \
-+					    right,			       \
-+					    fmt,			       \
-+					    ##__VA_ARGS__)
-+
-+/**
-+ * KUNIT_EXPECT_NE() - An expectation that @left and @right are not equal.
-+ * @test: The test context object.
-+ * @left: an arbitrary expression that evaluates to a primitive C type.
-+ * @right: an arbitrary expression that evaluates to a primitive C type.
-+ *
-+ * Sets an expectation that the values that @left and @right evaluate to are not
-+ * equal. This is semantically equivalent to
-+ * KUNIT_EXPECT_TRUE(@test, (@left) != (@right)). See KUNIT_EXPECT_TRUE() for
-+ * more information.
-+ */
-+#define KUNIT_EXPECT_NE(test, left, right) \
-+		KUNIT_EXPECT_BINARY(test, left, !=, right)
-+
-+#define KUNIT_EXPECT_NE_MSG(test, left, right, fmt, ...)		       \
-+		KUNIT_EXPECT_BINARY_MSG(test,				       \
-+					left,				       \
-+					!=,				       \
-+					right,				       \
-+					fmt,				       \
-+					##__VA_ARGS__)
-+
-+/**
-+ * KUNIT_EXPECT_PTR_NE() - Expects that pointers @left and @right are not equal.
-+ * @test: The test context object.
-+ * @left: an arbitrary expression that evaluates to a pointer.
-+ * @right: an arbitrary expression that evaluates to a pointer.
-+ *
-+ * Sets an expectation that the values that @left and @right evaluate to are not
-+ * equal. This is semantically equivalent to
-+ * KUNIT_EXPECT_TRUE(@test, (@left) != (@right)). See KUNIT_EXPECT_TRUE() for
-+ * more information.
-+ */
-+#define KUNIT_EXPECT_PTR_NE(test, left, right) \
-+		KUNIT_EXPECT_PTR_BINARY(test, left, !=, right)
-+
-+#define KUNIT_EXPECT_PTR_NE_MSG(test, left, right, fmt, ...)		       \
-+		KUNIT_EXPECT_PTR_BINARY_MSG(test,			       \
-+					    left,			       \
-+					    !=,				       \
-+					    right,			       \
-+					    fmt,			       \
-+					    ##__VA_ARGS__)
-+
-+/**
-+ * KUNIT_EXPECT_LT() - An expectation that @left is less than @right.
-+ * @test: The test context object.
-+ * @left: an arbitrary expression that evaluates to a primitive C type.
-+ * @right: an arbitrary expression that evaluates to a primitive C type.
-+ *
-+ * Sets an expectation that the value that @left evaluates to is less than the
-+ * value that @right evaluates to. This is semantically equivalent to
-+ * KUNIT_EXPECT_TRUE(@test, (@left) < (@right)). See KUNIT_EXPECT_TRUE() for
-+ * more information.
-+ */
-+#define KUNIT_EXPECT_LT(test, left, right) \
-+		KUNIT_EXPECT_BINARY(test, left, <, right)
-+
-+#define KUNIT_EXPECT_LT_MSG(test, left, right, fmt, ...)		       \
-+		KUNIT_EXPECT_BINARY_MSG(test,				       \
-+					left,				       \
-+					<,				       \
-+					right,				       \
-+					fmt,				       \
-+					##__VA_ARGS__)
-+
-+/**
-+ * KUNIT_EXPECT_LE() - Expects that @left is less than or equal to @right.
-+ * @test: The test context object.
-+ * @left: an arbitrary expression that evaluates to a primitive C type.
-+ * @right: an arbitrary expression that evaluates to a primitive C type.
-+ *
-+ * Sets an expectation that the value that @left evaluates to is less than or
-+ * equal to the value that @right evaluates to. Semantically this is equivalent
-+ * to KUNIT_EXPECT_TRUE(@test, (@left) <= (@right)). See KUNIT_EXPECT_TRUE() for
-+ * more information.
-+ */
-+#define KUNIT_EXPECT_LE(test, left, right) \
-+		KUNIT_EXPECT_BINARY(test, left, <=, right)
-+
-+#define KUNIT_EXPECT_LE_MSG(test, left, right, fmt, ...)		       \
-+		KUNIT_EXPECT_BINARY_MSG(test,				       \
-+					left,				       \
-+					<=,				       \
-+					right,				       \
-+					fmt,				       \
-+					##__VA_ARGS__)
-+
-+/**
-+ * KUNIT_EXPECT_GT() - An expectation that @left is greater than @right.
-+ * @test: The test context object.
-+ * @left: an arbitrary expression that evaluates to a primitive C type.
-+ * @right: an arbitrary expression that evaluates to a primitive C type.
-+ *
-+ * Sets an expectation that the value that @left evaluates to is greater than
-+ * the value that @right evaluates to. This is semantically equivalent to
-+ * KUNIT_EXPECT_TRUE(@test, (@left) > (@right)). See KUNIT_EXPECT_TRUE() for
-+ * more information.
-+ */
-+#define KUNIT_EXPECT_GT(test, left, right) \
-+		KUNIT_EXPECT_BINARY(test, left, >, right)
-+
-+#define KUNIT_EXPECT_GT_MSG(test, left, right, fmt, ...)		       \
-+		KUNIT_EXPECT_BINARY_MSG(test,				       \
-+					left,				       \
-+					>,				       \
-+					right,				       \
-+					fmt,				       \
-+					##__VA_ARGS__)
-+
-+/**
-+ * KUNIT_EXPECT_GE() - Expects that @left is greater than or equal to @right.
-+ * @test: The test context object.
-+ * @left: an arbitrary expression that evaluates to a primitive C type.
-+ * @right: an arbitrary expression that evaluates to a primitive C type.
-+ *
-+ * Sets an expectation that the value that @left evaluates to is greater than
-+ * the value that @right evaluates to. This is semantically equivalent to
-+ * KUNIT_EXPECT_TRUE(@test, (@left) >= (@right)). See KUNIT_EXPECT_TRUE() for
-+ * more information.
-+ */
-+#define KUNIT_EXPECT_GE(test, left, right) \
-+		KUNIT_EXPECT_BINARY(test, left, >=, right)
-+
-+#define KUNIT_EXPECT_GE_MSG(test, left, right, fmt, ...)		       \
-+		KUNIT_EXPECT_BINARY_MSG(test,				       \
-+					left,				       \
-+					>=,				       \
-+					right,				       \
-+					fmt,				       \
-+					##__VA_ARGS__)
-+
-+/**
-+ * KUNIT_EXPECT_STREQ() - Expects that strings @left and @right are equal.
-+ * @test: The test context object.
-+ * @left: an arbitrary expression that evaluates to a null terminated string.
-+ * @right: an arbitrary expression that evaluates to a null terminated string.
-+ *
-+ * Sets an expectation that the values that @left and @right evaluate to are
-+ * equal. This is semantically equivalent to
-+ * KUNIT_EXPECT_TRUE(@test, !strcmp((@left), (@right))). See KUNIT_EXPECT_TRUE()
-+ * for more information.
-+ */
-+#define KUNIT_EXPECT_STREQ(test, left, right) do {			       \
-+	struct kunit_stream *__stream = KUNIT_EXPECT_START(test);	       \
-+	typeof(left) __left = (left);					       \
-+	typeof(right) __right = (right);				       \
-+									       \
-+	kunit_stream_add(__stream, "Expected " #left " == " #right ", but\n"); \
-+	kunit_stream_add(__stream, "\t\t%s == %s\n", #left, __left);	       \
-+	kunit_stream_add(__stream, "\t\t%s == %s\n", #right, __right);	       \
-+									       \
-+	KUNIT_EXPECT_END(test, !strcmp(left, right), __stream);		       \
-+} while (0)
-+
-+#define KUNIT_EXPECT_STREQ_MSG(test, left, right, fmt, ...) do {	       \
-+	struct kunit_stream *__stream = KUNIT_EXPECT_START(test);	       \
-+	typeof(left) __left = (left);					       \
-+	typeof(right) __right = (right);				       \
-+									       \
-+	kunit_stream_add(__stream, "Expected " #left " == " #right ", but\n"); \
-+	kunit_stream_add(__stream, "\t\t%s == %s\n", #left, __left);	       \
-+	kunit_stream_add(__stream, "\t\t%s == %s\n", #right, __right);	       \
-+	kunit_stream_add(__stream, fmt, ##__VA_ARGS__);			       \
-+									       \
-+	KUNIT_EXPECT_END(test, !strcmp(left, right), __stream);		       \
-+} while (0)
-+
-+/**
-+ * KUNIT_EXPECT_STRNEQ() - Expects that strings @left and @right are not equal.
-+ * @test: The test context object.
-+ * @left: an arbitrary expression that evaluates to a null terminated string.
-+ * @right: an arbitrary expression that evaluates to a null terminated string.
-+ *
-+ * Sets an expectation that the values that @left and @right evaluate to are
-+ * not equal. This is semantically equivalent to
-+ * KUNIT_EXPECT_TRUE(@test, strcmp((@left), (@right))). See KUNIT_EXPECT_TRUE()
-+ * for more information.
-+ */
-+#define KUNIT_EXPECT_STRNEQ(test, left, right) do {			       \
-+	struct kunit_stream *__stream = KUNIT_EXPECT_START(test);	       \
-+	typeof(left) __left = (left);					       \
-+	typeof(right) __right = (right);				       \
-+									       \
-+	kunit_stream_add(__stream, "Expected " #left " != " #right ", but\n"); \
-+	kunit_stream_add(__stream, "\t\t%s == %s\n", #left, __left);	       \
-+	kunit_stream_add(__stream, "\t\t%s == %s\n", #right, __right);	       \
-+									       \
-+	KUNIT_EXPECT_END(test, strcmp(left, right), __stream);		       \
-+} while (0)
-+
-+#define KUNIT_EXPECT_STRNEQ_MSG(test, left, right, fmt, ...) do {	       \
-+	struct kunit_stream *__stream = KUNIT_EXPECT_START(test);	       \
-+	typeof(left) __left = (left);					       \
-+	typeof(right) __right = (right);				       \
-+									       \
-+	kunit_stream_add(__stream, "Expected " #left " != " #right ", but\n"); \
-+	kunit_stream_add(__stream, "\t\t%s == %s\n", #left, __left);	       \
-+	kunit_stream_add(__stream, "\t\t%s == %s\n", #right, __right);	       \
-+	kunit_stream_add(__stream, fmt, ##__VA_ARGS__);			       \
-+									       \
-+	KUNIT_EXPECT_END(test, strcmp(left, right), __stream);		       \
-+} while (0)
-+
-+/**
-+ * KUNIT_EXPECT_NOT_ERR_OR_NULL() - Expects that @ptr is not null and not err.
-+ * @test: The test context object.
-+ * @ptr: an arbitrary pointer.
-+ *
-+ * Sets an expectation that the value that @ptr evaluates to is not null and not
-+ * an errno stored in a pointer. This is semantically equivalent to
-+ * KUNIT_EXPECT_TRUE(@test, !IS_ERR_OR_NULL(@ptr)). See KUNIT_EXPECT_TRUE() for
-+ * more information.
-+ */
-+#define KUNIT_EXPECT_NOT_ERR_OR_NULL(test, ptr) do {			       \
-+	struct kunit_stream *__stream = KUNIT_EXPECT_START(test);	       \
-+	typeof(ptr) __ptr = (ptr);					       \
-+									       \
-+	if (!__ptr)							       \
-+		kunit_stream_add(__stream,				       \
-+			      "Expected " #ptr " is not null, but is\n");      \
-+	if (IS_ERR(__ptr))						       \
-+		kunit_stream_add(__stream,				       \
-+			      "Expected " #ptr " is not error, but is: %ld",   \
-+			      PTR_ERR(__ptr));				       \
-+									       \
-+	KUNIT_EXPECT_END(test, !IS_ERR_OR_NULL(__ptr), __stream);	       \
-+} while (0)
-+
-+#define KUNIT_EXPECT_NOT_ERR_OR_NULL_MSG(test, ptr, fmt, ...) do {	       \
-+	struct kunit_stream *__stream = KUNIT_EXPECT_START(test);	       \
-+	typeof(ptr) __ptr = (ptr);					       \
-+									       \
-+	if (!__ptr) {							       \
-+		kunit_stream_add(__stream,				       \
-+			      "Expected " #ptr " is not null, but is\n");      \
-+		kunit_stream_add(__stream, fmt, ##__VA_ARGS__);		       \
-+	}								       \
-+	if (IS_ERR(__ptr)) {						       \
-+		kunit_stream_add(__stream,				       \
-+			      "Expected " #ptr " is not error, but is: %ld",   \
-+			      PTR_ERR(__ptr));				       \
-+									       \
-+		kunit_stream_add(__stream, fmt, ##__VA_ARGS__);		       \
-+	}								       \
-+	KUNIT_EXPECT_END(test, !IS_ERR_OR_NULL(__ptr), __stream);	       \
-+} while (0)
-+
- #endif /* _KUNIT_TEST_H */
++#endif /* _KUNIT_TRY_CATCH_H */
+diff --git a/kunit/Makefile b/kunit/Makefile
+index 60a9ea6cb4697..1f7680cfa11ad 100644
+--- a/kunit/Makefile
++++ b/kunit/Makefile
+@@ -1,6 +1,7 @@
+ obj-$(CONFIG_KUNIT) +=			test.o \
+ 					string-stream.o \
+-					kunit-stream.o
++					kunit-stream.o \
++					try-catch.o
+ 
+ obj-$(CONFIG_KUNIT_TEST) +=		string-stream-test.o
+ 
 diff --git a/kunit/test.c b/kunit/test.c
-index fdab07bb0b529..1f94a9224b03e 100644
+index 1f94a9224b03e..12db50b221781 100644
 --- a/kunit/test.c
 +++ b/kunit/test.c
-@@ -287,3 +287,69 @@ void kunit_printk(const char *level,
+@@ -7,13 +7,26 @@
+  */
  
- 	va_end(args);
+ #include <linux/kernel.h>
++#include <linux/sched/debug.h>
+ #include <kunit/test.h>
++#include <kunit/try-catch.h>
+ 
+ static void kunit_set_failure(struct kunit *test)
+ {
+ 	WRITE_ONCE(test->success, false);
  }
-+
-+void kunit_expect_binary_msg(struct kunit *test,
-+			     long long left, const char *left_name,
-+			     long long right, const char *right_name,
-+			     bool compare_result,
-+			     const char *compare_name,
-+			     const char *file,
-+			     const char *line,
-+			     const char *fmt, ...)
+ 
++static bool kunit_get_death_test(struct kunit *test)
 +{
-+	struct kunit_stream *stream = kunit_expect_start(test, file, line);
-+	struct va_format vaf;
-+	va_list args;
++	bool death_test;
 +
-+	kunit_stream_add(stream,
-+			 "Expected %s %s %s, but\n",
-+			 left_name, compare_name, right_name);
-+	kunit_stream_add(stream, "\t\t%s == %lld\n", left_name, left);
-+	kunit_stream_add(stream, "\t\t%s == %lld", right_name, right);
++	spin_lock(&test->lock);
++	death_test = test->death_test;
++	spin_unlock(&test->lock);
 +
-+	if (fmt) {
-+		va_start(args, fmt);
-+
-+		vaf.fmt = fmt;
-+		vaf.va = &args;
-+
-+		kunit_stream_add(stream, "\n%pV", &vaf);
-+
-+		va_end(args);
-+	}
-+
-+	kunit_expect_end(test, compare_result, stream);
++	return death_test;
 +}
 +
-+void kunit_expect_ptr_binary_msg(struct kunit *test,
-+				 void *left, const char *left_name,
-+				 void *right, const char *right_name,
-+				 bool compare_result,
-+				 const char *compare_name,
-+				 const char *file,
-+				 const char *line,
-+				 const char *fmt, ...)
+ static int kunit_vprintk_emit(int level, const char *fmt, va_list args)
+ {
+ 	return vprintk_emit(0, level, NULL, 0, fmt, args);
+@@ -126,42 +139,175 @@ void kunit_fail(struct kunit *test, struct kunit_stream *stream)
+ 	kunit_stream_commit(stream);
+ }
+ 
++void __noreturn kunit_abort(struct kunit *test)
 +{
-+	struct kunit_stream *stream = kunit_expect_start(test, file, line);
-+	struct va_format vaf;
-+	va_list args;
++	kunit_set_death_test(test, true);
 +
-+	kunit_stream_add(stream,
-+			 "Expected %s %s %s, but\n",
-+			 left_name, compare_name, right_name);
-+	kunit_stream_add(stream, "\t\t%s == %pK\n", left_name, left);
-+	kunit_stream_add(stream, "\t\t%s == %pK", right_name, right);
++	kunit_try_catch_throw(&test->try_catch);
 +
-+	if (fmt) {
-+		va_start(args, fmt);
++	/*
++	 * Throw could not abort from test.
++	 *
++	 * XXX: we should never reach this line! As kunit_try_catch_throw is
++	 * marked __noreturn.
++	 */
++	WARN_ONCE(true, "Throw could not abort from test!\n");
++}
 +
-+		vaf.fmt = fmt;
-+		vaf.va = &args;
+ void kunit_init_test(struct kunit *test, const char *name)
+ {
+ 	spin_lock_init(&test->lock);
+ 	INIT_LIST_HEAD(&test->resources);
+ 	test->name = name;
+ 	test->success = true;
++	test->death_test = false;
+ }
+ 
+ /*
+- * Performs all logic to run a test case.
++ * Initializes and runs test case. Does not clean up or do post validations.
+  */
+-static void kunit_run_case(struct kunit_suite *suite,
+-			   struct kunit_case *test_case)
++static void kunit_run_case_internal(struct kunit *test,
++				    struct kunit_suite *suite,
++				    struct kunit_case *test_case)
+ {
+-	struct kunit test;
+-
+-	kunit_init_test(&test, test_case->name);
+-
+ 	if (suite->init) {
+ 		int ret;
+ 
+-		ret = suite->init(&test);
++		ret = suite->init(test);
+ 		if (ret) {
+-			kunit_err(&test, "failed to initialize: %d\n", ret);
+-			kunit_set_failure(&test);
+-			test_case->success = test.success;
++			kunit_err(test, "failed to initialize: %d\n", ret);
++			kunit_set_failure(test);
+ 			return;
+ 		}
+ 	}
+ 
+-	test_case->run_case(&test);
++	test_case->run_case(test);
++}
 +
-+		kunit_stream_add(stream, "\n%pV", &vaf);
++static void kunit_case_internal_cleanup(struct kunit *test)
++{
++	kunit_cleanup(test);
++}
+ 
++/*
++ * Performs post validations and cleanup after a test case was run.
++ * XXX: Should ONLY BE CALLED AFTER kunit_run_case_internal!
++ */
++static void kunit_run_case_cleanup(struct kunit *test,
++				   struct kunit_suite *suite)
++{
+ 	if (suite->exit)
+-		suite->exit(&test);
++		suite->exit(test);
 +
-+		va_end(args);
++	kunit_case_internal_cleanup(test);
++}
++
++/*
++ * Handles an unexpected crash in a test case.
++ */
++static void kunit_handle_test_crash(struct kunit *test,
++				   struct kunit_suite *suite,
++				   struct kunit_case *test_case)
++{
++	kunit_err(test, "kunit test case crashed!");
++	/*
++	 * TODO(brendanhiggins@google.com): This prints the stack trace up
++	 * through this frame, not up to the frame that caused the crash.
++	 */
++	show_stack(NULL, NULL);
++
++	kunit_case_internal_cleanup(test);
++}
++
++struct kunit_try_catch_context {
++	struct kunit *test;
++	struct kunit_suite *suite;
++	struct kunit_case *test_case;
++};
++
++static void kunit_try_run_case(void *data)
++{
++	struct kunit_try_catch_context *ctx = data;
++	struct kunit *test = ctx->test;
++	struct kunit_suite *suite = ctx->suite;
++	struct kunit_case *test_case = ctx->test_case;
++
++	/*
++	 * kunit_run_case_internal may encounter a fatal error; if it does,
++	 * abort will be called, this thread will exit, and finally the parent
++	 * thread will resume control and handle any necessary clean up.
++	 */
++	kunit_run_case_internal(test, suite, test_case);
++	/* This line may never be reached. */
++	kunit_run_case_cleanup(test, suite);
++}
++
++static void kunit_catch_run_case(void *data)
++{
++	struct kunit_try_catch_context *ctx = data;
++	struct kunit *test = ctx->test;
++	struct kunit_suite *suite = ctx->suite;
++	struct kunit_case *test_case = ctx->test_case;
++	int try_exit_code = kunit_try_catch_get_result(&test->try_catch);
++
++	if (try_exit_code) {
++		kunit_set_failure(test);
++		/*
++		 * Test case could not finish, we have no idea what state it is
++		 * in, so don't do clean up.
++		 */
++		if (try_exit_code == -ETIMEDOUT)
++			kunit_err(test, "test case timed out\n");
++		/*
++		 * Unknown internal error occurred preventing test case from
++		 * running, so there is nothing to clean up.
++		 */
++		else
++			kunit_err(test, "internal error occurred preventing test case from running: %d\n",
++				  try_exit_code);
++		return;
 +	}
 +
-+	kunit_expect_end(test, compare_result, stream);
++	if (kunit_get_death_test(test)) {
++		/*
++		 * EXPECTED DEATH: kunit_run_case_internal encountered
++		 * anticipated fatal error. Everything should be in a safe
++		 * state.
++		 */
++		kunit_run_case_cleanup(test, suite);
++	} else {
++		/*
++		 * UNEXPECTED DEATH: kunit_run_case_internal encountered an
++		 * unanticipated fatal error. We have no idea what the state of
++		 * the test case is in.
++		 */
++		kunit_handle_test_crash(test, suite, test_case);
++		kunit_set_failure(test);
++	}
++}
++
++/*
++ * Performs all logic to run a test case. It also catches most errors that
++ * occurs in a test case and reports them as failures.
++ */
++static void kunit_run_case_catch_errors(struct kunit_suite *suite,
++					struct kunit_case *test_case)
++{
++	struct kunit_try_catch_context context;
++	struct kunit_try_catch *try_catch;
++	struct kunit test;
++
++	kunit_init_test(&test, test_case->name);
++	try_catch = &test.try_catch;
+ 
+-	kunit_cleanup(&test);
++	kunit_try_catch_init(try_catch,
++			     &test,
++			     kunit_try_run_case,
++			     kunit_catch_run_case);
++	context.test = &test;
++	context.suite = suite;
++	context.test_case = test_case;
++	kunit_try_catch_run(try_catch, &context);
+ 
+ 	test_case->success = test.success;
+ }
+@@ -174,7 +320,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 	kunit_print_subtest_start(suite);
+ 
+ 	for (test_case = suite->test_cases; test_case->run_case; test_case++) {
+-		kunit_run_case(suite, test_case);
++		kunit_run_case_catch_errors(suite, test_case);
+ 		kunit_print_test_case_ok_not_ok(test_case, test_case_count++);
+ 	}
+ 
+diff --git a/kunit/try-catch.c b/kunit/try-catch.c
+new file mode 100644
+index 0000000000000..de580f074387b
+--- /dev/null
++++ b/kunit/try-catch.c
+@@ -0,0 +1,95 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * An API to allow a function, that may fail, to be executed, and recover in a
++ * controlled manner.
++ *
++ * Copyright (C) 2019, Google LLC.
++ * Author: Brendan Higgins <brendanhiggins@google.com>
++ */
++
++#include <kunit/try-catch.h>
++#include <kunit/test.h>
++#include <linux/completion.h>
++#include <linux/kthread.h>
++
++void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch)
++{
++	try_catch->try_result = -EFAULT;
++	complete_and_exit(try_catch->try_completion, -EFAULT);
++}
++
++static int kunit_generic_run_threadfn_adapter(void *data)
++{
++	struct kunit_try_catch *try_catch = data;
++
++	try_catch->try(try_catch->context);
++
++	complete_and_exit(try_catch->try_completion, 0);
++}
++
++void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
++{
++	DECLARE_COMPLETION_ONSTACK(try_completion);
++	struct kunit *test = try_catch->test;
++	struct task_struct *task_struct;
++	int exit_code, status;
++
++	try_catch->context = context;
++	try_catch->try_completion = &try_completion;
++	try_catch->try_result = 0;
++	task_struct = kthread_run(kunit_generic_run_threadfn_adapter,
++				  try_catch,
++				  "kunit_try_catch_thread");
++	if (IS_ERR(task_struct)) {
++		try_catch->catch(try_catch->context);
++		return;
++	}
++
++	/*
++	 * TODO(brendanhiggins@google.com): We should probably have some type of
++	 * variable timeout here. The only question is what that timeout value
++	 * should be.
++	 *
++	 * The intention has always been, at some point, to be able to label
++	 * tests with some type of size bucket (unit/small, integration/medium,
++	 * large/system/end-to-end, etc), where each size bucket would get a
++	 * default timeout value kind of like what Bazel does:
++	 * https://docs.bazel.build/versions/master/be/common-definitions.html#test.size
++	 * There is still some debate to be had on exactly how we do this. (For
++	 * one, we probably want to have some sort of test runner level
++	 * timeout.)
++	 *
++	 * For more background on this topic, see:
++	 * https://mike-bland.com/2011/11/01/small-medium-large.html
++	 */
++	status = wait_for_completion_timeout(&try_completion,
++					     300 * MSEC_PER_SEC); /* 5 min */
++	if (status < 0) {
++		kunit_err(test, "try timed out\n");
++		try_catch->try_result = -ETIMEDOUT;
++	}
++
++	exit_code = try_catch->try_result;
++
++	if (!exit_code)
++		return;
++
++	if (exit_code == -EFAULT)
++		try_catch->try_result = 0;
++	else if (exit_code == -EINTR)
++		kunit_err(test, "wake_up_process() was never called\n");
++	else if (exit_code)
++		kunit_err(test, "Unknown error: %d\n", exit_code);
++
++	try_catch->catch(try_catch->context);
++}
++
++void kunit_try_catch_init(struct kunit_try_catch *try_catch,
++			  struct kunit *test,
++			  kunit_try_catch_func_t try,
++			  kunit_try_catch_func_t catch)
++{
++	try_catch->test = test;
++	try_catch->try = try;
++	try_catch->catch = catch;
 +}
 -- 
 2.22.0.510.g264f2c817a-goog
