@@ -2,65 +2,64 @@ Return-Path: <SRS0=5k76=VO=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AE46C76192
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jul 2019 01:56:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2DC8C76192
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jul 2019 01:56:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3181421848
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jul 2019 01:56:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E81D2182B
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jul 2019 01:56:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="arQQpTGJ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SGk0SE+L"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726277AbfGQB4p (ORCPT
+        id S1728711AbfGQB4n (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 16 Jul 2019 21:56:45 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:35002 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728766AbfGQB4o (ORCPT
+        Tue, 16 Jul 2019 21:56:43 -0400
+Received: from mail-qk1-f201.google.com ([209.85.222.201]:49463 "EHLO
+        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728529AbfGQB4j (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Jul 2019 21:56:44 -0400
-Received: by mail-pg1-f201.google.com with SMTP id e7so2183712pgm.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2019 18:56:44 -0700 (PDT)
+        Tue, 16 Jul 2019 21:56:39 -0400
+Received: by mail-qk1-f201.google.com with SMTP id l14so18678472qke.16
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2019 18:56:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=z+RsQ5cMJRNJEspG7oJoFcFROmHPEJhG9JB06H11s3Q=;
-        b=arQQpTGJERz+HpGPXFp2jlPN5FrwHz2WQgWAk2OJzhGjTvteOU1VI4pyg3Gluszw+4
-         vjWiOIXlN3LE6Wmx+vW8ya52UlgsM6wNwD7n+F3tTlm0oU8wIAFq/wdLYE/uqwXxmQlX
-         XH8Q+EuWSZgjc3pc2sIgMXZRv15qqL94qa0UO9XEjvbkfa9x4jqUS6XSlv6anCR5d/Qu
-         TojpzGJ8KJngr73CNti9m0kYQQzcoyj/lkheRLPJEVpXYgERpvNTv8Z1n1LTd7t4E729
-         ECeSIi3rVf+NrWYm31K34bfHpNTeBSIN8kh5bzP8sJs2A90bieFh3IVp2mMrPJo+7TpA
-         I/fQ==
+        bh=jufAXaUURqTtvupks8boLXlDljriz0DHAMYuxhv6lic=;
+        b=SGk0SE+L0ONJ56JV62STa9/73PYbsMRLW7f3+sjS9iJ06qvWnhKAtPAg9l1uLlJK2P
+         j23MvuN/hdx6eNk0Sw24qNfxCfn572jDv0EOSpRkZDWR4kEOHhl0BL3CXfcXHolgVP8Y
+         I0QBEb0fa7yqs7iHaQAuKiMhKWpMSPX7ku0rjDABrRO+wUSLFRjLLBuadRCtcHjn/fVS
+         d9POs/tsM8//KlPtDm+hJmS0QJviJ86TTfbAqAmhuexuVugvnGbdgFAgkMG18GzeyJBi
+         nhytU3u4UnQO1Bs6YNcSJksIEIqe1P7GjbzOxMsGI9bmzOUJlJ+8zoepM3HtUlGyoVoG
+         e9Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=z+RsQ5cMJRNJEspG7oJoFcFROmHPEJhG9JB06H11s3Q=;
-        b=nsNbi1uyZ3E9G3m4Vc5ewJiqbsDD/QfYoHkJal+ybIadfYQF64nA09PjGIg5+coioD
-         IlqC0H5kSx5BrHNu+a0clBfm2EoRpUbb226tRozRaHaD4iCJV1z8DgODDVaCawExKLIj
-         IrIP9U6ErM6apsXB+dPDdfTuBHVIEl+mwpcEjpFGjUkx0j3MRNRSm8N+mwywgBGykpC2
-         N6WKEKF/CEE7QIffTSRkt4OcWFb6ayJvBZY1xxgc7LUr7roB0OWaTonZ0DskoVVaZd5U
-         aE3HCGJeOPuLXaNKmmd6IVHuysQKTO88ppxKsrTUyIKF0a2GckbTGJSfUqQQLaWcNIZp
-         xTRg==
-X-Gm-Message-State: APjAAAXPYCxlsrBbwlrRHUD4UgnEExiPaAaW6i/BFpEFFYcdNvctWjXv
-        GE8Ur+UTzJ/SqwUTCdQUpK/fgOp0NmArk5HFa2xf5w==
-X-Google-Smtp-Source: APXvYqwCZQKnuVk17fjP8A6U6bIZkWGFvrucA1ktqKosKL/38OKDiYQRbphN4EY4EbgHhiCugGJd7KJEeLMjHEFzWtBqZg==
-X-Received: by 2002:a65:4505:: with SMTP id n5mr34106191pgq.301.1563328603229;
- Tue, 16 Jul 2019 18:56:43 -0700 (PDT)
-Date:   Tue, 16 Jul 2019 18:55:43 -0700
+        bh=jufAXaUURqTtvupks8boLXlDljriz0DHAMYuxhv6lic=;
+        b=ffJYFQgEyZ624ppWJPcl1eYO6qrZmTGnrpROL4R9d8uW3nnqEYm8aVwrEIcoqwSkJs
+         +gmebgd72G1IRJN9H9RGPfOt8C8Zhw1tgHbPWjtdAF21/4mTZ1ezeaqVRWnN1az8lTuN
+         XMqn/WKTb9ScLkIXqMsuBudvJEw2ahdoB95ZzxNIt/oIaPrsC36zndA07wdlEwLx+Tf1
+         x3i23WtTM+3PzbRF2q0BQiVaD9FqcrIq6jhI5ZQLYsNmaqYjW87SigZbj1Y4TNV7oPaB
+         wdL0sChbAA0HBf+dtNZL9cvF+85z1S9JFGPt027SPu0FdHnX1lureeroLosm9uYPPUgO
+         oKJQ==
+X-Gm-Message-State: APjAAAXgbPtoYlzHpnMKCGRH8EV2PdJW5nRNT7Qb4+uSMxfjezxeBgQi
+        Pu6YA0IuGUWs8lpIJkZLhLfpUqR5pYVzVGvegJaBYw==
+X-Google-Smtp-Source: APXvYqzMYSoKc7xy2zJctW+VOk0X97W340OJGhZY9UWnWNDnmNnsODShc63XRgstRbuwVOYMn4U5hlDDzHSxHNwbM/EuvA==
+X-Received: by 2002:a0c:983b:: with SMTP id c56mr27362503qvd.131.1563328597854;
+ Tue, 16 Jul 2019 18:56:37 -0700 (PDT)
+Date:   Tue, 16 Jul 2019 18:55:41 -0700
 In-Reply-To: <20190717015543.152251-1-brendanhiggins@google.com>
-Message-Id: <20190717015543.152251-19-brendanhiggins@google.com>
+Message-Id: <20190717015543.152251-17-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20190717015543.152251-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.22.0.510.g264f2c817a-goog
-Subject: [PATCH v11 18/18] MAINTAINERS: add proc sysctl KUnit test to PROC
- SYSCTL section
+Subject: [PATCH v11 16/18] MAINTAINERS: add entry for KUnit the unit testing framework
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
         jpoimboe@redhat.com, keescook@google.com,
@@ -78,45 +77,45 @@ Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
         mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
         richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>,
-        Iurii Zaikin <yzaikin@google.com>
+        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add entry for the new proc sysctl KUnit test to the PROC SYSCTL section,
-and add Iurii as a maintainer.
+Add myself as maintainer of KUnit, the Linux kernel's unit testing
+framework.
 
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Cc: Iurii Zaikin <yzaikin@google.com>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+ MAINTAINERS | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 48d04d180a988..f8204c75114da 100644
+index 677ef41cb012c..48d04d180a988 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -12721,12 +12721,14 @@ F:	Documentation/filesystems/proc.txt
- PROC SYSCTL
- M:	Luis Chamberlain <mcgrof@kernel.org>
- M:	Kees Cook <keescook@chromium.org>
-+M:	Iurii Zaikin <yzaikin@google.com>
- L:	linux-kernel@vger.kernel.org
- L:	linux-fsdevel@vger.kernel.org
- S:	Maintained
- F:	fs/proc/proc_sysctl.c
- F:	include/linux/sysctl.h
- F:	kernel/sysctl.c
-+F:	kernel/sysctl-test.c
- F:	tools/testing/selftests/sysctl/
+@@ -8599,6 +8599,17 @@ S:	Maintained
+ F:	tools/testing/selftests/
+ F:	Documentation/dev-tools/kselftest*
  
- PS3 NETWORK SUPPORT
++KERNEL UNIT TESTING FRAMEWORK (KUnit)
++M:	Brendan Higgins <brendanhiggins@google.com>
++L:	linux-kselftest@vger.kernel.org
++L:	kunit-dev@googlegroups.com
++W:	https://google.github.io/kunit-docs/third_party/kernel/docs/
++S:	Maintained
++F:	Documentation/dev-tools/kunit/
++F:	include/kunit/
++F:	kunit/
++F:	tools/testing/kunit/
++
+ KERNEL USERMODE HELPER
+ M:	Luis Chamberlain <mcgrof@kernel.org>
+ L:	linux-kernel@vger.kernel.org
 -- 
 2.22.0.510.g264f2c817a-goog
 
