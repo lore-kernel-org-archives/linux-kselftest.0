@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91390C76186
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jul 2019 17:59:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50C66C76190
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jul 2019 17:59:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 699C321926
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jul 2019 17:59:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2430821926
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jul 2019 17:59:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a1Wmmrmp"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ce/6WmN6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391388AbfGWR7o (ORCPT
+        id S2391402AbfGWR7s (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 23 Jul 2019 13:59:44 -0400
-Received: from mail-yw1-f73.google.com ([209.85.161.73]:47560 "EHLO
-        mail-yw1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391360AbfGWR7j (ORCPT
+        Tue, 23 Jul 2019 13:59:48 -0400
+Received: from mail-yw1-f74.google.com ([209.85.161.74]:37234 "EHLO
+        mail-yw1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391361AbfGWR7q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Jul 2019 13:59:39 -0400
-Received: by mail-yw1-f73.google.com with SMTP id 77so32820432ywp.14
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jul 2019 10:59:39 -0700 (PDT)
+        Tue, 23 Jul 2019 13:59:46 -0400
+Received: by mail-yw1-f74.google.com with SMTP id f11so32830097ywc.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jul 2019 10:59:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=JHpRt1iV1Yui2063ArtK5NZw3fPfTbQsXHZ/X8tSe2c=;
-        b=a1WmmrmprQZ/rcrg4bnGXYSWuW8VRJo8q/rb7ZTLQKZa1K7I67ixfos045Wbs17Hsc
-         4ubobzNkIuAipJMS7ZPZPbwqhOEcQBYGSdXPH8NmRc6nBI3x8EfWx1KUwQ8GdoHMrOVu
-         pQBBRoSlOoWQvrJK6Ndgh0M+u5SrtS+Z7XLFtzHXYzmOZcoQreZcqxEy8gyvJGE0ittV
-         1ErCh2wjdbyE4mfBH/bts1VkhHwv8KlRuO+94TszgBwo8vjAMA7AFwRnm9ELenbWUlad
-         Ar6m6acLtYRugfggNK1CttVM0dqBedFHVAahPgUmqPuarVGgg9aYEhjvXatkNn9RUbXS
-         DjvQ==
+        bh=HpinGwuxMTqrT/lGIW6pacs7O2cDdG9/5Ty+RZAfASg=;
+        b=ce/6WmN6TyK+cE8ZhsNWx985tcmb8TsBUG67QVHPvfluZ/ESLePB0+Iu2kpzcDEd4Q
+         YbgyS6kgeVvVFCMr/LAOnm0UHsRKQhmlp8Muf9Haj3921fIO1R3W8RTR8Ay/3UNeJg77
+         3oj3IZF7aFzplHspAYys2RygkkcmZ5oyq8CPcTBqzS7rp1MfCHQ9R/Uyt21zik3yW2ex
+         viSYi5ZHeqKSa6InOONOnbkuTpjEw9pZIBEPGTBapLOkb92OQ042RHOMLo5PTXbS7p7j
+         huNarTmfeFDbiHSfiNnedUTa6Tx9rh0fc8dZU+mkH0hxVq24fx81n5unKjL7cIn91yBU
+         G6/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=JHpRt1iV1Yui2063ArtK5NZw3fPfTbQsXHZ/X8tSe2c=;
-        b=IVWlPijeWsqkNyVl4pN2zbC2IacsKyPmTc/GPsBHveg4lmaiGxtiBy33BR8TNG7Ehe
-         IUeTki5uAzrDa+oaYqptrni2kQNVxQKAscc2TEqf9WbQx0W7HDkE8cOSHcnvXekHxYDo
-         zzBrPSe2DQzDtJ2xYa/PJT5QZRT8VMPiWhLe9BKGRyPbkgpSmWEawF0mv3WG2gSCJ8Lv
-         WccjCWk711rgHzV8szaSKDnAAPG3ecpbMmBoWU6EV27Wz+P/vLM7SBtrvL3+nMWjFoaK
-         7LLTADsygXz1NnUiNP8U5Z2teJ+xAY6xVSsLTzihYZV9CRfJrTX2mWqpYGJbMF9oSzHg
-         JivA==
-X-Gm-Message-State: APjAAAW3Vdc3Z+kisiLkcXbWj26gIcDG06NzZYJrePXHUjrk8pMybCl7
-        kw87YPoqvaahhkzpNVsIPyRwwRhSH+MDdmUp
-X-Google-Smtp-Source: APXvYqzQ4z/ZiuFK+6sqRZERC5QgYRRFA4U1Dnbp9V3f1PKQeQRLZSu3TG/nr3g90hvkMvcrT8eNvmOVLDqS9X26
-X-Received: by 2002:a0d:d616:: with SMTP id y22mr43437325ywd.365.1563904778592;
- Tue, 23 Jul 2019 10:59:38 -0700 (PDT)
-Date:   Tue, 23 Jul 2019 19:58:47 +0200
+        bh=HpinGwuxMTqrT/lGIW6pacs7O2cDdG9/5Ty+RZAfASg=;
+        b=KGWOx7FfaOYRDlhtBWUUglJmm8UxCKm8owkcaahuq623aXXH+hOU3sH6dAbs6kuzjE
+         XnJ2g7rLaZT8J7DP9mnj35jSruOc6y4pRfHEWUqv3lN3wWwfC8yvqSSzeaNl2W5Uec+O
+         se+kX4uesBBrNMhMYAJNsRXO0dliJxSsUYOCm3WgnhFy0mbWUShUpejYZN0+DFqYX1Mg
+         oLX8kK1USh9ov9Si05zXxdSMfejZKhLpWL1WFZ3NM3Y9Bi/J7uy9/s6CeMJvp/hms05F
+         grPSXan8pVLKhgxoJkBnck7YYkDXV064T5yh02nvGxBHZwKrwJeWHEsDF/lkjHJ7y239
+         u/yw==
+X-Gm-Message-State: APjAAAXXKZAGeWF9TNs7241d/t1eex9nWL2yUA6/6c46ehRczlHyJLQl
+        HGqZm8Da25G+PA9v9tlj3RxMc1up+0pgC1ZA
+X-Google-Smtp-Source: APXvYqzHKD7+vuBXgJcq/Tk4Un/3kb/bP9xO8IxzyxfANBAOcEtBJXWYvzpx9hfbGP7jrgSdMTzC7LW89o7yIBsc
+X-Received: by 2002:a81:7854:: with SMTP id t81mr13003915ywc.2.1563904785456;
+ Tue, 23 Jul 2019 10:59:45 -0700 (PDT)
+Date:   Tue, 23 Jul 2019 19:58:49 +0200
 In-Reply-To: <cover.1563904656.git.andreyknvl@google.com>
-Message-Id: <c856babeb67195b35603b8d5ba386a2819cec5ff.1563904656.git.andreyknvl@google.com>
+Message-Id: <100436d5f8e4349a78f27b0bbb27e4801fcb946b.1563904656.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1563904656.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
-Subject: [PATCH v19 10/15] drm/radeon: untag user pointers in radeon_gem_userptr_ioctl
+Subject: [PATCH v19 12/15] media/v4l2-core: untag user pointers in videobuf_dma_contig_user_get
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -96,7 +96,8 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Robin Murphy <robin.murphy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>
+        Andrey Konovalov <andreyknvl@google.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
@@ -107,37 +108,58 @@ This patch is a part of a series that extends kernel ABI to allow to pass
 tagged user pointers (with the top byte set to something else other than
 0x00) as syscall arguments.
 
-In radeon_gem_userptr_ioctl() an MMU notifier is set up with a (tagged)
-userspace pointer. The untagged address should be used so that MMU
-notifiers for the untagged address get correctly matched up with the right
-BO. This funcation also calls radeon_ttm_tt_pin_userptr(), which uses
-provided user pointers for vma lookups, which can only by done with
-untagged pointers.
+videobuf_dma_contig_user_get() uses provided user pointers for vma
+lookups, which can only by done with untagged pointers.
 
-This patch untags user pointers in radeon_gem_userptr_ioctl().
+Untag the pointers in this function.
 
 Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
-Suggested-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Acked-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- drivers/gpu/drm/radeon/radeon_gem.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/v4l2-core/videobuf-dma-contig.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
-index d8bc5d2dfd61..89353098b627 100644
---- a/drivers/gpu/drm/radeon/radeon_gem.c
-+++ b/drivers/gpu/drm/radeon/radeon_gem.c
-@@ -296,6 +296,8 @@ int radeon_gem_userptr_ioctl(struct drm_device *dev, void *data,
- 	uint32_t handle;
- 	int r;
+diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/media/v4l2-core/videobuf-dma-contig.c
+index 76b4ac7b1678..aeb2f497c683 100644
+--- a/drivers/media/v4l2-core/videobuf-dma-contig.c
++++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
+@@ -157,6 +157,7 @@ static void videobuf_dma_contig_user_put(struct videobuf_dma_contig_memory *mem)
+ static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
+ 					struct videobuf_buffer *vb)
+ {
++	unsigned long untagged_baddr = untagged_addr(vb->baddr);
+ 	struct mm_struct *mm = current->mm;
+ 	struct vm_area_struct *vma;
+ 	unsigned long prev_pfn, this_pfn;
+@@ -164,22 +165,22 @@ static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
+ 	unsigned int offset;
+ 	int ret;
  
-+	args->addr = untagged_addr(args->addr);
-+
- 	if (offset_in_page(args->addr | args->size))
- 		return -EINVAL;
+-	offset = vb->baddr & ~PAGE_MASK;
++	offset = untagged_baddr & ~PAGE_MASK;
+ 	mem->size = PAGE_ALIGN(vb->size + offset);
+ 	ret = -EINVAL;
  
+ 	down_read(&mm->mmap_sem);
+ 
+-	vma = find_vma(mm, vb->baddr);
++	vma = find_vma(mm, untagged_baddr);
+ 	if (!vma)
+ 		goto out_up;
+ 
+-	if ((vb->baddr + mem->size) > vma->vm_end)
++	if ((untagged_baddr + mem->size) > vma->vm_end)
+ 		goto out_up;
+ 
+ 	pages_done = 0;
+ 	prev_pfn = 0; /* kill warning */
+-	user_address = vb->baddr;
++	user_address = untagged_baddr;
+ 
+ 	while (pages_done < (mem->size >> PAGE_SHIFT)) {
+ 		ret = follow_pfn(vma, user_address, &this_pfn);
 -- 
 2.22.0.709.g102302147b-goog
 
