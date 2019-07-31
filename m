@@ -2,73 +2,158 @@ Return-Path: <SRS0=avon=V4=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 229CFC433FF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Jul 2019 13:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2841DC433FF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Jul 2019 13:32:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EC55D206B8
-	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Jul 2019 13:05:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02F01206A2
+	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Jul 2019 13:32:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727581AbfGaNFS (ORCPT
+        id S1729565AbfGaNcb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 31 Jul 2019 09:05:18 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:50376 "EHLO mx1.redhat.com"
+        Wed, 31 Jul 2019 09:32:31 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:35176 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726259AbfGaNFR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Jul 2019 09:05:17 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        id S1729548AbfGaNc1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 31 Jul 2019 09:32:27 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id A634930C0DDA;
-        Wed, 31 Jul 2019 13:05:17 +0000 (UTC)
-Received: from kamzik.brq.redhat.com (unknown [10.43.2.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8A190100032A;
-        Wed, 31 Jul 2019 13:05:10 +0000 (UTC)
-Date:   Wed, 31 Jul 2019 15:05:08 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
+        by mx1.redhat.com (Postfix) with ESMTPS id 4870FC0022E4;
+        Wed, 31 Jul 2019 13:32:27 +0000 (UTC)
+Received: from thuth.com (dhcp-200-228.str.redhat.com [10.33.200.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6EE6960852;
+        Wed, 31 Jul 2019 13:32:25 +0000 (UTC)
+From:   Thomas Huth <thuth@redhat.com>
+To:     kvm@vger.kernel.org,
         Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-s390@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>
-Subject: Re: [PATCH 1/2] KVM: selftests: Implement ucall() for s390x
-Message-ID: <20190731130508.uavb75ct2ck2pp66@kamzik.brq.redhat.com>
-References: <20190730100112.18205-1-thuth@redhat.com>
- <20190730100112.18205-2-thuth@redhat.com>
- <20190730104807.7uzuvd52foybakgu@kamzik.brq.redhat.com>
- <d9cb3c86-6390-3803-f2c6-d47f5c24139f@redhat.com>
- <20190731102849.x26rdan7cddmpvhe@kamzik.brq.redhat.com>
- <0c38beb7-7383-a7ac-13d4-9d4bde4a21bb@redhat.com>
- <f7a103fa-51ef-533d-d3a4-7764fb742e44@redhat.com>
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Andrew Jones <drjones@redhat.com>
+Subject: [PATCH v2 2/3] KVM: selftests: Implement ucall() for s390x
+Date:   Wed, 31 Jul 2019 15:32:15 +0200
+Message-Id: <20190731133216.5620-3-thuth@redhat.com>
+In-Reply-To: <20190731133216.5620-1-thuth@redhat.com>
+References: <20190731133216.5620-1-thuth@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f7a103fa-51ef-533d-d3a4-7764fb742e44@redhat.com>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.45]); Wed, 31 Jul 2019 13:05:17 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Wed, 31 Jul 2019 13:32:27 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 31, 2019 at 02:57:38PM +0200, Paolo Bonzini wrote:
-> On 31/07/19 13:16, Thomas Huth wrote:
-> > Or maybe even better: Let's move this file into lib/x86_64/ and
-> > lib/aarch64/ instead, since there is more different code between the
-> > architectures here than common code.
-> 
-> All good solutions, just choose one. :))
->
+On s390x, we can neither exit via PIO nor MMIO, but have to use an
+instruction like DIAGNOSE. Now that ucall() is implemented, we can
+use it in the sync_reg_test on s390x, too.
 
-Agreed, and I like this last solution (move to arch-code) the best.
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+---
+ tools/testing/selftests/kvm/Makefile          |  2 +-
+ tools/testing/selftests/kvm/lib/s390x/ucall.c | 56 +++++++++++++++++++
+ .../selftests/kvm/s390x/sync_regs_test.c      |  6 +-
+ 3 files changed, 61 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/lib/s390x/ucall.c
 
-Thanks,
-drew
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index a51e3b83df40..75ea1ecbf85a 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -10,7 +10,7 @@ UNAME_M := $(shell uname -m)
+ LIBKVM = lib/assert.c lib/elf.c lib/io.c lib/kvm_util.c lib/sparsebit.c
+ LIBKVM_x86_64 = lib/x86_64/processor.c lib/x86_64/vmx.c lib/x86_64/ucall.c
+ LIBKVM_aarch64 = lib/aarch64/processor.c lib/aarch64/ucall.c
+-LIBKVM_s390x = lib/s390x/processor.c
++LIBKVM_s390x = lib/s390x/processor.c lib/s390x/ucall.c
+ 
+ TEST_GEN_PROGS_x86_64 = x86_64/cr4_cpuid_sync_test
+ TEST_GEN_PROGS_x86_64 += x86_64/evmcs_test
+diff --git a/tools/testing/selftests/kvm/lib/s390x/ucall.c b/tools/testing/selftests/kvm/lib/s390x/ucall.c
+new file mode 100644
+index 000000000000..fd589dc9bfab
+--- /dev/null
++++ b/tools/testing/selftests/kvm/lib/s390x/ucall.c
+@@ -0,0 +1,56 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * ucall support. A ucall is a "hypercall to userspace".
++ *
++ * Copyright (C) 2019 Red Hat, Inc.
++ */
++#include "kvm_util.h"
++
++void ucall_init(struct kvm_vm *vm, void *arg)
++{
++}
++
++void ucall_uninit(struct kvm_vm *vm)
++{
++}
++
++void ucall(uint64_t cmd, int nargs, ...)
++{
++	struct ucall uc = {
++		.cmd = cmd,
++	};
++	va_list va;
++	int i;
++
++	nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
++
++	va_start(va, nargs);
++	for (i = 0; i < nargs; ++i)
++		uc.args[i] = va_arg(va, uint64_t);
++	va_end(va);
++
++	/* Exit via DIAGNOSE 0x501 (normally used for breakpoints) */
++	asm volatile ("diag 0,%0,0x501" : : "a"(&uc) : "memory");
++}
++
++uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc)
++{
++	struct kvm_run *run = vcpu_state(vm, vcpu_id);
++	struct ucall ucall = {};
++
++	if (run->exit_reason == KVM_EXIT_S390_SIEIC &&
++	    run->s390_sieic.icptcode == 4 &&
++	    (run->s390_sieic.ipa >> 8) == 0x83 &&    /* 0x83 means DIAGNOSE */
++	    (run->s390_sieic.ipb >> 16) == 0x501) {
++		int reg = run->s390_sieic.ipa & 0xf;
++
++		memcpy(&ucall, addr_gva2hva(vm, run->s.regs.gprs[reg]),
++		       sizeof(ucall));
++
++		vcpu_run_complete_io(vm, vcpu_id);
++		if (uc)
++			memcpy(uc, &ucall, sizeof(ucall));
++	}
++
++	return ucall.cmd;
++}
+diff --git a/tools/testing/selftests/kvm/s390x/sync_regs_test.c b/tools/testing/selftests/kvm/s390x/sync_regs_test.c
+index e85ff0d69548..bbc93094519b 100644
+--- a/tools/testing/selftests/kvm/s390x/sync_regs_test.c
++++ b/tools/testing/selftests/kvm/s390x/sync_regs_test.c
+@@ -25,9 +25,11 @@
+ 
+ static void guest_code(void)
+ {
++	register u64 stage asm("11") = 0;
++
+ 	for (;;) {
+-		asm volatile ("diag 0,0,0x501");
+-		asm volatile ("ahi 11,1");
++		GUEST_SYNC(0);
++		asm volatile ("ahi %0,1" : : "r"(stage));
+ 	}
+ }
+ 
+-- 
+2.21.0
+
