@@ -2,36 +2,37 @@ Return-Path: <SRS0=59kf=V6=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56CF9C32750
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Aug 2019 17:03:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82CD2C32755
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Aug 2019 17:03:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3518120644
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Aug 2019 17:03:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57F1221773
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Aug 2019 17:03:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391092AbfHBRDe (ORCPT
+        id S2391071AbfHBRDf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Aug 2019 13:03:34 -0400
-Received: from foss.arm.com ([217.140.110.172]:55018 "EHLO foss.arm.com"
+        Fri, 2 Aug 2019 13:03:35 -0400
+Received: from foss.arm.com ([217.140.110.172]:55038 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388317AbfHBRDd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Aug 2019 13:03:33 -0400
+        id S2388317AbfHBRDe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 2 Aug 2019 13:03:34 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD1921570;
-        Fri,  2 Aug 2019 10:03:31 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3F2F1597;
+        Fri,  2 Aug 2019 10:03:33 -0700 (PDT)
 Received: from e120937-lin.cambridge.arm.com (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E08FD3F575;
-        Fri,  2 Aug 2019 10:03:30 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2391A3F575;
+        Fri,  2 Aug 2019 10:03:33 -0700 (PDT)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, shuah@kernel.org
 Cc:     andreyknvl@google.com, dave.martin@arm.com
-Subject: [PATCH v3 01/11] kselftest: arm64: introduce new boilerplate code
-Date:   Fri,  2 Aug 2019 18:02:50 +0100
-Message-Id: <20190802170300.20662-2-cristian.marussi@arm.com>
+Subject: [PATCH v3 03/11] kselftest: arm64: mangle_pstate_invalid_daif_bits
+Date:   Fri,  2 Aug 2019 18:02:52 +0100
+Message-Id: <20190802170300.20662-4-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190802170300.20662-1-cristian.marussi@arm.com>
 References: <20190802170300.20662-1-cristian.marussi@arm.com>
@@ -40,140 +41,58 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Added a new arm64-specific empty subsystem amongst TARGETS of KSFT build
-framework; once populated with testcases, it will be possible to build
-and invoke the new KSFT TARGETS=arm64 related tests from the toplevel
-Makefile in the usual ways.
+Added a simple mangle testcase which messes with the ucontext_t
+from within the sig_handler, trying to set PSTATE DAIF bits to an
+invalid value (masking everything). Expects SIGSEGV on test PASS.
 
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
-Reviewed the build instructions reported in the README, to be more
-agnostic regarding user/device etc..
----
- tools/testing/selftests/Makefile       |  1 +
- tools/testing/selftests/arm64/Makefile | 51 ++++++++++++++++++++++++++
- tools/testing/selftests/arm64/README   | 43 ++++++++++++++++++++++
- 3 files changed, 95 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/Makefile
- create mode 100644 tools/testing/selftests/arm64/README
+ .../arm64/signal/testcases/.gitignore         |  1 +
+ .../mangle_pstate_invalid_daif_bits.c         | 28 +++++++++++++++++++
+ 2 files changed, 29 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_daif_bits.c
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 25b43a8c2b15..1722dae9381a 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- TARGETS = android
-+TARGETS += arm64
- TARGETS += bpf
- TARGETS += breakpoints
- TARGETS += capabilities
-diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+diff --git a/tools/testing/selftests/arm64/signal/testcases/.gitignore b/tools/testing/selftests/arm64/signal/testcases/.gitignore
+index 8651272e3cfc..8a0a29f0cc2a 100644
+--- a/tools/testing/selftests/arm64/signal/testcases/.gitignore
++++ b/tools/testing/selftests/arm64/signal/testcases/.gitignore
+@@ -1 +1,2 @@
+ mangle_pstate_invalid_compat_toggle
++mangle_pstate_invalid_daif_bits
+diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_daif_bits.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_daif_bits.c
 new file mode 100644
-index 000000000000..03a0d4f71218
+index 000000000000..af899d4bb655
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/Makefile
-@@ -0,0 +1,51 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2019 ARM Limited
++++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_daif_bits.c
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (C) 2019 ARM Limited */
 +
-+# When ARCH not overridden for crosscompiling, lookup machine
-+ARCH ?= $(shell uname -m)
-+ARCH := $(shell echo $(ARCH) | sed -e s/aarch64/arm64/)
++#include "test_signals_utils.h"
++#include "testcases.h"
 +
-+ifeq ("x$(ARCH)", "xarm64")
-+SUBDIRS :=
-+else
-+SUBDIRS :=
-+endif
++static int mangle_invalid_pstate_run(struct tdescr *td, siginfo_t *si,
++				     ucontext_t *uc)
++{
++	ASSERT_GOOD_CONTEXT(uc);
 +
-+CFLAGS := -Wall -O2 -g
++	/*
++	 * This config should trigger a SIGSEGV by Kernel when it checks
++	 * the sigframe consistency in valid_user_regs() routine.
++	 */
++	uc->uc_mcontext.pstate |= PSR_D_BIT | PSR_A_BIT | PSR_I_BIT | PSR_F_BIT;
 +
-+export CC
-+export CFLAGS
++	return 1;
++}
 +
-+all:
-+	@for DIR in $(SUBDIRS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		mkdir -p $$BUILD_TARGET;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+install: all
-+	@for DIR in $(SUBDIRS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+run_tests: all
-+	@for DIR in $(SUBDIRS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+# Avoid any output on non arm64 on emit_tests
-+emit_tests: all
-+	@for DIR in $(SUBDIRS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+clean:
-+	@for DIR in $(SUBDIRS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+.PHONY: all clean install run_tests emit_tests
-diff --git a/tools/testing/selftests/arm64/README b/tools/testing/selftests/arm64/README
-new file mode 100644
-index 000000000000..dee3306071cc
---- /dev/null
-+++ b/tools/testing/selftests/arm64/README
-@@ -0,0 +1,43 @@
-+KSelfTest ARM64
-+===============
-+
-+- These tests are arm64 specific and so not built or run but just skipped
-+  completely when env-variable ARCH is found to be different than 'arm64'
-+  and `uname -m` reports other than 'aarch64'.
-+
-+- Holding true the above, ARM64 KSFT tests can be run:
-+
-+   + as standalone (example for signal tests)
-+
-+      $ make -C tools/testing/selftest/arm64/signal \
-+		INSTALL_PATH=<your-installation-path> install
-+
-+      and then launching on the target device inside the installed path:
-+
-+      $ <your-installed-path>/test_arm64_signals.sh [-k | -v]
-+
-+   + within the KSelfTest framework using standard Linux top-level-makefile
-+     targets:
-+
-+      $ make TARGETS=arm64 kselftest-clean
-+      $ make TARGETS=arm64 kselftest
-+
-+   Further details on building and running KFST can be found in:
-+     Documentation/dev-tools/kselftest.rst
-+
-+- Tests can depend on some arch-specific definitions which can be found in a
-+  standard Kernel Headers installation in $(top_srcdir)/usr/include.
-+  Such Kernel Headers are automatically installed (via make headers_install)
-+  by KSFT framework itself in a dedicated directory when tests are launched
-+  via KSFT itself; when running standalone, instead, a Warning is issued
-+  if such headers cannot be found somewhere (we try to guess a few standard
-+  locations anyway)
-+
-+- Some of these tests may be related to possibly not implemented ARMv8
-+  features: depending on their implementation status on the effective HW
-+  we'll expect different results. The tests' harness will take care to check
-+  at run-time if the required features are supported and will act accordingly.
-+  Moreover, in order to avoid any kind of compile-time dependency on the
-+  toolchain (possibly due to the above mentioned not-implemented features),
-+  we make strictly use of direct 'S3_ sysreg' raw-encoding while checking for
-+  those features and/or lookin up sysregs.
++struct tdescr tde = {
++		.sanity_disabled = true,
++		.name = "MANGLE_PSTATE_INVALID_DAIF_BITS",
++		.descr = "Mangling uc_mcontext with INVALID DAIF_BITS",
++		.sig_trig = SIGUSR1,
++		.sig_ok = SIGSEGV,
++		.run = mangle_invalid_pstate_run,
++};
 -- 
 2.17.1
 
