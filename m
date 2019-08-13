@@ -2,67 +2,66 @@ Return-Path: <SRS0=D3yD=WJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD13DC32750
-	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Aug 2019 06:11:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E5B6C32750
+	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Aug 2019 06:11:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8E0DE20874
-	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Aug 2019 06:11:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1DE0E20874
+	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Aug 2019 06:11:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="evEJsYyt";
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="pd2ldQlK"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="kgiwVKgP";
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="1RfCiHk2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727633AbfHMGLu (ORCPT
+        id S1727160AbfHMGLg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 13 Aug 2019 02:11:50 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:37622 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727246AbfHMGLt (ORCPT
+        Tue, 13 Aug 2019 02:11:36 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:60092 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727633AbfHMGLf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 02:11:49 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D68xaE022057;
-        Tue, 13 Aug 2019 06:11:28 GMT
+        Tue, 13 Aug 2019 02:11:35 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D68wPH010973;
+        Tue, 13 Aug 2019 06:11:16 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2019-08-05;
- bh=HhMcyroqMij2d5Lg82WAj2ypfByRL1QVurPA9HxkD10=;
- b=evEJsYytDvz7TszRj3tKgr0f8rPrOK8GLUt+racWZSc9xGskbSd61/F+PskkMlEoos2x
- mS0Uq1Y59M02yvsarvALYv3o0gRVn6SVUp3GWvptZ22sT0kE9Zw4WqSk4y6f9XhWfTDY
- Y01ew73D+sh/bCIu+igf7SKNEHCUqs8o22/6akImSyPqp1VHsxuOrAuFJUwRxGWG5WDA
- EK4Zz7mkjXGU6PICiS2uXstF7iiG5uBLEZjDUDR+LNlDc5kZ/Figfm8SRpm6unAfRuLS
- xWWW7koG50Rbt+SBNd6Iy665SBvPhFt2eGeYFQHHnd8eQjhwF7NmLpdal/relVp0URfD BQ== 
+ bh=pxWQMkeXEo6VK4H0xnGRztYzh1TzSktDwlYf6T9k180=;
+ b=kgiwVKgPjPDCglibAMRFBnvyiQK3Q4CLKUGpGS/t+UUoombTyEKmaSlicV9y40Nk/gVK
+ deAVKRl55c4l6FKW15TWhNfS6XGl3m1Q3taJHr/bzbh8n4qbwOgULIkO5oGrwkkBKORS
+ NYRQm62C4BOcJZu00baRgZNpMnJRgdR6/yNJkToMXgtVFhLvEEuPl29BLhmXrjKvEqGj
+ 7trPciy6yqU9mizDXrM1fVgPCAsXK56VAY0dEubzfNdqWNaSxMdIn003bnlJWv/DmCBp
+ gXPB6+LPyNfJoDg6GC3HXNPoNBrtZW3u64V32lhqFa66AbABesBmU993BR26cP43CYgH Vw== 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2018-07-02;
- bh=HhMcyroqMij2d5Lg82WAj2ypfByRL1QVurPA9HxkD10=;
- b=pd2ldQlK7kezzlqOr6fZolDPz0faMs3pLmMHzqqXPzZ6Nre82W5hazHH4zo4MIKK3C8R
- Dzhrx9jEplMlSENGA1sbohJ01q8FwWCe1MD1gov1yd+LRWDz6lvMtpoHD6DUXeiFPnQO
- fLwo4njOtLTTYlrB036zledWx8Oi6OXfpN1+snxLuHgnKk0D0kyDJnmvhUoc+QvO64Dq
- B3cSQp2lG7NDK6/okI7DqY/itFQdBgsnJaKPH50pWydmUUYJCoT0mDhhfTLD6UA/9k+n
- ZX0koUsBIijOkgXT9h6wumr+i9MlPepjvOnEcZRfPSJ956VVnAWWhoqF6D9CIbfjstvn Yg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2u9pjqbvkh-1
+ bh=pxWQMkeXEo6VK4H0xnGRztYzh1TzSktDwlYf6T9k180=;
+ b=1RfCiHk2eZTGIi7RCgPiHW4m5uUwcs0myIWjsNnlWqxacHVFmQ+JqwcFvdu1nPnLZaQh
+ 9U5hSVYuwPMr/SdxzVynnxQZHgVjyHc4D3cI+DvkjNL+04+XkteABuAblsCpAKqAlX0W
+ GoxFTZtwQecm+PRgfif0KrXD8ALt1qTnCpYsYD40/6xLzNVQiajB4tDNNyvh7MEpjepJ
+ vN9cmpVK7115D5H006GBN3rWcW78nz8ZoBYcRKL2qw28Ar7tZ0SDPwT0ilEW8dBW5GNW
+ mEGeRa8KhYuDSD8XwQy7GQK7Er9C4UrzvjpF7zgTCekJZhNlCpq5pcpaNRE9ULNb2FEZ Dw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2u9nbtc0vy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 06:11:28 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D67ShE157015;
-        Tue, 13 Aug 2019 06:11:27 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 2u9nrenm67-1
+        Tue, 13 Aug 2019 06:11:16 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D68TeZ056702;
+        Tue, 13 Aug 2019 06:11:15 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 2u9n9hs2cq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 06:11:27 +0000
+        Tue, 13 Aug 2019 06:11:15 +0000
 Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7D6BPgd026354;
-        Tue, 13 Aug 2019 06:11:25 GMT
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7D6BEPf013396;
+        Tue, 13 Aug 2019 06:11:14 GMT
 Received: from abi.no.oracle.com (/10.172.144.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 12 Aug 2019 23:11:25 -0700
+        with ESMTP ; Mon, 12 Aug 2019 23:11:13 -0700
 From:   Knut Omang <knut.omang@oracle.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
@@ -82,22 +81,22 @@ Cc:     linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
         "Theodore Ts'o" <tytso@mit.edu>, Daniel Vetter <daniel@ffwll.ch>,
         Stephen Boyd <sboyd@kernel.org>,
         Knut Omang <knut.omang@oracle.com>
-Subject: [RFC 09/19] ktf: resolve: A helper utility to aid in exposing private kernel symbols to KTF tests.
-Date:   Tue, 13 Aug 2019 08:09:24 +0200
-Message-Id: <09d79897772dd370a61967b03e83fa4b8663698b.1565676440.git-series.knut.omang@oracle.com>
+Subject: [RFC 06/19] ktf: A simple debugfs interface to test results
+Date:   Tue, 13 Aug 2019 08:09:21 +0200
+Message-Id: <ae6c38384e2338aa3cfb8a4e4dd1002833789253.1565676440.git-series.knut.omang@oracle.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
 References: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9347 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
  phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.0.1-1906280000 definitions=main-1908130067
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9347 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
  lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
  definitions=main-1908130067
@@ -106,216 +105,424 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Takes an input file foo.txt with a list of symbols on the form:
+From: Alan Maguire <alan.maguire@oracle.com>
 
-#module foo
-#header foo.h
-private_foo_symbol_1
-private_foo_symbol_2
+While test results is available via netlink from user space, sometimes
+it may be useful to be able to access the results from the kernel as well,
+for instance due to a crash. Make that possible via debugfs.
 
-and creates usable definitions to access these (requires CONFIG_KALLSYMS_ALL).
-This is useful to be able to easily and cleanly test internal interfaces of a module.
-Examples follows in the selftests later in the series.
+ktf_debugfs.h:   Support for creating a debugfs representation of test
 
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 Signed-off-by: Knut Omang <knut.omang@oracle.com>
 ---
- tools/testing/selftests/ktf/scripts/resolve | 188 +++++++++++++++++++++-
- 1 file changed, 188 insertions(+)
- create mode 100755 tools/testing/selftests/ktf/scripts/resolve
+ tools/testing/selftests/ktf/kernel/ktf_debugfs.c | 356 ++++++++++++++++-
+ tools/testing/selftests/ktf/kernel/ktf_debugfs.h |  34 ++-
+ 2 files changed, 390 insertions(+)
+ create mode 100644 tools/testing/selftests/ktf/kernel/ktf_debugfs.c
+ create mode 100644 tools/testing/selftests/ktf/kernel/ktf_debugfs.h
 
-diff --git a/tools/testing/selftests/ktf/scripts/resolve b/tools/testing/selftests/ktf/scripts/resolve
-new file mode 100755
-index 0000000..74005f7
+diff --git a/tools/testing/selftests/ktf/kernel/ktf_debugfs.c b/tools/testing/selftests/ktf/kernel/ktf_debugfs.c
+new file mode 100644
+index 0000000..a20fbd2
 --- /dev/null
-+++ b/tools/testing/selftests/ktf/scripts/resolve
-@@ -0,0 +1,188 @@
-+#!/usr/bin/python
++++ b/tools/testing/selftests/ktf/kernel/ktf_debugfs.c
+@@ -0,0 +1,356 @@
++/*
++ * Copyright (c) 2009, 2017, Oracle and/or its affiliates. All rights reserved.
++ *    Author: Alan Maguire <alan.maguire@oracle.com>
++ *
++ * SPDX-License-Identifier: GPL-2.0
++ *
++ */
++#include <asm/unistd.h>
++#include <linux/module.h>
++#include <linux/time.h>
++#include "ktf_debugfs.h"
++#include "ktf.h"
++#include "ktf_test.h"
++#include "ktf_cov.h"
 +
-+# Copyright (c) 2017, Oracle and/or its affiliates. All rights reserved.
-+#    Author: Knut Omang <knut.omang@oracle.com>
-+#
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# A script to generate code and header definitions for
-+# module and kernel symbols not directly exposed to KTF.
-+# (See the documentation for KTF for details)
-+#
++/* Create a debugfs representation of test sets/tests.  Hierarchy looks like
++ * this:
++ *
++ * Path					Semantics
++ * /sys/kernel/debug/ktf/run/<testset>		Run all tests in testset
++ * /sys/kernel/debug/ktf/run/<testset>/<test>	Run specific test in testset
++ * /sys/kernel/debug/ktf/results/<testset>	Show results of last run for
++ *						testset
++ *
++ * /sys/kernel/debug/ktf/results/<testset>/<test>
++ *						Show results of last run for
++ *						test
++ *
++ */
 +
-+import os, sys, re, shutil, string, ConfigParser
++static struct dentry *ktf_debugfs_rootdir;
++static struct dentry *ktf_debugfs_rundir;
++static struct dentry *ktf_debugfs_resultsdir;
++static struct dentry *ktf_debugfs_cov_file;
 +
-+def usage():
-+    print "Usage: resolve symbolfile outputfile"
-+    exit(0)
++static void ktf_debugfs_print_result(struct seq_file *seq, struct ktf_test *t)
++{
++	struct timespec now;
 +
-+class FuncInfo:
-+    def __init__(self, sym, re_sym, re_decl):
-+        self.symbol = sym
-+        self.re_sym = re_sym
-+        self.re_decl = re_decl
++	if (t && strlen(t->log) > 0) {
++		getnstimeofday(&now);
++		seq_printf(seq, "[%s/%s, %ld seconds ago] %s\n",
++			   t->tclass, t->name,
++			   now.tv_sec - t->lastrun.tv_sec, t->log);
++	}
++}
 +
-+    def __repr__(self):
-+        return "FuncInfo: [%s: %s]" % (self.symbol, self.re_decl)
++/* /sys/kernel/debug/ktf/results/<testset>-tests/<test> shows specific result */
++static int ktf_debugfs_result(struct seq_file *seq, void *v)
++{
++	struct ktf_test *t = (struct ktf_test *)seq->private;
 +
-+class Module:
-+    def __init__(self, name, header):
-+        self.cur_header = header
-+        self.prefix = "Z"
-+        self.name = name
-+        self.symbols = {}  # Input:  headerfile -> symbol list
-+        self.func_def = []  # FuncInfo list
-+        self.debug = False
-+        all_modules.append(self)
++	ktf_debugfs_print_result(seq, t);
 +
-+    def log(self, str):
-+        if self.debug:
-+            print str
++	return 0;
++}
 +
-+    def SetHeader(self, header):
-+        self.cur_header = header
++/* /sys/kernel/debug/ktf/results/<testset> shows all results for testset. */
++static int ktf_debugfs_results_all(struct seq_file *seq, void *v)
++{
++	struct ktf_case *testset = (struct ktf_case *)seq->private;
++	struct ktf_test *t;
 +
-+    def AddSymbol(self, sym):
-+        try:
-+            h = self.symbols[self.cur_header]
-+            h.append(sym)
-+        except:
-+            self.symbols[self.cur_header] = [sym]
++	if (!testset)
++		return 0;
 +
-+    # Open along include path:
-+    def Open(self, filename):
-+        for p in includepath:
-+            try:
-+                f = os.path.join(p, filename)
-+                self.log(" -- trying " + f)
-+                header = open(f,'r')
-+                return header
-+            except:
-+                continue
-+        sys.stderr.write(" ** unable to open \"%s\"\n" % filename)
-+        return None
++	seq_printf(seq, "%s results:\n", ktf_case_name(testset));
++	ktf_testcase_for_each_test(t, testset)
++		ktf_debugfs_print_result(seq, t);
 +
-+    # Parse the relevant header files for function defs:
-+    def ParseDefs(self):
-+        for hf in self.symbols.keys():
-+            self.log(" ** Parsing %s:" % hf)
-+            header = self.Open(hf)
-+            if header == None:
-+                return
-+            content = header.read()
-+            symbols = self.symbols[hf]
-+            types = r"(extern|u8|u16|u32|u64|int|long|size_t|off_t|loff_t|void|struct|union\s)(.*[\*\s]"
-+            funor = ")(" + "|".join(symbols) + r")(\([^\)]+\);)$"
-+            tt = types + funor
-+            s = re.compile(tt, re.MULTILINE)
-+            miter = s.finditer(content)
-+            s_count = 0
-+            for m in miter:
-+                sym = m.group(3)
-+                re_name = "_".join([self.prefix, sym])
-+                re_decl = "%s%s(*%s)%s" % (m.group(1), m.group(2), re_name, m.group(4))
-+                self.func_def.append(FuncInfo(sym, re_name, re_decl))
-+                s_count = s_count + 1
++	return 0;
++}
 +
-+            if s_count != len(symbols):
-+                print " ** Warning: File %s: Found %d definitions from %d symbols!" % \
-+                    (hf, s_count, len(symbols))
-+                print " ** - please check/fix output manually!"
++/* /sys/kernel/debug/ktf/run/<testset>-tests/<test> runs specific test. */
++static int ktf_debugfs_run(struct seq_file *seq, void *v)
++{
++	struct ktf_test *t = (struct ktf_test *)seq->private;
 +
-+    # Output functions:
-+    def write_funcs(self, file):
-+        for fi in self.func_def:
-+            file.write("\t%s\n"% fi.re_decl)
++	if (!t)
++		return 0;
 +
-+    def write_defines(self, file):
-+        for fi in self.func_def:
-+            file.write("#define %s ktf_syms.%s\n" % (fi.symbol, fi.re_sym))
++	ktf_run_hook(NULL, NULL, t, 0, NULL, 0);
++	ktf_debugfs_print_result(seq, t);
 +
-+    def write_resolve_calls(self, file):
-+        for fi in self.func_def:
-+            file.write("\tktf_resolve_symbol(%s, %s);\n" % (self.name, fi.symbol))
++	return 0;
++}
 +
-+usage_h = False
-+my_argv = []
-+includepath = [""]
++/* /sys/kernel/debug/ktf/run/<testset> runs all tests in testset. */
++static int ktf_debugfs_run_all(struct seq_file *seq, void *v)
++{
++	struct ktf_case *testset = (struct ktf_case *)seq->private;
++	struct ktf_test *t;
 +
-+for arg in sys.argv[1:]:
-+    if arg == "-h":
-+        usage_h = True
-+        continue
-+    incl = re.match(r"-I([^\s]+)", arg)
-+    if incl != None:
-+        includepath.append(incl.group(1))
-+        continue
-+    genopt = re.match(r"-([^\s]+)", arg)
-+    if genopt != None:
-+        # Silently ignore other cc options as we accept cc-flags-y:
-+        #
-+        continue
-+    my_argv.append(arg)
++	if (!testset)
++		return 0;
 +
-+# Main program:
++	seq_printf(seq, "Running %s\n", ktf_case_name(testset));
++	ktf_testcase_for_each_test(t, testset) {
++		ktf_run_hook(NULL, NULL, t, 0, NULL, 0);
++		ktf_debugfs_print_result(seq, t);
++	}
 +
-+if len(my_argv) != 2 or usage_h:
-+    usage()
++	return 0;
++}
 +
-+symfile = my_argv[0]
-+outputfile = my_argv[1]
++static int ktf_run_test_open(struct inode *inode, struct file *file)
++{
++	struct ktf_test *t;
 +
-+all_modules = []
-+module = Module("kernel", None)  # Default, at the top of the file is the main kernel symbols
-+header = None  # A header directive is required before any symbols
++	if (!try_module_get(THIS_MODULE))
++		return -EIO;
 +
-+try:
-+    file = open(symfile, 'r')
-+except:
-+    print "Unable to open config file \"%s\"" % symfile
-+    exit(1)
-+for line in file:
-+    match = re.match(r"^#(\w+) ([\w\.]+)\s*$", line)
-+    if match != None:
-+        cmd = match.group(1)
-+        value = match.group(2)
-+        if cmd == "module":
-+            module = Module(value, header)
-+        elif cmd == "header":
-+            header = value
-+            module.SetHeader(header)
-+        else:
-+            raise ResolveError("Unknown directive \"%s\"" % cmd)
-+        #print "%s set to %s" % (cmd, value)
-+        continue
-+    match = re.match(r"\s*(\w+)\s*", line)
-+    if match != None:
-+        s = match.group(1)
-+        module.AddSymbol(s)
++	t = (struct ktf_test *)inode->i_private;
 +
-+for m in all_modules:
-+    m.ParseDefs()
++	return single_open(file, ktf_debugfs_run, t);
++}
 +
-+try:
-+    output = open(outputfile, "w")
-+except:
-+    print "Failed to open output header file \"%s\"" % outputfile
-+output.write('#ifndef _KTF_RESOLVE_H\n#define _KTF_RESOLVE_H\n')
-+output.write('#include "ktf.h"\n\nstruct ktf_syms {\n')
++static int ktf_debugfs_release(struct inode *inode, struct file *file)
++{
++	module_put(THIS_MODULE);
++	return single_release(inode, file);
++}
 +
-+for m in all_modules:
-+    m.write_funcs(output)
++static const struct file_operations ktf_run_test_fops = {
++	.open = ktf_run_test_open,
++	.read = seq_read,
++	.llseek = seq_lseek,
++	.release = ktf_debugfs_release,
++};
 +
-+output.write('};\n\n')
++static int ktf_results_test_open(struct inode *inode, struct file *file)
++{
++	struct ktf_test *t;
 +
-+for m in all_modules:
-+    m.write_defines(output)
++	if (!try_module_get(THIS_MODULE))
++		return -EIO;
 +
-+output.write('\n\nextern struct ktf_syms ktf_syms;\n')
-+output.write('\nint ktf_resolve_symbols(void);\n#ifndef KTF_CLIENT\n')
-+output.write('struct ktf_syms ktf_syms;\n\n')
++	t = (struct ktf_test *)inode->i_private;
 +
-+output.write('\nint ktf_resolve_symbols(void)\n{\n')
++	return single_open(file, ktf_debugfs_result, t);
++}
 +
-+for m in all_modules:
-+    m.write_resolve_calls(output)
++static const struct file_operations ktf_results_test_fops = {
++	.open = ktf_results_test_open,
++	.read = seq_read,
++	.llseek = seq_lseek,
++	.release = ktf_debugfs_release,
++};
 +
-+output.write('\treturn 0;\n}\n\n#endif /* !KTF_CLIENT */\n#endif /* _KTF_RESOLVE_H */ \n')
-+output.close()
++static void _ktf_debugfs_destroy_test(struct ktf_test *t)
++{
++	if (!t)
++		return;
++
++	tlog(T_DEBUG, "Destroying debugfs test %s", t->name);
++	debugfs_remove(t->debugfs.debugfs_results_test);
++	debugfs_remove(t->debugfs.debugfs_run_test);
++	memset(&t->debugfs, 0, sizeof(t->debugfs));
++}
++
++void ktf_debugfs_create_test(struct ktf_test *t)
++{
++	struct ktf_case *testset = ktf_case_find(t->tclass);
++
++	if (!testset)
++		return;
++
++	memset(&t->debugfs, 0, sizeof(t->debugfs));
++
++	t->debugfs.debugfs_results_test =
++		debugfs_create_file(t->name, S_IFREG | 0444,
++				    testset->debugfs.debugfs_results_test,
++				 t, &ktf_results_test_fops);
++
++	if (t->debugfs.debugfs_results_test) {
++		t->debugfs.debugfs_run_test =
++			debugfs_create_file(t->name, S_IFREG | 0444,
++					    testset->debugfs.debugfs_run_test,
++				 t, &ktf_run_test_fops);
++		if (!t->debugfs.debugfs_run_test) {
++			_ktf_debugfs_destroy_test(t);
++		} else {
++			/* Take reference for test for debugfs */
++			ktf_test_get(t);
++		}
++	}
++	/* Drop reference to testset from ktf_case_find(). */
++	ktf_case_put(testset);
++}
++
++void ktf_debugfs_destroy_test(struct ktf_test *t)
++{
++	_ktf_debugfs_destroy_test(t);
++	/* Release reference now debugfs files are gone. */
++	ktf_test_put(t);
++}
++
++static int ktf_results_testset_open(struct inode *inode, struct file *file)
++{
++	struct ktf_case *testset;
++
++	if (!try_module_get(THIS_MODULE))
++		return -EIO;
++
++	testset = (struct ktf_case *)inode->i_private;
++
++	return single_open(file, ktf_debugfs_results_all, testset);
++}
++
++static const struct file_operations ktf_results_testset_fops = {
++	.open = ktf_results_testset_open,
++	.read = seq_read,
++	.llseek = seq_lseek,
++	.release = ktf_debugfs_release,
++};
++
++static int ktf_run_testset_open(struct inode *inode, struct file *file)
++{
++	struct ktf_case *testset;
++
++	if (!try_module_get(THIS_MODULE))
++		return -EIO;
++
++	testset = (struct ktf_case *)inode->i_private;
++
++	return single_open(file, ktf_debugfs_run_all, testset);
++}
++
++static const struct file_operations ktf_run_testset_fops = {
++	.open = ktf_run_testset_open,
++	.read = seq_read,
++	.llseek = seq_lseek,
++	.release = ktf_debugfs_release,
++};
++
++static void _ktf_debugfs_destroy_testset(struct ktf_case *testset)
++{
++	debugfs_remove(testset->debugfs.debugfs_run_testset);
++	debugfs_remove(testset->debugfs.debugfs_run_test);
++	debugfs_remove(testset->debugfs.debugfs_results_testset);
++	debugfs_remove(testset->debugfs.debugfs_results_test);
++}
++
++void ktf_debugfs_create_testset(struct ktf_case *testset)
++{
++	char tests_subdir[KTF_DEBUGFS_NAMESZ];
++	const char *name = ktf_case_name(testset);
++
++	memset(&testset->debugfs, 0, sizeof(testset->debugfs));
++
++	/* First add /sys/kernel/debug/ktf/[results|run]/<testset> */
++	testset->debugfs.debugfs_results_testset =
++		debugfs_create_file(name, S_IFREG | 0444,
++				    ktf_debugfs_resultsdir,
++				 testset, &ktf_results_testset_fops);
++	if (!testset->debugfs.debugfs_results_testset)
++		goto err;
++
++	testset->debugfs.debugfs_run_testset =
++		debugfs_create_file(name, S_IFREG | 0444,
++				    ktf_debugfs_rundir,
++				    testset, &ktf_run_testset_fops);
++	if (!testset->debugfs.debugfs_run_testset)
++		goto err;
++
++	/* Now add parent directories for individual test result/run tests
++	 * which live in
++	 * /sys/kernel/debug/ktf/[results|run]/<testset>-tests/<testname>
++	 */
++	(void)snprintf(tests_subdir, sizeof(tests_subdir), "%s%s",
++			name, KTF_DEBUGFS_TESTS_SUFFIX);
++
++	testset->debugfs.debugfs_results_test =
++		debugfs_create_dir(tests_subdir, ktf_debugfs_resultsdir);
++	if (!testset->debugfs.debugfs_results_test)
++		goto err;
++
++	testset->debugfs.debugfs_run_test =
++		debugfs_create_dir(tests_subdir, ktf_debugfs_rundir);
++	if (!testset->debugfs.debugfs_run_test)
++		goto err;
++
++	/* Take reference count for testset.  One will do as we will always
++	 * free testset debugfs resources together.
++	 */
++	ktf_case_get(testset);
++	return;
++err:
++	_ktf_debugfs_destroy_testset(testset);
++}
++
++void ktf_debugfs_destroy_testset(struct ktf_case *testset)
++{
++	tlog(T_DEBUG, "Destroying debugfs testset %s", ktf_case_name(testset));
++	_ktf_debugfs_destroy_testset(testset);
++	/* Remove our debugfs reference cout to testset */
++	ktf_case_put(testset);
++}
++
++/* /sys/kernel/debug/ktf/coverage shows coverage statistics. */
++static int ktf_debugfs_cov(struct seq_file *seq, void *v)
++{
++	ktf_cov_seq_print(seq);
++
++	return 0;
++}
++
++static int ktf_cov_open(struct inode *inode, struct file *file)
++{
++	if (!try_module_get(THIS_MODULE))
++		return -EIO;
++
++	return single_open(file, ktf_debugfs_cov, NULL);
++}
++
++static const struct file_operations ktf_cov_fops = {
++	.open = ktf_cov_open,
++	.read = seq_read,
++	.llseek = seq_lseek,
++	.release = ktf_debugfs_release,
++};
++
++void ktf_debugfs_cleanup(void)
++{
++	tlog(T_DEBUG, "Removing ktf debugfs dirs...");
++	debugfs_remove(ktf_debugfs_cov_file);
++	debugfs_remove(ktf_debugfs_rundir);
++	debugfs_remove(ktf_debugfs_resultsdir);
++	debugfs_remove(ktf_debugfs_rootdir);
++}
++
++void ktf_debugfs_init(void)
++{
++	ktf_debugfs_rootdir = debugfs_create_dir(KTF_DEBUGFS_ROOT, NULL);
++	if (!ktf_debugfs_rootdir)
++		goto err;
++	ktf_debugfs_rundir = debugfs_create_dir(KTF_DEBUGFS_RUN,
++						ktf_debugfs_rootdir);
++	if (!ktf_debugfs_rundir)
++		goto err;
++	ktf_debugfs_resultsdir = debugfs_create_dir(KTF_DEBUGFS_RESULTS,
++						    ktf_debugfs_rootdir);
++	if (!ktf_debugfs_resultsdir)
++		goto err;
++
++	ktf_debugfs_cov_file = debugfs_create_file(KTF_DEBUGFS_COV,
++						   S_IFREG | 0444,
++						   ktf_debugfs_rootdir,
++						   NULL,
++						   &ktf_cov_fops);
++	if (ktf_debugfs_cov_file)
++		return;
++err:
++	terr("Could not init %s\n", KTF_DEBUGFS_ROOT);
++	ktf_debugfs_cleanup();
++}
+diff --git a/tools/testing/selftests/ktf/kernel/ktf_debugfs.h b/tools/testing/selftests/ktf/kernel/ktf_debugfs.h
+new file mode 100644
+index 0000000..4dab1ea
+--- /dev/null
++++ b/tools/testing/selftests/ktf/kernel/ktf_debugfs.h
+@@ -0,0 +1,34 @@
++/*
++ * Copyright (c) 2009, 2017, Oracle and/or its affiliates. All rights reserved.
++ *    Author: Alan Maguire <alan.maguire@oracle.com>
++ *
++ * SPDX-License-Identifier: GPL-2.0
++ *
++ * ktf_debugfs.h: Support for creating a debugfs representation of test
++ * sets/tests.
++ */
++
++#ifndef KTF_DEBUGFS_H
++#define KTF_DEBUGFS_H
++#include <linux/debugfs.h>
++
++#define KTF_DEBUGFS_ROOT                        "ktf"
++#define KTF_DEBUGFS_RUN                         "run"
++#define KTF_DEBUGFS_RESULTS                     "results"
++#define KTF_DEBUGFS_COV				"coverage"
++#define KTF_DEBUGFS_TESTS_SUFFIX                "-tests"
++
++#define KTF_DEBUGFS_NAMESZ                      256
++
++struct ktf_test;
++struct ktf_case;
++
++void ktf_debugfs_create_test(struct ktf_test *);
++void ktf_debugfs_destroy_test(struct ktf_test *);
++void ktf_debugfs_create_testset(struct ktf_case *);
++void ktf_debugfs_destroy_testset(struct ktf_case *);
++void ktf_debugfs_init(void);
++void ktf_debugfs_cleanup(void);
++
++
++#endif
 -- 
 git-series 0.9.1
