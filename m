@@ -2,48 +2,48 @@ Return-Path: <SRS0=D3yD=WJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC175C433FF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Aug 2019 04:31:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AF1BC32750
+	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Aug 2019 04:39:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AFBD7206C2
-	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Aug 2019 04:31:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D324B20843
+	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Aug 2019 04:39:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1565670705;
-	bh=bXySyH7oG8Qg7BF2tUIzY88o3nkMldgjGwGFcu7lqBI=;
+	s=default; t=1565671144;
+	bh=3xMxQdsEpxtjj+1yTxgV9WOlUO2WQ552exvs56/rr1o=;
 	h=In-Reply-To:References:Subject:From:Cc:To:Date:List-ID:From;
-	b=XxfOLhPtA6tDt4n7D5CGqZfchh+tlZo79crCsP8TEA6g/uO8ys+NmSrnpQ40Wzfsf
-	 VOZXUphYb6f7su/8Iu93+zFJdVdFgmnbnRTfhuk1SydBSl4V693SmHVcH/mZoF8aQk
-	 mgAp7bn3gjawHnzmwUrXJ/UCeSTTk05BVdxapMXg=
+	b=sGWFjYA3rIxs2Pazt4DJCkilJnx6xXzjTkOAwJSiMXqn6jxSPWB1flsvCQinrwEW/
+	 zyuR84PVD9BZAjors32aSuldVwx7aUeKIly9Wv83hsnCNQLHxe/1M7lzSeCzCHsG56
+	 2HBJb5/GQCXF0DvbqVWVQy7HCyanXnUtbS6lEKg4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726086AbfHMEbm (ORCPT
+        id S1726838AbfHMEjC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 13 Aug 2019 00:31:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56866 "EHLO mail.kernel.org"
+        Tue, 13 Aug 2019 00:39:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58330 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725298AbfHMEbl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 00:31:41 -0400
+        id S1725298AbfHMEjB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 13 Aug 2019 00:39:01 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 67FF320644;
-        Tue, 13 Aug 2019 04:31:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 661F82054F;
+        Tue, 13 Aug 2019 04:38:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565670700;
-        bh=bXySyH7oG8Qg7BF2tUIzY88o3nkMldgjGwGFcu7lqBI=;
+        s=default; t=1565671139;
+        bh=3xMxQdsEpxtjj+1yTxgV9WOlUO2WQ552exvs56/rr1o=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=cn3hL1Bsuw/xu0q8nUGW5OVqNSM02gmqOxEj7OYVccBR3pVdlHQHfyV+9j4VK5VQ9
-         bBjRpi5awUcmcj/bU/NSzkg2lan5bKfaGdNGIkUpT77VE6EbkoCuI/ScUG0KINzgI5
-         ShJHcDr5aLfptCDpi5hT68kjow7hDCVTkDHNnS8o=
+        b=LR11it/I3O8CGTrv+Ng5zvucPa8uUkEfa3LmKFjw6O5u9qhsOj4v0EPjTnoOYONrH
+         u/tnKqLjb2VOMamzmBD+bQ92PSyu/l9yjopx4tVHE3QOH9DwxrVN/Ixn8t2s8dlBob
+         UQtw5MZJLoTm4I6qlCWqOvb7Iah3ocYPA4XTG7DY=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190812182421.141150-13-brendanhiggins@google.com>
-References: <20190812182421.141150-1-brendanhiggins@google.com> <20190812182421.141150-13-brendanhiggins@google.com>
-Subject: Re: [PATCH v12 12/18] kunit: test: add tests for KUnit managed resources
+In-Reply-To: <20190812182421.141150-15-brendanhiggins@google.com>
+References: <20190812182421.141150-1-brendanhiggins@google.com> <20190812182421.141150-15-brendanhiggins@google.com>
+Subject: Re: [PATCH v12 14/18] kunit: defconfig: add defconfigs for building KUnit tests
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
@@ -56,8 +56,7 @@ Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
         mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
         richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Avinash Kondareddy <akndr41@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>
+        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         frowand.list@gmail.com, gregkh@linuxfoundation.org,
         jpoimboe@redhat.com, keescook@google.com,
@@ -65,31 +64,46 @@ To:     Brendan Higgins <brendanhiggins@google.com>,
         peterz@infradead.org, robh@kernel.org, shuah@kernel.org,
         tytso@mit.edu, yamada.masahiro@socionext.com
 User-Agent: alot/0.8.1
-Date:   Mon, 12 Aug 2019 21:31:39 -0700
-Message-Id: <20190813043140.67FF320644@mail.kernel.org>
+Date:   Mon, 12 Aug 2019 21:38:58 -0700
+Message-Id: <20190813043859.661F82054F@mail.kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quoting Brendan Higgins (2019-08-12 11:24:15)
-> +
-> +static int kunit_resource_test_init(struct kunit *test)
-> +{
-> +       struct kunit_test_resource_context *ctx =3D
-> +                       kzalloc(sizeof(*ctx), GFP_KERNEL);
-> +
-> +       if (!ctx)
-> +               return -ENOMEM;
+Quoting Brendan Higgins (2019-08-12 11:24:17)
+> diff --git a/arch/um/configs/kunit_defconfig b/arch/um/configs/kunit_defc=
+onfig
+> new file mode 100644
+> index 0000000000000..bfe49689038f1
+> --- /dev/null
+> +++ b/arch/um/configs/kunit_defconfig
+> @@ -0,0 +1,8 @@
+> +CONFIG_OF=3Dy
+> +CONFIG_OF_UNITTEST=3Dy
+> +CONFIG_OF_OVERLAY=3Dy
+> +CONFIG_I2C=3Dy
+> +CONFIG_I2C_MUX=3Dy
+> +CONFIG_KUNIT=3Dy
+> +CONFIG_KUNIT_TEST=3Dy
+> +CONFIG_KUNIT_EXAMPLE_TEST=3Dy
+> diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing=
+/kunit/configs/all_tests.config
+> new file mode 100644
+> index 0000000000000..bfe49689038f1
+> --- /dev/null
+> +++ b/tools/testing/kunit/configs/all_tests.config
+> @@ -0,0 +1,8 @@
+> +CONFIG_OF=3Dy
+> +CONFIG_OF_UNITTEST=3Dy
+> +CONFIG_OF_OVERLAY=3Dy
+> +CONFIG_I2C=3Dy
+> +CONFIG_I2C_MUX=3Dy
 
-Should this use the test assertion logic to make sure that it's not
-failing allocations during init? BTW, maybe kunit allocation APIs should
-fail the test if they fail to allocate in general. Unless we're unit
-testing failure to allocate problems.
+Are these above config options necessary? I don't think they're part of
+the patch series anymore so it looks odd to enable the OF unittests and
+i2c configs.
 
-> +
-> +       test->priv =3D ctx;
-> +
-> +       kunit_init_test(&ctx->test, "test_test_context");
-> +
-> +       return 0;
+> +CONFIG_KUNIT=3Dy
+> +CONFIG_KUNIT_TEST=3Dy
+> +CONFIG_KUNIT_EXAMPLE_TEST=3Dy
