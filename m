@@ -2,64 +2,66 @@ Return-Path: <SRS0=D3yD=WJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDB82C32750
-	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Aug 2019 06:11:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D810C32753
+	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Aug 2019 06:11:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7FF8C20842
-	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Aug 2019 06:11:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 39CCA20844
+	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Aug 2019 06:11:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="sTnVvPWP";
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HSshzBTH"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="cXO/RaN4";
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="aCt6nQ31"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727420AbfHMGL0 (ORCPT
+        id S1727678AbfHMGLl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 13 Aug 2019 02:11:26 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:58758 "EHLO
+        Tue, 13 Aug 2019 02:11:41 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:59186 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726769AbfHMGLZ (ORCPT
+        with ESMTP id S1727667AbfHMGLj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 02:11:25 -0400
+        Tue, 13 Aug 2019 02:11:39 -0400
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D68qlk039282;
-        Tue, 13 Aug 2019 06:10:56 GMT
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D68qlv039282;
+        Tue, 13 Aug 2019 06:11:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2019-08-05; bh=diseXHpX8dtT9/GAoXhKTt8Q+OXoOvFSdw7KaXv5xJc=;
- b=sTnVvPWPYmwU+L+op8jGwhJlHHwBT9g8tYUy9fbnm8yjze7HRLw92g7VrQTIqC8gB2kS
- 9/ujgw2M2SfhH4W/vRcL/5QdjLj7Hu7YxfMcIhJLpxkMXNEecwKra/ghuXXDLlhGFCEa
- fJx6YtJ06sxvK3nfrc3fgXrNdxCYzyKcKfh2K57CFyc9phEfiQbFpD5HyO2hC8oRlAWQ
- s2c5u3FhUw+cmwySigu5CzLYHLKF6zE+3iZlCdd2VodHo2c5k3BE2N8BpjMvZHdiQjAu
- S/u70qdqkOiG1ruxuoZgbR760BNVTzEe317r9bDRPIVOdnyUzAkO5NTmEhUZfT4bG+3b JA== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2019-08-05;
+ bh=MkGlaRzfhOaspuCgCSxv0mcumwSprFHBy9GelM51bZI=;
+ b=cXO/RaN4hhWyYwTI/ANiRV7dNU7drhUyZyVr/adYVTkP1RuK4WkzvjLB9Peeg7ZhR9zd
+ PlKH+Ohmmmw/buNLkc0XHTBvHzXjG+42G6e7y806+teV5g8PeHT+wrO6ID+gyTkoAtYo
+ JaawzE9cJ0iYQKE0ozcSThhlM/bhPDG2AKaKKq9mWRr8+e9XQ7nAxAWwMpPTWoKbUr2r
+ bf0qOs8/ata9OtLbulu/KzU+2ImgEgV3qItogvtV1LuSGRg1wuyFCGuVBbYnUcdf5jtR
+ ndz66saasOvb7skjWTuXO9E5FzRxnsVZECSdx1xd/4sC2CzFMHYyqxR8/1IxG7hN/bxF 4A== 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2018-07-02; bh=diseXHpX8dtT9/GAoXhKTt8Q+OXoOvFSdw7KaXv5xJc=;
- b=HSshzBTHrCbhcZvGAkrQO1eewbvj8mZQhSOiMzNUwXrjGaueRILkd+nNdJRNvar7NA9d
- giGYMWweCPMOIXSbkpG/8giTi+O6AJTAwpdUaqnRy2KYRc2HtjLn4HoqiEZhLutBurXO
- oXo8yZuQwDfYbFQFkvUNy3yyEu562T2OTjLnjA6FBkIXx0hJKA2bKeboU+3m9GyjYxDe
- Vl9+Y/aa0cXzuZpmarcmzetuL9fPodJ1yFugUr4+imVcmsh2C5PCQvH9EoAEznQpIwzI
- yYxeK3qljydDiSaKvSR05U3wOa89fpntvOTODP4Ms7wy0z8mHZzm97/OOwvW482bRHJl BA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 2u9nvp4178-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2018-07-02;
+ bh=MkGlaRzfhOaspuCgCSxv0mcumwSprFHBy9GelM51bZI=;
+ b=aCt6nQ319nkZ7IZwz8tkum/s1PGwUPj9v8VbBEz7OnEBWLqoiR8KLw7xTVJHnDwe3uz0
+ 0a+N0xPESPrvVcjL6EQhMDSDwZFZqK7uyIF/7Zia3HC69ziDE9IskQ7m6WBhy4uvpeZC
+ mfL3z4p3+Cet93Ye8wK2yw+lZAMXqRSbkUN+rDW2Fa6Rn+vPjYudlwk186So+3/txj9l
+ ezSK5M4Jdd9h44ur22jRqBGn7SOhpMmhbviGU/zuYhA+KoLfNhaqsEv8d/4JOFY9nhjj
+ dLFzWCXxi0+DLaKXM4bBVpbJE2cWyfZQxidpEenO9lEepn4cnEgvHElgi+f0fkHK8enL Ig== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 2u9nvp41g6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 06:10:56 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D68Q1m056371;
-        Tue, 13 Aug 2019 06:10:55 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 2u9n9hs1pf-1
+        Tue, 13 Aug 2019 06:11:19 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D67Rqj096715;
+        Tue, 13 Aug 2019 06:11:19 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 2u9m0aydx7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 06:10:55 +0000
+        Tue, 13 Aug 2019 06:11:19 +0000
 Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7D6ApwT013132;
-        Tue, 13 Aug 2019 06:10:51 GMT
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7D6BIs8026626;
+        Tue, 13 Aug 2019 06:11:18 GMT
 Received: from abi.no.oracle.com (/10.172.144.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 12 Aug 2019 23:10:50 -0700
+        with ESMTP ; Mon, 12 Aug 2019 23:11:17 -0700
 From:   Knut Omang <knut.omang@oracle.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
@@ -79,20 +81,22 @@ Cc:     linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
         "Theodore Ts'o" <tytso@mit.edu>, Daniel Vetter <daniel@ffwll.ch>,
         Stephen Boyd <sboyd@kernel.org>,
         Knut Omang <knut.omang@oracle.com>
-Subject: [RFC 00/19] Integration of Kernel Test Framework (KTF) into the kernel tree
-Date:   Tue, 13 Aug 2019 08:09:15 +0200
-Message-Id: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
+Subject: [RFC 07/19] ktf: Simple coverage support
+Date:   Tue, 13 Aug 2019 08:09:22 +0200
+Message-Id: <a195920c376f836c563a8e11169be946267734fe.1565676440.git-series.knut.omang@oracle.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
+References: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9347 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
  phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.0.1-1906280000 definitions=main-1908130067
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9347 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
  lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
  definitions=main-1908130067
@@ -101,329 +105,817 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KTF has already been available for a while as a separate git repository with
-means to facilitate use with any kernel version.
+From: Alan Maguire <alan.maguire@oracle.com>
 
-KTF can be used both for "pure" unit testing and for more pragmatic
-approaches to component testing. Apart from some useful features that
-KTF uses from the kernel toolbox (such as kallsyms, kprobes),
-KTF does not depend on any special environment such as UML or on a
-large set of mocked up APIs to be useful. KTF basically allows test
-code to be inserted and managed as separate kernel modules, while
-providing the tests convenient access to almost the full range of kernel
-APIs, both exposed and private. And once a KTF test set exists, it
-should be fairly easy to compile and run it against older versions of
-the kernel as well.
+Allows reports of code coverage and memory allocation.
 
-This series proposes a non-intrusive integration of KTF into the kernel
-hopefully presented in digestable pieces.
-For convenience, the patch set is also available on top of v5.2
-at https://github.com/knuto/linux/pull/new/ktf_v1 .
+ktf_cov.c:       Code coverage support implementation for KTF.
+ktf_cov.h:       Code coverage support interface for KTF.
 
-The high level structure of the KTF code is as follows:
-
-External dependencies for the user land side:
-* libnl3 for netlink communication
-* googletest for test runner, reporting and test selection support.
-
-Kernel components:
-* Simple core test and test suite related abstractions:
-  core data structures ktf_case, ktf_test, an assertion macro "infrastructure"
-  with ASSERT_* and EXPECT_* macros and helper functions
-* Bookkeeping data structures:
-  - ktf_map - a (key, value) mapping container used to implement management
-    of instances of the higher level abstraction needs, such as ktf_handle and ktf_context.
-  - ktf_handle: A global environment that a test runs within.
-  - ktf_context: a test suite specific abstraction to allow a test to execute within
-	one or more contexts. An example use of context can be a device
-	instance: A test can be instantiated to run on all available such
-	devices, according to test suite defined criteria.
-* A generic netlink protocol (ktf_nl, ktf_unlproto) which defines operations to
-  allow a user space part of a test to query the kernel for test information,
-  invoke tests and get feedback reports about results.
-* An alternative debugfs interface to allow examining and executing kernel-only tests
-  without a user level program.
-* Support for overriding and modifying behaviour of kernel calls.
-
-User mode components:
-* A test executor based on and integrated with Googletest.
-  Googletest is one of several mature user land unit test suites for
-  C/C++. The choice allowed us to focus on kernel specific
-  functionality rather than having to reinvent too many wheels.
-* Tools to aid in creating new test modules (suites):
-  To facilitate a developer friendly way of testing internals of a module or the
-  kernel itself, one of the important features of KTF, we often need to access
-  symbols deliberately not exposed from a module.
-  KTF contains a script used to create definitions based on kallsyms
-  lookup for easy access to symbols not exposed by a module or the kernel.
-  The user just provides a simple text file with a list of the symbols by
-  module.
-
-This series is an attempt to address feedback from several people
-that having the functionality readily available within the kernel repository
-is desired.
-
-An in-tree KTF allows test suites to be provided with the kernel, which makes
-it easy to use KTF based suites as part of the kernel selftests and driver
-test suites. Having the ability to still build and run the latest versions of
-test suites against older kernels should be of great value to stable maintainers,
-distributions and driver maintainers, who would want to have an easy path,
-with minimal backporting efforts to make sure that criterias implemented by
-new test logic is also valid for these kernels.
-
-Our definite goal moving forward is to try to satisfy both needs in a
-transparent way. The plan is to let the standalone KTF repository follow the
-in-kernel one, and to allow test suites to be maintained similarly,
-and to support maintenance by proper tooling.
-
-Mode of integration into the kernel
-===================================
-
-One feature of KTF is that it allows tests to work, look and feel similar
-whether they execute entirely in user mode, entirely in kernel mode,
-or half and half (hybrid tests). KTF consist of both user space
-and kernel code. Unlike e.g. kselftest, KTF in the Github version
-does not attempt to address the test runner aspects of testing.
-
-Due to the need for building modules, KTF requires access to kernel module
-build facilities (obj-m). But KTF also has nontrivial needs for user
-land building, and we think it is good to keep the build structure in a way that
-allows KTF to be built both in-tree and out-of-tree without
-necessarily having to reconfigure the kernel.
-
-This first version of kernel integration of KTF solves this challenge
-by co-locating everything associated with KTF under ktf/ as in the
-github version, but use the little used hostprogs-y and hostlibs-y
-features to build the user space side. The first patch in the series is
-fixes to make it work in a natural way to suit our needs.
-
-Positioning for natural building within the kernel tree
-=======================================================
-
-Currently we find significant amount of C level tests within the following paths:
-
-tools/testing/selftests/  (kselftests, almost entirely user space so far)
-lib/  			  (various kernel level mostly unit tests)
-
-and in the making::
-
-kunit/			  (kernel only (UML))
-
-So all kernel code are currently located directly within the kernel
-build paths, accessed from the top level Makefile, to allow everything
-to be controlled by config and from the main build targets for the
-kernel. But this also poses challenges, in that .config has to be
-modified to build tests. And once a .config is changed, we no longer
-in principle logically operate on the same kernel.
-
-A better approach seems to be to follow the principle
-taken by kselftest: To have all the logic associated with the test
-inside the test tree, and make it available for building separately
-from the kernel itself. This require us to have a means to build
-kernel modules from within the test tree, separately from the main
-kernel paths. Currently this seems to only by supported via the M=
-option used to build out-of-tree modules. This was also easy to get to work
-for the kernel parts, based on the Github version of KTF, where we
-already do this. With the additional need to compile user land code,
-using the corresponding hostprogs-y and hostNNlibs-y seemed natural,
-but this has been challenging: The build macros does not really
-support hostprogs-y etc as "first class citizens" so some amount of
-hacking is in there in this first draft version.
-Using hostprogs-y etc is also a different approach that what is used
-for C code in kselftest today, but we imagine that there's room for
-unification here to get the best of both worlds, with the help of
-the wider Kbuild community.
-
-As an initial proposal, we have positioned ktf as an additional
-kselftest target, under tools/testing/selftests/ktf, and the recommended:
-
-make TARGETS="ktf" kselftest
-
-way of building and running should work, even from normal user accounts,
-if the user running it has sudo rights (for the kernel module insertion
-and removal). This will run the selftests for KTF itself, and should
-be a good starting point for adding more test cases. We also have had
-activities going to take some of the existing test suites under lib/
-and convert them into KTF based test suites, and will get back to this
-later.
-
-A trimmed down output from the above make target would look like this:
-
-  ...
-  CC [M]  tools/testing/selftests/ktf/kernel/ktf_override.o
-  LD [M]  tools/testing/selftests/ktf/kernel/ktf.o
-  HOSTCC  -fPIC tools/testing/selftests/ktf/lib/ktf_unlproto.o
-  HOSTCXX -fPIC tools/testing/selftests/ktf/lib/ktf_int.o
-  KTFSYMS tools/testing/selftests/ktf/selftest/ktf_syms.h
-  CC [M]  tools/testing/selftests/ktf/selftest/self.o
-  LD [M]  tools/testing/selftests/ktf/selftest/selftest.o
-  HOSTCXX tools/testing/selftests/ktf/user/ktftest.o
-  HOSTCXX tools/testing/selftests/ktf/user/hybrid.o
-  HOSTLD  tools/testing/selftests/ktf/user/ktftest
-  Building modules, stage 2.
-  MODPOST 7 modules
-  LD [M]  tools/testing/selftests/ktf/kernel/ktf.ko
-  LD [M]  tools/testing/selftests/ktf/selftest/selftest.ko
-  running tests
-make BUILD=/net/abi/local/abi/build/kernel/ktf/tools/testing/selftests -f scripts/runtests.mk run_tests
-TAP version 13
-1..1
-...
-ok 1 selftests: ktf: runtests.sh
-
-We're looking forward to feedback on this, and also to more discussion
-around unit testing at the testing & fuzzing workshop at LPC!
-
-Alan Maguire (3):
-  ktf: Implementation of ktf support for overriding function entry and return.
-  ktf: A simple debugfs interface to test results
-  ktf: Simple coverage support
-
-Knut Omang (16):
-  kbuild: Fixes to rules for host-cshlib and host-cxxshlib
-  ktf: Introduce the main part of the kernel side of ktf
-  ktf: Introduce a generic netlink protocol for test result communication
-  ktf: An implementation of a generic associative array container
-  ktf: Configurable context support for network info setup
-  ktf: resolve: A helper utility to aid in exposing private kernel symbols to KTF tests.
-  ktf: Add documentation for Kernel Test Framework (KTF)
-  ktf: Add a small test suite with a few tests to test KTF itself
-  ktf: Main part of user land library for executing tests
-  ktf: Integration logic for running ktf tests from googletest
-  ktf: Internal debugging facilities
-  ktf: Some simple examples
-  ktf: Some user applications to run tests
-  ktf: Toplevel ktf Makefile/makefile includes and scripts to run from kselftest
-  kselftests: Enable building ktf
-  Documentation/dev-tools: Add index entry for KTF documentation
-
- Documentation/dev-tools/index.rst                   |    1 +-
- Documentation/dev-tools/ktf/concepts.rst            |  242 +++-
- Documentation/dev-tools/ktf/debugging.rst           |  248 +++-
- Documentation/dev-tools/ktf/examples.rst            |   26 +-
- Documentation/dev-tools/ktf/features.rst            |  307 ++++-
- Documentation/dev-tools/ktf/implementation.rst      |   70 +-
- Documentation/dev-tools/ktf/index.rst               |   14 +-
- Documentation/dev-tools/ktf/installation.rst        |   73 +-
- Documentation/dev-tools/ktf/introduction.rst        |  134 ++-
- Documentation/dev-tools/ktf/progref.rst             |  144 ++-
- scripts/Makefile.host                               |   17 +-
- tools/testing/selftests/Makefile                    |    1 +-
- tools/testing/selftests/ktf/Makefile                |   21 +-
- tools/testing/selftests/ktf/examples/Makefile       |   17 +-
- tools/testing/selftests/ktf/examples/h2.c           |   45 +-
- tools/testing/selftests/ktf/examples/h3.c           |   84 +-
- tools/testing/selftests/ktf/examples/h4.c           |   62 +-
- tools/testing/selftests/ktf/examples/hello.c        |   38 +-
- tools/testing/selftests/ktf/examples/kgdemo.c       |   61 +-
- tools/testing/selftests/ktf/kernel/Makefile         |   15 +-
- tools/testing/selftests/ktf/kernel/ktf.h            |  604 +++++++-
- tools/testing/selftests/ktf/kernel/ktf_context.c    |  409 +++++-
- tools/testing/selftests/ktf/kernel/ktf_cov.c        |  690 ++++++++-
- tools/testing/selftests/ktf/kernel/ktf_cov.h        |   94 +-
- tools/testing/selftests/ktf/kernel/ktf_debugfs.c    |  356 ++++-
- tools/testing/selftests/ktf/kernel/ktf_debugfs.h    |   34 +-
- tools/testing/selftests/ktf/kernel/ktf_map.c        |  261 +++-
- tools/testing/selftests/ktf/kernel/ktf_map.h        |  154 ++-
- tools/testing/selftests/ktf/kernel/ktf_netctx.c     |  132 ++-
- tools/testing/selftests/ktf/kernel/ktf_netctx.h     |   64 +-
- tools/testing/selftests/ktf/kernel/ktf_nl.c         |  516 ++++++-
- tools/testing/selftests/ktf/kernel/ktf_nl.h         |   15 +-
- tools/testing/selftests/ktf/kernel/ktf_override.c   |   45 +-
- tools/testing/selftests/ktf/kernel/ktf_override.h   |   15 +-
- tools/testing/selftests/ktf/kernel/ktf_test.c       |  397 +++++-
- tools/testing/selftests/ktf/kernel/ktf_test.h       |  381 ++++-
- tools/testing/selftests/ktf/kernel/ktf_unlproto.h   |  105 +-
- tools/testing/selftests/ktf/lib/Makefile            |   21 +-
- tools/testing/selftests/ktf/lib/ktf.h               |  114 +-
- tools/testing/selftests/ktf/lib/ktf_debug.cc        |   20 +-
- tools/testing/selftests/ktf/lib/ktf_debug.h         |   59 +-
- tools/testing/selftests/ktf/lib/ktf_int.cc          | 1031 ++++++++++++-
- tools/testing/selftests/ktf/lib/ktf_int.h           |   84 +-
- tools/testing/selftests/ktf/lib/ktf_run.cc          |  177 ++-
- tools/testing/selftests/ktf/lib/ktf_unlproto.c      |   21 +-
- tools/testing/selftests/ktf/scripts/ktf_syms.mk     |   16 +-
- tools/testing/selftests/ktf/scripts/resolve         |  188 ++-
- tools/testing/selftests/ktf/scripts/runtests.mk     |    3 +-
- tools/testing/selftests/ktf/scripts/runtests.sh     |  100 +-
- tools/testing/selftests/ktf/scripts/top_make.mk     |   14 +-
- tools/testing/selftests/ktf/selftest/Makefile       |   17 +-
- tools/testing/selftests/ktf/selftest/context.c      |  149 ++-
- tools/testing/selftests/ktf/selftest/context.h      |   15 +-
- tools/testing/selftests/ktf/selftest/context_self.h |   34 +-
- tools/testing/selftests/ktf/selftest/hybrid.c       |   35 +-
- tools/testing/selftests/ktf/selftest/hybrid.h       |   24 +-
- tools/testing/selftests/ktf/selftest/hybrid_self.h  |   27 +-
- tools/testing/selftests/ktf/selftest/ktf_syms.txt   |   17 +-
- tools/testing/selftests/ktf/selftest/self.c         |  661 ++++++++-
- tools/testing/selftests/ktf/user/Makefile           |   26 +-
- tools/testing/selftests/ktf/user/hybrid.cc          |   39 +-
- tools/testing/selftests/ktf/user/ktfcov.cc          |   68 +-
- tools/testing/selftests/ktf/user/ktfrun.cc          |   20 +-
- tools/testing/selftests/ktf/user/ktftest.cc         |   46 +-
- 64 files changed, 8909 insertions(+), 9 deletions(-)
- create mode 100644 Documentation/dev-tools/ktf/concepts.rst
- create mode 100644 Documentation/dev-tools/ktf/debugging.rst
- create mode 100644 Documentation/dev-tools/ktf/examples.rst
- create mode 100644 Documentation/dev-tools/ktf/features.rst
- create mode 100644 Documentation/dev-tools/ktf/implementation.rst
- create mode 100644 Documentation/dev-tools/ktf/index.rst
- create mode 100644 Documentation/dev-tools/ktf/installation.rst
- create mode 100644 Documentation/dev-tools/ktf/introduction.rst
- create mode 100644 Documentation/dev-tools/ktf/progref.rst
- create mode 100644 tools/testing/selftests/ktf/Makefile
- create mode 100644 tools/testing/selftests/ktf/examples/Makefile
- create mode 100644 tools/testing/selftests/ktf/examples/h2.c
- create mode 100644 tools/testing/selftests/ktf/examples/h3.c
- create mode 100644 tools/testing/selftests/ktf/examples/h4.c
- create mode 100644 tools/testing/selftests/ktf/examples/hello.c
- create mode 100644 tools/testing/selftests/ktf/examples/kgdemo.c
- create mode 100644 tools/testing/selftests/ktf/kernel/Makefile
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf.h
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_context.c
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Knut Omang <knut.omang@oracle.com>
+---
+ tools/testing/selftests/ktf/kernel/ktf_cov.c | 690 ++++++++++++++++++++-
+ tools/testing/selftests/ktf/kernel/ktf_cov.h |  94 +++-
+ 2 files changed, 784 insertions(+)
  create mode 100644 tools/testing/selftests/ktf/kernel/ktf_cov.c
  create mode 100644 tools/testing/selftests/ktf/kernel/ktf_cov.h
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_debugfs.c
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_debugfs.h
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_map.c
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_map.h
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_netctx.c
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_netctx.h
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_nl.c
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_nl.h
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_override.c
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_override.h
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_test.c
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_test.h
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_unlproto.h
- create mode 100644 tools/testing/selftests/ktf/lib/Makefile
- create mode 100644 tools/testing/selftests/ktf/lib/ktf.h
- create mode 100644 tools/testing/selftests/ktf/lib/ktf_debug.cc
- create mode 100644 tools/testing/selftests/ktf/lib/ktf_debug.h
- create mode 100644 tools/testing/selftests/ktf/lib/ktf_int.cc
- create mode 100644 tools/testing/selftests/ktf/lib/ktf_int.h
- create mode 100644 tools/testing/selftests/ktf/lib/ktf_run.cc
- create mode 100644 tools/testing/selftests/ktf/lib/ktf_unlproto.c
- create mode 100644 tools/testing/selftests/ktf/scripts/ktf_syms.mk
- create mode 100755 tools/testing/selftests/ktf/scripts/resolve
- create mode 100644 tools/testing/selftests/ktf/scripts/runtests.mk
- create mode 100755 tools/testing/selftests/ktf/scripts/runtests.sh
- create mode 100644 tools/testing/selftests/ktf/scripts/top_make.mk
- create mode 100644 tools/testing/selftests/ktf/selftest/Makefile
- create mode 100644 tools/testing/selftests/ktf/selftest/context.c
- create mode 100644 tools/testing/selftests/ktf/selftest/context.h
- create mode 100644 tools/testing/selftests/ktf/selftest/context_self.h
- create mode 100644 tools/testing/selftests/ktf/selftest/hybrid.c
- create mode 100644 tools/testing/selftests/ktf/selftest/hybrid.h
- create mode 100644 tools/testing/selftests/ktf/selftest/hybrid_self.h
- create mode 100644 tools/testing/selftests/ktf/selftest/ktf_syms.txt
- create mode 100644 tools/testing/selftests/ktf/selftest/self.c
- create mode 100644 tools/testing/selftests/ktf/user/Makefile
- create mode 100644 tools/testing/selftests/ktf/user/hybrid.cc
- create mode 100644 tools/testing/selftests/ktf/user/ktfcov.cc
- create mode 100644 tools/testing/selftests/ktf/user/ktfrun.cc
- create mode 100644 tools/testing/selftests/ktf/user/ktftest.cc
 
-base-commit: 0ecfebd2b52404ae0c54a878c872bb93363ada36
+diff --git a/tools/testing/selftests/ktf/kernel/ktf_cov.c b/tools/testing/selftests/ktf/kernel/ktf_cov.c
+new file mode 100644
+index 0000000..f917994
+--- /dev/null
++++ b/tools/testing/selftests/ktf/kernel/ktf_cov.c
+@@ -0,0 +1,690 @@
++/*
++ * Copyright (c) 2009, 2017, Oracle and/or its affiliates. All rights reserved.
++ *    Author: Alan Maguire <alan.maguire@oracle.com>
++ *
++ * SPDX-License-Identifier: GPL-2.0
++ *
++ * ktf_cov.c: Code coverage support implementation for KTF.
++ */
++#include <linux/kallsyms.h>
++#include <linux/debugfs.h>
++#include <linux/mm.h>
++#include <linux/module.h>
++#include <linux/slab.h>
++#include <linux/stacktrace.h>
++#ifdef CONFIG_SLUB
++#include <linux/slub_def.h>
++#endif /* CONFIG_SLUB */
++#ifdef CONFIG_SLAB
++#include <linux/slab_def.h>
++#endif
++#include <linux/string.h>
++#include <linux/kprobes.h>
++#include <linux/ptrace.h>
++#include "ktf.h"
++#include "ktf_map.h"
++#include "ktf_cov.h"
++
++/* It may seem odd that we use a refcnt field in ktf_cov_entry structures
++ * in addition to using krefcount management via the ktf_map.  The reasoning
++ * here is that if we enable and then disable coverage, we do not want to
++ * purge the entry data as we likely want to examine counts after disabling
++ * coverage.  So the first enable will add entries to the cov_entry map and
++ * subsequent disable/enables will simply update the entry's refcnt.  The
++ * free function below should only be called therefore from cleanup context
++ * when the cov entries are finally removed from the cov_entry map.
++ */
++static void ktf_cov_entry_free(struct ktf_map_elem *elem)
++{
++	struct ktf_cov_entry *entry = container_of(elem, struct ktf_cov_entry,
++						   kmap);
++	if (entry->refcnt > 0)
++		unregister_kprobe(&entry->kprobe);
++	kfree(entry);
++}
++
++/* Comparison function is subtle.  We want to be able to compare key1
++ * and key2 here, where key1 may either be an existing object, in which
++ * case it has an address and size; or it may be an object offset, in which
++ * case k1's address will be the address with offset of size 0.  In both
++ * cases for the -1 case we can simply check if k1's address is less than
++ * k2's.  For the 1 case, we need to ensure that the address is >=
++ * k2's address and it's size, since this ensures the address does not
++ * fall within the object bounds.  Finally we are left with the case
++ * that k1.address >= k2.address _and_ it falls within the bounds of k2,
++ * which we consider a match.  For a concrete example of how this matching
++ * is used, see how we walk the stack of functions within the kmalloc
++ * kretprobe below: we will have a function + offset on the stack, and we
++ * want to see if this offset falls within a function in our coverage entry
++ * map.  If it does, we track the allocation.  The implicit assumption is
++ * no overlap between different objects.
++ */
++static int ktf_cov_obj_compare(const char *key1, const char *key2)
++{
++	struct ktf_cov_obj_key *k1 = (struct ktf_cov_obj_key *)key1;
++	struct ktf_cov_obj_key *k2 = (struct ktf_cov_obj_key *)key2;
++
++	if (k1->address < k2->address)
++		return -1;
++	if (k1->address >= (k2->address + k2->size))
++		return 1;
++	return 0;
++}
++
++void ktf_cov_entry_get(struct ktf_cov_entry *entry)
++{
++	ktf_map_elem_get(&entry->kmap);
++}
++
++void ktf_cov_entry_put(struct ktf_cov_entry *entry)
++{
++	ktf_map_elem_put(&entry->kmap);
++}
++
++/* Global map for address-> symbol/module mapping.  Sort via symbol address
++ * and size combination, see ktf_cov_obj_compare() above for comparison
++ * logic.
++ */
++static DEFINE_KTF_MAP(cov_entry_map, ktf_cov_obj_compare, ktf_cov_entry_free);
++
++struct ktf_cov_entry *ktf_cov_entry_find(unsigned long addr, unsigned long size)
++{
++	struct ktf_cov_obj_key k;
++
++	k.address = addr;
++	k.size = size;
++
++	return ktf_map_find_entry(&cov_entry_map, (char *)&k,
++				  struct ktf_cov_entry, kmap);
++}
++
++static void ktf_cov_free(struct ktf_map_elem *elem)
++{
++	struct ktf_cov *cov = container_of(elem, struct ktf_cov, kmap);
++
++	kfree(cov);
++}
++
++void ktf_cov_put(struct ktf_cov *cov)
++{
++	ktf_map_elem_put(&cov->kmap);
++}
++
++/* Coverage object map. Just modules supported for now, sort by name. */
++static DEFINE_KTF_MAP(cov_map, NULL, ktf_cov_free);
++
++struct ktf_cov *ktf_cov_find(const char *module)
++{
++	return ktf_map_find_entry(&cov_map, module, struct ktf_cov, kmap);
++}
++
++/* cache for memory objects used to track allocations */
++static struct kmem_cache *cov_mem_cache;
++
++static void ktf_cov_mem_free(struct ktf_map_elem *elem)
++{
++	struct ktf_cov_mem *m = container_of(elem, struct ktf_cov_mem,
++					     kmap);
++
++	kmem_cache_free(cov_mem_cache, m);
++}
++
++/* Global map for tracking memory allocations */
++DEFINE_KTF_MAP(cov_mem_map, ktf_cov_obj_compare, ktf_cov_mem_free);
++EXPORT_SYMBOL(cov_mem_map);
++
++struct ktf_cov_mem *ktf_cov_mem_find(unsigned long addr, unsigned long size)
++{
++	struct ktf_cov_obj_key k;
++
++	k.address = addr;
++	k.size = size;
++
++	return ktf_map_find_entry(&cov_mem_map, (char *)&k,
++				  struct ktf_cov_mem, kmap);
++}
++
++void ktf_cov_mem_get(struct ktf_cov_mem *m)
++{
++	ktf_map_elem_get(&m->kmap);
++}
++
++void ktf_cov_mem_put(struct ktf_cov_mem *m)
++{
++	ktf_map_elem_put(&m->kmap);
++}
++
++static void ktf_cov_mem_remove(struct ktf_cov_mem *m)
++{
++	ktf_map_remove_elem(&cov_mem_map, &m->kmap);
++}
++
++/* Do not use ktf_cov_entry_find() here as we can get entry directly
++ * from probe address (as probe is first field in struct ktf_cov_entry).
++ * No reference counting issues should apply as when entry refcnt drops
++ * to 0 we unregister the kprobe prior to freeing the entry.
++ */
++static int ktf_cov_handler(struct kprobe *p, struct pt_regs *regs)
++{
++	struct ktf_cov_entry *entry = (struct ktf_cov_entry *)p;
++
++	/* Make sure probe is ours... */
++	if (!entry || entry->magic != KTF_COV_ENTRY_MAGIC)
++		return 0;
++	entry->count++;
++	if (entry->count == 1 && entry->cov)
++		entry->cov->count++;
++	return 0;
++}
++
++static int ktf_cov_init_symbol(void *data, const char *name,
++			       struct module *mod, unsigned long addr)
++{
++	struct ktf_cov_entry *entry;
++	struct ktf_cov *cov = data;
++	char buf[256];
++
++	if (!mod || !cov)
++		return 0;
++
++	if (!try_module_get(mod))
++		return 0;
++
++	/* module_mutex is grabbed by register_kprobe() */
++	mutex_unlock(&module_mutex);
++
++	/* We only care about symbols for cov-specified module. */
++	if (strcmp(mod->name, cov->kmap.key))
++		goto out;
++
++	/* We don't probe ourselves and functions called within probe ctxt. */
++	if (strncmp(name, "ktf_cov", strlen("ktf_cov")) == 0 ||
++	    strcmp(name, "ktf_map_find") == 0)
++		goto out;
++
++	/* Check if we're already covered for this module/symbol. */
++	entry = ktf_cov_entry_find(addr, 0);
++	if (entry) {
++		tlog(T_DEBUG, "%s already present in coverage: %s",
++		     name, entry->name);
++		ktf_cov_entry_put(entry);
++		goto out;
++	}
++	entry = kzalloc(sizeof(*entry), GFP_KERNEL);
++	(void)strlcpy(entry->name, name, sizeof(entry->name));
++	entry->magic = KTF_COV_ENTRY_MAGIC;
++	entry->cov = cov;
++	entry->refcnt = 1;
++
++	entry->kprobe.pre_handler = ktf_cov_handler;
++	entry->kprobe.symbol_name = entry->name;
++
++	/* Ugh - we try to register a kprobe as a means of determining
++	 * if the symbol is a function.
++	 */
++	if (register_kprobe(&entry->kprobe) < 0) {
++		/* not a probe-able function */
++		kfree(entry);
++		goto out;
++	}
++	entry->key.address = addr;
++	entry->key.size = ktf_symbol_size(addr);
++	(void)sprint_symbol(buf, entry->key.address);
++	if (ktf_map_elem_init(&entry->kmap, (char *)&entry->key) < 0 ||
++	    ktf_map_insert(&cov_entry_map, &entry->kmap) < 0) {
++		unregister_kprobe(&entry->kprobe);
++		kfree(entry);
++		goto out;
++	}
++	tlog(T_DEBUG, "Added %s/%s (%p, size %lu) to coverage: %s",
++	     mod->name, entry->name, (void *)entry->kprobe.addr,
++	     entry->key.size, buf);
++
++	cov->total++;
++	ktf_cov_entry_put(entry);
++
++out:
++	mutex_lock(&module_mutex);
++	module_put(mod);
++	return 0;
++}
++
++static int ktf_cov_kmem_cache_alloc_handler(struct kretprobe_instance *,
++					    struct pt_regs *);
++
++static unsigned long register_kretprobe_size;
++
++/* Handler tracking allocations.  Determine if any functions we are
++ * tracking coverage for (coverage entries) are on the stack; if so
++ * we track the allocation.
++ */
++static int ktf_cov_kmem_alloc_entry(struct ktf_cov_mem *m, unsigned long bytes)
++{
++	struct ktf_cov_entry *entry = NULL;
++	int n;
++
++	/* We don't care about 0-length allocations. */
++	if (!bytes)
++		return 0;
++
++	/* Find first cov entry on stack to allow us to attribute traced
++	 * allocation to first coverage entry we come across.
++	 */
++	m->nr_entries = stack_trace_save(m->stack_entries, KTF_COV_MAX_STACK_DEPTH, 1);
++	for (n = 0; n < m->nr_entries; n++) {
++		/* avoid recursive enter when allocating cov mem */
++		if (m->stack_entries[n] ==
++		    (unsigned long)ktf_cov_kmem_cache_alloc_handler)
++			break;
++		/* ignore allocs as a result of registering probes */
++		if (m->stack_entries[n] >
++		    (unsigned long)register_kretprobe &&
++		    m->stack_entries[n] < ((unsigned long)register_kretprobe +
++		    register_kretprobe_size))
++			break;
++		entry = ktf_cov_entry_find(m->stack_entries[n], 0);
++		if (entry)
++			break;
++	}
++	if (!entry) {
++		m->nr_entries = 0;
++		return 0;
++	}
++	ktf_cov_entry_put(entry);
++
++	m->key.size = bytes;
++	/* Have to wait until alloc returns to get key.address */
++
++	return 0;
++}
++
++/* Handler tracking kmalloc allocations. */
++static int ktf_cov_kmalloc_entry_handler(struct kretprobe_instance *ri,
++					 struct pt_regs *regs)
++{
++	struct ktf_cov_mem *m = (struct ktf_cov_mem *)ri->data;
++	unsigned long bytes = (unsigned long)KTF_ENTRY_PROBE_ARG0;
++
++	return ktf_cov_kmem_alloc_entry(m, bytes);
++}
++
++static int ktf_cov_kmem_cache_alloc_entry_handler(struct kretprobe_instance *ri,
++						  struct pt_regs *regs)
++{
++	struct kmem_cache *cache =
++		(struct kmem_cache *)KTF_ENTRY_PROBE_ARG0;
++	struct ktf_cov_mem *m = (struct ktf_cov_mem *)ri->data;
++	unsigned long bytes;
++
++	if (!cache)
++		return 0;
++
++	bytes = cache->object_size;
++	if (cache == cov_mem_cache)
++		return 0;
++	return ktf_cov_kmem_alloc_entry(m, bytes);
++}
++
++static int ktf_cov_kmem_alloc_return(struct ktf_cov_mem *m,
++				     unsigned long ret)
++{
++	struct ktf_cov_mem *mm;
++
++	m->key.address = ret;
++	mm = kmem_cache_alloc(cov_mem_cache, GFP_NOWAIT);
++	if (!mm)
++		return 0;
++	memcpy(mm, m, sizeof(*mm));
++	if (ktf_map_elem_init(&mm->kmap, (char *)&mm->key) < 0 ||
++	    ktf_map_insert(&cov_mem_map, &mm->kmap) < 0) {
++		/* This can happen as inexplicably the same probe
++		 * can fire twice for _kmalloc; this results in
++		 * us attempting to add the same address twice, with
++		 * the result that we get -EEXIST from ktf_map_insert()
++		 * the second time.  Annoying but the end result is
++		 * we track the allocation once, which is what we want.
++		 */
++		terr("Failed to insert cov_mem %p", (void *)ret);
++		kmem_cache_free(cov_mem_cache, mm);
++	}
++	tlog(T_DEBUG, "cov_mem: tracking allocation %p", (void *)m->key.address);
++	m->nr_entries = 0;
++	return 0;
++}
++
++static int ktf_cov_kmalloc_handler(struct kretprobe_instance *ri,
++				   struct pt_regs *regs)
++{
++	struct ktf_cov_mem *m = (struct ktf_cov_mem *)ri->data;
++	unsigned long ret = regs_return_value(regs);
++
++	if (m->nr_entries)
++		return ktf_cov_kmem_alloc_return(m, ret);
++	return 0;
++}
++
++static int ktf_cov_kmem_cache_alloc_handler(struct kretprobe_instance *ri,
++					    struct pt_regs *regs)
++{
++	struct kmem_cache *cache =
++		(struct kmem_cache *)KTF_ENTRY_PROBE_ARG0;
++	struct ktf_cov_mem *m = (struct ktf_cov_mem *)ri->data;
++	unsigned long ret = regs_return_value(regs);
++
++	if (cache == cov_mem_cache)
++		return 0;
++
++	if (m->nr_entries)
++		return ktf_cov_kmem_alloc_return(m, ret);
++	return 0;
++}
++
++static int ktf_cov_kmem_free_entry(unsigned long tofree)
++{
++	struct ktf_cov_mem *m;
++
++	if (!tofree)
++		return 0;
++
++	m = ktf_cov_mem_find(tofree, 0);
++	if (m) {
++		tlog(T_DEBUG, "cov_mem: freeing allocation %p",
++		     (void *)m->key.address);
++		ktf_cov_mem_remove(m);
++		ktf_cov_mem_put(m);
++	}
++	return 0;
++}
++
++static int ktf_cov_kfree_entry_handler(struct kretprobe_instance *ri,
++				       struct pt_regs *regs)
++{
++	unsigned long tofree = (unsigned long)KTF_ENTRY_PROBE_ARG0;
++
++	if (!tofree)
++		return 0;
++
++	return ktf_cov_kmem_free_entry(tofree);
++}
++
++static int ktf_cov_kmem_cache_free_entry_handler(struct kretprobe_instance *ri,
++						 struct pt_regs *regs)
++{
++	struct kmem_cache *cache =
++		(struct kmem_cache *)KTF_ENTRY_PROBE_ARG0;
++	unsigned long tofree = (unsigned long)KTF_ENTRY_PROBE_ARG1;
++
++	if (!tofree || cache == cov_mem_cache)
++		return 0;
++
++	return ktf_cov_kmem_free_entry(tofree);
++}
++
++static struct kretprobe cov_mem_probes[] = {
++	{	.kp = { .symbol_name = "__kmalloc" },
++		.handler = ktf_cov_kmalloc_handler,
++		.entry_handler = ktf_cov_kmalloc_entry_handler,
++		.data_size = sizeof(struct ktf_cov_mem),
++		.maxactive = 0, /* assumes default value */
++	},
++	{	.kp = { .symbol_name = "kmem_cache_alloc" },
++		.handler = ktf_cov_kmem_cache_alloc_handler,
++		.entry_handler = ktf_cov_kmem_cache_alloc_entry_handler,
++		.data_size = sizeof(struct ktf_cov_mem),
++		.maxactive = 0, /* assumes default value */
++	},
++	{	.kp = { .symbol_name = "kfree" },
++		.handler = NULL,
++		.entry_handler = ktf_cov_kfree_entry_handler,
++		.data_size = 0,
++		.maxactive = 0, /* assumes default value */
++	},
++	{	.kp = { .symbol_name = "kmem_cache_free" },
++		.handler = NULL,
++		.entry_handler = ktf_cov_kmem_cache_free_entry_handler,
++		.data_size = 0,
++		.maxactive = 0, /* assumes default value */
++	}
++};
++
++static int cov_opt_mem_cnt;
++
++static int ktf_cov_init_opts(struct ktf_cov *cov)
++{
++	int i, ret = 0;
++
++	if (cov->opts & KTF_COV_OPT_MEM && ++cov_opt_mem_cnt == 1) {
++		if (!cov_mem_cache) {
++			cov_mem_cache =
++				kmem_cache_create("ktf_cov_mem_cache",
++						  sizeof(struct ktf_cov_mem), 0,
++						  SLAB_HWCACHE_ALIGN | SLAB_PANIC,
++						  NULL);
++
++			if (!cov_mem_cache)
++				return -ENOMEM;
++		}
++
++		for (i = 0; i < ARRAY_SIZE(cov_mem_probes); i++) {
++			/* reset in case we're re-registering */
++			cov_mem_probes[i].kp.addr = NULL;
++			cov_mem_probes[i].kp.flags = 0;
++			ret = register_kretprobe(&cov_mem_probes[i]);
++			if (ret) {
++				tlog(T_DEBUG,
++				     "%d: failed to register retprobe for %s",
++				     ret, cov_mem_probes[i].kp.symbol_name);
++				return ret;
++			}
++		}
++	}
++
++	return ret;
++}
++
++static void ktf_cov_cleanup_opts(struct ktf_cov *cov)
++{
++	int i;
++
++	if (cov->opts & KTF_COV_OPT_MEM && --cov_opt_mem_cnt == 0) {
++		for (i = 0; i < ARRAY_SIZE(cov_mem_probes); i++) {
++			if (cov_mem_probes[i].nmissed > 0) {
++				tlog(T_INFO, "%s: retprobe missed %d.",
++				     cov_mem_probes[i].kp.symbol_name,
++				     cov_mem_probes[i].nmissed);
++			}
++			if (cov_mem_probes[i].kp.addr)
++				unregister_kretprobe(&cov_mem_probes[i]);
++		}
++	}
++}
++
++/* If the module we are monitoring coverage for was unloaded/reloaded
++ * while coverage was disabled, we can end up re-enabling kprobes at
++ * different addresses for the same function.  The problem is however
++ * we reference coverage entries by their address in the coverage
++ * entry map, so we need to clean it up to reflect the new locations
++ * of the probes.  So we remove/re-add the entries with the updated
++ * addresses.  It would obviously be easier to just remove the entries
++ * on coverage disable, but that limits our ability to examine coverage
++ * data - a common pattern is enable coverage, run test(s), disable
++ * coverage, check coverage data.
++ */
++static void ktf_cov_update_entries(const char *name, struct ktf_cov *cov)
++{
++	struct ktf_cov_entry *entry = ktf_map_first_entry(&cov_entry_map,
++							  struct ktf_cov_entry,
++							  kmap);
++
++	while (entry) {
++		if (entry->cov != cov ||
++		    (unsigned long)entry->kprobe.addr == entry->key.address) {
++			entry = ktf_map_next_entry(entry, kmap);
++			continue;
++		}
++
++		/* Address has changed; remove entry with old address as key
++		 * and re-add with new address/size as key (size may have
++		 * changed if module was re-compiled).
++		 */
++		ktf_map_remove_elem(&cov_entry_map, &entry->kmap);
++		entry->key.address = (unsigned long)entry->kprobe.addr;
++		entry->key.size = ktf_symbol_size(entry->key.address);
++		if (ktf_map_elem_init(&entry->kmap, (char *)&entry->key) < 0 ||
++		    ktf_map_insert(&cov_entry_map, &entry->kmap) < 0) {
++			tlog(T_DEBUG, "Failed to add %s/%s", name, entry->name);
++			unregister_kprobe(&entry->kprobe);
++			entry->refcnt--;
++			entry = ktf_map_next_entry(entry, kmap);
++		} else {
++			tlog(T_DEBUG, "Added %s/%s (%p, size %lu) to coverage",
++			     name, entry->name, (void *)entry->key.address,
++			     entry->key.size);
++			/* Map has changed, reset to root. */
++			entry = ktf_map_first_entry(&cov_entry_map,
++						    struct ktf_cov_entry, kmap);
++		}
++	}
++}
++
++int ktf_cov_enable(const char *name, unsigned int opts)
++{
++	struct ktf_cov *cov = ktf_cov_find(name);
++	struct ktf_cov_entry *entry;
++	int ret = 0;
++
++#ifndef KTF_PROBE_SUPPORT
++	return -ENOTSUPP;
++#endif
++	if (!cov) {
++		cov = kzalloc(sizeof(*cov), GFP_KERNEL);
++		if (!cov)
++			return -ENOMEM;
++
++		cov->type = KTF_COV_TYPE_MODULE;
++		cov->opts = opts;
++		if (ktf_map_elem_init(&cov->kmap, name) < 0 ||
++		    ktf_map_insert(&cov_map, &cov->kmap) < 0) {
++			tlog(T_DEBUG, "cov %s already present", cov->kmap.key);
++			kfree(cov);
++			return -EEXIST;
++		}
++		register_kretprobe_size =
++			ktf_symbol_size((unsigned long)register_kretprobe);
++		mutex_lock(&module_mutex);
++		kallsyms_on_each_symbol(ktf_cov_init_symbol, cov);
++		mutex_unlock(&module_mutex);
++	} else {
++		ktf_map_for_each_entry(entry, &cov_entry_map, kmap) {
++			if (entry->cov != cov)
++				continue;
++			if (++entry->refcnt == 1) {
++				/* reset kprobe as we're re-registering */
++				memset(&entry->kprobe, 0,
++				       sizeof(entry->kprobe));
++				entry->kprobe.pre_handler = ktf_cov_handler;
++				entry->kprobe.symbol_name = entry->name;
++				ret = register_kprobe(&entry->kprobe);
++				if (ret) {
++					tlog(T_DEBUG, "Failed to add %s/%s",
++					     name, entry->name);
++					entry->refcnt--;
++				}
++			}
++		}
++		/* Probe addresses/function sizes for functions may have
++		 * changed if module was unloaded/reloaded - entry map
++		 * needs to be updated to use new address/size as key.
++		 */
++		ktf_cov_update_entries(name, cov);
++	}
++
++	ret = ktf_cov_init_opts(cov);
++
++	ktf_cov_put(cov);
++
++	return ret;
++}
++
++void ktf_cov_disable(const char *module)
++{
++	struct ktf_cov *cov = ktf_cov_find(module);
++	struct ktf_cov_entry *entry;
++
++#ifndef	KTF_PROBE_SUPPORT
++	return;
++#endif
++
++	if (!cov)
++		return;
++
++	ktf_map_for_each_entry(entry, &cov_entry_map, kmap) {
++		if (entry->cov == cov) {
++			if (--entry->refcnt == 0) {
++				unregister_kprobe(&entry->kprobe);
++				tlog(T_DEBUG, "Removed coverage %s/%s",
++				     cov->kmap.key, entry->name);
++			}
++		}
++	}
++	ktf_cov_cleanup_opts(cov);
++	ktf_cov_put(cov);
++}
++
++static void ktf_cov_mem_seq_print(struct seq_file *seq)
++{
++	struct ktf_cov_mem *m;
++	char buf[256];
++	int n;
++
++	seq_puts(seq, "\nMemory in use allocated by covered functions:\n\n");
++	seq_printf(seq, "%44s %16s %10s\n", "ALLOCATION STACK", "ADDRESS",
++		   "SIZE");
++	ktf_for_each_cov_mem(m) {
++		for (n = 0; n < m->nr_entries; n++) {
++			sprint_symbol(buf, m->stack_entries[n]);
++			seq_printf(seq, "%44s", buf);
++			if (n == 0)
++				seq_printf(seq, " %16p %10lu",
++					   (void *)m->key.address,
++					   m->key.size);
++			seq_puts(seq, "\n");
++		}
++		seq_puts(seq, "\n");
++	}
++}
++
++void ktf_cov_seq_print(struct seq_file *seq)
++{
++	struct ktf_cov_entry *entry;
++	struct ktf_cov *cov;
++
++	seq_printf(seq, "%10s %44s %10s\n", "MODULE", "#FUNCTIONS",
++		   "#CALLED");
++	ktf_map_for_each_entry(cov, &cov_map, kmap)
++		seq_printf(seq, "%10s %44d %10d\n",
++			   cov->kmap.key, cov->total, cov->count);
++
++	seq_printf(seq, "\n%10s %44s %10s\n", "MODULE", "FUNCTION", "COUNT");
++	ktf_map_for_each_entry(entry, &cov_entry_map, kmap)
++		seq_printf(seq, "%10s %44s %10d\n",
++			   entry->cov ? entry->cov->kmap.key : "-",
++			   entry->name, entry->count);
++
++	ktf_cov_mem_seq_print(seq);
++}
++
++
++void ktf_cov_cleanup(void)
++{
++	struct ktf_cov *cov;
++	char name[KTF_MAX_KEY];
++
++	ktf_map_for_each_entry(cov, &cov_map, kmap) {
++		ktf_cov_disable(ktf_map_elem_name(&cov->kmap, name));
++	}
++	ktf_map_delete_all(&cov_map);
++	ktf_map_delete_all(&cov_entry_map);
++	ktf_map_delete_all(&cov_mem_map);
++	kmem_cache_destroy(cov_mem_cache);
++}
+diff --git a/tools/testing/selftests/ktf/kernel/ktf_cov.h b/tools/testing/selftests/ktf/kernel/ktf_cov.h
+new file mode 100644
+index 0000000..56ae753
+--- /dev/null
++++ b/tools/testing/selftests/ktf/kernel/ktf_cov.h
+@@ -0,0 +1,94 @@
++/*
++ * Copyright (c) 2017, Oracle and/or its affiliates. All rights reserved.
++ *    Author: Alan Maguire <alan.maguire@oracle.com>
++ *
++ * SPDX-License-Identifier: GPL-2.0
++ *
++ * ktf_cov.h: Code coverage support interface for KTF.
++ */
++
++#ifndef KTF_COV_H
++#define KTF_COV_H
++
++#include <linux/debugfs.h>
++#include <linux/module.h>
++#include <linux/kprobes.h>
++#include "ktf.h"
++#include "ktf_map.h"
++
++enum ktf_cov_type {
++	KTF_COV_TYPE_MODULE,
++	KTF_COV_TYPE_MAX,
++};
++
++struct ktf_cov {
++	struct ktf_map_elem kmap;
++	enum ktf_cov_type type;		/* only modules supported for now. */
++	int count;			/* number of unique functions called */
++	int total;			/* total number of functions */
++	unsigned int opts;
++};
++
++/* Key for coverage entries (functions) consists in function address _and_
++ * size - this allows us to find offsets in function on stack.  Also used
++ * to track allocated memory - allocated address + size.
++ */
++struct ktf_cov_obj_key {
++	unsigned long address;
++	unsigned long size;
++};
++
++#define	KTF_COV_ENTRY_MAGIC		0xc07e8a5e
++struct ktf_cov_entry {
++	struct kprobe kprobe;
++	int magic;			/* magic number identifying entry */
++	struct ktf_map_elem kmap;
++	char name[KTF_MAX_KEY];
++	struct ktf_cov_obj_key key;
++	struct ktf_cov *cov;
++	struct ktf_map cov_mem;
++	int refcnt;
++	int count;
++};
++
++#define KTF_COV_MAX_STACK_DEPTH		32
++
++struct ktf_cov_mem {
++	struct ktf_map_elem kmap;
++	struct ktf_cov_obj_key key;
++	unsigned long flags;
++	unsigned int nr_entries;
++	unsigned long stack_entries[KTF_COV_MAX_STACK_DEPTH];
++};
++
++#define	KTF_COV_MEM_IGNORE	0x1	/* avoid recursive enter */
++
++struct ktf_cov_mem_probe {
++	const char *name;
++	struct kretprobe kretprobe;
++};
++
++extern struct ktf_map cov_mem_map;
++
++#define	ktf_for_each_cov_mem(pos)	\
++	ktf_map_for_each_entry(pos, &cov_mem_map, kmap)
++
++struct ktf_cov_entry *ktf_cov_entry_find(unsigned long, unsigned long);
++void ktf_cov_entry_put(struct ktf_cov_entry *);
++void ktf_cov_entry_get(struct ktf_cov_entry *);
++
++struct ktf_cov *ktf_cov_find(const char *);
++void ktf_cov_put(struct ktf_cov *);
++void ktf_cov_get(struct ktf_cov *);
++
++struct ktf_cov_mem *ktf_cov_mem_find(unsigned long, unsigned long);
++void ktf_cov_mem_put(struct ktf_cov_mem *);
++void ktf_cov_mem_get(struct ktf_cov_mem *);
++
++void ktf_cov_seq_print(struct seq_file *);
++void ktf_cov_cleanup(void);
++
++int ktf_cov_enable(const char *, unsigned int);
++void ktf_cov_disable(const char *);
++
++#endif
 -- 
 git-series 0.9.1
