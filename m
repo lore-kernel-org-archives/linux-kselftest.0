@@ -2,247 +2,525 @@ Return-Path: <SRS0=7BFT=WK=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2674BC0650F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 05:51:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F930C0650F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 05:52:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E4D182084F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 05:51:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5FD6D208C2
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 05:52:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="GX19XCmZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D4qm1j+H"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbfHNFvK (ORCPT
+        id S1727425AbfHNFwN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Aug 2019 01:51:10 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:54554 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726818AbfHNFvK (ORCPT
+        Wed, 14 Aug 2019 01:52:13 -0400
+Received: from mail-pg1-f201.google.com ([209.85.215.201]:45238 "EHLO
+        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727424AbfHNFwM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Aug 2019 01:51:10 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7E5mpIe062503;
-        Wed, 14 Aug 2019 05:50:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : subject
- : from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=corp-2019-08-05;
- bh=Cptp77h6SIWaOvz4askUueIxJmMTrJXjaT7ObIOf3wU=;
- b=GX19XCmZzVcDXK8yEfa0abnaUNeVMokbhpknbfpO5glNTU45xXLJfB9FpVWAgA0JVrd6
- fXqyk3K0LaPCUb5Y8fOHFVDkEi7jwoUlcjHuqpzDAkj4+WhGgyDovB4I/cD27akjSe9M
- PUOcIlSfDEg6kz2L36Eqi+pI22ODUmGPwwnmniQ0vWXVMReS/3cEp3LqANclvJLsCMZo
- 1/Xd63hTFKLk/2dUlAvffuFgjOwc2R2B4fZu+kU5hufny4d+QNdnsoDPO+XMmKC8r5sH
- Bxgcmq7nn1/Yb8802zA+neK6Domh1/QpVeE5Wf5flHdM2nMmwLsym9PTpRi/za1GojJZ aQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2u9nvpaj2v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Aug 2019 05:50:44 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7E5mm9T187666;
-        Wed, 14 Aug 2019 05:50:44 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 2ubwcxkrm9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Aug 2019 05:50:43 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7E5oc50025565;
-        Wed, 14 Aug 2019 05:50:38 GMT
-Received: from abi.no.oracle.com (/141.143.213.43)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 13 Aug 2019 22:50:37 -0700
-Message-ID: <aba3a1457087b281a82c09c3e382c932e750194f.camel@oracle.com>
-Subject: Re: [RFC 01/19] kbuild: Fixes to rules for host-cshlib and
- host-cxxshlib
-From:   Knut Omang <knut.omang@oracle.com>
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shreyans Devendra Doshi <0xinfosect0r@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Hidenori Yamaji <hidenori.yamaji@sony.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Timothy Bird <Tim.Bird@sony.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <sboyd@kernel.org>
-Date:   Wed, 14 Aug 2019 07:50:33 +0200
-In-Reply-To: <CAK7LNASgfd6KPRQ=hcqKkpZ6EVhFmbBjCXa30bvEqscu_5dwbQ@mail.gmail.com>
-References: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
-         <be2c361eac49ded2848b2a555b75e30cc3c24e71.1565676440.git-series.knut.omang@oracle.com>
-         <CAK7LNASX4jPRxRxD+JafAfKqjck=x27HuHZgPV1VFfW8MzcwZA@mail.gmail.com>
-         <14b99d26a4cff1c813c92818dc1234007fa06fc9.camel@oracle.com>
-         <CAK7LNASgfd6KPRQ=hcqKkpZ6EVhFmbBjCXa30bvEqscu_5dwbQ@mail.gmail.com>
+        Wed, 14 Aug 2019 01:52:12 -0400
+Received: by mail-pg1-f201.google.com with SMTP id 28so17324597pgm.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Aug 2019 22:52:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=nN6GreSzsXWubXye4Fe1x0SnNVwo3RCd7NvhpOATB0s=;
+        b=D4qm1j+HRO4nhA1iLo1a3tb+i9u0hkBtNYOIk4rXMsnVVoY7hFN4CmUXBWoy0EcXsZ
+         xMVvXbbaUQDZ6YAnF7/+chrHYDL4HU4DDJK4cKY/0SUR17+ywEAq583mR23ZjbFBaUXA
+         BFd5XX9PA18p73kZCWpjdGqxFRUL2Y4dVCvQ3kpxNw+IdNeQAXkjBiwCFh7OYXlkpFVl
+         rBQPwBDLFxypfDKOwssCyhoFqXEKrH7qlvXDS3Uq8r0SUve07lh0mjjjbq6JdYOI4hYc
+         you4gVfhuArC/N0NAKYDHbVEGhYvMzqiu2ZODfw3j35g22o0W42n9MGuO8lb+KEcEFO+
+         0fnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=nN6GreSzsXWubXye4Fe1x0SnNVwo3RCd7NvhpOATB0s=;
+        b=ATxbDGqmKMck3zmf+/+YHlwM2MPyLA8TPflfA8IDig+9HPgvyb5BrGc4ePGxW+N+Rx
+         tEbymKJUSmJm+64HSu4jElS0WIfxxghvQOefW5JVnThLXxezXABHYWC+cbzO86MPxtHh
+         frT0qR1F+4yNQjXeCR09icCV6YHoMQakAKOl7YQC0ahVbvnJGMZTxxXNnTcLXpxGFAIh
+         joqulcHAxQRZwcMhoQwv4KmoCN0yeSjQoeLS5Qq8tA3Jcdk0tEfzhckMGvqRJ9/5gD24
+         eDo6uhncdl6lYQVS7xXBBZsujehLI5DRfjwYaFQqsfTr1UgzuGle8aELYvlYYI9dyizJ
+         eT+g==
+X-Gm-Message-State: APjAAAWFCRzyQ3cmV+jvug6iDbA54HF1/1uVmhcvLwOw5uUH8FSUCdXJ
+        dmnAgU2GuLiULMN5jnJlFjTKf0iEg0iSk+fBU7fyZg==
+X-Google-Smtp-Source: APXvYqwF8b75tdLw53ZDS9Uu599uGECCNhz0MEuKcXm9n7gHzoHxSDEfZlDJVzBlVEcXMIStI5dOTBSObTH33odZOBK7Sg==
+X-Received: by 2002:a63:a346:: with SMTP id v6mr37524798pgn.57.1565761931486;
+ Tue, 13 Aug 2019 22:52:11 -0700 (PDT)
+Date:   Tue, 13 Aug 2019 22:50:51 -0700
+In-Reply-To: <20190814055108.214253-1-brendanhiggins@google.com>
+Message-Id: <20190814055108.214253-2-brendanhiggins@google.com>
+Mime-Version: 1.0
+References: <20190814055108.214253-1-brendanhiggins@google.com>
+X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
+Subject: [PATCH v13 01/18] kunit: test: add KUnit test runner core
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        jpoimboe@redhat.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
+        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
+        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
+        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
+        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
+        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
+        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
+        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
+        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
+        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1908140056
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908140056
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2019-08-14 at 11:02 +0900, Masahiro Yamada wrote:
-> Hi Knut,
-> 
-> On Wed, Aug 14, 2019 at 1:19 AM Knut Omang <knut.omang@oracle.com> wrote:
-> > On Tue, 2019-08-13 at 23:01 +0900, Masahiro Yamada wrote:
-> > > On Tue, Aug 13, 2019 at 3:13 PM Knut Omang <knut.omang@oracle.com> wrote:
-> > > > C++ libraries interfacing to C APIs might sometimes need some glue
-> > > > logic more easily written in C.
-> > > > Allow a C++ library to also contain 0 or more C objects.
-> > > > 
-> > > > Also fix rules for both C and C++ shared libraries:
-> > > > - C++ shared libraries depended on .c instead of .cc files
-> > > > - Rules were referenced as -objs instead of the intended
-> > > >   -cobjs and -cxxobjs following the pattern from hostprogs*.
-> > > > 
-> > > > Signed-off-by: Knut Omang <knut.omang@oracle.com>
-> > > 
-> > > How is this patch related to the rest of this series?
-> > 
-> > This is just my (likely naive) way I to get what I had working
-> > using autotools in the Github version of KTF) translated into something
-> > comparable using kbuild only. We need to build a shared library consisting
-> > of a few C++ files and a very simple C file, and a couple of simple binaries,
-> > and the rule in there does seem to take .c files and subject them to the
-> > C++ compiler, which makes this difficult to achieve?
-> 
-> Looking at the diff stat of the cover-letter,
-> the rest of this patch series is touching only
-> Documentation/ and tools/testing/kselftests/.
-> 
-> So, this one is unused by the rest of the changes, isn't it?
-> Am I missing something?
+Add core facilities for defining unit tests; this provides a common way
+to define test cases, functions that execute code which is under test
+and determine whether the code under test behaves as expected; this also
+provides a way to group together related test cases in test suites (here
+we call them test_modules).
 
-What I am trying to do is to build kernel **and** user mode components 
-under tools/testing/selftests/ktf and to keep the kernel test code out 
-of the tree. The only way I was able to do this was by means of the module build,
-eg. 'make TARGETS="ktf" kselftest' will cause a toplevel 'make M=tools/testing/selftests/ktf'
-which is what builds the lot. One can argue that this is a misuse of that mechanism,
-but as I argue in the cover letter, I think there is a need to make it possible 
-to have kernel code that is not going to be part of the installed kernel 
-somewhere else than in the normal build path of the kernel, which is what 
-I am trying to achieve.
+Just define test cases and how to execute them for now; setting
+expectations on code will be defined later.
 
-The toplevel Makefile logic for this is in patch 17 of the series in 
-tools/testing/selftests/ktf/Makefile
-and for ktf/kernel/Makefile and ktf/lib/Makefile and ktf/user/Makefile 
-in patches 2, 12 and 16 respectively.
+Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+---
+ include/kunit/test.h | 179 ++++++++++++++++++++++++++++++++++++++++
+ kunit/Kconfig        |  17 ++++
+ kunit/Makefile       |   1 +
+ kunit/test.c         | 191 +++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 388 insertions(+)
+ create mode 100644 include/kunit/test.h
+ create mode 100644 kunit/Kconfig
+ create mode 100644 kunit/Makefile
+ create mode 100644 kunit/test.c
 
-It is a bit of a hack still, since the hostcxxprogs-y and hostcxxlib-y
-targets in ktf/user and ktf/lib do not get invoked "automatically" 
-from __build like the obj-m targets. I haven't been able to figure out 
-yet how to achieve that, and was hoping I could get help on it :-)
-
-Thanks!
-Knut
-
-> > > This patch breaks GCC-plugins.
-> > > Did you really compile-test this patch before the submission?
-> > 
-> > Sorry for my ignorance here:
-> > I ran through the kernel build and installed the resulting kernel
-> > on a VM that I used to test this, if that's what you are asking
-> > about?
-> > 
-> > Do I need some unusual .config options or run a special make target
-> > to trigger the problem you see?
-> > 
-> > I used a recent Fedora config with default values for new options,
-> > and ran the normal default make target (also with O=) and make selftests
-> > to test the patch itself.
-> 
-> I just built allmodconfig for arm.
-> 
-> (The 0-day bot tests allmodconfig for most of architectures,
-> so you may receive error reports anyway.)
-> 
-> 
-> With your patch, I got the following:
-> 
-> 
-> masahiro@grover:~/ref/linux$ make  ARCH=arm
-> CROSS_COMPILE=arm-linux-gnueabihf-  allmodconfig all
->   HOSTCC  scripts/basic/fixdep
->   HOSTCC  scripts/kconfig/conf.o
->   HOSTCC  scripts/kconfig/confdata.o
->   HOSTCC  scripts/kconfig/expr.o
->   LEX     scripts/kconfig/lexer.lex.c
->   YACC    scripts/kconfig/parser.tab.h
->   HOSTCC  scripts/kconfig/lexer.lex.o
->   YACC    scripts/kconfig/parser.tab.c
->   HOSTCC  scripts/kconfig/parser.tab.o
->   HOSTCC  scripts/kconfig/preprocess.o
->   HOSTCC  scripts/kconfig/symbol.o
->   HOSTLD  scripts/kconfig/conf
-> scripts/kconfig/conf  --allmodconfig Kconfig
-> #
-> # configuration written to .config
-> #
->   SYSHDR  arch/arm/include/generated/uapi/asm/unistd-common.h
->   SYSHDR  arch/arm/include/generated/uapi/asm/unistd-oabi.h
->   SYSHDR  arch/arm/include/generated/uapi/asm/unistd-eabi.h
->   HOSTCC  scripts/dtc/dtc.o
->   HOSTCC  scripts/dtc/flattree.o
->   HOSTCC  scripts/dtc/fstree.o
->   HOSTCC  scripts/dtc/data.o
->   HOSTCC  scripts/dtc/livetree.o
->   HOSTCC  scripts/dtc/treesource.o
->   HOSTCC  scripts/dtc/srcpos.o
->   HOSTCC  scripts/dtc/checks.o
->   HOSTCC  scripts/dtc/util.o
->   LEX     scripts/dtc/dtc-lexer.lex.c
->   YACC    scripts/dtc/dtc-parser.tab.h
->   HOSTCC  scripts/dtc/dtc-lexer.lex.o
->   YACC    scripts/dtc/dtc-parser.tab.c
->   HOSTCC  scripts/dtc/dtc-parser.tab.o
->   HOSTCC  scripts/dtc/yamltree.o
->   HOSTLD  scripts/dtc/dtc
->   CC      scripts/gcc-plugins/latent_entropy_plugin.o
-> cc1: error: cannot load plugin ./scripts/gcc-plugins/arm_ssp_per_task_plugin.so
->    ./scripts/gcc-plugins/arm_ssp_per_task_plugin.so: cannot open
-> shared object file: No such file or directory
-> cc1: error: cannot load plugin ./scripts/gcc-plugins/structleak_plugin.so
->    ./scripts/gcc-plugins/structleak_plugin.so: cannot open shared
-> object file: No such file or directory
-> cc1: error: cannot load plugin ./scripts/gcc-plugins/latent_entropy_plugin.so
->    ./scripts/gcc-plugins/latent_entropy_plugin.so: cannot open shared
-> object file: No such file or directory
-> cc1: error: cannot load plugin ./scripts/gcc-plugins/randomize_layout_plugin.so
->    ./scripts/gcc-plugins/randomize_layout_plugin.so: cannot open
-> shared object file: No such file or directory
-> make[3]: *** [scripts/Makefile.build;281:
-> scripts/gcc-plugins/latent_entropy_plugin.o] Error 1
-> make[2]: *** [scripts/Makefile.build;497: scripts/gcc-plugins] Error 2
-> make[1]: *** [Makefile;1097: scripts] Error 2
-> make: *** [Makefile;330: __build_one_by_one] Error 2
-> 
-> 
-> 
-> 
-> 
-> 
-> 
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+new file mode 100644
+index 0000000000000..e0b34acb9ee4e
+--- /dev/null
++++ b/include/kunit/test.h
+@@ -0,0 +1,179 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Base unit test (KUnit) API.
++ *
++ * Copyright (C) 2019, Google LLC.
++ * Author: Brendan Higgins <brendanhiggins@google.com>
++ */
++
++#ifndef _KUNIT_TEST_H
++#define _KUNIT_TEST_H
++
++#include <linux/types.h>
++
++struct kunit;
++
++/**
++ * struct kunit_case - represents an individual test case.
++ * @run_case: the function representing the actual test case.
++ * @name: the name of the test case.
++ *
++ * A test case is a function with the signature, ``void (*)(struct kunit *)``
++ * that makes expectations (see KUNIT_EXPECT_TRUE()) about code under test. Each
++ * test case is associated with a &struct kunit_suite and will be run after the
++ * suite's init function and followed by the suite's exit function.
++ *
++ * A test case should be static and should only be created with the KUNIT_CASE()
++ * macro; additionally, every array of test cases should be terminated with an
++ * empty test case.
++ *
++ * Example:
++ *
++ * .. code-block:: c
++ *
++ *	void add_test_basic(struct kunit *test)
++ *	{
++ *		KUNIT_EXPECT_EQ(test, 1, add(1, 0));
++ *		KUNIT_EXPECT_EQ(test, 2, add(1, 1));
++ *		KUNIT_EXPECT_EQ(test, 0, add(-1, 1));
++ *		KUNIT_EXPECT_EQ(test, INT_MAX, add(0, INT_MAX));
++ *		KUNIT_EXPECT_EQ(test, -1, add(INT_MAX, INT_MIN));
++ *	}
++ *
++ *	static struct kunit_case example_test_cases[] = {
++ *		KUNIT_CASE(add_test_basic),
++ *		{}
++ *	};
++ *
++ */
++struct kunit_case {
++	void (*run_case)(struct kunit *test);
++	const char *name;
++
++	/* private: internal use only. */
++	bool success;
++};
++
++/**
++ * KUNIT_CASE - A helper for creating a &struct kunit_case
++ * @test_name: a reference to a test case function.
++ *
++ * Takes a symbol for a function representing a test case and creates a
++ * &struct kunit_case object from it. See the documentation for
++ * &struct kunit_case for an example on how to use it.
++ */
++#define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
++
++/**
++ * struct kunit_suite - describes a related collection of &struct kunit_case s.
++ * @name: the name of the test. Purely informational.
++ * @init: called before every test case.
++ * @exit: called after every test case.
++ * @test_cases: a null terminated array of test cases.
++ *
++ * A kunit_suite is a collection of related &struct kunit_case s, such that
++ * @init is called before every test case and @exit is called after every test
++ * case, similar to the notion of a *test fixture* or a *test class* in other
++ * unit testing frameworks like JUnit or Googletest.
++ *
++ * Every &struct kunit_case must be associated with a kunit_suite for KUnit to
++ * run it.
++ */
++struct kunit_suite {
++	const char name[256];
++	int (*init)(struct kunit *test);
++	void (*exit)(struct kunit *test);
++	struct kunit_case *test_cases;
++};
++
++/**
++ * struct kunit - represents a running instance of a test.
++ * @priv: for user to store arbitrary data. Commonly used to pass data created
++ * in the init function (see &struct kunit_suite).
++ *
++ * Used to store information about the current context under which the test is
++ * running. Most of this data is private and should only be accessed indirectly
++ * via public functions; the one exception is @priv which can be used by the
++ * test writer to store arbitrary data.
++ */
++struct kunit {
++	void *priv;
++
++	/* private: internal use only. */
++	const char *name; /* Read only after initialization! */
++	/*
++	 * success starts as true, and may only be set to false during a test
++	 * case; thus, it is safe to update this across multiple threads using
++	 * WRITE_ONCE; however, as a consequence, it may only be read after the
++	 * test case finishes once all threads associated with the test case
++	 * have terminated.
++	 */
++	bool success; /* Read only after test_case finishes! */
++};
++
++void kunit_init_test(struct kunit *test, const char *name);
++
++int kunit_run_tests(struct kunit_suite *suite);
++
++/**
++ * kunit_test_suite() - used to register a &struct kunit_suite with KUnit.
++ * @suite: a statically allocated &struct kunit_suite.
++ *
++ * Registers @suite with the test framework. See &struct kunit_suite for more
++ * information.
++ *
++ * NOTE: Currently KUnit tests are all run as late_initcalls; this means that
++ * they cannot test anything where tests must run at a different init phase. One
++ * significant restriction resulting from this is that KUnit cannot reliably
++ * test anything that is initialize in the late_init phase; another is that
++ * KUnit is useless to test things that need to be run in an earlier init phase.
++ */
++#define kunit_test_suite(suite)						       \
++		/*
++		 * TODO(brendanhiggins@google.com): Don't run all KUnit tests as
++		 * late_initcalls.  I have some future work planned to dispatch
++		 * all KUnit tests from the same place, and at the very least to
++		 * do so after everything else is definitely initialized.
++		 */							       \
++		static int kunit_suite_init##suite(void)		       \
++		{							       \
++			return kunit_run_tests(&suite);			       \
++		}							       \
++		late_initcall(kunit_suite_init##suite)
++
++void __printf(3, 4) kunit_printk(const char *level,
++				 const struct kunit *test,
++				 const char *fmt, ...);
++
++/**
++ * kunit_info() - Prints an INFO level message associated with the current test.
++ * @test: The test context object.
++ * @fmt: A printk() style format string.
++ *
++ * Prints an info level message associated with the test suite being run. Takes
++ * a variable number of format parameters just like printk().
++ */
++#define kunit_info(test, fmt, ...) \
++		kunit_printk(KERN_INFO, test, fmt, ##__VA_ARGS__)
++
++/**
++ * kunit_warn() - Prints a WARN level message associated with the current test.
++ * @test: The test context object.
++ * @fmt: A printk() style format string.
++ *
++ * Prints a warning level message.
++ */
++#define kunit_warn(test, fmt, ...) \
++		kunit_printk(KERN_WARNING, test, fmt, ##__VA_ARGS__)
++
++/**
++ * kunit_err() - Prints an ERROR level message associated with the current test.
++ * @test: The test context object.
++ * @fmt: A printk() style format string.
++ *
++ * Prints an error level message.
++ */
++#define kunit_err(test, fmt, ...) \
++		kunit_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
++
++#endif /* _KUNIT_TEST_H */
+diff --git a/kunit/Kconfig b/kunit/Kconfig
+new file mode 100644
+index 0000000000000..330ae83527c23
+--- /dev/null
++++ b/kunit/Kconfig
+@@ -0,0 +1,17 @@
++#
++# KUnit base configuration
++#
++
++menu "KUnit support"
++
++config KUNIT
++	bool "Enable support for unit tests (KUnit)"
++	help
++	  Enables support for kernel unit tests (KUnit), a lightweight unit
++	  testing and mocking framework for the Linux kernel. These tests are
++	  able to be run locally on a developer's workstation without a VM or
++	  special hardware when using UML. Can also be used on most other
++	  architectures. For more information, please see
++	  Documentation/dev-tools/kunit/.
++
++endmenu
+diff --git a/kunit/Makefile b/kunit/Makefile
+new file mode 100644
+index 0000000000000..5efdc4dea2c08
+--- /dev/null
++++ b/kunit/Makefile
+@@ -0,0 +1 @@
++obj-$(CONFIG_KUNIT) +=			test.o
+diff --git a/kunit/test.c b/kunit/test.c
+new file mode 100644
+index 0000000000000..d3dda359f99b1
+--- /dev/null
++++ b/kunit/test.c
+@@ -0,0 +1,191 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Base unit test (KUnit) API.
++ *
++ * Copyright (C) 2019, Google LLC.
++ * Author: Brendan Higgins <brendanhiggins@google.com>
++ */
++
++#include <kunit/test.h>
++#include <linux/kernel.h>
++
++static void kunit_set_failure(struct kunit *test)
++{
++	WRITE_ONCE(test->success, false);
++}
++
++static int kunit_vprintk_emit(int level, const char *fmt, va_list args)
++{
++	return vprintk_emit(0, level, NULL, 0, fmt, args);
++}
++
++static int kunit_printk_emit(int level, const char *fmt, ...)
++{
++	va_list args;
++	int ret;
++
++	va_start(args, fmt);
++	ret = kunit_vprintk_emit(level, fmt, args);
++	va_end(args);
++
++	return ret;
++}
++
++static void kunit_vprintk(const struct kunit *test,
++			  const char *level,
++			  struct va_format *vaf)
++{
++	kunit_printk_emit(level[1] - '0', "\t# %s: %pV", test->name, vaf);
++}
++
++static void kunit_print_tap_version(void)
++{
++	static bool kunit_has_printed_tap_version;
++
++	if (!kunit_has_printed_tap_version) {
++		kunit_printk_emit(LOGLEVEL_INFO, "TAP version 14\n");
++		kunit_has_printed_tap_version = true;
++	}
++}
++
++static size_t kunit_test_cases_len(struct kunit_case *test_cases)
++{
++	struct kunit_case *test_case;
++	size_t len = 0;
++
++	for (test_case = test_cases; test_case->run_case; test_case++)
++		len++;
++
++	return len;
++}
++
++static void kunit_print_subtest_start(struct kunit_suite *suite)
++{
++	kunit_print_tap_version();
++	kunit_printk_emit(LOGLEVEL_INFO, "\t# Subtest: %s\n", suite->name);
++	kunit_printk_emit(LOGLEVEL_INFO,
++			  "\t1..%zd\n",
++			  kunit_test_cases_len(suite->test_cases));
++}
++
++static void kunit_print_ok_not_ok(bool should_indent,
++				  bool is_ok,
++				  size_t test_number,
++				  const char *description)
++{
++	const char *indent, *ok_not_ok;
++
++	if (should_indent)
++		indent = "\t";
++	else
++		indent = "";
++
++	if (is_ok)
++		ok_not_ok = "ok";
++	else
++		ok_not_ok = "not ok";
++
++	kunit_printk_emit(LOGLEVEL_INFO,
++			  "%s%s %zd - %s\n",
++			  indent, ok_not_ok, test_number, description);
++}
++
++static bool kunit_suite_has_succeeded(struct kunit_suite *suite)
++{
++	const struct kunit_case *test_case;
++
++	for (test_case = suite->test_cases; test_case->run_case; test_case++)
++		if (!test_case->success)
++			return false;
++
++	return true;
++}
++
++static void kunit_print_subtest_end(struct kunit_suite *suite)
++{
++	static size_t kunit_suite_counter = 1;
++
++	kunit_print_ok_not_ok(false,
++			      kunit_suite_has_succeeded(suite),
++			      kunit_suite_counter++,
++			      suite->name);
++}
++
++static void kunit_print_test_case_ok_not_ok(struct kunit_case *test_case,
++					    size_t test_number)
++{
++	kunit_print_ok_not_ok(true,
++			      test_case->success,
++			      test_number,
++			      test_case->name);
++}
++
++void kunit_init_test(struct kunit *test, const char *name)
++{
++	test->name = name;
++	test->success = true;
++}
++
++/*
++ * Performs all logic to run a test case.
++ */
++static void kunit_run_case(struct kunit_suite *suite,
++			   struct kunit_case *test_case)
++{
++	struct kunit test;
++
++	kunit_init_test(&test, test_case->name);
++
++	if (suite->init) {
++		int ret;
++
++		ret = suite->init(&test);
++		if (ret) {
++			kunit_err(&test, "failed to initialize: %d\n", ret);
++			kunit_set_failure(&test);
++			test_case->success = test.success;
++			return;
++		}
++	}
++
++	test_case->run_case(&test);
++
++	if (suite->exit)
++		suite->exit(&test);
++
++	test_case->success = test.success;
++}
++
++int kunit_run_tests(struct kunit_suite *suite)
++{
++	struct kunit_case *test_case;
++	size_t test_case_count = 1;
++
++	kunit_print_subtest_start(suite);
++
++	for (test_case = suite->test_cases; test_case->run_case; test_case++) {
++		kunit_run_case(suite, test_case);
++		kunit_print_test_case_ok_not_ok(test_case, test_case_count++);
++	}
++
++	kunit_print_subtest_end(suite);
++
++	return 0;
++}
++
++void kunit_printk(const char *level,
++		  const struct kunit *test,
++		  const char *fmt, ...)
++{
++	struct va_format vaf;
++	va_list args;
++
++	va_start(args, fmt);
++
++	vaf.fmt = fmt;
++	vaf.va = &args;
++
++	kunit_vprintk(test, level, &vaf);
++
++	va_end(args);
++}
+-- 
+2.23.0.rc1.153.gdeed80330f-goog
 
