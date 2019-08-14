@@ -4,52 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18428C32750
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 02:38:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DA60C433FF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 02:38:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D61422133F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 02:38:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E9B602084F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 02:38:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1565750319;
-	bh=zcslmXbDP2/EosiPFy6ZMtnFs4fJr2gbROyEuLHFzO0=;
+	s=default; t=1565750328;
+	bh=ME8uYdcbeBKsE0Xjdsl7NR7jCQx95cYJx8uo04L6Xko=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=cO7dNCbysbbB+ohqzRwO693ZhjEylq5JMU3lfAJaLiQWwg8JcNAN8QanYjCNpdpt/
-	 cMXwFo9Wg2bzCzJsl3JYx0879X9gqPtEfeleuGj+A1zIoohySgwjnJnJvyVRTbX8u1
-	 yHwJ6ODQiW7kl7AWvJJx1C3BKcNzJsnlUw24qvmQ=
+	b=RdF+EFtnjOqxqXIJxM3v9lUoY8V4g2r2OWqcsIz1jvvLztAfcnnVW5ELtz3P3J9BN
+	 tnfXphcprC7OeggVZ+ZBjs4n6/G0dFAEu9yhtJey/svGI0qE51TKGY9n+FbG6wIqc3
+	 djfBCO8Sz8N59BQYptr+ReT7vJ3HaizalUi3sAs8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727738AbfHNCL6 (ORCPT
+        id S1727850AbfHNCim (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 13 Aug 2019 22:11:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44148 "EHLO mail.kernel.org"
+        Tue, 13 Aug 2019 22:38:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44048 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727703AbfHNCL6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 22:11:58 -0400
+        id S1727698AbfHNCLu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 13 Aug 2019 22:11:50 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2092420843;
-        Wed, 14 Aug 2019 02:11:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DF7522085A;
+        Wed, 14 Aug 2019 02:11:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565748718;
-        bh=zcslmXbDP2/EosiPFy6ZMtnFs4fJr2gbROyEuLHFzO0=;
+        s=default; t=1565748709;
+        bh=ME8uYdcbeBKsE0Xjdsl7NR7jCQx95cYJx8uo04L6Xko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uss+oxM/u2+X2i4+E5OIsaIodUnvgyN+qf8OTGbfLzmq+pZ4hdGb7wopWvSwgLwco
-         CffXjvAicp4+l3MTDIcJwd5jJaSvAjHB6AeT7d/JPiyoWdqmmQft72e0qZw0+ohSaV
-         XCVE9oyCN2RBUFALpTUsJ6IABXVxzHtCgrbKRttQ=
+        b=jV4TzSNWUhbOb5d0xbsJwBUGrihSqxF7Io7Pj80MhDdQzCmyLGRK8FDRUhFpden1K
+         pqeMtiXVAIuLTSLWfUPpGsvbw+A+BEr+rCOUznJnbb6N3KzBs4+77sTigRDLXeinhV
+         Th2ERWIoxkbmz6uMI32M6M94cmOV1wRXZ7hfkvYU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 035/123] selftests/bpf: add another gso_segs access
-Date:   Tue, 13 Aug 2019 22:09:19 -0400
-Message-Id: <20190814021047.14828-35-sashal@kernel.org>
+Cc:     Ido Schimmel <idosch@mellanox.com>,
+        Stephen Suryaputra <ssuryaextr@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 033/123] selftests: forwarding: gre_multipath: Fix flower filters
+Date:   Tue, 13 Aug 2019 22:09:17 -0400
+Message-Id: <20190814021047.14828-33-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190814021047.14828-1-sashal@kernel.org>
 References: <20190814021047.14828-1-sashal@kernel.org>
@@ -62,43 +61,91 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Ido Schimmel <idosch@mellanox.com>
 
-[ Upstream commit be69483bf4f3abaaca5d5ba460dbb50239463552 ]
+[ Upstream commit 1be79d89b7ae96e004911bd228ce8c2b5cc6415f ]
 
-Use BPF_REG_1 for source and destination of gso_segs read,
-to exercise "bpf: fix access to skb_shared_info->gso_segs" fix.
+The TC filters used in the test do not work with veth devices because the
+outer Ethertype is 802.1Q and not IPv4. The test passes with mlxsw
+netdevs since the hardware always looks at "The first Ethertype that
+does not point to either: VLAN, CNTAG or configurable Ethertype".
 
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Suggested-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Fix this by matching on the VLAN ID instead, but on the ingress side.
+The reason why this is not performed at egress is explained in the
+commit cited below.
+
+Fixes: 541ad323db3a ("selftests: forwarding: gre_multipath: Update next-hop statistics match criteria")
+Signed-off-by: Ido Schimmel <idosch@mellanox.com>
+Reported-by: Stephen Suryaputra <ssuryaextr@gmail.com>
+Tested-by: Stephen Suryaputra <ssuryaextr@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/verifier/ctx_skb.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ .../selftests/net/forwarding/gre_multipath.sh | 24 +++++++++----------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/verifier/ctx_skb.c b/tools/testing/selftests/bpf/verifier/ctx_skb.c
-index b0fda2877119c..d438193804b21 100644
---- a/tools/testing/selftests/bpf/verifier/ctx_skb.c
-+++ b/tools/testing/selftests/bpf/verifier/ctx_skb.c
-@@ -974,6 +974,17 @@
- 	.result = ACCEPT,
- 	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
- },
-+{
-+	"read gso_segs from CGROUP_SKB",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_1,
-+		    offsetof(struct __sk_buff, gso_segs)),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
-+},
+diff --git a/tools/testing/selftests/net/forwarding/gre_multipath.sh b/tools/testing/selftests/net/forwarding/gre_multipath.sh
+index 37d7297e1cf8a..a8d8e8b3dc819 100755
+--- a/tools/testing/selftests/net/forwarding/gre_multipath.sh
++++ b/tools/testing/selftests/net/forwarding/gre_multipath.sh
+@@ -93,18 +93,10 @@ sw1_create()
+ 	ip route add vrf v$ol1 192.0.2.16/28 \
+ 	   nexthop dev g1a \
+ 	   nexthop dev g1b
+-
+-	tc qdisc add dev $ul1 clsact
+-	tc filter add dev $ul1 egress pref 111 prot ipv4 \
+-	   flower dst_ip 192.0.2.66 action pass
+-	tc filter add dev $ul1 egress pref 222 prot ipv4 \
+-	   flower dst_ip 192.0.2.82 action pass
+ }
+ 
+ sw1_destroy()
  {
- 	"write gso_segs from CGROUP_SKB",
- 	.insns = {
+-	tc qdisc del dev $ul1 clsact
+-
+ 	ip route del vrf v$ol1 192.0.2.16/28
+ 
+ 	ip route del vrf v$ol1 192.0.2.82/32 via 192.0.2.146
+@@ -139,10 +131,18 @@ sw2_create()
+ 	ip route add vrf v$ol2 192.0.2.0/28 \
+ 	   nexthop dev g2a \
+ 	   nexthop dev g2b
++
++	tc qdisc add dev $ul2 clsact
++	tc filter add dev $ul2 ingress pref 111 prot 802.1Q \
++	   flower vlan_id 111 action pass
++	tc filter add dev $ul2 ingress pref 222 prot 802.1Q \
++	   flower vlan_id 222 action pass
+ }
+ 
+ sw2_destroy()
+ {
++	tc qdisc del dev $ul2 clsact
++
+ 	ip route del vrf v$ol2 192.0.2.0/28
+ 
+ 	ip route del vrf v$ol2 192.0.2.81/32 via 192.0.2.145
+@@ -215,15 +215,15 @@ multipath4_test()
+ 	   nexthop dev g1a weight $weight1 \
+ 	   nexthop dev g1b weight $weight2
+ 
+-	local t0_111=$(tc_rule_stats_get $ul1 111 egress)
+-	local t0_222=$(tc_rule_stats_get $ul1 222 egress)
++	local t0_111=$(tc_rule_stats_get $ul2 111 ingress)
++	local t0_222=$(tc_rule_stats_get $ul2 222 ingress)
+ 
+ 	ip vrf exec v$h1 \
+ 	   $MZ $h1 -q -p 64 -A 192.0.2.1 -B 192.0.2.18 \
+ 	       -d 1msec -t udp "sp=1024,dp=0-32768"
+ 
+-	local t1_111=$(tc_rule_stats_get $ul1 111 egress)
+-	local t1_222=$(tc_rule_stats_get $ul1 222 egress)
++	local t1_111=$(tc_rule_stats_get $ul2 111 ingress)
++	local t1_222=$(tc_rule_stats_get $ul2 222 ingress)
+ 
+ 	local d111=$((t1_111 - t0_111))
+ 	local d222=$((t1_222 - t0_222))
 -- 
 2.20.1
 
