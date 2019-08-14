@@ -2,84 +2,128 @@ Return-Path: <SRS0=7BFT=WK=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8963C433FF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 07:19:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D66A3C32753
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 10:04:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A0E81208C2
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 07:19:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1565767145;
-	bh=CgAKQPDJ39jdFLM0nBvPd2yB9ynIfZDmD15ru0dJ7Os=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:List-ID:From;
-	b=qjFdaFPX//fMQBttgrggkQpgR1fs6hGFNRxUnqjZx6zb2QPTfoB51RzNIGdXDevTG
-	 GDoW1goSiQkS6mz4KxEALETZ2U0piZ3pxYsn8lq06qE0izws5lkytAL5F+82IpIOQu
-	 V+SktHOJMXLiZjDxxk5cMV5mqMBiL1IgYhVa+JrU=
+	by mail.kernel.org (Postfix) with ESMTP id AD36B2084F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 10:04:06 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mX9zQWTJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727533AbfHNHTB (ORCPT
+        id S1726221AbfHNKEB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Aug 2019 03:19:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51934 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727447AbfHNHTB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Aug 2019 03:19:01 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EB2312084F;
-        Wed, 14 Aug 2019 07:18:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565767140;
-        bh=CgAKQPDJ39jdFLM0nBvPd2yB9ynIfZDmD15ru0dJ7Os=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=xaHZ0IYch7m/jbb9TEOjTqeFLiP9rjxW2XvyKLTklDuQ9VCWvHmVQLVD1vQiu2rnn
-         cOw3uwlSbmBaV+/CauuBCa6G8Ycn0SjO7DHdkifs3BC5XJgnHS80jI2+9Un3NHt0B8
-         RdlAMWFb7XoCTlu2ZRn/MyMMRRqi3LC5q4DnDaVA=
-Content-Type: text/plain; charset="utf-8"
+        Wed, 14 Aug 2019 06:04:01 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36119 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725861AbfHNKEB (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 14 Aug 2019 06:04:01 -0400
+Received: by mail-pf1-f196.google.com with SMTP id w2so2471194pfi.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Aug 2019 03:04:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A8hpxCTzvYAcZn9UvY3kAbimH8cB/wVPQT2NUqi4FTg=;
+        b=mX9zQWTJ21YVDsg/IO/lw3vK/5gRG1WKeYfq5hAVfRdrbxBQb/LOP7585An8TcS5uX
+         tQfD//4o9HuUJa0OuyeBf0yYOxvzPAaOMjQC0e2XsG/XzCmrU1JU4X/cHR16Fl4JFHLe
+         Zi0Tt+GUrI9Wq+kCxNmISk1ZO0HC18yrn6Nwe48kfT9CiA+xyYq2zY+VKjPraHI0VO+y
+         z/s0hx02KzWhdnSkkt85Mam6mmVNYQ/kS61kWPXi/v/57imnYMdAPEqFsVlbDExrl+Ld
+         2hdI8g4c1e8Cjj/bm8uvF1dfC8bBYtWFJT7eA1eUTgYFQ5SiQc/BI8jH+SCjQE2t4VrR
+         5trQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A8hpxCTzvYAcZn9UvY3kAbimH8cB/wVPQT2NUqi4FTg=;
+        b=OwvsZGeUgTmKdTC5g8xED6G94wnKcLmgkPJ9LZzB00WZL0aeodH2aBMVtCjoCNhevm
+         tNRZSpWrIam5RX8i/lmYaYHt5pchCF/8H8w3YbgsX/3v4YamIZvT58pFgOko0s1F3jI1
+         VnTMygmZidqgmNPC4pWOIN6CCg2YM980DZxk3UO2rzdrn7mYMYYaOuDpdW9SJKx9xQMc
+         cX3U0IOy+ilmHsKV8UAkzSHWBMMxJ3oYv6h6WIkNgS2cktFHl9d6qemlUVIZEZtC7FGn
+         9qYhBMhO9pZbfslh8RiiAGj5a31b23MZG4/LfVZf4W1qtJPSimskDFU4YcxAgZj2Dsib
+         zchw==
+X-Gm-Message-State: APjAAAWU2WkSOb2Yb8OOH5YZ2/AkqU8hCjTkDK49yqupjeG2EDjVcyi2
+        kPOLgVGKEbV9WOyLWoFcvGiczmPydz495aeER7e6Hg==
+X-Google-Smtp-Source: APXvYqxyXqiNwjdTK3oFKny5yM7CmoKjVDpDDnZBrvH4fSE28h1/JfZ1mGpG1xfSCFWK+kgS1gJNI6SNjgBRmNUJeQM=
+X-Received: by 2002:a63:205f:: with SMTP id r31mr36074127pgm.159.1565777039574;
+ Wed, 14 Aug 2019 03:03:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190814055108.214253-15-brendanhiggins@google.com>
-References: <20190814055108.214253-1-brendanhiggins@google.com> <20190814055108.214253-15-brendanhiggins@google.com>
-Subject: Re: [PATCH v13 14/18] kunit: defconfig: add defconfigs for building KUnit tests
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
-        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
-        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
-        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        jpoimboe@redhat.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        peterz@infradead.org, robh@kernel.org, shuah@kernel.org,
-        tytso@mit.edu, yamada.masahiro@socionext.com
-User-Agent: alot/0.8.1
-Date:   Wed, 14 Aug 2019 00:18:59 -0700
-Message-Id: <20190814071859.EB2312084F@mail.kernel.org>
+References: <20190814055108.214253-1-brendanhiggins@google.com>
+In-Reply-To: <20190814055108.214253-1-brendanhiggins@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 14 Aug 2019 03:03:47 -0700
+Message-ID: <CAFd5g45NdQEcP0JQpZc3HYYgNZfsBsHL+ByXRK+OupWObwMuqg@mail.gmail.com>
+Subject: Re: [PATCH v13 00/18] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+To:     Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        shuah <shuah@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quoting Brendan Higgins (2019-08-13 22:51:04)
-> Add defconfig for UML and a fragment that can be used to configure other
-> architectures for building KUnit tests. Add option to kunit_tool to use
-> a defconfig to create the kunitconfig.
->=20
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-> ---
+On Tue, Aug 13, 2019 at 10:52 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> ## TL;DR
+>
+> This revision addresses comments from Stephen and Bjorn Helgaas. Most
+> changes are pretty minor stuff that doesn't affect the API in anyway.
+> One significant change, however, is that I added support for freeing
+> kunit_resource managed resources before the test case is finished via
+> kunit_resource_destroy(). Additionally, Bjorn pointed out that I broke
+> KUnit on certain configurations (like the default one for x86, whoops).
+>
+> Based on Stephen's feedback on the previous change, I think we are
+> pretty close. I am not expecting any significant changes from here on
+> out.
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Stephen, it looks like you have just replied with "Reviewed-bys" on
+all the remaining emails that you looked at. Is there anything else
+that we are missing? Or is this ready for Shuah to apply?
 
+[...]
+
+Cheers!
