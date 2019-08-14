@@ -6,44 +6,44 @@ X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5484C0650F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 07:17:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9050C0650F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 07:18:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D4D12084F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 07:17:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BFA98214DA
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Aug 2019 07:18:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1565767077;
-	bh=fFSODLNozIGjhPTZNb2HDDCi9OpfDQhPl8bfSqvMcsU=;
+	s=default; t=1565767124;
+	bh=pa8ZM0cB7Ynd5h1v6jDVACGMr40DuVATemDtrICxNrI=;
 	h=In-Reply-To:References:Subject:From:Cc:To:Date:List-ID:From;
-	b=BqP4PV9r78mmUaWELvm0kYJc0PtOZNik4gTYONQTV+V//RLppwN7lOaSPIhvhM/pf
-	 8DrqYbRO7qucHLrOLV1lN2j2/dEn8zRyB/aERplw/3RLlvN5wa5oXprAyuJPKcVUmb
-	 u3wUqXEy4GdD/3uLy9j5pXdEO9eiWdWq80T6UJNI=
+	b=Fyc71T9D8G5JScEk5YMpiHZ4LOKsWEUzPIHaLjsHTmUf3PPHry1GJzcrOUsbopPcY
+	 0ILIwswH4LqLvXCYhcHr/Yuw7YLBNcovWEtSIqAeSYtX1K57NugnpirIq6YzX2t8bx
+	 TkvvjQAStABRz9/JBKSobZdM+nY90wgFyMWV7Exw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727608AbfHNHRx (ORCPT
+        id S1727297AbfHNHSm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Aug 2019 03:17:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51564 "EHLO mail.kernel.org"
+        Wed, 14 Aug 2019 03:18:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51750 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727100AbfHNHRx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Aug 2019 03:17:53 -0400
+        id S1726947AbfHNHSm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 14 Aug 2019 03:18:42 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1CF0F2054F;
-        Wed, 14 Aug 2019 07:17:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E76072054F;
+        Wed, 14 Aug 2019 07:18:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565767072;
-        bh=fFSODLNozIGjhPTZNb2HDDCi9OpfDQhPl8bfSqvMcsU=;
+        s=default; t=1565767121;
+        bh=pa8ZM0cB7Ynd5h1v6jDVACGMr40DuVATemDtrICxNrI=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Tig6bqO+uLutcqoP8F96ocG1Zw8W4tfd0g/H7BQWrNvKiL9x7S1IaLUnEFmD/GI5B
-         3SZl55sPYQvUA5FzyIIn/HDJC+7sZkqtLbaf9LMihXQ+w5Rq1lRJj6TTVrLTSzMJ6b
-         Y6Dgtp5Id7PoxZl5W+jvWsXN4ST7X/w3KSvEKsMI=
+        b=gFnMnbltojWFSsXrQHAtHzmV8Q0rNvZIWkw018qtr3Fxuh94zPr/qzmIgXjlo/Pzb
+         ueeNYjpdxcdtYM/fj/HS0Gzo8HhvRxS/Pbf3S8gXc0JRsgzdUsUzYLi6pw/xzuct4F
+         D32CJqllklCakBmqBQMSV8Swqw4sBNLi+YJG9e0o=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190814055108.214253-4-brendanhiggins@google.com>
-References: <20190814055108.214253-1-brendanhiggins@google.com> <20190814055108.214253-4-brendanhiggins@google.com>
-Subject: Re: [PATCH v13 03/18] kunit: test: add string_stream a std::stream like string builder
+In-Reply-To: <20190814055108.214253-13-brendanhiggins@google.com>
+References: <20190814055108.214253-1-brendanhiggins@google.com> <20190814055108.214253-13-brendanhiggins@google.com>
+Subject: Re: [PATCH v13 12/18] kunit: test: add tests for KUnit managed resources
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
@@ -56,7 +56,8 @@ Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
         mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
         richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>
+        wfg@linux.intel.com, Avinash Kondareddy <akndr41@gmail.com>,
+        Brendan Higgins <brendanhiggins@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         frowand.list@gmail.com, gregkh@linuxfoundation.org,
         jpoimboe@redhat.com, keescook@google.com,
@@ -64,29 +65,26 @@ To:     Brendan Higgins <brendanhiggins@google.com>,
         peterz@infradead.org, robh@kernel.org, shuah@kernel.org,
         tytso@mit.edu, yamada.masahiro@socionext.com
 User-Agent: alot/0.8.1
-Date:   Wed, 14 Aug 2019 00:17:51 -0700
-Message-Id: <20190814071752.1CF0F2054F@mail.kernel.org>
+Date:   Wed, 14 Aug 2019 00:18:40 -0700
+Message-Id: <20190814071840.E76072054F@mail.kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quoting Brendan Higgins (2019-08-13 22:50:53)
-> A number of test features need to do pretty complicated string printing
-> where it may not be possible to rely on a single preallocated string
-> with parameters.
+Quoting Brendan Higgins (2019-08-13 22:51:02)
+> From: Avinash Kondareddy <akndr41@gmail.com>
 >=20
-> So provide a library for constructing the string as you go similar to
-> C++'s std::string. string_stream is really just a string builder,
-> nothing more.
+> Add unit tests for KUnit managed resources. KUnit managed resources
+> (struct kunit_resource) are resources that are automatically cleaned up
+> at the end of a KUnit test, similar to the concept of devm_* managed
+> resources.
 >=20
+> Signed-off-by: Avinash Kondareddy <akndr41@gmail.com>
 > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
 > ---
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-
-The spinlocks will probably need to change to be irqsaves in the future,
-but I guess we can cross that bridge when we come to it.
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 
