@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F94EC3A59C
-	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Aug 2019 00:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E2ABC3A589
+	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Aug 2019 00:10:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D5DEC21773
-	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Aug 2019 00:10:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC66D2089E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Aug 2019 00:10:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="UyJlZup3"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="SiGOxa4o"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726464AbfHPAKC (ORCPT
+        id S1726298AbfHPAJ5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 15 Aug 2019 20:10:02 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38768 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726441AbfHPAKB (ORCPT
+        Thu, 15 Aug 2019 20:09:57 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:43879 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726295AbfHPAJ5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Aug 2019 20:10:01 -0400
-Received: by mail-pf1-f195.google.com with SMTP id o70so2157103pfg.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2019 17:10:01 -0700 (PDT)
+        Thu, 15 Aug 2019 20:09:57 -0400
+Received: by mail-pg1-f194.google.com with SMTP id k3so2012100pgb.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2019 17:09:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=XVcmO8RzpRC/BFyAhdGsg6GtacmmL8vW5DzIGcj2y00=;
-        b=UyJlZup3Cv7yWgUuLvmQAnNfqDuhuM74GoMYvrExOhXCciNnhsHNjBZs2PEruaFfjG
-         Jcui7w1fA8S36tDl5u6QHeKZF53YBkNnI8NRPTT9EsiCecxj3lysIb5IqKM09mKOGb1+
-         UDcxcyEFboiIxHynVYAC8K3EeVb9qsmZqVhaw=
+        bh=QdO+KVP1+sss46fGBNGuzASBMGiLUw4LDdShHVqVS8g=;
+        b=SiGOxa4oChRUrJQDP/9WW9hEK3Q7GEDfzQioPwOA4DoanEr7H9XLhn3g4CCzTNjEbR
+         QKg7ZhjgONqSMIffm8B2BmBOv+ICZjEv1O+9dICsOZiFfZgsi7r2pt9T/FS9S9tMq+Tf
+         4aOvx45ebDQyuYGew9Aw/jjLKO8/yufhC6IuI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=XVcmO8RzpRC/BFyAhdGsg6GtacmmL8vW5DzIGcj2y00=;
-        b=m7O7zIwYan3GD6pppy5LCvQGTsbxx3zCxkc5dNNXouJt2gnVLtI9yBcrx865t6JLlc
-         hTv/kpZ437cRpWIchTbXE4J0xQMikvMPvi8M/5Sw/058h6Z/Ntdqft/b9Ogdj6R7NhFv
-         0MqtzSn9F4traJaoqytypQLKAq0IuLJ1ep+ewIq9luac/8aWK6mN7U+Ua05Y3g5FHpp+
-         bdpC5+Jb119R96Tmz7GTCW4i1rgg6r0pjX3mn/gPO0ZsEMfqAgWqEX9XYuk7g/amnn6a
-         SWKQKcWd4E+G6znkAv4WqahnkKz6Hb+PnVN6k8cJ265bSNkbbMna2rAwoUswXJGRqgzZ
-         LQ/g==
-X-Gm-Message-State: APjAAAUOSMFqVbH6cdZCFczYa0oXyJq50qTPcfOaKS+im+Xxyw8j1ZGV
-        K4ookebAM7vzEgNFr5di3jmk4g==
-X-Google-Smtp-Source: APXvYqwAprqv8uGMD++iNatIdUckz9u8bL8pKGeHjyJM0EavcZ5h0ap9TeggfP0kBtQm1ZfTd3GqbQ==
-X-Received: by 2002:a17:90a:b947:: with SMTP id f7mr4557928pjw.63.1565914200957;
-        Thu, 15 Aug 2019 17:10:00 -0700 (PDT)
+        bh=QdO+KVP1+sss46fGBNGuzASBMGiLUw4LDdShHVqVS8g=;
+        b=SVNpL02f7f4hKRHzkPF4G2xxAnqq09mayPMF/hLBIpFdk2l49JYRjJQ4tmFw3gv4/U
+         EFMO8caPloGqcf7izNIvBnJVQ7dZ00qc82t2ljXUQcS6C7/nMCo1OHoAYDbrBsBNjKLM
+         ffxzSXOlSRfRcZkkaM96HwhAxQI+TZV2FGr9ZPqEJp8hOzy0SZBJk9hvmmgqPRSVpLR0
+         LHU0hDrZGrIH7bMvJFhNUrisPAnrK73Uh9HkywdmKXOn8L4/SLOet9mRkEPvOvoluZeN
+         vN8heW2jXqTuy7/+VAl6zA43fbTG/p7cH8p81LtNB4qAgCXyObr2EyzGLh1mH9rPaJIj
+         PtgA==
+X-Gm-Message-State: APjAAAWCVKpK++Er4dMTOHXYUVh0NVdlfNhIzfT3fDkqeORr8JlFAYwx
+        DbysmCKibl48jNUJS/rk39fQNQ==
+X-Google-Smtp-Source: APXvYqybWBOdTqtForqqs5AXfctJmFJuGpFhCmJcKMASp2u0bNvd1fYKk9MUyCUmcumZ7pokMfTldg==
+X-Received: by 2002:aa7:97aa:: with SMTP id d10mr8052048pfq.176.1565914196045;
+        Thu, 15 Aug 2019 17:09:56 -0700 (PDT)
 Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id g2sm4056916pfi.26.2019.08.15.17.09.58
+        by smtp.gmail.com with ESMTPSA id g2sm4056916pfi.26.2019.08.15.17.09.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2019 17:10:00 -0700 (PDT)
+        Thu, 15 Aug 2019 17:09:55 -0700 (PDT)
 From:   Scott Branden <scott.branden@broadcom.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -70,9 +70,9 @@ Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
         Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH 3/3] firmware: add mutex fw_lock_fallback for race condition
-Date:   Thu, 15 Aug 2019 17:09:45 -0700
-Message-Id: <20190816000945.29810-4-scott.branden@broadcom.com>
+Subject: [PATCH 1/3] test_firmware: add support for request_firmware_into_buf
+Date:   Thu, 15 Aug 2019 17:09:43 -0700
+Message-Id: <20190816000945.29810-2-scott.branden@broadcom.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190816000945.29810-1-scott.branden@broadcom.com>
 References: <20190816000945.29810-1-scott.branden@broadcom.com>
@@ -81,79 +81,140 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A race condition exists between _request_firmware_prepare checking
-if firmware is assigned and firmware_fallback_sysfs creating a sysfs
-entry (kernel trace below).  To avoid such condition add a mutex
-fw_lock_fallback to protect against such condition.
-
-misc test_firmware: Falling back to sysfs fallback for: nope-test-firmware.bin
-sysfs: cannot create duplicate filename '/devices/virtual/misc/test_firmware/nope-test-firmware.bin'
-CPU: 4 PID: 2059 Comm: test_firmware-3 Not tainted 5.3.0-rc4 #1
-Hardware name: Dell Inc. OptiPlex 7010/0KRC95, BIOS A13 03/25/2013
-Call Trace:
- dump_stack+0x67/0x90
- sysfs_warn_dup.cold+0x17/0x24
- sysfs_create_dir_ns+0xb3/0xd0
- kobject_add_internal+0xa6/0x2a0
- kobject_add+0x7e/0xb0
- ? _cond_resched+0x15/0x30
- device_add+0x121/0x670
- firmware_fallback_sysfs+0x15c/0x3c9
- _request_firmware+0x432/0x5a0
- ? devres_find+0x63/0xc0
- request_firmware_into_buf+0x63/0x80
- test_fw_run_batch_request+0x96/0xe0
- kthread+0xfb/0x130
- ? reset_store+0x30/0x30
- ? kthread_park+0x80/0x80
- ret_from_fork+0x3a/0x50
-kobject_add_internal failed for nope-test-firmware.bin with -EEXIST, don't try to register things with the same name in the same directory.
+Add test config into_buf to allow request_firmware_into_buf to be
+called instead of request_firmware/request_firmware_direct.  The number
+of parameters differ calling request_firmware_into_buf and support
+has not been added to test such api in test_firmware until now.
 
 Signed-off-by: Scott Branden <scott.branden@broadcom.com>
 ---
- drivers/base/firmware_loader/main.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ lib/test_firmware.c | 50 +++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 48 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-index bf44c79beae9..ce9896e3b782 100644
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -88,6 +88,7 @@ static inline struct fw_priv *to_fw_priv(struct kref *ref)
- /* fw_lock could be moved to 'struct fw_sysfs' but since it is just
-  * guarding for corner cases a global lock should be OK */
- DEFINE_MUTEX(fw_lock);
-+DEFINE_MUTEX(fw_lock_fallback);
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index 6ca97a63b3d6..1aa430228ae6 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -18,6 +18,7 @@
+ #include <linux/device.h>
+ #include <linux/fs.h>
+ #include <linux/miscdevice.h>
++#include <linux/sizes.h>
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
+ #include <linux/delay.h>
+@@ -26,6 +27,7 @@
  
- static struct firmware_cache fw_cache;
+ #define TEST_FIRMWARE_NAME	"test-firmware.bin"
+ #define TEST_FIRMWARE_NUM_REQS	4
++#define TEST_FIRMWARE_BUF_SIZE	SZ_1K
  
-@@ -758,6 +759,17 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
- 	if (!firmware_p)
- 		return -EINVAL;
+ static DEFINE_MUTEX(test_fw_mutex);
+ static const struct firmware *test_firmware;
+@@ -45,6 +47,8 @@ struct test_batched_req {
+  * test_config - represents configuration for the test for different triggers
+  *
+  * @name: the name of the firmware file to look for
++ * @into_buf: when the into_buf is used if this is true
++ *	request_firmware_into_buf() will be used instead.
+  * @sync_direct: when the sync trigger is used if this is true
+  *	request_firmware_direct() will be used instead.
+  * @send_uevent: whether or not to send a uevent for async requests
+@@ -83,6 +87,7 @@ struct test_batched_req {
+  */
+ struct test_config {
+ 	char *name;
++	bool into_buf;
+ 	bool sync_direct;
+ 	bool send_uevent;
+ 	u8 num_requests;
+@@ -176,6 +181,7 @@ static int __test_firmware_config_init(void)
  
-+	/*
-+	 * There is a race condition between _request_firmware_prepare checking
-+	 * if firmware is assigned and firmware_fallback_sysfs creating sysfs
-+	 * entries with duplicate names.
-+	 * Yet, with this lock the firmware_test locks up with cache enabled
-+	 * and no event used during firmware test.
-+	 * This points to some very racy code I don't know how to entirely fix.
-+	 */
-+	if (opt_flags & FW_OPT_NOCACHE)
-+		mutex_lock(&fw_lock_fallback);
+ 	test_fw_config->num_requests = TEST_FIRMWARE_NUM_REQS;
+ 	test_fw_config->send_uevent = true;
++	test_fw_config->into_buf = false;
+ 	test_fw_config->sync_direct = false;
+ 	test_fw_config->req_firmware = request_firmware;
+ 	test_fw_config->test_result = 0;
+@@ -244,6 +250,9 @@ static ssize_t config_show(struct device *dev,
+ 			test_fw_config->send_uevent ?
+ 			"FW_ACTION_HOTPLUG" :
+ 			"FW_ACTION_NOHOTPLUG");
++	len += scnprintf(buf+len, PAGE_SIZE - len,
++			"into_buf:\t\t%s\n",
++			test_fw_config->into_buf ? "true" : "false");
+ 	len += scnprintf(buf+len, PAGE_SIZE - len,
+ 			"sync_direct:\t\t%s\n",
+ 			test_fw_config->sync_direct ? "true" : "false");
+@@ -393,6 +402,23 @@ static ssize_t config_num_requests_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RW(config_num_requests);
+ 
++static ssize_t config_into_buf_store(struct device *dev,
++					struct device_attribute *attr,
++					const char *buf, size_t count)
++{
++	return test_dev_config_update_bool(buf,
++					   count,
++					   &test_fw_config->into_buf);
++}
 +
- 	if (!name || name[0] == '\0') {
- 		ret = -EINVAL;
- 		goto out;
-@@ -791,6 +803,9 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
- 		fw = NULL;
++static ssize_t config_into_buf_show(struct device *dev,
++				       struct device_attribute *attr,
++				       char *buf)
++{
++	return test_dev_config_show_bool(buf, test_fw_config->into_buf);
++}
++static DEVICE_ATTR_RW(config_into_buf);
++
+ static ssize_t config_sync_direct_store(struct device *dev,
+ 					struct device_attribute *attr,
+ 					const char *buf, size_t count)
+@@ -522,7 +548,7 @@ static ssize_t trigger_async_request_store(struct device *dev,
+ 		rc = count;
+ 	} else {
+ 		pr_err("failed to async load firmware\n");
+-		rc = -ENODEV;
++		rc = -ENOMEM;
  	}
  
-+	if (opt_flags & FW_OPT_NOCACHE)
-+		mutex_unlock(&fw_lock_fallback);
+ out:
+@@ -585,7 +611,26 @@ static int test_fw_run_batch_request(void *data)
+ 		return -EINVAL;
+ 	}
+ 
+-	req->rc = test_fw_config->req_firmware(&req->fw, req->name, req->dev);
++	if (test_fw_config->into_buf) {
++		void *test_buf;
 +
- 	*firmware_p = fw;
- 	return ret;
- }
++		test_buf = kzalloc(TEST_FIRMWARE_BUF_SIZE, GFP_KERNEL);
++		if (!test_buf)
++			return -ENOSPC;
++
++		req->rc = request_firmware_into_buf(&req->fw,
++						    req->name,
++						    req->dev,
++						    test_buf,
++						    TEST_FIRMWARE_BUF_SIZE);
++		if (!req->fw)
++			kfree(test_buf);
++	} else {
++		req->rc = test_fw_config->req_firmware(&req->fw,
++						       req->name,
++						       req->dev);
++	}
++
+ 	if (req->rc) {
+ 		pr_info("#%u: batched sync load failed: %d\n",
+ 			req->idx, req->rc);
+@@ -849,6 +894,7 @@ static struct attribute *test_dev_attrs[] = {
+ 	TEST_FW_DEV_ATTR(config),
+ 	TEST_FW_DEV_ATTR(config_name),
+ 	TEST_FW_DEV_ATTR(config_num_requests),
++	TEST_FW_DEV_ATTR(config_into_buf),
+ 	TEST_FW_DEV_ATTR(config_sync_direct),
+ 	TEST_FW_DEV_ATTR(config_send_uevent),
+ 	TEST_FW_DEV_ATTR(config_read_fw_idx),
 -- 
 2.17.1
 
