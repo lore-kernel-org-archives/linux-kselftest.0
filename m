@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D584EC3A589
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Aug 2019 23:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D443CC3A59E
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Aug 2019 23:22:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9CF8F23404
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Aug 2019 23:22:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A8174233FE
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Aug 2019 23:22:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oVhAqCHf"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JPSvTdqr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbfHTXWI (ORCPT
+        id S1726767AbfHTXVS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Aug 2019 19:22:08 -0400
-Received: from mail-qk1-f202.google.com ([209.85.222.202]:46989 "EHLO
-        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726882AbfHTXV3 (ORCPT
+        Tue, 20 Aug 2019 19:21:18 -0400
+Received: from mail-qt1-f202.google.com ([209.85.160.202]:40274 "EHLO
+        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726695AbfHTXVR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Aug 2019 19:21:29 -0400
-Received: by mail-qk1-f202.google.com with SMTP id c79so209670qkg.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Aug 2019 16:21:27 -0700 (PDT)
+        Tue, 20 Aug 2019 19:21:17 -0400
+Received: by mail-qt1-f202.google.com with SMTP id e32so607549qtc.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Aug 2019 16:21:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=6GIvcQlkCtdAi30r1LnLRHUgjIjXimHY6JEil5FCkXw=;
-        b=oVhAqCHfYnXucGOz017sxTeTlkCLNf6lBjDC8HpFiXB8yeBo5WR8Lip4M4FSL0JJbm
-         jsUNdzPt3oHvxAhD69V2xLuHzolCc/lyn34zrZ/14EImCT586L+8HsZ8rWLt0aYvmnbp
-         7CfmoI4KiX/Jg8x5mNQ75tRnyBci8RAsHR0uMmYAMeGpQw+aFRJxSnjg3VEBXNcWq6td
-         Ijweh1XHlppsKGkteDdGx7Jcb7PTfIpoZnchD29E5soMUFsetBtk3c8AKMNIyNV4HfVc
-         pI1uHahLpL+uyCNhMSDDuJPAGgtmhKTdFz+R3+Z6WJoPpAosekpQp2hgEwXUIMXEUH+U
-         JJaA==
+        bh=dJI3f1SN7FHCWsT2YqJJAK+Vl1EvHBTDcI6eHyMtfac=;
+        b=JPSvTdqrh5Hh7hmPhj7PWqFqjSO1pIitbg6P2pVs6R16DndX+uXzWVgyVVrWOFqwkb
+         krpCIxpzbHY6OSf1BUFGonJTCWm2ABvcgKj+4ZkhPReEXTRKKgxCHtCYVoPySSPzRxdu
+         DkJbZieHqOXFNnUqmCSsNo9Tukc3/7f58R2FRI/eWpyzGwwMUhQCebkt72Oi2fDqSbkV
+         cti+345QxDVHZxwO+deZlFSFk1yEcErYxJM0g/FN6264KIjdj+ogwLW5Ni5WRRQSqqVW
+         5kFNE7dRZSLPPX1nSVetLzZP5UI4scCNwGBlpIGf1Bqai6FTQz1NbkglGkpv6/BArW7W
+         B4WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=6GIvcQlkCtdAi30r1LnLRHUgjIjXimHY6JEil5FCkXw=;
-        b=M2vE2RfSKUEJHHhJZja33h8H99C9GfUtCKc8VISI/87eZC2G+VENFFuHaussslYZ1F
-         n2v0enb5CDAozXIYLK+fAu54TTjeKTA9mdgFP6sKtmp2mdbQfBRJ84zl0lK/E5zVQCgW
-         oyC3e3RSAS4nsseSSdhpiR2BdTTI/0gsOjtJ3Pl/+drm6T9o5IS10/eRwyjXFwfWevrZ
-         eGqRrExYuXjEuwLEvf3AwrW8WQF1Xt//912SH5Ut57Wn/panpmD/MmfzyczSdwHhdhTE
-         xCZ2ZF74Y0l85fLoLuxRSA7W5IOSfF7bpb+HJvuW8UbBhS1E/DZZd6ca3hQ/5f3Qrnhl
-         xO9Q==
-X-Gm-Message-State: APjAAAW0EVuIArhWFcFgDLzxN7QAZBT2G7VEDtBYVVz0+dFfVSLAJNNu
-        NilIOrE1+Ru+VSjsn2S3yD+doQKFNvSsC0ECcMQa7w==
-X-Google-Smtp-Source: APXvYqxd7eNoHBnTYDwBmXbm9bp6qnWnVNc7tsUhOZdOd8/M7VsqlsRqVpVWg+4vwlQYZmXpHG33tTk6DdogMZWxDs1qaA==
-X-Received: by 2002:ac8:7344:: with SMTP id q4mr29268226qtp.338.1566343287141;
- Tue, 20 Aug 2019 16:21:27 -0700 (PDT)
-Date:   Tue, 20 Aug 2019 16:20:40 -0700
+        bh=dJI3f1SN7FHCWsT2YqJJAK+Vl1EvHBTDcI6eHyMtfac=;
+        b=oqPIVS3BmTDbvEWnYlx5y+JECcU3mc0BrtAzWWueDowJNsM2IFZtelf0TDidZ6FUD7
+         ItFQFLB5GrwvhbDkl1FMEPc4Jd12DWy1XGvGwrtr6ek5Hj/ivzaBneuyyFPyP1iHFyZB
+         oQfa48aI9tffx4vDsN7XcDiI17LN2u1RygwfY+hkWjnDwcdf5prL5HsvoSpKvw5pY+AD
+         eRhpKQh0wwAfSKOiAwMcAG/2hgtYC0Hiv5vbDWxPkgyqtTS/k80QjI4GuyxC7BFgTFor
+         mhjBKJpFzo+Nrjd4GBA0zfDsYY6SPf2XZpn1Kp6wyrSXumGshSPk0LZOBfn5DnuMdx0G
+         7Htg==
+X-Gm-Message-State: APjAAAV/HlttFFR4fVgowcEwpEQs6+dLrL7ISB2kC3TbMJbkTicM+Lpb
+        WokQ46+PhpgtunBK852FKZT7VQsjItGsiSQuKS10Lw==
+X-Google-Smtp-Source: APXvYqyHSDrw/H0KHUwTj03jK169STEQ/ER8j6HHgZyfEVFWAzdBG41wuCfhIFzlcxq30giOP1Z93ZVa6G2k4a5fw8FcGA==
+X-Received: by 2002:ad4:45d3:: with SMTP id v19mr16123072qvt.90.1566343275753;
+ Tue, 20 Aug 2019 16:21:15 -0700 (PDT)
+Date:   Tue, 20 Aug 2019 16:20:36 -0700
 In-Reply-To: <20190820232046.50175-1-brendanhiggins@google.com>
-Message-Id: <20190820232046.50175-13-brendanhiggins@google.com>
+Message-Id: <20190820232046.50175-9-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20190820232046.50175-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
-Subject: [PATCH v14 12/18] kunit: test: add tests for KUnit managed resources
+Subject: [PATCH v14 08/18] objtool: add kunit_try_catch_throw to the noreturn list
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
         jpoimboe@redhat.com, keescook@google.com,
@@ -77,266 +77,44 @@ Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
         mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
         richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Avinash Kondareddy <akndr41@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>
+        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>,
+        kbuild test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Avinash Kondareddy <akndr41@gmail.com>
+Fix the following warning seen on GCC 7.3:
+  kunit/test-test.o: warning: objtool: kunit_test_unsuccessful_try() falls through to next function kunit_test_catch()
 
-Add unit tests for KUnit managed resources. KUnit managed resources
-(struct kunit_resource) are resources that are automatically cleaned up
-at the end of a KUnit test, similar to the concept of devm_* managed
-resources.
+kunit_try_catch_throw is a function added in the following patch in this
+series; it allows KUnit, a unit testing framework for the kernel, to
+bail out of a broken test. As a consequence, it is a new __noreturn
+function that objtool thinks is broken (as seen above). So fix this
+warning by adding kunit_try_catch_throw to objtool's noreturn list.
 
-Signed-off-by: Avinash Kondareddy <akndr41@gmail.com>
+Reported-by: kbuild test robot <lkp@intel.com>
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Link: https://www.spinics.net/lists/linux-kbuild/msg21708.html
+Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- kunit/test-test.c | 228 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 228 insertions(+)
+ tools/objtool/check.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kunit/test-test.c b/kunit/test-test.c
-index e0ab4bd546eac..5ebe059d16e25 100644
---- a/kunit/test-test.c
-+++ b/kunit/test-test.c
-@@ -101,3 +101,231 @@ static struct kunit_suite kunit_try_catch_test_suite = {
- 	.test_cases = kunit_try_catch_test_cases,
- };
- kunit_test_suite(kunit_try_catch_test_suite);
-+
-+/*
-+ * Context for testing test managed resources
-+ * is_resource_initialized is used to test arbitrary resources
-+ */
-+struct kunit_test_resource_context {
-+	struct kunit test;
-+	bool is_resource_initialized;
-+	int allocate_order[2];
-+	int free_order[2];
-+};
-+
-+static int fake_resource_init(struct kunit_resource *res, void *context)
-+{
-+	struct kunit_test_resource_context *ctx = context;
-+
-+	res->allocation = &ctx->is_resource_initialized;
-+	ctx->is_resource_initialized = true;
-+	return 0;
-+}
-+
-+static void fake_resource_free(struct kunit_resource *res)
-+{
-+	bool *is_resource_initialized = res->allocation;
-+
-+	*is_resource_initialized = false;
-+}
-+
-+static void kunit_resource_test_init_resources(struct kunit *test)
-+{
-+	struct kunit_test_resource_context *ctx = test->priv;
-+
-+	kunit_init_test(&ctx->test, "testing_test_init_test");
-+
-+	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
-+}
-+
-+static void kunit_resource_test_alloc_resource(struct kunit *test)
-+{
-+	struct kunit_test_resource_context *ctx = test->priv;
-+	struct kunit_resource *res;
-+	kunit_resource_free_t free = fake_resource_free;
-+
-+	res = kunit_alloc_and_get_resource(&ctx->test,
-+					   fake_resource_init,
-+					   fake_resource_free,
-+					   GFP_KERNEL,
-+					   ctx);
-+
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, res);
-+	KUNIT_EXPECT_PTR_EQ(test,
-+			    &ctx->is_resource_initialized,
-+			    (bool *) res->allocation);
-+	KUNIT_EXPECT_TRUE(test, list_is_last(&res->node, &ctx->test.resources));
-+	KUNIT_EXPECT_PTR_EQ(test, free, res->free);
-+}
-+
-+static void kunit_resource_test_destroy_resource(struct kunit *test)
-+{
-+	struct kunit_test_resource_context *ctx = test->priv;
-+	struct kunit_resource *res = kunit_alloc_and_get_resource(
-+			&ctx->test,
-+			fake_resource_init,
-+			fake_resource_free,
-+			GFP_KERNEL,
-+			ctx);
-+
-+	KUNIT_ASSERT_FALSE(test,
-+			   kunit_resource_destroy(&ctx->test,
-+						  kunit_resource_instance_match,
-+						  res->free,
-+						  res->allocation));
-+
-+	KUNIT_EXPECT_FALSE(test, ctx->is_resource_initialized);
-+	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
-+}
-+
-+static void kunit_resource_test_cleanup_resources(struct kunit *test)
-+{
-+	int i;
-+	struct kunit_test_resource_context *ctx = test->priv;
-+	struct kunit_resource *resources[5];
-+
-+	for (i = 0; i < ARRAY_SIZE(resources); i++) {
-+		resources[i] = kunit_alloc_and_get_resource(&ctx->test,
-+							    fake_resource_init,
-+							    fake_resource_free,
-+							    GFP_KERNEL,
-+							    ctx);
-+	}
-+
-+	kunit_cleanup(&ctx->test);
-+
-+	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
-+}
-+
-+static void kunit_resource_test_mark_order(int order_array[],
-+					   size_t order_size,
-+					   int key)
-+{
-+	int i;
-+
-+	for (i = 0; i < order_size && order_array[i]; i++)
-+		;
-+
-+	order_array[i] = key;
-+}
-+
-+#define KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, order_field, key)		       \
-+		kunit_resource_test_mark_order(ctx->order_field,	       \
-+					       ARRAY_SIZE(ctx->order_field),   \
-+					       key)
-+
-+static int fake_resource_2_init(struct kunit_resource *res, void *context)
-+{
-+	struct kunit_test_resource_context *ctx = context;
-+
-+	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, allocate_order, 2);
-+
-+	res->allocation = ctx;
-+
-+	return 0;
-+}
-+
-+static void fake_resource_2_free(struct kunit_resource *res)
-+{
-+	struct kunit_test_resource_context *ctx = res->allocation;
-+
-+	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, free_order, 2);
-+}
-+
-+static int fake_resource_1_init(struct kunit_resource *res, void *context)
-+{
-+	struct kunit_test_resource_context *ctx = context;
-+
-+	kunit_alloc_and_get_resource(&ctx->test,
-+				     fake_resource_2_init,
-+				     fake_resource_2_free,
-+				     GFP_KERNEL,
-+				     ctx);
-+
-+	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, allocate_order, 1);
-+
-+	res->allocation = ctx;
-+
-+	return 0;
-+}
-+
-+static void fake_resource_1_free(struct kunit_resource *res)
-+{
-+	struct kunit_test_resource_context *ctx = res->allocation;
-+
-+	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, free_order, 1);
-+}
-+
-+/*
-+ * TODO(brendanhiggins@google.com): replace the arrays that keep track of the
-+ * order of allocation and freeing with strict mocks using the IN_SEQUENCE macro
-+ * to assert allocation and freeing order when the feature becomes available.
-+ */
-+static void kunit_resource_test_proper_free_ordering(struct kunit *test)
-+{
-+	struct kunit_test_resource_context *ctx = test->priv;
-+
-+	/* fake_resource_1 allocates a fake_resource_2 in its init. */
-+	kunit_alloc_and_get_resource(&ctx->test,
-+				     fake_resource_1_init,
-+				     fake_resource_1_free,
-+				     GFP_KERNEL,
-+				     ctx);
-+
-+	/*
-+	 * Since fake_resource_2_init calls KUNIT_RESOURCE_TEST_MARK_ORDER
-+	 * before returning to fake_resource_1_init, it should be the first to
-+	 * put its key in the allocate_order array.
-+	 */
-+	KUNIT_EXPECT_EQ(test, ctx->allocate_order[0], 2);
-+	KUNIT_EXPECT_EQ(test, ctx->allocate_order[1], 1);
-+
-+	kunit_cleanup(&ctx->test);
-+
-+	/*
-+	 * Because fake_resource_2 finishes allocation before fake_resource_1,
-+	 * fake_resource_1 should be freed first since it could depend on
-+	 * fake_resource_2.
-+	 */
-+	KUNIT_EXPECT_EQ(test, ctx->free_order[0], 1);
-+	KUNIT_EXPECT_EQ(test, ctx->free_order[1], 2);
-+}
-+
-+static int kunit_resource_test_init(struct kunit *test)
-+{
-+	struct kunit_test_resource_context *ctx =
-+			kzalloc(sizeof(*ctx), GFP_KERNEL);
-+
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
-+
-+	test->priv = ctx;
-+
-+	kunit_init_test(&ctx->test, "test_test_context");
-+
-+	return 0;
-+}
-+
-+static void kunit_resource_test_exit(struct kunit *test)
-+{
-+	struct kunit_test_resource_context *ctx = test->priv;
-+
-+	kunit_cleanup(&ctx->test);
-+	kfree(ctx);
-+}
-+
-+static struct kunit_case kunit_resource_test_cases[] = {
-+	KUNIT_CASE(kunit_resource_test_init_resources),
-+	KUNIT_CASE(kunit_resource_test_alloc_resource),
-+	KUNIT_CASE(kunit_resource_test_destroy_resource),
-+	KUNIT_CASE(kunit_resource_test_cleanup_resources),
-+	KUNIT_CASE(kunit_resource_test_proper_free_ordering),
-+	{}
-+};
-+
-+static struct kunit_suite kunit_resource_test_suite = {
-+	.name = "kunit-resource-test",
-+	.init = kunit_resource_test_init,
-+	.exit = kunit_resource_test_exit,
-+	.test_cases = kunit_resource_test_cases,
-+};
-+kunit_test_suite(kunit_resource_test_suite);
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 176f2f0840609..0c8e17f946cda 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -145,6 +145,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
+ 		"usercopy_abort",
+ 		"machine_real_restart",
+ 		"rewind_stack_do_exit",
++		"kunit_try_catch_throw",
+ 	};
+ 
+ 	if (!func)
 -- 
 2.23.0.rc1.153.gdeed80330f-goog
 
