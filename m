@@ -2,64 +2,65 @@ Return-Path: <SRS0=du8n=WS=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16AE8C41514
-	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Aug 2019 19:25:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EE57C3A5A1
+	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Aug 2019 19:47:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E1E8123406
-	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Aug 2019 19:25:47 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="WM1U6q3f"
+	by mail.kernel.org (Postfix) with ESMTP id 40FD0233FD
+	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Aug 2019 19:47:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1566503236;
+	bh=ncOcgQhC15jbGlMDA43gopc9k5IpWGkNa8eZGXPUO1Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=1w1xTiRDgXVtfdC/ESg/oKol9vtNjkl1vN836a5XjWC2OZtUBoCJSasrvgB6xedPU
+	 KJCO6lDyWFCHesNEfsT3gAr3Y2QfuqoZViqBbJ0qg6lXJiv34Vom/HLtVW702HAYlY
+	 hUj36ysEfiuZBxAL6TQqaxJT0zz5374+lycQl6CQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389239AbfHVTZr (ORCPT
+        id S1730818AbfHVTrQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 22 Aug 2019 15:25:47 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:40559 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391877AbfHVTZH (ORCPT
+        Thu, 22 Aug 2019 15:47:16 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:41013 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725886AbfHVTrP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Aug 2019 15:25:07 -0400
-Received: by mail-pg1-f196.google.com with SMTP id w10so4234391pgj.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2019 12:25:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=V6iaCvkOKV70LTF1R2QxVbxqJJklSryV7VrfrPuNBPI=;
-        b=WM1U6q3fPx6VAdWuhVbasFSZ7o86MDefD/45MBjids0aZXHG3L567a42cBKkzs82Zy
-         zepTPT7of9GWrAA3oxb/hR24FzE6TL1jBjFt/La5FVBTSo5fAU9pLUw8QsoTi8c39do6
-         K6CLNpIF2TTudMamXSJHhT0QSIy/Gk+Qg06W4=
+        Thu, 22 Aug 2019 15:47:15 -0400
+Received: by mail-pl1-f193.google.com with SMTP id m9so4037368pls.8;
+        Thu, 22 Aug 2019 12:47:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=V6iaCvkOKV70LTF1R2QxVbxqJJklSryV7VrfrPuNBPI=;
-        b=ouFbwrDPF2KzTYtDHUUyuEGUJclttObp9s5TwR+WQdoIl8U0piOKwFB0MlmpL87GxE
-         2kAPR9xSUHBNZJeWFlVA6bdhOpB4KKKQLSsey2tfsMXb4fFxgk2w6ZoxHQvPqsL8znSp
-         qv9v57Zse0Kn2syjvzZ9dixdxZyY16G49V2hgi+LuVgkxVSbq1uPgTol6pZ8GAQUcLWK
-         XUmh1xvtTukDfIBzSD4bWdAmGXcaNDhlw1vPLbnaXm6M0KW2ryXmb8O+rOgNWFI0B8co
-         ZJxRi/FQigpPm6Ch4WVcfbW2j4lLn/m+rEkXr5y7fx4RTpU14vHW4ANCi3x1TsdiJYYj
-         ctWA==
-X-Gm-Message-State: APjAAAXfTchQvbZQFWqQ4YzVqoMzC/Fbk8pihdq7J6LH826WJHDkdxAL
-        YN30dBq1RlF+yBTnezS+cPU86Q==
-X-Google-Smtp-Source: APXvYqzSHf/VaI25XUU6JwgxHcTwum+eqwNg/nDEX2+Z4NtuYsQqfDBBgWEP7OESrOUbhgp0aExEbQ==
-X-Received: by 2002:a62:7503:: with SMTP id q3mr859120pfc.151.1566501906434;
-        Thu, 22 Aug 2019 12:25:06 -0700 (PDT)
-Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id c12sm198018pfc.22.2019.08.22.12.25.03
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=H7farA7jorlmfZ2e+AMW8oiTvvYc+aUzfxfRcuDpHnk=;
+        b=XO4/rwGLYk9SBYN8k7GRXHDJphUJmcRBvDWG44PY0QNg4zarCGqP8SQnHDyXKGZ3+M
+         doJ1GLX4b3OrVB/XVGKbBKAjw5QZN7Y/sf9EyO12Dx/Md0Zem8PiQ510+QghLiapF353
+         NEjs8KjS6x7LFgqS9j37zXpDdEdbVWk4xzJgyl4plClMJ9JwBsXatMrkIHtzzdkKvWep
+         DszRlTYo3xdTOOSkx1w5rJA8hd1o6ANEg3m9L9lQf+LkH7ELC2ZWziLlC14NPXxkFRw+
+         Q+rgwbzLCdzpTWNDnNdn/gF8027ea0R43zKbSC7gTabiPEJAqpRoIrAM/XF8LDxM3ns5
+         bYOA==
+X-Gm-Message-State: APjAAAXsYlBkxja3KFMZjogKk3Gd6UmmI8qGhGRRxVHu0V4uY91luxQ1
+        AIyevmmzEYb07svMXGkpUYI=
+X-Google-Smtp-Source: APXvYqx6e1XLcwxb1JcJfBbBHwrao8k3VyUgyeVUu0YdIROLSdrc1+tR5DYnDeiqbeePBddV80b7dA==
+X-Received: by 2002:a17:902:5a04:: with SMTP id q4mr543629pli.280.1566503234605;
+        Thu, 22 Aug 2019 12:47:14 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id s4sm324360pjp.15.2019.08.22.12.47.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 12:25:05 -0700 (PDT)
-From:   Scott Branden <scott.branden@broadcom.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 22 Aug 2019 12:47:13 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 92076403DC; Thu, 22 Aug 2019 19:47:12 +0000 (UTC)
+Date:   Thu, 22 Aug 2019 19:47:12 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Scott Branden <scott.branden@broadcom.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Brown <david.brown@linaro.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
         BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
@@ -69,76 +70,42 @@ Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Colin Ian King <colin.king@canonical.com>,
         Kees Cook <keescook@chromium.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH 0/7] firmware: add partial read support in request_firmware_into_buf
-Date:   Thu, 22 Aug 2019 12:24:44 -0700
-Message-Id: <20190822192451.5983-1-scott.branden@broadcom.com>
-X-Mailer: git-send-email 2.17.1
+        mcgrof@kernel.org
+Subject: Re: [PATCH 2/7] firmware: add offset to request_firmware_into_buf
+Message-ID: <20190822194712.GG16384@42.do-not-panic.com>
+References: <20190822192451.5983-1-scott.branden@broadcom.com>
+ <20190822192451.5983-3-scott.branden@broadcom.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190822192451.5983-3-scott.branden@broadcom.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch series adds partial read support in request_firmware_into_buf.
-In order to accept the enhanced API it has been requested that kernel
-selftests and upstreamed driver utilize the API enhancement and so
-are included in this patch series.
+On Thu, Aug 22, 2019 at 12:24:46PM -0700, Scott Branden wrote:
+> @@ -923,16 +936,22 @@ EXPORT_SYMBOL_GPL(firmware_request_cache);
+>   */
+>  int
+>  request_firmware_into_buf(const struct firmware **firmware_p, const char *name,
+> -			  struct device *device, void *buf, size_t size)
+> +			  struct device *device, void *buf, size_t size,
+> +			  size_t offset, unsigned int pread_flags)
 
-Also, no tests existed for existing request_firmware_into_buf kernel API.
-Therefore tests have been created and submitted upstream here:
-"[PATCH v2 0/2] firmware: selftest for request_firmware_into_buf"
-https://lkml.org/lkml/2019/8/22/1367
+This implies you having to change the other callers, and while currently
+our list of drivers is small, following the history of the firmware API
+and the long history of debate of *how* we should evolve its API, its
+preferred we add yet another new caller for this functionality. So
+please add a new caller, and use EXPORT_SYMBOL_GPL().
 
-The firmware selftests patches here require those patches to
-be applied first in order for the firmware selftest patches in this
-series to be valid.
+And while at it, pleaase use firmware_request_*() as the prefix, as we
+have want to use that as the instilled prefix. We have yet to complete
+the rename of the others older callers but its just a matter of time.
 
-Finally, in this patch series is the addition of a new Broadcom Valkyrie driver
-utilizing the new request_firmware_into_buf enhanced API.
+So something like: firmware_request_into_buf_offset()
 
-Scott Branden (7):
-  fs: introduce kernel_pread_file* support
-  firmware: add offset to request_firmware_into_buf
-  test_firmware: add partial read support for request_firmware_into_buf
-  selftests: firmware: Test partial file reads of
-    request_firmware_into_buf
-  bcm-vk: add bcm_vk UAPI
-  misc: bcm-vk: add Broadcom Valkyrie driver
-  MAINTAINERS: bcm-vk: Add maintainer for Broadcom Valkyrie Driver
+And thanks for adding a test case!
 
- MAINTAINERS                                   |    7 +
- drivers/base/firmware_loader/firmware.h       |    5 +
- drivers/base/firmware_loader/main.c           |   49 +-
- drivers/misc/Kconfig                          |    1 +
- drivers/misc/Makefile                         |    1 +
- drivers/misc/bcm-vk/Kconfig                   |   16 +
- drivers/misc/bcm-vk/Makefile                  |    7 +
- drivers/misc/bcm-vk/README                    |   29 +
- drivers/misc/bcm-vk/bcm_vk.h                  |  229 +++
- drivers/misc/bcm-vk/bcm_vk_dev.c              | 1558 +++++++++++++++++
- drivers/misc/bcm-vk/bcm_vk_msg.c              |  963 ++++++++++
- drivers/misc/bcm-vk/bcm_vk_msg.h              |  169 ++
- drivers/misc/bcm-vk/bcm_vk_sg.c               |  273 +++
- drivers/misc/bcm-vk/bcm_vk_sg.h               |   60 +
- drivers/soc/qcom/mdt_loader.c                 |    7 +-
- fs/exec.c                                     |   77 +-
- include/linux/firmware.h                      |    8 +-
- include/linux/fs.h                            |   15 +
- include/uapi/linux/misc/bcm_vk.h              |   88 +
- lib/test_firmware.c                           |  139 +-
- .../selftests/firmware/fw_filesystem.sh       |   80 +
- 21 files changed, 3744 insertions(+), 37 deletions(-)
- create mode 100644 drivers/misc/bcm-vk/Kconfig
- create mode 100644 drivers/misc/bcm-vk/Makefile
- create mode 100644 drivers/misc/bcm-vk/README
- create mode 100644 drivers/misc/bcm-vk/bcm_vk.h
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_dev.c
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.c
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.h
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.c
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.h
- create mode 100644 include/uapi/linux/misc/bcm_vk.h
-
--- 
-2.17.1
-
+  Luis
