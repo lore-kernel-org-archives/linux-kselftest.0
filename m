@@ -2,56 +2,57 @@ Return-Path: <SRS0=du8n=WS=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11761C3A5A1
-	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Aug 2019 19:25:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6C7EC3A5A5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Aug 2019 19:25:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DBE2A23406
-	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Aug 2019 19:25:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FDEE23400
+	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Aug 2019 19:25:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="SXwJ5gNI"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Lqfcfkmp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404332AbfHVTZT (ORCPT
+        id S2391930AbfHVTZ1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 22 Aug 2019 15:25:19 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:39370 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404298AbfHVTZR (ORCPT
+        Thu, 22 Aug 2019 15:25:27 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:32834 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404384AbfHVTZZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Aug 2019 15:25:17 -0400
-Received: by mail-pg1-f196.google.com with SMTP id u17so4233629pgi.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2019 12:25:17 -0700 (PDT)
+        Thu, 22 Aug 2019 15:25:25 -0400
+Received: by mail-pl1-f193.google.com with SMTP id go14so4012562plb.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2019 12:25:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=FyfNbWZdKxFWvrYaFX6247ohGc1n6i2IlhYtU0R4MSc=;
-        b=SXwJ5gNIh5SQY7nlTKo2WP1Un48e5LsC1U9OuOfWZkTgBdMg6RotiLVaK+P09DrmzE
-         QjzW950zBHesWWiKB0UCPDA3biOGksy2mAqj5HBPoZNCYLHLcGOPOHn2snAjD6IDFU6c
-         ETcf0sCqxyfbxlVxQRpeb7FNsT9aLWmfuIus8=
+        bh=cvNFosYfslBR/6BVIMWexVcAL5TsK7108rSnZMZd4X4=;
+        b=LqfcfkmpyJUSc2aXfZWs3W0xMRRcheys90Q7EO54mjpiPWnL9sBnbv8XMLomSSx8O9
+         9ktpA4rZhdplpQ4ro5QS7HE4S//9qBDE3luw1BnSeewiMlF5fftt+LT15Sit1z7GBMmo
+         yaCcSKkt+tggxjuspHuFaMogtb3SCbr2pE7Uw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=FyfNbWZdKxFWvrYaFX6247ohGc1n6i2IlhYtU0R4MSc=;
-        b=BuQfiDxvrm+uGZTq9ZVd734bAn0cz20HvjeC23G6Pd5F+qTOsuhn7o5TfWTjEAKX5c
-         p7QD4z4pgg6mPhM6Ikgmn51mlkfztMYT8i5qER3JE01FmV5xLDbtVFgPx1oUIQBXkdzw
-         GHghKKZeBD29n9ovRLsTQSe4Kvj8EsJXeuZwrwL1nnspNH7CDcP+398810VYfZEgVcWn
-         6/4/KCvLggNAOmiuIiZO7N3cp1Ze6oip9tipAMVg42t25kfZls1AVaajTi9P4dkWZRsD
-         xrV577QBSbPjn+bpi4lXMsIpomV6kX5WrF50/mqGGC6dft7LSUbdPslK8DZNWt8nOuMV
-         43Ug==
-X-Gm-Message-State: APjAAAVCGOyO+EWIMeVWxMxM7sNmbhyQNX0XhgYUwVIQ1wK0s2C6Csj5
-        9ZxtR+drTdTLpNAbNyEr1Af0MQ==
-X-Google-Smtp-Source: APXvYqz2G1wFBnjrDxHUN/2ILk5KhTVYDsdmpJ3R1CvZAlOJaP6PsyiVJGxATWi2HNcFU0jasc6Mvw==
-X-Received: by 2002:a17:90a:3266:: with SMTP id k93mr1361252pjb.46.1566501916581;
-        Thu, 22 Aug 2019 12:25:16 -0700 (PDT)
+        bh=cvNFosYfslBR/6BVIMWexVcAL5TsK7108rSnZMZd4X4=;
+        b=ZvVlLRlwaUkNmswIjeeXSLhfdz/v76+lpNGmDUAGKkKBzGNy602UF2kVid+iDNllI7
+         cDfDyp2vn38SZWoe7lBJ8LU0HtD1O3x45TIPcTWed+6RgkW85Y4o6e79iJzcG26UulIX
+         pGPX6rR0WZ8bFqeuQiis/XNB2qA4Kybr9PIHuM39OzcSi/nualHCGCNI8T7VKiMsNgzu
+         NuiCQCVP5LQmQXwp3sqX2l1kOvdi4PBBMsXCNZzfwJpPge2acKbvqt1BFWrmF2zsvhyB
+         2FyMDWkaTVHaDyxAJ6lNdcNEFjTPdIz8UCyYDLpT3VThuUDz09hHHXUz6+L8vUjiaM+x
+         W/PQ==
+X-Gm-Message-State: APjAAAWv9K4u6/jLjWAoWfdXzUsc+oG3YN7ngz9F6FgSjwfO7E4O7qwB
+        VyJp1/u5rv/sd1GNfwCT5FQ7gw==
+X-Google-Smtp-Source: APXvYqxTvONL03yjcaj7MsrmAUaBSFUgWDAcWsFUDtXLuMO0GvKeUtS496WfXIlpijUGpqlrHgo0FQ==
+X-Received: by 2002:a17:902:ba81:: with SMTP id k1mr441791pls.213.1566501924580;
+        Thu, 22 Aug 2019 12:25:24 -0700 (PDT)
 Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id c12sm198018pfc.22.2019.08.22.12.25.14
+        by smtp.gmail.com with ESMTPSA id c12sm198018pfc.22.2019.08.22.12.25.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 12:25:16 -0700 (PDT)
+        Thu, 22 Aug 2019 12:25:24 -0700 (PDT)
 From:   Scott Branden <scott.branden@broadcom.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -71,9 +72,9 @@ Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
         Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH 4/7] selftests: firmware: Test partial file reads of request_firmware_into_buf
-Date:   Thu, 22 Aug 2019 12:24:48 -0700
-Message-Id: <20190822192451.5983-5-scott.branden@broadcom.com>
+Subject: [PATCH 7/7] MAINTAINERS: bcm-vk: Add maintainer for Broadcom Valkyrie Driver
+Date:   Thu, 22 Aug 2019 12:24:51 -0700
+Message-Id: <20190822192451.5983-8-scott.branden@broadcom.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190822192451.5983-1-scott.branden@broadcom.com>
 References: <20190822192451.5983-1-scott.branden@broadcom.com>
@@ -82,125 +83,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add firmware tests for partial file reads of request_firmware_into_buf.
+Add maintainer entry for new Broadcom Valkyrie Driver
 
 Signed-off-by: Scott Branden <scott.branden@broadcom.com>
 ---
- .../selftests/firmware/fw_filesystem.sh       | 80 +++++++++++++++++++
- 1 file changed, 80 insertions(+)
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tools/testing/selftests/firmware/fw_filesystem.sh b/tools/testing/selftests/firmware/fw_filesystem.sh
-index 56894477c8bd..e973c658fe1a 100755
---- a/tools/testing/selftests/firmware/fw_filesystem.sh
-+++ b/tools/testing/selftests/firmware/fw_filesystem.sh
-@@ -126,6 +126,26 @@ config_unset_into_buf()
- 	echo 0 >  $DIR/config_into_buf
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 08176d64eed5..6eb2e3accf1d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3456,6 +3456,13 @@ L:	netdev@vger.kernel.org
+ S:	Supported
+ F:	drivers/net/ethernet/broadcom/tg3.*
  
-+config_set_buf_size()
-+{
-+	echo $1 >  $DIR/config_buf_size
-+}
++BROADCOM VALKYRIE DRIVER
++M:	Scott Branden <scott.branden@broadcom.com>
++L:	bcm-kernel-feedback-list@broadcom.com
++S:	Supported
++F:	drivers/misc/bcm-vk/
++F:	include/uapi/linux/misc/bcm_vk.h
 +
-+config_set_file_offset()
-+{
-+	echo $1 >  $DIR/config_file_offset
-+}
-+
-+config_set_partial()
-+{
-+	echo 1 >  $DIR/config_partial
-+}
-+
-+config_unset_partial()
-+{
-+	echo 0 >  $DIR/config_partial
-+}
-+
- config_set_sync_direct()
- {
- 	echo 1 >  $DIR/config_sync_direct
-@@ -184,6 +204,35 @@ read_firmwares()
- 	done
- }
- 
-+read_firmwares_partial()
-+{
-+	if [ "$(cat $DIR/config_into_buf)" == "1" ]; then
-+		fwfile="${FW_INTO_BUF}"
-+	else
-+		fwfile="${FW}"
-+	fi
-+
-+	if [ "$1" = "xzonly" ]; then
-+		fwfile="${fwfile}-orig"
-+	fi
-+
-+	# Strip fwfile down to match partial offset and length
-+	partial_data="$(cat $fwfile)"
-+	partial_data="${partial_data:$2:$3}"
-+
-+	for i in $(seq 0 3); do
-+		config_set_read_fw_idx $i
-+
-+		read_firmware="$(cat $DIR/read_firmware)"
-+
-+		# Verify the contents are what we expect.
-+		if [ $read_firmware != $partial_data ]; then
-+			echo "request #$i: partial firmware was not loaded" >&2
-+			exit 1
-+		fi
-+	done
-+}
-+
- read_firmwares_expect_nofile()
- {
- 	for i in $(seq 0 3); do
-@@ -296,6 +345,21 @@ test_batched_request_firmware_into_buf()
- 	echo "OK"
- }
- 
-+test_batched_request_firmware_into_buf_partial()
-+{
-+	echo -n "Batched request_firmware_into_buf_partial() $2 off=$3 size=$4 try #$1: "
-+	config_reset
-+	config_set_name $TEST_FIRMWARE_INTO_BUF_FILENAME
-+	config_set_into_buf
-+	config_set_partial
-+	config_set_buf_size $4
-+	config_set_file_offset $3
-+	config_trigger_sync
-+	read_firmwares_partial $2 $3 $4
-+	release_all_firmware
-+	echo "OK"
-+}
-+
- test_batched_request_firmware_direct()
- {
- 	echo -n "Batched request_firmware_direct() $2 try #$1: "
-@@ -348,6 +412,22 @@ for i in $(seq 1 5); do
- 	test_batched_request_firmware_into_buf $i normal
- done
- 
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_into_buf_partial $i normal 0 10
-+done
-+
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_into_buf_partial $i normal 0 5
-+done
-+
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_into_buf_partial $i normal 1 6
-+done
-+
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_into_buf_partial $i normal 2 10
-+done
-+
- for i in $(seq 1 5); do
- 	test_batched_request_firmware_direct $i normal
- done
+ BROCADE BFA FC SCSI DRIVER
+ M:	Anil Gurumurthy <anil.gurumurthy@qlogic.com>
+ M:	Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>
 -- 
 2.17.1
 
