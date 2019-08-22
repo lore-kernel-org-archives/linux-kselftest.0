@@ -2,144 +2,114 @@ Return-Path: <SRS0=du8n=WS=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E20E6C41514
-	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Aug 2019 21:12:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70D11C3A5A1
+	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Aug 2019 21:58:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8BD0D23404
-	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Aug 2019 21:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566508348;
-	bh=g3N7KJAQQXMrZl21YpyfOwt2qAoO+uh0CHP70RP4sQg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=0F2YKZsdS0ucoBtDiUiAbFo12zBM4yUnmLYn7c9rrBZ6igL8zXupOIpjxz0S8xgji
-	 1Sc3487Uj4wtsBRlZZzkRA/82BzBga3DDcXHUSVI8qBEQtOcDZX1OBO5bd21eHzbKB
-	 T2qfpkj8kgYbFWVF3ua4x4yA9sky0xkjGFrikj3A=
+	by mail.kernel.org (Postfix) with ESMTP id 1C89821655
+	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Aug 2019 21:58:28 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MMyLRLW7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389522AbfHVVMY (ORCPT
+        id S2388476AbfHVV61 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 22 Aug 2019 17:12:24 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:44468 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729718AbfHVVMY (ORCPT
+        Thu, 22 Aug 2019 17:58:27 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:44054 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732386AbfHVV61 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Aug 2019 17:12:24 -0400
-Received: by mail-pl1-f193.google.com with SMTP id t14so4156963plr.11;
-        Thu, 22 Aug 2019 14:12:23 -0700 (PDT)
+        Thu, 22 Aug 2019 17:58:27 -0400
+Received: by mail-pl1-f196.google.com with SMTP id t14so4223135plr.11;
+        Thu, 22 Aug 2019 14:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding:user-agent;
+        bh=sigJYFk+Q8pR1o6eZ0D86keNFXFBPNuofqZlri3Zfmk=;
+        b=MMyLRLW7rKWEn3A5ln1ByMZuj2c1D9cAVkujgr3g9HJK/+goKhOkHiBBAbFXHZyyCL
+         qypLXtTaT1HUEKAmyox5mrE+54FqTQL5F1nr4E/7bGZsmnAw1iVxbuDw44Euy6ftXuYg
+         ve3X0EkKXzJmeUTVIoQVSQpRT1MuEysJo9slO9brBZThml+dcqCq+5nPw75j8YlSboHV
+         jwhVSXxF+7n5G4/WnfxCbv9pBTXgBbJr5rNJ929dgdB1omA2AVpOjffXZZNpR8+I3Ah5
+         z6rKEDC86duu91bjUzI2+zwFIvGeXQSZ0hKnLaiLjTAhTGPa2SD42RSbNdqxSBwKVpOI
+         JKVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=B9ygC6cTImqzdO3iTZYzOtFqP+MjCXvwJo65jt0WJr4=;
-        b=NM8bPoeLLJW/fC+iPP8V211qvYjnJYq3IJYqWU23V2PpUgXwj63F9HnA3IfPRRMFDk
-         gePN3VQ+Hzc3qDhfAVLndHcn59tWvEQDyaVNVO9wRT+R3853GFwJ2J0MZ7ynTgx6UpBR
-         6b9IZ45QZP1Q+KGSMHYtNcBWqsahTOCfkBkmhLqp/tvnm8Buz/ufVpbuFHdcHDxSEDrb
-         ta8DSaPETfCYiDKff4hD82Uw0/UjZwjQBNAwcPpElRuryvtImrg02ssIAFMKNykfP14n
-         mhB0hibfu2mfvlid2Y602XVFclvt+NNE4EDXuYP+cl633SvvYfJlJYhKfKXTR5wnP0tK
-         NF6w==
-X-Gm-Message-State: APjAAAWJWbspwwyQjVPt4a9v9M8lirryidpPhgMdOwt5jZHNhAMWpddW
-        bv0bUiH/DnLaWprV3TsTd2elBxN3
-X-Google-Smtp-Source: APXvYqxSixNF8opcBdEl7Nryz+3OzHHuwJM7J2aAcf+EdilTKvc7C6wwX00WvkSHef+/zXk9naZJdw==
-X-Received: by 2002:a17:902:9889:: with SMTP id s9mr920461plp.100.1566508342878;
-        Thu, 22 Aug 2019 14:12:22 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id b24sm315586pfd.91.2019.08.22.14.12.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 14:12:21 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 02E09403DC; Thu, 22 Aug 2019 21:12:20 +0000 (UTC)
-Date:   Thu, 22 Aug 2019 21:12:20 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Scott Branden <scott.branden@broadcom.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/7] firmware: add offset to request_firmware_into_buf
-Message-ID: <20190822211220.GR16384@42.do-not-panic.com>
-References: <20190822192451.5983-1-scott.branden@broadcom.com>
- <20190822192451.5983-3-scott.branden@broadcom.com>
- <20190822194712.GG16384@42.do-not-panic.com>
- <7ee02971-e177-af05-28e0-90575ebe12e0@broadcom.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding:user-agent;
+        bh=sigJYFk+Q8pR1o6eZ0D86keNFXFBPNuofqZlri3Zfmk=;
+        b=o74IgHzptI7qdRi6HDUJ/WSHz+1bLXXouvmIlciVmdeuHH3DwVw6TE5buVOVF0uOG5
+         PCmrw5sqhJct5g1zOPqmO+h9v7ngvvoK5JbtGLIFup1N/hOKC4aLk5kxEDMR3P8gQARe
+         ZAOdV6u237PnM2aewzTQcUbZIQFykmgHK9yDh3XYSC7rqbPwbblwgmsXRbtvD6gduY4A
+         5pK6w2zhxlYHxY2Ak54LK2d/1kTzxuQMQ8XO/fyez2+EjWre/j0eiKlCA9DX1J0mHFqr
+         qSZIXjRQ8mJ0mU/9dAew6cwVwxT5r5l5wZPgfu4bjmkj/1oltIMFXsNy310jQvNgWpf2
+         51ZQ==
+X-Gm-Message-State: APjAAAV4BYf5YAbkxW4Kwu1KC8I7tUYhyGXFF1y5q8SSB0tJjroGsQLX
+        VCDeOHTTQJSObM6uQcFonp8=
+X-Google-Smtp-Source: APXvYqw93Ei4FhobENkoQh8QOfxTx3CADzCPuxWcsPQGrncMEjvS9dtshtbkr7lInAVoKuIUOM0QTw==
+X-Received: by 2002:a17:902:fe14:: with SMTP id g20mr1022404plj.54.1566511106363;
+        Thu, 22 Aug 2019 14:58:26 -0700 (PDT)
+Received: from ip-172-31-44-144.us-west-2.compute.internal (ec2-54-213-13-77.us-west-2.compute.amazonaws.com. [54.213.13.77])
+        by smtp.gmail.com with ESMTPSA id t23sm387068pfl.154.2019.08.22.14.58.25
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 22 Aug 2019 14:58:25 -0700 (PDT)
+Date:   Thu, 22 Aug 2019 21:58:23 +0000
+From:   Alakesh Haloi <alakesh.haloi@gmail.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] seccomp: fix compilation errors in seccomp-bpf kselftest
+Message-ID: <20190822215823.GA11292@ip-172-31-44-144.us-west-2.compute.internal>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <7ee02971-e177-af05-28e0-90575ebe12e0@broadcom.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 22, 2019 at 01:07:41PM -0700, Scott Branden wrote:
-> On 2019-08-22 12:47 p.m., Luis Chamberlain wrote:
-> > This implies you having to change the other callers, and while currently
-> > our list of drivers is small,
-> 
-> Yes, the list is small, very small.
-> 
-> There is a single driver making a call to the existing API.
-> 
-> And, the maintainer of that driver wanted
-> to start utilizing my enhanced API instead of the current API.
+Without this patch we see following error while building and kselftest
+for secccomp_bpf fails.
 
-You mean in the near term future? Your change makes it use the full file.
-Just checking.
+seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ undeclared (first use in this function);
+seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared (first use in this function);
 
-> As such I think it is very reasonable to update the API right now.
+Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-I'd prefer to see it separate, and we fix the race *before* we introduce
-the new functionality. I'll be poking at that shortly but I should note
-that I leave on vacation this weekend and won't be back for a good while.
-I already have an idea of how to approach this.
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 6ef7f16c4cf5..2e619760fc3e 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -1353,6 +1353,14 @@ TEST_F(precedence, log_is_fifth_in_any_order)
+ #define PTRACE_EVENT_SECCOMP 7
+ #endif
+ 
++#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
++#define PTRACE_EVENTMSG_SYSCALL_ENTRY 1
++#endif
++
++#ifndef PTRACE_EVENTMSG_SYSCALL_EXIT
++#define PTRACE_EVENTMSG_SYSCALL_EXIT 2
++#endif
++
+ #define IS_SECCOMP_EVENT(status) ((status >> 16) == PTRACE_EVENT_SECCOMP)
+ bool tracer_running;
+ void tracer_stop(int sig)
+-- 
+2.17.1
 
-When the current user want to use the new API it can do so, and then we
-just kill the older caller.
-
-> > following the history of the firmware API
-> > and the long history of debate of *how* we should evolve its API, its
-> > preferred we add yet another new caller for this functionality. So
-> > please add a new caller, and use EXPORT_SYMBOL_GPL().
-> > 
-> > And while at it, pleaase use firmware_request_*() as the prefix, as we
-> > have want to use that as the instilled prefix. We have yet to complete
-> > the rename of the others older callers but its just a matter of time.
-> > 
-> > So something like: firmware_request_into_buf_offset()
-> 
-> I would prefer to rename the API at this time given there is only a single
-> user.
-> 
-> Otherwise I would need to duplicate quite a bit in the test code to support
-> testing the single user of the old api and then enhanced API.
-
-> Or, I can leave existing API in place and change the test case to
-> just test the enhanced API to keep things simpler in the test code?
-
-If the new user is going to move to the API once available I will be
-happy to then leave out testing for the older API. That would make
-sense.
-
-But if you do want to keep testing for the old API, and allow an easy
-removal for it on the test driver, wouldn't a function pointer suffice
-for which API call to use based on a boolean?
-
-But yeah if we're going to abandon the old mechanism I'm happy to skip
-its testing.
-
-  Luis
