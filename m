@@ -2,62 +2,62 @@ Return-Path: <SRS0=UiRc=WY=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.4 required=3.0 tests=DATE_IN_PAST_24_48,
+	DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C719C3A5A1
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Aug 2019 17:37:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A4E1C3A5A6
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Aug 2019 17:37:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D6E2C233A1
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Aug 2019 17:37:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6243023403
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Aug 2019 17:37:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LS7sDUBj"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hBpwGl91"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727213AbfH1Rgx (ORCPT
+        id S1726805AbfH1RhK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Aug 2019 13:36:53 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:43694 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727204AbfH1Rgx (ORCPT
+        Wed, 28 Aug 2019 13:37:10 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34081 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727063AbfH1Rgd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Aug 2019 13:36:53 -0400
-Received: by mail-pg1-f196.google.com with SMTP id k3so91891pgb.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2019 10:36:52 -0700 (PDT)
+        Wed, 28 Aug 2019 13:36:33 -0400
+Received: by mail-pf1-f193.google.com with SMTP id b24so264509pfp.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2019 10:36:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=M47pTZiAE3Wr8BbtgIHsQv1k4WtO4wX2CZjP2HeXAjI=;
-        b=LS7sDUBjIS1Uff386cu0zqhDdYqMUwYYKZKmEjwIsi9QTzN89/DsKYkhHeAzX+HiWz
-         XUGR2aF5xzEjpRru0i1N004SQj75D1ew2JaMZGVGSMb1w0/XqTl0B3R7YnrgYSZbcJln
-         64EK3Y0c7M9n+gQt3BqNXH4dE9RFbDkXKcD/Y=
+        bh=UBNYDOQLiPHI747g3CvJSLTMKiFZvSX4+F+h+ZK0RGk=;
+        b=hBpwGl91JHahbLFCmv2w1Mjzc7Oz3kRyNRNlfokM3jA96+3Z6siqSGJK3qXqEvZYXw
+         209fRwW977JPTkPz9WVu94EDq8zT1usK2FPzVbiynFtN99nMvFDHeFEXObaCht1TcFgd
+         4xrqVdOp6iVorPHpgxumzhQ/jyb1V//MFBv7E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=M47pTZiAE3Wr8BbtgIHsQv1k4WtO4wX2CZjP2HeXAjI=;
-        b=LUlifryXrddD5ZqNkLrW5N/fwBzqT1XK+jeiQkCT9aIsLr9hFj8XxH5fVfVo7oEbx4
-         5Az5ctO13Nuf3COsMwBQ9MGBbme536/nSRiqg3DLTKcHXoozve+AAolYTd0JvC50mUdd
-         p+DsE9H4jguMaAMVnm4uySGRk8GMmtHu3urYwuGs/xQVK2gMEAkISLSCcn+qVle9tGj1
-         M4SU+jY43fugl9u1xenijNUtLOoFOJ7pGspk8K7lXQD5EwqllcN/iFTBEhC1/ujaThRt
-         FaE0rsQ02n7+MxqaEpXOAUNd3owVfbmPm4bonLoyDrzlMiwFJmqJXxe0dittTvSyv+8P
-         DKag==
-X-Gm-Message-State: APjAAAVfQS6yfv7QhYTlZGshq9zeJDKo9ZMHFcpW/XCbYLVNEMl3LMun
-        j4UjUgmTCH8gIB9RKHYqZ697mQ==
-X-Google-Smtp-Source: APXvYqw01wf5KpqvU0SBLWBJjcZSJTFTWWCu5dmEtVFN/KxdMMnVgA4WZSzYIDlb53k7Xqylep0gCg==
-X-Received: by 2002:a63:6fc9:: with SMTP id k192mr4431758pgc.20.1567013812543;
-        Wed, 28 Aug 2019 10:36:52 -0700 (PDT)
+        bh=UBNYDOQLiPHI747g3CvJSLTMKiFZvSX4+F+h+ZK0RGk=;
+        b=nT2hDs9s7VENnVO/zH2ABwvp4I+u71QY6CUkh85ffufYPKeb+yvyU3GS9AC9xVtool
+         EbmBY17MlZBBsDWbAC3ip7qW+om76n7q/ToAWS5Td2yyfVvVPaqC6X7vOfrKUZSjB6BN
+         ZT3NNpsH0cBTxFXPw3XQn0D7GzP8J4I55Nz39trP9rYFz6YbGi9P6eQphxtJWJTXGh6Y
+         w7oNDFifoETxL4P9C1sixOwR2I7RLUfVKqEPlgT4d/fhMwU4SHJaGU4EhOM3L0QjcjRo
+         ov7d9FHg2A3Tl5wmIFl1jDPiUxyVwS7As3AVprdTNUaddn2R+4UsDKxYUL1ltT9qvY78
+         xa7g==
+X-Gm-Message-State: APjAAAVZ0/RpyTPB//qr5X7AZ8Eh57Zeqrmvtfdt9htkByJNm99eK9bX
+        b+9LjK4JqWo27mhK3x7yDKKdW7txv6s=
+X-Google-Smtp-Source: APXvYqzwkMj0PJ8taLffJ8W2JrcvATme98GQGJX0LS7TPTRiUEPTNp5IYu8fT7uFmLx8nEqHd37GDw==
+X-Received: by 2002:a17:90a:f0d8:: with SMTP id fa24mr5639027pjb.142.1567013792822;
+        Wed, 28 Aug 2019 10:36:32 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w207sm3832866pff.93.2019.08.28.10.36.51
+        by smtp.gmail.com with ESMTPSA id m145sm5047005pfd.68.2019.08.28.10.36.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2019 10:36:51 -0700 (PDT)
-Date:   Sun, 25 Aug 2019 14:51:42 -0700
+        Wed, 28 Aug 2019 10:36:29 -0700 (PDT)
+Date:   Mon, 26 Aug 2019 10:48:34 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        Tycho Andersen <tycho@tycho.ws>,
+To:     David Abdurachmanov <david.abdurachmanov@gmail.com>
+Cc:     Tycho Andersen <tycho@tycho.ws>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@sifive.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Oleg Nesterov <oleg@redhat.com>,
@@ -78,48 +78,26 @@ Cc:     David Abdurachmanov <david.abdurachmanov@gmail.com>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, me@carlosedp.com
 Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
-Message-ID: <201908251446.04BCB8C@keescook>
+Message-ID: <201908261043.08510F5E66@keescook>
 References: <20190822205533.4877-1-david.abdurachmanov@sifive.com>
  <alpine.DEB.2.21.9999.1908231717550.25649@viisi.sifive.com>
+ <20190826145756.GB4664@cisco>
+ <CAEn-LTrtn01=fp6taBBG_QkfBtgiJyt6oUjZJOi6VN8OeXp6=g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.9999.1908231717550.25649@viisi.sifive.com>
+In-Reply-To: <CAEn-LTrtn01=fp6taBBG_QkfBtgiJyt6oUjZJOi6VN8OeXp6=g@mail.gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 23, 2019 at 05:30:53PM -0700, Paul Walmsley wrote:
-> On Thu, 22 Aug 2019, David Abdurachmanov wrote:
-> 
-> > There is one failing kernel selftest: global.user_notification_signal
-> 
-> Is this the only failing test?  Or are the rest of the selftests skipped 
-> when this test fails, and no further tests are run, as seems to be shown 
-> here:
-> 
->   https://lore.kernel.org/linux-riscv/CADnnUqcmDMRe1f+3jG8SPR6jRrnBsY8VVD70VbKEm0NqYeoicA@mail.gmail.com/
-> 
-> For example, looking at the source, I'd naively expect to see the 
-> user_notification_closed_listener test result -- which follows right 
-> after the failing test in the selftest source.  But there aren't any 
-> results?
-> 
-> Also - could you follow up with the author of this failing test to see if 
-> we can get some more clarity about what might be going wrong here?  It 
-> appears that the failing test was added in commit 6a21cc50f0c7f ("seccomp: 
-> add a return code to trap to userspace") by Tycho Andersen 
-> <tycho@tycho.ws>.
+On Mon, Aug 26, 2019 at 09:39:50AM -0700, David Abdurachmanov wrote:
+> I don't have the a build with SECCOMP for the board right now, so it
+> will have to wait. I just finished a new kernel (almost rc6) for Fedora,
 
-So, the original email says the riscv series is tested on top of 5.2-rc7,
-but just for fun, can you confirm that you're building a tree that includes
-9dd3fcb0ab73 ("selftests/seccomp: Handle namespace failures gracefully")? I
-assume it does, but I suspect something similar is happening, where the
-environment is slightly different than expected and the test stalls.
-
-Does it behave the same way under emulation (i.e. can I hope to
-reproduce this myself?)
+FWIW, I don't think this should block landing the code: all the tests
+fail without seccomp support. ;) So this patch is an improvement!
 
 -- 
 Kees Cook
