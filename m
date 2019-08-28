@@ -2,83 +2,105 @@ Return-Path: <SRS0=UiRc=WY=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 165C5C3A5A1
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Aug 2019 15:53:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75018C3A5A1
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Aug 2019 16:05:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E35902339E
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Aug 2019 15:53:24 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="EWma0uMu"
+	by mail.kernel.org (Postfix) with ESMTP id 5175E22DA7
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Aug 2019 16:05:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726865AbfH1PxV (ORCPT
+        id S1726603AbfH1QF1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Aug 2019 11:53:21 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:55870 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726863AbfH1PxU (ORCPT
+        Wed, 28 Aug 2019 12:05:27 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44534 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726560AbfH1QF1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Aug 2019 11:53:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=gQZskAU+8k336EC6UmUC7ikUT5tx26F1fzK9gaSbLLs=; b=EWma0uMu9kw+jEO+hZ+1+Tyw1
-        wIMr90xNPIQTuwomkBqe4oh4/4hoMaV+W7N3hLa6GYx3WRLvMJUSfwfAPR2r/K/9wROl9EpNL+/+A
-        prWlsPA7sjxqjUisFU42ap0eHmRf2WPAiwJtg4KdjTasczha8bCIb/9m4ni1W5fikZVQHBef3Hs3M
-        irW7e2qwgx9hhV7k0AFtRq0pGSgtn0KRwua7wPgztbYmdds+Dl0rRIn2rdfenDH9dpdXqmO55ASPs
-        VGkobLGAcWFmdfgJ+8DqM8Lm7XTMq8xgqIh7WM5C+tPSr3Nnu2Apb26WpeLU8o580KQMrGhVzp+Oc
-        4NS/JhWLQ==;
-Received: from [2601:1c0:6200:6e8::4f71]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i30Fe-0005vm-Pb; Wed, 28 Aug 2019 15:52:50 +0000
-Subject: Re: [PATCH v2] kunit: fix failure to build without printk
-To:     Brendan Higgins <brendanhiggins@google.com>, shuah@kernel.org
-Cc:     kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, frowand.list@gmail.com,
-        sboyd@kernel.org, pmladek@suse.com, sergey.senozhatsky@gmail.com,
-        rostedt@goodmis.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-References: <20190828093143.163302-1-brendanhiggins@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <4856aac6-1760-8ba5-dee0-aecfedbbe266@infradead.org>
-Date:   Wed, 28 Aug 2019 08:52:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190828093143.163302-1-brendanhiggins@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        Wed, 28 Aug 2019 12:05:27 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7SG2bbU021478
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2019 12:05:26 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2unvsng4pe-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2019 12:05:26 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Wed, 28 Aug 2019 16:55:21 +0100
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 28 Aug 2019 16:55:19 +0100
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7SFsuJp38339040
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Aug 2019 15:54:56 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 19B194C040;
+        Wed, 28 Aug 2019 15:55:18 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BB5384C04E;
+        Wed, 28 Aug 2019 15:55:16 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.129.156])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Aug 2019 15:55:16 +0000 (GMT)
+Subject: Re: [PATCH v1] sefltest/ima: support appended signatures (modsig)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     shuah <shuah@kernel.org>, linux-integrity@vger.kernel.org
+Cc:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Petr Vorel <pvorel@suse.cz>, Jessica Yu <jeyu@kernel.org>,
+        Dave Young <dyoung@redhat.com>,
+        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 28 Aug 2019 11:55:16 -0400
+In-Reply-To: <4a9f9cd3-c550-98e4-1513-14ef161c34c2@kernel.org>
+References: <1567005240-12912-1-git-send-email-zohar@linux.ibm.com>
+         <4a9f9cd3-c550-98e4-1513-14ef161c34c2@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19082815-0008-0000-0000-0000030E4D8A
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19082815-0009-0000-0000-00004A2C8E74
+Message-Id: <1567007716.6115.59.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-28_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=933 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908280163
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/28/19 2:31 AM, Brendan Higgins wrote:
-> Previously KUnit assumed that printk would always be present, which is
-> not a valid assumption to make. Fix that by removing call to
-> vprintk_emit, and calling printk directly.
+On Wed, 2019-08-28 at 09:53 -0600, shuah wrote:
+> On 8/28/19 9:14 AM, Mimi Zohar wrote:
+> > In addition to the PE/COFF and IMA xattr signatures, the kexec kernel
+> > image can be signed with an appended signature, using the same
+> > scripts/sign-file tool that is used to sign kernel modules.
+> > 
+> > This patch adds support for detecting a kernel image signed with an
+> > appended signature and updates the existing test messages
+> > appropriately.
+> > 
+> > Reviewed-by: Petr Vorel <pvorel@suse.cz>
+> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> > ---
 > 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Link: https://lore.kernel.org/linux-kselftest/0352fae9-564f-4a97-715a-fabe016259df@kernel.org/T/#t
-> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-> Cc: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> ---
->  include/kunit/test.h | 11 ++++-----
->  kunit/test.c         | 57 +++++---------------------------------------
->  2 files changed, 11 insertions(+), 57 deletions(-)
+> Thanks Mimi. This commit log looks good. My Ack for the patch
+> to go through the IMA tree.
+> 
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Thanks!
 
-thanks.
+Mimi
 
--- 
-~Randy
