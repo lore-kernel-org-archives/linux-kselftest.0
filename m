@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C88DC3A5A6
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Aug 2019 18:16:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99A27C3A59F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Aug 2019 18:27:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2CA002189D
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Aug 2019 18:16:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6884F20578
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Aug 2019 18:27:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567102608;
-	bh=CKyadd5oos7cAu41Ww1xXGPEYoofd2Y6aSlkbogwEdw=;
+	s=default; t=1567103257;
+	bh=xhiJezHpjdSXTTeSHRbLmmELwKti5nXh3MfmoKvhZEA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=xkvGPz9F5J7+dthkncXJdjecVVCwapIO92jvZwIHIB1So9P9USHcRfZd5tIZ7QWvG
-	 RSV3TYVrgLaRWXWJJcUaAg8HSUwvMuxEMa5li8q7u/mfpLoPYeim9twy3VIIuP1t0O
-	 OZnHsRqyPZ7vHttM7rEooMhwDJ37U1DXenPf4+Ic=
+	b=DKf/jC/Vu8TQfnmJXvxU4RuUVqQ/IGw974yHTQACzrwSDWVDtiVk53kBJfXCqR+In
+	 RcBNxmiDiEnJoe1FvxVKyHAi1Qtk5OEG0Ap2+NGgNZFpZ26x3WlpPVjX0GO/mgj1pV
+	 Dfeem2YqoIihF2u/mLalmGolrtYKmN2h+JD7OmoY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729860AbfH2SQq (ORCPT
+        id S1729301AbfH2SP3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 29 Aug 2019 14:16:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58786 "EHLO mail.kernel.org"
+        Thu, 29 Aug 2019 14:15:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57182 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729849AbfH2SQq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Aug 2019 14:16:46 -0400
+        id S1729280AbfH2SP1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 29 Aug 2019 14:15:27 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C82C233FF;
-        Thu, 29 Aug 2019 18:16:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 04E8323403;
+        Thu, 29 Aug 2019 18:15:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567102605;
-        bh=CKyadd5oos7cAu41Ww1xXGPEYoofd2Y6aSlkbogwEdw=;
+        s=default; t=1567102526;
+        bh=xhiJezHpjdSXTTeSHRbLmmELwKti5nXh3MfmoKvhZEA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oYQ4dk5eT05jxY6+s7EM38VCbSC4aFkaMazh5GrR1hPXRVRTfNsdJ7eD9z7oHDqFF
-         1eHcivQwrNqKv6pV3EBnPPrriOELy9rscZdi5A2B6gYihxjn7hCTXKTHcbWDZ0gV04
-         nufM7pQYv+CUEweJcuBwC7QTXBq+tcbRUVM3Hz9g=
+        b=qSE8kO3oXJkV+YykhS3BvrKzN/zpk857a6rL8L68iD3s+k8T3bFeazVF8krL4Vcet
+         xdDSTZCsKG+xOaqyyw+E5UkEgmyZqshoRiN8beRFHoic0CQY0P05fukNClBQwwHv0M
+         h5EU+tJbqhGQVQUEwj0r1YqDy5SQkr9Rw39ylA2U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 39/45] selftests/kvm: make platform_info_test pass on AMD
-Date:   Thu, 29 Aug 2019 14:15:39 -0400
-Message-Id: <20190829181547.8280-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 64/76] selftests/kvm: make platform_info_test pass on AMD
+Date:   Thu, 29 Aug 2019 14:12:59 -0400
+Message-Id: <20190829181311.7562-64-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190829181547.8280-1-sashal@kernel.org>
-References: <20190829181547.8280-1-sashal@kernel.org>
+In-Reply-To: <20190829181311.7562-1-sashal@kernel.org>
+References: <20190829181311.7562-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -73,14 +73,14 @@ Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kvm/platform_info_test.c | 2 +-
+ tools/testing/selftests/kvm/x86_64/platform_info_test.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/platform_info_test.c b/tools/testing/selftests/kvm/platform_info_test.c
-index 3764e71212650..65db510dddc34 100644
---- a/tools/testing/selftests/kvm/platform_info_test.c
-+++ b/tools/testing/selftests/kvm/platform_info_test.c
-@@ -100,8 +100,8 @@ int main(int argc, char *argv[])
+diff --git a/tools/testing/selftests/kvm/x86_64/platform_info_test.c b/tools/testing/selftests/kvm/x86_64/platform_info_test.c
+index 40050e44ec0ac..f9334bd3cce9f 100644
+--- a/tools/testing/selftests/kvm/x86_64/platform_info_test.c
++++ b/tools/testing/selftests/kvm/x86_64/platform_info_test.c
+@@ -99,8 +99,8 @@ int main(int argc, char *argv[])
  	msr_platform_info = vcpu_get_msr(vm, VCPU_ID, MSR_PLATFORM_INFO);
  	vcpu_set_msr(vm, VCPU_ID, MSR_PLATFORM_INFO,
  		msr_platform_info | MSR_PLATFORM_INFO_MAX_TURBO_RATIO);
