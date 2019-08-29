@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 504E9C3A5A3
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Aug 2019 18:27:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33FE5C3A59F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Aug 2019 18:32:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 28CEB2339E
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Aug 2019 18:27:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 09BCE2166E
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Aug 2019 18:32:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567103263;
-	bh=xZ797pCM1tLIzZS874oxi5NFfTKdvU9VX9OBr3G4RuE=;
+	s=default; t=1567103541;
+	bh=bJlc/+TfIgbgjjmyWhzlBUWdW2bkR1oySzbllaFjg+k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=fP0Qh9HJnbuJiKM3nUmNH2u4zyOfZzz+jmUhMBbNIdZW3Wwsu+sxhr72mKrdxLt7h
-	 6RgiUDwYtbpY7GhhIMI5PY8t6LVEhZhlGXlJE+vBJpPEdjV4j7T9D6dpDcxts6FKi0
-	 14PeSgjRFotGUerYGZjzB5R8TDQvk9yDVKcccJRc=
+	b=KZgb+G9uMvOrhQD1JBvmhflSoXurwzckTBXiIs/QK6+j9Yy7Fcoty+58NNW864v4P
+	 UlSHCvUc8lHHWJxmBm81wP1XzKJqzdMa2hzAHA/IH55RCtuhGOPAJZA6Eb0Qjg/NNR
+	 BEoqDpbiv+VNnRlS0SUkXGL9Zhg65YzM1nDjSXOk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728463AbfH2SPZ (ORCPT
+        id S1728841AbfH2SOc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 29 Aug 2019 14:15:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57096 "EHLO mail.kernel.org"
+        Thu, 29 Aug 2019 14:14:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56154 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729216AbfH2SPW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Aug 2019 14:15:22 -0400
+        id S1728836AbfH2SOb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 29 Aug 2019 14:14:31 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E9FB823405;
-        Thu, 29 Aug 2019 18:15:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 766CE2339E;
+        Thu, 29 Aug 2019 18:14:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567102521;
-        bh=xZ797pCM1tLIzZS874oxi5NFfTKdvU9VX9OBr3G4RuE=;
+        s=default; t=1567102470;
+        bh=bJlc/+TfIgbgjjmyWhzlBUWdW2bkR1oySzbllaFjg+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U3tnSUA0O2q1Cj+T8u/OHFEJ1TH+mA/jsmO7VFxICH+vICQcdyO0fQn0HcUPFrjh6
-         lCl4QuwuqfZv/ZNI62UIQUdrnnqvQ4nW8KFP1xQOG4AVlg9etVQMJjq5/VWPArnX0h
-         XekDhGP97sJebplOXcBGCkKfDrn3H8OWhYA5Dwgw=
+        b=ExstUR2N4UeW5Im0znp1kKz6YpCnKI3yNM+AnQ085ujM+IO87E0Bisf4B6x09hQZ/
+         wXms6Pk/W25mo1vBB/3xPJGRpnefsp9Cauz0bP+oFMfBWXWH1u7XiXQuxY7ZKRCSM/
+         nNPEoltKw2cXnToRXp1+OcgU1tm7qBa+ugE1ITC0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 63/76] selftests: kvm: fix state save/load on processors without XSAVE
-Date:   Thu, 29 Aug 2019 14:12:58 -0400
-Message-Id: <20190829181311.7562-63-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 34/76] selftests: kvm: fix vmx_set_nested_state_test
+Date:   Thu, 29 Aug 2019 14:12:29 -0400
+Message-Id: <20190829181311.7562-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190829181311.7562-1-sashal@kernel.org>
 References: <20190829181311.7562-1-sashal@kernel.org>
@@ -61,53 +61,73 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Paolo Bonzini <pbonzini@redhat.com>
 
-[ Upstream commit 54577e5018a8c0cb79c9a0fa118a55c68715d398 ]
+[ Upstream commit c930e19790bbbff31c018009907c813fa0925f63 ]
 
-state_test and smm_test are failing on older processors that do not
-have xcr0.  This is because on those processor KVM does provide
-support for KVM_GET/SET_XSAVE (to avoid having to rely on the older
-KVM_GET/SET_FPU) but not for KVM_GET/SET_XCRS.
+vmx_set_nested_state_test is trying to use the KVM_STATE_NESTED_EVMCS without
+enabling enlightened VMCS first.  Correct the outcome of the test, and actually
+test that it succeeds after the capability is enabled.
 
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../testing/selftests/kvm/lib/x86_64/processor.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ .../kvm/x86_64/vmx_set_nested_state_test.c      | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index d2ad85fb01ac0..5f1ba3da2dbd3 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1059,9 +1059,11 @@ struct kvm_x86_state *vcpu_save_state(struct kvm_vm *vm, uint32_t vcpuid)
-         TEST_ASSERT(r == 0, "Unexpected result from KVM_GET_XSAVE, r: %i",
-                 r);
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
+index a99fc66dafeb6..853e370e8a394 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
+@@ -25,6 +25,8 @@
+ #define VMCS12_REVISION 0x11e57ed0
+ #define VCPU_ID 5
  
--	r = ioctl(vcpu->fd, KVM_GET_XCRS, &state->xcrs);
--        TEST_ASSERT(r == 0, "Unexpected result from KVM_GET_XCRS, r: %i",
--                r);
-+	if (kvm_check_cap(KVM_CAP_XCRS)) {
-+		r = ioctl(vcpu->fd, KVM_GET_XCRS, &state->xcrs);
-+		TEST_ASSERT(r == 0, "Unexpected result from KVM_GET_XCRS, r: %i",
-+			    r);
++bool have_evmcs;
++
+ void test_nested_state(struct kvm_vm *vm, struct kvm_nested_state *state)
+ {
+ 	vcpu_nested_state_set(vm, VCPU_ID, state, false);
+@@ -75,8 +77,9 @@ void set_default_vmx_state(struct kvm_nested_state *state, int size)
+ {
+ 	memset(state, 0, size);
+ 	state->flags = KVM_STATE_NESTED_GUEST_MODE  |
+-			KVM_STATE_NESTED_RUN_PENDING |
+-			KVM_STATE_NESTED_EVMCS;
++			KVM_STATE_NESTED_RUN_PENDING;
++	if (have_evmcs)
++		state->flags |= KVM_STATE_NESTED_EVMCS;
+ 	state->format = 0;
+ 	state->size = size;
+ 	state->hdr.vmx.vmxon_pa = 0x1000;
+@@ -126,13 +129,19 @@ void test_vmx_nested_state(struct kvm_vm *vm)
+ 	/*
+ 	 * Setting vmxon_pa == -1ull and vmcs_pa == -1ull exits early without
+ 	 * setting the nested state but flags other than eVMCS must be clear.
++	 * The eVMCS flag can be set if the enlightened VMCS capability has
++	 * been enabled.
+ 	 */
+ 	set_default_vmx_state(state, state_sz);
+ 	state->hdr.vmx.vmxon_pa = -1ull;
+ 	state->hdr.vmx.vmcs12_pa = -1ull;
+ 	test_nested_state_expect_einval(vm, state);
+ 
+-	state->flags = KVM_STATE_NESTED_EVMCS;
++	state->flags &= KVM_STATE_NESTED_EVMCS;
++	if (have_evmcs) {
++		test_nested_state_expect_einval(vm, state);
++		vcpu_enable_evmcs(vm, VCPU_ID);
 +	}
+ 	test_nested_state(vm, state);
  
- 	r = ioctl(vcpu->fd, KVM_GET_SREGS, &state->sregs);
-         TEST_ASSERT(r == 0, "Unexpected result from KVM_GET_SREGS, r: %i",
-@@ -1102,9 +1104,11 @@ void vcpu_load_state(struct kvm_vm *vm, uint32_t vcpuid, struct kvm_x86_state *s
-         TEST_ASSERT(r == 0, "Unexpected result from KVM_SET_XSAVE, r: %i",
-                 r);
+ 	/* It is invalid to have vmxon_pa == -1ull and SMM flags non-zero. */
+@@ -217,6 +226,8 @@ int main(int argc, char *argv[])
+ 	struct kvm_nested_state state;
+ 	struct kvm_cpuid_entry2 *entry = kvm_get_supported_cpuid_entry(1);
  
--	r = ioctl(vcpu->fd, KVM_SET_XCRS, &state->xcrs);
--        TEST_ASSERT(r == 0, "Unexpected result from KVM_SET_XCRS, r: %i",
--                r);
-+	if (kvm_check_cap(KVM_CAP_XCRS)) {
-+		r = ioctl(vcpu->fd, KVM_SET_XCRS, &state->xcrs);
-+		TEST_ASSERT(r == 0, "Unexpected result from KVM_SET_XCRS, r: %i",
-+			    r);
-+	}
- 
- 	r = ioctl(vcpu->fd, KVM_SET_SREGS, &state->sregs);
-         TEST_ASSERT(r == 0, "Unexpected result from KVM_SET_SREGS, r: %i",
++	have_evmcs = kvm_check_cap(KVM_CAP_HYPERV_ENLIGHTENED_VMCS);
++
+ 	if (!kvm_check_cap(KVM_CAP_NESTED_STATE)) {
+ 		printf("KVM_CAP_NESTED_STATE not available, skipping test\n");
+ 		exit(KSFT_SKIP);
 -- 
 2.20.1
 
