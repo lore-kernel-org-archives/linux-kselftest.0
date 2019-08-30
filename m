@@ -2,163 +2,113 @@ Return-Path: <SRS0=ZP9S=W2=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E3FDC3A5A4
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Aug 2019 15:31:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EC7AC3A59B
+	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Aug 2019 16:20:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 38E052342F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Aug 2019 15:31:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=tycho-ws.20150623.gappssmtp.com header.i=@tycho-ws.20150623.gappssmtp.com header.b="Re7G4/ST"
+	by mail.kernel.org (Postfix) with ESMTP id E4C0523426
+	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Aug 2019 16:20:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1567182027;
+	bh=7MOipqKt2Wmhp8etEhAUF9iImbxmzYm8rI9O4cKGm/c=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=nKQjH4ywgViMgTCYzTPLvEjSXZuv5CUfByEGSA+mw8rvN6X7NgRtVgupdJpW33KtB
+	 Pcog8QEalgIrhpNlMwegozYbtuXUB37cSmATo+GaF4SxbEZY+cv9g0g3fMCLpVgU0E
+	 JLgVnjO3vKJEg0xpdi5ePdhLCm6TjW93vi0Tvu9Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728165AbfH3Pbj (ORCPT
+        id S1727135AbfH3QU0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 30 Aug 2019 11:31:39 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:37214 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727791AbfH3Pbi (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Aug 2019 11:31:38 -0400
-Received: by mail-io1-f67.google.com with SMTP id q12so14856552iog.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Aug 2019 08:31:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tycho-ws.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=dvyo6oUnovUM1KkwAmeMZvZdETszrFSP9d+1xtXeBAY=;
-        b=Re7G4/STBbK/+RGJsNi6DB2cisy5CRzH57YGOwsYmjwb8RO3j04UVg6NSIQtKlmaIi
-         6qaia3NQZ5uU/XQIL3nBRnAAYEP3jSj3tWL9xyWbcA//0U+B/SiC52SF6G6SiJ2NkJcQ
-         g9sc0URxPDqC23464nRSk92Z4JG660Njofbl1jOpyI+5sfWPpK3b8z6cV8yw96UqtM6P
-         wZGDpMksz5c2Z8z4UGxpCJfFVZxR7Mq5mDXRIMt1PIRcxoIBGOi2VrW0coggPbSOhvWt
-         4SHZTdKr9RklHVG4n/WbBhuCPZP2MzcdMrUxaewaZ/dQXz19UwuN9O6lcwXLzhW6Hhwy
-         jy1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=dvyo6oUnovUM1KkwAmeMZvZdETszrFSP9d+1xtXeBAY=;
-        b=LQ3uoQIdWcAa4ThUrC5u41rMmYdq4cLY3iYJrNjUhZmedoU44zyawWe6NNNMBuxnjF
-         XIgfnmCiONlWWDpPnRBbDXnl3dnM2lqSkOCzGQaq6N4J3mj3ayGpskBB+g8mB0doJR0d
-         hl5FkxpuqmEgutWjCszwxf1uzQDRnCCHJEDXd8SdBS/xdFiOJROhODUD53ghMDos7LvH
-         xYaSmXKJV55+ohHaa32DhJdzbciOGLafheWnkdHZlOKndmtJ0lW35sGejsvBuQWX/cf+
-         E4gjU8kgg5UI5mS7XC7JRhhofC0I6lzo3aaeaqyoRZ6af6h/sJaPuqFkYDMEm+BkJb3R
-         qGNg==
-X-Gm-Message-State: APjAAAX7SnWUN159le3wbAF9fYD1yjSNXn653vXNu73CCifszgTesh6o
-        9hGSs7MqXMBMRVf71KzSyxz4GA==
-X-Google-Smtp-Source: APXvYqzId3SbBWmFtoh761168yy6H9oaWQmQxOIZYIBRGcgRAptzNNRRtEx2PtBDJyj9pib0yDaycg==
-X-Received: by 2002:a5e:8e4a:: with SMTP id r10mr4555992ioo.100.1567179097306;
-        Fri, 30 Aug 2019 08:31:37 -0700 (PDT)
-Received: from cisco ([2601:282:901:dd7b:d1e4:8e0c:bfac:7e42])
-        by smtp.gmail.com with ESMTPSA id a21sm4530735ioe.27.2019.08.30.08.31.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Aug 2019 08:31:36 -0700 (PDT)
-Date:   Fri, 30 Aug 2019 09:31:35 -0600
-From:   Tycho Andersen <tycho@tycho.ws>
-To:     shuah <shuah@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alakesh Haloi <alakesh.haloi@gmail.com>
-Subject: Re: [PATCH] selftests/seccomp: fix build on older kernels
-Message-ID: <20190830153135.GD7627@cisco>
-References: <20190826144302.7745-1-tycho@tycho.ws>
- <201908291003.005EB96606@keescook>
- <f01c3383-0184-9770-c72e-7fe08b552112@kernel.org>
- <1a3e9d47-73f5-9cf5-e050-46a455b6a6cc@kernel.org>
+        Fri, 30 Aug 2019 12:20:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38260 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727434AbfH3QU0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Aug 2019 12:20:26 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 063132341B;
+        Fri, 30 Aug 2019 16:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567182025;
+        bh=7MOipqKt2Wmhp8etEhAUF9iImbxmzYm8rI9O4cKGm/c=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=GOjHZLU8Epe54Oc+cpo+LHgMFF42/oSRz1S3EhcKAnb5S8ffa8d0DWdVVIdCHQv46
+         iusD8tsuBtfNUpvwo6sHzgX+noKayeaZY9sIyXqhaVkIsL5gfvhRjb6nW7EvQQ/fDS
+         XJgPwxCKgfKqJHniuvLRgw/9hDmZyMRQ1gMNljVY=
+Subject: Re: [PATCH v2] selftests: watchdog: Add optional file argument
+To:     "George G. Davis" <george_davis@mentor.com>
+Cc:     Jerry Hoemann <jerry.hoemann@hpe.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>, shuah <shuah@kernel.org>
+References: <1567169597-10330-1-git-send-email-george_davis@mentor.com>
+ <197ee603-6ea7-a3c8-6b62-e3ba95433053@kernel.org>
+ <20190830161320.GD23419@mam-gdavis-lt>
+From:   shuah <shuah@kernel.org>
+Message-ID: <ff4527a1-3b94-9b4a-b785-507eb861379c@kernel.org>
+Date:   Fri, 30 Aug 2019 10:20:23 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1a3e9d47-73f5-9cf5-e050-46a455b6a6cc@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190830161320.GD23419@mam-gdavis-lt>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 30, 2019 at 09:19:00AM -0600, shuah wrote:
-> On 8/29/19 6:45 PM, shuah wrote:
-> > On 8/29/19 11:06 AM, Kees Cook wrote:
-> > > On Mon, Aug 26, 2019 at 08:43:02AM -0600, Tycho Andersen wrote:
-> > > > The seccomp selftest goes to some length to build against older kernel
-> > > > headers, viz. all the #ifdefs at the beginning of the file. 201766a20e30
-> > > > ("ptrace: add PTRACE_GET_SYSCALL_INFO request") introduces some
-> > > > additional
-> > > > macros, but doesn't do the #ifdef dance. Let's add that dance here to
-> > > > avoid:
-> > > > 
-> > > > gcc -Wl,-no-as-needed -Wall  seccomp_bpf.c -lpthread -o seccomp_bpf
-> > > > In file included from seccomp_bpf.c:51:
-> > > > seccomp_bpf.c: In function ‘tracer_ptrace’:
-> > > > seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’
-> > > > undeclared (first use in this function); did you mean
-> > > > ‘PTRACE_EVENT_CLONE’?
-> > > >    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-> > > >                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-> > > >    __typeof__(_expected) __exp = (_expected); \
-> > > >               ^~~~~~~~~
-> > > > seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
-> > > >    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-> > > >    ^~~~~~~~~
-> > > > seccomp_bpf.c:1787:20: note: each undeclared identifier is
-> > > > reported only once for each function it appears in
-> > > >    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-> > > >                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-> > > >    __typeof__(_expected) __exp = (_expected); \
-> > > >               ^~~~~~~~~
-> > > > seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
-> > > >    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-> > > >    ^~~~~~~~~
-> > > > seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’
-> > > > undeclared (first use in this function); did you mean
-> > > > ‘PTRACE_EVENT_EXIT’?
-> > > >      : PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
-> > > >        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-> > > >    __typeof__(_expected) __exp = (_expected); \
-> > > >               ^~~~~~~~~
-> > > > seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
-> > > >    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-> > > >    ^~~~~~~~~
-> > > > make: *** [Makefile:12: seccomp_bpf] Error 1
-> > > > 
-> > > > Signed-off-by: Tycho Andersen <tycho@tycho.ws>
-> > > > Fixes: 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
-> > > 
-> > > Acked-by: Kees Cook <keescook@chromium.org>
-> > > 
-> > > Alakesh Haloi also sent a fix[1] for this. I prefer Tycho's solution
-> > > (one #ifndef and a Fixes line). Shuah, can you please apply this?
-> > > 
-> > 
-> > Kees,
-> > 
-> > Yes I will pick this up.
-> > 
-> > thanks,
-> > -- Shuah
-> > 
+On 8/30/19 10:13 AM, George G. Davis wrote:
+> On Fri, Aug 30, 2019 at 09:12:10AM -0600, shuah wrote:
+>> On 8/30/19 6:53 AM, George G. Davis wrote:
+>>> diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
+>>> @@ -69,6 +70,7 @@ static void term(int sig)
+>>>   static void usage(char *progname)
+>>>   {
+>>>   	printf("Usage: %s [options]\n", progname);
+>>> +	printf(" -f, --file          Open watchdog device file (default is /dev/watchdog)\n");
+>>
+>> Can you split this line into two printf's. Checkpatch doesn't like
+>> it.
+>>
+>> printf(" -f, --file          Open watchdog device file\n");
+>> A second one below for default.
 > 
-> Applied after fixing the following checkpatch error in the commit log:
+> Sure, I'll add the following interdiff in v3:
 > 
-> ERROR: Please use git commit description style 'commit <12+ chars of sha1>
-> ("<title line>")' - ie: 'commit 201766a20e30 ("ptrace: add
-> PTRACE_GET_SYSCALL_INFO request")'
-> #82:
-> 
-> Now reads as follows:
-> 
-> Commit 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
->     introduces some additional macros, but doesn't do the #ifdef dance.
->     Let's add that dance here to avoid:
+> diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
+> index 9f17cae61007..6a68b486dd61 100644
+> --- a/tools/testing/selftests/watchdog/watchdog-test.c
+> +++ b/tools/testing/selftests/watchdog/watchdog-test.c
+> @@ -70,7 +70,8 @@ static void term(int sig)
+>   static void usage(char *progname)
+>   {
+>   	printf("Usage: %s [options]\n", progname);
+> -	printf(" -f, --file          Open watchdog device file (default is /dev/watchdog)\n");
+> +	printf(" -f, --file          Open watchdog device file\n");
+> +	printf("                     Default is /dev/watchdog\n");
 
-Ah, good to know. Thanks!
+Thanks. This is what I am looking for. Please send v3 with thsi change.
 
-Tycho
+>   	printf(" -b, --bootstatus    Get last boot status (Watchdog/POR)\n");
+>   	printf(" -d, --disable       Turn off the watchdog timer\n");
+>   	printf(" -e, --enable        Turn on the watchdog timer\n");
+> 
+>> On a separate note, I wish this usage block uses \t instead of spacing
+>> things out.
+> 
+> I noticed that most of those lines are hard spaced with only one using tabs.
+> To remain consistent with existing CodingStyle, I used hard spaces.
+> 
+
+yes. My comment about using "\t" can be done later and if you would like
+to send for that patch, I will be happy to take it.
+
+thanks,
+-- Shuah
