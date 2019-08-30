@@ -2,76 +2,110 @@ Return-Path: <SRS0=ZP9S=W2=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B911C3A59B
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Aug 2019 13:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B59AC3A59B
+	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Aug 2019 14:09:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1D50423427
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Aug 2019 13:59:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 209C223427
+	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Aug 2019 14:09:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1567174172;
+	bh=p5AjW3xVDRxCRokQLJsTqv+1lmdRB2z4uTAo1OGwa4Q=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=KX7V/tTpuVYO4Zpk2VZP8PVkXobQhHWivk5poxfYJm0KO2NdZU9XPgriWm+Z0UEGy
+	 pcEDS/82ueBrcke6GJvryxxVBC9J0quaUrgxV6LQF1n8L7rZTew9iiDBj6XblXln/U
+	 IOHfCJtF63D2lzr6eguiGyQzN5TgqkwpWKMemkqc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728111AbfH3N7R (ORCPT
+        id S1727783AbfH3OJb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 30 Aug 2019 09:59:17 -0400
-Received: from foss.arm.com ([217.140.110.172]:60780 "EHLO foss.arm.com"
+        Fri, 30 Aug 2019 10:09:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46668 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727751AbfH3N7R (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Aug 2019 09:59:17 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4089E360;
-        Fri, 30 Aug 2019 06:59:16 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB5B63F703;
-        Fri, 30 Aug 2019 06:59:14 -0700 (PDT)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will@kernel.org, paul.burton@mips.com,
-        tglx@linutronix.de, salyzyn@android.com, 0x7f454c46@gmail.com,
-        luto@kernel.org
-Subject: [PATCH v2 1/8] arm64: compat: vdso: Expose BUILD_VDSO32
-Date:   Fri, 30 Aug 2019 14:58:55 +0100
-Message-Id: <20190830135902.20861-2-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190830135902.20861-1-vincenzo.frascino@arm.com>
-References: <20190830135902.20861-1-vincenzo.frascino@arm.com>
+        id S1727791AbfH3OJb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Aug 2019 10:09:31 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 96DBD22CE9;
+        Fri, 30 Aug 2019 14:09:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567174170;
+        bh=p5AjW3xVDRxCRokQLJsTqv+1lmdRB2z4uTAo1OGwa4Q=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=E/heTaWMHie+f9aeljhO/1yfl9cSU7vcNF/AqUhGNPWL/KPpd7dNvx0UyWaxDk1k2
+         VFXySM1rPovDrqpfURtsc0Qw49mjuDC3qFcbeYuFqQRddu0yUujxGnbUUQ6uBdz0AY
+         Fg6wPEqFXmdOf/n5IqZABnc7lopIyAgMoMkspmt4=
+Subject: Re: [PATCH] seccomp: fix compilation errors in seccomp-bpf kselftest
+To:     Alakesh Haloi <alakesh.haloi@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <20190822215823.GA11292@ip-172-31-44-144.us-west-2.compute.internal>
+From:   shuah <shuah@kernel.org>
+Message-ID: <30e993fe-de76-9831-7ecc-61fcbcd51ae0@kernel.org>
+Date:   Fri, 30 Aug 2019 08:09:20 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20190822215823.GA11292@ip-172-31-44-144.us-west-2.compute.internal>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-clock_gettime32 and clock_getres_time32 should be compiled only with the
-32 bit vdso library.
+On 8/22/19 3:58 PM, Alakesh Haloi wrote:
+> Without this patch we see following error while building and kselftest
+> for secccomp_bpf fails.
+> 
+> seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ undeclared (first use in this function);
+> seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared (first use in this function);
+> 
+> Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
+> ---
+>   tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 6ef7f16c4cf5..2e619760fc3e 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -1353,6 +1353,14 @@ TEST_F(precedence, log_is_fifth_in_any_order)
+>   #define PTRACE_EVENT_SECCOMP 7
+>   #endif
+>   
+> +#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
+> +#define PTRACE_EVENTMSG_SYSCALL_ENTRY 1
+> +#endif
+> +
+> +#ifndef PTRACE_EVENTMSG_SYSCALL_EXIT
+> +#define PTRACE_EVENTMSG_SYSCALL_EXIT 2
+> +#endif
+> +
+>   #define IS_SECCOMP_EVENT(status) ((status >> 16) == PTRACE_EVENT_SECCOMP)
+>   bool tracer_running;
+>   void tracer_stop(int sig)
+> 
 
-Expose BUILD_VDSO32 when arm64 compat is compiled, to provide an
-indication to the generic library to include these symbols.
+Hi Kees,
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
----
- arch/arm64/include/asm/vdso/compat_gettimeofday.h | 1 +
- 1 file changed, 1 insertion(+)
+Okay to apply this one for 5.4-rc1. Or is this going through bpf tree?
+If it is going through bpf tree:
 
-diff --git a/arch/arm64/include/asm/vdso/compat_gettimeofday.h b/arch/arm64/include/asm/vdso/compat_gettimeofday.h
-index c50ee1b7d5cd..fe7afe0f1a3d 100644
---- a/arch/arm64/include/asm/vdso/compat_gettimeofday.h
-+++ b/arch/arm64/include/asm/vdso/compat_gettimeofday.h
-@@ -17,6 +17,7 @@
- #define VDSO_HAS_CLOCK_GETRES		1
- 
- #define VDSO_HAS_32BIT_FALLBACK		1
-+#define BUILD_VDSO32			1
- 
- static __always_inline
- int gettimeofday_fallback(struct __kernel_old_timeval *_tv,
--- 
-2.23.0
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
+thanks,
+-- Shuah
