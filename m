@@ -4,27 +4,28 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3B3BC3A59B
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Aug 2019 13:59:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F440C3A5A6
+	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Aug 2019 13:59:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CE24923426
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Aug 2019 13:59:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C84123427
+	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Aug 2019 13:59:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728503AbfH3N7U (ORCPT
+        id S1728511AbfH3N72 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 30 Aug 2019 09:59:20 -0400
-Received: from foss.arm.com ([217.140.110.172]:60794 "EHLO foss.arm.com"
+        Fri, 30 Aug 2019 09:59:28 -0400
+Received: from foss.arm.com ([217.140.110.172]:60866 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727751AbfH3N7T (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Aug 2019 09:59:19 -0400
+        id S1728604AbfH3N71 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Aug 2019 09:59:27 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0AD131576;
-        Fri, 30 Aug 2019 06:59:18 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EBE5D360;
+        Fri, 30 Aug 2019 06:59:26 -0700 (PDT)
 Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7569F3F703;
-        Fri, 30 Aug 2019 06:59:16 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 623F83F703;
+        Fri, 30 Aug 2019 06:59:25 -0700 (PDT)
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
 To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
@@ -32,9 +33,9 @@ To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 Cc:     catalin.marinas@arm.com, will@kernel.org, paul.burton@mips.com,
         tglx@linutronix.de, salyzyn@android.com, 0x7f454c46@gmail.com,
         luto@kernel.org
-Subject: [PATCH v2 2/8] lib: vdso: Build 32 bit specific functions in the right context
-Date:   Fri, 30 Aug 2019 14:58:56 +0100
-Message-Id: <20190830135902.20861-3-vincenzo.frascino@arm.com>
+Subject: [PATCH v2 7/8] mips: vdso: Remove unused VDSO_HAS_32BIT_FALLBACK
+Date:   Fri, 30 Aug 2019 14:59:01 +0100
+Message-Id: <20190830135902.20861-8-vincenzo.frascino@arm.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20190830135902.20861-1-vincenzo.frascino@arm.com>
 References: <20190830135902.20861-1-vincenzo.frascino@arm.com>
@@ -45,53 +46,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-clock_gettime32 and clock_getres_time32 should be compiled only with a
-32 bit vdso library.
+VDSO_HAS_32BIT_FALLBACK has been removed from the core since
+the architectures that support the generic vDSO library have
+been converted to support the 32 bit fallbacks.
 
-Exclude these symbols when BUILD_VDSO32 is not defined.
+Remove unused VDSO_HAS_32BIT_FALLBACK from mips vdso.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Paul Burton <paul.burton@mips.com>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Reviewed-by: Andy Lutomirski <luto@kernel.org>
 ---
- lib/vdso/gettimeofday.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/mips/include/asm/vdso/gettimeofday.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-index e630e7ff57f1..a86e89e6dedc 100644
---- a/lib/vdso/gettimeofday.c
-+++ b/lib/vdso/gettimeofday.c
-@@ -117,6 +117,7 @@ __cvdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts)
- 	return 0;
- }
+diff --git a/arch/mips/include/asm/vdso/gettimeofday.h b/arch/mips/include/asm/vdso/gettimeofday.h
+index e78462e8ca2e..5ad2b086626d 100644
+--- a/arch/mips/include/asm/vdso/gettimeofday.h
++++ b/arch/mips/include/asm/vdso/gettimeofday.h
+@@ -107,8 +107,6 @@ static __always_inline int clock_getres_fallback(
  
-+#ifdef BUILD_VDSO32
- static __maybe_unused int
- __cvdso_clock_gettime32(clockid_t clock, struct old_timespec32 *res)
- {
-@@ -139,6 +140,7 @@ __cvdso_clock_gettime32(clockid_t clock, struct old_timespec32 *res)
- 	}
- 	return ret;
- }
-+#endif /* BUILD_VDSO32 */
+ #if _MIPS_SIM != _MIPS_SIM_ABI64
  
- static __maybe_unused int
- __cvdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz)
-@@ -229,6 +231,7 @@ int __cvdso_clock_getres(clockid_t clock, struct __kernel_timespec *res)
- 	return 0;
- }
- 
-+#ifdef BUILD_VDSO32
- static __maybe_unused int
- __cvdso_clock_getres_time32(clockid_t clock, struct old_timespec32 *res)
- {
-@@ -251,4 +254,5 @@ __cvdso_clock_getres_time32(clockid_t clock, struct old_timespec32 *res)
- 	}
- 	return ret;
- }
-+#endif /* BUILD_VDSO32 */
- #endif /* VDSO_HAS_CLOCK_GETRES */
+-#define VDSO_HAS_32BIT_FALLBACK	1
+-
+ static __always_inline long clock_gettime32_fallback(
+ 					clockid_t _clkid,
+ 					struct old_timespec32 *_ts)
 -- 
 2.23.0
 
