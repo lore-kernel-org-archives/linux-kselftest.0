@@ -6,32 +6,32 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0900CC3A5A5
-	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Sep 2019 11:29:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35C20C3A5A7
+	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Sep 2019 11:29:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D8E9D2173E
-	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Sep 2019 11:29:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 069C32173E
+	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Sep 2019 11:29:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730059AbfIBL3z (ORCPT
+        id S1730071AbfIBL35 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 2 Sep 2019 07:29:55 -0400
-Received: from foss.arm.com ([217.140.110.172]:52476 "EHLO foss.arm.com"
+        Mon, 2 Sep 2019 07:29:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:52500 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730071AbfIBL3z (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Sep 2019 07:29:55 -0400
+        id S1730079AbfIBL35 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 2 Sep 2019 07:29:57 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A323360;
-        Mon,  2 Sep 2019 04:29:54 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD2411597;
+        Mon,  2 Sep 2019 04:29:56 -0700 (PDT)
 Received: from e120937-lin.cambridge.arm.com (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A2E223F246;
-        Mon,  2 Sep 2019 04:29:53 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 01C563F246;
+        Mon,  2 Sep 2019 04:29:55 -0700 (PDT)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, shuah@kernel.org
 Cc:     andreyknvl@google.com, dave.martin@arm.com, amit.kachhap@arm.com
-Subject: [PATCH v5 01/11] kselftest: arm64: add skeleton Makefile
-Date:   Mon,  2 Sep 2019 12:29:22 +0100
-Message-Id: <20190902112932.36129-2-cristian.marussi@arm.com>
+Subject: [PATCH v5 03/11] kselftest: arm64: mangle_pstate_invalid_daif_bits
+Date:   Mon,  2 Sep 2019 12:29:24 +0100
+Message-Id: <20190902112932.36129-4-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190902112932.36129-1-cristian.marussi@arm.com>
 References: <20190902112932.36129-1-cristian.marussi@arm.com>
@@ -40,189 +40,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a new arm64-specific empty subsystem amongst TARGETS of KSFT build
-framework; keep these new arm64 KSFT testcases separated into distinct
-subdirs inside tools/testing/selftests/arm64/ depending on the specific
-subsystem targeted.
-
-Add into toplevel arm64 KSFT Makefile a mechanism to guess the effective
-location of Kernel headers as installed by KSFT framework.
-
-Merge with
-
-commit 9ce1263033cd ("selftests, arm64: add a selftest for passing
-		     tagged pointers to kernel")
-
-while moving such KSFT tags tests inside their own subdirectory
-(arm64/tags).
+Add a simple mangle testcase which messes with the ucontext_t from within
+the signal handler, trying to set PSTATE DAIF bits to an invalid value
+(masking everything). Expects SIGSEGV on test PASS.
 
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
-v4 --> v5
-- rebased on arm64/for-next/core
-- merged this patch with KSFT arm64 tags patch, while moving the latter
-  into its own subdir
-- moved kernel header includes search mechanism from KSFT arm64
-  SIGNAL Makefile
-- export proper top_srcdir ENV for lib.mk
 v3 --> v4
-- comment reword
-- simplified documentation in README
-- dropped README about standalone
+- fixed commit message
+- added testcase comment description
 ---
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/arm64/Makefile        | 70 +++++++++++++++++--
- tools/testing/selftests/arm64/README          | 20 ++++++
- tools/testing/selftests/arm64/tags/Makefile   | 10 +++
- .../arm64/{ => tags}/run_tags_test.sh         |  0
- .../selftests/arm64/{ => tags}/tags_test.c    |  0
- 6 files changed, 95 insertions(+), 6 deletions(-)
- create mode 100644 tools/testing/selftests/arm64/README
- create mode 100644 tools/testing/selftests/arm64/tags/Makefile
- rename tools/testing/selftests/arm64/{ => tags}/run_tags_test.sh (100%)
- rename tools/testing/selftests/arm64/{ => tags}/tags_test.c (100%)
+ .../mangle_pstate_invalid_daif_bits.c         | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_daif_bits.c
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 25b43a8c2b15..1722dae9381a 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- TARGETS = android
-+TARGETS += arm64
- TARGETS += bpf
- TARGETS += breakpoints
- TARGETS += capabilities
-diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
-index a61b2e743e99..5dbb0ffdfc9a 100644
---- a/tools/testing/selftests/arm64/Makefile
-+++ b/tools/testing/selftests/arm64/Makefile
-@@ -1,11 +1,69 @@
- # SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2019 ARM Limited
- 
--# ARCH can be overridden by the user for cross compiling
--ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-+# When ARCH not overridden for crosscompiling, lookup machine
-+ARCH ?= $(shell uname -m)
-+ARCH := $(shell echo $(ARCH) | sed -e s/aarch64/arm64/)
- 
--ifneq (,$(filter $(ARCH),aarch64 arm64))
--TEST_GEN_PROGS := tags_test
--TEST_PROGS := run_tags_test.sh
-+ifeq ("x$(ARCH)", "xarm64")
-+SUBDIRS := tags
-+else
-+SUBDIRS :=
- endif
- 
--include ../lib.mk
-+CFLAGS := -Wall -O2 -g
-+
-+# A proper top_srcdir is needed by KSFT(lib.mk)
-+top_srcdir = ../../../../..
-+
-+# Additional include paths needed by kselftest.h and local headers
-+CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
-+
-+# Guessing where the Kernel headers could have been installed
-+# depending on ENV config
-+ifeq ($(KBUILD_OUTPUT),)
-+khdr_dir = $(top_srcdir)/usr/include
-+else
-+# the KSFT preferred location when KBUILD_OUTPUT is set
-+khdr_dir = $(KBUILD_OUTPUT)/kselftest/usr/include
-+endif
-+
-+CFLAGS += -I$(khdr_dir)
-+
-+export CC
-+export CFLAGS
-+export top_srcdir
-+
-+all:
-+	@for DIR in $(SUBDIRS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		mkdir -p $$BUILD_TARGET;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+install: all
-+	@for DIR in $(SUBDIRS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+run_tests: all
-+	@for DIR in $(SUBDIRS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+# Avoid any output on non arm64 on emit_tests
-+emit_tests: all
-+	@for DIR in $(SUBDIRS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+clean:
-+	@for DIR in $(SUBDIRS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+.PHONY: all clean install run_tests emit_tests
-diff --git a/tools/testing/selftests/arm64/README b/tools/testing/selftests/arm64/README
+diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_daif_bits.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_daif_bits.c
 new file mode 100644
-index 000000000000..aca892e62a6c
+index 000000000000..434b82597007
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/README
-@@ -0,0 +1,20 @@
-+KSelfTest ARM64
-+===============
++++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_daif_bits.c
+@@ -0,0 +1,35 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2019 ARM Limited
++ *
++ * Try to mangle the ucontext from inside a signal handler, mangling the
++ * DAIF bits in an illegal manner: this attempt must be spotted by Kernel
++ * and the test case is expected to be terminated via SEGV.
++ *
++ */
 +
-+- These tests are arm64 specific and so not built or run but just skipped
-+  completely when env-variable ARCH is found to be different than 'arm64'
-+  and `uname -m` reports other than 'aarch64'.
++#include "test_signals_utils.h"
++#include "testcases.h"
 +
-+- Holding true the above, ARM64 KSFT tests can be run within the KSelfTest
-+  framework using standard Linux top-level-makefile targets:
++static int mangle_invalid_pstate_run(struct tdescr *td, siginfo_t *si,
++				     ucontext_t *uc)
++{
++	ASSERT_GOOD_CONTEXT(uc);
 +
-+      $ make TARGETS=arm64 kselftest-clean
-+      $ make TARGETS=arm64 kselftest
++	/*
++	 * This config should trigger a SIGSEGV by Kernel when it checks
++	 * the sigframe consistency in valid_user_regs() routine.
++	 */
++	uc->uc_mcontext.pstate |= PSR_D_BIT | PSR_A_BIT | PSR_I_BIT | PSR_F_BIT;
 +
-+      or
++	return 1;
++}
 +
-+      $ make -C tools/testing/selftests TARGETS=arm64 \
-+		INSTALL_PATH=<your-installation-path> install
-+
-+   Further details on building and running KFST can be found in:
-+     Documentation/dev-tools/kselftest.rst
-diff --git a/tools/testing/selftests/arm64/tags/Makefile b/tools/testing/selftests/arm64/tags/Makefile
-new file mode 100644
-index 000000000000..76205533135b
---- /dev/null
-+++ b/tools/testing/selftests/arm64/tags/Makefile
-@@ -0,0 +1,10 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# ARCH can be overridden by the user for cross compiling
-+ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-+
-+ifneq (,$(filter $(ARCH),aarch64 arm64))
-+TEST_GEN_PROGS := tags_test
-+TEST_PROGS := run_tags_test.sh
-+endif
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/arm64/run_tags_test.sh b/tools/testing/selftests/arm64/tags/run_tags_test.sh
-similarity index 100%
-rename from tools/testing/selftests/arm64/run_tags_test.sh
-rename to tools/testing/selftests/arm64/tags/run_tags_test.sh
-diff --git a/tools/testing/selftests/arm64/tags_test.c b/tools/testing/selftests/arm64/tags/tags_test.c
-similarity index 100%
-rename from tools/testing/selftests/arm64/tags_test.c
-rename to tools/testing/selftests/arm64/tags/tags_test.c
++struct tdescr tde = {
++		.sanity_disabled = true,
++		.name = "MANGLE_PSTATE_INVALID_DAIF_BITS",
++		.descr = "Mangling uc_mcontext with INVALID DAIF_BITS",
++		.sig_trig = SIGUSR1,
++		.sig_ok = SIGSEGV,
++		.run = mangle_invalid_pstate_run,
++};
 -- 
 2.17.1
 
