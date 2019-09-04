@@ -2,106 +2,85 @@ Return-Path: <SRS0=jgWI=W7=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-7.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30F34C3A5AA
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Sep 2019 22:31:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E91BC3A59E
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Sep 2019 22:44:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1393C208E4
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Sep 2019 22:31:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4EB0721881
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Sep 2019 22:44:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1567637055;
+	bh=xYAcO4QBGr30BVz/sHi/ubGoS3juMZ+3hMwu/Ru4De8=;
+	h=Subject:To:References:From:Date:In-Reply-To:List-ID:From;
+	b=US3lepmoqsQ6+P0WaA1cjPk7jeB7mPktOFvcBv4BhFnXvdl6C2dAyr1BeywboA4mF
+	 nWzofxCpl3pWs3L0G22w/xvlbiq/EhlS/rhUZZwueg0nRiNWsuTip32DmId4oF3w0H
+	 94etP3cnsjoonLOzxv/bjCFw2Niz5xT+ytU11rCs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730447AbfIDWb3 (ORCPT
+        id S1729093AbfIDWoP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 4 Sep 2019 18:31:29 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:33580 "EHLO mx1.redhat.com"
+        Wed, 4 Sep 2019 18:44:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38006 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729919AbfIDWb2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Sep 2019 18:31:28 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1727156AbfIDWoO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Sep 2019 18:44:14 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 7774A10277E2;
-        Wed,  4 Sep 2019 22:31:27 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2332A1001956;
-        Wed,  4 Sep 2019 22:31:16 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wgcJq21Hydh7Tx5-o8empoPp7ULDBw0Am-du_Pa+fcftQ@mail.gmail.com>
-References: <CAHk-=wgcJq21Hydh7Tx5-o8empoPp7ULDBw0Am-du_Pa+fcftQ@mail.gmail.com> <20190904201933.10736-1-cyphar@cyphar.com> <20190904201933.10736-11-cyphar@cyphar.com> <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com> <20190904214856.vnvom7h5xontvngq@yavin.dot.cyphar.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian@brauner.io>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v12 10/12] namei: aggressively check for nd->root escape on ".." resolution
+        by mail.kernel.org (Postfix) with ESMTPSA id 782EC20870;
+        Wed,  4 Sep 2019 22:44:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567637054;
+        bh=xYAcO4QBGr30BVz/sHi/ubGoS3juMZ+3hMwu/Ru4De8=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=LYX8ESvAgwBEWCIBUt6zYDAZy3TxPU2gu7jIE/jV0j4pNf3ZdBkKeGkVIh4ylZfrm
+         C6JVUmxM7GpZLwXc5Hb8hGAUZ8K7K9eg6eLpHkhBkosEsPu2lgVbOfVe9UIvAC+U51
+         QL7bkEADaLb60UfHrBG+wx7c91RTSgAQrRLV5RBk=
+Subject: Re: next-20190903 kselftest results
+To:     ci_notify@linaro.org, lkft-triage@lists.linaro.org,
+        dan.rue@linaro.org, anders.roxell@linaro.org,
+        naresh.kamboju@linaro.org, linux-kselftest@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <943338456.3594.1567519226589.JavaMail.javamailuser@localhost>
+From:   shuah <shuah@kernel.org>
+Message-ID: <34634351-ecff-4520-cbc0-8ab6a4412150@kernel.org>
+Date:   Wed, 4 Sep 2019 16:44:12 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <20591.1567636276.1@warthog.procyon.org.uk>
-Date:   Wed, 04 Sep 2019 23:31:16 +0100
-Message-ID: <20592.1567636276@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.66]); Wed, 04 Sep 2019 22:31:28 +0000 (UTC)
+In-Reply-To: <943338456.3594.1567519226589.JavaMail.javamailuser@localhost>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-> > Hinting to userspace to do a retry (with -EAGAIN as you mention in your
-> > other mail) wouldn't be a bad thing at all, though you'd almost
-> > certainly get quite a few spurious -EAGAINs -- &{mount,rename}_lock are
-> > global for the entire machine, after all.
+On 9/3/19 8:00 AM, ci_notify@linaro.org wrote:
+> Summary
+> ------------------------------------------------------------------------
+> kernel: 5.3.0-rc7
+> git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> git branch: master
+> git commit: 7dc4585e03786f84d6e9dc16caa3ba5b8b44d986
+> git describe: next-20190903
+> Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190903
 > 
-> I'd hope that we have some future (possibly very long-term)
-> alternative that is not quite system-global, but yes, right now they
-> are.
+> Regressions (compared to build next-20190902)
 
-It ought to be reasonably easy to make them per-sb at least, I think.  We
-don't allow cross-super rename, right?
+Looks like you are running kselftest from 5.2 on this linux-next.
+You won't be able to find any kselftest test regressions this way.
+You aren't testing the kselftest patches that are in linux-next
+for Linux 5.4-rc1.
 
-David
+It would be helpful if you match the kernel and kselftest for linux-next
+and Linux mainline.
+
+It will help find test bugs quicker that way.
+
+thanks,
+-- Shuah
