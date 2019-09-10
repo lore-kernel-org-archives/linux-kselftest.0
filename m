@@ -4,61 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A956BC49ED9
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Sep 2019 23:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70D57C5AE5C
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Sep 2019 23:32:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 81029216F4
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Sep 2019 23:32:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B13321D7D
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Sep 2019 23:32:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RhQSqz9G"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h+GGtkUe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbfIJXcG (ORCPT
+        id S1726665AbfIJXcP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 Sep 2019 19:32:06 -0400
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:39016 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726317AbfIJXcF (ORCPT
+        Tue, 10 Sep 2019 19:32:15 -0400
+Received: from mail-pl1-f201.google.com ([209.85.214.201]:42366 "EHLO
+        mail-pl1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726642AbfIJXcP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Sep 2019 19:32:05 -0400
-Received: by mail-pf1-f201.google.com with SMTP id n186so14240799pfn.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2019 16:32:04 -0700 (PDT)
+        Tue, 10 Sep 2019 19:32:15 -0400
+Received: by mail-pl1-f201.google.com with SMTP id t10so10796893plr.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2019 16:32:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Vuvev8Yzxd1RQX7GlTnFg8u8KyDaWAzEg+D+vv41AFA=;
-        b=RhQSqz9Gow9lf3iCQJh2cOagmx6FazRfMH4sEChocwKkK/jGnMsp1AZ1niK495fZrk
-         sRn6d4YWN5J1bh6nFGxjKVP6G70zs3olWAaKHpNaedsb8FuwOty0ywehJVRiG/7DofuX
-         uybmLEFmUYZJPwpF8twlZl/gSn9fMdKVTRsNU2DY5f5Z7PJW2tnVVgvxa0y6o8jkZ7NH
-         vIPd/YYOZ5iS9r3YloHvde/PPsjmoWSn60tdpD3/VYzKfrgcSL93m01RYogrTr6HiyuK
-         m+iM8PVusjQYRgOXRPxj3Y66nWWhVOkQhQFehH/jJ0Ro7yxbajdQz+YsKWWPpBRb5CZi
-         gQFg==
+        bh=WFBLVilMD9R5I2x9WGApNW9Xl/InaF3MVHc6lryEpGU=;
+        b=h+GGtkUeEfv2DklIxS4AaGy9bxjHBdCnHnCXuii/Vee2O6OaKz2XDFN61+5jXM5oLb
+         hLp0KoFrwcRvtrNyVtZANiecFGNPnCyDd2v1fGDEyDxfetUE8RkmoUkAz0201Exq8q0P
+         V8ucnk86NfeRmPUns1h5Xq2dS82AvBDyWoJ9ZlOBbrPiIx5vFNjvQFWgcwcSWLH4ggMh
+         MBL7FpeQC2ZG+wLeoWOCXoSRnTFXm9JZoYOUemduU/x+trExFboUwRvulJ4PCEG9Up3d
+         zQohLvxEd1a6/1XlOi4OGhMXgLjGJRjki/T4c2jrHO9Nf4+fqBrm1agQx204TOY3vixe
+         43vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Vuvev8Yzxd1RQX7GlTnFg8u8KyDaWAzEg+D+vv41AFA=;
-        b=jWcHW1384N/6e5QtUgoejHKhpDM3isku9gMziHJ7e8kFFq5vovfb9BmrnXt1MW6y2U
-         SzVvpuH2E8WsM6xtXggCquOx4M0DW8oHzUuhY4gDSMVXytv+Xg/JnFAyp8WFn24COVCk
-         XdJI8i619qqtuTcnRxgLPV1+u5J8tsv4Vg8h7j28dekMiuLvTENvG6xrtxZOg1GC8yLS
-         gay8oLNNEf5/zOvgj13UJvuXlGO3aZoIhU4WxBpD7U2YC7IwqmVYjpmMPbJxeh4kBg34
-         Q4xo6JxFT/c/O5B/JteppnFYe5VkW9XQ7Xq8k7zoD2yJPm5uOIDL9tSvhNjVRvrMc4Ek
-         WdBQ==
-X-Gm-Message-State: APjAAAVSLb0h8Vu0a1gZTCgCNrbcbjjU/v9Y3pizEuYXNfdq0vrQbigV
-        DhGyGmln3IO/NAL08c9VBecjc2v9jnFis+9Oig==
-X-Google-Smtp-Source: APXvYqyXGgdGxEdLLOLogNOyiNYauXGQNpF8G1qrcyLi9ZKsCxGrBA4ZsS4UbIa1HhG6T+/TP2q13PknIdsiZKtDLg==
-X-Received: by 2002:a65:60d3:: with SMTP id r19mr30472526pgv.91.1568158323822;
- Tue, 10 Sep 2019 16:32:03 -0700 (PDT)
-Date:   Tue, 10 Sep 2019 16:31:42 -0700
+        bh=WFBLVilMD9R5I2x9WGApNW9Xl/InaF3MVHc6lryEpGU=;
+        b=ZkhGeHSX9McD31lJDyJonLVSWfiL/mR+Mj1Rj0mC2p/QVjDhBaag7mYFAISt1CbU4l
+         Srj6KQIb8MHoxXGSSKGkDGn8QBvIX0b+I3w7I/NqKVdDYVD8QgltgchKC0eFbZRFnZS6
+         ppkSnfYXqW8psX0+0HafxzLjFfrq0qfikhCRLnwTNlCyZVAz6GOrXas9fZ9yyUTI+QQF
+         GpAJD8VWqMEOJrl74gAsBkDj6roSRTiY/qYdY2incn+sJBLjhwR4q+U34o+HBvvm50lX
+         Bj/R0Y6E6+ZtyJlmeq+PBHewaDm3uGtE6W5yycVW8eXekeg87NjgRtbgeiMTEYyUfnfC
+         jVBA==
+X-Gm-Message-State: APjAAAXfaE1BNvvSjFQPEY9WENZbIdUt1mxaZO6BO5l/tdAXzEIx430/
+        1SJAoTq2y7nLoNYvd2w9cFRpe0xEHT6P/nu3Hg==
+X-Google-Smtp-Source: APXvYqzjnbYKL7TAsRI3CXlT/ixkt0pN7kXi7YtxByo8CwSMg7rt/bgc//xvhRD0khbYxEu3pdYIvPwRLoSYCU49Fw==
+X-Received: by 2002:a65:6288:: with SMTP id f8mr29606798pgv.292.1568158331902;
+ Tue, 10 Sep 2019 16:32:11 -0700 (PDT)
+Date:   Tue, 10 Sep 2019 16:31:45 -0700
 In-Reply-To: <20190910233146.206080-1-almasrymina@google.com>
-Message-Id: <20190910233146.206080-6-almasrymina@google.com>
+Message-Id: <20190910233146.206080-9-almasrymina@google.com>
 Mime-Version: 1.0
 References: <20190910233146.206080-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.23.0.162.g0b9fbb3734-goog
-Subject: [PATCH v4 5/9] hugetlb: remove duplicated code
+Subject: [PATCH v4 8/9] hugetlb_cgroup: Add hugetlb_cgroup reservation tests
 From:   Mina Almasry <almasrymina@google.com>
 To:     mike.kravetz@oracle.com
 Cc:     shuah@kernel.org, almasrymina@google.com, rientjes@google.com,
@@ -73,172 +74,783 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove duplicated code between region_chg and region_add, and refactor it into
-a common function, add_reservation_in_range. This is mostly done because
-there is a follow up change in this series that disables region
-coalescing in region_add, and I want to make that change in one place
-only. It should improve maintainability anyway on its own.
+The tests use both shared and private mapped hugetlb memory, and
+monitors the hugetlb usage counter as well as the hugetlb reservation
+counter. They test different configurations such as hugetlb memory usage
+via hugetlbfs, or MAP_HUGETLB, or shmget/shmat, and with and without
+MAP_POPULATE.
 
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 ---
- mm/hugetlb.c | 116 ++++++++++++++++++++++++---------------------------
- 1 file changed, 54 insertions(+), 62 deletions(-)
+ tools/testing/selftests/vm/.gitignore         |   1 +
+ tools/testing/selftests/vm/Makefile           |   4 +
+ .../selftests/vm/charge_reserved_hugetlb.sh   | 440 ++++++++++++++++++
+ .../selftests/vm/write_hugetlb_memory.sh      |  22 +
+ .../testing/selftests/vm/write_to_hugetlbfs.c | 252 ++++++++++
+ 5 files changed, 719 insertions(+)
+ create mode 100755 tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+ create mode 100644 tools/testing/selftests/vm/write_hugetlb_memory.sh
+ create mode 100644 tools/testing/selftests/vm/write_to_hugetlbfs.c
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index bea51ae422f63..ce5ed1056fefd 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -244,6 +244,57 @@ struct file_region {
- 	long to;
- };
+diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
+index 31b3c98b6d34d..d3bed9407773c 100644
+--- a/tools/testing/selftests/vm/.gitignore
++++ b/tools/testing/selftests/vm/.gitignore
+@@ -14,3 +14,4 @@ virtual_address_range
+ gup_benchmark
+ va_128TBswitch
+ map_fixed_noreplace
++write_to_hugetlbfs
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 9534dc2bc9295..8d37d5409b52c 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -18,6 +18,7 @@ TEST_GEN_FILES += transhuge-stress
+ TEST_GEN_FILES += userfaultfd
+ TEST_GEN_FILES += va_128TBswitch
+ TEST_GEN_FILES += virtual_address_range
++TEST_GEN_FILES += write_to_hugetlbfs
 
-+static long add_reservation_in_range(
-+		struct resv_map *resv, long f, long t, bool count_only)
-+{
+ TEST_PROGS := run_vmtests
+
+@@ -29,3 +30,6 @@ include ../lib.mk
+ $(OUTPUT)/userfaultfd: LDLIBS += -lpthread
+
+ $(OUTPUT)/mlock-random-test: LDLIBS += -lcap
 +
-+	long chg = 0;
-+	struct list_head *head = &resv->regions;
-+	struct file_region *rg = NULL, *trg = NULL, *nrg = NULL;
++# Why does adding $(OUTPUT)/ like above not apply this flag..?
++write_to_hugetlbfs: CFLAGS += -static
+diff --git a/tools/testing/selftests/vm/charge_reserved_hugetlb.sh b/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+new file mode 100755
+index 0000000000000..09e90e8f6fab4
+--- /dev/null
++++ b/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+@@ -0,0 +1,440 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
 +
-+	/* Locate the region we are before or in. */
-+	list_for_each_entry(rg, head, link)
-+		if (f <= rg->to)
-+			break;
++set -e
 +
-+	/* Round our left edge to the current segment if it encloses us. */
-+	if (f > rg->from)
-+		f = rg->from;
++cgroup_path=/dev/cgroup/memory
++if [[ ! -e $cgroup_path ]]; then
++      mkdir -p $cgroup_path
++      mount -t cgroup -o hugetlb,memory cgroup $cgroup_path
++fi
 +
-+	chg = t - f;
++cleanup () {
++	echo $$ > $cgroup_path/tasks
 +
-+	/* Check for and consume any regions we now overlap with. */
-+	nrg = rg;
-+	list_for_each_entry_safe(rg, trg, rg->link.prev, link) {
-+		if (&rg->link == head)
-+			break;
-+		if (rg->from > t)
-+			break;
++	set +e
++	if [[ "$(pgrep write_to_hugetlbfs)" != "" ]]; then
++	      kill -2 write_to_hugetlbfs
++	      # Wait for hugetlbfs memory to get depleted.
++	      sleep 0.5
++	fi
++	set -e
 +
-+		/* We overlap with this area, if it extends further than
-+		 * us then we must extend ourselves.  Account for its
-+		 * existing reservation.
-+		 */
-+		if (rg->to > t) {
-+			chg += rg->to - t;
-+			t = rg->to;
-+		}
-+		chg -= rg->to - rg->from;
-+
-+		if (!count_only && rg != nrg) {
-+			list_del(&rg->link);
-+			kfree(rg);
-+		}
-+	}
-+
-+	if (!count_only) {
-+		nrg->from = f;
-+		nrg->to = t;
-+	}
-+
-+	return chg;
++	if [[ -e /mnt/huge ]]; then
++	      rm -rf /mnt/huge/*
++	      umount /mnt/huge || echo error
++	      rmdir /mnt/huge
++	fi
++	if [[ -e $cgroup_path/hugetlb_cgroup_test ]]; then
++	      rmdir $cgroup_path/hugetlb_cgroup_test
++	fi
++	if [[ -e $cgroup_path/hugetlb_cgroup_test1 ]]; then
++	      rmdir $cgroup_path/hugetlb_cgroup_test1
++	fi
++	if [[ -e $cgroup_path/hugetlb_cgroup_test2 ]]; then
++	      rmdir $cgroup_path/hugetlb_cgroup_test2
++	fi
++	echo 0 > /proc/sys/vm/nr_hugepages
++	echo CLEANUP DONE
 +}
 +
- /*
-  * Add the huge page range represented by [f, t) to the reserve
-  * map.  Existing regions will be expanded to accommodate the specified
-@@ -257,7 +308,7 @@ struct file_region {
- static long region_add(struct resv_map *resv, long f, long t)
- {
- 	struct list_head *head = &resv->regions;
--	struct file_region *rg, *nrg, *trg;
-+	struct file_region *rg, *nrg;
- 	long add = 0;
-
- 	spin_lock(&resv->lock);
-@@ -287,38 +338,7 @@ static long region_add(struct resv_map *resv, long f, long t)
- 		goto out_locked;
- 	}
-
--	/* Round our left edge to the current segment if it encloses us. */
--	if (f > rg->from)
--		f = rg->from;
--
--	/* Check for and consume any regions we now overlap with. */
--	nrg = rg;
--	list_for_each_entry_safe(rg, trg, rg->link.prev, link) {
--		if (&rg->link == head)
--			break;
--		if (rg->from > t)
--			break;
--
--		/* If this area reaches higher then extend our area to
--		 * include it completely.  If this is not the first area
--		 * which we intend to reuse, free it. */
--		if (rg->to > t)
--			t = rg->to;
--		if (rg != nrg) {
--			/* Decrement return value by the deleted range.
--			 * Another range will span this area so that by
--			 * end of routine add will be >= zero
--			 */
--			add -= (rg->to - rg->from);
--			list_del(&rg->link);
--			kfree(rg);
--		}
--	}
--
--	add += (nrg->from - f);		/* Added to beginning of region */
--	nrg->from = f;
--	add += t - nrg->to;		/* Added to end of region */
--	nrg->to = t;
-+	add = add_reservation_in_range(resv, f, t, false);
-
- out_locked:
- 	resv->adds_in_progress--;
-@@ -345,8 +365,6 @@ static long region_add(struct resv_map *resv, long f, long t)
-  */
- static long region_chg(struct resv_map *resv, long f, long t)
- {
--	struct list_head *head = &resv->regions;
--	struct file_region *rg;
- 	long chg = 0;
-
- 	spin_lock(&resv->lock);
-@@ -375,34 +393,8 @@ static long region_chg(struct resv_map *resv, long f, long t)
- 		goto retry_locked;
- 	}
-
--	/* Locate the region we are before or in. */
--	list_for_each_entry(rg, head, link)
--		if (f <= rg->to)
--			break;
--
--	/* Round our left edge to the current segment if it encloses us. */
--	if (f > rg->from)
--		f = rg->from;
--	chg = t - f;
--
--	/* Check for and consume any regions we now overlap with. */
--	list_for_each_entry(rg, rg->link.prev, link) {
--		if (&rg->link == head)
--			break;
--		if (rg->from > t)
--			goto out;
-+	chg = add_reservation_in_range(resv, f, t, true);
-
--		/* We overlap with this area, if it extends further than
--		 * us then we must extend ourselves.  Account for its
--		 * existing reservation. */
--		if (rg->to > t) {
--			chg += rg->to - t;
--			t = rg->to;
--		}
--		chg -= rg->to - rg->from;
--	}
--
--out:
- 	spin_unlock(&resv->lock);
- 	return chg;
- }
++cleanup
++
++function expect_equal() {
++      local expected="$1"
++      local actual="$2"
++      local error="$3"
++
++      if [[ "$expected" != "$actual" ]]; then
++	    echo "expected ($expected) != actual ($actual): $3"
++	    cleanup
++	    exit 1
++      fi
++}
++
++function setup_cgroup() {
++      local name="$1"
++      local cgroup_limit="$2"
++      local reservation_limit="$3"
++
++      mkdir $cgroup_path/$name
++
++      echo writing cgroup limit: "$cgroup_limit"
++      echo "$cgroup_limit" > $cgroup_path/$name/hugetlb.2MB.limit_in_bytes
++
++      echo writing reseravation limit: "$reservation_limit"
++      echo "$reservation_limit" > \
++	    $cgroup_path/$name/hugetlb.2MB.reservation_limit_in_bytes
++      echo 0 > $cgroup_path/$name/cpuset.cpus
++      echo 0 > $cgroup_path/$name/cpuset.mems
++}
++
++function write_hugetlbfs_and_get_usage() {
++      local cgroup="$1"
++      local size="$2"
++      local populate="$3"
++      local write="$4"
++      local path="$5"
++      local method="$6"
++      local private="$7"
++      local expect_failure="$8"
++
++      # Function return values.
++      reservation_failed=0
++      oom_killed=0
++      hugetlb_difference=0
++      reserved_difference=0
++
++      local hugetlb_usage=$cgroup_path/$cgroup/hugetlb.2MB.usage_in_bytes
++      local reserved_usage=$cgroup_path/$cgroup/hugetlb.2MB.reservation_usage_in_bytes
++
++      local hugetlb_before=$(cat $hugetlb_usage)
++      local reserved_before=$(cat $reserved_usage)
++
++      echo
++      echo Starting:
++      echo hugetlb_usage="$hugetlb_before"
++      echo reserved_usage="$reserved_before"
++      echo expect_failure is "$expect_failure"
++
++      set +e
++      if [[ "$method" == "1" ]] || [[ "$method" == 2 ]] || \
++	    [[ "$private" == "-r" ]] && [[ "$expect_failure" != 1 ]]; then
++	    bash write_hugetlb_memory.sh "$size" "$populate" "$write" \
++		  "$cgroup"  "$path" "$method" "$private" "-l" &
++
++	    local write_result=$?
++	    # This sleep is to make sure that the script above has had enough
++	    # time to do its thing, since it runs in the background. This may
++	    # cause races...
++	    sleep 0.5
++	    echo write_result is $write_result
++      else
++	    bash write_hugetlb_memory.sh "$size" "$populate" "$write" \
++		  "$cgroup"  "$path" "$method" "$private"
++	    local write_result=$?
++      fi
++      set -e
++
++      if [[ "$write_result" == 1 ]]; then
++	    reservation_failed=1
++      fi
++
++      # On linus/master, the above process gets SIGBUS'd on oomkill, with
++      # return code 135. On earlier kernels, it gets actual oomkill, with return
++      # code 137, so just check for both conditions incase we're testing against
++      # an earlier kernel.
++      if [[ "$write_result" == 135 ]] || [[ "$write_result" == 137 ]]; then
++	    oom_killed=1
++      fi
++
++      local hugetlb_after=$(cat $hugetlb_usage)
++      local reserved_after=$(cat $reserved_usage)
++
++      echo After write:
++      echo hugetlb_usage="$hugetlb_after"
++      echo reserved_usage="$reserved_after"
++
++      hugetlb_difference=$(($hugetlb_after - $hugetlb_before))
++      reserved_difference=$(($reserved_after - $reserved_before))
++}
++
++function cleanup_hugetlb_memory() {
++      set +e
++      if [[ "$(pgrep write_to_hugetlbfs)" != "" ]]; then
++	    echo kiling write_to_hugetlbfs
++	    killall -2 write_to_hugetlbfs
++	    # Wait for hugetlbfs memory to get depleted.
++	    sleep 0.5
++      fi
++      set -e
++
++      if [[ -e /mnt/huge ]]; then
++	    rm -rf /mnt/huge/*
++	      umount /mnt/huge
++	      rmdir /mnt/huge
++      fi
++}
++
++function run_test() {
++      local size="$1"
++      local populate="$2"
++      local write="$3"
++      local cgroup_limit="$4"
++      local reservation_limit="$5"
++      local nr_hugepages="$6"
++      local method="$7"
++      local private="$8"
++      local expect_failure="$9"
++
++      # Function return values.
++      hugetlb_difference=0
++      reserved_difference=0
++      reservation_failed=0
++      oom_killed=0
++
++      echo nr hugepages = "$nr_hugepages"
++      echo "$nr_hugepages" > /proc/sys/vm/nr_hugepages
++
++      setup_cgroup "hugetlb_cgroup_test" "$cgroup_limit" "$reservation_limit"
++
++      mkdir -p /mnt/huge
++      mount -t hugetlbfs \
++	    -o pagesize=2M,size=256M none /mnt/huge
++
++      write_hugetlbfs_and_get_usage "hugetlb_cgroup_test" "$size" "$populate" \
++	    "$write" "/mnt/huge/test" "$method" "$private" "$expect_failure"
++
++      cleanup_hugetlb_memory
++
++      local final_hugetlb=$(cat $cgroup_path/hugetlb_cgroup_test/hugetlb.2MB.usage_in_bytes)
++      local final_reservation=$(cat $cgroup_path/hugetlb_cgroup_test/hugetlb.2MB.reservation_usage_in_bytes)
++
++      expect_equal "0" "$final_hugetlb" "final hugetlb is not zero"
++      expect_equal "0" "$final_reservation" "final reservation is not zero"
++}
++
++function run_multiple_cgroup_test() {
++      local size1="$1"
++      local populate1="$2"
++      local write1="$3"
++      local cgroup_limit1="$4"
++      local reservation_limit1="$5"
++
++      local size2="$6"
++      local populate2="$7"
++      local write2="$8"
++      local cgroup_limit2="$9"
++      local reservation_limit2="${10}"
++
++      local nr_hugepages="${11}"
++      local method="${12}"
++      local private="${13}"
++      local expect_failure="${14}"
++
++      # Function return values.
++      hugetlb_difference1=0
++      reserved_difference1=0
++      reservation_failed1=0
++      oom_killed1=0
++
++      hugetlb_difference2=0
++      reserved_difference2=0
++      reservation_failed2=0
++      oom_killed2=0
++
++
++      echo nr hugepages = "$nr_hugepages"
++      echo "$nr_hugepages" > /proc/sys/vm/nr_hugepages
++
++      setup_cgroup "hugetlb_cgroup_test1" "$cgroup_limit1" "$reservation_limit1"
++      setup_cgroup "hugetlb_cgroup_test2" "$cgroup_limit2" "$reservation_limit2"
++
++      mkdir -p /mnt/huge
++      mount -t hugetlbfs \
++	    -o pagesize=2M,size=256M none /mnt/huge
++
++      write_hugetlbfs_and_get_usage "hugetlb_cgroup_test1" "$size1" \
++	    "$populate1" "$write1" "/mnt/huge/test1" "$method" "$private" \
++	    "$expect_failure"
++
++      hugetlb_difference1=$hugetlb_difference
++      reserved_difference1=$reserved_difference
++      reservation_failed1=$reservation_failed
++      oom_killed1=$oom_killed
++
++      local cgroup1_hugetlb_usage=$cgroup_path/hugetlb_cgroup_test1/hugetlb.2MB.usage_in_bytes
++      local cgroup1_reservation_usage=$cgroup_path/hugetlb_cgroup_test1/hugetlb.2MB.reservation_usage_in_bytes
++      local cgroup2_hugetlb_usage=$cgroup_path/hugetlb_cgroup_test2/hugetlb.2MB.usage_in_bytes
++      local cgroup2_reservation_usage=$cgroup_path/hugetlb_cgroup_test2/hugetlb.2MB.reservation_usage_in_bytes
++
++      local usage_before_second_write=$(cat $cgroup1_hugetlb_usage)
++      local reservation_usage_before_second_write=$(cat \
++	    $cgroup1_reservation_usage)
++
++      write_hugetlbfs_and_get_usage "hugetlb_cgroup_test2" "$size2" \
++	    "$populate2" "$write2" "/mnt/huge/test2" "$method" "$private" \
++	    "$expect_failure"
++
++      hugetlb_difference2=$hugetlb_difference
++      reserved_difference2=$reserved_difference
++      reservation_failed2=$reservation_failed
++      oom_killed2=$oom_killed
++
++      expect_equal "$usage_before_second_write" \
++	    "$(cat $cgroup1_hugetlb_usage)" "Usage changed."
++      expect_equal "$reservation_usage_before_second_write" \
++	    "$(cat $cgroup1_reservation_usage)" "Reservation usage changed."
++
++      cleanup_hugetlb_memory
++
++      local final_hugetlb=$(cat $cgroup1_hugetlb_usage)
++      local final_reservation=$(cat $cgroup1_reservation_usage)
++
++      expect_equal "0" "$final_hugetlb" \
++	    "hugetlbt_cgroup_test1 final hugetlb is not zero"
++      expect_equal "0" "$final_reservation" \
++	    "hugetlbt_cgroup_test1 final reservation is not zero"
++
++      local final_hugetlb=$(cat $cgroup2_hugetlb_usage)
++      local final_reservation=$(cat $cgroup2_reservation_usage)
++
++      expect_equal "0" "$final_hugetlb" \
++	    "hugetlb_cgroup_test2 final hugetlb is not zero"
++      expect_equal "0" "$final_reservation" \
++	    "hugetlb_cgroup_test2 final reservation is not zero"
++}
++
++for private in "" "-r" ; do
++for populate in  "" "-o"; do
++for method in 0 1 2; do
++
++# Skip mmap(MAP_HUGETLB | MAP_SHARED). Doesn't seem to be supported.
++if [[ "$method" == 1 ]] && [[ "$private" == "" ]]; then
++      continue
++fi
++
++# Skip populated shmem tests. Doesn't seem to be supported.
++if [[ "$method" == 2"" ]] && [[ "$populate" == "-o" ]]; then
++      continue
++fi
++
++cleanup
++echo
++echo
++echo
++echo Test normal case.
++echo private=$private, populate=$populate, method=$method
++run_test $((10 * 1024 * 1024)) "$populate" "" $((20 * 1024 * 1024)) \
++      $((20 * 1024 * 1024)) 10 "$method" "$private" "0"
++
++echo Memory charged to hugtlb=$hugetlb_difference
++echo Memory charged to reservation=$reserved_difference
++
++if [[ "$populate" == "-o" ]]; then
++      expect_equal "$((10 * 1024 * 1024))" "$hugetlb_difference" \
++	    "Reserved memory charged to hugetlb cgroup."
++else
++      expect_equal "0" "$hugetlb_difference" \
++	    "Reserved memory charged to hugetlb cgroup."
++fi
++
++expect_equal "$((10 * 1024 * 1024))" "$reserved_difference" \
++      "Reserved memory not charged to reservation usage."
++echo 'PASS'
++
++cleanup
++echo
++echo
++echo
++echo Test normal case with write.
++echo private=$private, populate=$populate, method=$method
++run_test $((10 * 1024 * 1024)) "$populate" '-w' $((20 * 1024 * 1024)) \
++      $((20 * 1024 * 1024)) 10 "$method" "$private" "0"
++
++echo Memory charged to hugtlb=$hugetlb_difference
++echo Memory charged to reservation=$reserved_difference
++
++expect_equal "$((10 * 1024 * 1024))" "$hugetlb_difference" \
++      "Reserved memory charged to hugetlb cgroup."
++expect_equal "$((10 * 1024 * 1024))" "$reserved_difference" \
++      "Reserved memory not charged to reservation usage."
++echo 'PASS'
++
++
++cleanup
++echo
++echo
++echo
++echo Test more than reservation case.
++echo private=$private, populate=$populate, method=$method
++run_test "$((10 * 1024 * 1024))" "$populate" '' "$((20 * 1024 * 1024))" \
++      "$((5 * 1024 * 1024))" "10" "$method" "$private" "1"
++
++expect_equal "1" "$reservation_failed" "Reservation succeeded."
++echo 'PASS'
++
++cleanup
++
++echo
++echo
++echo
++echo Test more than cgroup limit case.
++echo private=$private, populate=$populate, method=$method
++
++# Not sure if shm memory can be cleaned up when the process gets sigbus'd.
++if [[ "$method" != 2 ]]; then
++      run_test $((10 * 1024 * 1024)) "$populate" "-w" $((5 * 1024 * 1024)) \
++	    $((20 * 1024 * 1024)) 10 "$method" "$private" "1"
++
++      expect_equal "1" "$oom_killed" "Not oom killed."
++fi
++echo 'PASS'
++
++cleanup
++
++echo
++echo
++echo
++echo Test normal case, multiple cgroups.
++echo private=$private, populate=$populate, method=$method
++run_multiple_cgroup_test "$((6 * 1024 * 1024))" "$populate" "" \
++      "$((20 * 1024 * 1024))" "$((20 * 1024 * 1024))" "$((10 * 1024 * 1024))" \
++      "$populate" "" "$((20 * 1024 * 1024))" "$((20 * 1024 * 1024))" "10" \
++      "$method" "$private" "0"
++
++echo Memory charged to hugtlb1=$hugetlb_difference1
++echo Memory charged to reservation1=$reserved_difference1
++echo Memory charged to hugtlb2=$hugetlb_difference2
++echo Memory charged to reservation2=$reserved_difference2
++
++expect_equal "$((6 * 1024 * 1024))" "$reserved_difference1" \
++      "Incorrect reservations charged to cgroup 1."
++expect_equal "$((10 * 1024 * 1024))" "$reserved_difference2" \
++      "Incorrect reservation charged to cgroup 2."
++if [[ "$populate" == "-o" ]]; then
++      expect_equal "$((6 * 1024 * 1024))" "$hugetlb_difference1" \
++	    "Incorrect hugetlb charged to cgroup 1."
++      expect_equal "$((10 * 1024 * 1024))" "$hugetlb_difference2" \
++	    "Incorrect hugetlb charged to cgroup 2."
++else
++      expect_equal "0" "$hugetlb_difference1" \
++	    "Incorrect hugetlb charged to cgroup 1."
++      expect_equal "0" "$hugetlb_difference2" \
++	    "Incorrect hugetlb charged to cgroup 2."
++fi
++echo 'PASS'
++
++cleanup
++echo
++echo
++echo
++echo Test normal case with write, multiple cgroups.
++echo private=$private, populate=$populate, method=$method
++run_multiple_cgroup_test "$((6 * 1024 * 1024))" "$populate" "-w" \
++      "$((20 * 1024 * 1024))" "$((20 * 1024 * 1024))" "$((10 * 1024 * 1024))" \
++      "$populate" "-w" "$((20 * 1024 * 1024))" "$((20 * 1024 * 1024))" "10" \
++      "$method" "$private" "0"
++
++echo Memory charged to hugtlb1=$hugetlb_difference1
++echo Memory charged to reservation1=$reserved_difference1
++echo Memory charged to hugtlb2=$hugetlb_difference2
++echo Memory charged to reservation2=$reserved_difference2
++
++expect_equal "$((6 * 1024 * 1024))" "$hugetlb_difference1" \
++      "Incorrect hugetlb charged to cgroup 1."
++expect_equal "$((6 * 1024 * 1024))" "$reserved_difference1" \
++      "Incorrect reservation charged to cgroup 1."
++expect_equal "$((10 * 1024 * 1024))" "$hugetlb_difference2" \
++      "Incorrect hugetlb charged to cgroup 2."
++expect_equal "$((10 * 1024 * 1024))" "$reserved_difference2" \
++      "Incorrected reservation charged to cgroup 2."
++
++echo 'PASS'
++
++done # private
++done # populate
++done # method
++
++umount $cgroup_path
++rmdir $cgroup_path
+diff --git a/tools/testing/selftests/vm/write_hugetlb_memory.sh b/tools/testing/selftests/vm/write_hugetlb_memory.sh
+new file mode 100644
+index 0000000000000..08f5fa5527cfd
+--- /dev/null
++++ b/tools/testing/selftests/vm/write_hugetlb_memory.sh
+@@ -0,0 +1,22 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++set -e
++
++size=$1
++populate=$2
++write=$3
++cgroup=$4
++path=$5
++method=$6
++private=$7
++want_sleep=$8
++
++echo "Putting task in cgroup '$cgroup'"
++echo $$ > /dev/cgroup/memory/"$cgroup"/tasks
++
++echo "Method is $method"
++
++set +e
++./write_to_hugetlbfs -p "$path" -s "$size" "$write" "$populate" -m "$method" \
++      "$private" "$want_sleep"
+diff --git a/tools/testing/selftests/vm/write_to_hugetlbfs.c b/tools/testing/selftests/vm/write_to_hugetlbfs.c
+new file mode 100644
+index 0000000000000..f02a897427a97
+--- /dev/null
++++ b/tools/testing/selftests/vm/write_to_hugetlbfs.c
+@@ -0,0 +1,252 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This program reserves and uses hugetlb memory, supporting a bunch of
++ * scenorios needed by the charged_reserved_hugetlb.sh test.
++ */
++
++#include <err.h>
++#include <errno.h>
++#include <signal.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <fcntl.h>
++#include <sys/types.h>
++#include <sys/shm.h>
++#include <sys/stat.h>
++#include <sys/mman.h>
++
++/* Global definitions. */
++enum method {
++	HUGETLBFS,
++	MMAP_MAP_HUGETLB,
++	SHM,
++	MAX_METHOD
++};
++
++
++/* Global variables. */
++static const char *self;
++static char *shmaddr;
++static int shmid;
++
++/*
++ * Show usage and exit.
++ */
++static void exit_usage(void)
++{
++
++	printf("Usage: %s -p <path to hugetlbfs file> -s <size to map> "
++		"[-m <0=hugetlbfs | 1=mmap(MAP_HUGETLB)>] [-l] [-r] "
++		"[-o] [-w]\n", self);
++	exit(EXIT_FAILURE);
++}
++
++void sig_handler(int signo)
++{
++	printf("Received %d.\n", signo);
++	if (signo == SIGINT) {
++		printf("Deleting the memory\n");
++		if (shmdt((const void *)shmaddr) != 0) {
++			perror("Detach failure");
++			shmctl(shmid, IPC_RMID, NULL);
++			exit(4);
++		}
++
++		shmctl(shmid, IPC_RMID, NULL);
++		printf("Done deleting the memory\n");
++	}
++	exit(2);
++}
++
++int main(int argc, char **argv)
++{
++	int fd = 0;
++	int key = 0;
++	int *ptr = NULL;
++	int c = 0;
++	int size = 0;
++	char path[256] = "";
++	enum method method = MAX_METHOD;
++	int want_sleep = 0, private = 0;
++	int populate = 0;
++	int write = 0;
++
++	unsigned long i;
++
++
++	if (signal(SIGINT, sig_handler) == SIG_ERR)
++		err(1, "\ncan't catch SIGINT\n");
++
++	/* Parse command-line arguments. */
++	setvbuf(stdout, NULL, _IONBF, 0);
++	self = argv[0];
++
++	while ((c = getopt(argc, argv, "s:p:m:owlr")) != -1) {
++		switch (c) {
++		case 's':
++			size = atoi(optarg);
++			break;
++		case 'p':
++			strncpy(path, optarg, sizeof(path));
++			break;
++		case 'm':
++			if (atoi(optarg) >= MAX_METHOD) {
++				errno = EINVAL;
++				perror("Invalid -m.");
++				exit_usage();
++			}
++			method = atoi(optarg);
++			break;
++		case 'o':
++			populate = 1;
++			break;
++		case 'w':
++			write = 1;
++			break;
++		case 'l':
++			want_sleep = 1;
++			break;
++		case 'r':
++			private = 1;
++			break;
++		default:
++			errno = EINVAL;
++			perror("Invalid arg");
++			exit_usage();
++		}
++	}
++
++	if (strncmp(path, "", sizeof(path)) != 0) {
++		printf("Writing to this path: %s\n", path);
++	} else {
++		errno = EINVAL;
++		perror("path not found");
++		exit_usage();
++	}
++
++	if (size != 0) {
++		printf("Writing this size: %d\n", size);
++	} else {
++		errno = EINVAL;
++		perror("size not found");
++		exit_usage();
++	}
++
++	if (!populate)
++		printf("Not populating.\n");
++	else
++		printf("Populating.\n");
++
++	if (!write)
++		printf("Not writing to memory.\n");
++
++	if (method == MAX_METHOD) {
++		errno = EINVAL;
++		perror("-m Invalid");
++		exit_usage();
++	} else
++		printf("Using method=%d\n", method);
++
++	if (!private)
++		printf("Shared mapping.\n");
++	else
++		printf("Private mapping.\n");
++
++
++	switch (method) {
++	case HUGETLBFS:
++		printf("Allocating using HUGETLBFS.\n");
++		fd = open(path, O_CREAT | O_RDWR, 0777);
++		if (fd == -1)
++			err(1, "Failed to open file.");
++
++		ptr = mmap(NULL, size, PROT_READ | PROT_WRITE,
++			(private ? MAP_PRIVATE : MAP_SHARED) | (populate ?
++				MAP_POPULATE : 0), fd, 0);
++
++		if (ptr == MAP_FAILED) {
++			close(fd);
++			err(1, "Error mapping the file");
++		}
++		break;
++	case MMAP_MAP_HUGETLB:
++		printf("Allocating using MAP_HUGETLB.\n");
++		ptr = mmap(NULL, size,
++		PROT_READ | PROT_WRITE,
++		(private ? (MAP_PRIVATE | MAP_ANONYMOUS) : MAP_SHARED) |
++		MAP_HUGETLB | (populate ?
++			MAP_POPULATE : 0),
++		-1, 0);
++
++		if (ptr == MAP_FAILED)
++			err(1, "mmap");
++
++		printf("Returned address is %p\n", ptr);
++		break;
++	case SHM:
++		printf("Allocating using SHM.\n");
++		shmid = shmget(key, size, SHM_HUGETLB | IPC_CREAT | SHM_R |
++				SHM_W);
++		if (shmid < 0) {
++			shmid = shmget(++key, size, SHM_HUGETLB | IPC_CREAT |
++					SHM_R | SHM_W);
++			if (shmid < 0)
++				err(1, "shmget");
++
++		}
++		printf("shmid: 0x%x, shmget key:%d\n", shmid, key);
++
++		shmaddr = shmat(shmid, NULL, 0);
++		if (shmaddr == (char *)-1) {
++			perror("Shared memory attach failure");
++			shmctl(shmid, IPC_RMID, NULL);
++			exit(2);
++		}
++		printf("shmaddr: %p\n", shmaddr);
++
++		break;
++	default:
++		errno = EINVAL;
++		err(1, "Invalid method.");
++	}
++
++	if (write) {
++		printf("Writing to memory.\n");
++		if (method != SHM) {
++			memset(ptr, 1, size);
++		} else {
++			printf("Starting the writes:\n");
++			for (i = 0; i < size; i++) {
++				shmaddr[i] = (char)(i);
++				if (!(i % (1024 * 1024)))
++					printf(".");
++			}
++			printf("\n");
++
++			printf("Starting the Check...");
++			for (i = 0; i < size; i++)
++				if (shmaddr[i] != (char)i) {
++					printf("\nIndex %lu mismatched\n", i);
++					exit(3);
++				}
++			printf("Done.\n");
++
++
++		}
++	}
++
++	if (want_sleep) {
++		/* Signal to caller that we're done. */
++		printf("DONE\n");
++
++		/* Hold memory until external kill signal is delivered. */
++		while (1)
++			sleep(100);
++	}
++
++	close(fd);
++
++	return 0;
++}
 --
 2.23.0.162.g0b9fbb3734-goog
