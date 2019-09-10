@@ -2,72 +2,70 @@ Return-Path: <SRS0=SOik=XF=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACCDEC49ED9
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Sep 2019 18:02:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFE85C5AE59
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Sep 2019 22:25:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8CB452168B
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Sep 2019 18:02:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CE5EA2171F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Sep 2019 22:25:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727650AbfIJSCu (ORCPT
+        id S1726341AbfIJWZe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 Sep 2019 14:02:50 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:34518 "EHLO mx1.redhat.com"
+        Tue, 10 Sep 2019 18:25:34 -0400
+Received: from mga02.intel.com ([134.134.136.20]:23481 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726421AbfIJSCt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Sep 2019 14:02:49 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id D1ADB69086;
-        Tue, 10 Sep 2019 18:02:49 +0000 (UTC)
-Received: from asgard.redhat.com (ovpn-112-20.ams2.redhat.com [10.36.112.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 27A50196AE;
-        Tue, 10 Sep 2019 18:02:45 +0000 (UTC)
-Date:   Tue, 10 Sep 2019 19:02:18 +0100
-From:   Eugene Syromiatnikov <esyr@redhat.com>
-To:     linux-kernel@vger.kernel.org,
-        Christian Brauner <christian@brauner.io>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Cc:     Adrian Reber <areber@redhat.com>
-Subject: [PATCH v2 6/6] selftests: add clone3 to TARGETS
-Message-ID: <e3b6c6d34bcd81a19d34808e2c29a27898df53f3.1568138394.git.esyr@redhat.com>
-References: <cover.1568138393.git.esyr@redhat.com>
+        id S1725932AbfIJWZe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Sep 2019 18:25:34 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Sep 2019 15:25:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,490,1559545200"; 
+   d="scan'208";a="185644850"
+Received: from zhanzhiw-mobl2.ger.corp.intel.com (HELO localhost) ([10.249.38.143])
+  by fmsmga007.fm.intel.com with ESMTP; 10 Sep 2019 15:25:29 -0700
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        stable@vger.kernel.org, Joey Pabalinas <joeypabalinas@gmail.com>,
+        Petr Vorel <petr.vorel@gmail.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] selftests/tpm2: Add the missing TEST_FILES assignment
+Date:   Tue, 10 Sep 2019 23:25:22 +0100
+Message-Id: <20190910222523.8116-1-jarkko.sakkinen@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1568138393.git.esyr@redhat.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Tue, 10 Sep 2019 18:02:49 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-* tools/testing/selftests/Makefile (TARGETS): Add clone3.
+The Python files required by the selftests are not packaged because of
+the missing assignment to TEST_FILES. Add the assignment.
 
-Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
+Cc: stable@vger.kernel.org
+Fixes: 6ea3dfe1e073 ("selftests: add TPM 2.0 tests")
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 ---
- tools/testing/selftests/Makefile | 1 +
+ tools/testing/selftests/tpm2/Makefile | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 25b43a8c..05163e4 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -4,6 +4,7 @@ TARGETS += bpf
- TARGETS += breakpoints
- TARGETS += capabilities
- TARGETS += cgroup
-+TARGETS += clone3
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += drivers/dma-buf
+diff --git a/tools/testing/selftests/tpm2/Makefile b/tools/testing/selftests/tpm2/Makefile
+index 9dd848427a7b..bf401f725eef 100644
+--- a/tools/testing/selftests/tpm2/Makefile
++++ b/tools/testing/selftests/tpm2/Makefile
+@@ -2,3 +2,4 @@
+ include ../lib.mk
+ 
+ TEST_PROGS := test_smoke.sh test_space.sh
++TEST_FILES := tpm2.py tpm2_tests.py
 -- 
-2.1.4
+2.20.1
 
