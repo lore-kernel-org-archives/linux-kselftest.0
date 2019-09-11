@@ -1,259 +1,93 @@
-Return-Path: <SRS0=SOik=XF=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=6tFw=XG=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE3C4C49ED9
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Sep 2019 23:32:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37657ECDE27
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Sep 2019 09:20:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BB7D421D82
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Sep 2019 23:32:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D99821928
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Sep 2019 09:20:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ahiXN/57"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IBQkqAd1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726657AbfIJXce (ORCPT
+        id S1726735AbfIKJUM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 Sep 2019 19:32:34 -0400
-Received: from mail-pg1-f202.google.com ([209.85.215.202]:38244 "EHLO
-        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726426AbfIJXcA (ORCPT
+        Wed, 11 Sep 2019 05:20:12 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:39191 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726702AbfIKJUM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Sep 2019 19:32:00 -0400
-Received: by mail-pg1-f202.google.com with SMTP id w5so11570511pgs.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2019 16:31:58 -0700 (PDT)
+        Wed, 11 Sep 2019 05:20:12 -0400
+Received: by mail-ed1-f68.google.com with SMTP id u6so19961869edq.6;
+        Wed, 11 Sep 2019 02:20:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=mZUy7Vl4WlAaKPPlo1SGP0dD97p4q4C7uD62LJh5Kro=;
-        b=ahiXN/57Hx8pU/8w3RyQRjOyezvn5sN+aDaZhNIpskt5jXIuVMfJqDgNOFjsxNarak
-         OsiWFRclaKX8/iNvDaAZQE306u2LvBU0Ra98M5bbJuqIBiXey4/GaeywyS+H8+/uW4UW
-         uEU5G+6/TecMke0/5AiexxqTdK83XicFjkO5irdEbDn+nzoEZ24T/puDFx5v/MwVYhZB
-         doA4m8J/bG81ocCSOUx3GC6z/uXjuo9RuGPbZucTdvI+KJt38NajRJdnojhnKPz5Ph8X
-         wG/RGLSbTpQox2JkYyBjWqjwDLHE5FXO5qjMiG+unc2sldvdhNYJy38ml7Nr2dFkX0HM
-         Zjxg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xco/af/x6HLCOyTU+F8H8hS4JAyuU2ZOlKKdPNtbpTc=;
+        b=IBQkqAd12yBtK7nUuezywmOLAhdKqEfDOGXS/rpxNGoG0SWhmCi0eQoQ+N5PpBj66G
+         FwZSPnzD7gRissIkhDNBGvyI3qG+alfEf76ataezk8eiJD9hXs3qrFjFljsmBagnA00D
+         AFM5P/MQtW30Lmier4a9FNH8sKnyjzAgu7leE52yCOe2+YPa5Z53PQMlVRwpFr8v7Mxs
+         DQkxacEhzTs31k3OwYJQjn5IedecyueCd4zKrtNdKvDDFvbOe42eaAX2H5ggjUiJkaAO
+         Zf6yjpC1B06wU2+AXCcxAZElwYkB+7XFbaHGf9XEGYeSHuVpd9vdo+hzHFB0YKnI71E3
+         jpeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=mZUy7Vl4WlAaKPPlo1SGP0dD97p4q4C7uD62LJh5Kro=;
-        b=MAvG48ZGwO/bld6KtrX4QPxmkxZI5KztXEQt4c5kZYestX1MBZHfNJjuO2+s5nZAqD
-         +p5TuRX4PzuQ224ryPVi4S8bv+SC2HuaBNiY8N8Q3TCY7PVeDYuC6z+4rG3kbjP6YBfM
-         J7rRNm4BdvpNKhhxhsT0STfqCTcAw9b03ZQnqNBinEAlU7j68GT4kVFe9pirhVY96uKI
-         uTmm7EKBiUwuYCRCXJVoyzbogqe2H/oKASSzFet80iVIystt3bveU+Z7sup2doKqjUR7
-         Ztli4h75k/eh4cjxuo2ZWlT6W4Q20nxbhxJyEuvl4ZE4MXSoTzr5aGz+k+mv1G0nDeJ8
-         JLAg==
-X-Gm-Message-State: APjAAAWH9ajmuE/jqTscBx4JV9sFPbpU4beU+wQPwqpAy9WA+GcYmCYH
-        XDf+28gt9OCp62dNLt2mAzFCIXUicfNyfhVtyw==
-X-Google-Smtp-Source: APXvYqzDDIfM1YkRxGnTNbUcbG5VGJZzeeVi+8DsjY1EECkM7SWLPMCeuXCw4Zsop1Ui01SonOWXARD0pa3+dAp4pQ==
-X-Received: by 2002:a65:50c5:: with SMTP id s5mr30212218pgp.368.1568158318057;
- Tue, 10 Sep 2019 16:31:58 -0700 (PDT)
-Date:   Tue, 10 Sep 2019 16:31:40 -0700
-In-Reply-To: <20190910233146.206080-1-almasrymina@google.com>
-Message-Id: <20190910233146.206080-4-almasrymina@google.com>
-Mime-Version: 1.0
-References: <20190910233146.206080-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.23.0.162.g0b9fbb3734-goog
-Subject: [PATCH v4 3/9] hugetlb_cgroup: add reservation accounting for private mappings
-From:   Mina Almasry <almasrymina@google.com>
-To:     mike.kravetz@oracle.com
-Cc:     shuah@kernel.org, almasrymina@google.com, rientjes@google.com,
-        shakeelb@google.com, gthelen@google.com, akpm@linux-foundation.org,
-        khalid.aziz@oracle.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        cgroups@vger.kernel.org, aneesh.kumar@linux.vnet.ibm.com,
-        mkoutny@suse.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xco/af/x6HLCOyTU+F8H8hS4JAyuU2ZOlKKdPNtbpTc=;
+        b=ktL32IgkqMeBBNk8EJVAau+k/QRP17f2MPBv9r7kNvQB+GG5T4EnSiQ611u/3XzTTS
+         Wkfb8wxFbzFLtzmYR6wnP5VxNuciWth/r4OGriMumGVIMgaLCa34dd9tHkxT6WXtWmzY
+         0TCyYnQlO+FTwHauayM149mjeggW2+3+YOCkhQ70BpGJuztIqOHehaSfpdw8vFzw8Aqu
+         O39AQ2lR6ozCLZER7MHzqzruSx0NpcBZXP1RQHbS3PaaI6bzTj+ptA6UbQ7PNQ+Buyqo
+         FQNKUoCVKd/S73JiN63gxcp5JzkLktczoOTVyQNxpDzhE1gPvESVue71FsUELP88buYD
+         jqaQ==
+X-Gm-Message-State: APjAAAVsnOWaccbM1vmDwzU+c3ndnrIAVr9tcqzdHT3L0og0h7XEsccW
+        KlAaCtfNlttoXtQbIDs3RIU=
+X-Google-Smtp-Source: APXvYqy4BvSO0gG/4I1Sjsy9hAklRK2xOgW5m/CB7P/ljWkEEbYILxaBvColTBRBPjXu3ggDmikluA==
+X-Received: by 2002:a50:eb4c:: with SMTP id z12mr35703111edp.155.1568193608578;
+        Wed, 11 Sep 2019 02:20:08 -0700 (PDT)
+Received: from dell5510 ([62.201.25.198])
+        by smtp.gmail.com with ESMTPSA id l11sm157360ejn.62.2019.09.11.02.20.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Sep 2019 02:20:07 -0700 (PDT)
+Date:   Wed, 11 Sep 2019 11:20:06 +0200
+From:   Petr Vorel <petr.vorel@gmail.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
+        Joey Pabalinas <joeypabalinas@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests/tpm2: Add the missing TEST_FILES assignment
+Message-ID: <20190911092005.GA22492@dell5510>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+References: <20190910222523.8116-1-jarkko.sakkinen@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190910222523.8116-1-jarkko.sakkinen@linux.intel.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Normally the pointer to the cgroup to uncharge hangs off the struct
-page, and gets queried when it's time to free the page. With
-hugetlb_cgroup reservations, this is not possible. Because it's possible
-for a page to be reserved by one task and actually faulted in by another
-task.
+Hi Jarkko,
 
-The best place to put the hugetlb_cgroup pointer to uncharge for
-reservations is in the resv_map. But, because the resv_map has different
-semantics for private and shared mappings, the code patch to
-charge/uncharge shared and private mappings is different. This patch
-implements charging and uncharging for private mappings.
+> The Python files required by the selftests are not packaged because of
+> the missing assignment to TEST_FILES. Add the assignment.
 
-For private mappings, the counter to uncharge is in
-resv_map->reservation_counter. On initializing the resv_map this is set
-to NULL. On reservation of a region in private mapping, the tasks
-hugetlb_cgroup is charged and the hugetlb_cgroup is placed is
-resv_map->reservation_counter.
+> Cc: stable@vger.kernel.org
+> Fixes: 6ea3dfe1e073 ("selftests: add TPM 2.0 tests")
+> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-On hugetlb_vm_op_close, we uncharge resv_map->reservation_counter.
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
 
-Signed-off-by: Mina Almasry <almasrymina@google.com>
----
- include/linux/hugetlb.h        |  8 ++++++
- include/linux/hugetlb_cgroup.h | 11 ++++++++
- mm/hugetlb.c                   | 47 ++++++++++++++++++++++++++++++++--
- mm/hugetlb_cgroup.c            | 12 ---------
- 4 files changed, 64 insertions(+), 14 deletions(-)
-
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 128ff1aff1c93..536cb144cf484 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -46,6 +46,14 @@ struct resv_map {
- 	long adds_in_progress;
- 	struct list_head region_cache;
- 	long region_cache_count;
-+ #ifdef CONFIG_CGROUP_HUGETLB
-+	/*
-+	 * On private mappings, the counter to uncharge reservations is stored
-+	 * here. If these fields are 0, then the mapping is shared.
-+	 */
-+	struct page_counter *reservation_counter;
-+	unsigned long pages_per_hpage;
-+#endif
- };
- extern struct resv_map *resv_map_alloc(void);
- void resv_map_release(struct kref *ref);
-diff --git a/include/linux/hugetlb_cgroup.h b/include/linux/hugetlb_cgroup.h
-index c467715dd8fb8..8c6ea58c63c89 100644
---- a/include/linux/hugetlb_cgroup.h
-+++ b/include/linux/hugetlb_cgroup.h
-@@ -25,6 +25,17 @@ struct hugetlb_cgroup;
- #define HUGETLB_CGROUP_MIN_ORDER	2
-
- #ifdef CONFIG_CGROUP_HUGETLB
-+struct hugetlb_cgroup {
-+	struct cgroup_subsys_state css;
-+	/*
-+	 * the counter to account for hugepages from hugetlb.
-+	 */
-+	struct page_counter hugepage[HUGE_MAX_HSTATE];
-+	/*
-+	 * the counter to account for hugepage reservations from hugetlb.
-+	 */
-+	struct page_counter reserved_hugepage[HUGE_MAX_HSTATE];
-+};
-
- static inline struct hugetlb_cgroup *hugetlb_cgroup_from_page(struct page *page)
- {
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index e975f55aede94..fbd7c52e17348 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -711,6 +711,16 @@ struct resv_map *resv_map_alloc(void)
- 	INIT_LIST_HEAD(&resv_map->regions);
-
- 	resv_map->adds_in_progress = 0;
-+#ifdef CONFIG_CGROUP_HUGETLB
-+	/*
-+	 * Initialize these to 0. On shared mappings, 0's here indicate these
-+	 * fields don't do cgroup accounting. On private mappings, these will be
-+	 * re-initialized to the proper values, to indicate that hugetlb cgroup
-+	 * reservations are to be un-charged from here.
-+	 */
-+	resv_map->reservation_counter = NULL;
-+	resv_map->pages_per_hpage = 0;
-+#endif
-
- 	INIT_LIST_HEAD(&resv_map->region_cache);
- 	list_add(&rg->link, &resv_map->region_cache);
-@@ -3193,7 +3203,19 @@ static void hugetlb_vm_op_close(struct vm_area_struct *vma)
-
- 	reserve = (end - start) - region_count(resv, start, end);
-
--	kref_put(&resv->refs, resv_map_release);
-+#ifdef CONFIG_CGROUP_HUGETLB
-+	/*
-+	 * Since we check for HPAGE_RESV_OWNER above, this must a private
-+	 * mapping, and these values should be none-zero, and should point to
-+	 * the hugetlb_cgroup counter to uncharge for this reservation.
-+	 */
-+	WARN_ON(!resv->reservation_counter);
-+	WARN_ON(!resv->pages_per_hpage);
-+
-+	hugetlb_cgroup_uncharge_counter(
-+			resv->reservation_counter,
-+			(end - start) * resv->pages_per_hpage);
-+#endif
-
- 	if (reserve) {
- 		/*
-@@ -3203,6 +3225,8 @@ static void hugetlb_vm_op_close(struct vm_area_struct *vma)
- 		gbl_reserve = hugepage_subpool_put_pages(spool, reserve);
- 		hugetlb_acct_memory(h, -gbl_reserve);
- 	}
-+
-+	kref_put(&resv->refs, resv_map_release);
- }
-
- static int hugetlb_vm_op_split(struct vm_area_struct *vma, unsigned long addr)
-@@ -4536,6 +4560,7 @@ int hugetlb_reserve_pages(struct inode *inode,
- 	struct hstate *h = hstate_inode(inode);
- 	struct hugepage_subpool *spool = subpool_inode(inode);
- 	struct resv_map *resv_map;
-+	struct hugetlb_cgroup *h_cg;
- 	long gbl_reserve;
-
- 	/* This should never happen */
-@@ -4569,11 +4594,29 @@ int hugetlb_reserve_pages(struct inode *inode,
- 		chg = region_chg(resv_map, from, to);
-
- 	} else {
-+		/* Private mapping. */
-+		chg = to - from;
-+
-+		if (hugetlb_cgroup_charge_cgroup(
-+					hstate_index(h),
-+					chg * pages_per_huge_page(h),
-+					&h_cg, true)) {
-+			return -ENOMEM;
-+		}
-+
- 		resv_map = resv_map_alloc();
- 		if (!resv_map)
- 			return -ENOMEM;
-
--		chg = to - from;
-+#ifdef CONFIG_CGROUP_HUGETLB
-+		/*
-+		 * Since this branch handles private mappings, we attach the
-+		 * counter to uncharge for this reservation off resv_map.
-+		 */
-+		resv_map->reservation_counter =
-+			&h_cg->reserved_hugepage[hstate_index(h)];
-+		resv_map->pages_per_hpage = pages_per_huge_page(h);
-+#endif
-
- 		set_vma_resv_map(vma, resv_map);
- 		set_vma_resv_flags(vma, HPAGE_RESV_OWNER);
-diff --git a/mm/hugetlb_cgroup.c b/mm/hugetlb_cgroup.c
-index 2ab36a98d834e..66ffd32063722 100644
---- a/mm/hugetlb_cgroup.c
-+++ b/mm/hugetlb_cgroup.c
-@@ -19,18 +19,6 @@
- #include <linux/hugetlb.h>
- #include <linux/hugetlb_cgroup.h>
-
--struct hugetlb_cgroup {
--	struct cgroup_subsys_state css;
--	/*
--	 * the counter to account for hugepages from hugetlb.
--	 */
--	struct page_counter hugepage[HUGE_MAX_HSTATE];
--	/*
--	 * the counter to account for hugepage reservations from hugetlb.
--	 */
--	struct page_counter reserved_hugepage[HUGE_MAX_HSTATE];
--};
--
- #define MEMFILE_PRIVATE(x, val)	(((x) << 16) | (val))
- #define MEMFILE_IDX(val)	(((val) >> 16) & 0xffff)
- #define MEMFILE_ATTR(val)	((val) & 0xffff)
---
-2.23.0.162.g0b9fbb3734-goog
+Kind regards,
+Petr
