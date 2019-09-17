@@ -2,51 +2,50 @@ Return-Path: <SRS0=iLhc=XM=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F377C4CEC9
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Sep 2019 18:05:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B03BC4CECD
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Sep 2019 18:32:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 399AB21848
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Sep 2019 18:05:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1568743510;
-	bh=IXjDaa7oixlswzf4Tva0sl0r8mHiLw0uW3O7GPu2vaQ=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=sq7IdC1K6GnXmOv/TekUUmfnYY06RAT+NlPPALEmgEMz4r5JVcSY/OeLi6nHiUELN
-	 RXfFfc291LfaoI8CNMNKqaDGys6lod7LsoxXUXV+2JYISWoM++dHGsTa0/kIJ47SC+
-	 xlmGNy3MISKcvkytJ7NYvC9tlltqlvxMSwYLm+ms=
+	by mail.kernel.org (Postfix) with ESMTP id 6ED2A2171F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Sep 2019 18:32:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728354AbfIQSFJ (ORCPT
+        id S1728718AbfIQScw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 Sep 2019 14:05:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39008 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726183AbfIQSFJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Sep 2019 14:05:09 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B6F4A2171F;
-        Tue, 17 Sep 2019 18:05:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568743508;
-        bh=IXjDaa7oixlswzf4Tva0sl0r8mHiLw0uW3O7GPu2vaQ=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=GgEQbdgkFqK96mPeHRO5h73Hg9JTY5HlbYRPtX35do7+ZHcfzyz3j1bvnw60TzIOp
-         xVGLBC3nN2WgtAT1a+e/AhpfvygccgfHu0Hso2o+E5uLQfoaAwwbnT2yOGeEO4HHuY
-         drXWN3/lbADK8VCJlqNsQ7p/u9cGptGYTn3EJiz0=
-Subject: Re: [PATCH v2] selftests: watchdog: Validate optional file argument
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     "George G. Davis" <george_davis@mentor.com>,
+        Tue, 17 Sep 2019 14:32:52 -0400
+Received: from esa1.mentor.iphmx.com ([68.232.129.153]:26589 "EHLO
+        esa1.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726276AbfIQScw (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Sep 2019 14:32:52 -0400
+IronPort-SDR: fo2tBWupeJ1358pLhuf1Uq9jiDlTX/ZwbVx1w7EWKXSGNABBbIT24OrhP4rvPGyw7HZZAb8Eq1
+ BND0FX/5WSeihyp9VPHC1boSQg9moPrA4K1/vVKmcMsBSXFM7lIzPD6d19aao44GMZPmFHNIDa
+ 6+0E1d/mWahOB9QBP+GKbVy1nMah144JZZNheC8wkdT0gUXe1HF7T6d67xEUsmNEotQPV4Kxwt
+ 3FwfXbwyuiTR+Y03UKXwoMHjubVSHAhic7p6HwNAC5ONxytMLRFScZrm383nik1asZf06ZxL2s
+ ZNE=
+X-IronPort-AV: E=Sophos;i="5.64,517,1559548800"; 
+   d="scan'208";a="43244354"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa1.mentor.iphmx.com with ESMTP; 17 Sep 2019 10:32:50 -0800
+IronPort-SDR: 2LXmIcWQgDFW845Q6YPBGMkuk9fl6htXrlBKexNeFo9VUhq6ua1tzpJfGh2M9o5EpisZdMBxlp
+ JyfD74Cb/3mdKMq87ktahwmCTLglPwkR72zdcwD4xTYfpuNWiEO3MxJaFZOX0YipdhqC/4LEyf
+ OlHtB7MJzp8R1bWSqBXk2rC2a4t/8D+gx0OjlEQWkT/4XQ9EhcmcrG6VFxOT8M2zLW3aHCWY88
+ 9zfH14srd4KdP4lfcaNmD7fOxuLDcIPA81Ge9dwqGyzv8L6Ezoe4spTLg8Y+NZI9dEFJ04rSg8
+ Aeo=
+Date:   Tue, 17 Sep 2019 14:32:47 -0400
+From:   "George G. Davis" <george_davis@mentor.com>
+To:     shuah <shuah@kernel.org>
+CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
         Eugeniu Rosca <roscaeugeniu@gmail.com>,
         Jerry Hoemann <jerry.hoemann@hpe.com>,
         Colin Ian King <colin.king@canonical.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] selftests: watchdog: Validate optional file argument
+Message-ID: <20190917183246.GB15686@mam-gdavis-lt>
 References: <1568659751-1845-1-git-send-email-george_davis@mentor.com>
  <fa008fd8-f867-b80e-84ed-148e1630c09e@kernel.org>
  <20190917145400.GA14341@vmlxhi-102.adit-jv.com>
@@ -54,51 +53,61 @@ References: <1568659751-1845-1-git-send-email-george_davis@mentor.com>
  <20190917165418.GA21010@vmlxhi-102.adit-jv.com>
  <374127ff-d06f-fcc3-d317-5614dfdc5a71@kernel.org>
  <20190917175056.GA24224@vmlxhi-102.adit-jv.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <2ede1d4d-fa52-2100-2725-1ae32e62a5b6@kernel.org>
-Date:   Tue, 17 Sep 2019 12:05:06 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ <2ede1d4d-fa52-2100-2725-1ae32e62a5b6@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20190917175056.GA24224@vmlxhi-102.adit-jv.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <2ede1d4d-fa52-2100-2725-1ae32e62a5b6@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-ClientProxiedBy: svr-orw-mbx-08.mgc.mentorg.com (147.34.90.208) To
+ svr-orw-mbx-01.mgc.mentorg.com (147.34.90.201)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/17/19 11:50 AM, Eugeniu Rosca wrote:
-> On Tue, Sep 17, 2019 at 11:44:45AM -0600, shuah wrote:
->> On 9/17/19 10:54 AM, Eugeniu Rosca wrote:
->>> Shuah,
->>>
->>> On Tue, Sep 17, 2019 at 09:25:31AM -0600, shuah wrote:
->>>
->>> [..]
->>>
->>>> I want two patches and the first one with
->>>> Fixes tag.
->>>
->>
->> These two patches need to be separate. The first one is a fix and
->> the second is an enhancement.
-> 
-> That was exactly the idea of v1.
-> 
->>
->> Please send two patches - the first one with Fixes tag.
-> 
-> Can you please pick [v1] series from below:
->   - https://patchwork.kernel.org/patch/11136283/
->   - https://patchwork.kernel.org/patch/11136285/
-> 
-> with adding a one-liner Fixes tag to the first patch?
-> 
+Hello Shuah,
 
-Please send v2 with Fixes tag on the first one and making the changes
-I suggested on that v1 series.
+On Tue, Sep 17, 2019 at 12:05:06PM -0600, shuah wrote:
+> On 9/17/19 11:50 AM, Eugeniu Rosca wrote:
+> >On Tue, Sep 17, 2019 at 11:44:45AM -0600, shuah wrote:
+> >>On 9/17/19 10:54 AM, Eugeniu Rosca wrote:
+> >>>Shuah,
+> >>>
+> >>>On Tue, Sep 17, 2019 at 09:25:31AM -0600, shuah wrote:
+> >>>
+> >>>[..]
+> >>>
+> >>>>I want two patches and the first one with
+> >>>>Fixes tag.
+> >>>
+> >>
+> >>These two patches need to be separate. The first one is a fix and
+> >>the second is an enhancement.
+> >
+> >That was exactly the idea of v1.
+> >
+> >>
+> >>Please send two patches - the first one with Fixes tag.
+> >
+> >Can you please pick [v1] series from below:
+> >  - https://patchwork.kernel.org/patch/11136283/
+> >  - https://patchwork.kernel.org/patch/11136285/
+> >
+> >with adding a one-liner Fixes tag to the first patch?
+> >
+> 
+> Please send v2 with Fixes tag on the first one and making the changes
+> I suggested on that v1 series.
 
-thanks,
--- Shuah
+I'll submit v3 series with the requested changes.
+
+Thanks!
+
+> 
+> thanks,
+> -- Shuah
+
+-- 
+Regards,
+George
