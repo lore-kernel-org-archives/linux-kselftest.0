@@ -2,77 +2,256 @@ Return-Path: <SRS0=+Iky=XO=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,PDS_TONAME_EQ_TOLOCAL_SHORT,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74190C49ED7
-	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Sep 2019 09:50:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 989F9C49ED7
+	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Sep 2019 10:00:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 491E421929
-	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Sep 2019 09:50:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C03D207FC
+	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Sep 2019 10:00:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388966AbfISJun (ORCPT
+        id S2389122AbfISJ74 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 19 Sep 2019 05:50:43 -0400
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:56388 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388872AbfISJum (ORCPT
+        Thu, 19 Sep 2019 05:59:56 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:56307 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389011AbfISJ7z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Sep 2019 05:50:42 -0400
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id 1EFC93C0582;
-        Thu, 19 Sep 2019 11:50:41 +0200 (CEST)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id L6xpfrZ9tsfP; Thu, 19 Sep 2019 11:50:35 +0200 (CEST)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id A0C123C057C;
-        Thu, 19 Sep 2019 11:50:23 +0200 (CEST)
-Received: from vmlxhi-102.adit-jv.com (10.72.93.184) by HI2EXCH01.adit-jv.com
- (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.468.0; Thu, 19 Sep
- 2019 11:50:23 +0200
-Date:   Thu, 19 Sep 2019 11:50:20 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     shuah <shuah@kernel.org>
-CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>,
-        "George G. Davis" <george_davis@mentor.com>,
-        Jerry Hoemann <jerry.hoemann@hpe.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/2] selftests: watchdog: Validate optional file
- argument
-Message-ID: <20190919095020.GA15734@vmlxhi-102.adit-jv.com>
-References: <20190917184023.16701-1-erosca@de.adit-jv.com>
- <20190918113348.GA23977@vmlxhi-102.adit-jv.com>
- <41ad241a-1c9d-7e20-3cb1-84bf42ec6989@kernel.org>
+        Thu, 19 Sep 2019 05:59:55 -0400
+Received: from static-dcd-cqq-121001.business.bouyguestelecom.com ([212.194.121.1] helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iAtE3-0004bo-EI; Thu, 19 Sep 2019 09:59:47 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     keescook@chromium.org, luto@amacapital.net
+Cc:     jannh@google.com, wad@chromium.org, shuah@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Tyler Hicks <tyhicks@canonical.com>
+Subject: [PATCH v1 1/3] seccomp: add SECCOMP_USER_NOTIF_FLAG_CONTINUE
+Date:   Thu, 19 Sep 2019 11:59:01 +0200
+Message-Id: <20190919095903.19370-2-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20190919095903.19370-1-christian.brauner@ubuntu.com>
+References: <20190919095903.19370-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <41ad241a-1c9d-7e20-3cb1-84bf42ec6989@kernel.org>
-User-Agent: Mutt/1.12.1+40 (7f8642d4ee82) (2019-06-28)
-X-Originating-IP: [10.72.93.184]
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah,
+This allows the seccomp notifier to continue a syscall. A positive
+discussion about this feature was triggered by a post to the
+ksummit-discuss mailing list (cf. [3]) and took place during KSummit
+(cf. [1]) and again at the containers/checkpoint-restore
+micro-conference at Linux Plumbers.
 
-On Wed, Sep 18, 2019 at 03:05:33PM -0600, Shuah wrote:
+Recently we landed seccomp support for SECCOMP_RET_USER_NOTIF (cf. [4])
+which enables a process (watchee) to retrieve an fd for its seccomp
+filter. This fd can then be handed to another (usually more privileged)
+process (watcher). The watcher will then be able to receive seccomp
+messages about the syscalls having been performed by the watchee.
 
-[..]
+This feature is heavily used in some userspace workloads. For example,
+it is currently used to intercept mknod() syscalls in user namespaces
+aka in containers.
+The mknod() syscall can be easily filtered based on dev_t. This allows
+us to only intercept a very specific subset of mknod() syscalls.
+Furthermore, mknod() is not possible in user namespaces toto coelo and
+so intercepting and denying syscalls that are not in the whitelist on
+accident is not a big deal. The watchee won't notice a difference.
 
-> They both look good to me. I will apply these patches once the merge
-> window closes or when my first pull request to Linus clears.
-> 
-> You will see a notification when I apply them to kselftest tree.
+In contrast to mknod(), a lot of other syscall we intercept (e.g.
+setxattr()) cannot be easily filtered like mknod() because they have
+pointer arguments. Additionally, some of them might actually succeed in
+user namespaces (e.g. setxattr() for all "user.*" xattrs). Since we
+currently cannot tell seccomp to continue from a user notifier we are
+stuck with performing all of the syscalls in lieu of the container. This
+is a huge security liability since it is extremely difficult to
+correctly assume all of the necessary privileges of the calling task
+such that the syscall can be successfully emulated without escaping
+other additional security restrictions (think missing CAP_MKNOD for
+mknod(), or MS_NODEV on a filesystem etc.). This can be solved by
+telling seccomp to resume the syscall.
 
-Many thanks for your prompt feedback.
+One thing that came up in the discussion was the problem that another
+thread could change the memory after userspace has decided to let the
+syscall continue which is a well known TOCTOU with seccomp which is
+present in other ways already.
+The discussion showed that this feature is already very useful for any
+syscall without pointer arguments. For any accidentally intercepted
+non-pointer syscall it is safe to continue.
+For syscalls with pointer arguments there is a race but for any cautious
+userspace and the main usec cases the race doesn't matter. The notifier
+is intended to be used in a scenario where a more privileged watcher
+supervises the syscalls of lesser privileged watchee to allow it to get
+around kernel-enforced limitations by performing the syscall for it
+whenever deemed save by the watcher. Hence, if a user tricks the watcher
+into allowing a syscall they will either get a deny based on
+kernel-enforced restrictions later or they will have changed the
+arguments in such a way that they manage to perform a syscall with
+arguments that they would've been allowed to do anyway.
+In general, it is good to point out again, that the notifier fd was not
+intended to allow userspace to implement a security policy but rather to
+work around kernel security mechanisms in cases where the watcher knows
+that a given action is safe to perform.
 
+/* References */
+[1]: https://linuxplumbersconf.org/event/4/contributions/560
+[2]: https://linuxplumbersconf.org/event/4/contributions/477
+[3]: https://lore.kernel.org/r/20190719093538.dhyopljyr5ns33qx@brauner.io
+[4]: commit 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
+
+Co-developed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Reviewed-by: Tycho Andersen <tycho@tycho.ws>
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Will Drewry <wad@chromium.org>
+CC: Tyler Hicks <tyhicks@canonical.com>
+---
+/* v1 */
+- Kees Cook <keescook@chromium.org>, Tycho Andersen <tycho@tycho.ws>:
+  - s/SECCOMP_RET_USER_NOTIF_ALLOW/SECCOMP_USER_NOTIF_FLAG_CONTINUE/g
+- Kees Cook <keescook@chromium.org>:
+  - put giant warning about the dangers, and correct usage of the
+    SECCOMP_USER_NOTIF_FLAG_CONTINUE flag
+- Kees Cook <keescook@chromium.org>:
+  - change return type for seccomp_do_user_notification() to int to align with
+    similar functions
+
+/* v0 */
+Link: https://lore.kernel.org/r/20190918084833.9369-2-christian.brauner@ubuntu.com
+---
+ include/uapi/linux/seccomp.h | 20 ++++++++++++++++++++
+ kernel/seccomp.c             | 28 ++++++++++++++++++++++------
+ 2 files changed, 42 insertions(+), 6 deletions(-)
+
+diff --git a/include/uapi/linux/seccomp.h b/include/uapi/linux/seccomp.h
+index 90734aa5aa36..8a5dafed8a64 100644
+--- a/include/uapi/linux/seccomp.h
++++ b/include/uapi/linux/seccomp.h
+@@ -76,6 +76,26 @@ struct seccomp_notif {
+ 	struct seccomp_data data;
+ };
+ 
++/*
++ * Valid flags for struct seccomp_notif_resp
++ *
++ * Note, the SECCOMP_USER_NOTIF_FLAG_CONTINUE flag must be used with caution!
++ * If set by the process supervising the syscalls of another process the
++ * syscall will continue. This is problematic because of an inherent TOCTOU.
++ * An attacker can exploit the time while the supervised process is waiting on
++ * a response from the supervising process to rewrite syscall arguments which
++ * are passed as pointers of the intercepted syscall.
++ * It should be absolutely clear that this means that the seccomp notifier
++ * _cannot_ be used to implement a security policy! It should only ever be used
++ * in scenarios where a more privileged process supervises the syscalls of a
++ * lesser privileged process to get around kernel-enforced security
++ * restrictions when the privileged process deems this safe. In other words,
++ * in order to continue a syscall the supervising process should be sure that
++ * another security mechanism or the kernel itself will sufficiently block
++ * syscalls if arguments are rewritten to something unsafe.
++ */
++#define SECCOMP_USER_NOTIF_FLAG_CONTINUE BIT(0)
++
+ struct seccomp_notif_resp {
+ 	__u64 id;
+ 	__s64 val;
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index dba52a7db5e8..12d2227e5786 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -75,6 +75,7 @@ struct seccomp_knotif {
+ 	/* The return values, only valid when in SECCOMP_NOTIFY_REPLIED */
+ 	int error;
+ 	long val;
++	u32 flags;
+ 
+ 	/* Signals when this has entered SECCOMP_NOTIFY_REPLIED */
+ 	struct completion ready;
+@@ -732,11 +733,12 @@ static u64 seccomp_next_notify_id(struct seccomp_filter *filter)
+ 	return filter->notif->next_id++;
+ }
+ 
+-static void seccomp_do_user_notification(int this_syscall,
+-					 struct seccomp_filter *match,
+-					 const struct seccomp_data *sd)
++static int seccomp_do_user_notification(int this_syscall,
++					struct seccomp_filter *match,
++					const struct seccomp_data *sd)
+ {
+ 	int err;
++	u32 flags = 0;
+ 	long ret = 0;
+ 	struct seccomp_knotif n = {};
+ 
+@@ -764,6 +766,7 @@ static void seccomp_do_user_notification(int this_syscall,
+ 	if (err == 0) {
+ 		ret = n.val;
+ 		err = n.error;
++		flags = n.flags;
+ 	}
+ 
+ 	/*
+@@ -780,8 +783,14 @@ static void seccomp_do_user_notification(int this_syscall,
+ 		list_del(&n.list);
+ out:
+ 	mutex_unlock(&match->notify_lock);
++
++	/* Userspace requests to continue the syscall. */
++	if (flags & SECCOMP_USER_NOTIF_FLAG_CONTINUE)
++		return 0;
++
+ 	syscall_set_return_value(current, task_pt_regs(current),
+ 				 err, ret);
++	return -1;
+ }
+ 
+ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
+@@ -867,8 +876,10 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
+ 		return 0;
+ 
+ 	case SECCOMP_RET_USER_NOTIF:
+-		seccomp_do_user_notification(this_syscall, match, sd);
+-		goto skip;
++		if (seccomp_do_user_notification(this_syscall, match, sd))
++			goto skip;
++
++		return 0;
+ 
+ 	case SECCOMP_RET_LOG:
+ 		seccomp_log(this_syscall, 0, action, true);
+@@ -1087,7 +1098,11 @@ static long seccomp_notify_send(struct seccomp_filter *filter,
+ 	if (copy_from_user(&resp, buf, sizeof(resp)))
+ 		return -EFAULT;
+ 
+-	if (resp.flags)
++	if (resp.flags & ~SECCOMP_USER_NOTIF_FLAG_CONTINUE)
++		return -EINVAL;
++
++	if ((resp.flags & SECCOMP_USER_NOTIF_FLAG_CONTINUE) &&
++	    (resp.error || resp.val))
+ 		return -EINVAL;
+ 
+ 	ret = mutex_lock_interruptible(&filter->notify_lock);
+@@ -1116,6 +1131,7 @@ static long seccomp_notify_send(struct seccomp_filter *filter,
+ 	knotif->state = SECCOMP_NOTIFY_REPLIED;
+ 	knotif->error = resp.error;
+ 	knotif->val = resp.val;
++	knotif->flags = resp.flags;
+ 	complete(&knotif->ready);
+ out:
+ 	mutex_unlock(&filter->notify_lock);
 -- 
-Best Regards,
-Eugeniu
+2.23.0
+
