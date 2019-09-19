@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ABD6C49ED7
-	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Sep 2019 22:24:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75576C3A5A6
+	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Sep 2019 22:24:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 13B8621A49
-	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Sep 2019 22:24:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A2F02196E
+	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Sep 2019 22:24:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EriOvxCX"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="okXtjjMu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436476AbfISWYj (ORCPT
+        id S2389457AbfISWYx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 19 Sep 2019 18:24:39 -0400
-Received: from mail-pl1-f202.google.com ([209.85.214.202]:38557 "EHLO
-        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407204AbfISWYe (ORCPT
+        Thu, 19 Sep 2019 18:24:53 -0400
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:46507 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407222AbfISWYq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Sep 2019 18:24:34 -0400
-Received: by mail-pl1-f202.google.com with SMTP id x5so3085727pln.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Sep 2019 15:24:33 -0700 (PDT)
+        Thu, 19 Sep 2019 18:24:46 -0400
+Received: by mail-pf1-f202.google.com with SMTP id f2so3226830pfk.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Sep 2019 15:24:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=TLk+W3TtdJSuJIMoUgUWtiVZOG1pWX4LnjAI9xModHw=;
-        b=EriOvxCXW2Dyp+0lmXbX3M6Cfl9G3gxeiJ94XhY9pqSKmh5hJQZW90HGAaFORsIP+6
-         GD7FcKPE3YLxPXG7I1cOqlwNJM8z5a/sYkY21FfC6tDkfMPCpK693LHzEk3BoJshaB6r
-         3KpQ812jdsbg1IG++B5lAwM5k99H4inEsoaU4TrvIY8Lmp8m5DYkhlr0+obO6AXtB2i/
-         dhZpSCfftkZaZKVDREoqDnk57WjHto/17AyWsbvGRAhnwOEngqRhEDEpEvYrqlvnd0Re
-         YStAy8vh9xkjBuAAhwcQEIYlYxRpzJPEYbx73GdFjdWlmpnM9ks0z9U7+l5YILrI1QOP
-         Yavg==
+        bh=1fNH/t1YSSHvbg8a3MxctDUNrINVVwuSB3u0kWY+VvE=;
+        b=okXtjjMugI2zY2ntgsy9f5ADQvXd32G/3xinqf6Q6DtZsN1MbYoRsonm/03yjd0/P+
+         MiIUVJ/TIT5XH2YKjfw0FvrBtAZwd5DM78evZ6y1x0tflJV48NyGtbgy/MY/hxd5k/Zc
+         3V9HjeyAmSr1BHpbXPnNTRrEmOoGHsqAiX3Ck/V8YaFH2UmsyObqtnMlM/LEM2sh6P3q
+         W0JqVYCmFHAWrwSTvjAAudRcEl5fiiFK2qODUwZWWBFv1tb1baNfEY5piUNaqnQJoX4r
+         sYGU1nFjv3MHx7pUHQxtV3lOoSFYliguYZydg0YOWMR0IC9U4uIEB4rXq6tv6XXwZu+0
+         5zNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=TLk+W3TtdJSuJIMoUgUWtiVZOG1pWX4LnjAI9xModHw=;
-        b=d8tWgFg4KXBT+0xEkCjQvloYRbnQOHNpaR7WZMor2EHrhJ+3V7rCjnM6TIEVP2Sene
-         Qe9liNu8OpKgxjd5n5DSNofBMu6xdYyCZMgF9UMA9FOoXPFZfhYoe3rXvxjHKgDQtxWF
-         pkjBXMjq0osGwcYlJO+J8ZKOS/m2H8Mos57N+0bVtiTyqy+K46eXh5Vu9au8nNzL55Br
-         3Jk8RDSEoJlT1Si/CXjcygMKNlGMiMl9EzB3zIYvjM0l9tnWwCqXb/Xmzr+shNglHlIe
-         NEfMwUU2Cq6WYdePwEM3FZ2ywQ7XVE7lMYErUOXxpJ1dHGkOYk+zQEe5wrQtaNyfO7lS
-         zOcg==
-X-Gm-Message-State: APjAAAWxGwDpBekHP/QPyhOMvqNip/Do2Uf8LL6z0yy8oQCpQ/0wChns
-        As3lGBWUzoazotjKOFdO9T0TdYdUlZqKOz84ZA==
-X-Google-Smtp-Source: APXvYqyAnlxB/n4XyYceM1Sj+ive18YUON3baqShoIJESwUkAZZdW2blkjIaIaLT/rP4KII11nx7Cy+ySswsS6vEKg==
-X-Received: by 2002:a63:ff4a:: with SMTP id s10mr11385929pgk.166.1568931873111;
- Thu, 19 Sep 2019 15:24:33 -0700 (PDT)
-Date:   Thu, 19 Sep 2019 15:24:17 -0700
+        bh=1fNH/t1YSSHvbg8a3MxctDUNrINVVwuSB3u0kWY+VvE=;
+        b=jo55n5GVlTE/BctYHpF6nfWcugmzdTmUXQbvxnD/x9sdRfD/KSG1vku7T/Uv+ugvgQ
+         vOTc0xXbTjHdbx9gtp7HdsyZtrSYOQwBcLnu/bxm7fAcX23BlCteWbpJTmpa4HgZ5XTS
+         O+epJ1qSZgWIXUw6e4G9uOhPX06m/omIba+WJipqiBgrmFPuJNbKJfim8+WVkusTKqCM
+         KKlvAvMBzMSmuudgZFfScuYPQOCQkkBRo9GiRBfy8qjZ9EemGz5ndkwQDaBvF1H6N4GV
+         FpgW0Sd+kkMWjP8Rio4olIFjVtSKQxOqCriYlDqX1C5ikR6V2zI5YBrx3NMc6iIk3m5d
+         u9bw==
+X-Gm-Message-State: APjAAAUpXX8dakGGM7Qprws5LNeY/H200NVUw6mjbMb79UbCGTA9W+VZ
+        SpAVUnJMGmeVTHT+SjmKImqA+XMt3oiWGevlDg==
+X-Google-Smtp-Source: APXvYqwVYmVYaJLBh2SrSRXW2EoYl9OM1kTw7+CtcNY8OPiNC3aAKR0Me26xzMapXcS6QkknLzni5XaRDPsqCd2NcA==
+X-Received: by 2002:a63:4451:: with SMTP id t17mr11796300pgk.128.1568931883911;
+ Thu, 19 Sep 2019 15:24:43 -0700 (PDT)
+Date:   Thu, 19 Sep 2019 15:24:21 -0700
 In-Reply-To: <20190919222421.27408-1-almasrymina@google.com>
-Message-Id: <20190919222421.27408-4-almasrymina@google.com>
+Message-Id: <20190919222421.27408-8-almasrymina@google.com>
 Mime-Version: 1.0
 References: <20190919222421.27408-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.23.0.351.gc4317032e6-goog
-Subject: [PATCH v5 3/7] hugetlb_cgroup: add reservation accounting for private mappings
+Subject: [PATCH v5 7/7] hugetlb_cgroup: Add hugetlb_cgroup reservation docs
 From:   Mina Almasry <almasrymina@google.com>
 To:     mike.kravetz@oracle.com
 Cc:     shuah@kernel.org, almasrymina@google.com, rientjes@google.com,
@@ -74,188 +74,129 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Normally the pointer to the cgroup to uncharge hangs off the struct
-page, and gets queried when it's time to free the page. With
-hugetlb_cgroup reservations, this is not possible. Because it's possible
-for a page to be reserved by one task and actually faulted in by another
-task.
-
-The best place to put the hugetlb_cgroup pointer to uncharge for
-reservations is in the resv_map. But, because the resv_map has different
-semantics for private and shared mappings, the code patch to
-charge/uncharge shared and private mappings is different. This patch
-implements charging and uncharging for private mappings.
-
-For private mappings, the counter to uncharge is in
-resv_map->reservation_counter. On initializing the resv_map this is set
-to NULL. On reservation of a region in private mapping, the tasks
-hugetlb_cgroup is charged and the hugetlb_cgroup is placed is
-resv_map->reservation_counter.
-
-On hugetlb_vm_op_close, we uncharge resv_map->reservation_counter.
+Add docs for how to use hugetlb_cgroup reservations, and their behavior.
 
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 Acked-by: Hillf Danton <hdanton@sina.com>
 
 ---
- include/linux/hugetlb.h        |  8 +++++++
- include/linux/hugetlb_cgroup.h | 11 +++++++++
- mm/hugetlb.c                   | 44 +++++++++++++++++++++++++++++++++-
- mm/hugetlb_cgroup.c            | 12 ----------
- 4 files changed, 62 insertions(+), 13 deletions(-)
+ .../admin-guide/cgroup-v1/hugetlb.rst         | 85 ++++++++++++++++---
+ 1 file changed, 74 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 3d70a17cc0c3..230f44f730fa 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -46,6 +46,14 @@ struct resv_map {
- 	long adds_in_progress;
- 	struct list_head region_cache;
- 	long region_cache_count;
-+#ifdef CONFIG_CGROUP_HUGETLB
-+	/*
-+	 * On private mappings, the counter to uncharge reservations is stored
-+	 * here. If these fields are 0, then the mapping is shared.
-+	 */
-+	struct page_counter *reservation_counter;
-+	unsigned long pages_per_hpage;
-+#endif
- };
- extern struct resv_map *resv_map_alloc(void);
- void resv_map_release(struct kref *ref);
-diff --git a/include/linux/hugetlb_cgroup.h b/include/linux/hugetlb_cgroup.h
-index de35997bb5f9..31c4a9e1cf91 100644
---- a/include/linux/hugetlb_cgroup.h
-+++ b/include/linux/hugetlb_cgroup.h
-@@ -25,6 +25,17 @@ struct hugetlb_cgroup;
- #define HUGETLB_CGROUP_MIN_ORDER	2
+diff --git a/Documentation/admin-guide/cgroup-v1/hugetlb.rst b/Documentation/admin-guide/cgroup-v1/hugetlb.rst
+index a3902aa253a9..70c10bd9a0b7 100644
+--- a/Documentation/admin-guide/cgroup-v1/hugetlb.rst
++++ b/Documentation/admin-guide/cgroup-v1/hugetlb.rst
+@@ -2,13 +2,6 @@
+ HugeTLB Controller
+ ==================
 
- #ifdef CONFIG_CGROUP_HUGETLB
-+struct hugetlb_cgroup {
-+	struct cgroup_subsys_state css;
-+	/*
-+	 * the counter to account for hugepages from hugetlb.
-+	 */
-+	struct page_counter hugepage[HUGE_MAX_HSTATE];
-+	/*
-+	 * the counter to account for hugepage reservations from hugetlb.
-+	 */
-+	struct page_counter reserved_hugepage[HUGE_MAX_HSTATE];
-+};
-
- static inline struct hugetlb_cgroup *hugetlb_cgroup_from_page(struct page *page)
- {
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index a52efcb70d04..bac1cbdd027c 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -665,6 +665,16 @@ struct resv_map *resv_map_alloc(void)
- 	INIT_LIST_HEAD(&resv_map->regions);
-
- 	resv_map->adds_in_progress = 0;
-+#ifdef CONFIG_CGROUP_HUGETLB
-+	/*
-+	 * Initialize these to 0. On shared mappings, 0's here indicate these
-+	 * fields don't do cgroup accounting. On private mappings, these will be
-+	 * re-initialized to the proper values, to indicate that hugetlb cgroup
-+	 * reservations are to be un-charged from here.
-+	 */
-+	resv_map->reservation_counter = NULL;
-+	resv_map->pages_per_hpage = 0;
-+#endif
-
- 	INIT_LIST_HEAD(&resv_map->region_cache);
- 	list_add(&rg->link, &resv_map->region_cache);
-@@ -3147,7 +3157,18 @@ static void hugetlb_vm_op_close(struct vm_area_struct *vma)
-
- 	reserve = (end - start) - region_count(resv, start, end);
-
--	kref_put(&resv->refs, resv_map_release);
-+#ifdef CONFIG_CGROUP_HUGETLB
-+	/*
-+	 * Since we check for HPAGE_RESV_OWNER above, this must a private
-+	 * mapping, and these values should be none-zero, and should point to
-+	 * the hugetlb_cgroup counter to uncharge for this reservation.
-+	 */
-+	WARN_ON(!resv->reservation_counter);
-+	WARN_ON(!resv->pages_per_hpage);
-+
-+	hugetlb_cgroup_uncharge_counter(resv->reservation_counter,
-+					(end - start) * resv->pages_per_hpage);
-+#endif
-
- 	if (reserve) {
- 		/*
-@@ -3157,6 +3178,8 @@ static void hugetlb_vm_op_close(struct vm_area_struct *vma)
- 		gbl_reserve = hugepage_subpool_put_pages(spool, reserve);
- 		hugetlb_acct_memory(h, -gbl_reserve);
- 	}
-+
-+	kref_put(&resv->refs, resv_map_release);
- }
-
- static int hugetlb_vm_op_split(struct vm_area_struct *vma, unsigned long addr)
-@@ -4490,6 +4513,7 @@ int hugetlb_reserve_pages(struct inode *inode,
- 	struct hstate *h = hstate_inode(inode);
- 	struct hugepage_subpool *spool = subpool_inode(inode);
- 	struct resv_map *resv_map;
-+	struct hugetlb_cgroup *h_cg;
- 	long gbl_reserve;
-
- 	/* This should never happen */
-@@ -4523,12 +4547,30 @@ int hugetlb_reserve_pages(struct inode *inode,
- 		chg = region_chg(resv_map, from, to);
-
- 	} else {
-+		/* Private mapping. */
- 		resv_map = resv_map_alloc();
- 		if (!resv_map)
- 			return -ENOMEM;
-
- 		chg = to - from;
-
-+		if (hugetlb_cgroup_charge_cgroup(hstate_index(h),
-+						 chg * pages_per_huge_page(h),
-+						 &h_cg, true)) {
-+			kref_put(&resv_map->refs, resv_map_release);
-+			return -ENOMEM;
-+		}
-+
-+#ifdef CONFIG_CGROUP_HUGETLB
-+		/*
-+		 * Since this branch handles private mappings, we attach the
-+		 * counter to uncharge for this reservation off resv_map.
-+		 */
-+		resv_map->reservation_counter =
-+			&h_cg->reserved_hugepage[hstate_index(h)];
-+		resv_map->pages_per_hpage = pages_per_huge_page(h);
-+#endif
-+
- 		set_vma_resv_map(vma, resv_map);
- 		set_vma_resv_flags(vma, HPAGE_RESV_OWNER);
- 	}
-diff --git a/mm/hugetlb_cgroup.c b/mm/hugetlb_cgroup.c
-index dc1ddc9b09c4..ae359ae61cf2 100644
---- a/mm/hugetlb_cgroup.c
-+++ b/mm/hugetlb_cgroup.c
-@@ -19,18 +19,6 @@
- #include <linux/hugetlb.h>
- #include <linux/hugetlb_cgroup.h>
-
--struct hugetlb_cgroup {
--	struct cgroup_subsys_state css;
--	/*
--	 * the counter to account for hugepages from hugetlb.
--	 */
--	struct page_counter hugepage[HUGE_MAX_HSTATE];
--	/*
--	 * the counter to account for hugepage reservations from hugetlb.
--	 */
--	struct page_counter reserved_hugepage[HUGE_MAX_HSTATE];
--};
+-The HugeTLB controller allows to limit the HugeTLB usage per control group and
+-enforces the controller limit during page fault. Since HugeTLB doesn't
+-support page reclaim, enforcing the limit at page fault time implies that,
+-the application will get SIGBUS signal if it tries to access HugeTLB pages
+-beyond its limit. This requires the application to know beforehand how much
+-HugeTLB pages it would require for its use.
 -
- #define MEMFILE_PRIVATE(x, val)	(((x) << 16) | (val))
- #define MEMFILE_IDX(val)	(((val) >> 16) & 0xffff)
- #define MEMFILE_ATTR(val)	((val) & 0xffff)
+ HugeTLB controller can be created by first mounting the cgroup filesystem.
+
+ # mount -t cgroup -o hugetlb none /sys/fs/cgroup
+@@ -28,10 +21,14 @@ process (bash) into it.
+
+ Brief summary of control files::
+
+- hugetlb.<hugepagesize>.limit_in_bytes     # set/show limit of "hugepagesize" hugetlb usage
+- hugetlb.<hugepagesize>.max_usage_in_bytes # show max "hugepagesize" hugetlb  usage recorded
+- hugetlb.<hugepagesize>.usage_in_bytes     # show current usage for "hugepagesize" hugetlb
+- hugetlb.<hugepagesize>.failcnt		   # show the number of allocation failure due to HugeTLB limit
++ hugetlb.<hugepagesize>.reservation_limit_in_bytes     # set/show limit of "hugepagesize" hugetlb reservations
++ hugetlb.<hugepagesize>.reservation_max_usage_in_bytes # show max "hugepagesize" hugetlb reservations recorded
++ hugetlb.<hugepagesize>.reservation_usage_in_bytes     # show current reservations for "hugepagesize" hugetlb
++ hugetlb.<hugepagesize>.reservation_failcnt            # show the number of allocation failure due to HugeTLB reservation limit
++ hugetlb.<hugepagesize>.limit_in_bytes                 # set/show limit of "hugepagesize" hugetlb faults
++ hugetlb.<hugepagesize>.max_usage_in_bytes             # show max "hugepagesize" hugetlb  usage recorded
++ hugetlb.<hugepagesize>.usage_in_bytes                 # show current usage for "hugepagesize" hugetlb
++ hugetlb.<hugepagesize>.failcnt                        # show the number of allocation failure due to HugeTLB usage limit
+
+ For a system supporting three hugepage sizes (64k, 32M and 1G), the control
+ files include::
+@@ -40,11 +37,77 @@ files include::
+   hugetlb.1GB.max_usage_in_bytes
+   hugetlb.1GB.usage_in_bytes
+   hugetlb.1GB.failcnt
++  hugetlb.1GB.reservation_limit_in_bytes
++  hugetlb.1GB.reservation_max_usage_in_bytes
++  hugetlb.1GB.reservation_usage_in_bytes
++  hugetlb.1GB.reservation_failcnt
+   hugetlb.64KB.limit_in_bytes
+   hugetlb.64KB.max_usage_in_bytes
+   hugetlb.64KB.usage_in_bytes
+   hugetlb.64KB.failcnt
++  hugetlb.64KB.reservation_limit_in_bytes
++  hugetlb.64KB.reservation_max_usage_in_bytes
++  hugetlb.64KB.reservation_usage_in_bytes
++  hugetlb.64KB.reservation_failcnt
+   hugetlb.32MB.limit_in_bytes
+   hugetlb.32MB.max_usage_in_bytes
+   hugetlb.32MB.usage_in_bytes
+   hugetlb.32MB.failcnt
++  hugetlb.32MB.reservation_limit_in_bytes
++  hugetlb.32MB.reservation_max_usage_in_bytes
++  hugetlb.32MB.reservation_usage_in_bytes
++  hugetlb.32MB.reservation_failcnt
++
++
++1. Reservation limits
++
++The HugeTLB controller allows to limit the HugeTLB reservations per control
++group and enforces the controller limit at reservation time. Reservation limits
++are superior to Page fault limits (see section 2), since Reservation limits are
++enforced at reservation time, and never causes the application to get SIGBUS
++signal. Instead, if the application is violating its limits, then it gets an
++error on reservation time, i.e. the mmap or shmget return an error.
++
++
++2. Page fault limits
++
++The HugeTLB controller allows to limit the HugeTLB usage (page fault) per
++control group and enforces the controller limit during page fault. Since HugeTLB
++doesn't support page reclaim, enforcing the limit at page fault time implies
++that, the application will get SIGBUS signal if it tries to access HugeTLB
++pages beyond its limit. This requires the application to know beforehand how
++much HugeTLB pages it would require for its use.
++
++
++3. Caveats with shared memory
++
++a. Charging and uncharging:
++
++For shared hugetlb memory, both hugetlb reservation and usage (page faults) are
++charged to the first task that causes the memory to be reserved or faulted,
++and all subsequent uses of this reserved or faulted memory is done without
++charging.
++
++Shared hugetlb memory is only uncharged when it is unreserved or deallocated.
++This is usually when the hugetlbfs file is deleted, and not when the task that
++caused the reservation or fault has exited.
++
++b. Interaction between reservation limit and fault limit.
++
++Generally, it's not recommended to set both of the reservation limit and fault
++limit in a cgroup. For private memory, the fault usage cannot exceed the
++reservation usage, so if you set both, one of those limits will be useless.
++Still, there is no kernel enforcement on setting both at the same time.
++
++For shared memory, a cgroup's fault usage may be greater than its reservation
++usage, so some care needs to be taken. Consider this example:
++
++- Task A reserves 4 pages in a shared hugetlbfs file. Cgroup A will get
++  4 reservations charged to it and no faults charged to it.
++- Task B reserves and faults the same 4 pages as Task A. Cgroup B will get no
++  reservation charge, but will get charged 4 faulted pages. If Cgroup B's limit
++  is less than 4, then Task B will get a SIGBUS.
++
++For the above scenario, it's not recommended for the userspace to set both
++reservation limits and fault limits, but it is still allowed to in case it sees
++some use for it, such as safe gradual transitioning from one to the other.
 --
 2.23.0.351.gc4317032e6-goog
