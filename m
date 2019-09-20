@@ -2,66 +2,48 @@ Return-Path: <SRS0=GpS6=XP=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FBB6C49ED7
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 23:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE288C49ED7
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 23:36:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2BED721D81
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 23:21:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gBA2/p13"
+	by mail.kernel.org (Postfix) with ESMTP id 821812080F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 23:36:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1569022564;
+	bh=5sglSv+9hSOJc0b2FWY8nQeYj0FpLkqsXtS/3eUTZSE=;
+	h=In-Reply-To:References:Cc:To:From:Subject:Date:List-ID:From;
+	b=y5dEs6QtCn1xs8iSWEO2kbz7SYS45ApYj5Y9McE9lZRGzld62Bcoy21jqzZt55Qgy
+	 BV08ze1tWDgYfDZ87ymBtJtM1eDMQxkt2tib6/BjkPWvaVZ2io2612DMB7pFDWkPYJ
+	 M5k4GEfcud6/BrBA5dbs0Wa8fxUwrHMGSz6YT08Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393981AbfITXTk (ORCPT
+        id S2437263AbfITXgB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 20 Sep 2019 19:19:40 -0400
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:35453 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393979AbfITXTk (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Sep 2019 19:19:40 -0400
-Received: by mail-pf1-f202.google.com with SMTP id r7so5773523pfg.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2019 16:19:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=nb7QxHXj+SKvjsJLG8FWioDhlMnWN+bRLwlVtN25RL8=;
-        b=gBA2/p13VviwFX4KcGj3wi73zswgh9stq+u0+VIVmsQc5JjIHMEAc8dxixhA5Rl+C3
-         3uN9VQFxr8hIUCrY4o5HmaFJmwEZnNosUkMmsdxptY6kSkTRMPReA+DGLs5E4S0eKzMb
-         wxzegoEDbhr1qTO0W9rClb06XAlrKyS+1nRcMn00URrZxhtKVvqNGaVUmf5l45RflXbu
-         api8zdcu39O2cGMSnmhZ8WwwXzUwnyWjqJ93u7qNLGNUqBTnR6n+wjy0GTxPZLA6Tksq
-         vc03vGL3W4/BQKCds3KzP7hRH5zJsvNdcNRfMW9REt7lHDUwBIQvByxBpEgtHGWEvZZv
-         wJAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=nb7QxHXj+SKvjsJLG8FWioDhlMnWN+bRLwlVtN25RL8=;
-        b=q263kX7IriJa3BHLYEAFAdZfApnLqVGcNHXt7H9sl2b4b3pgrEN15OYT7a77XK8yaJ
-         dXtM5eHJYVOqd55febg9OujC4iiDV3ONKVIIXoPRizo9zddBh8ant0DTtQIhp4PiaDOn
-         knBt2Qt/wz2aC0LVmqzMCkHIfCYy9ZDQ0fPjROFyczoczKZDjnN/6JXGhn6tthNnPBN1
-         3wqNVGmxlBg6LdidUt65q9lPGPzalGdxu7UTD0s6hya1OUv+2DXQgR1fYv7cPdU4BDW6
-         Mr44OvL0YhMJcLSfrFJwLKHN59eafxErQNtA2XG4E0UONeobUM3lfcfu20RYOUtarDah
-         RPwA==
-X-Gm-Message-State: APjAAAWlLJfK/94YXV7feEQgsLU2WrbOMZ3Oxiky1kuPxE8Y7COqlCYi
-        3vx8FaGBYPxr9hxiNimyLd8FIX/Kqh1+jk8lJT6v+Q==
-X-Google-Smtp-Source: APXvYqytMR8IZXABl+f3jYgBOchzLzV2fU9kRlUfaLFAk4s8Ys3CTvTqt33JWkrWAeywlxKZdNmAWieZg+uzSvfi8E7soQ==
-X-Received: by 2002:a65:5543:: with SMTP id t3mr17639051pgr.242.1569021579027;
- Fri, 20 Sep 2019 16:19:39 -0700 (PDT)
-Date:   Fri, 20 Sep 2019 16:19:04 -0700
-Message-Id: <20190920231923.141900-1-brendanhiggins@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.23.0.351.gc4317032e6-goog
-Subject: [PATCH v16 00/19] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        jpoimboe@redhat.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
+        Fri, 20 Sep 2019 19:36:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47022 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405089AbfITXgB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Sep 2019 19:36:01 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 48BBA20644;
+        Fri, 20 Sep 2019 23:36:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569022560;
+        bh=5sglSv+9hSOJc0b2FWY8nQeYj0FpLkqsXtS/3eUTZSE=;
+        h=In-Reply-To:References:Cc:To:From:Subject:Date:From;
+        b=QoMrsX259uVvKBLBgqFjYCWW1WAj3R7P2E6eLBj5gAyIaMIeiTZjnJfb1ejgaJusJ
+         UkwBwgUAjsyBgNEGV13XM9dZr3pmhCUgchYJf34niV3DUvIrN8ruCbCxuAbZoqAL58
+         4PWBzZepSAwldwciLUi98T3R3UO3RBc/aPRrzFTw=
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190920231923.141900-7-brendanhiggins@google.com>
+References: <20190920231923.141900-1-brendanhiggins@google.com> <20190920231923.141900-7-brendanhiggins@google.com>
 Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
@@ -74,184 +56,51 @@ Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
         richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
         wfg@linux.intel.com, torvalds@linux-foundation.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        jpoimboe@redhat.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
+        peterz@infradead.org, robh@kernel.org, shuah@kernel.org,
+        tytso@mit.edu, yamada.masahiro@socionext.com
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v16 06/19] lib: enable building KUnit in lib/
+User-Agent: alot/0.8.1
+Date:   Fri, 20 Sep 2019 16:35:59 -0700
+Message-Id: <20190920233600.48BBA20644@mail.kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## TL;DR
+Quoting Brendan Higgins (2019-09-20 16:19:10)
+> KUnit is a new unit testing framework for the kernel and when used is
+> built into the kernel as a part of it. Add KUnit to the lib Kconfig and
+> Makefile to allow it to be actually built.
+>=20
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> ---
+>  lib/Kconfig.debug | 2 ++
+>  lib/Makefile      | 2 ++
+>  2 files changed, 4 insertions(+)
+>=20
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 5960e2980a8a..5870fbe11e9b 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2144,4 +2144,6 @@ config IO_STRICT_DEVMEM
+> =20
+>  source "arch/$(SRCARCH)/Kconfig.debug"
+> =20
+> +source "lib/kunit/Kconfig"
+> +
 
-This revision addresses comments from Linus[1] and Randy[2], by moving
-top level `kunit/` directory to `lib/kunit/` and likewise moves top
-level Kconfig entry under lib/Kconfig.debug, so the KUnit submenu now
-shows up under the "Kernel Hacking" menu.
+Perhaps this should go by the "Runtime Testing" part? Before or after.
 
-As a consequence of this, I rewrote patch 06/18 (kbuild: enable building
-KUnit), and now needs to be re-acked/reviewed.
-
-## Background
-
-This patch set proposes KUnit, a lightweight unit testing and mocking
-framework for the Linux kernel.
-
-Unlike Autotest and kselftest, KUnit is a true unit testing framework;
-it does not require installing the kernel on a test machine or in a VM
-(however, KUnit still allows you to run tests on test machines or in VMs
-if you want[3]) and does not require tests to be written in userspace
-running on a host kernel. Additionally, KUnit is fast: From invocation
-to completion KUnit can run several dozen tests in about a second.
-Currently, the entire KUnit test suite for KUnit runs in under a second
-from the initial invocation (build time excluded).
-
-KUnit is heavily inspired by JUnit, Python's unittest.mock, and
-Googletest/Googlemock for C++. KUnit provides facilities for defining
-unit test cases, grouping related test cases into test suites, providing
-common infrastructure for running tests, mocking, spying, and much more.
-
-### What's so special about unit testing?
-
-A unit test is supposed to test a single unit of code in isolation,
-hence the name. There should be no dependencies outside the control of
-the test; this means no external dependencies, which makes tests orders
-of magnitudes faster. Likewise, since there are no external dependencies,
-there are no hoops to jump through to run the tests. Additionally, this
-makes unit tests deterministic: a failing unit test always indicates a
-problem. Finally, because unit tests necessarily have finer granularity,
-they are able to test all code paths easily solving the classic problem
-of difficulty in exercising error handling code.
-
-### Is KUnit trying to replace other testing frameworks for the kernel?
-
-No. Most existing tests for the Linux kernel are end-to-end tests, which
-have their place. A well tested system has lots of unit tests, a
-reasonable number of integration tests, and some end-to-end tests. KUnit
-is just trying to address the unit test space which is currently not
-being addressed.
-
-### More information on KUnit
-
-There is a bunch of documentation near the end of this patch set that
-describes how to use KUnit and best practices for writing unit tests.
-For convenience I am hosting the compiled docs here[4].
-
-Additionally for convenience, I have applied these patches to a
-branch[5]. The repo may be cloned with:
-git clone https://kunit.googlesource.com/linux
-This patchset is on the kunit/initial/v5.3/v16 branch.
-
-[1] https://www.lkml.org/lkml/2019/9/20/696
-[2] https://www.lkml.org/lkml/2019/9/20/738
-[3] https://google.github.io/kunit-docs/third_party/kernel/docs/usage.html#kunit-on-non-uml-architectures
-[4] https://google.github.io/kunit-docs/third_party/kernel/docs/
-[5] https://kunit.googlesource.com/linux/+/kunit/initial/v5.3/v16
-
----
-
-Avinash Kondareddy (1):
-  kunit: test: add tests for KUnit managed resources
-
-Brendan Higgins (16):
-  kunit: test: add KUnit test runner core
-  kunit: test: add test resource management API
-  kunit: test: add string_stream a std::stream like string builder
-  kunit: test: add assertion printing library
-  kunit: test: add the concept of expectations
-  lib: enable building KUnit in lib/
-  kunit: test: add initial tests
-  objtool: add kunit_try_catch_throw to the noreturn list
-  kunit: test: add support for test abort
-  kunit: test: add tests for kunit test abort
-  kunit: test: add the concept of assertions
-  kunit: defconfig: add defconfigs for building KUnit tests
-  Documentation: kunit: add documentation for KUnit
-  MAINTAINERS: add entry for KUnit the unit testing framework
-  MAINTAINERS: add proc sysctl KUnit test to PROC SYSCTL section
-  kunit: fix failure to build without printk
-
-Felix Guo (1):
-  kunit: tool: add Python wrappers for running KUnit tests
-
-Iurii Zaikin (1):
-  kernel/sysctl-test: Add null pointer test for sysctl.c:proc_dointvec()
-
- Documentation/dev-tools/index.rst             |    1 +
- Documentation/dev-tools/kunit/api/index.rst   |   16 +
- Documentation/dev-tools/kunit/api/test.rst    |   11 +
- Documentation/dev-tools/kunit/faq.rst         |   62 +
- Documentation/dev-tools/kunit/index.rst       |   79 +
- Documentation/dev-tools/kunit/start.rst       |  180 ++
- Documentation/dev-tools/kunit/usage.rst       |  576 +++++++
- MAINTAINERS                                   |   13 +
- arch/um/configs/kunit_defconfig               |    3 +
- include/kunit/assert.h                        |  356 ++++
- include/kunit/string-stream.h                 |   51 +
- include/kunit/test.h                          | 1490 +++++++++++++++++
- include/kunit/try-catch.h                     |   75 +
- kernel/Makefile                               |    2 +
- kernel/sysctl-test.c                          |  392 +++++
- lib/Kconfig.debug                             |   13 +
- lib/Makefile                                  |    2 +
- lib/kunit/Kconfig                             |   38 +
- lib/kunit/Makefile                            |    9 +
- lib/kunit/assert.c                            |  141 ++
- lib/kunit/example-test.c                      |   88 +
- lib/kunit/string-stream-test.c                |   52 +
- lib/kunit/string-stream.c                     |  217 +++
- lib/kunit/test-test.c                         |  331 ++++
- lib/kunit/test.c                              |  478 ++++++
- lib/kunit/try-catch.c                         |  118 ++
- tools/objtool/check.c                         |    1 +
- tools/testing/kunit/.gitignore                |    3 +
- tools/testing/kunit/configs/all_tests.config  |    3 +
- tools/testing/kunit/kunit.py                  |  136 ++
- tools/testing/kunit/kunit_config.py           |   66 +
- tools/testing/kunit/kunit_kernel.py           |  149 ++
- tools/testing/kunit/kunit_parser.py           |  310 ++++
- tools/testing/kunit/kunit_tool_test.py        |  206 +++
- .../test_is_test_passed-all_passed.log        |   32 +
- .../test_data/test_is_test_passed-crash.log   |   69 +
- .../test_data/test_is_test_passed-failure.log |   36 +
- .../test_is_test_passed-no_tests_run.log      |   75 +
- .../test_output_isolated_correctly.log        |  106 ++
- .../test_data/test_read_from_file.kconfig     |   17 +
- 40 files changed, 6003 insertions(+)
- create mode 100644 Documentation/dev-tools/kunit/api/index.rst
- create mode 100644 Documentation/dev-tools/kunit/api/test.rst
- create mode 100644 Documentation/dev-tools/kunit/faq.rst
- create mode 100644 Documentation/dev-tools/kunit/index.rst
- create mode 100644 Documentation/dev-tools/kunit/start.rst
- create mode 100644 Documentation/dev-tools/kunit/usage.rst
- create mode 100644 arch/um/configs/kunit_defconfig
- create mode 100644 include/kunit/assert.h
- create mode 100644 include/kunit/string-stream.h
- create mode 100644 include/kunit/test.h
- create mode 100644 include/kunit/try-catch.h
- create mode 100644 kernel/sysctl-test.c
- create mode 100644 lib/kunit/Kconfig
- create mode 100644 lib/kunit/Makefile
- create mode 100644 lib/kunit/assert.c
- create mode 100644 lib/kunit/example-test.c
- create mode 100644 lib/kunit/string-stream-test.c
- create mode 100644 lib/kunit/string-stream.c
- create mode 100644 lib/kunit/test-test.c
- create mode 100644 lib/kunit/test.c
- create mode 100644 lib/kunit/try-catch.c
- create mode 100644 tools/testing/kunit/.gitignore
- create mode 100644 tools/testing/kunit/configs/all_tests.config
- create mode 100755 tools/testing/kunit/kunit.py
- create mode 100644 tools/testing/kunit/kunit_config.py
- create mode 100644 tools/testing/kunit/kunit_kernel.py
- create mode 100644 tools/testing/kunit/kunit_parser.py
- create mode 100755 tools/testing/kunit/kunit_tool_test.py
- create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-all_passed.log
- create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-crash.log
- create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-failure.log
- create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-no_tests_run.log
- create mode 100644 tools/testing/kunit/test_data/test_output_isolated_correctly.log
- create mode 100644 tools/testing/kunit/test_data/test_read_from_file.kconfig
-
--- 
-2.23.0.351.gc4317032e6-goog
-
+>  endmenu # Kernel hacking
