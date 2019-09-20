@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67524C4CECD
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 23:21:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FF23C49ED7
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 23:21:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 35F3C21A4A
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 23:21:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3278F21A4A
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 23:21:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fN8BbWKk"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C8CTpH7h"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437181AbfITXVE (ORCPT
+        id S2437033AbfITXVG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 20 Sep 2019 19:21:04 -0400
-Received: from mail-pl1-f201.google.com ([209.85.214.201]:56613 "EHLO
-        mail-pl1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437067AbfITXUS (ORCPT
+        Fri, 20 Sep 2019 19:21:06 -0400
+Received: from mail-yw1-f73.google.com ([209.85.161.73]:54808 "EHLO
+        mail-yw1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437048AbfITXUN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Sep 2019 19:20:18 -0400
-Received: by mail-pl1-f201.google.com with SMTP id v4so5376357plp.23
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2019 16:20:18 -0700 (PDT)
+        Fri, 20 Sep 2019 19:20:13 -0400
+Received: by mail-yw1-f73.google.com with SMTP id l63so6704620ywg.21
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2019 16:20:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=XW6ObdsygoQczUzhnAeFOiZL9hvh/FcVMF1CQf4gGoM=;
-        b=fN8BbWKkmRWbki39ZBHS5ypTABzdFkBbS17uOOzZIBa9I0/uONV1bGF+mQFoBxTwHy
-         zF4o8ega2hGp8xygdEQArh+kCnmLjjjr9TYrCZwA//Tm2wHujPFBJClVGn9j86/H0jLi
-         b2Xaxq8Lzq6txv7pSIc+jnf/1UXvj+mWm9RYoYPs7FksxUFLw+SbqXRKqFET1FnQOD/9
-         4kkQrjNSMR2R3RzMaznpXBVtLPYJMhMBVI668K3BGdfu3bwViWUN3QqJTUwTRbLFtiNU
-         Ej22MFIEnLSsw8vnMbCiXQVCdTWw23HPUbk7RFORErjOyEgfVwdH6/QHN6VKjkYfLBTe
-         EIXQ==
+        bh=aABf1eQBMP6/WvpZsyoq3EyRjH0cX7yhFaKM6+EkpH4=;
+        b=C8CTpH7hjt5YzOI8L3ZXZdx+UjDYARIDHHjQ/7OtEDOsGIfUTly+gb2r4DffPT2x7P
+         4vRLIiK1XK9TvUnkfkNU1Iv9kUN8urfJiAOsHRGh0rwJ8k9Ny1vyB/ixjD51NAsOwCbO
+         FRInTaqsz/Bd8gz2nilcPiISmipuNqdZi9TZdJaanGF6Re0R4bHhbmbZDoOTAg98B5vF
+         D2QLWdOrGKPy9B47ek5ANwRKVa8jMt08wD6F/S/feLXmidmt6srqGWOW5ZgWIW0/Rm+Q
+         OQaWqX+oD7QR9eH/jyHsv+MYWnflZtQKzkZaXkmsA21SGpVoFzW6o3ApmTnQrTzRApNP
+         OQkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=XW6ObdsygoQczUzhnAeFOiZL9hvh/FcVMF1CQf4gGoM=;
-        b=uUGD82Jzb+VPb+deKuwP3L/MR/D9xXfK7mpeBFG7XzqJmFCkkxiU1CFkbqxUFWulhI
-         Y+eof18srfqLxsCLn1WQYSnlxdA4SZYgGedhB2abV23JChwmWrFcwDNeqPRiAIkgVA2Z
-         NKXOcB/XJpafyCo7odtBhjHNIxTpsZOJ/zszRag6P4UJjkI2fGrMmbraDnhO2tukA/Oj
-         TKfmDHpWwCGy3JPwurWLu/OBSqJl919YKK/NkvXIeJuE+aRjqluex4u//D0T3kGHm5x8
-         B0HWys8jdvKkUMX2TMmVSXFfruhIV6MaFwnBm3LOE3ut3QCnqJ7uw1E0BuCNX3MRgpYq
-         /GUw==
-X-Gm-Message-State: APjAAAVKlJlNOZNugfs4TJlj8uLNhuJHWVuAXz6pbP/f1FPQloPfEjZC
-        rNqsbpyoZ/lvkHGZAI2V1SIf4JIBkK+N4HMglhq/9A==
-X-Google-Smtp-Source: APXvYqxKVyhgyp4fnQJvfBqNIedf10ujv/TGP90gZCYCjp1JDQT/YqURWr/Bs7K6Ny1E5F/kXnYi2soTBwRXscawpsjg+g==
-X-Received: by 2002:a63:1f1f:: with SMTP id f31mr17488162pgf.353.1569021617565;
- Fri, 20 Sep 2019 16:20:17 -0700 (PDT)
-Date:   Fri, 20 Sep 2019 16:19:18 -0700
+        bh=aABf1eQBMP6/WvpZsyoq3EyRjH0cX7yhFaKM6+EkpH4=;
+        b=fhWuO/ujLjcE6tV5yEwTZwE+Bq4kwLybJRQ6/kLAX0BrOyIs7DihnGZN33E6yFeX9z
+         H/lBA41ntp3X1uhB2oXIHsca275GXZ50EnVxBFMJ/qrj1qD1QE8Jh4c44WauthnxGTZG
+         8LC1PLHPi3StMxjYahd+ZthPa48LthjelhJ8dY8W28TrN2Y9uTuOs2DIjNNqBXHopBkZ
+         C8DqEtgmJu1wBEJ+8yi+i6woYMONgUS0ogiEamH9l7uob+sVomkqyAbLeJKbmGKOGzrw
+         yzNWVRLFGmGdA8hO5B0y0NKfwZFVa/s/qlmhTElFOmhd3nRhGLOJAWj7S65eYmBw/rrL
+         ucsA==
+X-Gm-Message-State: APjAAAVxcbd3Sxj9yrIpNw9yfzFu9PqE3E2eLJQcB1BV4YTExKIF6z+e
+        eXXZiALhWnth3mNOGJOmQZiq50Yo810kIg3OITVRyA==
+X-Google-Smtp-Source: APXvYqweqI84X6kIFXp//UjYY7BAsyfmpZhSb5WrEB7msV1QvcEohsykXXMYy3EnpAxoYkj0k9lpHjzJ8iclAUJ1C+DKlg==
+X-Received: by 2002:a81:a24f:: with SMTP id z15mr14509682ywg.55.1569021612142;
+ Fri, 20 Sep 2019 16:20:12 -0700 (PDT)
+Date:   Fri, 20 Sep 2019 16:19:16 -0700
 In-Reply-To: <20190920231923.141900-1-brendanhiggins@google.com>
-Message-Id: <20190920231923.141900-15-brendanhiggins@google.com>
+Message-Id: <20190920231923.141900-13-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20190920231923.141900-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.23.0.351.gc4317032e6-goog
-Subject: [PATCH v16 14/19] kunit: defconfig: add defconfigs for building KUnit tests
+Subject: [PATCH v16 12/19] kunit: test: add tests for KUnit managed resources
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
         jpoimboe@redhat.com, keescook@google.com,
@@ -78,6 +78,7 @@ Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
         richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
         wfg@linux.intel.com, torvalds@linux-foundation.org,
+        Avinash Kondareddy <akndr41@gmail.com>,
         Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -85,141 +86,258 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add defconfig for UML and a fragment that can be used to configure other
-architectures for building KUnit tests. Add option to kunit_tool to use
-a defconfig to create the kunitconfig.
+From: Avinash Kondareddy <akndr41@gmail.com>
 
+Add unit tests for KUnit managed resources. KUnit managed resources
+(struct kunit_resource) are resources that are automatically cleaned up
+at the end of a KUnit test, similar to the concept of devm_* managed
+resources.
+
+Signed-off-by: Avinash Kondareddy <akndr41@gmail.com>
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
 Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 ---
- arch/um/configs/kunit_defconfig              |  3 +++
- tools/testing/kunit/configs/all_tests.config |  3 +++
- tools/testing/kunit/kunit.py                 | 28 +++++++++++++++++---
- tools/testing/kunit/kunit_kernel.py          |  3 ++-
- 4 files changed, 32 insertions(+), 5 deletions(-)
- create mode 100644 arch/um/configs/kunit_defconfig
- create mode 100644 tools/testing/kunit/configs/all_tests.config
+ lib/kunit/test-test.c | 228 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 228 insertions(+)
 
-diff --git a/arch/um/configs/kunit_defconfig b/arch/um/configs/kunit_defconfig
-new file mode 100644
-index 000000000000..9235b7d42d38
---- /dev/null
-+++ b/arch/um/configs/kunit_defconfig
-@@ -0,0 +1,3 @@
-+CONFIG_KUNIT=y
-+CONFIG_KUNIT_TEST=y
-+CONFIG_KUNIT_EXAMPLE_TEST=y
-diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
-new file mode 100644
-index 000000000000..9235b7d42d38
---- /dev/null
-+++ b/tools/testing/kunit/configs/all_tests.config
-@@ -0,0 +1,3 @@
-+CONFIG_KUNIT=y
-+CONFIG_KUNIT_TEST=y
-+CONFIG_KUNIT_EXAMPLE_TEST=y
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index da11bd62a4b8..0944dea5c321 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -11,6 +11,7 @@ import argparse
- import sys
- import os
- import time
-+import shutil
- 
- from collections import namedtuple
- from enum import Enum, auto
-@@ -21,7 +22,7 @@ import kunit_parser
- 
- KunitResult = namedtuple('KunitResult', ['status','result'])
- 
--KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs', 'build_dir'])
-+KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs', 'build_dir', 'defconfig'])
- 
- class KunitStatus(Enum):
- 	SUCCESS = auto()
-@@ -29,8 +30,16 @@ class KunitStatus(Enum):
- 	BUILD_FAILURE = auto()
- 	TEST_FAILURE = auto()
- 
-+def create_default_kunitconfig():
-+	if not os.path.exists(kunit_kernel.KUNITCONFIG_PATH):
-+		shutil.copyfile('arch/um/configs/kunit_defconfig',
-+				kunit_kernel.KUNITCONFIG_PATH)
+diff --git a/lib/kunit/test-test.c b/lib/kunit/test-test.c
+index e0ab4bd546ea..5ebe059d16e2 100644
+--- a/lib/kunit/test-test.c
++++ b/lib/kunit/test-test.c
+@@ -101,3 +101,231 @@ static struct kunit_suite kunit_try_catch_test_suite = {
+ 	.test_cases = kunit_try_catch_test_cases,
+ };
+ kunit_test_suite(kunit_try_catch_test_suite);
 +
- def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 	      request: KunitRequest) -> KunitResult:
-+	if request.defconfig:
-+		create_default_kunitconfig()
++/*
++ * Context for testing test managed resources
++ * is_resource_initialized is used to test arbitrary resources
++ */
++struct kunit_test_resource_context {
++	struct kunit test;
++	bool is_resource_initialized;
++	int allocate_order[2];
++	int free_order[2];
++};
 +
- 	config_start = time.time()
- 	success = linux.build_reconfig(request.build_dir)
- 	config_end = time.time()
-@@ -72,7 +81,7 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 	else:
- 		return KunitResult(KunitStatus.SUCCESS, test_result)
- 
--def main(argv, linux):
-+def main(argv, linux=None):
- 	parser = argparse.ArgumentParser(
- 			description='Helps writing and running KUnit tests.')
- 	subparser = parser.add_subparsers(dest='subcommand')
-@@ -99,13 +108,24 @@ def main(argv, linux):
- 				'directory.',
- 				type=str, default=None, metavar='build_dir')
- 
-+	run_parser.add_argument('--defconfig',
-+				help='Uses a default kunitconfig.',
-+				action='store_true')
++static int fake_resource_init(struct kunit_resource *res, void *context)
++{
++	struct kunit_test_resource_context *ctx = context;
 +
- 	cli_args = parser.parse_args(argv)
- 
- 	if cli_args.subcommand == 'run':
-+		if cli_args.defconfig:
-+			create_default_kunitconfig()
++	res->allocation = &ctx->is_resource_initialized;
++	ctx->is_resource_initialized = true;
++	return 0;
++}
 +
-+		if not linux:
-+			linux = kunit_kernel.LinuxSourceTree()
++static void fake_resource_free(struct kunit_resource *res)
++{
++	bool *is_resource_initialized = res->allocation;
 +
- 		request = KunitRequest(cli_args.raw_output,
- 				       cli_args.timeout,
- 				       cli_args.jobs,
--				       cli_args.build_dir)
-+				       cli_args.build_dir,
-+				       cli_args.defconfig)
- 		result = run_tests(linux, request)
- 		if result.status != KunitStatus.SUCCESS:
- 			sys.exit(1)
-@@ -113,4 +133,4 @@ def main(argv, linux):
- 		parser.print_help()
- 
- if __name__ == '__main__':
--	main(sys.argv[1:], kunit_kernel.LinuxSourceTree())
-+	main(sys.argv[1:])
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 07c0abf2f47d..bf3876835331 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -14,6 +14,7 @@ import os
- import kunit_config
- 
- KCONFIG_PATH = '.config'
-+KUNITCONFIG_PATH = 'kunitconfig'
- 
- class ConfigError(Exception):
- 	"""Represents an error trying to configure the Linux kernel."""
-@@ -81,7 +82,7 @@ class LinuxSourceTree(object):
- 
- 	def __init__(self):
- 		self._kconfig = kunit_config.Kconfig()
--		self._kconfig.read_from_file('kunitconfig')
-+		self._kconfig.read_from_file(KUNITCONFIG_PATH)
- 		self._ops = LinuxSourceTreeOperations()
- 
- 	def clean(self):
++	*is_resource_initialized = false;
++}
++
++static void kunit_resource_test_init_resources(struct kunit *test)
++{
++	struct kunit_test_resource_context *ctx = test->priv;
++
++	kunit_init_test(&ctx->test, "testing_test_init_test");
++
++	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
++}
++
++static void kunit_resource_test_alloc_resource(struct kunit *test)
++{
++	struct kunit_test_resource_context *ctx = test->priv;
++	struct kunit_resource *res;
++	kunit_resource_free_t free = fake_resource_free;
++
++	res = kunit_alloc_and_get_resource(&ctx->test,
++					   fake_resource_init,
++					   fake_resource_free,
++					   GFP_KERNEL,
++					   ctx);
++
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, res);
++	KUNIT_EXPECT_PTR_EQ(test,
++			    &ctx->is_resource_initialized,
++			    (bool *) res->allocation);
++	KUNIT_EXPECT_TRUE(test, list_is_last(&res->node, &ctx->test.resources));
++	KUNIT_EXPECT_PTR_EQ(test, free, res->free);
++}
++
++static void kunit_resource_test_destroy_resource(struct kunit *test)
++{
++	struct kunit_test_resource_context *ctx = test->priv;
++	struct kunit_resource *res = kunit_alloc_and_get_resource(
++			&ctx->test,
++			fake_resource_init,
++			fake_resource_free,
++			GFP_KERNEL,
++			ctx);
++
++	KUNIT_ASSERT_FALSE(test,
++			   kunit_resource_destroy(&ctx->test,
++						  kunit_resource_instance_match,
++						  res->free,
++						  res->allocation));
++
++	KUNIT_EXPECT_FALSE(test, ctx->is_resource_initialized);
++	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
++}
++
++static void kunit_resource_test_cleanup_resources(struct kunit *test)
++{
++	int i;
++	struct kunit_test_resource_context *ctx = test->priv;
++	struct kunit_resource *resources[5];
++
++	for (i = 0; i < ARRAY_SIZE(resources); i++) {
++		resources[i] = kunit_alloc_and_get_resource(&ctx->test,
++							    fake_resource_init,
++							    fake_resource_free,
++							    GFP_KERNEL,
++							    ctx);
++	}
++
++	kunit_cleanup(&ctx->test);
++
++	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
++}
++
++static void kunit_resource_test_mark_order(int order_array[],
++					   size_t order_size,
++					   int key)
++{
++	int i;
++
++	for (i = 0; i < order_size && order_array[i]; i++)
++		;
++
++	order_array[i] = key;
++}
++
++#define KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, order_field, key)		       \
++		kunit_resource_test_mark_order(ctx->order_field,	       \
++					       ARRAY_SIZE(ctx->order_field),   \
++					       key)
++
++static int fake_resource_2_init(struct kunit_resource *res, void *context)
++{
++	struct kunit_test_resource_context *ctx = context;
++
++	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, allocate_order, 2);
++
++	res->allocation = ctx;
++
++	return 0;
++}
++
++static void fake_resource_2_free(struct kunit_resource *res)
++{
++	struct kunit_test_resource_context *ctx = res->allocation;
++
++	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, free_order, 2);
++}
++
++static int fake_resource_1_init(struct kunit_resource *res, void *context)
++{
++	struct kunit_test_resource_context *ctx = context;
++
++	kunit_alloc_and_get_resource(&ctx->test,
++				     fake_resource_2_init,
++				     fake_resource_2_free,
++				     GFP_KERNEL,
++				     ctx);
++
++	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, allocate_order, 1);
++
++	res->allocation = ctx;
++
++	return 0;
++}
++
++static void fake_resource_1_free(struct kunit_resource *res)
++{
++	struct kunit_test_resource_context *ctx = res->allocation;
++
++	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, free_order, 1);
++}
++
++/*
++ * TODO(brendanhiggins@google.com): replace the arrays that keep track of the
++ * order of allocation and freeing with strict mocks using the IN_SEQUENCE macro
++ * to assert allocation and freeing order when the feature becomes available.
++ */
++static void kunit_resource_test_proper_free_ordering(struct kunit *test)
++{
++	struct kunit_test_resource_context *ctx = test->priv;
++
++	/* fake_resource_1 allocates a fake_resource_2 in its init. */
++	kunit_alloc_and_get_resource(&ctx->test,
++				     fake_resource_1_init,
++				     fake_resource_1_free,
++				     GFP_KERNEL,
++				     ctx);
++
++	/*
++	 * Since fake_resource_2_init calls KUNIT_RESOURCE_TEST_MARK_ORDER
++	 * before returning to fake_resource_1_init, it should be the first to
++	 * put its key in the allocate_order array.
++	 */
++	KUNIT_EXPECT_EQ(test, ctx->allocate_order[0], 2);
++	KUNIT_EXPECT_EQ(test, ctx->allocate_order[1], 1);
++
++	kunit_cleanup(&ctx->test);
++
++	/*
++	 * Because fake_resource_2 finishes allocation before fake_resource_1,
++	 * fake_resource_1 should be freed first since it could depend on
++	 * fake_resource_2.
++	 */
++	KUNIT_EXPECT_EQ(test, ctx->free_order[0], 1);
++	KUNIT_EXPECT_EQ(test, ctx->free_order[1], 2);
++}
++
++static int kunit_resource_test_init(struct kunit *test)
++{
++	struct kunit_test_resource_context *ctx =
++			kzalloc(sizeof(*ctx), GFP_KERNEL);
++
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
++
++	test->priv = ctx;
++
++	kunit_init_test(&ctx->test, "test_test_context");
++
++	return 0;
++}
++
++static void kunit_resource_test_exit(struct kunit *test)
++{
++	struct kunit_test_resource_context *ctx = test->priv;
++
++	kunit_cleanup(&ctx->test);
++	kfree(ctx);
++}
++
++static struct kunit_case kunit_resource_test_cases[] = {
++	KUNIT_CASE(kunit_resource_test_init_resources),
++	KUNIT_CASE(kunit_resource_test_alloc_resource),
++	KUNIT_CASE(kunit_resource_test_destroy_resource),
++	KUNIT_CASE(kunit_resource_test_cleanup_resources),
++	KUNIT_CASE(kunit_resource_test_proper_free_ordering),
++	{}
++};
++
++static struct kunit_suite kunit_resource_test_suite = {
++	.name = "kunit-resource-test",
++	.init = kunit_resource_test_init,
++	.exit = kunit_resource_test_exit,
++	.test_cases = kunit_resource_test_cases,
++};
++kunit_test_suite(kunit_resource_test_suite);
 -- 
 2.23.0.351.gc4317032e6-goog
 
