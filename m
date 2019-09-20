@@ -2,29 +2,30 @@ Return-Path: <SRS0=GpS6=XP=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 901A3C49ED7
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 08:30:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 099C6C4CEC9
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 08:30:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 60719218AE
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 08:30:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD2802080F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 08:30:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408170AbfITIag (ORCPT
+        id S2437479AbfITIai (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 20 Sep 2019 04:30:36 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:39513 "EHLO
+        Fri, 20 Sep 2019 04:30:38 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:39516 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405437AbfITIag (ORCPT
+        with ESMTP id S2405437AbfITIai (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Sep 2019 04:30:36 -0400
+        Fri, 20 Sep 2019 04:30:38 -0400
 Received: from static-dcd-cqq-121001.business.bouyguestelecom.com ([212.194.121.1] helo=localhost.localdomain)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iBEJA-0007Va-Sa; Fri, 20 Sep 2019 08:30:28 +0000
+        id 1iBEJC-0007Va-HJ; Fri, 20 Sep 2019 08:30:30 +0000
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     keescook@chromium.org, luto@amacapital.net
 Cc:     jannh@google.com, wad@chromium.org, shuah@kernel.org,
@@ -32,66 +33,191 @@ Cc:     jannh@google.com, wad@chromium.org, shuah@kernel.org,
         songliubraving@fb.com, yhs@fb.com, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v2 0/3] seccomp: continue syscall from notifier
-Date:   Fri, 20 Sep 2019 10:30:04 +0200
-Message-Id: <20190920083007.11475-1-christian.brauner@ubuntu.com>
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Tyler Hicks <tyhicks@canonical.com>, stable@vger.kernel.org
+Subject: [PATCH v2 3/3] seccomp: test SECCOMP_USER_NOTIF_FLAG_CONTINUE
+Date:   Fri, 20 Sep 2019 10:30:07 +0200
+Message-Id: <20190920083007.11475-4-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20190920083007.11475-1-christian.brauner@ubuntu.com>
+References: <20190920083007.11475-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hey everyone,
+Test whether a syscall can be performed after having been intercepted by
+the seccomp notifier. The test uses dup() and kcmp() since it allows us to
+nicely test whether the dup() syscall actually succeeded by comparing whether
+the fds refer to the same underlying struct file.
 
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Will Drewry <wad@chromium.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: Tycho Andersen <tycho@tycho.ws>
+CC: Tyler Hicks <tyhicks@canonical.com>
+Cc: stable@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+---
 /* v2 */
-This is the patchset coming out of the KSummit session Kees and I gave
-in Lisbon last week (cf. [3] which also contains slides with more
-details on related things such as deep argument inspection).
-The simple idea is to extend the seccomp notifier to allow for the
-continuation of a syscall. The rationale for this can be found in the
-commit message to [1]. For the curious there is more detail in [2].
-This patchset would unblock supervising an extended set of syscalls such
-as mount() where a privileged process is supervising the syscalls of a
-lesser privileged process and emulates the syscall for the latter in
-userspace.
-For more comments on security see [1] and the comments in
-include/uapi/linux/seccomp.h added by this patchset.
-
-Kees, if you prefer a pr the series can be pulled from:
-git@gitolite.kernel.org:pub/scm/linux/kernel/git/brauner/linux tags/seccomp-notify-syscall-continue-v5.5
-
-For anyone who wants to play with this it's sitting in:
-https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/log/?h=seccomp_syscall_continue
+- Shuah Khan <shuah@kernel.org>:
+  - skip test on missing precondition
 
 /* v1 */
-Link: https://lore.kernel.org/r/20190919095903.19370-1-christian.brauner@ubuntu.com
-- Kees Cook <keescook@chromium.org>:
-  - dropped patch because it is already present in linux-next
-    [PATCH 2/4] seccomp: add two missing ptrace ifdefines
-    Link: https://lore.kernel.org/r/20190918084833.9369-3-christian.brauner@ubuntu.com
+Link: https://lore.kernel.org/r/20190919095903.19370-4-christian.brauner@ubuntu.com
+- Christian Brauner <christian.brauner@ubuntu.com>:
+  - adapt to new flag name SECCOMP_USER_NOTIF_FLAG_CONTINUE
 
 /* v0 */
-Link: https://lore.kernel.org/r/20190918084833.9369-1-christian.brauner@ubuntu.com
+Link: https://lore.kernel.org/r/20190918084833.9369-5-christian.brauner@ubuntu.com
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 107 ++++++++++++++++++
+ 1 file changed, 107 insertions(+)
 
-Thanks!
-Christian
-
-*** BLURB HERE ***
-
-Christian Brauner (3):
-  seccomp: add SECCOMP_USER_NOTIF_FLAG_CONTINUE
-  seccomp: avoid overflow in implicit constant conversion
-  seccomp: test SECCOMP_USER_NOTIF_FLAG_CONTINUE
-
- include/uapi/linux/seccomp.h                  |  28 +++++
- kernel/seccomp.c                              |  28 ++++-
- tools/testing/selftests/seccomp/seccomp_bpf.c | 110 +++++++++++++++++-
- 3 files changed, 159 insertions(+), 7 deletions(-)
-
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index e996d7b7fd6e..2519377ebda3 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -44,6 +44,7 @@
+ #include <sys/times.h>
+ #include <sys/socket.h>
+ #include <sys/ioctl.h>
++#include <linux/kcmp.h>
+ 
+ #include <unistd.h>
+ #include <sys/syscall.h>
+@@ -167,6 +168,10 @@ struct seccomp_metadata {
+ 
+ #define SECCOMP_RET_USER_NOTIF 0x7fc00000U
+ 
++#ifndef SECCOMP_USER_NOTIF_FLAG_CONTINUE
++#define SECCOMP_USER_NOTIF_FLAG_CONTINUE 0x00000001
++#endif
++
+ #define SECCOMP_IOC_MAGIC		'!'
+ #define SECCOMP_IO(nr)			_IO(SECCOMP_IOC_MAGIC, nr)
+ #define SECCOMP_IOR(nr, type)		_IOR(SECCOMP_IOC_MAGIC, nr, type)
+@@ -3481,6 +3486,108 @@ TEST(seccomp_get_notif_sizes)
+ 	EXPECT_EQ(sizes.seccomp_notif_resp, sizeof(struct seccomp_notif_resp));
+ }
+ 
++static int filecmp(pid_t pid1, pid_t pid2, int fd1, int fd2)
++{
++#ifdef __NR_kcmp
++	return syscall(__NR_kcmp, pid1, pid2, KCMP_FILE, fd1, fd2);
++#else
++	errno = ENOSYS;
++	return -1;
++#endif
++}
++
++TEST(user_notification_continue)
++{
++	pid_t pid;
++	long ret;
++	int status, listener;
++	struct seccomp_notif req = {};
++	struct seccomp_notif_resp resp = {};
++	struct pollfd pollfd;
++
++	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
++	}
++
++	listener = user_trap_syscall(__NR_dup, SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	ASSERT_GE(listener, 0);
++
++	pid = fork();
++	ASSERT_GE(pid, 0);
++
++	if (pid == 0) {
++		int dup_fd, pipe_fds[2];
++		pid_t self;
++
++		ret = pipe(pipe_fds);
++		if (ret < 0)
++			exit(1);
++
++		dup_fd = dup(pipe_fds[0]);
++		if (dup_fd < 0)
++			exit(1);
++
++		self = getpid();
++
++		ret = filecmp(self, self, pipe_fds[0], dup_fd);
++		if (ret)
++			exit(2);
++
++		exit(0);
++	}
++
++	pollfd.fd = listener;
++	pollfd.events = POLLIN | POLLOUT;
++
++	EXPECT_GT(poll(&pollfd, 1, -1), 0);
++	EXPECT_EQ(pollfd.revents, POLLIN);
++
++	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
++
++	pollfd.fd = listener;
++	pollfd.events = POLLIN | POLLOUT;
++
++	EXPECT_GT(poll(&pollfd, 1, -1), 0);
++	EXPECT_EQ(pollfd.revents, POLLOUT);
++
++	EXPECT_EQ(req.data.nr, __NR_dup);
++
++	resp.id = req.id;
++	resp.flags = SECCOMP_USER_NOTIF_FLAG_CONTINUE;
++
++	/*
++	 * Verify that setting SECCOMP_USER_NOTIF_FLAG_CONTINUE enforces other
++	 * args be set to 0.
++	 */
++	resp.error = 0;
++	resp.val = USER_NOTIF_MAGIC;
++	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), -1);
++	EXPECT_EQ(errno, EINVAL);
++
++	resp.error = USER_NOTIF_MAGIC;
++	resp.val = 0;
++	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), -1);
++	EXPECT_EQ(errno, EINVAL);
++
++	resp.error = 0;
++	resp.val = 0;
++	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), 0) {
++		if (errno == EINVAL)
++			XFAIL(goto skip, "Kernel does not support SECCOMP_USER_NOTIF_FLAG_CONTINUE");
++	}
++
++skip:
++	EXPECT_EQ(waitpid(pid, &status, 0), pid);
++	EXPECT_EQ(true, WIFEXITED(status));
++	EXPECT_EQ(0, WEXITSTATUS(status)) {
++		if (WEXITSTATUS(status) == 2) {
++			XFAIL(return, "Kernel does not support kcmp() syscall");
++			return;
++		}
++	}
++}
++
+ /*
+  * TODO:
+  * - add microbenchmarks
 -- 
 2.23.0
 
