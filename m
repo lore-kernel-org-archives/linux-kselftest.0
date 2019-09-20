@@ -2,64 +2,64 @@ Return-Path: <SRS0=GpS6=XP=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AD23C3A5A2
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 23:20:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79ED7C4CEC9
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 23:20:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F412621971
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 23:20:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D4ED21D82
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 23:20:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D9ssoF4i"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Alfuq4xK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437140AbfITXUf (ORCPT
+        id S2437134AbfITXU2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 20 Sep 2019 19:20:35 -0400
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:40072 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437154AbfITXUd (ORCPT
+        Fri, 20 Sep 2019 19:20:28 -0400
+Received: from mail-qk1-f201.google.com ([209.85.222.201]:50257 "EHLO
+        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437121AbfITXU0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Sep 2019 19:20:33 -0400
-Received: by mail-pf1-f201.google.com with SMTP id b8so5769822pfd.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2019 16:20:32 -0700 (PDT)
+        Fri, 20 Sep 2019 19:20:26 -0400
+Received: by mail-qk1-f201.google.com with SMTP id d25so10001231qkk.17
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2019 16:20:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=kn+0r7CDFmPHQws2Z+HRgp03O+EE7Nh4RU07v5olnXQ=;
-        b=D9ssoF4ipBwV847C0cjnXrRXAQcdppI7EOYNdGwK7yapTIiGN6IqSwuzfc8JudHgWR
-         DDvqB359ZjduS4JJbjST8oH87XP0gI0nQGheG9haTGTZlsHvLFCuWQcJ/tsL6Dc1voNX
-         3xXom1IImokl9nln9Xx7YbolIyirgq0ZwBxMQuEnqhRXt/PFYTg+9Bv4s5Tk5d8GZe9e
-         RV6uSIyyHEB8Xis7NDaUBFl8lUFdwUF6ietUONOIXZbNSKwbp4cmdYJ3kbVEhXU3nRMf
-         rfFVbnAhzHx7LAMcK4MHFOZcBGREVeFOqAvBzclrXdsmD5cpZQhrL7iXDhUKFOgBo+yf
-         74sg==
+        bh=MYcfIKSKU50yEk2GBsBM2m5RiXljhL+2ZE7FFRNNMnA=;
+        b=Alfuq4xKcjyE/lvI9+hnlObqPY31tSqFtCXmQsJDgKBbZcMDdLd/Xe7IG+dh2opFqi
+         NkyEiOKdCjZbdWPC1fBNLUcaNtEJgBGm/C9KYrpwSGMN9kJJghCA0tF/hzhbo3QAqnOy
+         G1qrxWya38IKA9aT9DrUpNHS8ofpmZs1hUked/PR+nRiVaU1VfXljtUe111C/R7on8zn
+         6GrH2up+ee3CPMMeu4c4xDYF5+vRDtfCDix7aXc4nXc5AUTjcX3VMvg69w2RWR9+CCLb
+         ZYb5QuoRRzIn5CjL5tKk6cztEmTrCtopo7An4Qopbv5QmyKSNuCyNb6EPWl43WB8ctZa
+         XW0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=kn+0r7CDFmPHQws2Z+HRgp03O+EE7Nh4RU07v5olnXQ=;
-        b=gHO0KqEtzfj4GvAW0GwxhHry2v//aPHs/qGEAp8XFVlU8LYx+OmqN1F94utl6w0RHx
-         urb6EM2LU2Fxzal6v/QmRAJ4hH1JpYZQPTOhIxWmVM1Cd+dpJReXFvERRXUqHCiLAu0a
-         bIdBhR/ncBtSNd9FEyRRtz3UgT1MJhlzE4j70kh+Fmf2BdKsCPVbfgP4tfEd7V87iVcT
-         vCEwG4MgjMAIis3gkfSLr53+jhdOSUjztw223T/EOj3ROWJcwY8c0+Mghkgr1EfnX7fy
-         +91OQKbX83GEGxMEABWm/kEZ118pA7ZSwtBthiZeOP76HGkYAlfGrb7HSmLMxplpvHVU
-         dMCg==
-X-Gm-Message-State: APjAAAU9GUz3YDLLeLfcSjitDztYufisL/gFyKvBf481tq8jT6vDdxBO
-        /RYKJx8hf4+RrymsFrxRVZ4O89ED8Qc/N7hMnvf+Yg==
-X-Google-Smtp-Source: APXvYqxXIDX2P4YzdS48vzv/kEGqjUlci6nkdmwJewz2Pj/XqXGtlq51eAvpho6zXR7/9gV8XOKbJmv47q8gAzoqmRxxfQ==
-X-Received: by 2002:a63:d846:: with SMTP id k6mr17811762pgj.378.1569021631494;
- Fri, 20 Sep 2019 16:20:31 -0700 (PDT)
-Date:   Fri, 20 Sep 2019 16:19:23 -0700
+        bh=MYcfIKSKU50yEk2GBsBM2m5RiXljhL+2ZE7FFRNNMnA=;
+        b=d1+mN+ujO026NsItN82SEpOwfVk1WnuhmZ/R0ziNY0E/6Q6hvMf0K1dnasrs5hcEXG
+         zYQ3a1Gpwp2H8GRyG7Idfo0Mxf68cfDEiTIQp6GdCN78+FWCNf/OtLnUk92BMYjuhZUb
+         PN/zF+t9J6eaw4gd1/BpSiy02tgfdjYiaMb1NSwpAJiWsTJJPUSTYOAbXg00jJOUvFRy
+         pNWPZDky8NeRfCczaPVHVRFSPJCh9qKPQPk6iWPwPYWv8CLEXr8mKRDh4AVcClUdTqGd
+         ua8mVaRzz41atL/7sNXeULVAcTMnCDwYcjjAgKvu34ztgIvRs+IZgrpWlnzx+ZnQy0jm
+         AjuA==
+X-Gm-Message-State: APjAAAWxZobpMqlbazYsgXiYiRzxDDp+YkTOfHRG2/XqGfZm4CTfvHn/
+        AI2F9bTP8IdxlTjO9KiR/RSFEwHIPrnc8b34hRJpZQ==
+X-Google-Smtp-Source: APXvYqwe7HUQbxjHZ88C3/yd7hKPs7v0fuapQiwWc6yF6cIi7fKh2+NHXnkd9elywqPPfmZXvk//qq7AcofxgzfIeJsK2w==
+X-Received: by 2002:ac8:7502:: with SMTP id u2mr5779140qtq.216.1569021623093;
+ Fri, 20 Sep 2019 16:20:23 -0700 (PDT)
+Date:   Fri, 20 Sep 2019 16:19:20 -0700
 In-Reply-To: <20190920231923.141900-1-brendanhiggins@google.com>
-Message-Id: <20190920231923.141900-20-brendanhiggins@google.com>
+Message-Id: <20190920231923.141900-17-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20190920231923.141900-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.23.0.351.gc4317032e6-goog
-Subject: [PATCH v16 19/19] kunit: fix failure to build without printk
+Subject: [PATCH v16 16/19] MAINTAINERS: add entry for KUnit the unit testing framework
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
         jpoimboe@redhat.com, keescook@google.com,
@@ -78,175 +78,46 @@ Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
         richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
         wfg@linux.intel.com, torvalds@linux-foundation.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        Joe Perches <joe@perches.com>
+        Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Previously KUnit assumed that printk would always be present, which is
-not a valid assumption to make. Fix that by removing call to
-vprintk_emit, and calling printk directly.
+Add myself as maintainer of KUnit, the Linux kernel's unit testing
+framework.
 
-This fixes a build error[1] reported by Randy.
-
-For context this change comes after much discussion. My first stab[2] at
-this was just to make the KUnit logging code compile out; however, it
-was agreed that if we were going to use vprintk_emit, then vprintk_emit
-should provide a no-op stub, which lead to my second attempt[3]. In
-response to me trying to stub out vprintk_emit, Sergey Senozhatsky
-suggested a way for me to remove our usage of vprintk_emit, which led to
-my third attempt at solving this[4].
-
-In my third version of this patch[4], I completely removed vprintk_emit,
-as suggested by Sergey; however, there was a bit of debate over whether
-Sergey's solution was the best. The debate arose due to Sergey's version
-resulting in a checkpatch warning, which resulted in a debate over
-correct printk usage. Joe Perches offered an alternative fix which was
-somewhat less far reaching than what Sergey had suggested and
-importantly relied on continuing to use %pV. Much of the debated
-centered around whether %pV should be widely used, and whether Sergey's
-version would result in object size bloat. Ultimately, we decided to go
-with Sergey's version.
-
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Link[1]: https://lore.kernel.org/linux-kselftest/c7229254-0d90-d90e-f3df-5b6d6fc0b51f@infradead.org/
-Link[2]: https://lore.kernel.org/linux-kselftest/20190827174932.44177-1-brendanhiggins@google.com/
-Link[3]: https://lore.kernel.org/linux-kselftest/20190827234835.234473-1-brendanhiggins@google.com/
-Link[4]: https://lore.kernel.org/linux-kselftest/20190828093143.163302-1-brendanhiggins@google.com/
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-Cc: Joe Perches <joe@perches.com>
-Cc: Tim.Bird@sony.com
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 ---
- include/kunit/test.h |  5 ++--
- lib/kunit/test.c     | 57 +++++---------------------------------------
- 2 files changed, 8 insertions(+), 54 deletions(-)
+ MAINTAINERS | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 8b7eb03d4971..dba48304b3bd 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -339,9 +339,8 @@ static inline void *kunit_kzalloc(struct kunit *test, size_t size, gfp_t gfp)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a50e97a63bc8..e3d0d184ae4e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8802,6 +8802,17 @@ S:	Maintained
+ F:	tools/testing/selftests/
+ F:	Documentation/dev-tools/kselftest*
  
- void kunit_cleanup(struct kunit *test);
- 
--void __printf(3, 4) kunit_printk(const char *level,
--				 const struct kunit *test,
--				 const char *fmt, ...);
-+#define kunit_printk(lvl, test, fmt, ...) \
-+	printk(lvl "\t# %s: " fmt, (test)->name, ##__VA_ARGS__)
- 
- /**
-  * kunit_info() - Prints an INFO level message associated with @test.
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index b2ca9b94c353..c83c0fa59cbd 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -16,36 +16,12 @@ static void kunit_set_failure(struct kunit *test)
- 	WRITE_ONCE(test->success, false);
- }
- 
--static int kunit_vprintk_emit(int level, const char *fmt, va_list args)
--{
--	return vprintk_emit(0, level, NULL, 0, fmt, args);
--}
--
--static int kunit_printk_emit(int level, const char *fmt, ...)
--{
--	va_list args;
--	int ret;
--
--	va_start(args, fmt);
--	ret = kunit_vprintk_emit(level, fmt, args);
--	va_end(args);
--
--	return ret;
--}
--
--static void kunit_vprintk(const struct kunit *test,
--			  const char *level,
--			  struct va_format *vaf)
--{
--	kunit_printk_emit(level[1] - '0', "\t# %s: %pV", test->name, vaf);
--}
--
- static void kunit_print_tap_version(void)
- {
- 	static bool kunit_has_printed_tap_version;
- 
- 	if (!kunit_has_printed_tap_version) {
--		kunit_printk_emit(LOGLEVEL_INFO, "TAP version 14\n");
-+		pr_info("TAP version 14\n");
- 		kunit_has_printed_tap_version = true;
- 	}
- }
-@@ -64,10 +40,8 @@ static size_t kunit_test_cases_len(struct kunit_case *test_cases)
- static void kunit_print_subtest_start(struct kunit_suite *suite)
- {
- 	kunit_print_tap_version();
--	kunit_printk_emit(LOGLEVEL_INFO, "\t# Subtest: %s\n", suite->name);
--	kunit_printk_emit(LOGLEVEL_INFO,
--			  "\t1..%zd\n",
--			  kunit_test_cases_len(suite->test_cases));
-+	pr_info("\t# Subtest: %s\n", suite->name);
-+	pr_info("\t1..%zd\n", kunit_test_cases_len(suite->test_cases));
- }
- 
- static void kunit_print_ok_not_ok(bool should_indent,
-@@ -87,9 +61,7 @@ static void kunit_print_ok_not_ok(bool should_indent,
- 	else
- 		ok_not_ok = "not ok";
- 
--	kunit_printk_emit(LOGLEVEL_INFO,
--			  "%s%s %zd - %s\n",
--			  indent, ok_not_ok, test_number, description);
-+	pr_info("%s%s %zd - %s\n", indent, ok_not_ok, test_number, description);
- }
- 
- static bool kunit_suite_has_succeeded(struct kunit_suite *suite)
-@@ -133,11 +105,11 @@ static void kunit_print_string_stream(struct kunit *test,
- 		kunit_err(test,
- 			  "Could not allocate buffer, dumping stream:\n");
- 		list_for_each_entry(fragment, &stream->fragments, node) {
--			kunit_err(test, fragment->fragment);
-+			kunit_err(test, "%s", fragment->fragment);
- 		}
- 		kunit_err(test, "\n");
- 	} else {
--		kunit_err(test, buf);
-+		kunit_err(test, "%s", buf);
- 		kunit_kfree(test, buf);
- 	}
- }
-@@ -504,20 +476,3 @@ void kunit_cleanup(struct kunit *test)
- 		kunit_resource_free(test, resource);
- 	}
- }
--
--void kunit_printk(const char *level,
--		  const struct kunit *test,
--		  const char *fmt, ...)
--{
--	struct va_format vaf;
--	va_list args;
--
--	va_start(args, fmt);
--
--	vaf.fmt = fmt;
--	vaf.va = &args;
--
--	kunit_vprintk(test, level, &vaf);
--
--	va_end(args);
--}
++KERNEL UNIT TESTING FRAMEWORK (KUnit)
++M:	Brendan Higgins <brendanhiggins@google.com>
++L:	linux-kselftest@vger.kernel.org
++L:	kunit-dev@googlegroups.com
++W:	https://google.github.io/kunit-docs/third_party/kernel/docs/
++S:	Maintained
++F:	Documentation/dev-tools/kunit/
++F:	include/kunit/
++F:	lib/kunit/
++F:	tools/testing/kunit/
++
+ KERNEL USERMODE HELPER
+ M:	Luis Chamberlain <mcgrof@kernel.org>
+ L:	linux-kernel@vger.kernel.org
 -- 
 2.23.0.351.gc4317032e6-goog
 
