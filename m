@@ -2,95 +2,128 @@ Return-Path: <SRS0=GpS6=XP=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35FF6C3A5A2
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 18:16:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DDE1C3A5A2
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 20:24:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 125442173E
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 18:16:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P8Fsa8oc"
+	by mail.kernel.org (Postfix) with ESMTP id 42A4220C01
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Sep 2019 20:24:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1569011058;
+	bh=sFaOmPWJj56dw23yebZSt8SnxXqc2hBvrsUugoPL25Q=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=kU9xzkaqfxj823FzkXWoRJyjWjWurdVSNmSkhjjaYa0PNT63dC6WWPLQcU6rUkx67
+	 IVsfXxsIu1sxB+XPwpLiuiMKcgnw0kaMDzQZ+yYn7VHKldcc6b2t9Gom8ZyAuniGIR
+	 LbnmqwDJl6i+BzearMMNUfrHABXKjJHd3J2m9yFM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406370AbfITSQy (ORCPT
+        id S1729943AbfITUYS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 20 Sep 2019 14:16:54 -0400
-Received: from mail-pf1-f175.google.com ([209.85.210.175]:36859 "EHLO
-        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406368AbfITSQy (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Sep 2019 14:16:54 -0400
-Received: by mail-pf1-f175.google.com with SMTP id y22so5046439pfr.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2019 11:16:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZRYsl4kbwSC/bZBUIUOMAhY4tlK0GbxtJtIAdokA6Ow=;
-        b=P8Fsa8oc28GG87andEaXrr+qNwZa+kesukHYV2tO2wySoV1aWE0RWjAV3m4sDrgZSP
-         blnnQDZL42c8p5pjNmaGzEPNMC4p20HyaI/+zk7IP/DRc8HVJrm257RjBAbCqSsLt420
-         NrBEt60pAEu+Bw1EBEZYCVllTEckZGeybkNyPd3LomcUdO5stEsn/tH3APsSrBK+lX24
-         E4iA83c1C3qSKp9vhc8VZUb/Ljhd/uOg8n5KGKAH2zpPI1XDkqQVCFsgGAa6n4GY7rcr
-         eFkNEjqBtsNR/Cz3td+CFtKq3K22ZDxmQYjEcihORpjtEUSdAu0HWa2LpSJQTxgXVG+a
-         3Diw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZRYsl4kbwSC/bZBUIUOMAhY4tlK0GbxtJtIAdokA6Ow=;
-        b=JDzv9/rKb8vcBMo7nQwGmIEYFHyf7LyU/bLHgOXvMIIl1L0r0rmiQnmHvYQ49AGObZ
-         5xQZyTtd496fKr2X5Jl4kz/JzbHIKCLnt+CoDgXMA6AtXRjH5iZSMQQo0ZJ37bgaDsyE
-         lo8xOUTc8cQYtYhOTf/+obTtdTe7ODxjq3stTmarST/UvrzoS3Qru5YvZCX8BfAj20ri
-         +J4jdUJ385OLIIoKYRc4dOpEKXD2X2JxqSEgqi+3sdQFXAG86sh+geRVs876bdmS3Yzb
-         TFW2I9FRGmoJBEyA/QwyuKQQOYSSVJjFED4o3KB84bSFaH9gBdvU7QI5qXeKbiG8dF27
-         tUHA==
-X-Gm-Message-State: APjAAAXndhcjIitQGsKB9oLt/MV3bG8IbmUxOqT4nKmqfwwkE9DJYcSE
-        Si51Gs6R/IPWQG3UsZrT00u+YZp3X5cmm/6CCRvnOw==
-X-Google-Smtp-Source: APXvYqzmPYjHEihFc1rlwR8O2boZQRGHg+Ybxnn6AupPB2AjIwzWhoF9wR+AjNhTZn/qSkO+G2QnIsQteqieDZPr5h8=
-X-Received: by 2002:a17:90a:ba16:: with SMTP id s22mr5969190pjr.84.1569003413024;
- Fri, 20 Sep 2019 11:16:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <be8059f4-8e8f-cd18-0978-a9c861f6396b@linuxfoundation.org>
- <CAHk-=wgs+UoZWfHGENWSVBd57Z-Vp0Nqe68R6wkDb5zF+cfvDg@mail.gmail.com>
- <CAKRRn-edxk9Du70A27V=d3Na73fh=fVvGEVsQRGROrQm05YRrA@mail.gmail.com>
- <CAFd5g45ROPm-1SD5cD772gqESaP3D8RbBhSiJXZzbaA+2hFdHA@mail.gmail.com>
- <CAHk-=wgMuNLBhJR_nFHrpViHbz2ErQ-fJV6B9o0+wym+Wk+r0w@mail.gmail.com>
- <CAFd5g46b1S5TZYGMP4F2f3Xhb1HrYTUFBOEK5gXuMBFEkzhZ3A@mail.gmail.com> <CAHk-=whr5K4ZH2K9pj=PZNWbiHfuz4noorjJa746_FOxLAgfxw@mail.gmail.com>
-In-Reply-To: <CAHk-=whr5K4ZH2K9pj=PZNWbiHfuz4noorjJa746_FOxLAgfxw@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 20 Sep 2019 11:16:41 -0700
-Message-ID: <CAFd5g47=QykaDJZQMY=gzGX4626vrFk3E2JQK=zCPAO2O2=qzw@mail.gmail.com>
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.4-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Fri, 20 Sep 2019 16:24:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46406 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729813AbfITUYR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Sep 2019 16:24:17 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 09F25208C0;
+        Fri, 20 Sep 2019 20:24:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569011056;
+        bh=sFaOmPWJj56dw23yebZSt8SnxXqc2hBvrsUugoPL25Q=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=UmZGcPEdScVMJng+U+b1z9/fAJWTq0QakOKggHWZdNgnn6gE4whIVhLDV5slrJZ5f
+         lZhGNAoWzTJ8usrGfQNCKPBOhKYlVxxj8POQjOF3o9v/migT+y19hkwhgUJRlw0zE4
+         Bh6ZOtjlo6/CY+ABv2d7VRONpOGZhnjFNyu+OWnE=
+Subject: Re: [PATCH] selftests/kselftest/runner.sh: Add 45 second timeout per
+ test
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Anders Roxell <anders.roxell@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <201909191102.97FA56072@keescook>
+ <20190919185525.GD21254@piout.net>
+ <4844c68f-603d-14f2-f976-5bd255268c0d@kernel.org>
+ <201909191411.3FA57CBCF3@keescook>
+From:   shuah <shuah@kernel.org>
+Message-ID: <db388fa4-be5f-454f-7bab-2a837480ca8d@kernel.org>
+Date:   Fri, 20 Sep 2019 14:24:04 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <201909191411.3FA57CBCF3@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 20, 2019 at 11:15 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, Sep 20, 2019 at 11:03 AM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> >
-> > Fair enough. On that note, are you okay with the `include/kunit/`
-> > directory, or do you want me to move it to `include/linux/kunit`?
->
-> "include/kunit" should work just fine for me. At least I didn't react
-> to it immediately when I had done my test-pull, and it doesn't change
-> any auto-completion patterns for me either.
+On 9/19/19 3:17 PM, Kees Cook wrote:
+> On Thu, Sep 19, 2019 at 02:09:37PM -0600, shuah wrote:
+>> On 9/19/19 12:55 PM, Alexandre Belloni wrote:
+>>> On 19/09/2019 11:06:44-0700, Kees Cook wrote:
+>>>> Commit a745f7af3cbd ("selftests/harness: Add 30 second timeout per
+>>>> test") solves the problem of kselftest_harness.h-using binary tests
+>>>> possibly hanging forever. However, scripts and other binaries can still
+>>>> hang forever. This adds a global timeout to each test script run.
+>>>>
+>>
+>> Timeout is good, but really tests should not hang. So we have to somehow
+>> indicate that the test needs to be fixed.
+> 
+> Totally agreed, which is why I changed the reporting to call out a
+> "TIMEOUT" instead of just having it enter the general failure noise.
+> 
+>> This timeout is a band-aid and not real solution for the problem. This
+>> arbitrary value doesn't take into account that the test(s) in that
+>> particular directory (TARGET) could be running normally and working
+>> through all the tests.
+> 
+> Even something that looks like it's making progress may still be hung or
+> won't finish in a reasonable amount of time.
+> 
+>> We need some way to differentiate the two cases.
+> 
+> I don't think it's unreasonable to declare that no test should take
+> longer than some default amount of time that can be tweaked via a
+> "settings" file. It gives the framework the option of easily removing
+> tests that take "too long", etc. If the "timeout=..." value was made
+> mandatory for each test directory, then the framework could actually
+> filter based on expected worst-case run time.
+> 
+>>>> To make this configurable (e.g. as needed in the "rtc" test case),
+>>>> include a new per-test-directory "settings" file (similar to "config")
+>>>> that can contain kselftest-specific settings. The first recognized field
+>>>> is "timeout".
+>>>>
+>>>
+>>> Seems good to me. I was also wondering whether this is actually
+>>> reasonable to have tests running for so long. I wanted to discuss that
+>>> at LPC but I missed the session.
+>>>
+>>
+>> There is the individual test times and overall kselftest run time. We
+>> have lots of tests now and it does take long.
+> 
+> This patch seeks to implement a "timeout for a single test from
+> kselftest's perspective". Some "individual" tests have many subtests
+> (e.g. anything built with kselftest_harness.h) giving us the whole
+> subtest issue. I think my solution here is a good middle ground: we
+> specify the max run time for each executed test binary/script.
+> 
+> It's not clear to me if a v2 is needed? Is this patch fine as-is?
+> 
+> Thanks!
+> 
 
-Sounds good to me.
+v1 is good. I will pull this in for testing. I do like the way it is
+done.
 
-Thanks!
+thanks,
+-- Shuah
