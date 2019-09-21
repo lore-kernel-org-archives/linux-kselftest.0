@@ -2,507 +2,358 @@ Return-Path: <SRS0=e8zg=XQ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C71DDC3A5A2
-	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Sep 2019 00:21:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44E6AC4740A
+	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Sep 2019 23:57:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 836992184C
-	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Sep 2019 00:21:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02C6C20C01
+	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Sep 2019 23:57:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EysUiNJV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MAsMpA6Z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407138AbfIUATM (ORCPT
+        id S1726874AbfIUX5L (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 20 Sep 2019 20:19:12 -0400
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:52292 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406705AbfIUATK (ORCPT
+        Sat, 21 Sep 2019 19:57:11 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:45969 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726873AbfIUX5L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Sep 2019 20:19:10 -0400
-Received: by mail-pf1-f201.google.com with SMTP id u12so5825137pfn.19
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2019 17:19:10 -0700 (PDT)
+        Sat, 21 Sep 2019 19:57:11 -0400
+Received: by mail-pl1-f195.google.com with SMTP id u12so4840284pls.12;
+        Sat, 21 Sep 2019 16:57:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Y0xYR4PS86ooH7AKhBWD3EqeH7toUpR236CnccW5V4s=;
-        b=EysUiNJVivbMG+LVTbLF6YIh7LyOp4Nh2L/ykU3oMD4djAsL6I52KRj1wWK1F6N2gr
-         eMke//POFz8F63OCr1BytX4pKjk9m1GmT1WsJ0gC2JzndHG/mz0OxG8DoscdE+/V/Z31
-         89MnmDiGXYmS71PQ7U0QcsZe1D86Ef54LWw5W74GJ9lZIkUIWUsQn+JjjDhNNOXFmyT/
-         fckXrE2PrM0oMFLGXOZ4lI6SUAIWRCz/Q5n10/DbgU40pNVmEQiZ8srIQeL1fLWAKdM7
-         LuytWtgdwr2g348WyAkYHPuEnAwnBY1zf58EB7NdnE2AMY0WS9iHN4PJA7FScjQHDxiu
-         D5XA==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wFxsbjbphTDZBrxMQjimUMRPZiRt8Y19uxPrqCS0lwQ=;
+        b=MAsMpA6ZLXzYAVKtPqxG82w0tUPyrA+uHcfCg7hc6qz7k2hbHdGcq7NT0cdLfq+g4s
+         7wJu9IXWfNwyX+jChXxRk7MZEjoTHVWGTmhZrPgZM9b6czBdu8xrwQbv0MVcYkLgSAHJ
+         fZ4t4PW2w08ZoejFtpBuQ5SN9ZMibWDz/ogKDRRouvCvprvEEvPFvmE1MaLqf77+3mnY
+         IDL9FXzq+aVEbo80UAYIqaTTSYKVv7/pNYmuaUd3aNPHjzTNeRhZ7/307J0baxF6gV34
+         9KNcCdn2NfqfXfuf+vw352zlFfYx0gnV2qxcCihFpdFNi8EoPClMSqlIzk5cc+i+KnTy
+         y+SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Y0xYR4PS86ooH7AKhBWD3EqeH7toUpR236CnccW5V4s=;
-        b=FJODRXzBSsL8+9gpB090DGE3DDSjK0golBpu7//4wP8vqHmROaZD8BycFaODWUQy7a
-         0g/6JzsgAIckvWQyD814RFwcASzxo5WGixGQqemssrc0b56PlRTK0jIHEULUaIUzQao3
-         IhSR7xto/5hWHBzQqF7iifsX1r3ODwuolu5QJ0MZ3HuZdRnUQCL1YtEsX3QcILFMqixc
-         IkTMW+iGQnA1ujMfxoczRYh4UnN4o9RAI01V5dCoc2u03J9XtwanWoZa8hlK/yoAgS+K
-         BRkPHmgc50HB8Jhyi9nvctob2DDWwtRJkyt5I5rsP7iJx1OvAMGXsCn7sLKPn0Gl9ohh
-         /4vw==
-X-Gm-Message-State: APjAAAWzDpAC5HCN/ch9scfm5mN5x2ZPoDC2YIi8aOUlYsJTNUhR9L+L
-        KGi8EYTk30z6UTfS8WNah8n6zEBBmWLqdumo++TewQ==
-X-Google-Smtp-Source: APXvYqwwSqGC3rqe9kTclermBulyFNZ635/Qd5yD20lj+ooEXVKETEmFMimJe6LMKNOVNUefFoUg1uCkuaFG/4g2vEDXug==
-X-Received: by 2002:a65:60c3:: with SMTP id r3mr17830186pgv.116.1569025149504;
- Fri, 20 Sep 2019 17:19:09 -0700 (PDT)
-Date:   Fri, 20 Sep 2019 17:18:38 -0700
-In-Reply-To: <20190921001855.200947-1-brendanhiggins@google.com>
-Message-Id: <20190921001855.200947-3-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20190921001855.200947-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.23.0.351.gc4317032e6-goog
-Subject: [PATCH v17 02/19] kunit: test: add test resource management API
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        jpoimboe@redhat.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
-        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
-        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
-        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, torvalds@linux-foundation.org,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wFxsbjbphTDZBrxMQjimUMRPZiRt8Y19uxPrqCS0lwQ=;
+        b=DEobnqBmlKbEwIsyJWkLN/laZPdvUfgiYtPn5LwvHZ11Vz8wN2bGiZin3Wib7wZMuf
+         O/fXMoIkoTs2InYHFDi0bPLrdcbYNu8sU2xAU6ObPAoWZPQJVfGyeOzrrytbmNX5bEEm
+         tTPCm7pVpZPE51gH7VqpdEtQ4jBwL6rUHKzY4pAkye/vedGKNHtRrn9I21jldSpP/5t8
+         /rHdBOWoJmtvRYLsOer/oGgyNb57ab+hoWdN0atXSuu4m9VlrGX56hcVSEpRXMWxb4+G
+         vEPJDETRzvhn7McAG9VskCDaMI9hLgfkT0dLTi7eey3CNtXFk04sF7f2MjEwBwbR36Br
+         89aQ==
+X-Gm-Message-State: APjAAAV5epu41FhGPa6AwBDtXlxtE+ABqbso7R7PskHZlGDlcWBYBRlR
+        eB8vNPR4LH36Q8pRrWNKDzU=
+X-Google-Smtp-Source: APXvYqxZrC0dTyXVuTHwZCXAij6lsQvtDMduKtZPdPjNo1YcMZltAZwoqb9eh/Q+QIkJ8mwqsSGXeQ==
+X-Received: by 2002:a17:902:aa03:: with SMTP id be3mr25194879plb.84.1569110229927;
+        Sat, 21 Sep 2019 16:57:09 -0700 (PDT)
+Received: from [192.168.43.210] (mobile-166-177-248-155.mycingular.net. [166.177.248.155])
+        by smtp.gmail.com with ESMTPSA id c64sm9618895pfc.19.2019.09.21.16.57.06
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 21 Sep 2019 16:57:09 -0700 (PDT)
+Subject: Re: [RFC v3 18/19] of: unittest: split out a couple of test cases
+ from unittest
+To:     Rob Herring <robh@kernel.org>,
         Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>, shuah@kernel.org,
+        Joel Stanley <joel@jms.id.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Joe Perches <joe@perches.com>, brakmo@fb.com,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        linux-um@lists.infradead.org, Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Knut Omang <knut.omang@oracle.com>
+References: <20181128193636.254378-1-brendanhiggins@google.com>
+ <20181128193636.254378-19-brendanhiggins@google.com>
+ <990bfc7d-dc5e-d8d3-c151-9b321ff2ac10@gmail.com>
+ <CAFd5g45tOGgf_sKGYRC=fpnTBKGaG=8frbQdgZ3ZTkQFyTfP5A@mail.gmail.com>
+ <88fe0546-7850-5bb4-9673-b1aef2dccb3e@gmail.com>
+ <CAFd5g444f-FBq4x3U7BL-EY+bFxP0rsJhJ14=mjOi89PhMkURg@mail.gmail.com>
+ <0e311e88-c4d4-e98d-1720-53a04bd526fc@gmail.com>
+ <CAFd5g44NTZoSAJPMvXP2xvJgn7m5QoV-KJu2AMrr67+eL+CKrQ@mail.gmail.com>
+ <d9f7e000-4cac-a35a-3ff9-60130e12ebea@gmail.com>
+ <72cd1c5b-6f68-73ad-c8fd-f3a3268a0529@gmail.com>
+ <CAFd5g46UU9wk+F6A5wnKYYtYKmmtv__SaY8eg6v-T9xUjsoxhA@mail.gmail.com>
+ <bb5bcd3d-a09a-cfbe-c7fa-16e5eb75b0e4@gmail.com>
+ <CAFd5g448xQLOJwVYU5Zmu4+OPWuboiWZPhBvK6au8Pgm5B9haQ@mail.gmail.com>
+ <CAL_JsqLxPZ2TyKv3M=a9r4_Vh+aOQRXgETwbBvf7xsBVisZN9w@mail.gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+Message-ID: <cba984c8-3c2a-91c1-610d-04e35e2172be@gmail.com>
+Date:   Sat, 21 Sep 2019 16:57:00 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <CAL_JsqLxPZ2TyKv3M=a9r4_Vh+aOQRXgETwbBvf7xsBVisZN9w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Create a common API for test managed resources like memory and test
-objects. A lot of times a test will want to set up infrastructure to be
-used in test cases; this could be anything from just wanting to allocate
-some memory to setting up a driver stack; this defines facilities for
-creating "test resources" which are managed by the test infrastructure
-and are automatically cleaned up at the conclusion of the test.
+On 9/20/19 9:57 AM, Rob Herring wrote:
+> Following up from LPC discussions...
+> 
+> On Thu, Mar 21, 2019 at 8:30 PM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
+>>
+>> On Thu, Mar 21, 2019 at 5:22 PM Frank Rowand <frowand.list@gmail.com> wrote:
+>>>
+>>> On 2/27/19 7:52 PM, Brendan Higgins wrote:
+>>>> On Wed, Feb 20, 2019 at 12:45 PM Frank Rowand <frowand.list@gmail.com> wrote:
+>>>>>
+>>>>> On 2/18/19 2:25 PM, Frank Rowand wrote:
+>>>>>> On 2/15/19 2:56 AM, Brendan Higgins wrote:
+>>>>>>> On Thu, Feb 14, 2019 at 6:05 PM Frank Rowand <frowand.list@gmail.com> wrote:
+>>>>>>>>
+>>>>>>>> On 2/14/19 4:56 PM, Brendan Higgins wrote:
+>>>>>>>>> On Thu, Feb 14, 2019 at 3:57 PM Frank Rowand <frowand.list@gmail.com> wrote:
+>>>>>>>>>>
+>>>>>>>>>> On 12/5/18 3:54 PM, Brendan Higgins wrote:
+>>>>>>>>>>> On Tue, Dec 4, 2018 at 2:58 AM Frank Rowand <frowand.list@gmail.com> wrote:
+>> < snip >
+>>>>>
+>>>>> In the base version, the order of execution of the test code requires
+>>>>> bouncing back and forth between the test functions and the coding of
+>>>>> of_test_find_node_by_name_cases[].
+>>>>
+>>>> You shouldn't need to bounce back and forth because the order in which
+>>>> the tests run shouldn't matter.
+>>>
+>>> If one can't guarantee total independence of all of the tests, with no
+>>> side effects, then yes.  But that is not my world.  To make that
+>>> guarantee, I would need to be able to run just a single test in an
+>>> entire test run.
+>>>
+>>> I actually want to make side effects possible.  Whether from other
+>>> tests or from live kernel code that is accessing the live devicetree.
+>>> Any extra stress makes me happier.
+>>>
+>>> I forget the exact term that has been tossed around, but to me the
+>>> devicetree unittests are more like system validation, release tests,
+>>> acceptance tests, and stress tests.  Not unit tests in the philosophy
+>>> of KUnit.
+>>
+>> Ah, I understand. I thought that they were actually trying to be unit
+>> tests; that pretty much voids this discussion then. Integration tests
+>> and end to end tests are valuable as long as that is actually what you
+>> are trying to do.
+> 
+> There's a mixture. There's a whole bunch of tests that are basically
+> just testing various DT APIs and use a static DT. Those are all unit
+> tests IMO.
+> 
+> Then there's all the overlay tests Frank has added. I guess some of
+> those are not unittests in the strictest sense. Regardless, if we're
+> reporting test results, we should align our reporting with what will
+> become the rest of the kernel.
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
----
- include/kunit/test.h | 187 +++++++++++++++++++++++++++++++++++++++++++
- lib/kunit/test.c     | 163 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 350 insertions(+)
+The last time I talked to you at lpc, I was still resisting moving the
+DT unittests to the kunit framework.  But I think I am on board now.
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index e30d1bf2fb68..6781c756f11b 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -9,8 +9,72 @@
- #ifndef _KUNIT_TEST_H
- #define _KUNIT_TEST_H
- 
-+#include <linux/slab.h>
- #include <linux/types.h>
- 
-+struct kunit_resource;
-+
-+typedef int (*kunit_resource_init_t)(struct kunit_resource *, void *);
-+typedef void (*kunit_resource_free_t)(struct kunit_resource *);
-+
-+/**
-+ * struct kunit_resource - represents a *test managed resource*
-+ * @allocation: for the user to store arbitrary data.
-+ * @free: a user supplied function to free the resource. Populated by
-+ * kunit_alloc_resource().
-+ *
-+ * Represents a *test managed resource*, a resource which will automatically be
-+ * cleaned up at the end of a test case.
-+ *
-+ * Example:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	struct kunit_kmalloc_params {
-+ *		size_t size;
-+ *		gfp_t gfp;
-+ *	};
-+ *
-+ *	static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
-+ *	{
-+ *		struct kunit_kmalloc_params *params = context;
-+ *		res->allocation = kmalloc(params->size, params->gfp);
-+ *
-+ *		if (!res->allocation)
-+ *			return -ENOMEM;
-+ *
-+ *		return 0;
-+ *	}
-+ *
-+ *	static void kunit_kmalloc_free(struct kunit_resource *res)
-+ *	{
-+ *		kfree(res->allocation);
-+ *	}
-+ *
-+ *	void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
-+ *	{
-+ *		struct kunit_kmalloc_params params;
-+ *		struct kunit_resource *res;
-+ *
-+ *		params.size = size;
-+ *		params.gfp = gfp;
-+ *
-+ *		res = kunit_alloc_resource(test, kunit_kmalloc_init,
-+ *			kunit_kmalloc_free, &params);
-+ *		if (res)
-+ *			return res->allocation;
-+ *
-+ *		return NULL;
-+ *	}
-+ */
-+struct kunit_resource {
-+	void *allocation;
-+	kunit_resource_free_t free;
-+
-+	/* private: internal use only. */
-+	struct list_head node;
-+};
-+
- struct kunit;
- 
- /**
-@@ -114,6 +178,13 @@ struct kunit {
- 	 * with the test case have terminated.
- 	 */
- 	bool success; /* Read only after test_case finishes! */
-+	spinlock_t lock; /* Guards all mutable test state. */
-+	/*
-+	 * Because resources is a list that may be updated multiple times (with
-+	 * new resources) from any thread associated with a test case, we must
-+	 * protect it with some type of lock.
-+	 */
-+	struct list_head resources; /* Protected by lock. */
- };
- 
- void kunit_init_test(struct kunit *test, const char *name);
-@@ -147,6 +218,122 @@ int kunit_run_tests(struct kunit_suite *suite);
- 	}								       \
- 	late_initcall(kunit_suite_init##suite)
- 
-+/*
-+ * Like kunit_alloc_resource() below, but returns the struct kunit_resource
-+ * object that contains the allocation. This is mostly for testing purposes.
-+ */
-+struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
-+						    kunit_resource_init_t init,
-+						    kunit_resource_free_t free,
-+						    gfp_t internal_gfp,
-+						    void *context);
-+
-+/**
-+ * kunit_alloc_resource() - Allocates a *test managed resource*.
-+ * @test: The test context object.
-+ * @init: a user supplied function to initialize the resource.
-+ * @free: a user supplied function to free the resource.
-+ * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
-+ * @context: for the user to pass in arbitrary data to the init function.
-+ *
-+ * Allocates a *test managed resource*, a resource which will automatically be
-+ * cleaned up at the end of a test case. See &struct kunit_resource for an
-+ * example.
-+ *
-+ * NOTE: KUnit needs to allocate memory for each kunit_resource object. You must
-+ * specify an @internal_gfp that is compatible with the use context of your
-+ * resource.
-+ */
-+static inline void *kunit_alloc_resource(struct kunit *test,
-+					 kunit_resource_init_t init,
-+					 kunit_resource_free_t free,
-+					 gfp_t internal_gfp,
-+					 void *context)
-+{
-+	struct kunit_resource *res;
-+
-+	res = kunit_alloc_and_get_resource(test, init, free, internal_gfp,
-+					   context);
-+
-+	if (res)
-+		return res->allocation;
-+
-+	return NULL;
-+}
-+
-+typedef bool (*kunit_resource_match_t)(struct kunit *test,
-+				       const void *res,
-+				       void *match_data);
-+
-+/**
-+ * kunit_resource_instance_match() - Match a resource with the same instance.
-+ * @test: Test case to which the resource belongs.
-+ * @res: The data stored in kunit_resource->allocation.
-+ * @match_data: The resource pointer to match against.
-+ *
-+ * An instance of kunit_resource_match_t that matches a resource whose
-+ * allocation matches @match_data.
-+ */
-+static inline bool kunit_resource_instance_match(struct kunit *test,
-+						 const void *res,
-+						 void *match_data)
-+{
-+	return res == match_data;
-+}
-+
-+/**
-+ * kunit_resource_destroy() - Find a kunit_resource and destroy it.
-+ * @test: Test case to which the resource belongs.
-+ * @match: Match function. Returns whether a given resource matches @match_data.
-+ * @free: Must match free on the kunit_resource to free.
-+ * @match_data: Data passed into @match.
-+ *
-+ * Free the latest kunit_resource of @test for which @free matches the
-+ * kunit_resource_free_t associated with the resource and for which @match
-+ * returns true.
-+ *
-+ * RETURNS:
-+ * 0 if kunit_resource is found and freed, -ENOENT if not found.
-+ */
-+int kunit_resource_destroy(struct kunit *test,
-+			   kunit_resource_match_t match,
-+			   kunit_resource_free_t free,
-+			   void *match_data);
-+
-+/**
-+ * kunit_kmalloc() - Like kmalloc() except the allocation is *test managed*.
-+ * @test: The test context object.
-+ * @size: The size in bytes of the desired memory.
-+ * @gfp: flags passed to underlying kmalloc().
-+ *
-+ * Just like `kmalloc(...)`, except the allocation is managed by the test case
-+ * and is automatically cleaned up after the test case concludes. See &struct
-+ * kunit_resource for more information.
-+ */
-+void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp);
-+
-+/**
-+ * kunit_kfree() - Like kfree except for allocations managed by KUnit.
-+ * @test: The test case to which the resource belongs.
-+ * @ptr: The memory allocation to free.
-+ */
-+void kunit_kfree(struct kunit *test, const void *ptr);
-+
-+/**
-+ * kunit_kzalloc() - Just like kunit_kmalloc(), but zeroes the allocation.
-+ * @test: The test context object.
-+ * @size: The size in bytes of the desired memory.
-+ * @gfp: flags passed to underlying kmalloc().
-+ *
-+ * See kzalloc() and kunit_kmalloc() for more information.
-+ */
-+static inline void *kunit_kzalloc(struct kunit *test, size_t size, gfp_t gfp)
-+{
-+	return kunit_kmalloc(test, size, gfp | __GFP_ZERO);
-+}
-+
-+void kunit_cleanup(struct kunit *test);
-+
- void __printf(3, 4) kunit_printk(const char *level,
- 				 const struct kunit *test,
- 				 const char *fmt, ...);
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index d3dda359f99b..68b1037ab74d 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -122,6 +122,8 @@ static void kunit_print_test_case_ok_not_ok(struct kunit_case *test_case,
- 
- void kunit_init_test(struct kunit *test, const char *name)
- {
-+	spin_lock_init(&test->lock);
-+	INIT_LIST_HEAD(&test->resources);
- 	test->name = name;
- 	test->success = true;
- }
-@@ -153,6 +155,8 @@ static void kunit_run_case(struct kunit_suite *suite,
- 	if (suite->exit)
- 		suite->exit(&test);
- 
-+	kunit_cleanup(&test);
-+
- 	test_case->success = test.success;
- }
- 
-@@ -173,6 +177,165 @@ int kunit_run_tests(struct kunit_suite *suite)
- 	return 0;
- }
- 
-+struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
-+						    kunit_resource_init_t init,
-+						    kunit_resource_free_t free,
-+						    gfp_t internal_gfp,
-+						    void *context)
-+{
-+	struct kunit_resource *res;
-+	int ret;
-+
-+	res = kzalloc(sizeof(*res), internal_gfp);
-+	if (!res)
-+		return NULL;
-+
-+	ret = init(res, context);
-+	if (ret)
-+		return NULL;
-+
-+	res->free = free;
-+	spin_lock(&test->lock);
-+	list_add_tail(&res->node, &test->resources);
-+	spin_unlock(&test->lock);
-+
-+	return res;
-+}
-+
-+static void kunit_resource_free(struct kunit *test, struct kunit_resource *res)
-+{
-+	res->free(res);
-+	kfree(res);
-+}
-+
-+static struct kunit_resource *kunit_resource_find(struct kunit *test,
-+						  kunit_resource_match_t match,
-+						  kunit_resource_free_t free,
-+						  void *match_data)
-+{
-+	struct kunit_resource *resource;
-+
-+	lockdep_assert_held(&test->lock);
-+
-+	list_for_each_entry_reverse(resource, &test->resources, node) {
-+		if (resource->free != free)
-+			continue;
-+		if (match(test, resource->allocation, match_data))
-+			return resource;
-+	}
-+
-+	return NULL;
-+}
-+
-+static struct kunit_resource *kunit_resource_remove(
-+		struct kunit *test,
-+		kunit_resource_match_t match,
-+		kunit_resource_free_t free,
-+		void *match_data)
-+{
-+	struct kunit_resource *resource;
-+
-+	spin_lock(&test->lock);
-+	resource = kunit_resource_find(test, match, free, match_data);
-+	if (resource)
-+		list_del(&resource->node);
-+	spin_unlock(&test->lock);
-+
-+	return resource;
-+}
-+
-+int kunit_resource_destroy(struct kunit *test,
-+			   kunit_resource_match_t match,
-+			   kunit_resource_free_t free,
-+			   void *match_data)
-+{
-+	struct kunit_resource *resource;
-+
-+	resource = kunit_resource_remove(test, match, free, match_data);
-+
-+	if (!resource)
-+		return -ENOENT;
-+
-+	kunit_resource_free(test, resource);
-+	return 0;
-+}
-+
-+struct kunit_kmalloc_params {
-+	size_t size;
-+	gfp_t gfp;
-+};
-+
-+static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
-+{
-+	struct kunit_kmalloc_params *params = context;
-+
-+	res->allocation = kmalloc(params->size, params->gfp);
-+	if (!res->allocation)
-+		return -ENOMEM;
-+
-+	return 0;
-+}
-+
-+static void kunit_kmalloc_free(struct kunit_resource *res)
-+{
-+	kfree(res->allocation);
-+}
-+
-+void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
-+{
-+	struct kunit_kmalloc_params params = {
-+		.size = size,
-+		.gfp = gfp
-+	};
-+
-+	return kunit_alloc_resource(test,
-+				    kunit_kmalloc_init,
-+				    kunit_kmalloc_free,
-+				    gfp,
-+				    &params);
-+}
-+
-+void kunit_kfree(struct kunit *test, const void *ptr)
-+{
-+	int rc;
-+
-+	rc = kunit_resource_destroy(test,
-+				    kunit_resource_instance_match,
-+				    kunit_kmalloc_free,
-+				    (void *)ptr);
-+
-+	WARN_ON(rc);
-+}
-+
-+void kunit_cleanup(struct kunit *test)
-+{
-+	struct kunit_resource *resource;
-+
-+	/*
-+	 * test->resources is a stack - each allocation must be freed in the
-+	 * reverse order from which it was added since one resource may depend
-+	 * on another for its entire lifetime.
-+	 * Also, we cannot use the normal list_for_each constructs, even the
-+	 * safe ones because *arbitrary* nodes may be deleted when
-+	 * kunit_resource_free is called; the list_for_each_safe variants only
-+	 * protect against the current node being deleted, not the next.
-+	 */
-+	while (true) {
-+		spin_lock(&test->lock);
-+		if (list_empty(&test->resources)) {
-+			spin_unlock(&test->lock);
-+			break;
-+		}
-+		resource = list_last_entry(&test->resources,
-+					   struct kunit_resource,
-+					   node);
-+		list_del(&resource->node);
-+		spin_unlock(&test->lock);
-+
-+		kunit_resource_free(test, resource);
-+	}
-+}
-+
- void kunit_printk(const char *level,
- 		  const struct kunit *test,
- 		  const char *fmt, ...)
--- 
-2.23.0.351.gc4317032e6-goog
+Brendan agreed to accept a kunit patch from me (when I write it) to enable
+the DT unittests to report # of tests run and # of tests passed/failed,
+as is currently the case.
+
+Brendan also agreed that null initialization and clean up would be ok
+for the DT unittests.  But that he does not want that model to be
+frequently used.  (You mention this idea later in the email I am
+replying to.)
+
+
+> 
+>>> I do see the value of pure unit tests, and there are rare times that
+>>> my devicetree use case might be better served by that approach.  But
+>>> if so, it is very easy for me to add a simple pure test when debugging.
+>>> My general use case does not map onto this model.
+>>
+>> Why do you think it is rare that you would actually want unit tests?
+> 
+> I don't. We should have a unittest (or multiple) for every single DT
+> API call and that should be a requirement to add any new APIs.
+> 
+>> I mean, if you don't get much code churn, then maybe it's not going to
+>> provide you a ton of value to immediately go and write a bunch of unit
+>> tests right now, but I can't think of a single time where it's hurt.
+>> Unit tests, from my experience, are usually the easiest tests to
+>> maintain, and the most helpful when I am developing.
+>>
+>> Maybe I need to understand your use case better.
+>>
+>>>
+>>>
+>>>>>
+>>>>> In the frank version the order of execution of the test code is obvious.
+>>>>
+>>>> So I know we were arguing before over whether order *does* matter in
+>>>> some of the other test cases (none in the example that you or I
+>>>> posted), but wouldn't it be better if the order of execution didn't
+>>>> matter? If you don't allow a user to depend on the execution of test
+>>>> cases, then arguably these test case dependencies would never form and
+>>>> the order wouldn't matter.
+>>>
+>>> Reality intrudes.  Order does matter.
+>>>
+>>>
+>>>>>
+>>>>> It is possible that a test function could be left out of
+>>>>> of_test_find_node_by_name_cases[], in error.  This will result in a compile
+>>>>> warning (I think warning instead of error, but I have not verified that)
+>>>>> so it might be caught or it might be overlooked.
+>>>>>
+>>>>> The base version is 265 lines.  The frank version is 208 lines, 57 lines
+>>>>> less.  Less is better.
+>>>>
+>>>> I agree that less is better, but there are different kinds of less to
+>>>> consider. I prefer less logic in a function to fewer lines overall.
+>>>>
+>>>> It seems we are in agreement that test cases should be small and
+>>>> simple, so I won't dwell on that point any longer. I agree that the
+>>>
+>>> As a general guide for simple unit tests, sure.
+>>>
+>>> For my case, no.  Reality intrudes.
+>>>
+>>> KUnit has a nice architectural view of what a unit test should be.
+>>
+>> Cool, I am glad you think so! That actually means a lot to me. I was
+>> afraid I wasn't conveying the idea properly and that was the root of
+>> this debate.
+>>
+>>>
+>>> The existing devicetree "unittests" are not such unit tests.  They
+>>> simply share the same name.
+>>>
+>>> The devicetree unittests do not fit into a clean:
+>>>   - initialize
+>>>   - do one test
+>>>   - clean up
+>>> model.
+> 
+> Initialize being static and clean-up being NULL still fits into this model.
+> 
+>>> Trying to force them into that model will not work.  The initialize
+>>> is not a simple, easy to decompose thing.  And trying to decompose
+>>> it can actually make the code more complex and messier.
+>>>
+>>> Clean up can NOT occur, because part of my test validation is looking
+>>> at the state of the device tree after the tests complete, viewed
+>>> through the /proc/device-tree/ interface.
+> 
+> Well, that's pretty ugly to have the test in the kernel and the
+> validation in userspace. I can see why you do, but that seems like a
+> problem in how those tests are defined and run.
+
+Yes it is ugly.  Any good suggestions on a better solution?
+
+
+> 
+>> Again, if they are not actually intended to be unit tests, then I
+>> think that is fine.
+>>
+>> < snip >
+>>
+>>>> Compare the test cases for adding of_test_dynamic_basic,
+>>>> of_test_dynamic_add_existing_property,
+>>>> of_test_dynamic_modify_existing_property, and
+>>>> of_test_dynamic_modify_non_existent_property to the originals. My
+>>>> version is much longer overall, but I think is still much easier to
+>>>> understand. I can say from when I was trying to split this up in the
+>>>> first place, it was not obvious what properties were expected to be
+>>>> populated as a precondition for a given test case (except the first
+>>>> one of course). Whereas, in my version, it is immediately obvious what
+>>>> the preconditions are for a test case. I think you can apply this same
+>>>> logic to the examples you provided, in frank version, I don't
+>>>> immediately know if one test cases does something that is a
+>>>> precondition for another test case.
+>>>
+>>> Yes, that is a real problem in the current code, but easily fixed
+>>> with comments.
+>>
+>> I think it is best when you don't need comments, but in this case, I
+>> think I have to agree with you.
+>>
+>>>
+>>>
+>>>> My version also makes it easier to run a test case entirely by itself
+>>>> which is really valuable for debugging purposes. A common thing that
+>>>> happens when you have lots of unit tests is something breaks and lots
+>>>> of tests fail. If the test cases are good, there should be just a
+>>>> couple (ideally one) test cases that directly assert the violated
+>>>> property; those are the test cases you actually want to focus on, the
+>>>> rest are noise for the purposes of that breakage. In my version, it is
+>>>> much easier to turn off the test cases that you don't care about and
+>>>> then focus in on the ones that exercise the violated property.
+>>>>
+>>>> Now I know that, hermeticity especially, but other features as well
+>>>> (test suite summary, error on unused test case function, etc) are not
+>>>> actually in KUnit as it is under consideration here. Maybe it would be
+>>>> best to save these last two patches (18/19, and 19/19) until I have
+>>>> these other features checked in and reconsider them then?
+>>>
+>>> Thanks for leaving 18/19 and 19/19 off in v4.
+>>
+>> Sure, no problem. It was pretty clear that it was a waste of both of
+>> our times to continue discussing those at this juncture. :-)
+>>
+>> Do you still want me to try to convert the DT not-exactly-unittest to
+>> KUnit? I would kind of prefer (I don't feel *super* strongly about the
+>> matter) we don't call it that since I was intending for it to be the
+>> flagship initial example, but I certainly don't mind trying to clean
+>> this patch up to get it up to snuff. It's really just a question of
+>> whether it is worth it to you.
+> 
+> I still want to see this happen at least for the parts that are
+> clearly unit tests. And for the parts that aren't, Frank should move
+> them out of of/unittest.c.
+> 
+> So how to move forward? Convert tests one by one? Take a first swag at
+> what are unit tests and aren't?
+
+By the end of lpc I decided that I would go ahead and take a shot at
+modifying the DT unittests to use the kunit framework.  So I am
+volunteering me to do the work.  This has an additional benefit of
+testing whether someone like me can successfully follow the
+documentation.
+
+It looked like there was a good chance that kunit would get accepted in
+the merge window, so I was going to do the DT unittest work based on
+-rc1.  I see that Brenden has submitted a couple more versions after
+the merge window opened.  I think that kunit will be stable enough
+after -rc1 (even if not yet merged by Linus) that I will be comfortable
+doing the work on top of the latest patch series at the close of the
+merge window.
+
+
+> 
+> Brendan, do you still have DT unittest patches that work with current kunit?
+
+I never saw a version of the DT unittest patches that worked.  I was watching
+and waiting before doing a serious review of the DT unittest portion of the
+kunit patch series.
+
+-Frank
+
+> 
+> Rob
+> 
 
