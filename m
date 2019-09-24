@@ -2,63 +2,107 @@ Return-Path: <SRS0=qtJy=XT=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5D9FC432C1
-	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Sep 2019 20:01:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB213C432C1
+	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Sep 2019 20:05:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 973E821655
-	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Sep 2019 20:01:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F693214DA
+	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Sep 2019 20:05:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1569355524;
+	bh=nB3ANp+/569VNYtSayN5jMF7IHRxY+m3iP1QD1TGWw8=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=HRjVbjY4v1+q0hYdrGkvqpq6oEcoElZ3ny2De/+PcRxJvKxnCZb282ycFeXNGC/E6
+	 09gswAGZ8kUeiOSuE+4nQABvi3USWstZLPgmO7PN0kNbup8yIrJ5Xg/KNsg8iKNXtb
+	 2cTlC198DaRdJu/QjCC8nx5coOeuKzMA5jp+FbR0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728104AbfIXUBj (ORCPT
+        id S2409794AbfIXUFY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 24 Sep 2019 16:01:39 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:38677 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728014AbfIXUBj (ORCPT
+        Tue, 24 Sep 2019 16:05:24 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:35416 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728956AbfIXUFX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Sep 2019 16:01:39 -0400
-Received: from mon75-17-88-175-211-167.fbx.proxad.net ([88.175.211.167] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iCr0C-0007jN-MJ; Tue, 24 Sep 2019 20:01:36 +0000
-Date:   Tue, 24 Sep 2019 22:01:35 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: pidfd: Fix undefined reference to
- pthread_create()
-Message-ID: <20190924200134.x7ij7y24z45hizs5@wittgenstein>
-References: <20190924195237.30519-1-skhan@linuxfoundation.org>
+        Tue, 24 Sep 2019 16:05:23 -0400
+Received: by mail-io1-f68.google.com with SMTP id q10so7629962iop.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2019 13:05:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=tzqNMqA07jBcBpcqIcid0j0G7N4xLkFUhmGjg7IIOuU=;
+        b=DCyKK193tOOwAbtGLptlJdOOKYY/0pAfa4quNNXrWUvG3TJ7wXw/pThGwGpG+9QiwN
+         FazKM7SpbmIueD8YLUzNgzzgixAWUC4leRTPUG/z7IwX9zqjQydBTyOUnRi/xqLq7O0X
+         vwnBLD/ePKlVhAXYcazuiJhoHAT+eKbgJPEi0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tzqNMqA07jBcBpcqIcid0j0G7N4xLkFUhmGjg7IIOuU=;
+        b=c5yYxOVTBE3ylOweNzoRlwzy1JRfPQzmUa4v+jUVsX2s2KAPZMWlcvy+4hu1miC/0e
+         g/ufhLmTRueqhCSuOVz8ChB5gurs88wGwgEQn8cuEiT1JEIhbAo6iS2iOVJULW85tr2F
+         FXMjsYw8AsFDigOlfqUVQ3RtZ5qOfquF/wv5n7BPB9gi9MXsKbvhN9TQ/Z4SiBLbeI6K
+         I9ktJH1vRPE+9a4Sp09Is73bXRdDIYgOSIaRhZDwzln3UdiWQgbrK0CkjWYS+oxN06jA
+         71Q6tJaZeirSzd+Ny2fkHlx7bVOXsYiwHghWJFX9Gh5bQHVgYGce+evX21KzdBbKjbqu
+         3VAQ==
+X-Gm-Message-State: APjAAAX5BfcvDBWNhV4QXunK6CgsAlTqySk4HL9tgmNqR2newqmOeqOA
+        mbQsh8Na5f5Zvnk2RqVRYdb6nQ==
+X-Google-Smtp-Source: APXvYqxALuZ+2sOPVcl1PCpmgHoIsSghK1bXD0k9qNItmHh8nea4aKSF+aMNcivHLWvltHMCZ47cgQ==
+X-Received: by 2002:a5d:89da:: with SMTP id a26mr4311422iot.61.1569355520865;
+        Tue, 24 Sep 2019 13:05:20 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id k66sm4656319iof.25.2019.09.24.13.05.19
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 24 Sep 2019 13:05:20 -0700 (PDT)
+Subject: Re: [PATCH] selftests: proc: Fix _GNU_SOURCE redefined build warns
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     shuah@kernel.org, akpm@linux-foundation.org,
+        sabyasachi.linux@gmail.com, jrdr.linux@gmail.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        "skh >> Shuah Khan" <skhan@linuxfoundation.org>
+References: <20190924181910.23588-1-skhan@linuxfoundation.org>
+ <20190924181910.23588-2-skhan@linuxfoundation.org>
+ <20190924195253.GA2633@avx2>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f6c20b9b-4984-f865-3698-70b61bcd4be0@linuxfoundation.org>
+Date:   Tue, 24 Sep 2019 14:05:19 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190924195237.30519-1-skhan@linuxfoundation.org>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190924195253.GA2633@avx2>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 24, 2019 at 01:52:37PM -0600, Shuah Khan wrote:
-> Fix build failure:
+On 9/24/19 1:52 PM, Alexey Dobriyan wrote:
+> On Tue, Sep 24, 2019 at 12:19:10PM -0600, Shuah Khan wrote:
+>> Fix the following _GNU_SOURCE redefined build warns:
+>>
+>> proc-loadavg-001.c:17: warning: "_GNU_SOURCE" redefined
+>> proc-self-syscall.c:16: warning: "_GNU_SOURCE" redefined
+>> proc-uptime-002.c:18: warning: "_GNU_SOURCE" redefined
 > 
-> undefined reference to `pthread_create'
-> collect2: error: ld returned 1 exit status
+>> +#ifndef _GNU_SOURCE
+>>   #define _GNU_SOURCE
+>> +#endif
 > 
-> Fix CFLAGS to include pthread correctly.
+> Why are you doing this.
 > 
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> There are 140 redefinitions of _GNU_SOURCE
+> 
 
-Reviewed-by: Christian Brauner <christian.brauner@ubuntu.com>
 
-Thanks, Shuah!
-Queued-up in my fixes branch and will be included after the merge window
-closes. I'll also add a fixes tag and a cc for stable since this should
-very likely be backported.
+Is there something wrong with getting rid of this warning?
 
-Christian
+thanks,
+-- Shuah
