@@ -2,158 +2,80 @@ Return-Path: <SRS0=bENQ=XZ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UPPERCASE_50_75,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 437DBC32792
-	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Sep 2019 20:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C5E8C35280
+	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Sep 2019 20:40:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 15A6422509
-	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Sep 2019 20:39:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0261F224FE
+	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Sep 2019 20:40:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731212AbfI3UjV (ORCPT
+        id S1730955AbfI3UkF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 30 Sep 2019 16:39:21 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:60744 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730679AbfI3UjV (ORCPT
+        Mon, 30 Sep 2019 16:40:05 -0400
+Received: from www62.your-server.de ([213.133.104.62]:60488 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730607AbfI3UkE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Sep 2019 16:39:21 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8UHqnRO097382
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Sep 2019 13:59:26 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vbmmmn72p-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Sep 2019 13:59:26 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <iii@linux.ibm.com>;
-        Mon, 30 Sep 2019 18:59:24 +0100
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 30 Sep 2019 18:59:22 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8UHwqdE40239526
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 Sep 2019 17:58:52 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B64184C052;
-        Mon, 30 Sep 2019 17:59:20 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 802764C044;
-        Mon, 30 Sep 2019 17:59:20 +0000 (GMT)
-Received: from white.boeblingen.de.ibm.com (unknown [9.152.96.81])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 30 Sep 2019 17:59:20 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH v3 1/2] selftests: append / to $(OUTPUT)
-Date:   Mon, 30 Sep 2019 19:59:03 +0200
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190930175904.78219-1-iii@linux.ibm.com>
-References: <20190930175904.78219-1-iii@linux.ibm.com>
+        Mon, 30 Sep 2019 16:40:04 -0400
+Received: from 15.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.15] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iF0KT-0000xK-7e; Mon, 30 Sep 2019 20:23:25 +0200
+Date:   Mon, 30 Sep 2019 20:23:24 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     ast@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] tools: bpf: Use !building_out_of_srctree to determine
+ srctree
+Message-ID: <20190930182324.GA20613@pc-63.home>
+References: <20190927011344.4695-1-skhan@linuxfoundation.org>
+ <20190930085815.GA7249@pc-66.home>
+ <ea108769-1b3e-42f8-de9c-50b4a563be57@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19093017-4275-0000-0000-0000036CA0BA
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19093017-4276-0000-0000-0000387F28B2
-Message-Id: <20190930175904.78219-2-iii@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-30_10:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1909300164
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ea108769-1b3e-42f8-de9c-50b4a563be57@linuxfoundation.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25588/Mon Sep 30 10:25:56 2019)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-$(OUTPUT) is assumed to end with a / everywhere else in the tree, make
-this the case for kselftest as well.
+On Mon, Sep 30, 2019 at 08:16:55AM -0600, Shuah Khan wrote:
+> On 9/30/19 2:58 AM, Daniel Borkmann wrote:
+> > On Thu, Sep 26, 2019 at 07:13:44PM -0600, Shuah Khan wrote:
+> > > make TARGETS=bpf kselftest fails with:
+> > > 
+> > > Makefile:127: tools/build/Makefile.include: No such file or directory
+> > > 
+> > > When the bpf tool make is invoked from tools Makefile, srctree is
+> > > cleared and the current logic check for srctree equals to empty
+> > > string to determine srctree location from CURDIR.
+> > > 
+> > > When the build in invoked from selftests/bpf Makefile, the srctree
+> > > is set to "." and the same logic used for srctree equals to empty is
+> > > needed to determine srctree.
+> > > 
+> > > Check building_out_of_srctree undefined as the condition for both
+> > > cases to fix "make TARGETS=bpf kselftest" build failure.
+> > > 
+> > > Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> > 
+> > Applied, thanks!
+> 
+> Hi Daniel!
+> 
+> Is the tree the patch went into included in the linux-next?
 
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- tools/testing/selftests/Makefile | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Yes, both bpf and bpf-next are included in linux-next.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index c3feccb99ff5..49bcd066907e 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -136,31 +136,31 @@ all: khdr
- 	@for TARGET in $(TARGETS); do		\
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
- 		mkdir $$BUILD_TARGET  -p;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET;\
- 	done;
- 
- run_tests: all
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET run_tests;\
- 	done;
- 
- hotplug:
- 	@for TARGET in $(TARGETS_HOTPLUG); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET;\
- 	done;
- 
- run_hotplug: hotplug
- 	@for TARGET in $(TARGETS_HOTPLUG); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_full_test;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET run_full_test;\
- 	done;
- 
- clean_hotplug:
- 	@for TARGET in $(TARGETS_HOTPLUG); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET clean;\
- 	done;
- 
- run_pstore_crash:
-@@ -184,7 +184,7 @@ ifdef INSTALL_PATH
- 	install -m 744 kselftest/prefix.pl $(INSTALL_PATH)/kselftest/
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
- 	done;
- 
- 	@# Ask all targets to emit their test scripts
-@@ -203,7 +203,7 @@ ifdef INSTALL_PATH
- 		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
- 		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
- 		echo -n "run_many" >> $(ALL_SCRIPT); \
--		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
-+		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET/ -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
- 		echo "" >> $(ALL_SCRIPT);	    \
- 		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
- 	done;
-@@ -216,7 +216,7 @@ endif
- clean:
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET clean;\
- 	done;
- 
- .PHONY: khdr all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean
--- 
-2.23.0
-
+Thanks,
+Daniel
