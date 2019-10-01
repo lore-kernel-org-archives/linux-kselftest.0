@@ -2,135 +2,95 @@ Return-Path: <SRS0=mcJh=X2=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CA71ECE58A
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Oct 2019 17:02:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FC2FC352AA
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Oct 2019 18:34:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 43A0C2054F
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Oct 2019 17:02:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569949341;
-	bh=KeGk7ekKKZHY2R8nLwGcjBusx9sdG8nRc9xvnHtfSGM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Am57isfDAZcDracwKBxQif+/HgGhy7nIgF86Dl8VrAKJordPn4YMsMRY1YYwmHDbj
-	 Py+C8CPrDA2M2d9u1SJKD8m9dFjhxVjr0p7/ZN1Z0hetSIL36hU7TZM72+kkrWOvie
-	 EXL5WbHo7obh1sagt61q2+iOYmvmwQ9SvIDVlYwU=
+	by mail.kernel.org (Postfix) with ESMTP id 0CE262133F
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Oct 2019 18:34:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727817AbfJARCO (ORCPT
+        id S1726200AbfJASei (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 1 Oct 2019 13:02:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51242 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729570AbfJAQkG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:40:06 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C4A8F21906;
-        Tue,  1 Oct 2019 16:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569948005;
-        bh=KeGk7ekKKZHY2R8nLwGcjBusx9sdG8nRc9xvnHtfSGM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U5mo18adlS3mD7VBqclMZ84gx4heR8sBcuMoUb+3Lx7x8ZLT3mkdjaehkK71CbFh/
-         B9a2m1gh2cNrgFq7ra2dyFVrPTA37T+FTzTzwXLup93AXJojEiWMWw8OspFxXXbXs+
-         IiVUAWSkLvsWUNhBIA/moK2dByXWWDWI5C8Td7yo=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tycho Andersen <tycho@tycho.ws>, Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 30/71] selftests/seccomp: fix build on older kernels
-Date:   Tue,  1 Oct 2019 12:38:40 -0400
-Message-Id: <20191001163922.14735-30-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191001163922.14735-1-sashal@kernel.org>
-References: <20191001163922.14735-1-sashal@kernel.org>
+        Tue, 1 Oct 2019 14:34:38 -0400
+Received: from ja.ssi.bg ([178.16.129.10]:60728 "EHLO ja.ssi.bg"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725851AbfJASei (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Oct 2019 14:34:38 -0400
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id x91IYDF3004229;
+        Tue, 1 Oct 2019 21:34:13 +0300
+Date:   Tue, 1 Oct 2019 21:34:13 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+cc:     Shuah Khan <shuah@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Simon Horman <horms@verge.net.au>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] selftests: netfilter: introduce test cases for
+ ipvs
+In-Reply-To: <1569939599-1872-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+Message-ID: <alpine.LFD.2.21.1910012133330.3887@ja.home.ssi.bg>
+References: <1569939599-1872-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Tycho Andersen <tycho@tycho.ws>
 
-[ Upstream commit 88282297fff00796e81f5e67734a6afdfb31fbc4 ]
+	Hello,
 
-The seccomp selftest goes to some length to build against older kernel
-headers, viz. all the #ifdefs at the beginning of the file.
+On Tue, 1 Oct 2019, Haishuang Yan wrote:
 
-Commit 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
-introduces some additional macros, but doesn't do the #ifdef dance.
-Let's add that dance here to avoid:
+> This series patch include test cases for ipvs.
+> 
+> The test topology is who as below:
+> +--------------------------------------------------------------+
+> |                      |                                       |
+> |         ns0          |         ns1                           |
+> |      -----------     |     -----------    -----------        |
+> |      | veth01  | --------- | veth10  |    | veth12  |        |
+> |      -----------    peer   -----------    -----------        |
+> |           |          |                        |              |
+> |      -----------     |                        |              |
+> |      |  br0    |     |-----------------  peer |--------------|
+> |      -----------     |                        |              |
+> |           |          |                        |              |
+> |      ----------     peer   ----------      -----------       |
+> |      |  veth02 | --------- |  veth20 |     | veth12  |       |
+> |      ----------      |     ----------      -----------       |
+> |                      |         ns2                           |
+> |                      |                                       |
+> +--------------------------------------------------------------+
+> 
+> Test results:
+> # selftests: netfilter: ipvs.sh
+> # Testing DR mode...
+> # Testing NAT mode...
+> # Testing Tunnel mode...
+> # ipvs.sh: PASS
+> ok 6 selftests: netfilter: ipvs.sh
+> 
+> Haishuang Yan (3):
+>   selftests: netfilter: add ipvs test script
+>   selftests: netfilter: add ipvs nat test case
+>   selftests: netfilter: add ipvs tunnel test case
 
-gcc -Wl,-no-as-needed -Wall  seccomp_bpf.c -lpthread -o seccomp_bpf
-In file included from seccomp_bpf.c:51:
-seccomp_bpf.c: In function ‘tracer_ptrace’:
-seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ undeclared (first use in this function); did you mean ‘PTRACE_EVENT_CLONE’?
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-  __typeof__(_expected) __exp = (_expected); \
-             ^~~~~~~~~
-seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-  ^~~~~~~~~
-seccomp_bpf.c:1787:20: note: each undeclared identifier is reported only once for each function it appears in
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-  __typeof__(_expected) __exp = (_expected); \
-             ^~~~~~~~~
-seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-  ^~~~~~~~~
-seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared (first use in this function); did you mean ‘PTRACE_EVENT_EXIT’?
-    : PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
-      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-  __typeof__(_expected) __exp = (_expected); \
-             ^~~~~~~~~
-seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-  ^~~~~~~~~
-make: *** [Makefile:12: seccomp_bpf] Error 1
+Acked-by: Julian Anastasov <ja@ssi.bg>
 
-[skhan@linuxfoundation.org: Fix checkpatch error in commit log]
-Signed-off-by: Tycho Andersen <tycho@tycho.ws>
-Fixes: 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
-Acked-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 5 +++++
- 1 file changed, 5 insertions(+)
+>  tools/testing/selftests/netfilter/Makefile |   2 +-
+>  tools/testing/selftests/netfilter/ipvs.sh  | 234 +++++++++++++++++++++++++++++
+>  2 files changed, 235 insertions(+), 1 deletion(-)
+>  create mode 100755 tools/testing/selftests/netfilter/ipvs.sh
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 6ef7f16c4cf52..7f8b5c8982e3b 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -199,6 +199,11 @@ struct seccomp_notif_sizes {
- };
- #endif
- 
-+#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
-+#define PTRACE_EVENTMSG_SYSCALL_ENTRY	1
-+#define PTRACE_EVENTMSG_SYSCALL_EXIT	2
-+#endif
-+
- #ifndef seccomp
- int seccomp(unsigned int op, unsigned int flags, void *args)
- {
--- 
-2.20.1
+Regards
 
+--
+Julian Anastasov <ja@ssi.bg>
