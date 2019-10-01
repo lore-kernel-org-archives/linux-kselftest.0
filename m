@@ -2,119 +2,108 @@ Return-Path: <SRS0=mcJh=X2=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C8BBC352AA
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Oct 2019 14:22:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 886BCC352AA
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Oct 2019 17:00:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2DCBD2190F
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Oct 2019 14:22:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C41021783
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Oct 2019 17:00:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1569949248;
+	bh=8rXf1rcCw3zLras7kS4IMtEFY7Dv0pAdekM63Zo4p1g=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=JdHMBB4OgeXHRlf2CRsVG8zK2IN9Vv/8Zffp7Ohm3Wl1BrqhFkqs4a56XyRlR1cDW
+	 xaJwtN9wMNhLU/X6KpEqyJcrTGDXbwx7HtEPiWrxIf4jTyOkquh6tVY58+YuB4nLjb
+	 dfNehiwAyrSUvfdtnuVlsIZ+QZxL2sRaLfQwtIyY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389062AbfJAOWg (ORCPT
+        id S1730170AbfJAQkp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 1 Oct 2019 10:22:36 -0400
-Received: from cmccmta3.chinamobile.com ([221.176.66.81]:25105 "EHLO
-        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389055AbfJAOWg (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Oct 2019 10:22:36 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.5]) by rmmx-syy-dmz-app11-12011 (RichMail) with SMTP id 2eeb5d936119580-943cf; Tue, 01 Oct 2019 22:22:17 +0800 (CST)
-X-RM-TRANSID: 2eeb5d936119580-943cf
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost (unknown[223.105.0.241])
-        by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee35d936118070-0678c;
-        Tue, 01 Oct 2019 22:22:16 +0800 (CST)
-X-RM-TRANSID: 2ee35d936118070-0678c
-From:   Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Simon Horman <horms@verge.net.au>
-Cc:     Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Subject: [PATCH v3 3/3] selftests: netfilter: add ipvs tunnel test case
-Date:   Tue,  1 Oct 2019 22:19:59 +0800
-Message-Id: <1569939599-1872-4-git-send-email-yanhaishuang@cmss.chinamobile.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1569939599-1872-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
-References: <1569939599-1872-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+        Tue, 1 Oct 2019 12:40:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52066 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730241AbfJAQko (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Oct 2019 12:40:44 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D3E7421D79;
+        Tue,  1 Oct 2019 16:40:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569948043;
+        bh=8rXf1rcCw3zLras7kS4IMtEFY7Dv0pAdekM63Zo4p1g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hw0rp2UpCOnwwt+y7MLvTR0/AixA8DMxxoqItXLEpo8mN62bPcckG4dLPgwngg5sa
+         fAly+fz7licAcUa4bDyQbh5j7svzd2NDiSRVgveSwisIaGynvGm/TjlFalFjfB7jxe
+         9aOf+oiI/rE7GyTrF3sYpVLYl6ejHNffhzFPlfjE=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Andrii Nakryiko <andriin@fb.com>, Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 5.3 50/71] selftests/bpf: adjust strobemeta loop to satisfy latest clang
+Date:   Tue,  1 Oct 2019 12:39:00 -0400
+Message-Id: <20191001163922.14735-50-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191001163922.14735-1-sashal@kernel.org>
+References: <20191001163922.14735-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test virtual server via ipip tunnel.
+From: Andrii Nakryiko <andriin@fb.com>
 
-Tested:
-# selftests: netfilter: ipvs.sh
-# Testing DR mode...
-# Testing NAT mode...
-# Testing Tunnel mode...
-# ipvs.sh: PASS
-ok 6 selftests: netfilter: ipvs.sh
+[ Upstream commit 4670d68b9254710fdeaf794cad54d8b2c9929e0a ]
 
-Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+Some recent changes in latest Clang started causing the following
+warning when unrolling strobemeta test case main loop:
+
+  progs/strobemeta.h:416:2: warning: loop not unrolled: the optimizer was
+  unable to perform the requested transformation; the transformation might
+  be disabled or specified as part of an unsupported transformation
+  ordering [-Wpass-failed=transform-warning]
+
+This patch simplifies loop's exit condition to depend only on constant
+max iteration number (STROBE_MAX_MAP_ENTRIES), while moving early
+termination logic inside the loop body. The changes are equivalent from
+program logic standpoint, but fixes the warning. It also appears to
+improve generated BPF code, as it fixes previously failing non-unrolled
+strobemeta test cases.
+
+Cc: Alexei Starovoitov <ast@fb.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-v2: optimize test script
----
- tools/testing/selftests/netfilter/ipvs.sh | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ tools/testing/selftests/bpf/progs/strobemeta.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/netfilter/ipvs.sh b/tools/testing/selftests/netfilter/ipvs.sh
-index 270b5da..a8f6e70 100755
---- a/tools/testing/selftests/netfilter/ipvs.sh
-+++ b/tools/testing/selftests/netfilter/ipvs.sh
-@@ -174,6 +174,30 @@ test_nat() {
-     test_service
- }
- 
-+test_tun() {
-+    ip netns exec ns0 ip route add ${vip_v4} via ${gip_v4} dev br0
+diff --git a/tools/testing/selftests/bpf/progs/strobemeta.h b/tools/testing/selftests/bpf/progs/strobemeta.h
+index 8a399bdfd9203..067eb625d01c5 100644
+--- a/tools/testing/selftests/bpf/progs/strobemeta.h
++++ b/tools/testing/selftests/bpf/progs/strobemeta.h
+@@ -413,7 +413,10 @@ static __always_inline void *read_map_var(struct strobemeta_cfg *cfg,
+ #else
+ #pragma unroll
+ #endif
+-	for (int i = 0; i < STROBE_MAX_MAP_ENTRIES && i < map.cnt; ++i) {
++	for (int i = 0; i < STROBE_MAX_MAP_ENTRIES; ++i) {
++		if (i >= map.cnt)
++			break;
 +
-+    ip netns exec ns1 modprobe ipip
-+    ip netns exec ns1 ip link set tunl0 up
-+    ip netns exec ns1 sysctl -qw net.ipv4.ip_forward=0
-+    ip netns exec ns1 sysctl -qw net.ipv4.conf.all.send_redirects=0
-+    ip netns exec ns1 sysctl -qw net.ipv4.conf.default.send_redirects=0
-+    ip netns exec ns1 ipvsadm -A -t ${vip_v4}:${port} -s rr
-+    ip netns exec ns1 ipvsadm -a -i -t ${vip_v4}:${port} -r ${rip_v4}:${port}
-+    ip netns exec ns1 ip addr add ${vip_v4}/32 dev lo:1
-+
-+    ip netns exec ns2 modprobe ipip
-+    ip netns exec ns2 ip link set tunl0 up
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_ignore=1
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_announce=2
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.all.rp_filter=0
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.tunl0.rp_filter=0
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.veth21.rp_filter=0
-+    ip netns exec ns2 ip addr add ${vip_v4}/32 dev lo:1
-+
-+    test_service
-+}
-+
- run_tests() {
- 	local errors=
- 
-@@ -189,6 +213,12 @@ run_tests() {
- 	test_nat
- 	errors=$(( $errors + $? ))
- 
-+	echo "Testing Tunnel mode..."
-+	cleanup
-+	setup
-+	test_tun
-+	errors=$(( $errors + $? ))
-+
- 	return $errors
- }
- 
+ 		descr->key_lens[i] = 0;
+ 		len = bpf_probe_read_str(payload, STROBE_MAX_STR_LEN,
+ 					 map.entries[i].key);
 -- 
-1.8.3.1
-
-
+2.20.1
 
