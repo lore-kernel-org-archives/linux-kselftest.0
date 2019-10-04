@@ -2,124 +2,92 @@ Return-Path: <SRS0=Upep=X5=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A877C47404
-	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Oct 2019 16:34:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 918B1C4360C
+	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Oct 2019 19:01:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4EF67222BE
-	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Oct 2019 16:34:58 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Hiq3Knxj"
+	by mail.kernel.org (Postfix) with ESMTP id 6F6062084D
+	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Oct 2019 19:01:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727587AbfJDQe5 (ORCPT
+        id S1725932AbfJDTBU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 4 Oct 2019 12:34:57 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:38983 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727264AbfJDQe5 (ORCPT
+        Fri, 4 Oct 2019 15:01:20 -0400
+Received: from smtp1.linuxfoundation.org ([140.211.169.13]:34874 "EHLO
+        smtp1.linuxfoundation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbfJDTBU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Oct 2019 12:34:57 -0400
-Received: by mail-io1-f66.google.com with SMTP id a1so14889875ioc.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Oct 2019 09:34:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=SGqM+3yKbVJmLVuUUp3b6/LD0hJ2CQ/5lAjad49oZfs=;
-        b=Hiq3KnxjgCoa7fM42jZ/eJ7L6fmoeIQsqkBW32bReVdq+5p5AMheZkYySQREJ130YM
-         LytbMVn1ZAdjZ3CuzAT0xI1zwzWOI89rXTaH35Mc+JeVZLc6go+PkppN7must3ymhVNX
-         GYpAciN94+YbJawhB0Tww6XV4OLTpb/ZhVdm4TBlRlTD0reAzbIWhLZxCqQKV6rxhpc4
-         cVrG+DB9/grXkk2CIUbarQ5uizb2Je7f1k2d4vyGfN3lepxarBArpurz/GG7GsSd7izP
-         W2QiXOrRhPizCd0rZ9MnDhLG6w2uRZacUV7NJ3vtE+FZzakXWjBloxwHtTlj6FeapZpA
-         rRpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=SGqM+3yKbVJmLVuUUp3b6/LD0hJ2CQ/5lAjad49oZfs=;
-        b=hO0yJzS48Jm1y8Ib0ybmlRloFG1bbsDKrcWkLqP2s8rPlCi7UZsTwtQmiKPM4cVGWM
-         1jHgoAIjyxjFfC/kGGP5Qoyf0itTsSV0/j8vzxNFdi1ikNU8boikdx1tCH7u1wawNvHk
-         TLSTj8bNY5qdidZKxuX3b9r2v6HKlKr0vk7yGyCpVSkMw/4jFjcwYiA+PTH6AcQus16w
-         R59V972LGRdEnA5WAeXehFx0tclYhQ74d5V2qXLof0bD8nDbyIhxU0upecHyBUnF3g1v
-         mhxVyeP7c34xpdfb6RXz3oFIe+vJERDCwqjiC+dHaPMXnFgr8kjzKiWcySXKIlBQEDSK
-         5JXQ==
-X-Gm-Message-State: APjAAAXnJR8hUDRDwVvwPwwCs4oNKJ1h7e+kMMFdWIStmmq5LiVPY/Vg
-        Na/W+rs5FSQuJpDPBYxhROjwJhXfDLUufUJozVg5d58n/CI=
-X-Google-Smtp-Source: APXvYqy3ZAxCYueRwp6jwND+zik8W1OIH/2S/kqrX3mVWekZw9RcfVxwvG/7PBgjpCQlVTEiRlJTLW5rN4egcQgQXUU=
-X-Received: by 2002:a92:cd45:: with SMTP id v5mr17338504ilq.197.1570206896657;
- Fri, 04 Oct 2019 09:34:56 -0700 (PDT)
+        Fri, 4 Oct 2019 15:01:20 -0400
+X-Greylist: delayed 331 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Oct 2019 15:01:19 EDT
+Received: from rt.cvo.linuxfoundation.org (rt.cvo.linuxfoundation.org [172.17.192.131])
+        by smtp1.linuxfoundation.org (Postfix) with ESMTPS id 2F62F735;
+        Fri,  4 Oct 2019 18:55:48 +0000 (UTC)
+Received: by rt.cvo.linuxfoundation.org (Postfix, from userid 48)
+        id 1AD13706; Fri,  4 Oct 2019 18:55:48 +0000 (UTC)
+Subject: [Kernel.org Helpdesk #80110] Bugzilla Component for KUnit?
+From:   "Konstantin Ryabitsev via RT" 
+        <kernel-helpdesk@rt.linuxfoundation.org>
+Reply-To: kernel-helpdesk@rt.linuxfoundation.org
+In-Reply-To: <20191002215351.GA177672@google.com>
+References: <RT-Ticket-80110@linuxfoundation>
+ <20191002215351.GA177672@google.com>
+Message-ID: <rt-4.4.0-12639-1570215347-1334.80110-6-0@linuxfoundation>
+X-RT-Loop-Prevention: linuxfoundation.org
+X-RT-Ticket: linuxfoundation.org #80110
+X-Managed-BY: RT 4.4.0 (http://www.bestpractical.com/rt/)
+X-RT-Originator: konstantin@linuxfoundation.org
+To:     brendanhiggins@google.com
+CC:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+X-RT-Original-Encoding: utf-8
+Date:   Fri, 04 Oct 2019 14:55:48 -0400
 MIME-Version: 1.0
-References: <157016600217.8022.346317009413291058.stgit@devnote2>
-In-Reply-To: <157016600217.8022.346317009413291058.stgit@devnote2>
-From:   Jassi Brar <jaswinder.singh@linaro.org>
-Date:   Fri, 4 Oct 2019 11:34:45 -0500
-Message-ID: <CAJe_Zhdq4sFGgv-CJf12_qJzFq+oASTmsD8xReX877V1NYSCBw@mail.gmail.com>
-Subject: Re: [BUGFIX PATCH] selftests: Use real temporary working directory
- for archiving
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 4 Oct 2019 at 00:13, Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> Use real temporary working directory for generating kselftest
-> archive.
->
-> tools/testing/selftests/kselftest directory has been used for
-> the temporary working directory for making a tar archive from
-> gen_kselftest_tar.sh, and it removes the directory for cleanup.
->
-> However, since the kselftest directory became a part of the
-> repository, it must not be used as a working dir.
->
-> Introduce mktemp to prepare a temporary working directory
-> for archiving kselftests.
->
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> ---
->  tools/testing/selftests/gen_kselftest_tar.sh |    8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/gen_kselftest_tar.sh b/tools/testing=
-/selftests/gen_kselftest_tar.sh
-> index a27e2eec3586..eba1e9987ffc 100755
-> --- a/tools/testing/selftests/gen_kselftest_tar.sh
-> +++ b/tools/testing/selftests/gen_kselftest_tar.sh
-> @@ -38,16 +38,16 @@ main()
->         esac
->         fi
->
-> -       install_dir=3D./kselftest
-> +       tmpdir=3D`mktemp -d ./install-XXXXXX` || exit 1
->
->  # Run install using INSTALL_KSFT_PATH override to generate install
->  # directory
-> -./kselftest_install.sh
-> -tar $copts kselftest${ext} $install_dir
-> +./kselftest_install.sh $tmpdir
-> +tar $copts kselftest${ext} -C $tmpdir kselftest
->  echo "Kselftest archive kselftest${ext} created!"
->
->  # clean up install directory
-> -rm -rf kselftest
-> +rm -rf $tmpdir
->  }
->
->  main "$@"
->
-FWIW,  Acked-by: Jassi Brar <jaswinder.singh@linaro.org>
+On 2019-10-02 17:53:58, brendanhiggins@google.com wrote:
+> Hi,
+> 
+> I am thinking about requesting a Bugzilla component for my kernel
+> project KUnit. I am not sure if this is the right place for it.  Some
+> background on KUnit: We are working on adding unit testing for the
+> Linux
+> kernel[1][2]. We have our initial patchset that introduces the
+> subsystem
+> in the process of being merged (Linus sent our PR back to us for a
+> minor
+> fix[3], so it should be in either 5.4-rc2 or 5.5, but is nevertheless
+> in
+> linux-next). However, we also have a staging repo that people are
+> using
+> and some supporting code that lives outside of the kernel.
+> 
+> So I am trying to figure out:
+> 
+> 1. Is it appropriate to request a Bugzilla component before our
+>    subsystem has been merged into torvalds/master? I would just wait,
+>    but I have some users looking to file issues, so I would prefer to
+>    provide them something sooner rather than later.
+> 
+> 2. Is it appropriate to use the kernel's Bugzilla to track issues
+>    outside of the Linux kernel? As I mention above, we have code that
+>    lives outside of the kernel; is it appropriate to use kernel.org's
+>    Bugzilla for this?
+> 
+> 3. Does Bugzilla match my planned usage model? It doesn't look like
+>    Bugzilla get's much usage aside from reporting bugs. I want to use
+>    it for tracking feature progress and things like that. Is that
+> okay?
 
---=20
-Linaro.org =E2=94=82 Open source software for ARM SoCs | Follow Linaro
-http://facebook.com/pages/Linaro/155974581091106  -
-http://twitter.com/#!/linaroorg - http://linaro.org/linaro-blog
+Yes, we can certainly host this on bugzilla.kernel.org. Would you be okay with Tools/KUnit as product/category?
+
+Regards,
+-- 
+Konstantin Ryabitsev
+Director, LF Projects IT
+The Linux Foundation
