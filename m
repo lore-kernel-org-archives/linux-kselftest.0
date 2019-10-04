@@ -2,69 +2,75 @@ Return-Path: <SRS0=Upep=X5=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7B8CC4CED1
-	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Oct 2019 08:13:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45CF8C47404
+	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Oct 2019 09:43:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B8D882084D
-	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Oct 2019 08:13:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1482621D71
+	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Oct 2019 09:43:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387535AbfJDINq (ORCPT
+        id S2388334AbfJDJnY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 4 Oct 2019 04:13:46 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:39782 "EHLO
+        Fri, 4 Oct 2019 05:43:24 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:41571 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbfJDINq (ORCPT
+        with ESMTP id S2388326AbfJDJnY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Oct 2019 04:13:46 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        Fri, 4 Oct 2019 05:43:24 -0400
+Received: from [185.81.136.18] (helo=wittgenstein)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1iGIic-0001Rs-IS; Fri, 04 Oct 2019 08:13:42 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] kvm: selftests: fix spelling mistake: missmatch -> mismatch
-Date:   Fri,  4 Oct 2019 09:13:42 +0100
-Message-Id: <20191004081342.22108-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.20.1
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iGK7M-0008KY-Vt; Fri, 04 Oct 2019 09:43:21 +0000
+Date:   Fri, 4 Oct 2019 11:43:19 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     shuah <shuah@kernel.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        bgolaszewski@baylibre.com, Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>
+Subject: Re: Linux 5.4 kselftest known issues - update
+Message-ID: <20191004094318.3gzcfpr6kdj76pll@wittgenstein>
+References: <a293684f-4ab6-51af-60b1-caf4eb97ff05@linuxfoundation.org>
+ <2a835150-d7f1-1c4a-80cb-d385f799dd14@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2a835150-d7f1-1c4a-80cb-d385f799dd14@kernel.org>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+On Thu, Oct 03, 2019 at 08:30:55AM -0600, shuah wrote:
+> On 9/26/19 11:41 AM, Shuah Khan wrote:
+> > Here are the know kselftest issues on Linux 5.4 with
+> > top commit commit 619e17cf75dd58905aa67ccd494a6ba5f19d6cc6
+> > on x86_64:
+> > 
+> > The goal is to get these addressed before 5.4 comes out.
+> 
+> All of these issues are now fixed, except the bpf llvm dependency.
+> These fixes should all be in linux-next if they haven't already.
+> 
+> > 
+> > 3 build failures and status:
+> > 
+> > pidfd - undefined reference to `pthread_create' collect2: error: ld
+> > returned 1 exit status
+> > 
+> > Fixed: https://patchwork.kernel.org/patch/11159517/
 
-There is a spelling mistake in in an error message, fix it.
+This commit is included in the following pr which I sent just now:
+https://lore.kernel.org/r/20191004093947.14471-1-christian.brauner@ubuntu.com
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- tools/testing/selftests/kvm/lib/sparsebit.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kvm/lib/sparsebit.c b/tools/testing/selftests/kvm/lib/sparsebit.c
-index 031ba3c932ed..59ffba902e61 100644
---- a/tools/testing/selftests/kvm/lib/sparsebit.c
-+++ b/tools/testing/selftests/kvm/lib/sparsebit.c
-@@ -1866,7 +1866,7 @@ void sparsebit_validate_internal(struct sparsebit *s)
- 		 * of total bits set.
- 		 */
- 		if (s->num_set != total_bits_set) {
--			fprintf(stderr, "Number of bits set missmatch,\n"
-+			fprintf(stderr, "Number of bits set mismatch,\n"
- 				"  s->num_set: 0x%lx total_bits_set: 0x%lx",
- 				s->num_set, total_bits_set);
- 
--- 
-2.20.1
-
+Thanks!
+Christian
