@@ -2,80 +2,130 @@ Return-Path: <SRS0=dDkC=YB=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52BDFC4360C
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Oct 2019 14:55:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3C1AC10F14
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Oct 2019 14:56:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 32CA021721
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Oct 2019 14:55:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ACA9A20659
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Oct 2019 14:56:48 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="WYusr7jq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726407AbfJHOz6 (ORCPT
+        id S1727575AbfJHO4q (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Oct 2019 10:55:58 -0400
-Received: from mga12.intel.com ([192.55.52.136]:37759 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725953AbfJHOz6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Oct 2019 10:55:58 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 07:55:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,270,1566889200"; 
-   d="scan'208";a="218307702"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga004.fm.intel.com with ESMTP; 08 Oct 2019 07:55:54 -0700
-Received: from andy by smile with local (Exim 4.92.2)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1iHqu0-00030Q-Jo; Tue, 08 Oct 2019 17:55:52 +0300
-Date:   Tue, 8 Oct 2019 17:55:52 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     linux-kselftest@vger.kernel.org, brendanhiggins@google.com,
-        skhan@linuxfoundation.org, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com,
+        Tue, 8 Oct 2019 10:56:46 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:33114 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbfJHO4p (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 8 Oct 2019 10:56:45 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x98En6JX089148;
+        Tue, 8 Oct 2019 14:56:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2019-08-05;
+ bh=in2Wx3k+nUesmaQsjF1bcoCwQ7ksLAAPz2jKhu/xjuU=;
+ b=WYusr7jq/9X4G6KU0hNDs1CXzz1OqIqk7Roan74h60HpBZTw89Cav8H0APDEdMwjnpul
+ xHEfTqyahUfg5MvWq+avs5+rvUGjmE2ot1iBaSlhwcBr+rIURMQg8/iXrpTPgxGRYW28
+ 5NfrvYlucj6Dz6eh9n/ZFSiXS7f53xpeylj/cYSHarlscKeba+ydWScN5V9TQ56fUNJZ
+ 8OZLkMG/uvh0XixD5FjFj9BqiON8psBSVf+gKPIcW7q1pDqF5Zp2b25g4vXEwlsIkN0W
+ +Qu7ehOWdh6zaGSTb+R72o6LJwo82gDX+1HOTAc37j5Gvenjhor9zyfKouSQqSvzKJeg gg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 2vektrdmfq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Oct 2019 14:56:18 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x98EnBOo141555;
+        Tue, 8 Oct 2019 14:56:17 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 2vgefarhtg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Oct 2019 14:56:17 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x98EuFHv026443;
+        Tue, 8 Oct 2019 14:56:15 GMT
+Received: from dhcp-10-175-191-48.vpn.oracle.com (/10.175.191.48)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 08 Oct 2019 14:56:14 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     linux-kselftest@vger.kernel.org, brendanhiggins@google.com,
+        skhan@linuxfoundation.org
+Cc:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
         akpm@linux-foundation.org, yamada.masahiro@socionext.com,
         catalin.marinas@arm.com, joe.lawrence@redhat.com,
         penguin-kernel@i-love.sakura.ne.jp, schowdary@nvidia.com,
-        urezki@gmail.com, changbin.du@intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Knut Omang <knut.omang@oracle.com>
-Subject: Re: [PATCH linux-kselftest-test 2/3] kunit: allow kunit to be loaded
- as a module
-Message-ID: <20191008145552.GS32742@smile.fi.intel.com>
-References: <1570545832-32326-1-git-send-email-alan.maguire@oracle.com>
- <1570545832-32326-3-git-send-email-alan.maguire@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1570545832-32326-3-git-send-email-alan.maguire@oracle.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        urezki@gmail.com, andriy.shevchenko@linux.intel.com,
+        changbin.du@intel.com, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 linux-kselftest-test 0/3] kunit: support building core/tests as modules
+Date:   Tue,  8 Oct 2019 15:55:43 +0100
+Message-Id: <1570546546-549-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9403 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=38 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910080134
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9403 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=38 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910080134
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 08, 2019 at 03:43:51PM +0100, Alan Maguire wrote:
-> Making kunit itself buildable as a module allows for "always-on"
-> kunit configuration; specifying CONFIG_KUNIT=m means the module
-> is built but only used when loaded.  Kunit test modules will load
-> kunit.ko as an implicit dependency, so simply running
-> "modprobe my-kunit-tests" will load the tests along with the kunit
-> module and run them.
+The current kunit execution model is to provide base kunit functionality
+and tests built-in to the kernel.  The aim of this series is to allow
+building kunit itself and tests as modules.  This in turn allows a
+simple form of selective execution; load the module you wish to test.
+In doing so, kunit itself (if also built as a module) will be loaded as
+an implicit dependency.
 
-> +#ifdef MODULE
+Because this requires a core API modification - if a module delivers
+multiple suites, they must be declared with the kunit_test_suites()
+macro - we're proposing this patch as a candidate to be applied to the
+test tree before too many kunit consumers appear.  We attempt to deal
+with existing consumers in patch 1.
 
-> +#endif /* MODULE */
+Changes since v1:
 
-This is strange. Why do you need ifdef?
+- sent correct patch set; apologies, previous patch set was built
+  prior to kunit move to lib/ and should be ignored.
+
+Patch 1 consists changes needed to support loading tests as modules.
+Patch 2 allows kunit itself to be loaded as a module.
+Patch 3 documents module support.
+
+Alan Maguire (3):
+  kunit: allow kunit tests to be loaded as a module
+  kunit: allow kunit to be loaded as a module
+  kunit: update documentation to describe module-based build
+
+ Documentation/dev-tools/kunit/faq.rst   |  3 ++-
+ Documentation/dev-tools/kunit/index.rst |  3 +++
+ Documentation/dev-tools/kunit/usage.rst | 16 ++++++++++++++++
+ include/kunit/test.h                    | 30 +++++++++++++++++++++++-------
+ kernel/sysctl-test.c                    |  6 +++++-
+ lib/Kconfig.debug                       |  4 ++--
+ lib/kunit/Kconfig                       |  6 +++---
+ lib/kunit/Makefile                      |  4 +++-
+ lib/kunit/assert.c                      |  8 ++++++++
+ lib/kunit/example-test.c                |  6 +++++-
+ lib/kunit/string-stream-test.c          |  9 +++++++--
+ lib/kunit/string-stream.c               |  7 +++++++
+ lib/kunit/test-test.c                   |  8 ++++++--
+ lib/kunit/test.c                        | 12 ++++++++++++
+ lib/kunit/try-catch.c                   |  8 ++++++--
+ 15 files changed, 108 insertions(+), 22 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+1.8.3.1
 
