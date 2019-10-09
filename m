@@ -2,114 +2,89 @@ Return-Path: <SRS0=b0fy=YC=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4AD5ECE58E
-	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Oct 2019 11:17:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F2F5C47404
+	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Oct 2019 11:18:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7E4172133F
-	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Oct 2019 11:17:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0293221721
+	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Oct 2019 11:18:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730419AbfJILRP (ORCPT
+        id S1727657AbfJILSw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Oct 2019 07:17:15 -0400
-Received: from cmccmta3.chinamobile.com ([221.176.66.81]:2362 "EHLO
-        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726734AbfJILRM (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Oct 2019 07:17:12 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.17]) by rmmx-syy-dmz-app10-12010 (RichMail) with SMTP id 2eea5d9dc1a184f-0879a; Wed, 09 Oct 2019 19:16:50 +0800 (CST)
-X-RM-TRANSID: 2eea5d9dc1a184f-0879a
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost (unknown[223.105.0.241])
-        by rmsmtp-syy-appsvr09-12009 (RichMail) with SMTP id 2ee95d9dc1a06c5-f78e7;
-        Wed, 09 Oct 2019 19:16:49 +0800 (CST)
-X-RM-TRANSID: 2ee95d9dc1a06c5-f78e7
-From:   Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Simon Horman <horms@verge.net.au>
-Cc:     Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Subject: [PATCH v5 2/3] selftests: netfilter: add ipvs nat test case
-Date:   Wed,  9 Oct 2019 19:16:29 +0800
-Message-Id: <1570619790-6086-3-git-send-email-yanhaishuang@cmss.chinamobile.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1570619790-6086-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
-References: <1570619790-6086-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+        Wed, 9 Oct 2019 07:18:52 -0400
+Received: from foss.arm.com ([217.140.110.172]:60164 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725848AbfJILSw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 9 Oct 2019 07:18:52 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2666E28;
+        Wed,  9 Oct 2019 04:18:52 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F7213F703;
+        Wed,  9 Oct 2019 04:18:51 -0700 (PDT)
+Date:   Wed, 9 Oct 2019 12:18:49 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
+        amit.kachhap@arm.com, andreyknvl@google.com
+Subject: Re: [PATCH v8 02/12] kselftest: arm64:
+ mangle_pstate_invalid_compat_toggle and common utils
+Message-ID: <20191009111848.GB27757@arm.com>
+References: <20191009082611.9441-1-cristian.marussi@arm.com>
+ <20191009082611.9441-3-cristian.marussi@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191009082611.9441-3-cristian.marussi@arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test virtual server via NAT.
+On Wed, Oct 09, 2019 at 09:26:01AM +0100, Cristian Marussi wrote:
+> Add some arm64/signal specific boilerplate and utility code to help
+> further testcases' development.
+> 
+> Introduce also one simple testcase mangle_pstate_invalid_compat_toggle
+> and some related helpers: it is a simple mangle testcase which messes
+> with the ucontext_t from within the signal handler, trying to toggle
+> PSTATE state bits to switch the system between 32bit/64bit execution
+> state. Expects SIGSEGV on test PASS.
+> 
+> Reviewed-by: Dave Martin <Dave.Martin@arm.com>
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> v7 --> v8
+> - removed unused SSBS_SYSREG
 
-Tested:
-# selftests: netfilter: ipvs.sh
-# Testing DR mode...
-# Testing NAT mode...
-# ipvs.sh: PASS
+[...]
 
-Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
----
- tools/testing/selftests/netfilter/ipvs.sh | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+> diff --git a/tools/testing/selftests/arm64/signal/.gitignore b/tools/testing/selftests/arm64/signal/.gitignore
+> new file mode 100644
+> index 000000000000..e5aeae45febb
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm64/signal/.gitignore
+> @@ -0,0 +1,3 @@
+> +!*.[ch]
+> +mangle_*
+> +fake_sigreturn_*
 
-diff --git a/tools/testing/selftests/netfilter/ipvs.sh b/tools/testing/selftests/netfilter/ipvs.sh
-index f844c0a..60250f7 100755
---- a/tools/testing/selftests/netfilter/ipvs.sh
-+++ b/tools/testing/selftests/netfilter/ipvs.sh
-@@ -154,20 +154,40 @@ test_dr() {
- 	test_service
- }
- 
-+test_nat() {
-+	ip netns exec ns0 ip route add ${vip_v4} via ${gip_v4} dev br0
-+
-+	ip netns exec ns1 sysctl -qw net.ipv4.ip_forward=1
-+	ip netns exec ns1 ipvsadm -A -t ${vip_v4}:${port} -s rr
-+	ip netns exec ns1 ipvsadm -a -m -t ${vip_v4}:${port} -r ${rip_v4}:${port}
-+	ip netns exec ns1 ip addr add ${vip_v4}/32 dev lo:1
-+
-+	ip netns exec ns2 ip link del veth20
-+	ip netns exec ns2 ip route add default via ${dip_v4} dev veth21
-+
-+	test_service
-+}
-+
- run_tests() {
- 	local errors=
- 
- 	echo "Testing DR mode..."
-+	cleanup
- 	setup
- 	test_dr
- 	errors=$(( $errors + $? ))
- 
-+	echo "Testing NAT mode..."
-+	cleanup
-+	setup
-+	test_nat
-+	errors=$(( $errors + $? ))
-+
- 	return $errors
- }
- 
- trap cleanup EXIT
- 
--cleanup
- run_tests
- 
- if [ $? -ne 0 ]; then
--- 
-1.8.3.1
+I think the !*.[ch] line needs to come last.
 
+Re-including *.[ch] on the first line has no effect because no files
+have been excluded yet.
 
+(This looks like it was my mistake when I originally suggested using
+wildcards here -- apologies for that!)
 
+I'm happy for you to keey my Reviewed-by on that change.
+
+[...]
+
+Cheers
+---Dave
