@@ -2,93 +2,83 @@ Return-Path: <SRS0=61gv=YD=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8668C10F14
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Oct 2019 14:52:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B50AC10F14
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Oct 2019 15:21:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8D656214E0
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Oct 2019 14:52:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 527CD20B7C
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Oct 2019 15:21:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726167AbfJJOwu (ORCPT
+        id S1726339AbfJJPVy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 10 Oct 2019 10:52:50 -0400
-Received: from cmccmta3.chinamobile.com ([221.176.66.81]:2363 "EHLO
-        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbfJJOwu (ORCPT
+        Thu, 10 Oct 2019 11:21:54 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:57805 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbfJJPVy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Oct 2019 10:52:50 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.11]) by rmmx-syy-dmz-app10-12010 (RichMail) with SMTP id 2eea5d9f45574a9-22438; Thu, 10 Oct 2019 22:51:03 +0800 (CST)
-X-RM-TRANSID: 2eea5d9f45574a9-22438
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost (unknown[223.105.0.241])
-        by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee65d9f4555d17-54180;
-        Thu, 10 Oct 2019 22:51:03 +0800 (CST)
-X-RM-TRANSID: 2ee65d9f4555d17-54180
-From:   Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Simon Horman <horms@verge.net.au>
-Cc:     Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Subject: [PATCH v6 0/3] selftests: netfilter: introduce test cases for ipvs
-Date:   Thu, 10 Oct 2019 22:50:52 +0800
-Message-Id: <1570719055-25110-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
-X-Mailer: git-send-email 1.8.3.1
+        Thu, 10 Oct 2019 11:21:54 -0400
+Received: from [213.220.153.21] (helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iIaGE-0001BW-Vy; Thu, 10 Oct 2019 15:21:51 +0000
+Date:   Thu, 10 Oct 2019 17:21:49 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
+        libc-alpha@sourceware.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] clone3: add CLONE3_CLEAR_SIGHAND
+Message-ID: <20191010152148.gdea35mi7s6ivev6@wittgenstein>
+References: <20191010133518.5420-1-christian.brauner@ubuntu.com>
+ <87d0f4of7j.fsf@oldenburg2.str.redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87d0f4of7j.fsf@oldenburg2.str.redhat.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series patch include test cases for ipvs.
+On Thu, Oct 10, 2019 at 04:19:44PM +0200, Florian Weimer wrote:
+> * Christian Brauner:
+> 
+> > @@ -2567,7 +2572,7 @@ static bool clone3_args_valid(const struct kernel_clone_args *kargs)
+> >  	 * All lower bits of the flag word are taken.
+> >  	 * Verify that no other unknown flags are passed along.
+> >  	 */
+> > -	if (kargs->flags & ~CLONE_LEGACY_FLAGS)
+> > +	if (kargs->flags & ~(CLONE_LEGACY_FLAGS | CLONE3_CLEAR_SIGHAND))
+> >  		return false;
+> 
+> Does the comment need updating?  I feel it's a bit misleading now.
 
-The test topology is who as below:
-+--------------------------------------------------------------+
-|                      |                                       |
-|         ns0          |         ns1                           |
-|      -----------     |     -----------    -----------        |
-|      | veth01  | --------- | veth10  |    | veth12  |        |
-|      -----------    peer   -----------    -----------        |
-|           |          |                        |              |
-|      -----------     |                        |              |
-|      |  br0    |     |-----------------  peer |--------------|
-|      -----------     |                        |              |
-|           |          |                        |              |
-|      ----------     peer   ----------      -----------       |
-|      |  veth02 | --------- |  veth20 |     | veth12  |       |
-|      ----------      |     ----------      -----------       |
-|                      |         ns2                           |
-|                      |                                       |
-+--------------------------------------------------------------+
+Yeah, maybe just:
 
-Test results:
-# selftests: netfilter: ipvs.sh
-# Testing DR mode...
-# Testing NAT mode...
-# Testing Tunnel mode...
-# ipvs.sh: PASS
-ok 6 selftests: netfilter: ipvs.sh
+/* Verify that no unknown flags are passed along. */
 
-Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+?
 
-Haishuang Yan (3):
-  selftests: netfilter: add ipvs test script
-  selftests: netfilter: add ipvs nat test case
-  selftests: netfilter: add ipvs tunnel test case
-
- tools/testing/selftests/netfilter/Makefile |   2 +-
- tools/testing/selftests/netfilter/ipvs.sh  | 228 +++++++++++++++++++++++++++++
- 2 files changed, 229 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/netfilter/ipvs.sh
-
---
-1.8.3.1
-
-
-
+Thanks!
+Christian
