@@ -2,185 +2,895 @@ Return-Path: <SRS0=61gv=YD=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBD8CC4360C
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Oct 2019 17:14:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E28AEC10F14
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Oct 2019 18:56:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8D48220B7C
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Oct 2019 17:14:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570727644;
-	bh=rVBQfiP/YB1yYBxqZtiGACMzxcOAKtX1Jx40mSLBOVM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=I5UDL/hI7EKTpxcA7xgk/X7lbRSIOKV4ajFHbkipqa3yMjAZHNdWmbhgBZz711TMH
-	 OPKA1PFwZo/ch58OJBhqvPuILB1eH6lOl59P+0rHm3ql2PvrNpjetPdQrWcxxA3da1
-	 YDCjMJSJ7U5zb58U+EVDEibGkIbnaP+p/AWiY6L8=
+	by mail.kernel.org (Postfix) with ESMTP id 8C044214E0
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Oct 2019 18:56:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="e5rwKwDy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726688AbfJJROE (ORCPT
+        id S1726894AbfJJS4g (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 10 Oct 2019 13:14:04 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:44305 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726131AbfJJROD (ORCPT
+        Thu, 10 Oct 2019 14:56:36 -0400
+Received: from mail-pg1-f201.google.com ([209.85.215.201]:45442 "EHLO
+        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726387AbfJJS4g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Oct 2019 13:14:03 -0400
-Received: by mail-lf1-f65.google.com with SMTP id q12so4960732lfc.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2019 10:14:01 -0700 (PDT)
+        Thu, 10 Oct 2019 14:56:36 -0400
+Received: by mail-pg1-f201.google.com with SMTP id x31so5045234pgl.12
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2019 11:56:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bqvz+afB1Rg3ieCrlwoBKML7ipcOdiXJ/q/XXxTUovI=;
-        b=Xol/3a0t0AtCulvKJeuAKS1uo5PWCjeyeDeHYLSA1FXKSnOkgSTF276gwVNHa4nPiN
-         l58RJ3zV8SDjz5HcQUbk/k9PwAg2ytkBSxmhuzf7L/EFmiieyqeQcJuKFBVQbWUjfXE1
-         U4t1RhqK0BT10C1Atodrl5m0eWGZPM7fTB2Dk=
+        d=google.com; s=20161025;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=9+UVpgNk8CQF6QXtdJbLihVg7rPsY93dgpexzdrcZBM=;
+        b=e5rwKwDyCHuxMh/rpdE9yzCyiQyoAb5ZJdJs2uW1ZvJe5q8RknWv9n+WoF1xQh7Wq/
+         BxgnofU3/5A7cYQZGzaiIhRlXnWDXxbfHYYgqpMpuTVRXAANedK9PCTp+pbK2nmerOod
+         klDLukc8qBeoe/ETX+rxVBblF63uAsNL5215ao0277drAXmnVOy1jw8O+UVgz6bWp/or
+         UDf7LV+a5azay5zgSm+oxK2VyeFa79keyg79xQ3cC8fTPxxFyJqskzSeOoUo/qj18dUx
+         mTinoRB6mZgQZ8+KNvW3s5IF08VmaKSpsexCcl/rIzDOr1HUhMNvRQy8+1oMj37FzTeD
+         PtfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bqvz+afB1Rg3ieCrlwoBKML7ipcOdiXJ/q/XXxTUovI=;
-        b=ZW4L4JhZEKLjMb+TGdfNZCrCbyrdcBdn+AIhgkoAncYY781P7os12bAaZ1Qffl+fIk
-         A5LYire9zFxV5xUG8AVrJyr0G4UaxZMk61QLDtWz/leATpIIFH208B9xnMAWCKyMRUCD
-         7P152Jg9HWq3J3GWt78w1J26JEpAn5C3VHUIu6o7htlNImFMvBCS3znrO/SnuMO6PrNc
-         bnzjCYcb6kMbK3XCNxcZpud7fqlDfYRYPsIf2MmaeIOHV2a5vU4sYGPa+T7LCNx8+O3t
-         6Lw89T6Sb2+JCBGv1x04L2MtnI+leLI+2tssAkFZrWCuvBCkhhNcPUzWP8q8AzMmZH1J
-         KDFQ==
-X-Gm-Message-State: APjAAAV5s14rYZvQffnFVfrtdvJFNUv+53f+CIMt6VKsDvQPImLswcf3
-        d+iXHE/GSrtl+QsNCiJtNdYteSjlxS0=
-X-Google-Smtp-Source: APXvYqwXOwFsCNjRAZ81HF88cTGw7eBUloidEIxmAR9F9BiMUuNJtjGaHPwLGMakjmYSw8MD48MIcg==
-X-Received: by 2002:a19:ad0c:: with SMTP id t12mr6624430lfc.149.1570727640636;
-        Thu, 10 Oct 2019 10:14:00 -0700 (PDT)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id r75sm1459004lff.7.2019.10.10.10.14.00
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Oct 2019 10:14:00 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id d17so4976553lfa.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2019 10:14:00 -0700 (PDT)
-X-Received: by 2002:a19:f709:: with SMTP id z9mr6611392lfe.170.1570727268603;
- Thu, 10 Oct 2019 10:07:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191010054140.8483-1-cyphar@cyphar.com> <20191010054140.8483-3-cyphar@cyphar.com>
-In-Reply-To: <20191010054140.8483-3-cyphar@cyphar.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 10 Oct 2019 10:07:32 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh8L50f31vW8BwRUXhLiq3eoCQ3tg8ER4Yp2dzuU1w5rQ@mail.gmail.com>
-Message-ID: <CAHk-=wh8L50f31vW8BwRUXhLiq3eoCQ3tg8ER4Yp2dzuU1w5rQ@mail.gmail.com>
-Subject: Re: [PATCH v14 2/6] namei: LOOKUP_IN_ROOT: chroot-like path resolution
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        GNU C Library <libc-alpha@sourceware.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=9+UVpgNk8CQF6QXtdJbLihVg7rPsY93dgpexzdrcZBM=;
+        b=cIez8555ijvXo/3xrVeJbmWcg81foiDt8CvhE4HMBjyro5aWe3Bta3cspdtQl4pH2H
+         z5SCam3EhgYnm1yXAWAfzjhv/7oKNVQpublx50DqeiAIJ3CExNc85B8MZ5gA7+wDWMJi
+         cq4LzzaXxXbaQ0D7h4oNKpiTQ9RlH985QbuSQdZgm2QbwUZasNY54Foz2YeshfyRcAYt
+         fNhkrjmF7FCjhtUXCSm0ihkSX5tDdtEUgdFD1ogCxuHYtkx48a6+Cu+4xNqxg2OO+Zle
+         GnQ9CCYvuuV1S91f82fv6G4YwgU6a8nRMhZZMslEhdjWlzpJExdDBW/BITwSShdJbW7q
+         Q4CA==
+X-Gm-Message-State: APjAAAWpEF39EKpw7jsJCLzyXSG0ZcAFugwarL8Z0mTE8ua2HkqLDpga
+        cdKXKlrbjbkGHIKDtG1cotwx6uHSSmvb2Q==
+X-Google-Smtp-Source: APXvYqwm9yc/gW0K8N3S3+VgIiJgKpRAazFOfpIJC0PlC2fzNgvnu4G6viFzIssdRdA2EvP8Mm1jIS0pJq6MkA==
+X-Received: by 2002:a63:d415:: with SMTP id a21mr12168545pgh.299.1570733794707;
+ Thu, 10 Oct 2019 11:56:34 -0700 (PDT)
+Reply-To: 20191007213633.92565-1-davidgow@google.com
+Date:   Thu, 10 Oct 2019 11:56:31 -0700
+Message-Id: <20191010185631.26541-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.23.0.700.g56cf767bdb-goog
+Subject: [PATCH linux-kselftest/test v2] lib/list-test: add a test for the
+ 'list' doubly linked list
+From:   David Gow <davidgow@google.com>
+To:     shuah@kernel.org, brendanhiggins@google.com,
+        akpm@linux-foundation.org, keescook@chromium.org
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 9, 2019 at 10:42 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
->
-> --- a/fs/namei.c
-> +++ b/fs/namei.c
-> @@ -2277,6 +2277,11 @@ static const char *path_init(struct nameidata *nd, unsigned flags)
->
->         nd->m_seq = read_seqbegin(&mount_lock);
->
-> +       /* LOOKUP_IN_ROOT treats absolute paths as being relative-to-dirfd. */
-> +       if (flags & LOOKUP_IN_ROOT)
-> +               while (*s == '/')
-> +                       s++;
-> +
->         /* Figure out the starting path and root (if needed). */
->         if (*s == '/') {
->                 error = nd_jump_root(nd);
+Add a KUnit test for the kernel doubly linked list implementation in
+include/linux/list.h
 
-Hmm. Wouldn't this make more sense all inside the if (*s =- '/') test?
-That way if would be where we check for "should we start at the root",
-which seems to make more sense conceptually.
+Each test case (list_test_x) is focused on testing the behaviour of the
+list function/macro 'x'. None of the tests pass invalid lists to these
+macros, and so should behave identically with DEBUG_LIST enabled and
+disabled.
 
-That test for '/' currently has a "} else if (..)", but that's
-pointless since it ends with a "return" anyway. So the "else" logic is
-just noise.
+Note that, at present, it only tests the list_ types (not the
+singly-linked hlist_), and does not yet test all of the
+list_for_each_entry* macros (and some related things like
+list_prepare_entry).
 
-And if you get rid of the unnecessary else, moving the LOOKUP_IN_ROOT
-inside the if-statement works fine.
+Signed-off-by: David Gow <davidgow@google.com>
+---
+Addressed the various comments on v1. The biggest change is the renaming
+of all of the testcases from the form x_test to list_test_x. I'm not
+super happy with how that looks (not the least because it ends up with
+'list' twice), but it is more consistent with the proc/sysctl tests.
 
-So this could be something like
 
-    --- a/fs/namei.c
-    +++ b/fs/namei.c
-    @@ -2194,11 +2196,19 @@ static const char *path_init(struct
-nameidata *nd, unsigned flags)
+ MAINTAINERS       |   5 +
+ lib/Kconfig.debug |  12 +
+ lib/Makefile      |   3 +
+ lib/list-test.c   | 738 ++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 758 insertions(+)
+ create mode 100644 lib/list-test.c
 
-        nd->m_seq = read_seqbegin(&mount_lock);
-        if (*s == '/') {
-    -           set_root(nd);
-    -           if (likely(!nd_jump_root(nd)))
-    -                   return s;
-    -           return ERR_PTR(-ECHILD);
-    -   } else if (nd->dfd == AT_FDCWD) {
-    +           /* LOOKUP_IN_ROOT treats absolute paths as being
-relative-to-dirfd. */
-    +           if (!(flags & LOOKUP_IN_ROOT)) {
-    +                   set_root(nd);
-    +                   if (likely(!nd_jump_root(nd)))
-    +                           return s;
-    +                   return ERR_PTR(-ECHILD);
-    +           }
-    +
-    +           /* Skip initial '/' for LOOKUP_IN_ROOT */
-    +           do { s++; } while (*s == '/');
-    +   }
-    +
-    +   if (nd->dfd == AT_FDCWD) {
-                if (flags & LOOKUP_RCU) {
-                        struct fs_struct *fs = current->fs;
-                        unsigned seq;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7ef985e01457..9ccabdb25a26 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9504,6 +9504,11 @@ F:	Documentation/misc-devices/lis3lv02d.rst
+ F:	drivers/misc/lis3lv02d/
+ F:	drivers/platform/x86/hp_accel.c
+ 
++LIST UNIT TEST
++M:	David Gow <davidgow@google.com>
++S:	Maintained
++F:	lib/list-test.c
++
+ LIVE PATCHING
+ M:	Josh Poimboeuf <jpoimboe@redhat.com>
+ M:	Jiri Kosina <jikos@kernel.org>
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index a3017a5dadcd..7b648141ff52 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1961,6 +1961,18 @@ config SYSCTL_KUNIT_TEST
+ 
+ 	  If unsure, say N.
+ 
++config LIST_TEST
++	bool "KUnit Test for Kernel Linked-list structures"
++	depends on KUNIT
++	help
++	  This builds the linked list unit test, which runs on boot.
++	  It tests that the API and basic functionality of the list_head type
++	  and associated macros.
++	  For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config TEST_UDELAY
+ 	tristate "udelay test driver"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index bba1fd5485f7..309e174ee35d 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -292,3 +292,6 @@ obj-$(CONFIG_GENERIC_LIB_MULDI3) += muldi3.o
+ obj-$(CONFIG_GENERIC_LIB_CMPDI2) += cmpdi2.o
+ obj-$(CONFIG_GENERIC_LIB_UCMPDI2) += ucmpdi2.o
+ obj-$(CONFIG_OBJAGG) += objagg.o
++
++# KUnit tests
++obj-$(CONFIG_LIST_TEST) += list-test.o
+diff --git a/lib/list-test.c b/lib/list-test.c
+new file mode 100644
+index 000000000000..52522ba83a68
+--- /dev/null
++++ b/lib/list-test.c
+@@ -0,0 +1,738 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit test for the Kernel Linked-list structures.
++ *
++ * Copyright (C) 2019, Google LLC.
++ * Author: David Gow <davidgow@google.com>
++ */
++#include <kunit/test.h>
++
++#include <linux/list.h>
++
++struct list_test_struct {
++	int data;
++	struct list_head list;
++};
++
++static void list_test_list_init(struct kunit *test)
++{
++	/* Test the different ways of initialising a list. */
++	struct list_head list1 = LIST_HEAD_INIT(list1);
++	struct list_head list2;
++	LIST_HEAD(list3);
++	struct list_head *list4;
++	struct list_head *list5;
++
++	INIT_LIST_HEAD(&list2);
++
++	list4 = kzalloc(sizeof(*list4), 0);
++	INIT_LIST_HEAD(list4);
++
++	list5 = kmalloc(sizeof(*list5), 0);
++	memset(list5, 0xFF, sizeof(*list5));
++	INIT_LIST_HEAD(list5);
++
++	/* list_empty_careful() checks both next and prev. */
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&list1));
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&list2));
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&list3));
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(list4));
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(list5));
++
++	kfree(list4);
++	kfree(list5);
++}
++
++static void list_test_list_add(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add(&a, &list);
++	list_add(&b, &list);
++
++	/* should be [list] -> b -> a */
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &b);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &list);
++	KUNIT_EXPECT_PTR_EQ(test, b.next, &a);
++}
++
++static void list_test_list_add_tail(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	/* should be [list] -> a -> b */
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &a);
++	KUNIT_EXPECT_PTR_EQ(test, a.prev, &list);
++	KUNIT_EXPECT_PTR_EQ(test, a.next, &b);
++}
++
++static void list_test_list_del(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a -> b */
++	list_del(&a);
++
++	/* now: [list] -> b */
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &b);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &list);
++}
++
++static void list_test_list_replace(struct kunit *test)
++{
++	struct list_head a_old, a_new, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a_old, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a_old -> b */
++	list_replace(&a_old, &a_new);
++
++	/* now: [list] -> a_new -> b */
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &a_new);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &a_new);
++}
++
++static void list_test_list_replace_init(struct kunit *test)
++{
++	struct list_head a_old, a_new, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a_old, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a_old -> b */
++	list_replace_init(&a_old, &a_new);
++
++	/* now: [list] -> a_new -> b */
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &a_new);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &a_new);
++
++	/* check a_old is empty (initialized) */
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&a_old));
++}
++
++static void list_test_list_swap(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a -> b */
++	list_swap(&a, &b);
++
++	/* after: [list] -> b -> a */
++	KUNIT_EXPECT_PTR_EQ(test, &b, list.next);
++	KUNIT_EXPECT_PTR_EQ(test, &a, list.prev);
++
++	KUNIT_EXPECT_PTR_EQ(test, &a, b.next);
++	KUNIT_EXPECT_PTR_EQ(test, &list, b.prev);
++
++	KUNIT_EXPECT_PTR_EQ(test, &list, a.next);
++	KUNIT_EXPECT_PTR_EQ(test, &b, a.prev);
++}
++
++static void list_test_list_del_init(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a -> b */
++	list_del_init(&a);
++	/* after: [list] -> b, a initialised */
++
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &b);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &list);
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&a));
++}
++
++static void list_test_list_move(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++
++	list_add_tail(&a, &list1);
++	list_add_tail(&b, &list2);
++
++	/* before: [list1] -> a, [list2] -> b */
++	list_move(&a, &list2);
++	/* after: [list1] empty, [list2] -> a -> b */
++
++	KUNIT_EXPECT_TRUE(test, list_empty(&list1));
++
++	KUNIT_EXPECT_PTR_EQ(test, &a, list2.next);
++	KUNIT_EXPECT_PTR_EQ(test, &b, a.next);
++}
++
++static void list_test_list_move_tail(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++
++	list_add_tail(&a, &list1);
++	list_add_tail(&b, &list2);
++
++	/* before: [list1] -> a, [list2] -> b */
++	list_move_tail(&a, &list2);
++	/* after: [list1] empty, [list2] -> b -> a */
++
++	KUNIT_EXPECT_TRUE(test, list_empty(&list1));
++
++	KUNIT_EXPECT_PTR_EQ(test, &b, list2.next);
++	KUNIT_EXPECT_PTR_EQ(test, &a, b.next);
++}
++
++static void list_test_list_bulk_move_tail(struct kunit *test)
++{
++	struct list_head a, b, c, d, x, y;
++	struct list_head *list1_values[] = { &x, &b, &c, &y };
++	struct list_head *list2_values[] = { &a, &d };
++	struct list_head *ptr;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&x, &list1);
++	list_add_tail(&y, &list1);
++
++	list_add_tail(&a, &list2);
++	list_add_tail(&b, &list2);
++	list_add_tail(&c, &list2);
++	list_add_tail(&d, &list2);
++
++	/* before: [list1] -> x -> y, [list2] -> a -> b -> c -> d */
++	list_bulk_move_tail(&y, &b, &c);
++	/* after: [list1] -> x -> b -> c -> y, [list2] -> a -> d */
++
++	list_for_each(ptr, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, ptr, list1_values[i]);
++		i++;
++	}
++	KUNIT_EXPECT_EQ(test, i, 4);
++	i = 0;
++	list_for_each(ptr, &list2) {
++		KUNIT_EXPECT_PTR_EQ(test, ptr, list2_values[i]);
++		i++;
++	}
++	KUNIT_EXPECT_EQ(test, i, 2);
++}
++
++static void list_test_list_is_first(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	KUNIT_EXPECT_TRUE(test, list_is_first(&a, &list));
++	KUNIT_EXPECT_FALSE(test, list_is_first(&b, &list));
++}
++
++static void list_test_list_is_last(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	KUNIT_EXPECT_FALSE(test, list_is_last(&a, &list));
++	KUNIT_EXPECT_TRUE(test, list_is_last(&b, &list));
++}
++
++static void list_test_list_empty(struct kunit *test)
++{
++	struct list_head a;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++
++	list_add_tail(&a, &list1);
++
++	KUNIT_EXPECT_FALSE(test, list_empty(&list1));
++	KUNIT_EXPECT_TRUE(test, list_empty(&list2));
++}
++
++static void list_test_list_empty_careful(struct kunit *test)
++{
++	/* This test doesn't check correctness under concurrent access */
++	struct list_head a;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++
++	list_add_tail(&a, &list1);
++
++	KUNIT_EXPECT_FALSE(test, list_empty_careful(&list1));
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&list2));
++}
++
++static void list_test_list_rotate_left(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a -> b */
++	list_rotate_left(&list);
++	/* after: [list] -> b -> a */
++
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &b);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &list);
++	KUNIT_EXPECT_PTR_EQ(test, b.next, &a);
++}
++
++static void list_test_list_rotate_to_front(struct kunit *test)
++{
++	struct list_head a, b, c, d;
++	struct list_head *list_values[] = { &c, &d, &a, &b };
++	struct list_head *ptr;
++	LIST_HEAD(list);
++	int i = 0;
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++	list_add_tail(&c, &list);
++	list_add_tail(&d, &list);
++
++	/* before: [list] -> a -> b -> c -> d */
++	list_rotate_to_front(&c, &list);
++	/* after: [list] -> c -> d -> a -> b */
++
++	list_for_each(ptr, &list) {
++		KUNIT_EXPECT_PTR_EQ(test, ptr, list_values[i]);
++		i++;
++	}
++	KUNIT_EXPECT_EQ(test, i, 4);
++}
++
++static void list_test_list_is_singular(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	/* [list] empty */
++	KUNIT_EXPECT_FALSE(test, list_is_singular(&list));
++
++	list_add_tail(&a, &list);
++
++	/* [list] -> a */
++	KUNIT_EXPECT_TRUE(test, list_is_singular(&list));
++
++	list_add_tail(&b, &list);
++
++	/* [list] -> a -> b */
++	KUNIT_EXPECT_FALSE(test, list_is_singular(&list));
++}
++
++static void list_test_list_cut_position(struct kunit *test)
++{
++	struct list_head entries[3], *cur;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list1);
++	list_add_tail(&entries[1], &list1);
++	list_add_tail(&entries[2], &list1);
++
++	/* before: [list1] -> entries[0] -> entries[1] -> entries[2] */
++	list_cut_position(&list2, &list1, &entries[1]);
++	/* after: [list2] -> entries[0] -> entries[1], [list1] -> entries[2] */
++
++	list_for_each(cur, &list2) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 2);
++
++	list_for_each(cur, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++}
++
++static void list_test_list_cut_before(struct kunit *test)
++{
++	struct list_head entries[3], *cur;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list1);
++	list_add_tail(&entries[1], &list1);
++	list_add_tail(&entries[2], &list1);
++
++	/* before: [list1] -> entries[0] -> entries[1] -> entries[2] */
++	list_cut_before(&list2, &list1, &entries[1]);
++	/* after: [list2] -> entries[0], [list1] -> entries[1] -> entries[2] */
++
++	list_for_each(cur, &list2) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 1);
++
++	list_for_each(cur, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++}
++
++static void list_test_list_splice(struct kunit *test)
++{
++	struct list_head entries[5], *cur;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list1);
++	list_add_tail(&entries[1], &list1);
++	list_add_tail(&entries[2], &list2);
++	list_add_tail(&entries[3], &list2);
++	list_add_tail(&entries[4], &list1);
++
++	/* before: [list1]->e[0]->e[1]->e[4], [list2]->e[2]->e[3] */
++	list_splice(&list2, &entries[1]);
++	/* after: [list1]->e[0]->e[1]->e[2]->e[3]->e[4], [list2] uninit */
++
++	list_for_each(cur, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 5);
++}
++
++static void list_test_list_splice_tail(struct kunit *test)
++{
++	struct list_head entries[5], *cur;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list1);
++	list_add_tail(&entries[1], &list1);
++	list_add_tail(&entries[2], &list2);
++	list_add_tail(&entries[3], &list2);
++	list_add_tail(&entries[4], &list1);
++
++	/* before: [list1]->e[0]->e[1]->e[4], [list2]->e[2]->e[3] */
++	list_splice_tail(&list2, &entries[4]);
++	/* after: [list1]->e[0]->e[1]->e[2]->e[3]->e[4], [list2] uninit */
++
++	list_for_each(cur, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 5);
++}
++
++static void list_test_list_splice_init(struct kunit *test)
++{
++	struct list_head entries[5], *cur;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list1);
++	list_add_tail(&entries[1], &list1);
++	list_add_tail(&entries[2], &list2);
++	list_add_tail(&entries[3], &list2);
++	list_add_tail(&entries[4], &list1);
++
++	/* before: [list1]->e[0]->e[1]->e[4], [list2]->e[2]->e[3] */
++	list_splice_init(&list2, &entries[1]);
++	/* after: [list1]->e[0]->e[1]->e[2]->e[3]->e[4], [list2] empty */
++
++	list_for_each(cur, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 5);
++
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&list2));
++}
++
++static void list_test_list_splice_tail_init(struct kunit *test)
++{
++	struct list_head entries[5], *cur;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list1);
++	list_add_tail(&entries[1], &list1);
++	list_add_tail(&entries[2], &list2);
++	list_add_tail(&entries[3], &list2);
++	list_add_tail(&entries[4], &list1);
++
++	/* before: [list1]->e[0]->e[1]->e[4], [list2]->e[2]->e[3] */
++	list_splice_tail_init(&list2, &entries[4]);
++	/* after: [list1]->e[0]->e[1]->e[2]->e[3]->e[4], [list2] empty */
++
++	list_for_each(cur, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 5);
++
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&list2));
++}
++
++static void list_test_list_entry(struct kunit *test)
++{
++	struct list_test_struct test_struct;
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct, list_entry(&(test_struct.list), struct list_test_struct, list));
++}
++
++static void list_test_list_first_entry(struct kunit *test)
++{
++	struct list_test_struct test_struct1, test_struct2;
++	LIST_HEAD(list);
++
++	list_add_tail(&test_struct1.list, &list);
++	list_add_tail(&test_struct2.list, &list);
++
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct1, list_first_entry(&list, struct list_test_struct, list));
++}
++
++static void list_test_list_last_entry(struct kunit *test)
++{
++	struct list_test_struct test_struct1, test_struct2;
++	LIST_HEAD(list);
++
++	list_add_tail(&test_struct1.list, &list);
++	list_add_tail(&test_struct2.list, &list);
++
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct2, list_last_entry(&list, struct list_test_struct, list));
++}
++
++static void list_test_list_first_entry_or_null(struct kunit *test)
++{
++	struct list_test_struct test_struct1, test_struct2;
++	LIST_HEAD(list);
++
++	KUNIT_EXPECT_FALSE(test, list_first_entry_or_null(&list, struct list_test_struct, list));
++
++	list_add_tail(&test_struct1.list, &list);
++	list_add_tail(&test_struct2.list, &list);
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct1, list_first_entry_or_null(&list, struct list_test_struct, list));
++}
++
++static void list_test_list_next_entry(struct kunit *test)
++{
++	struct list_test_struct test_struct1, test_struct2;
++	LIST_HEAD(list);
++
++	list_add_tail(&test_struct1.list, &list);
++	list_add_tail(&test_struct2.list, &list);
++
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct2, list_next_entry(&test_struct1, list));
++}
++
++static void list_test_list_prev_entry(struct kunit *test)
++{
++	struct list_test_struct test_struct1, test_struct2;
++	LIST_HEAD(list);
++
++	list_add_tail(&test_struct1.list, &list);
++	list_add_tail(&test_struct2.list, &list);
++
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct1, list_prev_entry(&test_struct2, list));
++}
++
++static void list_test_list_for_each(struct kunit *test)
++{
++	struct list_head entries[3], *cur;
++	LIST_HEAD(list);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list);
++	list_add_tail(&entries[1], &list);
++	list_add_tail(&entries[2], &list);
++
++	list_for_each(cur, &list) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 3);
++}
++
++static void list_test_list_for_each_prev(struct kunit *test)
++{
++	struct list_head entries[3], *cur;
++	LIST_HEAD(list);
++	int i = 2;
++
++	list_add_tail(&entries[0], &list);
++	list_add_tail(&entries[1], &list);
++	list_add_tail(&entries[2], &list);
++
++	list_for_each_prev(cur, &list) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i--;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, -1);
++}
++
++static void list_test_list_for_each_safe(struct kunit *test)
++{
++	struct list_head entries[3], *cur, *n;
++	LIST_HEAD(list);
++	int i = 0;
++
++
++	list_add_tail(&entries[0], &list);
++	list_add_tail(&entries[1], &list);
++	list_add_tail(&entries[2], &list);
++
++	list_for_each_safe(cur, n, &list) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		list_del(&entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 3);
++	KUNIT_EXPECT_TRUE(test, list_empty(&list));
++}
++
++static void list_test_list_for_each_prev_safe(struct kunit *test)
++{
++	struct list_head entries[3], *cur, *n;
++	LIST_HEAD(list);
++	int i = 2;
++
++	list_add_tail(&entries[0], &list);
++	list_add_tail(&entries[1], &list);
++	list_add_tail(&entries[2], &list);
++
++	list_for_each_prev_safe(cur, n, &list) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		list_del(&entries[i]);
++		i--;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, -1);
++	KUNIT_EXPECT_TRUE(test, list_empty(&list));
++}
++
++static void list_test_list_for_each_entry(struct kunit *test)
++{
++	struct list_test_struct entries[5], *cur;
++	static LIST_HEAD(list);
++	int i = 0;
++
++	for (i = 0; i < 5; ++i) {
++		entries[i].data = i;
++		list_add_tail(&entries[i].list, &list);
++	}
++
++	i = 0;
++
++	list_for_each_entry(cur, &list, list) {
++		KUNIT_EXPECT_EQ(test, cur->data, i);
++		i++;
++	}
++	
++	KUNIT_EXPECT_EQ(test, i, 5);
++}
++
++static void list_test_list_for_each_entry_reverse(struct kunit *test)
++{
++	struct list_test_struct entries[5], *cur;
++	static LIST_HEAD(list);
++	int i = 0;
++
++	for (i = 0; i < 5; ++i) {
++		entries[i].data = i;
++		list_add_tail(&entries[i].list, &list);
++	}
++
++	i = 4;
++
++	list_for_each_entry_reverse(cur, &list, list) {
++		KUNIT_EXPECT_EQ(test, cur->data, i);
++		i--;
++	}
++	
++	KUNIT_EXPECT_EQ(test, i, -1);
++}
++
++static struct kunit_case list_test_cases[] = {
++	KUNIT_CASE(list_test_list_init),
++	KUNIT_CASE(list_test_list_add),
++	KUNIT_CASE(list_test_list_add_tail),
++	KUNIT_CASE(list_test_list_del),
++	KUNIT_CASE(list_test_list_replace),
++	KUNIT_CASE(list_test_list_replace_init),
++	KUNIT_CASE(list_test_list_swap),
++	KUNIT_CASE(list_test_list_del_init),
++	KUNIT_CASE(list_test_list_move),
++	KUNIT_CASE(list_test_list_move_tail),
++	KUNIT_CASE(list_test_list_bulk_move_tail),
++	KUNIT_CASE(list_test_list_is_first),
++	KUNIT_CASE(list_test_list_is_last),
++	KUNIT_CASE(list_test_list_empty),
++	KUNIT_CASE(list_test_list_empty_careful),
++	KUNIT_CASE(list_test_list_rotate_left),
++	KUNIT_CASE(list_test_list_rotate_to_front),
++	KUNIT_CASE(list_test_list_is_singular),
++	KUNIT_CASE(list_test_list_cut_position),
++	KUNIT_CASE(list_test_list_cut_before),
++	KUNIT_CASE(list_test_list_splice),
++	KUNIT_CASE(list_test_list_splice_tail),
++	KUNIT_CASE(list_test_list_splice_init),
++	KUNIT_CASE(list_test_list_splice_tail_init),
++	KUNIT_CASE(list_test_list_entry),
++	KUNIT_CASE(list_test_list_first_entry),
++	KUNIT_CASE(list_test_list_last_entry),
++	KUNIT_CASE(list_test_list_first_entry_or_null),
++	KUNIT_CASE(list_test_list_next_entry),
++	KUNIT_CASE(list_test_list_prev_entry),
++	KUNIT_CASE(list_test_list_for_each),
++	KUNIT_CASE(list_test_list_for_each_prev),
++	KUNIT_CASE(list_test_list_for_each_safe),
++	KUNIT_CASE(list_test_list_for_each_prev_safe),
++	KUNIT_CASE(list_test_list_for_each_entry),
++	KUNIT_CASE(list_test_list_for_each_entry_reverse),
++	{},
++};
++
++static struct kunit_suite list_test_module = {
++	.name = "list-test",
++	.test_cases = list_test_cases,
++};
++
++kunit_test_suite(list_test_module);
+-- 
+2.23.0.700.g56cf767bdb-goog
 
-instead. The patch ends up slightly bigger (due to the re-indentation)
-but now it handles all the "start at root" in the same place. Doesn't
-that make sense?
-
-             Linus
