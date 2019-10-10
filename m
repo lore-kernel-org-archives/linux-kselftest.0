@@ -2,93 +2,272 @@ Return-Path: <SRS0=61gv=YD=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7779C4360C
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Oct 2019 14:30:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD7A1C4360C
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Oct 2019 14:51:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BE9D5214E0
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Oct 2019 14:30:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JE2GxwQ0"
+	by mail.kernel.org (Postfix) with ESMTP id 865802190F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Oct 2019 14:51:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726075AbfJJOal (ORCPT
+        id S1726299AbfJJOvj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 10 Oct 2019 10:30:41 -0400
-Received: from mail-qk1-f172.google.com ([209.85.222.172]:34218 "EHLO
-        mail-qk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725971AbfJJOal (ORCPT
+        Thu, 10 Oct 2019 10:51:39 -0400
+Received: from cmccmta2.chinamobile.com ([221.176.66.80]:4740 "EHLO
+        cmccmta2.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726116AbfJJOvj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Oct 2019 10:30:41 -0400
-Received: by mail-qk1-f172.google.com with SMTP id q203so5806552qke.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2019 07:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oNCPbhC8wzdf80R8apAVzjMEvMwAA55ELwlddqmo6j8=;
-        b=JE2GxwQ0U+wGKPxLOmW5rMD990Vv4HvkORCYFJpDnRuaJeCqPWpR8JJ0+sl5da2zhK
-         O9xD2LbQm9cbck9a0m+1XlFub/AFVZEAiNFJJ+SjitdhOzmYFZxTDy8Nf0lZSlNniJSd
-         hoMIxBdzSDdhjOfiZ4DPHXmd/w6yAcn8tnq1Jf1n34BZnUGNriUm3XeOwDQH98Gvatb2
-         5KJ4ETPRWvD03jjAPA+O03ao/wZiSsKmKK44tPW7wJaa+ZQBPCeShFp4oyP2IjDtg2IN
-         BzqRwMsgk5+KXXHsSKThwa+O4NpNqJ9tWwKuRr7z3q5uZP81e6MlR4C1pg8zU6Tq8/5g
-         j8QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oNCPbhC8wzdf80R8apAVzjMEvMwAA55ELwlddqmo6j8=;
-        b=HH6tiBMoc3WJKRsKMKPPBl/fyqdAlMC7PYnpzQLGcjRlI1iYpbf3BBjeh+dsL/IZKM
-         4/c8x8/GM8BtpSE8NK9cNiA5K+F6EDTm0X5xXkDX0QzbFPDYKxTYKnEOSGuwhSw3eAlQ
-         RJ1/CDJ1xBqw6ih5tRG2TAPF0JXph4lFo491uQ12oCtTTpISF/9bFAbvaWRLE/YrpU3R
-         /TSpzYHInJrjgNN7oTWBLPV+SKWBOzprCYXklvnulku3dquuh+gt8vE2h/lQ5/VroBlr
-         mv+FY1FfBI9So2EkVbKDdDl1mCOfL3Cz/kKPJ2uW7bmen1Q8ZKV7USFlf40ol2h2NRL5
-         0zWA==
-X-Gm-Message-State: APjAAAV+L+Uz86TmOt1D04WtGoE44S41J97KlEW6dxsrrYrrBcHz/Cwt
-        vgxCdvLCLGFna4SupNjAOQS5S3SyGcdT1snFVrvYEQ==
-X-Google-Smtp-Source: APXvYqwh4T2EynqORRvfYSX3ld1oEMww7ThRy9esYa11rqAmnY59x9YLlT1+/xTOFqVmLPBoMEjaAFU9z0C5cQVy0TQ=
-X-Received: by 2002:a37:65d0:: with SMTP id z199mr9287814qkb.407.1570717839400;
- Thu, 10 Oct 2019 07:30:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
- <20191010142744.GA10083@rei.lan>
-In-Reply-To: <20191010142744.GA10083@rei.lan>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 10 Oct 2019 16:30:27 +0200
-Message-ID: <CACT4Y+ZiC_m-U1+Zxs3hhOM7j2seKKjX=H9eabUAGCctm1+8OQ@mail.gmail.com>
-Subject: Re: [Automated-testing] syzkaller reproducers
-To:     Cyril Hrubis <chrubis@suse.cz>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        automated-testing@yoctoproject.org, kernelci@groups.io,
-        syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 10 Oct 2019 10:51:39 -0400
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.5]) by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee75d9f455c4d7-22498; Thu, 10 Oct 2019 22:51:09 +0800 (CST)
+X-RM-TRANSID: 2ee75d9f455c4d7-22498
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost (unknown[223.105.0.241])
+        by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee35d9f455cb7f-51f9b;
+        Thu, 10 Oct 2019 22:51:09 +0800 (CST)
+X-RM-TRANSID: 2ee35d9f455cb7f-51f9b
+From:   Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Simon Horman <horms@verge.net.au>
+Cc:     Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org,
+        Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+Subject: [PATCH v6 1/3] selftests: netfilter: add ipvs test script
+Date:   Thu, 10 Oct 2019 22:50:53 +0800
+Message-Id: <1570719055-25110-2-git-send-email-yanhaishuang@cmss.chinamobile.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1570719055-25110-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+References: <1570719055-25110-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 4:27 PM Cyril Hrubis <chrubis@suse.cz> wrote:
->
-> Hi!
-> > We discussed collecting and uploading all syzkaller reproducers
-> > somewhere. You wanted to see how they look. I've uploaded all current
-> > reproducers here:
-> > https://github.com/dvyukov/syzkaller-repros
-> > Minimalistic build/run scripts are included.
->
-> What is the reason behind statically linking the reproducers?
->
-> The difference between static and dynamic binary is a bit less than 4MB,
-> which gives difference of several gigabytes for the whole repo. This
-> amount of binary data would complicate and slow down any CI
-> significantly...
+Test virutal server via directing routing for IPv4.
 
-Simply being able to run programs on a different machine. Dynamic
-binaries generally don't run on a different linux machine. If you can
-build dynamic binaries so that they run on test machine, feel free to
-drop -static.
+Tested:
+
+# selftests: netfilter: ipvs.sh
+# Testing DR mode...
+# ipvs.sh: PASS
+ok 6 selftests: netfilter: ipvs.sh
+
+Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+---
+v6: use #!/bin/sh
+v5: use cmp to compare two file contents suggested by Simon Horman
+v4: use #!/bin/bash -p suggested by Duncan Roe
+v3: use bash style
+v2: optimize test script
+---
+ tools/testing/selftests/netfilter/Makefile |   2 +-
+ tools/testing/selftests/netfilter/ipvs.sh  | 178 +++++++++++++++++++++++++++++
+ 2 files changed, 179 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/netfilter/ipvs.sh
+
+diff --git a/tools/testing/selftests/netfilter/Makefile b/tools/testing/selftests/netfilter/Makefile
+index 4144984..de1032b 100644
+--- a/tools/testing/selftests/netfilter/Makefile
++++ b/tools/testing/selftests/netfilter/Makefile
+@@ -2,6 +2,6 @@
+ # Makefile for netfilter selftests
+ 
+ TEST_PROGS := nft_trans_stress.sh nft_nat.sh bridge_brouter.sh \
+-	conntrack_icmp_related.sh nft_flowtable.sh
++	conntrack_icmp_related.sh nft_flowtable.sh ipvs.sh
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/netfilter/ipvs.sh b/tools/testing/selftests/netfilter/ipvs.sh
+new file mode 100755
+index 0000000..3d11d87
+--- /dev/null
++++ b/tools/testing/selftests/netfilter/ipvs.sh
+@@ -0,0 +1,178 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++#
++# End-to-end ipvs test suite
++# Topology:
++#--------------------------------------------------------------+
++#                      |                                       |
++#         ns0          |         ns1                           |
++#      -----------     |     -----------    -----------        |
++#      | veth01  | --------- | veth10  |    | veth12  |        |
++#      -----------    peer   -----------    -----------        |
++#           |          |                        |              |
++#      -----------     |                        |              |
++#      |  br0    |     |-----------------  peer |--------------|
++#      -----------     |                        |              |
++#           |          |                        |              |
++#      ----------     peer   ----------      -----------       |
++#      |  veth02 | --------- |  veth20 |     | veth21  |       |
++#      ----------      |     ----------      -----------       |
++#                      |         ns2                           |
++#                      |                                       |
++#--------------------------------------------------------------+
++#
++# We assume that all network driver are loaded
++#
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++ret=0
++GREEN='\033[0;92m'
++RED='\033[0;31m'
++NC='\033[0m' # No Color
++
++readonly port=8080
++
++readonly vip_v4=207.175.44.110
++readonly cip_v4=10.0.0.2
++readonly gip_v4=10.0.0.1
++readonly dip_v4=172.16.0.1
++readonly rip_v4=172.16.0.2
++readonly sip_v4=10.0.0.3
++
++readonly infile="$(mktemp)"
++readonly outfile="$(mktemp)"
++readonly datalen=32
++
++sysipvsnet="/proc/sys/net/ipv4/vs/"
++if [ ! -d $sysipvsnet ]; then
++	modprobe -q ip_vs
++	if [ $? -ne 0 ]; then
++		echo "skip: could not run test without ipvs module"
++		exit $ksft_skip
++	fi
++fi
++
++ip -Version > /dev/null 2>&1
++if [ $? -ne 0 ]; then
++	echo "SKIP: Could not run test without ip tool"
++	exit $ksft_skip
++fi
++
++ipvsadm -v > /dev/null 2>&1
++if [ $? -ne 0 ]; then
++	echo "SKIP: Could not run test without ipvsadm"
++	exit $ksft_skip
++fi
++
++setup() {
++	ip netns add ns0
++	ip netns add ns1
++	ip netns add ns2
++
++	ip link add veth01 netns ns0 type veth peer name veth10 netns ns1
++	ip link add veth02 netns ns0 type veth peer name veth20 netns ns2
++	ip link add veth12 netns ns1 type veth peer name veth21 netns ns2
++
++	ip netns exec ns0 ip link set veth01 up
++	ip netns exec ns0 ip link set veth02 up
++	ip netns exec ns0 ip link add br0 type bridge
++	ip netns exec ns0 ip link set veth01 master br0
++	ip netns exec ns0 ip link set veth02 master br0
++	ip netns exec ns0 ip link set br0 up
++	ip netns exec ns0 ip addr add ${cip_v4}/24 dev br0
++
++	ip netns exec ns1 ip link set lo up
++	ip netns exec ns1 ip link set veth10 up
++	ip netns exec ns1 ip addr add ${gip_v4}/24 dev veth10
++	ip netns exec ns1 ip link set veth12 up
++	ip netns exec ns1 ip addr add ${dip_v4}/24 dev veth12
++
++	ip netns exec ns2 ip link set lo up
++	ip netns exec ns2 ip link set veth21 up
++	ip netns exec ns2 ip addr add ${rip_v4}/24 dev veth21
++	ip netns exec ns2 ip link set veth20 up
++	ip netns exec ns2 ip addr add ${sip_v4}/24 dev veth20
++
++	sleep 1
++
++	dd if=/dev/urandom of="${infile}" bs="${datalen}" count=1 status=none
++}
++
++cleanup() {
++	for i in 0 1 2
++	do
++		ip netns del ns$i > /dev/null 2>&1
++	done
++
++	if [ -f "${outfile}" ]; then
++		rm "${outfile}"
++	fi
++	if [ -f "${infile}" ]; then
++		rm "${infile}"
++	fi
++}
++
++server_listen() {
++	ip netns exec ns2 nc -l -p 8080 > "${outfile}" &
++	server_pid=$!
++	sleep 0.2
++}
++
++client_connect() {
++	ip netns exec ns0 timeout 2 nc -w 1 ${vip_v4} ${port} < "${infile}"
++}
++
++verify_data() {
++	wait "${server_pid}"
++	cmp "$infile" "$outfile" 2>/dev/null
++}
++
++test_service() {
++	server_listen
++	client_connect
++	verify_data
++}
++
++
++test_dr() {
++	ip netns exec ns0 ip route add ${vip_v4} via ${gip_v4} dev br0
++
++	ip netns exec ns1 sysctl -qw net.ipv4.ip_forward=1
++	ip netns exec ns1 ipvsadm -A -t ${vip_v4}:${port} -s rr
++	ip netns exec ns1 ipvsadm -a -t ${vip_v4}:${port} -r ${rip_v4}:${port}
++	ip netns exec ns1 ip addr add ${vip_v4}/32 dev lo:1
++
++	# avoid incorrect arp response
++	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_ignore=1
++	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_announce=2
++	# avoid reverse route lookup
++	ip netns exec ns2 sysctl -qw  net.ipv4.conf.all.rp_filter=0
++	ip netns exec ns2 sysctl -qw  net.ipv4.conf.veth21.rp_filter=0
++	ip netns exec ns2 ip addr add ${vip_v4}/32 dev lo:1
++
++	test_service
++}
++
++run_tests() {
++	local errors=
++
++	echo "Testing DR mode..."
++	setup
++	test_dr
++	errors=$(( $errors + $? ))
++
++	return $errors
++}
++
++trap cleanup EXIT
++
++cleanup
++run_tests
++
++if [ $? -ne 0 ]; then
++	echo -e "$(basename $0): ${RED}FAIL${NC}"
++	exit 1
++fi
++echo -e "$(basename $0): ${GREEN}PASS${NC}"
++exit 0
+-- 
+1.8.3.1
+
+
+
