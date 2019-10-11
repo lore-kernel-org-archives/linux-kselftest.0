@@ -2,45 +2,31 @@ Return-Path: <SRS0=3l34=YE=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89CE2C47404
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 17:38:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79F73C47404
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 18:02:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5DE29214E0
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 17:38:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570815505;
-	bh=FhFKD5bAw+84ONEspFkWiihYtAtQ5FUUCvMVJ3P9gVY=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=kV/N2uR9mL7p8Uc/Tw0hxzAteBCzZc2Tt+g7xz5abwjmi5nkB9AzelPd7vB556Le4
-	 glnFBqOJoKzUF02HkhvgP++az4zM9SZ/aXkc1QMhEhUEFOiGsq3LTAr/EUSo0w4WrB
-	 6T1e/klOjp/Gk0ZW0roawL9h7Qr6r45kf5ZutMmU=
+	by mail.kernel.org (Postfix) with ESMTP id 5080921A4A
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 18:02:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728470AbfJKRiZ (ORCPT
+        id S1728689AbfJKSCx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 11 Oct 2019 13:38:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35902 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728400AbfJKRiZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Oct 2019 13:38:25 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 935112084C;
-        Fri, 11 Oct 2019 17:38:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570815503;
-        bh=FhFKD5bAw+84ONEspFkWiihYtAtQ5FUUCvMVJ3P9gVY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=qalFBZ4O0c7ta497kl96FZi3IwhvVoEjZxK93A3IxYC8uXYyHwhfYBM1PPjT2SL0b
-         19m7SE9c8XcA9wZzmrOv55AbOUOAnBrhobsFtq8KyLudBrgmVwYBxjIePyuaAXH17H
-         OVeeWWPjP3X/tkdJHDih6xyjlY+ZWglHyEdo/wwM=
-Subject: Re: syzkaller reproducers
-To:     Dmitry Vyukov <dvyukov@google.com>,
+        Fri, 11 Oct 2019 14:02:53 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45304 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728374AbfJKSCw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 11 Oct 2019 14:02:52 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 3A5B6B357;
+        Fri, 11 Oct 2019 18:02:51 +0000 (UTC)
+Date:   Fri, 11 Oct 2019 20:02:48 +0200
+From:   Cyril Hrubis <chrubis@suse.cz>
+To:     shuah <shuah@kernel.org>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         automated-testing@yoctoproject.org, kernelci@groups.io,
@@ -48,136 +34,42 @@ To:     Dmitry Vyukov <dvyukov@google.com>,
         Dhaval Giani <dhaval.giani@gmail.com>,
         Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Jan Setje-Eilers <jan.setjeeilers@oracle.com>
-Cc:     syzkaller <syzkaller@googlegroups.com>, shuah <shuah@kernel.org>
+        Jan Setje-Eilers <jan.setjeeilers@oracle.com>,
+        syzkaller <syzkaller@googlegroups.com>
+Subject: Re: [Automated-testing] syzkaller reproducers
+Message-ID: <20191011180248.GA24089@rei.lan>
 References: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
  <CACT4Y+ZaN900gwx=PHS10hrKofZib7HA7JFxE_DkwChyttYW+A@mail.gmail.com>
  <876a2abe-41ab-5819-4ae8-ad26186d0d1c@kernel.org>
-From:   shuah <shuah@kernel.org>
-Message-ID: <226099bc-9763-3a73-e26a-b292f601494c@kernel.org>
-Date:   Fri, 11 Oct 2019 11:38:07 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+ <226099bc-9763-3a73-e26a-b292f601494c@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <876a2abe-41ab-5819-4ae8-ad26186d0d1c@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <226099bc-9763-3a73-e26a-b292f601494c@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/8/19 9:00 AM, shuah wrote:
-> On 10/8/19 6:16 AM, Dmitry Vyukov wrote:
->> On Tue, Oct 8, 2019 at 1:46 PM Dmitry Vyukov <dvyukov@google.com> wrote:
->>>
->>> Hi Shuah,
->>>
->>> We discussed collecting and uploading all syzkaller reproducers
->>> somewhere. You wanted to see how they look. I've uploaded all current
->>> reproducers here:
->>> https://github.com/dvyukov/syzkaller-repros
->>> Minimalistic build/run scripts are included.
->>> +some testing mailing lists too as this can be used as a test suite
->>> If you have any potential uses for this, you are welcome to use it.
->>> But then we probably need to find some more official and shared place
->>> for them than my private github.
->>> The test programs can also be bulk updated if necessary, because all
->>> of this is auto-generated.
->>>
->>> Thanks
->>
->> +more people who expressed interest in the test suite before
->>
+Hi!
+> Playing with the git getting ready to host it on kernel.org git repo.
+> Build worked fine and I can't get the run.sh to work.
 > 
-> Thanks for putting this together. I am going to create a repo on
-> kernel.org t host these and pull your private git content in.
+> I expected it to run what is in
 > 
-> I will work on it this week and set things up.
+> syzkaller-repros/bin
 > 
+> It doesn't seem to do that. Looks like it wants to build. Here is what
+> I see. What am I doing wrong?
 
-Playing with the git getting ready to host it on kernel.org git repo.
-Build worked fine and I can't get the run.sh to work.
+You are suposed to run the run.sh script in the bin directory.
 
-I expected it to run what is in
+> I did a build which worked. There are some errors due to sys/cdefs.h
+> missing.
 
-syzkaller-repros/bin
+That is because you are missing 32bit gcc and devel libs.
 
-It doesn't seem to do that. Looks like it wants to build. Here is what
-I see. What am I doing wrong? I did a build which worked. There are some
-errors due to sys/cdefs.h missing.
-
-++ for f in *
-+++ pwd
-++ bin=/mnt/data/lkml/syzkaller-repros/bin
-+++ mktemp -d
-++ dir=/tmp/tmp.S8CjM8muRj
-++ cd /tmp/tmp.S8CjM8muRj
-++ timeout -s KILL 3 /mnt/data/lkml/syzkaller-repros/bin
-timeout: failed to run command ‘/mnt/data/lkml/syzkaller-repros/bin’: 
-Permission denied
-++ rm -rf /tmp/tmp.S8CjM8muRj
-++ for f in *
-+++ pwd
-++ bin=/mnt/data/lkml/syzkaller-repros/build.sh
-+++ mktemp -d
-++ dir=/tmp/tmp.zAVygWdpkt
-++ cd /tmp/tmp.zAVygWdpkt
-++ timeout -s KILL 3 /mnt/data/lkml/syzkaller-repros/build.sh
-linux/*.c
-grep: linux/*.c: No such file or directory
-gcc: error: linux/*.c: No such file or directory
-gcc: fatal error: no input files
-compilation terminated.
-++ rm -rf /tmp/tmp.zAVygWdpkt
-++ for f in *
-+++ pwd
-++ bin=/mnt/data/lkml/syzkaller-repros/LICENSE
-+++ mktemp -d
-++ dir=/tmp/tmp.hhcvgOc8RA
-++ cd /tmp/tmp.hhcvgOc8RA
-++ timeout -s KILL 3 /mnt/data/lkml/syzkaller-repros/LICENSE
-timeout: failed to run command 
-‘/mnt/data/lkml/syzkaller-repros/LICENSE’: Permission denied
-++ rm -rf /tmp/tmp.hhcvgOc8RA
-++ for f in *
-+++ pwd
-++ bin=/mnt/data/lkml/syzkaller-repros/linux
-+++ mktemp -d
-++ dir=/tmp/tmp.sM5UO7BHRB
-++ cd /tmp/tmp.sM5UO7BHRB
-++ timeout -s KILL 3 /mnt/data/lkml/syzkaller-repros/linux
-timeout: failed to run command ‘/mnt/data/lkml/syzkaller-repros/linux’: 
-Permission denied
-++ rm -rf /tmp/tmp.sM5UO7BHRB
-++ for f in *
-+++ pwd
-++ bin=/mnt/data/lkml/syzkaller-repros/README.md
-+++ mktemp -d
-++ dir=/tmp/tmp.4Kkrs6iLP5
-++ cd /tmp/tmp.4Kkrs6iLP5
-++ timeout -s KILL 3 /mnt/data/lkml/syzkaller-repros/README.md
-timeout: failed to run command 
-‘/mnt/data/lkml/syzkaller-repros/README.md’: Permission denied
-++ rm -rf /tmp/tmp.4Kkrs6iLP5
-++ for f in *
-+++ pwd
-++ bin=/mnt/data/lkml/syzkaller-repros/run.sh
-+++ mktemp -d
-++ dir=/tmp/tmp.YFx5WEOvJn
-++ cd /tmp/tmp.YFx5WEOvJn
-++ timeout -s KILL 3 /mnt/data/lkml/syzkaller-repros/run.sh
-+ pwd
-+ bin=/tmp/tmp.YFx5WEOvJn/*
-+ mktemp -d
-+ dir=/tmp/tmp.qD4i4g9qYR
-+ cd /tmp/tmp.qD4i4g9qYR
-+ timeout -s KILL 3 /tmp/tmp.YFx5WEOvJn/*
-timeout: failed to run command ‘/tmp/tmp.YFx5WEOvJn/*’: No such file or 
-directory
-+ rm -rf /tmp/tmp.qD4i4g9qYR
-++ rm -rf /tmp/tmp.YFx5WEOvJn
-
-thanks,
--- Shuah
+-- 
+Cyril Hrubis
+chrubis@suse.cz
