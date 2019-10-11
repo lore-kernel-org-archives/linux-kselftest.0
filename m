@@ -2,83 +2,90 @@ Return-Path: <SRS0=3l34=YE=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E4C6ECE596
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 09:45:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF260ECE58C
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 09:46:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7133D21A4A
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 09:45:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9020C20659
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 09:46:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbfJKJpb (ORCPT
+        id S1727615AbfJKJqX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 11 Oct 2019 05:45:31 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:45280 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726585AbfJKJpb (ORCPT
+        Fri, 11 Oct 2019 05:46:23 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:34731 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726585AbfJKJqX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Oct 2019 05:45:31 -0400
-Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id E7B3125AD5C;
-        Fri, 11 Oct 2019 20:45:28 +1100 (AEDT)
-Received: by reginn.horms.nl (Postfix, from userid 7100)
-        id ED00E940958; Fri, 11 Oct 2019 11:45:26 +0200 (CEST)
-Date:   Fri, 11 Oct 2019 11:45:26 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH v6 0/3] selftests: netfilter: introduce test cases for
- ipvs
-Message-ID: <20191011094524.ruopnvvh6bedhhgl@verge.net.au>
-References: <1570719055-25110-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+        Fri, 11 Oct 2019 05:46:23 -0400
+Received: from v22018046084765073.goodsrv.de ([185.183.158.195] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iIrV2-0004ZL-2S; Fri, 11 Oct 2019 09:46:16 +0000
+Date:   Fri, 11 Oct 2019 11:46:14 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     luto@amacapital.net, jannh@google.com, wad@chromium.org,
+        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Tycho Andersen <tycho@tycho.ws>,
+        Tyler Hicks <tyhicks@canonical.com>
+Subject: Re: [PATCH v2 1/3] seccomp: add SECCOMP_USER_NOTIF_FLAG_CONTINUE
+Message-ID: <20191011094613.rs45knchjbe7edv4@wittgenstein>
+References: <20190920083007.11475-1-christian.brauner@ubuntu.com>
+ <20190920083007.11475-2-christian.brauner@ubuntu.com>
+ <201910101440.17A13952@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1570719055-25110-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
-Organisation: Horms Solutions BV
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <201910101440.17A13952@keescook>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 10:50:52PM +0800, Haishuang Yan wrote:
-> This series patch include test cases for ipvs.
-> 
-> The test topology is who as below:
-> +--------------------------------------------------------------+
-> |                      |                                       |
-> |         ns0          |         ns1                           |
-> |      -----------     |     -----------    -----------        |
-> |      | veth01  | --------- | veth10  |    | veth12  |        |
-> |      -----------    peer   -----------    -----------        |
-> |           |          |                        |              |
-> |      -----------     |                        |              |
-> |      |  br0    |     |-----------------  peer |--------------|
-> |      -----------     |                        |              |
-> |           |          |                        |              |
-> |      ----------     peer   ----------      -----------       |
-> |      |  veth02 | --------- |  veth20 |     | veth12  |       |
-> |      ----------      |     ----------      -----------       |
-> |                      |         ns2                           |
-> |                      |                                       |
-> +--------------------------------------------------------------+
-> 
-> Test results:
-> # selftests: netfilter: ipvs.sh
-> # Testing DR mode...
-> # Testing NAT mode...
-> # Testing Tunnel mode...
-> # ipvs.sh: PASS
-> ok 6 selftests: netfilter: ipvs.sh
-> 
-> Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+On Thu, Oct 10, 2019 at 02:45:38PM -0700, Kees Cook wrote:
+> On Fri, Sep 20, 2019 at 10:30:05AM +0200, Christian Brauner wrote:
+> > + * Similar precautions should be applied when stacking SECCOMP_RET_USER_NOTIF.
+> > + * For SECCOMP_RET_USER_NOTIF filters acting on the same syscall the uppermost
+> > + * filter takes precedence. This means that the uppermost
+> > + * SECCOMP_RET_USER_NOTIF filter can override any SECCOMP_IOCTL_NOTIF_SEND from
+> > + * lower filters essentially allowing all syscalls to pass by using
+> > + * SECCOMP_USER_NOTIF_FLAG_CONTINUE. Note that SECCOMP_RET_USER_NOTIF can
+>                                                           ^^^^^^^^^^^^^^
+> This is meant to read RET_TRACE, yes?
 
-Thanks, applied to ipvs-next.
+Yes. :)
+
+> 
+> > + * equally be overriden by SECCOMP_USER_NOTIF_FLAG_CONTINUE.
+> 
+> I rewrote this paragraph with that corrected and swapping some
+> "upper/lower" to "most recently added" etc:
+> 
+> + * Similar precautions should be applied when stacking SECCOMP_RET_USER_NOTIF
+> + * or SECCOMP_RET_TRACE. For SECCOMP_RET_USER_NOTIF filters acting on the
+> + * same syscall, the most recently added filter takes precedence. This means
+> + * that the new SECCOMP_RET_USER_NOTIF filter can override any
+> + * SECCOMP_IOCTL_NOTIF_SEND from earlier filters, essentially allowing all
+> + * such filtered syscalls to be executed by sending the response
+> + * SECCOMP_USER_NOTIF_FLAG_CONTINUE. Note that SECCOMP_RET_TRACE can equally
+> + * be overriden by SECCOMP_USER_NOTIF_FLAG_CONTINUE.
+> 
+> 
+> Ultimately, I think this caveat is fine. RET_USER_NOTIF and RET_TRACE are
+> both used from the "process manager" use-case. The benefits of "continue"
+> semantics here outweighs the RET_USER_NOTIF and RET_TRACE "bypass". If
+> we end up in a situation where we need to deal with some kind of
+> nesting where this is a problem in practice, we can revisit this.
+> 
+> Applied to my for-next/seccomp. Thanks!
+
+Thanks!
+Christian
