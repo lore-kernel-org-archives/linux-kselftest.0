@@ -2,251 +2,149 @@ Return-Path: <SRS0=3l34=YE=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A76F6C47404
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 10:26:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 408C1ECE58C
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 11:19:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6C29021D71
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 10:26:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 04A02214E0
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 11:19:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="aDFfvbEg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SBukcD6G"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbfJKK0k (ORCPT
+        id S1726935AbfJKLTt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 11 Oct 2019 06:26:40 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:54434 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727014AbfJKK0j (ORCPT
+        Fri, 11 Oct 2019 07:19:49 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:39822 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727226AbfJKLTt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Oct 2019 06:26:39 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9BAO4Oq013108;
-        Fri, 11 Oct 2019 10:26:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=corp-2019-08-05;
- bh=RCbQWCPP7lHcb8exiNWxq2WV2sbQXnSqSnI0kzbr6PQ=;
- b=aDFfvbEguiVYlSs/2ebtjuV9OtSmNZlRiY+vOYlgT3BITTXZqq6Fgs3vmSYKIEnTWusz
- rMeNkAHfTHfVUueAPbiyPzeb67mz9LuHeX/5y4uRfg+m8S2JWHaFGG6ZmhaWh9dSIr1D
- ZyPykbQkhkGNez+EC6FV5PaOBZXqt3fT1JEmdvT71Fo1n0vt+Mrs4zwOJRppomK26tom
- W3FmfABYwdAEFDRgQ+jjpvMoeY+/8kvwdfheWpnRHjyjFtM4G/+UjJWEhqZ5W+g2JyWo
- 8IX4/jywKyFkSbAwaTrtN1K+LS15a0Uqbwsw/l6sUtyZsQ/YFXcSF+MNQRZb+0weInVa 6Q== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2vekts0eq4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Oct 2019 10:26:07 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9BAOx1O121361;
-        Fri, 11 Oct 2019 10:26:06 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2vje2xqscj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Oct 2019 10:26:06 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9BAQ31E003053;
-        Fri, 11 Oct 2019 10:26:03 GMT
-Received: from dhcp-10-175-168-195.vpn.oracle.com (/10.175.168.195)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 11 Oct 2019 03:26:03 -0700
-Date:   Fri, 11 Oct 2019 11:25:33 +0100 (BST)
-From:   Alan Maguire <alan.maguire@oracle.com>
-X-X-Sender: alan@dhcp-10-175-191-48.vpn.oracle.com
-To:     Brendan Higgins <brendanhiggins@google.com>
-cc:     Alan Maguire <alan.maguire@oracle.com>,
-        Kees Cook <keescook@chromium.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        catalin.marinas@arm.com, joe.lawrence@redhat.com,
-        penguin-kernel@i-love.sakura.ne.jp, schowdary@nvidia.com,
-        urezki@gmail.com, andriy.shevchenko@linux.intel.com,
-        changbin.du@intel.com, kunit-dev@googlegroups.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Knut Omang <knut.omang@oracle.com>
-Subject: Re: [PATCH v2 linux-kselftest-test 1/3] kunit: allow kunit tests to
- be loaded as a module
-In-Reply-To: <CAFd5g46_6McK06XSrX=EZ9AaYYitQzd2CTvPMX+rPymisDq5uQ@mail.gmail.com>
-Message-ID: <alpine.LRH.2.20.1910111105350.21459@dhcp-10-175-191-48.vpn.oracle.com>
-References: <1570546546-549-1-git-send-email-alan.maguire@oracle.com> <1570546546-549-2-git-send-email-alan.maguire@oracle.com> <20191008213535.GB186342@google.com> <alpine.LRH.2.20.1910091726010.2517@dhcp-10-175-191-127.vpn.oracle.com>
- <CAFd5g46_6McK06XSrX=EZ9AaYYitQzd2CTvPMX+rPymisDq5uQ@mail.gmail.com>
-User-Agent: Alpine 2.20 (LRH 67 2015-01-07)
+        Fri, 11 Oct 2019 07:19:49 -0400
+Received: by mail-pf1-f196.google.com with SMTP id v4so5916066pff.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2019 04:19:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0ljULyIMp5Dm2RbiLSJ5YpQ+1SlP+EDqs8VnjvFtPbs=;
+        b=SBukcD6G/E4Q++e2MZyOopU4xjNmSBLIyw2OjHpHEArm5yavHfcNQMcy3hp1jluvT4
+         pn2E1VFZ01pACE++91eD6JY72tto6e+WxedlsanzH8AklUqB/3sr2lQn8wdyPTZKlcWX
+         dbbd2t3v4vZYcmALClOA3exUTHL0Iw8lNRNsCNuesZkxRfL/U22AngssU5rBVBGSOudG
+         BenLYRW4LtdSmaJQN3IyO38RPqNZ6nkaPcIma0B+ppZBMXcbUJAuWkgVL5V4oggQGKJh
+         rOr48xytLkVF/U1/V1iBDpiotUPGzuPGHnTbjrv9VcWJF9FLcP+fTLUfIDCwcrbFzXd/
+         XiUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0ljULyIMp5Dm2RbiLSJ5YpQ+1SlP+EDqs8VnjvFtPbs=;
+        b=i2jvg1wg6LLlNLRxaTNekhU8DWsrcyf6TBSrAgfjWFjohs8nhcoP265sUW3XWCg4y3
+         TV3aeIxPL7Z4nBqMEuF2M5HUKUc7luDTlnJqax2pjG9e5YqLYckHI0fC5Vi9YlMEEVTj
+         +IRQK0M4Buufb5ecDpKc6FE9q6JAbajzpTIDcJdFfOOW6ObBoiLSJ2Ea7OFt2nNXDBFN
+         9tgJiWyB1WkizzOykgQRkNUoXiiw2G0Ia2taX/3CyVjV0xRFyi2BUgoCxM8/86r/qIdt
+         U/d8G8RsKRUTtzgLTbEbErnZo+TwrocnzPCRVLGZ5MXBH/6uwQVjTLkLDiKEiVv/dWU1
+         a0rw==
+X-Gm-Message-State: APjAAAVzzZZpuy71aHXmmRRb0XSCF2ZoQ3Hi+7a5NGjJCNlH56BxqcnV
+        an5slDyyCwXaaA+ur6sI0CJZmtpU9wEviq11IWWEqg==
+X-Google-Smtp-Source: APXvYqxcSK91sAbjydy8izO3KdbH6dlPRpO+hbZFf3Yur0zrcqyASWP1dCZqgyrB4WUpHZP16rqu7e0PrcNPMh+RL1s=
+X-Received: by 2002:a17:90a:f495:: with SMTP id bx21mr16324796pjb.84.1570792788221;
+ Fri, 11 Oct 2019 04:19:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9406 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910110099
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9406 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910110099
+References: <c99604e5-2ea4-4075-9a39-470104298368@googlegroups.com>
+In-Reply-To: <c99604e5-2ea4-4075-9a39-470104298368@googlegroups.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 11 Oct 2019 04:19:37 -0700
+Message-ID: <CAFd5g46+OMmP8mYsH8vcpMpdOeYryp=1Lsab4Hy6pAhWjX5-4Q@mail.gmail.com>
+Subject: Re: kunit.py should default to --build_dir=.kunit
+To:     "Theodore Ts'o" <theodore.tso@gmail.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Cc:     KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 11 Oct 2019, Brendan Higgins wrote:
++open list:KERNEL SELFTEST FRAMEWORK In case anyone in kselftest has
+any thoughts.
 
-> Sorry for the delayed reply. I will be on vacation until Wednesday,
-> October 16th.
-> 
-> On Wed, Oct 9, 2019 at 9:36 AM Alan Maguire <alan.maguire@oracle.com> wrote:
-> >
-> > On Tue, 8 Oct 2019, Brendan Higgins wrote:
-> >
-> > > On Tue, Oct 08, 2019 at 03:55:44PM +0100, Alan Maguire wrote:
-> [...]
-> > > > diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-> > > > index e6d17aa..e4f3a97 100644
-> > > > --- a/lib/kunit/string-stream.c
-> > > > +++ b/lib/kunit/string-stream.c
-> > > > @@ -100,6 +100,7 @@ int string_stream_vadd(struct string_stream *stream,
-> > > >
-> > > >     return 0;
-> > > >  }
-> > > > +EXPORT_SYMBOL_GPL(string_stream_vadd);
-> > >
-> > > Is this actually needed by anything other than lib/kunit/test.c right
-> > > now? Maybe we should move the include file into the kunit/ directory to
-> > > hide these so no one else can use them.
-> > >
-> >
-> > I tried this, and it's the right answer I think but it exposes
-> > a problem with symbol visibility when kunit is compiled as a module.
-> > More on this below...
-> >
-> > > >  int string_stream_add(struct string_stream *stream, const char *fmt, ...)
-> > > >  {
-> > > > @@ -112,6 +113,7 @@ int string_stream_add(struct string_stream *stream, const char *fmt, ...)
-> > > >
-> > > >     return result;
-> > > >  }
-> > > > +EXPORT_SYMBOL_GPL(string_stream_add);
-> > > [...]
-> > > > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> > > > index c83c0fa..e7896f1 100644
-> > > > --- a/lib/kunit/test.c
-> > > > +++ b/lib/kunit/test.c
-> > > [...]
-> > > > @@ -50,6 +51,7 @@ static unsigned long kunit_test_timeout(void)
-> > > >      * For more background on this topic, see:
-> > > >      * https://mike-bland.com/2011/11/01/small-medium-large.html
-> > > >      */
-> > > > +#ifndef MODULE
-> > >
-> > > Why is this block of code "ifndef MODULE"?
-> > >
-> >
-> > Symbol visibility is the problem again; sysctl_hung_task_timeout_secs
-> > isn't exported so when kunit is a module it can't find the symbol.
-> >
-> > I think I saw Kees mentioned something about symbol lookup too; in KTF
-> > Knut solved this by defining ktf_find_symbol(). I'd suggest we may need a
-> > kunit_find_symbol() with a function signature
-> 
-> I thought we were just talking about exposing symbols for linking
-> outside of a compilation unit (static vs. not static); nevertheless, I
-> think you are right that it is relevant here. Kees, thoughts?
-> 
-> > void *kunit_find_symbol(const char *modname, const char *symbol_name);
-> >
-> > ...which does a [module_]kallsyms_lookup_sym().
-> >
-> > If the above makes sense I can look at adding it as a patch (and adding
-> > a test of it of course!). What do you think?
-> 
-> So that won't work if you are trying to link against a symbol not in a
-> module, right? Also, it won't work against a static symbol, right?
-> 
+On Thu, Oct 10, 2019 at 7:05 PM Theodore Ts'o <theodore.tso@gmail.com> wrot=
+e:
+>
+> I've been experimenting with the ext4 kunit test case, and something that=
+ would be really helpful is if the default is to store the object files for=
+ the ARCM=3Dum kernel and its .config file in the top-level directory .kuni=
+t.   That is, that the default for --build_dir should be .kunit.
+>
+> Why does this important?  Because  the kernel developer will want to be r=
+unning unit tests as well as building kernels that can be run under whateve=
+r architecture they are normally developing for (for example, an x86 kernel=
+ that can be run using kvm; or a arm64 kernel that gets run on an Android d=
+evice by using the "fastboot" command).   So that means we don't want to be=
+ overwriting the object files and .config files for building the kernel for=
+ x86 when building the kunit kernel using the um arch.   For example, for e=
+xt4, my ideal workflow might go something like this:
 
-Nope, works in both cases with the proviso that we need to use an 
-alternative name for symbols when compiling built-in.  For example
-in the case of the string-stream tests, we'd use a test init callback
-to initialize used symbols:
+That's a good point.
 
-static int string_stream_test_init(struct kunit *test)
-{
-        _alloc_string_stream = kunit_find_symbol("alloc_string_stream");
-        _string_stream_add = kunit_find_symbol("string_stream_add");
-        _string_stream_get_string = kunit_find_symbol("string_stream_get_string");
-        _string_stream_is_empty = kunit_find_symbol("string_stream_is_empty");
-        if (IS_ERR(_alloc_string_stream) ||
-            IS_ERR(_string_stream_add) ||
-            IS_ERR(_string_stream_get_string) ||
-            IS_ERR(_string_stream_is_empty))
-                return EINVAL;
-        return 0;
-} 
+> <hack hack hack>
+> % ./tools/testing/kunit/kunit.py  run
+> <watch to see that unit tests succeed, and since most of the object files=
+ have already been built for the kunit kernel in be stored in the .kunit di=
+rectory, this will be fast, since only the modified files will need to be r=
+ecompiled>
+> % kbuild
+> <this is a script that builds an x86 kernel in /build/ext4-64 that is des=
+igned to be run under either kvm or in a GCE VM; since the kunit object fil=
+es are stored in /build/ext4-kunit, the pre-existing files when building fo=
+r x86_64 haven't been disturbed, so this build is fast as well>
+> % kvm-xfstests smoke
+> <this will run xfstests using the kernel plucked from /build/ext-64, usin=
+g kvm>
+>
+> The point is when I'm developing an ext4 feature, or reviewing and mergin=
+g ext4 commits, I need to be able to maintain separate build trees and sepa=
+rate config files for ARCH=3Dum as well as ARCH=3Dx86_64, and if the ARCH=
+=3Dum are stored in the kernel sources, then building with O=3D... doesn't =
+work:
+>
+> <tytso@lambda> {/usr/projects/linux/kunit}   (kunit)
+> 1084% make O=3D/build/test-dir
+> make[1]: Entering directory '/build/test-dir'
+> ***
+> *** The source tree is not clean, please run 'make mrproper'
+> *** in /usr/projects/linux/kunit
+> ***
 
-I've tested this when string-stream-test is compiled built-in and as a 
-module.  We can of course create a wrapper macro to handle these 
-assignments.
+Should we maybe drop `--build_dir` in favor of `O`?
 
-To illustrate further here's the test cases I'd propose adding to 
-test-test.c with the changes. 
+> One of the other reasons why it would be good to use --build_dir by defau=
+lt is that way, building with a separate O=3D build directory is regularly =
+tested.   Right now, "kunit.py --build_dir=3D" seems to be broken.
 
-In the first case we're grabbing the "modules" variable from the kernel,
-and in the second we're grabbing a static symbol from the test-test.ko
-module (when it is compiled as a module):
+Good point.
 
-/*
- * Find non-exported kernel symbol; we use the modules list as a safe
- * choice that should always be present.
- */
-static void kunit_find_symbol_kernel(struct kunit *test)
-{
-        KUNIT_ASSERT_NOT_ERR_OR_NULL(test, kunit_find_symbol("modules"));
-}
+> % ./tools/testing/kunit/kunit.py run --build_dir=3D/build/ext4-kunit
+> Generating .config ...
+> [22:04:12] Building KUnit Kernel ...
+> /usr/projects/linux/kunit/arch/x86/um/user-offsets.c:20:10: fatal error: =
+asm/syscalls_64.h: No such file or directory
+>    20 | #include <asm/syscalls_64.h>
+>       |          ^~~~~~~~~~~~~~~~~~~
+> compilation terminated.
+>
+> (This appears to be an ARCH=3Dum bug, not a kunit bug, though.)
 
-#ifdef MODULE
-/*
- * If we are compiled as a module, use this module for lookup.
- */
-static void kunit_find_symbol_module(struct kunit *test)
-{
-        KUNIT_ASSERT_NOT_ERR_OR_NULL(test,
-                                     kunit_find_symbol("kunit_find_symbol_kernel"));
-}
-#endif
+Yeah, I encountered this before. Some file is not getting properly
+cleaned up by `make mrproper`. It works if you do `git clean -fdx` (I
+know that's not a real solution for most people). Nevertheless, it
+sounds like we need to sit down and actually solve this problem since
+it is affecting users now.
 
- 
-> Even so, I think it is pretty wonky to expect users to either a)
-> export any symbol name to be tested,
-
-Absolutely not, I'd never advocate that.  Nothing should need to change in 
-the component under test simply to facilitate testing, especially if 
-there's a way the test framework can work around it.
-
-> or b) have to access them via
-> kunit_find_symbol.  I think it is fine to have some tests that cannot
-> be compiled as modules, if there is no other user friendly way to make
-> this work in those cases.
-
-That's fine, and I agree in some cases it's unworkable, but there are 
-going to be a lot of tristate componenets we'd like to test, and 
-restricting testing of those by requiring CONFIG_FOO=y seems like a 
-limitation too.  In practice I've found symbol lookup isn't needed 
-extensively for test development.  For cases where the weight of symbol 
-lookup is too heavy the tests can simply stay built-in - the non-exported 
-nature of the symbols is probably suggesting something about the nature of 
-the interface that makes that a more natural choice anyway.  However for 
-other cases I think there's value to having something like this feature.
-Of course there may be better ways to realize the functionality than what 
-I'm proposing.
-
-Thanks!
-
-Alan 
-
+I think you make a compelling argument. Anyone else have any thoughts on th=
+is?
