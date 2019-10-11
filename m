@@ -2,96 +2,92 @@ Return-Path: <SRS0=3l34=YE=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1D07C47404
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 21:38:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA6F7C47404
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 21:55:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A035721A4A
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 21:38:44 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UGkWR9IP"
+	by mail.kernel.org (Postfix) with ESMTP id 77A70218AC
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Oct 2019 21:55:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1570830921;
+	bh=gd8GAu0tkKp0TCBgtng5DI6iLgkG7+iNpGuxcQi/knA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=jkWuX0CUAmn8Oh2j/0KiK8XCEZl2Sgfm5TqtmGI5SaXg2B40DsrQpLFdstFmyPQYO
+	 ctlj3PJ6xqyBVHIjtHCIUt4gkAFTxqbfm9ROOl3lP5my1ot4DSHJswikeoOdEo1mGX
+	 tmD+3kViNF+Dn8Jv5GvHAjJzC/32MD3x143T3Dmg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728956AbfJKVio (ORCPT
+        id S1728861AbfJKVzV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 11 Oct 2019 17:38:44 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:37954 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728719AbfJKVio (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Oct 2019 17:38:44 -0400
-Received: by mail-io1-f67.google.com with SMTP id u8so24533160iom.5;
-        Fri, 11 Oct 2019 14:38:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2fEyK46kEA/BNmICLFW/D8fkweWoO46qLnUUQCiumgw=;
-        b=UGkWR9IPNmwR0PIvRa+nJWrolZGpnPlcbLdOwgSWB27qQ6UtLnMEVByTZ7TkU5tuiS
-         DWWgFeDanr54ETGd+HPIE7BX3l4t5lsATasZvZhCCSsiHSx3/4kTuiDoQkQ3VVCbP14h
-         ETsHdUvCQgfFs/1Z89hqRVcMetvZCVglFmWMwO3qJLwhxP1TYqJJHthYZKUIfSRshmGh
-         ElglennxRiDIEuBR2lV29iLqokZWA9bsoGV0lnaisyUXppftYOKys+z+Rw3Y2fwLLg3d
-         IG3GX7A4Aue+S5rO5XdwPscXs4eaGyYA791rbtglbopP6KyifIbYEQzeKAqCJvgIRLCj
-         Bz6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2fEyK46kEA/BNmICLFW/D8fkweWoO46qLnUUQCiumgw=;
-        b=iBJRPJ1xi5AXrjX1CX2zxlusg3WClqCl+D3l0UmR7o6hZnv8kxAd1app30RLuDcqp6
-         d7TYtW7ut+7ipLSYvn0xDQrB7SKOgowXNtShmYZIJNjK+clUT8e6mr13wGeJ4bGAWjsP
-         fdPhCTYpNklnN442d0sLzonDb+FpYFGIlVAU4Z85DTZEMqWjLTcejNPjKsDGOnFLjB2U
-         v8xoFeljoklQZ0NDJ9u6/88/Vk5wS79pK4fxirR5LJUUWBqdDV0nGrirwkOiOXYuFwYc
-         PRXz9xy1EOYXmnyZqvTu0M+pMa+Jqq9xF8XTO/BhbqTzozc8XdhWoWTK0z+x2Yevdonv
-         ShJw==
-X-Gm-Message-State: APjAAAXfTKhZfZtLaha15H30rR12xHevGSCT4Rbyfr5H6KI0D/D4ny6k
-        aTzNhf6Uj9zF9mroeBvDv/H7jWp4ZEYfk57tKCs=
-X-Google-Smtp-Source: APXvYqz6LcaIgeBINadDJ7DFnHJCvhVWFSJaLfbbEF6A1MoXRK386YmdH4wKVExMUiht72OtrLo4tGPVe+yP0ng8+4g=
-X-Received: by 2002:a02:5dc2:: with SMTP id w185mr19986288jaa.2.1570829923255;
- Fri, 11 Oct 2019 14:38:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191010133518.5420-1-christian.brauner@ubuntu.com>
-In-Reply-To: <20191010133518.5420-1-christian.brauner@ubuntu.com>
-From:   Michael Kerrisk <mtk.manpages@gmail.com>
-Date:   Fri, 11 Oct 2019 23:38:31 +0200
-Message-ID: <CAHO5Pa3V7fDb_+U-v+LB+TeAU0vfJyUMs9mD4ZqUtbLpZcD4nA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] clone3: add CLONE3_CLEAR_SIGHAND
-To:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Cc:     Linux Kernel <linux-kernel@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>, libc-alpha@sourceware.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        "Dmitry V. Levin" <ldv@altlinux.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 11 Oct 2019 17:55:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32882 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728719AbfJKVzU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 11 Oct 2019 17:55:20 -0400
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B39B62084C;
+        Fri, 11 Oct 2019 21:55:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570830920;
+        bh=gd8GAu0tkKp0TCBgtng5DI6iLgkG7+iNpGuxcQi/knA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=xbODnkmKqLvt+vMAiqzr5JnHjM/KSN2k/ERgprBZVFV8y2sT8beQvYqrkep4D3bMI
+         jE2bE005KDpC/x40l1Qb3PnuSkYYy+0tKTSypdeepNKTxF4DVe4/RdL9/3W6PWtuqa
+         IyXs7JFv76ptET5PXKIr9ePK2vbJ+CtMW4AFfqf8=
+Date:   Fri, 11 Oct 2019 14:55:19 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     David Gow <davidgow@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH linux-kselftest/test v2] lib/list-test: add a test for
+ the 'list' doubly linked list
+Message-Id: <20191011145519.7b7a1d16ecdead9bec212c01@linux-foundation.org>
+In-Reply-To: <CABVgOS=UwWxwD97c6y-XzbLWVhznPjBO3qvQEzX=8jTJ-gBi3A@mail.gmail.com>
+References: <20191010185631.26541-1-davidgow@google.com>
+        <20191011140727.49160042fafa20d5867f8df7@linux-foundation.org>
+        <CABVgOS=UwWxwD97c6y-XzbLWVhznPjBO3qvQEzX=8jTJ-gBi3A@mail.gmail.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello Christian,
+On Fri, 11 Oct 2019 14:37:25 -0700 David Gow <davidgow@google.com> wrote:
 
-Why CLONE3_CLEAR_SIGHAND rather than just CLONE_CLEAR_SIGHAND?
+> On Fri, Oct 11, 2019 at 2:05 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> >
+> > <looks at kunit>
+> >
+> > Given that everything runs at late_initcall time, shouldn't everything
+> > be __init, __initdata etc so all the code and data doesn't hang around
+> > for ever?
+> >
+> 
+> That's an interesting point. We haven't done this for KUnit tests to
+> date, and there is certainly a possibility down the line that we may
+> want to be able to run these tests in other circumstances. (There's
+> some work being done to allow KUnit and KUnit tests to be built as
+> modules here: https://lkml.org/lkml/2019/10/8/628 for example.) Maybe
+> it'd be worth having macros which wrap __init/__initdata etc as a way
+> of futureproofing tests against such a change?
+> 
+> Either way, I suspect this is something that should probably be
+> considered for KUnit as a whole, rather than on a test-by-test basis.
 
-Thanks,
+Sure, a new set of macros for this makes sense.  Can be retrofitted any
+time.
 
-Michael
+There might be a way of loading all of list_test.o into a discardable
+section at link time instead of sprinkling annotation all over the .c
+code.
