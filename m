@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAB9DFA3728
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Oct 2019 15:37:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BDF4FA3728
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Oct 2019 15:37:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C10A8218DE
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Oct 2019 15:37:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E64420854
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Oct 2019 15:37:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405144AbfJPPhT (ORCPT
+        id S2405279AbfJPPhV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 16 Oct 2019 11:37:19 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:47479 "EHLO
+        Wed, 16 Oct 2019 11:37:21 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:47481 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404935AbfJPPhT (ORCPT
+        with ESMTP id S2405140AbfJPPhU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Oct 2019 11:37:19 -0400
+        Wed, 16 Oct 2019 11:37:20 -0400
 Received: from [213.220.153.21] (helo=localhost.localdomain)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iKlMU-00050w-4Z; Wed, 16 Oct 2019 15:37:18 +0000
+        id 1iKlMU-00050w-QB; Wed, 16 Oct 2019 15:37:18 +0000
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     oleg@redhat.com, linux-kernel@vger.kernel.org
 Cc:     aarcange@redhat.com, akpm@linux-foundation.org,
@@ -34,9 +34,9 @@ Cc:     aarcange@redhat.com, akpm@linux-foundation.org,
         mhocko@suse.com, mingo@kernel.org, peterz@infradead.org,
         shuah@kernel.org, tglx@linutronix.de, viro@zeniv.linux.org.uk,
         Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v2 4/5] exit: use task_alive() in do_wait()
-Date:   Wed, 16 Oct 2019 17:36:05 +0200
-Message-Id: <20191016153606.2326-4-christian.brauner@ubuntu.com>
+Subject: [PATCH v2 5/5] pid: use task_alive() in pidfd_open()
+Date:   Wed, 16 Oct 2019 17:36:06 +0200
+Message-Id: <20191016153606.2326-5-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191016153606.2326-1-christian.brauner@ubuntu.com>
 References: <20191015141332.4055-1-christian.brauner@ubuntu.com>
@@ -48,8 +48,9 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace hlist_empty() with the new task_alive() helper which is more
-idiomatic, easier to grep for, and unifies how callers perform this check.
+Use the new task_alive() helper in pidfd_open(). This simplifies the
+code and avoids taking rcu_read_{lock,unlock}() and leads to overall
+nicer code.
 
 Cc: Oleg Nesterov <oleg@redhat.com>
 Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
@@ -60,22 +61,40 @@ patch not present
 /* v2 */
 patch introduced
 ---
- kernel/exit.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/pid.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/exit.c b/kernel/exit.c
-index a46a50d67002..2bb0cbe94bda 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -1457,7 +1457,7 @@ static long do_wait(struct wait_opts *wo)
- 	 */
- 	wo->notask_error = -ECHILD;
- 	if ((wo->wo_type < PIDTYPE_MAX) &&
--	   (!wo->wo_pid || hlist_empty(&wo->wo_pid->tasks[wo->wo_type])))
-+	   (!wo->wo_pid || !task_alive(wo->wo_pid, wo->wo_type)))
- 		goto notask;
+diff --git a/kernel/pid.c b/kernel/pid.c
+index 70ad4a9f728c..1f425b6c4c47 100644
+--- a/kernel/pid.c
++++ b/kernel/pid.c
+@@ -497,7 +497,7 @@ static int pidfd_create(struct pid *pid)
+  */
+ SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
+ {
+-	int fd, ret;
++	int fd;
+ 	struct pid *p;
  
- 	set_current_state(TASK_INTERRUPTIBLE);
+ 	if (flags)
+@@ -510,13 +510,11 @@ SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
+ 	if (!p)
+ 		return -ESRCH;
+ 
+-	ret = 0;
+-	rcu_read_lock();
+-	if (!pid_task(p, PIDTYPE_TGID))
+-		ret = -EINVAL;
+-	rcu_read_unlock();
++	if (task_alive(p, PIDTYPE_TGID))
++		fd = pidfd_create(p);
++	else
++		fd = -EINVAL;
+ 
+-	fd = ret ?: pidfd_create(p);
+ 	put_pid(p);
+ 	return fd;
+ }
 -- 
 2.23.0
 
