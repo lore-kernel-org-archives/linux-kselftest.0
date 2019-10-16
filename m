@@ -2,61 +2,80 @@ Return-Path: <SRS0=bX1H=YJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71D2BFA3728
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Oct 2019 15:08:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAB9DFA3728
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Oct 2019 15:37:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4D27B21925
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Oct 2019 15:08:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C10A8218DE
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Oct 2019 15:37:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731890AbfJPPIl (ORCPT
+        id S2405144AbfJPPhT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 16 Oct 2019 11:08:41 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50494 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726244AbfJPPIk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Oct 2019 11:08:40 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id E9BB0B3C5;
-        Wed, 16 Oct 2019 15:08:38 +0000 (UTC)
-Date:   Wed, 16 Oct 2019 17:08:38 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     rostedt@goodmis.org, jikos@kernel.org, joe.lawrence@redhat.com,
-        jpoimboe@redhat.com, mingo@redhat.com, shuah@kernel.org,
-        kamalesh@linux.vnet.ibm.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] selftests/livepatch: Make dynamic debug setup and
- restore generic
-Message-ID: <20191016150838.jd2bxb3yzyhap6m4@pathway.suse.cz>
-References: <20191016113316.13415-1-mbenes@suse.cz>
- <20191016113316.13415-3-mbenes@suse.cz>
+        Wed, 16 Oct 2019 11:37:19 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:47479 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404935AbfJPPhT (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 16 Oct 2019 11:37:19 -0400
+Received: from [213.220.153.21] (helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iKlMU-00050w-4Z; Wed, 16 Oct 2019 15:37:18 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     oleg@redhat.com, linux-kernel@vger.kernel.org
+Cc:     aarcange@redhat.com, akpm@linux-foundation.org,
+        christian@kellner.me, cyphar@cyphar.com, elena.reshetova@intel.com,
+        guro@fb.com, jannh@google.com, ldv@altlinux.org,
+        linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        mhocko@suse.com, mingo@kernel.org, peterz@infradead.org,
+        shuah@kernel.org, tglx@linutronix.de, viro@zeniv.linux.org.uk,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH v2 4/5] exit: use task_alive() in do_wait()
+Date:   Wed, 16 Oct 2019 17:36:05 +0200
+Message-Id: <20191016153606.2326-4-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191016153606.2326-1-christian.brauner@ubuntu.com>
+References: <20191015141332.4055-1-christian.brauner@ubuntu.com>
+ <20191016153606.2326-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191016113316.13415-3-mbenes@suse.cz>
-User-Agent: NeoMutt/20170912 (1.9.0)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed 2019-10-16 13:33:14, Miroslav Benes wrote:
-> From: Joe Lawrence <joe.lawrence@redhat.com>
-> 
-> Livepatch selftests currently save the current dynamic debug config and
-> tweak it for the selftests. The config is restored at the end. Make the
-> infrastructure generic, so that more variables can be saved and
-> restored.
-> 
-> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-> Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+Replace hlist_empty() with the new task_alive() helper which is more
+idiomatic, easier to grep for, and unifies how callers perform this check.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+---
+/* v1 */
+patch not present
 
-Best Regards,
-Petr
+/* v2 */
+patch introduced
+---
+ kernel/exit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/exit.c b/kernel/exit.c
+index a46a50d67002..2bb0cbe94bda 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -1457,7 +1457,7 @@ static long do_wait(struct wait_opts *wo)
+ 	 */
+ 	wo->notask_error = -ECHILD;
+ 	if ((wo->wo_type < PIDTYPE_MAX) &&
+-	   (!wo->wo_pid || hlist_empty(&wo->wo_pid->tasks[wo->wo_type])))
++	   (!wo->wo_pid || !task_alive(wo->wo_pid, wo->wo_type)))
+ 		goto notask;
+ 
+ 	set_current_state(TASK_INTERRUPTIBLE);
+-- 
+2.23.0
+
