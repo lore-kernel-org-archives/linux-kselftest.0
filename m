@@ -2,214 +2,78 @@ Return-Path: <SRS0=GiAI=YK=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F4ECFA372A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Oct 2019 10:19:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A35A5ECE58E
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Oct 2019 12:08:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6032021835
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Oct 2019 10:19:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 750752089C
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Oct 2019 12:08:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2501940AbfJQKTY (ORCPT
+        id S2391844AbfJQMIm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Oct 2019 06:19:24 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:36454 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731515AbfJQKTE (ORCPT
+        Thu, 17 Oct 2019 08:08:42 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:54683 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1731634AbfJQMIm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Oct 2019 06:19:04 -0400
-Received: from [185.81.136.22] (helo=localhost.localdomain)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iL2s0-0007tP-S3; Thu, 17 Oct 2019 10:19:01 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     oleg@redhat.com, linux-kernel@vger.kernel.org
-Cc:     aarcange@redhat.com, akpm@linux-foundation.org,
-        christian@kellner.me, cyphar@cyphar.com, elena.reshetova@intel.com,
-        guro@fb.com, jannh@google.com, ldv@altlinux.org,
-        linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        mhocko@suse.com, mingo@kernel.org, peterz@infradead.org,
-        shuah@kernel.org, tglx@linutronix.de, viro@zeniv.linux.org.uk,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v3 2/5] test: verify fdinfo for pidfd of reaped process
-Date:   Thu, 17 Oct 2019 12:18:29 +0200
-Message-Id: <20191017101832.5985-2-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191017101832.5985-1-christian.brauner@ubuntu.com>
-References: <20191016153606.2326-1-christian.brauner@ubuntu.com>
- <20191017101832.5985-1-christian.brauner@ubuntu.com>
+        Thu, 17 Oct 2019 08:08:42 -0400
+Received: from callcc.thunk.org (guestnat-104-133-0-98.corp.google.com [104.133.0.98] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x9HC8Yro023150
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Oct 2019 08:08:34 -0400
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id B7A5E420458; Thu, 17 Oct 2019 08:08:33 -0400 (EDT)
+Date:   Thu, 17 Oct 2019 08:08:33 -0400
+From:   "Theodore Y. Ts'o" <tytso@mit.edu>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-ext4@vger.kernel.org,
+        adilger.kernel@dilger.ca,
+        KUnit Development <kunit-dev@googlegroups.com>
+Subject: Re: [PATCH linux-kselftest/test v2] ext4: add kunit test for
+ decoding extended timestamps
+Message-ID: <20191017120833.GA25548@mit.edu>
+References: <20191010023931.230475-1-yzaikin@google.com>
+ <2f2ea7b0-f683-1cdd-f3f2-ecdf44cb4a97@linuxfoundation.org>
+ <CAAXuY3qtSHENgy3S168_03ju_JwAucOAt5WEJGQ+pi5PfurP6g@mail.gmail.com>
+ <CAFd5g46RcFV0FACuoF=jCSLzf7UFmEYn4gddaijUZ+zR_CFZBQ@mail.gmail.com>
+ <20191011131902.GC16225@mit.edu>
+ <CAFd5g45s1-=Z4JwJn4A1VDGu4oEGBisQ_0RFp4otUU3rKf1XpQ@mail.gmail.com>
+ <1e6611e6-2fa6-6f7d-bc7f-0bc2243d9342@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1e6611e6-2fa6-6f7d-bc7f-0bc2243d9342@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test that the fdinfo field of a pidfd referring to a dead process
-correctly shows Pid: -1 and NSpid: -1.
+On Wed, Oct 16, 2019 at 05:26:29PM -0600, Shuah Khan wrote:
+> 
+> I don't really buy the argument that unit tests should be deterministic
+> Possibly, but I would opt for having the ability to feed test data.
 
-Cc: Christian Kellner <christian@kellner.me>
-Cc: linux-kselftest@vger.kernel.org
-Reviewed-by: Christian Kellner <christian@kellner.me>
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
-/* pidfd selftests */
-passed
+I strongly believe that unit tests should be deterministic.
+Non-deterministic tests are essentially fuzz tests.  And fuzz tests
+should be different from unit tests.
 
-/* v1 */
-Link: https://lore.kernel.org/r/20191015141332.4055-2-christian.brauner@ubuntu.com
+We want unit tests to run quickly.  Fuzz tests need to be run for a
+large number of passes (perhaps hours) in order to be sure that we've
+hit any possible bad cases.  We want to be able to easily bisect fuzz
+tests --- preferably, automatically.  And any kind of flakey test is
+hell to bisect.
 
-/* v2 */
-Link: https://lore.kernel.org/r/20191016153606.2326-2-christian.brauner@ubuntu.com
-unchanged
+It's bad enough when a test is flakey because of the underlying code.
+But when a test is flakey because the test inputs are
+non-deterministic, it's even worse.
 
-/* v3 */
-unchanged
----
- .../selftests/pidfd/pidfd_fdinfo_test.c       | 59 ++++++++++++++-----
- 1 file changed, 45 insertions(+), 14 deletions(-)
-
-diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-index 3721be994abd..22558524f71c 100644
---- a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-@@ -113,11 +113,15 @@ static struct child clone_newns(int (*fn)(void *), void *args,
- 	return ret;
- }
- 
-+static inline void child_close(struct child *child)
-+{
-+	close(child->fd);
-+}
-+
- static inline int child_join(struct child *child, struct error *err)
- {
- 	int r;
- 
--	(void)close(child->fd);
- 	r = wait_for_pid(child->pid);
- 	if (r < 0)
- 		error_set(err, PIDFD_ERROR, "waitpid failed (ret %d, errno %d)",
-@@ -128,6 +132,12 @@ static inline int child_join(struct child *child, struct error *err)
- 	return r;
- }
- 
-+static inline int child_join_close(struct child *child, struct error *err)
-+{
-+	child_close(child);
-+	return child_join(child, err);
-+}
-+
- static inline void trim_newline(char *str)
- {
- 	char *pos = strrchr(str, '\n');
-@@ -136,8 +146,8 @@ static inline void trim_newline(char *str)
- 		*pos = '\0';
- }
- 
--static int verify_fdinfo_nspid(int pidfd, struct error *err,
--			       const char *expect, ...)
-+static int verify_fdinfo(int pidfd, struct error *err, const char *prefix,
-+			 size_t prefix_len, const char *expect, ...)
- {
- 	char buffer[512] = {0, };
- 	char path[512] = {0, };
-@@ -160,17 +170,20 @@ static int verify_fdinfo_nspid(int pidfd, struct error *err,
- 				 pidfd);
- 
- 	while (getline(&line, &n, f) != -1) {
--		if (strncmp(line, "NSpid:", 6))
-+		char *val;
-+
-+		if (strncmp(line, prefix, prefix_len))
- 			continue;
- 
- 		found = 1;
- 
--		r = strcmp(line + 6, buffer);
-+		val = line + prefix_len;
-+		r = strcmp(val, buffer);
- 		if (r != 0) {
- 			trim_newline(line);
- 			trim_newline(buffer);
--			error_set(err, PIDFD_FAIL, "NSpid: '%s' != '%s'",
--				  line + 6, buffer);
-+			error_set(err, PIDFD_FAIL, "%s '%s' != '%s'",
-+				  prefix, val, buffer);
- 		}
- 		break;
- 	}
-@@ -179,8 +192,8 @@ static int verify_fdinfo_nspid(int pidfd, struct error *err,
- 	fclose(f);
- 
- 	if (found == 0)
--		return error_set(err, PIDFD_FAIL, "NSpid not found for fd %d",
--				 pidfd);
-+		return error_set(err, PIDFD_FAIL, "%s not found for fd %d",
-+				 prefix, pidfd);
- 
- 	return PIDFD_PASS;
- }
-@@ -213,7 +226,7 @@ static int child_fdinfo_nspid_test(void *args)
- 	}
- 
- 	pidfd = *(int *)args;
--	r = verify_fdinfo_nspid(pidfd, &err, "\t0\n");
-+	r = verify_fdinfo(pidfd, &err, "NSpid:", 6, "\t0\n");
- 
- 	if (r != PIDFD_PASS)
- 		ksft_print_msg("NSpid fdinfo check failed: %s\n", err.msg);
-@@ -242,24 +255,42 @@ static void test_pidfd_fdinfo_nspid(void)
- 	/* The children will have pid 1 in the new pid namespace,
- 	 * so the line must be 'NSPid:\t<pid>\t1'.
- 	 */
--	verify_fdinfo_nspid(a.fd, &err, "\t%d\t%d\n", a.pid, 1);
--	verify_fdinfo_nspid(b.fd, &err, "\t%d\t%d\n", b.pid, 1);
-+	verify_fdinfo(a.fd, &err, "NSpid:", 6, "\t%d\t%d\n", a.pid, 1);
-+	verify_fdinfo(b.fd, &err, "NSpid:", 6, "\t%d\t%d\n", b.pid, 1);
- 
- 	/* wait for the process, check the exit status and set
- 	 * 'err' accordingly, if it is not already set.
- 	 */
-+	child_join_close(&a, &err);
-+	child_join_close(&b, &err);
-+
-+	error_report(&err, test_name);
-+}
-+
-+static void test_pidfd_dead_fdinfo(void)
-+{
-+	struct child a;
-+	struct error err = {0, };
-+	const char *test_name = "pidfd check fdinfo for dead process";
-+
-+	/* Create a new child in a new pid and mount namespace */
-+	a = clone_newns(child_fdinfo_nspid_test, NULL, &err);
-+	error_check(&err, test_name);
- 	child_join(&a, &err);
--	child_join(&b, &err);
- 
-+	verify_fdinfo(a.fd, &err, "Pid:", 4, "\t-1\n");
-+	verify_fdinfo(a.fd, &err, "NSpid:", 6, "\t-1\n");
-+	child_close(&a);
- 	error_report(&err, test_name);
- }
- 
- int main(int argc, char **argv)
- {
- 	ksft_print_header();
--	ksft_set_plan(1);
-+	ksft_set_plan(2);
- 
- 	test_pidfd_fdinfo_nspid();
-+	test_pidfd_dead_fdinfo();
- 
- 	return ksft_exit_pass();
- }
--- 
-2.23.0
-
+						- Ted
