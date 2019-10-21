@@ -2,102 +2,103 @@ Return-Path: <SRS0=iskD=YO=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 742FECA9EB9
-	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Oct 2019 09:12:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 035A3CA9EAF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Oct 2019 10:46:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 549242089C
-	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Oct 2019 09:12:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D252A20640
+	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Oct 2019 10:46:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726915AbfJUJM7 (ORCPT
+        id S1727328AbfJUKqE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 21 Oct 2019 05:12:59 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:53864 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726725AbfJUJM7 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Oct 2019 05:12:59 -0400
-Received: from [213.220.153.21] (helo=localhost.localdomain)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iMTkH-00074w-D8; Mon, 21 Oct 2019 09:12:57 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     linux-kernel@vger.kernel.org, keescook@chromium.org
-Cc:     rong.a.chen@intel.com, ast@kernel.org,
-        christian.brauner@ubuntu.com, daniel@iogearbox.net, kafai@fb.com,
-        lkp@lists.01.org, luto@amacapital.net, shuah@kernel.org,
-        songliubraving@fb.com, tycho@tycho.ws, tyhicks@canonical.com,
-        wad@chromium.org, yhs@fb.com, linux-kselftest@vger.kernel.org
-Subject: [PATCH] seccomp: fix SECCOMP_USER_NOTIF_FLAG_CONTINUE test
-Date:   Mon, 21 Oct 2019 11:10:55 +0200
-Message-Id: <20191021091055.4644-1-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191021084157.GG9296@shao2-debian>
-References: <20191021084157.GG9296@shao2-debian>
+        Mon, 21 Oct 2019 06:46:04 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:48804 "EHLO foss.arm.com"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1726767AbfJUKqE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 21 Oct 2019 06:46:04 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 150EBEBD;
+        Mon, 21 Oct 2019 03:45:29 -0700 (PDT)
+Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 749B03F718;
+        Mon, 21 Oct 2019 03:45:28 -0700 (PDT)
+Subject: Re: [PATCH] kselftest: Fix NULL INSTALL_PATH for TARGETS runlist
+To:     Prabhakar Kushwaha <prabhakar.pkin@gmail.com>,
+        linux-kselftest@vger.kernel.org
+Cc:     skhan@linuxfoundation.org,
+        Prabhakar Kushwaha <pkushwaha@marvell.com>
+References: <20191020122452.3345-1-prabhakar.pkin@gmail.com>
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Message-ID: <09db8f9d-98b9-e3ae-9eea-ae45e94d3053@arm.com>
+Date:   Mon, 21 Oct 2019 11:45:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191020122452.3345-1-prabhakar.pkin@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The ifndef for SECCOMP_USER_NOTIF_FLAG_CONTINUE was placed under the
-ifndef for the SECCOMP_FILTER_FLAG_NEW_LISTENER feature. This will not
-work on systems that do support SECCOMP_FILTER_FLAG_NEW_LISTENER but do not
-support SECCOMP_USER_NOTIF_FLAG_CONTINUE. So move the latter ifndef out of
-the former ifndef's scope.
+Hi
 
-2019-10-20 11:14:01 make run_tests -C seccomp
-make: Entering directory '/usr/src/perf_selftests-x86_64-rhel-7.6-0eebfed2954f152259cae0ad57b91d3ea92968e8/tools/testing/selftests/seccomp'
-gcc -Wl,-no-as-needed -Wall  seccomp_bpf.c -lpthread -o seccomp_bpf
-seccomp_bpf.c: In function ‘user_notification_continue’:
-seccomp_bpf.c:3562:15: error: ‘SECCOMP_USER_NOTIF_FLAG_CONTINUE’ undeclared (first use in this function)
-  resp.flags = SECCOMP_USER_NOTIF_FLAG_CONTINUE;
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-seccomp_bpf.c:3562:15: note: each undeclared identifier is reported only once for each function it appears in
-Makefile:12: recipe for target 'seccomp_bpf' failed
-make: *** [seccomp_bpf] Error 1
-make: Leaving directory '/usr/src/perf_selftests-x86_64-rhel-7.6-0eebfed2954f152259cae0ad57b91d3ea92968e8/tools/testing/selftests/seccomp'
+On 20/10/2019 13:24, Prabhakar Kushwaha wrote:
+> As per commit 131b30c94fbc ("kselftest: exclude failed TARGETS from
+> runlist") failed targets were excluded from the runlist. But value
+> $$INSTALL_PATH is always NULL. It should be $INSTALL_PATH instead
+> $$INSTALL_PATH.
+> 
+> So, fix Makefile to use $INSTALL_PATH. 
+> 
 
-Reported-by: kernel test robot <rong.a.chen@intel.com>
-Fixes: 0eebfed2954f ("seccomp: test SECCOMP_USER_NOTIF_FLAG_CONTINUE")
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+I was a bit puzzled at first since I never saw the NULLified value while testing
+the original patch. Looking at it closely today, I realized that I used to test it
+like:
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 2519377ebda3..9669b81086cf 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -168,10 +168,6 @@ struct seccomp_metadata {
- 
- #define SECCOMP_RET_USER_NOTIF 0x7fc00000U
- 
--#ifndef SECCOMP_USER_NOTIF_FLAG_CONTINUE
--#define SECCOMP_USER_NOTIF_FLAG_CONTINUE 0x00000001
--#endif
--
- #define SECCOMP_IOC_MAGIC		'!'
- #define SECCOMP_IO(nr)			_IO(SECCOMP_IOC_MAGIC, nr)
- #define SECCOMP_IOR(nr, type)		_IOR(SECCOMP_IOC_MAGIC, nr, type)
-@@ -205,6 +201,10 @@ struct seccomp_notif_sizes {
- };
- #endif
- 
-+#ifndef SECCOMP_USER_NOTIF_FLAG_CONTINUE
-+#define SECCOMP_USER_NOTIF_FLAG_CONTINUE 0x00000001
-+#endif
-+
- #ifndef seccomp
- int seccomp(unsigned int op, unsigned int flags, void *args)
- {
--- 
-2.23.0
+$ rm -rf $HOME/KSFT_TEST && make -C tools/testing/selftests/ INSTALL_PATH=$HOME/KSFT_TEST install
+
+which in fact causes INSTALL_PATH to be exported down to the subshell in the recipe, so that even
+referring it as $$INSTALL_PATH from the recipe line make it work fine.
+
+Instead, using the default Makefile provided value (unexported) by invoking like:
+
+$ rm -rf $HOME/KSFT_TEST && make -C tools/testing/selftests/ install
+
+exposes the error you mentioned, being INSTALL_PATH not accessible form the subshell and so NULL.
+Moreover it's anyway certainly better to refer with $(INSTALL_PATH) being it a strict Makefile var.
+So it's fine for me, thanks to have spotted this.
+
+Reviewed-by: cristian.marussi@arm.com
+
+
+Cristian
+
+
+> Signed-off-by: Prabhakar Kushwaha <pkushwaha@marvell.com>
+> Signed-off-by: Prabhakar Kushwaha <prabhakar.pkin@gmail.com>
+> CC: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+>  tools/testing/selftests/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 4cdbae6f4e61..612f6757015d 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -213,7 +213,7 @@ ifdef INSTALL_PATH
+>  	@# included in the generated runlist.
+>  	for TARGET in $(TARGETS); do \
+>  		BUILD_TARGET=$$BUILD/$$TARGET;	\
+> -		[ ! -d $$INSTALL_PATH/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
+> +		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
+>  		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
+>  		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
+>  		echo -n "run_many" >> $(ALL_SCRIPT); \
+> 
 
