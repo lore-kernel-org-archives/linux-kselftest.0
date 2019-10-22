@@ -2,111 +2,50 @@ Return-Path: <SRS0=V/Vv=YP=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2C5ACA9EA0
-	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Oct 2019 09:32:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B417CA9EA0
+	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Oct 2019 09:33:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BDFF020679
-	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Oct 2019 09:32:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C24A20679
+	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Oct 2019 09:33:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731261AbfJVJcQ (ORCPT
+        id S1730619AbfJVJdd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 22 Oct 2019 05:32:16 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:33745 "EHLO
+        Tue, 22 Oct 2019 05:33:33 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:33774 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728182AbfJVJcQ (ORCPT
+        with ESMTP id S1728182AbfJVJdd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Oct 2019 05:32:16 -0400
-Received: from [213.220.153.21] (helo=localhost.localdomain)
+        Tue, 22 Oct 2019 05:33:33 -0400
+Received: from [213.220.153.21] (helo=wittgenstein)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iMqWT-0004c2-Uv; Tue, 22 Oct 2019 09:32:14 +0000
+        id 1iMqXk-0004g2-Iv; Tue, 22 Oct 2019 09:33:32 +0000
+Date:   Tue, 22 Oct 2019 11:33:32 +0200
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     kernel-team@lists.ubuntu.com
-Cc:     stefan.bader@canonical.com, stgraber@ubuntu.com,
-        seth.forshee@canonical.com,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        kernel test robot <rong.a.chen@intel.com>,
+Cc:     kernel test robot <rong.a.chen@intel.com>,
         linux-kselftest@vger.kernel.org, Tycho Andersen <tycho@tycho.ws>
-Subject: [PATCH 2/2][SRU][DISCO][EOAN] UBUNTU: SAUCE: seccomp: fix SECCOMP_USER_NOTIF_FLAG_CONTINUE test
-Date:   Tue, 22 Oct 2019 11:32:10 +0200
-Message-Id: <20191022093210.26663-3-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191022093210.26663-1-christian.brauner@ubuntu.com>
+Subject: Re: [PATCH 2/2][SRU][DISCO][EOAN] UBUNTU: SAUCE: seccomp: fix
+ SECCOMP_USER_NOTIF_FLAG_CONTINUE test
+Message-ID: <20191022093331.tqg4tuksxvz6kj7a@wittgenstein>
 References: <20191022093210.26663-1-christian.brauner@ubuntu.com>
+ <20191022093210.26663-3-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191022093210.26663-3-christian.brauner@ubuntu.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-BugLink: https://bugs.launchpad.net/bugs/1849281
+Ignore this, please I forgot to add --supress-cc=all.
 
-The ifndef for SECCOMP_USER_NOTIF_FLAG_CONTINUE was placed under the
-ifndef for the SECCOMP_FILTER_FLAG_NEW_LISTENER feature. This will not
-work on systems that do support SECCOMP_FILTER_FLAG_NEW_LISTENER but do not
-support SECCOMP_USER_NOTIF_FLAG_CONTINUE. So move the latter ifndef out of
-the former ifndef's scope.
-
-2019-10-20 11:14:01 make run_tests -C seccomp
-make: Entering directory '/usr/src/perf_selftests-x86_64-rhel-7.6-0eebfed2954f152259cae0ad57b91d3ea92968e8/tools/testing/selftests/seccomp'
-gcc -Wl,-no-as-needed -Wall  seccomp_bpf.c -lpthread -o seccomp_bpf
-seccomp_bpf.c: In function ‘user_notification_continue’:
-seccomp_bpf.c:3562:15: error: ‘SECCOMP_USER_NOTIF_FLAG_CONTINUE’ undeclared (first use in this function)
-  resp.flags = SECCOMP_USER_NOTIF_FLAG_CONTINUE;
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-seccomp_bpf.c:3562:15: note: each undeclared identifier is reported only once for each function it appears in
-Makefile:12: recipe for target 'seccomp_bpf' failed
-make: *** [seccomp_bpf] Error 1
-make: Leaving directory '/usr/src/perf_selftests-x86_64-rhel-7.6-0eebfed2954f152259cae0ad57b91d3ea92968e8/tools/testing/selftests/seccomp'
-
-Reported-by: kernel test robot <rong.a.chen@intel.com>
-Fixes: 0eebfed2954f ("seccomp: test SECCOMP_USER_NOTIF_FLAG_CONTINUE")
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-Reviewed-by: Tycho Andersen <tycho@tycho.ws>
-Link: https://lore.kernel.org/r/20191021091055.4644-1-christian.brauner@ubuntu.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
-(cherry picked from commit 2aa8d8d04ca29c3269154e1d48855e498be8882f
- https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git)
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 6021baecb386..bf834ee02b69 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -167,10 +167,6 @@ struct seccomp_metadata {
- 
- #define SECCOMP_RET_USER_NOTIF 0x7fc00000U
- 
--#ifndef SECCOMP_USER_NOTIF_FLAG_CONTINUE
--#define SECCOMP_USER_NOTIF_FLAG_CONTINUE 0x00000001
--#endif
--
- #define SECCOMP_IOC_MAGIC		'!'
- #define SECCOMP_IO(nr)			_IO(SECCOMP_IOC_MAGIC, nr)
- #define SECCOMP_IOR(nr, type)		_IOR(SECCOMP_IOC_MAGIC, nr, type)
-@@ -209,6 +205,10 @@ struct seccomp_notif_sizes {
- #define PTRACE_EVENTMSG_SYSCALL_EXIT	2
- #endif
- 
-+#ifndef SECCOMP_USER_NOTIF_FLAG_CONTINUE
-+#define SECCOMP_USER_NOTIF_FLAG_CONTINUE 0x00000001
-+#endif
-+
- #ifndef seccomp
- int seccomp(unsigned int op, unsigned int flags, void *args)
- {
--- 
-2.23.0
-
+Sorry for the noise!
+Christian
