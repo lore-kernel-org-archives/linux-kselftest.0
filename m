@@ -7,56 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DD73CA9EB9
-	for <linux-kselftest@archiver.kernel.org>; Sat, 26 Oct 2019 13:19:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2599CC47E49
+	for <linux-kselftest@archiver.kernel.org>; Sat, 26 Oct 2019 13:36:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2124C222C3
-	for <linux-kselftest@archiver.kernel.org>; Sat, 26 Oct 2019 13:19:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7E9B21E6F
+	for <linux-kselftest@archiver.kernel.org>; Sat, 26 Oct 2019 13:36:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1572095944;
-	bh=8rI5UOEw6DaLu75RfzL3/QkaHNW9D5ayHlsc7k0R+E0=;
+	s=default; t=1572096972;
+	bh=2Zr63LfHAD3BEw5wTukfWSw3Tffj2QuG/1gRpsOupMc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=gSlFxT0EIGbdf1misSfSYGyJxmMgGLRijSu2JlLndDlZ6AQHFbLhFuGTDd4fSWv8S
-	 c5jgqUuBy2xOfpp+amuB46SckFTbuZbqRbbT//N8QwvjcCCQM33gTDOIAW+B3+mYJX
-	 Pp65Fns8xWyRTJACFcBSq5vJUy1WJ+OgtCJviJ+A=
+	b=q7KanianXO/7hwUiWJyaCd8Wu23QYgwekBJgKjVhNDoMbCgP3tv/zGHeXAQRgGFDr
+	 Bq3zwknB2wHftStJxOIdzu2xYUVcRAiYDEx+3HHJNzsGfvXowf1IqHhohOM6V4rn7l
+	 x1+TGRQNDmQFqyBSg3MlnGaicQJqViGY7R2R7AS0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728087AbfJZNS5 (ORCPT
+        id S1727347AbfJZNgH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 26 Oct 2019 09:18:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40768 "EHLO mail.kernel.org"
+        Sat, 26 Oct 2019 09:36:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38520 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728066AbfJZNSx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 26 Oct 2019 09:18:53 -0400
+        id S1727008AbfJZNQ4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 26 Oct 2019 09:16:56 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E9011222BE;
-        Sat, 26 Oct 2019 13:18:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3B72921897;
+        Sat, 26 Oct 2019 13:16:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572095933;
-        bh=8rI5UOEw6DaLu75RfzL3/QkaHNW9D5ayHlsc7k0R+E0=;
+        s=default; t=1572095816;
+        bh=2Zr63LfHAD3BEw5wTukfWSw3Tffj2QuG/1gRpsOupMc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nB4B6sbpRhydkVitsxmPrMUdY1iJANVh9encbH+CFfStAv0scFnru9QuTLM1+iEy2
-         ReRvXnnOq7pwiJnZLXkL/+mXruBjjhQjrT7kWUWvEgNufqXBubw8fDmjXCTmCh5nxO
-         OT8ujYh7bmcCvEdtdwXYOaoohKNkTsjqZPTC7SuI=
+        b=UY5Zm3IrybDhV81b8mQoRi4LNvyrBsg/2m8Pu0N5/7bSiZ3qPRNEVGxNx1a8ji6FT
+         Bh6aSXANeN7+RZYsg8PpTZRGIyq9R834/WHmX02oSLKNANPlhgdRAy3Fuw65Zj5JRJ
+         /cJL02CLyA6LfgQz5I1bALA0x7rPFvYCrP2SNZVc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        kbuild test robot <lkp@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+Cc:     Jiri Benc <jbenc@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 96/99] mm/gup_benchmark: add a missing "w" to getopt string
-Date:   Sat, 26 Oct 2019 09:15:57 -0400
-Message-Id: <20191026131600.2507-96-sashal@kernel.org>
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.3 30/99] selftests/bpf: More compatible nc options in test_lwt_ip_encap
+Date:   Sat, 26 Oct 2019 09:14:51 -0400
+Message-Id: <20191026131600.2507-30-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191026131600.2507-1-sashal@kernel.org>
 References: <20191026131600.2507-1-sashal@kernel.org>
@@ -69,51 +61,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: John Hubbard <jhubbard@nvidia.com>
+From: Jiri Benc <jbenc@redhat.com>
 
-[ Upstream commit 6f24c8d30d08f270b54f4c2cb9b08dfccbe59c57 ]
+[ Upstream commit 106c35dda32f8b63f88cad7433f1b8bb0056958a ]
 
-Even though gup_benchmark.c has code to handle the -w command-line option,
-the "w" is not part of the getopt string.  It looks as if it has been
-missing the whole time.
+Out of the three nc implementations widely in use, at least two (BSD netcat
+and nmap-ncat) do not support -l combined with -s. Modify the nc invocation
+to be accepted by all of them.
 
-On my machine, this leads naturally to the following predictable result:
-
-  $ sudo ./gup_benchmark -w
-  ./gup_benchmark: invalid option -- 'w'
-
-...which is fixed with this commit.
-
-Link: http://lkml.kernel.org/r/20191014184639.1512873-2-jhubbard@nvidia.com
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Keith Busch <keith.busch@intel.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: kbuild test robot <lkp@intel.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 17a90a788473 ("selftests/bpf: test that GSO works in lwt_ip_encap")
+Signed-off-by: Jiri Benc <jbenc@redhat.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/9f177682c387f3f943bb64d849e6c6774df3c5b4.1570539863.git.jbenc@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/vm/gup_benchmark.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_lwt_ip_encap.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/gup_benchmark.c b/tools/testing/selftests/vm/gup_benchmark.c
-index c0534e298b512..cb3fc09645c48 100644
---- a/tools/testing/selftests/vm/gup_benchmark.c
-+++ b/tools/testing/selftests/vm/gup_benchmark.c
-@@ -37,7 +37,7 @@ int main(int argc, char **argv)
- 	char *file = "/dev/zero";
- 	char *p;
+diff --git a/tools/testing/selftests/bpf/test_lwt_ip_encap.sh b/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
+index acf7a74f97cd9..59ea56945e6cd 100755
+--- a/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
++++ b/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
+@@ -314,15 +314,15 @@ test_gso()
+ 	command -v nc >/dev/null 2>&1 || \
+ 		{ echo >&2 "nc is not available: skipping TSO tests"; return; }
  
--	while ((opt = getopt(argc, argv, "m:r:n:f:tTLUSH")) != -1) {
-+	while ((opt = getopt(argc, argv, "m:r:n:f:tTLUwSH")) != -1) {
- 		switch (opt) {
- 		case 'm':
- 			size = atoi(optarg) * MB;
+-	# listen on IPv*_DST, capture TCP into $TMPFILE
++	# listen on port 9000, capture TCP into $TMPFILE
+ 	if [ "${PROTO}" == "IPv4" ] ; then
+ 		IP_DST=${IPv4_DST}
+ 		ip netns exec ${NS3} bash -c \
+-			"nc -4 -l -s ${IPv4_DST} -p 9000 > ${TMPFILE} &"
++			"nc -4 -l -p 9000 > ${TMPFILE} &"
+ 	elif [ "${PROTO}" == "IPv6" ] ; then
+ 		IP_DST=${IPv6_DST}
+ 		ip netns exec ${NS3} bash -c \
+-			"nc -6 -l -s ${IPv6_DST} -p 9000 > ${TMPFILE} &"
++			"nc -6 -l -p 9000 > ${TMPFILE} &"
+ 		RET=$?
+ 	else
+ 		echo "    test_gso: unknown PROTO: ${PROTO}"
 -- 
 2.20.1
 
