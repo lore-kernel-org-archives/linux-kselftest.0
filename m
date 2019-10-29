@@ -2,99 +2,211 @@ Return-Path: <SRS0=R/0P=YW=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09304CA9EC4
-	for <linux-kselftest@archiver.kernel.org>; Tue, 29 Oct 2019 11:49:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F99FCA9EAE
+	for <linux-kselftest@archiver.kernel.org>; Tue, 29 Oct 2019 13:00:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D2E2E218AC
-	for <linux-kselftest@archiver.kernel.org>; Tue, 29 Oct 2019 11:49:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA5AE21479
+	for <linux-kselftest@archiver.kernel.org>; Tue, 29 Oct 2019 13:00:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1572354054;
+	bh=BL0YD5+tRHbynt6BJTKvBePK+6HtQvxjqI2aXHq3Gec=;
+	h=From:Subject:To:Cc:References:Date:In-Reply-To:List-ID:From;
+	b=QP7wpbYuQUmnpB54Fwi/2NJDQP13V+pZo2uijUd2yvIt6gg71dwj+VSUsiwqHPabs
+	 9LfcCkBvbtQheGxMRLWdXSoWp+I/UbnAVwOVUUo1IPFSnNb+0fhf1mCeslG2k+pAjW
+	 Kn1900Akw3Gy6uSwpetMls0Hku2FHNww+6AAB7t4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729682AbfJ2Lt1 (ORCPT
+        id S2388119AbfJ2NAx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 29 Oct 2019 07:49:27 -0400
-Received: from mga03.intel.com ([134.134.136.65]:49218 "EHLO mga03.intel.com"
+        Tue, 29 Oct 2019 09:00:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51502 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728317AbfJ2Lt1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Oct 2019 07:49:27 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 04:49:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,243,1569308400"; 
-   d="scan'208";a="401121904"
-Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.122])
-  by fmsmga006.fm.intel.com with ESMTP; 29 Oct 2019 04:49:23 -0700
-Date:   Tue, 29 Oct 2019 13:49:22 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     David Howells <dhowells@redhat.com>, Petr Vorel <pvorel@suse.cz>,
-        shuah <shuah@kernel.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] selftest/trustedkeys: TPM 1.2 trusted keys test
-Message-ID: <20191029114922.GA12825@linux.intel.com>
-References: <1571944467-13097-1-git-send-email-zohar@linux.ibm.com>
- <20191028203014.GA8279@linux.intel.com>
- <1572295513.4532.270.camel@linux.ibm.com>
- <20191029091535.GB9896@linux.intel.com>
- <20191029092516.GA13848@linux.intel.com>
- <20191029114535.GA12272@linux.intel.com>
+        id S2387868AbfJ2NAx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 29 Oct 2019 09:00:53 -0400
+Received: from [172.20.52.151] (unknown [91.217.168.176])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3BB3F20874;
+        Tue, 29 Oct 2019 13:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572354051;
+        bh=BL0YD5+tRHbynt6BJTKvBePK+6HtQvxjqI2aXHq3Gec=;
+        h=From:Subject:To:Cc:References:Date:In-Reply-To:From;
+        b=v30jJeTCJsuncSbEuYtAnradgkCzhzlSQFOOFej8hmIKBkTUkZaQ268wWgIy8kuvR
+         nBM02GbqRiQyZoL6rf9ta930E4gi5UffaACWuPUdpeXyrW0QuDLnloBJTeGrSX7h2Y
+         ASAI/ss1h/cI4qhbpUfz05LA5h2+QY0A/O+5A5Vc=
+From:   shuah <shuah@kernel.org>
+Subject: Re: [PATCH linux-kselftest/test v6] lib/list-test: add a test for the
+ 'list' doubly linked list
+To:     David Gow <davidgow@google.com>, brendanhiggins@google.com,
+        akpm@linux-foundation.org, keescook@chromium.org
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, dan.carpenter@oracle.com,
+        shuah <shuah@kernel.org>
+References: <20191024224631.118656-1-davidgow@google.com>
+Message-ID: <0cb1d948-0da3-eb0f-c58f-ae3a785dd0dd@kernel.org>
+Date:   Tue, 29 Oct 2019 07:00:16 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191029114535.GA12272@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191024224631.118656-1-davidgow@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 29, 2019 at 01:45:35PM +0200, Jarkko Sakkinen wrote:
-> On Tue, Oct 29, 2019 at 11:25:16AM +0200, Jarkko Sakkinen wrote:
-> > I'll anyway try to setup user space with TrouSerS so that I can try
-> > it out. BuildRoot has recipe for that but not for IBM TSS 2.0 so I'll
-> > skip that and use my own test script for TPM2 trusted keys.
-> 
-> Busybox version of mktemp gives this error message:
-> 
->   mktemp: Invalid argument
-> 
-> I get that three times.
-> 
-> Then I get non-existent directory error from line 65 but it is probably
-> consequence of the previous errors.
-> 
-> This the help for mktemp:
-> 
-> "
-> Usage: mktemp [-dt] [-p DIR] [TEMPLATE]
-> 
-> Create a temporary file with name based on TEMPLATE and print its name.
-> TEMPLATE must end with XXXXXX (e.g. [/dir/]nameXXXXXX).
-> Without TEMPLATE, -t tmp.XXXXXX is assumed.
-> 
-> 	-d	Make directory, not file
-> 	-q	Fail silently on errors
-> 	-t	Prepend base directory name to TEMPLATE
-> 	-p DIR	Use DIR as a base directory (implies -t)
-> 	-u	Do not create anything; print a name
-> 
-> Base directory is: -p DIR, else $TMPDIR, else /tmp
-> "
-> 
-> Use total six X's seems to fix the problem.
+Hi David,
 
-OK, I fixes that issue and then I end up with:
+On 10/24/19 4:46 PM, David Gow wrote:
+> Add a KUnit test for the kernel doubly linked list implementation in
+> include/linux/list.h
+> 
+> Each test case (list_test_x) is focused on testing the behaviour of the
+> list function/macro 'x'. None of the tests pass invalid lists to these
+> macros, and so should behave identically with DEBUG_LIST enabled and
+> disabled.
+> 
+> Note that, at present, it only tests the list_ types (not the
+> singly-linked hlist_), and does not yet test all of the
+> list_for_each_entry* macros (and some related things like
+> list_prepare_entry).
+> 
+> Signed-off-by: David Gow <davidgow@google.com>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> Tested-by: Brendan Higgins <brendanhiggins@google.com>
+> ---
+> 
+> This revision addresses Brendan's comments in
+> https://lore.kernel.org/linux-kselftest/20191023220248.GA55483@google.com/
+> 
+> Specifically:
+> - Brendan's Reviewed-by/Tested-by being included in the description.
+> - A couple of trailing tabs in Kconfig.debug & list-test.c
+> - Reformatting of previously >80 character lines.
+> 
+> 
+> Earlier versions of this patchset can be found:
+> 
+> v5:
+> https://lore.kernel.org/linux-kselftest/20191022221322.122788-1-davidgow@google.com/
+> v4:
+> https://lore.kernel.org/linux-kselftest/20191018215549.65000-1-davidgow@google.com/
+> v3:
+> https://lore.kernel.org/linux-kselftest/20191016215707.95317-1-davidgow@google.com/
+> v2:
+> https://lore.kernel.org/linux-kselftest/20191010185631.26541-1-davidgow@google.com/
+> v1:
+> https://lore.kernel.org/linux-kselftest/20191007213633.92565-1-davidgow@google.com/
+> 
 
-  [INFO] add_key: No such device
+CHECK: Unnecessary parentheses around test_struct.list
+#699: FILE: lib/list-test.c:510:
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct, list_entry(&(test_struct.list),
 
-Anyway, got further.
+CHECK: Alignment should match open parenthesis
+#700: FILE: lib/list-test.c:511:
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct, list_entry(&(test_struct.list),
++				struct list_test_struct, list));
 
-/Jarkko
+CHECK: Please don't use multiple blank lines
+#711: FILE: lib/list-test.c:522:
++
++
+
+CHECK: Alignment should match open parenthesis
+#713: FILE: lib/list-test.c:524:
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct1, list_first_entry(&list,
++				struct list_test_struct, list));
+
+CHECK: Please don't use multiple blank lines
+#724: FILE: lib/list-test.c:535:
++
++
+
+CHECK: Alignment should match open parenthesis
+#726: FILE: lib/list-test.c:537:
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct2, list_last_entry(&list,
++				struct list_test_struct, list));
+
+CHECK: Alignment should match open parenthesis
+#735: FILE: lib/list-test.c:546:
++	KUNIT_EXPECT_FALSE(test, list_first_entry_or_null(&list,
++				struct list_test_struct, list));
+
+CHECK: Alignment should match open parenthesis
+#741: FILE: lib/list-test.c:552:
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct1,
++			list_first_entry_or_null(&list,
+
+CHECK: Alignment should match open parenthesis
+#742: FILE: lib/list-test.c:553:
++			list_first_entry_or_null(&list,
++				struct list_test_struct, list));
+
+CHECK: Please don't use multiple blank lines
+#753: FILE: lib/list-test.c:564:
++
++
+
+CHECK: Alignment should match open parenthesis
+#755: FILE: lib/list-test.c:566:
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct2, list_next_entry(&test_struct1,
++				list));
+
+CHECK: Please don't use multiple blank lines
+#766: FILE: lib/list-test.c:577:
++
++
+
+CHECK: Alignment should match open parenthesis
+#768: FILE: lib/list-test.c:579:
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct1, list_prev_entry(&test_struct2,
++				list));
+
+ERROR: that open brace { should be on the previous line
+#789: FILE: lib/list-test.c:600:
++static void list_test_list_for_each_prev(struct kunit *test)
++{
+
+ERROR: that open brace { should be on the previous line
+#807: FILE: lib/list-test.c:618:
++static void list_test_list_for_each_safe(struct kunit *test)
++{
+
+CHECK: Please don't use multiple blank lines
+#813: FILE: lib/list-test.c:624:
++
++
+
+ERROR: that open brace { should be on the previous line
+#828: FILE: lib/list-test.c:639:
++static void list_test_list_for_each_prev_safe(struct kunit *test)
++{
+
+ERROR: that open brace { should be on the previous line
+#848: FILE: lib/list-test.c:659:
++static void list_test_list_for_each_entry(struct kunit *test)
++{
+
+ERROR: that open brace { should be on the previous line
+#869: FILE: lib/list-test.c:680:
++static void list_test_list_for_each_entry_reverse(struct kunit *test)
++{
+
+
+I am seeing these error and warns. As per our hallway conversation, the
+"for_each*" in the test naming is tripping up checkpatch.pl
+
+For now you can change the name a bit to not trip checkpatch and maybe
+explore fixing checkpatch to differentiate between function names
+with "for_each" in them vs. the actual for_each usages in the code.
+
+thanks,
+-- Shuah
