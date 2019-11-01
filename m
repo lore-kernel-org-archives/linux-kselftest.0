@@ -2,101 +2,68 @@ Return-Path: <SRS0=qtj9=YZ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 876BACA9ECF
-	for <linux-kselftest@archiver.kernel.org>; Fri,  1 Nov 2019 14:49:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8DB5CA9ECF
+	for <linux-kselftest@archiver.kernel.org>; Fri,  1 Nov 2019 16:50:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5F376218AC
-	for <linux-kselftest@archiver.kernel.org>; Fri,  1 Nov 2019 14:49:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20150623.gappssmtp.com header.i=@kernel-dk.20150623.gappssmtp.com header.b="I8fTjuu/"
+	by mail.kernel.org (Postfix) with ESMTP id ABE2F218AC
+	for <linux-kselftest@archiver.kernel.org>; Fri,  1 Nov 2019 16:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1572627013;
+	bh=BUpvPIgCiek5J4CeLj4ca43Fs+r3iHsHbPYrxAmt2wE=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=bag069sLa97d4X6i1H5e1g7wB0rg5M2GsF87jEMpH5xk+sa7vyqKWyMt15G2Cvx12
+	 cknDgcP4/w6UGqbhPk/2N7NwSBoKxGlO1keswgsEmSA4YC4E3EsLHSROOojZ2XQsh5
+	 ra586uti+8KIUNTou4yJe6sHytEEwkX3WhyXKAao=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727483AbfKAOts (ORCPT
+        id S1728121AbfKAQuN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 1 Nov 2019 10:49:48 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:40221 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727553AbfKAOtq (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Nov 2019 10:49:46 -0400
-Received: by mail-il1-f196.google.com with SMTP id d83so8903480ilk.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Nov 2019 07:49:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OvG/qWeSbh1TxLgtmArlVNDYsoALFmkQsSm7UaGBE/U=;
-        b=I8fTjuu/6Ne32KB3TzlkLHNc34FVVQHy/sTVoKvVYeIrGIs/zEWpPkdT4X2FTYZjfJ
-         UM4GFAou96icNjK1AVI5vEOtitRVjbXgZfqaanuntVF/vhTirkZT/9E+CWJUq7E2TQj0
-         StXEuMWcR5zlKYK8R7EGKhYIJ+Gb4ciY1IEMBuLWPRJg6NDyeWhuiAg3JUaKBbPDkQbL
-         sElozNdk4t7DFMJr/2GTc4DXhCqAVsopLQpS5jb3DWebvxakkqFHF/FpNq1kpaMflaeM
-         i/d5Nr3Kf7lOCXzSXk2CZXk0I+pfGJSDm0die6SS7xUqTydNbrFVI18tKwuFsQOAi/MB
-         kf9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OvG/qWeSbh1TxLgtmArlVNDYsoALFmkQsSm7UaGBE/U=;
-        b=nEkgLRI/3iyH//N1fbHyK51YkH4BtvcNJgIM/jdJ462VSaN5aCKP395Rl99assx0SS
-         xf36KigM3UIMq1rWQLu5NzeVM6k+jGQSJp7gVZMygqCfTc1bft+NafWmdxMsOFNezfnC
-         satzmh126mmi6CTkDrFiOjZlXTcEW9Bnx/vjspYj2bZ8lmbJVSYpqSo1lnqtet6zCGFf
-         mVbX67aWKGv0v2nbwbmIKfan28XXhZ5S0qaR6p1ekym+3swT8LTmygs45tkmFd09VpUf
-         hdx59UOiuMMHC39J//2H8cQ7i499m/KvhQb8yrvWblgSzY3HVCTTyqdYh+XePHtbT3hf
-         R9+w==
-X-Gm-Message-State: APjAAAWU1sGYjlHzuo5HuJ/yaNwgMJHsTExNPTHLdq+lP5YJfs+uoM+A
-        N2VhJZ64bDaj174nep+/PjhExA==
-X-Google-Smtp-Source: APXvYqxr+bs1ScRWYKeCxmeXCSlj6Q4Lr6KXKYyS2zYjKblHkVBUMc7IPKJ+YzvkERiHaP9xr0/5Lg==
-X-Received: by 2002:a92:5d8f:: with SMTP id e15mr13331860ilg.173.1572619783709;
-        Fri, 01 Nov 2019 07:49:43 -0700 (PDT)
-Received: from [192.168.1.159] ([65.144.74.34])
-        by smtp.gmail.com with ESMTPSA id f73sm1107827ild.59.2019.11.01.07.49.40
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 01 Nov 2019 07:49:42 -0700 (PDT)
-Subject: Re: [PATCH 10/19] fs/io_uring: set FOLL_PIN via pin_user_pages()
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-References: <20191030224930.3990755-1-jhubbard@nvidia.com>
- <20191030224930.3990755-11-jhubbard@nvidia.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <979ba2a3-ee04-fb12-204d-1b68c7b6e141@kernel.dk>
-Date:   Fri, 1 Nov 2019 08:49:39 -0600
+        Fri, 1 Nov 2019 12:50:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55056 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726825AbfKAQuN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 1 Nov 2019 12:50:13 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 15D052080F;
+        Fri,  1 Nov 2019 16:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572627012;
+        bh=BUpvPIgCiek5J4CeLj4ca43Fs+r3iHsHbPYrxAmt2wE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=psFXQRDbxkTKxYUj7eTf2Omjo3astwoXfflW1bYkNIZmTuZD+EtesRws9UOkeYe91
+         IFZOcdy87wphXGkpuiDJs8rspxU3g4InAIWj8GjQJ6G/4herpdB9aV2dqStRjNlC9x
+         ow6EgmD3OczIPTgaA4qoa5ZVWNCdPZpOmHt5oMAI=
+Subject: Re: [PATCH linux-kselftest/test v6] lib/list-test: add a test for the
+ 'list' doubly linked list
+To:     Joe Perches <joe@perches.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, shuah <shuah@kernel.org>
+References: <20191024224631.118656-1-davidgow@google.com>
+ <0cb1d948-0da3-eb0f-c58f-ae3a785dd0dd@kernel.org>
+ <CABVgOSmCHbGjZBjeWSbPEZbJw22SaBQnoO77xxNzN_ugAwzNiQ@mail.gmail.com>
+ <20191030104217.GA18421@kadam>
+ <42a8270d-ed6f-d29f-5e71-7b76a074b63e@kernel.org>
+ <20191030191255.GD18421@kadam>
+ <f665ec7b21527c7095a61dd5c2f48fd00df0d5c9.camel@perches.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <a127aeaa-e5ba-2d8d-0894-936e05637508@kernel.org>
+Date:   Fri, 1 Nov 2019 10:49:51 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191030224930.3990755-11-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <f665ec7b21527c7095a61dd5c2f48fd00df0d5c9.camel@perches.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -104,14 +71,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/30/19 4:49 PM, John Hubbard wrote:
-> Convert fs/io_uring to use the new pin_user_pages() call, which sets
-> FOLL_PIN. Setting FOLL_PIN is now required for code that requires
-> tracking of pinned pages, and therefore for any code that calls
-> put_user_page().
+On 10/30/19 1:23 PM, Joe Perches wrote:
+> On Wed, 2019-10-30 at 22:12 +0300, Dan Carpenter wrote:
+>> On Wed, Oct 30, 2019 at 10:27:12AM -0600, shuah wrote:
+>>>> It's better to ignore checkpatch and other scripts when they are wrong.
+>>>> (unless the warning message inspires you to make the code more readable
+>>>> for humans).
+>>>>
+>>>
+>>> It gets confusing when to ignore and when not to. It takes work to
+>>> figure out and it is subjective.
+>>>
+>>
+>> In this case, it's not subjective because checkpatch is clearly not
+>> working as intended.
+> 
+> checkpatch _is_ working as intended.
+> It was never intended to be perfect.
+> 
+> checkpatch _always_ depended on a reviewer deciding
+> whether its output was appropriate.
+> 
+>> I don't feel like "checkpatch clean" is a useful criteria for applying
+>> patches.
+> 
+> Nor do I.
+> 
+>> The other things about warnings is that I always encourage people to
+>> just ignore old warnings.  If you're running Smatch and you see a
+>> warning in ancient code that means I saw it five years ago and didn't
+>> fix it so it's a false positive.  Old warnings are always 100% false
+>> positives.
+> 
+> That'd be not absolute either because it depended on your
+> historical judgment as to whether an old warning was in fact
+> a defect or not.
+> 
+> People make mistakes.
+> Regex based scripts are by design stupid and untrustworthy.
+> 
+> Mistakes will be made.
+> Just fix the actual defects in code as soon as possible.
+> 
+> 
+> 
 
-Reviewed-by: Jens Axboe <axboe@kernel.dk>
 
--- 
-Jens Axboe
+Thanks all for chiming in. I am taking v6 as is and adding an update
+to commit log capture the spurious errors from checkpath.pl for this
+specific case.
 
+thanks,
+-- Shuah
