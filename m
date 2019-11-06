@@ -7,33 +7,33 @@ X-Spam-Status: No, score=-13.2 required=3.0
 	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B344C5DF63
-	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Nov 2019 15:53:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A391AC5DF63
+	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Nov 2019 15:59:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E674B2178F
-	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Nov 2019 15:53:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6BD2821882
+	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Nov 2019 15:59:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727206AbfKFPxt (ORCPT
+        id S1727824AbfKFP7V (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 6 Nov 2019 10:53:49 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:56847 "EHLO
+        Wed, 6 Nov 2019 10:59:21 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:57005 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727192AbfKFPxt (ORCPT
+        with ESMTP id S1726926AbfKFP7U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Nov 2019 10:53:49 -0500
+        Wed, 6 Nov 2019 10:59:20 -0500
 Received: from [213.220.153.21] (helo=wittgenstein)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iSNcv-0002fh-51; Wed, 06 Nov 2019 15:53:45 +0000
-Date:   Wed, 6 Nov 2019 16:53:44 +0100
+        id 1iSNiG-0003C8-BP; Wed, 06 Nov 2019 15:59:16 +0000
+Date:   Wed, 6 Nov 2019 16:59:15 +0100
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Adrian Reber <areber@redhat.com>
 Cc:     Shuah Khan <shuah@kernel.org>,
         Eugene Syromiatnikov <esyr@redhat.com>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2] selftests: add tests for clone3()
-Message-ID: <20191106155343.zeq46rbnodkhh53a@wittgenstein>
+Message-ID: <20191106155914.hzolyolz2w4hcn7w@wittgenstein>
 References: <20191104131846.1076814-1-areber@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -59,14 +59,17 @@ On Mon, Nov 04, 2019 at 02:18:46PM +0100, Adrian Reber wrote:
 > 
 > Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
 > Signed-off-by: Adrian Reber <areber@redhat.com>
-> 
-> A few more comments below.
-> 
-> Also, would you be open to adding tests here for the newly added .stack
-> and .stack_size API (cf. [1])?
-> 
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fa729c4df558936b4a1a7b3e2234011f44ede28b 
-> 
+
+Resending, since mutt messed-up the quoting due to a new configuration I
+was testing.
+
+A few more comments below.
+
+Also, would you be open to adding tests here for the newly added .stack
+and .stack_size API (cf. [1])?
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fa729c4df558936b4a1a7b3e2234011f44ede28b
+
 > ---
 > v2:
 >  - Applied Christian's suggestions
@@ -203,15 +206,16 @@ On Mon, Nov 04, 2019 at 02:18:46PM +0100, Adrian Reber wrote:
 > +		args.exit_signal = 0;
 > +		break;
 > +	case CLONE3_ARGS_ALL_1:
-> 
-> I don't fully understand this test case. What is this for exactly?
-> 
+
+I don't fully understand this test case. What is this for exactly?
+
 > +		args.flags = 1;
 > +		args.pidfd = 1;
 > +		args.child_tid = 1;
 > +		args.parent_tid = 1;
 > +		args.exit_signal = 1;
 > +		args.stack = 1;
+> +		args. stack_size = 1;
 > +		args.tls = 1;
 > +		break;
 > +	case CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG:
@@ -324,15 +328,15 @@ On Mon, Nov 04, 2019 at 02:18:46PM +0100, Adrian Reber wrote:
 > +	 */
 > +	test_clone3(0, sizeof(struct clone_args) + 8, -ECHILD,
 > +			CLONE3_ARGS_ALL_0);
-> 
-> Ah, I haven't caught this during the first review. No, that's not
-> correct. You don't get a signal since exit_signal is 0, that's correct
-> _but_ you still need to wait on the child. You don't see the child
-> because the kernel will by default not wait on clone()-children aka
-> processes created with exit_signal != SIGCHLD. To wait on
-> clone()-children as well,  you need to set __WCLONE or __WALL in the
-> options argument for wait{p}id(2).
-> 
+
+Ah, I haven't caught this during the first review. No, that's not
+correct. You don't get a signal since exit_signal is 0, that's correct
+_but_ you still need to wait on the child. You don't see the child
+because the kernel will by default not wait on clone()-children aka
+processes created with exit_signal != SIGCHLD. To wait on
+clone()-children as well,  you need to set __WCLONE or __WALL in the
+options argument for wait{p}id(2).
+
 > +
 > +	/*
 > +	 * Do a clone3() with sizeof(struct clone_args) + 8
@@ -340,9 +344,9 @@ On Mon, Nov 04, 2019 at 02:18:46PM +0100, Adrian Reber wrote:
 > +	 */
 > +	test_clone3(0, sizeof(struct clone_args) + 8, -EINVAL,
 > +			CLONE3_ARGS_ALL_1);
-> 
-> The comment and the test don't line up. :)
-> 
+
+The comment and the test don't line up. :)
+
 > +
 > +	/* Do a clone3() with > page size */
 > +	test_clone3(0, getpagesize() + 8, -E2BIG, CLONE3_ARGS_NO_TEST);
