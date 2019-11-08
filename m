@@ -2,92 +2,70 @@ Return-Path: <SRS0=hfwG=ZA=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90CCBC5DF60
-	for <linux-kselftest@archiver.kernel.org>; Fri,  8 Nov 2019 03:25:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FB5FC5DF60
+	for <linux-kselftest@archiver.kernel.org>; Fri,  8 Nov 2019 06:33:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 648AB21882
-	for <linux-kselftest@archiver.kernel.org>; Fri,  8 Nov 2019 03:25:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573183530;
-	bh=OQWLutCvyBNF31F7nVyat1ronJZrpce2IWGhQEDJklg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=bJuhLgBH/0pGqiRfInmPbNYFme2NsBbtLeNIcwoEycjonB7ORgGJGKzz3Nz1qOy/I
-	 xRlw7eA7TNjksw0AM/uW5Aq9pRJH5wmK+GisBbaxyq4jgFfO8V+E00s2GeA6clXeIb
-	 fkIFFUX1GL/caXpYU9DuDjGvJoZw19y03/Gzbp5c=
+	by mail.kernel.org (Postfix) with ESMTP id 367ED21882
+	for <linux-kselftest@archiver.kernel.org>; Fri,  8 Nov 2019 06:33:09 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="sG/5Iy/R"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728302AbfKHDZa (ORCPT
+        id S1725900AbfKHGdJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 7 Nov 2019 22:25:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38220 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726219AbfKHDZ3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Nov 2019 22:25:29 -0500
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B0C222084D;
-        Fri,  8 Nov 2019 03:25:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573183529;
-        bh=OQWLutCvyBNF31F7nVyat1ronJZrpce2IWGhQEDJklg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EL2vfDt6Mw43aU8kaHTYInmtABbFRAMAOtsu/cUlsSL+yYrhw0c5kItTFOXfkIjl8
-         Y0b/qWgeolc6lq72oqbSsaPu3G7EN0ptlwK005z41DkQtbsDfU/HxzMGK8hKMkguIH
-         SfXE8gnrqWFYUWlSvy6ewTwdns60UlSGCNDkbslM=
-Date:   Thu, 7 Nov 2019 19:25:28 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
+        Fri, 8 Nov 2019 01:33:09 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:46636 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725372AbfKHGdI (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 8 Nov 2019 01:33:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=qCauJZ5vwFE0q6fN8aq4sFtrLeNJgvenOfvg0GpdMWM=; b=sG/5Iy/R93fNdCNserw/hcK8F
+        I/tl7i3svTZIlLBYVvm+NfxSZjsLxC51ymu9r87M1bcceDqDqzElzGH4E21ZuKNGpCjCF2a3WhE5/
+        aHceB75r4dDQHPWrsnertyu9LhreTunp6OttSkF3mfFAFB8UyZHLgY4VlFe3F3U+gU9tQP8euB1Al
+        O41BzkChjzsSrgPwft5xFbCUSfvSdd+z5qjlvYD27PHjVupeohgKhz9l3sivmFUVj3CAW0v4MZZGa
+        Nf+34EHDPZULFBQZufZmCw7CMWdZ50dwzhOF3TIDn5MlfUdXwaS3r5KB7jI4r0l0IBTjIaUgXcyRl
+        SUM4IXUpw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iSxpU-0004vC-5h; Fri, 08 Nov 2019 06:33:08 +0000
+Date:   Thu, 7 Nov 2019 22:33:08 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
 Cc:     linux-kernel@vger.kernel.org,
         Nicolas Geoffray <ngeoffray@google.com>,
-        kernel-team@android.com, Hugh Dickins <hughd@google.com>,
+        kernel-team@android.com, Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
         linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         Shuah Khan <shuah@kernel.org>
 Subject: Re: [PATCH 1/2] memfd: Fix COW issue on MAP_PRIVATE and
  F_SEAL_FUTURE_WRITE mappings
-Message-Id: <20191107192528.0c22e8e122a04d4f8d29c5eb@linux-foundation.org>
-In-Reply-To: <20191108020614.GA99567@google.com>
+Message-ID: <20191108063308.GB18778@infradead.org>
 References: <20191107195355.80608-1-joel@joelfernandes.org>
-        <20191107170023.0695732bb67eb80acd4caee5@linux-foundation.org>
-        <20191108020614.GA99567@google.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191107195355.80608-1-joel@joelfernandes.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 7 Nov 2019 21:06:14 -0500 Joel Fernandes <joel@joelfernandes.org> wrote:
+> -		 * Since the F_SEAL_FUTURE_WRITE seals allow for a MAP_SHARED
+> -		 * read-only mapping, take care to not allow mprotect to revert
+> -		 * protections.
+> +		 * Since an F_SEAL_FUTURE_WRITE sealed memfd can be mapped as
+> +		 * MAP_SHARED and read-only, take care to not allow mprotect to
+> +		 * revert protections on such mappings. Do this only for shared
+> +		 * mappings. For private mappings, don't need to mask VM_MAYWRITE
 
-> On Thu, Nov 07, 2019 at 05:00:23PM -0800, Andrew Morton wrote:
-> > On Thu,  7 Nov 2019 14:53:54 -0500 "Joel Fernandes (Google)" <joel@joelfernandes.org> wrote:
-> > 
-> > > F_SEAL_FUTURE_WRITE has unexpected behavior when used with MAP_PRIVATE:
-> > > A private mapping created after the memfd file that gets sealed with
-> > > F_SEAL_FUTURE_WRITE loses the copy-on-write at fork behavior, meaning
-> > > children and parent share the same memory, even though the mapping is
-> > > private.
-> > 
-> > That sounds fairly serious.  Should this be backported into -stable kernels?
-> 
-> Yes, it should be.
-
-I added
-
-Fixes: ab3948f58ff84 ("mm/memfd: add an F_SEAL_FUTURE_WRITE seal to memfd")
-Cc: <stable@vger.kernel.org>
-
-> The F_SEAL_FUTURE_WRITE feature was introduced in v5.1 so
-> v5.3.x stable kernels would need a backport. I can submit a backport tomorrow
-> unless we are Ok with stable automatically picking it up (I believe the
-> stable folks "auto select" fixes which should detect this is a fix since I
-> have said it is a fix in the subject line).
-
-The Cc:stable tag should trigger the appropriate actions, assisted by
-the Fixes:.  I doubt if "fix" in the Subject has much effect.
-
+This adds an > 80 char line.
