@@ -1,147 +1,129 @@
-Return-Path: <SRS0=RV3E=ZF=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=Rs50=ZE=vger.kernel.org=linux-m68k-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F32AC33C99
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Nov 2019 20:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A14CAC43331
+	for <linux-m68k@archiver.kernel.org>; Tue, 12 Nov 2019 23:01:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ADAB8206F3
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Nov 2019 20:31:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7593E20674
+	for <linux-m68k@archiver.kernel.org>; Tue, 12 Nov 2019 23:01:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="K3ELKy0L"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="c4HijsXE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbfKMUay (ORCPT
-        <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 13 Nov 2019 15:30:54 -0500
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:5469 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726270AbfKMUax (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Nov 2019 15:30:53 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dcc67fb0000>; Wed, 13 Nov 2019 12:30:51 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 13 Nov 2019 12:30:48 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 13 Nov 2019 12:30:48 -0800
-Received: from [10.2.160.107] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 13 Nov
- 2019 20:30:47 +0000
-Subject: Re: [PATCH v3 00/23] mm/gup: track dma-pinned pages: FOLL_PIN,
- FOLL_LONGTERM
-To:     Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
+        id S1727178AbfKLXBa (ORCPT <rfc822;linux-m68k@archiver.kernel.org>);
+        Tue, 12 Nov 2019 18:01:30 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:44076 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727074AbfKLXB3 (ORCPT
+        <rfc822;linux-m68k@lists.linux-m68k.org>);
+        Tue, 12 Nov 2019 18:01:29 -0500
+Received: by mail-pl1-f196.google.com with SMTP id az9so152870plb.11
+        for <linux-m68k@lists.linux-m68k.org>; Tue, 12 Nov 2019 15:01:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nExhpa8NtyhyvUyh20F6httON+9jpHubOC8X4R1/1QI=;
+        b=c4HijsXEjZGJqE7HF/OLTdBXGVnY9qLmNBULMzMpbSwMDUdlWMyYkBAj7Jv9KvJQq9
+         uQ/fhhX6CbwBVqkc6vhI0J9bVR6S+eypweTAwvYsABomRnDDk1wGcU2hJ/fV4/K6uu+1
+         c9+G8zkVxO8gfkNV8xNJ/wUCIdP5veO1BJPEs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nExhpa8NtyhyvUyh20F6httON+9jpHubOC8X4R1/1QI=;
+        b=RaQDUCo9Z3syPSPJVCm1cY0eFCo0kq49hh2MHakWJ13hOXSdvrQCj7WWRtazT/bexX
+         /GVgMr4Okm5ngEOA9hmCS9UAhJGybXYj7qTRlebS3gcGHBH4T4OkytHEjFagVKprRKTr
+         5SQUnqbv0hqagQUzAxuaR3iwCmmX0Hcs5l3CCw+KSGNI/Rc8/+hp7Sd35AW9/EN5ZMf6
+         G1GKUVZynVbt1M6PhI7FpscwRdlp3yoc8fKjftkuviyf+KRv6lkbbig9NHr2598wbLSh
+         Pw+E8dSFoi30UHDmdxg533VBg/th0uT6cgDQB47OEAV3wQqh09XQ6tQnlqwmF+n5Tu2t
+         XQMQ==
+X-Gm-Message-State: APjAAAUtLq3i8ieVzPXKJ0Rkbec2zkmRoYffIZnPYoH5FTmC5A7pU4qY
+        oD+n6ri5/z8nO8+y5PRLZ4HfJg==
+X-Google-Smtp-Source: APXvYqy/dNw+1S0sgv4o54+xgQ9m/sDAbXJguDm6De1m1sF3Ucjez84Z50LDqlIQCV97XGMiY2eUjw==
+X-Received: by 2002:a17:902:b282:: with SMTP id u2mr266015plr.301.1573599688858;
+        Tue, 12 Nov 2019 15:01:28 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id em16sm159840pjb.21.2019.11.12.15.01.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2019 15:01:27 -0800 (PST)
+Date:   Tue, 12 Nov 2019 15:01:26 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf <bpf@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        <kvm@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        netdev <netdev@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20191112000700.3455038-1-jhubbard@nvidia.com>
- <20191112203802.GD5584@ziepe.ca>
- <02fa935c-3469-b766-b691-5660084b60b9@nvidia.com>
- <CAKMK7uHvk+ti00mCCF2006U003w1dofFg9nSfmZ4bS2Z2pEDNQ@mail.gmail.com>
- <7b671bf9-4d94-f2cc-8453-863acd5a1115@nvidia.com>
- <20191113101210.GD6367@quack2.suse.cz>
- <20191113114311.GP23790@phenom.ffwll.local>
-From:   John Hubbard <jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <283b121d-f526-f43f-de45-dc2f8318d860@nvidia.com>
-Date:   Wed, 13 Nov 2019 12:28:02 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, libc-alpha@sourceware.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v15 0/9] open: introduce openat2(2) syscall
+Message-ID: <201911121457.7D02692@keescook>
+References: <20191105090553.6350-1-cyphar@cyphar.com>
+ <20191111132404.y523iqicbn6fivx5@yavin.dot.cyphar.com>
 MIME-Version: 1.0
-In-Reply-To: <20191113114311.GP23790@phenom.ffwll.local>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1573677051; bh=w2mV+XepuxnOtihiYgL/XuqwUYU2QI7jYfF/MppVAWE=;
-        h=X-PGP-Universal:Subject:To:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=K3ELKy0LEaE4Frm6QQ4jLw8cJF3zobatTYiyQ/Vg2jO630IkqTksnY4sEeXMrgt5a
-         b46qAh7TsgPVJKCPcTPIoUnjxNn6h2xUdpivOkXuz3queuSeoxqaSFBxc3yHdAdKf1
-         weqLMTvKu8Vs4tf6la1SbXQc5ZvBvuc6pK240FvHmEYJ0o2WePNqZANag+FSCa5U1i
-         2iyzSKadjF0T/uRVrR4KM4Ey20Bg7sJaaQBcaSS9Pr1q7odGMaBmeJ4hRBriIHKA4P
-         1LTpfohPn7iHAuSCtXbApQkiiVLKyUBXMKbsJDCLOd3JNZEji1iUk1dM5atghZtAzC
-         EJVJspvV4f3sw==
-Sender: linux-kselftest-owner@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191111132404.y523iqicbn6fivx5@yavin.dot.cyphar.com>
+Sender: linux-m68k-owner@vger.kernel.org
 Precedence: bulk
-List-ID: <linux-kselftest.vger.kernel.org>
-X-Mailing-List: linux-kselftest@vger.kernel.org
+List-ID: <linux-m68k.vger.kernel.org>
+X-Mailing-List: linux-m68k@vger.kernel.org
+Message-ID: <20191112230126.fB6tgZWuPfytE2mByhRZoPC7CCs14ObIOeCrnAjR5yo@z>
 
-On 11/13/19 3:43 AM, Daniel Vetter wrote:
-...
->>>> Can't we call this unpin_user_page then, for some symmetry? Or is that
->>>> even more churn?
->>>>
->>>> Looking from afar the naming here seems really confusing.
->>>
->>>
->>> That look from afar is valuable, because I'm too close to the problem to see
->>> how the naming looks. :)
->>>
->>> unpin_user_page() sounds symmetrical. It's true that it would cause more
->>> churn (which is why I started off with a proposal that avoids changing the
->>> names of put_user_page*() APIs). But OTOH, the amount of churn is proportional
->>> to the change in direction here, and it's really only 10 or 20 lines changed,
->>> in the end.
->>>
->>> So I'm open to changing to that naming. It would be nice to hear what others
->>> prefer, too...
->>
->> FWIW I'd find unpin_user_page() also better than put_user_page() as a
->> counterpart to pin_user_pages().
+On Tue, Nov 12, 2019 at 12:24:04AM +1100, Aleksa Sarai wrote:
+> On 2019-11-05, Aleksa Sarai <cyphar@cyphar.com> wrote:
+> > This patchset is being developed here:
+> >   <https://github.com/cyphar/linux/tree/openat2/master>
+> > 
+> > Patch changelog:
+> >  v15:
+> >   * Fix code style for LOOKUP_IN_ROOT handling in path_init(). [Linus Torvalds]
+> >   * Split out patches for each individual LOOKUP flag.
+> >   * Reword commit messages to give more background information about the
+> >     series, as well as mention the semantics of each flag in more detail.
+> > [...]
 > 
-> One more point from afar on pin/unpin: We use that a lot in graphics for
-> permanently pinned graphics buffer objects. Which really only should be
-> used for scanout. So at least graphics folks should have an appropriate
-> mindset and try to make sure we don't overuse this stuff.
-> -Daniel
-> 
+> Ping -- this patch hasn't been touched for a week. Thanks.
 
-OK, Ira also likes "unpin", and so far no one has said *anything* in favor
-of the "put_user_page" names, so I think we have a winner! I'll change the
-names to unpin_user_page*().
+If I've been following correctly, everyone is happy with this series.
+(i.e. Linus's comment appear to have been addressed.)
 
+Perhaps the next question is should this go via a pull request by you to
+Linus directly during the v5.5 merge window, via akpm, via akpm, via
+Christian, or some other path? Besides Linus, it's not been clear who
+should "claim" this series. :)
 
-thanks,
 -- 
-John Hubbard
-NVIDIA
+Kees Cook
