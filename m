@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02469C1744B
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Nov 2019 04:31:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 332A4C1744A
+	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Nov 2019 04:31:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CF9FB22474
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Nov 2019 04:31:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 023E12245A
+	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Nov 2019 04:31:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="EogAWVN9"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="pj6M3Paz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727403AbfKME1R (ORCPT
+        id S1727376AbfKME1Q (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 12 Nov 2019 23:27:17 -0500
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:13653 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727001AbfKME1Q (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 12 Nov 2019 23:27:16 -0500
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:13623 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726995AbfKME1P (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 12 Nov 2019 23:27:15 -0500
 Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dcb86200002>; Tue, 12 Nov 2019 20:27:12 -0800
+        id <B5dcb86200000>; Tue, 12 Nov 2019 20:27:12 -0800
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate102.nvidia.com (PGP Universal service);
-  Tue, 12 Nov 2019 20:27:13 -0800
+  Tue, 12 Nov 2019 20:27:12 -0800
 X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 12 Nov 2019 20:27:13 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
+        by hqpgpgate102.nvidia.com on Tue, 12 Nov 2019 20:27:12 -0800
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL105.nvidia.com
  (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 13 Nov
  2019 04:27:12 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
  Transport; Wed, 13 Nov 2019 04:27:12 +0000
 Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5dcb86200004>; Tue, 12 Nov 2019 20:27:12 -0800
+        id <B5dcb86200000>; Tue, 12 Nov 2019 20:27:12 -0800
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Al Viro <viro@zeniv.linux.org.uk>,
@@ -69,167 +69,200 @@ CC:     Al Viro <viro@zeniv.linux.org.uk>,
         <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
         <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v4 08/23] vfio, mm: fix get_user_pages_remote() and FOLL_LONGTERM
-Date:   Tue, 12 Nov 2019 20:26:55 -0800
-Message-ID: <20191113042710.3997854-9-jhubbard@nvidia.com>
+Subject: [PATCH v4 04/23] mm: devmap: refactor 1-based refcounting for ZONE_DEVICE pages
+Date:   Tue, 12 Nov 2019 20:26:51 -0800
+Message-ID: <20191113042710.3997854-5-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191113042710.3997854-1-jhubbard@nvidia.com>
 References: <20191113042710.3997854-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
 X-NVConfidentiality: public
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1573619232; bh=0cowaOO6KitGFGMnJNwN3YLhZSQBgszQDobj6JSTgxM=;
+        t=1573619232; bh=eh5PKTqFnv3H2C1oWk46Hm4jlzYBaiSiPR2xbAo8/Xk=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=EogAWVN9paP8N3pkbHvMzZjJ5gehKpeKWuou63lRw8FeGutg9NEVWBv94w4jqNJRm
-         sP7yh5Bwkvnr/0TV5Z3e4j2dVGNmkogCcZln9kBLTSn9K0Oatp17+fcUcgsQGWsoWS
-         IQl4a29AdwCbuc6xwcuhEu0vLJBbAArYTj6Wgw/ctGtRunEkjQ1pp7yxU7RrPP8lAR
-         ABIaJ442Nhe8X7aHS9oHrcdxj6Z+rnSYflHxLJlLvgfFfztOMoj3tAMYX87B6jHFAT
-         enxruNoT6/HUARpGfH/xCQlRketyioirDSfuiT/+GuSVFs4zl6mmoqJ5FcNaEb+aYL
-         nMBW9JOSK/Ebg==
+         Content-Type:Content-Transfer-Encoding;
+        b=pj6M3Paz4Jb8s/zkr4xbcn7V9rw85SFVXQf2t/30nSh5HeFhZtiu6L2TDkY9LXdBk
+         qmFAmsMXW8K9aqONmx5rzpgcKrp7KyoDoxEcKWWeF72f2hFzO1rgnvWA62qGpVpJpw
+         Fji+h0aQkFAXAMnKj3pPlPYU48JG4GZyXfD/6m7PagtSohgBgvIQp6tKddm+C3WJk9
+         XcFpVY0yWtBnkeMgSj0/b7hydd7pek7qPo7vhnlFkZz0SUdf+MdspBaUtaMwS2wKLd
+         hFWYy6ySeXIEnL5hOSCfBW1tz3UyYdy4KyiOziT+U/tvErynTern5gpDgfTipG7fZf
+         A69nwyNvr8ktQ==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As it says in the updated comment in gup.c: current FOLL_LONGTERM
-behavior is incompatible with FAULT_FLAG_ALLOW_RETRY because of the
-FS DAX check requirement on vmas.
+An upcoming patch changes and complicates the refcounting and
+especially the "put page" aspects of it. In order to keep
+everything clean, refactor the devmap page release routines:
 
-However, the corresponding restriction in get_user_pages_remote() was
-slightly stricter than is actually required: it forbade all
-FOLL_LONGTERM callers, but we can actually allow FOLL_LONGTERM callers
-that do not set the "locked" arg.
+* Rename put_devmap_managed_page() to page_is_devmap_managed(),
+  and limit the functionality to "read only": return a bool,
+  with no side effects.
 
-Update the code and comments accordingly, and update the VFIO caller
-to take advantage of this, fixing a bug as a result: the VFIO caller
-is logically a FOLL_LONGTERM user.
+* Add a new routine, put_devmap_managed_page(), to handle checking
+  what kind of page it is, and what kind of refcount handling it
+  requires.
 
-Also, remove an unnessary pair of calls that were releasing and
-reacquiring the mmap_sem. There is no need to avoid holding mmap_sem
-just in order to call page_to_pfn().
+* Rename __put_devmap_managed_page() to free_devmap_managed_page(),
+  and limit the functionality to unconditionally freeing a devmap
+  page.
 
-Also, move the DAX check ("if a VMA is DAX, don't allow long term
-pinning") from the VFIO call site, all the way into the internals
-of get_user_pages_remote() and __gup_longterm_locked(). That is:
-get_user_pages_remote() calls __gup_longterm_locked(), which in turn
-calls check_dax_vmas(). It's lightly explained in the comments as well.
+This is originally based on a separate patch by Ira Weiny, which
+applied to an early version of the put_user_page() experiments.
+Since then, J=C3=A9r=C3=B4me Glisse suggested the refactoring described abo=
+ve.
 
-Thanks to Jason Gunthorpe for pointing out a clean way to fix this,
-and to Dan Williams for helping clarify the DAX refactoring.
-
-Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Jerome Glisse <jglisse@redhat.com>
-Cc: Ira Weiny <ira.weiny@intel.com>
+Suggested-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- drivers/vfio/vfio_iommu_type1.c | 25 ++-----------------------
- mm/gup.c                        | 27 ++++++++++++++++++++++-----
- 2 files changed, 24 insertions(+), 28 deletions(-)
+ include/linux/mm.h | 27 ++++++++++++++++---
+ mm/memremap.c      | 67 ++++++++++++++++++++--------------------------
+ 2 files changed, 53 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type=
-1.c
-index d864277ea16f..7301b710c9a4 100644
---- a/drivers/vfio/vfio_iommu_type1.c
-+++ b/drivers/vfio/vfio_iommu_type1.c
-@@ -340,7 +340,6 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned=
- long vaddr,
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index a2adf95b3f9c..96228376139c 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -967,9 +967,10 @@ static inline bool is_zone_device_page(const struct pa=
+ge *page)
+ #endif
+=20
+ #ifdef CONFIG_DEV_PAGEMAP_OPS
+-void __put_devmap_managed_page(struct page *page);
++void free_devmap_managed_page(struct page *page);
+ DECLARE_STATIC_KEY_FALSE(devmap_managed_key);
+-static inline bool put_devmap_managed_page(struct page *page)
++
++static inline bool page_is_devmap_managed(struct page *page)
  {
- 	struct page *page[1];
- 	struct vm_area_struct *vma;
--	struct vm_area_struct *vmas[1];
- 	unsigned int flags =3D 0;
- 	int ret;
+ 	if (!static_branch_unlikely(&devmap_managed_key))
+ 		return false;
+@@ -978,7 +979,6 @@ static inline bool put_devmap_managed_page(struct page =
+*page)
+ 	switch (page->pgmap->type) {
+ 	case MEMORY_DEVICE_PRIVATE:
+ 	case MEMORY_DEVICE_FS_DAX:
+-		__put_devmap_managed_page(page);
+ 		return true;
+ 	default:
+ 		break;
+@@ -986,6 +986,27 @@ static inline bool put_devmap_managed_page(struct page=
+ *page)
+ 	return false;
+ }
 =20
-@@ -348,33 +347,13 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsign=
-ed long vaddr,
- 		flags |=3D FOLL_WRITE;
-=20
- 	down_read(&mm->mmap_sem);
--	if (mm =3D=3D current->mm) {
--		ret =3D get_user_pages(vaddr, 1, flags | FOLL_LONGTERM, page,
--				     vmas);
--	} else {
--		ret =3D get_user_pages_remote(NULL, mm, vaddr, 1, flags, page,
--					    vmas, NULL);
--		/*
--		 * The lifetime of a vaddr_get_pfn() page pin is
--		 * userspace-controlled. In the fs-dax case this could
--		 * lead to indefinite stalls in filesystem operations.
--		 * Disallow attempts to pin fs-dax pages via this
--		 * interface.
--		 */
--		if (ret > 0 && vma_is_fsdax(vmas[0])) {
--			ret =3D -EOPNOTSUPP;
--			put_page(page[0]);
--		}
--	}
--	up_read(&mm->mmap_sem);
--
-+	ret =3D get_user_pages_remote(NULL, mm, vaddr, 1, flags | FOLL_LONGTERM,
-+				    page, NULL, NULL);
- 	if (ret =3D=3D 1) {
- 		*pfn =3D page_to_pfn(page[0]);
- 		return 0;
- 	}
-=20
--	down_read(&mm->mmap_sem);
--
- 	vaddr =3D untagged_addr(vaddr);
-=20
- 	vma =3D find_vma_intersection(mm, vaddr, vaddr + 1);
-diff --git a/mm/gup.c b/mm/gup.c
-index 933524de6249..83702b2e86c8 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -29,6 +29,13 @@ struct follow_page_context {
- 	unsigned int page_mask;
- };
-=20
-+static __always_inline long __gup_longterm_locked(struct task_struct *tsk,
-+						  struct mm_struct *mm,
-+						  unsigned long start,
-+						  unsigned long nr_pages,
-+						  struct page **pages,
-+						  struct vm_area_struct **vmas,
-+						  unsigned int flags);
- /*
-  * Return the compound head page with ref appropriately incremented,
-  * or NULL if that failed.
-@@ -1167,13 +1174,23 @@ long get_user_pages_remote(struct task_struct *tsk,=
- struct mm_struct *mm,
- 		struct vm_area_struct **vmas, int *locked)
- {
- 	/*
--	 * FIXME: Current FOLL_LONGTERM behavior is incompatible with
-+	 * Parts of FOLL_LONGTERM behavior are incompatible with
- 	 * FAULT_FLAG_ALLOW_RETRY because of the FS DAX check requirement on
--	 * vmas.  As there are no users of this flag in this call we simply
--	 * disallow this option for now.
-+	 * vmas. However, this only comes up if locked is set, and there are
-+	 * callers that do request FOLL_LONGTERM, but do not set locked. So,
-+	 * allow what we can.
- 	 */
--	if (WARN_ON_ONCE(gup_flags & FOLL_LONGTERM))
--		return -EINVAL;
-+	if (gup_flags & FOLL_LONGTERM) {
-+		if (WARN_ON_ONCE(locked))
-+			return -EINVAL;
++static inline bool put_devmap_managed_page(struct page *page)
++{
++	bool is_devmap =3D page_is_devmap_managed(page);
++
++	if (is_devmap) {
++		int count =3D page_ref_dec_return(page);
++
 +		/*
-+		 * This will check the vmas (even if our vmas arg is NULL)
-+		 * and return -ENOTSUPP if DAX isn't allowed in this case:
++		 * devmap page refcounts are 1-based, rather than 0-based: if
++		 * refcount is 1, then the page is free and the refcount is
++		 * stable because nobody holds a reference on the page.
 +		 */
-+		return __gup_longterm_locked(tsk, mm, start, nr_pages, pages,
-+					     vmas, gup_flags | FOLL_TOUCH |
-+					     FOLL_REMOTE);
++		if (count =3D=3D 1)
++			free_devmap_managed_page(page);
++		else if (!count)
++			__put_page(page);
 +	}
++
++	return is_devmap;
++}
++
+ #else /* CONFIG_DEV_PAGEMAP_OPS */
+ static inline bool put_devmap_managed_page(struct page *page)
+ {
+diff --git a/mm/memremap.c b/mm/memremap.c
+index 03ccbdfeb697..bc7e2a27d025 100644
+--- a/mm/memremap.c
++++ b/mm/memremap.c
+@@ -410,48 +410,39 @@ struct dev_pagemap *get_dev_pagemap(unsigned long pfn=
+,
+ EXPORT_SYMBOL_GPL(get_dev_pagemap);
 =20
- 	return __get_user_pages_locked(tsk, mm, start, nr_pages, pages, vmas,
- 				       locked,
+ #ifdef CONFIG_DEV_PAGEMAP_OPS
+-void __put_devmap_managed_page(struct page *page)
++void free_devmap_managed_page(struct page *page)
+ {
+-	int count =3D page_ref_dec_return(page);
++	/* Clear Active bit in case of parallel mark_page_accessed */
++	__ClearPageActive(page);
++	__ClearPageWaiters(page);
++
++	mem_cgroup_uncharge(page);
+=20
+ 	/*
+-	 * If refcount is 1 then page is freed and refcount is stable as nobody
+-	 * holds a reference on the page.
++	 * When a device_private page is freed, the page->mapping field
++	 * may still contain a (stale) mapping value. For example, the
++	 * lower bits of page->mapping may still identify the page as
++	 * an anonymous page. Ultimately, this entire field is just
++	 * stale and wrong, and it will cause errors if not cleared.
++	 * One example is:
++	 *
++	 *  migrate_vma_pages()
++	 *    migrate_vma_insert_page()
++	 *      page_add_new_anon_rmap()
++	 *        __page_set_anon_rmap()
++	 *          ...checks page->mapping, via PageAnon(page) call,
++	 *            and incorrectly concludes that the page is an
++	 *            anonymous page. Therefore, it incorrectly,
++	 *            silently fails to set up the new anon rmap.
++	 *
++	 * For other types of ZONE_DEVICE pages, migration is either
++	 * handled differently or not done at all, so there is no need
++	 * to clear page->mapping.
+ 	 */
+-	if (count =3D=3D 1) {
+-		/* Clear Active bit in case of parallel mark_page_accessed */
+-		__ClearPageActive(page);
+-		__ClearPageWaiters(page);
+-
+-		mem_cgroup_uncharge(page);
+-
+-		/*
+-		 * When a device_private page is freed, the page->mapping field
+-		 * may still contain a (stale) mapping value. For example, the
+-		 * lower bits of page->mapping may still identify the page as
+-		 * an anonymous page. Ultimately, this entire field is just
+-		 * stale and wrong, and it will cause errors if not cleared.
+-		 * One example is:
+-		 *
+-		 *  migrate_vma_pages()
+-		 *    migrate_vma_insert_page()
+-		 *      page_add_new_anon_rmap()
+-		 *        __page_set_anon_rmap()
+-		 *          ...checks page->mapping, via PageAnon(page) call,
+-		 *            and incorrectly concludes that the page is an
+-		 *            anonymous page. Therefore, it incorrectly,
+-		 *            silently fails to set up the new anon rmap.
+-		 *
+-		 * For other types of ZONE_DEVICE pages, migration is either
+-		 * handled differently or not done at all, so there is no need
+-		 * to clear page->mapping.
+-		 */
+-		if (is_device_private_page(page))
+-			page->mapping =3D NULL;
++	if (is_device_private_page(page))
++		page->mapping =3D NULL;
+=20
+-		page->pgmap->ops->page_free(page);
+-	} else if (!count)
+-		__put_page(page);
++	page->pgmap->ops->page_free(page);
+ }
+-EXPORT_SYMBOL(__put_devmap_managed_page);
++EXPORT_SYMBOL(free_devmap_managed_page);
+ #endif /* CONFIG_DEV_PAGEMAP_OPS */
 --=20
 2.24.0
 
