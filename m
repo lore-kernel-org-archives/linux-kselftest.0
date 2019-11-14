@@ -2,176 +2,112 @@ Return-Path: <SRS0=Q6hR=ZG=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BB1DC43215
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Nov 2019 22:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F4FFC43215
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Nov 2019 23:06:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE60B20723
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Nov 2019 22:42:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC04720723
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Nov 2019 23:06:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AMVLKupT"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="oFJOV++E"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726996AbfKNWms (ORCPT
+        id S1726953AbfKNXGJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 Nov 2019 17:42:48 -0500
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:42811 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726319AbfKNWmr (ORCPT
+        Thu, 14 Nov 2019 18:06:09 -0500
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:7439 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726319AbfKNXGJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Nov 2019 17:42:47 -0500
-Received: by mail-pf1-f202.google.com with SMTP id i11so5964332pfk.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2019 14:42:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=//SxIFwu+xlyZ3KpN5ryMxJ8rZ5gTQh9998RBPDyljs=;
-        b=AMVLKupT3zHwBW4ZWFmXDdkA6JXGWjf0opHk2wCQKAwS/Pbi4yMhHyuB+kQf3TtJc+
-         Sr5MjazmlpJQW3hbtSsmlnovsDxJxUitOKUL5EgxO8rrjWZ7zytghWHAyrEy4+bEdScu
-         c+cDEwZVZDHw4nGXQRdAgdqsjnIYfpURyalE5LZEx4445CTjusNn8VX1Eku552sRPuyo
-         0H6a5OYznQ/W259RWo7jY/aRLwWThsV3r8C89RZX61L4Y7NyBI9BO/y1DSBiBXuyS9Hs
-         YogeSAJRRrhEiw//W7lJQDdgETPc661qHyFCTJ3aubO7xW05TiumkLUZdRXZW38Yl+Kx
-         LYfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=//SxIFwu+xlyZ3KpN5ryMxJ8rZ5gTQh9998RBPDyljs=;
-        b=U4Gig0Ho4s6Dw8jDWddidZLn2wTm8ljDntVT9rcAZZgNTLPalVIxEMe8qPdILFUV9a
-         mCaDwWpqh1yQ1lhTxk5MffMWQtDcfujfHTJwZ8srJTFj6HSYr2dg/CDK3+uuXB+QfliC
-         z4OI/oKl7amY89r3GtWQ7VjXPf4RQ7+NlYYJ+DkfGAjNteIL+u/zt4l1a1tbM2FyYXeV
-         1CnqTnoM/emDM3Yr19U5pPNRGFG6FXpTVzQ98xtYIQgfUXXmRCFWODGfzl9So47GSj4a
-         iedruiP+dfM77WCXa5DKvTfZSXxT5JhWPVqhAB69SF25JwJPPv9GeHenDN6iDKIkMq6z
-         Kwtw==
-X-Gm-Message-State: APjAAAXvqn/m9v9rbolKontsiqnqr2e8DRehHLv49wdjpC49R8Unwf66
-        v+NTake36DN9nLf72D9o9eHkeJya0yoqYOY0/FAD7w==
-X-Google-Smtp-Source: APXvYqwSbawrArXZyzzhjKV9QauxgDW501V2Kcvv8bhjhOddYlxq9Fi9xMi+/r+OSAKviq/rsgaF6aoGbPEnQAIMjfp4GQ==
-X-Received: by 2002:a63:34c8:: with SMTP id b191mr12450491pga.26.1573771364839;
- Thu, 14 Nov 2019 14:42:44 -0800 (PST)
-Date:   Thu, 14 Nov 2019 14:42:40 -0800
-Message-Id: <20191114224240.77861-1-brendanhiggins@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.24.0.432.g9d3f5f5b63-goog
-Subject: [PATCH linux-kselftest/test v2] Documentation: kunit: add
- documentation for kunit_tool
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     shuah@kernel.org, davidgow@google.com
-Cc:     kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, tytso@mit.edu,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 14 Nov 2019 18:06:09 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dcddda90000>; Thu, 14 Nov 2019 15:05:13 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 14 Nov 2019 15:06:08 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 14 Nov 2019 15:06:08 -0800
+Received: from rcampbell-dev.nvidia.com (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 14 Nov
+ 2019 23:06:05 +0000
+Subject: Re: [PATCH v4 2/2] mm/hmm/test: add self tests for HMM
+To:     Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@mellanox.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <20191104222141.5173-1-rcampbell@nvidia.com>
+ <20191104222141.5173-3-rcampbell@nvidia.com> <20191112152521.GC12550@lst.de>
+ <07589a71-3984-b2a6-b24b-6b9a23e1b60d@nvidia.com>
+ <20191112234549.GX21728@mellanox.com> <20191113135115.GA10688@lst.de>
+X-Nvconfidentiality: public
+From:   Ralph Campbell <rcampbell@nvidia.com>
+Message-ID: <21d6b69c-3167-e60d-eed2-65bb1f8515ae@nvidia.com>
+Date:   Thu, 14 Nov 2019 15:06:05 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.0
+MIME-Version: 1.0
+In-Reply-To: <20191113135115.GA10688@lst.de>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1573772713; bh=B7TOYH1oGC7u+umXh4N1/gSiAG/BcpUtpnIfDaTAGGs=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=oFJOV++Eska9iFN5ZhKxMBTjRKi8JF1c4HhevVI8pPNuS5t7MtzmYfvOgVfcpByUR
+         fJaX6cTnVCLhFEFTYsU5rTtSUs0KslB9IdJkuhy4B4L8wxaT32kLpmM93ENybg3fWJ
+         xrjb7/GDA8EdaxcUzOTJhqrf2xAJQKr2efRt0lO9JVRmzrBn/1ZNan8ghaePlkc8+f
+         AbSoMxaEoDeq9UZTG0HOz8Qb6j67Ng+9TPQ3P4XABedJSMmVAVLLTsa0YjGD2Cq1HX
+         NiFqgMNiYEQudfJXYaT7i7qDM6DlXfSwbRWl1D14+WVDRhtSdB73GLYltc8yac6ncU
+         1JjDg+lgEI9fg==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add documentation for the Python script used to build, run, and collect
-results from the kernel known as kunit_tool. kunit_tool
-(tools/testing/kunit/kunit.py) was already added in previous commits.
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
----
- Documentation/dev-tools/kunit/index.rst      |  1 +
- Documentation/dev-tools/kunit/kunit-tool.rst | 57 ++++++++++++++++++++
- Documentation/dev-tools/kunit/start.rst      |  5 +-
- 3 files changed, 62 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/dev-tools/kunit/kunit-tool.rst
+On 11/13/19 5:51 AM, Christoph Hellwig wrote:
+> On Tue, Nov 12, 2019 at 11:45:52PM +0000, Jason Gunthorpe wrote:
+>>> Well, it would mean registering for the whole process address space.
+>>> I'll give it a try.
+>>
+>> I'm not sure it makes much sense that this testing is essentially
+>> modeled after nouveau's usage which is very strange compared to the
+>> other drivers.
+> 
+> Which means we really should make the test cases fit the proper usage.
+> Maybe defer the tests for 5.5 and just merge the first patch for now?
+> 
 
-diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
-index 26ffb46bdf99d..c60d760a0eed1 100644
---- a/Documentation/dev-tools/kunit/index.rst
-+++ b/Documentation/dev-tools/kunit/index.rst
-@@ -9,6 +9,7 @@ KUnit - Unit Testing for the Linux Kernel
- 
- 	start
- 	usage
-+	kunit-tool
- 	api/index
- 	faq
- 
-diff --git a/Documentation/dev-tools/kunit/kunit-tool.rst b/Documentation/dev-tools/kunit/kunit-tool.rst
-new file mode 100644
-index 0000000000000..37509527c04e1
---- /dev/null
-+++ b/Documentation/dev-tools/kunit/kunit-tool.rst
-@@ -0,0 +1,57 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=================
-+kunit_tool How-To
-+=================
-+
-+What is kunit_tool?
-+===================
-+
-+kunit_tool is a script (``tools/testing/kunit/kunit.py``) that aids in building
-+the Linux kernel as UML (`User Mode Linux
-+<http://user-mode-linux.sourceforge.net/>`_), running KUnit tests, parsing
-+the test results and displaying them in a user friendly manner.
-+
-+What is a kunitconfig?
-+======================
-+
-+It's just a defconfig that kunit_tool looks for in the base directory.
-+kunit_tool uses it to generate a .config as you might expect. In addition, it
-+verifies that the generated .config contains the CONFIG options in the
-+kunitconfig; the reason it does this is so that it is easy to be sure that a
-+CONFIG that enables a test actually ends up in the .config.
-+
-+How do I use kunit_tool?
-+=================================
-+
-+If a kunitconfig is present at the root directory, all you have to do is:
-+
-+.. code-block:: bash
-+
-+	./tools/testing/kunit/kunit.py run
-+
-+However, you most likely want to use it with the following options:
-+
-+.. code-block:: bash
-+
-+	./tools/testing/kunit/kunit.py run --timeout=30 --jobs=`nproc --all`
-+
-+- ``--timeout`` sets a maximum amount of time to allow tests to run.
-+- ``--jobs`` sets the number of threads to use to build the kernel.
-+
-+If you just want to use the defconfig that ships with the kernel, you can
-+append the ``--defconfig`` flag as well:
-+
-+.. code-block:: bash
-+
-+	./tools/testing/kunit/kunit.py run --timeout=30 --jobs=`nproc --all` --defconfig
-+
-+.. note::
-+	This command is particularly helpful for getting started because it
-+	just works. No kunitconfig needs to be present.
-+
-+For a list of all the flags supported by kunit_tool, you can run:
-+
-+.. code-block:: bash
-+
-+	./tools/testing/kunit/kunit.py run --help
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index aeeddfafeea20..4248a6f9038b8 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -19,7 +19,10 @@ The wrapper can be run with:
- 
- .. code-block:: bash
- 
--   ./tools/testing/kunit/kunit.py run
-+	./tools/testing/kunit/kunit.py run --timeout=30 --jobs=`nproc --all` --defconfig
-+
-+For more information on this wrapper (also called kunit_tool) checkout the
-+:doc:`kunit-tool` page.
- 
- Creating a kunitconfig
- ======================
--- 
-2.24.0.432.g9d3f5f5b63-goog
+I think this a good point to discuss.
+Some devices will want to register for all changes to the process address
+space because there is no requirement to preregister regions that the
+device can access verses devices like InfiniBand where a range of addresses
+have to be registered before the device can access those addresses.
+So for nouveau and the hmm-test driver, the mmu_range_notifier_insert()
+and mmu_range_notifier_remove() are only used long enough to get a
+stable copy of a small part of the process address space and copy it to
+the device's page table. Then the regular process wide invalidations are
+required to keep the device's page tables consistent with the process
+page table.
 
+The "hacky" part of the current design is the interaction between the
+short term narrow address range invalidations verses the long term
+process wide invalidations. (double callbacks, double locking of the
+device page table)
+
+Both types of invalidate callbacks seem useful to me so forcing a
+driver to use only one type doesn't make sense to me.
