@@ -2,135 +2,178 @@ Return-Path: <SRS0=J+qR=ZH=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5CB7C432C3
-	for <linux-kselftest@archiver.kernel.org>; Fri, 15 Nov 2019 15:04:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79A8DC43215
+	for <linux-kselftest@archiver.kernel.org>; Fri, 15 Nov 2019 16:22:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B425A20674
-	for <linux-kselftest@archiver.kernel.org>; Fri, 15 Nov 2019 15:04:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 532BD2072D
+	for <linux-kselftest@archiver.kernel.org>; Fri, 15 Nov 2019 16:22:06 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DHEyADxY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727412AbfKOPEt (ORCPT
+        id S1727688AbfKOQWG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 15 Nov 2019 10:04:49 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31978 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727406AbfKOPEt (ORCPT
+        Fri, 15 Nov 2019 11:22:06 -0500
+Received: from mail-yb1-f195.google.com ([209.85.219.195]:35940 "EHLO
+        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727423AbfKOQWF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Nov 2019 10:04:49 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAFF4bLm097752
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2019 10:04:47 -0500
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2w9nsmkwhd-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2019 10:04:47 -0500
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <iii@linux.ibm.com>;
-        Fri, 15 Nov 2019 15:04:46 -0000
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 15 Nov 2019 15:04:44 -0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xAFF4hFF60424442
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 15 Nov 2019 15:04:43 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EF6FBAE067;
-        Fri, 15 Nov 2019 15:04:42 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B5660AE057;
-        Fri, 15 Nov 2019 15:04:42 +0000 (GMT)
-Received: from white.boeblingen.de.ibm.com (unknown [9.152.96.62])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 15 Nov 2019 15:04:42 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH v4] selftests: fix prepending $(OUTPUT) to $(TEST_PROGS)
-Date:   Fri, 15 Nov 2019 16:04:28 +0100
-X-Mailer: git-send-email 2.23.0
+        Fri, 15 Nov 2019 11:22:05 -0500
+Received: by mail-yb1-f195.google.com with SMTP id v2so4076354ybo.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2019 08:22:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=79MdZ76OL/77YdcyMQUGONs/F+BMctNttv4BAu+k8mw=;
+        b=DHEyADxYcWxDvNAdwskuseMzfBXxd2yOwsjGNfCoTqKcQJDXYZQjTgKOS0WBDJMtvW
+         lnjk/MtFABDplMU+kLYdQu+EZleEWtC1zjXvVSm4+Ywmm28r1Q3hb5+eBVKlXwqyzh7/
+         bBHOhuic1Do2SyEk/BTwrERVUyABSkoPw6gmZBzL+KLADTIB1+DRqS+k0lib0BHsPc9N
+         GADdGVyHe9MYdXVKew91i8gBYkwc50Mm6f9DmRQ3+AQ66E0XoewbuBSxkgTdt8R1mpK4
+         /jA3MWtIjAvm7CWmpi7ZfAwLSRT6PqaCPZRqZeX4ufhAdeJ7+HXw+A+odfhYtJKTO3pl
+         OI4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=79MdZ76OL/77YdcyMQUGONs/F+BMctNttv4BAu+k8mw=;
+        b=VXsuvif+JkV0sdgDDVsmUWOSNrd+Ab5i93yIogG68hV4cOdfHKmM7eHoQ4wLK88IqE
+         i5AWbf5YihInn7ykKGR7p3kea7yyngc7R5q56uXfVfLQ+7LrjRze8oSLqltx/JbWdx9U
+         DRZtLn2LJ7ojWpDG2Xs3tupRZ7SSvi8Jgog0FFDx3AlpHCor97ExmO1J3c1oQZoSQzB/
+         wXVj4/sysXOePqNDnB5OXYNbRfRRWheFakcyM/OE0TngUcf36p0Ge00vfV/OBLqwVUAm
+         zXqTY7OzN5tvURPwCbfxrzev3lx+Z4ifrb8l4z2DjUI8ESmzkPHWdn/gYDC1prWBOGoP
+         5r1w==
+X-Gm-Message-State: APjAAAXg20gf2p+yUQK8MoCXZrjW0LcEmUOEP0yntGsXZztNzgG/R7p4
+        FQKZYakbEqXZ96u1swSGlu0PoHpS
+X-Google-Smtp-Source: APXvYqzKzXHlAHHweYTnMrDhAZcF/etsmmxTgFVouSwW7hnHMglYST8YAU2HyGiR9Kdmsg95IgNDvg==
+X-Received: by 2002:a25:7105:: with SMTP id m5mr12108619ybc.167.1573834922269;
+        Fri, 15 Nov 2019 08:22:02 -0800 (PST)
+Received: from mail-yw1-f47.google.com (mail-yw1-f47.google.com. [209.85.161.47])
+        by smtp.gmail.com with ESMTPSA id j79sm3445171ywa.100.2019.11.15.08.22.00
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Nov 2019 08:22:01 -0800 (PST)
+Received: by mail-yw1-f47.google.com with SMTP id q140so3275853ywg.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2019 08:22:00 -0800 (PST)
+X-Received: by 2002:a0d:e808:: with SMTP id r8mr9795877ywe.275.1573834919811;
+ Fri, 15 Nov 2019 08:21:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19111515-0012-0000-0000-00000363F438
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19111515-0013-0000-0000-0000219F7289
-Message-Id: <20191115150428.61131-1-iii@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-15_04:2019-11-15,2019-11-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- malwarescore=0 impostorscore=0 mlxscore=0 spamscore=0 phishscore=0
- mlxlogscore=999 suspectscore=0 priorityscore=1501 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911150138
+References: <CA+G9fYsmZOf9zgo5dy2_HfPPK-0tBYfCXpZy2DneFOeiJfN=_g@mail.gmail.com>
+In-Reply-To: <CA+G9fYsmZOf9zgo5dy2_HfPPK-0tBYfCXpZy2DneFOeiJfN=_g@mail.gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Fri, 15 Nov 2019 11:21:23 -0500
+X-Gmail-Original-Message-ID: <CA+FuTSd3t9fju3seZQ0OMTxSkPtysG88stMoqMAV4G1Mj3wsVA@mail.gmail.com>
+Message-ID: <CA+FuTSd3t9fju3seZQ0OMTxSkPtysG88stMoqMAV4G1Mj3wsVA@mail.gmail.com>
+Subject: Re: selftest/net: so_txtime.sh fails intermittently - read Resource
+ temporarily unavailable
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        lkft-triage@lists.linaro.org,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently the following command produces an error message:
+On Thu, Nov 14, 2019 at 3:47 AM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> selftests net so_txtime.sh fails intermittently on multiple boards and
+> linux next and mainline.
 
-    linux# make kselftest TARGETS=bpf O=/mnt/linux-build
-    # selftests: bpf: test_libbpf.sh
-    # ./test_libbpf.sh: line 23: ./test_libbpf_open: No such file or directory
-    # test_libbpf: failed at file test_l4lb.o
-    # selftests: test_libbpf [FAILED]
+This is a time based test, so that is definitely possible. I had to
+trade off sensitivity to variance against total running time.
 
-The error message might not affect make return code, therefore one might
-need to grep make output in order to detect it.
+Current tests schedule delivery in the future at 10 msec timescale. It
+succeeds if dequeue happens at programmed departure time += 2 msec of
+variance (cfg_variance_us).
 
-The current logic prepends $(OUTPUT) only to the first member of
-$(TEST_PROGS). After that, run_one() does
+Note that statements of this kind are not errors and are printed every time:
 
-   cd `dirname $TEST`
+> # SO_TXTIME ipv6 clock monotonic
+> ipv6: clock_monotonic #
+> # payloada delay452 expected0 (us)
+> delay452: expected0_(us) #
 
-For all tests except the first one, `dirname $TEST` is ., which means
-they cannot access the files generated in $(OUTPUT).
+This seems like an error with clockid CLOCK_TAI, which means with qdisc ETF.
 
-Fix by using $(addprefix) to prepend $(OUTPUT)/ to each member of
-$(TEST_PROGS).
+> # SO_TXTIME ipv6 clock tai
+> ipv6: clock_tai #
+> # ./so_txtime read Resource temporarily unavailable
+> read: Resource_temporarily #
+> #
+> : _ #
+> # SO_TXTIME ipv6 clock tai
+> ipv6: clock_tai #
+> # ./so_txtime read Resource temporarily unavailable
+> read: Resource_temporarily #
 
-Fixes: 1a940687e424 ("selftests: lib.mk: copy test scripts and test files for make O=dir run")
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
+Let me check a few other runs on the dashboard, too.
 
-v1->v2:
-- Append / to $(OUTPUT).
-- Use $(addprefix) instead of $(foreach).
+> [FAIL] 24 selftests net so_txtime.sh # exit=1
+> selftests: net_so_txtime.sh [FAIL]
+>
+> Test run full log,
+> https://lkft.validation.linaro.org/scheduler/job/1010545#L1234
+>
+> Test results comparison link,
+> https://qa-reports.linaro.org/lkft/linux-next-oe/tests/kselftest/net_so_txtime.sh
+> https://qa-reports.linaro.org/lkft/linux-mainline-oe/tests/kselftest/net_so_txtime.sh
 
-v2->v3:
-- Split the patch in two.
-- Improve the commit message.
+This appears to have been flaky from the start, particularly on qemu_arm.
 
-v3->v4:
-- Drop the first patch.
-- Add a note regarding make return code to the commit message.
+Looking at a few runs..
 
- tools/testing/selftests/lib.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+failing runs exceeds bounds:
+https://lkft.validation.linaro.org/scheduler/job/1006586
+https://lkft.validation.linaro.org/scheduler/job/1010686
+https://lkft.validation.linaro.org/scheduler/job/1010630
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 1c8a1963d03f..0cf510df1ee2 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -75,7 +75,8 @@ ifdef building_out_of_srctree
- 		@rsync -aq $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(OUTPUT)
- 	fi
- 	@if [ "X$(TEST_PROGS)" != "X" ]; then
--		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(OUTPUT)/$(TEST_PROGS))
-+		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) \
-+				  $(addprefix $(OUTPUT)/,$(TEST_PROGS)))
- 	else
- 		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS))
- 	fi
--- 
-2.23.0
+"
+delay22049: expected20000_(us) #
+# ./so_txtime exceeds variance (2000 us)
+"
 
+"
+delay13700: expected10000_(us) #
+# ./so_txtime exceeds variance (2000 us)
+"
+"
+delay29722: expected20000_(us) #
+# ./so_txtime exceeds variance (2000 us)
+"
+
+These are easy to suppress, by just increasing cfg_variance_us and
+optionally also increasing the delivery time scale.
+
+failing run hit the "read: Resource temporarily unavailable" on TAI,
+like this report
+https://lkft.validation.linaro.org/scheduler/job/1008681
+
+It is not absence of CONFIG_NET_SCH_ETF. That is compiled in (as
+module) in these runs, according to the kernel config linked in the
+dashboard.
+
+The recv call must return EAGAIN because it reaches the SO_RCVTIMEO
+timeout, set to 100 msec. So the packet was lost. I don't immediately
+have an explanation for this. Will try to run my own qemu-arm
+instance.
+
+Naresh, when you mention "multiple boards" are there specific
+microarchitectural details of the hosts that I should take into
+account aside from the qemu-arm virtualized environment itself?
+
+passing run detects missing ETF and skips those:
+https://lkft.validation.linaro.org/scheduler/job/1006511
+
+That is peculiar, as the dashboard for that run also shows it as available.
+
+Very nice dashboard, btw!
