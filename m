@@ -1,113 +1,150 @@
-Return-Path: <SRS0=Q6hR=ZG=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=J+qR=ZH=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F4FFC43215
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Nov 2019 23:06:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0A7DC33C9B
+	for <linux-kselftest@archiver.kernel.org>; Fri, 15 Nov 2019 05:54:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EC04720723
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Nov 2019 23:06:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9BD7620748
+	for <linux-kselftest@archiver.kernel.org>; Fri, 15 Nov 2019 05:54:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="oFJOV++E"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="A9hrUgxG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726953AbfKNXGJ (ORCPT
+        id S1727422AbfKOFx7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 Nov 2019 18:06:09 -0500
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:7439 "EHLO
+        Fri, 15 Nov 2019 00:53:59 -0500
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:10713 "EHLO
         hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726319AbfKNXGJ (ORCPT
+        with ESMTP id S1727385AbfKOFx6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Nov 2019 18:06:09 -0500
+        Fri, 15 Nov 2019 00:53:58 -0500
 Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dcddda90000>; Thu, 14 Nov 2019 15:05:13 -0800
+        id <B5dce3d6a0000>; Thu, 14 Nov 2019 21:53:46 -0800
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 14 Nov 2019 15:06:08 -0800
+  Thu, 14 Nov 2019 21:53:46 -0800
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 14 Nov 2019 15:06:08 -0800
-Received: from rcampbell-dev.nvidia.com (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 14 Nov
- 2019 23:06:05 +0000
-Subject: Re: [PATCH v4 2/2] mm/hmm/test: add self tests for HMM
-To:     Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@mellanox.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Jerome Glisse <jglisse@redhat.com>,
+        by hqpgpgate101.nvidia.com on Thu, 14 Nov 2019 21:53:46 -0800
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 15 Nov
+ 2019 05:53:44 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 15 Nov 2019 05:53:44 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5dce3d670009>; Thu, 14 Nov 2019 21:53:43 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Paul Mackerras" <paulus@samba.org>, Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-References: <20191104222141.5173-1-rcampbell@nvidia.com>
- <20191104222141.5173-3-rcampbell@nvidia.com> <20191112152521.GC12550@lst.de>
- <07589a71-3984-b2a6-b24b-6b9a23e1b60d@nvidia.com>
- <20191112234549.GX21728@mellanox.com> <20191113135115.GA10688@lst.de>
-X-Nvconfidentiality: public
-From:   Ralph Campbell <rcampbell@nvidia.com>
-Message-ID: <21d6b69c-3167-e60d-eed2-65bb1f8515ae@nvidia.com>
-Date:   Thu, 14 Nov 2019 15:06:05 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        "Jason Gunthorpe" <jgg@mellanox.com>
+Subject: [PATCH v5 07/24] IB/umem: use get_user_pages_fast() to pin DMA pages
+Date:   Thu, 14 Nov 2019 21:53:23 -0800
+Message-ID: <20191115055340.1825745-8-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191115055340.1825745-1-jhubbard@nvidia.com>
+References: <20191115055340.1825745-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <20191113135115.GA10688@lst.de>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1573772713; bh=B7TOYH1oGC7u+umXh4N1/gSiAG/BcpUtpnIfDaTAGGs=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=oFJOV++Eska9iFN5ZhKxMBTjRKi8JF1c4HhevVI8pPNuS5t7MtzmYfvOgVfcpByUR
-         fJaX6cTnVCLhFEFTYsU5rTtSUs0KslB9IdJkuhy4B4L8wxaT32kLpmM93ENybg3fWJ
-         xrjb7/GDA8EdaxcUzOTJhqrf2xAJQKr2efRt0lO9JVRmzrBn/1ZNan8ghaePlkc8+f
-         AbSoMxaEoDeq9UZTG0HOz8Qb6j67Ng+9TPQ3P4XABedJSMmVAVLLTsa0YjGD2Cq1HX
-         NiFqgMNiYEQudfJXYaT7i7qDM6DlXfSwbRWl1D14+WVDRhtSdB73GLYltc8yac6ncU
-         1JjDg+lgEI9fg==
+        t=1573797226; bh=yfY59FEzCJLU6Ev5Ha1oxCyEt547L9Ku0BnikujLehw=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=A9hrUgxG1Wpy+FopUKz/jWLNwCqwSPx7DGqTimISP8Rl7kpszhEa7581+c/ChLkp4
+         AjT8S5nHDBGla9QupMu9UxjReSlJ+RLQ2lJjSr4S6+IpG6mVhCGujuMe/CIqN4+3gw
+         Lnx0yxKUoiXPUe0wmq+Yai+Uzi7i0VomFpZ+WLws7rrPSibVaUqYofPUjYGEkz66Nt
+         uSBZWRSpy9bjfpiajjJGp2ooa7ixb7fAeVs5N6hUZH9ppgsYd4zeJ2ytbw6RYaitfh
+         I5PCQOIgBChvbSC34WutTzwzJ0jOAlC0DGoYHCHktJBy6aAjNFkmvPAJd/QyzvnsGS
+         JGzL9jZEPHFtA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+And get rid of the mmap_sem calls, as part of that. Note
+that get_user_pages_fast() will, if necessary, fall back to
+__gup_longterm_unlocked(), which takes the mmap_sem as needed.
 
-On 11/13/19 5:51 AM, Christoph Hellwig wrote:
-> On Tue, Nov 12, 2019 at 11:45:52PM +0000, Jason Gunthorpe wrote:
->>> Well, it would mean registering for the whole process address space.
->>> I'll give it a try.
->>
->> I'm not sure it makes much sense that this testing is essentially
->> modeled after nouveau's usage which is very strange compared to the
->> other drivers.
-> 
-> Which means we really should make the test cases fit the proper usage.
-> Maybe defer the tests for 5.5 and just merge the first patch for now?
-> 
+Reviewed-by: Jason Gunthorpe <jgg@mellanox.com>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ drivers/infiniband/core/umem.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
-I think this a good point to discuss.
-Some devices will want to register for all changes to the process address
-space because there is no requirement to preregister regions that the
-device can access verses devices like InfiniBand where a range of addresses
-have to be registered before the device can access those addresses.
-So for nouveau and the hmm-test driver, the mmu_range_notifier_insert()
-and mmu_range_notifier_remove() are only used long enough to get a
-stable copy of a small part of the process address space and copy it to
-the device's page table. Then the regular process wide invalidations are
-required to keep the device's page tables consistent with the process
-page table.
+diff --git a/drivers/infiniband/core/umem.c b/drivers/infiniband/core/umem.=
+c
+index 24244a2f68cc..3d664a2539eb 100644
+--- a/drivers/infiniband/core/umem.c
++++ b/drivers/infiniband/core/umem.c
+@@ -271,16 +271,13 @@ struct ib_umem *ib_umem_get(struct ib_udata *udata, u=
+nsigned long addr,
+ 	sg =3D umem->sg_head.sgl;
+=20
+ 	while (npages) {
+-		down_read(&mm->mmap_sem);
+-		ret =3D get_user_pages(cur_base,
+-				     min_t(unsigned long, npages,
+-					   PAGE_SIZE / sizeof (struct page *)),
+-				     gup_flags | FOLL_LONGTERM,
+-				     page_list, NULL);
+-		if (ret < 0) {
+-			up_read(&mm->mmap_sem);
++		ret =3D get_user_pages_fast(cur_base,
++					  min_t(unsigned long, npages,
++						PAGE_SIZE /
++						sizeof(struct page *)),
++					  gup_flags | FOLL_LONGTERM, page_list);
++		if (ret < 0)
+ 			goto umem_release;
+-		}
+=20
+ 		cur_base +=3D ret * PAGE_SIZE;
+ 		npages   -=3D ret;
+@@ -288,8 +285,6 @@ struct ib_umem *ib_umem_get(struct ib_udata *udata, uns=
+igned long addr,
+ 		sg =3D ib_umem_add_sg_table(sg, page_list, ret,
+ 			dma_get_max_seg_size(context->device->dma_device),
+ 			&umem->sg_nents);
+-
+-		up_read(&mm->mmap_sem);
+ 	}
+=20
+ 	sg_mark_end(sg);
+--=20
+2.24.0
 
-The "hacky" part of the current design is the interaction between the
-short term narrow address range invalidations verses the long term
-process wide invalidations. (double callbacks, double locking of the
-device page table)
-
-Both types of invalidate callbacks seem useful to me so forcing a
-driver to use only one type doesn't make sense to me.
