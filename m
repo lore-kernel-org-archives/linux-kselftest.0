@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDA87C33C8C
-	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:20:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 232DCC432C3
+	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:21:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A68A721479
-	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:20:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE749214DE
+	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:21:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573921215;
-	bh=8NzhWQdmgAYi75Syl7w/F0X2VA0psKoEI0KYAzgnHuw=;
+	s=default; t=1573921277;
+	bh=T1fjXJ8Jm32Cke60Jcid/VJwyP6KUMtt2vqjFjO8xeY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ChdPu0EdpvQwa7Kt8Y11J7ejMSp4/J412pY4st4UTa9d7y3bELQ1rSkr02OtucuVT
-	 D13xbpyRkUlsktNaeAIoXLqjRNuZJtRf6Qse5YQpKVIEzQXE+7tGx8fIvEHWmkbuVm
-	 XLkWph5Q4M8phHlivNdNIqcO3sAFrTSmdSkPkcy4=
+	b=Pj8hYrTaOYKCEGh9SII1nkDML6QhnxwSDWM+AuxqIihW8iwlAtyAqFlUdAACDDm8q
+	 TBUH/TVRWlGc2pU7TbcBydTbZZWJOpLVFA5yiRyQp1OyYtNCQqn/LRMROR2gCVdCxv
+	 FxufslYkeKa5YTaRzu6gLztMt3Rkcwn7coDbg9Z4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729033AbfKPPoh (ORCPT
+        id S1728807AbfKPPnn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 16 Nov 2019 10:44:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49572 "EHLO mail.kernel.org"
+        Sat, 16 Nov 2019 10:43:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47766 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728057AbfKPPog (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:44:36 -0500
+        id S1727833AbfKPPnj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:43:39 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D69572072D;
-        Sat, 16 Nov 2019 15:44:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1955820833;
+        Sat, 16 Nov 2019 15:43:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919076;
-        bh=8NzhWQdmgAYi75Syl7w/F0X2VA0psKoEI0KYAzgnHuw=;
+        s=default; t=1573919018;
+        bh=T1fjXJ8Jm32Cke60Jcid/VJwyP6KUMtt2vqjFjO8xeY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wP1CN14DuR/OInosbLHgXDP39KEfTauAt26bPWm5p+LR3kI7VE2jbOO/fO/zun0du
-         Hp56NamJRhF3sDFplqkEaBq8L1Y0hcWc77t6KrFHhR6DUts2rb7Vn9wuI6qb3YUdwJ
-         ErLnNV0fGc8tzgeuM/rxqDKuRauK7c1GPvNEgcec=
+        b=JCyt8RD6YK86xeR85nOUBAEhInc8zUHli0GBR3x25KDXgQ94HLvBlLgsouSGvPl5X
+         2dgqtEAXtLftPhucdsNpybc+s579zJP+Kb5i3PAE+sH4ZFPC17N14sU3kEzZz26oeN
+         Ql3Du7q4/QPEuJK6XqaLftqF58n/QBISrv0gQRnQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Joel Stanley <joel@jms.id.au>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 144/237] selftests/powerpc/ptrace: Fix out-of-tree build
-Date:   Sat, 16 Nov 2019 10:39:39 -0500
-Message-Id: <20191116154113.7417-144-sashal@kernel.org>
+Cc:     Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Shuah Khan <shuah@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 119/237] selftests: kvm: Fix -Wformat warnings
+Date:   Sat, 16 Nov 2019 10:39:14 -0500
+Message-Id: <20191116154113.7417-119-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191116154113.7417-1-sashal@kernel.org>
 References: <20191116154113.7417-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -60,56 +60,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Joel Stanley <joel@jms.id.au>
+From: Andrea Parri <andrea.parri@amarulasolutions.com>
 
-[ Upstream commit c39b79082a38a4f8c801790edecbbb4d62ed2992 ]
+[ Upstream commit fb363e2d20351e1d16629df19e7bce1a31b3227a ]
 
-We should use TEST_GEN_PROGS, not TEST_PROGS. That tells the selftests
-makefile (lib.mk) that those tests are generated (built), and so it
-adds the $(OUTPUT) prefix for us, making the out-of-tree build work
-correctly.
+Fixes the following warnings:
 
-It also means we don't need our own clean rule, lib.mk does it.
+dirty_log_test.c: In function ‘help’:
+dirty_log_test.c:216:9: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 2 has type ‘int’ [-Wformat=]
+  printf(" -i: specify iteration counts (default: %"PRIu64")\n",
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/test_util.h:18:0,
+                 from dirty_log_test.c:16:
+/usr/include/inttypes.h:105:34: note: format string is defined here
+ # define PRIu64  __PRI64_PREFIX "u"
+dirty_log_test.c:218:9: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 2 has type ‘int’ [-Wformat=]
+  printf(" -I: specify interval in ms (default: %"PRIu64" ms)\n",
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/test_util.h:18:0,
+                 from dirty_log_test.c:16:
+/usr/include/inttypes.h:105:34: note: format string is defined here
+ # define PRIu64  __PRI64_PREFIX "u"
 
-We also have to update the ptrace-pkey and core-pkey rules to use
-$(OUTPUT).
-
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Andrea Parri <andrea.parri@amarulasolutions.com>
+Signed-off-by: Shuah Khan (Samsung OSG) <shuah@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/powerpc/ptrace/Makefile | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+ tools/testing/selftests/kvm/dirty_log_test.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/powerpc/ptrace/Makefile b/tools/testing/selftests/powerpc/ptrace/Makefile
-index 923d531265f8c..9f9423430059e 100644
---- a/tools/testing/selftests/powerpc/ptrace/Makefile
-+++ b/tools/testing/selftests/powerpc/ptrace/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--TEST_PROGS := ptrace-gpr ptrace-tm-gpr ptrace-tm-spd-gpr \
-+TEST_GEN_PROGS := ptrace-gpr ptrace-tm-gpr ptrace-tm-spd-gpr \
-               ptrace-tar ptrace-tm-tar ptrace-tm-spd-tar ptrace-vsx ptrace-tm-vsx \
-               ptrace-tm-spd-vsx ptrace-tm-spr ptrace-hwbreak ptrace-pkey core-pkey \
-               perf-hwbreak
-@@ -7,14 +7,9 @@ TEST_PROGS := ptrace-gpr ptrace-tm-gpr ptrace-tm-spd-gpr \
- top_srcdir = ../../../../..
- include ../../lib.mk
+diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
+index 0c2cdc105f968..a9c4b5e21d7e7 100644
+--- a/tools/testing/selftests/kvm/dirty_log_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_test.c
+@@ -31,9 +31,9 @@
+ /* How many pages to dirty for each guest loop */
+ #define  TEST_PAGES_PER_LOOP            1024
+ /* How many host loops to run (one KVM_GET_DIRTY_LOG for each loop) */
+-#define  TEST_HOST_LOOP_N               32
++#define  TEST_HOST_LOOP_N               32UL
+ /* Interval for each host loop (ms) */
+-#define  TEST_HOST_LOOP_INTERVAL        10
++#define  TEST_HOST_LOOP_INTERVAL        10UL
  
--all: $(TEST_PROGS)
--
- CFLAGS += -m64 -I../../../../../usr/include -I../tm -mhtm -fno-pie
- 
--ptrace-pkey core-pkey: child.h
--ptrace-pkey core-pkey: LDLIBS += -pthread
--
--$(TEST_PROGS): ../harness.c ../utils.c ../lib/reg.S ptrace.h
-+$(OUTPUT)/ptrace-pkey $(OUTPUT)/core-pkey: child.h
-+$(OUTPUT)/ptrace-pkey $(OUTPUT)/core-pkey: LDLIBS += -pthread
- 
--clean:
--	rm -f $(TEST_PROGS) *.o
-+$(TEST_GEN_PROGS): ../harness.c ../utils.c ../lib/reg.S ptrace.h
+ /*
+  * Guest variables.  We use these variables to share data between host
 -- 
 2.20.1
 
