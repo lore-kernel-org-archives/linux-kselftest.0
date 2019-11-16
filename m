@@ -4,49 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ACD9C43215
-	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:21:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA88C43141
+	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:22:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6A1B920895
-	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:21:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 09A9621479
+	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:22:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573921287;
-	bh=QapvbyAR0UCwp5TQJRgpF5BAlHZWPUtIxkqmXmTEBlI=;
+	s=default; t=1573921370;
+	bh=XR5WvofJzj0e2g0fbgE8Wpx6sS5fNscbX+8F20oWjZo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=dU6jkDRbLiaMO17JEcNrUi/dN/eh+1LkdshXz4ZLIuEaOWv5lE7r0Jj+w5kX8oC8m
-	 pWmgFLQIlDvEEVBLO5L1L5p/ld5W8HOI/8cWwM3FzcegPsF+z6hfT8MQ8qA/0MMyrO
-	 weGgWR+FsfOCR1p3Za3ThzyKiAYqPnJrc/ieB3+o=
+	b=ZpvYGzahu/8y/Yp/5halImge2aQD3oqGIqJbxIlsK0CtSCSgOwW76WIUtq8anBZq9
+	 hqc32FFTB8nG8cluX6AB1EtzqL3tjBnlYUcAj4QsVS6X1GVjTGs9A1wfOP0cFe864N
+	 ygAGlWxSWRG5ghqhAqgZnIhqJb28qtYBHd7WbeuM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729465AbfKPQVU (ORCPT
+        id S1729334AbfKPQWl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 16 Nov 2019 11:21:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47696 "EHLO mail.kernel.org"
+        Sat, 16 Nov 2019 11:22:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47088 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728777AbfKPPng (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:43:36 -0500
+        id S1728614AbfKPPnM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:43:12 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7135620729;
-        Sat, 16 Nov 2019 15:43:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C92C52072D;
+        Sat, 16 Nov 2019 15:43:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919015;
-        bh=QapvbyAR0UCwp5TQJRgpF5BAlHZWPUtIxkqmXmTEBlI=;
+        s=default; t=1573918992;
+        bh=XR5WvofJzj0e2g0fbgE8Wpx6sS5fNscbX+8F20oWjZo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HfT59ara3/2VtDWsfvuSZwURMpD3v2RHpJTGp53pzDt0mZDtt4ahZRfZj3Ylg9G0M
-         LgqsXadZdA2RM0WPFeQx4CngxYv8YwhkCbmPRCzSRJiHir7M7Eey3pDDEeyIhhO+Ch
-         /jDYQs0ibWkTdJHdSrupbs0wC3dFXU/FactJ4nsE=
+        b=DBsb5JGL9l6T+mNo9dPTIdP0v56UCCxHCRSwg2U+XtzSbSV4vYs9AL3BQkporfnXB
+         9G0CX3/graOZk6G8NEuntMxU2oVcXjk5JC6+LYneGwKXBZh7YEiUGoIDdcfcUTctJ2
+         JSk75SJQc8d69aQpRIMRwq2cQK0RUWQ303D6bFUM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Shuah Khan (Samsung OSG)" <shuah@kernel.org>,
+Cc:     Quentin Monnet <quentin.monnet@netronome.com>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 117/237] selftests: watchdog: fix message when /dev/watchdog open fails
-Date:   Sat, 16 Nov 2019 10:39:12 -0500
-Message-Id: <20191116154113.7417-117-sashal@kernel.org>
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 096/237] selftests/bpf: fix return value comparison for tests in test_libbpf.sh
+Date:   Sat, 16 Nov 2019 10:38:51 -0500
+Message-Id: <20191116154113.7417-96-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191116154113.7417-1-sashal@kernel.org>
 References: <20191116154113.7417-1-sashal@kernel.org>
@@ -59,41 +62,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Shuah Khan (Samsung OSG)" <shuah@kernel.org>
+From: Quentin Monnet <quentin.monnet@netronome.com>
 
-[ Upstream commit 9a244229a4b850b11952a0df79607c69b18fd8df ]
+[ Upstream commit c5fa5d602221362f8341ecd9e32d83194abf5bd9 ]
 
-When /dev/watchdog open fails, watchdog exits with "watchdog not enabled"
-message. This is incorrect when open fails due to insufficient privilege.
+The return value for each test in test_libbpf.sh is compared with
 
-Fix message to clearly state the reason when open fails with EACCESS when
-a non-root user runs it.
+    if (( $? == 0 )) ; then ...
 
-Signed-off-by: Shuah Khan (Samsung OSG) <shuah@kernel.org>
+This works well with bash, but not with dash, that /bin/sh is aliased to
+on some systems (such as Ubuntu).
+
+Let's replace this comparison by something that works on both shells.
+
+Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
+Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/watchdog/watchdog-test.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_libbpf.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-index 6e290874b70e2..e029e2017280f 100644
---- a/tools/testing/selftests/watchdog/watchdog-test.c
-+++ b/tools/testing/selftests/watchdog/watchdog-test.c
-@@ -89,7 +89,13 @@ int main(int argc, char *argv[])
- 	fd = open("/dev/watchdog", O_WRONLY);
- 
- 	if (fd == -1) {
--		printf("Watchdog device not enabled.\n");
-+		if (errno == ENOENT)
-+			printf("Watchdog device not enabled.\n");
-+		else if (errno == EACCES)
-+			printf("Run watchdog as root.\n");
-+		else
-+			printf("Watchdog device open failed %s\n",
-+				strerror(errno));
- 		exit(-1);
- 	}
- 
+diff --git a/tools/testing/selftests/bpf/test_libbpf.sh b/tools/testing/selftests/bpf/test_libbpf.sh
+index 8b1bc96d8e0cc..2989b2e2d856d 100755
+--- a/tools/testing/selftests/bpf/test_libbpf.sh
++++ b/tools/testing/selftests/bpf/test_libbpf.sh
+@@ -6,7 +6,7 @@ export TESTNAME=test_libbpf
+ # Determine selftest success via shell exit code
+ exit_handler()
+ {
+-	if (( $? == 0 )); then
++	if [ $? -eq 0 ]; then
+ 		echo "selftests: $TESTNAME [PASS]";
+ 	else
+ 		echo "$TESTNAME: failed at file $LAST_LOADED" 1>&2
 -- 
 2.20.1
 
