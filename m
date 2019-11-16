@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E471C33C8C
-	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:21:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3D40C432C3
+	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:21:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6B1692168B
-	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:21:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C35A3214DE
+	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:21:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573921278;
-	bh=S3hOXPcM+w0k/7va/5THvsyB8gokQ9VS9+1IN4YV+Lg=;
+	s=default; t=1573921280;
+	bh=mUCR23AAMHP7FiMfk5lBhT3X/eTAIhQFLugWPOV1dys=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=NHKGGEOe3vD5us4TDjvQj78B+hcbdJQjQQAX/eKJM2uOJSCoLcLq3/5b1prXb5cTd
-	 kpZzdPk7SXy/QeI4AylxbGKaUgb6U7c1ISHkMlkRpD4rZ5jfxT2K4fqvAroFStj+zq
-	 aE2iF0AdiklSMyVRmrSqsa79AgnCEi1dGLqc7yi8=
+	b=Uj4uttZp3X0qYvq3v73r0Gl3WnjzMuNDzrYR8VzXtwxjkNmaqTbhL7xtNvj+MYIlo
+	 SPWjwXx+4/EVlanhOqzUGQ9TZqNaYpVnVX06uobbY/xXwxX+LAMLIPBm/yDuEcuKOW
+	 F1Ckq5dqT6/uxk310okj8Eqo+YyAmD4brcDR3j+k=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727855AbfKPPnn (ORCPT
+        id S1728770AbfKPPne (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 16 Nov 2019 10:43:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47858 "EHLO mail.kernel.org"
+        Sat, 16 Nov 2019 10:43:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47638 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727830AbfKPPnn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:43:43 -0500
+        id S1728697AbfKPPne (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:43:34 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0D86720729;
-        Sat, 16 Nov 2019 15:43:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 455902075B;
+        Sat, 16 Nov 2019 15:43:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919022;
-        bh=S3hOXPcM+w0k/7va/5THvsyB8gokQ9VS9+1IN4YV+Lg=;
+        s=default; t=1573919013;
+        bh=mUCR23AAMHP7FiMfk5lBhT3X/eTAIhQFLugWPOV1dys=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wnMe1cMnvrWVIZatEDP+2TRffjD6G7UtdNN93bFc4YzyJQoOOOmvmr0hTmgu5iuor
-         i0bGkn84BcyWp4NKABrKCI88vSJooecDyotQ0XFensS7b11/3Sk0o7dPCoEv7ZD0+I
-         x6Zbx1bMaODo8pkYHoia68byGS7qr3JOjoOBXGHo=
+        b=xPUA97ii4w2GQDYn1GpkZuZF865JdU7fX4aLnmltBpA4e+7lmZScvexuephSl5Hfa
+         OmjmPcBZjPMAbYfRFXvm4MKN+rBUcB+EYyZHhKRGT9n40kCFvTyzb+kclnKZM0/JDl
+         +m0URu1dzVBAb5aviTHFbcVYqXCcoL99xVXXiT7A=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Peng Hao <peng.hao2@zte.com.cn>, Shuah Khan <shuah@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-fsdevel@vger.kernel.org,
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 120/237] selftests: fix warning: "_GNU_SOURCE" redefined
-Date:   Sat, 16 Nov 2019 10:39:15 -0500
-Message-Id: <20191116154113.7417-120-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 116/237] selftests/ftrace: Fix to test kprobe $comm arg only if available
+Date:   Sat, 16 Nov 2019 10:39:11 -0500
+Message-Id: <20191116154113.7417-116-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191116154113.7417-1-sashal@kernel.org>
 References: <20191116154113.7417-1-sashal@kernel.org>
@@ -59,47 +59,38 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Peng Hao <peng.hao2@zte.com.cn>
+From: Masami Hiramatsu <mhiramat@kernel.org>
 
-[ Upstream commit 0387662d1b6c5ad2950d8e94d5e380af3f15c05c ]
+[ Upstream commit 2452c96e617a0ff6fb2692e55217a3fa57a7322c ]
 
-Makefile contains -D_GNU_SOURCE. remove define "_GNU_SOURCE"
-in c files.
+Test $comm in kprobe-event argument syntax testcase
+only if it is supported on the kernel because
+$comm has been introduced 4.8 kernel.
+So on older stable kernel, it should be skipped.
 
-Signed-off-by: Peng Hao <peng.hao2@zte.com.cn>
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 Signed-off-by: Shuah Khan (Samsung OSG) <shuah@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/proc/fd-001-lookup.c  | 2 +-
- tools/testing/selftests/proc/fd-003-kthread.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc       | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/proc/fd-001-lookup.c b/tools/testing/selftests/proc/fd-001-lookup.c
-index a2010dfb21104..60d7948e7124f 100644
---- a/tools/testing/selftests/proc/fd-001-lookup.c
-+++ b/tools/testing/selftests/proc/fd-001-lookup.c
-@@ -14,7 +14,7 @@
-  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-  */
- // Test /proc/*/fd lookup.
--#define _GNU_SOURCE
-+
- #undef NDEBUG
- #include <assert.h>
- #include <dirent.h>
-diff --git a/tools/testing/selftests/proc/fd-003-kthread.c b/tools/testing/selftests/proc/fd-003-kthread.c
-index 1d659d55368c2..dc591f97b63d4 100644
---- a/tools/testing/selftests/proc/fd-003-kthread.c
-+++ b/tools/testing/selftests/proc/fd-003-kthread.c
-@@ -14,7 +14,7 @@
-  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-  */
- // Test that /proc/$KERNEL_THREAD/fd/ is empty.
--#define _GNU_SOURCE
-+
- #undef NDEBUG
- #include <sys/syscall.h>
- #include <assert.h>
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+index d026ff4e562f3..92ffb3bd33d82 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+@@ -78,8 +78,11 @@ test_badarg "\$stackp" "\$stack0+10" "\$stack1-10"
+ echo "r ${PROBEFUNC} \$retval" > kprobe_events
+ ! echo "p ${PROBEFUNC} \$retval" > kprobe_events
+ 
++# $comm was introduced in 4.8, older kernels reject it.
++if grep -A1 "fetcharg:" README | grep -q '\$comm' ; then
+ : "Comm access"
+ test_goodarg "\$comm"
++fi
+ 
+ : "Indirect memory access"
+ test_goodarg "+0(${GOODREG})" "-0(${GOODREG})" "+10(\$stack)" \
 -- 
 2.20.1
 
