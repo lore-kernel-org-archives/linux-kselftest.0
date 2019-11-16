@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91A49C43215
-	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 15:58:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4EBBC33C8C
+	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:03:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 60F0221844
-	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 15:58:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 946542192D
+	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Nov 2019 16:03:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573919892;
+	s=default; t=1573920191;
 	bh=G+bUnZIIGo0TF/ZYi61/DRntB0hbkjdnF5/2+ThSJ3w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=aP9YpiqNKHRGBKLfgI6kfbrg1RNWZAgDwYq1MER9CoG354RHFnIcKPebeL1C1Sy6c
-	 rvmFikYpK1zjBMz+80XV1y2V/uTSiGaIGjc26xRGL7o6LeaVXh3aKVl6s4EQ3Ku0YZ
-	 R/3Y3zKZ1Q1mJS5zdrboLnmI6sxQS3REC54o39L4=
+	b=gIUeareDW/g/IMh3A3ZdwDZ3nHyGXfQ9kDuueG1ipcFuPqaEURTtGEyXg5qwz/oPk
+	 URHpH9dN3U3Y8TEKZm+ZKj4OTDaBNNgw1LLzg8MhlZ6jOVrESnnnpXFOocOs2HMupe
+	 BJBYnX7hwDJWZD3Dua0SPM76FcrT4AyCkQHoonJ8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730145AbfKPP6C (ORCPT
+        id S1729889AbfKPQDL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 16 Nov 2019 10:58:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36092 "EHLO mail.kernel.org"
+        Sat, 16 Nov 2019 11:03:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32794 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731450AbfKPPy0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:54:26 -0500
+        id S1730030AbfKPPwH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:52:07 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D424A20854;
-        Sat, 16 Nov 2019 15:54:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A1FB220857;
+        Sat, 16 Nov 2019 15:52:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919666;
+        s=default; t=1573919526;
         bh=G+bUnZIIGo0TF/ZYi61/DRntB0hbkjdnF5/2+ThSJ3w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1tIp7Tr9MajtYxyDhtd9A9FpYXebUJcEoiUR+0HtOLrDqXmunEgNB9lN2bi1pQ51X
-         C3CXgl5ltXz6724N2YicDlLTf4ODpgH6aW7VptVfyXJAsaP1Q4awAGhPmTz1KDZZdS
-         rBi9gGBvl3xAI64iRrphAyQqR3UY0hN4UYGM4g8E=
+        b=kHVDNIYMKDr2AXNbQojkNnPx/jDrDByK78Zo9lvXIaDP2k6m+hqLmv62JOyeiGurm
+         iGRUFdHiZmkkBe0eaO+2YbWf2OBRuOi0z60EScR4Ilmve+Ox8coroiEZ/Ap8kfiPIl
+         TURmL51Mg0+kWdSrCJy3fu1HRJQLbQEr0+IK/Hf8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Shuah Khan <shuah@kernel.org>, Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 38/77] selftests/ftrace: Fix to test kprobe $comm arg only if available
-Date:   Sat, 16 Nov 2019 10:53:00 -0500
-Message-Id: <20191116155339.11909-38-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 48/99] selftests/ftrace: Fix to test kprobe $comm arg only if available
+Date:   Sat, 16 Nov 2019 10:50:11 -0500
+Message-Id: <20191116155103.10971-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191116155339.11909-1-sashal@kernel.org>
-References: <20191116155339.11909-1-sashal@kernel.org>
+In-Reply-To: <20191116155103.10971-1-sashal@kernel.org>
+References: <20191116155103.10971-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
