@@ -1,110 +1,205 @@
-Return-Path: <SRS0=hrhl=ZJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=8ET+=ZK=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49B89C432C0
-	for <linux-kselftest@archiver.kernel.org>; Sun, 17 Nov 2019 11:03:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5928BC43141
+	for <linux-kselftest@archiver.kernel.org>; Mon, 18 Nov 2019 11:58:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1E16F2075C
-	for <linux-kselftest@archiver.kernel.org>; Sun, 17 Nov 2019 11:03:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jJEJMNfR"
+	by mail.kernel.org (Postfix) with ESMTP id 38A5220727
+	for <linux-kselftest@archiver.kernel.org>; Mon, 18 Nov 2019 11:58:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726187AbfKQLDW (ORCPT
+        id S1726984AbfKRL6p (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 17 Nov 2019 06:03:22 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:40100 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725974AbfKQLDW (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 17 Nov 2019 06:03:22 -0500
-Received: by mail-pj1-f66.google.com with SMTP id ep1so663293pjb.7;
-        Sun, 17 Nov 2019 03:03:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oidSitOSx3wz/zOT9+cz4soIOB6y/ZqJ5xkv2u37mMg=;
-        b=jJEJMNfRpHtXmJckbTZB9ZNHCq2xiXBw90gY9gIbEXxRovl7hLntxcbbaAJAf2ud+b
-         MXSNvcdZDb+0nshW/ucfoHsxQ8QRBHxgRSL5szZH88Wyc09iVGespARjnFZ+xtCUCsX4
-         QeAd9DLUmgCNls3d3COIAwF12Lgg3kyUymoZejLgB9wVH8w6evTKORKdk+n2d5Jftvcc
-         FPi2UbmDvlAMhMpG6uftA5lkaa/oMW3HLrOKZHXfX9i8BLGQF/9S3WakXBP3t1bJi7+u
-         HaMNelmGG9FA6kvTeLFdgDEtFNwk5rBux4rm6+hvJms+0BAmsI1d43UY0aYqS79CZYDL
-         tCeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=oidSitOSx3wz/zOT9+cz4soIOB6y/ZqJ5xkv2u37mMg=;
-        b=MbiDtHiaPsQQIqzy439+cXoNePJfpmrpAB6XZbFEvkN2BLTCgLM5tt3TtRlPAZsEjU
-         leFTFk+7AqBtEcqVS0eJ/OKp/cdbRI4izOhDygfSfrvAqk0IanPXHVrgq0PZHI847hCh
-         f9g4dH5mi3Rq/rUNot2FPX+9oPeTRW+xb0E6ZjecvjjOMAqVOgHYWA4fzBvQoUGWmDCZ
-         MRx8K2a5OI3GLWkSNFXWwAnBTH7QqSiCPMnUkctG5yppFUMgB9KyK6vNYo4RsCLAV5JP
-         uddddY+L1cMsrXB8g5aB8fcfYrcFaO1fbyRUOS5UMTi5nYBsWm4dlt3Fyryv1ML/KNQF
-         b5YQ==
-X-Gm-Message-State: APjAAAWBn+fiQnhuPErPN+8cKsMBEunoqB9mQ76bC439FCDUTBIImuV/
-        R28Cy5Ovy39qR+vOyT7RNw==
-X-Google-Smtp-Source: APXvYqx+d4UcV0qPDI11BREyaM8WXS2PpgQ5hEDrsy14K2J9lpPJH9GED3bAD68F8Q4kG1EIrj8SUg==
-X-Received: by 2002:a17:90a:cc18:: with SMTP id b24mr30970268pju.141.1573988601826;
-        Sun, 17 Nov 2019 03:03:21 -0800 (PST)
-Received: from [172.24.28.130] ([203.100.54.194])
-        by smtp.gmail.com with ESMTPSA id w2sm18153667pfj.22.2019.11.17.03.03.19
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 17 Nov 2019 03:03:21 -0800 (PST)
-Subject: Re: [PATCH v8 5/9] hugetlb: disable region_add file_region coalescing
-To:     Mina Almasry <almasrymina@google.com>, mike.kravetz@oracle.com
-Cc:     shuah@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-        aneesh.kumar@linux.vnet.ibm.com
-References: <20191030013701.39647-1-almasrymina@google.com>
- <20191030013701.39647-5-almasrymina@google.com>
-From:   Wenkuan Wang <wwk0817@gmail.com>
-Message-ID: <010d5a90-3ebf-30e5-8829-a61f01b6f620@gmail.com>
-Date:   Sun, 17 Nov 2019 19:03:16 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Mon, 18 Nov 2019 06:58:45 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36158 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726506AbfKRL6m (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 18 Nov 2019 06:58:42 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 67C34AE68;
+        Mon, 18 Nov 2019 11:58:37 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 912131E4B0C; Mon, 18 Nov 2019 12:58:29 +0100 (CET)
+Date:   Mon, 18 Nov 2019 12:58:29 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 17/24] mm/gup: track FOLL_PIN pages
+Message-ID: <20191118115829.GJ17319@quack2.suse.cz>
+References: <20191115055340.1825745-1-jhubbard@nvidia.com>
+ <20191115055340.1825745-18-jhubbard@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <20191030013701.39647-5-almasrymina@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191115055340.1825745-18-jhubbard@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Thu 14-11-19 21:53:33, John Hubbard wrote:
+> Add tracking of pages that were pinned via FOLL_PIN.
+> 
+> As mentioned in the FOLL_PIN documentation, callers who effectively set
+> FOLL_PIN are required to ultimately free such pages via put_user_page().
+> The effect is similar to FOLL_GET, and may be thought of as "FOLL_GET
+> for DIO and/or RDMA use".
+> 
+> Pages that have been pinned via FOLL_PIN are identifiable via a
+> new function call:
+> 
+>    bool page_dma_pinned(struct page *page);
+> 
+> What to do in response to encountering such a page, is left to later
+> patchsets. There is discussion about this in [1].
+						^^ missing this reference
+in the changelog...
 
+> This also changes a BUG_ON(), to a WARN_ON(), in follow_page_mask().
+> 
+> Suggested-by: Jan Kara <jack@suse.cz>
+> Suggested-by: Jérôme Glisse <jglisse@redhat.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 6588d2e02628..db872766480f 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1054,6 +1054,8 @@ static inline __must_check bool try_get_page(struct page *page)
+>  	return true;
+>  }
+>  
+> +__must_check bool user_page_ref_inc(struct page *page);
+> +
+>  static inline void put_page(struct page *page)
+>  {
+>  	page = compound_head(page);
+> @@ -1071,29 +1073,70 @@ static inline void put_page(struct page *page)
+>  		__put_page(page);
+>  }
+>  
+> -/**
+> - * put_user_page() - release a gup-pinned page
+> - * @page:            pointer to page to be released
+> +/*
+> + * GUP_PIN_COUNTING_BIAS, and the associated functions that use it, overload
+> + * the page's refcount so that two separate items are tracked: the original page
+> + * reference count, and also a new count of how many get_user_pages() calls were
+							^^ pin_user_pages()
 
-On 10/30/19 9:36 AM, Mina Almasry wrote:
-> /* Must be called with resv->lock held. Calling this with count_only == true
-> * will count the number of pages to be added but will not modify the linked
-> - * list.
-> + * list. If regions_needed != NULL and count_only == true, then regions_needed
-> + * will indicate the number of file_regions needed in the cache to carry out to
-> + * add the regions for this range.
-> */
-> static long add_reservation_in_range(struct resv_map *resv, long f, long t,
+> + * made against the page. ("gup-pinned" is another term for the latter).
+> + *
+> + * With this scheme, get_user_pages() becomes special: such pages are marked
+			^^^ pin_user_pages()
 
-Hi Mina,
+> + * as distinct from normal pages. As such, the put_user_page() call (and its
+> + * variants) must be used in order to release gup-pinned pages.
+> + *
+> + * Choice of value:
+>   *
+> - * Pages that were pinned via pin_user_pages*() must be released via either
+> - * put_user_page(), or one of the put_user_pages*() routines. This is so that
+> - * eventually such pages can be separately tracked and uniquely handled. In
+> - * particular, interactions with RDMA and filesystems need special handling.
+> + * By making GUP_PIN_COUNTING_BIAS a power of two, debugging of page reference
+> + * counts with respect to get_user_pages() and put_user_page() becomes simpler,
+				^^^ pin_user_pages()
 
-Would you please share which tree this patch set used? this patch 5/9 can't be
-applied with Linus's tree and add_reservation_in_range can't be found.
+> + * due to the fact that adding an even power of two to the page refcount has
+> + * the effect of using only the upper N bits, for the code that counts up using
+> + * the bias value. This means that the lower bits are left for the exclusive
+> + * use of the original code that increments and decrements by one (or at least,
+> + * by much smaller values than the bias value).
+>   *
+> - * put_user_page() and put_page() are not interchangeable, despite this early
+> - * implementation that makes them look the same. put_user_page() calls must
+> - * be perfectly matched up with pin*() calls.
+> + * Of course, once the lower bits overflow into the upper bits (and this is
+> + * OK, because subtraction recovers the original values), then visual inspection
+> + * no longer suffices to directly view the separate counts. However, for normal
+> + * applications that don't have huge page reference counts, this won't be an
+> + * issue.
+> + *
+> + * Locking: the lockless algorithm described in page_cache_get_speculative()
+> + * and page_cache_gup_pin_speculative() provides safe operation for
+> + * get_user_pages and page_mkclean and other calls that race to set up page
+> + * table entries.
+>   */
+...
+> @@ -2070,9 +2191,16 @@ static int gup_hugepte(pte_t *ptep, unsigned long sz, unsigned long addr,
+>  	page = head + ((addr & (sz-1)) >> PAGE_SHIFT);
+>  	refs = __record_subpages(page, addr, end, pages + *nr);
+>  
+> -	head = try_get_compound_head(head, refs);
+> -	if (!head)
+> -		return 0;
+> +	if (flags & FOLL_PIN) {
+> +		head = page;
+> +		if (unlikely(!user_page_ref_inc(head)))
+> +			return 0;
+> +		head = page;
 
-Thanks
-Wenkuan
+Why do you assign 'head' twice? Also the refcounting logic is repeated
+several times so perhaps you can factor it out in to a helper function or
+even move it to __record_subpages()?
 
-> - bool count_only)
-> + long *regions_needed, bool count_only)
-> {
-> - long chg = 0;
-> + long add = 0;
-> struct list_head *head = &resv->regions;
-> + long last_accounted_offset = f;
-> struct file_region *rg = NULL, *trg = NULL, *nrg = NULL;
-> - /* Locate the region we are before or
+> +	} else {
+> +		head = try_get_compound_head(head, refs);
+> +		if (!head)
+> +			return 0;
+> +	}
+>  
+>  	if (unlikely(pte_val(pte) != pte_val(*ptep))) {
+>  		put_compound_head(head, refs);
+
+So this will do the wrong thing for FOLL_PIN. We took just one "pin"
+reference there but here we'll release 'refs' normal references AFAICT.
+Also the fact that you take just one pin reference for each huge page
+substantially changes how GUP refcounting works in the huge page case.
+Currently, FOLL_GET users can be completely agnostic of huge pages. So you
+can e.g. GUP whole 2 MB page, submit it as 2 different bios and then
+drop page references from each bio completion function. With your new
+FOLL_PIN behavior you cannot do that and I believe it will be a problem for
+some users. So I think you have to maintain the behavior that you increase
+the head->_refcount by (refs * GUP_PIN_COUNTING_BIAS) here.
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
