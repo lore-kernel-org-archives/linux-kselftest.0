@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24FA5C43215
-	for <linux-kselftest@archiver.kernel.org>; Mon, 18 Nov 2019 12:01:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 692C4C432C0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 18 Nov 2019 12:02:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE7B72084D
-	for <linux-kselftest@archiver.kernel.org>; Mon, 18 Nov 2019 12:01:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 46E0020857
+	for <linux-kselftest@archiver.kernel.org>; Mon, 18 Nov 2019 12:02:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727289AbfKRMBs (ORCPT
+        id S1727368AbfKRMCN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 18 Nov 2019 07:01:48 -0500
-Received: from mx2.suse.de ([195.135.220.15]:37574 "EHLO mx1.suse.de"
+        Mon, 18 Nov 2019 07:02:13 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37464 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726895AbfKRMB1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Nov 2019 07:01:27 -0500
+        id S1726760AbfKRMBZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 18 Nov 2019 07:01:25 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id E731CB061;
+        by mx1.suse.de (Postfix) with ESMTP id BB66FB02C;
         Mon, 18 Nov 2019 12:01:20 +0000 (UTC)
 Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 7EC421E4B09; Mon, 18 Nov 2019 11:16:58 +0100 (CET)
-Date:   Mon, 18 Nov 2019 11:16:58 +0100
+        id 7DE191E4B03; Mon, 18 Nov 2019 10:49:18 +0100 (CET)
+Date:   Mon, 18 Nov 2019 10:49:18 +0100
 From:   Jan Kara <jack@suse.cz>
 To:     John Hubbard <jhubbard@nvidia.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -57,42 +57,29 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 11/24] goldish_pipe: convert to pin_user_pages() and
- put_user_page()
-Message-ID: <20191118101658.GG17319@quack2.suse.cz>
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Jason Gunthorpe <jgg@mellanox.com>
+Subject: Re: [PATCH v5 07/24] IB/umem: use get_user_pages_fast() to pin DMA
+ pages
+Message-ID: <20191118094918.GE17319@quack2.suse.cz>
 References: <20191115055340.1825745-1-jhubbard@nvidia.com>
- <20191115055340.1825745-12-jhubbard@nvidia.com>
+ <20191115055340.1825745-8-jhubbard@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191115055340.1825745-12-jhubbard@nvidia.com>
+In-Reply-To: <20191115055340.1825745-8-jhubbard@nvidia.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu 14-11-19 21:53:27, John Hubbard wrote:
-> 1. Call the new global pin_user_pages_fast(), from pin_goldfish_pages().
+On Thu 14-11-19 21:53:23, John Hubbard wrote:
+> And get rid of the mmap_sem calls, as part of that. Note
+> that get_user_pages_fast() will, if necessary, fall back to
+> __gup_longterm_unlocked(), which takes the mmap_sem as needed.
 > 
-> 2. As required by pin_user_pages(), release these pages via
-> put_user_page(). In this case, do so via put_user_pages_dirty_lock().
-> 
-> That has the side effect of calling set_page_dirty_lock(), instead
-> of set_page_dirty(). This is probably more accurate.
-> 
-> As Christoph Hellwig put it, "set_page_dirty() is only safe if we are
-> dealing with a file backed page where we have reference on the inode it
-> hangs off." [1]
-> 
-> Another side effect is that the release code is simplified because
-> the page[] loop is now in gup.c instead of here, so just delete the
-> local release_user_pages() entirely, and call
-> put_user_pages_dirty_lock() directly, instead.
-> 
-> [1] https://lore.kernel.org/r/20190723153640.GB720@lst.de
-> 
+> Reviewed-by: Jason Gunthorpe <jgg@mellanox.com>
 > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 
@@ -102,52 +89,47 @@ Reviewed-by: Jan Kara <jack@suse.cz>
 
 								Honza
 
+
 > ---
->  drivers/platform/goldfish/goldfish_pipe.c | 17 +++--------------
->  1 file changed, 3 insertions(+), 14 deletions(-)
+>  drivers/infiniband/core/umem.c | 17 ++++++-----------
+>  1 file changed, 6 insertions(+), 11 deletions(-)
 > 
-> diff --git a/drivers/platform/goldfish/goldfish_pipe.c b/drivers/platform/goldfish/goldfish_pipe.c
-> index 7ed2a21a0bac..635a8bc1b480 100644
-> --- a/drivers/platform/goldfish/goldfish_pipe.c
-> +++ b/drivers/platform/goldfish/goldfish_pipe.c
-> @@ -274,7 +274,7 @@ static int pin_goldfish_pages(unsigned long first_page,
->  		*iter_last_page_size = last_page_size;
+> diff --git a/drivers/infiniband/core/umem.c b/drivers/infiniband/core/umem.c
+> index 24244a2f68cc..3d664a2539eb 100644
+> --- a/drivers/infiniband/core/umem.c
+> +++ b/drivers/infiniband/core/umem.c
+> @@ -271,16 +271,13 @@ struct ib_umem *ib_umem_get(struct ib_udata *udata, unsigned long addr,
+>  	sg = umem->sg_head.sgl;
+>  
+>  	while (npages) {
+> -		down_read(&mm->mmap_sem);
+> -		ret = get_user_pages(cur_base,
+> -				     min_t(unsigned long, npages,
+> -					   PAGE_SIZE / sizeof (struct page *)),
+> -				     gup_flags | FOLL_LONGTERM,
+> -				     page_list, NULL);
+> -		if (ret < 0) {
+> -			up_read(&mm->mmap_sem);
+> +		ret = get_user_pages_fast(cur_base,
+> +					  min_t(unsigned long, npages,
+> +						PAGE_SIZE /
+> +						sizeof(struct page *)),
+> +					  gup_flags | FOLL_LONGTERM, page_list);
+> +		if (ret < 0)
+>  			goto umem_release;
+> -		}
+>  
+>  		cur_base += ret * PAGE_SIZE;
+>  		npages   -= ret;
+> @@ -288,8 +285,6 @@ struct ib_umem *ib_umem_get(struct ib_udata *udata, unsigned long addr,
+>  		sg = ib_umem_add_sg_table(sg, page_list, ret,
+>  			dma_get_max_seg_size(context->device->dma_device),
+>  			&umem->sg_nents);
+> -
+> -		up_read(&mm->mmap_sem);
 >  	}
 >  
-> -	ret = get_user_pages_fast(first_page, requested_pages,
-> +	ret = pin_user_pages_fast(first_page, requested_pages,
->  				  !is_write ? FOLL_WRITE : 0,
->  				  pages);
->  	if (ret <= 0)
-> @@ -285,18 +285,6 @@ static int pin_goldfish_pages(unsigned long first_page,
->  	return ret;
->  }
->  
-> -static void release_user_pages(struct page **pages, int pages_count,
-> -			       int is_write, s32 consumed_size)
-> -{
-> -	int i;
-> -
-> -	for (i = 0; i < pages_count; i++) {
-> -		if (!is_write && consumed_size > 0)
-> -			set_page_dirty(pages[i]);
-> -		put_page(pages[i]);
-> -	}
-> -}
-> -
->  /* Populate the call parameters, merging adjacent pages together */
->  static void populate_rw_params(struct page **pages,
->  			       int pages_count,
-> @@ -372,7 +360,8 @@ static int transfer_max_buffers(struct goldfish_pipe *pipe,
->  
->  	*consumed_size = pipe->command_buffer->rw_params.consumed_size;
->  
-> -	release_user_pages(pipe->pages, pages_count, is_write, *consumed_size);
-> +	put_user_pages_dirty_lock(pipe->pages, pages_count,
-> +				  !is_write && *consumed_size > 0);
->  
->  	mutex_unlock(&pipe->lock);
->  	return 0;
+>  	sg_mark_end(sg);
 > -- 
 > 2.24.0
 > 
