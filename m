@@ -3,47 +3,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B1ADC43215
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Nov 2019 21:13:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7729C43215
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Nov 2019 21:15:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 594BA22409
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Nov 2019 21:13:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 766F022464
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Nov 2019 21:15:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1574198000;
-	bh=+rZbMiTPYllqoniIMcGs/dtJqiSXsDPl4BOGrV5LLyM=;
+	s=default; t=1574198129;
+	bh=t+h2IM+fHx8J/Y2oE3wXzDMYJsAee6rQLF3NNjll+as=;
 	h=In-Reply-To:References:Subject:From:Cc:To:Date:List-ID:From;
-	b=P0CmaQNJxLTTz+PFvXV9Thn6Lw/mp37I9cN/Q/8wUDkYiDITVErtE9WC/5rz/KEOp
-	 OuE+/ApYuv19PcSG1POe5QFTCzg968oAZoZ6mbZq7UJfv58FoNhsa05AJeM5QVLykw
-	 eUwuJ9JuP6JXOMs4dhbmuKpPNfqfRKX2+oeitApM=
+	b=c8peWWMEsLhUL0W4ewCrsOSquYBx8uoCtREkM9RBLFBZ8Lsf0OzwvLrFTl865+Tua
+	 LUJScVEeqkr6E02++OxwN/RP1QSh4br/zFAvSwGUZwLouNskGrERCgWl+G83fD9zwV
+	 zRJIrWjFUQE90I9mm13fiffm6jEYl35BbhCVeBo8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727428AbfKSVNQ (ORCPT
+        id S1727472AbfKSVP0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 19 Nov 2019 16:13:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41416 "EHLO mail.kernel.org"
+        Tue, 19 Nov 2019 16:15:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42432 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726711AbfKSVNQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Nov 2019 16:13:16 -0500
+        id S1727224AbfKSVP0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 Nov 2019 16:15:26 -0500
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4EFC6223E4;
-        Tue, 19 Nov 2019 21:13:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5D80A22444;
+        Tue, 19 Nov 2019 21:15:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574197995;
-        bh=+rZbMiTPYllqoniIMcGs/dtJqiSXsDPl4BOGrV5LLyM=;
+        s=default; t=1574198125;
+        bh=t+h2IM+fHx8J/Y2oE3wXzDMYJsAee6rQLF3NNjll+as=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=fXZYQ+b+Ktmf9wsPjVTZpfwRmX+bHAdGGR+e8D2LHjAiOOZrrpf/kniJKaLV6p8As
-         /qlwSrWVMmGPnJi2+7jkxaJACmiHB4NBr5+63q2yZ38RqvKXH2XNkPeSjl63VdEj6S
-         lZGBvUDbeO4y58fjCKEZczMw0VYE3Lj+2slmXyEs=
+        b=aJEZxMTd0gF3Br9hzumO40lalTlA+pJlbMnuK4JCYSU+HL88E3kfvo5flg5ThKylw
+         VYkhnli+vAwJENV1V4nIfnFARb6FEMk/s1N0m5GmaznPwWW7DLld+pUP56W+QDjSAF
+         XFrnw40/6pAEZxXILWW3E221aBt8aWBf0/M2hUEo=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1573812972-10529-6-git-send-email-alan.maguire@oracle.com>
-References: <1573812972-10529-1-git-send-email-alan.maguire@oracle.com> <1573812972-10529-6-git-send-email-alan.maguire@oracle.com>
-Subject: Re: [PATCH v4 linux-kselftest-test 5/6] kunit: allow kunit to be loaded as a module
+In-Reply-To: <1573812972-10529-7-git-send-email-alan.maguire@oracle.com>
+References: <1573812972-10529-1-git-send-email-alan.maguire@oracle.com> <1573812972-10529-7-git-send-email-alan.maguire@oracle.com>
+Subject: Re: [PATCH v4 linux-kselftest-test 6/6] kunit: update documentation to describe module-based build
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
         keescook@chromium.org, yzaikin@google.com,
@@ -59,43 +59,20 @@ Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
 To:     Alan Maguire <alan.maguire@oracle.com>, brendanhiggins@google.com,
         linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
 User-Agent: alot/0.8.1
-Date:   Tue, 19 Nov 2019 13:13:14 -0800
-Message-Id: <20191119211315.4EFC6223E4@mail.kernel.org>
+Date:   Tue, 19 Nov 2019 13:15:24 -0800
+Message-Id: <20191119211525.5D80A22444@mail.kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quoting Alan Maguire (2019-11-15 02:16:11)
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 87b5cf1..41ef71a 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -486,3 +486,16 @@ void kunit_cleanup(struct kunit *test)
->         }
->  }
->  EXPORT_SYMBOL_GPL(kunit_cleanup);
-> +
-> +static int kunit_init(void)
+Quoting Alan Maguire (2019-11-15 02:16:12)
+> Documentation should describe how to build kunit and tests as
+> modules.
+>=20
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Signed-off-by: Knut Omang <knut.omang@oracle.com>
+> ---
 
-Missing __init?
-
-> +{
-> +       return 0;
-> +}
-> +late_initcall(kunit_init);
-
-It looks pretty weird that this doesn't do anything in the module init
-or exit path. How does it work? And why does it need to be late init if
-nothing is called from here?
-
-> +
-> +static void __exit kunit_exit(void)
-> +{
-> +}
-> +module_exit(kunit_exit);
-> +
-> +MODULE_LICENSE("GPL");
-
-I guess should be "GPL v2"?
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
