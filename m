@@ -4,30 +4,31 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5711EC33C8C
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Nov 2019 03:12:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C206C432C0
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Nov 2019 03:13:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 397C1223BF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Nov 2019 03:12:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 799992231A
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Nov 2019 03:13:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727617AbfKSDM4 (ORCPT
+        id S1727671AbfKSDNA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 18 Nov 2019 22:12:56 -0500
-Received: from mga02.intel.com ([134.134.136.20]:21257 "EHLO mga02.intel.com"
+        Mon, 18 Nov 2019 22:13:00 -0500
+Received: from mga02.intel.com ([134.134.136.20]:21246 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727589AbfKSDM4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Nov 2019 22:12:56 -0500
+        id S1727659AbfKSDNA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 18 Nov 2019 22:13:00 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 19:12:42 -0800
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 19:12:43 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.68,322,1569308400"; 
-   d="scan'208";a="218105711"
+   d="scan'208";a="218105754"
 Received: from sjchrist-coffee.jf.intel.com ([10.54.74.41])
-  by orsmga002.jf.intel.com with ESMTP; 18 Nov 2019 19:12:42 -0800
+  by orsmga002.jf.intel.com with ESMTP; 18 Nov 2019 19:12:43 -0800
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -52,9 +53,9 @@ Cc:     "H. Peter Anvin" <hpa@zytor.com>,
         kvm@vger.kernel.org, linux-edac@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: [PATCH v3 04/19] x86/intel: Initialize IA32_FEATURE_CONTROL MSR at boot
-Date:   Mon, 18 Nov 2019 19:12:25 -0800
-Message-Id: <20191119031240.7779-5-sean.j.christopherson@intel.com>
+Subject: [PATCH v3 18/19] perf/x86: Provide stubs of KVM helpers for non-Intel CPUs
+Date:   Mon, 18 Nov 2019 19:12:39 -0800
+Message-Id: <20191119031240.7779-19-sean.j.christopherson@intel.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191119031240.7779-1-sean.j.christopherson@intel.com>
 References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
@@ -65,138 +66,68 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Opportunistically initialize IA32_FEATURE_CONTROL MSR to enable VMX when
-the MSR is left unlocked by BIOS.  Configuring IA32_FEATURE_CONTROL at
-boot time paves the way for similar enabling of other features, e.g.
-Software Guard Extensions (SGX).
+Provide stubs for perf_guest_get_msrs() and intel_pt_handle_vmx() when
+building without support for Intel CPUs, i.e. CPU_SUP_INTEL=n.  Lack of
+stubs is not currently a problem as the only user, KVM_INTEL, takes a
+dependency on CPU_SUP_INTEL=y.  Provide the stubs for all CPUs so that
+KVM_INTEL can be built for any CPU with compatible hardware support,
+e.g. Centuar and Zhaoxin CPUs.
 
-Temporarily leave equivalent KVM code in place in order to avoid
-introducing a regression on Centaur and Zhaoxin CPUs, e.g. removing
-KVM's code would leave the MSR unlocked on those CPUs and would break
-existing functionality if people are loading kvm_intel on Centaur and/or
-Zhaoxin.  Defer enablement of the boot-time configuration on Centaur and
-Zhaoxin to future patches to aid bisection.
+Note, the existing stub for perf_guest_get_msrs() is essentially dead
+code as KVM selects CONFIG_PERF_EVENTS, i.e. the only user guarantees
+the full implementation is built.
 
-Note, Local Machine Check Exceptions (LMCE) are also supported by the
-kernel and enabled via IA32_FEATURE_CONTROL, but the kernel currently
-uses LMCE if and and only if the feature is explicitly enabled by BIOS.
-Keep the current behavior to avoid introducing bugs, future patches can
-opt in to opportunistic enabling if it's deemed desirable to do so.
-
-Always lock IA32_FEATURE_CONTROL if it exists, even if the CPU doesn't
-support VMX, so that other existing and future kernel code that queries
-IA32_FEATURE_CONTROL can assume it's locked.
-
-Start from a clean slate when constructing the value to write to
-IA32_FEATURE_CONTROL, i.e. ignore whatever value BIOS left in the MSR so
-as not to enable random features or fault on the WRMSR.
-
-Suggested-by: Borislav Petkov <bp@suse.de>
-Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 ---
- arch/x86/Kconfig.cpu                  |  4 +++
- arch/x86/kernel/cpu/Makefile          |  1 +
- arch/x86/kernel/cpu/cpu.h             |  4 +++
- arch/x86/kernel/cpu/feature_control.c | 35 +++++++++++++++++++++++++++
- arch/x86/kernel/cpu/intel.c           |  2 ++
- 5 files changed, 46 insertions(+)
- create mode 100644 arch/x86/kernel/cpu/feature_control.c
+ arch/x86/include/asm/perf_event.h | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
-index af9c967782f6..aafc14a0abf7 100644
---- a/arch/x86/Kconfig.cpu
-+++ b/arch/x86/Kconfig.cpu
-@@ -387,6 +387,10 @@ config X86_DEBUGCTLMSR
- 	def_bool y
- 	depends on !(MK6 || MWINCHIPC6 || MWINCHIP3D || MCYRIXIII || M586MMX || M586TSC || M586 || M486SX || M486) && !UML
+diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+index ee26e9215f18..29964b0e1075 100644
+--- a/arch/x86/include/asm/perf_event.h
++++ b/arch/x86/include/asm/perf_event.h
+@@ -322,17 +322,10 @@ struct perf_guest_switch_msr {
+ 	u64 host, guest;
+ };
  
-+config X86_FEATURE_CONTROL_MSR
-+	def_bool y
-+	depends on CPU_SUP_INTEL
-+
- menuconfig PROCESSOR_SELECT
- 	bool "Supported processor vendors" if EXPERT
- 	---help---
-diff --git a/arch/x86/kernel/cpu/Makefile b/arch/x86/kernel/cpu/Makefile
-index 890f60083eca..84e35e762f76 100644
---- a/arch/x86/kernel/cpu/Makefile
-+++ b/arch/x86/kernel/cpu/Makefile
-@@ -29,6 +29,7 @@ obj-y			+= umwait.o
- obj-$(CONFIG_PROC_FS)	+= proc.o
- obj-$(CONFIG_X86_FEATURE_NAMES) += capflags.o powerflags.o
+-extern struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr);
+ extern void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap);
+ extern void perf_check_microcode(void);
+ extern int x86_perf_rdpmc_index(struct perf_event *event);
+ #else
+-static inline struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr)
+-{
+-	*nr = 0;
+-	return NULL;
+-}
+-
+ static inline void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap)
+ {
+ 	memset(cap, 0, sizeof(*cap));
+@@ -342,8 +335,23 @@ static inline void perf_events_lapic_init(void)	{ }
+ static inline void perf_check_microcode(void) { }
+ #endif
  
-+obj-$(CONFIG_X86_FEATURE_CONTROL_MSR) += feature_control.o
- ifdef CONFIG_CPU_SUP_INTEL
- obj-y			+= intel.o intel_pconfig.o tsx.o
- obj-$(CONFIG_PM)	+= intel_epb.o
-diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
-index 38ab6e115eac..a58e80866a3f 100644
---- a/arch/x86/kernel/cpu/cpu.h
-+++ b/arch/x86/kernel/cpu/cpu.h
-@@ -80,4 +80,8 @@ extern void x86_spec_ctrl_setup_ap(void);
- 
- extern u64 x86_read_arch_cap_msr(void);
- 
-+#ifdef CONFIG_X86_FEATURE_CONTROL_MSR
-+void init_feature_control_msr(struct cpuinfo_x86 *c);
++#if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
++extern struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr);
++#else
++static inline struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr)
++{
++	*nr = 0;
++	return NULL;
++}
 +#endif
 +
- #endif /* ARCH_X86_CPU_H */
-diff --git a/arch/x86/kernel/cpu/feature_control.c b/arch/x86/kernel/cpu/feature_control.c
-new file mode 100644
-index 000000000000..33c9444dda52
---- /dev/null
-+++ b/arch/x86/kernel/cpu/feature_control.c
-@@ -0,0 +1,35 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/tboot.h>
-+
-+#include <asm/cpufeature.h>
-+#include <asm/msr-index.h>
-+#include <asm/processor.h>
-+
-+void init_feature_control_msr(struct cpuinfo_x86 *c)
+ #ifdef CONFIG_CPU_SUP_INTEL
+  extern void intel_pt_handle_vmx(int on);
++#else
++static inline void intel_pt_handle_vmx(int on)
 +{
-+	u64 msr;
 +
-+	if (rdmsrl_safe(MSR_IA32_FEATURE_CONTROL, &msr))
-+		return;
-+
-+	if (msr & FEAT_CTL_LOCKED)
-+		return;
-+
-+	/*
-+	 * Ignore whatever value BIOS left in the MSR to avoid enabling random
-+	 * features or faulting on the WRMSR.
-+	 */
-+	msr = FEAT_CTL_LOCKED;
-+
-+	/*
-+	 * Enable VMX if and only if the kernel may do VMXON at some point,
-+	 * i.e. KVM is enabled, to avoid unnecessarily adding an attack vector
-+	 * for the kernel, e.g. using VMX to hide malicious code.
-+	 */
-+	if (cpu_has(c, X86_FEATURE_VMX) && IS_ENABLED(CONFIG_KVM)) {
-+		msr |= FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX;
-+		if (tboot_enabled())
-+			msr |= FEAT_CTL_VMX_ENABLED_INSIDE_SMX;
-+	}
-+	wrmsrl(MSR_IA32_FEATURE_CONTROL, msr);
 +}
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 4a900804a023..b7c6ed0b40b6 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -755,6 +755,8 @@ static void init_intel(struct cpuinfo_x86 *c)
- 	/* Work around errata */
- 	srat_detect_node(c);
+ #endif
  
-+	init_feature_control_msr(c);
-+
- 	if (cpu_has(c, X86_FEATURE_VMX))
- 		detect_vmx_virtcap(c);
- 
+ #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_AMD)
 -- 
 2.24.0
 
