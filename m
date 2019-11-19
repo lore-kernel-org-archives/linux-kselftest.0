@@ -2,113 +2,95 @@ Return-Path: <SRS0=JqO+=ZL=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAFBCC33C9D
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Nov 2019 01:24:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB067C432C0
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Nov 2019 03:12:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 92FB122310
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Nov 2019 01:24:47 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Uvv+qMR/"
+	by mail.kernel.org (Postfix) with ESMTP id 7F2F22231B
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Nov 2019 03:12:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727126AbfKSBYr (ORCPT
+        id S1727242AbfKSDMy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 18 Nov 2019 20:24:47 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:42717 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727020AbfKSBYr (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Nov 2019 20:24:47 -0500
-Received: by mail-pl1-f194.google.com with SMTP id j12so10787692plt.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2019 17:24:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u+EElGaeg7B4NHLzEdMEmecs3hx9HYQQt4MBfsxoGp4=;
-        b=Uvv+qMR/YvSIV89+KOuySyIJSm4e4O8lhyJ4qzs92d2olMqEp9kxbAHwujSp/QcdyY
-         1ikn1NyGEK1bTHUCPN2ReOTEP4BwNPd/W2fYw82oR5zuyyok3HUHSlXiwDRO5DvqNeQK
-         kXUorqKAnxgoZ+vVnQLRK2tiy77SYX6dLHf7WUdBfG1dFN3EYNwGl1MLezFQtxNfWCeO
-         FKCqQjRgAyWT3IhJ50fwUNjk5H2d5C5PrJ2bWdo8gzNdc1s6uMMEHft0PoI8IRCuCumK
-         UzLRPVaBr4MFBZBOpTZguBQJBX6qjjqVFu0HFirRUDHSE9/fpX4v+Yf0mCoEJpa5jZDq
-         F8eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u+EElGaeg7B4NHLzEdMEmecs3hx9HYQQt4MBfsxoGp4=;
-        b=CFhwDvXYBMismbPZYSp/WazpGmFEJzmUDhJPoZqNandYklm1QcwpFLgM77TvgJBej0
-         iW3INQEPyZhfVwjuMaOB782+7nZGSoRQ/gQJ616C8Y0BoLBaOSDRhZLmbTtg14u8UCbD
-         SkfLNUVWe13T9yeh4gCZqqdTbnj9A2varz86hj4kmEaBxyAZLd49MQIdjKl4Xk2nUTug
-         R8iAQXxHTg8472QxO4G7LkXRY83WZp8uiRMvW6B589oxhjrAZWyzD3A6U3iWAy6PDDS1
-         odSBzuaT2LPvmerZBp9pD6pP+6PfwYbx/Djuf2/R9OAKITqe5yFaRZmrEhJzmdb0eq79
-         VuTg==
-X-Gm-Message-State: APjAAAVwavj1sphEKgslFc80c7dRinVNX7KvW57WJ4ZaMDH3r+sqEGjY
-        ir+v6fFAzQFglO5c2NptnrXafkckxBQ/cS39rT+1jw==
-X-Google-Smtp-Source: APXvYqyQ0yIu5BJfhnGVAf7ZY450gOCdnTPdioyEqCBN6cL7YR/zlO5q8oTmMwfOkenfyH5sRhoTBLvV7xDeXBn6IOg=
-X-Received: by 2002:a17:902:be14:: with SMTP id r20mr31102887pls.297.1574126685459;
- Mon, 18 Nov 2019 17:24:45 -0800 (PST)
+        Mon, 18 Nov 2019 22:12:54 -0500
+Received: from mga02.intel.com ([134.134.136.20]:21246 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727014AbfKSDMy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 18 Nov 2019 22:12:54 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 19:12:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,322,1569308400"; 
+   d="scan'208";a="218105733"
+Received: from sjchrist-coffee.jf.intel.com ([10.54.74.41])
+  by orsmga002.jf.intel.com with ESMTP; 18 Nov 2019 19:12:42 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Subject: [PATCH v3 11/19] KVM: VMX: Check for full VMX support when verifying CPU compatibility
+Date:   Mon, 18 Nov 2019 19:12:32 -0800
+Message-Id: <20191119031240.7779-12-sean.j.christopherson@intel.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191119031240.7779-1-sean.j.christopherson@intel.com>
+References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
 MIME-Version: 1.0
-References: <1573812972-10529-1-git-send-email-alan.maguire@oracle.com>
- <1573812972-10529-5-git-send-email-alan.maguire@oracle.com> <20191118220958.GS11244@42.do-not-panic.com>
-In-Reply-To: <20191118220958.GS11244@42.do-not-panic.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 18 Nov 2019 17:24:33 -0800
-Message-ID: <CAFd5g46PQ_kWERgoVC--QAUNOWT6p9AwsJPTV4sM7uv6L+iB2g@mail.gmail.com>
-Subject: Re: [PATCH v4 linux-kselftest-test 4/6] kunit: remove timeout
- dependence on sysctl_hung_task_timeout_seconds
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        catalin.marinas@arm.com, joe.lawrence@redhat.com,
-        penguin-kernel@i-love.sakura.ne.jp, schowdary@nvidia.com,
-        urezki@gmail.com, andriy.shevchenko@linux.intel.com,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Theodore Ts'o" <tytso@mit.edu>, adilger.kernel@dilger.ca,
-        changbin.du@intel.com, linux-ext4@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Knut Omang <knut.omang@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 18, 2019 at 2:10 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Fri, Nov 15, 2019 at 10:16:10AM +0000, Alan Maguire wrote:
-> > In discussion of how to handle timeouts, it was noted that if
-> > sysctl_hung_task_timeout_seconds is exceeded for a kunit test,
-> > the test task will be killed and an oops generated.  This should
-> > suffice as a means of debugging such timeout issues for now.
-> >
-> > Hence remove use of sysctl_hung_task_timeout_secs, which has the
-> > added benefit of avoiding the need to export that symbol from
-> > the core kernel.
-> >
-> > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> > Signed-off-by: Knut Omang <knut.omang@oracle.com>
->
-> This seems like a workaround for sysctl_hung_task_timeout_secs not being
-> exported. If true, this can be addressed by creating a symbol namespace
-> (new) and using that namespace on this path.
+Explicitly check the current CPU's VMX feature flag when verifying
+compatibility across physical CPUs.  This effectively adds a check on
+IA32_FEATURE_CONTROL to ensure that VMX is fully enabled on all CPUs.
 
-It is; as discussed on in v3[1]. I don't really feel strongly one way
-or the other, I can see arguments for either side. Still, I don't want
-to give Alan the run-around. I think this is the 3rd or 4th time he
-has tried to address this issue.
+Reviewed-by: Jim Mattson <jmattson@google.com>
+Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+---
+ arch/x86/kvm/vmx/vmx.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-[1] https://lore.kernel.org/linux-kselftest/CAFd5g44esDP6WFmkjOiH+my_4iBeqMpFoScMCm_hQ0aFwNS9qw@mail.gmail.com/
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index eff28130cb54..d9bd99977464 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -6831,6 +6831,11 @@ static int __init vmx_check_processor_compat(void)
+ 	struct vmcs_config vmcs_conf;
+ 	struct vmx_capability vmx_cap;
+ 
++	if (!this_cpu_has(X86_FEATURE_VMX)) {
++		pr_err("kvm: VMX is disabled on CPU %d\n", smp_processor_id());
++		return -EIO;
++	}
++
+ 	if (setup_vmcs_config(&vmcs_conf, &vmx_cap) < 0)
+ 		return -EIO;
+ 	if (nested)
+-- 
+2.24.0
+
