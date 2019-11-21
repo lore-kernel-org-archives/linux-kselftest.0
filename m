@@ -2,159 +2,92 @@ Return-Path: <SRS0=nVqm=ZN=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A61F1C43141
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Nov 2019 21:52:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3267C432C3
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Nov 2019 22:12:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7CC522067D
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Nov 2019 21:52:38 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="KYGZRjKv"
+	by mail.kernel.org (Postfix) with ESMTP id B3EE3206D8
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Nov 2019 22:12:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbfKUVwb (ORCPT
+        id S1726539AbfKUWMg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Nov 2019 16:52:31 -0500
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:12745 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726297AbfKUVwb (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Nov 2019 16:52:31 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dd707210000>; Thu, 21 Nov 2019 13:52:33 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 21 Nov 2019 13:52:30 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 21 Nov 2019 13:52:30 -0800
-Received: from [10.2.168.213] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 21 Nov
- 2019 21:52:28 +0000
-Subject: Re: [PATCH v7 09/24] vfio, mm: fix get_user_pages_remote() and
- FOLL_LONGTERM
-To:     Alex Williamson <alex.williamson@redhat.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        Jason Gunthorpe <jgg@mellanox.com>
-References: <20191121071354.456618-1-jhubbard@nvidia.com>
- <20191121071354.456618-10-jhubbard@nvidia.com>
- <20191121143525.50deb72f@x1.home>
-From:   John Hubbard <jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <b5ae788a-58a9-de93-f65e-e4d9c0632dc9@nvidia.com>
-Date:   Thu, 21 Nov 2019 13:49:40 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Thu, 21 Nov 2019 17:12:36 -0500
+Received: from mga03.intel.com ([134.134.136.65]:47756 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726329AbfKUWMg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 21 Nov 2019 17:12:36 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Nov 2019 14:12:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,227,1571727600"; 
+   d="scan'208";a="205292088"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Nov 2019 14:12:34 -0800
+Date:   Thu, 21 Nov 2019 14:12:34 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 04/19] x86/intel: Initialize IA32_FEATURE_CONTROL MSR
+ at boot
+Message-ID: <20191121221234.GE16617@linux.intel.com>
+References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
+ <20191119031240.7779-5-sean.j.christopherson@intel.com>
+ <20191121103925.GB20907@linux.intel.com>
+ <20191121104145.GC20907@linux.intel.com>
+ <20191121110533.GD6540@zn.tnic>
 MIME-Version: 1.0
-In-Reply-To: <20191121143525.50deb72f@x1.home>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574373153; bh=oGhbv3cXo8o4GZ8PnxP5Ux4y8AE3jGJR4EeVDVjoVEc=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=KYGZRjKvtxip9P6ifb3Te8PpgvFSTRruWhwxOgXb0S114oVSZskeO+iOWdCneQvB4
-         NA5CKwViDqqMCzmcEtuXOzx5kWlGm/CdhdbD7x7k9Kx6Vh5kQFWAggEn8hm5nSetjo
-         GsuEs2bguAasb3kn7+569g/s+OYwxg2N/laFgRqUcYIkUaXO+dKZ1vX7QBvKE7iuhN
-         xdX8E7mSGSvk8taZzTl3l1tHACe5K5QgYBxfNvJAXLPet5p3Tx/OKYiHGukBzXFPA8
-         pg/kE+aDZRuWuc8KSGeIQ8zVRFi/6q/Cd2RICjjhHLzCf4ZbZMZG9XJoZELTlTOned
-         7+K+fSUD3HTWw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191121110533.GD6540@zn.tnic>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/21/19 1:35 PM, Alex Williamson wrote:
-> On Wed, 20 Nov 2019 23:13:39 -0800
-> John Hubbard <jhubbard@nvidia.com> wrote:
+On Thu, Nov 21, 2019 at 12:05:33PM +0100, Borislav Petkov wrote:
+> On Thu, Nov 21, 2019 at 12:41:45PM +0200, Jarkko Sakkinen wrote:
+> > On Thu, Nov 21, 2019 at 12:39:25PM +0200, Jarkko Sakkinen wrote:
+> > > > +void init_feature_control_msr(struct cpuinfo_x86 *c)
+> > 
+> > I'd also use here shorter init_feat_ctl_msr(). It has one call site
+> > but shorter name is more convenient when playing with tracing tools.
 > 
->> As it says in the updated comment in gup.c: current FOLL_LONGTERM
->> behavior is incompatible with FAULT_FLAG_ALLOW_RETRY because of the
->> FS DAX check requirement on vmas.
->>
->> However, the corresponding restriction in get_user_pages_remote() was
->> slightly stricter than is actually required: it forbade all
->> FOLL_LONGTERM callers, but we can actually allow FOLL_LONGTERM callers
->> that do not set the "locked" arg.
->>
->> Update the code and comments accordingly, and update the VFIO caller
->> to take advantage of this, fixing a bug as a result: the VFIO caller
->> is logically a FOLL_LONGTERM user.
->>
->> Also, remove an unnessary pair of calls that were releasing and
->> reacquiring the mmap_sem. There is no need to avoid holding mmap_sem
->> just in order to call page_to_pfn().
->>
->> Also, move the DAX check ("if a VMA is DAX, don't allow long term
->> pinning") from the VFIO call site, all the way into the internals
->> of get_user_pages_remote() and __gup_longterm_locked(). That is:
->> get_user_pages_remote() calls __gup_longterm_locked(), which in turn
->> calls check_dax_vmas(). It's lightly explained in the comments as well.
->>
->> Thanks to Jason Gunthorpe for pointing out a clean way to fix this,
->> and to Dan Williams for helping clarify the DAX refactoring.
->>
->> Reviewed-by: Jason Gunthorpe <jgg@mellanox.com>
->> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
->> Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
->> Cc: Dan Williams <dan.j.williams@intel.com>
->> Cc: Jerome Glisse <jglisse@redhat.com>
->> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
->> ---
->>   drivers/vfio/vfio_iommu_type1.c | 30 +++++-------------------------
->>   mm/gup.c                        | 27 ++++++++++++++++++++++-----
->>   2 files changed, 27 insertions(+), 30 deletions(-)
+> Yeah, and since we're shortening all to feat_ctl, let's do:
 > 
-> Tested with device assignment and Intel mdev vGPU assignment with QEMU
-> userspace:
-> 
-> Tested-by: Alex Williamson <alex.williamson@redhat.com>
-> Acked-by: Alex Williamson <alex.williamson@redhat.com>
-> 
-> Feel free to include for 19/24 as well.  Thanks,
-> 
-> Alex
+> mv arch/x86/kernel/cpu/feature_control.c arch/x86/kernel/cpu/feat_ctl.c
 
+Any objection to keeping the MSR name as MSR_IA32_FEATURE_CONTOL?  I'd like
+to have some anchor back to the name used in the SDM.
 
-Great! Thanks for the testing and ack on those. I'm about to repackage
-(and split up as CH requested) for 5.5, and will keep you on CC, of course.
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+Any opinions/thoughts on the name of the Kconfig?  Currently it's
+X86_FEATURE_CONTROL_MSR, which gets a bit long with CONFIG_ on the front.
+I also overlooked that we have MSR_MISC_FEATURE_CONTROL, so having IA32 in
+the Kconfig would probably be a good idea.  X86_IA32 is rather redundant,
+so maybe IA32_FEAT_CTL or IA32_FEATURE_CONTROL?
