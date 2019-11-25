@@ -2,32 +2,32 @@ Return-Path: <SRS0=TovR=ZR=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA12AC432C0
-	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Nov 2019 16:42:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2DF3C33C9E
+	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Nov 2019 16:42:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C8B9A2068E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Nov 2019 16:42:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C83F320878
+	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Nov 2019 16:42:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728928AbfKYQmb (ORCPT
+        id S1728931AbfKYQmc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 25 Nov 2019 11:42:31 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:60954 "EHLO inva021.nxp.com"
+        Mon, 25 Nov 2019 11:42:32 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:40570 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728860AbfKYQmb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Nov 2019 11:42:31 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EE31A2004FB;
-        Mon, 25 Nov 2019 17:42:28 +0100 (CET)
+        id S1728914AbfKYQmc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 25 Nov 2019 11:42:32 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 2CC041A02AC;
+        Mon, 25 Nov 2019 17:42:30 +0100 (CET)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id DFE0B2004E4;
-        Mon, 25 Nov 2019 17:42:28 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1F69D1A0211;
+        Mon, 25 Nov 2019 17:42:30 +0100 (CET)
 Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 5EEE7204E6;
-        Mon, 25 Nov 2019 17:42:28 +0100 (CET)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 8AA43204D5;
+        Mon, 25 Nov 2019 17:42:29 +0100 (CET)
 From:   Leonard Crestez <leonard.crestez@nxp.com>
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Matthias Kaehlcke <mka@chromium.org>
@@ -40,83 +40,57 @@ Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
         Brendan Higgins <brendanhiggins@google.com>,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-pm@vger.kernel.org, linux-imx@nxp.com
-Subject: [PATCH v3 0/4] PM: QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
-Date:   Mon, 25 Nov 2019 18:42:15 +0200
-Message-Id: <cover.1574699610.git.leonard.crestez@nxp.com>
+Subject: [PATCH v3 2/4] PM / QOS: Redefine FREQ_QOS_MAX_DEFAULT_VALUE to S32_MAX
+Date:   Mon, 25 Nov 2019 18:42:17 +0200
+Message-Id: <43ffe25df5e9b268778656a0b9259c2939715681.1574699610.git.leonard.crestez@nxp.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1574699610.git.leonard.crestez@nxp.com>
+References: <cover.1574699610.git.leonard.crestez@nxp.com>
+In-Reply-To: <cover.1574699610.git.leonard.crestez@nxp.com>
+References: <cover.1574699610.git.leonard.crestez@nxp.com>
 X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Support for frequency limits in dev_pm_qos was removed when cpufreq was
-switched to freq_qos, this series attempts to restore it by
-reimplementing on top of freq_qos.
+QOS requests for DEFAULT_VALUE are supposed to be ignored but this is
+not the case for FREQ_QOS_MAX. Adding one request for MAX_DEFAULT_VALUE
+and one for a real value will cause freq_qos_read_value to unexpectedly
+return MAX_DEFAULT_VALUE (-1).
 
-Discussion about removal is here:
-https://lore.kernel.org/linux-pm/VI1PR04MB7023DF47D046AEADB4E051EBEE680@VI1PR04MB7023.eurprd04.prod.outlook.com/T/#u
+This happens because freq_qos max value is aggregated with PM_QOS_MIN
+but FREQ_QOS_MAX_DEFAULT_VALUE is (-1) so it's smaller than other
+values.
 
-The cpufreq core switched away because it needs contraints at the level
-of a "cpufreq_policy" which cover multiple cpus so dev_pm_qos coupling
-to struct device was not useful. Cpufreq could only use dev_pm_qos by
-implementing an additional layer of aggregation anyway.
+Fix this by redefining FREQ_QOS_MAX_DEFAULT_VALUE to S32_MAX.
 
-However in the devfreq subsystem scaling is always performed on a per-device
-basis so dev_pm_qos is a very good match. Support for dev_pm_qos in devfreq
-core is here:
+Looking at current users for freq_qos it seems that none of them create
+requests for FREQ_QOS_MAX_DEFAULT_VALUE.
 
-	https://patchwork.kernel.org/cover/11252409/
-
-That series is RFC mostly because it needs these PM core patches.
-Earlier versions got entangled in some locking cleanups but those are
-not strictly necessary to get dev_pm_qos functionality.
-
-In theory if freq_qos is extended to handle conflicting min/max values then
-this sharing would be valuable. Right now freq_qos just ties two unrelated
-pm_qos aggregations for min and max freq.
-
+Fixes: 77751a466ebd ("PM: QoS: Introduce frequency QoS")
+Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 ---
-This is implemented by embeding a freq_qos_request inside dev_pm_qos_request:
-the data field was already an union in order to deal with flag requests.
+ include/linux/pm_qos.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The internal freq_qos_apply is exported so that it can be called from
-dev_pm_qos apply_constraints.
-
-The dev_pm_qos_constraints_destroy function has no obvious equivalent in
-freq_qos and the whole approach of "removing requests" is somewhat dubios:
-request objects should be owned by consumers and the list of qos requests
-should be empty when the target device is deleted.
-
-Changes since v2:
-* #define PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE FREQ_QOS_MAX_DEFAULT_VALUE
-* #define FREQ_QOS_MAX_DEFAULT_VALUE S32_MAX (in new patch)
-* Add initial kunit test for freq_qos, validating the MAX_DEFAULT_VALUE found
-by Matthias.
-Link to v2: https://patchwork.kernel.org/cover/11250413/
-
-First two patches can be applied separated
-
-Changes since v1:
-* Don't rename or EXPORT_SYMBOL_GPL the freq_qos_apply function; just
-drop the static marker.
-Link to v1: https://patchwork.kernel.org/cover/11212887/
-
-Leonard Crestez (4):
-  PM / QoS: Initial kunit test
-  PM / QOS: Redefine FREQ_QOS_MAX_DEFAULT_VALUE to S32_MAX
-  PM / QoS: Reorder pm_qos/freq_qos/dev_pm_qos structs
-  PM / QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
-
- drivers/base/Kconfig          |   4 ++
- drivers/base/power/Makefile   |   1 +
- drivers/base/power/qos-test.c | 116 ++++++++++++++++++++++++++++++++++
- drivers/base/power/qos.c      |  69 ++++++++++++++++++--
- include/linux/pm_qos.h        |  86 ++++++++++++++-----------
- kernel/power/qos.c            |   4 +-
- 6 files changed, 237 insertions(+), 43 deletions(-)
- create mode 100644 drivers/base/power/qos-test.c
-
+diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+index ebf5ef17cc2a..24a6263c9931 100644
+--- a/include/linux/pm_qos.h
++++ b/include/linux/pm_qos.h
+@@ -254,11 +254,11 @@ static inline s32 dev_pm_qos_raw_resume_latency(struct device *dev)
+ 	return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
+ }
+ #endif
+ 
+ #define FREQ_QOS_MIN_DEFAULT_VALUE	0
+-#define FREQ_QOS_MAX_DEFAULT_VALUE	(-1)
++#define FREQ_QOS_MAX_DEFAULT_VALUE	S32_MAX
+ 
+ enum freq_qos_req_type {
+ 	FREQ_QOS_MIN = 1,
+ 	FREQ_QOS_MAX,
+ };
 -- 
 2.17.1
 
