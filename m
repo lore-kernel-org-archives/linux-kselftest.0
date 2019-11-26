@@ -2,130 +2,97 @@ Return-Path: <SRS0=2Rat=ZS=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DA5AC43215
-	for <linux-kselftest@archiver.kernel.org>; Tue, 26 Nov 2019 13:15:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1860EC432C0
+	for <linux-kselftest@archiver.kernel.org>; Tue, 26 Nov 2019 15:17:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E69D520727
-	for <linux-kselftest@archiver.kernel.org>; Tue, 26 Nov 2019 13:15:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EDD4A20722
+	for <linux-kselftest@archiver.kernel.org>; Tue, 26 Nov 2019 15:17:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727339AbfKZNPS (ORCPT
+        id S1727580AbfKZPRX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 26 Nov 2019 08:15:18 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:35692 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725995AbfKZNPS (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Nov 2019 08:15:18 -0500
-Received: by mail-ot1-f67.google.com with SMTP id 23so14067882otf.2;
-        Tue, 26 Nov 2019 05:15:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yOQdMjYPdVy6RkGpAIiWBTaVHjvFHI5z40O+OjylWNs=;
-        b=Y7SBgiosMNbIocrTGKprvCSws+0ObYjHUmi9MPGHi6rZX/KyiorLStVwUf5dtEzlTI
-         p+NwdZ48eEPygwn8gu2Wt0LOXDqXfT9QyZzPE6Y0e9Ke3c5qpQLEd4zJW3Au9fIJXxTs
-         JO5BF4Q+nINAZkwrisuLH1JgyvHi7eS71eqeCg60DZJCbq8cDv8WvRuj/iwjkQgWhYNj
-         9BB8S7QRvdO3d5U4OtcxoeNoNQwqD2IA8dST1rnMNx5GQPlwNKujD3jCIkeEs4Ty3sol
-         yqzl+S+LV+QuLnEhrnY9pdLQ8LJze9wNmvtedJ9QaHtkxboraU2r1kLCaX974/Mr6B+v
-         V7aQ==
-X-Gm-Message-State: APjAAAWyH87rCgrRc/y2y8FkegYqVEzCU9DYqDc1CSWbUyv9RW/enPYy
-        1HtE1rqh0qScKg3d5FCIwXFRgwLDomrbFEgU4L8=
-X-Google-Smtp-Source: APXvYqz82YvsMLNHpNEPX4+Kqba7XbryaMpz18cKmGgzjGviKvra31QS1PI2HBdwdHYm5Us9bXfm9nzi6w+g6zzmjdw=
-X-Received: by 2002:a9d:19ed:: with SMTP id k100mr1589639otk.297.1574774116545;
- Tue, 26 Nov 2019 05:15:16 -0800 (PST)
-MIME-Version: 1.0
-References: <git-mailbomb-linux-master-1cbeab1b242d16fdb22dc3dab6a7d6afe746ae6d@kernel.org>
-In-Reply-To: <git-mailbomb-linux-master-1cbeab1b242d16fdb22dc3dab6a7d6afe746ae6d@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 26 Nov 2019 14:15:04 +0100
-Message-ID: <CAMuHMdUoOWugmyAA3-dP=AAMYwLy7KPKpGzXwxRn_yTJugM+Ww@mail.gmail.com>
-Subject: Re: ext4: add kunit test for decoding extended timestamps
-To:     Iurii Zaikin <yzaikin@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Tue, 26 Nov 2019 10:17:23 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:55206 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726049AbfKZPRW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Nov 2019 10:17:22 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E9AD81A0616;
+        Tue, 26 Nov 2019 16:17:20 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id DC8F01A0118;
+        Tue, 26 Nov 2019 16:17:20 +0100 (CET)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 504B520506;
+        Tue, 26 Nov 2019 16:17:20 +0100 (CET)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
+        Angus Ainslie <angus@akkea.ca>,
         Brendan Higgins <brendanhiggins@google.com>,
-        Theodore Tso <tytso@mit.edu>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-pm@vger.kernel.org, linux-imx@nxp.com
+Subject: [PATCH v4 2/4] PM / QoS: Redefine FREQ_QOS_MAX_DEFAULT_VALUE to S32_MAX
+Date:   Tue, 26 Nov 2019 17:17:11 +0200
+Message-Id: <ac4d360b6a2505ca277757d47d5480c45af21066.1574781196.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1574781196.git.leonard.crestez@nxp.com>
+References: <cover.1574781196.git.leonard.crestez@nxp.com>
+In-Reply-To: <cover.1574781196.git.leonard.crestez@nxp.com>
+References: <cover.1574781196.git.leonard.crestez@nxp.com>
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Lurii,
+QOS requests for DEFAULT_VALUE are supposed to be ignored but this is
+not the case for FREQ_QOS_MAX. Adding one request for MAX_DEFAULT_VALUE
+and one for a real value will cause freq_qos_read_value to unexpectedly
+return MAX_DEFAULT_VALUE (-1).
 
-On Tue, Nov 26, 2019 at 3:12 AM Linux Kernel Mailing List
-<linux-kernel@vger.kernel.org> wrote:
-> Commit:     1cbeab1b242d16fdb22dc3dab6a7d6afe746ae6d
-> Parent:     d460623c5fa126dc51bb2571dd7714ca75b0116c
-> Refname:    refs/heads/master
-> Web:        https://git.kernel.org/torvalds/c/1cbeab1b242d16fdb22dc3dab6a7d6afe746ae6d
-> Author:     Iurii Zaikin <yzaikin@google.com>
-> AuthorDate: Thu Oct 17 15:12:33 2019 -0700
-> Committer:  Shuah Khan <skhan@linuxfoundation.org>
-> CommitDate: Wed Oct 23 10:28:23 2019 -0600
->
->     ext4: add kunit test for decoding extended timestamps
->
->     KUnit tests for decoding extended 64 bit timestamps that verify the
->     seconds part of [a/c/m] timestamps in ext4 inode structs are decoded
->     correctly.
->
->     Test data is derived from the table in the Inode Timestamps section of
->     Documentation/filesystems/ext4/inodes.rst.
->
->     KUnit tests run during boot and output the results to the debug log
->     in TAP format (http://testanything.org/). Only useful for kernel devs
->     running KUnit test harness and are not for inclusion into a production
->     build.
->
->     Signed-off-by: Iurii Zaikin <yzaikin@google.com>
->     Reviewed-by: Theodore Ts'o <tytso@mit.edu>
->     Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
->     Tested-by: Brendan Higgins <brendanhiggins@google.com>
->     Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
->     Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+This happens because freq_qos max value is aggregated with PM_QOS_MIN
+but FREQ_QOS_MAX_DEFAULT_VALUE is (-1) so it's smaller than other
+values.
 
-While this test succeeds on arm64, it fails on m68k and arm32 (presumably
-all 32-bit platforms?):
+Fix this by redefining FREQ_QOS_MAX_DEFAULT_VALUE to S32_MAX.
 
-# Subtest: ext4_inode_test
-1..1
-# inode_test_xtimestamp_decoding: EXPECTATION FAILED at fs/ext4/inode-test.c:250
-Expected test_data[i].expected.tv_sec == timestamp.tv_sec, but
-test_data[i].expected.tv_sec == -2147483648
-timestamp.tv_sec == 2147483648
-1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits: msb:1
-lower_bound:1 extra_bits: 0
-# inode_test_xtimestamp_decoding: EXPECTATION FAILED at fs/ext4/inode-test.c:250
-Expected test_data[i].expected.tv_sec == timestamp.tv_sec, but
-test_data[i].expected.tv_sec == 2147483648
-timestamp.tv_sec == 6442450944
-2038-01-19 Lower bound of 32bit <0 timestamp, lo extra sec bit on:
-msb:1 lower_bound:1 extra_bits: 1
-# inode_test_xtimestamp_decoding: EXPECTATION FAILED at fs/ext4/inode-test.c:250
-Expected test_data[i].expected.tv_sec == timestamp.tv_sec, but
-test_data[i].expected.tv_sec == 6442450944
-timestamp.tv_sec == 10737418240
-2174-02-25 Lower bound of 32bit <0 timestamp, hi extra sec bit on:
-msb:1 lower_bound:1 extra_bits: 2
-not ok 1 - inode_test_xtimestamp_decoding
-not ok 1 - ext4_inode_test
+Looking at current users for freq_qos it seems that none of them create
+requests for FREQ_QOS_MAX_DEFAULT_VALUE.
 
-Gr{oetje,eeting}s,
+Fixes: 77751a466ebd ("PM: QoS: Introduce frequency QoS")
+Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+Reported-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+---
+ include/linux/pm_qos.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-                        Geert
-
+diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+index ebf5ef17cc2a..24a6263c9931 100644
+--- a/include/linux/pm_qos.h
++++ b/include/linux/pm_qos.h
+@@ -254,11 +254,11 @@ static inline s32 dev_pm_qos_raw_resume_latency(struct device *dev)
+ 	return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
+ }
+ #endif
+ 
+ #define FREQ_QOS_MIN_DEFAULT_VALUE	0
+-#define FREQ_QOS_MAX_DEFAULT_VALUE	(-1)
++#define FREQ_QOS_MAX_DEFAULT_VALUE	S32_MAX
+ 
+ enum freq_qos_req_type {
+ 	FREQ_QOS_MIN = 1,
+ 	FREQ_QOS_MAX,
+ };
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.17.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
