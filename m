@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2605EC33CB5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Nov 2019 01:42:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70342C43141
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Nov 2019 01:42:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 063C2215E5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Nov 2019 01:42:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4315121739
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Nov 2019 01:42:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727645AbfK1BkW (ORCPT
+        id S1727732AbfK1Bly (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 27 Nov 2019 20:40:22 -0500
-Received: from mga02.intel.com ([134.134.136.20]:10961 "EHLO mga02.intel.com"
+        Wed, 27 Nov 2019 20:41:54 -0500
+Received: from mga02.intel.com ([134.134.136.20]:10954 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727628AbfK1BkW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Nov 2019 20:40:22 -0500
+        id S1727629AbfK1BkX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 27 Nov 2019 20:40:23 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Nov 2019 17:40:19 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,251,1571727600"; 
-   d="scan'208";a="221166479"
+   d="scan'208";a="221166485"
 Received: from sjchrist-coffee.jf.intel.com ([10.54.74.41])
   by orsmga002.jf.intel.com with ESMTP; 27 Nov 2019 17:40:19 -0800
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
@@ -54,9 +54,9 @@ Cc:     "H. Peter Anvin" <hpa@zytor.com>,
         linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: [PATCH v4 05/19] x86/mce: WARN once if IA32_FEAT_CTL MSR is left unlocked
-Date:   Wed, 27 Nov 2019 17:40:02 -0800
-Message-Id: <20191128014016.4389-6-sean.j.christopherson@intel.com>
+Subject: [PATCH v4 07/19] x86/zhaoxin: Use common IA32_FEAT_CTL MSR initialization
+Date:   Wed, 27 Nov 2019 17:40:04 -0800
+Message-Id: <20191128014016.4389-8-sean.j.christopherson@intel.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191128014016.4389-1-sean.j.christopherson@intel.com>
 References: <20191128014016.4389-1-sean.j.christopherson@intel.com>
@@ -67,39 +67,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-WARN if the IA32_FEAT_CTL MSR is somehow left unlocked now that CPU
-initialization unconditionally locks the MSR.
+Use the recently added IA32_FEAT_CTL MSR initialization sequence to
+opportunstically enable VMX support when running on a Zhaoxin CPU.
 
 Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 ---
- arch/x86/kernel/cpu/mce/intel.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ arch/x86/Kconfig.cpu          | 2 +-
+ arch/x86/kernel/cpu/zhaoxin.c | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-index c238518b84a2..5627b1091b85 100644
---- a/arch/x86/kernel/cpu/mce/intel.c
-+++ b/arch/x86/kernel/cpu/mce/intel.c
-@@ -116,14 +116,15 @@ static bool lmce_supported(void)
- 	/*
- 	 * BIOS should indicate support for LMCE by setting bit 20 in
- 	 * IA32_FEAT_CTL without which touching MCG_EXT_CTL will generate a #GP
--	 * fault.
-+	 * fault.  The MSR must also be locked for LMCE_ENABLED to take effect.
-+	 * WARN if the MSR isn't locked as init_ia32_feat_ctl() unconditionally
-+	 * locks the MSR in the event that it wasn't already locked by BIOS.
- 	 */
- 	rdmsrl(MSR_IA32_FEAT_CTL, tmp);
--	if ((tmp & (FEAT_CTL_LOCKED | FEAT_CTL_LMCE_ENABLED)) ==
--		   (FEAT_CTL_LOCKED | FEAT_CTL_LMCE_ENABLED))
--		return true;
-+	if (WARN_ON_ONCE(!(tmp & FEAT_CTL_LOCKED)))
-+		return false;
+diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
+index cba5b64266df..526425fcaedc 100644
+--- a/arch/x86/Kconfig.cpu
++++ b/arch/x86/Kconfig.cpu
+@@ -389,7 +389,7 @@ config X86_DEBUGCTLMSR
  
--	return false;
-+	return tmp & FEAT_CTL_LMCE_ENABLED;
+ config IA32_FEAT_CTL
+ 	def_bool y
+-	depends on CPU_SUP_INTEL || CPU_SUP_CENTAUR
++	depends on CPU_SUP_INTEL || CPU_SUP_CENTAUR || CPU_SUP_ZHAOXIN
+ 
+ menuconfig PROCESSOR_SELECT
+ 	bool "Supported processor vendors" if EXPERT
+diff --git a/arch/x86/kernel/cpu/zhaoxin.c b/arch/x86/kernel/cpu/zhaoxin.c
+index 8e6f2f4b4afe..630a1450ea70 100644
+--- a/arch/x86/kernel/cpu/zhaoxin.c
++++ b/arch/x86/kernel/cpu/zhaoxin.c
+@@ -141,6 +141,8 @@ static void init_zhaoxin(struct cpuinfo_x86 *c)
+ 	set_cpu_cap(c, X86_FEATURE_LFENCE_RDTSC);
+ #endif
+ 
++	init_ia32_feat_ctl(c);
++
+ 	if (cpu_has(c, X86_FEATURE_VMX))
+ 		zhaoxin_detect_vmx_virtcap(c);
  }
- 
- bool mce_intel_cmci_poll(void)
 -- 
 2.24.0
 
