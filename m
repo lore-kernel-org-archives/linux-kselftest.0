@@ -5,65 +5,65 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4693C43141
-	for <linux-kselftest@archiver.kernel.org>; Sun,  1 Dec 2019 23:26:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D5E2C43215
+	for <linux-kselftest@archiver.kernel.org>; Sun,  1 Dec 2019 23:26:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 74BF32245C
-	for <linux-kselftest@archiver.kernel.org>; Sun,  1 Dec 2019 23:26:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 32591217AB
+	for <linux-kselftest@archiver.kernel.org>; Sun,  1 Dec 2019 23:26:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oH1SpGE7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eBXBJJOq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbfLAX0D (ORCPT
+        id S1727366AbfLAXZs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 1 Dec 2019 18:26:03 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:37086 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727279AbfLAXZs (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
         Sun, 1 Dec 2019 18:25:48 -0500
-Received: by mail-wr1-f68.google.com with SMTP id w15so10980433wru.4;
-        Sun, 01 Dec 2019 15:25:46 -0800 (PST)
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:52020 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727266AbfLAXZr (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 1 Dec 2019 18:25:47 -0500
+Received: by mail-wm1-f67.google.com with SMTP id g206so19832703wme.1;
+        Sun, 01 Dec 2019 15:25:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=vGbeK0zgYCmWlSmgxBPs/jpmt323fVhKZnVym+DQBus=;
-        b=oH1SpGE7VHgGjG8/Dx7tPCF0v5UNTNlLI1evs3DIp9Mrjdo+R9sVjlqhEySpi9o2Gq
-         mJ9V92jEHiXEhBgon60ow5Ac0gu7sz1RVN5H+6OqEY6YZewPCMHiD+78yV5TRDMwfhHT
-         kcw/8sV9z35UWzZlmN5hwrvx45ssjbo/cXtufMTNOxIN3gggaq95pZRyIgdFyXxG8PQE
-         cfeTat8Rud86zjOjWH5kJ5QeplJwmtWT7BmnJcTa8yeHASsO9QaT69n7MmnNRdpWoaro
-         fbLT2Up3g2SJ3x1dfWzUwtuBPgjekHd+A1UbusFVtu5Vn2bFTHnF/x56PlCw9KeUP1JX
-         GW5Q==
+        bh=BocdlsrLrUjQrAehWv4mAG7o8KdApwLekyWEKiTyhzs=;
+        b=eBXBJJOqQsgoShxc0EqW+IxlAtt6JSkE86+RlV4UWRL3wvhD/QVNGqUQlq+RKatXIN
+         OJaWLgKWHQzZIqVSHJfKD5aGeNL/DJtCP+Ujro0KfrgyrkaicYPDGtTmPu+ecKvZaQq5
+         CfYo1Y1LD1B7HL28modNAOvp+VQdbQcta0UOAfrj3bjHSOyFsHkEXBiDsyTM0C4o8dUW
+         ksYeFgSFRR0GJ20AV9OXf76PUpv/P+mnBpvtfbb7LP2uexsMS6kugAaxMQZ2s5m1Y0+M
+         LMJzoBZrExLpbu9Bmh6sUs1QrHp6DGogfyZ7+AON6ttWZ7lgKSNnYgBVaSISuQdym98z
+         g4bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=vGbeK0zgYCmWlSmgxBPs/jpmt323fVhKZnVym+DQBus=;
-        b=BQkclDntuFDkWt7QhHlL+8OQIaSu3BJ5IQw0vUrfMODrFTomTEeiBOdjU12zj14tFB
-         Pp1l5EJUJBjwfBDHtFt7KZeu0r+AVbndllOT5e0x3+uhJ/nnjRZRGep1KOBoDNfd3drK
-         mLja8goCVc1KloEIdoyCtxBtUKXqqGlj857L4G8ag2WXsFSDNv1h5h0sEYvXAIWNOkUL
-         2ksSqmgbd40PXzHAEUU4RLCmYP1nQSoJC018fYgamqapahW55sRmEZGh373+e7pqFtOK
-         3EYwR8lGYNihga7mDatzYOX7Ymnqcldj38V5WRlNBYwFFZbR+XSHOVD5W+5mnoCIAOpO
-         W4gg==
-X-Gm-Message-State: APjAAAV33uB5gyQGU/jf2FqXiQ4V9w8mo3RRi/Cp0CAslkcwzXaufjLH
-        vNtnXU8OxR8zS6SS7MDymcQ=
-X-Google-Smtp-Source: APXvYqwZ/Iti69NVkcCu6wCaCpEPeSP3LVRE1q3go6xDOzFwri5p6l9Qmz/0S07snc3kpBSHyN1qYQ==
-X-Received: by 2002:adf:eb42:: with SMTP id u2mr47495946wrn.173.1575242746142;
-        Sun, 01 Dec 2019 15:25:46 -0800 (PST)
-Received: from localhost.localdomain (cable-86-56-100-90.cust.telecolumbus.net. [86.56.100.90])
-        by smtp.gmail.com with ESMTPSA id y6sm37450454wrl.17.2019.12.01.15.25.45
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        bh=BocdlsrLrUjQrAehWv4mAG7o8KdApwLekyWEKiTyhzs=;
+        b=uf3zeO3s+ARlq9UvaX3VuWB0L5npLRk1k8QjFCWraNMxxJuvOtSzLGhRRxBJEiC6Xq
+         zRVuGP/tLYpYMM6ZiIroo5V8QLRaRCSTqZfhufe9hz73aHOCTX18kB685BzZJGexRJJq
+         u7uWHU/VNfr2zhekg6ber9WruA68q2On5jJ0mHRF3Zz3GedLbxoum2tbdYJe04z83j5G
+         yFvt8n+njgeXgchxi2nroGGGTmMdVyzzfRSWcK4eH1oPzVorCs79zQ8nnHTKHvZ5Auy/
+         SqW0pD0/bnL9XtyIriWxd27YzPjLeOsnRb/csGNKfx4NDeQBLqssKipxw1JE0IwgVKpf
+         4ETw==
+X-Gm-Message-State: APjAAAXTnV8zwZ28NE4JFMjflPx3X01FIuvlfQEyZ0+mG7HSAI2Z7Ee0
+        KS8bWWqNsqWTTEmVYgGb11w=
+X-Google-Smtp-Source: APXvYqzGHaKtd5jorQciodJy8Ctlzb3Zs/Z4kLACV2tH4wQ4fWpw5F0ZIeLXQbhFuz/jigZzYL+RNQ==
+X-Received: by 2002:a1c:106:: with SMTP id 6mr24541246wmb.33.1575242745049;
         Sun, 01 Dec 2019 15:25:45 -0800 (PST)
+Received: from localhost.localdomain (cable-86-56-100-90.cust.telecolumbus.net. [86.56.100.90])
+        by smtp.gmail.com with ESMTPSA id y6sm37450454wrl.17.2019.12.01.15.25.43
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Sun, 01 Dec 2019 15:25:44 -0800 (PST)
 From:   SeongJae Park <sj38.park@gmail.com>
 To:     brendanhiggins@google.com, shuah@kernel.org
 Cc:     corbet@lwn.net, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sjpark@amazon.de>
-Subject: [PATCH 4/6] kunit: Create default config in 'build_dir'
-Date:   Mon,  2 Dec 2019 08:25:22 +0900
-Message-Id: <1575242724-4937-5-git-send-email-sj38.park@gmail.com>
+Subject: [PATCH 3/6] kunit: Remove duplicated defconfig creation
+Date:   Mon,  2 Dec 2019 08:25:21 +0900
+Message-Id: <1575242724-4937-4-git-send-email-sj38.park@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1575242724-4937-1-git-send-email-sj38.park@gmail.com>
 References: <1575242724-4937-1-git-send-email-sj38.park@gmail.com>
@@ -74,31 +74,29 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: SeongJae Park <sjpark@amazon.de>
 
-If both '--build_dir' and '--defconfig' are given, the handling of
-'--defconfig' ignores '--build_dir' option.  This commit modifies the
-behavior to respect '--build_dir' option.
+'--defconfig' option is handled by the 'main() of the 'kunit.py' but
+again handled in following 'run_tests()'.  This commit removes this
+duplicated handling of the option in the 'run_tests()'.
 
 Signed-off-by: SeongJae Park <sjpark@amazon.de>
 ---
- tools/testing/kunit/kunit.py | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/kunit/kunit.py | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index f8f2695..1746330 100755
+index efe06d6..f8f2695 100755
 --- a/tools/testing/kunit/kunit.py
 +++ b/tools/testing/kunit/kunit.py
-@@ -114,6 +114,11 @@ def main(argv, linux=None):
- 	cli_args = parser.parse_args(argv)
+@@ -37,9 +37,6 @@ def create_default_kunitconfig():
  
- 	if cli_args.subcommand == 'run':
-+		if cli_args.build_dir:
-+			kunit_kernel.KUNITCONFIG_PATH = os.path.join(
-+				cli_args.build_dir,
-+				kunit_kernel.KUNITCONFIG_PATH)
-+
- 		if cli_args.defconfig:
- 			create_default_kunitconfig()
- 
+ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 	      request: KunitRequest) -> KunitResult:
+-	if request.defconfig:
+-		create_default_kunitconfig()
+-
+ 	config_start = time.time()
+ 	success = linux.build_reconfig(request.build_dir)
+ 	config_end = time.time()
 -- 
 2.7.4
 
