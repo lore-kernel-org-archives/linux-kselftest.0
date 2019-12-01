@@ -2,86 +2,92 @@ Return-Path: <SRS0=3s16=ZX=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BA03C432C0
-	for <linux-kselftest@archiver.kernel.org>; Sun,  1 Dec 2019 01:40:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E6B9C432C0
+	for <linux-kselftest@archiver.kernel.org>; Sun,  1 Dec 2019 21:10:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 44E602086A
-	for <linux-kselftest@archiver.kernel.org>; Sun,  1 Dec 2019 01:40:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1575164405;
-	bh=ajBvj1IaLYQkSA/v/7Hod991P4s7CVCuIKBejh5pxg0=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=Ra2EFN/Uy8cC1PacDKMWbJgQ3Svr7Nu8CZswKzKCmjH8SSpZLGPl6SNW0sVyWiLLU
-	 xYXTeTLqNgnigGJlQhY3CMnsuWhPAWIvU4d2xvXw5/xAQbxZ+Lx9LMaF8oBH5gmCaX
-	 YjU1yl+cLNUmvQKp9Q9VITPHf6t4B+AsLZ9wsMok=
+	by mail.kernel.org (Postfix) with ESMTP id 0D65A20865
+	for <linux-kselftest@archiver.kernel.org>; Sun,  1 Dec 2019 21:10:49 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oLf35IhQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726965AbfLABkE (ORCPT
+        id S1727040AbfLAVKs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 30 Nov 2019 20:40:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46496 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726906AbfLABkE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 30 Nov 2019 20:40:04 -0500
-Subject: Re: [GIT PULL] seccomp updates for v5.5-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575164403;
-        bh=ajBvj1IaLYQkSA/v/7Hod991P4s7CVCuIKBejh5pxg0=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=kDQly26WJo5YJvsn/LzUkhhjzAbbvTcxecHnSpiUFC8U97ES9N5DdXAy/GZSEdcMO
-         okriinkm2YBXTi6WKKnlrAzV0PoPrCF2os90+EL++4P9JWLP7OjusJhRIZ5c4SPwIf
-         trItpK1jsUwqxZLH+Rd885EDUMUrMh7dkdsR/JSk=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <201911260818.9C5DC1E@keescook>
-References: <201911260818.9C5DC1E@keescook>
-X-PR-Tracked-List-Id: <linux-parisc.vger.kernel.org>
-X-PR-Tracked-Message-Id: <201911260818.9C5DC1E@keescook>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
- tags/seccomp-v5.5-rc1
-X-PR-Tracked-Commit-Id: 23b2c96fad21886c53f5e1a4ffedd45ddd2e85ba
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b94ae8ad9fe79da61231999f347f79645b909bda
-Message-Id: <157516440360.28955.6948106020327612727.pr-tracker-bot@kernel.org>
-Date:   Sun, 01 Dec 2019 01:40:03 +0000
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        David Abdurachmanov <david.abdurachmanov@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>, bpf@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        kernel test robot <rong.a.chen@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-um@lists.infradead.org,
-        Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>,
-        Tyler Hicks <tyhicks@canonical.com>,
-        Will Drewry <wad@chromium.org>, x86@kernel.org,
-        Yonghong Song <yhs@fb.com>
+        Sun, 1 Dec 2019 16:10:48 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:37184 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726965AbfLAVKs (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 1 Dec 2019 16:10:48 -0500
+Received: by mail-lj1-f195.google.com with SMTP id u17so10223524lja.4;
+        Sun, 01 Dec 2019 13:10:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K6/nAJ7zRWy4qKArDtOklB/XBpnc4q8n7RTEqKD0nxA=;
+        b=oLf35IhQ2D095BBBi8WNjU8LKJG5D7kAgMegcF33QwoIOJC66xYI1ZGwNATONXYEOE
+         Vg+Ms8f5SaV+fMXWGAz5x6zLNurAtprVN5f4AyDGahxOBNgPxJF+G1eJvjA7vtyzgsT2
+         nosG37knd2kyq+ILkvs/5BO/ApsfPP1aCiKBGjMBgjkJhlhyn0OwQclwKiKBGMmsnwJC
+         RlVwePhLN6t5rmna5MEx6kN5xmMVk7zlxZaNsv/ELutPGbeXAc1RsPRimv2gxUHFFsco
+         TNhhl0BZ4ynJRe0ykYFXolqQrEzPSSEHaEUeSAITP87mbUl9Z8Wy9NeFhnMnOtNNT1IO
+         ivLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K6/nAJ7zRWy4qKArDtOklB/XBpnc4q8n7RTEqKD0nxA=;
+        b=OFZ0K+Rz1v6yLqj5nduqRd6kVnivf2tntS6cwEHLOMwXxJfcl9tA/vf8t6uBRyUYzv
+         S2nKe3saeQrkKXj6H0zrV7IiKzMrMKgTqhggY11tVyzZzTTrWy2a481I/Um19lUv4Fth
+         FltNBxIfU3HLNjAmu1QVZDf7RN6dQ+vb2RhACZmvWQlLwPJRG+KXpItj21nPVX43Q1F+
+         6vRO502D4I8QDpHq+j7YlnWMGWKe0Gy5plT/0AuEAlgBwOQ/wflD1Z7v0a3G7UokNkfp
+         8wQsCja/OrbvBLvF4vy5+ND1ya7eEKllq3Skh5GSzgs/L+Xzb1IPZVWQTI8BaeocCvvk
+         xwQw==
+X-Gm-Message-State: APjAAAVae2qiMIGePvK7/CF8kDtR3QaQ+4kP5fmKJHQvNK+QGO51HZZD
+        S8BN6u+mmqsnmm/5I4YOMT1KCgBz76OWu1MowP72RsGsyV0=
+X-Google-Smtp-Source: APXvYqyv5egh0CvwLiCaZRW7xONp7kzvGwnRIbz0FdAUGD+mjp2m58+YnCjWj/b/Q0OMmUUt7Y5wOVY81fwn86LVQo0=
+X-Received: by 2002:a2e:7816:: with SMTP id t22mr4851595ljc.161.1575234644720;
+ Sun, 01 Dec 2019 13:10:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20191127231926.162437-1-heidifahim@google.com> <CAMVcs3vKjd8XVku8VUq2R-OKKSq-X2L=h4niFxuoPBe_D63JAA@mail.gmail.com>
+In-Reply-To: <CAMVcs3vKjd8XVku8VUq2R-OKKSq-X2L=h4niFxuoPBe_D63JAA@mail.gmail.com>
+From:   SeongJae Park <sj38.park@gmail.com>
+Date:   Sun, 1 Dec 2019 22:10:18 +0100
+Message-ID: <CAEjAshrJy00VjDu3GY3gV6hu7J8PVcw=1jAeA_-GL02kvXTemQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: testing kunit: Bug fix in test_run_timeout function
+To:     Heidi Fahim <heidifahim@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>, Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Tue, 26 Nov 2019 08:25:28 -0800:
+On Thu, Nov 28, 2019 at 12:58 AM Heidi Fahim <heidifahim@google.com> wrote:
+>
+> On Wed, Nov 27, 2019 at 3:19 PM Heidi Fahim <heidifahim@google.com> wrote:
+> >
+> > Assert in test_run_timeout was not updated with the build_dir argument
+> > and caused the following error:
+> > AssertionError: Expected call: run_kernel(timeout=3453)
+> > Actual call: run_kernel(build_dir=None, timeout=3453)
+> >
+> > Needed to update kunit_tool_test to reflect this fix
+> > https://lkml.org/lkml/2019/9/6/3
+>
+> Wrong url, here is the correct link to the fix that caused this bug:
+> https://lkml.org/lkml/2019/9/6/351
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/seccomp-v5.5-rc1
+Reviewed-by: SeongJae Park <sjpark@amazon.de>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b94ae8ad9fe79da61231999f347f79645b909bda
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Thanks,
+SeongJae Park
