@@ -2,64 +2,64 @@ Return-Path: <SRS0=aVlM=ZZ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
-	version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91A1DC432C0
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Dec 2019 23:06:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03639C432C0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Dec 2019 23:08:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5F8FF2073B
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Dec 2019 23:06:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C77D220684
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Dec 2019 23:08:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RQtd+Q+J"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iXMrnw93"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728712AbfLCXGc (ORCPT
+        id S1729022AbfLCWpQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 3 Dec 2019 18:06:32 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:33904 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729344AbfLCXGa (ORCPT
+        Tue, 3 Dec 2019 17:45:16 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:41843 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728768AbfLCWpP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Dec 2019 18:06:30 -0500
-Received: by mail-pj1-f65.google.com with SMTP id t21so2136243pjq.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2019 15:06:30 -0800 (PST)
+        Tue, 3 Dec 2019 17:45:15 -0500
+Received: by mail-pf1-f195.google.com with SMTP id s18so2556751pfd.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2019 14:45:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Y2iAUprUf3pSOMTinMI9+8tya2E8oBWIGOekFGX5HtE=;
-        b=RQtd+Q+Jq3oz26YIhHqXhGktsZlvdyT9W6nrwbKCBKWRL7ZTHS787L7uBYipiIuaj0
-         t2LGZD3jBENoo8sWRPYby5PA1LhyYsxqw21isJh37AehCw93QsAqUDZuq0cA7E8xfb3Y
-         ZRrQzh32e0Rodb7O//iAPRQf0KFSv7TJrLfAwCF1lTUki4OZomF7ih5Pja27/hkMFFvd
-         BUevFk6R/3E1YWJkpNBkUS9TuI0QccztX4CJSI3/xTIVegPjSgybEJgJnsoBJDL+NAyX
-         RzB0Daj07rp+bSWj/JG12eLEmrWyliRC+gVc50JRjCBX2OgKmyn3A/1+8VkMy6MwYd9b
-         5hOg==
+        bh=qd7P+RAsKeedZrqHSNazeNqcDpe7+eVvkyWsa2Q207Q=;
+        b=iXMrnw93nP/soNBqfRzeL/LguWO2PkOg2jKyU1LfmhQ8cwNGaFd8qWTj1ngdPLbuZs
+         2V4t+5GyeScz7/QEokG4fQ+4fgTCRXC5hc6v+uUyIW/eepTWFvSu+HQA017iTYKOaN1t
+         fNOxy5KxTaiI/RBqvWjCH8e03nPVxe/jBysKTJWN9v9olf6QeUWbxPqaMdVSFELa+ZnT
+         Yh8wD4+Cagsxb4NudI+PNBY6O5OnrZ7ihaB8UKAHI4Xq1X7o2bVir7T3/0hy0/wiWvJR
+         2qSKD1ImpOVpVwTR7efn5Oxc4qTw24IFdfabSYnAt8ljytwn9zlOfL5FjtOq2T+VwFa5
+         DMmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Y2iAUprUf3pSOMTinMI9+8tya2E8oBWIGOekFGX5HtE=;
-        b=WnqsYCnfok+romCDbriz2NE363H1BvPCiiL21EDvZOrToDGu+hUtliiJznYVA52Yb6
-         X/hksqanA+l7rM/W5+xiuthYbCXaiTuy8ddvfUlYaOCRj18c1+itul09aQQBrh7dp4X8
-         MYumzuzwakuDYYBfN/hsvEKhRM12sm32MLDhc2PZtZAPNnH22//zDufcAj3ZeSz3Caqx
-         TmuOFfPweSO/TQiCuWSqSr5DzsaMU2ZkCh1HduGGI7J4HJgfcMR5TbUn/o7E1+n9PM1X
-         PipFAaBcA90RQSkXlZ+sqRu4LW7QQ74fISPsQKS9deq7DlDe4Md7y8CEtalPpk0JzrvV
-         Y80Q==
-X-Gm-Message-State: APjAAAUFihluo8mg9V0bN82EPJtCAsmgQOxJJWqkYgm0FiDXDHPHxfQG
-        HVycpI9CVRZna3pQMm9f7WAzseAl822Yhtq2Ywcd0g==
-X-Google-Smtp-Source: APXvYqwoExgGqnGZkIzdVLbdVbyPMv/m/oFfgdibsdNl5+1hS5tfHV2K1vCgTDj2i/m7J0guJkjxOOZDsOKAKgfVUv0=
-X-Received: by 2002:a17:90a:c390:: with SMTP id h16mr8400706pjt.131.1575414389181;
- Tue, 03 Dec 2019 15:06:29 -0800 (PST)
+        bh=qd7P+RAsKeedZrqHSNazeNqcDpe7+eVvkyWsa2Q207Q=;
+        b=c7XwA2yavbPj5LEqAy1rm0Dh+qFfPGCs/IaZ6UB5ifsuy6Q0fXTjms2bwxQKOFUy5K
+         gKISfCstKzieaKy4bdAhUw0PsLp9zuiR8e1q344ShTPRitMEDo5ubaA0SnrsSQGsK90y
+         34G9jE2Kt4BpieDOFztrSlH2p7htLdf5lzEwQsZOACT6fTzne6i7FJJOlrBuL4EzznU2
+         RVpFrOvSZvk1FuQD3R03x70MsqCooRwZ3XfzYq+hf12Ud+eqAWXI/WDOH9Y7YVs3tLi7
+         fGnkM3EWA/mPGzZEr4oz1G0KJsDC8hMD759Ir8wMJh3C0t8lCsqx9jUZkyVndK98pXjM
+         4j6w==
+X-Gm-Message-State: APjAAAUd7oQTGMdkwFOtWibiZ2KTY+YQpgJoyP9tmZxr4u44gF7XQit6
+        mjs1EI8lcgX7hL5wHCYGggYdyGaJzRMcot+8X/vdow==
+X-Google-Smtp-Source: APXvYqwcKBHbJdc+KCshtot/o7I0++tDm8qDfLRf4tv06Kw+/aPlM9T1C8nXAryH6sAPWx+2axjFe1oWQ0uD10x8T1Q=
+X-Received: by 2002:a63:480f:: with SMTP id v15mr22272pga.201.1575413114597;
+ Tue, 03 Dec 2019 14:45:14 -0800 (PST)
 MIME-Version: 1.0
-References: <1575374868-32601-1-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1575374868-32601-1-git-send-email-alan.maguire@oracle.com>
+References: <1575374868-32601-1-git-send-email-alan.maguire@oracle.com> <1575374868-32601-5-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1575374868-32601-5-git-send-email-alan.maguire@oracle.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 3 Dec 2019 15:06:17 -0800
-Message-ID: <CAFd5g45VsXEXX--z-tjZWOTLgodnUwnOgyGqJVgy4xbz_YZFTQ@mail.gmail.com>
-Subject: Re: [PATCH v5 linux-kselftest-test 0/6] kunit: support building
- core/tests as modules
+Date:   Tue, 3 Dec 2019 14:45:03 -0800
+Message-ID: <CAFd5g45vriC61WvPL_FMbTUjJTRqHW6_Le=7PcMiR-rFmf_9wQ@mail.gmail.com>
+Subject: Re: [PATCH v5 linux-kselftest-test 4/6] kunit: remove timeout
+ dependence on sysctl_hung_task_timeout_seconds
 To:     Alan Maguire <alan.maguire@oracle.com>
 Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
@@ -76,7 +76,8 @@ Cc:     "open list:KERNEL SELFTEST FRAMEWORK"
         David Gow <davidgow@google.com>, adilger.kernel@dilger.ca,
         "Theodore Ts'o" <tytso@mit.edu>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Knut Omang <knut.omang@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
@@ -85,17 +86,18 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Tue, Dec 3, 2019 at 4:08 AM Alan Maguire <alan.maguire@oracle.com> wrote:
 >
-> The current kunit execution model is to provide base kunit functionality
-> and tests built-in to the kernel.  The aim of this series is to allow
-> building kunit itself and tests as modules.  This in turn allows a
-> simple form of selective execution; load the module you wish to test.
-> In doing so, kunit itself (if also built as a module) will be loaded as
-> an implicit dependency.
+> In discussion of how to handle timeouts, it was noted that if
+> sysctl_hung_task_timeout_seconds is exceeded for a kunit test,
+> the test task will be killed and an oops generated.  This should
+> suffice as a means of debugging such timeout issues for now.
 >
-> Because this requires a core API modification - if a module delivers
-> multiple suites, they must be declared with the kunit_test_suites()
-> macro - we're proposing this patch set as a candidate to be applied to the
-> test tree before too many kunit consumers appear.  We attempt to deal
-> with existing consumers in patch 3.
+> Hence remove use of sysctl_hung_task_timeout_secs, which has the
+> added benefit of avoiding the need to export that symbol from
+> the core kernel.
+>
+> Co-developed-by: Knut Omang <knut.omang@oracle.com>
+> Signed-off-by: Knut Omang <knut.omang@oracle.com>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
