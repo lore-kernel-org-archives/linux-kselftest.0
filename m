@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D47BDC432C3
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Dec 2019 22:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F47DC432C0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Dec 2019 23:05:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A3FA220863
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Dec 2019 22:47:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 024D62064B
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Dec 2019 23:05:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XLtR10TY"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IUFc8UxN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729190AbfLCWry (ORCPT
+        id S1729302AbfLCWuW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 3 Dec 2019 17:47:54 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:37661 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729354AbfLCWrw (ORCPT
+        Tue, 3 Dec 2019 17:50:22 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:35526 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729743AbfLCWuW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Dec 2019 17:47:52 -0500
-Received: by mail-pg1-f195.google.com with SMTP id q127so2321615pga.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2019 14:47:51 -0800 (PST)
+        Tue, 3 Dec 2019 17:50:22 -0500
+Received: by mail-pl1-f194.google.com with SMTP id s10so2285051plp.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2019 14:50:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=7TqgN2iJjOXxie883Mhqea6U14ESjoMu4kL/R78rVdw=;
-        b=XLtR10TY5HvNYaSa6cai3/R9FYzleQQZz2svZyL8tOK87YQA912V1ym4Hv9zSZTa4W
-         XsYLsdsxIIeqUmKaaTyXJdXq5ZIMsdtz+qAW2aJArY3lZQzq/8XMkxXKMLduQdGguwWQ
-         tEyyhc1m8FNszdEx+TWMqK02tQGLsYRH7qEoztNCUWj2XYpGsKHNu+2K9gLUBTSzkpQg
-         cL0sHoa58B89n343/NyL3Q5aK/piEHaXyVdmqwAxoUlwff0wlzeadqsQ5m97SN9ss//N
-         WQpKd+LYhfVNyvGjsitB44ASs9L0mP1g554ne1GdBkVgiDiXqQvNshl3HDgwl4vsoLUr
-         Y7lA==
+        bh=s72VU58n1uZlGbJBRTu2xgBYvYdIHK25ECXlG0jy3sU=;
+        b=IUFc8UxNwCnljk1TUZeICIsFef5PK+xyx1Cbp5WCC/NRyAH/tbCYjBIAeLuROBwikS
+         7ZJl3nv42a8U9RgG63oQnfjnPKIovit6eCqoPDdhkLgzn5hRk1/nRxJt7ld9HCyyhMlk
+         JILbzRmnm3Y+5cdd/BwZZBnNhnO2dK6/enplmbtWP4BBQol0Ci2cwRgE+JclK44wH0Mw
+         ysEBvJVUVGDWQIELvgX4F94BvuaB1Sa/wk0WN9TVAehOEWdcUBsOn+qYzcqu8cpkUMhu
+         vttwNNE5r1wOhr9igAx4QihOT1fd5iRS1B7bEO+mKA2grij7zGOPJU69UqyOw6P7TKu5
+         SvPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7TqgN2iJjOXxie883Mhqea6U14ESjoMu4kL/R78rVdw=;
-        b=sPorhCPT5u7DIuNdGO1M+L2eHLFoLHJrGnaDftpBNPQhDbkMWy9zhdeIfFS5eSE1Kc
-         Az9ftoL+EGg+CheaBU2ymoP7vHT0ojpqodvt3x+/S+FnxQR7EmumYxfx0qTtbKy7KRza
-         GdHe8qWAFJZBrZNgbQ4a3peUEaDeYEMfLoDz+A3jfyy5+kzNeeASmt1CD8ltU3okipOk
-         SGcL0lnw7c+FHHIJlzjBmMgIbgXsElrWYrBd7wAYd0NXIlqiLAEShsRKwV98v9lIkq6Q
-         r0DCRCFH9947Z7Svhn+ycuRXPLWVg2XAvwiOdz9LuG+HVsRE6nMigbA+wsulMln5CwFj
-         k/hw==
-X-Gm-Message-State: APjAAAUB4RXmQ0J0IEytVvtfIP2vd8/PiwBCBBzrIhQ0PiUTF1kqrQ9W
-        WCvqvv3Rh2aIMIo4l6hiCTcExq83jaTTm2mwW+IxVg==
-X-Google-Smtp-Source: APXvYqxzyBp784JSAxM/nOyG953YC2qIJk8I3LZCsWw1NC/8F92n1+h9oQjRuIVvcrvMxxIyY3GenyseDH3/qhHb7BI=
-X-Received: by 2002:a63:480f:: with SMTP id v15mr32786pga.201.1575413270868;
- Tue, 03 Dec 2019 14:47:50 -0800 (PST)
+        bh=s72VU58n1uZlGbJBRTu2xgBYvYdIHK25ECXlG0jy3sU=;
+        b=EEoEhApe2+hCj750qfikzv0V95+0rtxiD+kCcmfknbzJ4hIAyPfFj8oD5URAeq+xnL
+         GVQsLI8QqxiELnuV/Q7pz4KyKv27PySRlbIgWORvL1XWxrElFIE7a+blZ4275TL0wHZj
+         gEgNrG4vFir0gHLM706g8R/Gex0/PDYdGOaG2xNIu2WJUv6Whd075V7abzL/9rWq7Si7
+         wwkZS6OqowbLPCrAO9dMcnVfeqUoORvfQpnuz1t/6s7+bRRZ+sEFsyp47XlVd6eTVkDT
+         0ghVWS+qxtug7nnfU/Xpi8YbHIw7fkQlIau6GzoAwD41Hw3YNWWJdDQJ/xXTr8P6ZL4M
+         z+fA==
+X-Gm-Message-State: APjAAAVimb1PGjWuOcvTC3vfc2vEVIg3LHYpibrcgNGJTwrG6EkXLNdv
+        cZli8hJg3VR6rC1665U7D80Jkkm8Id434ac4evregw==
+X-Google-Smtp-Source: APXvYqwiLcG4Ak+RbWUBVrzm1Y963nmdTKtkyVteu+4h4xn9QeAIwv9XGtBGLGW8JW3XRdI9kKo1W/hNsqcZZ8MX+Ho=
+X-Received: by 2002:a17:90a:c390:: with SMTP id h16mr8324726pjt.131.1575413421318;
+ Tue, 03 Dec 2019 14:50:21 -0800 (PST)
 MIME-Version: 1.0
-References: <1575374868-32601-1-git-send-email-alan.maguire@oracle.com> <1575374868-32601-6-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1575374868-32601-6-git-send-email-alan.maguire@oracle.com>
+References: <1575374868-32601-1-git-send-email-alan.maguire@oracle.com> <1575374868-32601-7-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1575374868-32601-7-git-send-email-alan.maguire@oracle.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 3 Dec 2019 14:47:39 -0800
-Message-ID: <CAFd5g47BXKat2Hty01WHz6eJj3WOjbeJ3pYqimaf2wQPm7Eibw@mail.gmail.com>
-Subject: Re: [PATCH v5 linux-kselftest-test 5/6] kunit: allow kunit to be
- loaded as a module
+Date:   Tue, 3 Dec 2019 14:50:10 -0800
+Message-ID: <CAFd5g47y8t7ZveLvgiTBVBkFE4-zJmPgMykjPNkm03X63Aimnw@mail.gmail.com>
+Subject: Re: [PATCH v5 linux-kselftest-test 6/6] kunit: update documentation
+ to describe module-based build
 To:     Alan Maguire <alan.maguire@oracle.com>
 Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
@@ -86,17 +86,12 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Tue, Dec 3, 2019 at 4:08 AM Alan Maguire <alan.maguire@oracle.com> wrote:
 >
-> Making kunit itself buildable as a module allows for "always-on"
-> kunit configuration; specifying CONFIG_KUNIT=m means the module
-> is built but only used when loaded.  Kunit test modules will load
-> kunit.ko as an implicit dependency, so simply running
-> "modprobe my-kunit-tests" will load the tests along with the kunit
-> module and run them.
+> Documentation should describe how to build kunit and tests as
+> modules.
 >
 > Co-developed-by: Knut Omang <knut.omang@oracle.com>
 > Signed-off-by: Knut Omang <knut.omang@oracle.com>
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-
-Thanks!
