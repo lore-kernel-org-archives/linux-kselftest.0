@@ -2,72 +2,93 @@ Return-Path: <SRS0=aVlM=ZZ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DBCDC432C0
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Dec 2019 01:50:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 516E0C432C0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Dec 2019 06:16:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DC3B72070B
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Dec 2019 01:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1575337817;
-	bh=Dk4m/U2lxvnyR0dGU+q/ENQ9jVd5AbvgdZJjTpY59tQ=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=uvwDW0OmoimhkynDRCJkpAt5TsY9p2pfIzM6RTK2TW6W5XsHwCudqPp96EGByWsJ9
-	 RN8HoP5XXAaMMLApnzU5XaxzTjEeLPPtm2NX8FgJaGvyqcmXR//GE5Ts5OuHRzJQaw
-	 IbI5B/TtB9mru2JU5Yjilf5WIMIjhO4hyR1csvEs=
+	by mail.kernel.org (Postfix) with ESMTP id 1F0AC2068E
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Dec 2019 06:16:29 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OA58cEfL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726114AbfLCBuR (ORCPT
+        id S1727015AbfLCGQ3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 2 Dec 2019 20:50:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43766 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725941AbfLCBuR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Dec 2019 20:50:17 -0500
-Subject: Re: [GIT PULL] Kselftest fixes2 update for Linux 5.5.rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575337816;
-        bh=Dk4m/U2lxvnyR0dGU+q/ENQ9jVd5AbvgdZJjTpY59tQ=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=RALQRtHDlbxnxW13OwjsFbaYBJDKCHeBSKO3cmbjBywvqzqWAHRyy4hrTJFSSaOOx
-         H2RokqLel4NPmChjZoSgqMfDxyBj7tRolV0hZVM+TKjgeBUZ/+28pkD76t1X+oxusT
-         pNGS31vQK3Zun9CFdTj1PHKhW+L2UrMIHKTxcfRk=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <2b0d6a6e-d135-f5dd-f8e9-74b3130d5e9e@linuxfoundation.org>
-References: <2b0d6a6e-d135-f5dd-f8e9-74b3130d5e9e@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <2b0d6a6e-d135-f5dd-f8e9-74b3130d5e9e@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
- tags/linux-kselftest-5.5-rc1-fixes2
-X-PR-Tracked-Commit-Id: f60b85e83659b5fbd3eb2c8f68d33ef4e35ebb2c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e30dbe50dc91d25dde251169b66d39f99bf45bad
-Message-Id: <157533781677.21520.12132405560953166223.pr-tracker-bot@kernel.org>
-Date:   Tue, 03 Dec 2019 01:50:16 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        linux-kselftest@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Tue, 3 Dec 2019 01:16:29 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:32795 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726521AbfLCGQ3 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 3 Dec 2019 01:16:29 -0500
+Received: by mail-pg1-f194.google.com with SMTP id 6so1196472pgk.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Dec 2019 22:16:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qE/70uhu0jaSAMS8KivJvAncflzBY+imZtLjsRtcA00=;
+        b=OA58cEfLSG/ymRbZf1oZr5T5yf7CX4tQh61rxiUlE16G3++1SovYv+eUTEn0/EbvHg
+         Ij0EXU9gjp/u8mFrSSw0zKkVX0mn47PspiuSy0IQ6g0ntqf9HUEfr3RGn9iUE4ghJFQg
+         1oPZi001msqEKsLwqhes4b57LzVywuFgnNR+Lq8xOKLN7cBXbYfLUraQ9/+uYpQDM+Oq
+         sg7gCYMk1YwY7mvf5l+gg/phX36djG2C5MrT4MeEEDny7/hQ6tXAjrdgo0dJJblgPInp
+         XLfgdh50k1+pNfwARCdj74xn04YwLHNkdRnxJy+DapDIP2Fvtn3x1qlXRgrchcKhOJ7o
+         1Nxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qE/70uhu0jaSAMS8KivJvAncflzBY+imZtLjsRtcA00=;
+        b=gr4NrzhPg7NDcDF/fgilZfFLvOtz+jtsbLrxVjK3LlXwjCusxHgwGc7L/w2vNmHv+r
+         wiF07CJGSap/Y6r6jphZPeB63t8ydPqypJA58yzV4XV1QwuERJFhJd7gRji7x/kyp69o
+         E52kfSQZTGN8ts9MEUX7L72JVRsNDFuPTeHO7IQH46W2b8qDTC9KnOa5Fqc1N+7DzQM/
+         ANuTfpIGJfa4UVr/ukmniRCYrS6IH4DWbFd6tCLDBlwIvcQt2/4Qv22lLjBJ4oNQJ95Q
+         Pho1XGLLoyT+ylLH7sdlCLU6caiIHyk+/gUumLEJcdkUTKkA9tTVV60yUkzY9Ze7LLtd
+         ao5Q==
+X-Gm-Message-State: APjAAAUFhIlnj1XeJGYAo1aYoXdNi04rOiLKwAtVd9qA1T5kY2c/weT9
+        i03og2IXi6T2ByVRm9piGIWOvnHmzmMIQm2QYet/EA==
+X-Google-Smtp-Source: APXvYqxIATMvEvC4LUmHaq0s9rzJuaHa84MyxysOr3z/cffTlAZjA1TXl44Q6sACqTVONzLZzMyh6y9VLKvOrRG52QQ=
+X-Received: by 2002:a62:7b46:: with SMTP id w67mr3087699pfc.113.1575353788248;
+ Mon, 02 Dec 2019 22:16:28 -0800 (PST)
+MIME-Version: 1.0
+References: <20191202235329.241986-1-heidifahim@google.com>
+In-Reply-To: <20191202235329.241986-1-heidifahim@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 2 Dec 2019 22:16:17 -0800
+Message-ID: <CAFd5g47a7a8q7by+1ALBtepeegLvfkgwvC3nFd8n8V=hqkV+cg@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: testing kunit: Bug fix in test_run_timeout function
+To:     Heidi Fahim <heidifahim@google.com>, shuah <shuah@kernel.org>
+Cc:     David Gow <davidgow@google.com>,
+        SeongJae Park <sj38.park@gmail.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SeongJae Park <sjpark@amazon.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Mon, 2 Dec 2019 09:12:48 -0700:
+On Mon, Dec 2, 2019 at 3:53 PM Heidi Fahim <heidifahim@google.com> wrote:
+>
+> Assert in test_run_timeout was not updated with the build_dir argument
+> and caused the following error:
+> AssertionError: Expected call: run_kernel(timeout=3453)
+> Actual call: run_kernel(build_dir=None, timeout=3453)
+>
+> Needed to update kunit_tool_test to reflect this fix
+> https://lkml.org/lkml/2019/9/6/351
+>
+> Signed-off-by: Heidi Fahim <heidifahim@google.com>
+> Reviewed-by: SeongJae Park <sjpark@amazon.de>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.5-rc1-fixes2
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Tested-by: Brendan Higgins <brendanhiggins@google.com>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e30dbe50dc91d25dde251169b66d39f99bf45bad
+Heidi, thanks for taking care of this!
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Shuah, can we make sure to get this in as a v5.5 fix?
