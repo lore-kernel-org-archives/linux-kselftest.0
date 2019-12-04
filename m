@@ -2,105 +2,189 @@ Return-Path: <SRS0=QLj4=Z2=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70908C43603
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Dec 2019 13:55:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4FACC43603
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Dec 2019 15:28:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 43C1A20637
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Dec 2019 13:55:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E57D2073B
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Dec 2019 15:28:12 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jhlZU+2R"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727849AbfLDNz7 (ORCPT
+        id S1728373AbfLDP2M (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 4 Dec 2019 08:55:59 -0500
-Received: from foss.arm.com ([217.140.110.172]:56142 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727828AbfLDNz6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Dec 2019 08:55:58 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5E0A1FB;
-        Wed,  4 Dec 2019 05:55:57 -0800 (PST)
-Received: from [192.168.1.18] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9EB5A3F68E;
-        Wed,  4 Dec 2019 05:55:53 -0800 (PST)
-Subject: Re: [PATCH v7 16/25] arm: Add support for generic vDSO (causing
- crash)
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Huw Davies <huw@codeweavers.com>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Andre Przywara <andre.przywara@arm.com>
-References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
- <20190621095252.32307-17-vincenzo.frascino@arm.com>
- <20191204135159.GA7210@roeck-us.net>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <6cdf4734-4065-09c1-8623-1bf523b38c1b@arm.com>
-Date:   Wed, 4 Dec 2019 13:58:25 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191204135159.GA7210@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Wed, 4 Dec 2019 10:28:12 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:35456 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728287AbfLDP2L (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Dec 2019 10:28:11 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xB4FOJ5Z121548;
+        Wed, 4 Dec 2019 15:27:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2019-08-05;
+ bh=AN47JONeK8oCX+YPtCKA7vbhhvfwmEGZgeS7UlEbne0=;
+ b=jhlZU+2Rzbv6gVANMI57IXf4244XikpH3LuIp0X0SonT0d1oWbooii/I/o40Vc417Vkm
+ JXnLIm8pTR2vkCTK0/YGs2RkZ9AT47NhF9QLRaIiycld3boG2vIUSOK7WG2KGBWj697F
+ cfBINSL1CSr5qFdSYb+vlUfZO8JozZlscwcZeuOJwVwdwMD8aQNIIl+nANbYSaLZiw9J
+ qH/wOseYpTNM3ZceqU0TrZpTbiEf1qbrx+R+AEtGFAqNlePYWdjGoiGAFTz+t+W8sOGJ
+ 2Xv/lT4fpuEC27mEEcxqLdmbyfl5UnqL3NojSts8/VGvgBgaTuzKZzloiXwGD750KS8G 5Q== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2wkfuufa02-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 04 Dec 2019 15:27:51 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xB4FOGXE011427;
+        Wed, 4 Dec 2019 15:27:51 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 2wp17e470u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 04 Dec 2019 15:27:51 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xB4FRnmC001349;
+        Wed, 4 Dec 2019 15:27:49 GMT
+Received: from dhcp-10-175-179-22.vpn.oracle.com (/10.175.179.22)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 04 Dec 2019 07:27:49 -0800
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     brendanhiggins@google.com, linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        keescook@chromium.org, yzaikin@google.com,
+        akpm@linux-foundation.org, yamada.masahiro@socionext.com,
+        catalin.marinas@arm.com, joe.lawrence@redhat.com,
+        penguin-kernel@i-love.sakura.ne.jp, urezki@gmail.com,
+        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
+        davidgow@google.com, adilger.kernel@dilger.ca, tytso@mit.edu,
+        mcgrof@kernel.org, linux-doc@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Knut Omang <knut.omang@oracle.com>
+Subject: [PATCH v6 linux-kselftest-test 1/6] kunit: move string-stream.h to lib/kunit
+Date:   Wed,  4 Dec 2019 15:27:09 +0000
+Message-Id: <1575473234-5443-2-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1575473234-5443-1-git-send-email-alan.maguire@oracle.com>
+References: <1575473234-5443-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9461 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-1912040128
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9461 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-1912040128
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Guenter,
+string-stream interfaces are not intended for external use;
+move them from include/kunit to lib/kunit accordingly.
 
-On 12/4/19 1:51 PM, Guenter Roeck wrote:
-> On Fri, Jun 21, 2019 at 10:52:43AM +0100, Vincenzo Frascino wrote:
->> The arm vDSO library requires some adaptations to use to take advantage
->> of the newly introduced generic vDSO library.
->>
->> Introduce the following changes:
->>  - Modification vdso.c to be compliant with the common vdso datapage
->>  - Use of lib/vdso for gettimeofday
->>  - Implementation of elf note
->>
->> Cc: Russell King <linux@armlinux.org.uk>
->> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> 
-> This patch causes a crash with qemu's mcimx6ul-evk emulation while running
-> imx_v6_v7_defconfig.
-> 
+Co-developed-by: Knut Omang <knut.omang@oracle.com>
+Signed-off-by: Knut Omang <knut.omang@oracle.com>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Tested-by: Brendan Higgins <brendanhiggins@google.com>
+---
+ include/kunit/assert.h                 | 3 ++-
+ lib/kunit/assert.c                     | 2 ++
+ lib/kunit/string-stream-test.c         | 3 ++-
+ lib/kunit/string-stream.c              | 3 ++-
+ {include => lib}/kunit/string-stream.h | 0
+ lib/kunit/test.c                       | 2 ++
+ 6 files changed, 10 insertions(+), 3 deletions(-)
+ rename {include => lib}/kunit/string-stream.h (100%)
 
-Thank you for reporting this. Could you please provide some details on how I can
-reproduce the scenario you are describing?
-
-> [   19.976852] Run /sbin/init as init process
-> [   20.044931] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000004
-> 
-> There is nothing else useful in the log, unfortunately.
-> 
-> Reverting the following three patches fixes the problem.
-> 
-> 74d06efb9c2f ARM: 8932/1: Add clock_gettime64 entry point
-> 052e76a31b4a ARM: 8931/1: Add clock_getres entry point
-> 20e2fc42312f ARM: 8930/1: Add support for generic vDSO
-> 
-> Guenter
-> 
-
+diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+index db6a0fc..ad889b5 100644
+--- a/include/kunit/assert.h
++++ b/include/kunit/assert.h
+@@ -9,10 +9,11 @@
+ #ifndef _KUNIT_ASSERT_H
+ #define _KUNIT_ASSERT_H
+ 
+-#include <kunit/string-stream.h>
+ #include <linux/err.h>
++#include <linux/kernel.h>
+ 
+ struct kunit;
++struct string_stream;
+ 
+ /**
+  * enum kunit_assert_type - Type of expectation/assertion.
+diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+index 86013d4..9aca71c 100644
+--- a/lib/kunit/assert.c
++++ b/lib/kunit/assert.c
+@@ -7,6 +7,8 @@
+  */
+ #include <kunit/assert.h>
+ 
++#include "string-stream.h"
++
+ void kunit_base_assert_format(const struct kunit_assert *assert,
+ 			      struct string_stream *stream)
+ {
+diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
+index 76cc05e..6c70dc8 100644
+--- a/lib/kunit/string-stream-test.c
++++ b/lib/kunit/string-stream-test.c
+@@ -6,10 +6,11 @@
+  * Author: Brendan Higgins <brendanhiggins@google.com>
+  */
+ 
+-#include <kunit/string-stream.h>
+ #include <kunit/test.h>
+ #include <linux/slab.h>
+ 
++#include "string-stream.h"
++
+ static void string_stream_test_empty_on_creation(struct kunit *test)
+ {
+ 	struct string_stream *stream = alloc_string_stream(test, GFP_KERNEL);
+diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
+index e6d17aa..3503920 100644
+--- a/lib/kunit/string-stream.c
++++ b/lib/kunit/string-stream.c
+@@ -6,11 +6,12 @@
+  * Author: Brendan Higgins <brendanhiggins@google.com>
+  */
+ 
+-#include <kunit/string-stream.h>
+ #include <kunit/test.h>
+ #include <linux/list.h>
+ #include <linux/slab.h>
+ 
++#include "string-stream.h"
++
+ struct string_stream_fragment_alloc_context {
+ 	struct kunit *test;
+ 	int len;
+diff --git a/include/kunit/string-stream.h b/lib/kunit/string-stream.h
+similarity index 100%
+rename from include/kunit/string-stream.h
+rename to lib/kunit/string-stream.h
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index c83c0fa..36ebf47 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -11,6 +11,8 @@
+ #include <linux/kernel.h>
+ #include <linux/sched/debug.h>
+ 
++#include "string-stream.h"
++
+ static void kunit_set_failure(struct kunit *test)
+ {
+ 	WRITE_ONCE(test->success, false);
 -- 
-Regards,
-Vincenzo
+1.8.3.1
+
