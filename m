@@ -2,71 +2,112 @@ Return-Path: <SRS0=AgsN=Z4=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	HK_RANDOM_FROM,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E57AC43603
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Dec 2019 09:01:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24CB1C43603
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Dec 2019 12:17:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 236B2205F4
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Dec 2019 09:01:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 001A724659
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Dec 2019 12:17:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726178AbfLFJBi (ORCPT
+        id S1726168AbfLFMRP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 Dec 2019 04:01:38 -0500
-Received: from mga09.intel.com ([134.134.136.24]:50484 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726065AbfLFJBi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Dec 2019 04:01:38 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Dec 2019 01:01:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,283,1571727600"; 
-   d="scan'208";a="219395084"
-Received: from lxy-clx-4s.sh.intel.com ([10.239.43.57])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Dec 2019 01:01:36 -0800
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH 0/3] Reanme the definitions of INTERRUPT_PENDING, NMI_PENDING and TSC_OFFSETING 
-Date:   Fri,  6 Dec 2019 16:45:23 +0800
-Message-Id: <20191206084526.131861-1-xiaoyao.li@intel.com>
-X-Mailer: git-send-email 2.19.1
+        Fri, 6 Dec 2019 07:17:15 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:43255 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726116AbfLFMRP (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Dec 2019 07:17:15 -0500
+Received: from 1.general.cascardo.us.vpn ([10.172.70.58] helo=calabresa)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <cascardo@canonical.com>)
+        id 1idCXo-00079d-9v; Fri, 06 Dec 2019 12:17:12 +0000
+Date:   Fri, 6 Dec 2019 09:17:07 -0300
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        posk@google.com
+Subject: Re: [PATCH] selftests: net: ip_defrag: increase netdev_max_backlog
+Message-ID: <20191206121707.GC5083@calabresa>
+References: <20191204195321.406365-1-cascardo@canonical.com>
+ <483097a3-92ec-aedd-60d9-ab7f58b9708d@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <483097a3-92ec-aedd-60d9-ab7f58b9708d@gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When reading the codes, I find the definitions of interrupt-window exiting and
-nmi-window exiting don't match the names in latest intel SDM.
+On Wed, Dec 04, 2019 at 12:03:57PM -0800, Eric Dumazet wrote:
+> 
+> 
+> On 12/4/19 11:53 AM, Thadeu Lima de Souza Cascardo wrote:
+> > When using fragments with size 8 and payload larger than 8000, the backlog
+> > might fill up and packets will be dropped, causing the test to fail. This
+> > happens often enough when conntrack is on during the IPv6 test.
+> > 
+> > As the larger payload in the test is 10000, using a backlog of 1250 allow
+> > the test to run repeatedly without failure. At least a 1000 runs were
+> > possible with no failures, when usually less than 50 runs were good enough
+> > for showing a failure.
+> > 
+> > As netdev_max_backlog is not a pernet setting, this sets the backlog to
+> > 1000 during exit to prevent disturbing following tests.
+> > 
+> 
+> Hmmm... I would prefer not changing a global setting like that.
+> This is going to be flaky since we often run tests in parallel (using different netns)
+> 
+> What about adding a small delay after each sent packet ?
+> 
+> diff --git a/tools/testing/selftests/net/ip_defrag.c b/tools/testing/selftests/net/ip_defrag.c
+> index c0c9ecb891e1d78585e0db95fd8783be31bc563a..24d0723d2e7e9b94c3e365ee2ee30e9445deafa8 100644
+> --- a/tools/testing/selftests/net/ip_defrag.c
+> +++ b/tools/testing/selftests/net/ip_defrag.c
+> @@ -198,6 +198,7 @@ static void send_fragment(int fd_raw, struct sockaddr *addr, socklen_t alen,
+>                 error(1, 0, "send_fragment: %d vs %d", res, frag_len);
+>  
+>         frag_counter++;
+> +       usleep(1000);
+>  }
+>  
+>  static void send_udp_frags(int fd_raw, struct sockaddr *addr,
+> 
 
-I have no idea whether it's the historical names, rename them to match the
-latest SDM to avoid confusion.
+That won't work because the issue only shows when we using conntrack, as the
+packet will be reassembled on output, then fragmented again. When this happens,
+the fragmentation code is transmitting the fragments in a tight loop, which
+floods the backlog.
 
-CPU_BASED_USE_TSC_OFFSETING mis-spelling in Patch 3 is found by checkpatch.pl. 
+One other option is limit the number of fragments to a 1000, like the following
+patch:
 
-Xiaoyao Li (3):
-  KVM: VMX: Rename INTERRUPT_PENDING to INTERRUPT_WINDOW
-  KVM: VMX: Rename NMI_PENDING to NMI_WINDOW
-  KVM: VMX: Fix the spelling of CPU_BASED_USE_TSC_OFFSETTING
-
- arch/x86/include/asm/vmx.h                    |  6 ++--
- arch/x86/include/uapi/asm/vmx.h               |  4 +--
- arch/x86/kvm/vmx/nested.c                     | 28 +++++++++----------
- arch/x86/kvm/vmx/vmx.c                        | 20 ++++++-------
- tools/arch/x86/include/uapi/asm/vmx.h         |  4 +--
- .../selftests/kvm/include/x86_64/vmx.h        |  8 +++---
- .../kvm/x86_64/vmx_tsc_adjust_test.c          |  2 +-
- 7 files changed, 36 insertions(+), 36 deletions(-)
-
--- 
-2.19.1
-
+diff --git a/tools/testing/selftests/net/ip_defrag.c b/tools/testing/selftests/net/ip_defrag.c
+index c0c9ecb891e1..f4086ba9d16c 100644
+--- a/tools/testing/selftests/net/ip_defrag.c
++++ b/tools/testing/selftests/net/ip_defrag.c
+@@ -16,6 +16,9 @@
+ #include <time.h>
+ #include <unistd.h>
+ 
++#define ALIGN(x, sz) ((x + (sz-1)) & ~(sz-1))
++#define MAX(a, b) ((a < b) ? b : a)
++
+ static bool		cfg_do_ipv4;
+ static bool		cfg_do_ipv6;
+ static bool		cfg_verbose;
+@@ -362,6 +365,7 @@ static void run_test(struct sockaddr *addr, socklen_t alen, bool ipv6)
+ 
+ 	for (payload_len = min_frag_len; payload_len < MSG_LEN_MAX;
+ 			payload_len += (rand() % 4096)) {
++		min_frag_len = MAX(8, ALIGN(payload_len / 1000, 8));
+ 		if (cfg_verbose)
+ 			printf("payload_len: %d\n", payload_len);
+ 
