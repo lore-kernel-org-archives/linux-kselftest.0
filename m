@@ -2,46 +2,44 @@ Return-Path: <SRS0=AgsN=Z4=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	HK_RANDOM_FROM,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81459C43603
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Dec 2019 03:17:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B36D6C2D0B1
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Dec 2019 09:01:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3C4C02245C
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Dec 2019 03:17:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="KMdtSzxm"
+	by mail.kernel.org (Postfix) with ESMTP id 937A4205F4
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Dec 2019 09:01:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726097AbfLFDRt (ORCPT
+        id S1726418AbfLFJBm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 5 Dec 2019 22:17:49 -0500
-Received: from ozlabs.org ([203.11.71.1]:59545 "EHLO ozlabs.org"
+        Fri, 6 Dec 2019 04:01:42 -0500
+Received: from mga09.intel.com ([134.134.136.24]:50489 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726076AbfLFDRt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Dec 2019 22:17:49 -0500
-Received: by ozlabs.org (Postfix, from userid 1034)
-        id 47Td7b02k6z9sPV; Fri,  6 Dec 2019 14:17:46 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1575602267;
-        bh=zVhnYe3N8hue/+LbI+X1XqJYlxmNifUh7vkS/DHm2wo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KMdtSzxm8RzEsLRq4cXQcjZ817K0nGpBpsyVoJ6V+0YCxMp9KeaqwjN5VgKdG3yzl
-         i9VRuShuQ6bPdil27QbLN7tot/8eBPEyFARVY+ZpxU4CNpEV/Joskq5LTIy9e2D7PQ
-         Es3VQmhlSdTnBTCQGhmTm6cUNf0+bBwUnd6K7KNdLqVBIEfSB34KxdjqixoOS1gkOA
-         5Bj4GtlPlFfgnb1AJNE0igL1N7pqmS0J4xeVDil8gXl3lsTYaYkAJfHM8Kd4I0CdTO
-         Y4nJA4bTD2ONIxupskXZ+0tV92ggZYNuihBSYzn9T5ElGB5Eotqr4jqVuVFNbCinrJ
-         F38lVixzilF5A==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     shuahkh@osg.samsung.com
-Cc:     linux-kselftest@vger.kernel.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: Fix dangling documentation references to kselftest_module.sh
-Date:   Fri,  6 Dec 2019 14:17:38 +1100
-Message-Id: <20191206031738.29641-1-mpe@ellerman.id.au>
-X-Mailer: git-send-email 2.21.0
+        id S1726109AbfLFJBl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Dec 2019 04:01:41 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Dec 2019 01:01:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,283,1571727600"; 
+   d="scan'208";a="219395098"
+Received: from lxy-clx-4s.sh.intel.com ([10.239.43.57])
+  by fmsmga001.fm.intel.com with ESMTP; 06 Dec 2019 01:01:39 -0800
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH 2/3] KVM: VMX: Rename NMI_PENDING to NMI_WINDOW
+Date:   Fri,  6 Dec 2019 16:45:25 +0800
+Message-Id: <20191206084526.131861-3-xiaoyao.li@intel.com>
+X-Mailer: git-send-email 2.19.1
+In-Reply-To: <20191206084526.131861-1-xiaoyao.li@intel.com>
+References: <20191206084526.131861-1-xiaoyao.li@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -49,67 +47,123 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit c78fd76f2b67 ("selftests: Move kselftest_module.sh into
-kselftest/") moved kselftest_module.sh but missed updating a few
-references to the path in documentation.
+Rename the NMI-window exiting related definitions to match the latest
+Intel SDM. No functional changes.
 
-Fixes: c78fd76f2b67 ("selftests: Move kselftest_module.sh into kselftest/")
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
 ---
- Documentation/dev-tools/kselftest.rst       | 8 ++++----
- tools/testing/selftests/kselftest/module.sh | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/vmx.h                       |  2 +-
+ arch/x86/kvm/vmx/nested.c                        | 12 ++++++------
+ arch/x86/kvm/vmx/vmx.c                           |  4 ++--
+ tools/testing/selftests/kvm/include/x86_64/vmx.h |  2 +-
+ 4 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index ecdfdc9d4b03..61ae13c44f91 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -203,12 +203,12 @@ Test Module
- Kselftest tests the kernel from userspace.  Sometimes things need
- testing from within the kernel, one method of doing this is to create a
- test module.  We can tie the module into the kselftest framework by
--using a shell script test runner.  ``kselftest_module.sh`` is designed
-+using a shell script test runner.  ``kselftest/module.sh`` is designed
- to facilitate this process.  There is also a header file provided to
- assist writing kernel modules that are for use with kselftest:
+diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
+index 5acda8d9b9a7..06d4420508c5 100644
+--- a/arch/x86/include/asm/vmx.h
++++ b/arch/x86/include/asm/vmx.h
+@@ -31,7 +31,7 @@
+ #define CPU_BASED_CR8_LOAD_EXITING              0x00080000
+ #define CPU_BASED_CR8_STORE_EXITING             0x00100000
+ #define CPU_BASED_TPR_SHADOW                    0x00200000
+-#define CPU_BASED_VIRTUAL_NMI_PENDING		0x00400000
++#define CPU_BASED_NMI_WINDOW_EXITING		0x00400000
+ #define CPU_BASED_MOV_DR_EXITING                0x00800000
+ #define CPU_BASED_UNCOND_IO_EXITING             0x01000000
+ #define CPU_BASED_USE_IO_BITMAPS                0x02000000
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index a77e92bd3f72..f8b9da53191e 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -2173,7 +2173,7 @@ static void prepare_vmcs02_early(struct vcpu_vmx *vmx, struct vmcs12 *vmcs12)
+ 	 */
+ 	exec_control = vmx_exec_control(vmx); /* L0's desires */
+ 	exec_control &= ~CPU_BASED_INTR_WINDOW_EXITING;
+-	exec_control &= ~CPU_BASED_VIRTUAL_NMI_PENDING;
++	exec_control &= ~CPU_BASED_NMI_WINDOW_EXITING;
+ 	exec_control &= ~CPU_BASED_TPR_SHADOW;
+ 	exec_control |= vmcs12->cpu_based_vm_exec_control;
  
- - ``tools/testing/kselftest/kselftest_module.h``
--- ``tools/testing/kselftest/kselftest_module.sh``
-+- ``tools/testing/kselftest/kselftest/module.sh``
+@@ -2566,7 +2566,7 @@ static int nested_vmx_check_nmi_controls(struct vmcs12 *vmcs12)
+ 		return -EINVAL;
  
- How to use
- ----------
-@@ -247,7 +247,7 @@ Example Module
+ 	if (CC(!nested_cpu_has_virtual_nmis(vmcs12) &&
+-	       nested_cpu_has(vmcs12, CPU_BASED_VIRTUAL_NMI_PENDING)))
++	       nested_cpu_has(vmcs12, CPU_BASED_NMI_WINDOW_EXITING)))
+ 		return -EINVAL;
  
-    #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 	return 0;
+@@ -3183,7 +3183,7 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+ 	u32 exit_qual;
  
--   #include "../tools/testing/selftests/kselftest_module.h"
-+   #include "../tools/testing/selftests/kselftest/module.h"
+ 	evaluate_pending_interrupts = exec_controls_get(vmx) &
+-		(CPU_BASED_INTR_WINDOW_EXITING | CPU_BASED_VIRTUAL_NMI_PENDING);
++		(CPU_BASED_INTR_WINDOW_EXITING | CPU_BASED_NMI_WINDOW_EXITING);
+ 	if (likely(!evaluate_pending_interrupts) && kvm_vcpu_apicv_active(vcpu))
+ 		evaluate_pending_interrupts |= vmx_has_apicv_interrupt(vcpu);
  
-    KSTM_MODULE_GLOBALS();
+@@ -3407,7 +3407,7 @@ static int nested_vmx_run(struct kvm_vcpu *vcpu, bool launch)
+ 	 */
+ 	if ((vmcs12->guest_activity_state == GUEST_ACTIVITY_HLT) &&
+ 	    !(vmcs12->vm_entry_intr_info_field & INTR_INFO_VALID_MASK) &&
+-	    !(vmcs12->cpu_based_vm_exec_control & CPU_BASED_VIRTUAL_NMI_PENDING) &&
++	    !(vmcs12->cpu_based_vm_exec_control & CPU_BASED_NMI_WINDOW_EXITING) &&
+ 	    !((vmcs12->cpu_based_vm_exec_control & CPU_BASED_INTR_WINDOW_EXITING) &&
+ 	      (vmcs12->guest_rflags & X86_EFLAGS_IF))) {
+ 		vmx->nested.nested_run_pending = 0;
+@@ -5527,7 +5527,7 @@ bool nested_vmx_exit_reflected(struct kvm_vcpu *vcpu, u32 exit_reason)
+ 	case EXIT_REASON_INTERRUPT_WINDOW:
+ 		return nested_cpu_has(vmcs12, CPU_BASED_INTR_WINDOW_EXITING);
+ 	case EXIT_REASON_NMI_WINDOW:
+-		return nested_cpu_has(vmcs12, CPU_BASED_VIRTUAL_NMI_PENDING);
++		return nested_cpu_has(vmcs12, CPU_BASED_NMI_WINDOW_EXITING);
+ 	case EXIT_REASON_TASK_SWITCH:
+ 		return true;
+ 	case EXIT_REASON_CPUID:
+@@ -6016,7 +6016,7 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps,
+ 		CPU_BASED_ALWAYSON_WITHOUT_TRUE_MSR;
+ 	msrs->procbased_ctls_high &=
+ 		CPU_BASED_INTR_WINDOW_EXITING |
+-		CPU_BASED_VIRTUAL_NMI_PENDING | CPU_BASED_USE_TSC_OFFSETING |
++		CPU_BASED_NMI_WINDOW_EXITING | CPU_BASED_USE_TSC_OFFSETING |
+ 		CPU_BASED_HLT_EXITING | CPU_BASED_INVLPG_EXITING |
+ 		CPU_BASED_MWAIT_EXITING | CPU_BASED_CR3_LOAD_EXITING |
+ 		CPU_BASED_CR3_STORE_EXITING |
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 0e3ba51436e4..84ceee734e98 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -4371,7 +4371,7 @@ static void enable_nmi_window(struct kvm_vcpu *vcpu)
+ 		return;
+ 	}
  
-@@ -276,7 +276,7 @@ Example test script
+-	exec_controls_setbit(to_vmx(vcpu), CPU_BASED_VIRTUAL_NMI_PENDING);
++	exec_controls_setbit(to_vmx(vcpu), CPU_BASED_NMI_WINDOW_EXITING);
+ }
  
-     #!/bin/bash
-     # SPDX-License-Identifier: GPL-2.0+
--    $(dirname $0)/../kselftest_module.sh "foo" test_foo
-+    $(dirname $0)/../kselftest/module.sh "foo" test_foo
+ static void vmx_inject_irq(struct kvm_vcpu *vcpu)
+@@ -5192,7 +5192,7 @@ static int handle_ept_misconfig(struct kvm_vcpu *vcpu)
+ static int handle_nmi_window(struct kvm_vcpu *vcpu)
+ {
+ 	WARN_ON_ONCE(!enable_vnmi);
+-	exec_controls_clearbit(to_vmx(vcpu), CPU_BASED_VIRTUAL_NMI_PENDING);
++	exec_controls_clearbit(to_vmx(vcpu), CPU_BASED_NMI_WINDOW_EXITING);
+ 	++vcpu->stat.nmi_window_exits;
+ 	kvm_make_request(KVM_REQ_EVENT, vcpu);
  
- 
- Test Harness
-diff --git a/tools/testing/selftests/kselftest/module.sh b/tools/testing/selftests/kselftest/module.sh
-index 18e1c7992d30..fb4733faff12 100755
---- a/tools/testing/selftests/kselftest/module.sh
-+++ b/tools/testing/selftests/kselftest/module.sh
-@@ -9,7 +9,7 @@
- #
- #   #!/bin/sh
- #   SPDX-License-Identifier: GPL-2.0+
--#   $(dirname $0)/../kselftest_module.sh "description" module_name
-+#   $(dirname $0)/../kselftest/module.sh "description" module_name
- #
- # Example: tools/testing/selftests/lib/printf.sh
- 
+diff --git a/tools/testing/selftests/kvm/include/x86_64/vmx.h b/tools/testing/selftests/kvm/include/x86_64/vmx.h
+index c6e442d7a241..7eb38451c359 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/vmx.h
++++ b/tools/testing/selftests/kvm/include/x86_64/vmx.h
+@@ -30,7 +30,7 @@
+ #define CPU_BASED_CR8_LOAD_EXITING		0x00080000
+ #define CPU_BASED_CR8_STORE_EXITING		0x00100000
+ #define CPU_BASED_TPR_SHADOW			0x00200000
+-#define CPU_BASED_VIRTUAL_NMI_PENDING		0x00400000
++#define CPU_BASED_NMI_WINDOW_EXITING		0x00400000
+ #define CPU_BASED_MOV_DR_EXITING		0x00800000
+ #define CPU_BASED_UNCOND_IO_EXITING		0x01000000
+ #define CPU_BASED_USE_IO_BITMAPS		0x02000000
 -- 
-2.21.0
+2.19.1
 
