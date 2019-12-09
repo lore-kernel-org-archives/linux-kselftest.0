@@ -2,121 +2,163 @@ Return-Path: <SRS0=BrDi=Z7=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B69BEC43603
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Dec 2019 15:24:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50427C2D0CC
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Dec 2019 22:54:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 873DB2068E
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Dec 2019 15:24:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2755E21556
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Dec 2019 22:54:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eNVXtppA"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="WhsiSQ3U"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726619AbfLIPYJ (ORCPT
+        id S1727633AbfLIWyc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Dec 2019 10:24:09 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:25185 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726614AbfLIPYJ (ORCPT
+        Mon, 9 Dec 2019 17:54:32 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:9283 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727595AbfLIWyU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Dec 2019 10:24:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1575905048;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cUyKBa+6w/X0SFxnoHv5d6eKbbOBp+7aIKnhyd8PFa4=;
-        b=eNVXtppA4aR5g77LXbuZeTvHsgfKUhlI245RtMBSUze0+dJoEjGVVd4IsqLpcU08vw/j8i
-        8Rkz05bWiTIYUzJJUPiViuQ3gCGcEcS76j+pKOj7JFG0S+mwMBy/ekKtO0X15iwt8OX4Zz
-        Cf2fnnzsWRUFAPPmSsRID2ATSJ77wyg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-45-Q2B1J4IVNJ23Qxcl83vcog-1; Mon, 09 Dec 2019 10:23:19 -0500
-Received: by mail-wr1-f71.google.com with SMTP id v17so7606573wrm.17
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Dec 2019 07:23:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cUyKBa+6w/X0SFxnoHv5d6eKbbOBp+7aIKnhyd8PFa4=;
-        b=P1uXLVYG7Cbjvv5/+grTtc7YciFEhw9OEF4/7csBRlKHZqwXaK0h4qE2rxtn5d3Wfx
-         Asa5NDP2MdOCleN7vAhgezqly5DZCclHkBgv6D/Va1wRBKmy2tNoaCbIX8uiga1EKjfH
-         zk7/XAbmEcCLvRGda6kv7wEw+Gs6PjM8l1yFHL4eEsm0QoiTdR/TTtUSjXwsDWNhIl8e
-         Yn5mQcNcgJNcoJAkGaYYqQF1K/n6lUOCb85IzwUggmBUA/XndEPkH/eG6XJf2xXrHHTb
-         Wd05EYFFJpUX6WKlE5VxDjwVzZe5QA1VDwUQox+wCOgMGIL/EvXPElh5ISR3sMB1UBM1
-         mLkA==
-X-Gm-Message-State: APjAAAVoiuo34uDyOVH5Pipe799w/tIJoY3D1/dgTiQ15kpgd1BfJ/jk
-        kkL+vne1XZb1ZUBBsiAnJ+WIQMJB1SQ44YFt70klr+uztHuNp573B05tZ+JkDaTgux0TqQs/P4f
-        twsE75YIbvnsFOG/agqOFffIYKTV8
-X-Received: by 2002:a5d:6b82:: with SMTP id n2mr2789654wrx.153.1575904997175;
-        Mon, 09 Dec 2019 07:23:17 -0800 (PST)
-X-Google-Smtp-Source: APXvYqx0NPr9yEyNrwcLoT342Axfuw2Fk6VGQtA0whJ8WufzbYGTUyCLQ/P9d/nSqFiXLn6bdXvtHg==
-X-Received: by 2002:a5d:6b82:: with SMTP id n2mr2789639wrx.153.1575904996946;
-        Mon, 09 Dec 2019 07:23:16 -0800 (PST)
-Received: from ?IPv6:2001:b07:6468:f312:e9bb:92e9:fcc3:7ba9? ([2001:b07:6468:f312:e9bb:92e9:fcc3:7ba9])
-        by smtp.gmail.com with ESMTPSA id d16sm29936960wrg.27.2019.12.09.07.23.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Dec 2019 07:23:16 -0800 (PST)
-Subject: Re: [PATCH 0/3] Reanme the definitions of INTERRUPT_PENDING,
- NMI_PENDING and TSC_OFFSETING
-To:     Sean Christopherson <sean.j.christopherson@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20191206084526.131861-1-xiaoyao.li@intel.com>
- <20191206204747.GD5433@linux.intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <2beeb1fb-7d3a-d829-38e0-ddf76b65bd3c@redhat.com>
-Date:   Mon, 9 Dec 2019 16:23:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        Mon, 9 Dec 2019 17:54:20 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5deed07c0000>; Mon, 09 Dec 2019 14:53:48 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Mon, 09 Dec 2019 14:54:09 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Mon, 09 Dec 2019 14:54:09 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 9 Dec
+ 2019 22:54:08 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 9 Dec
+ 2019 22:54:08 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 9 Dec 2019 22:54:07 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5deed08e0000>; Mon, 09 Dec 2019 14:54:06 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Paul Mackerras" <paulus@samba.org>, Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v8 20/26] powerpc: book3s64: convert to pin_user_pages() and put_user_page()
+Date:   Mon, 9 Dec 2019 14:53:38 -0800
+Message-ID: <20191209225344.99740-21-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191209225344.99740-1-jhubbard@nvidia.com>
+References: <20191209225344.99740-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <20191206204747.GD5433@linux.intel.com>
-Content-Language: en-US
-X-MC-Unique: Q2B1J4IVNJ23Qxcl83vcog-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1575932029; bh=IrXYbV9R0vnJHGhlZjINDlSdvrs03wECmgURaURVtqE=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=WhsiSQ3UbR8GTS9scmwBNOQ/VjWAqEEZK2GbNKhscKkyJkniMbVphYecKC59S9YrX
+         ufMC9MTwKq4Gp4zyHdkyeKaMuJMkrv7Ehp+e4gd8ndi924GMRltfG3U/zMTMCltoUa
+         K15wFcxvvC86D0DI9eoa0+kOx0RfNTczuMCM7MMiH/qHiERgXSakVbMoEwGq4OvaFU
+         YbdZ5NNdE4Yqe4nsIw2CamEhAngv2/zrToBWvdywK+54kSSIBO+f2a+OxHsRT1DRtt
+         0rEVgLblQxXNtGO9+koQiwcw8bykNgsIgy/jl5HLId9MEksa2ZuWW1A72sJdteNmrN
+         5jokdoze79MoA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 06/12/19 21:47, Sean Christopherson wrote:
->> When reading the codes, I find the definitions of interrupt-window exiting
->> and nmi-window exiting don't match the names in latest intel SDM.
-> I prefer KVM's names even though they diverge from the SDM.  The "window
-> exiting" terminology is very literal, which is desirable for the SDM
-> because it doesn't leave any wiggle room.  But for software, IMO the
-> "event pending" terminology is preferable as it's more descriptive of the
-> intended use of the control, e.g. KVM sets VIRTUAL_{INTR,NMI}_PENDING when
-> it has a virtual event to inject and clears it after injecting said event.
-> 
+1. Convert from get_user_pages() to pin_user_pages().
 
-On the other hand:
+2. As required by pin_user_pages(), release these pages via
+put_user_page(). In this case, do so via put_user_pages_dirty_lock().
 
-static void enable_irq_window(struct kvm_vcpu *vcpu)
-{
-        exec_controls_setbit(to_vmx(vcpu), CPU_BASED_VIRTUAL_INTR_PENDING);
-}
+That has the side effect of calling set_page_dirty_lock(), instead
+of set_page_dirty(). This is probably more accurate.
 
-static void enable_nmi_window(struct kvm_vcpu *vcpu)
-{
-        if (!enable_vnmi ||
-            vmcs_read32(GUEST_INTERRUPTIBILITY_INFO) & GUEST_INTR_STATE_STI) {
-                enable_irq_window(vcpu);
-                return;
-        }
+As Christoph Hellwig put it, "set_page_dirty() is only safe if we are
+dealing with a file backed page where we have reference on the inode it
+hangs off." [1]
 
-        exec_controls_setbit(to_vmx(vcpu), CPU_BASED_VIRTUAL_NMI_PENDING);
-}
+[1] https://lore.kernel.org/r/20190723153640.GB720@lst.de
 
-so we're already using a lot the "window" nomenclature in KVM.  I've applied Xiaoyao's patches.
+Cc: Jan Kara <jack@suse.cz>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ arch/powerpc/mm/book3s64/iommu_api.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-Paolo
+diff --git a/arch/powerpc/mm/book3s64/iommu_api.c b/arch/powerpc/mm/book3s6=
+4/iommu_api.c
+index 56cc84520577..fc1670a6fc3c 100644
+--- a/arch/powerpc/mm/book3s64/iommu_api.c
++++ b/arch/powerpc/mm/book3s64/iommu_api.c
+@@ -103,7 +103,7 @@ static long mm_iommu_do_alloc(struct mm_struct *mm, uns=
+igned long ua,
+ 	for (entry =3D 0; entry < entries; entry +=3D chunk) {
+ 		unsigned long n =3D min(entries - entry, chunk);
+=20
+-		ret =3D get_user_pages(ua + (entry << PAGE_SHIFT), n,
++		ret =3D pin_user_pages(ua + (entry << PAGE_SHIFT), n,
+ 				FOLL_WRITE | FOLL_LONGTERM,
+ 				mem->hpages + entry, NULL);
+ 		if (ret =3D=3D n) {
+@@ -167,9 +167,8 @@ static long mm_iommu_do_alloc(struct mm_struct *mm, uns=
+igned long ua,
+ 	return 0;
+=20
+ free_exit:
+-	/* free the reference taken */
+-	for (i =3D 0; i < pinned; i++)
+-		put_page(mem->hpages[i]);
++	/* free the references taken */
++	put_user_pages(mem->hpages, pinned);
+=20
+ 	vfree(mem->hpas);
+ 	kfree(mem);
+@@ -212,10 +211,9 @@ static void mm_iommu_unpin(struct mm_iommu_table_group=
+_mem_t *mem)
+ 		if (!page)
+ 			continue;
+=20
+-		if (mem->hpas[i] & MM_IOMMU_TABLE_GROUP_PAGE_DIRTY)
+-			SetPageDirty(page);
++		put_user_pages_dirty_lock(&page, 1,
++				mem->hpas[i] & MM_IOMMU_TABLE_GROUP_PAGE_DIRTY);
+=20
+-		put_page(page);
+ 		mem->hpas[i] =3D 0;
+ 	}
+ }
+--=20
+2.24.0
 
