@@ -2,193 +2,295 @@ Return-Path: <SRS0=VaWZ=2A=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8584C43603
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 19:48:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F0FDC43603
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:15:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 95A9E20828
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 19:48:12 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mYnRzTb5"
+	by mail.kernel.org (Postfix) with ESMTP id DEAE1205C9
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:15:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1576012549;
+	bh=RH4Oi4KY2cBvtGs8sL4JvqF5q9DMTHE4jUZynnxH8Sc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=ozUYJy+eGzAhvVjd1bqEeWmMzCOdpWZ93Cda22ZBnJ0zZD+wIG2d0XOyFQMkXvB+4
+	 /Pj862zAgB6CuDWO4SEW5J8twiGerY1qvAV8TyPZa8858kK+5ynvrQ3wWZMS7sGH9I
+	 /Qtiznku0lvo9RFFgAF84oaStcBB7Zd6iC2iCJK4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbfLJTsI (ORCPT
+        id S1728995AbfLJVNb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 Dec 2019 14:48:08 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:40282 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726898AbfLJTsH (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Dec 2019 14:48:07 -0500
-Received: by mail-pg1-f196.google.com with SMTP id k25so9375396pgt.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2019 11:48:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hs4+jt4b4qkjnd//rQ0dpgbF0ORXyEi5ROObXi8EfqY=;
-        b=mYnRzTb5+sTStYc7Niv1gGvH8acexDCSmAR+l0KIkpgvJvO+UcpjC7yGbeRlAanOLS
-         9X2B13LZgLNohEiDdd7+igZqn9TNKmhRIY1C0B7AS+VxR1Vxl4UJ6mdA3VB6atZDX4Jn
-         NTcWbvkzGlJ0wiIQr/Bqwlnvpx8AJV8BuVDKs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hs4+jt4b4qkjnd//rQ0dpgbF0ORXyEi5ROObXi8EfqY=;
-        b=uRdTs5WI/XfTD3zzWrGqeofo8F/v4MvQT+FUVZdI4htSDAytbMkQcB+2+id/2YCxPG
-         bcpC8jFvDkyWXTtfL0oT3taf+9lIn+Ihvx/grnkAwHhtiscseOk2yLtdFF2hpH7E92Ec
-         7lC1XhYdOSd/Iy81Muy4jBlDsSKVnQloq32Pp/l/sewO0XEo0C4ymRCrkPprql+PNYlK
-         Hs0ZdGTi/m1/RBMTJwH8ZhV7lAWsrx+0Ka2a5fVKJgQuVfRrJmaVHKrODTs5STl00OP4
-         1LA3VP4YWUlj8xwUAN+QHYnj5gYbJvK7jnWohNyyN2MH+GWmTguuSi5kIxA+emzgOFaV
-         RUqg==
-X-Gm-Message-State: APjAAAWwEadq9hDwPigL6G3mMQWCugirDuGP5xcM1VRSqYgtPlzj1f60
-        GGbwVb3FrUi4YDU0I8VMjkTrMA==
-X-Google-Smtp-Source: APXvYqz78cU7WRPjnasXetiMClBhXKzMKxaJBk2LajotEHBGPikWJe9GXvoW0ru9xwaigCtaqSZ13Q==
-X-Received: by 2002:a63:4e47:: with SMTP id o7mr26628998pgl.332.1576007286738;
-        Tue, 10 Dec 2019 11:48:06 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l186sm4243001pge.31.2019.12.10.11.48.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 11:48:05 -0800 (PST)
-Date:   Tue, 10 Dec 2019 11:48:04 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     shuah <shuah@kernel.org>,
-        John Johansen <john.johansen@canonical.com>, jmorris@namei.org,
-        serge@hallyn.com, Alan Maguire <alan.maguire@oracle.com>,
-        Iurii Zaikin <yzaikin@google.com>,
-        David Gow <davidgow@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Mike Salvatore <mike.salvatore@canonical.com>
-Subject: Re: [PATCH linux-kselftest/test v2] apparmor: add AppArmor KUnit
- tests for policy unpack
-Message-ID: <201912101147.7BCF728@keescook>
-References: <20191106004329.16991-1-brendanhiggins@google.com>
- <201911060916.AC9E14B@keescook>
- <20191107233337.GA191231@google.com>
- <CAFd5g462jFnbPxA2Nvc_3W064kZ8t5oHNE4M_3yt84+NuoiHGQ@mail.gmail.com>
+        Tue, 10 Dec 2019 16:13:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39814 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729344AbfLJVNb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:13:31 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0993D2077B;
+        Tue, 10 Dec 2019 21:13:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576012409;
+        bh=RH4Oi4KY2cBvtGs8sL4JvqF5q9DMTHE4jUZynnxH8Sc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=zQOyTGVXxW5CUEZCBeR/CFi2sw9BBijmXAumI4+ERl1z+x4XCTt+tWun6vTRdXtJh
+         gr4meJzW1UUMaKkZHloDMBZQ76vULq5rieZFVHOsLW4V7TWsKq+MVtrdJ/AhmW1Suf
+         nleberJ0n+vV6ColGLGUt1T3McYUjyWtxqrWXYXA=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 327/350] libbpf: Fix call relocation offset calculation bug
+Date:   Tue, 10 Dec 2019 16:07:12 -0500
+Message-Id: <20191210210735.9077-288-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
+References: <20191210210735.9077-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFd5g462jFnbPxA2Nvc_3W064kZ8t5oHNE4M_3yt84+NuoiHGQ@mail.gmail.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 18, 2019 at 04:34:53PM -0800, Brendan Higgins wrote:
-> On Thu, Nov 7, 2019 at 3:33 PM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> >
-> > On Wed, Nov 06, 2019 at 09:18:27AM -0800, Kees Cook wrote:
-> > > On Tue, Nov 05, 2019 at 04:43:29PM -0800, Brendan Higgins wrote:
-> > > > From: Mike Salvatore <mike.salvatore@canonical.com>
-> > > >
-> > > > Add KUnit tests to test AppArmor unpacking of userspace policies.
-> > > > AppArmor uses a serialized binary format for loading policies. To find
-> > > > policy format documentation see
-> > > > Documentation/admin-guide/LSM/apparmor.rst.
-> > > >
-> > > > In order to write the tests against the policy unpacking code, some
-> > > > static functions needed to be exposed for testing purposes. One of the
-> > > > goals of this patch is to establish a pattern for which testing these
-> > > > kinds of functions should be done in the future.
-> > > >
-> > > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > > > Signed-off-by: Mike Salvatore <mike.salvatore@canonical.com>
-> > > > ---
-> > > >  security/apparmor/Kconfig              |  16 +
-> > > >  security/apparmor/policy_unpack.c      |   4 +
-> > > >  security/apparmor/policy_unpack_test.c | 607 +++++++++++++++++++++++++
-> > > >  3 files changed, 627 insertions(+)
-> > > >  create mode 100644 security/apparmor/policy_unpack_test.c
-> > > >
-> > > > diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
-> > > > index d8b1a360a6368..78a33ccac2574 100644
-> > > > --- a/security/apparmor/Kconfig
-> > > > +++ b/security/apparmor/Kconfig
-> > > > @@ -66,3 +66,19 @@ config SECURITY_APPARMOR_DEBUG_MESSAGES
-> > > >       Set the default value of the apparmor.debug kernel parameter.
-> > > >       When enabled, various debug messages will be logged to
-> > > >       the kernel message buffer.
-> > > > +
-> > > > +config SECURITY_APPARMOR_KUNIT_TEST
-> > > > +   bool "Build KUnit tests for policy_unpack.c"
-> > > > +   depends on KUNIT && SECURITY_APPARMOR
-> > > > +   help
-> > > > +     This builds the AppArmor KUnit tests.
-> > > > +
-> > > > +     KUnit tests run during boot and output the results to the debug log
-> > > > +     in TAP format (http://testanything.org/). Only useful for kernel devs
-> > > > +     running KUnit test harness and are not for inclusion into a
-> > > > +     production build.
-> > > > +
-> > > > +     For more information on KUnit and unit tests in general please refer
-> > > > +     to the KUnit documentation in Documentation/dev-tools/kunit/.
-> > > > +
-> > > > +     If unsure, say N.
-> > > > diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
-> > > > index 8cfc9493eefc7..37c1dd3178fc0 100644
-> > > > --- a/security/apparmor/policy_unpack.c
-> > > > +++ b/security/apparmor/policy_unpack.c
-> > > > @@ -1120,3 +1120,7 @@ int aa_unpack(struct aa_loaddata *udata, struct list_head *lh,
-> > > >
-> > > >     return error;
-> > > >  }
-> > > > +
-> > > > +#ifdef CONFIG_SECURITY_APPARMOR_KUNIT_TEST
-> > > > +#include "policy_unpack_test.c"
-> > > > +#endif /* CONFIG_SECURITY_APPARMOR_KUNIT_TEST */
-> > >
-> > > To make this even LESS intrusive, the ifdefs could live in ..._test.c.
-> >
-> > Less intrusive, yes, but I think I actually like the ifdef here; it
-> > makes it clear from the source that the test is only a part of the build
-> > when configured to do so. Nevertheless, I will change it if anyone feels
-> > strongly about it.
-> >
-> > > Also, while I *think* the kernel build system will correctly track this
-> > > dependency, can you double-check that changes to ..._test.c correctly
-> > > trigger a recompile of policy_unpack.c?
-> >
-> > Yep, just verified, first I ran the tests and everything passed. Then I
-> > applied the following diff:
-> >
-> > diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
-> > index 533137f45361c..e1b0670dbdc27 100644
-> > --- a/security/apparmor/policy_unpack_test.c
-> > +++ b/security/apparmor/policy_unpack_test.c
-> > @@ -161,7 +161,7 @@ static void policy_unpack_test_unpack_array_with_name(struct kunit *test)
-> >
-> >         array_size = unpack_array(puf->e, name);
-> >
-> > -       KUNIT_EXPECT_EQ(test, array_size, (u16)TEST_ARRAY_SIZE);
-> > +       KUNIT_EXPECT_EQ(test, array_size + 1, (u16)TEST_ARRAY_SIZE);
-> >         KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> >                 puf->e->start + TEST_ARRAY_BUF_OFFSET + sizeof(u16) + 1);
-> >  }
-> >
-> > and reran the tests (to trigger an incremental build) and the test
-> > failed as expected indicating that the dependency is properly tracked.
-> 
-> Hey Kees,
-> 
-> Since it looks like you already took a pretty close look at this,
-> would you mind giving me a review?
+From: Andrii Nakryiko <andriin@fb.com>
 
-Yes! Thanks for checking on those items. :)
+[ Upstream commit a0d7da26ce86a25e97ae191cb90574ada6daea98 ]
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+When relocating subprogram call, libbpf doesn't take into account
+relo->text_off, which comes from symbol's value. This generally works fine for
+subprograms implemented as static functions, but breaks for global functions.
 
+Taking a simplified test_pkt_access.c as an example:
 
+__attribute__ ((noinline))
+static int test_pkt_access_subprog1(volatile struct __sk_buff *skb)
+{
+        return skb->len * 2;
+}
+
+__attribute__ ((noinline))
+static int test_pkt_access_subprog2(int val, volatile struct __sk_buff *skb)
+{
+        return skb->len + val;
+}
+
+SEC("classifier/test_pkt_access")
+int test_pkt_access(struct __sk_buff *skb)
+{
+        if (test_pkt_access_subprog1(skb) != skb->len * 2)
+                return TC_ACT_SHOT;
+        if (test_pkt_access_subprog2(2, skb) != skb->len + 2)
+                return TC_ACT_SHOT;
+        return TC_ACT_UNSPEC;
+}
+
+When compiled, we get two relocations, pointing to '.text' symbol. .text has
+st_value set to 0 (it points to the beginning of .text section):
+
+0000000000000008  000000050000000a R_BPF_64_32            0000000000000000 .text
+0000000000000040  000000050000000a R_BPF_64_32            0000000000000000 .text
+
+test_pkt_access_subprog1 and test_pkt_access_subprog2 offsets (targets of two
+calls) are encoded within call instruction's imm32 part as -1 and 2,
+respectively:
+
+0000000000000000 test_pkt_access_subprog1:
+       0:       61 10 00 00 00 00 00 00 r0 = *(u32 *)(r1 + 0)
+       1:       64 00 00 00 01 00 00 00 w0 <<= 1
+       2:       95 00 00 00 00 00 00 00 exit
+
+0000000000000018 test_pkt_access_subprog2:
+       3:       61 10 00 00 00 00 00 00 r0 = *(u32 *)(r1 + 0)
+       4:       04 00 00 00 02 00 00 00 w0 += 2
+       5:       95 00 00 00 00 00 00 00 exit
+
+0000000000000000 test_pkt_access:
+       0:       bf 16 00 00 00 00 00 00 r6 = r1
+===>   1:       85 10 00 00 ff ff ff ff call -1
+       2:       bc 01 00 00 00 00 00 00 w1 = w0
+       3:       b4 00 00 00 02 00 00 00 w0 = 2
+       4:       61 62 00 00 00 00 00 00 r2 = *(u32 *)(r6 + 0)
+       5:       64 02 00 00 01 00 00 00 w2 <<= 1
+       6:       5e 21 08 00 00 00 00 00 if w1 != w2 goto +8 <LBB0_3>
+       7:       bf 61 00 00 00 00 00 00 r1 = r6
+===>   8:       85 10 00 00 02 00 00 00 call 2
+       9:       bc 01 00 00 00 00 00 00 w1 = w0
+      10:       61 62 00 00 00 00 00 00 r2 = *(u32 *)(r6 + 0)
+      11:       04 02 00 00 02 00 00 00 w2 += 2
+      12:       b4 00 00 00 ff ff ff ff w0 = -1
+      13:       1e 21 01 00 00 00 00 00 if w1 == w2 goto +1 <LBB0_3>
+      14:       b4 00 00 00 02 00 00 00 w0 = 2
+0000000000000078 LBB0_3:
+      15:       95 00 00 00 00 00 00 00 exit
+
+Now, if we compile example with global functions, the setup changes.
+Relocations are now against specifically test_pkt_access_subprog1 and
+test_pkt_access_subprog2 symbols, with test_pkt_access_subprog2 pointing 24
+bytes into its respective section (.text), i.e., 3 instructions in:
+
+0000000000000008  000000070000000a R_BPF_64_32            0000000000000000 test_pkt_access_subprog1
+0000000000000048  000000080000000a R_BPF_64_32            0000000000000018 test_pkt_access_subprog2
+
+Calls instructions now encode offsets relative to function symbols and are both
+set ot -1:
+
+0000000000000000 test_pkt_access_subprog1:
+       0:       61 10 00 00 00 00 00 00 r0 = *(u32 *)(r1 + 0)
+       1:       64 00 00 00 01 00 00 00 w0 <<= 1
+       2:       95 00 00 00 00 00 00 00 exit
+
+0000000000000018 test_pkt_access_subprog2:
+       3:       61 20 00 00 00 00 00 00 r0 = *(u32 *)(r2 + 0)
+       4:       0c 10 00 00 00 00 00 00 w0 += w1
+       5:       95 00 00 00 00 00 00 00 exit
+
+0000000000000000 test_pkt_access:
+       0:       bf 16 00 00 00 00 00 00 r6 = r1
+===>   1:       85 10 00 00 ff ff ff ff call -1
+       2:       bc 01 00 00 00 00 00 00 w1 = w0
+       3:       b4 00 00 00 02 00 00 00 w0 = 2
+       4:       61 62 00 00 00 00 00 00 r2 = *(u32 *)(r6 + 0)
+       5:       64 02 00 00 01 00 00 00 w2 <<= 1
+       6:       5e 21 09 00 00 00 00 00 if w1 != w2 goto +9 <LBB2_3>
+       7:       b4 01 00 00 02 00 00 00 w1 = 2
+       8:       bf 62 00 00 00 00 00 00 r2 = r6
+===>   9:       85 10 00 00 ff ff ff ff call -1
+      10:       bc 01 00 00 00 00 00 00 w1 = w0
+      11:       61 62 00 00 00 00 00 00 r2 = *(u32 *)(r6 + 0)
+      12:       04 02 00 00 02 00 00 00 w2 += 2
+      13:       b4 00 00 00 ff ff ff ff w0 = -1
+      14:       1e 21 01 00 00 00 00 00 if w1 == w2 goto +1 <LBB2_3>
+      15:       b4 00 00 00 02 00 00 00 w0 = 2
+0000000000000080 LBB2_3:
+      16:       95 00 00 00 00 00 00 00 exit
+
+Thus the right formula to calculate target call offset after relocation should
+take into account relocation's target symbol value (offset within section),
+call instruction's imm32 offset, and (subtracting, to get relative instruction
+offset) instruction index of call instruction itself. All that is shifted by
+number of instructions in main program, given all sub-programs are copied over
+after main program.
+
+Convert few selftests relying on bpf-to-bpf calls to use global functions
+instead of static ones.
+
+Fixes: 48cca7e44f9f ("libbpf: add support for bpf_call")
+Reported-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20191119224447.3781271-1-andriin@fb.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/lib/bpf/libbpf.c                             | 8 ++++++--
+ tools/testing/selftests/bpf/progs/test_btf_haskv.c | 4 ++--
+ tools/testing/selftests/bpf/progs/test_btf_newkv.c | 4 ++--
+ tools/testing/selftests/bpf/progs/test_btf_nokv.c  | 4 ++--
+ 4 files changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index a267cd0c0ce28..6a87ff9936d7b 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -1791,9 +1791,13 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
+ 				pr_warning("incorrect bpf_call opcode\n");
+ 				return -LIBBPF_ERRNO__RELOC;
+ 			}
++			if (sym.st_value % 8) {
++				pr_warn("bad call relo offset: %lu\n", sym.st_value);
++				return -LIBBPF_ERRNO__RELOC;
++			}
+ 			prog->reloc_desc[i].type = RELO_CALL;
+ 			prog->reloc_desc[i].insn_idx = insn_idx;
+-			prog->reloc_desc[i].text_off = sym.st_value;
++			prog->reloc_desc[i].text_off = sym.st_value / 8;
+ 			obj->has_pseudo_calls = true;
+ 			continue;
+ 		}
+@@ -3239,7 +3243,7 @@ bpf_program__reloc_text(struct bpf_program *prog, struct bpf_object *obj,
+ 			 prog->section_name);
+ 	}
+ 	insn = &prog->insns[relo->insn_idx];
+-	insn->imm += prog->main_prog_cnt - relo->insn_idx;
++	insn->imm += relo->text_off + prog->main_prog_cnt - relo->insn_idx;
+ 	return 0;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/test_btf_haskv.c b/tools/testing/selftests/bpf/progs/test_btf_haskv.c
+index e5c79fe0ffdb2..d65c61e64df2f 100644
+--- a/tools/testing/selftests/bpf/progs/test_btf_haskv.c
++++ b/tools/testing/selftests/bpf/progs/test_btf_haskv.c
+@@ -25,7 +25,7 @@ struct dummy_tracepoint_args {
+ };
+ 
+ __attribute__((noinline))
+-static int test_long_fname_2(struct dummy_tracepoint_args *arg)
++int test_long_fname_2(struct dummy_tracepoint_args *arg)
+ {
+ 	struct ipv_counts *counts;
+ 	int key = 0;
+@@ -43,7 +43,7 @@ static int test_long_fname_2(struct dummy_tracepoint_args *arg)
+ }
+ 
+ __attribute__((noinline))
+-static int test_long_fname_1(struct dummy_tracepoint_args *arg)
++int test_long_fname_1(struct dummy_tracepoint_args *arg)
+ {
+ 	return test_long_fname_2(arg);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_btf_newkv.c b/tools/testing/selftests/bpf/progs/test_btf_newkv.c
+index 5ee3622ddebb6..8e83317db841f 100644
+--- a/tools/testing/selftests/bpf/progs/test_btf_newkv.c
++++ b/tools/testing/selftests/bpf/progs/test_btf_newkv.c
+@@ -33,7 +33,7 @@ struct dummy_tracepoint_args {
+ };
+ 
+ __attribute__((noinline))
+-static int test_long_fname_2(struct dummy_tracepoint_args *arg)
++int test_long_fname_2(struct dummy_tracepoint_args *arg)
+ {
+ 	struct ipv_counts *counts;
+ 	int key = 0;
+@@ -56,7 +56,7 @@ static int test_long_fname_2(struct dummy_tracepoint_args *arg)
+ }
+ 
+ __attribute__((noinline))
+-static int test_long_fname_1(struct dummy_tracepoint_args *arg)
++int test_long_fname_1(struct dummy_tracepoint_args *arg)
+ {
+ 	return test_long_fname_2(arg);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_btf_nokv.c b/tools/testing/selftests/bpf/progs/test_btf_nokv.c
+index 434188c377743..3f44220447594 100644
+--- a/tools/testing/selftests/bpf/progs/test_btf_nokv.c
++++ b/tools/testing/selftests/bpf/progs/test_btf_nokv.c
+@@ -23,7 +23,7 @@ struct dummy_tracepoint_args {
+ };
+ 
+ __attribute__((noinline))
+-static int test_long_fname_2(struct dummy_tracepoint_args *arg)
++int test_long_fname_2(struct dummy_tracepoint_args *arg)
+ {
+ 	struct ipv_counts *counts;
+ 	int key = 0;
+@@ -41,7 +41,7 @@ static int test_long_fname_2(struct dummy_tracepoint_args *arg)
+ }
+ 
+ __attribute__((noinline))
+-static int test_long_fname_1(struct dummy_tracepoint_args *arg)
++int test_long_fname_1(struct dummy_tracepoint_args *arg)
+ {
+ 	return test_long_fname_2(arg);
+ }
 -- 
-Kees Cook
+2.20.1
+
