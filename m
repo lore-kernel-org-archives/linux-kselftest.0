@@ -7,51 +7,54 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 137A1C2D0C4
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:31:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11626C2D0BF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:45:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DC968205C9
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:31:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DBC9A20637
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:45:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576013510;
-	bh=ExJa1uzw4YsyFUsIJI3vUUtRkYWOhea+6RzTG0beOdU=;
+	s=default; t=1576014347;
+	bh=O9wvgMQOY4z6mdfhDgz/8/61sjmrTeVx4xKSD80smfI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=abCDBuDo/UMIGZBHo5nnNFJASEEOb8DTkW3zxoCQdRbKQMzspqwU7sX5+YIktaI5D
-	 eDej+yFYbiBEVq93AqI/fEZmvVev0ounhgPV4IV2TkqHjViz4AKCiXtiqKbCEIDD1o
-	 dKUz0af4M3Cy5yl4jCyljdB0jrRlA0g1e2X+xVpg=
+	b=V0pWJn7s1VirFwyOokngUQGpdC4snSwG897lsKiL7lAwZqlDBA49GReXDY0/l9gTb
+	 H+gX2+PNVZsO0xEHFCFrIz9F0Q4qPVsjp/cDQ0BpeObhk9faGclnrczMCbBFUebxCr
+	 SawAK0dhAX13DPWvpsvKKZ3T6tJIBo1dejfmdsTk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728129AbfLJVJV (ORCPT
+        id S1729532AbfLJVcz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:09:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57736 "EHLO mail.kernel.org"
+        Tue, 10 Dec 2019 16:32:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36720 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728120AbfLJVJU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:09:20 -0500
+        id S1729528AbfLJVcy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:32:54 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9E6F9246B4;
-        Tue, 10 Dec 2019 21:09:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4C0BE205C9;
+        Tue, 10 Dec 2019 21:32:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012160;
-        bh=ExJa1uzw4YsyFUsIJI3vUUtRkYWOhea+6RzTG0beOdU=;
+        s=default; t=1576013573;
+        bh=O9wvgMQOY4z6mdfhDgz/8/61sjmrTeVx4xKSD80smfI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0jF6NNBn4OL3L6PQzPZfPPeiR/Pgv5/7jqJvlgokoIULJhQGFaNE5rXDvJ/3/WKM/
-         7XigXE06yimGUYHuZsRvAJxZPgXehGtnNCFMTyxRas2zLqoVPkQiHJ32ikM+RfukBt
-         Bun9OH9RB9zI9lTJnaJS21+6Sue7aUnPdK3qokRk=
+        b=y2w2cb91hGpf9Cdo5/9adlcFno1hceBXmdb1TtDffl4KsPh2cKuef9wQHOyJZ22Il
+         gZxMqmm7PyHGwjgVusD/D9gdjHM4gfZNXXQrCUHd34J8IJ3pOtBIV71cAMlG/C5T+0
+         c0eRzTt6s4H/dTzmTDRKTR0nhFr36GuhxCfL16Ik=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Tim Bird <Tim.Bird@sony.com>, Tim Bird <tim.bird@sony.com>,
+Cc:     Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Song Liu <songliubraving@fb.com>,
         Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 122/350] selftests: Fix O= and KBUILD_OUTPUT handling for relative paths
-Date:   Tue, 10 Dec 2019 16:03:47 -0500
-Message-Id: <20191210210735.9077-83-sashal@kernel.org>
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 026/177] selftests/bpf: Correct path to include msg + path
+Date:   Tue, 10 Dec 2019 16:29:50 -0500
+Message-Id: <20191210213221.11921-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
-References: <20191210210735.9077-1-sashal@kernel.org>
+In-Reply-To: <20191210213221.11921-1-sashal@kernel.org>
+References: <20191210213221.11921-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -60,72 +63,67 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Shuah Khan <skhan@linuxfoundation.org>
+From: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
 
-[ Upstream commit 303e6218ecec475d5bc3e5922dec770ee5baf107 ]
+[ Upstream commit c588146378962786ddeec817f7736a53298a7b01 ]
 
-Fix O= and KBUILD_OUTPUT handling for relative paths.
+The "path" buf is supposed to contain path + printf msg up to 24 bytes.
+It will be cut anyway, but compiler generates truncation warns like:
 
-export KBUILD_OUTPUT=../kselftest_size
-make TARGETS=size kselftest-all
+"
+samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c: In
+function ‘setup_cgroup_environment’:
+samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:52:34:
+warning: ‘/cgroup.controllers’ directive output may be truncated
+writing 19 bytes into a region of size between 1 and 4097
+[-Wformat-truncation=]
+snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
+				  ^~~~~~~~~~~~~~~~~~~
+samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:52:2:
+note: ‘snprintf’ output between 20 and 4116 bytes into a destination
+of size 4097
+snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:72:34:
+warning: ‘/cgroup.subtree_control’ directive output may be truncated
+writing 23 bytes into a region of size between 1 and 4097
+[-Wformat-truncation=]
+snprintf(path, sizeof(path), "%s/cgroup.subtree_control",
+				  ^~~~~~~~~~~~~~~~~~~~~~~
+cgroup_path);
+samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:72:2:
+note: ‘snprintf’ output between 24 and 4120 bytes into a destination
+of size 4097
+snprintf(path, sizeof(path), "%s/cgroup.subtree_control",
+cgroup_path);
+"
 
-or
+In order to avoid warns, lets decrease buf size for cgroup workdir on
+24 bytes with assumption to include also "/cgroup.subtree_control" to
+the address. The cut will never happen anyway.
 
-make O=../kselftest_size TARGETS=size kselftest-all
-
-In both of these cases, targets get built in ../kselftest_size which is
-a one level up from the size test directory.
-
-make[1]: Entering directory '/mnt/data/lkml/kselftest_size'
-make --no-builtin-rules INSTALL_HDR_PATH=$BUILD/usr \
-        ARCH=x86 -C ../../.. headers_install
-  INSTALL ../kselftest_size/usr/include
-gcc -static -ffreestanding -nostartfiles -s    get_size.c  -o ../kselftest_size/size/get_size
-/usr/bin/ld: cannot open output file ../kselftest_size/size/get_size: No such file or directory
-collect2: error: ld returned 1 exit status
-make[3]: *** [../lib.mk:138: ../kselftest_size/size/get_size] Error 1
-make[2]: *** [Makefile:143: all] Error 2
-make[1]: *** [/mnt/data/lkml/linux_5.4/Makefile:1221: kselftest-all] Error 2
-make[1]: Leaving directory '/mnt/data/lkml/kselftest_size'
-make: *** [Makefile:179: sub-make] Error 2
-
-Use abs_objtree exported by the main Makefile.
-
-Reported-by: Tim Bird <Tim.Bird@sony.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Tested-by: Tim Bird <tim.bird@sony.com>
-Acked-by: Tim Bird <tim.bird@sony.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Song Liu <songliubraving@fb.com>
+Link: https://lore.kernel.org/bpf/20191002120404.26962-3-ivan.khoronzhuk@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/Makefile | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/cgroup_helpers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 4cdbae6f4e61b..3405aa26a655a 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -86,10 +86,10 @@ override LDFLAGS =
- endif
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index cf16948aad4ad..6af24f9a780de 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -44,7 +44,7 @@
+  */
+ int setup_cgroup_environment(void)
+ {
+-	char cgroup_workdir[PATH_MAX + 1];
++	char cgroup_workdir[PATH_MAX - 24];
  
- ifneq ($(O),)
--	BUILD := $(O)
-+	BUILD := $(abs_objtree)
- else
- 	ifneq ($(KBUILD_OUTPUT),)
--		BUILD := $(KBUILD_OUTPUT)/kselftest
-+		BUILD := $(abs_objtree)/kselftest
- 	else
- 		BUILD := $(shell pwd)
- 		DEFAULT_INSTALL_HDR_PATH := 1
-@@ -102,6 +102,7 @@ include $(top_srcdir)/scripts/subarch.include
- ARCH           ?= $(SUBARCH)
- export KSFT_KHDR_INSTALL_DONE := 1
- export BUILD
-+#$(info abd_objtree = $(abs_objtree) BUILD = $(BUILD))
+ 	format_cgroup_path(cgroup_workdir, "");
  
- # build and run gpio when output directory is the src dir.
- # gpio has dependency on tools/gpio and builds tools/gpio
 -- 
 2.20.1
 
