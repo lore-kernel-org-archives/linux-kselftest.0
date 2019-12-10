@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 523A6C43603
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:21:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD896C2D0C4
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:31:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 21F5A207FF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:21:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 817012073B
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:31:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576012880;
-	bh=llxTMyAg9lnxaCEgDxZUDRqHpm9Nbq4qYqfQJrl9Q70=;
+	s=default; t=1576013478;
+	bh=oW7QC7ZN3sDu53rgPYqBtojvRFrE+jG2HcylGdisCL0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=NNuEUrwLXYK7VqfPh4QDHJc6ifHydR//z/eUt1nDuIGge57ecZFWGnttzRzfJFuWA
-	 a0Zrsi/NO+hRyeRsGT3tOTKIw0V4TH9j39ENnV7kaFgOmPec3ivZ7/25Ieim4zAowh
-	 qK04Kt1K/eGwociJx6DyIPm9PV5kMXfJultXgB44=
+	b=PUBehtmx5iQyLIkduhA1jKFT6226yrViNipjZIJoEHubjaBv+Zn0D09gbm+CD3AKw
+	 OlaV2FvytQyUXCfNrmX/VYaaHSX6YJvDosWKX1cQpJxseuVLLY3ISU1wdDAm/AechI
+	 NSOnQ3xxHBg/xgpUtjEBN0zb1qMFzm+at5oxSlJo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728854AbfLJVLu (ORCPT
+        id S1727485AbfLJVJf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:11:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35030 "EHLO mail.kernel.org"
+        Tue, 10 Dec 2019 16:09:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58280 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728618AbfLJVLu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:11:50 -0500
+        id S1728211AbfLJVJf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:09:35 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ECBD1246A8;
-        Tue, 10 Dec 2019 21:11:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A5565246AF;
+        Tue, 10 Dec 2019 21:09:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012309;
-        bh=llxTMyAg9lnxaCEgDxZUDRqHpm9Nbq4qYqfQJrl9Q70=;
+        s=default; t=1576012174;
+        bh=oW7QC7ZN3sDu53rgPYqBtojvRFrE+jG2HcylGdisCL0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jjFjYIlGkQo9DFdPB1rGuTDS0iBjyHhpVgAadJImn1k8N3daMT/+1RkZ8xD6LTjTw
-         6Melnw91DSedruFQC8MJEk9ej+hfr1uGM+UP/XeJa+CY9QD8iTCOJBtZnAzWd36tHo
-         vmr2lqXqHkz8ATKtG/KEgtpEoU3MbiM9tFmNBsCI=
+        b=W13duTr1XBqXhgqkrQaTsEqgF+fXheSzF8lFe2Mg5u6YODrQh7oshGRmE8G+M6YqL
+         slm3+4vxpN4i9I8fVhbMnhUJDwE+wYskAyz10Hrgt76xT5ZFb0Xh9G/hTlMoOgdPnC
+         mQjO8WHg1/J4Bk42ZnuHEng0iIYu97CR3vPLRqUU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 245/350] selftests: proc: Make va_max 1MB
-Date:   Tue, 10 Dec 2019 16:05:50 -0500
-Message-Id: <20191210210735.9077-206-sashal@kernel.org>
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 132/350] selftests/bpf: Make a copy of subtest name
+Date:   Tue, 10 Dec 2019 16:03:57 -0500
+Message-Id: <20191210210735.9077-93-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -61,43 +61,72 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Masami Hiramatsu <mhiramat@kernel.org>
+From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit 2f3571ea71311bbb2cbb9c3bbefc9c1969a3e889 ]
+[ Upstream commit f90415e9600c5227131531c0ed11514a2d3bbe62 ]
 
-Currently proc-self-map-files-002.c sets va_max (max test address
-of user virtual address) to 4GB, but it is too big for 32bit
-arch and 1UL << 32 is overflow on 32bit long.
-Also since this value should be enough bigger than vm.mmap_min_addr
-(64KB or 32KB by default), 1MB should be enough.
+test_progs never created a copy of subtest name, rather just stored
+pointer to whatever string test provided. This is bad as that string
+might be freed or modified by the end of subtest. Fix this by creating
+a copy of given subtest name when subtest starts.
 
-Make va_max 1MB unconditionally.
-
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Alexey Dobriyan <adobriyan@gmail.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20191021033902.3856966-6-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/proc/proc-self-map-files-002.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_progs.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/proc/proc-self-map-files-002.c b/tools/testing/selftests/proc/proc-self-map-files-002.c
-index 47b7473dedef7..e6aa00a183bcd 100644
---- a/tools/testing/selftests/proc/proc-self-map-files-002.c
-+++ b/tools/testing/selftests/proc/proc-self-map-files-002.c
-@@ -47,7 +47,11 @@ static void fail(const char *fmt, unsigned long a, unsigned long b)
- int main(void)
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index af75a1c7a4587..3bf18364c67c9 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -20,7 +20,7 @@ struct prog_test_def {
+ 	bool tested;
+ 	bool need_cgroup_cleanup;
+ 
+-	const char *subtest_name;
++	char *subtest_name;
+ 	int subtest_num;
+ 
+ 	/* store counts before subtest started */
+@@ -81,16 +81,17 @@ void test__end_subtest()
+ 	fprintf(env.stdout, "#%d/%d %s:%s\n",
+ 	       test->test_num, test->subtest_num,
+ 	       test->subtest_name, sub_error_cnt ? "FAIL" : "OK");
++
++	free(test->subtest_name);
++	test->subtest_name = NULL;
+ }
+ 
+ bool test__start_subtest(const char *name)
  {
- 	const int PAGE_SIZE = sysconf(_SC_PAGESIZE);
--	const unsigned long va_max = 1UL << 32;
-+	/*
-+	 * va_max must be enough bigger than vm.mmap_min_addr, which is
-+	 * 64KB/32KB by default. (depends on CONFIG_LSM_MMAP_MIN_ADDR)
-+	 */
-+	const unsigned long va_max = 1UL << 20;
- 	unsigned long va;
- 	void *p;
- 	int fd;
+ 	struct prog_test_def *test = env.test;
+ 
+-	if (test->subtest_name) {
++	if (test->subtest_name)
+ 		test__end_subtest();
+-		test->subtest_name = NULL;
+-	}
+ 
+ 	test->subtest_num++;
+ 
+@@ -104,7 +105,13 @@ bool test__start_subtest(const char *name)
+ 	if (!should_run(&env.subtest_selector, test->subtest_num, name))
+ 		return false;
+ 
+-	test->subtest_name = name;
++	test->subtest_name = strdup(name);
++	if (!test->subtest_name) {
++		fprintf(env.stderr,
++			"Subtest #%d: failed to copy subtest name!\n",
++			test->subtest_num);
++		return false;
++	}
+ 	env.test->old_error_cnt = env.test->error_cnt;
+ 
+ 	return true;
 -- 
 2.20.1
 
