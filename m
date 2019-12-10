@@ -7,54 +7,53 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11626C2D0BF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:45:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E71DEC43603
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:50:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DBC9A20637
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:45:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE2B0205C9
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Dec 2019 21:50:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576014347;
-	bh=O9wvgMQOY4z6mdfhDgz/8/61sjmrTeVx4xKSD80smfI=;
+	s=default; t=1576014625;
+	bh=ts474jo8X09F8Xjx0LlPALO9jEwtcGrtKgKurM6fb6g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=V0pWJn7s1VirFwyOokngUQGpdC4snSwG897lsKiL7lAwZqlDBA49GReXDY0/l9gTb
-	 H+gX2+PNVZsO0xEHFCFrIz9F0Q4qPVsjp/cDQ0BpeObhk9faGclnrczMCbBFUebxCr
-	 SawAK0dhAX13DPWvpsvKKZ3T6tJIBo1dejfmdsTk=
+	b=trJDXC2Crlxu/z/x2wHLQZRm/OEmJUn/oWC91ROZan4uM7v2BpIRzfflUh0hTKE3p
+	 lJDwE8WfAwyvuPUzGuflOFrSIiiChCGLMW+O6uYg17oQtmtwNBoQG1kPns8GWYSFz7
+	 14LCrpR9dnHqXXk+GLRlhihmpQ11P6G5r8iU8LCY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729532AbfLJVcz (ORCPT
+        id S1728000AbfLJVuU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:32:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36720 "EHLO mail.kernel.org"
+        Tue, 10 Dec 2019 16:50:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55782 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729528AbfLJVcy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:32:54 -0500
+        id S1726881AbfLJVIZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:08:25 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C0BE205C9;
-        Tue, 10 Dec 2019 21:32:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 272E520652;
+        Tue, 10 Dec 2019 21:08:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576013573;
-        bh=O9wvgMQOY4z6mdfhDgz/8/61sjmrTeVx4xKSD80smfI=;
+        s=default; t=1576012105;
+        bh=ts474jo8X09F8Xjx0LlPALO9jEwtcGrtKgKurM6fb6g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y2w2cb91hGpf9Cdo5/9adlcFno1hceBXmdb1TtDffl4KsPh2cKuef9wQHOyJZ22Il
-         gZxMqmm7PyHGwjgVusD/D9gdjHM4gfZNXXQrCUHd34J8IJ3pOtBIV71cAMlG/C5T+0
-         c0eRzTt6s4H/dTzmTDRKTR0nhFr36GuhxCfL16Ik=
+        b=SbiWEAFRjgihSzeonE53jPIa9oBruVtH9hAYd5Sk60ARdvivePTO5hHIQgXPNDRJd
+         KytqpGC/K8wMMVpKg22kkHRphpIfM5VFArpOxI6f0Ro5+svJEcDYZxr/p2WrYV6hMT
+         spaxhvLxpQ8EtCJeBp59/BaENiXqW7qKm62zvKRw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>,
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 026/177] selftests/bpf: Correct path to include msg + path
-Date:   Tue, 10 Dec 2019 16:29:50 -0500
-Message-Id: <20191210213221.11921-26-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 079/350] selftests/bpf: Fix btf_dump padding test case
+Date:   Tue, 10 Dec 2019 16:03:04 -0500
+Message-Id: <20191210210735.9077-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210213221.11921-1-sashal@kernel.org>
-References: <20191210213221.11921-1-sashal@kernel.org>
+In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
+References: <20191210210735.9077-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -63,66 +62,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit c588146378962786ddeec817f7736a53298a7b01 ]
+[ Upstream commit 76790c7c66ccc8695afc75e73f54c0ca86267ed2 ]
 
-The "path" buf is supposed to contain path + printf msg up to 24 bytes.
-It will be cut anyway, but compiler generates truncation warns like:
+Existing padding test case for btf_dump has a good test that was
+supposed to test padding generation at the end of a struct, but its
+expected output was specified incorrectly. Fix this.
 
-"
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c: In
-function ‘setup_cgroup_environment’:
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:52:34:
-warning: ‘/cgroup.controllers’ directive output may be truncated
-writing 19 bytes into a region of size between 1 and 4097
-[-Wformat-truncation=]
-snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
-				  ^~~~~~~~~~~~~~~~~~~
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:52:2:
-note: ‘snprintf’ output between 20 and 4116 bytes into a destination
-of size 4097
-snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
-^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:72:34:
-warning: ‘/cgroup.subtree_control’ directive output may be truncated
-writing 23 bytes into a region of size between 1 and 4097
-[-Wformat-truncation=]
-snprintf(path, sizeof(path), "%s/cgroup.subtree_control",
-				  ^~~~~~~~~~~~~~~~~~~~~~~
-cgroup_path);
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:72:2:
-note: ‘snprintf’ output between 24 and 4120 bytes into a destination
-of size 4097
-snprintf(path, sizeof(path), "%s/cgroup.subtree_control",
-cgroup_path);
-"
-
-In order to avoid warns, lets decrease buf size for cgroup workdir on
-24 bytes with assumption to include also "/cgroup.subtree_control" to
-the address. The cut will never happen anyway.
-
-Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/bpf/20191002120404.26962-3-ivan.khoronzhuk@linaro.org
+Fixes: 2d2a3ad872f8 ("selftests/bpf: add btf_dump BTF-to-C conversion tests")
+Reported-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20191008231009.2991130-4-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/cgroup_helpers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../testing/selftests/bpf/progs/btf_dump_test_case_padding.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index cf16948aad4ad..6af24f9a780de 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -44,7 +44,7 @@
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+index 3a62119c74986..35c512818a56b 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+@@ -62,6 +62,10 @@ struct padded_a_lot {
+  *	long: 64;
+  *	long: 64;
+  *	int b;
++ *	long: 32;
++ *	long: 64;
++ *	long: 64;
++ *	long: 64;
+  *};
+  *
   */
- int setup_cgroup_environment(void)
- {
--	char cgroup_workdir[PATH_MAX + 1];
-+	char cgroup_workdir[PATH_MAX - 24];
- 
- 	format_cgroup_path(cgroup_workdir, "");
+@@ -95,7 +99,6 @@ struct zone_padding {
+ struct zone {
+ 	int a;
+ 	short b;
+-	short: 16;
+ 	struct zone_padding __pad__;
+ };
  
 -- 
 2.20.1
