@@ -2,105 +2,203 @@ Return-Path: <SRS0=Q4EB=2C=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6585C2D0C5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Dec 2019 02:27:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 862D0C2D0C9
+	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Dec 2019 05:56:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9E75124653
-	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Dec 2019 02:27:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A6A624658
+	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Dec 2019 05:56:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XQIaEQxp"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="lsWfVOx2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727753AbfLLC1Z (ORCPT
+        id S1727906AbfLLF4i (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 11 Dec 2019 21:27:25 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:38588 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726793AbfLLC1X (ORCPT
+        Thu, 12 Dec 2019 00:56:38 -0500
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:14305 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726798AbfLLF4h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Dec 2019 21:27:23 -0500
-Received: by mail-pg1-f196.google.com with SMTP id a33so328972pgm.5;
-        Wed, 11 Dec 2019 18:27:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=tTHS0sAFW9uPlD+AqCNYpUarFLmjwnHqD++0UeSB8hU=;
-        b=XQIaEQxpgLBwXmiYR6pgGNgeFnutK6DCycup5orLwxibF5fYc8fMjIopR0VkLtgggt
-         KjI5/JWB4bKTxcALCb0rHq8otftnAoxoX3n1GDzGxeu3qVIhu7QuYyv2+Mwp2Bry6GYp
-         tRsT+zld0GfIWiO585WuHZA0454yZ0ZgGJs/DWoR+s5cSUaAki86/LKYI3WY7ujV5P/y
-         9LeYFUV9ZeR9kqCSfnsA79SVQeHOXx76+b6UUG0MNWlaw0UIpoGkWr+D4dtHkDbATWE3
-         HIVIstSxVNQmlB/Xw2ipNa0QI8nimIhCOcMYDhKRxqwf7ry9yk2vEb1cZsQCX7t9K0N3
-         6tng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=tTHS0sAFW9uPlD+AqCNYpUarFLmjwnHqD++0UeSB8hU=;
-        b=PmNkLtEK1wXiG9Ar5308zA+N2V4zsvWXX4rOjIJQY4VOKce84v5ekDAZtxudP8JQ/K
-         /3IL0eP+h0CSK/6erqWqcaFMUO02Cf3aoiGK3yUR5xXSh7Z2CSeM5LoM2QbxT8MeVBY7
-         FZ7l+S9qPwNbcpy/UKyd53lxbYL+BneIK12NzKBFznXCKJxSsMrLfNkFySRNKFD/SS5B
-         1rdn0YP1r04A0Lko2xmT7XVSF7c+BiIVKCWGlaxZI9xU8mbALVkyT+/XdH6Cid5wE+lP
-         wVUe1k5kEBPU8KJfO0G2HnPlqZVqu1jOmhvioqUiqojLrTip2ogiEmP5MN3q4zno4dVA
-         eVdA==
-X-Gm-Message-State: APjAAAUdw+RywvLGleY/vTEJJRYf+nsqqzCKhLMazbcxoFQmnJQJHcKK
-        6gI4/CRuT7vbpef30i5Tibs=
-X-Google-Smtp-Source: APXvYqyxoOoOHx1Hg7FJQOpMCtLSu31I0G7JyqkADbCfGNxEQhYGyDSTVOGeuddMmJ2QYMjHO14sMA==
-X-Received: by 2002:a63:4f59:: with SMTP id p25mr7719374pgl.230.1576117642714;
-        Wed, 11 Dec 2019 18:27:22 -0800 (PST)
-Received: from localhost.localdomain ([12.176.148.120])
-        by smtp.gmail.com with ESMTPSA id d22sm4245173pgg.52.2019.12.11.18.27.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2019 18:27:21 -0800 (PST)
-From:   SeongJae Park <sj38.park@gmail.com>
-X-Google-Original-From: SeongJae Park <sjpark@amazon.de>
-To:     brendanhiggins@google.com, shuah@kernel.org
-Cc:     sjpark@amazon.com, corbet@lwn.net, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, sj38.park@gmail.com,
-        sjpark@amazon.de
-Subject: [PATCH v6 1/6] docs/kunit/start: Use in-tree 'kunit_defconfig'
-Date:   Thu, 12 Dec 2019 02:27:06 +0000
-Message-Id: <20191212022711.10062-2-sjpark@amazon.de>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191212022711.10062-1-sjpark@amazon.de>
-References: <20191212022711.10062-1-sjpark@amazon.de>
+        Thu, 12 Dec 2019 00:56:37 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5df1d68d0000>; Wed, 11 Dec 2019 21:56:29 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 11 Dec 2019 21:56:36 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 11 Dec 2019 21:56:36 -0800
+Received: from [10.2.165.195] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 12 Dec
+ 2019 05:56:35 +0000
+Subject: Re: [PATCH v9 23/25] mm/gup: track FOLL_PIN pages
+To:     Jan Kara <jack@suse.cz>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20191211025318.457113-1-jhubbard@nvidia.com>
+ <20191211025318.457113-24-jhubbard@nvidia.com>
+ <20191211112807.GN1551@quack2.suse.cz>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <f961d0b6-c660-85b9-ad01-53bce74e39e9@nvidia.com>
+Date:   Wed, 11 Dec 2019 21:53:45 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
+MIME-Version: 1.0
+In-Reply-To: <20191211112807.GN1551@quack2.suse.cz>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1576130189; bh=WUvMFBOwsTbLT+9CzNbxGtAponFsFsmTJOyg8MjL8ds=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=lsWfVOx2mYuCSEqMXkqo0p3SpKqw9VwSL+20QlVcuyoMSELQtTCN0YxM6RzLVo9oa
+         uq4Hl9KFn70q6l1bzqmgaiV5HLk4+H2168Aq1l5uWc+mWWgNKPzhftF1QMyxl40GPe
+         nNNgDtbzvAru+MjxE1MbEaMe+90vfqRYKPVuX/JzejQXCe2EVI5eyYy9CwInRuqtjp
+         2idGFh4dXFAMfDwQiKAN1Pz/TUuUoswEkyfXdQEyWp7z5jAlzfpntkPH8s96FOaimZ
+         1olYa+8gPiG8ccYKitvEKwCbv3GPr0UXUD+T0zjEzw7D9d6fQ9awWSzCOfMJ4VZl20
+         16ivttgOjkh4A==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kunit doc suggests users to get the default `kunitconfig` from an
-external git tree.  However, the file is already located under the
-`arch/um/configs/` of the kernel tree.  Because the local file is easier
-to access and maintain, this commit updates the doc to use it.
+On 12/11/19 3:28 AM, Jan Kara wrote:
+...
+>=20
+> The patch looks mostly good to me now. Just a few smaller comments below.
+>=20
+>> Suggested-by: Jan Kara <jack@suse.cz>
+>> Suggested-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+>> Reviewed-by: Jan Kara <jack@suse.cz>
+>> Reviewed-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+>> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+>=20
+> I think you inherited here the Reviewed-by tags from the "add flags" patc=
+h
+> you've merged into this one but that's not really fair since this patch
+> does much more... In particular I didn't give my Reviewed-by tag for this
+> patch yet.
 
-Signed-off-by: SeongJae Park <sjpark@amazon.de>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
----
- Documentation/dev-tools/kunit/start.rst | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+OK, I've removed those reviewed-by's. (I felt bad about dropping them, afte=
+r
+people had devoted time to reviewing, but I do see that it's wrong to imply
+that they've reviewed this much much larger thing.)
 
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index 9d6db892c41c..d5197f1a45cb 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -32,9 +32,8 @@ regular Kernel config, with the specific test targets as well.
- 
- .. code-block:: bash
- 
--	git clone -b master https://kunit.googlesource.com/kunitconfig $PATH_TO_KUNITCONFIG_REPO
- 	cd $PATH_TO_LINUX_REPO
--	ln -s $PATH_TO_KUNIT_CONFIG_REPO/kunitconfig kunitconfig
-+	cp arch/um/configs/kunit_defconfig kunitconfig
- 
- You may want to add kunitconfig to your local gitignore.
- 
--- 
-2.17.1
+...
+>=20
+> I somewhat wonder about the asymmetry of try_grab_compound_head() vs
+> try_grab_page() in the treatment of 'flags'. How costly would it be to ma=
+ke
+> them symmetric (i.e., either set FOLL_GET for try_grab_compound_head()
+> callers or make sure one of FOLL_GET, FOLL_PIN is set for try_grab_page()=
+)?
+>=20
+> Because this difference looks like a subtle catch in the long run...
 
+Done. It is only a modest code-level change, at least the way I've done it,=
+ which is
+setting FOLL_GET for try_grab_compound_head(). In order to do that, I set
+it at the top of the internal gup fast calling stacks, which is actually a =
+good
+design anyway: gup fast is logically doing FOLL_GET in all cases. So settin=
+g
+the flag internally is accurate and consistent with the overall design.
+
+
+> ...
+>=20
+>> @@ -1522,8 +1536,8 @@ struct page *follow_trans_huge_pmd(struct vm_area_=
+struct *vma,
+>>   skip_mlock:
+>>   	page +=3D (addr & ~HPAGE_PMD_MASK) >> PAGE_SHIFT;
+>>   	VM_BUG_ON_PAGE(!PageCompound(page) && !is_zone_device_page(page), pag=
+e);
+>> -	if (flags & FOLL_GET)
+>> -		get_page(page);
+>> +	if (!try_grab_page(page, flags))
+>> +		page =3D ERR_PTR(-EFAULT);
+>=20
+> I think you need to also move the try_grab_page() earlier in the function=
+.
+> At this point the page may be marked as mlocked and you'd need to undo th=
+at
+> in case try_grab_page() fails.
+
+
+OK, I've moved it up, adding a "subpage" variable in order to make that wor=
+k.
+
+>=20
+>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>> index ac65bb5e38ac..0aab6fe0072f 100644
+>> --- a/mm/hugetlb.c
+>> +++ b/mm/hugetlb.c
+>> @@ -4356,7 +4356,13 @@ long follow_hugetlb_page(struct mm_struct *mm, st=
+ruct vm_area_struct *vma,
+>>   same_page:
+>>   		if (pages) {
+>>   			pages[i] =3D mem_map_offset(page, pfn_offset);
+>> -			get_page(pages[i]);
+>> +			if (!try_grab_page(pages[i], flags)) {
+>> +				spin_unlock(ptl);
+>> +				remainder =3D 0;
+>> +				err =3D -ENOMEM;
+>> +				WARN_ON_ONCE(1);
+>> +				break;
+>> +			}
+>>   		}
+>=20
+> This function does a refcount overflow check early so that it doesn't hav=
+e
+> to do try_get_page() here. So that check can be now removed when you do
+> try_grab_page() here anyway since that early check seems to be just a tin=
+y
+> optimization AFAICT.
+>=20
+> 								Honza
+>=20
+
+Yes. I've removed it, good spot.
+
+
+thanks,
+--=20
+John Hubbard
+NVIDIA
