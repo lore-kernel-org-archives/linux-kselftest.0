@@ -2,61 +2,67 @@ Return-Path: <SRS0=Q4EB=2C=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 862D0C2D0C9
-	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Dec 2019 05:56:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C68D9C2D0CA
+	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Dec 2019 08:19:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5A6A624658
-	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Dec 2019 05:56:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CC882173E
+	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Dec 2019 08:19:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="lsWfVOx2"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="rWJOgwO8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727906AbfLLF4i (ORCPT
+        id S1728332AbfLLITY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 12 Dec 2019 00:56:38 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:14305 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726798AbfLLF4h (ORCPT
+        Thu, 12 Dec 2019 03:19:24 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:8504 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728305AbfLLITW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 Dec 2019 00:56:37 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5df1d68d0000>; Wed, 11 Dec 2019 21:56:29 -0800
+        Thu, 12 Dec 2019 03:19:22 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5df1f8020000>; Thu, 12 Dec 2019 00:19:14 -0800
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 11 Dec 2019 21:56:36 -0800
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 12 Dec 2019 00:19:21 -0800
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 11 Dec 2019 21:56:36 -0800
-Received: from [10.2.165.195] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 12 Dec
- 2019 05:56:35 +0000
-Subject: Re: [PATCH v9 23/25] mm/gup: track FOLL_PIN pages
-To:     Jan Kara <jack@suse.cz>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        by hqpgpgate102.nvidia.com on Thu, 12 Dec 2019 00:19:21 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 12 Dec
+ 2019 08:19:21 +0000
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 12 Dec
+ 2019 08:19:20 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 12 Dec 2019 08:19:20 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5df1f8080008>; Thu, 12 Dec 2019 00:19:20 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
         Alex Williamson <alex.williamson@redhat.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
         Christoph Hellwig <hch@infradead.org>,
         Dan Williams <dan.j.williams@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Dave Chinner <david@fromorbit.com>,
         David Airlie <airlied@linux.ie>,
         "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
         Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
         Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Michal Hocko <mhocko@suse.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
+        "Paul Mackerras" <paulus@samba.org>, Shuah Khan <shuah@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
         <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
         <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
@@ -64,141 +70,83 @@ CC:     Andrew Morton <akpm@linux-foundation.org>,
         <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
         <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
         <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20191211025318.457113-1-jhubbard@nvidia.com>
- <20191211025318.457113-24-jhubbard@nvidia.com>
- <20191211112807.GN1551@quack2.suse.cz>
-From:   John Hubbard <jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <f961d0b6-c660-85b9-ad01-53bce74e39e9@nvidia.com>
-Date:   Wed, 11 Dec 2019 21:53:45 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v10 20/25] powerpc: book3s64: convert to pin_user_pages() and put_user_page()
+Date:   Thu, 12 Dec 2019 00:19:12 -0800
+Message-ID: <20191212081917.1264184-21-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191212081917.1264184-1-jhubbard@nvidia.com>
+References: <20191212081917.1264184-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <20191211112807.GN1551@quack2.suse.cz>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1576130189; bh=WUvMFBOwsTbLT+9CzNbxGtAponFsFsmTJOyg8MjL8ds=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=lsWfVOx2mYuCSEqMXkqo0p3SpKqw9VwSL+20QlVcuyoMSELQtTCN0YxM6RzLVo9oa
-         uq4Hl9KFn70q6l1bzqmgaiV5HLk4+H2168Aq1l5uWc+mWWgNKPzhftF1QMyxl40GPe
-         nNNgDtbzvAru+MjxE1MbEaMe+90vfqRYKPVuX/JzejQXCe2EVI5eyYy9CwInRuqtjp
-         2idGFh4dXFAMfDwQiKAN1Pz/TUuUoswEkyfXdQEyWp7z5jAlzfpntkPH8s96FOaimZ
-         1olYa+8gPiG8ccYKitvEKwCbv3GPr0UXUD+T0zjEzw7D9d6fQ9awWSzCOfMJ4VZl20
-         16ivttgOjkh4A==
+        t=1576138754; bh=/SSGEux97EMSANQDY2JXLUE9K5xV8QAnZMHjYc3B/q8=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=rWJOgwO8pzv47xoHn/o1vFVb0shw0M9RItFMYJAFJ/XPUD81zvhrl/C15FsVx6573
+         JNJWUOppJEW/KDwnnQm0bg3OqNpkPtjTz3p5BEk9P/mLIxIwpfNoXevS7FkYqYj10j
+         DTbqZm26/dNQOVyqJb4d7v1A6Bfgzj8CSDCQUii5ozaPjerxzOS6He1BfVbmBtsnfz
+         Mle3JOt3hOY+74Y0pYhXDX/mu7jwIj2s5M7Ei990FluWc9+CR/AbCCxbfbhMTKbFLa
+         KtSCodTQNMcZ6mN1RpfmtKc7JoT9GYG6+YA6TZHeESH9aH7HlEKHT/yEqL2OGiBj4L
+         O6KInnsEmikQw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/11/19 3:28 AM, Jan Kara wrote:
-...
->=20
-> The patch looks mostly good to me now. Just a few smaller comments below.
->=20
->> Suggested-by: Jan Kara <jack@suse.cz>
->> Suggested-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
->> Reviewed-by: Jan Kara <jack@suse.cz>
->> Reviewed-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
->> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
->=20
-> I think you inherited here the Reviewed-by tags from the "add flags" patc=
-h
-> you've merged into this one but that's not really fair since this patch
-> does much more... In particular I didn't give my Reviewed-by tag for this
-> patch yet.
+1. Convert from get_user_pages() to pin_user_pages().
 
-OK, I've removed those reviewed-by's. (I felt bad about dropping them, afte=
-r
-people had devoted time to reviewing, but I do see that it's wrong to imply
-that they've reviewed this much much larger thing.)
+2. As required by pin_user_pages(), release these pages via
+put_user_page().
 
-...
->=20
-> I somewhat wonder about the asymmetry of try_grab_compound_head() vs
-> try_grab_page() in the treatment of 'flags'. How costly would it be to ma=
-ke
-> them symmetric (i.e., either set FOLL_GET for try_grab_compound_head()
-> callers or make sure one of FOLL_GET, FOLL_PIN is set for try_grab_page()=
-)?
->=20
-> Because this difference looks like a subtle catch in the long run...
+Reviewed-by: Jan Kara <jack@suse.cz>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ arch/powerpc/mm/book3s64/iommu_api.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Done. It is only a modest code-level change, at least the way I've done it,=
- which is
-setting FOLL_GET for try_grab_compound_head(). In order to do that, I set
-it at the top of the internal gup fast calling stacks, which is actually a =
-good
-design anyway: gup fast is logically doing FOLL_GET in all cases. So settin=
-g
-the flag internally is accurate and consistent with the overall design.
-
-
-> ...
->=20
->> @@ -1522,8 +1536,8 @@ struct page *follow_trans_huge_pmd(struct vm_area_=
-struct *vma,
->>   skip_mlock:
->>   	page +=3D (addr & ~HPAGE_PMD_MASK) >> PAGE_SHIFT;
->>   	VM_BUG_ON_PAGE(!PageCompound(page) && !is_zone_device_page(page), pag=
-e);
->> -	if (flags & FOLL_GET)
->> -		get_page(page);
->> +	if (!try_grab_page(page, flags))
->> +		page =3D ERR_PTR(-EFAULT);
->=20
-> I think you need to also move the try_grab_page() earlier in the function=
-.
-> At this point the page may be marked as mlocked and you'd need to undo th=
-at
-> in case try_grab_page() fails.
-
-
-OK, I've moved it up, adding a "subpage" variable in order to make that wor=
-k.
-
->=20
->> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->> index ac65bb5e38ac..0aab6fe0072f 100644
->> --- a/mm/hugetlb.c
->> +++ b/mm/hugetlb.c
->> @@ -4356,7 +4356,13 @@ long follow_hugetlb_page(struct mm_struct *mm, st=
-ruct vm_area_struct *vma,
->>   same_page:
->>   		if (pages) {
->>   			pages[i] =3D mem_map_offset(page, pfn_offset);
->> -			get_page(pages[i]);
->> +			if (!try_grab_page(pages[i], flags)) {
->> +				spin_unlock(ptl);
->> +				remainder =3D 0;
->> +				err =3D -ENOMEM;
->> +				WARN_ON_ONCE(1);
->> +				break;
->> +			}
->>   		}
->=20
-> This function does a refcount overflow check early so that it doesn't hav=
-e
-> to do try_get_page() here. So that check can be now removed when you do
-> try_grab_page() here anyway since that early check seems to be just a tin=
-y
-> optimization AFAICT.
->=20
-> 								Honza
->=20
-
-Yes. I've removed it, good spot.
-
-
-thanks,
+diff --git a/arch/powerpc/mm/book3s64/iommu_api.c b/arch/powerpc/mm/book3s6=
+4/iommu_api.c
+index 56cc84520577..a86547822034 100644
+--- a/arch/powerpc/mm/book3s64/iommu_api.c
++++ b/arch/powerpc/mm/book3s64/iommu_api.c
+@@ -103,7 +103,7 @@ static long mm_iommu_do_alloc(struct mm_struct *mm, uns=
+igned long ua,
+ 	for (entry =3D 0; entry < entries; entry +=3D chunk) {
+ 		unsigned long n =3D min(entries - entry, chunk);
+=20
+-		ret =3D get_user_pages(ua + (entry << PAGE_SHIFT), n,
++		ret =3D pin_user_pages(ua + (entry << PAGE_SHIFT), n,
+ 				FOLL_WRITE | FOLL_LONGTERM,
+ 				mem->hpages + entry, NULL);
+ 		if (ret =3D=3D n) {
+@@ -167,9 +167,8 @@ static long mm_iommu_do_alloc(struct mm_struct *mm, uns=
+igned long ua,
+ 	return 0;
+=20
+ free_exit:
+-	/* free the reference taken */
+-	for (i =3D 0; i < pinned; i++)
+-		put_page(mem->hpages[i]);
++	/* free the references taken */
++	put_user_pages(mem->hpages, pinned);
+=20
+ 	vfree(mem->hpas);
+ 	kfree(mem);
+@@ -215,7 +214,8 @@ static void mm_iommu_unpin(struct mm_iommu_table_group_=
+mem_t *mem)
+ 		if (mem->hpas[i] & MM_IOMMU_TABLE_GROUP_PAGE_DIRTY)
+ 			SetPageDirty(page);
+=20
+-		put_page(page);
++		put_user_page(page);
++
+ 		mem->hpas[i] =3D 0;
+ 	}
+ }
 --=20
-John Hubbard
-NVIDIA
+2.24.0
+
