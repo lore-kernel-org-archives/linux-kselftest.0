@@ -2,47 +2,48 @@ Return-Path: <SRS0=O9g/=2H=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11958C43603
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Dec 2019 08:06:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 121D8C43603
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Dec 2019 08:18:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CBCC321775
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Dec 2019 08:06:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD7242176D
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Dec 2019 08:18:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576570014;
-	bh=2HEttcf2FK3isDhkwY7QsOLIh5N7UrvLjCETf/Z/wY8=;
+	s=default; t=1576570729;
+	bh=YNGFt7tShZP7l2gj4FQAbDV6Pvp7fIytyh/Xoh1BP3Y=;
 	h=In-Reply-To:References:Cc:To:From:Subject:Date:List-ID:From;
-	b=yVWFHX8Kaqoy0rsbsXJOy9bbq057Ol115005/TlVjQrWCiSb0oQ+C2ra23kp2Zyj3
-	 qB5eklOu2bE63PILzbIULsYdUJ+bhHg2P/AT7zp+sUCnZTab9PLGgYxlwkoqug1HgG
-	 QbaiTNN6gueGg3TRI8YD61P/cFYE8hHwkQ7u7M/k=
+	b=16R4aXzMnSlSQ0jNB+VZZhuP7s/cfugtLJPrRLtvrIu4RmWGEjOinBUACpSotorCB
+	 8g7PMUr52Qm4XQcbP4HHXpQJrFDhqCRNdriL1mjhUaMaiUrH/SjT/VjxiQhya5Q23m
+	 j55ydwBGTmHzQvz4D6XVSMl9lIMlqRVuzb7dCleY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726524AbfLQIGy (ORCPT
+        id S1726536AbfLQISq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 Dec 2019 03:06:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58838 "EHLO mail.kernel.org"
+        Tue, 17 Dec 2019 03:18:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34488 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726401AbfLQIGy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Dec 2019 03:06:54 -0500
+        id S1725870AbfLQISp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Dec 2019 03:18:45 -0500
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B672B2082E;
-        Tue, 17 Dec 2019 08:06:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 141F4206A5;
+        Tue, 17 Dec 2019 08:18:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576570013;
-        bh=2HEttcf2FK3isDhkwY7QsOLIh5N7UrvLjCETf/Z/wY8=;
+        s=default; t=1576570725;
+        bh=YNGFt7tShZP7l2gj4FQAbDV6Pvp7fIytyh/Xoh1BP3Y=;
         h=In-Reply-To:References:Cc:To:From:Subject:Date:From;
-        b=R3if4cpVHuRrFNYaLbiz7sGH/bwdNjle6N9etawjq8zT/vIHNtiMnGnWRmP/nqpmZ
-         aRNHn3kW5SpogEpAdtXeB4dmFbMkmmERy1vwIR9Mi8+rkAX87BU7LOSYhnngmTsAtP
-         KFsM1UkQlHp7uPa4XyWa9aecC4Lx/tF89egvPAwE=
+        b=ytNsQJW37JnBBre+73DH/cMIClGb7UAc9BPxxSQ7b3H/lnt16NsONH/BbeWk4I10B
+         VLmE/R8IYa9FjEsBMXuYSsNiHCEQYhKSDKBP2U4d7abNHXJK02tl0IXZbf44NP8ds8
+         lyxanqz/E3uu8KENO2yvY4g5zHyEBQwSDLWo12qI=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20191216220555.245089-7-brendanhiggins@google.com>
-References: <20191216220555.245089-1-brendanhiggins@google.com> <20191216220555.245089-7-brendanhiggins@google.com>
+In-Reply-To: <20191216220555.245089-6-brendanhiggins@google.com>
+References: <20191216220555.245089-1-brendanhiggins@google.com> <20191216220555.245089-6-brendanhiggins@google.com>
 Cc:     gregkh@linuxfoundation.org, logang@deltatee.com, mcgrof@kernel.org,
         knut.omang@oracle.com, linux-um@lists.infradead.org,
         linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -55,31 +56,26 @@ To:     Brendan Higgins <brendanhiggins@google.com>,
         richard@nod.at, rppt@linux.ibm.com, skhan@linuxfoundation.org,
         yzaikin@google.com
 From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC v1 6/6] kunit: Add 'kunit_shutdown' option
+Subject: Re: [RFC v1 5/6] kunit: test: add test plan to KUnit TAP format
 User-Agent: alot/0.8.1
-Date:   Tue, 17 Dec 2019 00:06:53 -0800
-Message-Id: <20191217080653.B672B2082E@mail.kernel.org>
+Date:   Tue, 17 Dec 2019 00:18:44 -0800
+Message-Id: <20191217081845.141F4206A5@mail.kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quoting Brendan Higgins (2019-12-16 14:05:55)
-> From: David Gow <davidgow@google.com>
+Quoting Brendan Higgins (2019-12-16 14:05:54)
+> TAP 14 allows an optional test plan to be emitted before the start of
+> the start of testing[1]; this is valuable because it makes it possible
+> for a test harness to detect whether the number of tests run matches the
+> number of tests expected to be run, ensuring that no tests silently
+> failed.
 >=20
-> Add a new kernel command-line option, 'kunit_shutdown', which allows the
-> user to specify that the kernel poweroff, halt, or reboot after
-> completing all KUnit tests; this is very handy for running KUnit tests
-> on UML or a VM so that the UML/VM process exits cleanly immediately
-> after running all tests without needing a special initramfs.
->=20
-> Signed-off-by: David Gow <davidgow@google.com>
+> Link[1]: https://github.com/isaacs/testanything.github.io/blob/tap14/tap-=
+version-14-specification.md#the-plan
 > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 > ---
->  lib/kunit/executor.c                | 18 ++++++++++++++++++
->  tools/testing/kunit/kunit_kernel.py |  2 +-
->  tools/testing/kunit/kunit_parser.py |  2 +-
->  3 files changed, 20 insertions(+), 2 deletions(-)
 
-Can you document it in Documentation/admin-guide/kernel-parameters.txt ?
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 
