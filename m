@@ -2,128 +2,131 @@ Return-Path: <SRS0=8h5t=2I=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CA35C43603
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Dec 2019 07:54:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18C26C43603
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Dec 2019 08:02:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 593CE2072B
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Dec 2019 07:54:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E8AEB2072B
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Dec 2019 08:02:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbfLRHyc (ORCPT
+        id S1726741AbfLRICN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 18 Dec 2019 02:54:32 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:55730 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725882AbfLRHyb (ORCPT
+        Wed, 18 Dec 2019 03:02:13 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:37645 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726698AbfLRICN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Dec 2019 02:54:31 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBI7sLp8053546
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2019 02:54:30 -0500
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2wy41rdkeu-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2019 02:54:27 -0500
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Wed, 18 Dec 2019 07:52:51 -0000
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 18 Dec 2019 07:52:47 -0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBI7qkGV30146916
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Dec 2019 07:52:46 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 11F96AE04D;
-        Wed, 18 Dec 2019 07:52:46 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C724EAE051;
-        Wed, 18 Dec 2019 07:52:43 +0000 (GMT)
-Received: from fir03.in.ibm.com (unknown [9.121.59.65])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 18 Dec 2019 07:52:43 +0000 (GMT)
-From:   Sandipan Das <sandipan@linux.ibm.com>
-To:     shuahkh@osg.samsung.com, linux-kselftest@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com,
-        dave.hansen@intel.com, x86@kernel.org, linuxram@us.ibm.com,
-        mhocko@kernel.org, linux-mm@kvack.org, mingo@redhat.com,
-        aneesh.kumar@linux.ibm.com, bauerman@linux.ibm.com,
-        msuchanek@suse.de, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v15 18/23] selftests/vm/pkeys: Detect write violation on a mapped access-denied-key page
-Date:   Wed, 18 Dec 2019 13:21:51 +0530
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1576645161.git.sandipan@linux.ibm.com>
-References: <cover.1576645161.git.sandipan@linux.ibm.com>
-In-Reply-To: <cover.1576645161.git.sandipan@linux.ibm.com>
-References: <cover.1576645161.git.sandipan@linux.ibm.com>
-X-TM-AS-GCONF: 00
-x-cbid: 19121807-4275-0000-0000-000003903981
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19121807-4276-0000-0000-000038A401BB
-Message-Id: <c2b0a51fb723bc525e9674a480702e109d937e1e.1576645161.git.sandipan@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-18_01:2019-12-17,2019-12-18 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- adultscore=0 spamscore=0 malwarescore=0 impostorscore=0 priorityscore=1501
- suspectscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
- definitions=main-1912180063
+        Wed, 18 Dec 2019 03:02:13 -0500
+Received: by mail-ot1-f67.google.com with SMTP id k14so1388967otn.4;
+        Wed, 18 Dec 2019 00:02:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PQqCUv7RKIwxsorFpwyUpfxIl9jds6e+DU9zk9PVPIs=;
+        b=Gb5HqcDsMXKtb+95DTTnDL1xWILA5la5D9B0ajXGdoBC8HvkwtpNC7zKQZO9yM0PUR
+         +/X89b+Ql9CG91oDKppLWoTZTm5HeE8QzaFGtOOs8bm46ePNPX4fD2f/2J9b8M2NOq5u
+         hcabttw6dBArxbz0yplQAAjY94Lzjbsp+6u04f8jiFsdTHfWWwtIcWB0Tm8gQq3c6TJ3
+         0agAGOCpKAIvn+9URzwV0UiYIWGU6v+z5W0+XQiaLAjle6k+flko1QhHaci7x61WiTNs
+         BWQXNgDhFXGbmcF1vGHMSP9dwYMxNuN/V3IEhk7J+u97TkYQ0OCpyX7PKLEG/DLikyje
+         DsRQ==
+X-Gm-Message-State: APjAAAVrLCTyEY5npIhWpWlm0pLQAKdO0/C0qWZtbWswtn7FhbqeyLmn
+        oo5FMRUuIHcItGCs0M/KSzEClA/ISLxZ9/0+rcDcwEhH
+X-Google-Smtp-Source: APXvYqzUfNZ/rvrZwk3wwyL1jpu6Y00InJEF7jIq3BEr3gS2sXwq9ICRHCV3bOYHa11F/bhIR6qTWjscOP47Vu+a3Ak=
+X-Received: by 2002:a9d:7984:: with SMTP id h4mr1280207otm.297.1576656132308;
+ Wed, 18 Dec 2019 00:02:12 -0800 (PST)
+MIME-Version: 1.0
+References: <878snajjh2.wl-kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <878snajjh2.wl-kuninori.morimoto.gx@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 18 Dec 2019 09:02:00 +0100
+Message-ID: <CAMuHMdUq6U0i_+Dg57jVNYM4iephuZ8k3QC6AyQ--W_qY5=q9w@mail.gmail.com>
+Subject: Re: [PATCH] sh: use generic strncpy()
+To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Karl Nasrallah <knnspeed@aol.com>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Linux-SH <linux-sh@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Ram Pai <linuxram@us.ibm.com>
+Hi Morimoto-san, Karl,
 
-Detect write-violation on a page to which access-disabled
-key is associated much after the page is mapped.
+On Wed, Dec 18, 2019 at 6:22 AM Kuninori Morimoto
+<kuninori.morimoto.gx@renesas.com> wrote:
+> From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+>
+> Current SH will get below warning at strncpy()
+>
+> In file included from ${LINUX}/arch/sh/include/asm/string.h:3,
+>                  from ${LINUX}/include/linux/string.h:20,
+>                  from ${LINUX}/include/linux/bitmap.h:9,
+>                  from ${LINUX}/include/linux/nodemask.h:95,
+>                  from ${LINUX}/include/linux/mmzone.h:17,
+>                  from ${LINUX}/include/linux/gfp.h:6,
+>                  from ${LINUX}/innclude/linux/slab.h:15,
+>                  from ${LINUX}/linux/drivers/mmc/host/vub300.c:38:
+> ${LINUX}/drivers/mmc/host/vub300.c: In function 'new_system_port_status':
+> ${LINUX}/arch/sh/include/asm/string_32.h:51:42: warning: array subscript\
+>   80 is above array bounds of 'char[26]' [-Warray-bounds]
+>    : "0" (__dest), "1" (__src), "r" (__src+__n)
+>                                      ~~~~~^~~~
+>
+> In general, strncpy() should behave like below.
+>
+>         char dest[10];
+>         char *src = "12345";
+>
+>         strncpy(dest, src, 10);
+>         // dest = {'1', '2', '3', '4', '5',
+>                    '\0','\0','\0','\0','\0'}
+>
+> But, current SH strnpy() has 2 issues.
+> 1st is it will access to out-of-memory (= src + 10).
 
-cc: Dave Hansen <dave.hansen@intel.com>
-cc: Florian Weimer <fweimer@redhat.com>
-Signed-off-by: Ram Pai <linuxram@us.ibm.com>
-Acked-by: Dave Hansen <dave.hansen@intel.com>
-Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
----
- tools/testing/selftests/vm/protection_keys.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+I believe this is not correct: the code does not really access memory
+beyond the end of the source string.  (Recent) gcc just thinks so,
+because "__src+__n" is used as a parameter to the routine.
 
-diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index ff207b765afd..176625ded549 100644
---- a/tools/testing/selftests/vm/protection_keys.c
-+++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -1026,6 +1026,18 @@ void test_write_of_access_disabled_region(int *ptr, u16 pkey)
- 	*ptr = __LINE__;
- 	expected_pkey_fault(pkey);
- }
-+
-+void test_write_of_access_disabled_region_with_page_already_mapped(int *ptr,
-+			u16 pkey)
-+{
-+	*ptr = __LINE__;
-+	dprintf1("disabling access; after accessing the page, "
-+		" to PKEY[%02d], doing write\n", pkey);
-+	pkey_access_deny(pkey);
-+	*ptr = __LINE__;
-+	expected_pkey_fault(pkey);
-+}
-+
- void test_kernel_write_of_access_disabled_region(int *ptr, u16 pkey)
- {
- 	int ret;
-@@ -1422,6 +1434,7 @@ void (*pkey_tests[])(int *ptr, u16 pkey) = {
- 	test_write_of_write_disabled_region,
- 	test_write_of_write_disabled_region_with_page_already_mapped,
- 	test_write_of_access_disabled_region,
-+	test_write_of_access_disabled_region_with_page_already_mapped,
- 	test_kernel_write_of_access_disabled_region,
- 	test_kernel_write_of_write_disabled_region,
- 	test_kernel_gup_of_access_disabled_region,
--- 
-2.17.1
+> 2nd is it needs big fixup for it, and maintenance __asm__
+> code is difficult.
 
+Yeah, the padding is missing.
+
+> To solve these issues, this patch simply uses generic strncpy()
+> instead of architecture specific one.
+
+That will definitely fix the issue, as we assume the generic
+implementation is correct ;-)
+
+Now, I've just tried, naively, to enable CONFIG_STRING_SELFTEST=y in my
+rts7751r2d build (without your patch), and boot it in qemu:
+
+    String selftests succeeded
+
+Woops, turns out lib/test_string.c does not have any testcases for
+strncpy()...
+
+So adding test code for the corner cases may be a valuable contribution.
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
